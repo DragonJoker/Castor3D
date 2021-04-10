@@ -110,9 +110,12 @@ namespace castor3d
 		//!\~english	Refraction map.
 		//!\~french		Map de réfraction.
 		eRefraction = 0x0400,
+		//!\~english	The pass receives lighting.
+		//!\~french		La passe reçoit l'éclairage.
+		eLighting = 0x0800,
 		//!\~english	All flags.
 		//\~french		Tous les indicateurs.
-		eAll = 0x07FF,
+		eAll = 0x08FF,
 	};
 	CU_ImplementFlags( PassFlag )
 	C3D_API castor::String getName( PassFlag value );

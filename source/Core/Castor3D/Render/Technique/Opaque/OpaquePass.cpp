@@ -508,6 +508,7 @@ namespace castor3d
 				utils.encodeMaterial( c3d_shadowReceiver
 					, ( checkFlag( flags.passFlags, PassFlag::eReflection ) ) ? 1_i : 0_i
 					, ( checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? 1_i : 0_i
+					, ( checkFlag( flags.passFlags, PassFlag::eLighting ) ) ? 1_i : 0_i
 					, c3d_envMapIndex
 					, matFlags );
 
@@ -662,6 +663,7 @@ namespace castor3d
 				utils.encodeMaterial( c3d_shadowReceiver
 					, ( checkFlag( flags.passFlags, PassFlag::eReflection ) ) ? 1_i : 0_i
 					, ( checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? 1_i : 0_i
+					, ( checkFlag( flags.passFlags, PassFlag::eLighting ) ) ? 1_i : 0_i
 					, c3d_envMapIndex
 					, matFlags );
 
@@ -816,6 +818,7 @@ namespace castor3d
 				utils.encodeMaterial( c3d_shadowReceiver
 					, ( checkFlag( flags.passFlags, PassFlag::eReflection ) ) ? 1_i : 0_i
 					, ( checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? 1_i : 0_i
+					, ( checkFlag( flags.passFlags, PassFlag::eLighting ) ) ? 1_i : 0_i
 					, c3d_envMapIndex
 					, matFlags );
 

@@ -763,29 +763,32 @@ namespace castor3d
 							, shininess );
 					}
 
-					emissive *= diffuse;
-					auto worldEye = writer.declLocale( "worldEye"
-						, c3d_cameraPosition.xyz() );
-					auto surface = writer.declLocale< shader::Surface >( "surface" );
-					surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
-					auto color = writer.declLocale( "lightDiffuse"
-						, lighting->computeCombinedDiffuse( worldEye
-							, shininess
-							, c3d_shadowReceiver
-							, surface ) );
-					color.xyz() *= diffuse * occlusion;
-					color.xyz() += emissive;
+					if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
+					{
+						emissive *= diffuse;
+						auto worldEye = writer.declLocale( "worldEye"
+							, c3d_cameraPosition.xyz() );
+						auto surface = writer.declLocale< shader::Surface >( "surface" );
+						surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
+						auto color = writer.declLocale( "lightDiffuse"
+							, lighting->computeCombinedDiffuse( worldEye
+								, shininess
+								, c3d_shadowReceiver
+								, surface ) );
+						color.xyz() *= diffuse * occlusion;
+						color.xyz() += emissive;
 
-					auto encodedColor = writer.declLocale( "encodedColor"
-						, utils.encodeColor( vec4( color, alpha ) ) );
-					auto encodedNormal = writer.declLocale( "encodedNormal"
-						, utils.encodeNormal( normal ) );
-					auto writecoord = writer.declLocale( "writecoord"
-						, uvec3( floor( uvw * c3d_voxelData.clipToGrid ) ) );
-					auto id = writer.declLocale( "id"
-						, utils.flatten( writecoord, uvec3( sdw::UInt{ m_voxelConfig.gridSize.value() } ) ) );
-					atomicMax( output[id].colorMask, encodedColor );
-					atomicMax( output[id].normalMask, encodedNormal );
+						auto encodedColor = writer.declLocale( "encodedColor"
+							, utils.encodeColor( vec4( color, alpha ) ) );
+						auto encodedNormal = writer.declLocale( "encodedNormal"
+							, utils.encodeNormal( normal ) );
+						auto writecoord = writer.declLocale( "writecoord"
+							, uvec3( floor( uvw * c3d_voxelData.clipToGrid ) ) );
+						auto id = writer.declLocale( "id"
+							, utils.flatten( writecoord, uvec3( sdw::UInt{ m_voxelConfig.gridSize.value() } ) ) );
+						atomicMax( output[id].colorMask, encodedColor );
+						atomicMax( output[id].normalMask, encodedNormal );
+					}
 				}
 				FI;
 			} );
@@ -907,31 +910,34 @@ namespace castor3d
 							, roughness );
 					}
 
-					emissive *= albedo;
-					auto worldEye = writer.declLocale( "worldEye"
-						, c3d_cameraPosition.xyz() );
-					auto surface = writer.declLocale< shader::Surface >( "surface" );
-					surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
-					auto color = writer.declLocale( "color"
-						, lighting->computeCombinedDiffuse( worldEye
-							, albedo
-							, metalness
-							, roughness
-							, c3d_shadowReceiver
-							, surface ) );
-					color *= albedo * occlusion;
-					color += emissive;
+					if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
+					{
+						emissive *= albedo;
+						auto worldEye = writer.declLocale( "worldEye"
+							, c3d_cameraPosition.xyz() );
+						auto surface = writer.declLocale< shader::Surface >( "surface" );
+						surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
+						auto color = writer.declLocale( "color"
+							, lighting->computeCombinedDiffuse( worldEye
+								, albedo
+								, metalness
+								, roughness
+								, c3d_shadowReceiver
+								, surface ) );
+						color *= albedo * occlusion;
+						color += emissive;
 
-					auto encodedColor = writer.declLocale( "encodedColor"
-						, utils.encodeColor( vec4( color, alpha ) ) );
-					auto encodedNormal = writer.declLocale( "encodedNormal"
-						, utils.encodeNormal( normal ) );
-					auto writecoord = writer.declLocale( "writecoord"
-						, uvec3( floor( uvw * c3d_voxelData.clipToGrid ) ) );
-					auto id = writer.declLocale( "id"
-						, utils.flatten( writecoord, uvec3( sdw::UInt{ m_voxelConfig.gridSize.value() } ) ) );
-					atomicMax( output[id].colorMask, encodedColor );
-					atomicMax( output[id].normalMask, encodedNormal );
+						auto encodedColor = writer.declLocale( "encodedColor"
+							, utils.encodeColor( vec4( color, alpha ) ) );
+						auto encodedNormal = writer.declLocale( "encodedNormal"
+							, utils.encodeNormal( normal ) );
+						auto writecoord = writer.declLocale( "writecoord"
+							, uvec3( floor( uvw * c3d_voxelData.clipToGrid ) ) );
+						auto id = writer.declLocale( "id"
+							, utils.flatten( writecoord, uvec3( sdw::UInt{ m_voxelConfig.gridSize.value() } ) ) );
+						atomicMax( output[id].colorMask, encodedColor );
+						atomicMax( output[id].normalMask, encodedNormal );
+					}
 				}
 				FI;
 			} );
@@ -1042,30 +1048,33 @@ namespace castor3d
 							, glossiness );
 					}
 
-					emissive *= albedo;
-					auto worldEye = writer.declLocale( "worldEye"
-						, c3d_cameraPosition.xyz() );
-					auto surface = writer.declLocale< shader::Surface >( "surface" );
-					surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
-					auto color = writer.declLocale( "lightDiffuse"
-						, lighting->computeCombinedDiffuse( worldEye
-							, specular
-							, glossiness
-							, c3d_shadowReceiver
-							, surface ) );
-					color.xyz() *= albedo * occlusion;
-					color.xyz() += emissive;
+					if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
+					{
+						emissive *= albedo;
+						auto worldEye = writer.declLocale( "worldEye"
+							, c3d_cameraPosition.xyz() );
+						auto surface = writer.declLocale< shader::Surface >( "surface" );
+						surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
+						auto color = writer.declLocale( "lightDiffuse"
+							, lighting->computeCombinedDiffuse( worldEye
+								, specular
+								, glossiness
+								, c3d_shadowReceiver
+								, surface ) );
+						color.xyz() *= albedo * occlusion;
+						color.xyz() += emissive;
 
-					auto encodedColor = writer.declLocale( "encodedColor"
-						, utils.encodeColor( vec4( color, alpha ) ) );
-					auto encodedNormal = writer.declLocale( "encodedNormal"
-						, utils.encodeNormal( normal ) );
-					auto writecoord = writer.declLocale( "writecoord"
-						, uvec3( floor( uvw * c3d_voxelData.clipToGrid ) ) );
-					auto id = writer.declLocale( "id"
-						, utils.flatten( writecoord, uvec3( sdw::UInt{ m_voxelConfig.gridSize.value() } ) ) );
-					atomicMax( output[id].colorMask, encodedColor );
-					atomicMax( output[id].normalMask, encodedNormal );
+						auto encodedColor = writer.declLocale( "encodedColor"
+							, utils.encodeColor( vec4( color, alpha ) ) );
+						auto encodedNormal = writer.declLocale( "encodedNormal"
+							, utils.encodeNormal( normal ) );
+						auto writecoord = writer.declLocale( "writecoord"
+							, uvec3( floor( uvw * c3d_voxelData.clipToGrid ) ) );
+						auto id = writer.declLocale( "id"
+							, utils.flatten( writecoord, uvec3( sdw::UInt{ m_voxelConfig.gridSize.value() } ) ) );
+						atomicMax( output[id].colorMask, encodedColor );
+						atomicMax( output[id].normalMask, encodedNormal );
+					}
 				}
 				FI;
 			} );
