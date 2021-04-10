@@ -684,6 +684,7 @@ namespace C3dAssimp
 			if ( aiScene->HasMeshes() )
 			{
 				bool create = true;
+				uint32_t aiMeshIndex = 0u;
 
 				for ( auto aiMesh : castor::makeArrayView( aiScene->mMeshes, aiScene->mNumMeshes ) )
 				{
@@ -692,7 +693,8 @@ namespace C3dAssimp
 						submesh = mesh.createSubmesh();
 					}
 
-					create = doProcessMesh( *mesh.getScene(), mesh, *skeleton, *aiMesh, *aiScene, *submesh );
+					create = doProcessMesh( *mesh.getScene(), mesh, *skeleton, *aiMesh, aiMeshIndex, *aiScene, *submesh );
+					++aiMeshIndex;
 				}
 
 				if ( m_arrayBones.empty() )
@@ -772,6 +774,7 @@ namespace C3dAssimp
 		, Mesh & mesh
 		, Skeleton & skeleton
 		, aiMesh const & aiMesh
+		, uint32_t aiMeshIndex
 		, aiScene const & aiScene
 		, Submesh & submesh )
 	{
@@ -787,59 +790,76 @@ namespace C3dAssimp
 
 		if ( aiMesh.HasFaces() && aiMesh.HasPositions() && material )
 		{
-			submesh.setDefaultMaterial( material );
-			submesh.addPoints( doCreateVertexBuffer( aiMesh ) );
-
-			if ( aiMesh.HasBones() )
-			{
-				log::debug << cuT( "  Skeleton found" ) << std::endl;
-				std::vector< VertexBoneData > bonesData( aiMesh.mNumVertices );
-				doProcessBones( skeleton, aiMesh.mBones, aiMesh.mNumBones, bonesData );
-				auto bones = std::make_shared< BonesComponent >( submesh );
-				bones->addBoneDatas( bonesData );
-				submesh.addComponent( bones );
-			}
-
-			auto mapping = std::make_shared< TriFaceMapping >( submesh );
-
-			for ( auto face : castor::makeArrayView( aiMesh.mFaces, aiMesh.mNumFaces ) )
-			{
-				if ( face.mNumIndices == 3 )
+			auto faces = castor::makeArrayView( aiMesh.mFaces, aiMesh.mNumFaces );
+			auto count = uint32_t( std::count_if( faces.begin()
+				, faces.end()
+				, []( aiFace const & face )
 				{
-					mapping->addFace( face.mIndices[0], face.mIndices[2], face.mIndices[1] );
+					return face.mNumIndices == 3
+						|| face.mNumIndices == 4;
+				} ) );
+
+			if ( count > 0 )
+			{
+				m_submeshByID.emplace( aiMeshIndex, submesh.getId() );
+				submesh.setDefaultMaterial( material );
+				submesh.addPoints( doCreateVertexBuffer( aiMesh ) );
+
+				if ( aiMesh.HasBones() )
+				{
+					log::debug << cuT( "  Skeleton found" ) << std::endl;
+					std::vector< VertexBoneData > bonesData( aiMesh.mNumVertices );
+					doProcessBones( skeleton, aiMesh.mBones, aiMesh.mNumBones, bonesData );
+					auto bones = std::make_shared< BonesComponent >( submesh );
+					bones->addBoneDatas( bonesData );
+					submesh.addComponent( bones );
 				}
-			}
 
-			if ( !aiMesh.mNormals )
-			{
-				mapping->computeNormals( true );
-			}
-			else if ( !aiMesh.mTangents )
-			{
-				mapping->computeTangentsFromNormals();
-			}
+				auto mapping = std::make_shared< TriFaceMapping >( submesh );
 
-			submesh.setIndexMapping( mapping );
-
-			if ( aiScene.HasAnimations() )
-			{
-				for( auto aiAnimation : castor::makeArrayView( aiScene.mAnimations, aiScene.mNumAnimations ) )
+				for ( auto face : faces )
 				{
-					auto it = std::find_if( aiAnimation->mMeshChannels
-						, aiAnimation->mMeshChannels + aiAnimation->mNumMeshChannels
-						, [this, &aiMesh, &submesh]( aiMeshAnim const * p_aiMeshAnim )
-						{
-							return p_aiMeshAnim->mName == aiMesh.mName;
-						} );
-
-					if ( it != aiAnimation->mMeshChannels + aiAnimation->mNumMeshChannels )
+					if ( face.mNumIndices == 3 )
 					{
-						doProcessAnimationMeshes( mesh, submesh, aiMesh, *( *it ) );
+						mapping->addFace( face.mIndices[0], face.mIndices[2], face.mIndices[1] );
+					}
+					else if ( face.mNumIndices == 4 )
+					{
+						mapping->addQuadFace( face.mIndices[0], face.mIndices[2], face.mIndices[1], face.mIndices[2] );
 					}
 				}
-			}
 
-			result = true;
+				if ( !aiMesh.mNormals )
+				{
+					mapping->computeNormals( true );
+				}
+				else if ( !aiMesh.mTangents )
+				{
+					mapping->computeTangentsFromNormals();
+				}
+
+				submesh.setIndexMapping( mapping );
+
+				if ( aiScene.HasAnimations() )
+				{
+					for ( auto aiAnimation : castor::makeArrayView( aiScene.mAnimations, aiScene.mNumAnimations ) )
+					{
+						auto it = std::find_if( aiAnimation->mMeshChannels
+							, aiAnimation->mMeshChannels + aiAnimation->mNumMeshChannels
+							, [this, &aiMesh, &submesh]( aiMeshAnim const * p_aiMeshAnim )
+							{
+								return p_aiMeshAnim->mName == aiMesh.mName;
+							} );
+
+						if ( it != aiAnimation->mMeshChannels + aiAnimation->mNumMeshChannels )
+						{
+							doProcessAnimationMeshes( mesh, submesh, aiMesh, *( *it ) );
+						}
+					}
+				}
+
+				result = true;
+			}
 		}
 
 		return result;
@@ -1011,21 +1031,26 @@ namespace C3dAssimp
 
 			for ( auto const & aiMesh : castor::makeArrayView( aiNode.mMeshes, aiNode.mNumMeshes ) )
 			{
-				auto submesh = mesh.getSubmesh( aiMesh );
-				CU_Require( submesh != nullptr );
+				auto submeshIt = m_submeshByID.find( aiMesh );
 
-				if ( !submesh->hasComponent( BonesComponent::Name ) )
+				if ( submeshIt != m_submeshByID.end() )
 				{
-					auto bones = std::make_shared< BonesComponent >( *submesh );
-					std::vector< VertexBoneData > arrayBones( submesh->getPointsCount() );
+					auto submesh = mesh.getSubmesh( submeshIt->second );
+					CU_Require( submesh != nullptr );
 
-					for ( auto & boneData : arrayBones )
+					if ( !submesh->hasComponent( BonesComponent::Name ) )
 					{
-						boneData.addBoneData( index, 1.0f );
-					}
+						auto bones = std::make_shared< BonesComponent >( *submesh );
+						std::vector< VertexBoneData > arrayBones( submesh->getPointsCount() );
 
-					bones->addBoneDatas( arrayBones );
-					submesh->addComponent( bones );
+						for ( auto & boneData : arrayBones )
+						{
+							boneData.addBoneData( index, 1.0f );
+						}
+
+						bones->addBoneDatas( arrayBones );
+						submesh->addComponent( bones );
+					}
 				}
 			}
 
