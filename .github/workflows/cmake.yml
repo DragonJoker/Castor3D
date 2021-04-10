@@ -30,6 +30,23 @@ jobs:
       with:
         vcpkgGitCommitId: '7e3d3beac5ca6fe8aab4599d4e1d8ce270ccdea8'
         setupOnly: true
+  
+    - name: Install necessary G++ version (Linux)
+      if: runner.os == 'Linux'
+      shell: bash
+      run: sudo apt-get install -y --no-install-recommends ccache gcc-8 g++-8
+
+    - name: Configure GCC version (Linux)
+      if: runner.os == 'Linux'
+      shell: bash
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      run: echo "CC=gcc-8" >> $GITHUB_ENV
+
+    - name: Configure G++ version (Linux)
+      if: runner.os == 'Linux'
+      shell: bash
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      run: echo "CXX=g++-8" >> $GITHUB_ENV
 
     - name: Install necessary packages
       shell: bash
