@@ -7,6 +7,8 @@ namespace castor
 {
 	namespace PF
 	{
+		//*****************************************************************************************
+
 		namespace
 		{
 			inline int8_t doSignInt32( int v )
@@ -734,6 +736,8 @@ namespace castor
 			}
 		}
 
+		//*****************************************************************************************
+
 		PixelFormat getPFWithoutAlpha( PixelFormat format )
 		{
 			PixelFormat result = PixelFormat::eCount;
@@ -840,6 +844,7 @@ namespace castor
 
 			case PixelFormat::eR8G8B8A8_UNORM:
 			case PixelFormat::eA8B8G8R8_UNORM:
+			case PixelFormat::eB8G8R8A8_UNORM:
 			case PixelFormat::eR8G8B8A8_SRGB:
 			case PixelFormat::eA8B8G8R8_SRGB:
 				result = component == PixelComponent::eRed
@@ -968,6 +973,10 @@ namespace castor
 				result = PixelDefinitions< PixelFormat::eB8G8R8_UNORM >::Alpha;
 				break;
 
+			case PixelFormat::eB8G8R8A8_UNORM:
+				result = PixelDefinitions< PixelFormat::eB8G8R8A8_UNORM >::Alpha;
+				break;
+
 			case PixelFormat::eR8G8B8_SRGB:
 				result = PixelDefinitions< PixelFormat::eR8G8B8_SRGB >::Alpha;
 				break;
@@ -1068,128 +1077,8 @@ namespace castor
 
 		bool isCompressed( PixelFormat format )
 		{
-			bool result = false;
-
-			switch ( format )
-			{
-			case PixelFormat::eR8_UNORM:
-				result = PixelDefinitions< PixelFormat::eR8_UNORM >::Compressed;
-				break;
-
-			case PixelFormat::eR16_SFLOAT:
-				result = PixelDefinitions< PixelFormat::eR16_SFLOAT >::Compressed;
-				break;
-
-			case PixelFormat::eR32_SFLOAT:
-				result = PixelDefinitions< PixelFormat::eR32_SFLOAT >::Compressed;
-				break;
-
-			case PixelFormat::eR8A8_UNORM:
-				result = PixelDefinitions< PixelFormat::eR8A8_UNORM >::Compressed;
-				break;
-
-			case PixelFormat::eR32A32_SFLOAT:
-				result = PixelDefinitions< PixelFormat::eR32A32_SFLOAT >::Compressed;
-				break;
-
-			case PixelFormat::eR5G5B5A1_UNORM:
-				result = PixelDefinitions< PixelFormat::eR5G5B5A1_UNORM >::Compressed;
-				break;
-
-			case PixelFormat::eR5G6B5_UNORM:
-				result = PixelDefinitions< PixelFormat::eR5G6B5_UNORM >::Compressed;
-				break;
-
-			case PixelFormat::eR8G8B8_UNORM:
-				result = PixelDefinitions< PixelFormat::eR8G8B8_UNORM >::Compressed;
-				break;
-
-			case PixelFormat::eB8G8R8_UNORM:
-				result = PixelDefinitions< PixelFormat::eB8G8R8_UNORM >::Compressed;
-				break;
-
-			case PixelFormat::eR8G8B8_SRGB:
-				result = PixelDefinitions< PixelFormat::eR8G8B8_SRGB >::Compressed;
-				break;
-
-			case PixelFormat::eB8G8R8_SRGB:
-				result = PixelDefinitions< PixelFormat::eB8G8R8_SRGB >::Compressed;
-				break;
-
-			case PixelFormat::eR8G8B8A8_UNORM:
-				result = PixelDefinitions< PixelFormat::eR8G8B8A8_UNORM >::Compressed;
-				break;
-
-			case PixelFormat::eA8B8G8R8_UNORM:
-				result = PixelDefinitions< PixelFormat::eA8B8G8R8_UNORM >::Compressed;
-				break;
-
-			case PixelFormat::eR8G8B8A8_SRGB:
-				result = PixelDefinitions< PixelFormat::eR8G8B8A8_SRGB >::Compressed;
-				break;
-
-			case PixelFormat::eA8B8G8R8_SRGB:
-				result = PixelDefinitions< PixelFormat::eA8B8G8R8_SRGB >::Compressed;
-				break;
-
-			case PixelFormat::eR16G16B16_SFLOAT:
-				result = PixelDefinitions< PixelFormat::eR16G16B16_SFLOAT >::Compressed;
-				break;
-
-			case PixelFormat::eR16G16B16A16_SFLOAT:
-				result = PixelDefinitions< PixelFormat::eR16G16B16A16_SFLOAT >::Compressed;
-				break;
-
-			case PixelFormat::eR32G32B32_SFLOAT:
-				result = PixelDefinitions< PixelFormat::eR32G32B32_SFLOAT >::Compressed;
-				break;
-
-			case PixelFormat::eR32G32B32A32_SFLOAT:
-				result = PixelDefinitions< PixelFormat::eR32G32B32A32_SFLOAT >::Compressed;
-				break;
-
-			case PixelFormat::eBC1_RGB_UNORM_BLOCK:
-				result = PixelDefinitions< PixelFormat::eBC1_RGB_UNORM_BLOCK >::Compressed;
-				break;
-
-			case PixelFormat::eBC3_UNORM_BLOCK:
-				result = PixelDefinitions< PixelFormat::eBC3_UNORM_BLOCK >::Compressed;
-				break;
-
-			case PixelFormat::eBC5_UNORM_BLOCK:
-				result = PixelDefinitions< PixelFormat::eBC5_UNORM_BLOCK >::Compressed;
-				break;
-
-			case PixelFormat::eD16_UNORM:
-				result = PixelDefinitions< PixelFormat::eD16_UNORM >::Compressed;
-				break;
-
-			case PixelFormat::eD24_UNORM_S8_UINT:
-				result = PixelDefinitions< PixelFormat::eD24_UNORM_S8_UINT >::Compressed;
-				break;
-
-			case PixelFormat::eD32_UNORM:
-				result = PixelDefinitions< PixelFormat::eD32_UNORM >::Compressed;
-				break;
-
-			case PixelFormat::eD32_SFLOAT:
-				result = PixelDefinitions< PixelFormat::eD32_SFLOAT >::Compressed;
-				break;
-
-			case PixelFormat::eD32_SFLOAT_S8_UINT:
-				result = PixelDefinitions< PixelFormat::eD32_SFLOAT_S8_UINT >::Compressed;
-				break;
-
-			case PixelFormat::eS8_UINT:
-				result = PixelDefinitions< PixelFormat::eS8_UINT >::Compressed;
-				break;
-
-			default:
-				result = false;
-				break;
-			}
-
-			return result;
+			return format >= PixelFormat::eBC1_RGB_UNORM_BLOCK
+				&& format <= PixelFormat::eASTC_12x12_SRGB_BLOCK;
 		}
 
 		PxBufferBaseSPtr decompressBuffer( PxBufferBaseSPtr src )
@@ -1444,6 +1333,10 @@ namespace castor
 				PixelDefinitions< PixelFormat::eB8G8R8_UNORM >::convert( srcBuffer, dstBuffer, dstFormat );
 				break;
 
+			case PixelFormat::eB8G8R8A8_UNORM:
+				PixelDefinitions< PixelFormat::eB8G8R8A8_UNORM >::convert( srcBuffer, dstBuffer, dstFormat );
+				break;
+
 			case PixelFormat::eR8G8B8_SRGB:
 				PixelDefinitions< PixelFormat::eR8G8B8_SRGB >::convert( srcBuffer, dstBuffer, dstFormat );
 				break;
@@ -1526,7 +1419,8 @@ namespace castor
 			}
 		}
 
-		void convertBuffer( PixelFormat srcFormat
+		void convertBuffer( Size const & dimensions
+			, PixelFormat srcFormat
 			, uint8_t const * srcBuffer
 			, uint32_t srcSize
 			, PixelFormat dstFormat
@@ -1536,119 +1430,123 @@ namespace castor
 			switch ( srcFormat )
 			{
 			case PixelFormat::eR8_UNORM:
-				PixelDefinitions< PixelFormat::eR8_UNORM >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				PixelDefinitions< PixelFormat::eR8_UNORM >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eR16_SFLOAT:
-				PixelDefinitions< PixelFormat::eR16_SFLOAT >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				PixelDefinitions< PixelFormat::eR16_SFLOAT >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eR32_SFLOAT:
-				PixelDefinitions< PixelFormat::eR32_SFLOAT >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				PixelDefinitions< PixelFormat::eR32_SFLOAT >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eR8A8_UNORM:
-				PixelDefinitions< PixelFormat::eR8A8_UNORM >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				PixelDefinitions< PixelFormat::eR8A8_UNORM >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eR32A32_SFLOAT:
-				PixelDefinitions< PixelFormat::eR32A32_SFLOAT >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				PixelDefinitions< PixelFormat::eR32A32_SFLOAT >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eR5G5B5A1_UNORM:
-				PixelDefinitions< PixelFormat::eR5G5B5A1_UNORM >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				PixelDefinitions< PixelFormat::eR5G5B5A1_UNORM >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eR5G6B5_UNORM:
-				PixelDefinitions< PixelFormat::eR5G6B5_UNORM >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				PixelDefinitions< PixelFormat::eR5G6B5_UNORM >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eR8G8B8_UNORM:
-				PixelDefinitions< PixelFormat::eR8G8B8_UNORM >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				PixelDefinitions< PixelFormat::eR8G8B8_UNORM >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eB8G8R8_UNORM:
-				PixelDefinitions< PixelFormat::eB8G8R8_UNORM >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				PixelDefinitions< PixelFormat::eB8G8R8_UNORM >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+
+			case PixelFormat::eB8G8R8A8_UNORM:
+				PixelDefinitions< PixelFormat::eB8G8R8A8_UNORM >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eR8G8B8_SRGB:
-				PixelDefinitions< PixelFormat::eR8G8B8_SRGB >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				PixelDefinitions< PixelFormat::eR8G8B8_SRGB >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eB8G8R8_SRGB:
-				PixelDefinitions< PixelFormat::eB8G8R8_SRGB >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				PixelDefinitions< PixelFormat::eB8G8R8_SRGB >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eR8G8B8A8_UNORM:
-				PixelDefinitions< PixelFormat::eR8G8B8A8_UNORM >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				PixelDefinitions< PixelFormat::eR8G8B8A8_UNORM >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eA8B8G8R8_UNORM:
-				PixelDefinitions< PixelFormat::eA8B8G8R8_UNORM >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				PixelDefinitions< PixelFormat::eA8B8G8R8_UNORM >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eR8G8B8A8_SRGB:
-				PixelDefinitions< PixelFormat::eR8G8B8A8_SRGB >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				PixelDefinitions< PixelFormat::eR8G8B8A8_SRGB >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eA8B8G8R8_SRGB:
-				PixelDefinitions< PixelFormat::eA8B8G8R8_SRGB >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				PixelDefinitions< PixelFormat::eA8B8G8R8_SRGB >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eR16G16B16_SFLOAT:
-				PixelDefinitions< PixelFormat::eR16G16B16_SFLOAT >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				PixelDefinitions< PixelFormat::eR16G16B16_SFLOAT >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eR16G16B16A16_SFLOAT:
-				PixelDefinitions< PixelFormat::eR16G16B16A16_SFLOAT >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				PixelDefinitions< PixelFormat::eR16G16B16A16_SFLOAT >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eR32G32B32_SFLOAT:
-				PixelDefinitions< PixelFormat::eR32G32B32_SFLOAT >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				PixelDefinitions< PixelFormat::eR32G32B32_SFLOAT >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eR32G32B32A32_SFLOAT:
-				PixelDefinitions< PixelFormat::eR32G32B32A32_SFLOAT >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				PixelDefinitions< PixelFormat::eR32G32B32A32_SFLOAT >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eBC1_RGB_UNORM_BLOCK:
-				PixelDefinitions< PixelFormat::eBC1_RGB_UNORM_BLOCK >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				PixelDefinitions< PixelFormat::eBC1_RGB_UNORM_BLOCK >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eBC1_RGBA_UNORM_BLOCK:
-				PixelDefinitions< PixelFormat::eBC1_RGBA_UNORM_BLOCK >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				PixelDefinitions< PixelFormat::eBC1_RGBA_UNORM_BLOCK >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eBC3_UNORM_BLOCK:
-				PixelDefinitions< PixelFormat::eBC3_UNORM_BLOCK >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				PixelDefinitions< PixelFormat::eBC3_UNORM_BLOCK >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eBC5_UNORM_BLOCK:
-				PixelDefinitions< PixelFormat::eBC5_UNORM_BLOCK >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				PixelDefinitions< PixelFormat::eBC5_UNORM_BLOCK >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eD16_UNORM:
-				PixelDefinitions< PixelFormat::eD16_UNORM >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				PixelDefinitions< PixelFormat::eD16_UNORM >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eD24_UNORM_S8_UINT:
-				PixelDefinitions< PixelFormat::eD24_UNORM_S8_UINT >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				PixelDefinitions< PixelFormat::eD24_UNORM_S8_UINT >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eD32_UNORM:
-				PixelDefinitions< PixelFormat::eD32_UNORM >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				PixelDefinitions< PixelFormat::eD32_UNORM >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eD32_SFLOAT:
-				PixelDefinitions< PixelFormat::eD32_SFLOAT >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				PixelDefinitions< PixelFormat::eD32_SFLOAT >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eD32_SFLOAT_S8_UINT:
-				PixelDefinitions< PixelFormat::eD32_SFLOAT_S8_UINT >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				PixelDefinitions< PixelFormat::eD32_SFLOAT_S8_UINT >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eS8_UINT:
-				PixelDefinitions< PixelFormat::eS8_UINT >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				PixelDefinitions< PixelFormat::eS8_UINT >::convert( dimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
 			default:
@@ -1694,6 +1592,9 @@ namespace castor
 					break;
 				case PixelFormat::eB8G8R8_UNORM:
 					result = ( formatName == PixelDefinitions< PixelFormat::eB8G8R8_UNORM >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
+					break;
+				case PixelFormat::eB8G8R8A8_UNORM:
+					result = ( formatName == PixelDefinitions< PixelFormat::eB8G8R8A8_UNORM >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
 				case PixelFormat::eR8G8B8_SRGB:
 					result = ( formatName == PixelDefinitions< PixelFormat::eR8G8B8_SRGB >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
@@ -1798,6 +1699,9 @@ namespace castor
 			case PixelFormat::eB8G8R8_UNORM:
 				result = PixelDefinitions< PixelFormat::eB8G8R8_UNORM >::toStr();
 				break;
+			case PixelFormat::eB8G8R8A8_UNORM:
+				result = PixelDefinitions< PixelFormat::eB8G8R8A8_UNORM >::toStr();
+				break;
 			case PixelFormat::eR8G8B8_SRGB:
 				result = PixelDefinitions< PixelFormat::eR8G8B8_SRGB >::toStr();
 				break;
@@ -1862,5 +1766,382 @@ namespace castor
 
 			return result;
 		}
+
+		PixelFormat getCompressed( PixelFormat format )
+		{
+			PixelFormat result;
+
+			switch ( format )
+			{
+			case PixelFormat::eR8G8B8_UNORM:
+			case PixelFormat::eB8G8R8_UNORM:
+				result = PixelFormat::eBC1_RGB_UNORM_BLOCK;
+				break;
+			case PixelFormat::eB8G8R8A8_UNORM:
+			case PixelFormat::eR8G8B8A8_UNORM:
+			case PixelFormat::eA8B8G8R8_UNORM:
+				result = PixelFormat::eBC3_UNORM_BLOCK;
+				break;
+			case PixelFormat::eR8G8B8_SRGB:
+			case PixelFormat::eB8G8R8_SRGB:
+				result = PixelFormat::eBC1_RGB_SRGB_BLOCK;
+				break;
+			case PixelFormat::eR8G8B8A8_SRGB:
+			case PixelFormat::eA8B8G8R8_SRGB:
+				result = PixelFormat::eBC3_SRGB_BLOCK;
+				break;
+			default:
+				result = format;
+				break;
+			}
+
+			return result;
+		}
+
+		//*****************************************************************************************
+
+		BC4x4Compressor::BC4x4Compressor( uint32_t srcPixelSize
+			, uint8_t ( *R8 )( uint8_t const * )
+			, uint8_t ( *G8 )( uint8_t const * )
+			, uint8_t ( *B8 )( uint8_t const * )
+			, uint8_t ( *A8 )( uint8_t const * ) )
+			: srcPixelSize{ srcPixelSize }
+			, getR8{ R8 }
+			, getG8{ G8 }
+			, getB8{ B8 }
+			, getA8{ A8 }
+		{
+		}
+
+		void BC4x4Compressor::extractBlock( uint8_t const * inPtr
+			, uint32_t width
+			, Block & colorBlock )
+		{
+			auto rgba = colorBlock.data();
+
+			for ( int j = 0; j < 4; j++ )
+			{
+				auto linePtr = inPtr;
+
+				for ( int i = 0; i < 4; i++ )
+				{
+					rgba[0] = getR8( linePtr );
+					rgba[1] = getG8( linePtr );
+					rgba[2] = getB8( linePtr );
+					rgba[3] = getA8( linePtr );
+					rgba += 4;
+					linePtr += srcPixelSize;
+				}
+
+				inPtr += width * srcPixelSize;
+			}
+		}
+
+		uint16_t BC4x4Compressor::colorTo565( Color const & color )
+		{
+			return ( ( color[0] >> 3 ) << 11 )
+				| ( ( color[1] >> 2 ) << 5 )
+				| ( color[2] >> 3 );
+		}
+
+		void BC4x4Compressor::emitByte( uint8_t *& dstBuffer, uint8_t b )
+		{
+			dstBuffer[0] = b;
+			dstBuffer += 1;
+		}
+
+		void BC4x4Compressor::emitWord( uint8_t *& dstBuffer, uint16_t s )
+		{
+			dstBuffer[0] = ( s >> 0 ) & 255;
+			dstBuffer[1] = ( s >> 8 ) & 255;
+			dstBuffer += 2;
+		}
+
+		void BC4x4Compressor::emitDoubleWord( uint8_t *& dstBuffer, uint32_t i )
+		{
+			dstBuffer[0] = ( i >> 0 ) & 255;
+			dstBuffer[1] = ( i >> 8 ) & 255;
+			dstBuffer[2] = ( i >> 16 ) & 255;
+			dstBuffer[3] = ( i >> 24 ) & 255;
+			dstBuffer += 4;
+		}
+
+		void BC4x4Compressor::emitColorIndices( uint8_t *& dstBuffer
+			, Block const & colorBlock
+			, Color const & minColor
+			, Color const & maxColor )
+		{
+			static uint8_t constexpr maskC565_5 = 0xF8;    // 0xFF minus last three bits
+			static uint8_t constexpr maskC565_6 = 0xFC;    // 0xFF minus last two bits
+
+			uint8_t colors[4][4];
+			uint32_t indices[16];
+			uint32_t result = 0u;
+			colors[0][0] = ( maxColor[0] & maskC565_5 ) | ( maxColor[0] >> 5 );
+			colors[0][1] = ( maxColor[1] & maskC565_6 ) | ( maxColor[1] >> 6 );
+			colors[0][2] = ( maxColor[2] & maskC565_5 ) | ( maxColor[2] >> 5 );
+			colors[1][0] = ( minColor[0] & maskC565_5 ) | ( minColor[0] >> 5 );
+			colors[1][1] = ( minColor[1] & maskC565_6 ) | ( minColor[1] >> 6 );
+			colors[1][2] = ( minColor[2] & maskC565_5 ) | ( minColor[2] >> 5 );
+			colors[2][0] = ( 2 * colors[0][0] + 1 * colors[1][0] ) / 3;
+			colors[2][1] = ( 2 * colors[0][1] + 1 * colors[1][1] ) / 3;
+			colors[2][2] = ( 2 * colors[0][2] + 1 * colors[1][2] ) / 3;
+			colors[3][0] = ( 1 * colors[0][0] + 2 * colors[1][0] ) / 3;
+			colors[3][1] = ( 1 * colors[0][1] + 2 * colors[1][1] ) / 3;
+			colors[3][2] = ( 1 * colors[0][2] + 2 * colors[1][2] ) / 3;
+
+			for ( int i = 15; i >= 0; --i )
+			{
+				auto c0 = colorBlock[i * 4 + 0];
+				auto c1 = colorBlock[i * 4 + 1];
+				auto c2 = colorBlock[i * 4 + 2];
+
+				auto d0 = abs( colors[0][0] - c0 ) + abs( colors[0][1] - c1 ) + abs( colors[0][2] - c2 );
+				auto d1 = abs( colors[1][0] - c0 ) + abs( colors[1][1] - c1 ) + abs( colors[1][2] - c2 );
+				auto d2 = abs( colors[2][0] - c0 ) + abs( colors[2][1] - c1 ) + abs( colors[2][2] - c2 );
+				auto d3 = abs( colors[3][0] - c0 ) + abs( colors[3][1] - c1 ) + abs( colors[3][2] - c2 );
+
+				auto b0 = uint32_t( d0 > d3 );
+				auto b1 = uint32_t( d1 > d2 );
+				auto b2 = uint32_t( d0 > d2 );
+				auto b3 = uint32_t( d1 > d3 );
+				auto b4 = uint32_t( d2 > d3 );
+
+				auto x0 = b1 & b2;
+				auto x1 = b0 & b3;
+				auto x2 = b0 & b4;
+
+				result |= ( x2 | ( ( x0 | x1 ) << 1 ) ) << ( i << 1 );
+			}
+
+			emitDoubleWord( dstBuffer, result );
+		}
+
+		//*****************************************************************************************
+
+		BC1Compressor::BC1Compressor( uint32_t srcPixelSize
+			, uint8_t( *R8 )( uint8_t const * )
+			, uint8_t( *G8 )( uint8_t const * )
+			, uint8_t( *B8 )( uint8_t const * )
+			, uint8_t( *A8 )( uint8_t const * ) )
+			: BC4x4Compressor{ srcPixelSize, R8, G8, B8, A8 }
+		{
+		}
+
+		void BC1Compressor::compress( Size const & dimensions
+			, uint8_t const * srcBuffer
+			, uint32_t srcSize
+			, uint8_t * dstBuffer
+			, uint32_t dstSize )
+		{
+			Block block;
+			Color minColor;
+			Color maxColor;
+			auto height = dimensions.getHeight();
+			auto width = dimensions.getWidth();
+
+			for ( uint32_t j = 0u; j < height; j += 4, srcBuffer += width * 4 * srcPixelSize )
+			{
+				for ( uint32_t i = 0; i < width; i += 4 )
+				{
+					extractBlock( srcBuffer + i * srcPixelSize, width, block );
+					getMinMaxColors( block, minColor, maxColor );
+
+					emitWord( dstBuffer, colorTo565( maxColor ) );
+					emitWord( dstBuffer, colorTo565( minColor ) );
+					emitColorIndices( dstBuffer, block, minColor, maxColor );
+				}
+			}
+		}
+
+		void BC1Compressor::getMinMaxColors( Block const & colorBlock
+			, Color & minColor
+			, Color & maxColor )
+		{
+			static int constexpr insetShift = 4;       // inset the bounding box with ( range >> shift )
+			uint8_t inset[3];
+			minColor[0] = minColor[1] = minColor[2] = 255;
+			maxColor[0] = maxColor[1] = maxColor[2] = 0;
+
+			for ( int i = 0; i < 16; i++ )
+			{
+				if ( colorBlock[i * 4 + 0] < minColor[0] )
+				{
+					minColor[0] = colorBlock[i * 4 + 0];
+				}
+				if ( colorBlock[i * 4 + 1] < minColor[1] )
+				{
+					minColor[1] = colorBlock[i * 4 + 1];
+				}
+				if ( colorBlock[i * 4 + 2] < minColor[2] )
+				{
+					minColor[2] = colorBlock[i * 4 + 2];
+				}
+				if ( colorBlock[i * 4 + 0] > maxColor[0] )
+				{
+					maxColor[0] = colorBlock[i * 4 + 0];
+				}
+				if ( colorBlock[i * 4 + 1] > maxColor[1] )
+				{
+					maxColor[1] = colorBlock[i * 4 + 1];
+				}
+				if ( colorBlock[i * 4 + 2] > maxColor[2] )
+				{
+					maxColor[2] = colorBlock[i * 4 + 2];
+				}
+			}
+
+			inset[0] = ( maxColor[0] - minColor[0] ) >> insetShift;
+			inset[1] = ( maxColor[1] - minColor[1] ) >> insetShift;
+			inset[2] = ( maxColor[2] - minColor[2] ) >> insetShift;
+			minColor[0] = ( minColor[0] + inset[0] <= 255 ) ? minColor[0] + inset[0] : 255;
+			minColor[1] = ( minColor[1] + inset[1] <= 255 ) ? minColor[1] + inset[1] : 255;
+			minColor[2] = ( minColor[2] + inset[2] <= 255 ) ? minColor[2] + inset[2] : 255;
+			maxColor[0] = ( maxColor[0] >= inset[0] ) ? maxColor[0] - inset[0] : 0;
+			maxColor[1] = ( maxColor[1] >= inset[1] ) ? maxColor[1] - inset[1] : 0;
+			maxColor[2] = ( maxColor[2] >= inset[2] ) ? maxColor[2] - inset[2] : 0;
+		}
+
+		//*****************************************************************************************
+
+		BC3Compressor::BC3Compressor( uint32_t srcPixelSize
+			, uint8_t( *R8 )( uint8_t const * )
+			, uint8_t( *G8 )( uint8_t const * )
+			, uint8_t( *B8 )( uint8_t const * )
+			, uint8_t( *A8 )( uint8_t const * ) )
+			: BC4x4Compressor{ srcPixelSize, R8, G8, B8, A8 }
+		{
+		}
+
+		void BC3Compressor::compress( Size const & dimensions
+			, uint8_t const * srcBuffer
+			, uint32_t srcSize
+			, uint8_t * dstBuffer
+			, uint32_t dstSize )
+		{
+			Block block;
+			Color minColor;
+			Color maxColor;
+			auto height = dimensions.getHeight();
+			auto width = dimensions.getWidth();
+
+			for ( uint32_t j = 0u; j < height; j += 4, srcBuffer += width * 4 * srcPixelSize )
+			{
+				for ( uint32_t i = 0; i < width; i += 4 )
+				{
+					extractBlock( srcBuffer + i * srcPixelSize, width, block );
+					getMinMaxColors( block, minColor, maxColor );
+
+					emitByte( dstBuffer, maxColor[3] );
+					emitByte( dstBuffer, minColor[3] );
+					emitAlphaIndices( dstBuffer, block, minColor[3], maxColor[3] );
+
+					emitWord( dstBuffer, colorTo565( maxColor ) );
+					emitWord( dstBuffer, colorTo565( minColor ) );
+					emitColorIndices( dstBuffer, block, minColor, maxColor );
+				}
+			}
+		}
+
+		void BC3Compressor::getMinMaxColors( Block const & colorBlock
+			, Color & minColor
+			, Color & maxColor )
+		{
+			static int constexpr insetShift = 4;       // inset the bounding box with ( range >> shift )
+			Color inset;
+			minColor[0] = minColor[1] = minColor[2] = 255;
+			maxColor[0] = maxColor[1] = maxColor[2] = 0;
+
+			for ( int i = 0; i < 16; i++ )
+			{
+				if ( colorBlock[i * 4 + 0] < minColor[0] )
+				{
+					minColor[0] = colorBlock[i * 4 + 0];
+				}
+				if ( colorBlock[i * 4 + 1] < minColor[1] )
+				{
+					minColor[1] = colorBlock[i * 4 + 1];
+				}
+				if ( colorBlock[i * 4 + 2] < minColor[2] )
+				{
+					minColor[2] = colorBlock[i * 4 + 2];
+				}
+				if ( colorBlock[i * 4 + 3] < minColor[3] )
+				{
+					minColor[3] = colorBlock[i * 4 + 3];
+				}
+				if ( colorBlock[i * 4 + 0] > maxColor[0] )
+				{
+					maxColor[0] = colorBlock[i * 4 + 0];
+				}
+				if ( colorBlock[i * 4 + 1] > maxColor[1] )
+				{
+					maxColor[1] = colorBlock[i * 4 + 1];
+				}
+				if ( colorBlock[i * 4 + 2] > maxColor[2] )
+				{
+					maxColor[2] = colorBlock[i * 4 + 2];
+				}
+				if ( colorBlock[i * 4 + 3] > maxColor[3] )
+				{
+					maxColor[3] = colorBlock[i * 4 + 3];
+				}
+			}
+
+			inset[0] = ( maxColor[0] - minColor[0] ) >> insetShift;
+			inset[1] = ( maxColor[1] - minColor[1] ) >> insetShift;
+			inset[2] = ( maxColor[2] - minColor[2] ) >> insetShift;
+			inset[3] = ( maxColor[3] - minColor[3] ) >> insetShift;
+			minColor[0] = ( minColor[0] + inset[0] <= 255 ) ? minColor[0] + inset[0] : 255;
+			minColor[1] = ( minColor[1] + inset[1] <= 255 ) ? minColor[1] + inset[1] : 255;
+			minColor[2] = ( minColor[2] + inset[2] <= 255 ) ? minColor[2] + inset[2] : 255;
+			minColor[3] = ( minColor[3] + inset[3] <= 255 ) ? minColor[3] + inset[3] : 255;
+			maxColor[0] = ( maxColor[0] >= inset[0] ) ? maxColor[0] - inset[0] : 0;
+			maxColor[1] = ( maxColor[1] >= inset[1] ) ? maxColor[1] - inset[1] : 0;
+			maxColor[2] = ( maxColor[2] >= inset[2] ) ? maxColor[2] - inset[2] : 0;
+			maxColor[3] = ( maxColor[3] >= inset[3] ) ? maxColor[3] - inset[3] : 0;
+		}
+
+		void BC3Compressor::emitAlphaIndices( uint8_t *& dstBuffer
+			, Block const & colorBlock
+			, uint8_t const minAlpha
+			, uint8_t const maxAlpha )
+		{
+			assert( maxAlpha > minAlpha );
+			uint8_t indices[16];
+			uint8_t mid = ( maxAlpha - minAlpha ) / ( 2 * 7 );
+			uint8_t ab1 = minAlpha + mid;
+			uint8_t ab2 = ( 6 * maxAlpha + 1 * minAlpha ) / 7 + mid;
+			uint8_t ab3 = ( 5 * maxAlpha + 2 * minAlpha ) / 7 + mid;
+			uint8_t ab4 = ( 4 * maxAlpha + 3 * minAlpha ) / 7 + mid;
+			uint8_t ab5 = ( 3 * maxAlpha + 4 * minAlpha ) / 7 + mid;
+			uint8_t ab6 = ( 2 * maxAlpha + 5 * minAlpha ) / 7 + mid;
+			uint8_t ab7 = ( 1 * maxAlpha + 6 * minAlpha ) / 7 + mid;
+			auto colorBlockData = colorBlock.data();
+			colorBlockData += 3;
+
+			for ( int i = 0; i < 16; i++ )
+			{
+				uint8_t a = colorBlockData[i * 4];
+				auto b1 = uint16_t( a <= ab1 );
+				auto b2 = uint16_t( a <= ab2 );
+				auto b3 = uint16_t( a <= ab3 );
+				auto b4 = uint16_t( a <= ab4 );
+				auto b5 = uint16_t( a <= ab5 );
+				auto b6 = uint16_t( a <= ab6 );
+				auto b7 = uint16_t( a <= ab7 );
+				auto index = uint8_t( ( b1 + b2 + b3 + b4 + b5 + b6 + b7 + 1u ) & 0x07u );
+				indices[i] = index ^ uint8_t( 2u > index );
+			}
+
+			emitByte( dstBuffer, ( indices[0] >> 0 ) | ( indices[1] << 3 ) | ( indices[2] << 6 ) );
+			emitByte( dstBuffer, ( indices[2] >> 2 ) | ( indices[3] << 1 ) | ( indices[4] << 4 ) | ( indices[5] << 7 ) );
+			emitByte( dstBuffer, ( indices[5] >> 1 ) | ( indices[6] << 2 ) | ( indices[7] << 5 ) );
+			emitByte( dstBuffer, ( indices[8] >> 0 ) | ( indices[9] << 3 ) | ( indices[10] << 6 ) );
+			emitByte( dstBuffer, ( indices[10] >> 2 ) | ( indices[11] << 1 ) | ( indices[12] << 4 ) | ( indices[13] << 7 ) );
+			emitByte( dstBuffer, ( indices[13] >> 1 ) | ( indices[14] << 2 ) | ( indices[15] << 5 ) );
+		}
+
+		//*****************************************************************************************
 	}
 }
