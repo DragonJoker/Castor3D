@@ -14,7 +14,52 @@ namespace castor
 	{
 		PixelFormat convert( gli::format format )
 		{
-			return PixelFormat( format );
+			if ( format < uint32_t( PixelFormat::eCount ) )
+			{
+				return PixelFormat( format );
+			}
+
+			switch ( format )
+			{
+			case gli::FORMAT_L8_UNORM_PACK8:
+			case gli::FORMAT_A8_UNORM_PACK8:
+				return PixelFormat::eR8_UNORM;
+				break;
+			case gli::FORMAT_L16_UNORM_PACK16:
+			case gli::FORMAT_A16_UNORM_PACK16:
+				return PixelFormat::eR16_UNORM;
+				break;
+			case gli::FORMAT_LA16_UNORM_PACK16:
+				return PixelFormat::eR8G8_UNORM;
+				break;
+			case gli::FORMAT_BGR8_UNORM_PACK32:
+				return PixelFormat::eB8G8R8A8_UNORM;
+				break;
+			case gli::FORMAT_BGR8_SRGB_PACK32:
+				return PixelFormat::eB8G8R8A8_SRGB;
+				break;
+			case gli::FORMAT_RGB_PVRTC1_8X8_UNORM_BLOCK32:
+			case gli::FORMAT_RGB_PVRTC1_8X8_SRGB_BLOCK32:
+			case gli::FORMAT_RGB_PVRTC1_16X8_UNORM_BLOCK32:
+			case gli::FORMAT_RGB_PVRTC1_16X8_SRGB_BLOCK32:
+			case gli::FORMAT_RGBA_PVRTC1_8X8_UNORM_BLOCK32:
+			case gli::FORMAT_RGBA_PVRTC1_8X8_SRGB_BLOCK32:
+			case gli::FORMAT_RGBA_PVRTC1_16X8_UNORM_BLOCK32:
+			case gli::FORMAT_RGBA_PVRTC1_16X8_SRGB_BLOCK32:
+			case gli::FORMAT_RGBA_PVRTC2_4X4_UNORM_BLOCK8:
+			case gli::FORMAT_RGBA_PVRTC2_4X4_SRGB_BLOCK8:
+			case gli::FORMAT_RGBA_PVRTC2_8X4_UNORM_BLOCK8:
+			case gli::FORMAT_RGBA_PVRTC2_8X4_SRGB_BLOCK8:
+			case gli::FORMAT_RGB_ETC_UNORM_BLOCK8:
+			case gli::FORMAT_RGB_ATC_UNORM_BLOCK8:
+			case gli::FORMAT_RGBA_ATCA_UNORM_BLOCK16:
+			case gli::FORMAT_RGBA_ATCI_UNORM_BLOCK16:
+			case gli::FORMAT_LA8_UNORM_PACK8:
+			case gli::FORMAT_RG3B2_UNORM_PACK8:
+			default:
+				CU_Exception( "Unsupported gli::format" );
+				break;
+			}
 		}
 
 		ImageLayout::Type convert( gli::target target )
