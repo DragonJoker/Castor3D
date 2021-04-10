@@ -119,7 +119,7 @@ namespace castor3d
 					if ( module.shader || !module.source.empty() )
 					{
 						auto compiled = compileShader( device, module );
-						m_states.push_back( makeShaderState( device
+						m_states.push_back( makeShaderState( *device
 							, module.stage
 							, compiled
 							, module.name ) );
