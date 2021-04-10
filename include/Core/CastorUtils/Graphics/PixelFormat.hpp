@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___CU_PixelFormat___
 
 #include "CastorUtils/Graphics/GraphicsModule.hpp"
+#include "CastorUtils/Graphics/Size.hpp"
 
 #include "CastorUtils/Exception/Exception.hpp"
 
@@ -759,7 +760,8 @@ namespace castor
 		 *\param[in]	dstBuffer	Le buffer destination
 		 *\param[in]	dstSize		La taille de la destination
 		 */
-		CU_API void convertBuffer( PixelFormat srcFormat
+		CU_API void convertBuffer( Size const & dimensions
+			, PixelFormat srcFormat
 			, uint8_t const * srcBuffer
 			, uint32_t srcSize
 			, PixelFormat dstFormat
@@ -801,6 +803,15 @@ namespace castor
 		 *\return		\p true si le format donné est un format compressé.
 		 */
 		CU_API bool isCompressed( PixelFormat format );
+		/**
+		 *\~english
+		 *\brief		Function to retrieve the compressed pixel format for the given one.
+		 *\param[in]	format	The pixel format.
+		 *\~french
+		 *\brief		Fonction de récuperation du format de pixel compressé correspondant à celui donné
+		 *\param[in]	format	Le format de pixels.
+		 */
+		CU_API PixelFormat getCompressed( PixelFormat format );
 		/**
 		 *\~english
 		 *\brief		Decompresses the given compressed pixel buffer.
@@ -859,6 +870,84 @@ namespace castor
 		 *\param[in,out]	src	Le tampon à réduire
 		 */
 		CU_API void reduceToAlpha( PxBufferBaseSPtr & src );
+
+		struct BC4x4Compressor
+		{
+		protected:
+			using Block = std::array< uint8_t, 64u >;
+			using Color = std::array< uint8_t, 4u >;
+
+			CU_API BC4x4Compressor( uint32_t srcPixelSize
+				, uint8_t( *R8 )( uint8_t const * )
+				, uint8_t( *G8 )( uint8_t const * )
+				, uint8_t( *B8 )( uint8_t const * )
+				, uint8_t( *A8 )( uint8_t const * ) );
+
+			CU_API void extractBlock( uint8_t const * inPtr
+				, uint32_t width
+				, Block & colorBlock );
+			CU_API uint16_t colorTo565( Color const & color );
+			CU_API void emitByte( uint8_t *& dstBuffer, uint8_t b );
+			CU_API void emitWord( uint8_t *& dstBuffer, uint16_t s );
+			CU_API void emitDoubleWord( uint8_t *& dstBuffer, uint32_t i );
+			CU_API void emitColorIndices( uint8_t *& dstBuffer
+				, Block const & colorBlock
+				, Color const & minColor
+				, Color const & maxColor );
+
+		protected:
+			uint32_t const srcPixelSize;
+			uint8_t( *getR8 )( uint8_t const * );
+			uint8_t( *getG8 )( uint8_t const * );
+			uint8_t( *getB8 )( uint8_t const * );
+			uint8_t( *getA8 )( uint8_t const * );
+		};
+
+		struct BC1Compressor
+			: private BC4x4Compressor
+		{
+			CU_API BC1Compressor( uint32_t srcPixelSize
+				, uint8_t( *R8 )( uint8_t const * )
+				, uint8_t( *G8 )( uint8_t const * )
+				, uint8_t( *B8 )( uint8_t const * )
+				, uint8_t( *A8 )( uint8_t const * ) );
+
+			CU_API void compress( Size const & dimensions
+				, uint8_t const * srcBuffer
+				, uint32_t srcSize
+				, uint8_t * dstBuffer
+				, uint32_t dstSize );
+
+		private:
+			void getMinMaxColors( Block const & colorBlock
+				, Color & minColor
+				, Color & maxColor );
+		};
+
+		struct BC3Compressor
+			: private BC4x4Compressor
+		{
+			CU_API BC3Compressor( uint32_t srcPixelSize
+				, uint8_t( *R8 )( uint8_t const * )
+				, uint8_t( *G8 )( uint8_t const * )
+				, uint8_t( *B8 )( uint8_t const * )
+				, uint8_t( *A8 )( uint8_t const * ) );
+
+			CU_API void compress( Size const & dimensions
+				, uint8_t const * srcBuffer
+				, uint32_t srcSize
+				, uint8_t * dstBuffer
+				, uint32_t dstSize );
+
+		private:
+			void getMinMaxColors( Block const & colorBlock
+				, Color & minColor
+				, Color & maxColor );
+			void emitAlphaIndices( uint8_t *& dstBuffer
+				, Block const & colorBlock
+				, uint8_t const minAlpha
+				, uint8_t const maxAlpha );
+		};
 	}
 }
 

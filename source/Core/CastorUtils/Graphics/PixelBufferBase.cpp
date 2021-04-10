@@ -21,8 +21,171 @@ namespace castor
 				+ ( size_t( ( y * buffer.getWidth() + x ) * ashes::getMinimalSize( format ) ) );
 		}
 
+		template< PixelFormat PFT >
+		void generateMipPixelT( uint8_t const * srcPixel1
+			, uint8_t const * srcPixel2
+			, uint8_t const * srcPixel3
+			, uint8_t const * srcPixel4
+			, uint8_t * dstPixel )
+		{
+			using PixelComponentsT = PixelComponents< PFT >;
 
-		void copyBuffer( uint8_t const * srcBuffer
+			PixelComponentsT::R8( dstPixel
+				, uint8_t( ( uint16_t( PixelComponentsT::R8( srcPixel1 ) )
+						+ uint16_t( PixelComponentsT::R8( srcPixel2 ) )
+						+ uint16_t( PixelComponentsT::R8( srcPixel3 ) )
+						+ uint16_t( PixelComponentsT::R8( srcPixel4 ) ) )
+					/ 4u ) );
+			PixelComponentsT::G8( dstPixel
+				, uint8_t( ( uint16_t( PixelComponentsT::G8( srcPixel1 ) )
+						+ uint16_t( PixelComponentsT::G8( srcPixel2 ) )
+						+ uint16_t( PixelComponentsT::G8( srcPixel3 ) )
+						+ uint16_t( PixelComponentsT::G8( srcPixel4 ) ) )
+					/ 4u ) );
+			PixelComponentsT::B8( dstPixel
+				, uint8_t( ( uint16_t( PixelComponentsT::B8( srcPixel1 ) )
+						+ uint16_t( PixelComponentsT::B8( srcPixel2 ) )
+						+ uint16_t( PixelComponentsT::B8( srcPixel3 ) )
+						+ uint16_t( PixelComponentsT::B8( srcPixel4 ) ) )
+					/ 4u ) );
+			PixelComponentsT::A8( dstPixel
+				, uint8_t( ( uint16_t( PixelComponentsT::A8( srcPixel1 ) )
+						+ uint16_t( PixelComponentsT::A8( srcPixel2 ) )
+						+ uint16_t( PixelComponentsT::A8( srcPixel3 ) )
+						+ uint16_t( PixelComponentsT::A8( srcPixel4 ) ) )
+					/ 4u ) );
+		}
+
+		template< PixelFormat PFT >
+		void generateMipLevelT( VkExtent2D const & extent
+			, uint8_t const * srcBuffer
+			, uint8_t * dstBuffer
+			, uint32_t level
+			, uint32_t levelSize )
+		{
+			auto pixelSize = PF::getBytesPerPixel( PFT );
+			auto srcLevelExtent = ashes::getSubresourceDimensions( extent, level - 1u );
+			auto dstLevelExtent = ashes::getSubresourceDimensions( extent, level );
+			auto srcLineSize = pixelSize * srcLevelExtent.width;
+			auto dstLineSize = pixelSize * dstLevelExtent.width;
+
+			for ( auto y = 0u; y < dstLevelExtent.height; ++y )
+			{
+				auto srcLine0 = srcBuffer;
+				auto srcLine1 = srcBuffer + srcLineSize;
+				auto dstLine = dstBuffer;
+
+				for ( auto x = 0u; x < dstLevelExtent.width; ++x )
+				{
+					generateMipPixelT< PFT >( srcLine0
+						, srcLine0 + pixelSize
+						, srcLine1
+						, srcLine1 + pixelSize
+						, dstLine );
+					srcLine0 += 2 * pixelSize;
+					srcLine1 += 2 * pixelSize;
+					dstLine += pixelSize;
+				}
+
+				srcBuffer += 2 * srcLineSize;
+				dstBuffer += dstLineSize;
+			}
+		}
+
+		template< PixelFormat PFT >
+		ByteArray generateMipmapsT( VkExtent3D const & extent
+			, uint8_t const * buffer
+			, uint32_t align
+			, uint32_t dstLevels )
+		{
+			ByteArray result;
+			auto vkfmt = VkFormat( PFT );
+			VkExtent2D dim{ extent.width, extent.height };
+			auto srcLayerSize = ashes::getLevelsSize( dim
+				, vkfmt
+				, 0u
+				, 1u
+				, 0u );
+			auto dstLayerSize = ashes::getLevelsSize( dim
+				, vkfmt
+				, 0u
+				, dstLevels
+				, 0u );
+			result.resize( dstLayerSize * extent.depth );
+			auto srcLayer = buffer;
+			auto dstLayer = result.data();
+
+			for ( auto layer = 0u; layer < extent.depth; ++layer )
+			{
+				auto levelSize = ashes::getSize( dim
+					, vkfmt
+					, 0u
+					, align );
+
+				// Copy level 0 to dst layer buffer
+				std::memcpy( dstLayer
+					, srcLayer
+					, levelSize );
+
+				auto dstLevel = dstLayer;
+
+				for ( auto i = 1u; i < dstLevels; ++i )
+				{
+					auto srcLevel = dstLevel;
+					dstLevel += levelSize;
+					levelSize = ashes::getSize( dim
+						, vkfmt
+						, i );
+					generateMipLevelT< PFT >( dim
+						, srcLevel
+						, dstLevel
+						, i
+						, levelSize );
+				}
+
+				srcLayer += srcLayerSize;
+				dstLayer += dstLayerSize;
+			}
+
+			return result;
+		}
+
+		ByteArray generateMipmaps( VkExtent3D const & extent
+			, uint8_t const * buffer
+			, PixelFormat format
+			, uint32_t align
+			, uint32_t dstLevels )
+		{
+			CU_Require( PF::getCompressed( format ) != format );
+
+			switch ( format )
+			{
+			case PixelFormat::eR8G8B8_UNORM:
+				return generateMipmapsT< PixelFormat::eR8G8B8_UNORM >( extent, buffer, align, dstLevels );
+			case PixelFormat::eB8G8R8_UNORM:
+				return 	generateMipmapsT< PixelFormat::eB8G8R8_UNORM >( extent, buffer, align, dstLevels );
+			case PixelFormat::eB8G8R8A8_UNORM:
+				return generateMipmapsT< PixelFormat::eB8G8R8A8_UNORM >( extent, buffer, align, dstLevels );
+			case PixelFormat::eR8G8B8A8_UNORM:
+				return generateMipmapsT< PixelFormat::eR8G8B8A8_UNORM >( extent, buffer, align, dstLevels );
+			case PixelFormat::eA8B8G8R8_UNORM:
+				return generateMipmapsT< PixelFormat::eA8B8G8R8_UNORM >( extent, buffer, align, dstLevels );
+			case PixelFormat::eR8G8B8_SRGB:
+				return generateMipmapsT< PixelFormat::eR8G8B8_SRGB >( extent, buffer, align, dstLevels );
+			case PixelFormat::eB8G8R8_SRGB:
+				return generateMipmapsT< PixelFormat::eB8G8R8_SRGB >( extent, buffer, align, dstLevels );
+			case PixelFormat::eR8G8B8A8_SRGB:
+				return generateMipmapsT< PixelFormat::eR8G8B8A8_SRGB >( extent, buffer, align, dstLevels );
+			case PixelFormat::eA8B8G8R8_SRGB:
+				return generateMipmapsT< PixelFormat::eA8B8G8R8_SRGB >( extent, buffer, align, dstLevels );
+			default:
+				CU_Failure( "Unsupported format type for CPU mipmaps generation" );
+				return ByteArray{};
+			}
+		}
+
+		void copyBuffer( Size const & dimensions
+			, uint8_t const * srcBuffer
 			, PixelFormat srcFormat
 			, uint32_t srcAlign
 			, uint8_t * dstBuffer
@@ -62,7 +225,9 @@ namespace castor
 						, dstBlockSize
 						, level
 						, dstAlign ) );
-					PF::convertBuffer( srcFormat
+					auto levelExtent = ashes::getSubresourceDimensions( VkExtent2D{ dimensions.getWidth(), dimensions.getHeight() }, level );
+					PF::convertBuffer( { levelExtent.width, levelExtent.height }
+						, srcFormat
 						, srcLevel
 						, srcLevelSize
 						, dstFormat
@@ -129,6 +294,24 @@ namespace castor
 		, uint32_t bufferAlign )
 	{
 		auto extent = VkExtent3D{ m_size.getWidth(), m_size.getHeight(), m_layers };
+		ByteArray mips;
+
+		if ( PF::isCompressed( getFormat() )
+			&& !PF::isCompressed( bufferFormat )
+			&& m_levels <= 1u
+			&& ashes::getMaxMipCount( extent ) > 1u )
+		{
+			// Since transferring to compressed formats may not be supported by graphics API
+			// we need to generate them on CPU
+			m_levels = ashes::getMaxMipCount( extent );
+			mips = generateMipmaps( extent
+				, buffer
+				, bufferFormat
+				, bufferAlign
+				, m_levels );
+			buffer = mips.data();
+		}
+
 		auto newSize = ashes::getLevelsSize( extent
 			, VkFormat( getFormat() )
 			, 0u
@@ -142,7 +325,8 @@ namespace castor
 		}
 		else
 		{
-			copyBuffer( buffer
+			copyBuffer( m_size
+				, buffer
 				, bufferFormat
 				, bufferAlign
 				, m_buffer.data()
