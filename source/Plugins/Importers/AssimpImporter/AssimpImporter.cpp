@@ -353,7 +353,11 @@ namespace C3dAssimp
 				auto texture = importer.loadTexture( castor::Path{ castor::string::stringCast< xchar >( name.C_Str() ) }
 					, config
 					, pass );
-				log::debug << cuT( "  Texture: [" ) << texture->toString() << cuT( "]" ) << std::endl;
+
+				if ( texture )
+				{
+					log::debug << cuT( "  Texture: [" ) << texture->toString() << cuT( "]" ) << std::endl;
+				}
 			}
 		}
 
