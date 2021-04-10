@@ -62,63 +62,6 @@ namespace castor3d
 {
 	namespace
 	{
-		void createAlphaRejectionPass( PassSPtr srcPass
-			, PassSPtr dstPass )
-		{
-			dstPass->setImplicit();
-			dstPass->setTwoSided( true );
-			dstPass->setAlphaFunc( VK_COMPARE_OP_GREATER );
-			dstPass->setAlphaValue( 0.95f );
-			dstPass->setEmissive( srcPass->getEmissive() );
-			dstPass->setOpacity( srcPass->getOpacity() );
-			dstPass->setRefractionRatio( srcPass->getRefractionRatio() );
-			dstPass->setParallaxOcclusion( srcPass->getParallaxOcclusion() );
-			dstPass->setColourBlendMode( srcPass->getColourBlendMode() );
-			dstPass->enableReflections( srcPass->hasReflections() );
-			dstPass->enableRefractions( srcPass->hasRefraction() );
-
-			if ( srcPass->hasSubsurfaceScattering() )
-			{
-				dstPass->setSubsurfaceScattering( std::make_unique< SubsurfaceScattering >( srcPass->getSubsurfaceScattering() ) );
-			}
-
-			for ( auto & unit : *srcPass )
-			{
-				dstPass->addTextureUnit( unit );
-			}
-		}
-
-		void createAlphaRejectionPass( MaterialSPtr material
-			, PhongPassSPtr srcPass )
-		{
-			auto dstPass = std::static_pointer_cast< PhongPass >( material->createPass() );
-			dstPass->setAmbient( srcPass->getAmbient() );
-			dstPass->setDiffuse( srcPass->getDiffuse() );
-			dstPass->setShininess( srcPass->getShininess().value() );
-			dstPass->setSpecular( srcPass->getSpecular() );
-			createAlphaRejectionPass( srcPass, dstPass );
-		}
-
-		void createAlphaRejectionPass( MaterialSPtr material
-			, MetallicRoughnessPbrPassSPtr srcPass )
-		{
-			auto dstPass = std::static_pointer_cast< MetallicRoughnessPbrPass >( material->createPass() );
-			dstPass->setAlbedo( srcPass->getAlbedo() );
-			dstPass->setRoughness( srcPass->getRoughness() );
-			dstPass->setMetallic( srcPass->getMetallic() );
-			createAlphaRejectionPass( srcPass, dstPass );
-		}
-
-		void createAlphaRejectionPass( MaterialSPtr material
-			, SpecularGlossinessPbrPassSPtr srcPass )
-		{
-			auto dstPass = std::static_pointer_cast< SpecularGlossinessPbrPass >( material->createPass() );
-			dstPass->setDiffuse( srcPass->getDiffuse() );
-			dstPass->setGlossiness( srcPass->getGlossiness() );
-			dstPass->setSpecular( srcPass->getSpecular() );
-			createAlphaRejectionPass( srcPass, dstPass );
-		}
-
 		void mergeMasks( uint32_t toMerge
 			, TextureFlag flag
 			, TextureFlags & result )
@@ -3214,27 +3157,13 @@ namespace castor3d
 			{
 				auto pass = *material->begin();
 
-				if ( pass->hasAlphaBlending()
+				if ( pass->hasOnlyAlphaBlending()
 					&& parsingContext->bBool1
 					&& !pass->getTextures( TextureFlag::eOpacity ).empty() )
 				{
 					parsingContext->bBool1 = false;
-
 					// Create a new pass with alpha rejection
-					switch ( pass->getType() )
-					{
-					case MaterialType::ePhong:
-						createAlphaRejectionPass( material, std::static_pointer_cast< PhongPass >( pass ) );
-						break;
-					case MaterialType::eMetallicRoughness:
-						createAlphaRejectionPass( material, std::static_pointer_cast< MetallicRoughnessPbrPass >( pass ) );
-						break;
-					case MaterialType::eSpecularGlossiness:
-						createAlphaRejectionPass( material, std::static_pointer_cast< SpecularGlossinessPbrPass >( pass ) );
-						break;
-					default:
-						break;
-					}
+					material->addAlphaRejectionPass( *pass );
 				}
 			}
 		}
@@ -3606,6 +3535,26 @@ namespace castor3d
 			params[0]->get( uiFunc );
 			params[1]->get( fFloat );
 			parsingContext->pass->setAlphaFunc( VkCompareOp( uiFunc ) );
+			parsingContext->pass->setAlphaValue( fFloat );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserPassBlendAlphaFunc )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->pass )
+		{
+			CU_ParsingError( cuT( "No Pass initialised." ) );
+		}
+		else if ( !params.empty() )
+		{
+			uint32_t uiFunc;
+			float fFloat;
+			params[0]->get( uiFunc );
+			params[1]->get( fFloat );
+			parsingContext->pass->setBlendAlphaFunc( VkCompareOp( uiFunc ) );
 			parsingContext->pass->setAlphaValue( fFloat );
 		}
 	}

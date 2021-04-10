@@ -265,6 +265,7 @@ namespace castor3d
 		C3D_API PipelineFlags prepareBackPipeline( BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
 			, VkCompareOp alphaFunc
+			, VkCompareOp blendAlphaFunc
 			, PassFlags const & passFlags
 			, TextureFlagsArray const & textures
 			, uint32_t heightMapIndex
@@ -313,6 +314,7 @@ namespace castor3d
 		C3D_API PipelineFlags prepareFrontPipeline( BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
 			, VkCompareOp alphaFunc
+			, VkCompareOp blendAlphaFunc
 			, PassFlags const & passFlags
 			, TextureFlagsArray const & textures
 			, uint32_t heightMapIndex

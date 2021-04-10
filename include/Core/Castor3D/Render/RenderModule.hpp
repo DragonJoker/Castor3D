@@ -232,6 +232,7 @@ namespace castor3d
 			, SceneFlags sceneFlags = SceneFlag::eNone
 			, VkPrimitiveTopology topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
 			, VkCompareOp alphaFunc = VK_COMPARE_OP_ALWAYS
+			, VkCompareOp blendAlphaFunc = VK_COMPARE_OP_ALWAYS
 			, TextureFlagsArray textures = {} )
 			: colourBlendMode{ colourBlendMode }
 			, alphaBlendMode{ alphaBlendMode }
@@ -241,6 +242,7 @@ namespace castor3d
 			, sceneFlags{ sceneFlags }
 			, topology{ topology }
 			, alphaFunc{ alphaFunc }
+			, blendAlphaFunc{ blendAlphaFunc }
 			, textures{ textures }
 			, texturesFlags{ merge( textures ) }
 		{
@@ -254,6 +256,7 @@ namespace castor3d
 		SceneFlags sceneFlags{ SceneFlag::eNone };
 		VkPrimitiveTopology topology{ VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST };
 		VkCompareOp alphaFunc{ VK_COMPARE_OP_ALWAYS };
+		VkCompareOp blendAlphaFunc{ VK_COMPARE_OP_ALWAYS };
 		TextureFlagsArray textures;
 		TextureFlags texturesFlags;
 	};

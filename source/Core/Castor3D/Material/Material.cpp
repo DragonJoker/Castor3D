@@ -141,6 +141,14 @@ namespace castor3d
 			} );
 	}
 
+	void Material::addAlphaRejectionPass( Pass & basePass )
+	{
+		basePass.setTwoSided( true );
+		basePass.setAlphaFunc( VK_COMPARE_OP_GREATER );
+		basePass.setBlendAlphaFunc( VK_COMPARE_OP_LESS_OR_EQUAL );
+		basePass.setAlphaValue( 0.95f );
+	}
+
 	void Material::onPassChanged( Pass const & pass )
 	{
 		onChanged( *this );
