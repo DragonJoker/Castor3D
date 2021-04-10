@@ -100,7 +100,10 @@ namespace castor
 					break;
 				}
 
-				result = PxBufferBase::create( Size( x, y ), format, data, format );
+				result = PxBufferBase::create( Size( x, y )
+					, PF::getCompressed( format )
+					, data
+					, format );
 				stbi_image_free( data );
 
 				//if ( components != ImageComponents::eA
@@ -157,7 +160,7 @@ namespace castor
 				}
 
 				result = PxBufferBase::create( Size( x, y )
-					, format
+					, PF::getCompressed( format )
 					, reinterpret_cast< uint8_t * >( data )
 					, format );
 				stbi_image_free( data );

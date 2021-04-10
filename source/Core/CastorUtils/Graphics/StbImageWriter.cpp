@@ -45,6 +45,7 @@ namespace castor
 				result = 3;
 				break;
 
+			case PixelFormat::eB8G8R8A8_UNORM:
 			case PixelFormat::eA8B8G8R8_UNORM:
 			case PixelFormat::eA8B8G8R8_SRGB:
 			case PixelFormat::eR8G8B8A8_UNORM:
