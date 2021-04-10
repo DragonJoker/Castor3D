@@ -711,7 +711,7 @@ namespace castor3d
 		commandBuffer->end();
 	}
 
-	void RenderTarget::doInitialiseCombine( RenderDevice const & device )
+	void RenderTarget::doInitCombineProgram()
 	{
 		static uint32_t constexpr LhsIdx = 0u;
 		static uint32_t constexpr RhsIdx = 1u;
@@ -775,6 +775,11 @@ namespace castor3d
 				} );
 			m_combinePxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
+	}
+
+	void RenderTarget::doInitialiseCombine( RenderDevice const & device )
+	{
+		doInitCombineProgram();
 
 		VkExtent2D extent
 		{

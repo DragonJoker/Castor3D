@@ -128,13 +128,21 @@ namespace castor3d
 		}
 	}
 
-	bool isValidNodeForPass( PassFlags const & passFlags, RenderMode value )
+	bool isValidNodeForPass( PassFlags const & passFlags, RenderMode renderMode )
 	{
-		auto transparent = checkFlag( passFlags, PassFlag::eAlphaBlending );
-		return value == RenderMode::eBoth
-			|| ( transparent
-				? ( value == RenderMode::eTransparentOnly )
-				: ( value == RenderMode::eOpaqueOnly ) );
+		if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) )
+		{
+			if ( checkFlag( passFlags, PassFlag::eAlphaTest ) )
+			{
+				return true;
+			}
+
+			return renderMode == RenderMode::eBoth
+				|| renderMode == RenderMode::eTransparentOnly;
+		}
+
+		return renderMode == RenderMode::eBoth
+			|| renderMode == RenderMode::eOpaqueOnly;
 	}
 
 	TextureFlagsArray::const_iterator checkFlags( TextureFlagsArray const & flags, TextureFlag flag )
@@ -189,21 +197,25 @@ namespace castor3d
 	{
 		return lhs.alphaFunc < rhs.alphaFunc
 			|| ( lhs.alphaFunc == rhs.alphaFunc
-				&& ( lhs.topology < rhs.topology
-					|| ( lhs.topology == rhs.topology
-						&& ( lhs.colourBlendMode < rhs.colourBlendMode
-							|| ( lhs.colourBlendMode == rhs.colourBlendMode
-								&& ( lhs.alphaBlendMode < rhs.alphaBlendMode
-									|| ( lhs.alphaBlendMode == rhs.alphaBlendMode
-										&& ( lhs.textures < rhs.textures
-											|| ( lhs.textures == rhs.textures
-												&& ( lhs.heightMapIndex < rhs.heightMapIndex
-													|| ( lhs.heightMapIndex == rhs.heightMapIndex
-														&& ( lhs.programFlags < rhs.programFlags
-															|| ( lhs.programFlags == rhs.programFlags
-																&& ( lhs.passFlags < rhs.passFlags
-																	|| ( lhs.passFlags == rhs.passFlags
-																		&& lhs.sceneFlags < rhs.sceneFlags )
+				&& ( lhs.blendAlphaFunc < rhs.blendAlphaFunc
+					|| ( lhs.blendAlphaFunc == rhs.blendAlphaFunc
+						&& ( lhs.topology < rhs.topology
+							|| ( lhs.topology == rhs.topology
+								&& ( lhs.colourBlendMode < rhs.colourBlendMode
+									|| ( lhs.colourBlendMode == rhs.colourBlendMode
+										&& ( lhs.alphaBlendMode < rhs.alphaBlendMode
+											|| ( lhs.alphaBlendMode == rhs.alphaBlendMode
+												&& ( lhs.textures < rhs.textures
+													|| ( lhs.textures == rhs.textures
+														&& ( lhs.heightMapIndex < rhs.heightMapIndex
+															|| ( lhs.heightMapIndex == rhs.heightMapIndex
+																&& ( lhs.programFlags < rhs.programFlags
+																	|| ( lhs.programFlags == rhs.programFlags
+																		&& ( lhs.passFlags < rhs.passFlags
+																			|| ( lhs.passFlags == rhs.passFlags
+																				&& lhs.sceneFlags < rhs.sceneFlags )
+																			)
+																		)
 																	)
 																)
 															)

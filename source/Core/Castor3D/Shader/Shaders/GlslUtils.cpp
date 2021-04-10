@@ -931,7 +931,8 @@ namespace castor3d::shader
 
 	void Utils::applyAlphaFunc( VkCompareOp alphaFunc
 		, sdw::Float & alpha
-		, sdw::Float const & alphaRef )const
+		, sdw::Float const & alphaRef
+		, bool opaque )const
 	{
 		if ( alphaFunc != VK_COMPARE_OP_ALWAYS )
 		{
@@ -946,7 +947,10 @@ namespace castor3d::shader
 					m_writer.discard();
 				}
 				FI;
-				alpha = 1.0_f;
+				if ( opaque )
+				{
+					alpha = 1.0_f;
+				}
 				break;
 			case VK_COMPARE_OP_EQUAL:
 				IF( m_writer, alpha != alphaRef )
@@ -954,7 +958,10 @@ namespace castor3d::shader
 					m_writer.discard();
 				}
 				FI;
-				alpha = 1.0_f;
+				if ( opaque )
+				{
+					alpha = 1.0_f;
+				}
 				break;
 			case VK_COMPARE_OP_LESS_OR_EQUAL:
 				IF( m_writer, alpha > alphaRef )
@@ -962,7 +969,10 @@ namespace castor3d::shader
 					m_writer.discard();
 				}
 				FI;
-				alpha = 1.0_f;
+				if ( opaque )
+				{
+					alpha = 1.0_f;
+				}
 				break;
 			case VK_COMPARE_OP_GREATER:
 				IF( m_writer, alpha <= alphaRef )
@@ -970,7 +980,10 @@ namespace castor3d::shader
 					m_writer.discard();
 				}
 				FI;
-				alpha = 1.0_f;
+				if ( opaque )
+				{
+					alpha = 1.0_f;
+				}
 				break;
 			case VK_COMPARE_OP_NOT_EQUAL:
 				IF( m_writer, alpha == alphaRef )
@@ -978,7 +991,10 @@ namespace castor3d::shader
 					m_writer.discard();
 				}
 				FI;
-				alpha = 1.0_f;
+				if ( opaque )
+				{
+					alpha = 1.0_f;
+				}
 				break;
 			case VK_COMPARE_OP_GREATER_OR_EQUAL:
 				IF( m_writer, alpha < alphaRef )
@@ -986,7 +1002,10 @@ namespace castor3d::shader
 					m_writer.discard();
 				}
 				FI;
-				alpha = 1.0_f;
+				if ( opaque )
+				{
+					alpha = 1.0_f;
+				}
 				break;
 			case VK_COMPARE_OP_ALWAYS:
 				break;
