@@ -62,11 +62,12 @@ namespace castor3d
 
 	Pass::Pass( Material & parent )
 		: OwnedBy< Material >{ parent }
-		, m_flags{ ( getType() == MaterialType::eMetallicRoughness
-			? PassFlag::eMetallicRoughness 
-			: ( getType() == MaterialType::eSpecularGlossiness
-				? PassFlag::eSpecularGlossiness
-				: PassFlag::eNone ) ) }
+		, m_flags{ PassFlag::eLighting
+			| ( ( getType() == MaterialType::eMetallicRoughness
+				? PassFlag::eMetallicRoughness 
+				: ( getType() == MaterialType::eSpecularGlossiness
+					? PassFlag::eSpecularGlossiness
+					: PassFlag::eNone ) ) ) }
 	{
 	}
 

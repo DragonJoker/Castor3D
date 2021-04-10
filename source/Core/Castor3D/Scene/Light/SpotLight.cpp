@@ -48,74 +48,160 @@ namespace castor3d
 
 		if ( result.empty() )
 		{
-			Point3fArray data;
+			Angle const angle = Angle::fromDegrees( 360.0f / FaceCount );
+			std::vector< Point2f > arc{ FaceCount + 1 };
 			Angle alpha;
-			auto angle = Angle::fromDegrees( 360.0f / FaceCount );
+			Point3fArray data;
 
-			data.emplace_back( 0.0f, 0.0f, 0.0f );
-			data.emplace_back( 0.0f, 0.0f, 1.0f );
+			data.reserve( FaceCount * FaceCount * 4 );
 
-			for ( auto i = 0u; i < FaceCount; alpha += angle, ++i )
+			for ( uint32_t i = 0; i <= FaceCount; i++ )
 			{
-				data.push_back( point::getNormalised( Point3f{ alpha.cos()
-					, alpha.sin()
-					, 1.0f } ) );
+				float x = +alpha.sin();
+				float y = -alpha.cos();
+				arc[i][0] = x;
+				arc[i][1] = y;
+				alpha += angle / 2;
 			}
 
-			for ( auto i = 0u; i < FaceCount; alpha += angle, ++i )
+			Angle iAlpha;
+			Point3f pos;
+
+			for ( uint32_t k = 0; k < FaceCount; ++k )
 			{
-				data.push_back( point::getNormalised( Point3f{ alpha.cos() / 2.0f
-					, alpha.sin() / 2.0f
-					, 1.0f } ) );
+				auto ptT = arc[k + 0];
+				auto ptB = arc[k + 1];
+
+				if ( k == 0 )
+				{
+					// Calcul de la position des points du haut
+					for ( uint32_t i = 0; i <= FaceCount; iAlpha += angle, ++i )
+					{
+						auto cos = iAlpha.cos();
+						auto sin = iAlpha.sin();
+						data.emplace_back( ptT[0] * cos, ptT[1], ptT[0] * sin );
+					}
+				}
+
+				// Calcul de la position des points
+				iAlpha = 0.0_radians;
+
+				for ( uint32_t i = 0; i <= FaceCount; iAlpha += angle, ++i )
+				{
+					auto cos = iAlpha.cos();
+					auto sin = iAlpha.sin();
+					data.emplace_back( ptB[0] * cos, ptB[1], ptB[0] * sin );
+				}
 			}
 
+			result.reserve( FaceCount * FaceCount * 6u );
+			uint32_t cur = 0;
+			uint32_t prv = 0;
 
-			// Side
-			for ( auto i = 0u; i < FaceCount - 1; i++ )
+			for ( uint32_t k = 0; k < FaceCount; ++k )
 			{
-				result.push_back( data[0u] );
-				result.push_back( data[i + 3u] );
-				result.push_back( data[i + 2u] );
-			}
+				if ( k == 0 )
+				{
+					for ( uint32_t i = 0; i <= FaceCount; ++i )
+					{
+						cur++;
+					}
+				}
 
-			// Last face
-			result.push_back( data[0u] );
-			result.push_back( data[2u] );
-			result.push_back( data[FaceCount + 1] );
+				for ( uint32_t i = 0; i < FaceCount; ++i )
+				{
+					result.push_back( data[prv + 0] );
+					result.push_back( data[cur + 0] );
+					result.push_back( data[prv + 1] );
+					result.push_back( data[cur + 0] );
+					result.push_back( data[cur + 1] );
+					result.push_back( data[prv + 1] );
+					prv++;
+					cur++;
+				}
 
-			// Base
-			auto second = 2u + FaceCount;
-			for ( auto i = 0u; i < FaceCount - 1; i++ )
-			{
-				// Center to intermediate.
-				result.push_back( data[1u] );
-				result.push_back( data[i + second + 0u] );
-				result.push_back( data[i + second + 1u] );
-				// Intermediate to border.
-				result.push_back( data[i + second + 0u] );
-				result.push_back( data[i + 2u] );
-				result.push_back( data[i + 3u] );
-				result.push_back( data[i + second + 0u] );
-				result.push_back( data[i + 3u] );
-				result.push_back( data[i + second + 1u] );
+				prv++;
+				cur++;
 			}
-			// Last face
-			auto third = second + FaceCount - 1u;
-			// Center to intermediate.
-			result.push_back( data[1u] );
-			result.push_back( data[third] );
-			result.push_back( data[second] );
-			// Intermediate to border
-			result.push_back( data[third] );
-			result.push_back( data[FaceCount + 1u] );
-			result.push_back( data[2u] );
-			result.push_back( data[third] );
-			result.push_back( data[2u] );
-			result.push_back( data[second] );
 		}
 
 		return result;
 	}
+
+	//Point3fArray const & SpotLight::generateVertices()
+	//{
+	//	static Point3fArray result;
+
+	//	if ( result.empty() )
+	//	{
+	//		Point3fArray data;
+	//		Angle alpha;
+	//		auto angle = Angle::fromDegrees( 360.0f / FaceCount );
+
+	//		data.emplace_back( 0.0f, 0.0f, 0.0f );
+	//		data.emplace_back( 0.0f, 0.0f, 1.0f );
+
+	//		for ( auto i = 0u; i < FaceCount; alpha += angle, ++i )
+	//		{
+	//			data.push_back( point::getNormalised( Point3f{ alpha.cos()
+	//				, alpha.sin()
+	//				, 1.0f } ) );
+	//		}
+
+	//		for ( auto i = 0u; i < FaceCount; alpha += angle, ++i )
+	//		{
+	//			data.push_back( point::getNormalised( Point3f{ alpha.cos() / 2.0f
+	//				, alpha.sin() / 2.0f
+	//				, 1.0f } ) );
+	//		}
+
+
+	//		// Side
+	//		for ( auto i = 0u; i < FaceCount - 1; i++ )
+	//		{
+	//			result.push_back( data[0u] );
+	//			result.push_back( data[i + 3u] );
+	//			result.push_back( data[i + 2u] );
+	//		}
+
+	//		// Last face
+	//		result.push_back( data[0u] );
+	//		result.push_back( data[2u] );
+	//		result.push_back( data[FaceCount + 1] );
+
+	//		// Base
+	//		auto second = 2u + FaceCount;
+	//		for ( auto i = 0u; i < FaceCount - 1; i++ )
+	//		{
+	//			// Center to intermediate.
+	//			result.push_back( data[1u] );
+	//			result.push_back( data[i + second + 0u] );
+	//			result.push_back( data[i + second + 1u] );
+	//			// Intermediate to border.
+	//			result.push_back( data[i + second + 0u] );
+	//			result.push_back( data[i + 2u] );
+	//			result.push_back( data[i + 3u] );
+	//			result.push_back( data[i + second + 0u] );
+	//			result.push_back( data[i + 3u] );
+	//			result.push_back( data[i + second + 1u] );
+	//		}
+	//		// Last face
+	//		auto third = second + FaceCount - 1u;
+	//		// Center to intermediate.
+	//		result.push_back( data[1u] );
+	//		result.push_back( data[third] );
+	//		result.push_back( data[second] );
+	//		// Intermediate to border
+	//		result.push_back( data[third] );
+	//		result.push_back( data[FaceCount + 1u] );
+	//		result.push_back( data[2u] );
+	//		result.push_back( data[third] );
+	//		result.push_back( data[2u] );
+	//		result.push_back( data[second] );
+	//	}
+
+	//	return result;
+	//}
 
 	void SpotLight::update()
 	{
