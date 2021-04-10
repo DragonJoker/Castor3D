@@ -61,12 +61,13 @@ namespace C3dAssimp
 		 */
 		bool doImportMesh( castor3d::Mesh & p_mesh )override;
 
-		bool doProcessMesh( castor3d::Scene & p_scene
-			, castor3d::Mesh & p_mesh
-			, castor3d::Skeleton & p_skeleton
-			, aiMesh const & p_aiMesh
-			, aiScene const & p_aiScene
-			, castor3d::Submesh & p_submesh );
+		bool doProcessMesh( castor3d::Scene & scene
+			, castor3d::Mesh & mesh
+			, castor3d::Skeleton & skeleton
+			, aiMesh const & aiMesh
+			, uint32_t aiMeshIndex
+			, aiScene const & aiScene
+			, castor3d::Submesh & submesh );
 		castor3d::MaterialSPtr doProcessMaterial( castor3d::Scene & p_scene
 			, aiMaterial const & p_aiMaterial );
 		castor3d::BoneSPtr doAddBone( castor::String const & p_name
@@ -108,6 +109,7 @@ namespace C3dAssimp
 		int m_anonymous;
 		std::map< castor::String, uint32_t > m_mapBoneByID;
 		std::vector< castor3d::BoneSPtr > m_arrayBones;
+		std::map< uint32_t, uint32_t > m_submeshByID;
 	};
 }
 
