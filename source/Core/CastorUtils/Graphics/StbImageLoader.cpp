@@ -176,6 +176,7 @@ namespace castor
 		StringArray const & listExtensions()
 		{
 			static StringArray const list
+#if !C3D_UseFreeImage
 			{
 				cuT( "jpeg" ),
 				cuT( "jpg" ),
@@ -189,7 +190,10 @@ namespace castor
 				cuT( "pnm" ),
 				cuT( "ppm" ),
 				cuT( "pgm" ),
-			};
+				cuT( "tif" ),
+			}
+#endif
+			;
 			return list;
 		}
 	}
