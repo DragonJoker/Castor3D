@@ -23,10 +23,10 @@ namespace castor
 		{
 			{ VK_COMPARE_OP_ALWAYS, cuT( "always" ) },
 			{ VK_COMPARE_OP_LESS, cuT( "less" ) },
-			{ VK_COMPARE_OP_LESS_OR_EQUAL, cuT( "less_or_equal" ) },
+			{ VK_COMPARE_OP_LESS_OR_EQUAL, cuT( "less_equal" ) },
 			{ VK_COMPARE_OP_EQUAL, cuT( "equal" ) },
 			{ VK_COMPARE_OP_NOT_EQUAL, cuT( "not_equal" ) },
-			{ VK_COMPARE_OP_GREATER_OR_EQUAL, cuT( "greater_or_equal" ) },
+			{ VK_COMPARE_OP_GREATER_OR_EQUAL, cuT( "greater_equal" ) },
 			{ VK_COMPARE_OP_GREATER, cuT( "greater" ) },
 			{ VK_COMPARE_OP_NEVER, cuT( "never" ) },
 		};
@@ -56,14 +56,20 @@ namespace castor
 				&& writeOpt( file, cuT( "colour_blend_mode" ), StrBlendModes[uint32_t( pass.getColourBlendMode() )], StrBlendModes[uint32_t( BlendMode::eNoBlend )] );
 		}
 
-		if ( result )
+		if ( result && pass.hasAlphaTest() )
 		{
-			if ( pass.hasAlphaTest() )
+			result = write( file, cuT( "alpha_func" ), strAlphaFuncs[pass.getAlphaFunc()], pass.getAlphaValue() );
+		}
+			
+		if ( result
+			&& pass.hasAlphaBlending() )
+		{
+			if ( pass.hasBlendAlphaTest() )
 			{
-				result = write( file, cuT( "alpha_func" ), strAlphaFuncs[pass.getAlphaFunc()], pass.getAlphaValue() );
+				result = write( file, cuT( "blend_alpha_func" ), strAlphaFuncs[pass.getBlendAlphaFunc()], pass.getAlphaValue() );
 			}
-			else if ( pass.hasAlphaBlending()
-				&& pass.getAlphaBlendMode() != BlendMode::eNoBlend )
+
+			if ( result )
 			{
 				result = write( file, cuT( "alpha_blend_mode" ), StrBlendModes[uint32_t( pass.getAlphaBlendMode() )] );
 			}
@@ -72,7 +78,9 @@ namespace castor
 		if ( result )
 		{
 			result = writeOpt( file, cuT( "parallax_occlusion" ), pass.hasParallaxOcclusion() )
-				&& writeOpt( file, cuT( "parallax_occlusion" ), pass.hasEnvironmentMapping() );
+				&& writeOpt( file, cuT( "reflections" ), pass.hasReflections() )
+				&& writeOpt( file, cuT( "refractions" ), pass.hasRefraction() )
+				&& writeOpt( file, cuT( "refraction_ratio" ), pass.getRefractionRatio(), 0.0f );
 		}
 
 		if ( result )

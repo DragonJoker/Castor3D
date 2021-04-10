@@ -275,6 +275,7 @@ namespace castor3d
 	PipelineFlags SceneRenderPass::prepareBackPipeline( BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
 		, VkCompareOp alphaFunc
+		, VkCompareOp blendAlphaFunc
 		, PassFlags const & passFlags
 		, TextureFlagsArray const & textures
 		, uint32_t heightMapIndex
@@ -291,6 +292,7 @@ namespace castor3d
 			, sceneFlags
 			, topology
 			, alphaFunc
+			, blendAlphaFunc
 			, textures };
 		prepareBackPipeline( flags, layouts );
 		return flags;
@@ -319,6 +321,7 @@ namespace castor3d
 	PipelineFlags SceneRenderPass::prepareFrontPipeline( BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
 		, VkCompareOp alphaFunc
+		, VkCompareOp blendAlphaFunc
 		, PassFlags const & passFlags
 		, TextureFlagsArray const & textures
 		, uint32_t heightMapIndex
@@ -335,6 +338,7 @@ namespace castor3d
 			, sceneFlags
 			, topology
 			, alphaFunc
+			, blendAlphaFunc
 			, textures };
 		prepareFrontPipeline( flags, layouts );
 		return flags;

@@ -350,7 +350,7 @@ namespace castor3d
 			{
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( inMaterial ) );
-				auto alpha = writer.declLocale( "alpha"
+				auto opacity = writer.declLocale( "opacity"
 					, material.m_opacity );
 				auto gamma = writer.declLocale( "gamma"
 					, material.m_gamma );
@@ -391,7 +391,7 @@ namespace castor3d
 						, tangent
 						, bitangent
 						, emissive
-						, alpha
+						, opacity
 						, occlusion
 						, transmittance
 						, diffuse
@@ -401,8 +401,12 @@ namespace castor3d
 						, tangentSpaceFragPosition );
 				}
 
+				utils.applyAlphaFunc( flags.blendAlphaFunc
+					, opacity
+					, material.m_alphaRef
+					, false );
 				utils.applyAlphaFunc( flags.alphaFunc
-					, alpha
+					, opacity
 					, material.m_alphaRef );
 				emissive *= diffuse;
 				auto worldEye = writer.declLocale( "worldEye"
@@ -492,7 +496,7 @@ namespace castor3d
 					, specular
 					, lightSpecular
 					, occlusion );
-				pxl_fragColor = vec4( colour, alpha );
+				pxl_fragColor = vec4( colour, opacity );
 
 				if ( getFogType( flags.sceneFlags ) != FogType::eDisabled )
 				{
@@ -607,7 +611,7 @@ namespace castor3d
 			{
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( inMaterial ) );
-				auto alpha = writer.declLocale( "alpha"
+				auto opacity = writer.declLocale( "opacity"
 					, material.m_opacity );
 				auto normal = writer.declLocale( "normal"
 					, normalize( inNormal ) );
@@ -656,7 +660,7 @@ namespace castor3d
 						, tangent
 						, bitangent
 						, emissive
-						, alpha
+						, opacity
 						, occlusion
 						, transmittance
 						, albedo
@@ -666,8 +670,12 @@ namespace castor3d
 						, tangentSpaceFragPosition );
 				}
 
+				utils.applyAlphaFunc( flags.blendAlphaFunc
+					, opacity
+					, material.m_alphaRef
+					, false );
 				utils.applyAlphaFunc( flags.alphaFunc
-					, alpha
+					, opacity
 					, material.m_alphaRef );
 				emissive *= albedo;
 				auto lightDiffuse = writer.declLocale( "lightDiffuse"
@@ -825,7 +833,7 @@ namespace castor3d
 					, mix( vec3( 0.04_f ), albedo, vec3( metalness ) )
 					, lightSpecular
 					, occlusion );
-				pxl_fragColor = vec4( colour, alpha );
+				pxl_fragColor = vec4( colour, opacity );
 
 				if ( getFogType( flags.sceneFlags ) != FogType::eDisabled )
 				{
@@ -939,7 +947,7 @@ namespace castor3d
 			{
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( inMaterial ) );
-				auto alpha = writer.declLocale( "alpha"
+				auto opacity = writer.declLocale( "opacity"
 					, material.m_opacity );
 				auto normal = writer.declLocale( "normal"
 					, normalize( inNormal ) );
@@ -988,7 +996,7 @@ namespace castor3d
 						, tangent
 						, bitangent
 						, emissive
-						, alpha
+						, opacity
 						, occlusion
 						, transmittance
 						, albedo
@@ -998,8 +1006,12 @@ namespace castor3d
 						, tangentSpaceFragPosition );
 				}
 
+				utils.applyAlphaFunc( flags.blendAlphaFunc
+					, opacity
+					, material.m_alphaRef
+					, false );
 				utils.applyAlphaFunc( flags.alphaFunc
-					, alpha
+					, opacity
 					, material.m_alphaRef );
 				emissive *= albedo;
 				auto lightDiffuse = writer.declLocale( "lightDiffuse"
@@ -1155,7 +1167,7 @@ namespace castor3d
 					, specular
 					, lightSpecular
 					, occlusion );
-				pxl_fragColor = vec4( colour, alpha );
+				pxl_fragColor = vec4( colour, opacity );
 
 				if ( getFogType( flags.sceneFlags ) != FogType::eDisabled )
 				{

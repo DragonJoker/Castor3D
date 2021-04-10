@@ -369,6 +369,7 @@ namespace castor3d
 			, ashes::CommandBufferPtr & commandBuffer
 			, ashes::ImageView const & source
 			, ashes::ImageView const & target );
+		C3D_API void doInitCombineProgram();
 		C3D_API void doInitialiseCombine( RenderDevice const & device );
 		C3D_API void doRender( RenderDevice const & device
 			, RenderInfo & info

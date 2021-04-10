@@ -873,7 +873,7 @@ namespace castor3d
 					for ( auto & pass : *material )
 					{
 						m_hasTransparentObjects |= pass->hasAlphaBlending();
-						m_hasOpaqueObjects |= !pass->hasAlphaBlending();
+						m_hasOpaqueObjects |= !pass->hasOnlyAlphaBlending();
 					}
 				}
 			}
