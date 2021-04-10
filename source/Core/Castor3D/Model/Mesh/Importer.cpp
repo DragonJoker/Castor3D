@@ -61,16 +61,61 @@ namespace castor3d
 
 			if ( result && initialise )
 			{
-				float scale = 1.0f;
+				float value = 1.0f;
 
-				if ( m_parameters.get( cuT( "rescale" ), scale )
-					&& std::abs( scale - 1.0f ) > 0.01f )
+				if ( m_parameters.get( cuT( "rescale" ), value )
+					&& std::abs( value - 1.0f ) > 0.01f )
 				{
 					for ( auto submesh : mesh )
 					{
 						for ( auto & vertex : submesh->getPoints() )
 						{
-							vertex.pos *= scale;
+							vertex.pos *= value;
+						}
+					}
+				}
+
+				if ( m_parameters.get( cuT( "pitch" ), value )
+					&& std::abs( value ) > 0.01f )
+				{
+					auto rot = castor::Quaternion::fromAxisAngle( castor::Point3f{ 1.0f, 0.0f, 0.0f }
+						, castor::Angle::fromDegrees( value ) );
+
+					for ( auto submesh : mesh )
+					{
+						for ( auto & vertex : submesh->getPoints() )
+						{
+							rot.transform( vertex.pos, vertex.pos );
+						}
+					}
+				}
+
+				if ( m_parameters.get( cuT( "yaw" ), value )
+					&& std::abs( value ) > 0.01f )
+				{
+					auto rot = castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0f, 1.0f, 0.0f }
+						, castor::Angle::fromDegrees( value ) );
+
+					for ( auto submesh : mesh )
+					{
+						for ( auto & vertex : submesh->getPoints() )
+						{
+							rot.transform( vertex.pos, vertex.pos );
+						}
+					}
+				}
+
+				if ( m_parameters.get( cuT( "roll" ), value )
+					&& std::abs( value ) > 0.01f )
+				{
+					auto rot = castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0f, 0.0f, 1.0f }
+						, castor::Angle::fromDegrees( value ) );
+
+					for ( auto submesh : mesh )
+					{
+						for ( auto & vertex : submesh->getPoints() )
+						{
+							rot.transform( vertex.pos, vertex.pos );
 						}
 					}
 				}

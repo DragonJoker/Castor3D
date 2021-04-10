@@ -2413,6 +2413,51 @@ namespace castor3d
 					{
 						parameters.add( cuT( "tangent_space" ), true );
 					}
+					else if ( param.find( cuT( "pitch" ) ) == 0 )
+					{
+						auto eqIndex = param.find( cuT( '=' ) );
+
+						if ( eqIndex != String::npos )
+						{
+							float value;
+							string::parse< float >( param.substr( eqIndex + 1 ), value );
+							parameters.add( cuT( "pitch" ), value );
+						}
+						else
+						{
+							CU_ParsingError( cuT( "Malformed parameter -pitch=<degrees>." ) );
+						}
+					}
+					else if ( param.find( cuT( "yaw" ) ) == 0 )
+					{
+						auto eqIndex = param.find( cuT( '=' ) );
+
+						if ( eqIndex != String::npos )
+						{
+							float value;
+							string::parse< float >( param.substr( eqIndex + 1 ), value );
+							parameters.add( cuT( "yaw" ), value );
+						}
+						else
+						{
+							CU_ParsingError( cuT( "Malformed parameter -yaw=<degrees>." ) );
+						}
+					}
+					else if ( param.find( cuT( "roll" ) ) == 0 )
+					{
+						auto eqIndex = param.find( cuT( '=' ) );
+
+						if ( eqIndex != String::npos )
+						{
+							float value;
+							string::parse< float >( param.substr( eqIndex + 1 ), value );
+							parameters.add( cuT( "roll" ), value );
+						}
+						else
+						{
+							CU_ParsingError( cuT( "Malformed parameter -roll=<degrees>." ) );
+						}
+					}
 					else if ( param.find( cuT( "split_mesh" ) ) == 0 )
 					{
 						parameters.add( cuT( "split_mesh" ), true );
@@ -2429,7 +2474,7 @@ namespace castor3d
 						}
 						else
 						{
-							CU_ParsingError( cuT( "Malformed parameter -rescale." ) );
+							CU_ParsingError( cuT( "Malformed parameter -rescale=<float>." ) );
 						}
 					}
 				}
