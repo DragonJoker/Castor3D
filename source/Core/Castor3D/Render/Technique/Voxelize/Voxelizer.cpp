@@ -43,7 +43,7 @@ namespace castor3d
 				, VK_IMAGE_TYPE_3D
 				, VK_FORMAT_R16G16B16A16_SFLOAT
 				, size
-				, getMipLevels( size )
+				, getMipLevels( size, VK_FORMAT_R16G16B16A16_SFLOAT )
 				, 1u
 				, VK_SAMPLE_COUNT_1_BIT
 				, VK_IMAGE_TILING_OPTIMAL

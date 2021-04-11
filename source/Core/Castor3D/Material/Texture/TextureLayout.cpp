@@ -107,9 +107,23 @@ namespace castor3d
 		}
 
 		uint32_t getMinMipLevels( uint32_t mipLevels
-			, VkExtent3D const & extent )
+			, VkExtent3D const & extent
+			, VkFormat format )
 		{
-			return std::min( getMipLevels( extent ), mipLevels );
+			return std::min( getMipLevels( extent, format ), mipLevels );
+		}
+
+		uint32_t adjustMipLevels( uint32_t mipLevels
+			, VkFormat format )
+		{
+			if ( format == VK_FORMAT_UNDEFINED )
+			{
+				return mipLevels;
+			}
+
+			auto blockSize = ashes::getBlockSize( format );
+			auto bitSize = getBitSize( blockSize.extent.width );
+			return mipLevels / bitSize;
 		}
 
 		bool eraseViews( uint32_t mipLevels
@@ -209,7 +223,7 @@ namespace castor3d
 				, debugName
 				, info
 				, 0u
-				, info->mipLevels
+				, adjustMipLevels( info->mipLevels, info->format )
 				, baseArrayLayer
 				, layerCount );
 
@@ -615,6 +629,7 @@ namespace castor3d
 
 		auto updateMipLevels( bool genNeeded
 			, uint32_t mipLevels
+			, uint32_t imgMipLevels
 			, MipView & mipView )
 		{
 			auto minLevels = std::min( mipLevels, uint32_t( mipView.levels.size() ) );
@@ -624,10 +639,21 @@ namespace castor3d
 				mipView.levels[level]->setMipmapsGenerationNeeded( genNeeded );
 			}
 
-			if ( mipLevels >= mipView.view->getLevelCount() )
+			if ( mipLevels >= mipView.view->getLevelCount()
+				|| imgMipLevels <= mipLevels )
 			{
 				mipView.view->setMipmapsGenerationNeeded( genNeeded );
 			}
+		}
+
+		auto updateMipLevels( bool genNeeded
+			, uint32_t mipLevels
+			, MipView & mipView )
+		{
+			updateMipLevels( genNeeded
+				, mipLevels
+				, mipView.view->getLevelCount()
+				, mipView );
 		}
 	}
 
@@ -685,9 +711,11 @@ namespace castor3d
 		return texture;
 	}
 
-	uint32_t getMipLevels( VkExtent3D const & extent )
+	uint32_t getMipLevels( VkExtent3D const & extent
+		, VkFormat format )
 	{
-		auto min = std::min( extent.width, extent.height );
+		auto blockSize = ashes::getBlockSize( format );
+		auto min = std::min( extent.width / blockSize.extent.width, extent.height / blockSize.extent.height );
 		return uint32_t( castor::getBitSize( min ) );
 	}
 
@@ -1172,7 +1200,7 @@ namespace castor3d
 
 		if ( mipLevels > 1u )
 		{
-			m_info->mipLevels = getMinMipLevels( mipLevels, m_info->extent );
+			m_info->mipLevels = getMinMipLevels( mipLevels, m_info->extent, m_info->format );
 		}
 
 		eraseViews( m_info->mipLevels, m_defaultView );
@@ -1280,7 +1308,7 @@ namespace castor3d
 	{
 		if ( getDepth() <= 1u && getLayersCount() <= 1u )
 		{
-			updateMipLevels( genNeeded, mipLevels, m_defaultView );
+			updateMipLevels( genNeeded, mipLevels, m_info->mipLevels, m_defaultView );
 		}
 	}
 
