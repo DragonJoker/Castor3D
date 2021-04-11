@@ -144,6 +144,7 @@ add_compile_options( $<$<CXX_COMPILER_ID:MSVC>:/wd4068> ) # Unknown pragma
 #--------------------------------------------------------------------------------------------------
 set( ASHES_DIR external/Ashes )
 set( SHADERWRITER_DIR external/ShaderWriter )
+set( RENDERGRAPH_DIR external/RenderGraph )
 
 msg_debug( "CMAKE_BUILD_TYPE : ${CMAKE_BUILD_TYPE}")
 msg_debug( "CMAKE_C_FLAGS    : ${CMAKE_C_FLAGS}" )
@@ -267,6 +268,9 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 	set( Ashes_BASE_DIR "External/Ashes" )
 	set( Ashes_SOURCE_DIR ${EXTERNAL_SOURCE_DIR}/Ashes )
 	set( Ashes_BINARY_DIR ${EXTERNAL_BINARY_DIR}/Ashes )
+
+	set( RenderGraph_SOURCE_DIR ${EXTERNAL_SOURCE_DIR}/RenderGraph )
+	set( RenderGraph_BINARY_DIR ${EXTERNAL_BINARY_DIR}/RenderGraph )
 
 	add_subdirectory( source )
 	add_subdirectory( tools )

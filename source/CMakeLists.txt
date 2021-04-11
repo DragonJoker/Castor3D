@@ -77,6 +77,12 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 		endif ()
 	endif ()
 
+	# RenderGraph external library
+	set( CRG_BUILD_TESTS OFF )
+	set( CRG_BUILD_EXAMPLES OFF )
+	set( CRG_BASE_DIR "External/RenderGraph" )
+	add_subdirectory( ../${RENDERGRAPH_DIR} ${CMAKE_BINARY_DIR}/${RENDERGRAPH_DIR} )
+
 	# ShaderWriter external library
 	set( SDW_BUILD_EXPORTERS ON )
 	set( SDW_BUILD_STATIC_SDAST OFF )

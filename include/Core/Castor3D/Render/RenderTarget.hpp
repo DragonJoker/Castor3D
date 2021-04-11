@@ -18,6 +18,9 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
+#include <RenderGraph/RenderGraph.hpp>
+#include <RenderGraph/RunnableGraph.hpp>
+
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 #include <ashespp/Sync/Semaphore.hpp>
 
@@ -434,6 +437,8 @@ namespace castor3d
 		ashes::Semaphore const * m_signalFinished{ nullptr };
 		castor::PreciseTimer m_timer;
 		SceneCullerUPtr m_culler;
+		crg::RenderGraph m_graph;
+		crg::RunnableGraphPtr m_runnable;
 	};
 }
 
