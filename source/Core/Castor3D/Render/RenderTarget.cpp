@@ -26,6 +26,8 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
+#include <RenderGraph/RenderQuad.hpp>
+
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Image/Image.hpp>
@@ -119,6 +121,7 @@ namespace castor3d
 		, m_overlaysFrameBuffer{ *this }
 		, m_combinedFrameBuffer{ *this }
 		, m_velocityTexture{ *getEngine() }
+		, m_graph{ m_name }
 	{
 		SamplerSPtr sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + getName() + cuT( "Linear" ) );
 		sampler->setMinFilter( VK_FILTER_LINEAR );
@@ -137,6 +140,90 @@ namespace castor3d
 	{
 		if ( !m_initialised )
 		{
+			auto & renderSystem = device.renderSystem;
+			auto objectsImg = m_graph.createImage( crg::ImageData{ "ObjectsResult"
+				, 0u
+				, VK_IMAGE_TYPE_2D
+				, VK_FORMAT_R8G8B8A8_UNORM
+				, castor3d::makeExtent2D( m_size )
+				, 1u
+				, 1u
+				, VK_SAMPLE_COUNT_1_BIT
+				, VK_IMAGE_TILING_OPTIMAL
+				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+					| VK_IMAGE_USAGE_SAMPLED_BIT ) } );
+			auto overlaysImg = m_graph.createImage( crg::ImageData{ "OverlaysResult"
+				, 0u
+				, VK_IMAGE_TYPE_2D
+				, VK_FORMAT_R8G8B8A8_UNORM
+				, castor3d::makeExtent2D( m_size )
+				, 1u
+				, 1u
+				, VK_SAMPLE_COUNT_1_BIT
+				, VK_IMAGE_TILING_OPTIMAL
+				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+					| VK_IMAGE_USAGE_SAMPLED_BIT ) } );
+			auto combinedImg = m_graph.createImage( crg::ImageData{ "CombinedResult"
+				, 0u
+				, VK_IMAGE_TYPE_2D
+				, getPixelFormat()
+				, castor3d::makeExtent2D( m_size )
+				, 1u
+				, 1u
+				, VK_SAMPLE_COUNT_1_BIT
+				, VK_IMAGE_TILING_OPTIMAL
+				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+					| VK_IMAGE_USAGE_SAMPLED_BIT
+					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } );
+			auto objectsSampledAttach = crg::Attachment::createSampled( crg::ImageViewData{ "ObjectsResult"
+					, objectsImg
+					, 0u
+					, VK_IMAGE_VIEW_TYPE_2D
+					, objectsImg.data->format
+					, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } }
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			auto overlaysSampledAttach = crg::Attachment::createSampled( crg::ImageViewData{ "OverlaysResult"
+					, overlaysImg
+					, 0u
+					, VK_IMAGE_VIEW_TYPE_2D
+					, overlaysImg.data->format
+					, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } }
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			auto combinedTargetAttach = crg::Attachment::createOutputColour( crg::ImageViewData{ "CombinedResult"
+					, combinedImg
+					, 0u
+					, VK_IMAGE_VIEW_TYPE_2D
+					, combinedImg.data->format
+					, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } );
+			crg::RenderPass combinePass{ "CombinePass"
+				, { objectsSampledAttach, overlaysSampledAttach }
+				, { combinedTargetAttach }
+				, [this, &device]( crg::RenderPass const & pass
+					, crg::GraphContext const & context
+					, crg::RunnableGraph const & graph )
+				{
+					doInitCombineProgram();
+					return crg::RenderQuadBuilder{}
+						.renderPosition( {} )
+						.renderSize( makeExtent2D( m_size ) )
+						.texcoordConfig( {} )
+						.program( { makeShaderState( device
+								, m_combineVtx )
+							, makeShaderState( device
+								, m_combinePxl ) } )
+						.build( pass, context, graph );
+				} };
+			m_graph.add( combinePass );
+			m_runnable = std::make_unique< crg::RunnableGraph >( std::move( m_graph )
+				, crg::GraphContext{ *device
+					, VK_NULL_HANDLE
+					, device->getAllocationCallbacks()
+					, device->getMemoryProperties()
+					, device->vkGetDeviceProcAddr } );
+			auto colourResult = m_runnable->getImageView( objectsSampledAttach );
+			auto overlaysResult = m_runnable->getImageView( overlaysSampledAttach );
+			auto combineResult = m_runnable->getImageView( combinedTargetAttach );
+
 			m_hdrConfigUbo = std::make_unique< HdrConfigUbo >( device );
 
 			if ( !m_toneMapping )
@@ -149,7 +236,6 @@ namespace castor3d
 			}
 
 			m_culler = std::make_unique< FrustumCuller >( *getScene(), *getCamera() );
-			auto & renderSystem = *getEngine()->getRenderSystem();
 			doInitialiseRenderPass( device );
 			m_initialised = doInitialiseFrameBuffer( device );
 
