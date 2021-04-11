@@ -103,12 +103,6 @@ namespace castor
 	Image & Image::resample( Size const & size )
 	{
 		CU_Require( getLevels() == 1u );
-		using ResizeFunc = int( *)( const unsigned char * input_pixels, int input_w, int input_h, int input_stride_in_bytes,
-			unsigned char *output_pixels, int output_w, int output_h, int output_stride_in_bytes,
-			int num_channels, int alpha_channel, int flags,
-			stbir_edge edge_wrap_mode, stbir_filter filter, stbir_colorspace space,
-			void *alloc_context );
-
 		auto srcBuffer = getPixels();
 		int channels = int( PF::getComponentsCount( srcBuffer->getFormat() ) );
 		int alpha = STBIR_ALPHA_CHANNEL_NONE;

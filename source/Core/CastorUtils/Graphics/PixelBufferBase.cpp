@@ -4,6 +4,8 @@
 
 #include <ashes/common/Format.hpp>
 
+#include "stb_image_resize.h"
+
 namespace castor
 {
 	namespace
@@ -64,8 +66,8 @@ namespace castor
 			, uint32_t levelSize )
 		{
 			auto pixelSize = PF::getBytesPerPixel( PFT );
-			auto srcLevelExtent = ashes::getSubresourceDimensions( extent, level - 1u );
-			auto dstLevelExtent = ashes::getSubresourceDimensions( extent, level );
+			auto srcLevelExtent = ashes::getSubresourceDimensions( extent, level - 1u, VkFormat( PFT ) );
+			auto dstLevelExtent = ashes::getSubresourceDimensions( extent, level, VkFormat( PFT ) );
 			auto srcLineSize = pixelSize * srcLevelExtent.width;
 			auto dstLineSize = pixelSize * dstLevelExtent.width;
 
@@ -184,7 +186,7 @@ namespace castor
 			}
 		}
 
-		void copyBuffer( Size const & dimensions
+		uint32_t copyBuffer( Size const & dimensions
 			, uint8_t const * srcBuffer
 			, PixelFormat srcFormat
 			, uint32_t srcAlign
@@ -225,8 +227,15 @@ namespace castor
 						, dstBlockSize
 						, level
 						, dstAlign ) );
-					auto levelExtent = ashes::getSubresourceDimensions( VkExtent2D{ dimensions.getWidth(), dimensions.getHeight() }, level );
-					PF::convertBuffer( { levelExtent.width, levelExtent.height }
+					auto srcLevelExtent = ashes::getSubresourceDimensions( VkExtent2D{ dimensions.getWidth(), dimensions.getHeight() }
+						, level
+						, VkFormat( srcFormat ) );
+					auto dstLevelExtent = ashes::getSubresourceDimensions( VkExtent2D{ dimensions.getWidth(), dimensions.getHeight() }
+						, level
+						, VkFormat( srcFormat ) );
+
+					PF::convertBuffer( { srcLevelExtent.width, srcLevelExtent.height }
+						, { dstLevelExtent.width, dstLevelExtent.height }
 						, srcFormat
 						, srcLevel
 						, srcLevelSize
@@ -240,6 +249,94 @@ namespace castor
 				srcLayerStart = srcLevelStart;
 				dstLayerStart = dstLevelStart;
 			}
+
+			return levels;
+		}
+
+		ByteArray resample( Size const & srcDimensions
+			, Size const & dstDimensions
+			, PixelFormat format
+			, uint8_t const * src )
+		{
+			int channels = int( PF::getComponentsCount( format ) );
+			int alpha = STBIR_ALPHA_CHANNEL_NONE;
+			stbir_colorspace colorSpace{ STBIR_COLORSPACE_LINEAR };
+			stbir_datatype dataType = STBIR_TYPE_UINT8;
+
+			switch ( format )
+			{
+			case PixelFormat::eR8_UNORM:
+			case PixelFormat::eR8_SNORM:
+			case PixelFormat::eR8A8_UNORM:
+			case PixelFormat::eR8A8_SNORM:
+			case PixelFormat::eA8B8G8R8_UNORM:
+			case PixelFormat::eA8B8G8R8_SNORM:
+			case PixelFormat::eR8G8B8A8_UNORM:
+			case PixelFormat::eR8G8B8A8_SNORM:
+				alpha = 1;
+				break;
+
+			case PixelFormat::eR8G8B8_SRGB:
+			case PixelFormat::eB8G8R8_SRGB:
+				colorSpace = STBIR_COLORSPACE_SRGB;
+				break;
+
+			case PixelFormat::eA8B8G8R8_SRGB:
+			case PixelFormat::eR8G8B8A8_SRGB:
+				colorSpace = STBIR_COLORSPACE_SRGB;
+				alpha = 1;
+				break;
+
+			case PixelFormat::eR16_SFLOAT:
+			case PixelFormat::eR32_SFLOAT:
+			case PixelFormat::eR16G16B16_SFLOAT:
+			case PixelFormat::eR32G32B32_SFLOAT:
+				dataType = STBIR_TYPE_FLOAT;
+				break;
+
+			case PixelFormat::eR16A16_SFLOAT:
+			case PixelFormat::eR32A32_SFLOAT:
+			case PixelFormat::eR16G16B16A16_SFLOAT:
+			case PixelFormat::eR32G32B32A32_SFLOAT:
+				dataType = STBIR_TYPE_FLOAT;
+				alpha = 1;
+				break;
+
+
+			case PixelFormat::eR8G8B8_UNORM:
+			case PixelFormat::eR8G8B8_SNORM:
+			case PixelFormat::eB8G8R8_UNORM:
+			case PixelFormat::eB8G8R8_SNORM:
+				break;
+
+			default:
+				auto text = "Unsupported image format " + ashes::getName( VkFormat( format ) ) + " for resize.";
+				CU_LoaderError( text );
+				break;
+			}
+
+			auto srcLayerSize = ashes::getSize( VkExtent2D{ srcDimensions.getWidth(), srcDimensions.getHeight() }
+			, VkFormat( format ) );
+			auto dstLayerSize = ashes::getSize( VkExtent2D{ dstDimensions.getWidth(), dstDimensions.getHeight() }
+			, VkFormat( format ) );
+			ByteArray result;
+			result.resize( dstLayerSize );
+			auto dst = result.data();
+
+			auto ret = stbir_resize( src, int( srcDimensions.getWidth() ), int( srcDimensions.getHeight() ), 0
+				, dst, int( dstDimensions.getWidth() ), int( dstDimensions.getHeight() ), 0
+				, dataType
+				, channels, alpha, 0
+				, STBIR_EDGE_CLAMP, STBIR_EDGE_CLAMP
+				, STBIR_FILTER_CATMULLROM, STBIR_FILTER_CATMULLROM
+				, colorSpace, nullptr );
+
+			if ( !ret )
+			{
+				CU_LoaderError( "Image couldn't be resized" );
+			}
+
+			return result;
 		}
 	}
 
@@ -295,21 +392,53 @@ namespace castor
 	{
 		auto extent = VkExtent3D{ m_size.getWidth(), m_size.getHeight(), m_layers };
 		ByteArray mips;
+		ByteArray resampled;
 
 		if ( PF::isCompressed( getFormat() )
 			&& !PF::isCompressed( bufferFormat )
 			&& m_levels <= 1u
 			&& ashes::getMaxMipCount( extent ) > 1u )
 		{
-			// Since transferring to compressed formats may not be supported by graphics API
-			// we need to generate them on CPU
-			m_levels = ashes::getMaxMipCount( extent );
-			mips = generateMipmaps( extent
-				, buffer
-				, bufferFormat
-				, bufferAlign
-				, m_levels );
-			buffer = mips.data();
+			if ( !isPowerOfTwo( extent.width ) || !isPowerOfTwo( extent.height ) )
+			{
+				if ( !isPowerOfTwo( extent.width ) )
+				{
+					extent.width = getNextPowerOfTwo( uint32_t( extent.width ) );
+				}
+
+				if ( !isPowerOfTwo( extent.height ) )
+				{
+					extent.height = getNextPowerOfTwo( uint32_t( extent.height ) );
+				}
+
+				resampled = resample( m_size
+					, { extent.width, extent.height }
+					, bufferFormat
+					, buffer );
+				m_size = { extent.width, extent.height };
+				buffer = resampled.data();
+			}
+
+			auto blockSize = ashes::getBlockSize( VkFormat( getFormat() ) );
+
+			if ( ( extent.width % blockSize.extent.width ) == 0
+				&& ( extent.height % blockSize.extent.height ) == 0 )
+			{
+				// Since transferring to compressed formats may not be supported by graphics API
+				// we need to generate them on CPU
+				m_levels = ashes::getMaxMipCount( extent );
+				mips = generateMipmaps( extent
+					, buffer
+					, bufferFormat
+					, bufferAlign
+					, m_levels );
+				buffer = mips.data();
+			}
+			else
+			{
+				Logger::logWarning( "Asking for block compressed format whilst dimensions don't allow it" );
+				m_format = bufferFormat;
+			}
 		}
 
 		auto newSize = ashes::getLevelsSize( extent
@@ -325,7 +454,7 @@ namespace castor
 		}
 		else
 		{
-			copyBuffer( m_size
+			m_levels = copyBuffer( m_size
 				, buffer
 				, bufferFormat
 				, bufferAlign
