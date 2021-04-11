@@ -4,6 +4,7 @@
 #include "CastorUtils/Data/LoaderException.hpp"
 #include "CastorUtils/Data/Path.hpp"
 #include "CastorUtils/Graphics/PixelBuffer.hpp"
+#include "CastorUtils/Miscellaneous/BitSize.hpp"
 
 #include <ashes/common/Format.hpp>
 
@@ -188,9 +189,6 @@ namespace castor
 		}
 
 		FREE_IMAGE_COLOR_TYPE type = FreeImage_GetColorType( fiImage );
-		uint32_t width = FreeImage_GetWidth( fiImage );
-		uint32_t height = FreeImage_GetHeight( fiImage );
-		Size dimensions( width, height );
 
 		if ( type == FIC_PALETTE )
 		{
@@ -236,21 +234,13 @@ namespace castor
 		{
 			auto bpp = FreeImage_GetBPP( fiImage ) / 8;
 
-			if ( bpp == PixelDefinitions< PixelFormat::eR16G16_SFLOAT >::Size )
-			{
-				sourceFmt = PixelFormat::eR16G16_SFLOAT;
-			}
-			else if ( bpp == PixelDefinitions< PixelFormat::eR16G16B16_SFLOAT >::Size )
+			if ( bpp == PixelDefinitions< PixelFormat::eR16G16B16_SFLOAT >::Size )
 			{
 				sourceFmt = PixelFormat::eR16G16B16_SFLOAT;
 			}
 			else if ( bpp == PixelDefinitions< PixelFormat::eR16G16B16A16_SFLOAT >::Size )
 			{
 				sourceFmt = PixelFormat::eR16G16B16A16_SFLOAT;
-			}
-			else if ( bpp == PixelDefinitions< PixelFormat::eR32G32_SFLOAT >::Size )
-			{
-				sourceFmt = PixelFormat::eR32G32B32_SFLOAT;
 			}
 			else if ( bpp == PixelDefinitions< PixelFormat::eR32G32B32_SFLOAT >::Size )
 			{
@@ -278,6 +268,10 @@ namespace castor
 			}
 		}
 
+		uint32_t width = FreeImage_GetWidth( fiImage );
+		uint32_t height = FreeImage_GetHeight( fiImage );
+		auto destFmt = PF::getCompressed( sourceFmt );
+		Size dimensions( width, height );
 		auto memorySize = FreeImage_GetMemorySize( fiImage );
 		auto levelSize = ashes::getSize( VkExtent2D{ dimensions.getWidth(), dimensions.getHeight() }
 			, VkFormat( sourceFmt ) );
@@ -287,7 +281,7 @@ namespace castor
 		swapComponents( pixels, sourceFmt, width, height );
 #endif
 		buffer = PxBufferBase::create( dimensions
-			, PF::getCompressed( sourceFmt )
+			, destFmt
 			, pixels
 			, sourceFmt );
 		FreeImage_Unload( fiImage );
