@@ -332,6 +332,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/ImageLoader.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/ImageWriter.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/PixelBufferBase.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/PixelDefinitions.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/PixelFormat.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/Position.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/Rectangle.cpp
@@ -366,9 +367,12 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/PixelBuffer.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/PixelBuffer.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/PixelBufferBase.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/PixelComponents.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/PixelComponents.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/PixelConstIterator.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/PixelDefinitions.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/PixelDefinitions.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/PixelFormat.hpp
-		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/PixelFormat.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/PixelIterator.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/Position.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/Rectangle.hpp

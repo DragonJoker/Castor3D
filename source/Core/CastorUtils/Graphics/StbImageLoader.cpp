@@ -3,6 +3,9 @@
 #include "CastorUtils/Data/LoaderException.hpp"
 #include "CastorUtils/Data/Path.hpp"
 #include "CastorUtils/Graphics/PixelBuffer.hpp"
+#include "CastorUtils/Miscellaneous/BitSize.hpp"
+
+#include <ashes/common/Format.hpp>
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_FAILURE_USERMSG
@@ -66,22 +69,22 @@ namespace castor
 			, uint32_t size )
 		{
 			PxBufferBaseSPtr result;
-			int x = 0;
-			int y = 0;
-			int n = 0;
+			int width = 0;
+			int height = 0;
+			int channels = 0;
 			stbi_set_flip_vertically_on_load( 1u );
 			uint8_t * data = stbi_load_from_memory( input
 				, size
-				, &x
-				, &y
-				, &n
+				, &width
+				, &height
+				, &channels
 				, 0 );
 
 			if ( data )
 			{
 				PixelFormat format;
 
-				switch ( n )
+				switch ( channels )
 				{
 				case 1:
 					format = PixelFormat::eR8_UNORM;
@@ -100,8 +103,9 @@ namespace castor
 					break;
 				}
 
-				result = PxBufferBase::create( Size( x, y )
-					, PF::getCompressed( format )
+				auto destFmt = PF::getCompressed( format );
+				result = PxBufferBase::create( Size( width, height )
+					, destFmt
 					, data
 					, format );
 				stbi_image_free( data );
@@ -125,22 +129,22 @@ namespace castor
 			, uint32_t size )
 		{
 			PxBufferBaseSPtr result;
-			int x = 0;
-			int y = 0;
-			int n = 0;
+			int width = 0;
+			int height = 0;
+			int channels = 0;
 			stbi_set_flip_vertically_on_load( 1u );
 			float * data = stbi_loadf_from_memory( input
 				, size
-				, &x
-				, &y
-				, &n
+				, &width
+				, &height
+				, &channels
 				, 0 );
 
 			if ( data )
 			{
 				PixelFormat format;
 
-				switch ( n )
+				switch ( channels )
 				{
 				case 1:
 					format = PixelFormat::eR32_SFLOAT;
@@ -159,8 +163,8 @@ namespace castor
 					break;
 				}
 
-				result = PxBufferBase::create( Size( x, y )
-					, PF::getCompressed( format )
+				result = PxBufferBase::create( Size( width, height )
+					, format
 					, reinterpret_cast< uint8_t * >( data )
 					, format );
 				stbi_image_free( data );
