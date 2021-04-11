@@ -98,7 +98,7 @@ namespace castor3d
 	uint32_t getMipLevels( SmTexture texture, castor::Size const & size )
 	{
 		return texture == SmTexture::eVariance
-			? getMipLevels( VkExtent3D{ size.getWidth(), size.getHeight() } )
+			? getMipLevels( VkExtent3D{ size.getWidth(), size.getHeight() }, getFormat( texture ) )
 			: 1u;
 	}
 

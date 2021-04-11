@@ -172,7 +172,8 @@ namespace castor3d
 		, castor::String const & name
 		, castor::PxBufferBaseUPtr buffer
 		, bool isStatic = false );
-	C3D_API uint32_t getMipLevels( VkExtent3D const & extent );
+	C3D_API uint32_t getMipLevels( VkExtent3D const & extent
+		, VkFormat format );
 
 	class TextureLayout
 		: public castor::OwnedBy< RenderSystem >
