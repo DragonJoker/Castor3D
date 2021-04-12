@@ -111,7 +111,7 @@ namespace castor
 		}
 
 		outbuffer = PxBufferBase::create( pixels->getDimensions()
-			, PF::getCompressed( pixels->getFormat() )
+			, pixels->getFormat()
 			, pixels->getConstPtr()
 			, pixels->getFormat() );
 		return ImageLayout{ ImageLayout::e2D, *outbuffer };

@@ -10,6 +10,16 @@ See LICENSE file in root folder
 
 namespace castor
 {
+	struct PxBufferConvertOptions
+	{
+		CU_API PxBufferConvertOptions();
+		CU_API ~PxBufferConvertOptions();
+
+		CU_API uint32_t getAdditionalAlign( PixelFormat format )const;
+
+		void * additionalOptions{ nullptr };
+	};
+
 	class PxBufferBase
 	{
 	public:
@@ -18,6 +28,34 @@ namespace castor
 		typedef PxArray::const_iterator ConstPixelData;
 
 	public:
+		/**
+		 *\~english
+		 *\brief		Creates a buffer from a source buffer, uninitialised data if no source is given.
+		 *\param[in]	size			Buffer dimensions.
+		 *\param[in]	pixelFormat		Pixels format.
+		 *\param[in]	layers			The number of layers stored in the buffer.
+		 *\param[in]	levels			The number of miplevels stored in the buffer.
+		 *\param[in]	buffer			The source buffer.
+		 *\param[in]	bufferFormat	The pixels format of the source buffer.
+		 *\param[in]	bufferAlign		The alignment of the source buffer.
+		 *\~french
+		 *\brief		Crée un buffer depuis une source, données initialisées si aucune source n'est donnée. 
+		 *\param[in]	size			Dimensions du buffer.
+		 *\param[in]	pixelFormat		Format des pixels du buffer.
+		 *\param[in]	layers			Le nombre de layers du buffer.
+		 *\param[in]	levels			Le nombre de miplevels du buffer.
+		 *\param[in]	buffer			Le buffer source.
+		 *\param[in]	bufferFormat	Le format des pixels du buffer source.
+		 *\param[in]	bufferAlign		L'alignement mémoire du buffer source.
+		 */
+		CU_API PxBufferBase( PxBufferConvertOptions const * options
+			, Size const & size
+			, PixelFormat pixelFormat
+			, uint32_t layers = 1u
+			, uint32_t levels = 1u
+			, uint8_t const * buffer = nullptr
+			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM
+			, uint32_t bufferAlign = 0u );
 		/**
 		 *\~english
 		 *\brief		Creates a buffer from a source buffer, uninitialised data if no source is given.
@@ -92,9 +130,30 @@ namespace castor
 		 *\param[in]	bufferFormat	Format des pixels du buffer de données.
 		 *\param[in]	bufferAlign		Alignement des données du buffer.
 		 */
-		CU_API void initialise( uint8_t const * buffer
+		CU_API void initialise( PxBufferConvertOptions const * options
+			, uint8_t const * buffer
 			, PixelFormat bufferFormat
 			, uint32_t bufferAlign = 0u );
+		/**
+		 *\~english
+		 *\brief		Initialises the data buffer to the given one
+		 *\remarks		Conversions are made if needed
+		 *\param[in]	buffer			Data buffer.
+		 *\param[in]	bufferFormat	Data buffer's pixels format.
+		 *\param[in]	bufferAlign		Buffer data's alignment.
+		 *\~french
+		 *\brief		Initialise le buffer de données à celui donné
+		 *\remarks		Des conversions sont faites si besoin est
+		 *\param[in]	buffer			Buffer de données.
+		 *\param[in]	bufferFormat	Format des pixels du buffer de données.
+		 *\param[in]	bufferAlign		Alignement des données du buffer.
+		 */
+		void initialise( uint8_t const * buffer
+			, PixelFormat bufferFormat
+			, uint32_t bufferAlign = 0u )
+		{
+			initialise( nullptr, buffer, bufferFormat, bufferAlign );
+		}
 		/**
 		 *\~english
 		 *\brief		Initialises the data buffer at the given size
@@ -253,13 +312,53 @@ namespace castor
 		 *\param[in]	bufferAlign		L'alignement mémoire du buffer source.
 		 *\return		Le buffer créé.
 		 */
-		CU_API static PxBufferBaseSPtr create( Size const & size
+		CU_API static PxBufferBaseSPtr create( PxBufferConvertOptions const * options
+			, Size const & size
 			, uint32_t layers
 			, uint32_t levels
 			, PixelFormat wantedFormat
 			, uint8_t const * buffer = nullptr
 			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM
 			, uint32_t bufferAlign = 0u );
+		/**
+		 *\~english
+		 *\brief		Creates a buffer with the given data.
+		 *\param[in]	size			Buffer dimensions.
+		 *\param[in]	layers			Buffer layers (or slices).
+		 *\param[in]	levels			Buffer mip levels.
+		 *\param[in]	wantedFormat	Pixels format.
+		 *\param[in]	buffer			Data buffer.
+		 *\param[in]	bufferFormat	Data buffer's pixels format.
+		 *\param[in]	bufferAlign		The alignment of the source buffer.
+		 *\return		The created buffer.
+		 *\~french
+		 *\brief		Crée un buffer avec les données voulues.
+		 *\param[in]	size			Dimensions du buffer.
+		 *\param[in]	layers			Couches du buffer (layers ou slices).
+		 *\param[in]	levels			Niveaux de mip du buffer.
+		 *\param[in]	wantedFormat	Format des pixels du buffer.
+		 *\param[in]	buffer			Buffer de données.
+		 *\param[in]	bufferFormat	Format des pixels du buffer de données.
+		 *\param[in]	bufferAlign		L'alignement mémoire du buffer source.
+		 *\return		Le buffer créé.
+		 */
+		CU_API static PxBufferBaseSPtr create( Size const & size
+			, uint32_t layers
+			, uint32_t levels
+			, PixelFormat wantedFormat
+			, uint8_t const * buffer = nullptr
+			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM
+			, uint32_t bufferAlign = 0u )
+		{
+			return create( nullptr
+				, size
+				, layers
+				, levels
+				, wantedFormat
+				, buffer
+				, bufferFormat
+				, bufferAlign );
+		}
 		/**
 		 *\~english
 		 *\brief		Creates a buffer with the given data.
@@ -278,13 +377,48 @@ namespace castor
 		 *\param[in]	bufferAlign		L'alignement mémoire du buffer source.
 		 *\return		Le buffer créé.
 		 */
-		static PxBufferBaseSPtr create( Size const & size
+		CU_API static PxBufferBaseSPtr create( PxBufferConvertOptions const * options
+			, Size const & size
 			, PixelFormat wantedFormat
 			, uint8_t const * buffer = nullptr
 			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM
 			, uint32_t bufferAlign = 0u )
 		{
-			return create( size
+			return create( options
+				, size
+				, 1u
+				, 1u
+				, wantedFormat
+				, buffer
+				, bufferFormat
+				, bufferAlign );
+		}
+		/**
+		 *\~english
+		 *\brief		Creates a buffer with the given data.
+		 *\param[in]	size			Buffer dimensions.
+		 *\param[in]	wantedFormat	Pixels format.
+		 *\param[in]	buffer			Data buffer.
+		 *\param[in]	bufferFormat	Data buffer's pixels format.
+		 *\param[in]	bufferAlign		The alignment of the source buffer.
+		 *\return		The created buffer.
+		 *\~french
+		 *\brief		Crée un buffer avec les données voulues.
+		 *\param[in]	size			Dimensions du buffer.
+		 *\param[in]	wantedFormat	Format des pixels du buffer.
+		 *\param[in]	buffer			Buffer de données.
+		 *\param[in]	bufferFormat	Format des pixels du buffer de données.
+		 *\param[in]	bufferAlign		L'alignement mémoire du buffer source.
+		 *\return		Le buffer créé.
+		 */
+		CU_API static PxBufferBaseSPtr create( Size const & size
+			, PixelFormat wantedFormat
+			, uint8_t const * buffer = nullptr
+			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM
+			, uint32_t bufferAlign = 0u )
+		{
+			return create( nullptr
+				, size
 				, 1u
 				, 1u
 				, wantedFormat

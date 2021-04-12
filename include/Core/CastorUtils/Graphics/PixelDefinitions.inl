@@ -47,7 +47,7 @@ namespace castor
 		{
 			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::L8( dstBuffer, PixelComponents< PFSrc >::L8( srcBuffer ) );
+				PixelComponents< PFDst >::R8U( dstBuffer, PixelComponents< PFSrc >::R8U( srcBuffer ) );
 				srcBuffer += PixelDefinitions< PFSrc >::Size;
 				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
@@ -82,8 +82,8 @@ namespace castor
 		{
 			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::L8( dstBuffer, PixelComponents< PFSrc >::L8( srcBuffer ) );
-				PixelComponents< PFDst >::A8( dstBuffer, PixelComponents< PFSrc >::A8( srcBuffer ) );
+				PixelComponents< PFDst >::L8U( dstBuffer, PixelComponents< PFSrc >::L8U( srcBuffer ) );
+				PixelComponents< PFDst >::A8U( dstBuffer, PixelComponents< PFSrc >::A8U( srcBuffer ) );
 				srcBuffer += PixelDefinitions< PFSrc >::Size;
 				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
@@ -119,10 +119,10 @@ namespace castor
 		{
 			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::A8( dstBuffer, PixelComponents< PFSrc >::A8( srcBuffer ) );
-				PixelComponents< PFDst >::R8( dstBuffer, PixelComponents< PFSrc >::R8( srcBuffer ) );
-				PixelComponents< PFDst >::G8( dstBuffer, PixelComponents< PFSrc >::G8( srcBuffer ) );
-				PixelComponents< PFDst >::B8( dstBuffer, PixelComponents< PFSrc >::B8( srcBuffer ) );
+				PixelComponents< PFDst >::A8U( dstBuffer, PixelComponents< PFSrc >::A8U( srcBuffer ) );
+				PixelComponents< PFDst >::R8U( dstBuffer, PixelComponents< PFSrc >::R8U( srcBuffer ) );
+				PixelComponents< PFDst >::G8U( dstBuffer, PixelComponents< PFSrc >::G8U( srcBuffer ) );
+				PixelComponents< PFDst >::B8U( dstBuffer, PixelComponents< PFSrc >::B8U( srcBuffer ) );
 				srcBuffer += PixelDefinitions< PFSrc >::Size;
 				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
@@ -134,9 +134,9 @@ namespace castor
 		{
 			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::R8( dstBuffer, PixelComponents< PFSrc >::R8( srcBuffer ) );
-				PixelComponents< PFDst >::G8( dstBuffer, PixelComponents< PFSrc >::G8( srcBuffer ) );
-				PixelComponents< PFDst >::B8( dstBuffer, PixelComponents< PFSrc >::B8( srcBuffer ) );
+				PixelComponents< PFDst >::R8U( dstBuffer, PixelComponents< PFSrc >::R8U( srcBuffer ) );
+				PixelComponents< PFDst >::G8U( dstBuffer, PixelComponents< PFSrc >::G8U( srcBuffer ) );
+				PixelComponents< PFDst >::B8U( dstBuffer, PixelComponents< PFSrc >::B8U( srcBuffer ) );
 				srcBuffer += PixelDefinitions< PFSrc >::Size;
 				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
@@ -148,9 +148,9 @@ namespace castor
 		{
 			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::R8( dstBuffer, PixelComponents< PFSrc >::R8( srcBuffer ) );
-				PixelComponents< PFDst >::G8( dstBuffer, PixelComponents< PFSrc >::G8( srcBuffer ) );
-				PixelComponents< PFDst >::B8( dstBuffer, PixelComponents< PFSrc >::B8( srcBuffer ) );
+				PixelComponents< PFDst >::R8U( dstBuffer, PixelComponents< PFSrc >::R8U( srcBuffer ) );
+				PixelComponents< PFDst >::G8U( dstBuffer, PixelComponents< PFSrc >::G8U( srcBuffer ) );
+				PixelComponents< PFDst >::B8U( dstBuffer, PixelComponents< PFSrc >::B8U( srcBuffer ) );
 				srcBuffer += PixelDefinitions< PFSrc >::Size;
 				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
@@ -162,9 +162,9 @@ namespace castor
 		{
 			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::B8( dstBuffer, PixelComponents< PFSrc >::B8( srcBuffer ) );
-				PixelComponents< PFDst >::G8( dstBuffer, PixelComponents< PFSrc >::G8( srcBuffer ) );
-				PixelComponents< PFDst >::R8( dstBuffer, PixelComponents< PFSrc >::R8( srcBuffer ) );
+				PixelComponents< PFDst >::B8U( dstBuffer, PixelComponents< PFSrc >::B8U( srcBuffer ) );
+				PixelComponents< PFDst >::G8U( dstBuffer, PixelComponents< PFSrc >::G8U( srcBuffer ) );
+				PixelComponents< PFDst >::R8U( dstBuffer, PixelComponents< PFSrc >::R8U( srcBuffer ) );
 				srcBuffer += PixelDefinitions< PFSrc >::Size;
 				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
@@ -176,10 +176,10 @@ namespace castor
 		{
 			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::B8( dstBuffer, PixelComponents< PFSrc >::B8( srcBuffer ) );
-				PixelComponents< PFDst >::G8( dstBuffer, PixelComponents< PFSrc >::G8( srcBuffer ) );
-				PixelComponents< PFDst >::R8( dstBuffer, PixelComponents< PFSrc >::R8( srcBuffer ) );
-				PixelComponents< PFDst >::A8( dstBuffer, PixelComponents< PFSrc >::A8( srcBuffer ) );
+				PixelComponents< PFDst >::B8U( dstBuffer, PixelComponents< PFSrc >::B8U( srcBuffer ) );
+				PixelComponents< PFDst >::G8U( dstBuffer, PixelComponents< PFSrc >::G8U( srcBuffer ) );
+				PixelComponents< PFDst >::R8U( dstBuffer, PixelComponents< PFSrc >::R8U( srcBuffer ) );
+				PixelComponents< PFDst >::A8U( dstBuffer, PixelComponents< PFSrc >::A8U( srcBuffer ) );
 				srcBuffer += PixelDefinitions< PFSrc >::Size;
 				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
@@ -191,9 +191,9 @@ namespace castor
 		{
 			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::R8( dstBuffer, PixelComponents< PFSrc >::R8( srcBuffer ) );
-				PixelComponents< PFDst >::G8( dstBuffer, PixelComponents< PFSrc >::G8( srcBuffer ) );
-				PixelComponents< PFDst >::B8( dstBuffer, PixelComponents< PFSrc >::B8( srcBuffer ) );
+				PixelComponents< PFDst >::R8U( dstBuffer, PixelComponents< PFSrc >::R8U( srcBuffer ) );
+				PixelComponents< PFDst >::G8U( dstBuffer, PixelComponents< PFSrc >::G8U( srcBuffer ) );
+				PixelComponents< PFDst >::B8U( dstBuffer, PixelComponents< PFSrc >::B8U( srcBuffer ) );
 				srcBuffer += PixelDefinitions< PFSrc >::Size;
 				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
@@ -205,9 +205,9 @@ namespace castor
 		{
 			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::B8( dstBuffer, PixelComponents< PFSrc >::B8( srcBuffer ) );
-				PixelComponents< PFDst >::G8( dstBuffer, PixelComponents< PFSrc >::G8( srcBuffer ) );
-				PixelComponents< PFDst >::R8( dstBuffer, PixelComponents< PFSrc >::R8( srcBuffer ) );
+				PixelComponents< PFDst >::B8U( dstBuffer, PixelComponents< PFSrc >::B8U( srcBuffer ) );
+				PixelComponents< PFDst >::G8U( dstBuffer, PixelComponents< PFSrc >::G8U( srcBuffer ) );
+				PixelComponents< PFDst >::R8U( dstBuffer, PixelComponents< PFSrc >::R8U( srcBuffer ) );
 				srcBuffer += PixelDefinitions< PFSrc >::Size;
 				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
@@ -219,10 +219,10 @@ namespace castor
 		{
 			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::A8( dstBuffer, PixelComponents< PFSrc >::A8( srcBuffer ) );
-				PixelComponents< PFDst >::R8( dstBuffer, PixelComponents< PFSrc >::R8( srcBuffer ) );
-				PixelComponents< PFDst >::G8( dstBuffer, PixelComponents< PFSrc >::G8( srcBuffer ) );
-				PixelComponents< PFDst >::B8( dstBuffer, PixelComponents< PFSrc >::B8( srcBuffer ) );
+				PixelComponents< PFDst >::A8U( dstBuffer, PixelComponents< PFSrc >::A8U( srcBuffer ) );
+				PixelComponents< PFDst >::R8U( dstBuffer, PixelComponents< PFSrc >::R8U( srcBuffer ) );
+				PixelComponents< PFDst >::G8U( dstBuffer, PixelComponents< PFSrc >::G8U( srcBuffer ) );
+				PixelComponents< PFDst >::B8U( dstBuffer, PixelComponents< PFSrc >::B8U( srcBuffer ) );
 				srcBuffer += PixelDefinitions< PFSrc >::Size;
 				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
@@ -234,10 +234,10 @@ namespace castor
 		{
 			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::A8( dstBuffer, PixelComponents< PFSrc >::A8( srcBuffer ) );
-				PixelComponents< PFDst >::B8( dstBuffer, PixelComponents< PFSrc >::B8( srcBuffer ) );
-				PixelComponents< PFDst >::G8( dstBuffer, PixelComponents< PFSrc >::G8( srcBuffer ) );
-				PixelComponents< PFDst >::R8( dstBuffer, PixelComponents< PFSrc >::R8( srcBuffer ) );
+				PixelComponents< PFDst >::A8U( dstBuffer, PixelComponents< PFSrc >::A8U( srcBuffer ) );
+				PixelComponents< PFDst >::B8U( dstBuffer, PixelComponents< PFSrc >::B8U( srcBuffer ) );
+				PixelComponents< PFDst >::G8U( dstBuffer, PixelComponents< PFSrc >::G8U( srcBuffer ) );
+				PixelComponents< PFDst >::R8U( dstBuffer, PixelComponents< PFSrc >::R8U( srcBuffer ) );
 				srcBuffer += PixelDefinitions< PFSrc >::Size;
 				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
@@ -249,10 +249,10 @@ namespace castor
 		{
 			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::A8( dstBuffer, PixelComponents< PFSrc >::A8( srcBuffer ) );
-				PixelComponents< PFDst >::R8( dstBuffer, PixelComponents< PFSrc >::R8( srcBuffer ) );
-				PixelComponents< PFDst >::G8( dstBuffer, PixelComponents< PFSrc >::G8( srcBuffer ) );
-				PixelComponents< PFDst >::B8( dstBuffer, PixelComponents< PFSrc >::B8( srcBuffer ) );
+				PixelComponents< PFDst >::A8U( dstBuffer, PixelComponents< PFSrc >::A8U( srcBuffer ) );
+				PixelComponents< PFDst >::R8U( dstBuffer, PixelComponents< PFSrc >::R8U( srcBuffer ) );
+				PixelComponents< PFDst >::G8U( dstBuffer, PixelComponents< PFSrc >::G8U( srcBuffer ) );
+				PixelComponents< PFDst >::B8U( dstBuffer, PixelComponents< PFSrc >::B8U( srcBuffer ) );
 				srcBuffer += PixelDefinitions< PFSrc >::Size;
 				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
@@ -264,10 +264,10 @@ namespace castor
 		{
 			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::A8( dstBuffer, PixelComponents< PFSrc >::A8( srcBuffer ) );
-				PixelComponents< PFDst >::B8( dstBuffer, PixelComponents< PFSrc >::B8( srcBuffer ) );
-				PixelComponents< PFDst >::G8( dstBuffer, PixelComponents< PFSrc >::G8( srcBuffer ) );
-				PixelComponents< PFDst >::R8( dstBuffer, PixelComponents< PFSrc >::R8( srcBuffer ) );
+				PixelComponents< PFDst >::A8U( dstBuffer, PixelComponents< PFSrc >::A8U( srcBuffer ) );
+				PixelComponents< PFDst >::B8U( dstBuffer, PixelComponents< PFSrc >::B8U( srcBuffer ) );
+				PixelComponents< PFDst >::G8U( dstBuffer, PixelComponents< PFSrc >::G8U( srcBuffer ) );
+				PixelComponents< PFDst >::R8U( dstBuffer, PixelComponents< PFSrc >::R8U( srcBuffer ) );
 				srcBuffer += PixelDefinitions< PFSrc >::Size;
 				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
@@ -411,18 +411,10 @@ namespace castor
 		\brief		Structure utilisée pour convertir un buffer d'un format de pixels vers un autre
 		*/
 		template< PixelFormat PFSrc, PixelFormat PFDst, typename EnableT = void >
-		struct BufferConverter;
-
-		template< PixelFormat PFSrc
-			, PixelFormat PFDst >
-		struct BufferConverter< PFSrc, PFDst
-			, std::enable_if_t< ( PFSrc == PFDst
-				|| ( ( PFDst != PixelFormat::eBC1_RGB_UNORM_BLOCK )
-					&& ( PFDst != PixelFormat::eBC1_RGB_SRGB_BLOCK )
-					&& ( PFDst != PixelFormat::eBC3_UNORM_BLOCK )
-					&& ( PFDst != PixelFormat::eBC3_SRGB_BLOCK ) ) ) > >
+		struct BufferConverter
 		{
-			void operator()( Size const & srcDimensions
+			void operator()( PxBufferConvertOptions const * options
+				, Size const & srcDimensions
 				, Size const & dstDimensions
 				, uint8_t const * srcBuffer
 				, uint32_t srcSize
@@ -441,72 +433,7 @@ namespace castor
 				}
 			}
 		};
-		/**
-		\~english
-		\brief		Structure used to convert a buffer from one pixel format to another one
-		\~french
-		\brief		Structure utilisée pour convertir un buffer d'un format de pixels vers un autre
-		*/
-		template< PixelFormat PFSrc
-			, PixelFormat PFDst >
-			struct BufferConverter< PFSrc, PFDst
-			, std::enable_if_t< ( PFSrc != PFDst
-				&& ( ( PFDst == PixelFormat::eBC1_RGB_UNORM_BLOCK )
-					|| ( PFDst == PixelFormat::eBC1_RGB_SRGB_BLOCK ) ) ) > >
-		{
-			void operator()( Size const & srcDimensions
-				, Size const & dstDimensions
-				, uint8_t const * srcBuffer
-				, uint32_t srcSize
-				, uint8_t * dstBuffer
-				, uint32_t dstSize )
-			{
-				BC1Compressor compressor{ PixelDefinitions< PFSrc >::Size
-					, PixelComponents< PFSrc >::R8
-					, PixelComponents< PFSrc >::G8
-					, PixelComponents< PFSrc >::B8
-					, PixelComponents< PFSrc >::A8 };
-				compressor.compress( srcDimensions
-					, dstDimensions
-					, srcBuffer
-					, srcSize
-					, dstBuffer
-					, dstSize );
-			}
-		};
-		/**
-		\~english
-		\brief		Structure used to convert a buffer from one pixel format to another one
-		\~french
-		\brief		Structure utilisée pour convertir un buffer d'un format de pixels vers un autre
-		*/
-		template< PixelFormat PFSrc
-			, PixelFormat PFDst >
-			struct BufferConverter< PFSrc, PFDst
-			, std::enable_if_t< ( PFSrc != PFDst
-				&& ( ( PFDst == PixelFormat::eBC3_UNORM_BLOCK )
-					|| ( PFDst == PixelFormat::eBC3_SRGB_BLOCK ) ) ) > >
-		{
-			void operator()( Size const & srcDimensions
-				, Size const & dstDimensions
-				, uint8_t const * srcBuffer
-				, uint32_t srcSize
-				, uint8_t * dstBuffer
-				, uint32_t dstSize )
-			{
-				BC3Compressor compressor{ PixelDefinitions< PFSrc >::Size
-					, PixelComponents< PFSrc >::R8
-					, PixelComponents< PFSrc >::G8
-					, PixelComponents< PFSrc >::B8
-					, PixelComponents< PFSrc >::A8 };
-				compressor.compress( srcDimensions
-					, dstDimensions
-					, srcBuffer
-					, srcSize
-					, dstBuffer
-					, dstSize );
-			}
-		};
+
 		/**
 		 *\~english
 		 *\brief			Conversion from static source format to dynamic destination format
@@ -529,83 +456,63 @@ namespace castor
 			case PixelFormat::eR8_UNORM:
 				PixelConverter< PF, PixelFormat::eR8_UNORM >()( srcBuffer, dstBuffer );
 				break;
-
 			case PixelFormat::eR16_SFLOAT:
 				PixelConverter< PF, PixelFormat::eR16_SFLOAT >()( srcBuffer, dstBuffer );
 				break;
-
 			case PixelFormat::eR32_SFLOAT:
 				PixelConverter< PF, PixelFormat::eR32_SFLOAT >()( srcBuffer, dstBuffer );
 				break;
-
 			case PixelFormat::eR8A8_UNORM:
 				PixelConverter< PF, PixelFormat::eR8A8_UNORM >()( srcBuffer, dstBuffer );
 				break;
-
 			case PixelFormat::eR16A16_SFLOAT:
 				PixelConverter< PF, PixelFormat::eR16A16_SFLOAT >()( srcBuffer, dstBuffer );
 				break;
-
 			case PixelFormat::eR32A32_SFLOAT:
 				PixelConverter< PF, PixelFormat::eR32A32_SFLOAT >()( srcBuffer, dstBuffer );
 				break;
-
 			case PixelFormat::eR5G5B5A1_UNORM:
 				PixelConverter< PF, PixelFormat::eR5G5B5A1_UNORM >()( srcBuffer, dstBuffer );
 				break;
-
 			case PixelFormat::eR5G6B5_UNORM:
 				PixelConverter< PF, PixelFormat::eR5G6B5_UNORM >()( srcBuffer, dstBuffer );
 				break;
-
 			case PixelFormat::eR8G8B8_UNORM:
 				PixelConverter< PF, PixelFormat::eR8G8B8_UNORM >()( srcBuffer, dstBuffer );
 				break;
-
 			case PixelFormat::eB8G8R8_UNORM:
 				PixelConverter< PF, PixelFormat::eB8G8R8_UNORM >()( srcBuffer, dstBuffer );
 				break;
-
 			case PixelFormat::eR8G8B8_SRGB:
 				PixelConverter< PF, PixelFormat::eR8G8B8_SRGB >()( srcBuffer, dstBuffer );
 				break;
-
 			case PixelFormat::eB8G8R8_SRGB:
 				PixelConverter< PF, PixelFormat::eB8G8R8_SRGB >()( srcBuffer, dstBuffer );
 				break;
-
 			case PixelFormat::eR8G8B8A8_UNORM:
 				PixelConverter< PF, PixelFormat::eR8G8B8A8_UNORM >()( srcBuffer, dstBuffer );
 				break;
-
 			case PixelFormat::eA8B8G8R8_UNORM:
 				PixelConverter< PF, PixelFormat::eA8B8G8R8_UNORM >()( srcBuffer, dstBuffer );
 				break;
-
 			case PixelFormat::eR8G8B8A8_SRGB:
 				PixelConverter< PF, PixelFormat::eR8G8B8A8_SRGB >()( srcBuffer, dstBuffer );
 				break;
-
 			case PixelFormat::eA8B8G8R8_SRGB:
 				PixelConverter< PF, PixelFormat::eA8B8G8R8_SRGB >()( srcBuffer, dstBuffer );
 				break;
-
 			case PixelFormat::eR16G16B16_SFLOAT:
 				PixelConverter< PF, PixelFormat::eR16G16B16_SFLOAT >()( srcBuffer, dstBuffer );
 				break;
-
 			case PixelFormat::eR16G16B16A16_SFLOAT:
 				PixelConverter< PF, PixelFormat::eR16G16B16A16_SFLOAT >()( srcBuffer, dstBuffer );
 				break;
-
 			case PixelFormat::eR32G32B32_SFLOAT:
 				PixelConverter< PF, PixelFormat::eR32G32B32_SFLOAT >()( srcBuffer, dstBuffer );
 				break;
-
 			case PixelFormat::eR32G32B32A32_SFLOAT:
 				PixelConverter< PF, PixelFormat::eR32G32B32A32_SFLOAT >()( srcBuffer, dstBuffer );
 				break;
-
 			default:
 				if ( PF == dstFormat )
 				{
@@ -640,23 +547,18 @@ namespace castor
 			case PixelFormat::eD16_UNORM:
 				PixelConverter< PF, PixelFormat::eD16_UNORM >()( srcBuffer, dstBuffer );
 				break;
-
 			case PixelFormat::eD24_UNORM_S8_UINT:
 				PixelConverter< PF, PixelFormat::eD24_UNORM_S8_UINT >()( srcBuffer, dstBuffer );
 				break;
-
 			case PixelFormat::eD32_UNORM:
 				PixelConverter< PF, PixelFormat::eD32_UNORM >()( srcBuffer, dstBuffer );
 				break;
-
 			case PixelFormat::eD32_SFLOAT:
 				PixelConverter< PF, PixelFormat::eD32_SFLOAT >()( srcBuffer, dstBuffer );
 				break;
-
 			case PixelFormat::eD32_SFLOAT_S8_UINT:
 				PixelConverter< PF, PixelFormat::eD32_SFLOAT_S8_UINT >()( srcBuffer, dstBuffer );
 				break;
-
 			default:
 				if ( PF == dstFormat )
 				{
@@ -691,11 +593,9 @@ namespace castor
 			case PixelFormat::eD24_UNORM_S8_UINT:
 				PixelConverter< PF, PixelFormat::eD24_UNORM_S8_UINT >()( srcBuffer, dstBuffer );
 				break;
-
 			case PixelFormat::eS8_UINT:
 				PixelConverter< PF, PixelFormat::eS8_UINT >()( srcBuffer, dstBuffer );
 				break;
-
 			default:
 				if ( PF == dstFormat )
 				{
@@ -725,7 +625,8 @@ namespace castor
 		 *\param[in]	dstSize		La taille du buffer destination
 		 */
 		template< PixelFormat PF >
-		void dynamicColourBufferConversion( Size const & srcDimensions
+		void dynamicColourBufferConversion( PxBufferConvertOptions const * options
+			, Size const & srcDimensions
 			, Size const & dstDimensions
 			, uint8_t const * srcBuffer
 			, uint32_t srcSize
@@ -736,109 +637,72 @@ namespace castor
 			switch ( dstFormat )
 			{
 			case PixelFormat::eR8_UNORM:
-				BufferConverter< PF, PixelFormat::eR8_UNORM >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eR8_UNORM >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			case PixelFormat::eR16_SFLOAT:
-				BufferConverter< PF, PixelFormat::eR16_SFLOAT >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eR16_SFLOAT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			case PixelFormat::eR32_SFLOAT:
-				BufferConverter< PF, PixelFormat::eR32_SFLOAT >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eR32_SFLOAT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			case PixelFormat::eR8A8_UNORM:
-				BufferConverter< PF, PixelFormat::eR8A8_UNORM >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eR8A8_UNORM >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			case PixelFormat::eR16A16_SFLOAT:
-				BufferConverter< PF, PixelFormat::eR16A16_SFLOAT >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eR16A16_SFLOAT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			case PixelFormat::eR32A32_SFLOAT:
-				BufferConverter< PF, PixelFormat::eR32A32_SFLOAT >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eR32A32_SFLOAT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			case PixelFormat::eR5G5B5A1_UNORM:
-				BufferConverter< PF, PixelFormat::eR5G5B5A1_UNORM >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eR5G5B5A1_UNORM >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			case PixelFormat::eR5G6B5_UNORM:
-				BufferConverter< PF, PixelFormat::eR5G6B5_UNORM >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eR5G6B5_UNORM >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			case PixelFormat::eR8G8B8_UNORM:
-				BufferConverter< PF, PixelFormat::eR8G8B8_UNORM >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eR8G8B8_UNORM >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			case PixelFormat::eB8G8R8_UNORM:
-				BufferConverter< PF, PixelFormat::eB8G8R8_UNORM >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eB8G8R8_UNORM >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			case PixelFormat::eB8G8R8A8_UNORM:
-				BufferConverter< PF, PixelFormat::eB8G8R8A8_UNORM >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eB8G8R8A8_UNORM >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			case PixelFormat::eR8G8B8_SRGB:
-				BufferConverter< PF, PixelFormat::eR8G8B8_SRGB >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eR8G8B8_SRGB >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			case PixelFormat::eB8G8R8_SRGB:
-				BufferConverter< PF, PixelFormat::eB8G8R8_SRGB >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eB8G8R8_SRGB >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			case PixelFormat::eR8G8B8A8_UNORM:
-				BufferConverter< PF, PixelFormat::eR8G8B8A8_UNORM >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eR8G8B8A8_UNORM >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			case PixelFormat::eA8B8G8R8_UNORM:
-				BufferConverter< PF, PixelFormat::eA8B8G8R8_UNORM >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eA8B8G8R8_UNORM >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			case PixelFormat::eR8G8B8A8_SRGB:
-				BufferConverter< PF, PixelFormat::eR8G8B8A8_SRGB >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eR8G8B8A8_SRGB >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			case PixelFormat::eA8B8G8R8_SRGB:
-				BufferConverter< PF, PixelFormat::eA8B8G8R8_SRGB >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eA8B8G8R8_SRGB >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			case PixelFormat::eR16G16B16_SFLOAT:
-				BufferConverter< PF, PixelFormat::eR16G16B16_SFLOAT >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eR16G16B16_SFLOAT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			case PixelFormat::eR16G16B16A16_SFLOAT:
-				BufferConverter< PF, PixelFormat::eR16G16B16A16_SFLOAT >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eR16G16B16A16_SFLOAT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			case PixelFormat::eR32G32B32_SFLOAT:
-				BufferConverter< PF, PixelFormat::eR32G32B32_SFLOAT >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eR32G32B32_SFLOAT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			case PixelFormat::eR32G32B32A32_SFLOAT:
-				BufferConverter< PF, PixelFormat::eR32G32B32A32_SFLOAT >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eR32G32B32A32_SFLOAT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
-			case PixelFormat::eBC1_RGB_UNORM_BLOCK:
-				BufferConverter< PF, PixelFormat::eBC1_RGB_UNORM_BLOCK >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
-				break;
-
-			case PixelFormat::eBC1_RGB_SRGB_BLOCK:
-				BufferConverter< PF, PixelFormat::eBC1_RGB_SRGB_BLOCK >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
-				break;
-
-			case PixelFormat::eBC3_UNORM_BLOCK:
-				BufferConverter< PF, PixelFormat::eBC3_UNORM_BLOCK >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
-				break;
-
-			case PixelFormat::eBC3_SRGB_BLOCK:
-				BufferConverter< PF, PixelFormat::eBC3_SRGB_BLOCK >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
-				break;
-
 			default:
 				if ( PF == dstFormat )
 				{
-					BufferConverter< PF, PF >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+					BufferConverter< PF, PF >()( nullptr, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				}
 				else
 				{
@@ -864,7 +728,8 @@ namespace castor
 		 *\param[in]	dstSize		La taille du buffer destination
 		 */
 		template< PixelFormat PF >
-		void dynamicDepthBufferConversion( Size const & srcDimensions
+		void dynamicDepthBufferConversion( PxBufferConvertOptions const * options
+			, Size const & srcDimensions
 			, Size const & dstDimensions
 			, uint8_t const * srcBuffer
 			, uint32_t srcSize
@@ -875,45 +740,36 @@ namespace castor
 			switch ( dstFormat )
 			{
 			case PixelFormat::eD16_UNORM:
-				BufferConverter< PF, PixelFormat::eD16_UNORM >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eD16_UNORM >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			case PixelFormat::eD24_UNORM_S8_UINT:
-				BufferConverter< PF, PixelFormat::eD24_UNORM_S8_UINT >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eD24_UNORM_S8_UINT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			case PixelFormat::eD32_UNORM:
-				BufferConverter< PF, PixelFormat::eD32_UNORM >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eD32_UNORM >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			case PixelFormat::eD32_SFLOAT:
-				BufferConverter< PF, PixelFormat::eD32_SFLOAT >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eD32_SFLOAT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			case PixelFormat::eD32_SFLOAT_S8_UINT:
-				BufferConverter< PF, PixelFormat::eD32_SFLOAT_S8_UINT >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eD32_SFLOAT_S8_UINT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			case PixelFormat::eR8G8B8A8_UNORM:
-				BufferConverter< PF, PixelFormat::eR8G8B8A8_UNORM >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eR8G8B8A8_UNORM >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			case PixelFormat::eR32G32B32_SFLOAT:
-				BufferConverter< PF, PixelFormat::eR32G32B32_SFLOAT >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eR32G32B32_SFLOAT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			case PixelFormat::eR8_UNORM:
-				BufferConverter< PF, PixelFormat::eR8_UNORM >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eR8_UNORM >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			case PixelFormat::eS8_UINT:
-				BufferConverter< PF, PixelFormat::eS8_UINT >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eS8_UINT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			default:
 				if ( PF == dstFormat )
 				{
-					BufferConverter< PF, PF >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+					BufferConverter< PF, PF >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				}
 				else
 				{
@@ -939,7 +795,8 @@ namespace castor
 		 *\param[in]	dstSize		La taille du buffer destination
 		 */
 		template< PixelFormat PF >
-		void dynamicStencilBufferConversion( Size const & srcDimensions
+		void dynamicStencilBufferConversion( PxBufferConvertOptions const * options
+			, Size const & srcDimensions
 			, Size const & dstDimensions
 			, uint8_t const * srcBuffer
 			, uint32_t srcSize
@@ -950,17 +807,15 @@ namespace castor
 			switch ( dstFormat )
 			{
 			case PixelFormat::eD24_UNORM_S8_UINT:
-				BufferConverter< PF, PixelFormat::eD24_UNORM_S8_UINT >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eD24_UNORM_S8_UINT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			case PixelFormat::eS8_UINT:
-				BufferConverter< PF, PixelFormat::eS8_UINT >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				BufferConverter< PF, PixelFormat::eS8_UINT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-
 			default:
 				if ( PF == dstFormat )
 				{
-					BufferConverter< PF, PF >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+					BufferConverter< PF, PF >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				}
 				else
 				{
@@ -997,9 +852,9 @@ namespace castor
 		{
 			details::dynamicColourConversion< PixelFormat::eR8_UNORM >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			details::dynamicColourBufferConversion< PixelFormat::eR8_UNORM >( srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+			details::dynamicColourBufferConversion< PixelFormat::eR8_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
 		template< PixelFormat PF >
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
@@ -1034,9 +889,9 @@ namespace castor
 		{
 			details::dynamicColourConversion< PixelFormat::eR32_SFLOAT >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			details::dynamicColourBufferConversion< PixelFormat::eR32_SFLOAT >( srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+			details::dynamicColourBufferConversion< PixelFormat::eR32_SFLOAT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
 		template< PixelFormat PF >
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
@@ -1070,7 +925,7 @@ namespace castor
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
 		}
 		template< PixelFormat PF >
@@ -1107,9 +962,9 @@ namespace castor
 		{
 			details::dynamicColourConversion< PixelFormat::eR8A8_UNORM >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			details::dynamicColourBufferConversion< PixelFormat::eR8A8_UNORM >( srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+			details::dynamicColourBufferConversion< PixelFormat::eR8A8_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
 		template< PixelFormat PF >
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
@@ -1144,7 +999,7 @@ namespace castor
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
 		}
 		template< PixelFormat PF >
@@ -1181,9 +1036,9 @@ namespace castor
 		{
 			details::dynamicColourConversion< PixelFormat::eR32A32_SFLOAT >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			details::dynamicColourBufferConversion< PixelFormat::eR32A32_SFLOAT >( srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+			details::dynamicColourBufferConversion< PixelFormat::eR32A32_SFLOAT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
 		template< PixelFormat PF >
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
@@ -1219,9 +1074,9 @@ namespace castor
 		{
 			details::dynamicColourConversion< PixelFormat::eR5G5B5A1_UNORM >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			details::dynamicColourBufferConversion< PixelFormat::eR5G5B5A1_UNORM >( srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+			details::dynamicColourBufferConversion< PixelFormat::eR5G5B5A1_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
 		template< PixelFormat PF >
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
@@ -1256,9 +1111,9 @@ namespace castor
 		{
 			details::dynamicColourConversion< PixelFormat::eR5G6B5_UNORM >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			details::dynamicColourBufferConversion< PixelFormat::eR5G6B5_UNORM >( srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+			details::dynamicColourBufferConversion< PixelFormat::eR5G6B5_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
 		template< PixelFormat PF >
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
@@ -1293,9 +1148,9 @@ namespace castor
 		{
 			details::dynamicColourConversion< PixelFormat::eR8G8B8_UNORM >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			details::dynamicColourBufferConversion< PixelFormat::eR8G8B8_UNORM >( srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+			details::dynamicColourBufferConversion< PixelFormat::eR8G8B8_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
 		template< PixelFormat PF >
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
@@ -1330,9 +1185,9 @@ namespace castor
 		{
 			details::dynamicColourConversion< PixelFormat::eB8G8R8_UNORM >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			details::dynamicColourBufferConversion< PixelFormat::eB8G8R8_UNORM >( srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+			details::dynamicColourBufferConversion< PixelFormat::eB8G8R8_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
 		template< PixelFormat PF >
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
@@ -1368,9 +1223,9 @@ namespace castor
 		{
 			details::dynamicColourConversion< PixelFormat::eB8G8R8A8_UNORM >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			details::dynamicColourBufferConversion< PixelFormat::eB8G8R8A8_UNORM >( srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+			details::dynamicColourBufferConversion< PixelFormat::eB8G8R8A8_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
 		template< PixelFormat PF >
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
@@ -1405,9 +1260,9 @@ namespace castor
 		{
 			details::dynamicColourConversion< PixelFormat::eR8G8B8_SRGB >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			details::dynamicColourBufferConversion< PixelFormat::eR8G8B8_SRGB >( srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+			details::dynamicColourBufferConversion< PixelFormat::eR8G8B8_SRGB >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
 		template< PixelFormat PF >
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
@@ -1442,9 +1297,9 @@ namespace castor
 		{
 			details::dynamicColourConversion< PixelFormat::eB8G8R8_SRGB >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			details::dynamicColourBufferConversion< PixelFormat::eB8G8R8_SRGB >( srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+			details::dynamicColourBufferConversion< PixelFormat::eB8G8R8_SRGB >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
 		template< PixelFormat PF >
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
@@ -1480,9 +1335,9 @@ namespace castor
 		{
 			details::dynamicColourConversion< PixelFormat::eR8G8B8A8_UNORM >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			details::dynamicColourBufferConversion< PixelFormat::eR8G8B8A8_UNORM >( srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+			details::dynamicColourBufferConversion< PixelFormat::eR8G8B8A8_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
 		template< PixelFormat PF >
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
@@ -1518,9 +1373,9 @@ namespace castor
 		{
 			details::dynamicColourConversion< PixelFormat::eA8B8G8R8_UNORM >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			details::dynamicColourBufferConversion< PixelFormat::eA8B8G8R8_UNORM >( srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+			details::dynamicColourBufferConversion< PixelFormat::eA8B8G8R8_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
 		template< PixelFormat PF >
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
@@ -1556,9 +1411,9 @@ namespace castor
 		{
 			details::dynamicColourConversion< PixelFormat::eR8G8B8A8_SRGB >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			details::dynamicColourBufferConversion< PixelFormat::eR8G8B8A8_SRGB >( srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+			details::dynamicColourBufferConversion< PixelFormat::eR8G8B8A8_SRGB >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
 		template< PixelFormat PF >
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
@@ -1594,9 +1449,9 @@ namespace castor
 		{
 			details::dynamicColourConversion< PixelFormat::eA8B8G8R8_SRGB >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			details::dynamicColourBufferConversion< PixelFormat::eA8B8G8R8_SRGB >( srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+			details::dynamicColourBufferConversion< PixelFormat::eA8B8G8R8_SRGB >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
 		template< PixelFormat PF >
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
@@ -1631,9 +1486,9 @@ namespace castor
 		{
 			details::dynamicColourConversion< PixelFormat::eR16G16B16_SFLOAT >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			details::dynamicColourBufferConversion< PixelFormat::eR16G16B16_SFLOAT >( srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+			details::dynamicColourBufferConversion< PixelFormat::eR16G16B16_SFLOAT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
 		template< PixelFormat PF >
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
@@ -1669,9 +1524,9 @@ namespace castor
 		{
 			details::dynamicColourConversion< PixelFormat::eR16G16B16A16_SFLOAT >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			details::dynamicColourBufferConversion< PixelFormat::eR16G16B16A16_SFLOAT >( srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+			details::dynamicColourBufferConversion< PixelFormat::eR16G16B16A16_SFLOAT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
 		template< PixelFormat PF >
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
@@ -1706,9 +1561,9 @@ namespace castor
 		{
 			details::dynamicColourConversion< PixelFormat::eR32G32B32_SFLOAT >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			details::dynamicColourBufferConversion< PixelFormat::eR32G32B32_SFLOAT >( srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+			details::dynamicColourBufferConversion< PixelFormat::eR32G32B32_SFLOAT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
 		template< PixelFormat PF >
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
@@ -1744,9 +1599,9 @@ namespace castor
 		{
 			details::dynamicColourConversion< PixelFormat::eR32G32B32A32_SFLOAT >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			details::dynamicColourBufferConversion< PixelFormat::eR32G32B32A32_SFLOAT >( srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+			details::dynamicColourBufferConversion< PixelFormat::eR32G32B32A32_SFLOAT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
 		template< PixelFormat PF >
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
@@ -1771,11 +1626,11 @@ namespace castor
 		static const bool Compressed = true;
 		static String toString()
 		{
-			return cuT( "DXT1 8 bits compressed format" );
+			return cuT( "BC1 8 bits compressed format" );
 		}
 		static String toStr()
 		{
-			return cuT( "dxtc1" );
+			return cuT( "bc1_unorm" );
 		}
 		static void convert( uint8_t const * srcBuffer, uint8_t * dstBuffer, PixelFormat dstFormat )
 		{
@@ -1784,17 +1639,60 @@ namespace castor
 				details::PixelConverter< PixelFormat::eBC1_RGB_UNORM_BLOCK, PixelFormat::eBC1_RGB_UNORM_BLOCK >()( srcBuffer, dstBuffer );
 			}
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
 			if ( dstFormat == PixelFormat::eBC1_RGB_UNORM_BLOCK )
 			{
-				details::BufferConverter< PixelFormat::eBC1_RGB_UNORM_BLOCK, PixelFormat::eBC1_RGB_UNORM_BLOCK >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				details::BufferConverter< PixelFormat::eBC1_RGB_UNORM_BLOCK, PixelFormat::eBC1_RGB_UNORM_BLOCK >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 			}
 		}
 		template< PixelFormat PF >
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
 			details::PixelConverter< PixelFormat::eBC1_RGB_UNORM_BLOCK, PF >()( srcBuffer, dstBuffer );
+		}
+	};
+
+	//*************************************************************************************************
+
+	//!\~english	Specialisation for PixelFormat::eBC1_RGB_SRGB_BLOCK
+	//!\~french		Spécialisation pour PixelFormat::eBC1_RGB_SRGB_BLOCK
+	template<>
+	struct PixelDefinitions< PixelFormat::eBC1_RGB_SRGB_BLOCK >
+	{
+		static const uint8_t Size = 8u; // Bit count for a 4x4 pixels block
+		static const uint8_t Count = 3;
+		static const bool Alpha = false;
+		static const bool Colour = true;
+		static const bool Depth = false;
+		static const bool Stencil = false;
+		static const bool Compressed = true;
+		static String toString()
+		{
+			return cuT( "BC1 SRGB 8 bits compressed format" );
+		}
+		static String toStr()
+		{
+			return cuT( "bc1_srgb" );
+		}
+		static void convert( uint8_t const * srcBuffer, uint8_t * dstBuffer, PixelFormat dstFormat )
+		{
+			if ( dstFormat == PixelFormat::eBC1_RGB_SRGB_BLOCK )
+			{
+				details::PixelConverter< PixelFormat::eBC1_RGB_SRGB_BLOCK, PixelFormat::eBC1_RGB_SRGB_BLOCK >()( srcBuffer, dstBuffer );
+			}
+		}
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		{
+			if ( dstFormat == PixelFormat::eBC1_RGB_SRGB_BLOCK )
+			{
+				details::BufferConverter< PixelFormat::eBC1_RGB_SRGB_BLOCK, PixelFormat::eBC1_RGB_SRGB_BLOCK >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+			}
+		}
+		template< PixelFormat PF >
+		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
+		{
+			details::PixelConverter< PixelFormat::eBC1_RGB_SRGB_BLOCK, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
@@ -1818,7 +1716,7 @@ namespace castor
 		}
 		static String toStr()
 		{
-			return cuT( "bc1" );
+			return cuT( "bc1_rgba_unorm" );
 		}
 		static void convert( uint8_t const * srcBuffer, uint8_t * dstBuffer, PixelFormat dstFormat )
 		{
@@ -1827,17 +1725,148 @@ namespace castor
 				details::PixelConverter< PixelFormat::eBC1_RGBA_UNORM_BLOCK, PixelFormat::eBC1_RGBA_UNORM_BLOCK >()( srcBuffer, dstBuffer );
 			}
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
 			if ( dstFormat == PixelFormat::eBC1_RGBA_UNORM_BLOCK )
 			{
-				details::BufferConverter< PixelFormat::eBC1_RGBA_UNORM_BLOCK, PixelFormat::eBC1_RGBA_UNORM_BLOCK >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				details::BufferConverter< PixelFormat::eBC1_RGBA_UNORM_BLOCK, PixelFormat::eBC1_RGBA_UNORM_BLOCK >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 			}
 		}
 		template< PixelFormat PF >
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
 			details::PixelConverter< PixelFormat::eBC1_RGBA_UNORM_BLOCK, PF >()( srcBuffer, dstBuffer );
+		}
+	};
+
+	//*************************************************************************************************
+
+	//!\~english	Specialisation for PixelFormat::eBC1_RGBA_SRGB_BLOCK
+	//!\~french		Spécialisation pour PixelFormat::eBC1_RGBA_SRGB_BLOCK
+	template<>
+	struct PixelDefinitions< PixelFormat::eBC1_RGBA_SRGB_BLOCK >
+	{
+		static const uint8_t Size = 8u; // Bit count for a 4x4 pixels block
+		static const uint8_t Count = 4;
+		static const bool Alpha = true;
+		static const bool Colour = true;
+		static const bool Depth = false;
+		static const bool Stencil = false;
+		static const bool Compressed = true;
+		static String toString()
+		{
+			return cuT( "BC1 SRGB 8 bits compressed format" );
+		}
+		static String toStr()
+		{
+			return cuT( "bc1_rgba_srgb" );
+		}
+		static void convert( uint8_t const * srcBuffer, uint8_t * dstBuffer, PixelFormat dstFormat )
+		{
+			if ( dstFormat == PixelFormat::eBC1_RGBA_SRGB_BLOCK )
+			{
+				details::PixelConverter< PixelFormat::eBC1_RGBA_SRGB_BLOCK, PixelFormat::eBC1_RGBA_SRGB_BLOCK >()( srcBuffer, dstBuffer );
+			}
+		}
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		{
+			if ( dstFormat == PixelFormat::eBC1_RGBA_SRGB_BLOCK )
+			{
+				details::BufferConverter< PixelFormat::eBC1_RGBA_SRGB_BLOCK, PixelFormat::eBC1_RGBA_SRGB_BLOCK >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+			}
+		}
+		template< PixelFormat PF >
+		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
+		{
+			details::PixelConverter< PixelFormat::eBC1_RGBA_SRGB_BLOCK, PF >()( srcBuffer, dstBuffer );
+		}
+	};
+
+	//*************************************************************************************************
+
+	//!\~english	Specialisation for PixelFormat::eBC2_UNORM_BLOCK
+	//!\~french		Spécialisation pour PixelFormat::eBC2_UNORM_BLOCK
+	template<>
+	struct PixelDefinitions< PixelFormat::eBC2_UNORM_BLOCK >
+	{
+		static const uint8_t Size = 16u; // Bit count for a 4x4 pixels block
+		static const uint8_t Count = 4;
+		static const bool Alpha = true;
+		static const bool Colour = true;
+		static const bool Depth = false;
+		static const bool Stencil = false;
+		static const bool Compressed = true;
+		static const PixelFormat NoAlphaPF = PixelFormat::eBC2_UNORM_BLOCK;
+		static String toString()
+		{
+			return cuT( "BC2 RGBA 16 bits compressed format" );
+		}
+		static String toStr()
+		{
+			return cuT( "bc2_unorm" );
+		}
+		static void convert( uint8_t const * srcBuffer, uint8_t * dstBuffer, PixelFormat dstFormat )
+		{
+			if ( dstFormat == PixelFormat::eBC2_UNORM_BLOCK )
+			{
+				details::PixelConverter< PixelFormat::eBC2_UNORM_BLOCK, PixelFormat::eBC2_UNORM_BLOCK >()( srcBuffer, dstBuffer );
+			}
+		}
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		{
+			if ( dstFormat == PixelFormat::eBC2_UNORM_BLOCK )
+			{
+				details::BufferConverter< PixelFormat::eBC2_UNORM_BLOCK, PixelFormat::eBC2_UNORM_BLOCK >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+			}
+		}
+		template< PixelFormat PF >
+		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
+		{
+			details::PixelConverter< PixelFormat::eBC2_UNORM_BLOCK, PF >()( srcBuffer, dstBuffer );
+		}
+	};
+
+	//*************************************************************************************************
+
+	//!\~english	Specialisation for PixelFormat::eBC2_SRGB_BLOCK
+	//!\~french		Spécialisation pour PixelFormat::eBC2_SRGB_BLOCK
+	template<>
+	struct PixelDefinitions< PixelFormat::eBC2_SRGB_BLOCK >
+	{
+		static const uint8_t Size = 16u; // Bit count for a 4x4 pixels block
+		static const uint8_t Count = 4;
+		static const bool Alpha = true;
+		static const bool Colour = true;
+		static const bool Depth = false;
+		static const bool Stencil = false;
+		static const bool Compressed = true;
+		static const PixelFormat NoAlphaPF = PixelFormat::eBC2_SRGB_BLOCK;
+		static String toString()
+		{
+			return cuT( "BC2 RGBA SRGB 16 bits compressed format" );
+		}
+		static String toStr()
+		{
+			return cuT( "bc2_srgb" );
+		}
+		static void convert( uint8_t const * srcBuffer, uint8_t * dstBuffer, PixelFormat dstFormat )
+		{
+			if ( dstFormat == PixelFormat::eBC2_UNORM_BLOCK )
+			{
+				details::PixelConverter< PixelFormat::eBC2_SRGB_BLOCK, PixelFormat::eBC2_SRGB_BLOCK >()( srcBuffer, dstBuffer );
+			}
+		}
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		{
+			if ( dstFormat == PixelFormat::eBC2_SRGB_BLOCK )
+			{
+				details::BufferConverter< PixelFormat::eBC2_SRGB_BLOCK, PixelFormat::eBC2_SRGB_BLOCK >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+			}
+		}
+		template< PixelFormat PF >
+		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
+		{
+			details::PixelConverter< PixelFormat::eBC2_SRGB_BLOCK, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
@@ -1858,11 +1887,11 @@ namespace castor
 		static const PixelFormat NoAlphaPF = PixelFormat::eBC3_UNORM_BLOCK;
 		static String toString()
 		{
-			return cuT( "DXT3 16 bits compressed format" );
+			return cuT( "BC3 16 bits compressed format" );
 		}
 		static String toStr()
 		{
-			return cuT( "dxtc3" );
+			return cuT( "bc3_unorm" );
 		}
 		static void convert( uint8_t const * srcBuffer, uint8_t * dstBuffer, PixelFormat dstFormat )
 		{
@@ -1871,11 +1900,11 @@ namespace castor
 				details::PixelConverter< PixelFormat::eBC3_UNORM_BLOCK, PixelFormat::eBC3_UNORM_BLOCK >()( srcBuffer, dstBuffer );
 			}
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
 			if ( dstFormat == PixelFormat::eBC3_UNORM_BLOCK )
 			{
-				details::BufferConverter< PixelFormat::eBC3_UNORM_BLOCK, PixelFormat::eBC3_UNORM_BLOCK >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				details::BufferConverter< PixelFormat::eBC3_UNORM_BLOCK, PixelFormat::eBC3_UNORM_BLOCK >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 			}
 		}
 		template< PixelFormat PF >
@@ -1887,10 +1916,10 @@ namespace castor
 
 	//*************************************************************************************************
 
-	//!\~english	Specialisation for PixelFormat::eBC5_UNORM_BLOCK
-	//!\~french		Spécialisation pour PixelFormat::eBC5_UNORM_BLOCK
+	//!\~english	Specialisation for PixelFormat::eBC3_SRGB_BLOCK
+	//!\~french		Spécialisation pour PixelFormat::eBC3_SRGB_BLOCK
 	template<>
-	struct PixelDefinitions< PixelFormat::eBC5_UNORM_BLOCK >
+	struct PixelDefinitions< PixelFormat::eBC3_SRGB_BLOCK >
 	{
 		static const uint8_t Size = 16u; // Bit count for a 4x4 pixels block
 		static const uint8_t Count = 4;
@@ -1899,14 +1928,146 @@ namespace castor
 		static const bool Depth = false;
 		static const bool Stencil = false;
 		static const bool Compressed = true;
-		static const PixelFormat NoAlphaPF = PixelFormat::eBC5_UNORM_BLOCK;
+		static const PixelFormat NoAlphaPF = PixelFormat::eBC3_SRGB_BLOCK;
 		static String toString()
 		{
-			return cuT( "DXT5 16 bits compressed format" );
+			return cuT( "BC3 SRGB 16 bits compressed format" );
 		}
 		static String toStr()
 		{
-			return cuT( "dxtc5" );
+			return cuT( "bc3_srgb" );
+		}
+		static void convert( uint8_t const * srcBuffer, uint8_t * dstBuffer, PixelFormat dstFormat )
+		{
+			if ( dstFormat == PixelFormat::eBC3_SRGB_BLOCK )
+			{
+				details::PixelConverter< PixelFormat::eBC3_SRGB_BLOCK, PixelFormat::eBC3_SRGB_BLOCK >()( srcBuffer, dstBuffer );
+			}
+		}
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		{
+			if ( dstFormat == PixelFormat::eBC3_SRGB_BLOCK )
+			{
+				details::BufferConverter< PixelFormat::eBC3_SRGB_BLOCK, PixelFormat::eBC3_SRGB_BLOCK >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+			}
+		}
+		template< PixelFormat PF >
+		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
+		{
+			details::PixelConverter< PixelFormat::eBC3_SRGB_BLOCK, PF >()( srcBuffer, dstBuffer );
+		}
+	};
+
+	//*************************************************************************************************
+
+	//!\~english	Specialisation for PixelFormat::eBC4_UNORM_BLOCK
+	//!\~french		Spécialisation pour PixelFormat::eBC4_UNORM_BLOCK
+	template<>
+	struct PixelDefinitions< PixelFormat::eBC4_UNORM_BLOCK >
+	{
+		static const uint8_t Size = 8u; // Bit count for a 4x4 pixels block
+		static const uint8_t Count = 1;
+		static const bool Alpha = false;
+		static const bool Colour = true;
+		static const bool Depth = false;
+		static const bool Stencil = false;
+		static const bool Compressed = true;
+		static const PixelFormat NoAlphaPF = PixelFormat::eBC4_UNORM_BLOCK;
+		static String toString()
+		{
+			return cuT( "BC4 8 bits compressed format" );
+		}
+		static String toStr()
+		{
+			return cuT( "bc4_unorm" );
+		}
+		static void convert( uint8_t const * srcBuffer, uint8_t * dstBuffer, PixelFormat dstFormat )
+		{
+			if ( dstFormat == PixelFormat::eBC4_UNORM_BLOCK )
+			{
+				details::PixelConverter< PixelFormat::eBC4_UNORM_BLOCK, PixelFormat::eBC4_UNORM_BLOCK >()( srcBuffer, dstBuffer );
+			}
+		}
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		{
+			if ( dstFormat == PixelFormat::eBC4_UNORM_BLOCK )
+			{
+				details::BufferConverter< PixelFormat::eBC4_UNORM_BLOCK, PixelFormat::eBC4_UNORM_BLOCK >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+			}
+		}
+		template< PixelFormat PF >
+		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
+		{
+			details::PixelConverter< PixelFormat::eBC4_UNORM_BLOCK, PF >()( srcBuffer, dstBuffer );
+		}
+	};
+
+	//*************************************************************************************************
+
+	//!\~english	Specialisation for PixelFormat::eBC4_SNORM_BLOCK
+	//!\~french		Spécialisation pour PixelFormat::eBC4_SNORM_BLOCK
+	template<>
+	struct PixelDefinitions< PixelFormat::eBC4_SNORM_BLOCK >
+	{
+		static const uint8_t Size = 8u; // Bit count for a 4x4 pixels block
+		static const uint8_t Count = 1;
+		static const bool Alpha = false;
+		static const bool Colour = true;
+		static const bool Depth = false;
+		static const bool Stencil = false;
+		static const bool Compressed = true;
+		static const PixelFormat NoAlphaPF = PixelFormat::eBC4_SNORM_BLOCK;
+		static String toString()
+		{
+			return cuT( "BC4 8 bits compressed format" );
+		}
+		static String toStr()
+		{
+			return cuT( "bc4_snorm" );
+		}
+		static void convert( uint8_t const * srcBuffer, uint8_t * dstBuffer, PixelFormat dstFormat )
+		{
+			if ( dstFormat == PixelFormat::eBC4_SNORM_BLOCK )
+			{
+				details::PixelConverter< PixelFormat::eBC4_SNORM_BLOCK, PixelFormat::eBC4_SNORM_BLOCK >()( srcBuffer, dstBuffer );
+			}
+		}
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		{
+			if ( dstFormat == PixelFormat::eBC4_SNORM_BLOCK )
+			{
+				details::BufferConverter< PixelFormat::eBC4_SNORM_BLOCK, PixelFormat::eBC4_SNORM_BLOCK >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+			}
+		}
+		template< PixelFormat PF >
+		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
+		{
+			details::PixelConverter< PixelFormat::eBC4_SNORM_BLOCK, PF >()( srcBuffer, dstBuffer );
+		}
+	};
+
+	//*************************************************************************************************
+
+	//!\~english	Specialisation for PixelFormat::eBC5_UNORM_BLOCK
+	//!\~french		Spécialisation pour PixelFormat::eBC5_UNORM_BLOCK
+	template<>
+	struct PixelDefinitions< PixelFormat::eBC5_UNORM_BLOCK >
+	{
+		static const uint8_t Size = 16u; // Bit count for a 4x4 pixels block
+		static const uint8_t Count = 2;
+		static const bool Alpha = false;
+		static const bool Colour = true;
+		static const bool Depth = false;
+		static const bool Stencil = false;
+		static const bool Compressed = true;
+		static const PixelFormat NoAlphaPF = PixelFormat::eBC5_UNORM_BLOCK;
+		static String toString()
+		{
+			return cuT( "BC5 16 bits compressed format" );
+		}
+		static String toStr()
+		{
+			return cuT( "bc5_unorm" );
 		}
 		static void convert( uint8_t const * srcBuffer, uint8_t * dstBuffer, PixelFormat dstFormat )
 		{
@@ -1915,17 +2076,237 @@ namespace castor
 				details::PixelConverter< PixelFormat::eBC5_UNORM_BLOCK, PixelFormat::eBC5_UNORM_BLOCK >()( srcBuffer, dstBuffer );
 			}
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
 			if ( dstFormat == PixelFormat::eBC5_UNORM_BLOCK )
 			{
-				details::BufferConverter< PixelFormat::eBC5_UNORM_BLOCK, PixelFormat::eBC5_UNORM_BLOCK >()( srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				details::BufferConverter< PixelFormat::eBC5_UNORM_BLOCK, PixelFormat::eBC5_UNORM_BLOCK >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 			}
 		}
 		template< PixelFormat PF >
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
 			details::PixelConverter< PixelFormat::eBC5_UNORM_BLOCK, PF >()( srcBuffer, dstBuffer );
+		}
+	};
+
+	//*************************************************************************************************
+
+	//!\~english	Specialisation for PixelFormat::eBC5_SNORM_BLOCK
+	//!\~french		Spécialisation pour PixelFormat::eBC5_SNORM_BLOCK
+	template<>
+	struct PixelDefinitions< PixelFormat::eBC5_SNORM_BLOCK >
+	{
+		static const uint8_t Size = 16u; // Bit count for a 4x4 pixels block
+		static const uint8_t Count = 2;
+		static const bool Alpha = false;
+		static const bool Colour = true;
+		static const bool Depth = false;
+		static const bool Stencil = false;
+		static const bool Compressed = true;
+		static const PixelFormat NoAlphaPF = PixelFormat::eBC5_SNORM_BLOCK;
+		static String toString()
+		{
+			return cuT( "BC5 16 bits compressed format" );
+		}
+		static String toStr()
+		{
+			return cuT( "bc5_snorm" );
+		}
+		static void convert( uint8_t const * srcBuffer, uint8_t * dstBuffer, PixelFormat dstFormat )
+		{
+			if ( dstFormat == PixelFormat::eBC5_SNORM_BLOCK )
+			{
+				details::PixelConverter< PixelFormat::eBC5_SNORM_BLOCK, PixelFormat::eBC5_SNORM_BLOCK >()( srcBuffer, dstBuffer );
+			}
+		}
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		{
+			if ( dstFormat == PixelFormat::eBC5_SNORM_BLOCK )
+			{
+				details::BufferConverter< PixelFormat::eBC5_SNORM_BLOCK, PixelFormat::eBC5_SNORM_BLOCK >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+			}
+		}
+		template< PixelFormat PF >
+		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
+		{
+			details::PixelConverter< PixelFormat::eBC5_SNORM_BLOCK, PF >()( srcBuffer, dstBuffer );
+		}
+	};
+
+	//*************************************************************************************************
+
+	//!\~english	Specialisation for PixelFormat::eBC5_SNORM_BLOCK
+	//!\~french		Spécialisation pour PixelFormat::eBC5_SNORM_BLOCK
+	template<>
+	struct PixelDefinitions< PixelFormat::eBC6H_UFLOAT_BLOCK >
+	{
+		static const uint8_t Size = 16u; // Bit count for a 4x4 pixels block
+		static const uint8_t Count = 3;
+		static const bool Alpha = false;
+		static const bool Colour = true;
+		static const bool Depth = false;
+		static const bool Stencil = false;
+		static const bool Compressed = true;
+		static const PixelFormat NoAlphaPF = PixelFormat::eBC6H_UFLOAT_BLOCK;
+		static String toString()
+		{
+			return cuT( "BC6H 16 bits compressed format" );
+		}
+		static String toStr()
+		{
+			return cuT( "bc6_ufloat" );
+		}
+		static void convert( uint8_t const * srcBuffer, uint8_t * dstBuffer, PixelFormat dstFormat )
+		{
+			if ( dstFormat == PixelFormat::eBC6H_UFLOAT_BLOCK )
+			{
+				details::PixelConverter< PixelFormat::eBC6H_UFLOAT_BLOCK, PixelFormat::eBC6H_UFLOAT_BLOCK >()( srcBuffer, dstBuffer );
+			}
+		}
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		{
+			if ( dstFormat == PixelFormat::eBC6H_UFLOAT_BLOCK )
+			{
+				details::BufferConverter< PixelFormat::eBC6H_UFLOAT_BLOCK, PixelFormat::eBC6H_UFLOAT_BLOCK >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+			}
+		}
+		template< PixelFormat PF >
+		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
+		{
+			details::PixelConverter< PixelFormat::eBC6H_UFLOAT_BLOCK, PF >()( srcBuffer, dstBuffer );
+		}
+	};
+
+	//*************************************************************************************************
+
+	//!\~english	Specialisation for PixelFormat::eBC6H_SFLOAT_BLOCK
+	//!\~french		Spécialisation pour PixelFormat::eBC6H_SFLOAT_BLOCK
+	template<>
+	struct PixelDefinitions< PixelFormat::eBC6H_SFLOAT_BLOCK >
+	{
+		static const uint8_t Size = 16u; // Bit count for a 4x4 pixels block
+		static const uint8_t Count = 3;
+		static const bool Alpha = false;
+		static const bool Colour = true;
+		static const bool Depth = false;
+		static const bool Stencil = false;
+		static const bool Compressed = true;
+		static const PixelFormat NoAlphaPF = PixelFormat::eBC6H_SFLOAT_BLOCK;
+		static String toString()
+		{
+			return cuT( "BC6H 16 bits compressed format" );
+		}
+		static String toStr()
+		{
+			return cuT( "bc6_sfloat" );
+		}
+		static void convert( uint8_t const * srcBuffer, uint8_t * dstBuffer, PixelFormat dstFormat )
+		{
+			if ( dstFormat == PixelFormat::eBC6H_SFLOAT_BLOCK )
+			{
+				details::PixelConverter< PixelFormat::eBC6H_SFLOAT_BLOCK, PixelFormat::eBC6H_SFLOAT_BLOCK >()( srcBuffer, dstBuffer );
+			}
+		}
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		{
+			if ( dstFormat == PixelFormat::eBC6H_SFLOAT_BLOCK )
+			{
+				details::BufferConverter< PixelFormat::eBC6H_SFLOAT_BLOCK, PixelFormat::eBC6H_SFLOAT_BLOCK >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+			}
+		}
+		template< PixelFormat PF >
+		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
+		{
+			details::PixelConverter< PixelFormat::eBC6H_SFLOAT_BLOCK, PF >()( srcBuffer, dstBuffer );
+		}
+	};
+
+	//*************************************************************************************************
+
+	//!\~english	Specialisation for PixelFormat::eBC7_UNORM_BLOCK
+	//!\~french		Spécialisation pour PixelFormat::eBC7_UNORM_BLOCK
+	template<>
+	struct PixelDefinitions< PixelFormat::eBC7_UNORM_BLOCK >
+	{
+		static const uint8_t Size = 16u; // Bit count for a 4x4 pixels block
+		static const uint8_t Count = 4;
+		static const bool Alpha = true;
+		static const bool Colour = true;
+		static const bool Depth = false;
+		static const bool Stencil = false;
+		static const bool Compressed = true;
+		static const PixelFormat NoAlphaPF = PixelFormat::eBC7_UNORM_BLOCK;
+		static String toString()
+		{
+			return cuT( "BC7 16 bits compressed format" );
+		}
+		static String toStr()
+		{
+			return cuT( "bc7_unorm" );
+		}
+		static void convert( uint8_t const * srcBuffer, uint8_t * dstBuffer, PixelFormat dstFormat )
+		{
+			if ( dstFormat == PixelFormat::eBC7_UNORM_BLOCK )
+			{
+				details::PixelConverter< PixelFormat::eBC7_UNORM_BLOCK, PixelFormat::eBC7_UNORM_BLOCK >()( srcBuffer, dstBuffer );
+			}
+		}
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		{
+			if ( dstFormat == PixelFormat::eBC7_UNORM_BLOCK )
+			{
+				details::BufferConverter< PixelFormat::eBC7_UNORM_BLOCK, PixelFormat::eBC7_UNORM_BLOCK >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+			}
+		}
+		template< PixelFormat PF >
+		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
+		{
+			details::PixelConverter< PixelFormat::eBC7_UNORM_BLOCK, PF >()( srcBuffer, dstBuffer );
+		}
+	};
+
+	//*************************************************************************************************
+
+	//!\~english	Specialisation for PixelFormat::eBC7_SRGB_BLOCK
+	//!\~french		Spécialisation pour PixelFormat::eBC7_SRGB_BLOCK
+	template<>
+	struct PixelDefinitions< PixelFormat::eBC7_SRGB_BLOCK >
+	{
+		static const uint8_t Size = 16u; // Bit count for a 4x4 pixels block
+		static const uint8_t Count = 4;
+		static const bool Alpha = true;
+		static const bool Colour = true;
+		static const bool Depth = false;
+		static const bool Stencil = false;
+		static const bool Compressed = true;
+		static const PixelFormat NoAlphaPF = PixelFormat::eBC7_SRGB_BLOCK;
+		static String toString()
+		{
+			return cuT( "BC7 16 bits compressed format" );
+		}
+		static String toStr()
+		{
+			return cuT( "bc7_srgb" );
+		}
+		static void convert( uint8_t const * srcBuffer, uint8_t * dstBuffer, PixelFormat dstFormat )
+		{
+			if ( dstFormat == PixelFormat::eBC7_SRGB_BLOCK )
+			{
+				details::PixelConverter< PixelFormat::eBC7_SRGB_BLOCK, PixelFormat::eBC7_SRGB_BLOCK >()( srcBuffer, dstBuffer );
+			}
+		}
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		{
+			if ( dstFormat == PixelFormat::eBC7_SRGB_BLOCK )
+			{
+				details::BufferConverter< PixelFormat::eBC7_SRGB_BLOCK, PixelFormat::eBC7_SRGB_BLOCK >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+			}
+		}
+		template< PixelFormat PF >
+		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
+		{
+			details::PixelConverter< PixelFormat::eBC7_SRGB_BLOCK, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
@@ -1955,9 +2336,9 @@ namespace castor
 		{
 			details::dynamicDepthConversion< PixelFormat::eD16_UNORM >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			details::dynamicDepthBufferConversion< PixelFormat::eD16_UNORM >( srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+			details::dynamicDepthBufferConversion< PixelFormat::eD16_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
 		template< PixelFormat PF >
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
@@ -1992,9 +2373,9 @@ namespace castor
 		{
 			details::dynamicDepthConversion< PixelFormat::eD24_UNORM_S8_UINT >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			details::dynamicDepthBufferConversion< PixelFormat::eD24_UNORM_S8_UINT >( srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+			details::dynamicDepthBufferConversion< PixelFormat::eD24_UNORM_S8_UINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
 		template< PixelFormat PF >
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
@@ -2029,9 +2410,9 @@ namespace castor
 		{
 			details::dynamicDepthConversion< PixelFormat::eD32_UNORM >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			details::dynamicDepthBufferConversion< PixelFormat::eD32_UNORM >( srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+			details::dynamicDepthBufferConversion< PixelFormat::eD32_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
 		template< PixelFormat PF >
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
@@ -2066,9 +2447,9 @@ namespace castor
 		{
 			details::dynamicDepthConversion< PixelFormat::eD32_SFLOAT >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			details::dynamicDepthBufferConversion< PixelFormat::eD32_SFLOAT >( srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+			details::dynamicDepthBufferConversion< PixelFormat::eD32_SFLOAT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
 		template< PixelFormat PF >
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
@@ -2103,9 +2484,9 @@ namespace castor
 		{
 			details::dynamicDepthConversion< PixelFormat::eD32_SFLOAT_S8_UINT >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			details::dynamicDepthBufferConversion< PixelFormat::eD32_SFLOAT_S8_UINT >( srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+			details::dynamicDepthBufferConversion< PixelFormat::eD32_SFLOAT_S8_UINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
 		template< PixelFormat PF >
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
@@ -2140,9 +2521,9 @@ namespace castor
 		{
 			details::dynamicStencilConversion< PixelFormat::eS8_UINT >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static void convert( castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		static void convert( PxBufferConvertOptions const * options, castor::Size const & srcDimensions, castor::Size const & dstDimensions, uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			details::dynamicStencilBufferConversion< PixelFormat::eS8_UINT >( srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+			details::dynamicStencilBufferConversion< PixelFormat::eS8_UINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
 		template< PixelFormat PF >
 		static void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )

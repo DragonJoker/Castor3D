@@ -73,23 +73,23 @@ namespace castor
 					switch ( component )
 					{
 					case PixelComponent::eRed:
-						PixelComponents< PF >::R8( pixel.ptr(), value );
+						PixelComponents< PF >::R8U( pixel.ptr(), value );
 						break;
 
 					case PixelComponent::eGreen:
-						PixelComponents< PF >::G8( pixel.ptr(), value );
+						PixelComponents< PF >::G8U( pixel.ptr(), value );
 						break;
 
 					case PixelComponent::eBlue:
-						PixelComponents< PF >::B8( pixel.ptr(), value );
+						PixelComponents< PF >::B8U( pixel.ptr(), value );
 						break;
 
 					case PixelComponent::eAlpha:
-						PixelComponents< PF >::A8( pixel.ptr(), value );
+						PixelComponents< PF >::A8U( pixel.ptr(), value );
 						break;
 
 					case PixelComponent::eLuminance:
-						PixelComponents< PF >::L8( pixel.ptr(), value );
+						PixelComponents< PF >::L8U( pixel.ptr(), value );
 						break;
 
 					default:
@@ -105,23 +105,23 @@ namespace castor
 					switch ( component )
 					{
 					case PixelComponent::eRed:
-						result = PixelComponents< PF >::R8( pixel.constPtr() );
+						result = PixelComponents< PF >::R8U( pixel.constPtr() );
 						break;
 
 					case PixelComponent::eGreen:
-						result = PixelComponents< PF >::G8( pixel.constPtr() );
+						result = PixelComponents< PF >::G8U( pixel.constPtr() );
 						break;
 
 					case PixelComponent::eBlue:
-						result = PixelComponents< PF >::B8( pixel.constPtr() );
+						result = PixelComponents< PF >::B8U( pixel.constPtr() );
 						break;
 
 					case PixelComponent::eAlpha:
-						result = PixelComponents< PF >::A8( pixel.constPtr() );
+						result = PixelComponents< PF >::A8U( pixel.constPtr() );
 						break;
 
 					case PixelComponent::eLuminance:
-						result = PixelComponents< PF >::L8( pixel.constPtr() );
+						result = PixelComponents< PF >::L8U( pixel.constPtr() );
 						break;
 
 					default:
@@ -139,23 +139,23 @@ namespace castor
 					switch ( component )
 					{
 					case PixelComponent::eRed:
-						PixelComponents< PF >::R8( pixel.ptr(), value );
+						PixelComponents< PF >::R8U( pixel.ptr(), value );
 						break;
 
 					case PixelComponent::eGreen:
-						PixelComponents< PF >::G8( pixel.ptr(), value );
+						PixelComponents< PF >::G8U( pixel.ptr(), value );
 						break;
 
 					case PixelComponent::eBlue:
-						PixelComponents< PF >::B8( pixel.ptr(), value );
+						PixelComponents< PF >::B8U( pixel.ptr(), value );
 						break;
 
 					case PixelComponent::eAlpha:
-						PixelComponents< PF >::A8( pixel.ptr(), value );
+						PixelComponents< PF >::A8U( pixel.ptr(), value );
 						break;
 
 					case PixelComponent::eLuminance:
-						PixelComponents< PF >::L8( pixel.ptr(), value );
+						PixelComponents< PF >::L8U( pixel.ptr(), value );
 						break;
 
 					default:
@@ -608,80 +608,120 @@ namespace castor
 	template<>
 	struct PixelComponents< PixelFormat::eR8_UNORM >
 	{
-		static uint8_t L8( uint8_t const * srcBuffer )
+		static uint8_t L8U( uint8_t const * srcBuffer )
 		{
 			return srcBuffer[0];
 		}
-		static uint8_t R8( uint8_t const * srcBuffer )
+		static uint8_t R8U( uint8_t const * srcBuffer )
 		{
 			return srcBuffer[0];
 		}
-		static uint8_t G8( uint8_t const * srcBuffer )
+		static uint8_t G8U( uint8_t const * srcBuffer )
 		{
 			return srcBuffer[0];
 		}
-		static uint8_t B8( uint8_t const * srcBuffer )
+		static uint8_t B8U( uint8_t const * srcBuffer )
 		{
 			return srcBuffer[0];
 		}
-		static uint8_t A8( uint8_t const * )
+		static uint8_t A8U( uint8_t const * )
 		{
 			return 0xFF;
 		}
+		static int8_t L8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( L8U( srcBuffer ) );
+		}
+		static int8_t R8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( R8U( srcBuffer ) );
+		}
+		static int8_t G8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( G8U( srcBuffer ) );
+		}
+		static int8_t B8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( B8U( srcBuffer ) );
+		}
+		static int8_t A8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( A8U( srcBuffer ) );
+		}
 		static float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer ) / 255.0f;
+			return L8U( srcBuffer ) / 255.0f;
 		}
 		static float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( srcBuffer ) / 255.0f;
+			return R8U( srcBuffer ) / 255.0f;
 		}
 		static float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( srcBuffer ) / 255.0f;
+			return G8U( srcBuffer ) / 255.0f;
 		}
 		static float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( srcBuffer ) / 255.0f;
+			return B8U( srcBuffer ) / 255.0f;
 		}
 		static float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( srcBuffer ) / 255.0f;
+			return A8U( srcBuffer ) / 255.0f;
 		}
-		static void L8( uint8_t * srcBuffer, uint8_t value )
+		static void L8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			srcBuffer[0] = value;
 		}
-		static void R8( uint8_t * srcBuffer, uint8_t value )
+		static void R8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			srcBuffer[0] = value;
 		}
-		static void G8( uint8_t * srcBuffer, uint8_t value )
+		static void G8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			srcBuffer[0] = value;
 		}
-		static void B8( uint8_t * srcBuffer, uint8_t value )
+		static void B8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			srcBuffer[0] = value;
 		}
-		static void A8( uint8_t *, uint8_t )
+		static void A8U( uint8_t *, uint8_t )
 		{
+		}
+		static void L8S( uint8_t * srcBuffer, int8_t value )
+		{
+			L8U( srcBuffer, uint8_t( value ) );
+		}
+		static void R8S( uint8_t * srcBuffer, int8_t value )
+		{
+			R8U( srcBuffer, uint8_t( value ) );
+		}
+		static void G8S( uint8_t * srcBuffer, int8_t value )
+		{
+			G8U( srcBuffer, uint8_t( value ) );
+		}
+		static void B8S( uint8_t * srcBuffer, int8_t value )
+		{
+			B8U( srcBuffer, uint8_t( value ) );
+		}
+		static void A8S( uint8_t * srcBuffer, uint8_t value )
+		{
+			A8U( srcBuffer, uint8_t( value ) );
 		}
 		static void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( srcBuffer, uint8_t( value * 255.0 ) );
+			L8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( srcBuffer, uint8_t( value * 255.0 ) );
+			R8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( srcBuffer, uint8_t( value * 255.0 ) );
+			G8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( srcBuffer, uint8_t( value * 255.0 ) );
+			B8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void A32F( uint8_t *, float )
 		{
@@ -695,25 +735,45 @@ namespace castor
 #define src ( *reinterpret_cast< float const * >( srcBuffer ) )
 #define dst ( *reinterpret_cast< float * >( srcBuffer ) )
 
-		static uint8_t L8( uint8_t const * srcBuffer )
+		static uint8_t L8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( L32F( srcBuffer ) * 255 );
+			return uint8_t( L8S( srcBuffer ) );
 		}
-		static uint8_t R8( uint8_t const * srcBuffer )
+		static uint8_t R8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R32F( srcBuffer ) * 255 );
+			return uint8_t( R8S( srcBuffer ) );
 		}
-		static uint8_t G8( uint8_t const * srcBuffer )
+		static uint8_t G8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( G32F( srcBuffer ) * 255 );
+			return uint8_t( G8S( srcBuffer ) );
 		}
-		static uint8_t B8( uint8_t const * srcBuffer )
+		static uint8_t B8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( B32F( srcBuffer ) * 255 );
+			return uint8_t( B8S( srcBuffer ) );
 		}
-		static uint8_t A8( uint8_t const * srcBuffer )
+		static uint8_t A8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( A32F( srcBuffer ) * 255 );
+			return uint8_t( A8S( srcBuffer ) );
+		}
+		static int8_t L8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( L32F( srcBuffer ) * 255 );
+		}
+		static int8_t R8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( R32F( srcBuffer ) * 255 );
+		}
+		static int8_t G8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( G32F( srcBuffer ) * 255 );
+		}
+		static int8_t B8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( B32F( srcBuffer ) * 255 );
+		}
+		static int8_t A8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( A32F( srcBuffer ) * 255 );
 		}
 		static float L32F( uint8_t const * srcBuffer )
 		{
@@ -735,24 +795,45 @@ namespace castor
 		{
 			return 1.0f;
 		}
-		static void L8( uint8_t * srcBuffer, uint8_t value )
+		static void L8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			L8S( srcBuffer, int8_t( value ) );
+		}
+		static void R8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			R8S( srcBuffer, int8_t( value ) );
+		}
+		static void G8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			G8S( srcBuffer, int8_t( value ) );
+		}
+		static void B8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			B8S( srcBuffer, int8_t( value ) );
+		}
+		static void A8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			A8S( srcBuffer, int8_t( value ) );
+		}
+		static void L8S( uint8_t * srcBuffer, int8_t value )
 		{
 			L32F( srcBuffer, float( value ) / 255 );
 		}
-		static void R8( uint8_t * srcBuffer, uint8_t value )
+		static void R8S( uint8_t * srcBuffer, int8_t value )
 		{
 			R32F( srcBuffer, float( value ) / 255 );
 		}
-		static void G8( uint8_t * srcBuffer, uint8_t value )
+		static void G8S( uint8_t * srcBuffer, int8_t value )
 		{
 			G32F( srcBuffer, float( value ) / 255 );
 		}
-		static void B8( uint8_t * srcBuffer, uint8_t value )
+		static void B8S( uint8_t * srcBuffer, int8_t value )
 		{
 			B32F( srcBuffer, float( value ) / 255 );
 		}
-		static void A8( uint8_t *, uint8_t pal )
+		static void A8S( uint8_t * srcBuffer, int8_t value )
 		{
+			A32F( srcBuffer, float( value ) / 255 );
 		}
 		static void L32F( uint8_t * srcBuffer, float value )
 		{
@@ -782,85 +863,125 @@ namespace castor
 	template<>
 	struct PixelComponents< PixelFormat::eR8A8_UNORM >
 	{
-		static uint8_t L8( uint8_t const * srcBuffer )
+		static uint8_t L8U( uint8_t const * srcBuffer )
 		{
 			return srcBuffer[0];
 		}
-		static uint8_t R8( uint8_t const * srcBuffer )
+		static uint8_t R8U( uint8_t const * srcBuffer )
 		{
 			return srcBuffer[0];
 		}
-		static uint8_t G8( uint8_t const * srcBuffer )
+		static uint8_t G8U( uint8_t const * srcBuffer )
 		{
 			return srcBuffer[0];
 		}
-		static uint8_t B8( uint8_t const * srcBuffer )
+		static uint8_t B8U( uint8_t const * srcBuffer )
 		{
 			return srcBuffer[0];
 		}
-		static uint8_t A8( uint8_t const * srcBuffer )
+		static uint8_t A8U( uint8_t const * srcBuffer )
 		{
 			return srcBuffer[1];
 		}
+		static int8_t L8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( L8U( srcBuffer ) );
+		}
+		static int8_t R8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( R8U( srcBuffer ) );
+		}
+		static int8_t G8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( G8U( srcBuffer ) );
+		}
+		static int8_t B8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( B8U( srcBuffer ) );
+		}
+		static int8_t A8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( A8U( srcBuffer ) );
+		}
 		static float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer ) / 255.0f;
+			return L8U( srcBuffer ) / 255.0f;
 		}
 		static float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( srcBuffer ) / 255.0f;
+			return R8U( srcBuffer ) / 255.0f;
 		}
 		static float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( srcBuffer ) / 255.0f;
+			return G8U( srcBuffer ) / 255.0f;
 		}
 		static float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( srcBuffer ) / 255.0f;
+			return B8U( srcBuffer ) / 255.0f;
 		}
 		static float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( srcBuffer ) / 255.0f;
+			return A8U( srcBuffer ) / 255.0f;
 		}
-		static void L8( uint8_t * srcBuffer, uint8_t value )
+		static void L8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			srcBuffer[0] = value;
 		}
-		static void R8( uint8_t * srcBuffer, uint8_t value )
+		static void R8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			srcBuffer[0] = value;
 		}
-		static void G8( uint8_t * srcBuffer, uint8_t value )
+		static void G8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			srcBuffer[0] = value;
 		}
-		static void B8( uint8_t * srcBuffer, uint8_t value )
+		static void B8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			srcBuffer[0] = value;
 		}
-		static void A8( uint8_t * srcBuffer, uint8_t value )
+		static void A8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			srcBuffer[1] = value;
 		}
+		static void L8S( uint8_t * srcBuffer, int8_t value )
+		{
+			L8U( srcBuffer, uint8_t( value ) );
+		}
+		static void R8S( uint8_t * srcBuffer, int8_t value )
+		{
+			R8U( srcBuffer, uint8_t( value ) );
+		}
+		static void G8S( uint8_t * srcBuffer, int8_t value )
+		{
+			G8U( srcBuffer, uint8_t( value ) );
+		}
+		static void B8S( uint8_t * srcBuffer, int8_t value )
+		{
+			B8U( srcBuffer, uint8_t( value ) );
+		}
+		static void A8S( uint8_t * srcBuffer, uint8_t value )
+		{
+			A8U( srcBuffer, uint8_t( value ) );
+		}
 		static void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( srcBuffer, uint8_t( value * 255.0 ) );
+			L8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( srcBuffer, uint8_t( value * 255.0 ) );
+			R8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( srcBuffer, uint8_t( value * 255.0 ) );
+			G8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( srcBuffer, uint8_t( value * 255.0 ) );
+			B8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void A32F( uint8_t * srcBuffer, float value )
 		{
-			A8( srcBuffer, uint8_t( value * 255.0 ) );
+			A8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 	};
 	//!\~english	Specialisation for PixelFormat::eR32A32_SFLOAT
@@ -871,25 +992,45 @@ namespace castor
 #define src reinterpret_cast< float const * >( srcBuffer )
 #define dst reinterpret_cast< float * >( srcBuffer )
 
-		static uint8_t L8( uint8_t const * srcBuffer )
+		static uint8_t L8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( L32F( srcBuffer ) * 255 );
+			return uint8_t( L8S( srcBuffer ) );
 		}
-		static uint8_t R8( uint8_t const * srcBuffer )
+		static uint8_t R8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R32F( srcBuffer ) * 255 );
+			return uint8_t( R8S( srcBuffer ) );
 		}
-		static uint8_t G8( uint8_t const * srcBuffer )
+		static uint8_t G8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( G32F( srcBuffer ) * 255 );
+			return uint8_t( G8S( srcBuffer ) );
 		}
-		static uint8_t B8( uint8_t const * srcBuffer )
+		static uint8_t B8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( B32F( srcBuffer ) * 255 );
+			return uint8_t( B8S( srcBuffer ) );
 		}
-		static uint8_t A8( uint8_t const * srcBuffer )
+		static uint8_t A8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( A32F( srcBuffer ) * 255 );
+			return uint8_t( A8S( srcBuffer ) );
+		}
+		static int8_t L8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( L32F( srcBuffer ) * 255 );
+		}
+		static int8_t R8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( R32F( srcBuffer ) * 255 );
+		}
+		static int8_t G8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( G32F( srcBuffer ) * 255 );
+		}
+		static int8_t B8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( B32F( srcBuffer ) * 255 );
+		}
+		static int8_t A8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( A32F( srcBuffer ) * 255 );
 		}
 		static float L32F( uint8_t const * srcBuffer )
 		{
@@ -911,23 +1052,43 @@ namespace castor
 		{
 			return src[1];
 		}
-		static void L8( uint8_t * srcBuffer, uint8_t value )
+		static void L8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			L8S( srcBuffer, int8_t( value ) );
+		}
+		static void R8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			R8S( srcBuffer, int8_t( value ) );
+		}
+		static void G8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			G8S( srcBuffer, int8_t( value ) );
+		}
+		static void B8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			B8S( srcBuffer, int8_t( value ) );
+		}
+		static void A8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			A8S( srcBuffer, int8_t( value ) );
+		}
+		static void L8S( uint8_t * srcBuffer, int8_t value )
 		{
 			L32F( srcBuffer, float( value ) / 255 );
 		}
-		static void R8( uint8_t * srcBuffer, uint8_t value )
+		static void R8S( uint8_t * srcBuffer, int8_t value )
 		{
 			R32F( srcBuffer, float( value ) / 255 );
 		}
-		static void G8( uint8_t * srcBuffer, uint8_t value )
+		static void G8S( uint8_t * srcBuffer, int8_t value )
 		{
 			G32F( srcBuffer, float( value ) / 255 );
 		}
-		static void B8( uint8_t * srcBuffer, uint8_t value )
+		static void B8S( uint8_t * srcBuffer, int8_t value )
 		{
 			B32F( srcBuffer, float( value ) / 255 );
 		}
-		static void A8( uint8_t * srcBuffer, uint8_t value )
+		static void A8S( uint8_t * srcBuffer, int8_t value )
 		{
 			A32F( srcBuffer, float( value ) / 255 );
 		}
@@ -963,87 +1124,127 @@ namespace castor
 #define src ( *reinterpret_cast< uint16_t const * >( srcBuffer ) )
 #define dst ( *reinterpret_cast< uint16_t * >( srcBuffer ) )
 
-		static uint8_t L8( uint8_t const * srcBuffer )
+		static uint8_t L8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R8( srcBuffer ) * 0.30 + G8( srcBuffer ) * 0.59 + B8( srcBuffer ) * 0.11 );
+			return uint8_t( R8U( srcBuffer ) * 0.30 + G8U( srcBuffer ) * 0.59 + B8U( srcBuffer ) * 0.11 );
 		}
-		static uint8_t A8( uint8_t const * srcBuffer )
+		static uint8_t A8U( uint8_t const * srcBuffer )
 		{
 			return uint8_t( ( src & 0x8000 ) ? 0xFF : 0x00 );
 		}
-		static uint8_t R8( uint8_t const * srcBuffer )
+		static uint8_t R8U( uint8_t const * srcBuffer )
 		{
 			return uint8_t( ( src & 0x7C00 ) >> 7 );
 		}
-		static uint8_t G8( uint8_t const * srcBuffer )
+		static uint8_t G8U( uint8_t const * srcBuffer )
 		{
 			return uint8_t( ( src & 0x03E0 ) >> 2 );
 		}
-		static uint8_t B8( uint8_t const * srcBuffer )
+		static uint8_t B8U( uint8_t const * srcBuffer )
 		{
 			return uint8_t( ( src & 0x001F ) << 3 );
 		}
+		static int8_t L8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( L8U( srcBuffer ) );
+		}
+		static int8_t R8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( R8U( srcBuffer ) );
+		}
+		static int8_t G8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( G8U( srcBuffer ) );
+		}
+		static int8_t B8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( B8U( srcBuffer ) );
+		}
+		static int8_t A8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( A8U( srcBuffer ) );
+		}
 		static float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer ) / 255.0f;
+			return L8U( srcBuffer ) / 255.0f;
 		}
 		static float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( srcBuffer ) / 255.0f;
+			return R8U( srcBuffer ) / 255.0f;
 		}
 		static float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( srcBuffer ) / 255.0f;
+			return G8U( srcBuffer ) / 255.0f;
 		}
 		static float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( srcBuffer ) / 255.0f;
+			return B8U( srcBuffer ) / 255.0f;
 		}
 		static float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( srcBuffer ) / 255.0f;
+			return A8U( srcBuffer ) / 255.0f;
 		}
-		static void L8( uint8_t * srcBuffer, uint8_t value )
+		static void L8U( uint8_t * srcBuffer, uint8_t value )
 		{
-			R8( srcBuffer, value );
-			G8( srcBuffer, value );
-			B8( srcBuffer, value );
+			R8U( srcBuffer, value );
+			G8U( srcBuffer, value );
+			B8U( srcBuffer, value );
 		}
-		static void A8( uint8_t * srcBuffer, uint8_t value )
+		static void A8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst = ( src & 0x7FFF ) | ( value ? 0x8000 : 0x0000 );
 		}
-		static void R8( uint8_t * srcBuffer, uint8_t value )
+		static void R8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst = ( src & 0x83FF ) | ( ( uint16_t( value ) << 7 ) & 0x7C00 );
 		}
-		static void G8( uint8_t * srcBuffer, uint8_t value )
+		static void G8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst = ( src & 0xFC1F ) | ( ( uint16_t( value ) << 2 ) & 0x03E0 );
 		}
-		static void B8( uint8_t * srcBuffer, uint8_t value )
+		static void B8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst = ( src & 0xFFE0 ) | ( ( uint16_t( value ) >> 3 ) & 0x001F );
 		}
+		static void L8S( uint8_t * srcBuffer, int8_t value )
+		{
+			L8U( srcBuffer, uint8_t( value ) );
+		}
+		static void R8S( uint8_t * srcBuffer, int8_t value )
+		{
+			R8U( srcBuffer, uint8_t( value ) );
+		}
+		static void G8S( uint8_t * srcBuffer, int8_t value )
+		{
+			G8U( srcBuffer, uint8_t( value ) );
+		}
+		static void B8S( uint8_t * srcBuffer, int8_t value )
+		{
+			B8U( srcBuffer, uint8_t( value ) );
+		}
+		static void A8S( uint8_t * srcBuffer, uint8_t value )
+		{
+			A8U( srcBuffer, uint8_t( value ) );
+		}
 		static void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( srcBuffer, uint8_t( value * 255.0 ) );
+			L8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( srcBuffer, uint8_t( value * 255.0 ) );
+			R8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( srcBuffer, uint8_t( value * 255.0 ) );
+			G8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( srcBuffer, uint8_t( value * 255.0 ) );
+			B8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void A32F( uint8_t * srcBuffer, float value )
 		{
-			A8( srcBuffer, uint8_t( value * 255.0 ) );
+			A8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 
 #undef src
@@ -1057,82 +1258,122 @@ namespace castor
 #define src	( *reinterpret_cast< uint16_t const * >( srcBuffer ) )
 #define dst	( *reinterpret_cast< uint16_t * >( srcBuffer ) )
 
-		static uint8_t L8( uint8_t const * srcBuffer )
+		static uint8_t L8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R8( srcBuffer ) * 0.30 + G8( srcBuffer ) * 0.59 + B8( srcBuffer ) * 0.11 );
+			return uint8_t( R8U( srcBuffer ) * 0.30 + G8U( srcBuffer ) * 0.59 + B8U( srcBuffer ) * 0.11 );
 		}
-		static uint8_t R8( uint8_t const * srcBuffer )
+		static uint8_t R8U( uint8_t const * srcBuffer )
 		{
 			return uint8_t( ( src & 0xF800 ) >> 8 );
 		}
-		static uint8_t G8( uint8_t const * srcBuffer )
+		static uint8_t G8U( uint8_t const * srcBuffer )
 		{
 			return uint8_t( ( src & 0x07E0 ) >> 3 );
 		}
-		static uint8_t B8( uint8_t const * srcBuffer )
+		static uint8_t B8U( uint8_t const * srcBuffer )
 		{
 			return uint8_t( ( src & 0x001F ) << 3 );
 		}
-		static uint8_t A8( uint8_t const * )
+		static uint8_t A8U( uint8_t const * )
 		{
 			return 0xFF;
 		}
+		static int8_t L8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( L8U( srcBuffer ) );
+		}
+		static int8_t R8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( R8U( srcBuffer ) );
+		}
+		static int8_t G8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( G8U( srcBuffer ) );
+		}
+		static int8_t B8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( B8U( srcBuffer ) );
+		}
+		static int8_t A8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( A8U( srcBuffer ) );
+		}
 		static float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer ) / 255.0f;
+			return L8U( srcBuffer ) / 255.0f;
 		}
 		static float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( srcBuffer ) / 255.0f;
+			return R8U( srcBuffer ) / 255.0f;
 		}
 		static float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( srcBuffer ) / 255.0f;
+			return G8U( srcBuffer ) / 255.0f;
 		}
 		static float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( srcBuffer ) / 255.0f;
+			return B8U( srcBuffer ) / 255.0f;
 		}
 		static float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( srcBuffer ) / 255.0f;
+			return A8U( srcBuffer ) / 255.0f;
 		}
-		static void L8( uint8_t * srcBuffer, uint8_t value )
+		static void L8U( uint8_t * srcBuffer, uint8_t value )
 		{
-			R8( srcBuffer, value );
-			G8( srcBuffer, value );
-			B8( srcBuffer, value );
+			R8U( srcBuffer, value );
+			G8U( srcBuffer, value );
+			B8U( srcBuffer, value );
 		}
-		static void R8( uint8_t * srcBuffer, uint8_t value )
+		static void R8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst = ( src & 0x07FF ) | ( ( uint16_t( value ) << 8 ) & 0xF800 );
 		}
-		static void G8( uint8_t * srcBuffer, uint8_t value )
+		static void G8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst = ( src & 0xF81F ) | ( ( uint16_t( value ) << 3 ) & 0x07E0 );
 		}
-		static void B8( uint8_t * srcBuffer, uint8_t value )
+		static void B8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst = ( src & 0xFFE0 ) | ( ( uint16_t( value ) >> 3 ) & 0x001F );
 		}
-		static void A8( uint8_t *, uint8_t )
+		static void A8U( uint8_t *, uint8_t )
 		{
+		}
+		static void L8S( uint8_t * srcBuffer, int8_t value )
+		{
+			L8U( srcBuffer, uint8_t( value ) );
+		}
+		static void R8S( uint8_t * srcBuffer, int8_t value )
+		{
+			R8U( srcBuffer, uint8_t( value ) );
+		}
+		static void G8S( uint8_t * srcBuffer, int8_t value )
+		{
+			G8U( srcBuffer, uint8_t( value ) );
+		}
+		static void B8S( uint8_t * srcBuffer, int8_t value )
+		{
+			B8U( srcBuffer, uint8_t( value ) );
+		}
+		static void A8S( uint8_t * srcBuffer, uint8_t value )
+		{
+			A8U( srcBuffer, uint8_t( value ) );
 		}
 		static void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( srcBuffer, uint8_t( value * 255.0 ) );
+			L8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( srcBuffer, uint8_t( value * 255.0 ) );
+			R8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( srcBuffer, uint8_t( value * 255.0 ) );
+			G8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( srcBuffer, uint8_t( value * 255.0 ) );
+			B8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void A32F( uint8_t *, float )
 		{
@@ -1156,82 +1397,122 @@ namespace castor
 #define src	( *reinterpret_cast< pixel const * >( srcBuffer ) )
 #define dst	( *reinterpret_cast< pixel * >( srcBuffer ) )
 
-		static uint8_t L8( uint8_t const * srcBuffer )
+		static uint8_t L8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R8( srcBuffer ) * 0.30 + G8( srcBuffer ) * 0.59 + B8( srcBuffer ) * 0.11 );
+			return uint8_t( R8U( srcBuffer ) * 0.30 + G8U( srcBuffer ) * 0.59 + B8U( srcBuffer ) * 0.11 );
 		}
-		static uint8_t R8( uint8_t const * srcBuffer )
+		static uint8_t R8U( uint8_t const * srcBuffer )
 		{
 			return src.r;
 		}
-		static uint8_t G8( uint8_t const * srcBuffer )
+		static uint8_t G8U( uint8_t const * srcBuffer )
 		{
 			return src.g;
 		}
-		static uint8_t B8( uint8_t const * srcBuffer )
+		static uint8_t B8U( uint8_t const * srcBuffer )
 		{
 			return src.b;
 		}
-		static uint8_t A8( uint8_t const * )
+		static uint8_t A8U( uint8_t const * )
 		{
 			return 0xFF;
 		}
+		static int8_t L8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( L8U( srcBuffer ) );
+		}
+		static int8_t R8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( R8U( srcBuffer ) );
+		}
+		static int8_t G8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( G8U( srcBuffer ) );
+		}
+		static int8_t B8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( B8U( srcBuffer ) );
+		}
+		static int8_t A8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( A8U( srcBuffer ) );
+		}
 		static float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer ) / 255.0f;
+			return L8U( srcBuffer ) / 255.0f;
 		}
 		static float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( srcBuffer ) / 255.0f;
+			return R8U( srcBuffer ) / 255.0f;
 		}
 		static float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( srcBuffer ) / 255.0f;
+			return G8U( srcBuffer ) / 255.0f;
 		}
 		static float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( srcBuffer ) / 255.0f;
+			return B8U( srcBuffer ) / 255.0f;
 		}
 		static float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( srcBuffer ) / 255.0f;
+			return A8U( srcBuffer ) / 255.0f;
 		}
-		static void L8( uint8_t * srcBuffer, uint8_t value )
+		static void L8U( uint8_t * srcBuffer, uint8_t value )
 		{
-			R8( srcBuffer, value );
-			G8( srcBuffer, value );
-			B8( srcBuffer, value );
+			R8U( srcBuffer, value );
+			G8U( srcBuffer, value );
+			B8U( srcBuffer, value );
 		}
-		static void R8( uint8_t * srcBuffer, uint8_t value )
+		static void R8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.r = value;
 		}
-		static void G8( uint8_t * srcBuffer, uint8_t value )
+		static void G8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.g = value;
 		}
-		static void B8( uint8_t * srcBuffer, uint8_t value )
+		static void B8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.b = value;
 		}
-		static void A8( uint8_t *, uint8_t )
+		static void A8U( uint8_t *, uint8_t )
 		{
+		}
+		static void L8S( uint8_t * srcBuffer, int8_t value )
+		{
+			L8U( srcBuffer, uint8_t( value ) );
+		}
+		static void R8S( uint8_t * srcBuffer, int8_t value )
+		{
+			R8U( srcBuffer, uint8_t( value ) );
+		}
+		static void G8S( uint8_t * srcBuffer, int8_t value )
+		{
+			G8U( srcBuffer, uint8_t( value ) );
+		}
+		static void B8S( uint8_t * srcBuffer, int8_t value )
+		{
+			B8U( srcBuffer, uint8_t( value ) );
+		}
+		static void A8S( uint8_t * srcBuffer, uint8_t value )
+		{
+			A8U( srcBuffer, uint8_t( value ) );
 		}
 		static void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( srcBuffer, uint8_t( value * 255.0 ) );
+			L8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( srcBuffer, uint8_t( value * 255.0 ) );
+			R8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( srcBuffer, uint8_t( value * 255.0 ) );
+			G8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( srcBuffer, uint8_t( value * 255.0 ) );
+			B8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void A32F( uint8_t *, float )
 		{
@@ -1255,82 +1536,122 @@ namespace castor
 #define src	( *reinterpret_cast< pixel const * >( srcBuffer ) )
 #define dst	( *reinterpret_cast< pixel * >( srcBuffer ) )
 
-		static uint8_t L8( uint8_t const * srcBuffer )
+		static uint8_t L8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R8( srcBuffer ) * 0.30 + G8( srcBuffer ) * 0.59 + B8( srcBuffer ) * 0.11 );
+			return uint8_t( R8U( srcBuffer ) * 0.30 + G8U( srcBuffer ) * 0.59 + B8U( srcBuffer ) * 0.11 );
 		}
-		static uint8_t R8( uint8_t const * srcBuffer )
+		static uint8_t R8U( uint8_t const * srcBuffer )
 		{
 			return src.r;
 		}
-		static uint8_t G8( uint8_t const * srcBuffer )
+		static uint8_t G8U( uint8_t const * srcBuffer )
 		{
 			return src.g;
 		}
-		static uint8_t B8( uint8_t const * srcBuffer )
+		static uint8_t B8U( uint8_t const * srcBuffer )
 		{
 			return src.b;
 		}
-		static uint8_t A8( uint8_t const * )
+		static uint8_t A8U( uint8_t const * )
 		{
 			return 0xFF;
 		}
+		static int8_t L8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( L8U( srcBuffer ) );
+		}
+		static int8_t R8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( R8U( srcBuffer ) );
+		}
+		static int8_t G8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( G8U( srcBuffer ) );
+		}
+		static int8_t B8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( B8U( srcBuffer ) );
+		}
+		static int8_t A8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( A8U( srcBuffer ) );
+		}
 		static float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer ) / 255.0f;
+			return L8U( srcBuffer ) / 255.0f;
 		}
 		static float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( srcBuffer ) / 255.0f;
+			return R8U( srcBuffer ) / 255.0f;
 		}
 		static float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( srcBuffer ) / 255.0f;
+			return G8U( srcBuffer ) / 255.0f;
 		}
 		static float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( srcBuffer ) / 255.0f;
+			return B8U( srcBuffer ) / 255.0f;
 		}
 		static float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( srcBuffer ) / 255.0f;
+			return A8U( srcBuffer ) / 255.0f;
 		}
-		static void L8( uint8_t * srcBuffer, uint8_t value )
+		static void L8U( uint8_t * srcBuffer, uint8_t value )
 		{
-			R8( srcBuffer, value );
-			G8( srcBuffer, value );
-			B8( srcBuffer, value );
+			R8U( srcBuffer, value );
+			G8U( srcBuffer, value );
+			B8U( srcBuffer, value );
 		}
-		static void R8( uint8_t * srcBuffer, uint8_t value )
+		static void R8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.r = value;
 		}
-		static void G8( uint8_t * srcBuffer, uint8_t value )
+		static void G8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.g = value;
 		}
-		static void B8( uint8_t * srcBuffer, uint8_t value )
+		static void B8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.b = value;
 		}
-		static void A8( uint8_t *, uint8_t )
+		static void A8U( uint8_t *, uint8_t )
 		{
+		}
+		static void L8S( uint8_t * srcBuffer, int8_t value )
+		{
+			L8U( srcBuffer, uint8_t( value ) );
+		}
+		static void R8S( uint8_t * srcBuffer, int8_t value )
+		{
+			R8U( srcBuffer, uint8_t( value ) );
+		}
+		static void G8S( uint8_t * srcBuffer, int8_t value )
+		{
+			G8U( srcBuffer, uint8_t( value ) );
+		}
+		static void B8S( uint8_t * srcBuffer, int8_t value )
+		{
+			B8U( srcBuffer, uint8_t( value ) );
+		}
+		static void A8S( uint8_t * srcBuffer, uint8_t value )
+		{
+			A8U( srcBuffer, uint8_t( value ) );
 		}
 		static void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( srcBuffer, uint8_t( value * 255.0 ) );
+			L8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( srcBuffer, uint8_t( value * 255.0 ) );
+			R8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( srcBuffer, uint8_t( value * 255.0 ) );
+			G8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( srcBuffer, uint8_t( value * 255.0 ) );
+			B8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void A32F( uint8_t *, float )
 		{
@@ -1355,87 +1676,127 @@ namespace castor
 #define src	( *reinterpret_cast< pixel const * >( srcBuffer ) )
 #define dst	( *reinterpret_cast< pixel * >( srcBuffer ) )
 
-		static uint8_t L8( uint8_t const * srcBuffer )
+		static uint8_t L8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R8( srcBuffer ) * 0.30 + G8( srcBuffer ) * 0.59 + B8( srcBuffer ) * 0.11 );
+			return uint8_t( R8U( srcBuffer ) * 0.30 + G8U( srcBuffer ) * 0.59 + B8U( srcBuffer ) * 0.11 );
 		}
-		static uint8_t A8( uint8_t const * srcBuffer )
+		static uint8_t A8U( uint8_t const * srcBuffer )
 		{
 			return src.a;
 		}
-		static uint8_t R8( uint8_t const * srcBuffer )
+		static uint8_t R8U( uint8_t const * srcBuffer )
 		{
 			return src.r;
 		}
-		static uint8_t G8( uint8_t const * srcBuffer )
+		static uint8_t G8U( uint8_t const * srcBuffer )
 		{
 			return src.g;
 		}
-		static uint8_t B8( uint8_t const * srcBuffer )
+		static uint8_t B8U( uint8_t const * srcBuffer )
 		{
 			return src.b;
 		}
+		static int8_t L8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( L8U( srcBuffer ) );
+		}
+		static int8_t R8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( R8U( srcBuffer ) );
+		}
+		static int8_t G8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( G8U( srcBuffer ) );
+		}
+		static int8_t B8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( B8U( srcBuffer ) );
+		}
+		static int8_t A8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( A8U( srcBuffer ) );
+		}
 		static float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer ) / 255.0f;
+			return L8U( srcBuffer ) / 255.0f;
 		}
 		static float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( srcBuffer ) / 255.0f;
+			return R8U( srcBuffer ) / 255.0f;
 		}
 		static float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( srcBuffer ) / 255.0f;
+			return G8U( srcBuffer ) / 255.0f;
 		}
 		static float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( srcBuffer ) / 255.0f;
+			return B8U( srcBuffer ) / 255.0f;
 		}
 		static float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( srcBuffer ) / 255.0f;
+			return A8U( srcBuffer ) / 255.0f;
 		}
-		static void L8( uint8_t * srcBuffer, uint8_t value )
+		static void L8U( uint8_t * srcBuffer, uint8_t value )
 		{
-			R8( srcBuffer, value );
-			G8( srcBuffer, value );
-			B8( srcBuffer, value );
+			R8U( srcBuffer, value );
+			G8U( srcBuffer, value );
+			B8U( srcBuffer, value );
 		}
-		static void A8( uint8_t * srcBuffer, uint8_t value )
+		static void A8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.a = value;
 		}
-		static void R8( uint8_t * srcBuffer, uint8_t value )
+		static void R8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.r = value;
 		}
-		static void G8( uint8_t * srcBuffer, uint8_t value )
+		static void G8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.g = value;
 		}
-		static void B8( uint8_t * srcBuffer, uint8_t value )
+		static void B8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.b = value;
 		}
+		static void L8S( uint8_t * srcBuffer, int8_t value )
+		{
+			L8U( srcBuffer, uint8_t( value ) );
+		}
+		static void R8S( uint8_t * srcBuffer, int8_t value )
+		{
+			R8U( srcBuffer, uint8_t( value ) );
+		}
+		static void G8S( uint8_t * srcBuffer, int8_t value )
+		{
+			G8U( srcBuffer, uint8_t( value ) );
+		}
+		static void B8S( uint8_t * srcBuffer, int8_t value )
+		{
+			B8U( srcBuffer, uint8_t( value ) );
+		}
+		static void A8S( uint8_t * srcBuffer, uint8_t value )
+		{
+			A8U( srcBuffer, uint8_t( value ) );
+		}
 		static void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( srcBuffer, uint8_t( value * 255.0 ) );
+			L8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( srcBuffer, uint8_t( value * 255.0 ) );
+			R8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( srcBuffer, uint8_t( value * 255.0 ) );
+			G8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( srcBuffer, uint8_t( value * 255.0 ) );
+			B8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void A32F( uint8_t * srcBuffer, float value )
 		{
-			A8( srcBuffer, uint8_t( value * 255.0 ) );
+			A8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 
 #undef src
@@ -1456,82 +1817,122 @@ namespace castor
 #define src	( *reinterpret_cast< pixel const * >( srcBuffer ) )
 #define dst	( *reinterpret_cast< pixel * >( srcBuffer ) )
 
-		static uint8_t L8( uint8_t const * srcBuffer )
+		static uint8_t L8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R8( srcBuffer ) * 0.30 + G8( srcBuffer ) * 0.59 + B8( srcBuffer ) * 0.11 );
+			return uint8_t( R8U( srcBuffer ) * 0.30 + G8U( srcBuffer ) * 0.59 + B8U( srcBuffer ) * 0.11 );
 		}
-		static uint8_t R8( uint8_t const * srcBuffer )
+		static uint8_t R8U( uint8_t const * srcBuffer )
 		{
 			return src.r;
 		}
-		static uint8_t G8( uint8_t const * srcBuffer )
+		static uint8_t G8U( uint8_t const * srcBuffer )
 		{
 			return src.g;
 		}
-		static uint8_t B8( uint8_t const * srcBuffer )
+		static uint8_t B8U( uint8_t const * srcBuffer )
 		{
 			return src.b;
 		}
-		static uint8_t A8( uint8_t const * )
+		static uint8_t A8U( uint8_t const * )
 		{
 			return 0xFF;
 		}
+		static int8_t L8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( L8U( srcBuffer ) );
+		}
+		static int8_t R8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( R8U( srcBuffer ) );
+		}
+		static int8_t G8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( G8U( srcBuffer ) );
+		}
+		static int8_t B8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( B8U( srcBuffer ) );
+		}
+		static int8_t A8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( A8U( srcBuffer ) );
+		}
 		static float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer ) / 255.0f;
+			return L8U( srcBuffer ) / 255.0f;
 		}
 		static float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( srcBuffer ) / 255.0f;
+			return R8U( srcBuffer ) / 255.0f;
 		}
 		static float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( srcBuffer ) / 255.0f;
+			return G8U( srcBuffer ) / 255.0f;
 		}
 		static float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( srcBuffer ) / 255.0f;
+			return B8U( srcBuffer ) / 255.0f;
 		}
 		static float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( srcBuffer ) / 255.0f;
+			return A8U( srcBuffer ) / 255.0f;
 		}
-		static void L8( uint8_t * srcBuffer, uint8_t value )
+		static void L8U( uint8_t * srcBuffer, uint8_t value )
 		{
-			R8( srcBuffer, value );
-			G8( srcBuffer, value );
-			B8( srcBuffer, value );
+			R8U( srcBuffer, value );
+			G8U( srcBuffer, value );
+			B8U( srcBuffer, value );
 		}
-		static void R8( uint8_t * srcBuffer, uint8_t value )
+		static void R8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.r = value;
 		}
-		static void G8( uint8_t * srcBuffer, uint8_t value )
+		static void G8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.g = value;
 		}
-		static void B8( uint8_t * srcBuffer, uint8_t value )
+		static void B8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.b = value;
 		}
-		static void A8( uint8_t *, uint8_t )
+		static void A8U( uint8_t *, uint8_t )
 		{
+		}
+		static void L8S( uint8_t * srcBuffer, int8_t value )
+		{
+			L8U( srcBuffer, uint8_t( value ) );
+		}
+		static void R8S( uint8_t * srcBuffer, int8_t value )
+		{
+			R8U( srcBuffer, uint8_t( value ) );
+		}
+		static void G8S( uint8_t * srcBuffer, int8_t value )
+		{
+			G8U( srcBuffer, uint8_t( value ) );
+		}
+		static void B8S( uint8_t * srcBuffer, int8_t value )
+		{
+			B8U( srcBuffer, uint8_t( value ) );
+		}
+		static void A8S( uint8_t * srcBuffer, uint8_t value )
+		{
+			A8U( srcBuffer, uint8_t( value ) );
 		}
 		static void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( srcBuffer, uint8_t( value * 255.0 ) );
+			L8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( srcBuffer, uint8_t( value * 255.0 ) );
+			R8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( srcBuffer, uint8_t( value * 255.0 ) );
+			G8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( srcBuffer, uint8_t( value * 255.0 ) );
+			B8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void A32F( uint8_t *, float )
 		{
@@ -1555,82 +1956,122 @@ namespace castor
 #define src	( *reinterpret_cast< pixel const * >( srcBuffer ) )
 #define dst	( *reinterpret_cast< pixel * >( srcBuffer ) )
 
-		static uint8_t L8( uint8_t const * srcBuffer )
+		static uint8_t L8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R8( srcBuffer ) * 0.30 + G8( srcBuffer ) * 0.59 + B8( srcBuffer ) * 0.11 );
+			return uint8_t( R8U( srcBuffer ) * 0.30 + G8U( srcBuffer ) * 0.59 + B8U( srcBuffer ) * 0.11 );
 		}
-		static uint8_t R8( uint8_t const * srcBuffer )
+		static uint8_t R8U( uint8_t const * srcBuffer )
 		{
 			return src.r;
 		}
-		static uint8_t G8( uint8_t const * srcBuffer )
+		static uint8_t G8U( uint8_t const * srcBuffer )
 		{
 			return src.g;
 		}
-		static uint8_t B8( uint8_t const * srcBuffer )
+		static uint8_t B8U( uint8_t const * srcBuffer )
 		{
 			return src.b;
 		}
-		static uint8_t A8( uint8_t const * )
+		static uint8_t A8U( uint8_t const * )
 		{
 			return 0xFF;
 		}
+		static int8_t L8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( L8U( srcBuffer ) );
+		}
+		static int8_t R8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( R8U( srcBuffer ) );
+		}
+		static int8_t G8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( G8U( srcBuffer ) );
+		}
+		static int8_t B8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( B8U( srcBuffer ) );
+		}
+		static int8_t A8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( A8U( srcBuffer ) );
+		}
 		static float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer ) / 255.0f;
+			return L8U( srcBuffer ) / 255.0f;
 		}
 		static float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( srcBuffer ) / 255.0f;
+			return R8U( srcBuffer ) / 255.0f;
 		}
 		static float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( srcBuffer ) / 255.0f;
+			return G8U( srcBuffer ) / 255.0f;
 		}
 		static float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( srcBuffer ) / 255.0f;
+			return B8U( srcBuffer ) / 255.0f;
 		}
 		static float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( srcBuffer ) / 255.0f;
+			return A8U( srcBuffer ) / 255.0f;
 		}
-		static void L8( uint8_t * srcBuffer, uint8_t value )
+		static void L8U( uint8_t * srcBuffer, uint8_t value )
 		{
-			R8( srcBuffer, value );
-			G8( srcBuffer, value );
-			B8( srcBuffer, value );
+			R8U( srcBuffer, value );
+			G8U( srcBuffer, value );
+			B8U( srcBuffer, value );
 		}
-		static void R8( uint8_t * srcBuffer, uint8_t value )
+		static void R8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.r = value;
 		}
-		static void G8( uint8_t * srcBuffer, uint8_t value )
+		static void G8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.g = value;
 		}
-		static void B8( uint8_t * srcBuffer, uint8_t value )
+		static void B8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.b = value;
 		}
-		static void A8( uint8_t *, uint8_t )
+		static void A8U( uint8_t *, uint8_t )
 		{
+		}
+		static void L8S( uint8_t * srcBuffer, int8_t value )
+		{
+			L8U( srcBuffer, uint8_t( value ) );
+		}
+		static void R8S( uint8_t * srcBuffer, int8_t value )
+		{
+			R8U( srcBuffer, uint8_t( value ) );
+		}
+		static void G8S( uint8_t * srcBuffer, int8_t value )
+		{
+			G8U( srcBuffer, uint8_t( value ) );
+		}
+		static void B8S( uint8_t * srcBuffer, int8_t value )
+		{
+			B8U( srcBuffer, uint8_t( value ) );
+		}
+		static void A8S( uint8_t * srcBuffer, uint8_t value )
+		{
+			A8U( srcBuffer, uint8_t( value ) );
 		}
 		static void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( srcBuffer, uint8_t( value * 255.0 ) );
+			L8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( srcBuffer, uint8_t( value * 255.0 ) );
+			R8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( srcBuffer, uint8_t( value * 255.0 ) );
+			G8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( srcBuffer, uint8_t( value * 255.0 ) );
+			B8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void A32F( uint8_t *, float )
 		{
@@ -1655,87 +2096,127 @@ namespace castor
 #define src	( *reinterpret_cast< pixel const * >( srcBuffer ) )
 #define dst	( *reinterpret_cast< pixel * >( srcBuffer ) )
 
-		static uint8_t L8( uint8_t const * srcBuffer )
+		static uint8_t L8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R8( srcBuffer ) * 0.30 + G8( srcBuffer ) * 0.59 + B8( srcBuffer ) * 0.11 );
+			return uint8_t( R8U( srcBuffer ) * 0.30 + G8U( srcBuffer ) * 0.59 + B8U( srcBuffer ) * 0.11 );
 		}
-		static uint8_t A8( uint8_t const * srcBuffer )
+		static uint8_t A8U( uint8_t const * srcBuffer )
 		{
 			return src.a;
 		}
-		static uint8_t R8( uint8_t const * srcBuffer )
+		static uint8_t R8U( uint8_t const * srcBuffer )
 		{
 			return src.r;
 		}
-		static uint8_t G8( uint8_t const * srcBuffer )
+		static uint8_t G8U( uint8_t const * srcBuffer )
 		{
 			return src.g;
 		}
-		static uint8_t B8( uint8_t const * srcBuffer )
+		static uint8_t B8U( uint8_t const * srcBuffer )
 		{
 			return src.b;
 		}
+		static int8_t L8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( L8U( srcBuffer ) );
+		}
+		static int8_t R8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( R8U( srcBuffer ) );
+		}
+		static int8_t G8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( G8U( srcBuffer ) );
+		}
+		static int8_t B8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( B8U( srcBuffer ) );
+		}
+		static int8_t A8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( A8U( srcBuffer ) );
+		}
 		static float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer ) / 255.0f;
+			return L8U( srcBuffer ) / 255.0f;
 		}
 		static float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( srcBuffer ) / 255.0f;
+			return R8U( srcBuffer ) / 255.0f;
 		}
 		static float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( srcBuffer ) / 255.0f;
+			return G8U( srcBuffer ) / 255.0f;
 		}
 		static float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( srcBuffer ) / 255.0f;
+			return B8U( srcBuffer ) / 255.0f;
 		}
 		static float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( srcBuffer ) / 255.0f;
+			return A8U( srcBuffer ) / 255.0f;
 		}
-		static void L8( uint8_t * srcBuffer, uint8_t value )
+		static void L8U( uint8_t * srcBuffer, uint8_t value )
 		{
-			R8( srcBuffer, value );
-			G8( srcBuffer, value );
-			B8( srcBuffer, value );
+			R8U( srcBuffer, value );
+			G8U( srcBuffer, value );
+			B8U( srcBuffer, value );
 		}
-		static void A8( uint8_t * srcBuffer, uint8_t value )
+		static void A8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.a = value;
 		}
-		static void R8( uint8_t * srcBuffer, uint8_t value )
+		static void R8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.r = value;
 		}
-		static void G8( uint8_t * srcBuffer, uint8_t value )
+		static void G8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.g = value;
 		}
-		static void B8( uint8_t * srcBuffer, uint8_t value )
+		static void B8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.b = value;
 		}
+		static void L8S( uint8_t * srcBuffer, int8_t value )
+		{
+			L8U( srcBuffer, uint8_t( value ) );
+		}
+		static void R8S( uint8_t * srcBuffer, int8_t value )
+		{
+			R8U( srcBuffer, uint8_t( value ) );
+		}
+		static void G8S( uint8_t * srcBuffer, int8_t value )
+		{
+			G8U( srcBuffer, uint8_t( value ) );
+		}
+		static void B8S( uint8_t * srcBuffer, int8_t value )
+		{
+			B8U( srcBuffer, uint8_t( value ) );
+		}
+		static void A8S( uint8_t * srcBuffer, uint8_t value )
+		{
+			A8U( srcBuffer, uint8_t( value ) );
+		}
 		static void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( srcBuffer, uint8_t( value * 255.0 ) );
+			L8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( srcBuffer, uint8_t( value * 255.0 ) );
+			R8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( srcBuffer, uint8_t( value * 255.0 ) );
+			G8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( srcBuffer, uint8_t( value * 255.0 ) );
+			B8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void A32F( uint8_t * srcBuffer, float value )
 		{
-			A8( srcBuffer, uint8_t( value * 255.0 ) );
+			A8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 
 #undef src
@@ -1757,87 +2238,127 @@ namespace castor
 #define src	( *reinterpret_cast< pixel const * >( srcBuffer ) )
 #define dst	( *reinterpret_cast< pixel * >( srcBuffer ) )
 
-		static uint8_t L8( uint8_t const * srcBuffer )
+		static uint8_t L8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R8( srcBuffer ) * 0.30 + G8( srcBuffer ) * 0.59 + B8( srcBuffer ) * 0.11 );
+			return uint8_t( R8U( srcBuffer ) * 0.30 + G8U( srcBuffer ) * 0.59 + B8U( srcBuffer ) * 0.11 );
 		}
-		static uint8_t A8( uint8_t const * srcBuffer )
+		static uint8_t A8U( uint8_t const * srcBuffer )
 		{
 			return src.a;
 		}
-		static uint8_t R8( uint8_t const * srcBuffer )
+		static uint8_t R8U( uint8_t const * srcBuffer )
 		{
 			return src.r;
 		}
-		static uint8_t G8( uint8_t const * srcBuffer )
+		static uint8_t G8U( uint8_t const * srcBuffer )
 		{
 			return src.g;
 		}
-		static uint8_t B8( uint8_t const * srcBuffer )
+		static uint8_t B8U( uint8_t const * srcBuffer )
 		{
 			return src.b;
 		}
+		static int8_t L8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( L8U( srcBuffer ) );
+		}
+		static int8_t R8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( R8U( srcBuffer ) );
+		}
+		static int8_t G8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( G8U( srcBuffer ) );
+		}
+		static int8_t B8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( B8U( srcBuffer ) );
+		}
+		static int8_t A8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( A8U( srcBuffer ) );
+		}
 		static float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer ) / 255.0f;
+			return L8U( srcBuffer ) / 255.0f;
 		}
 		static float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( srcBuffer ) / 255.0f;
+			return R8U( srcBuffer ) / 255.0f;
 		}
 		static float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( srcBuffer ) / 255.0f;
+			return G8U( srcBuffer ) / 255.0f;
 		}
 		static float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( srcBuffer ) / 255.0f;
+			return B8U( srcBuffer ) / 255.0f;
 		}
 		static float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( srcBuffer ) / 255.0f;
+			return A8U( srcBuffer ) / 255.0f;
 		}
-		static void L8( uint8_t * srcBuffer, uint8_t value )
+		static void L8U( uint8_t * srcBuffer, uint8_t value )
 		{
-			R8( srcBuffer, value );
-			G8( srcBuffer, value );
-			B8( srcBuffer, value );
+			R8U( srcBuffer, value );
+			G8U( srcBuffer, value );
+			B8U( srcBuffer, value );
 		}
-		static void A8( uint8_t * srcBuffer, uint8_t value )
+		static void A8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.a = value;
 		}
-		static void R8( uint8_t * srcBuffer, uint8_t value )
+		static void R8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.r = value;
 		}
-		static void G8( uint8_t * srcBuffer, uint8_t value )
+		static void G8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.g = value;
 		}
-		static void B8( uint8_t * srcBuffer, uint8_t value )
+		static void B8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.b = value;
 		}
+		static void L8S( uint8_t * srcBuffer, int8_t value )
+		{
+			L8U( srcBuffer, uint8_t( value ) );
+		}
+		static void R8S( uint8_t * srcBuffer, int8_t value )
+		{
+			R8U( srcBuffer, uint8_t( value ) );
+		}
+		static void G8S( uint8_t * srcBuffer, int8_t value )
+		{
+			G8U( srcBuffer, uint8_t( value ) );
+		}
+		static void B8S( uint8_t * srcBuffer, int8_t value )
+		{
+			B8U( srcBuffer, uint8_t( value ) );
+		}
+		static void A8S( uint8_t * srcBuffer, uint8_t value )
+		{
+			A8U( srcBuffer, uint8_t( value ) );
+		}
 		static void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( srcBuffer, uint8_t( value * 255.0 ) );
+			L8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( srcBuffer, uint8_t( value * 255.0 ) );
+			R8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( srcBuffer, uint8_t( value * 255.0 ) );
+			G8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( srcBuffer, uint8_t( value * 255.0 ) );
+			B8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void A32F( uint8_t * srcBuffer, float value )
 		{
-			A8( srcBuffer, uint8_t( value * 255.0 ) );
+			A8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 
 #undef src
@@ -1859,87 +2380,127 @@ namespace castor
 #define src	( *reinterpret_cast< pixel const * >( srcBuffer ) )
 #define dst	( *reinterpret_cast< pixel * >( srcBuffer ) )
 
-		static uint8_t L8( uint8_t const * srcBuffer )
+		static uint8_t L8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R8( srcBuffer ) * 0.30 + G8( srcBuffer ) * 0.59 + B8( srcBuffer ) * 0.11 );
+			return uint8_t( R8U( srcBuffer ) * 0.30 + G8U( srcBuffer ) * 0.59 + B8U( srcBuffer ) * 0.11 );
 		}
-		static uint8_t A8( uint8_t const * srcBuffer )
+		static uint8_t A8U( uint8_t const * srcBuffer )
 		{
 			return src.a;
 		}
-		static uint8_t R8( uint8_t const * srcBuffer )
+		static uint8_t R8U( uint8_t const * srcBuffer )
 		{
 			return src.r;
 		}
-		static uint8_t G8( uint8_t const * srcBuffer )
+		static uint8_t G8U( uint8_t const * srcBuffer )
 		{
 			return src.g;
 		}
-		static uint8_t B8( uint8_t const * srcBuffer )
+		static uint8_t B8U( uint8_t const * srcBuffer )
 		{
 			return src.b;
 		}
+		static int8_t L8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( L8U( srcBuffer ) );
+		}
+		static int8_t R8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( R8U( srcBuffer ) );
+		}
+		static int8_t G8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( G8U( srcBuffer ) );
+		}
+		static int8_t B8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( B8U( srcBuffer ) );
+		}
+		static int8_t A8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( A8U( srcBuffer ) );
+		}
 		static float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer ) / 255.0f;
+			return L8U( srcBuffer ) / 255.0f;
 		}
 		static float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( srcBuffer ) / 255.0f;
+			return R8U( srcBuffer ) / 255.0f;
 		}
 		static float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( srcBuffer ) / 255.0f;
+			return G8U( srcBuffer ) / 255.0f;
 		}
 		static float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( srcBuffer ) / 255.0f;
+			return B8U( srcBuffer ) / 255.0f;
 		}
 		static float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( srcBuffer ) / 255.0f;
+			return A8U( srcBuffer ) / 255.0f;
 		}
-		static void L8( uint8_t * srcBuffer, uint8_t value )
+		static void L8U( uint8_t * srcBuffer, uint8_t value )
 		{
-			R8( srcBuffer, value );
-			G8( srcBuffer, value );
-			B8( srcBuffer, value );
+			R8U( srcBuffer, value );
+			G8U( srcBuffer, value );
+			B8U( srcBuffer, value );
 		}
-		static void A8( uint8_t * srcBuffer, uint8_t value )
+		static void A8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.a = value;
 		}
-		static void R8( uint8_t * srcBuffer, uint8_t value )
+		static void R8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.r = value;
 		}
-		static void G8( uint8_t * srcBuffer, uint8_t value )
+		static void G8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.g = value;
 		}
-		static void B8( uint8_t * srcBuffer, uint8_t value )
+		static void B8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.b = value;
 		}
+		static void L8S( uint8_t * srcBuffer, int8_t value )
+		{
+			L8U( srcBuffer, uint8_t( value ) );
+		}
+		static void R8S( uint8_t * srcBuffer, int8_t value )
+		{
+			R8U( srcBuffer, uint8_t( value ) );
+		}
+		static void G8S( uint8_t * srcBuffer, int8_t value )
+		{
+			G8U( srcBuffer, uint8_t( value ) );
+		}
+		static void B8S( uint8_t * srcBuffer, int8_t value )
+		{
+			B8U( srcBuffer, uint8_t( value ) );
+		}
+		static void A8S( uint8_t * srcBuffer, uint8_t value )
+		{
+			A8U( srcBuffer, uint8_t( value ) );
+		}
 		static void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( srcBuffer, uint8_t( value * 255.0 ) );
+			L8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( srcBuffer, uint8_t( value * 255.0 ) );
+			R8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( srcBuffer, uint8_t( value * 255.0 ) );
+			G8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( srcBuffer, uint8_t( value * 255.0 ) );
+			B8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void A32F( uint8_t * srcBuffer, float value )
 		{
-			A8( srcBuffer, uint8_t( value * 255.0 ) );
+			A8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 
 #undef src
@@ -1961,87 +2522,127 @@ namespace castor
 #define src	( *reinterpret_cast< pixel const * >( srcBuffer ) )
 #define dst	( *reinterpret_cast< pixel * >( srcBuffer ) )
 
-		static uint8_t L8( uint8_t const * srcBuffer )
+		static uint8_t L8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R8( srcBuffer ) * 0.30 + G8( srcBuffer ) * 0.59 + B8( srcBuffer ) * 0.11 );
+			return uint8_t( R8U( srcBuffer ) * 0.30 + G8U( srcBuffer ) * 0.59 + B8U( srcBuffer ) * 0.11 );
 		}
-		static uint8_t A8( uint8_t const * srcBuffer )
+		static uint8_t A8U( uint8_t const * srcBuffer )
 		{
 			return src.a;
 		}
-		static uint8_t R8( uint8_t const * srcBuffer )
+		static uint8_t R8U( uint8_t const * srcBuffer )
 		{
 			return src.r;
 		}
-		static uint8_t G8( uint8_t const * srcBuffer )
+		static uint8_t G8U( uint8_t const * srcBuffer )
 		{
 			return src.g;
 		}
-		static uint8_t B8( uint8_t const * srcBuffer )
+		static uint8_t B8U( uint8_t const * srcBuffer )
 		{
 			return src.b;
 		}
+		static int8_t L8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( L8U( srcBuffer ) );
+		}
+		static int8_t R8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( R8U( srcBuffer ) );
+		}
+		static int8_t G8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( G8U( srcBuffer ) );
+		}
+		static int8_t B8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( B8U( srcBuffer ) );
+		}
+		static int8_t A8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( A8U( srcBuffer ) );
+		}
 		static float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer ) / 255.0f;
+			return L8U( srcBuffer ) / 255.0f;
 		}
 		static float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( srcBuffer ) / 255.0f;
+			return R8U( srcBuffer ) / 255.0f;
 		}
 		static float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( srcBuffer ) / 255.0f;
+			return G8U( srcBuffer ) / 255.0f;
 		}
 		static float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( srcBuffer ) / 255.0f;
+			return B8U( srcBuffer ) / 255.0f;
 		}
 		static float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( srcBuffer ) / 255.0f;
+			return A8U( srcBuffer ) / 255.0f;
 		}
-		static void L8( uint8_t * srcBuffer, uint8_t value )
+		static void L8U( uint8_t * srcBuffer, uint8_t value )
 		{
-			R8( srcBuffer, value );
-			G8( srcBuffer, value );
-			B8( srcBuffer, value );
+			R8U( srcBuffer, value );
+			G8U( srcBuffer, value );
+			B8U( srcBuffer, value );
 		}
-		static void A8( uint8_t * srcBuffer, uint8_t value )
+		static void A8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.a = value;
 		}
-		static void R8( uint8_t * srcBuffer, uint8_t value )
+		static void R8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.r = value;
 		}
-		static void G8( uint8_t * srcBuffer, uint8_t value )
+		static void G8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.g = value;
 		}
-		static void B8( uint8_t * srcBuffer, uint8_t value )
+		static void B8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			dst.b = value;
 		}
+		static void L8S( uint8_t * srcBuffer, int8_t value )
+		{
+			L8U( srcBuffer, uint8_t( value ) );
+		}
+		static void R8S( uint8_t * srcBuffer, int8_t value )
+		{
+			R8U( srcBuffer, uint8_t( value ) );
+		}
+		static void G8S( uint8_t * srcBuffer, int8_t value )
+		{
+			G8U( srcBuffer, uint8_t( value ) );
+		}
+		static void B8S( uint8_t * srcBuffer, int8_t value )
+		{
+			B8U( srcBuffer, uint8_t( value ) );
+		}
+		static void A8S( uint8_t * srcBuffer, uint8_t value )
+		{
+			A8U( srcBuffer, uint8_t( value ) );
+		}
 		static void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( srcBuffer, uint8_t( value * 255.0 ) );
+			L8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( srcBuffer, uint8_t( value * 255.0 ) );
+			R8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( srcBuffer, uint8_t( value * 255.0 ) );
+			G8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( srcBuffer, uint8_t( value * 255.0 ) );
+			B8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void A32F( uint8_t * srcBuffer, float value )
 		{
-			A8( srcBuffer, uint8_t( value * 255.0 ) );
+			A8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 
 #undef src
@@ -2052,25 +2653,46 @@ namespace castor
 	template<>
 	struct PixelComponents< PixelFormat::eR16G16B16_SFLOAT >
 	{
-		static uint8_t L8( uint8_t const * srcBuffer )
+
+		static uint8_t L8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( L32F( srcBuffer ) * 255 );
+			return uint8_t( L8S( srcBuffer ) );
 		}
-		static uint8_t R8( uint8_t const * srcBuffer )
+		static uint8_t R8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R32F( srcBuffer ) * 255 );
+			return uint8_t( R8S( srcBuffer ) );
 		}
-		static uint8_t G8( uint8_t const * srcBuffer )
+		static uint8_t G8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( G32F( srcBuffer ) * 255 );
+			return uint8_t( G8S( srcBuffer ) );
 		}
-		static uint8_t B8( uint8_t const * srcBuffer )
+		static uint8_t B8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( B32F( srcBuffer ) * 255 );
+			return uint8_t( B8S( srcBuffer ) );
 		}
-		static uint8_t A8( uint8_t const * srcBuffer )
+		static uint8_t A8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( A32F( srcBuffer ) * 255 );
+			return uint8_t( A8S( srcBuffer ) );
+		}
+		static int8_t L8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( L32F( srcBuffer ) * 255 );
+		}
+		static int8_t R8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( R32F( srcBuffer ) * 255 );
+		}
+		static int8_t G8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( G32F( srcBuffer ) * 255 );
+		}
+		static int8_t B8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( B32F( srcBuffer ) * 255 );
+		}
+		static int8_t A8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( A32F( srcBuffer ) * 255 );
 		}
 		static float L32F( uint8_t const * srcBuffer )
 		{
@@ -2098,24 +2720,45 @@ namespace castor
 		{
 			return 1.0f;
 		}
-		static void L8( uint8_t * srcBuffer, uint8_t value )
+		static void L8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			L8S( srcBuffer, int8_t( value ) );
+		}
+		static void R8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			R8S( srcBuffer, int8_t( value ) );
+		}
+		static void G8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			G8S( srcBuffer, int8_t( value ) );
+		}
+		static void B8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			B8S( srcBuffer, int8_t( value ) );
+		}
+		static void A8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			A8S( srcBuffer, int8_t( value ) );
+		}
+		static void L8S( uint8_t * srcBuffer, int8_t value )
 		{
 			L32F( srcBuffer, float( value ) / 255 );
 		}
-		static void R8( uint8_t * srcBuffer, uint8_t value )
+		static void R8S( uint8_t * srcBuffer, int8_t value )
 		{
 			R32F( srcBuffer, float( value ) / 255 );
 		}
-		static void G8( uint8_t * srcBuffer, uint8_t value )
+		static void G8S( uint8_t * srcBuffer, int8_t value )
 		{
 			G32F( srcBuffer, float( value ) / 255 );
 		}
-		static void B8( uint8_t * srcBuffer, uint8_t value )
+		static void B8S( uint8_t * srcBuffer, int8_t value )
 		{
 			B32F( srcBuffer, float( value ) / 255 );
 		}
-		static void A8( uint8_t *, uint8_t )
+		static void A8S( uint8_t * srcBuffer, int8_t value )
 		{
+			A32F( srcBuffer, float( value ) / 255 );
 		}
 		static void L32F( uint8_t * srcBuffer, float value )
 		{
@@ -2144,25 +2787,46 @@ namespace castor
 	template<>
 	struct PixelComponents< PixelFormat::eR32G32B32_SFLOAT >
 	{
-		static uint8_t L8( uint8_t const * srcBuffer )
+
+		static uint8_t L8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( L32F( srcBuffer ) * 255 );
+			return uint8_t( L8S( srcBuffer ) );
 		}
-		static uint8_t R8( uint8_t const * srcBuffer )
+		static uint8_t R8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R32F( srcBuffer ) * 255 );
+			return uint8_t( R8S( srcBuffer ) );
 		}
-		static uint8_t G8( uint8_t const * srcBuffer )
+		static uint8_t G8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( G32F( srcBuffer ) * 255 );
+			return uint8_t( G8S( srcBuffer ) );
 		}
-		static uint8_t B8( uint8_t const * srcBuffer )
+		static uint8_t B8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( B32F( srcBuffer ) * 255 );
+			return uint8_t( B8S( srcBuffer ) );
 		}
-		static uint8_t A8( uint8_t const * srcBuffer )
+		static uint8_t A8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( A32F( srcBuffer ) * 255 );
+			return uint8_t( A8S( srcBuffer ) );
+		}
+		static int8_t L8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( L32F( srcBuffer ) * 255 );
+		}
+		static int8_t R8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( R32F( srcBuffer ) * 255 );
+		}
+		static int8_t G8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( G32F( srcBuffer ) * 255 );
+		}
+		static int8_t B8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( B32F( srcBuffer ) * 255 );
+		}
+		static int8_t A8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( A32F( srcBuffer ) * 255 );
 		}
 		static float L32F( uint8_t const * srcBuffer )
 		{
@@ -2184,24 +2848,45 @@ namespace castor
 		{
 			return 1.0f;
 		}
-		static void L8( uint8_t * srcBuffer, uint8_t value )
+		static void L8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			L8S( srcBuffer, int8_t( value ) );
+		}
+		static void R8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			R8S( srcBuffer, int8_t( value ) );
+		}
+		static void G8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			G8S( srcBuffer, int8_t( value ) );
+		}
+		static void B8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			B8S( srcBuffer, int8_t( value ) );
+		}
+		static void A8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			A8S( srcBuffer, int8_t( value ) );
+		}
+		static void L8S( uint8_t * srcBuffer, int8_t value )
 		{
 			L32F( srcBuffer, float( value ) / 255 );
 		}
-		static void R8( uint8_t * srcBuffer, uint8_t value )
+		static void R8S( uint8_t * srcBuffer, int8_t value )
 		{
 			R32F( srcBuffer, float( value ) / 255 );
 		}
-		static void G8( uint8_t * srcBuffer, uint8_t value )
+		static void G8S( uint8_t * srcBuffer, int8_t value )
 		{
 			G32F( srcBuffer, float( value ) / 255 );
 		}
-		static void B8( uint8_t * srcBuffer, uint8_t value )
+		static void B8S( uint8_t * srcBuffer, int8_t value )
 		{
 			B32F( srcBuffer, float( value ) / 255 );
 		}
-		static void A8( uint8_t *, uint8_t )
+		static void A8S( uint8_t * srcBuffer, int8_t value )
 		{
+			A32F( srcBuffer, float( value ) / 255 );
 		}
 		static void L32F( uint8_t * srcBuffer, float value )
 		{
@@ -2230,25 +2915,45 @@ namespace castor
 	template<>
 	struct PixelComponents< PixelFormat::eR16G16B16A16_SFLOAT >
 	{
-		static uint8_t L8( uint8_t const * srcBuffer )
+		static uint8_t L8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( L32F( srcBuffer ) * 255 );
+			return uint8_t( L8S( srcBuffer ) );
 		}
-		static uint8_t R8( uint8_t const * srcBuffer )
+		static uint8_t R8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R32F( srcBuffer ) * 255 );
+			return uint8_t( R8S( srcBuffer ) );
 		}
-		static uint8_t G8( uint8_t const * srcBuffer )
+		static uint8_t G8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( G32F( srcBuffer ) * 255 );
+			return uint8_t( G8S( srcBuffer ) );
 		}
-		static uint8_t B8( uint8_t const * srcBuffer )
+		static uint8_t B8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( B32F( srcBuffer ) * 255 );
+			return uint8_t( B8S( srcBuffer ) );
 		}
-		static uint8_t A8( uint8_t const * srcBuffer )
+		static uint8_t A8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( A32F( srcBuffer ) * 255 );
+			return uint8_t( A8S( srcBuffer ) );
+		}
+		static int8_t L8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( L32F( srcBuffer ) * 255 );
+		}
+		static int8_t R8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( R32F( srcBuffer ) * 255 );
+		}
+		static int8_t G8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( G32F( srcBuffer ) * 255 );
+		}
+		static int8_t B8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( B32F( srcBuffer ) * 255 );
+		}
+		static int8_t A8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( A32F( srcBuffer ) * 255 );
 		}
 		static float L32F( uint8_t const * srcBuffer )
 		{
@@ -2278,23 +2983,43 @@ namespace castor
 			details::halfToFloat( result, reinterpret_cast< uint16_t const * >( srcBuffer ) + 3 );
 			return result;
 		}
-		static void L8( uint8_t * srcBuffer, uint8_t value )
+		static void L8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			L8S( srcBuffer, int8_t( value ) );
+		}
+		static void R8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			R8S( srcBuffer, int8_t( value ) );
+		}
+		static void G8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			G8S( srcBuffer, int8_t( value ) );
+		}
+		static void B8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			B8S( srcBuffer, int8_t( value ) );
+		}
+		static void A8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			A8S( srcBuffer, int8_t( value ) );
+		}
+		static void L8S( uint8_t * srcBuffer, int8_t value )
 		{
 			L32F( srcBuffer, float( value ) / 255 );
 		}
-		static void R8( uint8_t * srcBuffer, uint8_t value )
+		static void R8S( uint8_t * srcBuffer, int8_t value )
 		{
 			R32F( srcBuffer, float( value ) / 255 );
 		}
-		static void G8( uint8_t * srcBuffer, uint8_t value )
+		static void G8S( uint8_t * srcBuffer, int8_t value )
 		{
 			G32F( srcBuffer, float( value ) / 255 );
 		}
-		static void B8( uint8_t * srcBuffer, uint8_t value )
+		static void B8S( uint8_t * srcBuffer, int8_t value )
 		{
 			B32F( srcBuffer, float( value ) / 255 );
 		}
-		static void A8( uint8_t * srcBuffer, uint8_t value )
+		static void A8S( uint8_t * srcBuffer, int8_t value )
 		{
 			A32F( srcBuffer, float( value ) / 255 );
 		}
@@ -2329,25 +3054,45 @@ namespace castor
 #define src	( reinterpret_cast< float const * >( srcBuffer ) )
 #define dst	( reinterpret_cast< float * >( srcBuffer ) )
 
-		static uint8_t L8( uint8_t const * srcBuffer )
+		static uint8_t L8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( L32F( srcBuffer ) * 255 );
+			return uint8_t( L8S( srcBuffer ) );
 		}
-		static uint8_t R8( uint8_t const * srcBuffer )
+		static uint8_t R8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R32F( srcBuffer ) * 255 );
+			return uint8_t( R8S( srcBuffer ) );
 		}
-		static uint8_t G8( uint8_t const * srcBuffer )
+		static uint8_t G8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( G32F( srcBuffer ) * 255 );
+			return uint8_t( G8S( srcBuffer ) );
 		}
-		static uint8_t B8( uint8_t const * srcBuffer )
+		static uint8_t B8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( B32F( srcBuffer ) * 255 );
+			return uint8_t( B8S( srcBuffer ) );
 		}
-		static uint8_t A8( uint8_t const * srcBuffer )
+		static uint8_t A8U( uint8_t const * srcBuffer )
 		{
-			return uint8_t( A32F( srcBuffer ) * 255 );
+			return uint8_t( A8S( srcBuffer ) );
+		}
+		static int8_t L8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( L32F( srcBuffer ) * 255 );
+		}
+		static int8_t R8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( R32F( srcBuffer ) * 255 );
+		}
+		static int8_t G8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( G32F( srcBuffer ) * 255 );
+		}
+		static int8_t B8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( B32F( srcBuffer ) * 255 );
+		}
+		static int8_t A8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( A32F( srcBuffer ) * 255 );
 		}
 		static float L32F( uint8_t const * srcBuffer )
 		{
@@ -2369,23 +3114,43 @@ namespace castor
 		{
 			return src[3];
 		}
-		static void L8( uint8_t * srcBuffer, uint8_t value )
+		static void L8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			L8S( srcBuffer, int8_t( value ) );
+		}
+		static void R8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			R8S( srcBuffer, int8_t( value ) );
+		}
+		static void G8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			G8S( srcBuffer, int8_t( value ) );
+		}
+		static void B8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			B8S( srcBuffer, int8_t( value ) );
+		}
+		static void A8U( uint8_t * srcBuffer, uint8_t value )
+		{
+			A8S( srcBuffer, int8_t( value ) );
+		}
+		static void L8S( uint8_t * srcBuffer, int8_t value )
 		{
 			L32F( srcBuffer, float( value ) / 255 );
 		}
-		static void R8( uint8_t * srcBuffer, uint8_t value )
+		static void R8S( uint8_t * srcBuffer, int8_t value )
 		{
 			R32F( srcBuffer, float( value ) / 255 );
 		}
-		static void G8( uint8_t * srcBuffer, uint8_t value )
+		static void G8S( uint8_t * srcBuffer, int8_t value )
 		{
 			G32F( srcBuffer, float( value ) / 255 );
 		}
-		static void B8( uint8_t * srcBuffer, uint8_t value )
+		static void B8S( uint8_t * srcBuffer, int8_t value )
 		{
 			B32F( srcBuffer, float( value ) / 255 );
 		}
-		static void A8( uint8_t * srcBuffer, uint8_t value )
+		static void A8S( uint8_t * srcBuffer, int8_t value )
 		{
 			A32F( srcBuffer, float( value ) / 255 );
 		}
@@ -2484,84 +3249,124 @@ namespace castor
 		static void S32F( uint8_t *, float )
 		{
 		}
-		static uint8_t L8( uint8_t const * srcBuffer )
+		static uint8_t L8U( uint8_t const * srcBuffer )
 		{
 			return D8( srcBuffer );
 		}
-		static uint8_t A8( uint8_t const * srcBuffer )
+		static uint8_t A8U( uint8_t const * srcBuffer )
 		{
 			return 0;
 		}
-		static uint8_t R8( uint8_t const * srcBuffer )
+		static uint8_t R8U( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer );
+			return L8U( srcBuffer );
 		}
-		static uint8_t G8( uint8_t const * srcBuffer )
+		static uint8_t G8U( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer );
+			return L8U( srcBuffer );
 		}
-		static uint8_t B8( uint8_t const * srcBuffer )
+		static uint8_t B8U( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer );
+			return L8U( srcBuffer );
+		}
+		static int8_t L8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( L8U( srcBuffer ) );
+		}
+		static int8_t R8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( R8U( srcBuffer ) );
+		}
+		static int8_t G8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( G8U( srcBuffer ) );
+		}
+		static int8_t B8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( B8U( srcBuffer ) );
+		}
+		static int8_t A8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( A8U( srcBuffer ) );
 		}
 		static float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer ) / 255.0f;
+			return L8U( srcBuffer ) / 255.0f;
 		}
 		static float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( srcBuffer ) / 255.0f;
+			return R8U( srcBuffer ) / 255.0f;
 		}
 		static float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( srcBuffer ) / 255.0f;
+			return G8U( srcBuffer ) / 255.0f;
 		}
 		static float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( srcBuffer ) / 255.0f;
+			return B8U( srcBuffer ) / 255.0f;
 		}
 		static float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( srcBuffer ) / 255.0f;
+			return A8U( srcBuffer ) / 255.0f;
 		}
-		static void L8( uint8_t * srcBuffer, uint8_t value )
+		static void L8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			D8( srcBuffer, value );
 		}
-		static void A8( uint8_t * srcBuffer, uint8_t value )
+		static void A8U( uint8_t * srcBuffer, uint8_t value )
 		{
 		}
-		static void R8( uint8_t * srcBuffer, uint8_t value )
+		static void R8U( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( srcBuffer, value );
+			L8U( srcBuffer, value );
 		}
-		static void G8( uint8_t * srcBuffer, uint8_t value )
+		static void G8U( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( srcBuffer, value );
+			L8U( srcBuffer, value );
 		}
-		static void B8( uint8_t * srcBuffer, uint8_t value )
+		static void B8U( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( srcBuffer, value );
+			L8U( srcBuffer, value );
+		}
+		static void L8S( uint8_t * srcBuffer, int8_t value )
+		{
+			L8U( srcBuffer, uint8_t( value ) );
+		}
+		static void R8S( uint8_t * srcBuffer, int8_t value )
+		{
+			R8U( srcBuffer, uint8_t( value ) );
+		}
+		static void G8S( uint8_t * srcBuffer, int8_t value )
+		{
+			G8U( srcBuffer, uint8_t( value ) );
+		}
+		static void B8S( uint8_t * srcBuffer, int8_t value )
+		{
+			B8U( srcBuffer, uint8_t( value ) );
+		}
+		static void A8S( uint8_t * srcBuffer, uint8_t value )
+		{
+			A8U( srcBuffer, uint8_t( value ) );
 		}
 		static void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( srcBuffer, uint8_t( value * 255.0 ) );
+			L8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( srcBuffer, uint8_t( value * 255.0 ) );
+			R8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( srcBuffer, uint8_t( value * 255.0 ) );
+			G8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( srcBuffer, uint8_t( value * 255.0 ) );
+			B8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void A32F( uint8_t * srcBuffer, float value )
 		{
-			A8( srcBuffer, uint8_t( value * 255.0 ) );
+			A8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 
 #undef src
@@ -2642,85 +3447,125 @@ namespace castor
 		{
 			S8( srcBuffer, uint8_t( value * 255.0f ) );
 		}
-		static uint8_t L8( uint8_t const * srcBuffer )
+		static uint8_t L8U( uint8_t const * srcBuffer )
 		{
 			return D8( srcBuffer );
 		}
-		static uint8_t A8( uint8_t const * srcBuffer )
+		static uint8_t A8U( uint8_t const * srcBuffer )
 		{
 			return S8( srcBuffer );
 		}
-		static uint8_t R8( uint8_t const * srcBuffer )
+		static uint8_t R8U( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer );
+			return L8U( srcBuffer );
 		}
-		static uint8_t G8( uint8_t const * srcBuffer )
+		static uint8_t G8U( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer );
+			return L8U( srcBuffer );
 		}
-		static uint8_t B8( uint8_t const * srcBuffer )
+		static uint8_t B8U( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer );
+			return L8U( srcBuffer );
+		}
+		static int8_t L8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( L8U( srcBuffer ) );
+		}
+		static int8_t R8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( R8U( srcBuffer ) );
+		}
+		static int8_t G8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( G8U( srcBuffer ) );
+		}
+		static int8_t B8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( B8U( srcBuffer ) );
+		}
+		static int8_t A8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( A8U( srcBuffer ) );
 		}
 		static float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer ) / 255.0f;
+			return L8U( srcBuffer ) / 255.0f;
 		}
 		static float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( srcBuffer ) / 255.0f;
+			return R8U( srcBuffer ) / 255.0f;
 		}
 		static float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( srcBuffer ) / 255.0f;
+			return G8U( srcBuffer ) / 255.0f;
 		}
 		static float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( srcBuffer ) / 255.0f;
+			return B8U( srcBuffer ) / 255.0f;
 		}
 		static float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( srcBuffer ) / 255.0f;
+			return A8U( srcBuffer ) / 255.0f;
 		}
-		static void L8( uint8_t * srcBuffer, uint8_t value )
+		static void L8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			D8( srcBuffer, value );
 		}
-		static void A8( uint8_t * srcBuffer, uint8_t value )
+		static void A8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			S8( srcBuffer, value );
 		}
-		static void R8( uint8_t * srcBuffer, uint8_t value )
+		static void R8U( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( srcBuffer, value );
+			L8U( srcBuffer, value );
 		}
-		static void G8( uint8_t * srcBuffer, uint8_t value )
+		static void G8U( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( srcBuffer, value );
+			L8U( srcBuffer, value );
 		}
-		static void B8( uint8_t * srcBuffer, uint8_t value )
+		static void B8U( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( srcBuffer, value );
+			L8U( srcBuffer, value );
+		}
+		static void L8S( uint8_t * srcBuffer, int8_t value )
+		{
+			L8U( srcBuffer, uint8_t( value ) );
+		}
+		static void R8S( uint8_t * srcBuffer, int8_t value )
+		{
+			R8U( srcBuffer, uint8_t( value ) );
+		}
+		static void G8S( uint8_t * srcBuffer, int8_t value )
+		{
+			G8U( srcBuffer, uint8_t( value ) );
+		}
+		static void B8S( uint8_t * srcBuffer, int8_t value )
+		{
+			B8U( srcBuffer, uint8_t( value ) );
+		}
+		static void A8S( uint8_t * srcBuffer, uint8_t value )
+		{
+			A8U( srcBuffer, uint8_t( value ) );
 		}
 		static void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( srcBuffer, uint8_t( value * 255.0 ) );
+			L8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( srcBuffer, uint8_t( value * 255.0 ) );
+			R8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( srcBuffer, uint8_t( value * 255.0 ) );
+			G8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( srcBuffer, uint8_t( value * 255.0 ) );
+			B8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void A32F( uint8_t * srcBuffer, float value )
 		{
-			A8( srcBuffer, uint8_t( value * 255.0 ) );
+			A8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 
 #undef src
@@ -2795,84 +3640,124 @@ namespace castor
 		static void S32F( uint8_t *, float )
 		{
 		}
-		static uint8_t L8( uint8_t const * srcBuffer )
+		static uint8_t L8U( uint8_t const * srcBuffer )
 		{
 			return D8( srcBuffer );
 		}
-		static uint8_t A8( uint8_t const * srcBuffer )
+		static uint8_t A8U( uint8_t const * srcBuffer )
 		{
 			return 0xFF;
 		}
-		static uint8_t R8( uint8_t const * srcBuffer )
+		static uint8_t R8U( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer );
+			return L8U( srcBuffer );
 		}
-		static uint8_t G8( uint8_t const * srcBuffer )
+		static uint8_t G8U( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer );
+			return L8U( srcBuffer );
 		}
-		static uint8_t B8( uint8_t const * srcBuffer )
+		static uint8_t B8U( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer );
+			return L8U( srcBuffer );
+		}
+		static int8_t L8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( L8U( srcBuffer ) );
+		}
+		static int8_t R8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( R8U( srcBuffer ) );
+		}
+		static int8_t G8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( G8U( srcBuffer ) );
+		}
+		static int8_t B8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( B8U( srcBuffer ) );
+		}
+		static int8_t A8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( A8U( srcBuffer ) );
 		}
 		static float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer ) / 255.0f;
+			return L8U( srcBuffer ) / 255.0f;
 		}
 		static float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( srcBuffer ) / 255.0f;
+			return R8U( srcBuffer ) / 255.0f;
 		}
 		static float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( srcBuffer ) / 255.0f;
+			return G8U( srcBuffer ) / 255.0f;
 		}
 		static float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( srcBuffer ) / 255.0f;
+			return B8U( srcBuffer ) / 255.0f;
 		}
 		static float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( srcBuffer ) / 255.0f;
+			return A8U( srcBuffer ) / 255.0f;
 		}
-		static void L8( uint8_t * srcBuffer, uint8_t value )
+		static void L8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			D8( srcBuffer, value );
 		}
-		static void A8( uint8_t * srcBuffer, uint8_t value )
+		static void A8U( uint8_t * srcBuffer, uint8_t value )
 		{
 		}
-		static void R8( uint8_t * srcBuffer, uint8_t value )
+		static void R8U( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( srcBuffer, value );
+			L8U( srcBuffer, value );
 		}
-		static void G8( uint8_t * srcBuffer, uint8_t value )
+		static void G8U( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( srcBuffer, value );
+			L8U( srcBuffer, value );
 		}
-		static void B8( uint8_t * srcBuffer, uint8_t value )
+		static void B8U( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( srcBuffer, value );
+			L8U( srcBuffer, value );
+		}
+		static void L8S( uint8_t * srcBuffer, int8_t value )
+		{
+			L8U( srcBuffer, uint8_t( value ) );
+		}
+		static void R8S( uint8_t * srcBuffer, int8_t value )
+		{
+			R8U( srcBuffer, uint8_t( value ) );
+		}
+		static void G8S( uint8_t * srcBuffer, int8_t value )
+		{
+			G8U( srcBuffer, uint8_t( value ) );
+		}
+		static void B8S( uint8_t * srcBuffer, int8_t value )
+		{
+			B8U( srcBuffer, uint8_t( value ) );
+		}
+		static void A8S( uint8_t * srcBuffer, uint8_t value )
+		{
+			A8U( srcBuffer, uint8_t( value ) );
 		}
 		static void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( srcBuffer, uint8_t( value * 255.0 ) );
+			L8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( srcBuffer, uint8_t( value * 255.0 ) );
+			R8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( srcBuffer, uint8_t( value * 255.0 ) );
+			G8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( srcBuffer, uint8_t( value * 255.0 ) );
+			B8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void A32F( uint8_t * srcBuffer, float value )
 		{
-			A8( srcBuffer, uint8_t( value * 255.0 ) );
+			A8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 
 #undef src
@@ -2947,25 +3832,45 @@ namespace castor
 		static void S8( uint8_t *, uint8_t )
 		{
 		}
-		static uint8_t L8( uint8_t const * srcBuffer )
+		static uint8_t L8U( uint8_t const * srcBuffer )
 		{
 			return uint8_t( L32F( srcBuffer ) * 255 );
 		}
-		static uint8_t A8( uint8_t const * srcBuffer )
+		static uint8_t A8U( uint8_t const * srcBuffer )
 		{
 			return 0xFF;
 		}
-		static uint8_t R8( uint8_t const * srcBuffer )
+		static uint8_t R8U( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer );
+			return L8U( srcBuffer );
 		}
-		static uint8_t G8( uint8_t const * srcBuffer )
+		static uint8_t G8U( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer );
+			return L8U( srcBuffer );
 		}
-		static uint8_t B8( uint8_t const * srcBuffer )
+		static uint8_t B8U( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer );
+			return L8U( srcBuffer );
+		}
+		static int8_t L8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( L8U( srcBuffer ) );
+		}
+		static int8_t R8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( R8U( srcBuffer ) );
+		}
+		static int8_t G8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( G8U( srcBuffer ) );
+		}
+		static int8_t B8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( B8U( srcBuffer ) );
+		}
+		static int8_t A8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( A8U( srcBuffer ) );
 		}
 		static float L32F( uint8_t const * srcBuffer )
 		{
@@ -2987,24 +3892,44 @@ namespace castor
 		{
 			return 1.0f;
 		}
-		static void L8( uint8_t * srcBuffer, uint8_t value )
+		static void L8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			D8( srcBuffer, value );
 		}
-		static void A8( uint8_t * srcBuffer, uint8_t value )
+		static void A8U( uint8_t * srcBuffer, uint8_t value )
 		{
 		}
-		static void R8( uint8_t * srcBuffer, uint8_t value )
+		static void R8U( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( srcBuffer, value );
+			L8U( srcBuffer, value );
 		}
-		static void G8( uint8_t * srcBuffer, uint8_t value )
+		static void G8U( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( srcBuffer, value );
+			L8U( srcBuffer, value );
 		}
-		static void B8( uint8_t * srcBuffer, uint8_t value )
+		static void B8U( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( srcBuffer, value );
+			L8U( srcBuffer, value );
+		}
+		static void L8S( uint8_t * srcBuffer, int8_t value )
+		{
+			L8U( srcBuffer, uint8_t( value ) );
+		}
+		static void R8S( uint8_t * srcBuffer, int8_t value )
+		{
+			R8U( srcBuffer, uint8_t( value ) );
+		}
+		static void G8S( uint8_t * srcBuffer, int8_t value )
+		{
+			G8U( srcBuffer, uint8_t( value ) );
+		}
+		static void B8S( uint8_t * srcBuffer, int8_t value )
+		{
+			B8U( srcBuffer, uint8_t( value ) );
+		}
+		static void A8S( uint8_t * srcBuffer, uint8_t value )
+		{
+			A8U( srcBuffer, uint8_t( value ) );
 		}
 		static void L32F( uint8_t * srcBuffer, float value )
 		{
@@ -3099,25 +4024,45 @@ namespace castor
 		static void S8( uint8_t *, uint8_t )
 		{
 		}
-		static uint8_t L8( uint8_t const * srcBuffer )
+		static uint8_t L8U( uint8_t const * srcBuffer )
 		{
 			return uint8_t( L32F( srcBuffer ) * 255 );
 		}
-		static uint8_t A8( uint8_t const * srcBuffer )
+		static uint8_t A8U( uint8_t const * srcBuffer )
 		{
 			return 0xFF;
 		}
-		static uint8_t R8( uint8_t const * srcBuffer )
+		static uint8_t R8U( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer );
+			return L8U( srcBuffer );
 		}
-		static uint8_t G8( uint8_t const * srcBuffer )
+		static uint8_t G8U( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer );
+			return L8U( srcBuffer );
 		}
-		static uint8_t B8( uint8_t const * srcBuffer )
+		static uint8_t B8U( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer );
+			return L8U( srcBuffer );
+		}
+		static int8_t L8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( L8U( srcBuffer ) );
+		}
+		static int8_t R8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( R8U( srcBuffer ) );
+		}
+		static int8_t G8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( G8U( srcBuffer ) );
+		}
+		static int8_t B8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( B8U( srcBuffer ) );
+		}
+		static int8_t A8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( A8U( srcBuffer ) );
 		}
 		static float L32F( uint8_t const * srcBuffer )
 		{
@@ -3139,24 +4084,44 @@ namespace castor
 		{
 			return 1.0f;
 		}
-		static void L8( uint8_t * srcBuffer, uint8_t value )
+		static void L8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			D8( srcBuffer, value );
 		}
-		static void A8( uint8_t * srcBuffer, uint8_t value )
+		static void A8U( uint8_t * srcBuffer, uint8_t value )
 		{
 		}
-		static void R8( uint8_t * srcBuffer, uint8_t value )
+		static void R8U( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( srcBuffer, value );
+			L8U( srcBuffer, value );
 		}
-		static void G8( uint8_t * srcBuffer, uint8_t value )
+		static void G8U( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( srcBuffer, value );
+			L8U( srcBuffer, value );
 		}
-		static void B8( uint8_t * srcBuffer, uint8_t value )
+		static void B8U( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( srcBuffer, value );
+			L8U( srcBuffer, value );
+		}
+		static void L8S( uint8_t * srcBuffer, int8_t value )
+		{
+			L8U( srcBuffer, uint8_t( value ) );
+		}
+		static void R8S( uint8_t * srcBuffer, int8_t value )
+		{
+			R8U( srcBuffer, uint8_t( value ) );
+		}
+		static void G8S( uint8_t * srcBuffer, int8_t value )
+		{
+			G8U( srcBuffer, uint8_t( value ) );
+		}
+		static void B8S( uint8_t * srcBuffer, int8_t value )
+		{
+			B8U( srcBuffer, uint8_t( value ) );
+		}
+		static void A8S( uint8_t * srcBuffer, uint8_t value )
+		{
+			A8U( srcBuffer, uint8_t( value ) );
 		}
 		static void L32F( uint8_t * srcBuffer, float value )
 		{
@@ -3242,84 +4207,124 @@ namespace castor
 		{
 			S8( srcBuffer, uint8_t( value * 255.0f ) );
 		}
-		static uint8_t L8( uint8_t const * srcBuffer )
+		static uint8_t L8U( uint8_t const * srcBuffer )
 		{
 			return 0;
 		}
-		static uint8_t A8( uint8_t const * srcBuffer )
+		static uint8_t A8U( uint8_t const * srcBuffer )
 		{
 			return S8( srcBuffer );
 		}
-		static uint8_t R8( uint8_t const * srcBuffer )
+		static uint8_t R8U( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer );
+			return L8U( srcBuffer );
 		}
-		static uint8_t G8( uint8_t const * srcBuffer )
+		static uint8_t G8U( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer );
+			return L8U( srcBuffer );
 		}
-		static uint8_t B8( uint8_t const * srcBuffer )
+		static uint8_t B8U( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer );
+			return L8U( srcBuffer );
+		}
+		static int8_t L8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( L8U( srcBuffer ) );
+		}
+		static int8_t R8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( R8U( srcBuffer ) );
+		}
+		static int8_t G8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( G8U( srcBuffer ) );
+		}
+		static int8_t B8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( B8U( srcBuffer ) );
+		}
+		static int8_t A8S( uint8_t const * srcBuffer )
+		{
+			return int8_t( A8U( srcBuffer ) );
 		}
 		static float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( srcBuffer ) / 255.0f;
+			return L8U( srcBuffer ) / 255.0f;
 		}
 		static float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( srcBuffer ) / 255.0f;
+			return R8U( srcBuffer ) / 255.0f;
 		}
 		static float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( srcBuffer ) / 255.0f;
+			return G8U( srcBuffer ) / 255.0f;
 		}
 		static float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( srcBuffer ) / 255.0f;
+			return B8U( srcBuffer ) / 255.0f;
 		}
 		static float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( srcBuffer ) / 255.0f;
+			return A8U( srcBuffer ) / 255.0f;
 		}
-		static void L8( uint8_t * srcBuffer, uint8_t value )
+		static void L8U( uint8_t * srcBuffer, uint8_t value )
 		{
 		}
-		static void A8( uint8_t * srcBuffer, uint8_t value )
+		static void A8U( uint8_t * srcBuffer, uint8_t value )
 		{
 			S8( srcBuffer, value );
 		}
-		static void R8( uint8_t * srcBuffer, uint8_t value )
+		static void R8U( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( srcBuffer, value );
+			L8U( srcBuffer, value );
 		}
-		static void G8( uint8_t * srcBuffer, uint8_t value )
+		static void G8U( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( srcBuffer, value );
+			L8U( srcBuffer, value );
 		}
-		static void B8( uint8_t * srcBuffer, uint8_t value )
+		static void B8U( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( srcBuffer, value );
+			L8U( srcBuffer, value );
+		}
+		static void L8S( uint8_t * srcBuffer, int8_t value )
+		{
+			L8U( srcBuffer, uint8_t( value ) );
+		}
+		static void R8S( uint8_t * srcBuffer, int8_t value )
+		{
+			R8U( srcBuffer, uint8_t( value ) );
+		}
+		static void G8S( uint8_t * srcBuffer, int8_t value )
+		{
+			G8U( srcBuffer, uint8_t( value ) );
+		}
+		static void B8S( uint8_t * srcBuffer, int8_t value )
+		{
+			B8U( srcBuffer, uint8_t( value ) );
+		}
+		static void A8S( uint8_t * srcBuffer, uint8_t value )
+		{
+			A8U( srcBuffer, uint8_t( value ) );
 		}
 		static void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( srcBuffer, uint8_t( value * 255.0 ) );
+			L8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( srcBuffer, uint8_t( value * 255.0 ) );
+			R8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( srcBuffer, uint8_t( value * 255.0 ) );
+			G8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( srcBuffer, uint8_t( value * 255.0 ) );
+			B8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static void A32F( uint8_t * srcBuffer, float value )
 		{
-			A8( srcBuffer, uint8_t( value * 255.0 ) );
+			A8U( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 	};
 

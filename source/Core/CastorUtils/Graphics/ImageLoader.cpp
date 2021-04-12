@@ -7,6 +7,83 @@
 
 namespace castor
 {
+	//*********************************************************************************************
+
+	namespace
+	{
+		Image postProcess( PxBufferConvertOptions const & options
+			, Image image )
+		{
+			auto dstFormat = PF::getCompressed( image.getPixelFormat() );
+
+			if ( dstFormat == image.getPixelFormat() )
+			{
+				return image;
+			}
+
+			auto path = image.getPath();
+			auto name = image.getName();
+			auto layout = image.getLayout();
+			auto buffer = PxBufferBase::create( &options
+				, image.getDimensions()
+				, dstFormat
+				, image.getPxBuffer().getConstPtr()
+				, image.getPixelFormat() );
+			ImageLayout newLayout{ layout.type, *buffer };
+			return Image{ name
+				, path
+				, newLayout
+				, std::move( buffer ) };
+		}
+	}
+
+	//*********************************************************************************************
+
+	Image ImageLoaderImpl::load( String const & name
+		, Path const & imagePath
+		, String const & imageFormat
+		, uint8_t const * data
+		, uint32_t size )const
+	{
+		PxBufferBaseSPtr buffer;
+		auto layout = load( imageFormat, data, size, buffer );
+		return Image{ name, imagePath, layout, std::move( buffer ) };
+	}
+
+	Image ImageLoaderImpl::load( String const & name
+		, String const & imageFormat
+		, uint8_t const * data
+		, uint32_t size )const
+	{
+		return load( name
+			, {}
+			, imageFormat
+			, data
+			, size );
+	}
+
+	Image ImageLoaderImpl::load( String const & name
+		, Path const & imagePath
+		, uint8_t const * data
+		, uint32_t size )const
+	{
+		return load( name
+			, imagePath
+			, string::lowerCase( imagePath.getExtension() )
+			, data
+			, size );
+	}
+
+	//*********************************************************************************************
+
+	ImageLoader::ImageLoader()
+	{
+	}
+
+	ImageLoader::~ImageLoader()
+	{
+	}
+
 	void ImageLoader::registerLoader( String const & extension, ImageLoaderPtr loader )
 	{
 		m_loaders.emplace_back( std::move( loader ) );
@@ -83,6 +160,30 @@ namespace castor
 		}
 	}
 
+	//*********************************************************************************************
+
+	Image ImageLoader::load( String const & name
+		, String const & imageFormat
+		, uint8_t const * data
+		, uint32_t size )const
+	{
+		checkData( data, size );
+		auto loader = findLoader( imageFormat );
+		return postProcess( m_options
+			, loader->load( name, imageFormat, data, size ) );
+	}
+
+	Image ImageLoader::load( String const & name
+		, Path const & imagePath
+		, uint8_t const * data
+		, uint32_t size )const
+	{
+		checkData( data, size );
+		auto loader = findLoader( imagePath );
+		return postProcess( m_options
+			, loader->load( name, imagePath, data, size ) );
+	}
+
 	void ImageLoader::checkData( uint8_t const * data
 		, uint32_t size )const
 	{
@@ -113,4 +214,6 @@ namespace castor
 
 		return it->second;
 	}
+
+	//*********************************************************************************************
 }

@@ -334,6 +334,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/PixelBufferBase.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/PixelDefinitions.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/PixelFormat.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/PxBufferCompression.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/Position.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/Rectangle.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/Size.cpp
@@ -385,6 +386,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/StbImageWriter.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/UnsupportedFormatException.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/XpmImageLoader.hpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/PxBufferCompression.hpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/stb_image.h
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/stb_image_resize.h
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/stb_image_write.h
@@ -400,6 +402,58 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	)
 	source_group( "Header Files\\Graphics" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
 	source_group( "Source Files\\Graphics" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+
+	if( EXISTS ${EXTERNAL_SOURCE_DIR}/cvtt )
+		set( ${PROJECT_NAME}_DEFINITIONS
+			${${PROJECT_NAME}_DEFINITIONS}
+			CU_UseCVTT
+		)
+		set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_API.cpp
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BC6H_IO.cpp
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BC7_PrioData.cpp
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BC67.cpp
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BCCommon.cpp
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_ETC.cpp
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_IndexSelector.cpp
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_S3TC.cpp
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_Util.cpp
+		)
+		set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels.h
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_AggregatedError.h
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BC6H_IO.h
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BC7_Prio.h
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BC7_SingleColor.h
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BC67.h
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BCCommon.h
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_EndpointRefiner.h
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_EndpointSelector.h
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_ETC.h
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_ETC1.h
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_ETC2.h
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_ETC2_Rounding.h
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_FakeBT709_Rounding.h
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_IndexSelector.h
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_IndexSelectorHDR.h
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_PackedCovarianceMatrix.h
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_ParallelMath.h
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_S3TC.h
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_S3TC_SingleColor.h
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_UnfinishedEndpoints.h
+			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_Util.h
+		)
+		set( ${PROJECT_NAME}_SRC_FILES
+			${${PROJECT_NAME}_SRC_FILES}
+			${${PROJECT_NAME}_FOLDER_SRC_FILES}
+		)
+		set( ${PROJECT_NAME}_HDR_FILES
+			${${PROJECT_NAME}_HDR_FILES}
+			${${PROJECT_NAME}_FOLDER_HDR_FILES}
+		)
+		source_group( "Header Files\\Graphics\\CVTT" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
+		source_group( "Source Files\\Graphics\\CVTT" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+	endif ()
 
 	set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Log/Logger.cpp
@@ -648,6 +702,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 			$<BUILD_INTERFACE:${CASTOR_BINARY_DIR}/include>
 			$<BUILD_INTERFACE:${CASTOR_SOURCE_DIR}/include/Core>
 			$<BUILD_INTERFACE:${CASTOR_BINARY_DIR}/include/Core>
+			$<BUILD_INTERFACE:${EXTERNAL_SOURCE_DIR}/cvtt>
 			$<INSTALL_INTERFACE:include>
 		PRIVATE
 			${CASTOR_SOURCE_DIR}/include/Core
