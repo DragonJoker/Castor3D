@@ -103,9 +103,8 @@ namespace castor
 					break;
 				}
 
-				auto destFmt = PF::getCompressed( format );
 				result = PxBufferBase::create( Size( width, height )
-					, destFmt
+					, format
 					, data
 					, format );
 				stbi_image_free( data );

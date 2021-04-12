@@ -40,6 +40,18 @@ namespace castor
 
 	namespace PF
 	{
+		CU_API X8UGetter getR8U( PixelFormat format );
+		CU_API X8UGetter getG8U( PixelFormat format );
+		CU_API X8UGetter getB8U( PixelFormat format );
+		CU_API X8UGetter getA8U( PixelFormat format );
+		CU_API X8SGetter getR8S( PixelFormat format );
+		CU_API X8SGetter getG8S( PixelFormat format );
+		CU_API X8SGetter getB8S( PixelFormat format );
+		CU_API X8SGetter getA8S( PixelFormat format );
+		CU_API X32FGetter getR32F( PixelFormat format );
+		CU_API X32FGetter getG32F( PixelFormat format );
+		CU_API X32FGetter getB32F( PixelFormat format );
+		CU_API X32FGetter getA32F( PixelFormat format );
 		/**
 		 *\~english
 		 *\brief		Function to retrieve Pixel size without templates
@@ -142,7 +154,7 @@ namespace castor
 		 *\param[in]	dstBuffer	Le buffer destination
 		 *\param[in]	dstSize		La taille de la destination
 		 */
-		inline void convertBuffer( Size const & dimensions
+		static void convertBuffer( Size const & dimensions
 			, PixelFormat srcFormat
 			, uint8_t const * srcBuffer
 			, uint32_t srcSize
@@ -204,6 +216,37 @@ namespace castor
 		 *\param[in]	format	Le format de pixels.
 		 */
 		CU_API PixelFormat getCompressed( PixelFormat format );
+		/**
+		 *\~english
+		 *\brief		Function to perform convertion without templates
+		 *\param[in]	srcDimensions	The source dimensions
+		 *\param[in]	dstDimensions	The destination dimensions (used only when block compressing)
+		 *\param[in]	srcFormat		The source format
+		 *\param[in]	srcBuffer		The source buffer
+		 *\param[in]	srcSize			The source size
+		 *\param[in]	dstFormat		The destination format
+		 *\param[in]	dstBuffer		The destination buffer
+		 *\param[in]	dstSize			The destination size
+		 *\~french
+		 *\brief		Fonction de conversion sans templates
+		 *\param[in]	srcDimensions	Les dimensions de la source
+		 *\param[in]	dstDimensions	Les dimensions de la destination (utilisé uniquement lors d'une compression par blocs)
+		 *\param[in]	srcFormat		Le format de la source
+		 *\param[in]	srcBuffer		Le buffer source
+		 *\param[in]	srcSize			La taille de la source
+		 *\param[in]	dstFormat		Le format de la destination
+		 *\param[in]	dstBuffer		Le buffer destination
+		 *\param[in]	dstSize			La taille de la destination
+		 */
+		CU_API void compressBuffer( PxBufferConvertOptions const * options
+			, Size const & srcDimensions
+			, Size const & dstDimensions
+			, PixelFormat srcFormat
+			, uint8_t const * srcBuffer
+			, uint32_t srcSize
+			, PixelFormat dstFormat
+			, uint8_t * dstBuffer
+			, uint32_t dstSize );
 		/**
 		 *\~english
 		 *\brief		Decompresses the given compressed pixel buffer.
