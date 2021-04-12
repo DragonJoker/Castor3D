@@ -1,6 +1,7 @@
 #include "CastorUtils/Graphics/PixelBuffer.hpp"
 
 #include "CastorUtils/Miscellaneous/BitSize.hpp"
+#include "CastorUtils/Graphics/PxBufferCompression.hpp"
 
 #include <ashes/common/Format.hpp>
 
@@ -8,6 +9,8 @@
 
 namespace castor
 {
+	//*********************************************************************************************
+
 	namespace
 	{
 		VkDeviceSize getDataAt( VkFormat format
@@ -32,29 +35,29 @@ namespace castor
 		{
 			using PixelComponentsT = PixelComponents< PFT >;
 
-			PixelComponentsT::R8( dstPixel
-				, uint8_t( ( uint16_t( PixelComponentsT::R8( srcPixel1 ) )
-						+ uint16_t( PixelComponentsT::R8( srcPixel2 ) )
-						+ uint16_t( PixelComponentsT::R8( srcPixel3 ) )
-						+ uint16_t( PixelComponentsT::R8( srcPixel4 ) ) )
+			PixelComponentsT::R8U( dstPixel
+				, uint8_t( ( uint16_t( PixelComponentsT::R8U( srcPixel1 ) )
+						+ uint16_t( PixelComponentsT::R8U( srcPixel2 ) )
+						+ uint16_t( PixelComponentsT::R8U( srcPixel3 ) )
+						+ uint16_t( PixelComponentsT::R8U( srcPixel4 ) ) )
 					/ 4u ) );
-			PixelComponentsT::G8( dstPixel
-				, uint8_t( ( uint16_t( PixelComponentsT::G8( srcPixel1 ) )
-						+ uint16_t( PixelComponentsT::G8( srcPixel2 ) )
-						+ uint16_t( PixelComponentsT::G8( srcPixel3 ) )
-						+ uint16_t( PixelComponentsT::G8( srcPixel4 ) ) )
+			PixelComponentsT::G8U( dstPixel
+				, uint8_t( ( uint16_t( PixelComponentsT::G8U( srcPixel1 ) )
+						+ uint16_t( PixelComponentsT::G8U( srcPixel2 ) )
+						+ uint16_t( PixelComponentsT::G8U( srcPixel3 ) )
+						+ uint16_t( PixelComponentsT::G8U( srcPixel4 ) ) )
 					/ 4u ) );
-			PixelComponentsT::B8( dstPixel
-				, uint8_t( ( uint16_t( PixelComponentsT::B8( srcPixel1 ) )
-						+ uint16_t( PixelComponentsT::B8( srcPixel2 ) )
-						+ uint16_t( PixelComponentsT::B8( srcPixel3 ) )
-						+ uint16_t( PixelComponentsT::B8( srcPixel4 ) ) )
+			PixelComponentsT::B8U( dstPixel
+				, uint8_t( ( uint16_t( PixelComponentsT::B8U( srcPixel1 ) )
+						+ uint16_t( PixelComponentsT::B8U( srcPixel2 ) )
+						+ uint16_t( PixelComponentsT::B8U( srcPixel3 ) )
+						+ uint16_t( PixelComponentsT::B8U( srcPixel4 ) ) )
 					/ 4u ) );
-			PixelComponentsT::A8( dstPixel
-				, uint8_t( ( uint16_t( PixelComponentsT::A8( srcPixel1 ) )
-						+ uint16_t( PixelComponentsT::A8( srcPixel2 ) )
-						+ uint16_t( PixelComponentsT::A8( srcPixel3 ) )
-						+ uint16_t( PixelComponentsT::A8( srcPixel4 ) ) )
+			PixelComponentsT::A8U( dstPixel
+				, uint8_t( ( uint16_t( PixelComponentsT::A8U( srcPixel1 ) )
+						+ uint16_t( PixelComponentsT::A8U( srcPixel2 ) )
+						+ uint16_t( PixelComponentsT::A8U( srcPixel3 ) )
+						+ uint16_t( PixelComponentsT::A8U( srcPixel4 ) ) )
 					/ 4u ) );
 		}
 
@@ -152,6 +155,92 @@ namespace castor
 			return result;
 		}
 
+		ByteArray resample( VkExtent3D const & srcDimensions
+			, VkExtent3D const & dstDimensions
+			, PixelFormat format
+			, uint8_t const * src )
+		{
+			int channels = int( PF::getComponentsCount( format ) );
+			int alpha = STBIR_ALPHA_CHANNEL_NONE;
+			stbir_colorspace colorSpace{ STBIR_COLORSPACE_LINEAR };
+			stbir_datatype dataType = STBIR_TYPE_UINT8;
+
+			switch ( format )
+			{
+			case PixelFormat::eR8_UNORM:
+			case PixelFormat::eR8_SNORM:
+			case PixelFormat::eR8A8_UNORM:
+			case PixelFormat::eR8A8_SNORM:
+			case PixelFormat::eA8B8G8R8_UNORM:
+			case PixelFormat::eA8B8G8R8_SNORM:
+			case PixelFormat::eR8G8B8A8_UNORM:
+			case PixelFormat::eR8G8B8A8_SNORM:
+				alpha = 1;
+				break;
+
+			case PixelFormat::eR8G8B8_SRGB:
+			case PixelFormat::eB8G8R8_SRGB:
+				colorSpace = STBIR_COLORSPACE_SRGB;
+				break;
+
+			case PixelFormat::eA8B8G8R8_SRGB:
+			case PixelFormat::eR8G8B8A8_SRGB:
+				colorSpace = STBIR_COLORSPACE_SRGB;
+				alpha = 1;
+				break;
+
+			case PixelFormat::eR16_SFLOAT:
+			case PixelFormat::eR32_SFLOAT:
+			case PixelFormat::eR16G16B16_SFLOAT:
+			case PixelFormat::eR32G32B32_SFLOAT:
+				dataType = STBIR_TYPE_FLOAT;
+				break;
+
+			case PixelFormat::eR16A16_SFLOAT:
+			case PixelFormat::eR32A32_SFLOAT:
+			case PixelFormat::eR16G16B16A16_SFLOAT:
+			case PixelFormat::eR32G32B32A32_SFLOAT:
+				dataType = STBIR_TYPE_FLOAT;
+				alpha = 1;
+				break;
+
+
+			case PixelFormat::eR8G8B8_UNORM:
+			case PixelFormat::eR8G8B8_SNORM:
+			case PixelFormat::eB8G8R8_UNORM:
+			case PixelFormat::eB8G8R8_SNORM:
+				break;
+
+			default:
+				auto text = "Unsupported image format " + ashes::getName( VkFormat( format ) ) + " for resize.";
+				CU_LoaderError( text );
+				break;
+			}
+
+			auto srcLayerSize = ashes::getSize( VkExtent2D{ srcDimensions.width, srcDimensions.height }
+				, VkFormat( format ) );
+			auto dstLayerSize = ashes::getSize( VkExtent2D{ dstDimensions.width, dstDimensions.height }
+				, VkFormat( format ) );
+			ByteArray result;
+			result.resize( dstLayerSize );
+			auto dst = result.data();
+
+			auto ret = stbir_resize( src, int( srcDimensions.width ), int( srcDimensions.height ), 0
+				, dst, int( dstDimensions.width ), int( dstDimensions.height ), 0
+				, dataType
+				, channels, alpha, 0
+				, STBIR_EDGE_CLAMP, STBIR_EDGE_CLAMP
+				, STBIR_FILTER_CATMULLROM, STBIR_FILTER_CATMULLROM
+				, colorSpace, nullptr );
+
+			if ( !ret )
+			{
+				CU_LoaderError( "Image couldn't be resized" );
+			}
+
+			return result;
+		}
+
 		ByteArray generateMipmaps( VkExtent3D const & extent
 			, uint8_t const * buffer
 			, PixelFormat format
@@ -186,7 +275,60 @@ namespace castor
 			}
 		}
 
-		uint32_t copyBuffer( Size const & dimensions
+		ByteArray prepareForCompression( VkExtent3D & extent
+			, uint8_t const * buffer
+			, PixelFormat bufferFormat
+			, uint32_t bufferAlign
+			, PixelFormat compressed
+			, uint32_t & dstLevels )
+		{
+			ByteArray result;
+			auto blockSize = ashes::getBlockSize( VkFormat( compressed ) );
+
+			if ( ( extent.width % blockSize.extent.width ) != 0
+				&& ( extent.height % blockSize.extent.height ) != 0 )
+			{
+				auto resized = extent;
+
+				if ( ( extent.width % blockSize.extent.width ) != 0 )
+				{
+					extent.width = uint32_t( ashes::getAlignedSize( extent.width, blockSize.extent.width ) );
+				}
+
+				if ( ( extent.height % blockSize.extent.height ) != 0 )
+				{
+					extent.height = uint32_t( ashes::getAlignedSize( extent.height, blockSize.extent.height ) );
+				}
+
+				result = resample( extent
+					, resized
+					, bufferFormat
+					, buffer );
+				extent = resized;
+				buffer = result.data();
+				dstLevels = 1u;
+			}
+
+			auto requiredLevels = ashes::getMaxMipCount( extent );
+
+			if ( dstLevels <= 1u
+				&& requiredLevels > 1u )
+			{
+				// Since blitting to compressed formats may not be supported by graphics API,
+				// we need to generate them on CPU.
+				dstLevels = requiredLevels;
+				result = generateMipmaps( extent
+					, buffer
+					, bufferFormat
+					, bufferAlign
+					, dstLevels );
+			}
+
+			return result;
+		}
+
+		void copyBuffer( PxBufferConvertOptions const * options
+			, Size const & dimensions
 			, uint8_t const * srcBuffer
 			, PixelFormat srcFormat
 			, uint32_t srcAlign
@@ -249,98 +391,131 @@ namespace castor
 				srcLayerStart = srcLevelStart;
 				dstLayerStart = dstLevelStart;
 			}
-
-			return levels;
 		}
 
-		ByteArray resample( Size const & srcDimensions
-			, Size const & dstDimensions
-			, PixelFormat format
-			, uint8_t const * src )
+		void compressBuffer( PxBufferConvertOptions const * options
+			, Size const & dimensions
+			, uint8_t const * srcBuffer
+			, PixelFormat srcFormat
+			, uint32_t srcAlign
+			, uint8_t * dstBuffer
+			, PixelFormat dstFormat
+			, uint32_t dstAlign
+			, VkExtent3D const & extent
+			, uint32_t layers
+			, uint32_t levels )
 		{
-			int channels = int( PF::getComponentsCount( format ) );
-			int alpha = STBIR_ALPHA_CHANNEL_NONE;
-			stbir_colorspace colorSpace{ STBIR_COLORSPACE_LINEAR };
-			stbir_datatype dataType = STBIR_TYPE_UINT8;
+			srcAlign = ( srcAlign
+				? srcAlign
+				: uint32_t( PF::getBytesPerPixel( srcFormat ) ) );
+			dstAlign = ( dstAlign
+				? dstAlign
+				: uint32_t( PF::getBytesPerPixel( dstFormat ) ) );
+			auto srcLayerStart = srcBuffer;
+			auto dstLayerStart = dstBuffer;
+			auto srcBlockSize = ashes::getBlockSize( VkFormat( srcFormat ) );
+			auto dstBlockSize = ashes::getBlockSize( VkFormat( dstFormat ) );
 
-			switch ( format )
+			for ( uint32_t layer = 0u; layer < layers; ++layer )
 			{
-			case PixelFormat::eR8_UNORM:
-			case PixelFormat::eR8_SNORM:
-			case PixelFormat::eR8A8_UNORM:
-			case PixelFormat::eR8A8_SNORM:
-			case PixelFormat::eA8B8G8R8_UNORM:
-			case PixelFormat::eA8B8G8R8_SNORM:
-			case PixelFormat::eR8G8B8A8_UNORM:
-			case PixelFormat::eR8G8B8A8_SNORM:
-				alpha = 1;
-				break;
+				auto srcLevelStart = srcLayerStart;
+				auto dstLevelStart = dstLayerStart;
 
-			case PixelFormat::eR8G8B8_SRGB:
-			case PixelFormat::eB8G8R8_SRGB:
-				colorSpace = STBIR_COLORSPACE_SRGB;
-				break;
+				for ( uint32_t level = 0u; level < levels; ++level )
+				{
+					auto srcLevel = srcLevelStart;
+					auto dstLevel = dstLevelStart;
+					auto srcLevelSize = uint32_t( ashes::getSize( VkFormat( srcFormat )
+						, extent
+						, srcBlockSize
+						, level
+						, srcAlign ) );
+					auto dstLevelSize = uint32_t( ashes::getSize( VkFormat( dstFormat )
+						, extent
+						, dstBlockSize
+						, level
+						, dstAlign ) );
+					auto srcLevelExtent = ashes::getSubresourceDimensions( VkExtent2D{ dimensions.getWidth(), dimensions.getHeight() }
+						, level
+						, VkFormat( srcFormat ) );
+					auto dstLevelExtent = ashes::getSubresourceDimensions( VkExtent2D{ dimensions.getWidth(), dimensions.getHeight() }
+						, level
+						, VkFormat( srcFormat ) );
 
-			case PixelFormat::eA8B8G8R8_SRGB:
-			case PixelFormat::eR8G8B8A8_SRGB:
-				colorSpace = STBIR_COLORSPACE_SRGB;
-				alpha = 1;
-				break;
+					PF::compressBuffer( options
+						, { srcLevelExtent.width, srcLevelExtent.height }
+						, { dstLevelExtent.width, dstLevelExtent.height }
+						, srcFormat
+						, srcLevel
+						, srcLevelSize
+						, dstFormat
+						, dstLevel
+						, dstLevelSize );
+					srcLevelStart += srcLevelSize;
+					dstLevelStart += dstLevelSize;
+				}
 
-			case PixelFormat::eR16_SFLOAT:
-			case PixelFormat::eR32_SFLOAT:
-			case PixelFormat::eR16G16B16_SFLOAT:
-			case PixelFormat::eR32G32B32_SFLOAT:
-				dataType = STBIR_TYPE_FLOAT;
-				break;
-
-			case PixelFormat::eR16A16_SFLOAT:
-			case PixelFormat::eR32A32_SFLOAT:
-			case PixelFormat::eR16G16B16A16_SFLOAT:
-			case PixelFormat::eR32G32B32A32_SFLOAT:
-				dataType = STBIR_TYPE_FLOAT;
-				alpha = 1;
-				break;
-
-
-			case PixelFormat::eR8G8B8_UNORM:
-			case PixelFormat::eR8G8B8_SNORM:
-			case PixelFormat::eB8G8R8_UNORM:
-			case PixelFormat::eB8G8R8_SNORM:
-				break;
-
-			default:
-				auto text = "Unsupported image format " + ashes::getName( VkFormat( format ) ) + " for resize.";
-				CU_LoaderError( text );
-				break;
+				srcLayerStart = srcLevelStart;
+				dstLayerStart = dstLevelStart;
 			}
-
-			auto srcLayerSize = ashes::getSize( VkExtent2D{ srcDimensions.getWidth(), srcDimensions.getHeight() }
-			, VkFormat( format ) );
-			auto dstLayerSize = ashes::getSize( VkExtent2D{ dstDimensions.getWidth(), dstDimensions.getHeight() }
-			, VkFormat( format ) );
-			ByteArray result;
-			result.resize( dstLayerSize );
-			auto dst = result.data();
-
-			auto ret = stbir_resize( src, int( srcDimensions.getWidth() ), int( srcDimensions.getHeight() ), 0
-				, dst, int( dstDimensions.getWidth() ), int( dstDimensions.getHeight() ), 0
-				, dataType
-				, channels, alpha, 0
-				, STBIR_EDGE_CLAMP, STBIR_EDGE_CLAMP
-				, STBIR_FILTER_CATMULLROM, STBIR_FILTER_CATMULLROM
-				, colorSpace, nullptr );
-
-			if ( !ret )
-			{
-				CU_LoaderError( "Image couldn't be resized" );
-			}
-
-			return result;
 		}
 	}
 
-	PxBufferBase::PxBufferBase( Size const & size
+	//*********************************************************************************************
+
+	PxBufferConvertOptions::PxBufferConvertOptions()
+#if CU_UseCVTT
+		: additionalOptions{ new CVTTOptions{} }
+#endif
+	{
+	}
+
+	PxBufferConvertOptions::~PxBufferConvertOptions()
+	{
+#if CU_UseCVTT
+		auto options = reinterpret_cast< CVTTOptions * >( additionalOptions );
+		delete options;
+#endif
+	}
+
+	uint32_t PxBufferConvertOptions::getAdditionalAlign( PixelFormat format )const
+	{
+		switch ( format )
+		{
+#if CU_UseCVTT
+		case castor::PixelFormat::eBC1_RGB_UNORM_BLOCK:
+		case castor::PixelFormat::eBC1_RGB_SRGB_BLOCK:
+		case castor::PixelFormat::eBC1_RGBA_UNORM_BLOCK:
+		case castor::PixelFormat::eBC1_RGBA_SRGB_BLOCK:
+		case castor::PixelFormat::eBC2_UNORM_BLOCK:
+		case castor::PixelFormat::eBC2_SRGB_BLOCK:
+		case castor::PixelFormat::eBC3_UNORM_BLOCK:
+		case castor::PixelFormat::eBC3_SRGB_BLOCK:
+		case castor::PixelFormat::eBC4_UNORM_BLOCK:
+		case castor::PixelFormat::eBC4_SNORM_BLOCK:
+		case castor::PixelFormat::eBC5_UNORM_BLOCK:
+		case castor::PixelFormat::eBC5_SNORM_BLOCK:
+		case castor::PixelFormat::eBC6H_UFLOAT_BLOCK:
+		case castor::PixelFormat::eBC6H_SFLOAT_BLOCK:
+		case castor::PixelFormat::eBC7_UNORM_BLOCK:
+		case castor::PixelFormat::eBC7_SRGB_BLOCK:
+		case castor::PixelFormat::eETC2_R8G8B8_UNORM_BLOCK:
+		case castor::PixelFormat::eETC2_R8G8B8_SRGB_BLOCK:
+		case castor::PixelFormat::eETC2_R8G8B8A1_UNORM_BLOCK:
+		case castor::PixelFormat::eETC2_R8G8B8A1_SRGB_BLOCK:
+		case castor::PixelFormat::eETC2_R8G8B8A8_UNORM_BLOCK:
+		case castor::PixelFormat::eETC2_R8G8B8A8_SRGB_BLOCK:
+			return 8u * PF::getBytesPerPixel( format );
+#endif
+		default:
+			return 1u;
+		}
+	}
+
+	//*********************************************************************************************
+
+	PxBufferBase::PxBufferBase( PxBufferConvertOptions const * options
+		, Size const & size
 		, PixelFormat format
 		, uint32_t layers
 		, uint32_t levels
@@ -353,7 +528,25 @@ namespace castor
 		, m_levels{ levels }
 		, m_buffer{ 0 }
 	{
-		initialise( buffer, bufferFormat, bufferAlign );
+		initialise( options, buffer, bufferFormat, bufferAlign );
+	}
+
+	PxBufferBase::PxBufferBase( Size const & size
+		, PixelFormat format
+		, uint32_t layers
+		, uint32_t levels
+		, uint8_t const * buffer
+		, PixelFormat bufferFormat
+		, uint32_t bufferAlign )
+		: PxBufferBase{ nullptr
+			, size
+			, format
+			, layers
+			, levels
+			, buffer
+			, bufferFormat
+			, bufferAlign }
+	{
 	}
 
 	PxBufferBase::PxBufferBase( PxBufferBase const & rhs )
@@ -386,84 +579,69 @@ namespace castor
 		m_buffer.clear();
 	}
 
-	void PxBufferBase::initialise( uint8_t const * buffer
+	void PxBufferBase::initialise( PxBufferConvertOptions const * options
+		, uint8_t const * buffer
 		, PixelFormat bufferFormat
 		, uint32_t bufferAlign )
 	{
 		auto extent = VkExtent3D{ m_size.getWidth(), m_size.getHeight(), m_layers };
-		ByteArray mips;
-		ByteArray resampled;
 
 		if ( PF::isCompressed( getFormat() )
 			&& !PF::isCompressed( bufferFormat )
-			&& m_levels <= 1u
-			&& ashes::getMaxMipCount( extent ) > 1u )
+			&& buffer )
 		{
-			if ( !isPowerOfTwo( extent.width ) || !isPowerOfTwo( extent.height ) )
-			{
-				if ( !isPowerOfTwo( extent.width ) )
-				{
-					extent.width = getNextPowerOfTwo( uint32_t( extent.width ) );
-				}
-
-				if ( !isPowerOfTwo( extent.height ) )
-				{
-					extent.height = getNextPowerOfTwo( uint32_t( extent.height ) );
-				}
-
-				resampled = resample( m_size
-					, { extent.width, extent.height }
-					, bufferFormat
-					, buffer );
-				m_size = { extent.width, extent.height };
-				buffer = resampled.data();
-			}
-
-			auto blockSize = ashes::getBlockSize( VkFormat( getFormat() ) );
-
-			if ( ( extent.width % blockSize.extent.width ) == 0
-				&& ( extent.height % blockSize.extent.height ) == 0 )
-			{
-				// Since transferring to compressed formats may not be supported by graphics API
-				// we need to generate them on CPU
-				m_levels = ashes::getMaxMipCount( extent );
-				mips = generateMipmaps( extent
-					, buffer
-					, bufferFormat
-					, bufferAlign
-					, m_levels );
-				buffer = mips.data();
-			}
-			else
-			{
-				Logger::logWarning( "Asking for block compressed format whilst dimensions don't allow it" );
-				m_format = bufferFormat;
-			}
-		}
-
-		auto newSize = ashes::getLevelsSize( extent
-			, VkFormat( getFormat() )
-			, 0u
-			, m_levels
-			, PF::getBytesPerPixel( getFormat() ) );
-		m_buffer.resize( newSize );
-
-		if ( !buffer )
-		{
-			memset( m_buffer.data(), 0, newSize );
-		}
-		else
-		{
-			m_levels = copyBuffer( m_size
+			ByteArray mips;
+			mips = prepareForCompression( extent
+				, buffer
+				, bufferFormat
+				, bufferAlign
+				, getFormat()
+				, m_levels );
+			m_size = { extent.width, extent.height };
+			buffer = mips.empty() ? buffer : mips.data();
+			auto align = ( mips.empty() || !options )
+				? PF::getBytesPerPixel( getFormat() )
+				: std::max( uint8_t( options->getAdditionalAlign( getFormat() ) ), PF::getBytesPerPixel( getFormat() ) );
+			compressBuffer( options
+				, m_size
 				, buffer
 				, bufferFormat
 				, bufferAlign
 				, m_buffer.data()
 				, getFormat()
-				, uint32_t( PF::getBytesPerPixel( getFormat() ) )
+				, align
 				, extent
 				, m_layers
 				, m_levels );
+		}
+		else
+		{
+			auto align = PF::getBytesPerPixel( getFormat() );
+			VkDeviceSize newSize = ashes::getLevelsSize( extent
+				, VkFormat( getFormat() )
+				, 0u
+				, m_levels
+				, align );
+			m_buffer.resize( newSize );
+
+			if ( !buffer )
+			{
+				memset( m_buffer.data(), 0, newSize );
+			}
+			else
+			{
+				copyBuffer( options
+					, m_size
+					, buffer
+					, bufferFormat
+					, bufferAlign
+					, m_buffer.data()
+					, getFormat()
+					, align
+					, extent
+					, m_layers
+					, m_levels );
+			}
 		}
 	}
 
@@ -563,7 +741,8 @@ namespace castor
 			+ getDataAt( VkFormat( m_format ), x, y, index, level, m_levels, *this );
 	}
 
-	PxBufferBaseSPtr PxBufferBase::create( Size const & size
+	PxBufferBaseSPtr PxBufferBase::create( PxBufferConvertOptions const * options
+		, Size const & size
 		, uint32_t layers
 		, uint32_t levels
 		, PixelFormat wantedFormat
@@ -571,7 +750,8 @@ namespace castor
 		, PixelFormat bufferFormat
 		, uint32_t bufferAlign )
 	{
-		return std::make_shared< PxBufferBase >( size
+		return std::make_shared< PxBufferBase >( options
+			, size
 			, wantedFormat
 			, layers
 			, levels
@@ -579,4 +759,6 @@ namespace castor
 			, bufferFormat
 			, bufferAlign );
 	}
+
+	//*********************************************************************************************
 }
