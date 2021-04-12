@@ -11,6 +11,9 @@ namespace castor
 {
 	/**@name Graphics */
 	//@{
+	using X8UGetter = uint8_t( * )( uint8_t const * );
+	using X8SGetter = int8_t( * )( uint8_t const * );
+	using X32FGetter = float( * )( uint8_t const * );
 	/**
 	\~english
 	\brief Pixel format enumeration
@@ -581,11 +584,16 @@ namespace castor
 	using UbPixel = Pixel< PixelFormat::eR8G8B8A8_UNORM >;
 	/**
 	\~english
-	\brief		Pixel buffer base definition
-	\remark		It has 2 dimensions
+	\brief		Configuration options for Pixel buffer conversion/compression.
 	\~french
-	\brief		Définition de la classe de base d'un buffer de Pixel
-	\remark		Il a 2 dimensions
+	\brief		Options de configuration de conversion/compression d'un buffer de Pixel.
+	*/
+	struct PxBufferConvertOptions;
+	/**
+	\~english
+	\brief		Pixel buffer base definition.
+	\~french
+	\brief		Définition de la classe de base d'un buffer de Pixel.
 	*/
 	class PxBufferBase;
 	/**

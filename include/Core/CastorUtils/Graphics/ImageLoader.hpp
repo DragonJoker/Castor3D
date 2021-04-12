@@ -54,16 +54,11 @@ namespace castor
 		 *\param[in]	size		La taille des données de l'image.
 		 *\return		Le tampon de pixels contenant les données de l'image.
 		 */
-		Image load( String const & name
+		CU_API Image load( String const & name
 			, Path const & imagePath
 			, String const & imageFormat
 			, uint8_t const * data
-			, uint32_t size )const
-		{
-			PxBufferBaseSPtr buffer;
-			auto layout = load( imageFormat, data, size, buffer );
-			return Image{ name, imagePath, layout, std::move( buffer ) };
-		}
+			, uint32_t size )const;
 		/**
 		 *\~english
 		 *\brief		Loads an image file data.
@@ -80,17 +75,10 @@ namespace castor
 		 *\param[in]	size		La taille des données de l'image.
 		 *\return		Le tampon de pixels contenant les données de l'image.
 		 */
-		Image load( String const & name
+		CU_API Image load( String const & name
 			, String const & imageFormat
 			, uint8_t const * data
-			, uint32_t size )const
-		{
-			return load( name
-				, {}
-				, imageFormat
-				, data
-				, size );
-		}
+			, uint32_t size )const;
 		/**
 		 *\~english
 		 *\brief		Loads an image file data.
@@ -107,22 +95,17 @@ namespace castor
 		 *\param[in]	size		La taille des données de l'image.
 		 *\return		Le tampon de pixels contenant les données de l'image.
 		 */
-		Image load( String const & name
+		CU_API Image load( String const & name
 			, Path const & imagePath
 			, uint8_t const * data
-			, uint32_t size )const
-		{
-			return load( name
-				, imagePath
-				, string::lowerCase( imagePath.getExtension() )
-				, data
-				, size );
-		}
+			, uint32_t size )const;
 	};
 
 	class ImageLoader
 	{
 	public:
+		CU_API ImageLoader();
+		CU_API ~ImageLoader();
 		/**
 		 *\~english
 		 *\brief		Registers an image loader.
@@ -193,15 +176,10 @@ namespace castor
 		 *\param[in]	size		La taille des données de l'image.
 		 *\return		Le tampon de pixels contenant les données de l'image.
 		 */
-		Image load( String const & name
+		CU_API Image load( String const & name
 			, Path const & imagePath
 			, uint8_t const * data
-			, uint32_t size )const
-		{
-			checkData( data, size );
-			auto loader = findLoader( imagePath );
-			return loader->load( name, imagePath, data, size );
-		}
+			, uint32_t size )const;
 		/**
 		 *\~english
 		 *\brief		Loads an image file data.
@@ -218,15 +196,10 @@ namespace castor
 		 *\param[in]	size		La taille des données de l'image.
 		 *\return		Le tampon de pixels contenant les données de l'image.
 		 */
-		Image load( String const & name
+		CU_API Image load( String const & name
 			, String const & imageFormat
 			, uint8_t const * data
-			, uint32_t size )const
-		{
-			checkData( data, size );
-			auto loader = findLoader( imageFormat );
-			return loader->load( name, imageFormat, data, size );
-		}
+			, uint32_t size )const;
 
 	private:
 		CU_API void checkData( uint8_t const * data
@@ -237,6 +210,7 @@ namespace castor
 	private:
 		std::vector< ImageLoaderPtr > m_loaders;
 		std::map< String, ImageLoaderImpl * > m_extLoaders;
+		PxBufferConvertOptions m_options;
 	};
 }
 
