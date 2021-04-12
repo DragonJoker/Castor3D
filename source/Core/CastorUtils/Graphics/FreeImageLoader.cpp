@@ -270,7 +270,6 @@ namespace castor
 
 		uint32_t width = FreeImage_GetWidth( fiImage );
 		uint32_t height = FreeImage_GetHeight( fiImage );
-		auto destFmt = PF::getCompressed( sourceFmt );
 		Size dimensions( width, height );
 		auto memorySize = FreeImage_GetMemorySize( fiImage );
 		auto levelSize = ashes::getSize( VkExtent2D{ dimensions.getWidth(), dimensions.getHeight() }
@@ -281,7 +280,7 @@ namespace castor
 		swapComponents( pixels, sourceFmt, width, height );
 #endif
 		buffer = PxBufferBase::create( dimensions
-			, destFmt
+			, sourceFmt
 			, pixels
 			, sourceFmt );
 		FreeImage_Unload( fiImage );
