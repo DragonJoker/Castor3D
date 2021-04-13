@@ -403,7 +403,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	source_group( "Header Files\\Graphics" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
 	source_group( "Source Files\\Graphics" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
-	if( EXISTS ${EXTERNAL_SOURCE_DIR}/cvtt )
+	if( EXISTS ${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels.h )
 		set( ${PROJECT_NAME}_DEFINITIONS
 			${${PROJECT_NAME}_DEFINITIONS}
 			CU_UseCVTT
