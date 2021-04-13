@@ -283,7 +283,6 @@ namespace aria
 			dc->GradientFillLinear( wxRect{ cell.x + xOffset, cell.y, gradWidth, cell.height }, halfColour, curColor );
 			xOffset += gradWidth;
 			dc->GradientFillLinear( wxRect{ cell.x + xOffset, cell.y, curWidth, cell.height }, curColor, curColor );
-			xOffset += curWidth;
 		}
 	}
 

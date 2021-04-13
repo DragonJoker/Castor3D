@@ -110,8 +110,8 @@ namespace castor3d
 			, uint32_t setIndex )
 		{
 			UBO_VOXELIZER( m_writer, VoxelizerUbo::BindingPoint, 0u, true );
-			auto c3d_mapVoxelsFirstBounce = m_writer.declSampledImage< FImg3DRgba32 >( "c3d_mapVoxelsFirstBounce", bindingIndex++, setIndex );
-			auto c3d_mapVoxelsSecondaryBounce = m_writer.declSampledImage< FImg3DRgba32 >( "c3d_mapVoxelsSecondaryBounce", bindingIndex++, setIndex );
+			m_writer.declSampledImage< FImg3DRgba32 >( "c3d_mapVoxelsFirstBounce", bindingIndex++, setIndex );
+			m_writer.declSampledImage< FImg3DRgba32 >( "c3d_mapVoxelsSecondaryBounce", bindingIndex++, setIndex );
 			declareTraceConeRadiance();
 			declareTraceConeReflection();
 			declareTraceConeOcclusion();
@@ -379,7 +379,7 @@ namespace castor3d
 				auto vxlBlend = m_writer.declLocale( "vxlBlend"
 					, 1.0_f - pow( max( vxlPosition.x(), max( vxlPosition.y(), vxlPosition.z() ) ), 4.0_f ) );
 
-				auto vxlRadiance = m_writer.declLocale< sdw::Vec4 >( "vxlRadiance" );
+				auto vxlRadiance( m_writer.declLocale< sdw::Vec4 >( "vxlRadiance" ) );
 
 				IF( m_writer, voxelData.enableSecondaryBounce )
 				{
@@ -419,7 +419,7 @@ namespace castor3d
 				auto vxlPosition = m_writer.getVariable< sdw::Vec3 >( "vxlPosition" );
 				auto vxlBlend = m_writer.getVariable< sdw::Float >( "vxlBlend" );
 
-				auto vxlReflection = m_writer.declLocale< sdw::Vec4 >( "vxlReflection" );
+				auto vxlReflection( m_writer.declLocale< sdw::Vec4 >( "vxlReflection" ) );
 
 				IF( m_writer, voxelData.enableSecondaryBounce )
 				{

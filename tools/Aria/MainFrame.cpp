@@ -986,11 +986,11 @@ namespace aria
 			, wxT( "Ignoring tests results..." )
 			, int( 1 )
 			, this };
-		int index = 0;
 
 		if ( m_selectedPage
 			&& !m_selectedPage->selected.items.empty() )
 		{
+			int index = 0;
 			progress.SetRange( m_selectedPage->selected.items.size() );
 
 			for ( auto & item : m_selectedPage->selected.items )
@@ -1821,7 +1821,6 @@ namespace aria
 		auto & page = doGetPage( item );
 		page.model->ItemChanged( item );
 		auto rendIt = m_tests.counts.renderers.find( test.getRenderer() );
-		auto catIt = rendIt->second.categories.find( test.getCategory() );
 
 		if ( page.detailViews->isLayerShown( TestView::eTest )
 			&& page.testView->getTest() == &test )
