@@ -545,7 +545,6 @@ namespace castor
 				copyLineData( pixelSize, width, srcBuffer, dstBuffer );
 				dstBuffer += dstLineSize;
 				copyLineData( pixelSize, width, srcBuffer, dstBuffer );
-				dstBuffer += dstLineSize;
 				break;
 			case 2u:
 				// Duplicate first line line into the 2 first lines of the block
@@ -558,7 +557,6 @@ namespace castor
 				copyLineData( pixelSize, width, srcBuffer, dstBuffer );
 				dstBuffer += dstLineSize;
 				copyLineData( pixelSize, width, srcBuffer, dstBuffer );
-				dstBuffer += dstLineSize;
 				break;
 			case 3u:
 				// Duplicate first line line into the first line of the block
@@ -573,7 +571,6 @@ namespace castor
 				copyLineData( pixelSize, width, srcBuffer, dstBuffer );
 				dstBuffer += dstLineSize;
 				copyLineData( pixelSize, width, srcBuffer, dstBuffer );
-				dstBuffer += dstLineSize;
 				break;
 			default:
 				for ( auto i = 0u; i < height; ++i )

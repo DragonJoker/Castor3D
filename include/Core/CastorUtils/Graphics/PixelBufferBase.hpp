@@ -21,7 +21,7 @@ namespace castor
 
 	struct PxBufferConvertOptions
 	{
-		CU_API PxBufferConvertOptions( PxCompressionSupport support );
+		CU_API explicit PxBufferConvertOptions( PxCompressionSupport support );
 		CU_API ~PxBufferConvertOptions();
 
 		CU_API PixelFormat getCompressed( PixelFormat format )const;
