@@ -10,13 +10,24 @@ See LICENSE file in root folder
 
 namespace castor
 {
+	struct PxCompressionSupport
+	{
+		bool supportBC1{ false };
+		bool supportBC3{ false };
+		bool supportBC5{ false };
+		bool supportBC6{ false };
+		bool supportBC7{ false };
+	};
+
 	struct PxBufferConvertOptions
 	{
-		CU_API PxBufferConvertOptions();
+		CU_API PxBufferConvertOptions( PxCompressionSupport support );
 		CU_API ~PxBufferConvertOptions();
 
+		CU_API PixelFormat getCompressed( PixelFormat format )const;
 		CU_API uint32_t getAdditionalAlign( PixelFormat format )const;
 
+		PxCompressionSupport support;
 		void * additionalOptions{ nullptr };
 	};
 
@@ -270,6 +281,11 @@ namespace castor
 			return m_levels;
 		}
 
+		uint32_t getAlign()const
+		{
+			return m_align;
+		}
+
 		Size const & getDimensions()const
 		{
 			return m_size;
@@ -441,6 +457,7 @@ namespace castor
 		Size m_size;
 		uint32_t m_layers;
 		uint32_t m_levels;
+		uint32_t m_align;
 		mutable PxArray m_buffer;
 	};
 }

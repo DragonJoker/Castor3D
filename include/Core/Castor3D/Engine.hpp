@@ -434,6 +434,11 @@ namespace castor3d
 			return m_imageLoader;
 		}
 
+		inline castor::ImageLoader & getImageLoader()
+		{
+			return m_imageLoader;
+		}
+
 		inline castor::ImageWriter const & getImageWriter()const
 		{
 			return m_imageWriter;
