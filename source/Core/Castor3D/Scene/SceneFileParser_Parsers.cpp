@@ -4335,7 +4335,8 @@ namespace castor3d
 							, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 							, parsingContext->relative );
 						texture->setSource( parsingContext->folder
-							, parsingContext->relative );
+							, parsingContext->relative
+							, parsingContext->textureConfiguration.normalMask[0] == 0 );
 						parsingContext->textureUnit->setTexture( texture );
 						parsingContext->textureUnit->setConfiguration( parsingContext->textureConfiguration );
 						parsingContext->pass->addTextureUnit( std::move( parsingContext->textureUnit ) );
