@@ -282,32 +282,6 @@ namespace castor
 			, uint32_t & dstLevels )
 		{
 			ByteArray result;
-			auto blockSize = ashes::getBlockSize( VkFormat( compressed ) );
-
-			if ( ( extent.width % blockSize.extent.width ) != 0
-				&& ( extent.height % blockSize.extent.height ) != 0 )
-			{
-				auto resized = extent;
-
-				if ( ( extent.width % blockSize.extent.width ) != 0 )
-				{
-					extent.width = uint32_t( ashes::getAlignedSize( extent.width, blockSize.extent.width ) );
-				}
-
-				if ( ( extent.height % blockSize.extent.height ) != 0 )
-				{
-					extent.height = uint32_t( ashes::getAlignedSize( extent.height, blockSize.extent.height ) );
-				}
-
-				result = resample( extent
-					, resized
-					, bufferFormat
-					, buffer );
-				extent = resized;
-				buffer = result.data();
-				dstLevels = 1u;
-			}
-
 			auto requiredLevels = ashes::getMaxMipCount( extent );
 
 			if ( dstLevels <= 1u
