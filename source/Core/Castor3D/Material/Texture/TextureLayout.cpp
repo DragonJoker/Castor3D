@@ -610,7 +610,7 @@ namespace castor3d
 			std::vector< ashes::ImageView > imageViews;
 			auto buffer = makeBufferBase( device
 				, image.getPxBuffer().getSize()
-				, VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
+				, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 				, image.getName() + "StagingBuffer" );
 			auto mappedSize = ashes::getAlignedSize( image.getPxBuffer().getSize()
