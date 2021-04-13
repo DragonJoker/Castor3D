@@ -51,7 +51,8 @@ namespace castor
 	}
 
 	ImageSPtr ImageCache::add( String const & name
-		, Path const & path )
+		, Path const & path
+		, bool allowCompression )
 	{
 		using LockType = std::unique_lock< ImageCache >;
 		LockType lock{ makeUniqueLock( *this ) };
@@ -63,7 +64,7 @@ namespace castor
 
 			if ( !result->hasBuffer() )
 			{
-				*result = m_loader.load( name, path );
+				*result = m_loader.load( name, path, allowCompression );
 			}
 			else
 			{
@@ -74,7 +75,7 @@ namespace castor
 		{
 			if ( File::fileExists( path ) )
 			{
-				result = std::make_shared< Image >( m_loader.load( name, path ) );
+				result = std::make_shared< Image >( m_loader.load( name, path, allowCompression ) );
 				Collection< Image, String >::insert( name, result );
 				doReportCreation( getLogger(), name );
 			}
