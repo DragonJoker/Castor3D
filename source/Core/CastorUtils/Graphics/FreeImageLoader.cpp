@@ -233,26 +233,52 @@ namespace castor
 			|| fiFormat == FIF_EXR )
 		{
 			auto bpp = FreeImage_GetBPP( fiImage ) / 8;
+			auto type = FreeImage_GetImageType( fiImage );
 
-			if ( bpp == PixelDefinitions< PixelFormat::eR16G16B16_SFLOAT >::Size )
+			if ( type == FIT_RGBAF )
 			{
-				sourceFmt = PixelFormat::eR16G16B16_SFLOAT;
+				if ( bpp == PixelDefinitions< PixelFormat::eR16G16B16A16_SFLOAT >::Size )
+				{
+					sourceFmt = PixelFormat::eR16G16B16A16_SFLOAT;
+				}
+				else if ( bpp == PixelDefinitions< PixelFormat::eR32G32B32A32_SFLOAT >::Size )
+				{
+					sourceFmt = PixelFormat::eR32G32B32A32_SFLOAT;
+				}
+				else
+				{
+					CU_LoaderError( "Unsupported HDR RGBA image format" );
+				}
 			}
-			else if ( bpp == PixelDefinitions< PixelFormat::eR16G16B16A16_SFLOAT >::Size )
+			else if ( type == FIT_RGBF )
 			{
-				sourceFmt = PixelFormat::eR16G16B16A16_SFLOAT;
+				if ( bpp == PixelDefinitions< PixelFormat::eR16G16B16_SFLOAT >::Size )
+				{
+					sourceFmt = PixelFormat::eR16G16B16_SFLOAT;
+				}
+				else if ( bpp == PixelDefinitions< PixelFormat::eR32G32B32_SFLOAT >::Size )
+				{
+					sourceFmt = PixelFormat::eR32G32B32_SFLOAT;
+				}
+				else
+				{
+					CU_LoaderError( "Unsupported HDR RGB image format" );
+				}
 			}
-			else if ( bpp == PixelDefinitions< PixelFormat::eR32G32B32_SFLOAT >::Size )
+			else if ( type == FIT_FLOAT )
 			{
-				sourceFmt = PixelFormat::eR32G32B32_SFLOAT;
-			}
-			else if ( bpp == PixelDefinitions< PixelFormat::eR32G32B32A32_SFLOAT >::Size )
-			{
-				sourceFmt = PixelFormat::eR32G32B32A32_SFLOAT;
-			}
-			else
-			{
-				CU_LoaderError( "Unsupported HDR image format" );
+				if ( bpp == PixelDefinitions< PixelFormat::eR16_SFLOAT >::Size )
+				{
+					sourceFmt = PixelFormat::eR16_SFLOAT;
+				}
+				else if ( bpp == PixelDefinitions< PixelFormat::eR32_SFLOAT >::Size )
+				{
+					sourceFmt = PixelFormat::eR32_SFLOAT;
+				}
+				else
+				{
+					CU_LoaderError( "Unsupported HDR R image format" );
+				}
 			}
 		}
 		else
