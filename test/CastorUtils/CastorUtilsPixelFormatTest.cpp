@@ -22,32 +22,32 @@ namespace
 			stream << string::stringCast< CharType >( PF::getFormatName( pixel.getFormat() ) );
 			stream << ", Value : (";
 			stream.width( 3 );
-			stream << int( PF::getByteRed( pixel ) );
+			stream << int( PF::getR8U( pixel ) );
 			stream << ", ";
 			stream.width( 3 );
-			stream << int( PF::getByteGreen( pixel ) );
+			stream << int( PF::getG8U( pixel ) );
 			stream << ", ";
 			stream.width( 3 );
-			stream << int( PF::getByteBlue( pixel ) );
+			stream << int( PF::getB8U( pixel ) );
 			stream << ", ";
 			stream.width( 3 );
-			stream << int( PF::getByteAlpha( pixel ) );
+			stream << int( PF::getA8U( pixel ) );
 			stream << ") (";
 			stream.precision( 3 );
 			stream.width( 5 );
-			stream << PF::getFloatRed( pixel );
+			stream << PF::getR32F( pixel );
 			stream << ", ";
 			stream.precision( 3 );
 			stream.width( 5 );
-			stream << PF::getFloatGreen( pixel );
+			stream << PF::getG32F( pixel );
 			stream << ", ";
 			stream.precision( 3 );
 			stream.width( 5 );
-			stream << PF::getFloatBlue( pixel );
+			stream << PF::getB32F( pixel );
 			stream << ", ";
 			stream.precision( 3 );
 			stream.width( 5 );
-			stream << PF::getFloatAlpha( pixel );
+			stream << PF::getA32F( pixel );
 			stream << ")";
 			return stream;
 		}
@@ -66,19 +66,12 @@ namespace
 			stream.width( 10 );
 			stream << string::stringCast< CharType >( PF::getFormatName( pixel.getFormat() ) );
 			stream << ", Value : (";
-			stream.width( 11 );
-			stream << int( PF::getUInt32Depth( pixel ) );
-			stream << ", ";
-			stream.width( 3 );
-			stream << int( PF::getByteStencil( pixel ) );
-			stream << ") (";
 			stream.precision( 3 );
 			stream.width( 10 );
-			stream << PF::getFloatDepth( pixel );
+			stream << int( PF::getD32F( pixel ) );
 			stream << ", ";
-			stream.precision( 3 );
-			stream.width( 5 );
-			stream << PF::getFloatStencil( pixel );
+			stream.width( 3 );
+			stream << int( PF::getS8U( pixel ) );
 			stream << ")";
 			return stream;
 		}
@@ -111,13 +104,13 @@ namespace
 					auto const & pixel = buffer.at( x, y );
 					stream << "0x";
 					stream.width( 2 );
-					stream << std::hex << int( PF::getByteAlpha( pixel ) );
+					stream << std::hex << int( PF::getA8U( pixel ) );
 					stream.width( 2 );
-					stream << std::hex << int( PF::getByteRed( pixel ) );
+					stream << std::hex << int( PF::getR8U( pixel ) );
 					stream.width( 2 );
-					stream << std::hex << int( PF::getByteGreen( pixel ) );
+					stream << std::hex << int( PF::getG8U( pixel ) );
 					stream.width( 2 );
-					stream << std::hex << int( PF::getByteBlue( pixel ) ) << " ";
+					stream << std::hex << int( PF::getB8U( pixel ) ) << " ";
 				}
 
 				stream << std::endl;
@@ -145,9 +138,9 @@ namespace
 					auto const & pixel = buffer.at( x, y );
 					stream << "0x";
 					stream.width( 6 );
-					stream << std::hex << int( PF::getUInt24Depth( pixel ) );
+					stream << std::hex << int( PF::getD24U( pixel ) );
 					stream.width( 2 );
-					stream << std::hex << int( PF::getByteStencil( pixel ) ) << " ";
+					stream << std::hex << int( PF::getS8U( pixel ) ) << " ";
 				}
 
 				stream << std::endl;
@@ -213,10 +206,10 @@ namespace
 		void operator()()
 		{
 			Pixel< PFSrc > source( true );
-			PF::setByteRed( source, 0x40 );
-			PF::setByteGreen( source, 0x80 );
-			PF::setByteBlue( source, 0xBF );
-			PF::setByteAlpha( source, 0xFF );
+			PF::setR8U( source, 0x40 );
+			PF::setG8U( source, 0x80 );
+			PF::setB8U( source, 0xBF );
+			PF::setA8U( source, 0xFF );
 			auto stream = castor::makeStringStream();
 			stream.width( 20 );
 			stream << "Source pixel : " << source;
@@ -241,8 +234,8 @@ namespace
 		void operator()()
 		{
 			Pixel< PFSrc > source( true );
-			PF::setUInt32Depth( source, 0x10204080 );
-			PF::setByteStencil( source, 0x80 );
+			PF::setD24U( source, 0x00102040 );
+			PF::setS8U( source, 0x80 );
 			auto stream = castor::makeStringStream();
 			stream.width( 20 );
 			stream << "Source pixel : " << source;
@@ -311,10 +304,10 @@ namespace
 			for ( size_t i = 0; i < count; i += PixelDefinitions< PFSrc >::Size )
 			{
 				pixel.link( buffer.data() + i );
-				PF::setByteAlpha( pixel, value++ );
-				PF::setByteRed( pixel, value++ );
-				PF::setByteGreen( pixel, value++ );
-				PF::setByteBlue( pixel, value++ );
+				PF::setA8U( pixel, value++ );
+				PF::setR8U( pixel, value++ );
+				PF::setG8U( pixel, value++ );
+				PF::setB8U( pixel, value++ );
 			}
 
 			auto source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( size
@@ -355,8 +348,8 @@ namespace
 			for ( size_t i = 0; i < count; i += PixelDefinitions< PFSrc >::Size )
 			{
 				pixel.link( buffer.data() + i );
-				PF::setUInt32Depth( pixel, depth );
-				PF::setByteStencil( pixel, stencil );
+				PF::setD24U( pixel, depth );
+				PF::setS8U( pixel, stencil );
 				depth += 0x02468ACE;
 				stencil++;
 			}
@@ -392,8 +385,8 @@ namespace
 			for ( size_t i = 0; i < count; i += PixelDefinitions< PFSrc >::Size )
 			{
 				pixel.link( buffer.data() + i );
-				PF::setUInt32Depth( pixel, depth );
-				PF::setByteStencil( pixel, stencil );
+				PF::setD24U( pixel, depth );
+				PF::setS8U( pixel, stencil );
 				depth += 0x02468ACE;
 				stencil++;
 			}
@@ -429,8 +422,8 @@ namespace
 			for ( size_t i = 0; i < count; i += PixelDefinitions< PFSrc >::Size )
 			{
 				pixel.link( buffer.data() + i );
-				PF::setUInt32Depth( pixel, value++ );
-				PF::setByteStencil( pixel, value++ );
+				PF::setD24U( pixel, value++ );
+				PF::setS8U( pixel, value++ );
 			}
 
 			auto source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( size
