@@ -359,7 +359,6 @@ namespace castor
 	CU_API Point3f operator*( Point3f const & lhs, Matrix4x4f const & rhs );
 	CU_API Point4f operator*( Matrix4x4f const & lhs, Point4f const & rhs );
 	CU_API Point4f operator*( Point4f const & lhs, Matrix4x4f const & rhs );
-	CU_API uint32_t getNext2Pow( uint32_t value );
 	//@}
 }
 
