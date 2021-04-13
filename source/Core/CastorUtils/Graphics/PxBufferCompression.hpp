@@ -13,11 +13,11 @@ See LICENSE file in root folder
 
 namespace castor
 {
-#if CU_UseCVTT
-
 	using X8UGetter = uint8_t( * )( uint8_t const * );
 	using X8SGetter = int8_t( * )( uint8_t const * );
 	using X16FGetter = int16_t( * )( uint8_t const * );
+
+#if CU_UseCVTT
 
 	struct CVTTOptions
 	{
