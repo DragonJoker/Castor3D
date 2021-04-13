@@ -507,11 +507,11 @@ namespace castor
 		}
 		static Type R( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).r;
+			return Type( getSrc( buffer ).r << 4 );
 		}
 		static Type G( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).g;
+			return Type( getSrc( buffer ).g << 4 );
 		}
 		static Type B( uint8_t const * buffer )
 		{
@@ -523,11 +523,11 @@ namespace castor
 		}
 		static void R( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).r = value;
+			getDst( buffer ).r = value >> 4;
 		}
 		static void G( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).g = value;
+			getDst( buffer ).g = value >> 4;
 		}
 		static void B( uint8_t * buffer, Type value )
 		{
@@ -559,35 +559,35 @@ namespace castor
 		}
 		static Type R( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).r;
+			return Type( getSrc( buffer ).r << 4 );
 		}
 		static Type G( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).g;
+			return Type( getSrc( buffer ).g << 4 );
 		}
 		static Type B( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).b;
+			return Type( getSrc( buffer ).b << 4 );
 		}
 		static Type A( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).a;
+			return Type( getSrc( buffer ).a << 4 );
 		}
 		static void R( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).r = value;
+			getDst( buffer ).r = value >> 4;
 		}
 		static void G( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).g = value;
+			getDst( buffer ).g = value >> 4;
 		}
 		static void B( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).b = value;
+			getDst( buffer ).b = value >> 4;
 		}
 		static void A( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).a = value;
+			getDst( buffer ).a = value >> 4;
 		}
 	};
 	//!\~english	Specialisation for PixelFormat::eB4G4R4A4_UNORM
@@ -613,35 +613,35 @@ namespace castor
 		}
 		static Type R( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).r;
+			return Type( getSrc( buffer ).r << 4 );
 		}
 		static Type G( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).g;
+			return Type( getSrc( buffer ).g << 4 );
 		}
 		static Type B( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).b;
+			return Type( getSrc( buffer ).b << 4 );
 		}
 		static Type A( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).a;
+			return Type( getSrc( buffer ).a << 4 );
 		}
 		static void R( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).r = value;
+			getDst( buffer ).r = value >> 4;
 		}
 		static void G( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).g = value;
+			getDst( buffer ).g = value >> 4;
 		}
 		static void B( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).b = value;
+			getDst( buffer ).b = value >> 4;
 		}
 		static void A( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).a = value;
+			getDst( buffer ).a = value >> 4;
 		}
 	};
 	//!\~english	Specialisation for PixelFormat::eR5G6B5_UNORM
@@ -666,15 +666,15 @@ namespace castor
 		}
 		static Type R( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).r;
+			return Type( getSrc( buffer ).r << 3 );
 		}
 		static Type G( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).g;
+			return Type( getSrc( buffer ).g << 2 );
 		}
 		static Type B( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).b;
+			return Type( getSrc( buffer ).b << 3 );
 		}
 		static Type A( uint8_t const * buffer )
 		{
@@ -682,15 +682,15 @@ namespace castor
 		}
 		static void R( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).r = value;
+			getDst( buffer ).r = value >> 3;
 		}
 		static void G( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).g = value;
+			getDst( buffer ).g = value >> 2;
 		}
 		static void B( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).b = value;
+			getDst( buffer ).b = value >> 3;
 		}
 		static void A( uint8_t * buffer, Type value )
 		{
@@ -718,15 +718,15 @@ namespace castor
 		}
 		static Type R( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).r;
+			return Type( getSrc( buffer ).r << 3 );
 		}
 		static Type G( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).g;
+			return Type( getSrc( buffer ).g << 2 );
 		}
 		static Type B( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).b;
+			return Type( getSrc( buffer ).b << 3 );
 		}
 		static Type A( uint8_t const * buffer )
 		{
@@ -734,15 +734,15 @@ namespace castor
 		}
 		static void R( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).r = value;
+			getDst( buffer ).r = value >> 3;
 		}
 		static void G( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).g = value;
+			getDst( buffer ).g = value >> 2;
 		}
 		static void B( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).b = value;
+			getDst( buffer ).b = value >> 3;
 		}
 		static void A( uint8_t * buffer, Type value )
 		{
@@ -771,31 +771,31 @@ namespace castor
 		}
 		static Type R( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).r;
+			return Type( getSrc( buffer ).r << 3 );
 		}
 		static Type G( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).g;
+			return Type( getSrc( buffer ).g << 3 );
 		}
 		static Type B( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).b;
+			return Type( getSrc( buffer ).b << 3 );
 		}
 		static Type A( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).a;
+			return getSrc( buffer ).a << 7;
 		}
 		static void R( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).r = value;
+			getDst( buffer ).r = value >> 3;
 		}
 		static void G( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).g = value;
+			getDst( buffer ).g = value >> 3;
 		}
 		static void B( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).b = value;
+			getDst( buffer ).b = value >> 3;
 		}
 		static void A( uint8_t * buffer, Type value )
 		{
@@ -825,31 +825,31 @@ namespace castor
 		}
 		static Type R( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).r;
+			return Type( getSrc( buffer ).r << 3 );
 		}
 		static Type G( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).g;
+			return Type( getSrc( buffer ).g << 3 );
 		}
 		static Type B( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).b;
+			return Type( getSrc( buffer ).b << 3 );
 		}
 		static Type A( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).a;
+			return Type( getSrc( buffer ).a << 7 );
 		}
 		static void R( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).r = value;
+			getDst( buffer ).r = value >> 3;
 		}
 		static void G( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).g = value;
+			getDst( buffer ).g = value >> 3;
 		}
 		static void B( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).b = value;
+			getDst( buffer ).b = value >> 3;
 		}
 		static void A( uint8_t * buffer, Type value )
 		{
@@ -879,35 +879,35 @@ namespace castor
 		}
 		static Type R( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).r;
+			return Type( getSrc( buffer ).r << 3 );
 		}
 		static Type G( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).g;
+			return Type( getSrc( buffer ).g << 3 );
 		}
 		static Type B( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).b;
+			return Type( getSrc( buffer ).b << 3 );
 		}
 		static Type A( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).a;
+			return Type( getSrc( buffer ).a << 7 );
 		}
 		static void R( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).r = value;
+			getDst( buffer ).r = value >> 3;
 		}
 		static void G( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).g = value;
+			getDst( buffer ).g = value >> 3;
 		}
 		static void B( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).b = value;
+			getDst( buffer ).b = value >> 3;
 		}
 		static void A( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).a = value;
+			getDst( buffer ).a = ( value != 0 ) ? 0x01 : 0x00;
 		}
 	};
 	//!\~english	Specialisation for PixelFormat::eR8_UNORM
@@ -1906,35 +1906,35 @@ namespace castor
 		}
 		static Type R( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).r;
+			return Type( getSrc( buffer ).r << 6 );
 		}
 		static Type G( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).g;
+			return Type( getSrc( buffer ).g << 6 );
 		}
 		static Type B( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).b;
+			return Type( getSrc( buffer ).b << 6 );
 		}
 		static Type A( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).a;
+			return Type( getSrc( buffer ).a << 14 );
 		}
 		static void R( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).r = value;
+			getDst( buffer ).r = value >> 6;
 		}
 		static void G( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).g = value;
+			getDst( buffer ).g = value >> 6;
 		}
 		static void B( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).b = value;
+			getDst( buffer ).b = value >> 6;
 		}
 		static void A( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).a = value;
+			getDst( buffer ).a = value >> 14;
 		}
 	};
 	//!\~english	Specialisation for PixelFormat::eA2R10G10B10_SNORM
@@ -1960,35 +1960,35 @@ namespace castor
 		}
 		static Type R( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).r;
+			return Type( getSrc( buffer ).r << 6 );
 		}
 		static Type G( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).g;
+			return Type( getSrc( buffer ).g << 6 );
 		}
 		static Type B( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).b;
+			return Type( getSrc( buffer ).b << 6 );
 		}
 		static Type A( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).a;
+			return Type( getSrc( buffer ).a << 14 );
 		}
 		static void R( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).r = value;
+			getDst( buffer ).r = value >> 6;
 		}
 		static void G( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).g = value;
+			getDst( buffer ).g = value >> 6;
 		}
 		static void B( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).b = value;
+			getDst( buffer ).b = value >> 6;
 		}
 		static void A( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).a = value;
+			getDst( buffer ).a = value >> 14;
 		}
 	};
 	//!\~english	Specialisation for PixelFormat::eA2R10G10B10_USCALED
@@ -2042,35 +2042,35 @@ namespace castor
 		}
 		static Type R( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).r;
+			return Type( getSrc( buffer ).r << 6 );
 		}
 		static Type G( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).g;
+			return Type( getSrc( buffer ).g << 6 );
 		}
 		static Type B( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).b;
+			return Type( getSrc( buffer ).b << 6 );
 		}
 		static Type A( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).a;
+			return Type( getSrc( buffer ).a << 14 );
 		}
 		static void R( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).r = value;
+			getDst( buffer ).r = value >> 6;
 		}
 		static void G( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).g = value;
+			getDst( buffer ).g = value >> 6;
 		}
 		static void B( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).b = value;
+			getDst( buffer ).b = value >> 6;
 		}
 		static void A( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).a = value;
+			getDst( buffer ).a = value >> 14;
 		}
 	};
 	//!\~english	Specialisation for PixelFormat::eA2B10G10R10_SNORM
@@ -2096,35 +2096,35 @@ namespace castor
 		}
 		static Type R( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).r;
+			return Type( getSrc( buffer ).r << 6 );
 		}
 		static Type G( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).g;
+			return Type( getSrc( buffer ).g << 6 );
 		}
 		static Type B( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).b;
+			return Type( getSrc( buffer ).b << 6 );
 		}
 		static Type A( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).a;
+			return Type( getSrc( buffer ).a << 14 );
 		}
 		static void R( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).r = value;
+			getDst( buffer ).r = value >> 6;
 		}
 		static void G( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).g = value;
+			getDst( buffer ).g = value >> 6;
 		}
 		static void B( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).b = value;
+			getDst( buffer ).b = value >> 6;
 		}
 		static void A( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).a = value;
+			getDst( buffer ).a = value >> 14;
 		}
 	};
 	//!\~english	Specialisation for PixelFormat::eA2B10G10R10_USCALED
