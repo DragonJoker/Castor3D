@@ -70,6 +70,7 @@ jobs:
         git submodule update --init -- "CMake"
         git submodule update --init --recursive -- "external/Ashes"
         git submodule update --init -- "external/ShaderWriter"
+        git submodule update --init -- "external/cvtt"
 
     - name: Checkout dependencies submodule (Windows)
       if: runner.os == 'Windows'
