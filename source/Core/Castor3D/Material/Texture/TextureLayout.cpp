@@ -1,6 +1,7 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Material/Texture/TextureSource.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
@@ -12,7 +13,7 @@
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>
-#include <ashespp/Image/StagingTexture.hpp>
+#include <ashespp/Sync/Fence.hpp>
 
 using namespace castor;
 
@@ -603,29 +604,81 @@ namespace castor3d
 			, ashes::Image const & texture
 			, ashes::ImageViewCreateInfo & viewInfo )
 		{
-			auto buffer = image.getLayout().layerBuffer( image.getPxBuffer()
-				, viewInfo->subresourceRange.baseArrayLayer );
+			auto & layout = image.getLayout();
+			auto mipViewInfo = viewInfo;
+			mipViewInfo->subresourceRange.levelCount = 1u;
+			std::vector< ashes::ImageView > imageViews;
+			auto buffer = makeBufferBase( device
+				, image.getPxBuffer().getSize()
+				, VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
+				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+				, image.getName() + "StagingBuffer" );
+			auto mappedSize = ashes::getAlignedSize( image.getPxBuffer().getSize()
+				, device->getProperties().limits.nonCoherentAtomSize );
 
-			if ( buffer.empty() )
+			if ( auto data = buffer->lock( 0u, mappedSize, 0u ) )
+			{
+				std::memcpy( data, image.getPxBuffer().getConstPtr(), image.getPxBuffer().getSize() );
+				buffer->flush( 0u, mappedSize );
+				buffer->unlock();
+			}
+			else
 			{
 				return;
 			}
 
-			auto debugName = image.getName() + "Upload"
-				+ "L(" + string::toString( viewInfo->subresourceRange.baseArrayLayer ) + "x1/" + string::toString( image.getLayout().depthLayers() ) + ")"
-				+ "M(" + string::toString( viewInfo->subresourceRange.baseMipLevel ) + "x" + string::toString( viewInfo->subresourceRange.levelCount ) + "/" + string::toString( image.getLayout().levels ) + ")";
-			auto view = texture.createView( debugName, viewInfo );
-			auto staging = device->createStagingTexture( VkFormat( image.getPixelFormat() )
-				, {
-					ashes::getSubresourceDimension( image.getWidth(), viewInfo->subresourceRange.baseMipLevel ),
-					ashes::getSubresourceDimension( image.getHeight(), viewInfo->subresourceRange.baseMipLevel ),
+			ashes::VkBufferImageCopyArray copies;
+			VkExtent2D baseDimensions{ image.getWidth(), image.getHeight() };
+
+			for ( auto layer = layout.baseLayer;
+				layer < layout.baseLayer + viewInfo->subresourceRange.layerCount;
+				++layer )
+			{
+				VkImageSubresourceLayers subresourceLayers{ viewInfo->subresourceRange.aspectMask
+					, 0u
+					, layer
+					, 1u };
+
+				for ( auto level = layout.baseLevel;
+					level < layout.baseLevel + viewInfo->subresourceRange.levelCount;
+					++level )
+				{
+					subresourceLayers.mipLevel = level;
+					auto offset = image.getLayout().layerMipOffset( layer
+						, level );
+					copies.push_back( { offset
+						, 0u
+						, 0u
+						, subresourceLayers
+						, VkOffset3D{}
+						, VkExtent3D{ std::max( 1u, baseDimensions.width >> level )
+							, std::max( 1u, baseDimensions.height >> level )
+							, 1u } } );
 				}
-				, viewInfo->subresourceRange.levelCount );
-			staging->uploadTextureData( *device.graphicsQueue
-				, *device.graphicsCommandPool
-				, VkFormat( image.getPixelFormat() )
-				, buffer.data()
-				, view );
+			}
+
+			auto commandBuffer = device.graphicsCommandPool->createCommandBuffer( image.getName() + "ImageUpload"
+				, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
+			commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+			commandBuffer->beginDebugBlock( { "Upload " + image.getName() + " Image"
+				, { 0.5f, 0.5f, 0.5f, 1.0f } } );
+			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
+				, VK_PIPELINE_STAGE_TRANSFER_BIT
+				, texture.makeTransition( VK_IMAGE_LAYOUT_UNDEFINED
+					, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+					, viewInfo->subresourceRange ) );
+			commandBuffer->copyToImage( copies, *buffer, texture );
+			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+				, texture.makeTransition( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+					, viewInfo->subresourceRange ) );
+			commandBuffer->endDebugBlock();
+			commandBuffer->end();
+			auto fence = device.device->createFence();
+			device.graphicsQueue->submit( *commandBuffer
+				, fence.get() );
+			fence->wait( ashes::MaxTimeout );
 		}
 
 		auto updateMipLevels( bool genNeeded
