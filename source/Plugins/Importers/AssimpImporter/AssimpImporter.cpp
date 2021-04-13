@@ -366,13 +366,27 @@ namespace C3dAssimp
 			, MeshImporter const & importer
 			, aiString const & spcTexName )
 		{
-			aiString metTexName;
-			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_METALNESS, 0 ), metTexName );
-			aiString rghTexName;
-			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_DIFFUSE_ROUGHNESS, 0 ), rghTexName );
+			if ( aiGetVersionMajor() >= 4u )
+			{
+				static int constexpr TextureType_METALNESS = 15;
+				static int constexpr TextureType_DIFFUSE_ROUGHNESS = 16;
 
-			doLoadTexture( metTexName, pass, TextureConfiguration::MetalnessTexture, importer );
-			doLoadTexture( rghTexName, pass, TextureConfiguration::RoughnessTexture, importer );
+				aiString metTexName;
+				aiMaterial.Get( AI_MATKEY_TEXTURE( TextureType_METALNESS, 0 ), metTexName );
+				aiString rghTexName;
+				aiMaterial.Get( AI_MATKEY_TEXTURE( TextureType_DIFFUSE_ROUGHNESS, 0 ), rghTexName );
+
+				doLoadTexture( metTexName, pass, TextureConfiguration::MetalnessTexture, importer );
+				doLoadTexture( rghTexName, pass, TextureConfiguration::RoughnessTexture, importer );
+			}
+			else
+			{
+				aiString rghTexName;
+				aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_SHININESS, 0 ), rghTexName );
+
+				doLoadTexture( spcTexName, pass, TextureConfiguration::SpecularTexture, importer );
+				doLoadTexture( rghTexName, pass, TextureConfiguration::GlossinessTexture, importer );
+			}
 		}
 
 		void doProcessPassTextures( SpecularGlossinessPbrPass & pass
@@ -418,7 +432,12 @@ namespace C3dAssimp
 			aiString opaTexName;
 			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_OPACITY, 0 ), opaTexName );
 			aiString occTexName;
-			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_AMBIENT_OCCLUSION, 0 ), occTexName );
+
+			if ( aiGetVersionMajor() >= 4u )
+			{
+				static int constexpr TextureType_AMBIENT_OCCLUSION = 17;
+				aiMaterial.Get( AI_MATKEY_TEXTURE( TextureType_AMBIENT_OCCLUSION, 0 ), occTexName );
+			}
 
 			if ( difTexName.length > 0
 				&& std::string( difTexName.C_Str() ).find( "_Cine_" ) != castor::String::npos
