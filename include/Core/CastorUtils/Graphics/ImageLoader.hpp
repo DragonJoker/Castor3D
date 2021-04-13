@@ -104,7 +104,7 @@ namespace castor
 	class ImageLoader
 	{
 	public:
-		CU_API ImageLoader();
+		CU_API ImageLoader( PxCompressionSupport support = {} );
 		CU_API ~ImageLoader();
 		/**
 		 *\~english
@@ -200,6 +200,16 @@ namespace castor
 			, String const & imageFormat
 			, uint8_t const * data
 			, uint32_t size )const;
+
+		void setCompressionSupport( PxCompressionSupport support )
+		{
+			m_options.support = std::move( support );
+		}
+
+		PxBufferConvertOptions const & getOptions()const
+		{
+			return m_options;
+		}
 
 	private:
 		CU_API void checkData( uint8_t const * data

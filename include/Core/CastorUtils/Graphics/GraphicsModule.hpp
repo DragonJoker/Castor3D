@@ -11,9 +11,6 @@ namespace castor
 {
 	/**@name Graphics */
 	//@{
-	using X8UGetter = uint8_t( * )( uint8_t const * );
-	using X8SGetter = int8_t( * )( uint8_t const * );
-	using X32FGetter = float( * )( uint8_t const * );
 	/**
 	\~english
 	\brief Pixel format enumeration
@@ -714,6 +711,201 @@ namespace castor
 		: public std::false_type
 	{
 	};
+	/**
+	 *\~english
+	 *\brief		Helper struct to tell if a pixel format uses unsigned 8 bits components.
+	 *\~french
+	 *\brief		Structure d'aide permettant de dire si un format de pixels utilise des composantes en 8 bits unsigned.
+	 */
+	template< PixelFormat PixelFormatT >
+	struct Is8UComponents
+		: public std::false_type
+	{
+	};
+	template< PixelFormat PixelFormatT >
+	static bool constexpr is8UComponentsV = Is8UComponents< PixelFormatT >::value;
+	/**
+	 *\~english
+	 *\brief		Helper struct to tell if a pixel format uses unsigned 16 bits components.
+	 *\~french
+	 *\brief		Structure d'aide permettant de dire si un format de pixels utilise des composantes en 16 bits unsigned.
+	 */
+	template< PixelFormat PixelFormatT >
+	struct Is16UComponents
+		: public std::false_type
+	{
+	};
+	template< PixelFormat PixelFormatT >
+	static bool constexpr is16UComponentsV = Is16UComponents< PixelFormatT >::value;
+	/**
+	 *\~english
+	 *\brief		Helper struct to tell if a pixel format uses unsigned 32 bits components.
+	 *\~french
+	 *\brief		Structure d'aide permettant de dire si un format de pixels utilise des composantes en 32 bits unsigned.
+	 */
+	template< PixelFormat PixelFormatT >
+	struct Is32UComponents
+		: public std::false_type
+	{
+	};
+	template< PixelFormat PixelFormatT >
+	static bool constexpr is32UComponentsV = Is32UComponents< PixelFormatT >::value;
+	/**
+	 *\~english
+	 *\brief		Helper struct to tell if a pixel format uses unsigned 64 bits components.
+	 *\~french
+	 *\brief		Structure d'aide permettant de dire si un format de pixels utilise des composantes en 64 bits unsigned.
+	 */
+	template< PixelFormat PixelFormatT >
+	struct Is64UComponents
+		: public std::false_type
+	{
+	};
+	template< PixelFormat PixelFormatT >
+	static bool constexpr is64UComponentsV = Is64UComponents< PixelFormatT >::value;
+	/**
+	 *\~english
+	 *\brief		Helper struct to tell if a pixel format uses signed 8 bits components.
+	 *\~french
+	 *\brief		Structure d'aide permettant de dire si un format de pixels utilise des composantes en 8 bits signed.
+	 */
+	template< PixelFormat PixelFormatT >
+	struct Is8SComponents
+		: public std::false_type
+	{
+	};
+	template< PixelFormat PixelFormatT >
+	static bool constexpr is8SComponentsV = Is8SComponents< PixelFormatT >::value;
+	/**
+	 *\~english
+	 *\brief		Helper struct to tell if a pixel format uses signed 16 bits components.
+	 *\~french
+	 *\brief		Structure d'aide permettant de dire si un format de pixels utilise des composantes en 16 bits signed.
+	 */
+	template< PixelFormat PixelFormatT >
+	struct Is16SComponents
+		: public std::false_type
+	{
+	};
+	template< PixelFormat PixelFormatT >
+	static bool constexpr is16SComponentsV = Is16SComponents< PixelFormatT >::value;
+	/**
+	 *\~english
+	 *\brief		Helper struct to tell if a pixel format uses signed 32 bits components.
+	 *\~french
+	 *\brief		Structure d'aide permettant de dire si un format de pixels utilise des composantes en 32 bits signed.
+	 */
+	template< PixelFormat PixelFormatT >
+	struct Is32SComponents
+		: public std::false_type
+	{
+	};
+	template< PixelFormat PixelFormatT >
+	static bool constexpr is32SComponentsV = Is32SComponents< PixelFormatT >::value;
+	/**
+	 *\~english
+	 *\brief		Helper struct to tell if a pixel format uses signed 64 bits components.
+	 *\~french
+	 *\brief		Structure d'aide permettant de dire si un format de pixels utilise des composantes en 64 bits signed.
+	 */
+	template< PixelFormat PixelFormatT >
+	struct Is64SComponents
+		: public std::false_type
+	{
+	};
+	template< PixelFormat PixelFormatT >
+	static bool constexpr is64SComponentsV = Is64SComponents< PixelFormatT >::value;
+	/**
+	 *\~english
+	 *\brief		Helper struct to tell if a pixel format uses floating point 16 bits components.
+	 *\~french
+	 *\brief		Structure d'aide permettant de dire si un format de pixels utilise des composantes en 16 bits floating point.
+	 */
+	template< PixelFormat PixelFormatT >
+	struct Is16FComponents
+		: public std::false_type
+	{
+	};
+	template< PixelFormat PixelFormatT >
+	static bool constexpr is16FComponentsV = Is16FComponents< PixelFormatT >::value;
+	/**
+	 *\~english
+	 *\brief		Helper struct to tell if a pixel format uses floating point 32 bits components.
+	 *\~french
+	 *\brief		Structure d'aide permettant de dire si un format de pixels utilise des composantes en 32 bits floating point.
+	 */
+	template< PixelFormat PixelFormatT >
+	struct Is32FComponents
+		: public std::false_type
+	{
+	};
+	template< PixelFormat PixelFormatT >
+	static bool constexpr is32FComponentsV = Is32FComponents< PixelFormatT >::value;
+	/**
+	 *\~english
+	 *\brief		Helper struct to tell if a pixel format uses floating point 64 bits components.
+	 *\~french
+	 *\brief		Structure d'aide permettant de dire si un format de pixels utilise des composantes en 64 bits floating point.
+	 */
+	template< PixelFormat PixelFormatT >
+	struct Is64FComponents
+		: public std::false_type
+	{
+	};
+	template< PixelFormat PixelFormatT >
+	static bool constexpr is64FComponentsV = Is64FComponents< PixelFormatT >::value;
+	/**
+	 *\~english
+	 *\brief		Helper struct to tell if a pixel format uses unsigned 16 bits depth component.
+	 *\~french
+	 *\brief		Structure d'aide permettant de dire si un format de pixels utilise une composante profondeur en 16 bits unsigned.
+	 */
+	template< PixelFormat PixelFormatT >
+	struct IsD16UComponent
+		: public std::false_type
+	{
+	};
+	template< PixelFormat PixelFormatT >
+	static bool constexpr isD16UComponentV = IsD16UComponent< PixelFormatT >::value;
+	/**
+	 *\~english
+	 *\brief		Helper struct to tell if a pixel format uses unsigned 24 bits depth component.
+	 *\~french
+	 *\brief		Structure d'aide permettant de dire si un format de pixels utilise une composante profondeur en 24 bits unsigned.
+	 */
+	template< PixelFormat PixelFormatT >
+	struct IsD24UComponent
+		: public std::false_type
+	{
+	};
+	template< PixelFormat PixelFormatT >
+	static bool constexpr isD24UComponentV = IsD24UComponent< PixelFormatT >::value;
+	/**
+	 *\~english
+	 *\brief		Helper struct to tell if a pixel format uses floating point 32 bits depth component.
+	 *\~french
+	 *\brief		Structure d'aide permettant de dire si un format de pixels utilise une composante profondeur en 32 bits floating point.
+	 */
+	template< PixelFormat PixelFormatT >
+	struct IsD32FComponent
+		: public std::false_type
+	{
+	};
+	template< PixelFormat PixelFormatT >
+	static bool constexpr isD32FComponentV = IsD32FComponent< PixelFormatT >::value;
+	/**
+	 *\~english
+	 *\brief		Helper struct to tell if a pixel format uses only an unsigned 8 bits stencil component.
+	 *\~french
+	 *\brief		Structure d'aide permettant de dire si un format de pixels utilise uniquement une composante stencil en 8 bits stencil.
+	 */
+	template< PixelFormat PixelFormatT >
+	struct IsS8UComponent
+		: public std::false_type
+	{
+	};
+	template< PixelFormat PixelFormatT >
+	static bool constexpr isS8UComponentV = IsS8UComponent< PixelFormatT >::value;
 	/**
 	\~english
 	\brief		Position class

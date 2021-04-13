@@ -487,6 +487,12 @@ namespace castor3d
 		m_memoryProperties = gpu.getMemoryProperties();
 		m_properties = gpu.getProperties();
 		m_features = gpu.getFeatures();
+
+		getOwner()->getImageLoader().setCompressionSupport( { m_features.textureCompressionBC == VK_TRUE
+			, m_features.textureCompressionBC == VK_TRUE
+			, m_features.textureCompressionBC == VK_TRUE
+			, m_features.textureCompressionBC == VK_TRUE
+			, false } );
 	}
 
 	RenderSystem::~RenderSystem()

@@ -14,7 +14,7 @@ namespace castor
 		Image postProcess( PxBufferConvertOptions const & options
 			, Image image )
 		{
-			auto dstFormat = PF::getCompressed( image.getPixelFormat() );
+			auto dstFormat = options.getCompressed( image.getPixelFormat() );
 
 			if ( dstFormat == image.getPixelFormat() )
 			{
@@ -76,7 +76,8 @@ namespace castor
 
 	//*********************************************************************************************
 
-	ImageLoader::ImageLoader()
+	ImageLoader::ImageLoader( PxCompressionSupport support )
+		: m_options{ std::move( support ) }
 	{
 	}
 
@@ -159,8 +160,6 @@ namespace castor
 			throw;
 		}
 	}
-
-	//*********************************************************************************************
 
 	Image ImageLoader::load( String const & name
 		, String const & imageFormat

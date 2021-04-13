@@ -68,7 +68,8 @@ namespace castor
 				, 0u
 				, buffer.getLayers()
 				, 0u
-				, buffer.getLevels() }
+				, buffer.getLevels()
+				, buffer.getAlign() }
 		{
 		}
 

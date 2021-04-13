@@ -353,6 +353,111 @@ namespace castor
 				&& format <= PixelFormat::eASTC_12x12_SRGB_BLOCK;
 		}
 
+		namespace
+		{
+			template< PixelFormat PFSrc >
+			void compressBufferT( PxBufferConvertOptions const * options
+				, Size const & srcDimensions
+				, Size const & dstDimensions
+				, uint8_t const * srcBuffer
+				, uint32_t srcSize
+				, PixelFormat dstFormat
+				, uint8_t * dstBuffer
+				, uint32_t dstSize )
+			{
+				switch ( dstFormat )
+				{
+#if CU_UseCVTT
+				case PixelFormat::eBC1_RGB_UNORM_BLOCK:
+				case PixelFormat::eBC1_RGB_SRGB_BLOCK:
+				case PixelFormat::eBC1_RGBA_UNORM_BLOCK:
+				case PixelFormat::eBC1_RGBA_SRGB_BLOCK:
+				case PixelFormat::eBC3_UNORM_BLOCK:
+				case PixelFormat::eBC3_SRGB_BLOCK:
+				case PixelFormat::eBC2_UNORM_BLOCK:
+				case PixelFormat::eBC2_SRGB_BLOCK:
+				case PixelFormat::eBC4_UNORM_BLOCK:
+				case PixelFormat::eBC5_UNORM_BLOCK:
+				case PixelFormat::eBC7_UNORM_BLOCK:
+				case PixelFormat::eBC7_SRGB_BLOCK:
+					{
+						CVTTCompressorU< PFSrc > compressor{ options
+							, PF::getBytesPerPixel( PFSrc ) };
+						compressor.compress( dstFormat
+							, srcDimensions
+							, dstDimensions
+							, srcBuffer
+							, srcSize
+							, dstBuffer
+							, dstSize );
+					}
+					break;
+				case PixelFormat::eBC4_SNORM_BLOCK:
+				case PixelFormat::eBC5_SNORM_BLOCK:
+					{
+						CVTTCompressorS< PFSrc > compressor{ options
+							, PF::getBytesPerPixel( PFSrc ) };
+						compressor.compress( dstFormat
+							, srcDimensions
+							, dstDimensions
+							, srcBuffer
+							, srcSize
+							, dstBuffer
+							, dstSize );
+					}
+					break;
+				case PixelFormat::eBC6H_UFLOAT_BLOCK:
+				case PixelFormat::eBC6H_SFLOAT_BLOCK:
+					{
+						CVTTCompressorF< PFSrc > compressor{ options
+							, PF::getBytesPerPixel( PFSrc ) };
+						compressor.compress( dstFormat
+							, srcDimensions
+							, dstDimensions
+							, srcBuffer
+							, srcSize
+							, dstBuffer
+							, dstSize );
+					}
+					break;
+#else
+				case PixelFormat::eBC1_RGB_UNORM_BLOCK:
+				case PixelFormat::eBC1_RGB_SRGB_BLOCK:
+					{
+						BC1Compressor compressor{ PF::getBytesPerPixel( srcFormat )
+							, PF::getR8U( srcFormat )
+							, PF::getG8U( srcFormat )
+							, PF::getB8U( srcFormat )
+							, PF::getA8U( srcFormat ) };
+						compressor.compress( srcDimensions
+							, dstDimensions
+							, srcBuffer
+							, srcSize
+							, dstBuffer
+							, dstSize );
+					}
+					break;
+				case PixelFormat::eBC3_UNORM_BLOCK:
+				case PixelFormat::eBC3_SRGB_BLOCK:
+					{
+						BC3Compressor compressor{ PF::getBytesPerPixel( srcFormat )
+							, PF::getR8U( srcFormat )
+							, PF::getG8U( srcFormat )
+							, PF::getB8U( srcFormat )
+							, PF::getA8U( srcFormat ) };
+						compressor.compress( srcDimensions
+							, dstDimensions
+							, srcBuffer
+							, srcSize
+							, dstBuffer
+							, dstSize );
+					}
+					break;
+#endif
+				}
+			}
+		}
+
 		void compressBuffer( PxBufferConvertOptions const * options
 			, Size const & srcDimensions
 			, Size const & dstDimensions
@@ -363,107 +468,373 @@ namespace castor
 			, uint8_t * dstBuffer
 			, uint32_t dstSize )
 		{
-			switch ( dstFormat )
+			switch ( srcFormat )
 			{
-#if CU_UseCVTT
-			case PixelFormat::eBC1_RGB_UNORM_BLOCK:
-			case PixelFormat::eBC1_RGB_SRGB_BLOCK:
-			case PixelFormat::eBC1_RGBA_UNORM_BLOCK:
-			case PixelFormat::eBC1_RGBA_SRGB_BLOCK:
-			case PixelFormat::eBC3_UNORM_BLOCK:
-			case PixelFormat::eBC3_SRGB_BLOCK:
-			case PixelFormat::eBC2_UNORM_BLOCK:
-			case PixelFormat::eBC2_SRGB_BLOCK:
-			case PixelFormat::eBC4_UNORM_BLOCK:
-			case PixelFormat::eBC5_UNORM_BLOCK:
-			case PixelFormat::eBC7_UNORM_BLOCK:
-			case PixelFormat::eBC7_SRGB_BLOCK:
-				{
-					CVTTCompressorU compressor{ options
-						, PF::getBytesPerPixel( srcFormat )
-						, PF::getR8U( srcFormat )
-						, PF::getG8U( srcFormat )
-						, PF::getB8U( srcFormat )
-						, PF::getA8U( srcFormat ) };
-					compressor.compress( dstFormat
-						, srcDimensions
-						, dstDimensions
-						, srcBuffer
-						, srcSize
-						, dstBuffer
-						, dstSize );
-				}
+			case PixelFormat::eR4G4_UNORM:
+				compressBufferT< PixelFormat::eR4G4_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
-			case PixelFormat::eBC4_SNORM_BLOCK:
-			case PixelFormat::eBC5_SNORM_BLOCK:
-				{
-					CVTTCompressorS compressor{ options
-						, PF::getBytesPerPixel( srcFormat )
-						, PF::getR8S( srcFormat )
-						, PF::getG8S( srcFormat )
-						, PF::getB8S( srcFormat )
-						, PF::getA8S( srcFormat ) };
-					compressor.compress( dstFormat
-						, srcDimensions
-						, dstDimensions
-						, srcBuffer
-						, srcSize
-						, dstBuffer
-						, dstSize );
-				}
+			case PixelFormat::eR4G4B4A4_UNORM:
+				compressBufferT< PixelFormat::eR4G4B4A4_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
-			case PixelFormat::eBC6H_UFLOAT_BLOCK:
-			case PixelFormat::eBC6H_SFLOAT_BLOCK:
-				{
-					CVTTCompressorF compressor{ options
-						, PF::getBytesPerPixel( srcFormat )
-						, PF::getR32F( srcFormat )
-						, PF::getG32F( srcFormat )
-						, PF::getB32F( srcFormat )
-						, PF::getA32F( srcFormat ) };
-					compressor.compress( dstFormat
-						, srcDimensions
-						, dstDimensions
-						, srcBuffer
-						, srcSize
-						, dstBuffer
-						, dstSize );
-				}
+			case PixelFormat::eB4G4R4A4_UNORM:
+				compressBufferT< PixelFormat::eB4G4R4A4_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
-#else
-			case PixelFormat::eBC1_RGB_UNORM_BLOCK:
-			case PixelFormat::eBC1_RGB_SRGB_BLOCK:
-				{
-					BC1Compressor compressor{ PF::getBytesPerPixel( srcFormat )
-						, PF::getR8U( srcFormat )
-						, PF::getG8U( srcFormat )
-						, PF::getB8U( srcFormat )
-						, PF::getA8U( srcFormat ) };
-					compressor.compress( srcDimensions
-						, dstDimensions
-						, srcBuffer
-						, srcSize
-						, dstBuffer
-						, dstSize );
-				}
+			case PixelFormat::eR5G6B5_UNORM:
+				compressBufferT< PixelFormat::eR5G6B5_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
-			case PixelFormat::eBC3_UNORM_BLOCK:
-			case PixelFormat::eBC3_SRGB_BLOCK:
-				{
-					BC3Compressor compressor{ PF::getBytesPerPixel( srcFormat )
-						, PF::getR8U( srcFormat )
-						, PF::getG8U( srcFormat )
-						, PF::getB8U( srcFormat )
-						, PF::getA8U( srcFormat ) };
-					compressor.compress( srcDimensions
-						, dstDimensions
-						, srcBuffer
-						, srcSize
-						, dstBuffer
-						, dstSize );
-				}
+			case PixelFormat::eB5G6R5_UNORM:
+				compressBufferT< PixelFormat::eB5G6R5_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
-#endif
+			case PixelFormat::eR5G5B5A1_UNORM:
+				compressBufferT< PixelFormat::eR5G5B5A1_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eB5G5R5A1_UNORM:
+				compressBufferT< PixelFormat::eB5G5R5A1_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eA1R5G5B5_UNORM:
+				compressBufferT< PixelFormat::eA1R5G5B5_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR8_UNORM:
+				compressBufferT< PixelFormat::eR8_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR8_SNORM:
+				compressBufferT< PixelFormat::eR8_SNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR8_USCALED:
+				compressBufferT< PixelFormat::eR8_USCALED >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR8_SSCALED:
+				compressBufferT< PixelFormat::eR8_SSCALED >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR8_UINT:
+				compressBufferT< PixelFormat::eR8_UINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR8_SINT:
+				compressBufferT< PixelFormat::eR8_SINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR8_SRGB:
+				compressBufferT< PixelFormat::eR8_SRGB >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR8G8_UNORM:
+				compressBufferT< PixelFormat::eR8G8_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR8G8_SNORM:
+				compressBufferT< PixelFormat::eR8G8_SNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR8G8_USCALED:
+				compressBufferT< PixelFormat::eR8G8_USCALED >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR8G8_SSCALED:
+				compressBufferT< PixelFormat::eR8G8_SSCALED >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR8G8_UINT:
+				compressBufferT< PixelFormat::eR8G8_UINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR8G8_SINT:
+				compressBufferT< PixelFormat::eR8G8_SINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR8G8_SRGB:
+				compressBufferT< PixelFormat::eR8G8_SRGB >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR8G8B8_UNORM:
+				compressBufferT< PixelFormat::eR8G8B8_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR8G8B8_SNORM:
+				compressBufferT< PixelFormat::eR8G8B8_SNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR8G8B8_USCALED:
+				compressBufferT< PixelFormat::eR8G8B8_USCALED >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR8G8B8_SSCALED:
+				compressBufferT< PixelFormat::eR8G8B8_SSCALED >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR8G8B8_UINT:
+				compressBufferT< PixelFormat::eR8G8B8_UINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR8G8B8_SINT:
+				compressBufferT< PixelFormat::eR8G8B8_SINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR8G8B8_SRGB:
+				compressBufferT< PixelFormat::eR8G8B8_SRGB >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eB8G8R8_UNORM:
+				compressBufferT< PixelFormat::eB8G8R8_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eB8G8R8_SNORM:
+				compressBufferT< PixelFormat::eB8G8R8_SNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eB8G8R8_USCALED:
+				compressBufferT< PixelFormat::eB8G8R8_USCALED >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eB8G8R8_SSCALED:
+				compressBufferT< PixelFormat::eB8G8R8_SSCALED >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eB8G8R8_UINT:
+				compressBufferT< PixelFormat::eB8G8R8_UINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eB8G8R8_SINT:
+				compressBufferT< PixelFormat::eB8G8R8_SINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eB8G8R8_SRGB:
+				compressBufferT< PixelFormat::eB8G8R8_SRGB >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR8G8B8A8_UNORM:
+				compressBufferT< PixelFormat::eR8G8B8A8_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR8G8B8A8_SNORM:
+				compressBufferT< PixelFormat::eR8G8B8A8_SNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR8G8B8A8_USCALED:
+				compressBufferT< PixelFormat::eR8G8B8A8_USCALED >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR8G8B8A8_SSCALED:
+				compressBufferT< PixelFormat::eR8G8B8A8_SSCALED >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR8G8B8A8_UINT:
+				compressBufferT< PixelFormat::eR8G8B8A8_UINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR8G8B8A8_SINT:
+				compressBufferT< PixelFormat::eR8G8B8A8_SINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR8G8B8A8_SRGB:
+				compressBufferT< PixelFormat::eR8G8B8A8_SRGB >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eB8G8R8A8_UNORM:
+				compressBufferT< PixelFormat::eB8G8R8A8_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eB8G8R8A8_SNORM:
+				compressBufferT< PixelFormat::eB8G8R8A8_SNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eB8G8R8A8_USCALED:
+				compressBufferT< PixelFormat::eB8G8R8A8_USCALED >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eB8G8R8A8_SSCALED:
+				compressBufferT< PixelFormat::eB8G8R8A8_SSCALED >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eB8G8R8A8_UINT:
+				compressBufferT< PixelFormat::eB8G8R8A8_UINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eB8G8R8A8_SINT:
+				compressBufferT< PixelFormat::eB8G8R8A8_SINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eB8G8R8A8_SRGB:
+				compressBufferT< PixelFormat::eB8G8R8A8_SRGB >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eA8B8G8R8_UNORM:
+				compressBufferT< PixelFormat::eA8B8G8R8_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eA8B8G8R8_SNORM:
+				compressBufferT< PixelFormat::eA8B8G8R8_SNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eA8B8G8R8_USCALED:
+				compressBufferT< PixelFormat::eA8B8G8R8_USCALED >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eA8B8G8R8_SSCALED:
+				compressBufferT< PixelFormat::eA8B8G8R8_SSCALED >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eA8B8G8R8_UINT:
+				compressBufferT< PixelFormat::eA8B8G8R8_UINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eA8B8G8R8_SINT:
+				compressBufferT< PixelFormat::eA8B8G8R8_SINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eA8B8G8R8_SRGB:
+				compressBufferT< PixelFormat::eA8B8G8R8_SRGB >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eA2R10G10B10_UNORM:
+				compressBufferT< PixelFormat::eA2R10G10B10_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eA2R10G10B10_SNORM:
+				compressBufferT< PixelFormat::eA2R10G10B10_SNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eA2R10G10B10_USCALED:
+				compressBufferT< PixelFormat::eA2R10G10B10_USCALED >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eA2R10G10B10_SSCALED:
+				compressBufferT< PixelFormat::eA2R10G10B10_SSCALED >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eA2R10G10B10_UINT:
+				compressBufferT< PixelFormat::eA2R10G10B10_UINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eA2R10G10B10_SINT:
+				compressBufferT< PixelFormat::eA2R10G10B10_SINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eA2B10G10R10_UNORM:
+				compressBufferT< PixelFormat::eA2B10G10R10_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eA2B10G10R10_SNORM:
+				compressBufferT< PixelFormat::eA2B10G10R10_SNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eA2B10G10R10_USCALED:
+				compressBufferT< PixelFormat::eA2B10G10R10_USCALED >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eA2B10G10R10_SSCALED:
+				compressBufferT< PixelFormat::eA2B10G10R10_SSCALED >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eA2B10G10R10_UINT:
+				compressBufferT< PixelFormat::eA2B10G10R10_UINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eA2B10G10R10_SINT:
+				compressBufferT< PixelFormat::eA2B10G10R10_SINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16_UNORM:
+				compressBufferT< PixelFormat::eR16_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16_SNORM:
+				compressBufferT< PixelFormat::eR16_SNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16_USCALED:
+				compressBufferT< PixelFormat::eR16_USCALED >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16_SSCALED:
+				compressBufferT< PixelFormat::eR16_SSCALED >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16_UINT:
+				compressBufferT< PixelFormat::eR16_UINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16_SINT:
+				compressBufferT< PixelFormat::eR16_SINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16_SFLOAT:
+				compressBufferT< PixelFormat::eR16_SFLOAT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16G16_UNORM:
+				compressBufferT< PixelFormat::eR16G16_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16G16_SNORM:
+				compressBufferT< PixelFormat::eR16G16_SNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16G16_USCALED:
+				compressBufferT< PixelFormat::eR16G16_USCALED >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16G16_SSCALED:
+				compressBufferT< PixelFormat::eR16G16_SSCALED >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16G16_UINT:
+				compressBufferT< PixelFormat::eR16G16_UINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16G16_SINT:
+				compressBufferT< PixelFormat::eR16G16_SINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16G16_SFLOAT:
+				compressBufferT< PixelFormat::eR16G16_SFLOAT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16G16B16_UNORM:
+				compressBufferT< PixelFormat::eR16G16B16_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16G16B16_SNORM:
+				compressBufferT< PixelFormat::eR16G16B16_SNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16G16B16_USCALED:
+				compressBufferT< PixelFormat::eR16G16B16_USCALED >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16G16B16_SSCALED:
+				compressBufferT< PixelFormat::eR16G16B16_SSCALED >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16G16B16_UINT:
+				compressBufferT< PixelFormat::eR16G16B16_UINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16G16B16_SINT:
+				compressBufferT< PixelFormat::eR16G16B16_SINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16G16B16_SFLOAT:
+				compressBufferT< PixelFormat::eR16G16B16_SFLOAT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16G16B16A16_UNORM:
+				compressBufferT< PixelFormat::eR16G16B16A16_UNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16G16B16A16_SNORM:
+				compressBufferT< PixelFormat::eR16G16B16A16_SNORM >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16G16B16A16_USCALED:
+				compressBufferT< PixelFormat::eR16G16B16A16_USCALED >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16G16B16A16_SSCALED:
+				compressBufferT< PixelFormat::eR16G16B16A16_SSCALED >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16G16B16A16_UINT:
+				compressBufferT< PixelFormat::eR16G16B16A16_UINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16G16B16A16_SINT:
+				compressBufferT< PixelFormat::eR16G16B16A16_SINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16G16B16A16_SFLOAT:
+				compressBufferT< PixelFormat::eR16G16B16A16_SFLOAT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR32_UINT:
+				compressBufferT< PixelFormat::eR32_UINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR32_SINT:
+				compressBufferT< PixelFormat::eR32_SINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR32_SFLOAT:
+				compressBufferT< PixelFormat::eR32_SFLOAT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR32G32_UINT:
+				compressBufferT< PixelFormat::eR32G32_UINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR32G32_SINT:
+				compressBufferT< PixelFormat::eR32G32_SINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR32G32_SFLOAT:
+				compressBufferT< PixelFormat::eR32G32_SFLOAT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR32G32B32_UINT:
+				compressBufferT< PixelFormat::eR32G32B32_UINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR32G32B32_SINT:
+				compressBufferT< PixelFormat::eR32G32B32_SINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR32G32B32_SFLOAT:
+				compressBufferT< PixelFormat::eR32G32B32_SFLOAT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR32G32B32A32_UINT:
+				compressBufferT< PixelFormat::eR32G32B32A32_UINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR32G32B32A32_SINT:
+				compressBufferT< PixelFormat::eR32G32B32A32_SINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR32G32B32A32_SFLOAT:
+				compressBufferT< PixelFormat::eR32G32B32A32_SFLOAT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR64_UINT:
+				compressBufferT< PixelFormat::eR64_UINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR64_SINT:
+				compressBufferT< PixelFormat::eR64_SINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR64_SFLOAT:
+				compressBufferT< PixelFormat::eR64_SFLOAT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR64G64_UINT:
+				compressBufferT< PixelFormat::eR64G64_UINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR64G64_SINT:
+				compressBufferT< PixelFormat::eR64G64_SINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR64G64_SFLOAT:
+				compressBufferT< PixelFormat::eR64G64_SFLOAT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR64G64B64_UINT:
+				compressBufferT< PixelFormat::eR64G64B64_UINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR64G64B64_SINT:
+				compressBufferT< PixelFormat::eR64G64B64_SINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR64G64B64_SFLOAT:
+				compressBufferT< PixelFormat::eR64G64B64_SFLOAT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR64G64B64A64_UINT:
+				compressBufferT< PixelFormat::eR64G64B64A64_UINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR64G64B64A64_SINT:
+				compressBufferT< PixelFormat::eR64G64B64A64_SINT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR64G64B64A64_SFLOAT:
+				compressBufferT< PixelFormat::eR64G64B64A64_SFLOAT >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+			default:
+				break;
 			}
 		}
 
@@ -667,582 +1038,6 @@ namespace castor
 				, PixelFormat::eR8_UNORM
 				, srcBuffer->getConstPtr()
 				, srcBuffer->getFormat() );
-		}
-
-		X8UGetter getR8U( PixelFormat format )
-		{
-			switch ( format )
-			{
-			case PixelFormat::eR5G6B5_UNORM:
-				return PixelComponents< PixelFormat::eR5G6B5_UNORM >::R8U;
-			case PixelFormat::eR5G5B5A1_UNORM:
-				return PixelComponents< PixelFormat::eR5G5B5A1_UNORM >::R8U;
-			case PixelFormat::eR8_UNORM:
-				return PixelComponents< PixelFormat::eR8_UNORM >::R8U;
-			case PixelFormat::eR8G8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8_UNORM >::R8U;
-			case PixelFormat::eR8G8B8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8B8_UNORM >::R8U;
-			case PixelFormat::eR8G8B8_SRGB:
-				return PixelComponents< PixelFormat::eR8G8B8_SRGB >::R8U;
-			case PixelFormat::eB8G8R8_UNORM:
-				return PixelComponents< PixelFormat::eB8G8R8_UNORM >::R8U;
-			case PixelFormat::eB8G8R8_SRGB:
-				return PixelComponents< PixelFormat::eB8G8R8_SRGB >::R8U;
-			case PixelFormat::eR8G8B8A8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8B8A8_UNORM >::R8U;
-			case PixelFormat::eR8G8B8A8_SRGB:
-				return PixelComponents< PixelFormat::eR8G8B8A8_SRGB >::R8U;
-			case PixelFormat::eB8G8R8A8_UNORM:
-				return PixelComponents< PixelFormat::eB8G8R8A8_UNORM >::R8U;
-			case PixelFormat::eA8B8G8R8_UNORM:
-				return PixelComponents< PixelFormat::eA8B8G8R8_UNORM >::R8U;
-			case PixelFormat::eA8B8G8R8_SRGB:
-				return PixelComponents< PixelFormat::eA8B8G8R8_SRGB >::R8U;
-			case PixelFormat::eR16G16B16_SFLOAT:
-				return PixelComponents< PixelFormat::eR16G16B16_SFLOAT >::R8U;
-			case PixelFormat::eR16G16B16A16_SFLOAT:
-				return PixelComponents< PixelFormat::eR16G16B16A16_SFLOAT >::R8U;
-			case PixelFormat::eR32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32_SFLOAT >::R8U;
-			case PixelFormat::eR32G32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32_SFLOAT >::R8U;
-			case PixelFormat::eR32G32B32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32B32_SFLOAT >::R8U;
-			case PixelFormat::eR32G32B32A32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32B32A32_SFLOAT >::R8U;
-			default:
-				CU_Failure( "Unsupported pixel format for getR8U" );
-				return nullptr;
-			}
-		}
-
-		X8UGetter getG8U( PixelFormat format )
-		{
-			switch ( format )
-			{
-			case PixelFormat::eR5G6B5_UNORM:
-				return PixelComponents< PixelFormat::eR5G6B5_UNORM >::G8U;
-			case PixelFormat::eR5G5B5A1_UNORM:
-				return PixelComponents< PixelFormat::eR5G5B5A1_UNORM >::G8U;
-			case PixelFormat::eR8_UNORM:
-				return PixelComponents< PixelFormat::eR8_UNORM >::G8U;
-			case PixelFormat::eR8G8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8_UNORM >::G8U;
-			case PixelFormat::eR8G8B8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8B8_UNORM >::G8U;
-			case PixelFormat::eR8G8B8_SRGB:
-				return PixelComponents< PixelFormat::eR8G8B8_SRGB >::G8U;
-			case PixelFormat::eB8G8R8_UNORM:
-				return PixelComponents< PixelFormat::eB8G8R8_UNORM >::G8U;
-			case PixelFormat::eB8G8R8_SRGB:
-				return PixelComponents< PixelFormat::eB8G8R8_SRGB >::G8U;
-			case PixelFormat::eR8G8B8A8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8B8A8_UNORM >::G8U;
-			case PixelFormat::eR8G8B8A8_SRGB:
-				return PixelComponents< PixelFormat::eR8G8B8A8_SRGB >::G8U;
-			case PixelFormat::eB8G8R8A8_UNORM:
-				return PixelComponents< PixelFormat::eB8G8R8A8_UNORM >::G8U;
-			case PixelFormat::eA8B8G8R8_UNORM:
-				return PixelComponents< PixelFormat::eA8B8G8R8_UNORM >::G8U;
-			case PixelFormat::eA8B8G8R8_SRGB:
-				return PixelComponents< PixelFormat::eA8B8G8R8_SRGB >::G8U;
-			case PixelFormat::eR16G16B16_SFLOAT:
-				return PixelComponents< PixelFormat::eR16G16B16_SFLOAT >::G8U;
-			case PixelFormat::eR16G16B16A16_SFLOAT:
-				return PixelComponents< PixelFormat::eR16G16B16A16_SFLOAT >::G8U;
-			case PixelFormat::eR32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32_SFLOAT >::G8U;
-			case PixelFormat::eR32G32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32_SFLOAT >::G8U;
-			case PixelFormat::eR32G32B32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32B32_SFLOAT >::G8U;
-			case PixelFormat::eR32G32B32A32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32B32A32_SFLOAT >::G8U;
-			default:
-				CU_Failure( "Unsupported pixel format for getG8U" );
-				return nullptr;
-			}
-		}
-
-		X8UGetter getB8U( PixelFormat format )
-		{
-			switch ( format )
-			{
-			case PixelFormat::eR5G6B5_UNORM:
-				return PixelComponents< PixelFormat::eR5G6B5_UNORM >::B8U;
-			case PixelFormat::eR5G5B5A1_UNORM:
-				return PixelComponents< PixelFormat::eR5G5B5A1_UNORM >::B8U;
-			case PixelFormat::eR8_UNORM:
-				return PixelComponents< PixelFormat::eR8_UNORM >::B8U;
-			case PixelFormat::eR8G8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8_UNORM >::B8U;
-			case PixelFormat::eR8G8B8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8B8_UNORM >::B8U;
-			case PixelFormat::eR8G8B8_SRGB:
-				return PixelComponents< PixelFormat::eR8G8B8_SRGB >::B8U;
-			case PixelFormat::eB8G8R8_UNORM:
-				return PixelComponents< PixelFormat::eB8G8R8_UNORM >::B8U;
-			case PixelFormat::eB8G8R8_SRGB:
-				return PixelComponents< PixelFormat::eB8G8R8_SRGB >::B8U;
-			case PixelFormat::eR8G8B8A8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8B8A8_UNORM >::B8U;
-			case PixelFormat::eR8G8B8A8_SRGB:
-				return PixelComponents< PixelFormat::eR8G8B8A8_SRGB >::B8U;
-			case PixelFormat::eB8G8R8A8_UNORM:
-				return PixelComponents< PixelFormat::eB8G8R8A8_UNORM >::B8U;
-			case PixelFormat::eA8B8G8R8_UNORM:
-				return PixelComponents< PixelFormat::eA8B8G8R8_UNORM >::B8U;
-			case PixelFormat::eA8B8G8R8_SRGB:
-				return PixelComponents< PixelFormat::eA8B8G8R8_SRGB >::B8U;
-			case PixelFormat::eR16G16B16_SFLOAT:
-				return PixelComponents< PixelFormat::eR16G16B16_SFLOAT >::B8U;
-			case PixelFormat::eR16G16B16A16_SFLOAT:
-				return PixelComponents< PixelFormat::eR16G16B16A16_SFLOAT >::B8U;
-			case PixelFormat::eR32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32_SFLOAT >::B8U;
-			case PixelFormat::eR32G32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32_SFLOAT >::B8U;
-			case PixelFormat::eR32G32B32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32B32_SFLOAT >::B8U;
-			case PixelFormat::eR32G32B32A32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32B32A32_SFLOAT >::B8U;
-			default:
-				CU_Failure( "Unsupported pixel format for getB8U" );
-				return nullptr;
-			}
-		}
-
-		X8UGetter getA8U( PixelFormat format )
-		{
-			switch ( format )
-			{
-			case PixelFormat::eR5G6B5_UNORM:
-				return PixelComponents< PixelFormat::eR5G6B5_UNORM >::A8U;
-			case PixelFormat::eR5G5B5A1_UNORM:
-				return PixelComponents< PixelFormat::eR5G5B5A1_UNORM >::A8U;
-			case PixelFormat::eR8_UNORM:
-				return PixelComponents< PixelFormat::eR8_UNORM >::A8U;
-			case PixelFormat::eR8G8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8_UNORM >::A8U;
-			case PixelFormat::eR8G8B8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8B8_UNORM >::A8U;
-			case PixelFormat::eR8G8B8_SRGB:
-				return PixelComponents< PixelFormat::eR8G8B8_SRGB >::A8U;
-			case PixelFormat::eB8G8R8_UNORM:
-				return PixelComponents< PixelFormat::eB8G8R8_UNORM >::A8U;
-			case PixelFormat::eB8G8R8_SRGB:
-				return PixelComponents< PixelFormat::eB8G8R8_SRGB >::A8U;
-			case PixelFormat::eR8G8B8A8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8B8A8_UNORM >::A8U;
-			case PixelFormat::eR8G8B8A8_SRGB:
-				return PixelComponents< PixelFormat::eR8G8B8A8_SRGB >::A8U;
-			case PixelFormat::eB8G8R8A8_UNORM:
-				return PixelComponents< PixelFormat::eB8G8R8A8_UNORM >::A8U;
-			case PixelFormat::eA8B8G8R8_UNORM:
-				return PixelComponents< PixelFormat::eA8B8G8R8_UNORM >::A8U;
-			case PixelFormat::eA8B8G8R8_SRGB:
-				return PixelComponents< PixelFormat::eA8B8G8R8_SRGB >::A8U;
-			case PixelFormat::eR16G16B16_SFLOAT:
-				return PixelComponents< PixelFormat::eR16G16B16_SFLOAT >::A8U;
-			case PixelFormat::eR16G16B16A16_SFLOAT:
-				return PixelComponents< PixelFormat::eR16G16B16A16_SFLOAT >::A8U;
-			case PixelFormat::eR32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32_SFLOAT >::A8U;
-			case PixelFormat::eR32G32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32_SFLOAT >::A8U;
-			case PixelFormat::eR32G32B32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32B32_SFLOAT >::A8U;
-			case PixelFormat::eR32G32B32A32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32B32A32_SFLOAT >::A8U;
-			default:
-				CU_Failure( "Unsupported pixel format for getA8U" );
-				return nullptr;
-			}
-		}
-
-		X8SGetter getR8S( PixelFormat format )
-		{
-			switch ( format )
-			{
-			case PixelFormat::eR5G6B5_UNORM:
-				return PixelComponents< PixelFormat::eR5G6B5_UNORM >::R8S;
-			case PixelFormat::eR5G5B5A1_UNORM:
-				return PixelComponents< PixelFormat::eR5G5B5A1_UNORM >::R8S;
-			case PixelFormat::eR8_UNORM:
-				return PixelComponents< PixelFormat::eR8_UNORM >::R8S;
-			case PixelFormat::eR8G8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8_UNORM >::R8S;
-			case PixelFormat::eR8G8B8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8B8_UNORM >::R8S;
-			case PixelFormat::eR8G8B8_SRGB:
-				return PixelComponents< PixelFormat::eR8G8B8_SRGB >::R8S;
-			case PixelFormat::eB8G8R8_UNORM:
-				return PixelComponents< PixelFormat::eB8G8R8_UNORM >::R8S;
-			case PixelFormat::eB8G8R8_SRGB:
-				return PixelComponents< PixelFormat::eB8G8R8_SRGB >::R8S;
-			case PixelFormat::eR8G8B8A8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8B8A8_UNORM >::R8S;
-			case PixelFormat::eR8G8B8A8_SRGB:
-				return PixelComponents< PixelFormat::eR8G8B8A8_SRGB >::R8S;
-			case PixelFormat::eB8G8R8A8_UNORM:
-				return PixelComponents< PixelFormat::eB8G8R8A8_UNORM >::R8S;
-			case PixelFormat::eA8B8G8R8_UNORM:
-				return PixelComponents< PixelFormat::eA8B8G8R8_UNORM >::R8S;
-			case PixelFormat::eA8B8G8R8_SRGB:
-				return PixelComponents< PixelFormat::eA8B8G8R8_SRGB >::R8S;
-			case PixelFormat::eR16G16B16_SFLOAT:
-				return PixelComponents< PixelFormat::eR16G16B16_SFLOAT >::R8S;
-			case PixelFormat::eR16G16B16A16_SFLOAT:
-				return PixelComponents< PixelFormat::eR16G16B16A16_SFLOAT >::R8S;
-			case PixelFormat::eR32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32_SFLOAT >::R8S;
-			case PixelFormat::eR32G32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32_SFLOAT >::R8S;
-			case PixelFormat::eR32G32B32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32B32_SFLOAT >::R8S;
-			case PixelFormat::eR32G32B32A32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32B32A32_SFLOAT >::R8S;
-			default:
-				CU_Failure( "Unsupported pixel format for getR8S" );
-				return nullptr;
-			}
-		}
-
-		X8SGetter getG8S( PixelFormat format )
-		{
-			switch ( format )
-			{
-			case PixelFormat::eR5G6B5_UNORM:
-				return PixelComponents< PixelFormat::eR5G6B5_UNORM >::G8S;
-			case PixelFormat::eR5G5B5A1_UNORM:
-				return PixelComponents< PixelFormat::eR5G5B5A1_UNORM >::G8S;
-			case PixelFormat::eR8_UNORM:
-				return PixelComponents< PixelFormat::eR8_UNORM >::G8S;
-			case PixelFormat::eR8G8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8_UNORM >::G8S;
-			case PixelFormat::eR8G8B8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8B8_UNORM >::G8S;
-			case PixelFormat::eR8G8B8_SRGB:
-				return PixelComponents< PixelFormat::eR8G8B8_SRGB >::G8S;
-			case PixelFormat::eB8G8R8_UNORM:
-				return PixelComponents< PixelFormat::eB8G8R8_UNORM >::G8S;
-			case PixelFormat::eB8G8R8_SRGB:
-				return PixelComponents< PixelFormat::eB8G8R8_SRGB >::G8S;
-			case PixelFormat::eR8G8B8A8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8B8A8_UNORM >::G8S;
-			case PixelFormat::eR8G8B8A8_SRGB:
-				return PixelComponents< PixelFormat::eR8G8B8A8_SRGB >::G8S;
-			case PixelFormat::eB8G8R8A8_UNORM:
-				return PixelComponents< PixelFormat::eB8G8R8A8_UNORM >::G8S;
-			case PixelFormat::eA8B8G8R8_UNORM:
-				return PixelComponents< PixelFormat::eA8B8G8R8_UNORM >::G8S;
-			case PixelFormat::eA8B8G8R8_SRGB:
-				return PixelComponents< PixelFormat::eA8B8G8R8_SRGB >::G8S;
-			case PixelFormat::eR16G16B16_SFLOAT:
-				return PixelComponents< PixelFormat::eR16G16B16_SFLOAT >::G8S;
-			case PixelFormat::eR16G16B16A16_SFLOAT:
-				return PixelComponents< PixelFormat::eR16G16B16A16_SFLOAT >::G8S;
-			case PixelFormat::eR32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32_SFLOAT >::G8S;
-			case PixelFormat::eR32G32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32_SFLOAT >::G8S;
-			case PixelFormat::eR32G32B32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32B32_SFLOAT >::G8S;
-			case PixelFormat::eR32G32B32A32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32B32A32_SFLOAT >::G8S;
-			default:
-				CU_Failure( "Unsupported pixel format for getG8S" );
-				return nullptr;
-			}
-		}
-
-		X8SGetter getB8S( PixelFormat format )
-		{
-			switch ( format )
-			{
-			case PixelFormat::eR5G6B5_UNORM:
-				return PixelComponents< PixelFormat::eR5G6B5_UNORM >::B8S;
-			case PixelFormat::eR5G5B5A1_UNORM:
-				return PixelComponents< PixelFormat::eR5G5B5A1_UNORM >::B8S;
-			case PixelFormat::eR8_UNORM:
-				return PixelComponents< PixelFormat::eR8_UNORM >::B8S;
-			case PixelFormat::eR8G8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8_UNORM >::B8S;
-			case PixelFormat::eR8G8B8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8B8_UNORM >::B8S;
-			case PixelFormat::eR8G8B8_SRGB:
-				return PixelComponents< PixelFormat::eR8G8B8_SRGB >::B8S;
-			case PixelFormat::eB8G8R8_UNORM:
-				return PixelComponents< PixelFormat::eB8G8R8_UNORM >::B8S;
-			case PixelFormat::eB8G8R8_SRGB:
-				return PixelComponents< PixelFormat::eB8G8R8_SRGB >::B8S;
-			case PixelFormat::eR8G8B8A8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8B8A8_UNORM >::B8S;
-			case PixelFormat::eR8G8B8A8_SRGB:
-				return PixelComponents< PixelFormat::eR8G8B8A8_SRGB >::B8S;
-			case PixelFormat::eB8G8R8A8_UNORM:
-				return PixelComponents< PixelFormat::eB8G8R8A8_UNORM >::B8S;
-			case PixelFormat::eA8B8G8R8_UNORM:
-				return PixelComponents< PixelFormat::eA8B8G8R8_UNORM >::B8S;
-			case PixelFormat::eA8B8G8R8_SRGB:
-				return PixelComponents< PixelFormat::eA8B8G8R8_SRGB >::B8S;
-			case PixelFormat::eR16G16B16_SFLOAT:
-				return PixelComponents< PixelFormat::eR16G16B16_SFLOAT >::B8S;
-			case PixelFormat::eR16G16B16A16_SFLOAT:
-				return PixelComponents< PixelFormat::eR16G16B16A16_SFLOAT >::B8S;
-			case PixelFormat::eR32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32_SFLOAT >::B8S;
-			case PixelFormat::eR32G32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32_SFLOAT >::B8S;
-			case PixelFormat::eR32G32B32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32B32_SFLOAT >::B8S;
-			case PixelFormat::eR32G32B32A32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32B32A32_SFLOAT >::B8S;
-			default:
-				CU_Failure( "Unsupported pixel format for getB8S" );
-				return nullptr;
-			}
-		}
-
-		X8SGetter getA8S( PixelFormat format )
-		{
-			switch ( format )
-			{
-			case PixelFormat::eR5G6B5_UNORM:
-				return PixelComponents< PixelFormat::eR5G6B5_UNORM >::A8S;
-			case PixelFormat::eR5G5B5A1_UNORM:
-				return PixelComponents< PixelFormat::eR5G5B5A1_UNORM >::A8S;
-			case PixelFormat::eR8_UNORM:
-				return PixelComponents< PixelFormat::eR8_UNORM >::A8S;
-			case PixelFormat::eR8G8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8_UNORM >::A8S;
-			case PixelFormat::eR8G8B8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8B8_UNORM >::A8S;
-			case PixelFormat::eR8G8B8_SRGB:
-				return PixelComponents< PixelFormat::eR8G8B8_SRGB >::A8S;
-			case PixelFormat::eB8G8R8_UNORM:
-				return PixelComponents< PixelFormat::eB8G8R8_UNORM >::A8S;
-			case PixelFormat::eB8G8R8_SRGB:
-				return PixelComponents< PixelFormat::eB8G8R8_SRGB >::A8S;
-			case PixelFormat::eR8G8B8A8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8B8A8_UNORM >::A8S;
-			case PixelFormat::eR8G8B8A8_SRGB:
-				return PixelComponents< PixelFormat::eR8G8B8A8_SRGB >::A8S;
-			case PixelFormat::eB8G8R8A8_UNORM:
-				return PixelComponents< PixelFormat::eB8G8R8A8_UNORM >::A8S;
-			case PixelFormat::eA8B8G8R8_UNORM:
-				return PixelComponents< PixelFormat::eA8B8G8R8_UNORM >::A8S;
-			case PixelFormat::eA8B8G8R8_SRGB:
-				return PixelComponents< PixelFormat::eA8B8G8R8_SRGB >::A8S;
-			case PixelFormat::eR16G16B16_SFLOAT:
-				return PixelComponents< PixelFormat::eR16G16B16_SFLOAT >::A8S;
-			case PixelFormat::eR16G16B16A16_SFLOAT:
-				return PixelComponents< PixelFormat::eR16G16B16A16_SFLOAT >::A8S;
-			case PixelFormat::eR32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32_SFLOAT >::A8S;
-			case PixelFormat::eR32G32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32_SFLOAT >::A8S;
-			case PixelFormat::eR32G32B32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32B32_SFLOAT >::A8S;
-			case PixelFormat::eR32G32B32A32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32B32A32_SFLOAT >::A8S;
-			default:
-				CU_Failure( "Unsupported pixel format for getA8S" );
-				return nullptr;
-			}
-		}
-
-		X32FGetter getR32F( PixelFormat format )
-		{
-			switch ( format )
-			{
-			case PixelFormat::eR5G6B5_UNORM:
-				return PixelComponents< PixelFormat::eR5G6B5_UNORM >::R32F;
-			case PixelFormat::eR5G5B5A1_UNORM:
-				return PixelComponents< PixelFormat::eR5G5B5A1_UNORM >::R32F;
-			case PixelFormat::eR8_UNORM:
-				return PixelComponents< PixelFormat::eR8_UNORM >::R32F;
-			case PixelFormat::eR8G8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8_UNORM >::R32F;
-			case PixelFormat::eR8G8B8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8B8_UNORM >::R32F;
-			case PixelFormat::eR8G8B8_SRGB:
-				return PixelComponents< PixelFormat::eR8G8B8_SRGB >::R32F;
-			case PixelFormat::eB8G8R8_UNORM:
-				return PixelComponents< PixelFormat::eB8G8R8_UNORM >::R32F;
-			case PixelFormat::eB8G8R8_SRGB:
-				return PixelComponents< PixelFormat::eB8G8R8_SRGB >::R32F;
-			case PixelFormat::eR8G8B8A8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8B8A8_UNORM >::R32F;
-			case PixelFormat::eR8G8B8A8_SRGB:
-				return PixelComponents< PixelFormat::eR8G8B8A8_SRGB >::R32F;
-			case PixelFormat::eB8G8R8A8_UNORM:
-				return PixelComponents< PixelFormat::eB8G8R8A8_UNORM >::R32F;
-			case PixelFormat::eA8B8G8R8_UNORM:
-				return PixelComponents< PixelFormat::eA8B8G8R8_UNORM >::R32F;
-			case PixelFormat::eA8B8G8R8_SRGB:
-				return PixelComponents< PixelFormat::eA8B8G8R8_SRGB >::R32F;
-			case PixelFormat::eR16G16B16_SFLOAT:
-				return PixelComponents< PixelFormat::eR16G16B16_SFLOAT >::R32F;
-			case PixelFormat::eR16G16B16A16_SFLOAT:
-				return PixelComponents< PixelFormat::eR16G16B16A16_SFLOAT >::R32F;
-			case PixelFormat::eR32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32_SFLOAT >::R32F;
-			case PixelFormat::eR32G32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32_SFLOAT >::R32F;
-			case PixelFormat::eR32G32B32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32B32_SFLOAT >::R32F;
-			case PixelFormat::eR32G32B32A32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32B32A32_SFLOAT >::R32F;
-			default:
-				CU_Failure( "Unsupported pixel format for getR32F" );
-				return nullptr;
-			}
-		}
-
-		X32FGetter getG32F( PixelFormat format )
-		{
-			switch ( format )
-			{
-			case PixelFormat::eR5G6B5_UNORM:
-				return PixelComponents< PixelFormat::eR5G6B5_UNORM >::G32F;
-			case PixelFormat::eR5G5B5A1_UNORM:
-				return PixelComponents< PixelFormat::eR5G5B5A1_UNORM >::G32F;
-			case PixelFormat::eR8_UNORM:
-				return PixelComponents< PixelFormat::eR8_UNORM >::G32F;
-			case PixelFormat::eR8G8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8_UNORM >::G32F;
-			case PixelFormat::eR8G8B8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8B8_UNORM >::G32F;
-			case PixelFormat::eR8G8B8_SRGB:
-				return PixelComponents< PixelFormat::eR8G8B8_SRGB >::G32F;
-			case PixelFormat::eB8G8R8_UNORM:
-				return PixelComponents< PixelFormat::eB8G8R8_UNORM >::G32F;
-			case PixelFormat::eB8G8R8_SRGB:
-				return PixelComponents< PixelFormat::eB8G8R8_SRGB >::G32F;
-			case PixelFormat::eR8G8B8A8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8B8A8_UNORM >::G32F;
-			case PixelFormat::eR8G8B8A8_SRGB:
-				return PixelComponents< PixelFormat::eR8G8B8A8_SRGB >::G32F;
-			case PixelFormat::eB8G8R8A8_UNORM:
-				return PixelComponents< PixelFormat::eB8G8R8A8_UNORM >::G32F;
-			case PixelFormat::eA8B8G8R8_UNORM:
-				return PixelComponents< PixelFormat::eA8B8G8R8_UNORM >::G32F;
-			case PixelFormat::eA8B8G8R8_SRGB:
-				return PixelComponents< PixelFormat::eA8B8G8R8_SRGB >::G32F;
-			case PixelFormat::eR16G16B16_SFLOAT:
-				return PixelComponents< PixelFormat::eR16G16B16_SFLOAT >::G32F;
-			case PixelFormat::eR16G16B16A16_SFLOAT:
-				return PixelComponents< PixelFormat::eR16G16B16A16_SFLOAT >::G32F;
-			case PixelFormat::eR32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32_SFLOAT >::G32F;
-			case PixelFormat::eR32G32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32_SFLOAT >::G32F;
-			case PixelFormat::eR32G32B32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32B32_SFLOAT >::G32F;
-			case PixelFormat::eR32G32B32A32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32B32A32_SFLOAT >::G32F;
-			default:
-				CU_Failure( "Unsupported pixel format for getG32F" );
-				return nullptr;
-			}
-		}
-
-		X32FGetter getB32F( PixelFormat format )
-		{
-			switch ( format )
-			{
-			case PixelFormat::eR5G6B5_UNORM:
-				return PixelComponents< PixelFormat::eR5G6B5_UNORM >::B32F;
-			case PixelFormat::eR5G5B5A1_UNORM:
-				return PixelComponents< PixelFormat::eR5G5B5A1_UNORM >::B32F;
-			case PixelFormat::eR8_UNORM:
-				return PixelComponents< PixelFormat::eR8_UNORM >::B32F;
-			case PixelFormat::eR8G8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8_UNORM >::B32F;
-			case PixelFormat::eR8G8B8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8B8_UNORM >::B32F;
-			case PixelFormat::eR8G8B8_SRGB:
-				return PixelComponents< PixelFormat::eR8G8B8_SRGB >::B32F;
-			case PixelFormat::eB8G8R8_UNORM:
-				return PixelComponents< PixelFormat::eB8G8R8_UNORM >::B32F;
-			case PixelFormat::eB8G8R8_SRGB:
-				return PixelComponents< PixelFormat::eB8G8R8_SRGB >::B32F;
-			case PixelFormat::eR8G8B8A8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8B8A8_UNORM >::B32F;
-			case PixelFormat::eR8G8B8A8_SRGB:
-				return PixelComponents< PixelFormat::eR8G8B8A8_SRGB >::B32F;
-			case PixelFormat::eB8G8R8A8_UNORM:
-				return PixelComponents< PixelFormat::eB8G8R8A8_UNORM >::B32F;
-			case PixelFormat::eA8B8G8R8_UNORM:
-				return PixelComponents< PixelFormat::eA8B8G8R8_UNORM >::B32F;
-			case PixelFormat::eA8B8G8R8_SRGB:
-				return PixelComponents< PixelFormat::eA8B8G8R8_SRGB >::B32F;
-			case PixelFormat::eR16G16B16_SFLOAT:
-				return PixelComponents< PixelFormat::eR16G16B16_SFLOAT >::B32F;
-			case PixelFormat::eR16G16B16A16_SFLOAT:
-				return PixelComponents< PixelFormat::eR16G16B16A16_SFLOAT >::B32F;
-			case PixelFormat::eR32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32_SFLOAT >::B32F;
-			case PixelFormat::eR32G32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32_SFLOAT >::B32F;
-			case PixelFormat::eR32G32B32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32B32_SFLOAT >::B32F;
-			case PixelFormat::eR32G32B32A32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32B32A32_SFLOAT >::B32F;
-			default:
-				CU_Failure( "Unsupported pixel format for getB32F" );
-				return nullptr;
-			}
-		}
-
-		X32FGetter getA32F( PixelFormat format )
-		{
-			switch ( format )
-			{
-			case PixelFormat::eR5G6B5_UNORM:
-				return PixelComponents< PixelFormat::eR5G6B5_UNORM >::A32F;
-			case PixelFormat::eR5G5B5A1_UNORM:
-				return PixelComponents< PixelFormat::eR5G5B5A1_UNORM >::A32F;
-			case PixelFormat::eR8_UNORM:
-				return PixelComponents< PixelFormat::eR8_UNORM >::A32F;
-			case PixelFormat::eR8G8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8_UNORM >::A32F;
-			case PixelFormat::eR8G8B8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8B8_UNORM >::A32F;
-			case PixelFormat::eR8G8B8_SRGB:
-				return PixelComponents< PixelFormat::eR8G8B8_SRGB >::A32F;
-			case PixelFormat::eB8G8R8_UNORM:
-				return PixelComponents< PixelFormat::eB8G8R8_UNORM >::A32F;
-			case PixelFormat::eB8G8R8_SRGB:
-				return PixelComponents< PixelFormat::eB8G8R8_SRGB >::A32F;
-			case PixelFormat::eR8G8B8A8_UNORM:
-				return PixelComponents< PixelFormat::eR8G8B8A8_UNORM >::A32F;
-			case PixelFormat::eR8G8B8A8_SRGB:
-				return PixelComponents< PixelFormat::eR8G8B8A8_SRGB >::A32F;
-			case PixelFormat::eB8G8R8A8_UNORM:
-				return PixelComponents< PixelFormat::eB8G8R8A8_UNORM >::A32F;
-			case PixelFormat::eA8B8G8R8_UNORM:
-				return PixelComponents< PixelFormat::eA8B8G8R8_UNORM >::A32F;
-			case PixelFormat::eA8B8G8R8_SRGB:
-				return PixelComponents< PixelFormat::eA8B8G8R8_SRGB >::A32F;
-			case PixelFormat::eR16G16B16_SFLOAT:
-				return PixelComponents< PixelFormat::eR16G16B16_SFLOAT >::A32F;
-			case PixelFormat::eR16G16B16A16_SFLOAT:
-				return PixelComponents< PixelFormat::eR16G16B16A16_SFLOAT >::A32F;
-			case PixelFormat::eR32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32_SFLOAT >::A32F;
-			case PixelFormat::eR32G32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32_SFLOAT >::A32F;
-			case PixelFormat::eR32G32B32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32B32_SFLOAT >::A32F;
-			case PixelFormat::eR32G32B32A32_SFLOAT:
-				return PixelComponents< PixelFormat::eR32G32B32A32_SFLOAT >::A32F;
-			default:
-				CU_Failure( "Unsupported pixel format for getA32F" );
-				return nullptr;
-			}
 		}
 
 		uint8_t getBytesPerPixel( PixelFormat format )
@@ -1685,37 +1480,6 @@ namespace castor
 				break;
 			default:
 				CU_Failure( "Unsupported pixel format" );
-				break;
-			}
-
-			return result;
-		}
-
-		PixelFormat getCompressed( PixelFormat format )
-		{
-			PixelFormat result;
-
-			switch ( format )
-			{
-			case PixelFormat::eR8G8B8_UNORM:
-			case PixelFormat::eB8G8R8_UNORM:
-				result = PixelFormat::eBC1_RGB_UNORM_BLOCK;
-				break;
-			case PixelFormat::eB8G8R8A8_UNORM:
-			case PixelFormat::eR8G8B8A8_UNORM:
-			case PixelFormat::eA8B8G8R8_UNORM:
-				result = PixelFormat::eBC3_UNORM_BLOCK;
-				break;
-			case PixelFormat::eR8G8B8_SRGB:
-			case PixelFormat::eB8G8R8_SRGB:
-				result = PixelFormat::eBC1_RGB_SRGB_BLOCK;
-				break;
-			case PixelFormat::eR8G8B8A8_SRGB:
-			case PixelFormat::eA8B8G8R8_SRGB:
-				result = PixelFormat::eBC3_SRGB_BLOCK;
-				break;
-			default:
-				result = format;
 				break;
 			}
 

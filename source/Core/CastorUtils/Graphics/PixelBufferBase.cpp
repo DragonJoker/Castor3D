@@ -19,9 +19,10 @@ namespace castor
 			, uint32_t index
 			, uint32_t level
 			, uint32_t levels
+			, uint32_t align
 			, PxBufferBase const & buffer )
 		{
-			return VkDeviceSize( ( index * ashes::getLevelsSize( VkExtent2D{ x, y }, format, 0u, levels, 1u ) )
+			return VkDeviceSize( ( index * ashes::getLevelsSize( VkExtent2D{ x, y }, format, 0u, levels, align ) )
 				+ ashes::getLevelsSize( VkExtent2D{ x, y }, format, 0u, level, 1u ) )
 				+ ( size_t( ( y * buffer.getWidth() + x ) * ashes::getMinimalSize( format ) ) );
 		}
@@ -35,29 +36,29 @@ namespace castor
 		{
 			using PixelComponentsT = PixelComponents< PFT >;
 
-			PixelComponentsT::R8U( dstPixel
-				, uint8_t( ( uint16_t( PixelComponentsT::R8U( srcPixel1 ) )
-						+ uint16_t( PixelComponentsT::R8U( srcPixel2 ) )
-						+ uint16_t( PixelComponentsT::R8U( srcPixel3 ) )
-						+ uint16_t( PixelComponentsT::R8U( srcPixel4 ) ) )
+			PixelComponentsT::R( dstPixel
+				, uint8_t( ( uint16_t( PixelComponentsT::R( srcPixel1 ) )
+						+ uint16_t( PixelComponentsT::R( srcPixel2 ) )
+						+ uint16_t( PixelComponentsT::R( srcPixel3 ) )
+						+ uint16_t( PixelComponentsT::R( srcPixel4 ) ) )
 					/ 4u ) );
-			PixelComponentsT::G8U( dstPixel
-				, uint8_t( ( uint16_t( PixelComponentsT::G8U( srcPixel1 ) )
-						+ uint16_t( PixelComponentsT::G8U( srcPixel2 ) )
-						+ uint16_t( PixelComponentsT::G8U( srcPixel3 ) )
-						+ uint16_t( PixelComponentsT::G8U( srcPixel4 ) ) )
+			PixelComponentsT::G( dstPixel
+				, uint8_t( ( uint16_t( PixelComponentsT::G( srcPixel1 ) )
+						+ uint16_t( PixelComponentsT::G( srcPixel2 ) )
+						+ uint16_t( PixelComponentsT::G( srcPixel3 ) )
+						+ uint16_t( PixelComponentsT::G( srcPixel4 ) ) )
 					/ 4u ) );
-			PixelComponentsT::B8U( dstPixel
-				, uint8_t( ( uint16_t( PixelComponentsT::B8U( srcPixel1 ) )
-						+ uint16_t( PixelComponentsT::B8U( srcPixel2 ) )
-						+ uint16_t( PixelComponentsT::B8U( srcPixel3 ) )
-						+ uint16_t( PixelComponentsT::B8U( srcPixel4 ) ) )
+			PixelComponentsT::B( dstPixel
+				, uint8_t( ( uint16_t( PixelComponentsT::B( srcPixel1 ) )
+						+ uint16_t( PixelComponentsT::B( srcPixel2 ) )
+						+ uint16_t( PixelComponentsT::B( srcPixel3 ) )
+						+ uint16_t( PixelComponentsT::B( srcPixel4 ) ) )
 					/ 4u ) );
-			PixelComponentsT::A8U( dstPixel
-				, uint8_t( ( uint16_t( PixelComponentsT::A8U( srcPixel1 ) )
-						+ uint16_t( PixelComponentsT::A8U( srcPixel2 ) )
-						+ uint16_t( PixelComponentsT::A8U( srcPixel3 ) )
-						+ uint16_t( PixelComponentsT::A8U( srcPixel4 ) ) )
+			PixelComponentsT::A( dstPixel
+				, uint8_t( ( uint16_t( PixelComponentsT::A( srcPixel1 ) )
+						+ uint16_t( PixelComponentsT::A( srcPixel2 ) )
+						+ uint16_t( PixelComponentsT::A( srcPixel3 ) )
+						+ uint16_t( PixelComponentsT::A( srcPixel4 ) ) )
 					/ 4u ) );
 		}
 
@@ -247,8 +248,6 @@ namespace castor
 			, uint32_t align
 			, uint32_t dstLevels )
 		{
-			CU_Require( PF::getCompressed( format ) != format );
-
 			switch ( format )
 			{
 			case PixelFormat::eR8G8B8_UNORM:
@@ -463,9 +462,10 @@ namespace castor
 
 	//*********************************************************************************************
 
-	PxBufferConvertOptions::PxBufferConvertOptions()
+	PxBufferConvertOptions::PxBufferConvertOptions( PxCompressionSupport support )
+		: support{ std::move( support ) }
 #if CU_UseCVTT
-		: additionalOptions{ new CVTTOptions{} }
+		, additionalOptions{ new CVTTOptions{} }
 #endif
 	{
 	}
@@ -478,6 +478,48 @@ namespace castor
 #endif
 	}
 
+	PixelFormat PxBufferConvertOptions::getCompressed( PixelFormat format )const
+	{
+		PixelFormat result = format;
+
+		switch ( format )
+		{
+		case PixelFormat::eR8G8B8_UNORM:
+		case PixelFormat::eB8G8R8_UNORM:
+			if ( support.supportBC1 )
+			{
+				result = PixelFormat::eBC1_RGB_UNORM_BLOCK;
+			}
+			break;
+		case PixelFormat::eR8G8B8_SRGB:
+		case PixelFormat::eB8G8R8_SRGB:
+			if ( support.supportBC1 )
+			{
+				result = PixelFormat::eBC1_RGB_SRGB_BLOCK;
+			}
+			break;
+		case PixelFormat::eB8G8R8A8_UNORM:
+		case PixelFormat::eR8G8B8A8_UNORM:
+		case PixelFormat::eA8B8G8R8_UNORM:
+			if ( support.supportBC3 )
+			{
+				result = PixelFormat::eBC3_UNORM_BLOCK;
+			}
+			break;
+		case PixelFormat::eR8G8B8A8_SRGB:
+		case PixelFormat::eA8B8G8R8_SRGB:
+			if ( support.supportBC3 )
+			{
+				result = PixelFormat::eBC3_SRGB_BLOCK;
+			}
+			break;
+		default:
+			break;
+		}
+
+		return result;
+	}
+
 	uint32_t PxBufferConvertOptions::getAdditionalAlign( PixelFormat format )const
 	{
 		switch ( format )
@@ -487,12 +529,12 @@ namespace castor
 		case castor::PixelFormat::eBC1_RGB_SRGB_BLOCK:
 		case castor::PixelFormat::eBC1_RGBA_UNORM_BLOCK:
 		case castor::PixelFormat::eBC1_RGBA_SRGB_BLOCK:
+		case castor::PixelFormat::eBC4_UNORM_BLOCK:
+		case castor::PixelFormat::eBC4_SNORM_BLOCK:
 		case castor::PixelFormat::eBC2_UNORM_BLOCK:
 		case castor::PixelFormat::eBC2_SRGB_BLOCK:
 		case castor::PixelFormat::eBC3_UNORM_BLOCK:
 		case castor::PixelFormat::eBC3_SRGB_BLOCK:
-		case castor::PixelFormat::eBC4_UNORM_BLOCK:
-		case castor::PixelFormat::eBC4_SNORM_BLOCK:
 		case castor::PixelFormat::eBC5_UNORM_BLOCK:
 		case castor::PixelFormat::eBC5_SNORM_BLOCK:
 		case castor::PixelFormat::eBC6H_UFLOAT_BLOCK:
@@ -505,7 +547,7 @@ namespace castor
 		case castor::PixelFormat::eETC2_R8G8B8A1_SRGB_BLOCK:
 		case castor::PixelFormat::eETC2_R8G8B8A8_UNORM_BLOCK:
 		case castor::PixelFormat::eETC2_R8G8B8A8_SRGB_BLOCK:
-			return 8u * PF::getBytesPerPixel( format );
+			return cvtt::NumParallelBlocks * PF::getBytesPerPixel( format );
 #endif
 		default:
 			return 1u;
@@ -599,9 +641,15 @@ namespace castor
 				, m_levels );
 			m_size = { extent.width, extent.height };
 			buffer = mips.empty() ? buffer : mips.data();
-			auto align = ( mips.empty() || !options )
+			m_align = ( mips.empty() || !options )
 				? PF::getBytesPerPixel( getFormat() )
 				: std::max( uint8_t( options->getAdditionalAlign( getFormat() ) ), PF::getBytesPerPixel( getFormat() ) );
+			VkDeviceSize newSize = ashes::getLevelsSize( extent
+				, VkFormat( getFormat() )
+				, 0u
+				, m_levels
+				, m_align );
+			m_buffer.resize( newSize );
 			compressBuffer( options
 				, m_size
 				, buffer
@@ -609,19 +657,19 @@ namespace castor
 				, bufferAlign
 				, m_buffer.data()
 				, getFormat()
-				, align
+				, m_align
 				, extent
 				, m_layers
 				, m_levels );
 		}
 		else
 		{
-			auto align = PF::getBytesPerPixel( getFormat() );
+			m_align = PF::getBytesPerPixel( getFormat() );
 			VkDeviceSize newSize = ashes::getLevelsSize( extent
 				, VkFormat( getFormat() )
 				, 0u
 				, m_levels
-				, align );
+				, m_align );
 			m_buffer.resize( newSize );
 
 			if ( !buffer )
@@ -637,7 +685,7 @@ namespace castor
 					, bufferAlign
 					, m_buffer.data()
 					, getFormat()
-					, align
+					, m_align
 					, extent
 					, m_layers
 					, m_levels );
@@ -691,7 +739,7 @@ namespace castor
 				, VkFormat( getFormat() )
 				, 0u
 				, m_levels
-				, PF::getBytesPerPixel( getFormat() ) );
+				, m_align );
 			m_buffer.resize( newSize );
 
 			auto srcBuffer = buffer.data();
@@ -699,13 +747,13 @@ namespace castor
 				, VkFormat( getFormat() )
 				, 0u
 				, srcLevels
-				, PF::getBytesPerPixel( getFormat() ) );
+				, m_align );
 			auto dstBuffer = m_buffer.data();
 			auto dstLayerSize = ashes::getLevelsSize( extent
 				, VkFormat( getFormat() )
 				, 0u
 				, m_levels
-				, PF::getBytesPerPixel( getFormat() ) );
+				, m_align );
 
 			for ( uint32_t layer = 0u; layer < std::min( srcLevels, m_layers ); ++layer )
 			{
@@ -728,7 +776,7 @@ namespace castor
 	{
 		CU_Require( x < getWidth() && y < getHeight() );
 		return m_buffer.begin()
-			+ getDataAt( VkFormat( m_format ), x, y, index, level, m_levels, *this );
+			+ getDataAt( VkFormat( m_format ), x, y, index, level, m_levels, m_align, *this );
 	}
 
 	PxBufferBase::ConstPixelData PxBufferBase::getAt( uint32_t x
@@ -738,7 +786,7 @@ namespace castor
 	{
 		CU_Require( x < getWidth() && y < getHeight() );
 		return m_buffer.begin()
-			+ getDataAt( VkFormat( m_format ), x, y, index, level, m_levels, *this );
+			+ getDataAt( VkFormat( m_format ), x, y, index, level, m_levels, m_align, *this );
 	}
 
 	PxBufferBaseSPtr PxBufferBase::create( PxBufferConvertOptions const * options

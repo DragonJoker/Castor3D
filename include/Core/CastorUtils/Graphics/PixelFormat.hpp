@@ -18,40 +18,178 @@ See LICENSE file in root folder
 namespace castor
 {
 	template<> struct IsColourFormat< PixelFormat::eD16_UNORM > : public std::false_type {};
-	template<> struct IsColourFormat< PixelFormat::eD24_UNORM_S8_UINT > : public std::false_type {};
+	template<> struct IsColourFormat< PixelFormat::eX8_D24_UNORM > : public std::false_type {};
 	template<> struct IsColourFormat< PixelFormat::eD32_SFLOAT > : public std::false_type {};
-	template<> struct IsColourFormat< PixelFormat::eD32_SFLOAT_S8_UINT > : public std::false_type {};
 	template<> struct IsColourFormat< PixelFormat::eS8_UINT > : public std::false_type {};
+	template<> struct IsColourFormat< PixelFormat::eD16_UNORM_S8_UINT > : public std::false_type {};
+	template<> struct IsColourFormat< PixelFormat::eD24_UNORM_S8_UINT > : public std::false_type {};
+	template<> struct IsColourFormat< PixelFormat::eD32_SFLOAT_S8_UINT > : public std::false_type {};
 
 	template<> struct IsDepthFormat< PixelFormat::eD16_UNORM > : public std::true_type {};
-	template<> struct IsDepthFormat< PixelFormat::eD24_UNORM_S8_UINT > : public std::true_type {};
+	template<> struct IsDepthFormat< PixelFormat::eX8_D24_UNORM > : public std::true_type {};
 	template<> struct IsDepthFormat< PixelFormat::eD32_SFLOAT > : public std::true_type {};
+	template<> struct IsDepthFormat< PixelFormat::eD16_UNORM_S8_UINT > : public std::true_type {};
+	template<> struct IsDepthFormat< PixelFormat::eD24_UNORM_S8_UINT > : public std::true_type {};
 	template<> struct IsDepthFormat< PixelFormat::eD32_SFLOAT_S8_UINT > : public std::true_type {};
 
+	template<> struct IsStencilFormat< PixelFormat::eS8_UINT > : public std::true_type {};
+	template<> struct IsStencilFormat< PixelFormat::eD16_UNORM_S8_UINT > : public std::true_type {};
 	template<> struct IsStencilFormat< PixelFormat::eD24_UNORM_S8_UINT > : public std::true_type {};
 	template<> struct IsStencilFormat< PixelFormat::eD32_SFLOAT_S8_UINT > : public std::true_type {};
-	template<> struct IsStencilFormat< PixelFormat::eS8_UINT > : public std::true_type {};
 
 	template<> struct IsDepthStencilFormat< PixelFormat::eD16_UNORM > : public std::true_type {};
-	template<> struct IsDepthStencilFormat< PixelFormat::eD24_UNORM_S8_UINT > : public std::true_type {};
+	template<> struct IsDepthStencilFormat< PixelFormat::eX8_D24_UNORM > : public std::true_type {};
 	template<> struct IsDepthStencilFormat< PixelFormat::eD32_SFLOAT > : public std::true_type {};
-	template<> struct IsDepthStencilFormat< PixelFormat::eD32_SFLOAT_S8_UINT > : public std::true_type {};
 	template<> struct IsDepthStencilFormat< PixelFormat::eS8_UINT > : public std::true_type {};
+	template<> struct IsDepthStencilFormat< PixelFormat::eD16_UNORM_S8_UINT > : public std::true_type {};
+	template<> struct IsDepthStencilFormat< PixelFormat::eD24_UNORM_S8_UINT > : public std::true_type {};
+	template<> struct IsDepthStencilFormat< PixelFormat::eD32_SFLOAT_S8_UINT > : public std::true_type {};
+
+	template<> struct Is8UComponents< PixelFormat::eR4G4_UNORM > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eR4G4B4A4_UNORM > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eB4G4R4A4_UNORM > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eR5G6B5_UNORM > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eB5G6R5_UNORM > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eR5G5B5A1_UNORM > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eB5G5R5A1_UNORM > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eA1R5G5B5_UNORM > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eR8_UNORM > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eR8_USCALED > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eR8_UINT > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eR8_SRGB > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eR8G8_UNORM > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eR8G8_USCALED > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eR8G8_UINT > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eR8G8_SRGB > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eR8G8B8_UNORM > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eR8G8B8_USCALED > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eR8G8B8_UINT > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eR8G8B8_SRGB > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eB8G8R8_UNORM > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eB8G8R8_USCALED > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eB8G8R8_UINT > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eB8G8R8_SRGB > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eR8G8B8A8_UNORM > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eR8G8B8A8_USCALED > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eR8G8B8A8_UINT > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eR8G8B8A8_SRGB > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eB8G8R8A8_UNORM > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eB8G8R8A8_USCALED > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eB8G8R8A8_UINT > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eB8G8R8A8_SRGB > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eA8B8G8R8_UNORM > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eA8B8G8R8_USCALED > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eA8B8G8R8_UINT > : public std::true_type {};
+	template<> struct Is8UComponents< PixelFormat::eA8B8G8R8_SRGB > : public std::true_type {};
+
+	template<> struct Is8SComponents< PixelFormat::eR8_SNORM > : public std::true_type {};
+	template<> struct Is8SComponents< PixelFormat::eR8_SSCALED > : public std::true_type {};
+	template<> struct Is8SComponents< PixelFormat::eR8_SINT > : public std::true_type {};
+	template<> struct Is8SComponents< PixelFormat::eR8G8_SNORM > : public std::true_type {};
+	template<> struct Is8SComponents< PixelFormat::eR8G8_SSCALED > : public std::true_type {};
+	template<> struct Is8SComponents< PixelFormat::eR8G8_SINT > : public std::true_type {};
+	template<> struct Is8SComponents< PixelFormat::eR8G8B8_SNORM > : public std::true_type {};
+	template<> struct Is8SComponents< PixelFormat::eR8G8B8_SSCALED > : public std::true_type {};
+	template<> struct Is8SComponents< PixelFormat::eR8G8B8_SINT > : public std::true_type {};
+	template<> struct Is8SComponents< PixelFormat::eB8G8R8_SNORM > : public std::true_type {};
+	template<> struct Is8SComponents< PixelFormat::eB8G8R8_SSCALED > : public std::true_type {};
+	template<> struct Is8SComponents< PixelFormat::eB8G8R8_SINT > : public std::true_type {};
+	template<> struct Is8SComponents< PixelFormat::eR8G8B8A8_SNORM > : public std::true_type {};
+	template<> struct Is8SComponents< PixelFormat::eR8G8B8A8_SSCALED > : public std::true_type {};
+	template<> struct Is8SComponents< PixelFormat::eR8G8B8A8_SINT > : public std::true_type {};
+	template<> struct Is8SComponents< PixelFormat::eB8G8R8A8_SNORM > : public std::true_type {};
+	template<> struct Is8SComponents< PixelFormat::eB8G8R8A8_SSCALED > : public std::true_type {};
+	template<> struct Is8SComponents< PixelFormat::eB8G8R8A8_SINT > : public std::true_type {};
+	template<> struct Is8SComponents< PixelFormat::eA8B8G8R8_SNORM > : public std::true_type {};
+	template<> struct Is8SComponents< PixelFormat::eA8B8G8R8_SSCALED > : public std::true_type {};
+	template<> struct Is8SComponents< PixelFormat::eA8B8G8R8_SINT > : public std::true_type {};
+
+	template<> struct Is16UComponents< PixelFormat::eA2R10G10B10_UNORM > : public std::true_type {};
+	template<> struct Is16UComponents< PixelFormat::eA2R10G10B10_USCALED > : public std::true_type {};
+	template<> struct Is16UComponents< PixelFormat::eA2R10G10B10_UINT > : public std::true_type {};
+	template<> struct Is16UComponents< PixelFormat::eA2B10G10R10_UNORM > : public std::true_type {};
+	template<> struct Is16UComponents< PixelFormat::eA2B10G10R10_USCALED > : public std::true_type {};
+	template<> struct Is16UComponents< PixelFormat::eA2B10G10R10_UINT > : public std::true_type {};
+	template<> struct Is16UComponents< PixelFormat::eR16_UNORM > : public std::true_type {};
+	template<> struct Is16UComponents< PixelFormat::eR16_USCALED > : public std::true_type {};
+	template<> struct Is16UComponents< PixelFormat::eR16_UINT > : public std::true_type {};
+	template<> struct Is16UComponents< PixelFormat::eR16G16_UNORM > : public std::true_type {};
+	template<> struct Is16UComponents< PixelFormat::eR16G16_USCALED > : public std::true_type {};
+	template<> struct Is16UComponents< PixelFormat::eR16G16_UINT > : public std::true_type {};
+	template<> struct Is16UComponents< PixelFormat::eR16G16B16_UNORM > : public std::true_type {};
+	template<> struct Is16UComponents< PixelFormat::eR16G16B16_USCALED > : public std::true_type {};
+	template<> struct Is16UComponents< PixelFormat::eR16G16B16_UINT > : public std::true_type {};
+	template<> struct Is16UComponents< PixelFormat::eR16G16B16A16_UNORM > : public std::true_type {};
+	template<> struct Is16UComponents< PixelFormat::eR16G16B16A16_USCALED > : public std::true_type {};
+	template<> struct Is16UComponents< PixelFormat::eR16G16B16A16_UINT > : public std::true_type {};
+
+	template<> struct Is16SComponents< PixelFormat::eA2R10G10B10_SNORM > : public std::true_type {};
+	template<> struct Is16SComponents< PixelFormat::eA2R10G10B10_SSCALED > : public std::true_type {};
+	template<> struct Is16SComponents< PixelFormat::eA2R10G10B10_SINT > : public std::true_type {};
+	template<> struct Is16SComponents< PixelFormat::eA2B10G10R10_SNORM > : public std::true_type {};
+	template<> struct Is16SComponents< PixelFormat::eA2B10G10R10_SSCALED > : public std::true_type {};
+	template<> struct Is16SComponents< PixelFormat::eA2B10G10R10_SINT > : public std::true_type {};
+	template<> struct Is16SComponents< PixelFormat::eR16_SNORM > : public std::true_type {};
+	template<> struct Is16SComponents< PixelFormat::eR16_SSCALED > : public std::true_type {};
+	template<> struct Is16SComponents< PixelFormat::eR16_SINT > : public std::true_type {};
+	template<> struct Is16SComponents< PixelFormat::eR16G16_SNORM > : public std::true_type {};
+	template<> struct Is16SComponents< PixelFormat::eR16G16_SSCALED > : public std::true_type {};
+	template<> struct Is16SComponents< PixelFormat::eR16G16_SINT > : public std::true_type {};
+	template<> struct Is16SComponents< PixelFormat::eR16G16B16_SNORM > : public std::true_type {};
+	template<> struct Is16SComponents< PixelFormat::eR16G16B16_SSCALED > : public std::true_type {};
+	template<> struct Is16SComponents< PixelFormat::eR16G16B16_SINT > : public std::true_type {};
+	template<> struct Is16SComponents< PixelFormat::eR16G16B16A16_SNORM > : public std::true_type {};
+	template<> struct Is16SComponents< PixelFormat::eR16G16B16A16_SSCALED > : public std::true_type {};
+	template<> struct Is16SComponents< PixelFormat::eR16G16B16A16_SINT > : public std::true_type {};
+
+	template<> struct Is16FComponents< PixelFormat::eR16_SFLOAT > : public std::true_type {};
+	template<> struct Is16FComponents< PixelFormat::eR16G16_SFLOAT > : public std::true_type {};
+	template<> struct Is16FComponents< PixelFormat::eR16G16B16_SFLOAT > : public std::true_type {};
+	template<> struct Is16FComponents< PixelFormat::eR16G16B16A16_SFLOAT > : public std::true_type {};
+
+	template<> struct Is32UComponents< PixelFormat::eR32_UINT > : public std::true_type {};
+	template<> struct Is32UComponents< PixelFormat::eR32G32_UINT > : public std::true_type {};
+	template<> struct Is32UComponents< PixelFormat::eR32G32B32_UINT > : public std::true_type {};
+	template<> struct Is32UComponents< PixelFormat::eR32G32B32A32_UINT > : public std::true_type {};
+
+	template<> struct Is32SComponents< PixelFormat::eR32_SINT > : public std::true_type {};
+	template<> struct Is32SComponents< PixelFormat::eR32G32_SINT > : public std::true_type {};
+	template<> struct Is32SComponents< PixelFormat::eR32G32B32_SINT > : public std::true_type {};
+	template<> struct Is32SComponents< PixelFormat::eR32G32B32A32_SINT > : public std::true_type {};
+
+	template<> struct Is32FComponents< PixelFormat::eR32_SFLOAT > : public std::true_type {};
+	template<> struct Is32FComponents< PixelFormat::eR32G32_SFLOAT > : public std::true_type {};
+	template<> struct Is32FComponents< PixelFormat::eR32G32B32_SFLOAT > : public std::true_type {};
+	template<> struct Is32FComponents< PixelFormat::eR32G32B32A32_SFLOAT > : public std::true_type {};
+
+	template<> struct Is64UComponents< PixelFormat::eR64_UINT > : public std::true_type {};
+	template<> struct Is64UComponents< PixelFormat::eR64G64_UINT > : public std::true_type {};
+	template<> struct Is64UComponents< PixelFormat::eR64G64B64_UINT > : public std::true_type {};
+	template<> struct Is64UComponents< PixelFormat::eR64G64B64A64_UINT > : public std::true_type {};
+
+	template<> struct Is64SComponents< PixelFormat::eR64_SINT > : public std::true_type {};
+	template<> struct Is64SComponents< PixelFormat::eR64G64_SINT > : public std::true_type {};
+	template<> struct Is64SComponents< PixelFormat::eR64G64B64_SINT > : public std::true_type {};
+	template<> struct Is64SComponents< PixelFormat::eR64G64B64A64_SINT > : public std::true_type {};
+
+	template<> struct Is64FComponents< PixelFormat::eR64_SFLOAT > : public std::true_type {};
+	template<> struct Is64FComponents< PixelFormat::eR64G64_SFLOAT > : public std::true_type {};
+	template<> struct Is64FComponents< PixelFormat::eR64G64B64_SFLOAT > : public std::true_type {};
+	template<> struct Is64FComponents< PixelFormat::eR64G64B64A64_SFLOAT > : public std::true_type {};
+	
+	template<> struct IsD16UComponent< PixelFormat::eD16_UNORM > : public std::true_type {};
+	template<> struct IsD16UComponent< PixelFormat::eD16_UNORM_S8_UINT > : public std::true_type {};
+	
+	template<> struct IsD24UComponent< PixelFormat::eX8_D24_UNORM > : public std::true_type {};
+	template<> struct IsD24UComponent< PixelFormat::eD24_UNORM_S8_UINT > : public std::true_type {};
+	
+	template<> struct IsD32FComponent< PixelFormat::eD32_SFLOAT > : public std::true_type {};
+	template<> struct IsD32FComponent< PixelFormat::eD32_SFLOAT_S8_UINT > : public std::true_type {};
+
+	template<> struct IsS8UComponent< PixelFormat::eS8_UINT > : public std::true_type {};
 
 	namespace PF
 	{
-		CU_API X8UGetter getR8U( PixelFormat format );
-		CU_API X8UGetter getG8U( PixelFormat format );
-		CU_API X8UGetter getB8U( PixelFormat format );
-		CU_API X8UGetter getA8U( PixelFormat format );
-		CU_API X8SGetter getR8S( PixelFormat format );
-		CU_API X8SGetter getG8S( PixelFormat format );
-		CU_API X8SGetter getB8S( PixelFormat format );
-		CU_API X8SGetter getA8S( PixelFormat format );
-		CU_API X32FGetter getR32F( PixelFormat format );
-		CU_API X32FGetter getG32F( PixelFormat format );
-		CU_API X32FGetter getB32F( PixelFormat format );
-		CU_API X32FGetter getA32F( PixelFormat format );
 		/**
 		 *\~english
 		 *\brief		Function to retrieve Pixel size without templates
@@ -207,15 +345,6 @@ namespace castor
 		 *\return		\p true si le format donné est un format compressé.
 		 */
 		CU_API bool isCompressed( PixelFormat format );
-		/**
-		 *\~english
-		 *\brief		Function to retrieve the compressed pixel format for the given one.
-		 *\param[in]	format	The pixel format.
-		 *\~french
-		 *\brief		Fonction de récuperation du format de pixel compressé correspondant à celui donné
-		 *\param[in]	format	Le format de pixels.
-		 */
-		CU_API PixelFormat getCompressed( PixelFormat format );
 		/**
 		 *\~english
 		 *\brief		Function to perform convertion without templates

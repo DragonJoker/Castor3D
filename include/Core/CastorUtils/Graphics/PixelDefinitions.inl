@@ -1,3 +1,4 @@
+#include "CastorUtils/Graphics/PixelComponents.hpp"
 #include "CastorUtils/Graphics/UnsupportedFormatException.hpp"
 #include "CastorUtils/Miscellaneous/StringUtils.hpp"
 #include "CastorUtils/Exception/Assertion.hpp"
@@ -26,380 +27,112 @@ namespace castor
 		\~french
 		\brief		Structure utilisée pour convertir un pixel d'un format vers un autre
 		*/
-		template< PixelFormat PFSrc, PixelFormat PFDst, typename Enable = void >
-		struct PixelConverter;
-		//!\~english	Specialisation when source and destination formats are the same
-		//!\~french		Spécialisation quand les formats source et destination sont identiques
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter< PFSrc, PFDst, typename std::enable_if< PFSrc == PFDst >::type >
+		struct PixelConverter
 		{
 			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				std::memcpy( dstBuffer, srcBuffer, PixelDefinitions< PFSrc >::Size );
-				srcBuffer += PixelDefinitions< PFSrc >::Size;
-				dstBuffer += PixelDefinitions< PFDst >::Size;
-			}
-		};
-		//!\~english	Specialisation for converting to PixelFormat::eR8_UNORM
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eR8_UNORM
-		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR8_UNORM >::type >
-		{
-			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
-			{
-				PixelComponents< PFDst >::R8U( dstBuffer, PixelComponents< PFSrc >::R8U( srcBuffer ) );
-				srcBuffer += PixelDefinitions< PFSrc >::Size;
-				dstBuffer += PixelDefinitions< PFDst >::Size;
-			}
-		};
-		//!\~english	Specialisation for converting to PixelFormat::eR16_SFLOAT
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eR16_SFLOAT
-		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR16_SFLOAT >::type >
-		{
-			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
-			{
-				srcBuffer += PixelDefinitions< PFSrc >::Size;
-				dstBuffer += PixelDefinitions< PFDst >::Size;
-			}
-		};
-		//!\~english	Specialisation for converting to PixelFormat::eR32_SFLOAT
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eR32_SFLOAT
-		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR32_SFLOAT >::type >
-		{
-			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
-			{
-				PixelComponents< PFDst >::L32F( dstBuffer, PixelComponents< PFSrc >::L32F( srcBuffer ) );
-				srcBuffer += PixelDefinitions< PFSrc >::Size;
-				dstBuffer += PixelDefinitions< PFDst >::Size;
-			}
-		};
-		//!\~english	Specialisation for converting to PixelFormat::eR8A8_UNORM
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eR8A8_UNORM
-		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR8A8_UNORM >::type >
-		{
-			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
-			{
-				PixelComponents< PFDst >::L8U( dstBuffer, PixelComponents< PFSrc >::L8U( srcBuffer ) );
-				PixelComponents< PFDst >::A8U( dstBuffer, PixelComponents< PFSrc >::A8U( srcBuffer ) );
-				srcBuffer += PixelDefinitions< PFSrc >::Size;
-				dstBuffer += PixelDefinitions< PFDst >::Size;
-			}
-		};
-		//!\~english	Specialisation for converting to PixelFormat::eR16A16_SFLOAT
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eR16A16_SFLOAT
-		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR16A16_SFLOAT >::type >
-		{
-			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
-			{
-				srcBuffer += PixelDefinitions< PFSrc >::Size;
-				dstBuffer += PixelDefinitions< PFDst >::Size;
-			}
-		};
-		//!\~english	Specialisation for converting to PixelFormat::eR32A32_SFLOAT
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eR32A32_SFLOAT
-		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR32A32_SFLOAT >::type >
-		{
-			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
-			{
-				PixelComponents< PFDst >::L32F( dstBuffer, PixelComponents< PFSrc >::L32F( srcBuffer ) );
-				PixelComponents< PFDst >::A32F( dstBuffer, PixelComponents< PFSrc >::A32F( srcBuffer ) );
-				srcBuffer += PixelDefinitions< PFSrc >::Size;
-				dstBuffer += PixelDefinitions< PFDst >::Size;
-			}
-		};
-		//!\~english	Specialisation for converting to PixelFormat::eR5G5B5A1_UNORM
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eR5G5B5A1_UNORM
-		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR5G5B5A1_UNORM >::type >
-		{
-			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
-			{
-				PixelComponents< PFDst >::A8U( dstBuffer, PixelComponents< PFSrc >::A8U( srcBuffer ) );
-				PixelComponents< PFDst >::R8U( dstBuffer, PixelComponents< PFSrc >::R8U( srcBuffer ) );
-				PixelComponents< PFDst >::G8U( dstBuffer, PixelComponents< PFSrc >::G8U( srcBuffer ) );
-				PixelComponents< PFDst >::B8U( dstBuffer, PixelComponents< PFSrc >::B8U( srcBuffer ) );
-				srcBuffer += PixelDefinitions< PFSrc >::Size;
-				dstBuffer += PixelDefinitions< PFDst >::Size;
-			}
-		};
-		//!\~english	Specialisation for converting to PixelFormat::eR5G6B5_UNORM
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eR5G6B5_UNORM
-		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR5G6B5_UNORM >::type >
-		{
-			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
-			{
-				PixelComponents< PFDst >::R8U( dstBuffer, PixelComponents< PFSrc >::R8U( srcBuffer ) );
-				PixelComponents< PFDst >::G8U( dstBuffer, PixelComponents< PFSrc >::G8U( srcBuffer ) );
-				PixelComponents< PFDst >::B8U( dstBuffer, PixelComponents< PFSrc >::B8U( srcBuffer ) );
-				srcBuffer += PixelDefinitions< PFSrc >::Size;
-				dstBuffer += PixelDefinitions< PFDst >::Size;
-			}
-		};
-		//!\~english	Specialisation for converting to PixelFormat::eR8G8B8_UNORM
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eR8G8B8_UNORM
-		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR8G8B8_UNORM >::type >
-		{
-			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
-			{
-				PixelComponents< PFDst >::R8U( dstBuffer, PixelComponents< PFSrc >::R8U( srcBuffer ) );
-				PixelComponents< PFDst >::G8U( dstBuffer, PixelComponents< PFSrc >::G8U( srcBuffer ) );
-				PixelComponents< PFDst >::B8U( dstBuffer, PixelComponents< PFSrc >::B8U( srcBuffer ) );
-				srcBuffer += PixelDefinitions< PFSrc >::Size;
-				dstBuffer += PixelDefinitions< PFDst >::Size;
-			}
-		};
-		//!\~english	Specialisation for converting to PixelFormat::eB8G8R8_UNORM
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eB8G8R8_UNORM
-		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eB8G8R8_UNORM >::type >
-		{
-			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
-			{
-				PixelComponents< PFDst >::B8U( dstBuffer, PixelComponents< PFSrc >::B8U( srcBuffer ) );
-				PixelComponents< PFDst >::G8U( dstBuffer, PixelComponents< PFSrc >::G8U( srcBuffer ) );
-				PixelComponents< PFDst >::R8U( dstBuffer, PixelComponents< PFSrc >::R8U( srcBuffer ) );
-				srcBuffer += PixelDefinitions< PFSrc >::Size;
-				dstBuffer += PixelDefinitions< PFDst >::Size;
-			}
-		};
-		//!\~english	Specialisation for converting to PixelFormat::eB8G8R8A8_UNORM
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eB8G8R8A8_UNORM
-		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eB8G8R8A8_UNORM >::type >
-		{
-			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
-			{
-				PixelComponents< PFDst >::B8U( dstBuffer, PixelComponents< PFSrc >::B8U( srcBuffer ) );
-				PixelComponents< PFDst >::G8U( dstBuffer, PixelComponents< PFSrc >::G8U( srcBuffer ) );
-				PixelComponents< PFDst >::R8U( dstBuffer, PixelComponents< PFSrc >::R8U( srcBuffer ) );
-				PixelComponents< PFDst >::A8U( dstBuffer, PixelComponents< PFSrc >::A8U( srcBuffer ) );
-				srcBuffer += PixelDefinitions< PFSrc >::Size;
-				dstBuffer += PixelDefinitions< PFDst >::Size;
-			}
-		};
-		//!\~english	Specialisation for converting to PixelFormat::eR8G8B8_SRGB
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eR8G8B8_SRGB
-		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR8G8B8_SRGB >::type >
-		{
-			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
-			{
-				PixelComponents< PFDst >::R8U( dstBuffer, PixelComponents< PFSrc >::R8U( srcBuffer ) );
-				PixelComponents< PFDst >::G8U( dstBuffer, PixelComponents< PFSrc >::G8U( srcBuffer ) );
-				PixelComponents< PFDst >::B8U( dstBuffer, PixelComponents< PFSrc >::B8U( srcBuffer ) );
-				srcBuffer += PixelDefinitions< PFSrc >::Size;
-				dstBuffer += PixelDefinitions< PFDst >::Size;
-			}
-		};
-		//!\~english	Specialisation for converting to PixelFormat::eB8G8R8_SRGB
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eB8G8R8_SRGB
-		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eB8G8R8_SRGB >::type >
-		{
-			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
-			{
-				PixelComponents< PFDst >::B8U( dstBuffer, PixelComponents< PFSrc >::B8U( srcBuffer ) );
-				PixelComponents< PFDst >::G8U( dstBuffer, PixelComponents< PFSrc >::G8U( srcBuffer ) );
-				PixelComponents< PFDst >::R8U( dstBuffer, PixelComponents< PFSrc >::R8U( srcBuffer ) );
-				srcBuffer += PixelDefinitions< PFSrc >::Size;
-				dstBuffer += PixelDefinitions< PFDst >::Size;
-			}
-		};
-		//!\~english	Specialisation for converting to PixelFormat::eR8G8B8A8_UNORM
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eR8G8B8A8_UNORM
-		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR8G8B8A8_UNORM >::type >
-		{
-			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
-			{
-				PixelComponents< PFDst >::A8U( dstBuffer, PixelComponents< PFSrc >::A8U( srcBuffer ) );
-				PixelComponents< PFDst >::R8U( dstBuffer, PixelComponents< PFSrc >::R8U( srcBuffer ) );
-				PixelComponents< PFDst >::G8U( dstBuffer, PixelComponents< PFSrc >::G8U( srcBuffer ) );
-				PixelComponents< PFDst >::B8U( dstBuffer, PixelComponents< PFSrc >::B8U( srcBuffer ) );
-				srcBuffer += PixelDefinitions< PFSrc >::Size;
-				dstBuffer += PixelDefinitions< PFDst >::Size;
-			}
-		};
-		//!\~english	Specialisation for converting to PixelFormat::eR8G8B8A8_UNORM
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eR8G8B8A8_UNORM
-		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eA8B8G8R8_UNORM >::type >
-		{
-			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
-			{
-				PixelComponents< PFDst >::A8U( dstBuffer, PixelComponents< PFSrc >::A8U( srcBuffer ) );
-				PixelComponents< PFDst >::B8U( dstBuffer, PixelComponents< PFSrc >::B8U( srcBuffer ) );
-				PixelComponents< PFDst >::G8U( dstBuffer, PixelComponents< PFSrc >::G8U( srcBuffer ) );
-				PixelComponents< PFDst >::R8U( dstBuffer, PixelComponents< PFSrc >::R8U( srcBuffer ) );
-				srcBuffer += PixelDefinitions< PFSrc >::Size;
-				dstBuffer += PixelDefinitions< PFDst >::Size;
-			}
-		};
-		//!\~english	Specialisation for converting to PixelFormat::eR8G8B8A8_SRGB
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eR8G8B8A8_SRGB
-		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR8G8B8A8_SRGB >::type >
-		{
-			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
-			{
-				PixelComponents< PFDst >::A8U( dstBuffer, PixelComponents< PFSrc >::A8U( srcBuffer ) );
-				PixelComponents< PFDst >::R8U( dstBuffer, PixelComponents< PFSrc >::R8U( srcBuffer ) );
-				PixelComponents< PFDst >::G8U( dstBuffer, PixelComponents< PFSrc >::G8U( srcBuffer ) );
-				PixelComponents< PFDst >::B8U( dstBuffer, PixelComponents< PFSrc >::B8U( srcBuffer ) );
-				srcBuffer += PixelDefinitions< PFSrc >::Size;
-				dstBuffer += PixelDefinitions< PFDst >::Size;
-			}
-		};
-		//!\~english	Specialisation for converting to PixelFormat::eA8B8G8R8_SRGB
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eA8B8G8R8_SRGB
-		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eA8B8G8R8_SRGB >::type >
-		{
-			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
-			{
-				PixelComponents< PFDst >::A8U( dstBuffer, PixelComponents< PFSrc >::A8U( srcBuffer ) );
-				PixelComponents< PFDst >::B8U( dstBuffer, PixelComponents< PFSrc >::B8U( srcBuffer ) );
-				PixelComponents< PFDst >::G8U( dstBuffer, PixelComponents< PFSrc >::G8U( srcBuffer ) );
-				PixelComponents< PFDst >::R8U( dstBuffer, PixelComponents< PFSrc >::R8U( srcBuffer ) );
-				srcBuffer += PixelDefinitions< PFSrc >::Size;
-				dstBuffer += PixelDefinitions< PFDst >::Size;
-			}
-		};
-		//!\~english	Specialisation for converting to PixelFormat::eR16G16B16_SFLOAT
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eR16G16B16_SFLOAT
-		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR16G16B16_SFLOAT >::type >
-		{
-			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
-			{
-				PixelComponents< PFDst >::R32F( dstBuffer, PixelComponents< PFSrc >::R32F( srcBuffer ) );
-				PixelComponents< PFDst >::G32F( dstBuffer, PixelComponents< PFSrc >::G32F( srcBuffer ) );
-				PixelComponents< PFDst >::B32F( dstBuffer, PixelComponents< PFSrc >::B32F( srcBuffer ) );
-				srcBuffer += PixelDefinitions< PFSrc >::Size;
-				dstBuffer += PixelDefinitions< PFDst >::Size;
-			}
-		};
-		//!\~english	Specialisation for converting to PixelFormat::eR32G32B32_SFLOAT
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eR32G32B32_SFLOAT
-		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR32G32B32_SFLOAT >::type >
-		{
-			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
-			{
-				PixelComponents< PFDst >::R32F( dstBuffer, PixelComponents< PFSrc >::R32F( srcBuffer ) );
-				PixelComponents< PFDst >::G32F( dstBuffer, PixelComponents< PFSrc >::G32F( srcBuffer ) );
-				PixelComponents< PFDst >::B32F( dstBuffer, PixelComponents< PFSrc >::B32F( srcBuffer ) );
-				srcBuffer += PixelDefinitions< PFSrc >::Size;
-				dstBuffer += PixelDefinitions< PFDst >::Size;
-			}
-		};
-		//!\~english	Specialisation for converting to PixelFormat::eR16G16B16A16_SFLOAT
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eR16G16B16A16_SFLOAT
-		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR16G16B16A16_SFLOAT >::type >
-		{
-			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
-			{
-				PixelComponents< PFDst >::A32F( dstBuffer, PixelComponents< PFSrc >::A32F( srcBuffer ) );
-				PixelComponents< PFDst >::R32F( dstBuffer, PixelComponents< PFSrc >::R32F( srcBuffer ) );
-				PixelComponents< PFDst >::G32F( dstBuffer, PixelComponents< PFSrc >::G32F( srcBuffer ) );
-				PixelComponents< PFDst >::B32F( dstBuffer, PixelComponents< PFSrc >::B32F( srcBuffer ) );
-				srcBuffer += PixelDefinitions< PFSrc >::Size;
-				dstBuffer += PixelDefinitions< PFDst >::Size;
-			}
-		};
-		//!\~english	Specialisation for converting to PixelFormat::eR32G32B32A32_SFLOAT
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eR32G32B32A32_SFLOAT
-		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR32G32B32A32_SFLOAT >::type >
-		{
-			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
-			{
-				PixelComponents< PFDst >::A32F( dstBuffer, PixelComponents< PFSrc >::A32F( srcBuffer ) );
-				PixelComponents< PFDst >::R32F( dstBuffer, PixelComponents< PFSrc >::R32F( srcBuffer ) );
-				PixelComponents< PFDst >::G32F( dstBuffer, PixelComponents< PFSrc >::G32F( srcBuffer ) );
-				PixelComponents< PFDst >::B32F( dstBuffer, PixelComponents< PFSrc >::B32F( srcBuffer ) );
-				srcBuffer += PixelDefinitions< PFSrc >::Size;
-				dstBuffer += PixelDefinitions< PFDst >::Size;
-			}
-		};
-		//!\~english	Specialisation for converting to PixelFormat::eD16_UNORM
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eD16_UNORM
-		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eD16_UNORM >::type >
-		{
-			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
-			{
-				PixelComponents< PFDst >::D16( dstBuffer, PixelComponents< PFSrc >::D16( srcBuffer ) );
-				srcBuffer += PixelDefinitions< PFSrc >::Size;
-				dstBuffer += PixelDefinitions< PFDst >::Size;
-			}
-		};
-		//!\~english	Specialisation for converting to PixelFormat::eD24_UNORM_S8_UINT
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eD24_UNORM_S8_UINT
-		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eD24_UNORM_S8_UINT >::type >
-		{
-			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
-			{
-				PixelComponents< PFDst >::D24( dstBuffer, PixelComponents< PFSrc >::D24( srcBuffer ) );
-				PixelComponents< PFDst >::S8( dstBuffer, PixelComponents< PFSrc >::S8( srcBuffer ) );
-				srcBuffer += PixelDefinitions< PFSrc >::Size;
-				dstBuffer += PixelDefinitions< PFDst >::Size;
-			}
-		};
-		//!\~english	Specialisation for converting to PixelFormat::eD32_UNORM
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eD32_UNORM
-		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eD32_UNORM >::type >
-		{
-			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
-			{
-				PixelComponents< PFDst >::D32( dstBuffer, PixelComponents< PFSrc >::D32( srcBuffer ) );
-				srcBuffer += PixelDefinitions< PFSrc >::Size;
-				dstBuffer += PixelDefinitions< PFDst >::Size;
-			}
-		};
-		//!\~english	Specialisation for converting to PixelFormat::eD32_SFLOAT
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eD32_SFLOAT
-		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eD32_SFLOAT >::type >
-		{
-			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
-			{
-				PixelComponents< PFDst >::D32F( dstBuffer, PixelComponents< PFSrc >::D32F( srcBuffer ) );
-				srcBuffer += PixelDefinitions< PFSrc >::Size;
-				dstBuffer += PixelDefinitions< PFDst >::Size;
-			}
-		};
-		//!\~english	Specialisation for converting to PixelFormat::eD32_SFLOAT_S8_UINT
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eD32_SFLOAT_S8_UINT
-		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eD32_SFLOAT_S8_UINT >::type >
-		{
-			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
-			{
-				PixelComponents< PFDst >::D32F( dstBuffer, PixelComponents< PFSrc >::D32F( srcBuffer ) );
-				PixelComponents< PFDst >::S8( dstBuffer, PixelComponents< PFSrc >::S8( srcBuffer ) );
-				srcBuffer += PixelDefinitions< PFSrc >::Size;
-				dstBuffer += PixelDefinitions< PFDst >::Size;
-			}
-		};
-		//!\~english	Specialisation for converting to PixelFormat::eS8_UINT
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eS8_UINT
-		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eS8_UINT >::type >
-		{
-			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
-			{
-				PixelComponents< PFDst >::S8( dstBuffer, PixelComponents< PFSrc >::S8( srcBuffer ) );
+				if constexpr ( PFSrc == PFDst )
+				{
+					std::memcpy( dstBuffer, srcBuffer, PixelDefinitions< PFSrc >::Size );
+				}
+				else if constexpr ( is8UComponentsV< PFDst > )
+				{
+					PixelComponents< PFDst >::R( dstBuffer, getR8U< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::G( dstBuffer, getG8U< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::B( dstBuffer, getB8U< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::A( dstBuffer, getA8U< PFSrc >( srcBuffer ) );
+				}
+				else if constexpr ( is8SComponentsV< PFDst > )
+				{
+					PixelComponents< PFDst >::R( dstBuffer, getR8S< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::G( dstBuffer, getG8S< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::B( dstBuffer, getB8S< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::A( dstBuffer, getA8S< PFSrc >( srcBuffer ) );
+				}
+				else if constexpr ( is16UComponentsV< PFDst > )
+				{
+					PixelComponents< PFDst >::R( dstBuffer, getR16U< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::G( dstBuffer, getG16U< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::B( dstBuffer, getB16U< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::A( dstBuffer, getA16U< PFSrc >( srcBuffer ) );
+				}
+				else if constexpr ( is16SComponentsV< PFDst > )
+				{
+					PixelComponents< PFDst >::R( dstBuffer, getR16S< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::G( dstBuffer, getG16S< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::B( dstBuffer, getB16S< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::A( dstBuffer, getA16S< PFSrc >( srcBuffer ) );
+				}
+				else if constexpr ( is16FComponentsV< PFDst > )
+				{
+					PixelComponents< PFDst >::R( dstBuffer, getR16F< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::G( dstBuffer, getG16F< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::B( dstBuffer, getB16F< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::A( dstBuffer, getA16F< PFSrc >( srcBuffer ) );
+				}
+				else if constexpr ( is32UComponentsV< PFDst > )
+				{
+					PixelComponents< PFDst >::R( dstBuffer, getR32U< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::G( dstBuffer, getG32U< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::B( dstBuffer, getB32U< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::A( dstBuffer, getA32U< PFSrc >( srcBuffer ) );
+				}
+				else if constexpr ( is32SComponentsV< PFDst > )
+				{
+					PixelComponents< PFDst >::R( dstBuffer, getR32S< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::G( dstBuffer, getG32S< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::B( dstBuffer, getB32S< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::A( dstBuffer, getA32S< PFSrc >( srcBuffer ) );
+				}
+				else if constexpr ( is32FComponentsV< PFDst > )
+				{
+					PixelComponents< PFDst >::R( dstBuffer, getR32F< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::G( dstBuffer, getG32F< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::B( dstBuffer, getB32F< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::A( dstBuffer, getA32F< PFSrc >( srcBuffer ) );
+				}
+				else if constexpr ( is64UComponentsV< PFDst > )
+				{
+					PixelComponents< PFDst >::R( dstBuffer, getR64U< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::G( dstBuffer, getG64U< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::B( dstBuffer, getB64U< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::A( dstBuffer, getA64U< PFSrc >( srcBuffer ) );
+				}
+				else if constexpr ( is64SComponentsV< PFDst > )
+				{
+					PixelComponents< PFDst >::R( dstBuffer, getR64S< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::G( dstBuffer, getG64S< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::B( dstBuffer, getB64S< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::A( dstBuffer, getA64S< PFSrc >( srcBuffer ) );
+				}
+				else if constexpr ( is64FComponentsV< PFDst > )
+				{
+					PixelComponents< PFDst >::R( dstBuffer, getR64F< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::G( dstBuffer, getG64F< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::B( dstBuffer, getB64F< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::A( dstBuffer, getA64F< PFSrc >( srcBuffer ) );
+				}
+				else if constexpr ( isD16UComponentV< PFDst > )
+				{
+					PixelComponents< PFDst >::D( dstBuffer, getD16U< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::S( dstBuffer, getS8U< PFSrc >( srcBuffer ) );
+				}
+				else if constexpr ( isD24UComponentV< PFDst > )
+				{
+					PixelComponents< PFDst >::D( dstBuffer, getD24U< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::S( dstBuffer, getS8U< PFSrc >( srcBuffer ) );
+				}
+				else if constexpr ( isD32FComponentV< PFDst > )
+				{
+					PixelComponents< PFDst >::D( dstBuffer, getD32F< PFSrc >( srcBuffer ) );
+					PixelComponents< PFDst >::S( dstBuffer, getS8U< PFSrc >( srcBuffer ) );
+				}
+				else if constexpr ( isS8UComponentV< PFDst > )
+				{
+					PixelComponents< PFDst >::S( dstBuffer, getS8U< PFSrc >( srcBuffer ) );
+				}
+
 				srcBuffer += PixelDefinitions< PFSrc >::Size;
 				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
@@ -753,15 +486,6 @@ namespace castor
 				break;
 			case PixelFormat::eD32_SFLOAT_S8_UINT:
 				BufferConverter< PF, PixelFormat::eD32_SFLOAT_S8_UINT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
-				break;
-			case PixelFormat::eR8G8B8A8_UNORM:
-				BufferConverter< PF, PixelFormat::eR8G8B8A8_UNORM >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
-				break;
-			case PixelFormat::eR32G32B32_SFLOAT:
-				BufferConverter< PF, PixelFormat::eR32G32B32_SFLOAT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
-				break;
-			case PixelFormat::eR8_UNORM:
-				BufferConverter< PF, PixelFormat::eR8_UNORM >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
 			case PixelFormat::eS8_UINT:
 				BufferConverter< PF, PixelFormat::eS8_UINT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
