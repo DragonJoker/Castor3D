@@ -1021,11 +1021,11 @@ namespace aria
 			, wxT( "Setting Castor Date..." )
 			, int( 1 )
 			, this };
-		int index = 0;
 
 		if ( m_selectedPage
 			&& !m_selectedPage->selected.items.empty() )
 		{
+			int index = 0;
 			progress.SetRange( m_selectedPage->selected.items.size() );
 
 			for ( auto & item : m_selectedPage->selected.items )
@@ -1051,11 +1051,11 @@ namespace aria
 			, wxT( "Setting Scene Date..." )
 			, int( 1 )
 			, this };
-		int index = 0;
 
 		if ( m_selectedPage
 			&& !m_selectedPage->selected.items.empty() )
 		{
+			int index = 0;
 			progress.SetRange( m_selectedPage->selected.items.size() );
 
 			for ( auto & item : m_selectedPage->selected.items )
@@ -1820,7 +1820,6 @@ namespace aria
 		wxDataViewItem item{ getTestNode( test ) };
 		auto & page = doGetPage( item );
 		page.model->ItemChanged( item );
-		auto rendIt = m_tests.counts.renderers.find( test.getRenderer() );
 
 		if ( page.detailViews->isLayerShown( TestView::eTest )
 			&& page.testView->getTest() == &test )
