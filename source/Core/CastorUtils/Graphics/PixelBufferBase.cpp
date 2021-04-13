@@ -218,8 +218,6 @@ namespace castor
 				break;
 			}
 
-			auto srcLayerSize = ashes::getSize( VkExtent2D{ srcDimensions.width, srcDimensions.height }
-				, VkFormat( format ) );
 			auto dstLayerSize = ashes::getSize( VkExtent2D{ dstDimensions.width, dstDimensions.height }
 				, VkFormat( format ) );
 			ByteArray result;
