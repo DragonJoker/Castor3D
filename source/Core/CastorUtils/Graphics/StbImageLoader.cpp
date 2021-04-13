@@ -179,11 +179,9 @@ namespace castor
 		StringArray const & listExtensions()
 		{
 			static StringArray const list
-#if !C3D_UseFreeImage
 			{
 				cuT( "jpeg" ),
 				cuT( "jpg" ),
-				cuT( "png" ),
 				cuT( "tga" ),
 				cuT( "bmp" ),
 				cuT( "psd" ),
@@ -194,8 +192,10 @@ namespace castor
 				cuT( "ppm" ),
 				cuT( "pgm" ),
 				cuT( "tif" ),
-			}
+#if !C3D_UseFreeImage
+				cuT( "png" ),
 #endif
+			}
 			;
 			return list;
 		}

@@ -131,20 +131,7 @@ namespace castor
 			static StringArray const list
 #if C3D_UseFreeImage
 			{
-				cuT( "jpeg" ),
-				cuT( "jpg" ),
 				cuT( "png" ),
-				cuT( "tga" ),
-				cuT( "bmp" ),
-				cuT( "psd" ),
-				cuT( "gif" ),
-				cuT( "hdr" ),
-				cuT( "pic" ),
-				cuT( "pnm" ),
-				cuT( "ppm" ),
-				cuT( "pgm" ),
-				cuT( "tif" ),
-				cuT( "exr" ),
 			}
 #endif
 			;
