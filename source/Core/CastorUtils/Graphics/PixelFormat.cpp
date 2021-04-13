@@ -424,11 +424,11 @@ namespace castor
 				case PixelFormat::eBC1_RGB_UNORM_BLOCK:
 				case PixelFormat::eBC1_RGB_SRGB_BLOCK:
 					{
-						BC1Compressor compressor{ PF::getBytesPerPixel( srcFormat )
-							, PF::getR8U( srcFormat )
-							, PF::getG8U( srcFormat )
-							, PF::getB8U( srcFormat )
-							, PF::getA8U( srcFormat ) };
+						BC1Compressor compressor{ PF::getBytesPerPixel( PFSrc )
+							, getR8U< PFSrc >
+							, getG8U< PFSrc >
+							, getB8U< PFSrc >
+							, getA8U< PFSrc > };
 						compressor.compress( srcDimensions
 							, dstDimensions
 							, srcBuffer
@@ -440,11 +440,11 @@ namespace castor
 				case PixelFormat::eBC3_UNORM_BLOCK:
 				case PixelFormat::eBC3_SRGB_BLOCK:
 					{
-						BC3Compressor compressor{ PF::getBytesPerPixel( srcFormat )
-							, PF::getR8U( srcFormat )
-							, PF::getG8U( srcFormat )
-							, PF::getB8U( srcFormat )
-							, PF::getA8U( srcFormat ) };
+						BC3Compressor compressor{ PF::getBytesPerPixel( PFSrc )
+							, getR8U< PFSrc >
+							, getG8U< PFSrc >
+							, getB8U< PFSrc >
+							, getA8U< PFSrc > };
 						compressor.compress( srcDimensions
 							, dstDimensions
 							, srcBuffer
