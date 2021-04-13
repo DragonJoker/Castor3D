@@ -8,482 +8,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	namespace PF
-	{
-		/**
-		 *\~english
-		 *\brief		Function to retrieve pixel colour PixelComponents in float
-		 *\param[in]	pixel		The pixel
-		 *\param[in]	component	The PixelComponents
-		 *\return		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de récupération d'une composante couleur d'un pixel, en flottant
-		 *\param[in]	pixel		Le pixel
-		 *\param[in]	component	La composante
-		 *\return		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		float getX32F( Pixel< PF > const & pixel, PixelComponent component );
-		/**
-		 *\~english
-		 *\brief		Function to define pixel colour PixelComponents in float
-		 *\param[in]	pixel		The pixel
-		 *\param[in]	component	The PixelComponents
-		 *\param[in]	value		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de définition d'une composante couleur d'un pixel, en flottant
-		 *\param[in]	pixel		Le pixel
-		 *\param[in]	component	La composante
-		 *\param[in]	value		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		void setX32F( Pixel< PF > & pixel, PixelComponent component, float value );
-		/**
-		 *\~english
-		 *\brief		Function to retrieve pixel colour PixelComponents in byte
-		 *\param[in]	pixel		The pixel
-		 *\param[in]	component	The PixelComponents
-		 *\return		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de récupération d'une composante couleur d'un pixel, en octet
-		 *\param[in]	pixel		Le pixel
-		 *\param[in]	component	La composante
-		 *\return		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		uint8_t getX8U( Pixel< PF > const & pixel, PixelComponent component );
-		/**
-		 *\~english
-		 *\brief		Function to define pixel colour PixelComponents in byte
-		 *\param[in]	pixel		The pixel
-		 *\param[in]	component	The PixelComponents
-		 *\param[in]	value		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de définition d'une composante couleur d'un pixel, en octet
-		 *\param[in]	pixel		Le pixel
-		 *\param[in]	component	La composante
-		 *\param[in]	value		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		void setX8U( Pixel< PF > & pixel, PixelComponent component, uint8_t value );
-		/**
-		 *\~english
-		 *\brief		Function to retrieve pixel colour PixelComponents in uint16_t
-		 *\param[in]	pixel		The pixel
-		 *\param[in]	component	The PixelComponents
-		 *\return		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de récupération d'une composante couleur d'un pixel, en uint16_t
-		 *\param[in]	pixel		Le pixel
-		 *\param[in]	component	La composante
-		 *\return		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		uint16_t getX16U( Pixel< PF > const & pixel, PixelComponent component );
-		/**
-		 *\~english
-		 *\brief		Function to define pixel colour PixelComponents in uint16_t
-		 *\param[in]	pixel		The pixel
-		 *\param[in]	component	The PixelComponents
-		 *\param[in]	value		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de définition d'une composante couleur d'un pixel, en uint16_t
-		 *\param[in]	pixel		Le pixel
-		 *\param[in]	component	La composante
-		 *\param[in]	value		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		void setX16U( Pixel< PF > & pixel, PixelComponent component, uint16_t value );
-		/**
-		 *\~english
-		 *\brief		Function to retrieve pixel colour PixelComponents in uint32_t, with 24 relevant bits
-		 *\param[in]	pixel		The pixel
-		 *\param[in]	component	The PixelComponents
-		 *\return		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de récupération d'une composante couleur d'un pixel, en uint32_t, avec 24 bits utiles
-		 *\param[in]	pixel		Le pixel
-		 *\param[in]	component	La composante
-		 *\return		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		uint32_t getX24U( Pixel< PF > const & pixel, PixelComponent component );
-		/**
-		 *\~english
-		 *\brief		Function to define pixel colour PixelComponents in uint32_t, with 24 relevant bits
-		 *\param[in]	pixel		The pixel
-		 *\param[in]	component	The PixelComponents
-		 *\param[in]	value		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de définition d'une composante couleur d'un pixel, en uint32_t, avec 24 bits utiles
-		 *\param[in]	pixel		Le pixel
-		 *\param[in]	component	La composante
-		 *\param[in]	value		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		void setX24U( Pixel< PF > & pixel, PixelComponent component, uint32_t value );
-		/**
-		 *\~english
-		 *\brief		Function to retrieve pixel colour PixelComponents in float
-		 *\param[in]	pixel		The pixel
-		 *\return		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de récupération de la composante rouge d'un pixel, en flottant
-		 *\param[in]	pixel		Le pixel
-		 *\return		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		float getR32F( Pixel< PF > const & pixel )
-		{
-			return getX32F( pixel, PixelComponent::eRed );
-		}
-		/**
-		 *\~english
-		 *\brief		Function to define pixel colour PixelComponents in float
-		 *\param[in]	pixel		The pixel
-		 *\param[in]	value		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de définition de la composante rouge d'un pixel, en flottant
-		 *\param[in]	pixel		Le pixel
-		 *\param[in]	value		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		void setR32F( Pixel< PF > const & pixel, float value )
-		{
-			return setX32F( pixel, PixelComponent::eRed, value );
-		}
-		/**
-		 *\~english
-		 *\brief		Function to retrieve pixel red PixelComponents in byte
-		 *\param[in]	pixel		The pixel
-		 *\return		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de récupération de la composante rouge d'un pixel, en octet
-		 *\param[in]	pixel		Le pixel
-		 *\return		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		uint8_t getR8U( Pixel< PF > const & pixel )
-		{
-			return getX8U( pixel, PixelComponent::eRed );
-		}
-		/**
-		 *\~english
-		 *\brief		Function to define pixel red PixelComponents in byte
-		 *\param[in]	pixel		The pixel
-		 *\param[in]	value		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de définition de la composante rouge d'un pixel, en octet
-		 *\param[in]	pixel		Le pixel
-		 *\param[in]	value		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		void setR8U( Pixel< PF > & pixel, uint8_t value )
-		{
-			return setX8U( pixel, PixelComponent::eRed, value );
-		}
-		/**
-		 *\~english
-		 *\brief		Function to retrieve pixel green PixelComponents in float
-		 *\param[in]	pixel		The pixel
-		 *\return		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de récupération de la composante verte d'un pixel, en flottant
-		 *\param[in]	pixel		Le pixel
-		 *\return		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		float getG32F( Pixel< PF > const & pixel )
-		{
-			return getX32F( pixel, PixelComponent::eGreen );
-		}
-		/**
-		 *\~english
-		 *\brief		Function to define pixel green PixelComponents in float
-		 *\param[in]	pixel		The pixel
-		 *\param[in]	value		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de définition de la composante verte d'un pixel, en flottant
-		 *\param[in]	pixel		Le pixel
-		 *\param[in]	value		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		void setG32F( Pixel< PF > & pixel, float value )
-		{
-			return setX32F( pixel, PixelComponent::eGreen, value );
-		}
-		/**
-		 *\~english
-		 *\brief		Function to retrieve pixel green PixelComponents in byte
-		 *\param[in]	pixel		The pixel
-		 *\return		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de récupération de la composante verte d'un pixel, en octet
-		 *\param[in]	pixel		Le pixel
-		 *\return		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		uint8_t getG8U( Pixel< PF > const & pixel )
-		{
-			return getX8U( pixel, PixelComponent::eGreen );
-		}
-		/**
-		 *\~english
-		 *\brief		Function to define pixel green PixelComponents in byte
-		 *\param[in]	pixel		The pixel
-		 *\param[in]	value		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de définition de la composante verte d'un pixel, en octet
-		 *\param[in]	pixel		Le pixel
-		 *\param[in]	value		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		void setG8U( Pixel< PF > & pixel, uint8_t value )
-		{
-			return setX8U( pixel, PixelComponent::eGreen, value );
-		}
-		/**
-		 *\~english
-		 *\brief		Function to retrieve pixel blue PixelComponents in float
-		 *\param[in]	pixel		The pixel
-		 *\return		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de récupération de la composante bleue d'un pixel, en flottant
-		 *\param[in]	pixel		Le pixel
-		 *\return		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		float getB32F( Pixel< PF > const & pixel )
-		{
-			return getX32F( pixel, PixelComponent::eBlue );
-		}
-		/**
-		 *\~english
-		 *\brief		Function to define pixel blue PixelComponents in float
-		 *\param[in]	pixel		The pixel
-		 *\param[in]	value		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de définition de la composante bleue d'un pixel, en flottant
-		 *\param[in]	pixel		Le pixel
-		 *\param[in]	value		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		void setB32F( Pixel< PF > & pixel, float value )
-		{
-			return setX32F( pixel, PixelComponent::eBlue, value );
-		}
-		/**
-		 *\~english
-		 *\brief		Function to retrieve pixel blue PixelComponents in byte
-		 *\param[in]	pixel		The pixel
-		 *\return		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de récupération de la composante bleue d'un pixel, en octet
-		 *\param[in]	pixel		Le pixel
-		 *\return		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		uint8_t getB8U( Pixel< PF > const & pixel )
-		{
-			return getX8U( pixel, PixelComponent::eBlue );
-		}
-		/**
-		 *\~english
-		 *\brief		Function to define pixel blue PixelComponents in byte
-		 *\param[in]	pixel		The pixel
-		 *\param[in]	value		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de définition de la composante bleue d'un pixel, en octet
-		 *\param[in]	pixel		Le pixel
-		 *\param[in]	value		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		void setB8U( Pixel< PF > & pixel, uint8_t value )
-		{
-			return setX8U( pixel, PixelComponent::eBlue, value );
-		}
-		/**
-		 *\~english
-		 *\brief		Function to retrieve pixel alpha PixelComponents in float
-		 *\param[in]	pixel		The pixel
-		 *\return		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de récupération de la composante alpha d'un pixel, en flottant
-		 *\param[in]	pixel		Le pixel
-		 *\return		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		float getA32F( Pixel< PF > const & pixel )
-		{
-			return getX32F( pixel, PixelComponent::eAlpha );
-		}
-		/**
-		 *\~english
-		 *\brief		Function to define pixel alpha PixelComponents in float
-		 *\param[in]	pixel		The pixel
-		 *\param[in]	value		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de définition de la composante alpha d'un pixel, en flottant
-		 *\param[in]	pixel		Le pixel
-		 *\param[in]	value		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		void setA32F( Pixel< PF > & pixel, float value )
-		{
-			return setX32F( pixel, PixelComponent::eAlpha, value );
-		}
-		/**
-		 *\~english
-		 *\brief		Function to retrieve pixel alpha PixelComponents in byte
-		 *\param[in]	pixel		The pixel
-		 *\return		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de récupération de la composante alpha d'un pixel, en octet
-		 *\param[in]	pixel		Le pixel
-		 *\return		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		uint8_t getA8U( Pixel< PF > const & pixel )
-		{
-			return getX8U( pixel, PixelComponent::eAlpha );
-		}
-		/**
-		 *\~english
-		 *\brief		Function to define pixel alpha PixelComponents in byte
-		 *\param[in]	pixel		The pixel
-		 *\param[in]	value		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de définition de la composante alpha d'un pixel, en octet
-		 *\param[in]	pixel		Le pixel
-		 *\param[in]	value		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		void setA8U( Pixel< PF > & pixel, uint8_t value )
-		{
-			return setX8U( pixel, PixelComponent::eAlpha, value );
-		}
-		/**
-		 *\~english
-		 *\brief		Function to retrieve pixel depth PixelComponents in float
-		 *\param[in]	pixel		The pixel
-		 *\return		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de récupération de la composante profondeur d'un pixel, en flottant
-		 *\param[in]	pixel		Le pixel
-		 *\return		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		float getD32F( Pixel< PF > const & pixel )
-		{
-			return getX32F( pixel, PixelComponent::eDepth );
-		}
-		/**
-		*\~english
-		*\brief		Function to define pixel depth PixelComponents in float
-		*\param[in]	pixel		The pixel
-		*\param[in]	value		The PixelComponents value
-		*\~french
-		*\brief		Fonction de définition de la composante profondeur d'un pixel, en flottant
-		*\param[in]	pixel		Le pixel
-		*\param[in]	value		La valeur de la composante
-		*/
-		template< PixelFormat PF >
-		void setD32F( Pixel< PF > & pixel, float value )
-		{
-			return setX32F( pixel, PixelComponent::eDepth, value );
-		}
-		/**
-		 *\~english
-		 *\brief		Function to retrieve pixel depth PixelComponents in uint16_t
-		 *\param[in]	pixel		The pixel
-		 *\return		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de récupération de la composante profondeur d'un pixel, en uint16_t
-		 *\param[in]	pixel		Le pixel
-		 *\return		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		uint16_t getD16U( Pixel< PF > const & pixel )
-		{
-			return getX16U( pixel, PixelComponent::eDepth );
-		}
-		/**
-		 *\~english
-		 *\brief		Function to define pixel depth PixelComponents in uint16_t
-		 *\param[in]	pixel		The pixel
-		 *\param[in]	value		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de définition de la composante profondeur d'un pixel, en uint16_t
-		 *\param[in]	pixel		Le pixel
-		 *\param[in]	value		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		void setD16U( Pixel< PF > & pixel, uint16_t value )
-		{
-			return setX16U( pixel, PixelComponent::eDepth, value );
-		}
-		/**
-		 *\~english
-		 *\brief		Function to retrieve pixel depth PixelComponents in uint32_t, with 24 relevant bits
-		 *\param[in]	pixel		The pixel
-		 *\return		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de récupération de la composante profondeur d'un pixel, en uint32_t, avec 24 bits utiles
-		 *\param[in]	pixel		Le pixel
-		 *\return		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		uint32_t getD24U( Pixel< PF > const & pixel )
-		{
-			return getX24U( pixel, PixelComponent::eDepth );
-		}
-		/**
-		 *\~english
-		 *\brief		Function to define pixel depth PixelComponents in uint32_t, with 24 relevant bits
-		 *\param[in]	pixel		The pixel
-		 *\param[in]	value		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de définition de la composante profondeur d'un pixel, en uint32_t, avec 24 bits utiles
-		 *\param[in]	pixel		Le pixel
-		 *\param[in]	value		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		void setD24U( Pixel< PF > & pixel, uint32_t value )
-		{
-			return setX24U( pixel, PixelComponent::eDepth, value );
-		}
-		/**
-		 *\~english
-		 *\brief		Function to retrieve pixel depth stencil in byte
-		 *\param[in]	pixel		The pixel
-		 *\return		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de récupération de la composante stencil d'un pixel, en octet
-		 *\param[in]	pixel		Le pixel
-		 *\return		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		uint8_t getS8U( Pixel< PF > const & pixel )
-		{
-			return getX8U( pixel, PixelComponent::eStencil );
-		}
-		/**
-		 *\~english
-		 *\brief		Function to define pixel depth stencil in byte
-		 *\param[in]	pixel		The pixel
-		 *\param[in]	value		The PixelComponents value
-		 *\~french
-		 *\brief		Fonction de définition de la composante stencil d'un pixel, en octet
-		 *\param[in]	pixel		Le pixel
-		 *\param[in]	value		La valeur de la composante
-		 */
-		template< PixelFormat PF >
-		void setS8U( Pixel< PF > & pixel, uint8_t value )
-		{
-			return setX8U( pixel, PixelComponent::eStencil, value );
-		}
-	}
-
 	template< PixelFormat PFT >
 	uint8_t getR8U( uint8_t const * buffer );
 	template< PixelFormat PFT >
@@ -687,7 +211,367 @@ namespace castor
 
 	template< PixelFormat PFT >
 	void setS8U( uint8_t  * buffer, uint8_t value );
-}
+
+	/**
+	 *\~english
+	 *\brief		Function to retrieve pixel colour PixelComponents in float
+	 *\param[in]	pixel		The pixel
+	 *\return		The PixelComponents value
+	 *\~french
+	 *\brief		Fonction de récupération de la composante rouge d'un pixel, en flottant
+	 *\param[in]	pixel		Le pixel
+	 *\return		La valeur de la composante
+	 */
+	template< PixelFormat PF >
+	float getR32F( Pixel< PF > const & pixel )
+	{
+		return getR32F< PF >( pixel.constPtr() );
+	}
+	/**
+	 *\~english
+	 *\brief		Function to define pixel colour PixelComponents in float
+	 *\param[in]	pixel		The pixel
+	 *\param[in]	value		The PixelComponents value
+	 *\~french
+	 *\brief		Fonction de définition de la composante rouge d'un pixel, en flottant
+	 *\param[in]	pixel		Le pixel
+	 *\param[in]	value		La valeur de la composante
+	 */
+	template< PixelFormat PF >
+	void setR32F( Pixel< PF > const & pixel, float value )
+	{
+		return setR32F< PF >( pixel.ptr(), value );
+	}
+	/**
+	 *\~english
+	 *\brief		Function to retrieve pixel red PixelComponents in byte
+	 *\param[in]	pixel		The pixel
+	 *\return		The PixelComponents value
+	 *\~french
+	 *\brief		Fonction de récupération de la composante rouge d'un pixel, en octet
+	 *\param[in]	pixel		Le pixel
+	 *\return		La valeur de la composante
+	 */
+	template< PixelFormat PF >
+	uint8_t getR8U( Pixel< PF > const & pixel )
+	{
+		return getR8U< PF >( pixel.constPtr() );
+	}
+	/**
+	 *\~english
+	 *\brief		Function to define pixel red PixelComponents in byte
+	 *\param[in]	pixel		The pixel
+	 *\param[in]	value		The PixelComponents value
+	 *\~french
+	 *\brief		Fonction de définition de la composante rouge d'un pixel, en octet
+	 *\param[in]	pixel		Le pixel
+	 *\param[in]	value		La valeur de la composante
+	 */
+	template< PixelFormat PF >
+	void setR8U( Pixel< PF > & pixel, uint8_t value )
+	{
+		return setR8U< PF >( pixel.ptr(), value );
+	}
+	/**
+	 *\~english
+	 *\brief		Function to retrieve pixel green PixelComponents in float
+	 *\param[in]	pixel		The pixel
+	 *\return		The PixelComponents value
+	 *\~french
+	 *\brief		Fonction de récupération de la composante verte d'un pixel, en flottant
+	 *\param[in]	pixel		Le pixel
+	 *\return		La valeur de la composante
+	 */
+	template< PixelFormat PF >
+	float getG32F( Pixel< PF > const & pixel )
+	{
+		return getG32F< PF >( pixel.constPtr() );
+	}
+	/**
+	 *\~english
+	 *\brief		Function to define pixel green PixelComponents in float
+	 *\param[in]	pixel		The pixel
+	 *\param[in]	value		The PixelComponents value
+	 *\~french
+	 *\brief		Fonction de définition de la composante verte d'un pixel, en flottant
+	 *\param[in]	pixel		Le pixel
+	 *\param[in]	value		La valeur de la composante
+	 */
+	template< PixelFormat PF >
+	void setG32F( Pixel< PF > & pixel, float value )
+	{
+		return setG32F< PF >( pixel.ptr(), value );
+	}
+	/**
+	 *\~english
+	 *\brief		Function to retrieve pixel green PixelComponents in byte
+	 *\param[in]	pixel		The pixel
+	 *\return		The PixelComponents value
+	 *\~french
+	 *\brief		Fonction de récupération de la composante verte d'un pixel, en octet
+	 *\param[in]	pixel		Le pixel
+	 *\return		La valeur de la composante
+	 */
+	template< PixelFormat PF >
+	uint8_t getG8U( Pixel< PF > const & pixel )
+	{
+		return getG8U< PF >( pixel.constPtr() );
+	}
+	/**
+	 *\~english
+	 *\brief		Function to define pixel green PixelComponents in byte
+	 *\param[in]	pixel		The pixel
+	 *\param[in]	value		The PixelComponents value
+	 *\~french
+	 *\brief		Fonction de définition de la composante verte d'un pixel, en octet
+	 *\param[in]	pixel		Le pixel
+	 *\param[in]	value		La valeur de la composante
+	 */
+	template< PixelFormat PF >
+	void setG8U( Pixel< PF > & pixel, uint8_t value )
+	{
+		return setG8U< PF >( pixel.ptr(), value );
+	}
+	/**
+	 *\~english
+	 *\brief		Function to retrieve pixel blue PixelComponents in float
+	 *\param[in]	pixel		The pixel
+	 *\return		The PixelComponents value
+	 *\~french
+	 *\brief		Fonction de récupération de la composante bleue d'un pixel, en flottant
+	 *\param[in]	pixel		Le pixel
+	 *\return		La valeur de la composante
+	 */
+	template< PixelFormat PF >
+	float getB32F( Pixel< PF > const & pixel )
+	{
+		return getB32F< PF >( pixel.constPtr() );
+	}
+	/**
+	 *\~english
+	 *\brief		Function to define pixel blue PixelComponents in float
+	 *\param[in]	pixel		The pixel
+	 *\param[in]	value		The PixelComponents value
+	 *\~french
+	 *\brief		Fonction de définition de la composante bleue d'un pixel, en flottant
+	 *\param[in]	pixel		Le pixel
+	 *\param[in]	value		La valeur de la composante
+	 */
+	template< PixelFormat PF >
+	void setB32F( Pixel< PF > & pixel, float value )
+	{
+		return setB32F< PF >( pixel.ptr(), value );
+	}
+	/**
+	 *\~english
+	 *\brief		Function to retrieve pixel blue PixelComponents in byte
+	 *\param[in]	pixel		The pixel
+	 *\return		The PixelComponents value
+	 *\~french
+	 *\brief		Fonction de récupération de la composante bleue d'un pixel, en octet
+	 *\param[in]	pixel		Le pixel
+	 *\return		La valeur de la composante
+	 */
+	template< PixelFormat PF >
+	uint8_t getB8U( Pixel< PF > const & pixel )
+	{
+		return getB8U< PF >( pixel.constPtr() );
+	}
+	/**
+	 *\~english
+	 *\brief		Function to define pixel blue PixelComponents in byte
+	 *\param[in]	pixel		The pixel
+	 *\param[in]	value		The PixelComponents value
+	 *\~french
+	 *\brief		Fonction de définition de la composante bleue d'un pixel, en octet
+	 *\param[in]	pixel		Le pixel
+	 *\param[in]	value		La valeur de la composante
+	 */
+	template< PixelFormat PF >
+	void setB8U( Pixel< PF > & pixel, uint8_t value )
+	{
+		return setB8U< PF >( pixel.ptr(), value );
+	}
+	/**
+	 *\~english
+	 *\brief		Function to retrieve pixel alpha PixelComponents in float
+	 *\param[in]	pixel		The pixel
+	 *\return		The PixelComponents value
+	 *\~french
+	 *\brief		Fonction de récupération de la composante alpha d'un pixel, en flottant
+	 *\param[in]	pixel		Le pixel
+	 *\return		La valeur de la composante
+	 */
+	template< PixelFormat PF >
+	float getA32F( Pixel< PF > const & pixel )
+	{
+		return getA32F< PF >( pixel.constPtr() );
+	}
+	/**
+	 *\~english
+	 *\brief		Function to define pixel alpha PixelComponents in float
+	 *\param[in]	pixel		The pixel
+	 *\param[in]	value		The PixelComponents value
+	 *\~french
+	 *\brief		Fonction de définition de la composante alpha d'un pixel, en flottant
+	 *\param[in]	pixel		Le pixel
+	 *\param[in]	value		La valeur de la composante
+	 */
+	template< PixelFormat PF >
+	void setA32F( Pixel< PF > & pixel, float value )
+	{
+		return setA32F< PF >( pixel.ptr(), value );
+	}
+	/**
+	 *\~english
+	 *\brief		Function to retrieve pixel alpha PixelComponents in byte
+	 *\param[in]	pixel		The pixel
+	 *\return		The PixelComponents value
+	 *\~french
+	 *\brief		Fonction de récupération de la composante alpha d'un pixel, en octet
+	 *\param[in]	pixel		Le pixel
+	 *\return		La valeur de la composante
+	 */
+	template< PixelFormat PF >
+	uint8_t getA8U( Pixel< PF > const & pixel )
+	{
+		return getA8U< PF >( pixel.constPtr() );
+	}
+	/**
+	 *\~english
+	 *\brief		Function to define pixel alpha PixelComponents in byte
+	 *\param[in]	pixel		The pixel
+	 *\param[in]	value		The PixelComponents value
+	 *\~french
+	 *\brief		Fonction de définition de la composante alpha d'un pixel, en octet
+	 *\param[in]	pixel		Le pixel
+	 *\param[in]	value		La valeur de la composante
+	 */
+	template< PixelFormat PF >
+	void setA8U( Pixel< PF > & pixel, uint8_t value )
+	{
+		return setA8U< PF >( pixel.ptr(), value );
+	}
+	/**
+	 *\~english
+	 *\brief		Function to retrieve pixel depth PixelComponents in float
+	 *\param[in]	pixel		The pixel
+	 *\return		The PixelComponents value
+	 *\~french
+	 *\brief		Fonction de récupération de la composante profondeur d'un pixel, en flottant
+	 *\param[in]	pixel		Le pixel
+	 *\return		La valeur de la composante
+	 */
+	template< PixelFormat PF >
+	float getD32F( Pixel< PF > const & pixel )
+	{
+		return getD32F< PF >( pixel.constPtr() );
+	}
+	/**
+	*\~english
+	*\brief		Function to define pixel depth PixelComponents in float
+	*\param[in]	pixel		The pixel
+	*\param[in]	value		The PixelComponents value
+	*\~french
+	*\brief		Fonction de définition de la composante profondeur d'un pixel, en flottant
+	*\param[in]	pixel		Le pixel
+	*\param[in]	value		La valeur de la composante
+	*/
+	template< PixelFormat PF >
+	void setD32F( Pixel< PF > & pixel, float value )
+	{
+		return setD32F< PF >( pixel.ptr(), value );
+	}
+	/**
+	 *\~english
+	 *\brief		Function to retrieve pixel depth PixelComponents in uint16_t
+	 *\param[in]	pixel		The pixel
+	 *\return		The PixelComponents value
+	 *\~french
+	 *\brief		Fonction de récupération de la composante profondeur d'un pixel, en uint16_t
+	 *\param[in]	pixel		Le pixel
+	 *\return		La valeur de la composante
+	 */
+	template< PixelFormat PF >
+	uint16_t getD16U( Pixel< PF > const & pixel )
+	{
+		return getD16U< PF >( pixel.constPtr() );
+	}
+	/**
+	 *\~english
+	 *\brief		Function to define pixel depth PixelComponents in uint16_t
+	 *\param[in]	pixel		The pixel
+	 *\param[in]	value		The PixelComponents value
+	 *\~french
+	 *\brief		Fonction de définition de la composante profondeur d'un pixel, en uint16_t
+	 *\param[in]	pixel		Le pixel
+	 *\param[in]	value		La valeur de la composante
+	 */
+	template< PixelFormat PF >
+	void setD16U( Pixel< PF > & pixel, uint16_t value )
+	{
+		return setD16U< PF >( pixel.ptr(), value );
+	}
+	/**
+	 *\~english
+	 *\brief		Function to retrieve pixel depth PixelComponents in uint32_t, with 24 relevant bits
+	 *\param[in]	pixel		The pixel
+	 *\return		The PixelComponents value
+	 *\~french
+	 *\brief		Fonction de récupération de la composante profondeur d'un pixel, en uint32_t, avec 24 bits utiles
+	 *\param[in]	pixel		Le pixel
+	 *\return		La valeur de la composante
+	 */
+	template< PixelFormat PF >
+	uint32_t getD24U( Pixel< PF > const & pixel )
+	{
+		return getD24U< PF >( pixel.constPtr() );
+	}
+	/**
+	 *\~english
+	 *\brief		Function to define pixel depth PixelComponents in uint32_t, with 24 relevant bits
+	 *\param[in]	pixel		The pixel
+	 *\param[in]	value		The PixelComponents value
+	 *\~french
+	 *\brief		Fonction de définition de la composante profondeur d'un pixel, en uint32_t, avec 24 bits utiles
+	 *\param[in]	pixel		Le pixel
+	 *\param[in]	value		La valeur de la composante
+	 */
+	template< PixelFormat PF >
+	void setD24U( Pixel< PF > & pixel, uint32_t value )
+	{
+		return setD24U< PF >( pixel.ptr(), value );
+	}
+	/**
+	 *\~english
+	 *\brief		Function to retrieve pixel depth stencil in byte
+	 *\param[in]	pixel		The pixel
+	 *\return		The PixelComponents value
+	 *\~french
+	 *\brief		Fonction de récupération de la composante stencil d'un pixel, en octet
+	 *\param[in]	pixel		Le pixel
+	 *\return		La valeur de la composante
+	 */
+	template< PixelFormat PF >
+	uint8_t getS8U( Pixel< PF > const & pixel )
+	{
+		return getS8U< PF >( pixel.constPtr() );
+	}
+	/**
+	 *\~english
+	 *\brief		Function to define pixel depth stencil in byte
+	 *\param[in]	pixel		The pixel
+	 *\param[in]	value		The PixelComponents value
+	 *\~french
+	 *\brief		Fonction de définition de la composante stencil d'un pixel, en octet
+	 *\param[in]	pixel		Le pixel
+	 *\param[in]	value		La valeur de la composante
+	 */
+	template< PixelFormat PF >
+	void setS8U( Pixel< PF > & pixel, uint8_t value )
+	{
+		return setS8U< PF >( pixel.ptr(), value );
+	}}
 
 #include "PixelComponents.inl"
 

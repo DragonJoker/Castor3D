@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CU_PxBufferCompression___
 #define ___CU_PxBufferCompression___
 
-
-#include "CastorUtils/Graphics/GraphicsModule.hpp"
+#include "CastorUtils/Graphics/PixelBufferBase.hpp"
+#include "CastorUtils/Graphics/PixelComponents.hpp"
 
 #if CU_UseCVTT
 #	include <ConvectionKernels.h>
