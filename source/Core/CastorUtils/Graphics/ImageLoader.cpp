@@ -122,7 +122,8 @@ namespace castor
 	}
 
 	Image ImageLoader::load( String const & name
-		, Path const & path )const
+		, Path const & path
+		, bool allowCompression )const
 	{
 		if ( path.empty() )
 		{
@@ -152,7 +153,8 @@ namespace castor
 			return load( name
 				, path
 				, data.data()
-				, uint32_t( data.size() ) );
+				, uint32_t( data.size() )
+				, allowCompression );
 		}
 		catch ( std::exception & exc )
 		{
@@ -164,23 +166,39 @@ namespace castor
 	Image ImageLoader::load( String const & name
 		, String const & imageFormat
 		, uint8_t const * data
-		, uint32_t size )const
+		, uint32_t size
+		, bool allowCompression )const
 	{
 		checkData( data, size );
 		auto loader = findLoader( imageFormat );
-		return postProcess( m_options
-			, loader->load( name, imageFormat, data, size ) );
+		auto result = loader->load( name, imageFormat, data, size );
+
+		if ( allowCompression )
+		{
+			result = postProcess( m_options
+				, std::move( result ) );
+		}
+
+		return result;
 	}
 
 	Image ImageLoader::load( String const & name
 		, Path const & imagePath
 		, uint8_t const * data
-		, uint32_t size )const
+		, uint32_t size
+		, bool allowCompression )const
 	{
 		checkData( data, size );
 		auto loader = findLoader( imagePath );
-		return postProcess( m_options
-			, loader->load( name, imagePath, data, size ) );
+		auto result = loader->load( name, imagePath, data, size );
+
+		if ( allowCompression )
+		{
+			result = postProcess( m_options
+				, std::move( result ) );
+		}
+
+		return result;
 	}
 
 	void ImageLoader::checkData( uint8_t const * data

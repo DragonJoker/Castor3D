@@ -44,7 +44,8 @@ namespace castor
 		 *\return		L'image créée (ou récupérée).
 		 */
 		CU_API ImageSPtr add( String const & name
-			, Path const & path );
+			, Path const & path
+			, bool allowCompression = true );
 		/**
 		 *\~english
 		 *\brief		Creates the image with given params.

@@ -159,7 +159,8 @@ namespace castor
 		 *\return		Le tampon de pixels contenant les données de l'image.
 		 */
 		CU_API Image load( String const & name
-			, Path const & path )const;
+			, Path const & path
+			, bool allowCompression = true )const;
 		/**
 		 *\~english
 		 *\brief		Loads an image file data.
@@ -179,7 +180,8 @@ namespace castor
 		CU_API Image load( String const & name
 			, Path const & imagePath
 			, uint8_t const * data
-			, uint32_t size )const;
+			, uint32_t size
+			, bool allowCompression = true )const;
 		/**
 		 *\~english
 		 *\brief		Loads an image file data.
@@ -199,7 +201,8 @@ namespace castor
 		CU_API Image load( String const & name
 			, String const & imageFormat
 			, uint8_t const * data
-			, uint32_t size )const;
+			, uint32_t size
+			, bool allowCompression = true )const;
 
 		void setCompressionSupport( PxCompressionSupport support )
 		{
