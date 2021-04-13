@@ -98,12 +98,9 @@ namespace castor
 		StringArray const & listExtensions()
 		{
 			static StringArray const list
-#if !C3D_UseFreeImage
 			{
 				cuT( "exr" ),
-			}
-#endif
-			;
+			};
 			return list;
 		}
 	}

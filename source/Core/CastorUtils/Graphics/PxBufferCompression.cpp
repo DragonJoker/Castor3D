@@ -55,22 +55,22 @@ namespace castor
 			block.m_pixels[baseIndex + 0][1] = getG( linePtr );
 			block.m_pixels[baseIndex + 0][2] = getB( linePtr );
 			block.m_pixels[baseIndex + 0][3] = getA( linePtr );
-			linePtr += ( x >= w ) ? 0 : srcPixelSize;
+			linePtr += ( x + 0 >= w ) ? 0 : srcPixelSize;
 			block.m_pixels[baseIndex + 1][0] = getR( linePtr );
 			block.m_pixels[baseIndex + 1][1] = getG( linePtr );
 			block.m_pixels[baseIndex + 1][2] = getB( linePtr );
 			block.m_pixels[baseIndex + 1][3] = getA( linePtr );
-			linePtr += ( x >= w ) ? 0 : srcPixelSize;
+			linePtr += ( x + 1 >= w ) ? 0 : srcPixelSize;
 			block.m_pixels[baseIndex + 2][0] = getR( linePtr );
 			block.m_pixels[baseIndex + 2][1] = getG( linePtr );
 			block.m_pixels[baseIndex + 2][2] = getB( linePtr );
 			block.m_pixels[baseIndex + 2][3] = getA( linePtr );
-			linePtr += ( x >= w ) ? 0 : srcPixelSize;
+			linePtr += ( x + 2 >= w ) ? 0 : srcPixelSize;
 			block.m_pixels[baseIndex + 3][0] = getR( linePtr );
 			block.m_pixels[baseIndex + 3][1] = getG( linePtr );
 			block.m_pixels[baseIndex + 3][2] = getB( linePtr );
 			block.m_pixels[baseIndex + 3][3] = getA( linePtr );
-			linePtr += ( x >= w ) ? 0 : srcPixelSize;
+			linePtr += ( x + 3 >= w ) ? 0 : srcPixelSize;
 		}
 
 		template< typename TypeT >
@@ -83,6 +83,7 @@ namespace castor
 			, TypeT( *getB )( uint8_t const * )
 			, TypeT( *getA )( uint8_t const * ) )
 		{
+			auto origin = srcBuffer;
 			auto w = srcDimensions.getWidth();
 			auto h = srcDimensions.getHeight();
 			std::vector< BlockTypeT< TypeT > > result;
@@ -94,13 +95,17 @@ namespace castor
 			for ( uint32_t y = 0; y < bh; y += 4u )
 			{
 				auto line0Ptr = srcBuffer;
-				srcBuffer += ( y >= h ) ? 0 : srcLineSize;
+				srcBuffer += ( y + 0 >= h ) ? 0 : srcLineSize;
+				assert( ptrdiff_t( srcBuffer - origin ) <= srcSize );
 				auto line1Ptr = srcBuffer;
-				srcBuffer += ( y >= h ) ? 0 : srcLineSize;
+				srcBuffer += ( y + 1 >= h ) ? 0 : srcLineSize;
+				assert( ptrdiff_t( srcBuffer - origin ) <= srcSize );
 				auto line2Ptr = srcBuffer;
-				srcBuffer += ( y >= h ) ? 0 : srcLineSize;
+				srcBuffer += ( y + 2 >= h ) ? 0 : srcLineSize;
+				assert( ptrdiff_t( srcBuffer - origin ) <= srcSize );
 				auto line3Ptr = srcBuffer;
-				srcBuffer += ( y >= h ) ? 0 : srcLineSize;
+				srcBuffer += ( y + 3 >= h ) ? 0 : srcLineSize;
+				assert( ptrdiff_t( srcBuffer - origin ) <= srcSize );
 
 				for ( uint32_t x = 0; x < bw; x += 4u )
 				{
