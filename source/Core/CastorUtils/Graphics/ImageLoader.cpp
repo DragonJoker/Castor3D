@@ -29,6 +29,12 @@ namespace castor
 				, dstFormat
 				, image.getPxBuffer().getConstPtr()
 				, image.getPixelFormat() );
+
+			if ( image.getPxBuffer().isFlipped() )
+			{
+				buffer->flip();
+			}
+
 			ImageLayout newLayout{ layout.type, *buffer };
 			return Image{ name
 				, path
