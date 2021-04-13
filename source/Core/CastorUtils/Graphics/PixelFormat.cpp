@@ -454,6 +454,8 @@ namespace castor
 					}
 					break;
 #endif
+				default:
+					break;
 				}
 			}
 		}
