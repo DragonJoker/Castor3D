@@ -91,7 +91,7 @@ namespace castor
 					break;
 
 				case 2:
-					format = PixelFormat::eR8A8_UNORM;
+					format = PixelFormat::eR8G8_UNORM;
 					break;
 
 				case 3:
@@ -150,7 +150,7 @@ namespace castor
 					break;
 
 				case 2:
-					format = PixelFormat::eR32A32_SFLOAT;
+					format = PixelFormat::eR32G32_SFLOAT;
 					break;
 
 				case 3:
