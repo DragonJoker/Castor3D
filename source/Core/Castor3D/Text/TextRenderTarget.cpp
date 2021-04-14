@@ -41,7 +41,7 @@ namespace castor
 			if ( result )
 			{
 				result = writeNamedSub( file, cuT( "size" ), target.getSize() )
-					&& write( file, cuT( "format" ), PF::getFormatName( convert( target.getPixelFormat() ) ) )
+					&& write( file, cuT( "format" ), getFormatName( convert( target.getPixelFormat() ) ) )
 					&& writeName( file, cuT( "tone_mapping" ), target.getToneMapping()->getName() );
 			}
 

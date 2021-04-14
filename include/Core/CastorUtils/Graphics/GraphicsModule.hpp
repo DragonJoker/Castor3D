@@ -20,245 +20,10 @@ namespace castor
 	enum class PixelFormat
 		: uint32_t
 	{
-		eUNDEFINED = 0,
+#define CUPF_ENUM_VALUE( name, value, components, alpha, colour, depth, stencil, compressed ) e##name = value,
+#include "CastorUtils/Graphics/PixelFormat.enum"
 
-		eR4G4_UNORM = 1,
-		eR4G4B4A4_UNORM = 2,
-		eB4G4R4A4_UNORM = 3,
-		eR5G6B5_UNORM = 4,
-		eB5G6R5_UNORM = 5,
-		eR5G5B5A1_UNORM = 6,
-		eB5G5R5A1_UNORM = 7,
-		eA1R5G5B5_UNORM = 8,
-
-		eR8_UNORM = 9,
-		eR8_SNORM = 10,
-		eR8_USCALED = 11,
-		eR8_SSCALED = 12,
-		eR8_UINT = 13,
-		eR8_SINT = 14,
-		eR8_SRGB = 15,
-
-		eR8G8_UNORM = 16,
-		eR8G8_SNORM = 17,
-		eR8G8_USCALED = 18,
-		eR8G8_SSCALED = 19,
-		eR8G8_UINT = 20,
-		eR8G8_SINT = 21,
-		eR8G8_SRGB = 22,
-
-		eR8G8B8_UNORM = 23,
-		eR8G8B8_SNORM = 24,
-		eR8G8B8_USCALED = 25,
-		eR8G8B8_SSCALED = 26,
-		eR8G8B8_UINT = 27,
-		eR8G8B8_SINT = 28,
-		eR8G8B8_SRGB = 29,
-
-		eB8G8R8_UNORM = 30,
-		eB8G8R8_SNORM = 31,
-		eB8G8R8_USCALED = 32,
-		eB8G8R8_SSCALED = 33,
-		eB8G8R8_UINT = 34,
-		eB8G8R8_SINT = 35,
-		eB8G8R8_SRGB = 36,
-
-		eR8G8B8A8_UNORM = 37,
-		eR8G8B8A8_SNORM = 38,
-		eR8G8B8A8_USCALED = 39,
-		eR8G8B8A8_SSCALED = 40,
-		eR8G8B8A8_UINT = 41,
-		eR8G8B8A8_SINT = 42,
-		eR8G8B8A8_SRGB = 43,
-
-		eB8G8R8A8_UNORM = 44,
-		eB8G8R8A8_SNORM = 45,
-		eB8G8R8A8_USCALED = 46,
-		eB8G8R8A8_SSCALED = 47,
-		eB8G8R8A8_UINT = 48,
-		eB8G8R8A8_SINT = 49,
-		eB8G8R8A8_SRGB = 50,
-
-		eA8B8G8R8_UNORM = 51,
-		eA8B8G8R8_SNORM = 52,
-		eA8B8G8R8_USCALED = 53,
-		eA8B8G8R8_SSCALED = 54,
-		eA8B8G8R8_UINT = 55,
-		eA8B8G8R8_SINT = 56,
-		eA8B8G8R8_SRGB = 57,
-
-		eA2R10G10B10_UNORM = 58,
-		eA2R10G10B10_SNORM = 59,
-		eA2R10G10B10_USCALED = 60,
-		eA2R10G10B10_SSCALED = 61,
-		eA2R10G10B10_UINT = 62,
-		eA2R10G10B10_SINT = 63,
-
-		eA2B10G10R10_UNORM = 64,
-		eA2B10G10R10_SNORM = 65,
-		eA2B10G10R10_USCALED = 66,
-		eA2B10G10R10_SSCALED = 67,
-		eA2B10G10R10_UINT = 68,
-		eA2B10G10R10_SINT = 69,
-
-		eR16_UNORM = 70,
-		eR16_SNORM = 71,
-		eR16_USCALED = 72,
-		eR16_SSCALED = 73,
-		eR16_UINT = 74,
-		eR16_SINT = 75,
-		eR16_SFLOAT = 76,
-
-		eR16G16_UNORM = 77,
-		eR16G16_SNORM = 78,
-		eR16G16_USCALED = 79,
-		eR16G16_SSCALED = 80,
-		eR16G16_UINT = 81,
-		eR16G16_SINT = 82,
-		eR16G16_SFLOAT = 83,
-
-		eR16G16B16_UNORM = 84,
-		eR16G16B16_SNORM = 85,
-		eR16G16B16_USCALED = 86,
-		eR16G16B16_SSCALED = 87,
-		eR16G16B16_UINT = 88,
-		eR16G16B16_SINT = 89,
-		eR16G16B16_SFLOAT = 90,
-
-		eR16G16B16A16_UNORM = 91,
-		eR16G16B16A16_SNORM = 92,
-		eR16G16B16A16_USCALED = 93,
-		eR16G16B16A16_SSCALED = 94,
-		eR16G16B16A16_UINT = 95,
-		eR16G16B16A16_SINT = 96,
-		eR16G16B16A16_SFLOAT = 97,
-
-		eR32_UINT = 98,
-		eR32_SINT = 99,
-		eR32_SFLOAT = 100,
-
-		eR32G32_UINT = 101,
-		eR32G32_SINT = 102,
-		eR32G32_SFLOAT = 103,
-
-		eR32G32B32_UINT = 104,
-		eR32G32B32_SINT = 105,
-		eR32G32B32_SFLOAT = 106,
-
-		eR32G32B32A32_UINT = 107,
-		eR32G32B32A32_SINT = 108,
-		eR32G32B32A32_SFLOAT = 109,
-
-		eR64_UINT = 110,
-		eR64_SINT = 111,
-		eR64_SFLOAT = 112,
-
-		eR64G64_UINT = 113,
-		eR64G64_SINT = 114,
-		eR64G64_SFLOAT = 115,
-
-		eR64G64B64_UINT = 116,
-		eR64G64B64_SINT = 117,
-		eR64G64B64_SFLOAT = 118,
-
-		eR64G64B64A64_UINT = 119,
-		eR64G64B64A64_SINT = 120,
-		eR64G64B64A64_SFLOAT = 121,
-
-		eB10G11R11_UFLOAT = 122,
-		eE5B9G9R9_UFLOAT = 123,
-
-		eD16_UNORM = 124,
-		eX8_D24_UNORM = 125,
-		eD32_SFLOAT = 126,
-		eS8_UINT = 127,
-		eD16_UNORM_S8_UINT = 128,
-		eD24_UNORM_S8_UINT = 129,
-		eD32_SFLOAT_S8_UINT = 130,
-
-		eBC1_RGB_UNORM_BLOCK = 131, // RGB_DXT1
-		eBC1_RGB_SRGB_BLOCK = 132, // RGB_DXT1
-		eBC1_RGBA_UNORM_BLOCK = 133, // RGBA_DXT1
-		eBC1_RGBA_SRGB_BLOCK = 134, // RGBA_DXT1
-		eBC2_UNORM_BLOCK = 135, // RGBA_DXT3
-		eBC2_SRGB_BLOCK = 136, // RGBA_DXT3
-		eBC3_UNORM_BLOCK = 137, // RGBA_DXT5
-		eBC3_SRGB_BLOCK = 138, // RGBA_DXT5
-		eBC4_UNORM_BLOCK = 139, // R_ATI1N
-		eBC4_SNORM_BLOCK = 140, // R_ATI1N
-		eBC5_UNORM_BLOCK = 141, // RG_ATI2N
-		eBC5_SNORM_BLOCK = 142, // RG_ATI2N
-		eBC6H_UFLOAT_BLOCK = 143, // RGB_BP
-		eBC6H_SFLOAT_BLOCK = 144, // RGB_BP
-		eBC7_UNORM_BLOCK = 145, // RGBA_BP
-		eBC7_SRGB_BLOCK = 146, // RGBA_BP
-
-		eETC2_R8G8B8_UNORM_BLOCK = 147,
-		eETC2_R8G8B8_SRGB_BLOCK = 148,
-		eETC2_R8G8B8A1_UNORM_BLOCK = 149,
-		eETC2_R8G8B8A1_SRGB_BLOCK = 150,
-		eETC2_R8G8B8A8_UNORM_BLOCK = 151,
-		eETC2_R8G8B8A8_SRGB_BLOCK = 152,
-		eEAC_R11_UNORM_BLOCK = 153,
-		eEAC_R11_SNORM_BLOCK = 154,
-		eEAC_R11G11_UNORM_BLOCK = 155,
-		eEAC_R11G11_SNORM_BLOCK = 156,
-
-		eASTC_4x4_UNORM_BLOCK = 157,
-		eASTC_4x4_SRGB_BLOCK = 158,
-		eASTC_5x4_UNORM_BLOCK = 159,
-		eASTC_5x4_SRGB_BLOCK = 160,
-		eASTC_5x5_UNORM_BLOCK = 161,
-		eASTC_5x5_SRGB_BLOCK = 162,
-		eASTC_6x5_UNORM_BLOCK = 163,
-		eASTC_6x5_SRGB_BLOCK = 164,
-		eASTC_6x6_UNORM_BLOCK = 165,
-		eASTC_6x6_SRGB_BLOCK = 166,
-		eASTC_8x5_UNORM_BLOCK = 167,
-		eASTC_8x5_SRGB_BLOCK = 168,
-		eASTC_8x6_UNORM_BLOCK = 169,
-		eASTC_8x6_SRGB_BLOCK = 170,
-		eASTC_8x8_UNORM_BLOCK = 171,
-		eASTC_8x8_SRGB_BLOCK = 172,
-		eASTC_10x5_UNORM_BLOCK = 173,
-		eASTC_10x5_SRGB_BLOCK = 174,
-		eASTC_10x6_UNORM_BLOCK = 175,
-		eASTC_10x6_SRGB_BLOCK = 176,
-		eASTC_10x8_UNORM_BLOCK = 177,
-		eASTC_10x8_SRGB_BLOCK = 178,
-		eASTC_10x10_UNORM_BLOCK = 179,
-		eASTC_10x10_SRGB_BLOCK = 180,
-		eASTC_12x10_UNORM_BLOCK = 181,
-		eASTC_12x10_SRGB_BLOCK = 182,
-		eASTC_12x12_UNORM_BLOCK = 183,
-		eASTC_12x12_SRGB_BLOCK = 184,
 		CU_ScopedEnumBounds( eUNDEFINED ),
-
-		eR8A8_UNORM = eR8G8_UNORM,
-		eR8A8_SNORM = eR8G8_SNORM,
-		eR8A8_USCALED = eR8G8_USCALED,
-		eR8A8_SSCALED = eR8G8_SSCALED,
-		eR8A8_UINT = eR8G8_UINT,
-		eR8A8_SINT = eR8G8_SINT,
-		eR8A8_SRGB = eR8G8_SRGB,
-
-		eR16A16_UNORM = eR16G16_UNORM,
-		eR16A16_SNORM = eR16G16_SNORM,
-		eR16A16_USCALED = eR16G16_USCALED,
-		eR16A16_SSCALED = eR16G16_SSCALED,
-		eR16A16_UINT = eR16G16_UINT,
-		eR16A16_SINT = eR16G16_SINT,
-		eR16A16_SFLOAT = eR16G16_SFLOAT,
-
-		eR32A32_UINT = eR32G32_UINT,
-		eR32A32_SINT = eR32G32_SINT,
-		eR32A32_SFLOAT = eR32G32_SFLOAT,
-
-		eR64A64_UINT = eR64G64_UINT,
-		eR64A64_SINT = eR64G64_SINT,
-		eR64A64_SFLOAT = eR64G64_SFLOAT,
-
-		eD32_UNORM = eX8_D24_UNORM,
 	};
 	/**
 	\~english
@@ -638,9 +403,6 @@ namespace castor
 		//!\~english	Alpha.
 		//!\~french		Alpha.
 		eAlpha,
-		//!\~english	Luminance.
-		//!\~french		Luminance.
-		eLuminance,
 		//!\~english	Depth.
 		//!\~french		Profondeur.
 		eDepth,
@@ -678,6 +440,8 @@ namespace castor
 		: public std::true_type
 	{
 	};
+	template< PixelFormat PixelFormatT >
+	static bool constexpr isColourFormatV = IsColourFormat< PixelFormatT >::value;
 	/**
 	 *\~english
 	 *\brief		Helper struct to tell if a pixel format represents a depth pixel
@@ -689,6 +453,8 @@ namespace castor
 		: public std::false_type
 	{
 	};
+	template< PixelFormat PixelFormatT >
+	static bool constexpr isDepthFormatV = IsDepthFormat< PixelFormatT >::value;
 	/**
 	 *\~english
 	 *\brief		Helper struct to tell if a pixel format represents a stencil pixel
@@ -700,6 +466,8 @@ namespace castor
 		: public std::false_type
 	{
 	};
+	template< PixelFormat PixelFormatT >
+	static bool constexpr isStencilFormatV = IsStencilFormat< PixelFormatT >::value;
 	/**
 	 *\~english
 	 *\brief		Helper struct to tell if a pixel format represents a depth or stencil pixel
@@ -711,6 +479,34 @@ namespace castor
 		: public std::false_type
 	{
 	};
+	template< PixelFormat PixelFormatT >
+	static bool constexpr isDepthStencilFormatV = IsDepthStencilFormat< PixelFormatT >::value;
+	/**
+	 *\~english
+	 *\brief		Helper struct to tell if a pixel format is compressed.
+	 *\~french
+	 *\brief		Structure d'aide permettant de dire si un format de pixels est compressé.
+	 */
+	template< PixelFormat PixelFormatT >
+	struct IsCompressed
+		: public std::false_type
+	{
+	};
+	template< PixelFormat PixelFormatT >
+	static bool constexpr isCompressedV = IsCompressed< PixelFormatT >::value;
+	/**
+	 *\~english
+	 *\brief		Helper struct to tell if a pixel format is compressed.
+	 *\~french
+	 *\brief		Structure d'aide permettant de dire si un format de pixels est compressé.
+	 */
+	template< PixelFormat PixelFormatT >
+	struct HasAlpha
+		: public std::false_type
+	{
+	};
+	template< PixelFormat PixelFormatT >
+	static bool constexpr hasAlphaV = HasAlpha< PixelFormatT >::value;
 	/**
 	 *\~english
 	 *\brief		Helper struct to tell if a pixel format uses unsigned 8 bits components.

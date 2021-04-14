@@ -204,7 +204,7 @@ namespace castor3d
 					|| configuration.emissiveMask[0] )
 				{
 					auto format = unit->getTexture()->getPixelFormat();
-					configuration.needsGammaCorrection = !PF::isFloatingPoint( convert( format ) );
+					configuration.needsGammaCorrection = !isFloatingPoint( convert( format ) );
 				}
 
 				unit->setConfiguration( configuration );
