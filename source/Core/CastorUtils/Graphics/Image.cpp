@@ -104,51 +104,16 @@ namespace castor
 	{
 		CU_Require( getLevels() == 1u );
 		auto srcBuffer = getPixels();
-		int channels = int( PF::getComponentsCount( srcBuffer->getFormat() ) );
-		int alpha = STBIR_ALPHA_CHANNEL_NONE;
-		stbir_colorspace colorSpace{ STBIR_COLORSPACE_LINEAR };
-		stbir_datatype dataType = STBIR_TYPE_UINT8;
-
-		switch ( srcBuffer->getFormat() )
-		{
-		case PixelFormat::eR8_UNORM:
-		case PixelFormat::eR8A8_UNORM:
-		case PixelFormat::eA8B8G8R8_UNORM:
-		case PixelFormat::eR8G8B8A8_UNORM:
-			alpha = 1;
-			break;
-
-		case PixelFormat::eR8G8B8_SRGB:
-		case PixelFormat::eB8G8R8_SRGB:
-			colorSpace = STBIR_COLORSPACE_SRGB;
-			break;
-
-		case PixelFormat::eA8B8G8R8_SRGB:
-		case PixelFormat::eR8G8B8A8_SRGB:
-			colorSpace = STBIR_COLORSPACE_SRGB;
-			alpha = 1;
-			break;
-
-		case PixelFormat::eR16_SFLOAT:
-		case PixelFormat::eR32_SFLOAT:
-		case PixelFormat::eR16G16B16_SFLOAT:
-		case PixelFormat::eR32G32B32_SFLOAT:
-			dataType = STBIR_TYPE_FLOAT;
-			break;
-
-		case PixelFormat::eR16A16_SFLOAT:
-		case PixelFormat::eR32A32_SFLOAT:
-		case PixelFormat::eR16G16B16A16_SFLOAT:
-		case PixelFormat::eR32G32B32A32_SFLOAT:
-			dataType = STBIR_TYPE_FLOAT;
-			alpha = 1;
-			break;
-
-		default:
-			CU_LoaderError( "Unsupported image format for resize." );
-			break;
-		}
-
+		int channels = int( getComponentsCount( srcBuffer->getFormat() ) );
+		int alpha{ hasAlpha( srcBuffer->getFormat() )
+			? 1
+			: STBIR_ALPHA_CHANNEL_NONE };
+		stbir_datatype dataType{ isFloatingPoint( srcBuffer->getFormat() )
+			? STBIR_TYPE_FLOAT
+			: STBIR_TYPE_UINT8 };
+		stbir_colorspace colorSpace{ isSRGBFormat( srcBuffer->getFormat() )
+			? STBIR_COLORSPACE_SRGB
+			: STBIR_COLORSPACE_LINEAR };
 		auto srcLayerSize = m_layout.layerSize();
 		auto src = srcBuffer->getPtr();
 		updateLayerLayout( size, srcBuffer->getFormat() );
@@ -188,7 +153,7 @@ namespace castor
 	{
 		CU_CheckInvariants();
 		setPixel( 0, 0, colour );
-		uint32_t uiBpp = PF::getBytesPerPixel( getPixelFormat() );
+		uint32_t uiBpp = getBytesPerPixel( getPixelFormat() );
 		auto src = m_buffer->getPtr();
 		auto buffer = m_buffer->getPtr() + uiBpp;
 		auto end = m_buffer->getPtr() + m_buffer->getSize();
@@ -207,7 +172,7 @@ namespace castor
 	{
 		CU_CheckInvariants();
 		setPixel( 0, 0, colour );
-		uint32_t uiBpp = PF::getBytesPerPixel( getPixelFormat() );
+		uint32_t uiBpp = getBytesPerPixel( getPixelFormat() );
 		auto src = m_buffer->getPtr();
 		auto buffer = m_buffer->getPtr() + uiBpp;
 		auto end = m_buffer->getPtr() + m_buffer->getSize();
@@ -232,7 +197,7 @@ namespace castor
 		CU_Require( x < getWidth() && y < getHeight() && pixel );
 		uint8_t const * src = pixel;
 		uint8_t * dst = &( *m_buffer->getAt( x, y ) );
-		PF::convertPixel( format, src, getPixelFormat(), dst );
+		convertPixel( format, src, getPixelFormat(), dst );
 		CU_CheckInvariants();
 		return * this;
 	}
@@ -247,7 +212,7 @@ namespace castor
 		Point4ub components = toBGRAByte( colour );
 		uint8_t const * src = components.constPtr();
 		uint8_t * dst = &( *m_buffer->getAt( x, y ) );
-		PF::convertPixel( PixelFormat::eR8G8B8A8_UNORM, src, getPixelFormat(), dst );
+		convertPixel( PixelFormat::eR8G8B8A8_UNORM, src, getPixelFormat(), dst );
 		CU_CheckInvariants();
 		return * this;
 	}
@@ -262,7 +227,7 @@ namespace castor
 		Point3ub components = toBGRByte( colour );
 		uint8_t const * src = components.constPtr();
 		uint8_t * dst = &( *m_buffer->getAt( x, y ) );
-		PF::convertPixel( PixelFormat::eR8G8B8_UNORM, src, getPixelFormat(), dst );
+		convertPixel( PixelFormat::eR8G8B8_UNORM, src, getPixelFormat(), dst );
 		CU_CheckInvariants();
 		return * this;
 	}

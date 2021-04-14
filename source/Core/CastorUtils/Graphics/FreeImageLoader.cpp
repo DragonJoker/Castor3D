@@ -101,10 +101,10 @@ namespace castor
 		void swapComponents( uint8_t * pixels, PixelFormat format, uint32_t width, uint32_t height )
 		{
 			uint32_t count{ width * height };
-			uint32_t bpp{ PF::getBytesPerPixel( format ) };
+			uint32_t bpp( getBytesPerPixel( format ) );
 			uint32_t bpc{ 0u };
 
-			if ( PF::hasAlpha( format ) )
+			if ( hasAlpha( format ) )
 			{
 				bpc = bpp / 4;
 			}
@@ -224,11 +224,11 @@ namespace castor
 
 			if ( type == FIT_RGBAF )
 			{
-				if ( bpp == PixelDefinitions< PixelFormat::eR16G16B16A16_SFLOAT >::Size )
+				if ( bpp == getBytesPerPixel( PixelFormat::eR16G16B16A16_SFLOAT ) )
 				{
 					sourceFmt = PixelFormat::eR16G16B16A16_SFLOAT;
 				}
-				else if ( bpp == PixelDefinitions< PixelFormat::eR32G32B32A32_SFLOAT >::Size )
+				else if ( bpp == getBytesPerPixel( PixelFormat::eR32G32B32A32_SFLOAT ) )
 				{
 					sourceFmt = PixelFormat::eR32G32B32A32_SFLOAT;
 				}
@@ -239,11 +239,11 @@ namespace castor
 			}
 			else if ( type == FIT_RGBF )
 			{
-				if ( bpp == PixelDefinitions< PixelFormat::eR16G16B16_SFLOAT >::Size )
+				if ( bpp == getBytesPerPixel( PixelFormat::eR16G16B16_SFLOAT ) )
 				{
 					sourceFmt = PixelFormat::eR16G16B16_SFLOAT;
 				}
-				else if ( bpp == PixelDefinitions< PixelFormat::eR32G32B32_SFLOAT >::Size )
+				else if ( bpp == getBytesPerPixel( PixelFormat::eR32G32B32_SFLOAT ) )
 				{
 					sourceFmt = PixelFormat::eR32G32B32_SFLOAT;
 				}
@@ -254,11 +254,11 @@ namespace castor
 			}
 			else if ( type == FIT_FLOAT )
 			{
-				if ( bpp == PixelDefinitions< PixelFormat::eR16_SFLOAT >::Size )
+				if ( bpp == getBytesPerPixel( PixelFormat::eR16_SFLOAT ) )
 				{
 					sourceFmt = PixelFormat::eR16_SFLOAT;
 				}
-				else if ( bpp == PixelDefinitions< PixelFormat::eR32_SFLOAT >::Size )
+				else if ( bpp == getBytesPerPixel( PixelFormat::eR32_SFLOAT ) )
 				{
 					sourceFmt = PixelFormat::eR32_SFLOAT;
 				}

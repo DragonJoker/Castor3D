@@ -18,51 +18,6 @@ namespace castor
 
 	namespace
 	{
-		int getComponentsCount( castor::PixelFormat format )
-		{
-			int result = 0;
-
-			switch ( format )
-			{
-			case PixelFormat::eR8_UNORM:
-			case PixelFormat::eR16_SFLOAT:
-			case PixelFormat::eR32_SFLOAT:
-				result = 1;
-				break;
-
-			case PixelFormat::eR8A8_UNORM:
-			case PixelFormat::eR16A16_SFLOAT:
-			case PixelFormat::eR32A32_SFLOAT:
-				result = 2;
-				break;
-
-			case PixelFormat::eR8G8B8_UNORM:
-			case PixelFormat::eR8G8B8_SRGB:
-			case PixelFormat::eB8G8R8_UNORM:
-			case PixelFormat::eB8G8R8_SRGB:
-			case PixelFormat::eR16G16B16_SFLOAT:
-			case PixelFormat::eR32G32B32_SFLOAT:
-				result = 3;
-				break;
-
-			case PixelFormat::eB8G8R8A8_UNORM:
-			case PixelFormat::eA8B8G8R8_UNORM:
-			case PixelFormat::eA8B8G8R8_SRGB:
-			case PixelFormat::eR8G8B8A8_UNORM:
-			case PixelFormat::eR8G8B8A8_SRGB:
-			case PixelFormat::eR16G16B16A16_SFLOAT:
-			case PixelFormat::eR32G32B32A32_SFLOAT:
-				result = 4;
-				break;
-
-			default:
-				CU_LoaderError( "Unsupported image format for writing." );
-				break;
-			}
-
-			return result;
-		}
-
 		bool doSave8BitsPerChannel( Path const & path
 			, PxBufferBase const & buffer )
 		{
@@ -196,14 +151,7 @@ namespace castor
 	{
 		bool result = false;
 
-		if ( buffer.getFormat() == PixelFormat::eR16A16_SFLOAT
-			|| buffer.getFormat() == PixelFormat::eR32A32_SFLOAT
-			|| buffer.getFormat() == PixelFormat::eR16_SFLOAT
-			|| buffer.getFormat() == PixelFormat::eR32_SFLOAT
-			|| buffer.getFormat() == PixelFormat::eR16G16B16_SFLOAT
-			|| buffer.getFormat() == PixelFormat::eR32G32B32_SFLOAT
-			|| buffer.getFormat() == PixelFormat::eR16G16B16A16_SFLOAT
-			|| buffer.getFormat() == PixelFormat::eR32G32B32A32_SFLOAT )
+		if ( isFloatingPoint( buffer.getFormat() ) )
 		{
 			result = doSave32BitsPerChannel( path, buffer );
 		}

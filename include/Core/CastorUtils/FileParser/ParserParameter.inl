@@ -504,7 +504,7 @@ namespace castor
 
 			if ( values.size() )
 			{
-				value = PF::getFormatByName( values[0] );
+				value = getFormatByName( values[0] );
 				result = value != PixelFormat::eCount;
 
 				if ( values.size() > 1 )

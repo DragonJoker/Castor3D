@@ -342,6 +342,9 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/StbImageWriter.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/XpmImageLoader.cpp
 	)
+	set( ${PROJECT_NAME}_FOLDER_ENM_FILES
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/PixelFormat.enum
+	)
 	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/BoundingBox.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/BoundingContainer.hpp
@@ -399,9 +402,11 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	set( ${PROJECT_NAME}_HDR_FILES
 		${${PROJECT_NAME}_HDR_FILES}
 		${${PROJECT_NAME}_FOLDER_HDR_FILES}
+		${${PROJECT_NAME}_FOLDER_ENM_FILES}
 	)
 	source_group( "Header Files\\Graphics" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
 	source_group( "Source Files\\Graphics" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+	source_group( "Source Files\\Enum" FILES ${${PROJECT_NAME}_FOLDER_ENM_FILES} )
 
 	if( EXISTS ${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels.h )
 		set( ${PROJECT_NAME}_DEFINITIONS

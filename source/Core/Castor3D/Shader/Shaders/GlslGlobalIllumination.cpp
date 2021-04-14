@@ -390,7 +390,7 @@ namespace castor3d
 				ELSE
 				{
 					vxlRadiance = traceConeRadiance( mapVoxelsFirstBounce
-					, surface
+						, surface
 						, voxelData );
 				}
 				FI;
@@ -432,7 +432,7 @@ namespace castor3d
 				ELSE
 				{
 					vxlReflection = traceConeReflection( mapVoxelsFirstBounce
-					, surface
+						, surface
 						, wsCamera - surface.worldPosition
 						, roughness
 						, voxelData );
@@ -469,7 +469,7 @@ namespace castor3d
 
 				IF( m_writer, voxelData.enabled != 0_u )
 				{
-					auto vxlRadiance = m_writer.declLocale< sdw::Vec4 >( "vxlRadiance" );
+					auto vxlRadiance( m_writer.declLocale< sdw::Vec4 >( "vxlRadiance" ) );
 
 					IF( m_writer, voxelData.enableSecondaryBounce )
 					{
@@ -480,7 +480,7 @@ namespace castor3d
 					ELSE
 					{
 						vxlRadiance = traceConeRadiance( mapVoxelsFirstBounce
-						, surface
+							, surface
 							, voxelData );
 					}
 					FI;
@@ -541,7 +541,7 @@ namespace castor3d
 
 				IF( m_writer, voxelData.enabled != 0_u )
 				{
-					auto vxlReflection = m_writer.declLocale< sdw::Vec4 >( "vxlReflection" );
+					auto vxlReflection( m_writer.declLocale< sdw::Vec4 >( "vxlReflection" ) );
 
 					IF( m_writer, voxelData.enableSecondaryBounce )
 					{
