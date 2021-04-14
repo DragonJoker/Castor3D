@@ -918,9 +918,9 @@ namespace smaa
 		};
 
 		auto areaTexBuffer = PxBufferBase::create( Size{ AREATEX_WIDTH, AREATEX_HEIGHT }
-			, PixelFormat::eR8A8_UNORM
+			, PixelFormat::eR8G8_UNORM
 			, areaTexBytes
-			, PixelFormat::eR8A8_UNORM );
+			, PixelFormat::eR8G8_UNORM );
 		m_areaTex = std::make_shared< castor3d::TextureLayout >( m_renderSystem
 			, image
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT

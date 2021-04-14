@@ -29,7 +29,7 @@ namespace castor
 
 			auto buffer = PxBufferBase::create( Size{ imgSize, imgSize }
 				, PixelFormat::eR8G8B8A8_UNORM );
-			uint32_t bpp = PF::getBytesPerPixel( buffer->getFormat() );
+			uint32_t bpp = getBytesPerPixel( buffer->getFormat() );
 			auto pitch = imgSize * bpp;
 
 			// init random number generator

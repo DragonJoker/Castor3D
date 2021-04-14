@@ -144,7 +144,7 @@ namespace castor
 		result.extent = { texture.extent().x, texture.extent().y, texture.extent().z };
 		result.layers = uint32_t( texture.layers() );
 		result.levels = uint32_t( texture.levels() );
-		result.alignment = uint32_t( PF::getBytesPerPixel( result.format ) );
+		result.alignment = uint32_t( getBytesPerPixel( result.format ) );
 		buffer = PxBufferBase::create( result.dimensions()
 			, result.layers
 			, result.levels

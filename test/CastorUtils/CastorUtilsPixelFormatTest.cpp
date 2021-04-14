@@ -16,10 +16,10 @@ namespace
 		{
 			stream << "BPP : ";
 			stream.width( 2 );
-			stream << uint32_t( PF::getBytesPerPixel( pixel.getFormat() ) );
+			stream << uint32_t( getBytesPerPixel( pixel.getFormat() ) );
 			stream << ", Format : ";
 			stream.width( 10 );
-			stream << string::stringCast< CharType >( PF::getFormatName( pixel.getFormat() ) );
+			stream << string::stringCast< CharType >( getFormatName( pixel.getFormat() ) );
 			stream << ", Value : (";
 			stream.width( 3 );
 			stream << int( getR8U( pixel ) );
@@ -61,10 +61,10 @@ namespace
 		{
 			stream << "BPP : ";
 			stream.width( 2 );
-			stream << uint32_t( PF::getBytesPerPixel( pixel.getFormat() ) );
+			stream << uint32_t( getBytesPerPixel( pixel.getFormat() ) );
 			stream << ", Format : ";
 			stream.width( 10 );
-			stream << string::stringCast< CharType >( PF::getFormatName( pixel.getFormat() ) );
+			stream << string::stringCast< CharType >( getFormatName( pixel.getFormat() ) );
 			stream << ", Value : (";
 			stream.precision( 3 );
 			stream.width( 10 );
@@ -156,10 +156,10 @@ namespace
 	{
 		stream << "BPP : ";
 		stream.width( 2 );
-		stream << uint32_t( PF::getBytesPerPixel( buffer.getFormat() ) );
+		stream << uint32_t( getBytesPerPixel( buffer.getFormat() ) );
 		stream << ", Format : ";
 		stream.width( 10 );
-		stream << string::stringCast< CharType >( PF::getFormatName( buffer.getFormat() ) );
+		stream << string::stringCast< CharType >( getFormatName( buffer.getFormat() ) );
 		return stream;
 	}
 
@@ -198,14 +198,12 @@ namespace
 		PixelConverter< PFDst, PFSrc >()( p_source );
 	}
 
-	template< PixelFormat PFSrc, typename Enable = void > struct PixelConversionChecker;
-
-	template< PixelFormat PFSrc >
-	struct PixelConversionChecker< PFSrc, typename std::enable_if< IsColourFormat< PFSrc >::value >::type >
+	template< PixelFormat PF >
+	void CheckPixelConversions()
 	{
-		void operator()()
+		if constexpr ( isColourFormatV< PF > )
 		{
-			Pixel< PFSrc > source( true );
+			Pixel< PF > source( true );
 			setR8U( source, 0x40 );
 			setG8U( source, 0x80 );
 			setB8U( source, 0xBF );
@@ -216,8 +214,8 @@ namespace
 			Logger::logTrace( stream );
 			convertPixel< PixelFormat::eR8_UNORM >( source );
 			convertPixel< PixelFormat::eR32_SFLOAT >( source );
-			convertPixel< PixelFormat::eR8A8_UNORM >( source );
-			convertPixel< PixelFormat::eR32A32_SFLOAT >( source );
+			convertPixel< PixelFormat::eR8G8_UNORM >( source );
+			convertPixel< PixelFormat::eR32G32_SFLOAT >( source );
 			convertPixel< PixelFormat::eR5G5B5A1_UNORM >( source );
 			convertPixel< PixelFormat::eR5G6B5_UNORM >( source );
 			convertPixel< PixelFormat::eR8G8B8_UNORM >( source );
@@ -226,14 +224,9 @@ namespace
 			convertPixel< PixelFormat::eR32G32B32A32_SFLOAT >( source );
 			Logger::logTrace( StringStream() << std::endl );
 		}
-	};
-
-	template< PixelFormat PFSrc >
-	struct PixelConversionChecker< PFSrc, typename std::enable_if< IsDepthStencilFormat< PFSrc >::value >::type >
-	{
-		void operator()()
+		else if constexpr ( isDepthStencilFormatV< PF > )
 		{
-			Pixel< PFSrc > source( true );
+			Pixel< PF > source( true );
 			setD24U( source, 0x00102040 );
 			setS8U( source, 0x80 );
 			auto stream = castor::makeStringStream();
@@ -241,17 +234,11 @@ namespace
 			stream << "Source pixel : " << source;
 			Logger::logTrace( stream );
 			convertPixel< PixelFormat::eD16_UNORM >( source );
-			convertPixel< PixelFormat::eD32_UNORM >( source );
+			convertPixel< PixelFormat::eX8_D24_UNORM >( source );
 			convertPixel< PixelFormat::eD24_UNORM_S8_UINT >( source );
 			convertPixel< PixelFormat::eS8_UINT >( source );
 			Logger::logTrace( StringStream() << std::endl );
 		}
-	};
-
-	template< PixelFormat PF >
-	void CheckPixelConversions()
-	{
-		PixelConversionChecker< PF >()();
 	}
 
 	template< PixelFormat PFDst, PixelFormat PFSrc >
@@ -320,8 +307,8 @@ namespace
 			Logger::logTrace( stream );
 			convertBuffer< PixelFormat::eR8_UNORM >( source );
 			convertBuffer< PixelFormat::eR32_SFLOAT >( source );
-			convertBuffer< PixelFormat::eR8A8_UNORM >( source );
-			convertBuffer< PixelFormat::eR32A32_SFLOAT >( source );
+			convertBuffer< PixelFormat::eR8G8_UNORM >( source );
+			convertBuffer< PixelFormat::eR32G32_SFLOAT >( source );
 			convertBuffer< PixelFormat::eR5G5B5A1_UNORM >( source );
 			convertBuffer< PixelFormat::eR5G6B5_UNORM >( source );
 			convertBuffer< PixelFormat::eR8G8B8_UNORM >( source );
@@ -363,7 +350,7 @@ namespace
 			stream << "Source buffer : " << *source;
 			Logger::logTrace( stream );
 			convertBuffer< PixelFormat::eD16_UNORM >( source );
-			convertBuffer< PixelFormat::eD32_UNORM >( source );
+			convertBuffer< PixelFormat::eX8_D24_UNORM >( source );
 			convertBuffer< PixelFormat::eD24_UNORM_S8_UINT >( source );
 			Logger::logTrace( StringStream() << std::endl );
 		}
@@ -400,7 +387,7 @@ namespace
 			stream << "Source buffer : " << *source;
 			Logger::logTrace( stream );
 			convertBuffer< PixelFormat::eD16_UNORM >( source );
-			convertBuffer< PixelFormat::eD32_UNORM >( source );
+			convertBuffer< PixelFormat::eX8_D24_UNORM >( source );
 			convertBuffer< PixelFormat::eD24_UNORM_S8_UINT >( source );
 			convertBuffer< PixelFormat::eS8_UINT >( source );
 			Logger::logTrace( StringStream() << std::endl );
@@ -468,8 +455,8 @@ namespace Testing
 	{
 		CheckPixelConversions< PixelFormat::eR8_UNORM >();
 		CheckPixelConversions< PixelFormat::eR32_SFLOAT >();
-		CheckPixelConversions< PixelFormat::eR8A8_UNORM >();
-		CheckPixelConversions< PixelFormat::eR32A32_SFLOAT >();
+		CheckPixelConversions< PixelFormat::eR8G8_UNORM >();
+		CheckPixelConversions< PixelFormat::eR32G32_SFLOAT >();
 		CheckPixelConversions< PixelFormat::eR5G5B5A1_UNORM >();
 		CheckPixelConversions< PixelFormat::eR5G6B5_UNORM >();
 		CheckPixelConversions< PixelFormat::eR8G8B8_UNORM >();
@@ -477,7 +464,7 @@ namespace Testing
 		CheckPixelConversions< PixelFormat::eR32G32B32_SFLOAT >();
 		CheckPixelConversions< PixelFormat::eR32G32B32A32_SFLOAT >();
 		CheckPixelConversions< PixelFormat::eD16_UNORM >();
-		CheckPixelConversions< PixelFormat::eD32_UNORM >();
+		CheckPixelConversions< PixelFormat::eX8_D24_UNORM >();
 		CheckPixelConversions< PixelFormat::eD24_UNORM_S8_UINT >();
 		CheckPixelConversions< PixelFormat::eS8_UINT >();
 	}
@@ -486,8 +473,8 @@ namespace Testing
 	{
 		CheckBufferConversions< PixelFormat::eR8_UNORM >();
 		CheckBufferConversions< PixelFormat::eR32_SFLOAT >();
-		CheckBufferConversions< PixelFormat::eR8A8_UNORM >();
-		CheckBufferConversions< PixelFormat::eR32A32_SFLOAT >();
+		CheckBufferConversions< PixelFormat::eR8G8_UNORM >();
+		CheckBufferConversions< PixelFormat::eR32G32_SFLOAT >();
 		CheckBufferConversions< PixelFormat::eR5G5B5A1_UNORM >();
 		CheckBufferConversions< PixelFormat::eR5G6B5_UNORM >();
 		CheckBufferConversions< PixelFormat::eR8G8B8_UNORM >();
@@ -495,7 +482,7 @@ namespace Testing
 		CheckBufferConversions< PixelFormat::eR32G32B32_SFLOAT >();
 		CheckBufferConversions< PixelFormat::eR32G32B32A32_SFLOAT >();
 		CheckBufferConversions< PixelFormat::eD16_UNORM >();
-		CheckBufferConversions< PixelFormat::eD32_UNORM >();
+		CheckBufferConversions< PixelFormat::eX8_D24_UNORM >();
 		CheckBufferConversions< PixelFormat::eD24_UNORM_S8_UINT >();
 		CheckBufferConversions< PixelFormat::eS8_UINT >();
 	}
