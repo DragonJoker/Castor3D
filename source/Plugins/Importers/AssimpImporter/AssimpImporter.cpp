@@ -552,7 +552,11 @@ namespace C3dAssimp
 			if ( !pass.getTextureUnits( TextureFlag::eOpacity ).empty()
 				&& pass.getAlphaFunc() == VkCompareOp::VK_COMPARE_OP_ALWAYS )
 			{
-				pass.getOwner()->addAlphaRejectionPass( pass );
+				pass.setTwoSided( true );
+				pass.setAlphaBlendMode( BlendMode::eInterpolative );
+				pass.setAlphaFunc( VK_COMPARE_OP_GREATER );
+				pass.setBlendAlphaFunc( VK_COMPARE_OP_LESS_OR_EQUAL );
+				pass.setAlphaValue( 0.95f );
 			}
 		}
 
