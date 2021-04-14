@@ -84,42 +84,42 @@ namespace castor3d
 	void SkyboxBackground::loadLeftImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::eNegativeX, folder, relative );
+		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::eNegativeX, folder, relative, false );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadRightImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::ePositiveX, folder, relative );
+		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::ePositiveX, folder, relative, false );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadTopImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::eNegativeY, folder, relative );
+		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::eNegativeY, folder, relative, false );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadBottomImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::ePositiveY, folder, relative );
+		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::ePositiveY, folder, relative, false );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadFrontImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::eNegativeZ, folder, relative );
+		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::eNegativeZ, folder, relative, false );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadBackImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::ePositiveZ, folder, relative );
+		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::ePositiveZ, folder, relative, false );
 		notifyChanged();
 	}
 
@@ -127,7 +127,7 @@ namespace castor3d
 		, castor::Path const & relative
 		, CubeMapFace face )
 	{
-		getTexture().setLayerCubeFaceSource( 0u, face, folder, relative );
+		getTexture().setLayerCubeFaceSource( 0u, face, folder, relative, false );
 		notifyChanged();
 	}
 
@@ -152,7 +152,7 @@ namespace castor3d
 			, std::move( image )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SkyboxBackgroundEquirectangular" ) );
-		texture->setSource( folder, relative );
+		texture->setSource( folder, relative, false );
 		setEquiTexture( texture, size );
 	}
 
@@ -192,7 +192,7 @@ namespace castor3d
 			, image
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SkyboxBackgroundCross" ) );
-		texture->setSource( folder, relative );
+		texture->setSource( folder, relative, false );
 		setCrossTexture( texture );
 	}
 

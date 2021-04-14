@@ -577,26 +577,26 @@ namespace castor3d
 			, uint32_t & srcMipLevels
 			, bool allowCompression )
 		{
-			castor::PxBufferBaseSPtr buffer;
-			ImageLayout layout;
-			Path filePath;
+			castor::ImageSPtr image;
 
-			if ( castor::File::fileExists( folder / relative ) )
+			if ( engine.getImageCache().has( name ) )
 			{
-				auto image = engine.getImageLoader().load( name, folder / relative, allowCompression );
-				filePath = image.getPath();
-				layout = image.getLayout();
-				buffer = image.getPixels();
+				image = engine.getImageCache().find( name );
+			}
+			else
+			{
+				image = engine.getImageCache().add( name
+					, folder / relative
+					, allowCompression );
 			}
 
-			if ( !buffer )
-			{
-				CU_Exception( cuT( "TextureView::setSource - Couldn't load image " ) + relative );
-			}
-
+			auto buffer = adaptBuffer( image->getPixels(), mipLevels );
 			srcMipLevels = buffer->getLevels();
-			buffer = adaptBuffer( buffer, mipLevels );
-			return castor::Image{ name, filePath, ImageLayout{ layout.type, *buffer }, buffer };
+			castor::ImageLayout layout{ image->getLayout().type, *buffer };
+			return castor::Image{ name
+				, folder / relative
+				, layout
+				, std::move( buffer ) };
 		}
 
 		void processLevels( RenderDevice const & device
@@ -903,10 +903,32 @@ namespace castor3d
 		if ( !m_initialised )
 		{
 			auto props = device->getPhysicalDevice().getFormatProperties( m_info->format );
+			VkImageFormatProperties imageProps{};
+			auto res = device->getPhysicalDevice().getImageFormatProperties( m_info->format
+				, m_info->imageType
+				, m_info->tiling
+				, m_info->usage
+				, m_info->flags
+				, imageProps );
+
+			if ( res != VK_SUCCESS )
+			{
+				CU_Exception( "Unsupported image format properties" );
+			}
 
 			if ( checkFlag( props.optimalTilingFeatures, VK_FORMAT_FEATURE_TRANSFER_DST_BIT ) )
 			{
-				m_info->usage |= VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+				res = device->getPhysicalDevice().getImageFormatProperties( m_info->format
+					, m_info->imageType
+					, m_info->tiling
+					, m_info->usage | VK_IMAGE_USAGE_TRANSFER_DST_BIT
+					, m_info->flags
+					, imageProps );
+
+				if ( res == VK_SUCCESS )
+				{
+					m_info->usage |= VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+				}
 			}
 
 			if ( m_info->mipLevels > 1u )

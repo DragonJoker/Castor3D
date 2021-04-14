@@ -3462,7 +3462,7 @@ namespace castor3d
 			{
 				parsingContext->textureUnit = std::make_shared< TextureUnit >( *parsingContext->m_pParser->getEngine() );
 				parsingContext->createUnit = true;
-				parsingContext->imageInfo->mipLevels = ~uint32_t( 0u );
+				parsingContext->imageInfo->mipLevels = ashes::RemainingArrayLayers;
 			}
 			else
 			{
