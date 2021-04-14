@@ -3194,25 +3194,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 
-		if ( parsingContext->material )
-		{
-			auto material = parsingContext->material;
-
-			if ( material->getPassCount() == 1u )
-			{
-				auto pass = *material->begin();
-
-				if ( pass->hasOnlyAlphaBlending()
-					&& parsingContext->bBool1
-					&& !pass->getTextures( TextureFlag::eOpacity ).empty() )
-				{
-					parsingContext->bBool1 = false;
-					// Create a new pass with alpha rejection
-					material->addAlphaRejectionPass( *pass );
-				}
-			}
-		}
-		else
+		if ( !parsingContext->material )
 		{
 			CU_ParsingError( cuT( "Material not initialised" ) );
 		}
@@ -3525,7 +3507,17 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			params[0]->get( parsingContext->bBool1 );
+			bool value;
+			params[0]->get( value );
+
+			if ( value )
+			{
+				parsingContext->pass->setTwoSided( true );
+				parsingContext->pass->setAlphaBlendMode( BlendMode::eInterpolative );
+				parsingContext->pass->setAlphaFunc( VK_COMPARE_OP_GREATER );
+				parsingContext->pass->setBlendAlphaFunc( VK_COMPARE_OP_LESS_OR_EQUAL );
+				parsingContext->pass->setAlphaValue( 0.95f );
+			}
 
 		}
 	}
