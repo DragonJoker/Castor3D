@@ -147,8 +147,8 @@ namespace castor
 					}
 				}
 
-				srcBuffer += PixelDefinitions< PFSrc >::Size;
-				dstBuffer += PixelDefinitions< PFDst >::Size;
+				srcBuffer += getBytesPerPixel( PFSrc );
+				dstBuffer += getBytesPerPixel( PFDst );
 			}
 		};
 		/**
@@ -170,8 +170,8 @@ namespace castor
 			{
 				uint8_t const * src = &srcBuffer[0];
 				uint8_t * dst = &dstBuffer[0];
-				uint32_t count = srcSize / PixelDefinitions< PFSrc >::Size;
-				CU_Require( srcSize / PixelDefinitions< PFSrc >::Size == dstSize / PixelDefinitions< PFDst >::Size );
+				uint32_t count = srcSize / getBytesPerPixel( PFSrc );
+				CU_Require( srcSize / getBytesPerPixel( PFSrc ) == dstSize / getBytesPerPixel( PFDst ) );
 				PixelConverter< PFSrc, PFDst > converter;
 
 				for ( uint32_t i = 0; i < count; i++ )
