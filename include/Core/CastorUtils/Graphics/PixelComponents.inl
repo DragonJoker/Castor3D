@@ -3461,6 +3461,111 @@ namespace castor
 			getDst( buffer ).a = value;
 		}
 	};
+	//!\~english	Specialisation for PixelFormat::eB10G11R11_UFLOAT
+	//!\~french		Spécialisation pour PixelFormat::eB10G11R11_UFLOAT
+	template<>
+	struct PixelComponents< PixelFormat::eB10G11R11_UFLOAT >
+	{
+		using Type = float;
+		struct Pixel
+		{
+			uint32_t b : 10;
+			uint32_t g : 11;
+			uint32_t r : 11;
+		};
+		static Pixel const & getSrc( void const * buffer )
+		{
+			return *reinterpret_cast< Pixel const * >( buffer );
+		}
+		static Pixel & getDst( void * buffer )
+		{
+			return *reinterpret_cast< Pixel * >( buffer );
+		}
+		static Type R( uint8_t const * buffer )
+		{
+			return Type( getSrc( buffer ).r << 21 );
+		}
+		static Type G( uint8_t const * buffer )
+		{
+			return Type( getSrc( buffer ).g << 21 );
+		}
+		static Type B( uint8_t const * buffer )
+		{
+			return Type( getSrc( buffer ).b << 22 );
+		}
+		static Type A( uint8_t const * buffer )
+		{
+			return std::numeric_limits< float >::max();
+		}
+		static void R( uint8_t * buffer, Type value )
+		{
+			getDst( buffer ).r = ( uint32_t( value ) >> 21 );
+		}
+		static void G( uint8_t * buffer, Type value )
+		{
+			getDst( buffer ).g = ( uint32_t( value ) >> 21 );
+		}
+		static void B( uint8_t * buffer, Type value )
+		{
+			getDst( buffer ).b = ( uint32_t( value ) >> 21 );
+		}
+		static void A( uint8_t * buffer, Type value )
+		{
+		}
+	};
+	//!\~english	Specialisation for PixelFormat::eE5B9G9R9_UFLOAT
+	//!\~french		Spécialisation pour PixelFormat::eE5B9G9R9_UFLOAT
+	template<>
+	struct PixelComponents< PixelFormat::eE5B9G9R9_UFLOAT >
+	{
+		using Type = float;
+		struct Pixel
+		{
+			uint32_t e : 5;
+			uint32_t b : 9;
+			uint32_t g : 9;
+			uint32_t r : 9;
+		};
+		static Pixel const & getSrc( void const * buffer )
+		{
+			return *reinterpret_cast< Pixel const * >( buffer );
+		}
+		static Pixel & getDst( void * buffer )
+		{
+			return *reinterpret_cast< Pixel * >( buffer );
+		}
+		static Type R( uint8_t const * buffer )
+		{
+			return Type( getSrc( buffer ).r << 23 );
+		}
+		static Type G( uint8_t const * buffer )
+		{
+			return Type( getSrc( buffer ).g << 23 );
+		}
+		static Type B( uint8_t const * buffer )
+		{
+			return Type( getSrc( buffer ).b << 23 );
+		}
+		static Type A( uint8_t const * buffer )
+		{
+			return std::numeric_limits< float >::max();
+		}
+		static void R( uint8_t * buffer, Type value )
+		{
+			getDst( buffer ).r = ( uint32_t( value ) >> 23 );
+		}
+		static void G( uint8_t * buffer, Type value )
+		{
+			getDst( buffer ).g = ( uint32_t( value ) >> 23 );
+		}
+		static void B( uint8_t * buffer, Type value )
+		{
+			getDst( buffer ).b = ( uint32_t( value ) >> 23 );
+		}
+		static void A( uint8_t * buffer, Type value )
+		{
+		}
+	};
 	//!\~english	Specialisation for PixelFormat::eD16_UNORM
 	//!\~french		Spécialisation pour PixelFormat::eD16_UNORM
 	template<>

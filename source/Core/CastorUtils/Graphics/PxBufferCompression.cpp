@@ -230,7 +230,7 @@ namespace castor
 		using namespace cvtt::Kernels;
 		auto blocks = blocksCont.data();
 		uint32_t written = 0u;
-		auto pixelSize = PF::getBytesPerPixel( dstFormat );
+		auto pixelSize = getBytesPerPixel( dstFormat );
 
 		for ( auto it = blocksCont.begin(); it != blocksCont.end(); it += cvtt::NumParallelBlocks )
 		{
@@ -293,7 +293,7 @@ namespace castor
 		using namespace cvtt::Kernels;
 		auto blocks = blocksCont.data();
 		uint32_t written = 0u;
-		auto pixelSize = PF::getBytesPerPixel( dstFormat );
+		auto pixelSize = getBytesPerPixel( dstFormat );
 
 		for ( auto it = blocksCont.begin(); it != blocksCont.end(); it += cvtt::NumParallelBlocks )
 		{
@@ -326,7 +326,7 @@ namespace castor
 		using namespace cvtt::Kernels;
 		auto blocks = blocksCont.data();
 		uint32_t written = 0u;
-		auto pixelSize = PF::getBytesPerPixel( dstFormat );
+		auto pixelSize = getBytesPerPixel( dstFormat );
 
 		for ( auto it = blocksCont.begin(); it != blocksCont.end(); it += cvtt::NumParallelBlocks )
 		{
