@@ -127,15 +127,6 @@ namespace castor3d
 		C3D_API bool isTextured( TextureFlags mask = TextureFlag::eAll )const;
 		/**
 		 *\~english
-		 *\return		Adds an alpha rejection matching pass for given base pass.
-		 *\param[in]	basePass	The pass from which the alpha rejection pass is created.
-		 *\~french
-		 *\return		Ajoute une pass d'alpha rejection mixée, pour la passe donnée.
-		 *\param[in]	basePass	La passe à partir de laquelle la passe d'alpha rejection mixée est créée.
-		 */
-		C3D_API void addAlphaRejectionPass( Pass & basePass );
-		/**
-		 *\~english
 		 *\return		The passes count.
 		 *\~french
 		 *\return		Le nombre de passes.
