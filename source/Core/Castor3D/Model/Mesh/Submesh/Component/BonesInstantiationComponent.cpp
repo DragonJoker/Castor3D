@@ -31,6 +31,14 @@ namespace castor3d
 	{
 	}
 
+	SubmeshComponentSPtr BonesInstantiationComponent::clone( Submesh & submesh )const
+	{
+		auto result = std::make_shared< BonesInstantiationComponent >( submesh
+			, *submesh.getComponent< InstantiationComponent >()
+			, *submesh.getComponent< BonesComponent >() );
+		return result;
+	}
+
 	bool BonesInstantiationComponent::doInitialise( RenderDevice const & device )
 	{
 		bool result = true;

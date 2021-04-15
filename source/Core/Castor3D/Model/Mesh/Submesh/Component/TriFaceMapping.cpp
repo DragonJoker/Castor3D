@@ -98,6 +98,15 @@ namespace castor3d
 		}
 	}
 
+	SubmeshComponentSPtr TriFaceMapping::clone( Submesh & submesh )const
+	{
+		auto result = std::make_shared< TriFaceMapping >( submesh );
+		result->m_faces = m_faces;
+		result->m_hasNormals = m_hasNormals;
+		result->m_cameraPosition = m_cameraPosition;
+		return result;
+	}
+
 	void TriFaceMapping::computeNormals( Face const & face )
 	{
 		SubmeshUtils::computeNormals( *getOwner(), face );
