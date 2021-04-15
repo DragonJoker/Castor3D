@@ -19,8 +19,10 @@
 #include <GuiCommon/System/MaterialsList.hpp>
 #include <GuiCommon/System/RendererSelector.hpp>
 #include <GuiCommon/System/SplashScreen.hpp>
-#include <GuiCommon/System/SceneExporter.hpp>
 #include <GuiCommon/System/TreeListContainer.hpp>
+
+#include <SceneExporter/CscnExporter.hpp>
+#include <SceneExporter/ObjExporter.hpp>
 
 #include <Castor3D/Cache/SceneCache.hpp>
 #include <Castor3D/Cache/WindowCache.hpp>
@@ -984,7 +986,7 @@ namespace CastorViewer
 
 	void MainFrame::onExportScene( wxCommandEvent & event )
 	{
-		GuiCommon::ExportOptions options;
+		exporter::ExportOptions options;
 		PropertiesDialog dialog{ this
 			, _( "Export" )
 			, std::make_unique< GuiCommon::ExportOptionsTreeItemProperty >( true, options ) };
@@ -1010,16 +1012,30 @@ namespace CastorViewer
 				try
 				{
 					Path pathFile( ( wxChar const * )fileDialog.GetPath().c_str() );
+					bool result = false;
 
 					if ( pathFile.getExtension() == cuT( "obj" ) )
 					{
-						ObjSceneExporter exporter{ options };
-						exporter.exportScene( *scene, pathFile );
+						exporter::ObjSceneExporter exporter{ options };
+						result = exporter.exportScene( *scene, pathFile );
 					}
 					else if ( pathFile.getExtension() == cuT( "cscn" ) )
 					{
-						CscnSceneExporter exporter{ options };
-						exporter.exportScene( *scene, pathFile );
+						exporter::CscnSceneExporter exporter{ options };
+						result = exporter.exportScene( *scene, pathFile );
+					}
+
+					if ( result )
+					{
+						wxMessageBox( _( "Scene export completed" )
+							, wxMessageBoxCaptionStr
+							, wxOK | wxCENTRE | wxICON_INFORMATION );
+					}
+					else
+					{
+						wxMessageBox( _( "Scene export failed" )
+							, wxMessageBoxCaptionStr
+							, wxOK | wxCENTRE | wxICON_ERROR );
 					}
 				}
 				catch ( std::exception & exc )
