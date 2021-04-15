@@ -24,7 +24,7 @@ namespace castor
 			stream << component.value();
 		}
 
-		bool result = writeText( file, stream.str() );
+		bool result = this->writeText( file, stream.str() );
 		this->checkError( result, "RgbaColourT value" );
 		return result;
 	}
