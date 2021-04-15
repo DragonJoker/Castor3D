@@ -222,7 +222,6 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	System/NodeState.cpp
 	System/Recorder.cpp
 	System/RendererSelector.cpp
-	System/SceneExporter.cpp
 	System/SceneObjectsList.cpp
 	System/SplashScreen.cpp
 )
@@ -235,7 +234,6 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	System/NodeState.hpp
 	System/Recorder.hpp
 	System/RendererSelector.hpp
-	System/SceneExporter.hpp
 	System/SceneObjectsList.hpp
 	System/SplashScreen.hpp
 	System/TreeListContainer.hpp
@@ -284,6 +282,7 @@ target_include_directories( ${PROJECT_NAME}
 target_link_libraries( ${PROJECT_NAME}
 	PUBLIC
 		castor::Castor3D
+		castor::SceneExporter
 		${wxWidgets_LIBRARIES}
 		${GTK2_LIBRARIES}
 		${X11_LIBRARIES}
