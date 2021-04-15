@@ -6,12 +6,11 @@ See LICENSE file in root folder
 
 #include "GuiCommon/Properties/TreeItems/TreeItemProperty.hpp"
 
+#include <SceneExporter/SceneExporter.hpp>
+
 namespace GuiCommon
 {
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		24/08/2015
-	\version	0.11.0
 	\~english
 	\brief		Helper class to communicate between Scene objects or Materials lists and PropertiesContainer.
 	\~french
@@ -33,7 +32,7 @@ namespace GuiCommon
 		*\param[in]	toneMapping	L'objet cible.
 		*/
 		ExportOptionsTreeItemProperty( bool editable
-			, ExportOptions & options );
+			, castor3d::exporter::ExportOptions & options );
 		/**
 		*\~english
 		*\brief		Destructor
@@ -50,7 +49,7 @@ namespace GuiCommon
 			, wxPropertyGrid * grid );
 
 	private:
-		ExportOptions & m_options;
+		castor3d::exporter::ExportOptions & m_options;
 	};
 }
 
