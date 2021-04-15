@@ -71,7 +71,15 @@ namespace castor3d::exporter
 	{
 	}
 
-	bool ObjSceneExporter::exportScene( Scene const & scene
+	bool ObjSceneExporter::exportMesh( castor3d::Scene const & scene
+		, castor3d::Mesh const & mesh
+		, castor::Path const & outputFolder
+		, castor::String const & outputName )
+	{
+		return false;
+	}
+
+	bool ObjSceneExporter::exportScene( castor3d::Scene const & scene
 		, castor::Path const & fileName )
 	{
 		castor::Path mtlFilePath( fileName );
