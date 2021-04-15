@@ -55,6 +55,10 @@ namespace castor3d
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 			, uint32_t instanceMult )override;
 		/**
+		 *\copydoc		castor3d::SubmeshComponent::clone
+		 */
+		C3D_API SubmeshComponentSPtr clone( Submesh & submesh )const override;
+		/**
 		 *\~english
 		 *\brief		adds bone datas.
 		 *\param[in]	boneData	The bone datas.
@@ -72,7 +76,7 @@ namespace castor3d
 		 *\param[in]	boneData	Les données de bones.
 		 */
 		template< size_t Count >
-		inline void addBoneDatas( std::array< VertexBoneData, Count > const & boneData )
+		void addBoneDatas( std::array< VertexBoneData, Count > const & boneData )
 		{
 			addBoneDatas( boneData.data(), boneData.data() + boneData.size() );
 		}
@@ -82,7 +86,7 @@ namespace castor3d
 		 *\~french
 		 *\return		\p true si le sous-maillage a des données d'os.
 		 */
-		inline bool hasBoneData()const
+		bool hasBoneData()const
 		{
 			return !m_bones.empty();
 		}
@@ -92,7 +96,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les données d'os.
 		 */
-		inline VertexBoneDataArray const & getBonesData()const
+		VertexBoneDataArray const & getBonesData()const
 		{
 			return m_bones;
 		}
@@ -102,7 +106,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le VertexBuffer des bones.
 		 */
-		inline ashes::VertexBuffer< VertexBoneData > const & getBonesBuffer()const
+		ashes::VertexBuffer< VertexBoneData > const & getBonesBuffer()const
 		{
 			return *m_bonesBuffer;
 		}
@@ -112,14 +116,14 @@ namespace castor3d
 		 *\~french
 		 *\return		Le VertexBuffer des bones.
 		 */
-		inline ashes::VertexBuffer< VertexBoneData > & getBonesBuffer()
+		ashes::VertexBuffer< VertexBoneData > & getBonesBuffer()
 		{
 			return *m_bonesBuffer;
 		}
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
 		 */
-		inline ProgramFlags getProgramFlags( MaterialSPtr material )const override
+		ProgramFlags getProgramFlags( MaterialSPtr material )const override
 		{
 			return hasBoneData()
 				? ProgramFlag::eSkinning
