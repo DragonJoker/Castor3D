@@ -31,6 +31,14 @@ namespace castor3d
 		layouts.emplace_back( *m_animLayout );
 	}
 
+	SubmeshComponentSPtr MorphComponent::clone( Submesh & submesh )const
+	{
+		auto result = std::make_shared< MorphComponent >( submesh );
+		result->m_data = m_data;
+		result->m_animLayout = std::make_unique<ashes::PipelineVertexInputStateCreateInfo >( *m_animLayout );
+		return result;
+	}
+
 	bool MorphComponent::doInitialise( RenderDevice const & device )
 	{
 		auto & vertexBuffer = getOwner()->getVertexBuffer();
