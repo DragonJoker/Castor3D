@@ -8,7 +8,7 @@ namespace castor
 
 	template< typename ComponentT >
 	bool TextWriter< RgbaColourT< ComponentT > >::operator()( RgbaColourT< ComponentT > const & colour
-		, TextFile & file )
+		, StringStream & file )
 	{
 		StringStream stream{ castor::makeStringStream() };
 		stream.setf( std::ios::boolalpha );
@@ -24,7 +24,7 @@ namespace castor
 			stream << component.value();
 		}
 
-		bool result = file.print( 1024, cuT( "%s" ), stream.str().c_str() ) > 0;
+		bool result = writeText( file, stream.str() );
 		this->checkError( result, "RgbaColourT value" );
 		return result;
 	}

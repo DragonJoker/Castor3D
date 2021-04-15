@@ -13,7 +13,7 @@ namespace castor
 	}
 
 	bool TextWriter< Sampler >::operator()( Sampler const & sampler
-		, castor::TextFile & file )
+		, castor::StringStream & file )
 	{
 		bool result = true;
 

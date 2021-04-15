@@ -17,7 +17,7 @@ namespace castor
 	}
 
 	bool TextWriter< BorderPanelOverlay >::operator()( BorderPanelOverlay const & overlay
-		, TextFile & file )
+		, StringStream & file )
 	{
 		log::info << tabs() << cuT( "Writing BorderPanelOverlay " ) << overlay.getOverlayName() << std::endl;
 		bool result = false;

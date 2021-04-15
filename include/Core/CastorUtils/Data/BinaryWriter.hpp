@@ -11,10 +11,10 @@ namespace castor
 {
 	template< class T >
 	class BinaryWriter
-		: public Writer< T, FileType::eBinary >
+		: public FileWriter< T, FileType::eBinary >
 	{
 	protected:
-		using Type = typename Writer< T, FileType::eBinary >::Type;
+		using Type = typename FileWriter< T, FileType::eBinary >::Type;
 
 	public:
 		/**

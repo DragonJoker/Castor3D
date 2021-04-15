@@ -15,9 +15,9 @@ namespace castor
 			: public TextWriterT< castor3d::BorderPanelOverlay >
 	{
 	public:
-		C3D_API explicit TextWriter( castor::String const & tabs );
+		C3D_API explicit TextWriter( String const & tabs );
 		C3D_API bool operator()( castor3d::BorderPanelOverlay const & overlay
-			, castor::TextFile & file );
+			, castor::StringStream & file );
 	};
 }
 

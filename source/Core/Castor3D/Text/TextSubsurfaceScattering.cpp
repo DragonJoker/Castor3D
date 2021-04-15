@@ -14,7 +14,7 @@ namespace castor
 	}
 
 	bool TextWriter< SubsurfaceScattering >::operator()( SubsurfaceScattering const & obj
-		, TextFile & file )
+		, StringStream & file )
 	{
 		auto result = false;
 		log::info << tabs() << cuT( "Writing SubsurfaceScattering" ) << std::endl;

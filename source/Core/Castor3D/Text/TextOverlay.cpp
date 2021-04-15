@@ -14,7 +14,7 @@ namespace castor
 	}
 
 	bool TextWriter< Overlay >::operator()( Overlay const & overlay
-		, TextFile & file )
+		, StringStream & file )
 	{
 		switch ( overlay.getType() )
 		{

@@ -203,9 +203,10 @@ namespace Bloom
 		m_vertexBuffer.reset();
 	}
 
-	bool PostEffect::doWriteInto( TextFile & file, String const & tabs )
+	bool PostEffect::doWriteInto( StringStream & file, String const & tabs )
 	{
-		return file.writeText( tabs + cuT( "postfx \"" ) + Type + cuT( "\" -Size=" ) + string::toString( m_blurKernelSize )
-			+ cuT( " -Passes=" ) + string::toString( m_blurPassesCount ) ) > 0;
+		file << ( tabs + cuT( "postfx \"" ) + Type + cuT( "\" -Size=" ) + string::toString( m_blurKernelSize )
+			+ cuT( " -Passes=" ) + string::toString( m_blurPassesCount ) );
+		return true;
 	}
 }

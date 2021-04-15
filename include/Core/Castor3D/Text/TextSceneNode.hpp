@@ -18,7 +18,7 @@ namespace castor
 		C3D_API explicit TextWriter( castor::String const & tabs
 			, float scale = 1.0f );
 		C3D_API bool operator()( castor3d::SceneNode const & node
-			, castor::TextFile & file )override;
+			, castor::StringStream & file )override;
 
 	private:
 		float m_scale;
