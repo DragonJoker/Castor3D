@@ -36,7 +36,7 @@ target_include_directories( ${PROJECT_NAME} PRIVATE
 	${CASTOR_BINARY_DIR}/tools
 )
 target_link_libraries( ${PROJECT_NAME} PRIVATE
-	castor::Castor3D
+	castor::SceneExporter
 )
 target_compile_definitions( ${PROJECT_NAME} PRIVATE
 	${CastorToolsDefinitions}
