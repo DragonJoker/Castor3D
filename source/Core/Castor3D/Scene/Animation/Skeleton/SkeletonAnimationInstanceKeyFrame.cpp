@@ -52,6 +52,10 @@ namespace castor3d
 						{
 							transform = castor::Matrix4x4f{ it->second * bone->getOffsetMatrix() * boneData.m_weights[0] };
 						}
+						else
+						{
+							log::warn << "Bone for Keyframe not found" << std::endl;
+						}
 					}
 
 					for ( uint32_t i = 1; i < boneData.m_ids.size(); ++i )
@@ -64,6 +68,10 @@ namespace castor3d
 							if ( it != keyFrame.end() )
 							{
 								transform += castor::Matrix4x4f{ it->second * bone->getOffsetMatrix() * boneData.m_weights[i] };
+							}
+							else
+							{
+								log::warn << "Bone for Keyframe not found" << std::endl;
 							}
 						}
 					}
