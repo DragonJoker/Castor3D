@@ -18,7 +18,7 @@ namespace castor
 	}
 
 	bool TextWriter< SpotLight >::operator()( SpotLight const & light
-		, TextFile & file )
+		, StringStream & file )
 	{
 		log::info << tabs() << cuT( "Writing SpotLight " ) << light.getLight().getName() << std::endl;
 		bool result{ false };

@@ -12,7 +12,7 @@ namespace castor
 	}
 
 	bool TextWriter< Fog >::operator()( Fog const & config
-		, TextFile & file )
+		, StringStream & file )
 	{
 		bool result{ true };
 

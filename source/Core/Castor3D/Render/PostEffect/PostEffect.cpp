@@ -49,7 +49,7 @@ namespace castor3d
 	{
 	}
 
-	bool PostEffect::writeInto( castor::TextFile & file, castor::String const & tabs )
+	bool PostEffect::writeInto( castor::StringStream & file, castor::String const & tabs )
 	{
 		return doWriteInto( file, tabs );
 	}

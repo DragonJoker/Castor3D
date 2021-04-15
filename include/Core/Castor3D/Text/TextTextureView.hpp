@@ -17,7 +17,7 @@ namespace castor
 	public:
 		C3D_API explicit TextWriter( String const & tabs );
 		C3D_API bool operator()( castor3d::TextureView const & obj
-			, TextFile & file )override;
+			, StringStream & file )override;
 	};
 }
 

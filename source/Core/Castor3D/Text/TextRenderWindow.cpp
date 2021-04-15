@@ -13,7 +13,7 @@ namespace castor
 	}
 
 	bool TextWriter< RenderWindow >::operator()( RenderWindow const & window
-		, castor::TextFile & file )
+		, castor::StringStream & file )
 	{
 		log::info << tabs() << cuT( "Writing Window " ) << window.getName() << std::endl;
 		bool result = false;

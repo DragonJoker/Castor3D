@@ -16,7 +16,7 @@ namespace castor
 	{
 	public:
 		explicit TextWriter( String const & tabs );
-		bool operator()( RgbColourT< ComponentT > const & colour, TextFile & file )override;
+		bool operator()( RgbColourT< ComponentT > const & colour, StringStream & file )override;
 	};
 }
 
