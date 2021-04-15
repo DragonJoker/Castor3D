@@ -616,7 +616,7 @@ namespace castor
 			|| format == PixelFormat::eA2R10G10B10_UNORM
 			|| format == PixelFormat::eA2R10G10B10_SNORM
 			|| format == PixelFormat::eA2R10G10B10_USCALED
-			|| format == PixelFormat::eA2R10G10B10_USCALED
+			|| format == PixelFormat::eA2R10G10B10_SSCALED
 			|| format == PixelFormat::eA2R10G10B10_UINT
 			|| format == PixelFormat::eA2R10G10B10_SINT;
 	}
@@ -628,7 +628,7 @@ namespace castor
 			|| format == PixelFormat::eB8G8R8A8_UNORM
 			|| format == PixelFormat::eB8G8R8A8_SNORM
 			|| format == PixelFormat::eB8G8R8A8_USCALED
-			|| format == PixelFormat::eB8G8R8A8_USCALED
+			|| format == PixelFormat::eB8G8R8A8_SSCALED
 			|| format == PixelFormat::eB8G8R8A8_UINT
 			|| format == PixelFormat::eB8G8R8A8_SINT
 			|| format == PixelFormat::eB8G8R8A8_SRGB;
@@ -639,14 +639,14 @@ namespace castor
 		return format == PixelFormat::eA8B8G8R8_UNORM
 			|| format == PixelFormat::eA8B8G8R8_SNORM
 			|| format == PixelFormat::eA8B8G8R8_USCALED
-			|| format == PixelFormat::eA8B8G8R8_USCALED
+			|| format == PixelFormat::eA8B8G8R8_SSCALED
 			|| format == PixelFormat::eA8B8G8R8_UINT
 			|| format == PixelFormat::eA8B8G8R8_SINT
 			|| format == PixelFormat::eA8B8G8R8_SRGB
 			|| format == PixelFormat::eA2B10G10R10_UNORM
 			|| format == PixelFormat::eA2B10G10R10_SNORM
 			|| format == PixelFormat::eA2B10G10R10_USCALED
-			|| format == PixelFormat::eA2B10G10R10_USCALED
+			|| format == PixelFormat::eA2B10G10R10_SSCALED
 			|| format == PixelFormat::eA2B10G10R10_UINT
 			|| format == PixelFormat::eA2B10G10R10_SINT;
 	}

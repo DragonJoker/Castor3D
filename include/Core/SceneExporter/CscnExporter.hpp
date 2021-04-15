@@ -16,7 +16,7 @@ namespace castor3d::exporter
 		: public SceneExporter
 	{
 	public:
-		CSE_API CscnSceneExporter( ExportOptions options );
+		CSE_API explicit CscnSceneExporter( ExportOptions options );
 		CSE_API bool exportScene( castor3d::Scene const & scene
 			, castor::Path const & fileName )override;
 	};
