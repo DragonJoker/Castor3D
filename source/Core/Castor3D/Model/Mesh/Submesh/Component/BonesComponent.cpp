@@ -40,6 +40,14 @@ namespace castor3d
 		layouts.emplace_back( *m_bonesLayout );
 	}
 
+	SubmeshComponentSPtr BonesComponent::clone( Submesh & submesh )const
+	{
+		auto result = std::make_shared< BonesComponent >( submesh );
+		result->m_bones = m_bones;
+		result->m_bonesLayout = std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( *m_bonesLayout );
+		return result;
+	}
+
 	void BonesComponent::addBoneDatas( std::vector< VertexBoneData > const & boneData )
 	{
 		addBoneDatas( boneData.data(), boneData.data() + boneData.size() );
