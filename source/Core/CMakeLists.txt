@@ -5,6 +5,7 @@ function( CoreInit )
 	set( Cutils "no (Not wanted)" PARENT_SCOPE )
 	set( CUtlT "no (Not wanted)" PARENT_SCOPE )
 	set( C3D "no (Not wanted)" PARENT_SCOPE )
+	set( SEx "no (Not wanted)" PARENT_SCOPE )
 	set( Rnd "no (Not wanted)" PARENT_SCOPE )
 	set( C3DT "no (Not wanted)" PARENT_SCOPE )
 	set( CT "no (Not wanted)" PARENT_SCOPE )
@@ -25,6 +26,9 @@ function( CoreBuild )
 		set( Build ${C3D} )
 		add_subdirectory( Core/Castor3D )
 		set( C3D ${Build} PARENT_SCOPE )
+		set( Build ${SEx} )
+		add_subdirectory( Core/SceneExporter )
+		set( SEx ${Build} PARENT_SCOPE )
 	endif ()
 
 	set( ADDITIONAL_DEPS_REL
@@ -222,6 +226,22 @@ function( CoreSetup )
 			DISPLAY_NAME "Castor3D English help"
 			DESCRIPTION "Castor3D English HTML documentation."
 			GROUP Documentation
+			INSTALL_TYPES Developer Full
+		)
+
+		cpack_add_component( SceneExporter
+			DISPLAY_NAME "SceneExporter"
+			DESCRIPTION "Library used to export Castor3D scenes."
+			REQUIRED
+			GROUP Core
+			DEPENDS Castor3D
+			INSTALL_TYPES Minimal Developer Full
+		)
+		cpack_add_component( SceneExporter_dev
+			DISPLAY_NAME "SceneExporter SDK"
+			DESCRIPTION "Development files for SceneExporter."
+			GROUP Development
+			DEPENDS Castor3D_dev SceneExporter
 			INSTALL_TYPES Developer Full
 		)
 	endif ()

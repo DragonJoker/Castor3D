@@ -5,17 +5,12 @@ See LICENSE file in root folder
 #define ___GUICOMMON_PREREQUISITES_H___
 
 #include <Castor3D/Castor3DPrerequisites.hpp>
+#include <SceneExporter/SceneExporter.hpp>
 #include <ashespp/Core/WindowHandle.hpp>
 #include <wx/wx.h>
 
 namespace GuiCommon
 {
-	struct ExportOptions
-	{
-		float scale{ 1.0f };
-		bool dataSubfolders{ true };
-	};
-
 	typedef enum eBMP
 	{
 		eBMP_ANIMATED_OBJECTGROUP,

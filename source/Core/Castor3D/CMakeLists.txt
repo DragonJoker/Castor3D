@@ -1763,6 +1763,7 @@ target_compile_definitions( ${PROJECT_NAME}
 target_link_libraries( ${PROJECT_NAME}
 	PUBLIC
 		castor::CastorUtils
+		sdw::ShaderAST
 		sdw::ShaderWriter
 	PRIVATE
 		sdw::CompilerSpirV
