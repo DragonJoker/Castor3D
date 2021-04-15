@@ -8,7 +8,7 @@ namespace castor
 		struct PointTextT
 		{
 			static bool write( Point< ValueT, CountT > const & object
-				, TextFile & file )
+				, StringStream & file )
 			{
 				StringStream stream{ makeStringStream() };
 				stream.setf( std::ios::boolalpha );
@@ -21,7 +21,8 @@ namespace castor
 					stream << object[i];
 				}
 
-				return file.print( 1024, cuT( "%s" ), stream.str().c_str() ) > 0;
+				file << stream.str();
+				return true;
 			}
 		};
 	}
@@ -35,7 +36,7 @@ namespace castor
 	}
 
 	template< typename ValueT >
-	bool TextWriter< Point< ValueT, 1u > >::operator()( Point< ValueT, 1u > const & object, TextFile & file )
+	bool TextWriter< Point< ValueT, 1u > >::operator()( Point< ValueT, 1u > const & object, StringStream & file )
 	{
 		auto result = details::PointTextT< ValueT, 1u >::write( object, file );
 		this->checkError( result, "Point value" );
@@ -51,7 +52,7 @@ namespace castor
 	}
 
 	template< typename ValueT >
-	bool TextWriter< Point< ValueT, 2u > >::operator()( Point< ValueT, 2u > const & object, TextFile & file )
+	bool TextWriter< Point< ValueT, 2u > >::operator()( Point< ValueT, 2u > const & object, StringStream & file )
 	{
 		auto result = details::PointTextT< ValueT, 2u >::write( object, file );
 		this->checkError( result, "Point value" );
@@ -67,7 +68,7 @@ namespace castor
 	}
 
 	template< typename ValueT >
-	bool TextWriter< Point< ValueT, 3u > >::operator()( Point< ValueT, 3u > const & object, TextFile & file )
+	bool TextWriter< Point< ValueT, 3u > >::operator()( Point< ValueT, 3u > const & object, StringStream & file )
 	{
 		auto result = details::PointTextT< ValueT, 3u >::write( object, file );
 		this->checkError( result, "Point value" );
@@ -83,7 +84,7 @@ namespace castor
 	}
 
 	template< typename ValueT >
-	bool TextWriter< Point< ValueT, 4u > >::operator()( Point< ValueT, 4u > const & object, TextFile & file )
+	bool TextWriter< Point< ValueT, 4u > >::operator()( Point< ValueT, 4u > const & object, StringStream & file )
 	{
 		auto result = details::PointTextT< ValueT, 4u >::write( object, file );
 		this->checkError( result, "Point value" );

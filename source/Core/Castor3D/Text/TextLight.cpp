@@ -14,7 +14,7 @@ namespace castor
 	}
 
 	bool TextWriter< Light >::operator()( Light const & light
-		, TextFile & file )
+		, StringStream & file )
 	{
 		switch ( light.getLightType() )
 		{

@@ -17,16 +17,16 @@ namespace castor
 		}
 
 		C3D_API virtual bool operator()( GroupAnimation const & group
-			, castor::TextFile & file )override
+			, castor::StringStream & file )override
 		{
 			bool result = false;
 
 			if ( auto block{ beginBlock( file, "animation", group.name ) } )
 			{
 				result = write( file, "looped", group.looped )
-					&& write( file, "scale", group.scale )
-					&& write( file, "start_at", group.startingPoint.count() / 1000.0 )
-					&& write( file, "stop_at", group.stoppingPoint.count() / 1000.0 );
+					&& writeOpt( file, "scale", group.scale, 1.0f )
+					&& writeOpt( file, "start_at", group.startingPoint.count() / 1000.0, 0.0 )
+					&& writeOpt( file, "stop_at", group.stoppingPoint.count() / 1000.0, 0.0 );
 			}
 
 			return result;
@@ -39,7 +39,7 @@ namespace castor
 	}
 
 	bool TextWriter< AnimatedObjectGroup >::TextWriter::operator()( AnimatedObjectGroup const & group
-		, TextFile & file )
+		, StringStream & file )
 	{
 		log::info << tabs() << cuT( "Writing AnimatedObjectGroup " ) << group.getName() << std::endl;
 		bool result = false;
@@ -89,7 +89,7 @@ namespace castor
 
 			if ( !group.getAnimations().empty() )
 			{
-				result = result && file.writeText( cuT( "\n" ) ) > 0;
+				result = result && writeText( file, cuT( "\n" ) );
 
 				for ( auto it : group.getAnimations() )
 				{

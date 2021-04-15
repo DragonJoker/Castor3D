@@ -17,7 +17,7 @@ namespace castor
 	public:
 		C3D_API explicit TextWriter( String const & tabs );
 		C3D_API bool operator()( castor3d::BillboardList const & obj
-			, TextFile & file );
+			, castor::StringStream & file );
 	};
 }
 

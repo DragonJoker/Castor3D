@@ -12,7 +12,7 @@ namespace castor
 	}
 
 	bool TextWriter< Viewport >::operator()( Viewport const & viewport
-		, TextFile & file )
+		, StringStream & file )
 	{
 		log::info << tabs() << cuT( "Writing Viewport" ) << std::endl;
 		bool result = false;

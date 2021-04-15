@@ -18,7 +18,7 @@ namespace castor
 	}
 
 	bool TextWriter< PointLight >::operator()( PointLight const & light
-		, TextFile & file )
+		, StringStream & file )
 	{
 		log::info << tabs() << cuT( "Writing PointLight " ) << light.getLight().getName() << std::endl;
 		bool result{ false };

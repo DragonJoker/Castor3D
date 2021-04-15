@@ -7,11 +7,11 @@ namespace castor
 	{
 	}
 
-	bool TextWriter< Position >::operator()( Position const & object, TextFile & file )
+	bool TextWriter< Position >::operator()( Position const & object, StringStream & file )
 	{
 		StringStream stream{ makeStringStream() };
 		stream.setf( std::ios::showpoint );
 		stream << object[0] << " " << object[1];
-		return file.print( 1024, cuT( "%s" ), stream.str().c_str() ) > 0;
+		return writeText( file, stream.str() );
 	}
 }

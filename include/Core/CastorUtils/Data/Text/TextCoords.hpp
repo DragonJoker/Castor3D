@@ -16,7 +16,7 @@ namespace castor
 	{
 	public:
 		explicit TextWriter( String const & tabs );
-		bool operator()( Coords< ValueT, 1u > const & object, TextFile & file )override;
+		bool operator()( Coords< ValueT, 1u > const & object, StringStream & file )override;
 	};
 
 	template< typename ValueT >
@@ -25,7 +25,7 @@ namespace castor
 	{
 	public:
 		explicit TextWriter( String const & tabs );
-		bool operator()( Coords< ValueT, 2u > const & object, TextFile & file )override;
+		bool operator()( Coords< ValueT, 2u > const & object, StringStream & file )override;
 	};
 
 	template< typename ValueT >
@@ -34,7 +34,7 @@ namespace castor
 	{
 	public:
 		explicit TextWriter( String const & tabs );
-		bool operator()( Coords< ValueT, 3u > const & object, TextFile & file )override;
+		bool operator()( Coords< ValueT, 3u > const & object, StringStream & file )override;
 	};
 
 	template< typename ValueT >
@@ -43,7 +43,7 @@ namespace castor
 	{
 	public:
 		explicit TextWriter( String const & tabs );
-		bool operator()( Coords< ValueT, 4u > const & object, TextFile & file )override;
+		bool operator()( Coords< ValueT, 4u > const & object, StringStream & file )override;
 	};
 }
 

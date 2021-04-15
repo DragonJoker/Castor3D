@@ -75,7 +75,7 @@ namespace castor3d
 		 *\param[in]	file	Le fichier.
 		 *\param[in]	tabs	L'indentation actuelle.
 		 */
-		C3D_API bool writeInto( castor::TextFile & file
+		C3D_API bool writeInto( castor::StringStream & file
 			, castor::String const & tabs );
 		/**
 		 *\~english
@@ -203,7 +203,7 @@ namespace castor3d
 		 *\param[in]	file	Le fichier.
 		 *\param[in]	tabs	L'indentation actuelle.
 		 */
-		C3D_API virtual bool doWriteInto( castor::TextFile & file
+		C3D_API virtual bool doWriteInto( castor::StringStream & file
 			, castor::String const & tabs ) = 0;
 
 	protected:

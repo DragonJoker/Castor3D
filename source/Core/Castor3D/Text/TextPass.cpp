@@ -10,14 +10,16 @@ using namespace castor3d;
 namespace castor
 {
 	TextWriter< Pass >::TextWriter( String const & tabs
+		, Path const & folder
 		, String const & subfolder )
 		: TextWriterT< Pass >{ tabs }
+		, m_folder{ folder }
 		, m_subfolder{ subfolder }
 	{
 	}
 
 	bool TextWriter< Pass >::operator()( Pass const & pass
-		, TextFile & file )
+		, StringStream & file )
 	{
 		static std::map< VkCompareOp, String > strAlphaFuncs
 		{
@@ -88,7 +90,7 @@ namespace castor
 			for ( auto unit : pass )
 			{
 				result = result
-					&& writeSub( file, *unit, pass.getType(), m_subfolder );
+					&& writeSub( file, *unit, pass.getType(), m_folder, m_subfolder );
 			}
 		}
 

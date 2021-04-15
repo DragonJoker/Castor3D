@@ -10,7 +10,7 @@ namespace castor
 	}
 
 	bool TextWriter< HdrConfig >::operator()( HdrConfig const & obj
-		, TextFile & file )
+		, StringStream & file )
 	{
 		bool result = false;
 

@@ -11,10 +11,11 @@ namespace castor
 	{
 	}
 
-	bool TextWriter< VoxelSceneData >::operator()( VoxelSceneData const & obj, TextFile & file )
+	bool TextWriter< VoxelSceneData >::operator()( VoxelSceneData const & obj
+		, StringStream & file )
 	{
 		log::info << tabs() << cuT( "Writing VoxelSceneData" ) << std::endl;
-		auto result = file.writeText( cuT( "\n" ) + tabs() + cuT( "//Voxel Cone Tracing\n" ) ) > 0;
+		auto result = writeText( file, cuT( "\n" ) + tabs() + cuT( "//Voxel Cone Tracing\n" ) );
 
 		if ( result )
 		{

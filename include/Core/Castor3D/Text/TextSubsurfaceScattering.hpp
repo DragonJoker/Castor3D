@@ -17,7 +17,7 @@ namespace castor
 	public:
 		C3D_API explicit TextWriter( castor::String const & tabs );
 		C3D_API bool operator()( castor3d::SubsurfaceScattering const & pass
-			, castor::TextFile & file )override;
+			, castor::StringStream & file )override;
 	};
 }
 

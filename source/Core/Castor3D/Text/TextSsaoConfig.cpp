@@ -12,7 +12,7 @@ namespace castor
 	}
 
 	bool TextWriter< SsaoConfig >::operator()( SsaoConfig const & object
-		, TextFile & file )
+		, StringStream & file )
 	{
 		bool result{ false };
 		log::info << tabs() << cuT( "Writing SsaoConfig" ) << std::endl;

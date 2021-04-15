@@ -12,12 +12,12 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	template< class T, FileType FT >
+	template< class DataT, typename StreamT >
 	class Writer
 		: public castor::NonCopyable
 	{
 	protected:
-		using Type = typename FileTyper< FT >::Type;
+		using Type = StreamT;
 
 	public:
 		/**
@@ -30,10 +30,18 @@ namespace castor
 		 *\param[in]		object	L'objet à écrire.
 		 *\param[in,out]	file	Le fichier où écrire l'objet.
 		 */
-		virtual bool operator()( T const & object, Type & file )
+		virtual bool operator()( DataT const & object, Type & file )
 		{
 			CU_LoaderError( "Export not supported by the loader registered for this type" );
 		}
+	};
+
+	template< class DataT, FileType FileTypeT >
+	class FileWriter
+		: public Writer< DataT, typename FileTyper< FileTypeT >::Type >
+	{
+	protected:
+		using Type = typename FileTyper< FileTypeT >::Type;
 	};
 }
 

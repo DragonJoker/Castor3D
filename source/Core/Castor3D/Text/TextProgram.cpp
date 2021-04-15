@@ -12,7 +12,7 @@ namespace castor
 	}
 
 	bool TextWriter< ShaderProgram >::operator()( ShaderProgram const & shaderProgram
-		, TextFile & file )
+		, StringStream & file )
 	{
 		bool result = false;
 		bool hasFile = false;

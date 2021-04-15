@@ -18,7 +18,7 @@ namespace castor
 		C3D_API explicit TextWriter( String const & tabs
 			, String const & subfolder );
 		C3D_API bool operator()( castor3d::Mesh const & material
-			, TextFile & file )override;
+			, castor::StringStream & file )override;
 
 	private:
 		String m_subfolder;

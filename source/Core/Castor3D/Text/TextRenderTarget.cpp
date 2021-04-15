@@ -21,7 +21,8 @@ namespace castor
 	{
 	}
 
-	bool TextWriter< RenderTarget >::operator()( RenderTarget const & target, TextFile & file )
+	bool TextWriter< RenderTarget >::operator()( RenderTarget const & target
+		, StringStream & file )
 	{
 		log::info << tabs() << cuT( "Writing RenderTarget" ) << std::endl;
 		bool result = false;
@@ -49,7 +50,7 @@ namespace castor
 			{
 				for ( auto const & effect : target.getHDRPostEffects() )
 				{
-					result = effect->writeInto( file, tabs() ) && file.writeText( cuT( "\n" ) ) > 0;
+					result = effect->writeInto( file, tabs() ) && writeText( file, cuT( "\n" ) );
 				}
 			}
 
@@ -57,7 +58,7 @@ namespace castor
 			{
 				for ( auto const & effect : target.getSRGBPostEffects() )
 				{
-					result = effect->writeInto( file, tabs() ) && file.writeText( cuT( "\n" ) ) > 0;
+					result = effect->writeInto( file, tabs() ) && writeText( file, cuT( "\n" ) );
 				}
 			}
 

@@ -15,9 +15,13 @@ namespace castor
 		: public TextWriterT< castor3d::SceneBackground >
 	{
 	public:
-		C3D_API explicit TextWriter( castor::String const & tabs );
+		C3D_API explicit TextWriter( String const & tabs
+			, Path const & folder );
 		C3D_API bool operator()( castor3d::SceneBackground const & overlay
-			, castor::TextFile & file );
+			, castor::StringStream & file );
+
+	private:
+		Path m_folder;
 	};
 }
 

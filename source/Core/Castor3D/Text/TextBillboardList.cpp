@@ -15,7 +15,8 @@ namespace castor
 	{
 	}
 
-	bool TextWriter< BillboardList >::operator()( BillboardList const & obj, castor::TextFile & file )
+	bool TextWriter< BillboardList >::operator()( BillboardList const & obj
+		, castor::StringStream & file )
 	{
 		log::info << tabs() << cuT( "Writing BillboardList " ) << obj.getName() << std::endl;
 		bool result = false;

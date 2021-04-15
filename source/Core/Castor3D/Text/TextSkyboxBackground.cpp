@@ -6,13 +6,15 @@ using namespace castor3d;
 
 namespace castor
 {
-	TextWriter< SkyboxBackground >::TextWriter( String const & tabs )
+	TextWriter< SkyboxBackground >::TextWriter( String const & tabs
+		, Path const & folder )
 		: TextWriterT< SkyboxBackground >{ tabs }
+		, m_folder{ folder }
 	{
 	}
 
 	bool TextWriter< SkyboxBackground >::operator()( SkyboxBackground const & background
-		, TextFile & file )
+		, StringStream & file )
 	{
 		log::info << tabs() << cuT( "Writing SkyboxBackground" ) << std::endl;
 		static String const faces[]
@@ -25,24 +27,23 @@ namespace castor
 			cuT( "front" ),
 		};
 
-		auto result = file.writeText( cuT( "\n" ) + tabs() + cuT( "//Skybox\n" ) ) > 0;
+		auto result = true;
+		file << ( cuT( "\n" ) + tabs() + cuT( "//Skybox\n" ) );
 
 		if ( !background.getEquiTexturePath().empty()
 			&& castor::File::fileExists( background.getEquiTexturePath() ) )
 		{
-			result = false;
-
 			if ( auto block{ beginBlock( file, "skybox" ) } )
 			{
 				Path subfolder{ cuT( "Textures" ) };
 				String relative = copyFile( background.getEquiTexturePath()
-					, file.getFilePath()
+					, m_folder
 					, subfolder );
 				string::replace( relative, cuT( "\\" ), cuT( "/" ) );
 				auto & size = background.getEquiSize();
-				result = file.writeText( tabs() + cuT( "equirectangular" )
+				file << ( tabs() + cuT( "equirectangular" )
 					+ cuT( " \"" ) + relative + cuT( "\" " )
-					+ string::toString( size.getWidth() ) + cuT( "\n" ) ) > 0;
+					+ string::toString( size.getWidth() ) + cuT( "\n" ) );
 				castor::TextWriter< SkyboxBackground >::checkError( result, "Skybox equi-texture" );
 			}
 		}
@@ -53,7 +54,7 @@ namespace castor
 
 			if ( auto block{ beginBlock( file, "skybox" ) } )
 			{
-				result = writeFile( file, cuT( "cross" ), background.getCrossTexturePath(), cuT( "Textures" ) );
+				result = writeFile( file, cuT( "cross" ), background.getCrossTexturePath(), m_folder, cuT( "Textures" ) );
 			}
 		}
 		else if ( castor::File::fileExists( Path{ background.getTexture().getLayerCubeFaceView( 0, CubeMapFace( 0u ) ).toString() } )
@@ -76,6 +77,7 @@ namespace castor
 					result = writeFile( file
 						, faces[i]
 						, Path{ background.getTexture().getLayerCubeFaceView( 0u, CubeMapFace( i ) ).toString() }
+						, m_folder
 						, cuT( "Textures" ) );
 				}
 			}

@@ -18,7 +18,7 @@ namespace castor
 	}
 
 	bool TextWriter< ParticleSystem >::operator()( ParticleSystem const & obj
-		, castor::TextFile & file )
+		, castor::StringStream & file )
 	{
 		log::info << tabs() << cuT( "Writing ParticleSystem " ) << obj.getName() << std::endl;
 		bool result = false;
@@ -48,10 +48,11 @@ namespace castor
 					for ( auto & var : obj.getParticleVariables() )
 					{
 						result = result
-							&& file.writeText( tabs() + cuT( "variable \"" )
-								+ var.m_name + cuT( "\" " )
-								+ castor3d::getName( var.m_dataType ) + cuT( " " )
-								+ values[cuT( "out_" ) + var.m_name] + cuT( "\n" ) ) > 0;
+							&& writeText( file
+								, tabs() + cuT( "variable \"" )
+									+ var.m_name + cuT( "\" " )
+									+ castor3d::getName( var.m_dataType ) + cuT( " " )
+									+ values[cuT( "out_" ) + var.m_name] + cuT( "\n" ) );
 						checkError( result, "ParticleSystem particle variable" );
 					}
 				}

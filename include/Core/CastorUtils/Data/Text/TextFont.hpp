@@ -15,8 +15,11 @@ namespace castor
 		: public TextWriterT< Font >
 	{
 	public:
-		CU_API explicit TextWriter( String const & tabs );
-		CU_API bool operator()( Font const & object, TextFile & file )override;
+		CU_API explicit TextWriter( String const & tabs, Path const & folder );
+		CU_API bool operator()( Font const & object, StringStream & file )override;
+
+	private:
+		Path m_folder;
 	};
 }
 

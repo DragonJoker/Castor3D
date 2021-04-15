@@ -34,7 +34,7 @@ namespace castor
 	}
 
 	bool TextWriter< SceneNode >::operator()( SceneNode const & node
-		, castor::TextFile & file )
+		, castor::StringStream & file )
 	{
 		bool result = true;
 

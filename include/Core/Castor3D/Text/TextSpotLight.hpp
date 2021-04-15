@@ -17,7 +17,7 @@ namespace castor
 	public:
 		C3D_API explicit TextWriter( castor::String const & tabs );
 		C3D_API bool operator()( castor3d::SpotLight const & light
-			, castor::TextFile & file );
+			, castor::StringStream & file );
 	};
 }
 

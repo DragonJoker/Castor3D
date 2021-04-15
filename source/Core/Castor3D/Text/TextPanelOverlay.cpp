@@ -16,7 +16,8 @@ namespace castor
 	{
 	}
 
-	bool TextWriter< PanelOverlay >::operator()( PanelOverlay const & overlay, TextFile & file )
+	bool TextWriter< PanelOverlay >::operator()( PanelOverlay const & overlay
+		, StringStream & file )
 	{
 		log::info << tabs() << cuT( "Writing PanelOverlay " ) << overlay.getOverlayName() << std::endl;
 		bool result = false;

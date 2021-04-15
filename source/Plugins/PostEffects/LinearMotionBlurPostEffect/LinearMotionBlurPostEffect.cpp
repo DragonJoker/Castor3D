@@ -333,33 +333,29 @@ namespace motion_blur
 		m_surface.cleanup( device );
 	}
 
-	bool PostEffect::doWriteInto( castor::TextFile & file, castor::String const & tabs )
+	bool PostEffect::doWriteInto( castor::StringStream & file, castor::String const & tabs )
 	{
 		static Configuration const ref;
-		auto result = file.writeText( cuT( "\n" ) + tabs + Type + cuT( "\n" ) ) > 0
-			&& file.writeText( tabs + cuT( "{\n" ) ) > 0;
+		file << ( cuT( "\n" ) + tabs + Type + cuT( "\n" ) );
+		file << ( tabs + cuT( "{\n" ) );
 
-		if ( result && m_configuration.vectorDivider != ref.vectorDivider )
+		if ( m_configuration.vectorDivider != ref.vectorDivider )
 		{
-			result = file.writeText( tabs + cuT( "\tvectorDivider " ) + castor::string::toString( m_configuration.vectorDivider ) + cuT( "\n" ) ) > 0;
+			file << ( tabs + cuT( "\tvectorDivider " ) + castor::string::toString( m_configuration.vectorDivider ) + cuT( "\n" ) );
 		}
 
-		if ( result && m_configuration.samplesCount != ref.samplesCount )
+		if ( m_configuration.samplesCount != ref.samplesCount )
 		{
-			result = file.writeText( tabs + cuT( "\tsamples " ) + castor::string::toString( m_configuration.samplesCount ) + cuT( "\n" ) ) > 0;
+			file << ( tabs + cuT( "\tsamples " ) + castor::string::toString( m_configuration.samplesCount ) + cuT( "\n" ) );
 		}
 
-		if ( result && !m_fpsScale )
+		if ( !m_fpsScale )
 		{
-			result = file.writeText( tabs + cuT( "\tfpsScale false\n" ) ) > 0;
+			file << ( tabs + cuT( "\tfpsScale false\n" ) );
 		}
 
-		if ( result )
-		{
-			result = file.writeText( tabs + cuT( "}\n" ) ) > 0;
-		}
-
-		return result;
+		file << ( tabs + cuT( "}\n" ) );
+		return true;
 	}
 
 	//*********************************************************************************************

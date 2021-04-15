@@ -14,7 +14,8 @@ namespace castor
 	{
 	}
 
-	bool TextWriter< Camera >::operator()( Camera const & camera, TextFile & file )
+	bool TextWriter< Camera >::operator()( Camera const & camera
+		, StringStream & file )
 	{
 		log::info << tabs() << cuT( "Writing Camera " ) << camera.getName() << std::endl;
 		bool result = false;

@@ -37,14 +37,17 @@ namespace castor
 
 	TextWriter< TextureUnit >::TextWriter( String const & tabs
 		, MaterialType type
+		, Path const & folder
 		, String subFolder )
 		: TextWriterT< TextureUnit >{ tabs, "TextureUnit" }
 		, m_type{ type }
+		, m_folder{ folder }
 		, m_subFolder{ subFolder }
 	{
 	}
 
-	bool TextWriter< TextureUnit >::operator()( TextureUnit const & unit, TextFile & file )
+	bool TextWriter< TextureUnit >::operator()( TextureUnit const & unit
+		, StringStream & file )
 	{
 		bool result = true;
 		auto hasTexture = unit.isTextured() && unit.getTexture();
@@ -87,11 +90,11 @@ namespace castor
 						{
 							if ( m_subFolder.empty() )
 							{
-								result = writeFile( file, cuT( "image" ), Path{ image }, cuT( "Textures" ) );
+								result = writeFile( file, cuT( "image" ), Path{ image }, m_folder, cuT( "Textures" ) );
 							}
 							else
 							{
-								result = writeFile( file, cuT( "image" ), Path{ image }, String{ cuT( "Textures" ) } + Path::GenericSeparator + m_subFolder );
+								result = writeFile( file, cuT( "image" ), Path{ image }, m_folder, String{ cuT( "Textures" ) } + Path::GenericSeparator + m_subFolder );
 							}
 						}
 					}

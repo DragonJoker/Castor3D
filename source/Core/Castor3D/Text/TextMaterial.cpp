@@ -10,13 +10,16 @@ using namespace castor3d;
 namespace castor
 {
 	TextWriter< Material >::TextWriter( String const & tabs
+		, Path const & folder
 		, String const & subfolder )
 		: TextWriterT< Material >{ tabs }
+		, m_folder{ folder }
 		, m_subfolder{ subfolder }
 	{
 	}
 
-	bool TextWriter< Material >::operator()( Material const & material, TextFile & file )
+	bool TextWriter< Material >::operator()( Material const & material
+		, StringStream & file )
 	{
 		log::info << tabs() << cuT( "Writing Material " ) << material.getName() << std::endl;
 		bool result = false;
@@ -31,7 +34,7 @@ namespace castor
 				for ( auto pass : material )
 				{
 					result = result
-						&& writeSub( file, *std::static_pointer_cast< PhongPass >( pass ), m_subfolder );
+						&& writeSub( file, *std::static_pointer_cast< PhongPass >( pass ), m_folder, m_subfolder );
 				}
 				break;
 
@@ -39,7 +42,7 @@ namespace castor
 				for ( auto pass : material )
 				{
 					result = result
-						&& writeSub( file, *std::static_pointer_cast< MetallicRoughnessPbrPass >( pass ), m_subfolder );
+						&& writeSub( file, *std::static_pointer_cast< MetallicRoughnessPbrPass >( pass ), m_folder, m_subfolder );
 				}
 				break;
 
@@ -47,7 +50,7 @@ namespace castor
 				for ( auto pass : material )
 				{
 					result = result
-						&& writeSub( file, *std::static_pointer_cast< SpecularGlossinessPbrPass >( pass ), m_subfolder );
+						&& writeSub( file, *std::static_pointer_cast< SpecularGlossinessPbrPass >( pass ), m_folder, m_subfolder );
 				}
 				break;
 

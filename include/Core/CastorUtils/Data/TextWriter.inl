@@ -1,31 +1,31 @@
 namespace castor
 {
 	template< typename Value1T, typename Value2T >
-	bool TextWriterBase::write( TextFile & file, String const & name, Value1T const & value1, Value2T const & value2 )const
+	bool TextWriterBase::write( StringStream & file, String const & name, Value1T const & value1, Value2T const & value2 )const
 	{
-		auto result = file.writeText( tabs() + name + cuT( " " ) ) > 0
+		auto result = writeText( file, tabs() + name + cuT( " " ) )
 			&& TextWriter< Value1T >{ tabs() }( value1, file )
-			&& file.writeText( cuT( " " ) ) > 0
+			&& writeText( file, cuT( " " ) )
 			&& TextWriter< Value2T >{ tabs() }( value2, file )
-			&& file.writeText( cuT( "\n" ) ) > 0;
+			&& writeText( file, cuT( "\n" ) );
 		checkError( result, name.c_str() );
 		return result;
 	}
 
 	template< typename ValueT >
-	bool TextWriterBase::write( TextFile & file, String const & name, castor::RangedValue< ValueT > const & value )const
+	bool TextWriterBase::write( StringStream & file, String const & name, castor::RangedValue< ValueT > const & value )const
 	{
 		return write( file, name, value.value() );
 	}
 
 	template< typename ValueT >
-	bool TextWriterBase::write( TextFile & file, String const & name, castor::ChangeTracked< ValueT > const & value )const
+	bool TextWriterBase::write( StringStream & file, String const & name, castor::ChangeTracked< ValueT > const & value )const
 	{
 		return write( file, name, value.value() );
 	}
 
 	template< typename ValueT >
-	bool TextWriterBase::writeOpt( TextFile & file, String const & name, ValueT const & value, ValueT const & comp )const
+	bool TextWriterBase::writeOpt( StringStream & file, String const & name, ValueT const & value, ValueT const & comp )const
 	{
 		bool result{ true };
 
@@ -38,7 +38,7 @@ namespace castor
 	}
 
 	template< typename ValueT, typename ... ParamsT >
-	bool TextWriterBase::writeSub( TextFile & file, ValueT const & value, ParamsT const & ... params )const
+	bool TextWriterBase::writeSub( StringStream & file, ValueT const & value, ParamsT const & ... params )const
 	{
 		auto result = TextWriter< ValueT >{ tabs(), params... }( value, file );
 		checkError( result, cuT( "" ) );
@@ -46,17 +46,17 @@ namespace castor
 	}
 
 	template< typename ValueT, typename ... ParamsT >
-	bool TextWriterBase::writeNamedSub( TextFile & file, String const & name, ValueT const & value, ParamsT const & ... params )const
+	bool TextWriterBase::writeNamedSub( StringStream & file, String const & name, ValueT const & value, ParamsT const & ... params )const
 	{
-		auto result = file.writeText( tabs() + name + cuT( " " ) ) > 0
+		auto result = writeText( file, tabs() + name + cuT( " " ) )
 			&& TextWriter< ValueT >{ tabs(), params... }( value, file )
-			&& file.writeText( cuT( "\n" ) ) > 0;
+			&& writeText( file, cuT( "\n" ) );
 		checkError( result, name.c_str() );
 		return result;
 	}
 
 	template< typename ValueT, typename ... ParamsT >
-	bool TextWriterBase::writeSubOpt( TextFile & file, ValueT const & value, ValueT const & comp, ParamsT const & ... params )const
+	bool TextWriterBase::writeSubOpt( StringStream & file, ValueT const & value, ValueT const & comp, ParamsT const & ... params )const
 	{
 		bool result{ true };
 
@@ -69,7 +69,7 @@ namespace castor
 	}
 
 	template< typename ValueT, typename ... ParamsT >
-	bool TextWriterBase::writeNamedSubOpt( TextFile & file, String const & name, ValueT const & value, ValueT const & comp, ParamsT const & ... params )const
+	bool TextWriterBase::writeNamedSubOpt( StringStream & file, String const & name, ValueT const & value, ValueT const & comp, ParamsT const & ... params )const
 	{
 		bool result{ true };
 

@@ -19,7 +19,7 @@ namespace castor
 		C3D_API explicit TextWriter( String const & tabs
 			, castor3d::MaterialType type );
 		C3D_API bool operator()( castor3d::TextureConfiguration const & object
-			, TextFile & file )override;
+			, StringStream & file )override;
 
 	private:
 		castor3d::MaterialType m_type;

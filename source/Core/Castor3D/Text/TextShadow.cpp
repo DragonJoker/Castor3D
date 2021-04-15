@@ -13,7 +13,8 @@ namespace castor
 	{
 	}
 
-	bool TextWriter< ShadowConfig >::operator()( ShadowConfig const & object, TextFile & file )
+	bool TextWriter< ShadowConfig >::operator()( ShadowConfig const & object
+		, StringStream & file )
 	{
 		log::info << tabs() << cuT( "Writing ShadowConfig" ) << std::endl;
 		bool result = false;
