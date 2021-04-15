@@ -23,7 +23,7 @@ namespace castor
 		}
 
 		stream << cuT( " " ) << angle.degrees();
-		bool result = writeText( file, stream.str() );
+		bool result = this->writeText( file, stream.str() );
 		this->checkError( result, "Quaternion value" );
 		return result;
 	}
