@@ -30,6 +30,10 @@ namespace castor3d
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 			, uint32_t instanceMult )override;
 		/**
+		 *\copydoc		castor3d::SubmeshComponent::clone
+		 */
+		C3D_API SubmeshComponentSPtr clone( Submesh & submesh )const override;
+		/**
 		 *\~english
 		 *\return		The VertexBuffer.
 		 *\~french

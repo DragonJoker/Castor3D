@@ -97,11 +97,18 @@ namespace castor3d
 		C3D_API virtual ProgramFlags getProgramFlags( MaterialSPtr material )const = 0;
 		/**
 		 *\~english
+		 *\return		Clones this component.
+		 *\~french
+		 *\return		Clone ce composant.
+		 */
+		C3D_API virtual SubmeshComponentSPtr clone( Submesh & submesh )const = 0;
+		/**
+		 *\~english
 		 *\return		The component type name.
 		 *\~french
 		 *\return		Le nom du type de composant.
 		 */
-		inline castor::String const & getType()const
+		castor::String const & getType()const
 		{
 			return m_type;
 		}
@@ -111,7 +118,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Dit que le composant doit être mis à jour.
 		 */
-		inline void needsUpdate()
+		void needsUpdate()
 		{
 			m_dirty = true;
 		}

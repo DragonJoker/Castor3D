@@ -152,6 +152,12 @@ namespace castor3d
 		ref( newMaterial );
 	}
 
+	SubmeshComponentSPtr InstantiationComponent::clone( Submesh & submesh )const
+	{
+		auto result = std::make_shared< InstantiationComponent >( submesh, m_threshold );
+		return result;
+	}
+
 	InstantiationComponent::InstanceDataMap::const_iterator InstantiationComponent::find( MaterialSPtr material
 		, uint32_t instanceMult )const
 	{

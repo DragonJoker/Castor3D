@@ -71,6 +71,10 @@ namespace castor3d
 		 */
 		C3D_API void computeNormals( bool reverted = false )override;
 		/**
+		 *\copydoc		castor3d::SubmeshComponent::clone
+		 */
+		C3D_API SubmeshComponentSPtr clone( Submesh & submesh )const override;
+		/**
 		 *\~english
 		 *\brief		Creates and adds lines to the submesh.
 		 *\param[in]	lines	The lines.

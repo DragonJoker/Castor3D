@@ -119,6 +119,10 @@ namespace castor3d
 			, MaterialSPtr newMaterial
 			, bool update )override;
 		/**
+		 *\copydoc		castor3d::SubmeshComponent::clone
+		 */
+		C3D_API SubmeshComponentSPtr clone( Submesh & submesh )const override;
+		/**
 		*\~english
 		*name
 		*	Getters.
