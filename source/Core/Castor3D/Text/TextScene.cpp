@@ -88,7 +88,7 @@ namespace castor
 		}
 
 		template< typename CacheTypeT, typename FilterT >
-		bool writeCache( TextFile & file
+		bool writeCache( StringStream & file
 			, CacheTypeT const & cache
 			, String const & elemsName
 			, TextWriterBase const & writer
@@ -104,7 +104,7 @@ namespace castor
 
 			if ( !empty )
 			{
-				result = file.writeText( cuT( "\n" ) + writer.tabs() + cuT( "//" ) + elemsName + cuT( "\n" ) ) > 0;
+				file << ( cuT( "\n" ) + writer.tabs() + cuT( "//" ) + elemsName + cuT( "\n" ) );
 				log::info << writer.tabs() << cuT( "Scene::write - " ) << elemsName << std::endl;
 				auto lock( castor::makeUniqueLock( cache ) );
 
@@ -121,7 +121,7 @@ namespace castor
 		}
 
 		template< typename CacheTypeT, typename FilterT >
-		bool writeIncludedCache( TextFile & file
+		bool writeIncludedCache( StringStream & file
 			, CacheTypeT const & cache
 			, String const & elemsName
 			, Path const & includePath
@@ -137,7 +137,7 @@ namespace castor
 		}
 
 		template< typename CacheTypeT, typename FilterT >
-		bool writeCache( TextFile & file
+		bool writeCache( StringStream & file
 			, CacheTypeT const & cache
 			, String const & elemsName
 			, String const & subfolder
@@ -154,7 +154,7 @@ namespace castor
 
 			if ( !empty )
 			{
-				result = file.writeText( cuT( "\n" ) + writer.tabs() + cuT( "//" ) + elemsName + cuT( "\n" ) ) > 0;
+				file << ( cuT( "\n" ) + writer.tabs() + cuT( "//" ) + elemsName + cuT( "\n" ) );
 				log::info << writer.tabs() << cuT( "Scene::write - " ) << elemsName << std::endl;
 				auto lock( castor::makeUniqueLock( cache ) );
 
@@ -171,7 +171,7 @@ namespace castor
 		}
 
 		template< typename CacheTypeT, typename FilterT >
-		bool writeIncludedCache( TextFile & file
+		bool writeIncludedCache( StringStream & file
 			, CacheTypeT const & cache
 			, String const & elemsName
 			, Path const & includePath
@@ -186,9 +186,9 @@ namespace castor
 
 			return writeCache( file, cache, elemsName, subfolder, writer, filter );
 		}
-		
+
 		template< typename ViewTypeT, typename FilterT >
-		bool writeView( TextFile & file
+		bool writeView( StringStream & file
 			, ViewTypeT const & view
 			, String const & elemsName
 			, TextWriterBase const & writer
@@ -198,7 +198,7 @@ namespace castor
 
 			if ( !view.isEmpty() )
 			{
-				result = file.writeText( cuT( "\n" ) + writer.tabs() + cuT( "//" ) + elemsName + cuT( "\n" ) ) > 0;
+				file << ( cuT( "\n" ) + writer.tabs() + cuT( "//" ) + elemsName + cuT( "\n" ) );
 				log::info << writer.tabs() << cuT( "Scene::write - " ) << elemsName << std::endl;
 
 				for ( auto const & name : view )
@@ -217,9 +217,9 @@ namespace castor
 
 			return result;
 		}
-		
+
 		template< typename ViewTypeT >
-		bool writeView( TextFile & file
+		bool writeView( StringStream & file
 			, ViewTypeT const & view
 			, String const & elemsName
 			, TextWriterBase const & writer )
@@ -231,8 +231,54 @@ namespace castor
 				} );
 		}
 
+		template< typename ViewTypeT, typename FilterT >
+		bool writeView( StringStream & file
+			, ViewTypeT const & view
+			, String const & elemsName
+			, Path const & folder
+			, TextWriterBase const & writer
+			, FilterT filter )
+		{
+			bool result = true;
+
+			if ( !view.isEmpty() )
+			{
+				file << ( cuT( "\n" ) + writer.tabs() + cuT( "//" ) + elemsName + cuT( "\n" ) );
+				log::info << writer.tabs() << cuT( "Scene::write - " ) << elemsName << std::endl;
+
+				for ( auto const & name : view )
+				{
+					if ( result )
+					{
+						auto elem = view.find( name );
+
+						if ( filter( *elem ) )
+						{
+							result = writer.writeSub( file, *elem, folder );
+						}
+					}
+				}
+			}
+
+			return result;
+		}
+
 		template< typename ViewTypeT >
-		bool writeIncludedView( TextFile & file
+		bool writeView( StringStream & file
+			, ViewTypeT const & view
+			, String const & elemsName
+			, Path const & folder
+			, TextWriterBase const & writer )
+		{
+			return writeView( file, view, elemsName, folder, writer
+				, []( auto const & lookup )
+				{
+					return true;
+				} );
+		}
+
+		template< typename ViewTypeT >
+		bool writeIncludedView( StringStream & file
 			, ViewTypeT const & view
 			, String const & elemsName
 			, Path const & includePath
@@ -247,9 +293,10 @@ namespace castor
 		}
 
 		template< typename ViewTypeT, typename FilterT >
-		bool writeView( TextFile & file
+		bool writeView( StringStream & file
 			, ViewTypeT const & view
 			, String const & elemsName
+			, Path const & folder
 			, String const & subfolder
 			, TextWriterBase const & writer
 			, FilterT filter )
@@ -258,7 +305,7 @@ namespace castor
 
 			if ( !view.isEmpty() )
 			{
-				result = file.writeText( cuT( "\n" ) + writer.tabs() + cuT( "//" ) + elemsName + cuT( "\n" ) ) > 0;
+				file << ( cuT( "\n" ) + writer.tabs() + cuT( "//" ) + elemsName + cuT( "\n" ) );
 				log::info << writer.tabs() << cuT( "Scene::write - " ) << elemsName << std::endl;
 
 				for ( auto const & name : view )
@@ -269,7 +316,7 @@ namespace castor
 
 						if ( filter( *elem ) )
 						{
-							result = writer.writeSub( file, *elem, subfolder );
+							result = writer.writeSub( file, *elem, folder, subfolder );
 						}
 					}
 				}
@@ -279,13 +326,14 @@ namespace castor
 		}
 
 		template< typename ViewTypeT >
-		bool writeView( TextFile & file
+		bool writeView( StringStream & file
 			, ViewTypeT const & view
 			, String const & elemsName
+			, Path const & folder
 			, String const & subfolder
 			, TextWriterBase const & writer )
 		{
-			return writeView( file, view, elemsName, subfolder, writer
+			return writeView( file, view, elemsName, folder, subfolder, writer
 				, []( auto const & lookup )
 				{
 					return true;
@@ -293,10 +341,11 @@ namespace castor
 		}
 
 		template< typename ViewTypeT >
-		bool writeIncludedView( TextFile & file
+		bool writeIncludedView( StringStream & file
 			, ViewTypeT const & view
 			, String const & elemsName
 			, Path const & includePath
+			, Path const & folder
 			, String const & subfolder
 			, TextWriterBase const & writer )
 		{
@@ -305,10 +354,10 @@ namespace castor
 				return true;
 			}
 
-			return writeView( file, view, elemsName, subfolder, writer );
+			return writeView( file, view, elemsName, folder, subfolder, writer );
 		}
 
-		bool writeInclude( TextFile & file
+		bool writeInclude( StringStream & file
 			, Path const & path
 			, TextWriterBase const & writer )
 		{
@@ -320,7 +369,7 @@ namespace castor
 			return true;
 		}
 
-		bool writeNodes( TextFile & file
+		bool writeNodes( StringStream & file
 			, SceneNode::SceneNodePtrStrMap const & nodes
 			, String const & elemsName
 			, TextWriterBase const & writer )
@@ -329,7 +378,7 @@ namespace castor
 
 			if ( !nodes.empty() )
 			{
-				result = file.writeText( cuT( "\n" ) + writer.tabs() + cuT( "//" ) + elemsName + cuT( "\n" ) ) > 0;
+				file << ( cuT( "\n" ) + writer.tabs() + cuT( "//" ) + elemsName + cuT( "\n" ) );
 				log::info << writer.tabs() << cuT( "Scene::write - " ) << elemsName << std::endl;
 
 				for ( auto const & it : nodes )
@@ -346,7 +395,7 @@ namespace castor
 			return result;
 		}
 
-		bool writeIncludedNodes( TextFile & file
+		bool writeIncludedNodes( StringStream & file
 			, SceneNode::SceneNodePtrStrMap const & nodes
 			, String const & elemsName
 			, Path const & includePath
@@ -371,7 +420,7 @@ namespace castor
 	}
 
 	bool TextWriter< Scene >::TextWriter::operator()( Scene const & scene
-		, TextFile & file )
+		, StringStream & file )
 	{
 		log::info << cuT( "Scene::write - Scene Name" ) << std::endl;
 		bool result = writeComment( file, cuT( "Global configuration" ) )
@@ -398,12 +447,12 @@ namespace castor
 						&& writeInclude( file, m_options.nodesFile, *this )
 						&& writeInclude( file, m_options.objectsFile, *this )
 						&& writeInclude( file, m_options.lightsFile, *this )
-						&& writeSub( file, *scene.getBackground() )
+						&& writeSub( file, *scene.getBackground(), m_options.rootFolder )
 						&& writeSub( file, scene.getFog() )
 						&& writeSub( file, scene.getVoxelConeTracingConfig() )
-						&& writeView( file, scene.getFontView(), cuT( "Fonts" ), *this )
+						&& writeView( file, scene.getFontView(), cuT( "Fonts" ), m_options.rootFolder, *this )
 						&& writeIncludedView( file, scene.getSamplerView(), cuT( "Samplers" ), m_options.materialsFile, *this )
-						&& writeIncludedView( file, scene.getMaterialView(), cuT( "Materials" ), m_options.materialsFile, m_options.subfolder, *this )
+						&& writeIncludedView( file, scene.getMaterialView(), cuT( "Materials" ), m_options.rootFolder, m_options.materialsFile, m_options.subfolder, *this )
 						&& writeView( file, scene.getOverlayView(), cuT( "Overlays" ), *this, writable< Overlay > )
 						&& writeIncludedCache( file, scene.getMeshCache(), cuT( "Meshes" ), m_options.meshesFile, m_options.subfolder, *this, writable< Mesh > )
 						&& writeNodes( file, scene.getCameraRootNode()->getChildren(), cuT( "Cameras nodes" ), *this )

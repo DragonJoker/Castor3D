@@ -14,7 +14,7 @@ namespace castor
 	}
 
 	bool TextWriter< ColourBackground >::operator()( ColourBackground const & background
-		, TextFile & file )
+		, StringStream & file )
 	{
 		log::info << tabs() << cuT( "Writing ColourBackground" ) << std::endl;
 		return writeNamedSub( file, "background_colour", background.getColour() );

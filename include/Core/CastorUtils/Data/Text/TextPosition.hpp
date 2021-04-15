@@ -16,7 +16,7 @@ namespace castor
 	{
 	public:
 		CU_API explicit TextWriter( String const & tabs );
-		CU_API bool operator()( Position const & object, TextFile & file )override;
+		CU_API bool operator()( Position const & object, StringStream & file )override;
 	};
 }
 

@@ -11,7 +11,8 @@ namespace castor
 	{
 	}
 
-	bool TextWriter< LpvConfig >::operator()( LpvConfig const & object, TextFile & file )
+	bool TextWriter< LpvConfig >::operator()( LpvConfig const & object
+		, StringStream & file )
 	{
 		log::info << tabs() << cuT( "Writing LpvConfig" ) << std::endl;
 		bool result{ false };

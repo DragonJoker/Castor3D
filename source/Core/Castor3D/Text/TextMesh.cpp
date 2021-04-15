@@ -16,7 +16,7 @@ namespace castor
 	}
 
 	bool TextWriter< Mesh >::operator()( Mesh const & object
-		, TextFile & file )
+		, StringStream & file )
 	{
 		log::info << tabs() << cuT( "Writing Mesh " ) << object.getName() << std::endl;
 		bool result{ false };
@@ -51,7 +51,7 @@ namespace castor
 					{
 						if ( submesh->getDefaultMaterial() )
 						{
-							result = file.writeText( tabs() + cuT( "material " ) + string::toString( submesh->getId() ) + cuT( " \"" ) + submesh->getDefaultMaterial()->getName() + cuT( "\"\n" ) ) > 0;
+							result = writeText( file, tabs() + cuT( "material " ) + string::toString( submesh->getId() ) + cuT( " \"" ) + submesh->getDefaultMaterial()->getName() + cuT( "\"\n" ) );
 						}
 					}
 				}

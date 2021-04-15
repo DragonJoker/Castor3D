@@ -7,7 +7,8 @@ namespace castor
 	}
 
 	template< typename ValueT >
-	bool TextWriter< QuaternionT< ValueT > >::operator()( QuaternionT< ValueT > const & object, TextFile & file )
+	bool TextWriter< QuaternionT< ValueT > >::operator()( QuaternionT< ValueT > const & object
+		, StringStream & file )
 	{
 		StringStream stream{ castor::makeStringStream() };
 		Point3< ValueT > axis;
@@ -22,7 +23,7 @@ namespace castor
 		}
 
 		stream << cuT( " " ) << angle.degrees();
-		bool result = file.print( 1024, cuT( "%s" ), stream.str().c_str() ) > 0;
+		bool result = writeText( file, stream.str() );
 		this->checkError( result, "Quaternion value" );
 		return result;
 	}

@@ -15,7 +15,8 @@ namespace castor
 	{
 	}
 
-	bool TextWriter< Geometry >::operator()( Geometry const & geometry, TextFile & file )
+	bool TextWriter< Geometry >::operator()( Geometry const & geometry
+		, StringStream & file )
 	{
 		bool result{ true };
 
@@ -27,8 +28,8 @@ namespace castor
 			if ( auto block{ beginBlock( file, cuT( "object" ), geometry.getName() ) } )
 			{
 				result = writeName( file, "parent", geometry.getParent()->getName() )
-					&& write( file, cuT( "cast_shadows" ), geometry.isShadowCaster() )
-					&& write( file, cuT( "receive_shadows" ), geometry.isShadowReceiver() )
+					&& writeOpt( file, cuT( "cast_shadows" ), geometry.isShadowCaster(), true )
+					&& writeOpt( file, cuT( "receive_shadows" ), geometry.isShadowReceiver(), true )
 					&& writeName( file, cuT( "mesh" ), geometry.getMesh()->getName() );
 
 				if ( result )
@@ -55,7 +56,7 @@ namespace castor
 								if ( material != submesh->getDefaultMaterial() )
 								{
 									result = result
-										&& file.writeText( tabs() + cuT( "material " ) + string::toString( submesh->getId() ) + cuT( " \"" ) + material->getName() + cuT( "\"\n" ) ) > 0;
+										&& writeText( file, tabs() + cuT( "material " ) + string::toString( submesh->getId() ) + cuT( " \"" ) + material->getName() + cuT( "\"\n" ) );
 								}
 							}
 						}

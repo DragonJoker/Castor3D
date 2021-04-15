@@ -52,8 +52,8 @@ namespace Testing
 			}
 
 			Path filePath = folder / p_fileName.getFileName();
-			TextFile scnFile( Path{ filePath + cuT( ".cscn" ) }, File::OpenMode::eWrite, File::EncodingMode::eASCII );
-			auto result = castor::TextWriter< Scene >( String() )( p_scene, scnFile );
+			auto stream = castor::makeStringStream();
+			auto result = castor::TextWriter< Scene >( String() )( p_scene, stream );
 
 			Path subfolder{ cuT( "Meshes" ) };
 
@@ -81,6 +81,12 @@ namespace Testing
 						result = castor3d::BinaryWriter< Skeleton >{}.write( *skeleton, file );
 					}
 				}
+			}
+
+			if ( result )
+			{
+				TextFile scnFile( Path{ filePath + cuT( ".cscn" ) }, File::OpenMode::eWrite, File::EncodingMode::eASCII );
+				result = scnFile.writeText( stream.str() ) > 0;
 			}
 
 			return result;
