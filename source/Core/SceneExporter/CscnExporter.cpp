@@ -115,19 +115,15 @@ namespace castor3d::exporter
 			if ( !cache.isEmpty() )
 			{
 				file << ( cuT( "// " ) + elemsName + cuT( "\n" ) );
+				log::info << ( cuT( "Scene::write - " ) + elemsName );
+				castor::TextWriter< ObjType > writer{ castor::cuEmptyString };
+				auto lock( castor::makeUniqueLock( cache ) );
 
-				if ( result )
+				for ( auto const & elemIt : cache )
 				{
-					log::info << ( cuT( "Scene::write - " ) + elemsName );
-					castor::TextWriter< ObjType > writer{ castor::cuEmptyString };
-					auto lock = castor::makeUniqueLock( cache );
-
-					for ( auto const & elemIt : cache )
+					if ( filter( *elemIt.second ) )
 					{
-						if ( filter( *elemIt.second ) )
-						{
-							result = result && writer( *elemIt.second, file );
-						}
+						result = result && writer( *elemIt.second, file );
 					}
 				}
 			}
@@ -155,7 +151,7 @@ namespace castor3d::exporter
 				{
 					log::info << ( cuT( "Scene::write - " ) + elemsName );
 					castor::TextWriter< ObjType > writer{ castor::cuEmptyString, subfolder };
-					auto lock = castor::makeUniqueLock( cache );
+					auto lock( castor::makeUniqueLock( cache ) );
 
 					for ( auto const & elemIt : cache )
 					{
