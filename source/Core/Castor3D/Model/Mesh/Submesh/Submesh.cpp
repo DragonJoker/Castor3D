@@ -386,7 +386,8 @@ namespace castor3d
 		, MaterialSPtr newMaterial
 		, bool update )
 	{
-		if ( oldMaterial != newMaterial )
+		if ( oldMaterial != newMaterial
+			&& !m_disableSceneUpdate )
 		{
 			getOwner()->getScene()->setChanged();
 		}
@@ -438,6 +439,16 @@ namespace castor3d
 		}
 
 		return it->second;
+	}
+
+	void Submesh::enableSceneUpdate( bool updateScene )
+	{
+		m_disableSceneUpdate = false;
+
+		if ( updateScene )
+		{
+			getOwner()->getScene()->setChanged();
+		}
 	}
 
 	void Submesh::doGenerateVertexBuffer( RenderDevice const & device )

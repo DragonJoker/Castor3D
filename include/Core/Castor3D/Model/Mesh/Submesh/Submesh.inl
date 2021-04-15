@@ -337,5 +337,10 @@ namespace castor3d
 		m_topology = value;
 	}
 
+	inline void Submesh::disableSceneUpdate()
+	{
+		m_disableSceneUpdate = true;
+	}
+
 	//*********************************************************************************************
 }

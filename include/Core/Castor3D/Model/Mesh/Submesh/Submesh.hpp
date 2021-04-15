@@ -310,6 +310,22 @@ namespace castor3d
 		 */
 		inline void setTopology( VkPrimitiveTopology value );
 		/**
+		 *\~english
+		 *\brief		Disables scene update on modifications.
+		 *\~french
+		 *\brief		Désactive la mise à jour de la scène en cas de modification.
+		 */
+		inline void disableSceneUpdate();
+		/**
+		 *\~english
+		 *\brief		Enables scene update on modifications.
+		 *\param[in]	updateScene Tells if this call triggers a scene update.
+		 *\~french
+		 *\brief		Active la mise à jour de la scène en cas de modification.
+		 *\param[in]	updateScene	Dit si cet appel déclenche une mise à jour de la scène.
+		 */
+		C3D_API void enableSceneUpdate( bool updateScene );
+		/**
 		*\~english
 		*name
 		*	Getters.
@@ -385,6 +401,7 @@ namespace castor3d
 		ashes::BufferPtr< uint32_t > m_indexBuffer;
 		mutable std::unordered_map< size_t, GeometryBuffers > m_geometryBuffers;
 		bool m_needsNormalsCompute{ false };
+		bool m_disableSceneUpdate{ false };
 
 		friend class BinaryWriter< Submesh >;
 		friend class BinaryParser< Submesh >;
