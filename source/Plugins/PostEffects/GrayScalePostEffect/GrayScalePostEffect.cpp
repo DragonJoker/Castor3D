@@ -298,9 +298,10 @@ namespace grayscale
 		device.uboPools->putBuffer( m_configUbo );
 	}
 
-	bool PostEffect::doWriteInto( castor::TextFile & file, castor::String const & tabs )
+	bool PostEffect::doWriteInto( castor::StringStream & file, castor::String const & tabs )
 	{
-		return file.writeText( tabs + cuT( "postfx \"" ) + Type + cuT( "\"" ) ) > 0;
+		file << ( tabs + cuT( "postfx \"" ) + Type + cuT( "\"" ) );
+		return true;
 	}
 
 	//*********************************************************************************************

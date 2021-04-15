@@ -10,14 +10,16 @@ using namespace castor3d;
 namespace castor
 {
 	TextWriter< PhongPass >::TextWriter( String const & tabs
+		, Path const & folder
 		, String const & subfolder )
 		: TextWriterT< PhongPass >{ tabs }
+		, m_folder{ folder }
 		, m_subfolder{ subfolder }
 	{
 	}
 
 	bool TextWriter< PhongPass >::operator()( PhongPass const & pass
-		, TextFile & file )
+		, StringStream & file )
 	{
 		log::info << tabs() << cuT( "Writing PhongPass " ) << std::endl;
 		bool result = false;
@@ -28,7 +30,7 @@ namespace castor
 				&& writeNamedSub( file, "specular", pass.getSpecular() )
 				&& write( file, "ambient", pass.getAmbient() )
 				&& write( file, "shininess", pass.getShininess() )
-				&& writeSub< Pass >( file, pass, m_subfolder );
+				&& writeSub< Pass >( file, pass, m_folder, m_subfolder );
 		}
 
 		return result;

@@ -16,7 +16,7 @@ namespace castor
 	}
 
 	bool TextWriter< TextOverlay >::operator()( TextOverlay const & overlay
-		, castor::TextFile & file )
+		, castor::StringStream & file )
 	{
 		log::info << tabs() << cuT( "Writing TextOverlay " ) << overlay.getOverlayName() << std::endl;
 		bool result = false;

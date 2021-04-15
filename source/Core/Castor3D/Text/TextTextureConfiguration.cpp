@@ -16,7 +16,7 @@ namespace castor
 	}
 
 	bool TextWriter< TextureConfiguration >::operator()( TextureConfiguration const & configuration
-		, castor::TextFile & file )
+		, castor::StringStream & file )
 	{
 		log::info << tabs() << cuT( "Writing TextureConfiguration" ) << std::endl;
 		bool result = true;

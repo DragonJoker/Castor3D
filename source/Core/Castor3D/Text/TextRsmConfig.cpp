@@ -11,7 +11,8 @@ namespace castor
 	{
 	}
 
-	bool TextWriter< RsmConfig >::operator()( RsmConfig const & object, TextFile & file )
+	bool TextWriter< RsmConfig >::operator()( RsmConfig const & object
+		, StringStream & file )
 	{
 		log::info << tabs() << cuT( "Writing RsmConfig" ) << std::endl;
 		auto result = false;

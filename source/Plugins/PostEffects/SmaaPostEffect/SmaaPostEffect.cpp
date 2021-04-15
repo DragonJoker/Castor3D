@@ -532,86 +532,71 @@ namespace smaa
 		return result;
 	}
 
-	bool PostEffect::doWriteInto( TextFile & p_file, String const & tabs )
+	bool PostEffect::doWriteInto( StringStream & p_file, String const & tabs )
 	{
 		static SmaaConfig::Data const ref;
-		auto result = p_file.writeText( cuT( "\n" ) + tabs + Type + cuT( "\n" ) ) > 0
-			&& p_file.writeText( tabs + cuT( "{\n" ) ) > 0;
+		p_file << ( cuT( "\n" ) + tabs + Type + cuT( "\n" ) );
+		p_file << ( tabs + cuT( "{\n" ) );
+		p_file << ( tabs + cuT( "\tmode " ) + smaa::getName( m_config.data.mode ) + cuT( "\n" ) );
+		p_file << ( tabs + cuT( "\tpreset " ) + smaa::getName( m_config.data.preset ) + cuT( "\n" ) );
 
-		if ( result )
+		if ( m_config.data.preset == Preset::eCustom )
 		{
-			result = p_file.writeText( tabs + cuT( "\tmode " ) + smaa::getName( m_config.data.mode ) + cuT( "\n" ) ) > 0;
+			p_file << ( tabs + cuT( "\tthreshold" ) + string::toString( m_config.data.threshold, std::locale{ "C" } ) + cuT( "\n" ) );
+			p_file << ( tabs + cuT( "\tmaxSearchSteps " ) + string::toString( m_config.data.maxSearchSteps, std::locale{ "C" } ) + cuT( "\n" ) );
+			p_file << ( tabs + cuT( "\tmaxSearchStepsDiag " ) + string::toString( m_config.data.maxSearchStepsDiag, std::locale{ "C" } ) + cuT( "\n" ) );
+			p_file << ( tabs + cuT( "\tcornerRounding " ) + string::toString( m_config.data.cornerRounding, std::locale{ "C" } ) + cuT( "\n" ) );
 		}
 
-		if ( result )
-		{
-			result = p_file.writeText( tabs + cuT( "\tpreset " ) + smaa::getName( m_config.data.preset ) + cuT( "\n" ) ) > 0;
+		p_file << ( tabs + cuT( "\tedgeDetection " ) + smaa::getName( m_config.data.edgeDetection ) + cuT( "\n" ) );
 
-			if ( result && m_config.data.preset == Preset::eCustom )
+		if ( m_config.data.disableDiagonalDetection != ref.disableDiagonalDetection )
+		{
+			p_file << ( tabs + cuT( "\tdisableDiagonalDetection true\n" ) );
+		}
+
+		if ( m_config.data.disableCornerDetection != ref.disableCornerDetection )
+		{
+			p_file << ( tabs + cuT( "\tdisableCornerDetection true\n" ) );
+		}
+
+		if ( m_config.data.enablePredication != ref.enablePredication )
+		{
+			p_file << ( tabs + cuT( "\tpredication true\n" ) );
+
+			if ( m_config.data.predicationScale != ref.predicationScale )
 			{
-				result = p_file.writeText( tabs + cuT( "\tthreshold" ) + string::toString( m_config.data.threshold, std::locale{ "C" } ) + cuT( "\n" ) ) > 0
-					&& p_file.writeText( tabs + cuT( "\tmaxSearchSteps " ) + string::toString( m_config.data.maxSearchSteps, std::locale{ "C" } ) + cuT( "\n" ) ) > 0
-					&& p_file.writeText( tabs + cuT( "\tmaxSearchStepsDiag " ) + string::toString( m_config.data.maxSearchStepsDiag, std::locale{ "C" } ) + cuT( "\n" ) ) > 0
-					&& p_file.writeText( tabs + cuT( "\tcornerRounding " ) + string::toString( m_config.data.cornerRounding, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+				p_file << ( tabs + cuT( "\tpredicationScale " ) + string::toString( m_config.data.predicationScale, std::locale{ "C" } ) + cuT( "\n" ) );
+			}
+
+			if ( m_config.data.predicationStrength != ref.predicationStrength )
+			{
+				p_file << ( tabs + cuT( "\tpredicationStrength " ) + string::toString( m_config.data.predicationStrength, std::locale{ "C" } ) + cuT( "\n" ) );
+			}
+
+			if ( m_config.data.predicationThreshold != ref.predicationThreshold )
+			{
+				p_file << ( tabs + cuT( "\tpredicationThreshold " ) + string::toString( m_config.data.predicationThreshold, std::locale{ "C" } ) + cuT( "\n" ) );
 			}
 		}
 
-		if ( result )
+		if ( m_config.data.enableReprojection != ref.enableReprojection )
 		{
-			result = p_file.writeText( tabs + cuT( "\tedgeDetection " ) + smaa::getName( m_config.data.edgeDetection ) + cuT( "\n" ) ) > 0;
-		}
+			p_file << ( tabs + cuT( "\treprojection true\n" ) );
 
-		if ( result && m_config.data.disableDiagonalDetection != ref.disableDiagonalDetection )
-		{
-			result = p_file.writeText( tabs + cuT( "\tdisableDiagonalDetection true\n" ) ) > 0;
-		}
-
-		if ( result && m_config.data.disableCornerDetection != ref.disableCornerDetection )
-		{
-			result = p_file.writeText( tabs + cuT( "\tdisableCornerDetection true\n" ) ) > 0;
-		}
-
-		if ( result && m_config.data.enablePredication != ref.enablePredication )
-		{
-			result = p_file.writeText( tabs + cuT( "\tpredication true\n" ) ) > 0;
-
-			if ( result && m_config.data.predicationScale != ref.predicationScale )
+			if ( m_config.data.reprojectionWeightScale != ref.reprojectionWeightScale )
 			{
-				result = p_file.writeText( tabs + cuT( "\tpredicationScale " ) + string::toString( m_config.data.predicationScale, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
-			}
-
-			if ( result && m_config.data.predicationStrength != ref.predicationStrength )
-			{
-				result = p_file.writeText( tabs + cuT( "\tpredicationStrength " ) + string::toString( m_config.data.predicationStrength, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
-			}
-
-			if ( result && m_config.data.predicationThreshold != ref.predicationThreshold )
-			{
-				result = p_file.writeText( tabs + cuT( "\tpredicationThreshold " ) + string::toString( m_config.data.predicationThreshold, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+				p_file << ( tabs + cuT( "\treprojectionWeightScale " ) + string::toString( m_config.data.reprojectionWeightScale, std::locale{ "C" } ) + cuT( "\n" ) );
 			}
 		}
 
-		if ( result && m_config.data.enableReprojection != ref.enableReprojection )
+		if ( m_config.data.localContrastAdaptationFactor != ref.localContrastAdaptationFactor )
 		{
-			result = p_file.writeText( tabs + cuT( "\treprojection true\n" ) ) > 0;
-
-			if ( result && m_config.data.reprojectionWeightScale != ref.reprojectionWeightScale )
-			{
-				result = p_file.writeText( tabs + cuT( "\treprojectionWeightScale " ) + string::toString( m_config.data.reprojectionWeightScale, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
-			}
+			p_file << ( tabs + cuT( "\tlocalContrastAdaptationFactor " ) + string::toString( m_config.data.localContrastAdaptationFactor, std::locale{ "C" } ) + cuT( "\n" ) );
 		}
 
-		if ( result && m_config.data.localContrastAdaptationFactor != ref.localContrastAdaptationFactor )
-		{
-			result = p_file.writeText( tabs + cuT( "\tlocalContrastAdaptationFactor " ) + string::toString( m_config.data.localContrastAdaptationFactor, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
-		}
-
-		if ( result )
-		{
-			result = p_file.writeText( tabs + cuT( "}\n" ) ) > 0;
-		}
-
-		return result;
+		p_file << ( tabs + cuT( "}\n" ) );
+		return true;
 	}
 
 	ashes::Image const * PostEffect::doGetPredicationTexture()

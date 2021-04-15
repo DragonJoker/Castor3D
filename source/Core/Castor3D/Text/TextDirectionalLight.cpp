@@ -18,7 +18,7 @@ namespace castor
 	}
 
 	bool TextWriter< DirectionalLight >::operator()( DirectionalLight const & light
-		, TextFile & file )
+		, StringStream & file )
 	{
 		log::info << tabs() << cuT( "Writing DirectionalLight " ) << light.getLight().getName() << std::endl;
 		bool result{ false };

@@ -58,7 +58,7 @@ namespace grayscale
 		/**
 		 *\copydoc		castor3d::PostEffect::doWriteInto
 		 */
-		bool doWriteInto( castor::TextFile & file, castor::String const & tabs ) override;
+		bool doWriteInto( castor::StringStream & file, castor::String const & tabs ) override;
 
 	public:
 		static castor::String Type;

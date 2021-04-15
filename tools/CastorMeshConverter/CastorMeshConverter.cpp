@@ -212,7 +212,7 @@ bool doInitialiseEngine( castor3d::Engine & engine )
 
 template< typename ObjType, typename ViewType >
 bool writeView( ViewType const & view
-	, castor::TextFile & file )
+	, castor::StringStream & file )
 {
 	bool result = true;
 
@@ -233,8 +233,9 @@ bool writeView( ViewType const & view
 
 template< typename ObjType, typename ViewType >
 bool writeView( ViewType const & view
+	, castor::Path const & folder
 	, castor::String const & subfolder
-	, castor::TextFile & file )
+	, castor::StringStream & file )
 {
 	bool result = true;
 
@@ -245,7 +246,7 @@ bool writeView( ViewType const & view
 			if ( result )
 			{
 				auto elem = view.find( name );
-				result = castor::TextWriter< ObjType >{ castor::cuEmptyString, subfolder }( *elem, file );
+				result = castor::TextWriter< ObjType >{ castor::cuEmptyString, folder, subfolder }( *elem, file );
 			}
 		}
 	}
@@ -317,11 +318,18 @@ struct ObjectPostWriter< false, castor3d::Mesh >
 			}
 
 			auto & scene = *object.getScene();
-			auto newPath = path / ( options.output + cuT( "Materials.cscn" ) );
-			castor::TextFile file{ newPath, castor::File::OpenMode::eWrite };
+			auto stream = castor::makeStringStream();
 			result = writeView< castor3d::Material >( scene.getMaterialView()
+				, texturesFolder
 				, castor::cuEmptyString
-				, file );
+				, stream );
+
+			if ( result )
+			{
+				auto newPath = path / ( options.output + cuT( "Materials.cscn" ) );
+				castor::TextFile file{ newPath, castor::File::OpenMode::eWrite };
+				result = file.writeText( stream.str() ) > 0;
+			}
 		}
 
 		if ( result && !options.split )

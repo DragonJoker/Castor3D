@@ -16,11 +16,13 @@ namespace castor
 	{
 	public:
 		C3D_API explicit TextWriter( String const & tabs
+			, Path const & folder
 			, String const & subfolder );
 		C3D_API bool operator()( castor3d::Pass const & pass
-			, TextFile & file )override;
+			, castor::StringStream & file )override;
 
 	private:
+		Path m_folder;
 		String m_subfolder;
 	};
 }

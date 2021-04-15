@@ -16,7 +16,7 @@ namespace castor
 	{
 	public:
 		explicit TextWriter( String const & tabs );
-		bool operator()( QuaternionT< ValueT > const & object, TextFile & file )override;
+		bool operator()( QuaternionT< ValueT > const & object, StringStream & file )override;
 	};
 }
 
