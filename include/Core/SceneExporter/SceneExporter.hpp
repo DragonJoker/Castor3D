@@ -49,6 +49,10 @@ namespace castor3d::exporter
 		 */
 		CSE_API virtual bool exportScene( castor3d::Scene const & scene
 			, castor::Path const & fileName ) = 0;
+		CSE_API virtual bool exportMesh( castor3d::Scene const & scene
+			, castor3d::Mesh const & mesh
+			, castor::Path const & outputFolder
+			, castor::String const & outputName ) = 0;
 
 	protected:
 		ExportOptions const m_options;

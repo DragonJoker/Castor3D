@@ -22,6 +22,10 @@ namespace castor3d::exporter
 		CSE_API explicit ObjSceneExporter( ExportOptions options );
 		CSE_API bool exportScene( castor3d::Scene const & scene
 			, castor::Path const & fileName )override;
+		CSE_API bool exportMesh( castor3d::Scene const & scene
+			, castor3d::Mesh const & mesh
+			, castor::Path const & outputFolder
+			, castor::String const & outputName )override;
 
 	private:
 		void doExportMaterials( castor3d::Scene const & scene
