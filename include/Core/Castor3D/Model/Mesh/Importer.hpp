@@ -51,12 +51,23 @@ namespace castor3d
 			, bool initialise );
 		/**
 		 *\~english
-		 *\brief		Loads a texture and adds it to the given pass.
+		 *\brief		Loads an image from a file.
+		 *\param[in]	path	The image file path (can be relative or absolute).
+		 *\return		The image.
+		 *\~french
+		 *\brief		Charge une image depuis un fichier.
+		 *\param[in]	path	Le chemin vers l'image (peut être relatif ou absolu).
+		 *\return		L'image.
+		 */
+		C3D_API castor::ImageUPtr loadImage( castor::Path const & path )const;
+		/**
+		 *\~english
+		 *\brief		Loads a texture.
 		 *\param[in]	path	The image file path (can be relative or absolute).
 		 *\param[in]	config	The texture unit configuration.
 		 *\return		The texture unit.
 		 *\~french
-		 *\brief		Charge une texture et l'ajoute à la passe donnée.
+		 *\brief		Charge une texture.
 		 *\param[in]	path	Le chemin vers l'image (peut être relatif ou absolu).
 		 *\param[in]	config	La configuration de la texture.
 		 *\return		L'unité de texture.
