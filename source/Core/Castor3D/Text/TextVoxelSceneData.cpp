@@ -24,6 +24,7 @@ namespace castor
 			if ( auto block{ beginBlock( file, cuT( "voxel_cone_tracing" ) ) } )
 			{
 				result = write( file, cuT( "enabled" ), obj.enabled )
+					&& write( file, cuT( "grid_size" ), obj.gridSize )
 					&& write( file, cuT( "conservative_rasterization" ), obj.enableConservativeRasterization )
 					&& write( file, cuT( "temporal_smoothing" ), obj.enableTemporalSmoothing )
 					&& write( file, cuT( "occlusion" ), obj.enableOcclusion )
