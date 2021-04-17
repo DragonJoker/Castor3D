@@ -395,11 +395,25 @@ namespace castor3d
 		m_deferredRendering.reset();
 		doCleanupLpv( device );
 		doCleanupShadowMaps( device );
-		m_transparentPass->cleanup( device );
-		m_opaquePass->cleanup( device );
+
+		if ( m_transparentPass )
+		{
+			m_transparentPass->cleanup( device );
+		}
+
+		if ( m_opaquePass )
+		{
+			m_opaquePass->cleanup( device );
+		}
+
 		m_voxelizer.reset();
-		m_depthPass->cleanup( device );
-		m_depthPass.reset();
+
+		if ( m_depthPass )
+		{
+			m_depthPass->cleanup( device );
+			m_depthPass.reset();
+		}
+
 		m_vctConfigUbo.cleanup();
 		m_gpInfoUbo.cleanup( device );
 		m_matrixUbo.cleanup( device );
