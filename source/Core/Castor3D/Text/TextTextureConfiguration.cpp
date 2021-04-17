@@ -127,14 +127,17 @@ namespace castor
 		{
 			auto rotate = castor::Point2f{ configuration.rotate };
 			auto translate = castor::Point3f{ configuration.translate };
+			auto scale = castor::Point3f{ configuration.scale };
 
 			if ( translate != castor::Point3f{}
-				|| rotate != castor::Point2f{ 1.0f, 0.0f } )
+				|| rotate != castor::Point2f{ 1.0f, 0.0f }
+				|| scale != castor::Point3f{ 1.0f, 1.0f, 1.0f } )
 			{
 				if ( auto animBlock{ beginBlock( file, "animation" ) } )
 				{
 					result = writeNamedSubOpt( file, cuT( "translate" ), translate, castor::Point3f{} )
-						&& writeNamedSubOpt( file, cuT( "rotate" ), rotate, castor::Point2f{ 1.0f, 0.0f } );
+						&& writeNamedSubOpt( file, cuT( "rotate" ), rotate, castor::Point2f{ 1.0f, 0.0f } )
+						&& writeNamedSubOpt( file, cuT( "scale" ), scale, castor::Point3f{ 1.0f, 1.0f, 1.0f } );
 				}
 			}
 		}

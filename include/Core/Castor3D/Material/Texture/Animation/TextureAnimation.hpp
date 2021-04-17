@@ -54,6 +54,7 @@ namespace castor3d
 
 		C3D_API castor::Point3f getTranslate( castor::Milliseconds const & time )const;
 		C3D_API castor::Angle getRotate( castor::Milliseconds const & time )const;
+		C3D_API castor::Point3f getScale( castor::Milliseconds const & time )const;
 
 		TextureTranslateSpeed const & getTranslateSpeed()
 		{
@@ -63,6 +64,11 @@ namespace castor3d
 		TextureRotateSpeed const & getRotateSpeed()
 		{
 			return m_rotate;
+		}
+
+		TextureScaleSpeed const & getScaleSpeed()
+		{
+			return m_scale;
 		}
 
 		void setTranslateSpeed( TextureTranslateSpeed const & translate )
@@ -75,16 +81,24 @@ namespace castor3d
 			m_rotate = rotate;
 		}
 
+		void setScaleSpeed( TextureScaleSpeed const & scale )
+		{
+			m_scale = scale;
+		}
+
 		void setTransformSpeed( TextureTranslateSpeed const & translate
-			, TextureRotateSpeed const & rotate )
+			, TextureRotateSpeed const & rotate
+			, TextureScaleSpeed const & scale )
 		{
 			setTranslateSpeed( translate );
 			setRotateSpeed( rotate );
+			setScaleSpeed( scale );
 		}
 
 	protected:
 		TextureTranslateSpeed m_translate;
 		TextureRotateSpeed m_rotate;
+		TextureScaleSpeed m_scale;
 
 		friend class BinaryWriter< TextureAnimation >;
 		friend class BinaryParser< TextureAnimation >;

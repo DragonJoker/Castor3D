@@ -29,4 +29,9 @@ namespace castor3d
 	{
 		return m_rotate.getDistance( time );
 	}
+
+	castor::Point3f TextureAnimation::getScale( castor::Milliseconds const & time )const
+	{
+		return castor::Point3f{ m_scale.getDistance( time ) };
+	}
 }
