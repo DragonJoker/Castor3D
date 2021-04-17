@@ -33,6 +33,13 @@ namespace castor3d
 			{
 				return ( ( uv - vec3( 0.5_f, 0.5f, 0.5f ) ) * rotate ) + vec3( 0.5_f, 0.5f, 0.5f );
 			}
+
+			template< typename LhsT, typename RhsT >
+			LhsT scaleUV( LhsT const & scale
+				, RhsT const & uv )
+			{
+				return scale * uv;
+			}
 		}
 
 		//*****************************************************************************************
@@ -50,6 +57,7 @@ namespace castor3d
 			, miscVals{ getMember< sdw::Vec4 >( "miscVals" ) }
 			, translate{ getMember< sdw::Vec4 >( "translate" ) }
 			, rotate{ getMember< sdw::Vec4 >( "rotate" ) }
+			, scale{ getMember< sdw::Vec4 >( "scale" ) }
 			, colourMask{ colrSpec.xy() }
 			, specularMask{ colrSpec.zw() }
 			, glossinessMask{ glossOpa.xy() }
@@ -87,6 +95,7 @@ namespace castor3d
 				result->declMember( "miscVals", ast::type::Kind::eVec4F );
 				result->declMember( "translate", ast::type::Kind::eVec4F );
 				result->declMember( "rotate", ast::type::Kind::eVec4F );
+				result->declMember( "scale", ast::type::Kind::eVec4F );
 			}
 
 			return result;
@@ -239,7 +248,7 @@ namespace castor3d
 		{
 			return translateUV( translate.xy()
 				, rotateUV( vec2( rotate.xy() )
-					, mix( uv
+					, mix( scaleUV( uv, scale.xy() )
 						, vec2( uv.x(), 1.0_f - uv.y() )
 						, vec2( writer.cast< sdw::Float >( needsYInversion ) ) ) ) );
 		}
@@ -249,7 +258,7 @@ namespace castor3d
 		{
 			return translateUV( translate.xyz()
 				, rotateUV( vec3( rotate.xy(), 0.0f )
-					, mix( uvw
+					, mix( scaleUV( uvw, scale.xyz() )
 						, vec3( uvw.x(), 1.0_f - uvw.y(), uvw.z() )
 						, vec3( writer.cast< sdw::Float >( needsYInversion ) ) ) ) );
 		}
@@ -292,6 +301,7 @@ namespace castor3d
 						result.miscVals = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
 						result.translate = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
 						result.rotate = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
+						result.scale = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
 						m_writer.returnStmt( result );
 					}
 					, sdw::InUInt{ m_writer, cuT( "index" ) } );
