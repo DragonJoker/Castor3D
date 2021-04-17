@@ -33,6 +33,56 @@ namespace castor3d
 			stream << "min: " << obj.getMin() << ", max: " << obj.getMax();
 			return stream;
 		}
+
+		bool findImage( castor::Path const & path
+			, castor::Path const & filePath
+			, castor::Path & folder
+			, castor::Path & relative )
+		{
+			if ( castor::File::fileExists( path ) )
+			{
+				relative = path;
+			}
+			else if ( castor::File::fileExists( filePath / path ) )
+			{
+				auto fullPath = filePath / path;
+				folder = fullPath.getPath();
+				relative = fullPath.getFileName( true );;
+			}
+			else
+			{
+				castor::PathArray files;
+				castor::String fileName = path.getFileName( true );
+				castor::File::listDirectoryFiles( filePath, files, true );
+				auto it = std::find_if( files.begin()
+					, files.end()
+					, [&fileName]( castor::Path const & file )
+					{
+						return file.getFileName( true ) == fileName
+							|| file.getFileName( true ).find( fileName ) == 0;
+					} );
+
+				folder = filePath;
+
+				if ( it != files.end() )
+				{
+					relative = *it;
+					relative = castor::Path{ relative.substr( folder.size() + 1 ) };
+				}
+				else
+				{
+					relative = castor::Path{ fileName };
+				}
+			}
+
+			if ( !castor::File::fileExists( folder / relative ) )
+			{
+				log::error << cuT( "Couldn't load texture file [" ) << path << cuT( "]: File does not exist." ) << std::endl;
+				return false;
+			}
+
+			return true;
+		}
 	}
 
 	MeshImporter::MeshImporter( Engine & engine )
@@ -143,6 +193,40 @@ namespace castor3d
 		return result;
 	}
 
+	castor::ImageUPtr MeshImporter::loadImage( castor::Path const & path )const
+	{
+		castor::ImageUPtr result;
+		castor::Path relative;
+		castor::Path folder;
+
+		if ( findImage( path, m_filePath, folder, relative ) )
+		{
+			try
+			{
+				auto image = getEngine()->getImageLoader().load( relative.getFileName()
+					, folder / relative
+					, false );
+				result = std::make_unique< castor::Image >( relative.getFileName()
+					, folder / relative
+					, *image.getPixels() );
+			}
+			catch ( castor::Exception & exc )
+			{
+				log::error << cuT( "Error encountered while loading image file [" ) << path << cuT( "]: " ) << exc.what() << std::endl;
+			}
+			catch ( std::exception & exc )
+			{
+				log::error << cuT( "Error encountered while loading image file [" ) << path << cuT( "]: " ) << exc.what() << std::endl;
+			}
+			catch ( ... )
+			{
+				log::error << cuT( "Error encountered while loading image file [" ) << path << cuT( "]: Unknown error" ) << std::endl;
+			}
+		}
+
+		return result;
+	}
+
 	TextureUnitSPtr MeshImporter::loadTexture( castor::Path const & path
 		, TextureConfiguration const & config )const
 	{
@@ -150,66 +234,30 @@ namespace castor3d
 		castor::Path relative;
 		castor::Path folder;
 
-		if ( castor::File::fileExists( path ) )
+		if ( findImage( path, m_filePath, folder, relative ) )
 		{
-			relative = path;
-		}
-		else if ( castor::File::fileExists( m_filePath / path ) )
-		{
-			auto fullPath = m_filePath / path;
-			folder = fullPath.getPath();
-			relative = fullPath.getFileName( true );;
-		}
-		else
-		{
-			castor::PathArray files;
-			castor::String fileName = path.getFileName( true );
-			castor::File::listDirectoryFiles( m_filePath, files, true );
-			auto it = std::find_if( files.begin()
-				, files.end()
-				, [&fileName]( castor::Path const & file )
-				{
-					return file.getFileName( true ) == fileName
-						|| file.getFileName( true ).find( fileName ) == 0;
-				} );
-
-			folder = m_filePath;
-
-			if ( it != files.end() )
+			try
 			{
-				relative = *it;
-				relative = castor::Path{ relative.substr( folder.size() + 1 ) };
+				result = std::make_shared< TextureUnit >( *getEngine() );
+				result->setTexture( createTextureLayout( *getEngine()
+					, relative
+					, folder
+					, config.normalMask[0] == 0 ) );
+				result->setConfiguration( config );
+				return result;
 			}
-			else
+			catch ( castor::Exception & exc )
 			{
-				relative = castor::Path{ fileName };
+				log::error << cuT( "Error encountered while loading texture file [" ) << path << cuT( "]: " ) << exc.what() << std::endl;
 			}
-		}
-
-		if ( !castor::File::fileExists( folder / relative ) )
-		{
-			log::error << cuT( "Couldn't load texture file [" ) << path << cuT( "]: File does not exist." ) << std::endl;
-			return nullptr;
-		}
-
-		try
-		{
-			result = std::make_shared< TextureUnit >( *getEngine() );
-			result->setTexture( createTextureLayout( *getEngine(), relative, folder ) );
-			result->setConfiguration( config );
-			return result;
-		}
-		catch ( castor::Exception & exc )
-		{
-			log::error << cuT( "Error encountered while loading texture file [" ) << path << cuT( "]: " ) << exc.what() << std::endl;
-		}
-		catch ( std::exception & exc )
-		{
-			log::error << cuT( "Error encountered while loading texture file [" ) << path << cuT( "]: " ) << exc.what() << std::endl;
-		}
-		catch ( ... )
-		{
-			log::error << cuT( "Error encountered while loading texture file [" ) << path << cuT( "]: Unknown error" ) << std::endl;
+			catch ( std::exception & exc )
+			{
+				log::error << cuT( "Error encountered while loading texture file [" ) << path << cuT( "]: " ) << exc.what() << std::endl;
+			}
+			catch ( ... )
+			{
+				log::error << cuT( "Error encountered while loading texture file [" ) << path << cuT( "]: Unknown error" ) << std::endl;
+			}
 		}
 
 		return nullptr;
