@@ -554,9 +554,12 @@ namespace castor3d
 			{
 				auto flipped = buffer->isFlipped();
 				buffer = castor::PxBufferBase::create( buffer->getDimensions()
+					, buffer->getLayers()
+					, buffer->getLevels()
 					, dstFormat
 					, buffer->getConstPtr()
-					, buffer->getFormat() );
+					, buffer->getFormat()
+					, buffer->getAlign() );
 
 				if ( flipped )
 				{
