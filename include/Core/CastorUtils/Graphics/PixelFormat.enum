@@ -38,7 +38,7 @@ See LICENSE file in root folder
 #endif
 
 CUPF_ENUM_BEGIN( PixelFormat )
-CUPF_ENUM_VALUE_COLOR( UNDEFINED, 0, 0, false )
+CUPF_ENUM_VALUE( UNDEFINED, 0, 0, false, false, false, false, false )
 
 CUPF_ENUM_VALUE_COLOR( R4G4_UNORM, 1, 2, false )
 CUPF_ENUM_VALUE_COLOR( R4G4B4A4_UNORM, 2, 4, true )
