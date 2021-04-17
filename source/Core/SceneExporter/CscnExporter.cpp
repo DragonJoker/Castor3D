@@ -732,7 +732,19 @@ namespace castor3d::exporter
 			return options;
 		}
 
-		void finaliseExport( bool singleMesh
+		castor::String getCameraPosition( castor3d::Mesh const & mesh
+			, float & farPlane )
+		{
+			auto aabb = mesh.getBoundingBox();
+			auto height = aabb.getDimensions()->y;
+			auto z = -( height * 1.5f );
+			farPlane = std::abs( z ) + std::max( aabb.getMax()->z, std::max( aabb.getMax()->x, aabb.getMax()->y ) ) * 2.0f;
+			return castor::string::toString( aabb.getCenter()->x ) + cuT( " " )
+				+ castor::string::toString( aabb.getCenter()->y ) + cuT( " " )
+				+ castor::string::toString( z );
+		}
+
+		void finaliseExport( castor3d::Mesh const * singleMesh
 			, castor::TextWriter< castor3d::Scene >::Options const & options
 			, castor::StringStream const & meshes
 			, castor::StringStream const & nodes
@@ -784,8 +796,8 @@ namespace castor3d::exporter
 					stream << "\n";
 					stream << "	scene_node \"MainCameraNode\"\n";
 					stream << "	{\n";
-					stream << "		orientation 0 1 0 180\n";
-					stream << "		position 0.00000 1.00000 3.00000\n";
+					float farPlane = 0.0f;
+					stream << "		position " << getCameraPosition( *singleMesh, farPlane ) << "\n";
 					stream << "	}\n";
 					stream << "\n";
 					stream << "	//Cameras\n";
@@ -798,7 +810,7 @@ namespace castor3d::exporter
 					stream << "		{\n";
 					stream << "			type perspective\n";
 					stream << "			near 0.100000\n";
-					stream << "			far 1000.00\n";
+					stream << "			far " << farPlane << "\n";
 					stream << "			aspect_ratio 1.77800\n";
 					stream << "			fov_y 45.0000\n";
 					stream << "		}\n";
@@ -925,7 +937,7 @@ namespace castor3d::exporter
 
 			if ( result )
 			{
-				finaliseExport( true
+				finaliseExport( &mesh
 					, options
 					, meshes
 					, nodes
@@ -1046,7 +1058,7 @@ namespace castor3d::exporter
 
 			if ( result )
 			{
-				finaliseExport( false
+				finaliseExport( nullptr
 					, options
 					, meshes
 					, nodes
