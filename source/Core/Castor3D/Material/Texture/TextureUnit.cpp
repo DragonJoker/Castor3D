@@ -380,7 +380,8 @@ namespace castor3d
 	}
 
 	void TextureUnit::setTransform( castor::Point3f const & translate
-		, castor::Angle const & rotate )
+		, castor::Angle const & rotate
+		, castor::Point3f const & scale )
 	{
 		m_configuration.translate->x = translate->x;
 		m_configuration.translate->y = translate->y;
@@ -388,6 +389,10 @@ namespace castor3d
 
 		m_configuration.rotate->x = rotate.cos();
 		m_configuration.rotate->y = rotate.sin();
+
+		m_configuration.scale->x = scale->x;
+		m_configuration.scale->y = scale->y;
+		m_configuration.scale->z = scale->z;
 
 		onChanged( *this );
 	}

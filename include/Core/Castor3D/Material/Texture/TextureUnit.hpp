@@ -223,7 +223,8 @@ namespace castor3d
 		/**@{*/
 		C3D_API void setConfiguration( TextureConfiguration value );
 		C3D_API void setTransform( castor::Point3f const & translate
-			, castor::Angle const & rotate );
+			, castor::Angle const & rotate
+			, castor::Point3f const & scale );
 
 		void setRenderTarget( RenderTargetSPtr value )
 		{
