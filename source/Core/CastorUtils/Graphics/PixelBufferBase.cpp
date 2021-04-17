@@ -27,6 +27,71 @@ namespace castor
 				+ ( size_t( ( y * buffer.getWidth() + x ) * ashes::getMinimalSize( format ) ) );
 		}
 
+		template< typename TypeT >
+		struct LargerType;
+		template< typename TypeT >
+		using LargerTypeT = typename LargerType< TypeT >::Type;
+
+		template<>
+		struct LargerType< uint8_t >
+		{
+			using Type = uint16_t;
+		};
+
+		template<>
+		struct LargerType< int8_t >
+		{
+			using Type = int16_t;
+		};
+
+		template<>
+		struct LargerType< uint16_t >
+		{
+			using Type = uint32_t;
+		};
+
+		template<>
+		struct LargerType< int16_t >
+		{
+			using Type = int32_t;
+		};
+
+		template<>
+		struct LargerType< uint32_t >
+		{
+			using Type = uint64_t;
+		};
+
+		template<>
+		struct LargerType< int32_t >
+		{
+			using Type = int64_t;
+		};
+
+		template<>
+		struct LargerType< uint64_t >
+		{
+			using Type = uint64_t;
+		};
+
+		template<>
+		struct LargerType< int64_t >
+		{
+			using Type = int64_t;
+		};
+
+		template<>
+		struct LargerType< float >
+		{
+			using Type = double;
+		};
+
+		template<>
+		struct LargerType< double >
+		{
+			using Type = long double;
+		};
+
 		template< PixelFormat PFT >
 		void generateMipPixelT( uint8_t const * srcPixel1
 			, uint8_t const * srcPixel2
@@ -34,32 +99,46 @@ namespace castor
 			, uint8_t const * srcPixel4
 			, uint8_t * dstPixel )
 		{
-			using PixelComponentsT = PixelComponents< PFT >;
+			using PixelComponents = PixelComponents< PFT >;
+			using Type = typename PixelComponents::Type;
+			using LargerType = typename LargerTypeT< Type >;
 
-			PixelComponentsT::R( dstPixel
-				, uint8_t( ( uint16_t( PixelComponentsT::R( srcPixel1 ) )
-						+ uint16_t( PixelComponentsT::R( srcPixel2 ) )
-						+ uint16_t( PixelComponentsT::R( srcPixel3 ) )
-						+ uint16_t( PixelComponentsT::R( srcPixel4 ) ) )
+			PixelComponents::R( dstPixel
+				, Type( ( LargerType( PixelComponents::R( srcPixel1 ) )
+						+ LargerType( PixelComponents::R( srcPixel2 ) )
+						+ LargerType( PixelComponents::R( srcPixel3 ) )
+						+ LargerType( PixelComponents::R( srcPixel4 ) ) )
 					/ 4u ) );
-			PixelComponentsT::G( dstPixel
-				, uint8_t( ( uint16_t( PixelComponentsT::G( srcPixel1 ) )
-						+ uint16_t( PixelComponentsT::G( srcPixel2 ) )
-						+ uint16_t( PixelComponentsT::G( srcPixel3 ) )
-						+ uint16_t( PixelComponentsT::G( srcPixel4 ) ) )
-					/ 4u ) );
-			PixelComponentsT::B( dstPixel
-				, uint8_t( ( uint16_t( PixelComponentsT::B( srcPixel1 ) )
-						+ uint16_t( PixelComponentsT::B( srcPixel2 ) )
-						+ uint16_t( PixelComponentsT::B( srcPixel3 ) )
-						+ uint16_t( PixelComponentsT::B( srcPixel4 ) ) )
-					/ 4u ) );
-			PixelComponentsT::A( dstPixel
-				, uint8_t( ( uint16_t( PixelComponentsT::A( srcPixel1 ) )
-						+ uint16_t( PixelComponentsT::A( srcPixel2 ) )
-						+ uint16_t( PixelComponentsT::A( srcPixel3 ) )
-						+ uint16_t( PixelComponentsT::A( srcPixel4 ) ) )
-					/ 4u ) );
+
+			if constexpr ( getComponentsCount( PFT ) >= 2 )
+			{
+				PixelComponents::G( dstPixel
+					, Type( ( LargerType( PixelComponents::G( srcPixel1 ) )
+							+ LargerType( PixelComponents::G( srcPixel2 ) )
+							+ LargerType( PixelComponents::G( srcPixel3 ) )
+							+ LargerType( PixelComponents::G( srcPixel4 ) ) )
+						/ 4u ) );
+
+				if constexpr ( getComponentsCount( PFT ) >= 3 )
+				{
+					PixelComponents::B( dstPixel
+						, Type( ( LargerType( PixelComponents::B( srcPixel1 ) )
+								+ LargerType( PixelComponents::B( srcPixel2 ) )
+								+ LargerType( PixelComponents::B( srcPixel3 ) )
+								+ LargerType( PixelComponents::B( srcPixel4 ) ) )
+							/ 4u ) );
+
+					if constexpr ( getComponentsCount( PFT ) >= 4 )
+					{
+						PixelComponents::A( dstPixel
+							, Type( ( LargerType( PixelComponents::A( srcPixel1 ) )
+									+ LargerType( PixelComponents::A( srcPixel2 ) )
+									+ LargerType( PixelComponents::A( srcPixel3 ) )
+									+ LargerType( PixelComponents::A( srcPixel4 ) ) )
+								/ 4u ) );
+					}
+				}
+			}
 		}
 
 		template< PixelFormat PFT >
@@ -201,24 +280,11 @@ namespace castor
 		{
 			switch ( format )
 			{
-			case PixelFormat::eR8G8B8_UNORM:
-				return generateMipmapsT< PixelFormat::eR8G8B8_UNORM >( extent, buffer, align, dstLevels );
-			case PixelFormat::eB8G8R8_UNORM:
-				return 	generateMipmapsT< PixelFormat::eB8G8R8_UNORM >( extent, buffer, align, dstLevels );
-			case PixelFormat::eB8G8R8A8_UNORM:
-				return generateMipmapsT< PixelFormat::eB8G8R8A8_UNORM >( extent, buffer, align, dstLevels );
-			case PixelFormat::eR8G8B8A8_UNORM:
-				return generateMipmapsT< PixelFormat::eR8G8B8A8_UNORM >( extent, buffer, align, dstLevels );
-			case PixelFormat::eA8B8G8R8_UNORM:
-				return generateMipmapsT< PixelFormat::eA8B8G8R8_UNORM >( extent, buffer, align, dstLevels );
-			case PixelFormat::eR8G8B8_SRGB:
-				return generateMipmapsT< PixelFormat::eR8G8B8_SRGB >( extent, buffer, align, dstLevels );
-			case PixelFormat::eB8G8R8_SRGB:
-				return generateMipmapsT< PixelFormat::eB8G8R8_SRGB >( extent, buffer, align, dstLevels );
-			case PixelFormat::eR8G8B8A8_SRGB:
-				return generateMipmapsT< PixelFormat::eR8G8B8A8_SRGB >( extent, buffer, align, dstLevels );
-			case PixelFormat::eA8B8G8R8_SRGB:
-				return generateMipmapsT< PixelFormat::eA8B8G8R8_SRGB >( extent, buffer, align, dstLevels );
+#define CUPF_ENUM_VALUE_COLOR( name, value, components, alpha )\
+			case PixelFormat::e##name:\
+				return generateMipmapsT< PixelFormat::e##name >( extent, buffer, align, dstLevels );
+				break;
+#include "CastorUtils/Graphics/PixelFormat.enum"
 			default:
 				CU_Failure( "Unsupported format type for CPU mipmaps generation" );
 				return ByteArray{};
@@ -315,7 +381,7 @@ namespace castor
 						, VkFormat( srcFormat ) );
 					auto dstLevelExtent = ashes::getSubresourceDimensions( VkExtent2D{ dimensions.getWidth(), dimensions.getHeight() }
 						, level
-						, VkFormat( srcFormat ) );
+						, VkFormat( dstFormat ) );
 
 					convertBuffer( { srcLevelExtent.width, srcLevelExtent.height }
 						, { dstLevelExtent.width, dstLevelExtent.height }
