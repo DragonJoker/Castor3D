@@ -52,7 +52,8 @@ namespace castor
 
 	ImageSPtr ImageCache::add( String const & name
 		, Path const & path
-		, bool allowCompression )
+		, bool allowCompression
+		, bool generateMips )
 	{
 		using LockType = std::unique_lock< ImageCache >;
 		LockType lock{ makeUniqueLock( *this ) };
@@ -64,7 +65,10 @@ namespace castor
 
 			if ( !result->hasBuffer() )
 			{
-				*result = m_loader.load( name, path, allowCompression );
+				*result = m_loader.load( name
+					, path
+					, allowCompression
+					, generateMips );
 			}
 			else
 			{

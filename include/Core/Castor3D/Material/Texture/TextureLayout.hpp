@@ -167,7 +167,8 @@ namespace castor3d
 
 	C3D_API TextureLayoutSPtr createTextureLayout( Engine const & engine
 		, castor::Path const & relative
-		, castor::Path const & folder );
+		, castor::Path const & folder
+		, bool allowCompression = true );
 	C3D_API TextureLayoutSPtr createTextureLayout( Engine const & engine
 		, castor::String const & name
 		, castor::PxBufferBaseUPtr buffer
@@ -262,7 +263,8 @@ namespace castor3d
 			, bool isStatic = false );
 		C3D_API void setSource( castor::Path const & folder
 			, castor::Path const & relative
-			, bool allowCompression = true );
+			, bool allowCompression = true
+			, bool generateMips = true );
 		C3D_API void setSource( VkExtent3D const & extent
 			, VkFormat format );
 		void setSource( VkExtent2D const & extent
@@ -328,7 +330,8 @@ namespace castor3d
 		C3D_API void setLayerSource( uint32_t index
 			, castor::Path const & folder
 			, castor::Path const & relative
-			, bool allowCompression = true );
+			, bool allowCompression = true
+			, bool generateMips = true );
 		C3D_API void setLayerSource( uint32_t index
 			, VkExtent3D const & extent
 			, VkFormat format );
@@ -548,7 +551,8 @@ namespace castor3d
 			, CubeMapFace face
 			, castor::Path const & folder
 			, castor::Path const & relative
-			, bool allowCompression = true );
+			, bool allowCompression = true
+			, bool generateMips = true );
 		void setLayerCubeFaceSource( uint32_t layer
 			, CubeMapFace face
 			, VkExtent2D const & extent

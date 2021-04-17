@@ -84,42 +84,42 @@ namespace castor3d
 	void SkyboxBackground::loadLeftImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::eNegativeX, folder, relative, false );
+		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::eNegativeX, folder, relative, false, false );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadRightImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::ePositiveX, folder, relative, false );
+		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::ePositiveX, folder, relative, false, false );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadTopImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::eNegativeY, folder, relative, false );
+		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::eNegativeY, folder, relative, false, false );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadBottomImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::ePositiveY, folder, relative, false );
+		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::ePositiveY, folder, relative, false, false );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadFrontImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::eNegativeZ, folder, relative, false );
+		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::eNegativeZ, folder, relative, false, false );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadBackImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::ePositiveZ, folder, relative, false );
+		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::ePositiveZ, folder, relative, false, false );
 		notifyChanged();
 	}
 
@@ -127,7 +127,7 @@ namespace castor3d
 		, castor::Path const & relative
 		, CubeMapFace face )
 	{
-		getTexture().setLayerCubeFaceSource( 0u, face, folder, relative, false );
+		getTexture().setLayerCubeFaceSource( 0u, face, folder, relative, false, false );
 		notifyChanged();
 	}
 
