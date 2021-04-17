@@ -343,126 +343,138 @@ namespace C3dAssimp
 			}
 		}
 
-		void doLoadTexture( aiString const & name
+		struct TextureInfo
+		{
+			castor::String name;
+			aiUVTransform transform;
+		};
+
+		void doLoadTexture( TextureInfo const & info
 			, castor3d::Pass & pass
 			, castor3d::TextureConfiguration const & config
 			, castor3d::MeshImporter const & importer )
 		{
-			if ( name.length > 0 )
+			if ( !info.name.empty() )
 			{
-				auto texture = importer.loadTexture( castor::Path{ castor::string::stringCast< xchar >( name.C_Str() ) }
+				auto texture = importer.loadTexture( castor::Path{ info.name }
 					, config
 					, pass );
 
 				if ( texture )
 				{
 					log::debug << cuT( "  Texture: [" ) << texture->toString() << cuT( "]" ) << std::endl;
+					texture->setTransform( { info.transform.mTranslation.x, info.transform.mTranslation.y, 0.0f }
+						, castor::Angle::fromRadians( info.transform.mRotation )
+						, { info.transform.mScaling.x, info.transform.mScaling.y, 1.0f } );
 				}
 			}
+		}
+
+		TextureInfo getTextureInfo( aiMaterial const & aiMaterial
+			, aiTextureType type )
+		{
+			TextureInfo result;
+			aiString name;
+			aiMaterial.Get( AI_MATKEY_TEXTURE( type, 0 ), name );
+
+			if ( name.length > 0 )
+			{
+				result.name = castor::string::stringCast< xchar >( name.C_Str() );
+				aiMaterial.Get( AI_MATKEY_UVTRANSFORM( type, 0 ), result.transform );
+			}
+
+			return result;
 		}
 
 		void doProcessPassTextures( MetallicRoughnessPbrPass & pass
 			, aiMaterial const & aiMaterial
 			, MeshImporter const & importer
-			, aiString const & spcTexName )
+			, TextureInfo const & spcTex )
 		{
 			if ( aiGetVersionMajor() >= 4u )
 			{
-				static int constexpr TextureType_METALNESS = 15;
-				static int constexpr TextureType_DIFFUSE_ROUGHNESS = 16;
+				static auto constexpr TextureType_METALNESS = aiTextureType( 15 );
+				static auto constexpr TextureType_DIFFUSE_ROUGHNESS = aiTextureType( 16 );
 
-				aiString metTexName;
-				aiMaterial.Get( AI_MATKEY_TEXTURE( TextureType_METALNESS, 0 ), metTexName );
-				aiString rghTexName;
-				aiMaterial.Get( AI_MATKEY_TEXTURE( TextureType_DIFFUSE_ROUGHNESS, 0 ), rghTexName );
-
-				doLoadTexture( metTexName, pass, TextureConfiguration::MetalnessTexture, importer );
-				doLoadTexture( rghTexName, pass, TextureConfiguration::RoughnessTexture, importer );
+				auto metTex = getTextureInfo( aiMaterial, TextureType_METALNESS );
+				auto rghTex = getTextureInfo( aiMaterial, TextureType_DIFFUSE_ROUGHNESS );
+				doLoadTexture( metTex, pass, TextureConfiguration::MetalnessTexture, importer );
+				doLoadTexture( rghTex, pass, TextureConfiguration::RoughnessTexture, importer );
 			}
 			else
 			{
-				aiString rghTexName;
-				aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_SHININESS, 0 ), rghTexName );
-
-				doLoadTexture( spcTexName, pass, TextureConfiguration::SpecularTexture, importer );
-				doLoadTexture( rghTexName, pass, TextureConfiguration::GlossinessTexture, importer );
+				auto rghTex = getTextureInfo( aiMaterial, aiTextureType_SHININESS );
+				doLoadTexture( spcTex, pass, TextureConfiguration::SpecularTexture, importer );
+				doLoadTexture( rghTex, pass, TextureConfiguration::GlossinessTexture, importer );
 			}
 		}
 
 		void doProcessPassTextures( SpecularGlossinessPbrPass & pass
 			, aiMaterial const & aiMaterial
 			, MeshImporter const & importer
-			, aiString const & spcTexName )
+			, TextureInfo const & spcTex )
 		{
-			aiString glsTexName;
-			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_SHININESS, 0 ), glsTexName );
-
-			doLoadTexture( spcTexName, pass, TextureConfiguration::SpecularTexture, importer );
-			doLoadTexture( glsTexName, pass, TextureConfiguration::GlossinessTexture, importer );
+			auto glsTex = getTextureInfo( aiMaterial, aiTextureType_SHININESS );
+			doLoadTexture( spcTex, pass, TextureConfiguration::SpecularTexture, importer );
+			doLoadTexture( glsTex, pass, TextureConfiguration::GlossinessTexture, importer );
 		}
 
 		void doProcessPassTextures( PhongPass & pass
 			, aiMaterial const & aiMaterial
 			, MeshImporter const & importer
-			, aiString const & spcTexName )
+			, TextureInfo const & spcTex )
 		{
-			aiString ambTexName;
-			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_AMBIENT, 0 ), ambTexName );
-			aiString shnTexName;
-			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_SHININESS, 0 ), shnTexName );
-
-			doLoadTexture( spcTexName, pass, TextureConfiguration::SpecularTexture, importer );
-			doLoadTexture( shnTexName, pass, TextureConfiguration::ShininessTexture, importer );
+			auto ambTex = getTextureInfo( aiMaterial, aiTextureType_AMBIENT );
+			auto shnTex = getTextureInfo( aiMaterial, aiTextureType_SHININESS );
+			doLoadTexture( spcTex, pass, TextureConfiguration::SpecularTexture, importer );
+			doLoadTexture( shnTex, pass, TextureConfiguration::ShininessTexture, importer );
 		}
 
 		void doProcessPassTextures( Pass & pass
 			, aiMaterial const & aiMaterial
 			, MeshImporter const & importer )
 		{
-			aiString spcTexName;
-			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_SPECULAR, 0 ), spcTexName );
-			aiString difTexName;
-			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_DIFFUSE, 0 ), difTexName );
-			aiString emiTexName;
-			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_EMISSIVE, 0 ), emiTexName );
-			aiString nmlTexName;
-			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_NORMALS, 0 ), nmlTexName );
-			aiString hgtTexName;
-			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_HEIGHT, 0 ), hgtTexName );
-			aiString opaTexName;
-			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_OPACITY, 0 ), opaTexName );
-			aiString occTexName;
+			auto spcTex = getTextureInfo( aiMaterial, aiTextureType_SPECULAR );
+			auto difTex = getTextureInfo( aiMaterial, aiTextureType_DIFFUSE );
+			auto emiTex = getTextureInfo( aiMaterial, aiTextureType_EMISSIVE );
+			auto nmlTex = getTextureInfo( aiMaterial, aiTextureType_NORMALS );
+			auto hgtTex = getTextureInfo( aiMaterial, aiTextureType_HEIGHT );
+			auto opaTex = getTextureInfo( aiMaterial, aiTextureType_OPACITY );
+			TextureInfo occTex;
 
 			if ( aiGetVersionMajor() >= 4u )
 			{
-				static int constexpr TextureType_AMBIENT_OCCLUSION = 17;
-				aiMaterial.Get( AI_MATKEY_TEXTURE( TextureType_AMBIENT_OCCLUSION, 0 ), occTexName );
+				static auto constexpr TextureType_AMBIENT_OCCLUSION = aiTextureType( 17 );
+				occTex = getTextureInfo( aiMaterial, TextureType_AMBIENT_OCCLUSION );
 			}
 
-			if ( difTexName.length > 0
-				&& std::string( difTexName.C_Str() ).find( "_Cine_" ) != castor::String::npos
-				&& std::string( difTexName.C_Str() ).find( "/MI_CH_" ) != castor::String::npos )
+			if ( !difTex.name.empty()
+				&& difTex.name.find( "_Cine_" ) != castor::String::npos
+				&& difTex.name.find( "/MI_CH_" ) != castor::String::npos )
 			{
 				// Workaround for Collada textures.
-				castor::String strGlob = castor::string::stringCast< xchar >( difTexName.C_Str() ) + cuT( ".tga" );
+				castor::String strGlob = difTex.name + cuT( ".tga" );
 				castor::string::replace( strGlob, cuT( "/MI_CH_" ), cuT( "TX_CH_" ) );
 				castor::String strDiff = strGlob;
 				castor::String strNorm = strGlob;
 				castor::String strSpec = strGlob;
 				castor::String strOpac = strGlob;
-				difTexName = aiString{ castor::string::replace( strDiff, cuT( "_Cine_" ), cuT( "_D_" ) ) };
-				nmlTexName = aiString{ castor::string::replace( strNorm, cuT( "_Cine_" ), cuT( "_N_" ) ) };
-				spcTexName = aiString{ castor::string::replace( strSpec, cuT( "_Cine_" ), cuT( "_S_" ) ) };
-				opaTexName = aiString{ castor::string::replace( strOpac, cuT( "_Cine_" ), cuT( "_A_" ) ) };
+				difTex.name = castor::string::replace( strDiff, cuT( "_Cine_" ), cuT( "_D_" ) );
+				nmlTex.name = castor::string::replace( strNorm, cuT( "_Cine_" ), cuT( "_N_" ) );
+				spcTex.name = castor::string::replace( strSpec, cuT( "_Cine_" ), cuT( "_S_" ) );
+				opaTex.name = castor::string::replace( strOpac, cuT( "_Cine_" ), cuT( "_A_" ) );
+				nmlTex.transform = difTex.transform;
+				spcTex.transform = difTex.transform;
+				opaTex.transform = difTex.transform;
 			}
 
-			doLoadTexture( difTexName, pass, TextureConfiguration::DiffuseTexture, importer );
-			doLoadTexture( emiTexName, pass, TextureConfiguration::EmissiveTexture, importer );
-			doLoadTexture( occTexName, pass, TextureConfiguration::OcclusionTexture, importer );
+			doLoadTexture( difTex, pass, TextureConfiguration::DiffuseTexture, importer );
+			doLoadTexture( emiTex, pass, TextureConfiguration::EmissiveTexture, importer );
+			doLoadTexture( occTex, pass, TextureConfiguration::OcclusionTexture, importer );
 
-			if ( opaTexName.length > 0 )
+			if ( !opaTex.name.empty() )
 			{
-				doLoadTexture( opaTexName, pass, TextureConfiguration::OpacityTexture, importer );
+				doLoadTexture( opaTex, pass, TextureConfiguration::OpacityTexture, importer );
 
 				// force non 0.0 opacity when an opacity map is set
 				if ( pass.getOpacity() == 0.0f )
@@ -471,14 +483,15 @@ namespace C3dAssimp
 				}
 			}
 
-			if ( nmlTexName.length > 0 )
+			if ( !nmlTex.name.empty() )
 			{
-				doLoadTexture( nmlTexName, pass, TextureConfiguration::NormalTexture, importer );
-				doLoadTexture( hgtTexName, pass, TextureConfiguration::HeightTexture, importer );
+				doLoadTexture( nmlTex, pass, TextureConfiguration::NormalTexture, importer );
+				doLoadTexture( hgtTex, pass, TextureConfiguration::HeightTexture, importer );
 			}
 			else
 			{
-				doLoadTexture( hgtTexName, pass, TextureConfiguration::NormalTexture, importer );
+				auto config = TextureConfiguration::NormalTexture;
+				doLoadTexture( hgtTex, pass, config, importer );
 			}
 
 			switch ( pass.getType() )
@@ -487,19 +500,19 @@ namespace C3dAssimp
 				doProcessPassTextures( static_cast< PhongPass & >( pass )
 					, aiMaterial
 					, importer
-					, spcTexName );
+					, spcTex );
 				break;
 			case MaterialType::eSpecularGlossiness:
 				doProcessPassTextures( static_cast< SpecularGlossinessPbrPass & >( pass )
 					, aiMaterial
 					, importer
-					, spcTexName );
+					, spcTex );
 				break;
 			case MaterialType::eMetallicRoughness:
 				doProcessPassTextures( static_cast< MetallicRoughnessPbrPass & >( pass )
 					, aiMaterial
 					, importer
-					, spcTexName );
+					, spcTex );
 				break;
 			default:
 				CU_Failure( "Unsupported MaterialType" );
