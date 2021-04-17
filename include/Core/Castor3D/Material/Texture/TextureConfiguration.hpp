@@ -67,6 +67,7 @@ namespace castor3d
 		uint32_t needsYInversion{ 0u };
 		castor::Point4f translate{ 0, 0, 0, 0 };
 		castor::Point4f rotate{ 1, 0, 0, 0 };
+		castor::Point4f scale{ 1, 1, 1, 0 };
 		TextureSpace textureSpace{ TextureSpace::eColour };
 		/**@}*/
 		/**

@@ -23,6 +23,7 @@ namespace castor3d
 
 	using TextureRotateSpeed = castor::SpeedT< castor::Angle, castor::Seconds >;
 	using TextureTranslateSpeed = castor::SpeedT< castor::Point2f, castor::Seconds >;
+	using TextureScaleSpeed = castor::SpeedT< castor::Point2f, castor::Seconds >;
 
 	//@}
 	//@}
