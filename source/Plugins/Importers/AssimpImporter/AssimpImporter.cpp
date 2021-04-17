@@ -468,6 +468,7 @@ namespace C3dAssimp
 						, castor::PixelFormat::eR8G8B8A8_UNORM );
 					config.normalMask[0] = 0x00FFFFFF;
 					config.heightMask[0] = 0xFF000000;
+					path = image->getPath();
 					path = path.getPath() / ( path.getFileName() + "_C3DNml.tga" );
 					importer.getEngine()->getImageWriter().write( path, *nmlHeights );
 					info.name = path;
