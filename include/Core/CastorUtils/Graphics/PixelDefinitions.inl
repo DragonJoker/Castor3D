@@ -34,16 +34,14 @@ namespace castor
 		{
 			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				if constexpr ( isCompressedV< PFSrc >
-					|| isCompressedV< PFDst > )
+				if constexpr ( PFSrc == PFDst )
 				{
-					if constexpr ( PFSrc == PFDst )
-					{
-						std::memcpy( dstBuffer, srcBuffer, getBytesPerPixel( PFSrc ) );
-					}
+					std::memcpy( dstBuffer, srcBuffer, getBytesPerPixel( PFSrc ) );
 				}
 				else if constexpr( PFSrc != PixelFormat::eUNDEFINED
-					&& PFDst != PixelFormat::eUNDEFINED )
+					&& PFDst != PixelFormat::eUNDEFINED
+					&& !isCompressedV< PFSrc >
+					&& !isCompressedV< PFDst > )
 				{
 					if constexpr ( PFSrc == PFDst )
 					{
@@ -172,11 +170,21 @@ namespace castor
 				uint8_t * dst = &dstBuffer[0];
 				uint32_t count = srcSize / getBytesPerPixel( PFSrc );
 				CU_Require( srcSize / getBytesPerPixel( PFSrc ) == dstSize / getBytesPerPixel( PFDst ) );
-				PixelConverter< PFSrc, PFDst > converter;
 
-				for ( uint32_t i = 0; i < count; i++ )
+				if ( srcDimensions == dstDimensions
+					&& PFSrc == PFDst )
 				{
-					converter( src, dst );
+					CU_Require( srcSize == dstSize );
+					std::memcpy( dstBuffer, srcBuffer, srcSize );
+				}
+				else
+				{
+					PixelConverter< PFSrc, PFDst > converter;
+
+					for ( uint32_t i = 0; i < count; i++ )
+					{
+						converter( src, dst );
+					}
 				}
 			}
 		};
