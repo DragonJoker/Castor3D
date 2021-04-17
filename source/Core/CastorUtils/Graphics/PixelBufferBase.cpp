@@ -655,14 +655,30 @@ namespace castor
 
 	uint32_t getMipLevels( VkExtent3D const & extent )
 	{
-		auto min = std::min( extent.width, extent.height );
-		return uint32_t( castor::getBitSize( min ) );
+		return uint32_t( ashes::getMaxMipCount( extent ) );
 	}
 
 	uint32_t getMinMipLevels( uint32_t mipLevels
 		, VkExtent3D const & extent )
 	{
 		return std::min( getMipLevels( extent ), mipLevels );
+	}
+
+	void PxBufferBase::generateMips()
+	{
+		auto levels = getMipLevels( { m_size.getWidth(), m_size.getHeight(), 1u } );
+
+		if ( m_levels == 1u
+			&& levels > m_levels )
+		{
+			m_levels = levels;
+			auto buffer = generateMipmaps( { m_size.getWidth(), m_size.getHeight(), m_layers }
+				, m_buffer.data()
+				, m_format
+				, m_align
+				, m_levels );
+			m_buffer = buffer;
+		}
 	}
 
 	void PxBufferBase::update( uint32_t layers

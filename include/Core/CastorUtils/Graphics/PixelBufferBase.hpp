@@ -205,6 +205,13 @@ namespace castor
 		CU_API void update( uint32_t layers, uint32_t levels );
 		/**
 		 *\~english
+		 *\brief		Generate mipmaps.
+		 *\~french
+		 *\brief		Génère les mipmaps.
+		 */
+		CU_API void generateMips();
+		/**
+		 *\~english
 		 *\return		A clone of this buffer.
 		 *\~french
 		 *\return		Un clone de ce buffer.

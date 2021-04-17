@@ -4328,7 +4328,8 @@ namespace castor3d
 							, parsingContext->relative );
 						texture->setSource( parsingContext->folder
 							, parsingContext->relative
-							, parsingContext->textureConfiguration.normalMask[0] == 0 );
+							, parsingContext->textureConfiguration.normalMask[0] == 0
+							, true );
 						parsingContext->textureUnit->setTexture( texture );
 						parsingContext->textureUnit->setConfiguration( parsingContext->textureConfiguration );
 						parsingContext->pass->addTextureUnit( std::move( parsingContext->textureUnit ) );

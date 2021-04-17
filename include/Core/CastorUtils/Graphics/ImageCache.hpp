@@ -45,7 +45,8 @@ namespace castor
 		 */
 		CU_API ImageSPtr add( String const & name
 			, Path const & path
-			, bool allowCompression = true );
+			, bool allowCompression = true
+			, bool generateMips = true );
 		/**
 		 *\~english
 		 *\brief		Creates the image with given params.

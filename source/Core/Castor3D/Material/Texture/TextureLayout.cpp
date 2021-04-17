@@ -575,7 +575,8 @@ namespace castor3d
 			, castor::Path const & relative
 			, uint32_t mipLevels
 			, uint32_t & srcMipLevels
-			, bool allowCompression )
+			, bool allowCompression
+			, bool generateMips )
 		{
 			castor::ImageSPtr image;
 
@@ -587,7 +588,8 @@ namespace castor3d
 			{
 				image = engine.getImageCache().add( name
 					, folder / relative
-					, allowCompression );
+					, allowCompression
+					, generateMips );
 			}
 
 			auto buffer = adaptBuffer( image->getPixels(), mipLevels );
@@ -715,7 +717,8 @@ namespace castor3d
 
 	TextureLayoutSPtr createTextureLayout( Engine const & engine
 		, Path const & relative
-		, Path const & folder )
+		, Path const & folder
+		, bool allowCompression )
 	{
 		ashes::ImageCreateInfo createInfo
 		{
@@ -734,7 +737,9 @@ namespace castor3d
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, relative );
 		texture->setSource( folder
-			, relative );
+			, relative
+			, allowCompression
+			, true );
 		return texture;
 	}
 
@@ -1048,7 +1053,8 @@ namespace castor3d
 
 	void TextureLayout::setSource( Path const & folder
 		, Path const & relative
-		, bool allowCompression )
+		, bool allowCompression
+		, bool generateMips )
 	{
 		uint32_t srcMips = 1u;
 		m_image = getFileImage( *getRenderSystem()->getEngine()
@@ -1057,7 +1063,8 @@ namespace castor3d
 			, relative
 			, m_image.getLevels()
 			, srcMips
-			, allowCompression );
+			, allowCompression
+			, generateMips );
 		doUpdateCreateInfo( m_image.getLayout() );
 		doUpdateMips( false, srcMips );
 		m_static = true;
@@ -1121,7 +1128,8 @@ namespace castor3d
 	void TextureLayout::setLayerSource( uint32_t index
 		, castor::Path const & folder
 		, castor::Path const & relative
-		, bool allowCompression )
+		, bool allowCompression
+		, bool generateMips )
 	{
 		uint32_t srcMips = 1u;
 		auto image = getFileImage( *getRenderSystem()->getEngine()
@@ -1130,7 +1138,8 @@ namespace castor3d
 			, relative
 			, m_image.getLevels()
 			, srcMips
-			, allowCompression );
+			, allowCompression
+			, generateMips );
 		setLayerSource( index
 			, image.getPixels()
 			, srcMips );
@@ -1179,7 +1188,8 @@ namespace castor3d
 			, relative
 			, 1u
 			, srcMips
-			, allowCompression );
+			, allowCompression
+			, false );
 		setLayerMipSource( index
 			, level
 			, image.getPixels() );
@@ -1210,12 +1220,14 @@ namespace castor3d
 		, CubeMapFace face
 		, castor::Path const & folder
 		, castor::Path const & relative
-		, bool allowCompression )
+		, bool allowCompression
+		, bool generateMips )
 	{
 		setLayerSource( layer * 6u + uint32_t( face )
 			, folder
 			, relative
-			, allowCompression );
+			, allowCompression
+			, generateMips );
 	}
 
 	void TextureLayout::setLayerCubeFaceSource( uint32_t layer
