@@ -12,23 +12,41 @@ namespace castor
 	namespace
 	{
 		Image postProcess( PxBufferConvertOptions const & options
-			, Image image )
+			, Image image
+			, bool allowCompression
+			, bool generateMips )
 		{
-			auto dstFormat = options.getCompressed( image.getPixelFormat() );
+			auto dstFormat = image.getPixelFormat();
 
-			if ( dstFormat == image.getPixelFormat() )
+			if ( allowCompression )
+			{
+				dstFormat = options.getCompressed( dstFormat );
+			}
+
+			if ( dstFormat == image.getPixelFormat()
+				&& ( image.getLayout().levels > 1u
+					|| !generateMips ) )
 			{
 				return image;
 			}
 
+			auto buffer = image.getPixels();
 			auto path = image.getPath();
 			auto name = image.getName();
 			auto layout = image.getLayout();
-			auto buffer = PxBufferBase::create( &options
-				, image.getDimensions()
-				, dstFormat
-				, image.getPxBuffer().getConstPtr()
-				, image.getPixelFormat() );
+
+			if ( dstFormat != image.getPixelFormat() )
+			{
+				buffer = PxBufferBase::create( &options
+					, image.getDimensions()
+					, dstFormat
+					, buffer->getConstPtr()
+					, buffer->getFormat() );
+			}
+			else if ( generateMips )
+			{
+				buffer->generateMips();
+			}
 
 			if ( image.getPxBuffer().isFlipped() )
 			{
@@ -129,7 +147,8 @@ namespace castor
 
 	Image ImageLoader::load( String const & name
 		, Path const & path
-		, bool allowCompression )const
+		, bool allowCompression
+		, bool generateMips )const
 	{
 		if ( path.empty() )
 		{
@@ -160,7 +179,8 @@ namespace castor
 				, path
 				, data.data()
 				, uint32_t( data.size() )
-				, allowCompression );
+				, allowCompression
+				, generateMips );
 		}
 		catch ( std::exception & exc )
 		{
@@ -173,38 +193,36 @@ namespace castor
 		, String const & imageFormat
 		, uint8_t const * data
 		, uint32_t size
-		, bool allowCompression )const
+		, bool allowCompression
+		, bool generateMips )const
 	{
 		checkData( data, size );
 		auto loader = findLoader( imageFormat );
-		auto result = loader->load( name, imageFormat, data, size );
-
-		if ( allowCompression )
-		{
-			result = postProcess( m_options
-				, std::move( result ) );
-		}
-
-		return result;
+		return postProcess( m_options
+			, loader->load( name
+				, imageFormat
+				, data
+				, size )
+			, allowCompression
+			, generateMips );
 	}
 
 	Image ImageLoader::load( String const & name
 		, Path const & imagePath
 		, uint8_t const * data
 		, uint32_t size
-		, bool allowCompression )const
+		, bool allowCompression
+		, bool generateMips )const
 	{
 		checkData( data, size );
 		auto loader = findLoader( imagePath );
-		auto result = loader->load( name, imagePath, data, size );
-
-		if ( allowCompression )
-		{
-			result = postProcess( m_options
-				, std::move( result ) );
-		}
-
-		return result;
+		return postProcess( m_options
+			, loader->load( name
+				, imagePath
+				, data
+				, size )
+			, allowCompression
+			, generateMips );
 	}
 
 	void ImageLoader::checkData( uint8_t const * data

@@ -271,7 +271,9 @@ namespace castor3d
 			CU_Require( sampler );
 			sampler->initialise( device );
 
-			if ( result && m_texture->getMipmapCount() > 1u )
+			if ( result
+				&& m_texture->getMipmapCount() > 1u
+				&& m_texture->isStatic() )
 			{
 				m_texture->generateMipmaps( device );
 			}
