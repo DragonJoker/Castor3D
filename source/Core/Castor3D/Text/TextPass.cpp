@@ -54,7 +54,7 @@ namespace castor
 		{
 			result = writeOpt( file, cuT( "emissive" ), pass.getEmissive(), 0.0f )
 				&& writeNamedSubOpt( file, cuT( "transmission" ), pass.getTransmission(), castor::Point3f{ 1.0f, 1.0f, 1.0f } )
-				&& writeOpt( file, cuT( "two_sided" ), pass.isTwoSided(), true )
+				&& writeOpt( file, cuT( "two_sided" ), pass.isTwoSided(), false )
 				&& writeOpt( file, cuT( "colour_blend_mode" ), StrBlendModes[uint32_t( pass.getColourBlendMode() )], StrBlendModes[uint32_t( BlendMode::eNoBlend )] );
 		}
 
@@ -77,10 +77,15 @@ namespace castor
 			}
 		}
 
+		if ( result
+			&& pass.getParallaxOcclusion() !=  ParallaxOcclusionMode::eNone )
+		{
+			result = write( file, cuT( "parallax_occlusion" ), getName( pass.getParallaxOcclusion() ) );
+		}
+
 		if ( result )
 		{
-			result = writeOpt( file, cuT( "parallax_occlusion" ), pass.hasParallaxOcclusion() )
-				&& writeOpt( file, cuT( "reflections" ), pass.hasReflections() )
+			result = writeOpt( file, cuT( "reflections" ), pass.hasReflections() )
 				&& writeOpt( file, cuT( "refractions" ), pass.hasRefraction() )
 				&& writeOpt( file, cuT( "refraction_ratio" ), pass.getRefractionRatio(), 0.0f );
 		}
