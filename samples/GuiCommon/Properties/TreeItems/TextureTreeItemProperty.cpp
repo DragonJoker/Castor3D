@@ -194,6 +194,15 @@ namespace GuiCommon
 		{
 			grid->Append( new wxPropertyCategory( CATEGORY_TEXTURE ) );
 
+			if ( unit->getTexture()->isStatic() )
+			{
+				addProperty( grid, PROPERTY_TEXTURE_IMAGE, Path{ unit->getTexture()->getPath() }
+					, [this]( wxVariant const & var )
+					{
+						onImageChange( var );
+					} );
+			}
+
 			if ( m_materialType == MaterialType::ePhong )
 			{
 				doAddProperty( grid, PROPERTY_FLAG_DIFFUSE, PROPERTY_IS_DIFFUSE, PROPERTY_COMP_DIFFUSE, TextureFlag::eDiffuse, m_configuration.colourMask, 3u
@@ -239,22 +248,18 @@ namespace GuiCommon
 					, [this]( wxVariant const & var ){ onChange( var, TextureFlag::eHeight, 1u ); } );
 			addPropertyT( grid, PROPERTY_FACTOR_HEIGHT, &m_configuration.heightFactor );
 
-			if ( unit->getTexture()->isStatic() )
-			{
-				addProperty( grid, PROPERTY_FACTOR_HEIGHT, Path{ unit->getTexture()->getDefaultView().toString() }
-					, [this]( wxVariant const & var ){ onImageChange( var ); } );
-			}
-
 			if ( unit->hasAnimation() )
 			{
 				static wxString CATEGORY_ANIMATION = _( "Animation" );
 				static wxString PROPERTY_ANIMATION_TRANSLATE = _( "Translate" );
 				static wxString PROPERTY_ANIMATION_ROTATE = _( "Rotate" );
+				static wxString PROPERTY_ANIMATION_SCALE = _( "Scale" );
 
 				auto & anim = unit->getAnimation();
 				grid->Append( new wxPropertyCategory( CATEGORY_ANIMATION ) );
 				addPropertyT( grid, PROPERTY_ANIMATION_TRANSLATE, anim.getTranslateSpeed(), &anim, &TextureAnimation::setTranslateSpeed );
 				addPropertyT( grid, PROPERTY_ANIMATION_ROTATE, anim.getRotateSpeed(), &anim, &TextureAnimation::setRotateSpeed );
+				addPropertyT( grid, PROPERTY_ANIMATION_SCALE, anim.getScaleSpeed(), &anim, &TextureAnimation::setScaleSpeed );
 			}
 		}
 	}
