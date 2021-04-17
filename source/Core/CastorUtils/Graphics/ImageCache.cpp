@@ -79,7 +79,10 @@ namespace castor
 		{
 			if ( File::fileExists( path ) )
 			{
-				result = std::make_shared< Image >( m_loader.load( name, path, allowCompression ) );
+				result = std::make_shared< Image >( m_loader.load( name
+					, path
+					, allowCompression
+					, generateMips ) );
 				Collection< Image, String >::insert( name, result );
 				doReportCreation( getLogger(), name );
 			}
