@@ -243,14 +243,10 @@ namespace castor
 	{
 		switch ( srcFormat )
 		{
-#define CUPF_ENUM_VALUE( name, value, components, alpha, colour, depth, stencil, compressed )\
+#define CUPF_ENUM_VALUE_COLOR( name, value, components, alpha )\
 		case PixelFormat::e##name:\
 			compressBufferT< PixelFormat::e##name >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );\
 			break;
-#define CUPF_ENUM_VALUE_DEPTH_OR_STENCIL( name, value, components, depth, stencil )
-#define CUPF_ENUM_VALUE_DEPTH( name, value )
-#define CUPF_ENUM_VALUE_STENCIL( name, value )
-#define CUPF_ENUM_VALUE_COMPRESSED( name, value, components, alpha )
 #include "CastorUtils/Graphics/PixelFormat.enum"
 		default:
 			break;
