@@ -282,6 +282,7 @@ int main( int argc, char * argv[] )
 
 				castor3d::exporter::CscnSceneExporter exporter{ options.options };
 				exporter.exportMesh( scene, *mesh, rootFolder, options.output );
+				mesh->cleanup();
 			}
 
 			engine.cleanup();
