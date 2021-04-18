@@ -326,6 +326,11 @@ namespace aria
 			{
 				onClose( evt );
 			} );
+		Bind( wxEVT_SIZE
+			, [this]( wxSizeEvent & evt )
+			{
+				onSize( evt );
+			} );
 		auto onTimer = [this]( wxTimerEvent & evt )
 		{
 			if ( evt.GetId() == eID_TEST_UPDATER )
@@ -2301,6 +2306,24 @@ namespace aria
 
 	void MainFrame::onCategoryUpdateTimer( wxTimerEvent & evt )
 	{
+		evt.Skip();
+	}
+
+	void MainFrame::onSize( wxSizeEvent & evt )
+	{
+		for ( auto & testPageIt : m_testsPages )
+		{
+			auto & page = *testPageIt.second;
+
+			if ( page.model )
+			{
+				auto size = GetClientSize();
+				auto genSize = page.generalViews->GetSize();
+				page.model->resize( page.view
+					, { size.GetWidth() - genSize.GetWidth(), size.GetHeight() } );
+			}
+		}
+
 		evt.Skip();
 	}
 
