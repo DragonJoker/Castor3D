@@ -610,9 +610,6 @@ namespace castor3d
 			, ashes::ImageViewCreateInfo & viewInfo )
 		{
 			auto & layout = image.getLayout();
-			auto mipViewInfo = viewInfo;
-			mipViewInfo->subresourceRange.levelCount = 1u;
-			std::vector< ashes::ImageView > imageViews;
 			auto buffer = makeBufferBase( device
 				, image.getPxBuffer().getSize()
 				, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
@@ -635,8 +632,8 @@ namespace castor3d
 			ashes::VkBufferImageCopyArray copies;
 			VkExtent2D baseDimensions{ image.getWidth(), image.getHeight() };
 
-			for ( auto layer = layout.baseLayer;
-				layer < layout.baseLayer + viewInfo->subresourceRange.layerCount;
+			for ( auto layer = viewInfo->subresourceRange.baseArrayLayer;
+				layer < viewInfo->subresourceRange.baseArrayLayer + viewInfo->subresourceRange.layerCount;
 				++layer )
 			{
 				VkImageSubresourceLayers subresourceLayers{ viewInfo->subresourceRange.aspectMask
@@ -967,18 +964,13 @@ namespace castor3d
 						: VK_IMAGE_VIEW_TYPE_1D ),
 					m_info->format,
 					{},
-					{ ashes::getAspectMask( m_info->format ), 0u, 1u, 0u, 1u },
+					{ ashes::getAspectMask( m_info->format ), 0u, 1u, 0u, m_image.getLayout().depthLayers() },
 				};
 				uint32_t mipLevels = m_defaultView.view->isMipmapsGenerationNeeded()
 					? 1u
 					: m_image.getLayout().levels;
 				viewInfo->subresourceRange.levelCount = mipLevels;
-
-				for ( auto layer = 0u; layer < m_image.getLayout().depthLayers(); ++layer )
-				{
-					viewInfo->subresourceRange.baseArrayLayer = layer;
-					processLevels( device, m_image, *m_texture, viewInfo );
-				}
+				processLevels( device, m_image, *m_texture, viewInfo );
 			}
 
 			m_defaultView.forEachView( []( TextureViewUPtr const & view )
