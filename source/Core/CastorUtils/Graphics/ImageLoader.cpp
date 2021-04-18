@@ -42,15 +42,15 @@ namespace castor
 					, dstFormat
 					, buffer->getConstPtr()
 					, buffer->getFormat() );
+
+				if ( image.getPxBuffer().isFlipped() )
+				{
+					buffer->flip();
+				}
 			}
 			else if ( generateMips )
 			{
 				buffer->generateMips();
-			}
-
-			if ( image.getPxBuffer().isFlipped() )
-			{
-				buffer->flip();
 			}
 
 			ImageLayout newLayout{ layout.type, *buffer };
