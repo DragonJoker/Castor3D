@@ -79,6 +79,7 @@ namespace castor3d
 		eVsm = CU_MakeSectionName( 'V', 'S', 'M', 'S' ),
 		eTextureAnimation = CU_MakeSectionName( 'T', 'X', 'A', 'N' ),
 		eVoxelConeTracing = CU_MakeSectionName( 'V', 'C', 'T', 'C' ),
+		eTextureTransform = CU_MakeSectionName( 'T', 'X', 'T', 'R' ),
 	};
 
 	class SceneFileContext
@@ -176,6 +177,7 @@ namespace castor3d
 		SubsurfaceScatteringUPtr subsurfaceScattering;
 		std::shared_ptr< SkyboxBackground > skybox;
 		TextureConfiguration textureConfiguration;
+		TextureTransform textureTransform;
 	};
 
 	class SceneFileParser

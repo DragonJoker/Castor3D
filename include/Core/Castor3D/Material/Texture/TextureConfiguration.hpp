@@ -8,10 +8,17 @@ See LICENSE file in root folder
 #include "TextureModule.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
+#include <CastorUtils/Math/Angle.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
 namespace castor3d
 {
+	struct TextureTransform
+	{
+		castor::Point4f translate{ 0, 0, 0, 0 };
+		castor::Angle rotate;
+		castor::Point4f scale{ 1, 1, 1, 0 };
+	};
 	/**
 	*\~english
 	*\brief
@@ -65,9 +72,7 @@ namespace castor3d
 		float normalGMultiplier{ 1.0f };
 		uint32_t needsGammaCorrection{ 0u };
 		uint32_t needsYInversion{ 0u };
-		castor::Point4f translate{ 0, 0, 0, 0 };
-		castor::Point4f rotate{ 1, 0, 0, 0 };
-		castor::Point4f scale{ 1, 1, 1, 0 };
+		TextureTransform transform;
 		TextureSpace textureSpace{ TextureSpace::eColour };
 		/**@}*/
 		/**

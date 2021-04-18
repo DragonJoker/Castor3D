@@ -432,5 +432,142 @@ namespace castor
 			switchHand( result );
 			return result;
 		}
+
+		template< typename T, typename U >
+		Matrix3x3< T > & rotate( Matrix3x3< T > & matrix
+			, Angle orientation )
+		{
+			Matrix3x3< T > rotate;
+			return matrix *= setRotate( rotate, orientation );
+		}
+
+		template< typename T, typename U >
+		Matrix3x3< T > & setRotate( Matrix3x3< T > & matrix
+			, Angle orientation )
+		{
+			auto cosT = orientation.cos();
+			auto sinT = orientation.sin();
+
+			matrix[0][0] = T( cosT );
+			matrix[0][1] = T( sinT );
+			matrix[0][2] = T( 0 );
+
+			matrix[1][0] = T( -sinT );
+			matrix[1][1] = T( cosT );
+			matrix[1][2] = T( 0 );
+
+			matrix[2][0] = T( 0 );
+			matrix[2][1] = T( 0 );
+			matrix[2][2] = T( 1 );
+
+			return matrix;
+		}
+
+		template< typename T, typename U >
+		void getRotate( Matrix3x3< T > const & matrix
+			, Angle & orientation )
+		{
+		}
+
+		template< typename T, typename U >
+		Matrix3x3< T > & scale( Matrix3x3< T > & matrix
+			, U x
+			, U y )
+		{
+			matrix[0] *= T( x );
+			matrix[1] *= T( y );
+			return matrix;
+		}
+
+		template< typename T, typename U >
+		Matrix3x3< T > & scale( Matrix3x3< T > & matrix
+			, Point2< U > const & scaling )
+		{
+			return scale( matrix, scaling[0], scaling[1] );
+		}
+
+		template< typename T, typename U >
+		Matrix3x3< T > & setScale( Matrix3x3< T > & matrix
+			, U x
+			, U y )
+		{
+			std::memset( matrix.ptr(), 0, sizeof( T ) * 3 * 3 );
+			matrix[0][0] = T( x );
+			matrix[1][1] = T( y );
+			matrix[2][2] = T( 1 );
+			return matrix;
+		}
+
+		template< typename T, typename U >
+		Matrix3x3< T > & setScale( Matrix3x3< T > & matrix
+			, Point2< U > const & scaling )
+		{
+			return setScale( matrix, scaling[0], scaling[1] );
+		}
+
+		template< typename T, typename U >
+		Matrix3x3< T > & translate( Matrix3x3< T > & matrix
+			, U x
+			, U y )
+		{
+			matrix[2] = matrix[0] * x + matrix[1] * y + matrix[2];
+			return matrix;
+		}
+
+		template< typename T, typename U >
+		Matrix3x3< T > & translate( Matrix3x3< T > & matrix
+			, Point2< U > const & translation )
+		{
+			return translate( matrix, translation[0], translation[1] );
+		}
+
+		template< typename T, typename U >
+		Matrix3x3< T > & setTranslate( Matrix3x3< T > & matrix
+			, U x
+			, U y )
+		{
+			std::memset( matrix.ptr(), 0, sizeof( T ) * 3 * 3 );
+			constexpr T const unit( 1 );
+			matrix[0][0] = unit;
+			matrix[1][1] = unit;
+			matrix[2][0] = T( x );
+			matrix[2][1] = T( y );
+			matrix[2][2] = unit;
+			return matrix;
+		}
+
+		template< typename T, typename U >
+		Matrix3x3< T > & setTranslate( Matrix3x3< T > & matrix
+			, Point2< U > const & translation )
+		{
+			return setTranslate( matrix, translation[0], translation[1] );
+		}
+
+		template< typename T, typename U, typename V >
+		Matrix3x3< T > & setTransform( Matrix3x3< T > & matrix
+			, Point2< U > const & position
+			, Point2< U > const & scaling
+			, Angle orientation )
+		{
+			// Ordering:
+			//    1. Scale
+			//    2. Rotate
+			//    3. Translate
+			setTranslate( matrix, position );
+			rotate( matrix, orientation );
+			return scale( matrix, scaling );
+		}
+
+		template< typename T, typename U, typename V >
+		Matrix3x3< T > & transform( Matrix3x3< T > & matrix
+			, Point2< U > const & position
+			, Point2< U > const & scaling
+			, Angle orientation )
+		{
+			Matrix3x3< T > transform;
+			setTransform( transform, position, scaling, orientation );
+			matrix *= transform;
+			return matrix;
+		}
 	}
 }

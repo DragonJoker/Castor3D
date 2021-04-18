@@ -82,5 +82,12 @@ namespace castor3d
 		return static_cast< AnimationType & >( getAnimation( name ) );
 	}
 
+	template< typename AnimableHanlerT >
+	template< typename AnimationType >
+	inline AnimationType const & AnimableT< AnimableHanlerT >::doGetAnimation( castor::String const & name )const
+	{
+		return static_cast< AnimationType const & >( getAnimation( name ) );
+	}
+
 	//*************************************************************************************************
 }
