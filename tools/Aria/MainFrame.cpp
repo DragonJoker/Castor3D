@@ -367,7 +367,9 @@ namespace aria
 		}
 
 		m_runningTest.genProcess = std::make_unique< TestProcess >( this, wxPROCESS_DEFAULT );
+#if !ARIA_UseDiffImageLib
 		m_runningTest.difProcess = std::make_unique< TestProcess >( this, wxPROCESS_DEFAULT );
+#endif
 		m_runningTest.disProcess = std::make_unique< TestProcess >( this, wxPROCESS_DEFAULT );
 
 		Connect( wxEVT_END_PROCESS
@@ -1843,6 +1845,20 @@ namespace aria
 
 		if ( !m_cancelled )
 		{
+#if ARIA_UseDiffImageLib
+			diffimg::Options options;
+			auto file = ( m_config.test / run.getCategory()->name / ( run.getName() + ".cscn" ) );
+			options.input = file.getPath() / ( file.getFileName() + cuT( "_ref.png" ) );
+			options.outputs.emplace_back( file.getPath() / cuT( "Compare" ) / ( file.getFileName() + cuT( "_" ) + run.getRenderer()->name + cuT( ".png" ) ) );
+			diffimg::Config config{ options };
+
+			for ( auto output : options.outputs )
+			{
+				diffimg::compareImages( options, config, output );
+			}
+
+			onTestDiffEnd( 0 );
+#else
 			wxString command = m_config.differ;
 			command << " " << run.getRenderer()->name;
 			command << " -f " << ( m_config.test / run.getCategory()->name / ( run.getName() + ".cscn" ) );
@@ -1850,7 +1866,7 @@ namespace aria
 			auto result = wxExecute( command
 				, ExecMode
 				, m_runningTest.difProcess.get() );
-#if CTP_UseAsync
+#	if CTP_UseAsync
 
 			if ( result == 0 )
 			{
@@ -1861,8 +1877,9 @@ namespace aria
 				m_runningTest.currentProcess = m_runningTest.difProcess.get();
 			}
 
-#else
+#	else
 			onTestDiffEnd( wxProcessEvent{} );
+#	endif
 #endif
 		}
 		else 
@@ -1917,11 +1934,14 @@ namespace aria
 
 		if ( currentProcess )
 		{
+#if !ARIA_UseDiffImageLib
 			if ( currentProcess == m_runningTest.difProcess.get() )
 			{
 				onTestDiffEnd( status );
 			}
-			else if ( currentProcess == m_runningTest.disProcess.get() )
+			else
+#endif
+			if ( currentProcess == m_runningTest.disProcess.get() )
 			{
 				onTestDisplayEnd( status );
 			}
@@ -1937,28 +1957,38 @@ namespace aria
 		m_categoriesUpdater->Stop();
 		m_testUpdater->Stop();
 
-		if ( m_runningTest.difProcess )
+		if ( m_runningTest.disProcess )
 		{
 			if ( wxProcess::Exists( m_runningTest.disProcess->GetPid() ) )
 			{
 				wxProcess::Kill( m_runningTest.disProcess->GetPid() );
 			}
 
+			m_runningTest.disProcess->Disconnect( wxEVT_END_PROCESS );
+			m_runningTest.disProcess = nullptr;
+		}
+
+#if !ARIA_UseDiffImageLib
+		if ( m_runningTest.difProcess )
+		{
 			if ( wxProcess::Exists( m_runningTest.difProcess->GetPid() ) )
 			{
 				wxProcess::Kill( m_runningTest.difProcess->GetPid() );
 			}
 
+			m_runningTest.difProcess->Disconnect( wxEVT_END_PROCESS );
+			m_runningTest.difProcess = nullptr;
+		}
+#endif
+
+		if ( m_runningTest.genProcess )
+		{
 			if ( wxProcess::Exists( m_runningTest.genProcess->GetPid() ) )
 			{
 				wxProcess::Kill( m_runningTest.genProcess->GetPid() );
 			}
 
-			m_runningTest.disProcess->Disconnect( wxEVT_END_PROCESS );
-			m_runningTest.difProcess->Disconnect( wxEVT_END_PROCESS );
 			m_runningTest.genProcess->Disconnect( wxEVT_END_PROCESS );
-			m_runningTest.disProcess = nullptr;
-			m_runningTest.difProcess = nullptr;
 			m_runningTest.genProcess = nullptr;
 		}
 

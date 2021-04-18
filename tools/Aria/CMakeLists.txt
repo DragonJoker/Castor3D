@@ -4,6 +4,8 @@ find_package( SQLite3 QUIET )
 find_package( Boost QUIET COMPONENTS date_time )
 
 if ( SQLite3_FOUND AND Boost_FOUND )
+	option( ARIA_USE_DIFFIMAGE_LIB "USE_FOLDERS DiffImageLib instead of DiffImage binary" OFF )
+
 	set( ${PROJECT_NAME}_WXWIDGET 1 )
 	set( ${PROJECT_NAME}_DESCRIPTION "Aria - ${MAIN_PROJECT_NAME} render tests parser" )
 	set( ${PROJECT_NAME}_VERSION_MAJOR 1 )
@@ -170,13 +172,24 @@ if ( SQLite3_FOUND AND Boost_FOUND )
 		${Boost_INCLUDE_DIR}
 	)
 	target_link_libraries( ${PROJECT_NAME} PRIVATE
-		castor::CastorUtils
 		${wxWidgets_LIBRARIES}
 		${GTK2_LIBRARIES}
 		${X11_LIBRARIES}
 		SQLite::SQLite3
 		${Boost_LIBRARIES}
 	)
+	if ( ARIA_USE_DIFFIMAGE_LIB )
+		target_link_libraries( ${PROJECT_NAME} PRIVATE
+			castor::DiffImageLib
+		)
+		target_compile_definitions( ${PROJECT_NAME} PRIVATE
+			ARIA_UseDiffImageLib
+		)
+	else ()
+		target_link_libraries( ${PROJECT_NAME} PRIVATE
+			castor::CastorUtils
+		)
+	endif ()
 	target_compile_definitions( ${PROJECT_NAME} PRIVATE
 		${CastorToolsDefinitions}
 		${wxWidgets_DEFINITIONS}
