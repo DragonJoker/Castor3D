@@ -205,7 +205,8 @@ namespace castor3d
 			{
 				auto image = getEngine()->getImageLoader().load( relative.getFileName()
 					, folder / relative
-					, false );
+					, false
+					, true );
 				result = std::make_unique< castor::Image >( relative.getFileName()
 					, folder / relative
 					, *image.getPixels() );
