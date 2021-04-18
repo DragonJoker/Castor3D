@@ -152,7 +152,9 @@ namespace aria
 		struct RunningTest
 		{
 			std::unique_ptr< wxProcess > genProcess{};
+#if !ARIA_UseDiffImageLib
 			std::unique_ptr< wxProcess > difProcess{};
+#endif
 			std::unique_ptr< wxProcess > disProcess{};
 			wxProcess * currentProcess{};
 
