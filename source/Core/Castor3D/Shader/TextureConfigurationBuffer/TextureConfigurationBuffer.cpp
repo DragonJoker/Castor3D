@@ -202,9 +202,9 @@ namespace castor3d
 					data.heightFc = writeFlags( config.heightMask, config.heightFactor );
 					data.miscVals = writeFlags( float( config.needsGammaCorrection )
 						, float( config.needsYInversion ) );
-					data.translate = config.translate;
-					data.rotate = config.rotate;
-					data.scale = config.scale;
+					data.translate = config.transform.translate;
+					data.rotate = { config.transform.rotate.cos(), config.transform.rotate.sin(), 0.0f, 0.0f };
+					data.scale = config.transform.scale;
 
 #endif
 				} );
