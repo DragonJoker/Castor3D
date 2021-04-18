@@ -744,7 +744,7 @@ namespace castor3d::exporter
 				+ castor::string::toString( z );
 		}
 
-		void finaliseExport( castor3d::Mesh const * singleMesh
+		bool finaliseExport( castor3d::Mesh const * singleMesh
 			, castor::TextWriter< castor3d::Scene >::Options const & options
 			, castor::StringStream const & meshes
 			, castor::StringStream const & nodes
@@ -867,6 +867,8 @@ namespace castor3d::exporter
 					result = scnFile.writeText( stream.str() ) > 0;
 				}
 			}
+
+			return result;
 		}
 	}
 
@@ -937,7 +939,7 @@ namespace castor3d::exporter
 
 			if ( result )
 			{
-				finaliseExport( &mesh
+				result = finaliseExport( &mesh
 					, options
 					, meshes
 					, nodes
@@ -1058,7 +1060,7 @@ namespace castor3d::exporter
 
 			if ( result )
 			{
-				finaliseExport( nullptr
+				result = finaliseExport( nullptr
 					, options
 					, meshes
 					, nodes
