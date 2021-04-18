@@ -532,6 +532,191 @@ namespace castor
 		 */
 		template< typename T >
 		static Matrix4x4< T > getSwitchHand( Matrix4x4< T > const & matrix );
+		/**
+		 *\~english
+		 *\brief		Rotation function, builds a rotation matrix from the quaternion in parameter.
+		 *\param[out]	matrix		The matrix that will receive the rotation matrix
+		 *\param[in]	orientation	The quaterion used to compute the matrix
+		 *\~french
+		 *\brief		Fonction de rotation, construit une matrice de rotation à partir d'un quaternion
+		 *\param[out]	matrix		La matrice qui contiendra le résultat
+		 *\param[in]	orientation	Le quaternion contenant la rotation
+		 */
+		template< typename T, typename U >
+		static Matrix3x3< T > & rotate( Matrix3x3< T > & matrix
+			, Angle orientation );
+		/**
+		 *\~english
+		 *\brief		Rotation function, builds a rotation matrix from the quaternion in parameter.
+		 *\param[out]	matrix		The matrix that will receive the rotation matrix
+		 *\param[in]	orientation	The quaterion used to compute the matrix
+		 *\~french
+		 *\brief		Fonction de rotation, construit une matrice de rotation à partir d'un quaternion
+		 *\param[out]	matrix		La matrice qui contiendra le résultat
+		 *\param[in]	orientation	Le quaternion contenant la rotation
+		 */
+		template< typename T, typename U >
+		static Matrix3x3< T > & setRotate( Matrix3x3< T > & matrix
+			, Angle orientation );
+		/**
+		 *\~english
+		 *\brief		Rotation function, builds a rotation matrix from the quaternion in parameter.
+		 *\param[in]	matrix		The matrix holding the scale transformation
+		 *\param[out]	orientation	Receives the rotation
+		 *\~french
+		 *\brief		Fonction de rotation, construit une matrice de rotation à partir d'un quaternion
+		 *\param[in]	matrix		La matrice qui contient les transformations
+		 *\param[out]	orientation	Reçoit la rotation
+		 */
+		template< typename T, typename U >
+		static void getRotate( Matrix3x3< T > const & matrix
+			, Angle orientation );
+		/**
+		 *\~english
+		 *\brief		Scale function. Scales matrix from the three values in parameter.
+		 *\param[out]	matrix	The matrix that will be scaled
+		 *\param[in]	x, y, z	The scale values
+		 *\~french
+		 *\brief		Fonction de mise a l'échelle.
+		 *\param[out]	matrix	La matrice qui contiendra le résultat
+		 *\param[in]	x, y, z	Les valeurs d'échelle sur les 3 axes
+		 */
+		template< typename T, typename U >
+		static Matrix3x3< T > & scale( Matrix3x3< T > & matrix
+			, U x
+			, U y );
+		/**
+		 *\~english
+		 *\brief		Scale function. Scales matrix from the value in parameter.
+		 *\param[out]	matrix	The matrix that will be scaled
+		 *\param[in]	scaling	The scale value
+		 *\~french
+		 *\brief		Fonction de mise a l'échelle.
+		 *\param[out]	matrix	La matrice qui contiendra le résultat
+		 *\param[in]	scaling	Les valeurs d'échelle sur les 3 axes
+		 */
+		template< typename T, typename U >
+		static Matrix3x3< T > & scale( Matrix3x3< T > & matrix
+			, Point2< U > const & scaling );
+		/**
+		 *\~english
+		 *\brief		Scale function. Scales matrix from the three values in parameter.
+		 *\param[out]	matrix	The matrix that will be scaled
+		 *\param[in]	x, y, z	The scale values
+		 *\~french
+		 *\brief		Fonction de mise a l'échelle.
+		 *\param[out]	matrix	La matrice qui contiendra le résultat
+		 *\param[in]	x, y, z	Les valeurs d'échelle sur les 3 axes
+		 */
+		template< typename T, typename U >
+		static Matrix3x3< T > & setScale( Matrix3x3< T > & matrix
+			, U x
+			, U y );
+		/**
+		 *\~english
+		 *\brief		Scale function. Scales matrix from the value in parameter.
+		 *\param[out]	matrix	The matrix that will be scaled
+		 *\param[in]	scaling	The scale value
+		 *\~french
+		 *\brief		Fonction de mise a l'échelle.
+		 *\param[out]	matrix	La matrice qui contiendra le résultat
+		 *\param[in]	scaling	Les valeurs d'échelle sur les 3 axes
+		 */
+		template< typename T, typename U >
+		static Matrix3x3< T > & setScale( Matrix3x3< T > & matrix
+			, Point2< U > const & scaling );
+		/**
+		 *\~english
+		 *\brief		Translate function. Translates a matrix from the three values in parameter.
+		 *\param[out]	matrix			The matrix that will be translated
+		 *\param[in]	x, y, z	The translate values
+		 *\~french
+		 *\brief		Fonction de construction de matrice de translation.
+		 *\param[out]	matrix			La matrice qui contiendra le résultat
+		 *\param[in]	x, y, z	Les valeurs de translation sur les 3 axes
+		 */
+		template< typename T, typename U >
+		static Matrix3x3< T > & translate( Matrix3x3< T > & matrix
+			, U x
+			, U y );
+		/**
+		 *\~english
+		 *\brief		Translate function. Translates a matrix from the value in parameter.
+		 *\param[out]	matrix		The matrix that will be translated
+		 *\param[in]	translation	The translate value
+		 *\~french
+		 *\brief		Fonction de construction de matrice de translation.
+		 *\param[out]	matrix		La matrice qui contiendra le résultat
+		 *\param[in]	translation	Les valeurs de translation sur les 3 axes
+		 */
+		template< typename T, typename U >
+		static Matrix3x3< T > & translate( Matrix3x3< T > & matrix
+			, Point2< U > const & translation );
+		/**
+		 *\~english
+		 *\brief		Translate function. Translates a matrix from the three values in parameter.
+		 *\param[out]	matrix	The matrix that will be translated
+		 *\param[in]	x, y, z	The translate values
+		 *\~french
+		 *\brief		Fonction de construction de matrice de translation.
+		 *\param[out]	matrix	La matrice qui contiendra le résultat
+		 *\param[in]	x, y, z	Les valeurs de translation sur les 3 axes
+		 */
+		template< typename T, typename U >
+		static Matrix3x3< T > & setTranslate( Matrix3x3< T > & matrix
+			, U x
+			, U y );
+		/**
+		 *\~english
+		 *\brief		Translate function. Translates a matrix from the value in parameter.
+		 *\param[out]	matrix		The matrix that will be translated
+		 *\param[in]	translation	The translate value
+		 *\~french
+		 *\brief		Fonction de construction de matrice de translation.
+		 *\param[out]	matrix		La matrice qui contiendra le résultat
+		 *\param[in]	translation	Les valeurs de translation sur les 3 axes
+		 */
+		template< typename T, typename U >
+		static Matrix3x3< T > & setTranslate( Matrix3x3< T > & matrix
+			, Point2< U > const & translation );
+		/**
+		 *\~english
+		 *\brief		Retrieves transformation matrix from translation, scaling and rotation
+		 *\param[out]	matrix		Receives the transformation
+		 *\param[in]	position	The translation value
+		 *\param[in]	scaling		The scaling value
+		 *\param[in]	orientation	The rotation value
+		 *\~french
+		 *\brief		Récupère la matrice de transformation à partir de la translation, la mise à l'échelle et la rotation
+		 *\param[out]	matrix		Reçoit la transformation
+		 *\param[in]	position	La valeur de translation
+		 *\param[in]	scaling		La valeur de mise à l'échelle
+		 *\param[in]	orientation	La valeur de rotation
+		 */
+		template< typename T, typename U, typename V >
+		static Matrix3x3< T > & setTransform( Matrix3x3< T > & matrix
+			, Point2< U > const & position
+			, Point2< U > const & scaling
+			, Angle orientation );
+		/**
+		 *\~english
+		 *\brief		Retrieves transformation matrix from translation, scaling and rotation
+		 *\param[out]	matrix		Receives the transformation
+		 *\param[in]	position	The translation value
+		 *\param[in]	scaling		The scaling value
+		 *\param[in]	orientation	The rotation value
+		 *\~french
+		 *\brief		Récupère la matrice de transformation à partir de la translation, la mise à l'échelle et la rotation
+		 *\param[out]	matrix		Reçoit la transformation
+		 *\param[in]	position	La valeur de translation
+		 *\param[in]	scaling		La valeur de mise à l'échelle
+		 *\param[in]	orientation	La valeur de rotation
+		 */
+		template< typename T, typename U, typename V >
+		static Matrix3x3< T > & transform( Matrix3x3< T > & matrix
+			, Point2< U > const & position
+			, Point2< U > const & scaling
+			, Angle orientation );
 	}
 }
 

@@ -146,6 +146,13 @@ namespace castor3d
 		 *\return		L'animation.
 		 */
 		C3D_API TextureAnimation & getAnimation();
+		/**
+		 *\~english
+		 *\return		The animation.
+		 *\~french
+		 *\return		L'animation.
+		 */
+		C3D_API TextureAnimation const & getAnimation()const;
 		/**@}*/
 		/**
 		*\~english
@@ -211,6 +218,11 @@ namespace castor3d
 		{
 			return m_animated;
 		}
+
+		TextureTransform const & getTransform()const
+		{
+			return m_transform;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -223,6 +235,10 @@ namespace castor3d
 		/**@{*/
 		C3D_API void setConfiguration( TextureConfiguration value );
 		C3D_API void setTransform( castor::Point3f const & translate
+			, castor::Angle const & rotate
+			, castor::Point3f const & scale );
+		C3D_API void setTransform( TextureTransform const & transform );
+		C3D_API void setAnimationTransform( castor::Point3f const & translate
 			, castor::Angle const & rotate
 			, castor::Point3f const & scale );
 
@@ -249,10 +265,15 @@ namespace castor3d
 		using AnimableT< Engine >::hasAnimation;
 		using AnimableT< Engine >::getAnimation;
 
+		void doUpdateTransform( castor::Point3f const & translate
+			, castor::Angle const & rotate
+			, castor::Point3f const & scale );
+
 	private:
 		friend class TextureRenderer;
 		RenderDevice const * m_device{ nullptr };
 		TextureConfiguration m_configuration;
+		TextureTransform m_transform;
 		castor::Matrix4x4f m_transformations;
 		TextureLayoutSPtr m_texture;
 		RenderTargetWPtr m_renderTarget;
