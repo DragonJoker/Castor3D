@@ -119,6 +119,7 @@ function( ToolsBuild )
 		endif()
 
 		if( CASTOR_BUILD_TOOL_DIFF_IMAGE )
+			add_subdirectory( DiffImageLib )
 			set( Build ${DiffImg} )
 			add_subdirectory( DiffImage )
 			set( CPACK_PACKAGE_EXECUTABLES

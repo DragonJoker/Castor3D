@@ -1,6 +1,6 @@
-project( DiffImage )
+project( DiffImageLib )
 
-set( ${PROJECT_NAME}_DESCRIPTION "Diffs two images issued from Castor3D" )
+set( ${PROJECT_NAME}_DESCRIPTION "Library to diff two images issued from Castor3D" )
 set( ${PROJECT_NAME}_VERSION_MAJOR	1 )
 set( ${PROJECT_NAME}_VERSION_MINOR	0 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
@@ -8,10 +8,10 @@ set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 set( PROJECT_VERSION "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}" )
 
 set( ${PROJECT_NAME}_HDR_FILES
-	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/DiffImage.hpp
+	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/DiffImageLib.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
-	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/DiffImage.cpp
+	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/DiffImageLib.cpp
 )
 source_group( "Header Files"
 	FILES
@@ -21,25 +21,25 @@ source_group( "Source Files"
 	FILES
 		${${PROJECT_NAME}_SRC_FILES}
 )
-if ( WIN32 )
-	find_rsc_file( ${PROJECT_NAME} bin_dos )
-endif ()
 add_target_min(
 	${PROJECT_NAME}
-	bin_dos
+	lib
 	""
 	""
 )
-target_include_directories( ${PROJECT_NAME} PRIVATE
-	${Castor3DIncludeDirs}
-	${CASTOR_SOURCE_DIR}/tools
-	${CASTOR_BINARY_DIR}/tools
+add_library( castor::${PROJECT_NAME}
+	ALIAS
+	${PROJECT_NAME}
 )
-target_link_libraries( ${PROJECT_NAME} PRIVATE
-	castor::DiffImageLib
+target_include_directories( ${PROJECT_NAME}
+	PRIVATE
+		${Castor3DIncludeDirs}
+	PUBLIC
+		${CASTOR_SOURCE_DIR}/tools
+		${CASTOR_BINARY_DIR}/tools
 )
-target_compile_definitions( ${PROJECT_NAME} PRIVATE
-	${CastorToolsDefinitions}
+target_link_libraries( ${PROJECT_NAME} PUBLIC
+	castor::CastorUtils
 )
 set_property( TARGET ${PROJECT_NAME}
 	PROPERTY
@@ -47,7 +47,7 @@ set_property( TARGET ${PROJECT_NAME}
 )
 install_target_ex( ${PROJECT_NAME}
 	${PROJECT_NAME}
-	bin_dos
+	lib
 	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}
 )
 set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
