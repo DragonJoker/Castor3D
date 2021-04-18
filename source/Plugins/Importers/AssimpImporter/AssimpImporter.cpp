@@ -551,7 +551,6 @@ namespace C3dAssimp
 			, MeshImporter const & importer
 			, TextureInfo const & spcTex )
 		{
-			auto ambTex = getTextureInfo( aiMaterial, aiTextureType_AMBIENT );
 			auto shnTex = getTextureInfo( aiMaterial, aiTextureType_SHININESS );
 			doLoadTexture( spcTex, pass, TextureConfiguration::SpecularTexture, importer );
 			doLoadTexture( shnTex, pass, TextureConfiguration::ShininessTexture, importer );

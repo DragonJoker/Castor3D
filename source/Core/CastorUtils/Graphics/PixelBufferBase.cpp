@@ -28,69 +28,70 @@ namespace castor
 		}
 
 		template< typename TypeT >
-		struct LargerType;
-		template< typename TypeT >
-		using LargerTypeT = typename LargerType< TypeT >::Type;
+		struct LargerTyperT;
 
 		template<>
-		struct LargerType< uint8_t >
+		struct LargerTyperT< uint8_t >
 		{
 			using Type = uint16_t;
 		};
 
 		template<>
-		struct LargerType< int8_t >
+		struct LargerTyperT< int8_t >
 		{
 			using Type = int16_t;
 		};
 
 		template<>
-		struct LargerType< uint16_t >
+		struct LargerTyperT< uint16_t >
 		{
 			using Type = uint32_t;
 		};
 
 		template<>
-		struct LargerType< int16_t >
+		struct LargerTyperT< int16_t >
 		{
 			using Type = int32_t;
 		};
 
 		template<>
-		struct LargerType< uint32_t >
+		struct LargerTyperT< uint32_t >
 		{
 			using Type = uint64_t;
 		};
 
 		template<>
-		struct LargerType< int32_t >
+		struct LargerTyperT< int32_t >
 		{
 			using Type = int64_t;
 		};
 
 		template<>
-		struct LargerType< uint64_t >
+		struct LargerTyperT< uint64_t >
 		{
 			using Type = uint64_t;
 		};
 
 		template<>
-		struct LargerType< int64_t >
+		struct LargerTyperT< int64_t >
 		{
 			using Type = int64_t;
 		};
 
 		template<>
-		struct LargerType< float >
+		struct LargerTyperT< float >
 		{
 			using Type = double;
 		};
 
 		template<>
-		struct LargerType< double >
+		struct LargerTyperT< double >
 		{
 			using Type = long double;
 		};
+
+		template< typename TypeT >
+		using LargerTypeT = typename LargerTyperT< TypeT >::Type;
 
 		template< PixelFormat PFT >
 		void generateMipPixelT( uint8_t const * srcPixel1
@@ -99,42 +100,42 @@ namespace castor
 			, uint8_t const * srcPixel4
 			, uint8_t * dstPixel )
 		{
-			using PixelComponents = PixelComponents< PFT >;
-			using Type = typename PixelComponents::Type;
-			using LargerType = typename LargerTypeT< Type >;
+			using MyPixelComponentsT = PixelComponents< PFT >;
+			using MyTypeT = typename MyPixelComponentsT::Type;
+			using MyLargerTypeT = LargerTypeT< MyTypeT >;
 
-			PixelComponents::R( dstPixel
-				, Type( ( LargerType( PixelComponents::R( srcPixel1 ) )
-						+ LargerType( PixelComponents::R( srcPixel2 ) )
-						+ LargerType( PixelComponents::R( srcPixel3 ) )
-						+ LargerType( PixelComponents::R( srcPixel4 ) ) )
+			MyPixelComponentsT::R( dstPixel
+				, MyTypeT( ( MyLargerTypeT( MyPixelComponentsT::R( srcPixel1 ) )
+						+ MyLargerTypeT( MyPixelComponentsT::R( srcPixel2 ) )
+						+ MyLargerTypeT( MyPixelComponentsT::R( srcPixel3 ) )
+						+ MyLargerTypeT( MyPixelComponentsT::R( srcPixel4 ) ) )
 					/ 4u ) );
 
 			if constexpr ( getComponentsCount( PFT ) >= 2 )
 			{
-				PixelComponents::G( dstPixel
-					, Type( ( LargerType( PixelComponents::G( srcPixel1 ) )
-							+ LargerType( PixelComponents::G( srcPixel2 ) )
-							+ LargerType( PixelComponents::G( srcPixel3 ) )
-							+ LargerType( PixelComponents::G( srcPixel4 ) ) )
+				MyPixelComponentsT::G( dstPixel
+					, MyTypeT( ( MyLargerTypeT( MyPixelComponentsT::G( srcPixel1 ) )
+							+ MyLargerTypeT( MyPixelComponentsT::G( srcPixel2 ) )
+							+ MyLargerTypeT( MyPixelComponentsT::G( srcPixel3 ) )
+							+ MyLargerTypeT( MyPixelComponentsT::G( srcPixel4 ) ) )
 						/ 4u ) );
 
 				if constexpr ( getComponentsCount( PFT ) >= 3 )
 				{
-					PixelComponents::B( dstPixel
-						, Type( ( LargerType( PixelComponents::B( srcPixel1 ) )
-								+ LargerType( PixelComponents::B( srcPixel2 ) )
-								+ LargerType( PixelComponents::B( srcPixel3 ) )
-								+ LargerType( PixelComponents::B( srcPixel4 ) ) )
+					MyPixelComponentsT::B( dstPixel
+						, MyTypeT( ( MyLargerTypeT( MyPixelComponentsT::B( srcPixel1 ) )
+								+ MyLargerTypeT( MyPixelComponentsT::B( srcPixel2 ) )
+								+ MyLargerTypeT( MyPixelComponentsT::B( srcPixel3 ) )
+								+ MyLargerTypeT( MyPixelComponentsT::B( srcPixel4 ) ) )
 							/ 4u ) );
 
 					if constexpr ( getComponentsCount( PFT ) >= 4 )
 					{
-						PixelComponents::A( dstPixel
-							, Type( ( LargerType( PixelComponents::A( srcPixel1 ) )
-									+ LargerType( PixelComponents::A( srcPixel2 ) )
-									+ LargerType( PixelComponents::A( srcPixel3 ) )
-									+ LargerType( PixelComponents::A( srcPixel4 ) ) )
+						MyPixelComponentsT::A( dstPixel
+							, MyTypeT( ( MyLargerTypeT( MyPixelComponentsT::A( srcPixel1 ) )
+									+ MyLargerTypeT( MyPixelComponentsT::A( srcPixel2 ) )
+									+ MyLargerTypeT( MyPixelComponentsT::A( srcPixel3 ) )
+									+ MyLargerTypeT( MyPixelComponentsT::A( srcPixel4 ) ) )
 								/ 4u ) );
 					}
 				}
