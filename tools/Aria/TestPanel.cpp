@@ -5,6 +5,7 @@
 
 #include <CastorUtils/Data/File.hpp>
 #include <CastorUtils/Graphics/Image.hpp>
+#include <CastorUtils/Graphics/FreeImageLoader.hpp>
 #include <CastorUtils/Graphics/StbImageLoader.hpp>
 
 #include <wx/sizer.h>
@@ -216,6 +217,7 @@ namespace aria
 		, m_config{ config }
 	{
 		castor::StbImageLoader::registerLoader( m_loader );
+		castor::FreeImageLoader::registerLoader( m_loader );
 		SetBackgroundColour( BORDER_COLOUR );
 		SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 
