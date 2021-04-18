@@ -8,6 +8,10 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/Signal.hpp>
 
+#if ARIA_UseDiffImageLib
+#	include <DiffImageLib/DiffImageLib.hpp>
+#endif
+
 #include <wx/colour.h>
 #include <wx/datetime.h>
 #include <wx/string.h>
