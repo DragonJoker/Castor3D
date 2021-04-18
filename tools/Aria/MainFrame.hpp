@@ -102,6 +102,7 @@ namespace aria
 		void onProcessEnd( wxProcessEvent & evt );
 		void onTestUpdateTimer( wxTimerEvent & evt );
 		void onCategoryUpdateTimer( wxTimerEvent & evt );
+		void onSize( wxSizeEvent & evt );
 
 		struct Selection
 		{

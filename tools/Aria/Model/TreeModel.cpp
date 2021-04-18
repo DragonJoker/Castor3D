@@ -56,6 +56,24 @@ namespace aria
 			}
 		}
 
+		int getColumnMinSize( TreeModel::Column col
+			, int maxWidth )
+		{
+			switch ( col )
+			{
+			case aria::TreeModel::Column::eStatusName:
+				return maxWidth
+					- getColumnMinSize( TreeModel::Column::eRunDate, maxWidth )
+					- getColumnMinSize( TreeModel::Column::eRunTime, maxWidth );
+			case aria::TreeModel::Column::eRunDate:
+				return 80;
+			case aria::TreeModel::Column::eRunTime:
+				return 90;
+			default:
+				return 100;
+			}
+		}
+
 		wxString getColumnName( TreeModel::Column col )
 		{
 			switch ( col )
@@ -149,6 +167,20 @@ namespace aria
 			col->SetMinWidth( getColumnSize( column ) );
 			view->AppendColumn( col );
 		}
+	}
+
+	void TreeModel::resize( wxDataViewCtrl * view
+		, wxSize const & size )
+	{
+		for ( int i = 0; i < int( Column::eCount ); ++i )
+		{
+			auto column = Column( i );
+			auto col = view->GetColumn( i );
+			col->SetMinWidth( getColumnMinSize( column, size.GetWidth() ) );
+			col->SetWidth( getColumnMinSize( column, size.GetWidth() ) );
+		}
+
+		view->Refresh();
 	}
 
 	uint32_t TreeModel::getTestId( wxDataViewItem const & item )const
