@@ -91,6 +91,20 @@ namespace castor3d
 		C3D_API TextureUnitSPtr loadTexture( castor::Path const & path
 			, TextureConfiguration const & config
 			, Pass & pass )const;
+		/**
+		 *\~english
+		 *\brief			Converts given height image file to a normal+height image.
+		 *\param[in,out]	path	The image file path (can be relative or absolute), receives the resulting normal+height image file path.
+		 *\param[in,out]	config	The texture unit configuration.
+		 *\return			\p false if any error occured.
+		 *\~french
+		 *\brief			Convertit le fichier d'image de hauteur en une image normale+hauteur.
+		 *\param[in,out]	path	Le chemin vers l'image (peut être relatif ou absolu), reçoit le chemin de l'image normale+hauteur.
+		 *\param[in,out]	config	La configuration de la texture.
+		 *\return			\p false en cas d'erreur.
+		 */
+		C3D_API bool convertToNormalMap( castor::Path & path
+			, castor3d::TextureConfiguration & config )const;
 
 	protected:
 		/**
