@@ -61,8 +61,8 @@ namespace aria
 				return wxImage{};
 			}
 
-			castor::Image reference = loader.load( castor::cuEmptyString, refFile );
-			castor::Image toTest = loader.load( castor::cuEmptyString, testFile );
+			castor::Image reference = loader.load( castor::cuEmptyString, refFile, false, false );
+			castor::Image toTest = loader.load( castor::cuEmptyString, testFile, false, false );
 
 			if ( toTest.getDimensions() != reference.getDimensions() )
 			{
