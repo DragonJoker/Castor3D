@@ -32,6 +32,11 @@ namespace castor3d
 
 	castor::Point3f TextureAnimation::getScale( castor::Milliseconds const & time )const
 	{
-		return castor::Point3f{ m_scale.getDistance( time ) };
+		if ( m_scale.getValue() != castor::Point2f{ 0, 0 } )
+		{
+			return castor::Point3f{ m_scale.getDistance( time ) };
+		}
+
+		return castor::Point3f{ 1.0f, 1.0f, 1.0f };
 	}
 }

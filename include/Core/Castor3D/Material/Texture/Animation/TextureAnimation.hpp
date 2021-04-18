@@ -56,17 +56,17 @@ namespace castor3d
 		C3D_API castor::Angle getRotate( castor::Milliseconds const & time )const;
 		C3D_API castor::Point3f getScale( castor::Milliseconds const & time )const;
 
-		TextureTranslateSpeed const & getTranslateSpeed()
+		TextureTranslateSpeed const & getTranslateSpeed()const
 		{
 			return m_translate;
 		}
 
-		TextureRotateSpeed const & getRotateSpeed()
+		TextureRotateSpeed const & getRotateSpeed()const
 		{
 			return m_rotate;
 		}
 
-		TextureScaleSpeed const & getScaleSpeed()
+		TextureScaleSpeed const & getScaleSpeed()const
 		{
 			return m_scale;
 		}

@@ -3457,6 +3457,8 @@ namespace castor3d
 
 		if ( parsingContext->pass )
 		{
+			parsingContext->textureTransform = TextureTransform{};
+
 			if ( parsingContext->createPass
 				|| parsingContext->pass->getTextureUnitsCount() < parsingContext->unitIndex )
 			{
@@ -4269,6 +4271,20 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserUnitTransform )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( parsingContext->pass )
+		{
+			if ( !parsingContext->textureUnit )
+			{
+				CU_ParsingError( cuT( "TextureUnit not initialised" ) );
+			}
+		}
+	}
+	CU_EndAttributePush( CSCNSection::eTextureTransform )
+
 	CU_ImplementAttributeParser( parserUnitAnimation )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
@@ -4332,6 +4348,7 @@ namespace castor3d
 							, true );
 						parsingContext->textureUnit->setTexture( texture );
 						parsingContext->textureUnit->setConfiguration( parsingContext->textureConfiguration );
+						parsingContext->textureUnit->setTransform( parsingContext->textureTransform );
 						parsingContext->pass->addTextureUnit( std::move( parsingContext->textureUnit ) );
 					}
 					else
@@ -4361,6 +4378,69 @@ namespace castor3d
 		}
 	}
 	CU_EndAttributePop()
+
+	CU_ImplementAttributeParser( parserTexTransformRotate )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->textureUnit )
+		{
+			CU_ParsingError( cuT( "TextureUnit not initialised" ) );
+		}
+		else if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter" ) );
+		}
+		else
+		{
+			float value;
+			params[0]->get( value );
+			parsingContext->textureTransform.rotate = Angle::fromDegrees( value );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserTexTransformTranslate )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->textureUnit )
+		{
+			CU_ParsingError( cuT( "TextureUnit not initialised" ) );
+		}
+		else if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter" ) );
+		}
+		else
+		{
+			castor::Point2f value;
+			params[0]->get( value );
+			parsingContext->textureTransform.translate = Point4f{ value->x, value->y, 0.0f, 0.0f };
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserTexTransformScale )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->textureUnit )
+		{
+			CU_ParsingError( cuT( "TextureUnit not initialised" ) );
+		}
+		else if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter" ) );
+		}
+		else
+		{
+			castor::Point2f value;
+			params[0]->get( value );
+			parsingContext->textureTransform.scale = Point4f{ value->x, value->y, 1.0f, 0.0f };
+		}
+	}
+	CU_EndAttribute()
 
 	CU_ImplementAttributeParser( parserTexAnimRotate )
 	{
@@ -4400,6 +4480,27 @@ namespace castor3d
 			castor::Point2f value;
 			params[0]->get( value );
 			parsingContext->textureAnimation->setTranslateSpeed( TextureTranslateSpeed{ value } );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserTexAnimScale )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->textureAnimation )
+		{
+			CU_ParsingError( cuT( "TextureAnimation not initialised" ) );
+		}
+		else if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter" ) );
+		}
+		else
+		{
+			castor::Point2f value;
+			params[0]->get( value );
+			parsingContext->textureAnimation->setScaleSpeed( TextureScaleSpeed{ value } );
 		}
 	}
 	CU_EndAttribute()

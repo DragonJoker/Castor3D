@@ -2,9 +2,12 @@
 
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Text/TextRenderTarget.hpp"
 #include "Castor3D/Text/TextTextureConfiguration.hpp"
+
+#include <CastorUtils/Data/Text/TextPoint.hpp>
 
 using namespace castor3d;
 
@@ -103,6 +106,47 @@ namespace castor
 					{
 						result = writeSub( file, unit.getConfiguration(), m_type );
 						checkError( result, "configuration" );
+					}
+
+					if ( result )
+					{
+						auto & transform = unit.getTransform();
+						auto rotate = transform.rotate.degrees();
+						auto translate = castor::Point3f{ transform.translate };
+						auto scale = castor::Point3f{ transform.scale };
+
+						if ( translate != castor::Point3f{}
+							|| rotate != 0.0f
+							|| scale != castor::Point3f{ 1.0f, 1.0f, 1.0f } )
+						{
+							if ( auto animBlock{ beginBlock( file, "transform" ) } )
+							{
+								result = writeNamedSubOpt( file, cuT( "translate" ), translate, castor::Point3f{} )
+									&& writeNamedSubOpt( file, cuT( "rotate" ), rotate, 0.0f )
+									&& writeNamedSubOpt( file, cuT( "scale" ), scale, castor::Point3f{ 1.0f, 1.0f, 1.0f } );
+							}
+						}
+					}
+
+					if ( result
+						&& unit.hasAnimation() )
+					{
+						auto & anim = unit.getAnimation();
+						auto rotate = anim.getRotateSpeed().getValue().degrees();
+						auto translate = anim.getTranslateSpeed().getValue();
+						auto scale = anim.getScaleSpeed().getValue();
+
+						if ( translate != castor::Point2f{}
+							|| rotate != 0.0f
+							|| scale != castor::Point2f{} )
+						{
+							if ( auto animBlock{ beginBlock( file, "animation" ) } )
+							{
+								result = writeNamedSubOpt( file, cuT( "translate" ), translate, castor::Point2f{} )
+									&& writeNamedSubOpt( file, cuT( "rotate" ), rotate, 0.0f )
+									&& writeNamedSubOpt( file, cuT( "scale" ), scale, castor::Point2f{} );
+							}
+						}
 					}
 				}
 			}

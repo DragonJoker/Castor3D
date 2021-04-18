@@ -496,11 +496,17 @@ namespace castor3d
 		addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "normal_directx" ), parserUnitNormalDirectX, { makeParameter< ParameterType::eBool >() } );
 		addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "sampler" ), parserUnitSampler, { makeParameter< ParameterType::eName >() } );
 		addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "invert_y" ), parserUnitInvertY, { makeParameter< ParameterType::eBool >() } );
+		addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "transform" ), parserUnitTransform );
 		addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "animation" ), parserUnitAnimation );
 		addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "}" ), parserUnitEnd );
 
+		addParser( uint32_t( CSCNSection::eTextureTransform ), cuT( "rotate" ), parserTexTransformRotate, { makeParameter< ParameterType::eFloat >() } );
+		addParser( uint32_t( CSCNSection::eTextureTransform ), cuT( "translate" ), parserTexTransformTranslate, { makeParameter< ParameterType::ePoint2F >() } );
+		addParser( uint32_t( CSCNSection::eTextureTransform ), cuT( "scale" ), parserTexTransformScale, { makeParameter< ParameterType::ePoint2F >() } );
+
 		addParser( uint32_t( CSCNSection::eTextureAnimation ), cuT( "rotate" ), parserTexAnimRotate, { makeParameter< ParameterType::eFloat >() } );
 		addParser( uint32_t( CSCNSection::eTextureAnimation ), cuT( "translate" ), parserTexAnimTranslate, { makeParameter< ParameterType::ePoint2F >() } );
+		addParser( uint32_t( CSCNSection::eTextureAnimation ), cuT( "scale" ), parserTexAnimScale, { makeParameter< ParameterType::ePoint2F >() } );
 
 		addParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "vertex_program" ), parserVertexShader );
 		addParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "pixel_program" ), parserPixelShader );

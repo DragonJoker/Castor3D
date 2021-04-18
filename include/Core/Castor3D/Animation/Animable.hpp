@@ -114,6 +114,18 @@ namespace castor3d
 		 */
 		template< typename AnimationType >
 		inline AnimationType & doGetAnimation( castor::String const & name );
+		/**
+		 *\~english
+		 *\brief		Retrieves an animation
+		 *\param[in]	name	The animation name
+		 *\return		The animation
+		 *\~french
+		 *\brief		Récupère une animation
+		 *\param[in]	name	Le nom de l'animation
+		 *\return		L'animation
+		 */
+		template< typename AnimationType >
+		inline AnimationType const & doGetAnimation( castor::String const & name )const;
 
 	protected:
 		//!\~english	All animations.

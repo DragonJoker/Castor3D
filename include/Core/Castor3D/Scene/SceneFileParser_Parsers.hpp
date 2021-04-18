@@ -241,12 +241,19 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserUnitRefraction )
 	CU_DeclareAttributeParser( parserUnitSampler )
 	CU_DeclareAttributeParser( parserUnitInvertY )
+	CU_DeclareAttributeParser( parserUnitTransform )
 	CU_DeclareAttributeParser( parserUnitAnimation )
 	CU_DeclareAttributeParser( parserUnitEnd )
+
+	// Texture Transform Parsers
+	CU_DeclareAttributeParser( parserTexTransformRotate )
+	CU_DeclareAttributeParser( parserTexTransformTranslate )
+	CU_DeclareAttributeParser( parserTexTransformScale )
 
 	// Texture Animation Parsers
 	CU_DeclareAttributeParser( parserTexAnimRotate )
 	CU_DeclareAttributeParser( parserTexAnimTranslate )
+	CU_DeclareAttributeParser( parserTexAnimScale )
 
 	// Shader Parsers
 	CU_DeclareAttributeParser( parserVertexShader )

@@ -247,6 +247,12 @@ namespace castor3d
 		return doGetAnimation< TextureAnimation >( "Default" );
 	}
 
+	TextureAnimation const & TextureUnit::getAnimation()const
+	{
+		CU_Require( m_animated );
+		return doGetAnimation< TextureAnimation >( "Default" );
+	}
+
 	bool TextureUnit::initialise( RenderDevice const & device )
 	{
 		if ( m_initialised )
@@ -385,16 +391,51 @@ namespace castor3d
 		, castor::Angle const & rotate
 		, castor::Point3f const & scale )
 	{
-		m_configuration.translate->x = translate->x;
-		m_configuration.translate->y = translate->y;
-		m_configuration.translate->z = translate->z;
+		m_transform.translate->x = translate->x;
+		m_transform.translate->y = translate->y;
+		m_transform.translate->z = translate->z;
 
-		m_configuration.rotate->x = rotate.cos();
-		m_configuration.rotate->y = rotate.sin();
+		m_transform.rotate = rotate;
 
-		m_configuration.scale->x = scale->x;
-		m_configuration.scale->y = scale->y;
-		m_configuration.scale->z = scale->z;
+		m_transform.scale->x = scale->x;
+		m_transform.scale->y = scale->y;
+		m_transform.scale->z = scale->z;
+
+		doUpdateTransform( translate
+			, rotate
+			, scale );
+	}
+
+	void TextureUnit::setTransform( TextureTransform const & transform )
+	{
+		m_transform = transform;
+		doUpdateTransform( Point3f{ m_transform.translate }
+			, m_transform.rotate
+			, Point3f{ m_transform.scale } );
+	}
+
+	void TextureUnit::setAnimationTransform( castor::Point3f const & translate
+		, castor::Angle const & rotate
+		, castor::Point3f const & scale )
+	{
+		doUpdateTransform( Point3f{ m_transform.translate } + translate
+			, m_transform.rotate + rotate
+			, Point3f{ m_transform.scale } * scale );
+	}
+
+	void TextureUnit::doUpdateTransform( castor::Point3f const & translate
+		, castor::Angle const & rotate
+		, castor::Point3f const & scale )
+	{
+		m_configuration.transform.translate->x = translate->x;
+		m_configuration.transform.translate->y = translate->y;
+		m_configuration.transform.translate->z = translate->z;
+
+		m_configuration.transform.rotate = rotate;
+
+		m_configuration.transform.scale->x = scale->x;
+		m_configuration.transform.scale->y = scale->y;
+		m_configuration.transform.scale->z = scale->z;
 
 		onChanged( *this );
 	}

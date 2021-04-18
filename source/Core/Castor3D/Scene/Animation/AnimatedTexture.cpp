@@ -43,7 +43,6 @@ namespace castor3d
 			result += write( cuT( "_ng" ), configuration.normalGMultiplier );
 			result += writeMask( cuT( "_h" ), configuration.heightMask[0] );
 			result += write( cuT( "_hf" ), configuration.heightFactor );
-			result += write( cuT( "_hf" ), configuration.heightFactor );
 			return result;
 		}
 	}
