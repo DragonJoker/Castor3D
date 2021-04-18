@@ -40,6 +40,8 @@ namespace aria
 		TreeModelNode * addTest( DatabaseTest & test );
 		void expandRoots( wxDataViewCtrl * view );
 		void instantiate( wxDataViewCtrl * view );
+		void resize( wxDataViewCtrl * view
+			, wxSize const & size );
 
 		// helper method for wxLog
 		uint32_t getTestId( wxDataViewItem const & item )const;
