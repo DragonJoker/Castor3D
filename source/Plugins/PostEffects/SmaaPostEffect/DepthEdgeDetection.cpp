@@ -172,7 +172,9 @@ namespace smaa
 		timer.beginPass( edgeDetectionCmd, passIndex );
 		edgeDetectionCmd.memoryBarrier( VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_depthView.makeShaderInputResource( VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ) );
+			, m_depthView.image->makeTransition( VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, { VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT, 0u, 1u, 0u, 1u } ) );
 		edgeDetectionCmd.beginRenderPass( *m_renderPass
 			, *m_surface.frameBuffer
 			, {
@@ -184,7 +186,9 @@ namespace smaa
 		edgeDetectionCmd.endRenderPass();
 		edgeDetectionCmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
-			, m_depthView.makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			, m_depthView.image->makeTransition( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL
+				, { VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT, 0u, 1u, 0u, 1u } ) );
 		timer.endPass( edgeDetectionCmd, passIndex );
 		edgeDetectionCmd.endDebugBlock();
 		edgeDetectionCmd.end();
