@@ -108,13 +108,6 @@ namespace castor
 					, data
 					, format );
 				stbi_image_free( data );
-
-				//if ( components != ImageComponents::eA
-				//	&& components != ImageComponents::eAll
-				//	&& ( n % 2 ) == 0 )
-				//{
-				//	preMultiplyWithAlpha( result );
-				//}
 			}
 			else
 			{
