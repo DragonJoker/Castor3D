@@ -20,6 +20,8 @@ namespace castor3d
 {
 	namespace
 	{
+		static float constexpr normalStrength = 8.0f;
+
 		std::ostream & operator<<( std::ostream & stream, castor::Point3f const & obj )
 		{
 			stream << std::setprecision( 4 ) << obj->x
@@ -112,7 +114,7 @@ namespace castor3d
 		{
 			x = clamp( x, width );
 			y = clamp( y, height );
-			return float( data[getIndex( x, y, width, height )] ) / 255.0f;
+			return float( 0xFF - data[getIndex( x, y, width, height )] ) / 255.0f;
 		}
 
 		uint8_t textureCoordinateToRgb( float value )
@@ -126,8 +128,6 @@ namespace castor3d
 			, int x
 			, int y )
 		{
-			const float strength = 8.0f;
-
 			// surrounding pixels
 			float tl = getHeight( data, width, height, x - 1, y - 1 ); // top left
 			float  l = getHeight( data, width, height, x - 1, y );   // left
@@ -142,11 +142,11 @@ namespace castor3d
 			// sobel filter
 			const float dX = ( tr + 2.0 * r + br ) - ( tl + 2.0 * l + bl );
 			const float dY = ( bl + 2.0 * b + br ) - ( tl + 2.0 * t + tr );
-			const float dZ = 1.0 / strength;
+			const float dZ = 1.0 / normalStrength;
 
 			castor::Point3f n{ dX, dY, dZ };
 			castor::point::normalise( n );
-			return { n->x, n->y, n->z, c };
+			return { n->x, n->y, n->z, 1.0f - c };
 		}
 
 		castor::ByteArray calculateNormals( castor::ArrayView< uint8_t const > const & data
@@ -380,22 +380,28 @@ namespace castor3d
 			if ( auto image = loadImage( path ) )
 			{
 				log::info << "Converting height map to normal map." << std::endl;
-				auto buffer = castor::PxBufferBase::create( image->getDimensions()
+				castor::Size origDimensions{ image->getDimensions() };
+				castor::Size dimensions{ origDimensions.getWidth() * uint32_t( normalStrength ) * 2u
+					, origDimensions.getHeight() * uint32_t( normalStrength ) * 2u };
+				image->resample( dimensions );
+				auto buffer = castor::PxBufferBase::create( dimensions
 					, castor::PixelFormat::eR8_UNORM
 					, image->getPxBuffer().getConstPtr()
 					, image->getPixelFormat()
 					, image->getPxBuffer().getAlign() );
 				auto normals = calculateNormals( castor::makeArrayView( buffer->getConstPtr(), buffer->getSize() )
-					, image->getDimensions() );
+					, dimensions );
 				auto nmlHeights = castor::PxBufferBase::create( buffer->getDimensions()
 					, castor::PixelFormat::eR8G8B8A8_UNORM
 					, normals.data()
 					, castor::PixelFormat::eR8G8B8A8_UNORM );
+				castor::Image imageNml{ cuT( "" ), *nmlHeights };
+				imageNml.resample( origDimensions );
 				config.normalMask[0] = 0x00FFFFFF;
 				config.heightMask[0] = 0xFF000000;
 				path = image->getPath();
-				path = path.getPath() / ( path.getFileName() + "_C3DNml.tga" );
-				getEngine()->getImageWriter().write( path, *nmlHeights );
+				path = path.getPath() / ( "N_" + path.getFileName() + ".png" );
+				getEngine()->getImageWriter().write( path, imageNml.getPxBuffer() );
 			}
 		}
 
