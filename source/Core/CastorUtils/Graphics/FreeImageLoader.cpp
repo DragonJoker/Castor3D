@@ -143,6 +143,7 @@ namespace castor
 
 	void FreeImageLoader::registerLoader( ImageLoader & reg )
 	{
+		FreeImage_Initialise();
 		reg.registerLoader( listExtensions()
 			, std::make_unique< FreeImageLoader >() );
 	}
@@ -150,6 +151,7 @@ namespace castor
 	void FreeImageLoader::unregisterLoader( ImageLoader & reg )
 	{
 		reg.unregisterLoader( listExtensions() );
+		FreeImage_DeInitialise();
 	}
 
 	ImageLayout FreeImageLoader::load( String const & imageFormat
@@ -175,54 +177,15 @@ namespace castor
 			CU_LoaderError( "Can't load image" );
 		}
 
-		FREE_IMAGE_COLOR_TYPE type = FreeImage_GetColorType( fiImage );
+		auto colorType = FreeImage_GetColorType( fiImage );
+		auto imageType = FreeImage_GetImageType( fiImage );
 
-		if ( type == FIC_PALETTE )
-		{
-			if ( FreeImage_IsTransparent( fiImage ) )
-			{
-				sourceFmt = PixelFormat::eR8G8B8A8_UNORM;
-				FIBITMAP * dib = FreeImage_ConvertTo32Bits( fiImage );
-				FreeImage_Unload( fiImage );
-				fiImage = dib;
-
-				if ( !fiImage )
-				{
-					CU_LoaderError( "Can't convert image to 32 bits with alpha" );
-				}
-			}
-			else
-			{
-				sourceFmt = PixelFormat::eR8G8B8_UNORM;
-				FIBITMAP * dib = FreeImage_ConvertTo24Bits( fiImage );
-				FreeImage_Unload( fiImage );
-				fiImage = dib;
-
-				if ( !fiImage )
-				{
-					CU_LoaderError( "Can't convert image to 24 bits" );
-				}
-			}
-		}
-		else if ( type == FIC_RGBALPHA )
-		{
-			sourceFmt = PixelFormat::eR8G8B8A8_UNORM;
-			FIBITMAP * dib = FreeImage_ConvertTo32Bits( fiImage );
-			FreeImage_Unload( fiImage );
-			fiImage = dib;
-
-			if ( !fiImage )
-			{
-				CU_LoaderError( "Can't convert image to 32 bits with alpha" );
-			}
-		}
-		else if ( fiFormat == FIF_HDR
+		if ( fiFormat == FIF_HDR
 			|| fiFormat == FIF_EXR )
 		{
 			auto bpp = FreeImage_GetBPP( fiImage ) / 8;
-			auto type = FreeImage_GetImageType( fiImage );
 
-			if ( type == FIT_RGBAF )
+			if ( imageType == FIT_RGBAF )
 			{
 				if ( bpp == getBytesPerPixel( PixelFormat::eR16G16B16A16_SFLOAT ) )
 				{
@@ -237,7 +200,7 @@ namespace castor
 					CU_LoaderError( "Unsupported HDR RGBA image format" );
 				}
 			}
-			else if ( type == FIT_RGBF )
+			else if ( imageType == FIT_RGBF )
 			{
 				if ( bpp == getBytesPerPixel( PixelFormat::eR16G16B16_SFLOAT ) )
 				{
@@ -252,7 +215,7 @@ namespace castor
 					CU_LoaderError( "Unsupported HDR RGB image format" );
 				}
 			}
-			else if ( type == FIT_FLOAT )
+			else if ( imageType == FIT_FLOAT )
 			{
 				if ( bpp == getBytesPerPixel( PixelFormat::eR16_SFLOAT ) )
 				{
@@ -270,14 +233,14 @@ namespace castor
 		}
 		else
 		{
-			sourceFmt = PixelFormat::eR8G8B8_UNORM;
-			FIBITMAP * dib = FreeImage_ConvertTo24Bits( fiImage );
+			sourceFmt = PixelFormat::eR8G8B8A8_UNORM;
+			FIBITMAP * dib = FreeImage_ConvertTo32Bits( fiImage );
 			FreeImage_Unload( fiImage );
 			fiImage = dib;
 
 			if ( !fiImage )
 			{
-				CU_LoaderError( "Can't convert image to 24 bits" );
+				CU_LoaderError( "Can't convert image to 32 bits" );
 			}
 		}
 
