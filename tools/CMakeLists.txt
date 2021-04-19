@@ -8,6 +8,7 @@ option( CASTOR_BUILD_TOOL_MESH_UPGRADER "Build CastorMeshUpgrader" ON )
 option( CASTOR_BUILD_TOOL_MESH_CONVERTER "Build CastorMeshConverter" ON )
 option( CASTOR_BUILD_TOOL_CASTOR_TEST_LAUNCHER "Build CastorTestLauncher" ON )
 option( CASTOR_BUILD_TOOL_ARIA "Build Aria (Castor3D render tests manager)" ON )
+option( CASTOR_BUILD_TOOL_HGT_MAP_TO_NML_MAP "Build HeightMapToNormalMap" ON )
 
 function( ToolsInit )
 	set( ImgConv "no (Not wanted)" PARENT_SCOPE )
@@ -16,6 +17,7 @@ function( ToolsInit )
 	set( MshConv "no (Not wanted)" PARENT_SCOPE )
 	set( TestLcr "no (Not wanted)" PARENT_SCOPE )
 	set( Aria "no (Not wanted)" PARENT_SCOPE )
+	set( HgtNml "no (Not wanted)" PARENT_SCOPE )
 endfunction( ToolsInit )
 
 function( ToolsBuild )
@@ -84,6 +86,16 @@ function( ToolsBuild )
 						ImgConverter "ImgConverter"
 						PARENT_SCOPE )
 					set( ImgConv ${Build} PARENT_SCOPE )
+				endif ()
+
+				if( CASTOR_BUILD_TOOL_HGT_MAP_TO_NML_MAP )
+					set( Build ${HgtNml} )
+					add_subdirectory( HeightMapToNormalMap )
+					set( CPACK_PACKAGE_EXECUTABLES
+						${CPACK_PACKAGE_EXECUTABLES}
+						HeightMapToNormalMap "HeightMapToNormalMap"
+						PARENT_SCOPE )
+					set( HgtNml ${Build} PARENT_SCOPE )
 				endif ()
 
 				if( CASTOR_BUILD_TOOL_ARIA )
@@ -183,6 +195,9 @@ function( ToolsSummary )
 			if( CASTOR_BUILD_TOOL_CASTOR_TEST_LAUNCHER )
 				set( msg_tmp "${msg_tmp}\n    CastorTestLauncher   ${TestLcr}" )
 			endif ()
+			if( CASTOR_BUILD_TOOL_HGT_MAP_TO_NML_MAP )
+				set( msg_tmp "${msg_tmp}\n    HeightMapToNormalMap ${HgtNml}" )
+			endif ()
 		endif ()
 		set( msg "${msg}${msg_tmp}" )
 		message( STATUS "${msg}\n" )
@@ -213,6 +228,15 @@ function( ToolsSetup )
 			cpack_add_component( Aria
 				DISPLAY_NAME "Aria application"
 				DESCRIPTION "An application used to manage Castor3D render tests."
+				GROUP Tools
+				INSTALL_TYPES Full Developer
+			)
+		endif()
+
+		if( CASTOR_BUILD_TOOL_HGT_MAP_TO_NML_MAP )
+			cpack_add_component( HeightMapToNormalMap
+				DISPLAY_NAME "HeightMapToNormalMap application"
+				DESCRIPTION "Application used to generate a normal map from a height/bump map."
 				GROUP Tools
 				INSTALL_TYPES Full Developer
 			)
