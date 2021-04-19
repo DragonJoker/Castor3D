@@ -12,7 +12,7 @@ void printUsage()
 	std::cout << "DiffImage {RENDERERS} -f FILE" << std::endl;
 	std::cout << "  FILE must be a .cscn file." << std::endl;
 	std::cout << "  RENDERERS is a list of Castor3D renderers for which resulting images will be compared to the reference image." << std::endl;
-	std::cout << "  Can be vk, gl4, or d3d11." << std::endl;
+	std::cout << "  Can be vk, gl, or d3d11." << std::endl;
 }
 
 bool doParseArgs( int argc
