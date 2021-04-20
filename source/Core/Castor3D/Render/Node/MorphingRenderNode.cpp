@@ -10,8 +10,7 @@ using namespace castor;
 
 namespace castor3d
 {
-	MorphingRenderNode::MorphingRenderNode( RenderPipeline & pipeline
-		, PassRenderNode && passNode
+	MorphingRenderNode::MorphingRenderNode( PassRenderNode passNode
 		, UniformBufferOffsetT< ModelMatrixUboConfiguration > modelMatrixBuffer
 		, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
 		, UniformBufferOffsetT< PickingUboConfiguration > pickingBuffer
@@ -23,8 +22,7 @@ namespace castor3d
 		, InstanceType & instance
 		, AnimatedMesh & mesh
 		, UniformBufferOffsetT< MorphingUboConfiguration > morphingUbo )
-		: SubmeshRenderNode{ pipeline
-			, std::move( passNode )
+		: SubmeshRenderNode{ std::move( passNode )
 			, modelMatrixBuffer
 			, modelBuffer
 			, pickingBuffer

@@ -62,9 +62,11 @@ namespace castor3d
 			, castor::Size const & size )override;
 		void doCleanup( RenderDevice const & device )override;
 		void doUpdateUbos( CpuUpdater & updater )override;
-		void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
+		void doFillUboDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetLayout const & layout
 			, BillboardListRenderNode & node )override;
-		void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
+		void doFillUboDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetLayout const & layout
 			, SubmeshRenderNode & node )override;
 		ashes::VkDescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;

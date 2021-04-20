@@ -13,8 +13,7 @@ namespace castor3d
 	struct SkinningRenderNode
 		: public SubmeshRenderNode
 	{
-		C3D_API SkinningRenderNode( RenderPipeline & pipeline
-			, PassRenderNode && passNode
+		C3D_API SkinningRenderNode( PassRenderNode passNode
 			, UniformBufferOffsetT< ModelMatrixUboConfiguration > modelMatrixBuffer
 			, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
 			, UniformBufferOffsetT< PickingUboConfiguration > pickingBuffer
