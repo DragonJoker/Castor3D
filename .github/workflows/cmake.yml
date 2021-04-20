@@ -97,8 +97,8 @@ jobs:
       working-directory: ${{ github.workspace }}/dependencies/vc14/x64
       run: |
         7z x wxWidgets-3.1.0-win32-headers.zip
-        7z x wxWidgets-3.1.0-win32-libs-debug-vc16.4.1.zip
-        7z x wxWidgets-3.1.0-win32-libs-release-vc16.4.1.zip
+        7z x wxWidgets-3.1.0-win32-libs-debug-vc16.8.4.zip
+        7z x wxWidgets-3.1.0-win32-libs-release-vc16.8.4.zip
 
     - name: Create Build Environment
       run: cmake -E make_directory ${{runner.workspace}}/build-${{ matrix.buildType }}
