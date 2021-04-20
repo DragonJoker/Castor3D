@@ -12,8 +12,7 @@ namespace castor3d
 	struct MorphingRenderNode
 		: public SubmeshRenderNode
 	{
-		C3D_API MorphingRenderNode( RenderPipeline & pipeline
-			, PassRenderNode && passNode
+		C3D_API MorphingRenderNode( PassRenderNode passNode
 			, UniformBufferOffsetT< ModelMatrixUboConfiguration > modelMatrixBuffer
 			, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
 			, UniformBufferOffsetT< PickingUboConfiguration > pickingBuffer

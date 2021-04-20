@@ -9,8 +9,7 @@ using namespace castor;
 
 namespace castor3d
 {
-	BillboardRenderNode::BillboardRenderNode( RenderPipeline & pipeline
-		, PassRenderNode && passNode
+	BillboardRenderNode::BillboardRenderNode( PassRenderNode passNode
 		, UniformBufferOffsetT< ModelMatrixUboConfiguration > modelMatrixBuffer
 		, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
 		, UniformBufferOffsetT< PickingUboConfiguration > pickingBuffer
@@ -20,8 +19,7 @@ namespace castor3d
 		, GeometryBuffers const & buffers
 		, SceneNode & sceneNode
 		, BillboardBase & data )
-		: BillboardListRenderNode{ pipeline
-			, std::move( passNode )
+		: BillboardListRenderNode{ std::move( passNode )
 			, modelMatrixBuffer
 			, modelBuffer
 			, pickingBuffer

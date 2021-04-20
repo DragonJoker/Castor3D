@@ -458,7 +458,8 @@ namespace castor3d
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	node			Le noeud.
 		 */
-		C3D_API void initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseUboDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetPool const & descriptorPool
 			, BillboardRenderNode & node );
 		/**
 		 *\~english
@@ -470,7 +471,8 @@ namespace castor3d
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	node			Le noeud.
 		 */
-		C3D_API void initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseUboDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetPool const & descriptorPool
 			, MorphingRenderNode & node );
 		/**
 		 *\~english
@@ -482,7 +484,8 @@ namespace castor3d
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	node			Le noeud.
 		 */
-		C3D_API void initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseUboDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetPool const & descriptorPool
 			, SkinningRenderNode & node );
 		/**
 		 *\~english
@@ -494,7 +497,8 @@ namespace castor3d
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	node			Le noeud.
 		 */
-		C3D_API void initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseUboDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetPool const & descriptorPool
 			, StaticRenderNode & node );
 		/**
 		 *\~english
@@ -506,7 +510,8 @@ namespace castor3d
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	nodes			Les noeuds.
 		 */
-		C3D_API void initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseUboDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetPool const & descriptorPool
 			, SubmeshSkinninRenderNodesByPassMap & nodes );
 		/**
 		 *\~english
@@ -518,7 +523,8 @@ namespace castor3d
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	nodes			Les noeuds.
 		 */
-		C3D_API void initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseUboDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetPool const & descriptorPool
 			, SubmeshStaticRenderNodesByPassMap & nodes );
 		/**
 		 *\~english
@@ -532,7 +538,8 @@ namespace castor3d
 		 *\param[in]	node			Le noeud.
 		 *\param[in]	shadowMaps		Les shadow maps.
 		 */
-		C3D_API void initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseTextureDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetPool const & descriptorPool
 			, BillboardRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps );
 		/**
@@ -547,7 +554,8 @@ namespace castor3d
 		 *\param[in]	node			Le noeud.
 		 *\param[in]	shadowMaps		Les shadow maps.
 		 */
-		C3D_API void initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseTextureDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetPool const & descriptorPool
 			, MorphingRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps );
 		/**
@@ -562,7 +570,8 @@ namespace castor3d
 		 *\param[in]	node			Les noeud.
 		 *\param[in]	shadowMaps		Les shadow maps.
 		 */
-		C3D_API void initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseTextureDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetPool const & descriptorPool
 			, SkinningRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps );
 		/**
@@ -577,7 +586,8 @@ namespace castor3d
 		 *\param[in]	node			Le noeud.
 		 *\param[in]	shadowMaps		Les shadow maps.
 		 */
-		C3D_API void initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseTextureDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetPool const & descriptorPool
 			, StaticRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps );
 		/**
@@ -592,7 +602,8 @@ namespace castor3d
 		 *\param[in]	nodes			Les noeuds.
 		 *\param[in]	shadowMaps		Les shadow maps.
 		 */
-		C3D_API void initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseTextureDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetPool const & descriptorPool
 			, SubmeshSkinninRenderNodesByPassMap & nodes
 			, ShadowMapLightTypeArray const & shadowMaps );
 		/**
@@ -607,7 +618,8 @@ namespace castor3d
 		 *\param[in]	nodes			Les noeuds.
 		 *\param[in]	shadowMaps		Les shadow maps.
 		 */
-		C3D_API void initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseTextureDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetPool const & descriptorPool
 			, SubmeshStaticRenderNodesByPassMap & nodes
 			, ShadowMapLightTypeArray const & shadowMaps );
 		/**
@@ -1128,7 +1140,8 @@ namespace castor3d
 		 *\param[in]	layout	Le layout des descripteurs.
 		 *\param[in]	node	Le noeud.
 		 */
-		C3D_API virtual void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
+		C3D_API virtual void doFillUboDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetLayout const & layout
 			, BillboardListRenderNode & node ) = 0;
 		/**
 		 *\~english
@@ -1140,7 +1153,8 @@ namespace castor3d
 		 *\param[in]	layout	Le layout des descripteurs.
 		 *\param[in]	node	Le noeud.
 		 */
-		C3D_API virtual void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
+		C3D_API virtual void doFillUboDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetLayout const & layout
 			, SubmeshRenderNode & node ) = 0;
 		/**
 		 *\~english
@@ -1156,7 +1170,8 @@ namespace castor3d
 		 *\param[in]		node		Le noeud.
 		 *\param[in]		shadowMaps	Les shadow maps.
 		 */
-		C3D_API virtual void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
+		C3D_API virtual void doFillTextureDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, BillboardListRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps ) = 0;
@@ -1174,7 +1189,8 @@ namespace castor3d
 		 *\param[in]		node		Le noeud.
 		 *\param[in]		shadowMaps	Les shadow maps.
 		 */
-		C3D_API virtual void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
+		C3D_API virtual void doFillTextureDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, SubmeshRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps ) = 0;

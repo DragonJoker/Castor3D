@@ -458,16 +458,20 @@ namespace castor3d
 		{
 			for ( auto & pipelineNode : pipelineNodes )
 			{
-				pipelineNode.first->createDescriptorPools( uint32_t( pipelineNode.second.size() ) );
+				RenderPipeline & pipeline = *pipelineNode.first;
+				pipeline.createDescriptorPools( uint32_t( pipelineNode.second.size() ) );
 
 				for ( auto & node : pipelineNode.second )
 				{
-					renderPass.initialiseUboDescriptor( pipelineNode.first->getDescriptorPool( 0u ), node.second );
+					renderPass.initialiseUboDescriptor( pipeline
+						, pipeline.getDescriptorPool( 0u )
+						, node.second );
 					Pass & pass = node.second.passNode.pass;
 
-					if ( pipelineNode.first->hasDescriptorPool( 1u ) )
+					if ( pipeline.hasDescriptorPool( 1u ) )
 					{
-						renderPass.initialiseTextureDescriptor( pipelineNode.first->getDescriptorPool( 1u )
+						renderPass.initialiseTextureDescriptor( pipeline
+							, pipeline.getDescriptorPool( 1u )
 							, node.second
 							, shadowMaps );
 					}
@@ -490,13 +494,15 @@ namespace castor3d
 					size += uint32_t( passNodes.second.size() );
 				}
 
-				pipelineNode.first->createDescriptorPools( size );
-				renderPass.initialiseUboDescriptor( pipeline.getDescriptorPool( 0u )
+				pipeline.createDescriptorPools( size );
+				renderPass.initialiseUboDescriptor( pipeline
+					, pipeline.getDescriptorPool( 0u )
 					, pipelineNode.second );
 
 				if ( pipeline.hasDescriptorPool( 1u ) )
 				{
-					renderPass.initialiseTextureDescriptor( pipeline.getDescriptorPool( 1u )
+					renderPass.initialiseTextureDescriptor( pipeline
+						, pipeline.getDescriptorPool( 1u )
 						, pipelineNode.second
 						, shadowMaps );
 				}

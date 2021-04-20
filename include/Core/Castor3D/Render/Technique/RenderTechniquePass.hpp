@@ -194,15 +194,19 @@ namespace castor3d
 			, castor::Size const & size )override;
 		C3D_API void doUpdateFlags( PipelineFlags & flags )const override;
 		C3D_API ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
-		C3D_API void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
+		C3D_API void doFillUboDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetLayout const & layout
 			, BillboardListRenderNode & nodes )override;
-		C3D_API void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
+		C3D_API void doFillUboDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetLayout const & layout
 			, SubmeshRenderNode & nodes )override;
-		C3D_API void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
+		C3D_API void doFillTextureDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, BillboardListRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
-		C3D_API void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
+		C3D_API void doFillTextureDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, SubmeshRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
