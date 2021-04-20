@@ -28,7 +28,7 @@ namespace diffimg
 
 	struct Config
 	{
-		Config( Options const & options );
+		explicit Config( Options const & options );
 
 		castor::ImageUPtr reference;
 		std::array< castor::Path, size_t( DiffResult::eCount ) > dirs;
