@@ -96,14 +96,15 @@ namespace castor3d
 	namespace
 	{
 		template< typename DataTypeT, typename InstanceTypeT >
-		void fillTexDescriptor( ashes::DescriptorSetLayout const & layout
+		void fillTexDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, ObjectRenderNode< DataTypeT, InstanceTypeT > & node
 			, ShadowMapLightTypeArray const & shadowMaps )
 		{
 			index = getMinTextureIndex();
 			ashes::WriteDescriptorSetArray writes;
-			auto & flags = node.pipeline.getFlags();
+			auto & flags = pipeline.getFlags();
 
 			if ( !flags.textures.empty() )
 			{
@@ -140,20 +141,22 @@ namespace castor3d
 		}
 	}
 
-	void ShadowMapPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
+	void ShadowMapPass::doFillTextureDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, BillboardListRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		fillTexDescriptor( layout, index, node, shadowMaps );
+		fillTexDescriptor( pipeline, layout, index, node, shadowMaps );
 	}
 
-	void ShadowMapPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
+	void ShadowMapPass::doFillTextureDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, SubmeshRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		fillTexDescriptor( layout, index, node, shadowMaps );
+		fillTexDescriptor( pipeline, layout, index, node, shadowMaps );
 	}
 
 	ShaderPtr ShadowMapPass::doGetGeometryShaderSource( PipelineFlags const & flags )const

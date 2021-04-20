@@ -239,7 +239,8 @@ namespace castor3d
 		return SceneRenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 5u );
 	}
 
-	void OpaquePass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
+	void OpaquePass::doFillTextureDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, BillboardListRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
@@ -247,10 +248,11 @@ namespace castor3d
 		node.passNode.fillDescriptor( layout
 			, index
 			, *node.texDescriptorSet
-			, node.pipeline.getFlags().textures );
+			, pipeline.getFlags().textures );
 	}
 
-	void OpaquePass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
+	void OpaquePass::doFillTextureDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, SubmeshRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
@@ -259,7 +261,7 @@ namespace castor3d
 		node.passNode.fillDescriptor( layout
 			, index
 			, writes
-			, node.pipeline.getFlags().textures );
+			, pipeline.getFlags().textures );
 		node.texDescriptorSet->setBindings( writes );
 	}
 
