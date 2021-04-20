@@ -175,14 +175,16 @@ namespace castor3d
 		getCuller().getCamera().detach();
 	}
 
-	void ShadowMapPassSpot::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
+	void ShadowMapPassSpot::doFillUboDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetLayout const & layout
 		, BillboardListRenderNode & node )
 	{
 		m_shadowMapUbo.createSizedBinding( *node.uboDescriptorSet
 			, layout.getBinding( ShadowMapUbo::BindingPoint ) );
 	}
 
-	void ShadowMapPassSpot::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
+	void ShadowMapPassSpot::doFillUboDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetLayout const & layout
 		, SubmeshRenderNode & node )
 	{
 		m_shadowMapUbo.createSizedBinding( *node.uboDescriptorSet

@@ -110,15 +110,19 @@ namespace castor3d
 		C3D_API void doCleanup( RenderDevice const & device )override;
 		C3D_API bool doInitialise( RenderDevice const & device
 			, castor::Size const & size )override;
-		C3D_API void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
+		C3D_API void doFillUboDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetLayout const & layout
 			, BillboardListRenderNode & node )override;
-		C3D_API void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
+		C3D_API void doFillUboDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetLayout const & layout
 			, SubmeshRenderNode & node )override;
-		C3D_API void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
+		C3D_API void doFillTextureDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, BillboardListRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
-		C3D_API void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
+		C3D_API void doFillTextureDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, SubmeshRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;

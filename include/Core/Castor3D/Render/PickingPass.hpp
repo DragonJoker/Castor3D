@@ -133,15 +133,19 @@ namespace castor3d
 		bool doInitialise( RenderDevice const & device
 			, castor::Size const & size )override;
 		void doCleanup( RenderDevice const & device )override;
-		void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
+		void doFillUboDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetLayout const & layout
 			, BillboardListRenderNode & node )override;
-		void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
+		void doFillUboDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetLayout const & layout
 			, SubmeshRenderNode & node )override;
-		void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
+		void doFillTextureDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, BillboardListRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
-		void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
+		void doFillTextureDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, SubmeshRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;

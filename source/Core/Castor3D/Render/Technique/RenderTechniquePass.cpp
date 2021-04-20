@@ -301,10 +301,11 @@ namespace castor3d
 		return SceneRenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 1u );
 	}
 
-	void RenderTechniquePass::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
+	void RenderTechniquePass::doFillUboDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetLayout const & layout
 		, BillboardListRenderNode & node )
 	{
-		auto sceneFlags = node.pipeline.getFlags().sceneFlags;
+		auto sceneFlags = pipeline.getFlags().sceneFlags;
 
 		if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 		{
@@ -330,10 +331,11 @@ namespace castor3d
 		}
 	}
 
-	void RenderTechniquePass::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
+	void RenderTechniquePass::doFillUboDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetLayout const & layout
 		, SubmeshRenderNode & node )
 	{
-		auto sceneFlags = node.pipeline.getFlags().sceneFlags;
+		auto sceneFlags = pipeline.getFlags().sceneFlags;
 
 		if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 		{
@@ -395,7 +397,8 @@ namespace castor3d
 	namespace
 	{
 		template< typename DataTypeT, typename InstanceTypeT >
-		void fillTexDescriptor( ashes::DescriptorSetLayout const & layout
+		void fillTexDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, ObjectRenderNode< DataTypeT, InstanceTypeT > & node
 			, ShadowMapLightTypeArray const & shadowMaps
@@ -404,7 +407,7 @@ namespace castor3d
 			, TextureUnit const * vctFirstBounce
 			, TextureUnit const * vctSecondaryBounce )
 		{
-			auto & flags = node.pipeline.getFlags();
+			auto & flags = pipeline.getFlags();
 			ashes::WriteDescriptorSetArray writes;
 
 			if ( !flags.textures.empty() )
@@ -483,7 +486,7 @@ namespace castor3d
 				}
 			}
 
-			bindShadowMaps( node.pipeline.getFlags()
+			bindShadowMaps( pipeline.getFlags()
 				, shadowMaps
 				, writes
 				, index );
@@ -491,12 +494,14 @@ namespace castor3d
 		}
 	}
 
-	void RenderTechniquePass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
+	void RenderTechniquePass::doFillTextureDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, BillboardListRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		fillTexDescriptor( layout
+		fillTexDescriptor( pipeline
+			, layout
 			, index
 			, node
 			, shadowMaps
@@ -506,12 +511,14 @@ namespace castor3d
 			, m_vctSecondaryBounce );
 	}
 
-	void RenderTechniquePass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
+	void RenderTechniquePass::doFillTextureDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, SubmeshRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		fillTexDescriptor( layout
+		fillTexDescriptor( pipeline
+			, layout
 			, index
 			, node
 			, shadowMaps

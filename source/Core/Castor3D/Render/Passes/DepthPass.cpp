@@ -190,7 +190,8 @@ namespace castor3d
 		addFlag( flags.programFlags, ProgramFlag::eDepthPass );
 	}
 
-	void DepthPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
+	void DepthPass::doFillTextureDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, BillboardListRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
@@ -198,10 +199,11 @@ namespace castor3d
 		node.passNode.fillDescriptor( layout
 			, index
 			, *node.texDescriptorSet
-			, node.pipeline.getFlags().textures );
+			, pipeline.getFlags().textures );
 	}
 
-	void DepthPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
+	void DepthPass::doFillTextureDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, SubmeshRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
@@ -210,7 +212,7 @@ namespace castor3d
 		node.passNode.fillDescriptor( layout
 			, index
 			, writes
-			, node.pipeline.getFlags().textures );
+			, pipeline.getFlags().textures );
 		node.texDescriptorSet->setBindings( writes );
 	}
 

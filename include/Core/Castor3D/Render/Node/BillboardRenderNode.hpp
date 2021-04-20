@@ -13,8 +13,7 @@ namespace castor3d
 	struct BillboardRenderNode
 		: public BillboardListRenderNode
 	{
-		C3D_API BillboardRenderNode( RenderPipeline & pipeline
-			, PassRenderNode && passNode
+		C3D_API BillboardRenderNode( PassRenderNode passNode
 			, UniformBufferOffsetT< ModelMatrixUboConfiguration > modelMatrixBuffer
 			, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
 			, UniformBufferOffsetT< PickingUboConfiguration > pickingBuffer

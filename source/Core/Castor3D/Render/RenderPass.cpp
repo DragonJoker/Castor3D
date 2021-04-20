@@ -402,22 +402,18 @@ namespace castor3d
 		it->second = geometryEntry.modelInstancesUbo;
 		m_isDirty = true;
 
-		return SkinningRenderNode
-		{
-			pipeline,
-			doCreatePassRenderNode( pass, pipeline ),
-			geometryEntry.modelMatrixUbo,
-			geometryEntry.modelUbo,
-			geometryEntry.pickingUbo,
-			geometryEntry.texturesUbo,
-			geometryEntry.modelInstancesUbo,
-			buffers,
-			*primitive.getParent(),
-			submesh,
-			primitive,
-			skeleton,
-			animationEntry.skinningUbo
-		};
+		return SkinningRenderNode{ doCreatePassRenderNode( pass, pipeline )
+			, geometryEntry.modelMatrixUbo
+			, geometryEntry.modelUbo
+			, geometryEntry.pickingUbo
+			, geometryEntry.texturesUbo
+			, geometryEntry.modelInstancesUbo
+			, buffers
+			, *primitive.getParent()
+			, submesh
+			, primitive
+			, skeleton
+			, animationEntry.skinningUbo };
 	}
 
 	MorphingRenderNode SceneRenderPass::createMorphingNode( Pass & pass
@@ -440,22 +436,18 @@ namespace castor3d
 		it->second = geometryEntry.modelInstancesUbo;
 		m_isDirty = true;
 
-		return MorphingRenderNode
-		{
-			pipeline,
-			doCreatePassRenderNode( pass, pipeline ),
-			geometryEntry.modelMatrixUbo,
-			geometryEntry.modelUbo,
-			geometryEntry.pickingUbo,
-			geometryEntry.texturesUbo,
-			geometryEntry.modelInstancesUbo,
-			buffers,
-			*primitive.getParent(),
-			submesh,
-			primitive,
-			mesh,
-			animationEntry.morphingUbo
-		};
+		return MorphingRenderNode{ doCreatePassRenderNode( pass, pipeline )
+			, geometryEntry.modelMatrixUbo
+			, geometryEntry.modelUbo
+			, geometryEntry.pickingUbo
+			, geometryEntry.texturesUbo
+			, geometryEntry.modelInstancesUbo
+			, buffers
+			, *primitive.getParent()
+			, submesh
+			, primitive
+			, mesh
+			, animationEntry.morphingUbo };
 	}
 
 	StaticRenderNode SceneRenderPass::createStaticNode( Pass & pass
@@ -476,20 +468,16 @@ namespace castor3d
 		it->second = geometryEntry.modelInstancesUbo;
 		m_isDirty = true;
 
-		return StaticRenderNode
-		{
-			pipeline,
-			doCreatePassRenderNode( pass, pipeline ),
-			geometryEntry.modelMatrixUbo,
-			geometryEntry.modelUbo,
-			geometryEntry.pickingUbo,
-			geometryEntry.texturesUbo,
-			geometryEntry.modelInstancesUbo,
-			buffers,
-			*primitive.getParent(),
-			submesh,
-			primitive,
-		};
+		return StaticRenderNode{ doCreatePassRenderNode( pass, pipeline )
+			, geometryEntry.modelMatrixUbo
+			, geometryEntry.modelUbo
+			, geometryEntry.pickingUbo
+			, geometryEntry.texturesUbo
+			, geometryEntry.modelInstancesUbo
+			, buffers
+			, *primitive.getParent()
+			, submesh
+			, primitive };
 	}
 
 	BillboardRenderNode SceneRenderPass::createBillboardNode( Pass & pass
@@ -506,20 +494,16 @@ namespace castor3d
 		it->second = billboardEntry.modelInstancesUbo;
 		m_isDirty = true;
 
-		return BillboardRenderNode
-		{
-			pipeline,
-			doCreatePassRenderNode( pass, pipeline ),
-			billboardEntry.modelMatrixUbo,
-			billboardEntry.modelUbo,
-			billboardEntry.pickingUbo,
-			billboardEntry.billboardUbo,
-			billboardEntry.texturesUbo,
-			billboardEntry.modelInstancesUbo,
-			buffers,
-			*billboard.getNode(),
-			billboard
-		};
+		return BillboardRenderNode{ doCreatePassRenderNode( pass, pipeline )
+			, billboardEntry.modelMatrixUbo
+			, billboardEntry.modelUbo
+			, billboardEntry.pickingUbo
+			, billboardEntry.billboardUbo
+			, billboardEntry.texturesUbo
+			, billboardEntry.modelInstancesUbo
+			, buffers
+			, *billboard.getNode()
+			, billboard };
 	}
 
 	void SceneRenderPass::updatePipeline( RenderPipeline & pipeline )
@@ -636,6 +620,7 @@ namespace castor3d
 	{
 		template< typename RenderNodeT >
 		void initialiseCommonUboDescriptor( Engine & engine
+			, RenderPipeline const & pipeline
 			, ashes::DescriptorSetLayout const & layout
 			, RenderNodeT & node
 			, MatrixUbo & matrixUbo
@@ -645,13 +630,13 @@ namespace castor3d
 			engine.getMaterialCache().getPassBuffer().createBinding( uboDescriptorSet
 				, layout.getBinding( getPassBufferIndex() ) );
 
-			if ( !node.pipeline.getFlags().textures.empty() )
+			if ( !pipeline.getFlags().textures.empty() )
 			{
 				engine.getMaterialCache().getTextureBuffer().createBinding( uboDescriptorSet
 					, layout.getBinding( getTexturesBufferIndex() ) );
 			}
 
-			if ( checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eLighting ) )
+			if ( checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eLighting ) )
 			{
 				uboDescriptorSet.createBinding( layout.getBinding( getLightBufferIndex() )
 					, node.sceneNode.getScene()->getLightCache().getBuffer()
@@ -663,20 +648,20 @@ namespace castor3d
 			sceneUbo.createSizedBinding( uboDescriptorSet
 				, layout.getBinding( SceneUbo::BindingPoint ) );
 
-			if ( !checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eInstantiation ) )
+			if ( !checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eInstantiation ) )
 			{
 				node.modelMatrixUbo.createSizedBinding( uboDescriptorSet
 					, layout.getBinding( ModelMatrixUbo::BindingPoint ) );
 			}
 
-			if ( checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eInstanceMult ) )
+			if ( checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eInstanceMult ) )
 			{
 				CU_Require( node.modelInstancesUbo );
 				node.modelInstancesUbo.createSizedBinding( uboDescriptorSet
 					, layout.getBinding( ModelInstancesUbo::BindingPoint ) );
 			}
 
-			if ( !node.pipeline.getFlags().textures.empty() )
+			if ( !pipeline.getFlags().textures.empty() )
 			{
 				node.texturesUbo.createSizedBinding( uboDescriptorSet
 					, layout.getBinding( TexturesUbo::BindingPoint ) );
@@ -687,53 +672,59 @@ namespace castor3d
 		}
 	}
 
-	void SceneRenderPass::initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
+	void SceneRenderPass::initialiseUboDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetPool const & descriptorPool
 		, BillboardRenderNode & node )
 	{
 		auto & layout = descriptorPool.getLayout();
 		node.uboDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_BillboardUbo"
 			, 0u );
 		initialiseCommonUboDescriptor( *getEngine()
+			, pipeline
 			, layout
 			, node
 			, m_matrixUbo
 			, m_sceneUbo );
 		node.billboardUbo.createSizedBinding( *node.uboDescriptorSet
 			, layout.getBinding( BillboardUbo::BindingPoint ) );
-		doFillUboDescriptor( layout, node );
+		doFillUboDescriptor( pipeline, layout, node );
 		node.uboDescriptorSet->update();
 	}
 
-	void SceneRenderPass::initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
+	void SceneRenderPass::initialiseUboDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetPool const & descriptorPool
 		, MorphingRenderNode & node )
 	{
 		auto & layout = descriptorPool.getLayout();
 		node.uboDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Ubo"
 			, 0u );
 		initialiseCommonUboDescriptor( *getEngine()
+			, pipeline
 			, layout
 			, node
 			, m_matrixUbo
 			, m_sceneUbo );
 		node.morphingUbo.createSizedBinding( *node.uboDescriptorSet
 			, layout.getBinding( MorphingUbo::BindingPoint ) );
-		doFillUboDescriptor( layout, node );
+		doFillUboDescriptor( pipeline, layout, node );
 		node.uboDescriptorSet->update();
 	}
 
-	void SceneRenderPass::initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
+	void SceneRenderPass::initialiseUboDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetPool const & descriptorPool
 		, SkinningRenderNode & node )
 	{
 		auto & layout = descriptorPool.getLayout();
 		node.uboDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Ubo"
 			, 0u );
 		initialiseCommonUboDescriptor( *getEngine()
+			, pipeline
 			, layout
 			, node
 			, m_matrixUbo
 			, m_sceneUbo );
 
-		if ( checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eInstantiation ) )
+		if ( checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eInstantiation ) )
 		{
 			node.data.getInstantiatedBones().getInstancedBonesBuffer().createBinding( *node.uboDescriptorSet
 				, layout.getBinding( SkinningUbo::BindingPoint ) );
@@ -744,50 +735,55 @@ namespace castor3d
 				, layout.getBinding( SkinningUbo::BindingPoint ) );
 		}
 
-		doFillUboDescriptor( layout, node );
+		doFillUboDescriptor( pipeline, layout, node );
 		node.uboDescriptorSet->update();
 	}
 
-	void SceneRenderPass::initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
+	void SceneRenderPass::initialiseUboDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetPool const & descriptorPool
 		, StaticRenderNode & node )
 	{
 		auto & layout = descriptorPool.getLayout();
 		node.uboDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Ubo"
 			, 0u );
 		initialiseCommonUboDescriptor( *getEngine()
+			, pipeline
 			, layout
 			, node
 			, m_matrixUbo
 			, m_sceneUbo );
-		doFillUboDescriptor( layout, node );
+		doFillUboDescriptor( pipeline, layout, node );
 		node.uboDescriptorSet->update();
 	}
 
-	void SceneRenderPass::initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
+	void SceneRenderPass::initialiseUboDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetPool const & descriptorPool
 		, SubmeshSkinninRenderNodesByPassMap & nodes )
 	{
 		for ( auto & passNodes : nodes )
 		{
 			for ( auto & submeshNodes : passNodes.second )
 			{
-				initialiseUboDescriptor( descriptorPool, submeshNodes.second.begin()->second );
+				initialiseUboDescriptor( pipeline, descriptorPool, submeshNodes.second.begin()->second );
 			}
 		}
 	}
 
-	void SceneRenderPass::initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
+	void SceneRenderPass::initialiseUboDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetPool const & descriptorPool
 		, SubmeshStaticRenderNodesByPassMap & nodes )
 	{
 		for ( auto & passNodes : nodes )
 		{
 			for ( auto & submeshNodes : passNodes.second )
 			{
-				initialiseUboDescriptor( descriptorPool, submeshNodes.second.begin()->second );
+				initialiseUboDescriptor( pipeline, descriptorPool, submeshNodes.second.begin()->second );
 			}
 		}
 	}
 
-	void SceneRenderPass::initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
+	void SceneRenderPass::initialiseTextureDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetPool const & descriptorPool
 		, BillboardRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
@@ -795,11 +791,12 @@ namespace castor3d
 		uint32_t index = getMinTextureIndex();
 		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_BillboardTex"
 			, 1u );
-		doFillTextureDescriptor( layout, index, node, shadowMaps );
+		doFillTextureDescriptor( pipeline, layout, index, node, shadowMaps );
 		node.texDescriptorSet->update();
 	}
 
-	void SceneRenderPass::initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
+	void SceneRenderPass::initialiseTextureDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetPool const & descriptorPool
 		, MorphingRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
@@ -807,11 +804,12 @@ namespace castor3d
 		uint32_t index = getMinTextureIndex();
 		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Tex"
 			, 1u );
-		doFillTextureDescriptor( layout, index, node, shadowMaps );
+		doFillTextureDescriptor( pipeline, layout, index, node, shadowMaps );
 		node.texDescriptorSet->update();
 	}
 
-	void SceneRenderPass::initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
+	void SceneRenderPass::initialiseTextureDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetPool const & descriptorPool
 		, SkinningRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
@@ -819,11 +817,12 @@ namespace castor3d
 		uint32_t index = getMinTextureIndex();
 		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Tex"
 			, 1u );
-		doFillTextureDescriptor( layout, index, node, shadowMaps );
+		doFillTextureDescriptor( pipeline, layout, index, node, shadowMaps );
 		node.texDescriptorSet->update();
 	}
 
-	void SceneRenderPass::initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
+	void SceneRenderPass::initialiseTextureDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetPool const & descriptorPool
 		, StaticRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
@@ -831,27 +830,29 @@ namespace castor3d
 		uint32_t index = getMinTextureIndex();
 		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Tex"
 			, 1u );
-		doFillTextureDescriptor( layout, index, node, shadowMaps );
+		doFillTextureDescriptor( pipeline, layout, index, node, shadowMaps );
 		node.texDescriptorSet->update();
 	}
 
 	namespace
 	{
 		template< typename MapType >
-		void initialiseTextureDescriptors( SceneRenderPass & renderPass
+		void initialiseTextureDescriptors( RenderPipeline const & pipeline
+			, SceneRenderPass & renderPass
 			, ashes::DescriptorSetPool const & descriptorPool
 			, MapType & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )
 		{
 			subTraverseNodes( nodes
-				, [&renderPass, &descriptorPool, &shadowMaps]( Pass & pass1
+				, [&pipeline, &renderPass, &descriptorPool, &shadowMaps]( Pass & pass1
 					, auto & itPass )
 				{
 					Pass & pass = itPass.second.begin()->second.passNode.pass;
 
-					if ( itPass.second.begin()->second.pipeline.hasDescriptorPool( 1u ) )
+					if ( pipeline.hasDescriptorPool( 1u ) )
 					{
-						renderPass.initialiseTextureDescriptor( descriptorPool
+						renderPass.initialiseTextureDescriptor( pipeline
+							, descriptorPool
 							, itPass.second.begin()->second
 							, shadowMaps );
 					}
@@ -859,21 +860,25 @@ namespace castor3d
 		}
 	}
 
-	void SceneRenderPass::initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
+	void SceneRenderPass::initialiseTextureDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetPool const & descriptorPool
 		, SubmeshSkinninRenderNodesByPassMap & nodes
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		initialiseTextureDescriptors( *this
+		initialiseTextureDescriptors( pipeline
+			, *this
 			, descriptorPool
 			, nodes
 			, shadowMaps );
 	}
 
-	void SceneRenderPass::initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
+	void SceneRenderPass::initialiseTextureDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetPool const & descriptorPool
 		, SubmeshStaticRenderNodesByPassMap & nodes
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		initialiseTextureDescriptors( *this
+		initialiseTextureDescriptors( pipeline
+			, *this
 			, descriptorPool
 			, nodes
 			, shadowMaps );

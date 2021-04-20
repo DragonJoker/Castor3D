@@ -9,8 +9,7 @@ using namespace castor;
 
 namespace castor3d
 {
-	StaticRenderNode::StaticRenderNode( RenderPipeline & pipeline
-		, PassRenderNode && passNode
+	StaticRenderNode::StaticRenderNode( PassRenderNode passNode
 		, UniformBufferOffsetT< ModelMatrixUboConfiguration > modelMatrixBuffer
 		, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
 		, UniformBufferOffsetT< PickingUboConfiguration > pickingBuffer
@@ -20,8 +19,7 @@ namespace castor3d
 		, SceneNode & sceneNode
 		, Submesh & data
 		, Geometry & instance )
-		: SubmeshRenderNode{ pipeline
-			, std::move( passNode )
+		: SubmeshRenderNode{ std::move( passNode )
 			, modelMatrixBuffer
 			, modelBuffer
 			, pickingBuffer
