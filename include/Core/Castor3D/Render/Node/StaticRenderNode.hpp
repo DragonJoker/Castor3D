@@ -11,8 +11,7 @@ namespace castor3d
 	struct StaticRenderNode
 		: public SubmeshRenderNode
 	{
-		C3D_API StaticRenderNode( RenderPipeline & pipeline
-			, PassRenderNode && passNode
+		C3D_API StaticRenderNode( PassRenderNode passNode
 			, UniformBufferOffsetT< ModelMatrixUboConfiguration > modelMatrixBuffer
 			, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
 			, UniformBufferOffsetT< PickingUboConfiguration > pickingBuffer

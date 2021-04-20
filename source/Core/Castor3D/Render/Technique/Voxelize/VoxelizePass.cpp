@@ -344,7 +344,8 @@ namespace castor3d
 		return SceneRenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 1u );
 	}
 
-	void VoxelizePass::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
+	void VoxelizePass::doFillUboDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetLayout const & layout
 		, BillboardListRenderNode & node )
 	{
 		m_voxelizerUbo.createSizedBinding( *node.uboDescriptorSet
@@ -355,7 +356,8 @@ namespace castor3d
 			, m_voxels.getCount() );
 	}
 
-	void VoxelizePass::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
+	void VoxelizePass::doFillUboDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetLayout const & layout
 		, SubmeshRenderNode & node )
 	{
 		m_voxelizerUbo.createSizedBinding( *node.uboDescriptorSet
@@ -369,12 +371,13 @@ namespace castor3d
 	namespace
 	{
 		template< typename DataTypeT, typename InstanceTypeT >
-		void fillTexDescriptor( ashes::DescriptorSetLayout const & layout
+		void fillTexDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, ObjectRenderNode< DataTypeT, InstanceTypeT > & node
 			, ShadowMapLightTypeArray const & shadowMaps )
 		{
-			auto & flags = node.pipeline.getFlags();
+			auto & flags = pipeline.getFlags();
 			ashes::WriteDescriptorSetArray writes;
 
 			if ( !flags.textures.empty() )
@@ -385,7 +388,7 @@ namespace castor3d
 					, flags.textures );
 			}
 
-			bindShadowMaps( node.pipeline.getFlags()
+			bindShadowMaps( flags
 				, shadowMaps
 				, writes
 				, index );
@@ -393,23 +396,27 @@ namespace castor3d
 		}
 	}
 
-	void VoxelizePass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
+	void VoxelizePass::doFillTextureDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, BillboardListRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		fillTexDescriptor( layout
+		fillTexDescriptor( pipeline
+			, layout
 			, index
 			, node
 			, shadowMaps );
 	}
 
-	void VoxelizePass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
+	void VoxelizePass::doFillTextureDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, SubmeshRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		fillTexDescriptor( layout
+		fillTexDescriptor( pipeline
+			, layout
 			, index
 			, node
 			, shadowMaps );

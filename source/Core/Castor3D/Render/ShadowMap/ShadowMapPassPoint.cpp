@@ -216,14 +216,16 @@ namespace castor3d
 		m_onNodeChanged.disconnect();
 	}
 
-	void ShadowMapPassPoint::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
+	void ShadowMapPassPoint::doFillUboDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetLayout const & layout
 		, BillboardListRenderNode & node )
 	{
 		m_shadowMapUbo.createSizedBinding( *node.uboDescriptorSet
 			, layout.getBinding( ShadowMapUbo::BindingPoint ) );
 	}
 
-	void ShadowMapPassPoint::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
+	void ShadowMapPassPoint::doFillUboDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetLayout const & layout
 		, SubmeshRenderNode & node )
 	{
 		m_shadowMapUbo.createSizedBinding( *node.uboDescriptorSet

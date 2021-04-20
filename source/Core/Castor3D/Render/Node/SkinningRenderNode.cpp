@@ -10,8 +10,7 @@ using namespace castor;
 
 namespace castor3d
 {
-	SkinningRenderNode::SkinningRenderNode( RenderPipeline & pipeline
-		, PassRenderNode && passNode
+	SkinningRenderNode::SkinningRenderNode( PassRenderNode passNode
 		, UniformBufferOffsetT< ModelMatrixUboConfiguration > modelMatrixBuffer
 		, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
 		, UniformBufferOffsetT< PickingUboConfiguration > pickingBuffer
@@ -23,8 +22,7 @@ namespace castor3d
 		, Geometry & instance
 		, AnimatedSkeleton & skeleton
 		, UniformBufferOffsetT< SkinningUboConfiguration > skinningUbo )
-		: SubmeshRenderNode{ pipeline
-			, std::move( passNode )
+		: SubmeshRenderNode{ std::move( passNode )
 			, modelMatrixBuffer
 			, modelBuffer
 			, pickingBuffer
