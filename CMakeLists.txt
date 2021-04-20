@@ -109,7 +109,7 @@ if ( CASTOR_USE_DEPS_WXWIDGETS AND WIN32 )
 		message( SEND_ERROR "${DEPENDENCIES_DIR}/wxWidgets not found" )
 	endif ()
 	set( wxWidgets_ROOT_DIR ${DEPENDENCIES_DIR}/wxWidgets CACHE PATH "wxWidgets root directory" FORCE )
-	set( wxWidgets_LIB_DIR ${DEPENDENCIES_DIR}/wxWidgets/lib CACHE PATH "wxWidgets libraries directory" FORCE )
+	set( wxWidgets_LIB_DIR ${DEPENDENCIES_DIR}/wxWidgets/vc_x64_lib CACHE PATH "wxWidgets libraries directory" FORCE )
 endif ()
 
 #--------------------------------------------------------------------------------------------------
