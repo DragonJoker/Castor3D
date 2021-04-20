@@ -16,6 +16,8 @@
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
+#include <CastorUtils/Graphics/HeightMapToNormalMap.hpp>
+
 namespace castor3d
 {
 	namespace
@@ -380,28 +382,15 @@ namespace castor3d
 			if ( auto image = loadImage( path ) )
 			{
 				log::info << "Converting height map to normal map." << std::endl;
-				castor::Size origDimensions{ image->getDimensions() };
-				castor::Size dimensions{ origDimensions.getWidth() * uint32_t( normalStrength ) * 2u
-					, origDimensions.getHeight() * uint32_t( normalStrength ) * 2u };
-				image->resample( dimensions );
-				auto buffer = castor::PxBufferBase::create( dimensions
-					, castor::PixelFormat::eR8_UNORM
-					, image->getPxBuffer().getConstPtr()
-					, image->getPixelFormat()
-					, image->getPxBuffer().getAlign() );
-				auto normals = calculateNormals( castor::makeArrayView( buffer->getConstPtr(), buffer->getSize() )
-					, dimensions );
-				auto nmlHeights = castor::PxBufferBase::create( buffer->getDimensions()
-					, castor::PixelFormat::eR8G8B8A8_UNORM
-					, normals.data()
-					, castor::PixelFormat::eR8G8B8A8_UNORM );
-				castor::Image imageNml{ cuT( "" ), *nmlHeights };
-				imageNml.resample( origDimensions );
-				config.normalMask[0] = 0x00FFFFFF;
-				config.heightMask[0] = 0xFF000000;
-				path = image->getPath();
-				path = path.getPath() / ( "N_" + path.getFileName() + ".png" );
-				getEngine()->getImageWriter().write( path, imageNml.getPxBuffer() );
+
+				if ( castor::convertToNormalMap( 3.0f, *image ) )
+				{
+					config.normalMask[0] = 0x00FFFFFF;
+					config.heightMask[0] = 0xFF000000;
+					path = image->getPath();
+					path = path.getPath() / ( "N_" + path.getFileName() + ".png" );
+					getEngine()->getImageWriter().write( path, image->getPxBuffer() );
+				}
 			}
 		}
 

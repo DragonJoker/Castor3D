@@ -326,6 +326,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/Glyph.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/Grid.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/HdrColourComponent.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/HeightMapToNormalMap.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/Image.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/ImageCache.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/ImageLayout.cpp
@@ -361,6 +362,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/GraphicsModule.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/Grid.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/HdrColourComponent.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/HeightMapToNormalMap.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/Image.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/ImageCache.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/ImageLayout.hpp
