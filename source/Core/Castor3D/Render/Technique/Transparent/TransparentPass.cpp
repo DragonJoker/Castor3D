@@ -315,6 +315,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
+		auto textures = filterTexturesFlags( flags.textures );
 		auto & renderSystem = *getEngine()->getRenderSystem();
 
 		// Fragment Intputs
@@ -383,7 +384,8 @@ namespace castor3d
 		utils.declareRemoveGamma();
 		utils.declareLineariseDepth();
 		utils.declareComputeAccumulation();
-		utils.declareParallaxMappingFunc( flags );
+		utils.declareParallaxMappingFunc( flags.passFlags
+			, getTexturesMask() );
 		auto lighting = shader::PhongLightingModel::createModel( writer
 			, utils
 			, shader::ShadowOptions{ flags.sceneFlags, false }
@@ -433,7 +435,8 @@ namespace castor3d
 					, inTangentSpaceViewPosition );
 				auto tangentSpaceFragPosition = writer.declLocale( "tangentSpaceFragPosition"
 					, inTangentSpaceFragPosition );
-				lighting->computeMapContributions( flags
+				lighting->computeMapContributions( flags.passFlags
+					, textures
 					, gamma
 					, textureConfigs
 					, c3d_textureConfig
@@ -573,6 +576,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
+		auto textures = filterTexturesFlags( flags.textures );
 		auto & renderSystem = *getEngine()->getRenderSystem();
 
 		// Fragment Intputs
@@ -652,7 +656,8 @@ namespace castor3d
 		utils.declareFresnelSchlick();
 		utils.declareComputeIBL();
 		utils.declareComputeAccumulation();
-		utils.declareParallaxMappingFunc( flags );
+		utils.declareParallaxMappingFunc( flags.passFlags
+			, getTexturesMask() );
 		auto lighting = shader::MetallicBrdfLightingModel::createModel( writer
 			, utils
 			, shader::ShadowOptions{ flags.sceneFlags, false }
@@ -706,7 +711,8 @@ namespace castor3d
 					, inTangentSpaceViewPosition );
 				auto tangentSpaceFragPosition = writer.declLocale( "tangentSpaceFragPosition"
 					, inTangentSpaceFragPosition );
-				lighting->computeMapContributions( flags
+				lighting->computeMapContributions( flags.passFlags
+					, textures
 					, gamma
 					, textureConfigs
 					, c3d_textureConfig
@@ -916,6 +922,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
+		auto textures = filterTexturesFlags( flags.textures );
 		auto & renderSystem = *getEngine()->getRenderSystem();
 
 		// Fragment Intputs
@@ -994,7 +1001,8 @@ namespace castor3d
 		utils.declareFresnelSchlick();
 		utils.declareComputeIBL();
 		utils.declareComputeAccumulation();
-		utils.declareParallaxMappingFunc( flags );
+		utils.declareParallaxMappingFunc( flags.passFlags
+			, getTexturesMask() );
 		auto lighting = shader::SpecularBrdfLightingModel::createModel( writer
 			, utils
 			, shader::ShadowOptions{ flags.sceneFlags, false }
@@ -1048,7 +1056,8 @@ namespace castor3d
 					, inTangentSpaceViewPosition );
 				auto tangentSpaceFragPosition = writer.declLocale( "tangentSpaceFragPosition"
 					, inTangentSpaceFragPosition );
-				lighting->computeMapContributions( flags
+				lighting->computeMapContributions( flags.passFlags
+					, textures
 					, gamma
 					, textureConfigs
 					, c3d_textureConfig

@@ -78,7 +78,8 @@ namespace castor3d
 				, ShadowOptions const & shadows
 				, uint32_t & index
 				, bool isOpaqueProgram );
-			C3D_API void computeMapContributions( PipelineFlags const & flags
+			C3D_API void computeMapContributions( PassFlags const & passFlags
+				, FilteredTextureFlags const & textures
 				, sdw::Float const & gamma
 				, TextureConfigurations const & textureConfigs
 				, sdw::Array< sdw::UVec4 > const & textureConfig
@@ -96,7 +97,8 @@ namespace castor3d
 				, sdw::Float & shininess
 				, sdw::Vec3 & tangentSpaceViewPosition
 				, sdw::Vec3 & tangentSpaceFragPosition );
-			C3D_API void computeMapVoxelContributions( PipelineFlags const & flags
+			C3D_API void computeMapVoxelContributions( PassFlags const & passFlags
+				, FilteredTextureFlags const & textures
 				, sdw::Float const & gamma
 				, TextureConfigurations const & textureConfigs
 				, sdw::Array< sdw::UVec4 > const & textureConfig

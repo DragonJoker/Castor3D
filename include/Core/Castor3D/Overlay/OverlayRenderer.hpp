@@ -272,7 +272,7 @@ namespace castor3d
 			, std::map< uint32_t, Pipeline > & pipelines
 			, bool text );
 		ashes::PipelineShaderStageCreateInfoArray doCreateOverlayProgram( RenderDevice const & device
-			, TextureFlagsArray const & textures
+			, FilteredTextureFlags const & textures
 			, bool text );
 		ashes::DescriptorSetPtr doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
 			, TextureFlags textures

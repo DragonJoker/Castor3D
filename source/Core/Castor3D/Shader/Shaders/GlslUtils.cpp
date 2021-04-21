@@ -543,11 +543,12 @@ namespace castor3d::shader
 			, sdw::OutInt{ m_writer, "lighting" } );
 	}
 
-	void Utils::declareParallaxMappingFunc( PipelineFlags const & flags )
+	void Utils::declareParallaxMappingFunc( PassFlags const & passFlags
+		, TextureFlags const & textures )
 	{
-		if ( checkFlags( flags.textures, TextureFlag::eHeight ) != flags.textures.end()
-			&& ( checkFlag( flags.passFlags, PassFlag::eParallaxOcclusionMappingOne )
-			|| checkFlag( flags.passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) )
+		if ( checkFlag( textures, TextureFlag::eHeight )
+			&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
+				|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) )
 		{
 			if ( m_parallaxMapping )
 			{
@@ -831,11 +832,12 @@ namespace castor3d::shader
 			, sdw::InUVec3{ m_writer, "dim" } );
 	}
 
-	void Utils::declareParallaxShadowFunc( PipelineFlags const & flags )
+	void Utils::declareParallaxShadowFunc( PassFlags const & passFlags
+		, TextureFlags const & textures )
 	{
-		if ( checkFlags( flags.textures, TextureFlag::eHeight ) != flags.textures.end()
-			&& ( checkFlag( flags.passFlags, PassFlag::eParallaxOcclusionMappingOne )
-				|| checkFlag( flags.passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) )
+		if ( checkFlag( textures, TextureFlag::eHeight )
+			&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
+				|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) )
 		{
 			if ( m_parallaxShadow )
 			{
@@ -1217,7 +1219,7 @@ namespace castor3d::shader
 		return mat3( normalize( tangent ), normalize( bitangent ), normal );
 	}
 
-	void Utils::computeColourMapContribution( TextureFlagsArray const & flags
+	void Utils::computeColourMapContribution( FilteredTextureFlags const & flags
 		, TextureConfigurations const & textureConfigs
 		, sdw::Array< sdw::UVec4 > const & textureConfig
 		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
@@ -1228,16 +1230,16 @@ namespace castor3d::shader
 
 		if ( it != flags.end() )
 		{
-			auto i = uint32_t( std::distance( flags.begin(), it ) );
+			auto i = it->first;
 			auto colourMapConfig = m_writer.declLocale( "colourMapConfig"
-				, textureConfigs.getTextureConfiguration(  sdw::UInt( it->id + 1u ) ) );
+				, textureConfigs.getTextureConfiguration(  sdw::UInt( it->second.id + 1u ) ) );
 			auto sampledColour = m_writer.declLocale< sdw::Vec4 >( "sampledColour"
 				, maps[i].sample( colourMapConfig.convertUV( m_writer, texCoords.xy() ) ) );
 			colour = colourMapConfig.getDiffuse( m_writer, sampledColour, colour, 1.0_f );
 		}
 	}
 
-	void Utils::computeOpacityMapContribution( TextureFlagsArray const & flags
+	void Utils::computeOpacityMapContribution( FilteredTextureFlags const & flags
 		, TextureConfigurations const & textureConfigs
 		, sdw::Array< sdw::UVec4 > const & textureConfig
 		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
@@ -1248,16 +1250,16 @@ namespace castor3d::shader
 
 		if ( it != flags.end() )
 		{
-			auto i = uint32_t( std::distance( flags.begin(), it ) );
+			auto i = it->first;
 			auto opacityMapConfig = m_writer.declLocale( "opacityMapConfig"
-				, textureConfigs.getTextureConfiguration(  sdw::UInt( it->id + 1u ) ) );
+				, textureConfigs.getTextureConfiguration(  sdw::UInt( it->second.id + 1u ) ) );
 			auto sampledOpacity = m_writer.declLocale< sdw::Vec4 >( "sampledOpacity"
 				, maps[i].sample( opacityMapConfig.convertUV( m_writer, texCoords.xy() ) ) );
 			opacity = opacityMapConfig.getOpacity( m_writer, sampledOpacity, opacity );
 		}
 	}
 
-	void Utils::computeNormalMapContribution( TextureFlagsArray const & flags
+	void Utils::computeNormalMapContribution( FilteredTextureFlags const & flags
 		, TextureConfigurations const & textureConfigs
 		, sdw::Array< sdw::UVec4 > const & textureConfig
 		, sdw::Vec3 & normal
@@ -1272,9 +1274,9 @@ namespace castor3d::shader
 
 		if ( it != flags.end() )
 		{
-			auto i = uint32_t( std::distance( flags.begin(), it ) );
+			auto i = it->first;
 			auto normalMapConfig = m_writer.declLocale( "normalMapConfig"
-				, textureConfigs.getTextureConfiguration(  sdw::UInt( it->id ) ) );
+				, textureConfigs.getTextureConfiguration(  sdw::UInt( it->second.id ) ) );
 			auto sampledNormal = m_writer.declLocale< sdw::Vec4 >( "sampledNormal"
 				, maps[i].sample( normalMapConfig.convertUV( m_writer, texCoords.xy() ) ) );
 			auto tbn = m_writer.declLocale( "tbn"
@@ -1283,7 +1285,7 @@ namespace castor3d::shader
 		}
 	}
 
-	void Utils::computeHeightMapContribution( TextureFlagsArray const & flags
+	void Utils::computeHeightMapContribution( FilteredTextureFlags const & flags
 		, PassFlags const & passFlags
 		, TextureConfigurations const & textureConfigs
 		, sdw::Array< sdw::UVec4 > const & textureConfig
@@ -1298,9 +1300,9 @@ namespace castor3d::shader
 			&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
 				|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) )
 		{
-			auto i = uint32_t( std::distance( flags.begin(), it ) );
+			auto i = it->first;
 			auto heightMapConfig = m_writer.declLocale( "heightMapConfig"
-				, textureConfigs.getTextureConfiguration(  sdw::UInt( it->id ) ) );
+				, textureConfigs.getTextureConfiguration(  sdw::UInt( it->second.id ) ) );
 			texCoords.xy() = parallaxMapping( texCoords.xy()
 				, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
 				, maps[i]
@@ -1360,7 +1362,7 @@ namespace castor3d::shader
 		return result;
 	}
 
-	void Utils::computeGeometryMapsContributions( TextureFlagsArray const & flags
+	void Utils::computeGeometryMapsContributions( FilteredTextureFlags const & flags
 		, PassFlags const & passFlags
 		, TextureConfigurations const & textureConfigs
 		, sdw::Array< sdw::UVec4 > const & textureConfig
@@ -1370,12 +1372,13 @@ namespace castor3d::shader
 		, sdw::Vec3 & tangentSpaceViewPosition
 		, sdw::Vec3 & tangentSpaceFragPosition )
 	{
-		for ( uint32_t i = 0u; i < flags.size(); ++i )
+		for ( auto & textureIt : flags )
 		{
+			auto i = textureIt.first;
 			auto name = castor::string::stringCast< char >( castor::string::toString( i, std::locale{ "C" } ) );
 			auto config = m_writer.declLocale( "config" + name
-				, textureConfigs.getTextureConfiguration( m_writer.cast<  sdw::UInt >( flags[i].id ) ) );
-			computeGeometryMapContribution( flags[i].flags
+				, textureConfigs.getTextureConfiguration( m_writer.cast<  sdw::UInt >( textureIt.second.id ) ) );
+			computeGeometryMapContribution( textureIt.second.flags
 				, passFlags
 				, name
 				, config
@@ -1471,7 +1474,7 @@ namespace castor3d::shader
 		return result;
 	}
 
-	void Utils::computeCommonMapsContributions( TextureFlagsArray const & flags
+	void Utils::computeCommonMapsContributions( FilteredTextureFlags const & flags
 		, PassFlags const & passFlags
 		, sdw::Float const & gamma
 		, TextureConfigurations const & textureConfigs
@@ -1488,12 +1491,13 @@ namespace castor3d::shader
 		, sdw::Vec3 & tangentSpaceViewPosition
 		, sdw::Vec3 & tangentSpaceFragPosition )
 	{
-		for ( uint32_t i = 0u; i < flags.size(); ++i )
+		for ( auto & textureIt : flags )
 		{
+			auto i = textureIt.first;
 			auto name = castor::string::stringCast< char >( castor::string::toString( i, std::locale{ "C" } ) );
 			auto config = m_writer.declLocale( "config" + name
-				, textureConfigs.getTextureConfiguration( m_writer.cast<  sdw::UInt >( flags[i].id ) ) );
-			computeCommonMapContribution( flags[i].flags
+				, textureConfigs.getTextureConfiguration( m_writer.cast<  sdw::UInt >( textureIt.second.id ) ) );
+			computeCommonMapContribution( textureIt.second.flags
 				, passFlags
 				, name
 				, config
