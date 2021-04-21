@@ -96,6 +96,7 @@ namespace castor3d
 					, utils
 					, LightType::eDirectional
 					, false // lightUbo
+					, 0u // lightUboBinding
 					, shader::ShadowOptions{ SceneFlag::eNone, true }
 					, index );
 
@@ -172,6 +173,7 @@ namespace castor3d
 					, utils
 					, LightType::eDirectional
 					, false // lightUbo
+					, 0u // lightUboBinding
 					, shader::ShadowOptions{ SceneFlag::eNone, true }
 					, index );
 
@@ -252,6 +254,7 @@ namespace castor3d
 				, utils
 				, LightType::eSpot
 				, false // lightUbo
+				, 0u // lightUboBinding
 				, shader::ShadowOptions{ SceneFlag::eNone, true }
 				, index );
 
@@ -331,6 +334,7 @@ namespace castor3d
 				, utils
 				, LightType::eSpot
 				, false // lightUbo
+				, 0u // lightUboBinding
 				, shader::ShadowOptions{ SceneFlag::eNone, true }
 				, index );
 

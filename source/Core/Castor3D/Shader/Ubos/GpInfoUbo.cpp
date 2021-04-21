@@ -7,7 +7,6 @@
 
 namespace castor3d
 {
-	uint32_t const GpInfoUbo::BindingPoint = 6u;
 	const castor::String GpInfoUbo::GPInfo = cuT( "GPInfo" );
 	const castor::String GpInfoUbo::InvViewProj = cuT( "c3d_mtxInvViewProj" );
 	const castor::String GpInfoUbo::InvView = cuT( "c3d_mtxInvView" );

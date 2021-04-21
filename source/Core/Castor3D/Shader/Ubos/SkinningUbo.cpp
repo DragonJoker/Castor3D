@@ -10,7 +10,6 @@
 
 namespace castor3d
 {
-	uint32_t const SkinningUbo::BindingPoint = 8u;
 	castor::String const SkinningUbo::BufferSkinning = cuT( "Skinning" );
 	castor::String const SkinningUbo::Bones = cuT( "c3d_mtxBones" );
 

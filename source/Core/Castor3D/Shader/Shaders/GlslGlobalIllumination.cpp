@@ -25,26 +25,29 @@ namespace castor3d
 		{
 		}
 
-		void GlobalIllumination::declare( uint32_t setIndex
-			, uint32_t & bindingIndex
+		void GlobalIllumination::declare( uint32_t vctUboBindingIndex
+			, uint32_t lpvUboBindingIndex
+			, uint32_t llpvUboBindingIndex
+			, uint32_t & texBindingIndex
+			, uint32_t texSetIndex
 			, SceneFlags sceneFlags )
 		{
 			using namespace sdw;
 
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
-				declareVct( bindingIndex, setIndex );
+				declareVct( vctUboBindingIndex, texBindingIndex, texSetIndex );
 			}
 			else if ( !m_deferred )
 			{
 				if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 				{
-					declareLpv( bindingIndex, setIndex );
+					declareLpv( lpvUboBindingIndex, texBindingIndex, texSetIndex );
 				}
 
 				if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
 				{
-					declareLayeredLpv( bindingIndex, setIndex );
+					declareLayeredLpv( llpvUboBindingIndex, texBindingIndex, texSetIndex );
 				}
 			}
 		}
@@ -106,29 +109,31 @@ namespace castor3d
 				, InVoxelData{ m_writer, "voxelData" } );
 		}
 
-		void GlobalIllumination::declareVct( uint32_t & bindingIndex
-			, uint32_t setIndex )
+		void GlobalIllumination::declareVct( uint32_t uboBindingIndex
+			, uint32_t & texBindingIndex
+			, uint32_t texSetIndex )
 		{
-			UBO_VOXELIZER( m_writer, VoxelizerUbo::BindingPoint, 0u, true );
-			m_writer.declSampledImage< FImg3DRgba32 >( "c3d_mapVoxelsFirstBounce", bindingIndex++, setIndex );
-			m_writer.declSampledImage< FImg3DRgba32 >( "c3d_mapVoxelsSecondaryBounce", bindingIndex++, setIndex );
+			UBO_VOXELIZER( m_writer, uboBindingIndex, 0u, true );
+			m_writer.declSampledImage< FImg3DRgba32 >( "c3d_mapVoxelsFirstBounce", texBindingIndex++, texSetIndex );
+			m_writer.declSampledImage< FImg3DRgba32 >( "c3d_mapVoxelsSecondaryBounce", texBindingIndex++, texSetIndex );
 			declareTraceConeRadiance();
 			declareTraceConeReflection();
 			declareTraceConeOcclusion();
 		}
 
-		void GlobalIllumination::declareLpv( uint32_t & bindingIndex
-			, uint32_t setIndex
+		void GlobalIllumination::declareLpv( uint32_t uboBindingIndex
+			, uint32_t & texBindingIndex
+			, uint32_t texSetIndex
 			, bool declUbo )
 		{
 			if ( declUbo )
 			{
-				UBO_LPVGRIDCONFIG( m_writer, LpvGridConfigUbo::BindingPoint, 0u, true );
+				UBO_LPVGRIDCONFIG( m_writer, uboBindingIndex, 0u, true );
 			}
 
-			auto c3d_lpvAccumulatorR = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator" ), bindingIndex++, setIndex );
-			auto c3d_lpvAccumulatorG = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator" ), bindingIndex++, setIndex );
-			auto c3d_lpvAccumulatorB = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator" ), bindingIndex++, setIndex );
+			auto c3d_lpvAccumulatorR = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulatorG = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulatorB = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator" ), texBindingIndex++, texSetIndex );
 
 			/*Spherical harmonics coefficients - precomputed*/
 			auto SH_C0 = m_writer.declConstant( "SH_C0"
@@ -172,26 +177,27 @@ namespace castor3d
 				, InLpvGridData{ m_writer, "lpvGridData" } );
 		}
 
-		void GlobalIllumination::declareLayeredLpv( uint32_t & bindingIndex
-			, uint32_t setIndex
+		void GlobalIllumination::declareLayeredLpv( uint32_t uboBindingIndex
+			, uint32_t & texBindingIndex
+			, uint32_t texSetIndex
 			, bool declUbo )
 		{
 			using namespace sdw;
 
 			if ( declUbo )
 			{
-				UBO_LAYERED_LPVGRIDCONFIG( m_writer, LayeredLpvGridConfigUbo::BindingPoint, 0u, true );
+				UBO_LAYERED_LPVGRIDCONFIG( m_writer, uboBindingIndex, 0u, true );
 			}
 
-			auto c3d_lpvAccumulator1R = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator1" ), bindingIndex++, setIndex );
-			auto c3d_lpvAccumulator1G = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator1" ), bindingIndex++, setIndex );
-			auto c3d_lpvAccumulator1B = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator1" ), bindingIndex++, setIndex );
-			auto c3d_lpvAccumulator2R = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator2" ), bindingIndex++, setIndex );
-			auto c3d_lpvAccumulator2G = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator2" ), bindingIndex++, setIndex );
-			auto c3d_lpvAccumulator2B = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator2" ), bindingIndex++, setIndex );
-			auto c3d_lpvAccumulator3R = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator3" ), bindingIndex++, setIndex );
-			auto c3d_lpvAccumulator3G = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator3" ), bindingIndex++, setIndex );
-			auto c3d_lpvAccumulator3B = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator3" ), bindingIndex++, setIndex );
+			auto c3d_lpvAccumulator1R = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator1" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulator1G = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator1" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulator1B = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator1" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulator2R = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator2" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulator2G = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator2" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulator2B = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator2" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulator3R = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator3" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulator3G = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator3" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulator3B = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator3" ), texBindingIndex++, texSetIndex );
 
 			/*Spherical harmonics coefficients - precomputed*/
 			auto SH_C0 = m_writer.declConstant( "SH_C0"

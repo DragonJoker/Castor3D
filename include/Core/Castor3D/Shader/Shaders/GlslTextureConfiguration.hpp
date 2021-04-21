@@ -128,7 +128,8 @@ namespace castor3d
 		{
 		public:
 			C3D_API explicit TextureConfigurations( sdw::ShaderWriter & writer );
-			C3D_API void declare( bool hasSsbo );
+			C3D_API void declare( bool hasSsbo
+				, uint32_t binding );
 			C3D_API TextureConfigData getTextureConfiguration( sdw::UInt const & index )const;
 
 		private:

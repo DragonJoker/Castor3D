@@ -14,7 +14,6 @@ namespace castor3d
 		using Configuration = MorphingUboConfiguration;
 
 	public:
-		C3D_API static uint32_t const BindingPoint;
 		//!\~english	Name of the morphing animation frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les données d'animation de morphing.
 		C3D_API static castor::String const BufferMorphing;

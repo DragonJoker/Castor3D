@@ -8,7 +8,6 @@
 
 namespace castor3d
 {
-	uint32_t const MatrixUbo::BindingPoint = 3u;
 	castor::String const MatrixUbo::BufferMatrix = cuT( "Matrices" );
 	castor::String const MatrixUbo::Projection = cuT( "c3d_projection" );
 	castor::String const MatrixUbo::CurView = cuT( "c3d_curView" );

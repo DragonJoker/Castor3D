@@ -14,7 +14,6 @@ namespace castor3d
 		using Configuration = ModelUboConfiguration;
 
 	public:
-		C3D_API static uint32_t const BindingPoint;
 		//!\~english	Name of the model frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les données de modèle.
 		C3D_API static castor::String const BufferModel;

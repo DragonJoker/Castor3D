@@ -14,7 +14,6 @@ namespace castor3d
 		using Configuration = BillboardUboConfiguration;
 
 	public:
-		C3D_API static const uint32_t BindingPoint;
 		//!\~english	Name of the billboards frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les données de billboards.
 		C3D_API static castor::String const BufferBillboard;
