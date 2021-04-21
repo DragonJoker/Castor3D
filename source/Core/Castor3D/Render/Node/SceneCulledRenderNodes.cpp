@@ -128,18 +128,16 @@ namespace castor3d
 
 		GeometryBuffers const & getGeometryBuffers( Submesh const & submesh
 			, Pass const & pass
-			, uint32_t instanceCount
-			, TextureFlags mask )
+			, uint32_t instanceCount )
 		{
 			return submesh.getGeometryBuffers( pass.getOwner()->shared_from_this()
 				, instanceCount
-				, pass.getTextures( mask ) );
+				, pass.getTexturesMask() );
 		}
 
 		GeometryBuffers const & getGeometryBuffers( BillboardBase const & billboard
 			, Pass const & pass
-			, uint32_t instanceCount
-			, TextureFlags mask )
+			, uint32_t instanceCount )
 		{
 			return billboard.getGeometryBuffers();
 		}
@@ -150,15 +148,13 @@ namespace castor3d
 			, ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissor
-			, uint32_t instanceCount
-			, TextureFlags mask )
+			, uint32_t instanceCount )
 		{
 			if ( instanceCount )
 			{
 				GeometryBuffers const & geometryBuffers = getGeometryBuffers( node.data
 					, node.passNode.pass
-					, instanceCount
-					, mask );
+					, instanceCount );
 
 				commandBuffer.bindPipeline( pipeline.getPipeline() );
 
@@ -210,14 +206,13 @@ namespace castor3d
 			, ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissor
-			, uint32_t instanceCount
-			, TextureFlags mask )
+			, uint32_t instanceCount )
 		{
 			if ( instanceCount )
 			{
 				GeometryBuffers const & geometryBuffers = object.getGeometryBuffers( pass.getOwner()->shared_from_this()
 					, instanceCount
-					, pass.getTextures( mask ) );
+					, pass.getTexturesMask() );
 
 				commandBuffer.bindPipeline( pipeline.getPipeline() );
 
@@ -269,8 +264,7 @@ namespace castor3d
 			, Pass & pass
 			, Submesh & submesh
 			, CulledMapType & renderNodes
-			, uint32_t instanceMult
-			, TextureFlags mask )
+			, uint32_t instanceMult )
 		{
 			doAddRenderNodeCommands( pass
 				, pipeline
@@ -279,8 +273,7 @@ namespace castor3d
 				, commandBuffer
 				, viewport
 				, scissor
-				, uint32_t( renderNodes.size() * instanceMult )
-				, mask );
+				, uint32_t( renderNodes.size() * instanceMult ) );
 		}
 
 		template< typename MapType >
@@ -288,8 +281,7 @@ namespace castor3d
 			, ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissor
-			, uint32_t instanceMult
-			, TextureFlags mask )
+			, uint32_t instanceMult )
 		{
 			for ( auto & pipelines : inputNodes )
 			{
@@ -300,8 +292,7 @@ namespace castor3d
 						, commandBuffer
 						, viewport
 						, scissor
-						, instanceMult
-						, mask );
+						, instanceMult );
 				}
 			}
 		}
@@ -311,8 +302,7 @@ namespace castor3d
 			, ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissor
-			, uint32_t instanceMult
-			, TextureFlags mask )
+			, uint32_t instanceMult )
 		{
 			for ( auto & pipelines : inputNodes )
 			{
@@ -323,8 +313,7 @@ namespace castor3d
 						, commandBuffer
 						, viewport
 						, scissor
-						, node->instance.getCount()
-						, mask );
+						, node->instance.getCount() );
 				}
 			}
 		}
@@ -472,8 +461,7 @@ namespace castor3d
 					, pass
 					, submesh
 					, nodes
-					, queue.getOwner()->getInstanceMult()
-					, queue.getOwner()->getTexturesMask() );
+					, queue.getOwner()->getInstanceMult() );
 			} );
 		doTraverseNodes( instancedStaticNodes.backCulled
 			, [&queue, &viewport, &scissors]( RenderPipeline & pipeline
@@ -488,8 +476,7 @@ namespace castor3d
 					, pass
 					, submesh
 					, nodes
-					, queue.getOwner()->getInstanceMult()
-					, queue.getOwner()->getTexturesMask() );
+					, queue.getOwner()->getInstanceMult() );
 			} );
 		doTraverseNodes( instancedSkinnedNodes.frontCulled
 			, [&queue, &viewport, &scissors]( RenderPipeline & pipeline
@@ -504,8 +491,7 @@ namespace castor3d
 					, pass
 					, submesh
 					, nodes
-					, queue.getOwner()->getInstanceMult()
-					, queue.getOwner()->getTexturesMask() );
+					, queue.getOwner()->getInstanceMult() );
 			} );
 		doTraverseNodes( instancedSkinnedNodes.backCulled
 			, [&queue, &viewport, &scissors]( RenderPipeline & pipeline
@@ -520,61 +506,52 @@ namespace castor3d
 					, pass
 					, submesh
 					, nodes
-					, queue.getOwner()->getInstanceMult()
-					, queue.getOwner()->getTexturesMask() );
+					, queue.getOwner()->getInstanceMult() );
 			} );
 
 		doParseRenderNodesCommands( staticNodes.frontCulled
 			, queue.getCommandBuffer()
 			, viewport
 			, scissors
-			, queue.getOwner()->getInstanceMult()
-			, queue.getOwner()->getTexturesMask() );
+			, queue.getOwner()->getInstanceMult() );
 		doParseRenderNodesCommands( staticNodes.backCulled
 			, queue.getCommandBuffer()
 			, viewport
 			, scissors
-			, queue.getOwner()->getInstanceMult()
-			, queue.getOwner()->getTexturesMask() );
+			, queue.getOwner()->getInstanceMult() );
 
 		doParseRenderNodesCommands( skinnedNodes.frontCulled
 			, queue.getCommandBuffer()
 			, viewport
 			, scissors
-			, queue.getOwner()->getInstanceMult()
-			, queue.getOwner()->getTexturesMask() );
+			, queue.getOwner()->getInstanceMult() );
 		doParseRenderNodesCommands( skinnedNodes.backCulled
 			, queue.getCommandBuffer()
 			, viewport
 			, scissors
-			, queue.getOwner()->getInstanceMult()
-			, queue.getOwner()->getTexturesMask() );
+			, queue.getOwner()->getInstanceMult() );
 
 		doParseRenderNodesCommands( morphingNodes.frontCulled
 			, queue.getCommandBuffer()
 			, viewport
 			, scissors
-			, queue.getOwner()->getInstanceMult()
-			, queue.getOwner()->getTexturesMask() );
+			, queue.getOwner()->getInstanceMult() );
 		doParseRenderNodesCommands( morphingNodes.backCulled
 			, queue.getCommandBuffer()
 			, viewport
 			, scissors
-			, queue.getOwner()->getInstanceMult()
-			, queue.getOwner()->getTexturesMask() );
+			, queue.getOwner()->getInstanceMult() );
 
 		doParseRenderNodesCommands( billboardNodes.frontCulled
 			, queue.getCommandBuffer()
 			, viewport
 			, scissors
-			, queue.getOwner()->getInstanceMult()
-			, queue.getOwner()->getTexturesMask() );
+			, queue.getOwner()->getInstanceMult() );
 		doParseRenderNodesCommands( billboardNodes.backCulled
 			, queue.getCommandBuffer()
 			, viewport
 			, scissors
-			, queue.getOwner()->getInstanceMult()
-			, queue.getOwner()->getTexturesMask() );
+			, queue.getOwner()->getInstanceMult() );
 
 		queue.getCommandBuffer().end();
 	}

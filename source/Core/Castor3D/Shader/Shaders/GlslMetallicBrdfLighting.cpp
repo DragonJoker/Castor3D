@@ -321,7 +321,8 @@ namespace castor3d
 			return result;
 		}
 
-		void MetallicBrdfLightingModel::computeMapContributions( PipelineFlags const & flags
+		void MetallicBrdfLightingModel::computeMapContributions( PassFlags const & passFlags
+			, FilteredTextureFlags const & textures
 			, sdw::Float const & gamma
 			, TextureConfigurations const & textureConfigs
 			, sdw::Array< sdw::UVec4 > const & textureConfig
@@ -340,14 +341,15 @@ namespace castor3d
 			, sdw::Vec3 & tangentSpaceViewPosition
 			, sdw::Vec3 & tangentSpaceFragPosition )
 		{
-			for ( uint32_t i = 0u; i < flags.textures.size(); ++i )
+			for ( auto & textureIt : textures )
 			{
+				auto i = textureIt.first;
 				auto name = string::stringCast< char >( string::toString( i, std::locale{ "C" } ) );
 				auto config = m_writer.declLocale( "config" + name
-					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( flags.textures[i].id ) ) );
+					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( textureIt.second.id ) ) );
 				auto sampled = m_writer.declLocale( "sampled" + name
-					, m_utils.computeCommonMapContribution( flags.textures[i].flags
-						, flags.passFlags
+					, m_utils.computeCommonMapContribution( textureIt.second.flags
+						, passFlags
 						, name
 						, config
 						, maps[i]
@@ -363,24 +365,25 @@ namespace castor3d
 						, tangentSpaceViewPosition
 						, tangentSpaceFragPosition ) );
 
-				if ( checkFlag( flags.textures[i].flags, TextureFlag::eAlbedo ) )
+				if ( checkFlag( textureIt.second.flags, TextureFlag::eAlbedo ) )
 				{
 					albedo = config.getAlbedo( m_writer, sampled, albedo, gamma );
 				}
 
-				if ( checkFlag( flags.textures[i].flags, TextureFlag::eMetalness ) )
+				if ( checkFlag( textureIt.second.flags, TextureFlag::eMetalness ) )
 				{
 					metallic = config.getMetalness( m_writer, sampled, metallic );
 				}
 
-				if ( checkFlag( flags.textures[i].flags, TextureFlag::eRoughness ) )
+				if ( checkFlag( textureIt.second.flags, TextureFlag::eRoughness ) )
 				{
 					roughness = config.getRoughness( m_writer, sampled, roughness );
 				}
 			}
 		}
 
-		void MetallicBrdfLightingModel::computeMapVoxelContributions( PipelineFlags const & flags
+		void MetallicBrdfLightingModel::computeMapVoxelContributions( PassFlags const & passFlags
+			, FilteredTextureFlags const & textures
 			, sdw::Float const & gamma
 			, TextureConfigurations const & textureConfigs
 			, sdw::Array< sdw::UVec4 > const & textureConfig
@@ -393,14 +396,15 @@ namespace castor3d
 			, sdw::Float & metallic
 			, sdw::Float & roughness )
 		{
-			for ( uint32_t i = 0u; i < flags.textures.size(); ++i )
+			for ( auto & textureIt : textures )
 			{
+				auto i = textureIt.first;
 				auto name = string::stringCast< char >( string::toString( i, std::locale{ "C" } ) );
 				auto config = m_writer.declLocale( "config" + name
-					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( flags.textures[i].id ) ) );
+					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( textureIt.second.id ) ) );
 				auto sampled = m_writer.declLocale( "sampled" + name
-					, m_utils.computeCommonMapVoxelContribution( flags.textures[i].flags
-						, flags.passFlags
+					, m_utils.computeCommonMapVoxelContribution( textureIt.second.flags
+						, passFlags
 						, name
 						, config
 						, maps[i]
@@ -410,17 +414,17 @@ namespace castor3d
 						, opacity
 						, occlusion ) );
 
-				if ( checkFlag( flags.textures[i].flags, TextureFlag::eAlbedo ) )
+				if ( checkFlag( textureIt.second.flags, TextureFlag::eAlbedo ) )
 				{
 					albedo = config.getAlbedo( m_writer, sampled, albedo, gamma );
 				}
 
-				if ( checkFlag( flags.textures[i].flags, TextureFlag::eMetalness ) )
+				if ( checkFlag( textureIt.second.flags, TextureFlag::eMetalness ) )
 				{
 					metallic = config.getMetalness( m_writer, sampled, metallic );
 				}
 
-				if ( checkFlag( flags.textures[i].flags, TextureFlag::eRoughness ) )
+				if ( checkFlag( textureIt.second.flags, TextureFlag::eRoughness ) )
 				{
 					roughness = config.getRoughness( m_writer, sampled, roughness );
 				}

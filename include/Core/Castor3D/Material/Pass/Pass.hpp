@@ -158,7 +158,7 @@ namespace castor3d
 		C3D_API bool needsGammaCorrection()const;
 		C3D_API TextureUnitPtrArray getTextureUnits( TextureFlags mask = TextureFlag::eAll )const;
 		C3D_API uint32_t getTextureUnitsCount( TextureFlags mask = TextureFlag::eAll )const;
-		C3D_API TextureFlagsArray getTextures( TextureFlags mask )const;
+		C3D_API TextureFlagsArray getTexturesMask( TextureFlags mask = TextureFlag::eAll )const;
 
 		TextureFlags const & getTextures()const
 		{

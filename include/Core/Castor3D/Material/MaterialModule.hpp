@@ -111,6 +111,7 @@ namespace castor3d
 	};
 	C3D_API bool operator==( TextureFlagsId const & lhs, TextureFlagsId const & rhs );
 	using TextureFlagsArray = std::vector< TextureFlagsId >;
+	using FilteredTextureFlags = std::map< uint32_t, TextureFlagsId >;
 	/**
 	*\~english
 	*\brief

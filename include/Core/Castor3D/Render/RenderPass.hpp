@@ -633,6 +633,17 @@ namespace castor3d
 		C3D_API void updateFlags( PipelineFlags & flags )const;
 		/**
 		 *\~english
+		 *\brief		Filters the given textures flags using this pass needed textures.
+		 *\param[in]	textures	The textures flags.
+		 *\return		The filtered flags.
+		 *\~french
+		 *\brief		Filtre les indicateurs de textures donnés en utilisant ceux voulus par cette passe.
+		 *\param[in]	textures	Les indicateurs de textures.
+		 *\return		Les indicateurs filtrés.
+		 */
+		C3D_API FilteredTextureFlags filterTexturesFlags( TextureFlagsArray const & textures )const;
+		/**
+		 *\~english
 		 *\brief		Creates a blend state matching given blend modes.
 		 *\param[in]	colourBlendMode	The colour blend mode.
 		 *\param[in]	alphaBlendMode	The alpha blend mode.

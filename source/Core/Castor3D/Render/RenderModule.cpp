@@ -145,6 +145,17 @@ namespace castor3d
 			|| renderMode == RenderMode::eOpaqueOnly;
 	}
 
+	FilteredTextureFlags::const_iterator checkFlags( FilteredTextureFlags const & flags, TextureFlag flag )
+	{
+		auto it = std::find_if( flags.begin()
+			, flags.end()
+			, [flag]( FilteredTextureFlags::value_type const & lookup )
+			{
+				return checkFlag( lookup.second.flags, flag );
+			} );
+		return it;
+	}
+
 	TextureFlagsArray::const_iterator checkFlags( TextureFlagsArray const & flags, TextureFlag flag )
 	{
 		auto it = std::find_if( flags.begin()
@@ -163,6 +174,25 @@ namespace castor3d
 		for ( auto flag : flags )
 		{
 			result |= flag.flags;
+		}
+
+		return result;
+	}
+
+	FilteredTextureFlags filterTexturesFlags( TextureFlagsArray const & textures
+		, TextureFlags mask )
+	{
+		FilteredTextureFlags result;
+		uint32_t index = 0u;
+
+		for ( auto & flagId : textures )
+		{
+			if ( ( flagId.flags & mask ) != 0 )
+			{
+				result.emplace( index, flagId );
+			}
+
+			++index;
 		}
 
 		return result;

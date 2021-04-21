@@ -212,8 +212,23 @@ namespace castor3d
 	C3D_API castor::String getName( RenderMode value );
 	C3D_API bool isValidNodeForPass( PassFlags const & passFlags, RenderMode value );
 
+	C3D_API FilteredTextureFlags::const_iterator checkFlags( FilteredTextureFlags const & flags, TextureFlag flag );
 	C3D_API TextureFlagsArray::const_iterator checkFlags( TextureFlagsArray const & flags, TextureFlag flag );
 	C3D_API TextureFlags merge( TextureFlagsArray const & flags );
+	/**
+	 *\~english
+	 *\brief		Filters the given textures flags using the given mask.
+	 *\param[in]	textures	The textures flags.
+	 *\param[in]	mask		The mask used to filter out textures.
+	 *\return		The filtered flags.
+	 *\~french
+	 *\brief		Filtre les indicateurs de textures donnés en utilisant le masque donné.
+	 *\param[in]	textures	Les indicateurs de textures.
+	 *\param[in]	mask		Le masque utilisé pour le filtre.
+	 *\return		Les indicateurs filtrés.
+	 */
+	C3D_API FilteredTextureFlags filterTexturesFlags( TextureFlagsArray const & textures
+		, TextureFlags mask );
 	/**
 	*\~english
 	*\brief

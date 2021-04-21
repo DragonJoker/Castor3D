@@ -301,7 +301,8 @@ namespace castor3d
 			return result;
 		}
 
-		void SpecularBrdfLightingModel::computeMapContributions( PipelineFlags const & flags
+		void SpecularBrdfLightingModel::computeMapContributions( PassFlags const & passFlags
+			, FilteredTextureFlags const & textures
 			, sdw::Float const & gamma
 			, TextureConfigurations const & textureConfigs
 			, sdw::Array< sdw::UVec4 > const & textureConfig
@@ -320,17 +321,17 @@ namespace castor3d
 			, sdw::Vec3 & tangentSpaceViewPosition
 			, sdw::Vec3 & tangentSpaceFragPosition )
 		{
-			for ( uint32_t i = 0u; i < flags.textures.size(); ++i )
+			for ( auto & textureIt : textures )
 			{
-				auto name = string::stringCast< char >( string::toString( i, std::locale{ "C" } ) );
+				auto name = string::stringCast< char >( string::toString( textureIt.first, std::locale{ "C" } ) );
 				auto config = m_writer.declLocale( "config" + name
-					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( flags.textures[i].id ) ) );
+					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( textureIt.second.id ) ) );
 				auto sampled = m_writer.declLocale( "sampled" + name
-					, m_utils.computeCommonMapContribution( flags.textures[i].flags
-						, flags.passFlags
+					, m_utils.computeCommonMapContribution( textureIt.second.flags
+						, passFlags
 						, name
 						, config
-						, maps[i]
+						, maps[textureIt.first]
 						, gamma
 						, texCoords
 						, normal
@@ -343,24 +344,25 @@ namespace castor3d
 						, tangentSpaceViewPosition
 						, tangentSpaceFragPosition ) );
 
-				if ( checkFlag( flags.textures[i].flags, TextureFlag::eAlbedo ) )
+				if ( checkFlag( textureIt.second.flags, TextureFlag::eAlbedo ) )
 				{
 					albedo = config.getAlbedo( m_writer, sampled, albedo, gamma );
 				}
 
-				if ( checkFlag( flags.textures[i].flags, TextureFlag::eSpecular ) )
+				if ( checkFlag( textureIt.second.flags, TextureFlag::eSpecular ) )
 				{
 					specular = config.getSpecular( m_writer, sampled, specular );
 				}
 
-				if ( checkFlag( flags.textures[i].flags, TextureFlag::eGlossiness ) )
+				if ( checkFlag( textureIt.second.flags, TextureFlag::eGlossiness ) )
 				{
 					glossiness = config.getGlossiness( m_writer, sampled, glossiness );
 				}
 			}
 		}
 
-		void SpecularBrdfLightingModel::computeMapVoxelContributions( PipelineFlags const & flags
+		void SpecularBrdfLightingModel::computeMapVoxelContributions( PassFlags const & passFlags
+			, FilteredTextureFlags const & textures
 			, sdw::Float const & gamma
 			, TextureConfigurations const & textureConfigs
 			, sdw::Array< sdw::UVec4 > const & textureConfig
@@ -373,34 +375,34 @@ namespace castor3d
 			, sdw::Vec3 & specular
 			, sdw::Float & glossiness )
 		{
-			for ( uint32_t i = 0u; i < flags.textures.size(); ++i )
+			for ( auto & textureIt : textures )
 			{
-				auto name = string::stringCast< char >( string::toString( i, std::locale{ "C" } ) );
+				auto name = string::stringCast< char >( string::toString( textureIt.first, std::locale{ "C" } ) );
 				auto config = m_writer.declLocale( "config" + name
-					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( flags.textures[i].id ) ) );
+					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( textureIt.second.id ) ) );
 				auto sampled = m_writer.declLocale( "sampled" + name
-					, m_utils.computeCommonMapVoxelContribution( flags.textures[i].flags
-						, flags.passFlags
+					, m_utils.computeCommonMapVoxelContribution( textureIt.second.flags
+						, passFlags
 						, name
 						, config
-						, maps[i]
+						, maps[textureIt.first]
 						, gamma
 						, texCoords
 						, emissive
 						, opacity
 						, occlusion ) );
 
-				if ( checkFlag( flags.textures[i].flags, TextureFlag::eAlbedo ) )
+				if ( checkFlag( textureIt.second.flags, TextureFlag::eAlbedo ) )
 				{
 					albedo = config.getAlbedo( m_writer, sampled, albedo, gamma );
 				}
 
-				if ( checkFlag( flags.textures[i].flags, TextureFlag::eSpecular ) )
+				if ( checkFlag( textureIt.second.flags, TextureFlag::eSpecular ) )
 				{
 					specular = config.getSpecular( m_writer, sampled, specular );
 				}
 
-				if ( checkFlag( flags.textures[i].flags, TextureFlag::eGlossiness ) )
+				if ( checkFlag( textureIt.second.flags, TextureFlag::eGlossiness ) )
 				{
 					glossiness = config.getGlossiness( m_writer, sampled, glossiness );
 				}

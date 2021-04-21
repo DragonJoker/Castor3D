@@ -267,6 +267,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
+		auto textures = filterTexturesFlags( flags.textures );
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		bool hasTextures = !flags.textures.empty();
 
@@ -334,7 +335,8 @@ namespace castor3d
 		shader::Fog fog{ getFogType( flags.sceneFlags ), writer };
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
-		utils.declareParallaxMappingFunc( flags );
+		utils.declareParallaxMappingFunc( flags.passFlags
+			, getTexturesMask() );
 		auto lighting = shader::PhongLightingModel::createModel( writer
 			, utils
 			, shader::ShadowOptions{ flags.sceneFlags, false }
@@ -381,7 +383,8 @@ namespace castor3d
 				{
 					auto texCoord = writer.declLocale( "texCoord"
 						, inTexture );
-					lighting->computeMapContributions( flags
+					lighting->computeMapContributions( flags.passFlags
+						, textures
 						, gamma
 						, textureConfigs
 						, c3d_textureConfig
@@ -524,6 +527,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
+		auto textures = filterTexturesFlags( flags.textures );
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		bool hasTextures = !flags.textures.empty();
 
@@ -602,7 +606,8 @@ namespace castor3d
 		utils.declareFresnelSchlick();
 		utils.declareComputeIBL();
 		utils.declareInvertVec3Y();
-		utils.declareParallaxMappingFunc( flags );
+		utils.declareParallaxMappingFunc( flags.passFlags
+			, getTexturesMask() );
 		auto lighting = shader::MetallicBrdfLightingModel::createModel( writer
 			, utils
 			, shader::ShadowOptions{ flags.sceneFlags, false }
@@ -658,7 +663,8 @@ namespace castor3d
 				{
 					auto texCoord = writer.declLocale( "texCoord"
 						, inTexture );
-					lighting->computeMapContributions( flags
+					lighting->computeMapContributions( flags.passFlags
+						, textures
 						, gamma
 						, textureConfigs
 						, c3d_textureConfig
@@ -869,6 +875,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
+		auto textures = filterTexturesFlags( flags.textures );
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		bool hasTextures = !flags.textures.empty();
 
@@ -947,7 +954,8 @@ namespace castor3d
 		utils.declareRemoveGamma();
 		utils.declareFresnelSchlick();
 		utils.declareComputeIBL();
-		utils.declareParallaxMappingFunc( flags );
+		utils.declareParallaxMappingFunc( flags.passFlags
+			, getTexturesMask() );
 		auto lighting = shader::SpecularBrdfLightingModel::createModel( writer
 			, utils
 			, shader::ShadowOptions{ flags.sceneFlags, false }
@@ -1002,7 +1010,8 @@ namespace castor3d
 				{
 					auto texCoord = writer.declLocale( "texCoord"
 						, inTexture );
-					lighting->computeMapContributions( flags
+					lighting->computeMapContributions( flags.passFlags
+						, textures
 						, gamma
 						, textureConfigs
 						, c3d_textureConfig

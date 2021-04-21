@@ -54,7 +54,7 @@ namespace GuiCommon
 						VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST,
 						pass.getAlphaFunc(),
 						pass.getBlendAlphaFunc(),
-						pass.getTextures( castor3d::TextureFlag::eAll ),
+						pass.getTexturesMask(),
 					}
 					, scene
 					, result };

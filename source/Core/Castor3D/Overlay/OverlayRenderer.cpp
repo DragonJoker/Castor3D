@@ -139,7 +139,7 @@ namespace castor3d
 		};
 		CU_ImplementFlags( OverlayTexture )
 
-		uint32_t makeKey( TextureFlagsArray const & textures
+		uint32_t makeKey( FilteredTextureFlags const & textures
 			, bool text )
 		{
 			OverlayTextures tex{ text ? OverlayTexture::eText : OverlayTexture::eNone };
@@ -320,7 +320,7 @@ namespace castor3d
 				, device
 				, ( fontTexture
 					? m_renderer.m_textDeclaration
-					: ( pass.getTextures( TextureFlag::eAlbedo | TextureFlag::eOpacity ).empty()
+					: ( filterTexturesFlags( pass.getTexturesMask(), TextureFlag::eAlbedo | TextureFlag::eOpacity ).empty()
 						? m_renderer.m_noTexDeclaration
 						: m_renderer.m_texDeclaration ) )
 				, MaxPanelsPerBuffer );
@@ -831,7 +831,7 @@ namespace castor3d
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
-		auto textures = pass.getTextures( TextureFlag::eAlbedo | TextureFlag::eOpacity );
+		auto textures = filterTexturesFlags( pass.getTexturesMask(), TextureFlag::eAlbedo | TextureFlag::eOpacity );
 		auto vertexLayout = ( textures.empty() 
 			? &m_noTexDeclaration
 			: &m_texDeclaration );
@@ -895,7 +895,7 @@ namespace castor3d
 			}
 		) );
 		// Remove unwanted flags
-		auto textures = pass.getTextures( TextureFlag::eOpacity | TextureFlag::eDiffuse );
+		auto textures = filterTexturesFlags( pass.getTexturesMask(), TextureFlag::eAlbedo | TextureFlag::eOpacity );
 		auto key = makeKey( textures, text );
 		auto it = pipelines.find( key );
 
@@ -913,7 +913,7 @@ namespace castor3d
 	}
 
 	ashes::PipelineShaderStageCreateInfoArray OverlayRenderer::doCreateOverlayProgram( RenderDevice const & device
-		, TextureFlagsArray const & texturesFlags
+		, FilteredTextureFlags const & texturesFlags
 		, bool textOverlay )
 	{
 		using namespace sdw;

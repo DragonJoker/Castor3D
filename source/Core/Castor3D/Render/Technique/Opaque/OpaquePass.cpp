@@ -378,6 +378,7 @@ namespace castor3d
 		using namespace sdw;
 		FragmentWriter writer;
 
+		auto textures = filterTexturesFlags( flags.textures );
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		shader::LegacyMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
@@ -438,7 +439,8 @@ namespace castor3d
 		shader::Utils utils{ writer };
 		utils.declareRemoveGamma();
 		utils.declareEncodeMaterial();
-		utils.declareParallaxMappingFunc( flags );
+		utils.declareParallaxMappingFunc( flags.passFlags
+			, getTexturesMask() );
 
 		shader::PhongLightingModel lightingModel{ writer
 			, utils
@@ -481,7 +483,8 @@ namespace castor3d
 
 				if ( hasTextures )
 				{
-					lightingModel.computeMapContributions( flags
+					lightingModel.computeMapContributions( flags.passFlags
+						, textures
 						, gamma
 						, textureConfigs
 						, c3d_textureConfig
@@ -533,6 +536,7 @@ namespace castor3d
 		using namespace sdw;
 		FragmentWriter writer;
 
+		auto textures = filterTexturesFlags( flags.textures );
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		shader::PbrMRMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
@@ -593,7 +597,8 @@ namespace castor3d
 		shader::Utils utils{ writer };
 		utils.declareRemoveGamma();
 		utils.declareEncodeMaterial();
-		utils.declareParallaxMappingFunc( flags );
+		utils.declareParallaxMappingFunc( flags.passFlags
+			, getTexturesMask() );
 
 		shader::MetallicBrdfLightingModel lightingModel{ writer
 			, utils
@@ -636,7 +641,8 @@ namespace castor3d
 
 				if ( hasTextures )
 				{
-					lightingModel.computeMapContributions( flags
+					lightingModel.computeMapContributions( flags.passFlags
+						, textures
 						, gamma
 						, textureConfigs
 						, c3d_textureConfig
@@ -689,6 +695,7 @@ namespace castor3d
 		FragmentWriter writer;
 		auto & renderSystem = *getEngine()->getRenderSystem();
 
+		auto textures = filterTexturesFlags( flags.textures );
 		shader::PbrSGMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		shader::TextureConfigurations textureConfigs{ writer };
@@ -748,7 +755,8 @@ namespace castor3d
 		shader::Utils utils{ writer };
 		utils.declareRemoveGamma();
 		utils.declareEncodeMaterial();
-		utils.declareParallaxMappingFunc( flags );
+		utils.declareParallaxMappingFunc( flags.passFlags
+			, getTexturesMask() );
 
 		shader::SpecularBrdfLightingModel lightingModel{ writer
 			, utils
@@ -791,7 +799,8 @@ namespace castor3d
 
 				if ( hasTextures )
 				{
-					lightingModel.computeMapContributions( flags
+					lightingModel.computeMapContributions( flags.passFlags
+						, textures
 						, gamma
 						, textureConfigs
 						, c3d_textureConfig
