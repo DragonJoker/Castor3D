@@ -300,7 +300,7 @@ namespace castor3d
 		return result;
 	}
 
-	TextureFlagsArray Pass::getTextures( TextureFlags mask )const
+	TextureFlagsArray Pass::getTexturesMask( TextureFlags mask )const
 	{
 		auto units = getTextureUnits( mask );
 		TextureFlagsArray result;

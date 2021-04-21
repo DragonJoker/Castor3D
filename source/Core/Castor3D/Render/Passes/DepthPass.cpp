@@ -450,6 +450,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
+		auto textures = filterTexturesFlags( flags.textures );
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		bool hasTextures = !flags.textures.empty();
 
@@ -487,7 +488,8 @@ namespace castor3d
 		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
 
 		shader::Utils utils{ writer };
-		utils.declareParallaxMappingFunc( flags );
+		utils.declareParallaxMappingFunc( flags.passFlags
+			, getTexturesMask() );
 
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
@@ -502,7 +504,7 @@ namespace castor3d
 				{
 					auto texCoord = writer.declLocale( "texCoord"
 						, inTexture );
-					utils.computeGeometryMapsContributions( flags.textures
+					utils.computeGeometryMapsContributions( textures
 						, flags.passFlags
 						, textureConfigs
 						, c3d_textureConfig

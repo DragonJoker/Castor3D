@@ -916,6 +916,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
+		auto textures = filterTexturesFlags( flags.textures );
 
 		// UBOs
 		auto & renderSystem = *getEngine()->getRenderSystem();
@@ -956,7 +957,7 @@ namespace castor3d
 				auto material = materials->getBaseMaterial( vtx_material );
 				auto alpha = writer.declLocale( "alpha"
 					, material->m_opacity );
-				utils.computeOpacityMapContribution( flags.textures
+				utils.computeOpacityMapContribution( textures
 					, textureConfigs
 					, c3d_textureConfig
 					, c3d_maps
