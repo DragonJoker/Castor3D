@@ -16,7 +16,6 @@ namespace castor3d
 		using Configuration = TexturesUboConfiguration;
 
 	public:
-		C3D_API static uint32_t const BindingPoint;
 		//!\~english	Name of the HDR configuration frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant la configuration du HDR.
 		C3D_API static castor::String const BufferTextures;
@@ -27,13 +26,13 @@ namespace castor3d
 }
 
 #define UBO_TEXTURES( writer, binding, set, enabled )\
-	sdw::Ubo textures{ writer\
+	sdw::Ubo texturesUbo{ writer\
 		, castor3d::TexturesUbo::BufferTextures\
 		, binding\
 		, set\
 		, ast::type::MemoryLayout::eStd140\
 		, enabled };\
-	auto c3d_textureConfig = textures.declMember< sdw::UVec4 >( castor3d::TexturesUbo::TexturesConfig, 3u );\
-	textures.end()
+	auto c3d_textureConfig = texturesUbo.declMember< sdw::UVec4 >( castor3d::TexturesUbo::TexturesConfig, 3u );\
+	texturesUbo.end()
 
 #endif

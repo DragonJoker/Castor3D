@@ -39,7 +39,7 @@ namespace castor3d
 
 		//*****************************************************************************************
 
-		LegacyMaterial::LegacyMaterial( ShaderWriter & writer
+		PhongMaterial::PhongMaterial( ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
 			: BaseMaterial{ writer, std::move( expr ), enabled }
@@ -51,17 +51,17 @@ namespace castor3d
 		{
 		}
 
-		Vec3 LegacyMaterial::m_diffuse()const
+		Vec3 PhongMaterial::m_diffuse()const
 		{
 			return m_diffAmb.rgb();
 		}
 
-		std::unique_ptr< sdw::Struct > LegacyMaterial::declare( ShaderWriter & writer )
+		std::unique_ptr< sdw::Struct > PhongMaterial::declare( ShaderWriter & writer )
 		{
 			return std::make_unique< sdw::Struct >( writer, makeType( writer.getTypesCache() ) );
 		}
 
-		ast::type::StructPtr LegacyMaterial::makeType( ast::type::TypesCache & cache )
+		ast::type::StructPtr PhongMaterial::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140, "LegacyMaterial" );
 
@@ -186,31 +186,32 @@ namespace castor3d
 
 		//*********************************************************************************************
 
-		LegacyMaterials::LegacyMaterials( ShaderWriter & writer )
+		PhongMaterials::PhongMaterials( ShaderWriter & writer )
 			: Materials{ writer }
 		{
 		}
 
-		void LegacyMaterials::declare( bool hasSsbo )
+		void PhongMaterials::declare( bool hasSsbo
+			, uint32_t binding )
 		{
-			m_type = LegacyMaterial::declare( m_writer );
+			m_type = PhongMaterial::declare( m_writer );
 
 			if ( hasSsbo )
 			{
-				m_ssbo = std::make_unique< ArraySsboT< LegacyMaterial > >( m_writer
+				m_ssbo = std::make_unique< ArraySsboT< PhongMaterial > >( m_writer
 					, PassBufferName
 					, m_type->getType()
-					, getPassBufferIndex()
+					, binding
 					, 0u
 					, true );
 			}
 			else
 			{
-				auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( "c3d_materials", getPassBufferIndex(), 0u );
-				m_getMaterial = m_writer.implementFunction< LegacyMaterial >( "getMaterial"
+				auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( "c3d_materials", binding, 0u );
+				m_getMaterial = m_writer.implementFunction< PhongMaterial >( "getMaterial"
 					, [this, &c3d_materials]( UInt const & index )
 					{
-						auto result = m_writer.declLocale< LegacyMaterial >( "result"
+						auto result = m_writer.declLocale< PhongMaterial >( "result"
 							, *m_type );
 						auto offset = m_writer.declLocale( "offset"
 							, m_writer.cast< Int >( index ) * Int( MaxMaterialComponentsCount ) );
@@ -223,7 +224,7 @@ namespace castor3d
 			}
 		}
 
-		LegacyMaterial LegacyMaterials::getMaterial( UInt const & index )const
+		PhongMaterial PhongMaterials::getMaterial( UInt const & index )const
 		{
 			if ( m_ssbo )
 			{
@@ -235,11 +236,11 @@ namespace castor3d
 			}
 		}
 
-		BaseMaterialUPtr LegacyMaterials::getBaseMaterial( UInt const & index )const
+		BaseMaterialUPtr PhongMaterials::getBaseMaterial( UInt const & index )const
 		{
 			auto material = m_writer.declLocale( "material"
 				, getMaterial( index ) );
-			return std::make_unique< LegacyMaterial >( material );
+			return std::make_unique< PhongMaterial >( material );
 		}
 
 		//*********************************************************************************************
@@ -249,7 +250,8 @@ namespace castor3d
 		{
 		}
 
-		void PbrMRMaterials::declare( bool hasSsbo )
+		void PbrMRMaterials::declare( bool hasSsbo
+			, uint32_t binding )
 		{
 			m_type = MetallicRoughnessMaterial::declare( m_writer );
 
@@ -258,13 +260,13 @@ namespace castor3d
 				m_ssbo = std::make_unique< ArraySsboT< MetallicRoughnessMaterial > >( m_writer
 					, PassBufferName
 					, m_type->getType()
-					, getPassBufferIndex()
+					, binding
 					, 0u
 					, true );
 			}
 			else
 			{
-				auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( "c3d_materials", getPassBufferIndex(), 0u );
+				auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( "c3d_materials", binding, 0u );
 				m_getMaterial = m_writer.implementFunction< MetallicRoughnessMaterial >( "getMaterial"
 					, [this, &c3d_materials]( UInt const & index )
 					{
@@ -307,7 +309,8 @@ namespace castor3d
 		{
 		}
 
-		void PbrSGMaterials::declare( bool hasSsbo )
+		void PbrSGMaterials::declare( bool hasSsbo
+			, uint32_t binding )
 		{
 			m_type = SpecularGlossinessMaterial::declare( m_writer );
 
@@ -316,13 +319,13 @@ namespace castor3d
 				m_ssbo = std::make_unique< ArraySsboT< SpecularGlossinessMaterial > >( m_writer
 					, PassBufferName
 					, m_type->getType()
-					, getPassBufferIndex()
+					, binding
 					, 0u
 					, true );
 			}
 			else
 			{
-				auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( "c3d_materials", getPassBufferIndex(), 0u );
+				auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( "c3d_materials", binding, 0u );
 				m_getMaterial = m_writer.implementFunction< SpecularGlossinessMaterial >( "getMaterial"
 					, [this, &c3d_materials]( UInt const & index )
 					{

@@ -65,9 +65,9 @@ namespace castor3d
 		}
 	}
 
-	VkDescriptorSetLayoutBinding PassBuffer::createLayoutBinding()const
+	VkDescriptorSetLayoutBinding PassBuffer::createLayoutBinding( uint32_t binding )const
 	{
-		return m_buffer.createLayoutBinding( getPassBufferIndex() );
+		return m_buffer.createLayoutBinding( binding );
 	}
 
 	void PassBuffer::createBinding( ashes::DescriptorSet & descriptorSet
@@ -76,9 +76,9 @@ namespace castor3d
 		m_buffer.createBinding( descriptorSet, binding );
 	}
 
-	ashes::WriteDescriptorSet PassBuffer::getBinding()const
+	ashes::WriteDescriptorSet PassBuffer::getBinding( uint32_t binding )const
 	{
-		return m_buffer.getBinding( getPassBufferIndex() );
+		return m_buffer.getBinding( binding );
 	}
 
 	void PassBuffer::visit( PhongPass const & pass )

@@ -221,7 +221,7 @@ namespace castor3d
 		, BillboardListRenderNode & node )
 	{
 		m_shadowMapUbo.createSizedBinding( *node.uboDescriptorSet
-			, layout.getBinding( ShadowMapUbo::BindingPoint ) );
+			, layout.getBinding( uint32_t( NodeUboIdx::eShadow ) ) );
 	}
 
 	void ShadowMapPassPoint::doFillUboDescriptor( RenderPipeline const & pipeline
@@ -229,13 +229,13 @@ namespace castor3d
 		, SubmeshRenderNode & node )
 	{
 		m_shadowMapUbo.createSizedBinding( *node.uboDescriptorSet
-			, layout.getBinding( ShadowMapUbo::BindingPoint ) );
+			, layout.getBinding( uint32_t( NodeUboIdx::eShadow ) ) );
 	}
 
 	ashes::VkDescriptorSetLayoutBindingArray ShadowMapPassPoint::doCreateUboBindings( PipelineFlags const & flags )const
 	{
 		auto uboBindings = SceneRenderPass::doCreateUboBindings( flags );
-		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( ShadowMapUbo::BindingPoint
+		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eShadow )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		m_initialised = true;
@@ -313,11 +313,11 @@ namespace castor3d
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) && hasTextures );
 		auto in = writer.getIn();
 
-		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
-		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
-		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
-		auto skinningData = SkinningUbo::declare( writer, SkinningUbo::BindingPoint, 0, flags.programFlags );
-		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0, flags.programFlags );
+		UBO_MATRIX( writer, uint32_t( NodeUboIdx::eMatrix ), 0 );
+		UBO_MODEL_MATRIX( writer, uint32_t( NodeUboIdx::eModelMatrix ), 0 );
+		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0 );
+		auto skinningData = SkinningUbo::declare( writer, uint32_t( NodeUboIdx::eSkinning ), 0, flags.programFlags );
+		UBO_MORPHING( writer, uint32_t( NodeUboIdx::eMorphing ), 0, flags.programFlags );
 
 		// Outputs
 		auto vtx_worldPosition = writer.declOutput< Vec3 >( "vtx_worldPosition"
@@ -447,20 +447,22 @@ namespace castor3d
 			, SceneRenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
 		auto in = writer.getIn();
 
-		shader::LegacyMaterials materials{ writer };
-		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", getLightBufferIndex(), 0u );
+		shader::PhongMaterials materials{ writer };
+		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+			, uint32_t( NodeUboIdx::eMaterials ) );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", uint32_t( NodeUboIdx::eLights ), 0u );
 		shader::TextureConfigurations textureConfigs{ writer };
 
 		if ( hasTextures )
 		{
-			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+				, uint32_t( NodeUboIdx::eTexturesBuffer ) );
 		}
 
-		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
-		UBO_SHADOWMAP( writer, ShadowMapUbo::BindingPoint, 0u );
+		UBO_TEXTURES( writer, uint32_t( NodeUboIdx::eTexturesConfig ), 0u, hasTextures );
+		UBO_SHADOWMAP( writer, uint32_t( NodeUboIdx::eShadow ), 0u );
 
-		auto index = getMinTextureIndex();
+		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, index
 			, 1u
@@ -474,6 +476,7 @@ namespace castor3d
 			, utils
 			, LightType::ePoint
 			, false // lightUbo
+			, 0u // lightUboBinding
 			, shader::ShadowOptions{ SceneFlag::eNone, false }
 			, index );
 
@@ -622,21 +625,23 @@ namespace castor3d
 		auto in = writer.getIn();
 
 		shader::PbrMRMaterials materials{ writer };
-		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", getLightBufferIndex(), 0u );
+		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+			, uint32_t( NodeUboIdx::eMaterials ) );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", uint32_t( NodeUboIdx::eLights ), 0u );
 		shader::TextureConfigurations textureConfigs{ writer };
 
 		if ( hasTextures )
 		{
-			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+				, uint32_t( NodeUboIdx::eTexturesBuffer ) );
 		}
 
-		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
-		UBO_SHADOWMAP( writer, ShadowMapUbo::BindingPoint, 0u );
+		UBO_TEXTURES( writer, uint32_t( NodeUboIdx::eTexturesConfig ), 0u, hasTextures );
+		UBO_SHADOWMAP( writer, uint32_t( NodeUboIdx::eShadow ), 0u );
 
-		auto index = getMinTextureIndex();
+		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-			, getMinTextureIndex()
+			, index
 			, 1u
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
@@ -648,6 +653,7 @@ namespace castor3d
 			, utils
 			, LightType::ePoint
 			, false // lightUbo
+			, 0u // lightUboBinding
 			, shader::ShadowOptions{ SceneFlag::eNone, false }
 			, index );
 
@@ -796,21 +802,23 @@ namespace castor3d
 		auto in = writer.getIn();
 
 		shader::PbrSGMaterials materials{ writer };
-		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", getLightBufferIndex(), 0u );
+		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+			, uint32_t( NodeUboIdx::eMaterials ) );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", uint32_t( NodeUboIdx::eLights ), 0u );
 		shader::TextureConfigurations textureConfigs{ writer };
 
 		if ( hasTextures )
 		{
-			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+				, uint32_t( NodeUboIdx::eTexturesBuffer ) );
 		}
 
-		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
-		UBO_SHADOWMAP( writer, ShadowMapUbo::BindingPoint, 0u );
+		UBO_TEXTURES( writer, uint32_t( NodeUboIdx::eTexturesConfig ), 0u, hasTextures );
+		UBO_SHADOWMAP( writer, uint32_t( NodeUboIdx::eShadow ), 0u );
 
-		auto index = getMinTextureIndex();
+		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-			, getMinTextureIndex()
+			, index
 			, 1u
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
@@ -822,6 +830,7 @@ namespace castor3d
 			, utils
 			, LightType::ePoint
 			, false // lightUbo
+			, 0u // lightUboBinding
 			, shader::ShadowOptions{ SceneFlag::eNone, false }
 			, index );
 

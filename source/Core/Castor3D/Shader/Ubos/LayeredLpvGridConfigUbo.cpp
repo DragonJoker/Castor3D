@@ -56,7 +56,6 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	uint32_t const LayeredLpvGridConfigUbo::BindingPoint = 13;
 	std::string const LayeredLpvGridConfigUbo::LayeredLpvConfig = "LayeredLpvConfig";
 	std::string const LayeredLpvGridConfigUbo::LayeredLpvGridData = "c3d_llpvGridData";
 

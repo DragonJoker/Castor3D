@@ -116,6 +116,14 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
+		enum class ResolveUbo
+		{
+			eMaterials,
+			eScene,
+			eGpInfo,
+			eHdrConfig,
+		};
+
 		ShaderPtr doCreatePhongPixelProgram( RenderDevice const & device
 			, FogType fogType
 			, bool hasSsao
@@ -127,10 +135,14 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
-			UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
-			UBO_HDR_CONFIG( writer, HdrConfigUbo::BindingPoint, 0u );
-			auto index = 1u;
+			shader::PhongMaterials materials{ writer };
+			materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+				, uint32_t( ResolveUbo::eMaterials ) );
+			UBO_SCENE( writer, uint32_t( ResolveUbo::eScene ), 0u );
+			UBO_GPINFO( writer, uint32_t( ResolveUbo::eGpInfo ), 0u );
+			UBO_HDR_CONFIG( writer, uint32_t( ResolveUbo::eHdrConfig ), 0u );
+
+			auto index = 0u;
 			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), index++, 1u );
 			auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), index++, 1u );
 			auto c3d_mapData2 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), index++, 1u );
@@ -147,9 +159,6 @@ namespace castor3d
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
-			shader::LegacyMaterials materials{ writer };
-			materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
-			
 			shader::Utils utils{ writer };
 			utils.declareRemoveGamma();
 			utils.declareCalcWSPosition();
@@ -384,10 +393,13 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
-			UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
-			UBO_HDR_CONFIG( writer, HdrConfigUbo::BindingPoint, 0u );
-			auto index = 1u;
+			shader::PbrMRMaterials materials{ writer };
+			materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+				, uint32_t( ResolveUbo::eMaterials ) );
+			UBO_SCENE( writer, uint32_t( ResolveUbo::eScene ), 0u );
+			UBO_GPINFO( writer, uint32_t( ResolveUbo::eGpInfo ), 0u );
+			UBO_HDR_CONFIG( writer, uint32_t( ResolveUbo::eHdrConfig ), 0u );
+			auto index = 0u;
 			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), index++, 1u );
 			auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), index++, 1u );
 			auto c3d_mapData2 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), index++, 1u );
@@ -406,9 +418,6 @@ namespace castor3d
 			CU_Require( index < device.properties.limits.maxDescriptorSetSampledImages );
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
-
-			shader::PbrMRMaterials materials{ writer };
-			materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 
 			shader::Utils utils{ writer };
 			utils.declareRemoveGamma();
@@ -715,10 +724,13 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
-			UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
-			UBO_HDR_CONFIG( writer, HdrConfigUbo::BindingPoint, 0u );
-			auto index = 1u;
+			shader::PbrSGMaterials materials{ writer };
+			materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+				, uint32_t( ResolveUbo::eMaterials ) );
+			UBO_SCENE( writer, uint32_t( ResolveUbo::eScene ), 0u );
+			UBO_GPINFO( writer, uint32_t( ResolveUbo::eGpInfo ), 0u );
+			UBO_HDR_CONFIG( writer, uint32_t( ResolveUbo::eHdrConfig ), 0u );
+			auto index = 0u;
 			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), index++, 1u );
 			auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), index++, 1u );
 			auto c3d_mapData2 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), index++, 1u );
@@ -737,9 +749,6 @@ namespace castor3d
 			CU_Require( index < device.properties.limits.maxDescriptorSetSampledImages );
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
-
-			shader::PbrSGMaterials materials{ writer };
-			materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 
 			shader::Utils utils{ writer };
 			utils.declareRemoveGamma();
@@ -1063,14 +1072,14 @@ namespace castor3d
 			auto & passBuffer = engine.getMaterialCache().getPassBuffer();
 			ashes::VkDescriptorSetLayoutBindingArray bindings
 			{
-				passBuffer.createLayoutBinding(),
-				makeDescriptorSetLayoutBinding( SceneUbo::BindingPoint
+				passBuffer.createLayoutBinding( uint32_t( ResolveUbo::eMaterials ) ),
+				makeDescriptorSetLayoutBinding( uint32_t( ResolveUbo::eScene )
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ),
-				makeDescriptorSetLayoutBinding( GpInfoUbo::BindingPoint
+				makeDescriptorSetLayoutBinding( uint32_t( ResolveUbo::eGpInfo )
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ),
-				makeDescriptorSetLayoutBinding( HdrConfigUbo::BindingPoint
+				makeDescriptorSetLayoutBinding( uint32_t( ResolveUbo::eHdrConfig )
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ),
 			};
@@ -1088,13 +1097,13 @@ namespace castor3d
 			auto & passBuffer = engine.getMaterialCache().getPassBuffer();
 			auto & layout = pool.getLayout();
 			auto result = pool.createDescriptorSet( "DeferredResolveUbo", 0u );
-			passBuffer.createBinding( *result, layout.getBinding( getPassBufferIndex() ) );
+			passBuffer.createBinding( *result, layout.getBinding( uint32_t( ResolveUbo::eMaterials ) ) );
 			sceneUbo.createSizedBinding( *result
-				, layout.getBinding( SceneUbo::BindingPoint ) );
+				, layout.getBinding( uint32_t( ResolveUbo::eScene ) ) );
 			gpInfoUbo.createSizedBinding( *result
-				, layout.getBinding( GpInfoUbo::BindingPoint ) );
+				, layout.getBinding( uint32_t( ResolveUbo::eGpInfo ) ) );
 			hdrConfigUbo.createSizedBinding( *result
-				, layout.getBinding( HdrConfigUbo::BindingPoint ) );
+				, layout.getBinding( uint32_t( ResolveUbo::eHdrConfig ) ) );
 			result->update();
 			return result;
 		}
@@ -1180,7 +1189,7 @@ namespace castor3d
 			, bool hasSpecularGi
 			, MaterialType matType )
 		{
-			uint32_t index = 1u;
+			uint32_t index = 0u;
 			ashes::VkDescriptorSetLayoutBindingArray bindings
 			{
 				makeDescriptorSetLayoutBinding( index++
@@ -1274,7 +1283,7 @@ namespace castor3d
 		{
 			sampler->initialise( device );
 			auto descriptorSet = pool.createDescriptorSet( "DeferredResolveTex", 1u );
-			uint32_t index = 1u;
+			uint32_t index = 0u;
 			auto imgLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 			ashes::WriteDescriptorSetArray writes;
 

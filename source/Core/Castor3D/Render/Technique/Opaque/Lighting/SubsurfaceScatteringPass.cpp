@@ -65,7 +65,8 @@ namespace castor3d
 
 		enum BlurId : size_t
 		{
-			BlurSceneUboId = 1u,
+			BlurMaterialsUboId,
+			BlurSceneUboId,
 			BlurGpInfoUboId,
 			BlurSssUboId,
 			BlurDepthImgId,
@@ -83,7 +84,7 @@ namespace castor3d
 
 			// Shader inputs
 			auto materials = shader::createMaterials( writer, PassFlag( 0u ) );
-			materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+			materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers(), BlurMaterialsUboId );
 			UBO_SCENE( writer, BlurSceneUboId, 0u );
 			UBO_GPINFO( writer, BlurGpInfoUboId, 0u );
 			Ubo config{ writer, SubsurfaceScatteringPass::Config, BlurSssUboId, 0u };
@@ -213,7 +214,7 @@ namespace castor3d
 
 			// Shader inputs
 			auto materials = shader::createMaterials( writer, PassFlag( 0u ) );
-			materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+			materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers(), BlurMaterialsUboId );
 
 			auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), CombData4ImgId, 0u );
 			auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), CombData5ImgId, 0u );
@@ -478,7 +479,7 @@ namespace castor3d
 			, castor::Position{}
 			, shaderStages
 			, *m_renderPass
-			, { m_renderSystem.getEngine()->getMaterialCache().getPassBuffer().getBinding()
+			, { m_renderSystem.getEngine()->getMaterialCache().getPassBuffer().getBinding( BlurMaterialsUboId )
 				, makeDescriptorWrite( m_sceneUbo.getUbo(), BlurSceneUboId )
 				, makeDescriptorWrite( m_gpInfoUbo.getUbo(), BlurGpInfoUboId )
 				, makeDescriptorWrite( m_blurUbo, BlurSssUboId )
@@ -555,7 +556,7 @@ namespace castor3d
 			, castor::Position{}
 			, shaderStages
 			, *m_renderPass
-			, { m_renderSystem.getEngine()->getMaterialCache().getPassBuffer().getBinding()
+			, { m_renderSystem.getEngine()->getMaterialCache().getPassBuffer().getBinding( BlurMaterialsUboId )
 				, makeDescriptorWrite( m_geometryBufferResult[DsTexture::eData4].getTexture()->getDefaultView().getSampledView()
 					, m_sampler->getSampler()
 					, CombData4ImgId )

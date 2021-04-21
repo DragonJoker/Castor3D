@@ -23,10 +23,13 @@ namespace castor3d
 			C3D_API void declareModel( uint32_t & index );
 			C3D_API void declareDiffuseModel( uint32_t & index );
 			C3D_API void declareDirectionalModel( bool lightUbo
+				, uint32_t uboBinding
 				, uint32_t & index );
 			C3D_API void declarePointModel( bool lightUbo
+				, uint32_t uboBinding
 				, uint32_t & index );
 			C3D_API void declareSpotModel( bool lightUbo
+				, uint32_t uboBinding
 				, uint32_t & index );
 			// Calls
 			C3D_API DirectionalLight getDirectionalLight( sdw::Int const & index )const;
@@ -44,9 +47,9 @@ namespace castor3d
 			C3D_API void doDeclareDirectionalLight();
 			C3D_API void doDeclarePointLight();
 			C3D_API void doDeclareSpotLight();
-			C3D_API void doDeclareDirectionalLightUbo();
-			C3D_API void doDeclarePointLightUbo();
-			C3D_API void doDeclareSpotLightUbo();
+			C3D_API void doDeclareDirectionalLightUbo( uint32_t binding );
+			C3D_API void doDeclarePointLightUbo( uint32_t binding );
+			C3D_API void doDeclareSpotLightUbo( uint32_t binding );
 			C3D_API void doDeclareGetBaseLight();
 			C3D_API void doDeclareGetDirectionalLight();
 			C3D_API void doDeclareGetPointLight();
@@ -61,9 +64,6 @@ namespace castor3d
 			virtual void doDeclareComputeDirectionalLightDiffuse() = 0;
 			virtual void doDeclareComputePointLightDiffuse() = 0;
 			virtual void doDeclareComputeSpotLightDiffuse() = 0;
-
-		public:
-			C3D_API static uint32_t const UboBindingPoint;
 
 		protected:
 			sdw::ShaderWriter & m_writer;

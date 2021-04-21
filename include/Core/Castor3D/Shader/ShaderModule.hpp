@@ -150,51 +150,6 @@ namespace castor3d
 	C3D_API bool isShadowMapProgram( ProgramFlags const & flags );
 	/**
 	*\~english
-	*\return
-	*	The materials passes buffer index.
-	*\~french
-	*\return
-	*	L'index du buffer de passes de matériaux.
-	*/
-	C3D_API uint32_t getPassBufferIndex()noexcept;
-	/**
-	*\~english
-	*\return
-	*	The textures buffer index.
-	*\~french
-	*\return
-	ù	L'index du buffer de textures.
-	*/
-	C3D_API uint32_t getTexturesBufferIndex()noexcept;
-	/**
-	*\~english
-	*\return
-	*	The lights sources buffer index.
-	*\~french
-	*\return
-	*	L'index du buffer de sources lumineuses.
-	*/
-	C3D_API uint32_t getLightBufferIndex()noexcept;
-	/**
-	*\~english
-	*\return
-	*	The minimal index for shader buffers (SSBO and UBO).
-	*\~french
-	*\return
-	*	L'index minimal des shader buffers (SSBO et UBO).
-	*/
-	C3D_API uint32_t getMinBufferIndex()noexcept;
-	/**
-	*\~english
-	*\return
-	*	The minimal index for textures.
-	*\~french
-	*\return
-	*	L'index minimal pour les textures.
-	*/
-	C3D_API uint32_t getMinTextureIndex()noexcept;
-	/**
-	*\~english
 	*\brief
 	*	Base shader program implementation, used to share functions through the supported shader languages.
 	*\~french

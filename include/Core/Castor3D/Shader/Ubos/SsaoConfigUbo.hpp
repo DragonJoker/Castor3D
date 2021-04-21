@@ -156,7 +156,6 @@ namespace castor3d
 		}
 
 	public:
-		static uint32_t constexpr BindingPoint = 8u;
 		C3D_API static castor::String const BufferSsaoConfig;
 		C3D_API static castor::String const NumSamples;
 		C3D_API static castor::String const NumSpiralTurns;

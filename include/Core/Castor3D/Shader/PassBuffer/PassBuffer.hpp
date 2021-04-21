@@ -69,14 +69,14 @@ namespace castor3d
 		 *\~french
 		 *\brief		Crée une attache de layout de set de descripteurs.
 		 */
-		C3D_API VkDescriptorSetLayoutBinding createLayoutBinding()const;
+		C3D_API VkDescriptorSetLayoutBinding createLayoutBinding( uint32_t binding )const;
 		/**
 		 *\~english
 		 *\brief		Creates the descriptor write for this buffer.
 		 *\~french
 		 *\brief		Crée le descriptor write pour ce tampon.
 		 */
-		C3D_API ashes::WriteDescriptorSet getBinding()const;
+		C3D_API ashes::WriteDescriptorSet getBinding( uint32_t binding )const;
 		/**
 		 *\~english
 		 *\brief		Creates the descriptor set binding at given point.

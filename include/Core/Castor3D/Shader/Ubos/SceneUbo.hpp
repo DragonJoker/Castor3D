@@ -127,7 +127,6 @@ namespace castor3d
 		}
 
 	public:
-		C3D_API static uint32_t const BindingPoint;
 		//!\~english	Name of the scene frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les données de scène.
 		C3D_API static castor::String const BufferScene;

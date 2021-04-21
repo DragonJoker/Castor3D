@@ -380,8 +380,8 @@ namespace castor3d
 		VertexWriter writer;
 
 		// Shader inputs
-		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
-		UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
+		UBO_MATRIX( writer, uint32_t( LightPassUboIdx::eMatrix ), 0u );
+		UBO_GPINFO( writer, uint32_t( LightPassUboIdx::eGpInfo ), 0u );
 		auto position = writer.declInput< Vec2 >( "position", 0u );
 
 		// Shader outputs

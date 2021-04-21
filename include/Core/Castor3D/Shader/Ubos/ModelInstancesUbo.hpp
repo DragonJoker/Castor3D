@@ -87,7 +87,6 @@ namespace castor3d
 		}
 
 	public:
-		C3D_API static uint32_t const BindingPoint;
 		C3D_API static castor::String const BufferModelInstances;
 		C3D_API static castor::String const Instances;
 		C3D_API static castor::String const InstanceCount;

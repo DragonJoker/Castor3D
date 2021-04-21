@@ -6,7 +6,6 @@
 
 namespace castor3d
 {
-	uint32_t const ModelMatrixUbo::BindingPoint = 5u;
 	castor::String const ModelMatrixUbo::BufferModelMatrix = cuT( "ModelMatrices" );
 	castor::String const ModelMatrixUbo::PrvMtxModel = cuT( "c3d_prvMtxModel" );
 	castor::String const ModelMatrixUbo::PrvMtxNormal = cuT( "c3d_prvMtxNormal" );

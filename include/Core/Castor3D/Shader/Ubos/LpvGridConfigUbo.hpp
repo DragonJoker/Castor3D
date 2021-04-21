@@ -95,7 +95,6 @@ namespace castor3d
 		}
 
 	public:
-		C3D_API static const uint32_t BindingPoint;
 		C3D_API static const std::string LpvGridConfig;
 		C3D_API static const std::string LpvGridData;
 

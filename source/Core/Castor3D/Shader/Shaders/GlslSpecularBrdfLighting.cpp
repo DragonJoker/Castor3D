@@ -257,6 +257,7 @@ namespace castor3d
 			, Utils & utils
 			, LightType lightType
 			, bool lightUbo
+			, uint32_t lightUboBinding
 			, ShadowOptions const & shadows
 			, uint32_t & index )
 		{
@@ -268,15 +269,15 @@ namespace castor3d
 			switch ( lightType )
 			{
 			case LightType::eDirectional:
-				result->declareDirectionalModel( lightUbo, index );
+				result->declareDirectionalModel( lightUbo, lightUboBinding, index );
 				break;
 
 			case LightType::ePoint:
-				result->declarePointModel( lightUbo, index );
+				result->declarePointModel( lightUbo, lightUboBinding, index );
 				break;
 
 			case LightType::eSpot:
-				result->declareSpotModel( lightUbo, index );
+				result->declareSpotModel( lightUbo, lightUboBinding, index );
 				break;
 
 			default:

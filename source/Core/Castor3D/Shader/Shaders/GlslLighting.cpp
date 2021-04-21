@@ -18,8 +18,6 @@ namespace castor3d
 {
 	namespace shader
 	{
-		uint32_t const LightingModel::UboBindingPoint = 7u;
-
 		LightingModel::LightingModel( ShaderWriter & writer
 			, Utils & utils
 			, ShadowOptions shadowOptions
@@ -80,6 +78,7 @@ namespace castor3d
 		}
 
 		void LightingModel::declareDirectionalModel( bool lightUbo
+			, uint32_t uboBinding
 			, uint32_t & index )
 		{
 			m_shadowModel->declareDirectional( index );
@@ -92,7 +91,7 @@ namespace castor3d
 
 			if ( lightUbo )
 			{
-				doDeclareDirectionalLightUbo();
+				doDeclareDirectionalLightUbo( uboBinding );
 			}
 			else
 			{
@@ -108,6 +107,7 @@ namespace castor3d
 		}
 
 		void LightingModel::declarePointModel( bool lightUbo
+			, uint32_t uboBinding
 			, uint32_t & index )
 		{
 			m_shadowModel->declarePoint( index );
@@ -119,7 +119,7 @@ namespace castor3d
 
 			if ( lightUbo )
 			{
-				doDeclarePointLightUbo();
+				doDeclarePointLightUbo( uboBinding );
 			}
 			else
 			{
@@ -135,6 +135,7 @@ namespace castor3d
 		}
 
 		void LightingModel::declareSpotModel( bool lightUbo
+			, uint32_t uboBinding
 			, uint32_t & index )
 		{
 			m_shadowModel->declareSpot( index );
@@ -146,7 +147,7 @@ namespace castor3d
 
 			if ( lightUbo )
 			{
-				doDeclareSpotLightUbo();
+				doDeclareSpotLightUbo( uboBinding );
 			}
 			else
 			{
@@ -201,23 +202,23 @@ namespace castor3d
 			m_spotLightType = SpotLight::declare( m_writer );
 		}
 
-		void LightingModel::doDeclareDirectionalLightUbo()
+		void LightingModel::doDeclareDirectionalLightUbo( uint32_t binding )
 		{
-			Ubo lightUbo{ m_writer, "LightUbo", UboBindingPoint, 0u };
+			Ubo lightUbo{ m_writer, "LightUbo", binding, 0u };
 			lightUbo.declStructMember( "c3d_light", *m_directionalLightType );
 			lightUbo.end();
 		}
 
-		void LightingModel::doDeclarePointLightUbo()
+		void LightingModel::doDeclarePointLightUbo( uint32_t binding )
 		{
-			Ubo lightUbo{ m_writer, "LightUbo", UboBindingPoint, 0u };
+			Ubo lightUbo{ m_writer, "LightUbo", binding, 0u };
 			lightUbo.declStructMember( "c3d_light", *m_pointLightType );
 			lightUbo.end();
 		}
 
-		void LightingModel::doDeclareSpotLightUbo()
+		void LightingModel::doDeclareSpotLightUbo( uint32_t binding )
 		{
-			Ubo lightUbo{ m_writer, "LightUbo", UboBindingPoint, 0u };
+			Ubo lightUbo{ m_writer, "LightUbo", binding, 0u };
 			lightUbo.declStructMember( "c3d_light", *m_spotLightType );
 			lightUbo.end();
 		}

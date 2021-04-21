@@ -65,7 +65,6 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	uint32_t const LpvGridConfigUbo::BindingPoint = 12;
 	std::string const LpvGridConfigUbo::LpvGridData = "c3d_lpvGridData";
 	std::string const LpvGridConfigUbo::LpvGridConfig = "lpvGridConfig";
 

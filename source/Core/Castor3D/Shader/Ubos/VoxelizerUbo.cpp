@@ -88,7 +88,6 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	uint32_t const VoxelizerUbo::BindingPoint = 13u;
 	castor::String const VoxelizerUbo::BufferVoxelizer = cuT( "Voxelizer" );
 	castor::String const VoxelizerUbo::VoxelData = cuT( "c3d_voxelData" );
 

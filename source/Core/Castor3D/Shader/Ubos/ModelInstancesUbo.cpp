@@ -8,7 +8,6 @@
 
 namespace castor3d
 {
-	uint32_t const ModelInstancesUbo::BindingPoint = 10u;
 	castor::String const ModelInstancesUbo::BufferModelInstances = cuT( "ModelInstances" );
 	castor::String const ModelInstancesUbo::Instances = cuT( "c3d_instances" );
 	castor::String const ModelInstancesUbo::InstanceCount = cuT( "c3d_instanceCount" );

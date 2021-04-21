@@ -755,7 +755,7 @@ namespace castor3d
 		, BillboardListRenderNode & node )
 	{
 		node.pickingUbo.createSizedBinding( *node.uboDescriptorSet
-			, layout.getBinding( PickingUbo::BindingPoint ) );
+			, layout.getBinding( uint32_t( NodeUboIdx::ePicking ) ) );
 	}
 
 	void PickingPass::doFillUboDescriptor( RenderPipeline const & pipeline
@@ -763,7 +763,7 @@ namespace castor3d
 		, SubmeshRenderNode & node )
 	{
 		node.pickingUbo.createSizedBinding( *node.uboDescriptorSet
-			, layout.getBinding( PickingUbo::BindingPoint ) );
+			, layout.getBinding( uint32_t( NodeUboIdx::ePicking ) ) );
 	}
 
 	void PickingPass::doFillTextureDescriptor( RenderPipeline const & pipeline
@@ -829,11 +829,11 @@ namespace castor3d
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto in = writer.getIn();
 
-		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
-		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
-		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
-		auto skinningData = SkinningUbo::declare( writer, SkinningUbo::BindingPoint, 0, flags.programFlags );
-		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0, flags.programFlags );
+		UBO_MATRIX( writer, uint32_t( NodeUboIdx::eMatrix ), 0 );
+		UBO_MODEL_MATRIX( writer, uint32_t( NodeUboIdx::eModelMatrix ), 0 );
+		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0 );
+		auto skinningData = SkinningUbo::declare( writer, uint32_t( NodeUboIdx::eSkinning ), 0, flags.programFlags );
+		UBO_MORPHING( writer, uint32_t( NodeUboIdx::eMorphing ), 0, flags.programFlags );
 
 		// Outputs
 		auto outTexture = writer.declOutput< Vec3 >( "outTexture"
@@ -921,17 +921,19 @@ namespace castor3d
 		// UBOs
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto materials = shader::createMaterials( writer, flags.passFlags );
-		materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+			, uint32_t( NodeUboIdx::eMaterials ) );
 		shader::TextureConfigurations textureConfigs{ writer };
 		bool hasTextures = !flags.textures.empty();
 
 		if ( hasTextures )
 		{
-			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+				, uint32_t( NodeUboIdx::eTexturesBuffer ) );
 		}
 
-		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
-		UBO_PICKING( writer, PickingUbo::BindingPoint, 0u );
+		UBO_TEXTURES( writer, uint32_t( NodeUboIdx::eTexturesConfig ), 0u, hasTextures );
+		UBO_PICKING( writer, uint32_t( NodeUboIdx::ePicking ), 0u );
 
 		// Fragment Intputs
 		auto in = writer.getIn();
@@ -942,7 +944,7 @@ namespace castor3d
 		auto vtx_material = writer.declInput< UInt >( "vtx_material"
 			, SceneRenderPass::VertexOutputs::MaterialLocation );
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-			, getMinTextureIndex()
+			, 0u
 			, 1u
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
@@ -994,7 +996,7 @@ namespace castor3d
 
 	ashes::VkDescriptorSetLayoutBindingArray PickingPass::doCreateTextureBindings( PipelineFlags const & flags )const
 	{
-		auto index = getMinTextureIndex();
+		auto index = 0u;
 		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
 
 		if ( !flags.textures.empty() )

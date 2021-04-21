@@ -311,7 +311,7 @@ namespace castor3d
 		{
 			CU_Require( m_vctConfigUbo );
 			m_vctConfigUbo->createSizedBinding( *node.uboDescriptorSet
-				, layout.getBinding( VoxelizerUbo::BindingPoint ) );
+				, layout.getBinding( uint32_t( NodeUboIdx::eVoxelData ) ) );
 		}
 		else
 		{
@@ -319,14 +319,14 @@ namespace castor3d
 			{
 				CU_Require( m_lpvConfigUbo );
 				m_lpvConfigUbo->createSizedBinding( *node.uboDescriptorSet
-					, layout.getBinding( LpvGridConfigUbo::BindingPoint ) );
+					, layout.getBinding( uint32_t( NodeUboIdx::eLpvGridConfig ) ) );
 			}
 
 			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
 			{
 				CU_Require( m_llpvConfigUbo );
 				m_llpvConfigUbo->createSizedBinding( *node.uboDescriptorSet
-					, layout.getBinding( LayeredLpvGridConfigUbo::BindingPoint ) );
+					, layout.getBinding( uint32_t( NodeUboIdx::eLayeredLpvGridConfig ) ) );
 			}
 		}
 	}
@@ -341,7 +341,7 @@ namespace castor3d
 		{
 			CU_Require( m_vctConfigUbo );
 			m_vctConfigUbo->createSizedBinding( *node.uboDescriptorSet
-				, layout.getBinding( VoxelizerUbo::BindingPoint ) );
+				, layout.getBinding( uint32_t( NodeUboIdx::eVoxelData ) ) );
 		}
 		else
 		{
@@ -349,14 +349,14 @@ namespace castor3d
 			{
 				CU_Require( m_lpvConfigUbo );
 				m_lpvConfigUbo->createSizedBinding( *node.uboDescriptorSet
-					, layout.getBinding( LpvGridConfigUbo::BindingPoint ) );
+					, layout.getBinding( uint32_t( NodeUboIdx::eLpvGridConfig ) ) );
 			}
 
 			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
 			{
 				CU_Require( m_llpvConfigUbo );
 				m_llpvConfigUbo->createSizedBinding( *node.uboDescriptorSet
-					, layout.getBinding( LayeredLpvGridConfigUbo::BindingPoint ) );
+					, layout.getBinding( uint32_t( NodeUboIdx::eLayeredLpvGridConfig ) ) );
 			}
 		}
 	}
@@ -368,7 +368,7 @@ namespace castor3d
 		if ( checkFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing ) )
 		{
 			CU_Require( m_vctConfigUbo );
-			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( VoxelizerUbo::BindingPoint//13
+			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eVoxelData )
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		}
@@ -377,7 +377,7 @@ namespace castor3d
 			if ( checkFlag( flags.sceneFlags, SceneFlag::eLpvGI ) )
 			{
 				CU_Require( m_lpvConfigUbo );
-				uboBindings.emplace_back( makeDescriptorSetLayoutBinding( LpvGridConfigUbo::BindingPoint//12
+				uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eLpvGridConfig )
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 			}
@@ -385,7 +385,7 @@ namespace castor3d
 			if ( checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) )
 			{
 				CU_Require( m_llpvConfigUbo );
-				uboBindings.emplace_back( makeDescriptorSetLayoutBinding( LayeredLpvGridConfigUbo::BindingPoint//13
+				uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eLayeredLpvGridConfig )
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 			}
@@ -530,7 +530,7 @@ namespace castor3d
 
 	ashes::VkDescriptorSetLayoutBindingArray RenderTechniquePass::doCreateTextureBindings( PipelineFlags const & flags )const
 	{
-		auto index = getMinTextureIndex();
+		auto index = 0u;
 		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
 
 		if ( !flags.textures.empty() )
@@ -659,12 +659,12 @@ namespace castor3d
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) && hasTextures );
 		auto in = writer.getIn();
 
-		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
-		UBO_SCENE( writer, SceneUbo::BindingPoint, 0 );
-		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
-		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
-		auto skinningData = SkinningUbo::declare( writer, SkinningUbo::BindingPoint, 0, flags.programFlags );
-		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0, flags.programFlags );
+		UBO_MATRIX( writer, uint32_t( NodeUboIdx::eMatrix ), 0 );
+		UBO_SCENE( writer, uint32_t( NodeUboIdx::eScene ), 0 );
+		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0 );
+		UBO_MODEL_MATRIX( writer, uint32_t( NodeUboIdx::eModelMatrix ), 0 );
+		auto skinningData = SkinningUbo::declare( writer, uint32_t( NodeUboIdx::eSkinning ), 0, flags.programFlags );
+		UBO_MORPHING( writer, uint32_t( NodeUboIdx::eMorphing ), 0, flags.programFlags );
 
 		// Outputs
 		auto outWorldPosition = writer.declOutput< Vec3 >( "outWorldPosition"

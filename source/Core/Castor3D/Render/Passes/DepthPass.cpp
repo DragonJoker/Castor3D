@@ -218,7 +218,7 @@ namespace castor3d
 
 	ashes::VkDescriptorSetLayoutBindingArray DepthPass::doCreateTextureBindings( PipelineFlags const & flags )const
 	{
-		auto index = getMinTextureIndex();
+		auto index = 0u;
 		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
 
 		if ( !flags.textures.empty() )
@@ -299,12 +299,12 @@ namespace castor3d
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) && hasTextures );
 		auto in = writer.getIn();
 
-		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
-		UBO_SCENE( writer, SceneUbo::BindingPoint, 0 );
-		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
-		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
-		auto skinningData = SkinningUbo::declare( writer, SkinningUbo::BindingPoint, 0, flags.programFlags );
-		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0, flags.programFlags );
+		UBO_MATRIX( writer, uint32_t( NodeUboIdx::eMatrix ), 0 );
+		UBO_SCENE( writer, uint32_t( NodeUboIdx::eScene ), 0 );
+		UBO_MODEL_MATRIX( writer, uint32_t( NodeUboIdx::eModelMatrix ), 0 );
+		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0 );
+		auto skinningData = SkinningUbo::declare( writer, uint32_t( NodeUboIdx::eSkinning ), 0, flags.programFlags );
+		UBO_MORPHING( writer, uint32_t( NodeUboIdx::eMorphing ), 0, flags.programFlags );
 
 		// Outputs
 		auto outCurPosition = writer.declOutput< Vec3 >( "outCurPosition"
@@ -469,23 +469,25 @@ namespace castor3d
 		auto inTangentSpaceViewPosition = writer.declInput< Vec3 >( "inTangentSpaceViewPosition"
 			, SceneRenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-			, getMinTextureIndex()
+			, 0u
 			, 1u
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
 		auto out = writer.getOut();
 
 		auto materials = shader::createMaterials( writer, flags.passFlags );
-		materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+			, uint32_t( NodeUboIdx::eMaterials ) );
 		shader::TextureConfigurations textureConfigs{ writer };
 
 		if ( hasTextures )
 		{
-			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+				, uint32_t( NodeUboIdx::eTexturesBuffer ) );
 		}
 
-		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
-		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
+		UBO_SCENE( writer, uint32_t( NodeUboIdx::eScene ), 0u );
+		UBO_TEXTURES( writer, uint32_t( NodeUboIdx::eTexturesConfig ), 0u, hasTextures );
 
 		shader::Utils utils{ writer };
 		utils.declareParallaxMappingFunc( flags.passFlags

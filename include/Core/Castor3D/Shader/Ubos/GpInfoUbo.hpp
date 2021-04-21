@@ -86,7 +86,6 @@ namespace castor3d
 		C3D_API static const castor::String View;
 		C3D_API static const castor::String Proj;
 		C3D_API static const castor::String RenderSize;
-		C3D_API static uint32_t const BindingPoint;
 
 	private:
 		Engine & m_engine;
