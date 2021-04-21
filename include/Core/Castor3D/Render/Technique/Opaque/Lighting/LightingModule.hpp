@@ -25,6 +25,27 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	The lighting passes UBOs binding index.
+	*\~french
+	*\brief
+	*	L'index de binding des UBOs des passes d'éclairage.
+	*/
+	enum class LightPassUboIdx
+		: uint32_t
+	{
+		eMaterials,
+		eMatrix,
+		eGpInfo,
+		eScene,
+		eLight,
+		eModelMatrix,
+		eLpvGridConfig,
+		eLayeredLpvGridConfig,
+		eVoxelData,
+	};
+	/**
+	*\~english
+	*\brief
 	*	Enumerator of textures used by the lighting pass in deferred rendering.
 	*\~french
 	*\brief

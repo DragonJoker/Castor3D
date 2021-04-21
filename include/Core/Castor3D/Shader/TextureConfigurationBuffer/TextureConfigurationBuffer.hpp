@@ -62,7 +62,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Crée une attache de layout de set de descripteurs.
 		 */
-		C3D_API VkDescriptorSetLayoutBinding createLayoutBinding()const;
+		C3D_API VkDescriptorSetLayoutBinding createLayoutBinding( uint32_t binding )const;
 		/**
 		 *\~english
 		 *\brief		Creates the descriptor set binding at given point.

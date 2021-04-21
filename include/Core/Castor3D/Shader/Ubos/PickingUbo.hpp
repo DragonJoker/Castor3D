@@ -45,7 +45,6 @@ namespace castor3d
 		}
 
 	public:
-		C3D_API static const uint32_t BindingPoint;
 		//!\~english	Name of the picking information frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les informations de picking.
 		C3D_API static castor::String const BufferPicking;

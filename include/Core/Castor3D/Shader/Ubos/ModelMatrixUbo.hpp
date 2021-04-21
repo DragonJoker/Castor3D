@@ -105,7 +105,6 @@ namespace castor3d
 		}
 
 	public:
-		C3D_API static const uint32_t BindingPoint;
 		C3D_API static castor::String const BufferModelMatrix;
 		C3D_API static castor::String const PrvMtxModel;
 		C3D_API static castor::String const PrvMtxNormal;

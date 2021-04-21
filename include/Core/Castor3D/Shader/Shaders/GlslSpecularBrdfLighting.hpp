@@ -79,6 +79,7 @@ namespace castor3d
 				, Utils & utils
 				, LightType light
 				, bool lightUbo
+				, uint32_t lightUboBinding
 				, ShadowOptions const & shadows
 				, uint32_t & index );
 			C3D_API static std::shared_ptr< SpecularBrdfLightingModel > createDiffuseModel( sdw::ShaderWriter & writer
