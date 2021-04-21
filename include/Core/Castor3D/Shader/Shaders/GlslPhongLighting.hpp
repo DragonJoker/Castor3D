@@ -67,18 +67,41 @@ namespace castor3d
 				, ShadowOptions const & shadows
 				, uint32_t & index
 				, bool isOpaqueProgram );
-			C3D_API static std::shared_ptr< PhongLightingModel > createModel( sdw::ShaderWriter & writer
-				, Utils & utils
-				, LightType light
-				, bool lightUbo
-				, uint32_t lightUboBinding
-				, ShadowOptions const & shadows
-				, uint32_t & index );
 			C3D_API static std::shared_ptr< PhongLightingModel > createDiffuseModel( sdw::ShaderWriter & writer
 				, Utils & utils
 				, ShadowOptions const & shadows
 				, uint32_t & index
 				, bool isOpaqueProgram );
+			static std::shared_ptr< PhongLightingModel > createModel( sdw::ShaderWriter & writer
+				, Utils & utils
+				, LightType light
+				, ShadowOptions const & shadows
+				, uint32_t & index )
+			{
+				return createModel( writer
+					, utils
+					, light
+					, false
+					, 0u
+					, shadows
+					, index );
+			}
+			static std::shared_ptr< PhongLightingModel > createModel( sdw::ShaderWriter & writer
+				, Utils & utils
+				, LightType light
+				, uint32_t lightUboBinding
+				, ShadowOptions const & shadows
+				, uint32_t & index )
+			{
+				return createModel( writer
+					, utils
+					, light
+					, true
+					, lightUboBinding
+					, shadows
+					, index );
+			}
+
 			C3D_API void computeMapContributions( PassFlags const & passFlags
 				, FilteredTextureFlags const & textures
 				, sdw::Float const & gamma
@@ -122,6 +145,14 @@ namespace castor3d
 			void doDeclareComputePointLightDiffuse()override;
 			void doDeclareComputeSpotLightDiffuse()override;
 
+		private:
+			C3D_API static std::shared_ptr< PhongLightingModel > createModel( sdw::ShaderWriter & writer
+				, Utils & utils
+				, LightType light
+				, bool lightUbo
+				, uint32_t lightUboBinding
+				, ShadowOptions const & shadows
+				, uint32_t & index );
 			void doComputeLight( Light const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & lightDirection

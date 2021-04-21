@@ -95,8 +95,6 @@ namespace castor3d
 				auto lightingModel = shader::PhongLightingModel::createModel( writer
 					, utils
 					, LightType::eDirectional
-					, false // lightUbo
-					, 0u // lightUboBinding
 					, shader::ShadowOptions{ SceneFlag::eNone, true }
 					, index );
 
@@ -172,8 +170,6 @@ namespace castor3d
 				auto lightingModel = shader::PhongLightingModel::createModel( writer
 					, utils
 					, LightType::eDirectional
-					, false // lightUbo
-					, 0u // lightUboBinding
 					, shader::ShadowOptions{ SceneFlag::eNone, true }
 					, index );
 
@@ -253,8 +249,6 @@ namespace castor3d
 			auto lightingModel = shader::PhongLightingModel::createModel( writer
 				, utils
 				, LightType::eSpot
-				, false // lightUbo
-				, 0u // lightUboBinding
 				, shader::ShadowOptions{ SceneFlag::eNone, true }
 				, index );
 
@@ -333,8 +327,6 @@ namespace castor3d
 			auto lightingModel = shader::PhongLightingModel::createModel( writer
 				, utils
 				, LightType::eSpot
-				, false // lightUbo
-				, 0u // lightUboBinding
 				, shader::ShadowOptions{ SceneFlag::eNone, true }
 				, index );
 
