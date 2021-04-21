@@ -298,22 +298,24 @@ namespace castor3d
 		auto inMaterial = writer.declInput< UInt >( "inMaterial"
 			, SceneRenderPass::VertexOutputs::MaterialLocation );
 
-		shader::LegacyMaterials materials{ writer };
-		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", getLightBufferIndex(), 0u );
+		shader::PhongMaterials materials{ writer };
+		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+			, uint32_t( NodeUboIdx::eMaterials ) );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", uint32_t( NodeUboIdx::eLights ), 0u );
 		shader::TextureConfigurations textureConfigs{ writer };
 
 		if ( hasTextures )
 		{
-			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+				, uint32_t( NodeUboIdx::eTexturesBuffer ) );
 		}
 
-		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
-		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
-		UBO_MODEL( writer, ModelUbo::BindingPoint, 0u );
-		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
+		UBO_MATRIX( writer, uint32_t( NodeUboIdx::eMatrix ), 0u );
+		UBO_SCENE( writer, uint32_t( NodeUboIdx::eScene ), 0u );
+		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0u );
+		UBO_TEXTURES( writer, uint32_t( NodeUboIdx::eTexturesConfig ), 0u, hasTextures );
 
-		auto index = getMinTextureIndex();
+		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, index
 			, 1u
@@ -328,7 +330,12 @@ namespace castor3d
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ) );
 		shader::Utils utils{ writer };
 		shader::GlobalIllumination indirect{ writer, utils };
-		indirect.declare( 1u, index, flags.sceneFlags );
+		indirect.declare( uint32_t( NodeUboIdx::eVoxelData )
+			, uint32_t( NodeUboIdx::eLpvGridConfig )
+			, uint32_t( NodeUboIdx::eLayeredLpvGridConfig )
+			, index
+			, 1u
+			, flags.sceneFlags );
 
 		auto in = writer.getIn();
 
@@ -559,21 +566,23 @@ namespace castor3d
 			, SceneRenderPass::VertexOutputs::MaterialLocation );
 
 		shader::PbrMRMaterials materials{ writer };
-		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", getLightBufferIndex(), 0u );
+		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+			, uint32_t( NodeUboIdx::eMaterials ) );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", uint32_t( NodeUboIdx::eLights ), 0u );
 		shader::TextureConfigurations textureConfigs{ writer };
 
 		if ( hasTextures )
 		{
-			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+				, uint32_t( NodeUboIdx::eTexturesBuffer ) );
 		}
 
-		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
-		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
-		UBO_MODEL( writer, ModelUbo::BindingPoint, 0u );
-		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
+		UBO_MATRIX( writer, uint32_t( NodeUboIdx::eMatrix ), 0u );
+		UBO_SCENE( writer, uint32_t( NodeUboIdx::eScene ), 0u );
+		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0u );
+		UBO_TEXTURES( writer, uint32_t( NodeUboIdx::eTexturesConfig ), 0u, hasTextures );
 
-		auto index = getMinTextureIndex();
+		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, index
 			, 1u
@@ -597,7 +606,12 @@ namespace castor3d
 			, 1u );
 		shader::Utils utils{ writer };
 		shader::GlobalIllumination indirect{ writer, utils };
-		indirect.declare( 1u, index, flags.sceneFlags );
+		indirect.declare( uint32_t( NodeUboIdx::eVoxelData )
+			, uint32_t( NodeUboIdx::eLpvGridConfig )
+			, uint32_t( NodeUboIdx::eLayeredLpvGridConfig )
+			, index
+			, 1u
+			, flags.sceneFlags );
 
 		auto in = writer.getIn();
 
@@ -907,21 +921,23 @@ namespace castor3d
 			, SceneRenderPass::VertexOutputs::MaterialLocation );
 
 		shader::PbrSGMaterials materials{ writer };
-		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", getLightBufferIndex(), 0u );
+		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+			, uint32_t( NodeUboIdx::eMaterials ) );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", uint32_t( NodeUboIdx::eLights ), 0u );
 		shader::TextureConfigurations textureConfigs{ writer };
 
 		if ( hasTextures )
 		{
-			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+				, uint32_t( NodeUboIdx::eTexturesBuffer ) );
 		}
 
-		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
-		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
-		UBO_MODEL( writer, ModelUbo::BindingPoint, 0u );
-		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
+		UBO_MATRIX( writer, uint32_t( NodeUboIdx::eMatrix ), 0u );
+		UBO_SCENE( writer, uint32_t( NodeUboIdx::eScene ), 0u );
+		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0u );
+		UBO_TEXTURES( writer, uint32_t( NodeUboIdx::eTexturesConfig ), 0u, hasTextures );
 
-		auto index = getMinTextureIndex();
+		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, index
 			, 1u
@@ -945,7 +961,12 @@ namespace castor3d
 			, 1u );
 		shader::Utils utils{ writer };
 		shader::GlobalIllumination indirect{ writer, utils };
-		indirect.declare( 1u, index, flags.sceneFlags );
+		indirect.declare( uint32_t( NodeUboIdx::eVoxelData )
+			, uint32_t( NodeUboIdx::eLpvGridConfig )
+			, uint32_t( NodeUboIdx::eLayeredLpvGridConfig )
+			, index
+			, 1u
+			, flags.sceneFlags );
 
 		auto in = writer.getIn();
 

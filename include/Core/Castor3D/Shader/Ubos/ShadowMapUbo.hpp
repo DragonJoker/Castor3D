@@ -88,7 +88,6 @@ namespace castor3d
 		}
 
 	public:
-		C3D_API static uint32_t const BindingPoint;
 		C3D_API static castor::String const BufferShadowMap;
 		C3D_API static castor::String const LightProjection;
 		C3D_API static castor::String const LightView;

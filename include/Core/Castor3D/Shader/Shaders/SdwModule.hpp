@@ -85,7 +85,7 @@ namespace castor3d
 		struct PointLight;
 		struct SpotLight;
 		class Materials;
-		class LegacyMaterials;
+		class PhongMaterials;
 		class PbrMRMaterials;
 		class PbrSGMaterials;
 		class LightingModel;
@@ -93,7 +93,7 @@ namespace castor3d
 		class MetallicBrdfLightingModel;
 		class SpecularBrdfLightingModel;
 		struct BaseMaterial;
-		struct LegacyMaterial;
+		struct PhongMaterial;
 		struct MetallicRoughnessMaterial;
 		struct SpecularGlossinessMaterial;
 		struct TextureConfigData;
