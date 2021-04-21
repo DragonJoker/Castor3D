@@ -356,7 +356,7 @@ namespace castor3d
 					{
 						auto programFlags = submesh.getProgramFlags( material );
 						auto sceneFlags = scene.getFlags();
-						auto textures = pass->getTextures( renderPass.getTexturesMask() );
+						auto textures = pass->getTexturesMask();
 						auto animated = doAdjustFlags( *renderPass.getEngine()->getRenderSystem()
 							, programFlags
 							, passFlags
@@ -423,7 +423,7 @@ namespace castor3d
 				auto sceneFlags = scene.getFlags();
 				auto passFlags = pass->getPassFlags();
 				auto programFlags = billboard.getProgramFlags();
-				auto textures = pass->getTextures( renderPass.getTexturesMask() );
+				auto textures = pass->getTexturesMask();
 				addFlag( programFlags, ProgramFlag::eBillboards );
 				auto flags = renderPass.prepareBackPipeline( pass->getColourBlendMode()
 					, pass->getAlphaBlendMode()

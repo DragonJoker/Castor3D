@@ -390,7 +390,7 @@ namespace castor3d
 	{
 		auto & buffers = submesh.getGeometryBuffers( pass.getOwner()->shared_from_this()
 			, getInstanceMult()
-			, pass.getTextures( getTexturesMask() ) );
+			, pass.getTexturesMask() );
 		auto & scene = *primitive.getScene();
 		auto geometryEntry = scene.getGeometryCache().getUbos( primitive
 			, submesh
@@ -424,7 +424,7 @@ namespace castor3d
 	{
 		auto & buffers = submesh.getGeometryBuffers( pass.getOwner()->shared_from_this()
 			, getInstanceMult()
-			, pass.getTextures( getTexturesMask() ) );
+			, pass.getTexturesMask() );
 		auto & scene = *primitive.getScene();
 		auto geometryEntry = scene.getGeometryCache().getUbos( primitive
 			, submesh
@@ -457,7 +457,7 @@ namespace castor3d
 	{
 		auto & buffers = submesh.getGeometryBuffers( pass.getOwner()->shared_from_this()
 			, getInstanceMult()
-			, pass.getTextures( getTexturesMask() ) );
+			, pass.getTexturesMask() );
 		auto & scene = *primitive.getScene();
 		auto geometryEntry = scene.getGeometryCache().getUbos( primitive
 			, submesh
@@ -514,6 +514,12 @@ namespace castor3d
 	void SceneRenderPass::updateFlags( PipelineFlags & flags )const
 	{
 		doUpdateFlags( flags );
+	}
+
+	FilteredTextureFlags SceneRenderPass::filterTexturesFlags( TextureFlagsArray const & textures )const
+	{
+		return castor3d::filterTexturesFlags( textures
+			, getTexturesMask() );
 	}
 
 	ashes::PipelineColorBlendStateCreateInfo SceneRenderPass::createBlendState( BlendMode colourBlendMode

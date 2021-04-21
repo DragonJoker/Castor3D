@@ -671,6 +671,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
+		auto textures = filterTexturesFlags( flags.textures );
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		bool hasTextures = !flags.textures.empty();
 
@@ -756,7 +757,8 @@ namespace castor3d
 					{
 						auto texCoord = writer.declLocale( "texCoord"
 							, inTexture );
-						lighting->computeMapVoxelContributions( flags
+						lighting->computeMapVoxelContributions( flags.passFlags
+							, textures
 							, gamma
 							, textureConfigs
 							, c3d_textureConfig
@@ -807,6 +809,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
+		auto textures = filterTexturesFlags( flags.textures );
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		bool hasTextures = !flags.textures.empty();
 
@@ -903,7 +906,8 @@ namespace castor3d
 					{
 						auto texCoord = writer.declLocale( "texCoord"
 							, inTexture );
-						lighting->computeMapVoxelContributions( flags
+						lighting->computeMapVoxelContributions( flags.passFlags
+							, textures
 							, gamma
 							, textureConfigs
 							, c3d_textureConfig
@@ -956,6 +960,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
+		auto textures = filterTexturesFlags( flags.textures );
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		bool hasTextures = !flags.textures.empty();
 
@@ -1041,7 +1046,8 @@ namespace castor3d
 					{
 						auto texCoord = writer.declLocale( "texCoord"
 							, inTexture );
-						lighting->computeMapVoxelContributions( flags
+						lighting->computeMapVoxelContributions( flags.passFlags
+							, textures
 							, gamma
 							, textureConfigs
 							, c3d_textureConfig

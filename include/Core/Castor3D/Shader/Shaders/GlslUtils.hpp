@@ -37,8 +37,10 @@ namespace castor3d::shader
 		C3D_API void declareEncodeMaterial();
 		C3D_API void declareDecodeMaterial();
 		C3D_API void declareDecodeReceiver();
-		C3D_API void declareParallaxMappingFunc( PipelineFlags const & flags );
-		C3D_API void declareParallaxShadowFunc( PipelineFlags const & flags );
+		C3D_API void declareParallaxMappingFunc( PassFlags const & passFlags
+			, TextureFlags const & textures );
+		C3D_API void declareParallaxShadowFunc( PassFlags const & passFlags
+			, TextureFlags const & textures );
 
 		C3D_API void declareIsSaturated();
 		C3D_API void declareEncodeColor();
@@ -101,19 +103,19 @@ namespace castor3d::shader
 			, sdw::SampledImageCubeRgba32 const & irradiance
 			, sdw::SampledImageCubeRgba32 const & prefiltered
 			, sdw::SampledImage2DRgba32 const & brdf )const;
-		C3D_API void computeColourMapContribution( TextureFlagsArray const & flags
+		C3D_API void computeColourMapContribution( FilteredTextureFlags const & flags
 			, TextureConfigurations const & textureConfigs
 			, sdw::Array< sdw::UVec4 > const & textureConfig
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 			, sdw::Vec3 const & texCoords
 			, sdw::Vec3 & colour );
-		C3D_API void computeOpacityMapContribution( TextureFlagsArray const & flags
+		C3D_API void computeOpacityMapContribution( FilteredTextureFlags const & flags
 			, TextureConfigurations const & textureConfigs
 			, sdw::Array< sdw::UVec4 > const & textureConfig
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 			, sdw::Vec3 const & texCoords
 			, sdw::Float & opacity );
-		C3D_API void computeNormalMapContribution( TextureFlagsArray const & flags
+		C3D_API void computeNormalMapContribution( FilteredTextureFlags const & flags
 			, TextureConfigurations const & textureConfigs
 			, sdw::Array< sdw::UVec4 > const & textureConfig
 			, sdw::Vec3 & normal
@@ -123,7 +125,7 @@ namespace castor3d::shader
 			, sdw::Vec3 & tangentSpaceFragPosition
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 			, sdw::Vec3 & texCoords );
-		C3D_API void computeHeightMapContribution( TextureFlagsArray const & flags
+		C3D_API void computeHeightMapContribution( FilteredTextureFlags const & flags
 			, PassFlags const & passFlags
 			, TextureConfigurations const & textureConfigs
 			, sdw::Array< sdw::UVec4 > const & textureConfig
@@ -140,7 +142,7 @@ namespace castor3d::shader
 			, sdw::Float & opacity
 			, sdw::Vec3 & tangentSpaceViewPosition
 			, sdw::Vec3 & tangentSpaceFragPosition );
-		C3D_API void computeGeometryMapsContributions( TextureFlagsArray const & flags
+		C3D_API void computeGeometryMapsContributions( FilteredTextureFlags const & flags
 			, PassFlags const & passFlags
 			, TextureConfigurations const & textureConfigs
 			, sdw::Array< sdw::UVec4 > const & textureConfig
@@ -175,7 +177,7 @@ namespace castor3d::shader
 			, sdw::Vec3 & emissive
 			, sdw::Float & opacity
 			, sdw::Float & occlusion );
-		C3D_API void computeCommonMapsContributions( TextureFlagsArray const & flags
+		C3D_API void computeCommonMapsContributions( FilteredTextureFlags const & flags
 			, PassFlags const & passFlags
 			, sdw::Float const & gamma
 			, TextureConfigurations const & textureConfigs
