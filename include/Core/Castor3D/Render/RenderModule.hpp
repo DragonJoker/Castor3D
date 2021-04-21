@@ -75,6 +75,36 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	The render nodes UBOs binding index.
+	*\~french
+	*\brief
+	*	L'index de binding des UBOs des noeuds de rendu.
+	*/
+	enum class NodeUboIdx
+		: uint32_t
+	{
+		eMaterials,
+		eLights,
+		eMatrix,
+		eScene,
+		eTexturesBuffer,
+		eTexturesConfig,
+		eModel,
+		eModelMatrix,
+		eBillboard,
+		eSkinning,
+		eMorphing,
+		eModelInstances,
+		ePicking,
+		eShadow,
+		eLpvGridConfig,
+		eLayeredLpvGridConfig,
+		eVoxelData,
+		eVoxelBuffer,
+	};
+	/**
+	*\~english
+	*\brief
 	*	Frustum corners enumeration
 	*\~french
 	*\brief

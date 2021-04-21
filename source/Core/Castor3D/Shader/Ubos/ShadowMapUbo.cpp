@@ -9,7 +9,6 @@
 
 namespace castor3d
 {
-	uint32_t const ShadowMapUbo::BindingPoint = 13u;
 	castor::String const ShadowMapUbo::BufferShadowMap = cuT( "ShadowMapCfg" );
 	castor::String const ShadowMapUbo::LightProjection = cuT( "c3d_lightProjection" );
 	castor::String const ShadowMapUbo::LightView = cuT( "c3d_lightView" );

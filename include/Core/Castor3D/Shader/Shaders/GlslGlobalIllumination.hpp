@@ -22,17 +22,23 @@ namespace castor3d
 			C3D_API explicit GlobalIllumination( sdw::ShaderWriter & writer
 				, Utils & utils
 				, bool deferred = false );
-			C3D_API void declare( uint32_t setIndex
-				, uint32_t & bindingIndex
+			C3D_API void declare( uint32_t vctUboBindingIndex
+				, uint32_t lpvUboBindingIndex
+				, uint32_t llpvUboBindingIndex
+				, uint32_t & texBindingIndex
+				, uint32_t texSetIndex
 				, SceneFlags sceneFlags );
 			C3D_API void declareTraceConeRadiance();
-			C3D_API void declareVct( uint32_t & bindingIndex
-				, uint32_t setIndex = 0u );
-			C3D_API void declareLpv( uint32_t & bindingIndex
-				, uint32_t setIndex = 0u
+			C3D_API void declareVct( uint32_t uboBindingIndex
+				, uint32_t & texBindingIndex
+				, uint32_t texSetIndex = 0u );
+			C3D_API void declareLpv( uint32_t uboBindingIndex
+				, uint32_t & texBindingIndex
+				, uint32_t texSetIndex = 0u
 				, bool declUbo = true );
-			C3D_API void declareLayeredLpv( uint32_t & bindingIndex
-				, uint32_t setIndex = 0u
+			C3D_API void declareLayeredLpv( uint32_t uboBindingIndex
+				, uint32_t & texBindingIndex
+				, uint32_t texSetIndex = 0u
 				, bool declUbo = true );
 			C3D_API sdw::Vec3 computeLPVRadiance( Surface surface
 				, LpvGridData lpvGridData );

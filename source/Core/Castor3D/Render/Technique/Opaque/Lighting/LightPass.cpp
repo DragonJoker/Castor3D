@@ -157,31 +157,30 @@ namespace castor3d
 		, VoxelizerUbo const * voxelUbo )
 	{
 		ashes::VkDescriptorSetLayoutBindingArray setLayoutBindings;
-		setLayoutBindings.emplace_back( m_engine.getMaterialCache().getPassBuffer().createLayoutBinding() );
-		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( MatrixUbo::BindingPoint
+		setLayoutBindings.emplace_back( m_engine.getMaterialCache().getPassBuffer().createLayoutBinding( uint32_t( LightPassUboIdx::eMaterials ) ) );
+		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassUboIdx::eMatrix )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( SceneUbo::BindingPoint
+		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassUboIdx::eGpInfo )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( GpInfoUbo::BindingPoint
+		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassUboIdx::eScene )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassUboIdx::eLight )
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
 		if ( modelMatrixUbo )
 		{
-			setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( ModelMatrixUbo::BindingPoint
+			setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassUboIdx::eModelMatrix )
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_VERTEX_BIT ) );
 		}
 
-		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( shader::LightingModel::UboBindingPoint
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-
 		if ( voxelUbo )
 		{
-			setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( VoxelizerUbo::BindingPoint
+			setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassUboIdx::eVoxelData )
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		}
@@ -189,7 +188,7 @@ namespace castor3d
 		m_uboDescriptorLayout = m_device->createDescriptorSetLayout( getName() + "Ubo"
 			, std::move( setLayoutBindings ) );
 		m_uboDescriptorPool = m_uboDescriptorLayout->createPool( getName() + "Ubo", 2u );
-		uint32_t index = getMinBufferIndex();
+		uint32_t index = 0u;
 
 		setLayoutBindings = ashes::VkDescriptorSetLayoutBindingArray
 		{
@@ -491,28 +490,28 @@ namespace castor3d
 			, m_vctUbo );
 		pipeline.uboDescriptorSet = pipeline.program->getUboDescriptorPool().createDescriptorSet( getName() + "Ubo", 0u );
 		auto & uboLayout = pipeline.program->getUboDescriptorLayout();
-		m_engine.getMaterialCache().getPassBuffer().createBinding( *pipeline.uboDescriptorSet, uboLayout.getBinding( 0u ) );
+		m_engine.getMaterialCache().getPassBuffer().createBinding( *pipeline.uboDescriptorSet, uboLayout.getBinding( uint32_t( LightPassUboIdx::eMaterials ) ) );
 		m_matrixUbo.createSizedBinding( *pipeline.uboDescriptorSet
-			, uboLayout.getBinding( MatrixUbo::BindingPoint ) );
-		sceneUbo.createSizedBinding( *pipeline.uboDescriptorSet
-			, uboLayout.getBinding( SceneUbo::BindingPoint ) );
+			, uboLayout.getBinding( uint32_t( LightPassUboIdx::eMatrix ) ) );
 		m_gpInfoUbo.createSizedBinding( *pipeline.uboDescriptorSet
-			, uboLayout.getBinding( GpInfoUbo::BindingPoint ) );
+			, uboLayout.getBinding( uint32_t( LightPassUboIdx::eGpInfo ) ) );
+		sceneUbo.createSizedBinding( *pipeline.uboDescriptorSet
+			, uboLayout.getBinding( uint32_t( LightPassUboIdx::eScene ) ) );
+		pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( uint32_t( LightPassUboIdx::eLight ) )
+			, *m_baseUbo );
 
 		if ( m_mmUbo )
 		{
-			pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( ModelMatrixUbo::BindingPoint )
+			pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( uint32_t( LightPassUboIdx::eModelMatrix ) )
 				, m_mmUbo->getBuffer() );
 		}
 
 		if ( m_vctUbo )
 		{
 			m_vctUbo->createSizedBinding( *pipeline.uboDescriptorSet
-				, uboLayout.getBinding( VoxelizerUbo::BindingPoint ) );
+				, uboLayout.getBinding( uint32_t( LightPassUboIdx::eVoxelData ) ) );
 		}
 
-		pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( shader::LightingModel::UboBindingPoint )
-			, *m_baseUbo );
 		pipeline.uboDescriptorSet->update();
 
 		pipeline.firstCommandBuffer = m_device.graphicsCommandPool->createCommandBuffer( getName() + "First"
@@ -525,7 +524,7 @@ namespace castor3d
 		auto & texLayout = pipeline.program->getTextureDescriptorLayout();
 		auto writeBinding = [&gp, this]( uint32_t index, VkImageLayout layout )
 		{
-			auto & unit = gp[DsTexture( index - getMinBufferIndex() )];
+			auto & unit = gp[DsTexture( index )];
 			return ashes::WriteDescriptorSet
 			{
 				index,
@@ -534,7 +533,7 @@ namespace castor3d
 				{ { unit.getSampler()->getSampler(), unit.getTexture()->getDefaultView().getSampledView(), layout } }
 			};
 		};
-		uint32_t index = getMinBufferIndex();
+		uint32_t index = 0u;
 		pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ) );
 		pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 		pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
@@ -694,9 +693,13 @@ namespace castor3d
 		auto pxl_indirectSpecular = writer.declOutput< Vec3 >( "pxl_indirectSpecular", 3, m_generatesIndirect );
 
 		// Shader inputs
-		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
-		UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
-		auto index = getMinBufferIndex();
+		shader::PhongMaterials materials{ writer };
+		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+			, uint32_t( LightPassUboIdx::eMaterials ) );
+		UBO_MATRIX( writer, uint32_t( LightPassUboIdx::eMatrix ), 0u );
+		UBO_GPINFO( writer, uint32_t( LightPassUboIdx::eGpInfo ), 0u );
+		UBO_SCENE( writer, uint32_t( LightPassUboIdx::eScene ), 0u );
+		auto index = 0u;
 		auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), index++, 1u );
 		auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), index++, 1u );
 		auto c3d_mapData2 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), index++, 1u );
@@ -722,17 +725,21 @@ namespace castor3d
 
 		if ( m_voxels )
 		{
-			indirect.declare( 1u, index, sceneFlags );
+			indirect.declare( uint32_t( LightPassUboIdx::eVoxelData )
+				, uint32_t( LightPassUboIdx::eLpvGridConfig )
+				, uint32_t( LightPassUboIdx::eLayeredLpvGridConfig )
+				, index
+				, 1u
+				, sceneFlags );
 		}
 
 		auto lighting = shader::PhongLightingModel::createModel( writer
 			, utils
 			, lightType
 			, true // lightUbo
+			, uint32_t( LightPassUboIdx::eLight )
 			, shader::ShadowOptions{ m_shadows, lightType, rsm }
 			, index );
-		shader::LegacyMaterials materials{ writer };
-		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		shader::SssTransmittance sss{ writer
 			, lighting->getShadowModel()
 			, utils
@@ -916,10 +923,13 @@ namespace castor3d
 		auto pxl_indirectSpecular = writer.declOutput< Vec3 >( "pxl_indirectSpecular", 3, m_generatesIndirect );
 
 		// Shader inputs
-		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
-		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
-		UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
-		auto index = getMinBufferIndex();
+		shader::PbrMRMaterials materials{ writer };
+		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+			, uint32_t( LightPassUboIdx::eMaterials ) );
+		UBO_MATRIX( writer, uint32_t( LightPassUboIdx::eMatrix ), 0u );
+		UBO_GPINFO( writer, uint32_t( LightPassUboIdx::eGpInfo ), 0u );
+		UBO_SCENE( writer, uint32_t( LightPassUboIdx::eScene ), 0u );
+		auto index = 0u;
 		auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), index++, 1u );
 		auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), index++, 1u );
 		auto c3d_mapData2 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), index++, 1u );
@@ -945,17 +955,21 @@ namespace castor3d
 
 		if ( m_voxels )
 		{
-			indirect.declare( 1u, index, sceneFlags );
+			indirect.declare( uint32_t( LightPassUboIdx::eVoxelData )
+				, uint32_t( LightPassUboIdx::eLpvGridConfig )
+				, uint32_t( LightPassUboIdx::eLayeredLpvGridConfig )
+				, index
+				, 1u
+				, sceneFlags );
 		}
 
 		auto lighting = shader::MetallicBrdfLightingModel::createModel( writer
 			, utils
 			, lightType
 			, true // lightUbo
+			, uint32_t( LightPassUboIdx::eLight )
 			, shader::ShadowOptions{ m_shadows, lightType, rsm }
 			, index );
-		shader::LegacyMaterials materials{ writer };
-		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		shader::SssTransmittance sss{ writer
 			, lighting->getShadowModel()
 			, utils
@@ -1207,10 +1221,13 @@ namespace castor3d
 		auto & renderSystem = *m_engine.getRenderSystem();
 
 		// Shader inputs
-		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
-		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
-		UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
-		auto index = getMinBufferIndex();
+		shader::PbrSGMaterials materials{ writer };
+		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+			, uint32_t( LightPassUboIdx::eMaterials ) );
+		UBO_MATRIX( writer, uint32_t( LightPassUboIdx::eMatrix ), 0u );
+		UBO_GPINFO( writer, uint32_t( LightPassUboIdx::eGpInfo ), 0u );
+		UBO_SCENE( writer, uint32_t( LightPassUboIdx::eScene ), 0u );
+		auto index = 0u;
 		auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), index++, 1u );
 		auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), index++, 1u );
 		auto c3d_mapData2 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), index++, 1u );
@@ -1236,17 +1253,21 @@ namespace castor3d
 
 		if ( m_voxels )
 		{
-			indirect.declare( 1u, index, sceneFlags );
+			indirect.declare( uint32_t( LightPassUboIdx::eVoxelData )
+				, uint32_t( LightPassUboIdx::eLpvGridConfig )
+				, uint32_t( LightPassUboIdx::eLayeredLpvGridConfig )
+				, index
+				, 1u
+				, sceneFlags );
 		}
 
 		auto lighting = shader::SpecularBrdfLightingModel::createModel( writer
 			, utils
 			, lightType
 			, true // lightUbo
+			, uint32_t( LightPassUboIdx::eLight )
 			, shader::ShadowOptions{ m_shadows, lightType, rsm }
 			, index );
-		shader::LegacyMaterials materials{ writer };
-		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		shader::SssTransmittance sss{ writer
 			, lighting->getShadowModel()
 			, utils

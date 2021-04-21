@@ -634,47 +634,47 @@ namespace castor3d
 		{
 			ashes::DescriptorSet & uboDescriptorSet = *node.uboDescriptorSet;
 			engine.getMaterialCache().getPassBuffer().createBinding( uboDescriptorSet
-				, layout.getBinding( getPassBufferIndex() ) );
+				, layout.getBinding( uint32_t( NodeUboIdx::eMaterials ) ) );
 
 			if ( !pipeline.getFlags().textures.empty() )
 			{
 				engine.getMaterialCache().getTextureBuffer().createBinding( uboDescriptorSet
-					, layout.getBinding( getTexturesBufferIndex() ) );
+					, layout.getBinding( uint32_t( NodeUboIdx::eTexturesBuffer ) ) );
 			}
 
 			if ( checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eLighting ) )
 			{
-				uboDescriptorSet.createBinding( layout.getBinding( getLightBufferIndex() )
+				uboDescriptorSet.createBinding( layout.getBinding( uint32_t( NodeUboIdx::eLights ) )
 					, node.sceneNode.getScene()->getLightCache().getBuffer()
 					, node.sceneNode.getScene()->getLightCache().getView() );
 			}
 
 			matrixUbo.createSizedBinding( uboDescriptorSet
-				, layout.getBinding( MatrixUbo::BindingPoint ) );
+				, layout.getBinding( uint32_t( NodeUboIdx::eMatrix ) ) );
 			sceneUbo.createSizedBinding( uboDescriptorSet
-				, layout.getBinding( SceneUbo::BindingPoint ) );
+				, layout.getBinding( uint32_t( NodeUboIdx::eScene ) ) );
 
 			if ( !checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eInstantiation ) )
 			{
 				node.modelMatrixUbo.createSizedBinding( uboDescriptorSet
-					, layout.getBinding( ModelMatrixUbo::BindingPoint ) );
+					, layout.getBinding( uint32_t( NodeUboIdx::eModelMatrix ) ) );
 			}
 
 			if ( checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eInstanceMult ) )
 			{
 				CU_Require( node.modelInstancesUbo );
 				node.modelInstancesUbo.createSizedBinding( uboDescriptorSet
-					, layout.getBinding( ModelInstancesUbo::BindingPoint ) );
+					, layout.getBinding( uint32_t( NodeUboIdx::eModelInstances ) ) );
 			}
 
 			if ( !pipeline.getFlags().textures.empty() )
 			{
 				node.texturesUbo.createSizedBinding( uboDescriptorSet
-					, layout.getBinding( TexturesUbo::BindingPoint ) );
+					, layout.getBinding( uint32_t( NodeUboIdx::eTexturesConfig ) ) );
 			}
 
 			node.modelUbo.createSizedBinding( uboDescriptorSet
-				, layout.getBinding( ModelUbo::BindingPoint ) );
+				, layout.getBinding( uint32_t( NodeUboIdx::eModel ) ) );
 		}
 	}
 
@@ -692,7 +692,7 @@ namespace castor3d
 			, m_matrixUbo
 			, m_sceneUbo );
 		node.billboardUbo.createSizedBinding( *node.uboDescriptorSet
-			, layout.getBinding( BillboardUbo::BindingPoint ) );
+			, layout.getBinding( uint32_t( NodeUboIdx::eBillboard ) ) );
 		doFillUboDescriptor( pipeline, layout, node );
 		node.uboDescriptorSet->update();
 	}
@@ -711,7 +711,7 @@ namespace castor3d
 			, m_matrixUbo
 			, m_sceneUbo );
 		node.morphingUbo.createSizedBinding( *node.uboDescriptorSet
-			, layout.getBinding( MorphingUbo::BindingPoint ) );
+			, layout.getBinding( uint32_t( NodeUboIdx::eMorphing ) ) );
 		doFillUboDescriptor( pipeline, layout, node );
 		node.uboDescriptorSet->update();
 	}
@@ -733,12 +733,12 @@ namespace castor3d
 		if ( checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eInstantiation ) )
 		{
 			node.data.getInstantiatedBones().getInstancedBonesBuffer().createBinding( *node.uboDescriptorSet
-				, layout.getBinding( SkinningUbo::BindingPoint ) );
+				, layout.getBinding( uint32_t( NodeUboIdx::eSkinning ) ) );
 		}
 		else
 		{
 			node.skinningUbo.createSizedBinding( *node.uboDescriptorSet
-				, layout.getBinding( SkinningUbo::BindingPoint ) );
+				, layout.getBinding( uint32_t( NodeUboIdx::eSkinning ) ) );
 		}
 
 		doFillUboDescriptor( pipeline, layout, node );
@@ -794,7 +794,7 @@ namespace castor3d
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		auto & layout = descriptorPool.getLayout();
-		uint32_t index = getMinTextureIndex();
+		uint32_t index = 0u;
 		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_BillboardTex"
 			, 1u );
 		doFillTextureDescriptor( pipeline, layout, index, node, shadowMaps );
@@ -807,7 +807,7 @@ namespace castor3d
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		auto & layout = descriptorPool.getLayout();
-		uint32_t index = getMinTextureIndex();
+		uint32_t index = 0u;
 		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Tex"
 			, 1u );
 		doFillTextureDescriptor( pipeline, layout, index, node, shadowMaps );
@@ -820,7 +820,7 @@ namespace castor3d
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		auto & layout = descriptorPool.getLayout();
-		uint32_t index = getMinTextureIndex();
+		uint32_t index = 0u;
 		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Tex"
 			, 1u );
 		doFillTextureDescriptor( pipeline, layout, index, node, shadowMaps );
@@ -833,7 +833,7 @@ namespace castor3d
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		auto & layout = descriptorPool.getLayout();
-		uint32_t index = getMinTextureIndex();
+		uint32_t index = 0u;
 		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Tex"
 			, 1u );
 		doFillTextureDescriptor( pipeline, layout, index, node, shadowMaps );
@@ -1337,26 +1337,36 @@ namespace castor3d
 	ashes::VkDescriptorSetLayoutBindingArray SceneRenderPass::doCreateUboBindings( PipelineFlags const & flags )const
 	{
 		ashes::VkDescriptorSetLayoutBindingArray uboBindings;
-		uboBindings.emplace_back( getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding() );
-
-		if ( !flags.textures.empty() )
-		{
-			uboBindings.emplace_back( getEngine()->getMaterialCache().getTextureBuffer().createLayoutBinding() );
-		}
+		uboBindings.emplace_back( getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding( uint32_t( NodeUboIdx::eMaterials ) ) );
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::eLighting ) )
 		{
-			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( getLightBufferIndex()
+			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eLights )
 				, VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		}
 
-		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( MatrixUbo::BindingPoint//3
+		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eMatrix )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
 				? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
 				: VK_SHADER_STAGE_VERTEX_BIT ) ) );
-		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( SceneUbo::BindingPoint//4
+		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eScene )
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, ( VK_SHADER_STAGE_FRAGMENT_BIT
+				| ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
+					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
+					: VK_SHADER_STAGE_VERTEX_BIT ) ) ) );
+
+		if ( !flags.textures.empty() )
+		{
+			uboBindings.emplace_back( getEngine()->getMaterialCache().getTextureBuffer().createLayoutBinding( uint32_t( NodeUboIdx::eTexturesBuffer ) ) );
+			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eTexturesConfig )
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		}
+
+		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eModel )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, ( VK_SHADER_STAGE_FRAGMENT_BIT
 				| ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
@@ -1365,32 +1375,31 @@ namespace castor3d
 
 		if ( !checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
 		{
-			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( ModelMatrixUbo::BindingPoint//5
+			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eModelMatrix )
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
 					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
 					: VK_SHADER_STAGE_VERTEX_BIT ) ) );
 		}
 
-		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( TexturesUbo::BindingPoint//6
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( ModelUbo::BindingPoint//7
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, ( VK_SHADER_STAGE_FRAGMENT_BIT
-				| ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
+		if ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) )
+		{
+			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eBillboard )
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
 					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
-					: VK_SHADER_STAGE_VERTEX_BIT ) ) ) );
+					: VK_SHADER_STAGE_VERTEX_BIT ) ) );
+		}
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
 		{
-			uboBindings.push_back( SkinningUbo::createLayoutBinding( SkinningUbo::BindingPoint//8
+			uboBindings.push_back( SkinningUbo::createLayoutBinding( uint32_t( NodeUboIdx::eSkinning )
 				, flags.programFlags ) );
 		}
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
 		{
-			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( MorphingUbo::BindingPoint//9
+			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eMorphing )
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
 					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
@@ -1399,23 +1408,14 @@ namespace castor3d
 		
 		if ( checkFlag( flags.programFlags, ProgramFlag::eInstanceMult ) )
 		{
-			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( ModelInstancesUbo::BindingPoint//10
+			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eModelInstances )
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_VERTEX_BIT ) );
 		}
 
-		if ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) )
-		{
-			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( BillboardUbo::BindingPoint//11
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
-					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
-					: VK_SHADER_STAGE_VERTEX_BIT ) ) );
-		}
-
 		if ( checkFlag( flags.programFlags, ProgramFlag::ePicking ) )
 		{
-			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( PickingUbo::BindingPoint//12
+			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::ePicking )
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		}
@@ -1475,12 +1475,12 @@ namespace castor3d
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) && hasTextures );
 		auto in = writer.getIn();
 
-		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
-		UBO_SCENE( writer, SceneUbo::BindingPoint, 0 );
-		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
-		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
-		auto skinningData = SkinningUbo::declare( writer, SkinningUbo::BindingPoint, 0, flags.programFlags );
-		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0, flags.programFlags );
+		UBO_MATRIX( writer, uint32_t( NodeUboIdx::eMatrix ), 0 );
+		UBO_SCENE( writer, uint32_t( NodeUboIdx::eScene ), 0 );
+		UBO_MODEL_MATRIX( writer, uint32_t( NodeUboIdx::eModelMatrix ), 0 );
+		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0 );
+		auto skinningData = SkinningUbo::declare( writer, uint32_t( NodeUboIdx::eSkinning ), 0, flags.programFlags );
+		UBO_MORPHING( writer, uint32_t( NodeUboIdx::eMorphing ), 0, flags.programFlags );
 
 		// Outputs
 		auto vtx_worldPosition = writer.declOutput< Vec3 >( "vtx_worldPosition"
@@ -1608,11 +1608,11 @@ namespace castor3d
 		auto uv = writer.declInput< Vec2 >( "uv", 1u, hasTextures );
 		auto center = writer.declInput< Vec3 >( "center", 2u );
 		auto in = writer.getIn();
-		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
-		UBO_SCENE( writer, SceneUbo::BindingPoint, 0 );
-		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
-		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
-		UBO_BILLBOARD( writer, BillboardUbo::BindingPoint, 0 );
+		UBO_MATRIX( writer, uint32_t( NodeUboIdx::eMatrix ), 0 );
+		UBO_SCENE( writer, uint32_t( NodeUboIdx::eScene ), 0 );
+		UBO_MODEL_MATRIX( writer, uint32_t( NodeUboIdx::eModelMatrix ), 0 );
+		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0 );
+		UBO_BILLBOARD( writer, uint32_t( NodeUboIdx::eBillboard ), 0 );
 
 		// Shader outputs
 		auto vtx_worldPosition = writer.declOutput< Vec3 >( "vtx_worldPosition"

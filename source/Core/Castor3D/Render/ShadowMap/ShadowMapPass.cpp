@@ -64,7 +64,7 @@ namespace castor3d
 	
 	ashes::VkDescriptorSetLayoutBindingArray ShadowMapPass::doCreateTextureBindings( PipelineFlags const & flags )const
 	{
-		auto index = getMinTextureIndex();
+		auto index = 0u;
 		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
 
 		if ( !flags.textures.empty() )
@@ -102,7 +102,7 @@ namespace castor3d
 			, ObjectRenderNode< DataTypeT, InstanceTypeT > & node
 			, ShadowMapLightTypeArray const & shadowMaps )
 		{
-			index = getMinTextureIndex();
+			index = 0u;
 			ashes::WriteDescriptorSetArray writes;
 			auto & flags = pipeline.getFlags();
 

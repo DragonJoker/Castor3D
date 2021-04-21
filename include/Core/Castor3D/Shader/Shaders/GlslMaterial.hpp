@@ -58,12 +58,12 @@ namespace castor3d
 
 		CU_DeclareSmartPtr( BaseMaterial );
 
-		struct LegacyMaterial
+		struct PhongMaterial
 			: public BaseMaterial
 		{
-			friend class LegacyMaterials;
+			friend class PhongMaterials;
 
-			C3D_API LegacyMaterial( sdw::ShaderWriter & writer
+			C3D_API PhongMaterial( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled );
 
@@ -136,7 +136,8 @@ namespace castor3d
 
 		public:
 			virtual ~Materials() = default;
-			C3D_API virtual void declare( bool hasSsbo ) = 0;
+			C3D_API virtual void declare( bool hasSsbo
+				, uint32_t binding ) = 0;
 			C3D_API virtual BaseMaterialUPtr getBaseMaterial( sdw::UInt const & index )const = 0;
 
 		protected:
@@ -149,18 +150,19 @@ namespace castor3d
 			std::unique_ptr< sdw::Struct > m_type;
 		};
 
-		class LegacyMaterials
+		class PhongMaterials
 			: public Materials
 		{
 		public:
-			C3D_API explicit LegacyMaterials( sdw::ShaderWriter & writer );
-			C3D_API void declare( bool hasSsbo )override;
-			C3D_API LegacyMaterial getMaterial( sdw::UInt const & index )const;
+			C3D_API explicit PhongMaterials( sdw::ShaderWriter & writer );
+			C3D_API void declare( bool hasSsbo
+				, uint32_t binding )override;
+			C3D_API PhongMaterial getMaterial( sdw::UInt const & index )const;
 			C3D_API BaseMaterialUPtr getBaseMaterial( sdw::UInt const & index )const override;
 
 		private:
-			std::unique_ptr< sdw::ArraySsboT< LegacyMaterial > > m_ssbo;
-			sdw::Function< LegacyMaterial, sdw::InUInt > m_getMaterial;
+			std::unique_ptr< sdw::ArraySsboT< PhongMaterial > > m_ssbo;
+			sdw::Function< PhongMaterial, sdw::InUInt > m_getMaterial;
 		};
 
 		class PbrMRMaterials
@@ -168,7 +170,8 @@ namespace castor3d
 		{
 		public:
 			C3D_API explicit PbrMRMaterials( sdw::ShaderWriter & writer );
-			C3D_API void declare( bool hasSsbo )override;
+			C3D_API void declare( bool hasSsbo
+				, uint32_t binding )override;
 			C3D_API MetallicRoughnessMaterial getMaterial( sdw::UInt const & index )const;
 			C3D_API BaseMaterialUPtr getBaseMaterial( sdw::UInt const & index )const override;
 
@@ -182,7 +185,8 @@ namespace castor3d
 		{
 		public:
 			C3D_API explicit PbrSGMaterials( sdw::ShaderWriter & writer );
-			C3D_API void declare( bool hasSsbo )override;
+			C3D_API void declare( bool hasSsbo
+				, uint32_t binding )override;
 			C3D_API SpecularGlossinessMaterial getMaterial( sdw::UInt const & index )const;
 			C3D_API BaseMaterialUPtr getBaseMaterial( sdw::UInt const & index )const override;
 

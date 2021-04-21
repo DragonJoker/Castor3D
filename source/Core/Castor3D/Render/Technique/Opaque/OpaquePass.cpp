@@ -267,7 +267,7 @@ namespace castor3d
 
 	ashes::VkDescriptorSetLayoutBindingArray OpaquePass::doCreateTextureBindings( PipelineFlags const & flags )const
 	{
-		auto index = getMinTextureIndex();
+		auto index = 0u;
 		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
 
 		if ( !flags.textures.empty() )
@@ -380,20 +380,29 @@ namespace castor3d
 
 		auto textures = filterTexturesFlags( flags.textures );
 		auto & renderSystem = *getEngine()->getRenderSystem();
-		shader::LegacyMaterials materials{ writer };
-		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		shader::PhongMaterials materials{ writer };
+		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+			, uint32_t( NodeUboIdx::eMaterials ) );
 		shader::TextureConfigurations textureConfigs{ writer };
 		bool hasTextures = !flags.textures.empty();
 
 		if ( hasTextures )
 		{
-			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+				, uint32_t( NodeUboIdx::eTexturesBuffer ) );
 		}
 
 		// UBOs
-		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
-		UBO_MODEL( writer, ModelUbo::BindingPoint, 0u );
-		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
+		UBO_SCENE( writer, uint32_t( NodeUboIdx::eScene ), 0u );
+		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0u );
+		UBO_TEXTURES( writer, uint32_t( NodeUboIdx::eTexturesConfig ), 0u, hasTextures );
+
+		auto index = 0u;
+		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
+			, index
+			, 1u
+			, std::max( 1u, uint32_t( flags.textures.size() ) )
+			, hasTextures ) );
 
 		// Fragment Inputs
 		auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition"
@@ -419,13 +428,6 @@ namespace castor3d
 			, SceneRenderPass::VertexOutputs::InstanceLocation );
 		auto inMaterial = writer.declInput< UInt >( "inMaterial"
 			, SceneRenderPass::VertexOutputs::MaterialLocation );
-
-		auto index = getMinTextureIndex();
-		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-			, index
-			, 1u
-			, std::max( 1u, uint32_t( flags.textures.size() ) )
-			, hasTextures ) );
 
 		// Fragment Outputs
 		index = 0u;
@@ -539,19 +541,28 @@ namespace castor3d
 		auto textures = filterTexturesFlags( flags.textures );
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		shader::PbrMRMaterials materials{ writer };
-		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+			, uint32_t( NodeUboIdx::eMaterials ) );
 		shader::TextureConfigurations textureConfigs{ writer };
 		bool hasTextures = !flags.textures.empty();
 
 		if ( hasTextures )
 		{
-			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+				, uint32_t( NodeUboIdx::eTexturesBuffer ) );
 		}
 
 		// UBOs
-		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
-		UBO_MODEL( writer, ModelUbo::BindingPoint, 0u );
-		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
+		UBO_SCENE( writer, uint32_t( NodeUboIdx::eScene ), 0u );
+		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0u );
+		UBO_TEXTURES( writer, uint32_t( NodeUboIdx::eTexturesConfig ), 0u, hasTextures );
+
+		auto index = 0u;
+		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
+			, index
+			, 1u
+			, std::max( 1u, uint32_t( flags.textures.size() ) )
+			, hasTextures ) );
 
 		// Fragment Inputs
 		auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition"
@@ -577,13 +588,6 @@ namespace castor3d
 			, SceneRenderPass::VertexOutputs::InstanceLocation );
 		auto inMaterial = writer.declInput< UInt >( "inMaterial"
 			, SceneRenderPass::VertexOutputs::MaterialLocation );
-
-		auto index = getMinTextureIndex();
-		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-			, index
-			, 1u
-			, std::max( 1u, uint32_t( flags.textures.size() ) )
-			, hasTextures ) );
 
 		// Fragment Outputs
 		index = 0u;
@@ -697,19 +701,28 @@ namespace castor3d
 
 		auto textures = filterTexturesFlags( flags.textures );
 		shader::PbrSGMaterials materials{ writer };
-		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+			, uint32_t( NodeUboIdx::eMaterials ) );
 		shader::TextureConfigurations textureConfigs{ writer };
 		bool hasTextures = !flags.textures.empty();
 
 		if ( hasTextures )
 		{
-			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+				, uint32_t( NodeUboIdx::eTexturesBuffer ) );
 		}
 
 		// UBOs
-		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
-		UBO_MODEL( writer, ModelUbo::BindingPoint, 0u );
-		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
+		UBO_SCENE( writer, uint32_t( NodeUboIdx::eScene ), 0u );
+		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0u );
+		UBO_TEXTURES( writer, uint32_t( NodeUboIdx::eTexturesConfig ), 0u, hasTextures );
+
+		auto index = 0u;
+		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
+			, index
+			, 1u
+			, std::max( 1u, uint32_t( flags.textures.size() ) )
+			, hasTextures ) );
 
 		// Fragment Inputs
 		auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition"
@@ -735,13 +748,6 @@ namespace castor3d
 			, SceneRenderPass::VertexOutputs::InstanceLocation );
 		auto inMaterial = writer.declInput< UInt >( "inMaterial"
 			, SceneRenderPass::VertexOutputs::MaterialLocation );
-
-		auto index = getMinTextureIndex();
-		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-			, index
-			, 1u
-			, std::max( 1u, uint32_t( flags.textures.size() ) )
-			, hasTextures ) );
 
 		// Fragment Outputs
 		index = 0u;
