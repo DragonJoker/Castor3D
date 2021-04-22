@@ -202,12 +202,46 @@ namespace film_grain
 			m_sampler = engine.getSamplerCache().find( name );
 		}
 		
+		auto & loader = engine.getImageLoader();
+		//XpmLoader loader;
+		std::array< castor::Image, NoiseMapCount > images
+		{
+			loader.load( cuT( "FilmGrainNoise0" ), "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer1_xpm ), uint32_t( castor::getCountOf( NoiseLayer1_xpm ) ), false, false ),
+			loader.load( cuT( "FilmGrainNoise1" ), "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer2_xpm ), uint32_t( castor::getCountOf( NoiseLayer2_xpm ) ), false, false ),
+			loader.load( cuT( "FilmGrainNoise2" ), "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer3_xpm ), uint32_t( castor::getCountOf( NoiseLayer3_xpm ) ), false, false ),
+			loader.load( cuT( "FilmGrainNoise3" ), "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer4_xpm ), uint32_t( castor::getCountOf( NoiseLayer4_xpm ) ), false, false ),
+			loader.load( cuT( "FilmGrainNoise4" ), "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer5_xpm ), uint32_t( castor::getCountOf( NoiseLayer5_xpm ) ), false, false ),
+			loader.load( cuT( "FilmGrainNoise5" ), "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer6_xpm ), uint32_t( castor::getCountOf( NoiseLayer6_xpm ) ), false, false ),
+		};
+
+		for ( auto & image : images )
+		{
+			auto format = image.getPixelFormat();
+
+			if ( format == castor::PixelFormat::eR8G8B8_UNORM )
+			{
+				auto buffer = castor::PxBufferBase::create( image.getDimensions()
+					, castor::PixelFormat::eR8G8B8A8_UNORM
+					, image.getPxBuffer().getConstPtr()
+					, image.getPxBuffer().getFormat()
+					, image.getPxBuffer().getAlign() );
+				image = castor::Image{ image.getName()
+					, image.getPath()
+					, *buffer };
+			}
+		}
+
+		auto dim = images[0].getDimensions();
+		auto format = castor3d::convert( images[0].getPixelFormat() );
+		auto staging = m_device->createStagingTexture( format
+			, VkExtent2D{ dim.getWidth(), dim.getHeight() } );
+
 		ashes::ImageCreateInfo image
 		{
 			0u,
 			VK_IMAGE_TYPE_3D,
-			VK_FORMAT_R8G8B8A8_UNORM,
-			{ 512u, 512u, NoiseMapCount },
+			format,
+			{ dim.getWidth(), dim.getHeight(), NoiseMapCount },
 			1u,
 			1u,
 			VK_SAMPLE_COUNT_1_BIT,
@@ -230,23 +264,6 @@ namespace film_grain
 			{ ashes::getAspectMask( m_noise->getFormat() ), 0u, 1u, 0u, 1u }
 		};
 		m_noiseView = m_noise->createView( imageView );
-
-		auto & loader = engine.getImageLoader();
-		//XpmLoader loader;
-		std::array< castor::Image, NoiseMapCount > images
-		{
-			loader.load( cuT( "FilmGrainNoise0" ), "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer1_xpm ), uint32_t( castor::getCountOf( NoiseLayer1_xpm ) ), false, false ),
-			loader.load( cuT( "FilmGrainNoise1" ), "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer2_xpm ), uint32_t( castor::getCountOf( NoiseLayer2_xpm ) ), false, false ),
-			loader.load( cuT( "FilmGrainNoise2" ), "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer3_xpm ), uint32_t( castor::getCountOf( NoiseLayer3_xpm ) ), false, false ),
-			loader.load( cuT( "FilmGrainNoise3" ), "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer4_xpm ), uint32_t( castor::getCountOf( NoiseLayer4_xpm ) ), false, false ),
-			loader.load( cuT( "FilmGrainNoise4" ), "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer5_xpm ), uint32_t( castor::getCountOf( NoiseLayer5_xpm ) ), false, false ),
-			loader.load( cuT( "FilmGrainNoise5" ), "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer6_xpm ), uint32_t( castor::getCountOf( NoiseLayer6_xpm ) ), false, false ),
-		};
-
-		auto dim = images[0].getDimensions();
-		auto format = castor3d::convert( images[0].getPixelFormat() );
-		auto staging = m_device->createStagingTexture( format
-			, VkExtent2D{ dim.getWidth(), dim.getHeight() } );
 
 		for ( uint32_t i = 0u; i < NoiseMapCount; ++i )
 		{
