@@ -96,19 +96,24 @@
   </Type>
 
   <Type Name="castor::Image">
-    <DisplayString>{{name={m_name}}}</DisplayString>
+    <DisplayString>{{{m_name} {m_buffer}}}</DisplayString>
     <Expand>
       <Item Name="name">m_name</Item>
-      <Item Name="buffers">m_buffers</Item>
+      <Item Name="buffer">m_buffer</Item>
+      <Item Name="file">m_pathFile</Item>
     </Expand>
   </Type>
 
   <Type Name="castor::PxBufferBase">
-    <DisplayString>{{format={m_pixelFormat}}}</DisplayString>
+    <DisplayString>{{{m_format} {m_size}}}</DisplayString>
     <Expand>
-      <Item Name="format">m_pixelFormat</Item>
+      <Item Name="format">m_format</Item>
       <Item Name="size">m_size</Item>
       <Item Name="buffer">m_buffer</Item>
+      <Item Name="flipped">m_flipped</Item>
+      <Item Name="layers">m_layers</Item>
+      <Item Name="levels">m_levels</Item>
+      <Item Name="align">m_align</Item>
     </Expand>
   </Type>
 
