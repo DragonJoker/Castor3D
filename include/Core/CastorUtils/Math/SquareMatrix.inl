@@ -85,13 +85,13 @@ namespace castor
 				Type tS21 = input[2][1];
 				Type tS22 = input[2][2];
 				result[0][0] = tS11 * tS22 - tS21 * tS12;
-				result[0][1] = tS12 * tS20 - tS22 * tS10;
-				result[0][2] = tS10 * tS21 - tS20 * tS11;
-				result[1][0] = tS02 * tS21 - tS01 * tS22;
+				result[0][1] = tS02 * tS21 - tS01 * tS22;
+				result[0][2] = tS12 * tS01 - tS11 * tS02;
+				result[1][0] = tS12 * tS20 - tS22 * tS10;
 				result[1][1] = tS00 * tS22 - tS02 * tS20;
-				result[1][2] = tS01 * tS20 - tS00 * tS21;
-				result[2][0] = tS12 * tS01 - tS11 * tS02;
-				result[2][1] = tS10 * tS02 - tS12 * tS00;
+				result[1][2] = tS10 * tS02 - tS12 * tS00;
+				result[2][0] = tS10 * tS21 - tS20 * tS11;
+				result[2][1] = tS01 * tS20 - tS00 * tS21;
 				result[2][2] = tS11 * tS00 - tS10 * tS01;
 				Type determinant = tS00 * ( tS11 * tS22 - tS21 * tS12 )
 					- tS10 * ( tS01 * tS22 - tS21 * tS02 )
@@ -107,10 +107,10 @@ namespace castor
 				, castor::SquareMatrix< Type, 2 > & result )
 			{
 				Type determinant = input[0][0] * input[1][1] - input[1][0] * input[0][1];
-				result[1][1] = +input[1][1] / determinant;
+				result[0][0] = +input[1][1] / determinant;
 				result[0][1] = -input[0][1] / determinant;
 				result[1][0] = -input[1][0] / determinant;
-				result[0][0] = +input[0][0] / determinant;
+				result[1][1] = +input[0][0] / determinant;
 			}
 		};
 		template< typename Type, uint32_t Count > struct SqrMtxOperators;
