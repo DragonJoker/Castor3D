@@ -97,25 +97,105 @@ namespace aria
 	}
 
 	void CategoryPanel::update( wxString const & name
-		, TestsCounts & counts )
+		, AllTestsCounts & counts )
 	{
 		m_name = name;
-		m_counts = &counts;
+		m_allCounts = &counts;
+		m_rendererCounts = nullptr;
+		m_categoryCounts = nullptr;
 
 #if CTP_UseCountedValue
 
 		for ( uint32_t i = 0; i < TestsCountsType::eCount; ++i )
 		{
 			auto type = TestsCountsType( i );
-			m_connections[i] = m_counts->getCount( type ).onValueChange.connect( [type, this]( CountedUInt const & v )
+			m_connections[i] = m_allCounts->getCount( type ).onValueChange.connect( [type, this]( CountedUInt const & v )
 				{
 					if ( type == TestsCountsType::eAll )
 					{
-						m_values[type]->SetLabel( m_name << ": " << m_counts->getValue( type ) << " tests" );
+						m_values[type]->SetLabel( m_name << ": "
+							<< m_allCounts->getValue( type ) << " tests" );
 					}
 					else
 					{
-						m_values[type]->SetLabel( wxString{ "- " } << getName( type ) << ": " << m_counts->getValue( type ) << " (" << displayPercent( m_counts->getPercent( type ) ) << ")." );
+						m_values[type]->SetLabel( wxString{ "- " }
+							<< getName( type ) << ": "
+							<< m_allCounts->getValue( type ) << " ("
+							<< displayPercent( m_allCounts->getPercent( type ) ) << ")." );
+					}
+				} );
+		}
+
+#else
+
+		refresh();
+
+#endif
+	}
+
+	void CategoryPanel::update( wxString const & name
+		, RendererTestsCounts & counts )
+	{
+		m_name = name;
+		m_allCounts = nullptr;
+		m_rendererCounts = &counts;
+		m_categoryCounts = nullptr;
+
+#if CTP_UseCountedValue
+
+		for ( uint32_t i = 0; i < TestsCountsType::eCount; ++i )
+		{
+			auto type = TestsCountsType( i );
+			m_connections[i] = m_rendererCounts->getCount( type ).onValueChange.connect( [type, this]( CountedUInt const & v )
+				{
+					if ( type == TestsCountsType::eAll )
+					{
+						m_values[type]->SetLabel( m_name << ": "
+							<< m_rendererCounts->getValue( type ) << " tests" );
+					}
+					else
+					{
+						m_values[type]->SetLabel( wxString{ "- " }
+							<< getName( type ) << ": "
+							<< m_rendererCounts->getValue( type ) << " ("
+							<< displayPercent( m_rendererCounts->getPercent( type ) ) << ")." );
+					}
+				} );
+		}
+
+#else
+
+		refresh();
+
+#endif
+	}
+
+	void CategoryPanel::update( wxString const & name
+		, CategoryTestsCounts & counts )
+	{
+		m_name = name;
+		m_allCounts = nullptr;
+		m_rendererCounts = nullptr;
+		m_categoryCounts = &counts;
+
+#if CTP_UseCountedValue
+
+		for ( uint32_t i = 0; i < TestsCountsType::eCount; ++i )
+		{
+			auto type = TestsCountsType( i );
+			m_connections[i] = m_categoryCounts->getCount( type ).onValueChange.connect( [type, this]( CountedUInt const & v )
+				{
+					if ( type == TestsCountsType::eAll )
+					{
+						m_values[type]->SetLabel( m_name << ": "
+							<< m_categoryCounts->getValue( type ) << " tests" );
+					}
+					else
+					{
+						m_values[type]->SetLabel( wxString{ "- " }
+							<< getName( type ) << ": "
+							<< m_categoryCounts->getValue( type ) << " ("
+							<< displayPercent( m_categoryCounts->getPercent( type ) ) << ")." );
 					}
 				} );
 		}
@@ -131,7 +211,7 @@ namespace aria
 	{
 #if !CTP_UseCountedValue
 
-		if ( m_counts )
+		if ( m_allCounts )
 		{
 			for ( uint32_t i = 0; i < TestsCountsType::eCount; ++i )
 			{
@@ -139,11 +219,55 @@ namespace aria
 
 				if ( type == TestsCountsType::eAll )
 				{
-					m_values[type]->SetLabel( wxString{ m_name } << ": " << m_counts->getValue( type ) << " tests" );
+					m_values[type]->SetLabel( wxString{ m_name } << ": "
+						<< m_allCounts->getValue( type ) << " tests" );
 				}
 				else
 				{
-					m_values[type]->SetLabel( wxString{ "- " } << getName( type ) << ": " << m_counts->getValue( type ) << " (" << displayPercent( m_counts->getPercent( type ) ) << ")." );
+					m_values[type]->SetLabel( wxString{ "- " }
+						<< getName( type ) << ": "
+						<< m_allCounts->getValue( type ) << " ("
+						<< displayPercent( m_allCounts->getPercent( type ) ) << ")." );
+				}
+			}
+		}
+		else if ( m_rendererCounts )
+		{
+			for ( uint32_t i = 0; i < TestsCountsType::eCount; ++i )
+			{
+				auto type = TestsCountsType( i );
+
+				if ( type == TestsCountsType::eAll )
+				{
+					m_values[type]->SetLabel( wxString{ m_name } << ": "
+						<< m_rendererCounts->getValue( type ) << " tests" );
+				}
+				else
+				{
+					m_values[type]->SetLabel( wxString{ "- " }
+						<< getName( type ) << ": "
+						<< m_rendererCounts->getValue( type ) << " ("
+						<< displayPercent( m_rendererCounts->getPercent( type ) ) << ")." );
+				}
+			}
+		}
+		else if ( m_categoryCounts )
+		{
+			for ( uint32_t i = 0; i < TestsCountsType::eCount; ++i )
+			{
+				auto type = TestsCountsType( i );
+
+				if ( type == TestsCountsType::eAll )
+				{
+					m_values[type]->SetLabel( wxString{ m_name } << ": "
+						<< m_categoryCounts->getValue( type ) << " tests" );
+				}
+				else
+				{
+					m_values[type]->SetLabel( wxString{ "- " }
+						<< getName( type ) << ": "
+						<< m_categoryCounts->getValue( type ) << " ("
+						<< displayPercent( m_categoryCounts->getPercent( type ) ) << ")." );
 				}
 			}
 		}
