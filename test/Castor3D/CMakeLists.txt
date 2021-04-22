@@ -20,7 +20,7 @@ add_target(
 	${CASTOR_SOURCE_DIR}/test/Castor3D
 	${CASTOR_SOURCE_DIR}/test/Castor3D
 	"CastorUtils;Castor3D;CastorTest"
-	"CastorUtils;Castor3D;CastorTest;${CastorMinLibraries}"
+	"CastorUtils;Castor3D;CastorTest;${CastorMinLibraries};${CastorBinsDependencies}"
 )
 
 if ( MSVC )
