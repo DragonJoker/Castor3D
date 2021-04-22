@@ -386,14 +386,9 @@ namespace castor3d
 		m_matrixUbo.cpuUpdate( camera.getView(), camera.getProjection() );
 
 		auto model = doComputeModelMatrix( light, camera );
-		auto normal = castor::Matrix3x3f{ model };
-		normal.invert();
-		normal.transpose();
 		auto & data = *m_modelData;
 		data.prvModel = data.curModel;
-		data.prvNormal = data.curNormal;
 		data.curModel = model;
-		data.curNormal = Matrix4x4f{ normal };
 
 		m_pipeline->program->bind( light );
 	}

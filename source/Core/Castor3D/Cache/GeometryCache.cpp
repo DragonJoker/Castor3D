@@ -224,6 +224,8 @@ namespace castor3d
 
 				modelData.prvModel = modelData.curModel;
 				modelData.curModel = entry.geometry.getParent()->getDerivedTransformationMatrix();
+				auto normal = castor::Matrix3x3f{ modelData.curModel };
+				modelData.normal = castor::Matrix4x4f{ normal.getInverse().getTransposed() };
 				auto & texturesData = entry.texturesUbo.getData();
 				uint32_t index = 0u;
 

@@ -112,6 +112,8 @@ namespace castor3d
 			modelData.materialIndex = entry.pass.getId();
 			modelData.prvModel = modelData.curModel;
 			modelData.curModel = entry.billboard.getNode()->getDerivedTransformationMatrix();
+			auto normal = castor::Matrix3x3f{ modelData.curModel };
+			modelData.normal = castor::Matrix4x4f{ normal.getInverse().getTransposed() };
 			auto & billboardData = entry.billboardUbo.getData();
 			billboardData.dimensions = entry.billboard.getDimensions();
 			auto & texturesData = entry.texturesUbo.getData();

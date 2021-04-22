@@ -219,9 +219,8 @@ namespace castor3d
 	struct ModelUboConfiguration
 	{
 		castor::Matrix4x4f prvModel;
-		castor::Matrix4x4f prvNormal;
 		castor::Matrix4x4f curModel;
-		castor::Matrix4x4f curNormal;
+		castor::Matrix4x4f normal;
 		int32_t shadowReceiver;
 		int32_t materialIndex;
 		int32_t environmentIndex;
