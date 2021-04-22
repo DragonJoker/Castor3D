@@ -337,6 +337,8 @@ namespace castor3d
 						, SkinningUbo::computeTransform( skinningData, writer, flags.programFlags ) );
 					auto prvMtxModel = writer.declLocale( "prvMtxModel"
 						, curMtxModel );
+					auto mtxNormal = writer.declLocale( "mtxNormal"
+						, transpose( inverse( mat3( curMtxModel ) ) ) );
 				}
 				else if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
 				{
@@ -344,6 +346,8 @@ namespace castor3d
 						, inTransform );
 					auto prvMtxModel = writer.declLocale( "prvMtxModel"
 						, curMtxModel );
+					auto mtxNormal = writer.declLocale( "mtxNormal"
+						, transpose( inverse( mat3( curMtxModel ) ) ) );
 				}
 				else
 				{
@@ -351,12 +355,13 @@ namespace castor3d
 						, c3d_curMtxModel );
 					auto prvMtxModel = writer.declLocale( "prvMtxModel"
 						, c3d_prvMtxModel );
+					auto mtxNormal = writer.declLocale( "mtxNormal"
+						, mat3( c3d_mtxNormal ) );
 				}
 
 				auto curMtxModel = writer.getVariable< Mat4 >( "curMtxModel" );
 				auto prvMtxModel = writer.getVariable< Mat4 >( "prvMtxModel" );
-				auto mtxNormal = writer.declLocale( "mtxNormal"
-					, transpose( inverse( mat3( curMtxModel ) ) ) );
+				auto mtxNormal = writer.getVariable< Mat3 >( "mtxNormal" );
 
 				if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
 				{
