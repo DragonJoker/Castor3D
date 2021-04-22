@@ -32,6 +32,7 @@ namespace aria
 
 		CountedValueT & operator--()
 		{
+			assert( m_value > 0 );
 			--m_value;
 #if CTP_UseCountedValue
 			onValueChange( *this );

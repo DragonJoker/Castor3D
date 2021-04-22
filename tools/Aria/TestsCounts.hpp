@@ -10,32 +10,12 @@ See LICENSE file in root folder
 
 namespace aria
 {
-	struct TestsCounts
+	struct CategoryTestsCounts
 	{
-	private:
-		// Renderer
-		TestsCounts( TestsCounts & all
-			, Config const & config
-			, TestMap const & tests
-			, TestRunCategoryMap const & runs );
-		// Category
-		TestsCounts( TestsCounts & renderer
-			, Config const & config
+	public:
+		CategoryTestsCounts( Config const & config
 			, TestArray const & tests
 			, TestRunArray const & runs );
-
-	public:
-		// All
-		TestsCounts( Config const & config
-			, TestMap const & tests
-			, TestRunMap const & runs );
-		// Renderer
-		TestsCountsPtr addChild( TestMap const & tests
-			, TestRunCategoryMap const & runs );
-		// Category
-		TestsCountsPtr addChild( TestArray const & tests
-			, TestRunArray const & runs );
-		// Test
 		void addTest( DatabaseTest & test );
 
 		void add( TestStatus status );
@@ -51,29 +31,21 @@ namespace aria
 
 		void addIgnored()
 		{
-			assert( m_children.empty()
-				&& "Only Category test counts can unit count tests" );
 			++getCount( TestsCountsType::eIgnored );
 		}
 
 		void removeIgnored()
 		{
-			assert( m_children.empty()
-				&& "Only Category test counts can unit count tests" );
 			--getCount( TestsCountsType::eIgnored );
 		}
 
 		void addOutdated()
 		{
-			assert( m_children.empty()
-				&& "Only Category test counts can unit count tests" );
 			++getCount( TestsCountsType::eOutdated );
 		}
 
 		void removeOutdated()
 		{
-			assert( m_children.empty()
-				&& "Only Category test counts can unit count tests" );
 			--getCount( TestsCountsType::eOutdated );
 		}
 
@@ -116,14 +88,59 @@ namespace aria
 		std::array< CountedUInt, TestsCountsType::eCount > m_values{};
 		std::array< CountedUIntConnection, TestsCountsType::eCount > m_connections{};
 		Config const & m_config;
-		TestMap const * m_allTests{};
-		TestRunMap const * m_allRuns{};
-		TestMap const * m_rendererTests{};
-		TestRunCategoryMap const * m_rendererRuns{};
-		TestArray const * m_categoryTests{};
-		TestRunArray const * m_categoryRuns{};
-		TestsCounts * m_parent{};
-		std::vector< TestsCounts * > m_children;
+		TestArray const * m_tests{};
+		TestRunArray const * m_runs{};
+	};
+
+	struct RendererTestsCounts
+	{
+		RendererTestsCounts( Config const & config );
+
+		CategoryTestsCounts & addCategory( Category category
+			, TestArray const & tests
+			, TestRunArray const & runs );
+		CategoryTestsCounts & getCounts( Category category );
+		uint32_t getValue( TestsCountsType type )const;
+		uint32_t getAllValue()const;
+
+		float getPercent( TestsCountsType type )const
+		{
+			return ( 100.0f * getValue( type ) ) / getAllValue();
+		}
+
+		TestsCountsCategoryMap & getCategories()
+		{
+			return categories;
+		}
+
+	private:
+		Config const & config;
+		TestsCountsCategoryMap categories;
+	};
+
+	struct AllTestsCounts
+	{
+		AllTestsCounts( Config const & config );
+
+		RendererTestsCounts & addRenderer( Renderer renderer );
+		RendererTestsCounts & getRenderer( Renderer renderer );
+
+		CategoryTestsCounts & addCategory( Renderer renderer
+			, Category category
+			, TestArray const & tests
+			, TestRunArray const & runs );
+
+		uint32_t getValue( TestsCountsType type )const;
+		uint32_t getAllValue()const;
+
+		float getPercent( TestsCountsType type )const
+		{
+			return ( 100.0f * getValue( type ) ) / getAllValue();
+		}
+
+	private:
+		Config const & config;
+		TestsCountsRendererMap renderers;
 	};
 }
 

@@ -3,6 +3,7 @@
 #include "Aria/DatabaseTest.hpp"
 #include "Aria/Database/DbDateTimeHelpers.hpp"
 #include "Aria/TestDatabase.hpp"
+#include "Aria/TestsCounts.hpp"
 
 #include <CastorUtils/Data/File.hpp>
 #include <CastorUtils/Miscellaneous/Utils.hpp>
@@ -113,6 +114,8 @@ namespace aria
 		return it->second;
 	}
 
+	//*********************************************************************************************
+
 	uint32_t StatusName::getStatusIndex( bool ignoreResult
 		, TestStatus status )
 	{
@@ -142,6 +145,8 @@ namespace aria
 				? 0x02u
 				: 0x00u );
 	}
+
+	//*********************************************************************************************
 
 	db::DateTime getSceneDate( Config const & config, Test const & test )
 	{

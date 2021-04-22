@@ -229,8 +229,8 @@ namespace aria
 		, wxWindow * list )
 		: auiManager{ list, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE }
 		, runs{ &runs }
-		, counts{ &counts.categories }
-		, model{ new TreeModel{ config, renderer, *counts.counts } }
+		, counts{ &counts.getCategories() }
+		, model{ new TreeModel{ config, renderer, counts } }
 	{
 	}
 
@@ -395,9 +395,7 @@ namespace aria
 	void MainFrame::doInitTestsList( Renderer renderer )
 	{
 		auto runsIt = m_tests.runs.emplace( renderer, TestRunCategoryMap{} ).first;
-		auto countsIt = m_tests.counts.renderers.emplace( renderer, RendererTestsCounts{} ).first;
-		countsIt->second.counts = m_tests.counts.counts->addChild( m_tests.tests
-			, runsIt->second );
+		auto & rendererCounts = m_tests.counts->addRenderer( renderer );
 		auto it = m_testsPages.find( renderer );
 
 		wxPanel * pagePanel = new wxPanel{ m_testsBook
@@ -410,7 +408,7 @@ namespace aria
 			auto page = std::make_unique< TestsPage >( m_config
 				, renderer
 				, runsIt->second
-				, countsIt->second
+				, rendererCounts
 				, pagePanel );
 			m_testsPages.emplace( renderer
 				, std::move( page ) );
@@ -542,9 +540,7 @@ namespace aria
 			, wxAuiNotebookEventHandler( MainFrame::onTestsPageChange )
 			, nullptr
 			, this );
-		m_tests.counts.counts = std::make_unique< TestsCounts >( m_config
-			, m_tests.tests
-			, m_tests.runs );
+		m_tests.counts = std::make_shared< AllTestsCounts >( m_config );
 
 		for ( auto & renderer : m_database.getRenderers() )
 		{
@@ -761,7 +757,7 @@ namespace aria
 		, int & index )
 	{
 		auto runsIt = m_tests.runs.find( renderer );
-		auto countsIt = m_tests.counts.renderers.find( renderer );
+		auto & rendCounts = m_tests.counts->getRenderer( renderer );
 		auto rendIt = m_testsPages.find( renderer );
 		m_database.listLatestRuns( renderer
 			, m_tests.tests
@@ -775,15 +771,15 @@ namespace aria
 		for ( auto & category : *testsPage.runs )
 		{
 			auto testsIt = m_tests.tests.find( category.first );
-			auto catIt = countsIt->second.categories.emplace( category.first
-				, countsIt->second.counts->addChild( testsIt->second
-					, category.second ) ).first;
-			auto & testsCounts = *catIt->second;
-			testsPage.model->addCategory( category.first, testsCounts );
+			auto & catCounts = m_tests.counts->addCategory( renderer
+				, category.first
+				, testsIt->second
+				, category.second );
+			testsPage.model->addCategory( category.first, catCounts );
 
 			for ( auto & run : category.second )
 			{
-				testsCounts.addTest( run );
+				catCounts.addTest( run );
 				auto testNode = testsPage.model->addTest( run );
 				testsPage.modelNodes[run->test->id] = testNode;
 				progress.Update( index++
@@ -793,9 +789,9 @@ namespace aria
 		}
 
 		testsPage.categoryView->update( renderer->name
-			, *countsIt->second.counts );
+			, rendCounts );
 		testsPage.allView->update( _( "All" )
-			, *m_tests.counts.counts );
+			, *m_tests.counts );
 		testsPage.model->expandRoots( testsPage.view );
 		testsPage.auiManager.Update();
 
@@ -816,7 +812,7 @@ namespace aria
 		}
 
 		static TestRunCategoryMap runs;
-		static RendererTestsCounts counts;
+		static RendererTestsCounts counts{ m_config };
 		static TestsPage dummy{ m_config, nullptr, runs, counts, this };
 		return dummy;
 	}
@@ -1802,10 +1798,10 @@ namespace aria
 				{
 					auto renderer = rendererIt.second.get();
 					auto rendRunIt = m_tests.runs.find( renderer );
-					auto rendCountIt = m_tests.counts.renderers.find( renderer );
+					auto & rendCounts = m_tests.counts->getRenderer( renderer );
 					auto rendPageIt = m_testsPages.find( renderer );
 					auto catRunIt = rendRunIt->second.find( category );
-					auto catCountIt = rendCountIt->second.categories.find( category );
+					auto & catCounts = rendCounts.getCounts( category );
 					catRunIt->second.emplace_back( m_database
 						, TestRun{ &test
 							, renderer
@@ -1816,7 +1812,7 @@ namespace aria
 					auto & dbTest = catRunIt->second.back();
 					auto node = rendPageIt->second->model->addTest( dbTest );
 					rendPageIt->second->modelNodes.emplace( test.id, node );
-					catCountIt->second->addTest( dbTest );
+					catCounts.addTest( dbTest );
 				}
 			}
 		}
@@ -1835,7 +1831,7 @@ namespace aria
 		}
 
 		page.allView->update( _( "All" )
-			, *m_tests.counts.counts );
+			, *m_tests.counts );
 	}
 
 	void MainFrame::onTestRunEnd( int status )
@@ -2055,22 +2051,22 @@ namespace aria
 				else if ( category )
 				{
 					auto rendRunIt = m_tests.runs.find( renderer );
-					auto rendCountsIt = m_tests.counts.renderers.find( renderer );
+					auto & rendCounts = m_tests.counts->getRenderer( renderer );
 
 					if ( rendRunIt != m_tests.runs.end() )
 					{
 						auto catRunIt = rendRunIt->second.find( category );
-						auto catCountsIt = rendCountsIt->second.categories.find( category );
+						auto & catCounts = rendCounts.getCounts( category );
 
 						if ( catRunIt != rendRunIt->second.end() )
 						{
 							page.categoryView->update( category->name
-								, *catCountsIt->second );
+								, catCounts );
 						}
 						else
 						{
 							page.categoryView->update( renderer->name
-								, *rendCountsIt->second.counts );
+								, rendCounts );
 						}
 					}
 
@@ -2080,12 +2076,12 @@ namespace aria
 				else if ( renderer )
 				{
 					auto rendRunIt = m_tests.runs.find( renderer );
-					auto rendCountsIt = m_tests.counts.renderers.find( renderer );
+					auto & rendCounts = m_tests.counts->getRenderer( renderer );
 
 					if ( rendRunIt != m_tests.runs.end() )
 					{
 						page.categoryView->update( renderer->name
-							, *rendCountsIt->second.counts );
+							, rendCounts );
 					}
 
 					page.detailViews->showLayer( TestView::eCategory );

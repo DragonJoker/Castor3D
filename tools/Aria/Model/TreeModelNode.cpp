@@ -6,12 +6,13 @@
 namespace aria
 {
 	TreeModelNode::TreeModelNode( Renderer renderer
-		, TestsCounts & counts )
+		, RendererTestsCounts & counts )
 		: renderer{ renderer }
 		, statusName{ NodeType::eRenderer
 			, &counts
+			, nullptr
 			, renderer->name }
-		, counts{ &counts }
+		, rendererCounts{ &counts }
 		, m_container{ true }
 	{
 	}
@@ -19,13 +20,14 @@ namespace aria
 	TreeModelNode::TreeModelNode( TreeModelNode * parent
 		, Renderer renderer
 		, Category category
-		, TestsCounts & counts )
+		, CategoryTestsCounts & counts )
 		: renderer{ renderer }
 		, category{ category }
 		, statusName{ NodeType::eCategory
+			, nullptr
 			, &counts
 			, category->name }
-		, counts{ &counts }
+		, categoryCounts{ &counts }
 		, m_container{ true }
 		, m_parent{ parent }
 	{
@@ -38,8 +40,8 @@ namespace aria
 		, category{ test.getCategory() }
 		, statusName{ NodeType::eTestRun
 			, nullptr
+			, nullptr
 			, test.getName() }
-		, counts{ &test.getCounts() }
 		, m_container{ false }
 		, m_parent{ parent }
 	{

@@ -117,7 +117,7 @@ namespace aria
 
 	TreeModel::TreeModel( Config const & config
 		, Renderer renderer
-		, TestsCounts & counts )
+		, RendererTestsCounts & counts )
 		: m_config{ config }
 		, m_renderer{ renderer }
 		, m_root( new TreeModelNode{ renderer, counts } )
@@ -130,7 +130,7 @@ namespace aria
 	}
 
 	TreeModelNode * TreeModel::addCategory( Category category
-		, TestsCounts & counts )
+		, CategoryTestsCounts & counts )
 	{
 		TreeModelNode * node = new TreeModelNode{ m_root, m_renderer, category, counts };
 		m_categories[category->name] = node;
@@ -416,7 +416,7 @@ namespace aria
 			switch ( Column( col ) )
 			{
 			case Column::eStatusName:
-				node->statusName.counts = &node->test->getCounts();
+				node->statusName.categoryCounts = &node->test->getCounts();
 				node->statusName.status = node->test->getStatus();
 				node->statusName.outOfCastorDate = node->test->checkOutOfCastorDate();
 				node->statusName.outOfSceneDate = node->test->checkOutOfSceneDate();
@@ -447,18 +447,51 @@ namespace aria
 			switch ( Column( col ) )
 			{
 			case Column::eStatusName:
-				node->statusName.status = ( ( node->counts->getValue( TestsCountsType::eRunning ) != 0 )
-					? TestStatus::eRunning_Begin
-					: ( ( node->counts->getValue( TestsCountsType::ePending ) != 0 )
-						? TestStatus::ePending
-						: ( ( node->counts->getValue( TestsCountsType::eUnacceptable ) != 0 )
-							? TestStatus::eUnacceptable
-							: ( ( node->counts->getValue( TestsCountsType::eAcceptable ) != 0 )
-								? TestStatus::eAcceptable
-								: ( ( node->counts->getValue( TestsCountsType::eNegligible ) > node->counts->getValue( TestsCountsType::eNotRun ) )
-									? TestStatus::eNegligible
-									: TestStatus::eNotRun ) ) ) ) );
-				node->statusName.outOfCastorDate = ( node->counts->getValue( TestsCountsType::eOutdated ) != 0 );
+				if ( node->category )
+				{
+					node->statusName.status = ( ( node->categoryCounts->getValue( TestsCountsType::eRunning ) != 0 )
+						? TestStatus::eRunning_Begin
+						: ( ( node->categoryCounts->getValue( TestsCountsType::ePending ) != 0 )
+							? TestStatus::ePending
+							: ( ( node->categoryCounts->getValue( TestsCountsType::eUnacceptable ) != 0 )
+								? TestStatus::eUnacceptable
+								: ( ( node->categoryCounts->getValue( TestsCountsType::eAcceptable ) != 0 )
+									? TestStatus::eAcceptable
+									: ( ( node->categoryCounts->getValue( TestsCountsType::eNegligible ) > node->categoryCounts->getValue( TestsCountsType::eNotRun ) )
+										? TestStatus::eNegligible
+										: TestStatus::eNotRun ) ) ) ) );
+					node->statusName.outOfCastorDate = ( node->categoryCounts->getValue( TestsCountsType::eOutdated ) != 0 );
+				}
+				else if ( node->renderer )
+				{
+					node->statusName.status = ( ( node->rendererCounts->getValue( TestsCountsType::eRunning ) != 0 )
+						? TestStatus::eRunning_Begin
+						: ( ( node->rendererCounts->getValue( TestsCountsType::ePending ) != 0 )
+							? TestStatus::ePending
+							: ( ( node->rendererCounts->getValue( TestsCountsType::eUnacceptable ) != 0 )
+								? TestStatus::eUnacceptable
+								: ( ( node->rendererCounts->getValue( TestsCountsType::eAcceptable ) != 0 )
+									? TestStatus::eAcceptable
+									: ( ( node->rendererCounts->getValue( TestsCountsType::eNegligible ) > node->rendererCounts->getValue( TestsCountsType::eNotRun ) )
+										? TestStatus::eNegligible
+										: TestStatus::eNotRun ) ) ) ) );
+					node->statusName.outOfCastorDate = ( node->rendererCounts->getValue( TestsCountsType::eOutdated ) != 0 );
+				}
+				else
+				{
+					node->statusName.status = ( ( node->allCounts->getValue( TestsCountsType::eRunning ) != 0 )
+						? TestStatus::eRunning_Begin
+						: ( ( node->allCounts->getValue( TestsCountsType::ePending ) != 0 )
+							? TestStatus::ePending
+							: ( ( node->allCounts->getValue( TestsCountsType::eUnacceptable ) != 0 )
+								? TestStatus::eUnacceptable
+								: ( ( node->allCounts->getValue( TestsCountsType::eAcceptable ) != 0 )
+									? TestStatus::eAcceptable
+									: ( ( node->allCounts->getValue( TestsCountsType::eNegligible ) > node->allCounts->getValue( TestsCountsType::eNotRun ) )
+										? TestStatus::eNegligible
+										: TestStatus::eNotRun ) ) ) ) );
+					node->statusName.outOfCastorDate = ( node->allCounts->getValue( TestsCountsType::eOutdated ) != 0 );
+				}
 				node->statusName.outOfSceneDate = false;
 				node->statusName.ignored = false;
 				node->statusName.name = getName( item );

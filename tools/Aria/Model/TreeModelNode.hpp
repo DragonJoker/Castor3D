@@ -12,11 +12,11 @@ namespace aria
 	{
 	public:
 		TreeModelNode( Renderer renderer
-			, TestsCounts & counts );
+			, RendererTestsCounts & counts );
 		TreeModelNode( TreeModelNode * parent
 			, Renderer renderer
 			, Category category
-			, TestsCounts & counts );
+			, CategoryTestsCounts & counts );
 		TreeModelNode( TreeModelNode * parent
 			, DatabaseTest & test );
 		~TreeModelNode();
@@ -68,7 +68,9 @@ namespace aria
 		Renderer renderer{};
 		Category category{};
 		StatusName statusName{};
-		TestsCounts const * counts{};
+		AllTestsCounts const * allCounts{};
+		RendererTestsCounts const * rendererCounts{};
+		CategoryTestsCounts const * categoryCounts{};
 
 	private:
 		bool m_container{};

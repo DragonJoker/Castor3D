@@ -69,7 +69,21 @@ namespace aria
 
 		int getStatusSize( TestStatus status
 			, int maxWidth
-			, TestsCounts const & counts )
+			, AllTestsCounts const & counts )
+		{
+			return int( maxWidth * counts.getValue( getType( status ) ) / float( counts.getAllValue() ) );
+		}
+
+		int getStatusSize( TestStatus status
+			, int maxWidth
+			, RendererTestsCounts const & counts )
+		{
+			return int( maxWidth * counts.getValue( getType( status ) ) / float( counts.getAllValue() ) );
+		}
+
+		int getStatusSize( TestStatus status
+			, int maxWidth
+			, CategoryTestsCounts const & counts )
 		{
 			return int( maxWidth * counts.getValue( getType( status ) ) / float( counts.getAllValue() ) );
 		}
@@ -216,21 +230,44 @@ namespace aria
 		int xOffset = 10 + m_size.x;
 		std::vector< TestStatus > valid;
 
-		for ( int i = 1; i <= int( TestStatus::eRunning_Begin ); ++i )
+		if ( m_statusName.rendererCounts )
 		{
-			auto status = TestStatus( i );
-
-			if ( m_statusName.counts->getValue( getType( status ) ) > 0 )
+			for ( int i = 1; i <= int( TestStatus::eRunning_Begin ); ++i )
 			{
-				valid.push_back( status );
+				auto status = TestStatus( i );
+
+				if ( m_statusName.rendererCounts->getValue( getType( status ) ) > 0 )
+				{
+					valid.push_back( status );
+				}
+			}
+			{
+				auto status = TestStatus::eNotRun;
+
+				if ( m_statusName.rendererCounts->getValue( getType( status ) ) > 0 )
+				{
+					valid.push_back( status );
+				}
 			}
 		}
+		else if ( m_statusName.categoryCounts )
 		{
-			auto status = TestStatus::eNotRun;
-
-			if ( m_statusName.counts->getValue( getType( status ) ) > 0 )
+			for ( int i = 1; i <= int( TestStatus::eRunning_Begin ); ++i )
 			{
-				valid.push_back( status );
+				auto status = TestStatus( i );
+
+				if ( m_statusName.categoryCounts->getValue( getType( status ) ) > 0 )
+				{
+					valid.push_back( status );
+				}
+			}
+			{
+				auto status = TestStatus::eNotRun;
+
+				if ( m_statusName.categoryCounts->getValue( getType( status ) ) > 0 )
+				{
+					valid.push_back( status );
+				}
 			}
 		}
 
@@ -258,7 +295,16 @@ namespace aria
 			{
 				curColor = getStatusColor( *cur );
 				nxtColor = getStatusColor( *nxt );
-				curWidth = getStatusSize( *cur, totalWidth, *m_statusName.counts );
+
+				if ( m_statusName.rendererCounts )
+				{
+					curWidth = getStatusSize( *cur, totalWidth, *m_statusName.rendererCounts );
+				}
+				else
+				{
+					curWidth = getStatusSize( *cur, totalWidth, *m_statusName.categoryCounts );
+				}
+
 				gradWidth = curWidth / 4;
 				curWidth -= gradWidth * 2;
 

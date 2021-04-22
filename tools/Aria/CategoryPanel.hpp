@@ -23,11 +23,17 @@ namespace aria
 
 		void refresh();
 		void update( wxString const & name
-			, TestsCounts & counts );
+			, AllTestsCounts & counts );
+		void update( wxString const & name
+			, RendererTestsCounts & counts );
+		void update( wxString const & name
+			, CategoryTestsCounts & counts );
 
 	private:
 		Config const & m_config;
-		TestsCounts * m_counts{};
+		AllTestsCounts * m_allCounts{};
+		RendererTestsCounts * m_rendererCounts{};
+		CategoryTestsCounts * m_categoryCounts{};
 		wxString m_name;
 		std::array< wxStaticText *, TestsCountsType::eCount > m_values{};
 #if CTP_UseCountedValue

@@ -203,14 +203,14 @@ namespace aria
 	struct IdValue;
 	struct StatusName;
 	struct Test;
-	struct TestsCounts;
 	struct AllTestsCounts;
 	struct RendererTestsCounts;
+	struct CategoryTestsCounts;
 	struct TestNode;
 	struct TestRun;
 
 	using TestPtr = std::unique_ptr< Test >;
-	using TestsCountsPtr = std::unique_ptr< TestsCounts >;
+	using AllTestsCountsPtr = std::shared_ptr< AllTestsCounts >;
 	using Renderer = IdValue *;
 	using Category = IdValue *;
 	using Keyword = IdValue *;
@@ -222,9 +222,8 @@ namespace aria
 	using TestRunArray = std::vector< DatabaseTest >;
 	using TestRunCategoryMap = std::map< Category, TestRunArray, LessIdValue >;
 	using TestRunMap = std::map< Renderer, TestRunCategoryMap, LessIdValue >;
-	using TestsCountsArray = std::vector< TestsCountsPtr >;
-	using TestsCountsCategoryMap = std::map< Category, TestsCountsPtr, LessIdValue >;
-	using TestsCountsMap = std::map< Renderer, RendererTestsCounts, LessIdValue >;
+	using TestsCountsCategoryMap = std::map< Category, CategoryTestsCounts, LessIdValue >;
+	using TestsCountsRendererMap = std::map< Renderer, RendererTestsCounts, LessIdValue >;
 
 	template< typename ValueT >
 	struct CountedValueT;
@@ -239,22 +238,11 @@ namespace aria
 	using CountedUIntSignal = CountedValueSignalT< uint32_t >;
 	using CountedUIntConnection = CountedValueConnectionT< uint32_t >;
 
-	struct RendererTestsCounts
-	{
-		TestsCountsPtr counts;
-		TestsCountsCategoryMap categories;
-	};
-
-	struct AllTestsCounts
-	{
-		TestsCountsPtr counts;
-		TestsCountsMap renderers;
-	};
-
 	struct StatusName
 	{
 		NodeType type;
-		TestsCounts const * counts;
+		RendererTestsCounts const * rendererCounts;
+		CategoryTestsCounts const * categoryCounts;
 		std::string name;
 		TestStatus status{};
 		bool outOfCastorDate{};
@@ -271,7 +259,7 @@ namespace aria
 	{
 		TestMap tests;
 		TestRunMap runs;
-		AllTestsCounts counts;
+		AllTestsCountsPtr counts;
 	};
 
 	static const wxColour PANEL_BACKGROUND_COLOUR = wxColour( 30, 30, 30 );

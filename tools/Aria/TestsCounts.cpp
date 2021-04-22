@@ -6,82 +6,16 @@ namespace aria
 {
 	//*********************************************************************************************
 
-	TestsCounts::TestsCounts( TestsCounts & all
-		, Config const & config
-		, TestMap const & tests
-		, TestRunCategoryMap const & runs )
-		: m_config{ config }
-		, m_rendererTests{ &tests }
-		, m_rendererRuns{ &runs }
-		, m_parent{ &all }
-	{
-#if CTP_UseCountedValue
-
-		for ( uint32_t i = 0; i < TestsCountsTestsCountsType::eAll; ++i )
-		{
-			m_connections[i] = m_values[i].onValueChange.connect( [i, this]( CountedUInt const & v )
-				{
-					m_parent->m_values[i].onValueChange( v );
-				} );
-		}
-
-#endif
-	}
-
-	TestsCounts::TestsCounts( TestsCounts & renderer
-		, Config const & config
+	CategoryTestsCounts::CategoryTestsCounts( Config const & config
 		, TestArray const & tests
 		, TestRunArray const & runs )
 		: m_config{ config }
-		, m_categoryTests{ &tests }
-		, m_categoryRuns{ &runs }
-		, m_parent{ &renderer }
-	{
-#if CTP_UseCountedValue
-
-		for ( uint32_t i = 0; i < TestsCountsTestsCountsType::eAll; ++i )
-		{
-			m_connections[i] = m_values[i].onValueChange.connect( [i, this]( CountedUInt const & v )
-				{
-					m_parent->m_values[i].onValueChange( v );
-				} );
-		}
-
-#endif
-	}
-
-	TestsCounts::TestsCounts( Config const & config
-		, TestMap const & tests
-		, TestRunMap const & runs )
-		: m_config{ config }
-		, m_allTests{ &tests }
-		, m_allRuns{ &runs }
+		, m_tests{ &tests }
+		, m_runs{ &runs }
 	{
 	}
 
-	TestsCountsPtr TestsCounts::addChild( TestMap const & tests
-		, TestRunCategoryMap const & runs )
-	{
-		TestsCountsPtr result{ new TestsCounts{ *this
-			, m_config
-			, tests
-			, runs } };
-		m_children.push_back( result.get() );
-		return result;
-	}
-
-	TestsCountsPtr TestsCounts::addChild( TestArray const & tests
-		, TestRunArray const & runs )
-	{
-		TestsCountsPtr result{ new TestsCounts{ *this
-			, m_config
-			, tests
-			, runs } };
-		m_children.push_back( result.get() );
-		return result;
-	}
-
-	void TestsCounts::addTest( DatabaseTest & test )
+	void CategoryTestsCounts::addTest( DatabaseTest & test )
 	{
 		test.m_counts = this;
 		add( test.getStatus() );
@@ -97,33 +31,29 @@ namespace aria
 		}
 	}
 
-	void TestsCounts::add( TestStatus status )
+	void CategoryTestsCounts::add( TestStatus status )
 	{
-		assert( m_children.empty()
-			&& "Only Category test counts can unit count tests" );
 		++getCount( TestsCountsType::eAll );
 		++getCount( getType( status ) );
 	}
 
-	void TestsCounts::remove( TestStatus status )
+	void CategoryTestsCounts::remove( TestStatus status )
 	{
-		assert( m_children.empty()
-			&& "Only Category test counts can unit count tests" );
 		--getCount( getType( status ) );
 		--getCount( TestsCountsType::eAll );
 	}
 
-	CountedUInt & TestsCounts::getCount( TestsCountsType type )
+	CountedUInt & CategoryTestsCounts::getCount( TestsCountsType type )
 	{
 		return m_values[type];
 	}
 
-	CountedUInt const & TestsCounts::getCount( TestsCountsType type )const
+	CountedUInt const & CategoryTestsCounts::getCount( TestsCountsType type )const
 	{
 		return m_values[type];
 	}
 
-	uint32_t TestsCounts::getValue( TestsCountsType type )const
+	uint32_t CategoryTestsCounts::getValue( TestsCountsType type )const
 	{
 		if ( type == TestsCountsType::eNotRun )
 		{
@@ -133,48 +63,132 @@ namespace aria
 			return iall - allRun;
 		}
 
-		if ( m_children.empty() )
-		{
-			return uint32_t( getCount( type ) );
-		}
-
-		uint32_t result{};
-
-		for ( auto & child : m_children )
-		{
-			result += child->getValue( type );
-		}
-
-		return result;
+		return uint32_t( getCount( type ) );
 	}
 
-	uint32_t TestsCounts::getStatusValue( TestStatus status )const
+	uint32_t CategoryTestsCounts::getStatusValue( TestStatus status )const
 	{
 		return getValue( getType( status ) );
 	}
 
-	uint32_t TestsCounts::getIgnoredValue()const
+	uint32_t CategoryTestsCounts::getIgnoredValue()const
 	{
 		return getValue( TestsCountsType::eIgnored );
 	}
 
-	uint32_t TestsCounts::getOutdatedValue()const
+	uint32_t CategoryTestsCounts::getOutdatedValue()const
 	{
 		return getValue( TestsCountsType::eOutdated );
 	}
 
-	uint32_t TestsCounts::getAllValue()const
+	uint32_t CategoryTestsCounts::getAllValue()const
 	{
 		return getValue( TestsCountsType::eAll );
 	}
 
-	uint32_t TestsCounts::getAllRunStatus()const
+	uint32_t CategoryTestsCounts::getAllRunStatus()const
 	{
 		uint32_t result{};
 
 		for ( auto i = 1u; i < TestsCountsType::eCountedInAllEnd; ++i )
 		{
 			result += getValue( TestsCountsType( i ) );
+		}
+
+		return result;
+	}
+
+	//*********************************************************************************************
+
+	RendererTestsCounts::RendererTestsCounts( Config const & config )
+		: config{ config }
+	{
+	}
+
+	CategoryTestsCounts & RendererTestsCounts::addCategory( Category category
+		, TestArray const & tests
+		, TestRunArray const & runs )
+	{
+		auto countsIt = categories.emplace( category, CategoryTestsCounts{ config, tests, runs } ).first;
+		return countsIt->second;
+	}
+
+	CategoryTestsCounts & RendererTestsCounts::getCounts( Category category )
+	{
+		auto countsIt = categories.find( category );
+		return countsIt->second;
+	}
+
+	uint32_t RendererTestsCounts::getValue( TestsCountsType type )const
+	{
+		uint32_t result{};
+
+		for ( auto & category : categories )
+		{
+			result += category.second.getValue( type );
+		}
+
+		return result;
+	}
+
+	uint32_t RendererTestsCounts::getAllValue()const
+	{
+		uint32_t result{};
+
+		for ( auto & category : categories )
+		{
+			result += category.second.getAllValue();
+		}
+
+		return result;
+	}
+
+	//*********************************************************************************************
+
+	AllTestsCounts::AllTestsCounts( Config const & config )
+		: config{ config }
+	{
+	}
+
+	RendererTestsCounts & AllTestsCounts::addRenderer( Renderer renderer )
+	{
+		auto countsIt = renderers.emplace( renderer, RendererTestsCounts{ config } ).first;
+		return countsIt->second;
+	}
+
+	RendererTestsCounts & AllTestsCounts::getRenderer( Renderer renderer )
+	{
+		auto countsIt = renderers.find( renderer );
+		return countsIt->second;
+	}
+
+	CategoryTestsCounts & AllTestsCounts::addCategory( Renderer renderer
+		, Category category
+		, TestArray const & tests
+		, TestRunArray const & runs )
+	{
+		return getRenderer( renderer ).addCategory( category, tests, runs );
+	}
+
+	uint32_t AllTestsCounts::getValue( TestsCountsType type )const
+	{
+		uint32_t result{};
+
+		for ( auto & renderer : renderers )
+		{
+			result += renderer.second.getValue( type );
+		}
+
+		return result;
+	}
+
+	uint32_t AllTestsCounts::getAllValue()const
+	{
+		uint32_t result{};
+
+		for ( auto & renderer : renderers )
+		{
+			result += renderer.second.getAllValue();
 		}
 
 		return result;
