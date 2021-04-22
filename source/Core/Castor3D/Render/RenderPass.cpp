@@ -30,7 +30,6 @@
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelInstancesUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelUbo.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 #include "Castor3D/Shader/Ubos/PickingUbo.hpp"
@@ -403,7 +402,6 @@ namespace castor3d
 		m_isDirty = true;
 
 		return SkinningRenderNode{ doCreatePassRenderNode( pass, pipeline )
-			, geometryEntry.modelMatrixUbo
 			, geometryEntry.modelUbo
 			, geometryEntry.pickingUbo
 			, geometryEntry.texturesUbo
@@ -437,7 +435,6 @@ namespace castor3d
 		m_isDirty = true;
 
 		return MorphingRenderNode{ doCreatePassRenderNode( pass, pipeline )
-			, geometryEntry.modelMatrixUbo
 			, geometryEntry.modelUbo
 			, geometryEntry.pickingUbo
 			, geometryEntry.texturesUbo
@@ -469,7 +466,6 @@ namespace castor3d
 		m_isDirty = true;
 
 		return StaticRenderNode{ doCreatePassRenderNode( pass, pipeline )
-			, geometryEntry.modelMatrixUbo
 			, geometryEntry.modelUbo
 			, geometryEntry.pickingUbo
 			, geometryEntry.texturesUbo
@@ -495,7 +491,6 @@ namespace castor3d
 		m_isDirty = true;
 
 		return BillboardRenderNode{ doCreatePassRenderNode( pass, pipeline )
-			, billboardEntry.modelMatrixUbo
 			, billboardEntry.modelUbo
 			, billboardEntry.pickingUbo
 			, billboardEntry.billboardUbo
@@ -653,12 +648,6 @@ namespace castor3d
 				, layout.getBinding( uint32_t( NodeUboIdx::eMatrix ) ) );
 			sceneUbo.createSizedBinding( uboDescriptorSet
 				, layout.getBinding( uint32_t( NodeUboIdx::eScene ) ) );
-
-			if ( !checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eInstantiation ) )
-			{
-				node.modelMatrixUbo.createSizedBinding( uboDescriptorSet
-					, layout.getBinding( uint32_t( NodeUboIdx::eModelMatrix ) ) );
-			}
 
 			if ( checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eInstanceMult ) )
 			{
@@ -1373,15 +1362,6 @@ namespace castor3d
 					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
 					: VK_SHADER_STAGE_VERTEX_BIT ) ) ) );
 
-		if ( !checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
-		{
-			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eModelMatrix )
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
-					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
-					: VK_SHADER_STAGE_VERTEX_BIT ) ) );
-		}
-
 		if ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) )
 		{
 			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eBillboard )
@@ -1477,7 +1457,6 @@ namespace castor3d
 
 		UBO_MATRIX( writer, uint32_t( NodeUboIdx::eMatrix ), 0 );
 		UBO_SCENE( writer, uint32_t( NodeUboIdx::eScene ), 0 );
-		UBO_MODEL_MATRIX( writer, uint32_t( NodeUboIdx::eModelMatrix ), 0 );
 		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0 );
 		auto skinningData = SkinningUbo::declare( writer, uint32_t( NodeUboIdx::eSkinning ), 0, flags.programFlags );
 		UBO_MORPHING( writer, uint32_t( NodeUboIdx::eMorphing ), 0, flags.programFlags );
@@ -1610,7 +1589,6 @@ namespace castor3d
 		auto in = writer.getIn();
 		UBO_MATRIX( writer, uint32_t( NodeUboIdx::eMatrix ), 0 );
 		UBO_SCENE( writer, uint32_t( NodeUboIdx::eScene ), 0 );
-		UBO_MODEL_MATRIX( writer, uint32_t( NodeUboIdx::eModelMatrix ), 0 );
 		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0 );
 		UBO_BILLBOARD( writer, uint32_t( NodeUboIdx::eBillboard ), 0 );
 

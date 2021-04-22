@@ -90,7 +90,6 @@ namespace castor3d
 		eTexturesBuffer,
 		eTexturesConfig,
 		eModel,
-		eModelMatrix,
 		eBillboard,
 		eSkinning,
 		eMorphing,
@@ -99,7 +98,7 @@ namespace castor3d
 		eShadow,
 		eLpvGridConfig,
 		eLayeredLpvGridConfig,
-		eVoxelData,
+		eVoxelData = eLpvGridConfig,
 		eVoxelBuffer,
 	};
 	/**

@@ -24,7 +24,6 @@
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelUbo.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 #include "Castor3D/Shader/Ubos/PickingUbo.hpp"
@@ -830,7 +829,6 @@ namespace castor3d
 		auto in = writer.getIn();
 
 		UBO_MATRIX( writer, uint32_t( NodeUboIdx::eMatrix ), 0 );
-		UBO_MODEL_MATRIX( writer, uint32_t( NodeUboIdx::eModelMatrix ), 0 );
 		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0 );
 		auto skinningData = SkinningUbo::declare( writer, uint32_t( NodeUboIdx::eSkinning ), 0, flags.programFlags );
 		UBO_MORPHING( writer, uint32_t( NodeUboIdx::eMorphing ), 0, flags.programFlags );

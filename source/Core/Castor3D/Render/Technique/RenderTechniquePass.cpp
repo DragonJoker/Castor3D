@@ -662,7 +662,6 @@ namespace castor3d
 		UBO_MATRIX( writer, uint32_t( NodeUboIdx::eMatrix ), 0 );
 		UBO_SCENE( writer, uint32_t( NodeUboIdx::eScene ), 0 );
 		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0 );
-		UBO_MODEL_MATRIX( writer, uint32_t( NodeUboIdx::eModelMatrix ), 0 );
 		auto skinningData = SkinningUbo::declare( writer, uint32_t( NodeUboIdx::eSkinning ), 0, flags.programFlags );
 		UBO_MORPHING( writer, uint32_t( NodeUboIdx::eMorphing ), 0, flags.programFlags );
 

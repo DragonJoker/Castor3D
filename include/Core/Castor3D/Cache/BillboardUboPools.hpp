@@ -26,7 +26,6 @@ namespace castor3d
 			BillboardBase const & billboard;
 			Pass const & pass;
 			UniformBufferOffsetT< ModelUboConfiguration > modelUbo;
-			UniformBufferOffsetT< ModelMatrixUboConfiguration > modelMatrixUbo;
 			UniformBufferOffsetT< BillboardUboConfiguration > billboardUbo;
 			UniformBufferOffsetT< PickingUboConfiguration > pickingUbo;
 			UniformBufferOffsetT< TexturesUboConfiguration > texturesUbo;
