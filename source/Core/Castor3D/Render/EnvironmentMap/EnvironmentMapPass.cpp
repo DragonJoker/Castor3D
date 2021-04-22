@@ -1,6 +1,7 @@
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
@@ -77,7 +78,6 @@ namespace castor3d
 			, &objectNode
 			, SsaoConfig{} ) }
 		, m_mtxView{ m_camera->getView() }
-		, m_modelMatrixUbo{ *reflectionMap.getEngine() }
 		, m_hdrConfigUbo{ *reflectionMap.getEngine() }
 	{
 		log::trace << "Created EnvironmentMapPass" << objectNode.getName() << std::endl;
@@ -111,7 +111,7 @@ namespace castor3d
 			, 0.0f, 2.0f ) );
 		m_matrixUbo.initialise( device );
 		m_matrixUbo.cpuUpdate( m_mtxView, projection );
-		m_modelMatrixUbo.initialise( device );
+		m_modelUbo = device.uboPools->getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 		m_hdrConfigUbo.initialise( device );
 		auto const & environmentLayout = getOwner()->getTexture().getTexture();
 		m_envView = environmentLayout->getLayerCubeFaceMipView( 0u, CubeMapFace( face ), 0u ).getTargetView();
@@ -139,7 +139,7 @@ namespace castor3d
 		m_backgroundUboDescriptorSet = uboPool.createDescriptorSet( name + "Ubo", 0u );
 		m_backgroundTexDescriptorSet = texPool.createDescriptorSet( name + "Tex", 0u );
 		background.initialiseDescriptorSets( m_matrixUbo
-			, m_modelMatrixUbo
+			, m_modelUbo
 			, m_hdrConfigUbo
 			, *m_backgroundUboDescriptorSet
 			, *m_backgroundTexDescriptorSet );
@@ -175,7 +175,7 @@ namespace castor3d
 		m_opaquePass->cleanup( device );
 		m_transparentPass->cleanup( device );
 		m_hdrConfigUbo.cleanup( device );
-		m_modelMatrixUbo.cleanup();
+		device.uboPools->putBuffer( m_modelUbo );
 		m_matrixUbo.cleanup( device );
 	}
 
@@ -193,7 +193,9 @@ namespace castor3d
 		static_cast< RenderTechniquePass & >( *m_transparentPass ).update( updater );
 		m_matrixUbo.cpuUpdate( m_camera->getView()
 			, m_camera->getProjection() );
-		m_modelMatrixUbo.cpuUpdate( m_mtxModel );
+		auto & configuration = m_modelUbo.getData();
+		configuration.prvModel = configuration.curModel;
+		configuration.curModel = m_mtxModel;
 		m_hdrConfigUbo.cpuUpdate( m_camera->getHdrConfig() );
 	}
 

@@ -288,19 +288,19 @@ namespace castor3d
 				, false )
 			, lpConfig
 			, vctConfig }
-		, m_modelMatrixUbo{ m_device.renderSystem
+		, m_modelUbo{ m_device.renderSystem
 			, 1u
 			, VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
 			, getName() + "ModelMatrix" }
-		, m_modelMatrixData{ reinterpret_cast< ModelMatrixUboConfiguration * >( m_modelMatrixUbo.getBuffer().getBuffer().lock( 0u
-			, m_modelMatrixUbo.getAlignedSize()
+		, m_modelData{ reinterpret_cast< ModelUboConfiguration * >( m_modelUbo.getBuffer().getBuffer().lock( 0u
+			, m_modelUbo.getAlignedSize()
 			, 0u ) ) }
 		, m_stencilPass{ m_engine
 			, getName()
 			, lpConfig.lpResult[LpTexture::eDepth].getTexture()->getDefaultView().getTargetView()
 			, m_matrixUbo
-			, m_modelMatrixUbo }
+			, m_modelUbo }
 		, m_type{ type }
 	{
 	}
@@ -352,7 +352,7 @@ namespace castor3d
 			, *m_vertexBuffer
 			, declaration
 			, sceneUbo
-			, &m_modelMatrixUbo
+			, &m_modelUbo
 			, timer );
 	}
 
@@ -389,7 +389,7 @@ namespace castor3d
 		auto normal = castor::Matrix3x3f{ model };
 		normal.invert();
 		normal.transpose();
-		auto & data = *m_modelMatrixData;
+		auto & data = *m_modelData;
 		data.prvModel = data.curModel;
 		data.prvNormal = data.curNormal;
 		data.curModel = model;
@@ -406,7 +406,7 @@ namespace castor3d
 		// Shader inputs
 		UBO_MATRIX( writer, uint32_t( LightPassUboIdx::eMatrix ), 0u );
 		UBO_GPINFO( writer, uint32_t( LightPassUboIdx::eGpInfo ), 0u );
-		UBO_MODEL_MATRIX( writer, uint32_t( LightPassUboIdx::eModelMatrix ), 0u );
+		UBO_MODEL( writer, uint32_t( LightPassUboIdx::eModelMatrix ), 0u );
 		auto vertex = writer.declInput< Vec3 >( "position", 0u );
 
 		// Shader outputs
