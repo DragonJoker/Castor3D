@@ -1910,16 +1910,15 @@ namespace aria
 			, true );
 			assert( matches.size() < 2 );
 
-			if ( matches.empty() )
+			if ( !matches.empty() )
 			{
-				return;
+				auto & match = matches[0];
+				test.createNewRun( match );
+				auto & page = doGetPage( wxDataViewItem{ testNode.node } );
+				page.model->ItemChanged( wxDataViewItem{ testNode.node } );
+				doUpdateTestView( test );
 			}
 
-			auto & match = matches[0];
-			test.createNewRun( match );
-			auto & page = doGetPage( wxDataViewItem{ testNode.node } );
-			page.model->ItemChanged( wxDataViewItem{ testNode.node } );
-			doUpdateTestView( test );
 			doProcessTest();
 		}
 		else
