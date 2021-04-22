@@ -726,8 +726,9 @@ namespace C3dAssimp
 		Assimp::Importer importer;
 		uint32_t flags = 0u;
 		bool noOptim = false;
+		auto found = m_parameters.get( "no_optimisations", noOptim );
 
-		if ( m_parameters.get( "no_optimisations", noOptim ) && !noOptim )
+		if ( !found || !noOptim )
 		{
 			flags = aiProcess_Triangulate
 				| aiProcess_JoinIdenticalVertices
