@@ -29,6 +29,10 @@ namespace Testing
 
 		bool compare( castor::Matrix4x4f const & lhs, glm::mat4x4 const & rhs );
 		bool compare( castor::Matrix4x4d const & lhs, glm::mat4x4 const & rhs );
+		bool compare( castor::Matrix3x3f const & lhs, glm::mat3x3 const & rhs );
+		bool compare( castor::Matrix3x3d const & lhs, glm::mat3x3 const & rhs );
+		bool compare( castor::Matrix2x2f const & lhs, glm::mat2x2 const & rhs );
+		bool compare( castor::Matrix2x2d const & lhs, glm::mat2x2 const & rhs );
 
 #endif
 
@@ -38,6 +42,7 @@ namespace Testing
 #if defined( CASTOR_USE_GLM )
 
 		void MatrixInversionComparison();
+		void MatrixNormalComparison();
 		void MatrixMultiplicationComparison();
 		void TransformationMatrixComparison();
 		void ProjectionMatrixComparison();
