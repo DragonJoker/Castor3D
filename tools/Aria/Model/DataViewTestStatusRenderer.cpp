@@ -152,7 +152,7 @@ namespace aria
 		if ( m_source )
 		{
 			m_statusName = *m_source;
-			m_index = ( m_statusName.ignored
+			m_index = ( ( m_statusName.ignored && !isRunning( m_statusName.status ) )
 				? IgnoredIndex
 				: size_t( m_statusName.status ) + AdditionalIndices );
 			m_isTest = ( m_statusName.type == NodeType::eTestRun );
