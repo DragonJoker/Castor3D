@@ -202,30 +202,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Model matrices UBO.
-	*\~french
-	*\brief
-	*	UBO des matrices modèle.
-	*/
-	class ModelMatrixUbo;
-	/**
-	*\~english
-	*\brief
-	*	Model matrices data.
-	*\~french
-	*\brief
-	*	Données des matrices modèle.
-	*/
-	struct ModelMatrixUboConfiguration
-	{
-		castor::Matrix4x4f prvModel;
-		castor::Matrix4x4f prvNormal;
-		castor::Matrix4x4f curModel;
-		castor::Matrix4x4f curNormal;
-	};
-	/**
-	*\~english
-	*\brief
 	*	Model data UBO.
 	*\~french
 	*\brief
@@ -242,6 +218,10 @@ namespace castor3d
 	*/
 	struct ModelUboConfiguration
 	{
+		castor::Matrix4x4f prvModel;
+		castor::Matrix4x4f prvNormal;
+		castor::Matrix4x4f curModel;
+		castor::Matrix4x4f curNormal;
 		int32_t shadowReceiver;
 		int32_t materialIndex;
 		int32_t environmentIndex;

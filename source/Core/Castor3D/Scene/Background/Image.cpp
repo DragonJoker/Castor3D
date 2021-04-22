@@ -17,6 +17,7 @@
 #include "Castor3D/Scene/Background/Visitor.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
 
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
@@ -131,7 +132,7 @@ namespace castor3d
 			// Inputs
 			auto position = writer.declInput< Vec3 >( "position", 0u );
 			UBO_MATRIX( writer, MtxUboIdx, UboSetIdx );
-			UBO_MODEL_MATRIX( writer, MdlMtxUboIdx, UboSetIdx );
+			UBO_MODEL( writer, MdlMtxUboIdx, UboSetIdx );
 
 			// Outputs
 			auto vtx_texture = writer.declOutput< Vec3 >( "vtx_texture", 0u );

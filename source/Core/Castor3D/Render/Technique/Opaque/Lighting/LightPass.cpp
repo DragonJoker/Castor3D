@@ -31,7 +31,6 @@
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 #include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
@@ -153,7 +152,7 @@ namespace castor3d
 		, MatrixUbo & matrixUbo
 		, SceneUbo & sceneUbo
 		, GpInfoUbo const & gpInfoUbo
-		, UniformBufferT< ModelMatrixUboConfiguration > const * modelMatrixUbo
+		, UniformBufferT< ModelUboConfiguration > const * modelUbo
 		, VoxelizerUbo const * voxelUbo )
 	{
 		ashes::VkDescriptorSetLayoutBindingArray setLayoutBindings;
@@ -171,7 +170,7 @@ namespace castor3d
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
-		if ( modelMatrixUbo )
+		if ( modelUbo )
 		{
 			setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassUboIdx::eModelMatrix )
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
@@ -486,7 +485,7 @@ namespace castor3d
 			, m_matrixUbo
 			, sceneUbo
 			, m_gpInfoUbo
-			, m_mmUbo
+			, m_optModelUbo
 			, m_vctUbo );
 		pipeline.uboDescriptorSet = pipeline.program->getUboDescriptorPool().createDescriptorSet( getName() + "Ubo", 0u );
 		auto & uboLayout = pipeline.program->getUboDescriptorLayout();
@@ -500,10 +499,10 @@ namespace castor3d
 		pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( uint32_t( LightPassUboIdx::eLight ) )
 			, *m_baseUbo );
 
-		if ( m_mmUbo )
+		if ( m_optModelUbo )
 		{
 			pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( uint32_t( LightPassUboIdx::eModelMatrix ) )
-				, m_mmUbo->getBuffer() );
+				, m_optModelUbo->getBuffer() );
 		}
 
 		if ( m_vctUbo )
@@ -620,12 +619,12 @@ namespace castor3d
 		, ashes::VertexBufferBase & vbo
 		, ashes::PipelineVertexInputStateCreateInfo const & vertexLayout
 		, SceneUbo & sceneUbo
-		, UniformBufferT< ModelMatrixUboConfiguration > const * modelMatrixUbo
+		, UniformBufferT< ModelUboConfiguration > const * modelUbo
 		, RenderPassTimer & timer )
 	{
 		m_scene = &scene;
 		m_sceneUbo = &sceneUbo;
-		m_mmUbo = modelMatrixUbo;
+		m_optModelUbo = modelUbo;
 		m_usedVertexLayout = vertexLayout;
 		m_pUsedVertexLayout = &m_usedVertexLayout;
 		m_timer = &timer;

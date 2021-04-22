@@ -9,7 +9,7 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
@@ -81,7 +81,7 @@ namespace castor3d
 
 			// Shader inputs
 			UBO_MATRIX( writer, 0u, 0u );
-			UBO_MODEL_MATRIX( writer, 1u, 0u );
+			UBO_MODEL( writer, 1u, 0u );
 			auto vertex = writer.declInput< Vec3 >( "position", 0u );
 
 			// Shader outputs
@@ -103,12 +103,12 @@ namespace castor3d
 		, String const & prefix
 		, ashes::ImageView const & depthView
 		, MatrixUbo & matrixUbo
-		, UniformBufferT< ModelMatrixUboConfiguration > const & modelMatrixUbo )
+		, UniformBufferT< ModelUboConfiguration > const & modelUbo )
 		: m_engine{ engine }
 		, m_prefix{ prefix }
 		, m_depthView{ depthView }
 		, m_matrixUbo{ matrixUbo }
-		, m_modelMatrixUbo{ modelMatrixUbo }
+		, m_modelUbo{ modelUbo }
 	{
 	}
 
@@ -140,7 +140,7 @@ namespace castor3d
 		m_matrixUbo.createSizedBinding( *m_descriptorSet
 			, m_descriptorLayout->getBinding( 0u ) );
 		m_descriptorSet->createSizedBinding( m_descriptorLayout->getBinding( 1u )
-			, m_modelMatrixUbo.getBuffer() );
+			, m_modelUbo.getBuffer() );
 		m_descriptorSet->update();
 
 		m_renderPass = doCreateRenderPass( name, device, m_depthView );

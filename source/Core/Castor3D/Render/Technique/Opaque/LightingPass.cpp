@@ -27,7 +27,7 @@
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 

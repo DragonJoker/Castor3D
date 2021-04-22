@@ -11,7 +11,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/PBR/IblTextures.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
@@ -262,7 +262,7 @@ namespace castor3d
 		*	L'ensemble de descripteurs pour les textures.
 		*/
 		C3D_API virtual void initialiseDescriptorSets( MatrixUbo & matrixUbo
-			, ModelMatrixUbo const & modelMatrixUbo
+			, UniformBufferOffsetT< ModelUboConfiguration > const & modelUbo
 			, HdrConfigUbo const & hdrConfigUbo
 			, ashes::DescriptorSet & uboDescriptorSet
 			, ashes::DescriptorSet & texDescriptorSet )const;
@@ -427,7 +427,7 @@ namespace castor3d
 		std::atomic_bool m_initialised{ false };
 		bool m_hdr{ true };
 		MatrixUbo m_matrixUbo;
-		ModelMatrixUbo m_modelMatrixUbo;
+		UniformBufferOffsetT< ModelUboConfiguration > m_modelUbo;
 		castor::Matrix4x4f m_mtxModel;
 		ashes::SemaphorePtr m_semaphore;
 		ashes::DescriptorSetLayoutPtr m_uboDescriptorLayout;

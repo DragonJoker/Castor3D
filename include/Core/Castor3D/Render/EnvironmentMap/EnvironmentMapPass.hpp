@@ -11,7 +11,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
 
 #include <ashespp/Image/ImageView.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>
@@ -144,7 +144,7 @@ namespace castor3d
 		ashes::SemaphorePtr m_finished;
 		castor::Matrix4x4f m_mtxView;
 		castor::Matrix4x4f m_mtxModel;
-		ModelMatrixUbo m_modelMatrixUbo;
+		UniformBufferOffsetT< ModelUboConfiguration > m_modelUbo;
 		HdrConfigUbo m_hdrConfigUbo;
 	};
 }

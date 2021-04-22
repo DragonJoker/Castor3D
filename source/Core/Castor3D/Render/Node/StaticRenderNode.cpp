@@ -10,7 +10,6 @@ using namespace castor;
 namespace castor3d
 {
 	StaticRenderNode::StaticRenderNode( PassRenderNode passNode
-		, UniformBufferOffsetT< ModelMatrixUboConfiguration > modelMatrixBuffer
 		, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
 		, UniformBufferOffsetT< PickingUboConfiguration > pickingBuffer
 		, UniformBufferOffsetT< TexturesUboConfiguration > texturesBuffer
@@ -20,7 +19,6 @@ namespace castor3d
 		, Submesh & data
 		, Geometry & instance )
 		: SubmeshRenderNode{ std::move( passNode )
-			, modelMatrixBuffer
 			, modelBuffer
 			, pickingBuffer
 			, texturesBuffer

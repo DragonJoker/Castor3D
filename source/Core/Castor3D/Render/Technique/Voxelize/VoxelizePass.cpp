@@ -31,7 +31,6 @@
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelUbo.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
@@ -430,7 +429,6 @@ namespace castor3d
 
 		// Inputs
 		UBO_MATRIX( writer, uint32_t( NodeUboIdx::eMatrix ), 0u );
-		UBO_MODEL_MATRIX( writer, uint32_t( NodeUboIdx::eModelMatrix ), 0u );
 		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0 );
 		auto skinningData = SkinningUbo::declare( writer, uint32_t( NodeUboIdx::eSkinning ), 0, flags.programFlags );
 		UBO_MORPHING( writer, uint32_t( NodeUboIdx::eMorphing ), 0, flags.programFlags );
@@ -523,7 +521,6 @@ namespace castor3d
 		auto center = writer.declInput< Vec3 >( "center", 2u );
 		UBO_MATRIX( writer, uint32_t( NodeUboIdx::eMatrix ), 0u );
 		UBO_SCENE( writer, uint32_t( NodeUboIdx::eScene ), 0u );
-		UBO_MODEL_MATRIX( writer, uint32_t( NodeUboIdx::eModelMatrix ), 0u );
 		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0 );
 		UBO_BILLBOARD( writer, uint32_t( NodeUboIdx::eBillboard ), 0 );
 		auto in = writer.getIn();

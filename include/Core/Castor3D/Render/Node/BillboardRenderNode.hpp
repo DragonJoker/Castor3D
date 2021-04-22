@@ -14,7 +14,6 @@ namespace castor3d
 		: public BillboardListRenderNode
 	{
 		C3D_API BillboardRenderNode( PassRenderNode passNode
-			, UniformBufferOffsetT< ModelMatrixUboConfiguration > modelMatrixBuffer
 			, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
 			, UniformBufferOffsetT< PickingUboConfiguration > pickingBuffer
 			, UniformBufferOffsetT< BillboardUboConfiguration > billboardBuffer

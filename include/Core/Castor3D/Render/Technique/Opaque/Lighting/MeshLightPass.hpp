@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Render/Passes/StencilPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPass.hpp"
-#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
 
 namespace castor3d
 {
@@ -159,8 +159,8 @@ namespace castor3d
 			, Camera const & camera )const = 0;
 
 	private:
-		UniformBufferT< ModelMatrixUboConfiguration > m_modelMatrixUbo;
-		ModelMatrixUboConfiguration * m_modelMatrixData;
+		UniformBufferT< ModelUboConfiguration > m_modelUbo;
+		ModelUboConfiguration * m_modelData;
 		StencilPass m_stencilPass;
 		LightType m_type;
 		uint32_t m_count{ 0u };

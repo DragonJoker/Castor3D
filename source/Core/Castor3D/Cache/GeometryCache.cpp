@@ -210,8 +210,7 @@ namespace castor3d
 			auto & entry = pair.second;
 
 			if ( entry.geometry.getParent()
-				&& bool( entry.modelUbo )
-				&& bool( entry.modelMatrixUbo ) )
+				&& bool( entry.modelUbo ) )
 			{
 				auto & modelData = entry.modelUbo.getData();
 				modelData.shadowReceiver = entry.geometry.isShadowReceiver();
@@ -223,9 +222,8 @@ namespace castor3d
 					modelData.environmentIndex = envMap.getIndex();
 				}
 
-				auto & modelMatrixData = entry.modelMatrixUbo.getData();
-				modelMatrixData.prvModel = modelMatrixData.curModel;
-				modelMatrixData.curModel = entry.geometry.getParent()->getDerivedTransformationMatrix();
+				modelData.prvModel = modelData.curModel;
+				modelData.curModel = entry.geometry.getParent()->getDerivedTransformationMatrix();
 				auto & texturesData = entry.texturesUbo.getData();
 				uint32_t index = 0u;
 
@@ -262,7 +260,6 @@ namespace castor3d
 		for ( auto & entry : m_baseEntries )
 		{
 			uboPools.putBuffer( entry.second.modelUbo );
-			uboPools.putBuffer( entry.second.modelMatrixUbo );
 			uboPools.putBuffer( entry.second.pickingUbo );
 			uboPools.putBuffer( entry.second.texturesUbo );
 		}
@@ -319,7 +316,6 @@ namespace castor3d
 			auto & uboPools = *device.uboPools;
 			auto & baseEntry = iresult.first->second;
 			baseEntry.modelUbo = uboPools.getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
-			baseEntry.modelMatrixUbo = uboPools.getBuffer< ModelMatrixUboConfiguration>( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 			baseEntry.pickingUbo = uboPools.getBuffer< PickingUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 			baseEntry.texturesUbo = uboPools.getBuffer< TexturesUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 
@@ -369,7 +365,6 @@ namespace castor3d
 			auto entry = it->second;
 			m_baseEntries.erase( it );
 			uboPools.putBuffer( entry.modelUbo );
-			uboPools.putBuffer( entry.modelMatrixUbo );
 			uboPools.putBuffer( entry.pickingUbo );
 			uboPools.putBuffer( entry.texturesUbo );
 		}

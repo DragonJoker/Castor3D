@@ -724,13 +724,20 @@ namespace C3dAssimp
 		m_arrayBones.clear();
 		SubmeshSPtr submesh;
 		Assimp::Importer importer;
-		uint32_t flags = aiProcess_Triangulate
-			| aiProcess_JoinIdenticalVertices
-			| aiProcess_OptimizeMeshes
-			| aiProcess_OptimizeGraph
-			| aiProcess_FixInfacingNormals
-			| aiProcess_LimitBoneWeights
-			| aiProcess_Debone;
+		uint32_t flags = 0u;
+		bool noOptim = false;
+
+		if ( m_parameters.get( "no_optimisations", noOptim ) && !noOptim )
+		{
+			flags = aiProcess_Triangulate
+				| aiProcess_JoinIdenticalVertices
+				| aiProcess_OptimizeMeshes
+				| aiProcess_OptimizeGraph
+				| aiProcess_FixInfacingNormals
+				| aiProcess_LimitBoneWeights
+				| aiProcess_Debone;
+		}
+
 		bool tangentSpace = false;
 		castor::String normals;
 

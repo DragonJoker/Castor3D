@@ -39,7 +39,6 @@ namespace castor3d
 			Submesh const & submesh;
 			Pass const & pass;
 			UniformBufferOffsetT< ModelUboConfiguration > modelUbo;
-			UniformBufferOffsetT< ModelMatrixUboConfiguration > modelMatrixUbo;
 			UniformBufferOffsetT< PickingUboConfiguration > pickingUbo;
 			UniformBufferOffsetT< TexturesUboConfiguration > texturesUbo;
 			UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesUbo;
