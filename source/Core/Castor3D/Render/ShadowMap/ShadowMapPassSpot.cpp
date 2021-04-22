@@ -312,16 +312,22 @@ namespace castor3d
 			{
 				auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
 					, SkinningUbo::computeTransform( skinningData, writer, flags.programFlags ) );
+				auto mtxNormal = writer.declLocale( "mtxNormal"
+					, transpose( inverse( mat3( mtxModel ) ) ) );
 			}
 			else if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
 			{
 				auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
 					, transform );
+				auto mtxNormal = writer.declLocale( "mtxNormal"
+					, transpose( inverse( mat3( mtxModel ) ) ) );
 			}
 			else
 			{
 				auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
 					, c3d_curMtxModel );
+				auto mtxNormal = writer.declLocale( "mtxNormal"
+					, mat3( c3d_mtxNormal ) );
 			}
 
 			if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
@@ -342,8 +348,7 @@ namespace castor3d
 			}
 
 			auto mtxModel = writer.getVariable< Mat4 >( "mtxModel" );
-			auto mtxNormal = writer.declLocale( "mtxNormal"
-				, transpose( inverse( mat3( mtxModel ) ) ) );
+			auto mtxNormal = writer.getVariable< Mat3 >( "mtxNormal" );
 
 			if ( checkFlag( flags.programFlags, ProgramFlag::eInvertNormals ) )
 			{
