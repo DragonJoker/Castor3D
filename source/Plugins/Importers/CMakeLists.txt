@@ -1,11 +1,9 @@
 option( CASTOR_BUILDGRP_IMPORTER "Build Castor3D Importer plugins" TRUE )
 option( CASTOR_BUILD_IMPORTER_ASSIMP "Build Assimp Importer plugin (needs ASSIMP library)" TRUE )
-option( CASTOR_BUILD_IMPORTER_OBJ "Build OBJ Importer plugin" TRUE )
 option( CASTOR_BUILD_IMPORTER_PLY "Build PLY Importer plugin" TRUE )
 
 function( ImportersInit )
 	set( Assimp "no (Not wanted)" PARENT_SCOPE )
-	set( Obj "no (Not wanted)" PARENT_SCOPE )
 	set( Ply "no (Not wanted)" PARENT_SCOPE )
 endfunction( ImportersInit )
 
@@ -23,12 +21,6 @@ function( ImportersBuild )
 			add_subdirectory( Plugins/Importers/AssimpImporter )
 			set( Assimp ${Build} PARENT_SCOPE )
 			set( ADDITIONAL_DEPS_REL ${ADDITIONAL_DEPS_REL} PARENT_SCOPE )
-		endif()
-
-		if( ${CASTOR_BUILD_IMPORTER_OBJ} )
-			set( Build ${Obj} )
-			add_subdirectory( Plugins/Importers/ObjImporter )
-			set( Obj ${Build} PARENT_SCOPE )
 		endif()
 
 		if( ${CASTOR_BUILD_IMPORTER_PLY} )
@@ -58,9 +50,6 @@ function( ImportersSummary msg )
 		if( ${CASTOR_BUILD_IMPORTER_ASSIMP} )
 			set( msg_tmp "${msg_tmp}\n    Assimp               ${Assimp}" )
 		endif ()
-		if( ${CASTOR_BUILD_IMPORTER_OBJ} )
-			set( msg_tmp "${msg_tmp}\n    OBJ                  ${Obj}" )
-		endif ()
 		if( ${CASTOR_BUILD_IMPORTER_PLY} )
 			set( msg_tmp "${msg_tmp}\n    PLY                  ${Ply}" )
 		endif ()
@@ -74,16 +63,6 @@ function( ImportersSetup )
 			cpack_add_component( AssimpImporter
 				DISPLAY_NAME "AssimpImporter"
 				DESCRIPTION "Allows the mesh import using Assimp library in Castor3D."
-				GROUP Plugins
-				DEPENDS Castor3D
-				INSTALL_TYPES Full
-			)
-		endif ()
-
-		if( ${CASTOR_BUILD_IMPORTER_OBJ} )
-			cpack_add_component( ObjImporter
-				DISPLAY_NAME "ObjImporter"
-				DESCRIPTION "Allows the OBJ objects import in Castor3D."
 				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Full
