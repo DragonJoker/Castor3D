@@ -12,7 +12,7 @@ namespace aria
 	class DatabaseTest
 	{
 		friend class TestDatabase;
-		friend struct TestsCounts;
+		friend struct CategoryTestsCounts;
 
 	public:
 		DatabaseTest( TestDatabase & database
@@ -92,7 +92,7 @@ namespace aria
 			return m_test.sceneDate;
 		}
 
-		TestsCounts const & getCounts()const
+		CategoryTestsCounts const & getCounts()const
 		{
 			return *m_counts;
 		}
@@ -119,7 +119,7 @@ namespace aria
 
 	private:
 		TestDatabase & m_database;
-		TestsCounts * m_counts{};
+		CategoryTestsCounts * m_counts{};
 		TestRun m_test;
 		mutable bool m_outOfCastorDate;
 		mutable bool m_outOfSceneDate;

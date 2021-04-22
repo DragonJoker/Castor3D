@@ -32,11 +32,11 @@ namespace aria
 	public:
 		TreeModel( Config const & config
 			, Renderer renderer
-			, TestsCounts & counts );
+			, RendererTestsCounts & counts );
 		~TreeModel();
 
 		TreeModelNode * addCategory( Category category
-			, TestsCounts & counts );
+			, CategoryTestsCounts & counts );
 		TreeModelNode * addTest( DatabaseTest & test );
 		void expandRoots( wxDataViewCtrl * view );
 		void instantiate( wxDataViewCtrl * view );

@@ -146,6 +146,9 @@ namespace aria
 		m_test.runDate = std::move( runDate );
 		m_test.castorDate = std::move( castorDate );
 		m_test.sceneDate = std::move( sceneDate );
+		m_outOfCastorDate = isOutOfCastorDate( m_database.m_config, m_test );
+		m_outOfSceneDate = isOutOfSceneDate( m_database.m_config, m_test );
+		m_outOfDate = m_outOfCastorDate || m_outOfSceneDate;
 	}
 
 	void DatabaseTest::updateIgnoreResult( bool ignore
