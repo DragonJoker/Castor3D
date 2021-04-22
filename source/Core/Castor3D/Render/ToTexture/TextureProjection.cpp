@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
+#include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
@@ -41,7 +42,6 @@ namespace castor3d
 	TextureProjection::TextureProjection( Engine & engine )
 		: OwnedBy< Engine >{ engine }
 		, m_matrixUbo{ engine }
-		, m_modelMatrixUbo{ engine }
 		, m_sizePushConstant{ VK_SHADER_STAGE_FRAGMENT_BIT, { { 0u, VK_FORMAT_R32G32_SFLOAT } } }
 	{
 		m_sampler = engine.getSamplerCache().add( cuT( "TextureProjection" ) );
@@ -128,6 +128,7 @@ namespace castor3d
 		m_renderPass = device->createRenderPass( "TextureProjection"
 			, std::move( createInfo ) );
 
+		m_modelUbo = device.uboPools->getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 		m_sampler->initialise( device );
 		auto program = doInitialiseShader( device );
 		doInitialiseVertexBuffer( device );
@@ -139,7 +140,7 @@ namespace castor3d
 		m_pipeline.reset();
 		m_pipelineLayout.reset();
 		m_matrixUbo.cleanup( device );
-		m_modelMatrixUbo.cleanup();
+		device.uboPools->putBuffer( m_modelUbo );
 		m_sampler.reset();
 		m_vertexBuffer.reset();
 		m_descriptorSet.reset();
@@ -184,7 +185,9 @@ namespace castor3d
 		matrix::setTranslate( m_mtxModel, node->getDerivedPosition() );
 		m_matrixUbo.cpuUpdate( camera.getView()
 			, camera.getProjection() );
-		m_modelMatrixUbo.cpuUpdate( m_mtxModel, Identity );
+		auto & data = m_modelUbo.getData();
+		data.prvModel = data.curModel;
+		data.curModel = m_mtxModel;
 
 		if ( m_size != camera.getSize() )
 		{
@@ -203,7 +206,7 @@ namespace castor3d
 			// Inputs
 			auto position = writer.declInput< Vec3 >( "position", 0u );
 			UBO_MATRIX( writer, MtxUboIdx, 0 );
-			UBO_MODEL_MATRIX( writer, MdlMtxUboIdx, 0 );
+			UBO_MODEL( writer, MdlMtxUboIdx, 0 );
 
 			// Outputs
 			auto out = writer.getOut();
@@ -356,7 +359,7 @@ namespace castor3d
 		m_descriptorSet = m_descriptorPool->createDescriptorSet( "TextureProjection", 0u );
 		m_matrixUbo.createSizedBinding( *m_descriptorSet
 			, m_descriptorLayout->getBinding( 0u ) );
-		m_modelMatrixUbo.createSizedBinding( *m_descriptorSet
+		m_modelUbo.createSizedBinding( *m_descriptorSet
 			, m_descriptorLayout->getBinding( 1u ) );
 		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 2u )
 			, texture

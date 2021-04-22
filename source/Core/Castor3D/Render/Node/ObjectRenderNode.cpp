@@ -7,7 +7,6 @@ namespace castor3d
 {
 	template<>
 	ObjectRenderNode< Submesh, Geometry >::ObjectRenderNode( PassRenderNode passNode
-		, UniformBufferOffsetT< ModelMatrixUboConfiguration > modelMatrixBuffer
 		, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
 		, UniformBufferOffsetT< PickingUboConfiguration > pickingBuffer
 		, UniformBufferOffsetT< TexturesUboConfiguration > texturesBuffer
@@ -17,7 +16,6 @@ namespace castor3d
 		, Submesh & data
 		, Geometry & instance )
 		: passNode{ std::move( passNode ) }
-		, modelMatrixUbo{ modelMatrixBuffer }
 		, modelUbo{ modelBuffer }
 		, pickingUbo{ pickingBuffer }
 		, texturesUbo{ texturesBuffer }
@@ -31,7 +29,6 @@ namespace castor3d
 
 	template<>
 	ObjectRenderNode< BillboardBase, BillboardBase >::ObjectRenderNode( PassRenderNode passNode
-		, UniformBufferOffsetT< ModelMatrixUboConfiguration > modelMatrixBuffer
 		, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
 		, UniformBufferOffsetT< PickingUboConfiguration > pickingBuffer
 		, UniformBufferOffsetT< TexturesUboConfiguration > texturesBuffer
@@ -41,7 +38,6 @@ namespace castor3d
 		, BillboardBase & data
 		, BillboardBase & instance )
 		: passNode{ std::move( passNode ) }
-		, modelMatrixUbo{ modelMatrixBuffer }
 		, modelUbo{ modelBuffer }
 		, pickingUbo{ pickingBuffer }
 		, texturesUbo{ texturesBuffer }

@@ -27,10 +27,6 @@ namespace castor3d
 		{
 			return PoolType::eRsmConfig;
 		}
-		else if constexpr ( std::is_same_v< DataT, ModelMatrixUboConfiguration > )
-		{
-			return PoolType::eModelMatrix;
-		}
 		else if constexpr ( std::is_same_v< DataT, ModelUboConfiguration > )
 		{
 			return PoolType::eModel;

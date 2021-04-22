@@ -110,9 +110,8 @@ namespace castor3d
 			auto & modelData = entry.modelUbo.getData();
 			modelData.shadowReceiver = entry.billboard.isShadowReceiver();
 			modelData.materialIndex = entry.pass.getId();
-			auto & modelMatrixData = entry.modelMatrixUbo.getData();
-			modelMatrixData.prvModel = modelMatrixData.curModel;
-			modelMatrixData.curModel = entry.billboard.getNode()->getDerivedTransformationMatrix();
+			modelData.prvModel = modelData.curModel;
+			modelData.curModel = entry.billboard.getNode()->getDerivedTransformationMatrix();
 			auto & billboardData = entry.billboardUbo.getData();
 			billboardData.dimensions = entry.billboard.getDimensions();
 			auto & texturesData = entry.texturesUbo.getData();
@@ -192,7 +191,6 @@ namespace castor3d
 		for ( auto & entry : m_entries )
 		{
 			uboPools.putBuffer( entry.second.modelUbo );
-			uboPools.putBuffer( entry.second.modelMatrixUbo );
 			uboPools.putBuffer( entry.second.billboardUbo );
 			uboPools.putBuffer( entry.second.pickingUbo );
 			uboPools.putBuffer( entry.second.texturesUbo );
@@ -213,7 +211,6 @@ namespace castor3d
 			auto & uboPools = *m_device.uboPools;
 			auto & baseEntry = iresult.first->second;
 			baseEntry.modelUbo = uboPools.getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
-			baseEntry.modelMatrixUbo = uboPools.getBuffer< ModelMatrixUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 			baseEntry.billboardUbo = uboPools.getBuffer< BillboardUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 			baseEntry.pickingUbo = uboPools.getBuffer< PickingUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 			baseEntry.texturesUbo = uboPools.getBuffer< TexturesUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
@@ -262,7 +259,6 @@ namespace castor3d
 			auto entry = it->second;
 			m_baseEntries.erase( it );
 			uboPools.putBuffer( entry.modelUbo );
-			uboPools.putBuffer( entry.modelMatrixUbo );
 			uboPools.putBuffer( entry.billboardUbo );
 			uboPools.putBuffer( entry.pickingUbo );
 			uboPools.putBuffer( entry.texturesUbo );

@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
+#include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
@@ -13,6 +14,7 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
@@ -33,7 +35,6 @@ namespace castor3d
 		, m_scene{ scene }
 		, m_type{ type }
 		, m_matrixUbo{ engine }
-		, m_modelMatrixUbo{ engine }
 	{
 	}
 
@@ -110,7 +111,7 @@ namespace castor3d
 		doCleanup();
 
 		m_matrixUbo.cleanup( device );
-		m_modelMatrixUbo.cleanup();
+		device.uboPools->putBuffer( m_modelUbo );
 		m_pipeline.reset();
 		m_indexBuffer.reset();
 		m_vertexBuffer.reset();
@@ -142,7 +143,9 @@ namespace castor3d
 			auto node = camera.getParent();
 			castor::matrix::setTranslate( m_mtxModel, node->getDerivedPosition() );
 			castor::matrix::scale( m_mtxModel, Scale );
-			m_modelMatrixUbo.cpuUpdate( m_mtxModel, Identity );
+			auto & configuration = m_modelUbo.getData();
+			configuration.prvModel = configuration.curModel;
+			configuration.curModel = m_mtxModel;
 			doCpuUpdate( updater );
 		}
 	}
@@ -222,14 +225,14 @@ namespace castor3d
 	}
 
 	void SceneBackground::initialiseDescriptorSets( MatrixUbo & matrixUbo
-		, ModelMatrixUbo const & modelMatrixUbo
+		, UniformBufferOffsetT< ModelUboConfiguration > const & modelUbo
 		, HdrConfigUbo const & hdrConfigUbo
 		, ashes::DescriptorSet & uboDescriptorSet
 		, ashes::DescriptorSet & texDescriptorSet )const
 	{
 		matrixUbo.createSizedBinding( uboDescriptorSet
 			, m_uboDescriptorLayout->getBinding( MtxUboIdx ) );
-		modelMatrixUbo.createSizedBinding( uboDescriptorSet
+		modelUbo.createSizedBinding( uboDescriptorSet
 			, m_uboDescriptorLayout->getBinding( MdlMtxUboIdx ) );
 		hdrConfigUbo.createSizedBinding( uboDescriptorSet
 			, m_uboDescriptorLayout->getBinding( HdrCfgUboIdx ) );
@@ -280,7 +283,7 @@ namespace castor3d
 			// Inputs
 			auto position = writer.declInput< Vec3 >( "position", 0u );
 			UBO_MATRIX( writer, MtxUboIdx, UboSetIdx );
-			UBO_MODEL_MATRIX( writer, MdlMtxUboIdx, UboSetIdx );
+			UBO_MODEL( writer, MdlMtxUboIdx, UboSetIdx );
 
 			// Outputs
 			auto vtx_texture = writer.declOutput< Vec3 >( "vtx_texture", 0u );
@@ -446,7 +449,7 @@ namespace castor3d
 		, { *m_uboDescriptorLayout, *m_texDescriptorLayout } );
 
 		m_matrixUbo.initialise( device );
-		m_modelMatrixUbo.initialise( device );
+		m_modelUbo = device.uboPools->getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 
 		m_uboDescriptorSet.reset();
 		m_uboDescriptorPool = m_uboDescriptorLayout->createPool( "SceneBackgroundUbo"
@@ -459,7 +462,7 @@ namespace castor3d
 		m_texDescriptorSet = m_texDescriptorPool->createDescriptorSet( "SceneBackgroundTex"
 			, 0u );
 		initialiseDescriptorSets( m_matrixUbo
-			, m_modelMatrixUbo
+			, m_modelUbo
 			, hdrConfigUbo
 			, *m_uboDescriptorSet
 			, *m_texDescriptorSet );

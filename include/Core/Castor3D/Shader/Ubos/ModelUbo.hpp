@@ -14,17 +14,13 @@ namespace castor3d
 		using Configuration = ModelUboConfiguration;
 
 	public:
-		//!\~english	Name of the model frame variable buffer.
-		//!\~french		Nom du frame variable buffer contenant les données de modèle.
 		C3D_API static castor::String const BufferModel;
-		//!\~english	Name of the shadow receiver status frame variable.
-		//!\~french		Nom de la frame variable contenant le statut de réception d'ombres.
+		C3D_API static castor::String const PrvMtxModel;
+		C3D_API static castor::String const PrvMtxNormal;
+		C3D_API static castor::String const CurMtxModel;
+		C3D_API static castor::String const CurMtxNormal;
 		C3D_API static castor::String const ShadowReceiver;
-		//!\~english	Name of the material index frame variable.
-		//!\~french		Nom de la frame variable contenant l'indice du matériau.
 		C3D_API static castor::String const MaterialIndex;
-		//!\~english	Name of the material environment index frame variable.
-		//!\~french		Nom de la frame variable contenant l'indice de la map d'environnement du matériau.
 		C3D_API static castor::String const EnvironmentIndex;
 	};
 }
@@ -35,6 +31,10 @@ namespace castor3d
 		, binding\
 		, set\
 		, ast::type::MemoryLayout::eStd140 };\
+	auto c3d_prvMtxModel = model.declMember< sdw::Mat4 >( castor3d::ModelUbo::PrvMtxModel );\
+	auto c3d_prvMtxNormal = model.declMember< sdw::Mat4 >( castor3d::ModelUbo::PrvMtxNormal );\
+	auto c3d_curMtxModel = model.declMember< sdw::Mat4 >( castor3d::ModelUbo::CurMtxModel );\
+	auto c3d_curMtxNormal = model.declMember< sdw::Mat4 >( castor3d::ModelUbo::CurMtxNormal );\
 	auto c3d_shadowReceiver = model.declMember< sdw::Int >( castor3d::ModelUbo::ShadowReceiver );\
 	auto c3d_materialIndex = model.declMember< sdw::Int >( castor3d::ModelUbo::MaterialIndex );\
 	auto c3d_envMapIndex = model.declMember< sdw::Int >( castor3d::ModelUbo::EnvironmentIndex );\
