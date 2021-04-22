@@ -96,7 +96,7 @@ namespace castor3d
 			 *\param[in]	matrixUbo		The matrix UBO.
 			 *\param[in]	sceneUbo		The scene UBO.
 			 *\param[in]	gpInfoUbo		The geometry pass UBO.
-			 *\param[in]	modelMatrixUbo	The optional model matrix UBO.
+			 *\param[in]	modelUbo		The optional model matrix UBO.
 			 *\param[in]	voxelUbo		The optional voxelizer UBO.
 			 *\~french
 			 *\brief		Initialise le programme et son pipeline.
@@ -107,7 +107,7 @@ namespace castor3d
 			 *\param[in]	matrixUbo		L'UBO des matrices.
 			 *\param[in]	sceneUbo		L'UBO de la scène.
 			 *\param[in]	gpInfoUbo		L'UBO de la geometry pass.
-			 *\param[in]	modelMatrixUbo	L'UBO optionnel de matrices modèle.
+			 *\param[in]	modelUbo		L'UBO optionnel de matrices modèle.
 			 *\param[in]	voxelUbo		L'UBO optionnel du voxelizer.
 			 */
 			void initialise( ashes::VertexBufferBase & vbo
@@ -117,7 +117,7 @@ namespace castor3d
 				, MatrixUbo & matrixUbo
 				, SceneUbo & sceneUbo
 				, GpInfoUbo const & gpInfoUbo
-				, UniformBufferT< ModelMatrixUboConfiguration > const * modelMatrixUbo
+				, UniformBufferT< ModelUboConfiguration > const * modelUbo
 				, VoxelizerUbo const * voxelUbo );
 			/**
 			*\~english
@@ -412,7 +412,7 @@ namespace castor3d
 		 *\param[in]	vbo				The VBO.
 		 *\param[in]	vertexLayout	The vertex buffer layout.
 		 *\param[in]	sceneUbo		The scene UBO.
-		 *\param[in]	modelMatrixUbo	The optional model matrix UBO.
+		 *\param[in]	modelUbo		The optional model matrix UBO.
 		 *\param[in]	timer			The render pass timer.
 		 *\~french
 		 *\brief		Initialise la passe d'éclairage.
@@ -422,7 +422,7 @@ namespace castor3d
 		 *\param[in]	vbo				Le VBO.
 		 *\param[in]	vertexLayout	Le layout du tampon de sommets.
 		 *\param[in]	sceneUbo		L'UBO de scène.
-		 *\param[in]	modelMatrixUbo	L'UBO optionnel de matrices modèle.
+		 *\param[in]	modelUbo		L'UBO optionnel de matrices modèle.
 		 *\param[in]	timer			Le timer de passe.
 		 */
 		void doInitialise( Scene const & scene
@@ -431,7 +431,7 @@ namespace castor3d
 			, ashes::VertexBufferBase & vbo
 			, ashes::PipelineVertexInputStateCreateInfo const & vertexLayout
 			, SceneUbo & sceneUbo
-			, UniformBufferT< ModelMatrixUboConfiguration > const * modelMatrixUbo
+			, UniformBufferT< ModelUboConfiguration > const * modelUbo
 			, RenderPassTimer & timer );
 		/**
 		 *\~english
@@ -575,7 +575,7 @@ namespace castor3d
 		RenderDevice const & m_device;
 		Scene const * m_scene{ nullptr };
 		SceneUbo * m_sceneUbo{ nullptr };
-		UniformBufferT< ModelMatrixUboConfiguration > const * m_mmUbo{ nullptr };
+		UniformBufferT< ModelUboConfiguration > const * m_optModelUbo{ nullptr };
 		VoxelizerUbo const * m_vctUbo{ nullptr };
 		ashes::PipelineVertexInputStateCreateInfo m_usedVertexLayout{ 0u, {}, {} };
 		ashes::PipelineVertexInputStateCreateInfo const * m_pUsedVertexLayout{ nullptr };

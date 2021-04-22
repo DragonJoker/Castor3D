@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_TextureProjection_H___
 
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
 
 #include <CastorUtils/Graphics/Size.hpp>
 
@@ -83,7 +83,7 @@ namespace castor3d
 
 	private:
 		MatrixUbo m_matrixUbo;
-		ModelMatrixUbo m_modelMatrixUbo;
+		UniformBufferOffsetT< ModelUboConfiguration > m_modelUbo;
 		castor::Size m_size;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::PushConstantsBuffer< castor::Point2f > m_sizePushConstant;

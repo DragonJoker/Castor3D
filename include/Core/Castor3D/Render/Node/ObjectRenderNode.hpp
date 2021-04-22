@@ -27,7 +27,6 @@ namespace castor3d
 		C3D_API ObjectRenderNode & operator=( ObjectRenderNode && ) = default;
 
 		C3D_API ObjectRenderNode( PassRenderNode passNode
-			, UniformBufferOffsetT< ModelMatrixUboConfiguration > modelMatrixBuffer
 			, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
 			, UniformBufferOffsetT< PickingUboConfiguration > pickingBuffer
 			, UniformBufferOffsetT< TexturesUboConfiguration > texturesBuffer
@@ -38,7 +37,6 @@ namespace castor3d
 			, InstanceType & instance );
 
 		PassRenderNode passNode;
-		UniformBufferOffsetT< ModelMatrixUboConfiguration > modelMatrixUbo;
 		UniformBufferOffsetT< ModelUboConfiguration > modelUbo;
 		UniformBufferOffsetT< PickingUboConfiguration > pickingUbo;
 		UniformBufferOffsetT< TexturesUboConfiguration > texturesUbo;

@@ -4,7 +4,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
-#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
 
@@ -78,7 +78,7 @@ namespace castor3d
 		auto inBoneIds1 = writer.getVariable< IVec4 >( cuT( "inBoneIds1" ) );
 		auto inWeights0 = writer.getVariable< Vec4 >( cuT( "inWeights0" ) );
 		auto inWeights1 = writer.getVariable< Vec4 >( cuT( "inWeights1" ) );
-		auto c3d_curMtxModel = writer.getVariable< Mat4 >( ModelMatrixUbo::CurMtxModel );
+		auto c3d_curMtxModel = writer.getVariable< Mat4 >( ModelUbo::CurMtxModel );
 		auto mtxBoneTransform = writer.declLocale< Mat4 >( cuT( "mtxBoneTransform" ) );
 
 		if ( checkFlag( flags, ProgramFlag::eInstantiation ) )

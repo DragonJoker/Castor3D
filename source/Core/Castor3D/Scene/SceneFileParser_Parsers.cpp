@@ -85,6 +85,99 @@ namespace castor3d
 			mergeMasks( config.transmittanceMask[0], TextureFlag::eTransmittance, result );
 			return result;
 		}
+
+		void fillMeshImportParameters( castor::FileParser * parser
+			, String const & meshParams
+			, Parameters & parameters )
+		{
+			StringArray paramArray = string::split( meshParams, cuT( "-" ), 20, false );
+
+			for ( auto param : paramArray )
+			{
+				if ( param.find( cuT( "smooth_normals" ) ) == 0 )
+				{
+					String strNml = cuT( "smooth" );
+					parameters.add( cuT( "normals" ), strNml.c_str(), uint32_t( strNml.size() ) );
+				}
+				else if ( param.find( cuT( "flat_normals" ) ) == 0 )
+				{
+					String strNml = cuT( "flat" );
+					parameters.add( cuT( "normals" ), strNml.c_str(), uint32_t( strNml.size() ) );
+				}
+				else if ( param.find( cuT( "tangent_space" ) ) == 0 )
+				{
+					parameters.add( cuT( "tangent_space" ), true );
+				}
+				else if ( param.find( cuT( "pitch" ) ) == 0 )
+				{
+					auto eqIndex = param.find( cuT( '=' ) );
+
+					if ( eqIndex != String::npos )
+					{
+						float value;
+						string::parse< float >( param.substr( eqIndex + 1 ), value );
+						parameters.add( cuT( "pitch" ), value );
+					}
+					else
+					{
+						CU_ParsingError( cuT( "Malformed parameter -pitch=<degrees>." ) );
+					}
+				}
+				else if ( param.find( cuT( "yaw" ) ) == 0 )
+				{
+					auto eqIndex = param.find( cuT( '=' ) );
+
+					if ( eqIndex != String::npos )
+					{
+						float value;
+						string::parse< float >( param.substr( eqIndex + 1 ), value );
+						parameters.add( cuT( "yaw" ), value );
+					}
+					else
+					{
+						CU_ParsingError( cuT( "Malformed parameter -yaw=<degrees>." ) );
+					}
+				}
+				else if ( param.find( cuT( "roll" ) ) == 0 )
+				{
+					auto eqIndex = param.find( cuT( '=' ) );
+
+					if ( eqIndex != String::npos )
+					{
+						float value;
+						string::parse< float >( param.substr( eqIndex + 1 ), value );
+						parameters.add( cuT( "roll" ), value );
+					}
+					else
+					{
+						CU_ParsingError( cuT( "Malformed parameter -roll=<degrees>." ) );
+					}
+				}
+				else if ( param.find( cuT( "split_mesh" ) ) == 0 )
+				{
+					parameters.add( cuT( "split_mesh" ), true );
+				}
+				else if ( param.find( cuT( "rescale" ) ) == 0 )
+				{
+					auto eqIndex = param.find( cuT( '=' ) );
+
+					if ( eqIndex != String::npos )
+					{
+						float value;
+						string::parse< float >( param.substr( eqIndex + 1 ), value );
+						parameters.add( cuT( "rescale" ), value );
+					}
+					else
+					{
+						CU_ParsingError( cuT( "Malformed parameter -rescale=<float>." ) );
+					}
+				}
+				else if ( param.find( cuT( "no_optimisations" ) ) == 0 )
+				{
+					parameters.add( cuT( "no_optimisations" ), true );
+				}
+			}
+		}
 	}
 
 	CU_ImplementAttributeParser( parserRootScene )
@@ -2395,89 +2488,8 @@ namespace castor3d
 			if ( params.size() > 1 )
 			{
 				String meshParams;
-				StringArray paramArray = string::split( params[1]->get( meshParams ), cuT( "-" ), 20, false );
-
-				for ( auto param : paramArray )
-				{
-					if ( param.find( cuT( "smooth_normals" ) ) == 0 )
-					{
-						String strNml = cuT( "smooth" );
-						parameters.add( cuT( "normals" ), strNml.c_str(), uint32_t( strNml.size() ) );
-					}
-					else if ( param.find( cuT( "flat_normals" ) ) == 0 )
-					{
-						String strNml = cuT( "flat" );
-						parameters.add( cuT( "normals" ), strNml.c_str(), uint32_t( strNml.size() ) );
-					}
-					else if ( param.find( cuT( "tangent_space" ) ) == 0 )
-					{
-						parameters.add( cuT( "tangent_space" ), true );
-					}
-					else if ( param.find( cuT( "pitch" ) ) == 0 )
-					{
-						auto eqIndex = param.find( cuT( '=' ) );
-
-						if ( eqIndex != String::npos )
-						{
-							float value;
-							string::parse< float >( param.substr( eqIndex + 1 ), value );
-							parameters.add( cuT( "pitch" ), value );
-						}
-						else
-						{
-							CU_ParsingError( cuT( "Malformed parameter -pitch=<degrees>." ) );
-						}
-					}
-					else if ( param.find( cuT( "yaw" ) ) == 0 )
-					{
-						auto eqIndex = param.find( cuT( '=' ) );
-
-						if ( eqIndex != String::npos )
-						{
-							float value;
-							string::parse< float >( param.substr( eqIndex + 1 ), value );
-							parameters.add( cuT( "yaw" ), value );
-						}
-						else
-						{
-							CU_ParsingError( cuT( "Malformed parameter -yaw=<degrees>." ) );
-						}
-					}
-					else if ( param.find( cuT( "roll" ) ) == 0 )
-					{
-						auto eqIndex = param.find( cuT( '=' ) );
-
-						if ( eqIndex != String::npos )
-						{
-							float value;
-							string::parse< float >( param.substr( eqIndex + 1 ), value );
-							parameters.add( cuT( "roll" ), value );
-						}
-						else
-						{
-							CU_ParsingError( cuT( "Malformed parameter -roll=<degrees>." ) );
-						}
-					}
-					else if ( param.find( cuT( "split_mesh" ) ) == 0 )
-					{
-						parameters.add( cuT( "split_mesh" ), true );
-					}
-					else if ( param.find( cuT( "rescale" ) ) == 0 )
-					{
-						auto eqIndex = param.find( cuT( '=' ) );
-
-						if ( eqIndex != String::npos )
-						{
-							float value;
-							string::parse< float >( param.substr( eqIndex + 1 ), value );
-							parameters.add( cuT( "rescale" ), value );
-						}
-						else
-						{
-							CU_ParsingError( cuT( "Malformed parameter -rescale=<float>." ) );
-						}
-					}
-				}
+				params[1]->get( meshParams );
+				fillMeshImportParameters( parser, meshParams, parameters );
 			}
 
 			Engine * engine = parsingContext->m_pParser->getEngine();
@@ -2518,32 +2530,13 @@ namespace castor3d
 			Path path;
 			Path pathFile = context->m_file.getPath() / params[0]->get( path );
 			Parameters parameters;
+			parameters.add( "no_optimisations", true );
 
 			if ( params.size() > 2 )
 			{
-				String tmp;
-				StringArray arrayStrParams = string::split( params[2]->get( tmp ), cuT( "-" ), 20, false );
-
-				if ( !arrayStrParams.empty() )
-				{
-					for ( StringArrayConstIt it = arrayStrParams.begin(); it != arrayStrParams.end(); ++it )
-					{
-						if ( it->find( cuT( "smooth_normals" ) ) == 0 )
-						{
-							String strNml = cuT( "smooth" );
-							parameters.add( cuT( "normals" ), strNml.c_str(), uint32_t( strNml.size() ) );
-						}
-						else if ( it->find( cuT( "flat_normals" ) ) == 0 )
-						{
-							String strNml = cuT( "flat" );
-							parameters.add( cuT( "normals" ), strNml.c_str(), uint32_t( strNml.size() ) );
-						}
-						else if ( it->find( cuT( "tangent_space" ) ) == 0 )
-						{
-							parameters.add( cuT( "tangent_space" ), true );
-						}
-					}
-				}
+				String meshParams;
+				params[2]->get( meshParams );
+				fillMeshImportParameters( parser, meshParams, parameters );
 			}
 
 			Engine * engine = parsingContext->m_pParser->getEngine();
@@ -2595,6 +2588,7 @@ namespace castor3d
 						++index;
 					}
 
+					mesh.cleanup();
 					animation.addKeyFrame( std::move( keyFrame ) );
 				}
 				else
