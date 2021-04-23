@@ -500,7 +500,7 @@ namespace castor3d
 							: c3d_curMtxModel ) ) );
 
 				out.vtx.position = ( modelMtx * position );
-				outViewPosition = ( c3d_curView * out.vtx.position ).xyz();
+				outViewPosition = c3d_matrixData.worldToCurView( out.vtx.position ).xyz();
 				outNormal = normalize( mat3( transpose( inverse( modelMtx ) ) ) * normal );
 				outTexture = texcoord;
 				outMaterial = ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation )
@@ -543,12 +543,17 @@ namespace castor3d
 				curToCamera.y() = 0.0_f;
 				curToCamera = normalize( curToCamera );
 				auto right = writer.declLocale( "right"
-					, normalize( checkFlag( flags.programFlags, ProgramFlag::eSpherical )
-						? vec3( c3d_curView[0][0], c3d_curView[1][0], c3d_curView[2][0] )
-						: vec3( c3d_curView[0][0], 0.0_f, c3d_curView[2][0] ) ) );
+					, c3d_matrixData.getCurViewRight() );
+
+				if ( !checkFlag( flags.programFlags, ProgramFlag::eSpherical ) )
+				{
+					right.y() = 0.0_f;
+				}
+				
+				right = normalize( right );
 				auto up = writer.declLocale( "up"
 					, ( checkFlag( flags.programFlags, ProgramFlag::eSpherical )
-						? vec3( c3d_curView[0][1], c3d_curView[1][1], c3d_curView[2][1] )
+						? c3d_matrixData.getCurViewUp()
 						: vec3( 0.0_f, 1.0f, 0.0f ) ) );
 				auto width = writer.declLocale( "width"
 					, ( checkFlag( flags.programFlags, ProgramFlag::eFixedSize )
@@ -564,7 +569,7 @@ namespace castor3d
 						+ up * inPosition.y() * height
 					, 1.0_f );
 				auto viewPosition = writer.declLocale( "viewPosition"
-					, c3d_curView * out.vtx.position );
+					, c3d_matrixData.worldToCurView( out.vtx.position ) );
 				outViewPosition = viewPosition.xyz();
 				outNormal = normalize( c3d_cameraPosition.xyz() - curBbcenter );
 			} );

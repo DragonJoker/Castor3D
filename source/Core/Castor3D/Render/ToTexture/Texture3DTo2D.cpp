@@ -389,7 +389,7 @@ namespace castor3d
 							pos *= ( writer.cast< Float >( gridSize ) * ( 1.0_f / cellSize ) ) / writer.cast< Float >( gridSize );
 
 							outVoxelColor = inVoxelColor[0];
-							out.vtx.position = c3d_curViewProj * vec4( pos, 1.0f );
+							out.vtx.position = c3d_matrixData.worldToCurProj( vec4( pos, 1.0f ) );
 
 							EmitVertex( writer );
 						}

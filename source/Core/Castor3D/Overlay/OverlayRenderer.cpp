@@ -953,9 +953,9 @@ namespace castor3d
 					auto size = writer.declLocale( "size"
 						, vec2( c3d_positionRatio.z() * writer.cast< Float >( c3d_renderSizeIndex.x() )
 							, c3d_positionRatio.w() * writer.cast< Float >( c3d_renderSizeIndex.y() ) ) );
-					out.vtx.position = c3d_projection * vec4( size * ( c3d_positionRatio.xy() + position )
-						, 0.0_f
-						, 1.0_f );
+					out.vtx.position = c3d_matrixData.viewToProj( vec4( size * ( c3d_positionRatio.xy() + position )
+							, 0.0_f
+							, 1.0_f ) );
 				} );
 
 			vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

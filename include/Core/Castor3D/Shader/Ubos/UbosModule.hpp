@@ -175,7 +175,7 @@ namespace castor3d
 		castor::Matrix4x4f prvView;
 		castor::Matrix4x4f curViewProj;
 		castor::Matrix4x4f prvViewProj;
-		castor::Point2f jitter;
+		castor::Point4f jitter;
 	};
 	/**
 	*\~english
