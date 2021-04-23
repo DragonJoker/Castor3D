@@ -757,9 +757,9 @@ namespace castor3d
 					, prvMtxModel * curPosition );
 				curPosition = curMtxModel * curPosition;
 				outWorldPosition = curPosition.xyz();
-				prvPosition = c3d_prvViewProj * prvPosition;
-				curPosition = c3d_curViewProj * curPosition;
-				outViewPosition = ( c3d_curView * vec4( outWorldPosition, 1.0f ) ).xyz();
+				prvPosition = c3d_matrixData.worldToPrvProj( prvPosition );
+				curPosition = c3d_matrixData.worldToCurProj( curPosition );
+				outViewPosition = c3d_matrixData.worldToCurView( vec4( outWorldPosition, 1.0f ) ).xyz();
 
 				outNormal = normalize( mtxNormal * v4Normal.xyz() );
 				outTangent = normalize( mtxNormal * v4Tangent.xyz() );
@@ -785,8 +785,8 @@ namespace castor3d
 				// (note that for providing the jitter in non-homogeneous projection space,
 				//  pixel coordinates (screen space) need to multiplied by two in the C++
 				//  code)
-				curPosition.xy() -= c3d_jitter * curPosition.w();
-				prvPosition.xy() -= c3d_jitter * prvPosition.w();
+				c3d_matrixData.jitter( curPosition );
+				c3d_matrixData.jitter( prvPosition );
 				out.vtx.position = curPosition;
 
 				outCurPosition = curPosition.xyw();

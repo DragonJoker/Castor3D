@@ -883,9 +883,8 @@ namespace castor3d
 
 				outTexture = v3Texture;
 				v4Vertex = mtxModel * v4Vertex;
-				v4Vertex = c3d_curView * v4Vertex;
 				outInstance = writer.cast< UInt >( in.instanceIndex );
-				out.vtx.position = c3d_projection * v4Vertex;
+				out.vtx.position = c3d_matrixData.worldToCurProj( v4Vertex );
 			} );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}

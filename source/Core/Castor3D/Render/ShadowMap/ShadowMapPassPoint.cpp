@@ -403,7 +403,7 @@ namespace castor3d
 			vtx_tangent = normalize( mtxNormal * v4Tangent.xyz() );
 			vtx_tangent = normalize( sdw::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
-			vtx_cameraPosition = c3d_curView[3].xyz();
+			vtx_cameraPosition = c3d_matrixData.getCurViewCenter();
 			vertexPosition = mtxModel * vertexPosition;
 			vtx_worldPosition = vertexPosition.xyz();
 
@@ -412,8 +412,7 @@ namespace castor3d
 			vtx_tangentSpaceFragPosition = tbn * vtx_worldPosition;
 			vtx_tangentSpaceViewPosition = tbn * vtx_cameraPosition.xyz();
 
-			vertexPosition = c3d_curView * vertexPosition;
-			out.vtx.position = c3d_projection * vertexPosition;
+			out.vtx.position = c3d_matrixData.worldToCurProj( vertexPosition );
 		};
 
 		writer.implementFunction< sdw::Void >( "main", main );

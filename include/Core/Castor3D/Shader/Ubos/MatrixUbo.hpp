@@ -10,8 +10,52 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
+#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/MatTypes/Mat4.hpp>
+
 namespace castor3d
 {
+	namespace shader
+	{
+		struct MatrixData
+			: public sdw::StructInstance
+		{
+			C3D_API MatrixData( sdw::ShaderWriter & writer
+				, ast::expr::ExprPtr expr
+				, bool enabled );
+			C3D_API MatrixData & operator=( MatrixData const & rhs );
+
+			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+
+			C3D_API sdw::Vec4 viewToProj( sdw::Vec4 const & vsPosition )const;
+			C3D_API sdw::Vec4 worldToCurView( sdw::Vec4 const & wsPosition )const;
+			C3D_API sdw::Vec4 worldToPrvView( sdw::Vec4 const & wsPosition )const;
+			C3D_API sdw::Vec4 worldToCurProj( sdw::Vec4 const & wsPosition )const;
+			C3D_API sdw::Vec4 worldToPrvProj( sdw::Vec4 const & wsPosition )const;
+			C3D_API sdw::Vec3 getCurViewRight()const;
+			C3D_API sdw::Vec3 getPrvViewRight()const;
+			C3D_API sdw::Vec3 getCurViewUp()const;
+			C3D_API sdw::Vec3 getPrvViewUp()const;
+			C3D_API sdw::Vec3 getCurViewCenter()const;
+			C3D_API sdw::Vec3 getPrvViewCenter()const;
+			C3D_API void jitter( sdw::Vec4 & csPosition )const;
+
+		private:
+			using sdw::StructInstance::getMember;
+			using sdw::StructInstance::getMemberArray;
+
+		private:
+			sdw::Mat4 m_projection;
+			sdw::Mat4 m_invProjection;
+			sdw::Mat4 m_curView;
+			sdw::Mat4 m_prvView;
+			sdw::Mat4 m_curViewProj;
+			sdw::Mat4 m_prvViewProj;
+			sdw::Vec4 m_jitter;
+		};
+	}
+
 	class MatrixUbo
 	{
 	public:
@@ -113,13 +157,7 @@ namespace castor3d
 
 	public:
 		C3D_API static castor::String const BufferMatrix;
-		C3D_API static castor::String const Projection;
-		C3D_API static castor::String const CurView;
-		C3D_API static castor::String const PrvView;
-		C3D_API static castor::String const CurViewProj;
-		C3D_API static castor::String const PrvViewProj;
-		C3D_API static castor::String const InvProjection;
-		C3D_API static castor::String const Jitter;
+		C3D_API static castor::String const MatrixData;
 
 	private:
 		Engine & m_engine;
@@ -131,14 +169,10 @@ namespace castor3d
 	sdw::Ubo matrices{ writer\
 		, castor3d::MatrixUbo::BufferMatrix\
 		, binding\
-		, set };\
-	auto c3d_projection = matrices.declMember< sdw::Mat4 >( castor3d::MatrixUbo::Projection );\
-	auto c3d_invProjection = matrices.declMember< sdw::Mat4 >( castor3d::MatrixUbo::InvProjection );\
-	auto c3d_curView = matrices.declMember< sdw::Mat4 >( castor3d::MatrixUbo::CurView );\
-	auto c3d_prvView = matrices.declMember< sdw::Mat4 >( castor3d::MatrixUbo::PrvView );\
-	auto c3d_curViewProj = matrices.declMember< sdw::Mat4 >( castor3d::MatrixUbo::CurViewProj );\
-	auto c3d_prvViewProj = matrices.declMember< sdw::Mat4 >( castor3d::MatrixUbo::PrvViewProj );\
-	auto c3d_jitter = matrices.declMember< sdw::Vec2 >( castor3d::MatrixUbo::Jitter );\
+		, set\
+		, ast::type::MemoryLayout::eStd140\
+		, true };\
+	auto c3d_matrixData = matrices.declStructMember< shader::MatrixData >( castor3d::MatrixUbo::MatrixData );\
 	matrices.end()
 
 #endif
