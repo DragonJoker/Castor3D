@@ -204,7 +204,7 @@ namespace aria
 
 	castor::Path getResultName( TestRun const & test )
 	{
-		return castor::Path{ getFolderName( test.runDate ) + "_" + test.test->name + "_" + test.renderer->name + ".png" };
+		return castor::Path{ test.test->name + "_" + test.renderer->name + ".png" };
 	}
 
 	castor::Path getCompareFolder( Test const & test )
@@ -400,13 +400,6 @@ namespace aria
 		wxStructStat strucStat;
 		wxStat( makeWxString( imgPath ), &strucStat );
 		return makeDbDateTime( wxDateTime{ strucStat.st_mtime } );
-	}
-
-	castor::Path getFolderName( db::DateTime const & value )
-	{
-		return db::date_time::isValid( value )
-			? castor::Path{ db::date_time::format( value, FOLDER_DATETIME ) }
-			: castor::Path{};
 	}
 
 	bool isDateTime( castor::String const & value

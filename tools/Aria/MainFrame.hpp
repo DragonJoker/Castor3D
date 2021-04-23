@@ -53,6 +53,10 @@ namespace aria
 			, int & index );
 		TestsPage & doGetPage( wxDataViewItem const & item );
 
+		uint32_t doGetAllTestsRange()const;
+		uint32_t doGetAllRunsRange()const;
+		uint32_t doGetSelectedRendererRange()const;
+		uint32_t doGetSelectedCategoryRange()const;
 		void doProcessTest();
 		void doPushTest( TreeModelNode * node );
 		void doClearRunning();
