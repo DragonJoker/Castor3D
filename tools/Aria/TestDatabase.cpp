@@ -285,7 +285,7 @@ namespace aria
 				, dstFolder
 				, getCompareName( test )
 				, getResultName( test )
-				, false );
+				, true );
 		}
 	}
 
@@ -300,6 +300,11 @@ namespace aria
 		auto src = srcFolder / srcName;
 		auto dst = dstFolder / dstName;
 
+		if ( src == dst )
+		{
+			return;
+		}
+
 		if ( castor::File::fileExists( src ) )
 		{
 			if ( !castor::File::directoryExists( dstFolder ) )
@@ -313,6 +318,11 @@ namespace aria
 
 			if ( force || !castor::File::fileExists( dst ) )
 			{
+				if ( castor::File::fileExists( dst ) )
+				{
+					castor::File::deleteFile( dst );
+				}
+
 				if ( !castor::File::copyFileName( src, dst ) )
 				{
 					castor::Logger::logError( "Couldn't copy image [" + src + "]: " + castor::System::getLastErrorText() );
