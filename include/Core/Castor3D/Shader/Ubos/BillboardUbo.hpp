@@ -6,20 +6,50 @@ See LICENSE file in root folder
 
 #include "UbosModule.hpp"
 
+#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/VecTypes/Vec4.hpp>
+
 namespace castor3d
 {
+	namespace shader
+	{
+		struct BillboardData
+			: public sdw::StructInstance
+		{
+			C3D_API BillboardData( sdw::ShaderWriter & writer
+				, ast::expr::ExprPtr expr
+				, bool enabled );
+			C3D_API BillboardData & operator=( BillboardData const & rhs );
+
+			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+
+			C3D_API sdw::Vec3 getCameraRight( ProgramFlags programFlags
+				, MatrixData const & matrixData )const;
+			C3D_API sdw::Vec3 getCameraUp( ProgramFlags programFlags
+				, MatrixData const & matrixData )const;
+			C3D_API sdw::Float getWidth( ProgramFlags programFlags
+				, sdw::Float clipX )const;
+			C3D_API sdw::Float getHeight( ProgramFlags programFlags
+				, sdw::Float clipY )const;
+
+		private:
+			using sdw::StructInstance::getMember;
+			using sdw::StructInstance::getMemberArray;
+
+		private:
+			sdw::Vec2 m_dimensions;
+		};
+	}
+
 	class BillboardUbo
 	{
 	public:
 		using Configuration = BillboardUboConfiguration;
 
 	public:
-		//!\~english	Name of the billboards frame variable buffer.
-		//!\~french		Nom du frame variable buffer contenant les données de billboards.
 		C3D_API static castor::String const BufferBillboard;
-		//!\~english	Name of the billboard dimensions frame variable.
-		//!\~french		Nom de la frame variable contenant les dimensions du billboard.
-		C3D_API static castor::String const Dimensions;
+		C3D_API static castor::String const BillboardData;
 	};
 }
 
@@ -28,8 +58,9 @@ namespace castor3d
 		, castor3d::BillboardUbo::BufferBillboard\
 		, binding\
 		, set\
-		, ast::type::MemoryLayout::eStd140 };\
-	auto c3d_dimensions = billboard.declMember< Vec2 >( castor3d::BillboardUbo::Dimensions );\
+		, ast::type::MemoryLayout::eStd140\
+		, true };\
+	auto c3d_billboardData = billboard.declStructMember< shader::BillboardData >( castor3d::BillboardUbo::BillboardData );\
 	billboard.end()
 
 #endif

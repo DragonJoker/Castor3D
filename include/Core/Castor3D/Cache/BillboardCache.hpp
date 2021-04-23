@@ -6,14 +6,18 @@ See LICENSE file in root folder
 
 #include "Castor3D/Cache/ObjectCacheBase.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
-#include "Castor3D/Cache/BillboardUboPools.hpp"
+
+#include "Castor3D/Buffer/UniformBufferOffset.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 namespace castor3d
 {
+	C3D_API size_t hash( BillboardBase const & billboard
+		, Pass const & pass );
+	C3D_API size_t hash( BillboardBase const & billboard
+		, Pass const & pass
+		, uint32_t instanceMult );
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		24/04/2018
-	\version	0.11.0
 	\~english
 	\brief		BillboardList cache.
 	\~french
@@ -24,6 +28,17 @@ namespace castor3d
 		: public ObjectCacheBase< BillboardList, castor::String >
 	{
 	public:
+		struct PoolsEntry
+		{
+			size_t hash;
+			BillboardBase const & billboard;
+			Pass const & pass;
+			UniformBufferOffsetT< ModelUboConfiguration > modelUbo;
+			UniformBufferOffsetT< BillboardUboConfiguration > billboardUbo;
+			UniformBufferOffsetT< PickingUboConfiguration > pickingUbo;
+			UniformBufferOffsetT< TexturesUboConfiguration > texturesUbo;
+			UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesUbo;
+		};
 		using MyObjectCache = ObjectCacheBase< BillboardList, castor::String >;
 		using MyObjectCacheTraits = typename MyObjectCacheType::MyObjectCacheTraits;
 		using Element = typename MyObjectCacheType::Element;
@@ -87,31 +102,15 @@ namespace castor3d
 		C3D_API void registerPass( SceneRenderPass const & renderPass );
 		C3D_API void unregisterPass( SceneRenderPass const * renderPass
 			, uint32_t instanceMult );
-		/**
-		 *\~english
-		 *\brief		Initialises the UBO pools.
-		 *\param[in]	device	The GPU device.
-		 *\~french
-		 *\brief		Initialise les pools d'UBO.
-		 *\param[in]	device	Le device GPU.
-		 */
-		C3D_API void initialise( RenderDevice const & device );
-		/**
-		 *\~english
-		 *\brief		Cleans up the UBO pools.
-		 *\param[in]	device	The GPU device.
-		 *\~french
-		 *\brief		Nettoie les pools d'UBO.
-		 *\param[in]	device	Le device GPU.
-		 */
-		C3D_API void cleanup( RenderDevice const & device );
+		void registerElement( BillboardBase & billboard );
+		void unregisterElement( BillboardBase & billboard );
 		/**
 		 *\~english
 		 *\brief		Flushes the collection.
 		 *\~french
 		 *\brief		Vide la collection.
 		 */
-		C3D_API void clear();
+		C3D_API void clear( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -121,6 +120,23 @@ namespace castor3d
 		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( CpuUpdater & updater );
+		/**
+		 *\~english
+		 *\brief		Cleans up the UBO pools.
+		 *\remarks		Assumes the entry has been previously created.
+		 *\param		billboard		The instance.
+		 *\param		pass			The instance material pass.
+		 *\param		instanceMult	The instance multiplier, to know where to register the nodes.
+		 *\~french
+		 *\brief		Nettoie les pools d'UBO.
+		 *\remarks		Considère que l'entrée a été préalablement créée.
+		 *\param		billboard		L'instance.
+		 *\param		pass			La passe de matériau de l'instance.
+		 *\param		instanceMult	Le multiplicateur d'instances, pour savoir où enregistrer les nodes.
+		 */
+		C3D_API PoolsEntry getUbos( BillboardBase const & billboard
+			, Pass const & pass
+			, uint32_t instanceMult )const;
 		/**
 		 *\~english
 		 *\brief		Creates a new object and adds it to the collection.
@@ -154,14 +170,20 @@ namespace castor3d
 		 */
 		C3D_API void remove( Key const & name );
 
-		BillboardUboPools & getUboPools()const
-		{
-			return *m_pools;
-		}
+	private:
+		void doCreateEntry( RenderDevice const & device
+			, BillboardBase const & billboard
+			, Pass const & pass );
+		void doRemoveEntry( RenderDevice const & device
+			, BillboardBase const & billboard
+			, Pass const & pass );
 
 	private:
-		BillboardUboPoolsSPtr m_pools;
-		std::set< SceneRenderPass const * > m_pendingPasses;
+		std::map< size_t, PoolsEntry > m_baseEntries;
+		std::map< size_t, PoolsEntry > m_entries;
+		std::map< BillboardBase *, OnBillboardMaterialChangedConnection > m_connections;
+		using RenderPassSet = std::set< SceneRenderPass const * >;
+		std::map< uint32_t, RenderPassSet > m_instances;
 	};
 	using BillboardListCache = ObjectCache< BillboardList, castor::String >;
 	CU_DeclareSmartPtr( BillboardListCache );

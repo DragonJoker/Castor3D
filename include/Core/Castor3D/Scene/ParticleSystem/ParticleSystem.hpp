@@ -257,6 +257,9 @@ namespace castor3d
 		//!\~english	Tells that the next update is the first one.
 		//!\~french		Dit que la prochaine mise à jour est la première.
 		bool m_firstUpdate{ true };
+		//!\~english	The time elapsed since last frame.
+		//!\~french		Le temps écoulé depuis la dernière frame.
+		castor::Milliseconds m_time{ 0 };
 		//!\~english	The total elapsed time.
 		//!\~french		Le temps total écoulé.
 		castor::Milliseconds m_totalTime{ 0 };

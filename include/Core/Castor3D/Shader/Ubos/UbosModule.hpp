@@ -16,6 +16,11 @@ namespace castor3d
 	/**@name UBO */
 	//@{
 
+	namespace shader
+	{
+		struct BillboardData;
+		struct MatrixData;
+	}
 	/**
 	*\~english
 	*\brief

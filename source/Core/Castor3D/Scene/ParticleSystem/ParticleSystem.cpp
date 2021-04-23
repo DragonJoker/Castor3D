@@ -3,7 +3,6 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Cache/BillboardCache.hpp"
-#include "Castor3D/Cache/BillboardUboPools.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -169,7 +168,7 @@ namespace castor3d
 		m_particlesBillboard->setDimensions( m_dimensions );
 		m_particlesBillboard->setMaterial( m_material.lock() );
 		bool result = m_particlesBillboard->initialise( device, m_particlesCount );
-		getScene()->getBillboardListCache().getUboPools().registerElement( *m_particlesBillboard );
+		getScene()->getBillboardListCache().registerElement( *m_particlesBillboard );
 
 		if ( result )
 		{
@@ -198,7 +197,7 @@ namespace castor3d
 
 	void ParticleSystem::cleanup( RenderDevice const & device )
 	{
-		getScene()->getBillboardListCache().getUboPools().unregisterElement( *m_particlesBillboard );
+		getScene()->getBillboardListCache().unregisterElement( *m_particlesBillboard );
 		m_particlesBillboard->cleanup( device );
 		m_particlesBillboard.reset();
 		m_csImpl->cleanup( device );
@@ -219,8 +218,9 @@ namespace castor3d
 		time = updater.tslf > 0_ms
 			? updater.tslf
 			: time;
+		m_time = time;
 		m_totalTime += time;
-		updater.time = time;
+		updater.time = m_time;
 		updater.total = m_totalTime;
 		m_impl->update( updater );
 	}
@@ -228,6 +228,8 @@ namespace castor3d
 	void ParticleSystem::update( GpuUpdater & updater )
 	{
 		CU_Require( m_impl );
+		updater.time = m_time;
+		updater.total = m_totalTime;
 		m_activeParticlesCount = m_impl->update( updater );
 
 		if ( getBillboards()->getCount() != m_activeParticlesCount )

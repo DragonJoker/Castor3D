@@ -1,18 +1,40 @@
 #include "Castor3D/Cache/BillboardCache.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
 
-using namespace castor;
+#include <CastorUtils/Miscellaneous/Hash.hpp>
 
 namespace castor3d
 {
-	template<> const String ObjectCacheTraits< BillboardList, String >::Name = cuT( "BillboardList" );
+	size_t hash( BillboardBase const & billboard
+		, Pass const & pass )
+	{
+		size_t result = std::hash< BillboardBase const * >{}( &billboard );
+		castor::hashCombinePtr( result, pass );
+		return result;
+	}
+
+	size_t hash( BillboardBase const & billboard
+		, Pass const & pass
+		, uint32_t instanceMult )
+	{
+		size_t result = std::hash< uint32_t >{}( instanceMult );
+		castor::hashCombinePtr( result, billboard );
+		castor::hashCombinePtr( result, pass );
+		return result;
+	}
+
+	template<> const castor::String ObjectCacheTraits< BillboardList, castor::String >::Name = cuT( "BillboardList" );
 
 	BillboardListCache::ObjectCache( Engine & engine
 		, Scene & scene
@@ -37,16 +59,6 @@ namespace castor3d
 			, std::move( attach )
 			, std::move( detach ) )
 	{
-		scene.getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [this]( RenderDevice const & device )
-			{
-				m_pools = std::make_shared< BillboardUboPools >( device );
-
-				for ( auto pass : m_pendingPasses )
-				{
-					m_pools->registerPass( *pass );
-				}
-			} ) );
 	}
 
 	BillboardListCache::~ObjectCache()
@@ -55,66 +67,185 @@ namespace castor3d
 
 	void BillboardListCache::registerPass( SceneRenderPass const & renderPass )
 	{
-		if ( m_pools )
+		auto instanceMult = renderPass.getInstanceMult();
+		auto iresult = m_instances.emplace( instanceMult, RenderPassSet{} );
+
+		if ( iresult.second )
 		{
-			m_pools->registerPass( renderPass );
+			m_engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [this, instanceMult]( RenderDevice const & device )
+				{
+					auto & uboPools = *device.uboPools;
+
+					for ( auto entry : m_baseEntries )
+					{
+						entry.second.hash = hash( entry.second.billboard
+							, entry.second.pass
+							, instanceMult );
+						auto it = m_entries.emplace( entry.second.hash, entry.second ).first;
+
+						if ( instanceMult )
+						{
+							it->second.modelInstancesUbo = uboPools.getBuffer< ModelInstancesUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+						}
+					}
+				} ) );
 		}
-		else
-		{
-			m_pendingPasses.insert( &renderPass );
-		}
+
+		iresult.first->second.insert( &renderPass );
 	}
 
 	void BillboardListCache::unregisterPass( SceneRenderPass const * renderPass
 		, uint32_t instanceMult )
 	{
-		if ( m_pools )
-		{
-			m_pools->unregisterPass( renderPass, instanceMult );
-		}
-		else
-		{
-			auto it = m_pendingPasses.find( renderPass );
+		auto instIt = m_instances.find( instanceMult );
 
-			if ( it != m_pendingPasses.end() )
+		if ( instIt != m_instances.end() )
+		{
+			auto it = instIt->second.find( renderPass );
+
+			if ( it != instIt->second.end() )
 			{
-				m_pendingPasses.erase( it );
+				instIt->second.erase( it );
+			}
+
+			if ( instIt->second.empty() )
+			{
+				m_instances.erase( instIt );
+				m_engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+					, [this, instanceMult]( RenderDevice const & device )
+					{
+						auto & uboPools = *device.uboPools;
+
+						for ( auto & entry : m_baseEntries )
+						{
+							auto it = m_entries.find( hash( entry.second.billboard
+								, entry.second.pass
+								, instanceMult ) );
+
+							if ( it != m_entries.end() )
+							{
+								auto entry = it->second;
+								m_entries.erase( it );
+
+								if ( entry.modelInstancesUbo )
+								{
+									uboPools.putBuffer( entry.modelInstancesUbo );
+								}
+							}
+						}
+					} ) );
 			}
 		}
 	}
 
-	void BillboardListCache::cleanup( RenderDevice const & device )
+	void BillboardListCache::registerElement( BillboardBase & billboard )
 	{
-		if ( m_pools )
-		{
-			m_pools->clear();
-		}
+		getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+			, [this, &billboard]( RenderDevice const & device )
+			{
+				m_connections.emplace( &billboard
+					, billboard.onMaterialChanged.connect( [this, &device]( BillboardBase const & billboard
+						, MaterialSPtr oldMaterial
+						, MaterialSPtr newMaterial )
+						{
+							if ( oldMaterial )
+							{
+								for ( auto & pass : *oldMaterial )
+								{
+									doRemoveEntry( device, billboard, *pass );
+								}
+							}
+
+							if ( newMaterial )
+							{
+								for ( auto & pass : *newMaterial )
+								{
+									doCreateEntry( device, billboard, *pass );
+								}
+							}
+						} ) );
+
+				for ( auto & pass : *billboard.getMaterial() )
+				{
+					doCreateEntry( device, billboard, *pass );
+				}
+			} ) );
 	}
 
-	void BillboardListCache::clear()
+	void BillboardListCache::unregisterElement( BillboardBase & billboard )
 	{
-		for ( auto & element : m_elements )
+		getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+			, [this, &billboard]( RenderDevice const & device )
+			{
+				m_connections.erase( &billboard );
+
+				for ( auto & pass : *billboard.getMaterial() )
+				{
+					doRemoveEntry( device, billboard, *pass );
+				}
+			} ) );
+	}
+
+	void BillboardListCache::clear( RenderDevice const & device )
+	{
+		MyObjectCache::clear();
+		auto & uboPools = *device.uboPools;
+
+		for ( auto & entry : m_entries )
 		{
-			m_pools->unregisterElement( *element.second );
+			if ( entry.second.modelInstancesUbo )
+			{
+				uboPools.putBuffer( entry.second.modelInstancesUbo );
+			}
 		}
 
-		MyObjectCache::clear();
+		for ( auto & entry : m_entries )
+		{
+			uboPools.putBuffer( entry.second.modelUbo );
+			uboPools.putBuffer( entry.second.billboardUbo );
+			uboPools.putBuffer( entry.second.pickingUbo );
+			uboPools.putBuffer( entry.second.texturesUbo );
+		}
 	}
 
 	void BillboardListCache::update( CpuUpdater & updater )
 	{
-		m_pools->update();
+		for ( auto & pair : m_baseEntries )
+		{
+			auto & entry = pair.second;
+			auto & modelData = entry.modelUbo.getData();
+			modelData.shadowReceiver = entry.billboard.isShadowReceiver();
+			modelData.materialIndex = entry.pass.getId();
+			modelData.prvModel = modelData.curModel;
+			modelData.curModel = entry.billboard.getNode()->getDerivedTransformationMatrix();
+			auto normal = castor::Matrix3x3f{ modelData.curModel };
+			modelData.normal = castor::Matrix4x4f{ normal.getInverse().getTransposed() };
+			auto & billboardData = entry.billboardUbo.getData();
+			billboardData.dimensions = entry.billboard.getDimensions();
+			auto & texturesData = entry.texturesUbo.getData();
+			uint32_t index = 0u;
+
+			for ( auto & unit : entry.pass )
+			{
+				texturesData.indices[index / 4u][index % 4] = unit->getId();
+				++index;
+			}
+		}
+	}
+
+	BillboardListCache::PoolsEntry BillboardListCache::getUbos( BillboardBase const & billboard
+		, Pass const & pass
+		, uint32_t instanceMult )const
+	{
+		return m_entries.at( hash( billboard, pass, instanceMult ) );
 	}
 
 	BillboardListSPtr BillboardListCache::add( Key const & name
 		, SceneNode & parent )
 	{
 		auto result = MyObjectCache::add( name, parent );
-		getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [this, result]( RenderDevice const & device )
-			{
-				m_pools->registerElement( *result );
-			} ) );
+		registerElement( *result );
 		return result;
 	}
 
@@ -122,11 +253,7 @@ namespace castor3d
 	{
 		m_initialise( element );
 		MyObjectCache::add( element->getName(), element );
-		getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [this, element]( RenderDevice const & device )
-			{
-				m_pools->registerElement( *element );
-			} ) );
+		registerElement( *element );
 	}
 
 	void BillboardListCache::remove( Key const & name )
@@ -139,7 +266,77 @@ namespace castor3d
 			m_detach( element );
 			m_elements.erase( name );
 			onChanged();
-			m_pools->unregisterElement( *element );
+			unregisterElement( *element );
+		}
+	}
+
+	void BillboardListCache::doCreateEntry( RenderDevice const & device
+		, BillboardBase const & billboard
+		, Pass const & pass )
+	{
+		auto baseHash = hash( billboard, pass );
+		auto iresult = m_baseEntries.emplace( baseHash
+			, BillboardListCache::PoolsEntry{ baseHash
+			, billboard
+			, pass } );
+
+		if ( iresult.second )
+		{
+			auto & uboPools = *device.uboPools;
+			auto & baseEntry = iresult.first->second;
+			baseEntry.modelUbo = uboPools.getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+			baseEntry.billboardUbo = uboPools.getBuffer< BillboardUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+			baseEntry.pickingUbo = uboPools.getBuffer< PickingUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+			baseEntry.texturesUbo = uboPools.getBuffer< TexturesUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+
+			for ( auto instanceMult : m_instances )
+			{
+				auto entry = baseEntry;
+
+				if ( instanceMult.first > 1 )
+				{
+					entry.modelInstancesUbo = uboPools.getBuffer< ModelInstancesUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+				}
+
+				entry.hash = hash( billboard, pass, instanceMult.first );
+				m_entries.emplace( entry.hash, entry );
+			}
+		}
+	}
+
+	void BillboardListCache::doRemoveEntry( RenderDevice const & device
+		, BillboardBase const & billboard
+		, Pass const & pass )
+	{
+		auto & uboPools = *device.uboPools;
+		auto baseHash = hash( billboard, pass );
+
+		for ( auto instanceMult : m_instances )
+		{
+			auto it = m_entries.find( hash( billboard, pass, instanceMult.first ) );
+
+			if ( it != m_entries.end() )
+			{
+				auto entry = it->second;
+				m_entries.erase( it );
+
+				if ( entry.modelInstancesUbo )
+				{
+					uboPools.putBuffer( entry.modelInstancesUbo );
+				}
+			}
+		}
+
+		auto it = m_baseEntries.find( baseHash );
+
+		if ( it != m_baseEntries.end() )
+		{
+			auto entry = it->second;
+			m_baseEntries.erase( it );
+			uboPools.putBuffer( entry.modelUbo );
+			uboPools.putBuffer( entry.billboardUbo );
+			uboPools.putBuffer( entry.pickingUbo );
+			uboPools.putBuffer( entry.texturesUbo );
 		}
 	}
 }

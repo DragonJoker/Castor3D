@@ -542,27 +542,15 @@ namespace castor3d
 					, c3d_cameraPosition.xyz() - curBbcenter );
 				curToCamera.y() = 0.0_f;
 				curToCamera = normalize( curToCamera );
-				auto right = writer.declLocale( "right"
-					, c3d_matrixData.getCurViewRight() );
 
-				if ( !checkFlag( flags.programFlags, ProgramFlag::eSpherical ) )
-				{
-					right.y() = 0.0_f;
-				}
-				
-				right = normalize( right );
+				auto right = writer.declLocale( "right"
+					, c3d_billboardData.getCameraRight( flags.programFlags, c3d_matrixData ) );
 				auto up = writer.declLocale( "up"
-					, ( checkFlag( flags.programFlags, ProgramFlag::eSpherical )
-						? c3d_matrixData.getCurViewUp()
-						: vec3( 0.0_f, 1.0f, 0.0f ) ) );
+					, c3d_billboardData.getCameraUp( flags.programFlags, c3d_matrixData ) );
 				auto width = writer.declLocale( "width"
-					, ( checkFlag( flags.programFlags, ProgramFlag::eFixedSize )
-						? c3d_dimensions.x() / c3d_clipInfo.x()
-						: c3d_dimensions.x() ) );
+					, c3d_billboardData.getWidth( flags.programFlags, c3d_clipInfo.x() ) );
 				auto height = writer.declLocale( "height"
-					, ( checkFlag( flags.programFlags, ProgramFlag::eFixedSize )
-						? c3d_dimensions.y() / c3d_clipInfo.y()
-						: c3d_dimensions.y() ) );
+					, c3d_billboardData.getHeight( flags.programFlags, c3d_clipInfo.y() ) );
 
 				out.vtx.position = vec4( curBbcenter
 						+ right * inPosition.x() * width
