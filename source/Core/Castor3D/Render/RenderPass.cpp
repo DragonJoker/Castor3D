@@ -4,7 +4,6 @@
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
 #include "Castor3D/Cache/BillboardCache.hpp"
-#include "Castor3D/Cache/BillboardUboPools.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
@@ -482,7 +481,7 @@ namespace castor3d
 	{
 		auto & buffers = billboard.getGeometryBuffers();
 		auto & scene = billboard.getParentScene();
-		auto billboardEntry = scene.getBillboardListCache().getUboPools().getUbos( billboard
+		auto billboardEntry = scene.getBillboardListCache().getUbos( billboard
 			, pass
 			, getInstanceMult() );
 		auto it = m_modelsInstances.emplace( billboardEntry.hash
@@ -1637,41 +1636,23 @@ namespace castor3d
 					, c3d_cameraPosition.xyz() - curBbcenter );
 				curToCamera.y() = 0.0_f;
 				curToCamera = normalize( curToCamera );
+
 				auto right = writer.declLocale( "right"
-					, c3d_matrixData.getCurViewRight() );
+					, c3d_billboardData.getCameraRight( flags.programFlags, c3d_matrixData ) );
+				auto up = writer.declLocale( "up"
+					, c3d_billboardData.getCameraUp( flags.programFlags, c3d_matrixData ) );
+				auto width = writer.declLocale( "width"
+					, c3d_billboardData.getWidth( flags.programFlags, c3d_clipInfo.x() ) );
+				auto height = writer.declLocale( "height"
+					, c3d_billboardData.getHeight( flags.programFlags, c3d_clipInfo.y() ) );
+				vtx_worldPosition = curBbcenter
+					+ right * position.x() * width
+					+ up * position.y() * height;
 
-				if ( checkFlag( flags.programFlags, ProgramFlag::eSpherical ) )
-				{
-					writer.declLocale( "up"
-						, c3d_matrixData.getCurViewUp() );
-				}
-				else
-				{
-					right = normalize( vec3( right.x(), 0.0_f, right.z() ) );
-					writer.declLocale( "up"
-						, vec3( 0.0_f, 1.0f, 0.0f ) );
-				}
-
-				auto up = writer.getVariable< Vec3 >( "up" );
 				vtx_material = writer.cast< UInt >( c3d_materialIndex );
 				vtx_normal = curToCamera;
 				vtx_tangent = up;
 				vtx_bitangent = right;
-
-				auto width = writer.declLocale( "width"
-					, c3d_dimensions.x() );
-				auto height = writer.declLocale( "height"
-					, c3d_dimensions.y() );
-
-				if ( checkFlag( flags.programFlags, ProgramFlag::eFixedSize ) )
-				{
-					width = c3d_dimensions.x() / c3d_clipInfo.x();
-					height = c3d_dimensions.y() / c3d_clipInfo.y();
-				}
-
-				vtx_worldPosition = curBbcenter
-					+ right * position.x() * width
-					+ up * position.y() * height;
 				auto prvPosition = writer.declLocale( "prvPosition"
 					, vec4( prvBbcenter + right * position.x() * width + up * position.y() * height, 1.0_f ) );
 

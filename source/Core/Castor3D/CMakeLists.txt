@@ -154,7 +154,6 @@ source_group( "Source Files\\Buffer" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/AnimatedObjectGroupCache.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/BillboardCache.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/BillboardUboPools.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/CameraCache.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/GeometryCache.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/LightCache.cpp
@@ -175,7 +174,6 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/AnimatedObjectGroupCache.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/BillboardCache.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/BillboardUboPools.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/Cache.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/CacheBase.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/CacheModule.hpp
