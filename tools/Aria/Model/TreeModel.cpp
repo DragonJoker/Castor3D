@@ -12,29 +12,6 @@
 
 #include <wx/dc.h>
 
-#include "Aria/xpms/acceptable.xpm"
-#include "Aria/xpms/ignored.xpm"
-#include "Aria/xpms/negligible.xpm"
-#include "Aria/xpms/none.xpm"
-#include "Aria/xpms/notrun.xpm"
-#include "Aria/xpms/outofdate.xpm"
-#include "Aria/xpms/outofdate2.xpm"
-#include "Aria/xpms/unacceptable.xpm"
-#include "Aria/xpms/unprocessed.xpm"
-#include "Aria/xpms/pending.xpm"
-#include "Aria/xpms/progress_1.xpm"
-#include "Aria/xpms/progress_2.xpm"
-#include "Aria/xpms/progress_3.xpm"
-#include "Aria/xpms/progress_4.xpm"
-#include "Aria/xpms/progress_5.xpm"
-#include "Aria/xpms/progress_6.xpm"
-#include "Aria/xpms/progress_7.xpm"
-#include "Aria/xpms/progress_8.xpm"
-#include "Aria/xpms/progress_9.xpm"
-#include "Aria/xpms/progress_10.xpm"
-#include "Aria/xpms/progress_11.xpm"
-#include "Aria/xpms/progress_12.xpm"
-
 namespace aria
 {
 	//*********************************************************************************************
