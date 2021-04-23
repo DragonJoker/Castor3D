@@ -15,6 +15,7 @@
 #include "Aria/xpms/outofdate2.xpm"
 #include "Aria/xpms/unacceptable.xpm"
 #include "Aria/xpms/unprocessed.xpm"
+#include "Aria/xpms/crashed.xpm"
 #include "Aria/xpms/pending.xpm"
 #include "Aria/xpms/progress_1.xpm"
 #include "Aria/xpms/progress_2.xpm"
@@ -35,21 +36,6 @@ namespace aria
 
 	namespace
 	{
-		int getColumnSize( TreeModel::Column col )
-		{
-			switch ( col )
-			{
-			case TreeModel::Column::eStatusName:
-				return 400;
-			case TreeModel::Column::eRunDate:
-				return 80;
-			case TreeModel::Column::eRunTime:
-				return 90;
-			default:
-				return 100;
-			}
-		}
-
 		wxColourBase::ChannelType mix( float percent
 			, wxColourBase::ChannelType const & lhs
 			, wxColourBase::ChannelType const & rhs )
@@ -102,6 +88,8 @@ namespace aria
 				return wxColour{ 0xFF, 0x00, 0x00, 0xFF };
 			case TestStatus::eUnprocessed:
 				return wxColour{ 0x8A, 0x8A, 0x8A, 0xFF };
+			case TestStatus::eCrashed:
+				return wxColour{ 0x00, 0x00, 0x00, 0xFF };
 			case TestStatus::ePending:
 				return wxColour{ 0x00, 0x80, 0xC0, 0xFF };
 			default:
@@ -125,6 +113,7 @@ namespace aria
 			, createImage( acceptable_xpm )
 			, createImage( unacceptable_xpm )
 			, createImage( unprocessed_xpm )
+			, createImage( crashed_xpm )
 			, createImage( pending_xpm )
 			, createImage( progress_1_xpm )
 			, createImage( progress_2_xpm )

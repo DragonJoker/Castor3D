@@ -1912,13 +1912,17 @@ namespace aria
 
 			if ( !matches.empty() )
 			{
-				auto & match = matches[0];
-				test.createNewRun( match );
-				auto & page = doGetPage( wxDataViewItem{ testNode.node } );
-				page.model->ItemChanged( wxDataViewItem{ testNode.node } );
-				doUpdateTestView( test );
+				test.createNewRun( matches[0] );
+			}
+			else
+			{
+				test.createNewRun( TestStatus::eCrashed
+					, makeDbDateTime( wxDateTime::Now() ) );
 			}
 
+			auto & page = doGetPage( wxDataViewItem{ testNode.node } );
+			page.model->ItemChanged( wxDataViewItem{ testNode.node } );
+			doUpdateTestView( test );
 			doProcessTest();
 		}
 		else

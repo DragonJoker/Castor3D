@@ -101,13 +101,12 @@ namespace aria
 		}
 	}
 
-	void DatabaseTest::createNewRun( castor::Path const & match )
+	void DatabaseTest::createNewRun( TestStatus status
+		, db::DateTime const & runDate )
 	{
 		auto & config = m_database.m_config;
-		auto path = match.getPath();
-		auto rawStatus = aria::getStatus( path.getFileName() );
+		auto rawStatus = status;
 		auto newStatus = rawStatus;
-		auto runDate = getFileDate( match );
 
 		if ( m_test.test->ignoreResult )
 		{
@@ -128,6 +127,13 @@ namespace aria
 		{
 			updateReference( rawStatus );
 		}
+	}
+
+	void DatabaseTest::createNewRun( castor::Path const & match )
+	{
+		auto path = match.getPath();
+		createNewRun( aria::getStatus( path.getFileName() )
+			, getFileDate( match ) );
 	}
 
 	void DatabaseTest::update( int id )
