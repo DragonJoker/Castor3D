@@ -785,6 +785,7 @@ namespace aria
 				progress.Update( index++
 					, _( "Filling tests list" )
 					+ wxT( "\n" ) + getProgressDetails( run ) );
+				progress.Fit();
 			}
 		}
 
@@ -1051,6 +1052,7 @@ namespace aria
 					progress.Update( index++
 						, _( "Setting reference\n" )
 						+ wxT( "\n" ) + getProgressDetails( run ) );
+					progress.Fit();
 					updateTestStatus( *node->test, TestStatus::eNegligible, true );
 					auto & page = doGetPage( item );
 					page.model->ItemChanged( item );
@@ -1083,6 +1085,7 @@ namespace aria
 					progress.Update( index++
 						, _( "Ignoring" )
 						+ wxT( "\n" ) + getProgressDetails( run ) );
+					progress.Fit();
 					run.updateIgnoreResult( m_testMenu->IsChecked( eID_TEST_IGNORE_RESULT )
 						, m_config.castorRefDate
 						, true );
@@ -1117,6 +1120,7 @@ namespace aria
 					progress.Update( index++
 						, _( "Setting reference" )
 						+ wxT( "\n" ) + getProgressDetails( run ) );
+					progress.Fit();
 					run.updateCastorDate( m_config.castorRefDate );
 				}
 			}
@@ -1146,6 +1150,7 @@ namespace aria
 					progress.Update( index++
 						, _( "Setting reference" )
 						+ wxT( "\n" ) + getProgressDetails( run ) );
+					progress.Fit();
 					run.updateSceneDate();
 				}
 			}
@@ -1336,6 +1341,7 @@ namespace aria
 							progress.Update( index++
 								, _( "Updating tests Castor3D date" )
 								+ wxT( "\n" ) + getProgressDetails( run ) );
+							progress.Fit();
 
 							if ( run.checkOutOfCastorDate() )
 							{
@@ -1380,6 +1386,7 @@ namespace aria
 							progress.Update( index++
 								, _( "Updating tests Scene date" )
 								+ wxT( "\n" ) + getProgressDetails( run ) );
+							progress.Fit();
 
 							if ( run.checkOutOfSceneDate() )
 							{
@@ -1562,6 +1569,7 @@ namespace aria
 							progress.Update( index++
 								, _( "Updating tests Castor3D date" )
 								+ wxT( "\n" ) + getProgressDetails( run ) );
+							progress.Fit();
 
 							if ( run.checkOutOfCastorDate() )
 							{
@@ -1604,6 +1612,7 @@ namespace aria
 							progress.Update( index++
 								, _( "Updating tests Scene date" )
 								+ wxT( "\n" ) + getProgressDetails( run ) );
+							progress.Fit();
 
 							if ( run.checkOutOfSceneDate() )
 							{
@@ -1736,6 +1745,7 @@ namespace aria
 					progress.Update( index++
 						, _( "Updating tests Castor3D date" )
 						+ wxT( "\n" ) + getProgressDetails( run ) );
+					progress.Fit();
 
 					if ( run.checkOutOfCastorDate() )
 					{
@@ -1768,6 +1778,7 @@ namespace aria
 					progress.Update( index++
 						, _( "Updating tests Scene date" )
 						+ wxT( "\n" ) + getProgressDetails( run ) );
+					progress.Fit();
 
 					if ( run.checkOutOfSceneDate() )
 					{
