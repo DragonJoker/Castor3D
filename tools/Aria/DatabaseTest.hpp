@@ -28,6 +28,8 @@ namespace aria
 		void updateStatusNW( TestStatus newStatus );
 		void updateStatus( TestStatus newStatus
 			, bool useAsReference );
+		void createNewRun( TestStatus status
+			, db::DateTime const & runDate );
 		void createNewRun( castor::Path const & match );
 
 		bool checkOutOfCastorDate()const

@@ -28,6 +28,7 @@ namespace aria
 		eAcceptable,
 		eUnacceptable,
 		eUnprocessed,
+		eCrashed,
 		ePending,
 		eRunning_0,
 		eRunning_1,
@@ -50,6 +51,10 @@ namespace aria
 
 	castor::Path getFolderName( TestStatus value );
 	TestStatus getStatus( std::string const & name );
+	inline bool isCrashed( TestStatus value )
+	{
+		return value == TestStatus::eCrashed;
+	}
 	inline bool isPending( TestStatus value )
 	{
 		return value == TestStatus::ePending;
@@ -73,6 +78,8 @@ namespace aria
 			return "unacceptable";
 		case aria::TestStatus::eUnprocessed:
 			return "unprocessed";
+		case aria::TestStatus::eCrashed:
+			return "crashed";
 		case aria::TestStatus::ePending:
 			return "pending";
 		case aria::TestStatus::eRunning_0:
