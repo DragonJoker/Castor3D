@@ -20,6 +20,8 @@ namespace castor3d
 		struct MatrixData
 			: public sdw::StructInstance
 		{
+			friend struct BillboardData;
+
 			C3D_API MatrixData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled );
