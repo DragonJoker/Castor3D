@@ -486,6 +486,7 @@ namespace aria
 				progress.Update( index++
 					, _( "Listing tests" )
 					+ wxT( "\n" ) + getDetails( *catIt->second.back() ) );
+				progress.Fit();
 			}
 		}
 		else
@@ -592,6 +593,7 @@ namespace aria
 							progress.Update( index++
 								, _( "Listing latest runs" )
 								+ wxT( "\n" ) + getProgressDetails( runIt->second.back() ) );
+							progress.Fit();
 						}
 						else
 						{
@@ -604,6 +606,7 @@ namespace aria
 							progress.Update( index++
 								, _( "Listing latest runs" )
 								+ wxT( "\n" ) + getProgressDetails( *it ) );
+							progress.Fit();
 						}
 					}
 				}
@@ -759,6 +762,7 @@ namespace aria
 		progress.Update( index
 			, _( "Listing tests" )
 			+ wxT( "\n" ) + _( "..." ) );
+		progress.Fit();
 		m_listTests.listTests( m_categories, result, progress, index );
 	}
 
@@ -797,6 +801,7 @@ namespace aria
 		castor::Logger::logInfo( "Listing latest runs" );
 		progress.SetTitle( _( "Listing latest runs" ) );
 		progress.Update( index, _( "Listing latest runs\n..." ) );
+		progress.Fit();
 
 		for ( auto & renderer : m_renderers )
 		{
@@ -843,6 +848,7 @@ namespace aria
 		castor::Logger::logInfo( "Listing latest renderer runs" );
 		progress.SetTitle( _( "Listing latest renderer runs" ) );
 		progress.Update( index, _( "Listing latest renderer runs\n..." ) );
+		progress.Fit();
 		m_listLatestRendererRuns.listTests( tests, m_categories, renderer, result, progress, index );
 	}
 
@@ -938,6 +944,7 @@ namespace aria
 			progress.Update( index++
 				, _( "Creating tests database" )
 				+ wxT( "\n" ) + _( "Validating changes" ) );
+			progress.Fit();
 			transaction.commit();
 			progress.SetRange( saveRange );
 			index = saveIndex;
@@ -970,6 +977,7 @@ namespace aria
 			progress.Update( index++
 				, _( "Updating tests database" )
 				+ wxT( "\n" ) + _( "Creating tests database" ) );
+			progress.Fit();
 			progress.SetRange( NonTestsCount );
 			std::string query = "CREATE TABLE TestsDatabase( Id INTEGER PRIMARY KEY, Version INTEGER );";
 
@@ -990,6 +998,7 @@ namespace aria
 				progress.Update( index++
 					, _( "Updating tests database" )
 					+ wxT( "\n" ) + _( "Creating Renderer table" ) );
+				progress.Fit();
 				query = "CREATE TABLE Renderer";
 				query += "( Id INTEGER PRIMARY KEY\n";
 				query += "\t, Name VARCHAR(10)\n";
@@ -1008,6 +1017,8 @@ namespace aria
 				progress.Update( index++
 					, _( "Updating tests database" )
 					+ wxT( "\n" ) + _( "Creating Category table" ) );
+				progress.Fit();
+
 				query = "CREATE TABLE Category";
 				query += "( Id INTEGER PRIMARY KEY\n";
 				query += "\t, Name VARCHAR(50)\n";
@@ -1024,6 +1035,7 @@ namespace aria
 			progress.Update( index++
 				, _( "Updating tests database" )
 				+ wxT( "\n" ) + _( "Creating Test table" ) );
+			progress.Fit();
 
 			query = "ALTER TABLE Test\n";
 			query += "RENAME TO TestOld;";
@@ -1065,6 +1077,7 @@ namespace aria
 			progress.Update( index++
 				, _( "Updating tests database" )
 				+ wxT( "\n" ) + _( "Listing tests" ) );
+			progress.Fit();
 
 			query = "SELECT Category, Name, Renderer, RunDate, Status, CastorDate, SceneDate\n";
 			query += "FROM TestOld\n";
@@ -1082,6 +1095,8 @@ namespace aria
 				, _( "Updating tests database" )
 				+ wxT( " - " ) + _( "Listing tests" )
 				+ wxT( "\n" ) + _( "..." ) );
+			progress.Fit();
+
 			std::string prvCatName;
 			std::string prvTestName;
 			int testId = 0;
@@ -1096,6 +1111,7 @@ namespace aria
 					, _( "Updating tests database" )
 					+ wxT( " - " ) + _( "Listing tests" )
 					+ wxT( "\n" ) + getProgressDetails( catName, testName, rendName, runDate ) );
+				progress.Fit();
 
 				if ( catName != prvCatName
 					|| testName != prvTestName )
@@ -1123,6 +1139,8 @@ namespace aria
 			progress.Update( index++
 				, _( "Updating tests database" )
 				+ wxT( "\n" ) + _( "Validating changes" ) );
+			progress.Fit();
+
 			transaction.commit();
 			progress.SetRange( saveRange );
 			index = saveIndex;
@@ -1155,6 +1173,7 @@ namespace aria
 			progress.Update( index++
 				, _( "Updating tests database" )
 				+ wxT( "\n" ) + _( "Creating Keyword table" ) );
+			progress.Fit();
 			progress.SetRange( NonTestsCount );
 			std::string query = "CREATE TABLE Keyword( Id INTEGER PRIMARY KEY, Name VARCHAR(50) );";
 
@@ -1202,6 +1221,7 @@ namespace aria
 			progress.Update( index++
 				, _( "Updating tests database" )
 				+ wxT( "\n" ) + _( "Creating CategoryKeyword table" ) );
+			progress.Fit();
 			query = "CREATE TABLE CategoryKeyword( CategoryId INTEGER, KeywordId INTEGER );";
 
 			if ( !m_database.executeUpdate( query ) )
@@ -1213,6 +1233,7 @@ namespace aria
 			progress.Update( index++
 				, _( "Updating tests database" )
 				+ wxT( "\n" ) + _( "Creating TestKeyword table" ) );
+			progress.Fit();
 			query = "CREATE TABLE TestKeyword( TestId INTEGER, KeywordId INTEGER );";
 
 			if ( !m_database.executeUpdate( query ) )
@@ -1224,6 +1245,7 @@ namespace aria
 			progress.Update( index++
 				, _( "Updating tests database" )
 				+ wxT( "\n" ) + _( "Listing test names" ) );
+			progress.Fit();
 			query = "SELECT Id, Name FROM Test ORDER BY Name;";
 			auto testNames = m_database.executeSelect( query );
 
@@ -1259,6 +1281,7 @@ namespace aria
 					, _( "Updating tests database" )
 					+ wxT( "\n" ) + _( "Listing test names" )
 					+ wxT( "\n" ) + _( "- Test:" ) + name );
+				progress.Fit();
 
 				for ( auto & keyword : m_keywords )
 				{
@@ -1272,6 +1295,7 @@ namespace aria
 			progress.Update( index++
 				, _( "Updating tests database" )
 				+ wxT( "\n" ) + _( "Updating database version number" ) );
+			progress.Fit();
 			query = "UPDATE TestsDatabase SET Version=3;";
 
 			if ( !m_database.executeUpdate( query ) )
@@ -1282,6 +1306,7 @@ namespace aria
 			progress.Update( index++
 				, _( "Updating tests database" )
 				+ wxT( "\n" ) + _( "Validating changes" ) );
+			progress.Fit();
 			transaction.commit();
 			progress.SetRange( saveRange );
 			index = saveIndex;
@@ -1321,6 +1346,7 @@ namespace aria
 		progress.SetTitle( _( "Listing Test files" ) );
 		progress.SetRange( progress.GetRange() + int( categoryPaths.size() ) );
 		progress.Update( index, _( "Listing Test files\n..." ) );
+		progress.Fit();
 
 		for ( auto & categoryPath : categoryPaths )
 		{
@@ -1328,6 +1354,7 @@ namespace aria
 			progress.Update( index++
 				, _( "Listing Test files" )
 				+ wxT( "\n" ) + wxT( "- Category: " ) + makeWxString( categoryName ) + wxT( "..." ) );
+			progress.Fit();
 			auto category = getCategory( categoryName, m_categories, m_insertCategory );
 			auto iresult = result.emplace( category
 				, listCategoryTestFiles( m_config
