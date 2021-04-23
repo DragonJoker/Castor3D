@@ -385,8 +385,8 @@ namespace castor3d
 				curPosition = curMtxModel * curPosition;
 				auto worldPosition = writer.declLocale( "worldPosition"
 					, curPosition.xyz() );
-				prvPosition = c3d_prvViewProj * prvPosition;
-				curPosition = c3d_curViewProj * curPosition;
+				prvPosition = c3d_matrixData.worldToPrvProj( prvPosition );
+				curPosition = c3d_matrixData.worldToCurProj( curPosition );
 
 				auto normal = writer.declLocale( "normal"
 					, normalize( mtxNormal * v4Normal.xyz() ) );
@@ -413,8 +413,8 @@ namespace castor3d
 				// (note that for providing the jitter in non-homogeneous projection space,
 				//  pixel coordinates (screen space) need to multiplied by two in the C++
 				//  code)
-				curPosition.xy() -= c3d_jitter * curPosition.w();
-				prvPosition.xy() -= c3d_jitter * prvPosition.w();
+				c3d_matrixData.jitter( curPosition );
+				c3d_matrixData.jitter( prvPosition );
 				out.vtx.position = curPosition;
 
 				outCurPosition = curPosition.xyw();
