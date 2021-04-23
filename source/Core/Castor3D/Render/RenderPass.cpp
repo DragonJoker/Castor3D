@@ -1547,8 +1547,8 @@ namespace castor3d
 					, prvMtxModel * curPosition );
 				curPosition = curMtxModel * curPosition;
 				vtx_worldPosition = curPosition.xyz();
-				prvPosition = c3d_prvViewProj * prvPosition;
-				curPosition = c3d_curViewProj * curPosition;
+				prvPosition = c3d_matrixData.worldToPrvProj( prvPosition );
+				curPosition = c3d_matrixData.worldToCurProj( curPosition );
 
 				vtx_normal = normalize( mtxNormal * v4Normal.xyz() );
 				vtx_tangent = normalize( mtxNormal * v4Tangent.xyz() );
@@ -1574,7 +1574,8 @@ namespace castor3d
 				// (note that for providing the jitter in non-homogeneous projection space,
 				//  pixel coordinates (screen space) need to multiplied by two in the C++
 				//  code)
-				curPosition.xy() -= c3d_jitter * curPosition.w();
+				c3d_matrixData.jitter( curPosition );
+				c3d_matrixData.jitter( prvPosition );
 				out.vtx.position = curPosition;
 
 			} );
@@ -1637,12 +1638,12 @@ namespace castor3d
 				curToCamera.y() = 0.0_f;
 				curToCamera = normalize( curToCamera );
 				auto right = writer.declLocale( "right"
-					, vec3( c3d_curView[0][0], c3d_curView[1][0], c3d_curView[2][0] ) );
+					, c3d_matrixData.getCurViewRight() );
 
 				if ( checkFlag( flags.programFlags, ProgramFlag::eSpherical ) )
 				{
 					writer.declLocale( "up"
-						, vec3( c3d_curView[0][1], c3d_curView[1][1], c3d_curView[2][1] ) );
+						, c3d_matrixData.getCurViewUp() );
 				}
 				else
 				{
@@ -1681,10 +1682,9 @@ namespace castor3d
 
 				vtx_instance = writer.cast< UInt >( in.instanceIndex );
 				auto curPosition = writer.declLocale( "curPosition"
-					, c3d_curView * vec4( vtx_worldPosition, 1.0_f ) );
-				prvPosition = c3d_prvView * vec4( prvPosition );
-				curPosition = c3d_projection * curPosition;
-				prvPosition = c3d_projection * prvPosition;
+					, vec4( vtx_worldPosition, 1.0_f ) );
+				prvPosition = c3d_matrixData.worldToPrvProj( prvPosition );
+				curPosition = c3d_matrixData.worldToCurProj( curPosition );
 				vtx_viewPosition = curPosition.xyz();
 
 				auto tbn = writer.declLocale( "tbn"
@@ -1696,8 +1696,8 @@ namespace castor3d
 				// (note that for providing the jitter in non-homogeneous projection space,
 				//  pixel coordinates (screen space) need to multiplied by two in the C++
 				//  code)
-				curPosition.xy() -= c3d_jitter * curPosition.w();
-				prvPosition.xy() -= c3d_jitter * prvPosition.w();
+				c3d_matrixData.jitter( curPosition );
+				c3d_matrixData.jitter( prvPosition );
 				out.vtx.position = curPosition;
 
 				vtx_curPosition = curPosition.xyw();
