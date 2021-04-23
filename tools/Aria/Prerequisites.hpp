@@ -392,7 +392,6 @@ namespace aria
 	db::DateTime makeDbDateTime( wxDateTime const & in );
 
 	db::DateTime getFileDate( castor::Path const & imgPath );
-	castor::Path getFolderName( db::DateTime const & value );
 	bool isDateTime( castor::String const & value
 		, db::DateTime & result );
 }

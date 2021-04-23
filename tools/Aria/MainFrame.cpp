@@ -817,6 +817,85 @@ namespace aria
 		return dummy;
 	}
 
+	uint32_t MainFrame::doGetAllTestsRange()const
+	{
+		uint32_t range = 0u;
+
+		for ( auto & category : m_tests.tests )
+		{
+			range += category.second.size();
+		}
+
+		return range;
+	}
+
+	uint32_t MainFrame::doGetAllRunsRange()const
+	{
+		uint32_t range = 0u;
+
+		for ( auto & renderer : m_tests.runs )
+		{
+			for ( auto & category : renderer.second )
+			{
+				range += category.second.size();
+			}
+		}
+
+		return range;
+	}
+
+	uint32_t MainFrame::doGetSelectedRendererRange()const
+	{
+		uint32_t range = 0u;
+
+		for ( auto & item : m_selectedPage->selected.items )
+		{
+			auto node = static_cast< TreeModelNode * >( item.GetID() );
+
+			if ( isRendererNode( *node ) )
+			{
+				auto rendIt = m_tests.runs.find( node->renderer );
+
+				if ( rendIt != m_tests.runs.end() )
+				{
+					for ( auto & category : rendIt->second )
+					{
+						range += category.second.size();
+					}
+				}
+			}
+		}
+
+		return range;
+	}
+
+	uint32_t MainFrame::doGetSelectedCategoryRange()const
+	{
+		uint32_t range = 0u;
+
+		for ( auto & item : m_selectedPage->selected.items )
+		{
+			auto node = static_cast< TreeModelNode * >( item.GetID() );
+
+			if ( isCategoryNode( *node ) )
+			{
+				auto rendIt = m_tests.runs.find( node->renderer );
+
+				if ( rendIt != m_tests.runs.end() )
+				{
+					auto catIt = rendIt->second.find( node->category );
+
+					if ( catIt != rendIt->second.end() )
+					{
+						range += catIt->second.size();
+					}
+				}
+			}
+		}
+
+		return range;
+	}
+
 	void MainFrame::doProcessTest()
 	{
 		auto testNode = m_runningTest.next();
@@ -952,16 +1031,15 @@ namespace aria
 	void MainFrame::doSetRef()
 	{
 		m_cancelled.exchange( false );
-		wxProgressDialog progress{ wxT( "Updating tests reference" )
-			, wxT( "Updating tests reference..." )
-			, int( 1 )
-			, this };
 
 		if ( m_selectedPage
 			&& !m_selectedPage->selected.items.empty() )
 		{
 			int index = 0;
-			progress.SetRange( m_selectedPage->selected.items.size() );
+			wxProgressDialog progress{ wxT( "Updating tests reference" )
+				, wxT( "Updating tests reference..." )
+				, int( m_selectedPage->selected.items.size() )
+				, this };
 
 			for ( auto & item : m_selectedPage->selected.items )
 			{
@@ -985,16 +1063,15 @@ namespace aria
 	{
 		m_cancelled.exchange( false );
 		updateCastorRefDate( m_config );
-		wxProgressDialog progress{ wxT( "Ignoring tests results" )
-			, wxT( "Ignoring tests results..." )
-			, int( 1 )
-			, this };
 
 		if ( m_selectedPage
 			&& !m_selectedPage->selected.items.empty() )
 		{
 			int index = 0;
-			progress.SetRange( m_selectedPage->selected.items.size() );
+			wxProgressDialog progress{ wxT( "Ignoring tests results" )
+				, wxT( "Ignoring tests results..." )
+				, int( m_selectedPage->selected.items.size() )
+				, this };
 
 			for ( auto & item : m_selectedPage->selected.items )
 			{
@@ -1020,16 +1097,15 @@ namespace aria
 	{
 		m_cancelled.exchange( false );
 		updateCastorRefDate( m_config );
-		wxProgressDialog progress{ wxT( "Setting Castor Date" )
-			, wxT( "Setting Castor Date..." )
-			, int( 1 )
-			, this };
 
 		if ( m_selectedPage
 			&& !m_selectedPage->selected.items.empty() )
 		{
 			int index = 0;
-			progress.SetRange( m_selectedPage->selected.items.size() );
+			wxProgressDialog progress{ wxT( "Setting Castor Date" )
+				, wxT( "Setting Castor Date..." )
+				, int( m_selectedPage->selected.items.size() )
+				, this };
 
 			for ( auto & item : m_selectedPage->selected.items )
 			{
@@ -1050,16 +1126,15 @@ namespace aria
 	void MainFrame::doUpdateSceneDate()
 	{
 		m_cancelled.exchange( false );
-		wxProgressDialog progress{ wxT( "Setting Scene Date" )
-			, wxT( "Setting Scene Date..." )
-			, int( 1 )
-			, this };
 
 		if ( m_selectedPage
 			&& !m_selectedPage->selected.items.empty() )
 		{
 			int index = 0;
-			progress.SetRange( m_selectedPage->selected.items.size() );
+			wxProgressDialog progress{ wxT( "Setting Scene Date" )
+				, wxT( "Setting Scene Date..." )
+				, int( m_selectedPage->selected.items.size() )
+				, this };
 
 			for ( auto & item : m_selectedPage->selected.items )
 			{
@@ -1235,9 +1310,10 @@ namespace aria
 	{
 		m_cancelled.exchange( false );
 		updateCastorRefDate( m_config );
+		auto range = doGetSelectedCategoryRange();
 		wxProgressDialog progress{ wxT( "Updating tests Castor3D date" )
 			, wxT( "Updating tests..." )
-			, int( 1 )
+			, int( range )
 			, this };
 		int index = 0;
 
@@ -1255,8 +1331,6 @@ namespace aria
 
 					if ( catIt != rendIt->second.end() )
 					{
-						progress.SetRange( progress.GetRange() + catIt->second.size() );
-
 						for ( auto & run : catIt->second )
 						{
 							progress.Update( index++
@@ -1279,9 +1353,10 @@ namespace aria
 	void MainFrame::doUpdateCategorySceneDate()
 	{
 		m_cancelled.exchange( false );
+		auto range = doGetSelectedCategoryRange();
 		wxProgressDialog progress{ wxT( "Updating tests Scene date" )
 			, wxT( "Updating tests..." )
-			, int( 1 )
+			, int( range )
 			, this };
 		int index = 0;
 
@@ -1299,8 +1374,6 @@ namespace aria
 
 					if ( catIt != rendIt->second.end() )
 					{
-						progress.SetRange( progress.GetRange() + catIt->second.size() );
-
 						for ( auto & run : catIt->second )
 						{
 							auto sceneDate = getSceneDate( m_config, *run );
@@ -1465,9 +1538,10 @@ namespace aria
 	{
 		m_cancelled.exchange( false );
 		updateCastorRefDate( m_config );
+		auto range = doGetSelectedRendererRange();
 		wxProgressDialog progress{ wxT( "Updating tests Castor3D date" )
 			, wxT( "Updating tests..." )
-			, int( 1 )
+			, int( range )
 			, this };
 		int index = 0;
 
@@ -1483,8 +1557,6 @@ namespace aria
 				{
 					for ( auto & category : rendIt->second )
 					{
-						progress.SetRange( progress.GetRange() + category.second.size() );
-
 						for ( auto & run : category.second )
 						{
 							progress.Update( index++
@@ -1507,9 +1579,10 @@ namespace aria
 	void MainFrame::doUpdateRendererSceneDate()
 	{
 		m_cancelled.exchange( false );
+		auto range = doGetSelectedRendererRange();
 		wxProgressDialog progress{ wxT( "Updating tests Scene date" )
 			, wxT( "Updating tests..." )
-			, int( 1 )
+			, int( range )
 			, this };
 		int index = 0;
 
@@ -1525,8 +1598,6 @@ namespace aria
 				{
 					for ( auto & category : rendIt->second )
 					{
-						progress.SetRange( progress.GetRange() + category.second.size() );
-
 						for ( auto & run : category.second )
 						{
 							auto sceneDate = getSceneDate( m_config, *run );
@@ -1649,9 +1720,10 @@ namespace aria
 	{
 		m_cancelled.exchange( false );
 		updateCastorRefDate( m_config );
+		auto range = doGetAllRunsRange();
 		wxProgressDialog progress{ wxT( "Updating tests Castor3D date" )
 			, wxT( "Updating tests..." )
-			, int( 1 )
+			, int( range )
 			, this };
 		int index = 0;
 
@@ -1659,8 +1731,6 @@ namespace aria
 		{
 			for ( auto & category : renderer.second )
 			{
-				progress.SetRange( progress.GetRange() + category.second.size() );
-
 				for ( auto & run : category.second )
 				{
 					progress.Update( index++
@@ -1681,9 +1751,10 @@ namespace aria
 	void MainFrame::doUpdateAllSceneDate()
 	{
 		m_cancelled.exchange( false );
+		auto range = doGetAllRunsRange();
 		wxProgressDialog progress{ wxT( "Updating tests Scene date" )
 			, wxT( "Updating tests..." )
-			, int( 1 )
+			, int( range )
 			, this };
 		int index = 0;
 
@@ -1691,8 +1762,6 @@ namespace aria
 		{
 			for ( auto & category : renderer.second )
 			{
-				progress.SetRange( progress.GetRange() + category.second.size() );
-
 				for ( auto & run : category.second )
 				{
 					auto sceneDate = getSceneDate( m_config, *run );
@@ -1739,9 +1808,10 @@ namespace aria
 
 			if ( ires.second )
 			{
+				auto range = doGetAllTestsRange();
 				wxProgressDialog progress{ wxT( "Creating renderer entries" )
 					, wxT( "Creating renderer entries..." )
-					, int( 1 )
+					, int( range )
 					, this };
 				int index = 0;
 				doInitTestsList( renderer );
