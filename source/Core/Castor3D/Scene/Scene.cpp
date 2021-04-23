@@ -497,13 +497,7 @@ namespace castor3d
 		m_animatedObjectGroupCache->cleanup();
 		m_cameraCache->cleanup();
 		m_particleSystemCache->cleanup();
-
-		getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [this]( RenderDevice const & device )
-			{
-				m_billboardCache->cleanup( device );
-			} ) );
-
+		m_billboardCache->cleanup();
 		m_geometryCache->cleanup();
 		m_lightCache->cleanup();
 		m_sceneNodeCache->cleanup();

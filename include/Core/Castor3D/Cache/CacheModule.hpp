@@ -28,15 +28,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Holds the pools for billboard UBOs.
-	*\~french
-	*\brief
-	*	Contient les pools pour les UBO des billboards.
-	*/
-	class BillboardUboPools;
-	/**
-	*\~english
-	*\brief
 	*	Base class for an element cache.
 	*\~french
 	*\brief
@@ -529,7 +520,6 @@ namespace castor3d
 
 	CU_DeclareSmartPtr( AnimatedObjectGroupCache );
 	CU_DeclareSmartPtr( BillboardListCache );
-	CU_DeclareSmartPtr( BillboardUboPools );
 	CU_DeclareSmartPtr( CameraCache );
 	CU_DeclareSmartPtr( GeometryCache );
 	CU_DeclareSmartPtr( LightCache );
