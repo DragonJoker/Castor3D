@@ -139,6 +139,7 @@ jobs:
         7z a $GITHUB_WORKSPACE/Castor3D-${{ matrix.os[1] }}.zip $GITHUB_WORKSPACE/package/Castor3D/
 
     - name: Upload success package
+      if: runner.os != 'Windows'
       if: github.event_name == 'push' && ((steps.configure-windows.conclusion == 'success') || (steps.configure-linux.conclusion == 'success') || (steps.configure-macos.conclusion == 'success'))
       uses: actions/upload-artifact@v2
       with:
