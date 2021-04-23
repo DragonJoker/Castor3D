@@ -143,7 +143,6 @@ namespace castor
 
 	void FreeImageLoader::registerLoader( ImageLoader & reg )
 	{
-		FreeImage_Initialise();
 		reg.registerLoader( listExtensions()
 			, std::make_unique< FreeImageLoader >() );
 	}
@@ -151,7 +150,6 @@ namespace castor
 	void FreeImageLoader::unregisterLoader( ImageLoader & reg )
 	{
 		reg.unregisterLoader( listExtensions() );
-		FreeImage_DeInitialise();
 	}
 
 	ImageLayout FreeImageLoader::load( String const & imageFormat
