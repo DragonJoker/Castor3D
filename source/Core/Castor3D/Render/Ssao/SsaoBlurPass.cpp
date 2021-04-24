@@ -92,8 +92,6 @@ namespace castor3d
 
 #define result pxl_fragColor.r()
 #define keyPassThrough pxl_fragColor.g()
-#define readNormal( normal ) -( transpose( inverse( c3d_mtxGView ) ) * vec4( normal.xyz(), 1.0 ) ).xyz()
-#define writeNormal( normal ) ( transpose( inverse( c3d_mtxInvView ) ) * vec4( -normal.xyz(), 1.0 ) ).xyz()
 
 			/** Returns a number on (0, 1) */
 			auto unpackKey = writer.implementFunction< Float >( "unpackKey"
@@ -266,7 +264,7 @@ namespace castor3d
 					auto sum = writer.declLocale( "sum"
 						, temp.r() );
 					auto bentNormal = writer.declLocale( "bentNormal"
-						, readNormal( c3d_mapBentInput.fetch( ssCenter, 0_i ).xyz() ) );
+						, c3d_gpInfoData.readNormal( c3d_mapBentInput.fetch( ssCenter, 0_i ).xyz() ) );
 
 					keyPassThrough = temp.g();
 					auto key = writer.declLocale( "key"
@@ -276,14 +274,14 @@ namespace castor3d
 
 					if ( useNormalsBuffer )
 					{
-						normal = normalize( readNormal( c3d_mapNormal.fetch( ssCenter, 0_i ) ) );
+						normal = normalize( c3d_gpInfoData.readNormal( c3d_mapNormal.fetch( ssCenter, 0_i ).xyz() ) );
 					}
 
 					IF( writer, key == 1.0_f )
 					{
 						// Sky pixel (if you aren't using depth keying, disable this test)
 						result = sum;
-						pxl_bentNormal = writeNormal( bentNormal );
+						pxl_bentNormal = c3d_gpInfoData.writeNormal( bentNormal );
 						writer.returnStmt();
 					}
 					FI;
@@ -342,7 +340,7 @@ namespace castor3d
 						, 0.0001_f );
 					result = sum / ( totalWeight + epsilon );
 					bentNormal /= ( totalWeight + epsilon );
-					pxl_bentNormal = writeNormal( bentNormal );
+					pxl_bentNormal = c3d_gpInfoData.writeNormal( bentNormal );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 

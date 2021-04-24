@@ -19,6 +19,7 @@ namespace castor3d
 	namespace shader
 	{
 		struct BillboardData;
+		struct GpInfoData;
 		struct MatrixData;
 	}
 	/**

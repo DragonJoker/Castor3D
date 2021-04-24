@@ -130,9 +130,9 @@ namespace castor3d
 					auto data1 = writer.declLocale( "data1"
 						, c3d_mapData1.lod( texCoord, 0.0_f ) );
 					auto vsPosition = writer.declLocale( "vsPosition"
-						, utils.calcVSPosition( texCoord, depth, c3d_mtxInvProj ) );
+						, c3d_gpInfoData.projToView( utils, texCoord, depth ) );
 					auto wsPosition = writer.declLocale( "wsPosition"
-						, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
+						, c3d_gpInfoData.projToWorld( utils, texCoord, depth ) );
 					auto wsNormal = writer.declLocale( "wsNormal"
 						, data1.xyz() );
 					auto giNormal = writer.declLocale( "giNormal"
@@ -231,7 +231,7 @@ namespace castor3d
 					auto data1 = writer.declLocale( "data1"
 						, c3d_mapData1.lod( texCoord, 0.0_f ) );
 					auto wsPosition = writer.declLocale( "wsPosition"
-						, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
+						, c3d_gpInfoData.projToWorld( utils, texCoord, depth ) );
 					auto wsNormal = writer.declLocale( "wsNormal"
 						, data1.xyz() );
 
@@ -329,7 +329,7 @@ namespace castor3d
 					auto depth = writer.declLocale( "depth"
 						, c3d_mapDepth.lod( texCoord, 0.0_f ).x() );
 					auto wsPosition = writer.declLocale( "wsPosition"
-						, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
+						, c3d_gpInfoData.projToWorld( utils, texCoord, depth ) );
 					auto wsNormal = writer.declLocale( "wsNormal"
 						, data1.xyz() );
 

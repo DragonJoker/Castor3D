@@ -129,9 +129,7 @@ namespace castor3d
 						, c3d_mapLightDiffuse.lod( vtx_texture, 0.0_f ) );
 					auto depthM = writer.declLocale( "depthM"
 						, c3d_mapDepth.lod( vtx_texture, 0.0_f ).r() );
-					depthM = utils.calcVSPosition( vtx_texture
-						, depthM
-						, c3d_mtxInvProj ).z();
+					depthM = c3d_gpInfoData.projToView( utils, vtx_texture, depthM ).z();
 
 					// Accumulate center sample, multiplying it with its gaussian weight:
 					pxl_fragColor = colorM;
@@ -180,9 +178,7 @@ namespace castor3d
 						color = c3d_mapLightDiffuse.lod( offset, 0.0_f ).rgb();
 						offset = sdw::fma( vec2( o[i] ), finalStep, vtx_texture );
 						depth = c3d_mapDepth.lod( offset, 0.0_f ).r();
-						depth = utils.calcVSPosition( vtx_texture
-							, depth
-							, c3d_mtxInvProj ).z();
+						depth = c3d_gpInfoData.projToView( utils, vtx_texture, depth ).z();
 
 						// If the difference in depth is huge, we lerp color back to "colorM":
 						s = min( 0.0125_f * c3d_correction * abs( depthM - depth ), 1.0_f );
