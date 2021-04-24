@@ -767,7 +767,6 @@ namespace castor3d
 
 					if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 					{
-						emissive *= diffuse;
 						auto worldEye = writer.declLocale( "worldEye"
 							, c3d_cameraPosition.xyz() );
 						auto surface = writer.declLocale< shader::Surface >( "surface" );
@@ -918,7 +917,6 @@ namespace castor3d
 
 					if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 					{
-						emissive *= albedo;
 						auto worldEye = writer.declLocale( "worldEye"
 							, c3d_cameraPosition.xyz() );
 						auto surface = writer.declLocale< shader::Surface >( "surface" );
@@ -1061,7 +1059,6 @@ namespace castor3d
 
 					if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 					{
-						emissive *= albedo;
 						auto worldEye = writer.declLocale( "worldEye"
 							, c3d_cameraPosition.xyz() );
 						auto surface = writer.declLocale< shader::Surface >( "surface" );

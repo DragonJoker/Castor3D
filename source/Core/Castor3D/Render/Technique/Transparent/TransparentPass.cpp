@@ -467,7 +467,6 @@ namespace castor3d
 
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 				{
-					emissive *= diffuse;
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
 						, vec3( 0.0_f ) );
 					auto lightSpecular = writer.declLocale( "lightSpecular"
@@ -750,7 +749,6 @@ namespace castor3d
 
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 				{
-					emissive *= albedo;
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
 						, vec3( 0.0_f ) );
 					auto lightSpecular = writer.declLocale( "lightSpecular"
@@ -1102,7 +1100,6 @@ namespace castor3d
 
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 				{
-					emissive *= albedo;
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
 						, vec3( 0.0_f ) );
 					auto lightSpecular = writer.declLocale( "lightSpecular"
