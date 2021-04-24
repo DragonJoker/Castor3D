@@ -322,6 +322,8 @@ namespace castor3d
 			, sdw::Vec3 & tangentSpaceViewPosition
 			, sdw::Vec3 & tangentSpaceFragPosition )
 		{
+			bool hasEmissive = false;
+
 			for ( auto & textureIt : textures )
 			{
 				auto name = string::stringCast< char >( string::toString( textureIt.first, std::locale{ "C" } ) );
@@ -359,6 +361,17 @@ namespace castor3d
 				{
 					glossiness = config.getGlossiness( m_writer, sampled, glossiness );
 				}
+
+				if ( checkFlag( textureIt.second.flags, TextureFlag::eEmissive ) )
+				{
+					hasEmissive = true;
+				}
+			}
+
+			if ( checkFlag( passFlags, PassFlag::eLighting )
+				&& !hasEmissive )
+			{
+				emissive *= albedo;
 			}
 		}
 
@@ -376,6 +389,8 @@ namespace castor3d
 			, sdw::Vec3 & specular
 			, sdw::Float & glossiness )
 		{
+			bool hasEmissive = false;
+
 			for ( auto & textureIt : textures )
 			{
 				auto name = string::stringCast< char >( string::toString( textureIt.first, std::locale{ "C" } ) );
@@ -407,6 +422,17 @@ namespace castor3d
 				{
 					glossiness = config.getGlossiness( m_writer, sampled, glossiness );
 				}
+
+				if ( checkFlag( textureIt.second.flags, TextureFlag::eEmissive ) )
+				{
+					hasEmissive = true;
+				}
+			}
+
+			if ( checkFlag( passFlags, PassFlag::eLighting ) 
+				&& !hasEmissive )
+			{
+				emissive *= albedo;
 			}
 		}
 
