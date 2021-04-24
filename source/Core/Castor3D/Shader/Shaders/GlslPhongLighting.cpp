@@ -303,6 +303,8 @@ namespace castor3d
 			, sdw::Vec3 & tangentSpaceViewPosition
 			, sdw::Vec3 & tangentSpaceFragPosition )
 		{
+			bool hasEmissive = false;
+
 			for ( auto & textureIt : textures )
 			{
 				auto i = textureIt.first;
@@ -341,6 +343,17 @@ namespace castor3d
 				{
 					shininess = config.getShininess( m_writer, sampled, shininess );
 				}
+
+				if ( checkFlag( textureIt.second.flags, TextureFlag::eEmissive ) )
+				{
+					hasEmissive = true;
+				}
+			}
+
+			if ( checkFlag( passFlags, PassFlag::eLighting )
+				&& !hasEmissive )
+			{
+				emissive *= diffuse;
 			}
 		}
 
@@ -358,6 +371,8 @@ namespace castor3d
 			, sdw::Vec3 & specular
 			, sdw::Float & shininess )
 		{
+			bool hasEmissive = false;
+
 			for ( auto & textureIt : textures )
 			{
 				auto i = textureIt.first;
@@ -390,6 +405,17 @@ namespace castor3d
 				{
 					shininess = config.getShininess( m_writer, sampled, shininess );
 				}
+
+				if ( checkFlag( textureIt.second.flags, TextureFlag::eEmissive ) )
+				{
+					hasEmissive = true;
+				}
+			}
+
+			if ( checkFlag( passFlags, PassFlag::eLighting )
+				&& !hasEmissive )
+			{
+				emissive *= diffuse;
 			}
 		}
 
