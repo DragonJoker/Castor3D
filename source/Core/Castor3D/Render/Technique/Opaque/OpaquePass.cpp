@@ -508,7 +508,6 @@ namespace castor3d
 				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
 					, material.m_alphaRef );
-				emissive *= diffuse;
 				auto matFlags = writer.declLocale( "flags"
 					, 0.0_f );
 				utils.encodeMaterial( c3d_shadowReceiver
@@ -668,7 +667,6 @@ namespace castor3d
 				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
 					, material.m_alphaRef );
-				emissive *= albedo;
 				auto matFlags = writer.declLocale( "flags"
 					, 0.0_f );
 				utils.encodeMaterial( c3d_shadowReceiver
@@ -828,7 +826,6 @@ namespace castor3d
 				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
 					, material.m_alphaRef );
-				emissive *= albedo;
 				auto matFlags = writer.declLocale( "flags"
 					, 0.0_f );
 				utils.encodeMaterial( c3d_shadowReceiver
