@@ -219,7 +219,7 @@ namespace castor3d
 					auto diffuse = writer.declLocale( "diffuse"
 						, data2.xyz() );
 					auto surface = writer.declLocale< shader::Surface >( "surface" );
-					surface.create( utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj )
+					surface.create( c3d_gpInfoData.projToWorld( utils, vtx_texture, depth )
 						, data1.rgb() );
 
 					IF( writer, lighting )
@@ -368,9 +368,9 @@ namespace castor3d
 
 					if ( fogType != FogType::eDisabled )
 					{
-						surface.viewPosition = utils.calcVSPosition( vtx_texture
-							, c3d_mapDepth.lod( vtx_texture, 0.0_f ).x()
-							, c3d_mtxInvProj );
+						surface.viewPosition = c3d_gpInfoData.projToView( utils
+							, vtx_texture
+							, c3d_mapDepth.lod( vtx_texture, 0.0_f ).x() );
 						pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
 							, pxl_fragColor
 							, length( surface.viewPosition )
@@ -485,7 +485,7 @@ namespace castor3d
 					auto depth = writer.declLocale( "depth"
 						, c3d_mapDepth.lod( vtx_texture, 0.0_f ).x() );
 					auto surface = writer.declLocale< shader::Surface >( "surface" );
-					surface.create( utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj )
+					surface.create( c3d_gpInfoData.projToWorld( utils, vtx_texture, depth )
 						, data1.rgb() );
 
 					IF( writer, lighting )
@@ -699,9 +699,9 @@ namespace castor3d
 
 					if ( fogType != FogType::eDisabled )
 					{
-						surface.viewPosition = utils.calcVSPosition( fixedTexCoord
-							, c3d_mapDepth.lod( fixedTexCoord, 0.0_f ).x()
-							, c3d_mtxInvProj );
+						surface.viewPosition = c3d_gpInfoData.projToView( utils
+							, vtx_texture
+							, c3d_mapDepth.lod( vtx_texture, 0.0_f ).x() );
 						pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
 							, pxl_fragColor
 							, length( surface.viewPosition )
@@ -816,7 +816,7 @@ namespace castor3d
 					auto depth = writer.declLocale( "depth"
 						, c3d_mapDepth.lod( vtx_texture, 0.0_f ).x() );
 					auto surface = writer.declLocale< shader::Surface >( "surface" );
-					surface.create( utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj )
+					surface.create( c3d_gpInfoData.projToWorld( utils, vtx_texture, depth )
 						, data1.rgb() );
 
 					IF( writer, lighting )
@@ -1029,9 +1029,9 @@ namespace castor3d
 
 					if ( fogType != FogType::eDisabled )
 					{
-						surface.viewPosition = utils.calcVSPosition( fixedTexCoord
-							, c3d_mapDepth.lod( fixedTexCoord, 0.0_f ).x()
-							, c3d_mtxInvProj );
+						surface.viewPosition = c3d_gpInfoData.projToView( utils
+							, vtx_texture
+							, c3d_mapDepth.lod( vtx_texture, 0.0_f ).x() );
 						pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
 							, pxl_fragColor
 							, length( surface.viewPosition )

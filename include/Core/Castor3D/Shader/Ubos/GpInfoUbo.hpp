@@ -5,13 +5,55 @@ See LICENSE file in root folder
 #define ___C3D_GpInfoUbo_H___
 
 #include "UbosModule.hpp"
+#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
+#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/MatTypes/Mat4.hpp>
+
 namespace castor3d
 {
+	namespace shader
+	{
+		struct GpInfoData
+			: public sdw::StructInstance
+		{
+			C3D_API GpInfoData( sdw::ShaderWriter & writer
+				, ast::expr::ExprPtr expr
+				, bool enabled );
+			C3D_API GpInfoData & operator=( GpInfoData const & rhs );
+
+			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+
+			C3D_API sdw::Vec3 readNormal( sdw::Vec3 const & input )const;
+			C3D_API sdw::Vec3 writeNormal( sdw::Vec3 const & input )const;
+			C3D_API sdw::Vec3 projToWorld( Utils const & utils
+				, sdw::Vec2 const & texCoord
+				, sdw::Float const & depth )const;
+			C3D_API sdw::Vec3 projToView( Utils const & utils
+				, sdw::Vec2 const & texCoord
+				, sdw::Float const & depth )const;
+			C3D_API sdw::Vec2 calcTexCoord( Utils const & utils
+				, sdw::Vec2 const & fragCoord )const;
+
+		private:
+			using sdw::StructInstance::getMember;
+			using sdw::StructInstance::getMemberArray;
+
+		private:
+			sdw::Mat4 m_mtxInvViewProj;
+			sdw::Mat4 m_mtxInvView;
+			sdw::Mat4 m_mtxInvProj;
+			sdw::Mat4 m_mtxGView;
+			sdw::Mat4 m_mtxGProj;
+			sdw::Vec2 m_renderSize;
+		};
+	}
+
 	class GpInfoUbo
 	{
 	public:
@@ -79,13 +121,8 @@ namespace castor3d
 		}
 
 	public:
-		C3D_API static const castor::String GPInfo;
-		C3D_API static const castor::String InvViewProj;
-		C3D_API static const castor::String InvView;
-		C3D_API static const castor::String InvProj;
-		C3D_API static const castor::String View;
-		C3D_API static const castor::String Proj;
-		C3D_API static const castor::String RenderSize;
+		C3D_API static const castor::String BufferGPInfo;
+		C3D_API static const castor::String GPInfoData;
 
 	private:
 		Engine & m_engine;
@@ -95,15 +132,12 @@ namespace castor3d
 
 #define UBO_GPINFO( writer, binding, set )\
 	sdw::Ubo gpInfo{ writer\
-		, castor3d::GpInfoUbo::GPInfo\
+		, castor3d::GpInfoUbo::BufferGPInfo\
 		, binding\
-		, set };\
-	auto c3d_mtxInvViewProj = gpInfo.declMember< sdw::Mat4 >( castor3d::GpInfoUbo::InvViewProj );\
-	auto c3d_mtxInvView = gpInfo.declMember< sdw::Mat4 >( castor3d::GpInfoUbo::InvView );\
-	auto c3d_mtxInvProj = gpInfo.declMember< sdw::Mat4 >( castor3d::GpInfoUbo::InvProj );\
-	auto c3d_mtxGView = gpInfo.declMember< sdw::Mat4 >( castor3d::GpInfoUbo::View );\
-	auto c3d_mtxGProj = gpInfo.declMember< sdw::Mat4 >( castor3d::GpInfoUbo::Proj );\
-	auto c3d_renderSize = gpInfo.declMember< sdw::Vec2 >( castor3d::GpInfoUbo::RenderSize );\
+		, set\
+		, ast::type::MemoryLayout::eStd140\
+		, true };\
+	auto c3d_gpInfoData = gpInfo.declStructMember< shader::GpInfoData >( castor3d::GpInfoUbo::GPInfoData );\
 	gpInfo.end()
 
 #endif
