@@ -140,7 +140,7 @@ namespace castor3d
 					auto data1 = writer.declLocale( "data1"
 						, c3d_mapData1.lod( texCoord, 0.0_f ) );
 					auto surface = writer.declLocale< shader::Surface >( "surface" );
-					surface.create( utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj )
+					surface.create( c3d_gpInfoData.projToWorld( utils, texCoord, depth )
 						, data1.xyz() );
 
 					pxl_lpvGI = c3d_lpvGridData.indirectAttenuation / Float{ castor::Pi< float > }
