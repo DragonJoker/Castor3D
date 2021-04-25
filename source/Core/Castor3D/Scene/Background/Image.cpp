@@ -173,7 +173,7 @@ namespace castor3d
 
 				if ( !m_hdr )
 				{
-					pxl_FragColor = vec4( utils.removeGamma( c3d_gamma, colour.xyz() ), colour.w() );
+					pxl_FragColor = vec4( c3d_hdrConfigData.removeGamma( colour.xyz() ), colour.w() );
 				}
 				else
 				{
