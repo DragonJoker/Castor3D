@@ -11,8 +11,34 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
+#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/VecTypes/Vec4.hpp>
+
 namespace castor3d
 {
+	namespace shader
+	{
+		struct ModelInstancesData
+			: public sdw::StructInstance
+		{
+			C3D_API ModelInstancesData( sdw::ShaderWriter & writer
+				, ast::expr::ExprPtr expr
+				, bool enabled );
+			C3D_API ModelInstancesData & operator=( ModelInstancesData const & rhs );
+
+			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+
+		private:
+			using sdw::StructInstance::getMember;
+			using sdw::StructInstance::getMemberArray;
+
+		private:
+			sdw::UVec4 m_instances;
+			sdw::UInt m_instanceCount;
+		};
+	}
+
 	class ModelInstancesUbo
 	{
 	public:
@@ -88,8 +114,7 @@ namespace castor3d
 
 	public:
 		C3D_API static castor::String const BufferModelInstances;
-		C3D_API static castor::String const Instances;
-		C3D_API static castor::String const InstanceCount;
+		C3D_API static castor::String const ModelInstancesData;
 
 	private:
 		Engine & m_engine;
@@ -103,9 +128,10 @@ namespace castor3d
 	sdw::Ubo modelInstances{ writer\
 		, castor3d::ModelInstancesUbo::BufferModelInstances\
 		, binding\
-		, set };\
-	auto c3d_instances = modelInstances.declMember< sdw::UVec4 >( castor3d::ModelInstancesUbo::Instances, 7u );\
-	auto c3d_instanceCount = modelInstances.declMember< sdw::UInt >( castor3d::ModelInstancesUbo::InstanceCount );\
+		, set\
+		, ast::type::MemoryLayout::eStd140\
+		, true };\
+	auto c3d_modelInstancesData = modelInstances.declStructMember< castor3d::shader::ModelInstancesData >( castor3d::ModelInstancesUbo::ModelInstancesData );\
 	modelInstances.end()
 
 #endif
