@@ -13,12 +13,12 @@ namespace castor3d
 	castor::String const SkinningUbo::BufferSkinning = cuT( "Skinning" );
 	castor::String const SkinningUbo::Bones = cuT( "c3d_mtxBones" );
 
-	SkinningData SkinningUbo::declare( sdw::ShaderWriter & writer
+	shader::SkinningData SkinningUbo::declare( sdw::ShaderWriter & writer
 		, uint32_t binding
 		, uint32_t set
 		, ProgramFlags const & flags )
 	{
-		SkinningData result;
+		shader::SkinningData result;
 
 		if ( checkFlag( flags, ProgramFlag::eSkinning ) )
 		{
@@ -69,16 +69,16 @@ namespace castor3d
 				: VK_SHADER_STAGE_VERTEX_BIT ) );
 	}
 
-	sdw::Mat4 SkinningUbo::computeTransform( SkinningData & data
+	sdw::Mat4 SkinningUbo::computeTransform( shader::SkinningData const & data
 		, sdw::ShaderWriter & writer
-		, ProgramFlags const & flags )
+		, ProgramFlags const & flags
+		, sdw::Mat4 const & curMtxModel )
 	{
 		using namespace sdw;
 		auto inBoneIds0 = writer.getVariable< IVec4 >( cuT( "inBoneIds0" ) );
 		auto inBoneIds1 = writer.getVariable< IVec4 >( cuT( "inBoneIds1" ) );
 		auto inWeights0 = writer.getVariable< Vec4 >( cuT( "inWeights0" ) );
 		auto inWeights1 = writer.getVariable< Vec4 >( cuT( "inWeights1" ) );
-		auto c3d_curMtxModel = writer.getVariable< Mat4 >( ModelUbo::CurMtxModel );
 		auto mtxBoneTransform = writer.declLocale< Mat4 >( cuT( "mtxBoneTransform" ) );
 
 		if ( checkFlag( flags, ProgramFlag::eInstantiation ) )
@@ -110,7 +110,7 @@ namespace castor3d
 			mtxBoneTransform += bones[inBoneIds1[1]] * inWeights1[1];
 			mtxBoneTransform += bones[inBoneIds1[2]] * inWeights1[2];
 			mtxBoneTransform += bones[inBoneIds1[3]] * inWeights1[3];
-			mtxBoneTransform = c3d_curMtxModel * mtxBoneTransform;
+			mtxBoneTransform = curMtxModel * mtxBoneTransform;
 		}
 
 		return mtxBoneTransform;

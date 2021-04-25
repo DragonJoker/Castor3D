@@ -13,12 +13,15 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	struct SkinningData
+	namespace shader
 	{
-		std::unique_ptr< sdw::ArraySsboT< sdw::Mat4 > > ssbo;
-		std::unique_ptr< sdw::Ubo > ubo;
-		std::unique_ptr< sdw::SampledImageBufferRgba32 > tbo;
-	};
+		struct SkinningData
+		{
+			std::unique_ptr< sdw::ArraySsboT< sdw::Mat4 > > ssbo;
+			std::unique_ptr< sdw::Ubo > ubo;
+			std::unique_ptr< sdw::SampledImageBufferRgba32 > tbo;
+		};
+	}
 
 	class SkinningUbo
 	{
@@ -42,7 +45,7 @@ namespace castor3d
 		 *\param[in]	flags	Les indicateurs du programme.
 		 *\return		Les données de skinning.
 		 */
-		C3D_API static SkinningData declare( sdw::ShaderWriter & writer
+		C3D_API static shader::SkinningData declare( sdw::ShaderWriter & writer
 			, uint32_t binding
 			, uint32_t set
 			, ProgramFlags const & flags );
@@ -72,9 +75,10 @@ namespace castor3d
 		 *\param[in]	flags	Les indicateurs du programme.
 		 *\return		La matrice résultat.
 		 */
-		C3D_API static sdw::Mat4 computeTransform( SkinningData & data
+		C3D_API static sdw::Mat4 computeTransform( shader::SkinningData const & data
 			, sdw::ShaderWriter & writer
-			, ProgramFlags const & flags );
+			, ProgramFlags const & flags
+			, sdw::Mat4 const & curMtxModel );
 		/**@}*/
 
 	public:

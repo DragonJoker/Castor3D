@@ -303,37 +303,12 @@ namespace castor3d
 			auto v4Tangent = writer.declLocale( "v4Tangent"
 				, vec4( tangent, 0.0_f ) );
 			vtx_texture = uv;
-
-			if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
-			{
-				auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
-					, SkinningUbo::computeTransform( skinningData, writer, flags.programFlags ) );
-				auto mtxNormal = writer.declLocale( "mtxNormal"
-					, transpose( inverse( mat3( mtxModel ) ) ) );
-			}
-			else if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
-			{
-				auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
-					, transform );
-				auto mtxNormal = writer.declLocale( "mtxNormal"
-					, transpose( inverse( mat3( mtxModel ) ) ) );
-			}
-			else
-			{
-				auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
-					, c3d_curMtxModel );
-				auto mtxNormal = writer.declLocale( "mtxNormal"
-					, mat3( c3d_mtxNormal ) );
-			}
-
-			if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
-			{
-				vtx_material = writer.cast< UInt >( material );
-			}
-			else
-			{
-				vtx_material = writer.cast< UInt >( c3d_materialIndex );
-			}
+			auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
+				, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, transform ) );
+			auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
+				, c3d_modelData.getNormalMtx( flags.programFlags, mtxModel ) );
+			vtx_material = c3d_modelData.getMaterialIndex( flags.programFlags
+				, material );
 
 			if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
 			{
@@ -342,9 +317,6 @@ namespace castor3d
 				v4Tangent = vec4( sdw::mix( v4Tangent.xyz(), inTangent2.xyz(), vec3( c3d_time ) ), 1.0_f );
 				vtx_texture = vtx_texture * ( 1.0_f - c3d_time ) + inTexture2 * c3d_time;
 			}
-
-			auto mtxModel = writer.getVariable< Mat4 >( "mtxModel" );
-			auto mtxNormal = writer.getVariable< Mat3 >( "mtxNormal" );
 
 			if ( checkFlag( flags.programFlags, ProgramFlag::eInvertNormals ) )
 			{
