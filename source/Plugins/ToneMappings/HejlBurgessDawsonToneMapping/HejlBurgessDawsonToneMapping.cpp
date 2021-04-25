@@ -56,7 +56,7 @@ namespace HejlBurgessDawson
 			{
 				auto hdrColor = writer.declLocale( "hdrColor"
 					, c3d_mapHdr.sample( vtx_texture ).rgb() );
-				hdrColor *= vec3( c3d_exposure );
+				hdrColor *= vec3( c3d_hdrConfigData.getExposure() );
 				auto x = writer.declLocale( "x"
 					, max( hdrColor - 0.004_f, vec3( 0.0_f ) ) );
 				pxl_rgb = vec4( ( x * ( 6.2f * x + 0.5f ) )

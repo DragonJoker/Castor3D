@@ -63,9 +63,9 @@ namespace Reinhard
 					, c3d_mapHdr.sample( vtx_texture ).rgb() );
 				// Exposure tone mapping
 				auto mapped = writer.declLocale( "mapped"
-					, vec3( Float( 1.0f ) ) - exp( -hdrColor * c3d_exposure ) );
+					, vec3( Float( 1.0f ) ) - exp( -hdrColor * c3d_hdrConfigData.getExposure() ) );
 				// Gamma correction
-				pxl_rgb = vec4( utils.applyGamma( c3d_gamma, mapped ), 1.0_f );
+				pxl_rgb = vec4( c3d_hdrConfigData.applyGamma( mapped ), 1.0_f );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

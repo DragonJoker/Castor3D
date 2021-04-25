@@ -63,7 +63,7 @@ namespace HaarmPieterDuiker
 			{
 				auto hdrColor = writer.declLocale( "hdrColor"
 					, c3d_mapHdr.sample( vtx_texture ).rgb() );
-				hdrColor *= c3d_exposure;
+				hdrColor *= c3d_hdrConfigData.getExposure();
 				auto ld = writer.declLocale( "ld"
 					, vec3( 0.002_f ) );
 				auto linReference = writer.declLocale( "linReference"
@@ -71,7 +71,7 @@ namespace HaarmPieterDuiker
 				auto logReference = writer.declLocale( "logReference"
 					, 444.0_f );
 				auto logGamma = writer.declLocale( "logGamma"
-					, 1.0_f / c3d_gamma );
+					, 1.0_f / c3d_hdrConfigData.getGamma() );
 
 				auto logColor = writer.declLocale( "logColor"
 					, ( log10( vec3( 0.4_f ) * hdrColor.rgb() / linReference )
