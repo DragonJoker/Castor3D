@@ -6,11 +6,54 @@
 
 #include <ashespp/Buffer/StagingBuffer.hpp>
 
+#include <ShaderWriter/Source.hpp>
+
 namespace castor3d
 {
+	//*********************************************************************************************
+
+	namespace shader
+	{
+		ModelInstancesData::ModelInstancesData( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstance{ writer, std::move( expr ), enabled }
+			, m_instances{ getMember< sdw::UVec4 >( "instances" ) }
+			, m_instanceCount{ getMember< sdw::UInt >( "instanceCount" ) }
+		{
+		}
+
+		ModelInstancesData & ModelInstancesData::operator=( ModelInstancesData const & rhs )
+		{
+			StructInstance::operator=( rhs );
+			return *this;
+		}
+
+		ast::type::StructPtr ModelInstancesData::makeType( ast::type::TypesCache & cache )
+		{
+			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
+				, "ModelInstancesData" );
+
+			if ( result->empty() )
+			{
+				result->declMember( "instances", ast::type::Kind::eVec4U );
+				result->declMember( "instanceCount", ast::type::Kind::eUInt );
+			}
+
+			return result;
+		}
+
+		std::unique_ptr< sdw::Struct > ModelInstancesData::declare( sdw::ShaderWriter & writer )
+		{
+			return std::make_unique< sdw::Struct >( writer
+				, makeType( writer.getTypesCache() ) );
+		}
+	}
+
+	//*********************************************************************************************
+
 	castor::String const ModelInstancesUbo::BufferModelInstances = cuT( "ModelInstances" );
-	castor::String const ModelInstancesUbo::Instances = cuT( "c3d_instances" );
-	castor::String const ModelInstancesUbo::InstanceCount = cuT( "c3d_instanceCount" );
+	castor::String const ModelInstancesUbo::ModelInstancesData = cuT( "c3d_modelInstancesData" );
 
 	ModelInstancesUbo::ModelInstancesUbo( Engine & engine )
 		: m_engine{ engine }
