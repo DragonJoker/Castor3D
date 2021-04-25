@@ -20,7 +20,9 @@ namespace castor3d
 	{
 		struct BillboardData;
 		struct GpInfoData;
+		struct HdrConfigData;
 		struct MatrixData;
+		struct ModelInstancesData;
 	}
 	/**
 	*\~english
