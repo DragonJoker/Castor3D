@@ -476,7 +476,7 @@ namespace castor3d
 					surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
 					lighting->computeCombined( worldEye
 						, shininess
-						, c3d_shadowReceiver
+						, c3d_modelData.isShadowReceiver()
 						, surface
 						, output );
 					lightSpecular *= specular;
@@ -760,7 +760,7 @@ namespace castor3d
 						, albedo
 						, metalness
 						, roughness
-						, c3d_shadowReceiver
+						, c3d_modelData.isShadowReceiver()
 						, surface
 						, output );
 					auto reflected = writer.declLocale( "reflected"
@@ -1110,7 +1110,7 @@ namespace castor3d
 					lighting->computeCombined( worldEye
 						, specular
 						, glossiness
-						, c3d_shadowReceiver
+						, c3d_modelData.isShadowReceiver()
 						, surface
 						, output );
 					auto reflected = writer.declLocale( "reflected"

@@ -330,47 +330,14 @@ namespace castor3d
 				auto v4Tangent = writer.declLocale( "v4Tangent"
 					, vec4( inTangent, 0.0_f ) );
 				outTexture = inTexture;
-
-				if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
-				{
-					auto curMtxModel = writer.declLocale( "curMtxModel"
-						, SkinningUbo::computeTransform( skinningData, writer, flags.programFlags ) );
-					auto prvMtxModel = writer.declLocale( "prvMtxModel"
-						, curMtxModel );
-					auto mtxNormal = writer.declLocale( "mtxNormal"
-						, transpose( inverse( mat3( curMtxModel ) ) ) );
-				}
-				else if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
-				{
-					auto curMtxModel = writer.declLocale( "curMtxModel"
-						, inTransform );
-					auto prvMtxModel = writer.declLocale( "prvMtxModel"
-						, curMtxModel );
-					auto mtxNormal = writer.declLocale( "mtxNormal"
-						, transpose( inverse( mat3( curMtxModel ) ) ) );
-				}
-				else
-				{
-					auto curMtxModel = writer.declLocale( "curMtxModel"
-						, c3d_curMtxModel );
-					auto prvMtxModel = writer.declLocale( "prvMtxModel"
-						, c3d_prvMtxModel );
-					auto mtxNormal = writer.declLocale( "mtxNormal"
-						, mat3( c3d_mtxNormal ) );
-				}
-
-				auto curMtxModel = writer.getVariable< Mat4 >( "curMtxModel" );
-				auto prvMtxModel = writer.getVariable< Mat4 >( "prvMtxModel" );
-				auto mtxNormal = writer.getVariable< Mat3 >( "mtxNormal" );
-
-				if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
-				{
-					outMaterial = writer.cast< UInt >( inMaterial );
-				}
-				else
-				{
-					outMaterial = writer.cast< UInt >( c3d_materialIndex );
-				}
+				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
+						, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, inTransform ) );
+				auto prvMtxModel = writer.declLocale< Mat4 >( "prvMtxModel"
+					, c3d_modelData.getPrvModelMtx( flags.programFlags, curMtxModel ) );
+				auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
+					, c3d_modelData.getNormalMtx( flags.programFlags, curMtxModel ) );
+				outMaterial = c3d_modelData.getMaterialIndex( flags.programFlags
+					, inMaterial );
 
 				if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
 				{

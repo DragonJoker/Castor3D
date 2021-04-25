@@ -492,20 +492,15 @@ namespace castor3d
 					, ( checkFlag( flags.programFlags, ProgramFlag::eMorphing )
 						? sdw::mix( inTexcoord, inTexcoord2, vec3( c3d_time ) )
 						: inTexcoord ) );
-				auto modelMtx = writer.declLocale( "modelMtx"
-					, ( checkFlag( flags.programFlags, ProgramFlag::eSkinning )
-						? SkinningUbo::computeTransform( skinningData, writer, flags.programFlags )
-						: ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation )
-							? inTransform
-							: c3d_curMtxModel ) ) );
+				auto modelMtx = writer.declLocale< Mat4 >( "modelMtx"
+					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, inTransform ) );
+				outMaterial = c3d_modelData.getMaterialIndex( flags.programFlags
+					, inMaterial );
 
 				out.vtx.position = ( modelMtx * position );
 				outViewPosition = c3d_matrixData.worldToCurView( out.vtx.position ).xyz();
 				outNormal = normalize( mat3( transpose( inverse( modelMtx ) ) ) * normal );
 				outTexture = texcoord;
-				outMaterial = ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation )
-					? writer.cast< UInt >( inMaterial )
-					: writer.cast< UInt >( c3d_materialIndex ) );
 			} );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
@@ -537,7 +532,7 @@ namespace castor3d
 			, [&]()
 			{
 				auto curBbcenter = writer.declLocale( "curBbcenter"
-					, ( c3d_curMtxModel * vec4( center, 1.0_f ) ).xyz() );
+					, c3d_modelData.modelToCurWorld( vec4( center, 1.0_f ) ).xyz() );
 				auto curToCamera = writer.declLocale( "curToCamera"
 					, c3d_cameraPosition.xyz() - curBbcenter );
 				curToCamera.y() = 0.0_f;
@@ -560,6 +555,7 @@ namespace castor3d
 					, c3d_matrixData.worldToCurView( out.vtx.position ) );
 				outViewPosition = viewPosition.xyz();
 				outNormal = normalize( c3d_cameraPosition.xyz() - curBbcenter );
+				outMaterial = c3d_modelData.getMaterialIndex();
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -774,7 +770,7 @@ namespace castor3d
 						auto color = writer.declLocale( "lightDiffuse"
 							, lighting->computeCombinedDiffuse( worldEye
 								, shininess
-								, c3d_shadowReceiver
+								, c3d_modelData.isShadowReceiver()
 								, surface ) );
 						color.xyz() *= diffuse * occlusion;
 						color.xyz() += emissive;
@@ -926,7 +922,7 @@ namespace castor3d
 								, albedo
 								, metalness
 								, roughness
-								, c3d_shadowReceiver
+								, c3d_modelData.isShadowReceiver()
 								, surface ) );
 						color *= albedo * occlusion;
 						color += emissive;
@@ -1067,7 +1063,7 @@ namespace castor3d
 							, lighting->computeCombinedDiffuse( worldEye
 								, specular
 								, glossiness
-								, c3d_shadowReceiver
+								, c3d_modelData.isShadowReceiver()
 								, surface ) );
 						color.xyz() *= albedo * occlusion;
 						color.xyz() += emissive;

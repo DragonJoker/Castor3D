@@ -1492,47 +1492,14 @@ namespace castor3d
 				auto v4Tangent = writer.declLocale( "v4Tangent"
 					, vec4( tangent, 0.0_f ) );
 				vtx_texture = uv;
-
-				if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
-				{
-					auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
-						, SkinningUbo::computeTransform( skinningData, writer, flags.programFlags ) );
-					writer.declLocale< Mat4 >( "prvMtxModel"
-						, curMtxModel );
-					auto mtxNormal = writer.declLocale( "mtxNormal"
-						, transpose( inverse( mat3( curMtxModel ) ) ) );
-				}
-				else if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
-				{
-					auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
-						, transform );
-					writer.declLocale< Mat4 >( "prvMtxModel"
-						, curMtxModel );
-					auto mtxNormal = writer.declLocale( "mtxNormal"
-						, transpose( inverse( mat3( curMtxModel ) ) ) );
-				}
-				else
-				{
-					auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
-						, c3d_curMtxModel );
-					writer.declLocale< Mat4 >( "prvMtxModel"
-						, c3d_prvMtxModel );
-					auto mtxNormal = writer.declLocale( "mtxNormal"
-						, mat3( c3d_mtxNormal ) );
-				}
-
-				auto curMtxModel = writer.getVariable< Mat4 >( "curMtxModel" );
-				auto prvMtxModel = writer.getVariable< Mat4 >( "prvMtxModel" );
-				auto mtxNormal = writer.getVariable< Mat3 >( "mtxNormal" );
-
-				if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
-				{
-					vtx_material = writer.cast< UInt >( material );
-				}
-				else
-				{
-					vtx_material = writer.cast< UInt >( c3d_materialIndex );
-				}
+				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
+					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, transform ) );
+				auto prvMtxModel = writer.declLocale< Mat4 >( "prvMtxModel"
+					, c3d_modelData.getPrvModelMtx( flags.programFlags, curMtxModel ) );
+				auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
+					, c3d_modelData.getNormalMtx( flags.programFlags, curMtxModel ) );
+				vtx_material = c3d_modelData.getMaterialIndex( flags.programFlags
+					, material );
 
 				if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
 				{
@@ -1629,9 +1596,9 @@ namespace castor3d
 			, [&]()
 			{
 				auto curBbcenter = writer.declLocale( "curBbcenter"
-					, ( c3d_curMtxModel * vec4( center, 1.0_f ) ).xyz() );
+					, c3d_modelData.modelToCurWorld( vec4( center, 1.0_f ) ).xyz() );
 				auto prvBbcenter = writer.declLocale( "prvBbcenter" 
-					, ( c3d_prvMtxModel * vec4( center, 1.0_f ) ).xyz() );
+					, c3d_modelData.modelToPrvWorld( vec4( center, 1.0_f ) ).xyz() );
 				auto curToCamera = writer.declLocale( "curToCamera"
 					, c3d_cameraPosition.xyz() - curBbcenter );
 				curToCamera.y() = 0.0_f;
@@ -1649,7 +1616,7 @@ namespace castor3d
 					+ right * position.x() * width
 					+ up * position.y() * height;
 
-				vtx_material = writer.cast< UInt >( c3d_materialIndex );
+				vtx_material = c3d_modelData.getMaterialIndex();
 				vtx_normal = curToCamera;
 				vtx_tangent = up;
 				vtx_bitangent = right;

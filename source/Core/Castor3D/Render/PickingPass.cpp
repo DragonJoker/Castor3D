@@ -849,29 +849,10 @@ namespace castor3d
 					, vec4( inPosition.xyz(), 1.0_f ) );
 				auto v3Texture = writer.declLocale( "v3Texture"
 					, inTexture );
-				auto mtxModel = writer.declLocale< Mat4 >( "mtxModel" );
-
-				if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
-				{
-					mtxModel = SkinningUbo::computeTransform( skinningData, writer, flags.programFlags );
-				}
-				else if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
-				{
-					mtxModel = inTransform;
-				}
-				else
-				{
-					mtxModel = c3d_curMtxModel;
-				}
-
-				if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
-				{
-					outMaterial = writer.cast< UInt >( inMaterial );
-				}
-				else
-				{
-					outMaterial = writer.cast< UInt >( c3d_materialIndex );
-				}
+				auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
+					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, inTransform ) );
+				outMaterial = c3d_modelData.getMaterialIndex( flags.programFlags
+					, inMaterial );
 
 				if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
 				{

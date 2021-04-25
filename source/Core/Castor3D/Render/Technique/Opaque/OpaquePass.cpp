@@ -510,11 +510,11 @@ namespace castor3d
 					, material.m_alphaRef );
 				auto matFlags = writer.declLocale( "flags"
 					, 0.0_f );
-				utils.encodeMaterial( c3d_shadowReceiver
+				utils.encodeMaterial( c3d_modelData.isShadowReceiver()
 					, ( checkFlag( flags.passFlags, PassFlag::eReflection ) ) ? 1_i : 0_i
 					, ( checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? 1_i : 0_i
 					, ( checkFlag( flags.passFlags, PassFlag::eLighting ) ) ? 1_i : 0_i
-					, c3d_envMapIndex
+					, c3d_modelData.getEnvMapIndex()
 					, matFlags );
 
 				auto curPosition = writer.declLocale( "curPosition"
@@ -669,11 +669,11 @@ namespace castor3d
 					, material.m_alphaRef );
 				auto matFlags = writer.declLocale( "flags"
 					, 0.0_f );
-				utils.encodeMaterial( c3d_shadowReceiver
+				utils.encodeMaterial( c3d_modelData.isShadowReceiver()
 					, ( checkFlag( flags.passFlags, PassFlag::eReflection ) ) ? 1_i : 0_i
 					, ( checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? 1_i : 0_i
 					, ( checkFlag( flags.passFlags, PassFlag::eLighting ) ) ? 1_i : 0_i
-					, c3d_envMapIndex
+					, c3d_modelData.getEnvMapIndex()
 					, matFlags );
 
 				auto curPosition = writer.declLocale( "curPosition"
@@ -828,11 +828,11 @@ namespace castor3d
 					, material.m_alphaRef );
 				auto matFlags = writer.declLocale( "flags"
 					, 0.0_f );
-				utils.encodeMaterial( c3d_shadowReceiver
+				utils.encodeMaterial( c3d_modelData.isShadowReceiver()
 					, ( checkFlag( flags.passFlags, PassFlag::eReflection ) ) ? 1_i : 0_i
 					, ( checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? 1_i : 0_i
 					, ( checkFlag( flags.passFlags, PassFlag::eLighting ) ) ? 1_i : 0_i
-					, c3d_envMapIndex
+					, c3d_modelData.getEnvMapIndex()
 					, matFlags );
 
 				auto curPosition = writer.declLocale( "curPosition"

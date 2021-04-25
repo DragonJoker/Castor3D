@@ -6,8 +6,62 @@ See LICENSE file in root folder
 
 #include "UbosModule.hpp"
 
+#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/MatTypes/Mat4.hpp>
+
 namespace castor3d
 {
+	namespace shader
+	{
+		struct ModelData
+			: public sdw::StructInstance
+		{
+			C3D_API ModelData( sdw::ShaderWriter & writer
+				, ast::expr::ExprPtr expr
+				, bool enabled );
+			C3D_API ModelData & operator=( ModelData const & rhs );
+
+			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+
+			C3D_API sdw::Mat4 getCurModelMtx( ProgramFlags programFlags
+				, SkinningData const & skinning
+				, sdw::Mat4 const & instanceTransform )const;
+			C3D_API sdw::Mat4 getPrvModelMtx( ProgramFlags programFlags
+				, sdw::Mat4 const & curModelMatrix )const;
+			C3D_API sdw::Mat3 getNormalMtx( ProgramFlags programFlags
+				, sdw::Mat4 const & curModelMatrix )const;
+			C3D_API sdw::UInt getMaterialIndex( ProgramFlags programFlags
+				, sdw::Int const & instanceMaterial )const;
+			C3D_API sdw::UInt getMaterialIndex()const;
+			C3D_API sdw::Vec4 modelToWorld( sdw::Vec4 const & pos )const;
+			C3D_API sdw::Vec4 modelToCurWorld( sdw::Vec4 const & pos )const;
+			C3D_API sdw::Vec4 modelToPrvWorld( sdw::Vec4 const & pos )const;
+
+			sdw::Int const & isShadowReceiver()const
+			{
+				return m_shadowReceiver;
+			}
+
+			sdw::Int const & getEnvMapIndex()const
+			{
+				return m_envMapIndex;
+			}
+
+		private:
+			using sdw::StructInstance::getMember;
+			using sdw::StructInstance::getMemberArray;
+
+		private:
+			sdw::Mat4 m_prvMtxModel;
+			sdw::Mat4 m_curMtxModel;
+			sdw::Mat4 m_mtxNormal;
+			sdw::Int m_shadowReceiver;
+			sdw::Int m_materialIndex;
+			sdw::Int m_envMapIndex;
+		};
+	}
+
 	class ModelUbo
 	{
 	public:
@@ -15,12 +69,7 @@ namespace castor3d
 
 	public:
 		C3D_API static castor::String const BufferModel;
-		C3D_API static castor::String const PrvMtxModel;
-		C3D_API static castor::String const CurMtxModel;
-		C3D_API static castor::String const MtxNormal;
-		C3D_API static castor::String const ShadowReceiver;
-		C3D_API static castor::String const MaterialIndex;
-		C3D_API static castor::String const EnvironmentIndex;
+		C3D_API static castor::String const ModelData;
 	};
 }
 
@@ -29,13 +78,9 @@ namespace castor3d
 		, castor3d::ModelUbo::BufferModel\
 		, binding\
 		, set\
-		, ast::type::MemoryLayout::eStd140 };\
-	auto c3d_prvMtxModel = model.declMember< sdw::Mat4 >( castor3d::ModelUbo::PrvMtxModel );\
-	auto c3d_curMtxModel = model.declMember< sdw::Mat4 >( castor3d::ModelUbo::CurMtxModel );\
-	auto c3d_mtxNormal = model.declMember< sdw::Mat4 >( castor3d::ModelUbo::MtxNormal );\
-	auto c3d_shadowReceiver = model.declMember< sdw::Int >( castor3d::ModelUbo::ShadowReceiver );\
-	auto c3d_materialIndex = model.declMember< sdw::Int >( castor3d::ModelUbo::MaterialIndex );\
-	auto c3d_envMapIndex = model.declMember< sdw::Int >( castor3d::ModelUbo::EnvironmentIndex );\
+		, ast::type::MemoryLayout::eStd140\
+		, true };\
+	auto c3d_modelData = model.declStructMember< castor3d::shader::ModelData >( castor3d::ModelUbo::ModelData );\
 	model.end()
 
 #endif
