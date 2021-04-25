@@ -23,6 +23,8 @@ namespace castor3d
 		struct HdrConfigData;
 		struct MatrixData;
 		struct ModelInstancesData;
+		struct ModelData;
+		struct SkinningData;
 	}
 	/**
 	*\~english
