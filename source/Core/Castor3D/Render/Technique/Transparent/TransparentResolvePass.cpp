@@ -280,7 +280,7 @@ namespace castor3d
 							, c3d_gpInfoData.projToView( utils
 								, texCoord
 								, c3d_mapDepth.sample( texCoord ).r() ) );
-						pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
+						pxl_fragColor = fog.apply( vec4( c3d_hdrConfigData.removeGamma( c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
 							, pxl_fragColor
 							, length( position )
 							, position.z()

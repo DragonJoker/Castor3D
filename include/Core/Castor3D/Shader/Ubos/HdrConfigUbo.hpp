@@ -10,8 +10,47 @@ See LICENSE file in root folder
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 
+#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/BaseTypes/Float.hpp>
+
 namespace castor3d
 {
+	namespace shader
+	{
+		struct HdrConfigData
+			: public sdw::StructInstance
+		{
+			C3D_API HdrConfigData( sdw::ShaderWriter & writer
+				, ast::expr::ExprPtr expr
+				, bool enabled );
+			C3D_API HdrConfigData & operator=( HdrConfigData const & rhs );
+
+			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+
+			C3D_API sdw::Vec3 removeGamma( sdw::Vec3 const & srgb )const;
+			C3D_API sdw::Vec3 applyGamma( sdw::Vec3 const & hdr )const;
+
+			sdw::Float const & getExposure()const
+			{
+				return m_exposure;
+			}
+
+			sdw::Float const & getGamma()const
+			{
+				return m_gamma;
+			}
+
+		private:
+			using sdw::StructInstance::getMember;
+			using sdw::StructInstance::getMemberArray;
+
+		private:
+			sdw::Float m_exposure;
+			sdw::Float m_gamma;
+		};
+	}
+
 	class HdrConfigUbo
 	{
 	public:
@@ -86,15 +125,8 @@ namespace castor3d
 		}
 
 	public:
-		//!\~english	Name of the HDR configuration frame variable buffer.
-		//!\~french		Nom du frame variable buffer contenant la configuration du HDR.
 		C3D_API static castor::String const BufferHdrConfig;
-		//!\~english	Name of the exposure frame variable.
-		//!\~french		Nom de la frame variable contenant l'exposition.
-		C3D_API static castor::String const Exposure;
-		//!\~english	Name of the gamma correction frame variable.
-		//!\~french		Nom de la frame variable contenant la correction gamma.
-		C3D_API static castor::String const Gamma;
+		C3D_API static castor::String const HdrConfigData;
 
 	private:
 		Engine & m_engine;
@@ -103,12 +135,13 @@ namespace castor3d
 }
 
 #define UBO_HDR_CONFIG( writer, binding, set )\
-	Ubo hdrConfig{ writer\
+	sdw::Ubo hdrConfig{ writer\
 		, castor3d::HdrConfigUbo::BufferHdrConfig\
 		, binding\
-		, set };\
-	auto c3d_exposure = hdrConfig.declMember< Float >( castor3d::HdrConfigUbo::Exposure );\
-	auto c3d_gamma = hdrConfig.declMember< Float >( castor3d::HdrConfigUbo::Gamma );\
+		, set\
+		, ast::type::MemoryLayout::eStd140\
+		, true };\
+	auto c3d_hdrConfigData = hdrConfig.declStructMember< castor3d::shader::HdrConfigData >( castor3d::HdrConfigUbo::HdrConfigData );\
 	hdrConfig.end()
 
 #endif

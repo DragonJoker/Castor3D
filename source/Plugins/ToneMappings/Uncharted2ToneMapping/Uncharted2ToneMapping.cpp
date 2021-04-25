@@ -88,14 +88,14 @@ namespace Uncharted2
 				hdrColor *= vec3( Float( ExposureBias ) ); // Hardcoded Exposure Adjustment.
 
 				auto current = writer.declLocale( "current"
-					, uncharted2ToneMap( hdrColor * c3d_exposure ) );
+					, uncharted2ToneMap( hdrColor * c3d_hdrConfigData.getExposure() ) );
 
 				auto whiteScale = writer.declLocale( "whiteScale"
 					, vec3( 1.0_f ) / uncharted2ToneMap( vec3( Float( LinearWhitePointValue ) ) ) );
 				auto colour = writer.declLocale( "colour"
 					, current * whiteScale );
 
-				pxl_rgb = vec4( utils.applyGamma( c3d_gamma, colour ), 1.0_f );
+				pxl_rgb = vec4( c3d_hdrConfigData.applyGamma( colour ), 1.0_f );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

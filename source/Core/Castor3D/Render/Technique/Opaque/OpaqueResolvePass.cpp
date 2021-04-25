@@ -371,7 +371,7 @@ namespace castor3d
 						surface.viewPosition = c3d_gpInfoData.projToView( utils
 							, vtx_texture
 							, c3d_mapDepth.lod( vtx_texture, 0.0_f ).x() );
-						pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
+						pxl_fragColor = fog.apply( vec4( c3d_hdrConfigData.removeGamma( c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
 							, pxl_fragColor
 							, length( surface.viewPosition )
 							, surface.viewPosition.z()
@@ -702,7 +702,7 @@ namespace castor3d
 						surface.viewPosition = c3d_gpInfoData.projToView( utils
 							, vtx_texture
 							, c3d_mapDepth.lod( vtx_texture, 0.0_f ).x() );
-						pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
+						pxl_fragColor = fog.apply( vec4( c3d_hdrConfigData.removeGamma( c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
 							, pxl_fragColor
 							, length( surface.viewPosition )
 							, surface.viewPosition.z()
@@ -1032,7 +1032,7 @@ namespace castor3d
 						surface.viewPosition = c3d_gpInfoData.projToView( utils
 							, vtx_texture
 							, c3d_mapDepth.lod( vtx_texture, 0.0_f ).x() );
-						pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
+						pxl_fragColor = fog.apply( vec4( c3d_hdrConfigData.removeGamma( c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
 							, pxl_fragColor
 							, length( surface.viewPosition )
 							, surface.viewPosition.z()
