@@ -123,7 +123,7 @@ namespace castor3d
 					, Vec4 const & projInfo )
 				{
 					auto z = writer.declLocale( "z"
-						, key * c3d_farPlaneZ );
+						, key * c3d_ssaoConfigData.farPlaneZ );
 					auto position = writer.declLocale( "position"
 						, reconstructCSPosition( vec2( ssCenter ) + vec2( 0.5_f )
 							, z
@@ -178,13 +178,13 @@ namespace castor3d
 					, Vec3 const & position )
 				{
 					auto scale = writer.declLocale( "scale"
-						, 1.5_f * c3d_invRadius );
+						, 1.5_f * c3d_ssaoConfigData.invRadius );
 
 					// The "bilateral" weight. As depth difference increases, decrease weight.
 					// The key values are in scene-specific scale. To make them scale-invariant, factor in
 					// the AO radius, which should be based on the scene scale.
 					auto depthWeight = writer.declLocale( "depthWeight"
-						, max( 0.0_f, 1.0_f - ( c3d_edgeSharpness * 2000.0_f ) * abs( tapKey - key ) * scale ) );
+						, max( 0.0_f, 1.0_f - ( c3d_ssaoConfigData.edgeSharpness * 2000.0_f ) * abs( tapKey - key ) * scale ) );
 					auto k_normal = writer.declLocale( "k_normal"
 						, 1.0_f );
 					auto k_plane = writer.declLocale( "k_plane"
@@ -201,7 +201,7 @@ namespace castor3d
 						auto normalCloseness = writer.declLocale( "normalCloseness"
 							, dot( tapNormal, normal ) );
 
-						IF( writer, c3d_blurHighQuality == 0_i )
+						IF( writer, c3d_ssaoConfigData.blurHighQuality == 0_i )
 						{
 							normalCloseness = normalCloseness * normalCloseness;
 							normalCloseness = normalCloseness * normalCloseness;
@@ -211,15 +211,15 @@ namespace castor3d
 
 						auto normalError = writer.declLocale( "normalError"
 							, ( 1.0_f - normalCloseness ) * k_normal );
-						normalWeight = max( 1.0_f - c3d_edgeSharpness * normalError, 0.0_f );
+						normalWeight = max( 1.0_f - c3d_ssaoConfigData.edgeSharpness * normalError, 0.0_f );
 
-						IF( writer, c3d_blurHighQuality )
+						IF( writer, c3d_ssaoConfigData.blurHighQuality )
 						{
 							auto lowDistanceThreshold2 = writer.declLocale( "lowDistanceThreshold2"
 								, 0.001_f );
 
 							auto tapPosition = writer.declLocale( "tapPosition"
-								, positionFromKey( tapKey, tapLoc, c3d_projInfo ) );
+								, positionFromKey( tapKey, tapLoc, c3d_ssaoConfigData.projInfo ) );
 
 							// Change position in camera space
 							auto dq = writer.declLocale( "dq"
@@ -238,7 +238,7 @@ namespace castor3d
 							planeWeight = writer.ternary( distance2 * square( scale ) < lowDistanceThreshold2
 								, 1.0_f
 								, Float{ pow( max( 0.0_f
-										, 1.0_f - c3d_edgeSharpness * 2.0 * k_plane * planeError / sqrt( distance2 ) )
+										, 1.0_f - c3d_ssaoConfigData.edgeSharpness * 2.0 * k_plane * planeError / sqrt( distance2 ) )
 									, 2.0_f ) } );
 						}
 						FI;
@@ -296,16 +296,16 @@ namespace castor3d
 					bentNormal *= totalWeight;
 
 					auto position = writer.declLocale( "position"
-						, positionFromKey( key, ssCenter, c3d_projInfo ) );
+						, positionFromKey( key, ssCenter, c3d_ssaoConfigData.projInfo ) );
 
-					FOR( writer, Int, r, -c3d_blurRadius, r <= c3d_blurRadius, ++r )
+					FOR( writer, Int, r, -c3d_ssaoConfigData.blurRadius, r <= c3d_ssaoConfigData.blurRadius, ++r )
 					{
 						// We already handled the zero case above.  This loop should be unrolled and the static branch optimized out,
 						// so the IF statement has no runtime cost
 						IF( writer, r != 0_i )
 						{
 							auto tapLoc = writer.declLocale( "tapLoc"
-								, ssCenter + c3d_axis * ( r * c3d_blurStepSize ) );
+								, ssCenter + c3d_axis * ( r * c3d_ssaoConfigData.blurStepSize ) );
 
 							// spatial domain: offset gaussian tap
 							auto absR = writer.declLocale( "absR"
