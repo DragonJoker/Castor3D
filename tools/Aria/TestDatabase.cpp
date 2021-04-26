@@ -284,8 +284,7 @@ namespace aria
 			moveFile( srcFolder
 				, dstFolder
 				, getCompareName( test )
-				, getResultName( test )
-				, true );
+				, getResultName( test ) );
 		}
 	}
 
@@ -294,8 +293,7 @@ namespace aria
 	void moveFile( castor::Path const & srcFolder
 		, castor::Path const & dstFolder
 		, castor::Path const & srcName
-		, castor::Path const & dstName
-		, bool force )
+		, castor::Path const & dstName )
 	{
 		auto src = srcFolder / srcName;
 		auto dst = dstFolder / dstName;
@@ -316,18 +314,15 @@ namespace aria
 				}
 			}
 
-			if ( force || !castor::File::fileExists( dst ) )
+			if ( castor::File::fileExists( dst ) )
 			{
-				if ( castor::File::fileExists( dst ) )
-				{
-					castor::File::deleteFile( dst );
-				}
+				castor::File::deleteFile( dst );
+			}
 
-				if ( !castor::File::copyFileName( src, dst ) )
-				{
-					castor::Logger::logError( "Couldn't copy image [" + src + "]: " + castor::System::getLastErrorText() );
-					return;
-				}
+			if ( !castor::File::copyFileName( src, dst ) )
+			{
+				castor::Logger::logError( "Couldn't copy image [" + src + "]: " + castor::System::getLastErrorText() );
+				return;
 			}
 
 			castor::File::deleteFile( src );
@@ -336,14 +331,12 @@ namespace aria
 
 	void moveFile( castor::Path const & srcFolder
 		, castor::Path const & dstFolder
-		, castor::Path const & name
-		, bool force )
+		, castor::Path const & name )
 	{
 		moveFile( srcFolder
 			, dstFolder
 			, name
-			, name
-			, force );
+			, name );
 	}
 
 	//*********************************************************************************************
