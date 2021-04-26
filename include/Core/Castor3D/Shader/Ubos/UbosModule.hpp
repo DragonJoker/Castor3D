@@ -9,6 +9,8 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
+#include <ShaderWriter/ShaderWriterPrerequisites.hpp>
+
 namespace castor3d
 {
 	/**@name Shader */
@@ -21,11 +23,29 @@ namespace castor3d
 		struct BillboardData;
 		struct GpInfoData;
 		struct HdrConfigData;
+		struct LayeredLpvGridData;
+		struct LpvGridData;
+		struct LpvLightData;
 		struct MatrixData;
 		struct ModelInstancesData;
 		struct ModelData;
 		struct MorphingData;
+		struct OverlayData;
+		struct PickingData;
 		struct SkinningData;
+
+		Writer_Parameter( BillboardData );
+		Writer_Parameter( GpInfoData );
+		Writer_Parameter( HdrConfigData );
+		Writer_Parameter( LayeredLpvGridData );
+		Writer_Parameter( LpvGridData );
+		Writer_Parameter( LpvLightData );
+		Writer_Parameter( MatrixData );
+		Writer_Parameter( ModelInstancesData );
+		Writer_Parameter( ModelData );
+		Writer_Parameter( MorphingData );
+		Writer_Parameter( OverlayData );
+		Writer_Parameter( PickingData );
 	}
 	/**
 	*\~english
