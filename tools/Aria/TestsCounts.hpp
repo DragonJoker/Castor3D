@@ -94,7 +94,7 @@ namespace aria
 
 	struct RendererTestsCounts
 	{
-		RendererTestsCounts( Config const & config );
+		explicit RendererTestsCounts( Config const & config );
 
 		CategoryTestsCounts & addCategory( Category category
 			, TestArray const & tests
@@ -120,7 +120,7 @@ namespace aria
 
 	struct AllTestsCounts
 	{
-		AllTestsCounts( Config const & config );
+		explicit AllTestsCounts( Config const & config );
 
 		RendererTestsCounts & addRenderer( Renderer renderer );
 		RendererTestsCounts & getRenderer( Renderer renderer );
