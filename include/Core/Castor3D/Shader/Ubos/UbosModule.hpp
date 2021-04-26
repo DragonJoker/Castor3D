@@ -24,6 +24,7 @@ namespace castor3d
 		struct MatrixData;
 		struct ModelInstancesData;
 		struct ModelData;
+		struct MorphingData;
 		struct SkinningData;
 	}
 	/**

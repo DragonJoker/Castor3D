@@ -342,26 +342,19 @@ namespace castor3d
 		std::function< void() > main = [&]()
 		{
 			auto vertexPosition = writer.declLocale( "vertexPosition"
-				, vec4( position.xyz(), 1.0_f ) );
+				, vec4( c3d_morphingData.morph( position, inPosition2 ).xyz(), 1.0_f ) );
 			auto v4Normal = writer.declLocale( "v4Normal"
-				, vec4( normal, 0.0_f ) );
+				, vec4( c3d_morphingData.morph( normal, inNormal2 ), 0.0_f ) );
 			auto v4Tangent = writer.declLocale( "v4Tangent"
-				, vec4( tangent, 0.0_f ) );
-			vtx_texture = uv;
+				, vec4( c3d_morphingData.morph( tangent, inTangent2 ), 0.0_f ) );
+			vtx_texture = c3d_morphingData.morph( uv, inTexture2 );
+
 			auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
 				, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, transform ) );
 			auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
 				, c3d_modelData.getNormalMtx( flags.programFlags, mtxModel ) );
 			vtx_material = c3d_modelData.getMaterialIndex( flags.programFlags
 				, material );
-
-			if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
-			{
-				vertexPosition = vec4( sdw::mix( vertexPosition.xyz(), inPosition2.xyz(), vec3( c3d_time ) ), 1.0_f );
-				v4Normal = vec4( sdw::mix( v4Normal.xyz(), inNormal2.xyz(), vec3( c3d_time ) ), 1.0_f );
-				v4Tangent = vec4( sdw::mix( v4Tangent.xyz(), inTangent2.xyz(), vec3( c3d_time ) ), 1.0_f );
-				vtx_texture = vtx_texture * ( 1.0_f - c3d_time ) + inTexture2 * c3d_time;
-			}
 
 			if ( checkFlag( flags.programFlags, ProgramFlag::eInvertNormals ) )
 			{

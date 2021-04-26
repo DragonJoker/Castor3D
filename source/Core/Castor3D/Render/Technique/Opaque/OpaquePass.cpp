@@ -266,16 +266,14 @@ namespace castor3d
 
 	ashes::VkDescriptorSetLayoutBindingArray OpaquePass::doCreateTextureBindings( PipelineFlags const & flags )const
 	{
-		auto index = 0u;
 		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
 
 		if ( !flags.textures.empty() )
 		{
-			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( 0u
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT
 				, uint32_t( flags.textures.size() ) ) );
-			index += uint32_t( flags.textures.size() );
 		}
 
 		return textureBindings;

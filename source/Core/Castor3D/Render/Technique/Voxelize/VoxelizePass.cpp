@@ -481,17 +481,12 @@ namespace castor3d
 			, [&]()
 			{
 				auto position = writer.declLocale( "position"
-					, ( checkFlag( flags.programFlags, ProgramFlag::eMorphing )
-						? vec4( sdw::mix( inPosition.xyz(), inPosition2.xyz(), vec3( c3d_time ) ), 1.0_f )
-						: vec4( inPosition.xyz(), 1.0_f ) ) );
+					, c3d_morphingData.morph( inPosition, inPosition2 ) );
 				auto normal = writer.declLocale( "normal"
-					, ( checkFlag( flags.programFlags, ProgramFlag::eMorphing )
-						? sdw::mix( inNormal, inNormal2, vec3( c3d_time ) )
-						: inNormal ) );
+					, c3d_morphingData.morph( inNormal, inNormal2 ) );
 				auto texcoord = writer.declLocale( "texcoord"
-					, ( checkFlag( flags.programFlags, ProgramFlag::eMorphing )
-						? sdw::mix( inTexcoord, inTexcoord2, vec3( c3d_time ) )
-						: inTexcoord ) );
+					, c3d_morphingData.morph( inTexcoord, inTexcoord2 ) );
+
 				auto modelMtx = writer.declLocale< Mat4 >( "modelMtx"
 					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, inTransform ) );
 				outMaterial = c3d_modelData.getMaterialIndex( flags.programFlags
