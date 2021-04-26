@@ -13,31 +13,94 @@ using namespace castor;
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
+	namespace shader
+	{
+		SsaoConfigData::SsaoConfigData( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstance{ writer, std::move( expr ), enabled }
+			, projInfo{ getMember< sdw::Vec4 >( "projInfo" ) }
+			, viewMatrix{ getMember< sdw::Mat4 >( "viewMatrix" ) }
+			, numSamples{ getMember< sdw::Int >( "numSamples" ) }
+			, numSpiralTurns{ getMember< sdw::Int >( "numSpiralTurns" ) }
+			, projScale{ getMember< sdw::Float >( "projScale" ) }
+			, radius{ getMember< sdw::Float >( "radius" ) }
+			, invRadius{ getMember< sdw::Float >( "invRadius" ) }
+			, radius2{ getMember< sdw::Float >( "radius2" ) }
+			, invRadius2{ getMember< sdw::Float >( "invRadius2" ) }
+			, bias{ getMember< sdw::Float >( "bias" ) }
+			, intensity{ getMember< sdw::Float >( "intensity" ) }
+			, intensityDivR6{ getMember< sdw::Float >( "intensityDivR6" ) }
+			, farPlaneZ{ getMember< sdw::Float >( "farPlaneZ" ) }
+			, edgeSharpness{ getMember< sdw::Float >( "edgeSharpness" ) }
+			, blurStepSize{ getMember< sdw::Int >( "blurStepSize" ) }
+			, blurRadius{ getMember< sdw::Int >( "blurRadius" ) }
+			, highQuality{ getMember< sdw::Int >( "highQuality" ) }
+			, blurHighQuality{ getMember< sdw::Int >( "blurHighQuality" ) }
+			, logMaxOffset{ getMember< sdw::Int >( "logMaxOffset" ) }
+			, maxMipLevel{ getMember< sdw::Int >( "maxMipLevel" ) }
+			, minRadius{ getMember< sdw::Float >( "minRadius" ) }
+			, variation{ getMember< sdw::Int >( "variation" ) }
+			, bendStepCount{ getMember< sdw::Int >( "bendStepCount" ) }
+			, bendStepSize{ getMember< sdw::Float >( "bendStepSize" ) }
+		{
+		}
+
+		SsaoConfigData & SsaoConfigData::operator=( SsaoConfigData const & rhs )
+		{
+			StructInstance::operator=( rhs );
+			return *this;
+		}
+
+		ast::type::StructPtr SsaoConfigData::makeType( ast::type::TypesCache & cache )
+		{
+			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
+				, "SsaoConfigData" );
+
+			if ( result->empty() )
+			{
+				result->declMember( "projInfo", ast::type::Kind::eVec4F );
+				result->declMember( "viewMatrix", ast::type::Kind::eMat4x4F );
+				result->declMember( "numSamples", ast::type::Kind::eInt );
+				result->declMember( "numSpiralTurns", ast::type::Kind::eInt );
+				result->declMember( "projScale", ast::type::Kind::eFloat );
+				result->declMember( "radius", ast::type::Kind::eFloat );
+				result->declMember( "invRadius", ast::type::Kind::eFloat );
+				result->declMember( "radius2", ast::type::Kind::eFloat );
+				result->declMember( "invRadius2", ast::type::Kind::eFloat );
+				result->declMember( "bias", ast::type::Kind::eFloat );
+				result->declMember( "intensity", ast::type::Kind::eFloat );
+				result->declMember( "intensityDivR6", ast::type::Kind::eFloat );
+				result->declMember( "farPlaneZ", ast::type::Kind::eFloat );
+				result->declMember( "edgeSharpness", ast::type::Kind::eFloat );
+				result->declMember( "blurStepSize", ast::type::Kind::eFloat );
+				result->declMember( "blurRadius", ast::type::Kind::eInt );
+				result->declMember( "highQuality", ast::type::Kind::eInt );
+				result->declMember( "blurHighQuality", ast::type::Kind::eInt );
+				result->declMember( "logMaxOffset", ast::type::Kind::eInt );
+				result->declMember( "maxMipLevel", ast::type::Kind::eInt );
+				result->declMember( "minRadius", ast::type::Kind::eFloat );
+				result->declMember( "variation", ast::type::Kind::eInt );
+				result->declMember( "bendStepCount", ast::type::Kind::eInt );
+				result->declMember( "bendStepSize", ast::type::Kind::eFloat );
+			}
+
+			return result;
+		}
+
+		std::unique_ptr< sdw::Struct > SsaoConfigData::declare( sdw::ShaderWriter & writer )
+		{
+			return std::make_unique< sdw::Struct >( writer
+				, makeType( writer.getTypesCache() ) );
+		}
+	}
+
+	//*********************************************************************************************
+
 	String const SsaoConfigUbo::BufferSsaoConfig = cuT( "SsaoConfig" );
-	String const SsaoConfigUbo::NumSamples = cuT( "c3d_numSamples" );
-	String const SsaoConfigUbo::NumSpiralTurns = cuT( "c3d_numSpiralTurns" );
-	String const SsaoConfigUbo::ProjScale = cuT( "c3d_projScale" );
-	String const SsaoConfigUbo::Radius = cuT( "c3d_radius" );
-	String const SsaoConfigUbo::InvRadius = cuT( "c3d_invRadius" );
-	String const SsaoConfigUbo::Radius2 = cuT( "c3d_radius2" );
-	String const SsaoConfigUbo::InvRadius2 = cuT( "c3d_invRadius2" );
-	String const SsaoConfigUbo::Bias = cuT( "c3d_bias" );
-	String const SsaoConfigUbo::Intensity = cuT( "c3d_intensity" );
-	String const SsaoConfigUbo::IntensityDivR6 = cuT( "c3d_intensityDivR6" );
-	String const SsaoConfigUbo::FarPlaneZ = cuT( "c3d_farPlaneZ" );
-	String const SsaoConfigUbo::EdgeSharpness = cuT( "c3d_edgeSharpness" );
-	String const SsaoConfigUbo::BlurStepSize = cuT( "c3d_blurStepSize" );
-	String const SsaoConfigUbo::BlurRadius = cuT( "c3d_blurRadius" );
-	String const SsaoConfigUbo::ProjInfo = cuT( "c3d_projInfo" );
-	String const SsaoConfigUbo::ViewMatrix = cuT( "c3d_viewMatrix" );
-	String const SsaoConfigUbo::HighQuality = cuT( "c3d_highQuality" );
-	String const SsaoConfigUbo::BlurHighQuality = cuT( "c3d_blurHighQuality" );
-	String const SsaoConfigUbo::LogMaxOffset = cuT( "c3d_logMaxOffset" );
-	String const SsaoConfigUbo::MaxMipLevel = cuT( "c3d_maxMipLevel" );
-	String const SsaoConfigUbo::MinRadius = cuT( "c3d_minRadius" );
-	String const SsaoConfigUbo::Variation = cuT( "c3d_variation" );
-	String const SsaoConfigUbo::BendStepCount = cuT( "c3d_bendStepCount" );
-	String const SsaoConfigUbo::BendStepSize = cuT( "c3d_bendStepSize" );
+	String const SsaoConfigUbo::SsaoConfigData = cuT( "c3d_ssaoConfigData" );
 
 	SsaoConfigUbo::SsaoConfigUbo( Engine & engine )
 		: m_engine{ engine }
@@ -149,4 +212,6 @@ namespace castor3d
 		configuration.bendStepCount = config.bendStepCount.value();
 		configuration.bendStepSize = config.bendStepSize;
 	}
+
+	//*********************************************************************************************
 }
