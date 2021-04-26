@@ -18,12 +18,10 @@ namespace aria
 	void moveFile( castor::Path const & srcFolder
 		, castor::Path const & dstFolder
 		, castor::Path const & srcName
-		, castor::Path const & dstName
-		, bool force );
+		, castor::Path const & dstName );
 	void moveFile( castor::Path const & srcFolder
 		, castor::Path const & dstFolder
-		, castor::Path const & name
-		, bool force );
+		, castor::Path const & name );
 
 	class TestDatabase
 	{
