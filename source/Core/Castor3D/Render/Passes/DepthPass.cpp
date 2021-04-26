@@ -469,7 +469,7 @@ namespace castor3d
 					utils.computeGeometryMapsContributions( textures
 						, flags.passFlags
 						, textureConfigs
-						, c3d_textureConfig
+						, c3d_textureData.config
 						, c3d_maps
 						, texCoord
 						, opacity
