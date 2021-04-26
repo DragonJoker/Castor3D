@@ -9,6 +9,8 @@
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 
+#include <ShaderWriter/Source.hpp>
+
 namespace castor3d
 {
 	//*********************************************************************************************
