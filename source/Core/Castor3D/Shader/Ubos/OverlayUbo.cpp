@@ -5,10 +5,70 @@
 
 #include <CastorUtils/Graphics/Size.hpp>
 
+#include <ShaderWriter/Source.hpp>
+
 namespace castor3d
 {
-	castor::String const OverlayUbo::BufferOverlayName = cuT( "Overlay" );
-	castor::String const OverlayUbo::BufferOverlayInstance = cuT( "overlay" );
-	castor::String const OverlayUbo::PositionRatio = cuT( "c3d_positionRatio" );
-	castor::String const OverlayUbo::RenderSizeIndex = cuT( "c3d_renderSizeIndex" );
+	//*********************************************************************************************
+
+	namespace shader
+	{
+		OverlayData::OverlayData( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstance{ writer, std::move( expr ), enabled }
+			, m_positionRatio{ getMember< sdw::Vec4 >( "positionRatio" ) }
+			, m_renderSizeIndex{ getMember< sdw::IVec4 >( "renderSizeIndex" ) }
+		{
+		}
+
+		OverlayData & OverlayData::operator=( OverlayData const & rhs )
+		{
+			StructInstance::operator=( rhs );
+			return *this;
+		}
+
+		ast::type::StructPtr OverlayData::makeType( ast::type::TypesCache & cache )
+		{
+			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
+				, "OverlayData" );
+
+			if ( result->empty() )
+			{
+				result->declMember( "positionRatio", ast::type::Kind::eVec4F );
+				result->declMember( "renderSizeIndex", ast::type::Kind::eVec4I );
+			}
+
+			return result;
+		}
+
+		std::unique_ptr< sdw::Struct > OverlayData::declare( sdw::ShaderWriter & writer )
+		{
+			return std::make_unique< sdw::Struct >( writer
+				, makeType( writer.getTypesCache() ) );
+		}
+
+		sdw::Vec2 OverlayData::getOverlaySize()const
+		{
+			return vec2( m_positionRatio.z() * getWriter()->cast< sdw::Float >( m_renderSizeIndex.x() )
+				, m_positionRatio.w() * getWriter()->cast< sdw::Float >( m_renderSizeIndex.y() ) );
+		}
+
+		sdw::Vec2 OverlayData::modelToView( sdw::Vec2 const & pos )const
+		{
+			return m_positionRatio.xy() + pos;
+		}
+
+		sdw::UInt OverlayData::getMaterialIndex()const
+		{
+			return getWriter()->cast< sdw::UInt >( m_renderSizeIndex.z() );
+		}
+	}
+
+	//*********************************************************************************************
+
+	castor::String const OverlayUbo::BufferOverlay = cuT( "Overlay" );
+	castor::String const OverlayUbo::OverlayData = cuT( "c3d_overlayData" );
+
+	//*********************************************************************************************
 }

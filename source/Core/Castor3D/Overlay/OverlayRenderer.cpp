@@ -951,9 +951,8 @@ namespace castor3d
 					vtx_text = text;
 					vtx_texture = uv;
 					auto size = writer.declLocale( "size"
-						, vec2( c3d_positionRatio.z() * writer.cast< Float >( c3d_renderSizeIndex.x() )
-							, c3d_positionRatio.w() * writer.cast< Float >( c3d_renderSizeIndex.y() ) ) );
-					out.vtx.position = c3d_matrixData.viewToProj( vec4( size * ( c3d_positionRatio.xy() + position )
+						, c3d_overlayData.getOverlaySize() );
+					out.vtx.position = c3d_matrixData.viewToProj( vec4( size * c3d_overlayData.modelToView( position )
 							, 0.0_f
 							, 1.0_f ) );
 				} );
@@ -1006,7 +1005,7 @@ namespace castor3d
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					auto material = materials->getBaseMaterial( writer.cast< UInt >( c3d_renderSizeIndex.z() ) );
+					auto material = materials->getBaseMaterial( c3d_overlayData.getMaterialIndex() );
 					auto diffuse = writer.declLocale( "diffuse"
 						, material->m_diffuse() );
 					auto alpha = writer.declLocale( "alpha"
