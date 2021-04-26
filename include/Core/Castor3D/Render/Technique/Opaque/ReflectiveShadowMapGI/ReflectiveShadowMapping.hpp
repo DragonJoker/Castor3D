@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_ReflectiveShadowMapping_HPP___
 
 #include "ReflectiveShadowMapGIModule.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 
@@ -22,23 +23,15 @@ namespace castor3d
 			, sdw::Vec3 const & viewPosition
 			, sdw::Vec3 const & worldPosition
 			, sdw::Vec3 const & worldNormal
-			, sdw::Float const & rsmRMax
-			, sdw::Float const & rsmIntensity
-			, sdw::UInt const & rsmSampleCount );
+			, shader::RsmConfigData const & rsmData );
 		C3D_API sdw::Vec3 point( shader::PointLight const & light
 			, sdw::Vec3 const & worldPosition
 			, sdw::Vec3 const & worldNormal
-			, sdw::Float const & rsmRMax
-			, sdw::Float const & rsmIntensity
-			, sdw::UInt const & rsmSampleCount
-			, sdw::UInt const & rsmIndex );
+			, shader::RsmConfigData const & rsmData );
 		C3D_API sdw::Vec3 spot( shader::SpotLight const & light
 			, sdw::Vec3 const & worldPosition
 			, sdw::Vec3 const & worldNormal
-			, sdw::Float const & rsmRMax
-			, sdw::Float const & rsmIntensity
-			, sdw::UInt const & rsmSampleCount
-			, sdw::UInt const & rsmIndex );
+			, shader::RsmConfigData const & rsmData );
 
 	private:
 		void doDeclareDirectional();
@@ -53,25 +46,17 @@ namespace castor3d
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InFloat
-			, sdw::InFloat
-			, sdw::InUInt > m_directional;
+			, shader::InRsmConfigData > m_directional;
 		sdw::Function< sdw::Vec3
 			, shader::InPointLight
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InFloat
-			, sdw::InFloat
-			, sdw::InUInt
-			, sdw::InUInt > m_point;
+			, shader::InRsmConfigData > m_point;
 		sdw::Function< sdw::Vec3
 			, shader::InSpotLight
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InFloat
-			, sdw::InFloat
-			, sdw::InUInt
-			, sdw::InUInt > m_spot;
+			, shader::InRsmConfigData > m_spot;
 	};
 }
 
