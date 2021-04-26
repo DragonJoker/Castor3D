@@ -8,8 +8,36 @@ See LICENSE file in root folder
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 
+#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/BaseTypes/Int.hpp>
+
 namespace castor3d
 {
+	namespace shader
+	{
+		struct PickingData
+			: public sdw::StructInstance
+		{
+			C3D_API PickingData( sdw::ShaderWriter & writer
+				, ast::expr::ExprPtr expr
+				, bool enabled );
+			C3D_API PickingData & operator=( PickingData const & rhs );
+
+			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+
+			C3D_API sdw::Vec4 getIndex( sdw::UInt const & instance )const;
+
+		private:
+			using sdw::StructInstance::getMember;
+			using sdw::StructInstance::getMemberArray;
+
+		private:
+			sdw::Int m_drawIndex;
+			sdw::Int m_nodeIndex;
+		};
+	}
+
 	class PickingUbo
 	{
 	public:
@@ -45,15 +73,8 @@ namespace castor3d
 		}
 
 	public:
-		//!\~english	Name of the picking information frame variable buffer.
-		//!\~french		Nom du frame variable buffer contenant les informations de picking.
 		C3D_API static castor::String const BufferPicking;
-		//!\~english	Name of the draw index frame variable.
-		//!\~french		Nom de la frame variable contenant l'indice du dessin.
-		C3D_API static castor::String const DrawIndex;
-		//!\~english	Name of the node index frame variable.
-		//!\~french		Nom de la frame variable contenant l'indice du noeud.
-		C3D_API static castor::String const NodeIndex;
+		C3D_API static castor::String const PickingData;
 
 	private:
 		Engine & m_engine;
@@ -62,13 +83,13 @@ namespace castor3d
 }
 
 #define UBO_PICKING( writer, binding, set )\
-	sdw::Ubo model{ writer\
+	sdw::Ubo picking{ writer\
 		, castor3d::PickingUbo::BufferPicking\
 		, binding\
 		, set\
-		, ast::type::MemoryLayout::eStd140 };\
-	auto c3d_drawIndex = model.declMember< sdw::Int >( castor3d::PickingUbo::DrawIndex );\
-	auto c3d_nodeIndex = model.declMember< sdw::Int >( castor3d::PickingUbo::NodeIndex );\
-	model.end()
+		, ast::type::MemoryLayout::eStd140\
+		, true };\
+	auto c3d_pickingData = picking.declStructMember< castor3d::shader::PickingData >( castor3d::PickingUbo::PickingData );\
+	picking.end()
 
 #endif
