@@ -8,33 +8,57 @@ See LICENSE file in root folder
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 
+#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/VecTypes/Vec4.hpp>
+
 namespace castor3d
 {
+	namespace shader
+	{
+		struct OverlayData
+			: public sdw::StructInstance
+		{
+			C3D_API OverlayData( sdw::ShaderWriter & writer
+				, ast::expr::ExprPtr expr
+				, bool enabled );
+			C3D_API OverlayData & operator=( OverlayData const & rhs );
+
+			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+
+			C3D_API sdw::Vec2 getOverlaySize()const;
+			C3D_API sdw::Vec2 modelToView( sdw::Vec2 const & pos )const;
+			C3D_API sdw::UInt getMaterialIndex()const;
+
+		private:
+			using sdw::StructInstance::getMember;
+			using sdw::StructInstance::getMemberArray;
+
+		private:
+			sdw::Vec4 m_positionRatio;
+			sdw::IVec4 m_renderSizeIndex;
+		};
+	}
+
 	class OverlayUbo
 	{
 	private:
 		using Configuration = OverlayUboConfiguration;
 
 	public:
-		//!\~english	Name of the overlay information frame variable buffer.
-		//!\~french		Nom du frame variable buffer contenant les informations de l'incrustation.
-		C3D_API static castor::String const BufferOverlayName;
-		//!\~english	Name of the overlay information frame variable buffer.
-		//!\~french		Nom du frame variable buffer contenant les informations de l'incrustation.
-		C3D_API static castor::String const BufferOverlayInstance;
-		//!\~english	Name of the overlay position (xy) and render ratio (zw) frame variable.
-		//!\~french		Nom de la frame variable contenant la position (xy) et le ratio de rendu (zw) de l'incrustation.
-		C3D_API static castor::String const PositionRatio;
-		//!\~english	Name of the render size (xy) and material index (z) frame variable.
-		//!\~french		Nom de la frame variable contenant la taille de rendu (xy) et l'index du matériau (z).
-		C3D_API static castor::String const RenderSizeIndex;
+		C3D_API static castor::String const BufferOverlay;
+		C3D_API static castor::String const OverlayData;
 	};
 }
 
 #define UBO_OVERLAY( writer, binding, set )\
-	sdw::Ubo overlay{ writer, OverlayUbo::BufferOverlayName, binding, set };\
-	auto c3d_positionRatio = overlay.declMember< sdw::Vec4 >( castor3d::OverlayUbo::PositionRatio );\
-	auto c3d_renderSizeIndex = overlay.declMember< sdw::IVec4 >( castor3d::OverlayUbo::RenderSizeIndex );\
+	sdw::Ubo overlay{ writer\
+		, castor3d::OverlayUbo::BufferOverlay\
+		, binding\
+		, set\
+		, ast::type::MemoryLayout::eStd140\
+		, true };\
+	auto c3d_overlayData = overlay.declStructMember< castor3d::shader::OverlayData >( castor3d::OverlayUbo::OverlayData );\
 	overlay.end()
 
 #endif
