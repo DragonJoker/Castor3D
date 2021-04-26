@@ -12,6 +12,8 @@
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
+#include <ShaderWriter/Source.hpp>
+
 namespace castor3d
 {
 	//*********************************************************************************************
