@@ -482,7 +482,7 @@ namespace castor3d
 					, vec3( 0.0_f ) );
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
 				auto light = writer.declLocale( "light"
-					, lighting->getSpotLight( writer.cast< Int >( c3d_lightIndex ) ) );
+					, c3d_shadowMapData.getSpotLight( *lighting ) );
 				auto lightToVertex = writer.declLocale( "lightToVertex"
 					, light.m_position.xyz() - vtx_worldPosition );
 				auto distance = writer.declLocale( "distance"
@@ -666,7 +666,7 @@ namespace castor3d
 					, vec3( 0.0_f ) );
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
 				auto light = writer.declLocale( "light"
-					, lighting->getSpotLight( writer.cast< Int >( c3d_lightIndex ) ) );
+					, c3d_shadowMapData.getSpotLight( *lighting ) );
 				auto lightToVertex = writer.declLocale( "lightToVertex"
 					, light.m_position.xyz() - vtx_worldPosition );
 				auto distance = writer.declLocale( "distance"
@@ -850,7 +850,7 @@ namespace castor3d
 					, vec3( 0.0_f ) );
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
 				auto light = writer.declLocale( "light"
-					, lighting->getSpotLight( writer.cast< Int >( c3d_lightIndex ) ) );
+					, c3d_shadowMapData.getSpotLight( *lighting ) );
 				auto lightToVertex = writer.declLocale( "lightToVertex"
 					, light.m_position.xyz() - vtx_worldPosition );
 				auto distance = writer.declLocale( "distance"

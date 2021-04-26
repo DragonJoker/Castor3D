@@ -331,8 +331,8 @@ namespace castor3d
 			vtx_tangentSpaceFragPosition = tbn * vtx_worldPosition;
 			vtx_tangentSpaceViewPosition = tbn * vec3( 0.0_f );
 
-			vertexPosition = c3d_lightView * vertexPosition;
-			out.vtx.position = c3d_lightProjection * vertexPosition;
+			vertexPosition = c3d_shadowMapData.worldToView( vertexPosition );
+			out.vtx.position = c3d_shadowMapData.viewToProj( vertexPosition );
 		};
 
 		writer.implementFunction< sdw::Void >( "main", main );
@@ -476,7 +476,7 @@ namespace castor3d
 					, vec3( 0.0_f ) );
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
 				auto light = writer.declLocale( "light"
-					, lighting->getDirectionalLight( writer.cast< Int >( c3d_lightIndex ) ) );
+					, c3d_shadowMapData.getDirectionalLight( *lighting ) );
 				pxl_flux.rgb() = diffuse
 					* light.m_lightBase.m_colour
 					* light.m_lightBase.m_intensity.x()
@@ -638,7 +638,7 @@ namespace castor3d
 					, vec3( 0.0_f ) );
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
 				auto light = writer.declLocale( "light"
-					, lighting->getDirectionalLight( writer.cast< Int >( c3d_lightIndex ) ) );
+					, c3d_shadowMapData.getDirectionalLight( *lighting ) );
 				pxl_flux.rgb() = albedo
 					* light.m_lightBase.m_colour
 					* light.m_lightBase.m_intensity.x()
@@ -800,7 +800,7 @@ namespace castor3d
 					, vec3( 0.0_f ) );
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
 				auto light = writer.declLocale( "light"
-					, lighting->getDirectionalLight( writer.cast< Int >( c3d_lightIndex ) ) );
+					, c3d_shadowMapData.getDirectionalLight( *lighting ) );
 				pxl_flux.rgb() = albedo
 					* light.m_lightBase.m_colour
 					* light.m_lightBase.m_intensity.x()

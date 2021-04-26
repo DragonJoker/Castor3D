@@ -522,7 +522,7 @@ namespace castor3d
 				, vec3( 0.0_f ) );
 			shader::OutputComponents output{ lightDiffuse, lightSpecular };
 			auto light = writer.declLocale( "light"
-				, lighting->getPointLight( writer.cast< Int >( c3d_lightIndex ) ) );
+				, c3d_shadowMapData.getPointLight( *lighting ) );
 			auto lightToVertex = writer.declLocale( "lightToVertex"
 				, light.m_position.xyz() - vtx_worldPosition );
 			auto distance = writer.declLocale( "distance"
@@ -540,7 +540,7 @@ namespace castor3d
 				/ attenuation;
 
 			auto depth = writer.declLocale( "depth"
-				, length( vtx_worldPosition - c3d_lightPosFarPlane.xyz() ) / c3d_lightPosFarPlane.w() );
+				, c3d_shadowMapData.getLinearisedDepth( vtx_worldPosition ) );
 			pxl_normalLinear.w() = depth;
 			pxl_normalLinear.xyz() = normal;
 			pxl_position.xyz() = vtx_worldPosition;
@@ -697,7 +697,7 @@ namespace castor3d
 				, vec3( 0.0_f ) );
 			shader::OutputComponents output{ lightDiffuse, lightSpecular };
 			auto light = writer.declLocale( "light"
-				, lighting->getPointLight( writer.cast< Int >( c3d_lightIndex ) ) );
+				, c3d_shadowMapData.getPointLight( *lighting ) );
 			auto lightToVertex = writer.declLocale( "lightToVertex"
 				, light.m_position.xyz() - vtx_worldPosition );
 			auto distance = writer.declLocale( "distance"
@@ -715,7 +715,7 @@ namespace castor3d
 				/ attenuation;
 
 			auto depth = writer.declLocale( "depth"
-				, length( vtx_worldPosition - c3d_lightPosFarPlane.xyz() ) / c3d_lightPosFarPlane.w() );
+				, c3d_shadowMapData.getLinearisedDepth( vtx_worldPosition ) );
 			pxl_normalLinear.w() = depth;
 			pxl_normalLinear.xyz() = normal;
 			pxl_position.xyz() = vtx_worldPosition;
@@ -872,7 +872,7 @@ namespace castor3d
 				, vec3( 0.0_f ) );
 			shader::OutputComponents output{ lightDiffuse, lightSpecular };
 			auto light = writer.declLocale( "light"
-				, lighting->getPointLight( writer.cast< Int >( c3d_lightIndex ) ) );
+				, c3d_shadowMapData.getPointLight( *lighting ) );
 			auto lightToVertex = writer.declLocale( "lightToVertex"
 				, light.m_position.xyz() - vtx_worldPosition );
 			auto distance = writer.declLocale( "distance"
@@ -890,7 +890,7 @@ namespace castor3d
 				/ attenuation;
 
 			auto depth = writer.declLocale( "depth"
-				, length( vtx_worldPosition - c3d_lightPosFarPlane.xyz() ) / c3d_lightPosFarPlane.w() );
+				, c3d_shadowMapData.getLinearisedDepth( vtx_worldPosition ) );
 			pxl_normalLinear.w() = depth;
 			pxl_normalLinear.xyz() = normal;
 			pxl_position.xyz() = vtx_worldPosition;

@@ -34,6 +34,7 @@ namespace castor3d
 		struct PickingData;
 		struct RsmConfigData;
 		struct SceneData;
+		struct ShadowMapData;
 		struct SkinningData;
 
 		Writer_Parameter( BillboardData );
@@ -50,6 +51,7 @@ namespace castor3d
 		Writer_Parameter( PickingData );
 		Writer_Parameter( RsmConfigData );
 		Writer_Parameter( SceneData );
+		Writer_Parameter( ShadowMapData );
 	}
 	/**
 	*\~english
