@@ -1901,9 +1901,13 @@ namespace aria
 
 	void MainFrame::doUpdateTestView( DatabaseTest const & test )
 	{
-		wxDataViewItem item{ getTestNode( test ) };
-		auto & page = doGetPage( item );
-		page.model->ItemChanged( item );
+		wxDataViewItem testItem{ getTestNode( test ) };
+		auto & page = doGetPage( testItem );
+		page.model->ItemChanged( testItem );
+		wxDataViewItem categoryItem{ page.model->GetParent( testItem ) };
+		page.model->ItemChanged( categoryItem );
+		wxDataViewItem rendererItem{ page.model->GetParent( categoryItem ) };
+		page.model->ItemChanged( rendererItem );
 
 		if ( page.detailViews->isLayerShown( TestView::eTest )
 			&& page.testView->getTest() == &test )
