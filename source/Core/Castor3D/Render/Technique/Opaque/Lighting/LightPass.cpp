@@ -788,7 +788,7 @@ namespace castor3d
 						, materials.getMaterial( materialId )
 						, C3D_DisableSSSTransmittance == 0 );
 					auto eye = writer.declLocale( "eye"
-						, c3d_cameraPosition.xyz() );
+						, c3d_sceneData.getCameraPosition() );
 					auto shininess = writer.declLocale( "shininess"
 						, data2.w() );
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
@@ -817,7 +817,8 @@ namespace castor3d
 							, texCoord
 							, wsPosition
 							, wsNormal
-							, translucency );
+							, translucency
+							, c3d_gpInfoData.getInvViewProj() );
 #endif
 						break;
 					}
@@ -838,7 +839,8 @@ namespace castor3d
 							, texCoord
 							, wsPosition
 							, wsNormal
-							, translucency );
+							, translucency
+							, c3d_gpInfoData.getInvViewProj() );
 #endif
 						break;
 					}
@@ -859,7 +861,8 @@ namespace castor3d
 							, texCoord
 							, wsPosition
 							, wsNormal
-							, translucency );
+							, translucency
+							, c3d_gpInfoData.getInvViewProj() );
 	#endif
 						break;
 					}
@@ -1013,7 +1016,7 @@ namespace castor3d
 					auto lightSpecular = writer.declLocale( "lightSpecular"
 						, vec3( 0.0_f ) );
 					auto eye = writer.declLocale( "eye"
-						, c3d_cameraPosition.xyz() );
+						, c3d_sceneData.getCameraPosition() );
 					auto depth = writer.declLocale( "depth"
 						, c3d_mapDepth.lod( texCoord, 0.0_f ).x() );
 					auto vsPosition = writer.declLocale( "vsPosition"
@@ -1054,7 +1057,8 @@ namespace castor3d
 								, texCoord
 								, wsPosition
 								, wsNormal
-								, transmittance );
+								, transmittance
+								, c3d_gpInfoData.getInvViewProj() );
 						}
 						ELSE
 						{
@@ -1063,7 +1067,8 @@ namespace castor3d
 								, texCoord
 								, wsPosition
 								, wsNormal
-								, transmittance );
+								, transmittance
+								, c3d_gpInfoData.getInvViewProj() );
 						}
 						FI;
 #else
@@ -1099,7 +1104,8 @@ namespace castor3d
 								, texCoord
 								, wsPosition
 								, wsNormal
-								, transmittance );
+								, transmittance
+								, c3d_gpInfoData.getInvViewProj() );
 						}
 						ELSE
 						{
@@ -1108,7 +1114,8 @@ namespace castor3d
 								, texCoord
 								, wsPosition
 								, wsNormal
-								, transmittance );
+								, transmittance
+								, c3d_gpInfoData.getInvViewProj() );
 						}
 						FI;
 #else
@@ -1144,7 +1151,8 @@ namespace castor3d
 								, texCoord
 								, wsPosition
 								, wsNormal
-								, transmittance );
+								, transmittance
+								, c3d_gpInfoData.getInvViewProj() );
 						}
 						ELSE
 						{
@@ -1153,7 +1161,8 @@ namespace castor3d
 								, texCoord
 								, wsPosition
 								, wsNormal
-								, transmittance );
+								, transmittance
+								, c3d_gpInfoData.getInvViewProj() );
 						}
 						FI;
 #else
@@ -1316,7 +1325,7 @@ namespace castor3d
 					auto lightSpecular = writer.declLocale( "lightSpecular"
 						, vec3( 0.0_f ) );
 					auto eye = writer.declLocale( "eye"
-						, c3d_cameraPosition.xyz() );
+						, c3d_sceneData.getCameraPosition() );
 					auto depth = writer.declLocale( "depth"
 						, c3d_mapDepth.lod( texCoord, 0.0_f ).x() );
 					auto vsPosition = writer.declLocale( "vsPosition"
@@ -1354,7 +1363,8 @@ namespace castor3d
 							, texCoord
 							, wsPosition
 							, wsNormal
-							, translucency );
+							, translucency
+							, c3d_gpInfoData.getInvViewProj() );
 #endif
 						break;
 					}
@@ -1376,7 +1386,8 @@ namespace castor3d
 							, texCoord
 							, wsPosition
 							, wsNormal
-							, translucency );
+							, translucency
+							, c3d_gpInfoData.getInvViewProj() );
 #endif
 						break;
 					}
@@ -1398,7 +1409,8 @@ namespace castor3d
 							, texCoord
 							, wsPosition
 							, wsNormal
-							, translucency );
+							, translucency
+							, c3d_gpInfoData.getInvViewProj() );
 #endif
 						break;
 					}

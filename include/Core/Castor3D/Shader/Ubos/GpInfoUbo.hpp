@@ -40,6 +40,11 @@ namespace castor3d
 			C3D_API sdw::Vec2 calcTexCoord( Utils const & utils
 				, sdw::Vec2 const & fragCoord )const;
 
+			sdw::Mat4 const & getInvViewProj()const
+			{
+				return m_mtxInvViewProj;
+			}
+
 		private:
 			using sdw::StructInstance::getMember;
 			using sdw::StructInstance::getMemberArray;

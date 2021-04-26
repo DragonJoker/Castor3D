@@ -738,7 +738,7 @@ namespace castor3d
 				auto tbn = writer.declLocale( "tbn"
 					, transpose( mat3( outTangent, outBitangent, outNormal ) ) );
 				outTangentSpaceFragPosition = tbn * outWorldPosition;
-				outTangentSpaceViewPosition = tbn * c3d_cameraPosition.xyz();
+				outTangentSpaceViewPosition = c3d_sceneData.transformCamera( tbn );
 
 				// Convert the jitter from non-homogeneous coordinates to homogeneous
 				// coordinates and add it:
