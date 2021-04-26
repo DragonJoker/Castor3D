@@ -159,9 +159,7 @@ namespace castor3d
 							, vsPosition
 							, wsPosition
 							, wsNormal
-							, c3d_rsmRMax
-							, c3d_rsmIntensity
-							, c3d_rsmSampleCount );
+							, c3d_rsmConfigData );
 					}
 					FI;
 				} );
@@ -264,10 +262,7 @@ namespace castor3d
 						pxl_rsmGI = rsm.spot( light
 							, wsPosition
 							, wsNormal
-							, c3d_rsmRMax
-							, c3d_rsmIntensity
-							, c3d_rsmSampleCount
-							, c3d_rsmIndex );
+							, c3d_rsmConfigData );
 					}
 					FI;
 				} );
@@ -356,10 +351,7 @@ namespace castor3d
 						pxl_rsmGI = rsm.point( light
 							, wsPosition
 							, wsNormal
-							, c3d_rsmRMax
-							, c3d_rsmIntensity
-							, c3d_rsmSampleCount
-							, c3d_rsmIndex );
+							, c3d_rsmConfigData );
 					}
 					FI;
 				} );
