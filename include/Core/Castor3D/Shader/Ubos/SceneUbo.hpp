@@ -9,6 +9,9 @@ See LICENSE file in root folder
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 
+#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/VecTypes/Vec4.hpp>
+
 namespace castor3d
 {
 	namespace shader
