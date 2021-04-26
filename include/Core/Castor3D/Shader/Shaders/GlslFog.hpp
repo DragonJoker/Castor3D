@@ -22,8 +22,7 @@ namespace castor3d
 				, sdw::Vec4 const & colour
 				, sdw::Float const & dist
 				, sdw::Float const & y
-				, sdw::Vec4 const & fogInfo
-				, sdw::Vec4 const & cameraPosition );
+				, SceneData const & sceneData );
 
 		protected:
 			sdw::Function< sdw::Vec4
@@ -31,8 +30,7 @@ namespace castor3d
 				, sdw::InVec4
 				, sdw::InFloat
 				, sdw::InFloat
-				, sdw::InVec4
-				, sdw::InVec4 > m_fog;
+				, InSceneData > m_fog;
 		};
 	}
 }

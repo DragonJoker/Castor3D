@@ -1153,7 +1153,7 @@ namespace castor3d::shader
 		, sdw::Float const & alpha
 		, sdw::Float const & nearPlane
 		, sdw::Float const & farPlane
-		, sdw::Float const & accumulationOperator )
+		, sdw::Float const & accumulationOperator )const
 	{
 		return m_computeAccumulation( depth
 			, colour

@@ -29,9 +29,9 @@ namespace castor3d
 			C3D_API sdw::Vec3 getCameraUp( ProgramFlags programFlags
 				, MatrixData const & matrixData )const;
 			C3D_API sdw::Float getWidth( ProgramFlags programFlags
-				, sdw::Float clipX )const;
+				, SceneData const & sceneData )const;
 			C3D_API sdw::Float getHeight( ProgramFlags programFlags
-				, sdw::Float clipY )const;
+				, SceneData const & sceneData )const;
 
 		private:
 			using sdw::StructInstance::getMember;
