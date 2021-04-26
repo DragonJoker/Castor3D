@@ -85,7 +85,6 @@ namespace castor3d
 			// Shader inputs
 			auto materials = shader::createMaterials( writer, PassFlag( 0u ) );
 			materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers(), BlurMaterialsUboId );
-			UBO_SCENE( writer, BlurSceneUboId, 0u );
 			UBO_GPINFO( writer, BlurGpInfoUboId, 0u );
 			Ubo config{ writer, SubsurfaceScatteringPass::Config, BlurSssUboId, 0u };
 			auto c3d_pixelSize = config.declMember< Vec2 >( SubsurfaceScatteringPass::PixelSize );

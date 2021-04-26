@@ -1,6 +1,7 @@
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
 
@@ -66,18 +67,18 @@ namespace castor3d
 		}
 
 		sdw::Float BillboardData::getWidth( ProgramFlags programFlags
-			, sdw::Float clipX )const
+			, SceneData const & sceneData )const
 		{
 			return ( checkFlag( programFlags, ProgramFlag::eFixedSize )
-				? m_dimensions.x() / clipX
+				? m_dimensions.x() / sceneData.m_clipInfo.x()
 				: m_dimensions.x() );
 		}
 
 		sdw::Float BillboardData::getHeight( ProgramFlags programFlags
-			, sdw::Float clipY )const
+			, SceneData const & sceneData )const
 		{
 			return ( checkFlag( programFlags, ProgramFlag::eFixedSize )
-				? m_dimensions.y() / clipY
+				? m_dimensions.y() / sceneData.m_clipInfo.y()
 				: m_dimensions.y() );
 		}
 	}

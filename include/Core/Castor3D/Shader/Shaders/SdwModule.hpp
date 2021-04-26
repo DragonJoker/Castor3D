@@ -80,6 +80,7 @@ namespace castor3d
 
 		class Utils;
 		class Shadow;
+		class Fog;
 		struct Light;
 		struct DirectionalLight;
 		struct PointLight;

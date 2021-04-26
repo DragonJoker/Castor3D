@@ -7,6 +7,7 @@
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
 
@@ -36,14 +37,14 @@ namespace castor3d
 			, Float const & metallic
 			, Float const & roughness
 			, Int const & receivesShadows
+			, SceneData const & sceneData
 			, Surface surface
 			, OutputComponents & parentOutput )const
 		{
-			auto c3d_lightsCount = m_writer.getVariable< IVec4 >( "c3d_lightsCount" );
 			auto begin = m_writer.declLocale( "begin"
 				, 0_i );
 			auto end = m_writer.declLocale( "end"
-				, m_writer.cast< Int >( c3d_lightsCount.x() ) );
+				, sceneData.getDirectionalLightCount() );
 
 			FOR( m_writer, Int, dir, begin, dir < end, ++dir )
 			{
@@ -59,7 +60,7 @@ namespace castor3d
 			ROF;
 
 			begin = end;
-			end += m_writer.cast< Int >( c3d_lightsCount.y() );
+			end += sceneData.getPointLightCount();
 
 			FOR( m_writer, Int, point, begin, point < end, ++point )
 			{
@@ -75,7 +76,7 @@ namespace castor3d
 			ROF;
 
 			begin = end;
-			end += m_writer.cast< Int >( c3d_lightsCount.z() );
+			end += sceneData.getSpotLightCount();
 
 			FOR( m_writer, Int, spot, begin, spot < end, ++spot )
 			{
@@ -153,15 +154,15 @@ namespace castor3d
 			, Float const & metallic
 			, Float const & roughness
 			, Int const & receivesShadows
+			, SceneData const & sceneData
 			, Surface surface )const
 		{
-			auto c3d_lightsCount = m_writer.getVariable< IVec4 >( "c3d_lightsCount" );
 			auto result = m_writer.declLocale( "result"
 				, vec3( 0.0_f ) );
 			auto begin = m_writer.declLocale( "begin"
 				, 0_i );
 			auto end = m_writer.declLocale( "end"
-				, m_writer.cast< Int >( c3d_lightsCount.x() ) );
+				, sceneData.getDirectionalLightCount() );
 
 			FOR( m_writer, Int, dir, begin, dir < end, ++dir )
 			{
@@ -176,7 +177,7 @@ namespace castor3d
 			ROF;
 
 			begin = end;
-			end += m_writer.cast< Int >( c3d_lightsCount.y() );
+			end += sceneData.getPointLightCount();
 
 			FOR( m_writer, Int, point, begin, point < end, ++point )
 			{
@@ -191,7 +192,7 @@ namespace castor3d
 			ROF;
 
 			begin = end;
-			end += m_writer.cast< Int >( c3d_lightsCount.z() );
+			end += sceneData.getSpotLightCount();
 
 			FOR( m_writer, Int, spot, begin, spot < end, ++spot )
 			{

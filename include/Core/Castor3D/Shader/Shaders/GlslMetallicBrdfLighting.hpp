@@ -26,6 +26,7 @@ namespace castor3d
 				, sdw::Float const & metallic
 				, sdw::Float const & roughness
 				, sdw::Int const & receivesShadows
+				, SceneData const & sceneData
 				, Surface surface
 				, OutputComponents & output )const;
 			C3D_API void compute( DirectionalLight const & light
@@ -57,6 +58,7 @@ namespace castor3d
 				, sdw::Float const & metallic
 				, sdw::Float const & roughness
 				, sdw::Int const & receivesShadows
+				, SceneData const & sceneData
 				, Surface surface )const;
 			C3D_API sdw::Vec3 computeDiffuse( DirectionalLight const & light
 				, sdw::Vec3 const & worldEye

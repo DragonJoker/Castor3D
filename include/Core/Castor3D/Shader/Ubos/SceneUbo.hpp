@@ -5,11 +5,59 @@ See LICENSE file in root folder
 #define ___C3D_SceneUbo_H___
 
 #include "UbosModule.hpp"
+#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 
 namespace castor3d
 {
+	namespace shader
+	{
+		struct SceneData
+			: public sdw::StructInstance
+		{
+			friend struct BillboardData;
+			friend class Fog;
+
+			C3D_API SceneData( sdw::ShaderWriter & writer
+				, ast::expr::ExprPtr expr
+				, bool enabled );
+			C3D_API SceneData & operator=( SceneData const & rhs );
+
+			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+
+			C3D_API sdw::Vec3 transformCamera( sdw::Mat3 const & transform )const;
+			C3D_API sdw::Vec3 getPosToCamera( sdw::Vec3 const & position )const;
+			C3D_API sdw::Vec3 getCameraToPos( sdw::Vec3 const & position )const;
+			C3D_API sdw::Vec3 getAmbientLight()const;
+			C3D_API sdw::Vec3 getCameraPosition()const;
+			C3D_API sdw::Vec4 getBackgroundColour( Utils const & utils
+				, sdw::Float const & gamma )const;
+			C3D_API sdw::Vec4 getBackgroundColour( HdrConfigData const & hdrConfigData )const;
+			C3D_API sdw::Int getDirectionalLightCount()const;
+			C3D_API sdw::Int getPointLightCount()const;
+			C3D_API sdw::Int getSpotLightCount()const;
+			C3D_API sdw::Vec4 computeAccumulation( Utils const & utils
+				, sdw::Float const & depth
+				, sdw::Vec3 const & colour
+				, sdw::Float const & alpha
+				, sdw::Float const & accumulationOperator )const;
+
+		private:
+			using sdw::StructInstance::getMember;
+			using sdw::StructInstance::getMemberArray;
+
+		private:
+			sdw::Vec4 m_ambientLight;
+			sdw::Vec4 m_backgroundColour;
+			sdw::Vec4 m_lightsCount;
+			sdw::Vec4 m_cameraPosition;
+			sdw::Vec4 m_clipInfo;
+			sdw::Vec4 m_fogInfo;
+		};
+	}
+
 	class SceneUbo
 	{
 	private:
@@ -127,27 +175,8 @@ namespace castor3d
 		}
 
 	public:
-		//!\~english	Name of the scene frame variable buffer.
-		//!\~french		Nom du frame variable buffer contenant les données de scène.
 		C3D_API static castor::String const BufferScene;
-		//!\~english	Name of the ambient light frame variable.
-		//!\~french		Nom de la frame variable contenant la lumière ambiante.
-		C3D_API static castor::String const AmbientLight;
-		//!\~english	Name of the background colour frame variable.
-		//!\~french		Nom de la frame variable contenant la couleur de fond.
-		C3D_API static castor::String const BackgroundColour;
-		//!\~english	Name of the lights count frame variable.
-		//!\~french		Nom de la frame variable contenant le compte des lumières.
-		C3D_API static castor::String const LightsCount;
-		//!\~english	Name of the camera position frame variable.
-		//!\~french		Nom de la frame variable contenant la position de la caméra.
-		C3D_API static castor::String const CameraPos;
-		//!\~english	Name of the clip informations (window size, near and far plane) frame variable.
-		//!\~french		Nom de la frame variable contenant les informations de clipping (dimensions de la fenêtre, plans proche et lointain).
-		C3D_API static castor::String const ClipInfo;
-		//!\~english	Name of the fog informations (type and density) frame variable.
-		//!\~french		Nom de la frame variable contenant les informations de brouillard (type et densité).
-		C3D_API static castor::String const FogInfo;
+		C3D_API static castor::String const SceneData;
 
 	private:
 		Engine & m_engine;
@@ -160,13 +189,10 @@ namespace castor3d
 	sdw::Ubo scene{ writer\
 		, castor3d::SceneUbo::BufferScene\
 		, binding\
-		, set };\
-	auto c3d_ambientLight = scene.declMember< sdw::Vec4 >( castor3d::SceneUbo::AmbientLight );\
-	auto c3d_backgroundColour = scene.declMember< sdw::Vec4 >( castor3d::SceneUbo::BackgroundColour );\
-	auto c3d_lightsCount = scene.declMember< sdw::Vec4 >( castor3d::SceneUbo::LightsCount );\
-	auto c3d_cameraPosition = scene.declMember< sdw::Vec4 >( castor3d::SceneUbo::CameraPos );\
-	auto c3d_clipInfo = scene.declMember< sdw::Vec4 >( castor3d::SceneUbo::ClipInfo );\
-	auto c3d_fogInfo = scene.declMember< sdw::Vec4 >( castor3d::SceneUbo::FogInfo );\
+		, set\
+		, ast::type::MemoryLayout::eStd140\
+		, true };\
+	auto c3d_sceneData = scene.declStructMember< castor3d::shader::SceneData >( castor3d::SceneUbo::SceneData );\
 	scene.end()
 
 #endif

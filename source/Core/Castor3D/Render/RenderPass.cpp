@@ -1526,7 +1526,7 @@ namespace castor3d
 				auto tbn = writer.declLocale( "tbn"
 					, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
 				vtx_tangentSpaceFragPosition = tbn * vtx_worldPosition;
-				vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition.xyz();
+				vtx_tangentSpaceViewPosition = c3d_sceneData.transformCamera( tbn );
 
 				// Convert the jitter from non-homogeneous coordinates to homogeneous
 				// coordinates and add it:
@@ -1593,7 +1593,7 @@ namespace castor3d
 				auto prvBbcenter = writer.declLocale( "prvBbcenter" 
 					, c3d_modelData.modelToPrvWorld( vec4( center, 1.0_f ) ).xyz() );
 				auto curToCamera = writer.declLocale( "curToCamera"
-					, c3d_cameraPosition.xyz() - curBbcenter );
+					, c3d_sceneData.getPosToCamera( curBbcenter ) );
 				curToCamera.y() = 0.0_f;
 				curToCamera = normalize( curToCamera );
 
@@ -1602,9 +1602,9 @@ namespace castor3d
 				auto up = writer.declLocale( "up"
 					, c3d_billboardData.getCameraUp( flags.programFlags, c3d_matrixData ) );
 				auto width = writer.declLocale( "width"
-					, c3d_billboardData.getWidth( flags.programFlags, c3d_clipInfo.x() ) );
+					, c3d_billboardData.getWidth( flags.programFlags, c3d_sceneData ) );
 				auto height = writer.declLocale( "height"
-					, c3d_billboardData.getHeight( flags.programFlags, c3d_clipInfo.y() ) );
+					, c3d_billboardData.getHeight( flags.programFlags, c3d_sceneData ) );
 				vtx_worldPosition = curBbcenter
 					+ right * position.x() * width
 					+ up * position.y() * height;
@@ -1631,7 +1631,7 @@ namespace castor3d
 				auto tbn = writer.declLocale( "tbn"
 					, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
 				vtx_tangentSpaceFragPosition = tbn * vtx_worldPosition;
-				vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition.xyz();
+				vtx_tangentSpaceViewPosition = c3d_sceneData.transformCamera( tbn );
 				// Convert the jitter from non-homogeneous coordiantes to homogeneous
 				// coordinates and add it:
 				// (note that for providing the jitter in non-homogeneous projection space,
