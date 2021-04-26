@@ -27,8 +27,7 @@ namespace aria
 			auto resultFolder = work / getResultFolder( *test.test );
 			moveFile( resultFolder / getFolderName( oldStatus )
 				, resultFolder / getFolderName( newStatus )
-				, getResultName( test )
-				, false );
+				, getResultName( test ) );
 		}
 	}
 
