@@ -939,7 +939,7 @@ namespace castor3d
 				, alpha
 				, material->m_alphaRef );
 
-			pxl_fragColor = vec4( c3d_drawIndex, c3d_nodeIndex, vtx_instance, 0.0f );
+			pxl_fragColor = c3d_pickingData.getIndex( vtx_instance );
 #if C3D_DebugPicking
 			pxl_fragColor /= 255.0_f;
 #endif
