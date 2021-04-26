@@ -11,8 +11,55 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
+#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/MatTypes/Mat4.hpp>
+
 namespace castor3d
 {
+	namespace shader
+	{
+		struct SsaoConfigData
+			: public sdw::StructInstance
+		{
+			C3D_API SsaoConfigData( sdw::ShaderWriter & writer
+				, ast::expr::ExprPtr expr
+				, bool enabled );
+			C3D_API SsaoConfigData & operator=( SsaoConfigData const & rhs );
+
+			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+
+			sdw::Vec4 projInfo;
+			sdw::Mat4 viewMatrix;
+			sdw::Int numSamples;
+			sdw::Int numSpiralTurns;
+			sdw::Float projScale;
+			sdw::Float radius;
+			sdw::Float invRadius;
+			sdw::Float radius2;
+			sdw::Float invRadius2;
+			sdw::Float bias;
+			sdw::Float intensity;
+			sdw::Float intensityDivR6;
+			sdw::Float farPlaneZ;
+			sdw::Float edgeSharpness;
+			sdw::Int blurStepSize;
+			sdw::Int blurRadius;
+			sdw::Int highQuality;
+			sdw::Int blurHighQuality;
+			sdw::Int logMaxOffset;
+			sdw::Int maxMipLevel;
+			sdw::Float minRadius;
+			sdw::Int variation;
+			sdw::Int bendStepCount;
+			sdw::Float bendStepSize;
+
+		private:
+			using sdw::StructInstance::getMember;
+			using sdw::StructInstance::getMemberArray;
+		};
+	}
+
 	class SsaoConfigUbo
 	{
 	private:
@@ -157,30 +204,7 @@ namespace castor3d
 
 	public:
 		C3D_API static castor::String const BufferSsaoConfig;
-		C3D_API static castor::String const NumSamples;
-		C3D_API static castor::String const NumSpiralTurns;
-		C3D_API static castor::String const ProjScale;
-		C3D_API static castor::String const Radius;
-		C3D_API static castor::String const InvRadius;
-		C3D_API static castor::String const Radius2;
-		C3D_API static castor::String const InvRadius2;
-		C3D_API static castor::String const Bias;
-		C3D_API static castor::String const Intensity;
-		C3D_API static castor::String const IntensityDivR6;
-		C3D_API static castor::String const FarPlaneZ;
-		C3D_API static castor::String const EdgeSharpness;
-		C3D_API static castor::String const BlurStepSize;
-		C3D_API static castor::String const BlurRadius;
-		C3D_API static castor::String const ProjInfo;
-		C3D_API static castor::String const ViewMatrix;
-		C3D_API static castor::String const HighQuality;
-		C3D_API static castor::String const BlurHighQuality;
-		C3D_API static castor::String const LogMaxOffset;
-		C3D_API static castor::String const MaxMipLevel;
-		C3D_API static castor::String const MinRadius;
-		C3D_API static castor::String const Variation;
-		C3D_API static castor::String const BendStepCount;
-		C3D_API static castor::String const BendStepSize;
+		C3D_API static castor::String const SsaoConfigData;
 
 	private:
 		Engine & m_engine;
@@ -189,31 +213,13 @@ namespace castor3d
 }
 
 #define UBO_SSAO_CONFIG( Writer, Binding, Set )\
-	sdw::Ubo ssaoConfig{ Writer, castor3d::SsaoConfigUbo::BufferSsaoConfig, Binding, Set };\
-	auto c3d_projInfo = ssaoConfig.declMember< sdw::Vec4 >( castor3d::SsaoConfigUbo::ProjInfo );\
-	auto c3d_viewMatrix = ssaoConfig.declMember< sdw::Mat4 >( castor3d::SsaoConfigUbo::ViewMatrix );\
-	auto c3d_numSamples = ssaoConfig.declMember< sdw::Int >( castor3d::SsaoConfigUbo::NumSamples );\
-	auto c3d_numSpiralTurns = ssaoConfig.declMember< sdw::Int >( castor3d::SsaoConfigUbo::NumSpiralTurns );\
-	auto c3d_projScale = ssaoConfig.declMember< sdw::Float >( castor3d::SsaoConfigUbo::ProjScale );\
-	auto c3d_radius = ssaoConfig.declMember< sdw::Float >( castor3d::SsaoConfigUbo::Radius );\
-	auto c3d_invRadius = ssaoConfig.declMember< sdw::Float >( castor3d::SsaoConfigUbo::InvRadius );\
-	auto c3d_radius2 = ssaoConfig.declMember< sdw::Float >( castor3d::SsaoConfigUbo::Radius2 );\
-	auto c3d_invRadius2 = ssaoConfig.declMember< sdw::Float >( castor3d::SsaoConfigUbo::InvRadius2 );\
-	auto c3d_bias = ssaoConfig.declMember< sdw::Float >( castor3d::SsaoConfigUbo::Bias );\
-	auto c3d_intensity = ssaoConfig.declMember< sdw::Float >( castor3d::SsaoConfigUbo::Intensity );\
-	auto c3d_intensityDivR6 = ssaoConfig.declMember< sdw::Float >( castor3d::SsaoConfigUbo::IntensityDivR6 );\
-	auto c3d_farPlaneZ = ssaoConfig.declMember< sdw::Float >( castor3d::SsaoConfigUbo::FarPlaneZ );\
-	auto c3d_edgeSharpness = ssaoConfig.declMember< sdw::Float >( castor3d::SsaoConfigUbo::EdgeSharpness );\
-	auto c3d_blurStepSize = ssaoConfig.declMember< sdw::Int >( castor3d::SsaoConfigUbo::BlurStepSize );\
-	auto c3d_blurRadius = ssaoConfig.declMember< sdw::Int >( castor3d::SsaoConfigUbo::BlurRadius );\
-	auto c3d_highQuality = ssaoConfig.declMember< sdw::Int >( castor3d::SsaoConfigUbo::HighQuality );\
-	auto c3d_blurHighQuality = ssaoConfig.declMember< sdw::Int >( castor3d::SsaoConfigUbo::BlurHighQuality );\
-	auto c3d_logMaxOffset = ssaoConfig.declMember< sdw::Int >( castor3d::SsaoConfigUbo::LogMaxOffset );\
-	auto c3d_maxMipLevel = ssaoConfig.declMember< sdw::Int >( castor3d::SsaoConfigUbo::MaxMipLevel );\
-	auto c3d_minRadius = ssaoConfig.declMember< sdw::Float >( castor3d::SsaoConfigUbo::MinRadius );\
-	auto c3d_variation = ssaoConfig.declMember< sdw::Int >( castor3d::SsaoConfigUbo::Variation );\
-	auto c3d_bendStepCount = ssaoConfig.declMember< sdw::Int >( castor3d::SsaoConfigUbo::BendStepCount );\
-	auto c3d_bendStepSize = ssaoConfig.declMember< sdw::Float >( castor3d::SsaoConfigUbo::BendStepSize );\
+	sdw::Ubo ssaoConfig{ Writer\
+		, castor3d::SsaoConfigUbo::BufferSsaoConfig\
+		, Binding\
+		, Set\
+		, ast::type::MemoryLayout::eStd140\
+		, true };\
+	auto c3d_ssaoConfigData = ssaoConfig.declStructMember< castor3d::shader::SsaoConfigData >( castor3d::SsaoConfigUbo::SsaoConfigData );\
 	ssaoConfig.end()
 
 #endif

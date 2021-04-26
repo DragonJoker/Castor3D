@@ -143,7 +143,7 @@ namespace castor3d
 					auto alpha = writer.declLocale( "alpha"
 						, ( writer.cast< Float >( sampleNumber ) + 0.5_f ) * ( 1.0_f / writer.cast< Float >( sampleCount ) ) );
 					auto angle = writer.declLocale( "angle"
-						, alpha * ( 6.28_f * writer.cast< Float >( c3d_numSpiralTurns ) ) + spinAngle );
+						, alpha * ( 6.28_f * writer.cast< Float >( c3d_ssaoConfigData.numSpiralTurns ) ) + spinAngle );
 
 					ssRadius = alpha;
 					writer.returnStmt( vec2( cos( angle ), sin( angle ) ) );
@@ -158,7 +158,7 @@ namespace castor3d
 			auto csZToKey = writer.implementFunction< Float >( "csZToKey"
 				, [&]( Float const & csZ )
 				{
-					writer.returnStmt( clamp( csZ * ( 1.0_f / c3d_farPlaneZ ), 0.0_f, 1.0_f ) );
+					writer.returnStmt( clamp( csZ * ( 1.0_f / c3d_ssaoConfigData.farPlaneZ ), 0.0_f, 1.0_f ) );
 				}
 				, InFloat{ writer, "csZ" } );
 
@@ -172,7 +172,7 @@ namespace castor3d
 					// Offset to pixel center
 					position = reconstructCSPosition( vec2( ssPosition ) + vec2( 0.5_f )
 						, position.z()
-						, c3d_projInfo );
+						, c3d_ssaoConfigData.projInfo );
 					writer.returnStmt( position );
 				}
 				, InIVec2{ writer, "ssPosition" } );
@@ -182,9 +182,9 @@ namespace castor3d
 				{
 					// Derivation:
 					//  mipLevel = floor(log(ssR / MAX_OFFSET));
-					writer.returnStmt( clamp( writer.cast< Int >( floor( log2( ssRadius ) ) ) - c3d_logMaxOffset
+					writer.returnStmt( clamp( writer.cast< Int >( floor( log2( ssRadius ) ) ) - c3d_ssaoConfigData.logMaxOffset
 						, 0_i
-						, c3d_maxMipLevel ) );
+						, c3d_ssaoConfigData.maxMipLevel ) );
 				}
 				, InFloat{ writer, "ssRadius" } );
 
@@ -214,7 +214,7 @@ namespace castor3d
 					// Offset to pixel center
 					position = reconstructCSPosition( ( vec2( ssPosition ) + vec2( 0.5_f ) ) * invCszBufferScale
 						, position.z()
-						, c3d_projInfo );
+						, c3d_ssaoConfigData.projInfo );
 					writer.returnStmt( position );
 				}
 				, InIVec2{ writer, "ssCenter" }
@@ -234,20 +234,20 @@ namespace castor3d
 					// return float(vv < radius2) * max((vn - bias) / (epsilon + vv), 0.0) * radius2 * 0.6;
 
 					// B: Smoother transition to zero (lowers contrast, smoothing out corners). [Recommended]
-					IF( writer, c3d_highQuality )
+					IF( writer, c3d_ssaoConfigData.highQuality )
 					{
 						// Epsilon inside the sqrt for rsqrt operation
 						auto f = writer.declLocale( "f"
-							, max( 1.0_f - vv * c3d_invRadius2, 0.0_f ) );
-						writer.returnStmt( f * max( ( vn - c3d_bias ) * inverseSqrt( epsilon + vv ), 0.0_f ) );
+							, max( 1.0_f - vv * c3d_ssaoConfigData.invRadius2, 0.0_f ) );
+						writer.returnStmt( f * max( ( vn - c3d_ssaoConfigData.bias ) * inverseSqrt( epsilon + vv ), 0.0_f ) );
 					}
 					ELSE
 					{
 						// Avoid the square root from above.
 						//  Assumes the desired result is intensity/radius^6 in main()
 						auto f = writer.declLocale( "f"
-							, max( c3d_radius2 - vv, 0.0_f ) );
-						writer.returnStmt( f * f * f * max( ( vn - c3d_bias ) / ( epsilon + vv ), 0.0_f ) );
+							, max( c3d_ssaoConfigData.radius2 - vv, 0.0_f ) );
+						writer.returnStmt( f * f * f * max( ( vn - c3d_ssaoConfigData.bias ) / ( epsilon + vv ), 0.0_f ) );
 					}
 					FI;
 
@@ -346,7 +346,7 @@ namespace castor3d
 				{
 					// Offset on the unit disk, spun for this pixel
 					auto step = writer.declLocale( "step"
-						, csRay * c3d_bendStepSize );
+						, csRay * c3d_ssaoConfigData.bendStepSize );
 					auto current = writer.declLocale( "currentRadius"
 						, csCenter + step );
 					auto currentOcclusion = writer.declLocale( "currentOcclusion"
@@ -354,7 +354,7 @@ namespace castor3d
 					auto stepIdx = writer.declLocale( "stepIdx"
 						, 0_i );
 
-					WHILE( writer, stepIdx < c3d_bendStepCount && currentOcclusion == 0.0_f )
+					WHILE( writer, stepIdx < c3d_ssaoConfigData.bendStepCount && currentOcclusion == 0.0_f )
 					{
 						currentOcclusion = isOccluded( csCenter, current );
 						stepIdx += 1u;
@@ -423,9 +423,9 @@ namespace castor3d
 					// Choose the screen-space sample radius
 					// proportional to the projected area of the sphere
 					auto ssDiskRadius = writer.declLocale( "ssDiskRadius"
-						, c3d_projScale * c3d_radius / csCenter.z() );
+						, c3d_ssaoConfigData.projScale * c3d_ssaoConfigData.radius / csCenter.z() );
 
-					IF( writer, ssDiskRadius <= c3d_minRadius )
+					IF( writer, ssDiskRadius <= c3d_ssaoConfigData.minRadius )
 					{
 						// There is no way to compute AO at this radius
 						visibility = 1.0_f;
@@ -444,7 +444,7 @@ namespace castor3d
 					auto bentNormal = writer.declLocale( "bentNormal"
 						, vec3( 0.0_f ) );
 
-					FOR( writer, Int, i, 0, i < c3d_numSamples, ++i )
+					FOR( writer, Int, i, 0, i < c3d_ssaoConfigData.numSamples, ++i )
 					{
 						auto occluder = writer.declLocale( "occluder"
 							, vec3( 0.0_f ) );
@@ -458,7 +458,7 @@ namespace castor3d
 								, normal
 								, ssDiskRadius
 								, i
-								, c3d_numSamples
+								, c3d_ssaoConfigData.numSamples
 								, randomPatternRotationAngle
 								, 1.0_f
 								, occlusion ) );
@@ -472,16 +472,16 @@ namespace castor3d
 
 					auto A = writer.declLocale< Float >( "A" );
 
-					IF( writer, c3d_highQuality )
+					IF( writer, c3d_ssaoConfigData.highQuality )
 					{
 						A = pow( max( 0.0_f
-								, 1.0_f - sqrt( sum * ( 3.0_f / writer.cast< Float >( c3d_numSamples ) ) ) )
-							, c3d_intensity );
+								, 1.0_f - sqrt( sum * ( 3.0_f / writer.cast< Float >( c3d_ssaoConfigData.numSamples ) ) ) )
+							, c3d_ssaoConfigData.intensity );
 					}
 					ELSE
 					{
 						A = max( 0.0_f
-							, 1.0_f - sum * c3d_intensityDivR6 * ( 5.0_f / writer.cast< Float >( c3d_numSamples ) ) );
+							, 1.0_f - sum * c3d_ssaoConfigData.intensityDivR6 * ( 5.0_f / writer.cast< Float >( c3d_ssaoConfigData.numSamples ) ) );
 						// Anti-tone map to reduce contrast and drag dark region farther
 						// (x^0.2 + 1.2 * x^4)/2.2
 						A = ( pow( A, 0.2_f ) + 1.2_f * A * A * A * A ) / 2.2_f;
@@ -494,7 +494,7 @@ namespace castor3d
 					// Fade in as the radius reaches 2 pixels
 					visibility = mix( 1.0_f
 						, A
-						, clamp( ssDiskRadius - c3d_minRadius
+						, clamp( ssDiskRadius - c3d_ssaoConfigData.minRadius
 							, 0.0_f
 							, 1.0_f ) );
 				} );
