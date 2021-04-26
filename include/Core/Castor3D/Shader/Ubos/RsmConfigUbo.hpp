@@ -11,8 +11,36 @@ See LICENSE file in root folder
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
 
+#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/BaseTypes/Float.hpp>
+#include <ShaderWriter/BaseTypes/UInt.hpp>
+
 namespace castor3d
 {
+	namespace shader
+	{
+		struct RsmConfigData
+			: public sdw::StructInstance
+		{
+			C3D_API RsmConfigData( sdw::ShaderWriter & writer
+				, ast::expr::ExprPtr expr
+				, bool enabled );
+			C3D_API RsmConfigData & operator=( RsmConfigData const & rhs );
+
+			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+
+			sdw::Float rsmIntensity;
+			sdw::Float rsmRMax;
+			sdw::UInt rsmSampleCount;
+			sdw::UInt rsmIndex;
+
+		private:
+			using sdw::StructInstance::getMember;
+			using sdw::StructInstance::getMemberArray;
+		};
+	}
+
 	class RsmConfigUbo
 	{
 	public:
@@ -88,10 +116,7 @@ namespace castor3d
 
 	public:
 		C3D_API static std::string const BufferRsmConfig;
-		C3D_API static std::string const Intensity;
-		C3D_API static std::string const RMax;
-		C3D_API static std::string const SampleCount;
-		C3D_API static std::string const Index;
+		C3D_API static std::string const RsmConfigData;
 
 	private:
 		Engine & m_engine;
@@ -103,11 +128,10 @@ namespace castor3d
 	sdw::Ubo rsmConfig{ writer\
 		, castor3d::RsmConfigUbo::BufferRsmConfig\
 		, binding\
-		, set };\
-	auto c3d_rsmIntensity = rsmConfig.declMember< sdw::Float >( castor3d::RsmConfigUbo::Intensity );\
-	auto c3d_rsmRMax = rsmConfig.declMember< sdw::Float >( castor3d::RsmConfigUbo::RMax );\
-	auto c3d_rsmSampleCount = rsmConfig.declMember< sdw::UInt >( castor3d::RsmConfigUbo::SampleCount );\
-	auto c3d_rsmIndex = rsmConfig.declMember< sdw::UInt >( castor3d::RsmConfigUbo::Index );\
+		, set\
+		, ast::type::MemoryLayout::eStd140\
+		, true };\
+	auto c3d_rsmConfigData = rsmConfig.declStructMember< castor3d::shader::RsmConfigData >( castor3d::RsmConfigUbo::RsmConfigData );\
 	rsmConfig.end()
 
 #endif

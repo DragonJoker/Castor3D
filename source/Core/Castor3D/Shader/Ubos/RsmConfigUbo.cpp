@@ -9,13 +9,58 @@
 #include "Castor3D/Scene/Light/SpotLight.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 
+#include <ShaderWriter/Source.hpp>
+
 namespace castor3d
 {
+	//*********************************************************************************************
+
+	namespace shader
+	{
+		RsmConfigData::RsmConfigData( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstance{ writer, std::move( expr ), enabled }
+			, rsmIntensity{ getMember< sdw::Float >( "rsmIntensity" ) }
+			, rsmRMax{ getMember< sdw::Float >( "rsmRMax" ) }
+			, rsmSampleCount{ getMember< sdw::UInt >( "rsmSampleCount" ) }
+			, rsmIndex{ getMember< sdw::UInt >( "rsmIndex" ) }
+		{
+		}
+
+		RsmConfigData & RsmConfigData::operator=( RsmConfigData const & rhs )
+		{
+			StructInstance::operator=( rhs );
+			return *this;
+		}
+
+		ast::type::StructPtr RsmConfigData::makeType( ast::type::TypesCache & cache )
+		{
+			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
+				, "RsmConfigData" );
+
+			if ( result->empty() )
+			{
+				result->declMember( "rsmIntensity", ast::type::Kind::eFloat );
+				result->declMember( "rsmRMax", ast::type::Kind::eFloat );
+				result->declMember( "rsmSampleCount", ast::type::Kind::eUInt );
+				result->declMember( "rsmIndex", ast::type::Kind::eUInt );
+			}
+
+			return result;
+		}
+
+		std::unique_ptr< sdw::Struct > RsmConfigData::declare( sdw::ShaderWriter & writer )
+		{
+			return std::make_unique< sdw::Struct >( writer
+				, makeType( writer.getTypesCache() ) );
+		}
+	}
+
+	//*********************************************************************************************
+
 	std::string const RsmConfigUbo::BufferRsmConfig = "RsmConfig";
-	std::string const RsmConfigUbo::Intensity = "c3d_rsmIntensity";
-	std::string const RsmConfigUbo::RMax = "c3d_rsmRMax";
-	std::string const RsmConfigUbo::SampleCount = "c3d_rsmSampleCount";
-	std::string const RsmConfigUbo::Index = "c3d_rsmIndex";
+	std::string const RsmConfigUbo::RsmConfigData = "c3d_rsmConfigData";
 
 	RsmConfigUbo::RsmConfigUbo( Engine & engine )
 		: m_engine{ engine }
@@ -56,4 +101,6 @@ namespace castor3d
 		data.sampleCount = config.sampleCount.value().value();
 		data.index = light.getShadowMapIndex();
 	}
+
+	//*********************************************************************************************
 }
