@@ -80,7 +80,7 @@ namespace castor3d::shader
 			, sdw::Float const & alpha
 			, sdw::Float const & nearPlane
 			, sdw::Float const & farPlane
-			, sdw::Float const & accumulationOperator );
+			, sdw::Float const & accumulationOperator )const;
 		C3D_API sdw::Vec3 fresnelSchlick( sdw::Float const & product
 			, sdw::Vec3 const & f0
 			, sdw::Float const & roughness )const;

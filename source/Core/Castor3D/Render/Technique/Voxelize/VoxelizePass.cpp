@@ -529,7 +529,7 @@ namespace castor3d
 				auto curBbcenter = writer.declLocale( "curBbcenter"
 					, c3d_modelData.modelToCurWorld( vec4( center, 1.0_f ) ).xyz() );
 				auto curToCamera = writer.declLocale( "curToCamera"
-					, c3d_cameraPosition.xyz() - curBbcenter );
+					, c3d_sceneData.getPosToCamera( curBbcenter ) );
 				curToCamera.y() = 0.0_f;
 				curToCamera = normalize( curToCamera );
 
@@ -538,9 +538,9 @@ namespace castor3d
 				auto up = writer.declLocale( "up"
 					, c3d_billboardData.getCameraUp( flags.programFlags, c3d_matrixData ) );
 				auto width = writer.declLocale( "width"
-					, c3d_billboardData.getWidth( flags.programFlags, c3d_clipInfo.x() ) );
+					, c3d_billboardData.getWidth( flags.programFlags, c3d_sceneData ) );
 				auto height = writer.declLocale( "height"
-					, c3d_billboardData.getHeight( flags.programFlags, c3d_clipInfo.y() ) );
+					, c3d_billboardData.getHeight( flags.programFlags, c3d_sceneData ) );
 
 				out.vtx.position = vec4( curBbcenter
 						+ right * inPosition.x() * width
@@ -549,7 +549,7 @@ namespace castor3d
 				auto viewPosition = writer.declLocale( "viewPosition"
 					, c3d_matrixData.worldToCurView( out.vtx.position ) );
 				outViewPosition = viewPosition.xyz();
-				outNormal = normalize( c3d_cameraPosition.xyz() - curBbcenter );
+				outNormal = normalize( c3d_sceneData.getPosToCamera( curBbcenter ) );
 				outMaterial = c3d_modelData.getMaterialIndex();
 			} );
 
@@ -759,13 +759,14 @@ namespace castor3d
 					if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 					{
 						auto worldEye = writer.declLocale( "worldEye"
-							, c3d_cameraPosition.xyz() );
+							, c3d_sceneData.getCameraPosition() );
 						auto surface = writer.declLocale< shader::Surface >( "surface" );
 						surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
 						auto color = writer.declLocale( "lightDiffuse"
 							, lighting->computeCombinedDiffuse( worldEye
 								, shininess
 								, c3d_modelData.isShadowReceiver()
+								, c3d_sceneData
 								, surface ) );
 						color.xyz() *= diffuse * occlusion;
 						color.xyz() += emissive;
@@ -909,7 +910,7 @@ namespace castor3d
 					if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 					{
 						auto worldEye = writer.declLocale( "worldEye"
-							, c3d_cameraPosition.xyz() );
+							, c3d_sceneData.getCameraPosition() );
 						auto surface = writer.declLocale< shader::Surface >( "surface" );
 						surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
 						auto color = writer.declLocale( "color"
@@ -918,6 +919,7 @@ namespace castor3d
 								, metalness
 								, roughness
 								, c3d_modelData.isShadowReceiver()
+								, c3d_sceneData
 								, surface ) );
 						color *= albedo * occlusion;
 						color += emissive;
@@ -1051,7 +1053,7 @@ namespace castor3d
 					if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 					{
 						auto worldEye = writer.declLocale( "worldEye"
-							, c3d_cameraPosition.xyz() );
+							, c3d_sceneData.getCameraPosition() );
 						auto surface = writer.declLocale< shader::Surface >( "surface" );
 						surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
 						auto color = writer.declLocale( "lightDiffuse"
@@ -1059,6 +1061,7 @@ namespace castor3d
 								, specular
 								, glossiness
 								, c3d_modelData.isShadowReceiver()
+								, c3d_sceneData
 								, surface ) );
 						color.xyz() *= albedo * occlusion;
 						color.xyz() += emissive;
