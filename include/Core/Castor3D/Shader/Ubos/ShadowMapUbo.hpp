@@ -11,6 +11,38 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	namespace shader
+	{
+		struct ShadowMapData
+			: public sdw::StructInstance
+		{
+			C3D_API ShadowMapData( sdw::ShaderWriter & writer
+				, ast::expr::ExprPtr expr
+				, bool enabled );
+			C3D_API ShadowMapData & operator=( ShadowMapData const & rhs );
+
+			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+
+			C3D_API sdw::Vec4 worldToView( sdw::Vec4 const & pos )const;
+			C3D_API sdw::Vec4 viewToProj( sdw::Vec4 const & pos )const;
+			C3D_API sdw::Float getLinearisedDepth( sdw::Vec3 const & pos )const;
+			C3D_API DirectionalLight getDirectionalLight( LightingModel const & lighting )const;
+			C3D_API PointLight getPointLight( LightingModel const & lighting )const;
+			C3D_API SpotLight getSpotLight( LightingModel const & lighting )const;
+
+		private:
+			using sdw::StructInstance::getMember;
+			using sdw::StructInstance::getMemberArray;
+
+		private:
+			sdw::Mat4 m_lightProjection;
+			sdw::Mat4 m_lightView;
+			sdw::Vec4 m_lightPosFarPlane;
+			sdw::UInt m_lightIndex;
+		};
+	}
+
 	class ShadowMapUbo
 	{
 	public:
@@ -89,10 +121,7 @@ namespace castor3d
 
 	public:
 		C3D_API static castor::String const BufferShadowMap;
-		C3D_API static castor::String const LightProjection;
-		C3D_API static castor::String const LightView;
-		C3D_API static castor::String const LightPosFarPlane;
-		C3D_API static castor::String const LightIndex;
+		C3D_API static castor::String const ShadowMapData;
 
 	private:
 		Engine & m_engine;
@@ -105,10 +134,7 @@ namespace castor3d
 		, castor3d::ShadowMapUbo::BufferShadowMap\
 		, binding\
 		, set };\
-	auto c3d_lightProjection = shadowMapCfg.declMember< sdw::Mat4 >( castor3d::ShadowMapUbo::LightProjection );\
-	auto c3d_lightView = shadowMapCfg.declMember< sdw::Mat4 >( castor3d::ShadowMapUbo::LightView ); \
-	auto c3d_lightPosFarPlane = shadowMapCfg.declMember< sdw::Vec4 >( castor3d::ShadowMapUbo::LightPosFarPlane );\
-	auto c3d_lightIndex = shadowMapCfg.declMember< sdw::UInt >( castor3d::ShadowMapUbo::LightIndex );\
+	auto c3d_shadowMapData = shadowMapCfg.declStructMember< castor3d::shader::ShadowMapData >( castor3d::ShadowMapUbo::ShadowMapData );\
 	shadowMapCfg.end()
 
 #endif
