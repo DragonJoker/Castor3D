@@ -5,8 +5,10 @@ See LICENSE file in root folder
 #define ___C3D_GlslSpecularBrdfLightingModel_H___
 
 #include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include "Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp"
+#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 
 namespace castor3d
 {

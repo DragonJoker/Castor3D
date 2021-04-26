@@ -4,9 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_GlslPhongLightingModel_H___
 #define ___C3D_GlslPhongLightingModel_H___
 
-#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
-
 #include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
+
+#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 
 namespace castor3d
 {

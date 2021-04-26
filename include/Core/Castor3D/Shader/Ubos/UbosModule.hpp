@@ -37,6 +37,7 @@ namespace castor3d
 		struct ShadowMapData;
 		struct SkinningData;
 		struct SsaoConfigData;
+		struct TextureData;
 
 		Writer_Parameter( BillboardData );
 		Writer_Parameter( GpInfoData );
@@ -54,6 +55,7 @@ namespace castor3d
 		Writer_Parameter( SceneData );
 		Writer_Parameter( ShadowMapData );
 		Writer_Parameter( SsaoConfigData );
+		Writer_Parameter( TextureData );
 	}
 	/**
 	*\~english

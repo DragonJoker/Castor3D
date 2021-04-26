@@ -931,7 +931,7 @@ namespace castor3d
 					, material->m_opacity );
 				utils.computeOpacityMapContribution( textures
 					, textureConfigs
-					, c3d_textureConfig
+					, c3d_textureData.config
 					, c3d_maps
 					, vtx_texture
 					, alpha );

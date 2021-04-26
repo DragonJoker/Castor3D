@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "SdwModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
