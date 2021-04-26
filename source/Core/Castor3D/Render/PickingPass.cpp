@@ -846,23 +846,15 @@ namespace castor3d
 			,[&] ()
 			{
 				auto v4Vertex = writer.declLocale( "v4Vertex"
-					, vec4( inPosition.xyz(), 1.0_f ) );
+					, vec4( c3d_morphingData.morph( inPosition, inPosition2 ).xyz(), 1.0_f ) );
 				auto v3Texture = writer.declLocale( "v3Texture"
-					, inTexture );
+					, c3d_morphingData.morph( inTexture, inTexture2 ) );
+
 				auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
 					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, inTransform ) );
 				outMaterial = c3d_modelData.getMaterialIndex( flags.programFlags
 					, inMaterial );
 
-				if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
-				{
-					auto time = writer.declLocale( "time"
-						, vec3( 1.0_f - c3d_time ) );
-					v4Vertex = vec4( sdw::fma( v4Vertex.xyz(), time, inPosition2.xyz() * c3d_time ), 1.0_f );
-					v3Texture = sdw::fma( v3Texture, time, inTexture2 * c3d_time );
-				}
-
-				outTexture = v3Texture;
 				v4Vertex = mtxModel * v4Vertex;
 				outInstance = writer.cast< UInt >( in.instanceIndex );
 				out.vtx.position = c3d_matrixData.worldToCurProj( v4Vertex );
@@ -974,16 +966,14 @@ namespace castor3d
 
 	ashes::VkDescriptorSetLayoutBindingArray PickingPass::doCreateTextureBindings( PipelineFlags const & flags )const
 	{
-		auto index = 0u;
 		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
 
 		if ( !flags.textures.empty() )
 		{
-			textureBindings.push_back( makeDescriptorSetLayoutBinding( index
+			textureBindings.push_back( makeDescriptorSetLayoutBinding( 0u
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT
 				, uint32_t( flags.textures.size() ) ) );
-			index += uint32_t( flags.textures.size() );
 		}
 
 		return textureBindings;
