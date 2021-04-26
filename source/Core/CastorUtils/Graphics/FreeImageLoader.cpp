@@ -175,7 +175,6 @@ namespace castor
 			CU_LoaderError( "Can't load image" );
 		}
 
-		auto colorType = FreeImage_GetColorType( fiImage );
 		auto imageType = FreeImage_GetImageType( fiImage );
 
 		if ( fiFormat == FIF_HDR

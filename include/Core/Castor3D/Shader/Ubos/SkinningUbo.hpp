@@ -19,7 +19,6 @@ namespace castor3d
 		{
 			std::unique_ptr< sdw::ArraySsboT< sdw::Mat4 > > ssbo;
 			std::unique_ptr< sdw::Ubo > ubo;
-			std::unique_ptr< sdw::SampledImageBufferRgba32 > tbo;
 		};
 	}
 
