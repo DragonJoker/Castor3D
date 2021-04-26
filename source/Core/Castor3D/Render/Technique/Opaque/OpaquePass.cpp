@@ -486,7 +486,7 @@ namespace castor3d
 						, textures
 						, gamma
 						, textureConfigs
-						, c3d_textureConfig
+						, c3d_textureData.config
 						, c3d_maps
 						, texCoord
 						, normal
@@ -645,7 +645,7 @@ namespace castor3d
 						, textures
 						, gamma
 						, textureConfigs
-						, c3d_textureConfig
+						, c3d_textureData.config
 						, c3d_maps
 						, texCoord
 						, normal
@@ -804,7 +804,7 @@ namespace castor3d
 						, textures
 						, gamma
 						, textureConfigs
-						, c3d_textureConfig
+						, c3d_textureData.config
 						, c3d_maps
 						, texCoord
 						, normal
