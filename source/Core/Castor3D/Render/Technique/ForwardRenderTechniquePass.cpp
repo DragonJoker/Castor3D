@@ -421,7 +421,7 @@ namespace castor3d
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 				{
 					auto worldEye = writer.declLocale( "worldEye"
-						, c3d_cameraPosition.xyz() );
+						, c3d_sceneData.getCameraPosition() );
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
 						, vec3( 0.0_f ) );
 					auto lightSpecular = writer.declLocale( "lightSpecular"
@@ -432,12 +432,13 @@ namespace castor3d
 					lighting->computeCombined( worldEye
 						, shininess
 						, c3d_modelData.isShadowReceiver()
+						, c3d_sceneData
 						, surface
 						, output );
 					lightSpecular *= specular;
 
 					auto ambient = writer.declLocale( "ambient"
-						, clamp( c3d_ambientLight.xyz() * material.m_ambient * diffuse
+						, clamp( c3d_sceneData.getAmbientLight() * material.m_ambient * diffuse
 							, vec3( 0.0_f )
 							, vec3( 1.0_f ) ) );
 					auto reflected = writer.declLocale( "reflected"
@@ -449,7 +450,7 @@ namespace castor3d
 						|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
 					{
 						auto incident = writer.declLocale( "incident"
-							, reflections.computeIncident( inWorldPosition, c3d_cameraPosition.xyz() ) );
+							, reflections.computeIncident( inWorldPosition, worldEye ) );
 						ambient = vec3( 0.0_f );
 
 						if ( checkFlag( flags.passFlags, PassFlag::eReflection )
@@ -516,12 +517,11 @@ namespace castor3d
 
 				if ( getFogType( flags.sceneFlags ) != FogType::eDisabled )
 				{
-					pxl_fragColor = fog.apply( vec4( utils.removeGamma( gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
+					pxl_fragColor = fog.apply( c3d_sceneData.getBackgroundColour( utils, gamma )
 						, pxl_fragColor
 						, length( inViewPosition )
 						, inViewPosition.y()
-						, c3d_fogInfo
-						, c3d_cameraPosition );
+						, c3d_sceneData );
 				}
 			} );
 
@@ -645,7 +645,7 @@ namespace castor3d
 				auto bitangent = writer.declLocale( "bitangent"
 					, normalize( inBitangent ) );
 				auto ambient = writer.declLocale( "ambient"
-					, c3d_ambientLight.xyz() );
+					, c3d_sceneData.getAmbientLight() );
 				auto metalness = writer.declLocale( "metalness"
 					, material.m_metallic );
 				auto roughness = writer.declLocale( "roughness"
@@ -657,7 +657,7 @@ namespace castor3d
 				auto emissive = writer.declLocale( "emissive"
 					, vec3( material.m_emissive ) );
 				auto worldEye = writer.declLocale( "worldEye"
-					, c3d_cameraPosition.xyz() );
+					, c3d_sceneData.getCameraPosition() );
 				auto envAmbient = writer.declLocale( "envAmbient"
 					, vec3( 1.0_f ) );
 				auto envDiffuse = writer.declLocale( "envDiffuse"
@@ -718,6 +718,7 @@ namespace castor3d
 						, metalness
 						, roughness
 						, c3d_modelData.isShadowReceiver()
+						, c3d_sceneData
 						, surface
 						, output );
 					auto reflected = writer.declLocale( "reflected"
@@ -780,7 +781,7 @@ namespace castor3d
 								, albedo
 								, metalness
 								, roughness
-								, c3d_cameraPosition.xyz()
+								, worldEye
 								, c3d_mapIrradiance
 								, c3d_mapPrefiltered
 								, c3d_mapBrdf );
@@ -822,7 +823,7 @@ namespace castor3d
 							, albedo
 							, metalness
 							, roughness
-							, c3d_cameraPosition.xyz()
+							, worldEye
 							, c3d_mapIrradiance
 							, c3d_mapPrefiltered
 							, c3d_mapBrdf );
@@ -870,12 +871,11 @@ namespace castor3d
 
 				if ( getFogType( flags.sceneFlags ) != FogType::eDisabled )
 				{
-					pxl_fragColor = fog.apply( vec4( utils.removeGamma( gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
+					pxl_fragColor = fog.apply( c3d_sceneData.getBackgroundColour( utils, gamma )
 						, pxl_fragColor
 						, length( inViewPosition )
 						, inViewPosition.y()
-						, c3d_fogInfo
-						, c3d_cameraPosition );
+						, c3d_sceneData );
 				}
 			} );
 
@@ -998,7 +998,7 @@ namespace castor3d
 				auto bitangent = writer.declLocale( "bitangent"
 					, normalize( inBitangent ) );
 				auto ambient = writer.declLocale( "ambient"
-					, c3d_ambientLight.xyz() );
+					, c3d_sceneData.getAmbientLight() );
 				auto specular = writer.declLocale( "specular"
 					, material.m_specular );
 				auto glossiness = writer.declLocale( "glossiness"
@@ -1010,7 +1010,7 @@ namespace castor3d
 				auto emissive = writer.declLocale( "emissive"
 					, vec3( material.m_emissive ) );
 				auto worldEye = writer.declLocale( "worldEye"
-					, c3d_cameraPosition.xyz() );
+					, c3d_sceneData.getCameraPosition() );
 				auto envAmbient = writer.declLocale( "envAmbient"
 					, vec3( 1.0_f ) );
 				auto envDiffuse = writer.declLocale( "envDiffuse"
@@ -1070,6 +1070,7 @@ namespace castor3d
 						, specular
 						, glossiness
 						, c3d_modelData.isShadowReceiver()
+						, c3d_sceneData
 						, surface
 						, output );
 					auto reflected = writer.declLocale( "reflected"
@@ -1131,7 +1132,7 @@ namespace castor3d
 								, albedo
 								, specular
 								, glossiness
-								, c3d_cameraPosition.xyz()
+								, worldEye
 								, c3d_mapIrradiance
 								, c3d_mapPrefiltered
 								, c3d_mapBrdf );
@@ -1173,7 +1174,7 @@ namespace castor3d
 							, albedo
 							, specular
 							, glossiness
-							, c3d_cameraPosition.xyz()
+							, worldEye
 							, c3d_mapIrradiance
 							, c3d_mapPrefiltered
 							, c3d_mapBrdf );
@@ -1221,12 +1222,11 @@ namespace castor3d
 
 				if ( getFogType( flags.sceneFlags ) != FogType::eDisabled )
 				{
-					pxl_fragColor = fog.apply( vec4( utils.removeGamma( gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
+					pxl_fragColor = fog.apply( c3d_sceneData.getBackgroundColour( utils, gamma )
 						, pxl_fragColor
 						, length( inViewPosition )
 						, inViewPosition.y()
-						, c3d_fogInfo
-						, c3d_cameraPosition );
+						, c3d_sceneData );
 				}
 			} );
 

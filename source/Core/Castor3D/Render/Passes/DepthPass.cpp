@@ -364,7 +364,7 @@ namespace castor3d
 				auto tbn = writer.declLocale( "tbn"
 					, transpose( mat3( tangent, bitangent, normal ) ) );
 				outTangentSpaceFragPosition = tbn * worldPosition;
-				outTangentSpaceViewPosition = tbn * c3d_cameraPosition.xyz();
+				outTangentSpaceViewPosition = c3d_sceneData.transformCamera( tbn );
 
 				// Convert the jitter from non-homogeneous coordinates to homogeneous
 				// coordinates and add it:
@@ -447,7 +447,6 @@ namespace castor3d
 				, uint32_t( NodeUboIdx::eTexturesBuffer ) );
 		}
 
-		UBO_SCENE( writer, uint32_t( NodeUboIdx::eScene ), 0u );
 		UBO_TEXTURES( writer, uint32_t( NodeUboIdx::eTexturesConfig ), 0u, hasTextures );
 
 		shader::Utils utils{ writer };

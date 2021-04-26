@@ -33,6 +33,7 @@ namespace castor3d
 		struct OverlayData;
 		struct PickingData;
 		struct RsmConfigData;
+		struct SceneData;
 		struct SkinningData;
 
 		Writer_Parameter( BillboardData );
@@ -48,6 +49,7 @@ namespace castor3d
 		Writer_Parameter( OverlayData );
 		Writer_Parameter( PickingData );
 		Writer_Parameter( RsmConfigData );
+		Writer_Parameter( SceneData );
 	}
 	/**
 	*\~english

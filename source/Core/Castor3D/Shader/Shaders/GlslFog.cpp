@@ -1,5 +1,7 @@
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
 
+#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
+
 #include <ShaderWriter/Source.hpp>
 
 using namespace castor;
@@ -18,11 +20,10 @@ namespace castor3d
 						, Vec4 const & colour
 						, Float const & dist
 						, Float const & y
-						, Vec4 const & fogInfo
-						, Vec4 const & cameraPosition )
+						, SceneData const & sceneData )
 					{
 						auto z = writer.declLocale( "z", dist / 100.0_f );
-						auto density = writer.declLocale( "density", fogInfo.y() );
+						auto density = writer.declLocale( "density", sceneData.m_fogInfo.y() );
 
 						if ( flags == FogType::eLinear )
 						{
@@ -61,9 +62,9 @@ namespace castor3d
 							// Ground
 							//my camera y is 10.0. you can change it or pass it as a uniform
 							auto be = writer.declLocale( "be"
-								, ( cameraPosition.y() - y ) * 0.004_f );// 0.004 is just a factor; change it if you want
+								, ( sceneData.m_cameraPosition.y() - y ) * 0.004_f );// 0.004 is just a factor; change it if you want
 							auto bi = writer.declLocale( "bi"
-								, ( cameraPosition.y() - y ) * 0.001_f );// 0.001 is just a factor; change it if you want
+								, ( sceneData.m_cameraPosition.y() - y ) * 0.001_f );// 0.001 is just a factor; change it if you want
 							auto extinction = writer.declLocale( "ext"
 								, exp( -z * be ) );
 							auto inscattering = writer.declLocale( "insc"
@@ -77,8 +78,7 @@ namespace castor3d
 					, InVec4( writer, "colour" )
 					, InFloat( writer, "dist" )
 					, InFloat( writer, "y" )
-					, InVec4( writer, "fogInfo" )
-					, InVec4( writer, "cameraPosition" ) );
+					, InSceneData( writer, "sceneData" ) );
 			}
 		}
 
@@ -86,15 +86,13 @@ namespace castor3d
 			, Vec4 const & colour
 			, Float const & dist
 			, Float const & y
-			, Vec4 const & fogInfo
-			, Vec4 const & cameraPosition )
+			, SceneData const & sceneData )
 		{
 			return m_fog( bgColour
 				, colour
 				, dist
 				, y
-				, fogInfo 
-				, cameraPosition );
+				, sceneData );
 		}
 }
 }

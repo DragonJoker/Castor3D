@@ -426,7 +426,7 @@ namespace castor3d
 				auto emissive = writer.declLocale( "emissive"
 					, diffuse * material.m_emissive );
 				auto worldEye = writer.declLocale( "worldEye"
-					, c3d_cameraPosition.xyz() );
+					, c3d_sceneData.getCameraPosition() );
 				auto texCoord = writer.declLocale( "texCoord"
 					, inTexture );
 				auto occlusion = writer.declLocale( "occlusion"
@@ -477,12 +477,13 @@ namespace castor3d
 					lighting->computeCombined( worldEye
 						, shininess
 						, c3d_modelData.isShadowReceiver()
+						, c3d_sceneData
 						, surface
 						, output );
 					lightSpecular *= specular;
 
 					auto ambient = writer.declLocale( "ambient"
-						, clamp( c3d_ambientLight.xyz() * material.m_ambient * diffuse
+						, clamp( c3d_sceneData.getAmbientLight() * material.m_ambient * diffuse
 							, vec3( 0.0_f )
 							, vec3( 1.0_f ) ) );
 					auto reflected = writer.declLocale( "reflected"
@@ -494,7 +495,7 @@ namespace castor3d
 						|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
 					{
 						auto incident = writer.declLocale( "incident"
-							, reflections.computeIncident( inWorldPosition, c3d_cameraPosition.xyz() ) );
+							, reflections.computeIncident( inWorldPosition, worldEye ) );
 						ambient = vec3( 0.0_f );
 
 						if ( checkFlag( flags.passFlags, PassFlag::eReflection )
@@ -560,11 +561,10 @@ namespace castor3d
 				}
 
 				auto colour = writer.getVariable < Vec3 > ( "colour" );
-				pxl_accumulation = utils.computeAccumulation( in.fragCoord.z()
+				pxl_accumulation = c3d_sceneData.computeAccumulation( utils
+					, in.fragCoord.z()
 					, colour
 					, opacity
-					, c3d_clipInfo.z()
-					, c3d_clipInfo.w()
 					, material.m_bwAccumulationOperator );
 				pxl_revealage = opacity;
 				auto curPosition = writer.declLocale( "curPosition"
@@ -692,7 +692,7 @@ namespace castor3d
 				auto bitangent = writer.declLocale( "bitangent"
 					, normalize( inBitangent ) );
 				auto ambient = writer.declLocale( "ambient"
-					, c3d_ambientLight.xyz() );
+					, c3d_sceneData.getAmbientLight() );
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( inMaterial ) );
 				auto metalness = writer.declLocale( "metalness"
@@ -706,7 +706,7 @@ namespace castor3d
 				auto emissive = writer.declLocale( "emissive"
 					, albedo * material.m_emissive );
 				auto worldEye = writer.declLocale( "worldEye"
-					, c3d_cameraPosition.xyz() );
+					, c3d_sceneData.getCameraPosition() );
 				auto envAmbient = writer.declLocale( "envAmbient"
 					, vec3( 1.0_f ) );
 				auto envDiffuse = writer.declLocale( "envDiffuse"
@@ -761,6 +761,7 @@ namespace castor3d
 						, metalness
 						, roughness
 						, c3d_modelData.isShadowReceiver()
+						, c3d_sceneData
 						, surface
 						, output );
 					auto reflected = writer.declLocale( "reflected"
@@ -823,7 +824,7 @@ namespace castor3d
 								, albedo
 								, metalness
 								, roughness
-								, c3d_cameraPosition.xyz()
+								, worldEye
 								, c3d_mapIrradiance
 								, c3d_mapPrefiltered
 								, c3d_mapBrdf );
@@ -865,7 +866,7 @@ namespace castor3d
 							, albedo
 							, metalness
 							, roughness
-							, c3d_cameraPosition.xyz()
+							, worldEye
 							, c3d_mapIrradiance
 							, c3d_mapPrefiltered
 							, c3d_mapBrdf );
@@ -912,11 +913,10 @@ namespace castor3d
 				}
 
 				auto colour = writer.getVariable < Vec3 >( "colour" );
-				pxl_accumulation = utils.computeAccumulation( in.fragCoord.z()
+				pxl_accumulation = c3d_sceneData.computeAccumulation( utils
+					, in.fragCoord.z()
 					, colour
 					, opacity
-					, c3d_clipInfo.z()
-					, c3d_clipInfo.w()
 					, material.m_bwAccumulationOperator );
 				pxl_revealage = opacity;
 				auto curPosition = writer.declLocale( "curPosition"
@@ -1043,7 +1043,7 @@ namespace castor3d
 				auto bitangent = writer.declLocale( "bitangent"
 					, normalize( inBitangent ) );
 				auto ambient = writer.declLocale( "ambient"
-					, c3d_ambientLight.xyz() );
+					, c3d_sceneData.getAmbientLight() );
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( inMaterial ) );
 				auto specular = writer.declLocale( "specular"
@@ -1057,7 +1057,7 @@ namespace castor3d
 				auto emissive = writer.declLocale( "emissive"
 					, albedo * material.m_emissive );
 				auto worldEye = writer.declLocale( "worldEye"
-					, c3d_cameraPosition.xyz() );
+					, c3d_sceneData.getCameraPosition() );
 				auto envAmbient = writer.declLocale( "envAmbient"
 					, vec3( 1.0_f ) );
 				auto envDiffuse = writer.declLocale( "envDiffuse"
@@ -1111,6 +1111,7 @@ namespace castor3d
 						, specular
 						, glossiness
 						, c3d_modelData.isShadowReceiver()
+						, c3d_sceneData
 						, surface
 						, output );
 					auto reflected = writer.declLocale( "reflected"
@@ -1172,7 +1173,7 @@ namespace castor3d
 								, albedo
 								, specular
 								, glossiness
-								, c3d_cameraPosition.xyz()
+								, worldEye
 								, c3d_mapIrradiance
 								, c3d_mapPrefiltered
 								, c3d_mapBrdf );
@@ -1214,7 +1215,7 @@ namespace castor3d
 							, albedo
 							, specular
 							, glossiness
-							, c3d_cameraPosition.xyz()
+							, worldEye
 							, c3d_mapIrradiance
 							, c3d_mapPrefiltered
 							, c3d_mapBrdf );
@@ -1261,11 +1262,10 @@ namespace castor3d
 				}
 
 				auto colour = writer.getVariable < Vec3 > ( "colour" );
-				pxl_accumulation = utils.computeAccumulation( in.fragCoord.z()
+				pxl_accumulation = c3d_sceneData.computeAccumulation( utils
+					, in.fragCoord.z()
 					, colour
 					, opacity
-					, c3d_clipInfo.z()
-					, c3d_clipInfo.w()
 					, material.m_bwAccumulationOperator );
 				pxl_revealage = opacity;
 				auto curPosition = writer.declLocale( "curPosition"
