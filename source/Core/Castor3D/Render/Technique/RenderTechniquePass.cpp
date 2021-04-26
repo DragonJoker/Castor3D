@@ -697,12 +697,13 @@ namespace castor3d
 		writer.implementMain( [&]()
 			{
 				auto curPosition = writer.declLocale( "curPosition"
-					, vec4( inPosition.xyz(), 1.0_f ) );
+					, c3d_morphingData.morph( inPosition, inPosition2 ) );
 				auto v4Normal = writer.declLocale( "v4Normal"
-					, vec4( inNormal, 0.0_f ) );
+					, vec4( c3d_morphingData.morph( inNormal, inNormal2 ), 0.0_f ) );
 				auto v4Tangent = writer.declLocale( "v4Tangent"
-					, vec4( inTangent, 0.0_f ) );
-				outTexture = inTexture;
+					, vec4( c3d_morphingData.morph( inTangent, inTangent2 ), 0.0_f ) );
+				outTexture = c3d_morphingData.morph( inTexture, inTexture2 );
+
 				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
 					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, inTransform ) );
 				auto prvMtxModel = writer.declLocale< Mat4 >( "prvMtxModel"
@@ -711,14 +712,6 @@ namespace castor3d
 					, c3d_modelData.getNormalMtx( flags.programFlags, curMtxModel ) );
 				outMaterial = c3d_modelData.getMaterialIndex( flags.programFlags
 					, inMaterial );
-
-				if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
-				{
-					curPosition = vec4( sdw::mix( curPosition.xyz(), inPosition2.xyz(), vec3( c3d_time ) ), 1.0_f );
-					v4Normal = vec4( sdw::mix( v4Normal.xyz(), inNormal2.xyz(), vec3( c3d_time ) ), 1.0_f );
-					v4Tangent = vec4( sdw::mix( v4Tangent.xyz(), inTangent2.xyz(), vec3( c3d_time ) ), 1.0_f );
-					outTexture = sdw::mix( outTexture, inTexture2, vec3( c3d_time ) );
-				}
 
 				auto prvPosition = writer.declLocale( "prvPosition"
 					, prvMtxModel * curPosition );

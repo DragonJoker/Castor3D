@@ -2,6 +2,8 @@
 
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 
+#include <ShaderWriter/Source.hpp>
+
 namespace castor3d
 {
 	//*********************************************************************************************
