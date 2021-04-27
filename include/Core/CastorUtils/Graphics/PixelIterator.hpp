@@ -153,7 +153,7 @@ namespace castor
 		}
 
 	private:
-		static uint8_t const size = PixelDefinitions< PF >::Size;
+		static uint8_t const size = PixelDefinitionsT< PF >::Size;
 		internal_type m_current;
 		const_internal_type m_end;
 		pixel_type m_pixel;

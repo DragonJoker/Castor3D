@@ -283,12 +283,12 @@ namespace
 		{
 			Size size = { 16, 16 };
 			std::vector< uint8_t > buffer;
-			size_t count = size_t( size.getWidth() ) * size.getHeight() * PixelDefinitions< PFSrc >::Size;
+			size_t count = size_t( size.getWidth() ) * size.getHeight() * PixelDefinitionsT< PFSrc >::Size;
 			buffer.resize( count );
 			uint8_t value = 0;
 			Pixel< PFSrc > pixel;
 
-			for ( size_t i = 0; i < count; i += PixelDefinitions< PFSrc >::Size )
+			for ( size_t i = 0; i < count; i += PixelDefinitionsT< PFSrc >::Size )
 			{
 				pixel.link( buffer.data() + i );
 				setA8U( pixel, value++ );
@@ -326,13 +326,13 @@ namespace
 		{
 			Size size = { 16, 16 };
 			std::vector< uint8_t > buffer;
-			size_t count = size_t( size.getWidth() ) * size.getHeight() * PixelDefinitions< PFSrc >::Size;
+			size_t count = size_t( size.getWidth() ) * size.getHeight() * PixelDefinitionsT< PFSrc >::Size;
 			buffer.resize( count );
 			uint32_t depth = 0;
 			uint8_t stencil = 0;
 			Pixel< PFSrc > pixel;
 
-			for ( size_t i = 0; i < count; i += PixelDefinitions< PFSrc >::Size )
+			for ( size_t i = 0; i < count; i += PixelDefinitionsT< PFSrc >::Size )
 			{
 				pixel.link( buffer.data() + i );
 				setD24U( pixel, depth );
@@ -363,13 +363,13 @@ namespace
 		{
 			Size size = { 16, 16 };
 			std::vector< uint8_t > buffer;
-			size_t count = size_t( size.getWidth() ) * size.getHeight() * PixelDefinitions< PFSrc >::Size;
+			size_t count = size_t( size.getWidth() ) * size.getHeight() * PixelDefinitionsT< PFSrc >::Size;
 			buffer.resize( count );
 			uint32_t depth = 0;
 			uint8_t stencil = 0;
 			Pixel< PFSrc > pixel;
 
-			for ( size_t i = 0; i < count; i += PixelDefinitions< PFSrc >::Size )
+			for ( size_t i = 0; i < count; i += PixelDefinitionsT< PFSrc >::Size )
 			{
 				pixel.link( buffer.data() + i );
 				setD24U( pixel, depth );
@@ -401,12 +401,12 @@ namespace
 		{
 			Size size = { 16, 16 };
 			std::vector< uint8_t > buffer;
-			size_t count = size_t( size.getWidth()) * size.getHeight() * PixelDefinitions< PFSrc >::Size;
+			size_t count = size_t( size.getWidth()) * size.getHeight() * PixelDefinitionsT< PFSrc >::Size;
 			buffer.resize( count );
 			uint8_t value = 0;
 			Pixel< PFSrc > pixel;
 
-			for ( size_t i = 0; i < count; i += PixelDefinitions< PFSrc >::Size )
+			for ( size_t i = 0; i < count; i += PixelDefinitionsT< PFSrc >::Size )
 			{
 				pixel.link( buffer.data() + i );
 				setD24U( pixel, value++ );

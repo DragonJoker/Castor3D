@@ -52,7 +52,7 @@ namespace castor
 
 		static void add( LhsPixel & p_lhs, LhsPixel const & p_rhs )
 		{
-			for ( uint8_t i = 0; i < PixelDefinitions< FT >::Size; i++ )
+			for ( uint8_t i = 0; i < PixelDefinitionsT< FT >::Size; i++ )
 			{
 				p_lhs[i] += p_rhs[i];
 			}
@@ -60,14 +60,14 @@ namespace castor
 
 		static void subtract( LhsPixel & p_lhs, LhsPixel const & p_rhs )
 		{
-			for ( uint8_t i = 0; i < PixelDefinitions< FT >::Size; i++ )
+			for ( uint8_t i = 0; i < PixelDefinitionsT< FT >::Size; i++ )
 			{
 				p_lhs[i] -= p_rhs[i];
 			}
 		}
 		static void multiply( LhsPixel & p_lhs, LhsPixel const & p_rhs )
 		{
-			for ( uint8_t i = 0; i < PixelDefinitions< FT >::Size; i++ )
+			for ( uint8_t i = 0; i < PixelDefinitionsT< FT >::Size; i++ )
 			{
 				p_lhs[i] *= p_rhs[i];
 			}
@@ -75,7 +75,7 @@ namespace castor
 
 		static void divide( LhsPixel & p_lhs, LhsPixel const & p_rhs )
 		{
-			for ( uint8_t i = 0; i < PixelDefinitions< FT >::Size; i++ )
+			for ( uint8_t i = 0; i < PixelDefinitionsT< FT >::Size; i++ )
 			{
 				p_lhs[i] = ( p_rhs[i] == 0 ? p_lhs[i] : p_lhs[i] / p_rhs[i] );
 			}
@@ -83,7 +83,7 @@ namespace castor
 
 		static void assign( LhsPixel & p_lhs, LhsPixel const & p_rhs )
 		{
-			for ( uint8_t i = 0; i < PixelDefinitions< FT >::Size; i++ )
+			for ( uint8_t i = 0; i < PixelDefinitionsT< FT >::Size; i++ )
 			{
 				p_lhs[i] = p_rhs[i];
 			}
@@ -93,7 +93,7 @@ namespace castor
 		{
 			bool result = true;
 
-			for ( uint8_t i = 0; i < PixelDefinitions< FT >::Size; i++ )
+			for ( uint8_t i = 0; i < PixelDefinitionsT< FT >::Size; i++ )
 			{
 				result &= p_lhs[i] == p_rhs[i];
 			}
@@ -109,8 +109,8 @@ namespace castor
 	{
 		if ( p_init )
 		{
-			m_components.reset( new uint8_t[PixelDefinitions< FT >::Size] );
-			std::memset( m_components.get(), 0, PixelDefinitions< FT >::Size );
+			m_components.reset( new uint8_t[PixelDefinitionsT< FT >::Size] );
+			std::memset( m_components.get(), 0, PixelDefinitionsT< FT >::Size );
 		}
 	}
 
@@ -122,12 +122,12 @@ namespace castor
 
 	template< PixelFormat FT >
 	template< PixelFormat FU >
-	Pixel< FT >::Pixel( std::array< uint8_t, PixelDefinitions< FU >::Size > const & p_components )
-		:	m_components( new uint8_t[PixelDefinitions< FT >::Size] )
+	Pixel< FT >::Pixel( std::array< uint8_t, PixelDefinitionsT< FU >::Size > const & p_components )
+		:	m_components( new uint8_t[PixelDefinitionsT< FT >::Size] )
 	{
 		uint8_t const * src = &p_components[0];
 		uint8_t * dst = m_components.get();
-		PixelDefinitions< FU >::template convert< FT >( src, dst );
+		PixelDefinitionsT< FU >::template convert< FT >( src, dst );
 	}
 
 	template< PixelFormat FT >
@@ -135,8 +135,8 @@ namespace castor
 	{
 		if ( p_pxl.constPtr() )
 		{
-			m_components.reset( new uint8_t[PixelDefinitions< FT >::Size] );
-			std::memcpy( m_components.get(), p_pxl.constPtr(), PixelDefinitions< FT >::Size );
+			m_components.reset( new uint8_t[PixelDefinitionsT< FT >::Size] );
+			std::memcpy( m_components.get(), p_pxl.constPtr(), PixelDefinitionsT< FT >::Size );
 		}
 	}
 
@@ -153,10 +153,10 @@ namespace castor
 	{
 		if ( p_pxl.constPtr() )
 		{
-			m_components.reset( new uint8_t[PixelDefinitions< FT >::Size] );
+			m_components.reset( new uint8_t[PixelDefinitionsT< FT >::Size] );
 			uint8_t const * src = p_pxl.constPtr();
 			uint8_t * dst = m_components.get();
-			PixelDefinitions< FU >::template convert< FT >( src, dst );
+			PixelDefinitionsT< FU >::template convert< FT >( src, dst );
 		}
 	}
 
@@ -173,7 +173,7 @@ namespace castor
 		{
 			if ( p_pxl.constPtr() )
 			{
-				std::memcpy( m_components.get(), p_pxl.constPtr(), PixelDefinitions< FT >::Size );
+				std::memcpy( m_components.get(), p_pxl.constPtr(), PixelDefinitionsT< FT >::Size );
 			}
 			else
 			{
@@ -182,8 +182,8 @@ namespace castor
 		}
 		else if ( p_pxl.constPtr() )
 		{
-			m_components.reset( new uint8_t[PixelDefinitions< FT >::Size] );
-			std::memcpy( m_components.get(), p_pxl.constPtr(), PixelDefinitions< FT >::Size );
+			m_components.reset( new uint8_t[PixelDefinitionsT< FT >::Size] );
+			std::memcpy( m_components.get(), p_pxl.constPtr(), PixelDefinitionsT< FT >::Size );
 		}
 
 		return * this;
@@ -212,7 +212,7 @@ namespace castor
 			{
 				uint8_t const * src = p_pxl.constPtr();
 				uint8_t * dst = m_components.get();
-				PixelDefinitions< FU >::template convert< FT >( src, dst );
+				PixelDefinitionsT< FU >::template convert< FT >( src, dst );
 			}
 			else
 			{
@@ -221,10 +221,10 @@ namespace castor
 		}
 		else if ( p_pxl.constPtr() )
 		{
-			m_components.reset( new uint8_t[PixelDefinitions< FT >::Size] );
+			m_components.reset( new uint8_t[PixelDefinitionsT< FT >::Size] );
 			uint8_t const * src = p_pxl.constPtr();
 			uint8_t * dst = m_components.get();
-			PixelDefinitions< FU >::template convert< FT >( src, dst );
+			PixelDefinitionsT< FU >::template convert< FT >( src, dst );
 		}
 
 		return *this;
@@ -278,8 +278,8 @@ namespace castor
 	template< PixelFormat FT >
 	void Pixel< FT >::unlink()
 	{
-		m_components.reset( new uint8_t[PixelDefinitions< FT >::Size] );
-		std::memset( m_components.get(), 0, PixelDefinitions< FT >::Size );
+		m_components.reset( new uint8_t[PixelDefinitionsT< FT >::Size] );
+		std::memset( m_components.get(), 0, PixelDefinitionsT< FT >::Size );
 	}
 
 	template< PixelFormat FT >
@@ -301,11 +301,11 @@ namespace castor
 
 	template< PixelFormat FT >
 	template< PixelFormat FU >
-	void Pixel< FT >::set( std::array< uint8_t, PixelDefinitions< FU >::Size > const & p_components )
+	void Pixel< FT >::set( std::array< uint8_t, PixelDefinitionsT< FU >::Size > const & p_components )
 	{
 		uint8_t const * src = &p_components[0];
 		uint8_t * dst = m_components.get();
-		PixelDefinitions< FU >::template convert< FT >( src, dst );
+		PixelDefinitionsT< FU >::template convert< FT >( src, dst );
 	}
 
 	template< PixelFormat FT >
@@ -314,7 +314,7 @@ namespace castor
 	{
 		uint8_t const * src = &p_components[0];
 		uint8_t * dst = m_components.get();
-		PixelDefinitions< FU >::template convert< FT >( src, dst );
+		PixelDefinitionsT< FU >::template convert< FT >( src, dst );
 	}
 
 	template< PixelFormat FT >
@@ -323,7 +323,7 @@ namespace castor
 	{
 		uint8_t const * src = p_px.constPtr();
 		uint8_t * dst = m_components.get();
-		PixelDefinitions< FU >::template convert< FT >( src, dst );
+		PixelDefinitionsT< FU >::template convert< FT >( src, dst );
 	}
 
 	template < PixelFormat FT, PixelFormat FU >
