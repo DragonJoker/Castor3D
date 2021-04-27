@@ -100,7 +100,7 @@ namespace castor
 			, uint8_t const * srcPixel4
 			, uint8_t * dstPixel )
 		{
-			using MyPixelComponentsT = PixelComponents< PFT >;
+			using MyPixelComponentsT = PixelComponentsT< PFT >;
 			using MyTypeT = typename MyPixelComponentsT::Type;
 			using MyLargerTypeT = LargerTypeT< MyTypeT >;
 
@@ -826,6 +826,25 @@ namespace castor
 		, uint32_t bufferAlign )
 	{
 		return std::make_shared< PxBufferBase >( options
+			, size
+			, wantedFormat
+			, layers
+			, levels
+			, buffer
+			, bufferFormat
+			, bufferAlign );
+	}
+
+	PxBufferBaseUPtr PxBufferBase::createUnique( PxBufferConvertOptions const * options
+		, Size const & size
+		, uint32_t layers
+		, uint32_t levels
+		, PixelFormat wantedFormat
+		, uint8_t const * buffer
+		, PixelFormat bufferFormat
+		, uint32_t bufferAlign )
+	{
+		return std::make_unique< PxBufferBase >( options
 			, size
 			, wantedFormat
 			, layers

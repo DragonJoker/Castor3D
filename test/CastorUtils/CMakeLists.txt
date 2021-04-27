@@ -24,6 +24,7 @@ set( ${PROJECT_NAME}_HDR_FILES
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsDynamicBitsetTest.hpp
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsMatrixTest.hpp
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsObjectsPoolTest.hpp
+	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsPixelBufferExtractTest.hpp
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsPixelFormatTest.hpp
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsQuaternionTest.hpp
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsSignalTest.hpp
@@ -49,6 +50,7 @@ set( ${PROJECT_NAME}_SRC_FILES
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsDynamicBitsetTest.cpp
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsMatrixTest.cpp
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsObjectsPoolTest.cpp
+	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsPixelBufferExtractTest.cpp
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsPixelFormatTest.cpp
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsQuaternionTest.cpp
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsSignalTest.cpp

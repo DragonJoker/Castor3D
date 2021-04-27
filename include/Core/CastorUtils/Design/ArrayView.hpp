@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Design/DesignModule.hpp"
 
-#include <vector>
+#include <iterator>
 
 namespace castor
 {
