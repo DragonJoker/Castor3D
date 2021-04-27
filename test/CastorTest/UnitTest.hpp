@@ -309,7 +309,7 @@ namespace Testing
 	private:
 		virtual void doRegisterTests() = 0;
 
-	protected:
+	public:
 		inline void Fail( char const * const p_file
 			, char const * const p_function
 			, uint32_t const p_line
@@ -649,26 +649,47 @@ namespace Testing
 		return E;\
 	} ) )
 
+#	define CT_FAILURE_EX( test, x )\
+	( test ).Fail( __FILE__, __FUNCTION__, __LINE__, x )
+
+#	define CT_CHECK_EX( test, x )\
+	( test ).Check( LAZY( ( x ) ), __FILE__, __FUNCTION__, uint32_t( __LINE__ ), #x )
+
+#	define CT_EQUAL_EX( test, x, y )\
+	( test ).CheckEqual( [&]( auto const & lhs, auto const & rhs ){ return ( test ).compare( lhs, rhs ); }, LAZY( ( x ) ), LAZY( ( y ) ), __FILE__, __FUNCTION__, uint32_t( __LINE__ ), #x, #y )
+
+#	define CT_NEQUAL_EX( test, x, y )\
+	( test ).CheckNotEqual( [&]( auto const & lhs, auto const & rhs ){ return ( test ).compare( lhs, rhs ); }, LAZY( ( x ) ), LAZY( ( y ) ), __FILE__, __FUNCTION__, uint32_t( __LINE__ ), #x, #y )
+
+#	define CT_CHECK_THROW_EX( test, x )\
+	( test ).CheckThrow( LAZY( ( x ) ), __FILE__, __FUNCTION__, uint32_t( __LINE__ ), #x )
+
+#	define CT_CHECK_NOTHROW_EX( test, x )\
+	( test ).CheckNoThrow( LAZY( ( x ) ), __FILE__, __FUNCTION__, uint32_t( __LINE__ ), #x )
+
+#	define CT_REQUIRE_EX( test, x )\
+	( test ).Require( LAZY( ( x ) ), __FILE__, __FUNCTION__, uint32_t( __LINE__ ), #x )
+
 #	define CT_FAILURE( x )\
-	Fail( __FILE__, __FUNCTION__, __LINE__, x )
+	CT_FAILURE_EX( *this, x )
 
 #	define CT_CHECK( x )\
-	Check( LAZY( ( x ) ), __FILE__, __FUNCTION__, uint32_t( __LINE__ ), #x )
+	CT_CHECK_EX( *this, x )
 
 #	define CT_EQUAL( x, y )\
-	CheckEqual( [&]( auto const & lhs, auto const & rhs ){ return this->compare( lhs, rhs ); }, LAZY( ( x ) ), LAZY( ( y ) ), __FILE__, __FUNCTION__, uint32_t( __LINE__ ), #x, #y )
+	CT_EQUAL_EX( *this, x, y )
 
 #	define CT_NEQUAL( x, y )\
-	CheckNotEqual( [&]( auto const & lhs, auto const & rhs ){ return this->compare( lhs, rhs ); }, LAZY( ( x ) ), LAZY( ( y ) ), __FILE__, __FUNCTION__, uint32_t( __LINE__ ), #x, #y )
+	CT_NEQUAL_EX( *this, x, y )
 
 #	define CT_CHECK_THROW( x )\
-	CheckThrow( LAZY( ( x ) ), __FILE__, __FUNCTION__, uint32_t( __LINE__ ), #x )
+	CT_CHECK_THROW_EX( *this, x )
 
 #	define CT_CHECK_NOTHROW( x )\
-	CheckNoThrow( LAZY( ( x ) ), __FILE__, __FUNCTION__, uint32_t( __LINE__ ), #x )
+	CT_CHECK_NOTHROW_EX( *this, x )
 
 #	define CT_REQUIRE( x )\
-	Require( LAZY( ( x ) ), __FILE__, __FUNCTION__, uint32_t( __LINE__ ), #x )
+	CT_REQUIRE_EX( *this, x )
 }
 
 #endif

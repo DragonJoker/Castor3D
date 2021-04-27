@@ -49,99 +49,99 @@ namespace castor
 					}
 					else if constexpr ( is8UComponentsV< PFDst > )
 					{
-						PixelComponents< PFDst >::R( dstBuffer, getR8U< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::G( dstBuffer, getG8U< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::B( dstBuffer, getB8U< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::A( dstBuffer, getA8U< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::R( dstBuffer, getR8U< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::G( dstBuffer, getG8U< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::B( dstBuffer, getB8U< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::A( dstBuffer, getA8U< PFSrc >( srcBuffer ) );
 					}
 					else if constexpr ( is8SComponentsV< PFDst > )
 					{
-						PixelComponents< PFDst >::R( dstBuffer, getR8S< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::G( dstBuffer, getG8S< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::B( dstBuffer, getB8S< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::A( dstBuffer, getA8S< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::R( dstBuffer, getR8S< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::G( dstBuffer, getG8S< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::B( dstBuffer, getB8S< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::A( dstBuffer, getA8S< PFSrc >( srcBuffer ) );
 					}
 					else if constexpr ( is16UComponentsV< PFDst > )
 					{
-						PixelComponents< PFDst >::R( dstBuffer, getR16U< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::G( dstBuffer, getG16U< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::B( dstBuffer, getB16U< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::A( dstBuffer, getA16U< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::R( dstBuffer, getR16U< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::G( dstBuffer, getG16U< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::B( dstBuffer, getB16U< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::A( dstBuffer, getA16U< PFSrc >( srcBuffer ) );
 					}
 					else if constexpr ( is16SComponentsV< PFDst > )
 					{
-						PixelComponents< PFDst >::R( dstBuffer, getR16S< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::G( dstBuffer, getG16S< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::B( dstBuffer, getB16S< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::A( dstBuffer, getA16S< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::R( dstBuffer, getR16S< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::G( dstBuffer, getG16S< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::B( dstBuffer, getB16S< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::A( dstBuffer, getA16S< PFSrc >( srcBuffer ) );
 					}
 					else if constexpr ( is16FComponentsV< PFDst > )
 					{
-						PixelComponents< PFDst >::R( dstBuffer, getR16F< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::G( dstBuffer, getG16F< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::B( dstBuffer, getB16F< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::A( dstBuffer, getA16F< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::R( dstBuffer, getR16F< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::G( dstBuffer, getG16F< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::B( dstBuffer, getB16F< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::A( dstBuffer, getA16F< PFSrc >( srcBuffer ) );
 					}
 					else if constexpr ( is32UComponentsV< PFDst > )
 					{
-						PixelComponents< PFDst >::R( dstBuffer, getR32U< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::G( dstBuffer, getG32U< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::B( dstBuffer, getB32U< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::A( dstBuffer, getA32U< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::R( dstBuffer, getR32U< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::G( dstBuffer, getG32U< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::B( dstBuffer, getB32U< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::A( dstBuffer, getA32U< PFSrc >( srcBuffer ) );
 					}
 					else if constexpr ( is32SComponentsV< PFDst > )
 					{
-						PixelComponents< PFDst >::R( dstBuffer, getR32S< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::G( dstBuffer, getG32S< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::B( dstBuffer, getB32S< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::A( dstBuffer, getA32S< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::R( dstBuffer, getR32S< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::G( dstBuffer, getG32S< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::B( dstBuffer, getB32S< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::A( dstBuffer, getA32S< PFSrc >( srcBuffer ) );
 					}
 					else if constexpr ( is32FComponentsV< PFDst > )
 					{
-						PixelComponents< PFDst >::R( dstBuffer, getR32F< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::G( dstBuffer, getG32F< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::B( dstBuffer, getB32F< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::A( dstBuffer, getA32F< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::R( dstBuffer, getR32F< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::G( dstBuffer, getG32F< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::B( dstBuffer, getB32F< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::A( dstBuffer, getA32F< PFSrc >( srcBuffer ) );
 					}
 					else if constexpr ( is64UComponentsV< PFDst > )
 					{
-						PixelComponents< PFDst >::R( dstBuffer, getR64U< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::G( dstBuffer, getG64U< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::B( dstBuffer, getB64U< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::A( dstBuffer, getA64U< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::R( dstBuffer, getR64U< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::G( dstBuffer, getG64U< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::B( dstBuffer, getB64U< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::A( dstBuffer, getA64U< PFSrc >( srcBuffer ) );
 					}
 					else if constexpr ( is64SComponentsV< PFDst > )
 					{
-						PixelComponents< PFDst >::R( dstBuffer, getR64S< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::G( dstBuffer, getG64S< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::B( dstBuffer, getB64S< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::A( dstBuffer, getA64S< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::R( dstBuffer, getR64S< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::G( dstBuffer, getG64S< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::B( dstBuffer, getB64S< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::A( dstBuffer, getA64S< PFSrc >( srcBuffer ) );
 					}
 					else if constexpr ( is64FComponentsV< PFDst > )
 					{
-						PixelComponents< PFDst >::R( dstBuffer, getR64F< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::G( dstBuffer, getG64F< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::B( dstBuffer, getB64F< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::A( dstBuffer, getA64F< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::R( dstBuffer, getR64F< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::G( dstBuffer, getG64F< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::B( dstBuffer, getB64F< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::A( dstBuffer, getA64F< PFSrc >( srcBuffer ) );
 					}
 					else if constexpr ( isD16UComponentV< PFDst > )
 					{
-						PixelComponents< PFDst >::D( dstBuffer, getD16U< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::S( dstBuffer, getS8U< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::D( dstBuffer, getD16U< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::S( dstBuffer, getS8U< PFSrc >( srcBuffer ) );
 					}
 					else if constexpr ( isD24UComponentV< PFDst > )
 					{
-						PixelComponents< PFDst >::D( dstBuffer, getD24U< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::S( dstBuffer, getS8U< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::D( dstBuffer, getD24U< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::S( dstBuffer, getS8U< PFSrc >( srcBuffer ) );
 					}
 					else if constexpr ( isD32FComponentV< PFDst > )
 					{
-						PixelComponents< PFDst >::D( dstBuffer, getD32F< PFSrc >( srcBuffer ) );
-						PixelComponents< PFDst >::S( dstBuffer, getS8U< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::D( dstBuffer, getD32F< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::S( dstBuffer, getS8U< PFSrc >( srcBuffer ) );
 					}
 					else if constexpr ( isS8UComponentV< PFDst > )
 					{
-						PixelComponents< PFDst >::S( dstBuffer, getS8U< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::S( dstBuffer, getS8U< PFSrc >( srcBuffer ) );
 					}
 				}
 
@@ -575,7 +575,7 @@ namespace castor
 	//*************************************************************************************************
 
 	template< PixelFormat PFT >
-	struct PixelDefinitions
+	struct PixelDefinitionsT
 	{
 		static constexpr VkDeviceSize Size = ashes::getMinimalSize( VkFormat( PFT ) );
 		static constexpr uint8_t Count = ashes::getCount( VkFormat( PFT ) );

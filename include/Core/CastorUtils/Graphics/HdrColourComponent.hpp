@@ -28,7 +28,7 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Specified constructor
-		 *\param[in]	value	The PixelComponents value
+		 *\param[in]	value	The component value
 		 *\~french
 		 *\brief		Constructeur spécifié
 		 *\param[in]	value	La valeur de la composante
@@ -40,7 +40,7 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
-		 *\param[in]	rhs	The PixelComponents
+		 *\param[in]	rhs	The component
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation par copie
@@ -55,7 +55,7 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from float
-		 *\param[in]	rhs	The PixelComponents value, must be between 0.0f and 1.0f
+		 *\param[in]	rhs	The component value, must be between 0.0f and 1.0f
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un float
@@ -70,7 +70,7 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from double
-		 *\param[in]	rhs	The PixelComponents value, must be between 0.0 and 1.0
+		 *\param[in]	rhs	The component value, must be between 0.0 and 1.0
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un double
@@ -85,7 +85,7 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from long double
-		 *\param[in]	rhs	The PixelComponents value, must be between 0.0 and 1.0
+		 *\param[in]	rhs	The component value, must be between 0.0 and 1.0
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un long double
@@ -100,7 +100,7 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from int8_t
-		 *\param[in]	rhs	The PixelComponents value
+		 *\param[in]	rhs	The component value
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un int8_t
@@ -115,7 +115,7 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from uint8_t
-		 *\param[in]	rhs	The PixelComponents value
+		 *\param[in]	rhs	The component value
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un uint8_t
@@ -130,7 +130,7 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from int16_t
-		 *\param[in]	rhs	The PixelComponents value, must be between 0 and 255
+		 *\param[in]	rhs	The component value, must be between 0 and 255
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un int16_t
@@ -145,7 +145,7 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from uint16_t
-		 *\param[in]	rhs	The PixelComponents value, must be between 0 and 255
+		 *\param[in]	rhs	The component value, must be between 0 and 255
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un uint16_t
@@ -160,7 +160,7 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from int32_t
-		 *\param[in]	rhs	The PixelComponents value, must be between 0 and 255
+		 *\param[in]	rhs	The component value, must be between 0 and 255
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un int32_t
@@ -175,7 +175,7 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from uint32_t
-		 *\param[in]	rhs	The PixelComponents value, must be between 0 and 255
+		 *\param[in]	rhs	The component value, must be between 0 and 255
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un uint32_t
@@ -190,7 +190,7 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from int64_t
-		 *\param[in]	rhs	The PixelComponents value, must be between 0 and 255
+		 *\param[in]	rhs	The component value, must be between 0 and 255
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un int64_t
@@ -205,7 +205,7 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from uint64_t
-		 *\param[in]	rhs	The PixelComponents value, must be between 0 and 255
+		 *\param[in]	rhs	The component value, must be between 0 and 255
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un uint64_t
@@ -329,7 +329,7 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief		sets the PixelComponents value
+		 *\brief		sets the component value
 		 *\remarks		Clamps the result
 		 *\param[in]	value	The value
 		 *\~french
@@ -487,7 +487,7 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the PixelComponents value
+		 *\brief		Retrieves the component value
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère la valeur de la composante
@@ -499,7 +499,7 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the PixelComponents value
+		 *\brief		Retrieves the component value
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère la valeur de la composante

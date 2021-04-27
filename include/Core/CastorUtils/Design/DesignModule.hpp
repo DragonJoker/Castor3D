@@ -7,12 +7,13 @@ See LICENSE file in root folder
 
 #include "CastorUtils/CastorUtils.hpp"
 
-#include <vector>
+#include <iterator>
 
 namespace castor
 {
-	/**@name Align */
+	/**@name Design */
 	//@{
+
 	template< class IterT >
 	struct IteratorTraits : std::iterator_traits< IterT >
 	{
@@ -24,6 +25,16 @@ namespace castor
 	struct IteratorTraits< TypeT * > : std::iterator_traits< TypeT * >
 	{
 		using value_type = TypeT;
+	};
+
+	template< class FlagTypeT >
+	struct FlagIteratorTraitsT
+	{
+		using difference_type = std::ptrdiff_t;
+		using value_type = FlagTypeT;
+		using pointer = value_type *;
+		using reference = value_type &;
+		using iterator_category = std::forward_iterator_tag;
 	};
 	/**
 	\~english
@@ -215,7 +226,8 @@ namespace castor
 	*\param FlagType
 	*	The scoped enum type.
 	*/
-	template< typename FlagType >
+	template< typename FlagTypeT
+		, typename IteratorTraitsT = FlagIteratorTraitsT< FlagTypeT > >
 	struct FlagIterator;
 	/**
 	*\~english

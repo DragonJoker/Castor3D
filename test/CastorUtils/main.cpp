@@ -3,17 +3,18 @@
 #include "CastorUtilsBuddyAllocatorTest.hpp"
 #include "CastorUtilsDynamicBitsetTest.hpp"
 #include "CastorUtilsMatrixTest.hpp"
-#include "CastorUtilsPixelFormatTest.hpp"
-#include "CastorUtilsStringTest.hpp"
-#include "CastorUtilsZipTest.hpp"
-#include "CastorUtilsUniqueTest.hpp"
 #include "CastorUtilsObjectsPoolTest.hpp"
+#include "CastorUtilsPixelBufferExtractTest.hpp"
+#include "CastorUtilsPixelFormatTest.hpp"
 #include "CastorUtilsQuaternionTest.hpp"
 #include "CastorUtilsSignalTest.hpp"
 #include "CastorUtilsSpeedTest.hpp"
+#include "CastorUtilsStringTest.hpp"
 #include "CastorUtilsTextWriterTest.hpp"
 #include "CastorUtilsThreadPoolTest.hpp"
+#include "CastorUtilsUniqueTest.hpp"
 #include "CastorUtilsWorkerThreadTest.hpp"
+#include "CastorUtilsZipTest.hpp"
 
 #include <CastorTest/Benchmark.hpp>
 #include <CastorTest/BenchManager.hpp>
@@ -57,6 +58,7 @@ int main( int argc, char const * argv[] )
 	Testing::registerType( std::make_unique< Testing::CastorUtilsQuaternionTest >() );
 	Testing::registerType( std::make_unique< Testing::CastorUtilsSpeedTest >() );
 	Testing::registerType( std::make_unique< Testing::CastorUtilsTextWriterTest >() );
+	Testing::registerType( std::make_unique< Testing::CastorUtilsPixelBufferExtractTest >() );
 	BENCHLOOP( iCount, iReturn );
 	castor::Logger::cleanup();
 	return iReturn;

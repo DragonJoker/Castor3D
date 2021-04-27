@@ -46,33 +46,6 @@ namespace castor
 		return result;
 	}
 
-	bool hasComponent( PixelFormat format
-		, PixelComponent component )
-	{
-		switch ( component )
-		{
-		case castor::PixelComponent::eRed:
-			return getComponentsCount( format ) >= 1
-				&& !ashes::isDepthOrStencilFormat( VkFormat( format ) );
-		case castor::PixelComponent::eGreen:
-			return getComponentsCount( format ) >= 2
-				&& !ashes::isDepthOrStencilFormat( VkFormat( format ) );
-		case castor::PixelComponent::eBlue:
-			return getComponentsCount( format ) >= 3
-				&& !ashes::isDepthOrStencilFormat( VkFormat( format ) );
-		case castor::PixelComponent::eAlpha:
-			return hasAlpha( format );
-		case castor::PixelComponent::eDepth:
-			return ashes::isDepthFormat( VkFormat( format ) )
-				|| ashes::isDepthStencilFormat( VkFormat( format ) );
-		case castor::PixelComponent::eStencil:
-			return ashes::isStencilFormat( VkFormat( format ) )
-				|| ashes::isDepthStencilFormat( VkFormat( format ) );
-		default:
-			return false;
-		}
-	}
-
 	bool hasAlpha( PixelFormat format )
 	{
 		bool result = false;
@@ -354,42 +327,242 @@ namespace castor
 		, PixelComponent component )
 	{
 		src = decompressBuffer( src );
-		PxBufferBaseSPtr result;
+		auto result = PxBufferBase::create( src->getDimensions()
+			, getSingleComponent( src->getFormat() ) );
+		auto dstPixelSize = getBytesPerPixel( result->getFormat() );
+		auto dstBuffer = result->getPtr();
 
 		if ( hasComponent( src->getFormat(), component ) )
 		{
-			auto index = uint32_t( component );
+			auto index = getComponentIndex( component );
+			auto srcBuffer = src->getConstPtr();
+			auto srcPixelSize = getBytesPerPixel( src->getFormat() );
+			srcBuffer += index * dstPixelSize;
 
-			if ( isFloatingPoint( src->getFormat() ) )
+			for ( size_t i = 0; i < result->getCount(); ++i )
 			{
-				result = PxBufferBase::create( src->getDimensions(), PixelFormat::eR32_SFLOAT );
-				auto srcBuffer = reinterpret_cast< float const * >( src->getConstPtr() );
-				auto dstBuffer = reinterpret_cast< float * >( result->getPtr() );
-				auto srcPixelSize = getBytesPerPixel( src->getFormat() ) / sizeof( float );
-				auto dstPixelSize = getBytesPerPixel( result->getFormat() ) / sizeof( float );
+				std::memcpy( dstBuffer, srcBuffer, dstPixelSize );
+				dstBuffer += dstPixelSize;
+				srcBuffer += srcPixelSize;
+			}
+		}
+		else
+		{
+			for ( size_t i = 0; i < result->getCount(); ++i )
+			{
+				std::memset( dstBuffer, 0xFFFFFFFF, dstPixelSize );
+				dstBuffer += dstPixelSize;
+			}
+		}
+
+		return result;
+	}
+
+	PixelFormat getPixelFormat( PixelFormat format, PixelComponents components )
+	{
+		format = getSingleComponent( format );
+		auto count = components.size();
+
+		switch ( format )
+		{
+		case PixelFormat::eR8_UNORM:
+			switch ( count )
+			{
+			case 1:
+				return PixelFormat::eR8_UNORM;
+			case 2:
+				return PixelFormat::eR8G8_UNORM;
+			case 3:
+				return PixelFormat::eR8G8B8_UNORM;
+			case 4:
+				return PixelFormat::eR8G8B8A8_UNORM;
+			default:
+				return PixelFormat::eUNDEFINED;
+			}
+		case PixelFormat::eR8_SNORM:
+			switch ( count )
+			{
+			case 1:
+				return PixelFormat::eR8_SNORM;
+			case 2:
+				return PixelFormat::eR8G8_SNORM;
+			case 3:
+				return PixelFormat::eR8G8B8_SNORM;
+			case 4:
+				return PixelFormat::eR8G8B8A8_SNORM;
+			default:
+				return PixelFormat::eUNDEFINED;
+			}
+		case PixelFormat::eR16_UNORM:
+			switch ( count )
+			{
+			case 1:
+				return PixelFormat::eR16_UNORM;
+			case 2:
+				return PixelFormat::eR16G16_UNORM;
+			case 3:
+				return PixelFormat::eR16G16B16_UNORM;
+			case 4:
+				return PixelFormat::eR16G16B16A16_UNORM;
+			default:
+				return PixelFormat::eUNDEFINED;
+			}
+		case PixelFormat::eR16_SNORM:
+			switch ( count )
+			{
+			case 1:
+				return PixelFormat::eR16_SNORM;
+			case 2:
+				return PixelFormat::eR16G16_SNORM;
+			case 3:
+				return PixelFormat::eR16G16B16_SNORM;
+			case 4:
+				return PixelFormat::eR16G16B16A16_SNORM;
+			default:
+				return PixelFormat::eUNDEFINED;
+			}
+		case PixelFormat::eR16_SFLOAT:
+			switch ( count )
+			{
+			case 1:
+				return PixelFormat::eR16_SFLOAT;
+			case 2:
+				return PixelFormat::eR16G16_SFLOAT;
+			case 3:
+				return PixelFormat::eR16G16B16_SFLOAT;
+			case 4:
+				return PixelFormat::eR16G16B16A16_SFLOAT;
+			default:
+				return PixelFormat::eUNDEFINED;
+			}
+		case PixelFormat::eR32_UINT:
+			switch ( count )
+			{
+			case 1:
+				return PixelFormat::eR32_UINT;
+			case 2:
+				return PixelFormat::eR32G32_UINT;
+			case 3:
+				return PixelFormat::eR32G32B32_UINT;
+			case 4:
+				return PixelFormat::eR32G32B32A32_UINT;
+			default:
+				return PixelFormat::eUNDEFINED;
+			}
+		case PixelFormat::eR32_SINT:
+			switch ( count )
+			{
+			case 1:
+				return PixelFormat::eR32_SINT;
+			case 2:
+				return PixelFormat::eR32G32_SINT;
+			case 3:
+				return PixelFormat::eR32G32B32_SINT;
+			case 4:
+				return PixelFormat::eR32G32B32A32_SINT;
+			default:
+				return PixelFormat::eUNDEFINED;
+			}
+		case PixelFormat::eR32_SFLOAT:
+			switch ( count )
+			{
+			case 1:
+				return PixelFormat::eR32_SFLOAT;
+			case 2:
+				return PixelFormat::eR32G32_SFLOAT;
+			case 3:
+				return PixelFormat::eR32G32B32_SFLOAT;
+			case 4:
+				return PixelFormat::eR32G32B32A32_SFLOAT;
+			default:
+				return PixelFormat::eUNDEFINED;
+			}
+		case PixelFormat::eR64_UINT:
+			switch ( count )
+			{
+			case 1:
+				return PixelFormat::eR64_UINT;
+			case 2:
+				return PixelFormat::eR64G64_UINT;
+			case 3:
+				return PixelFormat::eR64G64B64_UINT;
+			case 4:
+				return PixelFormat::eR64G64B64A64_UINT;
+			default:
+				return PixelFormat::eUNDEFINED;
+			}
+		case PixelFormat::eR64_SINT:
+			switch ( count )
+			{
+			case 1:
+				return PixelFormat::eR64_SINT;
+			case 2:
+				return PixelFormat::eR64G64_SINT;
+			case 3:
+				return PixelFormat::eR64G64B64_SINT;
+			case 4:
+				return PixelFormat::eR64G64B64A64_SINT;
+			default:
+				return PixelFormat::eUNDEFINED;
+			}
+		case PixelFormat::eR64_SFLOAT:
+			switch ( count )
+			{
+			case 1:
+				return PixelFormat::eR64_SFLOAT;
+			case 2:
+				return PixelFormat::eR64G64_SFLOAT;
+			case 3:
+				return PixelFormat::eR64G64B64_SFLOAT;
+			case 4:
+				return PixelFormat::eR64G64B64A64_SFLOAT;
+			default:
+				return PixelFormat::eUNDEFINED;
+			}
+		default:
+			return PixelFormat::eUNDEFINED;
+		}
+	}
+
+	PxBufferBaseSPtr extractComponents( PxBufferBaseSPtr src
+		, PixelComponents components )
+	{
+		src = decompressBuffer( src );
+		auto result = PxBufferBase::create( src->getDimensions()
+			, getPixelFormat( src->getFormat(), components ) );
+		auto srcPixelSize = getBytesPerPixel( src->getFormat() );
+		auto dstPixelSize = getBytesPerPixel( result->getFormat() );
+		auto dstComponentSize = getBytesPerPixel( getSingleComponent( result->getFormat() ) );
+		auto dstIndex = 0u;
+
+		for ( auto component : components )
+		{
+			auto dstBuffer = result->getPtr();
+			dstBuffer += dstIndex * dstComponentSize;
+
+			if ( hasComponent( src->getFormat(), component ) )
+			{
+				auto srcBuffer = src->getConstPtr();
+				auto srcIndex = getComponentIndex( component );
+				srcBuffer += srcIndex * dstComponentSize;
 
 				for ( size_t i = 0; i < result->getCount(); ++i )
 				{
-					*dstBuffer = srcBuffer[index];
+					std::memcpy( dstBuffer, srcBuffer, dstComponentSize );
 					dstBuffer += dstPixelSize;
 					srcBuffer += srcPixelSize;
 				}
 			}
 			else
 			{
-				result = PxBufferBase::create( src->getDimensions(), PixelFormat::eR8_UNORM );
-				auto srcBuffer = src->getConstPtr();
-				auto dstBuffer = result->getPtr();
-				auto srcPixelSize = getBytesPerPixel( src->getFormat() );
-				auto dstPixelSize = getBytesPerPixel( result->getFormat() );
-
 				for ( size_t i = 0; i < result->getCount(); ++i )
 				{
-					*dstBuffer = srcBuffer[index];
+					std::memset( dstBuffer, 0xFFFFFFFF, dstComponentSize );
 					dstBuffer += dstPixelSize;
-					srcBuffer += srcPixelSize;
 				}
 			}
+
+			++dstIndex;
 		}
 
 		return result;
@@ -464,7 +637,7 @@ namespace castor
 		{
 #define CUPF_ENUM_VALUE( name, value, components, alpha, colour, depth, stencil, compressed )\
 		case PixelFormat::e##name:\
-			PixelDefinitions< PixelFormat::e##name >::convert( srcBuffer, dstBuffer, dstFormat );\
+			PixelDefinitionsT< PixelFormat::e##name >::convert( srcBuffer, dstBuffer, dstFormat );\
 			break;
 #define CUPF_ENUM_VALUE_COMPRESSED( name, value, components, alpha )
 #include "CastorUtils/Graphics/PixelFormat.enum"
@@ -486,7 +659,7 @@ namespace castor
 		switch ( srcFormat )
 		{
 #define CUPF_ENUM_VALUE( name, value, components, alpha, colour, depth, stencil, compressed ) case PixelFormat::e##name:\
-			PixelDefinitions< PixelFormat::e##name >::convert( nullptr, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );\
+			PixelDefinitionsT< PixelFormat::e##name >::convert( nullptr, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );\
 			break;
 #include "CastorUtils/Graphics/PixelFormat.enum"
 		default:
@@ -505,7 +678,7 @@ namespace castor
 			{
 #define CUPF_ENUM_VALUE( name, value, components, alpha, colour, depth, stencil, compressed )\
 			case PixelFormat::e##name:\
-				result = ( formatName == PixelDefinitions< PixelFormat::e##name >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );\
+				result = ( formatName == PixelDefinitionsT< PixelFormat::e##name >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );\
 				break;
 #include "CastorUtils/Graphics/PixelFormat.enum"
 			default:

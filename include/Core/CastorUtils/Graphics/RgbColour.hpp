@@ -607,9 +607,9 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the asked PixelComponents value
-		 *\param[in]	component	The asked PixelComponents
-		 *\return		The PixelComponents value
+		 *\brief		Retrieves the asked component value
+		 *\param[in]	component	The asked component
+		 *\return		The component value
 		 *\~french
 		 *\brief		Récupère la valeur de la composante demandée
 		 *\param[in]	component	La composante demandée
@@ -621,9 +621,9 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the asked PixelComponents value
-		 *\param[in]	component	The asked PixelComponents
-		 *\return		The PixelComponents value
+		 *\brief		Retrieves the asked component value
+		 *\param[in]	component	The asked component
+		 *\return		The component value
 		 *\~french
 		 *\brief		Récupère la valeur de la composante demandée
 		 *\param[in]	component	La composante demandée
@@ -635,8 +635,8 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the red PixelComponents value
-		 *\return		The PixelComponents value
+		 *\brief		Retrieves the red component value
+		 *\return		The component value
 		 *\~french
 		 *\brief		Récupère la valeur de la composante rouge
 		 *\return		La valeur de la composante
@@ -647,8 +647,8 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the red PixelComponents value
-		 *\return		The PixelComponents value
+		 *\brief		Retrieves the red component value
+		 *\return		The component value
 		 *\~french
 		 *\brief		Récupère la valeur de la composante rouge
 		 *\return		La valeur de la composante
@@ -659,8 +659,8 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the green PixelComponents value
-		 *\return		The PixelComponents value
+		 *\brief		Retrieves the green component value
+		 *\return		The component value
 		 *\~french
 		 *\brief		Récupère la valeur de la composante verte
 		 *\return		La valeur de la composante
@@ -671,8 +671,8 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the green PixelComponents value
-		 *\return		The PixelComponents value
+		 *\brief		Retrieves the green component value
+		 *\return		The component value
 		 *\~french
 		 *\brief		Récupère la valeur de la composante verte
 		 *\return		La valeur de la composante
@@ -683,8 +683,8 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the blue PixelComponents value
-		 *\return		The PixelComponents value
+		 *\brief		Retrieves the blue component value
+		 *\return		The component value
 		 *\~french
 		 *\brief		Récupère la valeur de la composante bleue
 		 *\return		La valeur de la composante
@@ -695,8 +695,8 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the blue PixelComponents value
-		 *\return		The PixelComponents value
+		 *\brief		Retrieves the blue component value
+		 *\return		The component value
 		 *\~french
 		 *\brief		Récupère la valeur de la composante bleue
 		 *\return		La valeur de la composante

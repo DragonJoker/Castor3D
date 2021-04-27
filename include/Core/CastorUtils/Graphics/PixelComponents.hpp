@@ -8,6 +8,27 @@ See LICENSE file in root folder
 
 namespace castor
 {
+	inline constexpr uint32_t getComponentIndex( PixelComponent component )
+	{
+		switch ( component )
+		{
+		case castor::PixelComponent::eRed:
+			return 0u;
+		case castor::PixelComponent::eGreen:
+			return 1u;
+		case castor::PixelComponent::eBlue:
+			return 2u;
+		case castor::PixelComponent::eAlpha:
+			return 3u;
+		case castor::PixelComponent::eDepth:
+			return 0u;
+		case castor::PixelComponent::eStencil:
+			return 1u;
+		default:
+			return 0u;
+		}
+	}
+
 	template< PixelFormat PFT >
 	uint8_t getR8U( uint8_t const * buffer );
 	template< PixelFormat PFT >
@@ -214,9 +235,9 @@ namespace castor
 
 	/**
 	 *\~english
-	 *\brief		Function to retrieve pixel colour PixelComponents in float
+	 *\brief		Function to retrieve pixel colour component in float
 	 *\param[in]	pixel		The pixel
-	 *\return		The PixelComponents value
+	 *\return		The component value
 	 *\~french
 	 *\brief		Fonction de récupération de la composante rouge d'un pixel, en flottant
 	 *\param[in]	pixel		Le pixel
@@ -229,9 +250,9 @@ namespace castor
 	}
 	/**
 	 *\~english
-	 *\brief		Function to define pixel colour PixelComponents in float
+	 *\brief		Function to define pixel colour component in float
 	 *\param[in]	pixel		The pixel
-	 *\param[in]	value		The PixelComponents value
+	 *\param[in]	value		The component value
 	 *\~french
 	 *\brief		Fonction de définition de la composante rouge d'un pixel, en flottant
 	 *\param[in]	pixel		Le pixel
@@ -244,9 +265,9 @@ namespace castor
 	}
 	/**
 	 *\~english
-	 *\brief		Function to retrieve pixel red PixelComponents in byte
+	 *\brief		Function to retrieve pixel red component in byte
 	 *\param[in]	pixel		The pixel
-	 *\return		The PixelComponents value
+	 *\return		The component value
 	 *\~french
 	 *\brief		Fonction de récupération de la composante rouge d'un pixel, en octet
 	 *\param[in]	pixel		Le pixel
@@ -259,9 +280,9 @@ namespace castor
 	}
 	/**
 	 *\~english
-	 *\brief		Function to define pixel red PixelComponents in byte
+	 *\brief		Function to define pixel red component in byte
 	 *\param[in]	pixel		The pixel
-	 *\param[in]	value		The PixelComponents value
+	 *\param[in]	value		The component value
 	 *\~french
 	 *\brief		Fonction de définition de la composante rouge d'un pixel, en octet
 	 *\param[in]	pixel		Le pixel
@@ -274,9 +295,9 @@ namespace castor
 	}
 	/**
 	 *\~english
-	 *\brief		Function to retrieve pixel green PixelComponents in float
+	 *\brief		Function to retrieve pixel green component in float
 	 *\param[in]	pixel		The pixel
-	 *\return		The PixelComponents value
+	 *\return		The component value
 	 *\~french
 	 *\brief		Fonction de récupération de la composante verte d'un pixel, en flottant
 	 *\param[in]	pixel		Le pixel
@@ -289,9 +310,9 @@ namespace castor
 	}
 	/**
 	 *\~english
-	 *\brief		Function to define pixel green PixelComponents in float
+	 *\brief		Function to define pixel green component in float
 	 *\param[in]	pixel		The pixel
-	 *\param[in]	value		The PixelComponents value
+	 *\param[in]	value		The component value
 	 *\~french
 	 *\brief		Fonction de définition de la composante verte d'un pixel, en flottant
 	 *\param[in]	pixel		Le pixel
@@ -304,9 +325,9 @@ namespace castor
 	}
 	/**
 	 *\~english
-	 *\brief		Function to retrieve pixel green PixelComponents in byte
+	 *\brief		Function to retrieve pixel green component in byte
 	 *\param[in]	pixel		The pixel
-	 *\return		The PixelComponents value
+	 *\return		The component value
 	 *\~french
 	 *\brief		Fonction de récupération de la composante verte d'un pixel, en octet
 	 *\param[in]	pixel		Le pixel
@@ -319,9 +340,9 @@ namespace castor
 	}
 	/**
 	 *\~english
-	 *\brief		Function to define pixel green PixelComponents in byte
+	 *\brief		Function to define pixel green component in byte
 	 *\param[in]	pixel		The pixel
-	 *\param[in]	value		The PixelComponents value
+	 *\param[in]	value		The component value
 	 *\~french
 	 *\brief		Fonction de définition de la composante verte d'un pixel, en octet
 	 *\param[in]	pixel		Le pixel
@@ -334,9 +355,9 @@ namespace castor
 	}
 	/**
 	 *\~english
-	 *\brief		Function to retrieve pixel blue PixelComponents in float
+	 *\brief		Function to retrieve pixel blue component in float
 	 *\param[in]	pixel		The pixel
-	 *\return		The PixelComponents value
+	 *\return		The component value
 	 *\~french
 	 *\brief		Fonction de récupération de la composante bleue d'un pixel, en flottant
 	 *\param[in]	pixel		Le pixel
@@ -349,9 +370,9 @@ namespace castor
 	}
 	/**
 	 *\~english
-	 *\brief		Function to define pixel blue PixelComponents in float
+	 *\brief		Function to define pixel blue component in float
 	 *\param[in]	pixel		The pixel
-	 *\param[in]	value		The PixelComponents value
+	 *\param[in]	value		The component value
 	 *\~french
 	 *\brief		Fonction de définition de la composante bleue d'un pixel, en flottant
 	 *\param[in]	pixel		Le pixel
@@ -364,9 +385,9 @@ namespace castor
 	}
 	/**
 	 *\~english
-	 *\brief		Function to retrieve pixel blue PixelComponents in byte
+	 *\brief		Function to retrieve pixel blue component in byte
 	 *\param[in]	pixel		The pixel
-	 *\return		The PixelComponents value
+	 *\return		The component value
 	 *\~french
 	 *\brief		Fonction de récupération de la composante bleue d'un pixel, en octet
 	 *\param[in]	pixel		Le pixel
@@ -379,9 +400,9 @@ namespace castor
 	}
 	/**
 	 *\~english
-	 *\brief		Function to define pixel blue PixelComponents in byte
+	 *\brief		Function to define pixel blue component in byte
 	 *\param[in]	pixel		The pixel
-	 *\param[in]	value		The PixelComponents value
+	 *\param[in]	value		The component value
 	 *\~french
 	 *\brief		Fonction de définition de la composante bleue d'un pixel, en octet
 	 *\param[in]	pixel		Le pixel
@@ -394,9 +415,9 @@ namespace castor
 	}
 	/**
 	 *\~english
-	 *\brief		Function to retrieve pixel alpha PixelComponents in float
+	 *\brief		Function to retrieve pixel alpha component in float
 	 *\param[in]	pixel		The pixel
-	 *\return		The PixelComponents value
+	 *\return		The component value
 	 *\~french
 	 *\brief		Fonction de récupération de la composante alpha d'un pixel, en flottant
 	 *\param[in]	pixel		Le pixel
@@ -409,9 +430,9 @@ namespace castor
 	}
 	/**
 	 *\~english
-	 *\brief		Function to define pixel alpha PixelComponents in float
+	 *\brief		Function to define pixel alpha component in float
 	 *\param[in]	pixel		The pixel
-	 *\param[in]	value		The PixelComponents value
+	 *\param[in]	value		The component value
 	 *\~french
 	 *\brief		Fonction de définition de la composante alpha d'un pixel, en flottant
 	 *\param[in]	pixel		Le pixel
@@ -424,9 +445,9 @@ namespace castor
 	}
 	/**
 	 *\~english
-	 *\brief		Function to retrieve pixel alpha PixelComponents in byte
+	 *\brief		Function to retrieve pixel alpha component in byte
 	 *\param[in]	pixel		The pixel
-	 *\return		The PixelComponents value
+	 *\return		The component value
 	 *\~french
 	 *\brief		Fonction de récupération de la composante alpha d'un pixel, en octet
 	 *\param[in]	pixel		Le pixel
@@ -439,9 +460,9 @@ namespace castor
 	}
 	/**
 	 *\~english
-	 *\brief		Function to define pixel alpha PixelComponents in byte
+	 *\brief		Function to define pixel alpha component in byte
 	 *\param[in]	pixel		The pixel
-	 *\param[in]	value		The PixelComponents value
+	 *\param[in]	value		The component value
 	 *\~french
 	 *\brief		Fonction de définition de la composante alpha d'un pixel, en octet
 	 *\param[in]	pixel		Le pixel
@@ -454,9 +475,9 @@ namespace castor
 	}
 	/**
 	 *\~english
-	 *\brief		Function to retrieve pixel depth PixelComponents in float
+	 *\brief		Function to retrieve pixel depth component in float
 	 *\param[in]	pixel		The pixel
-	 *\return		The PixelComponents value
+	 *\return		The component value
 	 *\~french
 	 *\brief		Fonction de récupération de la composante profondeur d'un pixel, en flottant
 	 *\param[in]	pixel		Le pixel
@@ -469,9 +490,9 @@ namespace castor
 	}
 	/**
 	*\~english
-	*\brief		Function to define pixel depth PixelComponents in float
+	*\brief		Function to define pixel depth component in float
 	*\param[in]	pixel		The pixel
-	*\param[in]	value		The PixelComponents value
+	*\param[in]	value		The component value
 	*\~french
 	*\brief		Fonction de définition de la composante profondeur d'un pixel, en flottant
 	*\param[in]	pixel		Le pixel
@@ -484,9 +505,9 @@ namespace castor
 	}
 	/**
 	 *\~english
-	 *\brief		Function to retrieve pixel depth PixelComponents in uint16_t
+	 *\brief		Function to retrieve pixel depth component in uint16_t
 	 *\param[in]	pixel		The pixel
-	 *\return		The PixelComponents value
+	 *\return		The component value
 	 *\~french
 	 *\brief		Fonction de récupération de la composante profondeur d'un pixel, en uint16_t
 	 *\param[in]	pixel		Le pixel
@@ -499,9 +520,9 @@ namespace castor
 	}
 	/**
 	 *\~english
-	 *\brief		Function to define pixel depth PixelComponents in uint16_t
+	 *\brief		Function to define pixel depth component in uint16_t
 	 *\param[in]	pixel		The pixel
-	 *\param[in]	value		The PixelComponents value
+	 *\param[in]	value		The component value
 	 *\~french
 	 *\brief		Fonction de définition de la composante profondeur d'un pixel, en uint16_t
 	 *\param[in]	pixel		Le pixel
@@ -514,9 +535,9 @@ namespace castor
 	}
 	/**
 	 *\~english
-	 *\brief		Function to retrieve pixel depth PixelComponents in uint32_t, with 24 relevant bits
+	 *\brief		Function to retrieve pixel depth component in uint32_t, with 24 relevant bits
 	 *\param[in]	pixel		The pixel
-	 *\return		The PixelComponents value
+	 *\return		The component value
 	 *\~french
 	 *\brief		Fonction de récupération de la composante profondeur d'un pixel, en uint32_t, avec 24 bits utiles
 	 *\param[in]	pixel		Le pixel
@@ -529,9 +550,9 @@ namespace castor
 	}
 	/**
 	 *\~english
-	 *\brief		Function to define pixel depth PixelComponents in uint32_t, with 24 relevant bits
+	 *\brief		Function to define pixel depth component in uint32_t, with 24 relevant bits
 	 *\param[in]	pixel		The pixel
-	 *\param[in]	value		The PixelComponents value
+	 *\param[in]	value		The component value
 	 *\~french
 	 *\brief		Fonction de définition de la composante profondeur d'un pixel, en uint32_t, avec 24 bits utiles
 	 *\param[in]	pixel		Le pixel
@@ -546,7 +567,7 @@ namespace castor
 	 *\~english
 	 *\brief		Function to retrieve pixel depth stencil in byte
 	 *\param[in]	pixel		The pixel
-	 *\return		The PixelComponents value
+	 *\return		The component value
 	 *\~french
 	 *\brief		Fonction de récupération de la composante stencil d'un pixel, en octet
 	 *\param[in]	pixel		Le pixel
@@ -561,7 +582,7 @@ namespace castor
 	 *\~english
 	 *\brief		Function to define pixel depth stencil in byte
 	 *\param[in]	pixel		The pixel
-	 *\param[in]	value		The PixelComponents value
+	 *\param[in]	value		The component value
 	 *\~french
 	 *\brief		Fonction de définition de la composante stencil d'un pixel, en octet
 	 *\param[in]	pixel		Le pixel
@@ -571,7 +592,8 @@ namespace castor
 	void setS8U( Pixel< PF > & pixel, uint8_t value )
 	{
 		return setS8U< PF >( pixel.ptr(), value );
-	}}
+	}
+}
 
 #include "PixelComponents.inl"
 
