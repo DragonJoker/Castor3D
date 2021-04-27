@@ -76,7 +76,7 @@ namespace castor
 		 *\param[in]	components	Initialise les données à celles-ci
 		 */
 		template< PixelFormat FU >
-		explicit Pixel( std::array< uint8_t, PixelDefinitions< FU >::Size > const & components );
+		explicit Pixel( std::array< uint8_t, PixelDefinitionsT< FU >::Size > const & components );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -185,7 +185,7 @@ namespace castor
 		 *\return
 		 */
 		template< PixelFormat FU >
-		void set( std::array< uint8_t, PixelDefinitions< FU >::Size > const & components );
+		void set( std::array< uint8_t, PixelDefinitionsT< FU >::Size > const & components );
 		/**
 		 *\~english
 		 *\brief		Converts given data and copies it into this pixel's components
@@ -294,7 +294,7 @@ namespace castor
 		 */
 		inline iterator end()
 		{
-			return ( m_components ? m_components.get() + PixelDefinitions< FT >::Size : nullptr );
+			return ( m_components ? m_components.get() + PixelDefinitionsT< FT >::Size : nullptr );
 		}
 		/**
 		 *\~english
@@ -306,7 +306,7 @@ namespace castor
 		 */
 		inline const_iterator end()const
 		{
-			return ( m_components ? m_components.get() + PixelDefinitions< FT >::Size : nullptr );
+			return ( m_components ? m_components.get() + PixelDefinitionsT< FT >::Size : nullptr );
 		}
 		/**
 		 *\~english
@@ -330,7 +330,7 @@ namespace castor
 		 */
 		static uint32_t getSize()
 		{
-			return PixelDefinitions< FT >::Size;
+			return PixelDefinitionsT< FT >::Size;
 		}
 		/**
 		 *\~english

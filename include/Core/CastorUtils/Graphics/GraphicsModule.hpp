@@ -6,6 +6,7 @@ See LICENSE file in root folder
 #pragma once
 
 #include "CastorUtils/CastorUtils.hpp"
+#include "CastorUtils/Design/FlagCombination.hpp"
 
 namespace castor
 {
@@ -120,16 +121,16 @@ namespace castor
 	enum class RgbaComponent
 		: uint8_t
 	{
-		//!\~english	Red PixelComponents
+		//!\~english	Red component
 		//!\~french		Composante rouge
 		eRed,
-		//!\~english	Green PixelComponents
+		//!\~english	Green component
 		//!\~french		Composante verte
 		eGreen,
-		//!\~english	Blue PixelComponents
+		//!\~english	Blue component
 		//!\~french		Composante bleue
 		eBlue,
-		//!\~english	Alpha PixelComponents
+		//!\~english	Alpha component
 		//!\~french		Composante alpha
 		eAlpha,
 		CU_ScopedEnumBounds( eRed )
@@ -143,21 +144,18 @@ namespace castor
 	enum class RgbComponent
 		: uint8_t
 	{
-		//!\~english	Red PixelComponents
+		//!\~english	Red component
 		//!\~french		Composante rouge
 		eRed,
-		//!\~english	Green PixelComponents
+		//!\~english	Green component
 		//!\~french		Composante verte
 		eGreen,
-		//!\~english	Blue PixelComponents
+		//!\~english	Blue component
 		//!\~french		Composante bleue
 		eBlue,
 		CU_ScopedEnumBounds( eRed )
 	};
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		03/01/2011
 	\~english
 	\brief		Intersection types
 	\remark		Enumerates the different intersection types.
@@ -228,9 +226,9 @@ namespace castor
 	class BoundingSphere;
 	/**
 	\~english
-	\brief		Defines a colour PixelComponents (R, G, B or A) to be used in castor::RgbColour or castor::RgbaColour.
+	\brief		Defines a colour component (R, G, B or A) to be used in castor::RgbColour or castor::RgbaColour.
 	\remark		Holds conversion operators to be converted either into float or uint8_t, with corresponding operations.
-				<br />A colour PixelComponents value is a floating number between 0.0 and 1.0.
+				<br />A colour component value is a floating number between 0.0 and 1.0.
 	\~french
 	\brief		Représente une composante de couleur (R, V, B ou A) pour l'utilisation dans castor::RgbColour ou castor::RgbaColour.
 	\remark		Définit les opérateurs de conversion en float ou uint8_t, avec les opérations correspondantes.
@@ -239,7 +237,7 @@ namespace castor
 	class ColourComponent;
 	/**
 	\~english
-	\brief		Defines a HDR colour PixelComponents (R, G, B or A) to be used in castor::HdrRgbColour or castor::HdrRgbaColour.
+	\brief		Defines a HDR colour component (R, G, B or A) to be used in castor::HdrRgbColour or castor::HdrRgbaColour.
 	\remark		Holds conversion operators to be converted either into float or uint8_t, with corresponding operations
 	\~french
 	\brief		Représente une composante de couleur HDR (R, V, B ou A) pour l'utilisation dans castor::HdrRgbColour ou castor::HdrRgbaColour.
@@ -384,7 +382,7 @@ namespace castor
 	struct PixelIterator;
 	/**
 	\~english
-	\brief Pixel PixelComponents enumeration.
+	\brief Pixel PixelComponentsT enumeration.
 	\~french
 	\brief Enumération des composantes de Pixel.
 	*/
@@ -393,34 +391,32 @@ namespace castor
 	{
 		//!\~english	Red.
 		//!\~french		Rouge.
-		eRed,
+		eRed = 0x01,
 		//!\~english	Green.
 		//!\~french		Vert.
-		eGreen,
+		eGreen = 0x02,
 		//!\~english	Blue.
 		//!\~french		Bleu.
-		eBlue,
+		eBlue = 0x04,
 		//!\~english	Alpha.
 		//!\~french		Alpha.
-		eAlpha,
+		eAlpha = 0x08,
 		//!\~english	Depth.
 		//!\~french		Profondeur.
-		eDepth,
+		eDepth = 0x10,
 		//!\~english	Stencil.
 		//!\~french		Stencil.
-		eStencil,
-		CU_ScopedEnumBounds( eRed )
+		eStencil = 0x20,
 	};
+	CU_ImplementFlags( PixelComponent )
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		27/05/2013
 	\~english
-	\brief		Holds colour/depth/stencil PixelComponents helper functions
+	\brief		Holds colour/depth/stencil PixelComponentsT helper functions
 	\~french
 	\brief		Contient des fonctions d'aides à la conversion de composantes couleur/profondeur/stencil
 	*/
 	template< PixelFormat PixelFormatT >
-	struct PixelComponents;
+	struct PixelComponentsT;
 	/**
 	 *\~english
 	 *\brief		Helper struct that holds pixel size, toString and converion functions
@@ -428,7 +424,17 @@ namespace castor
 	 *\brief		Structure d'aide contenant la taille d'un pixel ainsi que sa fonction toString et les fonction de conversion vers d'autres formats
 	 */
 	template< PixelFormat PixelFormatT >
-	struct PixelDefinitions;
+	struct PixelDefinitionsT;
+	/**
+	 *\~english
+	 *\brief		Gives the format of a single component of a pixel format.
+	 *\~french
+	 *\brief		Donne le format d'une composante d'un format de pixels.
+	 */
+	template< PixelFormat PixelFormatT, typename EnableT = void >
+	struct SingleComponentT;
+	template< PixelFormat PixelFormatT >
+	static PixelFormat constexpr singleComponentV = SingleComponentT< PixelFormatT >::value;
 	/**
 	 *\~english
 	 *\brief		Helper struct to tell if a pixel format represents a colour

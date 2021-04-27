@@ -118,6 +118,23 @@ namespace castor
 		 *\return		La référence de l'image
 		 */
 		CU_API Image & resample( Size const & size );
+		//@}
+		/**
+		 *\~english
+		 *\brief		Resizes the image to the given resolution
+		 *\param[in]	size	The new resolution
+		 *\return		A reference to the image
+		 *\~french
+		 *\brief		Redimensionne l'image à la résolution donnée
+		 *\param[in]	size	La nouvelle résolution
+		 *\return		La référence de l'image
+		 */
+		CU_API Image getResampled( Size const & size )const
+		{
+			auto result = *this;
+			result.resample( size );
+			return result;
+		}
 		/**
 		 *\~english
 		 *\brief		Fills all image pixels with the given colour

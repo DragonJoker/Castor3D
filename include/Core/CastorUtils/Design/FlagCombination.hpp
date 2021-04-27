@@ -6,11 +6,12 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Design/DesignModule.hpp"
 
+#include <iterator>
 #include <type_traits>
 
 namespace castor
 {
-	template< typename FlagType >
+	template< typename FlagType, typename IteratorTraitsT >
 	struct FlagIterator
 	{
 	public:
@@ -18,20 +19,28 @@ namespace castor
 		using BaseType = typename std::underlying_type< FlagType >::type;
 
 	public:
+		inline constexpr FlagIterator( FlagIterator const & value )
+			: m_initialValue{ value.m_initialValue }
+			, m_index{ value.m_index }
+			, m_value{ value.m_value }
+		{
+		}
 		/**
 		* Begin ctor.
 		*/
-		inline constexpr FlagIterator( BaseType value )
-			: m_initialValue{ value }
+		inline constexpr FlagIterator( BaseType contValue )
+			: m_initialValue{ contValue }
 		{
 			doGetNextValue();
 		}
 		/**
 		* End ctor.
 		*/
-		inline constexpr FlagIterator()
-			: m_initialValue{ 0u }
+		inline constexpr FlagIterator( BaseType contValue
+			, FlagType iterValue )
+			: m_initialValue{ contValue }
 			, m_index{ sizeof( BaseType ) * 8 }
+			, m_value{ iterValue }
 		{
 		}
 
@@ -148,7 +157,24 @@ namespace castor
 
 		inline constexpr FlagIterator< FlagType > end()const noexcept
 		{
-			return FlagIterator< FlagType >();
+			return FlagIterator< FlagType >( m_value, FlagType{} );
+		}
+
+		inline constexpr size_t size()const noexcept
+		{
+			size_t result = 0;
+
+			for ( auto it = begin(); it != end(); ++it )
+			{
+				++result;
+			}
+
+			return result;
+		}
+
+		inline constexpr bool empty()const noexcept
+		{
+			return value() == 0u;
 		}
 		/**\}*/
 		/**
