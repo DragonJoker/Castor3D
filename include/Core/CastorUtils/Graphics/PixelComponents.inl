@@ -23,7 +23,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR4G4_UNORM
 	//!\~french		Spécialisation pour PixelFormat::eR4G4_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eR4G4_UNORM >
+	struct PixelComponentsT< PixelFormat::eR4G4_UNORM >
 	{
 		using Type = uint8_t;
 		struct Pixel
@@ -73,7 +73,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR4G4B4A4_UNORM
 	//!\~french		Spécialisation pour PixelFormat::eR4G4B4A4_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eR4G4B4A4_UNORM >
+	struct PixelComponentsT< PixelFormat::eR4G4B4A4_UNORM >
 	{
 		using Type = uint8_t;
 		struct Pixel
@@ -127,7 +127,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eB4G4R4A4_UNORM
 	//!\~french		Spécialisation pour PixelFormat::eB4G4R4A4_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eB4G4R4A4_UNORM >
+	struct PixelComponentsT< PixelFormat::eB4G4R4A4_UNORM >
 	{
 		using Type = uint8_t;
 		struct Pixel
@@ -181,7 +181,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR5G6B5_UNORM
 	//!\~french		Spécialisation pour PixelFormat::eR5G6B5_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eR5G6B5_UNORM >
+	struct PixelComponentsT< PixelFormat::eR5G6B5_UNORM >
 	{
 		using Type = uint8_t;
 		struct Pixel
@@ -233,7 +233,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eB5G6R5_UNORM
 	//!\~french		Spécialisation pour PixelFormat::eB5G6R5_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eB5G6R5_UNORM >
+	struct PixelComponentsT< PixelFormat::eB5G6R5_UNORM >
 	{
 		using Type = uint8_t;
 		struct Pixel
@@ -285,7 +285,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR5G5B5A1_UNORM
 	//!\~french		Spécialisation pour PixelFormat::eR5G5B5A1_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eR5G5B5A1_UNORM >
+	struct PixelComponentsT< PixelFormat::eR5G5B5A1_UNORM >
 	{
 		using Type = uint8_t;
 		struct Pixel
@@ -339,7 +339,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eB5G5R5A1_UNORM
 	//!\~french		Spécialisation pour PixelFormat::eB5G5R5A1_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eB5G5R5A1_UNORM >
+	struct PixelComponentsT< PixelFormat::eB5G5R5A1_UNORM >
 	{
 		using Type = uint8_t;
 		struct Pixel
@@ -393,7 +393,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eA1R5G5B5_UNORM
 	//!\~french		Spécialisation pour PixelFormat::eA1R5G5B5_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eA1R5G5B5_UNORM >
+	struct PixelComponentsT< PixelFormat::eA1R5G5B5_UNORM >
 	{
 		using Type = uint8_t;
 		struct Pixel
@@ -447,7 +447,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR8_UNORM
 	//!\~french		Spécialisation pour PixelFormat::eR8_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eR8_UNORM >
+	struct PixelComponentsT< PixelFormat::eR8_UNORM >
 	{
 		using Type = uint8_t;
 		struct Pixel
@@ -495,7 +495,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR8_SNORM
 	//!\~french		Spécialisation pour PixelFormat::eR8_SNORM
 	template<>
-	struct PixelComponents< PixelFormat::eR8_SNORM >
+	struct PixelComponentsT< PixelFormat::eR8_SNORM >
 	{
 		using Type = int8_t;
 		struct Pixel
@@ -543,42 +543,42 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR8_USCALED
 	//!\~french		Spécialisation pour PixelFormat::eR8_USCALED
 	template<>
-	struct PixelComponents< PixelFormat::eR8_USCALED >
-		: public PixelComponents< PixelFormat::eR8_UNORM >
+	struct PixelComponentsT< PixelFormat::eR8_USCALED >
+		: public PixelComponentsT< PixelFormat::eR8_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR8_SSCALED
 	//!\~french		Spécialisation pour PixelFormat::eR8_SSCALED
 	template<>
-	struct PixelComponents< PixelFormat::eR8_SSCALED >
-		: public PixelComponents< PixelFormat::eR8_SNORM >
+	struct PixelComponentsT< PixelFormat::eR8_SSCALED >
+		: public PixelComponentsT< PixelFormat::eR8_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR8_UINT
 	//!\~french		Spécialisation pour PixelFormat::eR8_UINT
 	template<>
-	struct PixelComponents< PixelFormat::eR8_UINT >
-		: public PixelComponents< PixelFormat::eR8_UNORM >
+	struct PixelComponentsT< PixelFormat::eR8_UINT >
+		: public PixelComponentsT< PixelFormat::eR8_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR8_SINT
 	//!\~french		Spécialisation pour PixelFormat::eR8_SINT
 	template<>
-	struct PixelComponents< PixelFormat::eR8_SINT >
-		: public PixelComponents< PixelFormat::eR8_SNORM >
+	struct PixelComponentsT< PixelFormat::eR8_SINT >
+		: public PixelComponentsT< PixelFormat::eR8_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR8_SRGB
 	//!\~french		Spécialisation pour PixelFormat::eR8_SRGB
 	template<>
-	struct PixelComponents< PixelFormat::eR8_SRGB >
-		: public PixelComponents< PixelFormat::eR8_UNORM >
+	struct PixelComponentsT< PixelFormat::eR8_SRGB >
+		: public PixelComponentsT< PixelFormat::eR8_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR8G8_UNORM
 	//!\~french		Spécialisation pour PixelFormat::eR8G8_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eR8G8_UNORM >
+	struct PixelComponentsT< PixelFormat::eR8G8_UNORM >
 	{
 		using Type = uint8_t;
 		struct Pixel
@@ -628,7 +628,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR8G8_SNORM
 	//!\~french		Spécialisation pour PixelFormat::eR8G8_SNORM
 	template<>
-	struct PixelComponents< PixelFormat::eR8G8_SNORM >
+	struct PixelComponentsT< PixelFormat::eR8G8_SNORM >
 	{
 		using Type = int8_t;
 		struct Pixel
@@ -678,42 +678,42 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR8G8_USCALED
 	//!\~french		Spécialisation pour PixelFormat::eR8G8_USCALED
 	template<>
-	struct PixelComponents< PixelFormat::eR8G8_USCALED >
-		: public PixelComponents< PixelFormat::eR8G8_UNORM >
+	struct PixelComponentsT< PixelFormat::eR8G8_USCALED >
+		: public PixelComponentsT< PixelFormat::eR8G8_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR8G8_SSCALED
 	//!\~french		Spécialisation pour PixelFormat::eR8G8_SSCALED
 	template<>
-	struct PixelComponents< PixelFormat::eR8G8_SSCALED >
-		: public PixelComponents< PixelFormat::eR8G8_SNORM >
+	struct PixelComponentsT< PixelFormat::eR8G8_SSCALED >
+		: public PixelComponentsT< PixelFormat::eR8G8_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR8G8_UINT
 	//!\~french		Spécialisation pour PixelFormat::eR8G8_UINT
 	template<>
-	struct PixelComponents< PixelFormat::eR8G8_UINT >
-		: public PixelComponents< PixelFormat::eR8G8_UNORM >
+	struct PixelComponentsT< PixelFormat::eR8G8_UINT >
+		: public PixelComponentsT< PixelFormat::eR8G8_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR8G8_SINT
 	//!\~french		Spécialisation pour PixelFormat::eR8G8_SINT
 	template<>
-	struct PixelComponents< PixelFormat::eR8G8_SINT >
-		: public PixelComponents< PixelFormat::eR8G8_SNORM >
+	struct PixelComponentsT< PixelFormat::eR8G8_SINT >
+		: public PixelComponentsT< PixelFormat::eR8G8_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR8G8_SRGB
 	//!\~french		Spécialisation pour PixelFormat::eR8G8_SRGB
 	template<>
-	struct PixelComponents< PixelFormat::eR8G8_SRGB >
-		: public PixelComponents< PixelFormat::eR8G8_UNORM >
+	struct PixelComponentsT< PixelFormat::eR8G8_SRGB >
+		: public PixelComponentsT< PixelFormat::eR8G8_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR8G8B8_UNORM
 	//!\~french		Spécialisation pour PixelFormat::eR8G8B8_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eR8G8B8_UNORM >
+	struct PixelComponentsT< PixelFormat::eR8G8B8_UNORM >
 	{
 		using Type = uint8_t;
 		struct Pixel
@@ -765,7 +765,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR8G8B8_SNORM
 	//!\~french		Spécialisation pour PixelFormat::eR8G8B8_SNORM
 	template<>
-	struct PixelComponents< PixelFormat::eR8G8B8_SNORM >
+	struct PixelComponentsT< PixelFormat::eR8G8B8_SNORM >
 	{
 		using Type = int8_t;
 		struct Pixel
@@ -817,42 +817,42 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR8G8B8_USCALED
 	//!\~french		Spécialisation pour PixelFormat::eR8G8B8_USCALED
 	template<>
-	struct PixelComponents< PixelFormat::eR8G8B8_USCALED >
-		: public PixelComponents< PixelFormat::eR8G8B8_UNORM >
+	struct PixelComponentsT< PixelFormat::eR8G8B8_USCALED >
+		: public PixelComponentsT< PixelFormat::eR8G8B8_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR8G8B8_SSCALED
 	//!\~french		Spécialisation pour PixelFormat::eR8G8B8_SSCALED
 	template<>
-	struct PixelComponents< PixelFormat::eR8G8B8_SSCALED >
-		: public PixelComponents< PixelFormat::eR8G8B8_SNORM >
+	struct PixelComponentsT< PixelFormat::eR8G8B8_SSCALED >
+		: public PixelComponentsT< PixelFormat::eR8G8B8_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR8G8B8_UINT
 	//!\~french		Spécialisation pour PixelFormat::eR8G8B8_UINT
 	template<>
-	struct PixelComponents< PixelFormat::eR8G8B8_UINT >
-		: public PixelComponents< PixelFormat::eR8G8B8_UNORM >
+	struct PixelComponentsT< PixelFormat::eR8G8B8_UINT >
+		: public PixelComponentsT< PixelFormat::eR8G8B8_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR8G8B8_SINT
 	//!\~french		Spécialisation pour PixelFormat::eR8G8B8_SINT
 	template<>
-	struct PixelComponents< PixelFormat::eR8G8B8_SINT >
-		: public PixelComponents< PixelFormat::eR8G8B8_SNORM >
+	struct PixelComponentsT< PixelFormat::eR8G8B8_SINT >
+		: public PixelComponentsT< PixelFormat::eR8G8B8_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR8G8B8_SRGB
 	//!\~french		Spécialisation pour PixelFormat::eR8G8B8_SRGB
 	template<>
-	struct PixelComponents< PixelFormat::eR8G8B8_SRGB >
-		: public PixelComponents< PixelFormat::eR8G8B8_UNORM >
+	struct PixelComponentsT< PixelFormat::eR8G8B8_SRGB >
+		: public PixelComponentsT< PixelFormat::eR8G8B8_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eB8G8R8_UNORM
 	//!\~french		Spécialisation pour PixelFormat::eB8G8R8_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eB8G8R8_UNORM >
+	struct PixelComponentsT< PixelFormat::eB8G8R8_UNORM >
 	{
 		using Type = uint8_t;
 		struct Pixel
@@ -904,7 +904,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eB8G8R8_SNORM
 	//!\~french		Spécialisation pour PixelFormat::eB8G8R8_SNORM
 	template<>
-	struct PixelComponents< PixelFormat::eB8G8R8_SNORM >
+	struct PixelComponentsT< PixelFormat::eB8G8R8_SNORM >
 	{
 		using Type = int8_t;
 		struct Pixel
@@ -956,42 +956,42 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eB8G8R8_USCALED
 	//!\~french		Spécialisation pour PixelFormat::eB8G8R8_USCALED
 	template<>
-	struct PixelComponents< PixelFormat::eB8G8R8_USCALED >
-		: public PixelComponents< PixelFormat::eB8G8R8_UNORM >
+	struct PixelComponentsT< PixelFormat::eB8G8R8_USCALED >
+		: public PixelComponentsT< PixelFormat::eB8G8R8_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eB8G8R8_SSCALED
 	//!\~french		Spécialisation pour PixelFormat::eB8G8R8_SSCALED
 	template<>
-	struct PixelComponents< PixelFormat::eB8G8R8_SSCALED >
-		: public PixelComponents< PixelFormat::eB8G8R8_SNORM >
+	struct PixelComponentsT< PixelFormat::eB8G8R8_SSCALED >
+		: public PixelComponentsT< PixelFormat::eB8G8R8_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eB8G8R8_UINT
 	//!\~french		Spécialisation pour PixelFormat::eB8G8R8_UINT
 	template<>
-	struct PixelComponents< PixelFormat::eB8G8R8_UINT >
-		: public PixelComponents< PixelFormat::eB8G8R8_UNORM >
+	struct PixelComponentsT< PixelFormat::eB8G8R8_UINT >
+		: public PixelComponentsT< PixelFormat::eB8G8R8_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eB8G8R8_SINT
 	//!\~french		Spécialisation pour PixelFormat::eB8G8R8_SINT
 	template<>
-	struct PixelComponents< PixelFormat::eB8G8R8_SINT >
-		: public PixelComponents< PixelFormat::eB8G8R8_SNORM >
+	struct PixelComponentsT< PixelFormat::eB8G8R8_SINT >
+		: public PixelComponentsT< PixelFormat::eB8G8R8_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eB8G8R8_SRGB
 	//!\~french		Spécialisation pour PixelFormat::eB8G8R8_SRGB
 	template<>
-	struct PixelComponents< PixelFormat::eB8G8R8_SRGB >
-		: public PixelComponents< PixelFormat::eB8G8R8_UNORM >
+	struct PixelComponentsT< PixelFormat::eB8G8R8_SRGB >
+		: public PixelComponentsT< PixelFormat::eB8G8R8_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR8G8B8A8_UNORM
 	//!\~french		Spécialisation pour PixelFormat::eR8G8B8A8_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eR8G8B8A8_UNORM >
+	struct PixelComponentsT< PixelFormat::eR8G8B8A8_UNORM >
 	{
 		using Type = uint8_t;
 		struct Pixel
@@ -1045,7 +1045,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR8G8B8A8_SNORM
 	//!\~french		Spécialisation pour PixelFormat::eR8G8B8A8_SNORM
 	template<>
-	struct PixelComponents< PixelFormat::eR8G8B8A8_SNORM >
+	struct PixelComponentsT< PixelFormat::eR8G8B8A8_SNORM >
 	{
 		using Type = int8_t;
 		struct Pixel
@@ -1099,42 +1099,42 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR8G8B8A8_USCALED
 	//!\~french		Spécialisation pour PixelFormat::eR8G8B8A8_USCALED
 	template<>
-	struct PixelComponents< PixelFormat::eR8G8B8A8_USCALED >
-		: public PixelComponents< PixelFormat::eR8G8B8A8_UNORM >
+	struct PixelComponentsT< PixelFormat::eR8G8B8A8_USCALED >
+		: public PixelComponentsT< PixelFormat::eR8G8B8A8_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR8G8B8A8_SSCALED
 	//!\~french		Spécialisation pour PixelFormat::eR8G8B8A8_SSCALED
 	template<>
-	struct PixelComponents< PixelFormat::eR8G8B8A8_SSCALED >
-		: public PixelComponents< PixelFormat::eR8G8B8A8_SNORM >
+	struct PixelComponentsT< PixelFormat::eR8G8B8A8_SSCALED >
+		: public PixelComponentsT< PixelFormat::eR8G8B8A8_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR8G8B8A8_UINT
 	//!\~french		Spécialisation pour PixelFormat::eR8G8B8A8_UINT
 	template<>
-	struct PixelComponents< PixelFormat::eR8G8B8A8_UINT >
-		: public PixelComponents< PixelFormat::eR8G8B8A8_UNORM >
+	struct PixelComponentsT< PixelFormat::eR8G8B8A8_UINT >
+		: public PixelComponentsT< PixelFormat::eR8G8B8A8_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR8G8B8A8_SINT
 	//!\~french		Spécialisation pour PixelFormat::eR8G8B8A8_SINT
 	template<>
-	struct PixelComponents< PixelFormat::eR8G8B8A8_SINT >
-		: public PixelComponents< PixelFormat::eR8G8B8A8_SNORM >
+	struct PixelComponentsT< PixelFormat::eR8G8B8A8_SINT >
+		: public PixelComponentsT< PixelFormat::eR8G8B8A8_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR8G8B8A8_SRGB
 	//!\~french		Spécialisation pour PixelFormat::eR8G8B8A8_SRGB
 	template<>
-	struct PixelComponents< PixelFormat::eR8G8B8A8_SRGB >
-		: public PixelComponents< PixelFormat::eR8G8B8A8_UNORM >
+	struct PixelComponentsT< PixelFormat::eR8G8B8A8_SRGB >
+		: public PixelComponentsT< PixelFormat::eR8G8B8A8_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eB8G8R8A8_UNORM
 	//!\~french		Spécialisation pour PixelFormat::eB8G8R8A8_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eB8G8R8A8_UNORM >
+	struct PixelComponentsT< PixelFormat::eB8G8R8A8_UNORM >
 	{
 		using Type = uint8_t;
 		struct Pixel
@@ -1188,7 +1188,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eB8G8R8A8_SNORM
 	//!\~french		Spécialisation pour PixelFormat::eB8G8R8A8_SNORM
 	template<>
-	struct PixelComponents< PixelFormat::eB8G8R8A8_SNORM >
+	struct PixelComponentsT< PixelFormat::eB8G8R8A8_SNORM >
 	{
 		using Type = int8_t;
 		struct Pixel
@@ -1242,42 +1242,42 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eB8G8R8A8_USCALED
 	//!\~french		Spécialisation pour PixelFormat::eB8G8R8A8_USCALED
 	template<>
-	struct PixelComponents< PixelFormat::eB8G8R8A8_USCALED >
-		: public PixelComponents< PixelFormat::eB8G8R8A8_UNORM >
+	struct PixelComponentsT< PixelFormat::eB8G8R8A8_USCALED >
+		: public PixelComponentsT< PixelFormat::eB8G8R8A8_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eB8G8R8A8_SSCALED
 	//!\~french		Spécialisation pour PixelFormat::eB8G8R8A8_SSCALED
 	template<>
-	struct PixelComponents< PixelFormat::eB8G8R8A8_SSCALED >
-		: public PixelComponents< PixelFormat::eB8G8R8A8_SNORM >
+	struct PixelComponentsT< PixelFormat::eB8G8R8A8_SSCALED >
+		: public PixelComponentsT< PixelFormat::eB8G8R8A8_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eB8G8R8A8_UINT
 	//!\~french		Spécialisation pour PixelFormat::eB8G8R8A8_UINT
 	template<>
-	struct PixelComponents< PixelFormat::eB8G8R8A8_UINT >
-		: public PixelComponents< PixelFormat::eB8G8R8A8_UNORM >
+	struct PixelComponentsT< PixelFormat::eB8G8R8A8_UINT >
+		: public PixelComponentsT< PixelFormat::eB8G8R8A8_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eB8G8R8A8_SINT
 	//!\~french		Spécialisation pour PixelFormat::eB8G8R8A8_SINT
 	template<>
-	struct PixelComponents< PixelFormat::eB8G8R8A8_SINT >
-		: public PixelComponents< PixelFormat::eB8G8R8A8_SNORM >
+	struct PixelComponentsT< PixelFormat::eB8G8R8A8_SINT >
+		: public PixelComponentsT< PixelFormat::eB8G8R8A8_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eB8G8R8A8_SRGB
 	//!\~french		Spécialisation pour PixelFormat::eB8G8R8A8_SRGB
 	template<>
-	struct PixelComponents< PixelFormat::eB8G8R8A8_SRGB >
-		: public PixelComponents< PixelFormat::eB8G8R8A8_UNORM >
+	struct PixelComponentsT< PixelFormat::eB8G8R8A8_SRGB >
+		: public PixelComponentsT< PixelFormat::eB8G8R8A8_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eA8B8G8R8_UNORM
 	//!\~french		Spécialisation pour PixelFormat::eA8B8G8R8_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eA8B8G8R8_UNORM >
+	struct PixelComponentsT< PixelFormat::eA8B8G8R8_UNORM >
 	{
 		using Type = uint8_t;
 		struct Pixel
@@ -1331,7 +1331,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eA8B8G8R8_SNORM
 	//!\~french		Spécialisation pour PixelFormat::eA8B8G8R8_SNORM
 	template<>
-	struct PixelComponents< PixelFormat::eA8B8G8R8_SNORM >
+	struct PixelComponentsT< PixelFormat::eA8B8G8R8_SNORM >
 	{
 		using Type = int8_t;
 		struct Pixel
@@ -1385,42 +1385,42 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eA8B8G8R8_USCALED
 	//!\~french		Spécialisation pour PixelFormat::eA8B8G8R8_USCALED
 	template<>
-	struct PixelComponents< PixelFormat::eA8B8G8R8_USCALED >
-		: public PixelComponents< PixelFormat::eA8B8G8R8_UNORM >
+	struct PixelComponentsT< PixelFormat::eA8B8G8R8_USCALED >
+		: public PixelComponentsT< PixelFormat::eA8B8G8R8_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eA8B8G8R8_SSCALED
 	//!\~french		Spécialisation pour PixelFormat::eA8B8G8R8_SSCALED
 	template<>
-	struct PixelComponents< PixelFormat::eA8B8G8R8_SSCALED >
-		: public PixelComponents< PixelFormat::eA8B8G8R8_SNORM >
+	struct PixelComponentsT< PixelFormat::eA8B8G8R8_SSCALED >
+		: public PixelComponentsT< PixelFormat::eA8B8G8R8_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eA8B8G8R8_UINT
 	//!\~french		Spécialisation pour PixelFormat::eA8B8G8R8_UINT
 	template<>
-	struct PixelComponents< PixelFormat::eA8B8G8R8_UINT >
-		: public PixelComponents< PixelFormat::eA8B8G8R8_UNORM >
+	struct PixelComponentsT< PixelFormat::eA8B8G8R8_UINT >
+		: public PixelComponentsT< PixelFormat::eA8B8G8R8_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eA8B8G8R8_SINT
 	//!\~french		Spécialisation pour PixelFormat::eA8B8G8R8_SINT
 	template<>
-	struct PixelComponents< PixelFormat::eA8B8G8R8_SINT >
-		: public PixelComponents< PixelFormat::eA8B8G8R8_SNORM >
+	struct PixelComponentsT< PixelFormat::eA8B8G8R8_SINT >
+		: public PixelComponentsT< PixelFormat::eA8B8G8R8_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eA8B8G8R8_SRGB
 	//!\~french		Spécialisation pour PixelFormat::eA8B8G8R8_SRGB
 	template<>
-	struct PixelComponents< PixelFormat::eA8B8G8R8_SRGB >
-		: public PixelComponents< PixelFormat::eA8B8G8R8_UNORM >
+	struct PixelComponentsT< PixelFormat::eA8B8G8R8_SRGB >
+		: public PixelComponentsT< PixelFormat::eA8B8G8R8_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eA2R10G10B10_UNORM
 	//!\~french		Spécialisation pour PixelFormat::eA2R10G10B10_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eA2R10G10B10_UNORM >
+	struct PixelComponentsT< PixelFormat::eA2R10G10B10_UNORM >
 	{
 		using Type = uint16_t;
 		struct Pixel
@@ -1474,7 +1474,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eA2R10G10B10_SNORM
 	//!\~french		Spécialisation pour PixelFormat::eA2R10G10B10_SNORM
 	template<>
-	struct PixelComponents< PixelFormat::eA2R10G10B10_SNORM >
+	struct PixelComponentsT< PixelFormat::eA2R10G10B10_SNORM >
 	{
 		using Type = int16_t;
 		struct Pixel
@@ -1528,35 +1528,35 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eA2R10G10B10_USCALED
 	//!\~french		Spécialisation pour PixelFormat::eA2R10G10B10_USCALED
 	template<>
-	struct PixelComponents< PixelFormat::eA2R10G10B10_USCALED >
-		: public PixelComponents< PixelFormat::eA2R10G10B10_UNORM >
+	struct PixelComponentsT< PixelFormat::eA2R10G10B10_USCALED >
+		: public PixelComponentsT< PixelFormat::eA2R10G10B10_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eA2R10G10B10_SSCALED
 	//!\~french		Spécialisation pour PixelFormat::eA2R10G10B10_SSCALED
 	template<>
-	struct PixelComponents< PixelFormat::eA2R10G10B10_SSCALED >
-		: public PixelComponents< PixelFormat::eA2R10G10B10_SNORM >
+	struct PixelComponentsT< PixelFormat::eA2R10G10B10_SSCALED >
+		: public PixelComponentsT< PixelFormat::eA2R10G10B10_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eA2R10G10B10_UINT
 	//!\~french		Spécialisation pour PixelFormat::eA2R10G10B10_UINT
 	template<>
-	struct PixelComponents< PixelFormat::eA2R10G10B10_UINT >
-		: public PixelComponents< PixelFormat::eA2R10G10B10_UNORM >
+	struct PixelComponentsT< PixelFormat::eA2R10G10B10_UINT >
+		: public PixelComponentsT< PixelFormat::eA2R10G10B10_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eA2R10G10B10_SINT
 	//!\~french		Spécialisation pour PixelFormat::eA2R10G10B10_SINT
 	template<>
-	struct PixelComponents< PixelFormat::eA2R10G10B10_SINT >
-		: public PixelComponents< PixelFormat::eA2R10G10B10_SNORM >
+	struct PixelComponentsT< PixelFormat::eA2R10G10B10_SINT >
+		: public PixelComponentsT< PixelFormat::eA2R10G10B10_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eA2B10G10R10_UNORM
 	//!\~french		Spécialisation pour PixelFormat::eA2B10G10R10_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eA2B10G10R10_UNORM >
+	struct PixelComponentsT< PixelFormat::eA2B10G10R10_UNORM >
 	{
 		using Type = uint16_t;
 		struct Pixel
@@ -1610,7 +1610,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eA2B10G10R10_SNORM
 	//!\~french		Spécialisation pour PixelFormat::eA2B10G10R10_SNORM
 	template<>
-	struct PixelComponents< PixelFormat::eA2B10G10R10_SNORM >
+	struct PixelComponentsT< PixelFormat::eA2B10G10R10_SNORM >
 	{
 		using Type = int16_t;
 		struct Pixel
@@ -1664,35 +1664,35 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eA2B10G10R10_USCALED
 	//!\~french		Spécialisation pour PixelFormat::eA2B10G10R10_USCALED
 	template<>
-	struct PixelComponents< PixelFormat::eA2B10G10R10_USCALED >
-		: public PixelComponents< PixelFormat::eA2B10G10R10_UNORM >
+	struct PixelComponentsT< PixelFormat::eA2B10G10R10_USCALED >
+		: public PixelComponentsT< PixelFormat::eA2B10G10R10_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eA2B10G10R10_SSCALED
 	//!\~french		Spécialisation pour PixelFormat::eA2B10G10R10_SSCALED
 	template<>
-	struct PixelComponents< PixelFormat::eA2B10G10R10_SSCALED >
-		: public PixelComponents< PixelFormat::eA2B10G10R10_SNORM >
+	struct PixelComponentsT< PixelFormat::eA2B10G10R10_SSCALED >
+		: public PixelComponentsT< PixelFormat::eA2B10G10R10_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eA2B10G10R10_UINT
 	//!\~french		Spécialisation pour PixelFormat::eA2B10G10R10_UINT
 	template<>
-	struct PixelComponents< PixelFormat::eA2B10G10R10_UINT >
-		: public PixelComponents< PixelFormat::eA2B10G10R10_UNORM >
+	struct PixelComponentsT< PixelFormat::eA2B10G10R10_UINT >
+		: public PixelComponentsT< PixelFormat::eA2B10G10R10_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eA2B10G10R10_SINT
 	//!\~french		Spécialisation pour PixelFormat::eA2B10G10R10_SINT
 	template<>
-	struct PixelComponents< PixelFormat::eA2B10G10R10_SINT >
-		: public PixelComponents< PixelFormat::eA2B10G10R10_SNORM >
+	struct PixelComponentsT< PixelFormat::eA2B10G10R10_SINT >
+		: public PixelComponentsT< PixelFormat::eA2B10G10R10_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR16_UNORM
 	//!\~french		Spécialisation pour PixelFormat::eR16_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eR16_UNORM >
+	struct PixelComponentsT< PixelFormat::eR16_UNORM >
 	{
 		using Type = uint16_t;
 		struct Pixel
@@ -1740,7 +1740,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR16_SNORM
 	//!\~french		Spécialisation pour PixelFormat::eR16_SNORM
 	template<>
-	struct PixelComponents< PixelFormat::eR16_SNORM >
+	struct PixelComponentsT< PixelFormat::eR16_SNORM >
 	{
 		using Type = int16_t;
 		struct Pixel
@@ -1788,42 +1788,42 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR16_USCALED
 	//!\~french		Spécialisation pour PixelFormat::eR16_USCALED
 	template<>
-	struct PixelComponents< PixelFormat::eR16_USCALED >
-		: public PixelComponents< PixelFormat::eR16_UNORM >
+	struct PixelComponentsT< PixelFormat::eR16_USCALED >
+		: public PixelComponentsT< PixelFormat::eR16_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR16_SSCALED
 	//!\~french		Spécialisation pour PixelFormat::eR16_SSCALED
 	template<>
-	struct PixelComponents< PixelFormat::eR16_SSCALED >
-		: public PixelComponents< PixelFormat::eR16_SNORM >
+	struct PixelComponentsT< PixelFormat::eR16_SSCALED >
+		: public PixelComponentsT< PixelFormat::eR16_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR16_UINT
 	//!\~french		Spécialisation pour PixelFormat::eR16_UINT
 	template<>
-	struct PixelComponents< PixelFormat::eR16_UINT >
-		: public PixelComponents< PixelFormat::eR16_UNORM >
+	struct PixelComponentsT< PixelFormat::eR16_UINT >
+		: public PixelComponentsT< PixelFormat::eR16_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR16_SINT
 	//!\~french		Spécialisation pour PixelFormat::eR16_SINT
 	template<>
-	struct PixelComponents< PixelFormat::eR16_SINT >
-		: public PixelComponents< PixelFormat::eR16_SNORM >
+	struct PixelComponentsT< PixelFormat::eR16_SINT >
+		: public PixelComponentsT< PixelFormat::eR16_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR16_SFLOAT
 	//!\~french		Spécialisation pour PixelFormat::eR16_SFLOAT
 	template<>
-	struct PixelComponents< PixelFormat::eR16_SFLOAT >
-		: public PixelComponents< PixelFormat::eR16_SNORM >
+	struct PixelComponentsT< PixelFormat::eR16_SFLOAT >
+		: public PixelComponentsT< PixelFormat::eR16_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR16G16_UNORM
 	//!\~french		Spécialisation pour PixelFormat::eR16G16_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eR16G16_UNORM >
+	struct PixelComponentsT< PixelFormat::eR16G16_UNORM >
 	{
 		using Type = uint16_t;
 		struct Pixel
@@ -1873,7 +1873,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR16G16_SNORM
 	//!\~french		Spécialisation pour PixelFormat::eR16G16_SNORM
 	template<>
-	struct PixelComponents< PixelFormat::eR16G16_SNORM >
+	struct PixelComponentsT< PixelFormat::eR16G16_SNORM >
 	{
 		using Type = int16_t;
 		struct Pixel
@@ -1923,42 +1923,42 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR16G16_USCALED
 	//!\~french		Spécialisation pour PixelFormat::eR16G16_USCALED
 	template<>
-	struct PixelComponents< PixelFormat::eR16G16_USCALED >
-		: public PixelComponents< PixelFormat::eR16G16_UNORM >
+	struct PixelComponentsT< PixelFormat::eR16G16_USCALED >
+		: public PixelComponentsT< PixelFormat::eR16G16_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR16G16_SSCALED
 	//!\~french		Spécialisation pour PixelFormat::eR16G16_SSCALED
 	template<>
-	struct PixelComponents< PixelFormat::eR16G16_SSCALED >
-		: public PixelComponents< PixelFormat::eR16G16_SNORM >
+	struct PixelComponentsT< PixelFormat::eR16G16_SSCALED >
+		: public PixelComponentsT< PixelFormat::eR16G16_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR16G16_UINT
 	//!\~french		Spécialisation pour PixelFormat::eR16G16_UINT
 	template<>
-	struct PixelComponents< PixelFormat::eR16G16_UINT >
-		: public PixelComponents< PixelFormat::eR16G16_UNORM >
+	struct PixelComponentsT< PixelFormat::eR16G16_UINT >
+		: public PixelComponentsT< PixelFormat::eR16G16_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR16G16_SINT
 	//!\~french		Spécialisation pour PixelFormat::eR16G16_SINT
 	template<>
-	struct PixelComponents< PixelFormat::eR16G16_SINT >
-		: public PixelComponents< PixelFormat::eR16G16_SNORM >
+	struct PixelComponentsT< PixelFormat::eR16G16_SINT >
+		: public PixelComponentsT< PixelFormat::eR16G16_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR16G16_SFLOAT
 	//!\~french		Spécialisation pour PixelFormat::eR16G16_SFLOAT
 	template<>
-	struct PixelComponents< PixelFormat::eR16G16_SFLOAT >
-		: public PixelComponents< PixelFormat::eR16G16_SNORM >
+	struct PixelComponentsT< PixelFormat::eR16G16_SFLOAT >
+		: public PixelComponentsT< PixelFormat::eR16G16_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR16G16B16_UNORM
 	//!\~french		Spécialisation pour PixelFormat::eR16G16B16_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eR16G16B16_UNORM >
+	struct PixelComponentsT< PixelFormat::eR16G16B16_UNORM >
 	{
 		using Type = uint16_t;
 		struct Pixel
@@ -2010,7 +2010,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR16G16B16_SNORM
 	//!\~french		Spécialisation pour PixelFormat::eR16G16B16_SNORM
 	template<>
-	struct PixelComponents< PixelFormat::eR16G16B16_SNORM >
+	struct PixelComponentsT< PixelFormat::eR16G16B16_SNORM >
 	{
 		using Type = int16_t;
 		struct Pixel
@@ -2062,42 +2062,42 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR16G16B16_USCALED
 	//!\~french		Spécialisation pour PixelFormat::eR16G16B16_USCALED
 	template<>
-	struct PixelComponents< PixelFormat::eR16G16B16_USCALED >
-		: public PixelComponents< PixelFormat::eR16G16B16_UNORM >
+	struct PixelComponentsT< PixelFormat::eR16G16B16_USCALED >
+		: public PixelComponentsT< PixelFormat::eR16G16B16_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR16G16B16_SSCALED
 	//!\~french		Spécialisation pour PixelFormat::eR16G16B16_SSCALED
 	template<>
-	struct PixelComponents< PixelFormat::eR16G16B16_SSCALED >
-		: public PixelComponents< PixelFormat::eR16G16B16_SNORM >
+	struct PixelComponentsT< PixelFormat::eR16G16B16_SSCALED >
+		: public PixelComponentsT< PixelFormat::eR16G16B16_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR16G16B16_UINT
 	//!\~french		Spécialisation pour PixelFormat::eR16G16B16_UINT
 	template<>
-	struct PixelComponents< PixelFormat::eR16G16B16_UINT >
-		: public PixelComponents< PixelFormat::eR16G16B16_UNORM >
+	struct PixelComponentsT< PixelFormat::eR16G16B16_UINT >
+		: public PixelComponentsT< PixelFormat::eR16G16B16_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR16G16B16_SINT
 	//!\~french		Spécialisation pour PixelFormat::eR16G16B16_SINT
 	template<>
-	struct PixelComponents< PixelFormat::eR16G16B16_SINT >
-		: public PixelComponents< PixelFormat::eR16G16B16_SNORM >
+	struct PixelComponentsT< PixelFormat::eR16G16B16_SINT >
+		: public PixelComponentsT< PixelFormat::eR16G16B16_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR16G16B16_SFLOAT
 	//!\~french		Spécialisation pour PixelFormat::eR16G16B16_SFLOAT
 	template<>
-	struct PixelComponents< PixelFormat::eR16G16B16_SFLOAT >
-		: public PixelComponents< PixelFormat::eR16G16B16_SNORM >
+	struct PixelComponentsT< PixelFormat::eR16G16B16_SFLOAT >
+		: public PixelComponentsT< PixelFormat::eR16G16B16_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR16G16B16A16_UNORM
 	//!\~french		Spécialisation pour PixelFormat::eR16G16B16A16_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eR16G16B16A16_UNORM >
+	struct PixelComponentsT< PixelFormat::eR16G16B16A16_UNORM >
 	{
 		using Type = uint16_t;
 		struct Pixel
@@ -2151,7 +2151,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR16G16B16A16_SNORM
 	//!\~french		Spécialisation pour PixelFormat::eR16G16B16A16_SNORM
 	template<>
-	struct PixelComponents< PixelFormat::eR16G16B16A16_SNORM >
+	struct PixelComponentsT< PixelFormat::eR16G16B16A16_SNORM >
 	{
 		using Type = int16_t;
 		struct Pixel
@@ -2205,42 +2205,42 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR16G16B16A16_USCALED
 	//!\~french		Spécialisation pour PixelFormat::eR16G16B16A16_USCALED
 	template<>
-	struct PixelComponents< PixelFormat::eR16G16B16A16_USCALED >
-		: public PixelComponents< PixelFormat::eR16G16B16A16_UNORM >
+	struct PixelComponentsT< PixelFormat::eR16G16B16A16_USCALED >
+		: public PixelComponentsT< PixelFormat::eR16G16B16A16_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR16G16B16A16_SSCALED
 	//!\~french		Spécialisation pour PixelFormat::eR16G16B16A16_SSCALED
 	template<>
-	struct PixelComponents< PixelFormat::eR16G16B16A16_SSCALED >
-		: public PixelComponents< PixelFormat::eR16G16B16A16_SNORM >
+	struct PixelComponentsT< PixelFormat::eR16G16B16A16_SSCALED >
+		: public PixelComponentsT< PixelFormat::eR16G16B16A16_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR16G16B16A16_UINT
 	//!\~french		Spécialisation pour PixelFormat::eR16G16B16A16_UINT
 	template<>
-	struct PixelComponents< PixelFormat::eR16G16B16A16_UINT >
-		: public PixelComponents< PixelFormat::eR16G16B16A16_UNORM >
+	struct PixelComponentsT< PixelFormat::eR16G16B16A16_UINT >
+		: public PixelComponentsT< PixelFormat::eR16G16B16A16_UNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR16G16B16A16_SINT
 	//!\~french		Spécialisation pour PixelFormat::eR16G16B16A16_SINT
 	template<>
-	struct PixelComponents< PixelFormat::eR16G16B16A16_SINT >
-		: public PixelComponents< PixelFormat::eR16G16B16A16_SNORM >
+	struct PixelComponentsT< PixelFormat::eR16G16B16A16_SINT >
+		: public PixelComponentsT< PixelFormat::eR16G16B16A16_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR16G16B16A16_SFLOAT
 	//!\~french		Spécialisation pour PixelFormat::eR16G16B16A16_SFLOAT
 	template<>
-	struct PixelComponents< PixelFormat::eR16G16B16A16_SFLOAT >
-		: public PixelComponents< PixelFormat::eR16G16B16A16_SNORM >
+	struct PixelComponentsT< PixelFormat::eR16G16B16A16_SFLOAT >
+		: public PixelComponentsT< PixelFormat::eR16G16B16A16_SNORM >
 	{
 	};
 	//!\~english	Specialisation for PixelFormat::eR32_UINT
 	//!\~french		Spécialisation pour PixelFormat::eR32_UINT
 	template<>
-	struct PixelComponents< PixelFormat::eR32_UINT >
+	struct PixelComponentsT< PixelFormat::eR32_UINT >
 	{
 		using Type = uint32_t;
 		struct Pixel
@@ -2288,7 +2288,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR32_SINT
 	//!\~french		Spécialisation pour PixelFormat::eR32_SINT
 	template<>
-	struct PixelComponents< PixelFormat::eR32_SINT >
+	struct PixelComponentsT< PixelFormat::eR32_SINT >
 	{
 		using Type = int32_t;
 		struct Pixel
@@ -2336,7 +2336,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR32_SFLOAT
 	//!\~french		Spécialisation pour PixelFormat::eR32_SFLOAT
 	template<>
-	struct PixelComponents< PixelFormat::eR32_SFLOAT >
+	struct PixelComponentsT< PixelFormat::eR32_SFLOAT >
 	{
 		using Type = float;
 		struct Pixel
@@ -2384,7 +2384,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR32G32_UINT
 	//!\~french		Spécialisation pour PixelFormat::eR32G32_UINT
 	template<>
-	struct PixelComponents< PixelFormat::eR32G32_UINT >
+	struct PixelComponentsT< PixelFormat::eR32G32_UINT >
 	{
 		using Type = uint32_t;
 		struct Pixel
@@ -2434,7 +2434,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR32G32_SINT
 	//!\~french		Spécialisation pour PixelFormat::eR32G32_SINT
 	template<>
-	struct PixelComponents< PixelFormat::eR32G32_SINT >
+	struct PixelComponentsT< PixelFormat::eR32G32_SINT >
 	{
 		using Type = int32_t;
 		struct Pixel
@@ -2484,7 +2484,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR32G32_SFLOAT
 	//!\~french		Spécialisation pour PixelFormat::eR32G32_SFLOAT
 	template<>
-	struct PixelComponents< PixelFormat::eR32G32_SFLOAT >
+	struct PixelComponentsT< PixelFormat::eR32G32_SFLOAT >
 	{
 		using Type = float;
 		struct Pixel
@@ -2534,7 +2534,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR32G32B32_UINT
 	//!\~french		Spécialisation pour PixelFormat::eR32G32B32_UINT
 	template<>
-	struct PixelComponents< PixelFormat::eR32G32B32_UINT >
+	struct PixelComponentsT< PixelFormat::eR32G32B32_UINT >
 	{
 		using Type = uint32_t;
 		struct Pixel
@@ -2586,7 +2586,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR32G32B32_SINT
 	//!\~french		Spécialisation pour PixelFormat::eR32G32B32_SINT
 	template<>
-	struct PixelComponents< PixelFormat::eR32G32B32_SINT >
+	struct PixelComponentsT< PixelFormat::eR32G32B32_SINT >
 	{
 		using Type = int32_t;
 		struct Pixel
@@ -2638,7 +2638,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR32G32B32_SFLOAT
 	//!\~french		Spécialisation pour PixelFormat::eR32G32B32_SFLOAT
 	template<>
-	struct PixelComponents< PixelFormat::eR32G32B32_SFLOAT >
+	struct PixelComponentsT< PixelFormat::eR32G32B32_SFLOAT >
 	{
 		using Type = float;
 		struct Pixel
@@ -2690,7 +2690,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR32G32B32A32_UINT
 	//!\~french		Spécialisation pour PixelFormat::eR32G32B32A32_UINT
 	template<>
-	struct PixelComponents< PixelFormat::eR32G32B32A32_UINT >
+	struct PixelComponentsT< PixelFormat::eR32G32B32A32_UINT >
 	{
 		using Type = uint32_t;
 		struct Pixel
@@ -2744,7 +2744,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR32G32B32A32_SINT
 	//!\~french		Spécialisation pour PixelFormat::eR32G32B32A32_SINT
 	template<>
-	struct PixelComponents< PixelFormat::eR32G32B32A32_SINT >
+	struct PixelComponentsT< PixelFormat::eR32G32B32A32_SINT >
 	{
 		using Type = int32_t;
 		struct Pixel
@@ -2798,7 +2798,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR32G32B32A32_SFLOAT
 	//!\~french		Spécialisation pour PixelFormat::eR32G32B32A32_SFLOAT
 	template<>
-	struct PixelComponents< PixelFormat::eR32G32B32A32_SFLOAT >
+	struct PixelComponentsT< PixelFormat::eR32G32B32A32_SFLOAT >
 	{
 		using Type = float;
 		struct Pixel
@@ -2852,7 +2852,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR64_UINT
 	//!\~french		Spécialisation pour PixelFormat::eR64_UINT
 	template<>
-	struct PixelComponents< PixelFormat::eR64_UINT >
+	struct PixelComponentsT< PixelFormat::eR64_UINT >
 	{
 		using Type = uint64_t;
 		struct Pixel
@@ -2900,7 +2900,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR64_SINT
 	//!\~french		Spécialisation pour PixelFormat::eR64_SINT
 	template<>
-	struct PixelComponents< PixelFormat::eR64_SINT >
+	struct PixelComponentsT< PixelFormat::eR64_SINT >
 	{
 		using Type = int64_t;
 		struct Pixel
@@ -2948,7 +2948,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR64_SFLOAT
 	//!\~french		Spécialisation pour PixelFormat::eR64_SFLOAT
 	template<>
-	struct PixelComponents< PixelFormat::eR64_SFLOAT >
+	struct PixelComponentsT< PixelFormat::eR64_SFLOAT >
 	{
 		using Type = double;
 		struct Pixel
@@ -2996,7 +2996,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR64G64_UINT
 	//!\~french		Spécialisation pour PixelFormat::eR64G64_UINT
 	template<>
-	struct PixelComponents< PixelFormat::eR64G64_UINT >
+	struct PixelComponentsT< PixelFormat::eR64G64_UINT >
 	{
 		using Type = uint64_t;
 		struct Pixel
@@ -3046,7 +3046,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR64G64_SINT
 	//!\~french		Spécialisation pour PixelFormat::eR64G64_SINT
 	template<>
-	struct PixelComponents< PixelFormat::eR64G64_SINT >
+	struct PixelComponentsT< PixelFormat::eR64G64_SINT >
 	{
 		using Type = int64_t;
 		struct Pixel
@@ -3096,7 +3096,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR64G64_SFLOAT
 	//!\~french		Spécialisation pour PixelFormat::eR64G64_SFLOAT
 	template<>
-	struct PixelComponents< PixelFormat::eR64G64_SFLOAT >
+	struct PixelComponentsT< PixelFormat::eR64G64_SFLOAT >
 	{
 		using Type = double;
 		struct Pixel
@@ -3146,7 +3146,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR64G64B64_UINT
 	//!\~french		Spécialisation pour PixelFormat::eR64G64B64_UINT
 	template<>
-	struct PixelComponents< PixelFormat::eR64G64B64_UINT >
+	struct PixelComponentsT< PixelFormat::eR64G64B64_UINT >
 	{
 		using Type = uint64_t;
 		struct Pixel
@@ -3198,7 +3198,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR64G64B64_SINT
 	//!\~french		Spécialisation pour PixelFormat::eR64G64B64_SINT
 	template<>
-	struct PixelComponents< PixelFormat::eR64G64B64_SINT >
+	struct PixelComponentsT< PixelFormat::eR64G64B64_SINT >
 	{
 		using Type = int64_t;
 		struct Pixel
@@ -3250,7 +3250,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR64G64B64_SFLOAT
 	//!\~french		Spécialisation pour PixelFormat::eR64G64B64_SFLOAT
 	template<>
-	struct PixelComponents< PixelFormat::eR64G64B64_SFLOAT >
+	struct PixelComponentsT< PixelFormat::eR64G64B64_SFLOAT >
 	{
 		using Type = double;
 		struct Pixel
@@ -3302,7 +3302,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR64G64B64A64_UINT
 	//!\~french		Spécialisation pour PixelFormat::eR64G64B64A64_UINT
 	template<>
-	struct PixelComponents< PixelFormat::eR64G64B64A64_UINT >
+	struct PixelComponentsT< PixelFormat::eR64G64B64A64_UINT >
 	{
 		using Type = uint64_t;
 		struct Pixel
@@ -3356,7 +3356,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR64G64B64A64_SINT
 	//!\~french		Spécialisation pour PixelFormat::eR64G64B64A64_SINT
 	template<>
-	struct PixelComponents< PixelFormat::eR64G64B64A64_SINT >
+	struct PixelComponentsT< PixelFormat::eR64G64B64A64_SINT >
 	{
 		using Type = int64_t;
 		struct Pixel
@@ -3410,7 +3410,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eR64G64B64A64_SFLOAT
 	//!\~french		Spécialisation pour PixelFormat::eR64G64B64A64_SFLOAT
 	template<>
-	struct PixelComponents< PixelFormat::eR64G64B64A64_SFLOAT >
+	struct PixelComponentsT< PixelFormat::eR64G64B64A64_SFLOAT >
 	{
 		using Type = double;
 		struct Pixel
@@ -3464,7 +3464,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eB10G11R11_UFLOAT
 	//!\~french		Spécialisation pour PixelFormat::eB10G11R11_UFLOAT
 	template<>
-	struct PixelComponents< PixelFormat::eB10G11R11_UFLOAT >
+	struct PixelComponentsT< PixelFormat::eB10G11R11_UFLOAT >
 	{
 		using Type = float;
 		struct Pixel
@@ -3516,7 +3516,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eE5B9G9R9_UFLOAT
 	//!\~french		Spécialisation pour PixelFormat::eE5B9G9R9_UFLOAT
 	template<>
-	struct PixelComponents< PixelFormat::eE5B9G9R9_UFLOAT >
+	struct PixelComponentsT< PixelFormat::eE5B9G9R9_UFLOAT >
 	{
 		using Type = float;
 		struct Pixel
@@ -3569,7 +3569,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eD16_UNORM
 	//!\~french		Spécialisation pour PixelFormat::eD16_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eD16_UNORM >
+	struct PixelComponentsT< PixelFormat::eD16_UNORM >
 	{
 		using Type = uint16_t;
 		struct Pixel
@@ -3603,7 +3603,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eX8_D24_UNORM
 	//!\~french		Spécialisation pour PixelFormat::eX8_D24_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eX8_D24_UNORM >
+	struct PixelComponentsT< PixelFormat::eX8_D24_UNORM >
 	{
 		using Type = uint32_t;
 		struct Pixel
@@ -3637,7 +3637,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eD32_SFLOAT
 	//!\~french		Spécialisation pour PixelFormat::eD32_SFLOAT
 	template<>
-	struct PixelComponents< PixelFormat::eD32_SFLOAT >
+	struct PixelComponentsT< PixelFormat::eD32_SFLOAT >
 	{
 		using Type = float;
 		struct Pixel
@@ -3671,7 +3671,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eS8_UINT
 	//!\~french		Spécialisation pour PixelFormat::eS8_UINT
 	template<>
-	struct PixelComponents< PixelFormat::eS8_UINT >
+	struct PixelComponentsT< PixelFormat::eS8_UINT >
 	{
 		using Type = uint8_t;
 		struct Pixel
@@ -3705,7 +3705,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eD16_UNORM_S8_UINT
 	//!\~french		Spécialisation pour PixelFormat::eD16_UNORM_S8_UINT
 	template<>
-	struct PixelComponents< PixelFormat::eD16_UNORM_S8_UINT >
+	struct PixelComponentsT< PixelFormat::eD16_UNORM_S8_UINT >
 	{
 		using Type = uint16_t;
 		struct Pixel
@@ -3741,7 +3741,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eD24_UNORM_S8_UINT
 	//!\~french		Spécialisation pour PixelFormat::eD24_UNORM_S8_UINT
 	template<>
-	struct PixelComponents< PixelFormat::eD24_UNORM_S8_UINT >
+	struct PixelComponentsT< PixelFormat::eD24_UNORM_S8_UINT >
 	{
 		using Type = uint32_t;
 		struct Pixel
@@ -3777,7 +3777,7 @@ namespace castor
 	//!\~english	Specialisation for PixelFormat::eD24_UNORM_S8_UINT
 	//!\~french		Spécialisation pour PixelFormat::eD24_UNORM_S8_UINT
 	template<>
-	struct PixelComponents< PixelFormat::eD32_SFLOAT_S8_UINT >
+	struct PixelComponentsT< PixelFormat::eD32_SFLOAT_S8_UINT >
 	{
 		using Type = float;
 		struct Pixel
@@ -4323,67 +4323,67 @@ namespace castor
 	template< PixelFormat PFT >
 	uint8_t getR8U( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< uint8_t >::get( buffer, PixelComponents< PFT >::R );
+		return details::PxComponentGetter< uint8_t >::get( buffer, PixelComponentsT< PFT >::R );
 	}
 
 	template< PixelFormat PFT >
 	int8_t getR8S( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< int8_t >::get( buffer, PixelComponents< PFT >::R );
+		return details::PxComponentGetter< int8_t >::get( buffer, PixelComponentsT< PFT >::R );
 	}
 
 	template< PixelFormat PFT >
 	uint16_t getR16U( uint8_t * buffer )
 	{
-		return details::PxComponentGetter< uint16_t >::get( buffer, PixelComponents< PFT >::R );
+		return details::PxComponentGetter< uint16_t >::get( buffer, PixelComponentsT< PFT >::R );
 	}
 
 	template< PixelFormat PFT >
 	int16_t getR16S( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< int16_t >::get( buffer, PixelComponents< PFT >::R );
+		return details::PxComponentGetter< int16_t >::get( buffer, PixelComponentsT< PFT >::R );
 	}
 
 	template< PixelFormat PFT >
 	int16_t getR16F( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< int16_t >::get( buffer, PixelComponents< PFT >::R );
+		return details::PxComponentGetter< int16_t >::get( buffer, PixelComponentsT< PFT >::R );
 	}
 
 	template< PixelFormat PFT >
 	uint32_t getR32S( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< uint32_t >::get( buffer, PixelComponents< PFT >::R );
+		return details::PxComponentGetter< uint32_t >::get( buffer, PixelComponentsT< PFT >::R );
 	}
 
 	template< PixelFormat PFT >
 	int32_t getR32U( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< int32_t >::get( buffer, PixelComponents< PFT >::R );
+		return details::PxComponentGetter< int32_t >::get( buffer, PixelComponentsT< PFT >::R );
 	}
 
 	template< PixelFormat PFT >
 	float getR32F( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< float >::get( buffer, PixelComponents< PFT >::R );
+		return details::PxComponentGetter< float >::get( buffer, PixelComponentsT< PFT >::R );
 	}
 
 	template< PixelFormat PFT >
 	uint64_t getR64U( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< uint64_t >::get( buffer, PixelComponents< PFT >::R );
+		return details::PxComponentGetter< uint64_t >::get( buffer, PixelComponentsT< PFT >::R );
 	}
 
 	template< PixelFormat PFT >
 	int64_t getR64S( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< int64_t >::get( buffer, PixelComponents< PFT >::R );
+		return details::PxComponentGetter< int64_t >::get( buffer, PixelComponentsT< PFT >::R );
 	}
 
 	template< PixelFormat PFT >
 	double getR64F( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< double >::get( buffer, PixelComponents< PFT >::R );
+		return details::PxComponentGetter< double >::get( buffer, PixelComponentsT< PFT >::R );
 	}
 
 	//*************************************************************************************************
@@ -4391,67 +4391,67 @@ namespace castor
 	template< PixelFormat PFT >
 	uint8_t getG8U( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< uint8_t >::get( buffer, PixelComponents< PFT >::G );
+		return details::PxComponentGetter< uint8_t >::get( buffer, PixelComponentsT< PFT >::G );
 	}
 
 	template< PixelFormat PFT >
 	int8_t getG8S( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< int8_t >::get( buffer, PixelComponents< PFT >::G );
+		return details::PxComponentGetter< int8_t >::get( buffer, PixelComponentsT< PFT >::G );
 	}
 
 	template< PixelFormat PFT >
 	uint16_t getG16U( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< uint16_t >::get( buffer, PixelComponents< PFT >::G );
+		return details::PxComponentGetter< uint16_t >::get( buffer, PixelComponentsT< PFT >::G );
 	}
 
 	template< PixelFormat PFT >
 	int16_t getG16S( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< int16_t >::get( buffer, PixelComponents< PFT >::G );
+		return details::PxComponentGetter< int16_t >::get( buffer, PixelComponentsT< PFT >::G );
 	}
 
 	template< PixelFormat PFT >
 	int16_t getG16F( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< int16_t >::get( buffer, PixelComponents< PFT >::G );
+		return details::PxComponentGetter< int16_t >::get( buffer, PixelComponentsT< PFT >::G );
 	}
 
 	template< PixelFormat PFT >
 	uint32_t getG32U( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< uint32_t >::get( buffer, PixelComponents< PFT >::G );
+		return details::PxComponentGetter< uint32_t >::get( buffer, PixelComponentsT< PFT >::G );
 	}
 
 	template< PixelFormat PFT >
 	int32_t getG32S( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< int32_t >::get( buffer, PixelComponents< PFT >::G );
+		return details::PxComponentGetter< int32_t >::get( buffer, PixelComponentsT< PFT >::G );
 	}
 
 	template< PixelFormat PFT >
 	float getG32F( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< float >::get( buffer, PixelComponents< PFT >::G );
+		return details::PxComponentGetter< float >::get( buffer, PixelComponentsT< PFT >::G );
 	}
 
 	template< PixelFormat PFT >
 	uint64_t getG64U( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< uint64_t >::get( buffer, PixelComponents< PFT >::G );
+		return details::PxComponentGetter< uint64_t >::get( buffer, PixelComponentsT< PFT >::G );
 	}
 
 	template< PixelFormat PFT >
 	int64_t getG64S( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< int64_t >::get( buffer, PixelComponents< PFT >::G );
+		return details::PxComponentGetter< int64_t >::get( buffer, PixelComponentsT< PFT >::G );
 	}
 
 	template< PixelFormat PFT >
 	double getG64F( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< double >::get( buffer, PixelComponents< PFT >::G );
+		return details::PxComponentGetter< double >::get( buffer, PixelComponentsT< PFT >::G );
 	}
 
 	//*************************************************************************************************
@@ -4459,67 +4459,67 @@ namespace castor
 	template< PixelFormat PFT >
 	uint8_t getB8U( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< uint8_t >::get( buffer, PixelComponents< PFT >::B );
+		return details::PxComponentGetter< uint8_t >::get( buffer, PixelComponentsT< PFT >::B );
 	}
 
 	template< PixelFormat PFT >
 	int8_t getB8S( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< int8_t >::get( buffer, PixelComponents< PFT >::B );
+		return details::PxComponentGetter< int8_t >::get( buffer, PixelComponentsT< PFT >::B );
 	}
 
 	template< PixelFormat PFT >
 	uint16_t getB16U( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< uint16_t >::get( buffer, PixelComponents< PFT >::B );
+		return details::PxComponentGetter< uint16_t >::get( buffer, PixelComponentsT< PFT >::B );
 	}
 
 	template< PixelFormat PFT >
 	int16_t getB16S( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< int16_t >::get( buffer, PixelComponents< PFT >::B );
+		return details::PxComponentGetter< int16_t >::get( buffer, PixelComponentsT< PFT >::B );
 	}
 
 	template< PixelFormat PFT >
 	int16_t getB16F( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< int16_t >::get( buffer, PixelComponents< PFT >::B );
+		return details::PxComponentGetter< int16_t >::get( buffer, PixelComponentsT< PFT >::B );
 	}
 
 	template< PixelFormat PFT >
 	uint32_t getB32U( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< uint32_t >::get( buffer, PixelComponents< PFT >::B );
+		return details::PxComponentGetter< uint32_t >::get( buffer, PixelComponentsT< PFT >::B );
 	}
 
 	template< PixelFormat PFT >
 	int32_t getB32S( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< int32_t >::get( buffer, PixelComponents< PFT >::B );
+		return details::PxComponentGetter< int32_t >::get( buffer, PixelComponentsT< PFT >::B );
 	}
 
 	template< PixelFormat PFT >
 	float getB32F( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< float >::get( buffer, PixelComponents< PFT >::B );
+		return details::PxComponentGetter< float >::get( buffer, PixelComponentsT< PFT >::B );
 	}
 
 	template< PixelFormat PFT >
 	uint64_t getB64U( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< uint64_t >::get( buffer, PixelComponents< PFT >::B );
+		return details::PxComponentGetter< uint64_t >::get( buffer, PixelComponentsT< PFT >::B );
 	}
 
 	template< PixelFormat PFT >
 	int64_t getB64S( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< int64_t >::get( buffer, PixelComponents< PFT >::B );
+		return details::PxComponentGetter< int64_t >::get( buffer, PixelComponentsT< PFT >::B );
 	}
 
 	template< PixelFormat PFT >
 	double getB64F( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< double >::get( buffer, PixelComponents< PFT >::B );
+		return details::PxComponentGetter< double >::get( buffer, PixelComponentsT< PFT >::B );
 	}
 
 	//*************************************************************************************************
@@ -4527,67 +4527,67 @@ namespace castor
 	template< PixelFormat PFT >
 	uint8_t getA8U( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< uint8_t >::get( buffer, PixelComponents< PFT >::A );
+		return details::PxComponentGetter< uint8_t >::get( buffer, PixelComponentsT< PFT >::A );
 	}
 
 	template< PixelFormat PFT >
 	int8_t getA8S( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< int8_t >::get( buffer, PixelComponents< PFT >::A );
+		return details::PxComponentGetter< int8_t >::get( buffer, PixelComponentsT< PFT >::A );
 	}
 
 	template< PixelFormat PFT >
 	uint16_t getA16U( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< uint16_t >::get( buffer, PixelComponents< PFT >::A );
+		return details::PxComponentGetter< uint16_t >::get( buffer, PixelComponentsT< PFT >::A );
 	}
 
 	template< PixelFormat PFT >
 	int16_t getA16S( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< int16_t >::get( buffer, PixelComponents< PFT >::A );
+		return details::PxComponentGetter< int16_t >::get( buffer, PixelComponentsT< PFT >::A );
 	}
 
 	template< PixelFormat PFT >
 	int16_t getA16F( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< int16_t >::get( buffer, PixelComponents< PFT >::A );
+		return details::PxComponentGetter< int16_t >::get( buffer, PixelComponentsT< PFT >::A );
 	}
 
 	template< PixelFormat PFT >
 	uint32_t getA32U( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< uint32_t >::get( buffer, PixelComponents< PFT >::A );
+		return details::PxComponentGetter< uint32_t >::get( buffer, PixelComponentsT< PFT >::A );
 	}
 
 	template< PixelFormat PFT >
 	int32_t getA32S( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< int32_t >::get( buffer, PixelComponents< PFT >::A );
+		return details::PxComponentGetter< int32_t >::get( buffer, PixelComponentsT< PFT >::A );
 	}
 
 	template< PixelFormat PFT >
 	float getA32F( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< float >::get( buffer, PixelComponents< PFT >::A );
+		return details::PxComponentGetter< float >::get( buffer, PixelComponentsT< PFT >::A );
 	}
 
 	template< PixelFormat PFT >
 	uint64_t getA64U( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< uint64_t >::get( buffer, PixelComponents< PFT >::A );
+		return details::PxComponentGetter< uint64_t >::get( buffer, PixelComponentsT< PFT >::A );
 	}
 
 	template< PixelFormat PFT >
 	int64_t getA64S( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< int64_t >::get( buffer, PixelComponents< PFT >::A );
+		return details::PxComponentGetter< int64_t >::get( buffer, PixelComponentsT< PFT >::A );
 	}
 
 	template< PixelFormat PFT >
 	double getA64F( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< double >::get( buffer, PixelComponents< PFT >::A );
+		return details::PxComponentGetter< double >::get( buffer, PixelComponentsT< PFT >::A );
 	}
 
 	//*************************************************************************************************
@@ -4595,19 +4595,19 @@ namespace castor
 	template< PixelFormat PFT >
 	uint16_t getD16U( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< uint16_t >::get( buffer, PixelComponents< PFT >::D );
+		return details::PxComponentGetter< uint16_t >::get( buffer, PixelComponentsT< PFT >::D );
 	}
 
 	template< PixelFormat PFT >
 	uint32_t getD24U( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< uint32_t >::get( buffer, PixelComponents< PFT >::D );
+		return details::PxComponentGetter< uint32_t >::get( buffer, PixelComponentsT< PFT >::D );
 	}
 
 	template< PixelFormat PFT >
 	float getD32F( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< float >::get( buffer, PixelComponents< PFT >::D );
+		return details::PxComponentGetter< float >::get( buffer, PixelComponentsT< PFT >::D );
 	}
 
 	//*************************************************************************************************
@@ -4615,7 +4615,7 @@ namespace castor
 	template< PixelFormat PFT >
 	uint8_t getS8U( uint8_t const * buffer )
 	{
-		return details::PxComponentGetter< uint8_t >::get( buffer, PixelComponents< PFT >::S );
+		return details::PxComponentGetter< uint8_t >::get( buffer, PixelComponentsT< PFT >::S );
 	}
 
 	//*************************************************************************************************
@@ -4623,67 +4623,67 @@ namespace castor
 	template< PixelFormat PFT >
 	void setR8U( uint8_t * buffer, uint8_t value )
 	{
-		details::PxComponentSetter< uint8_t >::set( buffer, value, PixelComponents< PFT >::R );
+		details::PxComponentSetter< uint8_t >::set( buffer, value, PixelComponentsT< PFT >::R );
 	}
 
 	template< PixelFormat PFT >
 	void setR8S( uint8_t * buffer, int8_t value )
 	{
-		details::PxComponentSetter< int8_t >::set( buffer, value, PixelComponents< PFT >::R );
+		details::PxComponentSetter< int8_t >::set( buffer, value, PixelComponentsT< PFT >::R );
 	}
 
 	template< PixelFormat PFT >
 	void setR16U( uint8_t * buffer, uint16_t value )
 	{
-		details::PxComponentSetter< uint16_t >::set( buffer, value, PixelComponents< PFT >::R );
+		details::PxComponentSetter< uint16_t >::set( buffer, value, PixelComponentsT< PFT >::R );
 	}
 
 	template< PixelFormat PFT >
 	void setR16S( uint8_t * buffer, int16_t value )
 	{
-		details::PxComponentSetter< int16_t >::set( buffer, value, PixelComponents< PFT >::R );
+		details::PxComponentSetter< int16_t >::set( buffer, value, PixelComponentsT< PFT >::R );
 	}
 
 	template< PixelFormat PFT >
 	void setR16F( uint8_t * buffer, int16_t value )
 	{
-		details::PxComponentSetter< int16_t >::set( buffer, value, PixelComponents< PFT >::R );
+		details::PxComponentSetter< int16_t >::set( buffer, value, PixelComponentsT< PFT >::R );
 	}
 
 	template< PixelFormat PFT >
 	void setR32S( uint8_t * buffer, uint32_t value )
 	{
-		details::PxComponentSetter< uint32_t >::set( buffer, value, PixelComponents< PFT >::R );
+		details::PxComponentSetter< uint32_t >::set( buffer, value, PixelComponentsT< PFT >::R );
 	}
 
 	template< PixelFormat PFT >
 	void setR32U( uint8_t * buffer, int32_t value )
 	{
-		details::PxComponentSetter< int32_t >::set( buffer, value, PixelComponents< PFT >::R );
+		details::PxComponentSetter< int32_t >::set( buffer, value, PixelComponentsT< PFT >::R );
 	}
 
 	template< PixelFormat PFT >
 	void setR32F( uint8_t * buffer, float value )
 	{
-		details::PxComponentSetter< float >::set( buffer, value, PixelComponents< PFT >::R );
+		details::PxComponentSetter< float >::set( buffer, value, PixelComponentsT< PFT >::R );
 	}
 
 	template< PixelFormat PFT >
 	void setR64U( uint8_t * buffer, uint64_t value )
 	{
-		details::PxComponentSetter< uint64_t >::set( buffer, value, PixelComponents< PFT >::R );
+		details::PxComponentSetter< uint64_t >::set( buffer, value, PixelComponentsT< PFT >::R );
 	}
 
 	template< PixelFormat PFT >
 	void setR64S( uint8_t * buffer, int64_t value )
 	{
-		details::PxComponentSetter< int64_t >::set( buffer, value, PixelComponents< PFT >::R );
+		details::PxComponentSetter< int64_t >::set( buffer, value, PixelComponentsT< PFT >::R );
 	}
 
 	template< PixelFormat PFT >
 	void setR64F( uint8_t * buffer, double value )
 	{
-		details::PxComponentSetter< double >::set( buffer, value, PixelComponents< PFT >::R );
+		details::PxComponentSetter< double >::set( buffer, value, PixelComponentsT< PFT >::R );
 	}
 
 	//*************************************************************************************************
@@ -4691,67 +4691,67 @@ namespace castor
 	template< PixelFormat PFT >
 	void setG8U( uint8_t * buffer, uint8_t value )
 	{
-		details::PxComponentSetter< uint8_t >::set( buffer, value, PixelComponents< PFT >::G );
+		details::PxComponentSetter< uint8_t >::set( buffer, value, PixelComponentsT< PFT >::G );
 	}
 
 	template< PixelFormat PFT >
 	void setG8S( uint8_t * buffer, int8_t value )
 	{
-		details::PxComponentSetter< int8_t >::set( buffer, value, PixelComponents< PFT >::G );
+		details::PxComponentSetter< int8_t >::set( buffer, value, PixelComponentsT< PFT >::G );
 	}
 
 	template< PixelFormat PFT >
 	void setG16U( uint8_t * buffer, uint16_t value )
 	{
-		details::PxComponentSetter< uint16_t >::set( buffer, value, PixelComponents< PFT >::G );
+		details::PxComponentSetter< uint16_t >::set( buffer, value, PixelComponentsT< PFT >::G );
 	}
 
 	template< PixelFormat PFT >
 	void setG16S( uint8_t * buffer, int16_t value )
 	{
-		details::PxComponentSetter< int16_t >::set( buffer, value, PixelComponents< PFT >::G );
+		details::PxComponentSetter< int16_t >::set( buffer, value, PixelComponentsT< PFT >::G );
 	}
 
 	template< PixelFormat PFT >
 	void setG16F( uint8_t * buffer, int16_t value )
 	{
-		details::PxComponentSetter< int16_t >::set( buffer, value, PixelComponents< PFT >::G );
+		details::PxComponentSetter< int16_t >::set( buffer, value, PixelComponentsT< PFT >::G );
 	}
 
 	template< PixelFormat PFT >
 	void setG32S( uint8_t * buffer, uint32_t value )
 	{
-		details::PxComponentSetter< uint32_t >::set( buffer, value, PixelComponents< PFT >::G );
+		details::PxComponentSetter< uint32_t >::set( buffer, value, PixelComponentsT< PFT >::G );
 	}
 
 	template< PixelFormat PFT >
 	void setG32U( uint8_t * buffer, int32_t value )
 	{
-		details::PxComponentSetter< int32_t >::set( buffer, value, PixelComponents< PFT >::G );
+		details::PxComponentSetter< int32_t >::set( buffer, value, PixelComponentsT< PFT >::G );
 	}
 
 	template< PixelFormat PFT >
 	void setG32F( uint8_t * buffer, float value )
 	{
-		details::PxComponentSetter< float >::set( buffer, value, PixelComponents< PFT >::G );
+		details::PxComponentSetter< float >::set( buffer, value, PixelComponentsT< PFT >::G );
 	}
 
 	template< PixelFormat PFT >
 	void setG64U( uint8_t * buffer, uint64_t value )
 	{
-		details::PxComponentSetter< uint64_t >::set( buffer, value, PixelComponents< PFT >::G );
+		details::PxComponentSetter< uint64_t >::set( buffer, value, PixelComponentsT< PFT >::G );
 	}
 
 	template< PixelFormat PFT >
 	void setG64S( uint8_t * buffer, int64_t value )
 	{
-		details::PxComponentSetter< int64_t >::set( buffer, value, PixelComponents< PFT >::G );
+		details::PxComponentSetter< int64_t >::set( buffer, value, PixelComponentsT< PFT >::G );
 	}
 
 	template< PixelFormat PFT >
 	void setG64F( uint8_t * buffer, double value )
 	{
-		details::PxComponentSetter< double >::set( buffer, value, PixelComponents< PFT >::G );
+		details::PxComponentSetter< double >::set( buffer, value, PixelComponentsT< PFT >::G );
 	}
 
 	//*************************************************************************************************
@@ -4759,67 +4759,67 @@ namespace castor
 	template< PixelFormat PFT >
 	void setB8U( uint8_t * buffer, uint8_t value )
 	{
-		details::PxComponentSetter< uint8_t >::set( buffer, value, PixelComponents< PFT >::B );
+		details::PxComponentSetter< uint8_t >::set( buffer, value, PixelComponentsT< PFT >::B );
 	}
 
 	template< PixelFormat PFT >
 	void setB8S( uint8_t * buffer, int8_t value )
 	{
-		details::PxComponentSetter< int8_t >::set( buffer, value, PixelComponents< PFT >::B );
+		details::PxComponentSetter< int8_t >::set( buffer, value, PixelComponentsT< PFT >::B );
 	}
 
 	template< PixelFormat PFT >
 	void setB16U( uint8_t * buffer, uint16_t value )
 	{
-		details::PxComponentSetter< uint16_t >::set( buffer, value, PixelComponents< PFT >::B );
+		details::PxComponentSetter< uint16_t >::set( buffer, value, PixelComponentsT< PFT >::B );
 	}
 
 	template< PixelFormat PFT >
 	void setB16S( uint8_t * buffer, int16_t value )
 	{
-		details::PxComponentSetter< int16_t >::set( buffer, value, PixelComponents< PFT >::B );
+		details::PxComponentSetter< int16_t >::set( buffer, value, PixelComponentsT< PFT >::B );
 	}
 
 	template< PixelFormat PFT >
 	void setB16F( uint8_t * buffer, int16_t value )
 	{
-		details::PxComponentSetter< int16_t >::set( buffer, value, PixelComponents< PFT >::B );
+		details::PxComponentSetter< int16_t >::set( buffer, value, PixelComponentsT< PFT >::B );
 	}
 
 	template< PixelFormat PFT >
 	void setB32S( uint8_t * buffer, uint32_t value )
 	{
-		details::PxComponentSetter< uint32_t >::set( buffer, value, PixelComponents< PFT >::B );
+		details::PxComponentSetter< uint32_t >::set( buffer, value, PixelComponentsT< PFT >::B );
 	}
 
 	template< PixelFormat PFT >
 	void setB32U( uint8_t * buffer, int32_t value )
 	{
-		details::PxComponentSetter< int32_t >::set( buffer, value, PixelComponents< PFT >::B );
+		details::PxComponentSetter< int32_t >::set( buffer, value, PixelComponentsT< PFT >::B );
 	}
 
 	template< PixelFormat PFT >
 	void setB32F( uint8_t * buffer, float value )
 	{
-		details::PxComponentSetter< float >::set( buffer, value, PixelComponents< PFT >::B );
+		details::PxComponentSetter< float >::set( buffer, value, PixelComponentsT< PFT >::B );
 	}
 
 	template< PixelFormat PFT >
 	void setB64U( uint8_t * buffer, uint64_t value )
 	{
-		details::PxComponentSetter< uint64_t >::set( buffer, value, PixelComponents< PFT >::B );
+		details::PxComponentSetter< uint64_t >::set( buffer, value, PixelComponentsT< PFT >::B );
 	}
 
 	template< PixelFormat PFT >
 	void setB64S( uint8_t * buffer, int64_t value )
 	{
-		details::PxComponentSetter< int64_t >::set( buffer, value, PixelComponents< PFT >::B );
+		details::PxComponentSetter< int64_t >::set( buffer, value, PixelComponentsT< PFT >::B );
 	}
 
 	template< PixelFormat PFT >
 	void setB64F( uint8_t * buffer, double value )
 	{
-		details::PxComponentSetter< double >::set( buffer, value, PixelComponents< PFT >::B );
+		details::PxComponentSetter< double >::set( buffer, value, PixelComponentsT< PFT >::B );
 	}
 
 	//*************************************************************************************************
@@ -4827,67 +4827,67 @@ namespace castor
 	template< PixelFormat PFT >
 	void setA8U( uint8_t * buffer, uint8_t value )
 	{
-		details::PxComponentSetter< uint8_t >::set( buffer, value, PixelComponents< PFT >::A );
+		details::PxComponentSetter< uint8_t >::set( buffer, value, PixelComponentsT< PFT >::A );
 	}
 
 	template< PixelFormat PFT >
 	void setA8S( uint8_t * buffer, int8_t value )
 	{
-		details::PxComponentSetter< int8_t >::set( buffer, value, PixelComponents< PFT >::A );
+		details::PxComponentSetter< int8_t >::set( buffer, value, PixelComponentsT< PFT >::A );
 	}
 
 	template< PixelFormat PFT >
 	void setA16U( uint8_t * buffer, uint16_t value )
 	{
-		details::PxComponentSetter< uint16_t >::set( buffer, value, PixelComponents< PFT >::A );
+		details::PxComponentSetter< uint16_t >::set( buffer, value, PixelComponentsT< PFT >::A );
 	}
 
 	template< PixelFormat PFT >
 	void setA16S( uint8_t * buffer, int16_t value )
 	{
-		details::PxComponentSetter< int16_t >::set( buffer, value, PixelComponents< PFT >::A );
+		details::PxComponentSetter< int16_t >::set( buffer, value, PixelComponentsT< PFT >::A );
 	}
 
 	template< PixelFormat PFT >
 	void setA16F( uint8_t * buffer, int16_t value )
 	{
-		details::PxComponentSetter< int16_t >::set( buffer, value, PixelComponents< PFT >::A );
+		details::PxComponentSetter< int16_t >::set( buffer, value, PixelComponentsT< PFT >::A );
 	}
 
 	template< PixelFormat PFT >
 	void setA32S( uint8_t * buffer, uint32_t value )
 	{
-		details::PxComponentSetter< uint32_t >::set( buffer, value, PixelComponents< PFT >::A );
+		details::PxComponentSetter< uint32_t >::set( buffer, value, PixelComponentsT< PFT >::A );
 	}
 
 	template< PixelFormat PFT >
 	void setA32U( uint8_t * buffer, int32_t value )
 	{
-		details::PxComponentSetter< int32_t >::set( buffer, value, PixelComponents< PFT >::A );
+		details::PxComponentSetter< int32_t >::set( buffer, value, PixelComponentsT< PFT >::A );
 	}
 
 	template< PixelFormat PFT >
 	void setA32F( uint8_t * buffer, float value )
 	{
-		details::PxComponentSetter< float >::set( buffer, value, PixelComponents< PFT >::A );
+		details::PxComponentSetter< float >::set( buffer, value, PixelComponentsT< PFT >::A );
 	}
 
 	template< PixelFormat PFT >
 	void setA64U( uint8_t * buffer, uint64_t value )
 	{
-		details::PxComponentSetter< uint64_t >::set( buffer, value, PixelComponents< PFT >::A );
+		details::PxComponentSetter< uint64_t >::set( buffer, value, PixelComponentsT< PFT >::A );
 	}
 
 	template< PixelFormat PFT >
 	void setA64S( uint8_t * buffer, int64_t value )
 	{
-		details::PxComponentSetter< int64_t >::set( buffer, value, PixelComponents< PFT >::A );
+		details::PxComponentSetter< int64_t >::set( buffer, value, PixelComponentsT< PFT >::A );
 	}
 
 	template< PixelFormat PFT >
 	void setA64F( uint8_t * buffer, double value )
 	{
-		details::PxComponentSetter< double >::set( buffer, value, PixelComponents< PFT >::A );
+		details::PxComponentSetter< double >::set( buffer, value, PixelComponentsT< PFT >::A );
 	}
 
 	//*************************************************************************************************
@@ -4895,19 +4895,19 @@ namespace castor
 	template< PixelFormat PFT >
 	void setD16U( uint8_t * buffer, uint16_t value )
 	{
-		details::PxComponentSetter< uint16_t >::set( buffer, value, PixelComponents< PFT >::D );
+		details::PxComponentSetter< uint16_t >::set( buffer, value, PixelComponentsT< PFT >::D );
 	}
 
 	template< PixelFormat PFT >
 	void setD24U( uint8_t * buffer, uint32_t value )
 	{
-		details::PxComponentSetter< uint32_t >::set( buffer, value, PixelComponents< PFT >::D );
+		details::PxComponentSetter< uint32_t >::set( buffer, value, PixelComponentsT< PFT >::D );
 	}
 
 	template< PixelFormat PFT >
 	void setD32F( uint8_t * buffer, float value )
 	{
-		details::PxComponentSetter< float >::set( buffer, value, PixelComponents< PFT >::D );
+		details::PxComponentSetter< float >::set( buffer, value, PixelComponentsT< PFT >::D );
 	}
 
 	//*************************************************************************************************
@@ -4915,7 +4915,7 @@ namespace castor
 	template< PixelFormat PFT >
 	void setS8U( uint8_t * buffer, uint8_t value )
 	{
-		details::PxComponentSetter< uint8_t >::set( buffer, value, PixelComponents< PFT >::S );
+		details::PxComponentSetter< uint8_t >::set( buffer, value, PixelComponentsT< PFT >::S );
 	}
 
 	//*************************************************************************************************

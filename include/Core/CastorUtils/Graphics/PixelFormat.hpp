@@ -292,6 +292,8 @@ namespace castor
 	template<> struct Is16FComponents< PixelFormat::eR16G16_SFLOAT > : public std::true_type {};
 	template<> struct Is16FComponents< PixelFormat::eR16G16B16_SFLOAT > : public std::true_type {};
 	template<> struct Is16FComponents< PixelFormat::eR16G16B16A16_SFLOAT > : public std::true_type {};
+	template<> struct Is16FComponents< PixelFormat::eB10G11R11_UFLOAT > : public std::true_type {};
+	template<> struct Is16FComponents< PixelFormat::eE5B9G9R9_UFLOAT > : public std::true_type {};
 
 	template<> struct Is32UComponents< PixelFormat::eR32_UINT > : public std::true_type {};
 	template<> struct Is32UComponents< PixelFormat::eR32G32_UINT > : public std::true_type {};
@@ -334,6 +336,72 @@ namespace castor
 
 	template<> struct IsS8UComponent< PixelFormat::eS8_UINT > : public std::true_type {};
 
+	template< PixelFormat PFT >
+	struct SingleComponentT< PFT, std::enable_if_t< is8UComponentsV< PFT > > >
+	{
+		static PixelFormat constexpr value = PixelFormat::eR8_UNORM;
+	};
+
+	template< PixelFormat PFT >
+	struct SingleComponentT< PFT, std::enable_if_t< is8SComponentsV< PFT > > >
+	{
+		static PixelFormat constexpr value = PixelFormat::eR8_SNORM;
+	};
+
+	template< PixelFormat PFT >
+	struct SingleComponentT< PFT, std::enable_if_t< is16UComponentsV< PFT > > >
+	{
+		static PixelFormat constexpr value = PixelFormat::eR16_UNORM;
+	};
+
+	template< PixelFormat PFT >
+	struct SingleComponentT< PFT, std::enable_if_t< is16SComponentsV< PFT > > >
+	{
+		static PixelFormat constexpr value = PixelFormat::eR16_SNORM;
+	};
+
+	template< PixelFormat PFT >
+	struct SingleComponentT< PFT, std::enable_if_t< is16FComponentsV< PFT > > >
+	{
+		static PixelFormat constexpr value = PixelFormat::eR16_SFLOAT;
+	};
+
+	template< PixelFormat PFT >
+	struct SingleComponentT< PFT, std::enable_if_t< is32UComponentsV< PFT > > >
+	{
+		static PixelFormat constexpr value = PixelFormat::eR32_UINT;
+	};
+
+	template< PixelFormat PFT >
+	struct SingleComponentT< PFT, std::enable_if_t< is32SComponentsV< PFT > > >
+	{
+		static PixelFormat constexpr value = PixelFormat::eR32_SINT;
+	};
+
+	template< PixelFormat PFT >
+	struct SingleComponentT< PFT, std::enable_if_t< is32FComponentsV< PFT > > >
+	{
+		static PixelFormat constexpr value = PixelFormat::eR32_SFLOAT;
+	};
+
+	template< PixelFormat PFT >
+	struct SingleComponentT< PFT, std::enable_if_t< is64UComponentsV< PFT > > >
+	{
+		static PixelFormat constexpr value = PixelFormat::eR64_UINT;
+	};
+
+	template< PixelFormat PFT >
+	struct SingleComponentT< PFT, std::enable_if_t< is64SComponentsV< PFT > > >
+	{
+		static PixelFormat constexpr value = PixelFormat::eR64_SINT;
+	};
+
+	template< PixelFormat PFT >
+	struct SingleComponentT< PFT, std::enable_if_t< is64FComponentsV< PFT > > >
+	{
+		static PixelFormat constexpr value = PixelFormat::eR64_SFLOAT;
+	};
+
 	/**
 	 *\~english
 	 *\brief		Function to retrieve the number of components of a pixel format.
@@ -369,6 +437,13 @@ namespace castor
 	CU_API PixelFormat getFormatByName( String const & formatName );
 	/**
 	 *\~english
+	 *\return		\p false if format is depth, stencil or one without alpha.
+	 *\~french
+	 *\return		\p false si le format est depth, stencil ou un format sans alpha.
+	 */
+	CU_API bool hasAlpha( PixelFormat format );
+	/**
+	 *\~english
 	 *\param[in]	format		The pixel format.
 	 *\param[in]	component	The pixel component.
 	 *\return		\p true if the given pixel format contains the wanted pixel component.
@@ -377,15 +452,63 @@ namespace castor
 	 *\param[in]	component	La composante de pixels.
 	 *\return		\p true si le format de pixel donné contient la composante de pixel voulue.
 	 */
-	CU_API bool hasComponent( PixelFormat format
-		, PixelComponent component );
+	inline constexpr bool hasComponent( PixelFormat format
+		, PixelComponent component )
+	{
+		switch ( component )
+		{
+		case castor::PixelComponent::eRed:
+			return getComponentsCount( format ) >= 1
+				&& !ashes::isDepthOrStencilFormat( VkFormat( format ) );
+		case castor::PixelComponent::eGreen:
+			return getComponentsCount( format ) >= 2
+				&& !ashes::isDepthOrStencilFormat( VkFormat( format ) );
+		case castor::PixelComponent::eBlue:
+			return getComponentsCount( format ) >= 3
+				&& !ashes::isDepthOrStencilFormat( VkFormat( format ) );
+		case castor::PixelComponent::eAlpha:
+			return hasAlpha( format );
+		case castor::PixelComponent::eDepth:
+			return ashes::isDepthFormat( VkFormat( format ) )
+				|| ashes::isDepthStencilFormat( VkFormat( format ) );
+		case castor::PixelComponent::eStencil:
+			return ashes::isStencilFormat( VkFormat( format ) )
+				|| ashes::isDepthStencilFormat( VkFormat( format ) );
+		default:
+			return false;
+		}
+	}
 	/**
 	 *\~english
-	 *\return		\p false if format is depth, stencil or one without alpha.
+	 *\return		The single component format for given pixel format.
 	 *\~french
-	 *\return		\p false si le format est depth, stencil ou un format sans alpha.
+	 *\return		Le format à composante unique correspondant au format donné.
 	 */
-	CU_API bool hasAlpha( PixelFormat format );
+	inline constexpr PixelFormat getSingleComponent( PixelFormat format )
+	{
+		PixelFormat result = PixelFormat::eUNDEFINED;
+
+		switch ( format )
+		{
+#define CUPF_ENUM_VALUE_COLOR( name, value, components, alpha )\
+		case PixelFormat::e##name:\
+			result = singleComponentV< PixelFormat::e##name >;\
+			break;
+#include "CastorUtils/Graphics/PixelFormat.enum"
+		default:
+			result = PixelFormat::eUNDEFINED;
+			break;
+		}
+
+		return result;
+	}
+	/**
+	 *\~english
+	 *\return		The pixel format matching the given format and components.
+	 *\~french
+	 *\return		Le format correspondant au format de pixel et aux composantes donnés.
+	 */
+	CU_API PixelFormat getPixelFormat( PixelFormat format, PixelComponents components );
 	/**
 	 *\~english
 	 *\return		\p true if the given pixel format is a floating point one.
@@ -581,6 +704,20 @@ namespace castor
 	 */
 	CU_API PxBufferBaseSPtr extractComponent( PxBufferBaseSPtr src
 		, PixelComponent component );
+	/**
+	 *\~english
+	 *\brief		Extracts pixel component values from a source buffer holding alpha and puts it in a destination buffer.
+	 *\param[in]	src			The source buffer.
+	 *\param[in]	component	The component to extract.
+	 *\return		A castor::PixelFormat::eR8 buffer containing the extracted component, \p nullptr if source didn't have the wanted component.
+	 *\~french
+	 *\brief		Extrait les valeurs d'une composante de pixel d'un tampon source pour les mettre dans un tampon à part.
+	 *\param[in]	src			Le tampon source
+	 *\param[in]	component	La composante à extraire
+	 *\return		Le tampon contenant la composante extraite, au format castor::PixelFormat::eR8, \p nullptr si la source n'avait pas la coposante voulue.
+	 */
+	CU_API PxBufferBaseSPtr extractComponents( PxBufferBaseSPtr src
+		, PixelComponents component );
 	/**
 	 *\~english
 	 *\brief			Extracts alpha values from a source buffer holding alpha and puts it in a destination buffer.
