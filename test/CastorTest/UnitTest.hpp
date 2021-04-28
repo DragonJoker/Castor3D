@@ -713,6 +713,9 @@ namespace Testing
 		return E;\
 	} ) )
 
+#	define CT_NAME_CONCAT_( X, Y ) X ## Y
+#	define CT_NAME_CONCAT( X, Y ) CT_NAME_CONCAT_( X, Y )
+
 #	define CT_FAILURE_EX( test, x )\
 	( test ).fail( __FILE__, __FUNCTION__, __LINE__, x )
 
@@ -735,10 +738,10 @@ namespace Testing
 	( test ).require( LAZY( ( x ) ), __FILE__, __FUNCTION__, uint32_t( __LINE__ ), #x )
 
 #	define CT_ON_EX( test, text )\
-	Testing::TestBlockPtr block{ ( test ).on( text ) }
+	Testing::TestBlockPtr CT_NAME_CONCAT( onBlock, __LINE__ ){ ( test ).on( text ) }
 
 #	define CT_WHEN_EX( test, text )\
-	Testing::TestBlockPtr block{ ( test ).when( text ) }
+	Testing::TestBlockPtr CT_NAME_CONCAT( whenBlock, __LINE__ ){ ( test ).when( text ) }
 
 #	define CT_FAILURE( x )\
 	CT_FAILURE_EX( *this, x )
