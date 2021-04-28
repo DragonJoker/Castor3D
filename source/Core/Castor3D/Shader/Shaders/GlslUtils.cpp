@@ -1247,8 +1247,11 @@ namespace castor3d::shader
 				auto name = castor::string::stringCast< char >( castor::string::toString( i ) );
 				auto config = m_writer.declLocale( "config" + name
 					, textureConfigs.getTextureConfiguration( sdw::UInt( textureIt.second.id + 1u ) ) );
+				auto texCoord = m_writer.declLocale( "texCoord" + name
+					, texCoords.xy() );
+				config.convertUV( m_writer, texCoord );
 				auto sampled = m_writer.declLocale< sdw::Vec4 >( "sampled" + name
-					, maps[i].sample( config.convertUV( m_writer, texCoords.xy() ) ) );
+					, maps[i].sample( texCoord ) );
 
 				if ( checkFlag( textureIt.second.flags, TextureFlag::eDiffuse ) )
 				{
@@ -1275,11 +1278,14 @@ namespace castor3d::shader
 		if ( it != flags.end() )
 		{
 			auto i = it->first;
-			auto opacityMapConfig = m_writer.declLocale( "opacityMapConfig"
+			auto config = m_writer.declLocale( "opacityMapConfig"
 				, textureConfigs.getTextureConfiguration(  sdw::UInt( it->second.id + 1u ) ) );
+			auto texCoord = m_writer.declLocale( "texCoordOpacity"
+				, texCoords.xy() );
+			config.convertUV( m_writer, texCoord );
 			auto sampledOpacity = m_writer.declLocale< sdw::Vec4 >( "sampledOpacity"
-				, maps[i].sample( opacityMapConfig.convertUV( m_writer, texCoords.xy() ) ) );
-			opacity = opacityMapConfig.getOpacity( m_writer, sampledOpacity, opacity );
+				, maps[i].sample( texCoord ) );
+			opacity = config.getOpacity( m_writer, sampledOpacity, opacity );
 		}
 	}
 
@@ -1340,8 +1346,11 @@ namespace castor3d::shader
 		, sdw::Vec3 & tangentSpaceViewPosition
 		, sdw::Vec3 & tangentSpaceFragPosition )
 	{
+		auto texCoord = m_writer.declLocale( "texCoord" + name
+			, texCoords.xy() );
+		config.convertUV( m_writer, texCoord );
 		auto result = m_writer.declLocale( "result" + name
-			, map.sample( config.convertUV( m_writer, texCoords.xy() ) ) );
+			, map.sample( texCoord ) );
 
 		if ( checkFlag( textureFlags, TextureFlag::eNormal ) )
 		{
@@ -1379,8 +1388,11 @@ namespace castor3d::shader
 		, sdw::Float & opacity
 		, sdw::Float & occlusion )
 	{
+		auto texCoord = m_writer.declLocale( "texCoord" + name
+			, texCoords.xy() );
+		config.convertUV( m_writer, texCoord );
 		auto result = m_writer.declLocale< sdw::Vec4 >( "result" + name
-			, map.sample( config.convertUV( m_writer, texCoords.xy() ) ) );
+			, map.sample( texCoord ) );
 
 		if ( checkFlag( textureFlags, TextureFlag::eOpacity ) )
 		{
@@ -1450,7 +1462,8 @@ namespace castor3d::shader
 		, sdw::Vec3 & tangentSpaceFragPosition )
 	{
 		auto texCoord = m_writer.declLocale( "texCoord" + name
-			, config.convertUV( m_writer, texCoords.xy() ) );
+			, texCoords.xy() );
+		config.convertUV( m_writer, texCoord.xy() );
 
 		if ( checkFlag( textureFlags, TextureFlag::eHeight )
 			&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
