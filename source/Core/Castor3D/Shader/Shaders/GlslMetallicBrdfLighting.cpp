@@ -356,8 +356,8 @@ namespace castor3d
 
 			for ( auto & textureIt : textures )
 			{
-				if ( !checkFlag( textureIt.second.flags, TextureFlag::eOpacity )
-					&& !checkFlag( textureIt.second.flags, TextureFlag::eHeight ) )
+				if ( textureIt.second.flags != TextureFlag::eOpacity
+					&& textureIt.second.flags != TextureFlag::eHeight )
 				{
 					auto i = textureIt.first;
 					auto name = string::stringCast< char >( string::toString( i, std::locale{ "C" } ) );
