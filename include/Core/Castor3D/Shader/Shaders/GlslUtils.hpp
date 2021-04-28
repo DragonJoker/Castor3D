@@ -103,51 +103,25 @@ namespace castor3d::shader
 			, sdw::SampledImageCubeRgba32 const & irradiance
 			, sdw::SampledImageCubeRgba32 const & prefiltered
 			, sdw::SampledImage2DRgba32 const & brdf )const;
-		C3D_API void computeColourMapContribution( FilteredTextureFlags const & flags
+		C3D_API void compute2DMapsContributions( FilteredTextureFlags const & flags
 			, TextureConfigurations const & textureConfigs
 			, sdw::Array< sdw::UVec4 > const & textureConfig
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 			, sdw::Vec3 const & texCoords
-			, sdw::Vec3 & colour );
+			, sdw::Vec3 & colour
+			, sdw::Float & opacity );
 		C3D_API void computeOpacityMapContribution( FilteredTextureFlags const & flags
 			, TextureConfigurations const & textureConfigs
 			, sdw::Array< sdw::UVec4 > const & textureConfig
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 			, sdw::Vec3 const & texCoords
 			, sdw::Float & opacity );
-		C3D_API void computeNormalMapContribution( FilteredTextureFlags const & flags
-			, TextureConfigurations const & textureConfigs
-			, sdw::Array< sdw::UVec4 > const & textureConfig
-			, sdw::Vec3 & normal
-			, sdw::Vec3 & tangent
-			, sdw::Vec3 & bitangent
-			, sdw::Vec3 & tangentSpaceViewPosition
-			, sdw::Vec3 & tangentSpaceFragPosition
-			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
-			, sdw::Vec3 & texCoords );
-		C3D_API void computeHeightMapContribution( FilteredTextureFlags const & flags
-			, PassFlags const & passFlags
-			, TextureConfigurations const & textureConfigs
-			, sdw::Array< sdw::UVec4 > const & textureConfig
-			, sdw::Vec3 const & tangentSpaceViewPosition
-			, sdw::Vec3 const & tangentSpaceFragPosition
-			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
-			, sdw::Vec3 & texCoords );
-		C3D_API sdw::Vec4 computeGeometryMapContribution( TextureFlags const & textureFlags
-			, PassFlags const & passFlags
-			, std::string const & name
-			, shader::TextureConfigData const & config
-			, sdw::SampledImage2DRgba32 const & map
-			, sdw::Vec3 const & texCoords
-			, sdw::Float & opacity
-			, sdw::Vec3 & tangentSpaceViewPosition
-			, sdw::Vec3 & tangentSpaceFragPosition );
 		C3D_API void computeGeometryMapsContributions( FilteredTextureFlags const & flags
 			, PassFlags const & passFlags
 			, TextureConfigurations const & textureConfigs
 			, sdw::Array< sdw::UVec4 > const & textureConfig
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
-			, sdw::Vec3 const & cameraPosition
+			, sdw::Vec3 & texCoords
 			, sdw::Float & opacity
 			, sdw::Vec3 & tangentSpaceViewPosition
 			, sdw::Vec3 & tangentSpaceFragPosition );
@@ -177,26 +151,6 @@ namespace castor3d::shader
 			, sdw::Vec3 & emissive
 			, sdw::Float & opacity
 			, sdw::Float & occlusion );
-		C3D_API void computeCommonMapsContributions( FilteredTextureFlags const & flags
-			, PassFlags const & passFlags
-			, sdw::Float const & gamma
-			, TextureConfigurations const & textureConfigs
-			, sdw::Array< sdw::UVec4 > const & textureConfig
-			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
-			, sdw::Vec3 const & texCoords
-			, sdw::Vec3 & normal
-			, sdw::Vec3 & tangent
-			, sdw::Vec3 & bitangent
-			, sdw::Vec3 & emissive
-			, sdw::Float & opacity
-			, sdw::Float & occlusion
-			, sdw::Float & transmittance
-			, sdw::Vec3 & tangentSpaceViewPosition
-			, sdw::Vec3 & tangentSpaceFragPosition );
-		C3D_API sdw::Vec2 parallaxMapping( sdw::Vec2 const & texCoords
-			, sdw::Vec3 const & viewDir
-			, sdw::SampledImage2DRgba32 const & heightMap
-			, TextureConfigData const & textureConfig );
 		/**
 		 *\~english
 		 *\brief		Calls the GLSL function used to encode the material specifics into a vec4.
@@ -307,6 +261,21 @@ namespace castor3d::shader
 
 	public:
 		C3D_API static uint32_t const MaxIblReflectionLod;
+
+	private:
+		void doComputeGeometryMapContribution( TextureFlags const & textureFlags
+			, PassFlags const & passFlags
+			, std::string const & name
+			, shader::TextureConfigData const & config
+			, sdw::SampledImage2DRgba32 const & map
+			, sdw::Vec3 & texCoords
+			, sdw::Float & opacity
+			, sdw::Vec3 & tangentSpaceViewPosition
+			, sdw::Vec3 & tangentSpaceFragPosition );
+		sdw::Vec2 doParallaxMapping( sdw::Vec2 const & texCoords
+			, sdw::Vec3 const & viewDir
+			, sdw::SampledImage2DRgba32 const & heightMap
+			, TextureConfigData const & textureConfig );
 
 	private:
 		sdw::ShaderWriter & m_writer;

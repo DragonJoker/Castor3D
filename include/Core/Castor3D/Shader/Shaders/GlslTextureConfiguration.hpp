@@ -67,8 +67,7 @@ namespace castor3d
 				, sdw::Vec3 const & tangent
 				, sdw::Vec3 const & bitangent )const;
 			C3D_API sdw::Float getHeight( sdw::ShaderWriter & writer
-				, sdw::Vec4 const & sampled
-				, sdw::Float const & height )const;
+				, sdw::Vec4 const & sampled )const;
 			C3D_API sdw::Float getOcclusion( sdw::ShaderWriter & writer
 				, sdw::Vec4 const & sampled
 				, sdw::Float const & occlusion )const;
