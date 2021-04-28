@@ -7,6 +7,7 @@
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
 #include "Castor3D/Render/Node/PassRenderNode.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
@@ -191,17 +192,17 @@ namespace castor3d
 			return result;
 		}
 
-		TextureUnitSPtr prepareTexture( Engine & engine
+		TextureLayoutSPtr getTextureLayout( Engine & engine
 			, castor::PxBufferBaseUPtr buffer
 			, castor::String const & name
-			, TextureConfiguration resultConfig )
+			, bool isNormalMap )
 		{
 			// Finish buffer initialisation.
 			auto & loader = engine.getImageLoader();
 			auto compressedFormat = loader.getOptions().getCompressed( buffer->getFormat() );
 
 			if ( compressedFormat != buffer->getFormat()
-				&& resultConfig.normalMask[0] == 0 )
+				&& isNormalMap )
 			{
 				buffer = castor::PxBufferBase::createUnique( &loader.getOptions()
 					, buffer->getDimensions()
@@ -215,23 +216,50 @@ namespace castor3d
 			}
 
 			// Create the resulting texture.
-			auto layout = createTextureLayout( engine
+			return createTextureLayout( engine
 				, name
 				, std::move( buffer )
 				, true );
+		}
+
+		TextureUnitSPtr prepareTexture( Engine & engine
+			, castor::PxBufferBaseUPtr buffer
+			, castor::String const & name
+			, TextureConfiguration resultConfig )
+		{
 			auto unit = std::make_shared< TextureUnit >( engine );
 			unit->setConfiguration( resultConfig );
-			unit->setTexture( std::move( layout ) );
+			unit->setTexture( getTextureLayout( engine, std::move( buffer ), name, resultConfig.normalMask[0] == 0 ) );
 			return unit;
 		}
 
-		bool isMergeable( TextureUnit const & unit )
+		bool isPreparable( TextureUnit const & unit )
 		{
 			return ( !unit.getRenderTarget() )
 				&& unit.getTexture()
 				&& unit.getTexture()->isStatic()
-				&& !ashes::isCompressedFormat( unit.getTexture()->getPixelFormat() )
+				&& !ashes::isCompressedFormat( unit.getTexture()->getPixelFormat() );
+		}
+
+		bool isMergeable( TextureUnit const & unit )
+		{
+			return isPreparable( unit )
 				&& !unit.hasAnimation();
+		}
+
+		TextureUnitSPtr getPreparedTexture( Engine & engine
+			, castor::String const & name
+			, TextureUnitSPtr unit )
+		{
+			if ( isPreparable( *unit ) )
+			{
+				unit->setTexture( getTextureLayout( engine
+					, std::make_unique< castor::PxBufferBase >( unit->getTexture()->getImage().getPxBuffer() )
+					, unit->getTexture()->getName()
+					, unit->getConfiguration().normalMask[0] == 0 ) );
+			}
+
+			return unit;
 		}
 	}
 
@@ -512,8 +540,6 @@ namespace castor3d
 	{
 		auto texturesLhs = getTextureUnits( lhsFlag );
 		auto texturesRhs = getTextureUnits( rhsFlag );
-		TextureUnitSPtr newUnit;
-		SamplerSPtr sampler;
 
 		if ( !texturesLhs.empty()
 			&& !texturesRhs.empty()
@@ -527,7 +553,7 @@ namespace castor3d
 				TextureConfiguration resultConfig;
 				getMask( resultConfig, lhsMaskOffset ) = lhsDstMask;
 				getMask( resultConfig, rhsMaskOffset ) = rhsDstMask;
-				newUnit = doMergeImages( lhsUnit->getTexture()->getImage()
+				auto newUnit = doMergeImages( lhsUnit->getTexture()->getImage()
 					, lhsUnit->getConfiguration()
 					, getMask( lhsUnit->getConfiguration(), lhsMaskOffset )
 					, lhsDstMask
@@ -544,8 +570,12 @@ namespace castor3d
 			}
 			else
 			{
-				result.push_back( lhsUnit );
-				result.push_back( rhsUnit );
+				result.push_back( getPreparedTexture( *getOwner()->getEngine()
+					, lhsUnit->getTexture()->getName()
+					, lhsUnit ) );
+				result.push_back( getPreparedTexture( *getOwner()->getEngine()
+					, lhsUnit->getTexture()->getName()
+					, rhsUnit ) );
 			}
 		}
 		else
@@ -556,31 +586,16 @@ namespace castor3d
 			{
 				unit = std::move( texturesLhs[0] );
 			}
-
-			if ( !texturesRhs.empty() )
+			else if ( !texturesRhs.empty() )
 			{
 				unit = std::move( texturesRhs[0] );
 			}
 
 			if ( unit )
 			{
-				if ( !isMergeable( *unit ) )
-				{
-					newUnit = unit;
-				}
-				else
-				{
-					newUnit = prepareTexture( *getOwner()->getEngine()
-						, std::make_unique< castor::PxBufferBase >( unit->getTexture()->getImage().getPxBuffer() )
-						, getOwner()->getName() + name
-						, unit->getConfiguration() );
-					newUnit->setSampler( unit->getSampler() );
-				}
-			}
-
-			if ( newUnit )
-			{
-				result.push_back( newUnit );
+				result.push_back( getPreparedTexture( *getOwner()->getEngine()
+					, name
+					, unit ) );
 			}
 		}
 	}
