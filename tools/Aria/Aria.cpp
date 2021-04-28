@@ -1,6 +1,7 @@
 #include "Aria/Aria.hpp"
 #include "Aria/MainFrame.hpp"
 
+#include <wx/clipbrd.h>
 #include <wx/cmdline.h>
 #include <wx/fileconf.h>
 #include <wx/image.h>
@@ -242,6 +243,7 @@ namespace aria
 
 	int Aria::OnExit()
 	{
+		wxTheClipboard->Flush();
 		castor::Logger::logInfo( cuT( "Stop" ) );
 		castor::Logger::cleanup();
 		wxImage::CleanUpHandlers();
