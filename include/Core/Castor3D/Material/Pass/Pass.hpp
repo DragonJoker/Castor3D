@@ -418,11 +418,36 @@ namespace castor3d
 		}
 		/**@}*/
 
+	protected:
+		void doMergeImages( TextureFlag lhsFlag
+			, uint32_t lhsMaskOffset
+			, uint32_t lhsDstMask
+			, TextureFlag rhsFlag
+			, uint32_t rhsMaskOffset
+			, uint32_t rhsDstMask
+			, castor::String const & name
+			, TextureUnitPtrArray & result );
+		void doJoinDifOpa( TextureUnitPtrArray & result
+			, castor::String const & name );
+
 	private:
 		void onSssChanged( SubsurfaceScattering const & sss );
+		TextureUnitSPtr doMergeImages( castor::Image const & lhs
+			, TextureConfiguration const & lhsConfig
+			, uint32_t lhsSrcMask
+			, uint32_t lhsDstMask
+			, castor::Image const & rhs
+			, TextureConfiguration const & rhsConfig
+			, uint32_t rhsSrcMask
+			, uint32_t rhsDstMask
+			, castor::String const & name
+			, TextureConfiguration resultConfig );
+		void doJoinNmlHgt( TextureUnitPtrArray & result );
+		void doJoinEmsOcc( TextureUnitPtrArray & result );
 		virtual void doInitialise() = 0;
 		virtual void doCleanup() = 0;
 		virtual void doSetOpacity( float value ) = 0;
+		virtual void doPrepareTextures( TextureUnitPtrArray & result ) = 0;
 
 		void updateFlag( PassFlag flag
 			, bool value )
