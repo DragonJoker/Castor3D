@@ -198,8 +198,7 @@ namespace castor3d
 		}
 
 		sdw::Float TextureConfigData::getHeight( sdw::ShaderWriter & writer
-			, sdw::Vec4 const & sampled
-			, sdw::Float const & height )const
+			, sdw::Vec4 const & sampled )const
 		{
 			return heightFactor * getFloat( writer, sampled, heightMask );
 		}
