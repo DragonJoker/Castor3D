@@ -620,7 +620,7 @@ namespace castor3d::shader
 					// get depth after and before collision for linear interpolation
 					auto afterDepth = m_writer.declLocale( "afterDepth"
 						, currentDepthMapValue - currentLayerDepth );
-					sampled = heightMap.grad( currentTexCoords, dx, dy );
+					sampled = heightMap.grad( prevTexCoords, dx, dy );
 					auto beforeDepth = m_writer.declLocale( "beforeDepth"
 						, sampled[heightIndex] - currentLayerDepth + layerDepth );
 
