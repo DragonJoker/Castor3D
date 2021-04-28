@@ -8,351 +8,33 @@ namespace castor
 {
 	//*****************************************************************************************
 
-	PixelFormat getPFWithoutAlpha( PixelFormat format )
+	PixelFormat getFormatByName( String const & formatName )
 	{
 		PixelFormat result = PixelFormat::eCount;
 
-		switch ( format )
+		for ( int i = 0u; i < int( result ) && result == PixelFormat::eCount; ++i )
 		{
-		case PixelFormat::eR5G5B5A1_UNORM:
-			result = PixelFormat::eR5G6B5_UNORM;
-			break;
-		case PixelFormat::eR8G8B8A8_UNORM:
-			result = PixelFormat::eR8G8B8_UNORM;
-			break;
-		case PixelFormat::eA8B8G8R8_UNORM:
-			result = PixelFormat::eB8G8R8_UNORM;
-			break;
-		case PixelFormat::eR8G8B8A8_SRGB:
-			result = PixelFormat::eR8G8B8_UNORM;
-			break;
-		case PixelFormat::eA8B8G8R8_SRGB:
-			result = PixelFormat::eB8G8R8_UNORM;
-			break;
-		case PixelFormat::eR16G16B16A16_SFLOAT:
-			result = PixelFormat::eR16G16B16_SFLOAT;
-			break;
-		case PixelFormat::eR32G32B32A32_SFLOAT:
-			result = PixelFormat::eR32G32B32_SFLOAT;
-			break;
-		case PixelFormat::eR64G64B64A64_SFLOAT:
-			result = PixelFormat::eR64G64B64_SFLOAT;
-			break;
-		default:
-			result = format;
-			break;
-		}
-
-		return result;
-	}
-
-	bool hasAlpha( PixelFormat format )
-	{
-		bool result = false;
-
-		switch ( format )
-		{
+			switch ( PixelFormat( i ) )
+			{
 #define CUPF_ENUM_VALUE( name, value, components, alpha, colour, depth, stencil, compressed )\
-		case PixelFormat::e##name:\
-			result = alpha;\
-			break;
+			case PixelFormat::e##name:\
+				result = ( formatName == PixelDefinitionsT< PixelFormat::e##name >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );\
+				break;
 #include "CastorUtils/Graphics/PixelFormat.enum"
-		default:
-			result = false;
-			break;
-		}
-
-		return result;
-	}
-
-	bool isFloatingPoint( PixelFormat format )
-	{
-		return format == PixelFormat::eR16G16B16A16_SFLOAT
-			|| format == PixelFormat::eR16G16B16_SFLOAT
-			|| format == PixelFormat::eR16G16_SFLOAT
-			|| format == PixelFormat::eR16_SFLOAT
-			|| format == PixelFormat::eR32G32B32A32_SFLOAT
-			|| format == PixelFormat::eR32G32B32_SFLOAT
-			|| format == PixelFormat::eR32G32_SFLOAT
-			|| format == PixelFormat::eR32_SFLOAT
-			|| format == PixelFormat::eR64G64B64A64_SFLOAT
-			|| format == PixelFormat::eR64G64B64_SFLOAT
-			|| format == PixelFormat::eR64G64_SFLOAT
-			|| format == PixelFormat::eB10G11R11_UFLOAT
-			|| format == PixelFormat::eE5B9G9R9_UFLOAT
-			|| format == PixelFormat::eR64_SFLOAT
-			|| format == PixelFormat::eD32_SFLOAT
-			|| format == PixelFormat::eD32_SFLOAT_S8_UINT
-			|| format == PixelFormat::eBC6H_UFLOAT_BLOCK
-			|| format == PixelFormat::eBC6H_SFLOAT_BLOCK;
-	}
-
-	bool isCompressed( PixelFormat format )
-	{
-		return format >= PixelFormat::eBC1_RGB_UNORM_BLOCK
-			&& format <= PixelFormat::eASTC_12x12_SRGB_BLOCK;
-	}
-
-	namespace
-	{
-		template< PixelFormat PFSrc >
-		void compressBufferT( PxBufferConvertOptions const * options
-			, Size const & srcDimensions
-			, Size const & dstDimensions
-			, uint8_t const * srcBuffer
-			, uint32_t srcSize
-			, PixelFormat dstFormat
-			, uint8_t * dstBuffer
-			, uint32_t dstSize )
-		{
-			if constexpr ( isColourFormatV < PFSrc >
-				&& !isCompressedV< PFSrc > )
-			{
-				switch ( dstFormat )
-				{
-#if CU_UseCVTT
-				case PixelFormat::eBC1_RGB_UNORM_BLOCK:
-				case PixelFormat::eBC1_RGB_SRGB_BLOCK:
-				case PixelFormat::eBC1_RGBA_UNORM_BLOCK:
-				case PixelFormat::eBC1_RGBA_SRGB_BLOCK:
-				case PixelFormat::eBC3_UNORM_BLOCK:
-				case PixelFormat::eBC3_SRGB_BLOCK:
-				case PixelFormat::eBC2_UNORM_BLOCK:
-				case PixelFormat::eBC2_SRGB_BLOCK:
-				case PixelFormat::eBC4_UNORM_BLOCK:
-				case PixelFormat::eBC5_UNORM_BLOCK:
-				case PixelFormat::eBC7_UNORM_BLOCK:
-				case PixelFormat::eBC7_SRGB_BLOCK:
-					{
-						CVTTCompressorU< PFSrc > compressor{ options
-							, getBytesPerPixel( PFSrc ) };
-						compressor.compress( dstFormat
-							, srcDimensions
-							, dstDimensions
-							, srcBuffer
-							, srcSize
-							, dstBuffer
-							, dstSize );
-					}
-					break;
-				case PixelFormat::eBC4_SNORM_BLOCK:
-				case PixelFormat::eBC5_SNORM_BLOCK:
-					{
-						CVTTCompressorS< PFSrc > compressor{ options
-							, getBytesPerPixel( PFSrc ) };
-						compressor.compress( dstFormat
-							, srcDimensions
-							, dstDimensions
-							, srcBuffer
-							, srcSize
-							, dstBuffer
-							, dstSize );
-					}
-					break;
-				case PixelFormat::eBC6H_UFLOAT_BLOCK:
-				case PixelFormat::eBC6H_SFLOAT_BLOCK:
-					{
-						CVTTCompressorF< PFSrc > compressor{ options
-							, getBytesPerPixel( PFSrc ) };
-						compressor.compress( dstFormat
-							, srcDimensions
-							, dstDimensions
-							, srcBuffer
-							, srcSize
-							, dstBuffer
-							, dstSize );
-					}
-					break;
-#else
-				case PixelFormat::eBC1_RGB_UNORM_BLOCK:
-				case PixelFormat::eBC1_RGB_SRGB_BLOCK:
-					{
-						BC1Compressor compressor{ getBytesPerPixel( PFSrc )
-							, getR8U< PFSrc >
-							, getG8U< PFSrc >
-							, getB8U< PFSrc >
-							, getA8U< PFSrc > };
-						compressor.compress( srcDimensions
-							, dstDimensions
-							, srcBuffer
-							, srcSize
-							, dstBuffer
-							, dstSize );
-					}
-					break;
-				case PixelFormat::eBC3_UNORM_BLOCK:
-				case PixelFormat::eBC3_SRGB_BLOCK:
-					{
-						BC3Compressor compressor{ getBytesPerPixel( PFSrc )
-							, getR8U< PFSrc >
-							, getG8U< PFSrc >
-							, getB8U< PFSrc >
-							, getA8U< PFSrc > };
-						compressor.compress( srcDimensions
-							, dstDimensions
-							, srcBuffer
-							, srcSize
-							, dstBuffer
-							, dstSize );
-					}
-					break;
-#endif
-				default:
-					break;
-				}
-			}
-		}
-	}
-
-	void compressBuffer( PxBufferConvertOptions const * options
-		, Size const & srcDimensions
-		, Size const & dstDimensions
-		, PixelFormat srcFormat
-		, uint8_t const * srcBuffer
-		, uint32_t srcSize
-		, PixelFormat dstFormat
-		, uint8_t * dstBuffer
-		, uint32_t dstSize )
-	{
-		switch ( srcFormat )
-		{
-#define CUPF_ENUM_VALUE_COLOR( name, value, components, alpha )\
-		case PixelFormat::e##name:\
-			compressBufferT< PixelFormat::e##name >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );\
-			break;
-#include "CastorUtils/Graphics/PixelFormat.enum"
-		default:
-			break;
-		}
-	}
-
-	PxBufferBaseSPtr decompressBuffer( PxBufferBaseSPtr src )
-	{
-		PxBufferBaseSPtr result = src;
-
-		if ( isCompressed( src->getFormat() ) )
-		{
-			using PFNDecompressBlock = bool( *)( uint8_t const * data, uint8_t * pixelBuffer );
-			PFNDecompressBlock decompressBlock = nullptr;
-
-			switch ( src->getFormat() )
-			{
-			case PixelFormat::eBC1_RGB_UNORM_BLOCK:
-			case PixelFormat::eBC1_RGB_SRGB_BLOCK:
-				decompressBlock = decompressBC1Block;
-				break;
-			case PixelFormat::eBC3_UNORM_BLOCK:
-			case PixelFormat::eBC3_SRGB_BLOCK:
-				decompressBlock = decompressBC3Block;
-				break;
-			case PixelFormat::eBC5_UNORM_BLOCK:
-			case PixelFormat::eBC5_SNORM_BLOCK:
-				decompressBlock = decompressBC5Block;
-				break;
 			default:
-				CU_Failure( "Unsupported compression format" );
-				return result;
-			}
-
-			result = PxBufferBase::create( src->getDimensions()
-				, PixelFormat::eR8G8B8A8_UNORM );
-			uint8_t * pixelBuffer = result->getPtr();
-			uint8_t blockBuffer[16 * 4u];
-			uint8_t const * data = src->getConstPtr();
-			uint32_t pixelSize = getBytesPerPixel( result->getFormat() );
-			uint32_t height = src->getHeight();
-			uint32_t width = src->getWidth();
-			uint32_t heightInBlocks = height / 4u;
-			uint32_t widthInBlocks = width / 4u;
-
-			for ( uint32_t y = 0u; y < heightInBlocks; ++y )
-			{
-				uint32_t newRows;
-
-				if ( y * 4 + 3 >= height )
-				{
-					newRows = height - y * 4u;
-				}
-				else
-				{
-					newRows = 4u;
-				}
-
-				for ( uint32_t x = 0u; x < widthInBlocks; ++x )
-				{
-					bool r = decompressBlock( data, blockBuffer );
-
-					if ( !r )
-					{
-						return src;
-					}
-
-					uint32_t blockSize = 8u;
-					uint8_t * pixelp = pixelBuffer +
-						y * 4u * width * pixelSize +
-						x * 4u * pixelSize;
-					uint32_t newColumns;
-
-					if ( x * 4 + 3 >= width )
-					{
-						newColumns = width - x * 4;
-					}
-					else
-					{
-						newColumns = 4u;
-					}
-
-					for ( uint32_t row = 0u; row < newRows; ++row )
-					{
-						memcpy( pixelp + row * width * pixelSize
-							, blockBuffer + row * 4u * pixelSize
-							, newColumns * pixelSize );
-					}
-
-					data += blockSize;
-				}
-			}
-
-			if ( src->getFormat() == PixelFormat::eBC1_RGB_UNORM_BLOCK )
-			{
-				// Remove alpha channel for BC1 compressed buffer.
-				extractAlpha( result );
+				break;
 			}
 		}
 
-		return result;
-	}
-
-	PxBufferBaseSPtr extractComponent( PxBufferBaseSPtr src
-		, PixelComponent component )
-	{
-		src = decompressBuffer( src );
-		auto result = PxBufferBase::create( src->getDimensions()
-			, getSingleComponent( src->getFormat() ) );
-		auto dstPixelSize = getBytesPerPixel( result->getFormat() );
-		auto dstBuffer = result->getPtr();
-
-		if ( hasComponent( src->getFormat(), component ) )
+		if ( result == PixelFormat::eCount
+			&& formatName == "argb32" )
 		{
-			auto index = getComponentIndex( component );
-			auto srcBuffer = src->getConstPtr();
-			auto srcPixelSize = getBytesPerPixel( src->getFormat() );
-			srcBuffer += index * dstPixelSize;
-
-			for ( size_t i = 0; i < result->getCount(); ++i )
-			{
-				std::memcpy( dstBuffer, srcBuffer, dstPixelSize );
-				dstBuffer += dstPixelSize;
-				srcBuffer += srcPixelSize;
-			}
+			result = PixelFormat::eR8G8B8A8_UNORM;
 		}
-		else
+
+		if ( result == PixelFormat::eCount )
 		{
-			for ( size_t i = 0; i < result->getCount(); ++i )
-			{
-				std::memset( dstBuffer, 0xFFFFFFFF, dstPixelSize );
-				dstBuffer += dstPixelSize;
-			}
+			CU_Failure( "Unsupported pixel format" );
 		}
 
 		return result;
@@ -522,302 +204,6 @@ namespace castor
 		default:
 			return PixelFormat::eUNDEFINED;
 		}
-	}
-
-	PxBufferBaseSPtr extractComponents( PxBufferBaseSPtr src
-		, PixelComponents components )
-	{
-		src = decompressBuffer( src );
-		auto result = PxBufferBase::create( src->getDimensions()
-			, getPixelFormat( src->getFormat(), components ) );
-		auto srcPixelSize = getBytesPerPixel( src->getFormat() );
-		auto dstPixelSize = getBytesPerPixel( result->getFormat() );
-		auto dstComponentSize = getBytesPerPixel( getSingleComponent( result->getFormat() ) );
-		auto dstIndex = 0u;
-
-		for ( auto component : components )
-		{
-			auto dstBuffer = result->getPtr();
-			dstBuffer += dstIndex * dstComponentSize;
-
-			if ( hasComponent( src->getFormat(), component ) )
-			{
-				auto srcBuffer = src->getConstPtr();
-				auto srcIndex = getComponentIndex( component );
-				srcBuffer += srcIndex * dstComponentSize;
-
-				for ( size_t i = 0; i < result->getCount(); ++i )
-				{
-					std::memcpy( dstBuffer, srcBuffer, dstComponentSize );
-					dstBuffer += dstPixelSize;
-					srcBuffer += srcPixelSize;
-				}
-			}
-			else
-			{
-				for ( size_t i = 0; i < result->getCount(); ++i )
-				{
-					std::memset( dstBuffer, 0xFFFFFFFF, dstComponentSize );
-					dstBuffer += dstPixelSize;
-				}
-			}
-
-			++dstIndex;
-		}
-
-		return result;
-	}
-
-	PxBufferBaseSPtr extractAlpha( PxBufferBaseSPtr & srcBuffer )
-	{
-		PxBufferBaseSPtr result;
-
-		if ( hasAlpha( srcBuffer->getFormat() ) )
-		{
-			result = PxBufferBase::create( srcBuffer->getDimensions()
-				, PixelFormat::eR8G8_UNORM
-				, srcBuffer->getConstPtr()
-				, srcBuffer->getFormat() );
-			uint8_t * pBuffer = result->getPtr();
-
-			for ( uint32_t i = 0; i < result->getSize(); i += 2 )
-			{
-				pBuffer[0] = pBuffer[1];
-				pBuffer++;
-				pBuffer++;
-			}
-
-			result = PxBufferBase::create( srcBuffer->getDimensions()
-				, PixelFormat::eR8_UNORM
-				, result->getConstPtr()
-				, result->getFormat() );
-			srcBuffer = PxBufferBase::create( srcBuffer->getDimensions()
-				, getPFWithoutAlpha( srcBuffer->getFormat() )
-				, srcBuffer->getConstPtr()
-				, srcBuffer->getFormat() );
-		}
-
-		return result;
-	}
-
-	void reduceToAlpha( PxBufferBaseSPtr & srcBuffer )
-	{
-		if ( hasAlpha( srcBuffer->getFormat() ) )
-		{
-			if ( srcBuffer->getFormat() != PixelFormat::eR8G8_UNORM )
-			{
-				srcBuffer = PxBufferBase::create( srcBuffer->getDimensions()
-					, PixelFormat::eR8G8_UNORM
-					, srcBuffer->getConstPtr()
-					, srcBuffer->getFormat() );
-			}
-
-			uint8_t * pBuffer = srcBuffer->getPtr();
-
-			for ( uint32_t i = 0; i < srcBuffer->getSize(); i += 2 )
-			{
-				pBuffer[0] = pBuffer[1];
-				pBuffer++;
-				pBuffer++;
-			}
-		}
-
-		srcBuffer = PxBufferBase::create( srcBuffer->getDimensions()
-			, PixelFormat::eR8_UNORM
-			, srcBuffer->getConstPtr()
-			, srcBuffer->getFormat() );
-	}
-
-	void convertPixel( PixelFormat srcFormat
-		, uint8_t const *& srcBuffer
-		, PixelFormat dstFormat
-		, uint8_t *& dstBuffer )
-	{
-		switch ( srcFormat )
-		{
-#define CUPF_ENUM_VALUE( name, value, components, alpha, colour, depth, stencil, compressed )\
-		case PixelFormat::e##name:\
-			PixelDefinitionsT< PixelFormat::e##name >::convert( srcBuffer, dstBuffer, dstFormat );\
-			break;
-#define CUPF_ENUM_VALUE_COMPRESSED( name, value, components, alpha )
-#include "CastorUtils/Graphics/PixelFormat.enum"
-		default:
-			CU_Failure( "Unsupported pixel format" );
-			break;
-		}
-	}
-
-	void convertBuffer( Size const & srcDimensions
-		, Size const & dstDimensions
-		, PixelFormat srcFormat
-		, uint8_t const * srcBuffer
-		, uint32_t srcSize
-		, PixelFormat dstFormat
-		, uint8_t * dstBuffer
-		, uint32_t dstSize )
-	{
-		switch ( srcFormat )
-		{
-#define CUPF_ENUM_VALUE( name, value, components, alpha, colour, depth, stencil, compressed ) case PixelFormat::e##name:\
-			PixelDefinitionsT< PixelFormat::e##name >::convert( nullptr, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );\
-			break;
-#include "CastorUtils/Graphics/PixelFormat.enum"
-		default:
-			CU_Failure( "Unsupported pixel format" );
-			break;
-		}
-	}
-
-	PixelFormat getFormatByName( String const & formatName )
-	{
-		PixelFormat result = PixelFormat::eCount;
-
-		for ( int i = 0u; i < int( result ) && result == PixelFormat::eCount; ++i )
-		{
-			switch ( PixelFormat( i ) )
-			{
-#define CUPF_ENUM_VALUE( name, value, components, alpha, colour, depth, stencil, compressed )\
-			case PixelFormat::e##name:\
-				result = ( formatName == PixelDefinitionsT< PixelFormat::e##name >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );\
-				break;
-#include "CastorUtils/Graphics/PixelFormat.enum"
-			default:
-				break;
-			}
-		}
-
-		if ( result == PixelFormat::eCount
-			&& formatName == "argb32" )
-		{
-			result = PixelFormat::eR8G8B8A8_UNORM;
-		}
-
-		if ( result == PixelFormat::eCount )
-		{
-			CU_Failure( "Unsupported pixel format" );
-		}
-
-		return result;
-	}
-
-	bool isRGBFormat( PixelFormat format )
-	{
-		return format == PixelFormat::eR5G6B5_UNORM
-			|| format == PixelFormat::eR8G8B8_UNORM
-			|| format == PixelFormat::eR8G8B8_SNORM
-			|| format == PixelFormat::eR8G8B8_USCALED
-			|| format == PixelFormat::eR8G8B8_SSCALED
-			|| format == PixelFormat::eR8G8B8_UINT
-			|| format == PixelFormat::eR8G8B8_SINT
-			|| format == PixelFormat::eR8G8B8_SRGB
-			|| format == PixelFormat::eR16G16B16_UNORM
-			|| format == PixelFormat::eR16G16B16_SNORM
-			|| format == PixelFormat::eR16G16B16_USCALED
-			|| format == PixelFormat::eR16G16B16_SSCALED
-			|| format == PixelFormat::eR16G16B16_UINT
-			|| format == PixelFormat::eR16G16B16_SINT
-			|| format == PixelFormat::eR16G16B16_SFLOAT
-			|| format == PixelFormat::eR32G32B32_UINT
-			|| format == PixelFormat::eR32G32B32_SINT
-			|| format == PixelFormat::eR32G32B32_SFLOAT
-			|| format == PixelFormat::eR64G64B64_UINT
-			|| format == PixelFormat::eR64G64B64_SINT
-			|| format == PixelFormat::eR64G64B64_SFLOAT
-			|| format == PixelFormat::eBC1_RGB_UNORM_BLOCK
-			|| format == PixelFormat::eBC1_RGB_SRGB_BLOCK
-			|| format == PixelFormat::eBC6H_UFLOAT_BLOCK
-			|| format == PixelFormat::eBC6H_SFLOAT_BLOCK
-			|| format == PixelFormat::eETC2_R8G8B8_UNORM_BLOCK
-			|| format == PixelFormat::eETC2_R8G8B8_SRGB_BLOCK;
-	}
-
-	bool isBGRFormat( PixelFormat format )
-	{
-		return format == PixelFormat::eB5G6R5_UNORM
-			|| format == PixelFormat::eB8G8R8_UNORM
-			|| format == PixelFormat::eB8G8R8_SNORM
-			|| format == PixelFormat::eB8G8R8_USCALED
-			|| format == PixelFormat::eB8G8R8_SSCALED
-			|| format == PixelFormat::eB8G8R8_UINT
-			|| format == PixelFormat::eB8G8R8_SINT
-			|| format == PixelFormat::eB8G8R8_SRGB
-			|| format == PixelFormat::eB10G11R11_UFLOAT
-			|| format == PixelFormat::eE5B9G9R9_UFLOAT;
-	}
-
-	bool isRGBAFormat( PixelFormat format )
-	{
-		return format == PixelFormat::eR4G4B4A4_UNORM
-			|| format == PixelFormat::eR5G5B5A1_UNORM
-			|| format == PixelFormat::eR8G8B8A8_UNORM
-			|| format == PixelFormat::eR8G8B8A8_SNORM
-			|| format == PixelFormat::eR8G8B8A8_USCALED
-			|| format == PixelFormat::eR8G8B8A8_SSCALED
-			|| format == PixelFormat::eR8G8B8A8_UINT
-			|| format == PixelFormat::eR8G8B8A8_SINT
-			|| format == PixelFormat::eR8G8B8A8_SRGB
-			|| format == PixelFormat::eR16G16B16A16_UNORM
-			|| format == PixelFormat::eR16G16B16A16_SNORM
-			|| format == PixelFormat::eR16G16B16A16_USCALED
-			|| format == PixelFormat::eR16G16B16A16_SSCALED
-			|| format == PixelFormat::eR16G16B16A16_UINT
-			|| format == PixelFormat::eR16G16B16A16_SINT
-			|| format == PixelFormat::eR16G16B16A16_SFLOAT
-			|| format == PixelFormat::eR32G32B32A32_UINT
-			|| format == PixelFormat::eR32G32B32A32_SINT
-			|| format == PixelFormat::eR32G32B32A32_SFLOAT
-			|| format == PixelFormat::eR64G64B64A64_UINT
-			|| format == PixelFormat::eR64G64B64A64_SINT
-			|| format == PixelFormat::eR64G64B64A64_SFLOAT
-			|| format == PixelFormat::eBC1_RGBA_UNORM_BLOCK
-			|| format == PixelFormat::eBC1_RGBA_SRGB_BLOCK
-			|| format == PixelFormat::eBC7_UNORM_BLOCK
-			|| format == PixelFormat::eBC7_SRGB_BLOCK
-			|| format == PixelFormat::eETC2_R8G8B8A1_UNORM_BLOCK
-			|| format == PixelFormat::eETC2_R8G8B8A1_SRGB_BLOCK
-			|| format == PixelFormat::eETC2_R8G8B8A8_UNORM_BLOCK
-			|| format == PixelFormat::eETC2_R8G8B8A8_SRGB_BLOCK;
-	}
-
-	bool isARGBFormat( PixelFormat format )
-	{
-		return format == PixelFormat::eA1R5G5B5_UNORM
-			|| format == PixelFormat::eA2R10G10B10_UNORM
-			|| format == PixelFormat::eA2R10G10B10_SNORM
-			|| format == PixelFormat::eA2R10G10B10_USCALED
-			|| format == PixelFormat::eA2R10G10B10_SSCALED
-			|| format == PixelFormat::eA2R10G10B10_UINT
-			|| format == PixelFormat::eA2R10G10B10_SINT;
-	}
-
-	bool isBGRAFormat( PixelFormat format )
-	{
-		return format == PixelFormat::eB4G4R4A4_UNORM
-			|| format == PixelFormat::eB5G5R5A1_UNORM
-			|| format == PixelFormat::eB8G8R8A8_UNORM
-			|| format == PixelFormat::eB8G8R8A8_SNORM
-			|| format == PixelFormat::eB8G8R8A8_USCALED
-			|| format == PixelFormat::eB8G8R8A8_SSCALED
-			|| format == PixelFormat::eB8G8R8A8_UINT
-			|| format == PixelFormat::eB8G8R8A8_SINT
-			|| format == PixelFormat::eB8G8R8A8_SRGB;
-	}
-
-	bool isABGRFormat( PixelFormat format )
-	{
-		return format == PixelFormat::eA8B8G8R8_UNORM
-			|| format == PixelFormat::eA8B8G8R8_SNORM
-			|| format == PixelFormat::eA8B8G8R8_USCALED
-			|| format == PixelFormat::eA8B8G8R8_SSCALED
-			|| format == PixelFormat::eA8B8G8R8_UINT
-			|| format == PixelFormat::eA8B8G8R8_SINT
-			|| format == PixelFormat::eA8B8G8R8_SRGB
-			|| format == PixelFormat::eA2B10G10R10_UNORM
-			|| format == PixelFormat::eA2B10G10R10_SNORM
-			|| format == PixelFormat::eA2B10G10R10_USCALED
-			|| format == PixelFormat::eA2B10G10R10_SSCALED
-			|| format == PixelFormat::eA2B10G10R10_UINT
-			|| format == PixelFormat::eA2B10G10R10_SINT;
 	}
 
 	String getFormatName( PixelFormat format )
@@ -1199,5 +585,314 @@ namespace castor
 		default:
 			return "unsupported";
 		}
+	}
+
+	void convertPixel( PixelFormat srcFormat
+		, uint8_t const *& srcBuffer
+		, PixelFormat dstFormat
+		, uint8_t *& dstBuffer )
+	{
+		switch ( srcFormat )
+		{
+#define CUPF_ENUM_VALUE( name, value, components, alpha, colour, depth, stencil, compressed )\
+		case PixelFormat::e##name:\
+			PixelDefinitionsT< PixelFormat::e##name >::convert( srcBuffer, dstBuffer, dstFormat );\
+			break;
+#define CUPF_ENUM_VALUE_COMPRESSED( name, value, components, alpha )
+#include "CastorUtils/Graphics/PixelFormat.enum"
+		default:
+			CU_Failure( "Unsupported pixel format" );
+			break;
+		}
+	}
+
+	void convertBuffer( Size const & srcDimensions
+		, Size const & dstDimensions
+		, PixelFormat srcFormat
+		, uint8_t const * srcBuffer
+		, uint32_t srcSize
+		, PixelFormat dstFormat
+		, uint8_t * dstBuffer
+		, uint32_t dstSize )
+	{
+		switch ( srcFormat )
+		{
+#define CUPF_ENUM_VALUE( name, value, components, alpha, colour, depth, stencil, compressed ) case PixelFormat::e##name:\
+			PixelDefinitionsT< PixelFormat::e##name >::convert( nullptr, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );\
+			break;
+#include "CastorUtils/Graphics/PixelFormat.enum"
+		default:
+			CU_Failure( "Unsupported pixel format" );
+			break;
+		}
+	}
+
+	namespace
+	{
+		template< PixelFormat PFSrc >
+		void compressBufferT( PxBufferConvertOptions const * options
+			, Size const & srcDimensions
+			, Size const & dstDimensions
+			, uint8_t const * srcBuffer
+			, uint32_t srcSize
+			, PixelFormat dstFormat
+			, uint8_t * dstBuffer
+			, uint32_t dstSize )
+		{
+			if constexpr ( isColourFormatV < PFSrc >
+				&& !isCompressedV< PFSrc > )
+			{
+				switch ( dstFormat )
+				{
+#if CU_UseCVTT
+				case PixelFormat::eBC1_RGB_UNORM_BLOCK:
+				case PixelFormat::eBC1_RGB_SRGB_BLOCK:
+				case PixelFormat::eBC1_RGBA_UNORM_BLOCK:
+				case PixelFormat::eBC1_RGBA_SRGB_BLOCK:
+				case PixelFormat::eBC3_UNORM_BLOCK:
+				case PixelFormat::eBC3_SRGB_BLOCK:
+				case PixelFormat::eBC2_UNORM_BLOCK:
+				case PixelFormat::eBC2_SRGB_BLOCK:
+				case PixelFormat::eBC4_UNORM_BLOCK:
+				case PixelFormat::eBC5_UNORM_BLOCK:
+				case PixelFormat::eBC7_UNORM_BLOCK:
+				case PixelFormat::eBC7_SRGB_BLOCK:
+					{
+						CVTTCompressorU< PFSrc > compressor{ options
+							, getBytesPerPixel( PFSrc ) };
+						compressor.compress( dstFormat
+							, srcDimensions
+							, dstDimensions
+							, srcBuffer
+							, srcSize
+							, dstBuffer
+							, dstSize );
+					}
+					break;
+				case PixelFormat::eBC4_SNORM_BLOCK:
+				case PixelFormat::eBC5_SNORM_BLOCK:
+					{
+						CVTTCompressorS< PFSrc > compressor{ options
+							, getBytesPerPixel( PFSrc ) };
+						compressor.compress( dstFormat
+							, srcDimensions
+							, dstDimensions
+							, srcBuffer
+							, srcSize
+							, dstBuffer
+							, dstSize );
+					}
+					break;
+				case PixelFormat::eBC6H_UFLOAT_BLOCK:
+				case PixelFormat::eBC6H_SFLOAT_BLOCK:
+					{
+						CVTTCompressorF< PFSrc > compressor{ options
+							, getBytesPerPixel( PFSrc ) };
+						compressor.compress( dstFormat
+							, srcDimensions
+							, dstDimensions
+							, srcBuffer
+							, srcSize
+							, dstBuffer
+							, dstSize );
+					}
+					break;
+#else
+				case PixelFormat::eBC1_RGB_UNORM_BLOCK:
+				case PixelFormat::eBC1_RGB_SRGB_BLOCK:
+					{
+						BC1Compressor compressor{ getBytesPerPixel( PFSrc )
+							, getR8U< PFSrc >
+							, getG8U< PFSrc >
+							, getB8U< PFSrc >
+							, getA8U< PFSrc > };
+						compressor.compress( srcDimensions
+							, dstDimensions
+							, srcBuffer
+							, srcSize
+							, dstBuffer
+							, dstSize );
+					}
+					break;
+				case PixelFormat::eBC3_UNORM_BLOCK:
+				case PixelFormat::eBC3_SRGB_BLOCK:
+					{
+						BC3Compressor compressor{ getBytesPerPixel( PFSrc )
+							, getR8U< PFSrc >
+							, getG8U< PFSrc >
+							, getB8U< PFSrc >
+							, getA8U< PFSrc > };
+						compressor.compress( srcDimensions
+							, dstDimensions
+							, srcBuffer
+							, srcSize
+							, dstBuffer
+							, dstSize );
+					}
+					break;
+#endif
+				default:
+					break;
+				}
+			}
+		}
+	}
+
+	void compressBuffer( PxBufferConvertOptions const * options
+		, Size const & srcDimensions
+		, Size const & dstDimensions
+		, PixelFormat srcFormat
+		, uint8_t const * srcBuffer
+		, uint32_t srcSize
+		, PixelFormat dstFormat
+		, uint8_t * dstBuffer
+		, uint32_t dstSize )
+	{
+		switch ( srcFormat )
+		{
+#define CUPF_ENUM_VALUE_COLOR( name, value, components, alpha )\
+		case PixelFormat::e##name:\
+			compressBufferT< PixelFormat::e##name >( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );\
+			break;
+#include "CastorUtils/Graphics/PixelFormat.enum"
+		default:
+			break;
+		}
+	}
+
+	PxBufferBaseSPtr decompressBuffer( PxBufferBaseSPtr src )
+	{
+		PxBufferBaseSPtr result = src;
+
+		if ( isCompressed( src->getFormat() ) )
+		{
+			using PFNDecompressBlock = bool( * )( uint8_t const * data, uint8_t * pixelBuffer );
+			PFNDecompressBlock decompressBlock = nullptr;
+
+			switch ( src->getFormat() )
+			{
+			case PixelFormat::eBC1_RGB_UNORM_BLOCK:
+			case PixelFormat::eBC1_RGB_SRGB_BLOCK:
+				decompressBlock = decompressBC1Block;
+				break;
+			case PixelFormat::eBC3_UNORM_BLOCK:
+			case PixelFormat::eBC3_SRGB_BLOCK:
+				decompressBlock = decompressBC3Block;
+				break;
+			case PixelFormat::eBC5_UNORM_BLOCK:
+			case PixelFormat::eBC5_SNORM_BLOCK:
+				decompressBlock = decompressBC5Block;
+				break;
+			default:
+				CU_Failure( "Unsupported compression format" );
+				return result;
+			}
+
+			result = PxBufferBase::create( src->getDimensions()
+				, PixelFormat::eR8G8B8A8_UNORM );
+			uint8_t * pixelBuffer = result->getPtr();
+			uint8_t blockBuffer[16 * 4u];
+			uint8_t const * data = src->getConstPtr();
+			uint32_t pixelSize = getBytesPerPixel( result->getFormat() );
+			uint32_t height = src->getHeight();
+			uint32_t width = src->getWidth();
+			uint32_t heightInBlocks = height / 4u;
+			uint32_t widthInBlocks = width / 4u;
+
+			for ( uint32_t y = 0u; y < heightInBlocks; ++y )
+			{
+				uint32_t newRows;
+
+				if ( y * 4 + 3 >= height )
+				{
+					newRows = height - y * 4u;
+				}
+				else
+				{
+					newRows = 4u;
+				}
+
+				for ( uint32_t x = 0u; x < widthInBlocks; ++x )
+				{
+					bool r = decompressBlock( data, blockBuffer );
+
+					if ( !r )
+					{
+						return src;
+					}
+
+					uint32_t blockSize = 8u;
+					uint8_t * pixelp = pixelBuffer +
+						y * 4u * width * pixelSize +
+						x * 4u * pixelSize;
+					uint32_t newColumns;
+
+					if ( x * 4 + 3 >= width )
+					{
+						newColumns = width - x * 4;
+					}
+					else
+					{
+						newColumns = 4u;
+					}
+
+					for ( uint32_t row = 0u; row < newRows; ++row )
+					{
+						memcpy( pixelp + row * width * pixelSize
+							, blockBuffer + row * 4u * pixelSize
+							, newColumns * pixelSize );
+					}
+
+					data += blockSize;
+				}
+			}
+		}
+
+		return result;
+	}
+
+	std::string getName( PixelComponent const & component )
+	{
+		std::string result;
+		switch ( component )
+		{
+		case PixelComponent::eRed:
+			result = "red";
+			break;
+		case PixelComponent::eGreen:
+			result = "green";
+			break;
+		case PixelComponent::eBlue:
+			result = "blue";
+			break;
+		case PixelComponent::eAlpha:
+			result = "alpha";
+			break;
+		case PixelComponent::eDepth:
+			result = "depth";
+			break;
+		case PixelComponent::eStencil:
+			result = "stencil";
+			break;
+		default:
+			result = "unknown";
+			break;
+		}
+
+		return result;
+	}
+
+	std::string getName( PixelComponents const & components )
+	{
+		std::string result;
+		std::string sep;
+
+		for ( auto component : components )
+		{
+			result += sep + getName( component );
+			sep = "|";
+		}
+
+		return result;
 	}
 }

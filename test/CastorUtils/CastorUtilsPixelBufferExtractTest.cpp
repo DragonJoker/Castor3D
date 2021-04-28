@@ -114,6 +114,7 @@ namespace
 	void checkPixelExtractCompT( Testing::TestCase & test
 		, PixelComponents components )
 	{
+		CT_WHEN_EX( test, "components == " + getName( components ) );
 		PxBufferBaseSPtr src = createPixelBufferT< PfT >();
 		PxBufferBaseSPtr buffer = extractComponents( src, components );
 		auto srcData = src->getConstPtr();
@@ -127,7 +128,7 @@ namespace
 
 			for ( auto component : components )
 			{
-				auto srcComponent = srcData + componentSize * getComponentIndex( component );
+				auto srcComponent = srcData + componentSize * getComponentIndex( component, PfT );
 				auto dstComponent = dstData + componentSize * index;
 
 				if ( hasComponent( PfT, component ) )
@@ -219,42 +220,117 @@ namespace
 	}
 
 	template< PixelFormat PfT >
-	void checkPixelExtract1T( Testing::TestCase & test )
+	struct CheckPixelExtract1T
 	{
-		checkPixelExtractCompT< PfT >( test, PixelComponent::eRed );
-		checkPixelExtractCompT< PfT >( test, PixelComponent::eGreen );
-		checkPixelExtractCompT< PfT >( test, PixelComponent::eBlue );
-		checkPixelExtractCompT< PfT >( test, PixelComponent::eAlpha );
-	}
+		void operator()( Testing::TestCase & test )
+		{
+			CT_ON_EX( test, "PfT == " + getFormatName( PfT ) );
+			checkPixelExtractCompT< PfT >( test, PixelComponent::eRed );
+			checkPixelExtractCompT< PfT >( test, PixelComponent::eGreen );
+			checkPixelExtractCompT< PfT >( test, PixelComponent::eBlue );
+			checkPixelExtractCompT< PfT >( test, PixelComponent::eAlpha );
+		}
+	};
 
 	template< PixelFormat PfT >
-	void checkPixelExtract2ContigT( Testing::TestCase & test )
+	struct CheckPixelExtract2ContigT
 	{
-		checkPixelExtractCompT< PfT >( test, PixelComponent::eRed | PixelComponent::eGreen );
-		checkPixelExtractCompT< PfT >( test, PixelComponent::eGreen | PixelComponent::eBlue );
-		checkPixelExtractCompT< PfT >( test, PixelComponent::eBlue | PixelComponent::eAlpha );
-	}
+		void operator()( Testing::TestCase & test )
+		{
+			CT_ON_EX( test, "PfT == " + getFormatName( PfT ) );
+			checkPixelExtractCompT< PfT >( test, PixelComponent::eRed | PixelComponent::eGreen );
+			checkPixelExtractCompT< PfT >( test, PixelComponent::eGreen | PixelComponent::eBlue );
+			checkPixelExtractCompT< PfT >( test, PixelComponent::eBlue | PixelComponent::eAlpha );
+		}
+	};
 
 	template< PixelFormat PfT >
-	void checkPixelExtract3ContigT( Testing::TestCase & test )
+	struct CheckPixelExtract3ContigT
 	{
-		checkPixelExtractCompT< PfT >( test, PixelComponent::eRed | PixelComponent::eGreen | PixelComponent::eBlue );
-		checkPixelExtractCompT< PfT >( test, PixelComponent::eGreen | PixelComponent::eBlue | PixelComponent::eAlpha );
-	}
+		void operator()( Testing::TestCase & test )
+		{
+			CT_ON_EX( test, "PfT == " + getFormatName( PfT ) );
+			checkPixelExtractCompT< PfT >( test, PixelComponent::eRed | PixelComponent::eGreen | PixelComponent::eBlue );
+			checkPixelExtractCompT< PfT >( test, PixelComponent::eGreen | PixelComponent::eBlue | PixelComponent::eAlpha );
+		}
+	};
 
 	template< PixelFormat PfT >
-	void checkPixelExtract2DisjointT( Testing::TestCase & test )
+	struct CheckPixelExtract2DisjointT
 	{
-		checkPixelExtractCompT< PfT >( test, PixelComponent::eRed | PixelComponent::eBlue );
-		checkPixelExtractCompT< PfT >( test, PixelComponent::eRed | PixelComponent::eAlpha );
-		checkPixelExtractCompT< PfT >( test, PixelComponent::eGreen | PixelComponent::eAlpha );
-	}
+		void operator()( Testing::TestCase & test )
+		{
+			CT_ON_EX( test, "PfT == " + getFormatName( PfT ) );
+			checkPixelExtractCompT< PfT >( test, PixelComponent::eRed | PixelComponent::eBlue );
+			checkPixelExtractCompT< PfT >( test, PixelComponent::eRed | PixelComponent::eAlpha );
+			checkPixelExtractCompT< PfT >( test, PixelComponent::eGreen | PixelComponent::eAlpha );
+		}
+	};
 
 	template< PixelFormat PfT >
-	void checkPixelExtract3DisjointT( Testing::TestCase & test )
+	struct CheckPixelExtract3DisjointT
 	{
-		checkPixelExtractCompT< PfT >( test, PixelComponent::eRed | PixelComponent::eGreen | PixelComponent::eAlpha );
-		checkPixelExtractCompT< PfT >( test, PixelComponent::eRed | PixelComponent::eBlue | PixelComponent::eAlpha );
+		void operator()( Testing::TestCase & test )
+		{
+			CT_ON_EX( test, "PfT == " + getFormatName( PfT ) );
+			checkPixelExtractCompT< PfT >( test, PixelComponent::eRed | PixelComponent::eGreen | PixelComponent::eAlpha );
+			checkPixelExtractCompT< PfT >( test, PixelComponent::eRed | PixelComponent::eBlue | PixelComponent::eAlpha );
+		}
+	};
+
+	template< template< PixelFormat PfT > typename FunctorT >
+	void checkPixelExtractT( Testing::TestCase & test )
+	{
+		FunctorT< PixelFormat::eR8_UNORM >{}( test );
+		FunctorT< PixelFormat::eR8G8_UNORM >{}( test );
+		FunctorT< PixelFormat::eR8G8B8_UNORM >{}( test );
+		FunctorT< PixelFormat::eB8G8R8_UNORM >{}( test );
+		FunctorT< PixelFormat::eR8G8B8A8_UNORM >{}( test );
+		FunctorT< PixelFormat::eB8G8R8A8_UNORM >{}( test );
+		FunctorT< PixelFormat::eA8B8G8R8_UNORM >{}( test );
+		FunctorT< PixelFormat::eR8_SRGB >{}( test );
+		FunctorT< PixelFormat::eR8G8_SRGB >{}( test );
+		FunctorT< PixelFormat::eR8G8B8_SRGB >{}( test );
+		FunctorT< PixelFormat::eB8G8R8_SRGB >{}( test );
+		FunctorT< PixelFormat::eR8G8B8A8_SRGB >{}( test );
+		FunctorT< PixelFormat::eB8G8R8A8_SRGB >{}( test );
+		FunctorT< PixelFormat::eA8B8G8R8_SRGB >{}( test );
+		FunctorT< PixelFormat::eR16_UINT >{}( test );
+		FunctorT< PixelFormat::eR16G16_UINT >{}( test );
+		FunctorT< PixelFormat::eR16G16B16_UINT >{}( test );
+		FunctorT< PixelFormat::eR16G16B16A16_UINT >{}( test );
+		FunctorT< PixelFormat::eR16_SINT >{}( test );
+		FunctorT< PixelFormat::eR16G16_SINT >{}( test );
+		FunctorT< PixelFormat::eR16G16B16_SINT >{}( test );
+		FunctorT< PixelFormat::eR16G16B16A16_SINT >{}( test );
+		FunctorT< PixelFormat::eR16_SFLOAT >{}( test );
+		FunctorT< PixelFormat::eR16G16_SFLOAT >{}( test );
+		FunctorT< PixelFormat::eR16G16B16_SFLOAT >{}( test );
+		FunctorT< PixelFormat::eR16G16B16A16_SFLOAT >{}( test );
+		FunctorT< PixelFormat::eR32_UINT >{}( test );
+		FunctorT< PixelFormat::eR32G32_UINT >{}( test );
+		FunctorT< PixelFormat::eR32G32B32_UINT >{}( test );
+		FunctorT< PixelFormat::eR32G32B32A32_UINT >{}( test );
+		FunctorT< PixelFormat::eR32_SINT >{}( test );
+		FunctorT< PixelFormat::eR32G32_SINT >{}( test );
+		FunctorT< PixelFormat::eR32G32B32_SINT >{}( test );
+		FunctorT< PixelFormat::eR32G32B32A32_SINT >{}( test );
+		FunctorT< PixelFormat::eR32_SFLOAT >{}( test );
+		FunctorT< PixelFormat::eR32G32_SFLOAT >{}( test );
+		FunctorT< PixelFormat::eR32G32B32_SFLOAT >{}( test );
+		FunctorT< PixelFormat::eR32G32B32A32_SFLOAT >{}( test );
+		FunctorT< PixelFormat::eR64_UINT >{}( test );
+		FunctorT< PixelFormat::eR64G64_UINT >{}( test );
+		FunctorT< PixelFormat::eR64G64B64_UINT >{}( test );
+		FunctorT< PixelFormat::eR64G64B64A64_UINT >{}( test );
+		FunctorT< PixelFormat::eR64_SINT >{}( test );
+		FunctorT< PixelFormat::eR64G64_SINT >{}( test );
+		FunctorT< PixelFormat::eR64G64B64_SINT >{}( test );
+		FunctorT< PixelFormat::eR64G64B64A64_SINT >{}( test );
+		FunctorT< PixelFormat::eR64_SFLOAT >{}( test );
+		FunctorT< PixelFormat::eR64G64_SFLOAT >{}( test );
+		FunctorT< PixelFormat::eR64G64B64_SFLOAT >{}( test );
+		FunctorT< PixelFormat::eR64G64B64A64_SFLOAT >{}( test );
 	}
 }
 
@@ -280,221 +356,26 @@ namespace Testing
 
 	void CastorUtilsPixelBufferExtractTest::TestExtract1Component()
 	{
-		checkPixelExtract1T< PixelFormat::eR8_UNORM >( *this );
-		checkPixelExtract1T< PixelFormat::eR8G8_UNORM >( *this );
-		checkPixelExtract1T< PixelFormat::eR8G8B8_UNORM >( *this );
-		checkPixelExtract1T< PixelFormat::eR8G8B8A8_UNORM >( *this );
-		checkPixelExtract1T< PixelFormat::eR16_UINT >( *this );
-		checkPixelExtract1T< PixelFormat::eR16G16_UINT >( *this );
-		checkPixelExtract1T< PixelFormat::eR16G16B16_UINT >( *this );
-		checkPixelExtract1T< PixelFormat::eR16G16B16A16_UINT >( *this );
-		checkPixelExtract1T< PixelFormat::eR16_SINT >( *this );
-		checkPixelExtract1T< PixelFormat::eR16G16_SINT >( *this );
-		checkPixelExtract1T< PixelFormat::eR16G16B16_SINT >( *this );
-		checkPixelExtract1T< PixelFormat::eR16G16B16A16_SINT >( *this );
-		checkPixelExtract1T< PixelFormat::eR16_SFLOAT >( *this );
-		checkPixelExtract1T< PixelFormat::eR16G16_SFLOAT >( *this );
-		checkPixelExtract1T< PixelFormat::eR16G16B16_SFLOAT >( *this );
-		checkPixelExtract1T< PixelFormat::eR16G16B16A16_SFLOAT >( *this );
-		checkPixelExtract1T< PixelFormat::eR32_UINT >( *this );
-		checkPixelExtract1T< PixelFormat::eR32G32_UINT >( *this );
-		checkPixelExtract1T< PixelFormat::eR32G32B32_UINT >( *this );
-		checkPixelExtract1T< PixelFormat::eR32G32B32A32_UINT >( *this );
-		checkPixelExtract1T< PixelFormat::eR32_SINT >( *this );
-		checkPixelExtract1T< PixelFormat::eR32G32_SINT >( *this );
-		checkPixelExtract1T< PixelFormat::eR32G32B32_SINT >( *this );
-		checkPixelExtract1T< PixelFormat::eR32G32B32A32_SINT >( *this );
-		checkPixelExtract1T< PixelFormat::eR32_SFLOAT >( *this );
-		checkPixelExtract1T< PixelFormat::eR32G32_SFLOAT >( *this );
-		checkPixelExtract1T< PixelFormat::eR32G32B32_SFLOAT >( *this );
-		checkPixelExtract1T< PixelFormat::eR32G32B32A32_SFLOAT >( *this );
-		checkPixelExtract1T< PixelFormat::eR64_UINT >( *this );
-		checkPixelExtract1T< PixelFormat::eR64G64_UINT >( *this );
-		checkPixelExtract1T< PixelFormat::eR64G64B64_UINT >( *this );
-		checkPixelExtract1T< PixelFormat::eR64G64B64A64_UINT >( *this );
-		checkPixelExtract1T< PixelFormat::eR64_SINT >( *this );
-		checkPixelExtract1T< PixelFormat::eR64G64_SINT >( *this );
-		checkPixelExtract1T< PixelFormat::eR64G64B64_SINT >( *this );
-		checkPixelExtract1T< PixelFormat::eR64G64B64A64_SINT >( *this );
-		checkPixelExtract1T< PixelFormat::eR64_SFLOAT >( *this );
-		checkPixelExtract1T< PixelFormat::eR64G64_SFLOAT >( *this );
-		checkPixelExtract1T< PixelFormat::eR64G64B64_SFLOAT >( *this );
-		checkPixelExtract1T< PixelFormat::eR64G64B64A64_SFLOAT >( *this );
+		checkPixelExtractT< CheckPixelExtract1T >( *this );
 	}
 
 	void CastorUtilsPixelBufferExtractTest::TestExtract2ContigComponents()
 	{
-		checkPixelExtract2ContigT< PixelFormat::eR8_UNORM >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR8G8_UNORM >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR8G8B8_UNORM >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR8G8B8A8_UNORM >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR16_UINT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR16G16_UINT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR16G16B16_UINT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR16G16B16A16_UINT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR16_SINT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR16G16_SINT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR16G16B16_SINT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR16G16B16A16_SINT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR16_SFLOAT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR16G16_SFLOAT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR16G16B16_SFLOAT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR16G16B16A16_SFLOAT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR32_UINT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR32G32_UINT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR32G32B32_UINT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR32G32B32A32_UINT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR32_SINT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR32G32_SINT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR32G32B32_SINT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR32G32B32A32_SINT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR32_SFLOAT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR32G32_SFLOAT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR32G32B32_SFLOAT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR32G32B32A32_SFLOAT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR64_UINT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR64G64_UINT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR64G64B64_UINT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR64G64B64A64_UINT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR64_SINT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR64G64_SINT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR64G64B64_SINT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR64G64B64A64_SINT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR64_SFLOAT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR64G64_SFLOAT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR64G64B64_SFLOAT >( *this );
-		checkPixelExtract2ContigT< PixelFormat::eR64G64B64A64_SFLOAT >( *this );
+		checkPixelExtractT< CheckPixelExtract2ContigT >( *this );
 	}
 
 	void CastorUtilsPixelBufferExtractTest::TestExtract3ContigComponents()
 	{
-		checkPixelExtract3ContigT< PixelFormat::eR8_UNORM >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR8G8_UNORM >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR8G8B8_UNORM >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR8G8B8A8_UNORM >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR16_UINT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR16G16_UINT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR16G16B16_UINT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR16G16B16A16_UINT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR16_SINT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR16G16_SINT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR16G16B16_SINT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR16G16B16A16_SINT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR16_SFLOAT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR16G16_SFLOAT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR16G16B16_SFLOAT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR16G16B16A16_SFLOAT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR32_UINT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR32G32_UINT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR32G32B32_UINT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR32G32B32A32_UINT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR32_SINT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR32G32_SINT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR32G32B32_SINT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR32G32B32A32_SINT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR32_SFLOAT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR32G32_SFLOAT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR32G32B32_SFLOAT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR32G32B32A32_SFLOAT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR64_UINT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR64G64_UINT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR64G64B64_UINT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR64G64B64A64_UINT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR64_SINT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR64G64_SINT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR64G64B64_SINT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR64G64B64A64_SINT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR64_SFLOAT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR64G64_SFLOAT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR64G64B64_SFLOAT >( *this );
-		checkPixelExtract3ContigT< PixelFormat::eR64G64B64A64_SFLOAT >( *this );
+		checkPixelExtractT< CheckPixelExtract3ContigT >( *this );
 	}
 
 	void CastorUtilsPixelBufferExtractTest::TestExtract2DisjointComponents()
 	{
-		checkPixelExtract2DisjointT< PixelFormat::eR8_UNORM >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR8G8_UNORM >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR8G8B8_UNORM >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR8G8B8A8_UNORM >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR16_UINT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR16G16_UINT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR16G16B16_UINT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR16G16B16A16_UINT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR16_SINT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR16G16_SINT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR16G16B16_SINT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR16G16B16A16_SINT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR16_SFLOAT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR16G16_SFLOAT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR16G16B16_SFLOAT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR16G16B16A16_SFLOAT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR32_UINT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR32G32_UINT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR32G32B32_UINT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR32G32B32A32_UINT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR32_SINT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR32G32_SINT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR32G32B32_SINT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR32G32B32A32_SINT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR32_SFLOAT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR32G32_SFLOAT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR32G32B32_SFLOAT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR32G32B32A32_SFLOAT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR64_UINT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR64G64_UINT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR64G64B64_UINT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR64G64B64A64_UINT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR64_SINT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR64G64_SINT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR64G64B64_SINT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR64G64B64A64_SINT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR64_SFLOAT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR64G64_SFLOAT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR64G64B64_SFLOAT >( *this );
-		checkPixelExtract2DisjointT< PixelFormat::eR64G64B64A64_SFLOAT >( *this );
+		checkPixelExtractT< CheckPixelExtract2DisjointT >( *this );
 	}
 
 	void CastorUtilsPixelBufferExtractTest::TestExtract3DisjointComponents()
 	{
-		checkPixelExtract3DisjointT< PixelFormat::eR8_UNORM >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR8G8_UNORM >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR8G8B8_UNORM >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR8G8B8A8_UNORM >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR16_UINT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR16G16_UINT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR16G16B16_UINT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR16G16B16A16_UINT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR16_SINT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR16G16_SINT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR16G16B16_SINT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR16G16B16A16_SINT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR16_SFLOAT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR16G16_SFLOAT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR16G16B16_SFLOAT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR16G16B16A16_SFLOAT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR32_UINT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR32G32_UINT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR32G32B32_UINT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR32G32B32A32_UINT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR32_SINT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR32G32_SINT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR32G32B32_SINT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR32G32B32A32_SINT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR32_SFLOAT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR32G32_SFLOAT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR32G32B32_SFLOAT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR32G32B32A32_SFLOAT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR64_UINT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR64G64_UINT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR64G64B64_UINT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR64G64B64A64_UINT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR64_SINT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR64G64_SINT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR64G64B64_SINT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR64G64B64A64_SINT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR64_SFLOAT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR64G64_SFLOAT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR64G64B64_SFLOAT >( *this );
-		checkPixelExtract3DisjointT< PixelFormat::eR64G64B64A64_SFLOAT >( *this );
+		checkPixelExtractT< CheckPixelExtract3DisjointT >( *this );
 	}
 }

@@ -8,33 +8,58 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	inline constexpr uint32_t getComponentIndex( PixelComponent component )
-	{
-		switch ( component )
-		{
-		case castor::PixelComponent::eRed:
-			return 0u;
-		case castor::PixelComponent::eGreen:
-			return 1u;
-		case castor::PixelComponent::eBlue:
-			return 2u;
-		case castor::PixelComponent::eAlpha:
-			return 3u;
-		case castor::PixelComponent::eDepth:
-			return 0u;
-		case castor::PixelComponent::eStencil:
-			return 1u;
-		default:
-			return 0u;
-		}
-	}
+	template< PixelFormat PFT, PixelComponent PCT >
+	uint8_t getX8U( uint8_t const * buffer );
+	template< PixelFormat PFT, PixelComponent PCT >
+	int8_t getX8S( uint8_t const * buffer );
+	template< PixelFormat PFT, PixelComponent PCT >
+	uint16_t getX16U( uint8_t const * buffer );
+	template< PixelFormat PFT, PixelComponent PCT >
+	int16_t getX16S( uint8_t const * buffer );
+	template< PixelFormat PFT, PixelComponent PCT >
+	int16_t getX16F( uint8_t const * buffer );
+	template< PixelFormat PFT, PixelComponent PCT >
+	uint32_t getX32U( uint8_t const * buffer );
+	template< PixelFormat PFT, PixelComponent PCT >
+	int32_t getX32S( uint8_t const * buffer );
+	template< PixelFormat PFT, PixelComponent PCT >
+	float getX32F( uint8_t const * buffer );
+	template< PixelFormat PFT, PixelComponent PCT >
+	uint64_t getX64U( uint8_t const * buffer );
+	template< PixelFormat PFT, PixelComponent PCT >
+	int64_t getX64S( uint8_t const * buffer );
+	template< PixelFormat PFT, PixelComponent PCT >
+	double getX64F( uint8_t const * buffer );
+
+	template< PixelFormat PFT, PixelComponent PCT >
+	void setX8U( uint8_t * buffer, uint8_t value );
+	template< PixelFormat PFT, PixelComponent PCT >
+	void setX8S( uint8_t * buffer, int8_t value );
+	template< PixelFormat PFT, PixelComponent PCT >
+	void setX16U( uint8_t * buffer, uint16_t value );
+	template< PixelFormat PFT, PixelComponent PCT >
+	void setX16S( uint8_t * buffer, int16_t value );
+	template< PixelFormat PFT, PixelComponent PCT >
+	void setX16F( uint8_t * buffer, int16_t value );
+	template< PixelFormat PFT, PixelComponent PCT >
+	void setX32U( uint8_t * buffer, uint32_t value );
+	template< PixelFormat PFT, PixelComponent PCT >
+	void setX32S( uint8_t * buffer, int32_t value );
+	template< PixelFormat PFT, PixelComponent PCT >
+	void setX32F( uint8_t * buffer, float value );
+	template< PixelFormat PFT, PixelComponent PCT >
+	void setX64U( uint8_t * buffer, uint64_t value );
+	template< PixelFormat PFT, PixelComponent PCT >
+	void setX64S( uint8_t * buffer, int64_t value );
+	template< PixelFormat PFT, PixelComponent PCT >
+	void setX64F( uint8_t * buffer, double value );
 
 	template< PixelFormat PFT >
 	uint8_t getR8U( uint8_t const * buffer );
 	template< PixelFormat PFT >
 	int8_t getR8S( uint8_t const * buffer );
 	template< PixelFormat PFT >
-	uint16_t getR16U( uint8_t * buffer );
+	uint16_t getR16U( uint8_t const * buffer );
 	template< PixelFormat PFT >
 	int16_t getR16S( uint8_t const * buffer );
 	template< PixelFormat PFT >

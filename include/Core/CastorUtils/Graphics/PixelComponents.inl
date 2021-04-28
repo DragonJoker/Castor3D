@@ -857,9 +857,9 @@ namespace castor
 		using Type = uint8_t;
 		struct Pixel
 		{
-			uint8_t r;
-			uint8_t g;
 			uint8_t b;
+			uint8_t g;
+			uint8_t r;
 		};
 		static Pixel const & getSrc( void const * buffer )
 		{
@@ -909,9 +909,9 @@ namespace castor
 		using Type = int8_t;
 		struct Pixel
 		{
-			int8_t r;
-			int8_t g;
 			int8_t b;
+			int8_t g;
+			int8_t r;
 		};
 		static Pixel const & getSrc( void const * buffer )
 		{
@@ -4320,6 +4320,548 @@ namespace castor
 
 	//*************************************************************************************************
 
+	template< PixelFormat PFT, PixelComponent PCT >
+	uint8_t getX8U( uint8_t const * buffer )
+	{
+		if constexpr ( PCT == PixelComponent::eRed )
+		{
+			return getR8U< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eGreen )
+		{
+			return getG8U< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eBlue )
+		{
+			return getB8U< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eAlpha )
+		{
+			return getA8U< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eStencil )
+		{
+			return getS8U< PFT >( buffer );
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	template< PixelFormat PFT, PixelComponent PCT >
+	int8_t getX8S( uint8_t const * buffer )
+	{
+		if constexpr ( PCT == PixelComponent::eRed )
+		{
+			return getR8S< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eGreen )
+		{
+			return getG8S< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eBlue )
+		{
+			return getB8S< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eAlpha )
+		{
+			return getA8S< PFT >( buffer );
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	template< PixelFormat PFT, PixelComponent PCT >
+	uint16_t getX16U( uint8_t const * buffer )
+	{
+		if constexpr ( PCT == PixelComponent::eRed )
+		{
+			return getR16U< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eGreen )
+		{
+			return getG16U< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eBlue )
+		{
+			return getB16U< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eAlpha )
+		{
+			return getA16U< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eDepth )
+		{
+			return getD16U< PFT >( buffer );
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	template< PixelFormat PFT, PixelComponent PCT >
+	int16_t getX16S( uint8_t const * buffer )
+	{
+		if constexpr ( PCT == PixelComponent::eRed )
+		{
+			return getR16S< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eGreen )
+		{
+			return getG16S< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eBlue )
+		{
+			return getB16S< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eAlpha )
+		{
+			return getA16S< PFT >( buffer );
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	template< PixelFormat PFT, PixelComponent PCT >
+	int16_t getX16F( uint8_t const * buffer )
+	{
+		if constexpr ( PCT == PixelComponent::eRed )
+		{
+			return getR16F< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eGreen )
+		{
+			return getG16F< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eBlue )
+		{
+			return getB16F< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eAlpha )
+		{
+			return getA16F< PFT >( buffer );
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	template< PixelFormat PFT, PixelComponent PCT >
+	uint32_t getX32U( uint8_t const * buffer )
+	{
+		if constexpr ( PCT == PixelComponent::eRed )
+		{
+			return getR32U< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eGreen )
+		{
+			return getG32U< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eBlue )
+		{
+			return getB32U< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eAlpha )
+		{
+			return getA32U< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eDepth )
+		{
+			return getD24U< PFT >( buffer );
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	template< PixelFormat PFT, PixelComponent PCT >
+	int32_t getX32S( uint8_t const * buffer )
+	{
+		if constexpr ( PCT == PixelComponent::eRed )
+		{
+			return getR32S< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eGreen )
+		{
+			return getG32S< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eBlue )
+		{
+			return getB32S< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eAlpha )
+		{
+			return getA32S< PFT >( buffer );
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	template< PixelFormat PFT, PixelComponent PCT >
+	float getX32F( uint8_t const * buffer )
+	{
+		if constexpr ( PCT == PixelComponent::eRed )
+		{
+			return getR32F< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eGreen )
+		{
+			return getG32F< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eBlue )
+		{
+			return getB32F< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eAlpha )
+		{
+			return getA32F< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eDepth )
+		{
+			return getD32F< PFT >( buffer );
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	template< PixelFormat PFT, PixelComponent PCT >
+	uint64_t getX64U( uint8_t const * buffer )
+	{
+		if constexpr ( PCT == PixelComponent::eRed )
+		{
+			return getR64U< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eGreen )
+		{
+			return getG64U< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eBlue )
+		{
+			return getB64U< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eAlpha )
+		{
+			return getA64U< PFT >( buffer );
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	template< PixelFormat PFT, PixelComponent PCT >
+	int64_t getX64S( uint8_t const * buffer )
+	{
+		if constexpr ( PCT == PixelComponent::eRed )
+		{
+			return getR64S< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eGreen )
+		{
+			return getG64S< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eBlue )
+		{
+			return getB64S< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eAlpha )
+		{
+			return getA64S< PFT >( buffer );
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	template< PixelFormat PFT, PixelComponent PCT >
+	double getX64F( uint8_t const * buffer )
+	{
+		if constexpr ( PCT == PixelComponent::eRed )
+		{
+			return getR64F< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eGreen )
+		{
+			return getG64F< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eBlue )
+		{
+			return getB64F< PFT >( buffer );
+		}
+		else if constexpr ( PCT == PixelComponent::eAlpha )
+		{
+			return getA64F< PFT >( buffer );
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	//*************************************************************************************************
+
+	template< PixelFormat PFT, PixelComponent PCT >
+	void setX8U( uint8_t * buffer, uint8_t value )
+	{
+		if constexpr ( PCT == PixelComponent::eRed )
+		{
+			return setR8U< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eGreen )
+		{
+			return setG8U< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eBlue )
+		{
+			return setB8U< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eAlpha )
+		{
+			return setA8U< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eStencil )
+		{
+			return setS8U< PFT >( buffer, value );
+		}
+	}
+
+	template< PixelFormat PFT, PixelComponent PCT >
+	void setX8S( uint8_t * buffer, int8_t value )
+	{
+		if constexpr ( PCT == PixelComponent::eRed )
+		{
+			return setR8S< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eGreen )
+		{
+			return setG8S< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eBlue )
+		{
+			return setB8S< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eAlpha )
+		{
+			return setA8S< PFT >( buffer, value );
+		}
+	}
+
+	template< PixelFormat PFT, PixelComponent PCT >
+	void setX16U( uint8_t * buffer, uint16_t value )
+	{
+		if constexpr ( PCT == PixelComponent::eRed )
+		{
+			return setR16U< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eGreen )
+		{
+			return setG16U< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eBlue )
+		{
+			return setB16U< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eAlpha )
+		{
+			return setA16U< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eDepth )
+		{
+			return setD16U< PFT >( buffer, value );
+		}
+	}
+
+	template< PixelFormat PFT, PixelComponent PCT >
+	void setX16S( uint8_t * buffer, int16_t value )
+	{
+		if constexpr ( PCT == PixelComponent::eRed )
+		{
+			return setR16S< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eGreen )
+		{
+			return setG16S< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eBlue )
+		{
+			return setB16S< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eAlpha )
+		{
+			return setA16S< PFT >( buffer, value );
+		}
+	}
+
+	template< PixelFormat PFT, PixelComponent PCT >
+	void setX16F( uint8_t * buffer, int16_t value )
+	{
+		if constexpr ( PCT == PixelComponent::eRed )
+		{
+			return setR16F< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eGreen )
+		{
+			return setG16F< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eBlue )
+		{
+			return setB16F< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eAlpha )
+		{
+			return setA16F< PFT >( buffer, value );
+		}
+	}
+
+	template< PixelFormat PFT, PixelComponent PCT >
+	void setX32U( uint8_t * buffer, uint32_t value )
+	{
+		if constexpr ( PCT == PixelComponent::eRed )
+		{
+			return setR32U< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eGreen )
+		{
+			return setG32U< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eBlue )
+		{
+			return setB32U< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eAlpha )
+		{
+			return setA32U< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eDepth )
+		{
+			return setD24U< PFT >( buffer, value );
+		}
+	}
+
+	template< PixelFormat PFT, PixelComponent PCT >
+	void setX32S( uint8_t * buffer, int32_t value )
+	{
+		if constexpr ( PCT == PixelComponent::eRed )
+		{
+			return setR32S< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eGreen )
+		{
+			return setG32S< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eBlue )
+		{
+			return setB32S< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eAlpha )
+		{
+			return setA32S< PFT >( buffer, value );
+		}
+	}
+
+	template< PixelFormat PFT, PixelComponent PCT >
+	void setX32F( uint8_t * buffer, float value )
+	{
+		if constexpr ( PCT == PixelComponent::eRed )
+		{
+			return setR32F< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eGreen )
+		{
+			return setG32F< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eBlue )
+		{
+			return setB32F< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eAlpha )
+		{
+			return setA32F< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eDepth )
+		{
+			return setD32F< PFT >( buffer, value );
+		}
+	}
+
+	template< PixelFormat PFT, PixelComponent PCT >
+	void setX64U( uint8_t * buffer, uint64_t value )
+	{
+		if constexpr ( PCT == PixelComponent::eRed )
+		{
+			return setR64U< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eGreen )
+		{
+			return setG64U< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eBlue )
+		{
+			return setB64U< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eAlpha )
+		{
+			return setA64U< PFT >( buffer, value );
+		}
+	}
+
+	template< PixelFormat PFT, PixelComponent PCT >
+	void setX64S( uint8_t * buffer, int64_t value )
+	{
+		if constexpr ( PCT == PixelComponent::eRed )
+		{
+			return setR64S< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eGreen )
+		{
+			return setG64S< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eBlue )
+		{
+			return setB64S< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eAlpha )
+		{
+			return setA64S< PFT >( buffer, value );
+		}
+	}
+
+	template< PixelFormat PFT, PixelComponent PCT >
+	void setX64F( uint8_t * buffer, double value )
+	{
+		if constexpr ( PCT == PixelComponent::eRed )
+		{
+			return setR64F< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eGreen )
+		{
+			return setG64F< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eBlue )
+		{
+			return setB64F< PFT >( buffer, value );
+		}
+		else if constexpr ( PCT == PixelComponent::eAlpha )
+		{
+			return setA64F< PFT >( buffer, value );
+		}
+	}
+
+	//*************************************************************************************************
+
 	template< PixelFormat PFT >
 	uint8_t getR8U( uint8_t const * buffer )
 	{
@@ -4333,7 +4875,7 @@ namespace castor
 	}
 
 	template< PixelFormat PFT >
-	uint16_t getR16U( uint8_t * buffer )
+	uint16_t getR16U( uint8_t const * buffer )
 	{
 		return details::PxComponentGetter< uint16_t >::get( buffer, PixelComponentsT< PFT >::R );
 	}
@@ -4719,13 +5261,13 @@ namespace castor
 	}
 
 	template< PixelFormat PFT >
-	void setG32S( uint8_t * buffer, uint32_t value )
+	void setG32U( uint8_t * buffer, uint32_t value )
 	{
 		details::PxComponentSetter< uint32_t >::set( buffer, value, PixelComponentsT< PFT >::G );
 	}
 
 	template< PixelFormat PFT >
-	void setG32U( uint8_t * buffer, int32_t value )
+	void setG32S( uint8_t * buffer, int32_t value )
 	{
 		details::PxComponentSetter< int32_t >::set( buffer, value, PixelComponentsT< PFT >::G );
 	}
@@ -4787,13 +5329,13 @@ namespace castor
 	}
 
 	template< PixelFormat PFT >
-	void setB32S( uint8_t * buffer, uint32_t value )
+	void setB32U( uint8_t * buffer, uint32_t value )
 	{
 		details::PxComponentSetter< uint32_t >::set( buffer, value, PixelComponentsT< PFT >::B );
 	}
 
 	template< PixelFormat PFT >
-	void setB32U( uint8_t * buffer, int32_t value )
+	void setB32S( uint8_t * buffer, int32_t value )
 	{
 		details::PxComponentSetter< int32_t >::set( buffer, value, PixelComponentsT< PFT >::B );
 	}
@@ -4855,13 +5397,13 @@ namespace castor
 	}
 
 	template< PixelFormat PFT >
-	void setA32S( uint8_t * buffer, uint32_t value )
+	void setA32U( uint8_t * buffer, uint32_t value )
 	{
 		details::PxComponentSetter< uint32_t >::set( buffer, value, PixelComponentsT< PFT >::A );
 	}
 
 	template< PixelFormat PFT >
-	void setA32U( uint8_t * buffer, int32_t value )
+	void setA32S( uint8_t * buffer, int32_t value )
 	{
 		details::PxComponentSetter< int32_t >::set( buffer, value, PixelComponentsT< PFT >::A );
 	}

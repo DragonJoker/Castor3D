@@ -16,392 +16,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	template<> struct IsColourFormat< PixelFormat::eUNDEFINED > : public std::false_type {};
-	template<> struct IsColourFormat< PixelFormat::eD16_UNORM > : public std::false_type {};
-	template<> struct IsColourFormat< PixelFormat::eX8_D24_UNORM > : public std::false_type {};
-	template<> struct IsColourFormat< PixelFormat::eD32_SFLOAT > : public std::false_type {};
-	template<> struct IsColourFormat< PixelFormat::eS8_UINT > : public std::false_type {};
-	template<> struct IsColourFormat< PixelFormat::eD16_UNORM_S8_UINT > : public std::false_type {};
-	template<> struct IsColourFormat< PixelFormat::eD24_UNORM_S8_UINT > : public std::false_type {};
-	template<> struct IsColourFormat< PixelFormat::eD32_SFLOAT_S8_UINT > : public std::false_type {};
-
-	template<> struct IsDepthFormat< PixelFormat::eD16_UNORM > : public std::true_type {};
-	template<> struct IsDepthFormat< PixelFormat::eX8_D24_UNORM > : public std::true_type {};
-	template<> struct IsDepthFormat< PixelFormat::eD32_SFLOAT > : public std::true_type {};
-	template<> struct IsDepthFormat< PixelFormat::eD16_UNORM_S8_UINT > : public std::true_type {};
-	template<> struct IsDepthFormat< PixelFormat::eD24_UNORM_S8_UINT > : public std::true_type {};
-	template<> struct IsDepthFormat< PixelFormat::eD32_SFLOAT_S8_UINT > : public std::true_type {};
-
-	template<> struct IsStencilFormat< PixelFormat::eS8_UINT > : public std::true_type {};
-	template<> struct IsStencilFormat< PixelFormat::eD16_UNORM_S8_UINT > : public std::true_type {};
-	template<> struct IsStencilFormat< PixelFormat::eD24_UNORM_S8_UINT > : public std::true_type {};
-	template<> struct IsStencilFormat< PixelFormat::eD32_SFLOAT_S8_UINT > : public std::true_type {};
-
-	template<> struct IsDepthStencilFormat< PixelFormat::eD16_UNORM > : public std::true_type {};
-	template<> struct IsDepthStencilFormat< PixelFormat::eX8_D24_UNORM > : public std::true_type {};
-	template<> struct IsDepthStencilFormat< PixelFormat::eD32_SFLOAT > : public std::true_type {};
-	template<> struct IsDepthStencilFormat< PixelFormat::eS8_UINT > : public std::true_type {};
-	template<> struct IsDepthStencilFormat< PixelFormat::eD16_UNORM_S8_UINT > : public std::true_type {};
-	template<> struct IsDepthStencilFormat< PixelFormat::eD24_UNORM_S8_UINT > : public std::true_type {};
-	template<> struct IsDepthStencilFormat< PixelFormat::eD32_SFLOAT_S8_UINT > : public std::true_type {};
-
-	template<> struct IsCompressed< PixelFormat::eBC1_RGB_UNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eBC1_RGB_SRGB_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eBC1_RGBA_UNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eBC1_RGBA_SRGB_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eBC2_UNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eBC2_SRGB_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eBC3_UNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eBC3_SRGB_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eBC4_UNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eBC4_SNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eBC5_UNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eBC5_SNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eBC6H_UFLOAT_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eBC6H_SFLOAT_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eBC7_UNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eBC7_SRGB_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eETC2_R8G8B8_UNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eETC2_R8G8B8_SRGB_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eETC2_R8G8B8A1_UNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eETC2_R8G8B8A1_SRGB_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eETC2_R8G8B8A8_UNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eETC2_R8G8B8A8_SRGB_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eEAC_R11_UNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eEAC_R11_SNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eEAC_R11G11_UNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eEAC_R11G11_SNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eASTC_4x4_UNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eASTC_4x4_SRGB_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eASTC_5x4_UNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eASTC_5x4_SRGB_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eASTC_5x5_UNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eASTC_5x5_SRGB_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eASTC_6x5_UNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eASTC_6x5_SRGB_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eASTC_6x6_UNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eASTC_6x6_SRGB_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eASTC_8x5_UNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eASTC_8x5_SRGB_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eASTC_8x6_UNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eASTC_8x6_SRGB_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eASTC_8x8_UNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eASTC_8x8_SRGB_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eASTC_10x5_UNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eASTC_10x5_SRGB_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eASTC_10x6_UNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eASTC_10x6_SRGB_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eASTC_10x8_UNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eASTC_10x8_SRGB_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eASTC_10x10_UNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eASTC_10x10_SRGB_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eASTC_12x10_UNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eASTC_12x10_SRGB_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eASTC_12x12_UNORM_BLOCK > : public std::true_type {};
-	template<> struct IsCompressed< PixelFormat::eASTC_12x12_SRGB_BLOCK > : public std::true_type {};
-
-	template<> struct HasAlpha< PixelFormat::eR4G4B4A4_UNORM > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eB4G4R4A4_UNORM > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eR5G5B5A1_UNORM > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eB5G5R5A1_UNORM > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eR8G8B8A8_UNORM > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eR8G8B8A8_USCALED > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eR8G8B8A8_UINT > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eR8G8B8A8_SRGB > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eB8G8R8A8_UNORM > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eB8G8R8A8_USCALED > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eB8G8R8A8_UINT > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eB8G8R8A8_SRGB > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eA8B8G8R8_UNORM > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eA8B8G8R8_USCALED > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eA8B8G8R8_UINT > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eA8B8G8R8_SRGB > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eR8G8B8A8_SNORM > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eR8G8B8A8_SSCALED > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eR8G8B8A8_SINT > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eB8G8R8A8_SNORM > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eB8G8R8A8_SSCALED > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eB8G8R8A8_SINT > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eA8B8G8R8_SNORM > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eA8B8G8R8_SSCALED > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eA8B8G8R8_SINT > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eA2R10G10B10_UNORM > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eA2R10G10B10_USCALED > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eA2R10G10B10_UINT > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eA2B10G10R10_UNORM > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eA2B10G10R10_USCALED > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eA2B10G10R10_UINT > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eA2R10G10B10_SNORM > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eA2R10G10B10_SSCALED > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eA2R10G10B10_SINT > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eA2B10G10R10_SNORM > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eA2B10G10R10_SSCALED > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eA2B10G10R10_SINT > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eR16G16B16A16_UNORM > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eR16G16B16A16_USCALED > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eR16G16B16A16_UINT > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eR16G16B16A16_SNORM > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eR16G16B16A16_SSCALED > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eR16G16B16A16_SINT > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eR16G16B16A16_SFLOAT > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eR32G32B32A32_UINT > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eR32G32B32A32_SINT > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eR32G32B32A32_SFLOAT > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eR64G64B64A64_UINT > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eR64G64B64A64_SINT > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eR64G64B64A64_SFLOAT > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eBC1_RGBA_UNORM_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eBC1_RGBA_SRGB_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eBC2_UNORM_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eBC2_SRGB_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eBC3_UNORM_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eBC3_SRGB_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eBC7_UNORM_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eBC7_SRGB_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eETC2_R8G8B8A1_UNORM_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eETC2_R8G8B8A1_SRGB_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eETC2_R8G8B8A8_UNORM_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eETC2_R8G8B8A8_SRGB_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eASTC_4x4_UNORM_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eASTC_4x4_SRGB_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eASTC_5x4_UNORM_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eASTC_5x4_SRGB_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eASTC_5x5_UNORM_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eASTC_5x5_SRGB_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eASTC_6x5_UNORM_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eASTC_6x5_SRGB_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eASTC_6x6_UNORM_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eASTC_6x6_SRGB_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eASTC_8x5_UNORM_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eASTC_8x5_SRGB_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eASTC_8x6_UNORM_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eASTC_8x6_SRGB_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eASTC_8x8_UNORM_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eASTC_8x8_SRGB_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eASTC_10x5_UNORM_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eASTC_10x5_SRGB_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eASTC_10x6_UNORM_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eASTC_10x6_SRGB_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eASTC_10x8_UNORM_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eASTC_10x8_SRGB_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eASTC_10x10_UNORM_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eASTC_10x10_SRGB_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eASTC_12x10_UNORM_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eASTC_12x10_SRGB_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eASTC_12x12_UNORM_BLOCK > : public std::true_type {};
-	template<> struct HasAlpha< PixelFormat::eASTC_12x12_SRGB_BLOCK > : public std::true_type {};
-
-	template<> struct Is8UComponents< PixelFormat::eR4G4_UNORM > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eR4G4B4A4_UNORM > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eB4G4R4A4_UNORM > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eR5G6B5_UNORM > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eB5G6R5_UNORM > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eR5G5B5A1_UNORM > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eB5G5R5A1_UNORM > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eA1R5G5B5_UNORM > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eR8_UNORM > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eR8_USCALED > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eR8_UINT > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eR8_SRGB > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eR8G8_UNORM > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eR8G8_USCALED > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eR8G8_UINT > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eR8G8_SRGB > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eR8G8B8_UNORM > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eR8G8B8_USCALED > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eR8G8B8_UINT > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eR8G8B8_SRGB > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eB8G8R8_UNORM > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eB8G8R8_USCALED > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eB8G8R8_UINT > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eB8G8R8_SRGB > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eR8G8B8A8_UNORM > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eR8G8B8A8_USCALED > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eR8G8B8A8_UINT > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eR8G8B8A8_SRGB > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eB8G8R8A8_UNORM > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eB8G8R8A8_USCALED > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eB8G8R8A8_UINT > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eB8G8R8A8_SRGB > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eA8B8G8R8_UNORM > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eA8B8G8R8_USCALED > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eA8B8G8R8_UINT > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eA8B8G8R8_SRGB > : public std::true_type {};
-
-	template<> struct Is8SComponents< PixelFormat::eR8_SNORM > : public std::true_type {};
-	template<> struct Is8SComponents< PixelFormat::eR8_SSCALED > : public std::true_type {};
-	template<> struct Is8SComponents< PixelFormat::eR8_SINT > : public std::true_type {};
-	template<> struct Is8SComponents< PixelFormat::eR8G8_SNORM > : public std::true_type {};
-	template<> struct Is8SComponents< PixelFormat::eR8G8_SSCALED > : public std::true_type {};
-	template<> struct Is8SComponents< PixelFormat::eR8G8_SINT > : public std::true_type {};
-	template<> struct Is8SComponents< PixelFormat::eR8G8B8_SNORM > : public std::true_type {};
-	template<> struct Is8SComponents< PixelFormat::eR8G8B8_SSCALED > : public std::true_type {};
-	template<> struct Is8SComponents< PixelFormat::eR8G8B8_SINT > : public std::true_type {};
-	template<> struct Is8SComponents< PixelFormat::eB8G8R8_SNORM > : public std::true_type {};
-	template<> struct Is8SComponents< PixelFormat::eB8G8R8_SSCALED > : public std::true_type {};
-	template<> struct Is8SComponents< PixelFormat::eB8G8R8_SINT > : public std::true_type {};
-	template<> struct Is8SComponents< PixelFormat::eR8G8B8A8_SNORM > : public std::true_type {};
-	template<> struct Is8SComponents< PixelFormat::eR8G8B8A8_SSCALED > : public std::true_type {};
-	template<> struct Is8SComponents< PixelFormat::eR8G8B8A8_SINT > : public std::true_type {};
-	template<> struct Is8SComponents< PixelFormat::eB8G8R8A8_SNORM > : public std::true_type {};
-	template<> struct Is8SComponents< PixelFormat::eB8G8R8A8_SSCALED > : public std::true_type {};
-	template<> struct Is8SComponents< PixelFormat::eB8G8R8A8_SINT > : public std::true_type {};
-	template<> struct Is8SComponents< PixelFormat::eA8B8G8R8_SNORM > : public std::true_type {};
-	template<> struct Is8SComponents< PixelFormat::eA8B8G8R8_SSCALED > : public std::true_type {};
-	template<> struct Is8SComponents< PixelFormat::eA8B8G8R8_SINT > : public std::true_type {};
-
-	template<> struct Is16UComponents< PixelFormat::eA2R10G10B10_UNORM > : public std::true_type {};
-	template<> struct Is16UComponents< PixelFormat::eA2R10G10B10_USCALED > : public std::true_type {};
-	template<> struct Is16UComponents< PixelFormat::eA2R10G10B10_UINT > : public std::true_type {};
-	template<> struct Is16UComponents< PixelFormat::eA2B10G10R10_UNORM > : public std::true_type {};
-	template<> struct Is16UComponents< PixelFormat::eA2B10G10R10_USCALED > : public std::true_type {};
-	template<> struct Is16UComponents< PixelFormat::eA2B10G10R10_UINT > : public std::true_type {};
-	template<> struct Is16UComponents< PixelFormat::eR16_UNORM > : public std::true_type {};
-	template<> struct Is16UComponents< PixelFormat::eR16_USCALED > : public std::true_type {};
-	template<> struct Is16UComponents< PixelFormat::eR16_UINT > : public std::true_type {};
-	template<> struct Is16UComponents< PixelFormat::eR16G16_UNORM > : public std::true_type {};
-	template<> struct Is16UComponents< PixelFormat::eR16G16_USCALED > : public std::true_type {};
-	template<> struct Is16UComponents< PixelFormat::eR16G16_UINT > : public std::true_type {};
-	template<> struct Is16UComponents< PixelFormat::eR16G16B16_UNORM > : public std::true_type {};
-	template<> struct Is16UComponents< PixelFormat::eR16G16B16_USCALED > : public std::true_type {};
-	template<> struct Is16UComponents< PixelFormat::eR16G16B16_UINT > : public std::true_type {};
-	template<> struct Is16UComponents< PixelFormat::eR16G16B16A16_UNORM > : public std::true_type {};
-	template<> struct Is16UComponents< PixelFormat::eR16G16B16A16_USCALED > : public std::true_type {};
-	template<> struct Is16UComponents< PixelFormat::eR16G16B16A16_UINT > : public std::true_type {};
-
-	template<> struct Is16SComponents< PixelFormat::eA2R10G10B10_SNORM > : public std::true_type {};
-	template<> struct Is16SComponents< PixelFormat::eA2R10G10B10_SSCALED > : public std::true_type {};
-	template<> struct Is16SComponents< PixelFormat::eA2R10G10B10_SINT > : public std::true_type {};
-	template<> struct Is16SComponents< PixelFormat::eA2B10G10R10_SNORM > : public std::true_type {};
-	template<> struct Is16SComponents< PixelFormat::eA2B10G10R10_SSCALED > : public std::true_type {};
-	template<> struct Is16SComponents< PixelFormat::eA2B10G10R10_SINT > : public std::true_type {};
-	template<> struct Is16SComponents< PixelFormat::eR16_SNORM > : public std::true_type {};
-	template<> struct Is16SComponents< PixelFormat::eR16_SSCALED > : public std::true_type {};
-	template<> struct Is16SComponents< PixelFormat::eR16_SINT > : public std::true_type {};
-	template<> struct Is16SComponents< PixelFormat::eR16G16_SNORM > : public std::true_type {};
-	template<> struct Is16SComponents< PixelFormat::eR16G16_SSCALED > : public std::true_type {};
-	template<> struct Is16SComponents< PixelFormat::eR16G16_SINT > : public std::true_type {};
-	template<> struct Is16SComponents< PixelFormat::eR16G16B16_SNORM > : public std::true_type {};
-	template<> struct Is16SComponents< PixelFormat::eR16G16B16_SSCALED > : public std::true_type {};
-	template<> struct Is16SComponents< PixelFormat::eR16G16B16_SINT > : public std::true_type {};
-	template<> struct Is16SComponents< PixelFormat::eR16G16B16A16_SNORM > : public std::true_type {};
-	template<> struct Is16SComponents< PixelFormat::eR16G16B16A16_SSCALED > : public std::true_type {};
-	template<> struct Is16SComponents< PixelFormat::eR16G16B16A16_SINT > : public std::true_type {};
-
-	template<> struct Is16FComponents< PixelFormat::eR16_SFLOAT > : public std::true_type {};
-	template<> struct Is16FComponents< PixelFormat::eR16G16_SFLOAT > : public std::true_type {};
-	template<> struct Is16FComponents< PixelFormat::eR16G16B16_SFLOAT > : public std::true_type {};
-	template<> struct Is16FComponents< PixelFormat::eR16G16B16A16_SFLOAT > : public std::true_type {};
-	template<> struct Is16FComponents< PixelFormat::eB10G11R11_UFLOAT > : public std::true_type {};
-	template<> struct Is16FComponents< PixelFormat::eE5B9G9R9_UFLOAT > : public std::true_type {};
-
-	template<> struct Is32UComponents< PixelFormat::eR32_UINT > : public std::true_type {};
-	template<> struct Is32UComponents< PixelFormat::eR32G32_UINT > : public std::true_type {};
-	template<> struct Is32UComponents< PixelFormat::eR32G32B32_UINT > : public std::true_type {};
-	template<> struct Is32UComponents< PixelFormat::eR32G32B32A32_UINT > : public std::true_type {};
-
-	template<> struct Is32SComponents< PixelFormat::eR32_SINT > : public std::true_type {};
-	template<> struct Is32SComponents< PixelFormat::eR32G32_SINT > : public std::true_type {};
-	template<> struct Is32SComponents< PixelFormat::eR32G32B32_SINT > : public std::true_type {};
-	template<> struct Is32SComponents< PixelFormat::eR32G32B32A32_SINT > : public std::true_type {};
-
-	template<> struct Is32FComponents< PixelFormat::eR32_SFLOAT > : public std::true_type {};
-	template<> struct Is32FComponents< PixelFormat::eR32G32_SFLOAT > : public std::true_type {};
-	template<> struct Is32FComponents< PixelFormat::eR32G32B32_SFLOAT > : public std::true_type {};
-	template<> struct Is32FComponents< PixelFormat::eR32G32B32A32_SFLOAT > : public std::true_type {};
-
-	template<> struct Is64UComponents< PixelFormat::eR64_UINT > : public std::true_type {};
-	template<> struct Is64UComponents< PixelFormat::eR64G64_UINT > : public std::true_type {};
-	template<> struct Is64UComponents< PixelFormat::eR64G64B64_UINT > : public std::true_type {};
-	template<> struct Is64UComponents< PixelFormat::eR64G64B64A64_UINT > : public std::true_type {};
-
-	template<> struct Is64SComponents< PixelFormat::eR64_SINT > : public std::true_type {};
-	template<> struct Is64SComponents< PixelFormat::eR64G64_SINT > : public std::true_type {};
-	template<> struct Is64SComponents< PixelFormat::eR64G64B64_SINT > : public std::true_type {};
-	template<> struct Is64SComponents< PixelFormat::eR64G64B64A64_SINT > : public std::true_type {};
-
-	template<> struct Is64FComponents< PixelFormat::eR64_SFLOAT > : public std::true_type {};
-	template<> struct Is64FComponents< PixelFormat::eR64G64_SFLOAT > : public std::true_type {};
-	template<> struct Is64FComponents< PixelFormat::eR64G64B64_SFLOAT > : public std::true_type {};
-	template<> struct Is64FComponents< PixelFormat::eR64G64B64A64_SFLOAT > : public std::true_type {};
-	
-	template<> struct IsD16UComponent< PixelFormat::eD16_UNORM > : public std::true_type {};
-	template<> struct IsD16UComponent< PixelFormat::eD16_UNORM_S8_UINT > : public std::true_type {};
-	
-	template<> struct IsD24UComponent< PixelFormat::eX8_D24_UNORM > : public std::true_type {};
-	template<> struct IsD24UComponent< PixelFormat::eD24_UNORM_S8_UINT > : public std::true_type {};
-	
-	template<> struct IsD32FComponent< PixelFormat::eD32_SFLOAT > : public std::true_type {};
-	template<> struct IsD32FComponent< PixelFormat::eD32_SFLOAT_S8_UINT > : public std::true_type {};
-
-	template<> struct IsS8UComponent< PixelFormat::eS8_UINT > : public std::true_type {};
-
-	template< PixelFormat PFT >
-	struct SingleComponentT< PFT, std::enable_if_t< is8UComponentsV< PFT > > >
-	{
-		static PixelFormat constexpr value = PixelFormat::eR8_UNORM;
-	};
-
-	template< PixelFormat PFT >
-	struct SingleComponentT< PFT, std::enable_if_t< is8SComponentsV< PFT > > >
-	{
-		static PixelFormat constexpr value = PixelFormat::eR8_SNORM;
-	};
-
-	template< PixelFormat PFT >
-	struct SingleComponentT< PFT, std::enable_if_t< is16UComponentsV< PFT > > >
-	{
-		static PixelFormat constexpr value = PixelFormat::eR16_UNORM;
-	};
-
-	template< PixelFormat PFT >
-	struct SingleComponentT< PFT, std::enable_if_t< is16SComponentsV< PFT > > >
-	{
-		static PixelFormat constexpr value = PixelFormat::eR16_SNORM;
-	};
-
-	template< PixelFormat PFT >
-	struct SingleComponentT< PFT, std::enable_if_t< is16FComponentsV< PFT > > >
-	{
-		static PixelFormat constexpr value = PixelFormat::eR16_SFLOAT;
-	};
-
-	template< PixelFormat PFT >
-	struct SingleComponentT< PFT, std::enable_if_t< is32UComponentsV< PFT > > >
-	{
-		static PixelFormat constexpr value = PixelFormat::eR32_UINT;
-	};
-
-	template< PixelFormat PFT >
-	struct SingleComponentT< PFT, std::enable_if_t< is32SComponentsV< PFT > > >
-	{
-		static PixelFormat constexpr value = PixelFormat::eR32_SINT;
-	};
-
-	template< PixelFormat PFT >
-	struct SingleComponentT< PFT, std::enable_if_t< is32FComponentsV< PFT > > >
-	{
-		static PixelFormat constexpr value = PixelFormat::eR32_SFLOAT;
-	};
-
-	template< PixelFormat PFT >
-	struct SingleComponentT< PFT, std::enable_if_t< is64UComponentsV< PFT > > >
-	{
-		static PixelFormat constexpr value = PixelFormat::eR64_UINT;
-	};
-
-	template< PixelFormat PFT >
-	struct SingleComponentT< PFT, std::enable_if_t< is64SComponentsV< PFT > > >
-	{
-		static PixelFormat constexpr value = PixelFormat::eR64_SINT;
-	};
-
-	template< PixelFormat PFT >
-	struct SingleComponentT< PFT, std::enable_if_t< is64FComponentsV< PFT > > >
-	{
-		static PixelFormat constexpr value = PixelFormat::eR64_SFLOAT;
-	};
-
 	/**
 	 *\~english
 	 *\brief		Function to retrieve the number of components of a pixel format.
@@ -410,38 +24,14 @@ namespace castor
 	 *\brief		Fonction de récuperation du nombre de composantes d'un format de pixel.
 	 *\param[in]	format	Le format de pixels
 	 */
-	inline constexpr uint8_t getComponentsCount( PixelFormat format )
-	{
-		return uint8_t( ashes::getCount( VkFormat( format ) ) );
-	}
-	/**
-	 *\~english
-	 *\brief		Tells if the given format is an SRGB one.
-	 *\param[in]	format	The pixel format
-	 *\~french
-	 *\brief		Dit si le format donné est un format SRGB.
-	 *\param[in]	format	Le format de pixels
-	 */
-	inline constexpr bool isSRGBFormat( PixelFormat format )
-	{
-		return ashes::isSRGBFormat( VkFormat( format ) );
-	}
-	/**
-	 *\~english
-	 *\brief		Function to retrieve pixel format from a name
-	 *\param[in]	formatName	The pixel format name
-	 *\~french
-	 *\brief		Fonction de récuperation d'un format de pixel par son nom
-	 *\param[in]	formatName	Le nom du format de pixels
-	 */
-	CU_API PixelFormat getFormatByName( String const & formatName );
+	inline constexpr uint8_t getComponentsCount( PixelFormat format );
 	/**
 	 *\~english
 	 *\return		\p false if format is depth, stencil or one without alpha.
 	 *\~french
 	 *\return		\p false si le format est depth, stencil ou un format sans alpha.
 	 */
-	CU_API bool hasAlpha( PixelFormat format );
+	inline constexpr bool hasAlpha( PixelFormat format );
 	/**
 	 *\~english
 	 *\param[in]	format		The pixel format.
@@ -453,55 +43,130 @@ namespace castor
 	 *\return		\p true si le format de pixel donné contient la composante de pixel voulue.
 	 */
 	inline constexpr bool hasComponent( PixelFormat format
-		, PixelComponent component )
-	{
-		switch ( component )
-		{
-		case castor::PixelComponent::eRed:
-			return getComponentsCount( format ) >= 1
-				&& !ashes::isDepthOrStencilFormat( VkFormat( format ) );
-		case castor::PixelComponent::eGreen:
-			return getComponentsCount( format ) >= 2
-				&& !ashes::isDepthOrStencilFormat( VkFormat( format ) );
-		case castor::PixelComponent::eBlue:
-			return getComponentsCount( format ) >= 3
-				&& !ashes::isDepthOrStencilFormat( VkFormat( format ) );
-		case castor::PixelComponent::eAlpha:
-			return hasAlpha( format );
-		case castor::PixelComponent::eDepth:
-			return ashes::isDepthFormat( VkFormat( format ) )
-				|| ashes::isDepthStencilFormat( VkFormat( format ) );
-		case castor::PixelComponent::eStencil:
-			return ashes::isStencilFormat( VkFormat( format ) )
-				|| ashes::isDepthStencilFormat( VkFormat( format ) );
-		default:
-			return false;
-		}
-	}
+		, PixelComponent component );
 	/**
 	 *\~english
 	 *\return		The single component format for given pixel format.
 	 *\~french
 	 *\return		Le format à composante unique correspondant au format donné.
 	 */
-	inline constexpr PixelFormat getSingleComponent( PixelFormat format )
-	{
-		PixelFormat result = PixelFormat::eUNDEFINED;
+	inline constexpr PixelFormat getSingleComponent( PixelFormat format );
+	/**
+	 *\~english
+	 *\return		\p true if the given pixel format is a floating point one.
+	 *\~french
+	 *\return		\p true si le format donné est un format en nombres flottants.
+	 */
+	inline constexpr bool isFloatingPoint( PixelFormat format );
+	/**
+	 *\~english
+	 *\return		\p true if the given pixel format is a compressed one.
+	 *\~french
+	 *\return		\p true si le format donné est un format compressé.
+	 */
+	inline constexpr bool isCompressed( PixelFormat format );
+	/**
+	 *\~english
+	 *\brief		Tells if the given format is an SRGB one.
+	 *\param[in]	format	The pixel format
+	 *\~french
+	 *\brief		Dit si le format donné est un format SRGB.
+	 *\param[in]	format	Le format de pixels
+	 */
+	inline constexpr bool isSRGBFormat( PixelFormat format );
+	/**
+	 *\~english
+	 *\return		\p true if format is an RGB format.
+	 *\~french
+	 *\return		\p false si le format est en RGB.
+	 */
+	inline constexpr bool isRGBFormat( PixelFormat format );
+	/**
+	 *\~english
+	 *\return		\p true if format is an BGR format.
+	 *\~french
+	 *\return		\p false si le format est en BGR.
+	 */
+	inline constexpr bool isBGRFormat( PixelFormat format );
+	/**
+	 *\~english
+	 *\return		\p true if format is an RGBA format.
+	 *\~french
+	 *\return		\p false si le format est en RGBA.
+	 */
+	inline constexpr bool isRGBAFormat( PixelFormat format );
+	/**
+	 *\~english
+	 *\return		\p true if format is an ARGB format.
+	 *\~french
+	 *\return		\p false si le format est en ARGB.
+	 */
+	inline constexpr bool isARGBFormat( PixelFormat format );
+	/**
+	 *\~english
+	 *\return		\p true if format is an BGRA format.
+	 *\~french
+	 *\return		\p false si le format est en BGRA.
+	 */
+	inline constexpr bool isBGRAFormat( PixelFormat format );
+	/**
+	 *\~english
+	 *\return		\p true if format is an ABGR format.
+	 *\~french
+	 *\return		\p false si le format est en ABGR.
+	 */
+	inline constexpr bool isABGRFormat( PixelFormat format );
+	/**
+	 *\~english
+	 *\return		\p true if format is a depth and/or stencil format.
+	 *\~french
+	 *\return		\p false si le format est un format depth et/ou stencil.
+	 */
+	inline constexpr bool isDepthOrStencilFormat( PixelFormat format );
+	/**
+	 *\~english
+	 *\brief		Retrieves the pixel format without alpha that is near from the one given
+	 *\param[in]	format	The pixel format
+	 *\return		The given pixel format if none found
+	 *\~french
+	 *\brief		Récupère le format de pixel sans alpha le plus proche de celui donné
+	 *\param[in]	format	Le format de pixel
+	 *\return		Le format de pixels donné si non trouvé
+	 */
+	inline constexpr PixelFormat getPFWithoutAlpha( PixelFormat format );
+	/**
+	 *\~english
+	 *\return		The index matching the given PixelComponent.
+	 *\~french
+	 *\return		L'index correspondant au PixelComponent donné.
+	 */
+	inline constexpr uint32_t getComponentIndex( PixelComponent component );
+	/**
+	 *\~english
+	 *\return		The index matching the given PixelComponent and PixelFormat.
+	 *\~french
+	 *\return		L'index correspondant au PixelComponent et au PixelFormat donnés.
+	 */
+	inline constexpr uint32_t getComponentIndex( PixelComponent component
+		, PixelFormat format );
+	/**
+	 *\~english
+	 *\return		The PixelComponent matching the given index and PixelFormat.
+	 *\~french
+	 *\return		Le PixelComponent correspondant à l'index et au PixelFormat donnés.
+	 */
+	inline constexpr PixelComponent getIndexComponent( uint32_t index
+		, PixelFormat format );
 
-		switch ( format )
-		{
-#define CUPF_ENUM_VALUE_COLOR( name, value, components, alpha )\
-		case PixelFormat::e##name:\
-			result = singleComponentV< PixelFormat::e##name >;\
-			break;
-#include "CastorUtils/Graphics/PixelFormat.enum"
-		default:
-			result = PixelFormat::eUNDEFINED;
-			break;
-		}
-
-		return result;
-	}
+	/**
+	 *\~english
+	 *\brief		Function to retrieve pixel format from a name
+	 *\param[in]	formatName	The pixel format name
+	 *\~french
+	 *\brief		Fonction de récuperation d'un format de pixel par son nom
+	 *\param[in]	formatName	Le nom du format de pixels
+	 */
+	CU_API PixelFormat getFormatByName( String const & formatName );
 	/**
 	 *\~english
 	 *\return		The pixel format matching the given format and components.
@@ -509,62 +174,6 @@ namespace castor
 	 *\return		Le format correspondant au format de pixel et aux composantes donnés.
 	 */
 	CU_API PixelFormat getPixelFormat( PixelFormat format, PixelComponents components );
-	/**
-	 *\~english
-	 *\return		\p true if the given pixel format is a floating point one.
-	 *\~french
-	 *\return		\p true si le format donné est un format en nombres flottants.
-	 */
-	CU_API bool isFloatingPoint( PixelFormat format );
-	/**
-	 *\~english
-	 *\return		\p true if the given pixel format is a compressed one.
-	 *\~french
-	 *\return		\p true si le format donné est un format compressé.
-	 */
-	CU_API bool isCompressed( PixelFormat format );
-	/**
-	 *\~english
-	 *\return		\p true if format is an RGB format.
-	 *\~french
-	 *\return		\p false si le format est en RGB.
-	 */
-	CU_API bool isRGBFormat( PixelFormat format );
-	/**
-	 *\~english
-	 *\return		\p true if format is an BGR format.
-	 *\~french
-	 *\return		\p false si le format est en BGR.
-	 */
-	CU_API bool isBGRFormat( PixelFormat format );
-	/**
-	 *\~english
-	 *\return		\p true if format is an RGBA format.
-	 *\~french
-	 *\return		\p false si le format est en RGBA.
-	 */
-	CU_API bool isRGBAFormat( PixelFormat format );
-	/**
-	 *\~english
-	 *\return		\p true if format is an ARGB format.
-	 *\~french
-	 *\return		\p false si le format est en ARGB.
-	 */
-	CU_API bool isARGBFormat( PixelFormat format );
-	/**
-	 *\~english
-	 *\return		\p true if format is an BGRA format.
-	 *\~french
-	 *\return		\p false si le format est en BGRA.
-	 */
-	CU_API bool isBGRAFormat( PixelFormat format );
-	/**
-	 *\~english
-	 *\return		\p true if format is an ABGR format.
-	 *\~french
-	 *\return		\p false si le format est en ABGR.
-	 */
-	CU_API bool isABGRFormat( PixelFormat format );
 	/**
 	 *\~english
 	 *\brief		Function to perform convertion without templates
@@ -720,37 +329,24 @@ namespace castor
 		, PixelComponents component );
 	/**
 	 *\~english
-	 *\brief			Extracts alpha values from a source buffer holding alpha and puts it in a destination buffer.
-	 *\remarks			Destination buffer will be a eR8 pixel format buffer and alpha channel from source buffer will be removed.
-	 *\param[in,out]	src	The source buffer.
-	 *\return			The destination buffer, \p nullptr if source didn't have alpha.
+	 *\brief			Copies some pixel components from a source buffer into pixel components of a destination buffer.
+	 *\param[in]		srcComponents	The components to read from the source buffer.
+	 *\param[in]		dstComponents	The components to write into the destination buffer.
+	 *\param[in]		srcBuffer		The source buffer.
+	 *\param[in,out]	dstBuffer		The destination buffer.
 	 *\~french
-	 *\brief			Extrait les valeurs alpha d'un tampon source pour les mettre dans un tampon à part.
-	 *\remarks			Le tampon contenant les valeurs alpha sera au format eR8 et le canal alpha du tampon source sera supprimé.
-	 *\param[in,out]	src	Le tampon source.
-	 *\return			Le tampon alpha, \p nullptr si la source n'avait pas d'alpha.
+	 *\brief			Copie des composantes de pixel d'un buffer source vers des composantes de pixel d'un buffer destination.
+	 *\param[in]		srcComponents	Les composantes à lire depuis le buffer source.
+	 *\param[in]		dstComponents	Les composantes à écrire dans le buffer destination.
+	 *\param[in]		srcBuffer		Le buffer source.
+	 *\param[in,out]	dstBuffer		Le buffer destination.
 	 */
-	CU_API PxBufferBaseSPtr extractAlpha( PxBufferBaseSPtr & src );
-	/**
-	 *\~english
-	 *\brief		Retrieves the pixel format without alpha that is near from the one given
-	 *\param[in]	format	The pixel format
-	 *\return		The given pixel format if none found
-	 *\~french
-	 *\brief		Récupère le format de pixel sans alpha le plus proche de celui donné
-	 *\param[in]	format	Le format de pixel
-	 *\return		Le format de pixels donné si non trouvé
-	 */
-	CU_API PixelFormat getPFWithoutAlpha( PixelFormat format );
-	/**
-	 *\~english
-	 *\brief			Reduces a buffer to it's alpha channel, stored in a L8 format buffer
-	 *\param[in,out]	src	The buffer to reduce
-	 *\~french
-	 *\brief			Réduit un tampon à son canal alpha stocké dans un tampon au format L8
-	 *\param[in,out]	src	Le tampon à réduire
-	 */
-	CU_API void reduceToAlpha( PxBufferBaseSPtr & src );
+	CU_API void copyBufferComponents( PixelComponents srcComponents
+		, PixelComponents dstComponents
+		, PxBufferBase const & srcBuffer
+		, PxBufferBase & dstBuffer );
 }
+
+#include "PixelFormat.inl"
 
 #endif

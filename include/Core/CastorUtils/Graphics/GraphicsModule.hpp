@@ -409,6 +409,8 @@ namespace castor
 		eStencil = 0x20,
 	};
 	CU_ImplementFlags( PixelComponent )
+	CU_API std::string getName( PixelComponent const & component );
+	CU_API std::string getName( PixelComponents const & components );
 	/**
 	\~english
 	\brief		Holds colour/depth/stencil PixelComponentsT helper functions
