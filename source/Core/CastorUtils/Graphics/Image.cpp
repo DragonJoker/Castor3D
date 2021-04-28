@@ -102,7 +102,6 @@ namespace castor
 
 	Image & Image::resample( Size const & size )
 	{
-		CU_Require( getLevels() == 1u );
 		auto srcBuffer = getPixels();
 		int channels = int( getComponentsCount( srcBuffer->getFormat() ) );
 		int alpha{ hasAlpha( srcBuffer->getFormat() )

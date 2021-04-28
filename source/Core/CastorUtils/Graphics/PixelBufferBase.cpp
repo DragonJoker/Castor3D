@@ -734,18 +734,13 @@ namespace castor
 	void PxBufferBase::generateMips()
 	{
 		auto levels = getMipLevels( { m_size.getWidth(), m_size.getHeight(), 1u } );
-
-		if ( m_levels == 1u
-			&& levels > m_levels )
-		{
-			m_levels = levels;
-			auto buffer = generateMipmaps( { m_size.getWidth(), m_size.getHeight(), m_layers }
-				, m_buffer.data()
-				, m_format
-				, m_align
-				, m_levels );
-			m_buffer = buffer;
-		}
+		m_levels = levels;
+		auto buffer = generateMipmaps( { m_size.getWidth(), m_size.getHeight(), m_layers }
+			, m_buffer.data()
+			, m_format
+			, m_align
+			, m_levels );
+		m_buffer = buffer;
 	}
 
 	void PxBufferBase::update( uint32_t layers
