@@ -150,6 +150,21 @@ namespace castor3d
 			CU_Require( m_sampler );
 			return *m_sampler;
 		}
+
+		bool isAnisotropicFilteringEnabled()const
+		{
+			return m_info->anisotropyEnable;
+		}
+
+		bool isMipmapSet()const
+		{
+			return m_mipmapIsSet;
+		}
+
+		bool isCompareEnabled()const
+		{
+			return m_info->compareEnable;
+		}
 		/**@}*/
 		/**
 		*\~english
