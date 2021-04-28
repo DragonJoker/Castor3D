@@ -935,15 +935,15 @@ namespace castor3d
 					, c3d_maps
 					, vtx_texture
 					, alpha );
-			utils.applyAlphaFunc( flags.alphaFunc
-				, alpha
-				, material->m_alphaRef );
+				utils.applyAlphaFunc( flags.alphaFunc
+					, alpha
+					, material->m_alphaRef );
 
-			pxl_fragColor = c3d_pickingData.getIndex( vtx_instance );
+				pxl_fragColor = c3d_pickingData.getIndex( vtx_instance );
 #if C3D_DebugPicking
-			pxl_fragColor /= 255.0_f;
+				pxl_fragColor /= 255.0_f;
 #endif
-		} );
+			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
