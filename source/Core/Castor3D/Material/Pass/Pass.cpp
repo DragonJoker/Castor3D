@@ -209,7 +209,7 @@ namespace castor3d
 					, buffer->getConstPtr()
 					, buffer->getFormat() );
 			}
-			else
+			else if ( !castor::isCompressed( buffer->getFormat() ) )
 			{
 				buffer->generateMips();
 			}
@@ -223,6 +223,15 @@ namespace castor3d
 			unit->setConfiguration( resultConfig );
 			unit->setTexture( std::move( layout ) );
 			return unit;
+		}
+
+		bool isMergeable( TextureUnit const & unit )
+		{
+			return ( !unit.getRenderTarget() )
+				&& unit.getTexture()
+				&& unit.getTexture()->isStatic()
+				&& !ashes::isCompressedFormat( unit.getTexture()->getPixelFormat() )
+				&& !unit.hasAnimation();
 		}
 	}
 
@@ -512,22 +521,32 @@ namespace castor3d
 		{
 			auto & lhsUnit = texturesLhs[0];
 			auto & rhsUnit = texturesRhs[0];
-			TextureConfiguration resultConfig;
-			getMask( resultConfig, lhsMaskOffset ) = lhsDstMask;
-			getMask( resultConfig, rhsMaskOffset ) = rhsDstMask;
-			newUnit = doMergeImages( lhsUnit->getTexture()->getImage()
-				, lhsUnit->getConfiguration()
-				, getMask( lhsUnit->getConfiguration(), lhsMaskOffset )
-				, lhsDstMask
-				, rhsUnit->getTexture()->getImage()
-				, rhsUnit->getConfiguration()
-				, getMask( rhsUnit->getConfiguration(), rhsMaskOffset )
-				, rhsDstMask
-				, name
-				, resultConfig );
-			sampler = mergeSamplers( lhsUnit->getSampler()
-				, rhsUnit->getSampler()
-				, getOwner()->getName() + name );
+
+			if ( isMergeable( *lhsUnit ) && isMergeable( *rhsUnit ) )
+			{
+				TextureConfiguration resultConfig;
+				getMask( resultConfig, lhsMaskOffset ) = lhsDstMask;
+				getMask( resultConfig, rhsMaskOffset ) = rhsDstMask;
+				newUnit = doMergeImages( lhsUnit->getTexture()->getImage()
+					, lhsUnit->getConfiguration()
+					, getMask( lhsUnit->getConfiguration(), lhsMaskOffset )
+					, lhsDstMask
+					, rhsUnit->getTexture()->getImage()
+					, rhsUnit->getConfiguration()
+					, getMask( rhsUnit->getConfiguration(), rhsMaskOffset )
+					, rhsDstMask
+					, name
+					, resultConfig );
+				newUnit->setSampler( mergeSamplers( lhsUnit->getSampler()
+					, rhsUnit->getSampler()
+					, getOwner()->getName() + name ) );
+				result.push_back( newUnit );
+			}
+			else
+			{
+				result.push_back( lhsUnit );
+				result.push_back( rhsUnit );
+			}
 		}
 		else
 		{
@@ -545,18 +564,24 @@ namespace castor3d
 
 			if ( unit )
 			{
-				newUnit = prepareTexture( *getOwner()->getEngine()
-					, std::make_unique< castor::PxBufferBase >( unit->getTexture()->getImage().getPxBuffer() )
-					, getOwner()->getName() + name
-					, unit->getConfiguration() );
-				sampler = unit->getSampler();
+				if ( !isMergeable( *unit ) )
+				{
+					newUnit = unit;
+				}
+				else
+				{
+					newUnit = prepareTexture( *getOwner()->getEngine()
+						, std::make_unique< castor::PxBufferBase >( unit->getTexture()->getImage().getPxBuffer() )
+						, getOwner()->getName() + name
+						, unit->getConfiguration() );
+					newUnit->setSampler( unit->getSampler() );
+				}
 			}
-		}
 
-		if ( newUnit )
-		{
-			newUnit->setSampler( sampler );
-			result.push_back( newUnit );
+			if ( newUnit )
+			{
+				result.push_back( newUnit );
+			}
 		}
 	}
 
