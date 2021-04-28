@@ -1018,17 +1018,12 @@ namespace castor3d
 
 					if ( hasTexture )
 					{
-						utils.computeColourMapContribution( texturesFlags
+						utils.compute2DMapsContributions( texturesFlags
 							, textureConfigs
 							, c3d_textureData.config
 							, c3d_maps
 							, vec3( vtx_texture, 0.0 )
-							, diffuse );
-						utils.computeOpacityMapContribution( texturesFlags
-							, textureConfigs
-							, c3d_textureData.config
-							, c3d_maps
-							, vec3( vtx_texture, 0.0 )
+							, diffuse
 							, alpha );
 					}
 

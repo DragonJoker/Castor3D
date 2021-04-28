@@ -309,7 +309,7 @@ namespace castor3d
 			, TextureConfigurations const & textureConfigs
 			, sdw::Array< sdw::UVec4 > const & textureConfig
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
-			, sdw::Vec3 const & texCoords
+			, sdw::Vec3 & texCoords
 			, sdw::Vec3 & normal
 			, sdw::Vec3 & tangent
 			, sdw::Vec3 & bitangent
@@ -324,48 +324,61 @@ namespace castor3d
 			, sdw::Vec3 & tangentSpaceFragPosition )
 		{
 			bool hasEmissive = false;
+			m_utils.computeGeometryMapsContributions( textures
+				, passFlags
+				, textureConfigs
+				, textureConfig
+				, maps
+				, texCoords
+				, opacity
+				, tangentSpaceViewPosition
+				, tangentSpaceFragPosition );
 
 			for ( auto & textureIt : textures )
 			{
-				auto name = string::stringCast< char >( string::toString( textureIt.first, std::locale{ "C" } ) );
-				auto config = m_writer.declLocale( "config" + name
-					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( textureIt.second.id ) ) );
-				auto sampled = m_writer.declLocale( "sampled" + name
-					, m_utils.computeCommonMapContribution( textureIt.second.flags
-						, passFlags
-						, name
-						, config
-						, maps[textureIt.first]
-						, gamma
-						, texCoords
-						, normal
-						, tangent
-						, bitangent
-						, emissive
-						, opacity
-						, occlusion
-						, transmittance
-						, tangentSpaceViewPosition
-						, tangentSpaceFragPosition ) );
-
-				if ( checkFlag( textureIt.second.flags, TextureFlag::eAlbedo ) )
+				if ( !checkFlag( textureIt.second.flags, TextureFlag::eOpacity )
+					&& !checkFlag( textureIt.second.flags, TextureFlag::eHeight ) )
 				{
-					albedo = config.getAlbedo( m_writer, sampled, albedo, gamma );
-				}
+					auto name = string::stringCast< char >( string::toString( textureIt.first, std::locale{ "C" } ) );
+					auto config = m_writer.declLocale( "config" + name
+						, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( textureIt.second.id ) ) );
+					auto sampled = m_writer.declLocale( "sampled" + name
+						, m_utils.computeCommonMapContribution( textureIt.second.flags
+							, passFlags
+							, name
+							, config
+							, maps[textureIt.first]
+							, gamma
+							, texCoords
+							, normal
+							, tangent
+							, bitangent
+							, emissive
+							, opacity
+							, occlusion
+							, transmittance
+							, tangentSpaceViewPosition
+							, tangentSpaceFragPosition ) );
 
-				if ( checkFlag( textureIt.second.flags, TextureFlag::eSpecular ) )
-				{
-					specular = config.getSpecular( m_writer, sampled, specular );
-				}
+					if ( checkFlag( textureIt.second.flags, TextureFlag::eAlbedo ) )
+					{
+						albedo = config.getAlbedo( m_writer, sampled, albedo, gamma );
+					}
 
-				if ( checkFlag( textureIt.second.flags, TextureFlag::eGlossiness ) )
-				{
-					glossiness = config.getGlossiness( m_writer, sampled, glossiness );
-				}
+					if ( checkFlag( textureIt.second.flags, TextureFlag::eSpecular ) )
+					{
+						specular = config.getSpecular( m_writer, sampled, specular );
+					}
 
-				if ( checkFlag( textureIt.second.flags, TextureFlag::eEmissive ) )
-				{
-					hasEmissive = true;
+					if ( checkFlag( textureIt.second.flags, TextureFlag::eGlossiness ) )
+					{
+						glossiness = config.getGlossiness( m_writer, sampled, glossiness );
+					}
+
+					if ( checkFlag( textureIt.second.flags, TextureFlag::eEmissive ) )
+					{
+						hasEmissive = true;
+					}
 				}
 			}
 
