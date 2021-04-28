@@ -6,9 +6,9 @@ See LICENSE file in root folder
 
 #include "Castor3D/Material/Pass/Pass.hpp"
 
-#include <CastorUtils/Graphics/RgbColour.hpp>
-
 #include "Castor3D/Shader/PassBuffer/PassBufferModule.hpp"
+
+#include <CastorUtils/Graphics/RgbColour.hpp>
 
 namespace castor3d
 {
@@ -124,6 +124,8 @@ namespace castor3d
 		void doInitialise()override;
 		void doCleanup()override;
 		void doSetOpacity( float value )override;
+		void doPrepareTextures( TextureUnitPtrArray & result )override;
+		void doJoinMtlRgh( TextureUnitPtrArray & result );
 
 	private:
 		//!\~english	The albedo colour.

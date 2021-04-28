@@ -96,7 +96,8 @@
   </Type>
 
   <Type Name="castor::Image">
-    <DisplayString>{{{m_name} {m_buffer}}}</DisplayString>
+    <DisplayString Condition="m_buffer != nullptr">{{{m_name} {*m_buffer}}}</DisplayString>
+    <DisplayString>{{{m_name}}}</DisplayString>
     <Expand>
       <Item Name="name">m_name</Item>
       <Item Name="buffer">m_buffer</Item>
