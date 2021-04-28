@@ -71,6 +71,7 @@ namespace castor3d
 			, occlusionMask{ emisOccl.zw() }
 			, transmittanceMask{ trnsDumm.xy() }
 			, needsGammaCorrection{ writer.cast< sdw::UInt >( miscVals.x() ) }
+			, fneedsYInversion{ miscVals.y() }
 			, needsYInversion{ writer.cast< sdw::UInt >( miscVals.y() ) }
 		{
 		}
@@ -242,24 +243,29 @@ namespace castor3d
 				, vec3( writer.cast< sdw::Float >( needsGammaCorrection ) ) );
 		}
 
-		sdw::Vec2 TextureConfigData::convertUV( sdw::ShaderWriter & writer
-			, sdw::Vec2 const & uv )const
+		void TextureConfigData::convertUV( sdw::ShaderWriter & writer
+			, sdw::Vec2 & uv )const
 		{
-			return translateUV( translate.xy()
-				, rotateUV( vec2( rotate.xy() )
-					, mix( scaleUV( uv, scale.xy() )
-						, vec2( uv.x(), 1.0_f - uv.y() )
-						, vec2( writer.cast< sdw::Float >( needsYInversion ) ) ) ) );
+			auto mid = 0.5_f;
+
+			uv = vec2( uv.x()
+				, mix( uv.y(), 1.0_f - uv.y(), fneedsYInversion ) );
+			uv = scaleUV( scale.xy(), uv );
+			uv = rotateUV( rotate.xy(), uv );
+			uv = translateUV( translate.xy(), uv );
 		}
 
-		sdw::Vec3 TextureConfigData::convertUVW( sdw::ShaderWriter & writer
-			, sdw::Vec3 const & uvw )const
+		void TextureConfigData::convertUVW( sdw::ShaderWriter & writer
+			, sdw::Vec3 & uvw )const
 		{
-			return translateUV( translate.xyz()
-				, rotateUV( vec3( rotate.xy(), 0.0f )
-					, mix( scaleUV( uvw, scale.xyz() )
-						, vec3( uvw.x(), 1.0_f - uvw.y(), uvw.z() )
-						, vec3( writer.cast< sdw::Float >( needsYInversion ) ) ) ) );
+			auto mid = 0.5_f;
+
+			uvw = vec3( uvw.x()
+				, mix( uvw.y(), 1.0_f - uvw.y(), fneedsYInversion )
+				, uvw.z() );
+			uvw = scaleUV( scale.xyz(), uvw );
+			uvw = rotateUV( rotate.xyz(), uvw );
+			uvw = translateUV( translate.xyz(), uvw );
 		}
 
 		//*********************************************************************************************
