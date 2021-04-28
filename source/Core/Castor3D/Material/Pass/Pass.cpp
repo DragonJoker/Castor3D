@@ -1,7 +1,9 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
@@ -11,8 +13,6 @@
 #include <CastorUtils/Graphics/PixelFormat.hpp>
 
 #include <algorithm>
-
-using namespace castor;
 
 namespace castor3d
 {
@@ -38,7 +38,7 @@ namespace castor3d
 			}
 		}
 
-		void mergeConfigs( TextureConfiguration lhs
+		void mergeConfigs( TextureConfiguration const & lhs
 			, TextureConfiguration & rhs )
 		{
 			mergeMasks( lhs.colourMask[0], rhs.colourMask[0] );
@@ -55,6 +55,174 @@ namespace castor3d
 			mergeFactors( lhs.heightFactor, rhs.heightFactor, 0.1f );
 			mergeFactors( lhs.normalFactor, rhs.normalFactor, 1.0f );
 			mergeFactors( lhs.normalGMultiplier, rhs.normalGMultiplier, 1.0f );
+		}
+
+		uint32_t & getMask( TextureConfiguration & config
+			, uint32_t offset )
+		{
+			return ( *reinterpret_cast< castor::Point2ui * >( reinterpret_cast< uint8_t * >( &config ) + offset ) )[0];
+		}
+
+		uint32_t const & getMask( TextureConfiguration const & config
+			, uint32_t offset )
+		{
+			return ( *reinterpret_cast< castor::Point2ui const * >( reinterpret_cast< uint8_t const * >( &config ) + offset ) )[0];
+		}
+
+		castor::PixelComponents getPixelComponents( uint32_t mask )
+		{
+			castor::PixelComponents result;
+
+			if ( mask & 0xFF000000 )
+			{
+				result |= castor::PixelComponent::eAlpha;
+			}
+
+			if ( mask & 0x00FF0000 )
+			{
+				result |= castor::PixelComponent::eRed;
+			}
+
+			if ( mask & 0x0000FF00 )
+			{
+				result |= castor::PixelComponent::eGreen;
+			}
+
+			if ( mask & 0x000000FF )
+			{
+				result |= castor::PixelComponent::eBlue;
+			}
+
+			return result;
+		}
+
+		SamplerSPtr mergeSamplers( SamplerSPtr lhs
+			, SamplerSPtr rhs
+			, castor::String const & name )
+		{
+			auto sampler = lhs->getEngine()->getSamplerCache().add( name );
+			sampler->setBorderColour( lhs->getBorderColour() );
+			sampler->setCompareOp( lhs->getCompareOp() );
+			sampler->setMagFilter( lhs->getMagFilter() == VkFilter::VK_FILTER_NEAREST
+				? rhs->getMagFilter()
+				: lhs->getMagFilter() );
+			sampler->setMinFilter( lhs->getMinFilter() == VkFilter::VK_FILTER_NEAREST
+				? rhs->getMinFilter()
+				: lhs->getMinFilter() );
+
+			if ( lhs->isCompareEnabled() || rhs->isCompareEnabled() )
+			{
+				sampler->setCompareOp( std::max( lhs->getCompareOp(), rhs->getCompareOp() ) );
+			}
+
+			if ( lhs->isMipmapSet() || rhs->isMipmapSet() )
+			{
+				sampler->setMipFilter( lhs->getMipFilter() == VkSamplerMipmapMode::VK_SAMPLER_MIPMAP_MODE_NEAREST
+					? rhs->getMipFilter()
+					: lhs->getMipFilter() );
+			}
+
+			sampler->setWrapS( std::max( lhs->getWrapS(), rhs->getWrapS() ) );
+			sampler->setWrapT( std::max( lhs->getWrapT(), rhs->getWrapT() ) );
+			sampler->setWrapR( std::max( lhs->getWrapR(), rhs->getWrapR() ) );
+			sampler->setMinLod( std::min( lhs->getMinLod(), rhs->getMinLod() ) );
+			sampler->setMaxLod( std::max( lhs->getMaxLod(), rhs->getMaxLod() ) );
+			sampler->setLodBias( std::max( lhs->getLodBias(), rhs->getLodBias() ) );
+			sampler->enableAnisotropicFiltering( lhs->isAnisotropicFilteringEnabled() || rhs->isAnisotropicFilteringEnabled() );
+			sampler->setMaxAnisotropy( std::max( lhs->getMaxAnisotropy(), rhs->getMaxAnisotropy() ) );
+			return sampler;
+		}
+
+		castor::PxBufferBaseUPtr mergeBuffers( castor::Image const & lhs
+			, uint32_t const & lhsSrcMask
+			, uint32_t const & lhsDstMask
+			, castor::Image const & rhs
+			, uint32_t const & rhsSrcMask
+			, uint32_t const & rhsDstMask )
+		{
+			// Resize images to max images dimensions, if needed.
+			auto dimensions = lhs.getDimensions();
+			auto lhsBuffer = lhs.getPixels();
+			auto rhsBuffer = rhs.getPixels();
+
+			if ( dimensions != rhs.getDimensions() )
+			{
+				dimensions.set( std::max( dimensions.getWidth(), rhs.getDimensions().getWidth() )
+					, std::max( dimensions.getHeight(), rhs.getDimensions().getHeight() ) );
+
+				if ( dimensions != lhs.getDimensions() )
+				{
+					lhsBuffer = lhs.getResampled( dimensions ).getPixels();
+				}
+
+				if ( dimensions != rhs.getDimensions() )
+				{
+					rhsBuffer = rhs.getResampled( dimensions ).getPixels();
+				}
+			}
+
+			// Adjust the pixel formats to the most precise one
+			auto pixelFormat = lhs.getPixelFormat();
+
+			if ( pixelFormat != rhs.getPixelFormat() )
+			{
+				if ( getBytesPerPixel( pixelFormat ) < getBytesPerPixel( rhs.getPixelFormat() )
+					|| ( !isFloatingPoint( pixelFormat )
+						&& isFloatingPoint( rhs.getPixelFormat() ) )
+					)
+				{
+					pixelFormat = rhs.getPixelFormat();
+				}
+			}
+
+			// Merge the two buffers into one
+			auto lhsComponents = getPixelComponents( lhsSrcMask );
+			auto rhsComponents = getPixelComponents( rhsSrcMask );
+			auto result = castor::PxBufferBase::createUnique( dimensions
+				, getPixelFormat( pixelFormat, getPixelComponents( lhsDstMask | rhsDstMask ) ) );
+			copyBufferComponents( lhsComponents
+				, getPixelComponents( lhsDstMask )
+				, *lhsBuffer
+				, *result );
+			copyBufferComponents( rhsComponents
+				, getPixelComponents( rhsDstMask )
+				, *rhsBuffer
+				, *result );
+			return result;
+		}
+
+		TextureUnitSPtr prepareTexture( Engine & engine
+			, castor::PxBufferBaseUPtr buffer
+			, castor::String const & name
+			, TextureConfiguration resultConfig )
+		{
+			// Finish buffer initialisation.
+			auto & loader = engine.getImageLoader();
+			auto compressedFormat = loader.getOptions().getCompressed( buffer->getFormat() );
+
+			if ( compressedFormat != buffer->getFormat()
+				&& resultConfig.normalMask[0] == 0 )
+			{
+				buffer = castor::PxBufferBase::createUnique( &loader.getOptions()
+					, buffer->getDimensions()
+					, compressedFormat
+					, buffer->getConstPtr()
+					, buffer->getFormat() );
+			}
+			else
+			{
+				buffer->generateMips();
+			}
+
+			// Create the resulting texture.
+			auto layout = createTextureLayout( engine
+				, name
+				, std::move( buffer )
+				, true );
+			auto unit = std::make_shared< TextureUnit >( engine );
+			unit->setConfiguration( resultConfig );
+			unit->setTexture( std::move( layout ) );
+			return unit;
 		}
 	}
 
@@ -210,6 +378,12 @@ namespace castor3d
 				unit->setConfiguration( configuration );
 			}
 
+			TextureUnitPtrArray newUnits;
+			doJoinNmlHgt( newUnits );
+			doJoinEmsOcc( newUnits );
+			doPrepareTextures( newUnits );
+			m_textureUnits = newUnits;
+
 			std::sort( m_textureUnits.begin()
 				, m_textureUnits.end()
 				, []( TextureUnitSPtr const & lhs, TextureUnitSPtr const & rhs )
@@ -318,8 +492,150 @@ namespace castor3d
 		return uint32_t( getTextureUnits( mask ).size() );
 	}
 
+	void Pass::doMergeImages( TextureFlag lhsFlag
+		, uint32_t lhsMaskOffset
+		, uint32_t lhsDstMask
+		, TextureFlag rhsFlag
+		, uint32_t rhsMaskOffset
+		, uint32_t rhsDstMask
+		, castor::String const & name
+		, TextureUnitPtrArray & result )
+	{
+		auto texturesLhs = getTextureUnits( lhsFlag );
+		auto texturesRhs = getTextureUnits( rhsFlag );
+		TextureUnitSPtr newUnit;
+		SamplerSPtr sampler;
+
+		if ( !texturesLhs.empty()
+			&& !texturesRhs.empty()
+			&& texturesLhs[0] != texturesRhs[0] )
+		{
+			auto & lhsUnit = texturesLhs[0];
+			auto & rhsUnit = texturesRhs[0];
+			TextureConfiguration resultConfig;
+			getMask( resultConfig, lhsMaskOffset ) = lhsDstMask;
+			getMask( resultConfig, rhsMaskOffset ) = rhsDstMask;
+			newUnit = doMergeImages( lhsUnit->getTexture()->getImage()
+				, lhsUnit->getConfiguration()
+				, getMask( lhsUnit->getConfiguration(), lhsMaskOffset )
+				, lhsDstMask
+				, rhsUnit->getTexture()->getImage()
+				, rhsUnit->getConfiguration()
+				, getMask( rhsUnit->getConfiguration(), rhsMaskOffset )
+				, rhsDstMask
+				, name
+				, resultConfig );
+			sampler = mergeSamplers( lhsUnit->getSampler()
+				, rhsUnit->getSampler()
+				, getOwner()->getName() + name );
+		}
+		else
+		{
+			TextureUnitSPtr unit;
+
+			if ( !texturesLhs.empty() )
+			{
+				unit = std::move( texturesLhs[0] );
+			}
+
+			if ( !texturesRhs.empty() )
+			{
+				unit = std::move( texturesRhs[0] );
+			}
+
+			if ( unit )
+			{
+				newUnit = prepareTexture( *getOwner()->getEngine()
+					, std::make_unique< castor::PxBufferBase >( unit->getTexture()->getImage().getPxBuffer() )
+					, getOwner()->getName() + name
+					, unit->getConfiguration() );
+				sampler = unit->getSampler();
+			}
+		}
+
+		if ( newUnit )
+		{
+			newUnit->setSampler( sampler );
+			result.push_back( newUnit );
+		}
+	}
+
+	void Pass::doJoinDifOpa( TextureUnitPtrArray & result
+		, castor::String const & name )
+	{
+		doMergeImages( TextureFlag::eDiffuse
+			, offsetof( TextureConfiguration, colourMask )
+			, 0x00FFFFFF
+			, TextureFlag::eOpacity
+			, offsetof( TextureConfiguration, opacityMask )
+			, 0xFF000000
+			, name
+			, result );
+	}
+
 	void Pass::onSssChanged( SubsurfaceScattering const & sss )
 	{
 		onChanged( *this );
+	}
+
+	TextureUnitSPtr Pass::doMergeImages( castor::Image const & lhs
+		, TextureConfiguration const & lhsConfig
+		, uint32_t lhsSrcMask
+		, uint32_t lhsDstMask
+		, castor::Image const & rhs
+		, TextureConfiguration const & rhsConfig
+		, uint32_t rhsSrcMask
+		, uint32_t rhsDstMask
+		, castor::String const & name
+		, TextureConfiguration resultConfig )
+	{
+		auto merged = mergeBuffers( lhs
+			, lhsSrcMask
+			, lhsDstMask
+			, rhs
+			, rhsSrcMask
+			, rhsDstMask );
+
+		// Prepare the resulting texture configuration.
+		resultConfig.needsGammaCorrection = !isFloatingPoint( merged->getFormat() );
+
+		mergeMasks( lhsConfig.needsYInversion, resultConfig.needsYInversion );
+		mergeFactors( lhsConfig.heightFactor, resultConfig.heightFactor, 0.1f );
+		mergeFactors( lhsConfig.normalFactor, resultConfig.normalFactor, 1.0f );
+		mergeFactors( lhsConfig.normalGMultiplier, resultConfig.normalGMultiplier, 1.0f );
+
+		mergeMasks( rhsConfig.needsYInversion, resultConfig.needsYInversion );
+		mergeFactors( rhsConfig.heightFactor, resultConfig.heightFactor, 0.1f );
+		mergeFactors( rhsConfig.normalFactor, resultConfig.normalFactor, 1.0f );
+		mergeFactors( rhsConfig.normalGMultiplier, resultConfig.normalGMultiplier, 1.0f );
+
+		return prepareTexture( *getOwner()->getEngine()
+			, std::move( merged )
+			, getOwner()->getName() + name
+			, resultConfig );
+	}
+
+	void Pass::doJoinNmlHgt( TextureUnitPtrArray & result )
+	{
+		doMergeImages( TextureFlag::eNormal
+			, offsetof( TextureConfiguration, normalMask )
+			, 0x00FFFFFF
+			, TextureFlag::eHeight
+			, offsetof( TextureConfiguration, heightMask )
+			, 0xFF000000
+			, cuT( "NmlHgt" )
+			, result );
+	}
+
+	void Pass::doJoinEmsOcc( TextureUnitPtrArray & result )
+	{
+		doMergeImages( TextureFlag::eEmissive
+			, offsetof( TextureConfiguration, emissiveMask )
+			, 0x00FFFFFF
+			, TextureFlag::eOcclusion
+			, offsetof( TextureConfiguration, occlusionMask )
+			, 0xFF000000
+			, cuT( "EmsOcc" )
+			, result );
 	}
 }
