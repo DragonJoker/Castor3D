@@ -26,7 +26,7 @@ namespace Testing
 
 	void BenchManager::registerType( TestCaseUPtr p_case )
 	{
-		p_case->RegisterTests();
+		p_case->registerTests();
 		m_cases.push_back( std::move( p_case ) );
 	}
 
@@ -93,7 +93,7 @@ namespace Testing
 
 			for ( auto & testCase : m_cases )
 			{
-				testCase->Execute( errCount, testCount );
+				testCase->execute( errCount, testCount );
 				std::cout << testSep.str() << std::endl;
 			}
 

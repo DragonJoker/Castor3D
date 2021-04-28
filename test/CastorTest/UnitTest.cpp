@@ -6,16 +6,16 @@ namespace Testing
 {
 	//*************************************************************************************************
 
-	namespace
+	TestBlock::TestBlock( TestCase & testCase
+		, std::string const & text )
+		: testCase{ testCase }
+		, text{ text }
 	{
-		std::string Center( uint32_t p_width, std::string const & p_text )
-		{
-			size_t length = p_text.size();
-			std::stringstream stream;
-			stream.width( ( p_width - length ) / 2 );
-			stream << " ";
-			return stream.str() + p_text;
-		}
+	}
+
+	TestBlock::~TestBlock()
+	{
+		testCase.doPopBlock( this );
 	}
 
 	//*************************************************************************************************
@@ -29,12 +29,12 @@ namespace Testing
 	{
 	}
 
-	void TestCase::RegisterTests()
+	void TestCase::registerTests()
 	{
 		doRegisterTests();
 	}
 
-	void TestCase::Execute( uint32_t & p_errCount, uint32_t & p_testCount )
+	void TestCase::execute( uint32_t & p_errCount, uint32_t & p_testCount )
 	{
 		m_errorCount = &p_errCount;
 		m_testCount = &p_testCount;
@@ -78,6 +78,32 @@ namespace Testing
 	void TestCase::doRegisterTest( std::string const & p_name, TestFunction p_test )
 	{
 		m_tests.push_back( { p_name, p_test } );
+	}
+
+	TestBlockPtr TestCase::doPushBlock( std::string const & text )
+	{
+		auto result = std::make_unique< TestBlock >( *this, text );
+		m_blocks.push_back( result.get() );
+		return result;
+	}
+
+	void TestCase::doPopBlock( TestBlock * block )
+	{
+		auto it = std::find( m_blocks.begin(), m_blocks.end(), block );
+		m_blocks.erase( it );
+	}
+
+	void TestCase::doPrintError( std::string const & error )
+	{
+		std::string prefix;
+
+		for ( auto block : m_blocks )
+		{
+			std::cerr << prefix << block->text << std::endl;
+			prefix += "  ";
+		}
+
+		std::cerr << prefix << error << std::endl;
 	}
 
 	//*************************************************************************************************
