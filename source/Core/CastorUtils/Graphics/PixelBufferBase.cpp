@@ -606,6 +606,7 @@ namespace castor
 		, m_layers{ rhs.m_layers }
 		, m_levels{ rhs.m_levels }
 		, m_buffer{ 0 }
+		, m_flipped{ rhs.m_flipped }
 	{
 		initialise( rhs.getConstPtr(), rhs.getFormat(), rhs.getAlign() );
 	}

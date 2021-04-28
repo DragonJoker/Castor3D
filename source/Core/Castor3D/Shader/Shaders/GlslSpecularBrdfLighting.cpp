@@ -336,8 +336,8 @@ namespace castor3d
 
 			for ( auto & textureIt : textures )
 			{
-				if ( !checkFlag( textureIt.second.flags, TextureFlag::eOpacity )
-					&& !checkFlag( textureIt.second.flags, TextureFlag::eHeight ) )
+				if ( textureIt.second.flags != TextureFlag::eOpacity
+					&& textureIt.second.flags != TextureFlag::eHeight )
 				{
 					auto name = string::stringCast< char >( string::toString( textureIt.first, std::locale{ "C" } ) );
 					auto config = m_writer.declLocale( "config" + name
