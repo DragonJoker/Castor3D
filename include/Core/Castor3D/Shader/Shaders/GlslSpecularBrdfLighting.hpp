@@ -120,7 +120,7 @@ namespace castor3d
 				, TextureConfigurations const & textureConfigs
 				, sdw::Array< sdw::UVec4 > const & textureConfig
 				, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
-				, sdw::Vec3 const & texCoords
+				, sdw::Vec3 & texCoords
 				, sdw::Vec3 & normal
 				, sdw::Vec3 & tangent
 				, sdw::Vec3 & bitangent

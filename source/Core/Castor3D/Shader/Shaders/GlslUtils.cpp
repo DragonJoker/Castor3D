@@ -594,15 +594,20 @@ namespace castor3d::shader
 						, dFdxCoarse( currentTexCoords ) );
 					auto dy = m_writer.declLocale( "dy"
 						, dFdxCoarse( currentTexCoords ) );
+					auto heightIndex = m_writer.declLocale( "heightIndex"
+						, m_writer.cast< sdw::UInt >( textureConfig.heightMask.y() ) );
+					auto sampled = m_writer.declLocale( "sampled"
+						, heightMap.grad( currentTexCoords, dx, dy ) );
 					auto currentDepthMapValue = m_writer.declLocale( "currentDepthMapValue"
-						, heightMap.grad( currentTexCoords, dx, dy ).r() );
+						, sampled[heightIndex] );
 
 					WHILE( m_writer, currentLayerDepth < currentDepthMapValue )
 					{
 						// shift texture coordinates along direction of P
 						currentTexCoords -= deltaTexCoords;
 						// get depthmap value at current texture coordinates
-						currentDepthMapValue = heightMap.grad( currentTexCoords, dx, dy ).r();
+						sampled = heightMap.grad( currentTexCoords, dx, dy );
+						currentDepthMapValue = sampled[heightIndex];
 						// get depth of next layer
 						currentLayerDepth += layerDepth;
 					}
@@ -615,8 +620,9 @@ namespace castor3d::shader
 					// get depth after and before collision for linear interpolation
 					auto afterDepth = m_writer.declLocale( "afterDepth"
 						, currentDepthMapValue - currentLayerDepth );
+					sampled = heightMap.grad( currentTexCoords, dx, dy );
 					auto beforeDepth = m_writer.declLocale( "beforeDepth"
-						, heightMap.grad( prevTexCoords, dx, dy ).r() - currentLayerDepth + layerDepth );
+						, sampled[heightIndex] - currentLayerDepth + layerDepth );
 
 					// interpolation of texture coordinates
 					auto weight = m_writer.declLocale( "weight"
@@ -885,8 +891,12 @@ namespace castor3d::shader
 							, initialHeight - layerHeight );
 						auto currentTextureCoords = m_writer.declLocale( "currentTextureCoords"
 							, initialTexCoord + texStep );
+						auto heightIndex = m_writer.declLocale( "heightIndex"
+							, m_writer.cast< sdw::UInt >( textureConfig.heightMask.y() ) );
+						auto sampled = m_writer.declLocale( "sampled"
+							, heightMap.sample( currentTextureCoords ) );
 						auto heightFromTexture = m_writer.declLocale( "heightFromTexture"
-							, heightMap.sample( currentTextureCoords ).r() );
+							, sampled[heightIndex] );
 						auto stepIndex = m_writer.declLocale( "stepIndex"
 							, 1_i );
 
@@ -909,7 +919,8 @@ namespace castor3d::shader
 							stepIndex += 1_i;
 							currentLayerHeight -= layerHeight;
 							currentTextureCoords += texStep;
-							heightFromTexture = heightMap.sample( currentTextureCoords ).r();
+							sampled = heightMap.sample( currentTextureCoords );
+							heightFromTexture = sampled[heightIndex];
 						}
 						ELIHW;
 
@@ -1219,23 +1230,36 @@ namespace castor3d::shader
 		return mat3( normalize( tangent ), normalize( bitangent ), normal );
 	}
 
-	void Utils::computeColourMapContribution( FilteredTextureFlags const & flags
+	void Utils::compute2DMapsContributions( FilteredTextureFlags const & flags
 		, TextureConfigurations const & textureConfigs
 		, sdw::Array< sdw::UVec4 > const & textureConfig
 		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 		, sdw::Vec3 const & texCoords
-		, sdw::Vec3 & colour )
+		, sdw::Vec3 & colour
+		, sdw::Float & opacity )
 	{
-		auto it = checkFlags( flags, TextureFlag::eDiffuse );
-
-		if ( it != flags.end() )
+		for ( auto & textureIt : flags )
 		{
-			auto i = it->first;
-			auto colourMapConfig = m_writer.declLocale( "colourMapConfig"
-				, textureConfigs.getTextureConfiguration(  sdw::UInt( it->second.id + 1u ) ) );
-			auto sampledColour = m_writer.declLocale< sdw::Vec4 >( "sampledColour"
-				, maps[i].sample( colourMapConfig.convertUV( m_writer, texCoords.xy() ) ) );
-			colour = colourMapConfig.getDiffuse( m_writer, sampledColour, colour, 1.0_f );
+			if ( checkFlag( textureIt.second.flags, TextureFlag::eDiffuse )
+				|| checkFlag( textureIt.second.flags, TextureFlag::eOpacity ) )
+			{
+				auto i = textureIt.first;
+				auto name = castor::string::stringCast< char >( castor::string::toString( i ) );
+				auto config = m_writer.declLocale( "config" + name
+					, textureConfigs.getTextureConfiguration( sdw::UInt( textureIt.second.id + 1u ) ) );
+				auto sampled = m_writer.declLocale< sdw::Vec4 >( "sampled" + name
+					, maps[i].sample( config.convertUV( m_writer, texCoords.xy() ) ) );
+
+				if ( checkFlag( textureIt.second.flags, TextureFlag::eDiffuse ) )
+				{
+					colour = config.getDiffuse( m_writer, sampled, colour, 1.0_f );
+				}
+
+				if ( checkFlag( textureIt.second.flags, TextureFlag::eOpacity ) )
+				{
+					opacity = config.getOpacity( m_writer, sampled, opacity );
+				}
+			}
 		}
 	}
 
@@ -1259,107 +1283,13 @@ namespace castor3d::shader
 		}
 	}
 
-	void Utils::computeNormalMapContribution( FilteredTextureFlags const & flags
-		, TextureConfigurations const & textureConfigs
-		, sdw::Array< sdw::UVec4 > const & textureConfig
-		, sdw::Vec3 & normal
-		, sdw::Vec3 & tangent
-		, sdw::Vec3 & bitangent
-		, sdw::Vec3 & tangentSpaceViewPosition
-		, sdw::Vec3 & tangentSpaceFragPosition
-		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
-		, sdw::Vec3 & texCoords )
+	bool isGeometryMap( TextureFlags const & flags
+		, PassFlags const & passFlags )
 	{
-		auto it = checkFlags( flags, TextureFlag::eNormal );
-
-		if ( it != flags.end() )
-		{
-			auto i = it->first;
-			auto normalMapConfig = m_writer.declLocale( "normalMapConfig"
-				, textureConfigs.getTextureConfiguration(  sdw::UInt( it->second.id ) ) );
-			auto sampledNormal = m_writer.declLocale< sdw::Vec4 >( "sampledNormal"
-				, maps[i].sample( normalMapConfig.convertUV( m_writer, texCoords.xy() ) ) );
-			auto tbn = m_writer.declLocale( "tbn"
-				, shader::Utils::getTBN( normal, tangent, bitangent ) );
-			normal = normalMapConfig.getNormal( m_writer, sampledNormal, tbn );
-		}
-	}
-
-	void Utils::computeHeightMapContribution( FilteredTextureFlags const & flags
-		, PassFlags const & passFlags
-		, TextureConfigurations const & textureConfigs
-		, sdw::Array< sdw::UVec4 > const & textureConfig
-		, sdw::Vec3 const & tangentSpaceViewPosition
-		, sdw::Vec3 const & tangentSpaceFragPosition
-		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
-		, sdw::Vec3 & texCoords )
-	{
-		auto it = checkFlags( flags, TextureFlag::eHeight );
-
-		if ( it != flags.end()
-			&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
-				|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) )
-		{
-			auto i = it->first;
-			auto heightMapConfig = m_writer.declLocale( "heightMapConfig"
-				, textureConfigs.getTextureConfiguration(  sdw::UInt( it->second.id ) ) );
-			texCoords.xy() = parallaxMapping( texCoords.xy()
-				, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
-				, maps[i]
-				, heightMapConfig );
-
-			IF( m_writer, texCoords.x() > 1.0_f
-				|| texCoords.y() > 1.0_f
-				|| texCoords.x() < 0.0_f
-				|| texCoords.y() < 0.0_f )
-			{
-				m_writer.discard();
-			}
-			FI;
-		}
-	}
-
-	sdw::Vec4 Utils::computeGeometryMapContribution( TextureFlags const & textureFlags
-		, PassFlags const & passFlags
-		, std::string const & name
-		, shader::TextureConfigData const & config
-		, sdw::SampledImage2DRgba32 const & map
-		, sdw::Vec3 const & texCoords
-		, sdw::Float & opacity
-		, sdw::Vec3 & tangentSpaceViewPosition
-		, sdw::Vec3 & tangentSpaceFragPosition )
-	{
-		auto result = m_writer.declLocale< sdw::Vec4 >( "result" + name
-			, map.sample( config.convertUV( m_writer, texCoords.xy() ) ) );
-
-		if ( checkFlag( textureFlags, TextureFlag::eHeight )
-			&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
-				|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) )
-		{
-			texCoords.xy() = parallaxMapping( texCoords.xy()
-				, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
-				, map
-				, config );
-
-			if ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne ) )
-			{
-				IF( m_writer, texCoords.x() > 1.0_f
-					|| texCoords.y() > 1.0_f
-					|| texCoords.x() < 0.0_f
-					|| texCoords.y() < 0.0_f )
-				{
-					m_writer.discard();
-				}
-				FI;
-			}
-		}
-
-		if ( checkFlag( textureFlags, TextureFlag::eOpacity ) )
-		{
-			opacity = config.getOpacity( m_writer, result, opacity );
-		}
-
-		return result;
+		return checkFlag( flags, TextureFlag::eOpacity )
+			|| ( checkFlag( flags, TextureFlag::eHeight )
+				&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
+					|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) );
 	}
 
 	void Utils::computeGeometryMapsContributions( FilteredTextureFlags const & flags
@@ -1367,26 +1297,29 @@ namespace castor3d::shader
 		, TextureConfigurations const & textureConfigs
 		, sdw::Array< sdw::UVec4 > const & textureConfig
 		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
-		, sdw::Vec3 const & texCoords
+		, sdw::Vec3 & texCoords
 		, sdw::Float & opacity
 		, sdw::Vec3 & tangentSpaceViewPosition
 		, sdw::Vec3 & tangentSpaceFragPosition )
 	{
 		for ( auto & textureIt : flags )
 		{
-			auto i = textureIt.first;
-			auto name = castor::string::stringCast< char >( castor::string::toString( i, std::locale{ "C" } ) );
-			auto config = m_writer.declLocale( "config" + name
-				, textureConfigs.getTextureConfiguration( m_writer.cast<  sdw::UInt >( textureIt.second.id ) ) );
-			computeGeometryMapContribution( textureIt.second.flags
-				, passFlags
-				, name
-				, config
-				, maps[i]
-				, texCoords
-				, opacity
-				, tangentSpaceViewPosition
-				, tangentSpaceFragPosition );
+			if ( isGeometryMap( textureIt.second.flags, passFlags ) )
+			{
+				auto i = textureIt.first;
+				auto name = castor::string::stringCast< char >( castor::string::toString( i ) );
+				auto config = m_writer.declLocale( "configGeom" + name
+					, textureConfigs.getTextureConfiguration( m_writer.cast<  sdw::UInt >( textureIt.second.id ) ) );
+				doComputeGeometryMapContribution( textureIt.second.flags
+					, passFlags
+					, name
+					, config
+					, maps[i]
+					, texCoords
+					, opacity
+					, tangentSpaceViewPosition
+					, tangentSpaceFragPosition );
+			}
 		}
 	}
 
@@ -1407,15 +1340,8 @@ namespace castor3d::shader
 		, sdw::Vec3 & tangentSpaceViewPosition
 		, sdw::Vec3 & tangentSpaceFragPosition )
 	{
-		auto result = computeGeometryMapContribution( textureFlags
-			, passFlags
-			, name
-			, config
-			, map
-			, texCoords
-			, opacity
-			, tangentSpaceViewPosition
-			, tangentSpaceFragPosition );
+		auto result = m_writer.declLocale( "result" + name
+			, map.sample( config.convertUV( m_writer, texCoords.xy() ) ) );
 
 		if ( checkFlag( textureFlags, TextureFlag::eNormal ) )
 		{
@@ -1474,60 +1400,6 @@ namespace castor3d::shader
 		return result;
 	}
 
-	void Utils::computeCommonMapsContributions( FilteredTextureFlags const & flags
-		, PassFlags const & passFlags
-		, sdw::Float const & gamma
-		, TextureConfigurations const & textureConfigs
-		, sdw::Array< sdw::UVec4 > const & textureConfig
-		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
-		, sdw::Vec3 const & texCoords
-		, sdw::Vec3 & normal
-		, sdw::Vec3 & tangent
-		, sdw::Vec3 & bitangent
-		, sdw::Vec3 & emissive
-		, sdw::Float & opacity
-		, sdw::Float & occlusion
-		, sdw::Float & transmittance
-		, sdw::Vec3 & tangentSpaceViewPosition
-		, sdw::Vec3 & tangentSpaceFragPosition )
-	{
-		for ( auto & textureIt : flags )
-		{
-			auto i = textureIt.first;
-			auto name = castor::string::stringCast< char >( castor::string::toString( i, std::locale{ "C" } ) );
-			auto config = m_writer.declLocale( "config" + name
-				, textureConfigs.getTextureConfiguration( m_writer.cast<  sdw::UInt >( textureIt.second.id ) ) );
-			computeCommonMapContribution( textureIt.second.flags
-				, passFlags
-				, name
-				, config
-				, maps[i]
-				, gamma
-				, texCoords
-				, normal
-				, tangent
-				, bitangent
-				, emissive
-				, opacity
-				, occlusion
-				, transmittance
-				, tangentSpaceViewPosition
-				, tangentSpaceFragPosition );
-		}
-	}
-
-	sdw::Vec2 Utils::parallaxMapping( sdw::Vec2 const & texCoords
-		, sdw::Vec3 const & viewDir
-		, sdw::SampledImage2DRgba32 const & heightMap
-		, TextureConfigData const & textureConfig )
-	{
-		return m_parallaxMapping( textureConfig.convertUV( m_writer, texCoords.xy() )
-			, viewDir
-			, heightMap
-			, textureConfig );
-
-	}
-
 	void Utils::encodeMaterial( sdw::Int const & receiver
 		, sdw::Int const & reflection
 		, sdw::Int const & refraction
@@ -1565,5 +1437,60 @@ namespace castor3d::shader
 		m_decodeReceiver( encoded
 			, receiver
 			, lighting );
+	}
+
+	void Utils::doComputeGeometryMapContribution( TextureFlags const & textureFlags
+		, PassFlags const & passFlags
+		, std::string const & name
+		, shader::TextureConfigData const & config
+		, sdw::SampledImage2DRgba32 const & map
+		, sdw::Vec3 & texCoords
+		, sdw::Float & opacity
+		, sdw::Vec3 & tangentSpaceViewPosition
+		, sdw::Vec3 & tangentSpaceFragPosition )
+	{
+		auto texCoord = m_writer.declLocale( "texCoord" + name
+			, config.convertUV( m_writer, texCoords.xy() ) );
+
+		if ( checkFlag( textureFlags, TextureFlag::eHeight )
+			&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
+				|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) )
+		{
+			texCoords.xy() = doParallaxMapping( texCoord.xy()
+				, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
+				, map
+				, config );
+
+			if ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne ) )
+			{
+				IF( m_writer, texCoords.x() > 1.0_f
+					|| texCoords.y() > 1.0_f
+					|| texCoords.x() < 0.0_f
+					|| texCoords.y() < 0.0_f )
+				{
+					m_writer.discard();
+				}
+				FI;
+			}
+		}
+
+		if ( checkFlag( textureFlags, TextureFlag::eOpacity ) )
+		{
+			auto sampled = m_writer.declLocale( "sampled" + name
+				, map.sample( texCoord ) );
+			opacity = config.getOpacity( m_writer, sampled, opacity );
+		}
+	}
+
+	sdw::Vec2 Utils::doParallaxMapping( sdw::Vec2 const & texCoords
+		, sdw::Vec3 const & viewDir
+		, sdw::SampledImage2DRgba32 const & heightMap
+		, TextureConfigData const & textureConfig )
+	{
+		return m_parallaxMapping( texCoords.xy()
+			, viewDir
+			, heightMap
+			, textureConfig );
+
 	}
 }
