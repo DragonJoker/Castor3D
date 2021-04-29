@@ -15,6 +15,8 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/Signal.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
 
+#include <atomic>
+
 namespace castor3d
 {
 	class Pass
@@ -484,7 +486,7 @@ namespace castor3d
 		castor::Point3f m_transmission{ 1.0f, 1.0f, 1.0f };
 		VkCompareOp m_alphaFunc{ VK_COMPARE_OP_ALWAYS };
 		VkCompareOp m_blendAlphaFunc{ VK_COMPARE_OP_ALWAYS };
-		bool m_texturesReduced{ false };
+		std::atomic_bool m_texturesReduced{ false };
 		SubsurfaceScatteringUPtr m_subsurfaceScattering;
 		SubsurfaceScattering::OnChangedConnection m_sssConnection;
 		uint32_t m_heightTextureIndex{ InvalidIndex };
