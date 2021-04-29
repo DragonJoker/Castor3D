@@ -1467,7 +1467,8 @@ namespace castor3d::shader
 
 		if ( checkFlag( textureFlags, TextureFlag::eHeight )
 			&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
-				|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) )
+				|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) )
+			&& m_parallaxMapping )
 		{
 			texCoords.xy() = doParallaxMapping( texCoord.xy()
 				, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
