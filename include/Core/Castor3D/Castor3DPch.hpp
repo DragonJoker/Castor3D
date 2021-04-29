@@ -87,6 +87,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 #include <CastorUtils/Miscellaneous/StringUtils.hpp>
 #include <CastorUtils/Miscellaneous/Utils.hpp>
+#include <CastorUtils/Multithreading/AsyncJobQueue.hpp>
 #include <CastorUtils/Multithreading/MultithreadingModule.hpp>
 #include <CastorUtils/Multithreading/ThreadPool.hpp>
 #include <CastorUtils/Pool/BuddyAllocator.hpp>

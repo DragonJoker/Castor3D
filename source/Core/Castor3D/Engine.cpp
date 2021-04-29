@@ -15,6 +15,7 @@
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/InitialiseEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/ImporterFactory.hpp"
 #include "Castor3D/Model/Mesh/MeshFactory.hpp"
@@ -85,6 +86,7 @@ namespace castor3d
 		, m_importerFactory{ std::make_shared< MeshImporterFactory >() }
 		, m_particleFactory{ std::make_shared< ParticleFactory >() }
 		, m_enableApiTrace{ C3D_EnableAPITrace }
+		, m_texturesPreparer{ castor::CpuInformations{}.getCoreCount() }
 	{
 		auto dummy = []( auto element )
 		{
@@ -590,6 +592,14 @@ namespace castor3d
 				, size
 				, texture );
 		}
+	}
+
+	void Engine::prepareTextures( Pass & pass )
+	{
+		m_texturesPreparer.pushJob( [&pass]()
+			{
+				pass.prepareTextures();
+			} );
 	}
 
 	void Engine::doLoadCoreData()

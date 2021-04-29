@@ -74,7 +74,8 @@ namespace castor3d
 			, SamplerSPtr rhs
 			, castor::String const & name )
 		{
-			auto sampler = lhs->getEngine()->getSamplerCache().add( name );
+			log::debug << name + cuT( " - Merging samplers." ) << std::endl;
+			auto sampler = std::make_shared< Sampler >( *lhs->getEngine(), name );
 			sampler->setBorderColour( lhs->getBorderColour() );
 			sampler->setCompareOp( lhs->getCompareOp() );
 			sampler->setMagFilter( lhs->getMagFilter() == VkFilter::VK_FILTER_NEAREST
@@ -112,7 +113,8 @@ namespace castor3d
 			, uint32_t const & lhsDstMask
 			, castor::Image const & rhs
 			, uint32_t const & rhsSrcMask
-			, uint32_t const & rhsDstMask )
+			, uint32_t const & rhsDstMask
+			, castor::String const & name )
 		{
 			// Resize images to max images dimensions, if needed.
 			auto dimensions = lhs.getDimensions();
@@ -126,11 +128,13 @@ namespace castor3d
 
 				if ( dimensions != lhs.getDimensions() )
 				{
+					log::debug << name << cuT( " - Resizing LHS image." ) << std::endl;
 					lhsBuffer = lhs.getResampled( dimensions ).getPixels();
 				}
 
 				if ( dimensions != rhs.getDimensions() )
 				{
+					log::debug << name << cuT( " - Resizing RHS image." ) << std::endl;
 					rhsBuffer = rhs.getResampled( dimensions ).getPixels();
 				}
 			}
@@ -154,10 +158,12 @@ namespace castor3d
 			auto rhsComponents = getPixelComponents( rhsSrcMask );
 			auto result = castor::PxBufferBase::createUnique( dimensions
 				, getPixelFormat( pixelFormat, getPixelComponents( lhsDstMask | rhsDstMask ) ) );
+			log::debug << name << cuT( " - Copying LHS image components to result." ) << std::endl;
 			copyBufferComponents( lhsComponents
 				, getPixelComponents( lhsDstMask )
 				, *lhsBuffer
 				, *result );
+			log::debug << name << cuT( " - Copying RHS image components to result." ) << std::endl;
 			copyBufferComponents( rhsComponents
 				, getPixelComponents( rhsDstMask )
 				, *rhsBuffer
@@ -177,6 +183,7 @@ namespace castor3d
 			if ( compressedFormat != buffer->getFormat()
 				&& isNormalMap )
 			{
+				log::debug << name << cuT( " - Compressing result." ) << std::endl;
 				buffer = castor::PxBufferBase::createUnique( &loader.getOptions()
 					, buffer->getDimensions()
 					, compressedFormat
@@ -185,6 +192,7 @@ namespace castor3d
 			}
 			else if ( !castor::isCompressed( buffer->getFormat() ) )
 			{
+				log::debug << name << cuT( " - Generating result mipmaps." ) << std::endl;
 				buffer->generateMips();
 			}
 
@@ -221,11 +229,13 @@ namespace castor3d
 		}
 
 		TextureUnitSPtr getPreparedTexture( Engine & engine
+			, castor::String const & parentName
 			, castor::String const & name
 			, TextureUnitSPtr unit )
 		{
 			if ( isPreparable( *unit ) )
 			{
+				log::debug << parentName << name << cuT( " - Preparing texture for upload." ) << std::endl;
 				unit->setTexture( getTextureLayout( engine
 					, std::make_unique< castor::PxBufferBase >( unit->getTexture()->getImage().getPxBuffer() )
 					, unit->getTexture()->getName()
@@ -256,7 +266,11 @@ namespace castor3d
 
 	void Pass::initialise( RenderDevice const & device )
 	{
-		prepareTextures();
+		while ( !m_texturesReduced
+			&& !m_textureUnits.empty() )
+		{
+			std::this_thread::sleep_for( 1_ms );
+		}
 
 		for ( auto unit : m_textureUnits )
 		{
@@ -313,7 +327,11 @@ namespace castor3d
 		updateFlag( PassFlag::eAlphaBlending, hasAlphaBlending() );
 		updateFlag( PassFlag::eAlphaTest, hasAlphaTest() );
 		updateFlag( PassFlag::eBlendAlphaTest, hasBlendAlphaTest() );
-		m_texturesReduced = false;
+
+		if ( m_texturesReduced.exchange( false ) )
+		{
+			getOwner()->getEngine()->prepareTextures( *this );
+		}
 	}
 
 	void Pass::removeTextureUnit( uint32_t index )
@@ -327,7 +345,11 @@ namespace castor3d
 		updateFlag( PassFlag::eAlphaBlending, hasAlphaBlending() );
 		updateFlag( PassFlag::eAlphaTest, hasAlphaTest() );
 		updateFlag( PassFlag::eBlendAlphaTest, hasBlendAlphaTest() );
-		m_texturesReduced = false;
+
+		if ( m_texturesReduced.exchange( false ) )
+		{
+			getOwner()->getEngine()->prepareTextures( *this );
+		}
 	}
 
 	TextureUnitSPtr Pass::getTextureUnit( uint32_t index )const
@@ -523,6 +545,7 @@ namespace castor3d
 
 			if ( isMergeable( *lhsUnit ) && isMergeable( *rhsUnit ) )
 			{
+				log::debug << getOwner()->getName() << name << cuT( " - Merging textures." ) << std::endl;
 				TextureConfiguration resultConfig;
 				getMask( resultConfig, lhsMaskOffset ) = lhsDstMask;
 				getMask( resultConfig, rhsMaskOffset ) = rhsDstMask;
@@ -536,7 +559,7 @@ namespace castor3d
 					, rhsDstMask
 					, name
 					, resultConfig );
-				newUnit->setSampler( mergeSamplers( lhsUnit->getSampler()
+				newUnit->setOwnSampler( mergeSamplers( lhsUnit->getSampler()
 					, rhsUnit->getSampler()
 					, getOwner()->getName() + name ) );
 				result.push_back( newUnit );
@@ -544,9 +567,11 @@ namespace castor3d
 			else
 			{
 				result.push_back( getPreparedTexture( *getOwner()->getEngine()
+					, getOwner()->getName()
 					, lhsUnit->getTexture()->getName()
 					, lhsUnit ) );
 				result.push_back( getPreparedTexture( *getOwner()->getEngine()
+					, getOwner()->getName()
 					, lhsUnit->getTexture()->getName()
 					, rhsUnit ) );
 			}
@@ -567,6 +592,7 @@ namespace castor3d
 			if ( unit )
 			{
 				result.push_back( getPreparedTexture( *getOwner()->getEngine()
+					, getOwner()->getName()
 					, name
 					, unit ) );
 			}
@@ -607,7 +633,8 @@ namespace castor3d
 			, lhsDstMask
 			, rhs
 			, rhsSrcMask
-			, rhsDstMask );
+			, rhsDstMask
+			, getOwner()->getName() + name );
 
 		// Prepare the resulting texture configuration.
 		resultConfig.needsGammaCorrection = !isFloatingPoint( merged->getFormat() );
