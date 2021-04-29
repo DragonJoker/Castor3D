@@ -77,7 +77,7 @@ namespace castor3d
 				result->declMember( "intensityDivR6", ast::type::Kind::eFloat );
 				result->declMember( "farPlaneZ", ast::type::Kind::eFloat );
 				result->declMember( "edgeSharpness", ast::type::Kind::eFloat );
-				result->declMember( "blurStepSize", ast::type::Kind::eFloat );
+				result->declMember( "blurStepSize", ast::type::Kind::eInt );
 				result->declMember( "blurRadius", ast::type::Kind::eInt );
 				result->declMember( "highQuality", ast::type::Kind::eInt );
 				result->declMember( "blurHighQuality", ast::type::Kind::eInt );
