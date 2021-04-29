@@ -1,6 +1,7 @@
 /*
 See LICENSE file in root folder
 */
+#include "GraphicsModule.hpp"
 #include "PixelFormat.hpp"
 
 namespace castor
@@ -47,7 +48,7 @@ namespace castor
 		{
 			using MyPixelComponentsT = PixelComponentsT< PFT >;
 			using MyTypeT = typename MyPixelComponentsT::Type;
-			using MyLargerTypeT = typename LargerTypeT< MyTypeT >;
+			using MyLargerTypeT = LargerTypeT< MyTypeT >;
 			static size_t constexpr pixelSize = getBytesPerPixel( PFT );
 			static float constexpr coeffN = 5.0f;
 

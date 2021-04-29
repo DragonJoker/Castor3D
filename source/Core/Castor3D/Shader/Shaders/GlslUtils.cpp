@@ -1463,7 +1463,7 @@ namespace castor3d::shader
 	{
 		auto texCoord = m_writer.declLocale( "texCoord" + name
 			, texCoords.xy() );
-		config.convertUV( m_writer, texCoord.xy() );
+		config.convertUV( m_writer, texCoord );
 
 		if ( checkFlag( textureFlags, TextureFlag::eHeight )
 			&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
