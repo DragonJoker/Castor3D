@@ -38,6 +38,7 @@ namespace aria
 			, TestStatus newStatus
 			, bool reference );
 		TreeModelNode * getTestNode( DatabaseTest const & test );
+		wxDataViewItem getTestItem( DatabaseTest const & test );
 
 	private:
 		struct TestsPage;
@@ -58,7 +59,8 @@ namespace aria
 		uint32_t doGetSelectedRendererRange()const;
 		uint32_t doGetSelectedCategoryRange()const;
 		void doProcessTest();
-		void doPushTest( TreeModelNode * node );
+		void doStartTests();
+		void doPushTest( wxDataViewItem & item );
 		void doClearRunning();
 		void doRunTest();
 		void doCopyTestFileName();
@@ -170,6 +172,7 @@ namespace aria
 			void clear();
 			bool empty()const;
 			size_t size()const;
+			bool isRunning()const;
 
 		private:
 			std::list< TestNode > pending{};

@@ -300,6 +300,11 @@ namespace aria
 			+ ( running.test ? 1u : 0u );
 	}
 
+	bool MainFrame::RunningTest::isRunning()const
+	{
+		return running.test;
+	}
+
 	//*********************************************************************************************
 
 	MainFrame::MainFrame( Config config )
@@ -939,11 +944,25 @@ namespace aria
 		}
 	}
 
-	void MainFrame::doPushTest( TreeModelNode * node )
+	void MainFrame::doStartTests()
 	{
+		m_testProgress->SetRange( m_runningTest.size() );
+
+		if ( !m_runningTest.isRunning() )
+		{
+			m_testProgress->SetValue( 0 );
+			m_testProgress->Show();
+			doProcessTest();
+		}
+	}
+
+	void MainFrame::doPushTest( wxDataViewItem & item )
+	{
+		auto node = static_cast< TreeModelNode * >( item.GetID() );
 		auto & run = *node->test;
 		m_runningTest.push( { &run, run.getStatus(), node } );
 		run.updateStatusNW( TestStatus::ePending );
+		m_selectedPage->model->ItemChanged( item );
 	}
 
 	void MainFrame::doClearRunning()
@@ -958,21 +977,17 @@ namespace aria
 		if ( m_selectedPage
 			&& !m_selectedPage->selected.items.empty() )
 		{
-			m_testProgress->SetRange( int( m_selectedPage->selected.items.size() ) );
-			m_testProgress->SetValue( 0 );
-			m_testProgress->Show( m_selectedPage->selected.items.size() > 1 );
-
 			for ( auto & item : m_selectedPage->selected.items )
 			{
 				TreeModelNode * node = static_cast< TreeModelNode * >( item.GetID() );
 
 				if ( isTestNode( *node ) )
 				{
-					doPushTest( node );
+					doPushTest( item );
 				}
 			}
 
-			doProcessTest();
+			doStartTests();
 		}
 	}
 
@@ -1164,6 +1179,11 @@ namespace aria
 		return rendIt->second->modelNodes[test->test->id];
 	}
 
+	wxDataViewItem MainFrame::getTestItem( DatabaseTest const & test )
+	{
+		return wxDataViewItem{ getTestNode ( test ) };
+	}
+
 	void MainFrame::doRunAllCategoryTests()
 	{
 		m_cancelled.exchange( false );
@@ -1184,17 +1204,14 @@ namespace aria
 					{
 						for ( auto & run : catIt->second )
 						{
-							doPushTest( getTestNode( run ) );
+							doPushTest( getTestItem( run ) );
 						}
 					}
 				}
 			}
 		}
 
-		m_testProgress->SetRange( m_runningTest.size() );
-		m_testProgress->SetValue( 0 );
-		m_testProgress->Show();
-		doProcessTest();
+		doStartTests();
 		m_selectedPage->view->Refresh();
 	}
 
@@ -1220,7 +1237,7 @@ namespace aria
 						{
 							if ( run->status == filter )
 							{
-								doPushTest( getTestNode( run ) );
+								doPushTest( getTestItem( run ) );
 							}
 						}
 					}
@@ -1228,10 +1245,7 @@ namespace aria
 			}
 		}
 
-		m_testProgress->SetRange( m_runningTest.size() );
-		m_testProgress->SetValue( 0 );
-		m_testProgress->Show();
-		doProcessTest();
+		doStartTests();
 		m_selectedPage->view->Refresh();
 	}
 
@@ -1257,7 +1271,7 @@ namespace aria
 						{
 							if ( run->status != filter )
 							{
-								doPushTest( getTestNode( run ) );
+								doPushTest( getTestItem( run ) );
 							}
 						}
 					}
@@ -1265,10 +1279,7 @@ namespace aria
 			}
 		}
 
-		m_testProgress->SetRange( m_runningTest.size() );
-		m_testProgress->SetValue( 0 );
-		m_testProgress->Show();
-		doProcessTest();
+		doStartTests();
 		m_selectedPage->view->Refresh();
 	}
 
@@ -1296,7 +1307,7 @@ namespace aria
 							if ( isOutOfDate( m_config, *run )
 								|| run->status == TestStatus::eNotRun )
 							{
-								doPushTest( getTestNode( run ) );
+								doPushTest( getTestItem( run ) );
 							}
 						}
 					}
@@ -1304,10 +1315,7 @@ namespace aria
 			}
 		}
 
-		m_testProgress->SetRange( m_runningTest.size() );
-		m_testProgress->SetValue( 0 );
-		m_testProgress->Show();
-		doProcessTest();
+		doStartTests();
 		m_selectedPage->view->Refresh();
 	}
 
@@ -1419,17 +1427,14 @@ namespace aria
 					{
 						for ( auto & run : category.second )
 						{
-							doPushTest( getTestNode( run ) );
+							doPushTest( getTestItem( run ) );
 						}
 					}
 				}
 			}
 		}
 
-		m_testProgress->SetRange( m_runningTest.size() );
-		m_testProgress->SetValue( 0 );
-		m_testProgress->Show();
-		doProcessTest();
+		doStartTests();
 		m_selectedPage->view->Refresh();
 	}
 
@@ -1453,7 +1458,7 @@ namespace aria
 						{
 							if ( run->status == filter )
 							{
-								doPushTest( getTestNode( run ) );
+								doPushTest( getTestItem( run ) );
 							}
 						}
 					}
@@ -1461,10 +1466,7 @@ namespace aria
 			}
 		}
 
-		m_testProgress->SetRange( m_runningTest.size() );
-		m_testProgress->SetValue( 0 );
-		m_testProgress->Show();
-		doProcessTest();
+		doStartTests();
 		m_selectedPage->view->Refresh();
 	}
 
@@ -1488,7 +1490,7 @@ namespace aria
 						{
 							if ( run->status != filter )
 							{
-								doPushTest( getTestNode( run ) );
+								doPushTest( getTestItem( run ) );
 							}
 						}
 					}
@@ -1496,10 +1498,7 @@ namespace aria
 			}
 		}
 
-		m_testProgress->SetRange( m_runningTest.size() );
-		m_testProgress->SetValue( 0 );
-		m_testProgress->Show();
-		doProcessTest();
+		doStartTests();
 		m_selectedPage->view->Refresh();
 	}
 
@@ -1525,7 +1524,7 @@ namespace aria
 							if ( isOutOfDate( m_config, *run )
 								|| run->status == TestStatus::eNotRun )
 							{
-								doPushTest( getTestNode( run ) );
+								doPushTest( getTestItem( run ) );
 							}
 						}
 					}
@@ -1533,10 +1532,7 @@ namespace aria
 			}
 		}
 
-		m_testProgress->SetRange( m_runningTest.size() );
-		m_testProgress->SetValue( 0 );
-		m_testProgress->Show();
-		doProcessTest();
+		doStartTests();
 		m_selectedPage->view->Refresh();
 		m_selectedPage->view->Update();
 	}
@@ -1637,15 +1633,12 @@ namespace aria
 			{
 				for ( auto & run : category.second )
 				{
-					doPushTest( getTestNode( run ) );
+					doPushTest( getTestItem( run ) );
 				}
 			}
 		}
 
-		m_testProgress->SetRange( m_runningTest.size() );
-		m_testProgress->SetValue( 0 );
-		m_testProgress->Show();
-		doProcessTest();
+		doStartTests();
 		m_selectedPage->view->Refresh();
 	}
 
@@ -1661,16 +1654,13 @@ namespace aria
 				{
 					if ( run->status == filter )
 					{
-						doPushTest( getTestNode( run ) );
+						doPushTest( getTestItem( run ) );
 					}
 				}
 			}
 		}
 
-		m_testProgress->SetRange( m_runningTest.size() );
-		m_testProgress->SetValue( 0 );
-		m_testProgress->Show();
-		doProcessTest();
+		doStartTests();
 		m_selectedPage->view->Refresh();
 	}
 
@@ -1686,16 +1676,13 @@ namespace aria
 				{
 					if ( run->status != filter )
 					{
-						doPushTest( getTestNode( run ) );
+						doPushTest( getTestItem( run ) );
 					}
 				}
 			}
 		}
 
-		m_testProgress->SetRange( m_runningTest.size() );
-		m_testProgress->SetValue( 0 );
-		m_testProgress->Show();
-		doProcessTest();
+		doStartTests();
 		m_selectedPage->view->Refresh();
 	}
 
@@ -1712,16 +1699,13 @@ namespace aria
 				{
 					if ( isOutOfDate( m_config, *run ) )
 					{
-						doPushTest( getTestNode( run ) );
+						doPushTest( getTestItem( run ) );
 					}
 				}
 			}
 		}
 
-		m_testProgress->SetRange( m_runningTest.size() );
-		m_testProgress->SetValue( 0 );
-		m_testProgress->Show();
-		doProcessTest();
+		doStartTests();
 		m_selectedPage->view->Refresh();
 	}
 
