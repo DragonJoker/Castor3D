@@ -8,6 +8,7 @@ See LICENSE file in root folder
 #include "TextureModule.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
+#include <CastorUtils/Graphics/GraphicsModule.hpp>
 #include <CastorUtils/Math/Angle.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
@@ -31,11 +32,12 @@ namespace castor3d
 	{
 		/**
 		*\~english
-		*name
-		*	Masks, used to filter image components (AABBGGRR).
+		*\brief
+		*	Masks and start indices, used to filter image components (AARRGGBB).
+		*\remarks
 		*\~french
-		*name
-		*	Masques, utilisés pour filtrer les composantes d'une image (AABBGGRR).
+		*\brief
+		*	Masques et indices de début, utilisés pour filtrer les composantes d'une image (AARRGGBB).
 		*/
 		/**@{*/
 		castor::Point2ui colourMask{ 0u, 0u };
@@ -130,6 +132,7 @@ namespace castor3d
 	C3D_API bool operator!=( TextureConfiguration const & lhs, TextureConfiguration const & rhs );
 	/**@}*/
 	C3D_API TextureFlags getFlags( TextureConfiguration const & config );
+	C3D_API castor::PixelComponents getPixelComponents( uint32_t mask );
 }
 
 #endif
