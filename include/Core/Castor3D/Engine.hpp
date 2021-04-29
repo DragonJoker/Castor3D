@@ -30,6 +30,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 #include <CastorUtils/Log/LoggerInstance.hpp>
 #include <CastorUtils/Miscellaneous/CpuInformations.hpp>
+#include <CastorUtils/Multithreading/AsyncJobQueue.hpp>
 
 #include <ashespp/Core/RendererList.hpp>
 
@@ -242,6 +243,15 @@ namespace castor3d
 			, castor::Position const & position
 			, castor::Size const & size
 			, TextureLayout const & texture );
+		/**
+		 *\~english
+		 *\brief		Enqueues the given pass textures preparation.
+		 *\param[in]	pass	The pass for which textures need to be prepared.
+		 *\~french
+		 *\brief		Met dans la file la préparation des textures de la passe donnée.
+		 *\param[in]	pass	La passe dont les textures doivent être préparées.
+		 */
+		C3D_API void prepareTextures( Pass & pass );
 		/**
 		 *\~english
 		 *\brief		Retrieves plug-ins path
@@ -529,6 +539,7 @@ namespace castor3d
 		bool m_enableApiTrace{ false };
 		RenderDepthQuadSPtr m_renderDepth;
 		uint32_t m_lpvGridSize{ 32u };
+		castor::AsyncJobQueue m_texturesPreparer;
 	};
 }
 
