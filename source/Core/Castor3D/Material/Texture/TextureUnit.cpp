@@ -8,30 +8,36 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	namespace
 	{
-		String writeMask( uint32_t mask )
-		{
-			auto stream = castor::makeStringStream();
-			stream << cuT( "0x" ) << std::hex << std::setw( 8u ) << std::setfill( cuT( '0' ) ) << mask;
-			return stream.str();
-		}
-
-		void doUpdateShift( castor::Point2ui & mask )
+		void doUpdateStartIndex( castor::Point2ui & mask
+			, castor::PixelFormat format )
 		{
 			if ( mask[0] )
 			{
-				for ( uint32_t i = 0u; i < 4u; ++i )
+				auto components = getPixelComponents( mask[0] );
+
+				switch ( components.size() )
 				{
-					if ( mask[0] & ( 0x000000FFu << ( i * 8u ) ) )
+				case 1:
+					mask[1] = castor::getComponentIndex( *components.begin(), format );
+					break;
+				case 3:
+					if ( mask[0] & 0xFF000000 )
 					{
-						mask[1] = i;
-						i = 4u;
+						mask[1] = 1;
 					}
+					else
+					{
+						mask[1] = 0;
+					}
+					break;
+				default:
+					CU_Failure( "Invalid component count for a texture component flag" );
+					mask[1] = 0;
+					break;
 				}
 			}
 		}
@@ -369,21 +375,33 @@ namespace castor3d
 
 	void TextureUnit::setConfiguration( TextureConfiguration value )
 	{
+		RenderTargetSPtr target = m_renderTarget.lock();
+		auto format = castor::PixelFormat::eR8G8B8A8_UNORM;
+
+		if ( target )
+		{
+			format = castor::PixelFormat( target->getPixelFormat() );
+		}
+		else if ( m_texture )
+		{
+			format = m_texture->getImage().getPixelFormat();
+		}
+
 		m_configuration = std::move( value );
 		m_configuration.needsYInversion = m_texture
 			? ( m_texture->needsYInversion()
 				? 1u
 				: 0u )
 			: 0u;
-		doUpdateShift( m_configuration.colourMask );
-		doUpdateShift( m_configuration.specularMask );
-		doUpdateShift( m_configuration.glossinessMask );
-		doUpdateShift( m_configuration.opacityMask );
-		doUpdateShift( m_configuration.emissiveMask );
-		doUpdateShift( m_configuration.normalMask );
-		doUpdateShift( m_configuration.heightMask );
-		doUpdateShift( m_configuration.occlusionMask );
-		doUpdateShift( m_configuration.transmittanceMask );
+		doUpdateStartIndex( m_configuration.colourMask, format );
+		doUpdateStartIndex( m_configuration.specularMask, format );
+		doUpdateStartIndex( m_configuration.glossinessMask, format );
+		doUpdateStartIndex( m_configuration.opacityMask, format );
+		doUpdateStartIndex( m_configuration.emissiveMask, format );
+		doUpdateStartIndex( m_configuration.normalMask, format );
+		doUpdateStartIndex( m_configuration.heightMask, format );
+		doUpdateStartIndex( m_configuration.occlusionMask, format );
+		doUpdateStartIndex( m_configuration.transmittanceMask, format );
 		onChanged( *this );
 	}
 
@@ -409,18 +427,18 @@ namespace castor3d
 	void TextureUnit::setTransform( TextureTransform const & transform )
 	{
 		m_transform = transform;
-		doUpdateTransform( Point3f{ m_transform.translate }
+		doUpdateTransform( castor::Point3f{ m_transform.translate }
 			, m_transform.rotate
-			, Point3f{ m_transform.scale } );
+			, castor::Point3f{ m_transform.scale } );
 	}
 
 	void TextureUnit::setAnimationTransform( castor::Point3f const & translate
 		, castor::Angle const & rotate
 		, castor::Point3f const & scale )
 	{
-		doUpdateTransform( Point3f{ m_transform.translate } + translate
+		doUpdateTransform( castor::Point3f{ m_transform.translate } + translate
 			, m_transform.rotate + rotate
-			, Point3f{ m_transform.scale } * scale );
+			, castor::Point3f{ m_transform.scale } * scale );
 	}
 
 	void TextureUnit::doUpdateTransform( castor::Point3f const & translate

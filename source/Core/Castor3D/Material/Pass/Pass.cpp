@@ -70,33 +70,6 @@ namespace castor3d
 			return ( *reinterpret_cast< castor::Point2ui const * >( reinterpret_cast< uint8_t const * >( &config ) + offset ) )[0];
 		}
 
-		castor::PixelComponents getPixelComponents( uint32_t mask )
-		{
-			castor::PixelComponents result;
-
-			if ( mask & 0xFF000000 )
-			{
-				result |= castor::PixelComponent::eAlpha;
-			}
-
-			if ( mask & 0x00FF0000 )
-			{
-				result |= castor::PixelComponent::eRed;
-			}
-
-			if ( mask & 0x0000FF00 )
-			{
-				result |= castor::PixelComponent::eGreen;
-			}
-
-			if ( mask & 0x000000FF )
-			{
-				result |= castor::PixelComponent::eBlue;
-			}
-
-			return result;
-		}
-
 		SamplerSPtr mergeSamplers( SamplerSPtr lhs
 			, SamplerSPtr rhs
 			, castor::String const & name )
