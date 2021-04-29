@@ -389,6 +389,72 @@ namespace castor
 		static PixelFormat constexpr value = PixelFormat::eR64_SFLOAT;
 	};
 
+	template<>
+	struct LargerTyperT< uint8_t >
+	{
+		using Type = uint16_t;
+	};
+
+	template<>
+	struct LargerTyperT< int8_t >
+	{
+		using Type = int16_t;
+	};
+
+	template<>
+	struct LargerTyperT< uint16_t >
+	{
+		using Type = uint32_t;
+	};
+
+	template<>
+	struct LargerTyperT< int16_t >
+	{
+		using Type = int32_t;
+	};
+
+	template<>
+	struct LargerTyperT< uint32_t >
+	{
+		using Type = uint64_t;
+	};
+
+	template<>
+	struct LargerTyperT< int32_t >
+	{
+		using Type = int64_t;
+	};
+
+	template<>
+	struct LargerTyperT< uint64_t >
+	{
+		using Type = uint64_t;
+	};
+
+	template<>
+	struct LargerTyperT< int64_t >
+	{
+		using Type = int64_t;
+	};
+
+	template<>
+	struct LargerTyperT< float >
+	{
+		using Type = double;
+	};
+
+	template<>
+	struct LargerTyperT< double >
+	{
+		using Type = long double;
+	};
+
+	template<>
+	struct LargerTyperT< long double >
+	{
+		using Type = long double;
+	};
+
 	inline constexpr uint8_t getComponentsCount( PixelFormat format )
 	{
 		return uint8_t( ashes::getCount( VkFormat( format ) ) );
