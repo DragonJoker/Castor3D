@@ -315,6 +315,7 @@ namespace castor3d
 		using namespace sdw;
 		FragmentWriter writer;
 		auto textures = filterTexturesFlags( flags.textures );
+		bool hasTextures = !flags.textures.empty();
 		auto & renderSystem = *getEngine()->getRenderSystem();
 
 		// Fragment Intputs
@@ -337,7 +338,8 @@ namespace castor3d
 		auto inBitangent = writer.declInput< Vec3 >( "inBitangent"
 			, SceneRenderPass::VertexOutputs::BitangentLocation );
 		auto inTexture = writer.declInput< Vec3 >( "inTexture"
-			, SceneRenderPass::VertexOutputs::TextureLocation );
+			, SceneRenderPass::VertexOutputs::TextureLocation
+			, hasTextures );
 		auto inInstance = writer.declInput< UInt >( "inInstance"
 			, SceneRenderPass::VertexOutputs::InstanceLocation );
 		auto inMaterial = writer.declInput< UInt >( "inMaterial"
@@ -348,7 +350,6 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eMaterials ) );
 		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", uint32_t( NodeUboIdx::eLights ), 0u );
 		shader::TextureConfigurations textureConfigs{ writer };
-		bool hasTextures = !flags.textures.empty();
 
 		if ( hasTextures )
 		{
@@ -582,6 +583,7 @@ namespace castor3d
 		using namespace sdw;
 		FragmentWriter writer;
 		auto textures = filterTexturesFlags( flags.textures );
+		bool hasTextures = !flags.textures.empty();
 		auto & renderSystem = *getEngine()->getRenderSystem();
 
 		// Fragment Intputs
@@ -604,7 +606,8 @@ namespace castor3d
 		auto inBitangent = writer.declInput< Vec3 >( "inBitangent"
 			, SceneRenderPass::VertexOutputs::BitangentLocation );
 		auto inTexture = writer.declInput< Vec3 >( "inTexture"
-			, SceneRenderPass::VertexOutputs::TextureLocation );
+			, SceneRenderPass::VertexOutputs::TextureLocation
+			, hasTextures );
 		auto inInstance = writer.declInput< UInt >( "inInstance"
 			, SceneRenderPass::VertexOutputs::InstanceLocation );
 		auto inMaterial = writer.declInput< UInt >( "inMaterial"
@@ -615,7 +618,6 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eMaterials ) );
 		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", uint32_t( NodeUboIdx::eLights ), 0u );
 		shader::TextureConfigurations textureConfigs{ writer };
-		bool hasTextures = !flags.textures.empty();
 
 		if ( hasTextures )
 		{
@@ -934,6 +936,7 @@ namespace castor3d
 		using namespace sdw;
 		FragmentWriter writer;
 		auto textures = filterTexturesFlags( flags.textures );
+		bool hasTextures = !flags.textures.empty();
 		auto & renderSystem = *getEngine()->getRenderSystem();
 
 		// Fragment Intputs
@@ -958,7 +961,8 @@ namespace castor3d
 		auto inTexture = writer.declInput< Vec3 >( "inTexture"
 			, SceneRenderPass::VertexOutputs::TextureLocation );
 		auto inInstance = writer.declInput< UInt >( "inInstance"
-			, SceneRenderPass::VertexOutputs::InstanceLocation );
+			, SceneRenderPass::VertexOutputs::InstanceLocation
+			, hasTextures );
 		auto inMaterial = writer.declInput< UInt >( "inMaterial"
 			, SceneRenderPass::VertexOutputs::MaterialLocation );
 
@@ -967,7 +971,6 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eMaterials ) );
 		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", uint32_t( NodeUboIdx::eLights ), 0u );
 		shader::TextureConfigurations textureConfigs{ writer };
-		bool hasTextures = !flags.textures.empty();
 
 		if ( hasTextures )
 		{
