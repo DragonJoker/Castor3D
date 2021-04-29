@@ -712,6 +712,16 @@ namespace castor
 	static bool constexpr isS8UComponentV = IsS8UComponent< PixelFormatT >::value;
 	/**
 	\~english
+	\brief		Retrieves the type larger than the given one.
+	\~french
+	\brief		Récupère le type plus large que celui donné.
+	*/
+	template< typename TypeT >
+	struct LargerTyperT;
+	template< typename TypeT >
+	using LargerTypeT = typename LargerTyperT< TypeT >::Type;
+	/**
+	\~english
 	\brief		Position class
 	\remark		Kind of specialisation of Coords< 2, int32_t >
 	\~french

@@ -1,7 +1,9 @@
 #include "CastorUtils/Graphics/PixelBuffer.hpp"
 
-#include "CastorUtils/Miscellaneous/BitSize.hpp"
+#include "CastorUtils/Graphics/BoxFilterKernel.hpp"
+#include "CastorUtils/Graphics/LanczosFilterKernel.hpp"
 #include "CastorUtils/Graphics/PxBufferCompression.hpp"
+#include "CastorUtils/Miscellaneous/BitSize.hpp"
 
 #include <ashes/common/Format.hpp>
 
@@ -27,158 +29,7 @@ namespace castor
 				+ ( size_t( ( y * buffer.getWidth() + x ) * ashes::getMinimalSize( format ) ) );
 		}
 
-		template< typename TypeT >
-		struct LargerTyperT;
-
-		template<>
-		struct LargerTyperT< uint8_t >
-		{
-			using Type = uint16_t;
-		};
-
-		template<>
-		struct LargerTyperT< int8_t >
-		{
-			using Type = int16_t;
-		};
-
-		template<>
-		struct LargerTyperT< uint16_t >
-		{
-			using Type = uint32_t;
-		};
-
-		template<>
-		struct LargerTyperT< int16_t >
-		{
-			using Type = int32_t;
-		};
-
-		template<>
-		struct LargerTyperT< uint32_t >
-		{
-			using Type = uint64_t;
-		};
-
-		template<>
-		struct LargerTyperT< int32_t >
-		{
-			using Type = int64_t;
-		};
-
-		template<>
-		struct LargerTyperT< uint64_t >
-		{
-			using Type = uint64_t;
-		};
-
-		template<>
-		struct LargerTyperT< int64_t >
-		{
-			using Type = int64_t;
-		};
-
-		template<>
-		struct LargerTyperT< float >
-		{
-			using Type = double;
-		};
-
-		template<>
-		struct LargerTyperT< double >
-		{
-			using Type = long double;
-		};
-
-		template< typename TypeT >
-		using LargerTypeT = typename LargerTyperT< TypeT >::Type;
-
-		template< PixelFormat PFT >
-		void generateMipPixelT( uint8_t const * srcPixel1
-			, uint8_t const * srcPixel2
-			, uint8_t const * srcPixel3
-			, uint8_t const * srcPixel4
-			, uint8_t * dstPixel )
-		{
-			using MyPixelComponentsT = PixelComponentsT< PFT >;
-			using MyTypeT = typename MyPixelComponentsT::Type;
-			using MyLargerTypeT = LargerTypeT< MyTypeT >;
-
-			MyPixelComponentsT::R( dstPixel
-				, MyTypeT( ( MyLargerTypeT( MyPixelComponentsT::R( srcPixel1 ) )
-						+ MyLargerTypeT( MyPixelComponentsT::R( srcPixel2 ) )
-						+ MyLargerTypeT( MyPixelComponentsT::R( srcPixel3 ) )
-						+ MyLargerTypeT( MyPixelComponentsT::R( srcPixel4 ) ) )
-					/ 4u ) );
-
-			if constexpr ( getComponentsCount( PFT ) >= 2 )
-			{
-				MyPixelComponentsT::G( dstPixel
-					, MyTypeT( ( MyLargerTypeT( MyPixelComponentsT::G( srcPixel1 ) )
-							+ MyLargerTypeT( MyPixelComponentsT::G( srcPixel2 ) )
-							+ MyLargerTypeT( MyPixelComponentsT::G( srcPixel3 ) )
-							+ MyLargerTypeT( MyPixelComponentsT::G( srcPixel4 ) ) )
-						/ 4u ) );
-
-				if constexpr ( getComponentsCount( PFT ) >= 3 )
-				{
-					MyPixelComponentsT::B( dstPixel
-						, MyTypeT( ( MyLargerTypeT( MyPixelComponentsT::B( srcPixel1 ) )
-								+ MyLargerTypeT( MyPixelComponentsT::B( srcPixel2 ) )
-								+ MyLargerTypeT( MyPixelComponentsT::B( srcPixel3 ) )
-								+ MyLargerTypeT( MyPixelComponentsT::B( srcPixel4 ) ) )
-							/ 4u ) );
-
-					if constexpr ( getComponentsCount( PFT ) >= 4 )
-					{
-						MyPixelComponentsT::A( dstPixel
-							, MyTypeT( ( MyLargerTypeT( MyPixelComponentsT::A( srcPixel1 ) )
-									+ MyLargerTypeT( MyPixelComponentsT::A( srcPixel2 ) )
-									+ MyLargerTypeT( MyPixelComponentsT::A( srcPixel3 ) )
-									+ MyLargerTypeT( MyPixelComponentsT::A( srcPixel4 ) ) )
-								/ 4u ) );
-					}
-				}
-			}
-		}
-
-		template< PixelFormat PFT >
-		void generateMipLevelT( VkExtent2D const & extent
-			, uint8_t const * srcBuffer
-			, uint8_t * dstBuffer
-			, uint32_t level
-			, uint32_t levelSize )
-		{
-			auto pixelSize = getBytesPerPixel( PFT );
-			auto srcLevelExtent = ashes::getSubresourceDimensions( extent, level - 1u, VkFormat( PFT ) );
-			auto dstLevelExtent = ashes::getSubresourceDimensions( extent, level, VkFormat( PFT ) );
-			auto srcLineSize = pixelSize * srcLevelExtent.width;
-			auto dstLineSize = pixelSize * dstLevelExtent.width;
-
-			for ( auto y = 0u; y < dstLevelExtent.height; ++y )
-			{
-				auto srcLine0 = srcBuffer;
-				auto srcLine1 = srcBuffer + srcLineSize;
-				auto dstLine = dstBuffer;
-
-				for ( auto x = 0u; x < dstLevelExtent.width; ++x )
-				{
-					generateMipPixelT< PFT >( srcLine0
-						, srcLine0 + pixelSize
-						, srcLine1
-						, srcLine1 + pixelSize
-						, dstLine );
-					srcLine0 += 2 * pixelSize;
-					srcLine1 += 2 * pixelSize;
-					dstLine += pixelSize;
-				}
-
-				srcBuffer += 2 * srcLineSize;
-				dstBuffer += dstLineSize;
-			}
-		}
-
-		template< PixelFormat PFT >
+		template< PixelFormat PFT, template< PixelFormat > typename FilterT >
 		ByteArray generateMipmapsT( VkExtent3D const & extent
 			, uint8_t const * buffer
 			, uint32_t align
@@ -222,7 +73,7 @@ namespace castor
 					levelSize = ashes::getSize( dim
 						, vkfmt
 						, i );
-					generateMipLevelT< PFT >( dim
+					FilterT< PFT >::compute( dim
 						, srcLevel
 						, dstLevel
 						, i
@@ -283,8 +134,12 @@ namespace castor
 			{
 #define CUPF_ENUM_VALUE_COLOR( name, value, components, alpha )\
 			case PixelFormat::e##name:\
-				return generateMipmapsT< PixelFormat::e##name >( extent, buffer, align, dstLevels );
+				return generateMipmapsT< PixelFormat::e##name, KernelBoxFilterT >( extent, buffer, align, dstLevels );\
 				break;
+//#define CUPF_ENUM_VALUE_COLOR( name, value, components, alpha )\
+//			case PixelFormat::e##name:\
+//				return generateMipmapsT< PixelFormat::e##name, KernelLanczosFilterT >( extent, buffer, align, dstLevels );\
+//				break;
 #include "CastorUtils/Graphics/PixelFormat.enum"
 			default:
 				CU_Failure( "Unsupported format type for CPU mipmaps generation" );
