@@ -168,8 +168,8 @@ namespace aria
 			TestNode next();
 			void end();
 			void clear();
-			bool empty();
-			size_t size();
+			bool empty()const;
+			size_t size()const;
 
 		private:
 			std::list< TestNode > pending{};
