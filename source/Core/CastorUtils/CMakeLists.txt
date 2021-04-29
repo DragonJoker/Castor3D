@@ -351,6 +351,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/BoundingBox.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/BoundingContainer.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/BoundingSphere.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/BoxFilterKernel.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/Colour.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/Colour.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/ColourComponent.hpp
@@ -369,6 +370,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/ImageLayout.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/ImageLoader.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/ImageWriter.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/LanczosFilterKernel.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/Pixel.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/Pixel.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/PixelBuffer.hpp
