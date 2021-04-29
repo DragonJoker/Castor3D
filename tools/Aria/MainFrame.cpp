@@ -289,12 +289,12 @@ namespace aria
 		running = {};
 	}
 
-	bool MainFrame::RunningTest::empty()
+	bool MainFrame::RunningTest::empty()const
 	{
 		return size() == 0u;
 	}
 
-	size_t MainFrame::RunningTest::size()
+	size_t MainFrame::RunningTest::size()const
 	{
 		return pending.size()
 			+ ( running.test ? 1u : 0u );
