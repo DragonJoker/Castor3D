@@ -587,10 +587,12 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	source_group( "Source Files\\Miscellaneous" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 	set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Multithreading/AsyncJobQueue.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Multithreading/ThreadPool.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Multithreading/WorkerThread.cpp
 	)
 	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Multithreading/AsyncJobQueue.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Multithreading/MultithreadingModule.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Multithreading/ThreadPool.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Multithreading/WorkerThread.hpp
