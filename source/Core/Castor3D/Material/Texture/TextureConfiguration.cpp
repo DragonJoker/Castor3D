@@ -40,28 +40,28 @@ namespace castor3d
 	TextureConfiguration const TextureConfiguration::MetalnessTexture = []()
 	{
 		TextureConfiguration result;
-		result.specularMask[0] = 0x000000FF;
+		result.specularMask[0] = 0x00FF0000;
 		return result;
 	}();
 
 	TextureConfiguration const TextureConfiguration::ShininessTexture = []()
 	{
 		TextureConfiguration result;
-		result.glossinessMask[0] = 0x000000FF;
+		result.glossinessMask[0] = 0x00FF0000;
 		return result;
 	}();
 
 	TextureConfiguration const TextureConfiguration::GlossinessTexture = []()
 	{
 		TextureConfiguration result;
-		result.glossinessMask[0] = 0x000000FF;
+		result.glossinessMask[0] = 0x00FF0000;
 		return result;
 	}();
 
 	TextureConfiguration const TextureConfiguration::RoughnessTexture = []()
 	{
 		TextureConfiguration result;
-		result.glossinessMask[0] = 0x000000FF;
+		result.glossinessMask[0] = 0x00FF0000;
 		return result;
 	}();
 
@@ -89,14 +89,14 @@ namespace castor3d
 	TextureConfiguration const TextureConfiguration::HeightTexture = []()
 	{
 		TextureConfiguration result;
-		result.heightMask[0] = 0x000000FF;
+		result.heightMask[0] = 0x00FF0000;
 		return result;
 	}();
 
 	TextureConfiguration const TextureConfiguration::OcclusionTexture = []()
 	{
 		TextureConfiguration result;
-		result.occlusionMask[0] = 0x000000FF;
+		result.occlusionMask[0] = 0x00FF0000;
 		return result;
 	}();
 
@@ -145,6 +145,33 @@ namespace castor3d
 		mergeMasks( config.heightMask[0], TextureFlag::eHeight, result );
 		mergeMasks( config.occlusionMask[0], TextureFlag::eOcclusion, result );
 		mergeMasks( config.transmittanceMask[0], TextureFlag::eTransmittance, result );
+		return result;
+	}
+
+	castor::PixelComponents getPixelComponents( uint32_t mask )
+	{
+		castor::PixelComponents result;
+
+		if ( mask & 0xFF000000 )
+		{
+			result |= castor::PixelComponent::eAlpha;
+		}
+
+		if ( mask & 0x00FF0000 )
+		{
+			result |= castor::PixelComponent::eRed;
+		}
+
+		if ( mask & 0x0000FF00 )
+		{
+			result |= castor::PixelComponent::eGreen;
+		}
+
+		if ( mask & 0x000000FF )
+		{
+			result |= castor::PixelComponent::eBlue;
+		}
+
 		return result;
 	}
 }
