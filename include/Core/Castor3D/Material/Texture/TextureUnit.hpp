@@ -252,6 +252,12 @@ namespace castor3d
 			m_sampler = value;
 		}
 
+		void setOwnSampler( SamplerSPtr value )
+		{
+			m_ownSampler = value;
+			setSampler( m_ownSampler );
+		}
+
 		void setId( uint32_t value )
 		{
 			m_id = value;
@@ -278,6 +284,7 @@ namespace castor3d
 		TextureLayoutSPtr m_texture;
 		RenderTargetWPtr m_renderTarget;
 		SamplerWPtr m_sampler;
+		SamplerSPtr m_ownSampler;
 		ashes::WriteDescriptorSet m_descriptor;
 		uint32_t m_id{ 0u };
 		mutable bool m_changed;

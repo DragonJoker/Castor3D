@@ -3732,6 +3732,7 @@ namespace castor3d
 		}
 		else
 		{
+			parsingContext->m_pParser->getEngine()->prepareTextures( *parsingContext->pass );
 			parsingContext->pass.reset();
 			parsingContext->phongPass.reset();
 			parsingContext->pbrMRPass.reset();
