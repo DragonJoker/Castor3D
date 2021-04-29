@@ -3,8 +3,8 @@
   <Type Name="castor::Point&lt;*, 2&gt;">
     <DisplayString>{{x={m_data.coords[0]} y={m_data.coords[1]}}}</DisplayString>
     <Expand>
-      <Item Name="x">m_coords[0]</Item>
-      <Item Name="y">m_coords[1]</Item>
+      <Item Name="x">m_data.coords[0]</Item>
+      <Item Name="y">m_data.coords[1]</Item>
     </Expand>
   </Type>
 
