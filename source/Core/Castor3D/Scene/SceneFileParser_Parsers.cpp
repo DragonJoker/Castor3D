@@ -3846,7 +3846,7 @@ namespace castor3d
 					parsingContext->textureConfiguration.specularMask[0] = 0x00FFFFFF;
 					break;
 				case MaterialType::eMetallicRoughness:
-					parsingContext->textureConfiguration.specularMask[0] = 0x000000FF;
+					parsingContext->textureConfiguration.specularMask[0] = 0x00FF0000;
 					break;
 				default:
 					break;
@@ -3855,12 +3855,12 @@ namespace castor3d
 
 			if ( checkFlag( textures, TextureFlag::eHeight ) )
 			{
-				parsingContext->textureConfiguration.heightMask[0] = 0x000000FF;
+				parsingContext->textureConfiguration.heightMask[0] = 0x00FF0000;
 			}
 
 			if ( checkFlag( textures, TextureFlag::eGlossiness ) )
 			{
-				parsingContext->textureConfiguration.glossinessMask[0] = 0x000000FF;
+				parsingContext->textureConfiguration.glossinessMask[0] = 0x00FF0000;
 			}
 
 			if ( checkFlag( textures, TextureFlag::eEmissive ) )
@@ -3870,7 +3870,7 @@ namespace castor3d
 
 			if ( checkFlag( textures, TextureFlag::eOcclusion ) )
 			{
-				parsingContext->textureConfiguration.occlusionMask[0] = 0x000000FF;
+				parsingContext->textureConfiguration.occlusionMask[0] = 0x00FF0000;
 			}
 
 			if ( checkFlag( textures, TextureFlag::eTransmittance ) )
