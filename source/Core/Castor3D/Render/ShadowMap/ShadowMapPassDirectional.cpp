@@ -228,13 +228,13 @@ namespace castor3d
 		bool hasTextures = !flags.textures.empty();
 
 		// Vertex inputs
-		auto position = writer.declInput< Vec4 >( "position"
+		auto inPosition = writer.declInput< Vec4 >( "inPosition"
 			, SceneRenderPass::VertexInputs::PositionLocation );
-		auto normal = writer.declInput< Vec3 >( "normal"
+		auto inNormal = writer.declInput< Vec3 >( "inNormal"
 			, SceneRenderPass::VertexInputs::NormalLocation );
-		auto tangent = writer.declInput< Vec3 >( "tangent"
+		auto inTangent = writer.declInput< Vec3 >( "inTangent"
 			, SceneRenderPass::VertexInputs::TangentLocation );
-		auto uv = writer.declInput< Vec3 >( "uv"
+		auto inTexture = writer.declInput< Vec3 >( "inTexture"
 			, SceneRenderPass::VertexInputs::TextureLocation
 			, hasTextures );
 		auto inBoneIds0 = writer.declInput< IVec4 >( "inBoneIds0"
@@ -275,64 +275,68 @@ namespace castor3d
 		UBO_SHADOWMAP( writer, uint32_t( NodeUboIdx::eShadow ), 0 );
 
 		// Outputs
-		auto vtx_worldPosition = writer.declOutput< Vec3 >( "vtx_worldPosition"
+		auto outWorldPosition = writer.declOutput< Vec3 >( "outWorldPosition"
 			, SceneRenderPass::VertexOutputs::WorldPositionLocation );
-		auto vtx_normal = writer.declOutput< Vec3 >( "vtx_normal"
+		auto outNormal = writer.declOutput< Vec3 >( "outNormal"
 			, SceneRenderPass::VertexOutputs::NormalLocation );
-		auto vtx_tangent = writer.declOutput< Vec3 >( "vtx_tangent"
+		auto outTangent = writer.declOutput< Vec3 >( "outTangent"
 			, SceneRenderPass::VertexOutputs::TangentLocation );
-		auto vtx_bitangent = writer.declOutput< Vec3 >( "vtx_bitangent"
+		auto outBitangent = writer.declOutput< Vec3 >( "outBitangent"
 			, SceneRenderPass::VertexOutputs::BitangentLocation );
-		auto vtx_texture = writer.declOutput< Vec3 >( "vtx_texture"
+		auto outTexture = writer.declOutput< Vec3 >( "outTexture"
 			, SceneRenderPass::VertexOutputs::TextureLocation
 			, hasTextures );
-		auto vtx_material = writer.declOutput< UInt >( "vtx_material"
+		auto outMaterial = writer.declOutput< UInt >( "outMaterial"
 			, SceneRenderPass::VertexOutputs::MaterialLocation );
-		auto vtx_tangentSpaceFragPosition = writer.declOutput< Vec3 >( "vtx_tangentSpaceFragPosition"
+		auto outTangentSpaceFragPosition = writer.declOutput< Vec3 >( "outTangentSpaceFragPosition"
 			, SceneRenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
-		auto vtx_tangentSpaceViewPosition = writer.declOutput< Vec3 >( "vtx_tangentSpaceViewPosition"
+		auto outTangentSpaceViewPosition = writer.declOutput< Vec3 >( "outTangentSpaceViewPosition"
 			, SceneRenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
 		auto out = writer.getOut();
 
 		std::function< void() > main = [&]()
 		{
-			auto vertexPosition = writer.declLocale( "vertexPosition"
-				, vec4( c3d_morphingData.morph( position, inPosition2 ).xyz(), 1.0_f ) );
+			auto curPosition = writer.declLocale( "curPosition"
+				, inPosition );
 			auto v4Normal = writer.declLocale( "v4Normal"
-				, vec4( c3d_morphingData.morph( normal, inNormal2 ), 0.0_f ) );
+				, vec4( inNormal, 0.0_f ) );
 			auto v4Tangent = writer.declLocale( "v4Tangent"
-				, vec4( c3d_morphingData.morph( tangent, inTangent2 ), 0.0_f ) );
-			vtx_texture = c3d_morphingData.morph( uv, inTexture2 );
+				, vec4( inTangent, 0.0_f ) );
+			outTexture = inTexture;
+			c3d_morphingData.morph( curPosition, inPosition2
+				, v4Normal, inNormal2
+				, v4Tangent, inTangent2
+				, outTexture, inTexture2 );
 
 			auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
 				, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, transform ) );
 			auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
 				, c3d_modelData.getNormalMtx( flags.programFlags, mtxModel ) );
-			vtx_material = c3d_modelData.getMaterialIndex( flags.programFlags
+			outMaterial = c3d_modelData.getMaterialIndex( flags.programFlags
 				, material );
 
 			if ( checkFlag( flags.programFlags, ProgramFlag::eInvertNormals ) )
 			{
-				vtx_normal = normalize( mtxNormal * -v4Normal.xyz() );
+				outNormal = normalize( mtxNormal * -v4Normal.xyz() );
 			}
 			else
 			{
-				vtx_normal = normalize( mtxNormal * v4Normal.xyz() );
+				outNormal = normalize( mtxNormal * v4Normal.xyz() );
 			}
 
-			vtx_tangent = normalize( mtxNormal * v4Tangent.xyz() );
-			vtx_tangent = normalize( sdw::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
-			vtx_bitangent = cross( vtx_normal, vtx_tangent );
-			vertexPosition = mtxModel * vertexPosition;
-			vtx_worldPosition = vertexPosition.xyz();
+			outTangent = normalize( mtxNormal * v4Tangent.xyz() );
+			outTangent = normalize( sdw::fma( -outNormal, vec3( dot( outTangent, outNormal ) ), outTangent ) );
+			outBitangent = cross( outNormal, outTangent );
+			curPosition = mtxModel * curPosition;
+			outWorldPosition = curPosition.xyz();
 
 			auto tbn = writer.declLocale( "tbn"
-				, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
-			vtx_tangentSpaceFragPosition = tbn * vtx_worldPosition;
-			vtx_tangentSpaceViewPosition = tbn * vec3( 0.0_f );
+				, transpose( mat3( outTangent, outBitangent, outNormal ) ) );
+			outTangentSpaceFragPosition = tbn * outWorldPosition;
+			outTangentSpaceViewPosition = tbn * vec3( 0.0_f );
 
-			vertexPosition = c3d_shadowMapData.worldToView( vertexPosition );
-			out.vtx.position = c3d_shadowMapData.viewToProj( vertexPosition );
+			curPosition = c3d_shadowMapData.worldToView( curPosition );
+			out.vtx.position = c3d_shadowMapData.viewToProj( curPosition );
 		};
 
 		writer.implementFunction< sdw::Void >( "main", main );

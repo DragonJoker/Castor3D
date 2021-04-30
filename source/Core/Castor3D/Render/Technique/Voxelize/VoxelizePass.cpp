@@ -437,7 +437,7 @@ namespace castor3d
 			, SceneRenderPass::VertexInputs::PositionLocation );
 		auto inNormal = writer.declInput< Vec3 >( "inNormal"
 			, SceneRenderPass::VertexInputs::NormalLocation );
-		auto inTexcoord = writer.declInput< Vec3 >( "inTexcoord"
+		auto inTexture = writer.declInput< Vec3 >( "inTexture"
 			, SceneRenderPass::VertexInputs::TextureLocation
 			, hasTextures );
 		auto inBoneIds0 = writer.declInput< IVec4 >( "inBoneIds0"
@@ -464,7 +464,7 @@ namespace castor3d
 		auto inNormal2 = writer.declInput< Vec3 >( "inNormal2"
 			, SceneRenderPass::VertexInputs::Normal2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
-		auto inTexcoord2 = writer.declInput< Vec3 >( "inTexcoord2"
+		auto inTexture2 = writer.declInput< Vec3 >( "inTexture2"
 			, SceneRenderPass::VertexInputs::Texture2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) && hasTextures );
 		auto in = writer.getIn();
@@ -480,22 +480,23 @@ namespace castor3d
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
 			{
-				auto position = writer.declLocale( "position"
-					, c3d_morphingData.morph( inPosition, inPosition2 ) );
-				auto normal = writer.declLocale( "normal"
-					, c3d_morphingData.morph( inNormal, inNormal2 ) );
-				auto texcoord = writer.declLocale( "texcoord"
-					, c3d_morphingData.morph( inTexcoord, inTexcoord2 ) );
+				auto curPosition = writer.declLocale( "curPosition"
+					, inPosition );
+				auto v4Normal = writer.declLocale( "v4Normal"
+					, vec4( inNormal, 0.0_f ) );
+				outTexture = inTexture;
+				c3d_morphingData.morph( curPosition, inPosition2
+					, v4Normal, inNormal2
+					, outTexture, inTexture2 );
 
 				auto modelMtx = writer.declLocale< Mat4 >( "modelMtx"
 					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, inTransform ) );
 				outMaterial = c3d_modelData.getMaterialIndex( flags.programFlags
 					, inMaterial );
 
-				out.vtx.position = ( modelMtx * position );
+				out.vtx.position = ( modelMtx * curPosition );
 				outViewPosition = c3d_matrixData.worldToCurView( out.vtx.position ).xyz();
-				outNormal = normalize( mat3( transpose( inverse( modelMtx ) ) ) * normal );
-				outTexture = texcoord;
+				outNormal = normalize( mat3( transpose( inverse( modelMtx ) ) ) * v4Normal.xyz() );
 			} );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}

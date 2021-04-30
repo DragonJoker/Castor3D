@@ -846,9 +846,11 @@ namespace castor3d
 			,[&] ()
 			{
 				auto v4Vertex = writer.declLocale( "v4Vertex"
-					, vec4( c3d_morphingData.morph( inPosition, inPosition2 ).xyz(), 1.0_f ) );
+					, inPosition );
 				auto v3Texture = writer.declLocale( "v3Texture"
-					, c3d_morphingData.morph( inTexture, inTexture2 ) );
+					, inTexture );
+				c3d_morphingData.morph( v4Vertex, inPosition2
+					, v3Texture, inTexture2 );
 
 				auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
 					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, inTransform ) );

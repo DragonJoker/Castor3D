@@ -24,15 +24,34 @@ namespace castor3d
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
-			C3D_API sdw::Float morph( sdw::Float & lhs, sdw::Float const & rhs )const;
-			C3D_API sdw::Vec2 morph( sdw::Vec2 & lhs, sdw::Vec2 const & rhs )const;
-			C3D_API sdw::Vec3 morph( sdw::Vec3 & lhs, sdw::Vec3 const & rhs )const;
-			C3D_API sdw::Vec4 morph( sdw::Vec4 & lhs, sdw::Vec4 const & rhs )const;
-			C3D_API sdw::Vec4 morph( sdw::Vec4 & lhs, sdw::Vec3 const & rhs )const;
+			C3D_API void morph( sdw::Vec4 & pos
+				, sdw::Vec4 const & pos2
+				, sdw::Vec3 & uvw
+				, sdw::Vec3 const & uvw2 )const;
+			C3D_API void morph( sdw::Vec4 & pos
+				, sdw::Vec4 const & pos2
+				, sdw::Vec4 & nml
+				, sdw::Vec3 const & nml2
+				, sdw::Vec3 & uvw
+				, sdw::Vec3 const & uvw2 )const;
+			C3D_API void morph( sdw::Vec4 & pos
+				, sdw::Vec4 const & pos2
+				, sdw::Vec4 & nml
+				, sdw::Vec3 const & nml2
+				, sdw::Vec4 & tan
+				, sdw::Vec3 const & tan2
+				, sdw::Vec3 & uvw
+				, sdw::Vec3 const & uvw2 )const;
 
 		private:
 			using sdw::StructInstance::getMember;
 			using sdw::StructInstance::getMemberArray;
+
+			sdw::Float morph( sdw::Float & lhs, sdw::Float const & rhs )const;
+			sdw::Vec2 morph( sdw::Vec2 & lhs, sdw::Vec2 const & rhs )const;
+			sdw::Vec3 morph( sdw::Vec3 & lhs, sdw::Vec3 const & rhs )const;
+			sdw::Vec4 morph( sdw::Vec4 & lhs, sdw::Vec4 const & rhs )const;
+			sdw::Vec4 morph( sdw::Vec4 & lhs, sdw::Vec3 const & rhs )const;
 
 		private:
 			sdw::Float m_time;
