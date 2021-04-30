@@ -25,6 +25,7 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
@@ -1412,46 +1413,12 @@ namespace castor3d
 		using namespace sdw;
 		VertexWriter writer;
 		bool hasTextures = !flags.textures.empty();
+
 		// Vertex inputs
-		auto inPosition = writer.declInput< Vec4 >( "inPosition"
-			, SceneRenderPass::VertexInputs::PositionLocation );
-		auto inNormal = writer.declInput< Vec3 >( "inNormal"
-			, SceneRenderPass::VertexInputs::NormalLocation );
-		auto inTangent = writer.declInput< Vec3 >( "inTangent"
-			, SceneRenderPass::VertexInputs::TangentLocation );
-		auto inTexture = writer.declInput< Vec3 >( "inTexture"
-			, SceneRenderPass::VertexInputs::TextureLocation
-			, hasTextures );
-		auto inBoneIds0 = writer.declInput< IVec4 >( "inBoneIds0"
-			, SceneRenderPass::VertexInputs::BoneIds0Location
-			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto inBoneIds1 = writer.declInput< IVec4 >( "inBoneIds1"
-			, SceneRenderPass::VertexInputs::BoneIds1Location
-			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto inWeights0 = writer.declInput< Vec4 >( "inWeights0"
-			, SceneRenderPass::VertexInputs::Weights0Location
-			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto inWeights1 = writer.declInput< Vec4 >( "inWeights1"
-			, SceneRenderPass::VertexInputs::Weights1Location
-			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto transform = writer.declInput< Mat4 >( "transform"
-			, SceneRenderPass::VertexInputs::TransformLocation
-			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
-		auto material = writer.declInput< Int >( "material"
-			, SceneRenderPass::VertexInputs::MaterialLocation
-			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
-		auto inPosition2 = writer.declInput< Vec4 >( "inPosition2"
-			, SceneRenderPass::VertexInputs::Position2Location
-			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
-		auto inNormal2 = writer.declInput< Vec3 >( "inNormal2"
-			, SceneRenderPass::VertexInputs::Normal2Location
-			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
-		auto inTangent2 = writer.declInput< Vec3 >( "inTangent2"
-			, SceneRenderPass::VertexInputs::Tangent2Location
-			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
-		auto inTexture2 = writer.declInput< Vec3 >( "inTexture2"
-			, SceneRenderPass::VertexInputs::Texture2Location
-			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) && hasTextures );
+		shader::VertexSurface inSurface{ writer
+			, flags.programFlags
+			, getShaderFlags()
+			, hasTextures };
 		auto in = writer.getIn();
 
 		UBO_MATRIX( writer, uint32_t( NodeUboIdx::eMatrix ), 0 );
@@ -1461,85 +1428,50 @@ namespace castor3d
 		UBO_MORPHING( writer, uint32_t( NodeUboIdx::eMorphing ), 0, flags.programFlags );
 
 		// Outputs
-		auto outWorldPosition = writer.declOutput< Vec3 >( "outWorldPosition"
-			, SceneRenderPass::VertexOutputs::WorldPositionLocation );
-		auto outTangentSpaceFragPosition = writer.declOutput< Vec3 >( "outTangentSpaceFragPosition"
-			, SceneRenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
-		auto outTangentSpaceViewPosition = writer.declOutput< Vec3 >( "outTangentSpaceViewPosition"
-			, SceneRenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
-		auto outNormal = writer.declOutput< Vec3 >( "outNormal"
-			, SceneRenderPass::VertexOutputs::NormalLocation );
-		auto outTangent = writer.declOutput< Vec3 >( "outTangent"
-			, SceneRenderPass::VertexOutputs::TangentLocation );
-		auto outBitangent = writer.declOutput< Vec3 >( "outBitangent"
-			, SceneRenderPass::VertexOutputs::BitangentLocation );
-		auto outTexture = writer.declOutput< Vec3 >( "outTexture"
-			, SceneRenderPass::VertexOutputs::TextureLocation
-			, hasTextures );
-		auto outInstance = writer.declOutput< UInt >( "outInstance"
-			, SceneRenderPass::VertexOutputs::InstanceLocation );
-		auto outMaterial = writer.declOutput< UInt >( "outMaterial"
-			, SceneRenderPass::VertexOutputs::MaterialLocation );
+		shader::OutFragmentSurface outSurface{ writer
+			, getShaderFlags()
+			, hasTextures };
 		auto out = writer.getOut();
 
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
 			{
 				auto curPosition = writer.declLocale( "curPosition"
-					, inPosition );
+					, inSurface.position );
 				auto v4Normal = writer.declLocale( "v4Normal"
-					, vec4( inNormal, 0.0_f ) );
+					, vec4( inSurface.normal, 0.0_f ) );
 				auto v4Tangent = writer.declLocale( "v4Tangent"
-					, vec4( inTangent, 0.0_f ) );
-				outTexture = inTexture;
-				c3d_morphingData.morph( curPosition, inPosition2
-					, v4Normal, inNormal2
-					, v4Tangent, inTangent2
-					, outTexture, inTexture2 );
+					, vec4( inSurface.tangent, 0.0_f ) );
+				outSurface.texture = inSurface.texture;
+				inSurface.morph( c3d_morphingData
+					, curPosition
+					, v4Normal
+					, v4Tangent
+					, outSurface.texture );
+				outSurface.material = c3d_modelData.getMaterialIndex( flags.programFlags
+					, inSurface.material );
+				outSurface.instance = writer.cast< UInt >( in.instanceIndex );
 
 				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
-					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, transform ) );
+					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, inSurface ) );
 				auto prvMtxModel = writer.declLocale< Mat4 >( "prvMtxModel"
 					, c3d_modelData.getPrvModelMtx( flags.programFlags, curMtxModel ) );
-				auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
-					, c3d_modelData.getNormalMtx( flags.programFlags, curMtxModel ) );
-				outMaterial = c3d_modelData.getMaterialIndex( flags.programFlags
-					, material );
-
 				auto prvPosition = writer.declLocale( "prvPosition"
 					, prvMtxModel * curPosition );
 				curPosition = curMtxModel * curPosition;
-				outWorldPosition = curPosition.xyz();
-				prvPosition = c3d_matrixData.worldToPrvProj( prvPosition );
-				curPosition = c3d_matrixData.worldToCurProj( curPosition );
-
-				outNormal = normalize( mtxNormal * v4Normal.xyz() );
-				outTangent = normalize( mtxNormal * v4Tangent.xyz() );
-				outTangent = normalize( sdw::fma( -outNormal, vec3( dot( outTangent, outNormal ) ), outTangent ) );
-				outBitangent = cross( outNormal, outTangent );
-
-				if ( checkFlag( flags.programFlags, ProgramFlag::eInvertNormals ) )
-				{
-					outNormal = -outNormal;
-					outTangent = -outTangent;
-					outBitangent = -outBitangent;
-				}
-
-				outInstance = writer.cast< UInt >( in.instanceIndex );
-
-				auto tbn = writer.declLocale( "tbn"
-					, transpose( mat3( outTangent, outBitangent, outNormal ) ) );
-				outTangentSpaceFragPosition = tbn * outWorldPosition;
-				outTangentSpaceViewPosition = c3d_sceneData.transformCamera( tbn );
-
-				// Convert the jitter from non-homogeneous coordinates to homogeneous
-				// coordinates and add it:
-				// (note that for providing the jitter in non-homogeneous projection space,
-				//  pixel coordinates (screen space) need to multiplied by two in the C++
-				//  code)
-				c3d_matrixData.jitter( curPosition );
-				c3d_matrixData.jitter( prvPosition );
+				outSurface.worldPosition = curPosition.xyz();
+				outSurface.computeVelocity( c3d_matrixData
+					, curPosition
+					, prvPosition );
 				out.vtx.position = curPosition;
+
+				auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
+					, c3d_modelData.getNormalMtx( flags.programFlags, curMtxModel ) );
+				outSurface.computeTangentSpace( flags.programFlags
+					, c3d_sceneData.getCameraPosition()
+					, mtxNormal
+					, v4Normal
+					, v4Tangent );
 
 			} );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -1562,31 +1494,9 @@ namespace castor3d
 		UBO_BILLBOARD( writer, uint32_t( NodeUboIdx::eBillboard ), 0 );
 
 		// Shader outputs
-		auto vtx_worldPosition = writer.declOutput< Vec3 >( "vtx_worldPosition"
-			, SceneRenderPass::VertexOutputs::WorldPositionLocation );
-		auto vtx_viewPosition = writer.declOutput< Vec3 >( "vtx_viewPosition"
-			, SceneRenderPass::VertexOutputs::ViewPositionLocation );
-		auto vtx_curPosition = writer.declOutput< Vec3 >( "vtx_curPosition"
-			, SceneRenderPass::VertexOutputs::CurPositionLocation );
-		auto vtx_prvPosition = writer.declOutput< Vec3 >( "vtx_prvPosition"
-			, SceneRenderPass::VertexOutputs::PrvPositionLocation );
-		auto vtx_tangentSpaceFragPosition = writer.declOutput< Vec3 >( "vtx_tangentSpaceFragPosition"
-			, SceneRenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
-		auto vtx_tangentSpaceViewPosition = writer.declOutput< Vec3 >( "vtx_tangentSpaceViewPosition"
-			, SceneRenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
-		auto vtx_normal = writer.declOutput< Vec3 >( "vtx_normal"
-			, SceneRenderPass::VertexOutputs::NormalLocation );
-		auto vtx_tangent = writer.declOutput< Vec3 >( "vtx_tangent"
-			, SceneRenderPass::VertexOutputs::TangentLocation );
-		auto vtx_bitangent = writer.declOutput< Vec3 >( "vtx_bitangent"
-			, SceneRenderPass::VertexOutputs::BitangentLocation );
-		auto vtx_texture = writer.declOutput< Vec3 >( "vtx_texture"
-			, SceneRenderPass::VertexOutputs::TextureLocation
-			, hasTextures );
-		auto vtx_instance = writer.declOutput< UInt >( "vtx_instance"
-			, SceneRenderPass::VertexOutputs::InstanceLocation );
-		auto vtx_material = writer.declOutput< UInt >( "vtx_material"
-			, SceneRenderPass::VertexOutputs::MaterialLocation );
+		shader::OutFragmentSurface outSurface{ writer
+			, getShaderFlags()
+			, hasTextures };
 		auto out = writer.getOut();
 
 		writer.implementFunction< Void >( "main"
@@ -1609,49 +1519,31 @@ namespace castor3d
 					, c3d_billboardData.getWidth( flags.programFlags, c3d_sceneData ) );
 				auto height = writer.declLocale( "height"
 					, c3d_billboardData.getHeight( flags.programFlags, c3d_sceneData ) );
-				vtx_worldPosition = curBbcenter
+				outSurface.worldPosition = curBbcenter
 					+ right * position.x() * width
 					+ up * position.y() * height;
 
-				vtx_material = c3d_modelData.getMaterialIndex();
-				vtx_normal = curToCamera;
-				vtx_tangent = up;
-				vtx_bitangent = right;
-				auto prvPosition = writer.declLocale( "prvPosition"
-					, vec4( prvBbcenter + right * position.x() * width + up * position.y() * height, 1.0_f ) );
-
 				if ( hasTextures )
 				{
-					vtx_texture = vec3( uv, 0.0_f );
+					outSurface.texture = vec3( uv, 0.0_f );
 				}
 
-				vtx_instance = writer.cast< UInt >( in.instanceIndex );
-				auto curPosition = writer.declLocale( "curPosition"
-					, vec4( vtx_worldPosition, 1.0_f ) );
-				prvPosition = c3d_matrixData.worldToPrvProj( prvPosition );
-				curPosition = c3d_matrixData.worldToCurProj( curPosition );
-				vtx_viewPosition = curPosition.xyz();
+				outSurface.material = c3d_modelData.getMaterialIndex();
+				outSurface.instance = writer.cast< UInt >( in.instanceIndex );
 
-				auto tbn = writer.declLocale( "tbn"
-					, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
-				vtx_tangentSpaceFragPosition = tbn * vtx_worldPosition;
-				vtx_tangentSpaceViewPosition = c3d_sceneData.transformCamera( tbn );
-				// Convert the jitter from non-homogeneous coordiantes to homogeneous
-				// coordinates and add it:
-				// (note that for providing the jitter in non-homogeneous projection space,
-				//  pixel coordinates (screen space) need to multiplied by two in the C++
-				//  code)
-				c3d_matrixData.jitter( curPosition );
-				c3d_matrixData.jitter( prvPosition );
+				auto prvPosition = writer.declLocale( "prvPosition"
+					, vec4( prvBbcenter + right * position.x() * width + up * position.y() * height, 1.0_f ) );
+				auto curPosition = writer.declLocale( "curPosition"
+					, vec4( outSurface.worldPosition, 1.0_f ) );
+				outSurface.computeVelocity( c3d_matrixData
+					, curPosition
+					, prvPosition );
 				out.vtx.position = curPosition;
 
-				vtx_curPosition = curPosition.xyw();
-				vtx_prvPosition = prvPosition.xyw();
-				// Positions in projection space are in [-1, 1] range, while texture
-				// coordinates are in [0, 1] range. So, we divide by 2 to get velocities in
-				// the scale (and flip the y axis):
-				vtx_curPosition.xy() *= vec2( 0.5_f, -0.5_f );
-				vtx_prvPosition.xy() *= vec2( 0.5_f, -0.5_f );
+				outSurface.computeTangentSpace( c3d_sceneData.getCameraPosition()
+					, curToCamera
+					, up
+					, right );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

@@ -98,6 +98,12 @@ namespace castor3d
 			CU_Require( m_commands.semaphore );
 			return *m_commands.semaphore;
 		}
+
+		C3D_API ShaderFlags getShaderFlags()const override
+		{
+			return ShaderFlag::eWorldSpace
+				| ShaderFlag::eNormal;
+		}
 		/**@}*/
 
 		using SceneRenderPass::update;
