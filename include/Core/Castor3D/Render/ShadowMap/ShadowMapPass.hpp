@@ -82,6 +82,12 @@ namespace castor3d
 			return ShadowMap::textureFlags;
 		}
 
+		C3D_API ShaderFlags getShaderFlags()const override
+		{
+			return ShaderFlag::eWorldSpace
+				| ShaderFlag::eTangentSpace;
+		}
+
 	protected:
 		/**
 		 *\~english

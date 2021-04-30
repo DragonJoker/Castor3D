@@ -433,40 +433,10 @@ namespace castor3d
 		auto skinningData = SkinningUbo::declare( writer, uint32_t( NodeUboIdx::eSkinning ), 0, flags.programFlags );
 		UBO_MORPHING( writer, uint32_t( NodeUboIdx::eMorphing ), 0, flags.programFlags );
 
-		auto inPosition = writer.declInput< Vec4 >( "inPosition"
-			, SceneRenderPass::VertexInputs::PositionLocation );
-		auto inNormal = writer.declInput< Vec3 >( "inNormal"
-			, SceneRenderPass::VertexInputs::NormalLocation );
-		auto inTexture = writer.declInput< Vec3 >( "inTexture"
-			, SceneRenderPass::VertexInputs::TextureLocation
-			, hasTextures );
-		auto inBoneIds0 = writer.declInput< IVec4 >( "inBoneIds0"
-			, SceneRenderPass::VertexInputs::BoneIds0Location
-			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto inBoneIds1 = writer.declInput< IVec4 >( "inBoneIds1"
-			, SceneRenderPass::VertexInputs::BoneIds1Location
-			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto inWeights0 = writer.declInput< Vec4 >( "inWeights0"
-			, SceneRenderPass::VertexInputs::Weights0Location
-			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto inWeights1 = writer.declInput< Vec4 >( "inWeights1"
-			, SceneRenderPass::VertexInputs::Weights1Location
-			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto inTransform = writer.declInput< Mat4 >( "inTransform"
-			, SceneRenderPass::VertexInputs::TransformLocation
-			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
-		auto inMaterial = writer.declInput< Int >( "inMaterial"
-			, SceneRenderPass::VertexInputs::MaterialLocation
-			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
-		auto inPosition2 = writer.declInput< Vec4 >( "inPosition2"
-			, SceneRenderPass::VertexInputs::Position2Location
-			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
-		auto inNormal2 = writer.declInput< Vec3 >( "inNormal2"
-			, SceneRenderPass::VertexInputs::Normal2Location
-			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
-		auto inTexture2 = writer.declInput< Vec3 >( "inTexture2"
-			, SceneRenderPass::VertexInputs::Texture2Location
-			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) && hasTextures );
+		shader::VertexSurface inSurface{ writer
+			, flags.programFlags
+			, getShaderFlags()
+			, hasTextures };
 		auto in = writer.getIn();
 
 		// Outputs
@@ -481,18 +451,19 @@ namespace castor3d
 			, [&]()
 			{
 				auto curPosition = writer.declLocale( "curPosition"
-					, inPosition );
+					, inSurface.position );
 				auto v4Normal = writer.declLocale( "v4Normal"
-					, vec4( inNormal, 0.0_f ) );
-				outTexture = inTexture;
-				c3d_morphingData.morph( curPosition, inPosition2
-					, v4Normal, inNormal2
-					, outTexture, inTexture2 );
+					, vec4( inSurface.normal, 0.0_f ) );
+				outTexture = inSurface.texture;
+				inSurface.morph( c3d_morphingData
+					, curPosition
+					, v4Normal
+					, outTexture );
 
 				auto modelMtx = writer.declLocale< Mat4 >( "modelMtx"
-					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, inTransform ) );
+					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, inSurface ) );
 				outMaterial = c3d_modelData.getMaterialIndex( flags.programFlags
-					, inMaterial );
+					, inSurface.material );
 
 				out.vtx.position = ( modelMtx * curPosition );
 				outViewPosition = c3d_matrixData.worldToCurView( out.vtx.position ).xyz();

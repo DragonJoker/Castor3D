@@ -225,6 +225,25 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	The render pass shader flags.
+	*\~french
+	*\brief
+	*	Les indicateurs de shader des passes.
+	*/
+	enum class ShaderFlag
+		: uint8_t
+	{
+		eNone = 0x00,
+		eNormal = 0x01,
+		eTangentSpace = 0x02 | eNormal,
+		eVelocity = 0x04,
+		eWorldSpace = 0x08,
+		eViewSpace = 0x10,
+	};
+	CU_ImplementFlags( ShaderFlag )
+	/**
+	*\~english
+	*\brief
 	*	The render pass modes, regarding transparency.
 	*\~french
 	*\brief
