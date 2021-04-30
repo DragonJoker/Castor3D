@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_ModelUbo_H___
 
 #include "UbosModule.hpp"
+#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 #include <ShaderWriter/MatTypes/Mat4.hpp>
@@ -26,7 +27,7 @@ namespace castor3d
 
 			C3D_API sdw::Mat4 getCurModelMtx( ProgramFlags programFlags
 				, SkinningData const & skinning
-				, sdw::Mat4 const & instanceTransform )const;
+				, VertexSurface const & surface )const;
 			C3D_API sdw::Mat4 getPrvModelMtx( ProgramFlags programFlags
 				, sdw::Mat4 const & curModelMatrix )const;
 			C3D_API sdw::Mat3 getNormalMtx( ProgramFlags programFlags
