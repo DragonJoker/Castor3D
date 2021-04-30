@@ -5,6 +5,7 @@
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
 #include "Castor3D/Shader/Ubos/ModelUbo.hpp"
+#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 
 #include <ShaderWriter/Source.hpp>
 
@@ -70,46 +71,42 @@ namespace castor3d
 	}
 
 	sdw::Mat4 SkinningUbo::computeTransform( shader::SkinningData const & data
+		, shader::VertexSurface const & surface
 		, sdw::ShaderWriter & writer
 		, ProgramFlags const & flags
 		, sdw::Mat4 const & curMtxModel )
 	{
 		using namespace sdw;
-		auto inBoneIds0 = writer.getVariable< IVec4 >( cuT( "inBoneIds0" ) );
-		auto inBoneIds1 = writer.getVariable< IVec4 >( cuT( "inBoneIds1" ) );
-		auto inWeights0 = writer.getVariable< Vec4 >( cuT( "inWeights0" ) );
-		auto inWeights1 = writer.getVariable< Vec4 >( cuT( "inWeights1" ) );
 		auto mtxBoneTransform = writer.declLocale< Mat4 >( cuT( "mtxBoneTransform" ) );
 
 		if ( checkFlag( flags, ProgramFlag::eInstantiation ) )
 		{
 			auto gl_InstanceID = writer.getVariable< Int >( cuT( "gl_InstanceIndex" ) );
-			auto transform = writer.getVariable< Mat4 >( cuT( "inTransform" ) );
 			auto mtxInstanceOffset = writer.declLocale( cuT( "mtxInstanceOffset" )
 				, gl_InstanceID * 400_i );
 
 			auto & ssbo = *data.ssbo;
-			mtxBoneTransform = ssbo[writer.cast< UInt >( mtxInstanceOffset + inBoneIds0[0_i] )] * inWeights0[0_i];
-			mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + inBoneIds0[1_i] )] * inWeights0[1_i];
-			mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + inBoneIds0[2_i] )] * inWeights0[2_i];
-			mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + inBoneIds0[3_i] )] * inWeights0[3_i];
-			mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + inBoneIds1[0_i] )] * inWeights1[0_i];
-			mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + inBoneIds1[1_i] )] * inWeights1[1_i];
-			mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + inBoneIds1[2_i] )] * inWeights1[2_i];
-			mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + inBoneIds1[3_i] )] * inWeights1[3_i];
-			mtxBoneTransform = transform * mtxBoneTransform;
+			mtxBoneTransform = ssbo[writer.cast< UInt >( mtxInstanceOffset + surface.boneIds0[0_i] )] * surface.boneWeights0[0_i];
+			mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + surface.boneIds0[1_i] )] * surface.boneWeights0[1_i];
+			mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + surface.boneIds0[2_i] )] * surface.boneWeights0[2_i];
+			mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + surface.boneIds0[3_i] )] * surface.boneWeights0[3_i];
+			mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + surface.boneIds1[0_i] )] * surface.boneWeights1[0_i];
+			mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + surface.boneIds1[1_i] )] * surface.boneWeights1[1_i];
+			mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + surface.boneIds1[2_i] )] * surface.boneWeights1[2_i];
+			mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + surface.boneIds1[3_i] )] * surface.boneWeights1[3_i];
+			mtxBoneTransform = surface.transform * mtxBoneTransform;
 		}
 		else
 		{
 			auto bones = data.ubo->getMemberArray< Mat4 >( SkinningUbo::Bones );
-			mtxBoneTransform = bones[inBoneIds0[0]] * inWeights0[0];
-			mtxBoneTransform += bones[inBoneIds0[1]] * inWeights0[1];
-			mtxBoneTransform += bones[inBoneIds0[2]] * inWeights0[2];
-			mtxBoneTransform += bones[inBoneIds0[3]] * inWeights0[3];
-			mtxBoneTransform += bones[inBoneIds1[0]] * inWeights1[0];
-			mtxBoneTransform += bones[inBoneIds1[1]] * inWeights1[1];
-			mtxBoneTransform += bones[inBoneIds1[2]] * inWeights1[2];
-			mtxBoneTransform += bones[inBoneIds1[3]] * inWeights1[3];
+			mtxBoneTransform = bones[surface.boneIds0[0]] * surface.boneWeights0[0];
+			mtxBoneTransform += bones[surface.boneIds0[1]] * surface.boneWeights0[1];
+			mtxBoneTransform += bones[surface.boneIds0[2]] * surface.boneWeights0[2];
+			mtxBoneTransform += bones[surface.boneIds0[3]] * surface.boneWeights0[3];
+			mtxBoneTransform += bones[surface.boneIds1[0]] * surface.boneWeights1[0];
+			mtxBoneTransform += bones[surface.boneIds1[1]] * surface.boneWeights1[1];
+			mtxBoneTransform += bones[surface.boneIds1[2]] * surface.boneWeights1[2];
+			mtxBoneTransform += bones[surface.boneIds1[3]] * surface.boneWeights1[3];
 			mtxBoneTransform = curMtxModel * mtxBoneTransform;
 		}
 

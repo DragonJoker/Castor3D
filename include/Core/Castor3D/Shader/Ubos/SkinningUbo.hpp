@@ -75,6 +75,7 @@ namespace castor3d
 		 *\return		La matrice résultat.
 		 */
 		C3D_API static sdw::Mat4 computeTransform( shader::SkinningData const & data
+			, shader::VertexSurface const & surface
 			, sdw::ShaderWriter & writer
 			, ProgramFlags const & flags
 			, sdw::Mat4 const & curMtxModel );

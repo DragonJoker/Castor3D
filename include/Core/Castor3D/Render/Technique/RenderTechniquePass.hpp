@@ -180,6 +180,14 @@ namespace castor3d
 			CU_Require( m_finished );
 			return *m_finished;
 		}
+
+		C3D_API ShaderFlags getShaderFlags()const override
+		{
+			return ShaderFlag::eWorldSpace
+				| ShaderFlag::eTangentSpace
+				| ShaderFlag::eVelocity
+				| ShaderFlag::eViewSpace;
+		}
 		/**@}*/
 
 	public:

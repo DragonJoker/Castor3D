@@ -670,6 +670,12 @@ namespace castor3d
 		/**@{*/
 		C3D_API virtual TextureFlags getTexturesMask()const;
 
+		C3D_API virtual ShaderFlags getShaderFlags()const
+		{
+			return ShaderFlag::eWorldSpace
+				| ShaderFlag::eTangentSpace;
+		}
+
 		bool isOrderIndependent()const
 		{
 			return m_oit;

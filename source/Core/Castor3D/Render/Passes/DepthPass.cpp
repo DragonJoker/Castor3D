@@ -16,6 +16,7 @@
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelUbo.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
@@ -255,45 +256,10 @@ namespace castor3d
 		bool hasTextures = !flags.textures.empty();
 
 		// Vertex inputs
-		auto inPosition = writer.declInput< Vec4 >( "inPosition"
-			, SceneRenderPass::VertexInputs::PositionLocation );
-		auto inNormal = writer.declInput< Vec3 >( "inNormal"
-			, SceneRenderPass::VertexInputs::NormalLocation );
-		auto inTangent = writer.declInput< Vec3 >( "inTangent"
-			, SceneRenderPass::VertexInputs::TangentLocation );
-		auto inTexture = writer.declInput< Vec3 >( "inTexture"
-			, SceneRenderPass::VertexInputs::TextureLocation
-			, hasTextures );
-		auto inBoneIds0 = writer.declInput< IVec4 >( "inBoneIds0"
-			, SceneRenderPass::VertexInputs::BoneIds0Location
-			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto inBoneIds1 = writer.declInput< IVec4 >( "inBoneIds1"
-			, SceneRenderPass::VertexInputs::BoneIds1Location
-			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto inWeights0 = writer.declInput< Vec4 >( "inWeights0"
-			, SceneRenderPass::VertexInputs::Weights0Location
-			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto inWeights1 = writer.declInput< Vec4 >( "inWeights1"
-			, SceneRenderPass::VertexInputs::Weights1Location
-			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto inTransform = writer.declInput< Mat4 >( "inTransform"
-			, SceneRenderPass::VertexInputs::TransformLocation
-			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
-		auto inMaterial = writer.declInput< Int >( "inMaterial"
-			, SceneRenderPass::VertexInputs::MaterialLocation
-			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
-		auto inPosition2 = writer.declInput< Vec4 >( "inPosition2"
-			, SceneRenderPass::VertexInputs::Position2Location
-			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
-		auto inNormal2 = writer.declInput< Vec3 >( "inNormal2"
-			, SceneRenderPass::VertexInputs::Normal2Location
-			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
-		auto inTangent2 = writer.declInput< Vec3 >( "inTangent2"
-			, SceneRenderPass::VertexInputs::Tangent2Location
-			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
-		auto inTexture2 = writer.declInput< Vec3 >( "inTexture2"
-			, SceneRenderPass::VertexInputs::Texture2Location
-			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) && hasTextures );
+		shader::VertexSurface inSurface{ writer
+			, flags.programFlags
+			, getShaderFlags()
+			, hasTextures };
 		auto in = writer.getIn();
 
 		UBO_MATRIX( writer, uint32_t( NodeUboIdx::eMatrix ), 0 );
@@ -303,89 +269,49 @@ namespace castor3d
 		UBO_MORPHING( writer, uint32_t( NodeUboIdx::eMorphing ), 0, flags.programFlags );
 
 		// Outputs
-		auto outCurPosition = writer.declOutput< Vec3 >( "outCurPosition"
-			, SceneRenderPass::VertexOutputs::CurPositionLocation );
-		auto outPrvPosition = writer.declOutput< Vec3 >( "outPrvPosition"
-			, SceneRenderPass::VertexOutputs::PrvPositionLocation );
-		auto outTangentSpaceFragPosition = writer.declOutput< Vec3 >( "outTangentSpaceFragPosition"
-			, SceneRenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
-		auto outTangentSpaceViewPosition = writer.declOutput< Vec3 >( "outTangentSpaceViewPosition"
-			, SceneRenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
-		auto outTexture = writer.declOutput< Vec3 >( "outTexture"
-			, SceneRenderPass::VertexOutputs::TextureLocation
-			, hasTextures );
-		auto outMaterial = writer.declOutput< UInt >( "outMaterial"
-			, SceneRenderPass::VertexOutputs::MaterialLocation );
+		shader::OutFragmentSurface outSurface{ writer
+			, getShaderFlags()
+			, hasTextures };
 		auto out = writer.getOut();
 
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
 			{
 				auto curPosition = writer.declLocale( "curPosition"
-					, inPosition );
+					, inSurface.position );
 				auto v4Normal = writer.declLocale( "v4Normal"
-					, vec4( inNormal, 0.0_f ) );
+					, vec4( inSurface.normal, 0.0_f ) );
 				auto v4Tangent = writer.declLocale( "v4Tangent"
-					, vec4( inTangent, 0.0_f ) );
-				outTexture = inTexture;
-				c3d_morphingData.morph( curPosition, inPosition2
-					, v4Normal, inNormal2
-					, v4Tangent, inTangent2
-					, outTexture, inTexture2 );
+					, vec4( inSurface.tangent, 0.0_f ) );
+				outSurface.texture = inSurface.texture;
+				inSurface.morph( c3d_morphingData
+					, curPosition
+					, v4Normal
+					, v4Tangent
+					, outSurface.texture );
+				outSurface.material = c3d_modelData.getMaterialIndex( flags.programFlags
+					, inSurface.material );
 
 				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
-						, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, inTransform ) );
+					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, inSurface ) );
 				auto prvMtxModel = writer.declLocale< Mat4 >( "prvMtxModel"
 					, c3d_modelData.getPrvModelMtx( flags.programFlags, curMtxModel ) );
-				auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
-					, c3d_modelData.getNormalMtx( flags.programFlags, curMtxModel ) );
-				outMaterial = c3d_modelData.getMaterialIndex( flags.programFlags
-					, inMaterial );
-
 				auto prvPosition = writer.declLocale( "prvPosition"
 					, prvMtxModel * curPosition );
 				curPosition = curMtxModel * curPosition;
-				auto worldPosition = writer.declLocale( "worldPosition"
-					, curPosition.xyz() );
-				prvPosition = c3d_matrixData.worldToPrvProj( prvPosition );
-				curPosition = c3d_matrixData.worldToCurProj( curPosition );
-
-				auto normal = writer.declLocale( "normal"
-					, normalize( mtxNormal * v4Normal.xyz() ) );
-				auto tangent = writer.declLocale( "tangent"
-					, normalize( mtxNormal * v4Tangent.xyz() ) );
-				tangent = normalize( sdw::fma( -normal, vec3( dot( tangent, normal ) ), tangent ) );
-				auto bitangent = writer.declLocale( "bitangent"
-					, cross( normal, tangent ) );
-
-				if ( checkFlag( flags.programFlags, ProgramFlag::eInvertNormals ) )
-				{
-					normal = -normal;
-					tangent = -tangent;
-					bitangent = -bitangent;
-				}
-
-				auto tbn = writer.declLocale( "tbn"
-					, transpose( mat3( tangent, bitangent, normal ) ) );
-				outTangentSpaceFragPosition = tbn * worldPosition;
-				outTangentSpaceViewPosition = c3d_sceneData.transformCamera( tbn );
-
-				// Convert the jitter from non-homogeneous coordinates to homogeneous
-				// coordinates and add it:
-				// (note that for providing the jitter in non-homogeneous projection space,
-				//  pixel coordinates (screen space) need to multiplied by two in the C++
-				//  code)
-				c3d_matrixData.jitter( curPosition );
-				c3d_matrixData.jitter( prvPosition );
+				outSurface.worldPosition = curPosition.xyz();
+				outSurface.computeVelocity( c3d_matrixData
+					, curPosition
+					, prvPosition );
 				out.vtx.position = curPosition;
 
-				outCurPosition = curPosition.xyw();
-				outPrvPosition = prvPosition.xyw();
-				// Positions in projection space are in [-1, 1] range, while texture
-				// coordinates are in [0, 1] range. So, we divide by 2 to get velocities in
-				// the scale (and flip the y axis):
-				outCurPosition.xy() *= vec2( 0.5_f, -0.5_f );
-				outPrvPosition.xy() *= vec2( 0.5_f, -0.5_f );
+				auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
+					, c3d_modelData.getNormalMtx( flags.programFlags, curMtxModel ) );
+				outSurface.computeTangentSpace( flags.programFlags
+					, c3d_sceneData.getCameraPosition()
+					, mtxNormal
+					, v4Normal
+					, v4Tangent );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -420,19 +346,9 @@ namespace castor3d
 		bool hasTextures = !flags.textures.empty();
 
 		// Intputs
-		auto inCurPosition = writer.declInput< Vec3 >( "inCurPosition"
-			, SceneRenderPass::VertexOutputs::CurPositionLocation );
-		auto inPrvPosition = writer.declInput< Vec3 >( "inPrvPosition"
-			, SceneRenderPass::VertexOutputs::PrvPositionLocation );
-		auto inTexture = writer.declInput< Vec3 >( "inTexture"
-			, SceneRenderPass::VertexOutputs::TextureLocation
-			, hasTextures );
-		auto inMaterial = writer.declInput< UInt >( "inMaterial"
-			, SceneRenderPass::VertexOutputs::MaterialLocation );
-		auto inTangentSpaceFragPosition = writer.declInput< Vec3 >( "inTangentSpaceFragPosition"
-			, SceneRenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
-		auto inTangentSpaceViewPosition = writer.declInput< Vec3 >( "inTangentSpaceViewPosition"
-			, SceneRenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
+		shader::InFragmentSurface inSurface{ writer
+			, getShaderFlags()
+			, hasTextures };
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
 			, 1u
@@ -460,7 +376,7 @@ namespace castor3d
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
 			{
-				auto material = materials->getBaseMaterial( inMaterial );
+				auto material = materials->getBaseMaterial( inSurface.material );
 				auto opacity = writer.declLocale( "opacity"
 					, material->m_opacity );
 				auto alphaRef = writer.declLocale( "alphaRef"
@@ -469,7 +385,7 @@ namespace castor3d
 				if ( hasTextures )
 				{
 					auto texCoord = writer.declLocale( "texCoord"
-						, inTexture );
+						, inSurface.texture );
 					utils.computeGeometryMapsContributions( textures
 						, flags.passFlags
 						, textureConfigs
@@ -477,8 +393,8 @@ namespace castor3d
 						, c3d_maps
 						, texCoord
 						, opacity
-						, inTangentSpaceViewPosition
-						, inTangentSpaceFragPosition );
+						, inSurface.tangentSpaceViewPosition
+						, inSurface.tangentSpaceFragPosition );
 				}
 
 				utils.applyAlphaFunc( flags.alphaFunc

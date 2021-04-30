@@ -105,6 +105,9 @@ namespace castor3d
 		class LpvLightData;
 		class VoxelData;
 		class Surface;
+		struct VertexSurface;
+		struct OutFragmentSurface;
+		struct InFragmentSurface;
 
 		Writer_Parameter( Light );
 		Writer_Parameter( DirectionalLight );
