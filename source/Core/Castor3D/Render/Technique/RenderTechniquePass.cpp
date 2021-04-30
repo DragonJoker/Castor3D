@@ -697,12 +697,16 @@ namespace castor3d
 		writer.implementMain( [&]()
 			{
 				auto curPosition = writer.declLocale( "curPosition"
-					, c3d_morphingData.morph( inPosition, inPosition2 ) );
+					, inPosition );
 				auto v4Normal = writer.declLocale( "v4Normal"
-					, vec4( c3d_morphingData.morph( inNormal, inNormal2 ), 0.0_f ) );
+					, vec4( inNormal, 0.0_f ) );
 				auto v4Tangent = writer.declLocale( "v4Tangent"
-					, vec4( c3d_morphingData.morph( inTangent, inTangent2 ), 0.0_f ) );
-				outTexture = c3d_morphingData.morph( inTexture, inTexture2 );
+					, vec4( inTangent, 0.0_f ) );
+				outTexture = inTexture;
+				c3d_morphingData.morph( curPosition, inPosition2
+					, v4Normal, inNormal2
+					, v4Tangent, inTangent2
+					, outTexture, inTexture2 );
 
 				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
 					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, inTransform ) );
