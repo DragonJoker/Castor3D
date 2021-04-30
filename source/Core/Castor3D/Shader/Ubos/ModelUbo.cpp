@@ -1,6 +1,7 @@
 #include "Castor3D/Shader/Ubos/ModelUbo.hpp"
 
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
+#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 
 #include <ShaderWriter/Source.hpp>
 
@@ -55,13 +56,14 @@ namespace castor3d
 
 		sdw::Mat4 ModelData::getCurModelMtx( ProgramFlags programFlags
 			, SkinningData const & skinning
-			, sdw::Mat4 const & instanceTransform )const
+			, VertexSurface const & surface )const
 		{
 			auto & writer = *getWriter();
 
 			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 			{
 				return SkinningUbo::computeTransform( skinning
+					, surface
 					, writer
 					, programFlags
 					, m_curMtxModel );
@@ -69,7 +71,7 @@ namespace castor3d
 
 			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
-				return instanceTransform;
+				return surface.transform;
 			}
 
 			return m_curMtxModel;
