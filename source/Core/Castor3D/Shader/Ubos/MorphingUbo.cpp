@@ -41,6 +41,50 @@ namespace castor3d
 				, makeType( writer.getTypesCache() ) );
 		}
 
+		void MorphingData::morph( sdw::Vec4 & pos
+			, sdw::Vec4 const & pos2
+			, sdw::Vec3 & uvw
+			, sdw::Vec3 const & uvw2 )const
+		{
+			if ( isEnabled() )
+			{
+				pos = vec4( morph( pos, pos2 ).xyz(), 1.0f );
+				uvw = morph( uvw, uvw2 );
+			}
+		}
+
+		void MorphingData::morph( sdw::Vec4 & pos
+			, sdw::Vec4 const & pos2
+			, sdw::Vec4 & nml
+			, sdw::Vec3 const & nml2
+			, sdw::Vec3 & uvw
+			, sdw::Vec3 const & uvw2 )const
+		{
+			morph( pos, pos2, uvw, uvw2 );
+
+			if ( isEnabled() )
+			{
+				nml = vec4( morph( nml.xyz(), nml2 ), 0.0f );
+			}
+		}
+
+		void MorphingData::morph( sdw::Vec4 & pos
+			, sdw::Vec4 const & pos2
+			, sdw::Vec4 & nml
+			, sdw::Vec3 const & nml2
+			, sdw::Vec4 & tan
+			, sdw::Vec3 const & tan2
+			, sdw::Vec3 & uvw
+			, sdw::Vec3 const & uvw2 )const
+		{
+			morph( pos, pos2, nml, nml2, uvw, uvw2 );
+
+			if ( isEnabled() )
+			{
+				tan = vec4( morph( tan.xyz(), tan2 ), 0.0f );
+			}
+		}
+
 		sdw::Float MorphingData::morph( sdw::Float & lhs, sdw::Float const & rhs )const
 		{
 			if ( isEnabled() )
