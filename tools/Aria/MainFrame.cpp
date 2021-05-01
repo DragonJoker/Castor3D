@@ -10,6 +10,7 @@
 #include "Aria/Database/DbDateTimeHelpers.hpp"
 #include "Aria/Database/DbResult.hpp"
 #include "Aria/Database/DbStatement.hpp"
+#include "Aria/Editor/SceneFileDialog.hpp"
 #include "Aria/Model/TreeModel.hpp"
 #include "Aria/Model/TreeModelNode.hpp"
 
@@ -56,6 +57,7 @@ namespace aria
 			eID_TEST_UPDATE_CASTOR,
 			eID_TEST_UPDATE_SCENE,
 			eID_TEST_COPY_FILE_NAME,
+			eID_TEST_VIEW_FILE,
 			eID_CATEGORY_RUN_TESTS_ALL,
 			eID_CATEGORY_RUN_TESTS_NOTRUN,
 			eID_CATEGORY_RUN_TESTS_ACCEPTABLE,
@@ -593,11 +595,12 @@ namespace aria
 		auto addTestBaseMenus = []( wxMenu & menu )
 		{
 			menu.Append( eID_TEST_COPY_FILE_NAME, _( "Copy test file path" ) + wxT( "\tF2" ) );
-			menu.Append( eID_TEST_VIEW, _( "View Test" ) + wxT( "\tF3" ) );
+			menu.Append( eID_TEST_VIEW_FILE, _( "View test scene file" ) + wxT( "\tF3" ) );
 			menu.Append( eID_TEST_SET_REF, _( "Set Reference" ) + wxT( "\tF4" ) );
-			menu.Append( eID_TEST_IGNORE_RESULT, _( "Ignore result" ) + wxT( "\tF5" ), wxEmptyString, true );
-			menu.Append( eID_TEST_UPDATE_CASTOR, _( "Update Castor3D's date" ) + wxT( "\tF6" ) );
-			menu.Append( eID_TEST_UPDATE_SCENE, _( "Update Scene's date" ) + wxT( "\tF7" ) );
+			menu.Append( eID_TEST_VIEW, _( "View Test" ) + wxT( "\tF5" ) );
+			menu.Append( eID_TEST_IGNORE_RESULT, _( "Ignore result" ) + wxT( "\tF6" ), wxEmptyString, true );
+			menu.Append( eID_TEST_UPDATE_CASTOR, _( "Update Castor3D's date" ) + wxT( "\tF7" ) );
+			menu.Append( eID_TEST_UPDATE_SCENE, _( "Update Scene's date" ) + wxT( "\tF8" ) );
 		};
 		auto addTestRunMenus = []( wxMenu & menu )
 		{
@@ -1003,6 +1006,26 @@ namespace aria
 			{
 				auto guard = castor::makeBlockGuard( [](){ wxTheClipboard->Close(); } );
 				wxTheClipboard->SetData( new wxTextDataObject( makeWxString( getTestFileName( m_config.test, *node->test ) ) ) );
+			}
+		}
+	}
+
+	void MainFrame::doViewTestSceneFile()
+	{
+		if ( m_selectedPage
+			&& m_selectedPage->selected.items.size() == 1 )
+		{
+			auto & item = *m_selectedPage->selected.items.begin();
+			auto node = static_cast< TreeModelNode * >( item.GetID() );
+
+			if ( isTestNode( *node ) )
+			{
+				auto filePath = getTestFileName( m_config.test, *node->test );
+				auto editor = new SceneFileDialog{ m_config
+					, makeWxString( filePath )
+					, makeWxString( filePath.getFileName( true ) )
+					, this };
+				editor->Show();
 			}
 		}
 	}
@@ -2234,6 +2257,9 @@ namespace aria
 			break;
 		case eID_TEST_COPY_FILE_NAME:
 			doCopyTestFileName();
+			break;
+		case eID_TEST_VIEW_FILE:
+			doViewTestSceneFile();
 			break;
 		case eID_TEST_VIEW:
 			doViewTest();

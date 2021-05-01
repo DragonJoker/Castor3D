@@ -102,6 +102,43 @@ if ( SQLite3_FOUND AND Boost_FOUND )
 		${${PROJECT_NAME}_FOLDER_SRC_FILES}
 	)
 	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Editor/EditorModule.hpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Editor/LanguageFileContext.hpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Editor/LanguageFileParser.hpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Editor/LanguageInfo.hpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Editor/SceneFileDialog.hpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Editor/SceneFileEditor.hpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Editor/StcContext.hpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Editor/StcTextEditor.hpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Editor/StyleInfo.hpp
+	)
+	set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Editor/LanguageFileContext.cpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Editor/LanguageFileParser.cpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Editor/LanguageInfo.cpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Editor/SceneFileDialog.cpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Editor/SceneFileEditor.cpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Editor/StcContext.cpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Editor/StcTextEditor.cpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Editor/StyleInfo.cpp
+	)
+	source_group( "Header Files\\Editor"
+		FILES
+			${${PROJECT_NAME}_FOLDER_HDR_FILES}
+	)
+	source_group( "Source Files\\Editor"
+		FILES
+			${${PROJECT_NAME}_FOLDER_SRC_FILES}
+	)
+	set( ${PROJECT_NAME}_HDR_FILES
+		${${PROJECT_NAME}_HDR_FILES}
+		${${PROJECT_NAME}_FOLDER_HDR_FILES}
+	)
+	set( ${PROJECT_NAME}_SRC_FILES
+		${${PROJECT_NAME}_SRC_FILES}
+		${${PROJECT_NAME}_FOLDER_SRC_FILES}
+	)
+	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Model/DataViewTestStatusRenderer.hpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Model/ModelPrerequisites.hpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Model/TreeModel.hpp
@@ -202,6 +239,11 @@ if ( SQLite3_FOUND AND Boost_FOUND )
 		${PROJECT_NAME}
 		bin
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}
+	)
+	copy_target_files_ex( ${PROJECT_NAME}
+		${PROJECT_NAME}
+		""
+		${CASTOR_SOURCE_DIR}/languages/${PROJECT_NAME}/CSCN.lang
 	)
 	set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
 	add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
