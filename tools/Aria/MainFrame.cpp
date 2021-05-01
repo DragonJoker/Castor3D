@@ -26,6 +26,7 @@
 #include <wx/dc.h>
 #include <wx/gauge.h>
 #include <wx/menu.h>
+#include <wx/msgdlg.h>
 #include <wx/progdlg.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
@@ -905,6 +906,25 @@ namespace aria
 		return range;
 	}
 
+	void MainFrame::doViewSceneFile( castor::Path const & filePath )
+	{
+		if ( !castor::File::fileExists( filePath ) )
+		{
+			FILE * file;
+
+			if ( castor::fileOpen( file, filePath.c_str(), "w" ) )
+			{
+				fclose( file );
+			}
+		}
+
+		auto editor = new SceneFileDialog{ m_config
+			, makeWxString( filePath )
+			, makeWxString( filePath.getFileName( true ) )
+			, this };
+		editor->Show();
+	}
+
 	void MainFrame::doProcessTest()
 	{
 		auto testNode = m_runningTest.next();
@@ -1020,12 +1040,7 @@ namespace aria
 
 			if ( isTestNode( *node ) )
 			{
-				auto filePath = getTestFileName( m_config.test, *node->test );
-				auto editor = new SceneFileDialog{ m_config
-					, makeWxString( filePath )
-					, makeWxString( filePath.getFileName( true ) )
-					, this };
-				editor->Show();
+				doViewSceneFile( getTestFileName( m_config.test, *node->test ) );
 			}
 		}
 	}
@@ -1840,6 +1855,44 @@ namespace aria
 
 	void MainFrame::doNewCategory()
 	{
+		wxTextEntryDialog dialog{ this
+			, _( "Enter the new category name" )
+			, _( "Category creation" ) };
+
+		if ( dialog.ShowModal() == wxID_OK )
+		{
+			auto categoryName = makeStdString( dialog.GetValue() );
+			auto catIt = m_database.getCategories().find( makeStdString( categoryName ) );
+
+			if ( catIt != m_database.getCategories().end() )
+			{
+				wxMessageBox( wxString{} << wxT( "Invalid category name: " ) << categoryName
+					, wxT( "Error" )
+					, wxICON_ERROR );
+				return;
+			}
+
+			auto category = m_database.createCategory( makeStdString( categoryName ) );
+			m_tests.tests.emplace( category, TestArray{} );
+
+			if ( !castor::File::directoryExists( m_config.test / category->name ) )
+			{
+				castor::File::directoryCreate( m_config.test / category->name );
+			}
+
+			for ( auto & rendererIt : m_database.getRenderers() )
+			{
+				auto renderer = rendererIt.second.get();
+				auto & rendCounts = m_tests.counts->getRenderer( renderer );
+				auto & catCounts = rendCounts.addCategory( category, {}, {} );
+				auto rendPageIt = m_testsPages.find( renderer );
+				auto rendRunIt = m_tests.runs.find( renderer );
+				rendRunIt->second.emplace( category, TestRunArray{} );
+				rendPageIt->second->model->addCategory( category
+					, catCounts
+					, true );
+			}
+		}
 	}
 
 	void MainFrame::doNewTest()
@@ -1863,7 +1916,9 @@ namespace aria
 
 			if ( catIt == m_database.getCategories().end() )
 			{
-				castor::Logger::logError( castor::makeStringStream() << "Invalid category name: " << categoryName );
+				wxMessageBox( wxString{} << wxT( "Invalid category name: " ) << categoryName
+					, wxT( "Error" )
+					, wxICON_ERROR );
 				return;
 			}
 
@@ -1898,10 +1953,12 @@ namespace aria
 							, db::DateTime{}
 							, db::DateTime{} } );
 					auto & dbTest = catRunIt->second.back();
-					auto node = rendPageIt->second->model->addTest( dbTest );
+					auto node = rendPageIt->second->model->addTest( dbTest, true );
 					rendPageIt->second->modelNodes.emplace( test.id, node );
 					catCounts.addTest( dbTest );
 				}
+
+				doViewSceneFile( getTestFileName( m_config.test, test ) );
 			}
 		}
 	}

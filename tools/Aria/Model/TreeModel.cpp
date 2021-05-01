@@ -107,20 +107,34 @@ namespace aria
 	}
 
 	TreeModelNode * TreeModel::addCategory( Category category
-		, CategoryTestsCounts & counts )
+		, CategoryTestsCounts & counts
+		, bool newCategory )
 	{
 		TreeModelNode * node = new TreeModelNode{ m_root, m_renderer, category, counts };
 		m_categories[category->name] = node;
 		m_root->Append( node );
+
+		if ( newCategory )
+		{
+			ItemAdded( wxDataViewItem{ m_root }, wxDataViewItem{ node } );
+		}
+
 		return node;
 	}
 
-	TreeModelNode * TreeModel::addTest( DatabaseTest & test )
+	TreeModelNode * TreeModel::addTest( DatabaseTest & test
+		, bool newTest )
 	{
 		auto it = m_categories.find( test->test->category->name );
 		CU_Require( m_categories.end() != it );
 		TreeModelNode * node = new TreeModelNode{ it->second, test };
 		it->second->Append( node );
+
+		if ( newTest )
+		{
+			ItemAdded( wxDataViewItem{ it->second }, wxDataViewItem{ node } );
+		}
+
 		return node;
 	}
 
