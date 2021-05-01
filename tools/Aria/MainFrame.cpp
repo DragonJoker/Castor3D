@@ -3,6 +3,7 @@
 #include "Aria/CategoryPanel.hpp"
 #include "Aria/DatabaseTest.hpp"
 #include "Aria/LayeredPanel.hpp"
+#include "Aria/RendererPage.hpp"
 #include "Aria/TestPanel.hpp"
 #include "Aria/TestsCounts.hpp"
 #include "Aria/Aui/AuiDockArt.hpp"
@@ -15,13 +16,11 @@
 #include "Aria/Model/TreeModelNode.hpp"
 
 #include <CastorUtils/Data/File.hpp>
-#include <CastorUtils/Design/BlockGuard.hpp>
 #include <CastorUtils/Log/Logger.hpp>
 #include <CastorUtils/Miscellaneous/Utils.hpp>
 
 #include <castor.xpm>
 
-#include <wx/clipbrd.h>
 #include <wx/choicdlg.h>
 #include <wx/dc.h>
 #include <wx/gauge.h>
@@ -45,85 +44,6 @@ namespace aria
 #else
 		static auto constexpr ExecMode = wxEXEC_SYNC;
 #endif
-		enum ID
-		{
-			eID_TEST_UPDATER,
-			eID_CATEGORY_UPDATER,
-			eID_GRID,
-			eID_DETAIL,
-			eID_TEST_RUN,
-			eID_TEST_VIEW,
-			eID_TEST_SET_REF,
-			eID_TEST_IGNORE_RESULT,
-			eID_TEST_UPDATE_CASTOR,
-			eID_TEST_UPDATE_SCENE,
-			eID_TEST_COPY_FILE_NAME,
-			eID_TEST_VIEW_FILE,
-			eID_CATEGORY_RUN_TESTS_ALL,
-			eID_CATEGORY_RUN_TESTS_NOTRUN,
-			eID_CATEGORY_RUN_TESTS_ACCEPTABLE,
-			eID_CATEGORY_RUN_TESTS_ALL_BUT_NEGLIGIBLE,
-			eID_CATEGORY_RUN_TESTS_OUTDATED,
-			eID_CATEGORY_UPDATE_CASTOR,
-			eID_CATEGORY_UPDATE_SCENE,
-			eID_RENDERER_RUN_TESTS_ALL,
-			eID_RENDERER_RUN_TESTS_NOTRUN,
-			eID_RENDERER_RUN_TESTS_ACCEPTABLE,
-			eID_RENDERER_RUN_TESTS_ALL_BUT_NEGLIGIBLE,
-			eID_RENDERER_RUN_TESTS_OUTDATED,
-			eID_RENDERER_UPDATE_CASTOR,
-			eID_RENDERER_UPDATE_SCENE,
-			eID_ALL_RUN_TESTS_ALL,
-			eID_ALL_RUN_TESTS_NOTRUN,
-			eID_ALL_RUN_TESTS_ACCEPTABLE,
-			eID_ALL_RUN_TESTS_ALL_BUT_NEGLIGIBLE,
-			eID_ALL_RUN_TESTS_OUTDATED,
-			eID_ALL_UPDATE_CASTOR,
-			eID_ALL_UPDATE_SCENE,
-			eID_CANCEL,
-			eID_TESTS_BOOK,
-			eID_NEW_RENDERER,
-			eID_NEW_CATEGORY,
-			eID_NEW_TEST,
-		};
-
-		struct TestView
-		{
-			enum Type : size_t
-			{
-				eNone,
-				eTest,
-				eCategory,
-			};
-		};
-
-		struct GeneralView
-		{
-			enum Type : size_t
-			{
-				eNone,
-				eAll,
-			};
-		};
-
-		bool isTestNode( TreeModelNode const & node )
-		{
-			return node.test != nullptr;
-		}
-
-		bool isCategoryNode( TreeModelNode const & node )
-		{
-			return node.category
-				&& node.renderer
-				&& !node.isRootNode();
-		}
-
-		bool isRendererNode( TreeModelNode const & node )
-		{
-			return node.renderer
-				&& node.isRootNode();
-		}
-
 		class DataViewTestBoolBitmapRenderer
 			: public wxDataViewCustomRenderer
 		{
@@ -188,18 +108,6 @@ namespace aria
 			bool m_value{ false };
 		};
 
-		castor::Path getTestFileName( castor::Path const & folder
-			, Test const & test )
-		{
-			return folder / test.category->name / ( test.name + ".cscn" );
-		}
-
-		castor::Path getTestFileName( castor::Path const & folder
-			, DatabaseTest const & test )
-		{
-			return getTestFileName( folder, *test->test );
-		}
-
 		wxString const & getVersion()
 		{
 			static wxString const result{ wxString{ wxT( "v" ) } << Aria_VERSION_MAJOR << wxT( "." ) << Aria_VERSION_MINOR << wxT( "." ) << Aria_VERSION_BUILD };
@@ -221,25 +129,6 @@ namespace aria
 		castor::Logger::logInfo( castor::makeStringStream() << "Terminating process " << pid << "(" << status << ")" );
 		auto event = new wxProcessEvent{ wxID_ANY, pid, status };
 		m_mainframe->QueueEvent( event );
-	}
-
-	//*********************************************************************************************
-
-	MainFrame::TestsPage::TestsPage( Config const & config
-		, Renderer renderer
-		, TestRunCategoryMap &runs
-		, RendererTestsCounts & counts
-		, wxWindow * list )
-		: auiManager{ list, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE }
-		, runs{ &runs }
-		, counts{ &counts.getCategories() }
-		, model{ new TreeModel{ config, renderer, counts } }
-	{
-	}
-
-	MainFrame::TestsPage::~TestsPage()
-	{
-		auiManager.UnInit();
 	}
 
 	//*********************************************************************************************
@@ -317,6 +206,8 @@ namespace aria
 		, m_database{ m_config }
 	{
 		SetClientSize( 900, 600 );
+		doInitMenus();
+		doInitMenuBar();
 		{
 			wxProgressDialog progress{ wxT( "Initialising" )
 				, wxT( "Initialising..." )
@@ -327,8 +218,6 @@ namespace aria
 			m_tests.tests = m_database.listTests( progress, index );
 			doInitGui();
 		}
-		doInitMenus();
-		doInitMenuBar();
 		Bind( wxEVT_CLOSE_WINDOW
 			, [this]( wxCloseEvent & evt )
 			{
@@ -406,132 +295,25 @@ namespace aria
 		auto & rendererCounts = m_tests.counts->addRenderer( renderer );
 		auto it = m_testsPages.find( renderer );
 
-		wxPanel * pagePanel = new wxPanel{ m_testsBook
-			, wxID_ANY
-			, wxDefaultPosition
-			, wxDefaultSize };
-
 		if ( it == m_testsPages.end() )
 		{
-			auto page = std::make_unique< TestsPage >( m_config
+			auto page = new RendererPage{ m_config
 				, renderer
 				, runsIt->second
 				, rendererCounts
-				, pagePanel );
-			m_testsPages.emplace( renderer
-				, std::move( page ) );
+				, m_testsBook
+				, this
+				, m_testMenu.get()
+				, m_categoryMenu.get()
+				, m_rendererMenu.get()
+				, m_allMenu.get()
+				, m_busyMenu.get() };
+			m_testsPages.emplace( renderer, page );
 			it = m_testsPages.find( renderer );
 		}
 
-		auto & testsPage = *it->second;
-
-		wxPanel * listPanel = new wxPanel{ pagePanel
-			, wxID_ANY
-			, wxDefaultPosition
-			, wxDefaultSize };
-		listPanel->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-		listPanel->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
-		wxBoxSizer * sizerList = new wxBoxSizer{ wxVERTICAL };
-		testsPage.view = new wxDataViewCtrl{ listPanel
-			, eID_GRID
-			, wxDefaultPosition
-			, wxDefaultSize
-			, wxDV_MULTIPLE };
-		// Intently inverted back and fore.
-		testsPage.view->SetBackgroundColour( PANEL_FOREGROUND_COLOUR );
-		testsPage.view->SetForegroundColour( PANEL_BACKGROUND_COLOUR );
-		sizerList->Add( testsPage.view, wxSizerFlags( 1 ).Expand() );
-		listPanel->SetSizer( sizerList );
-		sizerList->SetSizeHints( listPanel );
-
-		testsPage.view->AssociateModel( testsPage.model.get() );
-		testsPage.view->Connect( wxEVT_DATAVIEW_SELECTION_CHANGED
-			, wxDataViewEventHandler( MainFrame::onSelectionChange )
-			, nullptr
-			, this );
-		testsPage.view->Connect( wxEVT_DATAVIEW_ITEM_CONTEXT_MENU
-			, wxDataViewEventHandler( MainFrame::onItemContextMenu )
-			, nullptr
-			, this );
-		testsPage.model->instantiate( testsPage.view );
-
-		auto size = GetClientSize();
-		testsPage.generalViews = new LayeredPanel{ pagePanel
-			, wxDefaultPosition
-			, wxDefaultSize };
-		auto generalViews = testsPage.generalViews;
-		generalViews->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-		generalViews->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
-		auto layer = new wxPanel{ generalViews, wxID_ANY, wxDefaultPosition, size };
-		layer->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-		layer->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
-		generalViews->addLayer( layer );
-		testsPage.allView = new CategoryPanel{ m_config, generalViews, wxDefaultPosition, size };
-		generalViews->addLayer( testsPage.allView );
-		generalViews->showLayer( GeneralView::eAll );
-
-		testsPage.detailViews = new LayeredPanel{ pagePanel
-			, wxDefaultPosition
-			, wxDefaultSize };
-		auto detailViews = testsPage.detailViews;
-		detailViews->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-		detailViews->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
-		layer = new wxPanel{ detailViews, wxID_ANY, wxDefaultPosition, size };
-		layer->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-		layer->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
-		detailViews->addLayer( layer );
-		testsPage.testView = new TestPanel{ detailViews, m_config };
-		detailViews->addLayer( testsPage.testView );
-		testsPage.categoryView = new CategoryPanel{ m_config, detailViews, wxDefaultPosition, size };
-		detailViews->addLayer( testsPage.categoryView );
-		detailViews->showLayer( TestView::eCategory );
-		
-		testsPage.auiManager.AddPane( listPanel
-			, wxAuiPaneInfo()
-				.Layer( 0 )
-				.Caption( _( "Tests List" ) )
-				.CaptionVisible( true )
-				.CloseButton( false )
-				.PaneBorder( false )
-				.Center()
-				.Movable( false )
-				.Dockable( false )
-				.Floatable( false ) );
-		testsPage.auiManager.AddPane( generalViews
-			, wxAuiPaneInfo()
-				.Layer( 0 )
-				.MinSize( 200, 200 )
-				.Caption( _( "General View" ) )
-				.CaptionVisible( true )
-				.CloseButton( false )
-				.PaneBorder( false )
-				.Right()
-				.Movable( true )
-				.Dockable( true )
-				.Floatable( true )
-				.RightDockable( true )
-				.LeftDockable( true )
-				.BottomDockable( true )
-				.TopDockable( true ) );
-		testsPage.auiManager.AddPane( detailViews
-			, wxAuiPaneInfo()
-				.Layer( 0 )
-				.MinSize( 200, 200 )
-				.Caption( _( "Details View" ) )
-				.CaptionVisible( true )
-				.CloseButton( false )
-				.PaneBorder( false )
-				.Bottom()
-				.Movable( true )
-				.Dockable( true )
-				.Floatable( true )
-				.BottomDockable( true )
-				.TopDockable( true ) );
-		testsPage.auiManager.SetArtProvider( new AuiDockArt );
-		testsPage.auiManager.Update();
-
-		pagePanel->SetClientData( &testsPage );
-		m_testsBook->AddPage( pagePanel, renderer->name );
+		auto testsPage = it->second;
+		m_testsBook->AddPage( testsPage, renderer->name );
 	}
 
 	wxWindow * MainFrame::doInitTestsLists()
@@ -765,66 +547,26 @@ namespace aria
 		, wxProgressDialog & progress
 		, int & index )
 	{
-		auto runsIt = m_tests.runs.find( renderer );
-		auto & rendCounts = m_tests.counts->getRenderer( renderer );
 		auto rendIt = m_testsPages.find( renderer );
-		m_database.listLatestRuns( renderer
+		assert( rendIt != m_testsPages.end() );
+		rendIt->second->listLatestRuns( m_database
 			, m_tests.tests
-			, *rendIt->second->runs
+			, *m_tests.counts
 			, progress
 			, index );
-		assert( rendIt != m_testsPages.end() );
-		auto & testsPage = *rendIt->second;
-		testsPage.runs = &runsIt->second;
-
-		for ( auto & category : *testsPage.runs )
-		{
-			auto testsIt = m_tests.tests.find( category.first );
-			auto & catCounts = m_tests.counts->addCategory( renderer
-				, category.first
-				, testsIt->second
-				, category.second );
-			testsPage.model->addCategory( category.first, catCounts );
-
-			for ( auto & run : category.second )
-			{
-				catCounts.addTest( run );
-				auto testNode = testsPage.model->addTest( run );
-				testsPage.modelNodes[run->test->id] = testNode;
-				progress.Update( index++
-					, _( "Filling tests list" )
-					+ wxT( "\n" ) + getProgressDetails( run ) );
-				progress.Fit();
-			}
-		}
-
-		testsPage.categoryView->update( renderer->name
-			, rendCounts );
-		testsPage.allView->update( _( "All" )
-			, *m_tests.counts );
-		testsPage.model->expandRoots( testsPage.view );
-		testsPage.auiManager.Update();
-
-		for ( auto & testsPage : m_testsPages )
-		{
-			testsPage.second->allView->refresh();
-		}
 	}
 
-	MainFrame::TestsPage & MainFrame::doGetPage( wxDataViewItem const & item )
+	RendererPage * MainFrame::doGetPage( wxDataViewItem const & item )
 	{
 		auto node = static_cast< TreeModelNode * >( item.GetID() );
 		auto rendIt = m_testsPages.find( node->test->getRenderer() );
 
 		if ( rendIt != m_testsPages.end() )
 		{
-			return *rendIt->second;
+			return rendIt->second;
 		}
 
-		static TestRunCategoryMap runs;
-		static RendererTestsCounts counts{ m_config };
-		static TestsPage dummy{ m_config, nullptr, runs, counts, this };
-		return dummy;
+		return nullptr;
 	}
 
 	uint32_t MainFrame::doGetAllTestsRange()const
@@ -856,54 +598,12 @@ namespace aria
 
 	uint32_t MainFrame::doGetSelectedRendererRange()const
 	{
-		uint32_t range = 0u;
-
-		for ( auto & item : m_selectedPage->selected.items )
-		{
-			auto node = static_cast< TreeModelNode * >( item.GetID() );
-
-			if ( isRendererNode( *node ) )
-			{
-				auto rendIt = m_tests.runs.find( node->renderer );
-
-				if ( rendIt != m_tests.runs.end() )
-				{
-					for ( auto & category : rendIt->second )
-					{
-						range += category.second.size();
-					}
-				}
-			}
-		}
-
-		return range;
+		return m_selectedPage->getSelectedRange( m_tests.runs );
 	}
 
 	uint32_t MainFrame::doGetSelectedCategoryRange()const
 	{
-		uint32_t range = 0u;
-
-		for ( auto & item : m_selectedPage->selected.items )
-		{
-			auto node = static_cast< TreeModelNode * >( item.GetID() );
-
-			if ( isCategoryNode( *node ) )
-			{
-				auto rendIt = m_tests.runs.find( node->renderer );
-
-				if ( rendIt != m_tests.runs.end() )
-				{
-					auto catIt = rendIt->second.find( node->category );
-
-					if ( catIt != rendIt->second.end() )
-					{
-						range += catIt->second.size();
-					}
-				}
-			}
-		}
-
-		return range;
+		return m_selectedPage->getSelectedCategoryRange( m_tests.runs );
 	}
 
 	void MainFrame::doViewSceneFile( castor::Path const & filePath )
@@ -937,28 +637,31 @@ namespace aria
 			command << " " << m_config.test / getSceneFile( *test );
 			command << " -" << testNode.test->getRenderer()->name;
 			test.updateStatusNW( TestStatus::eRunning_Begin );
-			auto & page = doGetPage( wxDataViewItem{ testNode.node } );
-			page.model->ItemChanged( wxDataViewItem{ testNode.node } );
-			page.categoryView->refresh();
-			m_statusText->SetLabel( _( "Running test: " ) + test.getName() );
-			auto result = wxExecute( command
-				, ExecMode
-				, m_runningTest.genProcess.get() );
+			auto page = doGetPage( wxDataViewItem{ testNode.node } );
+
+			if ( page )
+			{
+				page->updateTest( testNode.node );
+				m_statusText->SetLabel( _( "Running test: " ) + test.getName() );
+				auto result = wxExecute( command
+					, ExecMode
+					, m_runningTest.genProcess.get() );
 #if CTP_UseAsync
 
-			if ( result == 0 )
-			{
-				castor::Logger::logError( "doProcessTest: " + castor::System::getLastErrorText() );
-			}
-			else
-			{
-				m_runningTest.currentProcess = m_runningTest.genProcess.get();
-			}
+				if ( result == 0 )
+				{
+					castor::Logger::logError( "doProcessTest: " + castor::System::getLastErrorText() );
+				}
+				else
+				{
+					m_runningTest.currentProcess = m_runningTest.genProcess.get();
+				}
 
 #else
-			onTestRunEnd( wxProcessEvent{} );
+				onTestRunEnd( wxProcessEvent{} );
 #endif
-			m_testProgress->SetValue( m_testProgress->GetValue() + 1u );
+				m_testProgress->SetValue( m_testProgress->GetValue() + 1u );
+			}
 		}
 		else
 		{
@@ -977,6 +680,11 @@ namespace aria
 			m_testProgress->Show();
 			doProcessTest();
 		}
+
+		if ( m_selectedPage )
+		{
+			m_selectedPage->refreshView();
+		}
 	}
 
 	void MainFrame::doPushTest( wxDataViewItem & item )
@@ -985,7 +693,7 @@ namespace aria
 		auto & run = *node->test;
 		m_runningTest.push( { &run, run.getStatus(), node } );
 		run.updateStatusNW( TestStatus::ePending );
-		m_selectedPage->model->ItemChanged( item );
+		m_selectedPage->updateTest( node );
 	}
 
 	void MainFrame::doClearRunning()
@@ -997,51 +705,35 @@ namespace aria
 	{
 		m_cancelled.exchange( false );
 
-		if ( m_selectedPage
-			&& !m_selectedPage->selected.items.empty() )
+		if ( m_selectedPage )
 		{
-			for ( auto & item : m_selectedPage->selected.items )
-			{
-				TreeModelNode * node = static_cast< TreeModelNode * >( item.GetID() );
+			auto tests = m_selectedPage->listSelectedTests();
 
-				if ( isTestNode( *node ) )
+			if ( !tests.empty() )
+			{
+				for ( auto & item : tests )
 				{
 					doPushTest( item );
 				}
-			}
 
-			doStartTests();
+				doStartTests();
+			}
 		}
 	}
 
 	void MainFrame::doCopyTestFileName()
 	{
-		if ( m_selectedPage
-			&& m_selectedPage->selected.items.size() == 1 )
+		if ( m_selectedPage )
 		{
-			auto & item = *m_selectedPage->selected.items.begin();
-			auto node = static_cast< TreeModelNode * >( item.GetID() );
-
-			if ( isTestNode( *node ) && wxTheClipboard->Open() )
-			{
-				auto guard = castor::makeBlockGuard( [](){ wxTheClipboard->Close(); } );
-				wxTheClipboard->SetData( new wxTextDataObject( makeWxString( getTestFileName( m_config.test, *node->test ) ) ) );
-			}
+			m_selectedPage->copyTestFileName();
 		}
 	}
 
 	void MainFrame::doViewTestSceneFile()
 	{
-		if ( m_selectedPage
-			&& m_selectedPage->selected.items.size() == 1 )
+		if ( m_selectedPage )
 		{
-			auto & item = *m_selectedPage->selected.items.begin();
-			auto node = static_cast< TreeModelNode * >( item.GetID() );
-
-			if ( isTestNode( *node ) )
-			{
-				doViewSceneFile( getTestFileName( m_config.test, *node->test ) );
-			}
+			m_selectedPage->viewTestSceneFile();
 		}
 	}
 
@@ -1049,27 +741,10 @@ namespace aria
 	{
 		m_cancelled.exchange( false );
 
-		if ( m_selectedPage
-			&& m_selectedPage->selected.items.size() == 1 )
+		if ( m_selectedPage )
 		{
-			auto & item = *m_selectedPage->selected.items.begin();
-			auto node = static_cast< TreeModelNode * >( item.GetID() );
-
-			if ( isTestNode( *node ) )
-			{
-				wxString command = m_config.viewer;
-				command << " " << makeWxString( getTestFileName( m_config.test, *node->test ) );
-				command << " -" << node->test->getRenderer()->name;
-				m_statusText->SetLabel( _( "Viewing: " ) + node->test->getName() );
-				auto result = wxExecute( command
-					, wxEXEC_SYNC
-					, m_runningTest.disProcess.get() );
-
-				if ( result != 0 )
-				{
-					castor::Logger::logError( "doViewTest: " + castor::System::getLastErrorText() );
-				}
-			}
+			m_selectedPage->viewTest( m_runningTest.disProcess.get()
+				, m_statusText );
 		}
 
 		if ( m_runningTest.empty() )
@@ -1086,31 +761,9 @@ namespace aria
 	{
 		m_cancelled.exchange( false );
 
-		if ( m_selectedPage
-			&& !m_selectedPage->selected.items.empty() )
+		if ( m_selectedPage )
 		{
-			int index = 0;
-			wxProgressDialog progress{ wxT( "Updating tests reference" )
-				, wxT( "Updating tests reference..." )
-				, int( m_selectedPage->selected.items.size() )
-				, this };
-
-			for ( auto & item : m_selectedPage->selected.items )
-			{
-				auto node = static_cast< TreeModelNode * >( item.GetID() );
-
-				if ( isTestNode( *node ) )
-				{
-					auto & run = *node->test;
-					progress.Update( index++
-						, _( "Setting reference\n" )
-						+ wxT( "\n" ) + getProgressDetails( run ) );
-					progress.Fit();
-					updateTestStatus( *node->test, TestStatus::eNegligible, true );
-					auto & page = doGetPage( item );
-					page.model->ItemChanged( item );
-				}
-			}
+			m_selectedPage->setTestsReferences( *m_tests.counts );
 		}
 	}
 
@@ -1119,33 +772,9 @@ namespace aria
 		m_cancelled.exchange( false );
 		updateCastorRefDate( m_config );
 
-		if ( m_selectedPage
-			&& !m_selectedPage->selected.items.empty() )
+		if ( m_selectedPage )
 		{
-			int index = 0;
-			wxProgressDialog progress{ wxT( "Ignoring tests results" )
-				, wxT( "Ignoring tests results..." )
-				, int( m_selectedPage->selected.items.size() )
-				, this };
-
-			for ( auto & item : m_selectedPage->selected.items )
-			{
-				auto node = static_cast< TreeModelNode * >( item.GetID() );
-
-				if ( isTestNode( *node ) )
-				{
-					auto & run = *node->test;
-					progress.Update( index++
-						, _( "Ignoring" )
-						+ wxT( "\n" ) + getProgressDetails( run ) );
-					progress.Fit();
-					run.updateIgnoreResult( m_testMenu->IsChecked( eID_TEST_IGNORE_RESULT )
-						, m_config.castorRefDate
-						, true );
-					auto & page = doGetPage( item );
-					page.model->ItemChanged( item );
-				}
-			}
+			m_selectedPage->ignoreTestsResult( m_testMenu->IsChecked( eID_TEST_IGNORE_RESULT ) );
 		}
 	}
 
@@ -1154,29 +783,9 @@ namespace aria
 		m_cancelled.exchange( false );
 		updateCastorRefDate( m_config );
 
-		if ( m_selectedPage
-			&& !m_selectedPage->selected.items.empty() )
+		if ( m_selectedPage )
 		{
-			int index = 0;
-			wxProgressDialog progress{ wxT( "Setting Castor Date" )
-				, wxT( "Setting Castor Date..." )
-				, int( m_selectedPage->selected.items.size() )
-				, this };
-
-			for ( auto & item : m_selectedPage->selected.items )
-			{
-				auto node = static_cast< TreeModelNode * >( item.GetID() );
-
-				if ( isTestNode( *node ) )
-				{
-					auto & run = *node->test;
-					progress.Update( index++
-						, _( "Setting reference" )
-						+ wxT( "\n" ) + getProgressDetails( run ) );
-					progress.Fit();
-					run.updateCastorDate( m_config.castorRefDate );
-				}
-			}
+			m_selectedPage->updateTestsCastorDate();
 		}
 	}
 
@@ -1184,29 +793,9 @@ namespace aria
 	{
 		m_cancelled.exchange( false );
 
-		if ( m_selectedPage
-			&& !m_selectedPage->selected.items.empty() )
+		if ( m_selectedPage )
 		{
-			int index = 0;
-			wxProgressDialog progress{ wxT( "Setting Scene Date" )
-				, wxT( "Setting Scene Date..." )
-				, int( m_selectedPage->selected.items.size() )
-				, this };
-
-			for ( auto & item : m_selectedPage->selected.items )
-			{
-				auto node = static_cast< TreeModelNode * >( item.GetID() );
-
-				if ( isTestNode( *node ) )
-				{
-					auto & run = *node->test;
-					progress.Update( index++
-						, _( "Setting reference" )
-						+ wxT( "\n" ) + getProgressDetails( run ) );
-					progress.Fit();
-					run.updateSceneDate();
-				}
-			}
+			m_selectedPage->updateTestsSceneDate();
 		}
 	}
 
@@ -1214,7 +803,7 @@ namespace aria
 	{
 		auto rendIt = m_testsPages.find( test->renderer );
 		assert( rendIt != m_testsPages.end() );
-		return rendIt->second->modelNodes[test->test->id];
+		return rendIt->second->getTestNode( test );
 	}
 
 	wxDataViewItem MainFrame::getTestItem( DatabaseTest const & test )
@@ -1226,99 +815,63 @@ namespace aria
 	{
 		m_cancelled.exchange( false );
 
-		for ( auto & item : m_selectedPage->selected.items )
+		if ( m_selectedPage )
 		{
-			auto node = static_cast< TreeModelNode * >( item.GetID() );
-
-			if ( isCategoryNode( *node ) )
-			{
-				auto rendIt = m_tests.runs.find( node->renderer );
-
-				if ( rendIt != m_tests.runs.end() )
+			auto items = m_selectedPage->listCategoryTests( m_tests.runs
+				, []( DatabaseTest const & run )
 				{
-					auto catIt = rendIt->second.find( node->category );
+					return true;
+				} );
 
-					if ( catIt != rendIt->second.end() )
-					{
-						for ( auto & run : catIt->second )
-						{
-							doPushTest( getTestItem( run ) );
-						}
-					}
-				}
+			for ( auto & item : items )
+			{
+				doPushTest( item );
 			}
-		}
 
-		doStartTests();
-		m_selectedPage->view->Refresh();
+			doStartTests();
+		}
 	}
 
 	void MainFrame::doRunCategoryTests( TestStatus filter )
 	{
 		m_cancelled.exchange( false );
 
-		for ( auto & item : m_selectedPage->selected.items )
+		if ( m_selectedPage )
 		{
-			auto node = static_cast< TreeModelNode * >( item.GetID() );
-
-			if ( isCategoryNode( *node ) )
-			{
-				auto rendIt = m_tests.runs.find( node->renderer );
-
-				if ( rendIt != m_tests.runs.end() )
+			auto items = m_selectedPage->listCategoryTests( m_tests.runs
+				, [filter]( DatabaseTest const & run )
 				{
-					auto catIt = rendIt->second.find( node->category );
+					return run->status == filter;
+				} );
 
-					if ( catIt != rendIt->second.end() )
-					{
-						for ( auto & run : catIt->second )
-						{
-							if ( run->status == filter )
-							{
-								doPushTest( getTestItem( run ) );
-							}
-						}
-					}
-				}
+			for ( auto & item : items )
+			{
+				doPushTest( item );
 			}
-		}
 
-		doStartTests();
-		m_selectedPage->view->Refresh();
+			doStartTests();
+		}
 	}
 
 	void MainFrame::doRunAllCategoryTestsBut( TestStatus filter )
 	{
 		m_cancelled.exchange( false );
 
-		for ( auto & item : m_selectedPage->selected.items )
+		if ( m_selectedPage )
 		{
-			auto node = static_cast< TreeModelNode * >( item.GetID() );
-
-			if ( isCategoryNode( *node ) )
-			{
-				auto rendIt = m_tests.runs.find( node->renderer );
-
-				if ( rendIt != m_tests.runs.end() )
+			auto items = m_selectedPage->listCategoryTests( m_tests.runs
+				, [filter]( DatabaseTest const & run )
 				{
-					auto catIt = rendIt->second.find( node->category );
+					return run->status != filter;
+				} );
 
-					if ( catIt != rendIt->second.end() )
-					{
-						for ( auto & run : catIt->second )
-						{
-							if ( run->status != filter )
-							{
-								doPushTest( getTestItem( run ) );
-							}
-						}
-					}
-				}
+			for ( auto & item : items )
+			{
+				doPushTest( item );
 			}
-		}
 
-		doStartTests();
-		m_selectedPage->view->Refresh();
+			doStartTests();
+		}
 	}
 
 	void MainFrame::doRunAllCategoryOutdatedTests()
@@ -1326,35 +879,22 @@ namespace aria
 		m_cancelled.exchange( false );
 		updateCastorRefDate( m_config );
 
-		for ( auto & item : m_selectedPage->selected.items )
+		if ( m_selectedPage )
 		{
-			auto node = static_cast< TreeModelNode * >( item.GetID() );
-
-			if ( isCategoryNode( *node ) )
-			{
-				auto rendIt = m_tests.runs.find( node->renderer );
-
-				if ( rendIt != m_tests.runs.end() )
+			auto items = m_selectedPage->listCategoryTests( m_tests.runs
+				, [this]( DatabaseTest const & run )
 				{
-					auto catIt = rendIt->second.find( node->category );
+					return isOutOfDate( m_config, *run )
+						|| run->status == TestStatus::eNotRun;
+				} );
 
-					if ( catIt != rendIt->second.end() )
-					{
-						for ( auto & run : catIt->second )
-						{
-							if ( isOutOfDate( m_config, *run )
-								|| run->status == TestStatus::eNotRun )
-							{
-								doPushTest( getTestItem( run ) );
-							}
-						}
-					}
-				}
+			for ( auto & item : items )
+			{
+				doPushTest( item );
 			}
-		}
 
-		doStartTests();
-		m_selectedPage->view->Refresh();
+			doStartTests();
+		}
 	}
 
 	void MainFrame::doUpdateCategoryCastorDate()
@@ -1368,38 +908,27 @@ namespace aria
 			, this };
 		int index = 0;
 
-		for ( auto & item : m_selectedPage->selected.items )
+		if ( m_selectedPage )
 		{
-			auto node = static_cast< TreeModelNode * >( item.GetID() );
-
-			if ( isCategoryNode( *node ) )
-			{
-				auto rendIt = m_tests.runs.find( node->renderer );
-
-				if ( rendIt != m_tests.runs.end() )
+			auto items = m_selectedPage->listCategoryTests( m_tests.runs
+				, []( DatabaseTest const & run )
 				{
-					auto catIt = rendIt->second.find( node->category );
+					return run.checkOutOfCastorDate();
+				} );
 
-					if ( catIt != rendIt->second.end() )
-					{
-						for ( auto & run : catIt->second )
-						{
-							progress.Update( index++
-								, _( "Updating tests Castor3D date" )
-								+ wxT( "\n" ) + getProgressDetails( run ) );
-							progress.Fit();
-
-							if ( run.checkOutOfCastorDate() )
-							{
-								run.updateCastorDate( m_config.castorRefDate );
-							}
-						}
-					}
-				}
+			for ( auto & item : items )
+			{
+				auto node = reinterpret_cast< TreeModelNode * >( item.GetID() );
+				auto & run = *node->test;
+				progress.Update( index++
+					, _( "Updating tests Castor3D date" )
+					+ wxT( "\n" ) + getProgressDetails( run ) );
+				progress.Fit();
+				run.updateCastorDate( m_config.castorRefDate );
 			}
-		}
 
-		m_selectedPage->view->Refresh();
+			m_selectedPage->refreshView();
+		}
 	}
 
 	void MainFrame::doUpdateCategorySceneDate()
@@ -1412,132 +941,91 @@ namespace aria
 			, this };
 		int index = 0;
 
-		for ( auto & item : m_selectedPage->selected.items )
+		if ( m_selectedPage )
 		{
-			auto node = static_cast< TreeModelNode * >( item.GetID() );
-
-			if ( isCategoryNode( *node ) )
-			{
-				auto rendIt = m_tests.runs.find( node->renderer );
-
-				if ( rendIt != m_tests.runs.end() )
+			auto items = m_selectedPage->listCategoryTests( m_tests.runs
+				, []( DatabaseTest const & run )
 				{
-					auto catIt = rendIt->second.find( node->category );
+					return run.checkOutOfSceneDate();
+				} );
 
-					if ( catIt != rendIt->second.end() )
-					{
-						for ( auto & run : catIt->second )
-						{
-							auto sceneDate = getSceneDate( m_config, *run );
-							progress.Update( index++
-								, _( "Updating tests Scene date" )
-								+ wxT( "\n" ) + getProgressDetails( run ) );
-							progress.Fit();
-
-							if ( run.checkOutOfSceneDate() )
-							{
-								run.updateSceneDate( sceneDate );
-							}
-						}
-					}
-				}
+			for ( auto & item : items )
+			{
+				auto node = reinterpret_cast< TreeModelNode * >( item.GetID() );
+				auto & run = *node->test;
+				auto sceneDate = getSceneDate( m_config, *run );
+				progress.Update( index++
+					, _( "Updating tests Scene date" )
+					+ wxT( "\n" ) + getProgressDetails( run ) );
+				progress.Fit();
+				run.updateSceneDate( sceneDate );
 			}
-		}
 
-		m_selectedPage->view->Refresh();
+			m_selectedPage->refreshView();
+		}
 	}
 
 	void MainFrame::doRunAllRendererTests()
 	{
 		m_cancelled.exchange( false );
 
-		for ( auto & item : m_selectedPage->selected.items )
+		if ( m_selectedPage )
 		{
-			auto node = static_cast< TreeModelNode * >( item.GetID() );
-
-			if ( isRendererNode( *node ) )
-			{
-				auto rendIt = m_tests.runs.find( node->renderer );
-
-				if ( rendIt != m_tests.runs.end() )
+			auto items = m_selectedPage->listRendererTests( m_tests.runs
+				, []( DatabaseTest const & run )
 				{
-					for ( auto & category : rendIt->second )
-					{
-						for ( auto & run : category.second )
-						{
-							doPushTest( getTestItem( run ) );
-						}
-					}
-				}
-			}
-		}
+					return true;
+				} );
 
-		doStartTests();
-		m_selectedPage->view->Refresh();
+			for ( auto & item : items )
+			{
+				doPushTest( item );
+			}
+
+			doStartTests();
+		}
 	}
 
 	void MainFrame::doRunRendererTests( TestStatus filter )
 	{
 		m_cancelled.exchange( false );
 
-		for ( auto & item : m_selectedPage->selected.items )
+		if ( m_selectedPage )
 		{
-			auto node = static_cast< TreeModelNode * >( item.GetID() );
-
-			if ( isRendererNode( *node ) )
-			{
-				auto rendIt = m_tests.runs.find( node->renderer );
-
-				if ( rendIt != m_tests.runs.end() )
+			auto items = m_selectedPage->listRendererTests( m_tests.runs
+				, [filter]( DatabaseTest const & run )
 				{
-					for ( auto & category : rendIt->second )
-					{
-						for ( auto & run : category.second )
-						{
-							if ( run->status == filter )
-							{
-								doPushTest( getTestItem( run ) );
-							}
-						}
-					}
-				}
-			}
-		}
+					return run->status == filter;
+				} );
 
-		doStartTests();
-		m_selectedPage->view->Refresh();
+			for ( auto & item : items )
+			{
+				doPushTest( item );
+			}
+
+			doStartTests();
+		}
 	}
 
 	void MainFrame::doRunAllRendererTestsBut( TestStatus filter )
 	{
 		m_cancelled.exchange( false );
 
-		for ( auto & item : m_selectedPage->selected.items )
+		if ( m_selectedPage )
 		{
-			auto node = static_cast< TreeModelNode * >( item.GetID() );
-
-			if ( isRendererNode( *node ) )
-			{
-				auto rendIt = m_tests.runs.find( node->renderer );
-
-				if ( rendIt != m_tests.runs.end() )
+			auto items = m_selectedPage->listRendererTests( m_tests.runs
+				, [filter]( DatabaseTest const & run )
 				{
-					for ( auto & category : rendIt->second )
-					{
-						for ( auto & run : category.second )
-						{
-							if ( run->status != filter )
-							{
-								doPushTest( getTestItem( run ) );
-							}
-						}
-					}
-				}
-			}
-		}
+					return run->status != filter;
+				} );
 
-		doStartTests();
-		m_selectedPage->view->Refresh();
+			for ( auto & item : items )
+			{
+				doPushTest( item );
+			}
+
+			doStartTests();
+		}
 	}
 
 	void MainFrame::doRunAllRendererOutdatedTests()
@@ -1545,34 +1033,22 @@ namespace aria
 		m_cancelled.exchange( false );
 		updateCastorRefDate( m_config );
 
-		for ( auto & item : m_selectedPage->selected.items )
+		if ( m_selectedPage )
 		{
-			auto node = static_cast< TreeModelNode * >( item.GetID() );
-
-			if ( isRendererNode( *node ) )
-			{
-				auto rendIt = m_tests.runs.find( node->renderer );
-
-				if ( rendIt != m_tests.runs.end() )
+			auto items = m_selectedPage->listRendererTests( m_tests.runs
+				, [this]( DatabaseTest const & run )
 				{
-					for ( auto & category : rendIt->second )
-					{
-						for ( auto & run : category.second )
-						{
-							if ( isOutOfDate( m_config, *run )
-								|| run->status == TestStatus::eNotRun )
-							{
-								doPushTest( getTestItem( run ) );
-							}
-						}
-					}
-				}
-			}
-		}
+					return isOutOfDate( m_config, *run )
+						|| run->status == TestStatus::eNotRun;
+				} );
 
-		doStartTests();
-		m_selectedPage->view->Refresh();
-		m_selectedPage->view->Update();
+			for ( auto & item : items )
+			{
+				doPushTest( item );
+			}
+
+			doStartTests();
+		}
 	}
 
 	void MainFrame::doUpdateRendererCastorDate()
@@ -1586,36 +1062,27 @@ namespace aria
 			, this };
 		int index = 0;
 
-		for ( auto & item : m_selectedPage->selected.items )
+		if ( m_selectedPage )
 		{
-			auto node = static_cast< TreeModelNode * >( item.GetID() );
-
-			if ( isRendererNode( *node ) )
-			{
-				auto rendIt = m_tests.runs.find( node->renderer );
-
-				if ( rendIt != m_tests.runs.end() )
+			auto items = m_selectedPage->listRendererTests( m_tests.runs
+				, [this]( DatabaseTest const & run )
 				{
-					for ( auto & category : rendIt->second )
-					{
-						for ( auto & run : category.second )
-						{
-							progress.Update( index++
-								, _( "Updating tests Castor3D date" )
-								+ wxT( "\n" ) + getProgressDetails( run ) );
-							progress.Fit();
+					return run.checkOutOfCastorDate();
+				} );
 
-							if ( run.checkOutOfCastorDate() )
-							{
-								run.updateCastorDate( m_config.castorRefDate );
-							}
-						}
-					}
-				}
+			for ( auto & item : items )
+			{
+				auto node = reinterpret_cast< TreeModelNode * >( item.GetID() );
+				auto & run = *node->test;
+				progress.Update( index++
+					, _( "Updating tests Castor3D date" )
+					+ wxT( "\n" ) + getProgressDetails( run ) );
+				progress.Fit();
+				run.updateCastorDate( m_config.castorRefDate );
 			}
-		}
 
-		m_selectedPage->view->Refresh();
+			m_selectedPage->refreshView();
+		}
 	}
 
 	void MainFrame::doUpdateRendererSceneDate()
@@ -1628,37 +1095,28 @@ namespace aria
 			, this };
 		int index = 0;
 
-		for ( auto & item : m_selectedPage->selected.items )
+		if ( m_selectedPage )
 		{
-			auto node = static_cast< TreeModelNode * >( item.GetID() );
-
-			if ( isRendererNode( *node ) )
-			{
-				auto rendIt = m_tests.runs.find( node->renderer );
-
-				if ( rendIt != m_tests.runs.end() )
+			auto items = m_selectedPage->listRendererTests( m_tests.runs
+				, [this]( DatabaseTest const & run )
 				{
-					for ( auto & category : rendIt->second )
-					{
-						for ( auto & run : category.second )
-						{
-							auto sceneDate = getSceneDate( m_config, *run );
-							progress.Update( index++
-								, _( "Updating tests Scene date" )
-								+ wxT( "\n" ) + getProgressDetails( run ) );
-							progress.Fit();
+					return run.checkOutOfSceneDate();
+				} );
 
-							if ( run.checkOutOfSceneDate() )
-							{
-								run.updateSceneDate( sceneDate );
-							}
-						}
-					}
-				}
+			for ( auto & item : items )
+			{
+				auto node = reinterpret_cast< TreeModelNode * >( item.GetID() );
+				auto & run = *node->test;
+				auto sceneDate = getSceneDate( m_config, *run );
+				progress.Update( index++
+					, _( "Updating tests Scene date" )
+					+ wxT( "\n" ) + getProgressDetails( run ) );
+				progress.Fit();
+				run.updateSceneDate( sceneDate );
 			}
-		}
 
-		m_selectedPage->view->Refresh();
+			m_selectedPage->refreshView();
+		}
 	}
 
 	void MainFrame::doRunAllTests()
@@ -1677,7 +1135,6 @@ namespace aria
 		}
 
 		doStartTests();
-		m_selectedPage->view->Refresh();
 	}
 
 	void MainFrame::doRunTests( TestStatus filter )
@@ -1699,7 +1156,6 @@ namespace aria
 		}
 
 		doStartTests();
-		m_selectedPage->view->Refresh();
 	}
 
 	void MainFrame::doRunAllTestsBut( TestStatus filter )
@@ -1721,7 +1177,6 @@ namespace aria
 		}
 
 		doStartTests();
-		m_selectedPage->view->Refresh();
 	}
 
 	void MainFrame::doRunAllOutdatedTests()
@@ -1744,7 +1199,6 @@ namespace aria
 		}
 
 		doStartTests();
-		m_selectedPage->view->Refresh();
 	}
 
 	void MainFrame::doUpdateAllCastorDate()
@@ -1777,7 +1231,7 @@ namespace aria
 			}
 		}
 
-		m_selectedPage->view->Refresh();
+		m_selectedPage->refreshView();
 	}
 
 	void MainFrame::doUpdateAllSceneDate()
@@ -1810,16 +1264,22 @@ namespace aria
 			}
 		}
 
-		m_selectedPage->view->Refresh();
+		m_selectedPage->refreshView();
 	}
 
 	void MainFrame::doCancelTest( DatabaseTest & test
 		, TestStatus status )
 	{
 		test.updateStatusNW( status );
-		wxDataViewItem item = wxDataViewItem{ getTestNode( test ) };
-		auto & page = doGetPage( item );
-		page.model->ItemChanged( item );
+		auto node = getTestNode( test );
+		wxDataViewItem item = wxDataViewItem{ node };
+		auto page = doGetPage( item );
+
+		if ( page )
+		{
+			m_selectedPage->updateTest( node );
+		}
+
 		doClearRunning();
 		m_statusText->SetLabel( _( "Idle" ) );
 		m_testProgress->Hide();
@@ -1885,12 +1345,12 @@ namespace aria
 				auto renderer = rendererIt.second.get();
 				auto & rendCounts = m_tests.counts->getRenderer( renderer );
 				auto & catCounts = rendCounts.addCategory( category, {}, {} );
-				auto rendPageIt = m_testsPages.find( renderer );
+
 				auto rendRunIt = m_tests.runs.find( renderer );
 				rendRunIt->second.emplace( category, TestRunArray{} );
-				rendPageIt->second->model->addCategory( category
-					, catCounts
-					, true );
+
+				auto rendPageIt = m_testsPages.find( renderer );
+				rendPageIt->second->addCategory( category, catCounts );
 			}
 		}
 	}
@@ -1942,7 +1402,6 @@ namespace aria
 					auto renderer = rendererIt.second.get();
 					auto rendRunIt = m_tests.runs.find( renderer );
 					auto & rendCounts = m_tests.counts->getRenderer( renderer );
-					auto rendPageIt = m_testsPages.find( renderer );
 					auto catRunIt = rendRunIt->second.find( category );
 					auto & catCounts = rendCounts.getCounts( category );
 					catRunIt->second.emplace_back( m_database
@@ -1953,8 +1412,9 @@ namespace aria
 							, db::DateTime{}
 							, db::DateTime{} } );
 					auto & dbTest = catRunIt->second.back();
-					auto node = rendPageIt->second->model->addTest( dbTest, true );
-					rendPageIt->second->modelNodes.emplace( test.id, node );
+
+					auto rendPageIt = m_testsPages.find( renderer );
+					rendPageIt->second->addTest( dbTest );
 					catCounts.addTest( dbTest );
 				}
 
@@ -1966,21 +1426,12 @@ namespace aria
 	void MainFrame::doUpdateTestView( DatabaseTest const & test )
 	{
 		wxDataViewItem testItem{ getTestNode( test ) };
-		auto & page = doGetPage( testItem );
-		page.model->ItemChanged( testItem );
-		wxDataViewItem categoryItem{ page.model->GetParent( testItem ) };
-		page.model->ItemChanged( categoryItem );
-		wxDataViewItem rendererItem{ page.model->GetParent( categoryItem ) };
-		page.model->ItemChanged( rendererItem );
+		auto page = doGetPage( testItem );
 
-		if ( page.detailViews->isLayerShown( TestView::eTest )
-			&& page.testView->getTest() == &test )
+		if ( page )
 		{
-			page.testView->refresh();
+			page->updateTestView( test, *m_tests.counts );
 		}
-
-		page.allView->update( _( "All" )
-			, *m_tests.counts );
 	}
 
 	void MainFrame::onTestRunEnd( int status )
@@ -2069,9 +1520,14 @@ namespace aria
 					, makeDbDateTime( wxDateTime::Now() ) );
 			}
 
-			auto & page = doGetPage( wxDataViewItem{ testNode.node } );
-			page.model->ItemChanged( wxDataViewItem{ testNode.node } );
-			doUpdateTestView( test );
+			auto page = doGetPage( wxDataViewItem{ testNode.node } );
+
+			if ( page )
+			{
+				page->updateTest( testNode.node );
+				page->updateTestView( test, *m_tests.counts );
+			}
+
 			doProcessTest();
 		}
 		else
@@ -2150,159 +1606,7 @@ namespace aria
 
 	void MainFrame::onTestsPageChange( wxAuiNotebookEvent & evt )
 	{
-		m_selectedPage = reinterpret_cast< TestsPage * >( m_testsBook->GetPage( m_testsBook->GetSelection() )->GetClientData() );
-	}
-
-	void MainFrame::onSelectionChange( wxDataViewEvent & evt )
-	{
-		auto & page = *m_selectedPage;
-		auto wasDisplayingTest = page.detailViews->isLayerShown( TestView::eTest );
-		auto wasDisplayingCategory = page.detailViews->isLayerShown( TestView::eCategory );
-		page.selected.allTests = true;
-		page.selected.allCategories = true;
-		page.selected.allRenderers = true;
-		page.view->GetSelections( page.selected.items );
-		bool displayTest = false;
-		bool displayCategory = false;
-
-		if ( page.selected.items.size() == 1 )
-		{
-			TreeModelNode * node = static_cast< TreeModelNode * >( page.selected.items[0].GetID() );
-
-			if ( node )
-			{
-				Category category{};
-				Renderer renderer{};
-				DatabaseTest * test{};
-
-				if ( node->test )
-				{
-					test = node->test;
-				}
-				else if ( node->isRootNode() )
-				{
-					renderer = node->renderer;
-				}
-				else if ( node->GetParent() )
-				{
-					renderer = node->renderer;
-					category = node->category;
-				}
-
-				if ( test )
-				{
-					if ( !isPending( test->getStatus() )
-						&& !isRunning( test->getStatus() ) )
-					{
-						page.testView->setTest( *test );
-						page.detailViews->showLayer( TestView::eTest );
-						displayTest = true;
-						page.selected.allTests = true;
-					}
-				}
-				else if ( category )
-				{
-					auto rendRunIt = m_tests.runs.find( renderer );
-					auto & rendCounts = m_tests.counts->getRenderer( renderer );
-
-					if ( rendRunIt != m_tests.runs.end() )
-					{
-						auto catRunIt = rendRunIt->second.find( category );
-						auto & catCounts = rendCounts.getCounts( category );
-
-						if ( catRunIt != rendRunIt->second.end() )
-						{
-							page.categoryView->update( category->name
-								, catCounts );
-						}
-						else
-						{
-							page.categoryView->update( renderer->name
-								, rendCounts );
-						}
-					}
-
-					page.detailViews->showLayer( TestView::eCategory );
-					displayCategory = true;
-				}
-				else if ( renderer )
-				{
-					auto rendRunIt = m_tests.runs.find( renderer );
-					auto & rendCounts = m_tests.counts->getRenderer( renderer );
-
-					if ( rendRunIt != m_tests.runs.end() )
-					{
-						page.categoryView->update( renderer->name
-							, rendCounts );
-					}
-
-					page.detailViews->showLayer( TestView::eCategory );
-					displayCategory = true;
-				}
-			}
-		}
-
-		for ( auto & item : page.selected.items )
-		{
-			auto node = static_cast< TreeModelNode * >( item.GetID() );
-			page.selected.allRenderers = isRendererNode( *node )
-				&& page.selected.allRenderers;
-			page.selected.allCategories = isCategoryNode( *node )
-				&& page.selected.allCategories;
-			page.selected.allTests = node->test
-				&& page.selected.allTests;
-		}
-
-		if ( !displayTest && !displayCategory )
-		{
-			page.detailViews->hideLayers();
-		}
-
-		if ( wasDisplayingCategory != displayCategory
-			|| wasDisplayingTest != displayTest )
-		{
-			// Page change
-			page.auiManager.Update();
-		}
-	}
-
-	void MainFrame::onItemContextMenu( wxDataViewEvent & evt )
-	{
-		if ( m_selectedPage
-			&& ( !m_selectedPage->selected.items.empty() ) )
-		{
-			if ( m_selectedPage->selected.allTests )
-			{
-				if ( m_selectedPage->selected.items.size() <= 1 )
-				{
-					m_testMenu->Enable( eID_TEST_IGNORE_RESULT, true );
-					m_testMenu->Check( eID_TEST_IGNORE_RESULT, static_cast< TreeModelNode * >( m_selectedPage->selected.items.front().GetID() )->test->getIgnoreResult() );
-				}
-				else
-				{
-					m_testMenu->Enable( eID_TEST_IGNORE_RESULT, false );
-					m_testMenu->Check( eID_TEST_IGNORE_RESULT, false );
-				}
-
-				PopupMenu( m_testMenu.get() );
-			}
-			else if ( m_selectedPage->selected.allCategories )
-			{
-				PopupMenu( m_categoryMenu.get() );
-			}
-			else if ( m_selectedPage->selected.allRenderers )
-			{
-				PopupMenu( m_rendererMenu.get() );
-			}
-			else
-			{
-				PopupMenu( m_allMenu.get() );
-			}
-		}
-		else
-		{
-			PopupMenu( m_busyMenu.get() );
-		}
+		m_selectedPage = reinterpret_cast< RendererPage * >( m_testsBook->GetPage( m_testsBook->GetSelection() ) );
 	}
 
 	void MainFrame::onTestsMenuOption( wxCommandEvent & evt )
@@ -2449,8 +1753,12 @@ namespace aria
 				: TestStatus( uint32_t( node->statusName.status ) + 1 );
 		}
 
-		auto & page = doGetPage( wxDataViewItem{ node } );
-		page.model->ItemChanged( wxDataViewItem{ node } );
+		auto page = doGetPage( wxDataViewItem{ node } );
+
+		if ( page )
+		{
+			page->updateTest( node );
+		}
 
 		evt.Skip();
 	}
@@ -2464,14 +1772,12 @@ namespace aria
 	{
 		for ( auto & testPageIt : m_testsPages )
 		{
-			auto & page = *testPageIt.second;
+			auto page = testPageIt.second;
 
-			if ( page.model )
+			if ( page )
 			{
 				auto size = GetClientSize();
-				auto genSize = page.generalViews->GetSize();
-				page.model->resize( page.view
-					, { size.GetWidth() - genSize.GetWidth(), size.GetHeight() } );
+				page->resizeModel( size );
 			}
 		}
 

@@ -201,6 +201,7 @@ namespace aria
 	class DatabaseTest;
 	class LayeredPanel;
 	class MainFrame;
+	class RendererPage;
 	class TestDatabase;
 	class TestPanel;
 	class TreeModelNode;
@@ -394,6 +395,15 @@ namespace aria
 	db::DateTime getFileDate( castor::Path const & imgPath );
 	bool isDateTime( castor::String const & value
 		, db::DateTime & result );
+
+
+	bool isTestNode( TreeModelNode const & node );
+	bool isCategoryNode( TreeModelNode const & node );
+	bool isRendererNode( TreeModelNode const & node );
+	castor::Path getTestFileName( castor::Path const & folder
+		, Test const & test );
+	castor::Path getTestFileName( castor::Path const & folder
+		, DatabaseTest const & test );
 }
 
 #endif
