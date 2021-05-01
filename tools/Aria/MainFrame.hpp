@@ -58,6 +58,7 @@ namespace aria
 		uint32_t doGetAllRunsRange()const;
 		uint32_t doGetSelectedRendererRange()const;
 		uint32_t doGetSelectedCategoryRange()const;
+		void doViewSceneFile( castor::Path const & filePath );
 		void doProcessTest();
 		void doStartTests();
 		void doPushTest( wxDataViewItem & item );

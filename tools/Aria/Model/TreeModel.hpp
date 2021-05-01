@@ -36,8 +36,10 @@ namespace aria
 		~TreeModel();
 
 		TreeModelNode * addCategory( Category category
-			, CategoryTestsCounts & counts );
-		TreeModelNode * addTest( DatabaseTest & test );
+			, CategoryTestsCounts & counts
+			, bool newCategory = false );
+		TreeModelNode * addTest( DatabaseTest & test
+			, bool newTest = false );
 		void expandRoots( wxDataViewCtrl * view );
 		void instantiate( wxDataViewCtrl * view );
 		void resize( wxDataViewCtrl * view
