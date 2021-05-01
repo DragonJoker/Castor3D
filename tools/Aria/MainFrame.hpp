@@ -64,6 +64,7 @@ namespace aria
 		void doClearRunning();
 		void doRunTest();
 		void doCopyTestFileName();
+		void doViewTestSceneFile();
 		void doViewTest();
 		void doSetRef();
 		void doIgnoreTestResult();
