@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CTP_MainFrame_HPP___
 #define ___CTP_MainFrame_HPP___
 
-#include "Prerequisites.hpp"
+#include "RendererPage.hpp"
 #include "TestDatabase.hpp"
 #include "Database/DbConnection.hpp"
 #include "Database/DbStatement.hpp"
@@ -29,6 +29,48 @@ namespace aria
 		: public wxFrame
 	{
 	public:
+		enum ID
+		{
+			eID_TEST_UPDATER,
+			eID_CATEGORY_UPDATER,
+			eID_DETAIL,
+			eID_TEST_RUN,
+			eID_TEST_VIEW,
+			eID_TEST_SET_REF,
+			eID_TEST_IGNORE_RESULT,
+			eID_TEST_UPDATE_CASTOR,
+			eID_TEST_UPDATE_SCENE,
+			eID_TEST_COPY_FILE_NAME,
+			eID_TEST_VIEW_FILE,
+			eID_CATEGORY_RUN_TESTS_ALL,
+			eID_CATEGORY_RUN_TESTS_NOTRUN,
+			eID_CATEGORY_RUN_TESTS_ACCEPTABLE,
+			eID_CATEGORY_RUN_TESTS_ALL_BUT_NEGLIGIBLE,
+			eID_CATEGORY_RUN_TESTS_OUTDATED,
+			eID_CATEGORY_UPDATE_CASTOR,
+			eID_CATEGORY_UPDATE_SCENE,
+			eID_RENDERER_RUN_TESTS_ALL,
+			eID_RENDERER_RUN_TESTS_NOTRUN,
+			eID_RENDERER_RUN_TESTS_ACCEPTABLE,
+			eID_RENDERER_RUN_TESTS_ALL_BUT_NEGLIGIBLE,
+			eID_RENDERER_RUN_TESTS_OUTDATED,
+			eID_RENDERER_UPDATE_CASTOR,
+			eID_RENDERER_UPDATE_SCENE,
+			eID_ALL_RUN_TESTS_ALL,
+			eID_ALL_RUN_TESTS_NOTRUN,
+			eID_ALL_RUN_TESTS_ACCEPTABLE,
+			eID_ALL_RUN_TESTS_ALL_BUT_NEGLIGIBLE,
+			eID_ALL_RUN_TESTS_OUTDATED,
+			eID_ALL_UPDATE_CASTOR,
+			eID_ALL_UPDATE_SCENE,
+			eID_CANCEL,
+			eID_TESTS_BOOK,
+			eID_NEW_RENDERER,
+			eID_NEW_CATEGORY,
+			eID_NEW_TEST,
+		};
+
+	public:
 		explicit MainFrame( Config config );
 		~MainFrame();
 
@@ -41,8 +83,6 @@ namespace aria
 		wxDataViewItem getTestItem( DatabaseTest const & test );
 
 	private:
-		struct TestsPage;
-
 		wxWindow * doInitTestsLists();
 		void doInitTestsList( Renderer renderer );
 		void doInitGui();
@@ -52,7 +92,7 @@ namespace aria
 		void doFillList( Renderer renderer
 			, wxProgressDialog & progress
 			, int & index );
-		TestsPage & doGetPage( wxDataViewItem const & item );
+		RendererPage * doGetPage( wxDataViewItem const & item );
 
 		uint32_t doGetAllTestsRange()const;
 		uint32_t doGetAllRunsRange()const;
@@ -103,46 +143,12 @@ namespace aria
 
 		void onClose( wxCloseEvent & evt );
 		void onTestsPageChange( wxAuiNotebookEvent & evt );
-		void onSelectionChange( wxDataViewEvent & evt );
-		void onItemContextMenu( wxDataViewEvent & evt );
 		void onTestsMenuOption( wxCommandEvent & evt );
 		void onDatabaseMenuOption( wxCommandEvent & evt );
 		void onProcessEnd( wxProcessEvent & evt );
 		void onTestUpdateTimer( wxTimerEvent & evt );
 		void onCategoryUpdateTimer( wxTimerEvent & evt );
 		void onSize( wxSizeEvent & evt );
-
-		struct Selection
-		{
-			wxDataViewItemArray items;
-			bool allTests{};
-			bool allCategories{};
-			bool allRenderers{};
-		};
-
-		struct TestsPage
-		{
-			TestsPage( TestsPage && ) = default;
-			TestsPage & operator=( TestsPage && ) = default;
-			TestsPage( Config const & config
-				, Renderer renderer
-				, TestRunCategoryMap & runs
-				, RendererTestsCounts & counts
-				, wxWindow * list );
-			~TestsPage();
-			wxAuiManager auiManager;
-			TestRunCategoryMap * runs;
-			TestsCountsCategoryMap * counts;
-			wxObjectDataPtr< TreeModel > model;
-			wxDataViewCtrl * view{};
-			LayeredPanel * generalViews{};
-			LayeredPanel * detailViews{};
-			TestPanel * testView{};
-			CategoryPanel * allView{};
-			CategoryPanel * categoryView{};
-			std::map< uint32_t, TreeModelNode * > modelNodes;
-			Selection selected;
-		};
 
 		class TestProcess
 			: public wxProcess
@@ -186,9 +192,9 @@ namespace aria
 		Config m_config;
 		TestDatabase m_database;
 		Tests m_tests;
-		std::map< Renderer, std::unique_ptr< TestsPage > > m_testsPages;
+		std::map< Renderer, RendererPage * > m_testsPages;
 		wxAuiNotebook * m_testsBook{};
-		TestsPage * m_selectedPage{};
+		RendererPage * m_selectedPage{};
 		wxStaticText * m_statusText{};
 		wxGauge * m_testProgress{};
 		bool m_hasPage{ false };
