@@ -1,9 +1,10 @@
 #include "Aria/Prerequisites.hpp"
 
 #include "Aria/DatabaseTest.hpp"
-#include "Aria/Database/DbDateTimeHelpers.hpp"
 #include "Aria/TestDatabase.hpp"
 #include "Aria/TestsCounts.hpp"
+#include "Aria/Database/DbDateTimeHelpers.hpp"
+#include "Aria/Model/TreeModelNode.hpp"
 
 #include <CastorUtils/Data/File.hpp>
 #include <CastorUtils/Miscellaneous/Utils.hpp>
@@ -406,5 +407,35 @@ namespace aria
 		, db::DateTime & result )
 	{
 		return db::date_time::isDateTime( value, FOLDER_DATETIME, result );
+	}
+
+	bool isTestNode( TreeModelNode const & node )
+	{
+		return node.test != nullptr;
+	}
+
+	bool isCategoryNode( TreeModelNode const & node )
+	{
+		return node.category
+			&& node.renderer
+			&& !node.isRootNode();
+	}
+
+	bool isRendererNode( TreeModelNode const & node )
+	{
+		return node.renderer
+			&& node.isRootNode();
+	}
+
+	castor::Path getTestFileName( castor::Path const & folder
+		, Test const & test )
+	{
+		return folder / test.category->name / ( test.name + ".cscn" );
+	}
+
+	castor::Path getTestFileName( castor::Path const & folder
+		, DatabaseTest const & test )
+	{
+		return getTestFileName( folder, *test->test );
 	}
 }
