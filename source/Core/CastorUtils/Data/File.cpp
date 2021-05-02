@@ -4,6 +4,8 @@
 
 #include "CastorUtils/Log/Logger.hpp"
 
+#include <filesystem>
+
 namespace castor
 {
 	File::File( Path const & p_fileName, FlagCombination< OpenMode > const & p_mode, EncodingMode p_encoding )
@@ -277,29 +279,41 @@ namespace castor
 			, dstFolder / srcFileName.getFileName( true ) );
 	}
 
+	std::filesystem::path makePath( Path const & path )
+	{
+		String string{ path };
+		return std::filesystem::path{ string
+			, std::locale{ "C" }
+			, std::filesystem::path::auto_format };
+	}
+
 	bool File::copyFileName( Path const & srcFileName
 		, Path const & dstFileName )
 	{
 		bool result = false;
-		std::ifstream src( string::stringCast< char >( srcFileName ), std::ios::binary );
 
-		if ( src.is_open() )
+		if ( fileExists( srcFileName ) )
 		{
-			std::ofstream dst( string::stringCast< char >( dstFileName ), std::ios::binary | std::ios::trunc );
-
-			if ( dst.is_open() )
+			if ( !fileExists( dstFileName ) )
 			{
-				dst << src.rdbuf();
-				result = true;
+				std::error_code error;
+				std::filesystem::copy( makePath( srcFileName )
+					, makePath( dstFileName )
+					, error );
+
+				if ( error )
+				{
+					Logger::logWarning( cuT( "copyFile - Couldn't copy file [" ) + srcFileName + cuT( "] to [" ) + dstFileName + cuT( "]: " ) + error.message() );
+				}
 			}
 			else
 			{
-				Logger::logWarning( cuT( "copyFile - Can't open destination file : " ) + dstFileName );
+				Logger::logWarning( cuT( "copyFile - Destination file [" ) + dstFileName + cuT( "] already exists." ) );
 			}
 		}
 		else
 		{
-			Logger::logWarning( cuT( "copyFile - Can't open source file : " ) + srcFileName );
+			Logger::logWarning( cuT( "copyFile - Source file [" ) + srcFileName + cuT( "] doesn't exist." ) );
 		}
 
 		return result;
