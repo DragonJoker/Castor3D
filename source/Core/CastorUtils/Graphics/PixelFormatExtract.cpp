@@ -107,6 +107,9 @@ namespace castor
 					, componentSize
 					, count );
 				break;
+			default:
+				CU_Failure( "Unsupported PixelComponent for component copy" );
+				break;
 			}
 		}
 
@@ -162,6 +165,9 @@ namespace castor
 					, dstPixelFormat
 					, componentSize
 					, count );
+				break;
+			default:
+				CU_Failure( "Unsupported PixelComponent for component copy" );
 				break;
 			}
 		}
