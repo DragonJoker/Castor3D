@@ -146,7 +146,7 @@ jobs:
       run: cmake --build . --config ${{ matrix.buildType }} --target clean
 
     - name: Upload success package
-      if: runner.os != 'Windows' && github.event_name == 'push' && ((steps.configure-windows.conclusion == 'success') || (steps.configure-linux.conclusion == 'success') || (steps.configure-macos.conclusion == 'success'))
+      if: github.event_name == 'push' && ((steps.configure-windows.conclusion == 'success') || (steps.configure-linux.conclusion == 'success') || (steps.configure-macos.conclusion == 'success'))
       uses: actions/upload-artifact@v2
       with:
         name: Castor3D-${{ matrix.os[1] }}.zip
