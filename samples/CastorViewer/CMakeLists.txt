@@ -50,8 +50,10 @@ target_link_libraries( ${PROJECT_NAME}
 		${Castor3DBinsDependencies}
 		castor::GuiCommon
 )
-set_property( TARGET ${PROJECT_NAME}
-	PROPERTY
+set_target_properties( ${PROJECT_NAME}
+	PROPERTIES
+		CXX_STANDARD 17
+		CXX_EXTENSIONS OFF
 		FOLDER "Samples"
 )
 install_target_ex( ${PROJECT_NAME}

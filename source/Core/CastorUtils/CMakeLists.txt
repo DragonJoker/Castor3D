@@ -815,7 +815,12 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		api_dll
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}
 	)
-	set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Core" )
+	set_target_properties( ${PROJECT_NAME}
+		PROPERTIES
+			CXX_STANDARD 17
+			CXX_EXTENSIONS OFF
+			FOLDER "Core"
+	)
 	add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
 	target_add_doc_ex( ${PROJECT_NAME} "French" "*.h *.hpp" ${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME} )
 	target_add_doc_ex( ${PROJECT_NAME} "English" "*.h *.hpp" ${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME} )
