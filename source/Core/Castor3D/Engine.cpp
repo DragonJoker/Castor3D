@@ -37,6 +37,7 @@
 #include <CastorUtils/Graphics/ExrImageLoader.hpp>
 #include <CastorUtils/Graphics/FreeImageLoader.hpp>
 #include <CastorUtils/Graphics/GliImageLoader.hpp>
+#include <CastorUtils/Graphics/GliImageWriter.hpp>
 #include <CastorUtils/Graphics/StbImageLoader.hpp>
 #include <CastorUtils/Graphics/StbImageWriter.hpp>
 #include <CastorUtils/Graphics/XpmImageLoader.hpp>
@@ -123,6 +124,7 @@ namespace castor3d
 		XpmImageLoader::registerLoader( m_imageLoader );
 		FreeImageLoader::registerLoader( m_imageLoader );
 		StbImageWriter::registerWriter( m_imageWriter );
+		GliImageWriter::registerWriter( m_imageWriter );
 
 		// m_listenerCache *MUST* be the first created.
 		m_listenerCache = makeCache< FrameListener, String >( *this
@@ -270,6 +272,13 @@ namespace castor3d
 
 		// and eventually the  plug-ins.
 		m_pluginCache->clear();
+		GliImageLoader::unregisterLoader( m_imageLoader );
+		StbImageLoader::unregisterLoader( m_imageLoader );
+		ExrImageLoader::unregisterLoader( m_imageLoader );
+		XpmImageLoader::unregisterLoader( m_imageLoader );
+		FreeImageLoader::unregisterLoader( m_imageLoader );
+		StbImageWriter::unregisterWriter( m_imageWriter );
+		GliImageWriter::unregisterWriter( m_imageWriter );
 		cleanupGlslang();
 
 		m_logger = nullptr;

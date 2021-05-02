@@ -44,6 +44,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/FontCache.hpp>
 #include <CastorUtils/Graphics/FreeImageLoader.hpp>
 #include <CastorUtils/Graphics/GliImageLoader.hpp>
+#include <CastorUtils/Graphics/GliImageWriter.hpp>
 #include <CastorUtils/Graphics/Grid.hpp>
 #include <CastorUtils/Graphics/HdrColourComponent.hpp>
 #include <CastorUtils/Graphics/HeightMapToNormalMap.hpp>
