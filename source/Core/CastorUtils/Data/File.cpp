@@ -8,6 +8,15 @@
 
 namespace castor
 {
+	namespace
+	{
+		std::filesystem::path makePath( Path const & path )
+		{
+			String string{ path };
+			return std::filesystem::path{ string, std::locale{ "C" } };
+		}
+	}
+
 	File::File( Path const & p_fileName, FlagCombination< OpenMode > const & p_mode, EncodingMode p_encoding )
 		: m_mode{ p_mode }
 		, m_encoding{ p_encoding }
@@ -277,14 +286,6 @@ namespace castor
 	{
 		return copyFileName( srcFileName
 			, dstFolder / srcFileName.getFileName( true ) );
-	}
-
-	std::filesystem::path makePath( Path const & path )
-	{
-		String string{ path };
-		return std::filesystem::path{ string
-			, std::locale{ "C" }
-			, std::filesystem::path::auto_format };
 	}
 
 	bool File::copyFileName( Path const & srcFileName
