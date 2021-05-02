@@ -140,7 +140,7 @@ jobs:
         7z a $GITHUB_WORKSPACE/Castor3D-${{ matrix.os[1] }}.zip $GITHUB_WORKSPACE/package/Castor3D/
 
     - name: Clean build folder
-      if: (steps.build.conclusion != 'success')
+      if: (steps.build.conclusion == 'success')
       working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
       shell: bash
       run: cmake --build . --config ${{ matrix.buildType }} --target clean
