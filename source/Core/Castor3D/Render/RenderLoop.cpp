@@ -174,10 +174,16 @@ namespace castor3d
 	{
 		if ( m_renderSystem.hasMainDevice() )
 		{
+			bool first = m_first;
 			RenderInfo & info = m_debugOverlays->beginFrame();
 			doGpuStep( info );
 			doCpuStep( tslf );
 			m_lastFrameTime = m_debugOverlays->endFrame();
+
+			if ( first )
+			{
+				log::info << "Initialisation time: " << ( m_lastFrameTime.load().count() / 1000.0f ) << " ms." << std::endl;
+			}
 		}
 	}
 
