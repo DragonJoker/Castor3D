@@ -44,69 +44,6 @@ namespace aria
 #else
 		static auto constexpr ExecMode = wxEXEC_SYNC;
 #endif
-		class DataViewTestBoolBitmapRenderer
-			: public wxDataViewCustomRenderer
-		{
-			static wxString GetDefaultType()
-			{
-				return wxS( "bool" );
-			}
-
-		public:
-			DataViewTestBoolBitmapRenderer( char const * const * xpmTrue
-				, char const * const * xpmFalse
-				, const wxString & varianttype = GetDefaultType()
-				, wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT
-				, int align = wxDVR_DEFAULT_ALIGNMENT )
-				: wxDataViewCustomRenderer{ varianttype, mode, align }
-				, m_size{ 20, 20 }
-				, m_bitmaps{ createImage( xpmFalse )
-					, createImage( xpmTrue ) }
-			{
-			}
-
-			~DataViewTestBoolBitmapRenderer()
-			{
-			}
-
-			bool SetValue( const wxVariant & value ) override
-			{
-				m_value = value.GetBool();
-				return true;
-			}
-
-			bool GetValue( wxVariant & value ) const override
-			{
-				value = wxVariant{ m_value };
-				return true;
-			}
-
-			bool Render( wxRect cell, wxDC * dc, int state ) override
-			{
-				dc->DrawBitmap( m_bitmaps[m_value ? 1u : 0u]
-					, cell.x
-					, cell.y
-					, true );
-				return false;
-			}
-
-			wxSize GetSize() const override
-			{
-				return m_size;
-			}
-
-		private:
-			wxImage createImage( char const * const * xpmData )
-			{
-				wxImage result{ xpmData };
-				return result.Scale( m_size.x, m_size.y );
-			}
-
-		private:
-			wxSize m_size;
-			std::array< wxBitmap, 2 > m_bitmaps;
-			bool m_value{ false };
-		};
 
 		wxString const & getVersion()
 		{
