@@ -51,7 +51,12 @@ install_target_ex( ${PROJECT_NAME}
 	api_dll
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}
 )
-set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Core" )
+set_target_properties( ${PROJECT_NAME}
+	PROPERTIES
+		CXX_STANDARD 17
+		CXX_EXTENSIONS OFF
+		FOLDER "Core"
+)
 add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
 
 set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )

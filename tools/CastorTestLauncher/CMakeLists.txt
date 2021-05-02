@@ -64,8 +64,10 @@ target_compile_definitions( ${PROJECT_NAME} PRIVATE
 	${CastorToolsDefinitions}
 	${wxWidgets_DEFINITIONS}
 )
-set_property( TARGET ${PROJECT_NAME}
-	PROPERTY
+set_target_properties( ${PROJECT_NAME}
+	PROPERTIES
+		CXX_STANDARD 17
+		CXX_EXTENSIONS OFF
 		FOLDER "Tools"
 )
 install_target_ex( ${PROJECT_NAME}

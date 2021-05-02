@@ -120,6 +120,7 @@ set_target_properties( ${PROJECT_NAME}
 	PROPERTIES
 		VERSION ${PROJECT_VERSION}
 		CXX_STANDARD 17
+		CXX_EXTENSIONS OFF
 		FOLDER "Tests/Castor"
 )
 add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )

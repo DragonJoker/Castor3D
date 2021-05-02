@@ -321,8 +321,10 @@ install_target_ex( ${PROJECT_NAME}
 	lib
 	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}
 )
-set_property( TARGET ${PROJECT_NAME}
-	PROPERTY
+set_target_properties( ${PROJECT_NAME}
+	PROPERTIES
+		CXX_STANDARD 17
+		CXX_EXTENSIONS OFF
 		FOLDER "Samples"
 )
 
