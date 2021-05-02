@@ -689,7 +689,7 @@ namespace castor3d::exporter
 			, castor::Path & filePath
 			, castor::Path & meshFolder )
 		{
-			folder = fileName.getPath() / fileName.getFileName();
+			folder = fileName.getPath();
 
 			if ( !castor::File::directoryExists( folder ) )
 			{
@@ -704,7 +704,6 @@ namespace castor3d::exporter
 			{
 				dataSubfolder = fileName.getFileName();
 				options.subfolder = dataSubfolder;
-				options.rootFolder = options.rootFolder / dataSubfolder;
 			}
 
 			meshFolder = folder / cuT( "Meshes" );
