@@ -74,6 +74,11 @@ namespace castor3d
 			, SamplerSPtr rhs
 			, castor::String const & name )
 		{
+			if ( lhs == rhs )
+			{
+				return lhs;
+			}
+
 			log::debug << name + cuT( " - Merging samplers." ) << std::endl;
 			auto sampler = std::make_shared< Sampler >( *lhs->getEngine(), name );
 			sampler->setBorderColour( lhs->getBorderColour() );
@@ -174,14 +179,14 @@ namespace castor3d
 		TextureLayoutSPtr getTextureLayout( Engine & engine
 			, castor::PxBufferBaseUPtr buffer
 			, castor::String const & name
-			, bool isNormalMap )
+			, bool allowCompression )
 		{
 			// Finish buffer initialisation.
 			auto & loader = engine.getImageLoader();
 			auto compressedFormat = loader.getOptions().getCompressed( buffer->getFormat() );
 
 			if ( compressedFormat != buffer->getFormat()
-				&& isNormalMap )
+				&& allowCompression )
 			{
 				log::debug << name << cuT( " - Compressing result." ) << std::endl;
 				buffer = castor::PxBufferBase::createUnique( &loader.getOptions()
@@ -210,7 +215,10 @@ namespace castor3d
 		{
 			auto unit = std::make_shared< TextureUnit >( engine );
 			unit->setConfiguration( resultConfig );
-			unit->setTexture( getTextureLayout( engine, std::move( buffer ), name, resultConfig.normalMask[0] == 0 ) );
+			unit->setTexture( getTextureLayout( engine
+				, std::move( buffer )
+				, name
+				, resultConfig.normalMask[0] == 0 ) );
 			return unit;
 		}
 

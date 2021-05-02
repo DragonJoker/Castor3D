@@ -1,9 +1,11 @@
 #include "Castor3D/Text/TextTextureUnit.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Text/TextRenderTarget.hpp"
 #include "Castor3D/Text/TextTextureConfiguration.hpp"
 
@@ -61,6 +63,15 @@ namespace castor
 			auto texture = unit.getTexture();
 			auto image = texture->getPath();
 			hasTexture = !image.empty() || !texture->isStatic();
+			bool createImageFile = false;
+
+			if ( !hasTexture
+				&& texture->isStatic() )
+			{
+				hasTexture = true;
+				createImageFile = true;
+				image = Path{ Path{ texture->getName() }.getFileName() + cuT( ".ktx" ) };
+			}
 
 			if ( hasTexture )
 			{
@@ -91,13 +102,43 @@ namespace castor
 						}
 						else
 						{
-							if ( m_subFolder.empty() )
+							if ( createImageFile )
 							{
-								result = writeFile( file, cuT( "image" ), Path{ image }, m_folder, cuT( "Textures" ) );
+								log::info << tabs() << cuT( "\tCreating texture image" ) << std::endl;
+								castor::Path path{ cuT( "Textures" ) };
+
+								if ( !m_subFolder.empty() )
+								{
+									path /= m_subFolder;
+								}
+
+								if ( !File::directoryExists( m_folder / path ) )
+								{
+									File::directoryCreate( m_folder / path );
+								}
+
+								path /= image;
+								auto & writer = texture->getOwner()->getEngine()->getImageWriter();
+								result = writer.write( m_folder / path, texture->getImage().getPxBuffer() );
+								checkError( result, "Image creation" );
+
+								if ( result )
+								{
+									result = writePath( file, cuT( "image" ), path );
+								}
 							}
 							else
 							{
-								result = writeFile( file, cuT( "image" ), Path{ image }, m_folder, String{ cuT( "Textures" ) } + Path::GenericSeparator + m_subFolder );
+								log::info << tabs() << cuT( "\tCopying texture image" ) << std::endl;
+
+								if ( m_subFolder.empty() )
+								{
+									result = writeFile( file, cuT( "image" ), Path{ image }, m_folder, cuT( "Textures" ) );
+								}
+								else
+								{
+									result = writeFile( file, cuT( "image" ), Path{ image }, m_folder, String{ cuT( "Textures" ) } + Path::GenericSeparator + m_subFolder );
+								}
 							}
 						}
 					}
