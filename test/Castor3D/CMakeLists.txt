@@ -28,7 +28,12 @@ if ( MSVC )
 		PROPERTY COMPILE_FLAGS "${CMAKE_CXX_FLAGS} /bigobj" )
 endif ()
 
-set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Tests/Castor" )
+set_target_properties( ${PROJECT_NAME}
+	PROPERTIES
+		CXX_STANDARD 17
+		CXX_EXTENSIONS OFF
+		FOLDER "Tests/Castor"
+)
 add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
 
 # Copying test data files
