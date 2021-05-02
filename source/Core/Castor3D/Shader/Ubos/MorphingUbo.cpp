@@ -48,8 +48,8 @@ namespace castor3d
 		{
 			if ( isEnabled() )
 			{
-				pos = vec4( morph( pos, pos2 ).xyz(), 1.0f );
-				uvw = morph( uvw, uvw2 );
+				pos = vec4( sdw::mix( pos.xyz(), pos2.xyz(), vec3( m_time ) ), 1.0f );
+				uvw = sdw::mix( uvw, uvw2, vec3( m_time ) );
 			}
 		}
 
@@ -64,7 +64,7 @@ namespace castor3d
 
 			if ( isEnabled() )
 			{
-				nml = vec4( morph( nml.xyz(), nml2 ), 0.0f );
+				nml = vec4( sdw::mix( nml.xyz(), nml2, vec3( m_time ) ), 0.0f );
 			}
 		}
 
@@ -81,7 +81,7 @@ namespace castor3d
 
 			if ( isEnabled() )
 			{
-				tan = vec4( morph( tan.xyz(), tan2 ), 0.0f );
+				tan = vec4( sdw::mix( tan.xyz(), tan2, vec3( m_time ) ), 0.0f );
 			}
 		}
 

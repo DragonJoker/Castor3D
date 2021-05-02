@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
-#include <ShaderWriter/VecTypes/Vec3.hpp>
+#include <ShaderWriter/MatTypes/Mat4.hpp>
 
 namespace castor3d
 {
