@@ -9,12 +9,17 @@
 #include <CastorUtils/Data/File.hpp>
 
 #include <wx/dialog.h>
+#include <wx/filedlg.h>
+#include <wx/filename.h>
 
 namespace aria
 {
 	typedef enum eID
 	{
+		eID_PAGES,
 		eID_MENU_QUIT,
+		eID_MENU_OPEN,
+		eID_MENU_CLOSE,
 		eID_MENU_SAVE,
 		eID_MENU_RUN,
 	}	eID;
@@ -55,10 +60,24 @@ namespace aria
 		Bind( wxEVT_MENU
 			, [this]( wxCommandEvent & event )
 			{
-				m_editor->saveFile();
+				doCloseFile();
 				event.Skip();
 			}
-			, eID_MENU_SAVE );
+			, eID_MENU_CLOSE );
+		Bind( wxEVT_MENU
+			, [this]( wxCommandEvent & event )
+			{
+				doOpenFile();
+				event.Skip();
+			}
+			, eID_MENU_OPEN );
+		Bind( wxEVT_MENU
+			, [this]( wxCommandEvent & event )
+			{
+				doSaveFile();
+				event.Skip();
+			}
+		, eID_MENU_SAVE );
 		Bind( wxEVT_MENU
 			, [this]( wxCommandEvent & event )
 			{
@@ -100,26 +119,28 @@ namespace aria
 
 	void SceneFileDialog::doInitialiseLayout( wxString const & filename )
 	{
-		m_editor = new SceneFileEditor{ m_stcContext
-			, filename
-			, this };
-		m_editor->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-		m_editor->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+		m_editors = new wxAuiNotebook( this
+			, eID_PAGES
+			, wxDefaultPosition
+			, wxDefaultSize
+			, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_TAB_FIXED_WIDTH | wxAUI_NB_SCROLL_BUTTONS );
+		m_editors->SetArtProvider( new AuiTabArt );
 
 		wxSize size = GetClientSize();
 		m_auiManager.SetArtProvider( new AuiDockArt );
-		m_auiManager.AddPane( m_editor
+		m_auiManager.AddPane( m_editors
 			, wxAuiPaneInfo()
-				.CaptionVisible( false )
-				.Name( wxT( "Editor" ) )
-				.Caption( _( "Editor" ) )
-				.CenterPane()
-				.CaptionVisible( false )
-				.Dock()
-				.MinSize( size )
-				.Layer( 1 )
-				.PaneBorder( false ) );
+			.CaptionVisible( false )
+			.Name( wxT( "Files" ) )
+			.Caption( _( "Files" ) )
+			.CenterPane()
+			.Dock()
+			.MinSize( size )
+			.Layer( 1 )
+			.PaneBorder( false ) );
 		m_auiManager.Update();
+
+		doLoadPage( filename );
 	}
 
 	void SceneFileDialog::doPopulateMenu()
@@ -129,11 +150,15 @@ namespace aria
 		menuBar->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 
 		wxMenu * menu = new wxMenu;
-		menu->Append( eID_MENU_SAVE, _( "&Save\tCTRL+S" ) );
+		menu->Append( eID_MENU_OPEN, _( "&Open File" ) + wxT( "\tCTRL+O" ) );
 		menu->AppendSeparator();
-		menu->Append( eID_MENU_RUN, _( "&Run\tF5" ) );
+		menu->Append( eID_MENU_CLOSE, _( "Close File" ) + wxT( "\tCTRL+W" ) );
 		menu->AppendSeparator();
-		menu->Append( eID_MENU_QUIT, _( "&Quit\tCTRL+Q" ) );
+		menu->Append( eID_MENU_SAVE, _( "&Save" ) + wxT( "\tCTRL+S" ) );
+		menu->AppendSeparator();
+		menu->Append( eID_MENU_RUN, _( "&Run" ) + wxT( "\tF5" ) );
+		menu->AppendSeparator();
+		menu->Append( eID_MENU_QUIT, _( "&Quit" ) + wxT( "\tCTRL+Q" ) );
 		menuBar->Append( menu, _T( "&File" ) );
 
 		SetMenuBar( menuBar );
@@ -141,6 +166,62 @@ namespace aria
 
 	void SceneFileDialog::doCleanup()
 	{
-		m_auiManager.DetachPane( m_editor );
+		m_auiManager.DetachPane( m_editors );
+		m_editors->DeleteAllPages();
+	}
+
+	void SceneFileDialog::doOpenFile()
+	{
+		static const wxString CSCN_WILDCARD = wxT( " (*.cscn)|*.cscn|" );
+
+		wxFileName fileName{ m_filename };
+		auto path = fileName.GetPath();
+		wxString wildcard;
+		wildcard << _( "Castor3D scene file" );
+		wildcard << CSCN_WILDCARD;
+
+		wxFileDialog fileDialog{ this, _( "Open a scene" )
+			, path
+			, wxEmptyString
+			, wildcard
+			, wxFD_OPEN | wxFD_FILE_MUST_EXIST };
+
+		if ( fileDialog.ShowModal() == wxID_OK )
+		{
+			doLoadPage( fileDialog.GetPath() );
+		}
+	}
+
+	void SceneFileDialog::doCloseFile()
+	{
+		m_editors->DeletePage( m_editors->GetSelection() );
+
+		if ( m_editors->GetPageCount() == 0 )
+		{
+			Close();
+		}
+	}
+
+	void SceneFileDialog::doSaveFile()
+	{
+		auto editor = static_cast< SceneFileEditor * >( m_editors->GetPage( m_editors->GetSelection() ) );
+
+		if ( editor )
+		{
+			editor->saveFile();
+		}
+	}
+
+	void SceneFileDialog::doLoadPage( wxString const & filename )
+	{
+		wxFileName fileName{ filename };
+		auto page = new SceneFileEditor{ m_stcContext
+			, filename
+			, this };
+		page->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+		page->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+		m_editors->AddPage( page, fileName.GetName(), true );
+		auto size = m_editors->GetClientSize();
+		page->SetSize( 0, 22, size.x, size.y - 22 );
 	}
 }
