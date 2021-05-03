@@ -146,17 +146,20 @@ namespace castor3d
 
 	void TextureConfigurationBuffer::removeTextureConfiguration( TextureUnit & unit )
 	{
-		auto id = unit.getId();
+		auto id = unit.getId() - 1u;
 		CU_Require( id < m_configurations.size() );
 		CU_Require( &unit == m_configurations[id] );
+		auto it = m_configurations.erase( m_configurations.begin() + id );
+		m_connections.erase( m_connections.begin() + id );
+		++id;
 
-		for ( auto it = m_configurations.erase( m_configurations.begin() + id ); it != m_configurations.end(); ++it )
+		while ( it != m_configurations.end() )
 		{
 			( *it )->setId( id );
+			++it;
 			++id;
 		}
 
-		m_connections.erase( m_connections.begin() + id );
 		unit.setId( 0u );
 		m_configID--;
 	}
