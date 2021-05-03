@@ -29,13 +29,17 @@ namespace aria
 		void doInitialiseLayout( wxString const & filename );
 		void doPopulateMenu();
 		void doCleanup();
+		void doOpenFile();
+		void doCloseFile();
+		void doSaveFile();
+		void doLoadPage( wxString const & filename );
 
 	private:
 		Config const & m_config;
 		wxString m_filename;
 		wxAuiManager m_auiManager;
 		StcContext m_stcContext;
-		SceneFileEditor * m_editor{};
+		wxAuiNotebook * m_editors{};
 	};
 }
 
