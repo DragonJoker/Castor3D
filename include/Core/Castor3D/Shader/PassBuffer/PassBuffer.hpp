@@ -36,9 +36,7 @@ namespace castor3d
 		 */
 		C3D_API PassBuffer( Engine & engine
 			, RenderDevice const & device
-			, uint32_t count
-			, uint32_t size );
-		C3D_API virtual ~PassBuffer() = default;
+			, uint32_t count );
 		/**
 		 *\~english
 		 *\brief		Adds a pass to the buffer.
@@ -98,7 +96,7 @@ namespace castor3d
 		 *\brief		Met les données de la passe dans le tampon.
 		 *\param[in]	pass	La passe.
 		 */
-		C3D_API virtual void visit( PhongPass const & pass );
+		C3D_API void visit( PhongPass const & pass );
 		/**
 		 *\~english
 		 *\brief		Puts the pass data into the buffer.
@@ -107,7 +105,7 @@ namespace castor3d
 		 *\brief		Met les données de la passe dans le tampon.
 		 *\param[in]	pass	La passe.
 		 */
-		C3D_API virtual void visit( MetallicRoughnessPbrPass const & pass );
+		C3D_API void visit( MetallicRoughnessPbrPass const & pass );
 		/**
 		 *\~english
 		 *\brief		Puts the pass data into the buffer.
@@ -116,7 +114,7 @@ namespace castor3d
 		 *\brief		Met les données de la passe dans le tampon.
 		 *\param[in]	pass	La passe.
 		 */
-		C3D_API virtual void visit( SpecularGlossinessPbrPass const & pass );
+		C3D_API void visit( SpecularGlossinessPbrPass const & pass );
 		/**
 		 *\~english
 		 *\return		The pointer to the buffer.
@@ -166,42 +164,45 @@ namespace castor3d
 		};
 
 #if C3D_MaterialsStructOfArrays
-		/**
-		\~english
-		\brief		Common passes extended data.
-		\~french
-		\brief		Données étendues communes aux passes.
-		*/
+
 		struct ExtendedData
 		{
-			//!\~english	The Subsurface Scattering informations.
-			//!\~french		Les informations de Subsurface Scattering.
 			castor::ArrayView< RgbaColour > sssInfo;
-			//!\~english	The luminosity transmittance profile data.
-			//!\~french		Les données du profil de transmission de luminosité.
 			castor::ArrayView< std::array< RgbaColour, 10u > > transmittanceProfile;
 		};
 
+		struct PassesData
+		{
+			castor::ArrayView< RgbaColour > colourDiv;
+			castor::ArrayView< RgbaColour > specDiv;
+			castor::ArrayView< RgbaColour > common;
+			castor::ArrayView< RgbaColour > opacity;
+			castor::ArrayView< RgbaColour > reflRefr;
+			ExtendedData extended;
+		};
+
 #else
-		/**
-		\~english
-		\brief		Common passes extended data.
-		\~french
-		\brief		Données étendues communes aux passes.
-		*/
+
 		struct ExtendedData
 		{
-			//!\~english	The Subsurface Scattering informations.
-			//!\~french		Les informations de Subsurface Scattering.
 			RgbaColour sssInfo;
-			//!\~english	The luminosity transmittance profile data.
-			//!\~french		Les données du profil de transmission de luminosité.
 			std::array< RgbaColour, 10u > transmittanceProfile;
 		};
 
+		struct PassData
+		{
+			RgbaColour colourDiv;
+			RgbaColour specDiv;
+			RgbaColour common;
+			RgbaColour opacity;
+			RgbaColour reflRefr;
+			ExtendedData extended;
+		};
+		using PassesData = castor::ArrayView< PassData >;
+
 #endif
 
-		static constexpr uint32_t ExtendedDataSize = sizeof( RgbaColour ) * 11;
+		static constexpr uint32_t DataSize = sizeof( PassData );
 
 	protected:
 		C3D_API void doVisitExtended( Pass const & pass
@@ -210,25 +211,14 @@ namespace castor3d
 			, uint32_t index
 			, ExtendedData & data );
 
-	protected:
-		//!\~english	The shader buffer.
-		//!\~french		Le tampon shader.
+	private:
 		ShaderBuffer m_buffer;
-		//!\~english	The current passes.
-		//!\~french		Les passes actuelles.
 		std::vector< Pass * > m_passes;
-		//!\~english	The current passes.
-		//!\~french		Les passes actuelles.
 		std::vector< Pass const * > m_dirty;
-		//!\~english	The connections to change signal for current passes.
-		//!\~french		Les connexions aux signaux de changement des passes actuelles.
 		std::vector< OnPassChangedConnection > m_connections;
-		//!\~english	The maximum pass count.
-		//!\~french		Le nombre maximal de passes.
 		uint32_t m_passCount;
-		//!\~english	The next pass ID.
-		//!\~french		L'ID de la passe suivante.
 		uint32_t m_passID{ 1u };
+		PassesData m_data;
 	};
 }
 
