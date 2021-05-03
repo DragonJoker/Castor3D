@@ -43,13 +43,18 @@ namespace aria
 	{
 	}
 
+	void DatabaseTest::updateCastorDateNW( db::DateTime const & castorDate )
+	{
+		m_test.castorDate = castorDate;
+		updateOutOfDate();
+	}
+
 	void DatabaseTest::updateCastorDate( db::DateTime const & castorDate )
 	{
 		if ( m_test.castorDate < castorDate )
 		{
-			m_test.castorDate = castorDate;
+			updateCastorDateNW( castorDate );
 			m_database.updateRunCastorDate( m_test );
-			updateOutOfDate();
 		}
 	}
 

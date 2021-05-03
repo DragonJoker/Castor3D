@@ -21,6 +21,7 @@ namespace aria
 		void updateIgnoreResult( bool ignore
 			, db::DateTime castorDate
 			, bool useAsReference );
+		void updateCastorDateNW( db::DateTime const & castorDate );
 		void updateCastorDate( db::DateTime const & castorDate );
 		void updateCastorDate();
 		void updateSceneDate( db::DateTime const & castorDate );

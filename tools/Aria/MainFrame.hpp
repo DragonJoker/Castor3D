@@ -123,6 +123,7 @@ namespace aria
 		void doRunAllRendererOutdatedTests();
 		void doUpdateRendererCastorDate();
 		void doUpdateRendererSceneDate();
+		std::vector< wxDataViewItem > doListAllTests( RendererPage::FilterFunc filter );
 		void doRunAllTests();
 		void doRunTests( TestStatus filter );
 		void doRunAllTestsBut( TestStatus filter );
