@@ -2,18 +2,74 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Material/Pass/PhongPass.hpp"
+#include "Castor3D/Material/Pass/MetallicRoughnessPbrPass.hpp"
+#include "Castor3D/Material/Pass/SpecularGlossinessPbrPass.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 namespace castor3d
 {
 	//*********************************************************************************************
 
+	namespace
+	{
+#if C3D_MaterialsStructOfArrays
+
+		PassBuffer::PassesData doBindData( uint8_t * buffer
+			, uint32_t count )
+		{
+			auto colourDiv = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
+				, reinterpret_cast< PassBuffer::RgbaColour * >( buffer ) + count );
+			buffer += sizeof( PassBuffer::RgbaColour ) * count;
+			auto specDiv = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
+				, reinterpret_cast< PassBuffer::RgbaColour * >( buffer ) + count );
+			buffer += sizeof( PassBuffer::RgbaColour ) * count;
+			auto common = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
+				, reinterpret_cast< PassBuffer::RgbaColour * >( buffer ) + count );
+			buffer += sizeof( PassBuffer::RgbaColour ) * count;
+			auto opacity = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
+				, reinterpret_cast< PassBuffer::RgbaColour * >( buffer ) + count );
+			buffer += sizeof( PassBuffer::RgbaColour ) * count;
+			auto reflRefr = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
+				, reinterpret_cast< PassBuffer::RgbaColour * >( buffer ) + count );
+			buffer += sizeof( PassBuffer::RgbaColour ) * count;
+			auto sssInfo = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
+				, reinterpret_cast< PassBuffer::RgbaColour * >( buffer ) + count );
+			buffer += sizeof( PassBuffer::RgbaColour ) * count;
+			auto transmittance = makeArrayView( reinterpret_cast< std::array< PassBuffer::RgbaColour, 10u > * >( buffer )
+				, reinterpret_cast< std::array< PassBuffer::RgbaColour, 10u > * >( buffer ) + count );
+			return
+			{
+				colourDiv,
+				specDiv,
+				common,
+				opacity,
+				reflRefr,
+				sssInfo,
+				transmittance,
+			};
+		}
+
+#else
+
+		PassBuffer::PassesData doBindData( uint8_t * buffer
+			, uint32_t count )
+		{
+			return castor::makeArrayView( reinterpret_cast< PassBuffer::PassData * >( buffer )
+				, reinterpret_cast< PassBuffer::PassData * >( buffer ) + count );
+		}
+
+#endif
+	}
+
+	//*********************************************************************************************
+
 	PassBuffer::PassBuffer( Engine & engine
 		, RenderDevice const & device
-		, uint32_t count
-		, uint32_t size )
-		: m_buffer{ engine, device, count * size, cuT( "PassBuffer" ) }
+		, uint32_t count )
+		: m_buffer{ engine, device, count * DataSize, cuT( "PassBuffer" ) }
 		, m_passCount{ count }
+		, m_data{ doBindData( m_buffer.getPtr(), count ) }
 	{
 	}
 
@@ -86,17 +142,145 @@ namespace castor3d
 
 	void PassBuffer::visit( PhongPass const & pass )
 	{
-		CU_Exception( "This pass buffer can't hold phong pass data" );
+		CU_Require( pass.getId() > 0 );
+		auto index = pass.getId() - 1;
+
+#if C3D_MaterialsStructOfArrays
+
+		auto & albRough = m_data.albRough[index];
+		auto & metDiv = m_data.metDiv[index];
+		auto & common = data.common[index];
+		auto & opacity = data.opacity[index];
+		auto & reflRefr = m_data.reflRefr[index];
+		auto & extended = m_data.extended;
+
+#else
+
+		auto & data = m_data[index];
+		auto & colourDiv = data.colourDiv;
+		auto & specDiv = data.specDiv;
+		auto & common = data.common;
+		auto & opacity = data.opacity;
+		auto & reflRefr = data.reflRefr;
+		auto & extended = data.extended;
+
+#endif
+
+		colourDiv.r = pass.getDiffuse().red();
+		colourDiv.g = pass.getDiffuse().green();
+		colourDiv.b = pass.getDiffuse().blue();
+		colourDiv.a = pass.getAmbient();
+		specDiv.r = pass.getSpecular().red();
+		specDiv.g = pass.getSpecular().green();
+		specDiv.b = pass.getSpecular().blue();
+		specDiv.a = pass.getShininess().value();
+		common.r = pass.getOpacity();
+		common.g = pass.getEmissive();
+		common.b = pass.getAlphaValue();
+		common.a = pass.needsGammaCorrection() ? 2.2f : 1.0f;
+		opacity.r = pass.getTransmission()->x;
+		opacity.g = pass.getTransmission()->y;
+		opacity.b = pass.getTransmission()->z;
+		opacity.a = pass.getOpacity();
+		reflRefr.r = pass.getRefractionRatio();
+		reflRefr.g = pass.hasRefraction() ? 1.0f : 0.0f;
+		reflRefr.b = pass.hasReflections() ? 1.0f : 0.0f;
+		reflRefr.a = float( pass.getBWAccumulationOperator() );
+		doVisitExtended( pass, extended );
 	}
 
 	void PassBuffer::visit( MetallicRoughnessPbrPass const & pass )
 	{
-		CU_Exception( "This pass buffer can't hold metallic/roughness pass data" );
+		CU_Require( pass.getId() > 0 );
+		auto index = pass.getId() - 1;
+
+#if C3D_MaterialsStructOfArrays
+
+		auto & colourDiv = m_data.colourDiv[index];
+		auto & specDiv = m_data.specDiv[index];
+		auto & common = m_data.common[index];
+		auto & opacity = m_data.opacity[index];
+		auto & reflRefr = m_data.reflRefr[index];
+		auto & extended = m_data.extended;
+
+#else
+
+		auto & data = m_data[index];
+		auto & colourDiv = data.colourDiv;
+		auto & specDiv = data.specDiv;
+		auto & common = data.common;
+		auto & opacity = data.opacity;
+		auto & reflRefr = data.reflRefr;
+		auto & extended = data.extended;
+
+#endif
+
+		colourDiv.r = pass.getAlbedo().red();
+		colourDiv.g = pass.getAlbedo().green();
+		colourDiv.b = pass.getAlbedo().blue();
+		colourDiv.a = pass.getRoughness();
+		specDiv.r = pass.getMetallic();
+		common.r = pass.getOpacity();
+		common.g = pass.getEmissive();
+		common.b = pass.getAlphaValue();
+		common.a = pass.needsGammaCorrection() ? 2.2f : 1.0f;
+		opacity.r = pass.getTransmission()->x;
+		opacity.g = pass.getTransmission()->y;
+		opacity.b = pass.getTransmission()->z;
+		opacity.a = pass.getOpacity();
+		reflRefr.r = pass.getRefractionRatio();
+		reflRefr.g = pass.hasRefraction() ? 1.0f : 0.0f;
+		reflRefr.b = pass.hasReflections() ? 1.0f : 0.0f;
+		reflRefr.a = float( pass.getBWAccumulationOperator() );
+		doVisitExtended( pass, extended );
 	}
 
 	void PassBuffer::visit( SpecularGlossinessPbrPass const & pass )
 	{
-		CU_Exception( "This pass buffer can't hold specular/glossiness pass data" );
+		CU_Require( pass.getId() > 0 );
+		auto index = pass.getId() - 1;
+
+#if C3D_MaterialsStructOfArrays
+
+		auto & colourDiv = m_data.colourDiv[index];
+		auto & specDiv = m_data.specDiv[index];
+		auto & common = m_data.common[index];
+		auto & opacity = m_data.opacity[index];
+		auto & reflRefr = m_data.reflRefr[index];
+		auto & extended = m_data.extended;
+
+#else
+
+		auto & data = m_data[index];
+		auto & colourDiv = data.colourDiv;
+		auto & specDiv = data.specDiv;
+		auto & common = data.common;
+		auto & opacity = data.opacity;
+		auto & reflRefr = data.reflRefr;
+		auto & extended = data.extended;
+
+#endif
+
+		colourDiv.r = pass.getDiffuse().red();
+		colourDiv.g = pass.getDiffuse().green();
+		colourDiv.b = pass.getDiffuse().blue();
+		specDiv.r = pass.getSpecular().red();
+		specDiv.g = pass.getSpecular().green();
+		specDiv.b = pass.getSpecular().blue();
+		specDiv.a = pass.getGlossiness();
+		common.r = pass.getOpacity();
+		common.g = pass.getEmissive();
+		common.b = pass.getAlphaValue();
+		common.a = pass.needsGammaCorrection() ? 2.2f : 1.0f;
+		opacity.r = pass.getTransmission()->x;
+		opacity.g = pass.getTransmission()->y;
+		opacity.b = pass.getTransmission()->z;
+		opacity.a = pass.getOpacity();
+		reflRefr.r = pass.getRefractionRatio();
+		reflRefr.g = pass.hasRefraction() ? 1.0f : 0.0f;
+		reflRefr.b = pass.hasReflections() ? 1.0f : 0.0f;
+		reflRefr.a = float( pass.getBWAccumulationOperator() );
+		doVisitExtended( pass, extended );
 	}
 
 	void PassBuffer::doVisitExtended( Pass const & pass

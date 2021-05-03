@@ -22,33 +22,6 @@ namespace castor3d
 	*	ShaderBuffer contenant les données des Pass.
 	*/
 	class PassBuffer;
-	/**
-	*\~english
-	*\brief
-	*	ShaderBuffer holding the Metallic Roughness PBR passes data.
-	*\~french
-	*\brief
-	*	ShaderBuffer contenant les données des passes PBR Metallic Roughness.
-	*/
-	class MetallicRoughnessPassBuffer;
-	/**
-	*\~english
-	*\brief
-	*	ShaderBuffer holding the Phong passes data.
-	*\~french
-	*\brief
-	*	ShaderBuffer contenant les données des passes Phong.
-	*/
-	class PhongPassBuffer;
-	/**
-	*\~english
-	*\brief
-	*	ShaderBuffer holding the Specular Glossiness PBR passes data.
-	*\~french
-	*\brief
-	*	ShaderBuffer contenant les données des passes PBR Specular Glossiness.
-	*/
-	class SpecularGlossinessPassBuffer;
 
 	CU_DeclareSmartPtr( PassBuffer );
 
