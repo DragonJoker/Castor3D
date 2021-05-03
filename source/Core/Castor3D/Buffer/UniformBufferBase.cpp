@@ -161,7 +161,6 @@ namespace castor3d
 
 	void UniformBufferBase::cleanup()
 	{
-		CU_Require( m_renderSystem.hasCurrentRenderDevice() );
 		m_buffer.reset();
 	}
 
