@@ -759,6 +759,11 @@ namespace castor3d
 		data.textureSize[1] = float( m_size.height );
 	}
 
+	GaussianBlur::~GaussianBlur()
+	{
+		getEngine()->getSamplerCache().remove( m_prefix + cuT( "GaussianBlur" ) );
+	}
+
 	void GaussianBlur::accept( PipelineVisitorBase & visitor )
 	{
 		if ( m_intermediate.isTextured() )

@@ -27,6 +27,14 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	struct RenderWindowDesc
+	{
+		castor::String name;
+		RenderTargetSPtr renderTarget;
+		bool enableVSync{};
+		bool fullscreen{};
+	};
+
 	class RenderWindow
 		: public castor::OwnedBy< Engine >
 		, public castor::Named
@@ -74,14 +82,14 @@ namespace castor3d
 			InputListener( Engine & engine
 				, RenderWindow & window )
 				: UserInputListener{ engine, window.getName() + "UIListener" }
-				, m_window{ window.shared_from_this() }
+				, m_window{ &window }
 			{
 			}
 
 		private:
-			EventHandlerSPtr doGetMouseTargetableHandler( castor::Position const & position )const override
+			EventHandler * doGetMouseTargetableHandler( castor::Position const & position )const override
 			{
-				return m_window.lock();
+				return m_window;
 			}
 
 			/**@name General */
@@ -92,7 +100,7 @@ namespace castor3d
 			 */
 			bool doInitialise()override
 			{
-				doAddHandler( m_window.lock() );
+				doAddHandler( m_window );
 				return true;
 			}
 			/**
@@ -100,11 +108,11 @@ namespace castor3d
 			 */
 			void doCleanup()override
 			{
-				doRemoveHandler( m_window.lock() );
+				doRemoveHandler( m_window );
 			}
 
 		private:
-			RenderWindowWPtr m_window;
+			RenderWindow * m_window;
 		};
 
 	public:
@@ -113,13 +121,19 @@ namespace castor3d
 		 *\brief		Constructor
 		 *\param[in]	engine	The engine.
 		 *\param[in]	name	The window name.
+		 *\param[in]	size	The window size.
+		 *\param[in]	handle	The native window handle.
 		 *\~french
 		 *\brief		Constructor
 		 *\param[in]	engine	Le moteur.
 		 *\param[in]	name	Le nom de la fenêtre.
+		 *\param[in]	size	Les dimensions de la fenêtre.
+		 *\param[in]	handle	Le handle de la fenêtre native.
 		 */
 		C3D_API RenderWindow( castor::String const & name
-			, Engine & engine );
+			, Engine & engine
+			, castor::Size const & size
+			, ashes::WindowHandle handle );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -129,18 +143,11 @@ namespace castor3d
 		C3D_API ~RenderWindow();
 		/**
 		 *\~english
-		 *\brief		Sets the handle, initialises the window.
-		 *\param[in]	size	The window size.
-		 *\param[in]	handle	The native window handle.
-		 *\return		\p false if any problem occured
+		 *\brief		Initialises the render window with given RenderTarget.
 		 *\~french
-		 *\brief		Définit l'identifiant de la fenêtre, initialise la fenêtre.
-		 *\param[in]	size	Les dimensions de la fenêtre.
-		 *\param[in]	handle	Le handle de la fenêtre native.
-		 *\return		\p false si un problème quelconque a été rencontré.
+		 *\brief		Initialises la render window avec la RenderTarget donnée.
 		 */
-		C3D_API bool initialise( castor::Size const & size
-			, ashes::WindowHandle handle );
+		C3D_API void initialise( RenderTargetSPtr value );
 		/**
 		 *\~english
 		 *\brief		Cleans up the instance.
@@ -318,14 +325,14 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
+		C3D_API GeometrySPtr getPickedGeometry()const;
+		C3D_API BillboardBaseSPtr getPickedBillboard()const;
+		C3D_API SubmeshSPtr getPickedSubmesh()const;
+		C3D_API uint32_t getPickedFace()const;
+
 		uint32_t getIndex()const
 		{
 			return m_index;
-		}
-
-		bool isInitialised()const
-		{
-			return m_initialised;
 		}
 
 		FrameListenerSPtr getListener()const
@@ -369,10 +376,11 @@ namespace castor3d
 			m_enablePickingDebug = v;
 		}
 
-		C3D_API GeometrySPtr getPickedGeometry()const;
-		C3D_API BillboardBaseSPtr getPickedBillboard()const;
-		C3D_API SubmeshSPtr getPickedSubmesh()const;
-		C3D_API uint32_t getPickedFace()const;
+		ashes::Surface const & getSurface()const
+		{
+			CU_Require( m_surface );
+			return *m_surface;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -383,11 +391,6 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		void setRenderTarget( RenderTargetSPtr value )
-		{
-			m_renderTarget = value;
-		}
-
 		void setDevice( RenderDeviceSPtr value )
 		{
 			m_device = std::move( value );
@@ -410,32 +413,38 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doCreateSwapchain();
-		void doCreateRenderingResources();
 		void doCreateRenderPass();
-		void doCreateCommandBuffers();
-		void doCreateFrameBuffers();
-		ashes::ImageViewCRefArray doPrepareAttaches( uint32_t backBuffer );
+		void doDestroyRenderPass();
 		void doCreateProgram();
-		void doCreateSwapChainDependent();
-		bool doPrepareFrames();
+		void doDestroyProgram();
+		void doCreateSwapchain();
+		void doDestroySwapchain();
+		void doCreateRenderingResources();
+		void doDestroyRenderingResources();
+		void doCreatePickingPass();
+		void doDestroyPickingPass();
+		void doCreateRenderQuad();
+		void doDestroyRenderQuad();
+		void doCreateFrameBuffers();
+		void doDestroyFrameBuffers();
+		void doCreateCommandBuffers();
+		void doDestroyCommandBuffers();
 		void doResetSwapChain();
-		RenderingResources * getResources();
-		void waitFrame();
-		void submitFrame( RenderingResources * resources );
-		void presentFrame( RenderingResources * resources );
+		RenderingResources * doGetResources();
+		void doWaitFrame();
+		void doSubmitFrame( RenderingResources * resources );
+		void doPresentFrame( RenderingResources * resources );
 		bool doCheckNeedReset( VkResult errCode
 			, bool acquisition
 			, char const * const action );
 		void doCleanup( bool enableDevice );
-
 		void doProcessMouseEvent( MouseEventSPtr event )override;
 
 	private:
 		static uint32_t s_nbRenderWindows;
 		uint32_t m_index{};
 		RenderDeviceSPtr m_device;
-		ashes::Surface const * m_surface{};
+		ashes::SurfacePtr m_surface;
 		ashes::SwapChainPtr m_swapChain;
 		ashes::ImageArray m_swapChainImages;
 		ashes::CommandPoolPtr m_commandPool;
@@ -451,14 +460,12 @@ namespace castor3d
 		ashes::PipelineShaderStageCreateInfoArray m_program;
 		RenderQuadUPtr m_renderQuad;
 		RenderTargetWPtr m_renderTarget;
-		OverlayRendererSPtr m_overlayRenderer;
 		FrameListenerWPtr m_listener;
-		bool m_initialised{ false };
 		bool m_vsync{ false };
 		bool m_fullscreen{ false };
 		castor::Size m_size;
 		bool m_toSave{ false };
-		std::atomic_bool m_dirty{ true };
+		mutable std::atomic_bool m_dirty{ true };
 		castor::PxBufferBaseSPtr m_saveBuffer;
 		PickingPassSPtr m_pickingPass;
 		castor::Position m_mousePosition;

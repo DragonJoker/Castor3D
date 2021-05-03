@@ -2,6 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
+#include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
@@ -478,6 +479,7 @@ namespace castor3d
 	Texture3DTo2D::~Texture3DTo2D()
 	{
 		m_device.uboPools->putBuffer( m_uniformBuffer );
+		m_renderSystem.getEngine()->getSamplerCache().remove( "Texture3DToTexture2DDepth" );
 	}
 
 	void Texture3DTo2D::createPasses( IntermediateViewArray intermediates )

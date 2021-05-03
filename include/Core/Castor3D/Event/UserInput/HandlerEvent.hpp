@@ -23,7 +23,7 @@ namespace castor3d
 		 *\param[in]	handler	Un gestionnaire.
 		 */
 		HandlerEvent( HandlerEventType type
-			, EventHandlerSPtr handler )
+			, EventHandler * handler )
 			: UserInputEvent{ UserInputEventType::eHandler }
 			, m_handlerEventType{ type }
 			, m_handler{ handler }
@@ -54,10 +54,9 @@ namespace castor3d
 		 *\~french
 		 *\return		Le gestionnaire.
 		 */
-		inline EventHandlerSPtr getHandler()const
+		inline EventHandler * getHandler()const
 		{
-			CU_Require( !m_handler.expired() );
-			return m_handler.lock();
+			return m_handler;
 		}
 
 	private:
@@ -66,7 +65,7 @@ namespace castor3d
 		HandlerEventType const m_handlerEventType;
 		//!\~english	The handler.
 		//!\~french		Le gestionnaire.
-		EventHandlerWPtr const m_handler;
+		EventHandler * const m_handler;
 	};
 }
 

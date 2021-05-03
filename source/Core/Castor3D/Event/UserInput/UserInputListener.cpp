@@ -217,7 +217,7 @@ namespace castor3d
 		{
 			m_mouse.position = position;
 			auto current = doGetMouseTargetableHandler( position );
-			auto last = m_lastMouseTarget.lock();
+			auto last = m_lastMouseTarget;
 
 			if ( current != last )
 			{
@@ -225,8 +225,8 @@ namespace castor3d
 				{
 					log::debug << position.x() << "x" << position.y() << std::endl;
 					last->pushEvent( MouseEvent( MouseEventType::eLeave, position ) );
-					last.reset();
-					m_lastMouseTarget.reset();
+					last = nullptr;
+					m_lastMouseTarget = nullptr;
 				}
 			}
 
@@ -258,7 +258,7 @@ namespace castor3d
 
 			if ( current )
 			{
-				auto active = m_activeHandler.lock();
+				auto active = m_activeHandler;
 
 				if ( current != active )
 				{
@@ -297,14 +297,14 @@ namespace castor3d
 			}
 			else
 			{
-				auto active = m_activeHandler.lock();
+				auto active = m_activeHandler;
 
 				if ( active )
 				{
 					active->pushEvent( HandlerEvent( HandlerEventType::eDeactivate, current ) );
 				}
 
-				m_activeHandler.reset();
+				m_activeHandler = nullptr;
 			}
 		}
 
@@ -336,7 +336,7 @@ namespace castor3d
 
 		if ( doHasHandlers() )
 		{
-			auto active = m_activeHandler.lock();
+			auto active = m_activeHandler;
 
 			if ( active )
 			{
@@ -369,7 +369,7 @@ namespace castor3d
 
 		if ( doHasHandlers() )
 		{
-			auto active = m_activeHandler.lock();
+			auto active = m_activeHandler;
 
 			if ( active )
 			{
@@ -402,7 +402,7 @@ namespace castor3d
 
 		if ( doHasHandlers() )
 		{
-			auto active = m_activeHandler.lock();
+			auto active = m_activeHandler;
 
 			if ( active )
 			{

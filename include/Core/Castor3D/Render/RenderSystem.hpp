@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_RenderSystem_H___
@@ -94,17 +94,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates a logical device bound to a physical GPU.
-		 *\param[in]	handle		The native window handle.
-		 *\param[in]	gpuIndex	The GPU index.
+		 *\param[in]	surface		The render surface.
 		 *\return		The created device.
 		 *\~french
 		 *\brief		Crée un périphérique logique lié à un GPU physique.
-		 *\param[in]	handle		Le handle de la fenêtre native.
-		 *\param[in]	gpuIndex	L'indice du GPU.
+		 *\param[in]	surface		La surface de rendu.
 		 *\return		Le périphérique logique créé.
 		 */
-		C3D_API RenderDeviceSPtr createDevice( ashes::WindowHandle handle
-			, uint32_t gpuIndex = 0u );
+		C3D_API RenderDeviceSPtr createDevice( ashes::Surface const & surface );
 		/**
 		*\~english
 		*\brief
@@ -314,6 +311,13 @@ namespace castor3d
 		AshPluginDescription const & getDescription()const
 		{
 			return m_desc;
+		}
+
+		ashes::PhysicalDevice const & getPhysicalDevice( uint32_t gpuIndex )const
+		{
+			CU_Require( gpuIndex < m_gpus.size()
+				&& "Invalid Physical Device index." );
+			return *m_gpus[gpuIndex];
 		}
 		/**@}*/
 		/**

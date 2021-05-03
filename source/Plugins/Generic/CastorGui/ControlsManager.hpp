@@ -206,7 +206,7 @@ namespace CastorGui
 		*\param[in] p_position
 		*	The mouse position
 		*/
-		castor3d::EventHandlerSPtr doGetMouseTargetableHandler( castor::Position const & p_position )const override;
+		castor3d::EventHandler * doGetMouseTargetableHandler( castor::Position const & p_position )const override;
 		/**
 		*\brief
 		*	Updates the z-index ordered controls array
@@ -223,7 +223,7 @@ namespace CastorGui
 		*\return
 		*	The controls by z-index.
 		*/
-		std::vector< ControlSPtr > doGetControlsByZIndex()const;
+		std::vector< Control * > doGetControlsByZIndex()const;
 		/**
 		*\return
 		*	The controls by ID.
@@ -238,7 +238,7 @@ namespace CastorGui
 		//! The mutex used to protect the controls by z-index.
 		mutable std::mutex m_mutexControlsByZIndex;
 		//! The controls array
-		mutable std::vector< ControlSPtr > m_controlsByZIndex;
+		mutable std::vector< Control *  > m_controlsByZIndex;
 		//! The mutex used to protect the controls by ID.
 		mutable std::mutex m_mutexControlsById;
 		//! The controls map, sorted by ID

@@ -18,9 +18,8 @@ namespace castor3d
 	struct RenderDevice
 	{
 		C3D_API RenderDevice( RenderSystem & renderSystem
-			, ashes::PhysicalDevice const & gpu
 			, AshPluginDescription const & desc
-			, ashes::SurfacePtr surface );
+			, ashes::Surface const & surface );
 
 		C3D_API VkFormat selectSuitableDepthFormat( VkFormatFeatureFlags requiredFeatures )const;
 		C3D_API VkFormat selectSuitableStencilFormat( VkFormatFeatureFlags requiredFeatures )const;
@@ -69,9 +68,9 @@ namespace castor3d
 		}
 
 		RenderSystem & renderSystem;
+		ashes::Surface const & surface;
 		ashes::PhysicalDevice const & gpu;
 		AshPluginDescription const & desc;
-		ashes::SurfacePtr surface;
 		VkPhysicalDeviceMemoryProperties memoryProperties{};
 		VkPhysicalDeviceFeatures features{};
 		VkPhysicalDeviceProperties properties{};
