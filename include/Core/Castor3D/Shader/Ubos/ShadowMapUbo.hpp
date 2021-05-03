@@ -72,7 +72,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API explicit ShadowMapUbo( Engine & engine );
+		C3D_API explicit ShadowMapUbo( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -80,24 +80,6 @@ namespace castor3d
 		 *\brief		Destructeur
 		 */
 		C3D_API ~ShadowMapUbo();
-		/**
-		 *\~english
-		 *\brief		Initialises the UBO.
-		 *\param[in]	device	The GPU device.
-		 *\~french
-		 *\brief		Initialise l'UBO.
-		 *\param[in]	device	Le device GPU.
-		 */
-		C3D_API void initialise( RenderDevice const & device );
-		/**
-		 *\~english
-		 *\brief		Cleanup function.
-		 *\param[in]	device	The GPU device.
-		 *\~french
-		 *\brief		Fonction de nettoyage.
-		 *\param[in]	device	Le device GPU.
-		 */
-		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -127,7 +109,7 @@ namespace castor3d
 		C3D_API static castor::String const ShadowMapData;
 
 	private:
-		Engine & m_engine;
+		RenderDevice const & m_device;
 		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }

@@ -66,13 +66,13 @@ namespace castor3d
 
 	uint32_t const ShadowMapPassPoint::TextureSize = 512u;
 
-	ShadowMapPassPoint::ShadowMapPassPoint( Engine & engine
+	ShadowMapPassPoint::ShadowMapPassPoint( RenderDevice const & device
 		, uint32_t index
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap )
-		: ShadowMapPass{ cuT( "Point Layer " ) + string::toString( index / 6u ) + " Face " + string::toString( index % 6u ), engine, matrixUbo, culler, shadowMap }
-		, m_viewport{ engine }
+		: ShadowMapPass{ cuT( "Point Layer " ) + string::toString( index / 6u ) + " Face " + string::toString( index % 6u ), device, matrixUbo, culler, shadowMap }
+		, m_viewport{ *device.renderSystem.getEngine() }
 	{
 		log::trace << "Created " << m_name << std::endl;
 	}

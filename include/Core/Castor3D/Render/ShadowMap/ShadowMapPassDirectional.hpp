@@ -30,7 +30,7 @@ namespace castor3d
 		 *\param[in]	shadowMap		La shadow map parente.
 		 *\param[in]	cascadeIndex	L'index de la cascade de cette passe.
 		 */
-		C3D_API ShadowMapPassDirectional( Engine & engine
+		C3D_API ShadowMapPassDirectional( RenderDevice const & device
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, ShadowMap const & shadowMap

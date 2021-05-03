@@ -40,7 +40,8 @@ namespace castor3d
 {
 	namespace
 	{
-		std::vector< ShadowMap::PassData > createPasses( Scene & scene
+		std::vector< ShadowMap::PassData > createPasses( RenderDevice const & device
+			, Scene & scene
 			, ShadowMap & shadowMap )
 		{
 			auto & engine = *scene.getEngine();
@@ -61,7 +62,7 @@ namespace castor3d
 					nullptr,
 				};
 				passData.culler = std::make_unique< FrustumCuller >( scene, *passData.camera );
-				passData.pass = std::make_shared< ShadowMapPassSpot >( engine
+				passData.pass = std::make_shared< ShadowMapPassSpot >( device
 					, i
 					, *passData.matrixUbo
 					, *passData.culler
@@ -83,7 +84,7 @@ namespace castor3d
 				, 0u
 				, Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize }
 				, shader::getSpotShadowMapCount() }
-			, createPasses( scene, *this )
+			, createPasses( device, scene, *this )
 			, shader::getSpotShadowMapCount() }
 	{
 		log::trace << "Created ShadowMapSpot" << std::endl;

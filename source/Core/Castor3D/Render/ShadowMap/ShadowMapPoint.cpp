@@ -43,7 +43,8 @@ namespace castor3d
 {
 	namespace
 	{
-		std::vector< ShadowMap::PassData > createPasses( Scene & scene
+		std::vector< ShadowMap::PassData > createPasses( RenderDevice const & device
+			, Scene & scene
 			, ShadowMap & shadowMap )
 		{
 			auto & engine = *scene.getEngine();
@@ -58,7 +59,7 @@ namespace castor3d
 					std::make_unique< DummyCuller >( scene ),
 					nullptr,
 				};
-				passData.pass = std::make_shared< ShadowMapPassPoint >( engine
+				passData.pass = std::make_shared< ShadowMapPassPoint >( device
 					, i
 					, *passData.matrixUbo
 					, *passData.culler
@@ -80,7 +81,7 @@ namespace castor3d
 				, VkImageCreateFlags( VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT )
 				, Size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize }
 				, 6u * shader::getPointShadowMapCount() }
-			, createPasses( scene, *this )
+			, createPasses( device, scene, *this )
 			, shader::getPointShadowMapCount() }
 	{
 		log::trace << "Created ShadowMapPoint" << std::endl;
