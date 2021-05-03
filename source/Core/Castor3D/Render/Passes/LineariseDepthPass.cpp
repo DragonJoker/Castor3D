@@ -241,59 +241,43 @@ namespace castor3d
 
 		ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device )
 		{
-			ashes::VkAttachmentDescriptionArray attachments
-			{
-				{
-					0u,
-					VK_FORMAT_R32_SFLOAT,
-					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
-					VK_ATTACHMENT_STORE_OP_STORE,
-					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
-					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-				},
-			};
+			ashes::VkAttachmentDescriptionArray attachments{ { 0u
+				, VK_FORMAT_R32_SFLOAT
+				, VK_SAMPLE_COUNT_1_BIT
+				, VK_ATTACHMENT_LOAD_OP_CLEAR
+				, VK_ATTACHMENT_STORE_OP_STORE
+				, VK_ATTACHMENT_LOAD_OP_DONT_CARE
+				, VK_ATTACHMENT_STORE_OP_DONT_CARE
+				, VK_IMAGE_LAYOUT_UNDEFINED
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } };
 			ashes::SubpassDescriptionArray subpasses;
-			subpasses.emplace_back( ashes::SubpassDescription
-				{
-					0u,
-					VK_PIPELINE_BIND_POINT_GRAPHICS,
-					{},
-					{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
-					{},
-					ashes::nullopt,
-					{},
-				} );
+			subpasses.emplace_back( ashes::SubpassDescription{ 0u
+				, VK_PIPELINE_BIND_POINT_GRAPHICS
+				, {}
+				, { { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } }
+				, {}
+				, ashes::nullopt
+				, {} } );
 			ashes::VkSubpassDependencyArray dependencies
 			{
-				{
-					VK_SUBPASS_EXTERNAL,
-					0u,
-					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-					VK_DEPENDENCY_BY_REGION_BIT,
-				},
-				{
-					0u,
-					VK_SUBPASS_EXTERNAL,
-					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-					VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-					VK_ACCESS_SHADER_READ_BIT,
-					VK_DEPENDENCY_BY_REGION_BIT,
-				},
-			};
-			ashes::RenderPassCreateInfo createInfo
-			{
-				0u,
-				std::move( attachments ),
-				std::move( subpasses ),
-				std::move( dependencies ),
-			};
+				{ VK_SUBPASS_EXTERNAL
+					, 0u
+					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
+					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
+					, VK_DEPENDENCY_BY_REGION_BIT }
+				, { 0u
+					, VK_SUBPASS_EXTERNAL
+					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
+					, VK_ACCESS_SHADER_READ_BIT
+					, VK_DEPENDENCY_BY_REGION_BIT } };
+			ashes::RenderPassCreateInfo createInfo{ 0u
+				, std::move( attachments )
+				, std::move( subpasses )
+				, std::move( dependencies ) };
 			auto result = device->createRenderPass( "LineariseDepthPass"
 				, std::move( createInfo ) );
 			return result;
@@ -414,6 +398,7 @@ namespace castor3d
 
 	void LineariseDepthPass::cleanup( RenderDevice const & device )
 	{
+		m_initialised = false;
 		doCleanupMinifyPass( device );
 		doCleanupLinearisePass( device );
 
