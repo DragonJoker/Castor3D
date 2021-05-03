@@ -39,7 +39,7 @@ namespace castor3d
 		 *\param[in]	shadowMap	La shadow map parente.
 		 */
 		C3D_API ShadowMapPass( castor::String name
-			, Engine & engine
+			, RenderDevice const & device
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, ShadowMap const & shadowMap );

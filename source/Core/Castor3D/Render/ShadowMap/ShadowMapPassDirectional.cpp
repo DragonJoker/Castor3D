@@ -46,12 +46,12 @@ namespace castor3d
 {
 	uint32_t const ShadowMapPassDirectional::TextureSize = 2048u;
 
-	ShadowMapPassDirectional::ShadowMapPassDirectional( Engine & engine
+	ShadowMapPassDirectional::ShadowMapPassDirectional( RenderDevice const & device
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap
 		, uint32_t cascadeIndex )
-		: ShadowMapPass{ cuT( "Directional Cascade " ) + string::toString( cascadeIndex ), engine, matrixUbo, culler, shadowMap }
+		: ShadowMapPass{ cuT( "Directional Cascade " ) + string::toString( cascadeIndex ), device, matrixUbo, culler, shadowMap }
 	{
 		log::trace << "Created " << m_name << std::endl;
 	}
