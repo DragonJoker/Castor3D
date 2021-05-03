@@ -46,7 +46,8 @@ namespace castor3d
 		 *\param[in]	passes		Les passes utilisées pour rendre cette texture.
 		 *\param[in]	count		Le nombre de passes.
 		 */
-		C3D_API ShadowMap( Scene & scene
+		C3D_API ShadowMap( RenderDevice const & device
+			, Scene & scene
 			, LightType lightType
 			, ShadowMapResult result
 			, std::vector< PassData > passes
@@ -57,7 +58,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~ShadowMap() = default;
+		C3D_API virtual ~ShadowMap();
 		/**
 		 *\~english
 		 *\brief		Initialises the frame buffer and light type specific data.
@@ -67,15 +68,6 @@ namespace castor3d
 		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API bool initialise( RenderDevice const & device );
-		/**
-		 *\~english
-		 *\brief		Cleans up the frame buffer and light type specific data.
-		 *\param[in]	device	The GPU device.
-		 *\~french
-		 *\brief		Nettoie le frame buffer et les données spécifiques au type de source lumineuse.
-		 *\param[in]	device	Le device GPU.
-		 */
-		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		*\~english
 		*\brief
@@ -172,10 +164,6 @@ namespace castor3d
 		 */
 		C3D_API virtual void doInitialise( RenderDevice const & device ) = 0;
 		/**
-		 *\copydoc		castor3d::ShadowMap::cleanup
-		 */
-		C3D_API virtual void doCleanup( RenderDevice const & device ) = 0;
-		/**
 		 *\copydoc		castor3d::ShadowMap::render
 		 */
 		C3D_API virtual ashes::Semaphore const & doRender( RenderDevice const & device
@@ -190,6 +178,7 @@ namespace castor3d
 		C3D_API virtual bool isUpToDate( uint32_t index )const = 0;
 
 	protected:
+		RenderDevice const & m_device;
 		Scene & m_scene;
 		LightType m_lightType;
 		castor::String m_name;

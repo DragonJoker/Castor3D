@@ -75,23 +75,21 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	Voxelizer::Voxelizer( Engine & engine
-		, RenderDevice const & device
+	Voxelizer::Voxelizer( RenderDevice const & device
 		, Scene & scene
 		, Camera & camera
 		, MatrixUbo & matrixUbo
 		, VoxelizerUbo & voxelizerUbo
 		, VoxelSceneData const & voxelConfig )
-		: m_engine{ engine }
+		: m_engine{ *device.renderSystem.getEngine() }
 		, m_voxelConfig{ voxelConfig }
 		, m_culler{ scene, &camera }
-		, m_matrixUbo{ engine }
-		, m_firstBounce{ createTexture( engine, device, "VoxelizedSceneFirstBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
-		, m_secondaryBounce{ createTexture( engine, device, "VoxelizedSceneSecondaryBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
-		, m_voxels{ createSsbo( engine, device, "VoxelizedSceneBuffer", m_voxelConfig.gridSize.value() ) }
+		, m_matrixUbo{ device }
+		, m_firstBounce{ createTexture( m_engine, device, "VoxelizedSceneFirstBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
+		, m_secondaryBounce{ createTexture( m_engine, device, "VoxelizedSceneSecondaryBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
+		, m_voxels{ createSsbo( m_engine, device, "VoxelizedSceneBuffer", m_voxelConfig.gridSize.value() ) }
 		, m_voxelizerUbo{ voxelizerUbo }
-		, m_voxelizePass{ castor::makeUnique< VoxelizePass >( engine
-			, device
+		, m_voxelizePass{ castor::makeUnique< VoxelizePass >( device
 			, m_matrixUbo
 			, m_culler
 			, m_voxelizerUbo

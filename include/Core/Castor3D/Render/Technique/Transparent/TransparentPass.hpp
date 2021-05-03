@@ -35,12 +35,17 @@ namespace castor3d
 		 *\param[in]	llpvConfigUbo	L'UBO de configuration des Layered LPV.
 		 *\param[in]	vctConfigUbo	L'UBO de configuration du VCT.
 		 */
-		C3D_API TransparentPass( MatrixUbo & matrixUbo
+		C3D_API TransparentPass( RenderDevice const & device
+			, castor::Size const & size
+			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, SsaoConfig const & ssaoConfig
 			, LpvGridConfigUbo const & lpvConfigUbo
 			, LayeredLpvGridConfigUbo const & llpvConfigUbo
-			, VoxelizerUbo const & vctConfigUbo );
+			, VoxelizerUbo const & vctConfigUbo
+			, LightVolumePassResult const * lpvResult
+			, TextureUnit const * vctFirstBounce
+			, TextureUnit const * vctSecondaryBounce );
 		/**
 		 *\~english
 		 *\brief		Destructor

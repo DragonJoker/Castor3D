@@ -77,8 +77,10 @@ namespace castor3d
 		}
 	}
 
-	ShadowMapDirectional::ShadowMapDirectional( Scene & scene )
-		: ShadowMap{ scene
+	ShadowMapDirectional::ShadowMapDirectional( RenderDevice const & device
+		, Scene & scene )
+		: ShadowMap{ device
+			, scene
 			, LightType::eDirectional
 			, ShadowMapResult{ *scene.getEngine()
 				, cuT( "Directional" )
@@ -95,6 +97,9 @@ namespace castor3d
 
 	ShadowMapDirectional::~ShadowMapDirectional()
 	{
+		m_commandBuffer.reset();
+		m_frameBuffers.clear();
+		m_blur.reset();
 	}
 
 	void ShadowMapDirectional::update( CpuUpdater & updater )
@@ -217,13 +222,6 @@ namespace castor3d
 	{
 		doInitialiseFramebuffers( device );
 		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( m_name );
-	}
-
-	void ShadowMapDirectional::doCleanup( RenderDevice const & device )
-	{
-		m_commandBuffer.reset();
-		m_frameBuffers.clear();
-		m_blur.reset();
 	}
 
 	bool ShadowMapDirectional::isUpToDate( uint32_t index )const

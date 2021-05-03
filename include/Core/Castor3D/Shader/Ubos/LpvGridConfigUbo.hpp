@@ -58,7 +58,6 @@ namespace castor3d
 		C3D_API LpvGridConfigUbo( LpvGridConfigUbo && ) = default;
 		C3D_API LpvGridConfigUbo & operator=( LpvGridConfigUbo && ) = delete;
 
-		C3D_API explicit LpvGridConfigUbo();
 		C3D_API explicit LpvGridConfigUbo( RenderDevice const & device );
 		C3D_API ~LpvGridConfigUbo();
 

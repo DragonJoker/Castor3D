@@ -142,6 +142,7 @@ namespace castor3d
 
 	MatrixUbo::~MatrixUbo()
 	{
+		cleanup();
 	}
 
 	void MatrixUbo::initialise( RenderDevice const & device )
@@ -149,14 +150,15 @@ namespace castor3d
 		if ( !m_ubo )
 		{
 			m_ubo = device.uboPools->getBuffer< Configuration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+			m_device = &device;
 		}
 	}
 
-	void MatrixUbo::cleanup( RenderDevice const & device )
+	void MatrixUbo::cleanup()
 	{
 		if ( m_ubo )
 		{
-			device.uboPools->putBuffer( m_ubo );
+			m_device->uboPools->putBuffer( m_ubo );
 		}
 	}
 
