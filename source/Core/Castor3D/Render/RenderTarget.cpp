@@ -271,7 +271,6 @@ namespace castor3d
 			m_velocityTexture.cleanup();
 			m_velocityTexture.setTexture( nullptr );
 
-			m_renderTechnique->cleanup( device );
 			m_hdrConfigUbo.cleanup( device );
 			m_overlaysFrameBuffer.cleanup( device );
 			m_objectsFrameBuffer.cleanup( device );
@@ -627,7 +626,7 @@ namespace castor3d
 				m_renderTechnique = getEngine()->getRenderTechniqueCache().add( name
 					, std::make_shared< RenderTechnique >( name
 						, *this
-						, *getEngine()->getRenderSystem()
+						, device
 						, m_techniqueParameters
 						, m_ssaoConfig ) );
 			}
@@ -638,7 +637,7 @@ namespace castor3d
 			}
 		}
 
-		return m_renderTechnique->initialise( device, m_intermediates );
+		return true;
 	}
 
 	bool RenderTarget::doInitialiseToneMapping( RenderDevice const & device )

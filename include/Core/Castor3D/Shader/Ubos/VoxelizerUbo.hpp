@@ -99,7 +99,6 @@ namespace castor3d
 		C3D_API VoxelizerUbo( VoxelizerUbo && ) = default;
 		C3D_API VoxelizerUbo & operator=( VoxelizerUbo && ) = delete;
 
-		C3D_API explicit VoxelizerUbo();
 		C3D_API explicit VoxelizerUbo( RenderDevice const & device );
 		C3D_API ~VoxelizerUbo();
 

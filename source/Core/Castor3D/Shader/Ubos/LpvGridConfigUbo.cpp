@@ -68,10 +68,6 @@ namespace castor3d
 	std::string const LpvGridConfigUbo::LpvGridData = "c3d_lpvGridData";
 	std::string const LpvGridConfigUbo::LpvGridConfig = "lpvGridConfig";
 
-	LpvGridConfigUbo::LpvGridConfigUbo()
-	{
-	}
-
 	LpvGridConfigUbo::LpvGridConfigUbo( RenderDevice const & device )
 	{
 		initialise( device );

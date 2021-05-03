@@ -185,12 +185,13 @@ namespace castor3d
 			, [this]( String const & name
 				, String const & type
 				, RenderTarget & renderTarget
+				, RenderDevice const & device
 				, Parameters const & parameters
 				, SsaoConfig const & ssaoConfig )
 			{
 				return std::make_shared< RenderTechnique >( name
 					, renderTarget
-					, *getRenderSystem()
+					, device
 					, parameters
 					, ssaoConfig );
 			}

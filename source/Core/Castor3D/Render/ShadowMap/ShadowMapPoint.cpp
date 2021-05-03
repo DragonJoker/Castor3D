@@ -70,8 +70,10 @@ namespace castor3d
 		}
 	}
 
-	ShadowMapPoint::ShadowMapPoint( Scene & scene )
-		: ShadowMap{ scene
+	ShadowMapPoint::ShadowMapPoint( RenderDevice const & device
+		, Scene & scene )
+		: ShadowMap{ device
+			, scene
 			, LightType::ePoint
 			, ShadowMapResult{ *scene.getEngine()
 				, cuT( "Point" )
@@ -86,6 +88,8 @@ namespace castor3d
 
 	ShadowMapPoint::~ShadowMapPoint()
 	{
+		m_passesData.clear();
+		m_blur.reset();
 	}
 
 	void ShadowMapPoint::update( CpuUpdater & updater )
@@ -189,12 +193,6 @@ namespace castor3d
 			data.commandBuffer = device.graphicsCommandPool->createCommandBuffer( debugName );
 			data.finished = device->createSemaphore( debugName );
 		}
-	}
-
-	void ShadowMapPoint::doCleanup( RenderDevice const & device )
-	{
-		m_passesData.clear();
-		m_blur.reset();
 	}
 
 	ashes::Semaphore const & ShadowMapPoint::doRender( RenderDevice const & device
