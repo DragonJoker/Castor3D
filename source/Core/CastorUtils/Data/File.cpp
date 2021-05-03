@@ -271,20 +271,23 @@ namespace castor
 	}
 
 	bool File::copyFile( Path const & srcFileName
-		, Path const & dstFolder )
+		, Path const & dstFolder
+		, bool allowReplace )
 	{
 		return copyFileName( srcFileName
-			, dstFolder / srcFileName.getFileName( true ) );
+			, dstFolder / srcFileName.getFileName( true )
+			, allowReplace );
 	}
 
 	bool File::copyFileName( Path const & srcFileName
-		, Path const & dstFileName )
+		, Path const & dstFileName
+		, bool allowReplace )
 	{
 		bool result = false;
 
 		if ( fileExists( srcFileName ) )
 		{
-			if ( !fileExists( dstFileName ) )
+			if ( !fileExists( dstFileName ) || allowReplace )
 			{
 				std::ifstream src( string::stringCast< char >( srcFileName ), std::ios::binary );
 
