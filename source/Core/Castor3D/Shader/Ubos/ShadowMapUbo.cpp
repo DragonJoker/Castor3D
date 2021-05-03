@@ -92,33 +92,15 @@ namespace castor3d
 	castor::String const ShadowMapUbo::BufferShadowMap = cuT( "ShadowMapCfg" );
 	castor::String const ShadowMapUbo::ShadowMapData = cuT( "c3d_shadowMapData" );
 
-	ShadowMapUbo::ShadowMapUbo( Engine & engine )
-		: m_engine{ engine }
+	ShadowMapUbo::ShadowMapUbo( RenderDevice const & device )
+		: m_device{ device }
 	{
-		if ( engine.getRenderSystem()->hasCurrentRenderDevice() )
-		{
-			initialise( engine.getRenderSystem()->getCurrentRenderDevice() );
-		}
+		m_ubo = m_device.uboPools->getBuffer< Configuration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 	}
 
 	ShadowMapUbo::~ShadowMapUbo()
 	{
-	}
-
-	void ShadowMapUbo::initialise( RenderDevice const & device )
-	{
-		if ( !m_ubo )
-		{
-			m_ubo = device.uboPools->getBuffer< Configuration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
-		}
-	}
-
-	void ShadowMapUbo::cleanup( RenderDevice const & device )
-	{
-		if ( m_ubo )
-		{
-			device.uboPools->putBuffer( m_ubo );
-		}
+		m_device.uboPools->putBuffer( m_ubo );
 	}
 
 	void ShadowMapUbo::update( Light const & light

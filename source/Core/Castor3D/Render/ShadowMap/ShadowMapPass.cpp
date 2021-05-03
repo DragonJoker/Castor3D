@@ -4,6 +4,7 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -23,13 +24,13 @@ using namespace castor;
 namespace castor3d
 {
 	ShadowMapPass::ShadowMapPass( castor::String name
-		, Engine & engine
+		, RenderDevice const & device
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap )
 		: SceneRenderPass{ cuT( "ShadowMap" )
 			, std::move( name )
-			, engine
+			, *device.renderSystem.getEngine()
 			, matrixUbo
 			, culler
 			, RenderMode::eBoth
@@ -38,7 +39,7 @@ namespace castor3d
 			, nullptr
 			, 1u }
 		, m_shadowMap{ shadowMap }
-		, m_shadowMapUbo{ engine }
+		, m_shadowMapUbo{ device }
 	{
 	}
 
