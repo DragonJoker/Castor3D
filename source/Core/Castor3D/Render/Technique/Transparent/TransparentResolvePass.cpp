@@ -544,6 +544,8 @@ namespace castor3d
 
 	TransparentResolvePass::~TransparentResolvePass()
 	{
+		m_sampler->cleanup();
+		m_engine.getSamplerCache().remove( "C3D_BW_TransparentResolvePass" );
 	}
 
 	ashes::Semaphore const & TransparentResolvePass::render( RenderDevice const & device

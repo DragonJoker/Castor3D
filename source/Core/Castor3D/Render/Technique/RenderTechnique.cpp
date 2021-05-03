@@ -7,6 +7,7 @@
 #include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/ParticleSystemCache.hpp"
+#include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
@@ -419,6 +420,8 @@ namespace castor3d
 		m_initialised = false;
 		m_depthBuffer.cleanup();
 		m_colourTexture.cleanup();
+		getEngine()->getSamplerCache().remove( cuT( "RenderTechnique_Colour" ) );
+		getEngine()->getSamplerCache().remove( cuT( "RenderTechnique_Depth" ) );
 	}
 
 	void RenderTechnique::update( CpuUpdater & updater )

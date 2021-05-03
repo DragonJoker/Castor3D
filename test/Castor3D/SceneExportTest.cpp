@@ -101,45 +101,12 @@ namespace Testing
 			p_cache.add( p_object->getName(), p_object );
 		}
 
-		RenderWindowSPtr getWindow( Engine & engine
-			, String const & p_sceneName
-			, bool p_rename )
-		{
-			auto & windows = engine.getRenderWindowCache();
-			windows.lock();
-			auto it = std::find_if( windows.begin()
-				, windows.end()
-				, [p_sceneName]( auto & p_pair )
-			{
-				return p_pair.second->getScene()->getName() == p_sceneName;
-			} );
-
-			RenderWindowSPtr window;
-
-			if ( it != windows.end() )
-			{
-				window = it->second;
-
-				if ( p_rename )
-				{
-					RenameObject( window, windows );
-				}
-			}
-
-			windows.unlock();
-			return window;
-		}
-
-		void cleanup( SceneSPtr & scene
-			, RenderWindowSPtr & window )
+		void cleanup( SceneSPtr & scene )
 		{
 			auto & engine = *scene->getEngine();
 			scene->cleanup();
-			window->cleanup();
 			engine.getRenderLoop().renderSyncFrame();
 			engine.getSceneCache().remove( scene->getName() );
-			engine.getRenderWindowCache().remove( window->getName() );
-			window.reset();
 			scene.reset();
 		}
 	}
@@ -187,11 +154,13 @@ namespace Testing
 		CT_REQUIRE( dstParser.parseFile( p_path ) );
 		CT_REQUIRE( dstParser.scenesBegin() != dstParser.scenesEnd() );
 		SceneSPtr scene{ dstParser.scenesBegin()->second };
-		auto window = getWindow( m_engine, scene->getName(), false );
+		auto window = std::make_shared< RenderWindow >( "SceneExportTest"
+			, m_engine
+			, Size{ 800u, 600u }
+			, ashes::WindowHandle{ std::make_unique< TestWindowHandle >() } );
 
 		if ( window )
 		{
-			window->initialise( Size{ 800, 600 }, ashes::WindowHandle{ std::make_unique< TestWindowHandle >() } );
 			m_engine.getRenderLoop().renderSyncFrame();
 			m_engine.getRenderLoop().renderSyncFrame();
 		}
@@ -204,18 +173,17 @@ namespace Testing
 		SceneSPtr src{ doParseScene( m_testDataFolder / p_name ) };
 		Path path{ cuT( "TestScene.cscn" ) };
 		CT_CHECK( ExportScene( *src, path ) );
+		auto window = std::make_shared< RenderWindow >( "SceneExportTest"
+			, m_engine
+			, Size{ 800u, 600u }
+			, ashes::WindowHandle{ std::make_unique< TestWindowHandle >() } );
 		
 		RenameObject( src, m_engine.getSceneCache() );
-		auto srcWindow = getWindow( m_engine, src->getName(), true );
-		CT_CHECK( srcWindow != nullptr );
-
 		SceneSPtr dst{ doParseScene( Path{ cuT( "TestScene" ) } / cuT( "TestScene.cscn" ) ) };
 		CT_EQUAL( *src, *dst );
-		auto dstWindow = getWindow( m_engine, dst->getName(), false );
-		CT_CHECK( dstWindow != nullptr );
 		File::directoryDelete( Path{ cuT( "TestScene" ) } );
-		cleanup( dst, dstWindow );
-		cleanup( src, srcWindow );
+		cleanup( dst );
+		cleanup( src );
 		doCleanupEngine();
 	}
 }

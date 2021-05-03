@@ -166,187 +166,168 @@ namespace castor3d
 	uint32_t RenderWindow::s_nbRenderWindows = 0;
 
 	RenderWindow::RenderWindow( castor::String const & name
-		, Engine & engine )
+		, Engine & engine
+		, castor::Size const & size
+		, ashes::WindowHandle handle )
 		: OwnedBy< Engine >{ engine }
 		, castor::Named{ name }
 		, MouseEventHandler{}
 		, m_index{ s_nbRenderWindows++ }
+		, m_surface{ engine.getRenderSystem()->getInstance().createSurface( engine.getRenderSystem()->getPhysicalDevice( 0u )
+			, std::move( handle ) ) }
 		, m_listener{ engine.getFrameListenerCache().add( getName() + castor::string::toString( m_index ) ) }
+		, m_size{ size }
 	{
-		log::debug << "Created render window " << m_index << std::endl;
+		if ( !m_surface )
+		{
+			CU_Exception( "Could not create Vulkan surface." );
+		}
+
+		engine.getRenderLoop().createDevice( *this );
+
+		if ( !m_device )
+		{
+			CU_Exception( "Could not create Vulkan device." );
+		}
+
+		auto guard = castor::makeBlockGuard(
+			[this, &engine]()
+			{
+				engine.getRenderSystem()->setCurrentRenderDevice( m_device.get() );
+			},
+			[this, &engine]()
+			{
+				engine.getRenderSystem()->setCurrentRenderDevice( nullptr );
+			} );
+		engine.getMaterialCache().initialise( *m_device, engine.getMaterialsType() );
+		m_commandPool = getDevice()->createCommandPool( getDevice().getGraphicsQueueFamilyIndex()
+			, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT | VK_COMMAND_POOL_CREATE_TRANSIENT_BIT );
+		doCreateProgram();
+		doCreateSwapchain();
+		engine.registerWindow( *this );
 	}
 
 	RenderWindow::~RenderWindow()
 	{
 		log::debug << "Destroyed render window " << m_index << std::endl;
 		auto & engine = *getEngine();
+		engine.unregisterWindow( *this );
 		auto listener = getListener();
 		engine.getFrameListenerCache().remove( getName() + castor::string::toString( m_index ) );
-		auto target = m_renderTarget.lock();
-
-		if ( target )
-		{
-			engine.getRenderTargetCache().remove( target );
-		}
-
+		doDestroySwapchain();
+		doDestroyProgram();
+		m_commandPool.reset();
 		m_device.reset();
 	}
 
-	void RenderWindow::doCreateSwapchain()
+	void RenderWindow::initialise( RenderTargetSPtr target )
 	{
-		m_swapChain = getDevice()->createSwapChain( getSwapChainCreateInfo( *m_surface
-			, { m_size.getWidth(), m_size.getHeight() } ) );
-		m_swapChainImages = m_swapChain->getImages();
-		m_commandPool = getDevice()->createCommandPool( getDevice().getGraphicsQueueFamilyIndex()
-			, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT | VK_COMMAND_POOL_CREATE_TRANSIENT_BIT );
-	}
+		m_renderTarget = target;
 
-	bool RenderWindow::initialise( castor::Size const & size
-		, ashes::WindowHandle handle )
-	{
-		m_size = size;
-
-		if ( handle )
+		if ( !target )
 		{
-			auto & engine = *getEngine();
-			engine.getRenderLoop().createDevice( std::move( handle ), *this );
-			m_initialised = m_device != nullptr;
-
-			if ( m_initialised )
-			{
-				m_surface = m_device->surface.get();
-				auto guard = castor::makeBlockGuard(
-					[this, &engine]()
-					{
-						engine.getRenderSystem()->setCurrentRenderDevice( m_device.get() );
-					},
-					[this, &engine]()
-					{
-						engine.getRenderSystem()->setCurrentRenderDevice( nullptr );
-					} );
-				engine.getMaterialCache().initialise( *m_device, engine.getMaterialsType() );
-				doCreateSwapchain();
-				doCreateRenderPass();
-				RenderTargetSPtr target = getRenderTarget();
-
-				if ( !target )
-				{
-					CU_Exception( "No render target for render window." );
-				}
-
-				target->initialise( *m_device );
-				m_pickingPass = std::make_shared< PickingPass >( *getEngine()
-					, target->getTechnique()->getMatrixUbo()
-					, target->getCuller() );
-				m_pickingPass->initialise( *m_device, target->getSize() );
-
-				doCreateSwapChainDependent();
-				doPrepareFrames();
-
-				m_saveBuffer = castor::PxBufferBase::create( target->getSize(), convert( target->getPixelFormat() ) );
-				auto bufferSize = ashes::getAlignedSize( ashes::getLevelsSize( VkExtent2D{ m_saveBuffer->getWidth(), m_saveBuffer->getHeight() }
-						, target->getPixelFormat()
-						, 0u
-						, 1u
-						, 1u )
-					, getDevice()->getProperties().limits.nonCoherentAtomSize );
-				m_stagingBuffer = getDevice()->createBuffer( "Snapshot"
-					, bufferSize
-					, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT );
-				auto requirements = m_stagingBuffer->getMemoryRequirements();
-				auto deduced = getDevice()->deduceMemoryType( requirements.memoryTypeBits
-					, VkMemoryPropertyFlagBits::VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
-				m_stagingBuffer->bindMemory( getDevice()->allocateMemory( "Snapshot"
-					, {
-						VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
-						nullptr,
-						requirements.size,
-						deduced
-					} ) );
-				m_stagingData = castor::makeArrayView( m_stagingBuffer->lock( 0u, bufferSize, 0u )
-					, bufferSize );
-				m_transferCommands = { getDevice(), "Snapshot" };
-				auto & view = target->getTexture().getTexture()->getDefaultView().getTargetView();
-				auto & commands = *m_transferCommands.commandBuffer;
-				commands.begin();
-				commands.beginDebugBlock( { "Staging Texture Download"
-					, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
-				commands.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-					, VK_PIPELINE_STAGE_TRANSFER_BIT
-					, view.makeTransferSource( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-				commands.memoryBarrier( VK_PIPELINE_STAGE_HOST_BIT
-					, VK_PIPELINE_STAGE_TRANSFER_BIT
-					, m_stagingBuffer->makeTransferDestination() );
-				auto extent = view.image->getDimensions();
-				auto mipLevel = view->subresourceRange.baseMipLevel;
-				extent.width = std::max( 1u, extent.width >> mipLevel );
-				extent.height = std::max( 1u, extent.height >> mipLevel );
-				commands.copyToBuffer( VkBufferImageCopy{ 0u
-						, 0u
-						, 0u
-						, { view->subresourceRange.aspectMask
-							, mipLevel
-							, view->subresourceRange.baseArrayLayer
-							, view->subresourceRange.layerCount }
-						, VkOffset3D{}
-						, VkExtent3D{ std::max( 1u, extent.width )
-							, std::max( 1u, extent.height )
-							, 1u } }
-					, *view.image
-					, *m_stagingBuffer );
-				commands.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-					, view.makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
-				commands.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-					, VK_PIPELINE_STAGE_HOST_BIT
-					, m_stagingBuffer->makeHostRead() );
-				commands.endDebugBlock();
-				commands.end();
-
-				m_initialised = true;
-				m_dirty = false;
-				engine.registerWindow( *this );
-			}
+			CU_Exception( "No render target for render window." );
 		}
 
-		return m_initialised;
+		target->initialise( *m_device );
+		doCreatePickingPass();
+		doCreateRenderQuad();
+		doCreateCommandBuffers();
+
+		m_saveBuffer = castor::PxBufferBase::create( target->getSize(), convert( target->getPixelFormat() ) );
+		auto bufferSize = ashes::getAlignedSize( ashes::getLevelsSize( VkExtent2D{ m_saveBuffer->getWidth(), m_saveBuffer->getHeight() }
+			, target->getPixelFormat()
+			, 0u
+			, 1u
+			, 1u )
+			, getDevice()->getProperties().limits.nonCoherentAtomSize );
+		m_stagingBuffer = getDevice()->createBuffer( "Snapshot"
+			, bufferSize
+			, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT );
+		auto requirements = m_stagingBuffer->getMemoryRequirements();
+		auto deduced = getDevice()->deduceMemoryType( requirements.memoryTypeBits
+			, VkMemoryPropertyFlagBits::VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
+		m_stagingBuffer->bindMemory( getDevice()->allocateMemory( "Snapshot"
+			, {
+				VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
+				nullptr,
+				requirements.size,
+				deduced
+			} ) );
+		m_stagingData = castor::makeArrayView( m_stagingBuffer->lock( 0u, bufferSize, 0u )
+			, bufferSize );
+		m_transferCommands = { getDevice(), "Snapshot" };
+		auto & view = target->getTexture().getTexture()->getDefaultView().getTargetView();
+		auto & commands = *m_transferCommands.commandBuffer;
+		commands.begin();
+		commands.beginDebugBlock( { "Staging Texture Download"
+			, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
+		commands.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, view.makeTransferSource( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		commands.memoryBarrier( VK_PIPELINE_STAGE_HOST_BIT
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, m_stagingBuffer->makeTransferDestination() );
+		auto extent = view.image->getDimensions();
+		auto mipLevel = view->subresourceRange.baseMipLevel;
+		extent.width = std::max( 1u, extent.width >> mipLevel );
+		extent.height = std::max( 1u, extent.height >> mipLevel );
+		commands.copyToBuffer( VkBufferImageCopy{ 0u
+			, 0u
+			, 0u
+			, { view->subresourceRange.aspectMask
+			, mipLevel
+			, view->subresourceRange.baseArrayLayer
+			, view->subresourceRange.layerCount }
+			, VkOffset3D{}
+			, VkExtent3D{ std::max( 1u, extent.width )
+			, std::max( 1u, extent.height )
+			, 1u } }
+			, *view.image
+			, *m_stagingBuffer );
+		commands.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, view.makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
+		commands.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			, VK_PIPELINE_STAGE_HOST_BIT
+			, m_stagingBuffer->makeHostRead() );
+		commands.endDebugBlock();
+		commands.end();
+
+		m_dirty = false;
+
+		log::debug << "Created render window " << m_index << std::endl;
 	}
 
 	void RenderWindow::cleanup()
 	{
-		m_initialised = false;
+		auto & engine = *getEngine();
+		bool hasCurrent = engine.getRenderSystem()->hasCurrentRenderDevice();
 
-		if ( m_device )
+		if ( hasCurrent
+			&& &engine.getRenderSystem()->getCurrentRenderDevice() != m_device.get() )
 		{
-			auto & engine = *getEngine();
-			engine.unregisterWindow( *this );
-			bool hasCurrent = engine.getRenderSystem()->hasCurrentRenderDevice();
-
-			if ( hasCurrent
-				&& &engine.getRenderSystem()->getCurrentRenderDevice() != m_device.get() )
-			{
-				auto & device = engine.getRenderSystem()->getCurrentRenderDevice();
-				auto guard = castor::makeBlockGuard(
-					[this, &engine]()
-					{
-						engine.getRenderSystem()->setCurrentRenderDevice( nullptr );
-					},
-					[this, &engine, &device]()
-					{
-						engine.getRenderSystem()->setCurrentRenderDevice( &device );
-					} );
-				doCleanup( true );
-			}
-			else
-			{
-				doCleanup( !hasCurrent );
-			}
+			auto & device = engine.getRenderSystem()->getCurrentRenderDevice();
+			auto guard = castor::makeBlockGuard(
+				[this, &engine]()
+				{
+					engine.getRenderSystem()->setCurrentRenderDevice( nullptr );
+				},
+				[this, &engine, &device]()
+				{
+					engine.getRenderSystem()->setCurrentRenderDevice( &device );
+				} );
+			doCleanup( true );
+		}
+		else
+		{
+			doCleanup( !hasCurrent );
 		}
 	}
 
 	void RenderWindow::render( bool waitOnly )
 	{
-		if ( m_initialised && !m_dirty )
+		if ( !m_dirty )
 		{
 			RenderTargetSPtr target = getRenderTarget();
 
@@ -372,14 +353,14 @@ namespace castor3d
 
 				if ( waitOnly )
 				{
-					waitFrame();
+					doWaitFrame();
 				}
-				else if ( auto resources = getResources() )
+				else if ( auto resources = doGetResources() )
 				{
 					try
 					{
-						submitFrame( resources );
-						presentFrame( resources );
+						doSubmitFrame( resources );
+						doPresentFrame( resources );
 					}
 					catch ( ashes::Exception & exc )
 					{
@@ -387,7 +368,7 @@ namespace castor3d
 
 						if ( exc.getResult() == VK_ERROR_DEVICE_LOST )
 						{
-							m_initialised = false;
+							m_dirty = true;
 						}
 					}
 				}
@@ -408,7 +389,7 @@ namespace castor3d
 	{
 		m_size = size;
 
-		if ( m_initialised && !m_dirty.exchange( true ) )
+		if ( !m_dirty.exchange( true ) )
 		{
 			getListener()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
 				, [this]( RenderDevice const & device )
@@ -620,18 +601,6 @@ namespace castor3d
 		return m_pickingPass->getPickedFace();
 	}
 
-	void RenderWindow::doCreateRenderingResources()
-	{
-		for ( uint32_t i = 0u; i < uint32_t( m_swapChainImages.size() ); ++i )
-		{
-			m_renderingResources.emplace_back( std::make_unique< RenderingResources >( getDevice()->createSemaphore( getName() + castor::string::toString( i ) + "ImageAvailable" )
-				, getDevice()->createSemaphore( getName() + castor::string::toString( i ) + "FinishedRendering" )
-				, getDevice()->createFence( getName() + castor::string::toString( i ), VkFenceCreateFlags{ 0u } )
-				, getDevice().graphicsCommandPool->createCommandBuffer( getName() + castor::string::toString( i ) )
-				, 0u ) );
-		}
-	}
-
 	void RenderWindow::doCreateRenderPass()
 	{
 		ashes::VkAttachmentDescriptionArray attaches
@@ -691,57 +660,9 @@ namespace castor3d
 			, std::move( createInfo ) );
 	}
 
-	void RenderWindow::doCreateFrameBuffers()
+	void RenderWindow::doDestroyRenderPass()
 	{
-		m_frameBuffers.resize( m_swapChainImages.size() );
-
-		for ( size_t i = 0u; i < m_frameBuffers.size(); ++i )
-		{
-			auto attaches = doPrepareAttaches( uint32_t( i ) );
-			m_frameBuffers[i] = m_renderPass->createFrameBuffer( "RenderPass"
-				, m_swapChain->getDimensions()
-				, std::move( attaches ) );
-		}
-	}
-
-	void RenderWindow::doCreateCommandBuffers()
-	{
-		for ( auto & commandBuffers : m_commandBuffers )
-		{
-			commandBuffers.resize( m_swapChainImages.size() );
-			uint32_t index = 0u;
-
-			for ( auto & commandBuffer : commandBuffers )
-			{
-				commandBuffer = m_commandPool->createCommandBuffer( getName() + castor::string::toString( index++ ) );
-			}
-		}
-	}
-
-	ashes::ImageViewCRefArray RenderWindow::doPrepareAttaches( uint32_t backBuffer )
-	{
-		ashes::ImageViewCRefArray attaches;
-		m_views.clear();
-
-		for ( auto & attach : m_renderPass->getAttachments() )
-		{
-			m_views.push_back( m_swapChainImages[backBuffer].createView( makeVkType< VkImageViewCreateInfo >( 0u
-				, m_swapChainImages[backBuffer]
-				, VK_IMAGE_VIEW_TYPE_2D
-				, m_swapChain->getFormat()
-				, VkComponentMapping{}
-				, VkImageSubresourceRange
-				{
-					ashes::getAspectMask( m_swapChain->getFormat() ),
-					0u,
-					1u,
-					0u,
-					1u,
-				} ) ) );
-			attaches.emplace_back( m_views.back() );
-		}
-
-		return attaches;
+		m_renderPass.reset();
 	}
 
 	void RenderWindow::doCreateProgram()
@@ -796,15 +717,70 @@ namespace castor3d
 		};
 	}
 
-	void RenderWindow::doCreateSwapChainDependent()
+	void RenderWindow::doDestroyProgram()
 	{
+		m_program.clear();
+	}
+
+	void RenderWindow::doCreateSwapchain()
+	{
+		m_swapChain = getDevice()->createSwapChain( getSwapChainCreateInfo( *m_surface
+			, { m_size.getWidth(), m_size.getHeight() } ) );
+		m_swapChainImages = m_swapChain->getImages();
+		doCreateRenderPass();
 		doCreateRenderingResources();
+		doCreateFrameBuffers();
+	}
+
+	void RenderWindow::doDestroySwapchain()
+	{
+		doDestroyFrameBuffers();
+		doDestroyRenderingResources();
+		doDestroyRenderPass();
+		m_swapChainImages.clear();
+		m_swapChain.reset();
+	}
+
+	void RenderWindow::doCreateRenderingResources()
+	{
+		for ( uint32_t i = 0u; i < uint32_t( m_swapChainImages.size() ); ++i )
+		{
+			m_renderingResources.emplace_back( std::make_unique< RenderingResources >( getDevice()->createSemaphore( getName() + castor::string::toString( i ) + "ImageAvailable" )
+				, getDevice()->createSemaphore( getName() + castor::string::toString( i ) + "FinishedRendering" )
+				, getDevice()->createFence( getName() + castor::string::toString( i ), VkFenceCreateFlags{ 0u } )
+				, getDevice().graphicsCommandPool->createCommandBuffer( getName() + castor::string::toString( i ) )
+				, 0u ) );
+		}
+	}
+
+	void RenderWindow::doDestroyRenderingResources()
+	{
+		m_renderingResources.clear();
+	}
+
+	void RenderWindow::doCreatePickingPass()
+	{
+		auto & target = *getRenderTarget();
+		m_pickingPass = std::make_shared< PickingPass >( *getEngine()
+			, target.getTechnique()->getMatrixUbo()
+			, target.getCuller() );
+		m_pickingPass->initialise( *m_device, target.getSize() );
+	}
+
+	void RenderWindow::doDestroyPickingPass()
+	{
+		m_pickingPass->cleanup( *m_device );
+		m_pickingPass.reset();
+	}
+
+	void RenderWindow::doCreateRenderQuad()
+	{
+		auto & target = *getRenderTarget();
 		m_renderQuad = RenderQuadBuilder{}
 			.texcoordConfig( rq::Texcoord{} )
 			.build( *m_device
 				, "RenderWindow" + getName()
 				, VK_FILTER_LINEAR );
-		doCreateProgram();
 		m_renderQuad->createPipeline( VkExtent2D{ m_size[0], m_size[1] }
 			, castor::Position{}
 			, m_program
@@ -814,7 +790,7 @@ namespace castor3d
 #if C3D_DebugPicking
 				RenderQuad::makeDescriptorWrite( m_pickingPass->getResult()
 #else
-				RenderQuad::makeDescriptorWrite( getRenderTarget()->getTexture().getTexture()->getDefaultView().getSampledView()
+				RenderQuad::makeDescriptorWrite( target.getTexture().getTexture()->getDefaultView().getSampledView()
 #endif
 					, m_renderQuad->getSampler().getSampler()
 					, 0u ),
@@ -828,62 +804,112 @@ namespace castor3d
 		m_renderQuad->initialisePasses();
 	}
 
-	bool RenderWindow::doPrepareFrames()
+	void RenderWindow::doDestroyRenderQuad()
 	{
-		bool result{ true };
-		doCreateCommandBuffers();
-		doCreateFrameBuffers();
+		m_renderQuad.reset();
+	}
+
+	void RenderWindow::doCreateFrameBuffers()
+	{
+		auto prepareAttaches = [this]( uint32_t backBuffer )
+		{
+			ashes::ImageViewCRefArray attaches;
+			m_views.clear();
+
+			for ( auto & attach : m_renderPass->getAttachments() )
+			{
+				m_views.push_back( m_swapChainImages[backBuffer].createView( makeVkType< VkImageViewCreateInfo >( 0u
+					, m_swapChainImages[backBuffer]
+					, VK_IMAGE_VIEW_TYPE_2D
+					, m_swapChain->getFormat()
+					, VkComponentMapping{}
+					, VkImageSubresourceRange
+					{ 
+						ashes::getAspectMask( m_swapChain->getFormat() ),
+						0u,
+						1u,
+						0u,
+						1u,
+					} ) ) );
+				attaches.emplace_back( m_views.back() );
+			}
+
+			return attaches;
+		};
+
+		m_frameBuffers.resize( m_swapChainImages.size() );
+
+		for ( size_t i = 0u; i < m_frameBuffers.size(); ++i )
+		{
+			auto attaches = prepareAttaches( uint32_t( i ) );
+			m_frameBuffers[i] = m_renderPass->createFrameBuffer( "RenderPass"
+				, m_swapChain->getDimensions()
+				, std::move( attaches ) );
+		}
+	}
+
+	void RenderWindow::doDestroyFrameBuffers()
+	{
+		m_frameBuffers.clear();
+	}
+
+	void RenderWindow::doCreateCommandBuffers()
+	{
 		auto pass = 0u;
 
 		for ( auto & commandBuffers : m_commandBuffers )
 		{
-			for ( uint32_t i = 0u; i < commandBuffers.size() && result; ++i )
-			{
-				auto & frameBuffer = *m_frameBuffers[i];
-				auto & commandBuffer = *commandBuffers[i];
+			commandBuffers.resize( m_swapChainImages.size() );
+			uint32_t index = 0u;
 
-				commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
-				commandBuffer.beginDebugBlock(
+			for ( auto & commandBuffer : commandBuffers )
+			{
+				auto & frameBuffer = *m_frameBuffers[index];
+				commandBuffer = m_commandPool->createCommandBuffer( getName() + castor::string::toString( index++ ) );
+				commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
+				commandBuffer->beginDebugBlock(
 					{
 						"RenderWindow Render",
 						makeFloatArray( getEngine()->getNextRainbowColour() ),
 					} );
-				commandBuffer.beginRenderPass( *m_renderPass
+				commandBuffer->beginRenderPass( *m_renderPass
 					, frameBuffer
 					, { opaqueWhiteClearColor }
-					, VK_SUBPASS_CONTENTS_INLINE );
-				m_renderQuad->registerPass( commandBuffer, pass );
-				commandBuffer.endRenderPass();
-				commandBuffer.endDebugBlock();
-				commandBuffer.end();
+				, VK_SUBPASS_CONTENTS_INLINE );
+				m_renderQuad->registerPass( *commandBuffer, pass );
+				commandBuffer->endRenderPass();
+				commandBuffer->endDebugBlock();
+				commandBuffer->end();
 			}
 
 			++pass;
 		}
+	}
 
-		return result;
+	void RenderWindow::doDestroyCommandBuffers()
+	{
+		for ( auto & commandBuffers : m_commandBuffers )
+		{
+			commandBuffers.clear();
+		}
 	}
 
 	void RenderWindow::doResetSwapChain()
 	{
 		getDevice()->waitIdle();
-		m_renderQuad.reset();
-		m_frameBuffers.clear();
 
-		for ( auto & commandBuffers : m_commandBuffers )
-		{
-			commandBuffers.clear();
-		}
+		doDestroyCommandBuffers();
+		doDestroyRenderQuad();
+		doDestroyPickingPass();
+		doDestroySwapchain();
 
-		m_renderingResources.clear();
-		m_swapChainImages.clear();
-		m_swapChain.reset();
 		doCreateSwapchain();
-		doCreateSwapChainDependent();
-		doPrepareFrames();
+		doCreatePickingPass();
+		doCreateRenderQuad();
+		doCreateCommandBuffers();
 	}
 
-	RenderWindow::RenderingResources * RenderWindow::getResources()
+	RenderWindow::RenderingResources * RenderWindow::doGetResources()
 	{
 		auto & resources = *m_renderingResources[m_resourceIndex];
 		uint32_t imageIndex{ 0u };
@@ -903,7 +929,7 @@ namespace castor3d
 		return nullptr;
 	}
 
-	void RenderWindow::waitFrame()
+	void RenderWindow::doWaitFrame()
 	{
 		getDevice().graphicsQueue->submit( {}
 			, { getRenderTarget()->getSemaphore() }
@@ -912,7 +938,7 @@ namespace castor3d
 			, nullptr );
 	}
 
-	void RenderWindow::submitFrame( RenderingResources * resources )
+	void RenderWindow::doSubmitFrame( RenderingResources * resources )
 	{
 		auto toWait = &getRenderTarget()->getSemaphore();
 		VkPipelineStageFlags waitStage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
@@ -937,7 +963,7 @@ namespace castor3d
 			, resources->fence.get() );
 	}
 
-	void RenderWindow::presentFrame( RenderingResources * resources )
+	void RenderWindow::doPresentFrame( RenderingResources * resources )
 	{
 		try
 		{
@@ -1007,38 +1033,19 @@ namespace castor3d
 		}
 
 		getDevice()->waitIdle();
-		m_stagingBuffer.reset();
-		m_transferCommands = {};
 
-		if ( m_pickingPass )
-		{
-			m_pickingPass->cleanup( *m_device );
-			m_pickingPass.reset();
-		}
-
-		m_overlayRenderer.reset();
 		RenderTargetSPtr target = getRenderTarget();
 
 		if ( target )
 		{
+			m_transferCommands = {};
+			m_stagingBuffer.reset();
+			m_saveBuffer.reset();
+			doDestroyCommandBuffers();
+			doDestroyRenderQuad();
+			doDestroyPickingPass();
 			target->cleanup( *m_device );
 		}
-
-		m_renderQuad.reset();
-		m_program.clear();
-
-		for ( auto & commandBuffers : m_commandBuffers )
-		{
-			commandBuffers.clear();
-		}
-
-		m_renderingResources.clear();
-		m_commandPool.reset();
-		m_frameBuffers.clear();
-		m_stagingBuffer.reset();
-		m_renderPass.reset();
-		m_swapChainImages.clear();
-		m_swapChain.reset();
 
 		if ( enableDevice )
 		{
