@@ -370,7 +370,8 @@ namespace castor
 		 *\return		\p true si le fichier a été copié correctement
 		 */
 		CU_API static bool copyFile( Path const & filePath
-			, Path const & folderPath );
+			, Path const & folderPath
+			, bool allowReplace = false );
 		/**
 		 *\~english
 		 *\brief		Copies a file
@@ -380,7 +381,8 @@ namespace castor
 		 *\return		\p true si le fichier a été copié correctement
 		 */
 		CU_API static bool copyFileName( Path const & srcFileName
-			, Path const & dstFileName );
+			, Path const & dstFileName
+			, bool allowReplace = false );
 		/**
 		 *\~english
 		 *\brief		Retrieves the file size
