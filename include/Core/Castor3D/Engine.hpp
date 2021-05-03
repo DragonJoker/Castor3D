@@ -254,6 +254,13 @@ namespace castor3d
 		C3D_API void prepareTextures( Pass & pass );
 		/**
 		 *\~english
+		 *\brief		Retrieves a colour issued from a rainbow colours iterator.
+		 *\~french
+		 *\brief		Récupère une couleur issue d'un itérateur de couleurs d'arc-en-ciel.
+		 */
+		C3D_API castor::RgbaColour getNextRainbowColour()const;
+		/**
+		 *\~english
 		 *\brief		Retrieves plug-ins path
 		 *\return		The plug-ins path
 		 *\~french
@@ -297,176 +304,179 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API castor::RgbaColour getNextRainbowColour()const;
-
-		inline castor::String const & getAppName()const
+		castor::String const & getAppName()const
 		{
 			return m_appName;
 		}
 		
-		inline Version const & getAppVersion()const
+		Version const & getAppVersion()const
 		{
 			return m_appVersion;
 		}
 		
-		inline castor::ImageCache const & getImageCache()const
+		castor::ImageCache const & getImageCache()const
 		{
 			return m_imageCache;
 		}
 
-		inline castor::ImageCache & getImageCache()
+		castor::ImageCache & getImageCache()
 		{
 			return m_imageCache;
 		}
 
-		inline castor::FontCache const & getFontCache()const
+		castor::FontCache const & getFontCache()const
 		{
 			return m_fontCache;
 		}
 
-		inline castor::FontCache & getFontCache()
+		castor::FontCache & getFontCache()
 		{
 			return m_fontCache;
 		}
 
-		inline UserInputListenerSPtr getUserInputListener()
+		UserInputListenerSPtr getUserInputListener()
 		{
 			return m_userInputListener;
 		}
 
-		inline RenderSystem * getRenderSystem()const
+		RenderSystem * getRenderSystem()const
 		{
 			return m_renderSystem.get();
 		}
 
-		inline SamplerSPtr getDefaultSampler()const
+		SamplerSPtr getDefaultSampler()const
 		{
 			return m_defaultSampler;
 		}
 
-		inline SamplerSPtr getLightsSampler()const
+		SamplerSPtr getLightsSampler()const
 		{
 			return m_lightsSampler;
 		}
 
-		inline std::map< castor::String, castor::AttributeParsersBySection > const & getAdditionalParsers()const
+		std::map< castor::String, castor::AttributeParsersBySection > const & getAdditionalParsers()const
 		{
 			return m_additionalParsers;
 		}
 
-		inline std::map< castor::String, castor::StrUInt32Map > const & getAdditionalSections()const
+		std::map< castor::String, castor::StrUInt32Map > const & getAdditionalSections()const
 		{
 			return m_additionalSections;
 		}
 
-		inline Version const & getVersion()const
+		Version const & getVersion()const
 		{
 			return m_version;
 		}
 
-		inline bool isValidationEnabled()const
+		bool isValidationEnabled()const
 		{
 			return m_enableValidation;
 		}
 
-		inline bool isApiTraceEnabled()const
+		bool isApiTraceEnabled()const
 		{
 			return m_enableApiTrace;
 		}
 
-		inline bool hasRenderLoop()const
+		bool hasRenderLoop()const
 		{
 			return m_renderLoop != nullptr;
 		}
 
-		inline RenderLoop const & getRenderLoop()const
+		RenderLoop const & getRenderLoop()const
 		{
 			return *m_renderLoop;
 		}
 
-		inline RenderLoop & getRenderLoop()
+		RenderLoop & getRenderLoop()
 		{
 			return *m_renderLoop;
 		}
 
-		inline bool isThreaded()
+		bool isThreaded()
 		{
 			return m_threaded;
 		}
 
-		inline MeshFactory const & getMeshFactory()const
+		MeshFactory const & getMeshFactory()const
 		{
 			return *m_meshFactory;
 		}
 
-		inline MeshFactory & getMeshFactory()
+		MeshFactory & getMeshFactory()
 		{
 			return *m_meshFactory;
 		}
 
-		inline MeshSubdividerFactory const & getSubdividerFactory()const
+		MeshSubdividerFactory const & getSubdividerFactory()const
 		{
 			return *m_subdividerFactory;
 		}
 
-		inline MeshSubdividerFactory & getSubdividerFactory()
+		MeshSubdividerFactory & getSubdividerFactory()
 		{
 			return *m_subdividerFactory;
 		}
 
-		inline MeshImporterFactory const & getImporterFactory()const
+		MeshImporterFactory const & getImporterFactory()const
 		{
 			return *m_importerFactory;
 		}
 
-		inline MeshImporterFactory & getImporterFactory()
+		MeshImporterFactory & getImporterFactory()
 		{
 			return *m_importerFactory;
 		}
 
-		inline ParticleFactory & getParticleFactory()
+		ParticleFactory & getParticleFactory()
 		{
 			return *m_particleFactory;
 		}
 
-		inline castor::CpuInformations const & getCpuInformations()const
+		castor::CpuInformations const & getCpuInformations()const
 		{
 			return m_cpuInformations;
 		}
 
-		inline MaterialType getMaterialsType()const
+		MaterialType getMaterialsType()const
 		{
 			return m_materialType;
 		}
 
-		inline castor::ImageLoader const & getImageLoader()const
+		castor::ImageLoader const & getImageLoader()const
 		{
 			return m_imageLoader;
 		}
 
-		inline castor::ImageLoader & getImageLoader()
+		castor::ImageLoader & getImageLoader()
 		{
 			return m_imageLoader;
 		}
 
-		inline castor::ImageWriter const & getImageWriter()const
+		castor::ImageWriter const & getImageWriter()const
 		{
 			return m_imageWriter;
 		}
 
-		inline ashes::RendererList const & getRenderersList()const
+		ashes::RendererList const & getRenderersList()const
 		{
 			return m_rendererList;
 		}
 
-		inline castor::LoggerInstance & getLogger()
+		castor::LoggerInstance & getLogger()
 		{
 			return *m_logger;
 		}
 
-		inline uint32_t getLpvGridSize()
+		uint32_t getLpvGridSize()
 		{
 			return m_lpvGridSize;
+		}
+
+		std::map< castor::String, RenderWindow * > const & getRenderWindows()const
+		{
+			return m_renderWindows;
 		}
 		/**@}*/
 		/**
@@ -478,17 +488,17 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		inline void setUserInputListener( UserInputListenerSPtr listener )
+		void setUserInputListener( UserInputListenerSPtr listener )
 		{
 			m_userInputListener = listener;
 		}
 
-		inline void setMaterialsType( MaterialType type )
+		void setMaterialsType( MaterialType type )
 		{
 			m_materialType = type;
 		}
 
-		inline void setLpvGridSize( uint32_t size )
+		void setLpvGridSize( uint32_t size )
 		{
 			m_lpvGridSize = size;
 		}
@@ -520,11 +530,11 @@ namespace castor3d
 		DECLARE_CACHE_MEMBER( scene, Scene );
 		DECLARE_CACHE_MEMBER( listener, FrameListener );
 		FrameListenerWPtr m_defaultListener;
+		std::map< castor::String, RenderWindow * > m_renderWindows;
 		std::map< RenderWindow const *, UserInputListenerSPtr > m_windowInputListeners;
 		UserInputListenerSPtr m_userInputListener;
 		DECLARE_CACHE_MEMBER( target, RenderTarget );
 		DECLARE_CACHE_MEMBER( technique, RenderTechnique );
-		DECLARE_CACHE_MEMBER( window, RenderWindow );
 		castor::FontCache m_fontCache;
 		castor::ImageCache m_imageCache;
 		std::map< castor::String, castor::AttributeParsersBySection > m_additionalParsers;

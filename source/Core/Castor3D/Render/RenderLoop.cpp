@@ -97,17 +97,14 @@ namespace castor3d
 			} );
 	}
 
-	void RenderLoop::createDevice( ashes::WindowHandle handle
-		, RenderWindow & window )
+	void RenderLoop::createDevice( RenderWindow & window )
 	{
 		if ( !m_renderSystem.hasMainDevice() )
 		{
-			doCreateMainDevice( std::move( handle ), window );
+			doCreateMainDevice( window );
 		}
-		else
-		{
-			doCreateDevice( std::move( handle ), window );
-		}
+
+		window.setDevice( m_renderSystem.getMainRenderDevice() );
 	}
 
 	void RenderLoop::showDebugOverlays( bool p_show )
@@ -144,19 +141,13 @@ namespace castor3d
 		return m_debugOverlays->isShown();
 	}
 
-	RenderDeviceSPtr RenderLoop::doCreateDevice( ashes::WindowHandle handle
-		, RenderWindow & window )
+	RenderDeviceSPtr RenderLoop::doCreateDevice( RenderWindow const & window )
 	{
 		RenderDeviceSPtr result;
 
 		try
 		{
-			result = m_renderSystem.createDevice( std::move( handle ) );
-
-			if ( result )
-			{
-				window.setDevice( result );
-			}
+			result = m_renderSystem.createDevice( window.getSurface() );
 		}
 		catch ( castor::Exception & exc )
 		{
@@ -260,10 +251,11 @@ namespace castor3d
 			doProcessEvents( EventType::eQueueRender );
 		}
 
-		getEngine()->getRenderWindowCache().forEach( [this]( RenderWindow & window )
-			{
-				window.render( m_first );
-			} );
+		for ( auto & window : getEngine()->getRenderWindows() )
+		{
+			window.second->render( m_first );
+		}
+
 		m_first = false;
 
 		{

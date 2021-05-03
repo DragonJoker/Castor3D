@@ -227,6 +227,7 @@ namespace castor3d
 		if ( m_sampler )
 		{
 			m_sampler->cleanup();
+			m_sampler->getEngine()->getSamplerCache().remove( getName() );
 		}
 
 		cleanup();

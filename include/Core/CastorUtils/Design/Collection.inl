@@ -144,6 +144,7 @@ namespace castor
 		if ( m_last.result != m_objects.end() )
 		{
 			ret = m_last.result->second;
+			m_objects.erase( m_last.result );
 			doInitLast();
 		}
 

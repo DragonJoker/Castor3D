@@ -37,8 +37,6 @@ namespace GuiCommon
 			, wxTreeItemId id );
 		void doAddSkeleton( castor3d::Skeleton const & skeleton
 			, wxTreeItemId id );
-		void doAddRenderWindow( wxTreeItemId id
-			, castor3d::RenderWindow & window );
 		void doAddGeometry( wxTreeItemId id
 			, castor3d::Geometry & geometry );
 		void doAddCamera( wxTreeItemId id

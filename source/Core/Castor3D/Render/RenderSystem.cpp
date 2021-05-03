@@ -664,15 +664,11 @@ namespace castor3d
 		return result;
 	}
 	
-	RenderDeviceSPtr RenderSystem::createDevice( ashes::WindowHandle handle
-		, uint32_t gpuIndex )
+	RenderDeviceSPtr RenderSystem::createDevice( ashes::Surface const & surface )
 	{
-		CU_Require( gpuIndex < m_gpus.size()
-			&& "Invalid Physical Device index." );
 		return std::make_shared< RenderDevice >( *this
-			, *m_gpus[gpuIndex]
 			, m_desc
-			, m_instance->createSurface( *m_gpus[gpuIndex], std::move( handle ) ) );
+			, surface );
 	}
 
 	castor::Matrix4x4f RenderSystem::getFrustum( float left

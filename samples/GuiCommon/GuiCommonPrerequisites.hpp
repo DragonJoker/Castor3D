@@ -25,8 +25,6 @@ namespace GuiCommon
 		eBMP_VIEWPORT_SEL,
 		eBMP_RENDER_TARGET,
 		eBMP_RENDER_TARGET_SEL,
-		eBMP_RENDER_WINDOW,
-		eBMP_RENDER_WINDOW_SEL,
 		eBMP_FRAME_VARIABLE,
 		eBMP_FRAME_VARIABLE_SEL,
 		eBMP_FRAME_VARIABLE_BUFFER,
@@ -203,7 +201,7 @@ namespace GuiCommon
 	 *\param[in]	fileName	Le nom du fichier de scène.
 	 *\return		true si tout s'est bien passé.
 	 */
-	castor3d::RenderWindowSPtr loadScene( castor3d::Engine & engine, castor::Path const & fileName );
+	castor3d::RenderTargetSPtr loadScene( castor3d::Engine & engine, castor::Path const & fileName );
 	/**
 	 *\~english
 	 *\brief		Loads the eingine plug-ins.

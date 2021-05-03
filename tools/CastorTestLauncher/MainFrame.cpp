@@ -41,10 +41,10 @@ namespace test_launcher
 {
 	namespace
 	{
-		RenderWindowSPtr doLoadScene( Engine & engine
+		RenderTargetSPtr doLoadScene( Engine & engine
 			, Path const & fileName )
 		{
-			RenderWindowSPtr result;
+			RenderTargetSPtr result;
 
 			if ( File::fileExists( fileName ) )
 			{
@@ -58,7 +58,7 @@ namespace test_launcher
 
 						if ( parser.parseFile( fileName ) )
 						{
-							result = parser.getRenderWindow();
+							result = parser.getRenderWindow().renderTarget;
 						}
 						else
 						{
@@ -277,18 +277,21 @@ namespace test_launcher
 
 		if ( !m_filePath.empty() )
 		{
-			RenderWindowSPtr window = doLoadScene( m_engine, m_filePath );
-
 			auto sizewx = GetClientSize();
 			castor::Size sizeWnd{ uint32_t( sizewx.GetWidth() ), uint32_t( sizewx.GetHeight() ) };
+			m_renderWindow = std::make_shared< RenderWindow >( "CastorTest"
+				, m_engine
+				, sizeWnd
+				, makeWindowHandle( this ) );
+			auto target = doLoadScene( m_engine, m_filePath );
 
-			if ( !window || !window->initialise( sizeWnd, makeWindowHandle( this ) ) )
+			if ( !target )
 			{
 				Logger::logError( cuT( "Can't initialise the render window." ) );
 			}
 			else
 			{
-				m_renderWindow = window;
+				m_renderWindow->initialise( target );
 			}
 		}
 		else
@@ -332,6 +335,7 @@ namespace test_launcher
 
 	void MainFrame::cleanup()
 	{
+		m_renderWindow->cleanup();
 		m_renderWindow.reset();
 		m_engine.cleanup();
 	}
