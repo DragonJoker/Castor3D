@@ -667,6 +667,7 @@ namespace aria
 		m_listTests = ListTests{ m_database };
 		m_listLatestRun = ListLatestTestRun{ m_database };
 		m_listLatestRendererRuns = ListLatestRendererTests{ this };
+		m_updateRunsCastorDate = UpdateRunsCastorDate{ m_database };
 
 		if ( m_config.initFromFolder )
 		{
@@ -851,6 +852,13 @@ namespace aria
 		test.id = m_insertTest.insert( test.category->id
 			, test.name );
 		castor::Logger::logInfo( "Inserted: " + getDetails( test ) );
+	}
+
+	void TestDatabase::updateRunsCastorDate( db::DateTime const & date )
+	{
+		m_updateRunsCastorDate.castorDate->setValue( date );
+		m_updateRunsCastorDate.stmt->executeUpdate();
+		castor::Logger::logInfo( "Updated Castor3D date for all runs" );
 	}
 
 	void TestDatabase::insertRun( TestRun & run
