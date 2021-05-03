@@ -192,7 +192,8 @@ namespace aria
 	{
 		auto & config = m_database.m_config;
 		castor::File::copyFileName( config.work / getResultFolder( *m_test.test ) / getFolderName( status ) / getResultName( m_test )
-			, config.test / getReferenceFolder( m_test ) / getReferenceName( m_test ) );
+			, config.test / getReferenceFolder( m_test ) / getReferenceName( m_test )
+			, true );
 	}
 
 	void DatabaseTest::updateOutOfDate( bool remove )const
