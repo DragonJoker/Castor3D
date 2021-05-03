@@ -637,7 +637,7 @@ namespace castor3d
 
 	void LightPass::doCleanup()
 	{
-		m_matrixUbo.cleanup( m_device );
+		m_matrixUbo.cleanup();
 		m_commandBuffers[0].reset();
 		m_commandBuffers[1].reset();
 		m_pipelines.clear();

@@ -86,6 +86,16 @@ namespace castor3d
 		 *\param[in]	engine	Le moteur.
 		 */
 		explicit GpInfoUbo( Engine & engine );
+		/**@}*/
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	engine	The GPU device.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	engine	Le device GPU.
+		 */
+		explicit GpInfoUbo( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -105,12 +115,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
-		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Fonction de nettoyage.
-		 *\param[in]	device	Le device GPU.
 		 */
-		C3D_API void cleanup( RenderDevice const & device );
+		C3D_API void cleanup();
 		C3D_API void cpuUpdate( castor::Size const & renderSize
 			, Camera const & camera );
 
@@ -131,6 +139,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
+		RenderDevice const * m_device{};
 		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }

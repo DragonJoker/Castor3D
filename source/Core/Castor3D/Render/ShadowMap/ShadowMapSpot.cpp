@@ -73,8 +73,10 @@ namespace castor3d
 		}
 	}
 
-	ShadowMapSpot::ShadowMapSpot( Scene & scene )
-		: ShadowMap{ scene
+	ShadowMapSpot::ShadowMapSpot( RenderDevice const & device
+		, Scene & scene )
+		: ShadowMap{ device
+			, scene
 			, LightType::eSpot
 			, ShadowMapResult{ *scene.getEngine()
 				, cuT( "Spot" )
@@ -89,6 +91,8 @@ namespace castor3d
 
 	ShadowMapSpot::~ShadowMapSpot()
 	{
+		m_passesData.clear();
+		m_blur.reset();
 	}
 	
 	void ShadowMapSpot::update( CpuUpdater & updater )
@@ -138,12 +142,6 @@ namespace castor3d
 				} );
 			m_passesData.back().blurCommands = m_blur->getCommands( true, i );
 		}
-	}
-
-	void ShadowMapSpot::doCleanup( RenderDevice const & device )
-	{
-		m_passesData.clear();
-		m_blur.reset();
 	}
 
 	ashes::Semaphore const & ShadowMapSpot::doRender( RenderDevice const & device

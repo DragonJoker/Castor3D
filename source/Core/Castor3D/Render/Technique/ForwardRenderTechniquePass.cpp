@@ -99,6 +99,74 @@ namespace castor3d
 			, vctConfigUbo }
 	{
 	}
+	
+	ForwardRenderTechniquePass::ForwardRenderTechniquePass( RenderDevice const & device
+		, castor::Size const & size
+		, castor::String const & category
+		, castor::String const & name
+		, MatrixUbo & matrixUbo
+		, SceneCuller & culler
+		, bool environment
+		, SceneNode const * ignored
+		, SsaoConfig const & config
+		, LpvGridConfigUbo const * lpvConfigUbo
+		, LayeredLpvGridConfigUbo const * llpvConfigUbo
+		, VoxelizerUbo const * vctConfigUbo
+		, LightVolumePassResult const * lpvResult
+		, TextureUnit const * vctFirstBounce
+		, TextureUnit const * vctSecondaryBounce )
+		: RenderTechniquePass{ device
+			, size
+			, category
+			, name
+			, matrixUbo
+			, culler
+			, environment
+			, ignored
+			, config
+			, lpvConfigUbo
+			, llpvConfigUbo
+			, vctConfigUbo
+			, lpvResult
+			, vctFirstBounce
+			, vctSecondaryBounce }
+	{
+	}
+
+	ForwardRenderTechniquePass::ForwardRenderTechniquePass( RenderDevice const & device
+		, castor::Size const & size
+		, castor::String const & category
+		, castor::String const & name
+		, MatrixUbo & matrixUbo
+		, SceneCuller & culler
+		, bool oit
+		, bool environment
+		, SceneNode const * ignored
+		, SsaoConfig const & config
+		, LpvGridConfigUbo const * lpvConfigUbo
+		, LayeredLpvGridConfigUbo const * llpvConfigUbo
+		, VoxelizerUbo const * vctConfigUbo
+		, LightVolumePassResult const * lpvResult
+		, TextureUnit const * vctFirstBounce
+		, TextureUnit const * vctSecondaryBounce )
+		: RenderTechniquePass{ device
+			, size
+			, category
+			, name
+			, matrixUbo
+			, culler
+			, oit
+			, environment
+			, ignored
+			, config
+			, lpvConfigUbo
+			, llpvConfigUbo
+			, vctConfigUbo
+			, lpvResult
+			, vctFirstBounce
+			, vctSecondaryBounce }
+	{
+	}
 
 	void ForwardRenderTechniquePass::initialiseRenderPass( RenderDevice const & device
 		, ashes::ImageView const & colourView

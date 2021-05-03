@@ -91,10 +91,6 @@ namespace castor3d
 	castor::String const VoxelizerUbo::BufferVoxelizer = cuT( "Voxelizer" );
 	castor::String const VoxelizerUbo::VoxelData = cuT( "c3d_voxelData" );
 
-	VoxelizerUbo::VoxelizerUbo()
-	{
-	}
-
 	VoxelizerUbo::VoxelizerUbo( RenderDevice const & device )
 	{
 		initialise( device );

@@ -17,12 +17,14 @@ CU_ImplementCUSmartPtr( castor3d, ShadowMap )
 
 namespace castor3d
 {
-	ShadowMap::ShadowMap( Scene & scene
+	ShadowMap::ShadowMap( RenderDevice const & device
+		, Scene & scene
 		, LightType lightType
 		, ShadowMapResult result
 		, std::vector< PassData > passes
 		, uint32_t count )
 		: OwnedBy< Engine >{ *scene.getEngine() }
+		, m_device{ device }
 		, m_scene{ scene }
 		, m_lightType{ lightType }
 		, m_name{ cuT( "ShadowMap" ) + castor::string::snakeToCamelCase( getName( lightType ) ) }
@@ -30,6 +32,20 @@ namespace castor3d
 		, m_passes{ std::move( passes ) }
 		, m_count{ count }
 	{
+	}
+
+	ShadowMap::~ShadowMap()
+	{
+		m_finished.reset();
+
+		for ( auto & pass : m_passes )
+		{
+			pass.pass->cleanup( m_device );
+			pass.matrixUbo->cleanup();
+		}
+
+		m_initialised = false;
+		m_result.cleanup();
 	}
 
 	void ShadowMap::accept( PipelineVisitorBase & visitor )
@@ -134,21 +150,6 @@ namespace castor3d
 		}
 
 		return m_initialised;
-	}
-
-	void ShadowMap::cleanup( RenderDevice const & device )
-	{
-		m_finished.reset();
-
-		for ( auto & pass : m_passes )
-		{
-			pass.pass->cleanup( device );
-			pass.matrixUbo->cleanup( device );
-		}
-
-		m_initialised = false;
-		doCleanup( device );
-		m_result.cleanup();
 	}
 
 	ashes::Semaphore const & ShadowMap::render( RenderDevice const & device

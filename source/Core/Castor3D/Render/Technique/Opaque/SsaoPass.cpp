@@ -42,7 +42,7 @@ namespace castor3d
 		}
 
 		m_matrixUbo.initialise( device );
-		m_ssaoConfigUbo = std::make_shared< SsaoConfigUbo >( m_engine );
+		m_ssaoConfigUbo = std::make_shared< SsaoConfigUbo >( device );
 		m_rawAoPass = std::make_shared< SsaoRawAOPass >( m_engine
 			, device
 			, m_size
@@ -87,11 +87,11 @@ namespace castor3d
 
 		if ( m_ssaoConfigUbo )
 		{
-			m_ssaoConfigUbo->cleanup( device );
+			m_ssaoConfigUbo->cleanup();
 			m_ssaoConfigUbo.reset();
 		}
 
-		m_matrixUbo.cleanup( device );
+		m_matrixUbo.cleanup();
 	}
 
 	void SsaoPass::update( CpuUpdater & updater )

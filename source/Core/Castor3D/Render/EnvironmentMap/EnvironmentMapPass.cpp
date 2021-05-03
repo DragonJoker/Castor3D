@@ -176,7 +176,7 @@ namespace castor3d
 		m_transparentPass->cleanup( device );
 		m_hdrConfigUbo.cleanup( device );
 		device.uboPools->putBuffer( m_modelUbo );
-		m_matrixUbo.cleanup( device );
+		m_matrixUbo.cleanup();
 	}
 
 	void EnvironmentMapPass::update( CpuUpdater & updater )

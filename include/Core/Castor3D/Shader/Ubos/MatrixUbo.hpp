@@ -113,12 +113,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
-		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Fonction de nettoyage.
-		 *\param[in]	device	Le device GPU.
 		 */
-		C3D_API void cleanup( RenderDevice const & device );
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -163,6 +161,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
+		RenderDevice const * m_device{};
 		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }

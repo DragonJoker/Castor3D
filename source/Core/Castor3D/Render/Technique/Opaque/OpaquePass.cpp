@@ -44,7 +44,9 @@ namespace castor3d
 	String const OpaquePass::Output4 = "outData4";
 	String const OpaquePass::Output5 = "outData5";
 
-	OpaquePass::OpaquePass( MatrixUbo & matrixUbo
+	OpaquePass::OpaquePass( RenderDevice const & device
+		, castor::Size const & size
+		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, SsaoConfig const & config )
 		: castor3d::RenderTechniquePass{ cuT( "Opaque" )
@@ -55,6 +57,11 @@ namespace castor3d
 			, nullptr
 			, config }
 	{
+		initialise( device
+			, size
+			, nullptr
+			, nullptr
+			, nullptr );
 	}
 
 	OpaquePass::~OpaquePass()

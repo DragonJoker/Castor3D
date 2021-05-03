@@ -537,7 +537,7 @@ namespace castor3d
 
 	void OverlayRenderer::cleanup( RenderDevice const & device )
 	{
-		m_matrixUbo.cleanup( device );
+		m_matrixUbo.cleanup();
 		m_panelOverlays.clear();
 		m_borderPanelOverlays.clear();
 		m_textOverlays.clear();

@@ -41,20 +41,20 @@ namespace castor3d
 		 *\brief		Constructor
 		 *\param[in]	name			The technique name.
 		 *\param[in]	renderTarget	The render target for this technique.
-		 *\param[in]	renderSystem	The render system.
+		 *\param[in]	device			The GPU device.
 		 *\param[in]	parameters		The technique parameters.
 		 *\param[in]	ssaoConfig		The SSAO configuration.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	name			Le nom de la technique.
 		 *\param[in]	renderTarget	La render target pour cette technique.
-		 *\param[in]	renderSystem	Le render system.
+		 *\param[in]	device			Le device GPU.
 		 *\param[in]	parameters		Les paramètres de la technique.
 		 *\param[in]	ssaoConfig		La configuration du SSAO.
 		 */
 		C3D_API RenderTechnique( castor::String const & name
 			, RenderTarget & renderTarget
-			, RenderSystem & renderSystem
+			, RenderDevice const & device
 			, Parameters const & parameters
 			, SsaoConfig const & ssaoConfig );
 		/**
@@ -66,27 +66,13 @@ namespace castor3d
 		C3D_API virtual ~RenderTechnique();
 		/**
 		 *\~english
-		 *\brief		Initialisation function.
-		 *\param[in]	device			The GPU device.
-		 *\param[out]	intermediates	Receives the intermediate views used by the whole technique.
-		 *\return		\p true if ok.
+		 *\brief		Lists the intermediate view used by the whole technique.
+		 *\param[out]	intermediates	Receives the intermediate views.
 		 *\~french
-		 *\brief		Fonction d'initialisation.
-		 *\param[in]	device			Le device GPU.
-		 *\param[out]	intermediates	Reçoit les vues intermédiaires utilisées par toute la technique.
-		 *\return		\p true if ok.
+		 *\brief		Liste les vues intermédiaires utilisées par toute la technique.
+		 *\param[out]	intermediates	Reçoit les vues intermédiaires.
 		 */
-		C3D_API bool initialise( RenderDevice const & device
-			, std::vector< IntermediateView > & intermediates );
-		/**
-		 *\~english
-		 *\brief		Cleanup function
-		 *\param[in]	device	The GPU device.
-		 *\~french
-		 *\brief		Fonction de nettoyage
-		 *\param[in]	device	Le device GPU.
-		 */
-		C3D_API void cleanup( RenderDevice const & device );
+		C3D_API void listIntermediates( std::vector< IntermediateView > & intermediates );
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -240,16 +226,8 @@ namespace castor3d
 		using ShadowMapArray = std::vector< ShadowMapUPtr >;
 
 	private:
-		void doCreateShadowMaps();
-		void doCreateLpv( RenderDevice const & device );
-		void doInitialiseShadowMaps( RenderDevice const & device );
-		void doInitialiseLpv( RenderDevice const & device );
-		void doInitialiseBackgroundPass( RenderDevice const & device );
-		void doInitialiseDepthPass( RenderDevice const & device );
-		void doInitialiseOpaquePass( RenderDevice const & device );
-		void doInitialiseTransparentPass( RenderDevice const & device );
-		void doCleanupShadowMaps( RenderDevice const & device );
-		void doCleanupLpv( RenderDevice const & device );
+		void doInitialiseShadowMaps();
+		void doInitialiseLpv();
 		void doUpdateShadowMaps( CpuUpdater & updater );
 		void doUpdateShadowMaps( GpuUpdater & updater );
 		void doUpdateLpv( CpuUpdater & updater );
@@ -274,46 +252,45 @@ namespace castor3d
 			, ashes::Semaphore const & semaphore );
 
 	private:
-		bool m_initialised;
 		RenderTarget & m_renderTarget;
-		RenderSystem & m_renderSystem;
+		RenderDevice const & m_device;
 		castor::Size m_size;
+		SsaoConfig m_ssaoConfig;
 		TextureUnit m_colourTexture;
 		TextureUnit m_depthBuffer;
 		MatrixUbo m_matrixUbo;
 		GpInfoUbo m_gpInfoUbo;
-		DebugConfig m_debugConfig;
-		DepthPassUPtr m_depthPass;
-		VoxelizerUPtr m_voxelizer;
-		RenderTechniquePassUPtr m_opaquePass;
-		RenderTechniquePassUPtr m_transparentPass;
-		SsaoConfig m_ssaoConfig;
-		DeferredRenderingUPtr m_deferredRendering;
-		WeightedBlendRenderingUPtr m_weightedBlendRendering;
-		RenderPassTimerSPtr m_particleTimer;
-		ShadowMapUPtr m_directionalShadowMap;
-		ShadowMapUPtr m_pointShadowMap;
-		ShadowMapUPtr m_spotShadowMap;
-		ShadowMapLightTypeArray m_allShadowMaps;
-		ShadowMapLightTypeArray m_activeShadowMaps;
 		LpvGridConfigUbo m_lpvConfigUbo;
 		LayeredLpvGridConfigUbo m_llpvConfigUbo;
 		VoxelizerUbo m_vctConfigUbo;
-		LightVolumePassResultUPtr m_lpvResult;
-		LightVolumePassResultArray m_llpvResult;
-		LightPropagationVolumesLightType m_lightPropagationVolumes;
-		LayeredLightPropagationVolumesLightType m_layeredLightPropagationVolumes;
-		LightPropagationVolumesGLightType m_lightPropagationVolumesG;
-		LayeredLightPropagationVolumesGLightType m_layeredLightPropagationVolumesG;
-		ashes::SemaphorePtr m_signalFinished;
+		DepthPassUPtr m_depthPass;
+		VoxelizerUPtr m_voxelizer;
 		ashes::RenderPassPtr m_bgRenderPass;
 		ashes::FrameBufferPtr m_bgFrameBuffer;
 		ashes::CommandBufferPtr m_bgCommandBuffer;
 		ashes::CommandBufferPtr m_cbgCommandBuffer;
 		OnBackgroundChangedConnection m_onBgChanged;
 		OnBackgroundChangedConnection m_onCBgChanged;
-		CommandsSemaphore m_colorTexTransition;
+		RenderTechniquePassUPtr m_opaquePass;
+		RenderTechniquePassUPtr m_transparentPass;
+		ashes::SemaphorePtr m_signalFinished;
+		ShadowMapUPtr m_directionalShadowMap;
+		ShadowMapUPtr m_pointShadowMap;
+		ShadowMapUPtr m_spotShadowMap;
+		LightVolumePassResultUPtr m_lpvResult;
+		LightVolumePassResultArray m_llpvResult;
 		CommandsSemaphore m_clearLpv;
+		DebugConfig m_debugConfig;
+		DeferredRenderingUPtr m_deferredRendering;
+		WeightedBlendRenderingUPtr m_weightedBlendRendering;
+		RenderPassTimerSPtr m_particleTimer;
+		ShadowMapLightTypeArray m_allShadowMaps;
+		ShadowMapLightTypeArray m_activeShadowMaps;
+		LightPropagationVolumesLightType m_lightPropagationVolumes;
+		LayeredLightPropagationVolumesLightType m_layeredLightPropagationVolumes;
+		LightPropagationVolumesGLightType m_lightPropagationVolumesG;
+		LayeredLightPropagationVolumesGLightType m_layeredLightPropagationVolumesG;
+		CommandsSemaphore m_colorTexTransition;
 	};
 }
 

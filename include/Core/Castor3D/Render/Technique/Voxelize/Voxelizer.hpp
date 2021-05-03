@@ -18,7 +18,6 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine			The engine.
 		 *\param[in]	device			The GPU device.
 		 *\param[in]	scene			The rendered scene.
 		 *\param[in]	camera			The camera viewing the scene.
@@ -27,7 +26,6 @@ namespace castor3d
 		 *\param[in]	voxelConfig		The voxelizer configuration.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine			Le moteur.
 		 *\param[in]	device			Le device GPU.
 		 *\param[in]	scene			La scène rendue.
 		 *\param[in]	camera			La caméra regardant la scène.
@@ -35,8 +33,7 @@ namespace castor3d
 		 *\param[in]	voxelizerUbo	L'UBO de configuration du voxelizer.
 		 *\param[in]	voxelConfig		La configuration du voxelizer.
 		 */
-		C3D_API Voxelizer( Engine & engine
-			, RenderDevice const & device
+		C3D_API Voxelizer( RenderDevice const & device
 			, Scene & scene
 			, Camera & camera
 			, MatrixUbo & matrixUbo
