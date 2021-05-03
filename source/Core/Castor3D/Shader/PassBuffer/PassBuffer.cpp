@@ -33,17 +33,20 @@ namespace castor3d
 
 	void PassBuffer::removePass( Pass & pass )
 	{
-		auto id = pass.getId();
+		auto id = pass.getId() - 1u;
 		CU_Require( id < m_passes.size() );
 		CU_Require( &pass == m_passes[id] );
+		auto it = m_passes.erase( m_passes.begin() + id );
+		m_connections.erase( m_connections.begin() + id );
+		++id;
 
-		for ( auto it = m_passes.erase( m_passes.begin() + id ); it != m_passes.end(); ++it )
+		while ( it != m_passes.end() )
 		{
 			( *it )->setId( id );
+			++it;
 			++id;
 		}
 
-		m_connections.erase( m_connections.begin() + id );
 		pass.setId( 0u );
 		m_passID--;
 	}

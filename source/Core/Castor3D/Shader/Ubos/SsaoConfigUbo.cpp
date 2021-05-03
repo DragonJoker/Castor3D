@@ -112,13 +112,16 @@ namespace castor3d
 			initialise( m_engine.getRenderSystem()->getCurrentRenderDevice() );
 		}
 	}
+	
+	SsaoConfigUbo::SsaoConfigUbo( RenderDevice const & device )
+		: m_engine{ *device.renderSystem.getEngine() }
+	{
+		initialise( device );
+	}
 
 	SsaoConfigUbo::~SsaoConfigUbo()
 	{
-		if ( m_engine.getRenderSystem()->hasCurrentRenderDevice() )
-		{
-			cleanup( m_engine.getRenderSystem()->getCurrentRenderDevice() );
-		}
+		cleanup();
 	}
 
 	void SsaoConfigUbo::initialise( RenderDevice const & device )
@@ -126,14 +129,15 @@ namespace castor3d
 		if ( !m_ubo )
 		{
 			m_ubo = device.uboPools->getBuffer< Configuration >( 0u );
+			m_device = &device;
 		}
 	}
 
-	void SsaoConfigUbo::cleanup( RenderDevice const & device )
+	void SsaoConfigUbo::cleanup()
 	{
 		if ( m_ubo )
 		{
-			device.uboPools->putBuffer( m_ubo );
+			m_device->uboPools->putBuffer( m_ubo );
 		}
 	}
 

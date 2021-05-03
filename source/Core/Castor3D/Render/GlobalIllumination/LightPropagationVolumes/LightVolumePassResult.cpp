@@ -17,5 +17,6 @@ namespace castor3d
 			{ size, size, size },
 		}
 	{
+		initialise( device );
 	}
 }

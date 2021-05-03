@@ -214,6 +214,7 @@ namespace castor3d
 		using Producer = std::function < std::shared_ptr< RenderTechnique >( KeyType const &
 			, castor::String const &
 			, RenderTarget &
+			, RenderDevice const &
 			, Parameters const &
 			, SsaoConfig const & ) >;
 		using Merger = std::function< void( CacheBase< RenderTechnique, KeyType > const &

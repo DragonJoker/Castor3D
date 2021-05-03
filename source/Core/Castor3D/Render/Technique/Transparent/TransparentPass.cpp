@@ -52,12 +52,17 @@ namespace castor3d
 {
 	//************************************************************************************************
 
-	TransparentPass::TransparentPass( MatrixUbo & matrixUbo
+	TransparentPass::TransparentPass( RenderDevice const & device
+		, castor::Size const & size
+		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, SsaoConfig const & config
 		, LpvGridConfigUbo const & lpvConfigUbo
 		, LayeredLpvGridConfigUbo const & llpvConfigUbo
-		, VoxelizerUbo const & vctConfigUbo )
+		, VoxelizerUbo const & vctConfigUbo
+		, LightVolumePassResult const * lpvResult
+		, TextureUnit const * vctFirstBounce
+		, TextureUnit const * vctSecondaryBounce )
 		: castor3d::RenderTechniquePass{ "Transparent"
 			, "Accumulation"
 			, matrixUbo
@@ -70,6 +75,11 @@ namespace castor3d
 			, &llpvConfigUbo
 			, &vctConfigUbo }
 	{
+		initialise( device
+			, size
+			, lpvResult
+			, vctFirstBounce
+			, vctSecondaryBounce );
 	}
 
 	TransparentPass::~TransparentPass()

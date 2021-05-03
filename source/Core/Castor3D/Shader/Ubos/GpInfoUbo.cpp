@@ -102,8 +102,16 @@ namespace castor3d
 		}
 	}
 
+	GpInfoUbo::GpInfoUbo( RenderDevice const & device )
+		: m_engine{ *device.renderSystem.getEngine() }
+	{
+		initialise( device );
+	}
+
+
 	GpInfoUbo::~GpInfoUbo()
 	{
+		cleanup();
 	}
 
 	void GpInfoUbo::initialise( castor3d::RenderDevice const & device )
@@ -111,14 +119,15 @@ namespace castor3d
 		if ( !m_ubo )
 		{
 			m_ubo = device.uboPools->getBuffer< GpInfoUboConfiguration >( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
+			m_device = &device;
 		}
 	}
 
-	void GpInfoUbo::cleanup( castor3d::RenderDevice const & device )
+	void GpInfoUbo::cleanup()
 	{
 		if ( m_ubo )
 		{
-			device.uboPools->putBuffer< GpInfoUboConfiguration >( m_ubo );
+			m_device->uboPools->putBuffer< GpInfoUboConfiguration >( m_ubo );
 		}
 	}
 

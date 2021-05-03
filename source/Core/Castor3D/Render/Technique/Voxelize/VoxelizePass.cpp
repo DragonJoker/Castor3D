@@ -53,8 +53,7 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	VoxelizePass::VoxelizePass( Engine & engine
-		, RenderDevice const & device
+	VoxelizePass::VoxelizePass( RenderDevice const & device
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, VoxelizerUbo const & voxelizerUbo
@@ -62,7 +61,7 @@ namespace castor3d
 		, VoxelSceneData const & voxelConfig )
 		: SceneRenderPass{ "Voxelize"
 			, "Voxelization"
-			, engine
+			, *device.renderSystem.getEngine()
 			, matrixUbo
 			, culler
 			, RenderMode::eBoth

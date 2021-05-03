@@ -167,6 +167,71 @@ namespace castor3d
 	{
 	}
 
+	RenderTechniquePass::RenderTechniquePass( RenderDevice const & device
+		, castor::Size const & size
+		, String const & category
+		, String const & name
+		, MatrixUbo & matrixUbo
+		, SceneCuller & culler
+		, bool environment
+		, SceneNode const * ignored
+		, SsaoConfig const & config
+		, LpvGridConfigUbo const * lpvConfigUbo
+		, LayeredLpvGridConfigUbo const * llpvConfigUbo
+		, VoxelizerUbo const * vctConfigUbo
+		, LightVolumePassResult const * lpvResult
+		, TextureUnit const * vctFirstBounce
+		, TextureUnit const * vctSecondaryBounce )
+		: SceneRenderPass{ category, name, *culler.getScene().getEngine(), matrixUbo, culler, ignored }
+		, m_scene{ culler.getScene() }
+		, m_camera{ culler.hasCamera() ? &culler.getCamera() : nullptr }
+		, m_sceneNode{}
+		, m_environment{ environment }
+		, m_ssaoConfig{ config }
+		, m_lpvConfigUbo{ lpvConfigUbo }
+		, m_llpvConfigUbo{ llpvConfigUbo }
+		, m_vctConfigUbo{ vctConfigUbo }
+	{
+		initialise( device
+			, size
+			, lpvResult
+			, vctFirstBounce
+			, vctSecondaryBounce );
+	}
+
+	RenderTechniquePass::RenderTechniquePass( RenderDevice const & device
+		, castor::Size const & size
+		, String const & category
+		, String const & name
+		, MatrixUbo & matrixUbo
+		, SceneCuller & culler
+		, bool oit
+		, bool environment
+		, SceneNode const * ignored
+		, SsaoConfig const & config
+		, LpvGridConfigUbo const * lpvConfigUbo
+		, LayeredLpvGridConfigUbo const * llpvConfigUbo
+		, VoxelizerUbo const * vctConfigUbo
+		, LightVolumePassResult const * lpvResult
+		, TextureUnit const * vctFirstBounce
+		, TextureUnit const * vctSecondaryBounce )
+		: SceneRenderPass{ category, name, *culler.getScene().getEngine(), matrixUbo, culler, oit, ignored }
+		, m_scene{ culler.getScene() }
+		, m_camera{ culler.hasCamera() ? &culler.getCamera() : nullptr }
+		, m_sceneNode{}
+		, m_environment{ environment }
+		, m_ssaoConfig{ config }
+		, m_lpvConfigUbo{ lpvConfigUbo }
+		, m_llpvConfigUbo{ llpvConfigUbo }
+		, m_vctConfigUbo{ vctConfigUbo }
+	{
+		initialise( device
+			, size
+			, lpvResult
+			, vctFirstBounce
+			, vctSecondaryBounce );
+	}
+
 	bool RenderTechniquePass::initialise( RenderDevice const & device
 		, castor::Size const & size
 		, LightVolumePassResult const * lpvResult
