@@ -89,8 +89,6 @@ namespace GuiCommon
 			ImagesLoader::getBitmap( eBMP_VIEWPORT_SEL ),
 			ImagesLoader::getBitmap( eBMP_RENDER_TARGET ),
 			ImagesLoader::getBitmap( eBMP_RENDER_TARGET_SEL ),
-			ImagesLoader::getBitmap( eBMP_RENDER_WINDOW ),
-			ImagesLoader::getBitmap( eBMP_RENDER_WINDOW_SEL ),
 			ImagesLoader::getBitmap( eBMP_FRAME_VARIABLE ),
 			ImagesLoader::getBitmap( eBMP_FRAME_VARIABLE_SEL ),
 			ImagesLoader::getBitmap( eBMP_FRAME_VARIABLE_BUFFER ),
@@ -176,15 +174,6 @@ namespace GuiCommon
 				, new BackgroundTreeItemProperty( this, m_propertiesHolder->isEditable(), *scene->getBackground() ) );
 
 			auto catId = AppendItem( sceneId
-				, _( "Render Windows" )
-				, eBMP_RENDER_WINDOW
-				, eBMP_RENDER_WINDOW_SEL );
-			scene->getEngine()->getRenderWindowCache().forEach( [this, catId]( RenderWindow & elem )
-				{
-					doAddRenderWindow( catId, elem );
-				} );
-
-			catId = AppendItem( sceneId
 				, _( "Render Targets" )
 				, eBMP_RENDER_TARGET
 				, eBMP_RENDER_TARGET_SEL );
@@ -337,25 +326,6 @@ namespace GuiCommon
 	{
 		auto itg = m_ids.insert( { geometry, SubmeshIdMap{} } ).first;
 		itg->second.insert( { submesh, id } );
-	}
-
-	void SceneObjectsList::doAddRenderWindow( wxTreeItemId id
-		, RenderWindow & window )
-	{
-		wxTreeItemId windowId = AppendItem( id
-			, make_wxString( window.getName() )
-			, eBMP_RENDER_WINDOW
-			, eBMP_RENDER_WINDOW_SEL
-			, new RenderWindowTreeItemProperty( m_propertiesHolder->isEditable(), window ) );
-		RenderTargetSPtr target = window.getRenderTarget();
-
-		if ( target )
-		{
-			AppendRenderTarget( this
-				, m_propertiesHolder->isEditable()
-				, id
-				, *target );
-		}
 	}
 
 	void SceneObjectsList::doAddGeometry( wxTreeItemId id

@@ -90,6 +90,7 @@ namespace castor3d
 				, ashes::RenderPass const & renderPass
 				, VkExtent2D const & outputSize
 				, rq::Config config );
+			~CombineQuad();
 
 		private:
 			IntermediateViewArray m_lhsViews;

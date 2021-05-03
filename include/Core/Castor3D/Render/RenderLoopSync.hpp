@@ -56,8 +56,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderLoop::doCreateMainDevice
 		 */
-		C3D_API RenderDeviceSPtr doCreateMainDevice( ashes::WindowHandle handle
-			, RenderWindow & window )override;
+		C3D_API RenderDeviceSPtr doCreateMainDevice( RenderWindow const & window )override;
 
 	private:
 		//!\~english Tells if the render loop is active.	\~french Dit si la boucle de rendu est active.

@@ -48,15 +48,15 @@ namespace CastorViewer
 			, wxPoint const & pos = wxDefaultPosition
 			, wxSize const & size = wxDefaultSize
 			, long style = wxDEFAULT_FRAME_STYLE );
-		virtual ~RenderPanel();
+		~RenderPanel();
 
-		void resetRenderWindow();
-		void setRenderWindow( castor3d::RenderWindowSPtr window );
+		void reset();
+		void setTarget( castor3d::RenderTargetSPtr target );
 		void onKeyUp( wxKeyEvent & event );
 
 		inline castor3d::RenderWindowSPtr getRenderWindow()const
 		{
-			return m_renderWindow.lock();
+			return m_renderWindow;
 		}
 
 		inline void disableWindowResize()
@@ -131,7 +131,7 @@ namespace CastorViewer
 		bool m_resizeWindow{ true };
 		std::atomic_bool m_movementStarted{ false };
 		wxTimer * m_timers[eTIMER_ID_COUNT];
-		castor3d::RenderWindowWPtr m_renderWindow;
+		castor3d::RenderWindowSPtr m_renderWindow;
 		castor3d::CameraWPtr m_camera;
 		castor3d::SceneWPtr m_scene;
 		castor3d::FrameListenerSPtr m_listener;

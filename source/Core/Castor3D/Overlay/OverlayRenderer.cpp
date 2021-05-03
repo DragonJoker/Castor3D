@@ -511,6 +511,7 @@ namespace castor3d
 			m_finished = device->createSemaphore( "OverlayRenderer" );
 		}
 
+		m_matrixUbo.initialise( device );
 
 		// Create one panel overlays buffer pool
 		m_panelVertexBuffers.emplace_back( std::make_unique< PanelVertexBufferPool >( *getRenderSystem()->getEngine()

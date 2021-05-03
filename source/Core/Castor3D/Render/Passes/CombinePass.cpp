@@ -314,6 +314,11 @@ namespace castor3d
 		initialisePasses();
 	}
 
+	CombinePass::CombineQuad::~CombineQuad()
+	{
+		m_lhsSampler->getEngine()->getSamplerCache().remove( m_lhsSampler->getName() );
+	}
+
 	//*********************************************************************************************
 
 	String const CombinePass::LhsMaps = cuT( "c3d_mapsLhs" );

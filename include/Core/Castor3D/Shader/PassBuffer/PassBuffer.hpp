@@ -38,6 +38,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, uint32_t count
 			, uint32_t size );
+		C3D_API virtual ~PassBuffer() = default;
 		/**
 		 *\~english
 		 *\brief		Adds a pass to the buffer.

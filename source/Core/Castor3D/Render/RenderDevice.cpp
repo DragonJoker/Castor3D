@@ -14,9 +14,9 @@ namespace castor3d
 	namespace
 	{
 		std::array< uint32_t, 4u > initialiseQueueFamilies( ashes::Instance const & instance
-			, ashes::Surface const & surface
-			, ashes::PhysicalDevice const & gpu )
+			, ashes::Surface const & surface )
 		{
+			auto & gpu = surface.getGpu();
 			std::array< uint32_t, 4u > queueFamiliesIndex;
 			// Parcours des propriétés des files, pour vérifier leur support de la présentation.
 			auto queueProps = gpu.getQueueFamilyProperties();
@@ -132,7 +132,6 @@ namespace castor3d
 
 		ashes::DeviceCreateInfo getDeviceCreateInfo( ashes::Instance const & instance
 			, ashes::Surface const & surface
-			, ashes::PhysicalDevice const & gpu
 			, ashes::DeviceQueueCreateInfoArray queueCreateInfos )
 		{
 			log::debug << "Instance enabled layers count: " << uint32_t( instance.getEnabledLayerNames().size() ) << std::endl;
@@ -144,27 +143,25 @@ namespace castor3d
 				std::move( queueCreateInfos ),
 				layers,
 				extensions,
-				gpu.getFeatures(),
+				surface.getGpu().getFeatures(),
 			};
 		}
 	}
 
 	RenderDevice::RenderDevice( RenderSystem & renderSystem
-		, ashes::PhysicalDevice const & gpu
 		, AshPluginDescription const & desc
-		, ashes::SurfacePtr surface )
+		, ashes::Surface const & surface )
 		: renderSystem{ renderSystem }
-		, gpu{ gpu }
+		, surface{ surface }
+		, gpu{ surface.getGpu() }
 		, desc{ desc }
-		, surface{ std::move( surface ) }
 		, memoryProperties{ gpu.getMemoryProperties() }
 		, properties{ gpu.getProperties() }
 		, features{ gpu.getFeatures() }
-		, queueFamiliesIndex{ initialiseQueueFamilies( renderSystem.getInstance(), *this->surface, gpu ) }
+		, queueFamiliesIndex{ initialiseQueueFamilies( renderSystem.getInstance(), surface ) }
 		, device{ renderSystem.getInstance().createDevice( gpu
 			, getDeviceCreateInfo( renderSystem.getInstance()
-				, *this->surface
-				, gpu
+				, surface
 				, getQueueCreateInfos( queueFamiliesIndex ) ) ) }
 	{
 		commandPools.push_back( device->createCommandPool( queueFamiliesIndex[RenderDevice::PresentIdx]

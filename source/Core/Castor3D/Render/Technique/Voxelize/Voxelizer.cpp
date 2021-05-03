@@ -4,6 +4,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
+#include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
@@ -111,6 +112,14 @@ namespace castor3d
 
 	Voxelizer::~Voxelizer()
 	{
+		m_voxelSecondaryBounce.reset();
+		m_voxelToTexture.reset();
+		m_voxelizePass.reset();
+		m_voxels.reset();
+		m_secondaryBounce.cleanup();
+		m_firstBounce.cleanup();
+		m_engine.getSamplerCache().remove( "VoxelizedSceneSecondaryBounce" );
+		m_engine.getSamplerCache().remove( "VoxelizedSceneFirstBounce" );
 	}
 
 	void Voxelizer::update( CpuUpdater & updater )

@@ -197,23 +197,6 @@ namespace castor3d
 			, dummy
 			, dummy
 			, mergeResource );
-		m_windowCache = makeCache< RenderWindow, String >( *this
-			, [this]( castor::String const & name )
-			{
-				auto result = std::make_shared< RenderWindow >( name
-					, *this );
-				return result;
-			}
-			, dummy
-			, [this]( RenderWindowSPtr element )
-			{
-				postEvent( makeCpuFunctorEvent( EventType::ePreRender
-					, [element]()
-					{
-						element->cleanup();
-					} ) );
-			}
-			, mergeResource );
 
 		if ( !File::directoryExists( getEngineDirectory() ) )
 		{
@@ -258,7 +241,6 @@ namespace castor3d
 		m_overlayCache->clear();
 		m_fontCache.clear();
 		m_imageCache.clear();
-		m_windowCache->clear();
 		m_sceneCache->clear();
 		m_materialCache->clear();
 		m_listenerCache->clear();
@@ -349,7 +331,6 @@ namespace castor3d
 			}
 
 			m_listenerCache->cleanup();
-			m_windowCache->cleanup();
 			m_sceneCache->cleanup();
 			m_samplerCache->cleanup();
 			m_overlayCache->cleanup();
@@ -513,6 +494,8 @@ namespace castor3d
 
 	void Engine::registerWindow( RenderWindow & window )
 	{
+		auto result = m_renderWindows.emplace( window.getName(), &window ).second;
+		CU_Assert( result, "Duplicate window." );
 		m_windowInputListeners.emplace( &window
 			, std::make_shared< RenderWindow::InputListener >( *this, window ) );
 		auto listener = m_windowInputListeners.find( &window )->second;
@@ -537,6 +520,8 @@ namespace castor3d
 					log::debug << "Removed UIListener 0x" << std::hex << plistener << std::endl;
 				} ) );
 		}
+
+		m_renderWindows.erase( window.getName() );
 	}
 
 	void Engine::registerParsers( castor::String const & name, castor::AttributeParsersBySection const & parsers )

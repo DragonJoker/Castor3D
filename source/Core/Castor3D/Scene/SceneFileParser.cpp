@@ -109,7 +109,7 @@ namespace castor3d
 		m_pGeneralParentMaterial = nullptr;
 		viewport = nullptr;
 		shaderStage = VkShaderStageFlagBits( 0u );
-		window.reset();
+		window = RenderWindowDesc{};
 		sceneNode.reset();
 		geometry.reset();
 		mesh.reset();
@@ -214,7 +214,7 @@ namespace castor3d
 	{
 	}
 
-	RenderWindowSPtr SceneFileParser::getRenderWindow()
+	RenderWindowDesc SceneFileParser::getRenderWindow()
 	{
 		return m_renderWindow;
 	}
@@ -685,7 +685,7 @@ namespace castor3d
 			m_mapScenes.insert( std::make_pair( it->first, it->second ) );
 		}
 
-		m_renderWindow = context->window;
+		m_renderWindow = std::move( context->window );
 	}
 
 	bool SceneFileParser::doDiscardParser( String const & line )

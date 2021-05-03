@@ -40,6 +40,7 @@
 #include "Castor3D/Scene/Light/LightFactory.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
+#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 
 #include <CastorUtils/Graphics/Font.hpp>
 #include <CastorUtils/Graphics/FontCache.hpp>

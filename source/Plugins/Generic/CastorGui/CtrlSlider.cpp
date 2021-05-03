@@ -281,9 +281,9 @@ namespace CastorGui
 	void SliderCtrl::onMouseLeave( MouseEvent const & p_event )
 	{
 		if ( m_scrolling
-				&& getControlsManager()->getFocusedControl() != shared_from_this()
-				&& getControlsManager()->getFocusedControl() != m_tick.lock()
-				&& getControlsManager()->getFocusedControl() != m_line.lock()
+				&& getControlsManager()->getFocusedControl() != this
+				&& getControlsManager()->getFocusedControl() != m_tick.lock().get()
+				&& getControlsManager()->getFocusedControl() != m_line.lock().get()
 		   )
 		{
 			doMoveMouse( p_event.getPosition() );

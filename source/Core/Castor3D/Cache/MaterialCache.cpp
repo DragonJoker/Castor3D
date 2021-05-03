@@ -168,6 +168,32 @@ namespace castor3d
 		return result;
 	}
 
+	void MaterialCache::remove( Key const & name )
+	{
+		auto material = find( name );
+
+		if ( material )
+		{
+			for ( auto & pass : *material )
+			{
+				if ( pass->getId() != 0 )
+				{
+					m_passBuffer->removePass( *pass );
+
+					for ( auto & unit : *pass )
+					{
+						if ( unit->getId() != 0u )
+						{
+							m_textureBuffer->removeTextureConfiguration( *unit );
+						}
+					}
+				}
+			}
+		}
+
+		m_elements.erase( name );
+	}
+
 	void MaterialCache::getNames( StringArray & names )
 	{
 		LockType lock{ castor::makeUniqueLock( m_elements ) };

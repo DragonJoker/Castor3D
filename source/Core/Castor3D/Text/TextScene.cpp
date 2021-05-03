@@ -121,6 +121,32 @@ namespace castor
 		}
 
 		template< typename CacheTypeT, typename FilterT >
+		bool writeKeyedContainer( StringStream & file
+			, CacheTypeT const & cache
+			, String const & elemsName
+			, TextWriterBase const & writer
+			, FilterT filter )
+		{
+			bool result = true;
+
+			if ( !cache.empty() )
+			{
+				file << ( cuT( "\n" ) + writer.tabs() + cuT( "//" ) + elemsName + cuT( "\n" ) );
+				log::info << writer.tabs() << cuT( "Scene::write - " ) << elemsName << std::endl;
+
+				for ( auto const & it : cache )
+				{
+					if ( result && filter( *it.second ) )
+					{
+						result = writer.writeSub( file, *it.second );
+					}
+				}
+			}
+
+			return result;
+		}
+
+		template< typename CacheTypeT, typename FilterT >
 		bool writeIncludedCache( StringStream & file
 			, CacheTypeT const & cache
 			, String const & elemsName
@@ -481,7 +507,7 @@ namespace castor
 					}
 				};
 
-				result = writeCache( file, scene.getEngine()->getRenderWindowCache(), cuT( "Windows" ), *this, IsWritable{ scene } );
+				result = writeKeyedContainer( file, scene.getEngine()->getRenderWindows(), cuT( "Windows" ), *this, IsWritable{ scene } );
 			}
 		}
 

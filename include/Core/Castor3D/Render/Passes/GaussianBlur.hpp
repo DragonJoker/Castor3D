@@ -46,6 +46,7 @@ namespace castor3d
 			, castor::String const & prefix
 			, TextureView const & view
 			, uint32_t kernelSize );
+		C3D_API ~GaussianBlur();
 		/**
 		 *\~english
 		 *\brief		Blurs given texture.

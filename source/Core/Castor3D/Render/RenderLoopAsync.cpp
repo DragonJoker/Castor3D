@@ -139,14 +139,12 @@ namespace castor3d
 		}
 	}
 
-	RenderDeviceSPtr RenderLoopAsync::doCreateMainDevice( ashes::WindowHandle handle
-		, RenderWindow & window )
+	RenderDeviceSPtr RenderLoopAsync::doCreateMainDevice( RenderWindow const & window )
 	{
 		RenderDeviceSPtr result;
 
 		if ( !m_createContext )
 		{
-			doSetHandle( std::move( handle ) );
 			doSetWindow( &window );
 			m_createContext = true;
 
@@ -187,7 +185,7 @@ namespace castor3d
 				if ( !isInterrupted() && m_createContext && !isCreated() )
 				{
 					// On nous a demandé de créer le contexte principal, on le crée
-					auto device = doCreateDevice( std::move( doGetHandle() ), *doGetWindow() );
+					auto device = doCreateDevice( *doGetWindow() );
 
 					if ( device )
 					{
@@ -245,25 +243,13 @@ namespace castor3d
 		}
 	}
 
-	void RenderLoopAsync::doSetHandle( ashes::WindowHandle handle )
+	void RenderLoopAsync::doSetWindow( RenderWindow const * window )
 	{
 		LockType lock{ castor::makeUniqueLock( m_mutexWindow ) };
-		m_handle = std::move( handle );
+		m_window = window;
 	}
 
-	ashes::WindowHandle & RenderLoopAsync::doGetHandle()
-	{
-		LockType lock{ castor::makeUniqueLock( m_mutexWindow ) };
-		return m_handle;
-	}
-
-	void RenderLoopAsync::doSetWindow( RenderWindow * p_window )
-	{
-		LockType lock{ castor::makeUniqueLock( m_mutexWindow ) };
-		m_window = p_window;
-	}
-
-	RenderWindow * RenderLoopAsync::doGetWindow()const
+	RenderWindow const * RenderLoopAsync::doGetWindow()const
 	{
 		LockType lock{ castor::makeUniqueLock( m_mutexWindow ) };
 		return m_window;

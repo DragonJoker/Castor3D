@@ -222,6 +222,7 @@ namespace castor3d
 	RenderQuad::~RenderQuad()
 	{
 		m_sampler->cleanup();
+		m_sampler->getEngine()->getSamplerCache().remove( getName() );
 		cleanup();
 	}
 

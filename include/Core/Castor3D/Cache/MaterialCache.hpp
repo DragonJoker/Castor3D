@@ -145,6 +145,15 @@ namespace castor3d
 		C3D_API MaterialSPtr add( Key const & name, MaterialType type );
 		/**
 		 *\~english
+		 *\brief		Removes an element, given a name.
+		 *\param[in]	name	The element name.
+		 *\~french
+		 *\brief		Retire un élément à partir d'un nom.
+		 *\param[in]	name	Le nom d'élément.
+		 */
+		C3D_API void remove( Key const & name );
+		/**
+		 *\~english
 		 *\brief		Puts all the materials names in the given array
 		 *\param[out]	names	The array of names to be filled
 		 *\~french

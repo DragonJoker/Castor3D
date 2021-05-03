@@ -92,6 +92,11 @@ namespace CastorViewer
 		m_cursorArrow = new wxCursor( wxCURSOR_ARROW );
 		m_cursorHand = new wxCursor( wxCURSOR_HAND );
 		m_cursorNone = new wxCursor( wxCURSOR_BLANK );
+
+		m_renderWindow = std::make_shared< castor3d::RenderWindow >( cuT( "RenderPanel" )
+			, *wxGetApp().getCastor()
+			, GuiCommon::makeSize( GetClientSize() )
+			, GuiCommon::makeWindowHandle( this ) );
 	}
 
 	RenderPanel::~RenderPanel()
@@ -107,7 +112,7 @@ namespace CastorViewer
 		}
 	}
 
-	void RenderPanel::resetRenderWindow()
+	void RenderPanel::reset()
 	{
 		doStopMovement();
 		m_selectedSubmesh.reset();
@@ -121,63 +126,58 @@ namespace CastorViewer
 		m_lightsNode = nullptr;
 		m_listener.reset();
 		m_cubeManager.reset();
-		m_renderWindow.reset();
+		m_renderWindow->cleanup();
 	}
 
-	void RenderPanel::setRenderWindow( RenderWindowSPtr window )
+	void RenderPanel::setTarget( castor3d::RenderTargetSPtr target )
 	{
-		CU_Require( window );
-		castor::Size sizeWnd = GuiCommon::makeSize( GetClientSize() );
+		auto sizeWnd = GuiCommon::makeSize( GetClientSize() );
+		castor::Size sizeScreen;
+		castor::System::getScreenSize( 0, sizeScreen );
+		GetParent()->SetClientSize( sizeWnd.getWidth(), sizeWnd.getHeight() );
+		GetParent()->SetMinClientSize( GuiCommon::make_wxSize( target->getSize() ) );
+		sizeWnd = GuiCommon::makeSize( GetParent()->GetClientSize() );
+		GetParent()->SetPosition( wxPoint( std::abs( int( sizeScreen.getWidth() ) - int( sizeWnd.getWidth() ) ) / 2
+			, std::abs( int( sizeScreen.getHeight() ) - int( sizeWnd.getHeight() ) ) / 2 ) );
+		m_listener = m_renderWindow->getListener();
+		m_renderWindow->initialise( target );
+		auto & scene = target->getScene();
 
-		if ( window->initialise( sizeWnd, GuiCommon::makeWindowHandle( this ) ) )
+		if ( scene )
 		{
-			castor::Size sizeScreen;
-			castor::System::getScreenSize( 0, sizeScreen );
-			GetParent()->SetClientSize( sizeWnd.getWidth(), sizeWnd.getHeight() );
-			GetParent()->SetMinClientSize( GuiCommon::make_wxSize( window->getRenderTarget()->getSize() ) );
-			sizeWnd = GuiCommon::makeSize( GetParent()->GetClientSize() );
-			GetParent()->SetPosition( wxPoint( std::abs( int( sizeScreen.getWidth() ) - int( sizeWnd.getWidth() ) ) / 2
-				, std::abs( int( sizeScreen.getHeight() ) - int( sizeWnd.getHeight() ) ) / 2 ) );
-			m_listener = window->getListener();
-			SceneSPtr scene = window->getScene();
+			m_cubeManager = std::make_unique< GuiCommon::CubeBoxManager >( *scene );
+			auto camera = target->getCamera();
 
-			if ( scene )
+			if ( camera )
 			{
-				m_cubeManager = std::make_unique< GuiCommon::CubeBoxManager >( *scene );
-				auto camera = window->getCamera();
-
-				if ( camera )
+				if ( scene->getSceneNodeCache().has( cuT( "PointLightsNode" ) ) )
 				{
-					if ( scene->getSceneNodeCache().has( cuT( "PointLightsNode" ) ) )
-					{
-						m_lightsNode = scene->getSceneNodeCache().find( cuT( "PointLightsNode" ) ).get();
-					}
-					else if ( scene->getSceneNodeCache().has( cuT( "LightNode" ) ) )
-					{
-						m_lightsNode = scene->getSceneNodeCache().find( cuT( "LightNode" ) ).get();
-					}
-
-					auto cameraNode = camera->getParent();
-
-					if ( cameraNode )
-					{
-						m_currentNode = cameraNode;
-						m_currentState = &doAddNodeState( m_currentNode, true );
-					}
-
-					m_renderWindow = window;
-					m_keyboardEvent = std::make_unique< KeyboardEvent >( window );
-
-					{
-						window->addPickingScene( *scene );
-					}
-
-					m_camera = camera;
-					doStartMovement();
+					m_lightsNode = scene->getSceneNodeCache().find( cuT( "PointLightsNode" ) ).get();
+				}
+				else if ( scene->getSceneNodeCache().has( cuT( "LightNode" ) ) )
+				{
+					m_lightsNode = scene->getSceneNodeCache().find( cuT( "LightNode" ) ).get();
 				}
 
-				m_scene = scene;
+				auto cameraNode = camera->getParent();
+
+				if ( cameraNode )
+				{
+					m_currentNode = cameraNode;
+					m_currentState = &doAddNodeState( m_currentNode, true );
+				}
+
+				m_keyboardEvent = std::make_unique< KeyboardEvent >( m_renderWindow );
+
+				{
+					m_renderWindow->addPickingScene( *scene );
+				}
+
+				m_camera = camera;
+				doStartMovement();
 			}
+
+			m_scene = scene;
 		}
 	}
 
@@ -270,10 +270,9 @@ namespace CastorViewer
 	void RenderPanel::doChangeCamera()
 	{
 		auto camera = m_camera.lock();
-		auto window = m_renderWindow.lock();
 		auto scene = m_scene.lock();
 
-		if ( camera && window && scene )
+		if ( camera && scene )
 		{
 			//auto & shadowMaps = window->getRenderTarget()->getTechnique()->getShadowMaps();
 
@@ -526,21 +525,9 @@ namespace CastorViewer
 
 	void RenderPanel::onSize( wxSizeEvent & p_event )
 	{
-		auto window = m_renderWindow.lock();
-
-		if ( window )
+		if ( m_resizeWindow )
 		{
-			if ( m_resizeWindow )
-			{
-				window->resize( p_event.GetSize().x, p_event.GetSize().y );
-			}
-		}
-		else
-		{
-			wxClientDC dc( this );
-			dc.SetBrush( wxBrush( GuiCommon::INACTIVE_TAB_COLOUR ) );
-			dc.SetPen( wxPen( GuiCommon::INACTIVE_TAB_COLOUR ) );
-			dc.DrawRectangle( 0, 0, p_event.GetSize().x, p_event.GetSize().y );
+			m_renderWindow->resize( p_event.GetSize().x, p_event.GetSize().y );
 		}
 
 		p_event.Skip();
@@ -548,31 +535,11 @@ namespace CastorViewer
 
 	void RenderPanel::onMove( wxMoveEvent & p_event )
 	{
-		auto window = m_renderWindow.lock();
-
-		if ( !window )
-		{
-			wxClientDC dc( this );
-			dc.SetBrush( wxBrush( GuiCommon::INACTIVE_TAB_COLOUR ) );
-			dc.SetPen( wxPen( GuiCommon::INACTIVE_TAB_COLOUR ) );
-			dc.DrawRectangle( 0, 0, GetClientSize().x, GetClientSize().y );
-		}
-
 		p_event.Skip();
 	}
 
 	void RenderPanel::onPaint( wxPaintEvent & p_event )
 	{
-		auto window = m_renderWindow.lock();
-
-		if ( !window )
-		{
-			wxPaintDC dc( this );
-			dc.SetBrush( wxBrush( GuiCommon::INACTIVE_TAB_COLOUR ) );
-			dc.SetPen( wxPen( GuiCommon::INACTIVE_TAB_COLOUR ) );
-			dc.DrawRectangle( 0, 0, GetClientSize().x, GetClientSize().y );
-		}
-
 		p_event.Skip();
 	}
 
@@ -761,12 +728,7 @@ namespace CastorViewer
 		if ( m_listener )
 		{
 			m_listener->postEvent( std::make_unique< KeyboardEvent >( *m_keyboardEvent ) );
-			auto window = m_renderWindow.lock();
-
-			if ( window )
-			{
-				wxGetApp().getMainFrame()->toggleFullScreen( !window->isFullscreen() );
-			}
+			wxGetApp().getMainFrame()->toggleFullScreen( !m_renderWindow->isFullscreen() );
 		}
 
 		p_event.Skip();
@@ -784,36 +746,9 @@ namespace CastorViewer
 
 		if ( !inputListener || !inputListener->fireMouseButtonPushed( MouseButton::eLeft ) )
 		{
-			auto window = getRenderWindow();
-
-			if ( window )
+			if ( m_currentState )
 			{
-				/*if ( m_altdown )
-				{
-					auto x = m_oldX;
-					auto y = m_oldY;
-					m_listener->postEvent( makeCpuFunctorEvent( EventType::ePreRender
-						, [this, window, x, y]()
-						{
-							Camera & camera = *window->getCamera();
-							camera.update();
-							auto type = window->pick( Position{ int( x ), int( y ) } );
-
-							if ( type != PickNodeType::eNone
-								&& type != PickNodeType::eBillboard )
-							{
-								doUpdateSelectedGeometry( window->getPickedGeometry(), window->getPickedSubmesh() );
-							}
-							else
-							{
-								doUpdateSelectedGeometry( nullptr, nullptr );
-							}
-						} ) );
-				}
-				else */if ( m_currentState )
-				{
-					doStartTimer( eTIMER_ID_MOUSE );
-				}
+				doStartTimer( eTIMER_ID_MOUSE );
 			}
 		}
 
@@ -850,28 +785,23 @@ namespace CastorViewer
 
 		if ( !inputListener || !inputListener->fireMouseButtonPushed( MouseButton::eMiddle ) )
 		{
-			auto window = getRenderWindow();
+			auto x = m_oldX;
+			auto y = m_oldY;
+			m_listener->postEvent( makeCpuFunctorEvent( EventType::ePreRender
+				, [this, x, y]()
+				{
+					auto type = m_renderWindow->pick( Position{ int( x ), int( y ) } );
 
-			if ( window )
-			{
-				auto x = m_oldX;
-				auto y = m_oldY;
-				m_listener->postEvent( makeCpuFunctorEvent( EventType::ePreRender
-					, [this, window, x, y]()
+					if ( type != PickNodeType::eNone
+						&& type != PickNodeType::eBillboard )
 					{
-						auto type = window->pick( Position{ int( x ), int( y ) } );
-
-						if ( type != PickNodeType::eNone
-							&& type != PickNodeType::eBillboard )
-						{
-							doUpdateSelectedGeometry( window->getPickedGeometry(), window->getPickedSubmesh() );
-						}
-						else
-						{
-							doUpdateSelectedGeometry( nullptr, nullptr );
-						}
-					} ) );
-			}
+						doUpdateSelectedGeometry( m_renderWindow->getPickedGeometry(), m_renderWindow->getPickedSubmesh() );
+					}
+					else
+					{
+						doUpdateSelectedGeometry( nullptr, nullptr );
+					}
+				} ) );
 		}
 
 		p_event.Skip();

@@ -5,7 +5,7 @@
 #include "GuiCommon/Shader/ShaderDialog.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Cache/WindowCache.hpp>
+#include <Castor3D/Cache/TargetCache.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/PhongPass.hpp>
 #include <Castor3D/Material/Pass/MetallicRoughnessPbrPass.hpp>
@@ -59,19 +59,15 @@ namespace GuiCommon
 					, scene
 					, result };
 				auto & engine = *pass.getOwner()->getEngine();
-				auto lock( castor::makeUniqueLock( engine.getRenderWindowCache() ) );
-				auto it = engine.getRenderWindowCache().begin();
-
-				if ( it != engine.getRenderWindowCache().end()
-					&& it->second->getRenderTarget() )
-				{
-					RenderTechniqueSPtr technique = it->second->getRenderTarget()->getTechnique();
-
-					if ( technique )
+				engine.getRenderTargetCache().forEach( [&vis]( RenderTarget const & target )
 					{
-						technique->accept( vis );
-					}
-				}
+						RenderTechniqueSPtr technique = target.getTechnique();
+
+						if ( technique )
+						{
+							technique->accept( vis );
+						}
+					} );
 
 				return result;
 			}

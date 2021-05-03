@@ -246,8 +246,6 @@ namespace castor3d
 		void TextureConfigData::convertUV( sdw::ShaderWriter & writer
 			, sdw::Vec2 & uv )const
 		{
-			auto mid = 0.5_f;
-
 			uv = vec2( uv.x()
 				, mix( uv.y(), 1.0_f - uv.y(), fneedsYInversion ) );
 			uv = scaleUV( scale.xy(), uv );
@@ -258,8 +256,6 @@ namespace castor3d
 		void TextureConfigData::convertUVW( sdw::ShaderWriter & writer
 			, sdw::Vec3 & uvw )const
 		{
-			auto mid = 0.5_f;
-
 			uvw = vec3( uvw.x()
 				, mix( uvw.y(), 1.0_f - uvw.y(), fneedsYInversion )
 				, uvw.z() );

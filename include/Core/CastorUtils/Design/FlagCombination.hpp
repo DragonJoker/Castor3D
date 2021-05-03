@@ -19,7 +19,7 @@ namespace castor
 		using BaseType = typename std::underlying_type< FlagType >::type;
 
 	public:
-		inline constexpr FlagIterator( FlagIterator const & value )
+		inline explicit constexpr FlagIterator( FlagIterator const & value )
 			: m_initialValue{ value.m_initialValue }
 			, m_index{ value.m_index }
 			, m_value{ value.m_value }
@@ -28,7 +28,7 @@ namespace castor
 		/**
 		* Begin ctor.
 		*/
-		inline constexpr FlagIterator( BaseType contValue )
+		inline explicit constexpr FlagIterator( BaseType contValue )
 			: m_initialValue{ contValue }
 		{
 			doGetNextValue();

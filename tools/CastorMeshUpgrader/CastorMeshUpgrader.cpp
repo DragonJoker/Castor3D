@@ -492,7 +492,10 @@ int main( int argc, char * argv[] )
 		{
 			castor3d::Scene scene{ cuT( "DummyScene" ), engine };
 			auto name = inputPath.getFileName();
-			auto device = engine.getRenderSystem()->createDevice( ashes::WindowHandle{ std::make_unique< DummyWindowHandle >() }, 0u );
+			auto & renderSystem = *engine.getRenderSystem();
+			auto surface = renderSystem.getInstance().createSurface( renderSystem.getPhysicalDevice( 0u )
+				, ashes::WindowHandle{ std::make_unique< DummyWindowHandle >() } );
+			auto device = renderSystem.createDevice( *surface );
 
 			if ( extension == cuT( "cmsh" ) )
 			{

@@ -130,6 +130,7 @@ namespace castor3d
 			m_texture.reset();
 		}
 
+		getEngine()->getSamplerCache().remove( cuT( "Skybox" ) );
 		m_ibl.reset();
 	}
 

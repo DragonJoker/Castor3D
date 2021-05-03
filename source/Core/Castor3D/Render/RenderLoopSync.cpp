@@ -74,10 +74,9 @@ namespace castor3d
 		CU_Exception( CALL_END_RENDERING );
 	}
 
-	RenderDeviceSPtr RenderLoopSync::doCreateMainDevice( ashes::WindowHandle handle
-		, RenderWindow & window )
+	RenderDeviceSPtr RenderLoopSync::doCreateMainDevice( RenderWindow const & window )
 	{
-		auto result = doCreateDevice( std::move( handle ), window );
+		auto result = doCreateDevice( window );
 
 		if ( result )
 		{

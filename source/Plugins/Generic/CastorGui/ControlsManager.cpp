@@ -45,7 +45,7 @@ namespace CastorGui
 
 		for ( auto handler : m_handlers )
 		{
-			std::static_pointer_cast< Control >( handler )->destroy();
+			static_cast< Control * >( handler )->destroy();
 		}
 	}
 
@@ -54,7 +54,7 @@ namespace CastorGui
 		auto controls = doGetControlsByZIndex();
 		auto it = std::find_if( std::begin( controls )
 			, std::end( controls )
-			, [&p_overlay]( ControlSPtr p_control )
+			, [&p_overlay]( Control * p_control )
 		{
 			return p_control->getName() == p_overlay;
 		} );
@@ -84,7 +84,7 @@ namespace CastorGui
 		auto controls = doGetControlsByZIndex();
 		auto it = std::find_if( std::begin( controls )
 			, std::end( controls )
-			, [&p_overlay]( ControlSPtr p_control )
+			, [&p_overlay]( Control * p_control )
 		{
 			return p_control->getName() == p_overlay;
 		} );
@@ -118,7 +118,7 @@ namespace CastorGui
 
 	void ControlsManager::addControl( ControlSPtr p_control )
 	{
-		doAddHandler( p_control );
+		doAddHandler( p_control.get() );
 		LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
 
 		if ( m_controlsById.find( p_control->getId() ) != m_controlsById.end() )
@@ -255,7 +255,7 @@ namespace CastorGui
 		}
 	}
 
-	EventHandlerSPtr ControlsManager::doGetMouseTargetableHandler( Position const & p_position )const
+	castor3d::EventHandler * ControlsManager::doGetMouseTargetableHandler( Position const & p_position )const
 	{
 		if ( m_changed )
 		{
@@ -263,12 +263,12 @@ namespace CastorGui
 		}
 
 		auto controls = doGetControlsByZIndex();
-		EventHandlerSPtr result;
+		castor3d::EventHandler * result{};
 		auto it = controls.rbegin();
 
 		while ( !result && it != controls.rend() )
 		{
-			ControlSPtr control = *it;
+			Control * control = *it;
 
 			if ( control->catchesMouseEvents()
 					&& control->getAbsolutePosition().x() <= p_position.x()
@@ -295,11 +295,13 @@ namespace CastorGui
 
 			for ( auto handler : handlers )
 			{
-				m_controlsByZIndex.push_back( std::static_pointer_cast< Control >( handler ) );
+				m_controlsByZIndex.push_back( static_cast< Control * >( handler ) );
 			}
 		}
 
-		std::sort( m_controlsByZIndex.begin(), m_controlsByZIndex.end(), []( ControlSPtr p_a, ControlSPtr p_b )
+		std::sort( m_controlsByZIndex.begin()
+			, m_controlsByZIndex.end()
+			, []( Control * p_a, Control * p_b )
 		{
 			uint64_t a = p_a->getBackground()->getIndex() + p_a->getBackground()->getLevel() * 1000ull;
 			uint64_t b = p_b->getBackground()->getIndex() + p_b->getBackground()->getLevel() * 1000ull;
@@ -314,7 +316,7 @@ namespace CastorGui
 
 	void ControlsManager::doRemoveControl( uint32_t p_id )
 	{
-		EventHandlerSPtr handler;
+		castor3d::EventHandler * handler;
 		{
 			LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
 			auto it = m_controlsById.find( p_id );
@@ -325,17 +327,17 @@ namespace CastorGui
 			}
 
 			m_controlsById.erase( it );
-			handler = it->second.lock();
+			handler = it->second.lock().get();
 		}
 
 		m_changed = true;
 		doRemoveHandler( handler );
 	}
 
-	std::vector< ControlSPtr > ControlsManager::doGetControlsByZIndex()const
+	std::vector< Control * > ControlsManager::doGetControlsByZIndex()const
 	{
 		LockType lock{ castor::makeUniqueLock( m_mutexControlsByZIndex ) };
-		std::vector< ControlSPtr > result;
+		std::vector< Control * > result;
 
 		if ( !m_controlsByZIndex.empty() )
 		{
