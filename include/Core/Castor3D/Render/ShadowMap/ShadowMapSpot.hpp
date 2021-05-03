@@ -26,7 +26,8 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	scene	La scène.
 		 */
-		C3D_API explicit ShadowMapSpot( Scene & scene );
+		C3D_API explicit ShadowMapSpot( RenderDevice const & device
+			, Scene & scene );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -45,7 +46,6 @@ namespace castor3d
 
 	private:
 		void doInitialise( RenderDevice const & device )override;
-		void doCleanup( RenderDevice const & device )override;
 		ashes::Semaphore const & doRender( RenderDevice const & device
 			, ashes::Semaphore const & toWait
 			, uint32_t index )override;

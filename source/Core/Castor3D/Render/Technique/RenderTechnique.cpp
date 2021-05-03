@@ -224,7 +224,217 @@ namespace castor3d
 				, image
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, std::move( debugName ) );
-			result->initialise( device );
+			return result;
+		}
+
+		TextureUnit doCreateTextureUnit( RenderDevice const & device
+			, castor::String const & name
+			, VkFormat format
+			, VkImageUsageFlags usage
+			, castor::Size const & dimensions )
+		{
+			VkImageSubresourceRange range{ 0u, 0u, 1u, 0u, 1u };
+			auto & engine = *device.renderSystem.getEngine();
+			auto colourTexture = doCreateTexture( engine
+				, device
+				, dimensions
+				, format
+				, usage
+				, name );
+			TextureUnit result{ engine };
+			result.setTexture( colourTexture );
+			result.setSampler( createSampler( engine
+				, name
+				, VK_FILTER_LINEAR
+				, &range ) );
+			result.initialise( device );
+			return result;
+		}
+
+		LightVolumePassResultArray doCreateLLPVResult( RenderDevice const & device )
+		{
+			LightVolumePassResultArray result;
+			auto & engine = *device.renderSystem.getEngine();
+
+			for ( uint32_t i = 0u; i < shader::LpvMaxCascadesCount; ++i )
+			{
+				result.emplace_back( castor::makeUnique< LightVolumePassResult >( engine
+					, device
+					, castor::string::toString( i )
+					, engine.getLpvGridSize() ) );
+			}
+
+			return result;
+		}
+
+		CommandsSemaphore doCreateClearLpvCommands( RenderDevice const & device
+			, castor::String const & name
+			, LightVolumePassResult  const & lpvResult
+			, LightVolumePassResultArray const & llpvResult )
+		{
+			CommandsSemaphore result{ device
+				, name + cuT( "ClearLpv" ) };
+			ashes::CommandBuffer & cmd = *result.commandBuffer;
+			auto clearTex = [&cmd]( LightVolumePassResult const & result
+				, LpvTexture tex )
+			{
+				cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+					, VK_PIPELINE_STAGE_TRANSFER_BIT
+					, result[tex].getTexture()->getDefaultView().getSampledView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+				cmd.clear( result[tex].getTexture()->getDefaultView().getSampledView(), getClearValue( tex ).color );
+				cmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+					, result[tex].getTexture()->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+			};
+			cmd.begin();
+			cmd.beginDebugBlock(
+				{
+					"Lighting - " + name + " - Clear Injection",
+					castor3d::makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ),
+				} );
+			clearTex( lpvResult, LpvTexture::eR );
+			clearTex( lpvResult, LpvTexture::eG );
+			clearTex( lpvResult, LpvTexture::eB );
+
+			for ( auto & lpvResult : llpvResult )
+			{
+				clearTex( *lpvResult, LpvTexture::eR );
+				clearTex( *lpvResult, LpvTexture::eG );
+				clearTex( *lpvResult, LpvTexture::eB );
+			}
+
+			cmd.endDebugBlock();
+			cmd.end();
+			return result;
+		}
+
+		ashes::RenderPassPtr createBgRenderPass( RenderDevice const & device
+			, VkFormat depthFormat
+			, VkFormat colourFormat )
+		{
+			ashes::VkAttachmentDescriptionArray attachments
+			{
+				{
+					0u,
+					depthFormat,
+					VK_SAMPLE_COUNT_1_BIT,
+					VK_ATTACHMENT_LOAD_OP_LOAD,
+					VK_ATTACHMENT_STORE_OP_STORE,
+					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+					VK_ATTACHMENT_STORE_OP_DONT_CARE,
+					VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+					VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+				},
+				{
+					0u,
+					colourFormat,
+					VK_SAMPLE_COUNT_1_BIT,
+					VK_ATTACHMENT_LOAD_OP_CLEAR,
+					VK_ATTACHMENT_STORE_OP_STORE,
+					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+					VK_ATTACHMENT_STORE_OP_DONT_CARE,
+					VK_IMAGE_LAYOUT_UNDEFINED,
+					VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+				},
+			};
+			ashes::SubpassDescriptionArray subpasses;
+			subpasses.emplace_back( ashes::SubpassDescription
+				{
+					0u,
+					VK_PIPELINE_BIND_POINT_GRAPHICS,
+				{},
+				{ { 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
+				{},
+				VkAttachmentReference{ 0u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL },
+				{},
+				} );
+			ashes::VkSubpassDependencyArray dependencies
+			{
+				{
+					VK_SUBPASS_EXTERNAL,
+					0u,
+					VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+					VK_ACCESS_MEMORY_READ_BIT,
+					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_READ_BIT,
+					VK_DEPENDENCY_BY_REGION_BIT,
+				},
+				{
+					0u,
+					VK_SUBPASS_EXTERNAL,
+					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+					VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_READ_BIT,
+					VK_ACCESS_MEMORY_READ_BIT,
+					VK_DEPENDENCY_BY_REGION_BIT,
+				},
+			};
+			ashes::RenderPassCreateInfo createInfo
+			{
+				0u,
+				std::move( attachments ),
+				std::move( subpasses ),
+				std::move( dependencies ),
+			};
+			return device->createRenderPass( "Background"
+				, std::move( createInfo ) );
+		}
+
+		ashes::FrameBufferPtr doCreateBgFramebuffer( ashes::RenderPass const & renderPass
+			, TextureUnit const & depthBuffer
+			, TextureUnit const & colourTexture )
+		{
+			ashes::ImageViewCRefArray attaches
+			{
+				depthBuffer.getTexture()->getDefaultView().getTargetView(),
+				colourTexture.getTexture()->getDefaultView().getTargetView(),
+			};
+			return renderPass.createFrameBuffer( "Background"
+				, { depthBuffer.getTexture()->getWidth(), depthBuffer.getTexture()->getHeight() }
+			, std::move( attaches ) );
+		}
+
+		void doPrepareBgCommands( RenderDevice const & device
+			, SceneBackground & background
+			, ashes::RenderPass const & renderPass
+			, ashes::FrameBuffer const & framebuffer
+			, HdrConfigUbo const & hdrConfigUbo
+			, ashes::CommandBuffer & commandBuffer )
+		{
+			background.initialise( device, renderPass, hdrConfigUbo );
+			background.prepareFrame( commandBuffer
+				, Size{ framebuffer.getDimensions().width, framebuffer.getDimensions().height }
+				, renderPass
+				, framebuffer );
+		}
+
+		CommandsSemaphore doPrepareColourTransitionCommands( RenderDevice const & device
+			, TextureUnit const & colourTexture
+			, TextureUnit const & velocityTexture )
+		{
+			auto & engine = *device.renderSystem.getEngine();
+			CommandsSemaphore result{ device, "TechniqueColourTexTransition" };
+			auto & cmd = *result.commandBuffer;
+			cmd.begin();
+			cmd.beginDebugBlock(
+				{
+					"Technique Colour Texture Transition",
+					makeFloatArray( engine.getNextRainbowColour() ),
+				} );
+			cmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+				, colourTexture.getTexture()->getDefaultView().getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
+			cmd.memoryBarrier( VK_PIPELINE_STAGE_HOST_BIT
+				, VK_PIPELINE_STAGE_TRANSFER_BIT
+				, velocityTexture.getTexture()->getDefaultView().getTargetView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+			cmd.clear( velocityTexture.getTexture()->getDefaultView().getTargetView()
+				, transparentBlackClearColor.color );
+			cmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+				, velocityTexture.getTexture()->getDefaultView().getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+			cmd.endDebugBlock();
+			cmd.end();
+
 			return result;
 		}
 	}
@@ -233,64 +443,274 @@ namespace castor3d
 
 	RenderTechnique::RenderTechnique( String const & name
 		, RenderTarget & renderTarget
-		, RenderSystem & renderSystem
+		, RenderDevice const & device
 		, Parameters const & parameters
 		, SsaoConfig const & ssaoConfig )
-		: OwnedBy< Engine >{ *renderSystem.getEngine() }
+		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
 		, Named{ name }
 		, m_renderTarget{ renderTarget }
-		, m_renderSystem{ renderSystem }
-		, m_matrixUbo{ *m_renderSystem.getEngine() }
-		, m_gpInfoUbo{ *m_renderSystem.getEngine() }
-		, m_lpvConfigUbo{}
-		, m_llpvConfigUbo{}
-		, m_vctConfigUbo{}
-#if C3D_UseDeferredRendering
-		, m_opaquePass{ castor::makeUniqueDerived< RenderTechniquePass, OpaquePass >( m_matrixUbo
-			, m_renderTarget.getCuller()
-			, ssaoConfig ) }
-#else
-		, m_opaquePass{ castor::makeUniqueDerived< RenderTechniquePass, ForwardRenderTechniquePass >( cuT( "Opaque" )
-			, cuT( "Forward" )
+		, m_device{ device }
+		, m_size{ m_renderTarget.getSize() }
+		, m_ssaoConfig{ ssaoConfig }
+		, m_colourTexture{ doCreateTextureUnit( m_device
+			, cuT( "RenderTechnique_Colour" )
+			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
+			, m_size ) }
+		, m_depthBuffer{ doCreateTextureUnit( m_device
+			, cuT( "RenderTechnique_Colour" )
+			, device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
+				| VK_FORMAT_FEATURE_TRANSFER_SRC_BIT )
+			, ( VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
+			, m_size ) }
+		, m_matrixUbo{ m_device }
+		, m_gpInfoUbo{ m_device }
+		, m_lpvConfigUbo{ m_device }
+		, m_llpvConfigUbo{ m_device }
+		, m_vctConfigUbo{ m_device }
+		, m_depthPass{ castor::makeUnique< DepthPass >( cuT( "Depth Prepass" )
+			, m_device
 			, m_matrixUbo
 			, m_renderTarget.getCuller()
-			, false
-			, nullptr
-			, ssaoConfig
-			, &m_lpvConfigUbo
-			, &m_llpvConfigUbo
-			, &m_vctConfigUbo ) }
-#endif
-#if C3D_UseWeightedBlendedRendering
-		, m_transparentPass{ castor::makeUniqueDerived< RenderTechniquePass, TransparentPass >( m_matrixUbo
+			, m_ssaoConfig
+			, m_depthBuffer.getTexture() ) }
+		, m_voxelizer{ castor::makeUnique< Voxelizer >( device
+			, *m_renderTarget.getScene()
+			, *m_renderTarget.getCamera()
+			, m_matrixUbo
+			, m_vctConfigUbo
+			, m_renderTarget.getScene()->getVoxelConeTracingConfig() ) }
+		, m_bgRenderPass{ createBgRenderPass( m_device
+			, m_depthBuffer.getTexture()->getPixelFormat()
+			, m_colourTexture.getTexture()->getPixelFormat() ) }
+		, m_bgFrameBuffer{ doCreateBgFramebuffer( *m_bgRenderPass
+			, m_depthBuffer
+			, m_colourTexture ) }
+		, m_bgCommandBuffer{ device.graphicsCommandPool->createCommandBuffer( "Background" ) }
+		, m_cbgCommandBuffer{ device.graphicsCommandPool->createCommandBuffer( "ColourBackground" ) }
+		, m_colorTexTransition{ doPrepareColourTransitionCommands( device
+			, m_colourTexture
+			, m_renderTarget.getVelocity() ) }
+		, m_onBgChanged{ m_renderTarget.getScene()->getBackground()->onChanged.connect( [this]( SceneBackground const & )
+			{
+				getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+					, [this]( RenderDevice const & device )
+					{
+						doPrepareBgCommands( m_device
+							, *m_renderTarget.getScene()->getBackground()
+							, *m_bgRenderPass
+							, *m_bgFrameBuffer
+							, m_renderTarget.getHdrConfigUbo()
+							, *m_bgCommandBuffer );
+					} ) );
+			} ) }
+		, m_onCBgChanged{ m_renderTarget.getScene()->getColourBackground().onChanged.connect( [this]( SceneBackground const & )
+			{
+				getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+					, [this]( RenderDevice const & device )
+					{
+						doPrepareBgCommands( m_device
+							, m_renderTarget.getScene()->getColourBackground()
+							, *m_bgRenderPass
+							, *m_bgFrameBuffer
+							, m_renderTarget.getHdrConfigUbo()
+							, *m_cbgCommandBuffer );
+					} ) );
+			} ) }
+#if C3D_UseDeferredRendering
+		, m_opaquePass{ castor::makeUniqueDerived< RenderTechniquePass, OpaquePass >( m_device
+			, m_size
+			, m_matrixUbo
 			, m_renderTarget.getCuller()
-			, ssaoConfig
+			, m_ssaoConfig ) }
+		, m_deferredRendering{ castor::makeUnique< DeferredRendering >( *getEngine()
+			, m_device
+			, static_cast< OpaquePass & >( *m_opaquePass )
+			, m_depthBuffer
+			, m_renderTarget.getVelocity()
+			, m_colourTexture
+			, m_directionalShadowMap->getShadowPassResult()
+			, m_pointShadowMap->getShadowPassResult()
+			, m_spotShadowMap->getShadowPassResult()
+			, *m_lpvResult
+			, m_llpvResult
+			, m_voxelizer->getFirstBounce()
+			, m_voxelizer->getSecondaryBounce()
+			, m_renderTarget.getSize()
+			, *m_renderTarget.getScene()
+			, m_renderTarget.getHdrConfigUbo()
+			, m_gpInfoUbo
 			, m_lpvConfigUbo
 			, m_llpvConfigUbo
-			, m_vctConfigUbo ) }
+			, m_vctConfigUbo
+			, m_ssaoConfig )
+}
 #else
-		, m_transparentPass{ castor::makeUniqueDerived< RenderTechniquePass, ForwardRenderTechniquePass >( cuT( "Transparent" )
+		, m_opaquePass{ castor::makeUniqueDerived< RenderTechniquePass, ForwardRenderTechniquePass >( m_device
+			, m_size
+			, m_lpvResult.get()
+			, &m_voxelizer->getFirstBounce()
+			, m_voxelizer->getSecondaryBounce()
+			, cuT( "Opaque" )
+			, cuT( "Forward" )
+			, m_matrixUbo
+			, m_renderTarget.getCuller()
+			, false
+			, nullptr
+			, m_ssaoConfig
+			, &m_lpvConfigUbo
+			, &m_llpvConfigUbo
+			, &m_vctConfigUbo
+			, m_lpvResult.get()
+			, &m_voxelizer->getFirstBounce()
+			, &m_voxelizer->getSecondaryBounce() ) }
+#endif
+#if C3D_UseWeightedBlendedRendering
+		, m_transparentPass{ castor::makeUniqueDerived< RenderTechniquePass, TransparentPass >( m_device
+			, m_size
+			, m_matrixUbo
+			, m_renderTarget.getCuller()
+			, m_ssaoConfig
+			, m_lpvConfigUbo
+			, m_llpvConfigUbo
+			, m_vctConfigUbo
+			, m_lpvResult.get()
+			, &m_voxelizer->getFirstBounce()
+			, &m_voxelizer->getSecondaryBounce() ) }
+		, m_weightedBlendRendering{ castor::makeUnique< WeightedBlendRendering >( *getEngine()
+			, m_device
+			, static_cast< TransparentPass & >( *m_transparentPass )
+			, m_depthBuffer
+			, m_colourTexture.getTexture()->getDefaultView().getTargetView()
+			, m_renderTarget.getVelocity()
+			, m_renderTarget.getSize()
+			, *m_renderTarget.getScene()
+			, m_renderTarget.getHdrConfigUbo()
+			, m_gpInfoUbo
+			, *m_lpvResult )}
+#else
+		, m_transparentPass{ castor::makeUniqueDerived< RenderTechniquePass, ForwardRenderTechniquePass >( m_device
+			, m_size
+			, cuT( "Transparent" )
 			, cuT( "Forward" )
 			, m_matrixUbo
 			, m_renderTarget.getCuller()
 			, false
 			, false
 			, nullptr
-			, ssaoConfig
+			, m_ssaoConfig
 			, &m_lpvConfigUbo
 			, &m_llpvConfigUbo
-			, &m_vctConfigUbo ) }
+			, &m_vctConfigUbo
+			, m_lpvResult.get()
+			, &m_voxelizer->getFirstBounce()
+			, &m_voxelizer->getSecondaryBounce() ) }
 #endif
-		, m_initialised{ false }
-		, m_ssaoConfig{ ssaoConfig }
-		, m_colourTexture{ *m_renderSystem.getEngine() }
-		, m_depthBuffer{ *m_renderSystem.getEngine() }
+		, m_signalFinished{ m_device->createSemaphore( "RenderTechnique" ) }
+		, m_directionalShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapDirectional >( m_device
+			, *m_renderTarget.getScene() ) }
+		, m_spotShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapSpot >( m_device
+			, *m_renderTarget.getScene() ) }
+		, m_pointShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapPoint >( m_device
+			, *m_renderTarget.getScene() ) }
+		, m_lpvResult{ castor::makeUnique< LightVolumePassResult >( *getEngine()
+			, m_device
+			, cuEmptyString
+			, getEngine()->getLpvGridSize() ) }
+		, m_llpvResult{ doCreateLLPVResult( device ) }
+		, m_clearLpv{ doCreateClearLpvCommands( device, getName(), *m_lpvResult, m_llpvResult ) }
+		, m_particleTimer{ std::make_shared< RenderPassTimer >( device, cuT( "Particles" ), cuT( "Particles" ) ) }
 	{
-		doCreateShadowMaps();
+		m_allShadowMaps[size_t( LightType::eDirectional )].emplace_back( std::ref( *m_directionalShadowMap ), UInt32Array{} );
+		m_allShadowMaps[size_t( LightType::eSpot )].emplace_back( std::ref( *m_spotShadowMap ), UInt32Array{} );
+		m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( std::ref( *m_pointShadowMap ), UInt32Array{} );
+		doInitialiseShadowMaps();
+		doInitialiseLpv();
+
+		doPrepareBgCommands( m_device
+			, *m_renderTarget.getScene()->getBackground()
+			, *m_bgRenderPass
+			, *m_bgFrameBuffer
+			, m_renderTarget.getHdrConfigUbo()
+			, *m_bgCommandBuffer );
+		doPrepareBgCommands( m_device
+			, m_renderTarget.getScene()->getColourBackground()
+			, *m_bgRenderPass
+			, *m_bgFrameBuffer
+			, m_renderTarget.getHdrConfigUbo()
+			, *m_cbgCommandBuffer );
+
+#if !C3D_UseDeferredRendering
+
+		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).initialiseRenderPass( device
+			, m_colourTexture.getTexture()->getDefaultView().getTargetView()
+			, m_depthBuffer.getTexture()->getDefaultView().getTargetView()
+			, m_size
+			, false );
+
+#endif
+#if !C3D_UseWeightedBlendedRendering
+
+		static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).initialiseRenderPass( m_device
+			, m_colourTexture.getTexture()->getDefaultView().getTargetView()
+			, m_depthBuffer.getTexture()->getDefaultView().getTargetView()
+			, m_size
+			, false );
+
+#endif
+
+		auto & maps = m_renderTarget.getScene()->getEnvironmentMaps();
+
+		for ( auto & map : maps )
+		{
+			map.get().initialise( device );
+		}
 	}
 
 	RenderTechnique::~RenderTechnique()
 	{
+		m_onBgChanged.disconnect();
+		m_bgCommandBuffer.reset();
+		m_cbgCommandBuffer.reset();
+		m_bgFrameBuffer.reset();
+		m_bgRenderPass.reset();
+		m_particleTimer.reset();
+		m_weightedBlendRendering.reset();
+		m_deferredRendering.reset();
+		m_clearLpv = {};
+		m_lpvConfigUbo.cleanup();
+		m_llpvConfigUbo.cleanup();
+		m_llpvResult.clear();
+		m_lpvResult.reset();
+
+		if ( m_transparentPass )
+		{
+			m_transparentPass->cleanup( m_device );
+		}
+
+		if ( m_opaquePass )
+		{
+			m_opaquePass->cleanup( m_device );
+		}
+
+		m_voxelizer.reset();
+
+		if ( m_depthPass )
+		{
+			m_depthPass->cleanup( m_device );
+			m_depthPass.reset();
+		}
+
+		m_vctConfigUbo.cleanup();
+		m_gpInfoUbo.cleanup();
+		m_matrixUbo.cleanup();
+		m_depthBuffer.cleanup();
+		m_colourTexture.cleanup();
+		getEngine()->getSamplerCache().remove( cuT( "RenderTechnique_Colour" ) );
+		getEngine()->getSamplerCache().remove( cuT( "RenderTechnique_Depth" ) );
 		m_cbgCommandBuffer.reset();
 		m_bgCommandBuffer.reset();
 		m_bgFrameBuffer.reset();
@@ -311,126 +731,13 @@ namespace castor3d
 		m_opaquePass.reset();
 	}
 
-	bool RenderTechnique::initialise( RenderDevice const & device
-		, std::vector< IntermediateView > & intermediates )
+	void RenderTechnique::listIntermediates( std::vector< IntermediateView > & intermediates )
 	{
-		if ( !m_initialised )
-		{
-			VkImageSubresourceRange range{ 0u, 0u, 1u, 0u, 1u };
-			m_size = m_renderTarget.getSize();
-			auto colourTexture = doCreateTexture( *getEngine()
-				, device
-				, m_size
-				, VK_FORMAT_R16G16B16A16_SFLOAT
-				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
-					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
-				, cuT( "RenderTechnique_Colour" ) );
-			m_colourTexture.setTexture( colourTexture );
-			m_colourTexture.setSampler( createSampler( *getEngine()
-				, cuT( "RenderTechnique_Colour" )
-				, VK_FILTER_LINEAR
-				, &range ) );
-
-			auto depthBuffer = doCreateTexture( *getEngine()
-				, device
-				, m_size
-				, device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
-					| VK_FORMAT_FEATURE_TRANSFER_SRC_BIT )
-				, ( VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
-				, cuT( "RenderTechnique_Depth" ) );
-			m_depthBuffer.setTexture( depthBuffer );
-			m_depthBuffer.setSampler( createSampler( *getEngine()
-				, cuT( "RenderTechnique_Depth" )
-				, VK_FILTER_LINEAR
-				, &range ) );
-
-			m_colourTexture.initialise( device );
-			m_depthBuffer.initialise( device );
-			m_signalFinished = device->createSemaphore( "RenderTechnique" );
-			m_gpInfoUbo.initialise( device );
-			m_matrixUbo.initialise( device );
-			m_vctConfigUbo.initialise( device );
-
-			m_voxelizer = castor::makeUnique< Voxelizer >( *m_renderSystem.getEngine()
-				, device
-				, *m_renderTarget.getScene()
-				, *m_renderTarget.getCamera()
-				, m_matrixUbo
-				, m_vctConfigUbo
-				, m_renderTarget.getScene()->getVoxelConeTracingConfig() );
-
-			auto & maps = m_renderTarget.getScene()->getEnvironmentMaps();
-
-			doInitialiseShadowMaps( device );
-			doCreateLpv( device );
-			doInitialiseLpv( device );
-			doInitialiseDepthPass( device );
-			doInitialiseBackgroundPass( device );
-			doInitialiseOpaquePass( device );
-			doInitialiseTransparentPass( device );
-
-			for ( auto & map : maps )
-			{
-				map.get().initialise( device );
-			}
-
-			m_particleTimer = std::make_shared< RenderPassTimer >( device, cuT( "Particles" ), cuT( "Particles" ) );
-			IntermediatesLister::submit( *this, intermediates );
-			m_initialised = true;
-		}
-
-		return m_initialised;
-	}
-
-	void RenderTechnique::cleanup( RenderDevice const & device )
-	{
-		m_onBgChanged.disconnect();
-		m_bgCommandBuffer.reset();
-		m_cbgCommandBuffer.reset();
-		m_bgFrameBuffer.reset();
-		m_bgRenderPass.reset();
-		m_particleTimer.reset();
-		m_weightedBlendRendering.reset();
-		m_deferredRendering.reset();
-		doCleanupLpv( device );
-		doCleanupShadowMaps( device );
-
-		if ( m_transparentPass )
-		{
-			m_transparentPass->cleanup( device );
-		}
-
-		if ( m_opaquePass )
-		{
-			m_opaquePass->cleanup( device );
-		}
-
-		m_voxelizer.reset();
-
-		if ( m_depthPass )
-		{
-			m_depthPass->cleanup( device );
-			m_depthPass.reset();
-		}
-
-		m_vctConfigUbo.cleanup();
-		m_gpInfoUbo.cleanup( device );
-		m_matrixUbo.cleanup( device );
-		m_initialised = false;
-		m_depthBuffer.cleanup();
-		m_colourTexture.cleanup();
-		getEngine()->getSamplerCache().remove( cuT( "RenderTechnique_Colour" ) );
-		getEngine()->getSamplerCache().remove( cuT( "RenderTechnique_Depth" ) );
+		IntermediatesLister::submit( *this, intermediates );
 	}
 
 	void RenderTechnique::update( CpuUpdater & updater )
 	{
-		if ( !m_initialised )
-		{
-			return;
-		}
-
 		updater.camera = m_renderTarget.getCamera();
 		updater.voxelConeTracing = m_renderTarget.getScene()->getVoxelConeTracingConfig().enabled;
 
@@ -484,17 +791,12 @@ namespace castor3d
 
 	void RenderTechnique::update( GpuUpdater & updater )
 	{
-		if ( !m_initialised )
-		{
-			return;
-		}
-
 		updater.scene = m_renderTarget.getScene();
 		updater.camera = m_renderTarget.getCamera();
 		updater.voxelConeTracing = m_renderTarget.getScene()->getVoxelConeTracingConfig().enabled;
 
-		doInitialiseShadowMaps( updater.device );
-		doInitialiseLpv( updater.device );
+		doInitialiseShadowMaps();
+		doInitialiseLpv();
 
 		for ( auto & map : m_renderTarget.getScene()->getEnvironmentMaps() )
 		{
@@ -539,11 +841,6 @@ namespace castor3d
 		, ashes::SemaphoreCRefArray const & waitSemaphores
 		, RenderInfo & info )
 	{
-		if ( !m_initialised )
-		{
-			return waitSemaphores.front();
-		}
-
 		auto * semaphore = &doRenderDepth( device, waitSemaphores );
 		semaphore = &doRenderBackground( device, *semaphore );
 		semaphore = &doRenderEnvironmentMaps( device, *semaphore );
@@ -600,81 +897,14 @@ namespace castor3d
 		m_pointShadowMap->accept( visitor );
 	}
 
-	void RenderTechnique::doCreateShadowMaps()
+	void RenderTechnique::doInitialiseShadowMaps()
 	{
-		auto & scene = *m_renderTarget.getScene();
-		m_directionalShadowMap = castor::makeUniqueDerived< ShadowMap, ShadowMapDirectional >( scene );
-		m_allShadowMaps[size_t( LightType::eDirectional )].emplace_back( std::ref( *m_directionalShadowMap ), UInt32Array{} );
-		m_spotShadowMap = castor::makeUniqueDerived< ShadowMap, ShadowMapSpot >( scene );
-		m_allShadowMaps[size_t( LightType::eSpot )].emplace_back( std::ref( *m_spotShadowMap ), UInt32Array{} );
-		m_pointShadowMap = castor::makeUniqueDerived< ShadowMap, ShadowMapPoint >( scene );
-		m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( std::ref( *m_pointShadowMap ), UInt32Array{} );
+		m_directionalShadowMap->initialise( m_device );
+		m_spotShadowMap->initialise( m_device );
+		m_pointShadowMap->initialise( m_device );
 	}
 
-	void RenderTechnique::doCreateLpv( RenderDevice const & device )
-	{
-		m_lpvConfigUbo.initialise( device );
-		m_llpvConfigUbo.initialise( device );
-
-		auto & scene = *m_renderTarget.getScene();
-		m_lpvResult = castor::makeUnique< LightVolumePassResult >( *getEngine()
-			, device
-			, cuEmptyString
-			, getEngine()->getLpvGridSize() );
-		m_lpvResult->initialise( device );
-
-		for ( uint32_t i = 0u; i < shader::LpvMaxCascadesCount; ++i )
-		{
-			m_llpvResult.emplace_back( castor::makeUnique< LightVolumePassResult >( *getEngine()
-				, device
-				, castor::string::toString( i )
-				, getEngine()->getLpvGridSize() ) );
-			m_llpvResult.back()->initialise( device );
-		}
-
-		m_clearLpv = CommandsSemaphore{ device
-			, this->getName() + cuT( "ClearLpv" ) };
-		ashes::CommandBuffer & cmd = *m_clearLpv.commandBuffer;
-		auto clearTex = [&cmd]( LightVolumePassResult const & result
-			, LpvTexture tex )
-		{
-			cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, result[tex].getTexture()->getDefaultView().getSampledView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
-			cmd.clear( result[tex].getTexture()->getDefaultView().getSampledView(), getClearValue( tex ).color );
-			cmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, result[tex].getTexture()->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
-		};
-		cmd.begin();
-		cmd.beginDebugBlock(
-			{
-				"Lighting - " + this->getName() + " - Clear Injection",
-				castor3d::makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ),
-			} );
-		clearTex( *m_lpvResult, LpvTexture::eR );
-		clearTex( *m_lpvResult, LpvTexture::eG );
-		clearTex( *m_lpvResult, LpvTexture::eB );
-
-		for ( auto & lpvResult : m_llpvResult )
-		{
-			clearTex( *lpvResult, LpvTexture::eR );
-			clearTex( *lpvResult, LpvTexture::eG );
-			clearTex( *lpvResult, LpvTexture::eB );
-		}
-
-		cmd.endDebugBlock();
-		cmd.end();
-	}
-
-	void RenderTechnique::doInitialiseShadowMaps( RenderDevice const & device )
-	{
-		m_directionalShadowMap->initialise( device );
-		m_spotShadowMap->initialise( device );
-		m_pointShadowMap->initialise( device );
-	}
-
-	void RenderTechnique::doInitialiseLpv( RenderDevice const & device )
+	void RenderTechnique::doInitialiseLpv()
 	{
 		auto & scene = *m_renderTarget.getScene();
 
@@ -693,7 +923,7 @@ namespace castor3d
 			{
 				m_lightPropagationVolumes[i] = castor::makeUnique< LightPropagationVolumes >( scene
 					, LightType( i )
-					, device
+					, m_device
 					, m_allShadowMaps[i].front().first.get().getShadowPassResult()
 					, *m_lpvResult
 					, m_lpvConfigUbo );
@@ -704,7 +934,7 @@ namespace castor3d
 			{
 				m_lightPropagationVolumesG[i] = castor::makeUnique< LightPropagationVolumesG >( scene
 					, LightType( i )
-					, device
+					, m_device
 					, m_allShadowMaps[i].front().first.get().getShadowPassResult()
 					, *m_lpvResult
 					, m_lpvConfigUbo );
@@ -715,7 +945,7 @@ namespace castor3d
 			{
 				m_layeredLightPropagationVolumes[i] = castor::makeUnique< LayeredLightPropagationVolumes >( scene
 					, LightType( i )
-					, device
+					, m_device
 					, m_allShadowMaps[i].front().first.get().getShadowPassResult()
 					, m_llpvResult
 					, m_llpvConfigUbo );
@@ -726,278 +956,13 @@ namespace castor3d
 			{
 				m_layeredLightPropagationVolumesG[i] = castor::makeUnique< LayeredLightPropagationVolumesG >( scene
 					, LightType( i )
-					, device
+					, m_device
 					, m_allShadowMaps[i].front().first.get().getShadowPassResult()
 					, m_llpvResult
 					, m_llpvConfigUbo );
 				m_layeredLightPropagationVolumesG[i]->initialise();
 			}
 		}
-	}
-
-	void RenderTechnique::doInitialiseBackgroundPass( RenderDevice const & device )
-	{
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		m_bgCommandBuffer = device.graphicsCommandPool->createCommandBuffer( "Background" );
-		m_cbgCommandBuffer = device.graphicsCommandPool->createCommandBuffer( "ColourBackground" );
-
-		ashes::VkAttachmentDescriptionArray attachments
-		{
-			{
-				0u,
-				m_depthBuffer.getTexture()->getPixelFormat(),
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_LOAD,
-				VK_ATTACHMENT_STORE_OP_STORE,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-			},
-			{
-				0u,
-				m_colourTexture.getTexture()->getPixelFormat(),
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_CLEAR,
-				VK_ATTACHMENT_STORE_OP_STORE,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_UNDEFINED,
-				VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-			},
-		};
-		ashes::SubpassDescriptionArray subpasses;
-		subpasses.emplace_back( ashes::SubpassDescription
-			{
-				0u,
-				VK_PIPELINE_BIND_POINT_GRAPHICS,
-				{},
-				{ { 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
-				{},
-				VkAttachmentReference{ 0u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL },
-				{},
-			} );
-		ashes::VkSubpassDependencyArray dependencies
-		{
-			{
-				VK_SUBPASS_EXTERNAL,
-				0u,
-				VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_ACCESS_MEMORY_READ_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			},
-			{
-				0u,
-				VK_SUBPASS_EXTERNAL,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_READ_BIT,
-				VK_ACCESS_MEMORY_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			},
-		};
-		ashes::RenderPassCreateInfo createInfo
-		{
-			0u,
-			std::move( attachments ),
-			std::move( subpasses ),
-			std::move( dependencies ),
-		};
-		m_bgRenderPass = device->createRenderPass( "Background"
-			, std::move( createInfo ) );
-
-		ashes::ImageViewCRefArray attaches
-		{
-			m_depthBuffer.getTexture()->getDefaultView().getTargetView(),
-			m_colourTexture.getTexture()->getDefaultView().getTargetView(),
-		};
-		m_bgFrameBuffer = m_bgRenderPass->createFrameBuffer( "Background"
-			, { m_depthBuffer.getTexture()->getWidth(), m_depthBuffer.getTexture()->getHeight() }
-			, std::move( attaches ) );
-
-		auto & background = *m_renderTarget.getScene()->getBackground();
-		auto prepareBackground = [&background, this]( RenderDevice const & device )
-		{
-			background.initialise( device, *m_bgRenderPass, m_renderTarget.getHdrConfigUbo() );
-			background.prepareFrame( *m_bgCommandBuffer
-				, Size{ m_colourTexture.getTexture()->getWidth(), m_colourTexture.getTexture()->getHeight() }
-				, *m_bgRenderPass
-				, *m_bgFrameBuffer );
-		};
-		prepareBackground( device );
-		m_onBgChanged = background.onChanged.connect( [prepareBackground, this]( SceneBackground const & )
-			{
-				getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender, prepareBackground ) );
-			} );
-		auto & cbackground = m_renderTarget.getScene()->getColourBackground();
-		auto prepareCBackground = [&cbackground, this]( RenderDevice const & device )
-		{
-			cbackground.initialise( device, *m_bgRenderPass, m_renderTarget.getHdrConfigUbo() );
-			cbackground.prepareFrame( *m_cbgCommandBuffer
-				, Size{ m_colourTexture.getTexture()->getWidth(), m_colourTexture.getTexture()->getHeight() }
-				, *m_bgRenderPass
-				, *m_bgFrameBuffer );
-		};
-		prepareCBackground( device );
-		m_onCBgChanged = cbackground.onChanged.connect( [prepareCBackground, this]( SceneBackground const & )
-			{
-				getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender, prepareCBackground ) );
-			} );
-	}
-
-	void RenderTechnique::doInitialiseDepthPass( RenderDevice const & device )
-	{
-		m_depthPass = castor::makeUnique< DepthPass >( cuT( "Depth Prepass" )
-			, device
-			, m_matrixUbo
-			, m_renderTarget.getCuller()
-			, m_ssaoConfig
-			, m_depthBuffer.getTexture() );
-		m_depthPass->initialise( device, m_size, nullptr );
-	}
-
-	void RenderTechnique::doInitialiseOpaquePass( RenderDevice const & device )
-	{
-#if C3D_UseDeferredRendering
-
-		m_opaquePass->initialise( device
-			, m_size
-			, nullptr
-			, nullptr
-			, nullptr );
-		m_deferredRendering = castor::makeUnique< DeferredRendering >( *getEngine()
-			, device
-			, static_cast< OpaquePass & >( *m_opaquePass )
-			, m_depthBuffer
-			, m_renderTarget.getVelocity()
-			, m_colourTexture
-			, m_directionalShadowMap->getShadowPassResult()
-			, m_pointShadowMap->getShadowPassResult()
-			, m_spotShadowMap->getShadowPassResult()
-			, *m_lpvResult
-			, m_llpvResult
-			, m_voxelizer->getFirstBounce()
-			, m_voxelizer->getSecondaryBounce()
-			, m_renderTarget.getSize()
-			, *m_renderTarget.getScene()
-			, m_renderTarget.getHdrConfigUbo()
-			, m_gpInfoUbo
-			, m_lpvConfigUbo
-			, m_llpvConfigUbo
-			, m_vctConfigUbo
-			, m_ssaoConfig );
-
-#else
-
-		m_opaquePass->initialise( device
-			, m_size
-			, m_lpvResult.get()
-			, &m_voxelizer->getFirstBounce()
-			, m_voxelizer->getSecondaryBounce() );
-		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).initialiseRenderPass( device
-			, m_colourTexture.getTexture()->getDefaultView().getTargetView()
-			, m_depthBuffer.getTexture()->getDefaultView().getTargetView()
-			, m_size
-			, false );
-
-#endif
-
-		m_colorTexTransition = { device, "TechniqueColourTexTransition" };
-		auto & cmd = *m_colorTexTransition.commandBuffer;
-		cmd.begin();
-		cmd.beginDebugBlock(
-			{
-				"Technique Colour Texture Transition",
-				makeFloatArray( getEngine()->getNextRainbowColour() ),
-			} );
-		cmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_colourTexture.getTexture()->getDefaultView().getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
-		cmd.memoryBarrier( VK_PIPELINE_STAGE_HOST_BIT
-			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_renderTarget.getVelocity().getTexture()->getDefaultView().getTargetView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
-		cmd.clear( m_renderTarget.getVelocity().getTexture()->getDefaultView().getTargetView()
-			, transparentBlackClearColor.color );
-		cmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_renderTarget.getVelocity().getTexture()->getDefaultView().getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
-		cmd.endDebugBlock();
-		cmd.end();
-	}
-
-	void RenderTechnique::doInitialiseTransparentPass( RenderDevice const & device )
-	{
-		m_transparentPass->initialise( device
-			, m_size
-			, m_lpvResult.get()
-			, &m_voxelizer->getFirstBounce()
-			, &m_voxelizer->getSecondaryBounce() );
-
-#if C3D_UseWeightedBlendedRendering
-
-		m_weightedBlendRendering = castor::makeUnique< WeightedBlendRendering >( *getEngine()
-			, device
-			, static_cast< TransparentPass & >( *m_transparentPass )
-			, m_depthBuffer
-			, m_colourTexture.getTexture()->getDefaultView().getTargetView()
-			, m_renderTarget.getVelocity()
-			, m_renderTarget.getSize()
-			, *m_renderTarget.getScene()
-			, m_renderTarget.getHdrConfigUbo()
-			, m_gpInfoUbo
-			, *m_lpvResult );
-
-#else
-
-		static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).initialiseRenderPass( device
-			, m_colourTexture.getTexture()->getDefaultView().getTargetView()
-			, m_depthBuffer.getTexture()->getDefaultView().getTargetView()
-			, m_size
-			, false );
-
-#endif
-	}
-
-	void RenderTechnique::doCleanupShadowMaps( RenderDevice const & device )
-	{
-		m_directionalShadowMap->cleanup( device );
-		m_spotShadowMap->cleanup( device );
-		m_pointShadowMap->cleanup( device );
-	}
-
-	void RenderTechnique::doCleanupLpv( RenderDevice const & device )
-	{
-		m_clearLpv = {};
-
-		for ( auto i = uint32_t( LightType::eMin ); i < uint32_t( LightType::eCount ); ++i )
-		{
-			if ( m_lightPropagationVolumes[i] )
-			{
-				m_lightPropagationVolumes[i]->cleanup();
-			}
-
-			if ( m_lightPropagationVolumesG[i] )
-			{
-				m_lightPropagationVolumesG[i]->cleanup();
-			}
-
-			if ( m_layeredLightPropagationVolumes[i] )
-			{
-				m_layeredLightPropagationVolumes[i]->cleanup();
-			}
-
-			if ( m_layeredLightPropagationVolumesG[i] )
-			{
-				m_layeredLightPropagationVolumesG[i]->cleanup();
-			}
-		}
-
-		m_lpvConfigUbo.cleanup();
-		m_llpvConfigUbo.cleanup();
-		m_llpvResult.clear();
-		m_lpvResult.reset();
 	}
 
 	void RenderTechnique::doUpdateShadowMaps( CpuUpdater & updater )
