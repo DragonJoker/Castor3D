@@ -83,6 +83,7 @@ namespace aria
 
 		void insertTest( Test & test
 			, bool moveFiles = true );
+		void updateRunsCastorDate( db::DateTime const & date );
 
 	public:
 		struct InsertIdValue
@@ -536,6 +537,23 @@ namespace aria
 			db::Parameter * rendererId{};
 		};
 
+		struct UpdateRunsCastorDate
+		{
+			UpdateRunsCastorDate() = default;
+			explicit UpdateRunsCastorDate( db::Connection & connection )
+				: stmt{ connection.createStatement( "UPDATE TestRun SET CastorDate=? WHERE Id IN (SELECT MAX(Id) FROM TestRun GROUP BY TestId, RendererId);" ) }
+				, castorDate{ stmt->createParameter( "CastorDate", db::FieldType::eDatetime ) }
+			{
+				if ( !stmt->initialise() )
+				{
+					throw std::runtime_error{ "Couldn't create UpdateRunsCastorDate UPDATE statement." };
+				}
+			}
+
+			db::StatementPtr stmt;
+			db::Parameter * castorDate;
+		};
+
 	private:
 		void insertRun( TestRun & run
 			, bool moveFiles = true );
@@ -574,6 +592,7 @@ namespace aria
 		ListTests m_listTests;
 		ListLatestTestRun m_listLatestRun;
 		ListLatestRendererTests m_listLatestRendererRuns;
+		UpdateRunsCastorDate m_updateRunsCastorDate;
 	};
 }
 

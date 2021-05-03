@@ -838,12 +838,6 @@ namespace aria
 	{
 		m_cancelled.exchange( false );
 		updateCastorRefDate( m_config );
-		auto range = doGetSelectedCategoryRange();
-		wxProgressDialog progress{ wxT( "Updating tests Castor3D date" )
-			, wxT( "Updating tests..." )
-			, int( range )
-			, this };
-		int index = 0;
 
 		if ( m_selectedPage )
 		{
@@ -852,6 +846,11 @@ namespace aria
 				{
 					return run.checkOutOfCastorDate();
 				} );
+			wxProgressDialog progress{ wxT( "Updating tests Castor3D date" )
+				, wxT( "Updating tests..." )
+				, int( items.size() )
+				, this };
+			int index = 0;
 
 			for ( auto & item : items )
 			{
@@ -871,12 +870,6 @@ namespace aria
 	void MainFrame::doUpdateCategorySceneDate()
 	{
 		m_cancelled.exchange( false );
-		auto range = doGetSelectedCategoryRange();
-		wxProgressDialog progress{ wxT( "Updating tests Scene date" )
-			, wxT( "Updating tests..." )
-			, int( range )
-			, this };
-		int index = 0;
 
 		if ( m_selectedPage )
 		{
@@ -885,6 +878,11 @@ namespace aria
 				{
 					return run.checkOutOfSceneDate();
 				} );
+			wxProgressDialog progress{ wxT( "Updating tests Scene date" )
+				, wxT( "Updating tests..." )
+				, int( items.size() )
+				, this };
+			int index = 0;
 
 			for ( auto & item : items )
 			{
@@ -992,12 +990,6 @@ namespace aria
 	{
 		m_cancelled.exchange( false );
 		updateCastorRefDate( m_config );
-		auto range = doGetSelectedRendererRange();
-		wxProgressDialog progress{ wxT( "Updating tests Castor3D date" )
-			, wxT( "Updating tests..." )
-			, int( range )
-			, this };
-		int index = 0;
 
 		if ( m_selectedPage )
 		{
@@ -1006,6 +998,11 @@ namespace aria
 				{
 					return run.checkOutOfCastorDate();
 				} );
+			wxProgressDialog progress{ wxT( "Updating tests Castor3D date" )
+				, wxT( "Updating tests..." )
+				, int( items.size() )
+				, this };
+			int index = 0;
 
 			for ( auto & item : items )
 			{
@@ -1025,12 +1022,6 @@ namespace aria
 	void MainFrame::doUpdateRendererSceneDate()
 	{
 		m_cancelled.exchange( false );
-		auto range = doGetSelectedRendererRange();
-		wxProgressDialog progress{ wxT( "Updating tests Scene date" )
-			, wxT( "Updating tests..." )
-			, int( range )
-			, this };
-		int index = 0;
 
 		if ( m_selectedPage )
 		{
@@ -1039,6 +1030,11 @@ namespace aria
 				{
 					return run.checkOutOfSceneDate();
 				} );
+			wxProgressDialog progress{ wxT( "Updating tests Scene date" )
+				, wxT( "Updating tests..." )
+				, int( items.size() )
+				, this };
+			int index = 0;
 
 			for ( auto & item : items )
 			{
@@ -1056,9 +1052,9 @@ namespace aria
 		}
 	}
 
-	void MainFrame::doRunAllTests()
+	std::vector< wxDataViewItem > MainFrame::doListAllTests( RendererPage::FilterFunc filter )
 	{
-		m_cancelled.exchange( false );
+		std::vector< wxDataViewItem > result;
 
 		for ( auto & renderer : m_tests.runs )
 		{
@@ -1066,9 +1062,28 @@ namespace aria
 			{
 				for ( auto & run : category.second )
 				{
-					doPushTest( getTestItem( run ) );
+					if ( filter( run ) )
+					{
+						result.push_back( getTestItem( run ) );
+					}
 				}
 			}
+		}
+
+		return result;
+	}
+
+	void MainFrame::doRunAllTests()
+	{
+		m_cancelled.exchange( false );
+		auto items = doListAllTests( []( DatabaseTest const & run )
+			{
+				return true;
+			} );
+
+		for ( auto & item : items )
+		{
+			doPushTest( item );
 		}
 
 		doStartTests();
@@ -1077,19 +1092,14 @@ namespace aria
 	void MainFrame::doRunTests( TestStatus filter )
 	{
 		m_cancelled.exchange( false );
-
-		for ( auto & renderer : m_tests.runs )
-		{
-			for ( auto & category : renderer.second )
+		auto items = doListAllTests( [filter]( DatabaseTest const & run )
 			{
-				for ( auto & run : category.second )
-				{
-					if ( run->status == filter )
-					{
-						doPushTest( getTestItem( run ) );
-					}
-				}
-			}
+				return run->status == filter;
+			} );
+
+		for ( auto & item : items )
+		{
+			doPushTest( item );
 		}
 
 		doStartTests();
@@ -1098,19 +1108,14 @@ namespace aria
 	void MainFrame::doRunAllTestsBut( TestStatus filter )
 	{
 		m_cancelled.exchange( false );
-
-		for ( auto & renderer : m_tests.runs )
-		{
-			for ( auto & category : renderer.second )
+		auto items = doListAllTests( [filter]( DatabaseTest const & run )
 			{
-				for ( auto & run : category.second )
-				{
-					if ( run->status != filter )
-					{
-						doPushTest( getTestItem( run ) );
-					}
-				}
-			}
+				return run->status != filter;
+			} );
+
+		for ( auto & item : items )
+		{
+			doPushTest( item );
 		}
 
 		doStartTests();
@@ -1120,19 +1125,14 @@ namespace aria
 	{
 		m_cancelled.exchange( false );
 		updateCastorRefDate( m_config );
-
-		for ( auto & renderer : m_tests.runs )
-		{
-			for ( auto & category : renderer.second )
+		auto items = doListAllTests( [this]( DatabaseTest const & run )
 			{
-				for ( auto & run : category.second )
-				{
-					if ( isOutOfDate( m_config, *run ) )
-					{
-						doPushTest( getTestItem( run ) );
-					}
-				}
-			}
+				return isOutOfDate( m_config, *run );
+			} );
+
+		for ( auto & item : items )
+		{
+			doPushTest( item );
 		}
 
 		doStartTests();
@@ -1142,30 +1142,26 @@ namespace aria
 	{
 		m_cancelled.exchange( false );
 		updateCastorRefDate( m_config );
-		auto range = doGetAllRunsRange();
+		m_database.updateRunsCastorDate( m_config.castorRefDate );
+		auto items = doListAllTests( [this]( DatabaseTest const & run )
+			{
+				return run.checkOutOfCastorDate();
+			} );
 		wxProgressDialog progress{ wxT( "Updating tests Castor3D date" )
 			, wxT( "Updating tests..." )
-			, int( range )
+			, int( items.size() )
 			, this };
 		int index = 0;
 
-		for ( auto & renderer : m_tests.runs )
+		for ( auto & item : items )
 		{
-			for ( auto & category : renderer.second )
-			{
-				for ( auto & run : category.second )
-				{
-					progress.Update( index++
-						, _( "Updating tests Castor3D date" )
-						+ wxT( "\n" ) + getProgressDetails( run ) );
-					progress.Fit();
-
-					if ( run.checkOutOfCastorDate() )
-					{
-						run.updateCastorDate( m_config.castorRefDate );
-					}
-				}
-			}
+			auto node = reinterpret_cast< TreeModelNode * >( item.GetID() );
+			auto & run = *node->test;
+			progress.Update( index++
+				, _( "Updating tests Castor3D date" )
+				+ wxT( "\n" ) + getProgressDetails( run ) );
+			progress.Fit();
+			run.updateCastorDateNW( m_config.castorRefDate );
 		}
 
 		m_selectedPage->refreshView();
@@ -1174,30 +1170,29 @@ namespace aria
 	void MainFrame::doUpdateAllSceneDate()
 	{
 		m_cancelled.exchange( false );
-		auto range = doGetAllRunsRange();
+		auto items = doListAllTests( [this]( DatabaseTest const & run )
+			{
+				return run.checkOutOfSceneDate();
+			} );
 		wxProgressDialog progress{ wxT( "Updating tests Scene date" )
 			, wxT( "Updating tests..." )
-			, int( range )
+			, int( items.size() )
 			, this };
 		int index = 0;
 
-		for ( auto & renderer : m_tests.runs )
+		for ( auto & item : items )
 		{
-			for ( auto & category : renderer.second )
-			{
-				for ( auto & run : category.second )
-				{
-					auto sceneDate = getSceneDate( m_config, *run );
-					progress.Update( index++
-						, _( "Updating tests Scene date" )
-						+ wxT( "\n" ) + getProgressDetails( run ) );
-					progress.Fit();
+			auto node = reinterpret_cast< TreeModelNode * >( item.GetID() );
+			auto & run = *node->test;
+			auto sceneDate = getSceneDate( m_config, *run );
+			progress.Update( index++
+				, _( "Updating tests Scene date" )
+				+ wxT( "\n" ) + getProgressDetails( run ) );
+			progress.Fit();
 
-					if ( run.checkOutOfSceneDate() )
-					{
-						run.updateSceneDate( sceneDate );
-					}
-				}
+			if ( run.checkOutOfSceneDate() )
+			{
+				run.updateSceneDate( sceneDate );
 			}
 		}
 
