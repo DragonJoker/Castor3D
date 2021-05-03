@@ -7,9 +7,7 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
-#include "Castor3D/Shader/PassBuffer/PhongPassBuffer.hpp"
-#include "Castor3D/Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp"
-#include "Castor3D/Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp"
+#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
@@ -44,30 +42,9 @@ namespace castor3d
 				m_defaultMaterial->initialise( device );
 			}
 
-			switch ( type )
-			{
-			case MaterialType::ePhong:
-				m_passBuffer = std::make_shared< PhongPassBuffer >( *getEngine()
-					, device
-					, shader::MaxMaterialsCount );
-				break;
-
-			case MaterialType::eMetallicRoughness:
-				m_passBuffer = std::make_shared< MetallicRoughnessPassBuffer >( *getEngine()
-					, device
-					, shader::MaxMaterialsCount );
-				break;
-
-			case MaterialType::eSpecularGlossiness:
-				m_passBuffer = std::make_shared< SpecularGlossinessPassBuffer >( *getEngine()
-					, device
-					, shader::MaxMaterialsCount );
-				break;
-
-			default:
-				break;
-			}
-
+			m_passBuffer = std::make_shared< PassBuffer >( *getEngine()
+				, device
+				, shader::MaxMaterialsCount );
 			m_textureBuffer = std::make_shared< TextureConfigurationBuffer >( *getEngine()
 				, device
 				, shader::MaxTextureConfigurationCount );
