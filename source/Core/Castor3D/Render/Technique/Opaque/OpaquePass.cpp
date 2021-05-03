@@ -71,79 +71,61 @@ namespace castor3d
 	void OpaquePass::initialiseRenderPass( RenderDevice const & device
 		, OpaquePassResult const & gpResult )
 	{
-		ashes::VkAttachmentDescriptionArray attachments
-		{
-			{
-				0u,
-				gpResult[DsTexture::eDepth].getTexture()->getPixelFormat(),
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_LOAD,
-				VK_ATTACHMENT_STORE_OP_STORE,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-				VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
-			}
-		};
+		ashes::VkAttachmentDescriptionArray attachments{ { 0u
+			, gpResult[DsTexture::eDepth].getTexture()->getPixelFormat()
+			, VK_SAMPLE_COUNT_1_BIT
+			, VK_ATTACHMENT_LOAD_OP_LOAD
+			, VK_ATTACHMENT_STORE_OP_STORE
+			, VK_ATTACHMENT_LOAD_OP_DONT_CARE
+			, VK_ATTACHMENT_STORE_OP_DONT_CARE
+			, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL
+			, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL } };
 		ashes::VkAttachmentReferenceArray colorAttachments;
 
 		// Colour attachments.
 		for ( auto index = 1u; index < uint32_t( DsTexture::eCount ); ++index )
 		{
-			attachments.push_back(
-				{
-					0u,
-					gpResult[DsTexture( index )].getTexture()->getPixelFormat(),
-					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
-					VK_ATTACHMENT_STORE_OP_STORE,
-					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
-					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-				} );
-			colorAttachments.push_back( { uint32_t( index ), VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } );
+			attachments.push_back( { 0u
+				, gpResult[DsTexture( index )].getTexture()->getPixelFormat()
+				, VK_SAMPLE_COUNT_1_BIT
+				, VK_ATTACHMENT_LOAD_OP_CLEAR
+				, VK_ATTACHMENT_STORE_OP_STORE
+				, VK_ATTACHMENT_LOAD_OP_DONT_CARE
+				, VK_ATTACHMENT_STORE_OP_DONT_CARE
+				, VK_IMAGE_LAYOUT_UNDEFINED
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
+			colorAttachments.push_back( { uint32_t( index )
+				, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } );
 		}
 		
 		ashes::SubpassDescriptionArray subpasses;
-		subpasses.emplace_back( ashes::SubpassDescription
-			{
-				0u,
-				VK_PIPELINE_BIND_POINT_GRAPHICS,
-				{},
-				std::move( colorAttachments ),
-				{},
-				VkAttachmentReference{ 0u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL },
-				{},
-			} );
+		subpasses.emplace_back( ashes::SubpassDescription{ 0u
+			, VK_PIPELINE_BIND_POINT_GRAPHICS
+			, {}
+			, std::move( colorAttachments )
+			, {}
+			, VkAttachmentReference{ 0u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL }
+			, {} } );
 		ashes::VkSubpassDependencyArray dependencies
 		{
-			{
-				VK_SUBPASS_EXTERNAL,
-				0u,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-				VK_ACCESS_SHADER_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			},
-			{
-				0u,
-				VK_SUBPASS_EXTERNAL,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-				VK_ACCESS_MEMORY_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			}
-		};
-		ashes::RenderPassCreateInfo createInfo
-		{
-			0u,
-			std::move( attachments ),
-			std::move( subpasses ),
-			std::move( dependencies ),
-		};
+			{ VK_SUBPASS_EXTERNAL
+				, 0u
+				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+				, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
+				, VK_ACCESS_SHADER_READ_BIT
+				, VK_DEPENDENCY_BY_REGION_BIT }
+			, { 0u
+				, VK_SUBPASS_EXTERNAL
+				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+				, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT
+				, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
+				, VK_ACCESS_MEMORY_READ_BIT
+				, VK_DEPENDENCY_BY_REGION_BIT } };
+		ashes::RenderPassCreateInfo createInfo{ 0u
+			, std::move( attachments )
+			, std::move( subpasses )
+			, std::move( dependencies ) };
 		m_renderPass = device->createRenderPass( "OpaquePass"
 			, std::move( createInfo ) );
 
@@ -155,10 +137,8 @@ namespace castor3d
 		}
 
 		m_frameBuffer = m_renderPass->createFrameBuffer( "OpaquePass"
-			, {
-				gpResult[DsTexture::eDepth].getTexture()->getWidth(),
-				gpResult[DsTexture::eDepth].getTexture()->getHeight(),
-			}
+			, { gpResult[DsTexture::eDepth].getTexture()->getWidth()
+				, gpResult[DsTexture::eDepth].getTexture()->getHeight() }
 			, std::move( attaches ) );
 		m_nodesCommands = device.graphicsCommandPool->createCommandBuffer( "OpaquePass" );
 	}
@@ -175,25 +155,19 @@ namespace castor3d
 	ashes::Semaphore const & OpaquePass::render( RenderDevice const & device
 		, ashes::Semaphore const & toWait )
 	{
-		static ashes::VkClearValueArray const clearValues
-		{
-			defaultClearDepthStencil,
-			transparentBlackClearColor,
-			transparentBlackClearColor,
-			transparentBlackClearColor,
-			transparentBlackClearColor,
-			transparentBlackClearColor,
-		};
+		static ashes::VkClearValueArray const clearValues{ defaultClearDepthStencil
+			, transparentBlackClearColor
+			, transparentBlackClearColor
+			, transparentBlackClearColor
+			, transparentBlackClearColor
+			, transparentBlackClearColor };
 
 		auto * result = &toWait;
 		auto timerBlock = getTimer().start();
 
 		m_nodesCommands->begin();
-		m_nodesCommands->beginDebugBlock(
-			{
-				"Deferred - Geometry",
-				makeFloatArray( getEngine()->getNextRainbowColour() ),
-			} );
+		m_nodesCommands->beginDebugBlock( { "Deferred - Geometry"
+				, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
 		timerBlock->beginPass( *m_nodesCommands );
 		timerBlock->notifyPassRender();
 		m_nodesCommands->beginRenderPass( getRenderPass()

@@ -265,6 +265,8 @@ namespace castor3d
 		VoxelizerUbo m_vctConfigUbo;
 		DepthPassUPtr m_depthPass;
 		VoxelizerUPtr m_voxelizer;
+		LightVolumePassResultUPtr m_lpvResult;
+		LightVolumePassResultArray m_llpvResult;
 		ashes::RenderPassPtr m_bgRenderPass;
 		ashes::FrameBufferPtr m_bgFrameBuffer;
 		ashes::CommandBufferPtr m_bgCommandBuffer;
@@ -277,8 +279,6 @@ namespace castor3d
 		ShadowMapUPtr m_directionalShadowMap;
 		ShadowMapUPtr m_pointShadowMap;
 		ShadowMapUPtr m_spotShadowMap;
-		LightVolumePassResultUPtr m_lpvResult;
-		LightVolumePassResultArray m_llpvResult;
 		CommandsSemaphore m_clearLpv;
 		DebugConfig m_debugConfig;
 		DeferredRenderingUPtr m_deferredRendering;
