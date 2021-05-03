@@ -268,10 +268,10 @@ namespace GuiCommon
 		}
 	}
 
-	RenderWindowSPtr loadScene( Engine & engine
+	RenderTargetSPtr loadScene( Engine & engine
 		, castor::Path const & fileName )
 	{
-		RenderWindowSPtr result;
+		RenderTargetSPtr result;
 
 		if ( castor::File::fileExists( fileName ) )
 		{
@@ -285,7 +285,7 @@ namespace GuiCommon
 
 					if ( parser.parseFile( fileName ) )
 					{
-						result = parser.getRenderWindow();
+						result = parser.getRenderWindow().renderTarget;
 					}
 					else
 					{

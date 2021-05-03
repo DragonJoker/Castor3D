@@ -25,13 +25,14 @@ namespace castortd
 		: public wxPanel
 	{
 	public:
-		RenderPanel( wxWindow * p_parent, wxSize const & p_size, Game & p_game );
+		RenderPanel( wxWindow * parent, wxSize const & size, Game & game );
 		~RenderPanel();
-		void setRenderWindow( castor3d::RenderWindowSPtr p_window );
+		void reset();
+		void setRenderTarget( castor3d::RenderTargetSPtr target );
 
-		inline castor3d::RenderWindowSPtr getRenderWindow()const
+		inline castor3d::RenderWindow const & getRenderWindow()const
 		{
-			return m_renderWindow.lock();
+			return *m_renderWindow;
 		}
 
 	private:
@@ -39,36 +40,36 @@ namespace castortd
 		float doTransformY( int y );
 		int doTransformX( float x );
 		int doTransformY( float y );
-		void doUpdateSelectedGeometry( castor3d::GeometrySPtr p_geometry );
+		void doUpdateSelectedGeometry( castor3d::GeometrySPtr geometry );
 		void doUpgradeTowerDamage();
 		void doUpgradeTowerSpeed();
 		void doUpgradeTowerRange();
-		void doStartTimer( TimerID p_id );
-		void doStopTimer( TimerID p_id );
+		void doStartTimer( TimerID id );
+		void doStopTimer( TimerID id );
 
 		DECLARE_EVENT_TABLE()
-		void OnSize( wxSizeEvent & p_event );
-		void OnMove( wxMoveEvent & p_event );
-		void OnPaint( wxPaintEvent & p_event );
-		void OnsetFocus( wxFocusEvent & p_event );
-		void OnKillFocus( wxFocusEvent & p_event );
-		void onKeyDown( wxKeyEvent & p_event );
-		void onKeyUp( wxKeyEvent & p_event );
-		void OnMouseLdown( wxMouseEvent & p_event );
-		void OnMouseLUp( wxMouseEvent & p_event );
-		void OnMouseRUp( wxMouseEvent & p_event );
-		void OnMouseMove( wxMouseEvent & p_event );
-		void OnMouseWheel( wxMouseEvent & p_event );
-		void OnMouseTimer( wxTimerEvent & p_event );
-		void OnTimerUp( wxTimerEvent & p_event );
-		void OnTimerDown( wxTimerEvent & p_event );
-		void OnTimerLeft( wxTimerEvent & p_event );
-		void OnTimerRight( wxTimerEvent & p_event );
-		void OnNewLongRangeTower( wxCommandEvent & p_event );
-		void OnNewShortRangeTower( wxCommandEvent & p_event );
-		void OnUpgradeTowerSpeed( wxCommandEvent & p_event );
-		void OnUpgradeTowerRange( wxCommandEvent & p_event );
-		void OnUpgradeTowerDamage( wxCommandEvent & p_event );
+		void OnSize( wxSizeEvent & event );
+		void OnMove( wxMoveEvent & event );
+		void OnPaint( wxPaintEvent & event );
+		void OnsetFocus( wxFocusEvent & event );
+		void OnKillFocus( wxFocusEvent & event );
+		void onKeyDown( wxKeyEvent & event );
+		void onKeyUp( wxKeyEvent & event );
+		void OnMouseLdown( wxMouseEvent & event );
+		void OnMouseLUp( wxMouseEvent & event );
+		void OnMouseRUp( wxMouseEvent & event );
+		void OnMouseMove( wxMouseEvent & event );
+		void OnMouseWheel( wxMouseEvent & event );
+		void OnMouseTimer( wxTimerEvent & event );
+		void OnTimerUp( wxTimerEvent & event );
+		void OnTimerDown( wxTimerEvent & event );
+		void OnTimerLeft( wxTimerEvent & event );
+		void OnTimerRight( wxTimerEvent & event );
+		void OnNewLongRangeTower( wxCommandEvent & event );
+		void OnNewShortRangeTower( wxCommandEvent & event );
+		void OnUpgradeTowerSpeed( wxCommandEvent & event );
+		void OnUpgradeTowerRange( wxCommandEvent & event );
+		void OnUpgradeTowerDamage( wxCommandEvent & event );
 
 	private:
 		float m_x{ 0.0f };
@@ -78,7 +79,7 @@ namespace castortd
 		bool m_mouseLeftDown{ false };
 		std::array< wxTimer *, size_t( TimerID::eCount ) > m_timers;
 		GuiCommon::NodeStatePtr m_cameraState;
-		castor3d::RenderWindowWPtr m_renderWindow;
+		castor3d::RenderWindowSPtr m_renderWindow;
 		castor3d::FrameListenerSPtr m_listener;
 		castor3d::GeometryWPtr m_selectedGeometry;
 		castor3d::SceneNodeSPtr m_marker;

@@ -54,19 +54,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates a render context.
-		 *\remarks		If the main context has not been created yet, the first created context will become the main context.
-						For asynchronous render loop, this means that the calling thread won't have associated context, preventing calls to renderSyncFrame.
-		 *\param[in]	handle	The native window handle.
 		 *\param[in]	window	The render window used to initialise the render context, receives the context.
 		 *\~french
 		 *\brief		Crée un contexte de rendu.
-		 *\remarks		Si le contexte principal n'a pas encore été créé, le premier contexte créé deviendra le contexte principal.
-						Pour la boucles de rendu asynchrone, cela signifie que le thread appelant cette fonction sera sans contexte associé, prévenant l'appel de renderSyncFrame.
-		 *\param[in]	handle	Le handle de la fenêtre native.
 		 *\param[in]	window	La fenêtre de rendu utilisée pour initialiser le contexte de rendu, recevra le contexte.
 		 */
-		C3D_API void createDevice( ashes::WindowHandle handle
-			, RenderWindow & window );
+		C3D_API void createDevice( RenderWindow & window );
 		/**
 		 *\~english
 		 *\brief		Show or hide debug overlays.
@@ -193,17 +186,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Asks for render context creation.
-		 *\param[in]	handle	The native window handle.
-		 *\param[in]	window	The render window used to initialise the render context, receives the context.
+		 *\param[in]	window	The render window used to initialise the render context.
 		 *\return		The created context, or the existing one.
 		 *\~french
 		 *\brief		Demande la création du contexte de rendu.
-		 *\param[in]	handle	Le handle de la fenêtre native.
-		 *\param[in]	window	La fenêtre de rendu utilisée pour initialiser le contexte de rendu, recevra le contexte.
+		 *\param[in]	window	La fenêtre de rendu utilisée pour initialiser le contexte de rendu.
 		 *\return		Le contexte créé, ou l'existant.
 		 */
-		C3D_API RenderDeviceSPtr doCreateDevice( ashes::WindowHandle handle
-			, RenderWindow & window );
+		C3D_API RenderDeviceSPtr doCreateDevice( RenderWindow const & window );
 		/**
 		 *\~english
 		 *\brief		Starts threaded render loop.
@@ -216,15 +206,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Asks for main render context creation.
-		 *\param[in]	handle	The native window handle.
-		 *\param[in]	window	The render window used to initialise the render context, receives the context.
+		 *\param[in]	window	The render window used to initialise the render context.
 		 *\~french
 		 *\brief		Demande la création du contexte de rendu principal.
-		 *\param[in]	handle	Le handle de la fenêtre native.
-		 *\param[in]	window	La fenêtre de rendu utilisée pour initialiser le contexte de rendu, recevra le contexte.
+		 *\param[in]	window	La fenêtre de rendu utilisée pour initialiser le contexte de rendu.
 		 */
-		C3D_API virtual RenderDeviceSPtr doCreateMainDevice( ashes::WindowHandle handle
-			, RenderWindow & window ) = 0;
+		C3D_API virtual RenderDeviceSPtr doCreateMainDevice( RenderWindow const & window ) = 0;
 
 	private:
 		struct TechniqueQueues

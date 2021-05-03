@@ -342,16 +342,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			if ( parsingContext->window )
-			{
-				CU_ParsingError( cuT( "Can't create more than one render window" ) );
-			}
-			else
-			{
-				String name;
-				params[0]->get( name );
-				parsingContext->window = parsingContext->scene->getEngine()->getRenderWindowCache().add( name );
-			}
+			params[0]->get( parsingContext->window.name );
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eWindow )
@@ -394,16 +385,8 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserWindowRenderTarget )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
-
-		if ( parsingContext->window )
-		{
-			parsingContext->renderTarget = parsingContext->m_pParser->getEngine()->getRenderTargetCache().add( TargetType::eWindow );
-			parsingContext->iInt16 = 0;
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No window initialised." ) );
-		}
+		parsingContext->renderTarget = parsingContext->m_pParser->getEngine()->getRenderTargetCache().add( TargetType::eWindow );
+		parsingContext->iInt16 = 0;
 	}
 	CU_EndAttributePush( CSCNSection::eRenderTarget )
 
@@ -411,15 +394,9 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 
-		if ( !parsingContext->window )
+		if ( !params.empty() )
 		{
-			CU_ParsingError( cuT( "No window initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			bool value;
-			params[0]->get( value );
-			parsingContext->window->enableVSync( value );
+			params[0]->get( parsingContext->window.enableVSync );
 		}
 	}
 	CU_EndAttribute()
@@ -428,16 +405,10 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 
-		if ( !parsingContext->window )
-		{
-			CU_ParsingError( cuT( "No window initialised." ) );
-		}
-		else if ( !params.empty() )
+		if ( !params.empty() )
 		{
 
-			bool value;
-			params[0]->get( value );
-			parsingContext->window->setFullscreen( value );
+			params[0]->get( parsingContext->window.fullscreen );
 		}
 	}
 	CU_EndAttribute()
@@ -638,7 +609,7 @@ namespace castor3d
 		}
 		else
 		{
-			parsingContext->window->setRenderTarget( parsingContext->renderTarget );
+			parsingContext->window.renderTarget = parsingContext->renderTarget;
 		}
 	}
 	CU_EndAttributePop()
@@ -4317,6 +4288,7 @@ namespace castor3d
 				{
 					parsingContext->textureUnit->setConfiguration( parsingContext->textureConfiguration );
 					parsingContext->pass->addTextureUnit( std::move( parsingContext->textureUnit ) );
+					parsingContext->renderTarget = nullptr;
 				}
 				else if ( parsingContext->folder.empty() && parsingContext->relative.empty() )
 				{

@@ -27,31 +27,6 @@ namespace castor3d
 
 	namespace
 	{
-		SamplerSPtr doCreateSampler( Engine & engine
-			, RenderDevice const & device
-			, castor::String const & name )
-		{
-			SamplerSPtr result;
-			auto & cache = engine.getSamplerCache();
-
-			if ( cache.has( name ) )
-			{
-				result = cache.find( name );
-			}
-			else
-			{
-				result = engine.getSamplerCache().add( cuT( "TextureProjection" ) );
-				result->setMinFilter( VK_FILTER_NEAREST );
-				result->setMagFilter( VK_FILTER_NEAREST );
-				result->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				result->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				result->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				result->initialise( device );
-			}
-
-			return result;
-		}
-
 		TextureLayoutSPtr createTexture( Engine & engine
 			, RenderDevice const & device
 			, castor::String const & name
@@ -185,6 +160,7 @@ namespace castor3d
 		m_subsurfaceScattering->cleanup( m_device );
 		m_ssao->cleanup( m_device );
 		m_linearisePass->cleanup( m_device );
+		m_opaquePassResult.cleanup();
 	}
 
 	void DeferredRendering::update( CpuUpdater & updater )

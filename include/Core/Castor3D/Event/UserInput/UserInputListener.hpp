@@ -74,14 +74,14 @@ namespace castor3d
 			return m_mouse.position;
 		}
 
-		inline EventHandlerSPtr getActiveControl()const
+		inline EventHandler * getActiveControl()const
 		{
-			return m_activeHandler.lock();
+			return m_activeHandler;
 		}
 
-		inline EventHandlerSPtr getFocusedControl()const
+		inline EventHandler * getFocusedControl()const
 		{
-			return m_lastMouseTarget.lock();
+			return m_lastMouseTarget;
 		}
 
 		inline FrameListener & getFrameListener()const
@@ -371,7 +371,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les gestionnaires, de manière thread-safe.
 		 */
-		inline std::vector< EventHandlerSPtr > doGetHandlers()const
+		inline std::vector< EventHandler * > doGetHandlers()const
 		{
 			auto lock( castor::makeUniqueLock( m_mutexHandlers ) );
 			return m_handlers;
@@ -397,7 +397,7 @@ namespace castor3d
 		 *\remarks		Vous *DEVEZ* appeler cette fonction lors de l'ajout d'un gestionnaire dans vos listes, si vous voulez qu'il soit mis à jour.
 		 *\param[in]	handler	Le gestionnaire.
 		 */
-		inline void doAddHandler( EventHandlerSPtr handler )
+		inline void doAddHandler( EventHandler * handler )
 		{
 			auto lock( castor::makeUniqueLock( m_mutexHandlers ) );
 
@@ -418,7 +418,7 @@ namespace castor3d
 		 *\remarks		Vous *DEVEZ* appeler cette fonction lors de l'ajout d'un gestionnaire dans vos listes, si vous voulez qu'il soit mis à jour.
 		 *\param[in]	handler	Le gestionnaire.
 		 */
-		inline void doRemoveHandler( EventHandlerSPtr handler )
+		inline void doRemoveHandler( EventHandler * handler )
 		{
 			auto lock( castor::makeUniqueLock( m_mutexHandlers ) );
 			m_handlers.erase( std::find( std::begin( m_handlers ), std::end( m_handlers ), handler ) );
@@ -435,7 +435,7 @@ namespace castor3d
 		 *\param[in]	position	la position de la souris.
 		 *\return		Le gestionnaire, \p nullptr si aucun.
 		 */
-		C3D_API virtual EventHandlerSPtr doGetMouseTargetableHandler( castor::Position const & position )const = 0;
+		C3D_API virtual EventHandler * doGetMouseTargetableHandler( castor::Position const & position )const = 0;
 
 		/**@name General */
 		//@{
@@ -457,7 +457,7 @@ namespace castor3d
 		mutable std::mutex m_mutexHandlers;
 		//!\~english	The handlers array.
 		//!\~french		Le tableau de gestionnaires.
-		std::vector< EventHandlerSPtr > m_handlers;
+		std::vector< EventHandler * > m_handlers;
 		//!\~english	The associated frame listener.
 		//!\~french		Le frame listener associé.
 		FrameListenerSPtr m_frameListener;
@@ -466,8 +466,8 @@ namespace castor3d
 		MouseState m_mouse;
 		KeyboardState m_keyboard;
 		bool m_enabled{};
-		EventHandlerWPtr m_activeHandler;
-		EventHandlerWPtr m_lastMouseTarget;
+		EventHandler * m_activeHandler{};
+		EventHandler * m_lastMouseTarget{};
 		std::map< castor::String, OnMouseMoveActionFunction > m_onMouseMoveActions;
 		std::map< castor::String, OnClickActionFunction > m_onClickActions;
 		std::map< castor::String, OnSelectActionFunction > m_onSelectActions;

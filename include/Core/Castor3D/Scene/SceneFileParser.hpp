@@ -17,6 +17,7 @@ See LICENSE file in root folder
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Material/Pass/SubsurfaceScattering.hpp"
+#include "Castor3D/Render/RenderWindow.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 
 #include <CastorUtils/FileParser/FileParser.hpp>
@@ -108,7 +109,7 @@ namespace castor3d
 
 	public:
 		SceneSPtr scene;
-		RenderWindowSPtr window;
+		RenderWindowDesc window;
 		SceneNodeSPtr sceneNode;
 		GeometrySPtr geometry;
 		MeshSPtr mesh;
@@ -207,7 +208,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La fenêtre de rendu définie par la scène.
 		 */
-		C3D_API RenderWindowSPtr getRenderWindow();
+		C3D_API RenderWindowDesc getRenderWindow();
 		/**
 		 *\~english
 		 *\brief		Parses the given file (expecting it to be in CSCN file format).
@@ -261,7 +262,7 @@ namespace castor3d
 	private:
 		castor::String m_strSceneFilePath;
 		ScenePtrStrMap m_mapScenes;
-		RenderWindowSPtr m_renderWindow;
+		RenderWindowDesc m_renderWindow;
 
 		UInt32StrMap m_mapBlendFactors;
 		UInt32StrMap m_mapTypes;

@@ -25,6 +25,7 @@
 #include <SceneExporter/ObjExporter.hpp>
 
 #include <Castor3D/Cache/SceneCache.hpp>
+#include <Castor3D/Cache/TargetCache.hpp>
 #include <Castor3D/Cache/WindowCache.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>
@@ -138,9 +139,14 @@ namespace CastorViewer
 			doPopulateToolBar( splashScreen );
 			wxIcon icon = wxIcon( castor_xpm );
 			SetIcon( icon );
-			doInitialiseGUI();
-			doInitialisePerspectives();
 			result = doInitialise3D();
+
+			if ( result )
+			{
+				doInitialiseGUI();
+				doInitialiseTimers();
+				doInitialisePerspectives();
+			}
 		}
 
 		Show( result );
@@ -165,45 +171,35 @@ namespace CastorViewer
 					engine->getRenderLoop().pause();
 				}
 
-				m_renderPanel->resetRenderWindow();
 				doCleanupScene();
-				RenderWindowSPtr window = GuiCommon::loadScene( *engine, m_filePath );
+				RenderTargetSPtr target = GuiCommon::loadScene( *engine, m_filePath );
 
-				if ( window )
+				if ( target )
 				{
-					m_renderPanel->setRenderWindow( window );
+					m_renderPanel->setTarget( target );
+					m_mainScene = target->getScene();
 
-					if ( window->isInitialised() )
+					auto size = make_wxSize( target->getSize() );
+
+					if ( !IsMaximized() )
 					{
-						m_mainScene = window->getScene();
-
-						auto size = make_wxSize( window->getRenderTarget()->getSize() );
-
-						if ( !IsMaximized() )
-						{
-							SetClientSize( size );
-							SetPosition( wxPoint{} );
-						}
-						else
-						{
-							m_renderPanel->disableWindowResize();
-							Maximize( false );
-							SetPosition( wxPoint{} );
-							SetClientSize( size );
-							m_renderPanel->enableWindowResize();
-						}
-
-#if wxCHECK_VERSION( 2, 9, 0 )
-
-						SetMinClientSize( size );
-
-#endif
-						toggleFullScreen( window->isFullscreen() );
+						SetClientSize( size );
+						SetPosition( wxPoint{} );
 					}
 					else
 					{
-						wxMessageBox( _( "Can't initialise the render window.\nLook into CastorViewer.log for more details" ) );
+						m_renderPanel->disableWindowResize();
+						Maximize( false );
+						SetPosition( wxPoint{} );
+						SetClientSize( size );
+						m_renderPanel->enableWindowResize();
 					}
+
+#if wxCHECK_VERSION( 2, 9, 0 )
+
+					SetMinClientSize( size );
+
+#endif
 
 					if ( isCastor3DThreaded )
 					{
@@ -283,6 +279,67 @@ namespace CastorViewer
 		if ( m_sceneObjects && m_sceneObjects->getList() )
 		{
 			m_sceneObjects->getList()->select( geometry, submesh );
+		}
+	}
+
+	bool MainFrame::doInitialise3D()
+	{
+		auto engine = wxGetApp().getCastor();
+		bool result = true;
+		Logger::logInfo( cuT( "Initialising Castor3D" ) );
+
+		try
+		{
+			if ( !wxGetApp().isUnlimitedFps() )
+			{
+				engine->initialise( wantedFPS, isCastor3DThreaded );
+			}
+			else
+			{
+				engine->initialise( 1000u, isCastor3DThreaded );
+			}
+
+			Logger::logInfo( cuT( "Castor3D Initialised" ) );
+		}
+		catch ( std::exception & exc )
+		{
+			wxMessageBox( _( "Problem occured while initialising Castor3D." ) + wxString( wxT( "\n" ) ) + wxString( exc.what(), wxMBConvLibc() ), _( "Exception" ), wxOK | wxCENTRE | wxICON_ERROR );
+			result = false;
+		}
+		catch ( ... )
+		{
+			wxMessageBox( _( "Problem occured while initialising Castor3D.\nLook at CastorViewer.log for more details" ), _( "Exception" ), wxOK | wxCENTRE | wxICON_ERROR );
+			result = false;
+		}
+
+		return result;
+	}
+
+	void MainFrame::doInitialiseTimers()
+	{
+		auto engine = wxGetApp().getCastor();
+
+		if ( !isCastor3DThreaded && !m_timer )
+		{
+			m_timer = new wxTimer( this, eID_RENDER_TIMER );
+			m_timer->Start( 1000 / engine->getRenderLoop().getWantedFps() );
+		}
+
+		if ( !m_timerMsg )
+		{
+			m_timerMsg = new wxTimer( this, eID_MSGLOG_TIMER );
+			m_timerMsg->Start( 100 );
+		}
+
+		if ( !m_timerErr )
+		{
+			m_timerErr = new wxTimer( this, eID_ERRLOG_TIMER );
+			m_timerErr->Start( 100 );
+		}
+
+		if ( !m_fpsTimer )
+		{
+			m_fpsTimer = new wxTimer( this, eID_FPS_TIMER );
 		}
 	}
 
@@ -376,62 +433,6 @@ namespace CastorViewer
 		m_sceneTabsContainer->ChangeSelection( 0u );
 
 		m_auiManager.Update();
-	}
-
-	bool MainFrame::doInitialise3D()
-	{
-		auto engine = wxGetApp().getCastor();
-		bool result = true;
-		Logger::logInfo( cuT( "Initialising Castor3D" ) );
-
-		try
-		{
-			if ( !wxGetApp().isUnlimitedFps() )
-			{
-				engine->initialise( wantedFPS, isCastor3DThreaded );
-			}
-			else
-			{
-				engine->initialise( 1000u, isCastor3DThreaded );
-			}
-
-			Logger::logInfo( cuT( "Castor3D Initialised" ) );
-
-			if ( !isCastor3DThreaded && !m_timer )
-			{
-				m_timer = new wxTimer( this, eID_RENDER_TIMER );
-				m_timer->Start( 1000 / engine->getRenderLoop().getWantedFps() );
-			}
-
-			if ( !m_timerMsg )
-			{
-				m_timerMsg = new wxTimer( this, eID_MSGLOG_TIMER );
-				m_timerMsg->Start( 100 );
-			}
-
-			if ( !m_timerErr )
-			{
-				m_timerErr = new wxTimer( this, eID_ERRLOG_TIMER );
-				m_timerErr->Start( 100 );
-			}
-
-			if ( !m_fpsTimer )
-			{
-				m_fpsTimer = new wxTimer( this, eID_FPS_TIMER );
-			}
-		}
-		catch ( std::exception & exc )
-		{
-			wxMessageBox( _( "Problem occured while initialising Castor3D." ) + wxString( wxT( "\n" ) ) + wxString( exc.what(), wxMBConvLibc() ), _( "Exception" ), wxOK | wxCENTRE | wxICON_ERROR );
-			result = false;
-		}
-		catch ( ... )
-		{
-			wxMessageBox( _( "Problem occured while initialising Castor3D.\nLook at CastorViewer.log for more details" ), _( "Exception" ), wxOK | wxCENTRE | wxICON_ERROR );
-			result = false;
-		}
-
-		return result;
 	}
 
 	bool MainFrame::doInitialiseImages()
@@ -603,10 +604,17 @@ namespace CastorViewer
 			m_mainCamera.reset();
 			m_sceneNode.reset();
 			auto engine = wxGetApp().getCastor();
-			engine->getRenderWindowCache().cleanup();
+			m_renderPanel->reset();
 			scene->cleanup();
 			engine->getRenderLoop().renderSyncFrame();
-			engine->getRenderWindowCache().clear();
+
+			auto target = m_renderPanel->getRenderWindow()->getRenderTarget();
+
+			if ( target )
+			{
+				engine->getRenderTargetCache().remove( target );
+			}
+
 			engine->getRenderLoop().cleanup();
 			engine->getSceneCache().remove( scene->getName() );
 			Logger::logDebug( cuT( "MainFrame::doCleanupScene - Scene related objects unloaded." ) );
@@ -912,7 +920,7 @@ namespace CastorViewer
 					castor->getRenderLoop().pause();
 				}
 
-				m_renderPanel->resetRenderWindow();
+				m_renderPanel->reset();
 
 				if ( castor->isThreaded() )
 				{
@@ -924,7 +932,7 @@ namespace CastorViewer
 		}
 		else if ( m_renderPanel )
 		{
-			m_renderPanel->resetRenderWindow();
+			m_renderPanel->reset();
 		}
 
 		if ( m_renderPanel )

@@ -6,6 +6,7 @@
 
 #include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>
+#include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
 
 #include <wx/sizer.h>
@@ -66,39 +67,35 @@ namespace castortd
 	void MainFrame::doLoadScene()
 	{
 		auto & engine = *wxGetApp().getCastor();
-		auto window = GuiCommon::loadScene( engine
+		auto target = GuiCommon::loadScene( engine
 			, File::getExecutableDirectory().getPath() / cuT( "share" ) / cuT( "CastorDvpTD" ) / cuT( "Data.zip" ) );
 
-		if ( window )
+		if ( target )
 		{
-			m_game = std::make_unique< Game >( *window->getScene() );
+			m_game = std::make_unique< Game >( *target->getScene() );
 			m_panel = wxMakeWindowPtr< RenderPanel >( this, MainFrameSize, *m_game );
-			m_panel->setRenderWindow( window );
+			m_panel->setRenderTarget( target );
+			auto & window = m_panel->getRenderWindow();
 
-			if ( window->isInitialised() )
+			if ( window.isFullscreen() )
 			{
-				if ( window->isFullscreen() )
-				{
-					ShowFullScreen( true, wxFULLSCREEN_ALL );
-				}
+				ShowFullScreen( true, wxFULLSCREEN_ALL );
+			}
 
-				if ( !IsMaximized() )
-				{
-					SetClientSize( window->getSize().getWidth(), window->getSize().getHeight() );
-				}
-				else
-				{
-					Maximize( false );
-					SetClientSize( window->getSize().getWidth(), window->getSize().getHeight() );
-					Maximize();
-				}
-
-				Logger::logInfo( cuT( "Scene file read" ) );
+			if ( !IsMaximized() )
+			{
+				SetClientSize( window.getSize().getWidth()
+					, window.getSize().getHeight() );
 			}
 			else
 			{
-				throw std::runtime_error{ "Impossible d'initialiser la fenêtre de rendu." };
+				Maximize( false );
+				SetClientSize( window.getSize().getWidth()
+					, window.getSize().getHeight() );
+				Maximize();
 			}
+
+			Logger::logInfo( cuT( "Scene file read" ) );
 
 #if wxCHECK_VERSION( 2, 9, 0 )
 
@@ -155,7 +152,7 @@ namespace castortd
 				wxGetApp().getCastor()->getRenderLoop().pause();
 			}
 
-			m_panel->setRenderWindow( nullptr );
+			m_panel->reset();
 
 			if ( wxGetApp().getCastor()->isThreaded() )
 			{
