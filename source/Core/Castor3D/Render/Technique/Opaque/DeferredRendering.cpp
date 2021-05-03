@@ -213,10 +213,6 @@ namespace castor3d
 		if ( m_ssaoConfig.enabled )
 		{
 			result = &m_linearisePass->linearise( device, *result );
-		}
-
-		if ( m_ssaoConfig.enabled )
-		{
 			result = &m_ssao->render( *result );
 		}
 
