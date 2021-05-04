@@ -192,17 +192,6 @@ namespace castor3d
 		return *m_vertexBuffer;
 	}
 
-	inline bool Submesh::hasVertexLayout()const
-	{
-		return ( m_vertexLayout != nullptr );
-	}
-
-	inline ashes::PipelineVertexInputStateCreateInfo const & Submesh::getVertexLayout()const
-	{
-		CU_Require( hasVertexLayout() );
-		return *m_vertexLayout;
-	}
-
 	inline bool Submesh::hasIndexBuffer()const
 	{
 		return ( m_indexBuffer != nullptr );

@@ -15,16 +15,18 @@ namespace castor3d
 	namespace
 	{
 		size_t hash( MaterialSPtr material
-			, TextureFlagsArray const & flags )
+			, ShaderFlags const & shaderFlags
+			, TextureFlagsArray const & mask )
 		{
 			auto result = std::hash< MaterialSPtr >{}( material );
 
-			for ( auto const & flagId : flags )
+			for ( auto const & flagId : mask )
 			{
 				result = castor::hashCombine( result, flagId.id );
 				result = castor::hashCombine( result, flagId.flags.value() );
 			}
 
+			result = castor::hashCombine( result, shaderFlags.value() );
 			return result;
 		}
 
@@ -93,6 +95,43 @@ namespace castor3d
 			static castor::Point3f const defaultValue{ 0.0f, 0.0f, 0.0f };
 			return fix( value, defaultValue );
 		}
+
+		ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout( ShaderFlags const & flags
+			, bool hasTextures )
+		{
+			ashes::VkVertexInputBindingDescriptionArray bindings{ { 0u
+				, sizeof( InterleavedVertex ), VK_VERTEX_INPUT_RATE_VERTEX } };
+			ashes::VkVertexInputAttributeDescriptionArray attributes{ 1u, { SceneRenderPass::VertexInputs::PositionLocation
+				, 0u
+				, VK_FORMAT_R32G32B32_SFLOAT
+				, offsetof( InterleavedVertex, pos ) } };
+
+			if ( checkFlag( flags, ShaderFlag::eNormal ) )
+			{
+				attributes.push_back( { SceneRenderPass::VertexInputs::NormalLocation
+					, 0u
+					, VK_FORMAT_R32G32B32_SFLOAT
+					, offsetof( InterleavedVertex, nml ) } );
+			}
+
+			if ( checkFlag( flags, ShaderFlag::eTangentSpace ) )
+			{
+				attributes.push_back( { SceneRenderPass::VertexInputs::TangentLocation
+					, 0u
+					, VK_FORMAT_R32G32B32_SFLOAT
+					, offsetof( InterleavedVertex, tan ) } );
+			}
+
+			if ( hasTextures )
+			{
+				attributes.push_back( { SceneRenderPass::VertexInputs::TextureLocation
+					, 0u
+					, VK_FORMAT_R32G32B32_SFLOAT
+					, offsetof( InterleavedVertex, tex ) } );
+			}
+
+			return ashes::PipelineVertexInputStateCreateInfo{ 0u, bindings, attributes };
+		}
 	}
 
 	Submesh::Submesh( Mesh & mesh, uint32_t id )
@@ -125,37 +164,6 @@ namespace castor3d
 				component.second->initialise( device );
 				component.second->fill( device );
 				component.second->upload();
-			}
-
-			if ( !m_vertexLayout )
-			{
-				m_vertexLayout = std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
-					, ashes::VkVertexInputBindingDescriptionArray
-					{
-						{ 0u, sizeof( InterleavedVertex ), VK_VERTEX_INPUT_RATE_VERTEX },
-					}
-					, ashes::VkVertexInputAttributeDescriptionArray
-					{
-						{ SceneRenderPass::VertexInputs::PositionLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, pos ) },
-						{ SceneRenderPass::VertexInputs::NormalLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, nml ) },
-						{ SceneRenderPass::VertexInputs::TangentLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, tan ) },
-						{ SceneRenderPass::VertexInputs::TextureLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, tex ) },
-					} );
-			}
-
-			if ( !m_vertexLayoutNoTex )
-			{
-				m_vertexLayoutNoTex = std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
-					, ashes::VkVertexInputBindingDescriptionArray
-					{
-						{ 0u, sizeof( InterleavedVertex ), VK_VERTEX_INPUT_RATE_VERTEX },
-					}
-					, ashes::VkVertexInputAttributeDescriptionArray
-					{
-						{ SceneRenderPass::VertexInputs::PositionLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, pos ) },
-						{ SceneRenderPass::VertexInputs::NormalLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, nml ) },
-						{ SceneRenderPass::VertexInputs::TangentLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, tan ) },
-					} );
 			}
 
 			m_generated = true;
@@ -398,11 +406,12 @@ namespace castor3d
 		}
 	}
 
-	GeometryBuffers const & Submesh::getGeometryBuffers( MaterialSPtr material
+	GeometryBuffers const & Submesh::getGeometryBuffers( ShaderFlags const & flags
+		, MaterialSPtr material
 		, uint32_t instanceMult
 		, TextureFlagsArray const & mask )const
 	{
-		auto key = hash( material, mask );
+		auto key = hash( material, flags, mask );
 		auto it = m_geometryBuffers.find( key );
 
 		if ( it == m_geometryBuffers.end() )
@@ -412,19 +421,27 @@ namespace castor3d
 			ashes::PipelineVertexInputStateCreateInfoCRefArray layouts;
 			buffers.emplace_back( m_vertexBuffer->getBuffer() );
 			offsets.emplace_back( 0u );
+			auto hash = std::hash< ShaderFlags::BaseType >{}( flags );
+			hash = castor::hashCombine( hash, mask.empty() );
 
-			if ( !mask.empty() )
+			auto layoutIt = m_vertexLayouts.find( hash );
+
+			if ( layoutIt == m_vertexLayouts.end() )
 			{
-				layouts.emplace_back( *m_vertexLayout );
+				layoutIt = m_vertexLayouts.emplace( hash, doCreateVertexLayout( flags, !mask.empty() ) ).first;
 			}
-			else
-			{
-				layouts.emplace_back( *m_vertexLayoutNoTex );
-			}
+
+			layouts.push_back( layoutIt->second );
 
 			for ( auto & component : m_components )
 			{
-				component.second->gather( material, buffers, offsets, layouts, instanceMult );
+				component.second->gather( flags
+					, material
+					, buffers
+					, offsets
+					, layouts
+					, instanceMult
+					, mask );
 			}
 
 			GeometryBuffers result;

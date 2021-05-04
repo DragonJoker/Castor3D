@@ -21,6 +21,8 @@ See LICENSE file in root folder
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
 
+#include <unordered_map>
+
 namespace castor3d
 {
 	template< typename T >
@@ -224,7 +226,8 @@ namespace castor3d
 		*\~french
 		*\return		Les tampons de géométrie associés au materiau donné.
 		*/
-		C3D_API GeometryBuffers const & getGeometryBuffers( MaterialSPtr material
+		C3D_API GeometryBuffers const & getGeometryBuffers( ShaderFlags const & flags
+			, MaterialSPtr material
 			, uint32_t instanceMult
 			, TextureFlagsArray const & mask )const;
 		/**
@@ -349,8 +352,6 @@ namespace castor3d
 		inline bool hasVertexBuffer()const;
 		inline ashes::VertexBuffer< InterleavedVertex > const & getVertexBuffer()const;
 		inline ashes::VertexBuffer< InterleavedVertex > & getVertexBuffer();
-		inline bool hasVertexLayout()const;
-		inline ashes::PipelineVertexInputStateCreateInfo const & getVertexLayout()const;
 		inline bool hasIndexBuffer()const;
 		inline ashes::Buffer< uint32_t > const & getIndexBuffer()const;
 		inline ashes::Buffer< uint32_t > & getIndexBuffer();
@@ -396,9 +397,8 @@ namespace castor3d
 		bool m_dirty{ true };
 		VkPrimitiveTopology m_topology{ VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST };
 		ashes::VertexBufferPtr< InterleavedVertex > m_vertexBuffer;
-		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;
-		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayoutNoTex;
 		ashes::BufferPtr< uint32_t > m_indexBuffer;
+		mutable std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_vertexLayouts;
 		mutable std::unordered_map< size_t, GeometryBuffers > m_geometryBuffers;
 		bool m_needsNormalsCompute{ false };
 		bool m_disableSceneUpdate{ false };
