@@ -23,11 +23,13 @@ namespace castor3d
 	{
 	}
 
-	void BonesInstantiationComponent::gather( MaterialSPtr material
+	void BonesInstantiationComponent::gather( ShaderFlags const & flags
+		, MaterialSPtr material
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
-		, uint32_t instanceMult )
+		, uint32_t instanceMult
+		, TextureFlagsArray const & mask )
 	{
 	}
 

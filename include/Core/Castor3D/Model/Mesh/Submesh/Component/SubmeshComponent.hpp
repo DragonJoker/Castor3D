@@ -83,11 +83,13 @@ namespace castor3d
 		 *\~french
 		 *\brief		Récupère les tampons qui doivent aller dans un VAO.
 		 */
-		C3D_API virtual void gather( MaterialSPtr material
+		C3D_API virtual void gather( ShaderFlags const & flags
+			, MaterialSPtr material
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
-			, uint32_t instanceMult ) = 0;
+			, uint32_t instanceMult
+			, TextureFlagsArray const & mask ) = 0;
 		/**
 		 *\~english
 		 *\return		The shader program flags.

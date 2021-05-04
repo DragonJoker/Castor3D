@@ -126,16 +126,19 @@ namespace castor3d
 
 		//*****************************************************************************************
 
-		GeometryBuffers const & getGeometryBuffers( Submesh const & submesh
+		GeometryBuffers const & getGeometryBuffers( ShaderFlags const & flags
+			, Submesh const & submesh
 			, Pass const & pass
 			, uint32_t instanceCount )
 		{
-			return submesh.getGeometryBuffers( pass.getOwner()->shared_from_this()
+			return submesh.getGeometryBuffers( flags
+				, pass.getOwner()->shared_from_this()
 				, instanceCount
 				, pass.getTexturesMask() );
 		}
 
-		GeometryBuffers const & getGeometryBuffers( BillboardBase const & billboard
+		GeometryBuffers const & getGeometryBuffers( ShaderFlags const & flags
+			, BillboardBase const & billboard
 			, Pass const & pass
 			, uint32_t instanceCount )
 		{
@@ -144,6 +147,7 @@ namespace castor3d
 
 		template< typename NodeType >
 		void doAddRenderNodeCommands( RenderPipeline & pipeline
+			, ShaderFlags const & shaderFlags
 			, NodeType const & node
 			, ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
@@ -152,7 +156,8 @@ namespace castor3d
 		{
 			if ( instanceCount )
 			{
-				GeometryBuffers const & geometryBuffers = getGeometryBuffers( node.data
+				GeometryBuffers const & geometryBuffers = getGeometryBuffers( shaderFlags
+					, node.data
 					, node.passNode.pass
 					, instanceCount );
 
@@ -201,6 +206,7 @@ namespace castor3d
 		template< typename NodeType >
 		void doAddRenderNodeCommands( Pass & pass
 			, RenderPipeline & pipeline
+			, ShaderFlags const & shaderFlags
 			, NodeType const & node
 			, Submesh & object
 			, ashes::CommandBuffer const & commandBuffer
@@ -210,7 +216,8 @@ namespace castor3d
 		{
 			if ( instanceCount )
 			{
-				GeometryBuffers const & geometryBuffers = object.getGeometryBuffers( pass.getOwner()->shared_from_this()
+				GeometryBuffers const & geometryBuffers = object.getGeometryBuffers( shaderFlags
+					, pass.getOwner()->shared_from_this()
 					, instanceCount
 					, pass.getTexturesMask() );
 
@@ -261,6 +268,7 @@ namespace castor3d
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissor
 			, RenderPipeline & pipeline
+			, ShaderFlags const & shaderFlags
 			, Pass & pass
 			, Submesh & submesh
 			, CulledMapType & renderNodes
@@ -268,6 +276,7 @@ namespace castor3d
 		{
 			doAddRenderNodeCommands( pass
 				, pipeline
+				, shaderFlags
 				, *renderNodes[0]
 				, submesh
 				, commandBuffer
@@ -281,6 +290,7 @@ namespace castor3d
 			, ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissor
+			, ShaderFlags const & shaderFlags
 			, uint32_t instanceMult )
 		{
 			for ( auto & pipelines : inputNodes )
@@ -288,6 +298,7 @@ namespace castor3d
 				for ( auto & node : pipelines.second )
 				{
 					doAddRenderNodeCommands( *pipelines.first
+						, shaderFlags
 						, *node
 						, commandBuffer
 						, viewport
@@ -302,6 +313,7 @@ namespace castor3d
 			, ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissor
+			, ShaderFlags const & shaderFlags
 			, uint32_t instanceMult )
 		{
 			for ( auto & pipelines : inputNodes )
@@ -309,6 +321,7 @@ namespace castor3d
 				for ( auto & node : pipelines.second )
 				{
 					doAddRenderNodeCommands( *pipelines.first
+						, shaderFlags
 						, *node
 						, commandBuffer
 						, viewport
@@ -458,6 +471,7 @@ namespace castor3d
 					, viewport
 					, scissors
 					, pipeline
+					, queue.getOwner()->getShaderFlags()
 					, pass
 					, submesh
 					, nodes
@@ -473,6 +487,7 @@ namespace castor3d
 					, viewport
 					, scissors
 					, pipeline
+					, queue.getOwner()->getShaderFlags()
 					, pass
 					, submesh
 					, nodes
@@ -488,6 +503,7 @@ namespace castor3d
 					, viewport
 					, scissors
 					, pipeline
+					, queue.getOwner()->getShaderFlags()
 					, pass
 					, submesh
 					, nodes
@@ -503,6 +519,7 @@ namespace castor3d
 					, viewport
 					, scissors
 					, pipeline
+					, queue.getOwner()->getShaderFlags()
 					, pass
 					, submesh
 					, nodes
@@ -513,44 +530,52 @@ namespace castor3d
 			, queue.getCommandBuffer()
 			, viewport
 			, scissors
+			, queue.getOwner()->getShaderFlags()
 			, queue.getOwner()->getInstanceMult() );
 		doParseRenderNodesCommands( staticNodes.backCulled
 			, queue.getCommandBuffer()
 			, viewport
 			, scissors
+			, queue.getOwner()->getShaderFlags()
 			, queue.getOwner()->getInstanceMult() );
 
 		doParseRenderNodesCommands( skinnedNodes.frontCulled
 			, queue.getCommandBuffer()
 			, viewport
 			, scissors
+			, queue.getOwner()->getShaderFlags()
 			, queue.getOwner()->getInstanceMult() );
 		doParseRenderNodesCommands( skinnedNodes.backCulled
 			, queue.getCommandBuffer()
 			, viewport
 			, scissors
+			, queue.getOwner()->getShaderFlags()
 			, queue.getOwner()->getInstanceMult() );
 
 		doParseRenderNodesCommands( morphingNodes.frontCulled
 			, queue.getCommandBuffer()
 			, viewport
 			, scissors
+			, queue.getOwner()->getShaderFlags()
 			, queue.getOwner()->getInstanceMult() );
 		doParseRenderNodesCommands( morphingNodes.backCulled
 			, queue.getCommandBuffer()
 			, viewport
 			, scissors
+			, queue.getOwner()->getShaderFlags()
 			, queue.getOwner()->getInstanceMult() );
 
 		doParseRenderNodesCommands( billboardNodes.frontCulled
 			, queue.getCommandBuffer()
 			, viewport
 			, scissors
+			, queue.getOwner()->getShaderFlags()
 			, queue.getOwner()->getInstanceMult() );
 		doParseRenderNodesCommands( billboardNodes.backCulled
 			, queue.getCommandBuffer()
 			, viewport
 			, scissors
+			, queue.getOwner()->getShaderFlags()
 			, queue.getOwner()->getInstanceMult() );
 
 		queue.getCommandBuffer().end();
