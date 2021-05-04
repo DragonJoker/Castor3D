@@ -55,7 +55,7 @@ namespace aria
 
 	RendererPage::RendererPage( Config const & config
 		, Renderer renderer
-		, TestRunCategoryMap & runs
+		, RendererTestRuns & runs
 		, RendererTestsCounts & counts
 		, wxWindow * parent
 		, wxWindow * frame
@@ -73,7 +73,7 @@ namespace aria
 		, m_allMenu{ allMenu }
 		, m_busyMenu{ busyMenu }
 		, m_auiManager{ this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE }
-		, m_runs{ &runs }
+		, m_runs{ runs }
 		, m_counts{ counts }
 		, m_model{ new TreeModel{ m_config, renderer, counts } }
 	{
@@ -87,8 +87,7 @@ namespace aria
 
 	TreeModelNode * RendererPage::getTestNode( DatabaseTest const & test )const
 	{
-		auto it = m_modelNodes.find( test->test->id );
-		return it->second;
+		return m_model->getTestNode( test );
 	}
 
 	void RendererPage::refreshView()const
@@ -109,31 +108,33 @@ namespace aria
 		, wxProgressDialog & progress
 		, int & index )
 	{
+		for ( auto & category : database.getCategories() )
+		{
+			auto testsIt = tests.find( category.second.get() );
+			auto & catCounts = counts.addCategory( m_renderer
+				, category.second.get()
+				, testsIt->second );
+			m_model->addCategory( category.second.get(), catCounts );
+		}
+
 		database.listLatestRuns( m_renderer
 			, tests
-			, *m_runs
+			, m_runs
 			, progress
 			, index );
 
-		for ( auto & category : *m_runs )
+		for ( auto & run : m_runs )
 		{
-			auto testsIt = tests.find( category.first );
-			auto & catCounts = counts.addCategory( m_renderer
-				, category.first
-				, testsIt->second
-				, category.second );
-			m_model->addCategory( category.first, catCounts );
-
-			for ( auto & run : category.second )
-			{
-				catCounts.addTest( run );
-				auto testNode = m_model->addTest( run );
-				m_modelNodes[run->test->id] = testNode;
-				progress.Update( index++
-					, _( "Filling tests list" )
-					+ wxT( "\n" ) + getProgressDetails( run ) );
-				progress.Fit();
-			}
+			auto category = run.getCategory();
+			auto testsIt = tests.find( category );
+			auto & catCounts = counts.getCategory( m_renderer
+				, category );
+			catCounts.addTest( run );
+			auto testNode = m_model->addTest( run );
+			progress.Update( index++
+				, _( "Filling tests list" )
+				+ wxT( "\n" ) + getProgressDetails( run ) );
+			progress.Fit();
 		}
 
 		auto & rendCounts = counts.getRenderer( m_renderer );
@@ -146,66 +147,13 @@ namespace aria
 		m_allView->refresh();
 	}
 
-	uint32_t RendererPage::getSelectedRange( TestRunMap const & runs )const
-	{
-		uint32_t range = 0u;
-
-		for ( auto & item : m_selected.items )
-		{
-			auto node = static_cast< TreeModelNode * >( item.GetID() );
-
-			if ( isRendererNode( *node ) )
-			{
-				auto rendIt = runs.find( node->renderer );
-
-				if ( rendIt != runs.end() )
-				{
-					for ( auto & category : rendIt->second )
-					{
-						range += category.second.size();
-					}
-				}
-			}
-		}
-
-		return range;
-	}
-
-	uint32_t RendererPage::getSelectedCategoryRange( TestRunMap const & runs )const
-	{
-		uint32_t range = 0u;
-
-		for ( auto & item : m_selected.items )
-		{
-			auto node = static_cast< TreeModelNode * >( item.GetID() );
-
-			if ( isCategoryNode( *node ) )
-			{
-				auto rendIt = runs.find( node->renderer );
-
-				if ( rendIt != runs.end() )
-				{
-					auto catIt = rendIt->second.find( node->category );
-
-					if ( catIt != rendIt->second.end() )
-					{
-						range += catIt->second.size();
-					}
-				}
-			}
-		}
-
-		return range;
-	}
-
 	void RendererPage::updateTest( TreeModelNode * node )
 	{
 		m_model->ItemChanged( wxDataViewItem{ node } );
 		m_categoryView->refresh();
 	}
 
-	std::vector< wxDataViewItem > RendererPage::listRendererTests( TestRunMap const & runs
-		, FilterFunc filter )const
+	std::vector< wxDataViewItem > RendererPage::listRendererTests( FilterFunc filter )const
 	{
 		std::vector< wxDataViewItem > result;
 
@@ -215,19 +163,11 @@ namespace aria
 
 			if ( isRendererNode( *node ) )
 			{
-				auto rendIt = runs.find( node->renderer );
-
-				if ( rendIt != runs.end() )
+				for ( auto & run : m_runs )
 				{
-					for ( auto & category : rendIt->second )
+					if ( filter( run ) )
 					{
-						for ( auto & run : category.second )
-						{
-							if ( filter( run ) )
-							{
-								result.push_back( wxDataViewItem{ getTestNode( run ) } );
-							}
-						}
+						result.push_back( wxDataViewItem{ getTestNode( run ) } );
 					}
 				}
 			}
@@ -236,8 +176,7 @@ namespace aria
 		return result;
 	}
 
-	std::vector< wxDataViewItem > RendererPage::listCategoryTests( TestRunMap const & runs
-		, RendererPage::FilterFunc filter )const
+	std::vector< wxDataViewItem > RendererPage::listCategoryTests( FilterFunc filter )const
 	{
 		std::vector< wxDataViewItem > result;
 
@@ -247,21 +186,12 @@ namespace aria
 
 			if ( isCategoryNode( *node ) )
 			{
-				auto rendIt = runs.find( node->renderer );
-
-				if ( rendIt != runs.end() )
+				for ( auto & run : m_runs )
 				{
-					auto catIt = rendIt->second.find( node->category );
-
-					if ( catIt != rendIt->second.end() )
+					if ( run.getCategory() == node->category
+						&& filter( run ) )
 					{
-						for ( auto & run : catIt->second )
-						{
-							if ( filter( run ) )
-							{
-								result.push_back( wxDataViewItem{ getTestNode( run ) } );
-							}
-						}
+						result.push_back( wxDataViewItem{ getTestNode( run ) } );
 					}
 				}
 			}
@@ -472,8 +402,12 @@ namespace aria
 
 	void RendererPage::addTest( DatabaseTest & dbTest )
 	{
-		auto node = m_model->addTest( dbTest, true );
-		m_modelNodes.emplace( dbTest->id, node );
+		m_model->addTest( dbTest, true );
+	}
+
+	void RendererPage::removeTest( DatabaseTest const & dbTest )
+	{
+		m_model->removeTest( dbTest );
 	}
 
 	void RendererPage::updateTestView( DatabaseTest const & test
@@ -494,6 +428,27 @@ namespace aria
 
 		m_allView->update( _( "All" )
 			, counts );
+	}
+
+	void RendererPage::changeTestsCategory( ToMoveArray const & tests
+		, Category newCategory )
+	{
+		for ( auto & test : tests )
+		{
+			auto & oldTest = m_runs.getTest( test.id );
+
+			removeTest( oldTest );
+			addTest( oldTest );
+
+			auto & oldCounts = m_counts.getCounts( test.originalCategory );
+			auto & newCounts = m_counts.getCounts( newCategory );
+			oldCounts.removeTest( oldTest );
+			newCounts.addTest( oldTest );
+
+			m_runs.changeCategory( oldTest
+				, test.originalCategory
+				, newCategory );
+		}
 	}
 
 	void RendererPage::doInitLayout( wxWindow * frame )

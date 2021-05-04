@@ -50,6 +50,66 @@ namespace aria
 			static wxString const result{ wxString{ wxT( "v" ) } << Aria_VERSION_MAJOR << wxT( "." ) << Aria_VERSION_MINOR << wxT( "." ) << Aria_VERSION_BUILD };
 			return result;
 		}
+
+		Category selectCategory( wxWindow * parent
+			, TestDatabase const & database )
+		{
+			wxArrayString categories;
+
+			for ( auto & category : database.getCategories() )
+			{
+				categories.push_back( category.first );
+			}
+
+			wxSingleChoiceDialog categoryDlg{ parent
+				, _( "Select the test's category" )
+				, _( "Test creation" )
+				, categories };
+			Category result{};
+
+			if ( categoryDlg.ShowModal() == wxID_OK )
+			{
+				wxString categoryName = categoryDlg.GetStringSelection();
+				auto catIt = database.getCategories().find( makeStdString( categoryName ) );
+
+				if ( catIt == database.getCategories().end() )
+				{
+					wxMessageBox( wxString{} << wxT( "Invalid category name: " ) << categoryName
+						, wxT( "Error" )
+						, wxICON_ERROR );
+				}
+				else
+				{
+					result = catIt->second.get();
+				}
+			}
+
+			return result;
+		}
+
+		void moveSceneFile( Config const config
+			, Test const & test
+			, Category oldCategory
+			, Category newCategory )
+		{
+			auto srcFolder = config.test / oldCategory->name;
+			auto dstFolder = config.test / newCategory->name;
+			moveFile( srcFolder
+				, dstFolder
+				, getSceneName( test ) );
+		}
+
+		void moveReferenceImage( Config const config
+			, Test const & test
+			, Category oldCategory
+			, Category newCategory )
+		{
+			auto srcFolder = config.test / oldCategory->name;
+			auto dstFolder = config.test / newCategory->name;
+			moveFile( srcFolder
+				, dstFolder
+				, getReferenceName( test ) );
+		}
 	}
 
 	//*********************************************************************************************
@@ -142,6 +202,7 @@ namespace aria
 		, m_config{ std::move( config ) }
 		, m_database{ m_config }
 	{
+		m_tests.runs = std::make_shared< AllTestRuns >( m_database );
 		SetClientSize( 900, 600 );
 		doInitMenus();
 		doInitMenuBar();
@@ -228,7 +289,7 @@ namespace aria
 
 	void MainFrame::doInitTestsList( Renderer renderer )
 	{
-		auto runsIt = m_tests.runs.emplace( renderer, TestRunCategoryMap{} ).first;
+		auto & rendererRuns = m_tests.runs->addRenderer( renderer );
 		auto & rendererCounts = m_tests.counts->addRenderer( renderer );
 		auto it = m_testsPages.find( renderer );
 
@@ -236,7 +297,7 @@ namespace aria
 		{
 			auto page = new RendererPage{ m_config
 				, renderer
-				, runsIt->second
+				, rendererRuns
 				, rendererCounts
 				, m_testsBook
 				, this
@@ -321,39 +382,40 @@ namespace aria
 			menu.Append( eID_TEST_IGNORE_RESULT, _( "Ignore result" ) + wxT( "\tF6" ), wxEmptyString, true );
 			menu.Append( eID_TEST_UPDATE_CASTOR, _( "Update Castor3D's date" ) + wxT( "\tF7" ) );
 			menu.Append( eID_TEST_UPDATE_SCENE, _( "Update Scene's date" ) + wxT( "\tF8" ) );
+			menu.Append( eID_TEST_CHANGE_CATEGORY, _( "Change test category" ) );
 		};
 		auto addTestRunMenus = []( wxMenu & menu )
 		{
 		};
 		auto addRendererMenus = []( wxMenu & menu )
 		{
-			menu.Append( eID_RENDERER_RUN_TESTS_ALL, _( "Run all renderer's tests" ) + wxT( "\tCtrl+F1" ) );
-			menu.Append( eID_RENDERER_RUN_TESTS_NOTRUN, _( "Run all <not run> renderer's tests" ) + wxT( "\tCtrl+F2" ) );
-			menu.Append( eID_RENDERER_RUN_TESTS_ACCEPTABLE, _( "Run all <acceptable> renderer's tests" ) + wxT( "\tCtrl+F3" ) );
-			menu.Append( eID_RENDERER_RUN_TESTS_ALL_BUT_NEGLIGIBLE, _( "Run all but <negligible> renderer's tests" ) + wxT( "\tCtrl+F4" ) );
+			menu.Append( eID_RENDERER_RUN_TESTS_ALL, _( "Run all renderer's tests" ) + wxT( "\tCTRL+F1" ) );
+			menu.Append( eID_RENDERER_RUN_TESTS_NOTRUN, _( "Run all <not run> renderer's tests" ) + wxT( "\tCTRL+F2" ) );
+			menu.Append( eID_RENDERER_RUN_TESTS_ACCEPTABLE, _( "Run all <acceptable> renderer's tests" ) + wxT( "\tCTRL+F3" ) );
+			menu.Append( eID_RENDERER_RUN_TESTS_ALL_BUT_NEGLIGIBLE, _( "Run all but <negligible> renderer's tests" ) + wxT( "\tCTRL+F4" ) );
 			menu.Append( eID_RENDERER_RUN_TESTS_OUTDATED, _( "Run all outdated renderer's tests" ) + wxT( "\tFCtrl+5" ) );
-			menu.Append( eID_RENDERER_UPDATE_CASTOR, _( "Update renderer's tests Castor3D's date" ) + wxT( "\tCtrl+F6" ) );
-			menu.Append( eID_RENDERER_UPDATE_SCENE, _( "Update renderer's tests Scene's date" ) + wxT( "\tCtrl+F7" ) );
+			menu.Append( eID_RENDERER_UPDATE_CASTOR, _( "Update renderer's tests Castor3D's date" ) + wxT( "\tCTRL+F6" ) );
+			menu.Append( eID_RENDERER_UPDATE_SCENE, _( "Update renderer's tests Scene's date" ) + wxT( "\tCTRL+F7" ) );
 		};
 		auto addCategoryMenus = []( wxMenu & menu )
 		{
-			menu.Append( eID_CATEGORY_RUN_TESTS_ALL, _( "Run all category's tests" ) + wxT( "\tAlt+F1" ) );
-			menu.Append( eID_CATEGORY_RUN_TESTS_NOTRUN, _( "Run all <not run> category's tests" ) + wxT( "\tAlt+F2" ) );
-			menu.Append( eID_CATEGORY_RUN_TESTS_ACCEPTABLE, _( "Run all <acceptable> category's tests" ) + wxT( "\tAlt+F3" ) );
-			menu.Append( eID_CATEGORY_RUN_TESTS_ALL_BUT_NEGLIGIBLE, _( "Run all but <negligible> category's tests" ) + wxT( "\tAlt+F4" ) );
-			menu.Append( eID_CATEGORY_RUN_TESTS_OUTDATED, _( "Run all outdated category's tests" ) + wxT( "\tAlt+F5" ) );
-			menu.Append( eID_CATEGORY_UPDATE_CASTOR, _( "Update category's tests Castor3D's date" ) + wxT( "\tAlt+F6" ) );
-			menu.Append( eID_CATEGORY_UPDATE_SCENE, _( "Update category's tests Scene's date" ) + wxT( "\tAlt+F7" ) );
+			menu.Append( eID_CATEGORY_RUN_TESTS_ALL, _( "Run all category's tests" ) + wxT( "\tALT+F1" ) );
+			menu.Append( eID_CATEGORY_RUN_TESTS_NOTRUN, _( "Run all <not run> category's tests" ) + wxT( "\tALT+F2" ) );
+			menu.Append( eID_CATEGORY_RUN_TESTS_ACCEPTABLE, _( "Run all <acceptable> category's tests" ) + wxT( "\tALT+F3" ) );
+			menu.Append( eID_CATEGORY_RUN_TESTS_ALL_BUT_NEGLIGIBLE, _( "Run all but <negligible> category's tests" ) + wxT( "\tALT+F4" ) );
+			menu.Append( eID_CATEGORY_RUN_TESTS_OUTDATED, _( "Run all outdated category's tests" ) + wxT( "\tALT+F5" ) );
+			menu.Append( eID_CATEGORY_UPDATE_CASTOR, _( "Update category's tests Castor3D's date" ) + wxT( "\tALT+F6" ) );
+			menu.Append( eID_CATEGORY_UPDATE_SCENE, _( "Update category's tests Scene's date" ) + wxT( "\tALT+F7" ) );
 		};
 		auto addAllMenus = []( wxMenu & menu )
 		{
-			menu.Append( eID_ALL_RUN_TESTS_ALL, _( "Run all tests" ) + wxT( "\tCtrl+Alt+F1" ) );
-			menu.Append( eID_ALL_RUN_TESTS_NOTRUN, _( "Run all <not run> tests" ) + wxT( "\tCtrl+Alt+F2" ) );
-			menu.Append( eID_ALL_RUN_TESTS_ACCEPTABLE, _( "Run all <acceptable> tests" ) + wxT( "\tCtrl+Alt+F3" ) );
-			menu.Append( eID_ALL_RUN_TESTS_ALL_BUT_NEGLIGIBLE, _( "Run all but <negligible> tests" ) + wxT( "\tCtrl+Alt+F4" ) );
-			menu.Append( eID_ALL_RUN_TESTS_OUTDATED, _( "Run all outdated tests" ) + wxT( "\tCtrl+Alt+F5" ) );
-			menu.Append( eID_ALL_UPDATE_CASTOR, _( "Update tests Castor3D's date" ) + wxT( "\tCtrl+Alt+F6" ) );
-			menu.Append( eID_ALL_UPDATE_SCENE, _( "Update tests Scene's date" ) + wxT( "\tCtrl+Alt+F7" ) );
+			menu.Append( eID_ALL_RUN_TESTS_ALL, _( "Run all tests" ) + wxT( "\tCTRL+ALT+F1" ) );
+			menu.Append( eID_ALL_RUN_TESTS_NOTRUN, _( "Run all <not run> tests" ) + wxT( "\tCTRL+ALT+F2" ) );
+			menu.Append( eID_ALL_RUN_TESTS_ACCEPTABLE, _( "Run all <acceptable> tests" ) + wxT( "\tCTRL+ALT+F3" ) );
+			menu.Append( eID_ALL_RUN_TESTS_ALL_BUT_NEGLIGIBLE, _( "Run all but <negligible> tests" ) + wxT( "\tCTRL+ALT+F4" ) );
+			menu.Append( eID_ALL_RUN_TESTS_OUTDATED, _( "Run all outdated tests" ) + wxT( "\tCTRL+ALT+F5" ) );
+			menu.Append( eID_ALL_UPDATE_CASTOR, _( "Update tests Castor3D's date" ) + wxT( "\tCTRL+ALT+F6" ) );
+			menu.Append( eID_ALL_UPDATE_SCENE, _( "Update tests Scene's date" ) + wxT( "\tCTRL+ALT+F7" ) );
 		};
 		m_testMenu = std::make_unique< wxMenu >();
 		m_testMenu->Append( eID_TEST_RUN, _( "Run Test" ) + wxT( "\tF1" ) );
@@ -474,7 +536,7 @@ namespace aria
 		progress.SetRange( progress.GetRange() + int( testCount * m_database.getRenderers().size() ) );
 		progress.Update( index, _( "Filling Data View..." ) );
 
-		for ( auto & renderer : m_tests.runs )
+		for ( auto & renderer : *m_tests.runs )
 		{
 			doFillList( renderer.first, progress, index );
 		}
@@ -516,31 +578,6 @@ namespace aria
 		}
 
 		return range;
-	}
-
-	uint32_t MainFrame::doGetAllRunsRange()const
-	{
-		uint32_t range = 0u;
-
-		for ( auto & renderer : m_tests.runs )
-		{
-			for ( auto & category : renderer.second )
-			{
-				range += category.second.size();
-			}
-		}
-
-		return range;
-	}
-
-	uint32_t MainFrame::doGetSelectedRendererRange()const
-	{
-		return m_selectedPage->getSelectedRange( m_tests.runs );
-	}
-
-	uint32_t MainFrame::doGetSelectedCategoryRange()const
-	{
-		return m_selectedPage->getSelectedCategoryRange( m_tests.runs );
 	}
 
 	void MainFrame::doViewSceneFile( castor::Path const & filePath )
@@ -736,6 +773,75 @@ namespace aria
 		}
 	}
 
+	void MainFrame::doChangeTestCategory()
+	{
+		m_cancelled.exchange( false );
+
+		if ( m_selectedPage )
+		{
+			auto category = selectCategory( this, m_database );
+
+			if ( category )
+			{
+				auto items = m_selectedPage->listSelectedTests();
+				RendererPage::ToMoveArray toMove;
+				struct CatChange
+				{
+					Test * test;
+					Category category;
+				};
+				std::vector< CatChange > changes;
+
+				for ( auto & item : items )
+				{
+					auto node = static_cast< TreeModelNode * >( item.GetID() );
+
+					if ( node->category != category )
+					{
+						toMove.push_back( { node->category, node->test->getTestId() } );
+
+						auto catIt = m_tests.tests.find( node->category );
+						auto testIt = std::find_if( catIt->second.begin()
+							, catIt->second.end()
+							, [&node]( TestPtr const & lookup )
+							{
+								return lookup->id == node->test->getTestId();
+							} );
+						auto test = std::move( *testIt );
+						catIt->second.erase( testIt );
+
+						changes.push_back( { test.get(), test->category } );
+						test->category = category;
+						catIt = m_tests.tests.find( category );
+						catIt->second.emplace_back( std::move( test ) );
+					}
+				}
+
+				for ( auto & page : m_testsPages )
+				{
+					page.second->changeTestsCategory( toMove, category );
+				}
+
+				wxProgressDialog progress{ wxT( "Changing tests category" )
+					, wxT( "Changing tests category..." )
+					, int( changes.size() )
+					, this };
+				int index = 0;
+
+				for ( auto & change : changes )
+				{
+					progress.Update( index++
+						, _( "Changing test category" )
+						+ wxT( "\n" ) + getProgressDetails( *change.test ) );
+					progress.Fit();
+					moveSceneFile( m_config, *change.test, change.category, category );
+					moveReferenceImage( m_config, *change.test, change.category, category );
+					m_database.updateTestCategory( *change.test, category );
+				}
+			}
+		}
+	}
+
 	TreeModelNode * MainFrame::getTestNode( DatabaseTest const & test )
 	{
 		auto rendIt = m_testsPages.find( test->renderer );
@@ -754,8 +860,7 @@ namespace aria
 
 		if ( m_selectedPage )
 		{
-			auto items = m_selectedPage->listCategoryTests( m_tests.runs
-				, []( DatabaseTest const & run )
+			auto items = m_selectedPage->listCategoryTests( []( DatabaseTest const & lookup )
 				{
 					return true;
 				} );
@@ -775,10 +880,9 @@ namespace aria
 
 		if ( m_selectedPage )
 		{
-			auto items = m_selectedPage->listCategoryTests( m_tests.runs
-				, [filter]( DatabaseTest const & run )
+			auto items = m_selectedPage->listCategoryTests( [filter]( DatabaseTest const & lookup )
 				{
-					return run->status == filter;
+					return lookup->status == filter;
 				} );
 
 			for ( auto & item : items )
@@ -796,10 +900,9 @@ namespace aria
 
 		if ( m_selectedPage )
 		{
-			auto items = m_selectedPage->listCategoryTests( m_tests.runs
-				, [filter]( DatabaseTest const & run )
+			auto items = m_selectedPage->listCategoryTests( [filter]( DatabaseTest const & lookup )
 				{
-					return run->status != filter;
+					return lookup->status != filter;
 				} );
 
 			for ( auto & item : items )
@@ -818,11 +921,10 @@ namespace aria
 
 		if ( m_selectedPage )
 		{
-			auto items = m_selectedPage->listCategoryTests( m_tests.runs
-				, [this]( DatabaseTest const & run )
+			auto items = m_selectedPage->listCategoryTests( [this]( DatabaseTest const & lookup )
 				{
-					return isOutOfDate( m_config, *run )
-						|| run->status == TestStatus::eNotRun;
+					return isOutOfDate( m_config, *lookup )
+						|| lookup->status == TestStatus::eNotRun;
 				} );
 
 			for ( auto & item : items )
@@ -841,10 +943,9 @@ namespace aria
 
 		if ( m_selectedPage )
 		{
-			auto items = m_selectedPage->listCategoryTests( m_tests.runs
-				, []( DatabaseTest const & run )
+			auto items = m_selectedPage->listCategoryTests( []( DatabaseTest const & lookup )
 				{
-					return run.checkOutOfCastorDate();
+					return lookup.checkOutOfCastorDate();
 				} );
 			wxProgressDialog progress{ wxT( "Updating tests Castor3D date" )
 				, wxT( "Updating tests..." )
@@ -873,10 +974,9 @@ namespace aria
 
 		if ( m_selectedPage )
 		{
-			auto items = m_selectedPage->listCategoryTests( m_tests.runs
-				, []( DatabaseTest const & run )
+			auto items = m_selectedPage->listCategoryTests( []( DatabaseTest const & lookup )
 				{
-					return run.checkOutOfSceneDate();
+					return lookup.checkOutOfSceneDate();
 				} );
 			wxProgressDialog progress{ wxT( "Updating tests Scene date" )
 				, wxT( "Updating tests..." )
@@ -906,8 +1006,7 @@ namespace aria
 
 		if ( m_selectedPage )
 		{
-			auto items = m_selectedPage->listRendererTests( m_tests.runs
-				, []( DatabaseTest const & run )
+			auto items = m_selectedPage->listRendererTests( []( DatabaseTest const & lookup )
 				{
 					return true;
 				} );
@@ -927,10 +1026,9 @@ namespace aria
 
 		if ( m_selectedPage )
 		{
-			auto items = m_selectedPage->listRendererTests( m_tests.runs
-				, [filter]( DatabaseTest const & run )
+			auto items = m_selectedPage->listRendererTests( [filter]( DatabaseTest const & lookup )
 				{
-					return run->status == filter;
+					return lookup->status == filter;
 				} );
 
 			for ( auto & item : items )
@@ -948,10 +1046,9 @@ namespace aria
 
 		if ( m_selectedPage )
 		{
-			auto items = m_selectedPage->listRendererTests( m_tests.runs
-				, [filter]( DatabaseTest const & run )
+			auto items = m_selectedPage->listRendererTests( [filter]( DatabaseTest const & lookup )
 				{
-					return run->status != filter;
+					return lookup->status != filter;
 				} );
 
 			for ( auto & item : items )
@@ -970,11 +1067,10 @@ namespace aria
 
 		if ( m_selectedPage )
 		{
-			auto items = m_selectedPage->listRendererTests( m_tests.runs
-				, [this]( DatabaseTest const & run )
+			auto items = m_selectedPage->listRendererTests( [this]( DatabaseTest const & lookup )
 				{
-					return isOutOfDate( m_config, *run )
-						|| run->status == TestStatus::eNotRun;
+					return isOutOfDate( m_config, *lookup )
+						|| lookup->status == TestStatus::eNotRun;
 				} );
 
 			for ( auto & item : items )
@@ -993,10 +1089,9 @@ namespace aria
 
 		if ( m_selectedPage )
 		{
-			auto items = m_selectedPage->listRendererTests( m_tests.runs
-				, [this]( DatabaseTest const & run )
+			auto items = m_selectedPage->listRendererTests( [this]( DatabaseTest const & lookup )
 				{
-					return run.checkOutOfCastorDate();
+					return lookup.checkOutOfCastorDate();
 				} );
 			wxProgressDialog progress{ wxT( "Updating tests Castor3D date" )
 				, wxT( "Updating tests..." )
@@ -1025,10 +1120,9 @@ namespace aria
 
 		if ( m_selectedPage )
 		{
-			auto items = m_selectedPage->listRendererTests( m_tests.runs
-				, [this]( DatabaseTest const & run )
+			auto items = m_selectedPage->listRendererTests( [this]( DatabaseTest const & lookup )
 				{
-					return run.checkOutOfSceneDate();
+					return lookup.checkOutOfSceneDate();
 				} );
 			wxProgressDialog progress{ wxT( "Updating tests Scene date" )
 				, wxT( "Updating tests..." )
@@ -1052,22 +1146,15 @@ namespace aria
 		}
 	}
 
-	std::vector< wxDataViewItem > MainFrame::doListAllTests( RendererPage::FilterFunc filter )
+	std::vector< wxDataViewItem > MainFrame::doListAllTests( FilterFunc filter )
 	{
+		std::vector< DatabaseTest * > runs;
+		m_tests.runs->listTests( filter, runs );
 		std::vector< wxDataViewItem > result;
 
-		for ( auto & renderer : m_tests.runs )
+		for ( auto & run : runs )
 		{
-			for ( auto & category : renderer.second )
-			{
-				for ( auto & run : category.second )
-				{
-					if ( filter( run ) )
-					{
-						result.push_back( getTestItem( run ) );
-					}
-				}
-			}
+			result.push_back( getTestItem( *run ) );
 		}
 
 		return result;
@@ -1076,7 +1163,7 @@ namespace aria
 	void MainFrame::doRunAllTests()
 	{
 		m_cancelled.exchange( false );
-		auto items = doListAllTests( []( DatabaseTest const & run )
+		auto items = doListAllTests( []( DatabaseTest const & lookup )
 			{
 				return true;
 			} );
@@ -1092,9 +1179,9 @@ namespace aria
 	void MainFrame::doRunTests( TestStatus filter )
 	{
 		m_cancelled.exchange( false );
-		auto items = doListAllTests( [filter]( DatabaseTest const & run )
+		auto items = doListAllTests( [filter]( DatabaseTest const & lookup )
 			{
-				return run->status == filter;
+				return lookup->status == filter;
 			} );
 
 		for ( auto & item : items )
@@ -1108,9 +1195,9 @@ namespace aria
 	void MainFrame::doRunAllTestsBut( TestStatus filter )
 	{
 		m_cancelled.exchange( false );
-		auto items = doListAllTests( [filter]( DatabaseTest const & run )
+		auto items = doListAllTests( [filter]( DatabaseTest const & lookup )
 			{
-				return run->status != filter;
+				return lookup->status != filter;
 			} );
 
 		for ( auto & item : items )
@@ -1125,9 +1212,9 @@ namespace aria
 	{
 		m_cancelled.exchange( false );
 		updateCastorRefDate( m_config );
-		auto items = doListAllTests( [this]( DatabaseTest const & run )
+		auto items = doListAllTests( [this]( DatabaseTest const & lookup )
 			{
-				return isOutOfDate( m_config, *run );
+				return isOutOfDate( m_config, *lookup );
 			} );
 
 		for ( auto & item : items )
@@ -1143,9 +1230,9 @@ namespace aria
 		m_cancelled.exchange( false );
 		updateCastorRefDate( m_config );
 		m_database.updateRunsCastorDate( m_config.castorRefDate );
-		auto items = doListAllTests( [this]( DatabaseTest const & run )
+		auto items = doListAllTests( [this]( DatabaseTest const & lookup )
 			{
-				return run.checkOutOfCastorDate();
+				return lookup.checkOutOfCastorDate();
 			} );
 		wxProgressDialog progress{ wxT( "Updating tests Castor3D date" )
 			, wxT( "Updating tests..." )
@@ -1170,9 +1257,9 @@ namespace aria
 	void MainFrame::doUpdateAllSceneDate()
 	{
 		m_cancelled.exchange( false );
-		auto items = doListAllTests( [this]( DatabaseTest const & run )
+		auto items = doListAllTests( [this]( DatabaseTest const & lookup )
 			{
-				return run.checkOutOfSceneDate();
+				return lookup.checkOutOfSceneDate();
 			} );
 		wxProgressDialog progress{ wxT( "Updating tests Scene date" )
 			, wxT( "Updating tests..." )
@@ -1229,19 +1316,15 @@ namespace aria
 		if ( dialog.ShowModal() == wxID_OK )
 		{
 			auto renderer = m_database.createRenderer( makeStdString( dialog.GetValue() ) );
-			auto ires = m_tests.runs.emplace( renderer, TestRunCategoryMap{} );
-
-			if ( ires.second )
-			{
-				auto range = doGetAllTestsRange();
-				wxProgressDialog progress{ wxT( "Creating renderer entries" )
-					, wxT( "Creating renderer entries..." )
-					, int( range )
-					, this };
-				int index = 0;
-				doInitTestsList( renderer );
-				doFillList( renderer, progress, index );
-			}
+			m_tests.runs->addRenderer( renderer );
+			auto range = doGetAllTestsRange();
+			wxProgressDialog progress{ wxT( "Creating renderer entries" )
+				, wxT( "Creating renderer entries..." )
+				, int( range )
+				, this };
+			int index = 0;
+			doInitTestsList( renderer );
+			doFillList( renderer, progress, index );
 		}
 	}
 
@@ -1275,11 +1358,9 @@ namespace aria
 			for ( auto & rendererIt : m_database.getRenderers() )
 			{
 				auto renderer = rendererIt.second.get();
-				auto & rendCounts = m_tests.counts->getRenderer( renderer );
-				auto & catCounts = rendCounts.addCategory( category, {}, {} );
 
-				auto rendRunIt = m_tests.runs.find( renderer );
-				rendRunIt->second.emplace( category, TestRunArray{} );
+				auto & rendCounts = m_tests.counts->getRenderer( renderer );
+				auto & catCounts = rendCounts.addCategory( category, {} );
 
 				auto rendPageIt = m_testsPages.find( renderer );
 				rendPageIt->second->addCategory( category, catCounts );
@@ -1289,32 +1370,10 @@ namespace aria
 
 	void MainFrame::doNewTest()
 	{
-		wxArrayString categories;
+		auto category = selectCategory( this, m_database );
 
-		for ( auto & category : m_database.getCategories() )
+		if ( category )
 		{
-			categories.push_back( category.first );
-		}
-
-		wxSingleChoiceDialog categoryDlg{ this
-			, _( "Select the test's category" )
-			, _( "Test creation" )
-			, categories };
-
-		if ( categoryDlg.ShowModal() == wxID_OK )
-		{
-			wxString categoryName = categoryDlg.GetStringSelection();
-			auto catIt = m_database.getCategories().find( makeStdString( categoryName ) );
-
-			if ( catIt == m_database.getCategories().end() )
-			{
-				wxMessageBox( wxString{} << wxT( "Invalid category name: " ) << categoryName
-					, wxT( "Error" )
-					, wxICON_ERROR );
-				return;
-			}
-
-			auto category = catIt->second.get();
 			wxTextEntryDialog dialog{ this
 				, _( "Enter the new test name" )
 				, _( "Test creation" ) };
@@ -1332,18 +1391,15 @@ namespace aria
 				for ( auto & rendererIt : m_database.getRenderers() )
 				{
 					auto renderer = rendererIt.second.get();
-					auto rendRunIt = m_tests.runs.find( renderer );
+					auto & rendRuns = m_tests.runs->getRenderer( renderer );
 					auto & rendCounts = m_tests.counts->getRenderer( renderer );
-					auto catRunIt = rendRunIt->second.find( category );
 					auto & catCounts = rendCounts.getCounts( category );
-					catRunIt->second.emplace_back( m_database
-						, TestRun{ &test
-							, renderer
-							, db::DateTime{}
-							, TestStatus::eNotRun
-							, db::DateTime{}
-							, db::DateTime{} } );
-					auto & dbTest = catRunIt->second.back();
+					auto & dbTest = rendRuns.addTest( TestRun{ &test
+						, renderer
+						, db::DateTime{}
+						, TestStatus::eNotRun
+						, db::DateTime{}
+						, db::DateTime{} } );
 
 					auto rendPageIt = m_testsPages.find( renderer );
 					rendPageIt->second->addTest( dbTest );
@@ -1380,7 +1436,7 @@ namespace aria
 		{
 #if ARIA_UseDiffImageLib
 			diffimg::Options options;
-			auto file = ( m_config.test / run.getCategory()->name / ( run.getName() + ".cscn" ) );
+			auto file = ( m_config.test / run.getCategory()->name / getSceneName( *run ) );
 			options.input = file.getPath() / ( file.getFileName() + cuT( "_ref.png" ) );
 			options.outputs.emplace_back( file.getPath() / cuT( "Compare" ) / ( file.getFileName() + cuT( "_" ) + run.getRenderer()->name + cuT( ".png" ) ) );
 			diffimg::Config config{ options };
@@ -1394,7 +1450,7 @@ namespace aria
 #else
 			wxString command = m_config.differ;
 			command << " " << run.getRenderer()->name;
-			command << " -f " << ( m_config.test / run.getCategory()->name / ( run.getName() + ".cscn" ) );
+			command << " -f " << ( m_config.test / run.getCategory()->name / getSceneName( *run ) );
 			m_runningTest.difProcess->Redirect();
 			auto result = wxExecute( command
 				, ExecMode
@@ -1568,6 +1624,9 @@ namespace aria
 			break;
 		case eID_TEST_UPDATE_SCENE:
 			doUpdateSceneDate();
+			break;
+		case eID_TEST_CHANGE_CATEGORY:
+			doChangeTestCategory();
 			break;
 		case eID_CATEGORY_RUN_TESTS_ALL:
 			doRunAllCategoryTests();
