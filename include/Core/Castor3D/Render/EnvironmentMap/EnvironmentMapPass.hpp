@@ -43,7 +43,8 @@ namespace castor3d
 		 *\param[in]	objectNode		Le noeud auquel l'objet est attaché.
 		 *\param[in]	face			La face de cube que cette passe dessine.
 		 */
-		C3D_API EnvironmentMapPass( EnvironmentMap & reflectionMap
+		C3D_API EnvironmentMapPass( RenderDevice const & device
+			, EnvironmentMap & reflectionMap
 			, SceneNodeSPtr node
 			, SceneNode const & objectNode
 			, CubeMapFace face );
@@ -78,8 +79,7 @@ namespace castor3d
 		 *\param		timer		Le timer de passe de rendu à utiliser.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		bool initialise( RenderDevice const & device
-			, castor::Size const & size
+		bool initialise( castor::Size const & size
 			, uint32_t face
 			, ashes::RenderPass const & renderPass
 			, SceneBackground const & background
@@ -94,7 +94,7 @@ namespace castor3d
 		 *\brief		Nettoie la passe.
 		 *\param		device	Le device GPU.
 		 */
-		void cleanup( RenderDevice const & device );
+		void cleanup();
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -123,10 +123,10 @@ namespace castor3d
 		 *\param		device	Le device GPU.
 		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
-		C3D_API ashes::Semaphore const & render( RenderDevice const & device
-			, ashes::Semaphore const & toWait );
+		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait );
 
 	private:
+		RenderDevice const & m_device;
 		SceneNodeSPtr m_node;
 		CubeMapFace m_face;
 		CameraSPtr m_camera;

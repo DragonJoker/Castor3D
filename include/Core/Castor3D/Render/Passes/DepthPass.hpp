@@ -55,8 +55,7 @@ namespace castor3d
 		 *\param[in]	device		Le device GPU.
 		 *\param[out]	semaphores	Les sémaphores à attendre.
 		 */
-		C3D_API ashes::Semaphore const & render( RenderDevice const & device
-			, ashes::SemaphoreCRefArray const & semaphores );
+		C3D_API ashes::Semaphore const & render( ashes::SemaphoreCRefArray const & semaphores );
 
 		C3D_API TextureFlags getTexturesMask()const override;
 
@@ -74,7 +73,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::doCleanup
 		 */
-		C3D_API void doCleanup( RenderDevice const & device )override;
+		C3D_API void doCleanup()override;
 
 	private:
 		void doUpdateFlags( PipelineFlags & flags )const override;

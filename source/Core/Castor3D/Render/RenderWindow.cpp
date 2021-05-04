@@ -761,15 +761,15 @@ namespace castor3d
 	void RenderWindow::doCreatePickingPass()
 	{
 		auto & target = *getRenderTarget();
-		m_pickingPass = std::make_shared< PickingPass >( *getEngine()
+		m_pickingPass = std::make_shared< PickingPass >( *m_device
 			, target.getTechnique()->getMatrixUbo()
 			, target.getCuller() );
-		m_pickingPass->initialise( *m_device, target.getSize() );
+		m_pickingPass->initialise( target.getSize() );
 	}
 
 	void RenderWindow::doDestroyPickingPass()
 	{
-		m_pickingPass->cleanup( *m_device );
+		m_pickingPass->cleanup();
 		m_pickingPass.reset();
 	}
 

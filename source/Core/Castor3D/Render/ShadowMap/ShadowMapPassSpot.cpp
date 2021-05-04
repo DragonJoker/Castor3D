@@ -45,7 +45,7 @@ namespace castor3d
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap )
-		: ShadowMapPass{ cuT( "Spot " ) + string::toString( index ), device, matrixUbo, culler, shadowMap }
+		: ShadowMapPass{ device, cuT( "Spot " ) + string::toString( index ), matrixUbo, culler, shadowMap }
 	{
 		log::trace << "Created " << m_name << std::endl;
 	}
@@ -83,8 +83,7 @@ namespace castor3d
 		m_matrixUbo.cpuUpdate( myCamera.getView(), myCamera.getProjection() );
 	}
 
-	bool ShadowMapPassSpot::doInitialise( RenderDevice const & device
-		, Size const & size )
+	bool ShadowMapPassSpot::doInitialise( Size const & size )
 	{
 		std::array< VkImageLayout, size_t( SmTexture::eCount ) > FinalLayouts
 		{
@@ -162,14 +161,14 @@ namespace castor3d
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = device->createRenderPass( m_name
+		m_renderPass = m_device->createRenderPass( m_name
 			, std::move( createInfo ) );
 
 		m_initialised = true;
 		return m_initialised;
 	}
 
-	void ShadowMapPassSpot::doCleanup( RenderDevice const & device )
+	void ShadowMapPassSpot::doCleanup()
 	{
 		m_renderQueue.cleanup();
 		getCuller().getCamera().detach();
