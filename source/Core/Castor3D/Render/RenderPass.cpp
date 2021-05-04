@@ -387,7 +387,8 @@ namespace castor3d
 		, Geometry & primitive
 		, AnimatedSkeleton & skeleton )
 	{
-		auto & buffers = submesh.getGeometryBuffers( pass.getOwner()->shared_from_this()
+		auto & buffers = submesh.getGeometryBuffers( getShaderFlags()
+			, pass.getOwner()->shared_from_this()
 			, getInstanceMult()
 			, pass.getTexturesMask() );
 		auto & scene = *primitive.getScene();
@@ -420,7 +421,8 @@ namespace castor3d
 		, Geometry & primitive
 		, AnimatedMesh & mesh )
 	{
-		auto & buffers = submesh.getGeometryBuffers( pass.getOwner()->shared_from_this()
+		auto & buffers = submesh.getGeometryBuffers( getShaderFlags()
+			, pass.getOwner()->shared_from_this()
 			, getInstanceMult()
 			, pass.getTexturesMask() );
 		auto & scene = *primitive.getScene();
@@ -452,7 +454,8 @@ namespace castor3d
 		, Submesh & submesh
 		, Geometry & primitive )
 	{
-		auto & buffers = submesh.getGeometryBuffers( pass.getOwner()->shared_from_this()
+		auto & buffers = submesh.getGeometryBuffers( getShaderFlags()
+			, pass.getOwner()->shared_from_this()
 			, getInstanceMult()
 			, pass.getTexturesMask() );
 		auto & scene = *primitive.getScene();
