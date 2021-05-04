@@ -4,7 +4,11 @@ See LICENSE file in root folder
 #ifndef ___C3D_MorphComponent_H___
 #define ___C3D_MorphComponent_H___
 
+#include "Castor3D/Render/RenderModule.hpp"
+
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp"
+
+#include <unordered_map>
 
 namespace castor3d
 {
@@ -24,11 +28,13 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
-		C3D_API void gather( MaterialSPtr material
+		C3D_API void gather( ShaderFlags const & flags
+			, MaterialSPtr material
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
-			, uint32_t instanceMult )override;
+			, uint32_t instanceMult
+			, TextureFlagsArray const & mask )override;
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::clone
 		 */
@@ -83,7 +89,7 @@ namespace castor3d
 
 	private:
 		ashes::VertexBufferPtr< InterleavedVertex > m_animBuffer;
-		ashes::PipelineVertexInputStateCreateInfoPtr m_animLayout;
+		std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_animLayouts;
 		InterleavedVertexArray m_data;
 	};
 }

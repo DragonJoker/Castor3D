@@ -7,12 +7,54 @@
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
+#include <CastorUtils/Miscellaneous/Hash.hpp>
+
 #include <ashespp/Buffer/VertexBuffer.hpp>
 
 using namespace castor;
 
 namespace castor3d
 {
+	namespace
+	{
+		ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout( ShaderFlags const & flags
+			, bool hasTextures )
+		{
+			ashes::VkVertexInputBindingDescriptionArray bindings{ { MorphComponent::BindingPoint
+				, sizeof( InterleavedVertex ), VK_VERTEX_INPUT_RATE_VERTEX } };
+			ashes::VkVertexInputAttributeDescriptionArray attributes{ 1u, { SceneRenderPass::VertexInputs::Position2Location
+				, 0u
+				, VK_FORMAT_R32G32B32A32_SFLOAT
+				, offsetof( InterleavedVertex, pos ) } };
+
+			if ( checkFlag( flags, ShaderFlag::eNormal ) )
+			{
+				attributes.push_back( { SceneRenderPass::VertexInputs::Normal2Location
+					, 0u
+					, VK_FORMAT_R32G32B32A32_SFLOAT
+					, offsetof( InterleavedVertex, nml ) } );
+			}
+
+			if ( checkFlag( flags, ShaderFlag::eTangentSpace ) )
+			{
+				attributes.push_back( { SceneRenderPass::VertexInputs::Tangent2Location
+					, 0u
+					, VK_FORMAT_R32G32B32A32_SFLOAT
+					, offsetof( InterleavedVertex, tan ) } );
+			}
+
+			if ( hasTextures )
+			{
+				attributes.push_back( { SceneRenderPass::VertexInputs::Texture2Location
+					, 0u
+					, VK_FORMAT_R32G32B32A32_SFLOAT
+					, offsetof( InterleavedVertex, tex ) } );
+			}
+
+			return ashes::PipelineVertexInputStateCreateInfo{ 0u, bindings, attributes };
+		}
+	}
+
 	String const MorphComponent::Name = cuT( "morph" );
 
 	MorphComponent::MorphComponent( Submesh & submesh )
@@ -20,22 +62,32 @@ namespace castor3d
 	{
 	}
 
-	void MorphComponent::gather( MaterialSPtr material
+	void MorphComponent::gather( ShaderFlags const & flags
+		, MaterialSPtr material
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
-		, uint32_t instanceMult )
+		, uint32_t instanceMult
+		, TextureFlagsArray const & mask )
 	{
+		auto hash = std::hash< ShaderFlags::BaseType >{}( flags );
+		hash = castor::hashCombine( hash, mask.empty() );
+		auto layoutIt = m_animLayouts.find( hash );
+
+		if ( layoutIt == m_animLayouts.end() )
+		{
+			layoutIt = m_animLayouts.emplace( hash, doCreateVertexLayout( flags, !mask.empty() ) ).first;
+		}
+
 		buffers.emplace_back( m_animBuffer->getBuffer() );
 		offsets.emplace_back( 0u );
-		layouts.emplace_back( *m_animLayout );
+		layouts.emplace_back( layoutIt->second );
 	}
 
 	SubmeshComponentSPtr MorphComponent::clone( Submesh & submesh )const
 	{
 		auto result = std::make_shared< MorphComponent >( submesh );
 		result->m_data = m_data;
-		result->m_animLayout = std::make_unique<ashes::PipelineVertexInputStateCreateInfo >( *m_animLayout );
 		return result;
 	}
 
@@ -51,18 +103,6 @@ namespace castor3d
 				, 0u
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 				, getOwner()->getParent().getName() + "Submesh" + castor::string::toString( getOwner()->getId() ) + "MorphComponentBuffer" );
-			m_animLayout = std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
-				, ashes::VkVertexInputBindingDescriptionArray
-				{
-					{ BindingPoint, sizeof( InterleavedVertex ), VK_VERTEX_INPUT_RATE_VERTEX },
-				}
-				, ashes::VkVertexInputAttributeDescriptionArray
-				{
-					{ SceneRenderPass::VertexInputs::Position2Location, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InterleavedVertex, pos ) },
-					{ SceneRenderPass::VertexInputs::Normal2Location, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InterleavedVertex, nml ) },
-					{ SceneRenderPass::VertexInputs::Tangent2Location, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InterleavedVertex, tan ) },
-					{ SceneRenderPass::VertexInputs::Texture2Location, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InterleavedVertex, tex ) },
-				} );
 		}
 
 		return m_animBuffer != nullptr;
@@ -70,7 +110,6 @@ namespace castor3d
 
 	void MorphComponent::doCleanup()
 	{
-		m_animLayout.reset();
 		m_animBuffer.reset();
 	}
 

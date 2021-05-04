@@ -29,11 +29,13 @@ namespace castor3d
 		return getOwner()->getParent().getSkeleton();
 	}
 
-	void BonesComponent::gather( MaterialSPtr material
+	void BonesComponent::gather( ShaderFlags const & flags
+		, MaterialSPtr material
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
-		, uint32_t instanceMult )
+		, uint32_t instanceMult
+		, TextureFlagsArray const & mask )
 	{
 		buffers.emplace_back( m_bonesBuffer->getBuffer() );
 		offsets.emplace_back( 0u );

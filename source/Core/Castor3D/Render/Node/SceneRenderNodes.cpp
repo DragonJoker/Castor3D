@@ -375,7 +375,7 @@ namespace castor3d
 							, programFlags
 							, sceneFlags
 							, submesh.getTopology()
-							, submesh.getGeometryBuffers( material, instanceMult, textures ).layouts );
+							, submesh.getGeometryBuffers( renderPass.getShaderFlags(), material, instanceMult, textures ).layouts );
 						nodes.addRenderNode( flags
 							, animated
 							, culledNode
@@ -401,7 +401,7 @@ namespace castor3d
 								, programFlags
 								, sceneFlags
 								, submesh.getTopology()
-								, submesh.getGeometryBuffers( material, instanceMult, textures ).layouts );
+								, submesh.getGeometryBuffers( renderPass.getShaderFlags(), material, instanceMult, textures ).layouts );
 							nodes.addRenderNode( flags
 								, animated
 								, culledNode

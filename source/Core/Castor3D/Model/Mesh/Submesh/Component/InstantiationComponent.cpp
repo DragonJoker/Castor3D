@@ -120,11 +120,13 @@ namespace castor3d
 		return count;
 	}
 
-	void InstantiationComponent::gather( MaterialSPtr material
+	void InstantiationComponent::gather( ShaderFlags const & flags
+		, MaterialSPtr material
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
-		, uint32_t instanceMult )
+		, uint32_t instanceMult
+		, TextureFlagsArray const & mask )
 	{
 		auto it = m_instances.find( material );
 		auto index = ( instanceMult <= 1u

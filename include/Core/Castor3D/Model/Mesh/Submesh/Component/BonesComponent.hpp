@@ -49,11 +49,13 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
-		C3D_API void gather( MaterialSPtr material
+		C3D_API void gather( ShaderFlags const & flags
+			, MaterialSPtr material
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
-			, uint32_t instanceMult )override;
+			, uint32_t instanceMult
+			, TextureFlagsArray const & mask )override;
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::clone
 		 */
