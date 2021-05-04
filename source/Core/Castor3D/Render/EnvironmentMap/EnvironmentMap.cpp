@@ -8,6 +8,7 @@
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp"
 #include "Castor3D/Render/PBR/IblTextures.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
@@ -92,7 +93,8 @@ namespace castor3d
 			return result;
 		}
 
-		EnvironmentMap::EnvironmentMapPasses doCreatePasses( EnvironmentMap & map
+		EnvironmentMap::EnvironmentMapPasses doCreatePasses( RenderDevice const & device
+			, EnvironmentMap & map
 			, SceneNode & node )
 		{
 			static castor::Point3f const position;
@@ -126,12 +128,12 @@ namespace castor3d
 			return EnvironmentMap::EnvironmentMapPasses
 			{
 				{
-					std::make_unique< EnvironmentMapPass >( map, nodes[0], node, CubeMapFace::ePositiveX ),
-					std::make_unique< EnvironmentMapPass >( map, nodes[1], node, CubeMapFace::eNegativeX ),
-					std::make_unique< EnvironmentMapPass >( map, nodes[2], node, CubeMapFace::ePositiveY ),
-					std::make_unique< EnvironmentMapPass >( map, nodes[3], node, CubeMapFace::eNegativeY ),
-					std::make_unique< EnvironmentMapPass >( map, nodes[4], node, CubeMapFace::ePositiveZ ),
-					std::make_unique< EnvironmentMapPass >( map, nodes[5], node, CubeMapFace::eNegativeZ ),
+					std::make_unique< EnvironmentMapPass >( device, map, nodes[0], node, CubeMapFace::ePositiveX ),
+					std::make_unique< EnvironmentMapPass >( device, map, nodes[1], node, CubeMapFace::eNegativeX ),
+					std::make_unique< EnvironmentMapPass >( device, map, nodes[2], node, CubeMapFace::ePositiveY ),
+					std::make_unique< EnvironmentMapPass >( device, map, nodes[3], node, CubeMapFace::eNegativeY ),
+					std::make_unique< EnvironmentMapPass >( device, map, nodes[4], node, CubeMapFace::ePositiveZ ),
+					std::make_unique< EnvironmentMapPass >( device, map, nodes[5], node, CubeMapFace::eNegativeZ ),
 				}
 			};
 		}
@@ -139,14 +141,15 @@ namespace castor3d
 
 	uint32_t EnvironmentMap::m_count = 0u;
 
-	EnvironmentMap::EnvironmentMap( Engine & engine
+	EnvironmentMap::EnvironmentMap( RenderDevice const & device
 		, SceneNode & node )
-		: OwnedBy< Engine >{ engine }
-		, m_environmentMap{ doCreateTexture( engine, MapSize ) }
+		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
+		, m_device{ device }
+		, m_environmentMap{ doCreateTexture( *device.renderSystem.getEngine(), MapSize ) }
 		, m_node{ node }
 		, m_index{ ++m_count }
 		, m_render{ ( m_count % 5u ) }
-		, m_passes( doCreatePasses( *this, node ) )
+		, m_passes( doCreatePasses( m_device , *this, node ) )
 	{
 		log::trace << "Created EnvironmentMap" << node.getName() << std::endl;
 	}
@@ -155,20 +158,20 @@ namespace castor3d
 	{
 	}
 
-	bool EnvironmentMap::initialise( RenderDevice const & device )
+	bool EnvironmentMap::initialise()
 	{
 		if ( !m_environmentMap->isInitialised() )
 		{
-			m_timer = std::make_shared< RenderPassTimer >( device
+			m_timer = std::make_shared< RenderPassTimer >( m_device
 				, cuT( "EnvironmentMap" )
 				, m_node.getName()
 				, uint32_t( m_passes.size() + 1u ) ); // passes + mipmap generation
-			m_environmentMap->initialise( device );
+			m_environmentMap->initialise( m_device );
 			ashes::ImageCreateInfo depthStencil
 			{
 				0u,
 				VK_IMAGE_TYPE_2D,
-				device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT ),
+				m_device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT ),
 				{ MapSize[0], MapSize[1], 1u },
 				1u,
 				1u,
@@ -176,7 +179,7 @@ namespace castor3d
 				VK_IMAGE_TILING_OPTIMAL,
 				VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
 			};
-			m_depthBuffer = makeImage( device
+			m_depthBuffer = makeImage( m_device
 				, std::move( depthStencil )
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, "EnvironmentMapDepth" );
@@ -248,7 +251,7 @@ namespace castor3d
 				std::move( subpasses ),
 				std::move( dependencies ),
 			};
-			m_renderPass = device->createRenderPass( "EnvironmentMap"
+			m_renderPass = m_device->createRenderPass( "EnvironmentMap"
 				, std::move( createInfo ) );
 			auto & background = *m_node.getScene()->getBackground();
 			m_backgroundUboDescriptorPool = background.getUboDescriptorLayout().createPool( "EnvironmentMapUbo", 6u );
@@ -257,8 +260,7 @@ namespace castor3d
 
 			for ( auto & pass : m_passes )
 			{
-				pass->initialise( device
-					, MapSize
+				pass->initialise( MapSize
 					, face++
 					, *m_renderPass
 					, background
@@ -267,7 +269,7 @@ namespace castor3d
 					, *m_timer );
 			}
 
-			m_generateMipmaps = CommandsSemaphore{ device, cuT( "EnvironmentMapMipmaps" ) };
+			m_generateMipmaps = CommandsSemaphore{ m_device, cuT( "EnvironmentMapMipmaps" ) };
 			auto & cmd = *m_generateMipmaps.commandBuffer;
 			cmd.begin();
 			m_timer->beginPass( cmd, 6u );
@@ -286,13 +288,13 @@ namespace castor3d
 		return true;
 	}
 
-	void EnvironmentMap::cleanup( RenderDevice const & device )
+	void EnvironmentMap::cleanup()
 	{
 		m_ibl.reset();
 
 		for ( auto & pass : m_passes )
 		{
-			pass->cleanup( device );
+			pass->cleanup();
 		}
 
 		m_backgroundUboDescriptorPool.reset();
@@ -328,8 +330,7 @@ namespace castor3d
 		}
 	}
 
-	ashes::Semaphore const & EnvironmentMap::render( RenderDevice const & device
-		, ashes::Semaphore const & toWait )
+	ashes::Semaphore const & EnvironmentMap::render( ashes::Semaphore const & toWait )
 	{
 		ashes::Semaphore const * result = &toWait;
 		auto timerBlock = m_timer->start();
@@ -339,11 +340,11 @@ namespace castor3d
 		{
 			for ( auto & pass : m_passes )
 			{
-				result = &pass->render( device, *result );
+				result = &pass->render( *result );
 			}
 
 			timerBlock->notifyPassRender( uint32_t( m_passes.size() ) );
-			result = &m_generateMipmaps.submit( *device.graphicsQueue, *result );
+			result = &m_generateMipmaps.submit( *m_device.graphicsQueue, *result );
 			m_render = 0u;
 		}
 

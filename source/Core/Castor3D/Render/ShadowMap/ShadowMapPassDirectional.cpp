@@ -51,7 +51,7 @@ namespace castor3d
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap
 		, uint32_t cascadeIndex )
-		: ShadowMapPass{ cuT( "Directional Cascade " ) + string::toString( cascadeIndex ), device, matrixUbo, culler, shadowMap }
+		: ShadowMapPass{ device, cuT( "Directional Cascade " ) + string::toString( cascadeIndex ), matrixUbo, culler, shadowMap }
 	{
 		log::trace << "Created " << m_name << std::endl;
 	}
@@ -82,8 +82,7 @@ namespace castor3d
 		m_shadowMapUbo.update( *updater.light, updater.index );
 	}
 
-	bool ShadowMapPassDirectional::doInitialise( RenderDevice const & device
-		, Size const & size )
+	bool ShadowMapPassDirectional::doInitialise( Size const & size )
 	{
 		std::array< VkImageLayout, size_t( SmTexture::eCount ) > FinalLayouts
 		{
@@ -161,13 +160,13 @@ namespace castor3d
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = device->createRenderPass( m_name
+		m_renderPass = m_device->createRenderPass( m_name
 			, std::move( createInfo ) );
 		m_initialised = true;
 		return m_initialised;
 	}
 
-	void ShadowMapPassDirectional::doCleanup( RenderDevice const & device )
+	void ShadowMapPassDirectional::doCleanup()
 	{
 		m_renderQueue.cleanup();
 		getCuller().getCamera().detach();

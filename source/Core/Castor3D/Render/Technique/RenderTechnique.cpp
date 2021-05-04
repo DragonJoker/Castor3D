@@ -160,7 +160,7 @@ namespace castor3d
 					cache.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
 						, [&shadowMap]( RenderDevice const & device )
 						{
-							shadowMap.initialise( device );
+							shadowMap.initialise();
 						} ) );
 				}
 
@@ -647,7 +647,7 @@ namespace castor3d
 
 		for ( auto & map : maps )
 		{
-			map.get().initialise( device );
+			map.get().initialise();
 		}
 	}
 
@@ -669,19 +669,19 @@ namespace castor3d
 
 		if ( m_transparentPass )
 		{
-			m_transparentPass->cleanup( m_device );
+			m_transparentPass->cleanup();
 		}
 
 		if ( m_opaquePass )
 		{
-			m_opaquePass->cleanup( m_device );
+			m_opaquePass->cleanup();
 		}
 
 		m_voxelizer.reset();
 
 		if ( m_depthPass )
 		{
-			m_depthPass->cleanup( m_device );
+			m_depthPass->cleanup();
 			m_depthPass.reset();
 		}
 
@@ -880,9 +880,9 @@ namespace castor3d
 
 	void RenderTechnique::doInitialiseShadowMaps()
 	{
-		m_directionalShadowMap->initialise( m_device );
-		m_spotShadowMap->initialise( m_device );
-		m_pointShadowMap->initialise( m_device );
+		m_directionalShadowMap->initialise();
+		m_spotShadowMap->initialise();
+		m_pointShadowMap->initialise();
 	}
 
 	void RenderTechnique::doInitialiseLpv()
@@ -1141,7 +1141,7 @@ namespace castor3d
 
 		for ( auto & map : m_renderTarget.getScene()->getEnvironmentMaps() )
 		{
-			result = &map.get().render( device, *result );
+			result = &map.get().render( *result );
 		}
 
 		return *result;
@@ -1150,7 +1150,7 @@ namespace castor3d
 	ashes::Semaphore const & RenderTechnique::doRenderDepth( RenderDevice const & device
 		, ashes::SemaphoreCRefArray const & semaphores )
 	{
-		return m_depthPass->render( device, semaphores );
+		return m_depthPass->render( semaphores );
 	}
 
 	ashes::Semaphore const & RenderTechnique::doRenderBackground( RenderDevice const & device

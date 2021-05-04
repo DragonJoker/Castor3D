@@ -138,7 +138,7 @@ namespace castor3d
 			, m_gpInfoUbo
 			, hdrConfigUbo ) }
 	{
-		m_opaquePass.initialiseRenderPass( device, m_opaquePassResult );
+		m_opaquePass.initialiseRenderPass( m_opaquePassResult );
 
 		if ( m_ssaoConfig.enabled )
 		{
@@ -208,7 +208,7 @@ namespace castor3d
 		, ashes::Semaphore const & toWait )
 	{
 		ashes::Semaphore const * result = &toWait;
-		result = &m_opaquePass.render( device, *result );
+		result = &m_opaquePass.render( *result );
 
 		if ( m_ssaoConfig.enabled )
 		{

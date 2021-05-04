@@ -71,7 +71,7 @@ namespace castor3d
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap )
-		: ShadowMapPass{ cuT( "Point Layer " ) + string::toString( index / 6u ) + " Face " + string::toString( index % 6u ), device, matrixUbo, culler, shadowMap }
+		: ShadowMapPass{ device, cuT( "Point Layer " ) + string::toString( index / 6u ) + " Face " + string::toString( index % 6u ), matrixUbo, culler, shadowMap }
 		, m_viewport{ *device.renderSystem.getEngine() }
 	{
 		log::trace << "Created " << m_name << std::endl;
@@ -119,8 +119,7 @@ namespace castor3d
 		SceneRenderPass::doUpdate( nodes.billboardNodes.backCulled );
 	}
 
-	bool ShadowMapPassPoint::doInitialise( RenderDevice const & device
-		, Size const & size )
+	bool ShadowMapPassPoint::doInitialise( Size const & size )
 	{
 		float const aspect = float( size.getWidth() ) / size.getHeight();
 		float const nearZ = 1.0f;
@@ -203,14 +202,14 @@ namespace castor3d
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = device->createRenderPass( m_name
+		m_renderPass = m_device->createRenderPass( m_name
 			, std::move( createInfo ) );
 		m_viewport.resize( size );
 		m_initialised = true;
 		return m_initialised;
 	}
 
-	void ShadowMapPassPoint::doCleanup( RenderDevice const & device )
+	void ShadowMapPassPoint::doCleanup()
 	{
 		m_renderQueue.cleanup();
 		m_onNodeChanged.disconnect();

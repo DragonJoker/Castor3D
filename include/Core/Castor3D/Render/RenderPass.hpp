@@ -28,9 +28,9 @@ namespace castor3d
 		using DistanceSortedNodeMap = std::multimap< double, std::unique_ptr< DistanceRenderNodeBase > >;
 
 	protected:
-		C3D_API SceneRenderPass( castor::String const & category
+		C3D_API SceneRenderPass( RenderDevice const & device
+			, castor::String const & category
 			, castor::String const & name
-			, Engine & engine
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, RenderMode mode
@@ -58,9 +58,9 @@ namespace castor3d
 		 *\param[in]	culler			Le culler pour cette passe.
 		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
 		 */
-		C3D_API SceneRenderPass( castor::String const & category
+		C3D_API SceneRenderPass( RenderDevice const & device
+			, castor::String const & category
 			, castor::String const & name
-			, Engine & engine
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, uint32_t instanceMult = 1u );
@@ -84,9 +84,9 @@ namespace castor3d
 		 *\param[in]	oit				Le statut de rendu indépendant de l'ordre des objets.
 		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
 		 */
-		C3D_API SceneRenderPass( castor::String const & category
+		C3D_API SceneRenderPass( RenderDevice const & device
+			, castor::String const & category
 			, castor::String const & name
-			, Engine & engine
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, bool oit
@@ -111,9 +111,9 @@ namespace castor3d
 		 *\param[in]	ignored			Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
 		 */
-		C3D_API SceneRenderPass( castor::String const & category
+		C3D_API SceneRenderPass( RenderDevice const & device
+			, castor::String const & category
 			, castor::String const & name
-			, Engine & engine
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, SceneNode const * ignored
@@ -140,9 +140,9 @@ namespace castor3d
 		 *\param[in]	ignored			Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
 		 */
-		C3D_API SceneRenderPass( castor::String const & category
+		C3D_API SceneRenderPass( RenderDevice const & device
+			, castor::String const & category
 			, castor::String const & name
-			, Engine & engine
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, bool oit
@@ -169,8 +169,7 @@ namespace castor3d
 		 *\param		size	Les dimensions voulues pour la passe.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool initialise( RenderDevice const & device
-			, castor::Size const & size );
+		C3D_API bool initialise( castor::Size const & size );
 		/**
 		 *\~english
 		 *\brief		Initialises the pass.
@@ -187,8 +186,7 @@ namespace castor3d
 		 *\param		index	L'indice de la passe, dans le parent.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool initialise( RenderDevice const & device
-			, castor::Size const & size
+		C3D_API bool initialise( castor::Size const & size
 			, RenderPassTimer & timer
 			, uint32_t index );
 		/**
@@ -199,7 +197,7 @@ namespace castor3d
 		 *\brief		Nettoie la passe.
 		 *\param		device	Le device actuel.
 		 */
-		C3D_API void cleanup( RenderDevice const & device );
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -1132,7 +1130,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Nettoie la passe.
 		 */
-		C3D_API virtual void doCleanup( RenderDevice const & device ) = 0;
+		C3D_API virtual void doCleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Initialises the pass.
@@ -1145,8 +1143,7 @@ namespace castor3d
 		 *\param		size	Les dimensions voulues pour la passe.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool doInitialise( RenderDevice const & device
-			, castor::Size const & size ) = 0;
+		C3D_API virtual bool doInitialise( castor::Size const & size ) = 0;
 		/**
 		 *\~english
 		 *\brief		Initialises the descriptor set of a billboard node.
@@ -1325,6 +1322,7 @@ namespace castor3d
 		};
 
 	protected:
+		RenderDevice const & m_device;
 		RenderSystem & m_renderSystem;
 		MatrixUbo & m_matrixUbo;
 		SceneCuller & m_culler;

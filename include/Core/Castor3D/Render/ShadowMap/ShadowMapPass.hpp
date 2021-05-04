@@ -38,8 +38,8 @@ namespace castor3d
 		 *\param[in]	culler		Le culler pour cette passe.
 		 *\param[in]	shadowMap	La shadow map parente.
 		 */
-		C3D_API ShadowMapPass( castor::String name
-			, RenderDevice const & device
+		C3D_API ShadowMapPass( RenderDevice const & device
+			, castor::String name
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, ShadowMap const & shadowMap );

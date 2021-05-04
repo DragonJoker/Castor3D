@@ -63,7 +63,8 @@ namespace castor3d
 		, LightVolumePassResult const * lpvResult
 		, TextureUnit const * vctFirstBounce
 		, TextureUnit const * vctSecondaryBounce )
-		: castor3d::RenderTechniquePass{ "Transparent"
+		: castor3d::RenderTechniquePass{ device
+			, "Transparent"
 			, "Accumulation"
 			, matrixUbo
 			, culler
@@ -75,8 +76,7 @@ namespace castor3d
 			, &llpvConfigUbo
 			, &vctConfigUbo }
 	{
-		initialise( device
-			, size
+		initialise( size
 			, lpvResult
 			, vctFirstBounce
 			, vctSecondaryBounce );
@@ -86,8 +86,7 @@ namespace castor3d
 	{
 	}
 
-	void TransparentPass::initialiseRenderPass( RenderDevice const & device
-		, TransparentPassResult const & wbpResult )
+	void TransparentPass::initialiseRenderPass( TransparentPassResult const & wbpResult )
 	{
 		ashes::VkAttachmentDescriptionArray attaches
 		{
@@ -157,7 +156,7 @@ namespace castor3d
 			, std::move( attaches )
 			, std::move( subpasses )
 			, std::move( dependencies ) };
-		m_renderPass = device->createRenderPass( "TransparentPass"
+		m_renderPass = m_device->createRenderPass( "TransparentPass"
 			, std::move( createInfo ) );
 		ashes::ImageViewCRefArray fbAttaches;
 
@@ -170,11 +169,10 @@ namespace castor3d
 			, { wbpResult[WbTexture::eDepth].getTexture()->getWidth()
 				, wbpResult[WbTexture::eDepth].getTexture()->getHeight() }
 			, std::move( fbAttaches ) );
-		m_nodesCommands = device.graphicsCommandPool->createCommandBuffer( "TransparentPass" );
+		m_nodesCommands = m_device.graphicsCommandPool->createCommandBuffer( "TransparentPass" );
 	}
 
-	ashes::Semaphore const & TransparentPass::render( RenderDevice const & device
-		, ashes::Semaphore const & toWait )
+	ashes::Semaphore const & TransparentPass::render( ashes::Semaphore const & toWait )
 	{
 		static ashes::VkClearValueArray const clearValues{ defaultClearDepthStencil
 			, transparentBlackClearColor
@@ -203,7 +201,7 @@ namespace castor3d
 		m_nodesCommands->endDebugBlock();
 		m_nodesCommands->end();
 
-		device.graphicsQueue->submit( *m_nodesCommands
+		m_device.graphicsQueue->submit( *m_nodesCommands
 			, *result
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, getSemaphore()
@@ -226,12 +224,11 @@ namespace castor3d
 		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
 	}
 
-	bool TransparentPass::doInitialise( RenderDevice const & device
-		, Size const & size )
+	bool TransparentPass::doInitialise( Size const & size )
 	{
 		if ( !m_finished )
 		{
-			m_finished = device->createSemaphore( "TransparentPass" );
+			m_finished = m_device->createSemaphore( "TransparentPass" );
 		}
 
 		return true;

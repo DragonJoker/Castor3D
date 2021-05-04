@@ -146,7 +146,7 @@ namespace castor3d
 		, ashes::Semaphore const & toWait )
 	{
 		ashes::Semaphore const * result = &toWait;
-		result = &m_voxelizePass->render( device, *result );
+		result = &m_voxelizePass->render( *result );
 		result = &m_voxelToTexture->render( device, *result );
 
 		if ( m_voxelConfig.enableSecondaryBounce )

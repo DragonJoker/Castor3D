@@ -276,12 +276,12 @@ namespace castor3d
 
 	uint32_t const PickingPass::UboBindingPoint = 7u;
 
-	PickingPass::PickingPass( Engine & engine
+	PickingPass::PickingPass( RenderDevice const & device
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler )
-		: SceneRenderPass{ cuT( "Picking" )
+		: SceneRenderPass{ device
 			, cuT( "Picking" )
-			, engine
+			, cuT( "Picking" )
 			, matrixUbo
 			, culler
 			, RenderMode::eBoth
@@ -289,12 +289,8 @@ namespace castor3d
 			, false
 			, nullptr
 			, 1u }
+		, m_transferFence{ m_device->createFence( "PickingPass" ) }
 	{
-		engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [this]( RenderDevice const & device )
-			{
-				m_transferFence = device->createFence( "PickingPass" );
-			} ) );
 	}
 
 	PickingPass::~PickingPass()
@@ -590,12 +586,11 @@ namespace castor3d
 			, nodes );
 	}
 
-	bool PickingPass::doInitialise( RenderDevice const & device
-		, Size const & size )
+	bool PickingPass::doInitialise( Size const & size )
 	{
-		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( "PickingPass" );
+		m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer( "PickingPass" );
 
-		m_colourTexture = createTexture( device
+		m_colourTexture = createTexture( m_device
 			, size
 			, VK_FORMAT_R32G32B32A32_SFLOAT
 			, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
@@ -604,7 +599,7 @@ namespace castor3d
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, "Colour" );
-		m_colourView = createView( device
+		m_colourView = createView( m_device
 			, *m_colourTexture
 			, "Colour" );
 
@@ -642,17 +637,17 @@ namespace castor3d
 			}
 		}
 
-		m_depthTexture = createTexture( device
+		m_depthTexture = createTexture( m_device
 			, size
 			, VK_FORMAT_D32_SFLOAT
 			, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, "Depth" );
-		m_depthView = createView( device
+		m_depthView = createView( m_device
 			, *m_depthTexture
 			, "Depth" );
 
-		m_stagingBuffer = makeBuffer< Point4f >( device
+		m_stagingBuffer = makeBuffer< Point4f >( m_device
 			, PickingWidth * PickingWidth
 			, ( VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				| VK_BUFFER_USAGE_TRANSFER_SRC_BIT )
@@ -726,7 +721,7 @@ namespace castor3d
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = device->createRenderPass( "PickingPass"
+		m_renderPass = m_device->createRenderPass( "PickingPass"
 			, std::move( createInfo ) );
 
 		ashes::ImageViewCRefArray attachments;
@@ -739,7 +734,7 @@ namespace castor3d
 		return true;
 	}
 
-	void PickingPass::doCleanup( RenderDevice const & device )
+	void PickingPass::doCleanup()
 	{
 		m_commandBuffer.reset();
 		m_scenes.clear();

@@ -67,7 +67,7 @@ namespace castor3d
 		 *\brief		Initialise le frame buffer et les données spécifiques au type de source lumineuse.
 		 *\param[in]	device	Le device GPU.
 		 */
-		C3D_API bool initialise( RenderDevice const & device );
+		C3D_API bool initialise();
 		/**
 		*\~english
 		*\brief

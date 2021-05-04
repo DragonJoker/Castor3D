@@ -43,7 +43,8 @@ namespace castor3d
 		, SceneCuller & culler
 		, SsaoConfig const & ssaoConfig
 		, TextureLayoutSPtr depthBuffer )
-		: RenderTechniquePass{ prefix
+		: RenderTechniquePass{ device
+			, prefix
 			, "DepthPass"
 			, matrixUbo
 			, culler
@@ -101,15 +102,14 @@ namespace castor3d
 			, std::move( fbattaches ) );
 
 		m_nodesCommands = device.graphicsCommandPool->createCommandBuffer( "DepthPass" );
-		initialise( device, { size.width, size.height }, nullptr );
+		initialise( { size.width, size.height }, nullptr );
 	}
 
 	DepthPass::~DepthPass()
 	{
 	}
 
-	ashes::Semaphore const & DepthPass::render( RenderDevice const & device
-		, ashes::SemaphoreCRefArray const & semaphores )
+	ashes::Semaphore const & DepthPass::render( ashes::SemaphoreCRefArray const & semaphores )
 	{
 		static ashes::VkClearValueArray const clearValues
 		{
@@ -139,7 +139,7 @@ namespace castor3d
 		m_nodesCommands->end();
 
 		ashes::VkPipelineStageFlagsArray const stages( semaphores.size(), VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT );
-		device.graphicsQueue->submit( { *m_nodesCommands }
+		m_device.graphicsQueue->submit( { *m_nodesCommands }
 			, semaphores
 			, stages
 			, { getSemaphore() }
@@ -148,12 +148,12 @@ namespace castor3d
 		return getSemaphore();
 	}
 
-	void DepthPass::doCleanup( RenderDevice const & device )
+	void DepthPass::doCleanup()
 	{
 		m_nodesCommands.reset();
 		m_frameBuffer.reset();
 		m_renderPass.reset();
-		RenderTechniquePass::doCleanup( device );
+		RenderTechniquePass::doCleanup();
 	}
 
 	TextureFlags DepthPass::getTexturesMask()const

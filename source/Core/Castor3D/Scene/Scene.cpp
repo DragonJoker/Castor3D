@@ -508,7 +508,7 @@ namespace castor3d
 			getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
 				, [&pass]( RenderDevice const & device )
 				{
-					pass.get().cleanup( device );
+					pass.get().cleanup();
 				} ) );
 		}
 
@@ -708,14 +708,14 @@ namespace castor3d
 	{
 		if ( !hasEnvironmentMap( node ) )
 		{
-			auto it = m_reflectionMaps.emplace( &node, std::make_unique< EnvironmentMap >( *getEngine(), node ) ).first;
+			auto it = m_reflectionMaps.emplace( &node, std::make_unique< EnvironmentMap >( *getEngine()->getRenderSystem()->getMainRenderDevice(), node ) ).first;
 			auto & pass = *it->second;
 			m_reflectionMapsArray.emplace_back( pass );
 
 			getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
 				, [&pass]( RenderDevice const & device )
 				{
-					pass.initialise( device );
+					pass.initialise();
 				} ) );
 		}
 	}

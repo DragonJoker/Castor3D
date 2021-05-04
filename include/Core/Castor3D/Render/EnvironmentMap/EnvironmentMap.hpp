@@ -39,7 +39,7 @@ namespace castor3d
 		 *\param[in]	engine	Le moteur.
 		 *\param[in]	node	Le noeud de scène.
 		 */
-		C3D_API EnvironmentMap( Engine & engine
+		C3D_API EnvironmentMap( RenderDevice const & device
 			, SceneNode & node );
 		/**
 		 *\~english
@@ -56,7 +56,7 @@ namespace castor3d
 		 *\brief		Initialise le frame buffer.
 		 *\param[in]	device	Le device GPU.
 		 */
-		C3D_API bool initialise( RenderDevice const & device );
+		C3D_API bool initialise();
 		/**
 		 *\~english
 		 *\brief		Cleans up the frame buffer.
@@ -65,7 +65,7 @@ namespace castor3d
 		 *\brief		Nettoie le frame buffer.
 		 *\param[in]	device	Le device GPU.
 		 */
-		C3D_API void cleanup( RenderDevice const & device );
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -94,8 +94,7 @@ namespace castor3d
 		 *\param[in]	device	Le device GPU.
 		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
-		C3D_API ashes::Semaphore const & render( RenderDevice const & device
-			, ashes::Semaphore const & toWait );
+		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait );
 		/**
 		*\~english
 		*name
@@ -139,6 +138,7 @@ namespace castor3d
 		/**@}*/
 
 	private:
+		RenderDevice const & m_device;
 		static uint32_t m_count;
 		TextureUnitSPtr m_environmentMap;
 		ashes::ImagePtr m_depthBuffer;

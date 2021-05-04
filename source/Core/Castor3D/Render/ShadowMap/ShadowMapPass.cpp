@@ -23,14 +23,14 @@ using namespace castor;
 
 namespace castor3d
 {
-	ShadowMapPass::ShadowMapPass( castor::String name
-		, RenderDevice const & device
+	ShadowMapPass::ShadowMapPass( RenderDevice const & device
+		, castor::String name
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap )
-		: SceneRenderPass{ cuT( "ShadowMap" )
+		: SceneRenderPass{ device
+			, cuT( "ShadowMap" )
 			, std::move( name )
-			, *device.renderSystem.getEngine()
 			, matrixUbo
 			, culler
 			, RenderMode::eBoth

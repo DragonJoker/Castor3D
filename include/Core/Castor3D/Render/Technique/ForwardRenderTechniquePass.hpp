@@ -40,7 +40,8 @@ namespace castor3d
 		 *\param[in]	llpvConfigUbo	La configuration des Layered LPV, si nécessaire.
 		 *\param[in]	vctConfigUbo	La configuration du VCT, si nécessaire.
 		 */
-		C3D_API ForwardRenderTechniquePass( castor::String const & category
+		C3D_API ForwardRenderTechniquePass( RenderDevice const & device
+			, castor::String const & category
 			, castor::String const & name
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
@@ -78,7 +79,8 @@ namespace castor3d
 		 *\param[in]	llpvConfigUbo	La configuration des Layered LPV, si nécessaire.
 		 *\param[in]	vctConfigUbo	La configuration du VCT, si nécessaire.
 		 */
-		C3D_API ForwardRenderTechniquePass( castor::String const & category
+		C3D_API ForwardRenderTechniquePass( RenderDevice const & device
+			, castor::String const & category
 			, castor::String const & name
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
@@ -190,8 +192,7 @@ namespace castor3d
 		 *\param[in]	size		Les dimensions de la passe.
 		 *\param[in]	clear		Dit si les attaches doivent être vidées au début de la passe.
 		 */
-		C3D_API void initialiseRenderPass( RenderDevice const & device
-			, ashes::ImageView const & colourView
+		C3D_API void initialiseRenderPass( ashes::ImageView const & colourView
 			, ashes::ImageView const & depthView
 			, castor::Size const & size
 			, bool clear );
@@ -209,14 +210,13 @@ namespace castor3d
 		 *\param[in]	device	Le device GPU.
 		 *\param[out]	toWait	Le sémaphore à attendre.
 		 */
-		C3D_API ashes::Semaphore const & render( RenderDevice const & device
-			, ashes::Semaphore const & toWait );
+		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait );
 
 	protected:
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::doCleanup
 		 */
-		C3D_API void doCleanup( RenderDevice const & device )override;
+		C3D_API void doCleanup()override;
 
 	private:
 		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
