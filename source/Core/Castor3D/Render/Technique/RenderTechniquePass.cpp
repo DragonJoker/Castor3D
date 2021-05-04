@@ -122,7 +122,8 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	RenderTechniquePass::RenderTechniquePass( String const & category
+	RenderTechniquePass::RenderTechniquePass( RenderDevice const & device
+		, String const & category
 		, String const & name
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
@@ -132,7 +133,7 @@ namespace castor3d
 		, LpvGridConfigUbo const * lpvConfigUbo
 		, LayeredLpvGridConfigUbo const * llpvConfigUbo
 		, VoxelizerUbo const * vctConfigUbo )
-		: SceneRenderPass{ category, name, *culler.getScene().getEngine(), matrixUbo, culler, ignored }
+		: SceneRenderPass{ device, category, name, matrixUbo, culler, ignored }
 		, m_scene{ culler.getScene() }
 		, m_camera{ culler.hasCamera() ? &culler.getCamera() : nullptr }
 		, m_sceneNode{}
@@ -144,7 +145,8 @@ namespace castor3d
 	{
 	}
 
-	RenderTechniquePass::RenderTechniquePass( String const & category
+	RenderTechniquePass::RenderTechniquePass( RenderDevice const & device
+		, String const & category
 		, String const & name
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
@@ -155,7 +157,7 @@ namespace castor3d
 		, LpvGridConfigUbo const * lpvConfigUbo
 		, LayeredLpvGridConfigUbo const * llpvConfigUbo
 		, VoxelizerUbo const * vctConfigUbo )
-		: SceneRenderPass{ category, name, *culler.getScene().getEngine(), matrixUbo, culler, oit, ignored }
+		: SceneRenderPass{ device, category, name, matrixUbo, culler, oit, ignored }
 		, m_scene{ culler.getScene() }
 		, m_camera{ culler.hasCamera() ? &culler.getCamera() : nullptr }
 		, m_sceneNode{}
@@ -182,7 +184,7 @@ namespace castor3d
 		, LightVolumePassResult const * lpvResult
 		, TextureUnit const * vctFirstBounce
 		, TextureUnit const * vctSecondaryBounce )
-		: SceneRenderPass{ category, name, *culler.getScene().getEngine(), matrixUbo, culler, ignored }
+		: SceneRenderPass{ device, category, name, matrixUbo, culler, ignored }
 		, m_scene{ culler.getScene() }
 		, m_camera{ culler.hasCamera() ? &culler.getCamera() : nullptr }
 		, m_sceneNode{}
@@ -192,8 +194,7 @@ namespace castor3d
 		, m_llpvConfigUbo{ llpvConfigUbo }
 		, m_vctConfigUbo{ vctConfigUbo }
 	{
-		initialise( device
-			, size
+		initialise( size
 			, lpvResult
 			, vctFirstBounce
 			, vctSecondaryBounce );
@@ -215,7 +216,7 @@ namespace castor3d
 		, LightVolumePassResult const * lpvResult
 		, TextureUnit const * vctFirstBounce
 		, TextureUnit const * vctSecondaryBounce )
-		: SceneRenderPass{ category, name, *culler.getScene().getEngine(), matrixUbo, culler, oit, ignored }
+		: SceneRenderPass{ device, category, name, matrixUbo, culler, oit, ignored }
 		, m_scene{ culler.getScene() }
 		, m_camera{ culler.hasCamera() ? &culler.getCamera() : nullptr }
 		, m_sceneNode{}
@@ -225,15 +226,13 @@ namespace castor3d
 		, m_llpvConfigUbo{ llpvConfigUbo }
 		, m_vctConfigUbo{ vctConfigUbo }
 	{
-		initialise( device
-			, size
+		initialise( size
 			, lpvResult
 			, vctFirstBounce
 			, vctSecondaryBounce );
 	}
 
-	bool RenderTechniquePass::initialise( RenderDevice const & device
-		, castor::Size const & size
+	bool RenderTechniquePass::initialise( castor::Size const & size
 		, LightVolumePassResult const * lpvResult
 		, TextureUnit const * vctFirstBounce
 		, TextureUnit const * vctSecondaryBounce )
@@ -241,11 +240,10 @@ namespace castor3d
 		m_lpvResult = lpvResult;
 		m_vctFirstBounce = vctFirstBounce;
 		m_vctSecondaryBounce = vctSecondaryBounce;
-		return SceneRenderPass::initialise( device, size );
+		return SceneRenderPass::initialise( size );
 	}
 
-	bool RenderTechniquePass::initialise( RenderDevice const & device
-		, castor::Size const & size
+	bool RenderTechniquePass::initialise( castor::Size const & size
 		, RenderPassTimer & timer
 		, uint32_t index
 		, LightVolumePassResult const * lpvResult
@@ -255,7 +253,7 @@ namespace castor3d
 		m_lpvResult = lpvResult;
 		m_vctFirstBounce = vctFirstBounce;
 		m_vctSecondaryBounce = vctSecondaryBounce;
-		return SceneRenderPass::initialise( device, size, timer, index );
+		return SceneRenderPass::initialise( size, timer, index );
 	}
 
 	void RenderTechniquePass::accept( RenderTechniqueVisitor & visitor )
@@ -297,14 +295,13 @@ namespace castor3d
 			, updater.camera.get() );
 	}
 
-	bool RenderTechniquePass::doInitialise( RenderDevice const & device
-		, Size const & CU_UnusedParam( size ) )
+	bool RenderTechniquePass::doInitialise( Size const & CU_UnusedParam( size ) )
 	{
-		m_finished = device->createSemaphore( getName() );
+		m_finished = m_device->createSemaphore( getName() );
 		return true;
 	}
 
-	void RenderTechniquePass::doCleanup( RenderDevice const & device )
+	void RenderTechniquePass::doCleanup()
 	{
 		m_renderQueue.cleanup();
 		m_finished.reset();

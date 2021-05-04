@@ -79,8 +79,7 @@ namespace castor3d
 		 *\param[in]	device	Le device GPU.
 		 *\param[out]	toWait	Le sémaphore à attendre.
 		 */
-		ashes::Semaphore const & render( RenderDevice const & device
-			, ashes::Semaphore const & toWait );
+		ashes::Semaphore const & render( ashes::Semaphore const & toWait );
 		/**
 		*\~english
 		*name
@@ -110,9 +109,8 @@ namespace castor3d
 		C3D_API ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
 		C3D_API ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		C3D_API ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
-		C3D_API void doCleanup( RenderDevice const & device )override;
-		C3D_API bool doInitialise( RenderDevice const & device
-			, castor::Size const & size )override;
+		C3D_API void doCleanup()override;
+		C3D_API bool doInitialise( castor::Size const & size )override;
 		C3D_API void doFillUboDescriptor( RenderPipeline const & pipeline
 			, ashes::DescriptorSetLayout const & layout
 			, BillboardListRenderNode & node )override;

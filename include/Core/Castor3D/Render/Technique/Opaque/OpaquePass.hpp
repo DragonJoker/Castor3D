@@ -48,8 +48,7 @@ namespace castor3d
 		 *\param[in]	device		Le device GPU.
 		 *\param[in]	gpResult	Les tampons de la geometry pass.
 		 */
-		C3D_API void initialiseRenderPass( RenderDevice const & device
-			, OpaquePassResult const & gpResult );
+		C3D_API void initialiseRenderPass( OpaquePassResult const & gpResult );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -64,8 +63,7 @@ namespace castor3d
 		 *\param[in]	device	Le device GPU.
 		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
-		C3D_API ashes::Semaphore const & render( RenderDevice const & device
-			, ashes::Semaphore const & toWait );
+		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait );
 
 		C3D_API TextureFlags getTexturesMask()const override;
 

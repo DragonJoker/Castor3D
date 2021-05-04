@@ -52,24 +52,28 @@ namespace castor3d
 		}
 	}
 
-	EnvironmentMapPass::EnvironmentMapPass( EnvironmentMap & reflectionMap
+	EnvironmentMapPass::EnvironmentMapPass( RenderDevice const & device
+		, EnvironmentMap & reflectionMap
 		, SceneNodeSPtr node
 		, SceneNode const & objectNode
 		, CubeMapFace face )
 		: OwnedBy< EnvironmentMap >{ reflectionMap }
+		, m_device{ device }
 		, m_node{ node }
 		, m_face{ face }
 		, m_camera{ doCreateCamera( *node ) }
 		, m_culler{ std::make_unique< FrustumCuller >( *m_camera->getScene(), *m_camera ) }
 		, m_matrixUbo{ *reflectionMap.getEngine() }
-		, m_opaquePass{ std::make_shared< ForwardRenderTechniquePass >( cuT( "EnvironmentMap" )
+		, m_opaquePass{ std::make_shared< ForwardRenderTechniquePass >( device
+			, cuT( "EnvironmentMap" )
 			, m_node->getName() + cuT( " Opaque" )
 			, m_matrixUbo
 			, *m_culler
 			, true
 			, &objectNode
 			, SsaoConfig{} ) }
-		, m_transparentPass{ std::make_shared< ForwardRenderTechniquePass >( cuT( "EnvironmentMap" )
+		, m_transparentPass{ std::make_shared< ForwardRenderTechniquePass >( device
+			, cuT( "EnvironmentMap" )
 			, m_node->getName() + cuT( " Transparent" )
 			, m_matrixUbo
 			, *m_culler
@@ -87,8 +91,7 @@ namespace castor3d
 	{
 	}
 
-	bool EnvironmentMapPass::initialise( RenderDevice const & device
-		, Size const & size
+	bool EnvironmentMapPass::initialise( Size const & size
 		, uint32_t face
 		, ashes::RenderPass const & renderPass
 		, SceneBackground const & background
@@ -106,24 +109,23 @@ namespace castor3d
 		m_camera->resize( size );
 
 		auto name = "EnvironmentMapPass" + m_node->getName() + castor::string::toString( face );
-		static castor::Matrix4x4f const projection = convert( device->perspective( ( 45.0_degrees ).radians()
+		static castor::Matrix4x4f const projection = convert( m_device->perspective( ( 45.0_degrees ).radians()
 			, 1.0f
 			, 0.0f, 2.0f ) );
-		m_matrixUbo.initialise( device );
+		m_matrixUbo.initialise( m_device );
 		m_matrixUbo.cpuUpdate( m_mtxView, projection );
-		m_modelUbo = device.uboPools->getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
-		m_hdrConfigUbo.initialise( device );
+		m_modelUbo = m_device.uboPools->getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+		m_hdrConfigUbo.initialise( m_device );
 		auto const & environmentLayout = getOwner()->getTexture().getTexture();
 		m_envView = environmentLayout->getLayerCubeFaceMipView( 0u, CubeMapFace( face ), 0u ).getTargetView();
 		auto const & depthView = getOwner()->getDepthView();
 
 		// Initialise opaque pass.
-		m_opaquePass->initialiseRenderPass( device
-			, m_envView
+		m_opaquePass->initialiseRenderPass( m_envView
 			, getOwner()->getDepthView()
 			, size
 			, true );
-		m_opaquePass->initialise( device, size, timer, uint32_t( m_face ) * 3u + 0u, nullptr );
+		m_opaquePass->initialise( size, timer, uint32_t( m_face ) * 3u + 0u, nullptr );
 
 		// Create custom background pass.
 		ashes::ImageViewCRefArray attaches;
@@ -132,7 +134,7 @@ namespace castor3d
 		m_frameBuffer = renderPass.createFrameBuffer( name
 			, VkExtent2D{ size[0], size[1] }
 			, std::move( attaches ) );
-		m_backgroundCommands = device.graphicsCommandPool->createCommandBuffer( name
+		m_backgroundCommands = m_device.graphicsCommandPool->createCommandBuffer( name
 			, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
 		auto & commandBuffer = *m_backgroundCommands;
 		m_renderPass = &renderPass;
@@ -152,19 +154,18 @@ namespace castor3d
 			, *m_backgroundTexDescriptorSet );
 
 		// Initialise transparent pass.
-		m_transparentPass->initialiseRenderPass( device
-			, m_envView
+		m_transparentPass->initialiseRenderPass( m_envView
 			, getOwner()->getDepthView()
 			, size
 			, false );
-		m_transparentPass->initialise( device, size, timer, uint32_t( m_face ) * 3u + 2u, nullptr );
+		m_transparentPass->initialise( size, timer, uint32_t( m_face ) * 3u + 2u, nullptr );
 
-		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( name );
-		m_finished = device->createSemaphore( name );
+		m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer( name );
+		m_finished = m_device->createSemaphore( name );
 		return true;
 	}
 
-	void EnvironmentMapPass::cleanup( RenderDevice const & device )
+	void EnvironmentMapPass::cleanup()
 	{
 		m_finished.reset();
 		m_commandBuffer.reset();
@@ -172,10 +173,10 @@ namespace castor3d
 		m_backgroundUboDescriptorSet.reset();
 		m_backgroundTexDescriptorSet.reset();
 		m_frameBuffer.reset();
-		m_opaquePass->cleanup( device );
-		m_transparentPass->cleanup( device );
-		m_hdrConfigUbo.cleanup( device );
-		device.uboPools->putBuffer( m_modelUbo );
+		m_opaquePass->cleanup();
+		m_transparentPass->cleanup();
+		m_hdrConfigUbo.cleanup( m_device );
+		m_device.uboPools->putBuffer( m_modelUbo );
 		m_matrixUbo.cleanup();
 	}
 
@@ -206,8 +207,7 @@ namespace castor3d
 		m_transparentPass->update( updater );
 	}
 
-	ashes::Semaphore const & EnvironmentMapPass::render( RenderDevice const & device
-		, ashes::Semaphore const & toWait )
+	ashes::Semaphore const & EnvironmentMapPass::render( ashes::Semaphore const & toWait )
 	{
 		ashes::Semaphore const * result = &toWait;
 		auto timer = &getOwner()->getTimer();
@@ -244,7 +244,7 @@ namespace castor3d
 		m_commandBuffer->endDebugBlock();
 		m_commandBuffer->end();
 
-		device.graphicsQueue->submit( *m_commandBuffer
+		m_device.graphicsQueue->submit( *m_commandBuffer
 			, toWait
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, *m_finished

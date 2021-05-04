@@ -66,9 +66,8 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		bool doInitialise( RenderDevice const & device
-			, castor::Size const & size )override;
-		void doCleanup( RenderDevice const & device )override;
+		bool doInitialise( castor::Size const & size )override;
+		void doCleanup()override;
 		void doUpdateUbos( CpuUpdater & updater )override;
 		void doFillUboDescriptor( RenderPipeline const & pipeline
 			, ashes::DescriptorSetLayout const & layout
