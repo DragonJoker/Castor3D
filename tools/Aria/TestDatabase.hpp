@@ -56,34 +56,35 @@ namespace aria
 			, wxProgressDialog & progress
 			, int & index );
 
-		TestRunMap listLatestRuns( TestMap const & tests );
-		TestRunMap listLatestRuns( TestMap const & tests
+		AllTestRuns listLatestRuns( TestMap const & tests );
+		AllTestRuns listLatestRuns( TestMap const & tests
 			, wxProgressDialog & progress
 			, int & index );
 		void listLatestRuns( TestMap const & tests
-			, TestRunMap & result );
+			, AllTestRuns & result );
 		void listLatestRuns( TestMap const & tests
-			, TestRunMap & result
-			, wxProgressDialog & progress
-			, int & index );
-		TestRunCategoryMap listLatestRuns( Renderer renderer
-			, TestMap const & tests );
-		TestRunCategoryMap listLatestRuns( Renderer renderer
-			, TestMap const & tests
+			, AllTestRuns & result
 			, wxProgressDialog & progress
 			, int & index );
 		void listLatestRuns( Renderer renderer
 			, TestMap const & tests
-			, TestRunCategoryMap & result );
+			, RendererTestRuns & result );
 		void listLatestRuns( Renderer renderer
 			, TestMap const & tests
-			, TestRunCategoryMap & result
+			, RendererTestRuns & result
 			, wxProgressDialog & progress
 			, int & index );
 
 		void insertTest( Test & test
 			, bool moveFiles = true );
 		void updateRunsCastorDate( db::DateTime const & date );
+		void updateTestCategory( Test const & test
+			, Category category );
+
+		Config const & getConfig()const
+		{
+			return m_config;
+		}
 
 	public:
 		struct InsertIdValue
@@ -448,6 +449,24 @@ namespace aria
 			db::Parameter * tableName{};
 		};
 
+		struct ListCategories
+		{
+			ListCategories() = default;
+			explicit ListCategories( db::Connection & connection )
+				: stmt{ connection.createStatement( "SELECT Id, Name FROM Category" ) }
+			{
+				if ( !stmt->initialise() )
+				{
+					throw std::runtime_error{ "Couldn't create ListCategories SELECT statement." };
+				}
+			}
+
+			void listCategories( CategoryMap & categories );
+
+		private:
+			db::StatementPtr stmt;
+		};
+
 		struct ListTests
 		{
 			ListTests( ListTests const & ) = default;
@@ -519,7 +538,7 @@ namespace aria
 				}
 			}
 
-			TestRunCategoryMap listTests( TestMap const & tests
+			RendererTestRuns listTests( TestMap const & tests
 				, CategoryMap & categories
 				, Renderer renderer
 				, wxProgressDialog & progress
@@ -527,7 +546,7 @@ namespace aria
 			void listTests( TestMap const & tests
 				, CategoryMap & categories
 				, Renderer renderer
-				, TestRunCategoryMap & result
+				, RendererTestRuns & result
 				, wxProgressDialog & progress
 				, int & index );
 
@@ -552,6 +571,25 @@ namespace aria
 
 			db::StatementPtr stmt;
 			db::Parameter * castorDate;
+		};
+
+		struct UpdateTestCategory
+		{
+			UpdateTestCategory() = default;
+			explicit UpdateTestCategory( db::Connection & connection )
+				: stmt{ connection.createStatement( "UPDATE Test SET CategoryId=? WHERE Id=?;" ) }
+				, categoryId{ stmt->createParameter( "CategoryId", db::FieldType::eSint32 ) }
+				, id{ stmt->createParameter( "Id", db::FieldType::eSint32 ) }
+			{
+				if ( !stmt->initialise() )
+				{
+					throw std::runtime_error{ "Couldn't create UpdateTestCategory UPDATE statement." };
+				}
+			}
+
+			db::StatementPtr stmt;
+			db::Parameter * categoryId;
+			db::Parameter * id;
 		};
 
 	private:
@@ -589,10 +627,12 @@ namespace aria
 		UpdateRunDates m_updateRunDates;
 		UpdateRunCastorDate m_updateRunCastorDate;
 		UpdateRunSceneDate m_updateRunSceneDate;
+		ListCategories m_listCategories;
 		ListTests m_listTests;
 		ListLatestTestRun m_listLatestRun;
 		ListLatestRendererTests m_listLatestRendererRuns;
 		UpdateRunsCastorDate m_updateRunsCastorDate;
+		UpdateTestCategory m_updateTestCategory;
 	};
 }
 

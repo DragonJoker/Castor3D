@@ -14,9 +14,9 @@ namespace aria
 	{
 	public:
 		CategoryTestsCounts( Config const & config
-			, TestArray const & tests
-			, TestRunArray const & runs );
+			, TestArray const & tests );
 		void addTest( DatabaseTest & test );
+		void removeTest( DatabaseTest & test );
 
 		void add( TestStatus status );
 		void remove( TestStatus status );
@@ -89,7 +89,6 @@ namespace aria
 		std::array< CountedUIntConnection, TestsCountsType::eCount > m_connections{};
 		Config const & m_config;
 		TestArray const * m_tests{};
-		TestRunArray const * m_runs{};
 	};
 
 	struct RendererTestsCounts
@@ -97,8 +96,7 @@ namespace aria
 		explicit RendererTestsCounts( Config const & config );
 
 		CategoryTestsCounts & addCategory( Category category
-			, TestArray const & tests
-			, TestRunArray const & runs );
+			, TestArray const & tests );
 		CategoryTestsCounts & getCounts( Category category );
 		uint32_t getValue( TestsCountsType type )const;
 		uint32_t getAllValue()const;
@@ -127,8 +125,9 @@ namespace aria
 
 		CategoryTestsCounts & addCategory( Renderer renderer
 			, Category category
-			, TestArray const & tests
-			, TestRunArray const & runs );
+			, TestArray const & tests );
+		CategoryTestsCounts & getCategory( Renderer renderer
+			, Category category );
 
 		uint32_t getValue( TestsCountsType type )const;
 		uint32_t getAllValue()const;

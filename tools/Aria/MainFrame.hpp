@@ -42,6 +42,7 @@ namespace aria
 			eID_TEST_UPDATE_SCENE,
 			eID_TEST_COPY_FILE_NAME,
 			eID_TEST_VIEW_FILE,
+			eID_TEST_CHANGE_CATEGORY,
 			eID_CATEGORY_RUN_TESTS_ALL,
 			eID_CATEGORY_RUN_TESTS_NOTRUN,
 			eID_CATEGORY_RUN_TESTS_ACCEPTABLE,
@@ -95,9 +96,6 @@ namespace aria
 		RendererPage * doGetPage( wxDataViewItem const & item );
 
 		uint32_t doGetAllTestsRange()const;
-		uint32_t doGetAllRunsRange()const;
-		uint32_t doGetSelectedRendererRange()const;
-		uint32_t doGetSelectedCategoryRange()const;
 		void doViewSceneFile( castor::Path const & filePath );
 		void doProcessTest();
 		void doStartTests();
@@ -123,7 +121,7 @@ namespace aria
 		void doRunAllRendererOutdatedTests();
 		void doUpdateRendererCastorDate();
 		void doUpdateRendererSceneDate();
-		std::vector< wxDataViewItem > doListAllTests( RendererPage::FilterFunc filter );
+		std::vector< wxDataViewItem > doListAllTests( FilterFunc filter );
 		void doRunAllTests();
 		void doRunTests( TestStatus filter );
 		void doRunAllTestsBut( TestStatus filter );
@@ -136,6 +134,7 @@ namespace aria
 		void doNewRenderer();
 		void doNewCategory();
 		void doNewTest();
+		void doChangeTestCategory();
 		void doUpdateTestView( DatabaseTest const & test );
 		void onTestRunEnd( int status );
 		void onTestDisplayEnd( int status );

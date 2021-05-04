@@ -138,6 +138,41 @@ namespace aria
 		return node;
 	}
 
+	TreeModelNode * TreeModel::getTestNode( DatabaseTest const & test )const
+	{
+		TreeModelNode * result{};
+		auto it = m_categories.begin();
+
+		while ( !result && it != m_categories.end() )
+		{
+			auto nodeIt = std::find_if( it->second->GetChildren().begin()
+				, it->second->GetChildren().end()
+				, [&test]( TreeModelNode * lookup )
+				{
+					return lookup->test
+						&& lookup->test->getTestId() == test.getTestId();
+				} );
+
+			if ( nodeIt != it->second->GetChildren().end() )
+			{
+				result = *nodeIt;
+			}
+
+			++it;
+		}
+
+		return result;
+	}
+
+	void TreeModel::removeTest( DatabaseTest const & test )
+	{
+		auto node = getTestNode( test );
+		auto it = m_categories.find( node->category->name );
+		CU_Require( m_categories.end() != it );
+		it->second->Remove( node );
+		ItemDeleted( wxDataViewItem{ it->second }, wxDataViewItem{ node } );
+	}
+
 	void TreeModel::expandRoots( wxDataViewCtrl * view )
 	{
 		view->Expand( wxDataViewItem{ m_root } );
@@ -286,14 +321,7 @@ namespace aria
 
 		if ( node )
 		{
-			if ( node->test )
-			{
-				result = node->test->getCategory()->name;
-			}
-			else
-			{
-				result = node->category->name;
-			}
+			result = node->category->name;
 		}
 
 		return result;

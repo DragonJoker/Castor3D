@@ -15,6 +15,10 @@ namespace aria
 		friend struct CategoryTestsCounts;
 
 	public:
+		DatabaseTest( DatabaseTest const & ) = delete;
+		DatabaseTest & operator=( DatabaseTest const & ) = delete;
+		DatabaseTest( DatabaseTest && ) = default;
+		DatabaseTest & operator=( DatabaseTest && ) = default;
 		DatabaseTest( TestDatabase & database
 			, TestRun test );
 
@@ -32,6 +36,8 @@ namespace aria
 		void createNewRun( TestStatus status
 			, db::DateTime const & runDate );
 		void createNewRun( castor::Path const & match );
+		void changeCategory( Category dstCategory
+			, CategoryTestsCounts & dstCounts );
 
 		bool checkOutOfCastorDate()const
 		{
@@ -100,6 +106,11 @@ namespace aria
 			return *m_counts;
 		}
 
+		CategoryTestsCounts & getCounts()
+		{
+			return *m_counts;
+		}
+
 		TestRun const * operator->()const
 		{
 			return &m_test;
@@ -121,12 +132,106 @@ namespace aria
 		void updateOutOfDate( bool remove = true )const;
 
 	private:
-		TestDatabase & m_database;
+		TestDatabase * m_database;
 		CategoryTestsCounts * m_counts{};
 		TestRun m_test;
 		mutable bool m_outOfCastorDate;
 		mutable bool m_outOfSceneDate;
 		mutable bool m_outOfDate;
+	};
+
+	class RendererTestRuns
+	{
+	private:
+		using Cont = std::vector< DatabaseTest >;
+
+	public:
+		RendererTestRuns( RendererTestRuns const & ) = delete;
+		RendererTestRuns & operator=( RendererTestRuns const & ) = delete;
+		RendererTestRuns( RendererTestRuns && ) = default;
+		RendererTestRuns & operator=( RendererTestRuns && ) = default;
+		RendererTestRuns( TestDatabase & database );
+
+		DatabaseTest & addTest( TestRun run );
+		DatabaseTest & addTest( DatabaseTest test );
+		void removeTest( DatabaseTest const & test );
+		DatabaseTest & getTest( int32_t testId );
+		void listTests( FilterFunc filter
+			, std::vector< DatabaseTest * > & result );
+		void changeCategory( DatabaseTest const & test
+			, Category oldCategory
+			, Category newCategory )const;
+
+		size_t size()
+		{
+			return m_runs.size();
+		}
+
+		Cont::iterator begin()
+		{
+			return m_runs.begin();
+		}
+
+		Cont::iterator end()
+		{
+			return m_runs.end();
+		}
+
+		Cont::const_iterator begin()const
+		{
+			return m_runs.begin();
+		}
+
+		Cont::const_iterator end()const
+		{
+			return m_runs.end();
+		}
+
+	private:
+		TestDatabase & m_database;
+		Cont m_runs;
+	};
+
+	class AllTestRuns
+	{
+	private:
+		using Cont = std::map< Renderer, RendererTestRuns, LessIdValue >;
+
+	public:
+		AllTestRuns( AllTestRuns const & ) = delete;
+		AllTestRuns & operator=( AllTestRuns const & ) = delete;
+		AllTestRuns( AllTestRuns && ) = default;
+		AllTestRuns & operator=( AllTestRuns && ) = default;
+		AllTestRuns( TestDatabase & database );
+
+		RendererTestRuns & addRenderer( Renderer renderer );
+		RendererTestRuns & getRenderer( Renderer renderer );
+		void listTests( FilterFunc filter
+			, std::vector< DatabaseTest * > & result );
+
+		Cont::iterator begin()
+		{
+			return m_runs.begin();
+		}
+
+		Cont::iterator end()
+		{
+			return m_runs.end();
+		}
+
+		Cont::const_iterator begin()const
+		{
+			return m_runs.begin();
+		}
+
+		Cont::const_iterator end()const
+		{
+			return m_runs.end();
+		}
+
+	private:
+		TestDatabase & m_database;
+		Cont m_runs;
 	};
 }
 

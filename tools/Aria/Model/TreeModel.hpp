@@ -40,6 +40,8 @@ namespace aria
 			, bool newCategory = false );
 		TreeModelNode * addTest( DatabaseTest & test
 			, bool newTest = false );
+		TreeModelNode * getTestNode( DatabaseTest const & test )const;
+		void removeTest( DatabaseTest const & test );
 		void expandRoots( wxDataViewCtrl * view );
 		void instantiate( wxDataViewCtrl * view );
 		void resize( wxDataViewCtrl * view

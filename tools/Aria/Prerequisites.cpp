@@ -185,7 +185,7 @@ namespace aria
 
 	castor::Path getSceneFile( Test const & test )
 	{
-		return castor::Path{ test.category->name } / ( test.name + ".cscn" );
+		return castor::Path{ test.category->name } / getSceneName( test );
 	}
 
 	castor::Path getSceneFile( TestRun const & test )
@@ -193,14 +193,36 @@ namespace aria
 		return getSceneFile( *test.test );
 	}
 
+	castor::Path getSceneName( Test const & test )
+	{
+		return castor::Path{ test.name + ".cscn" };
+	}
+
+	castor::Path getSceneName( TestRun const & test )
+	{
+		return getSceneName( *test.test );
+	}
+
 	castor::Path getResultFolder( Test const & test )
 	{
-		return castor::Path{ "Result" } / test.category->name;
+		return getResultFolder( test, test.category );
+	}
+
+	castor::Path getResultFolder( Test const & test
+		, Category category )
+	{
+		return castor::Path{ "Result" } / category->name;
 	}
 
 	castor::Path getResultFolder( TestRun const & test )
 	{
-		return getResultFolder( *test.test ) / getFolderName( test.status );
+		return getResultFolder( *test.test, test.test->category ) / getFolderName( test.status );
+	}
+
+	castor::Path getResultFolder( TestRun const & test
+		, Category category )
+	{
+		return getResultFolder( *test.test, category ) / getFolderName( test.status );
 	}
 
 	castor::Path getResultName( TestRun const & test )
@@ -430,7 +452,7 @@ namespace aria
 	castor::Path getTestFileName( castor::Path const & folder
 		, Test const & test )
 	{
-		return folder / test.category->name / ( test.name + ".cscn" );
+		return folder / getSceneFile( test );
 	}
 
 	castor::Path getTestFileName( castor::Path const & folder

@@ -23,6 +23,12 @@ namespace aria
 		: public wxPanel
 	{
 	public:
+		struct ToMove
+		{
+			Category originalCategory;
+			int32_t id;
+		};
+		using ToMoveArray = std::vector< ToMove >;
 		struct Selection
 		{
 			wxDataViewItemArray items;
@@ -32,14 +38,11 @@ namespace aria
 		};
 
 	public:
-		using FilterFunc = std::function< bool( DatabaseTest const & ) >;
-
-	public:
 		RendererPage( RendererPage && ) = default;
 		RendererPage & operator=( RendererPage && ) = default;
 		RendererPage( Config const & config
 			, Renderer renderer
-			, TestRunCategoryMap & runs
+			, RendererTestRuns & runs
 			, RendererTestsCounts & counts
 			, wxWindow * parent
 			, wxWindow * frame
@@ -58,13 +61,9 @@ namespace aria
 			, AllTestsCounts & counts
 			, wxProgressDialog & progress
 			, int & index );
-		uint32_t getSelectedRange( TestRunMap const & runs )const;
-		uint32_t getSelectedCategoryRange( TestRunMap const & runs )const;
 		void updateTest( TreeModelNode * node );
-		std::vector< wxDataViewItem > listRendererTests( TestRunMap const & runs
-			, FilterFunc filter )const;
-		std::vector< wxDataViewItem > listCategoryTests( TestRunMap const & runs
-			, FilterFunc filter )const;
+		std::vector< wxDataViewItem > listRendererTests( FilterFunc filter )const;
+		std::vector< wxDataViewItem > listCategoryTests( FilterFunc filter )const;
 		std::vector< wxDataViewItem > listSelectedTests()const;
 		void copyTestFileName()const;
 		void viewTestSceneFile();
@@ -77,8 +76,11 @@ namespace aria
 		void addCategory( Category category
 			, CategoryTestsCounts & catCounts );
 		void addTest( DatabaseTest & dbTest );
+		void removeTest( DatabaseTest const & dbTest );
 		void updateTestView( DatabaseTest const & test
 			, AllTestsCounts & counts );
+		void changeTestsCategory( ToMoveArray const & tests
+			, Category newCategory );
 
 	private:
 		void doInitLayout( wxWindow * frame );
@@ -98,7 +100,7 @@ namespace aria
 		wxMenu * m_allMenu;
 		wxMenu * m_busyMenu;
 		wxAuiManager m_auiManager;
-		TestRunCategoryMap * m_runs;
+		RendererTestRuns & m_runs;
 		RendererTestsCounts & m_counts;
 		wxObjectDataPtr< TreeModel > m_model;
 		wxDataViewCtrl * m_view{};
@@ -107,7 +109,6 @@ namespace aria
 		TestPanel * m_testView{};
 		CategoryPanel * m_allView{};
 		CategoryPanel * m_categoryView{};
-		std::map< uint32_t, TreeModelNode * > m_modelNodes;
 		Selection m_selected;
 	};
 }

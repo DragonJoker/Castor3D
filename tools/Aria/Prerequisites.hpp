@@ -16,6 +16,7 @@ See LICENSE file in root folder
 #include <wx/datetime.h>
 #include <wx/string.h>
 
+#include <functional>
 #include <list>
 #include <unordered_map>
 
@@ -199,6 +200,8 @@ namespace aria
 
 	class CategoryPanel;
 	class DatabaseTest;
+	class RendererTestRuns;
+	class AllTestRuns;
 	class LayeredPanel;
 	class MainFrame;
 	class RendererPage;
@@ -217,8 +220,11 @@ namespace aria
 	struct TestNode;
 	struct TestRun;
 
+	using FilterFunc = std::function< bool( DatabaseTest const & ) >;
+
 	using TestPtr = std::unique_ptr< Test >;
 	using AllTestsCountsPtr = std::shared_ptr< AllTestsCounts >;
+	using AllTestRunsPtr = std::shared_ptr< AllTestRuns >;
 	using Renderer = IdValue *;
 	using Category = IdValue *;
 	using Keyword = IdValue *;
@@ -227,9 +233,6 @@ namespace aria
 	using KeywordMap = std::unordered_map< std::string, IdValuePtr, HashNoCase >;
 	using TestArray = std::vector< TestPtr >;
 	using TestMap = std::map< Category, TestArray, LessIdValue >;
-	using TestRunArray = std::vector< DatabaseTest >;
-	using TestRunCategoryMap = std::map< Category, TestRunArray, LessIdValue >;
-	using TestRunMap = std::map< Renderer, TestRunCategoryMap, LessIdValue >;
 	using TestsCountsCategoryMap = std::map< Category, CategoryTestsCounts, LessIdValue >;
 	using TestsCountsRendererMap = std::map< Renderer, RendererTestsCounts, LessIdValue >;
 
@@ -266,7 +269,7 @@ namespace aria
 	struct Tests
 	{
 		TestMap tests;
-		TestRunMap runs;
+		AllTestRunsPtr runs;
 		AllTestsCountsPtr counts;
 	};
 
@@ -350,7 +353,10 @@ namespace aria
 	db::DateTime getSceneDate( Config const & config, Test const & test );
 	void updateCastorRefDate( Config & config );
 	castor::Path getSceneFile( Test const & test );
+	castor::Path getSceneName( Test const & test );
 	castor::Path getResultFolder( Test const & test );
+	castor::Path getResultFolder( Test const & test
+		, Category category );
 	castor::Path getCompareFolder( Test const & test );
 	castor::Path getReferenceFolder( Test const & test );
 	castor::Path getReferenceName( Test const & test );
@@ -365,7 +371,10 @@ namespace aria
 	bool isOutOfSceneDate( Config const & config, TestRun const & test );
 	bool isOutOfDate( Config const & config, TestRun const & test );
 	castor::Path getSceneFile( TestRun const & test );
+	castor::Path getSceneName( TestRun const & test );
 	castor::Path getResultFolder( TestRun const & test );
+	castor::Path getResultFolder( TestRun const & test
+		, Category category );
 	castor::Path getResultName( TestRun const & test );
 	castor::Path getCompareFolder( TestRun const & test );
 	castor::Path getCompareName( TestRun const & test );
