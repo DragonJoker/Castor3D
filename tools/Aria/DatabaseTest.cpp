@@ -35,7 +35,7 @@ namespace aria
 
 	DatabaseTest::DatabaseTest( TestDatabase & database
 		, TestRun test )
-		: m_database{ database }
+		: m_database{ &database }
 		, m_test{ std::move( test ) }
 		, m_outOfCastorDate{ isOutOfCastorDate( database.m_config, m_test ) }
 		, m_outOfSceneDate{ isOutOfSceneDate( database.m_config, m_test ) }
@@ -54,14 +54,14 @@ namespace aria
 		if ( m_test.castorDate < castorDate )
 		{
 			updateCastorDateNW( castorDate );
-			m_database.updateRunCastorDate( m_test );
+			m_database->updateRunCastorDate( m_test );
 		}
 	}
 
 	void DatabaseTest::updateCastorDate()
 	{
-		updateCastorRefDate( m_database.m_config );
-		updateCastorDate( m_database.m_config.castorRefDate );
+		updateCastorRefDate( m_database->m_config );
+		updateCastorDate( m_database->m_config.castorRefDate );
 	}
 
 	void DatabaseTest::updateSceneDate( db::DateTime const & sceneDate )
@@ -69,14 +69,14 @@ namespace aria
 		if ( m_test.sceneDate < sceneDate )
 		{
 			m_test.sceneDate = sceneDate;
-			m_database.updateRunSceneDate( m_test );
+			m_database->updateRunSceneDate( m_test );
 			updateOutOfDate();
 		}
 	}
 
 	void DatabaseTest::updateSceneDate()
 	{
-		auto sceneDate = aria::getSceneDate( m_database.m_config, m_test );
+		auto sceneDate = aria::getSceneDate( m_database->m_config, m_test );
 		updateSceneDate( sceneDate );
 	}
 
@@ -91,12 +91,12 @@ namespace aria
 	void DatabaseTest::updateStatus( TestStatus newStatus
 		, bool useAsReference )
 	{
-		auto & config = m_database.m_config;
+		auto & config = m_database->m_config;
 		TestStatus oldStatus = m_test.status;
 		updateCastorRefDate( config );
 		m_test.castorDate = config.castorRefDate;
 		updateStatusNW( newStatus );
-		m_database.updateRunStatus( m_test );
+		m_database->updateRunStatus( m_test );
 		moveResultFile( m_test, oldStatus, newStatus, config.work );
 
 		if ( useAsReference )
@@ -108,7 +108,7 @@ namespace aria
 	void DatabaseTest::createNewRun( TestStatus status
 		, db::DateTime const & runDate )
 	{
-		auto & config = m_database.m_config;
+		auto & config = m_database->m_config;
 		auto rawStatus = status;
 		auto newStatus = rawStatus;
 
@@ -125,7 +125,7 @@ namespace aria
 		m_test.sceneDate = aria::getSceneDate( config, m_test );
 		assert( db::date_time::isValid( m_test.sceneDate ) );
 		updateStatusNW( newStatus );
-		m_database.insertRun( m_test );
+		m_database->insertRun( m_test );
 
 		if ( m_test.test->ignoreResult )
 		{
@@ -138,6 +138,14 @@ namespace aria
 		auto path = match.getPath();
 		createNewRun( aria::getStatus( path.getFileName() )
 			, getFileDate( match ) );
+	}
+
+	void DatabaseTest::changeCategory( Category dstCategory
+		, CategoryTestsCounts & dstCounts )
+	{
+		CU_Assert( m_counts != nullptr, "Test counts not set" );
+		m_counts->removeTest( *this );
+		dstCounts.addTest( *this );
 	}
 
 	void DatabaseTest::update( int id )
@@ -156,8 +164,8 @@ namespace aria
 		m_test.runDate = std::move( runDate );
 		m_test.castorDate = std::move( castorDate );
 		m_test.sceneDate = std::move( sceneDate );
-		m_outOfCastorDate = isOutOfCastorDate( m_database.m_config, m_test );
-		m_outOfSceneDate = isOutOfSceneDate( m_database.m_config, m_test );
+		m_outOfCastorDate = isOutOfCastorDate( m_database->m_config, m_test );
+		m_outOfSceneDate = isOutOfSceneDate( m_database->m_config, m_test );
 		m_outOfDate = m_outOfCastorDate || m_outOfSceneDate;
 	}
 
@@ -180,7 +188,7 @@ namespace aria
 		m_test.test->ignoreResult = ignore;
 		m_test.castorDate = std::move( castorDate );
 		assert( db::date_time::isValid( m_test.castorDate ) );
-		m_database.updateTestIgnoreResult( *m_test.test, ignore );
+		m_database->updateTestIgnoreResult( *m_test.test, ignore );
 
 		if ( ignore )
 		{
@@ -190,7 +198,7 @@ namespace aria
 
 	void DatabaseTest::updateReference( TestStatus status )
 	{
-		auto & config = m_database.m_config;
+		auto & config = m_database->m_config;
 		castor::File::copyFileName( config.work / getResultFolder( *m_test.test ) / getFolderName( status ) / getResultName( m_test )
 			, config.test / getReferenceFolder( m_test ) / getReferenceName( m_test )
 			, true );
@@ -198,8 +206,8 @@ namespace aria
 
 	void DatabaseTest::updateOutOfDate( bool remove )const
 	{
-		bool outOfCastorDate{ isOutOfCastorDate( m_database.m_config, m_test ) };
-		bool outOfSceneDate{ isOutOfSceneDate( m_database.m_config, m_test ) };
+		bool outOfCastorDate{ isOutOfCastorDate( m_database->m_config, m_test ) };
+		bool outOfSceneDate{ isOutOfSceneDate( m_database->m_config, m_test ) };
 		bool outOfDate{ outOfSceneDate || outOfCastorDate };
 		std::swap( m_outOfCastorDate, outOfCastorDate );
 		std::swap( m_outOfSceneDate, outOfSceneDate );
@@ -218,6 +226,109 @@ namespace aria
 			{
 				m_counts->addOutdated();
 			}
+		}
+	}
+
+	//*********************************************************************************************
+
+	RendererTestRuns::RendererTestRuns( TestDatabase & database )
+		: m_database{ database }
+	{
+	}
+
+	DatabaseTest & RendererTestRuns::addTest( TestRun run )
+	{
+		m_runs.emplace_back( m_database, std::move( run ) );
+		return m_runs.back();
+	}
+
+	DatabaseTest & RendererTestRuns::addTest( DatabaseTest test )
+	{
+		m_runs.emplace_back( std::move( test ) );
+		return m_runs.back();
+	}
+
+	void RendererTestRuns::removeTest( DatabaseTest const & test )
+	{
+		auto it = std::find_if( m_runs.begin()
+			, m_runs.end()
+			, [&test]( DatabaseTest & lookup )
+			{
+				return lookup.getTestId() == test.getTestId();
+			} );
+		CU_Assert( it != m_runs.end(), "Test not found in CategoryTestRuns" );
+		m_runs.erase( it );
+	}
+
+	DatabaseTest & RendererTestRuns::getTest( int32_t testId )
+	{
+		auto it = std::find_if( m_runs.begin()
+			, m_runs.end()
+			, [&testId]( DatabaseTest const & test )
+			{
+				return test.getTestId() == testId;
+			} );
+		CU_Assert( it != m_runs.end(), "Test not found in CategoryTestRuns" );
+		return *it;
+	}
+
+	void RendererTestRuns::listTests( FilterFunc filter
+		, std::vector< DatabaseTest * > & result )
+	{
+		for ( auto & run : m_runs )
+		{
+			if ( filter( run ) )
+			{
+				result.push_back( &run );
+			}
+		}
+	}
+
+	void moveResultImage( Config const config
+		, DatabaseTest const & test
+		, Category oldCategory
+		, Category newCategory )
+	{
+		auto srcFolder = config.work / getResultFolder( *test, oldCategory );
+		auto dstFolder = config.work / getResultFolder( *test, newCategory );
+		moveFile( srcFolder
+			, dstFolder
+			, getResultName( *test ) );
+	}
+
+	void RendererTestRuns::changeCategory( DatabaseTest const & test
+		, Category oldCategory
+		, Category newCategory )const
+	{
+		moveResultImage( m_database.getConfig(), test, oldCategory, newCategory );
+	}
+
+	//*********************************************************************************************
+
+	AllTestRuns::AllTestRuns( TestDatabase & database )
+		: m_database{ database }
+	{
+	}
+
+	RendererTestRuns & AllTestRuns::addRenderer( Renderer renderer )
+	{
+		auto it = m_runs.emplace( renderer, RendererTestRuns{ m_database } ).first;
+		return it->second;
+	}
+
+	RendererTestRuns & AllTestRuns::getRenderer( Renderer renderer )
+	{
+		auto it = m_runs.find( renderer );
+		CU_Assert( it != m_runs.end(), "Renderer not found in AllTestRuns" );
+		return it->second;
+	}
+
+	void AllTestRuns::listTests( FilterFunc filter
+		, std::vector< DatabaseTest * > & result )
+	{
+		for ( auto & run : m_runs )
+		{
+			run.second.listTests( filter, result );
 		}
 	}
 
