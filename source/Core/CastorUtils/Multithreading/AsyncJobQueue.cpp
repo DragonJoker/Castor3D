@@ -24,6 +24,16 @@ namespace castor
 		m_pending.push_back( job );
 	}
 
+	void AsyncJobQueue::waitAll()
+	{
+		while ( !doCheckEnded() )
+		{
+			std::this_thread::sleep_for( 5_ms );
+		}
+
+		m_pool.waitAll( Milliseconds{ 0xFFFFFFFFull } );
+	}
+
 	void AsyncJobQueue::doRun()
 	{
 		while ( !m_ended )
@@ -48,5 +58,11 @@ namespace castor
 			std::this_thread::sleep_for( 5_ms );
 		};
 		return dummy;
+	}
+
+	bool AsyncJobQueue::doCheckEnded()
+	{
+		auto lock( makeUniqueLock( m_mutex ) );
+		return m_pending.empty();
 	}
 }

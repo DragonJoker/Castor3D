@@ -43,10 +43,18 @@ namespace castor
 		 *\param[in]	job	La tâche.
 		 */
 		CU_API void pushJob( Job job );
+		/**
+		 *\~english
+		 *\brief		Waits for all the jobs to be run.
+		 *\~french
+		 *\brief		Attend que tous les jobs soient terminés.
+		 */
+		CU_API void waitAll();
 
 	private:
 		void doRun();
 		Job doPopJob();
+		bool doCheckEnded();
 
 	private:
 		std::atomic_bool m_ended;
