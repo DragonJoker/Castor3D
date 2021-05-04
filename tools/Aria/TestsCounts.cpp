@@ -7,11 +7,9 @@ namespace aria
 	//*********************************************************************************************
 
 	CategoryTestsCounts::CategoryTestsCounts( Config const & config
-		, TestArray const & tests
-		, TestRunArray const & runs )
+		, TestArray const & tests )
 		: m_config{ config }
 		, m_tests{ &tests }
-		, m_runs{ &runs }
 	{
 	}
 
@@ -29,6 +27,22 @@ namespace aria
 		{
 			addOutdated();
 		}
+	}
+
+	void CategoryTestsCounts::removeTest( DatabaseTest & test )
+	{
+		if ( isOutOfDate( m_config, *test ) )
+		{
+			removeOutdated();
+		}
+
+		if ( test.getIgnoreResult() )
+		{
+			removeIgnored();
+		}
+
+		remove( test.getStatus() );
+		test.m_counts = nullptr;
 	}
 
 	void CategoryTestsCounts::add( TestStatus status )
@@ -106,10 +120,9 @@ namespace aria
 	}
 
 	CategoryTestsCounts & RendererTestsCounts::addCategory( Category category
-		, TestArray const & tests
-		, TestRunArray const & runs )
+		, TestArray const & tests )
 	{
-		auto countsIt = categories.emplace( category, CategoryTestsCounts{ config, tests, runs } ).first;
+		auto countsIt = categories.emplace( category, CategoryTestsCounts{ config, tests } ).first;
 		return countsIt->second;
 	}
 
@@ -164,10 +177,15 @@ namespace aria
 
 	CategoryTestsCounts & AllTestsCounts::addCategory( Renderer renderer
 		, Category category
-		, TestArray const & tests
-		, TestRunArray const & runs )
+		, TestArray const & tests )
 	{
-		return getRenderer( renderer ).addCategory( category, tests, runs );
+		return getRenderer( renderer ).addCategory( category, tests );
+	}
+
+	CategoryTestsCounts & AllTestsCounts::getCategory( Renderer renderer
+		, Category category )
+	{
+		return getRenderer( renderer ).getCounts( category );
 	}
 
 	uint32_t AllTestsCounts::getValue( TestsCountsType type )const

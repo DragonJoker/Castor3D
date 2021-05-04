@@ -10,6 +10,8 @@ namespace aria
 {
 	class TreeModelNode
 	{
+		friend TreeModel;
+
 	public:
 		TreeModelNode( Renderer renderer
 			, RendererTestsCounts & counts );
