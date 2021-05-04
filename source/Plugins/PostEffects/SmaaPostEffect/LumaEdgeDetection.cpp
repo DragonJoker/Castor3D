@@ -304,11 +304,19 @@ namespace smaa
 			return texture.createView( view );
 		}
 
-		castor3d::rq::BindingDescriptionArray createBindings()
+		castor3d::rq::BindingDescriptionArray createBindings( bool predication )
 		{
+			if ( predication )
+			{
+				return
+				{
+					{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+					{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+				};
+			}
+
 			return
 			{
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
 				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
 			};
 		}
@@ -321,7 +329,7 @@ namespace smaa
 		, ashes::ImageView const & colourView
 		, ashes::Image const * predication
 		, SmaaConfig const & config )
-		: EdgeDetection{ renderTarget, device, config, createBindings() }
+		: EdgeDetection{ renderTarget, device, config, createBindings( predication ) }
 		, m_colourView{ colourView }
 		, m_predicationView{ ( predication
 			? std::make_unique< ashes::ImageView >( doCreatePredicationView( *predication ) )
