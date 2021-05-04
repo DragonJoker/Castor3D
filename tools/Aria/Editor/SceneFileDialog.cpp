@@ -85,7 +85,7 @@ namespace aria
 				command << " " << m_filename
 					<< " -l 0"
 					<< " -a";
-				auto result = wxExecute( command, wxEXEC_SYNC );
+				auto result = wxExecute( command, wxEXEC_ASYNC );
 				event.Skip();
 			}
 			, eID_MENU_RUN );
