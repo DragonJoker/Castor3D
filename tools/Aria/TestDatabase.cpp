@@ -449,6 +449,21 @@ namespace aria
 
 	//*********************************************************************************************
 
+	void TestDatabase::ListCategories::listCategories( CategoryMap & categories )
+	{
+		if ( auto res = stmt->executeSelect() )
+		{
+			for ( auto & row : *res )
+			{
+				auto id = row.getField( 0 ).getValue< int32_t >();
+				auto name = row.getField( 1 ).getValue< std::string >();
+				categories.emplace( name, std::make_unique< IdValue >( id, name ) );
+			}
+		}
+	}
+
+	//*********************************************************************************************
+
 	TestMap TestDatabase::ListTests::listTests( CategoryMap & categories
 		, wxProgressDialog & progress
 		, int & index )
@@ -463,6 +478,11 @@ namespace aria
 		, wxProgressDialog & progress
 		, int & index )
 	{
+		for ( auto & category : categories )
+		{
+			result.emplace( category.second.get(), TestArray{} );
+		}
+
 		if ( auto res = stmt->executeSelect() )
 		{
 			progress.SetRange( int( progress.GetRange() + res->size() ) );
@@ -498,13 +518,13 @@ namespace aria
 
 	//*********************************************************************************************
 
-	TestRunCategoryMap TestDatabase::ListLatestRendererTests::listTests( TestMap const & tests
+	RendererTestRuns TestDatabase::ListLatestRendererTests::listTests( TestMap const & tests
 		, CategoryMap & categories
 		, Renderer renderer
 		, wxProgressDialog & progress
 		, int & index )
 	{
-		TestRunCategoryMap result;
+		RendererTestRuns result{ *database };
 		listTests( tests, categories, renderer, result, progress, index );
 		return result;
 	}
@@ -512,24 +532,21 @@ namespace aria
 	void TestDatabase::ListLatestRendererTests::listTests( TestMap const & tests
 		, CategoryMap & categories
 		, Renderer renderer
-		, TestRunCategoryMap & result
+		, RendererTestRuns & result
 		, wxProgressDialog & progress
 		, int & index )
 	{
 		// Prefill result with "not run" entries.
 		for ( auto & cat : tests )
 		{
-			auto catIt = result.emplace( cat.first, TestRunArray{} ).first;
-
 			for ( auto & test : cat.second )
 			{
-				catIt->second.emplace_back( *database
-					, TestRun{ test.get()
-						, renderer
-						, db::DateTime{}
-						, TestStatus::eNotRun
-						, db::DateTime{}
-						, db::DateTime{} } );
+				result.addTest( TestRun{ test.get()
+					, renderer
+					, db::DateTime{}
+					, TestStatus::eNotRun
+					, db::DateTime{}
+					, db::DateTime{} } );
 			}
 		}
 
@@ -563,29 +580,26 @@ namespace aria
 						auto status = TestStatus( row.getField( 4 ).getValue< int32_t >() );
 						auto castorDate = row.getField( 5 ).getValue< db::DateTime >();
 						auto sceneDate = row.getField( 6 ).getValue< db::DateTime >();
-						auto runIt = result.find( catIt->first );
-						assert( runIt != result.end() );
-						auto it = std::find_if( runIt->second.begin()
-							, runIt->second.end()
+						auto it = std::find_if( result.begin()
+							, result.end()
 							, [testId]( DatabaseTest const & lookup )
 							{
 								return lookup->test->id == testId;
 							} );
 
-						if ( it == runIt->second.end() )
+						if ( it == result.end() )
 						{
 							assert( false );
-							runIt->second.emplace_back( *database
-								, TestRun{ &test
-									, renderer
-									, runDate
-									, status
-									, castorDate
-									, sceneDate } );
-							runIt->second.back().update( runId );
+							auto & dbTest = result.addTest( TestRun{ &test
+								, renderer
+								, runDate
+								, status
+								, castorDate
+								, sceneDate } );
+							dbTest.update( runId );
 							progress.Update( index++
 								, _( "Listing latest runs" )
-								+ wxT( "\n" ) + getProgressDetails( runIt->second.back() ) );
+								+ wxT( "\n" ) + getProgressDetails( dbTest ) );
 							progress.Fit();
 						}
 						else
@@ -664,10 +678,12 @@ namespace aria
 		m_updateRunDates = UpdateRunDates{ m_database };
 		m_updateRunCastorDate = UpdateRunCastorDate{ m_database };
 		m_updateRunSceneDate = UpdateRunSceneDate{ m_database };
+		m_listCategories = ListCategories{ m_database };
 		m_listTests = ListTests{ m_database };
 		m_listLatestRun = ListLatestTestRun{ m_database };
 		m_listLatestRendererRuns = ListLatestRendererTests{ this };
 		m_updateRunsCastorDate = UpdateRunsCastorDate{ m_database };
+		m_updateTestCategory = UpdateTestCategory{ m_database };
 
 		if ( m_config.initFromFolder )
 		{
@@ -757,27 +773,28 @@ namespace aria
 			, _( "Listing tests" )
 			+ wxT( "\n" ) + _( "..." ) );
 		progress.Fit();
+		m_listCategories.listCategories( m_categories );
 		m_listTests.listTests( m_categories, result, progress, index );
 	}
 
-	TestRunMap TestDatabase::listLatestRuns( TestMap const & tests )
+	AllTestRuns TestDatabase::listLatestRuns( TestMap const & tests )
 	{
-		TestRunMap result;
+		AllTestRuns result{ *this };
 		listLatestRuns( tests, result );
 		return result;
 	}
 
-	TestRunMap TestDatabase::listLatestRuns( TestMap const & tests
+	AllTestRuns TestDatabase::listLatestRuns( TestMap const & tests
 		, wxProgressDialog & progress
 		, int & index )
 	{
-		TestRunMap result;
+		AllTestRuns result{ *this };
 		listLatestRuns( tests, result, progress, index );
 		return result;
 	}
 
 	void TestDatabase::listLatestRuns( TestMap const & tests
-		, TestRunMap & result )
+		, AllTestRuns & result )
 	{
 		wxProgressDialog progress{ wxT( "Listing latest runs" )
 			, wxT( "Listing latest runs..." )
@@ -788,7 +805,7 @@ namespace aria
 	}
 
 	void TestDatabase::listLatestRuns( TestMap const & tests
-		, TestRunMap & result
+		, AllTestRuns & result
 		, wxProgressDialog & progress
 		, int & index )
 	{
@@ -799,31 +816,14 @@ namespace aria
 
 		for ( auto & renderer : m_renderers )
 		{
-			result[renderer.second.get()] = listLatestRuns( renderer.second.get(), tests, progress, index );
+			auto & rendCounts = result.addRenderer( renderer.second.get() );
+			listLatestRuns( renderer.second.get(), tests, rendCounts, progress, index );
 		}
-	}
-
-	TestRunCategoryMap TestDatabase::listLatestRuns( Renderer renderer
-		, TestMap const & tests )
-	{
-		TestRunCategoryMap result;
-		listLatestRuns( renderer, tests, result );
-		return result;
-	}
-
-	TestRunCategoryMap TestDatabase::listLatestRuns( Renderer renderer
-		, TestMap const & tests
-		, wxProgressDialog & progress
-		, int & index )
-	{
-		TestRunCategoryMap result;
-		listLatestRuns( renderer, tests, result, progress, index );
-		return result;
 	}
 
 	void TestDatabase::listLatestRuns( Renderer renderer
 		, TestMap const & tests
-		, TestRunCategoryMap & result )
+		, RendererTestRuns & result )
 	{
 		wxProgressDialog progress{ wxT( "Listing latest renderer runs" )
 			, wxT( "Listing latest renderer runs..." )
@@ -835,7 +835,7 @@ namespace aria
 
 	void TestDatabase::listLatestRuns( Renderer renderer
 		, TestMap const & tests
-		, TestRunCategoryMap & result
+		, RendererTestRuns & result
 		, wxProgressDialog & progress
 		, int & index )
 	{
@@ -859,6 +859,15 @@ namespace aria
 		m_updateRunsCastorDate.castorDate->setValue( date );
 		m_updateRunsCastorDate.stmt->executeUpdate();
 		castor::Logger::logInfo( "Updated Castor3D date for all runs" );
+	}
+
+	void TestDatabase::updateTestCategory( Test const & test
+		, Category category )
+	{
+		m_updateTestCategory.categoryId->setValue( category->id );
+		m_updateTestCategory.id->setValue( test.id );
+		m_updateTestCategory.stmt->executeUpdate();
+		castor::Logger::logInfo( "Updated category for test " + test.name );
 	}
 
 	void TestDatabase::insertRun( TestRun & run
