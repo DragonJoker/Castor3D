@@ -15,6 +15,7 @@
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Node/RenderNode_Render.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -102,9 +103,9 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	SceneRenderPass::SceneRenderPass( String const & category
+	SceneRenderPass::SceneRenderPass( RenderDevice const & device
+		, String const & category
 		, String const & name
-		, Engine & engine
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, RenderMode mode
@@ -112,9 +113,10 @@ namespace castor3d
 		, bool forceTwoSided
 		, SceneNode const * ignored
 		, uint32_t instanceMult )
-		: OwnedBy< Engine >{ engine }
+		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
 		, Named{ name }
-		, m_renderSystem{ *engine.getRenderSystem() }
+		, m_device{ device }
+		, m_renderSystem{ m_device.renderSystem }
 		, m_matrixUbo{ matrixUbo }
 		, m_culler{ culler }
 		, m_renderQueue{ *this, mode, ignored }
@@ -122,82 +124,116 @@ namespace castor3d
 		, m_oit{ oit }
 		, m_forceTwoSided{ forceTwoSided }
 		, m_mode{ mode }
-		, m_sceneUbo{ engine }
+		, m_sceneUbo{ m_device }
 		, m_instanceMult{ instanceMult }
 	{
 		m_culler.getScene().getGeometryCache().registerPass( *this );
 		m_culler.getScene().getBillboardListCache().registerPass( *this );
 	}
 
-	SceneRenderPass::SceneRenderPass( String const & category
+	SceneRenderPass::SceneRenderPass( RenderDevice const & device
+		, String const & category
 		, String const & name
-		, Engine & engine
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, uint32_t instanceMult )
-		: SceneRenderPass{ category, name, engine, matrixUbo, culler, RenderMode::eOpaqueOnly, true, false, nullptr, instanceMult }
+		: SceneRenderPass{ device
+			, category
+			, name
+			, matrixUbo
+			, culler
+			, RenderMode::eOpaqueOnly
+			, true
+			, false
+			, nullptr
+			, instanceMult }
 	{
 	}
 
-	SceneRenderPass::SceneRenderPass( String const & category
+	SceneRenderPass::SceneRenderPass( RenderDevice const & device
+		, String const & category
 		, String const & name
-		, Engine & engine
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, bool oit
 		, uint32_t instanceMult )
-		: SceneRenderPass{ category, name, engine, matrixUbo, culler, RenderMode::eTransparentOnly, oit, false, nullptr, instanceMult }
+		: SceneRenderPass{ device
+			, category
+			, name
+			, matrixUbo
+			, culler
+			, RenderMode::eTransparentOnly
+			, oit
+			, false
+			, nullptr
+			, instanceMult }
 	{
 	}
 
-	SceneRenderPass::SceneRenderPass( String const & category
+	SceneRenderPass::SceneRenderPass( RenderDevice const & device
+		, String const & category
 		, String const & name
-		, Engine & engine
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, SceneNode const * ignored
 		, uint32_t instanceMult )
-		: SceneRenderPass{ category, name, engine, matrixUbo, culler, RenderMode::eOpaqueOnly, true, false, ignored, instanceMult }
+		: SceneRenderPass{ device
+			, category
+			, name
+			, matrixUbo
+			, culler
+			, RenderMode::eOpaqueOnly
+			, true
+			, false
+			, ignored
+			, instanceMult }
 	{
 	}
 
-	SceneRenderPass::SceneRenderPass( String const & category
+	SceneRenderPass::SceneRenderPass( RenderDevice const & device
+		, String const & category
 		, String const & name
-		, Engine & engine
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, bool oit
 		, SceneNode const * ignored
 		, uint32_t instanceMult )
-		: SceneRenderPass{ category, name, engine, matrixUbo, culler, RenderMode::eTransparentOnly, oit, false, ignored, instanceMult }
+		: SceneRenderPass{ device
+			, category
+			, name
+			, matrixUbo
+			, culler
+			, RenderMode::eTransparentOnly
+			, oit
+			, false
+			, ignored
+			, instanceMult }
 	{
 	}
 
-	bool SceneRenderPass::initialise( RenderDevice const & device
-		, Size const & size
+	bool SceneRenderPass::initialise( Size const & size
 		, RenderPassTimer & timer
 		, uint32_t index )
 	{
 		m_timer = &timer;
 		m_index = index;
-		m_sceneUbo.initialise( device );
+		m_sceneUbo.initialise( m_device );
 		m_sceneUbo.setWindowSize( size );
 		m_size = size;
-		return doInitialise( device, size );
+		return doInitialise( size );
 	}
 
-	bool SceneRenderPass::initialise( RenderDevice const & device
-		, Size const & size )
+	bool SceneRenderPass::initialise( Size const & size )
 	{
-		m_ownTimer = std::make_shared< RenderPassTimer >( device, m_category, getName() );
-		return initialise( device, size, *m_ownTimer.get(), 0u );
+		m_ownTimer = std::make_shared< RenderPassTimer >( m_device, m_category, getName() );
+		return initialise( size, *m_ownTimer.get(), 0u );
 	}
 
-	void SceneRenderPass::cleanup( RenderDevice const & device )
+	void SceneRenderPass::cleanup()
 	{
 		m_sceneUbo.cleanup();
 		m_renderPass.reset();
-		doCleanup( device );
+		doCleanup();
 		m_ownTimer.reset();
 		m_backPipelines.clear();
 		m_frontPipelines.clear();

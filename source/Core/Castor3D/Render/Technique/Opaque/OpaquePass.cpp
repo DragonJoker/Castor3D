@@ -49,7 +49,8 @@ namespace castor3d
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, SsaoConfig const & config )
-		: castor3d::RenderTechniquePass{ cuT( "Opaque" )
+		: castor3d::RenderTechniquePass{ device
+			, cuT( "Opaque" )
 			, cuT( "Geometry pass" )
 			, matrixUbo
 			, culler
@@ -57,8 +58,7 @@ namespace castor3d
 			, nullptr
 			, config }
 	{
-		initialise( device
-			, size
+		initialise( size
 			, nullptr
 			, nullptr
 			, nullptr );
@@ -68,8 +68,7 @@ namespace castor3d
 	{
 	}
 
-	void OpaquePass::initialiseRenderPass( RenderDevice const & device
-		, OpaquePassResult const & gpResult )
+	void OpaquePass::initialiseRenderPass( OpaquePassResult const & gpResult )
 	{
 		ashes::VkAttachmentDescriptionArray attachments{ { 0u
 			, gpResult[DsTexture::eDepth].getTexture()->getPixelFormat()
@@ -126,7 +125,7 @@ namespace castor3d
 			, std::move( attachments )
 			, std::move( subpasses )
 			, std::move( dependencies ) };
-		m_renderPass = device->createRenderPass( "OpaquePass"
+		m_renderPass = m_device->createRenderPass( "OpaquePass"
 			, std::move( createInfo ) );
 
 		ashes::ImageViewCRefArray attaches;
@@ -140,7 +139,7 @@ namespace castor3d
 			, { gpResult[DsTexture::eDepth].getTexture()->getWidth()
 				, gpResult[DsTexture::eDepth].getTexture()->getHeight() }
 			, std::move( attaches ) );
-		m_nodesCommands = device.graphicsCommandPool->createCommandBuffer( "OpaquePass" );
+		m_nodesCommands = m_device.graphicsCommandPool->createCommandBuffer( "OpaquePass" );
 	}
 
 	void OpaquePass::accept( RenderTechniqueVisitor & visitor )
@@ -152,8 +151,7 @@ namespace castor3d
 		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
 	}
 
-	ashes::Semaphore const & OpaquePass::render( RenderDevice const & device
-		, ashes::Semaphore const & toWait )
+	ashes::Semaphore const & OpaquePass::render( ashes::Semaphore const & toWait )
 	{
 		static ashes::VkClearValueArray const clearValues{ defaultClearDepthStencil
 			, transparentBlackClearColor
@@ -185,7 +183,7 @@ namespace castor3d
 		m_nodesCommands->endDebugBlock();
 		m_nodesCommands->end();
 
-		device.graphicsQueue->submit( *m_nodesCommands
+		m_device.graphicsQueue->submit( *m_nodesCommands
 			, *result
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, getSemaphore()

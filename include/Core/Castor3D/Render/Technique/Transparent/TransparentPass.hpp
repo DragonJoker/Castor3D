@@ -63,8 +63,7 @@ namespace castor3d
 		 *\param[in]	device		Le device GPU.
 		 *\param[in]	wbpResult	Les tampons de la passe d'accumulation.
 		 */
-		C3D_API void initialiseRenderPass( RenderDevice const & device
-			, TransparentPassResult const & wbpResult );
+		C3D_API void initialiseRenderPass( TransparentPassResult const & wbpResult );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -79,8 +78,7 @@ namespace castor3d
 		 *\param[in]	device	Le device GPU.
 		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
-		C3D_API ashes::Semaphore const & render( RenderDevice const & device
-			, ashes::Semaphore const & toWait );
+		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait );
 
 		C3D_API TextureFlags getTexturesMask()const override;
 		/**
@@ -99,8 +97,7 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		bool doInitialise( RenderDevice const & device
-			, castor::Size const & size )override;
+		bool doInitialise( castor::Size const & size )override;
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;

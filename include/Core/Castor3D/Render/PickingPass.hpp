@@ -30,7 +30,7 @@ namespace castor3d
 		 *\param[in]	matrixUbo	L'UBO de matrices de la scène.
 		 *\param[in]	culler		Le culler pour cette passe.
 		 */
-		C3D_API explicit PickingPass( Engine & engine
+		C3D_API explicit PickingPass( RenderDevice const & device
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler );
 		/**
@@ -135,9 +135,8 @@ namespace castor3d
 		void doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes );
 		void doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes );
 		void doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes );
-		bool doInitialise( RenderDevice const & device
-			, castor::Size const & size )override;
-		void doCleanup( RenderDevice const & device )override;
+		bool doInitialise( castor::Size const & size )override;
+		void doCleanup()override;
 		void doFillUboDescriptor( RenderPipeline const & pipeline
 			, ashes::DescriptorSetLayout const & layout
 			, BillboardListRenderNode & node )override;

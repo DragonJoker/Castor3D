@@ -59,9 +59,9 @@ namespace castor3d
 		, VoxelizerUbo const & voxelizerUbo
 		, ashes::Buffer< Voxel > const & voxels
 		, VoxelSceneData const & voxelConfig )
-		: SceneRenderPass{ "Voxelize"
+		: SceneRenderPass{ device
+			, "Voxelize"
 			, "Voxelization"
-			, *device.renderSystem.getEngine()
 			, matrixUbo
 			, culler
 			, RenderMode::eBoth
@@ -76,7 +76,7 @@ namespace castor3d
 		, m_voxelizerUbo{ voxelizerUbo }
 		, m_voxelConfig{ voxelConfig }
 	{
-		initialise( device, { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } );
+		initialise( { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } );
 	}
 
 	VoxelizePass::~VoxelizePass()
@@ -150,8 +150,7 @@ namespace castor3d
 		}
 	}
 
-	ashes::Semaphore const & VoxelizePass::render( RenderDevice const & device
-		, ashes::Semaphore const & toWait )
+	ashes::Semaphore const & VoxelizePass::render( ashes::Semaphore const & toWait )
 	{
 		ashes::Semaphore const * result = &toWait;
 
@@ -179,7 +178,7 @@ namespace castor3d
 			timerBlock->endPass( cmd );
 			cmd.end();
 
-			device.graphicsQueue->submit( { cmd }
+			m_device.graphicsQueue->submit( { cmd }
 				, { *result }
 				, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT }
 				, { getSemaphore() }
@@ -190,8 +189,7 @@ namespace castor3d
 		return *result;
 	}
 
-	bool VoxelizePass::doInitialise( RenderDevice const & device
-		, castor::Size const & CU_UnusedParam( size ) )
+	bool VoxelizePass::doInitialise( castor::Size const & CU_UnusedParam( size ) )
 	{
 		ashes::VkAttachmentDescriptionArray attaches;
 		ashes::SubpassDescriptionArray subpasses;
@@ -233,7 +231,7 @@ namespace castor3d
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = device->createRenderPass( getName()
+		m_renderPass = m_device->createRenderPass( getName()
 			, std::move( createInfo ) );
 		ashes::ImageViewCRefArray fbAttaches;
 
@@ -243,13 +241,13 @@ namespace castor3d
 
 		m_commands =
 		{
-			device.graphicsCommandPool->createCommandBuffer( getName() ),
-			device->createSemaphore( getName() ),
+			m_device.graphicsCommandPool->createCommandBuffer( getName() ),
+			m_device->createSemaphore( getName() ),
 		};
 		return true;
 	}
 
-	void VoxelizePass::doCleanup( RenderDevice const & device )
+	void VoxelizePass::doCleanup()
 	{
 		m_renderQueue.cleanup();
 		m_commands = { nullptr, nullptr };
