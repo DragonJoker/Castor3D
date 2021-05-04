@@ -52,7 +52,8 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	ForwardRenderTechniquePass::ForwardRenderTechniquePass( castor::String const & category
+	ForwardRenderTechniquePass::ForwardRenderTechniquePass( RenderDevice const & device
+		, castor::String const & category
 		, castor::String const & name
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
@@ -62,7 +63,8 @@ namespace castor3d
 		, LpvGridConfigUbo const * lpvConfigUbo
 		, LayeredLpvGridConfigUbo const * llpvConfigUbo
 		, VoxelizerUbo const * vctConfigUbo )
-		: RenderTechniquePass{ category
+		: RenderTechniquePass{ device
+			, category
 			, name
 			, matrixUbo
 			, culler
@@ -75,7 +77,8 @@ namespace castor3d
 	{
 	}
 
-	ForwardRenderTechniquePass::ForwardRenderTechniquePass( castor::String const & category
+	ForwardRenderTechniquePass::ForwardRenderTechniquePass( RenderDevice const & device
+		, castor::String const & category
 		, castor::String const & name
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
@@ -86,7 +89,8 @@ namespace castor3d
 		, LpvGridConfigUbo const * lpvConfigUbo
 		, LayeredLpvGridConfigUbo const * llpvConfigUbo
 		, VoxelizerUbo const * vctConfigUbo )
-		: RenderTechniquePass{ category
+		: RenderTechniquePass{ device
+			, category
 			, name
 			, matrixUbo
 			, culler
@@ -168,8 +172,7 @@ namespace castor3d
 	{
 	}
 
-	void ForwardRenderTechniquePass::initialiseRenderPass( RenderDevice const & device
-		, ashes::ImageView const & colourView
+	void ForwardRenderTechniquePass::initialiseRenderPass( ashes::ImageView const & colourView
 		, ashes::ImageView const & depthView
 		, castor::Size const & size
 		, bool clear )
@@ -256,7 +259,7 @@ namespace castor3d
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = device->createRenderPass( getName()
+		m_renderPass = m_device->createRenderPass( getName()
 			, std::move( createInfo ) );
 		ashes::ImageViewCRefArray fbAttaches;
 		fbAttaches.emplace_back( depthView );
@@ -266,7 +269,7 @@ namespace castor3d
 			, { colourView.image->getDimensions().width, colourView.image->getDimensions().height }
 			, std::move( fbAttaches ) );
 
-		m_nodesCommands = device.graphicsCommandPool->createCommandBuffer( getName() );
+		m_nodesCommands = m_device.graphicsCommandPool->createCommandBuffer( getName() );
 	}
 
 	void ForwardRenderTechniquePass::accept( RenderTechniqueVisitor & visitor )
@@ -277,8 +280,7 @@ namespace castor3d
 		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
 	}
 
-	ashes::Semaphore const & ForwardRenderTechniquePass::render( RenderDevice const & device
-		, ashes::Semaphore const & toWait )
+	ashes::Semaphore const & ForwardRenderTechniquePass::render( ashes::Semaphore const & toWait )
 	{
 		ashes::Semaphore const * result = &toWait;
 
@@ -313,7 +315,7 @@ namespace castor3d
 		m_nodesCommands->endDebugBlock();
 		m_nodesCommands->end();
 
-		device.graphicsQueue->submit( { *m_nodesCommands }
+		m_device.graphicsQueue->submit( { *m_nodesCommands }
 			, { *result }
 			, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT }
 			, { getSemaphore() }
@@ -323,11 +325,11 @@ namespace castor3d
 		return *result;
 	}
 
-	void ForwardRenderTechniquePass::doCleanup( RenderDevice const & device )
+	void ForwardRenderTechniquePass::doCleanup()
 	{
 		m_nodesCommands.reset();
 		m_frameBuffer.reset();
-		RenderTechniquePass::doCleanup( device );
+		RenderTechniquePass::doCleanup();
 	}
 
 	ShaderPtr ForwardRenderTechniquePass::doGetPhongPixelShaderSource( PipelineFlags const & flags )const

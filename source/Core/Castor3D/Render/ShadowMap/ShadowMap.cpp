@@ -40,7 +40,7 @@ namespace castor3d
 
 		for ( auto & pass : m_passes )
 		{
-			pass.pass->cleanup( m_device );
+			pass.pass->cleanup();
 			pass.matrixUbo->cleanup();
 		}
 
@@ -82,14 +82,14 @@ namespace castor3d
 		}
 	}
 
-	bool ShadowMap::initialise( RenderDevice const & device )
+	bool ShadowMap::initialise()
 	{
 		if ( !m_initialised
 			&& m_scene.hasShadows( m_lightType ) )
 		{
-			m_result.initialise( device );
+			m_result.initialise( m_device );
 			{
-				auto cmdBuffer = device.graphicsCommandPool->createCommandBuffer( m_name + "Clear" );
+				auto cmdBuffer = m_device.graphicsCommandPool->createCommandBuffer( m_name + "Clear" );
 				cmdBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 				uint32_t index = 0u;
 
@@ -128,8 +128,8 @@ namespace castor3d
 				}
 
 				cmdBuffer->end();
-				auto fence = device->createFence( m_name + "Clear" );
-				device.graphicsQueue->submit( *cmdBuffer, fence.get() );
+				auto fence = m_device->createFence( m_name + "Clear" );
+				m_device.graphicsQueue->submit( *cmdBuffer, fence.get() );
 				fence->wait( ashes::MaxTimeout );
 			}
 			auto size = m_result[SmTexture::eVariance].getTexture()->getDimensions();
@@ -137,14 +137,14 @@ namespace castor3d
 
 			for ( auto & pass : m_passes )
 			{
-				pass.matrixUbo->initialise( device );
-				result = result && pass.pass->initialise( device, { size.width, size.height } );
+				pass.matrixUbo->initialise( m_device );
+				result = result && pass.pass->initialise( { size.width, size.height } );
 			}
 
 			if ( result )
 			{
-				m_finished = device->createSemaphore( m_name );
-				doInitialise( device );
+				m_finished = m_device->createSemaphore( m_name );
+				doInitialise( m_device );
 				m_initialised = true;
 			}
 		}

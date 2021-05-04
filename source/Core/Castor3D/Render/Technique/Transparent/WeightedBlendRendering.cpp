@@ -38,7 +38,7 @@ namespace castor3d
 		, m_transparentPassResult{ engine, device, depthView, velocityTexture }
 		, m_finalCombinePass{ engine, device, m_size, m_transparentPass.getSceneUbo(), hdrConfigUbo, gpInfoUbo, m_transparentPassResult, colourView }
 	{
-		m_transparentPass.initialiseRenderPass( device, m_transparentPassResult );
+		m_transparentPass.initialiseRenderPass( m_transparentPassResult );
 	}
 
 	void WeightedBlendRendering::update( CpuUpdater & updater )
@@ -56,7 +56,7 @@ namespace castor3d
 		, ashes::Semaphore const & toWait )
 	{
 		auto * result = &toWait;
-		result = &m_transparentPass.render( device, *result );
+		result = &m_transparentPass.render( *result );
 		result = &m_finalCombinePass.render( device
 			, scene.getFog().getType()
 			, *result );
