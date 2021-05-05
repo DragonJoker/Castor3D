@@ -44,9 +44,9 @@ namespace castor3d
 			, LpvGridConfigUbo const & lpvConfigUbo
 			, LayeredLpvGridConfigUbo const & llpvConfigUbo
 			, VoxelizerUbo const & vctConfigUbo
-			, LightVolumePassResult const * lpvResult
-			, TextureUnit const * vctFirstBounce
-			, TextureUnit const * vctSecondaryBounce );
+			, LightVolumePassResult const & lpvResult
+			, TextureUnit const & vctFirstBounce
+			, TextureUnit const & vctSecondaryBounce );
 		/**
 		 *\~english
 		 *\brief		Destructor

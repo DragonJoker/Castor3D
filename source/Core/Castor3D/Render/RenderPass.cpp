@@ -112,24 +112,24 @@ namespace castor3d
 		, Named{ name }
 		, m_device{ device }
 		, m_renderSystem{ m_device.renderSystem }
-		, m_matrixUbo{ desc.matrixUbo }
-		, m_culler{ desc.culler }
-		, m_renderQueue{ *this, desc.mode, desc.ignored }
+		, m_matrixUbo{ desc.m_matrixUbo }
+		, m_culler{ desc.m_culler }
+		, m_renderQueue{ *this, desc.m_mode, desc.m_ignored }
 		, m_category{ category }
-		, m_size{ desc.size.width, desc.size.height }
-		, m_oit{ desc.oit }
-		, m_forceTwoSided{ desc.forceTwoSided }
-		, m_mode{ desc.mode }
+		, m_size{ desc.m_size.width, desc.m_size.height }
+		, m_oit{ desc.m_oit }
+		, m_forceTwoSided{ desc.m_forceTwoSided }
+		, m_mode{ desc.m_mode }
 		, m_sceneUbo{ m_device }
 		, m_renderPass{ std::move( renderPass ) }
-		, m_ownTimer{ ( desc.timer
+		, m_ownTimer{ ( desc.m_timer
 			? nullptr
 			: std::make_shared< RenderPassTimer >( m_device, m_category, name ) ) }
-		, m_timer{ ( desc.timer
-			? desc.timer
+		, m_timer{ ( desc.m_timer
+			? desc.m_timer
 			: m_ownTimer.get() ) }
-		, m_index{ desc.index }
-		, m_instanceMult{ desc.instanceMult }
+		, m_index{ desc.m_index }
+		, m_instanceMult{ desc.m_instanceMult }
 		, m_shaderCache{ makeCache( *getEngine() ) }
 	{
 		m_sceneUbo.setWindowSize( m_size );
