@@ -30,7 +30,8 @@ namespace castor3d
 			, castor::Size const & size
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
-			, SsaoConfig const & config );
+			, SsaoConfig const & config
+			, OpaquePassResult const & gpResult );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -38,17 +39,6 @@ namespace castor3d
 		 *\brief		Destructeur
 		 */
 		C3D_API ~OpaquePass();
-		/**
-		 *\~english
-		 *\brief		Initialises the render pass.
-		 *\param[in]	device		The GPU device.
-		 *\param[in]	gpResult	The geometry pass buffers.
-		 *\~french
-		 *\brief		Initialise la passe de rendu.
-		 *\param[in]	device		Le device GPU.
-		 *\param[in]	gpResult	Les tampons de la geometry pass.
-		 */
-		C3D_API void initialiseRenderPass( OpaquePassResult const & gpResult );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */

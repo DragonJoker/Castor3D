@@ -16,8 +16,7 @@ namespace castor3d
 		: public GBufferT< DsTexture >
 	{
 	public:
-		C3D_API OpaquePassResult( Engine & engine
-			, RenderDevice const & device
+		C3D_API OpaquePassResult( RenderDevice const & device
 			, TextureUnit const & depthTexture
 			, TextureUnit const & velocityTexture );
 	};

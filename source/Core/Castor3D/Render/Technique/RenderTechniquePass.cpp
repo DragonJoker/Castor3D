@@ -137,39 +137,11 @@ namespace castor3d
 		, m_lpvConfigUbo{ techniquePassDesc.lpvConfigUbo }
 		, m_llpvConfigUbo{ techniquePassDesc.llpvConfigUbo }
 		, m_vctConfigUbo{ techniquePassDesc.vctConfigUbo }
+		, m_lpvResult{ techniquePassDesc.lpvResult }
+		, m_vctFirstBounce{ techniquePassDesc.vctFirstBounce }
+		, m_vctSecondaryBounce{ techniquePassDesc.vctSecondaryBounce }
 		, m_finished{ m_device->createSemaphore( name ) }
 	{
-		if ( techniquePassDesc.size != castor::Size{} )
-		{
-			initialise( techniquePassDesc.size
-				, techniquePassDesc.lpvResult
-				, techniquePassDesc.vctFirstBounce
-				, techniquePassDesc.vctSecondaryBounce );
-		}
-	}
-
-	bool RenderTechniquePass::initialise( castor::Size const & size
-		, LightVolumePassResult const * lpvResult
-		, TextureUnit const * vctFirstBounce
-		, TextureUnit const * vctSecondaryBounce )
-	{
-		m_lpvResult = lpvResult;
-		m_vctFirstBounce = vctFirstBounce;
-		m_vctSecondaryBounce = vctSecondaryBounce;
-		return SceneRenderPass::initialise( size );
-	}
-
-	bool RenderTechniquePass::initialise( castor::Size const & size
-		, RenderPassTimer & timer
-		, uint32_t index
-		, LightVolumePassResult const * lpvResult
-		, TextureUnit const * vctFirstBounce
-		, TextureUnit const * vctSecondaryBounce )
-	{
-		m_lpvResult = lpvResult;
-		m_vctFirstBounce = vctFirstBounce;
-		m_vctSecondaryBounce = vctSecondaryBounce;
-		return SceneRenderPass::initialise( size, timer, index );
 	}
 
 	void RenderTechniquePass::accept( RenderTechniqueVisitor & visitor )

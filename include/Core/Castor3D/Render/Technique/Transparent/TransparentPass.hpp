@@ -40,6 +40,7 @@ namespace castor3d
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, SsaoConfig const & ssaoConfig
+			, TransparentPassResult const & transparentPassResult
 			, LpvGridConfigUbo const & lpvConfigUbo
 			, LayeredLpvGridConfigUbo const & llpvConfigUbo
 			, VoxelizerUbo const & vctConfigUbo
@@ -53,17 +54,6 @@ namespace castor3d
 		 *\brief		Destructeur
 		 */
 		C3D_API ~TransparentPass();
-		/**
-		 *\~english
-		 *\brief		Initialises the render pass.
-		 *\param[in]	device		The GPU device.
-		 *\param[in]	wbpResult	The accumulation pass buffers.
-		 *\~french
-		 *\brief		Initialise la passe de rendu.
-		 *\param[in]	device		Le device GPU.
-		 *\param[in]	wbpResult	Les tampons de la passe d'accumulation.
-		 */
-		C3D_API void initialiseRenderPass( TransparentPassResult const & wbpResult );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
