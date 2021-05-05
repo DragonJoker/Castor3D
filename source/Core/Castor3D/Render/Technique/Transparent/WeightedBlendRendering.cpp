@@ -3,6 +3,7 @@
 #include "Castor3D/Render/RenderInfo.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/Technique/Transparent/TransparentPassResult.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Fog.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -24,9 +25,8 @@ namespace castor3d
 	WeightedBlendRendering::WeightedBlendRendering( Engine & engine
 		, RenderDevice const & device
 		, TransparentPass & transparentPass
-		, TextureUnit const & depthView
+		, TransparentPassResult const & transparentPassResult
 		, ashes::ImageView const & colourView
-		, TextureUnit const & velocityTexture
 		, castor::Size const & size
 		, Scene const & scene
 		, HdrConfigUbo const & hdrConfigUbo
@@ -34,11 +34,10 @@ namespace castor3d
 		, LightVolumePassResult const & lpvResult )
 		: m_engine{ engine }
 		, m_transparentPass{ transparentPass }
+		, m_transparentPassResult{ transparentPassResult }
 		, m_size{ size }
-		, m_transparentPassResult{ engine, device, depthView, velocityTexture }
 		, m_finalCombinePass{ engine, device, m_size, m_transparentPass.getSceneUbo(), hdrConfigUbo, gpInfoUbo, m_transparentPassResult, colourView }
 	{
-		m_transparentPass.initialiseRenderPass( m_transparentPassResult );
 	}
 
 	void WeightedBlendRendering::update( CpuUpdater & updater )

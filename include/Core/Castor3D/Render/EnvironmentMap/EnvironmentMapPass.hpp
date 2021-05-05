@@ -9,9 +9,12 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Technique/TechniqueModule.hpp"
 
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
+#include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelUbo.hpp"
+
+#include <CastorUtils/Design/Named.hpp>
 
 #include <ashespp/Image/ImageView.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>
@@ -22,7 +25,8 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class EnvironmentMapPass
-		: castor::OwnedBy< EnvironmentMap >
+		: public castor::OwnedBy< EnvironmentMap >
+		, public castor::Named
 	{
 	public:
 		EnvironmentMapPass( EnvironmentMapPass const & )=delete;
@@ -47,7 +51,8 @@ namespace castor3d
 			, EnvironmentMap & reflectionMap
 			, SceneNodeSPtr node
 			, SceneNode const & objectNode
-			, CubeMapFace face );
+			, CubeMapFace face
+			, RenderPassTimer & timer );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -79,13 +84,10 @@ namespace castor3d
 		 *\param		timer		Le timer de passe de rendu à utiliser.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		bool initialise( castor::Size const & size
-			, uint32_t face
-			, ashes::RenderPass const & renderPass
+		bool initialise( ashes::RenderPass const & renderPass
 			, SceneBackground const & background
 			, ashes::DescriptorSetPool const & uboPool
-			, ashes::DescriptorSetPool const & texPool
-			, RenderPassTimer & timer );
+			, ashes::DescriptorSetPool const & texPool );
 		/**
 		 *\~english
 		 *\brief		Cleans up the pass.
@@ -129,6 +131,7 @@ namespace castor3d
 		RenderDevice const & m_device;
 		SceneNodeSPtr m_node;
 		CubeMapFace m_face;
+		RenderPassTimer * m_timer;
 		CameraSPtr m_camera;
 		SceneCullerUPtr m_culler;
 		ashes::ImageView m_envView;
@@ -140,8 +143,7 @@ namespace castor3d
 		MatrixUbo m_matrixUbo;
 		std::shared_ptr< ForwardRenderTechniquePass > m_opaquePass;
 		std::shared_ptr< ForwardRenderTechniquePass > m_transparentPass;
-		ashes::CommandBufferPtr m_commandBuffer;
-		ashes::SemaphorePtr m_finished;
+		CommandsSemaphore m_commands;
 		castor::Matrix4x4f m_mtxView;
 		castor::Matrix4x4f m_mtxModel;
 		UniformBufferOffsetT< ModelUboConfiguration > m_modelUbo;
