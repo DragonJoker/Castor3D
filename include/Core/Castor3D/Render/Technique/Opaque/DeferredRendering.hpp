@@ -72,8 +72,7 @@ namespace castor3d
 		DeferredRendering( Engine & engine
 			, RenderDevice const & device
 			, OpaquePass & opaquePass
-			, TextureUnit const & depthTexture
-			, TextureUnit const & velocityTexture
+			, OpaquePassResult const & opaquePassResult
 			, TextureUnit const & resultTexture
 			, ShadowMapResult const & smDirectionalResult
 			, ShadowMapResult const & smPointResult
@@ -149,9 +148,9 @@ namespace castor3d
 		RenderDevice const & m_device;
 		SsaoConfig & m_ssaoConfig;
 		OpaquePass & m_opaquePass;
+		OpaquePassResult const & m_opaquePassResult;
 		GpInfoUbo const & m_gpInfoUbo;
 		castor::Size m_size;
-		OpaquePassResult m_opaquePassResult;
 		LineariseDepthPassUPtr m_linearisePass;
 		SsaoPassUPtr m_ssao;
 		std::unique_ptr< LightingPass > m_lightingPass;

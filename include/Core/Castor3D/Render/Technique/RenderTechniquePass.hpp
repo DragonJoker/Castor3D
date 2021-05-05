@@ -17,17 +17,15 @@ namespace castor3d
 {
 	struct RenderTechniquePassDesc
 	{
-		RenderTechniquePassDesc( castor::Size const & size
-			, bool environment
+		RenderTechniquePassDesc( bool environment
 			, SsaoConfig const & ssaoConfig
-			, LpvGridConfigUbo const * lpvConfigUbo = nullptr
+			, LpvGridConfigUbo const * lpvConfigUbo
 			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr
 			, VoxelizerUbo const * vctConfigUbo = nullptr
 			, LightVolumePassResult const * lpvResult = nullptr
 			, TextureUnit const * vctFirstBounce = nullptr
 			, TextureUnit const * vctSecondaryBounce = nullptr )
-			: size{ size }
-			, environment{ environment }
+			: environment{ environment }
 			, ssaoConfig{ ssaoConfig }
 			, lpvConfigUbo{ lpvConfigUbo }
 			, llpvConfigUbo{ llpvConfigUbo }
@@ -58,16 +56,17 @@ namespace castor3d
 			, LpvGridConfigUbo const * lpvConfigUbo = nullptr
 			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr
 			, VoxelizerUbo const * vctConfigUbo = nullptr )
-			: RenderTechniquePassDesc{ {}
-				, environment
+			: RenderTechniquePassDesc{ environment
 				, ssaoConfig
 				, lpvConfigUbo
 				, llpvConfigUbo
-				, vctConfigUbo }
+				, vctConfigUbo
+				, nullptr
+				, nullptr
+				, nullptr }
 		{
 		}
 
-		castor::Size size;
 		bool environment;
 		SsaoConfig const & ssaoConfig;
 		LpvGridConfigUbo const * lpvConfigUbo;
@@ -106,54 +105,6 @@ namespace castor3d
 			, ashes::RenderPassPtr renderPass = nullptr );
 
 	public:
-		/**
-		 *\~english
-		 *\brief		Initialises the pass.
-		 *\param[in]	size				The pass needed dimensions.
-		 *\param[in]	lpvResult			The LPV result, if needed.
-		 *\param[in]	vctFirstBounce		The VCT first bounce result, if needed.
-		 *\param[in]	vctSecondaryBounce	The VCT secondary bounce result, if needed.
-		 *\return		\p true on ok.
-		 *\~french
-		 *\brief		Initialise la passe.
-		 *\param[in]	size				Les dimensions voulues pour la passe.
-		 *\param[in]	lpvResult			Le résultat du LPV, si nécessaire.
-		 *\param[in]	vctFirstBounce		Le résultat du premier rebond de VCT, si nécessaire.
-		 *\param[in]	vctSecondaryBounce	Le résultat du second rebond de VCT, si nécessaire.
-		 *\return		\p true si tout s'est bien passé.
-		 */
-		C3D_API bool initialise( castor::Size const & size
-			, LightVolumePassResult const * lpvResult = nullptr
-			, TextureUnit const * vctFirstBounce = nullptr
-			, TextureUnit const * vctSecondaryBounce = nullptr );
-		/**
-		 *\~english
-		 *\brief		Initialises the pass.
-		 *\param[in]	device				The GPU device.
-		 *\param[in]	size				The pass needed dimensions.
-		 *\param[in]	timer				The parent timer.
-		 *\param[in]	index				The pass timer index, in its parent.
-		 *\param[in]	lpvResult			The LPV result, if needed.
-		 *\param[in]	vctFirstBounce		The VCT first bounce result, if needed.
-		 *\param[in]	vctSecondaryBounce	The VCT secondary bounce result, if needed.
-		 *\return		\p true on ok.
-		 *\~french
-		 *\brief		Initialise la passe.
-		 *\param[in]	device				Le device GPU.
-		 *\param[in]	size				Les dimensions voulues pour la passe.
-		 *\param[in]	timer				Le timer parent.
-		 *\param[in]	index				L'indice de la passe, dans le parent.
-		 *\param[in]	lpvResult			Le résultat du LPV, si nécessaire.
-		 *\param[in]	vctFirstBounce		Le résultat du premier rebond de VCT, si nécessaire.
-		 *\param[in]	vctSecondaryBounce	Le résultat du second rebond de VCT, si nécessaire.
-		 *\return		\p true si tout s'est bien passé.
-		 */
-		C3D_API bool initialise( castor::Size const & size
-			, RenderPassTimer & timer
-			, uint32_t index
-			, LightVolumePassResult const * lpvResult = nullptr
-			, TextureUnit const * vctFirstBounce = nullptr
-			, TextureUnit const * vctSecondaryBounce = nullptr );
 		/**
 		 *\~english
 		 *\brief		Visitor acceptance function.
@@ -245,21 +196,18 @@ namespace castor3d
 		 */
 		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
 
-	private:
-		using SceneRenderPass::initialise;
-
 	protected:
 		Scene const & m_scene;
+		Camera * m_camera{ nullptr };
+		SceneRenderNode m_sceneNode;
+		bool m_environment{ false };
+		SsaoConfig m_ssaoConfig;
 		LpvGridConfigUbo const * m_lpvConfigUbo;
 		LayeredLpvGridConfigUbo const * m_llpvConfigUbo;
 		VoxelizerUbo const * m_vctConfigUbo;
 		LightVolumePassResult const * m_lpvResult;
 		TextureUnit const * m_vctFirstBounce;
 		TextureUnit const * m_vctSecondaryBounce;
-		Camera * m_camera{ nullptr };
-		SceneRenderNode m_sceneNode;
-		bool m_environment{ false };
-		SsaoConfig m_ssaoConfig;
 		ashes::SemaphorePtr m_finished;
 	};
 }

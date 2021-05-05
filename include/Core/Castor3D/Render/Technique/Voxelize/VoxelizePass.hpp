@@ -46,7 +46,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~VoxelizePass();
+		C3D_API ~VoxelizePass();
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
