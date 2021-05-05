@@ -8,6 +8,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp"
 
+#include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
+
 #include <unordered_map>
 
 namespace castor3d

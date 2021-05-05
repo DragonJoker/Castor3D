@@ -513,8 +513,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	TransparentResolvePass::TransparentResolvePass( Engine & engine
-		, RenderDevice const & device
+	TransparentResolvePass::TransparentResolvePass( RenderDevice const & device
 		, Size const & size
 		, SceneUbo & sceneUbo
 		, HdrConfigUbo const & hdrConfigUbo
@@ -522,7 +521,8 @@ namespace castor3d
 		, TransparentPassResult const & wbResult
 		, ashes::ImageView const & colourView )
 		: m_size{ size }
-		, m_engine{ engine }
+		, m_device{ device }
+		, m_engine{ *m_device.renderSystem.getEngine() }
 		, m_sceneUbo{ sceneUbo }
 		, m_gpInfo{ gpInfoUbo }
 		, m_wbResult{ wbResult }
@@ -548,16 +548,15 @@ namespace castor3d
 		m_engine.getSamplerCache().remove( "C3D_BW_TransparentResolvePass" );
 	}
 
-	ashes::Semaphore const & TransparentResolvePass::render( RenderDevice const & device
-		, FogType fogType
+	ashes::Semaphore const & TransparentResolvePass::render( FogType fogType
 		, ashes::Semaphore const & toWait )
 	{
-		auto & program = *doGetProgram( device, fogType );
+		auto & program = *doGetProgram( m_device, fogType );
 		RenderPassTimerBlock timerBlock{ m_timer->start() };
 		timerBlock->notifyPassRender();
 		auto * result = &toWait;
 
-		device.graphicsQueue->submit( program.getCommandBuffer()
+		m_device.graphicsQueue->submit( program.getCommandBuffer()
 			, *result
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, *m_semaphore
