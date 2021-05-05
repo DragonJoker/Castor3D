@@ -84,9 +84,9 @@ namespace castor3d
 				, 0u
 				, Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize }
 				, shader::getSpotShadowMapCount() }
-			, createPasses( device, scene, *this )
 			, shader::getSpotShadowMapCount() }
 	{
+		m_passes = createPasses( device, scene, *this );
 		log::trace << "Created ShadowMapSpot" << std::endl;
 	}
 

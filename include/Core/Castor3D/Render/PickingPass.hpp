@@ -135,8 +135,6 @@ namespace castor3d
 		void doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes );
 		void doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes );
 		void doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes );
-		bool doInitialise( castor::Size const & size )override;
-		void doCleanup()override;
 		void doFillUboDescriptor( RenderPipeline const & pipeline
 			, ashes::DescriptorSetLayout const & layout
 			, BillboardListRenderNode & node )override;
@@ -180,8 +178,8 @@ namespace castor3d
 		ashes::ImageView m_colourView;
 		ashes::ImageView m_depthView;
 		ashes::FrameBufferPtr m_frameBuffer;
-		VkBufferImageCopy m_copyRegion{};
-		VkBufferImageCopy m_transferDisplayRegion{};
+		VkBufferImageCopy m_copyRegion;
+		VkBufferImageCopy m_transferDisplayRegion;
 		std::vector< VkBufferImageCopy > m_pickDisplayRegions;
 		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::BufferPtr< castor::Point4f > m_stagingBuffer;

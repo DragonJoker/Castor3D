@@ -69,12 +69,6 @@ namespace castor3d
 	public:
 		using RenderTechniquePass::update;
 
-	protected:
-		/**
-		 *\copydoc		castor3d::RenderTechniquePass::doCleanup
-		 */
-		C3D_API void doCleanup()override;
-
 	private:
 		void doUpdateFlags( PipelineFlags & flags )const override;
 		void doFillTextureDescriptor( RenderPipeline const & pipeline
