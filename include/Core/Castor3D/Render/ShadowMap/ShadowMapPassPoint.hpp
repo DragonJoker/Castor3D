@@ -58,8 +58,6 @@ namespace castor3d
 		void doUpdateNodes( SceneCulledRenderNodes & nodes );
 
 	private:
-		bool doInitialise( castor::Size const & size )override;
-		void doCleanup()override;
 		void doUpdateUbos( CpuUpdater & updater )override;
 		void doFillUboDescriptor( RenderPipeline const & pipeline
 			, ashes::DescriptorSetLayout const & layout

@@ -44,6 +44,81 @@ using namespace castor;
 
 namespace castor3d
 {
+	namespace
+	{
+		ashes::RenderPassPtr createRenderPass( RenderDevice const & device
+			, ShadowMap const & shadowMap
+			, castor::String const & name )
+		{
+			std::array< VkImageLayout, size_t( SmTexture::eCount ) > FinalLayouts{ VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL };
+
+			// Create the render pass.
+			ashes::VkAttachmentDescriptionArray attaches;
+			ashes::VkAttachmentReferenceArray references;
+			uint32_t index = 0u;
+
+			for ( auto & result : shadowMap.getShadowPassResult() )
+			{
+				attaches.push_back( { 0u
+					, result->getTexture()->getPixelFormat()
+					, VK_SAMPLE_COUNT_1_BIT
+					, VK_ATTACHMENT_LOAD_OP_CLEAR
+					, VK_ATTACHMENT_STORE_OP_STORE
+					, VK_ATTACHMENT_LOAD_OP_DONT_CARE
+					, VK_ATTACHMENT_STORE_OP_DONT_CARE
+					, VK_IMAGE_LAYOUT_UNDEFINED
+					, FinalLayouts[index] } );
+
+				if ( index > 0 )
+				{
+					references.push_back( { index, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } );
+				}
+
+				++index;
+			}
+
+			ashes::SubpassDescriptionArray subpasses;
+			subpasses.emplace_back( ashes::SubpassDescription{ 0u
+				, VK_PIPELINE_BIND_POINT_GRAPHICS
+				, {}
+				, references
+				, {}
+				, VkAttachmentReference{ 0u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL }
+				, {} } );
+			ashes::VkSubpassDependencyArray dependencies
+			{
+				{ VK_SUBPASS_EXTERNAL
+					, 0u
+					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
+					, VK_ACCESS_SHADER_READ_BIT
+					, VK_DEPENDENCY_BY_REGION_BIT }
+				, { 0u
+					, VK_SUBPASS_EXTERNAL
+					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
+					, VK_ACCESS_SHADER_READ_BIT
+					, VK_DEPENDENCY_BY_REGION_BIT } };
+			ashes::RenderPassCreateInfo createInfo{ 0u
+				, std::move( attaches )
+				, std::move( subpasses )
+				, std::move( dependencies ) };
+			return device->createRenderPass( name
+				, std::move( createInfo ) );
+		}
+
+		castor::String getPassName( uint32_t cascadeIndex )
+		{
+			return cuT( "Directional Cascade " ) + string::toString( cascadeIndex );
+		}
+	}
+
 	uint32_t const ShadowMapPassDirectional::TextureSize = 2048u;
 
 	ShadowMapPassDirectional::ShadowMapPassDirectional( RenderDevice const & device
@@ -51,13 +126,19 @@ namespace castor3d
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap
 		, uint32_t cascadeIndex )
-		: ShadowMapPass{ device, cuT( "Directional Cascade " ) + string::toString( cascadeIndex ), matrixUbo, culler, shadowMap }
+		: ShadowMapPass{ device
+			, getPassName( cascadeIndex )
+			, matrixUbo
+			, culler
+			, shadowMap
+			, createRenderPass( device, shadowMap, getPassName( cascadeIndex ) ) }
 	{
 		log::trace << "Created " << m_name << std::endl;
 	}
 
 	ShadowMapPassDirectional::~ShadowMapPassDirectional()
 	{
+		getCuller().getCamera().detach();
 	}
 
 	bool ShadowMapPassDirectional::update( CpuUpdater & updater )
@@ -80,96 +161,6 @@ namespace castor3d
 	{
 		SceneRenderPass::doUpdateUbos( updater );
 		m_shadowMapUbo.update( *updater.light, updater.index );
-	}
-
-	bool ShadowMapPassDirectional::doInitialise( Size const & size )
-	{
-		std::array< VkImageLayout, size_t( SmTexture::eCount ) > FinalLayouts
-		{
-			VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-		};
-
-		// Create the render pass.
-		ashes::VkAttachmentDescriptionArray attaches;
-		ashes::VkAttachmentReferenceArray references;
-		uint32_t index = 0u;
-
-		for ( auto & result : m_shadowMap.getShadowPassResult() )
-		{
-			attaches.push_back(
-				{
-					0u,
-					result->getTexture()->getPixelFormat(),
-					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
-					VK_ATTACHMENT_STORE_OP_STORE,
-					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
-					FinalLayouts[index],
-				} );
-
-			if ( index > 0 )
-			{
-				references.push_back( { index, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } );
-			}
-
-			++index;
-		}
-
-		ashes::SubpassDescriptionArray subpasses;
-		subpasses.emplace_back( ashes::SubpassDescription
-			{
-				0u,
-				VK_PIPELINE_BIND_POINT_GRAPHICS,
-				{},
-				references,
-				{},
-				VkAttachmentReference{ 0u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL },
-				{},
-			} );
-		ashes::VkSubpassDependencyArray dependencies
-		{
-			{
-				VK_SUBPASS_EXTERNAL,
-				0u,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-				VK_ACCESS_SHADER_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			},
-			{
-				0u,
-				VK_SUBPASS_EXTERNAL,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-				VK_ACCESS_SHADER_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			}
-		};
-		ashes::RenderPassCreateInfo createInfo
-		{
-			0u,
-			std::move( attaches ),
-			std::move( subpasses ),
-			std::move( dependencies ),
-		};
-		m_renderPass = m_device->createRenderPass( m_name
-			, std::move( createInfo ) );
-		m_initialised = true;
-		return m_initialised;
-	}
-
-	void ShadowMapPassDirectional::doCleanup()
-	{
-		m_renderQueue.cleanup();
-		getCuller().getCamera().detach();
 	}
 
 	void ShadowMapPassDirectional::doFillUboDescriptor( RenderPipeline const & pipeline

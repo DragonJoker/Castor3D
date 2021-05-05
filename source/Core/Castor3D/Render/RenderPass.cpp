@@ -106,109 +106,36 @@ namespace castor3d
 	SceneRenderPass::SceneRenderPass( RenderDevice const & device
 		, String const & category
 		, String const & name
-		, MatrixUbo & matrixUbo
-		, SceneCuller & culler
-		, RenderMode mode
-		, bool oit
-		, bool forceTwoSided
-		, SceneNode const * ignored
-		, uint32_t instanceMult )
+		, SceneRenderPassDesc const & desc
+		, ashes::RenderPassPtr renderPass )
 		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
 		, Named{ name }
 		, m_device{ device }
 		, m_renderSystem{ m_device.renderSystem }
-		, m_matrixUbo{ matrixUbo }
-		, m_culler{ culler }
-		, m_renderQueue{ *this, mode, ignored }
+		, m_matrixUbo{ desc.matrixUbo }
+		, m_culler{ desc.culler }
+		, m_renderQueue{ *this, desc.mode, desc.ignored }
 		, m_category{ category }
-		, m_oit{ oit }
-		, m_forceTwoSided{ forceTwoSided }
-		, m_mode{ mode }
+		, m_oit{ desc.oit }
+		, m_forceTwoSided{ desc.forceTwoSided }
+		, m_mode{ desc.mode }
 		, m_sceneUbo{ m_device }
-		, m_instanceMult{ instanceMult }
+		, m_renderPass{ std::move( renderPass ) }
+		, m_instanceMult{ desc.instanceMult }
+		, m_shaderCache{ makeCache( *getEngine() ) }
 	{
 		m_culler.getScene().getGeometryCache().registerPass( *this );
 		m_culler.getScene().getBillboardListCache().registerPass( *this );
 	}
 
-	SceneRenderPass::SceneRenderPass( RenderDevice const & device
-		, String const & category
-		, String const & name
-		, MatrixUbo & matrixUbo
-		, SceneCuller & culler
-		, uint32_t instanceMult )
-		: SceneRenderPass{ device
-			, category
-			, name
-			, matrixUbo
-			, culler
-			, RenderMode::eOpaqueOnly
-			, true
-			, false
-			, nullptr
-			, instanceMult }
+	SceneRenderPass::~SceneRenderPass()
 	{
-	}
-
-	SceneRenderPass::SceneRenderPass( RenderDevice const & device
-		, String const & category
-		, String const & name
-		, MatrixUbo & matrixUbo
-		, SceneCuller & culler
-		, bool oit
-		, uint32_t instanceMult )
-		: SceneRenderPass{ device
-			, category
-			, name
-			, matrixUbo
-			, culler
-			, RenderMode::eTransparentOnly
-			, oit
-			, false
-			, nullptr
-			, instanceMult }
-	{
-	}
-
-	SceneRenderPass::SceneRenderPass( RenderDevice const & device
-		, String const & category
-		, String const & name
-		, MatrixUbo & matrixUbo
-		, SceneCuller & culler
-		, SceneNode const * ignored
-		, uint32_t instanceMult )
-		: SceneRenderPass{ device
-			, category
-			, name
-			, matrixUbo
-			, culler
-			, RenderMode::eOpaqueOnly
-			, true
-			, false
-			, ignored
-			, instanceMult }
-	{
-	}
-
-	SceneRenderPass::SceneRenderPass( RenderDevice const & device
-		, String const & category
-		, String const & name
-		, MatrixUbo & matrixUbo
-		, SceneCuller & culler
-		, bool oit
-		, SceneNode const * ignored
-		, uint32_t instanceMult )
-		: SceneRenderPass{ device
-			, category
-			, name
-			, matrixUbo
-			, culler
-			, RenderMode::eTransparentOnly
-			, oit
-			, false
-			, ignored
-			, instanceMult }
-	{
+		m_sceneUbo.cleanup();
+		m_renderPass.reset();
+		m_renderQueue.cleanup();
+		m_ownTimer.reset();
+		m_backPipelines.clear();
+		m_frontPipelines.clear();
 	}
 
 	bool SceneRenderPass::initialise( Size const & size
@@ -217,26 +144,15 @@ namespace castor3d
 	{
 		m_timer = &timer;
 		m_index = index;
-		m_sceneUbo.initialise( m_device );
-		m_sceneUbo.setWindowSize( size );
 		m_size = size;
-		return doInitialise( size );
+		m_sceneUbo.setWindowSize( m_size );
+		return true;
 	}
 
 	bool SceneRenderPass::initialise( Size const & size )
 	{
 		m_ownTimer = std::make_shared< RenderPassTimer >( m_device, m_category, getName() );
 		return initialise( size, *m_ownTimer.get(), 0u );
-	}
-
-	void SceneRenderPass::cleanup()
-	{
-		m_sceneUbo.cleanup();
-		m_renderPass.reset();
-		doCleanup();
-		m_ownTimer.reset();
-		m_backPipelines.clear();
-		m_frontPipelines.clear();
 	}
 
 	void SceneRenderPass::update( CpuUpdater & updater )
@@ -302,8 +218,9 @@ namespace castor3d
 				flags.alphaBlendMode = BlendMode::eNoBlend;
 			}
 
-			auto program = doGetProgram( flags );
-			doPrepareBackPipeline( program, layouts, flags );
+			doPrepareBackPipeline( getShaderProgramCache().getAutomaticProgram( *this, flags )
+				, layouts
+				, flags );
 		}
 	}
 
@@ -348,8 +265,9 @@ namespace castor3d
 				flags.alphaBlendMode = BlendMode::eNoBlend;
 			}
 
-			auto program = doGetProgram( flags );
-			doPrepareFrontPipeline( program, layouts, flags );
+			doPrepareFrontPipeline( getShaderProgramCache().getAutomaticProgram( *this, flags )
+				, layouts
+				, flags );
 		}
 	}
 
@@ -931,12 +849,6 @@ namespace castor3d
 		, RenderPipeline & pipeline )
 	{
 		return SceneRenderNode{};
-	}
-
-	ShaderProgramSPtr SceneRenderPass::doGetProgram( PipelineFlags const & flags )const
-	{
-		return getEngine()->getShaderProgramCache().getAutomaticProgram( *this
-			, flags );
 	}
 
 	namespace

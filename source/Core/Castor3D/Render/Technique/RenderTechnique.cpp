@@ -666,25 +666,8 @@ namespace castor3d
 		m_llpvConfigUbo.cleanup();
 		m_llpvResult.clear();
 		m_lpvResult.reset();
-
-		if ( m_transparentPass )
-		{
-			m_transparentPass->cleanup();
-		}
-
-		if ( m_opaquePass )
-		{
-			m_opaquePass->cleanup();
-		}
-
 		m_voxelizer.reset();
-
-		if ( m_depthPass )
-		{
-			m_depthPass->cleanup();
-			m_depthPass.reset();
-		}
-
+		m_depthPass.reset();
 		m_vctConfigUbo.cleanup();
 		m_gpInfoUbo.cleanup();
 		m_matrixUbo.cleanup();
