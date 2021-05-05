@@ -20,8 +20,10 @@
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Render/Technique/ForwardRenderTechniquePass.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePass.hpp"
+#include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
 #include "Castor3D/Render/Technique/Opaque/DeferredRendering.hpp"
 #include "Castor3D/Render/Technique/Transparent/TransparentPass.hpp"
+#include "Castor3D/Render/Technique/Transparent/TransparentPassResult.hpp"
 #include "Castor3D/Render/Technique/Transparent/WeightedBlendRendering.hpp"
 #include "Castor3D/Render/Technique/Voxelize/Voxelizer.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -507,16 +509,19 @@ namespace castor3d
 					} ) );
 			} ) }
 #if C3D_UseDeferredRendering
+		, m_opaquePassResult{ castor::makeUnique< OpaquePassResult >( device
+			, m_depthBuffer
+			, m_renderTarget.getVelocity() ) }
 		, m_opaquePass{ castor::makeUniqueDerived< RenderTechniquePass, OpaquePass >( m_device
 			, m_size
 			, m_matrixUbo
 			, m_renderTarget.getCuller()
-			, m_ssaoConfig ) }
+			, m_ssaoConfig
+			, *m_opaquePassResult ) }
 		, m_deferredRendering{ castor::makeUnique< DeferredRendering >( *getEngine()
 			, m_device
 			, static_cast< OpaquePass & >( *m_opaquePass )
-			, m_depthBuffer
-			, m_renderTarget.getVelocity()
+			, *m_opaquePassResult
 			, m_colourTexture
 			, m_directionalShadowMap->getShadowPassResult()
 			, m_pointShadowMap->getShadowPassResult()
@@ -552,14 +557,22 @@ namespace castor3d
 			, &m_vctConfigUbo
 			, m_lpvResult.get()
 			, &m_voxelizer->getFirstBounce()
-			, &m_voxelizer->getSecondaryBounce() ) }
+			, &m_voxelizer->getSecondaryBounce()
+			, m_colourTexture.getTexture()->getDefaultView().getTargetView()
+			, m_depthBuffer.getTexture()->getDefaultView().getTargetView()
+			, m_size
+			, false ) }
 #endif
 #if C3D_UseWeightedBlendedRendering
+		, m_transparentPassResult{ castor::makeUnique< TransparentPassResult >( device
+			, m_depthBuffer
+			, m_renderTarget.getVelocity() ) }
 		, m_transparentPass{ castor::makeUniqueDerived< RenderTechniquePass, TransparentPass >( m_device
 			, m_size
 			, m_matrixUbo
 			, m_renderTarget.getCuller()
 			, m_ssaoConfig
+			, *m_transparentPassResult
 			, m_lpvConfigUbo
 			, m_llpvConfigUbo
 			, m_vctConfigUbo
@@ -569,9 +582,8 @@ namespace castor3d
 		, m_weightedBlendRendering{ castor::makeUnique< WeightedBlendRendering >( *getEngine()
 			, m_device
 			, static_cast< TransparentPass & >( *m_transparentPass )
-			, m_depthBuffer
+			, *m_transparentPassResult
 			, m_colourTexture.getTexture()->getDefaultView().getTargetView()
-			, m_renderTarget.getVelocity()
 			, m_renderTarget.getSize()
 			, *m_renderTarget.getScene()
 			, m_renderTarget.getHdrConfigUbo()
@@ -593,7 +605,11 @@ namespace castor3d
 			, &m_vctConfigUbo
 			, m_lpvResult.get()
 			, &m_voxelizer->getFirstBounce()
-			, &m_voxelizer->getSecondaryBounce() ) }
+			, &m_voxelizer->getSecondaryBounce()
+			, m_colourTexture.getTexture()->getDefaultView().getTargetView()
+			, m_depthBuffer.getTexture()->getDefaultView().getTargetView()
+			, m_size
+			, false ) }
 #endif
 		, m_signalFinished{ m_device->createSemaphore( "RenderTechnique" ) }
 		, m_directionalShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapDirectional >( m_device
@@ -624,25 +640,6 @@ namespace castor3d
 			, m_renderTarget.getHdrConfigUbo()
 			, *m_cbgCommandBuffer );
 
-#if !C3D_UseDeferredRendering
-
-		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).initialiseRenderPass( device
-			, m_colourTexture.getTexture()->getDefaultView().getTargetView()
-			, m_depthBuffer.getTexture()->getDefaultView().getTargetView()
-			, m_size
-			, false );
-
-#endif
-#if !C3D_UseWeightedBlendedRendering
-
-		static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).initialiseRenderPass( m_device
-			, m_colourTexture.getTexture()->getDefaultView().getTargetView()
-			, m_depthBuffer.getTexture()->getDefaultView().getTargetView()
-			, m_size
-			, false );
-
-#endif
-
 		auto & maps = m_renderTarget.getScene()->getEnvironmentMaps();
 
 		for ( auto & map : maps )
@@ -659,8 +656,16 @@ namespace castor3d
 		m_bgFrameBuffer.reset();
 		m_bgRenderPass.reset();
 		m_particleTimer.reset();
+#if C3D_UseWeightedBlendedRendering
 		m_weightedBlendRendering.reset();
+		m_transparentPassResult->cleanup();
+		m_transparentPassResult.reset();
+#endif
+#if C3D_UseDeferredRendering
 		m_deferredRendering.reset();
+		m_opaquePassResult->cleanup();
+		m_opaquePassResult.reset();
+#endif
 		m_clearLpv = {};
 		m_lpvConfigUbo.cleanup();
 		m_llpvConfigUbo.cleanup();

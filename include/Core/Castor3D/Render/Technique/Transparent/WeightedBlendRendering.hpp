@@ -7,7 +7,6 @@ See LICENSE file in root folder
 #include "TransparentModule.hpp"
 
 #include "Castor3D/Render/Technique/Transparent/TransparentPass.hpp"
-#include "Castor3D/Render/Technique/Transparent/TransparentPassResult.hpp"
 #include "Castor3D/Render/Technique/Transparent/TransparentResolvePass.hpp"
 
 namespace castor3d
@@ -46,9 +45,8 @@ namespace castor3d
 		WeightedBlendRendering( Engine & engine
 			, RenderDevice const & device
 			, TransparentPass & transparentPass
-			, TextureUnit const & depthView
+			, TransparentPassResult const & transparentPassResult
 			, ashes::ImageView const & colourView
-			, TextureUnit const & velocityTexture
 			, castor::Size const & size
 			, Scene const & scene
 			, HdrConfigUbo const & hdrConfigUbo
@@ -95,8 +93,8 @@ namespace castor3d
 	private:
 		Engine & m_engine;
 		TransparentPass & m_transparentPass;
+		TransparentPassResult const & m_transparentPassResult;
 		castor::Size m_size;
-		TransparentPassResult m_transparentPassResult;
 		TransparentResolvePass m_finalCombinePass;
 	};
 }

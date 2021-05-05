@@ -116,14 +116,23 @@ namespace castor3d
 		, m_culler{ desc.culler }
 		, m_renderQueue{ *this, desc.mode, desc.ignored }
 		, m_category{ category }
+		, m_size{ desc.size.width, desc.size.height }
 		, m_oit{ desc.oit }
 		, m_forceTwoSided{ desc.forceTwoSided }
 		, m_mode{ desc.mode }
 		, m_sceneUbo{ m_device }
 		, m_renderPass{ std::move( renderPass ) }
+		, m_ownTimer{ ( desc.timer
+			? nullptr
+			: std::make_shared< RenderPassTimer >( m_device, m_category, name ) ) }
+		, m_timer{ ( desc.timer
+			? desc.timer
+			: m_ownTimer.get() ) }
+		, m_index{ desc.index }
 		, m_instanceMult{ desc.instanceMult }
 		, m_shaderCache{ makeCache( *getEngine() ) }
 	{
+		m_sceneUbo.setWindowSize( m_size );
 		m_culler.getScene().getGeometryCache().registerPass( *this );
 		m_culler.getScene().getBillboardListCache().registerPass( *this );
 	}
@@ -136,23 +145,6 @@ namespace castor3d
 		m_ownTimer.reset();
 		m_backPipelines.clear();
 		m_frontPipelines.clear();
-	}
-
-	bool SceneRenderPass::initialise( Size const & size
-		, RenderPassTimer & timer
-		, uint32_t index )
-	{
-		m_timer = &timer;
-		m_index = index;
-		m_size = size;
-		m_sceneUbo.setWindowSize( m_size );
-		return true;
-	}
-
-	bool SceneRenderPass::initialise( Size const & size )
-	{
-		m_ownTimer = std::make_shared< RenderPassTimer >( m_device, m_category, getName() );
-		return initialise( size, *m_ownTimer.get(), 0u );
 	}
 
 	void SceneRenderPass::update( CpuUpdater & updater )

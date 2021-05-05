@@ -22,6 +22,9 @@ namespace castor3d
 		 *\param[in]	name				The pass name.
 		 *\param[in]	renderPassDesc		The scene render pass construction data.
 		 *\param[in]	techniquePassDesc	The technique render pass construction data.
+		 *\param[in]	colourView			The target colour view.
+		 *\param[in]	depthView			The target depth view.
+		 *\param[in]	clear				Tells if the attaches must be cleared at the beginning of the pass.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	device				Le render device.
@@ -29,31 +32,17 @@ namespace castor3d
 		 *\param[in]	name				Le nom de la passe.
 		 *\param[in]	renderPassDesc		Les données de construction de passe de rendu de scène.
 		 *\param[in]	techniquePassDesc	Les données de construction de passe de rendu de technique.
+		 *\param[in]	colourView			La vue couleur cible.
+		 *\param[in]	depthView			La vue profondeur cible.
+		 *\param[in]	clear				Dit si les attaches doivent être vidées au début de la passe.
 		 */
 		C3D_API ForwardRenderTechniquePass( RenderDevice const & device
 			, castor::String const & category
 			, castor::String const & name
 			, SceneRenderPassDesc const & renderPassDesc
-			, RenderTechniquePassDesc const & techniqueDesc );
-		/**
-		 *\~english
-		 *\brief		Initialises the render pass.
-		 *\param[in]	device		The GPU device.
-		 *\param[in]	colourView	The target colour view.
-		 *\param[in]	depthView	The target depth view.
-		 *\param[in]	size		The pass dimensions.
-		 *\param[in]	clear		Tells if the attaches must be cleared at the beginning of the pass.
-		 *\~french
-		 *\brief		Initialise la passe de rendu.
-		 *\param[in]	device		Le device GPU.
-		 *\param[in]	colourView	La vue couleur cible.
-		 *\param[in]	depthView	La vue profondeur cible.
-		 *\param[in]	size		Les dimensions de la passe.
-		 *\param[in]	clear		Dit si les attaches doivent être vidées au début de la passe.
-		 */
-		C3D_API void initialiseRenderPass( ashes::ImageView const & colourView
+			, RenderTechniquePassDesc const & techniqueDesc
+			, ashes::ImageView const & colourView
 			, ashes::ImageView const & depthView
-			, castor::Size const & size
 			, bool clear );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept

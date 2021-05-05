@@ -50,92 +50,107 @@ namespace castor3d
 			};
 			return image.getOwner()->getTexture().createView( name, view );
 		}
+
+		ashes::FrameBufferPtr doCreateFramebuffer( ashes::RenderPass const & renderPass
+			, EnvironmentMap const & envMap
+			, ashes::ImageView const & envView
+			, castor::String const & name )
+		{
+			auto size = envMap.getSize();
+			auto const & depthView = envMap.getDepthView();
+			ashes::ImageViewCRefArray attaches;
+			attaches.emplace_back( depthView );
+			attaches.emplace_back( envView );
+			return renderPass.createFrameBuffer( name
+				, VkExtent2D{ size.width, size.height }
+				, std::move( attaches ) );
+		}
 	}
 
 	EnvironmentMapPass::EnvironmentMapPass( RenderDevice const & device
 		, EnvironmentMap & reflectionMap
 		, SceneNodeSPtr node
 		, SceneNode const & objectNode
-		, CubeMapFace face )
+		, CubeMapFace face
+		, RenderPassTimer & timer )
 		: OwnedBy< EnvironmentMap >{ reflectionMap }
+		, Named{ "EnvironmentMapPass" + objectNode.getName() + castor::string::toString( uint32_t( face ) ) }
 		, m_device{ device }
 		, m_node{ node }
 		, m_face{ face }
+		, m_timer{ &timer }
 		, m_camera{ doCreateCamera( *node ) }
 		, m_culler{ std::make_unique< FrustumCuller >( *m_camera->getScene(), *m_camera ) }
+		, m_envView{ getOwner()->getTexture().getTexture()->getLayerCubeFaceMipView( 0u, m_face, 0u ).getTargetView() }
+		, m_frameBuffer{ doCreateFramebuffer( getOwner()->getRenderPass()
+			, *getOwner()
+			, m_envView
+			, getName() ) }
 		, m_matrixUbo{ device }
 		, m_opaquePass{ std::make_shared< ForwardRenderTechniquePass >( device
 			, cuT( "EnvironmentMap" )
-			, m_node->getName() + cuT( " Opaque" )
-			, SceneRenderPassDesc{ m_matrixUbo, *m_culler, &objectNode }
-			, RenderTechniquePassDesc{ true, SsaoConfig{} } ) }
+			, getName() + cuT( "Opaque" )
+			, SceneRenderPassDesc{ reflectionMap.getSize(), m_matrixUbo, *m_culler, &objectNode, timer, uint32_t( face ) * 3u + 0u }
+			, RenderTechniquePassDesc{ true, SsaoConfig{} }
+			, m_envView
+			, getOwner()->getDepthView()
+			, true ) }
 		, m_transparentPass{ std::make_shared< ForwardRenderTechniquePass >( device
 			, cuT( "EnvironmentMap" )
-			, m_node->getName() + cuT( " Transparent" )
-			, SceneRenderPassDesc{ m_matrixUbo, *m_culler, true, &objectNode }
-			, RenderTechniquePassDesc{ true, SsaoConfig{} } ) }
+			, getName() + cuT( "Transparent" )
+			, SceneRenderPassDesc{ reflectionMap.getSize(), m_matrixUbo, *m_culler, true, &objectNode, timer, uint32_t( face ) * 3u + 2u }
+			, RenderTechniquePassDesc{ true, SsaoConfig{} }
+			, m_envView
+			, getOwner()->getDepthView()
+			, false ) }
+		, m_commands{ m_device, getName() }
 		, m_mtxView{ m_camera->getView() }
 		, m_modelUbo{ m_device.uboPools->getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
 		, m_hdrConfigUbo{ m_device }
 	{
-		log::trace << "Created EnvironmentMapPass" << objectNode.getName() << std::endl;
-	}
-
-	EnvironmentMapPass::~EnvironmentMapPass()
-	{
-		m_hdrConfigUbo.cleanup();
-		m_device.uboPools->putBuffer( m_modelUbo );
-		m_transparentPass.reset();
-		m_opaquePass.reset();
-		m_matrixUbo.cleanup();
-	}
-
-	bool EnvironmentMapPass::initialise( Size const & size
-		, uint32_t face
-		, ashes::RenderPass const & renderPass
-		, SceneBackground const & background
-		, ashes::DescriptorSetPool const & uboPool
-		, ashes::DescriptorSetPool const & texPool
-		, RenderPassTimer & timer )
-	{
-		float const aspect = float( size.getWidth() ) / size.getHeight();
+		auto size = getOwner()->getSize();
+		float const aspect = float( size.width ) / size.height;
 		float const nearZ = 0.1f;
 		float const farZ = 1000.0f;
 		m_camera->getViewport().setPerspective( 90.0_degrees
 			, aspect
 			, nearZ
 			, farZ );
-		m_camera->resize( size );
+		m_camera->resize( { size.width, size.height } );
 
-		auto name = "EnvironmentMapPass" + m_node->getName() + castor::string::toString( face );
 		static castor::Matrix4x4f const projection = convert( m_device->perspective( ( 45.0_degrees ).radians()
 			, 1.0f
 			, 0.0f, 2.0f ) );
 		m_matrixUbo.cpuUpdate( m_mtxView, projection );
-		auto const & environmentLayout = getOwner()->getTexture().getTexture();
-		m_envView = environmentLayout->getLayerCubeFaceMipView( 0u, CubeMapFace( face ), 0u ).getTargetView();
-		auto const & depthView = getOwner()->getDepthView();
 
-		// Initialise opaque pass.
-		m_opaquePass->initialiseRenderPass( m_envView
-			, getOwner()->getDepthView()
-			, size
-			, true );
-		m_opaquePass->initialise( size, timer, uint32_t( m_face ) * 3u + 0u, nullptr );
+		log::trace << "Created EnvironmentMapPass " << getName() << std::endl;
+	}
+
+	EnvironmentMapPass::~EnvironmentMapPass()
+	{
+		m_hdrConfigUbo.cleanup();
+		m_device.uboPools->putBuffer( m_modelUbo );
+		m_commands = {};
+		m_transparentPass.reset();
+		m_opaquePass.reset();
+		m_matrixUbo.cleanup();
+		m_frameBuffer.reset();
+	}
+
+	bool EnvironmentMapPass::initialise( ashes::RenderPass const & renderPass
+		, SceneBackground const & background
+		, ashes::DescriptorSetPool const & uboPool
+		, ashes::DescriptorSetPool const & texPool )
+	{
+		auto size = getOwner()->getSize();
 
 		// Create custom background pass.
-		ashes::ImageViewCRefArray attaches;
-		attaches.emplace_back( depthView );
-		attaches.emplace_back( m_envView );
-		m_frameBuffer = renderPass.createFrameBuffer( name
-			, VkExtent2D{ size[0], size[1] }
-			, std::move( attaches ) );
-		m_backgroundCommands = m_device.graphicsCommandPool->createCommandBuffer( name
+		m_backgroundCommands = m_device.graphicsCommandPool->createCommandBuffer( getName()
 			, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
 		auto & commandBuffer = *m_backgroundCommands;
 		m_renderPass = &renderPass;
-		m_backgroundUboDescriptorSet = uboPool.createDescriptorSet( name + "Ubo", 0u );
-		m_backgroundTexDescriptorSet = texPool.createDescriptorSet( name + "Tex", 0u );
+		m_backgroundUboDescriptorSet = uboPool.createDescriptorSet( getName() + "Ubo", 0u );
+		m_backgroundTexDescriptorSet = texPool.createDescriptorSet( getName() + "Tex", 0u );
 		background.initialiseDescriptorSets( m_matrixUbo
 			, m_modelUbo
 			, m_hdrConfigUbo
@@ -144,31 +159,19 @@ namespace castor3d
 		m_backgroundUboDescriptorSet->update();
 		m_backgroundTexDescriptorSet->update();
 		background.prepareFrame( commandBuffer
-			, size
+			, { size.width, size.height }
 			, renderPass
 			, *m_backgroundUboDescriptorSet
 			, *m_backgroundTexDescriptorSet );
 
-		// Initialise transparent pass.
-		m_transparentPass->initialiseRenderPass( m_envView
-			, getOwner()->getDepthView()
-			, size
-			, false );
-		m_transparentPass->initialise( size, timer, uint32_t( m_face ) * 3u + 2u, nullptr );
-
-		m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer( name );
-		m_finished = m_device->createSemaphore( name );
 		return true;
 	}
 
 	void EnvironmentMapPass::cleanup()
 	{
-		m_finished.reset();
-		m_commandBuffer.reset();
 		m_backgroundCommands.reset();
 		m_backgroundUboDescriptorSet.reset();
 		m_backgroundTexDescriptorSet.reset();
-		m_frameBuffer.reset();
 	}
 
 	void EnvironmentMapPass::update( CpuUpdater & updater )
@@ -203,15 +206,15 @@ namespace castor3d
 		ashes::Semaphore const * result = &toWait;
 		auto timer = &getOwner()->getTimer();
 
-		m_commandBuffer->begin();
-		m_commandBuffer->beginDebugBlock(
+		m_commands.commandBuffer->begin();
+		m_commands.commandBuffer->beginDebugBlock(
 			{
 				"EnvironmentMapPass render",
 				makeFloatArray( getOwner()->getEngine()->getNextRainbowColour() ),
 			} );
-		timer->beginPass( *m_commandBuffer, uint32_t( m_face ) );
+		timer->beginPass( *m_commands.commandBuffer, uint32_t( m_face ) );
 		timer->notifyPassRender( uint32_t( m_face ) );
-		m_commandBuffer->beginRenderPass( *m_renderPass
+		m_commands.commandBuffer->beginRenderPass( *m_renderPass
 			, *m_frameBuffer
 			, { defaultClearDepthStencil, opaqueBlackClearColor }
 			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
@@ -229,18 +232,18 @@ namespace castor3d
 			commandBuffers.emplace_back( m_transparentPass->getCommandBuffer() );
 		}
 
-		m_commandBuffer->executeCommands( commandBuffers );
-		m_commandBuffer->endRenderPass();
-		timer->endPass( *m_commandBuffer, uint32_t( m_face ) );
-		m_commandBuffer->endDebugBlock();
-		m_commandBuffer->end();
+		m_commands.commandBuffer->executeCommands( commandBuffers );
+		m_commands.commandBuffer->endRenderPass();
+		timer->endPass( *m_commands.commandBuffer, uint32_t( m_face ) );
+		m_commands.commandBuffer->endDebugBlock();
+		m_commands.commandBuffer->end();
 
-		m_device.graphicsQueue->submit( *m_commandBuffer
+		m_device.graphicsQueue->submit( *m_commands.commandBuffer
 			, toWait
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, *m_finished
+			, *m_commands.semaphore
 			, nullptr );
-		result = m_finished.get();
+		result = m_commands.semaphore.get();
 
 		return *result;
 	}

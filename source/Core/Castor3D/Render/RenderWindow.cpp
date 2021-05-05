@@ -764,7 +764,6 @@ namespace castor3d
 		m_pickingPass = std::make_shared< PickingPass >( *m_device
 			, target.getTechnique()->getMatrixUbo()
 			, target.getCuller() );
-		m_pickingPass->initialise( target.getSize() );
 	}
 
 	void RenderWindow::doDestroyPickingPass()

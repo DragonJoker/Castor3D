@@ -59,8 +59,7 @@ namespace castor3d
 	DeferredRendering::DeferredRendering( Engine & engine
 		, RenderDevice const & device
 		, OpaquePass & opaquePass
-		, TextureUnit const & depthTexture
-		, TextureUnit const & velocityTexture
+		, OpaquePassResult const & opaquePassResult
 		, TextureUnit const & resultTexture
 		, ShadowMapResult const & smDirectionalResult
 		, ShadowMapResult const & smPointResult
@@ -82,27 +81,24 @@ namespace castor3d
 		, m_device{ device }
 		, m_ssaoConfig{ ssaoConfig }
 		, m_opaquePass{ opaquePass }
+		, m_opaquePassResult{ opaquePassResult }
 		, m_size{ size }
 		, m_gpInfoUbo{ gpInfoUbo }
-		, m_opaquePassResult{ m_engine
-			, device
-			, depthTexture
-			, velocityTexture }
 		, m_linearisePass{ castor::makeUnique< LineariseDepthPass >( m_engine
 			, cuT( "Deferred" )
 			, m_size
-			, depthTexture.getTexture()->getDefaultView().getSampledView() ) }
+			, opaquePassResult[DsTexture::eDepth].getTexture()->getDefaultView().getSampledView() ) }
 		, m_ssao{ castor::makeUnique< SsaoPass >( m_engine
 			, m_size
 			, m_ssaoConfig
 			, m_linearisePass->getResult()
-			, m_opaquePassResult
+			, opaquePassResult
 			, m_gpInfoUbo ) }
 		, m_lightingPass{ std::make_unique< LightingPass >( m_engine
 			, m_device
 			, m_size
 			, scene
-			, m_opaquePassResult
+			, opaquePassResult
 			, smDirectionalResult
 			, smPointResult
 			, smSpotResult
@@ -110,7 +106,7 @@ namespace castor3d
 			, llpvResult
 			, vctFirstBounce
 			, vctSecondaryBounce
-			, depthTexture.getTexture()->getDefaultView().getTargetView()
+			, opaquePassResult[DsTexture::eDepth].getTexture()->getDefaultView().getTargetView()
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
 			, lpvConfigUbo
@@ -121,12 +117,12 @@ namespace castor3d
 			, m_gpInfoUbo
 			, m_opaquePass.getSceneUbo()
 			, m_size
-			, m_opaquePassResult
+			, opaquePassResult
 			, m_lightingPass->getResult() ) }
 		, m_resolve{ castor::makeUnique< OpaqueResolvePass >( m_engine
 			, m_device
 			, scene
-			, m_opaquePassResult
+			, opaquePassResult
 			, *m_ssao
 			, m_subsurfaceScattering->getResult()
 			, m_lightingPass->getResult()[LpTexture::eDiffuse]
@@ -138,8 +134,6 @@ namespace castor3d
 			, m_gpInfoUbo
 			, hdrConfigUbo ) }
 	{
-		m_opaquePass.initialiseRenderPass( m_opaquePassResult );
-
 		if ( m_ssaoConfig.enabled )
 		{
 			m_linearisePass->initialise( m_device );
@@ -160,7 +154,6 @@ namespace castor3d
 		m_subsurfaceScattering->cleanup( m_device );
 		m_ssao->cleanup( m_device );
 		m_linearisePass->cleanup( m_device );
-		m_opaquePassResult.cleanup();
 	}
 
 	void DeferredRendering::update( CpuUpdater & updater )

@@ -103,6 +103,7 @@ namespace castor3d
 
 	CU_DeclareCUSmartPtr( castor3d, DeferredRendering, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, OpaqueResolvePass, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, OpaquePassResult, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, SsaoPass, C3D_API );
 
 	//@}
