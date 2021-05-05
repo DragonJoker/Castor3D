@@ -17,7 +17,6 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises deferred rendering related stuff.
-		 *\param[in]	engine			The engine.
 		 *\param[in]	device			The GPU device.
 		 *\param[in]	transparentPass	The transparent nodes render pass.
 		 *\param[in]	depthView		The target depth buffer.
@@ -30,7 +29,6 @@ namespace castor3d
 		 *\param[in]	lpvResult		The LPV result.
 		 *\~french
 		 *\brief		Initialise les données liées au deferred rendering.
-		 *\param[in]	engine			Le moteur.
 		 *\param[in]	device			Le device GPU.
 		 *\param[in]	transparentPass	La passe de rendu des noeuds transparents.
 		 *\param[in]	depthView		Le tampon de profondeur cible.
@@ -42,8 +40,7 @@ namespace castor3d
 		 *\param[in]	gpInfoUbo		L'UBO de la passe géométrique.
 		 *\param[in]	lpvResult		Le résultat du LPV.
 		 */
-		WeightedBlendRendering( Engine & engine
-			, RenderDevice const & device
+		WeightedBlendRendering( RenderDevice const & device
 			, TransparentPass & transparentPass
 			, TransparentPassResult const & transparentPassResult
 			, ashes::ImageView const & colourView
@@ -82,8 +79,7 @@ namespace castor3d
 		 *\param[in]	scene	La scène rendue.
 		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
-		ashes::Semaphore const & render( RenderDevice const & device
-			, Scene const & scene
+		ashes::Semaphore const & render( Scene const & scene
 			, ashes::Semaphore const & toWait );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
@@ -91,7 +87,7 @@ namespace castor3d
 		void accept( RenderTechniqueVisitor & visitor );
 
 	private:
-		Engine & m_engine;
+		RenderDevice const & m_device;
 		TransparentPass & m_transparentPass;
 		TransparentPassResult const & m_transparentPassResult;
 		castor::Size m_size;
