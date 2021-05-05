@@ -28,21 +28,13 @@ namespace castor3d
 			, SceneCuller & culler
 			, RenderMode mode
 			, bool oit
-			, bool forceTwoSided
-			, SceneNode const * ignored
-			, RenderPassTimer * timer
-			, uint32_t index
-			, uint32_t instanceMult )
-			: size{ size }
-			, matrixUbo{ matrixUbo }
-			, culler{ culler }
-			, mode{ mode }
-			, oit{ oit }
-			, forceTwoSided{ forceTwoSided }
-			, ignored{ ignored }
-			, timer{ timer }
-			, index{ index }
-			, instanceMult{ instanceMult }
+			, bool forceTwoSided )
+			: m_size{ size }
+			, m_matrixUbo{ matrixUbo }
+			, m_culler{ culler }
+			, m_mode{ mode }
+			, m_oit{ oit }
+			, m_forceTwoSided{ forceTwoSided }
 		{
 		}
 		/**
@@ -59,18 +51,13 @@ namespace castor3d
 		 */
 		SceneRenderPassDesc( VkExtent3D const & size
 			, MatrixUbo & matrixUbo
-			, SceneCuller & culler
-			, uint32_t instanceMult = 1u )
+			, SceneCuller & culler )
 			: SceneRenderPassDesc{ size
 				, matrixUbo
 				, culler
 				, RenderMode::eOpaqueOnly
 				, true
-				, false
-				, nullptr
-				, nullptr
-				, 0u
-				, instanceMult }
+				, false }
 		{
 		}
 		/**
@@ -90,228 +77,63 @@ namespace castor3d
 		SceneRenderPassDesc( VkExtent3D const & size
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
-			, bool oit
-			, uint32_t instanceMult = 1u )
+			, bool oit )
 			: SceneRenderPassDesc{ size
 				, matrixUbo
 				, culler
 				, RenderMode::eTransparentOnly
 				, oit
-				, false
-				, nullptr
-				, nullptr
-				, 0u
-				, instanceMult }
+				, false }
 		{
 		}
 		/**
 		 *\~english
-		 *\brief		Constructor for opaque passes.
-		 *\param[in]	matrixUbo		The scene matrices UBO.
-		 *\param[in]	culler			The scene culler for this pass.
-		 *\param[in]	instanceMult	The object instance multiplier.
+		 *\param[in]	value	The object instance multiplier.
 		 *\~french
-		 *\brief		Constructeur pour les passes opaques.
-		 *\param[in]	matrixUbo		L'UBO des matrices de la scène.
-		 *\param[in]	culler			Le culler pour cette passe.
-		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
+		 *\param[in]	value	Le multiplicateur d'instances d'objets.
 		 */
-		SceneRenderPassDesc( VkExtent3D const & size
-			, MatrixUbo & matrixUbo
-			, SceneCuller & culler
-			, RenderPassTimer & timer
-			, uint32_t index
-			, uint32_t instanceMult = 1u )
-			: SceneRenderPassDesc{ size
-				, matrixUbo
-				, culler
-				, RenderMode::eOpaqueOnly
-				, true
-				, false
-				, nullptr
-				, &timer
-				, index
-				, instanceMult }
+		SceneRenderPassDesc & instanceMult( uint32_t value )
 		{
+			m_instanceMult = value;
+			return *this;
 		}
 		/**
 		 *\~english
-		 *\brief		Constructor for transparent passes.
-		 *\param[in]	matrixUbo		The scene matrices UBO.
-		 *\param[in]	culler			The scene culler for this pass.
-		 *\param[in]	oit				The order independant status.
-		 *\param[in]	instanceMult	The object instance multiplier.
+		 *\param[in]	value	The scene node to ignore during rendering.
 		 *\~french
-		 *\brief		Constructeur pour les passes transparents.
-		 *\param[in]	matrixUbo		L'UBO des matrices de la scène.
-		 *\param[in]	culler			Le culler pour cette passe.
-		 *\param[in]	oit				Le statut de rendu indépendant de l'ordre des objets.
-		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
+		 *\param[in]	value	Le scene node à ignorer pendant le rendu.
 		 */
-		SceneRenderPassDesc( VkExtent3D const & size
-			, MatrixUbo & matrixUbo
-			, SceneCuller & culler
-			, bool oit
-			, RenderPassTimer & timer
-			, uint32_t index
-			, uint32_t instanceMult = 1u )
-			: SceneRenderPassDesc{ size
-				, matrixUbo
-				, culler
-				, RenderMode::eTransparentOnly
-				, oit
-				, false
-				, nullptr
-				, &timer
-				, index
-				, instanceMult }
+		SceneRenderPassDesc & ignored( SceneNode const & value )
 		{
+			m_ignored = &value;
+			return *this;
 		}
 		/**
 		 *\~english
-		 *\brief		Constructor for opaque passes.
-		 *\param[in]	matrixUbo		The scene matrices UBO.
-		 *\param[in]	culler			The scene culler for this pass.
-		 *\param[in]	ignored			The geometries attached to this node will be ignored in the render.
-		 *\param[in]	instanceMult	The object instance multiplier.
+		 *\param[in]	timer	The render pass timer the resulting render pass will use.
+		 *\param[in]	index	The render pass index, for the given timer.
 		 *\~french
-		 *\brief		Constructeur pour les passes opaques.
-		 *\param[in]	matrixUbo		L'UBO des matrices de la scène.
-		 *\param[in]	culler			Le culler pour cette passe.
-		 *\param[in]	ignored			Les géométries attachées à ce noeud seront ignorées lors du rendu.
-		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
+		 *\param[in]	timer	Le timer de render pass que la passe résultante utilisera.
+		 *\param[in]	index	L'indice de la passe de rendu, dans le timer donné.
 		 */
-		SceneRenderPassDesc( VkExtent3D const & size
-			, MatrixUbo & matrixUbo
-			, SceneCuller & culler
-			, SceneNode const * ignored
-			, uint32_t instanceMult = 1u )
-			: SceneRenderPassDesc{ size
-				, matrixUbo
-				, culler
-				, RenderMode::eOpaqueOnly
-				, true
-				, false
-				, ignored
-				, nullptr
-				, 0u
-				, instanceMult }
+		SceneRenderPassDesc & timer( RenderPassTimer & timer
+			, uint32_t index )
 		{
-		}
-		/**
-		 *\~english
-		 *\brief		Constructor for transparent passes.
-		 *\param[in]	matrixUbo		The scene matrices UBO.
-		 *\param[in]	culler			The scene culler for this pass.
-		 *\param[in]	oit				The order independant status.
-		 *\param[in]	ignored			The geometries attached to this node will be ignored in the render.
-		 *\param[in]	instanceMult	The object instance multiplier.
-		 *\~french
-		 *\brief		Constructeur pour les passes transparents.
-		 *\param[in]	matrixUbo		L'UBO des matrices de la scène.
-		 *\param[in]	culler			Le culler pour cette passe.
-		 *\param[in]	oit				Le statut de rendu indépendant de l'ordre des objets.
-		 *\param[in]	ignored			Les géométries attachées à ce noeud seront ignorées lors du rendu.
-		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
-		 */
-		SceneRenderPassDesc( VkExtent3D const & size
-			, MatrixUbo & matrixUbo
-			, SceneCuller & culler
-			, bool oit
-			, SceneNode const * ignored
-			, uint32_t instanceMult = 1u )
-			: SceneRenderPassDesc{ size
-				, matrixUbo
-				, culler
-				, RenderMode::eTransparentOnly
-				, oit
-				, false
-				, ignored
-				, nullptr
-				, 0u
-				, instanceMult }
-		{
-		}
-		/**
-		 *\~english
-		 *\brief		Constructor for opaque passes.
-		 *\param[in]	matrixUbo		The scene matrices UBO.
-		 *\param[in]	culler			The scene culler for this pass.
-		 *\param[in]	ignored			The geometries attached to this node will be ignored in the render.
-		 *\param[in]	instanceMult	The object instance multiplier.
-		 *\~french
-		 *\brief		Constructeur pour les passes opaques.
-		 *\param[in]	matrixUbo		L'UBO des matrices de la scène.
-		 *\param[in]	culler			Le culler pour cette passe.
-		 *\param[in]	ignored			Les géométries attachées à ce noeud seront ignorées lors du rendu.
-		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
-		 */
-		SceneRenderPassDesc( VkExtent3D const & size
-			, MatrixUbo & matrixUbo
-			, SceneCuller & culler
-			, SceneNode const * ignored
-			, RenderPassTimer & timer
-			, uint32_t index
-			, uint32_t instanceMult = 1u )
-			: SceneRenderPassDesc{ size
-				, matrixUbo
-				, culler
-				, RenderMode::eOpaqueOnly
-				, true
-				, false
-				, ignored
-				, &timer
-				, index
-				, instanceMult }
-		{
-		}
-		/**
-		 *\~english
-		 *\brief		Constructor for transparent passes.
-		 *\param[in]	matrixUbo		The scene matrices UBO.
-		 *\param[in]	culler			The scene culler for this pass.
-		 *\param[in]	oit				The order independant status.
-		 *\param[in]	ignored			The geometries attached to this node will be ignored in the render.
-		 *\param[in]	instanceMult	The object instance multiplier.
-		 *\~french
-		 *\brief		Constructeur pour les passes transparents.
-		 *\param[in]	matrixUbo		L'UBO des matrices de la scène.
-		 *\param[in]	culler			Le culler pour cette passe.
-		 *\param[in]	oit				Le statut de rendu indépendant de l'ordre des objets.
-		 *\param[in]	ignored			Les géométries attachées à ce noeud seront ignorées lors du rendu.
-		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
-		 */
-		SceneRenderPassDesc( VkExtent3D const & size
-			, MatrixUbo & matrixUbo
-			, SceneCuller & culler
-			, bool oit
-			, SceneNode const * ignored
-			, RenderPassTimer & timer
-			, uint32_t index
-			, uint32_t instanceMult = 1u )
-			: SceneRenderPassDesc{ size
-				, matrixUbo
-				, culler
-				, RenderMode::eTransparentOnly
-				, oit
-				, false
-				, ignored
-				, &timer
-				, index
-				, instanceMult }
-		{
+			m_timer = &timer;
+			m_index = index;
+			return *this;
 		}
 
-		VkExtent3D size;
-		MatrixUbo & matrixUbo;
-		SceneCuller & culler;
-		RenderMode mode;
-		bool oit;
-		bool forceTwoSided;
-		SceneNode const * ignored;
-		RenderPassTimer * timer;
-		uint32_t index;
-		uint32_t instanceMult;
+		VkExtent3D m_size;
+		MatrixUbo & m_matrixUbo;
+		SceneCuller & m_culler;
+		RenderMode m_mode;
+		bool m_oit;
+		bool m_forceTwoSided;
+		SceneNode const * m_ignored{};
+		RenderPassTimer * m_timer{};
+		uint32_t m_index{ 0u };
+		uint32_t m_instanceMult{ 1u };
 	};
 
 	class SceneRenderPass

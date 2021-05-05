@@ -18,63 +18,86 @@ namespace castor3d
 	struct RenderTechniquePassDesc
 	{
 		RenderTechniquePassDesc( bool environment
-			, SsaoConfig const & ssaoConfig
-			, LpvGridConfigUbo const * lpvConfigUbo
-			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr
-			, VoxelizerUbo const * vctConfigUbo = nullptr
-			, LightVolumePassResult const * lpvResult = nullptr
-			, TextureUnit const * vctFirstBounce = nullptr
-			, TextureUnit const * vctSecondaryBounce = nullptr )
-			: environment{ environment }
-			, ssaoConfig{ ssaoConfig }
-			, lpvConfigUbo{ lpvConfigUbo }
-			, llpvConfigUbo{ llpvConfigUbo }
-			, vctConfigUbo{ vctConfigUbo }
-			, lpvResult{ lpvResult }
-			, vctFirstBounce{ vctFirstBounce }
-			, vctSecondaryBounce{ vctSecondaryBounce }
+			, SsaoConfig const & ssaoConfig )
+			: m_environment{ environment }
+			, m_ssaoConfig{ ssaoConfig }
 		{
 		}
 		/**
 		 *\~english
-		 *\brief		Constructor for opaque passes.
-		 *\param[in]	environment		Pass used for an environment map rendering.
-		 *\param[in]	ssaoConfig		The SSAO configuration.
-		 *\param[in]	lpvConfigUbo	The LPV configuration, if needed.
-		 *\param[in]	llpvConfigUbo	The Layered LPV configuration, if needed.
-		 *\param[in]	vctConfigUbo	The VCT configuration, if needed.
+		 *\param[in]	value	The LPV configuration.
 		 *\~french
-		 *\brief		Constructeur pour les passes opaques.
-		 *\param[in]	environment		Passe utilisée pour le rendu d'une texture d'environnement.
-		 *\param[in]	ssaoConfig		La configuration du SSAO.
-		 *\param[in]	lpvConfigUbo	La configuration des LPV, si nécessaire.
-		 *\param[in]	llpvConfigUbo	La configuration des Layered LPV, si nécessaire.
-		 *\param[in]	vctConfigUbo	La configuration du VCT, si nécessaire.
+		 *\param[in]	value	La configuration des LPV.
 		 */
-		RenderTechniquePassDesc( bool environment
-			, SsaoConfig const & ssaoConfig
-			, LpvGridConfigUbo const * lpvConfigUbo = nullptr
-			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr
-			, VoxelizerUbo const * vctConfigUbo = nullptr )
-			: RenderTechniquePassDesc{ environment
-				, ssaoConfig
-				, lpvConfigUbo
-				, llpvConfigUbo
-				, vctConfigUbo
-				, nullptr
-				, nullptr
-				, nullptr }
+		RenderTechniquePassDesc & lpvConfigUbo( LpvGridConfigUbo const & value )
 		{
+			m_lpvConfigUbo = &value;
+			return *this;
+		}
+		/**
+		 *\~english
+		 *\param[in]	value	The Layered LPV configuration.
+		 *\~french
+		 *\param[in]	value	La configuration des Layered LPV.
+		 */
+		RenderTechniquePassDesc & llpvConfigUbo( LayeredLpvGridConfigUbo const & value )
+		{
+			m_llpvConfigUbo = &value;
+			return *this;
+		}
+		/**
+		 *\~english
+		 *\param[in]	value	The VCT configuration.
+		 *\~french
+		 *\param[in]	value	La configuration du VCT.
+		 */
+		RenderTechniquePassDesc & vctConfigUbo( VoxelizerUbo const & value )
+		{
+			m_vctConfigUbo = &value;
+			return *this;
+		}
+		/**
+		 *\~english
+		 *\param[in]	value	The LPV result.
+		 *\~french
+		 *\param[in]	value	Le résultat du LPV.
+		 */
+		RenderTechniquePassDesc & lpvResult( LightVolumePassResult const & value )
+		{
+			m_lpvResult = &value;
+			return *this;
+		}
+		/**
+		 *\~english
+		 *\param[in]	value	The VCT first bounce result.
+		 *\~french
+		 *\param[in]	value	Le résultat du premier rebond de VCT.
+		 */
+		RenderTechniquePassDesc & vctFirstBounce( TextureUnit const & value )
+		{
+			m_vctFirstBounce = &value;
+			return *this;
+		}
+		/**
+		 *\~english
+		 *\param[in]	value	The VCT second bounce result.
+		 *\~french
+		 *\param[in]	value	Le résultat du second rebond de VCT.
+		 */
+		RenderTechniquePassDesc & vctSecondaryBounce( TextureUnit const & value )
+		{
+			m_vctSecondaryBounce = &value;
+			return *this;
 		}
 
-		bool environment;
-		SsaoConfig const & ssaoConfig;
-		LpvGridConfigUbo const * lpvConfigUbo;
-		LayeredLpvGridConfigUbo const * llpvConfigUbo;
-		VoxelizerUbo const * vctConfigUbo;
-		LightVolumePassResult const * lpvResult;
-		TextureUnit const * vctFirstBounce;
-		TextureUnit const * vctSecondaryBounce;
+		bool m_environment;
+		SsaoConfig const & m_ssaoConfig;
+		LpvGridConfigUbo const * m_lpvConfigUbo{};
+		LayeredLpvGridConfigUbo const * m_llpvConfigUbo{};
+		VoxelizerUbo const * m_vctConfigUbo{};
+		LightVolumePassResult const * m_lpvResult{};
+		TextureUnit const * m_vctFirstBounce{};
+		TextureUnit const * m_vctSecondaryBounce{};
 	};
 
 	class RenderTechniquePass

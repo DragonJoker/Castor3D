@@ -90,7 +90,9 @@ namespace castor3d
 		, m_opaquePass{ std::make_shared< ForwardRenderTechniquePass >( device
 			, cuT( "EnvironmentMap" )
 			, getName() + cuT( "Opaque" )
-			, SceneRenderPassDesc{ reflectionMap.getSize(), m_matrixUbo, *m_culler, &objectNode, timer, uint32_t( face ) * 3u + 0u }
+			, SceneRenderPassDesc{ reflectionMap.getSize(), m_matrixUbo, *m_culler }
+				.ignored( objectNode )
+				.timer( timer, uint32_t( face ) * 3u + 0u )
 			, RenderTechniquePassDesc{ true, SsaoConfig{} }
 			, m_envView
 			, getOwner()->getDepthView()
@@ -98,7 +100,9 @@ namespace castor3d
 		, m_transparentPass{ std::make_shared< ForwardRenderTechniquePass >( device
 			, cuT( "EnvironmentMap" )
 			, getName() + cuT( "Transparent" )
-			, SceneRenderPassDesc{ reflectionMap.getSize(), m_matrixUbo, *m_culler, true, &objectNode, timer, uint32_t( face ) * 3u + 2u }
+			, SceneRenderPassDesc{ reflectionMap.getSize(), m_matrixUbo, *m_culler, false }
+				.ignored( objectNode )
+				.timer( timer, uint32_t( face ) * 3u + 2u )
 			, RenderTechniquePassDesc{ true, SsaoConfig{} }
 			, m_envView
 			, getOwner()->getDepthView()

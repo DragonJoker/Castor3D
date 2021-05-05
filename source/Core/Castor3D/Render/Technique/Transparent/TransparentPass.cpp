@@ -157,21 +157,20 @@ namespace castor3d
 		, LpvGridConfigUbo const & lpvConfigUbo
 		, LayeredLpvGridConfigUbo const & llpvConfigUbo
 		, VoxelizerUbo const & vctConfigUbo
-		, LightVolumePassResult const * lpvResult
-		, TextureUnit const * vctFirstBounce
-		, TextureUnit const * vctSecondaryBounce )
+		, LightVolumePassResult const & lpvResult
+		, TextureUnit const & vctFirstBounce
+		, TextureUnit const & vctSecondaryBounce )
 		: castor3d::RenderTechniquePass{ device
 			, "Transparent"
 			, "Accumulation"
-			, { { size.getWidth(), size.getHeight(), 1u }, matrixUbo, culler, true, nullptr }
-			, { false
-				, config
-				, &lpvConfigUbo
-				, &llpvConfigUbo
-				, &vctConfigUbo
-				, lpvResult
-				, vctFirstBounce
-				, vctSecondaryBounce }
+			, SceneRenderPassDesc{ { size.getWidth(), size.getHeight(), 1u }, matrixUbo, culler, true }
+			, RenderTechniquePassDesc{ false, config }
+				.lpvConfigUbo( lpvConfigUbo  )
+				.llpvConfigUbo( llpvConfigUbo )
+				.vctConfigUbo( vctConfigUbo )
+				.lpvResult( lpvResult )
+				.vctFirstBounce( vctFirstBounce )
+				.vctSecondaryBounce( vctSecondaryBounce )
 			, createRenderPass( device, transparentPassResult ) }
 		, m_frameBuffer{ createFramebuffer( *m_renderPass, transparentPassResult ) }
 		, m_nodesCommands{ m_device.graphicsCommandPool->createCommandBuffer( "TransparentPass" ) }

@@ -129,17 +129,17 @@ namespace castor3d
 		, RenderTechniquePassDesc const & techniquePassDesc
 		, ashes::RenderPassPtr renderPass )
 		: SceneRenderPass{ device, category, name, renderPassDesc, std::move( renderPass ) }
-		, m_scene{ renderPassDesc.culler.getScene() }
-		, m_camera{ renderPassDesc.culler.hasCamera() ? &renderPassDesc.culler.getCamera() : nullptr }
+		, m_scene{ renderPassDesc.m_culler.getScene() }
+		, m_camera{ renderPassDesc.m_culler.hasCamera() ? &renderPassDesc.m_culler.getCamera() : nullptr }
 		, m_sceneNode{}
-		, m_environment{ techniquePassDesc.environment }
-		, m_ssaoConfig{ techniquePassDesc.ssaoConfig }
-		, m_lpvConfigUbo{ techniquePassDesc.lpvConfigUbo }
-		, m_llpvConfigUbo{ techniquePassDesc.llpvConfigUbo }
-		, m_vctConfigUbo{ techniquePassDesc.vctConfigUbo }
-		, m_lpvResult{ techniquePassDesc.lpvResult }
-		, m_vctFirstBounce{ techniquePassDesc.vctFirstBounce }
-		, m_vctSecondaryBounce{ techniquePassDesc.vctSecondaryBounce }
+		, m_environment{ techniquePassDesc.m_environment }
+		, m_ssaoConfig{ techniquePassDesc.m_ssaoConfig }
+		, m_lpvConfigUbo{ techniquePassDesc.m_lpvConfigUbo }
+		, m_llpvConfigUbo{ techniquePassDesc.m_llpvConfigUbo }
+		, m_vctConfigUbo{ techniquePassDesc.m_vctConfigUbo }
+		, m_lpvResult{ techniquePassDesc.m_lpvResult }
+		, m_vctFirstBounce{ techniquePassDesc.m_vctFirstBounce }
+		, m_vctSecondaryBounce{ techniquePassDesc.m_vctSecondaryBounce }
 		, m_finished{ m_device->createSemaphore( name ) }
 	{
 	}
