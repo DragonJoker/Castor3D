@@ -90,6 +90,8 @@ namespace aria
 			return castor::Path{ "Unacceptable" };
 		case TestStatus::eUnprocessed:
 			return castor::Path{ "Unprocessed" };
+		case TestStatus::eCrashed:
+			return castor::Path{ "Crashed" };
 		default:
 			assert( false );
 			return castor::Path{};
