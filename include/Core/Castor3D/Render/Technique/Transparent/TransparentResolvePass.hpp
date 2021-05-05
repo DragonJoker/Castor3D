@@ -81,8 +81,7 @@ namespace castor3d
 		 *\param[in]	wbResult		Les tampons de la passe d'accumulation.
 		 *\param[in]	colourView		La vue couleur cible.
 		 */
-		TransparentResolvePass( Engine & engine
-			, RenderDevice const & device
+		TransparentResolvePass( RenderDevice const & device
 			, castor::Size const & size
 			, SceneUbo & sceneUbo
 			, HdrConfigUbo const & hdrConfigUbo
@@ -99,17 +98,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders the combine pass.
-		 *\param[in]	device	The GPU device.
 		 *\param[in]	fogType	The fog type.
 		 *\param[in]	toWait	The semaphore from the previous render pass.
 		 *\~french
 		 *\brief		Dessine la passe de combinaison.
-		 *\param[in]	device	Le device GPU.
 		 *\param[in]	fogType	Le type de brouillard.
 		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
-		ashes::Semaphore const & render( RenderDevice const & device
-			, FogType fogType
+		ashes::Semaphore const & render( FogType fogType
 			, ashes::Semaphore const & toWait );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
@@ -122,6 +118,7 @@ namespace castor3d
 
 	private:
 		castor::Size m_size;
+		RenderDevice const & m_device;
 		Engine & m_engine;
 		SceneUbo & m_sceneUbo;
 		GpInfoUbo const & m_gpInfo;

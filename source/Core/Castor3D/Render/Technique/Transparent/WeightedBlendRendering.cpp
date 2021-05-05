@@ -22,8 +22,7 @@ using namespace castor;
 
 namespace castor3d
 {
-	WeightedBlendRendering::WeightedBlendRendering( Engine & engine
-		, RenderDevice const & device
+	WeightedBlendRendering::WeightedBlendRendering( RenderDevice const & device
 		, TransparentPass & transparentPass
 		, TransparentPassResult const & transparentPassResult
 		, ashes::ImageView const & colourView
@@ -32,11 +31,17 @@ namespace castor3d
 		, HdrConfigUbo const & hdrConfigUbo
 		, GpInfoUbo const & gpInfoUbo
 		, LightVolumePassResult const & lpvResult )
-		: m_engine{ engine }
+		: m_device{ device }
 		, m_transparentPass{ transparentPass }
 		, m_transparentPassResult{ transparentPassResult }
 		, m_size{ size }
-		, m_finalCombinePass{ engine, device, m_size, m_transparentPass.getSceneUbo(), hdrConfigUbo, gpInfoUbo, m_transparentPassResult, colourView }
+		, m_finalCombinePass{ m_device
+			, m_size
+			, m_transparentPass.getSceneUbo()
+			, hdrConfigUbo
+			, gpInfoUbo
+			, m_transparentPassResult
+			, colourView }
 	{
 	}
 
@@ -50,14 +55,12 @@ namespace castor3d
 		m_transparentPass.update( updater );
 	}
 
-	ashes::Semaphore const & WeightedBlendRendering::render( RenderDevice const & device
-		, Scene const & scene
+	ashes::Semaphore const & WeightedBlendRendering::render( Scene const & scene
 		, ashes::Semaphore const & toWait )
 	{
 		auto * result = &toWait;
 		result = &m_transparentPass.render( *result );
-		result = &m_finalCombinePass.render( device
-			, scene.getFog().getType()
+		result = &m_finalCombinePass.render( scene.getFog().getType()
 			, *result );
 		return *result;
 	}

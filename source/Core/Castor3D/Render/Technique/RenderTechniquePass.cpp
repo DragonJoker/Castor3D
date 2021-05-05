@@ -231,7 +231,9 @@ namespace castor3d
 			return ashes::PipelineDepthStencilStateCreateInfo{ 0u
 				, VK_TRUE
 				, VK_FALSE
-				, VK_COMPARE_OP_EQUAL };
+				, ( m_mode != RenderMode::eTransparentOnly
+					? VK_COMPARE_OP_EQUAL
+					: VK_COMPARE_OP_LESS_OR_EQUAL ) };
 		}
 	}
 

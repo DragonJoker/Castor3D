@@ -195,8 +195,7 @@ namespace castor3d
 		}
 	}
 
-	ashes::Semaphore const & DeferredRendering::render( RenderDevice const & device
-		, Scene const & scene
+	ashes::Semaphore const & DeferredRendering::render( Scene const & scene
 		, Camera const & camera
 		, ashes::Semaphore const & toWait )
 	{
@@ -205,7 +204,7 @@ namespace castor3d
 
 		if ( m_ssaoConfig.enabled )
 		{
-			result = &m_linearisePass->linearise( device, *result );
+			result = &m_linearisePass->linearise( m_device, *result );
 			result = &m_ssao->render( *result );
 		}
 
@@ -216,7 +215,7 @@ namespace castor3d
 
 		if ( scene.needsSubsurfaceScattering() )
 		{
-			result = &m_subsurfaceScattering->render( device, *result );
+			result = &m_subsurfaceScattering->render( m_device, *result );
 		}
 
 		result = &m_resolve->render( *result );

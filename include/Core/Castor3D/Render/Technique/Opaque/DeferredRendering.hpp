@@ -128,8 +128,7 @@ namespace castor3d
 		 *\param[in]	camera	La caméra.
 		 *\param[out]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
-		ashes::Semaphore const & render( RenderDevice const & device
-			, Scene const & scene
+		ashes::Semaphore const & render( Scene const & scene
 			, Camera const & camera
 			, ashes::Semaphore const & toWait );
 		/**

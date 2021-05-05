@@ -541,26 +541,18 @@ namespace castor3d
 }
 #else
 		, m_opaquePass{ castor::makeUniqueDerived< RenderTechniquePass, ForwardRenderTechniquePass >( m_device
-			, m_size
-			, m_lpvResult.get()
-			, &m_voxelizer->getFirstBounce()
-			, m_voxelizer->getSecondaryBounce()
 			, cuT( "Opaque" )
 			, cuT( "Forward" )
-			, m_matrixUbo
-			, m_renderTarget.getCuller()
-			, false
-			, nullptr
-			, m_ssaoConfig
-			, &m_lpvConfigUbo
-			, &m_llpvConfigUbo
-			, &m_vctConfigUbo
-			, m_lpvResult.get()
-			, &m_voxelizer->getFirstBounce()
-			, &m_voxelizer->getSecondaryBounce()
+			, SceneRenderPassDesc{ { m_size.getWidth(), m_size.getHeight(), 1u }, m_matrixUbo, m_renderTarget.getCuller() }
+			, RenderTechniquePassDesc{ false, m_ssaoConfig }
+				.lpvConfigUbo( m_lpvConfigUbo )
+				.llpvConfigUbo( m_llpvConfigUbo )
+				.vctConfigUbo( m_vctConfigUbo )
+				.lpvResult( *m_lpvResult )
+				.vctFirstBounce( m_voxelizer->getFirstBounce() )
+				.vctSecondaryBounce( m_voxelizer->getSecondaryBounce() )
 			, m_colourTexture.getTexture()->getDefaultView().getTargetView()
 			, m_depthBuffer.getTexture()->getDefaultView().getTargetView()
-			, m_size
 			, false ) }
 #endif
 #if C3D_UseWeightedBlendedRendering
@@ -579,8 +571,7 @@ namespace castor3d
 			, *m_lpvResult
 			, m_voxelizer->getFirstBounce()
 			, m_voxelizer->getSecondaryBounce() ) }
-		, m_weightedBlendRendering{ castor::makeUnique< WeightedBlendRendering >( *getEngine()
-			, m_device
+		, m_weightedBlendRendering{ castor::makeUnique< WeightedBlendRendering >( m_device
 			, static_cast< TransparentPass & >( *m_transparentPass )
 			, *m_transparentPassResult
 			, m_colourTexture.getTexture()->getDefaultView().getTargetView()
@@ -591,24 +582,18 @@ namespace castor3d
 			, *m_lpvResult )}
 #else
 		, m_transparentPass{ castor::makeUniqueDerived< RenderTechniquePass, ForwardRenderTechniquePass >( m_device
-			, m_size
 			, cuT( "Transparent" )
 			, cuT( "Forward" )
-			, m_matrixUbo
-			, m_renderTarget.getCuller()
-			, false
-			, false
-			, nullptr
-			, m_ssaoConfig
-			, &m_lpvConfigUbo
-			, &m_llpvConfigUbo
-			, &m_vctConfigUbo
-			, m_lpvResult.get()
-			, &m_voxelizer->getFirstBounce()
-			, &m_voxelizer->getSecondaryBounce()
+			, SceneRenderPassDesc{ { m_size.getWidth(), m_size.getHeight(), 1u }, m_matrixUbo, m_renderTarget.getCuller(), false }
+			, RenderTechniquePassDesc{ false, m_ssaoConfig }
+				.lpvConfigUbo( m_lpvConfigUbo )
+				.llpvConfigUbo( m_llpvConfigUbo )
+				.vctConfigUbo( m_vctConfigUbo )
+				.lpvResult( *m_lpvResult )
+				.vctFirstBounce( m_voxelizer->getFirstBounce() )
+				.vctSecondaryBounce( m_voxelizer->getSecondaryBounce() )
 			, m_colourTexture.getTexture()->getDefaultView().getTargetView()
 			, m_depthBuffer.getTexture()->getDefaultView().getTargetView()
-			, m_size
 			, false ) }
 #endif
 		, m_signalFinished{ m_device->createSemaphore( "RenderTechnique" ) }
@@ -1190,9 +1175,9 @@ namespace castor3d
 			auto & camera = *m_renderTarget.getCamera();
 
 #if C3D_UseDeferredRendering
-			result = &m_deferredRendering->render( device, scene, camera, *result );
+			result = &m_deferredRendering->render( scene, camera, *result );
 #else
-			result = &static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).render( device, *result );
+			result = &static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).render( *result );
 #endif
 		}
 		else
@@ -1213,9 +1198,9 @@ namespace castor3d
 			auto & scene = *m_renderTarget.getScene();
 
 #if C3D_UseWeightedBlendedRendering
-			result = &m_weightedBlendRendering->render( device, scene, *result );
+			result = &m_weightedBlendRendering->render( scene, *result );
 #else
-			result = &static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).render( device, *result );
+			result = &static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).render( *result );
 #endif
 		}
 
