@@ -371,12 +371,15 @@ namespace castor3d
 		: SceneRenderPass{ device
 			, cuT( "Picking" )
 			, cuT( "Picking" )
-			, SceneRenderPassDesc{ matrixUbo
+			, SceneRenderPassDesc{ { PickingWidth, PickingWidth, 1u }
+				, matrixUbo
 				, culler
 				, RenderMode::eBoth
 				, true
 				, false
 				, nullptr
+				, nullptr
+				, 0u
 				, 1u }
 			, createRenderPass( device, VK_FORMAT_R32G32B32A32_SFLOAT, VK_FORMAT_D32_SFLOAT ) }
 		, m_colourTexture{ createTexture( m_device

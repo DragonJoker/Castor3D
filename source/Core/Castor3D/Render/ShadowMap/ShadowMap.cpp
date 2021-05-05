@@ -136,7 +136,6 @@ namespace castor3d
 			for ( auto & pass : m_passes )
 			{
 				pass.matrixUbo->initialise( m_device );
-				result = result && pass.pass->initialise( { size.width, size.height } );
 			}
 
 			if ( result )

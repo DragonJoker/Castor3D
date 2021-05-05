@@ -2,8 +2,9 @@
 
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 
-using namespace castor;
+CU_ImplementCUSmartPtr( castor3d, TransparentPassResult )
 
 namespace castor3d
 {
@@ -14,9 +15,9 @@ namespace castor3d
 		return cuT( "c3d_map" ) + getName( texture );
 	}
 
-	String getName( WbTexture texture )
+	castor::String getName( WbTexture texture )
 	{
-		static std::array< String, size_t( WbTexture::eCount ) > Values
+		static std::array< castor::String, size_t( WbTexture::eCount ) > Values
 		{
 			{
 				"Depth",
@@ -89,18 +90,14 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	TransparentPassResult::TransparentPassResult( Engine & engine
-		, RenderDevice const & device
+	TransparentPassResult::TransparentPassResult( RenderDevice const & device
 		, TextureUnit const & depthTexture
 		, TextureUnit const & velocityTexture )
-		: GBufferT< WbTexture >
-		{
-			engine,
-			cuT( "WBResult" ),
-			{ &depthTexture, nullptr, nullptr, &velocityTexture },
-			0u,
-			castor::Size{ depthTexture.getTexture()->getDimensions().width, depthTexture.getTexture()->getDimensions().height },
-		}
+		: GBufferT< WbTexture >{ *device.renderSystem.getEngine()
+			, cuT( "WBResult" )
+			, { &depthTexture, nullptr, nullptr, &velocityTexture }
+			, 0u
+			, castor::Size{ depthTexture.getTexture()->getDimensions().width, depthTexture.getTexture()->getDimensions().height } }
 	{
 		initialise( device );
 	}

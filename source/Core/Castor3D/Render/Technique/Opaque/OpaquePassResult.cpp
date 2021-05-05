@@ -1,8 +1,10 @@
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
 
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Render/RenderDevice.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 
-using namespace castor;
+CU_ImplementCUSmartPtr( castor3d, OpaquePassResult )
 
 namespace castor3d
 {
@@ -15,7 +17,7 @@ namespace castor3d
 
 	castor::String getName( DsTexture texture )
 	{
-		static std::array< String, size_t( DsTexture::eCount ) > Values
+		static std::array< castor::String, size_t( DsTexture::eCount ) > Values
 		{
 			{
 				cuT( "Depth" ),
@@ -98,18 +100,14 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	OpaquePassResult::OpaquePassResult( Engine & engine
-		, RenderDevice const & device
+	OpaquePassResult::OpaquePassResult( RenderDevice const & device
 		, TextureUnit const & depthTexture
 		, TextureUnit const & velocityTexture )
-		: GBufferT< DsTexture >
-		{
-			engine,
-			cuT( "GPResult" ),
-			{ &depthTexture, nullptr, nullptr, nullptr, nullptr, &velocityTexture },
-			0u,
-			castor::Size{ depthTexture.getTexture()->getDimensions().width, depthTexture.getTexture()->getDimensions().height },
-		}
+		: GBufferT< DsTexture >{ *device.renderSystem.getEngine()
+			, cuT( "GPResult" )
+			, { &depthTexture, nullptr, nullptr, nullptr, nullptr, &velocityTexture }
+			, 0u
+			, castor::Size{ depthTexture.getTexture()->getDimensions().width, depthTexture.getTexture()->getDimensions().height } }
 	{
 		initialise( device );
 	}

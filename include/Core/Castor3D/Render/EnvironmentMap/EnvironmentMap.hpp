@@ -135,6 +135,11 @@ namespace castor3d
 		{
 			return m_index;
 		}
+
+		ashes::RenderPass const & getRenderPass()const
+		{
+			return *m_renderPass;
+		}
 		/**@}*/
 
 	private:
