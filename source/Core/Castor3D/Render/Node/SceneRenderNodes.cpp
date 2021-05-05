@@ -311,8 +311,8 @@ namespace castor3d
 				&& ( !pass.hasOnlyAlphaBlending() || renderPass.isOrderIndependent() )
 				&& !pass.hasEnvironmentMapping() )
 			{
-				if ( checkFlag( programFlags, ProgramFlag::eSkinning )
-					&& renderSystem.getGpuInformations().hasShaderStorageBuffers() )
+				if ( !checkFlag( programFlags, ProgramFlag::eSkinning )
+					|| renderSystem.getGpuInformations().hasShaderStorageBuffers() )
 				{
 					addFlag( programFlags, ProgramFlag::eInstantiation );
 				}
