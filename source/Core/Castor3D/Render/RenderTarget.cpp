@@ -271,7 +271,7 @@ namespace castor3d
 			m_velocityTexture.cleanup();
 			m_velocityTexture.setTexture( nullptr );
 
-			m_hdrConfigUbo.cleanup( device );
+			m_hdrConfigUbo.cleanup();
 			m_overlaysFrameBuffer.cleanup( device );
 			m_objectsFrameBuffer.cleanup( device );
 			m_combinedFrameBuffer.cleanup( device );

@@ -66,20 +66,17 @@ namespace castor3d
 		: castor3d::RenderTechniquePass{ device
 			, "Transparent"
 			, "Accumulation"
-			, matrixUbo
-			, culler
-			, true
-			, false
-			, nullptr
-			, config
-			, &lpvConfigUbo
-			, &llpvConfigUbo
-			, &vctConfigUbo }
+			, { matrixUbo, culler, true, nullptr }
+			, { size
+				, false
+				, config
+				, &lpvConfigUbo
+				, &llpvConfigUbo
+				, &vctConfigUbo
+				, lpvResult
+				, vctFirstBounce
+				, vctSecondaryBounce } }
 	{
-		initialise( size
-			, lpvResult
-			, vctFirstBounce
-			, vctSecondaryBounce );
 	}
 
 	TransparentPass::~TransparentPass()
@@ -222,16 +219,6 @@ namespace castor3d
 			, visitor.getFlags() );
 		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ) );
 		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
-	}
-
-	bool TransparentPass::doInitialise( Size const & size )
-	{
-		if ( !m_finished )
-		{
-			m_finished = m_device->createSemaphore( "TransparentPass" );
-		}
-
-		return true;
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo TransparentPass::doCreateDepthStencilState( PipelineFlags const & flags )const

@@ -37,6 +37,68 @@ using namespace castor;
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
+	namespace
+	{
+		ashes::RenderPassPtr createRenderPass( RenderDevice const & device
+			, TextureLayout const & depthBuffer )
+		{
+			// Create the render pass.
+			ashes::VkAttachmentDescriptionArray attaches{ { 0u
+				, depthBuffer.getPixelFormat()
+				, VK_SAMPLE_COUNT_1_BIT
+				, VK_ATTACHMENT_LOAD_OP_CLEAR
+				, VK_ATTACHMENT_STORE_OP_STORE
+				, VK_ATTACHMENT_LOAD_OP_CLEAR
+				, VK_ATTACHMENT_STORE_OP_STORE
+				, VK_IMAGE_LAYOUT_UNDEFINED
+				, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL } };
+			ashes::SubpassDescriptionArray subpasses;
+			subpasses.emplace_back( ashes::SubpassDescription{ 0u
+				, VK_PIPELINE_BIND_POINT_GRAPHICS
+				, {}
+				, {}
+				, {}
+				, VkAttachmentReference{ 0u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL }
+				, {} } );
+			ashes::VkSubpassDependencyArray dependencies
+			{
+				{ VK_SUBPASS_EXTERNAL
+					, 0u
+					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
+					, VK_ACCESS_SHADER_READ_BIT
+					, VK_DEPENDENCY_BY_REGION_BIT }
+				, { 0u
+					, VK_SUBPASS_EXTERNAL
+					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
+					, VK_ACCESS_SHADER_READ_BIT
+					, VK_DEPENDENCY_BY_REGION_BIT } };
+			ashes::RenderPassCreateInfo createInfo{ 0u
+				, std::move( attaches )
+				, std::move( subpasses )
+				, std::move( dependencies ) };
+			return device->createRenderPass( "DepthPass"
+				, std::move( createInfo ) );
+		}
+
+		ashes::FrameBufferPtr createFramebuffer( ashes::RenderPass const & renderPass
+			, TextureLayout const & depthBuffer )
+		{
+			ashes::ImageViewCRefArray fbattaches;
+			fbattaches.emplace_back( depthBuffer.getDefaultView().getTargetView() );
+			return renderPass.createFrameBuffer( "DepthPass"
+				, { depthBuffer.getDimensions().width, depthBuffer.getDimensions().height }
+				, std::move( fbattaches ) );
+		}
+	}
+
+	//*********************************************************************************************
+
 	DepthPass::DepthPass( String const & prefix
 		, RenderDevice const & device
 		, MatrixUbo & matrixUbo
@@ -46,63 +108,13 @@ namespace castor3d
 		: RenderTechniquePass{ device
 			, prefix
 			, "DepthPass"
-			, matrixUbo
-			, culler
-			, false
-			, nullptr
-			, ssaoConfig }
+			, { matrixUbo, culler, nullptr }
+			, { false, ssaoConfig }
+			, createRenderPass( device, *depthBuffer ) }
+		, m_nodesCommands{ m_device.graphicsCommandPool->createCommandBuffer( "DepthPass" ) }
+		, m_frameBuffer{ createFramebuffer( *m_renderPass, *depthBuffer ) }
 	{
-		VkExtent2D size{ depthBuffer->getDimensions().width, depthBuffer->getDimensions().height };
-
-		// Create the render pass.
-		ashes::VkAttachmentDescriptionArray attaches{ { 0u
-			, depthBuffer->getPixelFormat()
-			, VK_SAMPLE_COUNT_1_BIT
-			, VK_ATTACHMENT_LOAD_OP_CLEAR
-			, VK_ATTACHMENT_STORE_OP_STORE
-			, VK_ATTACHMENT_LOAD_OP_CLEAR
-			, VK_ATTACHMENT_STORE_OP_STORE
-			, VK_IMAGE_LAYOUT_UNDEFINED
-			, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL } };
-		ashes::SubpassDescriptionArray subpasses;
-		subpasses.emplace_back( ashes::SubpassDescription{ 0u
-			, VK_PIPELINE_BIND_POINT_GRAPHICS
-			, {}
-			, {}
-			, {}
-			, VkAttachmentReference{ 0u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL }
-			, {} } );
-		ashes::VkSubpassDependencyArray dependencies
-		{
-			{ VK_SUBPASS_EXTERNAL
-				, 0u
-				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-				, VK_ACCESS_SHADER_READ_BIT
-				, VK_DEPENDENCY_BY_REGION_BIT }
-			, { 0u
-				, VK_SUBPASS_EXTERNAL
-				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-				, VK_ACCESS_SHADER_READ_BIT
-				, VK_DEPENDENCY_BY_REGION_BIT } };
-		ashes::RenderPassCreateInfo createInfo{ 0u
-			, std::move( attaches )
-			, std::move( subpasses )
-			, std::move( dependencies ) };
-		m_renderPass = device->createRenderPass( "DepthPass"
-			, std::move( createInfo ) );
-
-		ashes::ImageViewCRefArray fbattaches;
-		fbattaches.emplace_back( depthBuffer->getDefaultView().getTargetView() );
-		m_frameBuffer = m_renderPass->createFrameBuffer( "DepthPass"
-			, size
-			, std::move( fbattaches ) );
-
-		m_nodesCommands = device.graphicsCommandPool->createCommandBuffer( "DepthPass" );
-		initialise( { size.width, size.height }, nullptr );
+		initialise( { depthBuffer->getDimensions().width, depthBuffer->getDimensions().height }, nullptr );
 	}
 
 	DepthPass::~DepthPass()
@@ -146,14 +158,6 @@ namespace castor3d
 			, nullptr );
 
 		return getSemaphore();
-	}
-
-	void DepthPass::doCleanup()
-	{
-		m_nodesCommands.reset();
-		m_frameBuffer.reset();
-		m_renderPass.reset();
-		RenderTechniquePass::doCleanup();
 	}
 
 	TextureFlags DepthPass::getTexturesMask()const

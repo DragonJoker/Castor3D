@@ -52,8 +52,6 @@ namespace castor3d
 		C3D_API void update( GpuUpdater & updater )override;
 
 	private:
-		bool doInitialise( castor::Size const & size )override;
-		void doCleanup()override;
 		void doUpdateUbos( CpuUpdater & updater )override;
 		void doFillUboDescriptor( RenderPipeline const & pipeline
 			, ashes::DescriptorSetLayout const & layout

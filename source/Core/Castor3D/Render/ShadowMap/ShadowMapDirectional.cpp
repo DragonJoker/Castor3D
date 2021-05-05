@@ -88,11 +88,11 @@ namespace castor3d
 				, 0u
 				, Size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize }
 				, scene.getDirectionalShadowCascades() }
-			, createPasses( device, scene, *this, scene.getDirectionalShadowCascades() )
 			, 1u }
-		, m_frameBuffers( m_passes.size() )
+		, m_frameBuffers( scene.getDirectionalShadowCascades() )
 		, m_cascades{ scene.getDirectionalShadowCascades() }
 	{
+		m_passes = createPasses( device, scene, *this, scene.getDirectionalShadowCascades() );
 		log::trace << "Created ShadowMapDirectional" << std::endl;
 	}
 

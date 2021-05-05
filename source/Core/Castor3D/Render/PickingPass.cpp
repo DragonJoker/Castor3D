@@ -53,6 +53,9 @@ namespace castor3d
 		static std::string const DrawIndex = "c3d_iDrawIndex";
 		static std::string const NodeIndex = "c3d_iNodeIndex";
 
+		static int constexpr PickingOffset = int( PickingPass::PickingWidth / 2 );
+		static int constexpr BufferOffset = ( PickingOffset * PickingPass::PickingWidth ) + PickingOffset - 1;
+
 		castor::Position convertToTopDown( castor::Position const & position
 			, castor::Size const & size )
 		{
@@ -268,8 +271,94 @@ namespace castor3d
 			return result;
 		}
 
-		static int constexpr PickingOffset = int( PickingPass::PickingWidth / 2 );
-		static int constexpr BufferOffset = ( PickingOffset * PickingPass::PickingWidth ) + PickingOffset - 1;
+		ashes::RenderPassPtr createRenderPass( RenderDevice const & device
+			, VkFormat colourFormat
+			, VkFormat depthFormat )
+		{
+			// Create the render pass.
+			ashes::VkAttachmentDescriptionArray attaches
+			{
+				{ 0u
+					, colourFormat
+					, VK_SAMPLE_COUNT_1_BIT
+					, VK_ATTACHMENT_LOAD_OP_CLEAR
+					, VK_ATTACHMENT_STORE_OP_STORE
+					, VK_ATTACHMENT_LOAD_OP_DONT_CARE
+					, VK_ATTACHMENT_STORE_OP_DONT_CARE
+					, VK_IMAGE_LAYOUT_UNDEFINED
+					, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL }
+				, { 0u
+					, depthFormat
+					, VK_SAMPLE_COUNT_1_BIT
+					, VK_ATTACHMENT_LOAD_OP_CLEAR
+					, VK_ATTACHMENT_STORE_OP_STORE
+					, VK_ATTACHMENT_LOAD_OP_DONT_CARE
+					, VK_ATTACHMENT_STORE_OP_DONT_CARE
+					, VK_IMAGE_LAYOUT_UNDEFINED
+					, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL } };
+			ashes::SubpassDescriptionArray subpasses;
+			subpasses.emplace_back( ashes::SubpassDescription{ 0u
+				, VK_PIPELINE_BIND_POINT_GRAPHICS
+				, {}
+				, { { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } }
+				, {}
+				, VkAttachmentReference{ 1u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL }
+				, {} } );
+			ashes::VkSubpassDependencyArray dependencies
+			{
+				{ VK_SUBPASS_EXTERNAL
+					, 0u
+					, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
+					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+					, VK_ACCESS_MEMORY_READ_BIT
+					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
+					, VK_DEPENDENCY_BY_REGION_BIT }
+				, { 0u
+					, VK_SUBPASS_EXTERNAL
+					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
+					, VK_ACCESS_SHADER_READ_BIT
+					, VK_DEPENDENCY_BY_REGION_BIT } };
+			ashes::RenderPassCreateInfo createInfo{ 0u
+				, std::move( attaches )
+				, std::move( subpasses )
+				, std::move( dependencies ) };
+			return device->createRenderPass( "PickingPass"
+				, std::move( createInfo ) );
+		}
+
+		ashes::FrameBufferPtr createFramebuffer( ashes::RenderPass const & renderPass
+			, ashes::ImageView const & colourView
+			, ashes::ImageView const & depthView )
+		{
+			ashes::ImageViewCRefArray attachments;
+			attachments.emplace_back( colourView );
+			attachments.emplace_back( depthView );
+			return renderPass.createFrameBuffer( "PickingPass"
+				, { PickingPass::PickingWidth, PickingPass::PickingWidth }
+				, std::move( attachments ) );
+		}
+
+		std::vector< VkBufferImageCopy > createPickDisplayRegions()
+		{
+			std::vector< VkBufferImageCopy > result;
+
+			for ( int i = 0; i < PickingPass::PickingWidth; ++i )
+			{
+				for ( int j = 0; j < PickingPass::PickingWidth; ++j )
+				{
+					result.push_back( { BufferOffset * ashes::getMinimalSize( VK_FORMAT_R32G32B32A32_SFLOAT )
+						, 0u
+						, 0u
+						, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 0u, 1u }
+						, { int( PickingPass::PickingWidth ) * 2 + i, j, 0 }
+						, { 1u, 1u, 1u } } );
+				}
+			}
+
+			return result;
+		}
 	}
 
 	//*********************************************************************************************
@@ -282,20 +371,71 @@ namespace castor3d
 		: SceneRenderPass{ device
 			, cuT( "Picking" )
 			, cuT( "Picking" )
-			, matrixUbo
-			, culler
-			, RenderMode::eBoth
-			, true
-			, false
-			, nullptr
-			, 1u }
+			, SceneRenderPassDesc{ matrixUbo
+				, culler
+				, RenderMode::eBoth
+				, true
+				, false
+				, nullptr
+				, 1u }
+			, createRenderPass( device, VK_FORMAT_R32G32B32A32_SFLOAT, VK_FORMAT_D32_SFLOAT ) }
+		, m_colourTexture{ createTexture( m_device
+			, { PickingWidth, PickingWidth }
+			, VK_FORMAT_R32G32B32A32_SFLOAT
+			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
+				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
+				| VK_IMAGE_USAGE_SAMPLED_BIT )
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, "Colour" ) }
+		, m_depthTexture{ createTexture( m_device
+			, { PickingWidth, PickingWidth }
+			, VK_FORMAT_D32_SFLOAT
+			, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, "Depth" ) }
+		, m_colourView{ createView( m_device
+			, *m_colourTexture
+			, "Colour" ) }
+		, m_depthView{ createView( m_device
+			, *m_depthTexture
+			, "Depth" ) }
+		, m_frameBuffer{ createFramebuffer( *m_renderPass
+			, m_colourView
+			, m_depthView ) }
+		, m_copyRegion{ 0u
+			, 0u
+			, 0u
+			, { m_colourView->subresourceRange.aspectMask, 0u, 0u, 1u }
+			, { 0, 0, 0 }
+			, { PickingWidth, PickingWidth, 1u } }
+		, m_transferDisplayRegion{ 0u
+			, 0u
+			, 0u
+			, { m_colourView->subresourceRange.aspectMask, 0u, 0u, 1u }
+			, { 0, 0, 0 }
+			, { PickingWidth, PickingWidth, 1u } }
+		, m_pickDisplayRegions{ createPickDisplayRegions() }
+		, m_commandBuffer{ m_device.graphicsCommandPool->createCommandBuffer( "PickingPass" ) }
 		, m_transferFence{ m_device->createFence( "PickingPass" ) }
+		, m_stagingBuffer{ makeBuffer< Point4f >( m_device
+			, PickingWidth * PickingWidth
+			, ( VK_BUFFER_USAGE_TRANSFER_DST_BIT
+				| VK_BUFFER_USAGE_TRANSFER_SRC_BIT )
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "PickingPassStagingBuffer" ) }
+		, m_buffer{ PickingWidth * PickingWidth }
 	{
 	}
 
 	PickingPass::~PickingPass()
 	{
-		CU_Assert( m_commandBuffer == nullptr, "Did you forget to call PickingPass::cleanup ?" );
+		m_commandBuffer.reset();
+		m_scenes.clear();
+		m_stagingBuffer.reset();
+		m_frameBuffer.reset();
+		m_depthTexture.reset();
+		m_colourTexture.reset();
 	}
 
 	void PickingPass::addScene( Scene & scene, Camera & camera )
@@ -584,164 +724,6 @@ namespace castor3d
 		updateNonInstanced( *this
 			, PickNodeType::eBillboard
 			, nodes );
-	}
-
-	bool PickingPass::doInitialise( Size const & size )
-	{
-		m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer( "PickingPass" );
-
-		m_colourTexture = createTexture( m_device
-			, size
-			, VK_FORMAT_R32G32B32A32_SFLOAT
-			, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, "Colour" );
-		m_colourView = createView( m_device
-			, *m_colourTexture
-			, "Colour" );
-
-		m_copyRegion =
-		{
-			0u,
-			0u,
-			0u,
-			{ m_colourView->subresourceRange.aspectMask, 0u, 0u, 1u },
-			{ 0, 0, 0 },
-			{ PickingWidth, PickingWidth, 1u },
-		};
-		m_transferDisplayRegion =
-		{
-			0u,
-			0u,
-			0u,
-			{ m_colourView->subresourceRange.aspectMask, 0u, 0u, 1u },
-			{ 0, 0, 0 },
-			{ PickingWidth, PickingWidth, 1u },
-		};
-		for ( int i = 0; i < PickingWidth; ++i )
-		{
-			for ( int j = 0; j < PickingWidth; ++j )
-			{
-				m_pickDisplayRegions.push_back(
-					{
-						BufferOffset * ashes::getMinimalSize( VK_FORMAT_R32G32B32A32_SFLOAT ),
-						0u,
-						0u,
-						{ m_colourView->subresourceRange.aspectMask, 0u, 0u, 1u },
-						{ int( PickingWidth ) * 2 + i, j, 0 },
-						{ 1u, 1u, 1u },
-					} );
-			}
-		}
-
-		m_depthTexture = createTexture( m_device
-			, size
-			, VK_FORMAT_D32_SFLOAT
-			, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, "Depth" );
-		m_depthView = createView( m_device
-			, *m_depthTexture
-			, "Depth" );
-
-		m_stagingBuffer = makeBuffer< Point4f >( m_device
-			, PickingWidth * PickingWidth
-			, ( VK_BUFFER_USAGE_TRANSFER_DST_BIT
-				| VK_BUFFER_USAGE_TRANSFER_SRC_BIT )
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "PickingPassStagingBuffer" );
-
-		m_buffer.resize( PickingWidth * PickingWidth );
-
-		// Create the render pass.
-		ashes::VkAttachmentDescriptionArray attaches
-		{
-			{
-				0u,
-				m_colourTexture->getFormat(),
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_CLEAR,
-				VK_ATTACHMENT_STORE_OP_STORE,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_UNDEFINED,
-				VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-			},
-			{
-				0u,
-				m_depthTexture->getFormat(),
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_CLEAR,
-				VK_ATTACHMENT_STORE_OP_STORE,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_UNDEFINED,
-				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-			},
-		};
-		ashes::SubpassDescriptionArray subpasses;
-		subpasses.emplace_back( ashes::SubpassDescription
-			{
-				0u,
-				VK_PIPELINE_BIND_POINT_GRAPHICS,
-				{},
-				{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
-				{},
-				VkAttachmentReference{ 1u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL },
-				{},
-			} );
-		ashes::VkSubpassDependencyArray dependencies
-		{
-			{
-				VK_SUBPASS_EXTERNAL,
-				0u,
-				VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_ACCESS_MEMORY_READ_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			},
-			{
-				0u,
-				VK_SUBPASS_EXTERNAL,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-				VK_ACCESS_SHADER_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			}
-		};
-		ashes::RenderPassCreateInfo createInfo
-		{
-			0u,
-			std::move( attaches ),
-			std::move( subpasses ),
-			std::move( dependencies ),
-		};
-		m_renderPass = m_device->createRenderPass( "PickingPass"
-			, std::move( createInfo ) );
-
-		ashes::ImageViewCRefArray attachments;
-		attachments.emplace_back( m_colourView );
-		attachments.emplace_back( m_depthView );
-		m_frameBuffer = m_renderPass->createFrameBuffer( "PickingPass"
-			, { size.getWidth(), size.getHeight() }
-			, std::move( attachments ) );
-
-		return true;
-	}
-
-	void PickingPass::doCleanup()
-	{
-		m_commandBuffer.reset();
-		m_scenes.clear();
-		m_stagingBuffer.reset();
-		m_frameBuffer.reset();
-		m_depthTexture.reset();
-		m_colourTexture.reset();
 	}
 
 	void PickingPass::doFillUboDescriptor( RenderPipeline const & pipeline

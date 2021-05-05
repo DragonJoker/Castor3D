@@ -15,196 +15,95 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	struct RenderTechniquePassDesc
+	{
+		RenderTechniquePassDesc( castor::Size const & size
+			, bool environment
+			, SsaoConfig const & ssaoConfig
+			, LpvGridConfigUbo const * lpvConfigUbo = nullptr
+			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr
+			, VoxelizerUbo const * vctConfigUbo = nullptr
+			, LightVolumePassResult const * lpvResult = nullptr
+			, TextureUnit const * vctFirstBounce = nullptr
+			, TextureUnit const * vctSecondaryBounce = nullptr )
+			: size{ size }
+			, environment{ environment }
+			, ssaoConfig{ ssaoConfig }
+			, lpvConfigUbo{ lpvConfigUbo }
+			, llpvConfigUbo{ llpvConfigUbo }
+			, vctConfigUbo{ vctConfigUbo }
+			, lpvResult{ lpvResult }
+			, vctFirstBounce{ vctFirstBounce }
+			, vctSecondaryBounce{ vctSecondaryBounce }
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Constructor for opaque passes.
+		 *\param[in]	environment		Pass used for an environment map rendering.
+		 *\param[in]	ssaoConfig		The SSAO configuration.
+		 *\param[in]	lpvConfigUbo	The LPV configuration, if needed.
+		 *\param[in]	llpvConfigUbo	The Layered LPV configuration, if needed.
+		 *\param[in]	vctConfigUbo	The VCT configuration, if needed.
+		 *\~french
+		 *\brief		Constructeur pour les passes opaques.
+		 *\param[in]	environment		Passe utilisée pour le rendu d'une texture d'environnement.
+		 *\param[in]	ssaoConfig		La configuration du SSAO.
+		 *\param[in]	lpvConfigUbo	La configuration des LPV, si nécessaire.
+		 *\param[in]	llpvConfigUbo	La configuration des Layered LPV, si nécessaire.
+		 *\param[in]	vctConfigUbo	La configuration du VCT, si nécessaire.
+		 */
+		RenderTechniquePassDesc( bool environment
+			, SsaoConfig const & ssaoConfig
+			, LpvGridConfigUbo const * lpvConfigUbo = nullptr
+			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr
+			, VoxelizerUbo const * vctConfigUbo = nullptr )
+			: RenderTechniquePassDesc{ {}
+				, environment
+				, ssaoConfig
+				, lpvConfigUbo
+				, llpvConfigUbo
+				, vctConfigUbo }
+		{
+		}
+
+		castor::Size size;
+		bool environment;
+		SsaoConfig const & ssaoConfig;
+		LpvGridConfigUbo const * lpvConfigUbo;
+		LayeredLpvGridConfigUbo const * llpvConfigUbo;
+		VoxelizerUbo const * vctConfigUbo;
+		LightVolumePassResult const * lpvResult;
+		TextureUnit const * vctFirstBounce;
+		TextureUnit const * vctSecondaryBounce;
+	};
+
 	class RenderTechniquePass
 		: public SceneRenderPass
 	{
 	protected:
 		/**
 		 *\~english
-		 *\brief		Constructor for opaque nodes.
-		 *\param[in]	device			The current device.
-		 *\param[in]	category		The pass category.
-		 *\param[in]	name			The pass name.
-		 *\param[in]	matrixUbo		The scene matrices UBO.
-		 *\param[in]	culler			The culler for this pass.
-		 *\param[in]	environment		Pass used for an environment map rendering.
-		 *\param[in]	ignored			The geometries attached to this node will be ignored in the render.
-		 *\param[in]	ssaoConfig		The SSAO configuration.
-		 *\param[in]	lpvConfigUbo	The LPV configuration, if needed.
-		 *\param[in]	llpvConfigUbo	The Layered LPV configuration, if needed.
-		 *\param[in]	vctConfigUbo	The VCT configuration, if needed.
-		 *\~french
-		 *\brief		Constructeur pour les noeuds opaques.
-		 *\param[in]	device			Le device actuel.
-		 *\param[in]	category		La catégorie de la passe.
-		 *\param[in]	name			Le nom de la passe.
-		 *\param[in]	matrixUbo		L'UBO de matrices de la scène.
-		 *\param[in]	culler			Le culler pour cette passe.
-		 *\param[in]	environment		Passe utilisée pour le rendu d'une texture d'environnement.
-		 *\param[in]	ignored			Les géométries attachées à ce noeud seront ignorées lors du rendu.
-		 *\param[in]	ssaoConfig		La configuration du SSAO.
-		 *\param[in]	lpvConfigUbo	La configuration des LPV, si nécessaire.
-		 *\param[in]	llpvConfigUbo	La configuration des Layered LPV, si nécessaire.
-		 *\param[in]	vctConfigUbo	La configuration du VCT, si nécessaire.
-		 */
-		C3D_API RenderTechniquePass( RenderDevice const & device
-			, castor::String const & category
-			, castor::String const & name
-			, MatrixUbo & matrixUbo
-			, SceneCuller & culler
-			, bool environment
-			, SceneNode const * ignored
-			, SsaoConfig const & ssaoConfig
-			, LpvGridConfigUbo const * lpvConfigUbo = nullptr
-			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr
-			, VoxelizerUbo const * vctConfigUbo = nullptr );
-		/**
-		 *\~english
-		 *\brief		Constructor for transparent nodes.
-		 *\param[in]	device			The current device.
-		 *\param[in]	category		The pass category.
-		 *\param[in]	name			The technique name.
-		 *\param[in]	matrixUbo		The scene matrices UBO.
-		 *\param[in]	culler			The culler for this pass.
-		 *\param[in]	oit				The OIT status.
-		 *\param[in]	environment		Pass used for an environment map rendering.
-		 *\param[in]	ignored			The geometries attached to this node will be ignored in the render.
-		 *\param[in]	ssaoConfig		The SSAO configuration.
-		 *\param[in]	lpvConfigUbo	The LPV configuration, if needed.
-		 *\param[in]	llpvConfigUbo	The Layered LPV configuration, if needed.
-		 *\param[in]	vctConfigUbo	The VCT configuration, if needed.
-		 *\~french
-		 *\brief		Constructeur pour les noeuds transparents.
-		 *\param[in]	device			Le device actuel.
-		 *\param[in]	category		La catégorie de la passe.
-		 *\param[in]	name			Le nom de la technique.
-		 *\param[in]	matrixUbo		L'UBO de matrices de la scène.
-		 *\param[in]	culler			Le culler pour cette passe.
-		 *\param[in]	oit				Le statut d'OIT.
-		 *\param[in]	environment		Passe utilisée pour le rendu d'une texture d'environnement.
-		 *\param[in]	ignored			Les géométries attachées à ce noeud seront ignorées lors du rendu.
-		 *\param[in]	ssaoConfig		La configuration du SSAO.
-		 *\param[in]	lpvConfigUbo	La configuration des LPV, si nécessaire.
-		 *\param[in]	llpvConfigUbo	La configuration des Layered LPV, si nécessaire.
-		 *\param[in]	vctConfigUbo	La configuration du VCT, si nécessaire.
-		 */
-		C3D_API RenderTechniquePass( RenderDevice const & device
-			, castor::String const & category
-			, castor::String const & name
-			, MatrixUbo & matrixUbo
-			, SceneCuller & culler
-			, bool oit
-			, bool environment
-			, SceneNode const * ignored
-			, SsaoConfig const & ssaoConfig
-			, LpvGridConfigUbo const * lpvConfigUbo = nullptr
-			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr
-			, VoxelizerUbo const * vctConfigUbo = nullptr );
-		/**
-		 *\~english
-		 *\brief		Constructor for opaque nodes.
-		 *\param[in]	device				The current device.
+		 *\brief		Constructor.
+		 *\param[in]	device				The render device.
 		 *\param[in]	category			The pass category.
 		 *\param[in]	name				The pass name.
-		 *\param[in]	matrixUbo			The scene matrices UBO.
-		 *\param[in]	culler				The culler for this pass.
-		 *\param[in]	environment			Pass used for an environment map rendering.
-		 *\param[in]	ignored				The geometries attached to this node will be ignored in the render.
-		 *\param[in]	ssaoConfig			The SSAO configuration.
-		 *\param[in]	lpvConfigUbo		The LPV configuration, if needed.
-		 *\param[in]	llpvConfigUbo		The Layered LPV configuration, if needed.
-		 *\param[in]	vctConfigUbo		The VCT configuration, if needed.
-		 *\param[in]	size				The pass needed dimensions.
-		 *\param[in]	lpvResult			The LPV result, if needed.
-		 *\param[in]	vctFirstBounce		The VCT first bounce result, if needed.
-		 *\param[in]	vctSecondaryBounce	The VCT secondary bounce result, if needed.
+		 *\param[in]	renderPassDesc		The scene render pass construction data.
+		 *\param[in]	techniquePassDesc	The technique render pass construction data.
 		 *\~french
-		 *\brief		Constructeur pour les noeuds opaques.
-		 *\param[in]	device				Le device actuel.
+		 *\brief		Constructeur.
+		 *\param[in]	device				Le render device.
 		 *\param[in]	category			La catégorie de la passe.
 		 *\param[in]	name				Le nom de la passe.
-		 *\param[in]	matrixUbo			L'UBO de matrices de la scène.
-		 *\param[in]	culler				Le culler pour cette passe.
-		 *\param[in]	environment			Passe utilisée pour le rendu d'une texture d'environnement.
-		 *\param[in]	ignored				Les géométries attachées à ce noeud seront ignorées lors du rendu.
-		 *\param[in]	ssaoConfig			La configuration du SSAO.
-		 *\param[in]	lpvConfigUbo		La configuration des LPV, si nécessaire.
-		 *\param[in]	llpvConfigUbo		La configuration des Layered LPV, si nécessaire.
-		 *\param[in]	vctConfigUbo		La configuration du VCT, si nécessaire.
-		 *\param[in]	size				Les dimensions voulues pour la passe.
-		 *\param[in]	lpvResult			Le résultat du LPV, si nécessaire.
-		 *\param[in]	vctFirstBounce		Le résultat du premier rebond de VCT, si nécessaire.
-		 *\param[in]	vctSecondaryBounce	Le résultat du second rebond de VCT, si nécessaire.
+		 *\param[in]	renderPassDesc		Les données de construction de passe de rendu de scène.
+		 *\param[in]	techniquePassDesc	Les données de construction de passe de rendu de technique.
 		 */
 		C3D_API RenderTechniquePass( RenderDevice const & device
-			, castor::Size const & size
 			, castor::String const & category
 			, castor::String const & name
-			, MatrixUbo & matrixUbo
-			, SceneCuller & culler
-			, bool environment
-			, SceneNode const * ignored
-			, SsaoConfig const & ssaoConfig
-			, LpvGridConfigUbo const * lpvConfigUbo = nullptr
-			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr
-			, VoxelizerUbo const * vctConfigUbo = nullptr
-			, LightVolumePassResult const * lpvResult = nullptr
-			, TextureUnit const * vctFirstBounce = nullptr
-			, TextureUnit const * vctSecondaryBounce = nullptr );
-		/**
-		 *\~english
-		 *\brief		Constructor for transparent nodes.
-		 *\param[in]	device				The current device.
-		 *\param[in]	category			The pass category.
-		 *\param[in]	name				The technique name.
-		 *\param[in]	matrixUbo			The scene matrices UBO.
-		 *\param[in]	culler				The culler for this pass.
-		 *\param[in]	oit					The OIT status.
-		 *\param[in]	environment			Pass used for an environment map rendering.
-		 *\param[in]	ignored				The geometries attached to this node will be ignored in the render.
-		 *\param[in]	ssaoConfig			The SSAO configuration.
-		 *\param[in]	lpvConfigUbo		The LPV configuration, if needed.
-		 *\param[in]	llpvConfigUbo		The Layered LPV configuration, if needed.
-		 *\param[in]	vctConfigUbo		The VCT configuration, if needed.
-		 *\param[in]	size				The pass needed dimensions.
-		 *\param[in]	lpvResult			The LPV result, if needed.
-		 *\param[in]	vctFirstBounce		The VCT first bounce result, if needed.
-		 *\param[in]	vctSecondaryBounce	The VCT secondary bounce result, if needed.
-		 *\~french
-		 *\brief		Constructeur pour les noeuds transparents.
-		 *\param[in]	device				Le device actuel.
-		 *\param[in]	category			La catégorie de la passe.
-		 *\param[in]	name				Le nom de la technique.
-		 *\param[in]	matrixUbo			L'UBO de matrices de la scène.
-		 *\param[in]	culler				Le culler pour cette passe.
-		 *\param[in]	oit					Le statut d'OIT.
-		 *\param[in]	environment			Passe utilisée pour le rendu d'une texture d'environnement.
-		 *\param[in]	ignored				Les géométries attachées à ce noeud seront ignorées lors du rendu.
-		 *\param[in]	ssaoConfig			La configuration du SSAO.
-		 *\param[in]	lpvConfigUbo		La configuration des LPV, si nécessaire.
-		 *\param[in]	llpvConfigUbo		La configuration des Layered LPV, si nécessaire.
-		 *\param[in]	vctConfigUbo		La configuration du VCT, si nécessaire.
-		 *\param[in]	size				Les dimensions voulues pour la passe.
-		 *\param[in]	lpvResult			Le résultat du LPV, si nécessaire.
-		 *\param[in]	vctFirstBounce		Le résultat du premier rebond de VCT, si nécessaire.
-		 *\param[in]	vctSecondaryBounce	Le résultat du second rebond de VCT, si nécessaire.
-		 */
-		C3D_API RenderTechniquePass( RenderDevice const & device
-			, castor::Size const & size
-			, castor::String const & category
-			, castor::String const & name
-			, MatrixUbo & matrixUbo
-			, SceneCuller & culler
-			, bool oit
-			, bool environment
-			, SceneNode const * ignored
-			, SsaoConfig const & ssaoConfig
-			, LpvGridConfigUbo const * lpvConfigUbo = nullptr
-			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr
-			, VoxelizerUbo const * vctConfigUbo = nullptr
-			, LightVolumePassResult const * lpvResult = nullptr
-			, TextureUnit const * vctFirstBounce = nullptr
-			, TextureUnit const * vctSecondaryBounce = nullptr );
+			, SceneRenderPassDesc const & renderPassDesc
+			, RenderTechniquePassDesc const & techniquePassDesc
+			, ashes::RenderPassPtr renderPass = nullptr );
 
 	public:
 		/**
@@ -305,7 +204,6 @@ namespace castor3d
 			, castor::Point2f const & jitter
 			, RenderInfo & info );
 		C3D_API void doUpdateUbos( CpuUpdater & updater )override;
-		C3D_API bool doInitialise( castor::Size const & size )override;
 		C3D_API void doUpdateFlags( PipelineFlags & flags )const override;
 		C3D_API ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
 		C3D_API void doFillUboDescriptor( RenderPipeline const & pipeline
@@ -329,13 +227,6 @@ namespace castor3d
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 
 	protected:
-		/**
-		 *\~english
-		 *\brief		Cleans up the pass.
-		 *\~french
-		 *\brief		Nettoie la passe.
-		 */
-		C3D_API virtual void doCleanup()override;
 		/**
 		 *\copydoc		castor3d::SceneRenderPass::doCreateUboBindings
 		 */

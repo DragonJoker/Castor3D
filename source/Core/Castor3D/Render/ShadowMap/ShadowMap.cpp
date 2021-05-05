@@ -21,7 +21,6 @@ namespace castor3d
 		, Scene & scene
 		, LightType lightType
 		, ShadowMapResult result
-		, std::vector< PassData > passes
 		, uint32_t count )
 		: OwnedBy< Engine >{ *scene.getEngine() }
 		, m_device{ device }
@@ -29,7 +28,6 @@ namespace castor3d
 		, m_lightType{ lightType }
 		, m_name{ cuT( "ShadowMap" ) + castor::string::snakeToCamelCase( getName( lightType ) ) }
 		, m_result{ std::move( result ) }
-		, m_passes{ std::move( passes ) }
 		, m_count{ count }
 	{
 	}
@@ -40,7 +38,7 @@ namespace castor3d
 
 		for ( auto & pass : m_passes )
 		{
-			pass.pass->cleanup();
+			pass.pass.reset();
 			pass.matrixUbo->cleanup();
 		}
 

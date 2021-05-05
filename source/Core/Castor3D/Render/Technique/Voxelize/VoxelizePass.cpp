@@ -53,6 +53,55 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
+	namespace
+	{
+		ashes::RenderPassPtr createRenderPass( RenderDevice const & device )
+		{
+			ashes::VkAttachmentDescriptionArray attaches;
+			ashes::SubpassDescriptionArray subpasses;
+			subpasses.push_back( { 0u
+				, VK_PIPELINE_BIND_POINT_GRAPHICS
+				, {}
+				, {}
+				, {}
+				, ashes::nullopt
+				, {} } );
+			ashes::VkSubpassDependencyArray dependencies
+			{
+				{ VK_SUBPASS_EXTERNAL
+					, 0u
+					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
+					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
+					, VK_DEPENDENCY_BY_REGION_BIT }
+				, { 0u
+					, VK_SUBPASS_EXTERNAL
+					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
+					, VK_ACCESS_SHADER_READ_BIT
+					, VK_DEPENDENCY_BY_REGION_BIT } };
+			ashes::RenderPassCreateInfo createInfo{ 0u
+				, std::move( attaches )
+				, std::move( subpasses )
+				, std::move( dependencies ) };
+			return device->createRenderPass( "Voxelization"
+				, std::move( createInfo ) );
+		}
+
+		ashes::FrameBufferPtr createFramebuffer( ashes::RenderPass const & renderPass
+			, VoxelSceneData const & voxelConfig )
+		{
+			ashes::ImageViewCRefArray fbAttaches;
+			return renderPass.createFrameBuffer( "Voxelization"
+				, { voxelConfig.gridSize.value(), voxelConfig.gridSize.value() }
+				, std::move( fbAttaches ) );
+		}
+	}
+
+	//*********************************************************************************************
+
 	VoxelizePass::VoxelizePass( RenderDevice const & device
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
@@ -62,17 +111,19 @@ namespace castor3d
 		: SceneRenderPass{ device
 			, "Voxelize"
 			, "Voxelization"
-			, matrixUbo
-			, culler
-			, RenderMode::eBoth
-			, true
-			, true
-			, nullptr
-			, 1u }
+			, SceneRenderPassDesc{ matrixUbo
+				, culler
+				, RenderMode::eBoth
+				, true
+				, true
+				, nullptr
+				, 1u }
+			, createRenderPass( device ) }
 		, m_scene{ culler.getScene() }
 		, m_camera{ culler.getCamera() }
 		, m_voxels{ voxels }
-		, m_commands{ nullptr, nullptr }
+		, m_commands{ device, getName() }
+		, m_frameBuffer{ createFramebuffer( *m_renderPass, voxelConfig ) }
 		, m_voxelizerUbo{ voxelizerUbo }
 		, m_voxelConfig{ voxelConfig }
 	{
@@ -85,7 +136,7 @@ namespace castor3d
 
 	void VoxelizePass::accept( RenderTechniqueVisitor & visitor )
 	{
-		auto shaderProgram = getEngine()->getShaderProgramCache().getAutomaticProgram( *this
+		auto shaderProgram = getShaderProgramCache().getAutomaticProgram( *this
 			, visitor.getFlags() );
 		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ) );
 		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_GEOMETRY_BIT ) );
@@ -187,71 +238,6 @@ namespace castor3d
 		}
 
 		return *result;
-	}
-
-	bool VoxelizePass::doInitialise( castor::Size const & CU_UnusedParam( size ) )
-	{
-		ashes::VkAttachmentDescriptionArray attaches;
-		ashes::SubpassDescriptionArray subpasses;
-		subpasses.emplace_back( ashes::SubpassDescription
-			{
-				0u,
-				VK_PIPELINE_BIND_POINT_GRAPHICS,
-				{},
-				{},
-				{},
-				ashes::nullopt,
-				{},
-			} );
-		ashes::VkSubpassDependencyArray dependencies
-		{
-			{
-				VK_SUBPASS_EXTERNAL,
-				0u,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			},
-			{
-				0u,
-				VK_SUBPASS_EXTERNAL,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-				VK_ACCESS_SHADER_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			}
-		};
-		ashes::RenderPassCreateInfo createInfo
-		{
-			0u,
-			std::move( attaches ),
-			std::move( subpasses ),
-			std::move( dependencies ),
-		};
-		m_renderPass = m_device->createRenderPass( getName()
-			, std::move( createInfo ) );
-		ashes::ImageViewCRefArray fbAttaches;
-
-		m_frameBuffer = m_renderPass->createFrameBuffer( getName()
-			, { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() }
-			, std::move( fbAttaches ) );
-
-		m_commands =
-		{
-			m_device.graphicsCommandPool->createCommandBuffer( getName() ),
-			m_device->createSemaphore( getName() ),
-		};
-		return true;
-	}
-
-	void VoxelizePass::doCleanup()
-	{
-		m_renderQueue.cleanup();
-		m_commands = { nullptr, nullptr };
-		m_frameBuffer.reset();
 	}
 
 	void VoxelizePass::doUpdateFlags( PipelineFlags & flags )const

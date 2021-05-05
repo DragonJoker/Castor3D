@@ -49,19 +49,12 @@ namespace castor3d
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, SsaoConfig const & config )
-		: castor3d::RenderTechniquePass{ device
+		: RenderTechniquePass{ device
 			, cuT( "Opaque" )
 			, cuT( "Geometry pass" )
-			, matrixUbo
-			, culler
-			, false
-			, nullptr
-			, config }
+			, { matrixUbo, culler, nullptr }
+			, { size, false, config } }
 	{
-		initialise( size
-			, nullptr
-			, nullptr
-			, nullptr );
 	}
 
 	OpaquePass::~OpaquePass()
@@ -145,7 +138,7 @@ namespace castor3d
 	void OpaquePass::accept( RenderTechniqueVisitor & visitor )
 	{
 		auto & flags = visitor.getFlags();
-		auto shaderProgram = getEngine()->getShaderProgramCache().getAutomaticProgram( *this
+		auto shaderProgram = getShaderProgramCache().getAutomaticProgram( *this
 			, flags );
 		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ) );
 		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );

@@ -62,6 +62,78 @@ namespace castor3d
 				}
 			};
 		}
+
+		ashes::RenderPassPtr createRenderPass( RenderDevice const & device
+			, ShadowMap const & shadowMap
+			, castor::String const & name )
+		{
+			std::array< VkImageLayout, size_t( SmTexture::eCount ) > FinalLayouts{ VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL };
+
+			// Create the render pass.
+			ashes::VkAttachmentDescriptionArray attaches;
+			ashes::VkAttachmentReferenceArray references;
+			uint32_t index = 0u;
+
+			for ( auto & result : shadowMap.getShadowPassResult() )
+			{
+				attaches.push_back( { 0u
+					, result->getTexture()->getPixelFormat()
+					, VK_SAMPLE_COUNT_1_BIT
+					, VK_ATTACHMENT_LOAD_OP_CLEAR
+					, VK_ATTACHMENT_STORE_OP_STORE
+					, VK_ATTACHMENT_LOAD_OP_DONT_CARE
+					, VK_ATTACHMENT_STORE_OP_DONT_CARE
+					, VK_IMAGE_LAYOUT_UNDEFINED
+					, FinalLayouts[index] } );
+
+				if ( index > 0 )
+				{
+					references.push_back( { index, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } );
+				}
+
+				++index;
+			}
+
+			ashes::SubpassDescriptionArray subpasses;
+			subpasses.push_back( { 0u
+				, VK_PIPELINE_BIND_POINT_GRAPHICS
+				, {}
+				, references
+				, {}
+				, VkAttachmentReference{ 0u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL }
+				, {} } );
+			ashes::VkSubpassDependencyArray dependencies
+			{
+				{ VK_SUBPASS_EXTERNAL
+					, 0u
+					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
+					, VK_ACCESS_SHADER_READ_BIT
+					, VK_DEPENDENCY_BY_REGION_BIT }
+				, { 0u
+					, VK_SUBPASS_EXTERNAL
+					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
+					, VK_ACCESS_SHADER_READ_BIT
+					, VK_DEPENDENCY_BY_REGION_BIT } };
+			ashes::RenderPassCreateInfo createInfo{ 0u
+				,std::move( attaches )
+				,std::move( subpasses )
+				,std::move( dependencies ) };
+			return device->createRenderPass( name
+				, std::move( createInfo ) );
+		}
+
+		castor::String getPassName( uint32_t index )
+		{
+			return cuT( "Point Layer " ) + string::toString( index / 6u ) + " Face " + string::toString( index % 6u );
+		}
 	}
 
 	uint32_t const ShadowMapPassPoint::TextureSize = 512u;
@@ -71,14 +143,25 @@ namespace castor3d
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap )
-		: ShadowMapPass{ device, cuT( "Point Layer " ) + string::toString( index / 6u ) + " Face " + string::toString( index % 6u ), matrixUbo, culler, shadowMap }
+		: ShadowMapPass{ device
+			, getPassName( index )
+			, matrixUbo
+			, culler
+			, shadowMap
+			, createRenderPass( device, shadowMap, getPassName( index ) ) }
 		, m_viewport{ *device.renderSystem.getEngine() }
 	{
+		float const aspect = float( ShadowMapPassPoint::TextureSize ) / ShadowMapPassPoint::TextureSize;
+		float const nearZ = 1.0f;
+		float const farZ = 2000.0f;
+		m_projection = device.renderSystem.getPerspective( 90.0_degrees, aspect, nearZ, farZ );
+		m_viewport.resize( { ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize } );
 		log::trace << "Created " << m_name << std::endl;
 	}
 
 	ShadowMapPassPoint::~ShadowMapPassPoint()
 	{
+		m_onNodeChanged.disconnect();
 	}
 
 	bool ShadowMapPassPoint::update( CpuUpdater & updater )
@@ -117,102 +200,6 @@ namespace castor3d
 		SceneRenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled );
 		SceneRenderPass::doUpdate( nodes.morphingNodes.backCulled );
 		SceneRenderPass::doUpdate( nodes.billboardNodes.backCulled );
-	}
-
-	bool ShadowMapPassPoint::doInitialise( Size const & size )
-	{
-		float const aspect = float( size.getWidth() ) / size.getHeight();
-		float const nearZ = 1.0f;
-		float const farZ = 2000.0f;
-		m_projection = getEngine()->getRenderSystem()->getPerspective( 90.0_degrees, aspect, nearZ, farZ );
-
-		std::array< VkImageLayout, size_t( SmTexture::eCount ) > FinalLayouts
-		{
-			VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-		};
-
-		// Create the render pass.
-		ashes::VkAttachmentDescriptionArray attaches;
-		ashes::VkAttachmentReferenceArray references;
-		uint32_t index = 0u;
-
-		for ( auto & result : m_shadowMap.getShadowPassResult() )
-		{
-			attaches.push_back(
-				{
-					0u,
-					result->getTexture()->getPixelFormat(),
-					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
-					VK_ATTACHMENT_STORE_OP_STORE,
-					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
-					FinalLayouts[index],
-				} );
-
-			if ( index > 0 )
-			{
-				references.push_back( { index, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } );
-			}
-
-			++index;
-		}
-
-		ashes::SubpassDescriptionArray subpasses;
-		subpasses.emplace_back( ashes::SubpassDescription
-			{
-				0u,
-				VK_PIPELINE_BIND_POINT_GRAPHICS,
-				{},
-				references,
-				{},
-				VkAttachmentReference{ 0u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL },
-				{},
-			} );
-		ashes::VkSubpassDependencyArray dependencies
-		{
-			{
-				VK_SUBPASS_EXTERNAL,
-				0u,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-				VK_ACCESS_SHADER_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			},
-			{
-				0u,
-				VK_SUBPASS_EXTERNAL,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-				VK_ACCESS_SHADER_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			}
-		};
-		ashes::RenderPassCreateInfo createInfo
-		{
-			0u,
-			std::move( attaches ),
-			std::move( subpasses ),
-			std::move( dependencies ),
-		};
-		m_renderPass = m_device->createRenderPass( m_name
-			, std::move( createInfo ) );
-		m_viewport.resize( size );
-		m_initialised = true;
-		return m_initialised;
-	}
-
-	void ShadowMapPassPoint::doCleanup()
-	{
-		m_renderQueue.cleanup();
-		m_onNodeChanged.disconnect();
 	}
 
 	void ShadowMapPassPoint::doFillUboDescriptor( RenderPipeline const & pipeline

@@ -55,121 +55,16 @@ namespace castor3d
 	ForwardRenderTechniquePass::ForwardRenderTechniquePass( RenderDevice const & device
 		, castor::String const & category
 		, castor::String const & name
-		, MatrixUbo & matrixUbo
-		, SceneCuller & culler
-		, bool environment
-		, SceneNode const * ignored
-		, SsaoConfig const & config
-		, LpvGridConfigUbo const * lpvConfigUbo
-		, LayeredLpvGridConfigUbo const * llpvConfigUbo
-		, VoxelizerUbo const * vctConfigUbo )
+		, SceneRenderPassDesc const & renderPassDesc
+		, RenderTechniquePassDesc const & techniqueDesc )
 		: RenderTechniquePass{ device
 			, category
 			, name
-			, matrixUbo
-			, culler
-			, environment
-			, ignored
-			, config
-			, lpvConfigUbo
-			, llpvConfigUbo
-			, vctConfigUbo }
+			, renderPassDesc
+			, techniqueDesc }
+		, m_nodesCommands{ m_device.graphicsCommandPool->createCommandBuffer( getName() ) }
 	{
-	}
-
-	ForwardRenderTechniquePass::ForwardRenderTechniquePass( RenderDevice const & device
-		, castor::String const & category
-		, castor::String const & name
-		, MatrixUbo & matrixUbo
-		, SceneCuller & culler
-		, bool oit
-		, bool environment
-		, SceneNode const * ignored
-		, SsaoConfig const & config
-		, LpvGridConfigUbo const * lpvConfigUbo
-		, LayeredLpvGridConfigUbo const * llpvConfigUbo
-		, VoxelizerUbo const * vctConfigUbo )
-		: RenderTechniquePass{ device
-			, category
-			, name
-			, matrixUbo
-			, culler
-			, oit
-			, environment
-			, ignored
-			, config
-			, lpvConfigUbo
-			, llpvConfigUbo
-			, vctConfigUbo }
-	{
-	}
-	
-	ForwardRenderTechniquePass::ForwardRenderTechniquePass( RenderDevice const & device
-		, castor::Size const & size
-		, castor::String const & category
-		, castor::String const & name
-		, MatrixUbo & matrixUbo
-		, SceneCuller & culler
-		, bool environment
-		, SceneNode const * ignored
-		, SsaoConfig const & config
-		, LpvGridConfigUbo const * lpvConfigUbo
-		, LayeredLpvGridConfigUbo const * llpvConfigUbo
-		, VoxelizerUbo const * vctConfigUbo
-		, LightVolumePassResult const * lpvResult
-		, TextureUnit const * vctFirstBounce
-		, TextureUnit const * vctSecondaryBounce )
-		: RenderTechniquePass{ device
-			, size
-			, category
-			, name
-			, matrixUbo
-			, culler
-			, environment
-			, ignored
-			, config
-			, lpvConfigUbo
-			, llpvConfigUbo
-			, vctConfigUbo
-			, lpvResult
-			, vctFirstBounce
-			, vctSecondaryBounce }
-	{
-	}
-
-	ForwardRenderTechniquePass::ForwardRenderTechniquePass( RenderDevice const & device
-		, castor::Size const & size
-		, castor::String const & category
-		, castor::String const & name
-		, MatrixUbo & matrixUbo
-		, SceneCuller & culler
-		, bool oit
-		, bool environment
-		, SceneNode const * ignored
-		, SsaoConfig const & config
-		, LpvGridConfigUbo const * lpvConfigUbo
-		, LayeredLpvGridConfigUbo const * llpvConfigUbo
-		, VoxelizerUbo const * vctConfigUbo
-		, LightVolumePassResult const * lpvResult
-		, TextureUnit const * vctFirstBounce
-		, TextureUnit const * vctSecondaryBounce )
-		: RenderTechniquePass{ device
-			, size
-			, category
-			, name
-			, matrixUbo
-			, culler
-			, oit
-			, environment
-			, ignored
-			, config
-			, lpvConfigUbo
-			, llpvConfigUbo
-			, vctConfigUbo
-			, lpvResult
-			, vctFirstBounce
-			, vctSecondaryBounce }
-	{
+		m_frameBuffer.reset();
 	}
 
 	void ForwardRenderTechniquePass::initialiseRenderPass( ashes::ImageView const & colourView
@@ -269,12 +164,11 @@ namespace castor3d
 			, { colourView.image->getDimensions().width, colourView.image->getDimensions().height }
 			, std::move( fbAttaches ) );
 
-		m_nodesCommands = m_device.graphicsCommandPool->createCommandBuffer( getName() );
 	}
 
 	void ForwardRenderTechniquePass::accept( RenderTechniqueVisitor & visitor )
 	{
-		auto shaderProgram = getEngine()->getShaderProgramCache().getAutomaticProgram( *this
+		auto shaderProgram = getShaderProgramCache().getAutomaticProgram( *this
 			, visitor.getFlags() );
 		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ) );
 		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
@@ -323,13 +217,6 @@ namespace castor3d
 		result = &getSemaphore();
 
 		return *result;
-	}
-
-	void ForwardRenderTechniquePass::doCleanup()
-	{
-		m_nodesCommands.reset();
-		m_frameBuffer.reset();
-		RenderTechniquePass::doCleanup();
 	}
 
 	ShaderPtr ForwardRenderTechniquePass::doGetPhongPixelShaderSource( PipelineFlags const & flags )const

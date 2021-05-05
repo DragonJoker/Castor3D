@@ -50,7 +50,6 @@ namespace castor3d
 			, Scene & scene
 			, LightType lightType
 			, ShadowMapResult result
-			, std::vector< PassData > passes
 			, uint32_t count );
 		/**
 		 *\~english

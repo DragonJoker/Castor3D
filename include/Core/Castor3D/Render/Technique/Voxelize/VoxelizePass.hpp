@@ -109,8 +109,6 @@ namespace castor3d
 		C3D_API ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
 		C3D_API ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		C3D_API ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
-		C3D_API void doCleanup()override;
-		C3D_API bool doInitialise( castor::Size const & size )override;
 		C3D_API void doFillUboDescriptor( RenderPipeline const & pipeline
 			, ashes::DescriptorSetLayout const & layout
 			, BillboardListRenderNode & node )override;
