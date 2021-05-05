@@ -97,7 +97,6 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		bool doInitialise( castor::Size const & size )override;
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;

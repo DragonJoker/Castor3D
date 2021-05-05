@@ -42,7 +42,8 @@ namespace castor3d
 			, castor::String name
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
-			, ShadowMap const & shadowMap );
+			, ShadowMap const & shadowMap
+			, ashes::RenderPassPtr renderPass );
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.

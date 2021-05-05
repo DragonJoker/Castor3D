@@ -27,17 +27,19 @@ namespace castor3d
 		, castor::String name
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
-		, ShadowMap const & shadowMap )
+		, ShadowMap const & shadowMap
+		, ashes::RenderPassPtr renderPass )
 		: SceneRenderPass{ device
 			, cuT( "ShadowMap" )
 			, std::move( name )
-			, matrixUbo
-			, culler
-			, RenderMode::eBoth
-			, true
-			, false
-			, nullptr
-			, 1u }
+			, SceneRenderPassDesc{ matrixUbo
+				, culler
+				, RenderMode::eBoth
+				, true
+				, false
+				, nullptr
+				, 1u }
+			, std::move( renderPass ) }
 		, m_shadowMap{ shadowMap }
 		, m_shadowMapUbo{ device }
 	{

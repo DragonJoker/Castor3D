@@ -81,9 +81,9 @@ namespace castor3d
 				, VkImageCreateFlags( VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT )
 				, Size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize }
 				, 6u * shader::getPointShadowMapCount() }
-			, createPasses( device, scene, *this )
 			, shader::getPointShadowMapCount() }
 	{
+		m_passes = createPasses( device, scene, *this );
 		log::trace << "Created ShadowMapPoint" << std::endl;
 	}
 
