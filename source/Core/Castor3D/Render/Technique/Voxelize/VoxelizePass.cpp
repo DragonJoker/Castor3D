@@ -111,16 +111,7 @@ namespace castor3d
 		: SceneRenderPass{ device
 			, "Voxelize"
 			, "Voxelization"
-			, SceneRenderPassDesc{ { voxelConfig.gridSize.value(), voxelConfig.gridSize.value(), 1u }
-				, matrixUbo
-				, culler
-				, RenderMode::eBoth
-				, true
-				, true
-				, nullptr
-				, nullptr
-				, 0u
-				, 1u }
+			, SceneRenderPassDesc{ { voxelConfig.gridSize.value(), voxelConfig.gridSize.value(), 1u }, matrixUbo, culler, RenderMode::eBoth, true, true }
 			, createRenderPass( device ) }
 		, m_scene{ culler.getScene() }
 		, m_camera{ culler.getCamera() }

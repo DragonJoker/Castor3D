@@ -576,9 +576,9 @@ namespace castor3d
 			, m_lpvConfigUbo
 			, m_llpvConfigUbo
 			, m_vctConfigUbo
-			, m_lpvResult.get()
-			, &m_voxelizer->getFirstBounce()
-			, &m_voxelizer->getSecondaryBounce() ) }
+			, *m_lpvResult
+			, m_voxelizer->getFirstBounce()
+			, m_voxelizer->getSecondaryBounce() ) }
 		, m_weightedBlendRendering{ castor::makeUnique< WeightedBlendRendering >( *getEngine()
 			, m_device
 			, static_cast< TransparentPass & >( *m_transparentPass )
