@@ -63,32 +63,31 @@ namespace castor3d
 		, m_face{ face }
 		, m_camera{ doCreateCamera( *node ) }
 		, m_culler{ std::make_unique< FrustumCuller >( *m_camera->getScene(), *m_camera ) }
-		, m_matrixUbo{ *reflectionMap.getEngine() }
+		, m_matrixUbo{ device }
 		, m_opaquePass{ std::make_shared< ForwardRenderTechniquePass >( device
 			, cuT( "EnvironmentMap" )
 			, m_node->getName() + cuT( " Opaque" )
-			, m_matrixUbo
-			, *m_culler
-			, true
-			, &objectNode
-			, SsaoConfig{} ) }
+			, SceneRenderPassDesc{ m_matrixUbo, *m_culler, &objectNode }
+			, RenderTechniquePassDesc{ true, SsaoConfig{} } ) }
 		, m_transparentPass{ std::make_shared< ForwardRenderTechniquePass >( device
 			, cuT( "EnvironmentMap" )
 			, m_node->getName() + cuT( " Transparent" )
-			, m_matrixUbo
-			, *m_culler
-			, true
-			, true
-			, &objectNode
-			, SsaoConfig{} ) }
+			, SceneRenderPassDesc{ m_matrixUbo, *m_culler, true, &objectNode }
+			, RenderTechniquePassDesc{ true, SsaoConfig{} } ) }
 		, m_mtxView{ m_camera->getView() }
-		, m_hdrConfigUbo{ *reflectionMap.getEngine() }
+		, m_modelUbo{ m_device.uboPools->getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
+		, m_hdrConfigUbo{ m_device }
 	{
 		log::trace << "Created EnvironmentMapPass" << objectNode.getName() << std::endl;
 	}
 
 	EnvironmentMapPass::~EnvironmentMapPass()
 	{
+		m_hdrConfigUbo.cleanup();
+		m_device.uboPools->putBuffer( m_modelUbo );
+		m_transparentPass.reset();
+		m_opaquePass.reset();
+		m_matrixUbo.cleanup();
 	}
 
 	bool EnvironmentMapPass::initialise( Size const & size
@@ -112,10 +111,7 @@ namespace castor3d
 		static castor::Matrix4x4f const projection = convert( m_device->perspective( ( 45.0_degrees ).radians()
 			, 1.0f
 			, 0.0f, 2.0f ) );
-		m_matrixUbo.initialise( m_device );
 		m_matrixUbo.cpuUpdate( m_mtxView, projection );
-		m_modelUbo = m_device.uboPools->getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
-		m_hdrConfigUbo.initialise( m_device );
 		auto const & environmentLayout = getOwner()->getTexture().getTexture();
 		m_envView = environmentLayout->getLayerCubeFaceMipView( 0u, CubeMapFace( face ), 0u ).getTargetView();
 		auto const & depthView = getOwner()->getDepthView();
@@ -173,11 +169,6 @@ namespace castor3d
 		m_backgroundUboDescriptorSet.reset();
 		m_backgroundTexDescriptorSet.reset();
 		m_frameBuffer.reset();
-		m_opaquePass->cleanup();
-		m_transparentPass->cleanup();
-		m_hdrConfigUbo.cleanup( m_device );
-		m_device.uboPools->putBuffer( m_modelUbo );
-		m_matrixUbo.cleanup();
 	}
 
 	void EnvironmentMapPass::update( CpuUpdater & updater )

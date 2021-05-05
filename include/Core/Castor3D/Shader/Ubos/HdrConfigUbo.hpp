@@ -78,6 +78,16 @@ namespace castor3d
 		 *\param[in]	engine	Le moteur.
 		 */
 		C3D_API explicit HdrConfigUbo( Engine & engine );
+		/**@}*/
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	device	The RenderDevice.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	device	Le RenderDevice.
+		 */
+		C3D_API explicit HdrConfigUbo( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -102,7 +112,7 @@ namespace castor3d
 		 *\brief		Fonction de nettoyage.
 		 *\param[in]	device	Le device GPU.
 		 */
-		C3D_API void cleanup( RenderDevice const & device );
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -130,6 +140,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
+		RenderDevice const * m_device{};
 		UniformBufferOffsetT< HdrConfig > m_ubo;
 	};
 }

@@ -125,111 +125,27 @@ namespace castor3d
 	RenderTechniquePass::RenderTechniquePass( RenderDevice const & device
 		, String const & category
 		, String const & name
-		, MatrixUbo & matrixUbo
-		, SceneCuller & culler
-		, bool environment
-		, SceneNode const * ignored
-		, SsaoConfig const & config
-		, LpvGridConfigUbo const * lpvConfigUbo
-		, LayeredLpvGridConfigUbo const * llpvConfigUbo
-		, VoxelizerUbo const * vctConfigUbo )
-		: SceneRenderPass{ device, category, name, matrixUbo, culler, ignored }
-		, m_scene{ culler.getScene() }
-		, m_camera{ culler.hasCamera() ? &culler.getCamera() : nullptr }
+		, SceneRenderPassDesc const & renderPassDesc
+		, RenderTechniquePassDesc const & techniquePassDesc
+		, ashes::RenderPassPtr renderPass )
+		: SceneRenderPass{ device, category, name, renderPassDesc, std::move( renderPass ) }
+		, m_scene{ renderPassDesc.culler.getScene() }
+		, m_camera{ renderPassDesc.culler.hasCamera() ? &renderPassDesc.culler.getCamera() : nullptr }
 		, m_sceneNode{}
-		, m_environment{ environment }
-		, m_ssaoConfig{ config }
-		, m_lpvConfigUbo{ lpvConfigUbo }
-		, m_llpvConfigUbo{ llpvConfigUbo }
-		, m_vctConfigUbo{ vctConfigUbo }
+		, m_environment{ techniquePassDesc.environment }
+		, m_ssaoConfig{ techniquePassDesc.ssaoConfig }
+		, m_lpvConfigUbo{ techniquePassDesc.lpvConfigUbo }
+		, m_llpvConfigUbo{ techniquePassDesc.llpvConfigUbo }
+		, m_vctConfigUbo{ techniquePassDesc.vctConfigUbo }
+		, m_finished{ m_device->createSemaphore( name ) }
 	{
-	}
-
-	RenderTechniquePass::RenderTechniquePass( RenderDevice const & device
-		, String const & category
-		, String const & name
-		, MatrixUbo & matrixUbo
-		, SceneCuller & culler
-		, bool oit
-		, bool environment
-		, SceneNode const * ignored
-		, SsaoConfig const & config
-		, LpvGridConfigUbo const * lpvConfigUbo
-		, LayeredLpvGridConfigUbo const * llpvConfigUbo
-		, VoxelizerUbo const * vctConfigUbo )
-		: SceneRenderPass{ device, category, name, matrixUbo, culler, oit, ignored }
-		, m_scene{ culler.getScene() }
-		, m_camera{ culler.hasCamera() ? &culler.getCamera() : nullptr }
-		, m_sceneNode{}
-		, m_environment{ environment }
-		, m_ssaoConfig{ config }
-		, m_lpvConfigUbo{ lpvConfigUbo }
-		, m_llpvConfigUbo{ llpvConfigUbo }
-		, m_vctConfigUbo{ vctConfigUbo }
-	{
-	}
-
-	RenderTechniquePass::RenderTechniquePass( RenderDevice const & device
-		, castor::Size const & size
-		, String const & category
-		, String const & name
-		, MatrixUbo & matrixUbo
-		, SceneCuller & culler
-		, bool environment
-		, SceneNode const * ignored
-		, SsaoConfig const & config
-		, LpvGridConfigUbo const * lpvConfigUbo
-		, LayeredLpvGridConfigUbo const * llpvConfigUbo
-		, VoxelizerUbo const * vctConfigUbo
-		, LightVolumePassResult const * lpvResult
-		, TextureUnit const * vctFirstBounce
-		, TextureUnit const * vctSecondaryBounce )
-		: SceneRenderPass{ device, category, name, matrixUbo, culler, ignored }
-		, m_scene{ culler.getScene() }
-		, m_camera{ culler.hasCamera() ? &culler.getCamera() : nullptr }
-		, m_sceneNode{}
-		, m_environment{ environment }
-		, m_ssaoConfig{ config }
-		, m_lpvConfigUbo{ lpvConfigUbo }
-		, m_llpvConfigUbo{ llpvConfigUbo }
-		, m_vctConfigUbo{ vctConfigUbo }
-	{
-		initialise( size
-			, lpvResult
-			, vctFirstBounce
-			, vctSecondaryBounce );
-	}
-
-	RenderTechniquePass::RenderTechniquePass( RenderDevice const & device
-		, castor::Size const & size
-		, String const & category
-		, String const & name
-		, MatrixUbo & matrixUbo
-		, SceneCuller & culler
-		, bool oit
-		, bool environment
-		, SceneNode const * ignored
-		, SsaoConfig const & config
-		, LpvGridConfigUbo const * lpvConfigUbo
-		, LayeredLpvGridConfigUbo const * llpvConfigUbo
-		, VoxelizerUbo const * vctConfigUbo
-		, LightVolumePassResult const * lpvResult
-		, TextureUnit const * vctFirstBounce
-		, TextureUnit const * vctSecondaryBounce )
-		: SceneRenderPass{ device, category, name, matrixUbo, culler, oit, ignored }
-		, m_scene{ culler.getScene() }
-		, m_camera{ culler.hasCamera() ? &culler.getCamera() : nullptr }
-		, m_sceneNode{}
-		, m_environment{ environment }
-		, m_ssaoConfig{ config }
-		, m_lpvConfigUbo{ lpvConfigUbo }
-		, m_llpvConfigUbo{ llpvConfigUbo }
-		, m_vctConfigUbo{ vctConfigUbo }
-	{
-		initialise( size
-			, lpvResult
-			, vctFirstBounce
-			, vctSecondaryBounce );
+		if ( techniquePassDesc.size != castor::Size{} )
+		{
+			initialise( techniquePassDesc.size
+				, techniquePassDesc.lpvResult
+				, techniquePassDesc.vctFirstBounce
+				, techniquePassDesc.vctSecondaryBounce );
+		}
 	}
 
 	bool RenderTechniquePass::initialise( castor::Size const & size
@@ -293,18 +209,6 @@ namespace castor3d
 	{
 		m_sceneUbo.cpuUpdate( *updater.camera->getScene()
 			, updater.camera.get() );
-	}
-
-	bool RenderTechniquePass::doInitialise( Size const & CU_UnusedParam( size ) )
-	{
-		m_finished = m_device->createSemaphore( getName() );
-		return true;
-	}
-
-	void RenderTechniquePass::doCleanup()
-	{
-		m_renderQueue.cleanup();
-		m_finished.reset();
 	}
 
 	void RenderTechniquePass::doUpdateFlags( PipelineFlags & flags )const

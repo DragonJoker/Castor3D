@@ -73,6 +73,12 @@ namespace castor3d
 		}
 	}
 
+	HdrConfigUbo::HdrConfigUbo( RenderDevice const & device )
+		: m_engine{ *device.renderSystem.getEngine() }
+	{
+		initialise( device );
+	}
+
 	HdrConfigUbo::~HdrConfigUbo()
 	{
 	}
@@ -82,14 +88,15 @@ namespace castor3d
 		if ( !m_ubo )
 		{
 			m_ubo = device.uboPools->getBuffer< Configuration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+			m_device = &device;
 		}
 	}
 
-	void HdrConfigUbo::cleanup( RenderDevice const & device )
+	void HdrConfigUbo::cleanup()
 	{
 		if ( m_ubo )
 		{
-			device.uboPools->putBuffer( m_ubo );
+			m_device->uboPools->putBuffer( m_ubo );
 		}
 	}
 

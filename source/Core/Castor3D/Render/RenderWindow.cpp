@@ -769,7 +769,6 @@ namespace castor3d
 
 	void RenderWindow::doDestroyPickingPass()
 	{
-		m_pickingPass->cleanup();
 		m_pickingPass.reset();
 	}
 
