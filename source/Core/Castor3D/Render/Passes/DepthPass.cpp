@@ -108,7 +108,7 @@ namespace castor3d
 		: RenderTechniquePass{ device
 			, prefix
 			, "DepthPass"
-			, { depthBuffer->getDimensions(), matrixUbo, culler, nullptr }
+			, { depthBuffer->getDimensions(), matrixUbo, culler }
 			, { false, ssaoConfig }
 			, createRenderPass( device, *depthBuffer ) }
 		, m_nodesCommands{ m_device.graphicsCommandPool->createCommandBuffer( "DepthPass" ) }

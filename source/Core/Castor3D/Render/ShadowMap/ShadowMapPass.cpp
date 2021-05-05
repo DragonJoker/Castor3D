@@ -32,16 +32,7 @@ namespace castor3d
 		: SceneRenderPass{ device
 			, cuT( "ShadowMap" )
 			, std::move( name )
-			, SceneRenderPassDesc{ shadowMap.getShadowPassResult()[SmTexture::eDepth].getTexture()->getDimensions()
-				, matrixUbo
-				, culler
-				, RenderMode::eBoth
-				, true
-				, false
-				, nullptr
-				, nullptr
-				, 0u
-				, 1u }
+			, SceneRenderPassDesc{ shadowMap.getShadowPassResult()[SmTexture::eDepth].getTexture()->getDimensions(), matrixUbo, culler, RenderMode::eBoth, true, false }
 			, std::move( renderPass ) }
 		, m_shadowMap{ shadowMap }
 		, m_shadowMapUbo{ device }
