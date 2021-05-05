@@ -138,7 +138,7 @@ namespace castor3d
 		: RenderTechniquePass{ device
 			, cuT( "Opaque" )
 			, cuT( "Geometry pass" )
-			, { { size.getWidth(), size.getHeight(), 1u }, matrixUbo, culler, nullptr }
+			, { { size.getWidth(), size.getHeight(), 1u }, matrixUbo, culler }
 			, { false, config }
 			, createRenderPass( device, gpResult ) }
 		, m_frameBuffer{ createFramebuffer( *m_renderPass, gpResult ) }
