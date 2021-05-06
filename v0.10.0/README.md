@@ -1,3 +1,5 @@
+[Back to Main page](http://dragonjoker.github.io/Castor3D)
+
 Castor3D
 ========
 
@@ -71,13 +73,6 @@ Implemented Plug-ins
 Links
 -----
 
-- [Building Castor3D](https://dragonjoker.github.com/Castor3D/v0.10.0/pages/build)
-- [API Documentation](https://dragonjoker.github.com/Castor3D/v0.10.0/doc)
+- [Building Castor3D](https://dragonjoker.github.io/Castor3D/v0.10.0/pages/build)
+- [API Documentation](https://dragonjoker.github.io/Castor3D/v0.10.0/doc)
 - [Playlist on YouTube](https://www.youtube.com/playlist?list=PLKA1SVXuAbMNaFbSJyAN_4yD2bzNlgES3)
-
-Older Versions
---------------
-
-- [v0.9.0](https://dragonjoker.github.com/Castor3D/v0.9.0/)
-- [v0.8.0](https://dragonjoker.github.com/Castor3D/v0.8.0/)
-- [v0.7.0](https://dragonjoker.github.com/Castor3D/v0.7.0/)

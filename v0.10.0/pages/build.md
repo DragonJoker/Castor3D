@@ -1,9 +1,4 @@
-[Back to Main page](http://DragonJoker.github.com/Castor3D)
-
-|         Server     | Result |
-|:------------------:|--------|
-|  Travis CI (Linux) | [![Build Status](https://travis-ci.org/DragonJoker/Castor3D.svg?branch=development)](https://travis-ci.org/DragonJoker/Castor3D) |
-| AppVeyor (Windows) | [![Build Status](https://ci.appveyor.com/api/projects/status/github/DragonJoker/castor3d?branch=development&svg=true)](https://ci.appveyor.com/project/DragonJoker/castor3d) |
+[Back to version page](http://DragonJoker.github.com/Castor3D/v0.10.0)
 
 
 Building Castor3D

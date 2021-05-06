@@ -1,4 +1,4 @@
-[Back to Main page](http://DragonJoker.github.com/Castor3D)
+[Back to Main page](http://dragonjoker.github.io/Castor3D)
 
 <p align="center">
   <a href="https://github.com/DragonJoker/Castor3D/actions?query=workflow%3ABuild"><img alt="Build status" src="https://github.com/DragonJoker/Castor3D/workflows/Build/badge.svg"></a>
