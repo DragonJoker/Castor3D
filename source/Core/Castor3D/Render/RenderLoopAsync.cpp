@@ -25,10 +25,7 @@ namespace castor3d
 		, m_paused{ false }
 		, m_ended{ false }
 		, m_rendering{ false }
-		, m_createContext{ false }
-		, m_created{ false }
 		, m_interrupted{ false }
-		, m_handle{ nullptr }
 	{
 		m_mainLoopThread = std::make_unique< std::thread >( [this]()
 		{
@@ -42,11 +39,6 @@ namespace castor3d
 		m_interrupted = true;
 		m_mainLoopThread->join();
 		m_mainLoopThread.reset();
-	}
-
-	bool RenderLoopAsync::isCreated()const
-	{
-		return m_created;
 	}
 
 	bool RenderLoopAsync::isRendering()const
@@ -139,28 +131,6 @@ namespace castor3d
 		}
 	}
 
-	RenderDeviceSPtr RenderLoopAsync::doCreateMainDevice( RenderWindow const & window )
-	{
-		RenderDeviceSPtr result;
-
-		if ( !m_createContext )
-		{
-			doSetWindow( &window );
-			m_createContext = true;
-
-			while ( !isInterrupted() && !isCreated() )
-			{
-				System::sleep( 5 );
-			}
-
-			m_createContext = false;
-			doSetWindow( nullptr );
-			result = m_renderSystem.getMainRenderDevice();
-		}
-
-		return result;
-	}
-
 	void RenderLoopAsync::doMainLoop()
 	{
 		PreciseTimer timer;
@@ -168,7 +138,6 @@ namespace castor3d
 		auto scopeGuard{ makeScopeGuard( [this]()
 		{
 			cleanup();
-			m_renderSystem.cleanup();
 		} ) };
 
 		try
@@ -176,39 +145,6 @@ namespace castor3d
 			// Tant qu'on n'est pas interrompu, on continue
 			while ( !isInterrupted() )
 			{
-				// Tant qu'on n'a pas de contexte principal et qu'on ne nous a pas demandé de le créer, on attend.
-				while ( !isInterrupted() && !m_createContext && !isCreated() )
-				{
-					System::sleep( 10 );
-				}
-
-				if ( !isInterrupted() && m_createContext && !isCreated() )
-				{
-					// On nous a demandé de créer le contexte principal, on le crée
-					auto device = doCreateDevice( *doGetWindow() );
-
-					if ( device )
-					{
-						m_renderSystem.setMainDevice( device );
-						auto guard = makeBlockGuard(
-							[this, &device]()
-							{
-								m_renderSystem.setCurrentRenderDevice( device.get() );
-							},
-							[this]()
-							{
-								m_renderSystem.setCurrentRenderDevice( nullptr );
-							} );
-						GpuInformations info;
-						m_renderSystem.initialise( std::move( info ) );
-						m_created = true;
-					}
-					else
-					{
-						m_interrupted = true;
-					}
-				}
-
 				// Tant qu'on n'a pas demandé le début du rendu, on attend.
 				while ( !isInterrupted() && !isRendering() )
 				{
@@ -241,17 +177,5 @@ namespace castor3d
 			m_frameEnded = true;
 			m_ended = true;
 		}
-	}
-
-	void RenderLoopAsync::doSetWindow( RenderWindow const * window )
-	{
-		LockType lock{ castor::makeUniqueLock( m_mutexWindow ) };
-		m_window = window;
-	}
-
-	RenderWindow const * RenderLoopAsync::doGetWindow()const
-	{
-		LockType lock{ castor::makeUniqueLock( m_mutexWindow ) };
-		return m_window;
 	}
 }

@@ -42,6 +42,26 @@ namespace castor3d
 {
 	namespace
 	{
+		RenderDevice::QueueData const * getQueueFamily( ashes::Surface const & surface
+			, RenderDevice::QueueFamilies const & queues )
+		{
+			RenderDevice::QueueData const * result{};
+			auto it = std::find_if( queues.begin()
+				, queues.end()
+				, [&surface]( RenderDevice::QueueData const & lookup )
+				{
+					return surface.getSupport( lookup.familyIndex );
+				} );
+
+			if ( it == queues.end() )
+			{
+				throw ashes::Exception{ VK_ERROR_INITIALIZATION_FAILED
+					, "Couldn't find a queue supporting presentation." };
+			}
+
+			return &( *it );
+		}
+
 		uint32_t getImageCount( ashes::Surface const & surface )
 		{
 			auto surfaceCaps = surface.getCapabilities();
@@ -173,9 +193,11 @@ namespace castor3d
 		, castor::Named{ name }
 		, MouseEventHandler{}
 		, m_index{ s_nbRenderWindows++ }
-		, m_surface{ engine.getRenderSystem()->getInstance().createSurface( engine.getRenderSystem()->getPhysicalDevice( 0u )
+		, m_device{ *engine.getRenderSystem()->getMainRenderDevice() }
+		, m_surface{ m_device.renderSystem.getInstance().createSurface( m_device.renderSystem.getPhysicalDevice( 0u )
 			, std::move( handle ) ) }
-		, m_listener{ engine.getFrameListenerCache().add( getName() + castor::string::toString( m_index ) ) }
+		, m_presentQueue{ getQueueFamily( *m_surface, m_device.queueFamilies ) }
+		, m_listener{ getEngine()->getFrameListenerCache().add( getName() + castor::string::toString( m_index ) ) }
 		, m_size{ size }
 	{
 		if ( !m_surface )
@@ -183,28 +205,21 @@ namespace castor3d
 			CU_Exception( "Could not create Vulkan surface." );
 		}
 
-		engine.getRenderLoop().createDevice( *this );
-
-		if ( !m_device )
-		{
-			CU_Exception( "Could not create Vulkan device." );
-		}
-
 		auto guard = castor::makeBlockGuard(
-			[this, &engine]()
+			[this]()
 			{
-				engine.getRenderSystem()->setCurrentRenderDevice( m_device.get() );
+				m_device.renderSystem.setCurrentRenderDevice( &m_device );
 			},
-			[this, &engine]()
+			[this]()
 			{
-				engine.getRenderSystem()->setCurrentRenderDevice( nullptr );
+				m_device.renderSystem.setCurrentRenderDevice( nullptr );
 			} );
-		engine.getMaterialCache().initialise( *m_device, engine.getMaterialsType() );
+		getEngine()->getMaterialCache().initialise( m_device, getEngine()->getMaterialsType() );
 		m_commandPool = getDevice()->createCommandPool( getDevice().getGraphicsQueueFamilyIndex()
 			, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT | VK_COMMAND_POOL_CREATE_TRANSIENT_BIT );
 		doCreateProgram();
 		doCreateSwapchain();
-		engine.registerWindow( *this );
+		getEngine()->registerWindow( *this );
 	}
 
 	RenderWindow::~RenderWindow()
@@ -217,7 +232,6 @@ namespace castor3d
 		doDestroySwapchain();
 		doDestroyProgram();
 		m_commandPool.reset();
-		m_device.reset();
 	}
 
 	void RenderWindow::initialise( RenderTargetSPtr target )
@@ -229,7 +243,7 @@ namespace castor3d
 			CU_Exception( "No render target for render window." );
 		}
 
-		target->initialise( *m_device );
+		target->initialise( m_device );
 		doCreatePickingPass();
 		doCreateRenderQuad();
 		doCreateCommandBuffers();
@@ -305,7 +319,7 @@ namespace castor3d
 		bool hasCurrent = engine.getRenderSystem()->hasCurrentRenderDevice();
 
 		if ( hasCurrent
-			&& &engine.getRenderSystem()->getCurrentRenderDevice() != m_device.get() )
+			&& &engine.getRenderSystem()->getCurrentRenderDevice() != &m_device )
 		{
 			auto & device = engine.getRenderSystem()->getCurrentRenderDevice();
 			auto guard = castor::makeBlockGuard(
@@ -338,7 +352,7 @@ namespace castor3d
 				auto guard = castor::makeBlockGuard(
 					[this, &renderSystem]()
 					{
-						renderSystem.setCurrentRenderDevice( m_device.get() );
+						renderSystem.setCurrentRenderDevice( &m_device );
 					},
 					[this, &renderSystem]()
 					{
@@ -571,7 +585,7 @@ namespace castor3d
 
 		if ( camera && !m_pickingPass->isPicking() )
 		{
-			result = m_pickingPass->pick( *m_device
+			result = m_pickingPass->pick( m_device
 				, position
 				, *camera );
 		}
@@ -761,7 +775,7 @@ namespace castor3d
 	void RenderWindow::doCreatePickingPass()
 	{
 		auto & target = *getRenderTarget();
-		m_pickingPass = std::make_shared< PickingPass >( *m_device
+		m_pickingPass = std::make_shared< PickingPass >( m_device
 			, target.getTechnique()->getMatrixUbo()
 			, target.getCuller() );
 	}
@@ -776,7 +790,7 @@ namespace castor3d
 		auto & target = *getRenderTarget();
 		m_renderQuad = RenderQuadBuilder{}
 			.texcoordConfig( rq::Texcoord{} )
-			.build( *m_device
+			.build( m_device
 				, "RenderWindow" + getName()
 				, VK_FILTER_LINEAR );
 		m_renderQuad->createPipeline( VkExtent2D{ m_size[0], m_size[1] }
@@ -1027,7 +1041,7 @@ namespace castor3d
 
 		if ( enableDevice )
 		{
-			engine.getRenderSystem()->setCurrentRenderDevice( m_device.get() );
+			engine.getRenderSystem()->setCurrentRenderDevice( &m_device );
 		}
 
 		getDevice()->waitIdle();
@@ -1042,7 +1056,7 @@ namespace castor3d
 			doDestroyCommandBuffers();
 			doDestroyRenderQuad();
 			doDestroyPickingPass();
-			target->cleanup( *m_device );
+			target->cleanup( m_device );
 		}
 
 		if ( enableDevice )

@@ -36,29 +36,6 @@ namespace castor3d
 			, AshPluginDescription desc );
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API virtual ~RenderSystem();
-		/**
-		 *\~english
-		 *\brief		Initialises the render system
-		 *\param[in]	informations	The GPU informations.
-		 *\~french
-		 *\brief		Initialise le render system
-		 *\param[in]	informations	Les informations du GPU.
-		 */
-		C3D_API void initialise( GpuInformations informations );
-		/**
-		 *\~english
-		 *\brief		Cleans the render system up
-		 *\~french
-		 *\brief		Nettoie le render system
-		 */
-		C3D_API void cleanup();
-		/**
-		 *\~english
 		 *\brief		Pushes a scene on the stack
 		 *\param[in]	scene	The scene
 		 *\~french
@@ -91,17 +68,6 @@ namespace castor3d
 		 *\return		Le shader compilé.
 		 */
 		C3D_API SpirVShader compileShader( ShaderModule const & module )const;
-		/**
-		 *\~english
-		 *\brief		Creates a logical device bound to a physical GPU.
-		 *\param[in]	surface		The render surface.
-		 *\return		The created device.
-		 *\~french
-		 *\brief		Crée un périphérique logique lié à un GPU physique.
-		 *\param[in]	surface		La surface de rendu.
-		 *\return		Le périphérique logique créé.
-		 */
-		C3D_API RenderDeviceSPtr createDevice( ashes::Surface const & surface );
 		/**
 		*\~english
 		*\brief
@@ -242,11 +208,6 @@ namespace castor3d
 			return m_gpuInformations;
 		}
 
-		bool isInitialised()const
-		{
-			return m_initialised;
-		}
-
 		castor::String getRendererType()const
 		{
 			return m_desc.name;
@@ -329,11 +290,6 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		void setMainDevice( RenderDeviceSPtr device )
-		{
-			m_mainDevice = device;
-		}
-
 		void setCurrentRenderDevice( RenderDevice const * device )
 		{
 			m_currentDevice = device;
@@ -353,7 +309,6 @@ namespace castor3d
 
 	private:
 		std::recursive_mutex m_mutex;
-		bool m_initialised;
 		AshPluginDescription const m_desc;
 		GpuInformations m_gpuInformations;
 		OverlayRendererSPtr m_overlayRenderer;
@@ -363,10 +318,6 @@ namespace castor3d
 		VkPhysicalDeviceMemoryProperties m_memoryProperties;
 		VkPhysicalDeviceProperties m_properties;
 		VkPhysicalDeviceFeatures m_features;
-		uint32_t presentQueueFamilyIndex;
-		uint32_t graphicsQueueFamilyIndex;
-		uint32_t computeQueueFamilyIndex;
-		uint32_t transferQueueFamilyIndex;
 		VkLayerProperties m_globalLayer{};
 		ashes::VkLayerPropertiesArray m_layers;
 		ashes::StringArray m_layerNames;

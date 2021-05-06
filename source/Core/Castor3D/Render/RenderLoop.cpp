@@ -97,16 +97,6 @@ namespace castor3d
 			} );
 	}
 
-	void RenderLoop::createDevice( RenderWindow & window )
-	{
-		if ( !m_renderSystem.hasMainDevice() )
-		{
-			doCreateMainDevice( window );
-		}
-
-		window.setDevice( m_renderSystem.getMainRenderDevice() );
-	}
-
 	void RenderLoop::showDebugOverlays( bool p_show )
 	{
 		m_debugOverlays->show( p_show );
@@ -139,26 +129,6 @@ namespace castor3d
 	bool RenderLoop::hasDebugOverlays()const
 	{
 		return m_debugOverlays->isShown();
-	}
-
-	RenderDeviceSPtr RenderLoop::doCreateDevice( RenderWindow const & window )
-	{
-		RenderDeviceSPtr result;
-
-		try
-		{
-			result = m_renderSystem.createDevice( window.getSurface() );
-		}
-		catch ( castor::Exception & exc )
-		{
-			log::error << cuT( "createContext - " ) << exc.getFullDescription() << std::endl;
-		}
-		catch ( std::exception & exc )
-		{
-			log::error << std::string( "createContext - " ) << exc.what() << std::endl;
-		}
-
-		return result;
 	}
 
 	void RenderLoop::doRenderFrame( castor::Milliseconds tslf )

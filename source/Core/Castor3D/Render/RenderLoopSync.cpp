@@ -25,7 +25,6 @@ namespace castor3d
 	RenderLoopSync::~RenderLoopSync()
 	{
 		cleanup();
-		m_renderSystem.cleanup();
 	}
 
 	void RenderLoopSync::beginRendering()
@@ -72,28 +71,5 @@ namespace castor3d
 	void RenderLoopSync::endRendering()
 	{
 		CU_Exception( CALL_END_RENDERING );
-	}
-
-	RenderDeviceSPtr RenderLoopSync::doCreateMainDevice( RenderWindow const & window )
-	{
-		auto result = doCreateDevice( window );
-
-		if ( result )
-		{
-			m_renderSystem.setMainDevice( result );
-			auto guard = makeBlockGuard(
-				[this, &result]()
-				{
-					m_renderSystem.setCurrentRenderDevice( result.get() );
-				},
-				[this]()
-				{
-					m_renderSystem.setCurrentRenderDevice( nullptr );
-				} );
-			GpuInformations info;
-			m_renderSystem.initialise( std::move( info ) );
-		}
-
-		return result;
 	}
 }
