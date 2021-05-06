@@ -56,7 +56,7 @@ namespace castor3d
 			{
 				ShadowMap::PassData passData
 				{
-					std::make_unique< MatrixUbo >( engine ),
+					std::make_unique< MatrixUbo >( device ),
 					std::make_shared< Camera >( cuT( "ShadowMapDirectional_" ) + string::toString( cascade + 1, std::locale{ "C" } )
 						, scene
 						, *scene.getCameraRootNode()
