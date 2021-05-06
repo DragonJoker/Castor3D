@@ -3,49 +3,48 @@
 </p>
 
 
-# Castor3D
+Castor3D
+========
 
-Castor3D is a 3D engine written in C++ 17.
-It works on Windows and GNU/Linux.
-It relies on Ashes as a rendering API, allowing Vulkan, Direct3D 11, and OpenGL.
-The project itself is compilable on supported platforms using CMake (\ref build).
+Castor3D is a 3D engine written in C++ 17.  
+It works on Windows and on GNU/Linux.  
+It relies on Ashes as a rendering API, allowing Vulkan, OpenGL and Direct3D 11.  
 
-## Features
+Features
+--------
 
-- Deferred rendering for opaque objects.
-- Blended Weighted rendering for transparent objects.
+- Deferred rendering.
 - Normal mapping.
-- Shadow Mapping (allowing to choose between Raw, PCF or Variance Shadow Maps).
 - Parallax Occlusion mapping.
 - Screen Space Ambient Occlusion (using Scalable Ambiant Obscurance implementation).
+- Shadow Mapping (allowing to choose between Raw, PCF or Variance Shadow Maps).
 - Reflection/Refraction Mapping.
-- PBR rendering (Metallic and Specular workflows), and Phong rendering.
+- PBR rendering (Metallic and Specular workflows), and Blinn-Phong rendering.
 - HDR rendering with various tone mapping operators.
 - Screen Space Subsurface Scattering (without backlit transmittance yet).
-- Volumetric Light Scattering for the directional light source, if it projects shadows.
-- Cascaded Shadow Maps for the directional light source.
-- Global Illumination, through Light Propagation Volumes or Voxel Cone Tracing.
+- Volumetric Light Scattering for directional light source projecting shadows.
+- Cascaded Shadow Maps for directional light sources.
+- Global Illumination through Ligh Propagation Volumes (layered or non layered, with or without geometry injection).
 - Frustum culling.
 - Scene graph.
 - Modular architecture through plug-ins.
-- Shaders are generated automatically from pipeline configuration.
+- Shaders are generated automatically from material and pass configuration.
 - Shaders are writable directly from C++ code.
-- Scenes are described using a text format easily comprehensible and extensible.
-- Asynchronous (timers) or synchronour (thread) rendering.
 
-## Implemented Plug-ins
+Implemented Plug-ins
+--------------------
 
-### Importers
+**Importers**
 - ASSIMP: Multiple format mesh importer.
 - PLY: Stanford Polygon library mesh importer.
 - OBJ: Wavefront OBJ mesh importer.
 
-### Dividers
+**Dividers**
 - Loop subdivision surfaces.
 - Phong tessellation.
 - PN-Triangles surfaces.
 
-### PostEffects
+**PostEffects**
 - Bloom: HDR Bloom implementation.
 - FilmGrain: To display some grain on the render.
 - GrayScale.
@@ -54,36 +53,42 @@ The project itself is compilable on supported platforms using CMake (\ref build)
 - SMAA Antialiasing (1X and T2X so far).
 - Linear Motion Blur.
 
-### Generators
+**Generators**
 - DiamondSquareTerrain: to generate terrains inside Castor3D scenes, using diamond-quare algorithm.
 
-### Generic
+**Generic**
 - CastorGUI: to build GUIs inside Castor3D scenes.
 
-### ToneMappings
+**ToneMappings**
 - LinearToneMapping: Default tone mapping.
 - HaarmPieterDuikerToneMapping: Haarm Pieter Duiker tone mapping.
 - HejlBurgessDawsonToneMapping: Hejl Burgess Dawson tone mapping.
 - ReinhardToneMapping: Reinhard tone mapping.
 - Uncharted2ToneMapping: Uncharted 2 tone mapping.
 
-## Screenshots
+Other applications
+------------------
+- CastorViewer: A scene viewer based on Castor3D.
+- CastorMeshConverter: A converter from various mesh files to Castor3D mesh format.
+- CastorMeshUpgrader: Upgrades from earlier versions of Castor3D mesh format to the latest one.
+- ImgConverter: Allows you to convert any image file type to XPM or ICO.
 
-![Sponza, PBR](http://dragonjoker.github.com/Castor3D/img/Sponza-PBR-Bloom-Small.png)
-![Sponza, VCT](http://dragonjoker.github.com/Castor3D/img/Sponza-PBR-VCT-Small.png)
-![Cerberus](http://dragonjoker.github.com/Castor3D/img/Cerberus-PBR-Small.png)
-![Park, Legacy](http://dragonjoker.github.com/Castor3D/img/Park-Legacy-Small.png)
-![Park, PBR](http://dragonjoker.github.com/Castor3D/img/Park-PBR-Small.png)
-![Nyra, PBR](http://dragonjoker.github.com/Castor3D/img/Nyra-PBR-MR-Small.png)
-![SanMiguel, PBR](http://dragonjoker.github.com/Castor3D/img/SanMiguel-PBR-SG-Small.png)
-![SanMiguel, PBR, LPV](http://dragonjoker.github.com/Castor3D/img/SanMiguel-PBR-SG-LPV-Small.png)
 
-## Links
+![Sponza](http://dragonjoker.github.io/Castor3D/img/Sponza-PBR-Bloom-Small.png)
+![Cerberus](http://dragonjoker.github.io/Castor3D/img/Cerberus-PBR-Small.png)
+![Park, Legacy](http://dragonjoker.github.io/Castor3D/img/Park-Legacy-Small.png)
+![Park, PBR](http://dragonjoker.github.io/Castor3D/img/Park-PBR-Small.png)
+![Nyra, PBR](http://dragonjoker.github.io/Castor3D/img/Nyra-PBR-MR-Small.png)
+![SanMiguel, PBR](http://dragonjoker.github.io/Castor3D/img/SanMiguel-PBR-SG-Small.png)
 
-- [Building Castor3D](https://dragonjoker.github.com/Castor3D/pages/build)
-- [API Documentation](https://dragonjoker.github.com/Castor3D/doc)
+Links
+-----
+
+- [Building Castor3D](http://dragonjoker.github.io/Castor3D/pages/build)
+- [API Documentation](http://dragonjoker.github.io/Castor3D/doc/)
 - [Playlist on YouTube](https://www.youtube.com/playlist?list=PLKA1SVXuAbMNaFbSJyAN_4yD2bzNlgES3)
 
-## Contact
+Contact
+-------
 
 You can rech me on the Discord server dedicated to my projects: [DragonJoker's Lair](https://discord.gg/jue8kW)
