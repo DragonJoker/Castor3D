@@ -12,6 +12,7 @@ namespace castor
 {
 	class AsyncJobQueue
 	{
+	public:
 		using Job = std::function< void() >;
 		using JobArray = std::vector< Job >;
 

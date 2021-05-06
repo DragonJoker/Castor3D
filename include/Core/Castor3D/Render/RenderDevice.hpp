@@ -25,7 +25,7 @@ namespace castor3d
 		eTransfer = 0x04,
 		eCompute = 0x08,
 	};
-	CU_ImplementFlags( QueueFamilyFlag );
+	CU_ImplementFlags( QueueFamilyFlag )
 
 	struct RenderDevice
 	{

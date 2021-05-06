@@ -87,12 +87,19 @@ namespace castor3d
 		, m_importerFactory{ std::make_shared< MeshImporterFactory >() }
 		, m_particleFactory{ std::make_shared< ParticleFactory >() }
 		, m_enableApiTrace{ C3D_EnableAPITrace }
-		, m_texturesPreparer{ castor::CpuInformations{}.getCoreCount() }
+		, m_jobs{ castor::CpuInformations{}.getCoreCount() }
 	{
 		auto dummy = []( auto element )
 		{
 		};
-		auto eventInit = [this]( auto element )
+		auto jobInit = [this]( auto element )
+		{
+			this->pushGpuJob( [element]( RenderDevice const & device )
+				{
+					element->initialise( device );
+				} );
+		};
+		auto gpuEventInit = [this]( auto element )
 		{
 			this->postEvent( makeGpuInitialiseEvent( *element ) );
 		};
@@ -143,7 +150,7 @@ namespace castor3d
 			{
 				return std::make_shared< Sampler >( *this, name );
 			}
-			, eventInit
+			, gpuEventInit
 			, cpuEvtClean
 			, mergeResource );
 		m_materialCache = std::make_unique< MaterialCache >( *this
@@ -151,7 +158,7 @@ namespace castor3d
 			{
 				return std::make_shared< Material >( name, *this, type );
 			}
-			, eventInit
+			, gpuEventInit
 			, cpuEvtClean
 			, mergeResource );
 		m_pluginCache = std::make_unique< PluginCache >( *this
@@ -591,9 +598,22 @@ namespace castor3d
 
 	void Engine::prepareTextures( Pass & pass )
 	{
-		m_texturesPreparer.pushJob( [&pass]()
+		pushJob( [&pass]()
 			{
 				pass.prepareTextures();
+			} );
+	}
+
+	void Engine::pushJob( castor::AsyncJobQueue::Job job )
+	{
+		m_jobs.pushJob( job );
+	}
+
+	void Engine::pushGpuJob( std::function< void( RenderDevice const & ) > job )
+	{
+		pushJob( [this, job]()
+			{
+				job( *m_renderSystem->getMainRenderDevice() );
 			} );
 	}
 
