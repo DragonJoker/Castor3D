@@ -150,7 +150,7 @@ namespace aria
 		RendererTestRuns & operator=( RendererTestRuns const & ) = delete;
 		RendererTestRuns( RendererTestRuns && ) = default;
 		RendererTestRuns & operator=( RendererTestRuns && ) = default;
-		RendererTestRuns( TestDatabase & database );
+		explicit RendererTestRuns( TestDatabase & database );
 
 		DatabaseTest & addTest( TestRun run );
 		DatabaseTest & addTest( DatabaseTest test );
@@ -202,7 +202,7 @@ namespace aria
 		AllTestRuns & operator=( AllTestRuns const & ) = delete;
 		AllTestRuns( AllTestRuns && ) = default;
 		AllTestRuns & operator=( AllTestRuns && ) = default;
-		AllTestRuns( TestDatabase & database );
+		explicit AllTestRuns( TestDatabase & database );
 
 		RendererTestRuns & addRenderer( Renderer renderer );
 		RendererTestRuns & getRenderer( Renderer renderer );
