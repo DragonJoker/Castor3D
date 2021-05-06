@@ -92,29 +92,14 @@ namespace castor3d
 	castor::String const VoxelizerUbo::VoxelData = cuT( "c3d_voxelData" );
 
 	VoxelizerUbo::VoxelizerUbo( RenderDevice const & device )
+		: m_device{ device }
+		, m_ubo{ m_device.uboPools->getBuffer< Configuration >( 0u ) }
 	{
-		initialise( device );
 	}
 
 	VoxelizerUbo::~VoxelizerUbo()
 	{
-		cleanup();
-	}
-
-	void VoxelizerUbo::initialise( RenderDevice const & device )
-	{
-		m_device = &device;
-		m_ubo = m_device->uboPools->getBuffer< Configuration >( 0u );
-	}
-
-	void VoxelizerUbo::cleanup()
-	{
-		if ( m_ubo )
-		{
-			m_device->uboPools->putBuffer( m_ubo );
-			m_device = nullptr;
-			m_ubo = {};
-		}
+		m_device.uboPools->putBuffer( m_ubo );
 	}
 
 	void VoxelizerUbo::cpuUpdate( VoxelSceneData const & voxelConfig

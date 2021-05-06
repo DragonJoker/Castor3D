@@ -125,41 +125,15 @@ namespace castor3d
 	castor::String const MatrixUbo::BufferMatrix = cuT( "Matrices" );
 	castor::String const MatrixUbo::MatrixData = cuT( "c3d_matrixData" );
 
-	MatrixUbo::MatrixUbo( Engine & engine )
-		: m_engine{ engine }
-	{
-		if ( engine.getRenderSystem()->hasCurrentRenderDevice() )
-		{
-			initialise( engine.getRenderSystem()->getCurrentRenderDevice() );
-		}
-	}
-
 	MatrixUbo::MatrixUbo( RenderDevice const & device )
-		: m_engine{ *device.renderSystem.getEngine() }
+		: m_device{ device }
+		, m_ubo{ m_device.uboPools->getBuffer< Configuration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
 	{
-		initialise( device );
 	}
 
 	MatrixUbo::~MatrixUbo()
 	{
-		cleanup();
-	}
-
-	void MatrixUbo::initialise( RenderDevice const & device )
-	{
-		if ( !m_ubo )
-		{
-			m_ubo = device.uboPools->getBuffer< Configuration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
-			m_device = &device;
-		}
-	}
-
-	void MatrixUbo::cleanup()
-	{
-		if ( m_ubo )
-		{
-			m_device->uboPools->putBuffer( m_ubo );
-		}
+		m_device.uboPools->putBuffer( m_ubo );
 	}
 
 	void MatrixUbo::cpuUpdate( castor::Matrix4x4f const & view

@@ -112,7 +112,6 @@ namespace castor3d
 		, m_pixelFormat{ VK_FORMAT_R8G8B8A8_UNORM }
 		, m_initialised{ false }
 		, m_size{ Size{ 100u, 100u } }
-		, m_hdrConfigUbo{ *getEngine() }
 		, m_renderTechnique{}
 		, m_index{ ++sm_uiCount }
 		, m_name{ cuT( "Target" ) + string::toString( m_index ) }
@@ -138,18 +137,19 @@ namespace castor3d
 	{
 		if ( !m_initialised )
 		{
+			m_hdrConfigUbo = std::make_unique< HdrConfigUbo >( device );
+
 			if ( !m_toneMapping )
 			{
 				m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( cuT( "linear" )
 					, *getEngine()
 					, device
-					, m_hdrConfigUbo
+					, *m_hdrConfigUbo
 					, Parameters{} );
 			}
 
 			m_culler = std::make_unique< FrustumCuller >( *getScene(), *getCamera() );
 			auto & renderSystem = *getEngine()->getRenderSystem();
-			m_hdrConfigUbo.initialise( device );
 			doInitialiseRenderPass( device );
 			m_initialised = doInitialiseFrameBuffer( device );
 
@@ -213,10 +213,8 @@ namespace castor3d
 				m_srgbCopyFinished = device->createSemaphore( getName() + "SRGBCopy" );
 			}
 
-			m_overlayRenderer = std::make_shared< OverlayRenderer >( *getEngine()->getRenderSystem()
-				, *device.uboPools
+			m_overlayRenderer = std::make_shared< OverlayRenderer >( device
 				, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView().getTargetView() );
-			m_overlayRenderer->initialise( device );
 
 			doInitialiseCombine( device );
 
@@ -235,12 +233,7 @@ namespace castor3d
 			m_combinePass.reset();
 
 			m_toneMappingCommandBuffer.reset();
-
-			if ( m_overlayRenderer )
-			{
-				m_overlayRenderer->cleanup( device );
-				m_overlayRenderer.reset();
-			}
+			m_overlayRenderer.reset();
 
 			for ( auto effect : m_srgbPostEffects )
 			{
@@ -271,7 +264,7 @@ namespace castor3d
 			m_velocityTexture.cleanup();
 			m_velocityTexture.setTexture( nullptr );
 
-			m_hdrConfigUbo.cleanup();
+			m_hdrConfigUbo.reset();
 			m_overlaysFrameBuffer.cleanup( device );
 			m_objectsFrameBuffer.cleanup( device );
 			m_combinedFrameBuffer.cleanup( device );
@@ -296,7 +289,7 @@ namespace castor3d
 		CU_Require( m_culler );
 		m_culler->compute();
 
-		m_hdrConfigUbo.cpuUpdate( getHdrConfig() );
+		m_hdrConfigUbo->cpuUpdate( getHdrConfig() );
 
 		for ( auto effect : m_hdrPostEffects )
 		{
@@ -437,7 +430,7 @@ namespace castor3d
 				m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( name
 					, *getEngine()
 					, device
-					, m_hdrConfigUbo
+					, *m_hdrConfigUbo
 					, parameters );
 				doInitialiseToneMapping( device );
 			} ) );
@@ -953,7 +946,7 @@ namespace castor3d
 			}
 
 			m_overlayRenderer->endPrepare( *m_overlaysTimer );
-			m_overlayRenderer->render( device, *m_overlaysTimer );
+			m_overlayRenderer->render( *m_overlaysTimer );
 			result = &m_overlayRenderer->getSemaphore();
 		}
 		return *result;

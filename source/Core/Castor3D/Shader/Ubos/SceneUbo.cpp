@@ -134,43 +134,15 @@ namespace castor3d
 	castor::String const SceneUbo::BufferScene = cuT( "Scene" );
 	castor::String const SceneUbo::SceneData = cuT( "c3d_sceneData" );
 
-	SceneUbo::SceneUbo( Engine & engine )
-		: m_engine{ engine }
-	{
-		if ( engine.getRenderSystem()->hasCurrentRenderDevice() )
-		{
-			initialise( engine.getRenderSystem()->getCurrentRenderDevice() );
-		}
-	}
-	
 	SceneUbo::SceneUbo( RenderDevice const & device )
-		: m_engine{ *device.renderSystem.getEngine() }
+		: m_device{ device }
+		, m_ubo{ m_device.uboPools->getBuffer< Configuration >( 0u ) }
 	{
-		initialise( device );
 	}
 
 	SceneUbo::~SceneUbo()
 	{
-		cleanup();
-	}
-
-	void SceneUbo::initialise( RenderDevice const & device )
-	{
-		if ( !m_ubo )
-		{
-			m_device = &device;
-			m_ubo = device.uboPools->getBuffer< Configuration >( 0u );
-		}
-	}
-
-	void SceneUbo::cleanup()
-	{
-		if ( m_ubo && m_device )
-		{
-			m_device->uboPools->putBuffer( m_ubo );
-			m_device = nullptr;
-			m_ubo = {};
-		}
+		m_device.uboPools->putBuffer( m_ubo );
 	}
 
 	void SceneUbo::cpuUpdateCameraPosition( Camera const & camera )
