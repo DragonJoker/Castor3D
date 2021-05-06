@@ -53,15 +53,6 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		Creates a render context.
-		 *\param[in]	window	The render window used to initialise the render context, receives the context.
-		 *\~french
-		 *\brief		Crée un contexte de rendu.
-		 *\param[in]	window	La fenêtre de rendu utilisée pour initialiser le contexte de rendu, recevra le contexte.
-		 */
-		C3D_API void createDevice( RenderWindow & window );
-		/**
-		 *\~english
 		 *\brief		Show or hide debug overlays.
 		 *\param[in]	show	The status.
 		 *\~french
@@ -185,17 +176,6 @@ namespace castor3d
 	protected:
 		/**
 		 *\~english
-		 *\brief		Asks for render context creation.
-		 *\param[in]	window	The render window used to initialise the render context.
-		 *\return		The created context, or the existing one.
-		 *\~french
-		 *\brief		Demande la création du contexte de rendu.
-		 *\param[in]	window	La fenêtre de rendu utilisée pour initialiser le contexte de rendu.
-		 *\return		Le contexte créé, ou l'existant.
-		 */
-		C3D_API RenderDeviceSPtr doCreateDevice( RenderWindow const & window );
-		/**
-		 *\~english
 		 *\brief		Starts threaded render loop.
 		 *\param[in]	tslf	The time elapsed since last frame.
 		 *\~french
@@ -203,15 +183,6 @@ namespace castor3d
 		 *\param[in]	tslf	Le temps écoulé depuis la dernière frame.
 		 */
 		C3D_API void doRenderFrame( castor::Milliseconds tslf = 0_ms );
-		/**
-		 *\~english
-		 *\brief		Asks for main render context creation.
-		 *\param[in]	window	The render window used to initialise the render context.
-		 *\~french
-		 *\brief		Demande la création du contexte de rendu principal.
-		 *\param[in]	window	La fenêtre de rendu utilisée pour initialiser le contexte de rendu.
-		 */
-		C3D_API virtual RenderDeviceSPtr doCreateMainDevice( RenderWindow const & window ) = 0;
 
 	private:
 		struct TechniqueQueues

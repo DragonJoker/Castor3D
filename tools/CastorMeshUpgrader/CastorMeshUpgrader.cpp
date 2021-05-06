@@ -495,13 +495,13 @@ int main( int argc, char * argv[] )
 			auto & renderSystem = *engine.getRenderSystem();
 			auto surface = renderSystem.getInstance().createSurface( renderSystem.getPhysicalDevice( 0u )
 				, ashes::WindowHandle{ std::make_unique< DummyWindowHandle >() } );
-			auto device = renderSystem.createDevice( *surface );
+			auto & device = *renderSystem.getMainRenderDevice();
 
 			if ( extension == cuT( "cmsh" ) )
 			{
 				castor3d::Mesh mesh{ name, scene };
 
-				if ( doParseObject( *device, inputPath, mesh ) )
+				if ( doParseObject( device, inputPath, mesh ) )
 				{
 					doWriteObject( outputPath, mesh );
 				}
@@ -510,7 +510,7 @@ int main( int argc, char * argv[] )
 			{
 				castor3d::Skeleton skeleton{ scene };
 
-				if ( doParseObject( *device, inputPath, skeleton ) )
+				if ( doParseObject( device, inputPath, skeleton ) )
 				{
 					doWriteObject( outputPath, skeleton );
 				}
