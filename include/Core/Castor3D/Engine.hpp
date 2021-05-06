@@ -254,6 +254,20 @@ namespace castor3d
 		C3D_API void prepareTextures( Pass & pass );
 		/**
 		 *\~english
+		 *\brief		Enqueues the given job.
+		 *\~french
+		 *\brief		Met dans la file la tâche donnée.
+		 */
+		C3D_API void pushJob( castor::AsyncJobQueue::Job job );
+		/**
+		 *\~english
+		 *\brief		Enqueues the given GPU job.
+		 *\~french
+		 *\brief		Met dans la file la tâche GPU donnée.
+		 */
+		C3D_API void pushGpuJob( std::function< void( RenderDevice const & ) > job );
+		/**
+		 *\~english
 		 *\brief		Retrieves a colour issued from a rainbow colours iterator.
 		 *\~french
 		 *\brief		Récupère une couleur issue d'un itérateur de couleurs d'arc-en-ciel.
@@ -549,7 +563,7 @@ namespace castor3d
 		bool m_enableApiTrace{ false };
 		RenderDepthQuadSPtr m_renderDepth;
 		uint32_t m_lpvGridSize{ 32u };
-		castor::AsyncJobQueue m_texturesPreparer;
+		castor::AsyncJobQueue m_jobs;
 	};
 }
 
