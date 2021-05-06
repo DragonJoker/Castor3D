@@ -13,197 +13,148 @@ namespace castor3d
 {
 	namespace
 	{
-		std::array< uint32_t, 4u > initialiseQueueFamilies( ashes::Instance const & instance
-			, ashes::Surface const & surface )
+		RenderDevice::QueueFamilies initialiseQueueFamilies( ashes::Instance const & instance
+			, ashes::PhysicalDevice const & gpu )
 		{
-			auto & gpu = surface.getGpu();
-			std::array< uint32_t, 4u > queueFamiliesIndex;
-			// Parcours des propriétés des files, pour vérifier leur support de la présentation.
+			RenderDevice::QueueFamilies result;
 			auto queueProps = gpu.getQueueFamilyProperties();
-			std::vector< uint32_t > supportsPresent( static_cast< uint32_t >( queueProps.size() ) );
-			uint32_t i{ 0u };
-			queueFamiliesIndex[RenderDevice::GraphicsIdx] = std::numeric_limits< uint32_t >::max();
-			queueFamiliesIndex[RenderDevice::PresentIdx] = std::numeric_limits< uint32_t >::max();
-			queueFamiliesIndex[RenderDevice::ComputeIdx] = std::numeric_limits< uint32_t >::max();
-			queueFamiliesIndex[RenderDevice::TransferIdx] = std::numeric_limits< uint32_t >::max();
+			bool hasGraphics = false;
+			uint32_t index{};
 
-			for ( auto & present : supportsPresent )
+			for ( auto & queueProp : queueProps )
 			{
-				present = surface.getSupport( i );
-
-				if ( queueProps[i].queueCount > 0 )
+				if ( queueProp.queueCount > 0 )
 				{
-					if ( ashes::checkFlag( queueProps[i].queueFlags, VK_QUEUE_GRAPHICS_BIT ) )
-					{
-						// Tout d'abord on choisit une file graphique
-						if ( queueFamiliesIndex[RenderDevice::GraphicsIdx] == std::numeric_limits< uint32_t >::max() )
-						{
-							queueFamiliesIndex[RenderDevice::GraphicsIdx] = i;
-							queueFamiliesIndex[RenderDevice::ComputeIdx] = i;
-							queueFamiliesIndex[RenderDevice::TransferIdx] = i;
-						}
+					RenderDevice::QueueData data;
+					data.familyIndex = index++;
 
-						// Si une file supporte les graphismes et la présentation, on la préfère.
-						if ( present )
-						{
-							queueFamiliesIndex[RenderDevice::GraphicsIdx] = i;
-							queueFamiliesIndex[RenderDevice::PresentIdx] = i;
-							break;
-						}
-					}
-					else if ( ashes::checkFlag( queueProps[i].queueFlags, VK_QUEUE_COMPUTE_BIT )
-						&& queueFamiliesIndex[RenderDevice::ComputeIdx] == std::numeric_limits< uint32_t >::max() )
+					if ( ashes::checkFlag( queueProp.queueFlags, VK_QUEUE_GRAPHICS_BIT ) )
 					{
-						queueFamiliesIndex[RenderDevice::ComputeIdx] = i;
+						hasGraphics = true;
+						data.familySupport |= QueueFamilyFlag::eGraphics;
 					}
-					else if ( ashes::checkFlag( queueProps[i].queueFlags, VK_QUEUE_TRANSFER_BIT )
-						&& queueFamiliesIndex[RenderDevice::TransferIdx] == std::numeric_limits< uint32_t >::max() )
-					{
-						queueFamiliesIndex[RenderDevice::TransferIdx] = i;
-					}
-				}
 
-				++i;
-			}
-
-			if ( queueFamiliesIndex[RenderDevice::PresentIdx] == std::numeric_limits< uint32_t >::max() )
-			{
-				// Pas de file supportant les deux, on a donc 2 files distinctes.
-				for ( size_t i = 0; i < queueProps.size(); ++i )
-				{
-					if ( supportsPresent[i] )
+					if ( ashes::checkFlag( queueProp.queueFlags, VK_QUEUE_COMPUTE_BIT ) )
 					{
-						queueFamiliesIndex[RenderDevice::PresentIdx] = static_cast< uint32_t >( i );
-						break;
+						data.familySupport |= QueueFamilyFlag::eCompute;
+					}
+
+					if ( ashes::checkFlag( queueProp.queueFlags, VK_QUEUE_TRANSFER_BIT ) )
+					{
+						data.familySupport |= QueueFamilyFlag::eTransfer;
+					}
+
+					data.queues.resize( queueProp.queueCount );
+
+					if ( data.familySupport != QueueFamilyFlag::eNone )
+					{
+						result.push_back( std::move( data ) );
 					}
 				}
 			}
 
 			// Si on n'en a pas trouvé, on génère une erreur.
-			if ( queueFamiliesIndex[RenderDevice::GraphicsIdx] == std::numeric_limits< uint32_t >::max()
-				|| queueFamiliesIndex[RenderDevice::PresentIdx] == std::numeric_limits< uint32_t >::max()
-				|| queueFamiliesIndex[RenderDevice::ComputeIdx] == std::numeric_limits< uint32_t >::max()
-				|| queueFamiliesIndex[RenderDevice::TransferIdx] == std::numeric_limits< uint32_t >::max() )
+			if ( !hasGraphics )
 			{
 				throw ashes::Exception{ VK_ERROR_INITIALIZATION_FAILED
-					, "Queue families retrieval" };
+					, "No queue with graphics support was found" };
 			}
 
-			return queueFamiliesIndex;
+			return result;
 		}
 
-		ashes::DeviceQueueCreateInfoArray getQueueCreateInfos( std::array< uint32_t, 4u > const & queueFamiliesIndex )
+		ashes::DeviceQueueCreateInfoArray getQueueCreateInfos( RenderDevice::QueueFamilies const & queues )
 		{
 			ashes::DeviceQueueCreateInfoArray queueCreateInfos;
-			std::vector< float > queuePriorities = { 1.0f };
 
-			if ( queueFamiliesIndex[RenderDevice::GraphicsIdx] != uint32_t( InvalidIndex ) )
+			for ( auto & queueData : queues )
 			{
-				queueCreateInfos.push_back(
-					{
-						0u,
-						queueFamiliesIndex[RenderDevice::GraphicsIdx],
-						queuePriorities,
-					} );
-			}
+				std::vector< float > queuePriorities;
+				queuePriorities.resize( queueData.queues.size(), 1.0f );
 
-			if ( queueFamiliesIndex[RenderDevice::PresentIdx] != queueFamiliesIndex[RenderDevice::GraphicsIdx] )
-			{
-				queueCreateInfos.push_back(
-					{
-						0u,
-						queueFamiliesIndex[RenderDevice::PresentIdx],
-						queuePriorities,
-					} );
-			}
-
-			if ( queueFamiliesIndex[RenderDevice::ComputeIdx] != queueFamiliesIndex[RenderDevice::GraphicsIdx] )
-			{
-				queueCreateInfos.push_back(
-					{
-						0u,
-						queueFamiliesIndex[RenderDevice::ComputeIdx],
-						queuePriorities,
-					} );
+				queueCreateInfos.push_back( { 0u
+					, queueData.familyIndex
+					, queuePriorities } );
 			}
 
 			return queueCreateInfos;
 		}
 
 		ashes::DeviceCreateInfo getDeviceCreateInfo( ashes::Instance const & instance
-			, ashes::Surface const & surface
+			, ashes::PhysicalDevice const & gpu
 			, ashes::DeviceQueueCreateInfoArray queueCreateInfos )
 		{
 			log::debug << "Instance enabled layers count: " << uint32_t( instance.getEnabledLayerNames().size() ) << std::endl;
-			ashes::StringArray layers = instance.getEnabledLayerNames();
 			ashes::StringArray extensions = { std::string{ VK_KHR_SWAPCHAIN_EXTENSION_NAME } };
-			return ashes::DeviceCreateInfo
-			{
-				0u,
-				std::move( queueCreateInfos ),
-				layers,
-				extensions,
-				surface.getGpu().getFeatures(),
-			};
+			return ashes::DeviceCreateInfo{ 0u
+				, std::move( queueCreateInfos )
+				, instance.getEnabledLayerNames()
+				, extensions
+				, gpu.getFeatures() };
 		}
 	}
 
 	RenderDevice::RenderDevice( RenderSystem & renderSystem
-		, AshPluginDescription const & desc
-		, ashes::Surface const & surface )
+		, ashes::PhysicalDevice const & gpu
+		, AshPluginDescription const & desc )
 		: renderSystem{ renderSystem }
-		, surface{ surface }
-		, gpu{ surface.getGpu() }
+		, gpu{ gpu }
 		, desc{ desc }
 		, memoryProperties{ gpu.getMemoryProperties() }
 		, properties{ gpu.getProperties() }
 		, features{ gpu.getFeatures() }
-		, queueFamiliesIndex{ initialiseQueueFamilies( renderSystem.getInstance(), surface ) }
+		, queueFamilies{ initialiseQueueFamilies( renderSystem.getInstance(), gpu ) }
 		, device{ renderSystem.getInstance().createDevice( gpu
 			, getDeviceCreateInfo( renderSystem.getInstance()
-				, surface
-				, getQueueCreateInfos( queueFamiliesIndex ) ) ) }
+				, gpu
+				, getQueueCreateInfos( queueFamilies ) ) ) }
 	{
-		commandPools.push_back( device->createCommandPool( queueFamiliesIndex[RenderDevice::PresentIdx]
-			, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT ) );
-		presentCommandPool = commandPools.back().get();
-		graphicsCommandPool = presentCommandPool;
-		computeCommandPool = presentCommandPool;
-		transferCommandPool = presentCommandPool;
-		presentQueue = device->getQueue( queueFamiliesIndex[RenderDevice::PresentIdx], 0u );
-		graphicsQueue = device->getQueue( queueFamiliesIndex[RenderDevice::PresentIdx], 0u );
-		computeQueue = device->getQueue( queueFamiliesIndex[RenderDevice::PresentIdx], 0u );
-		transferQueue = device->getQueue( queueFamiliesIndex[RenderDevice::PresentIdx], 0u );
-
-		if ( queueFamiliesIndex[RenderDevice::GraphicsIdx] != queueFamiliesIndex[RenderDevice::PresentIdx] )
+		for ( auto & queueData : queueFamilies )
 		{
-			commandPools.push_back( device->createCommandPool( queueFamiliesIndex[RenderDevice::GraphicsIdx]
-				, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT ) );
-			graphicsCommandPool = commandPools.back().get();
-			graphicsQueue = device->getQueue( queueFamiliesIndex[RenderDevice::GraphicsIdx], 0u );
-		}
+			queueData.commandPool = device->createCommandPool( queueData.familyIndex
+				, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT );
+			uint32_t index = 0u;
 
-		if ( queueFamiliesIndex[RenderDevice::ComputeIdx] != queueFamiliesIndex[RenderDevice::PresentIdx] )
-		{
-			commandPools.push_back( device->createCommandPool( queueFamiliesIndex[RenderDevice::ComputeIdx]
-				, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT ) );
-			computeCommandPool = commandPools.back().get();
-			computeQueue = device->getQueue( queueFamiliesIndex[RenderDevice::ComputeIdx], 0u );
-		}
+			for ( auto & queue : queueData.queues )
+			{
+				queue = device->getQueue( queueData.familyIndex, index++ );
+			}
 
-		if ( queueFamiliesIndex[RenderDevice::TransferIdx] != queueFamiliesIndex[RenderDevice::PresentIdx] )
-		{
-			commandPools.push_back( device->createCommandPool( queueFamiliesIndex[RenderDevice::TransferIdx]
-				, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT ) );
-			transferCommandPool = commandPools.back().get();
-			transferQueue = device->getQueue( queueFamiliesIndex[RenderDevice::TransferIdx], 0u );
-		}
+			if ( !m_preferredGraphicsQueue
+				&& checkFlag( queueData.familySupport, QueueFamilyFlag::eGraphics ) )
+			{
+				m_preferredGraphicsQueue = &queueData;
+				graphicsCommandPool = queueData.commandPool.get();
+				graphicsQueue = queueData.queues.front().get();
+			}
 
-		transferCommandPool = graphicsCommandPool;
-		transferQueue = device->getQueue( queueFamiliesIndex[RenderDevice::GraphicsIdx], 0u );
+			if ( !m_preferredComputeQueue
+				&& checkFlag( queueData.familySupport, QueueFamilyFlag::eCompute ) )
+			{
+				m_preferredComputeQueue = &queueData;
+				computeCommandPool = queueData.commandPool.get();
+				computeQueue = queueData.queues.front().get();
+			}
+
+			if ( !m_preferredTransferQueue
+				&& checkFlag( queueData.familySupport, QueueFamilyFlag::eTransfer ) )
+			{
+				m_preferredTransferQueue = &queueData;
+				transferCommandPool = queueData.commandPool.get();
+				transferQueue = queueData.queues.front().get();
+			}
+		}
 
 		bufferPool = std::make_shared< GpuBufferPool >( renderSystem, *this, cuT( "GlobalBufferPool" ) );
 		uboPools = std::make_shared< UniformBufferPools >( renderSystem, *this );
+	}
+
+	RenderDevice::~RenderDevice()
+	{
+		uboPools.reset();
+		bufferPool.reset();
+		queueFamilies.clear();
+		device.reset();
 	}
 
 	VkFormat RenderDevice::selectSuitableDepthFormat( VkFormatFeatureFlags requiredFeatures )const

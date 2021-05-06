@@ -53,12 +53,6 @@ namespace castor3d
 		C3D_API void endRendering()override;
 
 	private:
-		/**
-		 *\copydoc		castor3d::RenderLoop::doCreateMainDevice
-		 */
-		C3D_API RenderDeviceSPtr doCreateMainDevice( RenderWindow const & window )override;
-
-	private:
 		//!\~english Tells if the render loop is active.	\~french Dit si la boucle de rendu est active.
 		bool m_active;
 	};
