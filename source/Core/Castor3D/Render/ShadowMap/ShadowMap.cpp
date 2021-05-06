@@ -29,6 +29,7 @@ namespace castor3d
 		, m_name{ cuT( "ShadowMap" ) + castor::string::snakeToCamelCase( getName( lightType ) ) }
 		, m_result{ std::move( result ) }
 		, m_count{ count }
+		, m_finished{ m_device->createSemaphore( m_name ) }
 	{
 	}
 
@@ -130,20 +131,14 @@ namespace castor3d
 				m_device.graphicsQueue->submit( *cmdBuffer, fence.get() );
 				fence->wait( ashes::MaxTimeout );
 			}
-			auto size = m_result[SmTexture::eVariance].getTexture()->getDimensions();
-			bool result = true;
 
 			for ( auto & pass : m_passes )
 			{
 				pass.matrixUbo->initialise( m_device );
 			}
 
-			if ( result )
-			{
-				m_finished = m_device->createSemaphore( m_name );
-				doInitialise( m_device );
-				m_initialised = true;
-			}
+			doInitialise( m_device );
+			m_initialised = true;
 		}
 
 		return m_initialised;

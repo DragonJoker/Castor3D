@@ -261,7 +261,6 @@ namespace castor3d
 			auto & background = *m_node.getScene()->getBackground();
 			m_backgroundUboDescriptorPool = background.getUboDescriptorLayout().createPool( "EnvironmentMapUbo", 6u );
 			m_backgroundTexDescriptorPool = background.getTexDescriptorLayout().createPool( "EnvironmentMapTex", 6u );
-			uint32_t face = 0u;
 
 			for ( auto & pass : m_passes )
 			{
