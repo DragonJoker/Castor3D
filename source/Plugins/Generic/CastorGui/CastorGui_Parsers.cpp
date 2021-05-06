@@ -98,7 +98,7 @@ namespace CastorGui
 
 	ControlsManager & getControlsManager( FileParserContextSPtr context )
 	{
-		return static_cast< ControlsManager & >( *std::static_pointer_cast< SceneFileContext >( context )->m_pParser->getEngine()->getUserInputListener() );
+		return static_cast< ControlsManager & >( *std::static_pointer_cast< SceneFileContext >( context )->parser->getEngine()->getUserInputListener() );
 	}
 
 	ParserContext & getParserContext( FileParserContextSPtr context )
@@ -128,7 +128,7 @@ namespace CastorGui
 	CU_ImplementAttributeParser( parserGui )
 	{
 		ParserContext * guiContext = new ParserContext;
-		guiContext->m_engine = std::static_pointer_cast< SceneFileContext >( context )->m_pParser->getEngine();
+		guiContext->m_engine = std::static_pointer_cast< SceneFileContext >( context )->parser->getEngine();
 		context->registerUserContext( PLUGIN_NAME, guiContext );
 	}
 	CU_EndAttributePush( CastorGui::GUISection::eGUI )
