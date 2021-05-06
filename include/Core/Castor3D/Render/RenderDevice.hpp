@@ -7,6 +7,8 @@ See LICENSE file in root folder
 #include "RenderModule.hpp"
 #include "Castor3D/Buffer/BufferModule.hpp"
 
+#include <CastorUtils/Design/FlagCombination.hpp>
+
 #include <ashespp/Command/CommandPool.hpp>
 #include <ashespp/Sync/Queue.hpp>
 
@@ -15,11 +17,31 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	enum class QueueFamilyFlag
+	{
+		eNone = 0x00,
+		ePresent = 0x01,
+		eGraphics = 0x02,
+		eTransfer = 0x04,
+		eCompute = 0x08,
+	};
+	CU_ImplementFlags( QueueFamilyFlag );
+
 	struct RenderDevice
 	{
+		struct QueueData
+		{
+			QueueFamilyFlags familySupport{};
+			uint32_t familyIndex{ 0xFFFFFFFFu };
+			ashes::CommandPoolPtr commandPool{ nullptr };
+			std::vector< ashes::QueuePtr > queues;
+		};
+		using QueueFamilies = std::vector< QueueData >;
+
 		C3D_API RenderDevice( RenderSystem & renderSystem
-			, AshPluginDescription const & desc
-			, ashes::Surface const & surface );
+			, ashes::PhysicalDevice const & gpu
+			, AshPluginDescription const & desc );
+		C3D_API ~RenderDevice();
 
 		C3D_API VkFormat selectSuitableDepthFormat( VkFormatFeatureFlags requiredFeatures )const;
 		C3D_API VkFormat selectSuitableStencilFormat( VkFormatFeatureFlags requiredFeatures )const;
@@ -27,71 +49,63 @@ namespace castor3d
 		C3D_API VkFormat selectSuitableFormat( std::vector< VkFormat > const & formats
 			, VkFormatFeatureFlags requiredFeatures )const;
 
-		inline ashes::Device const * operator->()const
+		ashes::Device const * operator->()const
 		{
 			return device.get();
 		}
 
-		inline ashes::Device * operator->()
+		ashes::Device * operator->()
 		{
 			return device.get();
 		}
 
-		inline ashes::Device & operator*()
+		ashes::Device & operator*()
 		{
 			return *device;
 		}
 
-		inline ashes::Device const & operator*()const
+		ashes::Device const & operator*()const
 		{
 			return *device;
 		}
 
-		inline uint32_t getGraphicsQueueFamilyIndex()const
+		uint32_t getGraphicsQueueFamilyIndex()const
 		{
-			return queueFamiliesIndex[GraphicsIdx];
+			CU_Require( m_preferredGraphicsQueue );
+			return m_preferredGraphicsQueue->familyIndex;
 		}
 
-		inline uint32_t getPresentQueueFamilyIndex()const
+		uint32_t getComputeQueueFamilyIndex()const
 		{
-			return queueFamiliesIndex[PresentIdx];
+			CU_Require( m_preferredComputeQueue );
+			return m_preferredComputeQueue->familyIndex;
 		}
 
-		inline uint32_t getComputeQueueFamilyIndex()const
+		uint32_t getTransferQueueFamilyIndex()const
 		{
-			return queueFamiliesIndex[ComputeIdx];
-		}
-
-		inline uint32_t getTransferQueueFamilyIndex()const
-		{
-			return queueFamiliesIndex[TransferIdx];
+			CU_Require( m_preferredTransferQueue );
+			return m_preferredTransferQueue->familyIndex;
 		}
 
 		RenderSystem & renderSystem;
-		ashes::Surface const & surface;
 		ashes::PhysicalDevice const & gpu;
 		AshPluginDescription const & desc;
 		VkPhysicalDeviceMemoryProperties memoryProperties{};
 		VkPhysicalDeviceFeatures features{};
 		VkPhysicalDeviceProperties properties{};
-		std::array< uint32_t, 4u > queueFamiliesIndex;
+		QueueFamilies queueFamilies;
 		ashes::DevicePtr device;
-		std::vector< ashes::CommandPoolPtr > commandPools;
-		ashes::CommandPool * presentCommandPool{ nullptr };
-		ashes::CommandPool * graphicsCommandPool{ nullptr };
-		ashes::CommandPool * computeCommandPool{ nullptr };
-		ashes::CommandPool * transferCommandPool{ nullptr };
-		ashes::QueuePtr presentQueue{ nullptr };
-		ashes::QueuePtr graphicsQueue{ nullptr };
-		ashes::QueuePtr computeQueue{ nullptr };
-		ashes::QueuePtr transferQueue{ nullptr };
+		QueueData * m_preferredGraphicsQueue{};
+		QueueData * m_preferredComputeQueue{};
+		QueueData * m_preferredTransferQueue{};
+		ashes::CommandPool * graphicsCommandPool{};
+		ashes::CommandPool * computeCommandPool{};
+		ashes::CommandPool * transferCommandPool{};
+		ashes::Queue * graphicsQueue{};
+		ashes::Queue * computeQueue{};
+		ashes::Queue * transferQueue{};
 		GpuBufferPoolSPtr bufferPool;
 		UniformBufferPoolsSPtr uboPools;
-
-		static constexpr size_t GraphicsIdx = 0u;
-		static constexpr size_t PresentIdx = 1u;
-		static constexpr size_t ComputeIdx = 2u;
-		static constexpr size_t TransferIdx = 3u;
 	};
 }
 

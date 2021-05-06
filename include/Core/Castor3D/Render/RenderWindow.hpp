@@ -342,8 +342,7 @@ namespace castor3d
 
 		RenderDevice const & getDevice()const
 		{
-			CU_Require( m_device );
-			return *m_device;
+			return m_device;
 		}
 
 		RenderTargetSPtr getRenderTarget()const
@@ -391,11 +390,6 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		void setDevice( RenderDeviceSPtr value )
-		{
-			m_device = std::move( value );
-		}
-
 		void enableVSync( bool value )
 		{
 			m_vsync = value;
@@ -443,8 +437,9 @@ namespace castor3d
 	private:
 		static uint32_t s_nbRenderWindows;
 		uint32_t m_index{};
-		RenderDeviceSPtr m_device;
+		RenderDevice const & m_device;
 		ashes::SurfacePtr m_surface;
+		RenderDevice::QueueData const * m_presentQueue{};
 		ashes::SwapChainPtr m_swapChain;
 		ashes::ImageArray m_swapChainImages;
 		ashes::CommandPoolPtr m_commandPool;

@@ -35,17 +35,6 @@ namespace castor3d
 		C3D_API ~RenderLoopAsync();
 		/**
 		 *\~english
-		 *\brief		Retrieves the context creation status.
-		 *\remarks		Thread-safe.
-		 *\return		\p true if created.
-		 *\~french
-		 *\brief		Récupère le statut de création du contexte de rendu.
-		 *\remarks		Thread-safe.
-		 *\return		\p true si créé.
-		 */
-		C3D_API bool isCreated()const;
-		/**
-		 *\~english
 		 *\brief		Retrieves the render start status.
 		 *\remarks		Thread-safe.
 		 *\return		\p true if started.
@@ -113,10 +102,6 @@ namespace castor3d
 
 	private:
 		/**
-		 *\copydoc		castor3d::RenderLoop::doCreateMainDevice
-		 */
-		C3D_API RenderDeviceSPtr doCreateMainDevice( RenderWindow const & window )override;
-		/**
 		 *\~english
 		 *\brief		The threaded render loop.
 		 *\remarks		The main context is created here, since OpenGL needs each thread to have its context.
@@ -125,8 +110,6 @@ namespace castor3d
 		 *\remarks		Le contexte principal est créé ici, car OpenGL demande à chaque thread d'avoir son contexte.
 		 */
 		C3D_API void doMainLoop();
-		C3D_API void doSetWindow( RenderWindow const * window );
-		C3D_API RenderWindow const * doGetWindow()const;
 
 	private:
 		std::unique_ptr< std::thread > m_mainLoopThread;
@@ -134,12 +117,7 @@ namespace castor3d
 		std::atomic_bool m_rendering;
 		std::atomic_bool m_frameEnded;
 		std::atomic_bool m_paused;
-		std::atomic_bool m_createContext;
-		std::atomic_bool m_created;
 		std::atomic_bool m_interrupted;
-		mutable std::mutex m_mutexWindow;
-		RenderWindow const * m_window;
-		ashes::WindowHandle m_handle;
 		castor::Milliseconds m_savedTime{ 0 };
 	};
 }
