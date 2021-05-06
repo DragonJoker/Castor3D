@@ -65,5 +65,5 @@ Links
 -----
 
 - [Building Castor3D](https://dragonjoker.github.io/Castor3D/v0.9.0/pages/build)
-- [API Documentation](https://dragonjoker.github.io/Castor3D/v0.9.0/doc/Castor3D/English)
+- [API Documentation](https://dragonjoker.github.io/Castor3D/v0.9.0/doc)
 - [Playlist on YouTube](https://www.youtube.com/playlist?list=PLKA1SVXuAbMNaFbSJyAN_4yD2bzNlgES3)

@@ -1,4 +1,4 @@
-[Back to version page](http://DragonJoker.github.com/Castor3D/v0.10.0)
+[Back to version page](http://DragonJoker.github.io/Castor3D/v0.10.0)
 
 
 Building Castor3D
