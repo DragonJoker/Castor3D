@@ -36,13 +36,7 @@ namespace castor3d
 	ShadowMap::~ShadowMap()
 	{
 		m_finished.reset();
-
-		for ( auto & pass : m_passes )
-		{
-			pass.pass.reset();
-			pass.matrixUbo->cleanup();
-		}
-
+		m_passes.clear();
 		m_initialised = false;
 		m_result.cleanup();
 	}
@@ -132,11 +126,6 @@ namespace castor3d
 				fence->wait( ashes::MaxTimeout );
 			}
 
-			for ( auto & pass : m_passes )
-			{
-				pass.matrixUbo->initialise( m_device );
-			}
-
 			doInitialise( m_device );
 			m_initialised = true;
 		}
@@ -148,10 +137,12 @@ namespace castor3d
 		, ashes::Semaphore const & toWait
 		, uint32_t index )
 	{
-		//if ( isUpToDate( index ) )
-		//{
-		//	return toWait;
-		//}
+#if !C3D_MeasureShadowMapImpact
+		if ( isUpToDate( index ) )
+		{
+			return toWait;
+		}
+#endif
 
 		return doRender( device, toWait, index );
 	}

@@ -53,7 +53,7 @@ namespace castor3d
 			{
 				ShadowMap::PassData passData
 				{
-					std::make_unique< MatrixUbo >( engine ),
+					std::make_unique< MatrixUbo >( device ),
 					std::make_shared< Camera >( cuT( "ShadowMapSpot" )
 						, scene
 						, *scene.getCameraRootNode()

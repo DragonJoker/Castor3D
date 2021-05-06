@@ -54,7 +54,7 @@ namespace castor3d
 			{
 				ShadowMap::PassData passData
 				{
-					std::make_unique< MatrixUbo >( engine ),
+					std::make_unique< MatrixUbo >( device ),
 					nullptr,
 					std::make_unique< DummyCuller >( scene ),
 					nullptr,
