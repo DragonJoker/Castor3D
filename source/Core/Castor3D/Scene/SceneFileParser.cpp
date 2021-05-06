@@ -75,14 +75,8 @@ namespace castor3d
 		, viewport( nullptr )
 		, strName()
 		, strName2()
-		, uiUInt16( 0 )
-		, uiUInt32( 0 )
-		, uiUInt64( 0 )
-		, bBool1( false )
-		, bBool2( false )
-		, m_pGeneralParentMaterial( nullptr )
 		, mapScenes()
-		, m_pParser( parser )
+		, parser( parser )
 		, createMaterial{ true }
 		, passIndex{ 0u }
 		, createPass{ true }
@@ -101,12 +95,6 @@ namespace castor3d
 		face2 = -1;
 		lightType = LightType::eCount;
 		primitiveType = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-		uiUInt16 = 0;
-		uiUInt32 = 0;
-		uiUInt64 = 0;
-		bBool1 = false;
-		bBool2 = false;
-		m_pGeneralParentMaterial = nullptr;
 		viewport = nullptr;
 		shaderStage = VkShaderStageFlagBits( 0u );
 		window = RenderWindowDesc{};
