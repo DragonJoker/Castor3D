@@ -93,42 +93,15 @@ namespace castor3d
 	const castor::String GpInfoUbo::BufferGPInfo = cuT( "GPInfo" );
 	const castor::String GpInfoUbo::GPInfoData = cuT( "GPInfoData" );
 
-	GpInfoUbo::GpInfoUbo( Engine & engine )
-		: m_engine{ engine }
-	{
-		if ( engine.getRenderSystem()->hasCurrentRenderDevice() )
-		{
-			initialise( engine.getRenderSystem()->getCurrentRenderDevice() );
-		}
-	}
-
 	GpInfoUbo::GpInfoUbo( RenderDevice const & device )
-		: m_engine{ *device.renderSystem.getEngine() }
+		: m_device{ device }
+		, m_ubo{ m_device.uboPools->getBuffer< GpInfoUboConfiguration >( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ) }
 	{
-		initialise( device );
 	}
-
 
 	GpInfoUbo::~GpInfoUbo()
 	{
-		cleanup();
-	}
-
-	void GpInfoUbo::initialise( castor3d::RenderDevice const & device )
-	{
-		if ( !m_ubo )
-		{
-			m_ubo = device.uboPools->getBuffer< GpInfoUboConfiguration >( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
-			m_device = &device;
-		}
-	}
-
-	void GpInfoUbo::cleanup()
-	{
-		if ( m_ubo )
-		{
-			m_device->uboPools->putBuffer< GpInfoUboConfiguration >( m_ubo );
-		}
+		m_device.uboPools->putBuffer< GpInfoUboConfiguration >( m_ubo );
 	}
 
 	void GpInfoUbo::cpuUpdate( castor::Size const & renderSize

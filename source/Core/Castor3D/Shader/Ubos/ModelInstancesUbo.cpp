@@ -55,33 +55,15 @@ namespace castor3d
 	castor::String const ModelInstancesUbo::BufferModelInstances = cuT( "ModelInstances" );
 	castor::String const ModelInstancesUbo::ModelInstancesData = cuT( "c3d_modelInstancesData" );
 
-	ModelInstancesUbo::ModelInstancesUbo( Engine & engine )
-		: m_engine{ engine }
+	ModelInstancesUbo::ModelInstancesUbo( RenderDevice const & device )
+		: m_device{ device }
+		, m_ubo{ m_device.uboPools->getBuffer< Configuration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
 	{
-		if ( engine.getRenderSystem()->hasCurrentRenderDevice() )
-		{
-			initialise( engine.getRenderSystem()->getCurrentRenderDevice() );
-		}
 	}
 
 	ModelInstancesUbo::~ModelInstancesUbo()
 	{
-	}
-
-	void ModelInstancesUbo::initialise( RenderDevice const & device )
-	{
-		if ( !m_ubo )
-		{
-			m_ubo = device.uboPools->getBuffer< Configuration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
-		}
-	}
-
-	void ModelInstancesUbo::cleanup( RenderDevice const & device )
-	{
-		if ( m_ubo )
-		{
-			device.uboPools->putBuffer( m_ubo );
-		}
+		m_device.uboPools->putBuffer( m_ubo );
 	}
 
 	void ModelInstancesUbo::cpuUpdate( UInt32Array const & instances )

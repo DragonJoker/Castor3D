@@ -34,7 +34,6 @@ namespace castor3d
 		, castor::Named{ scene.getName() + name }
 		, m_scene{ scene }
 		, m_type{ type }
-		, m_matrixUbo{ engine }
 	{
 	}
 
@@ -46,6 +45,7 @@ namespace castor3d
 		, ashes::RenderPass const & renderPass
 		, HdrConfigUbo const & hdrConfigUbo )
 	{
+		m_matrixUbo = std::make_unique< MatrixUbo >( device );
 		m_semaphore = device->createSemaphore( "SceneBackground" );
 		m_initialised = doInitialiseVertexBuffer( device )
 			&& doInitialise( device, renderPass );
@@ -110,7 +110,6 @@ namespace castor3d
 
 		doCleanup();
 
-		m_matrixUbo.cleanup();
 		device.uboPools->putBuffer( m_modelUbo );
 		m_pipeline.reset();
 		m_indexBuffer.reset();
@@ -449,7 +448,6 @@ namespace castor3d
 		m_pipelineLayout = device->createPipelineLayout( "SceneBackground"
 		, { *m_uboDescriptorLayout, *m_texDescriptorLayout } );
 
-		m_matrixUbo.initialise( device );
 		m_modelUbo = device.uboPools->getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 
 		m_uboDescriptorSet.reset();
@@ -462,7 +460,7 @@ namespace castor3d
 			, 1u );
 		m_texDescriptorSet = m_texDescriptorPool->createDescriptorSet( "SceneBackgroundTex"
 			, 0u );
-		initialiseDescriptorSets( m_matrixUbo
+		initialiseDescriptorSets( *m_matrixUbo
 			, m_modelUbo
 			, hdrConfigUbo
 			, *m_uboDescriptorSet

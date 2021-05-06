@@ -61,17 +61,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	renderSystem	The RenderSystem.
-		 *\param[in]	uboPools		The UBO pools.
-		 *\param[in]	target			The target texture view.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	uboPools	The UBO pools.
+		 *\param[in]	target		The target texture view.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	renderSystem	Le RenderSystem.
-		 *\param[in]	uboPools		Les pools d'UBO.
-		 *\param[in]	target			La vue de texture cible.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	uboPools	Les pools d'UBO.
+		 *\param[in]	target		La vue de texture cible.
 		 */
-		C3D_API OverlayRenderer( RenderSystem & renderSystem
-			, UniformBufferPools & uboPools
+		C3D_API OverlayRenderer( RenderDevice const & device
 			, ashes::ImageView const & target );
 		/**
 		 *\~english
@@ -80,24 +79,6 @@ namespace castor3d
 		 *\brief		Destructeur.
 		 */
 		C3D_API ~OverlayRenderer();
-		/**
-		 *\~english
-		 *\brief		Initialises the buffers.
-		 *\param[in]	device	The GPU device.
-		 *\~french
-		 *\brief		Initialise les tampons.
-		 *\param[in]	device	Le device GPU.
-		 */
-		C3D_API void initialise( RenderDevice const & device );
-		/**
-		*\~english
-		*\brief		Flushes the renderer.
-		 *\param[in]	device	The GPU device.
-		*\~french
-		*\brief		Nettoie le renderer.
-		 *\param[in]	device	Le device GPU.
-		*/
-		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, GPU wise.
@@ -138,8 +119,7 @@ namespace castor3d
 		 *\param[in]	device	Le device GPU.
 		 *\param[in]	timer	Le timer de la passe de rendu.
 		 */
-		C3D_API void render( RenderDevice const & device
-			, RenderPassTimer & timer );
+		C3D_API void render( RenderPassTimer & timer );
 		/**
 		*\~english
 		*name
@@ -292,6 +272,7 @@ namespace castor3d
 		void doCreateRenderPass( RenderDevice const & device );
 
 	private:
+		RenderDevice const & m_device;
 		UniformBufferPools & m_uboPools;
 		ashes::ImageView const & m_target;
 		ashes::CommandBufferPtr m_commandBuffer;
