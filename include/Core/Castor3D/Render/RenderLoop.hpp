@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Overlay/OverlayModule.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 
-#include <CastorUtils/Multithreading/ThreadPool.hpp>
+#include <CastorUtils/Multithreading/AsyncJobQueue.hpp>
 
 #include <ashespp/Core/WindowHandle.hpp>
 
@@ -245,7 +245,7 @@ namespace castor3d
 		std::unique_ptr< DebugOverlays > m_debugOverlays;
 		//!\~english	The pool used to update the render queues.
 		//!\~french		Le pool de mise à jour des files de rendu.
-		castor::ThreadPool m_queueUpdater;
+		castor::AsyncJobQueue m_queueUpdater;
 		struct UploadResources
 		{
 			//!\~english	The command buffer and semaphore used for UBO uploads.

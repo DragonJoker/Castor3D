@@ -31,13 +31,18 @@ namespace castor
 			std::this_thread::sleep_for( 5_ms );
 		}
 
-		m_pool.waitAll( Milliseconds{ 0xFFFFFFFFull } );
+		m_pool.waitAll( Milliseconds{ Milliseconds::max() } );
 	}
 
 	void AsyncJobQueue::doRun()
 	{
 		while ( !m_ended )
 		{
+			while ( !m_ended && doCheckEnded() )
+			{
+				std::this_thread::sleep_for( 5_ms );
+			}
+
 			m_pool.pushJob( doPopJob() );
 		}
 	}
@@ -53,6 +58,7 @@ namespace castor
 			return job;
 		}
 
+		// Should never happen, but let's do this just in case.
 		static Job dummy = []()
 		{
 			std::this_thread::sleep_for( 5_ms );

@@ -300,25 +300,15 @@ namespace castor3d
 	{
 		for ( auto & techniqueQueues : techniquesQueues )
 		{
-			if ( techniqueQueues.queues.size() > m_queueUpdater.getCount() )
+			for ( auto & queue : techniqueQueues.queues )
 			{
-				for ( auto & queue : techniqueQueues.queues )
-				{
-					m_queueUpdater.pushJob( [&queue, &techniqueQueues]()
-						{
-							queue.get().update( techniqueQueues.shadowMaps );
-						} );
-				}
-
-				m_queueUpdater.waitAll( Milliseconds::max() );
-			}
-			else
-			{
-				for ( auto & queue : techniqueQueues.queues )
-				{
-					queue.get().update( techniqueQueues.shadowMaps );
-				}
+				m_queueUpdater.pushJob( [&queue, &techniqueQueues]()
+					{
+						queue.get().update( techniqueQueues.shadowMaps );
+					} );
 			}
 		}
+
+		m_queueUpdater.waitAll();
 	}
 }
