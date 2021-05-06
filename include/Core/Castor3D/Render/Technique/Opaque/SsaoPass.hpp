@@ -36,7 +36,7 @@ namespace castor3d
 		 *\param[in]	gpResult		Le résultat de la geometry pass.
 		 *\param[in]	gpInfoUbo		L'UBO de configuration du GBuffer
 		 */
-		C3D_API SsaoPass( Engine & engine
+		C3D_API SsaoPass( RenderDevice const & device
 			, castor::Size const & size
 			, SsaoConfig & ssaoConfig
 			, TextureUnit const & linearisedDepth
@@ -48,9 +48,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~SsaoPass() = default;
-		C3D_API void initialise( RenderDevice const & device );
-		C3D_API void cleanup( RenderDevice const & device );
+		C3D_API ~SsaoPass();
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -94,6 +92,7 @@ namespace castor3d
 		}
 
 	private:
+		RenderDevice const & m_device;
 		Engine & m_engine;
 		SsaoConfig & m_ssaoConfig;
 		TextureUnit const & m_linearisedDepth;
@@ -105,7 +104,6 @@ namespace castor3d
 		std::shared_ptr< SsaoRawAOPass > m_rawAoPass;
 		std::shared_ptr< SsaoBlurPass > m_horizontalBlur;
 		std::shared_ptr< SsaoBlurPass > m_verticalBlur;
-		bool m_initialised{ false };
 	};
 }
 

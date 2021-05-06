@@ -62,33 +62,15 @@ namespace castor3d
 	std::string const RsmConfigUbo::BufferRsmConfig = "RsmConfig";
 	std::string const RsmConfigUbo::RsmConfigData = "c3d_rsmConfigData";
 
-	RsmConfigUbo::RsmConfigUbo( Engine & engine )
-		: m_engine{ engine }
+	RsmConfigUbo::RsmConfigUbo( RenderDevice const & device )
+		: m_device{ device }
+		, m_ubo{ m_device.uboPools->getBuffer< Configuration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
 	{
-		if ( engine.getRenderSystem()->hasCurrentRenderDevice() )
-		{
-			initialise( engine.getRenderSystem()->getCurrentRenderDevice() );
-		}
 	}
 
 	RsmConfigUbo::~RsmConfigUbo()
 	{
-	}
-
-	void RsmConfigUbo::initialise( RenderDevice const & device )
-	{
-		if ( !m_ubo )
-		{
-			m_ubo = device.uboPools->getBuffer< Configuration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
-		}
-	}
-
-	void RsmConfigUbo::cleanup( RenderDevice const & device )
-	{
-		if ( m_ubo )
-		{
-			device.uboPools->putBuffer( m_ubo );
-		}
+		m_device.uboPools->putBuffer( m_ubo );
 	}
 
 	void RsmConfigUbo::update( Light const & light )

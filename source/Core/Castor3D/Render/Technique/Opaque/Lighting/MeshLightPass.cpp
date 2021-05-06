@@ -360,7 +360,6 @@ namespace castor3d
 	{
 		doCleanup();
 		m_stencilPass.cleanup();
-		m_matrixUbo.cleanup();
 		m_vertexBuffer.reset();
 	}
 

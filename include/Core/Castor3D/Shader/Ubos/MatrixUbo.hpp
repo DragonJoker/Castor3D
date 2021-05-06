@@ -62,61 +62,8 @@ namespace castor3d
 	{
 	public:
 		using Configuration = MatrixUboConfiguration;
-		/**
-		*\~english
-		*\name
-		*	Copy/Move construction/assignment operation.
-		*\~french
-		*\name
-		*	Constructeurs/Opérateurs d'affectation par copie/déplacement.
-		*/
-		/**@{*/
-		C3D_API MatrixUbo( MatrixUbo const & ) = delete;
-		C3D_API MatrixUbo & operator=( MatrixUbo const & ) = delete;
-		C3D_API MatrixUbo( MatrixUbo && ) = default;
-		C3D_API MatrixUbo & operator=( MatrixUbo && ) = delete;
-		/**@}*/
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
-		 */
-		C3D_API explicit MatrixUbo( Engine & engine );
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	device	The GPU device.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	device	Le device GPU.
-		 */
 		C3D_API explicit MatrixUbo( RenderDevice const & device );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
 		C3D_API ~MatrixUbo();
-		/**
-		 *\~english
-		 *\brief		Initialises the UBO.
-		 *\param[in]	device	The GPU device.
-		 *\~french
-		 *\brief		Initialise l'UBO.
-		 *\param[in]	device	Le device GPU.
-		 */
-		C3D_API void initialise( RenderDevice const & device );
-		/**
-		 *\~english
-		 *\brief		Cleanup function.
-		 *\~french
-		 *\brief		Fonction de nettoyage.
-		 */
-		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -160,8 +107,7 @@ namespace castor3d
 		C3D_API static castor::String const MatrixData;
 
 	private:
-		Engine & m_engine;
-		RenderDevice const * m_device{};
+		RenderDevice const & m_device;
 		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }

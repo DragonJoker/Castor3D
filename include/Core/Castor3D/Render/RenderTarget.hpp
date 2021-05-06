@@ -322,7 +322,8 @@ namespace castor3d
 
 		HdrConfigUbo const & getHdrConfigUbo()const
 		{
-			return m_hdrConfigUbo;
+			CU_Require( m_hdrConfigUbo );
+			return *m_hdrConfigUbo;
 		}
 		/**@}*/
 		/**
@@ -403,7 +404,7 @@ namespace castor3d
 		TargetType m_type;
 		bool m_initialised;
 		castor::Size m_size;
-		HdrConfigUbo m_hdrConfigUbo;
+		std::unique_ptr< HdrConfigUbo > m_hdrConfigUbo;
 		RenderTechniqueSPtr m_renderTechnique;
 		SceneWPtr m_scene;
 		CameraWPtr m_camera;

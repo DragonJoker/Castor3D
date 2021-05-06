@@ -132,12 +132,10 @@ namespace castor3d
 
 	EnvironmentMapPass::~EnvironmentMapPass()
 	{
-		m_hdrConfigUbo.cleanup();
 		m_device.uboPools->putBuffer( m_modelUbo );
 		m_commands = {};
 		m_transparentPass.reset();
 		m_opaquePass.reset();
-		m_matrixUbo.cleanup();
 		m_frameBuffer.reset();
 	}
 

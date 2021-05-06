@@ -53,16 +53,8 @@ namespace castor3d
 		using Configuration = LpvGridConfigUboConfiguration;
 
 	public:
-		C3D_API LpvGridConfigUbo( LpvGridConfigUbo const & ) = delete;
-		C3D_API LpvGridConfigUbo & operator=( LpvGridConfigUbo const & ) = delete;
-		C3D_API LpvGridConfigUbo( LpvGridConfigUbo && ) = default;
-		C3D_API LpvGridConfigUbo & operator=( LpvGridConfigUbo && ) = delete;
-
 		C3D_API explicit LpvGridConfigUbo( RenderDevice const & device );
 		C3D_API ~LpvGridConfigUbo();
-
-		C3D_API void initialise( RenderDevice const & device );
-		C3D_API void cleanup();
 
 		C3D_API void cpuUpdate( castor::BoundingBox const & aabb
 			, castor::Point3f const & cameraPos
@@ -98,7 +90,7 @@ namespace castor3d
 		C3D_API static const std::string LpvGridData;
 
 	private:
-		RenderDevice const * m_device{};
+		RenderDevice const & m_device;
 		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
