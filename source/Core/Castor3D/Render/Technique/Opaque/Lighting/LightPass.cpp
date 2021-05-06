@@ -338,7 +338,6 @@ namespace castor3d
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName() }
 	{
-		m_matrixUbo.initialise( m_device );
 	}
 
 	void LightPass::update( bool first
@@ -637,7 +636,6 @@ namespace castor3d
 
 	void LightPass::doCleanup()
 	{
-		m_matrixUbo.cleanup();
 		m_commandBuffers[0].reset();
 		m_commandBuffers[1].reset();
 		m_pipelines.clear();

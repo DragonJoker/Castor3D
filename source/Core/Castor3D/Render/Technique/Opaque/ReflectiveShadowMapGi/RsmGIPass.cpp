@@ -94,8 +94,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderPtr getDirectionalPixelShaderSource( RenderSystem const & renderSystem
-			, uint32_t width
+		ShaderPtr getDirectionalPixelShaderSource( uint32_t width
 			, uint32_t height )
 		{
 			using namespace sdw;
@@ -173,8 +172,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderPtr getSpotPixelShaderSource( RenderSystem const & renderSystem
-			, uint32_t width
+		ShaderPtr getSpotPixelShaderSource( uint32_t width
 			, uint32_t height )
 		{
 			using namespace sdw;
@@ -255,8 +253,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderPtr getPointPixelShaderSource( RenderSystem const & renderSystem
-			, uint32_t width
+		ShaderPtr getPointPixelShaderSource( uint32_t width
 			, uint32_t height )
 		{
 			using namespace sdw;
@@ -322,25 +319,18 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< ast::Shader > getPixelProgram( Engine const & engine
-			, LightType lightType
+		std::unique_ptr< ast::Shader > getPixelProgram( LightType lightType
 			, uint32_t width
 			, uint32_t height )
 		{
 			switch ( lightType )
 			{
 			case LightType::eDirectional:
-				return getDirectionalPixelShaderSource( *engine.getRenderSystem()
-					, width
-					, height );
+				return getDirectionalPixelShaderSource( width, height );
 			case LightType::eSpot:
-				return getSpotPixelShaderSource( *engine.getRenderSystem()
-					, width
-					, height );
+				return getSpotPixelShaderSource( width, height );
 			case LightType::ePoint:
-				return getPointPixelShaderSource( *engine.getRenderSystem()
-					, width
-					, height );
+				return getPointPixelShaderSource( width, height );
 			default:
 				CU_Failure( "Unexpected MaterialType" );
 				return nullptr;
@@ -370,13 +360,13 @@ namespace castor3d
 			return sampler;
 		}
 
-		TextureUnit doCreateTexture( Engine & engine
-			, RenderDevice const & device
+		TextureUnit doCreateTexture( RenderDevice const & device
 			, castor::String const & name
 			, VkFormat format
 			, VkExtent2D const & size )
 		{
-			auto & renderSystem = *engine.getRenderSystem();
+			auto & renderSystem = device.renderSystem;
+			auto & engine = *renderSystem.getEngine();
 			auto sampler = doCreateSampler( engine, name, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER );
 
 			ashes::ImageCreateInfo image
@@ -403,16 +393,15 @@ namespace castor3d
 			return result;
 		}
 
-		TextureUnitArray doCreateTextures( Engine & engine
-			, RenderDevice const & device
+		TextureUnitArray doCreateTextures( RenderDevice const & device
 			, castor::String const & name
 			, VkFormat format1
 			, VkFormat format2
 			, VkExtent2D const & size )
 		{
 			TextureUnitArray result;
-			result.emplace_back( doCreateTexture( engine, device, name, format1, size ) );
-			result.emplace_back( doCreateTexture( engine, device, name, format2, size ) );
+			result.emplace_back( doCreateTexture( device, name, format1, size ) );
+			result.emplace_back( doCreateTexture( device, name, format2, size ) );
 			return result;
 		}
 		
@@ -524,8 +513,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	RsmGIPass::RsmGIPass( Engine & engine
-		, RenderDevice const & device
+	RsmGIPass::RsmGIPass( RenderDevice const & device
 		, LightCache const & lightCache
 		, LightType lightType
 		, VkExtent2D const & size
@@ -544,15 +532,14 @@ namespace castor3d
 		, m_gpResult{ gpResult }
 		, m_smResult{ smResult }
 		, m_gpInfo{ gpInfo }
-		, m_result{ doCreateTextures( engine
-			, m_device
+		, m_result{ doCreateTextures( m_device
 			, getName() + "Result"
 			, downscaleResult[0u].getTexture()->getPixelFormat()
 			, downscaleResult[1u].getTexture()->getPixelFormat()
 			, size ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram( engine, lightType, size.width, size.height ) }
-		, m_rsmConfigUbo{ engine }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram( lightType, size.width, size.height ) }
+		, m_rsmConfigUbo{ device }
 		, m_rsmSamplesSsbo{ makeBuffer< castor::Point2f >( m_device
 			, RsmConfig::MaxRange
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
@@ -566,8 +553,6 @@ namespace castor3d
 			, m_result[1].getTexture()->getDefaultView().getTargetView() ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_device, cuT( "Reflective Shadow Maps" ), cuT( "GI Resolve" ) ) }
 	{
-		m_rsmConfigUbo.initialise( m_device );
-
 		if ( auto buffer = m_rsmSamplesSsbo->lock( 0u, RsmConfig::MaxRange, 0u ) )
 		{
 			std::random_device rd;

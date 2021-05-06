@@ -32,27 +32,18 @@ namespace castor3d
 		*	Construction / Destruction.
 		*/
 		/**@{*/
-		C3D_API explicit TextureProjection( Engine & engine );
-		C3D_API ~TextureProjection();
-		/**@}*/
-		/**
-		*name
-		*	Initialisation / Cleanup.
-		*/
-		/**@{*/
-		C3D_API void initialise( RenderDevice const & device
+		C3D_API explicit TextureProjection( RenderDevice const & device
 			, ashes::ImageView const & source
 			, VkFormat targetColour
 			, VkFormat targetDepth );
-		C3D_API void cleanup( RenderDevice const & device );
+		C3D_API ~TextureProjection();
 		/**@}*/
 		/**
 		*name
 		*	Update.
 		*/
 		/**@{*/
-		C3D_API void update( RenderDevice const & device
-			, Camera const & camera );
+		C3D_API void update( Camera const & camera );
 		/**@}*/
 		/**
 		*name
@@ -73,15 +64,15 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		ashes::PipelineShaderStageCreateInfoArray doInitialiseShader( RenderDevice const & device );
-		bool doInitialiseVertexBuffer( RenderDevice const & device );
-		bool doInitialisePipeline( RenderDevice const & device
-			, ashes::PipelineShaderStageCreateInfoArray & program
+		ashes::PipelineShaderStageCreateInfoArray doInitialiseShader();
+		bool doInitialiseVertexBuffer();
+		bool doInitialisePipeline( ashes::PipelineShaderStageCreateInfoArray & program
 			, ashes::ImageView const & texture
 			, ashes::RenderPass const & renderPass );
-		void doPrepareFrame( RenderDevice const & device );
+		void doPrepareFrame();
 
 	private:
+		RenderDevice const & m_device;
 		MatrixUbo m_matrixUbo;
 		UniformBufferOffsetT< ModelUboConfiguration > m_modelUbo;
 		castor::Size m_size;

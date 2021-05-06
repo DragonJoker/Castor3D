@@ -74,8 +74,7 @@ namespace castor3d
 					m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getTargetView(),
 				}
 				, size );
-			m_rsmGiPass = std::make_unique< RsmGIPass >( this->m_engine
-				, this->m_device
+			m_rsmGiPass = std::make_unique< RsmGIPass >( this->m_device
 				, lightCache
 				, LtType
 				, size

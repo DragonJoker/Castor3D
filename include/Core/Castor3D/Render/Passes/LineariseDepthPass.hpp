@@ -47,7 +47,7 @@ namespace castor3d
 		 *\param[in]	size		Les dimensions de la zone de rendu.
 		 *\param[in]	depthBuffer	Le tampon de profondeur non linéarisé.
 		 */
-		C3D_API LineariseDepthPass( Engine & engine
+		C3D_API LineariseDepthPass( RenderDevice const & device
 			, castor::String const & prefix
 			, castor::Size const & size
 			, ashes::ImageView const & depthBuffer );
@@ -57,9 +57,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~LineariseDepthPass() = default;
-		C3D_API void initialise( RenderDevice const & device );
-		C3D_API void cleanup( RenderDevice const & device );
+		C3D_API ~LineariseDepthPass();
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -88,8 +86,7 @@ namespace castor3d
 		 *\param[in]	device	Le device GPU.
 		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
-		C3D_API ashes::Semaphore const & linearise( RenderDevice const & device
-			, ashes::Semaphore const & toWait )const;
+		C3D_API ashes::Semaphore const & linearise( ashes::Semaphore const & toWait )const;
 		/**
 		 *\~english
 		 *\param[in]	device	The GPU device.
@@ -102,8 +99,7 @@ namespace castor3d
 		 *\param[in]	index	L'index de la passe.
 		 *\return		Les commandes utilisées pour rendre la passe.
 		 */
-		C3D_API CommandsSemaphore getCommands( RenderDevice const & device
-			, RenderPassTimer const & timer
+		C3D_API CommandsSemaphore getCommands( RenderPassTimer const & timer
 			, uint32_t index )const;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
@@ -130,10 +126,10 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doInitialiseLinearisePass( RenderDevice const & device );
-		void doInitialiseMinifyPass( RenderDevice const & device );
-		void doCleanupLinearisePass( RenderDevice const & device );
-		void doCleanupMinifyPass( RenderDevice const & device );
+		void doInitialiseLinearisePass();
+		void doInitialiseMinifyPass();
+		void doCleanupLinearisePass();
+		void doCleanupMinifyPass();
 		void doPrepareFrame( ashes::CommandBuffer & cb
 			, RenderPassTimer const & timer
 			, uint32_t index )const;
@@ -142,6 +138,7 @@ namespace castor3d
 		static constexpr uint32_t MaxMipLevel = 5u;
 
 	private:
+		RenderDevice const & m_device;
 		Engine & m_engine;
 		ashes::ImageView const & m_srcDepthBuffer;
 		ashes::ImageView m_depthBuffer;
@@ -156,7 +153,7 @@ namespace castor3d
 		ashes::SamplerPtr m_minifySampler;
 		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::SemaphorePtr m_finished;
-		bool m_initialised{ false };
+		UniformBufferOffsetT< castor::Point3f > m_clipInfo;
 		/**
 		*name
 		*	Common.
@@ -181,7 +178,6 @@ namespace castor3d
 		ashes::DescriptorSetPtr m_lineariseDescriptor;
 		ashes::FrameBufferPtr m_lineariseFrameBuffer;
 		ashes::GraphicsPipelinePtr m_linearisePipeline;
-		UniformBufferOffsetT< castor::Point3f > m_clipInfo;
 		castor::ChangeTracked< castor::Point3f > m_clipInfoValue;
 		/**@}*/
 		/**

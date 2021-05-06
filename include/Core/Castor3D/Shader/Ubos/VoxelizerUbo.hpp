@@ -94,16 +94,9 @@ namespace castor3d
 		using Configuration = VoxelizerUboConfiguration;
 
 	public:
-		C3D_API VoxelizerUbo( VoxelizerUbo const & ) = delete;
-		C3D_API VoxelizerUbo & operator=( VoxelizerUbo const & ) = delete;
-		C3D_API VoxelizerUbo( VoxelizerUbo && ) = default;
-		C3D_API VoxelizerUbo & operator=( VoxelizerUbo && ) = delete;
-
 		C3D_API explicit VoxelizerUbo( RenderDevice const & device );
 		C3D_API ~VoxelizerUbo();
 
-		C3D_API void initialise( RenderDevice const & device );
-		C3D_API void cleanup();
 		C3D_API void cpuUpdate( VoxelSceneData const & voxelConfig
 			, float worldToGrid
 			, uint32_t voxelGridSize );
@@ -124,7 +117,7 @@ namespace castor3d
 		C3D_API static castor::String const VoxelData;
 
 	private:
-		RenderDevice const * m_device{};
+		RenderDevice const & m_device;
 		UniformBufferOffsetT< Configuration > m_ubo{};
 	};
 }

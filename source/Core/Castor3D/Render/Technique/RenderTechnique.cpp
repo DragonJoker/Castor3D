@@ -652,15 +652,10 @@ namespace castor3d
 		m_opaquePassResult.reset();
 #endif
 		m_clearLpv = {};
-		m_lpvConfigUbo.cleanup();
-		m_llpvConfigUbo.cleanup();
 		m_llpvResult.clear();
 		m_lpvResult.reset();
 		m_voxelizer.reset();
 		m_depthPass.reset();
-		m_vctConfigUbo.cleanup();
-		m_gpInfoUbo.cleanup();
-		m_matrixUbo.cleanup();
 		m_depthBuffer.cleanup();
 		m_colourTexture.cleanup();
 		getEngine()->getSamplerCache().remove( cuT( "RenderTechnique_Colour" ) );
