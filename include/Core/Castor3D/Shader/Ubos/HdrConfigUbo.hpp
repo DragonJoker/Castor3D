@@ -57,62 +57,8 @@ namespace castor3d
 		using Configuration = HdrConfig;
 
 	public:
-		/**
-		 *\~english
-		 *\name			Copy/Move construction/assignment operation.
-		 *\~french
-		 *\name			Constructeurs/Opérateurs d'affectation par copie/déplacement.
-		 */
-		/**@{*/
-		C3D_API HdrConfigUbo( HdrConfigUbo const & ) = delete;
-		C3D_API HdrConfigUbo & operator=( HdrConfigUbo const & ) = delete;
-		C3D_API HdrConfigUbo( HdrConfigUbo && ) = default;
-		C3D_API HdrConfigUbo & operator=( HdrConfigUbo && ) = delete;
-		/**@}*/
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
-		 */
-		C3D_API explicit HdrConfigUbo( Engine & engine );
-		/**@}*/
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	device	The RenderDevice.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	device	Le RenderDevice.
-		 */
 		C3D_API explicit HdrConfigUbo( RenderDevice const & device );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
 		C3D_API ~HdrConfigUbo();
-		/**
-		 *\~english
-		 *\brief		Initialises the UBO.
-		 *\param[in]	device	The GPU device.
-		 *\~french
-		 *\brief		Initialise l'UBO.
-		 *\param[in]	device	Le device GPU.
-		 */
-		C3D_API void initialise( RenderDevice const & device );
-		/**
-		 *\~english
-		 *\brief		Cleanup function.
-		 *\param[in]	device	The GPU device.
-		 *\~french
-		 *\brief		Fonction de nettoyage.
-		 *\param[in]	device	Le device GPU.
-		 */
-		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -139,8 +85,7 @@ namespace castor3d
 		C3D_API static castor::String const HdrConfigData;
 
 	private:
-		Engine & m_engine;
-		RenderDevice const * m_device{};
+		RenderDevice const & m_device;
 		UniformBufferOffsetT< HdrConfig > m_ubo;
 	};
 }

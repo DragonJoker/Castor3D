@@ -426,7 +426,7 @@ namespace castor3d
 		BackgroundType m_type;
 		std::atomic_bool m_initialised{ false };
 		bool m_hdr{ true };
-		MatrixUbo m_matrixUbo;
+		std::unique_ptr< MatrixUbo > m_matrixUbo;
 		UniformBufferOffsetT< ModelUboConfiguration > m_modelUbo;
 		castor::Matrix4x4f m_mtxModel;
 		ashes::SemaphorePtr m_semaphore;

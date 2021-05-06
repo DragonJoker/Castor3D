@@ -64,40 +64,15 @@ namespace castor3d
 	castor::String const HdrConfigUbo::BufferHdrConfig = cuT( "HdrConfig" );
 	castor::String const HdrConfigUbo::HdrConfigData = cuT( "c3d_hdrConfigData" );
 
-	HdrConfigUbo::HdrConfigUbo( Engine & engine )
-		: m_engine{ engine }
-	{
-		if ( engine.getRenderSystem()->hasCurrentRenderDevice() )
-		{
-			initialise( engine.getRenderSystem()->getCurrentRenderDevice() );
-		}
-	}
-
 	HdrConfigUbo::HdrConfigUbo( RenderDevice const & device )
-		: m_engine{ *device.renderSystem.getEngine() }
+		: m_device{ device }
+		, m_ubo{ m_device.uboPools->getBuffer< Configuration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
 	{
-		initialise( device );
 	}
 
 	HdrConfigUbo::~HdrConfigUbo()
 	{
-	}
-
-	void HdrConfigUbo::initialise( RenderDevice const & device )
-	{
-		if ( !m_ubo )
-		{
-			m_ubo = device.uboPools->getBuffer< Configuration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
-			m_device = &device;
-		}
-	}
-
-	void HdrConfigUbo::cleanup()
-	{
-		if ( m_ubo )
-		{
-			m_device->uboPools->putBuffer( m_ubo );
-		}
+		m_device.uboPools->putBuffer( m_ubo );
 	}
 
 	void HdrConfigUbo::cpuUpdate( HdrConfig const & config )

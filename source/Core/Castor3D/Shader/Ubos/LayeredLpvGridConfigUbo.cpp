@@ -60,29 +60,14 @@ namespace castor3d
 	std::string const LayeredLpvGridConfigUbo::LayeredLpvGridData = "c3d_llpvGridData";
 
 	LayeredLpvGridConfigUbo::LayeredLpvGridConfigUbo( RenderDevice const & device )
+		: m_device{ device }
+		, m_ubo{ m_device.uboPools->getBuffer< Configuration >( 0u ) }
 	{
-		initialise( device );
 	}
 
 	LayeredLpvGridConfigUbo::~LayeredLpvGridConfigUbo()
 	{
-		cleanup();
-	}
-
-	void LayeredLpvGridConfigUbo::initialise( RenderDevice const & device )
-	{
-		m_device = &device;
-		m_ubo = m_device->uboPools->getBuffer< Configuration >( 0u );
-	}
-
-	void LayeredLpvGridConfigUbo::cleanup()
-	{
-		if ( m_ubo )
-		{
-			m_device->uboPools->putBuffer( m_ubo );
-			m_device = nullptr;
-			m_ubo = {};
-		}
+		m_device.uboPools->putBuffer( m_ubo );
 	}
 
 	void LayeredLpvGridConfigUbo::cpuUpdate( std::array< castor::Grid, shader::LpvMaxCascadesCount > const & grids

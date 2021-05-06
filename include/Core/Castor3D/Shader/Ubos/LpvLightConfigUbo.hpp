@@ -50,17 +50,8 @@ namespace castor3d
 		using Configuration = LpvLightConfigUboConfiguration;
 
 	public:
-		C3D_API LpvLightConfigUbo( LpvLightConfigUbo const & ) = delete;
-		C3D_API LpvLightConfigUbo & operator=( LpvLightConfigUbo const & ) = delete;
-		C3D_API LpvLightConfigUbo( LpvLightConfigUbo && ) = default;
-		C3D_API LpvLightConfigUbo & operator=( LpvLightConfigUbo && ) = delete;
-
-		C3D_API explicit LpvLightConfigUbo();
 		C3D_API explicit LpvLightConfigUbo( RenderDevice const & device );
 		C3D_API ~LpvLightConfigUbo();
-
-		C3D_API void initialise( RenderDevice const & device );
-		C3D_API void cleanup();
 
 		C3D_API void cpuUpdate( Light const & light
 			, float lpvCellSize );
@@ -89,7 +80,7 @@ namespace castor3d
 		C3D_API static const std::string LpvLightData;
 
 	private:
-		RenderDevice const * m_device{};
+		RenderDevice const & m_device;
 		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }

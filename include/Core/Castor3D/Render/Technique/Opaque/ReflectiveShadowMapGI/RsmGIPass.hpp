@@ -48,8 +48,7 @@ namespace castor3d
 		 *\param[in]	smResult		La shadow map.
 		 *\param[in]	downscaleResult	Le résultat downscaled.
 		 */
-		C3D_API RsmGIPass( Engine & engine
-			, RenderDevice const & device
+		C3D_API RsmGIPass( RenderDevice const & device
 			, LightCache const & lightCache
 			, LightType lightType
 			, VkExtent2D const & size

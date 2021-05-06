@@ -104,41 +104,15 @@ namespace castor3d
 	String const SsaoConfigUbo::BufferSsaoConfig = cuT( "SsaoConfig" );
 	String const SsaoConfigUbo::SsaoConfigData = cuT( "c3d_ssaoConfigData" );
 
-	SsaoConfigUbo::SsaoConfigUbo( Engine & engine )
-		: m_engine{ engine }
-	{
-		if ( m_engine.getRenderSystem()->hasCurrentRenderDevice() )
-		{
-			initialise( m_engine.getRenderSystem()->getCurrentRenderDevice() );
-		}
-	}
-	
 	SsaoConfigUbo::SsaoConfigUbo( RenderDevice const & device )
-		: m_engine{ *device.renderSystem.getEngine() }
+		: m_device{ device }
+		, m_ubo{ m_device.uboPools->getBuffer< Configuration >( 0u ) }
 	{
-		initialise( device );
 	}
 
 	SsaoConfigUbo::~SsaoConfigUbo()
 	{
-		cleanup();
-	}
-
-	void SsaoConfigUbo::initialise( RenderDevice const & device )
-	{
-		if ( !m_ubo )
-		{
-			m_ubo = device.uboPools->getBuffer< Configuration >( 0u );
-			m_device = &device;
-		}
-	}
-
-	void SsaoConfigUbo::cleanup()
-	{
-		if ( m_ubo )
-		{
-			m_device->uboPools->putBuffer( m_ubo );
-		}
+		m_device.uboPools->putBuffer( m_ubo );
 	}
 
 	void SsaoConfigUbo::cpuUpdate( SsaoConfig const & config

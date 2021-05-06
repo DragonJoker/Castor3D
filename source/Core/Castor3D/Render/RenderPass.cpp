@@ -139,7 +139,6 @@ namespace castor3d
 
 	SceneRenderPass::~SceneRenderPass()
 	{
-		m_sceneUbo.cleanup();
 		m_renderPass.reset();
 		m_renderQueue.cleanup();
 		m_ownTimer.reset();

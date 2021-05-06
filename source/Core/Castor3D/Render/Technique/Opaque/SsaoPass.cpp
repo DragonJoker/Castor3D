@@ -5,7 +5,7 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
-#include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Ssao/SsaoBlurPass.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/Ssao/SsaoRawAOPass.hpp"
@@ -18,42 +18,32 @@ CU_ImplementCUSmartPtr( castor3d, SsaoPass )
 
 namespace castor3d
 {
-	SsaoPass::SsaoPass( Engine & engine
+	SsaoPass::SsaoPass( RenderDevice const & device
 		, castor::Size const & size
 		, SsaoConfig & ssaoConfig
 		, TextureUnit const & linearisedDepth
 		, OpaquePassResult const & gpResult
 		, GpInfoUbo const & gpInfoUbo )
-		: m_engine{ engine }
+		: m_device{ device }
+		, m_engine{ *m_device.renderSystem.getEngine() }
 		, m_ssaoConfig{ ssaoConfig }
 		, m_linearisedDepth{ linearisedDepth }
 		, m_gpResult{ gpResult }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_size{ makeExtent2D( size ) }
-		, m_matrixUbo{ engine }
-	{
-	}
-
-	void SsaoPass::initialise( RenderDevice const & device )
-	{
-		if ( m_initialised )
-		{
-			return;
-		}
-
-		m_matrixUbo.initialise( device );
-		m_ssaoConfigUbo = std::make_shared< SsaoConfigUbo >( device );
-		m_rawAoPass = std::make_shared< SsaoRawAOPass >( m_engine
-			, device
+		, m_matrixUbo{ m_device }
+		, m_ssaoConfigUbo{ std::make_shared< SsaoConfigUbo >( m_device ) }
+		, m_rawAoPass{ std::make_shared< SsaoRawAOPass >( m_engine
+			, m_device
 			, m_size
 			, m_ssaoConfig
 			, *m_ssaoConfigUbo
 			, m_gpInfoUbo
 			, m_linearisedDepth
-			, m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView() );
+			, m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView() ) }
 #if !C3D_DebugRawPass
-		m_horizontalBlur = std::make_shared< SsaoBlurPass >( m_engine
-			, device
+		, m_horizontalBlur{ std::make_shared< SsaoBlurPass >( m_engine
+			, m_device
 			, cuT( "Horizontal" )
 			, m_size
 			, m_ssaoConfig
@@ -62,9 +52,9 @@ namespace castor3d
 			, castor::Point2i{ 1, 0 }
 			, m_rawAoPass->getResult()
 			, m_rawAoPass->getBentResult()
-			, m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView() );
-		m_verticalBlur = std::make_shared< SsaoBlurPass >( m_engine
-			, device
+			, m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView() ) }
+		, m_verticalBlur{ std::make_shared< SsaoBlurPass >( m_engine
+			, m_device
 			, cuT( "Vertical" )
 			, m_size
 			, m_ssaoConfig
@@ -73,25 +63,17 @@ namespace castor3d
 			, castor::Point2i{ 0, 1 }
 			, m_horizontalBlur->getResult()
 			, m_horizontalBlur->getBentResult()
-			, m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView() );
+			, m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView() ) }
 #endif
-		m_initialised = true;
+	{
 	}
 
-	void SsaoPass::cleanup( RenderDevice const & device )
+	SsaoPass::~SsaoPass()
 	{
-		m_initialised = false;
 		m_verticalBlur.reset();
 		m_horizontalBlur.reset();
 		m_rawAoPass.reset();
-
-		if ( m_ssaoConfigUbo )
-		{
-			m_ssaoConfigUbo->cleanup();
-			m_ssaoConfigUbo.reset();
-		}
-
-		m_matrixUbo.cleanup();
+		m_ssaoConfigUbo.reset();
 	}
 
 	void SsaoPass::update( CpuUpdater & updater )

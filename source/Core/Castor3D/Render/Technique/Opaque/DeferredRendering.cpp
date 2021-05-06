@@ -84,11 +84,11 @@ namespace castor3d
 		, m_opaquePassResult{ opaquePassResult }
 		, m_size{ size }
 		, m_gpInfoUbo{ gpInfoUbo }
-		, m_linearisePass{ castor::makeUnique< LineariseDepthPass >( m_engine
+		, m_linearisePass{ castor::makeUnique< LineariseDepthPass >( m_device
 			, cuT( "Deferred" )
 			, m_size
 			, opaquePassResult[DsTexture::eDepth].getTexture()->getDefaultView().getSampledView() ) }
-		, m_ssao{ castor::makeUnique< SsaoPass >( m_engine
+		, m_ssao{ castor::makeUnique< SsaoPass >( m_device
 			, m_size
 			, m_ssaoConfig
 			, m_linearisePass->getResult()
@@ -134,12 +134,6 @@ namespace castor3d
 			, m_gpInfoUbo
 			, hdrConfigUbo ) }
 	{
-		if ( m_ssaoConfig.enabled )
-		{
-			m_linearisePass->initialise( m_device );
-			m_ssao->initialise( m_device );
-		}
-
 		if ( scene.needsSubsurfaceScattering() )
 		{
 			m_subsurfaceScattering->initialise( m_device );
@@ -152,8 +146,6 @@ namespace castor3d
 	{
 		m_resolve->cleanup();
 		m_subsurfaceScattering->cleanup( m_device );
-		m_ssao->cleanup( m_device );
-		m_linearisePass->cleanup( m_device );
 	}
 
 	void DeferredRendering::update( CpuUpdater & updater )
@@ -174,12 +166,6 @@ namespace castor3d
 
 	void DeferredRendering::update( GpuUpdater & updater )
 	{
-		if ( m_ssaoConfig.enabled )
-		{
-			m_linearisePass->initialise( m_device );
-			m_ssao->initialise( m_device );
-		}
-
 		if ( m_scene.needsSubsurfaceScattering() )
 		{
 			m_subsurfaceScattering->initialise( m_device );
@@ -204,7 +190,7 @@ namespace castor3d
 
 		if ( m_ssaoConfig.enabled )
 		{
-			result = &m_linearisePass->linearise( m_device, *result );
+			result = &m_linearisePass->linearise( *result );
 			result = &m_ssao->render( *result );
 		}
 

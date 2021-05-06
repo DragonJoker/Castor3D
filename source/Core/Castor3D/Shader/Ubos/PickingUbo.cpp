@@ -58,29 +58,15 @@ namespace castor3d
 	castor::String const PickingUbo::BufferPicking = cuT( "Picking" );
 	castor::String const PickingUbo::PickingData = cuT( "c3d_pickingData" );
 
-	PickingUbo::PickingUbo( Engine & engine )
-		: m_engine{ engine }
+	PickingUbo::PickingUbo( RenderDevice const & device )
+		: m_device{ device }
+		, m_ubo{ m_device.uboPools->getBuffer< Configuration >( 0u ) }
 	{
-		if ( engine.getRenderSystem()->hasCurrentRenderDevice() )
-		{
-			initialise( engine.getRenderSystem()->getCurrentRenderDevice() );
-		}
 	}
 
-	void PickingUbo::initialise( RenderDevice const & device )
+	PickingUbo::~PickingUbo()
 	{
-		if ( !m_ubo )
-		{
-			m_ubo = device.uboPools->getBuffer< Configuration >( 0u );
-		}
-	}
-
-	void PickingUbo::cleanup( RenderDevice const & device )
-	{
-		if ( m_ubo )
-		{
-			device.uboPools->putBuffer( m_ubo );
-		}
+		m_device.uboPools->putBuffer( m_ubo );
 	}
 
 	void PickingUbo::update( Configuration & configuration

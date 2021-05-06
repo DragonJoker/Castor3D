@@ -466,13 +466,14 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	OverlayRenderer::OverlayRenderer( RenderSystem & renderSystem
-		, UniformBufferPools & uboPools
+	OverlayRenderer::OverlayRenderer( RenderDevice const & device
 		, ashes::ImageView const & target )
-		: OwnedBy< RenderSystem >( renderSystem )
-		, m_uboPools{ uboPools }
+		: OwnedBy< RenderSystem >( device.renderSystem )
+		, m_device{ device }
+		, m_uboPools{ *device.uboPools }
 		, m_target{ target }
-		, m_matrixUbo{ *renderSystem.getEngine() }
+		, m_commandBuffer{ device.graphicsCommandPool->createCommandBuffer( "OverlayRenderer" ) }
+		, m_matrixUbo{ device }
 		, m_noTexDeclaration{ 0u
 			, ashes::VkVertexInputBindingDescriptionArray{ { 0u
 				, sizeof( OverlayCategory::Vertex )
@@ -491,27 +492,9 @@ namespace castor3d
 			, ashes::VkVertexInputAttributeDescriptionArray{ { 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, coords ) }
 				, { 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, texture ) }
 				, { 2u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, text ) } } }
+		, m_finished{ device->createSemaphore( "OverlayRenderer" ) }
 	{
-	}
-
-	OverlayRenderer::~OverlayRenderer()
-	{
-	}
-
-	void OverlayRenderer::initialise( RenderDevice const & device )
-	{
-		if ( !m_renderPass )
-		{
-			doCreateRenderPass( device );
-		}
-
-		if ( !m_commandBuffer )
-		{
-			m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( "OverlayRenderer" );
-			m_finished = device->createSemaphore( "OverlayRenderer" );
-		}
-
-		m_matrixUbo.initialise( device );
+		doCreateRenderPass( device );
 
 		// Create one panel overlays buffer pool
 		m_panelVertexBuffers.emplace_back( std::make_unique< PanelVertexBufferPool >( *getRenderSystem()->getEngine()
@@ -535,9 +518,8 @@ namespace castor3d
 			, MaxPanelsPerBuffer ) );
 	}
 
-	void OverlayRenderer::cleanup( RenderDevice const & device )
+	OverlayRenderer::~OverlayRenderer()
 	{
-		m_matrixUbo.cleanup();
 		m_panelOverlays.clear();
 		m_borderPanelOverlays.clear();
 		m_textOverlays.clear();
@@ -614,10 +596,9 @@ namespace castor3d
 		m_sizeChanged = false;
 	}
 
-	void OverlayRenderer::render( RenderDevice const & device
-		, RenderPassTimer & timer )
+	void OverlayRenderer::render( RenderPassTimer & timer )
 	{
-		auto & queue = *device.graphicsQueue;
+		auto & queue = *m_device.graphicsQueue;
 		RenderPassTimerBlock timerBlock{ timer.start() };
 		timerBlock->notifyPassRender();
 		queue.submit( *m_commandBuffer

@@ -52,33 +52,7 @@ namespace castor3d
 		using Configuration = ShadowMapUboConfiguration;
 
 	public:
-		/**
-		 *\~english
-		 *\name			Copy/Move construction/assignment operation.
-		 *\~french
-		 *\name			Constructeurs/Opérateurs d'affectation par copie/déplacement.
-		 */
-		/**@{*/
-		C3D_API ShadowMapUbo( ShadowMapUbo const & ) = delete;
-		C3D_API ShadowMapUbo & operator=( ShadowMapUbo const & ) = delete;
-		C3D_API ShadowMapUbo( ShadowMapUbo && ) = default;
-		C3D_API ShadowMapUbo & operator=( ShadowMapUbo && ) = delete;
-		/**@}*/
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
-		 */
 		C3D_API explicit ShadowMapUbo( RenderDevice const & device );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
 		C3D_API ~ShadowMapUbo();
 		/**
 		 *\~english

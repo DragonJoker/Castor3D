@@ -42,9 +42,8 @@ namespace castor3d
 	{
 	public:
 		using Configuration = PickingUboConfiguration;
-		explicit PickingUbo( Engine & engine );
-		void initialise( RenderDevice const & device );
-		void cleanup( RenderDevice const & device );
+		C3D_API explicit PickingUbo( RenderDevice const & device );
+		C3D_API ~PickingUbo();
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -77,7 +76,7 @@ namespace castor3d
 		C3D_API static castor::String const PickingData;
 
 	private:
-		Engine & m_engine;
+		RenderDevice const & m_device;
 		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }

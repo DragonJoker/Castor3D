@@ -65,60 +65,9 @@ namespace castor3d
 		using Configuration = GpInfoUboConfiguration;
 
 	public:
-		/**
-		 *\~english
-		 *\name			Copy/Move construction/assignment operation.
-		 *\~french
-		 *\name			Constructeurs/Opérateurs d'affectation par copie/déplacement.
-		 */
-		/**@{*/
-		C3D_API GpInfoUbo( GpInfoUbo const & ) = delete;
-		C3D_API GpInfoUbo & operator=( GpInfoUbo const & ) = delete;
-		C3D_API GpInfoUbo( GpInfoUbo && ) = default;
-		C3D_API GpInfoUbo & operator=( GpInfoUbo && ) = delete;
-		/**@}*/
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
-		 */
-		explicit GpInfoUbo( Engine & engine );
-		/**@}*/
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	engine	The GPU device.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	engine	Le device GPU.
-		 */
-		explicit GpInfoUbo( RenderDevice const & device );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		~GpInfoUbo();
-		/**
-		 *\~english
-		 *\brief		Initialises the UBO.
-		 *\param[in]	device	The GPU device.
-		 *\~french
-		 *\brief		Initialise l'UBO.
-		 *\param[in]	device	Le device GPU.
-		 */
-		C3D_API void initialise( RenderDevice const & device );
-		/**
-		 *\~english
-		 *\brief		Cleanup function.
-		 *\~french
-		 *\brief		Fonction de nettoyage.
-		 */
-		C3D_API void cleanup();
+		C3D_API explicit GpInfoUbo( RenderDevice const & device );
+		C3D_API ~GpInfoUbo();
+
 		C3D_API void cpuUpdate( castor::Size const & renderSize
 			, Camera const & camera );
 
@@ -138,8 +87,7 @@ namespace castor3d
 		C3D_API static const castor::String GPInfoData;
 
 	private:
-		Engine & m_engine;
-		RenderDevice const * m_device{};
+		RenderDevice const & m_device;
 		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }

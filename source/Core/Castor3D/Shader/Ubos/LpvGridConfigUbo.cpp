@@ -69,29 +69,14 @@ namespace castor3d
 	std::string const LpvGridConfigUbo::LpvGridConfig = "lpvGridConfig";
 
 	LpvGridConfigUbo::LpvGridConfigUbo( RenderDevice const & device )
+		: m_device{ device }
+		, m_ubo{ m_device.uboPools->getBuffer< Configuration >( 0u ) }
 	{
-		initialise( device );
 	}
 	
 	LpvGridConfigUbo::~LpvGridConfigUbo()
 	{
-		cleanup();
-	}
-
-	void LpvGridConfigUbo::initialise( RenderDevice const & device )
-	{
-		m_device = &device;
-		m_ubo = m_device->uboPools->getBuffer< Configuration >( 0u );
-	}
-
-	void LpvGridConfigUbo::cleanup()
-	{
-		if ( m_ubo )
-		{
-			m_device->uboPools->putBuffer( m_ubo );
-			m_device = nullptr;
-			m_ubo = {};
-		}
+		m_device.uboPools->putBuffer( m_ubo );
 	}
 
 	void LpvGridConfigUbo::cpuUpdate( castor::BoundingBox const & aabb

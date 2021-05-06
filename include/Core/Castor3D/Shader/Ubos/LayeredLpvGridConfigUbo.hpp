@@ -49,16 +49,8 @@ namespace castor3d
 		using Configuration = LayeredLpvGridConfigUboConfiguration;
 
 	public:
-		C3D_API LayeredLpvGridConfigUbo( LayeredLpvGridConfigUbo const & ) = delete;
-		C3D_API LayeredLpvGridConfigUbo & operator=( LayeredLpvGridConfigUbo const & ) = delete;
-		C3D_API LayeredLpvGridConfigUbo( LayeredLpvGridConfigUbo && ) = default;
-		C3D_API LayeredLpvGridConfigUbo & operator=( LayeredLpvGridConfigUbo && ) = delete;
-
 		C3D_API explicit LayeredLpvGridConfigUbo( RenderDevice const & device );
 		C3D_API ~LayeredLpvGridConfigUbo();
-
-		C3D_API void initialise( RenderDevice const & device );
-		C3D_API void cleanup();
 
 		C3D_API void cpuUpdate( std::array< castor::Grid, shader::LpvMaxCascadesCount > const & grids
 			, float indirectAttenuation );
@@ -79,7 +71,7 @@ namespace castor3d
 		C3D_API static const std::string LayeredLpvGridData;
 
 	private:
-		RenderDevice const * m_device{};
+		RenderDevice const & m_device;
 		UniformBufferOffsetT< Configuration > m_ubo{};
 	};
 }
