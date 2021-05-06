@@ -29,7 +29,7 @@ namespace smaa
 	CU_ImplementAttributeParser( parserSmaa )
 	{
 		ParserContext * smaaContext = new ParserContext;
-		smaaContext->engine = std::static_pointer_cast< castor3d::SceneFileContext >( context )->m_pParser->getEngine();
+		smaaContext->engine = std::static_pointer_cast< castor3d::SceneFileContext >( context )->parser->getEngine();
 		context->registerUserContext( PostEffect::Type, smaaContext );
 	}
 	CU_EndAttributePush( SmaaSection::eRoot )

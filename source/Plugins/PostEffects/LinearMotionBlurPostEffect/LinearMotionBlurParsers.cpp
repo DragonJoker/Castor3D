@@ -30,7 +30,7 @@ namespace motion_blur
 	CU_ImplementAttributeParser( parserMotionBlur )
 	{
 		ParserContext * blurContext = new ParserContext;
-		blurContext->engine = std::static_pointer_cast< castor3d::SceneFileContext >( context )->m_pParser->getEngine();
+		blurContext->engine = std::static_pointer_cast< castor3d::SceneFileContext >( context )->parser->getEngine();
 		context->registerUserContext( PostEffect::Type, blurContext );
 	}
 	CU_EndAttributePush( MotionBlurSection::eRoot )
