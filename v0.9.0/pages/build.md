@@ -1,8 +1,8 @@
 [Back to version page](http://DragonJoker.github.io/Castor3D/v0.9.0)
 
 
-Building Castor3D
-=================
+Building Castor3D v0.9.0
+========================
 
 Castor3D uses CMake to build project files.
 You just need to launch CMake to build your preferential project file.

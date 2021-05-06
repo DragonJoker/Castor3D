@@ -1,7 +1,7 @@
 [Back to Main page](http://dragonjoker.github.io/Castor3D)
 
-Castor3D
-========
+Castor3D v0.10.0
+================
 
 Castor3D is a 3D engine written in C++.
 It works on Windows and also on GNU/Linux.
