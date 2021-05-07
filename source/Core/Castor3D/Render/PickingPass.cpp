@@ -722,7 +722,7 @@ namespace castor3d
 	ashes::VkDescriptorSetLayoutBindingArray PickingPass::doCreateAdditionalBindings( PipelineFlags const & flags )const
 	{
 		ashes::VkDescriptorSetLayoutBindingArray addBindings;
-		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::ePicking )
+		addBindings.emplace_back( makeDescriptorSetLayoutBinding( 0u
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		return addBindings;
@@ -769,7 +769,7 @@ namespace castor3d
 		, BillboardListRenderNode & node )
 	{
 		node.pickingUbo.createSizedBinding( descriptorSet
-			, descriptorSet.getLayout().getBinding( uint32_t( NodeUboIdx::ePicking ) ) );
+			, descriptorSet.getLayout().getBinding( 0u ) );
 	}
 
 	void PickingPass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
@@ -777,7 +777,7 @@ namespace castor3d
 		, SubmeshRenderNode & node )
 	{
 		node.pickingUbo.createSizedBinding( descriptorSet
-			, descriptorSet.getLayout().getBinding( uint32_t( NodeUboIdx::ePicking ) ) );
+			, descriptorSet.getLayout().getBinding( 0u ) );
 	}
 
 	void PickingPass::doUpdate( RenderQueueArray & CU_UnusedParam( queues ) )
@@ -882,7 +882,7 @@ namespace castor3d
 		}
 
 		UBO_PICKING( writer
-			, uint32_t( NodeUboIdx::ePicking )
+			, 0u
 			, RenderPipeline::eAdditional );
 
 		// Fragment Intputs
