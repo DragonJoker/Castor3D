@@ -135,6 +135,7 @@ namespace castor3d
 		void doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes );
 		void doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes );
 		void doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes );
+		ashes::VkDescriptorSetLayoutBindingArray doCreateAdditionalBindings( PipelineFlags const & flags )const override;
 		void doFillUboDescriptor( RenderPipeline const & pipeline
 			, ashes::DescriptorSet & descriptorSet
 			, BillboardListRenderNode & node )override;
@@ -151,6 +152,12 @@ namespace castor3d
 			, uint32_t & index
 			, SubmeshRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
+		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSet & descriptorSet
+			, BillboardListRenderNode & node )override;
+		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSet & descriptorSet
+			, SubmeshRenderNode & node )override;
 		void doUpdate( RenderQueueArray & queues )override;
 		virtual ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
