@@ -12,7 +12,6 @@ See LICENSE file in root folder
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/OverlayUbo.hpp"
-#include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
 
 #include <CastorUtils/Graphics/Size.hpp>
 
@@ -224,7 +223,6 @@ namespace castor3d
 			OverlayRenderNode & node;
 			uint32_t index;
 			UniformBufferOffsetT< Configuration > overlayUbo;
-			UniformBufferOffsetT< TexturesUbo::Configuration > texturesUbo;
 			OverlayGeometryBuffers geometryBuffers;
 			ashes::DescriptorSetPtr descriptorSet;
 			FontTexture::OnChanged::connection connection;
@@ -258,14 +256,12 @@ namespace castor3d
 			, TextureFlags textures
 			, Pass const & pass
 			, UniformBufferOffsetT< Configuration > const & overlayUbo
-			, UniformBufferOffsetT< TexturesUbo::Configuration > const & texturesUbo
 			, uint32_t index
 			, bool update = true );
 		ashes::DescriptorSetPtr doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
 			, TextureFlags textures
 			, Pass const & pass
 			, UniformBufferOffsetT< Configuration > const & overlayUbo
-			, UniformBufferOffsetT< TexturesUbo::Configuration > const & texturesUbo
 			, uint32_t index
 			, TextureLayout const & texture
 			, Sampler const & sampler );
