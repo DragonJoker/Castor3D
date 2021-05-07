@@ -32,7 +32,6 @@
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 #include "Castor3D/Shader/Ubos/ShadowMapUbo.hpp"
-#include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
 
 #include <CastorUtils/Graphics/Image.hpp>
 
@@ -352,10 +351,6 @@ namespace castor3d
 				, RenderPipeline::eBuffers );
 		}
 
-		UBO_TEXTURES( writer
-			, uint32_t( NodeUboIdx::eTexturesConfig )
-			, RenderPipeline::eBuffers
-			, hasTextures );
 		UBO_SHADOWMAP( writer
 			, uint32_t( NodeUboIdx::eShadow )
 			, RenderPipeline::eBuffers );
@@ -426,7 +421,6 @@ namespace castor3d
 					, textures
 					, gamma
 					, textureConfigs
-					, c3d_textureData.config
 					, c3d_maps
 					, texCoord
 					, normal
@@ -520,10 +514,6 @@ namespace castor3d
 				, RenderPipeline::eBuffers );
 		}
 
-		UBO_TEXTURES( writer
-			, uint32_t( NodeUboIdx::eTexturesConfig )
-			, RenderPipeline::eBuffers
-			, hasTextures );
 		UBO_SHADOWMAP( writer
 			, uint32_t( NodeUboIdx::eShadow )
 			, RenderPipeline::eBuffers );
@@ -594,7 +584,6 @@ namespace castor3d
 					, textures
 					, gamma
 					, textureConfigs
-					, c3d_textureData.config
 					, c3d_maps
 					, texCoord
 					, normal
@@ -688,10 +677,6 @@ namespace castor3d
 				, RenderPipeline::eBuffers );
 		}
 
-		UBO_TEXTURES( writer
-			, uint32_t( NodeUboIdx::eTexturesConfig )
-			, RenderPipeline::eBuffers
-			, hasTextures );
 		UBO_SHADOWMAP( writer
 			, uint32_t( NodeUboIdx::eShadow )
 			, RenderPipeline::eBuffers );
@@ -762,7 +747,6 @@ namespace castor3d
 					, textures
 					, gamma
 					, textureConfigs
-					, c3d_textureData.config
 					, c3d_maps
 					, texCoord
 					, normal

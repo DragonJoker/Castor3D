@@ -13,7 +13,6 @@ namespace castor3d
 		, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
 		, UniformBufferOffsetT< PickingUboConfiguration > pickingBuffer
 		, UniformBufferOffsetT< BillboardUboConfiguration > billboardBuffer
-		, UniformBufferOffsetT< TexturesUboConfiguration > texturesBuffer
 		, UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesBuffer
 		, GeometryBuffers const & buffers
 		, SceneNode & sceneNode
@@ -21,7 +20,6 @@ namespace castor3d
 		: BillboardListRenderNode{ std::move( passNode )
 			, modelBuffer
 			, pickingBuffer
-			, texturesBuffer
 			, modelInstancesBuffer
 			, buffers
 			, sceneNode

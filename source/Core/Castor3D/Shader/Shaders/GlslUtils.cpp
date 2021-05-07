@@ -1232,7 +1232,6 @@ namespace castor3d::shader
 
 	void Utils::compute2DMapsContributions( FilteredTextureFlags const & flags
 		, TextureConfigurations const & textureConfigs
-		, sdw::Array< sdw::UVec4 > const & textureConfig
 		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 		, sdw::Vec3 const & texCoords
 		, sdw::Vec3 & colour
@@ -1268,7 +1267,6 @@ namespace castor3d::shader
 
 	void Utils::computeOpacityMapContribution( FilteredTextureFlags const & flags
 		, TextureConfigurations const & textureConfigs
-		, sdw::Array< sdw::UVec4 > const & textureConfig
 		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 		, sdw::Vec3 const & texCoords
 		, sdw::Float & opacity )
@@ -1301,7 +1299,6 @@ namespace castor3d::shader
 	void Utils::computeGeometryMapsContributions( FilteredTextureFlags const & flags
 		, PassFlags const & passFlags
 		, TextureConfigurations const & textureConfigs
-		, sdw::Array< sdw::UVec4 > const & textureConfig
 		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 		, sdw::Vec3 & texCoords
 		, sdw::Float & opacity

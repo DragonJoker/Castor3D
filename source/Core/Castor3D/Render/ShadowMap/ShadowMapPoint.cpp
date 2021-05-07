@@ -26,7 +26,6 @@
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/ShadowMapUbo.hpp"
-#include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
 
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
