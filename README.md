@@ -74,17 +74,17 @@ Other applications
 - ImgConverter: Allows you to convert any image file type to XPM or ICO.
 
 
-![Sponza](http://dragonjoker.github.com/Castor3D/img/Sponza-PBR-Bloom-Small.png)
-![Cerberus](http://dragonjoker.github.com/Castor3D/img/Cerberus-PBR-Small.png)
-![Park, Legacy](http://dragonjoker.github.com/Castor3D/img/Park-Legacy-Small.png)
-![Park, PBR](http://dragonjoker.github.com/Castor3D/img/Park-PBR-Small.png)
-![Nyra, PBR](http://dragonjoker.github.com/Castor3D/img/Nyra-PBR-MR-Small.png)
-![SanMiguel, PBR](http://dragonjoker.github.com/Castor3D/img/SanMiguel-PBR-SG-Small.png)
+![Sponza](http://dragonjoker.github.io/Castor3D/img/Sponza-PBR-Bloom-Small.png)
+![Cerberus](http://dragonjoker.github.io/Castor3D/img/Cerberus-PBR-Small.png)
+![Park, Legacy](http://dragonjoker.github.io/Castor3D/img/Park-Legacy-Small.png)
+![Park, PBR](http://dragonjoker.github.io/Castor3D/img/Park-PBR-Small.png)
+![Nyra, PBR](http://dragonjoker.github.io/Castor3D/img/Nyra-PBR-MR-Small.png)
+![SanMiguel, PBR](http://dragonjoker.github.io/Castor3D/img/SanMiguel-PBR-SG-Small.png)
 
 Links
 -----
 
-- [Building Castor3D](http://dragonjoker.github.com/Castor3D/pages/build)
+- [Building Castor3D](http://dragonjoker.github.io/Castor3D/pages/build)
 - [API Documentation](http://dragonjoker.github.io/Castor3D/doc/)
 - [Playlist on YouTube](https://www.youtube.com/playlist?list=PLKA1SVXuAbMNaFbSJyAN_4yD2bzNlgES3)
 
