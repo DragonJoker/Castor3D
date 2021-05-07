@@ -105,21 +105,18 @@ namespace castor3d::shader
 			, sdw::SampledImage2DRgba32 const & brdf )const;
 		C3D_API void compute2DMapsContributions( FilteredTextureFlags const & flags
 			, TextureConfigurations const & textureConfigs
-			, sdw::Array< sdw::UVec4 > const & textureConfig
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 			, sdw::Vec3 const & texCoords
 			, sdw::Vec3 & colour
 			, sdw::Float & opacity );
 		C3D_API void computeOpacityMapContribution( FilteredTextureFlags const & flags
 			, TextureConfigurations const & textureConfigs
-			, sdw::Array< sdw::UVec4 > const & textureConfig
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 			, sdw::Vec3 const & texCoords
 			, sdw::Float & opacity );
 		C3D_API void computeGeometryMapsContributions( FilteredTextureFlags const & flags
 			, PassFlags const & passFlags
 			, TextureConfigurations const & textureConfigs
-			, sdw::Array< sdw::UVec4 > const & textureConfig
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 			, sdw::Vec3 & texCoords
 			, sdw::Float & opacity
