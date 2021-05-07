@@ -243,15 +243,16 @@ namespace castor3d
 	}
 
 	void RenderTechniquePass::doFillUboDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetLayout const & layout
+		, ashes::DescriptorSet & descriptorSet
 		, BillboardListRenderNode & node )
 	{
 		auto sceneFlags = pipeline.getFlags().sceneFlags;
+		auto & layout = descriptorSet.getLayout();
 
 		if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 		{
 			CU_Require( m_vctConfigUbo );
-			m_vctConfigUbo->createSizedBinding( *node.uboDescriptorSet
+			m_vctConfigUbo->createSizedBinding( descriptorSet
 				, layout.getBinding( uint32_t( NodeUboIdx::eVoxelData ) ) );
 		}
 		else
@@ -259,29 +260,30 @@ namespace castor3d
 			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 			{
 				CU_Require( m_lpvConfigUbo );
-				m_lpvConfigUbo->createSizedBinding( *node.uboDescriptorSet
+				m_lpvConfigUbo->createSizedBinding( descriptorSet
 					, layout.getBinding( uint32_t( NodeUboIdx::eLpvGridConfig ) ) );
 			}
 
 			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
 			{
 				CU_Require( m_llpvConfigUbo );
-				m_llpvConfigUbo->createSizedBinding( *node.uboDescriptorSet
+				m_llpvConfigUbo->createSizedBinding( descriptorSet
 					, layout.getBinding( uint32_t( NodeUboIdx::eLayeredLpvGridConfig ) ) );
 			}
 		}
 	}
 
 	void RenderTechniquePass::doFillUboDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetLayout const & layout
+		, ashes::DescriptorSet & descriptorSet
 		, SubmeshRenderNode & node )
 	{
 		auto sceneFlags = pipeline.getFlags().sceneFlags;
+		auto & layout = descriptorSet.getLayout();
 
 		if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 		{
 			CU_Require( m_vctConfigUbo );
-			m_vctConfigUbo->createSizedBinding( *node.uboDescriptorSet
+			m_vctConfigUbo->createSizedBinding( descriptorSet
 				, layout.getBinding( uint32_t( NodeUboIdx::eVoxelData ) ) );
 		}
 		else
@@ -289,14 +291,14 @@ namespace castor3d
 			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 			{
 				CU_Require( m_lpvConfigUbo );
-				m_lpvConfigUbo->createSizedBinding( *node.uboDescriptorSet
+				m_lpvConfigUbo->createSizedBinding( descriptorSet
 					, layout.getBinding( uint32_t( NodeUboIdx::eLpvGridConfig ) ) );
 			}
 
 			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
 			{
 				CU_Require( m_llpvConfigUbo );
-				m_llpvConfigUbo->createSizedBinding( *node.uboDescriptorSet
+				m_llpvConfigUbo->createSizedBinding( descriptorSet
 					, layout.getBinding( uint32_t( NodeUboIdx::eLayeredLpvGridConfig ) ) );
 			}
 		}
@@ -339,7 +341,7 @@ namespace castor3d
 	{
 		template< typename DataTypeT, typename InstanceTypeT >
 		void fillTexDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSetLayout const & layout
+			, ashes::DescriptorSet & descriptorSet
 			, uint32_t & index
 			, ObjectRenderNode< DataTypeT, InstanceTypeT > & node
 			, ShadowMapLightTypeArray const & shadowMaps
@@ -349,6 +351,7 @@ namespace castor3d
 			, TextureUnit const * vctSecondaryBounce )
 		{
 			auto & flags = pipeline.getFlags();
+			auto & layout = descriptorSet.getLayout();
 			ashes::WriteDescriptorSetArray writes;
 
 			if ( !flags.textures.empty() )
@@ -431,18 +434,18 @@ namespace castor3d
 				, shadowMaps
 				, writes
 				, index );
-			node.texDescriptorSet->setBindings( writes );
+			descriptorSet.setBindings( writes );
 		}
 	}
 
 	void RenderTechniquePass::doFillTextureDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetLayout const & layout
+		, ashes::DescriptorSet & descriptorSet
 		, uint32_t & index
 		, BillboardListRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		fillTexDescriptor( pipeline
-			, layout
+			, descriptorSet
 			, index
 			, node
 			, shadowMaps
@@ -453,13 +456,13 @@ namespace castor3d
 	}
 
 	void RenderTechniquePass::doFillTextureDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetLayout const & layout
+		, ashes::DescriptorSet & descriptorSet
 		, uint32_t & index
 		, SubmeshRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		fillTexDescriptor( pipeline
-			, layout
+			, descriptorSet
 			, index
 			, node
 			, shadowMaps

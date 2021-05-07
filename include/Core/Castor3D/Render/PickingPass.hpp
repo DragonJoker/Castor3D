@@ -136,18 +136,18 @@ namespace castor3d
 		void doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes );
 		void doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes );
 		void doFillUboDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSetLayout const & layout
+			, ashes::DescriptorSet & descriptorSet
 			, BillboardListRenderNode & node )override;
 		void doFillUboDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSetLayout const & layout
+			, ashes::DescriptorSet & descriptorSet
 			, SubmeshRenderNode & node )override;
 		void doFillTextureDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSetLayout const & layout
+			, ashes::DescriptorSet & descriptorSet
 			, uint32_t & index
 			, BillboardListRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		void doFillTextureDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSetLayout const & layout
+			, ashes::DescriptorSet & descriptorSet
 			, uint32_t & index
 			, SubmeshRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;

@@ -320,24 +320,24 @@ namespace castor3d
 	}
 
 	void VoxelizePass::doFillUboDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetLayout const & layout
+		, ashes::DescriptorSet & descriptorSet
 		, BillboardListRenderNode & node )
 	{
-		m_voxelizerUbo.createSizedBinding( *node.uboDescriptorSet
-			, layout.getBinding( uint32_t( NodeUboIdx::eVoxelData ) ) );
-		node.uboDescriptorSet->createBinding( layout.getBinding( uint32_t( NodeUboIdx::eVoxelBuffer ) )
+		m_voxelizerUbo.createSizedBinding( descriptorSet
+			, descriptorSet.getLayout().getBinding( uint32_t( NodeUboIdx::eVoxelData ) ) );
+		descriptorSet.createBinding( descriptorSet.getLayout().getBinding( uint32_t( NodeUboIdx::eVoxelBuffer ) )
 			, m_voxels
 			, 0u
 			, m_voxels.getCount() );
 	}
 
 	void VoxelizePass::doFillUboDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetLayout const & layout
+		, ashes::DescriptorSet & descriptorSet
 		, SubmeshRenderNode & node )
 	{
-		m_voxelizerUbo.createSizedBinding( *node.uboDescriptorSet
-			, layout.getBinding( uint32_t( NodeUboIdx::eVoxelData ) ) );
-		node.uboDescriptorSet->createBinding( layout.getBinding( uint32_t( NodeUboIdx::eVoxelBuffer ) )
+		m_voxelizerUbo.createSizedBinding( descriptorSet
+			, descriptorSet.getLayout().getBinding( uint32_t( NodeUboIdx::eVoxelData ) ) );
+		descriptorSet.createBinding( descriptorSet.getLayout().getBinding( uint32_t( NodeUboIdx::eVoxelBuffer ) )
 			, m_voxels
 			, 0u
 			, m_voxels.getCount() );
@@ -347,7 +347,7 @@ namespace castor3d
 	{
 		template< typename DataTypeT, typename InstanceTypeT >
 		void fillTexDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSetLayout const & layout
+			, ashes::DescriptorSet & descriptorSet
 			, uint32_t & index
 			, ObjectRenderNode< DataTypeT, InstanceTypeT > & node
 			, ShadowMapLightTypeArray const & shadowMaps )
@@ -357,7 +357,7 @@ namespace castor3d
 
 			if ( !flags.textures.empty() )
 			{
-				node.passNode.fillDescriptor( layout
+				node.passNode.fillDescriptor( descriptorSet.getLayout()
 					, index
 					, writes
 					, flags.textures );
@@ -367,31 +367,31 @@ namespace castor3d
 				, shadowMaps
 				, writes
 				, index );
-			node.texDescriptorSet->setBindings( writes );
+			descriptorSet.setBindings( writes );
 		}
 	}
 
 	void VoxelizePass::doFillTextureDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetLayout const & layout
+		, ashes::DescriptorSet & descriptorSet
 		, uint32_t & index
 		, BillboardListRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		fillTexDescriptor( pipeline
-			, layout
+			, descriptorSet
 			, index
 			, node
 			, shadowMaps );
 	}
 
 	void VoxelizePass::doFillTextureDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetLayout const & layout
+		, ashes::DescriptorSet & descriptorSet
 		, uint32_t & index
 		, SubmeshRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		fillTexDescriptor( pipeline
-			, layout
+			, descriptorSet
 			, index
 			, node
 			, shadowMaps );
