@@ -736,7 +736,8 @@ namespace castor3d
 			, lightType
 			, uint32_t( LightPassUboIdx::eLight )
 			, shader::ShadowOptions{ m_shadows, lightType, rsm }
-			, index );
+			, index
+			, 1u );
 		shader::SssTransmittance sss{ writer
 			, lighting->getShadowModel()
 			, utils
@@ -969,7 +970,8 @@ namespace castor3d
 			, lightType
 			, uint32_t( LightPassUboIdx::eLight )
 			, shader::ShadowOptions{ m_shadows, lightType, rsm }
-			, index );
+			, index
+			, 1u );
 		shader::SssTransmittance sss{ writer
 			, lighting->getShadowModel()
 			, utils
@@ -1273,7 +1275,8 @@ namespace castor3d
 			, lightType
 			, uint32_t( LightPassUboIdx::eLight )
 			, shader::ShadowOptions{ m_shadows, lightType, rsm }
-			, index );
+			, index
+			, 1u );
 		shader::SssTransmittance sss{ writer
 			, lighting->getShadowModel()
 			, utils

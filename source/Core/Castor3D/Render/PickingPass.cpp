@@ -728,45 +728,10 @@ namespace castor3d
 		return addBindings;
 	}
 
-	void PickingPass::doFillUboDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSet & descriptorSet
-		, BillboardListRenderNode & node )
-	{
-	}
-
-	void PickingPass::doFillUboDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSet & descriptorSet
-		, SubmeshRenderNode & node )
-	{
-	}
-
-	void PickingPass::doFillTextureDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSet & descriptorSet
-		, uint32_t & index
-		, BillboardListRenderNode & node
-		, ShadowMapLightTypeArray const & shadowMaps )
-	{
-		node.passNode.fillDescriptor( descriptorSet.getLayout()
-			, index
-			, descriptorSet
-			, pipeline.getFlags().textures );
-	}
-
-	void PickingPass::doFillTextureDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSet & descriptorSet
-		, uint32_t & index
-		, SubmeshRenderNode & node
-		, ShadowMapLightTypeArray const & shadowMaps )
-	{
-		node.passNode.fillDescriptor( descriptorSet.getLayout()
-			, index
-			, descriptorSet
-			, pipeline.getFlags().textures );
-	}
-
 	void PickingPass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
 		, ashes::DescriptorSet & descriptorSet
-		, BillboardListRenderNode & node )
+		, BillboardListRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		node.pickingUbo.createSizedBinding( descriptorSet
 			, descriptorSet.getLayout().getBinding( 0u ) );
@@ -774,7 +739,8 @@ namespace castor3d
 
 	void PickingPass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
 		, ashes::DescriptorSet & descriptorSet
-		, SubmeshRenderNode & node )
+		, SubmeshRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		node.pickingUbo.createSizedBinding( descriptorSet
 			, descriptorSet.getLayout().getBinding( 0u ) );
@@ -937,21 +903,6 @@ namespace castor3d
 
 	void PickingPass::doUpdatePipeline( RenderPipeline & pipeline )
 	{
-	}
-
-	ashes::VkDescriptorSetLayoutBindingArray PickingPass::doCreateTextureBindings( PipelineFlags const & flags )const
-	{
-		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
-
-		if ( !flags.textures.empty() )
-		{
-			textureBindings.push_back( makeDescriptorSetLayoutBinding( 0u
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT
-				, uint32_t( flags.textures.size() ) ) );
-		}
-
-		return textureBindings;
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo PickingPass::doCreateDepthStencilState( PipelineFlags const & flags )const

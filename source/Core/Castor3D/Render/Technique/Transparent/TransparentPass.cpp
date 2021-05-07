@@ -292,6 +292,14 @@ namespace castor3d
 		bool hasTextures = !flags.textures.empty();
 		auto & renderSystem = *getEngine()->getRenderSystem();
 
+		shader::Utils utils{ writer };
+		utils.declareApplyGamma();
+		utils.declareRemoveGamma();
+		utils.declareLineariseDepth();
+		utils.declareComputeAccumulation();
+		utils.declareParallaxMappingFunc( flags.passFlags
+			, getTexturesMask() );
+
 		// Fragment Intputs
 		shader::InFragmentSurface inSurface{ writer
 			, getShaderFlags()
@@ -323,42 +331,33 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
 
-		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-			, index
+			, 0u
 			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
-		index += uint32_t( flags.textures.size() );
+
+		auto index = 0u;
 		auto c3d_mapEnvironment( writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment"
 			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? index++ : 0u
-			, RenderPipeline::eTextures
+			, RenderPipeline::eAdditional
 			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ) );
-		shader::Utils utils{ writer };
-		shader::GlobalIllumination indirect{ writer, utils };
-		indirect.declare( uint32_t( NodeUboIdx::eVoxelData )
-			, uint32_t( NodeUboIdx::eLpvGridConfig )
-			, uint32_t( NodeUboIdx::eLayeredLpvGridConfig )
+		auto lighting = shader::PhongLightingModel::createModel( writer
+			, utils
+			, shader::ShadowOptions{ flags.sceneFlags, false }
 			, index
-			, RenderPipeline::eTextures
+			, RenderPipeline::eAdditional
+			, false );
+		shader::GlobalIllumination indirect{ writer, utils };
+		indirect.declare( index
+			, RenderPipeline::eAdditional
 			, flags.sceneFlags );
 
 		auto in = writer.getIn();
 
 		shader::Fog fog{ getFogType( flags.sceneFlags ), writer };
-		utils.declareApplyGamma();
-		utils.declareRemoveGamma();
-		utils.declareLineariseDepth();
-		utils.declareComputeAccumulation();
-		utils.declareParallaxMappingFunc( flags.passFlags
-			, getTexturesMask() );
-		auto lighting = shader::PhongLightingModel::createModel( writer
-			, utils
-			, shader::ShadowOptions{ flags.sceneFlags, false }
-			, index
-			, false );
 		shader::PhongReflectionModel reflections{ writer, utils };
 
 		// Fragment Outputs
@@ -538,6 +537,16 @@ namespace castor3d
 		bool hasTextures = !flags.textures.empty();
 		auto & renderSystem = *getEngine()->getRenderSystem();
 
+		shader::Utils utils{ writer };
+		utils.declareApplyGamma();
+		utils.declareRemoveGamma();
+		utils.declareLineariseDepth();
+		utils.declareFresnelSchlick();
+		utils.declareComputeIBL();
+		utils.declareComputeAccumulation();
+		utils.declareParallaxMappingFunc( flags.passFlags
+			, getTexturesMask() );
+
 		// Fragment Intputs
 		shader::InFragmentSurface inSurface{ writer
 			, getShaderFlags()
@@ -569,53 +578,40 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
 
-		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-			, index
+			, 0u
 			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
-		index += uint32_t( flags.textures.size() );
 
+		auto index = 0u;
 		auto c3d_mapEnvironment( writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment"
 			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? index++ : 0u
-			, RenderPipeline::eTextures
+			, RenderPipeline::eAdditional
 			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ) );
 		auto c3d_mapIrradiance = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapIrradiance"
 			, index++
-			, RenderPipeline::eTextures );
+			, RenderPipeline::eAdditional );
 		auto c3d_mapPrefiltered = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapPrefiltered"
 			, index++
-			, RenderPipeline::eTextures );
+			, RenderPipeline::eAdditional );
 		auto c3d_mapBrdf = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf"
 			, index++
-			, RenderPipeline::eTextures );
-		shader::Utils utils{ writer };
-		shader::GlobalIllumination indirect{ writer, utils };
-		indirect.declare( uint32_t( NodeUboIdx::eVoxelData )
-			, uint32_t( NodeUboIdx::eLpvGridConfig )
-			, uint32_t( NodeUboIdx::eLayeredLpvGridConfig )
-			, index
-			, RenderPipeline::eTextures
-			, flags.sceneFlags );
-
-		auto in = writer.getIn();
-
-		utils.declareApplyGamma();
-		utils.declareRemoveGamma();
-		utils.declareLineariseDepth();
-		utils.declareFresnelSchlick();
-		utils.declareComputeIBL();
-		utils.declareComputeAccumulation();
-		utils.declareParallaxMappingFunc( flags.passFlags
-			, getTexturesMask() );
+			, RenderPipeline::eAdditional );
 		auto lighting = shader::MetallicBrdfLightingModel::createModel( writer
 			, utils
 			, shader::ShadowOptions{ flags.sceneFlags, false }
 			, index
+			, RenderPipeline::eAdditional
 			, false );
+		shader::GlobalIllumination indirect{ writer, utils };
+		indirect.declare( index
+			, RenderPipeline::eAdditional
+			, flags.sceneFlags );
+
+		auto in = writer.getIn();
 		shader::MetallicPbrReflectionModel reflections{ writer, utils };
 
 		// Fragment Outputs
@@ -873,6 +869,16 @@ namespace castor3d
 		bool hasTextures = !flags.textures.empty();
 		auto & renderSystem = *getEngine()->getRenderSystem();
 
+		shader::Utils utils{ writer };
+		utils.declareApplyGamma();
+		utils.declareRemoveGamma();
+		utils.declareLineariseDepth();
+		utils.declareFresnelSchlick();
+		utils.declareComputeIBL();
+		utils.declareComputeAccumulation();
+		utils.declareParallaxMappingFunc( flags.passFlags
+			, getTexturesMask() );
+
 		// Fragment Intputs
 		shader::InFragmentSurface inSurface{ writer
 			, getShaderFlags()
@@ -904,52 +910,40 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
 
-		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-			, index
+			, 0u
 			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
-		index += uint32_t( flags.textures.size() );
+
+		auto index = 0u;
 		auto c3d_mapEnvironment( writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment"
 			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? index++ : 0u
-			, RenderPipeline::eTextures
+			, RenderPipeline::eAdditional
 			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ) );
 		auto c3d_mapIrradiance = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapIrradiance"
 			, index++
-			, RenderPipeline::eTextures );
+			, RenderPipeline::eAdditional );
 		auto c3d_mapPrefiltered = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapPrefiltered"
 			, index++
-			, RenderPipeline::eTextures );
+			, RenderPipeline::eAdditional );
 		auto c3d_mapBrdf = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf"
 			, index++
-			, RenderPipeline::eTextures );
-		shader::Utils utils{ writer };
-		shader::GlobalIllumination indirect{ writer, utils };
-		indirect.declare( uint32_t( NodeUboIdx::eVoxelData )
-			, uint32_t( NodeUboIdx::eLpvGridConfig )
-			, uint32_t( NodeUboIdx::eLayeredLpvGridConfig )
-			, index
-			, RenderPipeline::eTextures
-			, flags.sceneFlags );
-
-		auto in = writer.getIn();
-
-		utils.declareApplyGamma();
-		utils.declareRemoveGamma();
-		utils.declareLineariseDepth();
-		utils.declareFresnelSchlick();
-		utils.declareComputeIBL();
-		utils.declareComputeAccumulation();
-		utils.declareParallaxMappingFunc( flags.passFlags
-			, getTexturesMask() );
+			, RenderPipeline::eAdditional );
 		auto lighting = shader::SpecularBrdfLightingModel::createModel( writer
 			, utils
 			, shader::ShadowOptions{ flags.sceneFlags, false }
 			, index
+			, RenderPipeline::eAdditional
 			, false );
+		shader::GlobalIllumination indirect{ writer, utils };
+		indirect.declare( index
+			, RenderPipeline::eAdditional
+			, flags.sceneFlags );
+
+		auto in = writer.getIn();
 		shader::SpecularPbrReflectionModel reflections{ writer, utils };
 
 		// Fragment Outputs
@@ -990,10 +984,10 @@ namespace castor3d
 					, inSurface.texture );
 				auto occlusion = writer.declLocale( "occlusion"
 					, 1.0_f );
-				auto opacity = writer.declLocale( "opacity"
-					, material.m_opacity );
 				auto transmittance = writer.declLocale( "transmittance"
 					, 0.0_f );
+				auto opacity = writer.declLocale( "opacity"
+					, material.m_opacity );
 				auto tangentSpaceViewPosition = writer.declLocale( "tangentSpaceViewPosition"
 					, inSurface.tangentSpaceViewPosition );
 				auto tangentSpaceFragPosition = writer.declLocale( "tangentSpaceFragPosition"

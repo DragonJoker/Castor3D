@@ -201,44 +201,6 @@ namespace castor3d
 		SceneRenderPass::doUpdate( nodes.billboardNodes.backCulled );
 	}
 
-	ashes::VkDescriptorSetLayoutBindingArray ShadowMapPassPoint::doCreateAdditionalBindings( PipelineFlags const & flags )const
-	{
-		ashes::VkDescriptorSetLayoutBindingArray addBindings;
-		addBindings.emplace_back( makeDescriptorSetLayoutBinding( 0u
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		m_initialised = true;
-		return addBindings;
-	}
-
-	void ShadowMapPassPoint::doFillUboDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSet & descriptorSet
-		, BillboardListRenderNode & node )
-	{
-	}
-
-	void ShadowMapPassPoint::doFillUboDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSet & descriptorSet
-		, SubmeshRenderNode & node )
-	{
-	}
-
-	void ShadowMapPassPoint::doFillAdditionalDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSet & descriptorSet
-		, BillboardListRenderNode & node )
-	{
-		m_shadowMapUbo.createSizedBinding( descriptorSet
-			, descriptorSet.getLayout().getBinding( 0u ) );
-	}
-
-	void ShadowMapPassPoint::doFillAdditionalDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSet & descriptorSet
-		, SubmeshRenderNode & node )
-	{
-		m_shadowMapUbo.createSizedBinding( descriptorSet
-			, descriptorSet.getLayout().getBinding( 0u ) );
-	}
-
 	ashes::PipelineDepthStencilStateCreateInfo ShadowMapPassPoint::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
 		return ashes::PipelineDepthStencilStateCreateInfo{ 0u, true, true };
@@ -341,6 +303,9 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		bool hasTextures = !flags.textures.empty();
 
+		shader::Utils utils{ writer };
+		utils.declareRemoveGamma();
+
 		// Fragment Intputs
 		shader::InFragmentSurface inSurface{ writer
 			, getShaderFlags()
@@ -363,25 +328,22 @@ namespace castor3d
 				, RenderPipeline::eBuffers );
 		}
 
-		UBO_SHADOWMAP( writer
-			, 0u
-			, RenderPipeline::eAdditional );
-
-		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-			, index
+			, 0u
 			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
-		index += uint32_t( flags.textures.size() );
 
-		shader::Utils utils{ writer };
-		utils.declareRemoveGamma();
+		auto index = 0u;
+		UBO_SHADOWMAP( writer
+			, index++
+			, RenderPipeline::eAdditional );
 		auto lighting = shader::PhongLightingModel::createModel( writer
 			, utils
 			, LightType::ePoint
 			, shader::ShadowOptions{ SceneFlag::eNone, false }
-			, index );
+			, index
+			, RenderPipeline::eAdditional );
 
 		// Fragment Outputs
 		auto pxl_normalLinear( writer.declOutput< Vec4 >( "pxl_normalLinear", 0u ) );
@@ -504,6 +466,9 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		bool hasTextures = !flags.textures.empty();
 
+		shader::Utils utils{ writer };
+		utils.declareRemoveGamma();
+
 		// Fragment Intputs
 		shader::InFragmentSurface inSurface{ writer
 			, getShaderFlags()
@@ -526,25 +491,22 @@ namespace castor3d
 				, RenderPipeline::eBuffers );
 		}
 
-		UBO_SHADOWMAP( writer
-			, 0u
-			, RenderPipeline::eAdditional );
-
-		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-			, index
+			, 0u
 			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
-		index += uint32_t( flags.textures.size() );
 
-		shader::Utils utils{ writer };
-		utils.declareRemoveGamma();
+		auto index = 0u;
+		UBO_SHADOWMAP( writer
+			, index++
+			, RenderPipeline::eAdditional );
 		auto lighting = shader::MetallicBrdfLightingModel::createModel( writer
 			, utils
 			, LightType::ePoint
 			, shader::ShadowOptions{ SceneFlag::eNone, false }
-			, index );
+			, index
+			, RenderPipeline::eAdditional );
 
 		// Fragment Outputs
 		auto pxl_normalLinear( writer.declOutput< Vec4 >( "pxl_normalLinear", 0u ) );
@@ -667,6 +629,9 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		bool hasTextures = !flags.textures.empty();
 
+		shader::Utils utils{ writer };
+		utils.declareRemoveGamma();
+
 		// Fragment Intputs
 		shader::InFragmentSurface inSurface{ writer
 			, getShaderFlags()
@@ -689,25 +654,22 @@ namespace castor3d
 				, RenderPipeline::eBuffers );
 		}
 
-		UBO_SHADOWMAP( writer
-			, 0u
-			, RenderPipeline::eAdditional );
-
-		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-			, index
+			, 0u
 			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
-		index += uint32_t( flags.textures.size() );
 
-		shader::Utils utils{ writer };
-		utils.declareRemoveGamma();
+		auto index = 0u;
+		UBO_SHADOWMAP( writer
+			, index++
+			, RenderPipeline::eAdditional );
 		auto lighting = shader::SpecularBrdfLightingModel::createModel( writer
 			, utils
 			, LightType::ePoint
 			, shader::ShadowOptions{ SceneFlag::eNone, false }
-			, index );
+			, index
+			, RenderPipeline::eAdditional );
 
 		// Fragment Outputs
 		auto pxl_normalLinear( writer.declOutput< Vec4 >( "pxl_normalLinear", 0u ) );

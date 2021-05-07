@@ -96,7 +96,8 @@ namespace castor3d
 					, utils
 					, LightType::eDirectional
 					, shader::ShadowOptions{ SceneFlag::eNone, true }
-					, index );
+					, index
+					, 1u );
 
 				auto convertPointToGridIndex = writer.implementFunction< IVec3 >( "convertPointToGridIndex"
 					, [&]( Vec3 pos )
@@ -171,7 +172,8 @@ namespace castor3d
 					, utils
 					, LightType::eDirectional
 					, shader::ShadowOptions{ SceneFlag::eNone, true }
-					, index );
+					, index
+					, 1u );
 
 				auto convertPointToGridIndex = writer.implementFunction< IVec3 >( "convertPointToGridIndex"
 					, [&]( Vec3 pos )
@@ -250,7 +252,8 @@ namespace castor3d
 				, utils
 				, LightType::eSpot
 				, shader::ShadowOptions{ SceneFlag::eNone, true }
-				, index );
+				, index
+				, 1u );
 
 			auto convertPointToGridIndex = writer.implementFunction< IVec3 >( "convertPointToGridIndex"
 				, [&]( Vec3 pos )
@@ -328,7 +331,8 @@ namespace castor3d
 				, utils
 				, LightType::eSpot
 				, shader::ShadowOptions{ SceneFlag::eNone, true }
-				, index );
+				, index
+				, 1u );
 
 			auto convertPointToGridIndex = writer.implementFunction< IVec3 >( "convertPointToGridIndex"
 				, [&]( Vec3 pos )

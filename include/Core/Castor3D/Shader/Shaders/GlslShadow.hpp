@@ -36,10 +36,14 @@ namespace castor3d
 			C3D_API Shadow( ShadowOptions shadowOptions
 				, sdw::ShaderWriter & writer
 				, Utils & utils );
-			C3D_API void declare( uint32_t & index );
-			C3D_API void declareDirectional( uint32_t & index );
-			C3D_API void declarePoint( uint32_t & index );
-			C3D_API void declareSpot( uint32_t & index );
+			C3D_API void declare( uint32_t & index
+				, uint32_t set );
+			C3D_API void declareDirectional( uint32_t & index
+				, uint32_t set );
+			C3D_API void declarePoint( uint32_t & index
+				, uint32_t set );
+			C3D_API void declareSpot( uint32_t & index
+				, uint32_t set );
 			C3D_API sdw::Float computeDirectional( shader::Light light
 				, Surface surface
 				, sdw::Mat4 const & lightMatrix

@@ -222,49 +222,6 @@ namespace castor3d
 		return SceneRenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 5u );
 	}
 
-	void OpaquePass::doFillTextureDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSet & descriptorSet
-		, uint32_t & index
-		, BillboardListRenderNode & node
-		, ShadowMapLightTypeArray const & shadowMaps )
-	{
-		ashes::WriteDescriptorSetArray writes;
-		node.passNode.fillDescriptor( descriptorSet.getLayout()
-			, index
-			, writes
-			, pipeline.getFlags().textures );
-		descriptorSet.setBindings( writes );
-	}
-
-	void OpaquePass::doFillTextureDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSet & descriptorSet
-		, uint32_t & index
-		, SubmeshRenderNode & node
-		, ShadowMapLightTypeArray const & shadowMaps )
-	{
-		ashes::WriteDescriptorSetArray writes;
-		node.passNode.fillDescriptor( descriptorSet.getLayout()
-			, index
-			, writes
-			, pipeline.getFlags().textures );
-		descriptorSet.setBindings( writes );
-	}
-
-	ashes::VkDescriptorSetLayoutBindingArray OpaquePass::doCreateTextureBindings( PipelineFlags const & flags )const
-	{
-		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
-
-		if ( !flags.textures.empty() )
-		{
-			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( 0u
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT
-				, uint32_t( flags.textures.size() ) ) );
-		}
-
-		return textureBindings;
-	}
-
 	ShaderPtr OpaquePass::doGetGeometryShaderSource( PipelineFlags const & flags )const
 	{
 		return nullptr;
@@ -299,9 +256,8 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
 
-		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-			, index
+			, 0u
 			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
@@ -312,7 +268,7 @@ namespace castor3d
 			, hasTextures };
 
 		// Fragment Outputs
-		index = 0u;
+		auto index = 0u;
 		auto outData1 = writer.declOutput< Vec4 >( OpaquePass::Output1, index++ );
 		auto outData2 = writer.declOutput< Vec4 >( OpaquePass::Output2, index++ );
 		auto outData3 = writer.declOutput< Vec4 >( OpaquePass::Output3, index++ );
@@ -434,9 +390,8 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
 
-		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-			, index
+			, 0u
 			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
@@ -447,7 +402,7 @@ namespace castor3d
 			, hasTextures };
 
 		// Fragment Outputs
-		index = 0u;
+		auto index = 0u;
 		auto outData1 = writer.declOutput< Vec4 >( OpaquePass::Output1, index++ );
 		auto outData2 = writer.declOutput< Vec4 >( OpaquePass::Output2, index++ );
 		auto outData3 = writer.declOutput< Vec4 >( OpaquePass::Output3, index++ );
@@ -569,9 +524,8 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
 
-		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-			, index
+			, 0u
 			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
@@ -582,7 +536,7 @@ namespace castor3d
 			, hasTextures };
 
 		// Fragment Outputs
-		index = 0u;
+		auto index = 0u;
 		auto outData1 = writer.declOutput< Vec4 >( OpaquePass::Output1, index++ );
 		auto outData2 = writer.declOutput< Vec4 >( OpaquePass::Output2, index++ );
 		auto outData3 = writer.declOutput< Vec4 >( OpaquePass::Output3, index++ );

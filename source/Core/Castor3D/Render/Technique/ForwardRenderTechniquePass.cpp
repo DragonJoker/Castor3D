@@ -226,6 +226,12 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		bool hasTextures = !flags.textures.empty();
 
+		shader::Utils utils{ writer };
+		utils.declareApplyGamma();
+		utils.declareRemoveGamma();
+		utils.declareParallaxMappingFunc( flags.passFlags
+			, getTexturesMask() );
+
 		// Fragment Intputs
 		shader::InFragmentSurface inSurface{ writer
 			, getShaderFlags()
@@ -257,40 +263,33 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
 
-		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-			, index
+			, 0u
 			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
-		index += uint32_t( flags.textures.size() );
+
+		auto index = 0u;
+		shader::GlobalIllumination indirect{ writer, utils };
 		auto c3d_mapEnvironment( writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment"
 			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? index++ : 0u
-			, RenderPipeline::eTextures
+			, RenderPipeline::eAdditional
 			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ) );
-		shader::Utils utils{ writer };
-		shader::GlobalIllumination indirect{ writer, utils };
-		indirect.declare( uint32_t( NodeUboIdx::eVoxelData )
-			, uint32_t( NodeUboIdx::eLpvGridConfig )
-			, uint32_t( NodeUboIdx::eLayeredLpvGridConfig )
+		auto lighting = shader::PhongLightingModel::createModel( writer
+			, utils
+			, shader::ShadowOptions{ flags.sceneFlags, false }
 			, index
-			, RenderPipeline::eTextures
+			, RenderPipeline::eAdditional
+			, m_mode != RenderMode::eTransparentOnly );
+		indirect.declare( index
+			, RenderPipeline::eAdditional
 			, flags.sceneFlags );
 
 		auto in = writer.getIn();
 
 		shader::Fog fog{ getFogType( flags.sceneFlags ), writer };
-		utils.declareApplyGamma();
-		utils.declareRemoveGamma();
-		utils.declareParallaxMappingFunc( flags.passFlags
-			, getTexturesMask() );
-		auto lighting = shader::PhongLightingModel::createModel( writer
-			, utils
-			, shader::ShadowOptions{ flags.sceneFlags, false }
-			, index
-			, m_mode != RenderMode::eTransparentOnly );
 		shader::PhongReflectionModel reflections{ writer, utils };
 
 		// Fragment Outputs
@@ -474,6 +473,15 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		bool hasTextures = !flags.textures.empty();
 
+		shader::Utils utils{ writer };
+		utils.declareApplyGamma();
+		utils.declareRemoveGamma();
+		utils.declareFresnelSchlick();
+		utils.declareComputeIBL();
+		utils.declareInvertVec3Y();
+		utils.declareParallaxMappingFunc( flags.passFlags
+			, getTexturesMask() );
+
 		// Fragment Intputs
 		shader::InFragmentSurface inSurface{ writer
 			, getShaderFlags()
@@ -505,51 +513,40 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
 
-		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-			, index
+			, 0u
 			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
-		index += uint32_t( flags.textures.size() );
+
+		auto index = 0u;
 		auto c3d_mapEnvironment( writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment"
 			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? index++ : 0u
-			, RenderPipeline::eTextures
+			, RenderPipeline::eAdditional
 			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ) );
 		auto c3d_mapIrradiance = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapIrradiance"
 			, index++
-			, RenderPipeline::eTextures );
+			, RenderPipeline::eAdditional );
 		auto c3d_mapPrefiltered = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapPrefiltered"
 			, index++
-			, RenderPipeline::eTextures );
+			, RenderPipeline::eAdditional );
 		auto c3d_mapBrdf = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf"
 			, index++
-			, RenderPipeline::eTextures );
-		shader::Utils utils{ writer };
-		shader::GlobalIllumination indirect{ writer, utils };
-		indirect.declare( uint32_t( NodeUboIdx::eVoxelData )
-			, uint32_t( NodeUboIdx::eLpvGridConfig )
-			, uint32_t( NodeUboIdx::eLayeredLpvGridConfig )
-			, index
-			, RenderPipeline::eTextures
-			, flags.sceneFlags );
-
-		auto in = writer.getIn();
-
-		utils.declareApplyGamma();
-		utils.declareRemoveGamma();
-		utils.declareFresnelSchlick();
-		utils.declareComputeIBL();
-		utils.declareInvertVec3Y();
-		utils.declareParallaxMappingFunc( flags.passFlags
-			, getTexturesMask() );
+			, RenderPipeline::eAdditional );
 		auto lighting = shader::MetallicBrdfLightingModel::createModel( writer
 			, utils
 			, shader::ShadowOptions{ flags.sceneFlags, false }
 			, index
+			, RenderPipeline::eAdditional
 			, m_mode != RenderMode::eTransparentOnly );
+		shader::GlobalIllumination indirect{ writer, utils };
+		indirect.declare( index
+			, RenderPipeline::eAdditional
+			, flags.sceneFlags );
+
+		auto in = writer.getIn();
 		shader::MetallicPbrReflectionModel reflections{ writer, utils };
 		shader::Fog fog{ getFogType( flags.sceneFlags ), writer };
 
@@ -810,6 +807,14 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		bool hasTextures = !flags.textures.empty();
 
+		shader::Utils utils{ writer };
+		utils.declareApplyGamma();
+		utils.declareRemoveGamma();
+		utils.declareFresnelSchlick();
+		utils.declareComputeIBL();
+		utils.declareParallaxMappingFunc( flags.passFlags
+			, getTexturesMask() );
+
 		// Fragment Intputs
 		shader::InFragmentSurface inSurface{ writer
 			, getShaderFlags()
@@ -841,51 +846,42 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
 
-		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-			, index
+			, 0u
 			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
-		index += uint32_t( flags.textures.size() );
+
+		auto index = 0u;
+		shader::GlobalIllumination indirect{ writer, utils };
 		auto c3d_mapEnvironment( writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment"
 			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? index++ : 0u
-			, RenderPipeline::eTextures
+			, RenderPipeline::eAdditional
 			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ) );
 		auto c3d_mapIrradiance = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapIrradiance"
 			, index++
-			, RenderPipeline::eTextures );
+			, RenderPipeline::eAdditional );
 		auto c3d_mapPrefiltered = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapPrefiltered"
 			, index++
-			, RenderPipeline::eTextures );
+			, RenderPipeline::eAdditional );
 		auto c3d_mapBrdf = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf"
 			, index++
-			, RenderPipeline::eTextures );
-		shader::Utils utils{ writer };
-		shader::GlobalIllumination indirect{ writer, utils };
-		indirect.declare( uint32_t( NodeUboIdx::eVoxelData )
-			, uint32_t( NodeUboIdx::eLpvGridConfig )
-			, uint32_t( NodeUboIdx::eLayeredLpvGridConfig )
+			, RenderPipeline::eAdditional );
+		auto lighting = shader::SpecularBrdfLightingModel::createModel( writer
+			, utils
+			, shader::ShadowOptions{ flags.sceneFlags, false }
 			, index
-			, RenderPipeline::eTextures
+			, RenderPipeline::eAdditional
+			, m_mode != RenderMode::eTransparentOnly );
+		indirect.declare( index
+			, RenderPipeline::eAdditional
 			, flags.sceneFlags );
 
 		auto in = writer.getIn();
 
 		shader::Fog fog{ getFogType( flags.sceneFlags ), writer };
-		utils.declareApplyGamma();
-		utils.declareRemoveGamma();
-		utils.declareFresnelSchlick();
-		utils.declareComputeIBL();
-		utils.declareParallaxMappingFunc( flags.passFlags
-			, getTexturesMask() );
-		auto lighting = shader::SpecularBrdfLightingModel::createModel( writer
-			, utils
-			, shader::ShadowOptions{ flags.sceneFlags, false }
-			, index
-			, m_mode != RenderMode::eTransparentOnly );
 		shader::SpecularPbrReflectionModel reflections{ writer, utils };
 
 		// Fragment Outputs

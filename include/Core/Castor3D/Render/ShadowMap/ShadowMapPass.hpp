@@ -99,21 +99,16 @@ namespace castor3d
 		 *\param		nodes	Les noeuds.
 		 */
 		void doUpdateNodes( SceneCulledRenderNodes & nodes );
-		/**
-		 *\copydoc		castor3d::SceneRenderPass::doCreateTextureBindings
-		 */
-		ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
 
 	private:
-		void doFillTextureDescriptor( RenderPipeline const & pipeline
+		ashes::VkDescriptorSetLayoutBindingArray doCreateAdditionalBindings( PipelineFlags const & flags )const override;
+		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
 			, ashes::DescriptorSet & descriptorSet
-			, uint32_t & index
-			, BillboardListRenderNode & nodes
+			, BillboardListRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps )override;
-		void doFillTextureDescriptor( RenderPipeline const & pipeline
+		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
 			, ashes::DescriptorSet & descriptorSet
-			, uint32_t & index
-			, SubmeshRenderNode & nodes
+			, SubmeshRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
 		void doUpdatePipeline( RenderPipeline & pipeline )override;

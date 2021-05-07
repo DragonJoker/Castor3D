@@ -71,18 +71,23 @@ namespace castor3d
 
 	private:
 		void doUpdateFlags( PipelineFlags & flags )const override;
-		void doFillTextureDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSet & descriptorSet
-			, uint32_t & index
-			, BillboardListRenderNode & nodes
-			, ShadowMapLightTypeArray const & shadowMaps )override;
-		void doFillTextureDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSet & descriptorSet
-			, uint32_t & index
-			, SubmeshRenderNode & nodes
-			, ShadowMapLightTypeArray const & shadowMaps )override;
-		ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
 		void doUpdatePipeline( RenderPipeline & pipeline)override;
+		ashes::VkDescriptorSetLayoutBindingArray doCreateAdditionalBindings( PipelineFlags const & flags )const override
+		{
+			return ashes::VkDescriptorSetLayoutBindingArray{};
+		}
+		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSet & descriptorSet
+			, BillboardListRenderNode & node
+			, ShadowMapLightTypeArray const & shadowMaps )override
+		{
+		}
+		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSet & descriptorSet
+			, SubmeshRenderNode & node
+			, ShadowMapLightTypeArray const & shadowMaps )override
+		{
+		}
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;

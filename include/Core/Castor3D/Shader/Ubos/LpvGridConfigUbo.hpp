@@ -85,6 +85,12 @@ namespace castor3d
 			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
 		}
 
+		ashes::WriteDescriptorSet getDescriptorWrite( uint32_t dstBinding
+			, uint32_t dstArrayElement = 0u )const
+		{
+			return m_ubo.getDescriptorWrite( dstBinding, dstArrayElement );
+		}
+
 	public:
 		C3D_API static const std::string LpvGridConfig;
 		C3D_API static const std::string LpvGridData;

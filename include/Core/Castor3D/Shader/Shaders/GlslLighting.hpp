@@ -20,17 +20,22 @@ namespace castor3d
 				, Utils & utils
 				, ShadowOptions shadowOptions
 				, bool isOpaqueProgram );
-			C3D_API void declareModel( uint32_t & index );
-			C3D_API void declareDiffuseModel( uint32_t & index );
+			C3D_API void declareModel( uint32_t & index
+				, uint32_t set );
+			C3D_API void declareDiffuseModel( uint32_t & index
+				, uint32_t set );
 			C3D_API void declareDirectionalModel( bool lightUbo
 				, uint32_t uboBinding
-				, uint32_t & index );
+				, uint32_t & index
+				, uint32_t set );
 			C3D_API void declarePointModel( bool lightUbo
 				, uint32_t uboBinding
-				, uint32_t & index );
+				, uint32_t & index
+				, uint32_t set );
 			C3D_API void declareSpotModel( bool lightUbo
 				, uint32_t uboBinding
-				, uint32_t & index );
+				, uint32_t & index
+				, uint32_t set );
 			// Calls
 			C3D_API DirectionalLight getDirectionalLight( sdw::Int const & index )const;
 			C3D_API PointLight getPointLight( sdw::Int const & index )const;

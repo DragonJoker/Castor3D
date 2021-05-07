@@ -472,15 +472,15 @@ namespace castor3d
 					{
 						renderPass.initialiseTextureDescriptor( pipeline
 							, pipeline.getDescriptorPool( RenderPipeline::eTextures )
-							, node.second
-							, shadowMaps );
+							, node.second );
 					}
 
 					if ( pipeline.hasDescriptorPool( RenderPipeline::eAdditional ) )
 					{
 						renderPass.initialiseAdditionalDescriptor( pipeline
 							, pipeline.getDescriptorPool( RenderPipeline::eAdditional )
-							, node.second );
+							, node.second
+							, shadowMaps );
 					}
 				}
 			}
@@ -510,15 +510,15 @@ namespace castor3d
 				{
 					renderPass.initialiseTextureDescriptor( pipeline
 						, pipeline.getDescriptorPool( RenderPipeline::eTextures )
-						, pipelineNode.second
-						, shadowMaps );
+						, pipelineNode.second );
 				}
 
 				if ( pipeline.hasDescriptorPool( RenderPipeline::eAdditional ) )
 				{
 					renderPass.initialiseAdditionalDescriptor( pipeline
 						, pipeline.getDescriptorPool( RenderPipeline::eAdditional )
-						, pipelineNode.second );
+						, pipelineNode.second
+						, shadowMaps );
 				}
 			}
 		}
