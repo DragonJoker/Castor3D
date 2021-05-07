@@ -97,7 +97,6 @@ namespace castor3d
 		eLpvGridConfig,
 		eLayeredLpvGridConfig,
 		eVoxelData = eLpvGridConfig,
-		eVoxelBuffer,
 	};
 	/**
 	*\~english

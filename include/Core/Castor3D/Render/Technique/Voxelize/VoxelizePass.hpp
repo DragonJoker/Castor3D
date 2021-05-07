@@ -105,34 +105,40 @@ namespace castor3d
 		using SceneRenderPass::update;
 
 	private:
-		C3D_API ashes::VkDescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
-		C3D_API ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
-		C3D_API ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
-		C3D_API ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
-		C3D_API void doFillUboDescriptor( RenderPipeline const & pipeline
+		ashes::VkDescriptorSetLayoutBindingArray doCreateAdditionalBindings( PipelineFlags const & flags )const override;
+		ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
+		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
+		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
+		void doFillUboDescriptor( RenderPipeline const & pipeline
 			, ashes::DescriptorSet & descriptorSet
 			, BillboardListRenderNode & node )override;
-		C3D_API void doFillUboDescriptor( RenderPipeline const & pipeline
+		void doFillUboDescriptor( RenderPipeline const & pipeline
 			, ashes::DescriptorSet & descriptorSet
 			, SubmeshRenderNode & node )override;
-		C3D_API void doFillTextureDescriptor( RenderPipeline const & pipeline
+		void doFillTextureDescriptor( RenderPipeline const & pipeline
 			, ashes::DescriptorSet & descriptorSet
 			, uint32_t & index
 			, BillboardListRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
-		C3D_API void doFillTextureDescriptor( RenderPipeline const & pipeline
+		void doFillTextureDescriptor( RenderPipeline const & pipeline
 			, ashes::DescriptorSet & descriptorSet
 			, uint32_t & index
 			, SubmeshRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
-		C3D_API void doUpdateFlags( PipelineFlags & flags )const override;
-		C3D_API void doUpdatePipeline( RenderPipeline & pipeline )override;
-		C3D_API ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
-		C3D_API ShaderPtr doGetBillboardShaderSource( PipelineFlags const & flags )const override;
-		C3D_API ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
-		C3D_API ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
-		C3D_API ShaderPtr doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const override;
-		C3D_API ShaderPtr doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const override;
+		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSet & descriptorSet
+			, BillboardListRenderNode & node )override;
+		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSet & descriptorSet
+			, SubmeshRenderNode & node )override;
+		void doUpdateFlags( PipelineFlags & flags )const override;
+		void doUpdatePipeline( RenderPipeline & pipeline )override;
+		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
+		ShaderPtr doGetBillboardShaderSource( PipelineFlags const & flags )const override;
+		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
+		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
+		ShaderPtr doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const override;
+		ShaderPtr doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const override;
 
 	private:
 		Scene const & m_scene;

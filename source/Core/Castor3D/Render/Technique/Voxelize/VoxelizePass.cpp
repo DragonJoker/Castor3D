@@ -259,16 +259,16 @@ namespace castor3d
 		m_sceneUbo.cpuUpdate( m_scene, &m_camera );
 	}
 
-	ashes::VkDescriptorSetLayoutBindingArray VoxelizePass::doCreateUboBindings( PipelineFlags const & flags )const
+	ashes::VkDescriptorSetLayoutBindingArray VoxelizePass::doCreateAdditionalBindings( PipelineFlags const & flags )const
 	{
-		auto uboBindings = SceneRenderPass::doCreateUboBindings( flags );
-		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eVoxelData )
+		auto addBindings = SceneRenderPass::doCreateUboBindings( flags );
+		addBindings.emplace_back( makeDescriptorSetLayoutBinding( 0u
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eVoxelBuffer )
+		addBindings.emplace_back( makeDescriptorSetLayoutBinding( 1u
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		return uboBindings;
+		return addBindings;
 	}
 
 	ashes::VkDescriptorSetLayoutBindingArray VoxelizePass::doCreateTextureBindings( PipelineFlags const & flags )const
@@ -322,24 +322,12 @@ namespace castor3d
 		, ashes::DescriptorSet & descriptorSet
 		, BillboardListRenderNode & node )
 	{
-		m_voxelizerUbo.createSizedBinding( descriptorSet
-			, descriptorSet.getLayout().getBinding( uint32_t( NodeUboIdx::eVoxelData ) ) );
-		descriptorSet.createBinding( descriptorSet.getLayout().getBinding( uint32_t( NodeUboIdx::eVoxelBuffer ) )
-			, m_voxels
-			, 0u
-			, m_voxels.getCount() );
 	}
 
 	void VoxelizePass::doFillUboDescriptor( RenderPipeline const & pipeline
 		, ashes::DescriptorSet & descriptorSet
 		, SubmeshRenderNode & node )
 	{
-		m_voxelizerUbo.createSizedBinding( descriptorSet
-			, descriptorSet.getLayout().getBinding( uint32_t( NodeUboIdx::eVoxelData ) ) );
-		descriptorSet.createBinding( descriptorSet.getLayout().getBinding( uint32_t( NodeUboIdx::eVoxelBuffer ) )
-			, m_voxels
-			, 0u
-			, m_voxels.getCount() );
 	}
 
 	namespace
@@ -394,6 +382,30 @@ namespace castor3d
 			, index
 			, node
 			, shadowMaps );
+	}
+
+	void VoxelizePass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSet & descriptorSet
+		, BillboardListRenderNode & node )
+	{
+		m_voxelizerUbo.createSizedBinding( descriptorSet
+			, descriptorSet.getLayout().getBinding( 0u ) );
+		descriptorSet.createBinding( descriptorSet.getLayout().getBinding( 1u )
+			, m_voxels
+			, 0u
+			, m_voxels.getCount() );
+	}
+
+	void VoxelizePass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSet & descriptorSet
+		, SubmeshRenderNode & node )
+	{
+		m_voxelizerUbo.createSizedBinding( descriptorSet
+			, descriptorSet.getLayout().getBinding( 0u ) );
+		descriptorSet.createBinding( descriptorSet.getLayout().getBinding( 1u )
+			, m_voxels
+			, 0u
+			, m_voxels.getCount() );
 	}
 
 	ShaderPtr VoxelizePass::doGetVertexShaderSource( PipelineFlags const & flags )const
@@ -530,7 +542,10 @@ namespace castor3d
 		writer.inputLayout( ast::stmt::InputLayout::eTriangleList );
 		writer.outputLayout( ast::stmt::OutputLayout::eTriangleStrip, 3u );
 
-		UBO_VOXELIZER( writer, uint32_t( NodeUboIdx::eVoxelData ), 0u, true );
+		UBO_VOXELIZER( writer
+			, 0u
+			, RenderPipeline::eAdditional
+			, true );
 
 		// Shader inputs
 		uint32_t index = 0u;
@@ -644,8 +659,8 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
 		UBO_VOXELIZER( writer
-			, uint32_t( NodeUboIdx::eVoxelData )
-			, RenderPipeline::eBuffers
+			, 0u
+			, RenderPipeline::eAdditional
 			, true );
 
 		auto texIndex = 0u;
@@ -667,8 +682,8 @@ namespace castor3d
 
 		// Fragment Outputs
 		auto output( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
-			, uint32_t( NodeUboIdx::eVoxelBuffer )
-			, 0u ) );
+			, 1u
+			, RenderPipeline::eAdditional ) );
 
 		shader::Utils utils{ writer };
 		utils.declareApplyGamma();
@@ -803,8 +818,8 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
 		UBO_VOXELIZER( writer
-			, uint32_t( NodeUboIdx::eVoxelData )
-			, RenderPipeline::eBuffers
+			, 0u
+			, RenderPipeline::eAdditional
 			, true );
 
 		auto texIndex = 0u;
@@ -830,8 +845,8 @@ namespace castor3d
 
 		// Fragment Outputs
 		auto output( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
-			, uint32_t( NodeUboIdx::eVoxelBuffer )
-			, 0u ) );
+			, 1u
+			, RenderPipeline::eAdditional ) );
 
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
@@ -956,8 +971,9 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
 		UBO_VOXELIZER( writer
-			, uint32_t( NodeUboIdx::eVoxelData )
-			, RenderPipeline::eBuffers, true );
+			, 0u
+			, RenderPipeline::eAdditional
+			, true );
 
 		auto texIndex = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
@@ -978,8 +994,8 @@ namespace castor3d
 
 		// Fragment Outputs
 		auto output( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
-			, uint32_t( NodeUboIdx::eVoxelBuffer )
-			, 0u ) );
+			, 1u
+			, RenderPipeline::eAdditional ) );
 
 		shader::Utils utils{ writer };
 		utils.declareApplyGamma();
