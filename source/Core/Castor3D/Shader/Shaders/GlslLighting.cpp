@@ -29,9 +29,10 @@ namespace castor3d
 		{
 		}
 
-		void LightingModel::declareModel( uint32_t & index )
+		void LightingModel::declareModel( uint32_t & index
+			, uint32_t set )
 		{
-			m_shadowModel->declare( index );
+			m_shadowModel->declare( index, set );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			m_writer.inlineComment( "// LIGHTS" );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
@@ -53,9 +54,10 @@ namespace castor3d
 			doDeclareComputeSpotLight();
 		}
 
-		void LightingModel::declareDiffuseModel( uint32_t & index )
+		void LightingModel::declareDiffuseModel( uint32_t & index
+			, uint32_t set )
 		{
-			m_shadowModel->declare( index );
+			m_shadowModel->declare( index, set );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			m_writer.inlineComment( "// LIGHTS" );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
@@ -79,9 +81,10 @@ namespace castor3d
 
 		void LightingModel::declareDirectionalModel( bool lightUbo
 			, uint32_t uboBinding
-			, uint32_t & index )
+			, uint32_t & index
+			, uint32_t set )
 		{
-			m_shadowModel->declareDirectional( index );
+			m_shadowModel->declareDirectional( index, set );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			m_writer.inlineComment( "// LIGHTS" );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
@@ -108,9 +111,10 @@ namespace castor3d
 
 		void LightingModel::declarePointModel( bool lightUbo
 			, uint32_t uboBinding
-			, uint32_t & index )
+			, uint32_t & index
+			, uint32_t set )
 		{
-			m_shadowModel->declarePoint( index );
+			m_shadowModel->declarePoint( index, set );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			m_writer.inlineComment( "// LIGHTS" );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
@@ -136,9 +140,10 @@ namespace castor3d
 
 		void LightingModel::declareSpotModel( bool lightUbo
 			, uint32_t uboBinding
-			, uint32_t & index )
+			, uint32_t & index
+			, uint32_t set )
 		{
-			m_shadowModel->declareSpot( index );
+			m_shadowModel->declareSpot( index, set );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			m_writer.inlineComment( "// LIGHTS" );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );

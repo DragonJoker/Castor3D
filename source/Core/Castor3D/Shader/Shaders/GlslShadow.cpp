@@ -39,7 +39,8 @@ namespace castor3d
 		{
 		}
 
-		void Shadow::declare( uint32_t & index )
+		void Shadow::declare( uint32_t & index
+			, uint32_t set )
 		{
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			m_writer.inlineComment( "// SHADOWS" );
@@ -62,40 +63,40 @@ namespace castor3d
 				{
 					m_writer.declSampledImage< FImg2DArrayRgba32 >( MapNormalDepthDirectional
 						, ( directionalEnabled ? index++ : index )
-						, 1u
+						, set
 						, directionalEnabled );
 					m_writer.declSampledImage< FImg2DArrayRg32 >( MapVarianceDirectional
 						, ( directionalEnabled ? index++ : index )
-						, 1u
+						, set
 						, directionalEnabled );
 				}
 				else
 				{
 					m_writer.declSampledImage< FImg2DRgba32 >( MapNormalDepthDirectional
 						, ( directionalEnabled ? index++ : index )
-						, 1u
+						, set
 						, directionalEnabled );
 					m_writer.declSampledImage< FImg2DRg32 >( MapVarianceDirectional
 						, ( directionalEnabled ? index++ : index )
-						, 1u
+						, set
 						, directionalEnabled );
 				}
 
 				m_writer.declSampledImage< FImgCubeArrayRgba32 >( MapNormalDepthPoint
 					, ( pointEnabled ? index++ : index )
-					, 1u
+					, set
 					, pointEnabled );
 				m_writer.declSampledImage< FImgCubeArrayRg32 >( MapVariancePoint
 					, ( pointEnabled ? index++ : index )
-					, 1u
+					, set
 					, pointEnabled );
 				m_writer.declSampledImage< FImg2DArrayRgba32 >( MapNormalDepthSpot
 					, ( spotEnabled ? index++ : index )
-					, 1u
+					, set
 					, spotEnabled );
 				m_writer.declSampledImage< FImg2DArrayRg32 >( MapVarianceSpot
 					, ( spotEnabled ? index++ : index )
-					, 1u
+					, set
 					, spotEnabled );
 
 				m_utils.declareInvertVec2Y();
@@ -125,7 +126,8 @@ namespace castor3d
 			doDeclareVolumetric();
 		}
 
-		void Shadow::declareDirectional( uint32_t & index )
+		void Shadow::declareDirectional( uint32_t & index
+			, uint32_t set )
 		{
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			m_writer.inlineComment( "// SHADOWS" );
@@ -143,13 +145,21 @@ namespace castor3d
 
 				if ( DirectionalMaxCascadesCount > 1u )
 				{
-					m_writer.declSampledImage< FImg2DArrayRgba32 >( MapNormalDepthDirectional, index++, 1u );
-					m_writer.declSampledImage< FImg2DArrayRg32 >( MapVarianceDirectional, index++, 1u );
+					m_writer.declSampledImage< FImg2DArrayRgba32 >( MapNormalDepthDirectional
+						, index++
+						, set );
+					m_writer.declSampledImage< FImg2DArrayRg32 >( MapVarianceDirectional
+						, index++
+						, set );
 				}
 				else
 				{
-					m_writer.declSampledImage< FImg2DRgba32 >( MapNormalDepthDirectional, index++, 1u );
-					m_writer.declSampledImage< FImg2DRg32 >( MapVarianceDirectional, index++, 1u );
+					m_writer.declSampledImage< FImg2DRgba32 >( MapNormalDepthDirectional
+						, index++
+						, set );
+					m_writer.declSampledImage< FImg2DRg32 >( MapVarianceDirectional
+						, index++
+						, set );
 				}
 
 				m_utils.declareInvertVec2Y();
@@ -175,7 +185,8 @@ namespace castor3d
 			doDeclareVolumetric();
 		}
 
-		void Shadow::declarePoint( uint32_t & index )
+		void Shadow::declarePoint( uint32_t & index
+			, uint32_t set )
 		{
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			m_writer.inlineComment( "// SHADOWS" );
@@ -183,8 +194,12 @@ namespace castor3d
 
 			if ( checkFlag( m_shadowOptions.type, SceneFlag::eShadowPoint ) )
 			{
-				m_writer.declSampledImage< FImgCubeArrayRgba32 >( MapNormalDepthPoint, index++, 1u );
-				m_writer.declSampledImage< FImgCubeArrayRg32 >( MapVariancePoint, index++, 1u );
+				m_writer.declSampledImage< FImgCubeArrayRgba32 >( MapNormalDepthPoint
+					, index++
+					, set );
+				m_writer.declSampledImage< FImgCubeArrayRg32 >( MapVariancePoint
+					, index++
+					, set );
 
 				doDeclareGetRandom();
 				doDeclareGetShadowOffset();
@@ -196,7 +211,8 @@ namespace castor3d
 			doDeclareComputePointShadow();
 		}
 
-		void Shadow::declareSpot( uint32_t & index )
+		void Shadow::declareSpot( uint32_t & index
+			, uint32_t set )
 		{
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			m_writer.inlineComment( "// SHADOWS" );
@@ -204,8 +220,12 @@ namespace castor3d
 
 			if ( checkFlag( m_shadowOptions.type, SceneFlag::eShadowSpot ) )
 			{
-				m_writer.declSampledImage< FImg2DArrayRgba32 >( MapNormalDepthSpot, index++, 1u );
-				m_writer.declSampledImage< FImg2DArrayRg32 >( MapVarianceSpot, index++, 1u );
+				m_writer.declSampledImage< FImg2DArrayRgba32 >( MapNormalDepthSpot
+					, index++
+					, set );
+				m_writer.declSampledImage< FImg2DArrayRg32 >( MapVarianceSpot
+					, index++
+					, set );
 
 				doDeclareGetRandom();
 				doDeclareGetShadowOffset();

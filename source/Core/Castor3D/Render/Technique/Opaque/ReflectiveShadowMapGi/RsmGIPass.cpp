@@ -134,7 +134,8 @@ namespace castor3d
 				, utils
 				, LightType::eDirectional
 				, shader::ShadowOptions{ true }
-				, index );
+				, index
+				, 1u );
 			ReflectiveShadowMapping rsm{ writer, c3d_rsmSamples, LightType::eDirectional };
 
 			writer.implementFunction< sdw::Void >( "main"
@@ -211,7 +212,8 @@ namespace castor3d
 				, utils
 				, LightType::eSpot
 				, shader::ShadowOptions{ true }
-				, index );
+				, index
+				, 1u );
 			ReflectiveShadowMapping rsm{ writer, c3d_rsmSamples, LightType::eSpot };
 
 			writer.implementFunction< sdw::Void >( "main"
@@ -291,7 +293,8 @@ namespace castor3d
 				, utils
 				, LightType::ePoint
 				, shader::ShadowOptions{ true }
-				, index );
+				, index
+				, 1u );
 			ReflectiveShadowMapping rsm{ writer, c3d_rsmSamples, LightType::ePoint };
 
 			writer.implementFunction< sdw::Void >( "main"

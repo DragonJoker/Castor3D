@@ -115,8 +115,9 @@ namespace castor3d
 			UBO_LAYERED_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u, true );
 			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), DepthMapIdx, 0u );
 			auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), Data1MapIdx, 0u );
-			auto index = uint32_t( RLpvAccum1Idx );
-			lpvGI.declareLayeredLpv( 0u, index, 0u, false );
+			auto uboIndex = 0u;
+			auto texIndex = uint32_t( RLpvAccum1Idx );
+			lpvGI.declareLayeredLpv( uboIndex, texIndex, 0u, 0u, false );
 			auto in = writer.getIn();
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );

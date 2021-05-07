@@ -261,46 +261,31 @@ namespace castor3d
 
 	ashes::VkDescriptorSetLayoutBindingArray VoxelizePass::doCreateAdditionalBindings( PipelineFlags const & flags )const
 	{
-		auto addBindings = SceneRenderPass::doCreateUboBindings( flags );
-		addBindings.emplace_back( makeDescriptorSetLayoutBinding( 0u
+		auto index = 0u;
+		ashes::VkDescriptorSetLayoutBindingArray addBindings;
+		addBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		addBindings.emplace_back( makeDescriptorSetLayoutBinding( 1u
+		addBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		return addBindings;
-	}
-
-	ashes::VkDescriptorSetLayoutBindingArray VoxelizePass::doCreateTextureBindings( PipelineFlags const & flags )const
-	{
-		auto index = 0u;
-		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
-
-		if ( !flags.textures.empty() )
-		{
-			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT
-				, uint32_t( flags.textures.size() ) ) );
-			index += uint32_t( flags.textures.size() );
-		}
 
 		for ( uint32_t j = 0u; j < uint32_t( LightType::eCount ); ++j )
 		{
 			if ( checkFlag( flags.sceneFlags, SceneFlag( uint8_t( SceneFlag::eShadowBegin ) << j ) ) )
 			{
 				// Depth
-				textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				addBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 				// Variance
-				textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				addBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 			}
 		}
 
-		return textureBindings;
+		return addBindings;
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo VoxelizePass::doCreateDepthStencilState( PipelineFlags const & flags )const
@@ -318,38 +303,33 @@ namespace castor3d
 		return SceneRenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 1u );
 	}
 
-	void VoxelizePass::doFillUboDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSet & descriptorSet
-		, BillboardListRenderNode & node )
-	{
-	}
-
-	void VoxelizePass::doFillUboDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSet & descriptorSet
-		, SubmeshRenderNode & node )
-	{
-	}
-
 	namespace
 	{
-		template< typename DataTypeT, typename InstanceTypeT >
-		void fillTexDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSet & descriptorSet
-			, uint32_t & index
-			, ObjectRenderNode< DataTypeT, InstanceTypeT > & node
-			, ShadowMapLightTypeArray const & shadowMaps )
+		ashes::WriteDescriptorSet getDescriptorWrite( ashes::Buffer< Voxel > const & voxels
+			, uint32_t dstBinding )
 		{
+			auto & buffer = voxels.getBuffer();
+			auto result = ashes::WriteDescriptorSet{ dstBinding
+				, 0u
+				, 1u
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
+			result.bufferInfo.push_back( { buffer
+				, 0u
+				, buffer.getSize() } );
+			return result;
+		}
+
+		void fillAdditionalDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSet & descriptorSet
+			, ShadowMapLightTypeArray const & shadowMaps
+			, VoxelizerUbo const & voxlizerUbo
+			, ashes::Buffer< Voxel > const & voxels )
+		{
+			uint32_t index = 0u;
 			auto & flags = pipeline.getFlags();
 			ashes::WriteDescriptorSetArray writes;
-
-			if ( !flags.textures.empty() )
-			{
-				node.passNode.fillDescriptor( descriptorSet.getLayout()
-					, index
-					, writes
-					, flags.textures );
-			}
-
+			writes.push_back( voxlizerUbo.getDescriptorWrite( index++ ) );
+			writes.push_back( getDescriptorWrite( voxels, index++ ) );
 			bindShadowMaps( flags
 				, shadowMaps
 				, writes
@@ -358,54 +338,28 @@ namespace castor3d
 		}
 	}
 
-	void VoxelizePass::doFillTextureDescriptor( RenderPipeline const & pipeline
+	void VoxelizePass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
 		, ashes::DescriptorSet & descriptorSet
-		, uint32_t & index
 		, BillboardListRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		fillTexDescriptor( pipeline
+		fillAdditionalDescriptor( pipeline
 			, descriptorSet
-			, index
-			, node
-			, shadowMaps );
+			, shadowMaps
+			, m_voxelizerUbo
+			, m_voxels );
 	}
 
-	void VoxelizePass::doFillTextureDescriptor( RenderPipeline const & pipeline
+	void VoxelizePass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
 		, ashes::DescriptorSet & descriptorSet
-		, uint32_t & index
 		, SubmeshRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		fillTexDescriptor( pipeline
+		fillAdditionalDescriptor( pipeline
 			, descriptorSet
-			, index
-			, node
-			, shadowMaps );
-	}
-
-	void VoxelizePass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSet & descriptorSet
-		, BillboardListRenderNode & node )
-	{
-		m_voxelizerUbo.createSizedBinding( descriptorSet
-			, descriptorSet.getLayout().getBinding( 0u ) );
-		descriptorSet.createBinding( descriptorSet.getLayout().getBinding( 1u )
-			, m_voxels
-			, 0u
-			, m_voxels.getCount() );
-	}
-
-	void VoxelizePass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSet & descriptorSet
-		, SubmeshRenderNode & node )
-	{
-		m_voxelizerUbo.createSizedBinding( descriptorSet
-			, descriptorSet.getLayout().getBinding( 0u ) );
-		descriptorSet.createBinding( descriptorSet.getLayout().getBinding( 1u )
-			, m_voxels
-			, 0u
-			, m_voxels.getCount() );
+			, shadowMaps
+			, m_voxelizerUbo
+			, m_voxels );
 	}
 
 	ShaderPtr VoxelizePass::doGetVertexShaderSource( PipelineFlags const & flags )const
@@ -636,6 +590,14 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		bool hasTextures = !flags.textures.empty();
 
+		shader::Utils utils{ writer };
+		utils.declareApplyGamma();
+		utils.declareRemoveGamma();
+		utils.declareIsSaturated();
+		utils.declareEncodeColor();
+		utils.declareEncodeNormal();
+		utils.declareFlatten();
+
 		shader::PhongMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 			, uint32_t( NodeUboIdx::eMaterials )
@@ -658,18 +620,27 @@ namespace castor3d
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
-		UBO_VOXELIZER( writer
-			, 0u
-			, RenderPipeline::eAdditional
-			, true );
 
-		auto texIndex = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-			, texIndex
+			, 0u
 			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
-		texIndex += uint32_t( flags.textures.size() );
+
+		uint32_t addIndex = 0u;
+		UBO_VOXELIZER( writer
+			, addIndex++
+			, RenderPipeline::eAdditional
+			, true );
+		auto output( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
+			, addIndex++
+			, RenderPipeline::eAdditional ) );
+		auto lighting = shader::PhongLightingModel::createDiffuseModel( writer
+			, utils
+			, shader::ShadowOptions{ flags.sceneFlags, false }
+			, addIndex
+			, RenderPipeline::eAdditional
+			, m_mode != RenderMode::eTransparentOnly );
 
 		// Shader inputs
 		auto index = 0u;
@@ -679,24 +650,6 @@ namespace castor3d
 		auto inTexture = writer.declInput< Vec3 >( "inTexture", index++, hasTextures );
 		auto inMaterial = writer.declInput< UInt >( "inMaterial", index++ );
 		auto in = writer.getIn();
-
-		// Fragment Outputs
-		auto output( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
-			, 1u
-			, RenderPipeline::eAdditional ) );
-
-		shader::Utils utils{ writer };
-		utils.declareApplyGamma();
-		utils.declareRemoveGamma();
-		utils.declareIsSaturated();
-		utils.declareEncodeColor();
-		utils.declareEncodeNormal();
-		utils.declareFlatten();
-		auto lighting = shader::PhongLightingModel::createDiffuseModel( writer
-			, utils
-			, shader::ShadowOptions{ flags.sceneFlags, false }
-			, texIndex
-			, m_mode != RenderMode::eTransparentOnly );
 
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
@@ -786,6 +739,14 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		bool hasTextures = !flags.textures.empty();
 
+		shader::Utils utils{ writer };
+		utils.declareApplyGamma();
+		utils.declareRemoveGamma();
+		utils.declareIsSaturated();
+		utils.declareEncodeColor();
+		utils.declareEncodeNormal();
+		utils.declareFlatten();
+
 		// Shader inputs
 		auto index = 0u;
 		auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition", index++ );
@@ -817,36 +778,27 @@ namespace castor3d
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
-		UBO_VOXELIZER( writer
-			, 0u
-			, RenderPipeline::eAdditional
-			, true );
 
-		auto texIndex = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-			, texIndex
+			, 0u
 			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
-		texIndex += uint32_t( flags.textures.size() );
 
-		shader::Utils utils{ writer };
-		utils.declareApplyGamma();
-		utils.declareRemoveGamma();
-		utils.declareIsSaturated();
-		utils.declareEncodeColor();
-		utils.declareEncodeNormal();
-		utils.declareFlatten();
+		uint32_t addIndex = 0u;
+		UBO_VOXELIZER( writer
+			, addIndex++
+			, RenderPipeline::eAdditional
+			, true );
+		auto output( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
+			, addIndex++
+			, RenderPipeline::eAdditional ) );
 		auto lighting = shader::MetallicBrdfLightingModel::createDiffuseModel( writer
 			, utils
 			, shader::ShadowOptions{ flags.sceneFlags, false }
-			, texIndex
+			, addIndex
+			, RenderPipeline::eAdditional
 			, m_mode != RenderMode::eTransparentOnly );
-
-		// Fragment Outputs
-		auto output( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
-			, 1u
-			, RenderPipeline::eAdditional ) );
 
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
@@ -948,6 +900,14 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		bool hasTextures = !flags.textures.empty();
 
+		shader::Utils utils{ writer };
+		utils.declareApplyGamma();
+		utils.declareRemoveGamma();
+		utils.declareIsSaturated();
+		utils.declareEncodeColor();
+		utils.declareEncodeNormal();
+		utils.declareFlatten();
+
 		shader::PbrSGMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 			, uint32_t( NodeUboIdx::eMaterials )
@@ -970,18 +930,27 @@ namespace castor3d
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
-		UBO_VOXELIZER( writer
-			, 0u
-			, RenderPipeline::eAdditional
-			, true );
 
-		auto texIndex = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-			, texIndex
+			, 0u
 			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
-		texIndex += uint32_t( flags.textures.size() );
+
+		uint32_t addIndex = 0u;
+		UBO_VOXELIZER( writer
+			, addIndex++
+			, RenderPipeline::eAdditional
+			, true );
+		auto output( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
+			, addIndex++
+			, RenderPipeline::eAdditional ) );
+		auto lighting = shader::SpecularBrdfLightingModel::createDiffuseModel( writer
+			, utils
+			, shader::ShadowOptions{ flags.sceneFlags, false }
+			, addIndex
+			, RenderPipeline::eAdditional
+			, m_mode != RenderMode::eTransparentOnly );
 
 		// Shader inputs
 		auto index = 0u;
@@ -991,24 +960,6 @@ namespace castor3d
 		auto inTexture = writer.declInput< Vec3 >( "inTexture", index++, hasTextures );
 		auto inMaterial = writer.declInput< UInt >( "inMaterial", index++ );
 		auto in = writer.getIn();
-
-		// Fragment Outputs
-		auto output( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
-			, 1u
-			, RenderPipeline::eAdditional ) );
-
-		shader::Utils utils{ writer };
-		utils.declareApplyGamma();
-		utils.declareRemoveGamma();
-		utils.declareIsSaturated();
-		utils.declareEncodeColor();
-		utils.declareEncodeNormal();
-		utils.declareFlatten();
-		auto lighting = shader::SpecularBrdfLightingModel::createDiffuseModel( writer
-			, utils
-			, shader::ShadowOptions{ flags.sceneFlags, false }
-			, texIndex
-			, m_mode != RenderMode::eTransparentOnly );
 
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
