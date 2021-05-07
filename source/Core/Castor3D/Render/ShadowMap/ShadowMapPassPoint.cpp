@@ -203,19 +203,19 @@ namespace castor3d
 	}
 
 	void ShadowMapPassPoint::doFillUboDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetLayout const & layout
+		, ashes::DescriptorSet & descriptorSet
 		, BillboardListRenderNode & node )
 	{
-		m_shadowMapUbo.createSizedBinding( *node.uboDescriptorSet
-			, layout.getBinding( uint32_t( NodeUboIdx::eShadow ) ) );
+		m_shadowMapUbo.createSizedBinding( descriptorSet
+			, descriptorSet.getLayout().getBinding( uint32_t( NodeUboIdx::eShadow ) ) );
 	}
 
 	void ShadowMapPassPoint::doFillUboDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetLayout const & layout
+		, ashes::DescriptorSet & descriptorSet
 		, SubmeshRenderNode & node )
 	{
-		m_shadowMapUbo.createSizedBinding( *node.uboDescriptorSet
-			, layout.getBinding( uint32_t( NodeUboIdx::eShadow ) ) );
+		m_shadowMapUbo.createSizedBinding( descriptorSet
+			, descriptorSet.getLayout().getBinding( uint32_t( NodeUboIdx::eShadow ) ) );
 	}
 
 	ashes::VkDescriptorSetLayoutBindingArray ShadowMapPassPoint::doCreateUboBindings( PipelineFlags const & flags )const
