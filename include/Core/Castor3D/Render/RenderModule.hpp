@@ -94,7 +94,6 @@ namespace castor3d
 		eSkinning,
 		eMorphing,
 		eModelInstances,
-		ePicking,
 		eShadow,
 		eLpvGridConfig,
 		eLayeredLpvGridConfig,
