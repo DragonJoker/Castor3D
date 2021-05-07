@@ -118,7 +118,6 @@ namespace castor3d
 				, FilteredTextureFlags const & textures
 				, sdw::Float const & gamma
 				, TextureConfigurations const & textureConfigs
-				, sdw::Array< sdw::UVec4 > const & textureConfig
 				, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 				, sdw::Vec3 & texCoords
 				, sdw::Vec3 & normal
@@ -137,7 +136,6 @@ namespace castor3d
 				, FilteredTextureFlags const & textures
 				, sdw::Float const & gamma
 				, TextureConfigurations const & textureConfigs
-				, sdw::Array< sdw::UVec4 > const & textureConfig
 				, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 				, sdw::Vec3 const & texCoords
 				, sdw::Vec3 & emissive

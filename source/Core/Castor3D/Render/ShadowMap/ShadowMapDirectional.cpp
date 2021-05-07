@@ -18,7 +18,6 @@
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
 #include "Castor3D/Shader/Ubos/ShadowMapUbo.hpp"
-#include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
 
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>

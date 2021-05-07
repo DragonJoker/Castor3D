@@ -11,7 +11,6 @@
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
-#include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -368,11 +367,6 @@ namespace castor3d
 				, RenderPipeline::eBuffers );
 		}
 
-		UBO_TEXTURES( writer
-			, uint32_t( NodeUboIdx::eTexturesConfig )
-			, RenderPipeline::eBuffers
-			, hasTextures );
-
 		shader::Utils utils{ writer };
 		utils.declareParallaxMappingFunc( flags.passFlags
 			, getTexturesMask() );
@@ -393,7 +387,6 @@ namespace castor3d
 					utils.computeGeometryMapsContributions( textures
 						, flags.passFlags
 						, textureConfigs
-						, c3d_textureData.config
 						, c3d_maps
 						, texCoord
 						, opacity

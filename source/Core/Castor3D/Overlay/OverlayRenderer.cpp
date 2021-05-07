@@ -68,7 +68,6 @@ namespace castor3d
 
 		template< typename T >
 		void doUpdateUbo( UniformBufferOffsetT< T > & overlayUbo
-			, UniformBufferOffsetT< TexturesUbo::Configuration > & texturesUbo
 			, OverlayCategory const & overlay
 			, Pass const & pass
 			, Size const & size )
@@ -90,14 +89,6 @@ namespace castor3d
 				pass.getId(),
 				0,
 			};
-			auto & texturesData = texturesUbo.getData();
-			uint32_t texIndex = 0u;
-
-			for ( auto & unit : pass )
-			{
-				texturesData.indices[texIndex / 4u][texIndex % 4] = unit->getId();
-				++texIndex;
-			}
 		}
 
 		template< typename OverlayT, typename QuadT >
@@ -330,7 +321,6 @@ namespace castor3d
 						: m_renderer.m_texDeclaration ) )
 				, MaxPanelsPerBuffer );
 			doUpdateUbo( bufferIndex.overlayUbo
-				, bufferIndex.texturesUbo
 				, overlay
 				, pass
 				, m_renderer.m_size );
@@ -346,7 +336,6 @@ namespace castor3d
 						, pass.getTextures()
 						, pass
 						, bufferIndex.overlayUbo
-						, bufferIndex.texturesUbo
 						, bufferIndex.index
 						, *fontTexture->getTexture()
 						, *fontTexture->getSampler() );
@@ -361,7 +350,6 @@ namespace castor3d
 						, pass.getTextures()
 						, pass
 						, bufferIndex.overlayUbo
-						, bufferIndex.texturesUbo
 						, bufferIndex.index );
 				}
 			}
@@ -422,7 +410,6 @@ namespace castor3d
 		if ( !free.empty() )
 		{
 			result.overlayUbo = uboPools.getBuffer< Configuration >( 0u );
-			result.texturesUbo = uboPools.getBuffer< TexturesUbo::Configuration >( 0u );
 			result.index = *free.begin();
 			result.geometryBuffers.noTexture.vbo.emplace_back( buffer->getBuffer() );
 			result.geometryBuffers.noTexture.layouts.emplace_back( declaration );
@@ -642,7 +629,6 @@ namespace castor3d
 		, TextureFlags textures
 		, Pass const & pass
 		, UniformBufferOffsetT< Configuration > const & overlayUbo
-		, UniformBufferOffsetT< TexturesUbo::Configuration > const & texturesUbo
 		, uint32_t index
 		, bool update )
 	{
@@ -661,9 +647,6 @@ namespace castor3d
 		// Overlay UBO
 		overlayUbo.createSizedBinding( *result
 			, pipeline.descriptorLayout->getBinding( uint32_t( OverlayBindingId::eOverlay ) ) );
-		// Textures UBO
-		texturesUbo.createSizedBinding( *result
-			, pipeline.descriptorLayout->getBinding( uint32_t( OverlayBindingId::eTexturesConfig ) ) );
 		uint32_t texIndex = 0u;
 
 		for ( auto & unit : pass.getTextureUnits( textures ) )
@@ -693,7 +676,6 @@ namespace castor3d
 		, TextureFlags textures
 		, Pass const & pass
 		, UniformBufferOffsetT< Configuration > const & overlayUbo
-		, UniformBufferOffsetT< TexturesUbo::Configuration > const & texturesUbo
 		, uint32_t index
 		, TextureLayout const & texture
 		, Sampler const & sampler )
@@ -702,7 +684,6 @@ namespace castor3d
 			, std::move( textures )
 			, pass
 			, overlayUbo
-			, texturesUbo
 			, index
 			, false );
 		result->createBinding( pipeline.descriptorLayout->getBinding( uint32_t( OverlayBindingId::eTextMap ) )
@@ -968,10 +949,6 @@ namespace castor3d
 			UBO_OVERLAY( writer
 				, uint32_t( OverlayBindingId::eOverlay )
 				, 0u );
-			UBO_TEXTURES( writer
-				, uint32_t( OverlayBindingId::eTexturesConfig )
-				, 0u
-				, hasTexture );
 
 			// Shader inputs
 			auto vtx_text = writer.declInput< Vec2 >( "vtx_text"
@@ -1013,7 +990,6 @@ namespace castor3d
 					{
 						utils.compute2DMapsContributions( texturesFlags
 							, textureConfigs
-							, c3d_textureData.config
 							, c3d_maps
 							, vec3( vtx_texture, 0.0 )
 							, diffuse

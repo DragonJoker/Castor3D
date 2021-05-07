@@ -28,7 +28,6 @@
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 #include "Castor3D/Shader/Ubos/PickingUbo.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
-#include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
@@ -882,10 +881,6 @@ namespace castor3d
 				, RenderPipeline::eBuffers );
 		}
 
-		UBO_TEXTURES( writer
-			, uint32_t( NodeUboIdx::eTexturesConfig )
-			, RenderPipeline::eBuffers
-			, hasTextures );
 		UBO_PICKING( writer
 			, uint32_t( NodeUboIdx::ePicking )
 			, RenderPipeline::eAdditional );
@@ -913,7 +908,6 @@ namespace castor3d
 					, material->m_opacity );
 				utils.computeOpacityMapContribution( textures
 					, textureConfigs
-					, c3d_textureData.config
 					, c3d_maps
 					, inSurface.texture
 					, alpha );

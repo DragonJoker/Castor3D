@@ -429,27 +429,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Texture configuration data UBO.
-	*\~french
-	*\brief
-	*	UBO des données de configuration de texture.
-	*/
-	class TexturesUbo;
-	/**
-	*\~english
-	*\brief
-	*	Texture configuration data.
-	*\~french
-	*\brief
-	*	Données de configuration de texture.
-	*/
-	struct TexturesUboConfiguration
-	{
-		std::array< castor::Point4ui, 3u > indices;
-	};
-	/**
-	*\~english
-	*\brief
 	*	Voxelizer configuration data UBO.
 	*\~french
 	*\brief

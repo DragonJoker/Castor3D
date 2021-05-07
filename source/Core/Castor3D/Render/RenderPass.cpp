@@ -36,7 +36,6 @@
 #include "Castor3D/Shader/Ubos/PickingUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
-#include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
 
 #include <ashespp/Buffer/Buffer.hpp>
 #include <ashespp/Buffer/VertexBuffer.hpp>
@@ -350,7 +349,6 @@ namespace castor3d
 		return SkinningRenderNode{ doCreatePassRenderNode( pass, pipeline )
 			, geometryEntry.modelUbo
 			, geometryEntry.pickingUbo
-			, geometryEntry.texturesUbo
 			, geometryEntry.modelInstancesUbo
 			, buffers
 			, *primitive.getParent()
@@ -384,7 +382,6 @@ namespace castor3d
 		return MorphingRenderNode{ doCreatePassRenderNode( pass, pipeline )
 			, geometryEntry.modelUbo
 			, geometryEntry.pickingUbo
-			, geometryEntry.texturesUbo
 			, geometryEntry.modelInstancesUbo
 			, buffers
 			, *primitive.getParent()
@@ -416,7 +413,6 @@ namespace castor3d
 		return StaticRenderNode{ doCreatePassRenderNode( pass, pipeline )
 			, geometryEntry.modelUbo
 			, geometryEntry.pickingUbo
-			, geometryEntry.texturesUbo
 			, geometryEntry.modelInstancesUbo
 			, buffers
 			, *primitive.getParent()
@@ -442,7 +438,6 @@ namespace castor3d
 			, billboardEntry.modelUbo
 			, billboardEntry.pickingUbo
 			, billboardEntry.billboardUbo
-			, billboardEntry.texturesUbo
 			, billboardEntry.modelInstancesUbo
 			, buffers
 			, *billboard.getNode()
@@ -602,12 +597,6 @@ namespace castor3d
 				CU_Require( node.modelInstancesUbo );
 				node.modelInstancesUbo.createSizedBinding( descriptorSet
 					, layout.getBinding( uint32_t( NodeUboIdx::eModelInstances ) ) );
-			}
-
-			if ( !pipeline.getFlags().textures.empty() )
-			{
-				node.texturesUbo.createSizedBinding( descriptorSet
-					, layout.getBinding( uint32_t( NodeUboIdx::eTexturesConfig ) ) );
 			}
 
 			node.modelUbo.createSizedBinding( descriptorSet

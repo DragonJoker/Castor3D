@@ -205,7 +205,6 @@ namespace castor3d
 			uboPools.putBuffer( entry.second.modelUbo );
 			uboPools.putBuffer( entry.second.billboardUbo );
 			uboPools.putBuffer( entry.second.pickingUbo );
-			uboPools.putBuffer( entry.second.texturesUbo );
 		}
 	}
 
@@ -223,14 +222,6 @@ namespace castor3d
 			modelData.normal = castor::Matrix4x4f{ normal.getInverse().getTransposed() };
 			auto & billboardData = entry.billboardUbo.getData();
 			billboardData.dimensions = entry.billboard.getDimensions();
-			auto & texturesData = entry.texturesUbo.getData();
-			uint32_t index = 0u;
-
-			for ( auto & unit : entry.pass )
-			{
-				texturesData.indices[index / 4u][index % 4] = unit->getId();
-				++index;
-			}
 		}
 	}
 
@@ -287,7 +278,6 @@ namespace castor3d
 			baseEntry.modelUbo = uboPools.getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 			baseEntry.billboardUbo = uboPools.getBuffer< BillboardUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 			baseEntry.pickingUbo = uboPools.getBuffer< PickingUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
-			baseEntry.texturesUbo = uboPools.getBuffer< TexturesUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 
 			for ( auto instanceMult : m_instances )
 			{
@@ -336,7 +326,6 @@ namespace castor3d
 			uboPools.putBuffer( entry.modelUbo );
 			uboPools.putBuffer( entry.billboardUbo );
 			uboPools.putBuffer( entry.pickingUbo );
-			uboPools.putBuffer( entry.texturesUbo );
 		}
 	}
 }

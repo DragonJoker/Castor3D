@@ -43,10 +43,6 @@ namespace castor3d
 		{
 			return PoolType::ePicking;
 		}
-		else if constexpr ( std::is_same_v< DataT, TexturesUboConfiguration > )
-		{
-			return PoolType::eTextures;
-		}
 		else if constexpr ( std::is_same_v< DataT, ShadowMapUboConfiguration > )
 		{
 			return PoolType::eShadowMap;
