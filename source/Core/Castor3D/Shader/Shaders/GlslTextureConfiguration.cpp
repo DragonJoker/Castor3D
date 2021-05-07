@@ -272,7 +272,8 @@ namespace castor3d
 		}
 
 		void TextureConfigurations::declare( bool hasSsbo
-			, uint32_t binding )
+			, uint32_t binding
+			, uint32_t set )
 		{
 
 			if ( hasSsbo )
@@ -280,14 +281,14 @@ namespace castor3d
 				m_ssbo = std::make_unique< sdw::ArraySsboT< TextureConfigData > >( m_writer
 					, TextureConfigurationBufferName
 					, binding
-					, 0u
+					, set
 					, true );
 			}
 			else
 			{
 				auto c3d_textureConfigurations = m_writer.declSampledImage< FImgBufferRgba32 >( "c3d_textureConfigurations"
 					, binding
-					, 0u );
+					, set );
 				m_getTextureConfiguration = m_writer.implementFunction< TextureConfigData >( "getTextureConfiguration"
 					, [this, &c3d_textureConfigurations]( sdw::UInt const & index )
 					{

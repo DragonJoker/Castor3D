@@ -111,6 +111,7 @@ namespace castor3d
 	void MorphComponent::doCleanup()
 	{
 		m_animBuffer.reset();
+		m_animLayouts.clear();
 	}
 
 	void MorphComponent::doFill( RenderDevice const & device )

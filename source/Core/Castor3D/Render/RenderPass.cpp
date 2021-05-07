@@ -621,7 +621,7 @@ namespace castor3d
 	{
 		auto & layout = descriptorPool.getLayout();
 		node.uboDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_BillboardUbo"
-			, 0u );
+			, RenderPipeline::eBuffers );
 		auto & descriptorSet = *node.uboDescriptorSet;
 		initialiseCommonUboDescriptor( *getEngine()
 			, pipeline
@@ -644,7 +644,7 @@ namespace castor3d
 	{
 		auto & layout = descriptorPool.getLayout();
 		node.uboDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Ubo"
-			, 0u );
+			, RenderPipeline::eBuffers );
 		auto & descriptorSet = *node.uboDescriptorSet;
 		initialiseCommonUboDescriptor( *getEngine()
 			, pipeline
@@ -667,7 +667,7 @@ namespace castor3d
 	{
 		auto & layout = descriptorPool.getLayout();
 		node.uboDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Ubo"
-			, 0u );
+			, RenderPipeline::eBuffers );
 		auto & descriptorSet = *node.uboDescriptorSet;
 		initialiseCommonUboDescriptor( *getEngine()
 			, pipeline
@@ -700,7 +700,7 @@ namespace castor3d
 	{
 		auto & layout = descriptorPool.getLayout();
 		node.uboDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Ubo"
-			, 0u );
+			, RenderPipeline::eBuffers );
 		auto & descriptorSet = *node.uboDescriptorSet;
 		initialiseCommonUboDescriptor( *getEngine()
 			, pipeline
@@ -752,7 +752,7 @@ namespace castor3d
 	{
 		uint32_t index = 0u;
 		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_BillboardTex"
-			, 1u );
+			, RenderPipeline::eTextures );
 		auto & descriptorSet = *node.texDescriptorSet;
 		doFillTextureDescriptor( pipeline
 			, descriptorSet
@@ -769,7 +769,7 @@ namespace castor3d
 	{
 		uint32_t index = 0u;
 		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Tex"
-			, 1u );
+			, RenderPipeline::eTextures );
 		auto & descriptorSet = *node.texDescriptorSet;
 		doFillTextureDescriptor( pipeline
 			, descriptorSet
@@ -786,7 +786,7 @@ namespace castor3d
 	{
 		uint32_t index = 0u;
 		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Tex"
-			, 1u );
+			, RenderPipeline::eTextures );
 		auto & descriptorSet = *node.texDescriptorSet;
 		doFillTextureDescriptor( pipeline
 			, descriptorSet
@@ -803,7 +803,7 @@ namespace castor3d
 	{
 		uint32_t index = 0u;
 		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Tex"
-			, 1u );
+			, RenderPipeline::eTextures );
 		auto & descriptorSet = *node.texDescriptorSet;
 		doFillTextureDescriptor( pipeline
 			, descriptorSet
@@ -828,7 +828,7 @@ namespace castor3d
 				{
 					Pass & pass = itPass.second.begin()->second.passNode.pass;
 
-					if ( pipeline.hasDescriptorPool( 1u ) )
+					if ( pipeline.hasDescriptorPool( RenderPipeline::eTextures ) )
 					{
 						renderPass.initialiseTextureDescriptor( pipeline
 							, descriptorPool
@@ -861,6 +861,92 @@ namespace castor3d
 			, descriptorPool
 			, nodes
 			, shadowMaps );
+	}
+
+	void SceneRenderPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
+		, ashes::DescriptorSetPool const & descriptorPool
+		, BillboardRenderNode & node )
+	{
+		auto & layout = descriptorPool.getLayout();
+		auto descriptorSet = descriptorPool.createDescriptorSet( getName() + "_BillboardAdd"
+			, RenderPipeline::eAdditional );
+		doFillAdditionalDescriptor( pipeline
+			, *descriptorSet
+			, node );
+		descriptorSet->update();
+		pipeline.setAdditionalDescriptorSet( node, std::move( descriptorSet ) );
+	}
+
+	void SceneRenderPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
+		, ashes::DescriptorSetPool const & descriptorPool
+		, MorphingRenderNode & node )
+	{
+		auto & layout = descriptorPool.getLayout();
+		auto descriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Add"
+			, RenderPipeline::eAdditional );
+		doFillAdditionalDescriptor( pipeline
+			, *descriptorSet
+			, node );
+		descriptorSet->update();
+		pipeline.setAdditionalDescriptorSet( node, std::move( descriptorSet ) );
+	}
+
+	void SceneRenderPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
+		, ashes::DescriptorSetPool const & descriptorPool
+		, SkinningRenderNode & node )
+	{
+		auto & layout = descriptorPool.getLayout();
+		auto descriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Add"
+			, RenderPipeline::eAdditional );
+		doFillAdditionalDescriptor( pipeline
+			, *descriptorSet
+			, node );
+		descriptorSet->update();
+		pipeline.setAdditionalDescriptorSet( node, std::move( descriptorSet ) );
+	}
+
+	void SceneRenderPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
+		, ashes::DescriptorSetPool const & descriptorPool
+		, StaticRenderNode & node )
+	{
+		auto & layout = descriptorPool.getLayout();
+		auto descriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Add"
+			, RenderPipeline::eAdditional );
+		doFillAdditionalDescriptor( pipeline
+			, *descriptorSet
+			, node );
+		descriptorSet->update();
+		pipeline.setAdditionalDescriptorSet( node, std::move( descriptorSet ) );
+	}
+
+	void SceneRenderPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
+		, ashes::DescriptorSetPool const & descriptorPool
+		, SubmeshSkinninRenderNodesByPassMap & nodes )
+	{
+		for ( auto & passNodes : nodes )
+		{
+			for ( auto & submeshNodes : passNodes.second )
+			{
+				initialiseAdditionalDescriptor( pipeline
+					, descriptorPool
+					, submeshNodes.second.begin()->second );
+			}
+		}
+	}
+
+	void SceneRenderPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
+		, ashes::DescriptorSetPool const & descriptorPool
+		, SubmeshStaticRenderNodesByPassMap & nodes )
+	{
+		for ( auto & passNodes : nodes )
+		{
+			for ( auto & submeshNodes : passNodes.second )
+			{
+				initialiseAdditionalDescriptor( pipeline
+					, descriptorPool
+					, submeshNodes.second.begin()->second );
+			}
+		}
 	}
 
 	PassRenderNode SceneRenderPass::doCreatePassRenderNode( Pass & pass
@@ -1169,6 +1255,11 @@ namespace castor3d
 			, info );
 	}
 
+	void SceneRenderPass::doUpdate( RenderQueueArray & queues )
+	{
+		queues.emplace_back( m_renderQueue );
+	}
+
 	void SceneRenderPass::doUpdateUbos( CpuUpdater & updater )
 	{
 		auto & camera = *updater.camera;
@@ -1188,116 +1279,6 @@ namespace castor3d
 				updateInstancesUbos( m_modelsInstances, getCuller().getCulledSubmeshes( RenderMode( i ) ), getInstanceMult() );
 				updateInstancesUbos( m_modelsInstances, getCuller().getCulledBillboards( RenderMode( i ) ), getInstanceMult() );
 			}
-		}
-	}
-
-	std::map< PipelineFlags, RenderPipelineUPtr > & SceneRenderPass::doGetFrontPipelines()
-	{
-		return m_frontPipelines;
-	}
-
-	std::map< PipelineFlags, RenderPipelineUPtr > & SceneRenderPass::doGetBackPipelines()
-	{
-		return m_backPipelines;
-	}
-
-	std::map< PipelineFlags, RenderPipelineUPtr > const & SceneRenderPass::doGetFrontPipelines()const
-	{
-		return m_frontPipelines;
-	}
-
-	std::map< PipelineFlags, RenderPipelineUPtr > const & SceneRenderPass::doGetBackPipelines()const
-	{
-		return m_backPipelines;
-	}
-
-	void SceneRenderPass::doPrepareFrontPipeline( ShaderProgramSPtr program
-		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts
-		, PipelineFlags const & flags )
-	{
-		auto & pipelines = doGetFrontPipelines();
-
-		if ( pipelines.find( flags ) == pipelines.end() )
-		{
-			auto dsState = doCreateDepthStencilState( flags );
-			auto bdState = doCreateBlendState( flags );
-			auto & pipeline = *pipelines.emplace( flags
-				, castor::makeUnique< RenderPipeline >( *this
-					, *getEngine()->getRenderSystem()
-					, std::move( dsState )
-					, ashes::PipelineRasterizationStateCreateInfo{ 0u, false, false, VK_POLYGON_MODE_FILL, VK_CULL_MODE_FRONT_BIT }
-					, std::move( bdState )
-					, ashes::PipelineMultisampleStateCreateInfo{}
-					, program
-					, flags ) ).first->second;
-			pipeline.setVertexLayouts( layouts );
-			pipeline.setViewport( makeViewport( m_size ) );
-
-			if ( !checkFlag( flags.programFlags, ProgramFlag::ePicking ) )
-			{
-				pipeline.setScissor( makeScissor( m_size ) );
-			}
-
-			getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [this, &pipeline, flags]( RenderDevice const & device )
-				{
-					auto uboBindings = doCreateUboBindings( flags );
-					auto texBindings = doCreateTextureBindings( flags );
-					auto uboLayout = device->createDescriptorSetLayout( getName()
-						, std::move( uboBindings ) );
-					auto texLayout = device->createDescriptorSetLayout( getName()
-						, std::move( texBindings ) );
-					std::vector< ashes::DescriptorSetLayoutPtr > dsLayouts;
-					dsLayouts.emplace_back( std::move( uboLayout ) );
-					dsLayouts.emplace_back( std::move( texLayout ) );
-					pipeline.setDescriptorSetLayouts( std::move( dsLayouts ) );
-					pipeline.initialise( device, getRenderPass() );
-				} ) );
-		}
-	}
-
-	void SceneRenderPass::doPrepareBackPipeline( ShaderProgramSPtr program
-		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts
-		, PipelineFlags const & flags )
-	{
-		auto & pipelines = doGetBackPipelines();
-
-		if ( pipelines.find( flags ) == pipelines.end() )
-		{
-			auto dsState = doCreateDepthStencilState( flags );
-			auto bdState = doCreateBlendState( flags );
-			auto & pipeline = *pipelines.emplace( flags
-				, castor::makeUnique< RenderPipeline >( *this
-					, *getEngine()->getRenderSystem()
-					, std::move( dsState )
-					, ashes::PipelineRasterizationStateCreateInfo{ 0u, false, false, VK_POLYGON_MODE_FILL, VK_CULL_MODE_BACK_BIT }
-					, std::move( bdState )
-					, ashes::PipelineMultisampleStateCreateInfo{}
-					, program
-					, flags ) ).first->second;
-			pipeline.setVertexLayouts( layouts );
-			pipeline.setViewport( makeViewport( m_size ) );
-
-			if ( !checkFlag( flags.programFlags, ProgramFlag::ePicking ) )
-			{
-				pipeline.setScissor( makeScissor( m_size ) );
-			}
-
-			getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [this, &pipeline, flags]( RenderDevice const & device )
-				{
-					auto uboBindings = doCreateUboBindings( flags );
-					auto texBindings = doCreateTextureBindings( flags );
-					auto uboLayout = device->createDescriptorSetLayout( getName()
-						, std::move( uboBindings ) );
-					auto texLayout = device->createDescriptorSetLayout( getName()
-						, std::move( texBindings ) );
-					std::vector< ashes::DescriptorSetLayoutPtr > dsLayouts;
-					dsLayouts.emplace_back( std::move( uboLayout ) );
-					dsLayouts.emplace_back( std::move( texLayout ) );
-					pipeline.setDescriptorSetLayouts( std::move( dsLayouts ) );
-					pipeline.initialise( device, getRenderPass() );
-				} ) );
 		}
 	}
 
@@ -1363,7 +1344,7 @@ namespace castor3d
 					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
 					: VK_SHADER_STAGE_VERTEX_BIT ) ) );
 		}
-		
+
 		if ( checkFlag( flags.programFlags, ProgramFlag::eInstanceMult ) )
 		{
 			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eModelInstances )
@@ -1371,19 +1352,123 @@ namespace castor3d
 				, VK_SHADER_STAGE_VERTEX_BIT ) );
 		}
 
-		if ( checkFlag( flags.programFlags, ProgramFlag::ePicking ) )
-		{
-			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::ePicking )
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		}
-
 		return uboBindings;
 	}
 
-	void SceneRenderPass::doUpdate( RenderQueueArray & queues )
+	ashes::VkDescriptorSetLayoutBindingArray SceneRenderPass::doCreateAdditionalBindings( PipelineFlags const & flags )const
 	{
-		queues.emplace_back( m_renderQueue );
+		return ashes::VkDescriptorSetLayoutBindingArray{};
+	}
+
+	std::map< PipelineFlags, RenderPipelineUPtr > & SceneRenderPass::doGetFrontPipelines()
+	{
+		return m_frontPipelines;
+	}
+
+	std::map< PipelineFlags, RenderPipelineUPtr > & SceneRenderPass::doGetBackPipelines()
+	{
+		return m_backPipelines;
+	}
+
+	std::map< PipelineFlags, RenderPipelineUPtr > const & SceneRenderPass::doGetFrontPipelines()const
+	{
+		return m_frontPipelines;
+	}
+
+	std::map< PipelineFlags, RenderPipelineUPtr > const & SceneRenderPass::doGetBackPipelines()const
+	{
+		return m_backPipelines;
+	}
+
+	void SceneRenderPass::doInitialisePipeline( RenderDevice const & device
+		, RenderPipeline & pipeline )const
+	{
+		auto & flags = pipeline.getFlags();
+		auto uboBindings = doCreateUboBindings( flags );
+		auto texBindings = doCreateTextureBindings( flags );
+		auto addBindings = doCreateAdditionalBindings( flags );
+		auto uboLayout = device->createDescriptorSetLayout( getName()
+			, std::move( uboBindings ) );
+		auto texLayout = device->createDescriptorSetLayout( getName()
+			, std::move( texBindings ) );
+		auto addLayout = device->createDescriptorSetLayout( getName()
+			, std::move( addBindings ) );
+		std::vector< ashes::DescriptorSetLayoutPtr > dsLayouts;
+		dsLayouts.emplace_back( std::move( uboLayout ) );
+		dsLayouts.emplace_back( std::move( texLayout ) );
+		dsLayouts.emplace_back( std::move( addLayout ) );
+		pipeline.setDescriptorSetLayouts( std::move( dsLayouts ) );
+		pipeline.initialise( device, getRenderPass() );
+	}
+
+	void SceneRenderPass::doPrepareFrontPipeline( ShaderProgramSPtr program
+		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts
+		, PipelineFlags const & flags )
+	{
+		auto & pipelines = doGetFrontPipelines();
+
+		if ( pipelines.find( flags ) == pipelines.end() )
+		{
+			auto dsState = doCreateDepthStencilState( flags );
+			auto bdState = doCreateBlendState( flags );
+			auto & pipeline = *pipelines.emplace( flags
+				, castor::makeUnique< RenderPipeline >( *this
+					, *getEngine()->getRenderSystem()
+					, std::move( dsState )
+					, ashes::PipelineRasterizationStateCreateInfo{ 0u, false, false, VK_POLYGON_MODE_FILL, VK_CULL_MODE_FRONT_BIT }
+					, std::move( bdState )
+					, ashes::PipelineMultisampleStateCreateInfo{}
+					, program
+					, flags ) ).first->second;
+			pipeline.setVertexLayouts( layouts );
+			pipeline.setViewport( makeViewport( m_size ) );
+
+			if ( !checkFlag( flags.programFlags, ProgramFlag::ePicking ) )
+			{
+				pipeline.setScissor( makeScissor( m_size ) );
+			}
+
+			getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [this, &pipeline]( RenderDevice const & device )
+				{
+					doInitialisePipeline( device, pipeline );
+				} ) );
+		}
+	}
+
+	void SceneRenderPass::doPrepareBackPipeline( ShaderProgramSPtr program
+		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts
+		, PipelineFlags const & flags )
+	{
+		auto & pipelines = doGetBackPipelines();
+
+		if ( pipelines.find( flags ) == pipelines.end() )
+		{
+			auto dsState = doCreateDepthStencilState( flags );
+			auto bdState = doCreateBlendState( flags );
+			auto & pipeline = *pipelines.emplace( flags
+				, castor::makeUnique< RenderPipeline >( *this
+					, *getEngine()->getRenderSystem()
+					, std::move( dsState )
+					, ashes::PipelineRasterizationStateCreateInfo{ 0u, false, false, VK_POLYGON_MODE_FILL, VK_CULL_MODE_BACK_BIT }
+					, std::move( bdState )
+					, ashes::PipelineMultisampleStateCreateInfo{}
+					, program
+					, flags ) ).first->second;
+			pipeline.setVertexLayouts( layouts );
+			pipeline.setViewport( makeViewport( m_size ) );
+
+			if ( !checkFlag( flags.programFlags, ProgramFlag::ePicking ) )
+			{
+				pipeline.setScissor( makeScissor( m_size ) );
+			}
+
+			getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [this, &pipeline]( RenderDevice const & device )
+				{
+					doInitialisePipeline( device, pipeline );
+				} ) );
+		}
 	}
 
 	ShaderPtr SceneRenderPass::doGetVertexShaderSource( PipelineFlags const & flags )const
@@ -1399,11 +1484,23 @@ namespace castor3d
 			, hasTextures };
 		auto in = writer.getIn();
 
-		UBO_MATRIX( writer, uint32_t( NodeUboIdx::eMatrix ), 0 );
-		UBO_SCENE( writer, uint32_t( NodeUboIdx::eScene ), 0 );
-		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0 );
-		auto skinningData = SkinningUbo::declare( writer, uint32_t( NodeUboIdx::eSkinning ), 0, flags.programFlags );
-		UBO_MORPHING( writer, uint32_t( NodeUboIdx::eMorphing ), 0, flags.programFlags );
+		UBO_MATRIX( writer
+			, uint32_t( NodeUboIdx::eMatrix )
+			, RenderPipeline::eBuffers );
+		UBO_SCENE( writer
+			, uint32_t( NodeUboIdx::eScene )
+			, RenderPipeline::eBuffers );
+		UBO_MODEL( writer
+			, uint32_t( NodeUboIdx::eModel )
+			, RenderPipeline::eBuffers );
+		auto skinningData = SkinningUbo::declare( writer
+			, uint32_t( NodeUboIdx::eSkinning )
+			, RenderPipeline::eBuffers
+			, flags.programFlags );
+		UBO_MORPHING( writer
+			, uint32_t( NodeUboIdx::eMorphing )
+			, RenderPipeline::eBuffers
+			, flags.programFlags );
 
 		// Outputs
 		shader::OutFragmentSurface outSurface{ writer
@@ -1466,10 +1563,18 @@ namespace castor3d
 		auto uv = writer.declInput< Vec2 >( "uv", 1u, hasTextures );
 		auto center = writer.declInput< Vec3 >( "center", 2u );
 		auto in = writer.getIn();
-		UBO_MATRIX( writer, uint32_t( NodeUboIdx::eMatrix ), 0 );
-		UBO_SCENE( writer, uint32_t( NodeUboIdx::eScene ), 0 );
-		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0 );
-		UBO_BILLBOARD( writer, uint32_t( NodeUboIdx::eBillboard ), 0 );
+		UBO_MATRIX( writer
+			, uint32_t( NodeUboIdx::eMatrix )
+			, RenderPipeline::eBuffers );
+		UBO_SCENE( writer
+			, uint32_t( NodeUboIdx::eScene )
+			, RenderPipeline::eBuffers );
+		UBO_MODEL( writer
+			, uint32_t( NodeUboIdx::eModel )
+			, RenderPipeline::eBuffers );
+		UBO_BILLBOARD( writer
+			, uint32_t( NodeUboIdx::eBillboard )
+			, RenderPipeline::eBuffers );
 
 		// Shader outputs
 		shader::OutFragmentSurface outSurface{ writer

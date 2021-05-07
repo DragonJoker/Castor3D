@@ -173,11 +173,19 @@ namespace castor3d
 					commandBuffer.setScissor( *scissor );
 				}
 
-				commandBuffer.bindDescriptorSet( *node.uboDescriptorSet, pipeline.getPipelineLayout() );
+				if ( pipeline.hasDescriptorPool( RenderPipeline::eBuffers ) )
+				{
+					commandBuffer.bindDescriptorSet( *node.uboDescriptorSet, pipeline.getPipelineLayout() );
+				}
 
-				if ( node.texDescriptorSet )
+				if ( pipeline.hasDescriptorPool( RenderPipeline::eTextures ) )
 				{
 					commandBuffer.bindDescriptorSet( *node.texDescriptorSet, pipeline.getPipelineLayout() );
+				}
+
+				if ( pipeline.hasDescriptorPool( RenderPipeline::eAdditional ) )
+				{
+					commandBuffer.bindDescriptorSet( pipeline.getAdditionalDescriptorSet( node ), pipeline.getPipelineLayout() );
 				}
 
 				for ( uint32_t i = 0; i < geometryBuffers.vbo.size(); ++i )
