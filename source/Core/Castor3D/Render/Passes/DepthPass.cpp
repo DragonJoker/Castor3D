@@ -174,49 +174,6 @@ namespace castor3d
 		addFlag( flags.programFlags, ProgramFlag::eDepthPass );
 	}
 
-	void DepthPass::doFillTextureDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSet & descriptorSet
-		, uint32_t & index
-		, BillboardListRenderNode & node
-		, ShadowMapLightTypeArray const & shadowMaps )
-	{
-		ashes::WriteDescriptorSetArray writes;
-		node.passNode.fillDescriptor( descriptorSet.getLayout()
-			, index
-			, writes
-			, pipeline.getFlags().textures );
-		descriptorSet.setBindings( writes );
-	}
-
-	void DepthPass::doFillTextureDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSet & descriptorSet
-		, uint32_t & index
-		, SubmeshRenderNode & node
-		, ShadowMapLightTypeArray const & shadowMaps )
-	{
-		ashes::WriteDescriptorSetArray writes;
-		node.passNode.fillDescriptor( descriptorSet.getLayout()
-			, index
-			, writes
-			, pipeline.getFlags().textures );
-		descriptorSet.setBindings( writes );
-	}
-
-	ashes::VkDescriptorSetLayoutBindingArray DepthPass::doCreateTextureBindings( PipelineFlags const & flags )const
-	{
-		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
-
-		if ( !flags.textures.empty() )
-		{
-			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( 0u
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT
-				, uint32_t( flags.textures.size() ) ) );
-		}
-
-		return textureBindings;
-	}
-
 	void DepthPass::doUpdatePipeline( RenderPipeline & pipeline )
 	{
 	}

@@ -512,8 +512,7 @@ namespace castor3d
 		 */
 		C3D_API void initialiseTextureDescriptor( RenderPipeline const & pipeline
 			, ashes::DescriptorSetPool const & descriptorPool
-			, BillboardRenderNode & node
-			, ShadowMapLightTypeArray const & shadowMaps );
+			, BillboardRenderNode & node );
 		/**
 		 *\~english
 		 *\brief		Initialises the textures descriptor set of a morphing node.
@@ -528,8 +527,7 @@ namespace castor3d
 		 */
 		C3D_API void initialiseTextureDescriptor( RenderPipeline const & pipeline
 			, ashes::DescriptorSetPool const & descriptorPool
-			, MorphingRenderNode & node
-			, ShadowMapLightTypeArray const & shadowMaps );
+			, MorphingRenderNode & node );
 		/**
 		 *\~english
 		 *\brief		Initialises the textures descriptor set of a skinning node.
@@ -544,8 +542,7 @@ namespace castor3d
 		 */
 		C3D_API void initialiseTextureDescriptor( RenderPipeline const & pipeline
 			, ashes::DescriptorSetPool const & descriptorPool
-			, SkinningRenderNode & node
-			, ShadowMapLightTypeArray const & shadowMaps );
+			, SkinningRenderNode & node );
 		/**
 		 *\~english
 		 *\brief		Initialises the textures descriptor set of a static node.
@@ -560,8 +557,7 @@ namespace castor3d
 		 */
 		C3D_API void initialiseTextureDescriptor( RenderPipeline const & pipeline
 			, ashes::DescriptorSetPool const & descriptorPool
-			, StaticRenderNode & node
-			, ShadowMapLightTypeArray const & shadowMaps );
+			, StaticRenderNode & node );
 		/**
 		 *\~english
 		 *\brief		Initialises the textures descriptor set of skinning nodes.
@@ -576,8 +572,7 @@ namespace castor3d
 		 */
 		C3D_API void initialiseTextureDescriptor( RenderPipeline const & pipeline
 			, ashes::DescriptorSetPool const & descriptorPool
-			, SubmeshSkinninRenderNodesByPassMap & nodes
-			, ShadowMapLightTypeArray const & shadowMaps );
+			, SubmeshSkinninRenderNodesByPassMap & nodes );
 		/**
 		 *\~english
 		 *\brief		Initialises the textures descriptor set of static nodes.
@@ -592,8 +587,7 @@ namespace castor3d
 		 */
 		C3D_API void initialiseTextureDescriptor( RenderPipeline const & pipeline
 			, ashes::DescriptorSetPool const & descriptorPool
-			, SubmeshStaticRenderNodesByPassMap & nodes
-			, ShadowMapLightTypeArray const & shadowMaps );
+			, SubmeshStaticRenderNodesByPassMap & nodes );
 		/**
 		 *\~english
 		 *\brief		Initialises the additional descriptor set of a billboard node.
@@ -606,7 +600,8 @@ namespace castor3d
 		 */
 		C3D_API void initialiseAdditionalDescriptor( RenderPipeline & pipeline
 			, ashes::DescriptorSetPool const & descriptorPool
-			, BillboardRenderNode & node );
+			, BillboardRenderNode & node
+			, ShadowMapLightTypeArray const & shadowMaps );
 		/**
 		 *\~english
 		 *\brief		Initialises the additional descriptor set of a morphing node.
@@ -619,7 +614,8 @@ namespace castor3d
 		 */
 		C3D_API void initialiseAdditionalDescriptor( RenderPipeline & pipeline
 			, ashes::DescriptorSetPool const & descriptorPool
-			, MorphingRenderNode & node );
+			, MorphingRenderNode & node
+			, ShadowMapLightTypeArray const & shadowMaps );
 		/**
 		 *\~english
 		 *\brief		Initialises the additional descriptor set of a skinning node.
@@ -632,7 +628,8 @@ namespace castor3d
 		 */
 		C3D_API void initialiseAdditionalDescriptor( RenderPipeline & pipeline
 			, ashes::DescriptorSetPool const & descriptorPool
-			, SkinningRenderNode & node );
+			, SkinningRenderNode & node
+			, ShadowMapLightTypeArray const & shadowMaps );
 		/**
 		 *\~english
 		 *\brief		Initialises the additional descriptor set of a static node.
@@ -645,7 +642,8 @@ namespace castor3d
 		 */
 		C3D_API void initialiseAdditionalDescriptor( RenderPipeline & pipeline
 			, ashes::DescriptorSetPool const & descriptorPool
-			, StaticRenderNode & node );
+			, StaticRenderNode & node
+			, ShadowMapLightTypeArray const & shadowMaps );
 		/**
 		 *\~english
 		 *\brief		Initialises the additional descriptor set of skining nodes.
@@ -658,7 +656,8 @@ namespace castor3d
 		 */
 		C3D_API void initialiseAdditionalDescriptor( RenderPipeline & pipeline
 			, ashes::DescriptorSetPool const & descriptorPool
-			, SubmeshSkinninRenderNodesByPassMap & nodes );
+			, SubmeshSkinninRenderNodesByPassMap & nodes
+			, ShadowMapLightTypeArray const & shadowMaps );
 		/**
 		 *\~english
 		 *\brief		Initialises the additional descriptor set of static nodes.
@@ -671,7 +670,8 @@ namespace castor3d
 		 */
 		C3D_API void initialiseAdditionalDescriptor( RenderPipeline & pipeline
 			, ashes::DescriptorSetPool const & descriptorPool
-			, SubmeshStaticRenderNodesByPassMap & nodes );
+			, SubmeshStaticRenderNodesByPassMap & nodes
+			, ShadowMapLightTypeArray const & shadowMaps );
 		/**
 		 *\~english
 		 *\brief			Modifies the given flags to make them match the render pass requirements.
@@ -1073,7 +1073,7 @@ namespace castor3d
 		 *\brief		Crée les attaches de layout de descripteurs communs pour les UBO.
 		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
-		C3D_API virtual ashes::VkDescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const;
+		C3D_API ashes::VkDescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const;
 		/**
 		 *\~english
 		 *\brief		Creates the common textures descriptor layout bindings.
@@ -1082,7 +1082,7 @@ namespace castor3d
 		 *\brief		Crée les attaches de layout de descripteurs communs pour les textures.
 		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
-		C3D_API virtual ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const = 0;
+		C3D_API ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const;
 		/**
 		 *\~english
 		 *\brief		Creates the common textures descriptor layout bindings.
@@ -1126,70 +1126,6 @@ namespace castor3d
 		C3D_API virtual ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const = 0;
 		/**
 		 *\~english
-		 *\brief		Initialises the UBOs descriptor set of a billboard node.
-		 *\param[in]	layout	The descriptors layout.
-		 *\param[in]	node	The node.
-		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs d'UBOs pour un noeud de billboard.
-		 *\param[in]	layout	Le layout des descripteurs.
-		 *\param[in]	node	Le noeud.
-		 */
-		C3D_API virtual void doFillUboDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSet & descriptorSet
-			, BillboardListRenderNode & node ) = 0;
-		/**
-		 *\~english
-		 *\brief		Initialises the UBOs descriptor set of a submesh node.
-		 *\param[in]	layout	The descriptors layout.
-		 *\param[in]	node	The node.
-		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs d'UBO pour un noeud de submesh.
-		 *\param[in]	layout	Le layout des descripteurs.
-		 *\param[in]	node	Le noeud.
-		 */
-		C3D_API virtual void doFillUboDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSet & descriptorSet
-			, SubmeshRenderNode & node ) = 0;
-		/**
-		 *\~english
-		 *\brief			Initialises the textures descriptor set of a billboard node.
-		 *\param[in]		layout		The descriptors layout.
-		 *\param[in,out]	index		The texture index, updated to the next available.
-		 *\param[in]		node		The node.
-		 *\param[in]		shadowMaps	The shadow maps.
-		 *\~french
-		 *\brief			Initialise l'ensemble de descripteurs de textures pour un noeud de billboard.
-		 *\param[in]		layout		Le layout des descripteurs.
-		 *\param[in, out]	index		L'indice de la texture, mis à jour au prochain disponible.
-		 *\param[in]		node		Le noeud.
-		 *\param[in]		shadowMaps	Les shadow maps.
-		 */
-		C3D_API virtual void doFillTextureDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSet & descriptorSet
-			, uint32_t & index
-			, BillboardListRenderNode & node
-			, ShadowMapLightTypeArray const & shadowMaps ) = 0;
-		/**
-		 *\~english
-		 *\brief			Initialises the textures descriptor set of a submesh node.
-		 *\param[in]		layout		The descriptors layout.
-		 *\param[in,out]	index		The texture index, updated to the next available.
-		 *\param[in]		node		The node.
-		 *\param[in]		shadowMaps	The shadow maps.
-		 *\~french
-		 *\brief			Initialise l'ensemble de descripteurs de textures pour un noeud de submesh.
-		 *\param[in]		layout		Le layout des descripteurs.
-		 *\param[in,out]	index		L'indice de la texture, mis à jour au prochain disponible.
-		 *\param[in]		node		Le noeud.
-		 *\param[in]		shadowMaps	Les shadow maps.
-		 */
-		C3D_API virtual void doFillTextureDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSet & descriptorSet
-			, uint32_t & index
-			, SubmeshRenderNode & node
-			, ShadowMapLightTypeArray const & shadowMaps ) = 0;
-		/**
-		 *\~english
 		 *\brief			Initialises the additional descriptor set of a billboard node.
 		 *\param[in]		layout		The descriptors layout.
 		 *\param[in,out]	index		The texture index, updated to the next available.
@@ -1204,22 +1140,28 @@ namespace castor3d
 		 */
 		C3D_API virtual void doFillAdditionalDescriptor( RenderPipeline const & pipeline
 			, ashes::DescriptorSet & descriptorSet
-			, BillboardListRenderNode & node )
+			, BillboardListRenderNode & node
+			, ShadowMapLightTypeArray const & shadowMaps )
 		{
 		}
 		/**
 		 *\~english
-		 *\brief			Initialises the additional descriptors set of a submesh node.
+		 *\brief			Initialises the additional descriptor set of a submesh node.
 		 *\param[in]		layout		The descriptors layout.
+		 *\param[in,out]	index		The texture index, updated to the next available.
 		 *\param[in]		node		The node.
+		 *\param[in]		shadowMaps	The shadow maps.
 		 *\~french
-		 *\brief			Initialise l'ensemble de descripteurs additionnels pour un noeud de morphing.
+		 *\brief			Initialise l'ensemble de descripteurs additionnels pour un noeud de submesh.
 		 *\param[in]		layout		Le layout des descripteurs.
+		 *\param[in, out]	index		L'indice de la texture, mis à jour au prochain disponible.
 		 *\param[in]		node		Le noeud.
+		 *\param[in]		shadowMaps	Les shadow maps.
 		 */
 		C3D_API virtual void doFillAdditionalDescriptor( RenderPipeline const & pipeline
 			, ashes::DescriptorSet & descriptorSet
-			, SubmeshRenderNode & node )
+			, SubmeshRenderNode & node
+			, ShadowMapLightTypeArray const & shadowMaps )
 		{
 		}
 

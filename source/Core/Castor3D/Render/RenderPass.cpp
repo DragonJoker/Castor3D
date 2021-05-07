@@ -621,9 +621,6 @@ namespace castor3d
 			, m_sceneUbo );
 		node.billboardUbo.createSizedBinding( descriptorSet
 			, layout.getBinding( uint32_t( NodeUboIdx::eBillboard ) ) );
-		doFillUboDescriptor( pipeline
-			, descriptorSet
-			, node );
 		descriptorSet.update();
 	}
 
@@ -644,9 +641,6 @@ namespace castor3d
 			, m_sceneUbo );
 		node.morphingUbo.createSizedBinding( descriptorSet
 			, layout.getBinding( uint32_t( NodeUboIdx::eMorphing ) ) );
-		doFillUboDescriptor( pipeline
-			, descriptorSet
-			, node );
 		descriptorSet.update();
 	}
 
@@ -677,9 +671,6 @@ namespace castor3d
 				, layout.getBinding( uint32_t( NodeUboIdx::eSkinning ) ) );
 		}
 
-		doFillUboDescriptor( pipeline
-			, descriptorSet
-			, node );
 		descriptorSet.update();
 	}
 
@@ -698,9 +689,6 @@ namespace castor3d
 			, descriptorSet
 			, m_matrixUbo
 			, m_sceneUbo );
-		doFillUboDescriptor( pipeline
-			, descriptorSet
-			, node );
 		descriptorSet.update();
 	}
 
@@ -736,181 +724,188 @@ namespace castor3d
 
 	void SceneRenderPass::initialiseTextureDescriptor( RenderPipeline const & pipeline
 		, ashes::DescriptorSetPool const & descriptorPool
-		, BillboardRenderNode & node
-		, ShadowMapLightTypeArray const & shadowMaps )
+		, BillboardRenderNode & node )
 	{
 		uint32_t index = 0u;
 		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_BillboardTex"
 			, RenderPipeline::eTextures );
 		auto & descriptorSet = *node.texDescriptorSet;
-		doFillTextureDescriptor( pipeline
-			, descriptorSet
-			, index
-			, node
-			, shadowMaps );
-		descriptorSet.update();
-	}
 
-	void SceneRenderPass::initialiseTextureDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetPool const & descriptorPool
-		, MorphingRenderNode & node
-		, ShadowMapLightTypeArray const & shadowMaps )
-	{
-		uint32_t index = 0u;
-		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Tex"
-			, RenderPipeline::eTextures );
-		auto & descriptorSet = *node.texDescriptorSet;
-		doFillTextureDescriptor( pipeline
-			, descriptorSet
-			, index
-			, node
-			, shadowMaps );
-		descriptorSet.update();
-	}
-
-	void SceneRenderPass::initialiseTextureDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetPool const & descriptorPool
-		, SkinningRenderNode & node
-		, ShadowMapLightTypeArray const & shadowMaps )
-	{
-		uint32_t index = 0u;
-		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Tex"
-			, RenderPipeline::eTextures );
-		auto & descriptorSet = *node.texDescriptorSet;
-		doFillTextureDescriptor( pipeline
-			, descriptorSet
-			, index
-			, node
-			, shadowMaps );
-		descriptorSet.update();
-	}
-
-	void SceneRenderPass::initialiseTextureDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetPool const & descriptorPool
-		, StaticRenderNode & node
-		, ShadowMapLightTypeArray const & shadowMaps )
-	{
-		uint32_t index = 0u;
-		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Tex"
-			, RenderPipeline::eTextures );
-		auto & descriptorSet = *node.texDescriptorSet;
-		doFillTextureDescriptor( pipeline
-			, descriptorSet
-			, index
-			, node
-			, shadowMaps );
-		descriptorSet.update();
-	}
-
-	namespace
-	{
-		template< typename MapType >
-		void initialiseTextureDescriptors( RenderPipeline const & pipeline
-			, SceneRenderPass & renderPass
-			, ashes::DescriptorSetPool const & descriptorPool
-			, MapType & nodes
-			, ShadowMapLightTypeArray const & shadowMaps )
+		if ( !pipeline.getFlags().textures.empty() )
 		{
-			subTraverseNodes( nodes
-				, [&pipeline, &renderPass, &descriptorPool, &shadowMaps]( Pass & pass1
-					, auto & itPass )
-				{
-					Pass & pass = itPass.second.begin()->second.passNode.pass;
+			node.passNode.fillDescriptor( descriptorSet.getLayout()
+				, index
+				, descriptorSet
+				, pipeline.getFlags().textures );
+		}
 
-					if ( pipeline.hasDescriptorPool( RenderPipeline::eTextures ) )
-					{
-						renderPass.initialiseTextureDescriptor( pipeline
-							, descriptorPool
-							, itPass.second.begin()->second
-							, shadowMaps );
-					}
-				} );
+		descriptorSet.update();
+	}
+
+	void SceneRenderPass::initialiseTextureDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetPool const & descriptorPool
+		, MorphingRenderNode & node )
+	{
+		uint32_t index = 0u;
+		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Tex"
+			, RenderPipeline::eTextures );
+		auto & descriptorSet = *node.texDescriptorSet;
+
+		if ( !pipeline.getFlags().textures.empty() )
+		{
+			node.passNode.fillDescriptor( descriptorSet.getLayout()
+				, index
+				, descriptorSet
+				, pipeline.getFlags().textures );
+		}
+
+		descriptorSet.update();
+	}
+
+	void SceneRenderPass::initialiseTextureDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetPool const & descriptorPool
+		, SkinningRenderNode & node )
+	{
+		uint32_t index = 0u;
+		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Tex"
+			, RenderPipeline::eTextures );
+		auto & descriptorSet = *node.texDescriptorSet;
+
+		if ( !pipeline.getFlags().textures.empty() )
+		{
+			node.passNode.fillDescriptor( descriptorSet.getLayout()
+				, index
+				, descriptorSet
+				, pipeline.getFlags().textures );
+		}
+
+		descriptorSet.update();
+	}
+
+	void SceneRenderPass::initialiseTextureDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetPool const & descriptorPool
+		, StaticRenderNode & node )
+	{
+		uint32_t index = 0u;
+		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Tex"
+			, RenderPipeline::eTextures );
+		auto & descriptorSet = *node.texDescriptorSet;
+
+		if ( !pipeline.getFlags().textures.empty() )
+		{
+			node.passNode.fillDescriptor( descriptorSet.getLayout()
+				, index
+				, descriptorSet
+				, pipeline.getFlags().textures );
+		}
+
+		descriptorSet.update();
+	}
+
+	void SceneRenderPass::initialiseTextureDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSetPool const & descriptorPool
+		, SubmeshSkinninRenderNodesByPassMap & nodes )
+	{
+		for ( auto & passNodes : nodes )
+		{
+			for ( auto & submeshNodes : passNodes.second )
+			{
+				if ( pipeline.hasDescriptorPool( RenderPipeline::eTextures ) )
+				{
+					initialiseTextureDescriptor( pipeline
+						, descriptorPool
+						, submeshNodes.second.begin()->second );
+				}
+			}
 		}
 	}
 
 	void SceneRenderPass::initialiseTextureDescriptor( RenderPipeline const & pipeline
 		, ashes::DescriptorSetPool const & descriptorPool
-		, SubmeshSkinninRenderNodesByPassMap & nodes
-		, ShadowMapLightTypeArray const & shadowMaps )
+		, SubmeshStaticRenderNodesByPassMap & nodes )
 	{
-		initialiseTextureDescriptors( pipeline
-			, *this
-			, descriptorPool
-			, nodes
-			, shadowMaps );
-	}
-
-	void SceneRenderPass::initialiseTextureDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetPool const & descriptorPool
-		, SubmeshStaticRenderNodesByPassMap & nodes
-		, ShadowMapLightTypeArray const & shadowMaps )
-	{
-		initialiseTextureDescriptors( pipeline
-			, *this
-			, descriptorPool
-			, nodes
-			, shadowMaps );
+		for ( auto & passNodes : nodes )
+		{
+			for ( auto & submeshNodes : passNodes.second )
+			{
+				if ( pipeline.hasDescriptorPool( RenderPipeline::eTextures ) )
+				{
+					initialiseTextureDescriptor( pipeline
+						, descriptorPool
+						, submeshNodes.second.begin()->second );
+				}
+			}
+		}
 	}
 
 	void SceneRenderPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
 		, ashes::DescriptorSetPool const & descriptorPool
-		, BillboardRenderNode & node )
+		, BillboardRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		auto & layout = descriptorPool.getLayout();
 		auto descriptorSet = descriptorPool.createDescriptorSet( getName() + "_BillboardAdd"
 			, RenderPipeline::eAdditional );
 		doFillAdditionalDescriptor( pipeline
 			, *descriptorSet
-			, node );
+			, node
+			, shadowMaps );
 		descriptorSet->update();
 		pipeline.setAdditionalDescriptorSet( node, std::move( descriptorSet ) );
 	}
 
 	void SceneRenderPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
 		, ashes::DescriptorSetPool const & descriptorPool
-		, MorphingRenderNode & node )
+		, MorphingRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		auto & layout = descriptorPool.getLayout();
 		auto descriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Add"
 			, RenderPipeline::eAdditional );
 		doFillAdditionalDescriptor( pipeline
 			, *descriptorSet
-			, node );
+			, node
+			, shadowMaps );
 		descriptorSet->update();
 		pipeline.setAdditionalDescriptorSet( node, std::move( descriptorSet ) );
 	}
 
 	void SceneRenderPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
 		, ashes::DescriptorSetPool const & descriptorPool
-		, SkinningRenderNode & node )
+		, SkinningRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		auto & layout = descriptorPool.getLayout();
 		auto descriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Add"
 			, RenderPipeline::eAdditional );
 		doFillAdditionalDescriptor( pipeline
 			, *descriptorSet
-			, node );
+			, node
+			, shadowMaps );
 		descriptorSet->update();
 		pipeline.setAdditionalDescriptorSet( node, std::move( descriptorSet ) );
 	}
 
 	void SceneRenderPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
 		, ashes::DescriptorSetPool const & descriptorPool
-		, StaticRenderNode & node )
+		, StaticRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		auto & layout = descriptorPool.getLayout();
 		auto descriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Add"
 			, RenderPipeline::eAdditional );
 		doFillAdditionalDescriptor( pipeline
 			, *descriptorSet
-			, node );
+			, node
+			, shadowMaps );
 		descriptorSet->update();
 		pipeline.setAdditionalDescriptorSet( node, std::move( descriptorSet ) );
 	}
 
 	void SceneRenderPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
 		, ashes::DescriptorSetPool const & descriptorPool
-		, SubmeshSkinninRenderNodesByPassMap & nodes )
+		, SubmeshSkinninRenderNodesByPassMap & nodes
+		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		for ( auto & passNodes : nodes )
 		{
@@ -918,14 +913,16 @@ namespace castor3d
 			{
 				initialiseAdditionalDescriptor( pipeline
 					, descriptorPool
-					, submeshNodes.second.begin()->second );
+					, submeshNodes.second.begin()->second
+					, shadowMaps );
 			}
 		}
 	}
 
 	void SceneRenderPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
 		, ashes::DescriptorSetPool const & descriptorPool
-		, SubmeshStaticRenderNodesByPassMap & nodes )
+		, SubmeshStaticRenderNodesByPassMap & nodes
+		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		for ( auto & passNodes : nodes )
 		{
@@ -933,7 +930,8 @@ namespace castor3d
 			{
 				initialiseAdditionalDescriptor( pipeline
 					, descriptorPool
-					, submeshNodes.second.begin()->second );
+					, submeshNodes.second.begin()->second
+					, shadowMaps );
 			}
 		}
 	}
@@ -1344,6 +1342,21 @@ namespace castor3d
 		return uboBindings;
 	}
 
+	ashes::VkDescriptorSetLayoutBindingArray SceneRenderPass::doCreateTextureBindings( PipelineFlags const & flags )const
+	{
+		ashes::VkDescriptorSetLayoutBindingArray texBindings;
+
+		if ( !flags.textures.empty() )
+		{
+			texBindings.emplace_back( makeDescriptorSetLayoutBinding( 0u
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT
+				, uint32_t( flags.textures.size() ) ) );
+		}
+
+		return texBindings;
+	}
+
 	ashes::VkDescriptorSetLayoutBindingArray SceneRenderPass::doCreateAdditionalBindings( PipelineFlags const & flags )const
 	{
 		return ashes::VkDescriptorSetLayoutBindingArray{};
@@ -1376,11 +1389,11 @@ namespace castor3d
 		auto uboBindings = doCreateUboBindings( flags );
 		auto texBindings = doCreateTextureBindings( flags );
 		auto addBindings = doCreateAdditionalBindings( flags );
-		auto uboLayout = device->createDescriptorSetLayout( getName()
+		auto uboLayout = device->createDescriptorSetLayout( getName() + "Ubo"
 			, std::move( uboBindings ) );
-		auto texLayout = device->createDescriptorSetLayout( getName()
+		auto texLayout = device->createDescriptorSetLayout( getName() + "Tex"
 			, std::move( texBindings ) );
-		auto addLayout = device->createDescriptorSetLayout( getName()
+		auto addLayout = device->createDescriptorSetLayout( getName() + "Add"
 			, std::move( addBindings ) );
 		std::vector< ashes::DescriptorSetLayoutPtr > dsLayouts;
 		dsLayouts.emplace_back( std::move( uboLayout ) );
