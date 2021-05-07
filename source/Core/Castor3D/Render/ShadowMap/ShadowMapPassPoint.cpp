@@ -201,30 +201,42 @@ namespace castor3d
 		SceneRenderPass::doUpdate( nodes.billboardNodes.backCulled );
 	}
 
+	ashes::VkDescriptorSetLayoutBindingArray ShadowMapPassPoint::doCreateAdditionalBindings( PipelineFlags const & flags )const
+	{
+		ashes::VkDescriptorSetLayoutBindingArray addBindings;
+		addBindings.emplace_back( makeDescriptorSetLayoutBinding( 0u
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		m_initialised = true;
+		return addBindings;
+	}
+
 	void ShadowMapPassPoint::doFillUboDescriptor( RenderPipeline const & pipeline
 		, ashes::DescriptorSet & descriptorSet
 		, BillboardListRenderNode & node )
 	{
-		m_shadowMapUbo.createSizedBinding( descriptorSet
-			, descriptorSet.getLayout().getBinding( uint32_t( NodeUboIdx::eShadow ) ) );
 	}
 
 	void ShadowMapPassPoint::doFillUboDescriptor( RenderPipeline const & pipeline
 		, ashes::DescriptorSet & descriptorSet
 		, SubmeshRenderNode & node )
 	{
-		m_shadowMapUbo.createSizedBinding( descriptorSet
-			, descriptorSet.getLayout().getBinding( uint32_t( NodeUboIdx::eShadow ) ) );
 	}
 
-	ashes::VkDescriptorSetLayoutBindingArray ShadowMapPassPoint::doCreateUboBindings( PipelineFlags const & flags )const
+	void ShadowMapPassPoint::doFillAdditionalDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSet & descriptorSet
+		, BillboardListRenderNode & node )
 	{
-		auto uboBindings = SceneRenderPass::doCreateUboBindings( flags );
-		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eShadow )
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		m_initialised = true;
-		return uboBindings;
+		m_shadowMapUbo.createSizedBinding( descriptorSet
+			, descriptorSet.getLayout().getBinding( 0u ) );
+	}
+
+	void ShadowMapPassPoint::doFillAdditionalDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSet & descriptorSet
+		, SubmeshRenderNode & node )
+	{
+		m_shadowMapUbo.createSizedBinding( descriptorSet
+			, descriptorSet.getLayout().getBinding( 0u ) );
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo ShadowMapPassPoint::doCreateDepthStencilState( PipelineFlags const & flags )const
@@ -352,8 +364,8 @@ namespace castor3d
 		}
 
 		UBO_SHADOWMAP( writer
-			, uint32_t( NodeUboIdx::eShadow )
-			, RenderPipeline::eBuffers );
+			, 0u
+			, RenderPipeline::eAdditional );
 
 		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
@@ -515,8 +527,8 @@ namespace castor3d
 		}
 
 		UBO_SHADOWMAP( writer
-			, uint32_t( NodeUboIdx::eShadow )
-			, RenderPipeline::eBuffers );
+			, 0u
+			, RenderPipeline::eAdditional );
 
 		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
@@ -678,8 +690,8 @@ namespace castor3d
 		}
 
 		UBO_SHADOWMAP( writer
-			, uint32_t( NodeUboIdx::eShadow )
-			, RenderPipeline::eBuffers );
+			, 0u
+			, RenderPipeline::eAdditional );
 
 		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
