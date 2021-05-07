@@ -68,17 +68,6 @@ namespace castor3d
 		void doUpdateFlags( PipelineFlags & flags )const override;
 		void doUpdatePipeline( RenderPipeline & pipeline )override;
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
-		void doFillTextureDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSet & descriptorSet
-			, uint32_t & index
-			, BillboardListRenderNode & nodes
-			, ShadowMapLightTypeArray const & shadowMaps )override;
-		void doFillTextureDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSet & descriptorSet
-			, uint32_t & index
-			, SubmeshRenderNode & nodes
-			, ShadowMapLightTypeArray const & shadowMaps )override;
-		ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
 		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const override;
