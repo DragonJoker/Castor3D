@@ -40,7 +40,6 @@ namespace castor3d
 			Pass const & pass;
 			UniformBufferOffsetT< ModelUboConfiguration > modelUbo;
 			UniformBufferOffsetT< PickingUboConfiguration > pickingUbo;
-			UniformBufferOffsetT< TexturesUboConfiguration > texturesUbo;
 			UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesUbo;
 		};
 		using MyObjectCache = ObjectCacheBase< Geometry, castor::String >;

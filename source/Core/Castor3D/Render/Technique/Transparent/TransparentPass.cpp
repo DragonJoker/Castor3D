@@ -37,7 +37,6 @@
 #include "Castor3D/Shader/Ubos/ModelUbo.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
-#include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
@@ -323,10 +322,6 @@ namespace castor3d
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
-		UBO_TEXTURES( writer
-			, uint32_t( NodeUboIdx::eTexturesConfig )
-			, RenderPipeline::eBuffers
-			, hasTextures );
 
 		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
@@ -408,7 +403,6 @@ namespace castor3d
 					, textures
 					, gamma
 					, textureConfigs
-					, c3d_textureData.config
 					, c3d_maps
 					, texCoord
 					, normal
@@ -574,10 +568,6 @@ namespace castor3d
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
-		UBO_TEXTURES( writer
-			, uint32_t( NodeUboIdx::eTexturesConfig )
-			, RenderPipeline::eBuffers
-			, hasTextures );
 
 		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
@@ -678,7 +668,6 @@ namespace castor3d
 					, textures
 					, gamma
 					, textureConfigs
-					, c3d_textureData.config
 					, c3d_maps
 					, texCoord
 					, normal
@@ -914,10 +903,6 @@ namespace castor3d
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
-		UBO_TEXTURES( writer
-			, uint32_t( NodeUboIdx::eTexturesConfig )
-			, RenderPipeline::eBuffers
-			, hasTextures );
 
 		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
@@ -1017,7 +1002,6 @@ namespace castor3d
 					, textures
 					, gamma
 					, textureConfigs
-					, c3d_textureData.config
 					, c3d_maps
 					, texCoord
 					, normal

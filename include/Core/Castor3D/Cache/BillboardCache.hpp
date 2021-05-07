@@ -36,7 +36,6 @@ namespace castor3d
 			UniformBufferOffsetT< ModelUboConfiguration > modelUbo;
 			UniformBufferOffsetT< BillboardUboConfiguration > billboardUbo;
 			UniformBufferOffsetT< PickingUboConfiguration > pickingUbo;
-			UniformBufferOffsetT< TexturesUboConfiguration > texturesUbo;
 			UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesUbo;
 		};
 		using MyObjectCache = ObjectCacheBase< BillboardList, castor::String >;
