@@ -25,6 +25,28 @@ namespace castor3d
 		{
 		}
 
+		void GlobalIllumination::declare( uint32_t & bindingIndex
+			, uint32_t setIndex
+			, SceneFlags sceneFlags )
+		{
+			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
+			{
+				declareVct( bindingIndex, bindingIndex, setIndex, setIndex );
+			}
+			else if ( !m_deferred )
+			{
+				if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
+				{
+					declareLpv( bindingIndex, bindingIndex, setIndex, setIndex );
+				}
+
+				if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
+				{
+					declareLayeredLpv( bindingIndex, bindingIndex, setIndex, setIndex );
+				}
+			}
+		}
+
 		void GlobalIllumination::declare( uint32_t vctUboBindingIndex
 			, uint32_t lpvUboBindingIndex
 			, uint32_t llpvUboBindingIndex
@@ -36,18 +58,18 @@ namespace castor3d
 
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
-				declareVct( vctUboBindingIndex, texBindingIndex, texSetIndex );
+				declareVct( vctUboBindingIndex, texBindingIndex, 0u, texSetIndex );
 			}
 			else if ( !m_deferred )
 			{
 				if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 				{
-					declareLpv( lpvUboBindingIndex, texBindingIndex, texSetIndex );
+					declareLpv( lpvUboBindingIndex, texBindingIndex, 0u, texSetIndex );
 				}
 
 				if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
 				{
-					declareLayeredLpv( llpvUboBindingIndex, texBindingIndex, texSetIndex );
+					declareLayeredLpv( llpvUboBindingIndex, texBindingIndex, 0u, texSetIndex );
 				}
 			}
 		}
@@ -109,11 +131,12 @@ namespace castor3d
 				, InVoxelData{ m_writer, "voxelData" } );
 		}
 
-		void GlobalIllumination::declareVct( uint32_t uboBindingIndex
+		void GlobalIllumination::declareVct( uint32_t & uboBindingIndex
 			, uint32_t & texBindingIndex
+			, uint32_t uboSetIndex
 			, uint32_t texSetIndex )
 		{
-			UBO_VOXELIZER( m_writer, uboBindingIndex, 0u, true );
+			UBO_VOXELIZER( m_writer, uboBindingIndex++, uboSetIndex, true );
 			m_writer.declSampledImage< FImg3DRgba32 >( "c3d_mapVoxelsFirstBounce", texBindingIndex++, texSetIndex );
 			m_writer.declSampledImage< FImg3DRgba32 >( "c3d_mapVoxelsSecondaryBounce", texBindingIndex++, texSetIndex );
 			declareTraceConeRadiance();
@@ -121,14 +144,15 @@ namespace castor3d
 			declareTraceConeOcclusion();
 		}
 
-		void GlobalIllumination::declareLpv( uint32_t uboBindingIndex
+		void GlobalIllumination::declareLpv( uint32_t & uboBindingIndex
 			, uint32_t & texBindingIndex
+			, uint32_t uboSetIndex
 			, uint32_t texSetIndex
 			, bool declUbo )
 		{
 			if ( declUbo )
 			{
-				UBO_LPVGRIDCONFIG( m_writer, uboBindingIndex, 0u, true );
+				UBO_LPVGRIDCONFIG( m_writer, uboBindingIndex++, uboSetIndex, true );
 			}
 
 			auto c3d_lpvAccumulatorR = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator" ), texBindingIndex++, texSetIndex );
@@ -177,8 +201,9 @@ namespace castor3d
 				, InLpvGridData{ m_writer, "lpvGridData" } );
 		}
 
-		void GlobalIllumination::declareLayeredLpv( uint32_t uboBindingIndex
+		void GlobalIllumination::declareLayeredLpv( uint32_t & uboBindingIndex
 			, uint32_t & texBindingIndex
+			, uint32_t uboSetIndex
 			, uint32_t texSetIndex
 			, bool declUbo )
 		{
@@ -186,7 +211,7 @@ namespace castor3d
 
 			if ( declUbo )
 			{
-				UBO_LAYERED_LPVGRIDCONFIG( m_writer, uboBindingIndex, 0u, true );
+				UBO_LAYERED_LPVGRIDCONFIG( m_writer, uboBindingIndex++, uboSetIndex, true );
 			}
 
 			auto c3d_lpvAccumulator1R = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator1" ), texBindingIndex++, texSetIndex );

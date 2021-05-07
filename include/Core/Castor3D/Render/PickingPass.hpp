@@ -136,28 +136,14 @@ namespace castor3d
 		void doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes );
 		void doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes );
 		ashes::VkDescriptorSetLayoutBindingArray doCreateAdditionalBindings( PipelineFlags const & flags )const override;
-		void doFillUboDescriptor( RenderPipeline const & pipeline
+		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
 			, ashes::DescriptorSet & descriptorSet
-			, BillboardListRenderNode & node )override;
-		void doFillUboDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSet & descriptorSet
-			, SubmeshRenderNode & node )override;
-		void doFillTextureDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSet & descriptorSet
-			, uint32_t & index
-			, BillboardListRenderNode & nodes
-			, ShadowMapLightTypeArray const & shadowMaps )override;
-		void doFillTextureDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSet & descriptorSet
-			, uint32_t & index
-			, SubmeshRenderNode & nodes
+			, BillboardListRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
 			, ashes::DescriptorSet & descriptorSet
-			, BillboardListRenderNode & node )override;
-		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSet & descriptorSet
-			, SubmeshRenderNode & node )override;
+			, SubmeshRenderNode & node
+			, ShadowMapLightTypeArray const & shadowMaps )override;
 		void doUpdate( RenderQueueArray & queues )override;
 		virtual ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
@@ -166,7 +152,6 @@ namespace castor3d
 		ShaderPtr doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const;
 		void doUpdatePipeline( RenderPipeline & pipeline )override;
-		ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 		void doUpdateFlags( PipelineFlags & flags )const override;

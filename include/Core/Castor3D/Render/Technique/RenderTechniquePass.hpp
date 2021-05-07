@@ -174,41 +174,26 @@ namespace castor3d
 		using SceneRenderPass::update;
 
 	private:
-		C3D_API virtual void doUpdateNodes( SceneCulledRenderNodes & nodes
+		virtual void doUpdateNodes( SceneCulledRenderNodes & nodes
 			, castor::Point2f const & jitter
 			, RenderInfo & info );
-		C3D_API void doUpdateUbos( CpuUpdater & updater )override;
-		C3D_API void doUpdateFlags( PipelineFlags & flags )const override;
-		C3D_API ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
-		C3D_API void doFillUboDescriptor( RenderPipeline const & pipeline
+		void doUpdateUbos( CpuUpdater & updater )override;
+		void doUpdateFlags( PipelineFlags & flags )const override;
+		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
+		ashes::VkDescriptorSetLayoutBindingArray doCreateAdditionalBindings( PipelineFlags const & flags )const override;
+		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
 			, ashes::DescriptorSet & descriptorSet
-			, BillboardListRenderNode & nodes )override;
-		C3D_API void doFillUboDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSet & descriptorSet
-			, SubmeshRenderNode & nodes )override;
-		C3D_API void doFillTextureDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSet & descriptorSet
-			, uint32_t & index
-			, BillboardListRenderNode & nodes
+			, BillboardListRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps )override;
-		C3D_API void doFillTextureDescriptor( RenderPipeline const & pipeline
+		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
 			, ashes::DescriptorSet & descriptorSet
-			, uint32_t & index
-			, SubmeshRenderNode & nodes
+			, SubmeshRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps )override;
-		C3D_API void doUpdatePipeline( RenderPipeline & pipeline )override;
+		void doUpdatePipeline( RenderPipeline & pipeline )override;
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 
 	protected:
-		/**
-		 *\copydoc		castor3d::SceneRenderPass::doCreateUboBindings
-		 */
-		ashes::VkDescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::SceneRenderPass::doCreateTextureBindings
-		 */
-		ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags.

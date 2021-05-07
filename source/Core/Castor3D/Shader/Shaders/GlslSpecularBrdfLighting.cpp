@@ -244,13 +244,14 @@ namespace castor3d
 			, Utils & utils
 			, ShadowOptions const & shadows
 			, uint32_t & index
+			, uint32_t set
 			, bool isOpaqueProgram )
 		{
 			auto result = std::make_shared< SpecularBrdfLightingModel >( writer
 				, utils
 				, shadows
 				, isOpaqueProgram );
-			result->declareModel( index );
+			result->declareModel( index, set );
 			return result;
 		}
 
@@ -260,7 +261,8 @@ namespace castor3d
 			, bool lightUbo
 			, uint32_t lightUboBinding
 			, ShadowOptions const & shadows
-			, uint32_t & index )
+			, uint32_t & index
+			, uint32_t set )
 		{
 			auto result = std::make_shared< SpecularBrdfLightingModel >( writer
 				, utils
@@ -270,15 +272,15 @@ namespace castor3d
 			switch ( lightType )
 			{
 			case LightType::eDirectional:
-				result->declareDirectionalModel( lightUbo, lightUboBinding, index );
+				result->declareDirectionalModel( lightUbo, lightUboBinding, index, set );
 				break;
 
 			case LightType::ePoint:
-				result->declarePointModel( lightUbo, lightUboBinding, index );
+				result->declarePointModel( lightUbo, lightUboBinding, index, set );
 				break;
 
 			case LightType::eSpot:
-				result->declareSpotModel( lightUbo, lightUboBinding, index );
+				result->declareSpotModel( lightUbo, lightUboBinding, index, set );
 				break;
 
 			default:
@@ -293,13 +295,14 @@ namespace castor3d
 			, Utils & utils
 			, ShadowOptions const & shadows
 			, uint32_t & index
+			, uint32_t set
 			, bool isOpaqueProgram )
 		{
 			auto result = std::make_shared< SpecularBrdfLightingModel >( writer
 				, utils
 				, shadows
 				, isOpaqueProgram );
-			result->declareDiffuseModel( index );
+			result->declareDiffuseModel( index, set );
 			return result;
 		}
 

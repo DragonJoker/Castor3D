@@ -23,6 +23,45 @@ using namespace castor;
 
 namespace castor3d
 {
+	namespace
+	{
+		void fillAdditionalDescriptor( RenderPipeline const & pipeline
+			, ashes::DescriptorSet & descriptorSet
+			, Scene const & scene
+			, ShadowMapUbo const & shadowMapUbo )
+		{
+			uint32_t index = 0u;
+			ashes::WriteDescriptorSetArray writes;
+			auto & flags = pipeline.getFlags();
+			writes.push_back( shadowMapUbo.getDescriptorWrite( index++ ) );
+
+			if ( checkFlag( flags.passFlags, PassFlag::eMetallicRoughness )
+				|| checkFlag( flags.passFlags, PassFlag::eSpecularGlossiness ) )
+			{
+				auto & background = *scene.getBackground();
+
+				if ( background.hasIbl() )
+				{
+					auto & ibl = background.getIbl();
+					bindTexture( ibl.getIrradianceTexture()
+						, ibl.getIrradianceSampler()
+						, writes
+						, index );
+					bindTexture( ibl.getPrefilteredEnvironmentTexture()
+						, ibl.getPrefilteredEnvironmentSampler()
+						, writes
+						, index );
+					bindTexture( ibl.getPrefilteredBrdfTexture()
+						, ibl.getPrefilteredBrdfSampler()
+						, writes
+						, index );
+				}
+			}
+
+			descriptorSet.setBindings( writes );
+		}
+	}
+
 	ShadowMapPass::ShadowMapPass( RenderDevice const & device
 		, castor::String name
 		, MatrixUbo & matrixUbo
@@ -58,110 +97,53 @@ namespace castor3d
 			SceneRenderPass::doUpdate( nodes.billboardNodes.backCulled );
 		}
 	}
-	
-	ashes::VkDescriptorSetLayoutBindingArray ShadowMapPass::doCreateTextureBindings( PipelineFlags const & flags )const
-	{
-		auto index = 0u;
-		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
 
-		if ( !flags.textures.empty() )
-		{
-			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT
-				, uint32_t( flags.textures.size() ) ) );
-			index += uint32_t( flags.textures.size() );
-		}
+	ashes::VkDescriptorSetLayoutBindingArray ShadowMapPass::doCreateAdditionalBindings( PipelineFlags const & flags )const
+	{
+		ashes::VkDescriptorSetLayoutBindingArray addBindings;
+		uint32_t index = 0u;
+		addBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
 		if ( checkFlag( flags.passFlags, PassFlag::eMetallicRoughness )
 			|| checkFlag( flags.passFlags, PassFlag::eSpecularGlossiness ) )
 		{
-			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			addBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapIrradiance
-			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			addBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapPrefiltered
-			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			addBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
 		}
 
-		return textureBindings;
+		m_initialised = true;
+		return addBindings;
 	}
 
-	namespace
-	{
-		template< typename DataTypeT, typename InstanceTypeT >
-		void fillTexDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSet & descriptorSet
-			, uint32_t & index
-			, ObjectRenderNode< DataTypeT, InstanceTypeT > & node
-			, ShadowMapLightTypeArray const & shadowMaps )
-		{
-			index = 0u;
-			ashes::WriteDescriptorSetArray writes;
-			auto & flags = pipeline.getFlags();
-
-			if ( !flags.textures.empty() )
-			{
-				node.passNode.fillDescriptor( descriptorSet.getLayout()
-					, index
-					, writes
-					, flags.textures );
-			}
-
-			if ( checkFlag( flags.passFlags, PassFlag::eMetallicRoughness )
-				|| checkFlag( flags.passFlags, PassFlag::eSpecularGlossiness ) )
-			{
-				auto & background = *node.sceneNode.getScene()->getBackground();
-
-				if ( background.hasIbl() )
-				{
-					auto & ibl = background.getIbl();
-					bindTexture( ibl.getIrradianceTexture()
-						, ibl.getIrradianceSampler()
-						, writes
-						, index );
-					bindTexture( ibl.getPrefilteredEnvironmentTexture()
-						, ibl.getPrefilteredEnvironmentSampler()
-						, writes
-						, index );
-					bindTexture( ibl.getPrefilteredBrdfTexture()
-						, ibl.getPrefilteredBrdfSampler()
-						, writes
-						, index );
-				}
-			}
-
-			descriptorSet.setBindings( writes );
-		}
-	}
-
-	void ShadowMapPass::doFillTextureDescriptor( RenderPipeline const & pipeline
+	void ShadowMapPass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
 		, ashes::DescriptorSet & descriptorSet
-		, uint32_t & index
 		, BillboardListRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		fillTexDescriptor( pipeline
+		fillAdditionalDescriptor( pipeline
 			, descriptorSet
-			, index
-			, node
-			, shadowMaps );
+			, getCuller().getScene()
+			, m_shadowMapUbo );
 	}
 
-	void ShadowMapPass::doFillTextureDescriptor( RenderPipeline const & pipeline
+	void ShadowMapPass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
 		, ashes::DescriptorSet & descriptorSet
-		, uint32_t & index
 		, SubmeshRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		fillTexDescriptor( pipeline
+		fillAdditionalDescriptor( pipeline
 			, descriptorSet
-			, index
-			, node
-			, shadowMaps );
+			, getCuller().getScene()
+			, m_shadowMapUbo );
 	}
 
 	ShaderPtr ShadowMapPass::doGetGeometryShaderSource( PipelineFlags const & flags )const
