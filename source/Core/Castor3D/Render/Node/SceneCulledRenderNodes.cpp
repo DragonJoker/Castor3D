@@ -465,7 +465,7 @@ namespace castor3d
 			, [&queue, &viewport, &scissors]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
-				, auto & nodes )
+				, StaticRenderNodePtrArray & nodes )
 			{
 				doParseRenderNodesCommands( queue.getCommandBuffer()
 					, viewport
@@ -481,9 +481,9 @@ namespace castor3d
 			, [&queue, &viewport, &scissors]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
-				, auto & nodes )
+				, StaticRenderNodePtrArray & nodes )
 			{
-				doParseRenderNodesCommands< StaticRenderNodePtrArray >( queue.getCommandBuffer()
+				doParseRenderNodesCommands( queue.getCommandBuffer()
 					, viewport
 					, scissors
 					, pipeline
@@ -497,9 +497,9 @@ namespace castor3d
 			, [&queue, &viewport, &scissors]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
-				, auto & nodes )
+				, SkinningRenderNodePtrArray & nodes )
 			{
-				doParseRenderNodesCommands< SkinningRenderNodePtrArray >( queue.getCommandBuffer()
+				doParseRenderNodesCommands( queue.getCommandBuffer()
 					, viewport
 					, scissors
 					, pipeline
@@ -513,9 +513,9 @@ namespace castor3d
 			, [&queue, &viewport, &scissors]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
-				, auto & nodes )
+				, SkinningRenderNodePtrArray & nodes )
 			{
-				doParseRenderNodesCommands< SkinningRenderNodePtrArray >( queue.getCommandBuffer()
+				doParseRenderNodesCommands( queue.getCommandBuffer()
 					, viewport
 					, scissors
 					, pipeline

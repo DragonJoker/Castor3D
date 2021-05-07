@@ -721,42 +721,42 @@ namespace castor3d
 	}
 
 	void PickingPass::doFillUboDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetLayout const & layout
+		, ashes::DescriptorSet & descriptorSet
 		, BillboardListRenderNode & node )
 	{
-		node.pickingUbo.createSizedBinding( *node.uboDescriptorSet
-			, layout.getBinding( uint32_t( NodeUboIdx::ePicking ) ) );
+		node.pickingUbo.createSizedBinding( descriptorSet
+			, descriptorSet.getLayout().getBinding( uint32_t( NodeUboIdx::ePicking ) ) );
 	}
 
 	void PickingPass::doFillUboDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetLayout const & layout
+		, ashes::DescriptorSet & descriptorSet
 		, SubmeshRenderNode & node )
 	{
-		node.pickingUbo.createSizedBinding( *node.uboDescriptorSet
-			, layout.getBinding( uint32_t( NodeUboIdx::ePicking ) ) );
+		node.pickingUbo.createSizedBinding( descriptorSet
+			, descriptorSet.getLayout().getBinding( uint32_t( NodeUboIdx::ePicking ) ) );
 	}
 
 	void PickingPass::doFillTextureDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetLayout const & layout
+		, ashes::DescriptorSet & descriptorSet
 		, uint32_t & index
 		, BillboardListRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		node.passNode.fillDescriptor( layout
+		node.passNode.fillDescriptor( descriptorSet.getLayout()
 			, index
-			, *node.texDescriptorSet
+			, descriptorSet
 			, pipeline.getFlags().textures );
 	}
 
 	void PickingPass::doFillTextureDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetLayout const & layout
+		, ashes::DescriptorSet & descriptorSet
 		, uint32_t & index
 		, SubmeshRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		node.passNode.fillDescriptor( layout
+		node.passNode.fillDescriptor( descriptorSet.getLayout()
 			, index
-			, *node.texDescriptorSet
+			, descriptorSet
 			, pipeline.getFlags().textures );
 	}
 
