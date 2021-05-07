@@ -280,25 +280,34 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		shader::PhongMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-			, uint32_t( NodeUboIdx::eMaterials ) );
+			, uint32_t( NodeUboIdx::eMaterials )
+			, RenderPipeline::eBuffers );
 		shader::TextureConfigurations textureConfigs{ writer };
 		bool hasTextures = !flags.textures.empty();
 
 		if ( hasTextures )
 		{
 			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( NodeUboIdx::eTexturesBuffer ) );
+				, uint32_t( NodeUboIdx::eTexturesBuffer )
+				, RenderPipeline::eBuffers );
 		}
 
 		// UBOs
-		UBO_SCENE( writer, uint32_t( NodeUboIdx::eScene ), 0u );
-		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0u );
-		UBO_TEXTURES( writer, uint32_t( NodeUboIdx::eTexturesConfig ), 0u, hasTextures );
+		UBO_SCENE( writer
+			, uint32_t( NodeUboIdx::eScene )
+			, RenderPipeline::eBuffers );
+		UBO_MODEL( writer
+			, uint32_t( NodeUboIdx::eModel )
+			, RenderPipeline::eBuffers );
+		UBO_TEXTURES( writer
+			, uint32_t( NodeUboIdx::eTexturesConfig )
+			, RenderPipeline::eBuffers
+			, hasTextures );
 
 		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, index
-			, 1u
+			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
 
@@ -411,25 +420,34 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		shader::PbrMRMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-			, uint32_t( NodeUboIdx::eMaterials ) );
+			, uint32_t( NodeUboIdx::eMaterials )
+			, RenderPipeline::eBuffers );
 		shader::TextureConfigurations textureConfigs{ writer };
 		bool hasTextures = !flags.textures.empty();
 
 		if ( hasTextures )
 		{
 			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( NodeUboIdx::eTexturesBuffer ) );
+				, uint32_t( NodeUboIdx::eTexturesBuffer )
+				, RenderPipeline::eBuffers );
 		}
 
 		// UBOs
-		UBO_SCENE( writer, uint32_t( NodeUboIdx::eScene ), 0u );
-		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0u );
-		UBO_TEXTURES( writer, uint32_t( NodeUboIdx::eTexturesConfig ), 0u, hasTextures );
+		UBO_SCENE( writer
+			, uint32_t( NodeUboIdx::eScene )
+			, RenderPipeline::eBuffers );
+		UBO_MODEL( writer
+			, uint32_t( NodeUboIdx::eModel )
+			, RenderPipeline::eBuffers );
+		UBO_TEXTURES( writer
+			, uint32_t( NodeUboIdx::eTexturesConfig )
+			, RenderPipeline::eBuffers
+			, hasTextures );
 
 		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, index
-			, 1u
+			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
 
@@ -542,25 +560,34 @@ namespace castor3d
 		auto textures = filterTexturesFlags( flags.textures );
 		shader::PbrSGMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-			, uint32_t( NodeUboIdx::eMaterials ) );
+			, uint32_t( NodeUboIdx::eMaterials )
+			, RenderPipeline::eBuffers );
 		shader::TextureConfigurations textureConfigs{ writer };
 		bool hasTextures = !flags.textures.empty();
 
 		if ( hasTextures )
 		{
 			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( NodeUboIdx::eTexturesBuffer ) );
+				, uint32_t( NodeUboIdx::eTexturesBuffer )
+				, RenderPipeline::eBuffers );
 		}
 
 		// UBOs
-		UBO_SCENE( writer, uint32_t( NodeUboIdx::eScene ), 0u );
-		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0u );
-		UBO_TEXTURES( writer, uint32_t( NodeUboIdx::eTexturesConfig ), 0u, hasTextures );
+		UBO_SCENE( writer
+			, uint32_t( NodeUboIdx::eScene )
+			, RenderPipeline::eBuffers );
+		UBO_MODEL( writer
+			, uint32_t( NodeUboIdx::eModel )
+			, RenderPipeline::eBuffers );
+		UBO_TEXTURES( writer
+			, uint32_t( NodeUboIdx::eTexturesConfig )
+			, RenderPipeline::eBuffers
+			, hasTextures );
 
 		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, index
-			, 1u
+			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
 
