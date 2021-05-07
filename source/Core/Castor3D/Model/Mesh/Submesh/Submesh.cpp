@@ -193,7 +193,7 @@ namespace castor3d
 
 		m_vertexBuffer.reset();
 		m_indexBuffer.reset();
-
+		m_vertexLayouts.clear();
 		m_points.clear();
 	}
 

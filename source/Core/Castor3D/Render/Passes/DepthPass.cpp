@@ -249,11 +249,23 @@ namespace castor3d
 			, hasTextures };
 		auto in = writer.getIn();
 
-		UBO_MATRIX( writer, uint32_t( NodeUboIdx::eMatrix ), 0 );
-		UBO_SCENE( writer, uint32_t( NodeUboIdx::eScene ), 0 );
-		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0 );
-		auto skinningData = SkinningUbo::declare( writer, uint32_t( NodeUboIdx::eSkinning ), 0, flags.programFlags );
-		UBO_MORPHING( writer, uint32_t( NodeUboIdx::eMorphing ), 0, flags.programFlags );
+		UBO_MATRIX( writer
+			, uint32_t( NodeUboIdx::eMatrix )
+			, RenderPipeline::eBuffers );
+		UBO_SCENE( writer
+			, uint32_t( NodeUboIdx::eScene )
+			, RenderPipeline::eBuffers );
+		UBO_MODEL( writer
+			, uint32_t( NodeUboIdx::eModel )
+			, RenderPipeline::eBuffers );
+		auto skinningData = SkinningUbo::declare( writer
+			, uint32_t( NodeUboIdx::eSkinning )
+			, RenderPipeline::eBuffers
+			, flags.programFlags );
+		UBO_MORPHING( writer
+			, uint32_t( NodeUboIdx::eMorphing )
+			, RenderPipeline::eBuffers
+			, flags.programFlags );
 
 		// Outputs
 		shader::OutFragmentSurface outSurface{ writer
@@ -338,23 +350,28 @@ namespace castor3d
 			, hasTextures };
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
-			, 1u
+			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
 		auto out = writer.getOut();
 
 		auto materials = shader::createMaterials( writer, flags.passFlags );
 		materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-			, uint32_t( NodeUboIdx::eMaterials ) );
+			, uint32_t( NodeUboIdx::eMaterials )
+			, RenderPipeline::eBuffers );
 		shader::TextureConfigurations textureConfigs{ writer };
 
 		if ( hasTextures )
 		{
 			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( NodeUboIdx::eTexturesBuffer ) );
+				, uint32_t( NodeUboIdx::eTexturesBuffer )
+				, RenderPipeline::eBuffers );
 		}
 
-		UBO_TEXTURES( writer, uint32_t( NodeUboIdx::eTexturesConfig ), 0u, hasTextures );
+		UBO_TEXTURES( writer
+			, uint32_t( NodeUboIdx::eTexturesConfig )
+			, RenderPipeline::eBuffers
+			, hasTextures );
 
 		shader::Utils utils{ writer };
 		utils.declareParallaxMappingFunc( flags.passFlags
