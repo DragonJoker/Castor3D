@@ -225,10 +225,20 @@ namespace castor3d
 			, hasTextures };
 		auto in = writer.getIn();
 
-		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0 );
-		auto skinningData = SkinningUbo::declare( writer, uint32_t( NodeUboIdx::eSkinning ), 0, flags.programFlags );
-		UBO_MORPHING( writer, uint32_t( NodeUboIdx::eMorphing ), 0, flags.programFlags );
-		UBO_SHADOWMAP( writer, uint32_t( NodeUboIdx::eShadow ), 0 );
+		UBO_MODEL( writer
+			, uint32_t( NodeUboIdx::eModel )
+			, RenderPipeline::eBuffers );
+		auto skinningData = SkinningUbo::declare( writer
+			, uint32_t( NodeUboIdx::eSkinning )
+			, RenderPipeline::eBuffers
+			, flags.programFlags );
+		UBO_MORPHING( writer
+			, uint32_t( NodeUboIdx::eMorphing )
+			, RenderPipeline::eBuffers
+			, flags.programFlags );
+		UBO_SHADOWMAP( writer
+			, uint32_t( NodeUboIdx::eShadow )
+			, RenderPipeline::eBuffers );
 
 		// Outputs
 		shader::OutFragmentSurface outSurface{ writer
@@ -290,23 +300,32 @@ namespace castor3d
 
 		shader::PhongMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-			, uint32_t( NodeUboIdx::eMaterials ) );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", uint32_t( NodeUboIdx::eLights ), 0u );
+			, uint32_t( NodeUboIdx::eMaterials )
+			, RenderPipeline::eBuffers );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
+			, uint32_t( NodeUboIdx::eLights )
+			, RenderPipeline::eBuffers );
 		shader::TextureConfigurations textureConfigs{ writer };
 
 		if ( hasTextures )
 		{
 			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( NodeUboIdx::eTexturesBuffer ) );
+				, uint32_t( NodeUboIdx::eTexturesBuffer )
+				, RenderPipeline::eBuffers );
 		}
 
-		UBO_TEXTURES( writer, uint32_t( NodeUboIdx::eTexturesConfig ), 0u, hasTextures );
-		UBO_SHADOWMAP( writer, uint32_t( NodeUboIdx::eShadow ), 0u );
+		UBO_TEXTURES( writer
+			, uint32_t( NodeUboIdx::eTexturesConfig )
+			, RenderPipeline::eBuffers
+			, hasTextures );
+		UBO_SHADOWMAP( writer
+			, uint32_t( NodeUboIdx::eShadow )
+			, RenderPipeline::eBuffers );
 
 		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, index
-			, 1u
+			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
 		index += uint32_t( flags.textures.size() );
@@ -438,23 +457,32 @@ namespace castor3d
 
 		shader::PbrMRMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-			, uint32_t( NodeUboIdx::eMaterials ) );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", uint32_t( NodeUboIdx::eLights ), 0u );
+			, uint32_t( NodeUboIdx::eMaterials )
+			, RenderPipeline::eBuffers );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
+			, uint32_t( NodeUboIdx::eLights )
+			, RenderPipeline::eBuffers );
 		shader::TextureConfigurations textureConfigs{ writer };
 
 		if ( hasTextures )
 		{
 			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( NodeUboIdx::eTexturesBuffer ) );
+				, uint32_t( NodeUboIdx::eTexturesBuffer )
+				, RenderPipeline::eBuffers );
 		}
 
-		UBO_TEXTURES( writer, uint32_t( NodeUboIdx::eTexturesConfig ), 0u, hasTextures );
-		UBO_SHADOWMAP( writer, uint32_t( NodeUboIdx::eShadow ), 0u );
+		UBO_TEXTURES( writer
+			, uint32_t( NodeUboIdx::eTexturesConfig )
+			, RenderPipeline::eBuffers
+			, hasTextures );
+		UBO_SHADOWMAP( writer
+			, uint32_t( NodeUboIdx::eShadow )
+			, RenderPipeline::eBuffers );
 
 		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, index
-			, 1u
+			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
 		index += uint32_t( flags.textures.size() );
@@ -586,23 +614,32 @@ namespace castor3d
 
 		shader::PbrSGMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-			, uint32_t( NodeUboIdx::eMaterials ) );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", uint32_t( NodeUboIdx::eLights ), 0u );
+			, uint32_t( NodeUboIdx::eMaterials )
+			, RenderPipeline::eBuffers );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
+			, uint32_t( NodeUboIdx::eLights )
+			, RenderPipeline::eBuffers );
 		shader::TextureConfigurations textureConfigs{ writer };
 
 		if ( hasTextures )
 		{
 			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( NodeUboIdx::eTexturesBuffer ) );
+				, uint32_t( NodeUboIdx::eTexturesBuffer )
+				, RenderPipeline::eBuffers );
 		}
 
-		UBO_TEXTURES( writer, uint32_t( NodeUboIdx::eTexturesConfig ), 0u, hasTextures );
-		UBO_SHADOWMAP( writer, uint32_t( NodeUboIdx::eShadow ), 0u );
+		UBO_TEXTURES( writer
+			, uint32_t( NodeUboIdx::eTexturesConfig )
+			, RenderPipeline::eBuffers
+			, hasTextures );
+		UBO_SHADOWMAP( writer
+			, uint32_t( NodeUboIdx::eShadow )
+			, RenderPipeline::eBuffers );
 
 		auto index = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, index
-			, 1u
+			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
 		index += uint32_t( flags.textures.size() );

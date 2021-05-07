@@ -692,7 +692,8 @@ namespace castor3d
 		// Shader inputs
 		shader::PhongMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-			, uint32_t( LightPassUboIdx::eMaterials ) );
+			, uint32_t( LightPassUboIdx::eMaterials )
+			, 0u );
 		UBO_MATRIX( writer, uint32_t( LightPassUboIdx::eMatrix ), 0u );
 		UBO_GPINFO( writer, uint32_t( LightPassUboIdx::eGpInfo ), 0u );
 		UBO_SCENE( writer, uint32_t( LightPassUboIdx::eScene ), 0u );
@@ -924,7 +925,8 @@ namespace castor3d
 		// Shader inputs
 		shader::PbrMRMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-			, uint32_t( LightPassUboIdx::eMaterials ) );
+			, uint32_t( LightPassUboIdx::eMaterials )
+			, 0u );
 		UBO_MATRIX( writer, uint32_t( LightPassUboIdx::eMatrix ), 0u );
 		UBO_GPINFO( writer, uint32_t( LightPassUboIdx::eGpInfo ), 0u );
 		UBO_SCENE( writer, uint32_t( LightPassUboIdx::eScene ), 0u );
@@ -1227,7 +1229,8 @@ namespace castor3d
 		// Shader inputs
 		shader::PbrSGMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-			, uint32_t( LightPassUboIdx::eMaterials ) );
+			, uint32_t( LightPassUboIdx::eMaterials )
+			, 0u );
 		UBO_MATRIX( writer, uint32_t( LightPassUboIdx::eMatrix ), 0u );
 		UBO_GPINFO( writer, uint32_t( LightPassUboIdx::eGpInfo ), 0u );
 		UBO_SCENE( writer, uint32_t( LightPassUboIdx::eScene ), 0u );

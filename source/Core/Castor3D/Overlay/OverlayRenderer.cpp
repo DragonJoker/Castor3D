@@ -913,8 +913,12 @@ namespace castor3d
 		{
 			VertexWriter writer;
 
-			UBO_MATRIX( writer, uint32_t( OverlayBindingId::eMatrix ), 0u );
-			UBO_OVERLAY( writer, uint32_t( OverlayBindingId::eOverlay ), 0u );
+			UBO_MATRIX( writer
+				, uint32_t( OverlayBindingId::eMatrix )
+				, 0u );
+			UBO_OVERLAY( writer
+				, uint32_t( OverlayBindingId::eOverlay )
+				, 0u );
 
 			// Shader inputs
 			uint32_t index = 0u;
@@ -950,17 +954,24 @@ namespace castor3d
 
 			auto materials = std::make_unique< shader::PhongMaterials >( writer );
 			materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( OverlayBindingId::eMaterials ) );
+				, uint32_t( OverlayBindingId::eMaterials )
+				, 0u );
 			shader::TextureConfigurations textureConfigs{ writer };
 
 			if ( hasTexture )
 			{
 				textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-					, uint32_t( OverlayBindingId::eTexturesBuffer ) );
+					, uint32_t( OverlayBindingId::eTexturesBuffer )
+					, 0u );
 			}
 
-			UBO_OVERLAY( writer, uint32_t( OverlayBindingId::eOverlay ), 0u );
-			UBO_TEXTURES( writer, uint32_t( OverlayBindingId::eTexturesConfig ), 0u, hasTexture );
+			UBO_OVERLAY( writer
+				, uint32_t( OverlayBindingId::eOverlay )
+				, 0u );
+			UBO_TEXTURES( writer
+				, uint32_t( OverlayBindingId::eTexturesConfig )
+				, 0u
+				, hasTexture );
 
 			// Shader inputs
 			auto vtx_text = writer.declInput< Vec2 >( "vtx_text"

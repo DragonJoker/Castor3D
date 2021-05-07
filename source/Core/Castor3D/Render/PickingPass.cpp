@@ -720,20 +720,25 @@ namespace castor3d
 			, nodes );
 	}
 
+	ashes::VkDescriptorSetLayoutBindingArray PickingPass::doCreateAdditionalBindings( PipelineFlags const & flags )const
+	{
+		ashes::VkDescriptorSetLayoutBindingArray addBindings;
+		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::ePicking )
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		return addBindings;
+	}
+
 	void PickingPass::doFillUboDescriptor( RenderPipeline const & pipeline
 		, ashes::DescriptorSet & descriptorSet
 		, BillboardListRenderNode & node )
 	{
-		node.pickingUbo.createSizedBinding( descriptorSet
-			, descriptorSet.getLayout().getBinding( uint32_t( NodeUboIdx::ePicking ) ) );
 	}
 
 	void PickingPass::doFillUboDescriptor( RenderPipeline const & pipeline
 		, ashes::DescriptorSet & descriptorSet
 		, SubmeshRenderNode & node )
 	{
-		node.pickingUbo.createSizedBinding( descriptorSet
-			, descriptorSet.getLayout().getBinding( uint32_t( NodeUboIdx::ePicking ) ) );
 	}
 
 	void PickingPass::doFillTextureDescriptor( RenderPipeline const & pipeline
@@ -760,6 +765,22 @@ namespace castor3d
 			, pipeline.getFlags().textures );
 	}
 
+	void PickingPass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSet & descriptorSet
+		, BillboardListRenderNode & node )
+	{
+		node.pickingUbo.createSizedBinding( descriptorSet
+			, descriptorSet.getLayout().getBinding( uint32_t( NodeUboIdx::ePicking ) ) );
+	}
+
+	void PickingPass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
+		, ashes::DescriptorSet & descriptorSet
+		, SubmeshRenderNode & node )
+	{
+		node.pickingUbo.createSizedBinding( descriptorSet
+			, descriptorSet.getLayout().getBinding( uint32_t( NodeUboIdx::ePicking ) ) );
+	}
+
 	void PickingPass::doUpdate( RenderQueueArray & CU_UnusedParam( queues ) )
 	{
 	}
@@ -777,10 +798,20 @@ namespace castor3d
 			, hasTextures };
 		auto in = writer.getIn();
 
-		UBO_MATRIX( writer, uint32_t( NodeUboIdx::eMatrix ), 0 );
-		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0 );
-		auto skinningData = SkinningUbo::declare( writer, uint32_t( NodeUboIdx::eSkinning ), 0, flags.programFlags );
-		UBO_MORPHING( writer, uint32_t( NodeUboIdx::eMorphing ), 0, flags.programFlags );
+		UBO_MATRIX( writer
+			, uint32_t( NodeUboIdx::eMatrix )
+			, RenderPipeline::eBuffers );
+		UBO_MODEL( writer
+			, uint32_t( NodeUboIdx::eModel )
+			, RenderPipeline::eBuffers );
+		auto skinningData = SkinningUbo::declare( writer
+			, uint32_t( NodeUboIdx::eSkinning )
+			, RenderPipeline::eBuffers
+			, flags.programFlags );
+		UBO_MORPHING( writer
+			, uint32_t( NodeUboIdx::eMorphing )
+			, RenderPipeline::eBuffers
+			, flags.programFlags );
 
 		// Outputs
 		shader::OutFragmentSurface outSurface{ writer
@@ -839,18 +870,25 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto materials = shader::createMaterials( writer, flags.passFlags );
 		materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-			, uint32_t( NodeUboIdx::eMaterials ) );
+			, uint32_t( NodeUboIdx::eMaterials )
+			, RenderPipeline::eBuffers );
 		shader::TextureConfigurations textureConfigs{ writer };
 		bool hasTextures = !flags.textures.empty();
 
 		if ( hasTextures )
 		{
 			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( NodeUboIdx::eTexturesBuffer ) );
+				, uint32_t( NodeUboIdx::eTexturesBuffer )
+				, RenderPipeline::eBuffers );
 		}
 
-		UBO_TEXTURES( writer, uint32_t( NodeUboIdx::eTexturesConfig ), 0u, hasTextures );
-		UBO_PICKING( writer, uint32_t( NodeUboIdx::ePicking ), 0u );
+		UBO_TEXTURES( writer
+			, uint32_t( NodeUboIdx::eTexturesConfig )
+			, RenderPipeline::eBuffers
+			, hasTextures );
+		UBO_PICKING( writer
+			, uint32_t( NodeUboIdx::ePicking )
+			, RenderPipeline::eAdditional );
 
 		// Fragment Intputs
 		shader::InFragmentSurface inSurface{ writer
@@ -859,7 +897,7 @@ namespace castor3d
 		auto in = writer.getIn();
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
-			, 1u
+			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
 

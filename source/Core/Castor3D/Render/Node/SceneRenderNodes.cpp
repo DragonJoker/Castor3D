@@ -464,16 +464,23 @@ namespace castor3d
 				for ( auto & node : pipelineNode.second )
 				{
 					renderPass.initialiseUboDescriptor( pipeline
-						, pipeline.getDescriptorPool( 0u )
+						, pipeline.getDescriptorPool( RenderPipeline::eBuffers )
 						, node.second );
 					Pass & pass = node.second.passNode.pass;
 
-					if ( pipeline.hasDescriptorPool( 1u ) )
+					if ( pipeline.hasDescriptorPool( RenderPipeline::eTextures ) )
 					{
 						renderPass.initialiseTextureDescriptor( pipeline
-							, pipeline.getDescriptorPool( 1u )
+							, pipeline.getDescriptorPool( RenderPipeline::eTextures )
 							, node.second
 							, shadowMaps );
+					}
+
+					if ( pipeline.hasDescriptorPool( RenderPipeline::eAdditional ) )
+					{
+						renderPass.initialiseAdditionalDescriptor( pipeline
+							, pipeline.getDescriptorPool( RenderPipeline::eAdditional )
+							, node.second );
 					}
 				}
 			}
@@ -496,15 +503,22 @@ namespace castor3d
 
 				pipeline.createDescriptorPools( size );
 				renderPass.initialiseUboDescriptor( pipeline
-					, pipeline.getDescriptorPool( 0u )
+					, pipeline.getDescriptorPool( RenderPipeline::eBuffers )
 					, pipelineNode.second );
 
-				if ( pipeline.hasDescriptorPool( 1u ) )
+				if ( pipeline.hasDescriptorPool( RenderPipeline::eTextures ) )
 				{
 					renderPass.initialiseTextureDescriptor( pipeline
-						, pipeline.getDescriptorPool( 1u )
+						, pipeline.getDescriptorPool( RenderPipeline::eTextures )
 						, pipelineNode.second
 						, shadowMaps );
+				}
+
+				if ( pipeline.hasDescriptorPool( RenderPipeline::eAdditional ) )
+				{
+					renderPass.initialiseAdditionalDescriptor( pipeline
+						, pipeline.getDescriptorPool( RenderPipeline::eAdditional )
+						, pipelineNode.second );
 				}
 			}
 		}

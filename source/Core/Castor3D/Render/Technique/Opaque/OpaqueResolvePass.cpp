@@ -137,7 +137,8 @@ namespace castor3d
 			// Shader inputs
 			shader::PhongMaterials materials{ writer };
 			materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( ResolveUbo::eMaterials ) );
+				, uint32_t( ResolveUbo::eMaterials )
+				, 0u );
 			UBO_SCENE( writer, uint32_t( ResolveUbo::eScene ), 0u );
 			UBO_GPINFO( writer, uint32_t( ResolveUbo::eGpInfo ), 0u );
 			UBO_HDR_CONFIG( writer, uint32_t( ResolveUbo::eHdrConfig ), 0u );
@@ -394,7 +395,8 @@ namespace castor3d
 			// Shader inputs
 			shader::PbrMRMaterials materials{ writer };
 			materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( ResolveUbo::eMaterials ) );
+				, uint32_t( ResolveUbo::eMaterials )
+				, 0u );
 			UBO_SCENE( writer, uint32_t( ResolveUbo::eScene ), 0u );
 			UBO_GPINFO( writer, uint32_t( ResolveUbo::eGpInfo ), 0u );
 			UBO_HDR_CONFIG( writer, uint32_t( ResolveUbo::eHdrConfig ), 0u );
@@ -724,7 +726,8 @@ namespace castor3d
 			// Shader inputs
 			shader::PbrSGMaterials materials{ writer };
 			materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( ResolveUbo::eMaterials ) );
+				, uint32_t( ResolveUbo::eMaterials )
+				, 0u );
 			UBO_SCENE( writer, uint32_t( ResolveUbo::eScene ), 0u );
 			UBO_GPINFO( writer, uint32_t( ResolveUbo::eGpInfo ), 0u );
 			UBO_HDR_CONFIG( writer, uint32_t( ResolveUbo::eHdrConfig ), 0u );

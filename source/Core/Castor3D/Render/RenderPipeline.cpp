@@ -68,7 +68,7 @@ namespace castor3d
 
 		for ( auto & descriptorLayout : m_descriptorLayouts )
 		{
-			if ( !descriptorLayout->getBindings().empty() )
+			//if ( !descriptorLayout->getBindings().empty() )
 			{
 				descriptorLayouts.emplace_back( *descriptorLayout );
 			}
@@ -152,7 +152,13 @@ namespace castor3d
 			{
 				m_descriptorPools.emplace_back( layout->createPool( getOwner()->getName() + "RenderPipeline", maxSets ) );
 			}
+			else
+			{
+				m_descriptorPools.emplace_back( nullptr );
+			}
 		}
+
+		CU_Require( m_descriptorPools.size() == Descriptor_COUNT );
 	}
 
 	void RenderPipeline::setVertexLayouts( ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts )
@@ -165,9 +171,37 @@ namespace castor3d
 		}
 	}
 
-	void RenderPipeline::setDescriptorSetLayouts( std::vector< ashes::DescriptorSetLayoutPtr > && layouts )
+	void RenderPipeline::setDescriptorSetLayouts( std::vector< ashes::DescriptorSetLayoutPtr > layouts )
 	{
 		CU_Require( !m_pipeline );
 		m_descriptorLayouts = std::move( layouts );
+	}
+
+	void RenderPipeline::setAdditionalDescriptorSet( SubmeshRenderNode const & node
+		, ashes::DescriptorSetPtr descriptorSet )
+	{
+		auto ires = m_submeshAddDescriptors.emplace( &node, std::move( descriptorSet ) ).second;
+		CU_Require( ires );
+	}
+
+	void RenderPipeline::setAdditionalDescriptorSet( BillboardListRenderNode const & node
+		, ashes::DescriptorSetPtr descriptorSet )
+	{
+		auto ires = m_billboardAddDescriptors.emplace( &node, std::move( descriptorSet ) ).second;
+		CU_Require( ires );
+	}
+
+	ashes::DescriptorSet const & RenderPipeline::getAdditionalDescriptorSet( SubmeshRenderNode const & node )const
+	{
+		auto it = m_submeshAddDescriptors.find( &node );
+		CU_Require( it != m_submeshAddDescriptors.end() );
+		return *it->second;
+	}
+
+	ashes::DescriptorSet const & RenderPipeline::getAdditionalDescriptorSet( BillboardListRenderNode const & node )const
+	{
+		auto it = m_billboardAddDescriptors.find( &node );
+		CU_Require( it != m_billboardAddDescriptors.end() );
+		return *it->second;
 	}
 }

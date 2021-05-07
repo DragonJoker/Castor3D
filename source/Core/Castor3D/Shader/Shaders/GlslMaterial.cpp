@@ -192,7 +192,8 @@ namespace castor3d
 		}
 
 		void PhongMaterials::declare( bool hasSsbo
-			, uint32_t binding )
+			, uint32_t binding
+			, uint32_t set )
 		{
 			m_type = PhongMaterial::declare( m_writer );
 
@@ -202,12 +203,14 @@ namespace castor3d
 					, PassBufferName
 					, m_type->getType()
 					, binding
-					, 0u
+					, set
 					, true );
 			}
 			else
 			{
-				auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( "c3d_materials", binding, 0u );
+				auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( "c3d_materials"
+					, binding
+					, set );
 				m_getMaterial = m_writer.implementFunction< PhongMaterial >( "getMaterial"
 					, [this, &c3d_materials]( UInt const & index )
 					{
@@ -251,7 +254,8 @@ namespace castor3d
 		}
 
 		void PbrMRMaterials::declare( bool hasSsbo
-			, uint32_t binding )
+			, uint32_t binding
+			, uint32_t set )
 		{
 			m_type = MetallicRoughnessMaterial::declare( m_writer );
 
@@ -261,12 +265,14 @@ namespace castor3d
 					, PassBufferName
 					, m_type->getType()
 					, binding
-					, 0u
+					, set
 					, true );
 			}
 			else
 			{
-				auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( "c3d_materials", binding, 0u );
+				auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( "c3d_materials"
+					, binding
+					, set );
 				m_getMaterial = m_writer.implementFunction< MetallicRoughnessMaterial >( "getMaterial"
 					, [this, &c3d_materials]( UInt const & index )
 					{
@@ -310,7 +316,8 @@ namespace castor3d
 		}
 
 		void PbrSGMaterials::declare( bool hasSsbo
-			, uint32_t binding )
+			, uint32_t binding
+			, uint32_t set )
 		{
 			m_type = SpecularGlossinessMaterial::declare( m_writer );
 
@@ -320,12 +327,14 @@ namespace castor3d
 					, PassBufferName
 					, m_type->getType()
 					, binding
-					, 0u
+					, set
 					, true );
 			}
 			else
 			{
-				auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( "c3d_materials", binding, 0u );
+				auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( "c3d_materials"
+					, binding
+					, set );
 				m_getMaterial = m_writer.implementFunction< SpecularGlossinessMaterial >( "getMaterial"
 					, [this, &c3d_materials]( UInt const & index )
 					{

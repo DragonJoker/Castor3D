@@ -404,10 +404,20 @@ namespace castor3d
 		bool hasTextures = !flags.textures.empty();
 
 		// Inputs
-		UBO_MATRIX( writer, uint32_t( NodeUboIdx::eMatrix ), 0u );
-		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0 );
-		auto skinningData = SkinningUbo::declare( writer, uint32_t( NodeUboIdx::eSkinning ), 0, flags.programFlags );
-		UBO_MORPHING( writer, uint32_t( NodeUboIdx::eMorphing ), 0, flags.programFlags );
+		UBO_MATRIX( writer
+			, uint32_t( NodeUboIdx::eMatrix )
+			, RenderPipeline::eBuffers );
+		UBO_MODEL( writer
+			, uint32_t( NodeUboIdx::eModel )
+			, RenderPipeline::eBuffers );
+		auto skinningData = SkinningUbo::declare( writer
+			, uint32_t( NodeUboIdx::eSkinning )
+			, RenderPipeline::eBuffers
+			, flags.programFlags );
+		UBO_MORPHING( writer
+			, uint32_t( NodeUboIdx::eMorphing )
+			, RenderPipeline::eBuffers
+			, flags.programFlags );
 
 		shader::VertexSurface inSurface{ writer
 			, flags.programFlags
@@ -457,10 +467,18 @@ namespace castor3d
 		// Shader inputs
 		auto inPosition = writer.declInput< Vec4 >( "inPosition", 0u );
 		auto center = writer.declInput< Vec3 >( "center", 2u );
-		UBO_MATRIX( writer, uint32_t( NodeUboIdx::eMatrix ), 0u );
-		UBO_SCENE( writer, uint32_t( NodeUboIdx::eScene ), 0u );
-		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0 );
-		UBO_BILLBOARD( writer, uint32_t( NodeUboIdx::eBillboard ), 0 );
+		UBO_MATRIX( writer
+			, uint32_t( NodeUboIdx::eMatrix )
+			, RenderPipeline::eBuffers );
+		UBO_SCENE( writer
+			, uint32_t( NodeUboIdx::eScene )
+			, RenderPipeline::eBuffers );
+		UBO_MODEL( writer
+			, uint32_t( NodeUboIdx::eModel )
+			, RenderPipeline::eBuffers );
+		UBO_BILLBOARD( writer
+			, uint32_t( NodeUboIdx::eBillboard )
+			, RenderPipeline::eBuffers );
 		auto in = writer.getIn();
 
 		// Outputs
@@ -606,25 +624,39 @@ namespace castor3d
 
 		shader::PhongMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-			, uint32_t( NodeUboIdx::eMaterials ) );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", uint32_t( NodeUboIdx::eLights ), 0u );
+			, uint32_t( NodeUboIdx::eMaterials )
+			, RenderPipeline::eBuffers );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
+			, uint32_t( NodeUboIdx::eLights )
+			, RenderPipeline::eBuffers );
 		shader::TextureConfigurations textureConfigs{ writer };
 
 		if ( hasTextures )
 		{
 			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( NodeUboIdx::eTexturesBuffer ) );
+				, uint32_t( NodeUboIdx::eTexturesBuffer )
+				, RenderPipeline::eBuffers );
 		}
 
-		UBO_SCENE( writer, uint32_t( NodeUboIdx::eScene ), 0u );
-		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0u );
-		UBO_TEXTURES( writer, uint32_t( NodeUboIdx::eTexturesConfig ), 0u, hasTextures );
-		UBO_VOXELIZER( writer, uint32_t( NodeUboIdx::eVoxelData ), 0u, true );
+		UBO_SCENE( writer
+			, uint32_t( NodeUboIdx::eScene )
+			, RenderPipeline::eBuffers );
+		UBO_MODEL( writer
+			, uint32_t( NodeUboIdx::eModel )
+			, RenderPipeline::eBuffers );
+		UBO_TEXTURES( writer
+			, uint32_t( NodeUboIdx::eTexturesConfig )
+			, RenderPipeline::eBuffers
+			, hasTextures );
+		UBO_VOXELIZER( writer
+			, uint32_t( NodeUboIdx::eVoxelData )
+			, RenderPipeline::eBuffers
+			, true );
 
 		auto texIndex = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, texIndex
-			, 1u
+			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
 		texIndex += uint32_t( flags.textures.size() );
@@ -756,25 +788,39 @@ namespace castor3d
 
 		shader::PbrMRMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-			, uint32_t( NodeUboIdx::eMaterials ) );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", uint32_t( NodeUboIdx::eLights ), 0u );
+			, uint32_t( NodeUboIdx::eMaterials )
+			, RenderPipeline::eBuffers );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
+			, uint32_t( NodeUboIdx::eLights )
+			, RenderPipeline::eBuffers );
 		shader::TextureConfigurations textureConfigs{ writer };
 
 		if ( hasTextures )
 		{
 			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( NodeUboIdx::eTexturesBuffer ) );
+				, uint32_t( NodeUboIdx::eTexturesBuffer )
+				, RenderPipeline::eBuffers );
 		}
 
-		UBO_SCENE( writer, uint32_t( NodeUboIdx::eScene ), 0u );
-		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0u );
-		UBO_TEXTURES( writer, uint32_t( NodeUboIdx::eTexturesConfig ), 0u, hasTextures );
-		UBO_VOXELIZER( writer, uint32_t( NodeUboIdx::eVoxelData ), 0u, true );
+		UBO_SCENE( writer
+			, uint32_t( NodeUboIdx::eScene )
+			, RenderPipeline::eBuffers );
+		UBO_MODEL( writer
+			, uint32_t( NodeUboIdx::eModel )
+			, RenderPipeline::eBuffers );
+		UBO_TEXTURES( writer
+			, uint32_t( NodeUboIdx::eTexturesConfig )
+			, RenderPipeline::eBuffers
+			, hasTextures );
+		UBO_VOXELIZER( writer
+			, uint32_t( NodeUboIdx::eVoxelData )
+			, RenderPipeline::eBuffers
+			, true );
 
 		auto texIndex = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, texIndex
-			, 1u
+			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
 		texIndex += uint32_t( flags.textures.size() );
@@ -900,25 +946,38 @@ namespace castor3d
 
 		shader::PbrSGMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-			, uint32_t( NodeUboIdx::eMaterials ) );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", uint32_t( NodeUboIdx::eLights ), 0u );
+			, uint32_t( NodeUboIdx::eMaterials )
+			, RenderPipeline::eBuffers );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
+			, uint32_t( NodeUboIdx::eLights )
+			, RenderPipeline::eBuffers );
 		shader::TextureConfigurations textureConfigs{ writer };
 
 		if ( hasTextures )
 		{
 			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( NodeUboIdx::eTexturesBuffer ) );
+				, uint32_t( NodeUboIdx::eTexturesBuffer )
+				, RenderPipeline::eBuffers );
 		}
 
-		UBO_SCENE( writer, uint32_t( NodeUboIdx::eScene ), 0u );
-		UBO_MODEL( writer, uint32_t( NodeUboIdx::eModel ), 0u );
-		UBO_TEXTURES( writer, uint32_t( NodeUboIdx::eTexturesConfig ), 0u, hasTextures );
-		UBO_VOXELIZER( writer, uint32_t( NodeUboIdx::eVoxelData ), 0u, true );
+		UBO_SCENE( writer
+			, uint32_t( NodeUboIdx::eScene )
+			, RenderPipeline::eBuffers );
+		UBO_MODEL( writer
+			, uint32_t( NodeUboIdx::eModel )
+			, RenderPipeline::eBuffers );
+		UBO_TEXTURES( writer
+			, uint32_t( NodeUboIdx::eTexturesConfig )
+			, RenderPipeline::eBuffers
+			, hasTextures );
+		UBO_VOXELIZER( writer
+			, uint32_t( NodeUboIdx::eVoxelData )
+			, RenderPipeline::eBuffers, true );
 
 		auto texIndex = 0u;
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, texIndex
-			, 1u
+			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
 		texIndex += uint32_t( flags.textures.size() );

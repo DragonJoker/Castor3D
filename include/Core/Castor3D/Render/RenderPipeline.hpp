@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_RenderPipeline_H___
 
 #include "RenderModule.hpp"
+#include "Castor3D/Render/Node/RenderNodeModule.hpp"
 
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
 #include <ashespp/Descriptor/DescriptorSetPool.hpp>
@@ -15,11 +16,22 @@ See LICENSE file in root folder
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 #include <ashespp/Pipeline/PipelineViewportStateCreateInfo.hpp>
 
+#include <unordered_map>
+
 namespace castor3d
 {
 	class RenderPipeline
 		: public castor::OwnedBy< SceneRenderPass >
 	{
+	public:
+		enum Descriptor
+		{
+			eBuffers,
+			eTextures,
+			eAdditional,
+			CU_EnumBounds( Descriptor, eBuffers )
+		};
+
 	public:
 		/**
 		*\~english
@@ -136,7 +148,11 @@ namespace castor3d
 		**/
 		/**@{*/
 		C3D_API void setVertexLayouts( ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts );
-		C3D_API void setDescriptorSetLayouts( std::vector< ashes::DescriptorSetLayoutPtr > && layouts );
+		C3D_API void setDescriptorSetLayouts( std::vector< ashes::DescriptorSetLayoutPtr > layouts );
+		C3D_API void setAdditionalDescriptorSet( SubmeshRenderNode const & node
+			, ashes::DescriptorSetPtr descriptorSet );
+		C3D_API void setAdditionalDescriptorSet( BillboardListRenderNode const & node
+			, ashes::DescriptorSetPtr descriptorSet );
 
 		void setVertexLayouts( std::vector< ashes::PipelineVertexInputStateCreateInfo > layouts )
 		{
@@ -171,6 +187,9 @@ namespace castor3d
 		*	Accesseurs.
 		**/
 		/**@{*/
+		C3D_API ashes::DescriptorSet const & getAdditionalDescriptorSet( SubmeshRenderNode const & node )const;
+		C3D_API ashes::DescriptorSet const & getAdditionalDescriptorSet( BillboardListRenderNode const & node )const;
+
 		PipelineFlags const & getFlags()const
 		{
 			return m_flags;
@@ -193,18 +212,18 @@ namespace castor3d
 			return *m_pipelineLayout;
 		}
 
-		ashes::DescriptorSetLayout const & getDescriptorSetLayout( uint32_t index )const
+		ashes::DescriptorSetLayout const & getDescriptorSetLayout( Descriptor index )const
 		{
 			CU_Require( index < m_descriptorLayouts.size() );
 			return *m_descriptorLayouts[index];
 		}
 
-		bool hasDescriptorPool( uint32_t index )const
+		bool hasDescriptorPool( Descriptor index )const
 		{
-			return index < m_descriptorPools.size();
+			return m_descriptorPools[index] != nullptr;
 		}
 
-		ashes::DescriptorSetPool const & getDescriptorPool( uint32_t index )const
+		ashes::DescriptorSetPool const & getDescriptorPool( Descriptor index )const
 		{
 			CU_Require( index < m_descriptorPools.size() );
 			return *m_descriptorPools[index];
@@ -232,6 +251,8 @@ namespace castor3d
 		std::unique_ptr< VkRect2D > m_scissor;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
 		ashes::GraphicsPipelinePtr m_pipeline;
+		std::unordered_map< SubmeshRenderNode const *, ashes::DescriptorSetPtr > m_submeshAddDescriptors;
+		std::unordered_map< BillboardListRenderNode const *, ashes::DescriptorSetPtr > m_billboardAddDescriptors;
 	};
 }
 
