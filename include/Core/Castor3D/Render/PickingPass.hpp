@@ -31,6 +31,7 @@ namespace castor3d
 		 *\param[in]	culler		Le culler pour cette passe.
 		 */
 		C3D_API explicit PickingPass( RenderDevice const & device
+			, castor::Size const & size
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler );
 		/**

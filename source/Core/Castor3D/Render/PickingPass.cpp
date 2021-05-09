@@ -285,7 +285,11 @@ namespace castor3d
 					, VK_ATTACHMENT_LOAD_OP_DONT_CARE
 					, VK_ATTACHMENT_STORE_OP_DONT_CARE
 					, VK_IMAGE_LAYOUT_UNDEFINED
+#if C3D_DebugPicking
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL }
+#else
 					, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL }
+#endif
 				, { 0u
 					, depthFormat
 					, VK_SAMPLE_COUNT_1_BIT
@@ -328,6 +332,7 @@ namespace castor3d
 		}
 
 		ashes::FrameBufferPtr createFramebuffer( ashes::RenderPass const & renderPass
+			, Size const & size
 			, ashes::ImageView const & colourView
 			, ashes::ImageView const & depthView )
 		{
@@ -335,7 +340,7 @@ namespace castor3d
 			attachments.emplace_back( colourView );
 			attachments.emplace_back( depthView );
 			return renderPass.createFrameBuffer( "PickingPass"
-				, { PickingPass::PickingWidth, PickingPass::PickingWidth }
+				, { size.getWidth(), size.getHeight() }
 				, std::move( attachments ) );
 		}
 
@@ -365,15 +370,16 @@ namespace castor3d
 	uint32_t const PickingPass::UboBindingPoint = 7u;
 
 	PickingPass::PickingPass( RenderDevice const & device
+		, castor::Size const & size
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler )
 		: SceneRenderPass{ device
 			, cuT( "Picking" )
 			, cuT( "Picking" )
-			, SceneRenderPassDesc{ { PickingWidth, PickingWidth, 1u }, matrixUbo, culler, RenderMode::eBoth, true, false }
+			, SceneRenderPassDesc{ { size.getWidth(), size.getHeight(), 1u }, matrixUbo, culler, RenderMode::eBoth, true, false }
 			, createRenderPass( device, VK_FORMAT_R32G32B32A32_SFLOAT, VK_FORMAT_D32_SFLOAT ) }
 		, m_colourTexture{ createTexture( m_device
-			, { PickingWidth, PickingWidth }
+			, m_size
 			, VK_FORMAT_R32G32B32A32_SFLOAT
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
@@ -382,7 +388,7 @@ namespace castor3d
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, "Colour" ) }
 		, m_depthTexture{ createTexture( m_device
-			, { PickingWidth, PickingWidth }
+			, m_size
 			, VK_FORMAT_D32_SFLOAT
 			, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
@@ -394,6 +400,7 @@ namespace castor3d
 			, *m_depthTexture
 			, "Depth" ) }
 		, m_frameBuffer{ createFramebuffer( *m_renderPass
+			, m_size
 			, m_colourView
 			, m_depthView ) }
 		, m_copyRegion{ 0u
@@ -449,10 +456,10 @@ namespace castor3d
 			auto & myCamera = getCuller().getCamera();
 			int32_t offsetX = std::clamp( position.x() - PickingOffset
 				, 0
-				, int32_t( m_colourTexture->getDimensions().width - PickingWidth ) );
+				, int32_t( m_size.getWidth() - PickingWidth ) );
 			int32_t offsetY = std::clamp( position.y() - PickingOffset
 				, 0
-				, int32_t( m_colourTexture->getDimensions().height - PickingWidth ) );
+				, int32_t( m_size.getHeight() - PickingWidth ) );
 			VkRect2D scissor =
 			{
 				{ offsetX, offsetY },
