@@ -209,8 +209,10 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eMorphing )
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
+
+		auto index = uint32_t( PassUboIdx::eCount );
 		UBO_SHADOWMAP( writer
-			, 0u
+			, index++
 			, RenderPipeline::eAdditional );
 
 		// Outputs
@@ -296,7 +298,7 @@ namespace castor3d
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
 
-		auto index = 0u;
+		auto index = uint32_t( PassUboIdx::eCount );
 		UBO_SHADOWMAP( writer
 			, index++
 			, RenderPipeline::eAdditional );
@@ -448,7 +450,7 @@ namespace castor3d
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
 
-		auto index = 0u;
+		auto index = uint32_t( PassUboIdx::eCount );
 		UBO_SHADOWMAP( writer
 			, index++
 			, RenderPipeline::eAdditional );
@@ -600,7 +602,7 @@ namespace castor3d
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
 
-		auto index = 0u;
+		auto index = uint32_t( PassUboIdx::eCount );
 		UBO_SHADOWMAP( writer
 			, index++
 			, RenderPipeline::eAdditional );

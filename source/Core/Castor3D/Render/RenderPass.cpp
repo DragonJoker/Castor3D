@@ -587,11 +587,6 @@ namespace castor3d
 					, node.sceneNode.getScene()->getLightCache().getView() );
 			}
 
-			matrixUbo.createSizedBinding( descriptorSet
-				, layout.getBinding( uint32_t( NodeUboIdx::eMatrix ) ) );
-			sceneUbo.createSizedBinding( descriptorSet
-				, layout.getBinding( uint32_t( NodeUboIdx::eScene ) ) );
-
 			if ( checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eInstanceMult ) )
 			{
 				CU_Require( node.modelInstancesUbo );
@@ -846,10 +841,14 @@ namespace castor3d
 		auto & layout = descriptorPool.getLayout();
 		auto descriptorSet = descriptorPool.createDescriptorSet( getName() + "_BillboardAdd"
 			, RenderPipeline::eAdditional );
+		ashes::WriteDescriptorSetArray descriptorWrites;
+		descriptorWrites.push_back( m_matrixUbo.getDescriptorWrite( uint32_t( PassUboIdx::eMatrix ) ) );
+		descriptorWrites.push_back( m_sceneUbo.getDescriptorWrite( uint32_t( PassUboIdx::eScene ) ) );
 		doFillAdditionalDescriptor( pipeline
-			, *descriptorSet
+			, descriptorWrites
 			, node
 			, shadowMaps );
+		descriptorSet->setBindings( descriptorWrites );
 		descriptorSet->update();
 		pipeline.setAdditionalDescriptorSet( node, std::move( descriptorSet ) );
 	}
@@ -862,10 +861,14 @@ namespace castor3d
 		auto & layout = descriptorPool.getLayout();
 		auto descriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Add"
 			, RenderPipeline::eAdditional );
+		ashes::WriteDescriptorSetArray descriptorWrites;
+		descriptorWrites.push_back( m_matrixUbo.getDescriptorWrite( uint32_t( PassUboIdx::eMatrix ) ) );
+		descriptorWrites.push_back( m_sceneUbo.getDescriptorWrite( uint32_t( PassUboIdx::eScene ) ) );
 		doFillAdditionalDescriptor( pipeline
-			, *descriptorSet
+			, descriptorWrites
 			, node
 			, shadowMaps );
+		descriptorSet->setBindings( descriptorWrites );
 		descriptorSet->update();
 		pipeline.setAdditionalDescriptorSet( node, std::move( descriptorSet ) );
 	}
@@ -878,10 +881,14 @@ namespace castor3d
 		auto & layout = descriptorPool.getLayout();
 		auto descriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Add"
 			, RenderPipeline::eAdditional );
+		ashes::WriteDescriptorSetArray descriptorWrites;
+		descriptorWrites.push_back( m_matrixUbo.getDescriptorWrite( uint32_t( PassUboIdx::eMatrix ) ) );
+		descriptorWrites.push_back( m_sceneUbo.getDescriptorWrite( uint32_t( PassUboIdx::eScene ) ) );
 		doFillAdditionalDescriptor( pipeline
-			, *descriptorSet
+			, descriptorWrites
 			, node
 			, shadowMaps );
+		descriptorSet->setBindings( descriptorWrites );
 		descriptorSet->update();
 		pipeline.setAdditionalDescriptorSet( node, std::move( descriptorSet ) );
 	}
@@ -894,10 +901,14 @@ namespace castor3d
 		auto & layout = descriptorPool.getLayout();
 		auto descriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Add"
 			, RenderPipeline::eAdditional );
+		ashes::WriteDescriptorSetArray descriptorWrites;
+		descriptorWrites.push_back( m_matrixUbo.getDescriptorWrite( uint32_t( PassUboIdx::eMatrix ) ) );
+		descriptorWrites.push_back( m_sceneUbo.getDescriptorWrite( uint32_t( PassUboIdx::eScene ) ) );
 		doFillAdditionalDescriptor( pipeline
-			, *descriptorSet
+			, descriptorWrites
 			, node
 			, shadowMaps );
+		descriptorSet->setBindings( descriptorWrites );
 		descriptorSet->update();
 		pipeline.setAdditionalDescriptorSet( node, std::move( descriptorSet ) );
 	}
@@ -1281,18 +1292,6 @@ namespace castor3d
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		}
 
-		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eMatrix )
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
-				? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
-				: VK_SHADER_STAGE_VERTEX_BIT ) ) );
-		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eScene )
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, ( VK_SHADER_STAGE_FRAGMENT_BIT
-				| ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
-					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
-					: VK_SHADER_STAGE_VERTEX_BIT ) ) ) );
-
 		if ( !flags.textures.empty() )
 		{
 			uboBindings.emplace_back( getEngine()->getMaterialCache().getTextureBuffer().createLayoutBinding( uint32_t( NodeUboIdx::eTexturesBuffer ) ) );
@@ -1359,7 +1358,20 @@ namespace castor3d
 
 	ashes::VkDescriptorSetLayoutBindingArray SceneRenderPass::doCreateAdditionalBindings( PipelineFlags const & flags )const
 	{
-		return ashes::VkDescriptorSetLayoutBindingArray{};
+		ashes::VkDescriptorSetLayoutBindingArray addBindings;
+		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( PassUboIdx::eMatrix )
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
+				? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
+				: VK_SHADER_STAGE_VERTEX_BIT ) ) );
+		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( PassUboIdx::eScene )
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, ( VK_SHADER_STAGE_FRAGMENT_BIT
+				| ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
+					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
+					: VK_SHADER_STAGE_VERTEX_BIT ) ) ) );
+		doFillAdditionalBindings( flags, addBindings );
+		return addBindings;
 	}
 
 	std::map< PipelineFlags, RenderPipelineUPtr > & SceneRenderPass::doGetFrontPipelines()
@@ -1486,12 +1498,6 @@ namespace castor3d
 			, hasTextures };
 		auto in = writer.getIn();
 
-		UBO_MATRIX( writer
-			, uint32_t( NodeUboIdx::eMatrix )
-			, RenderPipeline::eBuffers );
-		UBO_SCENE( writer
-			, uint32_t( NodeUboIdx::eScene )
-			, RenderPipeline::eBuffers );
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
@@ -1503,6 +1509,13 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eMorphing )
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
+
+		UBO_MATRIX( writer
+			, uint32_t( PassUboIdx::eMatrix )
+			, RenderPipeline::eAdditional );
+		UBO_SCENE( writer
+			, uint32_t( PassUboIdx::eScene )
+			, RenderPipeline::eAdditional );
 
 		// Outputs
 		shader::OutFragmentSurface outSurface{ writer
@@ -1565,18 +1578,20 @@ namespace castor3d
 		auto uv = writer.declInput< Vec2 >( "uv", 1u, hasTextures );
 		auto center = writer.declInput< Vec3 >( "center", 2u );
 		auto in = writer.getIn();
-		UBO_MATRIX( writer
-			, uint32_t( NodeUboIdx::eMatrix )
-			, RenderPipeline::eBuffers );
-		UBO_SCENE( writer
-			, uint32_t( NodeUboIdx::eScene )
-			, RenderPipeline::eBuffers );
+
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
 		UBO_BILLBOARD( writer
 			, uint32_t( NodeUboIdx::eBillboard )
 			, RenderPipeline::eBuffers );
+
+		UBO_MATRIX( writer
+			, uint32_t( PassUboIdx::eMatrix )
+			, RenderPipeline::eAdditional );
+		UBO_SCENE( writer
+			, uint32_t( PassUboIdx::eScene )
+			, RenderPipeline::eAdditional );
 
 		// Shader outputs
 		shader::OutFragmentSurface outSurface{ writer

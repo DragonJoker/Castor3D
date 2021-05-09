@@ -105,15 +105,16 @@ namespace castor3d
 		using SceneRenderPass::update;
 
 	private:
-		ashes::VkDescriptorSetLayoutBindingArray doCreateAdditionalBindings( PipelineFlags const & flags )const override;
+		void doFillAdditionalBindings( PipelineFlags const & flags
+			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSet & descriptorSet
+			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, BillboardListRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSet & descriptorSet
+			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, SubmeshRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		void doUpdateFlags( PipelineFlags & flags )const override;

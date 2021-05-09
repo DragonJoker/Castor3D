@@ -26,14 +26,13 @@ namespace castor3d
 	namespace
 	{
 		void fillAdditionalDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSet & descriptorSet
+			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, Scene const & scene
 			, ShadowMapUbo const & shadowMapUbo )
 		{
-			uint32_t index = 0u;
-			ashes::WriteDescriptorSetArray writes;
+			auto index = uint32_t( PassUboIdx::eCount );
 			auto & flags = pipeline.getFlags();
-			writes.push_back( shadowMapUbo.getDescriptorWrite( index++ ) );
+			descriptorWrites.push_back( shadowMapUbo.getDescriptorWrite( index++ ) );
 
 			if ( checkFlag( flags.passFlags, PassFlag::eMetallicRoughness )
 				|| checkFlag( flags.passFlags, PassFlag::eSpecularGlossiness ) )
@@ -45,20 +44,18 @@ namespace castor3d
 					auto & ibl = background.getIbl();
 					bindTexture( ibl.getIrradianceTexture()
 						, ibl.getIrradianceSampler()
-						, writes
+						, descriptorWrites
 						, index );
 					bindTexture( ibl.getPrefilteredEnvironmentTexture()
 						, ibl.getPrefilteredEnvironmentSampler()
-						, writes
+						, descriptorWrites
 						, index );
 					bindTexture( ibl.getPrefilteredBrdfTexture()
 						, ibl.getPrefilteredBrdfSampler()
-						, writes
+						, descriptorWrites
 						, index );
 				}
 			}
-
-			descriptorSet.setBindings( writes );
 		}
 	}
 
@@ -98,50 +95,49 @@ namespace castor3d
 		}
 	}
 
-	ashes::VkDescriptorSetLayoutBindingArray ShadowMapPass::doCreateAdditionalBindings( PipelineFlags const & flags )const
+	void ShadowMapPass::doFillAdditionalBindings( PipelineFlags const & flags
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
-		ashes::VkDescriptorSetLayoutBindingArray addBindings;
-		uint32_t index = 0u;
-		addBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+		auto index = uint32_t( PassUboIdx::eCount );
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
 		if ( checkFlag( flags.passFlags, PassFlag::eMetallicRoughness )
 			|| checkFlag( flags.passFlags, PassFlag::eSpecularGlossiness ) )
 		{
-			addBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapIrradiance
-			addBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapPrefiltered
-			addBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
 		}
 
 		m_initialised = true;
-		return addBindings;
 	}
 
 	void ShadowMapPass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSet & descriptorSet
+		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, BillboardListRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		fillAdditionalDescriptor( pipeline
-			, descriptorSet
+			, descriptorWrites
 			, getCuller().getScene()
 			, m_shadowMapUbo );
 	}
 
 	void ShadowMapPass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSet & descriptorSet
+		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, SubmeshRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		fillAdditionalDescriptor( pipeline
-			, descriptorSet
+			, descriptorWrites
 			, getCuller().getScene()
 			, m_shadowMapUbo );
 	}

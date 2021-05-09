@@ -726,31 +726,28 @@ namespace castor3d
 			, nodes );
 	}
 
-	ashes::VkDescriptorSetLayoutBindingArray PickingPass::doCreateAdditionalBindings( PipelineFlags const & flags )const
+	void PickingPass::doFillAdditionalBindings( PipelineFlags const & flags
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
-		ashes::VkDescriptorSetLayoutBindingArray addBindings;
-		addBindings.emplace_back( makeDescriptorSetLayoutBinding( 0u
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( PassUboIdx::eCount )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		return addBindings;
 	}
 
 	void PickingPass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSet & descriptorSet
+		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, BillboardListRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		node.pickingUbo.createSizedBinding( descriptorSet
-			, descriptorSet.getLayout().getBinding( 0u ) );
+		descriptorWrites.push_back( node.pickingUbo.getDescriptorWrite( uint32_t( PassUboIdx::eCount ) ) );
 	}
 
 	void PickingPass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSet & descriptorSet
+		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, SubmeshRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		node.pickingUbo.createSizedBinding( descriptorSet
-			, descriptorSet.getLayout().getBinding( 0u ) );
+		descriptorWrites.push_back( node.pickingUbo.getDescriptorWrite( uint32_t( PassUboIdx::eCount ) ) );
 	}
 
 	void PickingPass::doUpdate( RenderQueueArray & CU_UnusedParam( queues ) )
@@ -770,9 +767,6 @@ namespace castor3d
 			, hasTextures };
 		auto in = writer.getIn();
 
-		UBO_MATRIX( writer
-			, uint32_t( NodeUboIdx::eMatrix )
-			, RenderPipeline::eBuffers );
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
@@ -784,6 +778,10 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eMorphing )
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
+
+		UBO_MATRIX( writer
+			, uint32_t( PassUboIdx::eMatrix )
+			, RenderPipeline::eAdditional );
 
 		// Outputs
 		shader::OutFragmentSurface outSurface{ writer

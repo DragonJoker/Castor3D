@@ -136,13 +136,14 @@ namespace castor3d
 		void doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes );
 		void doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes );
 		void doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes );
-		ashes::VkDescriptorSetLayoutBindingArray doCreateAdditionalBindings( PipelineFlags const & flags )const override;
+		void doFillAdditionalBindings( PipelineFlags const & flags
+			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
 		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSet & descriptorSet
+			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, BillboardListRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSet & descriptorSet
+			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, SubmeshRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		void doUpdate( RenderQueueArray & queues )override;

@@ -180,13 +180,14 @@ namespace castor3d
 		void doUpdateUbos( CpuUpdater & updater )override;
 		void doUpdateFlags( PipelineFlags & flags )const override;
 		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
-		ashes::VkDescriptorSetLayoutBindingArray doCreateAdditionalBindings( PipelineFlags const & flags )const override;
+		void doFillAdditionalBindings( PipelineFlags const & flags
+			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
 		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSet & descriptorSet
+			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, BillboardListRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSet & descriptorSet
+			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, SubmeshRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		void doUpdatePipeline( RenderPipeline & pipeline )override;

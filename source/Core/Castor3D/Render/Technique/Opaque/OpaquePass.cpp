@@ -249,9 +249,6 @@ namespace castor3d
 		}
 
 		// UBOs
-		UBO_SCENE( writer
-			, uint32_t( NodeUboIdx::eScene )
-			, RenderPipeline::eBuffers );
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
@@ -261,6 +258,10 @@ namespace castor3d
 			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
+
+		UBO_SCENE( writer
+			, uint32_t( PassUboIdx::eScene )
+			, RenderPipeline::eAdditional );
 
 		// Fragment Inputs
 		shader::InFragmentSurface inSurface{ writer
@@ -383,9 +384,6 @@ namespace castor3d
 		}
 
 		// UBOs
-		UBO_SCENE( writer
-			, uint32_t( NodeUboIdx::eScene )
-			, RenderPipeline::eBuffers );
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
@@ -395,6 +393,10 @@ namespace castor3d
 			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
+
+		UBO_SCENE( writer
+			, uint32_t( PassUboIdx::eScene )
+			, RenderPipeline::eAdditional );
 
 		// Fragment Inputs
 		shader::InFragmentSurface inSurface{ writer
@@ -517,9 +519,6 @@ namespace castor3d
 		}
 
 		// UBOs
-		UBO_SCENE( writer
-			, uint32_t( NodeUboIdx::eScene )
-			, RenderPipeline::eBuffers );
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
@@ -529,6 +528,10 @@ namespace castor3d
 			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
+
+		UBO_SCENE( writer
+			, uint32_t( PassUboIdx::eScene )
+			, RenderPipeline::eAdditional );
 
 		// Fragment Inputs
 		shader::InFragmentSurface inSurface{ writer
