@@ -482,6 +482,16 @@ namespace castor3d
 		return m_pickNodeType;
 	}
 
+	bool PickingPass::doIsValidPass( PassFlags const & passFlags )const
+	{
+		if ( !checkFlag( passFlags, PassFlag::ePickable ) )
+		{
+			return false;
+		}
+
+		return SceneRenderPass::doIsValidPass( passFlags );
+	}
+
 	void PickingPass::doUpdateNodes( SceneCulledRenderNodes & nodes )
 	{
 		auto & myCamera = getCuller().getCamera();
@@ -853,7 +863,7 @@ namespace castor3d
 		}
 
 		UBO_PICKING( writer
-			, 0u
+			, uint32_t( PassUboIdx::eCount )
 			, RenderPipeline::eAdditional );
 
 		// Fragment Intputs

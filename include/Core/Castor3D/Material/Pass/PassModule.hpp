@@ -113,9 +113,12 @@ namespace castor3d
 		//!\~english	The pass receives lighting.
 		//!\~french		La passe reçoit l'éclairage.
 		eLighting = 0x0800,
+		//!\~english	The pass sets an object as pickable.
+		//!\~french		La passe rend l'objet sélectionnable.
+		ePickable = 0x1000,
 		//!\~english	All flags.
 		//\~french		Tous les indicateurs.
-		eAll = 0x08FF,
+		eAll = 0x1FFF,
 	};
 	CU_ImplementFlags( PassFlag )
 	C3D_API castor::String getName( PassFlag value );
