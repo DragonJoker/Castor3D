@@ -71,7 +71,6 @@ namespace castor3d
 
 		Quad faces[6];
 	};
-
 	/**
 	*\~english
 	*\brief
@@ -85,8 +84,6 @@ namespace castor3d
 	{
 		eMaterials,
 		eLights,
-		eMatrix,
-		eScene,
 		eTexturesBuffer,
 		eTexturesConfig,
 		eModel,
@@ -97,6 +94,21 @@ namespace castor3d
 		eLpvGridConfig,
 		eLayeredLpvGridConfig,
 		eVoxelData = eLpvGridConfig,
+	};
+	/**
+	*\~english
+	*\brief
+	*	The render pass UBOs binding index.
+	*\~french
+	*\brief
+	*	L'index de binding des UBOs des passes de rendu.
+	*/
+	enum class PassUboIdx
+		: uint32_t
+	{
+		eMatrix,
+		eScene,
+		CU_ScopedEnumBounds( eMatrix ),
 	};
 	/**
 	*\~english
