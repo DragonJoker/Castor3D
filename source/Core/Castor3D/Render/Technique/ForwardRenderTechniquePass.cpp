@@ -270,7 +270,6 @@ namespace castor3d
 			, uint32_t( PassUboIdx::eScene )
 			, RenderPipeline::eAdditional );
 		auto index = uint32_t( PassUboIdx::eCount );
-		shader::GlobalIllumination indirect{ writer, utils };
 		auto c3d_mapEnvironment( writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment"
 			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? index++ : 0u
@@ -283,6 +282,7 @@ namespace castor3d
 			, index
 			, RenderPipeline::eAdditional
 			, m_mode != RenderMode::eTransparentOnly );
+		shader::GlobalIllumination indirect{ writer, utils };
 		indirect.declare( index
 			, RenderPipeline::eAdditional
 			, flags.sceneFlags );
@@ -853,7 +853,6 @@ namespace castor3d
 			, uint32_t( PassUboIdx::eScene )
 			, RenderPipeline::eAdditional );
 		auto index = uint32_t( PassUboIdx::eCount );
-		shader::GlobalIllumination indirect{ writer, utils };
 		auto c3d_mapEnvironment( writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment"
 			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? index++ : 0u
@@ -875,6 +874,7 @@ namespace castor3d
 			, index
 			, RenderPipeline::eAdditional
 			, m_mode != RenderMode::eTransparentOnly );
+		shader::GlobalIllumination indirect{ writer, utils };
 		indirect.declare( index
 			, RenderPipeline::eAdditional
 			, flags.sceneFlags );

@@ -352,7 +352,7 @@ namespace castor3d
 					pass->prepareTextures();
 					auto passFlags = pass->getPassFlags();
 
-					if ( isValidNodeForPass( passFlags, mode ) )
+					if ( renderPass.isValidPass( *pass ) )
 					{
 						auto programFlags = submesh.getProgramFlags( material );
 						auto sceneFlags = scene.getFlags();
@@ -437,7 +437,7 @@ namespace castor3d
 					, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP
 					, billboard.getGeometryBuffers().layouts );
 
-				if ( isValidNodeForPass( passFlags, mode )
+				if ( renderPass.isValidPass( *pass )
 					&& !isShadowMapProgram( programFlags ) )
 				{
 					nodes.addRenderNode( flags
