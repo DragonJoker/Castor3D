@@ -348,7 +348,6 @@ namespace castor3d
 
 		return SkinningRenderNode{ doCreatePassRenderNode( pass, pipeline )
 			, geometryEntry.modelUbo
-			, geometryEntry.pickingUbo
 			, geometryEntry.modelInstancesUbo
 			, buffers
 			, *primitive.getParent()
@@ -381,7 +380,6 @@ namespace castor3d
 
 		return MorphingRenderNode{ doCreatePassRenderNode( pass, pipeline )
 			, geometryEntry.modelUbo
-			, geometryEntry.pickingUbo
 			, geometryEntry.modelInstancesUbo
 			, buffers
 			, *primitive.getParent()
@@ -412,7 +410,6 @@ namespace castor3d
 
 		return StaticRenderNode{ doCreatePassRenderNode( pass, pipeline )
 			, geometryEntry.modelUbo
-			, geometryEntry.pickingUbo
 			, geometryEntry.modelInstancesUbo
 			, buffers
 			, *primitive.getParent()
@@ -436,7 +433,6 @@ namespace castor3d
 
 		return BillboardRenderNode{ doCreatePassRenderNode( pass, pipeline )
 			, billboardEntry.modelUbo
-			, billboardEntry.pickingUbo
 			, billboardEntry.billboardUbo
 			, billboardEntry.modelInstancesUbo
 			, buffers
@@ -1141,13 +1137,13 @@ namespace castor3d
 		}
 	}
 
-	void SceneRenderPass::doUpdate( StaticRenderNodesPtrByPipelineMap & nodes )
+	void SceneRenderPass::doUpdate( StaticRenderNodePtrByPipelineMap & nodes )
 	{
 		renderNonInstanced( *this
 			, nodes );
 	}
 
-	void SceneRenderPass::doUpdate( StaticRenderNodesPtrByPipelineMap & nodes
+	void SceneRenderPass::doUpdate( StaticRenderNodePtrByPipelineMap & nodes
 		, RenderInfo & info )
 	{
 		renderNonInstanced( *this
@@ -1155,13 +1151,13 @@ namespace castor3d
 			, info );
 	}
 
-	void SceneRenderPass::doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes )
+	void SceneRenderPass::doUpdate( SkinningRenderNodePtrByPipelineMap & nodes )
 	{
 		renderNonInstanced( *this
 			, nodes );
 	}
 
-	void SceneRenderPass::doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes
+	void SceneRenderPass::doUpdate( SkinningRenderNodePtrByPipelineMap & nodes
 		, RenderInfo & info )
 	{
 		renderNonInstanced( *this
@@ -1223,13 +1219,13 @@ namespace castor3d
 			} );
 	}
 
-	void SceneRenderPass::doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes )
+	void SceneRenderPass::doUpdate( MorphingRenderNodePtrByPipelineMap & nodes )
 	{
 		renderNonInstanced( *this
 			, nodes );
 	}
 
-	void SceneRenderPass::doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes
+	void SceneRenderPass::doUpdate( MorphingRenderNodePtrByPipelineMap & nodes
 		, RenderInfo & info )
 	{
 		renderNonInstanced( *this
@@ -1237,13 +1233,13 @@ namespace castor3d
 			, info );
 	}
 
-	void SceneRenderPass::doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes )
+	void SceneRenderPass::doUpdate( BillboardRenderNodePtrByPipelineMap & nodes )
 	{
 		renderNonInstanced( *this
 			, nodes );
 	}
 
-	void SceneRenderPass::doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes
+	void SceneRenderPass::doUpdate( BillboardRenderNodePtrByPipelineMap & nodes
 		, RenderInfo & info )
 	{
 		renderNonInstanced( *this

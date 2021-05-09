@@ -29,12 +29,12 @@ namespace castor3d
 			AnimatedSkeletonSPtr skeleton;
 		};
 
-		using StaticNodesMap = RenderNodesT< StaticRenderNode, StaticRenderNodesByPipelineMap >;
-		using SkinnedNodesMap = RenderNodesT< SkinningRenderNode, SkinningRenderNodesByPipelineMap >;
+		using StaticNodesMap = RenderNodesT< StaticRenderNode, StaticRenderNodeByPipelineMap >;
+		using SkinnedNodesMap = RenderNodesT< SkinningRenderNode, SkinningRenderNodeByPipelineMap >;
 		using InstantiatedStaticNodesMap = RenderNodesT< StaticRenderNode, SubmeshStaticRenderNodesByPipelineMap >;
 		using InstantiatedSkinnedNodesMap = RenderNodesT< SkinningRenderNode, SubmeshSkinningRenderNodesByPipelineMap >;
-		using MorphingNodesMap = RenderNodesT< MorphingRenderNode, MorphingRenderNodesByPipelineMap >;
-		using BillboardNodesMap = RenderNodesT< BillboardRenderNode, BillboardRenderNodesByPipelineMap >;
+		using MorphingNodesMap = RenderNodesT< MorphingRenderNode, MorphingRenderNodeByPipelineMap >;
+		using BillboardNodesMap = RenderNodesT< BillboardRenderNode, BillboardRenderNodeByPipelineMap >;
 
 		//!\~english	The scene.
 		//!\~french		La scène.

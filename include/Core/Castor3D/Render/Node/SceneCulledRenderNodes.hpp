@@ -12,12 +12,12 @@ namespace castor3d
 {
 	struct SceneCulledRenderNodes
 	{
-		using StaticNodesMap = RenderNodesT< StaticRenderNode, StaticRenderNodesPtrByPipelineMap >;
-		using SkinnedNodesMap = RenderNodesT< SkinningRenderNode, SkinningRenderNodesPtrByPipelineMap >;
+		using StaticNodesMap = RenderNodesT< StaticRenderNode, StaticRenderNodePtrByPipelineMap >;
+		using SkinnedNodesMap = RenderNodesT< SkinningRenderNode, SkinningRenderNodePtrByPipelineMap >;
 		using InstantiatedStaticNodesMap = RenderNodesT< StaticRenderNode, SubmeshStaticRenderNodesPtrByPipelineMap >;
 		using InstantiatedSkinnedNodesMap = RenderNodesT< SkinningRenderNode, SubmeshSkinningRenderNodesPtrByPipelineMap >;
-		using MorphingNodesMap = RenderNodesT< MorphingRenderNode, MorphingRenderNodesPtrByPipelineMap >;
-		using BillboardNodesMap = RenderNodesT< BillboardRenderNode, BillboardRenderNodesPtrByPipelineMap >;
+		using MorphingNodesMap = RenderNodesT< MorphingRenderNode, MorphingRenderNodePtrByPipelineMap >;
+		using BillboardNodesMap = RenderNodesT< BillboardRenderNode, BillboardRenderNodePtrByPipelineMap >;
 
 		//!\~english	The scene.
 		//!\~french		La scène.

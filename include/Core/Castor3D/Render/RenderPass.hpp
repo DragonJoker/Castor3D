@@ -949,7 +949,7 @@ namespace castor3d
 		 *\brief		Met à jour des sous maillages non instanciés.
 		 *\param[in]	nodes	Les noeuds de rendu.
 		 */
-		C3D_API void doUpdate( StaticRenderNodesPtrByPipelineMap & nodes );
+		C3D_API void doUpdate( StaticRenderNodePtrByPipelineMap & nodes );
 		/**
 		 *\~english
 		 *\brief			Updates non instanced submeshes.
@@ -960,7 +960,7 @@ namespace castor3d
 		 *\param[in]		nodes	Les noeuds de rendu.
 		 *\param[in,out]	info	Reçoit les informations de rendu.
 		 */
-		C3D_API void doUpdate( StaticRenderNodesPtrByPipelineMap & nodes
+		C3D_API void doUpdate( StaticRenderNodePtrByPipelineMap & nodes
 			, RenderInfo & info );
 		/**
 		 *\~english
@@ -970,7 +970,7 @@ namespace castor3d
 		 *\brief		Met à jour des sous maillages non instanciés.
 		 *\param[in]	nodes	Les noeuds de rendu.
 		 */
-		C3D_API void doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes );
+		C3D_API void doUpdate( SkinningRenderNodePtrByPipelineMap & nodes );
 		/**
 		 *\~english
 		 *\brief			Updates non instanced submeshes.
@@ -981,7 +981,7 @@ namespace castor3d
 		 *\param[in]		nodes	Les noeuds de rendu.
 		 *\param[in,out]	info	Reçoit les informations de rendu.
 		 */
-		C3D_API void doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes
+		C3D_API void doUpdate( SkinningRenderNodePtrByPipelineMap & nodes
 			, RenderInfo & info );
 		/**
 		 *\~english
@@ -1012,7 +1012,7 @@ namespace castor3d
 		 *\brief		Met à jour des sous maillages non instanciés.
 		 *\param[in]	nodes	Les noeuds de rendu.
 		 */
-		C3D_API void doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes );
+		C3D_API void doUpdate( MorphingRenderNodePtrByPipelineMap & nodes );
 		/**
 		 *\~english
 		 *\brief			Updates non instanced submeshes.
@@ -1023,7 +1023,7 @@ namespace castor3d
 		 *\param[in]		nodes	Les noeuds de rendu.
 		 *\param[in,out]	info	Reçoit les informations de rendu.
 		 */
-		C3D_API void doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes
+		C3D_API void doUpdate( MorphingRenderNodePtrByPipelineMap & nodes
 			, RenderInfo & info );
 		/**
 		 *\~english
@@ -1033,7 +1033,7 @@ namespace castor3d
 		 *\brief		Met à jour des billboards.
 		 *\param[in]	nodes	Les noeuds de rendu.
 		 */
-		C3D_API void doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes );
+		C3D_API void doUpdate( BillboardRenderNodePtrByPipelineMap & nodes );
 		/**
 		 *\~english
 		 *\brief			Updates billboards.
@@ -1044,7 +1044,7 @@ namespace castor3d
 		 *\param[in]		nodes	Les noeuds de rendu.
 		 *\param[in,out]	info	Reçoit les informations de rendu.
 		 */
-		C3D_API void doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes
+		C3D_API void doUpdate( BillboardRenderNodePtrByPipelineMap & nodes
 			, RenderInfo & info );
 		/**
 		 *\~english

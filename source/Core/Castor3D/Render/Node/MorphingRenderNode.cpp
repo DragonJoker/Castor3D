@@ -12,7 +12,6 @@ namespace castor3d
 {
 	MorphingRenderNode::MorphingRenderNode( PassRenderNode passNode
 		, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
-		, UniformBufferOffsetT< PickingUboConfiguration > pickingBuffer
 		, UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesBuffer
 		, GeometryBuffers const & buffers
 		, SceneNode & sceneNode
@@ -22,7 +21,6 @@ namespace castor3d
 		, UniformBufferOffsetT< MorphingUboConfiguration > morphingUbo )
 		: SubmeshRenderNode{ std::move( passNode )
 			, modelBuffer
-			, pickingBuffer
 			, modelInstancesBuffer
 			, buffers
 			, sceneNode

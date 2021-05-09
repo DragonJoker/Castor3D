@@ -254,7 +254,6 @@ namespace castor3d
 		for ( auto & entry : m_baseEntries )
 		{
 			uboPools.putBuffer( entry.second.modelUbo );
-			uboPools.putBuffer( entry.second.pickingUbo );
 		}
 
 		m_entries.clear();
@@ -309,7 +308,6 @@ namespace castor3d
 			auto & uboPools = *device.uboPools;
 			auto & baseEntry = iresult.first->second;
 			baseEntry.modelUbo = uboPools.getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
-			baseEntry.pickingUbo = uboPools.getBuffer< PickingUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 
 			for ( auto instanceMult : m_instances )
 			{
@@ -357,7 +355,6 @@ namespace castor3d
 			auto entry = it->second;
 			m_baseEntries.erase( it );
 			uboPools.putBuffer( entry.modelUbo );
-			uboPools.putBuffer( entry.pickingUbo );
 		}
 	}
 

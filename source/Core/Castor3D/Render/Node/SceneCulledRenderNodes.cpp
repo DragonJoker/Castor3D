@@ -31,61 +31,28 @@
 
 #include <ashespp/Command/CommandBufferInheritanceInfo.hpp>
 
-using namespace castor;
+CU_ImplementCUSmartPtr( castor3d, SceneCulledRenderNodes )
 
 using ashes::operator==;
 using ashes::operator!=;
-
-//*************************************************************************************************
-
-namespace castor
-{
-	void Deleter< castor3d::SceneCulledRenderNodes >::operator()( castor3d::SceneCulledRenderNodes * ptr )noexcept
-	{
-		delete ptr;
-	}
-}
-
-//*************************************************************************************************
 
 namespace castor3d
 {
 	namespace
 	{
-		template< typename NodeType, typename MapType >
+		template< typename NodeT >
 		void doAddRenderNode( RenderPipeline & pipeline
-			, NodeType * node
-			, MapType & nodes )
+			, NodeT * node
+			, NodePtrByPipelineMapT< NodeT > & nodes )
 		{
-			using ObjectRenderNodesArray = typename MapType::mapped_type;
-			ObjectRenderNodesArray tmp;
-			auto itPipeline = nodes.emplace( &pipeline, std::move( tmp ) ).first;
-			itPipeline->second.emplace_back( node );
+			auto & pipelineMap = nodes.emplace( &pipeline, NodePtrArrayT< NodeT >{} ).first->second;
+			pipelineMap.emplace_back( node );
 		}
 
-		template< typename NodeType, typename MapType >
-		void doAddRenderNode( Pass & pass
-			, RenderPipeline & pipeline
-			, NodeType * node
-			, Submesh & object
-			, MapType & nodes )
-		{
-			using ObjectRenderNodesByPipelineMap = typename MapType::mapped_type;
-			using ObjectRenderNodesByPassMap = typename ObjectRenderNodesByPipelineMap::mapped_type;
-			using ObjectRenderNodesArray = typename ObjectRenderNodesByPassMap::mapped_type;
-
-			auto itPipeline = nodes.emplace( &pipeline, ObjectRenderNodesByPipelineMap{} ).first;
-			auto itPass = itPipeline->second.emplace( &pass, ObjectRenderNodesByPassMap{} ).first;
-			auto itObject = itPass->second.emplace( &object, ObjectRenderNodesArray{} ).first;
-			itObject->second.emplace_back( node );
-		}
-
-		template< typename MapType
-			, typename CulledMapType
-			, typename CulledT >
-		void doParseRenderNodes( MapType & inputNodes
-			, CulledMapType & outputNodes
-			, SceneCuller::CulledInstancesPtrT< CulledT > const & culledNodes )
+		template< typename NodeT >
+		void doParseRenderNodes( NodeByPipelineMapT< NodeT > & inputNodes
+			, NodePtrByPipelineMapT< NodeT > & outputNodes
+			, SceneCuller::CulledInstancesPtrT< NodeCulledT< NodeT > > const & culledNodes )
 		{
 			for ( auto & pipelines : inputNodes )
 			{
@@ -103,12 +70,24 @@ namespace castor3d
 			}
 		}
 
-		template< typename CulledMapType
-			, typename AllMapType >
-		void doParseRenderNodes( CulledMapType & outputNodes
+		template< typename NodeT >
+		void doAddInstantiatedRenderNode( Pass & pass
+			, RenderPipeline & pipeline
+			, NodeT * node
+			, Submesh & object
+			, ObjectNodesPtrByPipelineMapT< NodeT > & nodes )
+		{
+			auto & pipelineMap = nodes.emplace( &pipeline, ObjectNodesPtrByPassT< NodeT >{} ).first->second;
+			auto & passMap = pipelineMap.emplace( &pass, ObjectNodesPtrMapT< NodeT >{} ).first->second;
+			auto & obbjectMap = passMap.emplace( &object, NodePtrArrayT< NodeT >{} ).first->second;
+			obbjectMap.emplace_back( node );
+		}
+
+		template< typename NodeT >
+		void doParseInstantiatedRenderNodes( ObjectNodesPtrByPipelineMapT< NodeT > & outputNodes
 			, RenderPipeline & pipeline
 			, Pass & pass
-			, AllMapType & renderNodes
+			, NodeMapT< NodeT > & renderNodes
 			, SceneCuller::CulledInstancesPtrT< CulledSubmesh > const & culledNodes )
 		{
 			for ( auto & node : renderNodes )
@@ -119,7 +98,7 @@ namespace castor3d
 
 				if ( it != culledNodes.objects.end() )
 				{
-					doAddRenderNode( pass, pipeline, &node.second, ( *it )->data, outputNodes );
+					doAddInstantiatedRenderNode( pass, pipeline, &node.second, ( *it )->data, outputNodes );
 				}
 			}
 		}
@@ -145,10 +124,10 @@ namespace castor3d
 			return billboard.getGeometryBuffers();
 		}
 
-		template< typename NodeType >
+		template< typename NodeT >
 		void doAddRenderNodeCommands( RenderPipeline & pipeline
 			, ShaderFlags const & shaderFlags
-			, NodeType const & node
+			, NodeT const & node
 			, ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissor
@@ -173,12 +152,12 @@ namespace castor3d
 					commandBuffer.setScissor( *scissor );
 				}
 
-				if ( pipeline.hasDescriptorPool( RenderPipeline::eBuffers ) )
+				if ( node.uboDescriptorSet )
 				{
 					commandBuffer.bindDescriptorSet( *node.uboDescriptorSet, pipeline.getPipelineLayout() );
 				}
 
-				if ( pipeline.hasDescriptorPool( RenderPipeline::eTextures ) )
+				if ( node.texDescriptorSet )
 				{
 					commandBuffer.bindDescriptorSet( *node.texDescriptorSet, pipeline.getPipelineLayout() );
 				}
@@ -211,11 +190,11 @@ namespace castor3d
 			}
 		}
 
-		template< typename NodeType >
+		template< typename NodeT >
 		void doAddRenderNodeCommands( Pass & pass
 			, RenderPipeline & pipeline
 			, ShaderFlags const & shaderFlags
-			, NodeType const & node
+			, NodeT const & node
 			, Submesh & object
 			, ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
@@ -241,12 +220,12 @@ namespace castor3d
 					commandBuffer.setScissor( *scissor );
 				}
 
-				if ( pipeline.hasDescriptorPool( RenderPipeline::eBuffers ) )
+				if ( node.uboDescriptorSet )
 				{
 					commandBuffer.bindDescriptorSet( *node.uboDescriptorSet, pipeline.getPipelineLayout() );
 				}
 
-				if ( pipeline.hasDescriptorPool( RenderPipeline::eTextures ) )
+				if ( node.texDescriptorSet )
 				{
 					commandBuffer.bindDescriptorSet( *node.texDescriptorSet, pipeline.getPipelineLayout() );
 				}
@@ -279,15 +258,15 @@ namespace castor3d
 			}
 		}
 
-		template< typename CulledMapType >
-		void doParseRenderNodesCommands( ashes::CommandBuffer const & commandBuffer
+		template< typename NodeT >
+		void doParseInstantiatedRenderNodesCommands( ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissor
 			, RenderPipeline & pipeline
 			, ShaderFlags const & shaderFlags
 			, Pass & pass
 			, Submesh & submesh
-			, CulledMapType & renderNodes
+			, NodePtrArrayT< NodeT > & renderNodes
 			, uint32_t instanceMult )
 		{
 			doAddRenderNodeCommands( pass
@@ -301,8 +280,8 @@ namespace castor3d
 				, uint32_t( renderNodes.size() * instanceMult ) );
 		}
 
-		template< typename MapType >
-		void doParseRenderNodesCommands( MapType & inputNodes
+		template< typename NodeT >
+		void doParseRenderNodesCommands( NodePtrByPipelineMapT <NodeT > & inputNodes
 			, ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissor
@@ -325,7 +304,7 @@ namespace castor3d
 		}
 
 		template<>
-		void doParseRenderNodesCommands( BillboardRenderNodesPtrByPipelineMap & inputNodes
+		void doParseRenderNodesCommands( BillboardRenderNodePtrByPipelineMap & inputNodes
 			, ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissor
@@ -391,9 +370,9 @@ namespace castor3d
 			, [this, &queue, &culler]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
-				, auto & nodes )
+				, StaticRenderNodeMap & nodes )
 			{
-				doParseRenderNodes( instancedStaticNodes.frontCulled
+				doParseInstantiatedRenderNodes( instancedStaticNodes.frontCulled
 					, pipeline
 					, pass
 					, nodes
@@ -403,9 +382,9 @@ namespace castor3d
 			, [this, &queue, &culler]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
-				, auto & nodes )
+				, StaticRenderNodeMap & nodes )
 			{
-				doParseRenderNodes( instancedStaticNodes.backCulled
+				doParseInstantiatedRenderNodes( instancedStaticNodes.backCulled
 					, pipeline
 					, pass
 					, nodes
@@ -415,9 +394,9 @@ namespace castor3d
 			, [this, &queue, &culler]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
-				, auto & nodes )
+				, SkinningRenderNodeMap & nodes )
 			{
-				doParseRenderNodes( instancedSkinnedNodes.frontCulled
+				doParseInstantiatedRenderNodes( instancedSkinnedNodes.frontCulled
 					, pipeline
 					, pass
 					, nodes
@@ -427,9 +406,9 @@ namespace castor3d
 			, [this, &queue, &culler]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
-				, auto & nodes )
+				, SkinningRenderNodeMap & nodes )
 			{
-				doParseRenderNodes( instancedSkinnedNodes.backCulled
+				doParseInstantiatedRenderNodes( instancedSkinnedNodes.backCulled
 					, pipeline
 					, pass
 					, nodes
@@ -483,7 +462,7 @@ namespace castor3d
 				, Submesh & submesh
 				, StaticRenderNodePtrArray & nodes )
 			{
-				doParseRenderNodesCommands( queue.getCommandBuffer()
+				doParseInstantiatedRenderNodesCommands( queue.getCommandBuffer()
 					, viewport
 					, scissors
 					, pipeline
@@ -499,7 +478,7 @@ namespace castor3d
 				, Submesh & submesh
 				, StaticRenderNodePtrArray & nodes )
 			{
-				doParseRenderNodesCommands( queue.getCommandBuffer()
+				doParseInstantiatedRenderNodesCommands( queue.getCommandBuffer()
 					, viewport
 					, scissors
 					, pipeline
@@ -515,7 +494,7 @@ namespace castor3d
 				, Submesh & submesh
 				, SkinningRenderNodePtrArray & nodes )
 			{
-				doParseRenderNodesCommands( queue.getCommandBuffer()
+				doParseInstantiatedRenderNodesCommands( queue.getCommandBuffer()
 					, viewport
 					, scissors
 					, pipeline
@@ -531,7 +510,7 @@ namespace castor3d
 				, Submesh & submesh
 				, SkinningRenderNodePtrArray & nodes )
 			{
-				doParseRenderNodesCommands( queue.getCommandBuffer()
+				doParseInstantiatedRenderNodesCommands( queue.getCommandBuffer()
 					, viewport
 					, scissors
 					, pipeline

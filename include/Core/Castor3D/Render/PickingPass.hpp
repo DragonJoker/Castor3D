@@ -130,12 +130,12 @@ namespace castor3d
 			, ashes::CommandBuffer const & commandBuffer );
 		PickNodeType doPick( castor::Point4f const & pixel
 			, SceneCulledRenderNodes & nodes );
+		void doUpdate( StaticRenderNodePtrByPipelineMap & nodes );
+		void doUpdate( SkinningRenderNodePtrByPipelineMap & nodes );
+		void doUpdate( MorphingRenderNodePtrByPipelineMap & nodes );
+		void doUpdate( BillboardRenderNodePtrByPipelineMap & nodes );
 		void doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes );
-		void doUpdate( StaticRenderNodesPtrByPipelineMap & nodes );
-		void doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes );
 		void doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes );
-		void doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes );
-		void doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes );
 		bool doIsValidPass( PassFlags const & passFlags )const override;
 		void doFillAdditionalBindings( PipelineFlags const & flags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
@@ -187,6 +187,8 @@ namespace castor3d
 		ashes::FencePtr m_transferFence;
 		PickNodeType m_pickNodeType{ PickNodeType::eNone };
 		std::atomic_bool m_picking{ false };
+		std::unordered_map< SubmeshRenderNode const *, UniformBufferOffsetT< PickingUboConfiguration > > m_submeshBuffers;
+		std::unordered_map< BillboardListRenderNode const *, UniformBufferOffsetT< PickingUboConfiguration > > m_billboardBuffers;
 	};
 }
 

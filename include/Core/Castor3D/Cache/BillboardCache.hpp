@@ -35,7 +35,6 @@ namespace castor3d
 			Pass const & pass;
 			UniformBufferOffsetT< ModelUboConfiguration > modelUbo;
 			UniformBufferOffsetT< BillboardUboConfiguration > billboardUbo;
-			UniformBufferOffsetT< PickingUboConfiguration > pickingUbo;
 			UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesUbo;
 		};
 		using MyObjectCache = ObjectCacheBase< BillboardList, castor::String >;
