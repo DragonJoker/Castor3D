@@ -719,6 +719,7 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API virtual TextureFlags getTexturesMask()const;
+		C3D_API bool isValidPass( Pass const & pass )const;
 
 		C3D_API virtual ShaderFlags getShaderFlags()const
 		{
@@ -1095,6 +1096,7 @@ namespace castor3d
 		 */
 		C3D_API virtual void doFillAdditionalBindings( PipelineFlags const & flags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const = 0;
+		C3D_API virtual bool doIsValidPass( PassFlags const & passFlags )const;
 
 	private:
 		C3D_API std::map< PipelineFlags, RenderPipelineUPtr > & doGetFrontPipelines();
