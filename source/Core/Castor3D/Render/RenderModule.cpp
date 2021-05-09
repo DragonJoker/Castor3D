@@ -128,23 +128,6 @@ namespace castor3d
 		}
 	}
 
-	bool isValidNodeForPass( PassFlags const & passFlags, RenderMode renderMode )
-	{
-		if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) )
-		{
-			if ( checkFlag( passFlags, PassFlag::eAlphaTest ) )
-			{
-				return true;
-			}
-
-			return renderMode == RenderMode::eBoth
-				|| renderMode == RenderMode::eTransparentOnly;
-		}
-
-		return renderMode == RenderMode::eBoth
-			|| renderMode == RenderMode::eOpaqueOnly;
-	}
-
 	FilteredTextureFlags::const_iterator checkFlags( FilteredTextureFlags const & flags, TextureFlag flag )
 	{
 		auto it = std::find_if( flags.begin()

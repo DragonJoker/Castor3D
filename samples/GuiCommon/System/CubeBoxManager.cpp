@@ -78,6 +78,7 @@ namespace GuiCommon
 				material = scene.getEngine()->getMaterialCache().add( matName, scene.getMaterialsType() );
 				auto pass = material->createPass();
 				pass->enableLighting( false );
+				pass->enablePicking( false );
 
 				switch ( scene.getMaterialsType() )
 				{

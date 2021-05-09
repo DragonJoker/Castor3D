@@ -418,6 +418,11 @@ namespace castor3d
 		{
 			updateFlag( PassFlag::eLighting, value );
 		}
+
+		void enablePicking( bool value )
+		{
+			updateFlag( PassFlag::ePickable, value );
+		}
 		/**@}*/
 
 	protected:
