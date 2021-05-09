@@ -199,7 +199,7 @@ namespace castor3d
 		doUpdateFlags( flags );
 		remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
 
-		if ( isValidNodeForPass( flags.passFlags, m_mode )
+		if ( doIsValidPass( flags.passFlags )
 			&& ( !checkFlag( flags.programFlags, ProgramFlag::eBillboards )
 				|| !isShadowMapProgram( flags.programFlags ) ) )
 		{
@@ -246,7 +246,7 @@ namespace castor3d
 		doUpdateFlags( flags );
 		addFlag( flags.programFlags, ProgramFlag::eInvertNormals );
 
-		if ( isValidNodeForPass( flags.passFlags, m_mode )
+		if ( doIsValidPass( flags.passFlags )
 			&& ( !checkFlag( flags.programFlags, ProgramFlag::eBillboards )
 				|| !isShadowMapProgram( flags.programFlags ) ) )
 		{
@@ -558,6 +558,11 @@ namespace castor3d
 	TextureFlags SceneRenderPass::getTexturesMask()const
 	{
 		return TextureFlags{ TextureFlag::eAll };
+	}
+
+	bool SceneRenderPass::isValidPass( Pass const & pass )const
+	{
+		return doIsValidPass( pass.getPassFlags() );
 	}
 
 	namespace
@@ -1361,9 +1366,10 @@ namespace castor3d
 		ashes::VkDescriptorSetLayoutBindingArray addBindings;
 		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( PassUboIdx::eMatrix )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
-				? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
-				: VK_SHADER_STAGE_VERTEX_BIT ) ) );
+			, ( VK_SHADER_STAGE_FRAGMENT_BIT
+				| ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
+					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
+					: VK_SHADER_STAGE_VERTEX_BIT ) ) ) );
 		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( PassUboIdx::eScene )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, ( VK_SHADER_STAGE_FRAGMENT_BIT
@@ -1392,6 +1398,23 @@ namespace castor3d
 	std::map< PipelineFlags, RenderPipelineUPtr > const & SceneRenderPass::doGetBackPipelines()const
 	{
 		return m_backPipelines;
+	}
+
+	bool SceneRenderPass::doIsValidPass( PassFlags const & passFlags )const
+	{
+		if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) )
+		{
+			if ( checkFlag( passFlags, PassFlag::eAlphaTest ) )
+			{
+				return true;
+			}
+
+			return m_mode == RenderMode::eBoth
+				|| m_mode == RenderMode::eTransparentOnly;
+		}
+
+		return m_mode == RenderMode::eBoth
+			|| m_mode == RenderMode::eOpaqueOnly;
 	}
 
 	void SceneRenderPass::doInitialisePipeline( RenderDevice const & device
