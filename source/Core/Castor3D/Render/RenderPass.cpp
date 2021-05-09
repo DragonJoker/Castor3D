@@ -585,13 +585,6 @@ namespace castor3d
 					, layout.getBinding( uint32_t( NodeUboIdx::eTextures ) ) );
 			}
 
-			if ( checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eLighting ) )
-			{
-				descriptorSet.createBinding( layout.getBinding( uint32_t( NodeUboIdx::eLights ) )
-					, node.sceneNode.getScene()->getLightCache().getBuffer()
-					, node.sceneNode.getScene()->getLightCache().getView() );
-			}
-
 			if ( checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eInstanceMult ) )
 			{
 				CU_Require( node.modelInstancesUbo );
@@ -1289,13 +1282,6 @@ namespace castor3d
 	{
 		ashes::VkDescriptorSetLayoutBindingArray uboBindings;
 		uboBindings.emplace_back( getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding( uint32_t( NodeUboIdx::eMaterials ) ) );
-
-		if ( checkFlag( flags.programFlags, ProgramFlag::eLighting ) )
-		{
-			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eLights )
-				, VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		}
 
 		if ( !flags.textures.empty() )
 		{

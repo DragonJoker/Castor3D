@@ -217,6 +217,25 @@ namespace castor3d
 	{
 	}
 
+	void OpaquePass::doFillAdditionalBindings( PipelineFlags const & flags
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
+	{
+	}
+
+	void OpaquePass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
+		, ashes::WriteDescriptorSetArray & descriptorWrites
+		, BillboardListRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
+	{
+	}
+
+	void OpaquePass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
+		, ashes::WriteDescriptorSetArray & descriptorWrites
+		, SubmeshRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
+	{
+	}
+
 	ashes::PipelineColorBlendStateCreateInfo OpaquePass::doCreateBlendState( PipelineFlags const & flags )const
 	{
 		return SceneRenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 5u );
