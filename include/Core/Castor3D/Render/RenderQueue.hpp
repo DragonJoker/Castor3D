@@ -132,8 +132,8 @@ namespace castor3d
 		SceneCullerSignalConnection m_onCullerCompute;
 		RenderMode m_mode;
 		SceneNode const * m_ignoredNode{ nullptr };
-		SceneRenderNodesPtr m_renderNodes;
-		SceneCulledRenderNodesPtr m_culledRenderNodes;
+		SceneRenderNodesUPtr m_renderNodes;
+		SceneCulledRenderNodesUPtr m_culledRenderNodes;
 		ashes::CommandBufferPtr m_commandBuffer;
 		bool m_allChanged{};
 		bool m_culledChanged{};
