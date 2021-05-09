@@ -1,5 +1,6 @@
 #include "Castor3D/Render/ShadowMap/ShadowMapPass.hpp"
 
+#include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
@@ -32,30 +33,8 @@ namespace castor3d
 		{
 			auto index = uint32_t( PassUboIdx::eCount );
 			auto & flags = pipeline.getFlags();
+			descriptorWrites.push_back( scene.getLightCache().getDescriptorWrite( index++ ) );
 			descriptorWrites.push_back( shadowMapUbo.getDescriptorWrite( index++ ) );
-
-			if ( checkFlag( flags.passFlags, PassFlag::eMetallicRoughness )
-				|| checkFlag( flags.passFlags, PassFlag::eSpecularGlossiness ) )
-			{
-				auto & background = *scene.getBackground();
-
-				if ( background.hasIbl() )
-				{
-					auto & ibl = background.getIbl();
-					bindTexture( ibl.getIrradianceTexture()
-						, ibl.getIrradianceSampler()
-						, descriptorWrites
-						, index );
-					bindTexture( ibl.getPrefilteredEnvironmentTexture()
-						, ibl.getPrefilteredEnvironmentSampler()
-						, descriptorWrites
-						, index );
-					bindTexture( ibl.getPrefilteredBrdfTexture()
-						, ibl.getPrefilteredBrdfSampler()
-						, descriptorWrites
-						, index );
-				}
-			}
 		}
 	}
 
@@ -100,23 +79,11 @@ namespace castor3d
 	{
 		auto index = uint32_t( PassUboIdx::eCount );
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
-
-		if ( checkFlag( flags.passFlags, PassFlag::eMetallicRoughness )
-			|| checkFlag( flags.passFlags, PassFlag::eSpecularGlossiness ) )
-		{
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapIrradiance
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapPrefiltered
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
-		}
-
 		m_initialised = true;
 	}
 

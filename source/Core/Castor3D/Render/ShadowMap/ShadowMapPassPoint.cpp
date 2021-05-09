@@ -317,9 +317,6 @@ namespace castor3d
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 			, uint32_t( NodeUboIdx::eMaterials )
 			, RenderPipeline::eBuffers );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
-			, uint32_t( NodeUboIdx::eLights )
-			, RenderPipeline::eBuffers );
 		shader::TextureConfigurations textureConfigs{ writer };
 
 		if ( hasTextures )
@@ -336,6 +333,9 @@ namespace castor3d
 			, hasTextures ) );
 
 		auto index = uint32_t( PassUboIdx::eCount );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
+			, index++
+			, RenderPipeline::eAdditional );
 		UBO_SHADOWMAP( writer
 			, index++
 			, RenderPipeline::eAdditional );
@@ -480,9 +480,6 @@ namespace castor3d
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 			, uint32_t( NodeUboIdx::eMaterials )
 			, RenderPipeline::eBuffers );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
-			, uint32_t( NodeUboIdx::eLights )
-			, RenderPipeline::eBuffers );
 		shader::TextureConfigurations textureConfigs{ writer };
 
 		if ( hasTextures )
@@ -499,6 +496,9 @@ namespace castor3d
 			, hasTextures ) );
 
 		auto index = uint32_t( PassUboIdx::eCount );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
+			, index++
+			, RenderPipeline::eAdditional );
 		UBO_SHADOWMAP( writer
 			, index++
 			, RenderPipeline::eAdditional );
@@ -643,9 +643,6 @@ namespace castor3d
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 			, uint32_t( NodeUboIdx::eMaterials )
 			, RenderPipeline::eBuffers );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
-			, uint32_t( NodeUboIdx::eLights )
-			, RenderPipeline::eBuffers );
 		shader::TextureConfigurations textureConfigs{ writer };
 
 		if ( hasTextures )
@@ -662,6 +659,9 @@ namespace castor3d
 			, hasTextures ) );
 
 		auto index = uint32_t( PassUboIdx::eCount );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
+			, index++
+			, RenderPipeline::eAdditional );
 		UBO_SHADOWMAP( writer
 			, index++
 			, RenderPipeline::eAdditional );
