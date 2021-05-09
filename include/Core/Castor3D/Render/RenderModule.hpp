@@ -83,7 +83,6 @@ namespace castor3d
 		: uint32_t
 	{
 		eMaterials,
-		eLights,
 		eTextures,
 		eModel,
 		eBillboard,

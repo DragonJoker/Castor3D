@@ -241,9 +241,6 @@ namespace castor3d
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 			, uint32_t( NodeUboIdx::eMaterials )
 			, RenderPipeline::eBuffers );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
-			, uint32_t( NodeUboIdx::eLights )
-			, RenderPipeline::eBuffers );
 		shader::TextureConfigurations textureConfigs{ writer };
 
 		if ( hasTextures )
@@ -270,6 +267,9 @@ namespace castor3d
 			, uint32_t( PassUboIdx::eScene )
 			, RenderPipeline::eAdditional );
 		auto index = uint32_t( PassUboIdx::eCount );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
+			, index++
+			, RenderPipeline::eAdditional );
 		auto c3d_mapEnvironment( writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment"
 			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? index++ : 0u
@@ -491,9 +491,6 @@ namespace castor3d
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 			, uint32_t( NodeUboIdx::eMaterials )
 			, RenderPipeline::eBuffers );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
-			, uint32_t( NodeUboIdx::eLights )
-			, RenderPipeline::eBuffers );
 		shader::TextureConfigurations textureConfigs{ writer };
 
 		if ( hasTextures )
@@ -520,6 +517,9 @@ namespace castor3d
 			, uint32_t( PassUboIdx::eScene )
 			, RenderPipeline::eAdditional );
 		auto index = uint32_t( PassUboIdx::eCount );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
+			, index++
+			, RenderPipeline::eAdditional );
 		auto c3d_mapEnvironment( writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment"
 			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? index++ : 0u
@@ -824,9 +824,6 @@ namespace castor3d
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 			, uint32_t( NodeUboIdx::eMaterials )
 			, RenderPipeline::eBuffers );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
-			, uint32_t( NodeUboIdx::eLights )
-			, RenderPipeline::eBuffers );
 		shader::TextureConfigurations textureConfigs{ writer };
 
 		if ( hasTextures )
@@ -853,6 +850,9 @@ namespace castor3d
 			, uint32_t( PassUboIdx::eScene )
 			, RenderPipeline::eAdditional );
 		auto index = uint32_t( PassUboIdx::eCount );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
+			, index++
+			, RenderPipeline::eAdditional );
 		auto c3d_mapEnvironment( writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment"
 			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? index++ : 0u

@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
+#include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/ShaderCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -264,6 +265,9 @@ namespace castor3d
 	{
 		auto index = uint32_t( PassUboIdx::eCount );
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
@@ -318,14 +322,16 @@ namespace castor3d
 		}
 
 		void fillAdditionalDescriptor( RenderPipeline const & pipeline
+			, Scene const & scene
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps
-			, VoxelizerUbo const & voxlizerUbo
+			, VoxelizerUbo const & voxelizerUbo
 			, ashes::Buffer< Voxel > const & voxels )
 		{
 			auto index = uint32_t( PassUboIdx::eCount );
 			auto & flags = pipeline.getFlags();
-			descriptorWrites.push_back( voxlizerUbo.getDescriptorWrite( index++ ) );
+			descriptorWrites.push_back( scene.getLightCache().getDescriptorWrite( index++ ) );
+			descriptorWrites.push_back( voxelizerUbo.getDescriptorWrite( index++ ) );
 			descriptorWrites.push_back( getDescriptorWrite( voxels, index++ ) );
 			bindShadowMaps( flags
 				, shadowMaps
@@ -340,6 +346,7 @@ namespace castor3d
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		fillAdditionalDescriptor( pipeline
+			, m_scene
 			, descriptorWrites
 			, shadowMaps
 			, m_voxelizerUbo
@@ -352,6 +359,7 @@ namespace castor3d
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		fillAdditionalDescriptor( pipeline
+			, m_scene
 			, descriptorWrites
 			, shadowMaps
 			, m_voxelizerUbo
@@ -497,7 +505,7 @@ namespace castor3d
 		writer.outputLayout( ast::stmt::OutputLayout::eTriangleStrip, 3u );
 
 		UBO_VOXELIZER( writer
-			, uint32_t( PassUboIdx::eCount )
+			, uint32_t( PassUboIdx::eCount ) + 1u
 			, RenderPipeline::eAdditional
 			, true );
 
@@ -602,9 +610,6 @@ namespace castor3d
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 			, uint32_t( NodeUboIdx::eMaterials )
 			, RenderPipeline::eBuffers );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
-			, uint32_t( NodeUboIdx::eLights )
-			, RenderPipeline::eBuffers );
 		shader::TextureConfigurations textureConfigs{ writer };
 
 		if ( hasTextures )
@@ -628,6 +633,9 @@ namespace castor3d
 			, uint32_t( PassUboIdx::eScene )
 			, RenderPipeline::eAdditional );
 		auto addIndex = uint32_t( PassUboIdx::eCount );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
+			, addIndex++
+			, RenderPipeline::eAdditional );
 		UBO_VOXELIZER( writer
 			, addIndex++
 			, RenderPipeline::eAdditional
@@ -760,9 +768,6 @@ namespace castor3d
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 			, uint32_t( NodeUboIdx::eMaterials )
 			, RenderPipeline::eBuffers );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
-			, uint32_t( NodeUboIdx::eLights )
-			, RenderPipeline::eBuffers );
 		shader::TextureConfigurations textureConfigs{ writer };
 
 		if ( hasTextures )
@@ -786,6 +791,9 @@ namespace castor3d
 			, uint32_t( PassUboIdx::eScene )
 			, RenderPipeline::eAdditional );
 		auto addIndex = uint32_t( PassUboIdx::eCount );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
+			, addIndex++
+			, RenderPipeline::eAdditional );
 		UBO_VOXELIZER( writer
 			, addIndex++
 			, RenderPipeline::eAdditional
@@ -912,9 +920,6 @@ namespace castor3d
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 			, uint32_t( NodeUboIdx::eMaterials )
 			, RenderPipeline::eBuffers );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
-			, uint32_t( NodeUboIdx::eLights )
-			, RenderPipeline::eBuffers );
 		shader::TextureConfigurations textureConfigs{ writer };
 
 		if ( hasTextures )
@@ -938,6 +943,9 @@ namespace castor3d
 			, uint32_t( PassUboIdx::eScene )
 			, RenderPipeline::eAdditional );
 		auto addIndex = uint32_t( PassUboIdx::eCount );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
+			, addIndex++
+			, RenderPipeline::eAdditional );
 		UBO_VOXELIZER( writer
 			, addIndex++
 			, RenderPipeline::eAdditional
