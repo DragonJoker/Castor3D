@@ -13,7 +13,6 @@ namespace castor3d
 	{
 		C3D_API StaticRenderNode( PassRenderNode passNode
 			, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
-			, UniformBufferOffsetT< PickingUboConfiguration > pickingBuffer
 			, UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesBuffer
 			, GeometryBuffers const & buffers
 			, SceneNode & sceneNode

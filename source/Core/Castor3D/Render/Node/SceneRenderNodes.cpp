@@ -20,59 +20,41 @@
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
 
-using namespace castor;
+CU_ImplementCUSmartPtr( castor3d, SceneRenderNodes )
 
 using ashes::operator==;
 using ashes::operator!=;
-
-//*************************************************************************************************
-
-namespace castor
-{
-	void Deleter< castor3d::SceneRenderNodes >::operator()( castor3d::SceneRenderNodes * ptr )noexcept
-	{
-		delete ptr;
-	}
-}
-
-//*************************************************************************************************
 
 namespace castor3d
 {
 	namespace
 	{
-		template< typename NodeType, typename MapType, typename CulledType >
+		template< typename NodeT >
 		void doAddRenderNode( RenderPipeline & pipeline
-			, NodeType && node
-			, CulledType const & culled
-			, MapType & nodes )
+			, NodeT node
+			, NodeCulledT< NodeT > const & culled
+			, NodeByPipelineMapT< NodeT > & nodes )
 		{
-			using ObjectRenderNodesArray = typename MapType::mapped_type;
-			ObjectRenderNodesArray tmp;
-			auto itPipeline = nodes.emplace( &pipeline, std::move( tmp ) ).first;
-			itPipeline->second.emplace( &culled, std::move( node ) );
+			auto & pipelineMap = nodes.emplace( &pipeline, NodeMapT< NodeT >{} ).first->second;
+			pipelineMap.emplace( &culled, std::move( node ) );
 		}
 
-		template< typename NodeType, typename MapType, typename CulledType >
-		void doAddRenderNode( Pass & pass
+		template< typename NodeT >
+		void doAddInstantiatedRenderNode( Pass & pass
 			, RenderPipeline & pipeline
-			, NodeType && node
+			, NodeT node
 			, Submesh & object
-			, CulledType const & culled
-			, MapType & nodes )
+			, NodeCulledT< NodeT > const & culled
+			, ObjectNodesByPipelineMapT< NodeT > & nodes )
 		{
-			using ObjectRenderNodesByPipelineMap = typename MapType::mapped_type;
-			using ObjectRenderNodesByPassMap = typename ObjectRenderNodesByPipelineMap::mapped_type;
-			using ObjectRenderNodesArray = typename ObjectRenderNodesByPassMap::mapped_type;
-
-			auto itPipeline = nodes.emplace( &pipeline, ObjectRenderNodesByPipelineMap{} ).first;
-			auto itPass = itPipeline->second.emplace( &pass, ObjectRenderNodesByPassMap{} ).first;
-			auto itObject = itPass->second.emplace( &object, ObjectRenderNodesArray{} ).first;
-			itObject->second.emplace( &culled, std::move( node ) );
+			auto & pipelineMap = nodes.emplace( &pipeline, ObjectNodesByPassMapT< NodeT >{} ).first->second;
+			auto & passMap = pipelineMap.emplace( &pass, ObjectNodesMapT< NodeT >{} ).first->second;
+			auto & objectMap = passMap.emplace( &object, NodeMapT< NodeT >{} ).first->second;
+			objectMap.emplace( &culled, std::move( node ) );
 		}
 
 		AnimatedObjectSPtr doFindAnimatedObject( Scene const & scene
-			, String const & name )
+			, castor::String const & name )
 		{
 			AnimatedObjectSPtr result;
 			auto & cache = scene.getAnimatedObjectGroupCache();
@@ -95,17 +77,16 @@ namespace castor3d
 			return result;
 		}
 
-		template< typename CreatorFunc
-			, typename NodesType
-			, typename CulledType
-			, typename ... Params >
+		template< typename ContT
+			, typename CulledT
+			, typename CreatorT >
 		void doAddNode( SceneRenderPass & renderPass
 			, PipelineFlags const & flags
 			, Pass & pass
-			, NodesType & nodes
+			, ContT & nodes
 			, VkPrimitiveTopology topology
-			, CulledType const & culled
-			, CreatorFunc creator )
+			, CulledT const & culled
+			, CreatorT creator )
 		{
 			if ( pass.isTwoSided()
 				|| renderPass.forceTwoSided()
@@ -153,7 +134,7 @@ namespace castor3d
 
 					if ( pipeline )
 					{
-						doAddRenderNode( pass
+						doAddInstantiatedRenderNode( pass
 							, *pipeline
 							, renderPass.createSkinningNode( pass, *pipeline, submesh, primitive, skeleton )
 							, submesh
@@ -166,7 +147,7 @@ namespace castor3d
 
 				if ( pipeline )
 				{
-					doAddRenderNode( pass
+					doAddInstantiatedRenderNode( pass
 						, *pipeline
 						, renderPass.createSkinningNode( pass, *pipeline, submesh, primitive, skeleton )
 						, submesh
@@ -237,10 +218,9 @@ namespace castor3d
 
 					if ( pipeline )
 					{
-						auto node = renderPass.createStaticNode( pass, *pipeline, submesh, primitive );
-						doAddRenderNode( pass
+						doAddInstantiatedRenderNode( pass
 							, *pipeline
-							, node
+							, renderPass.createStaticNode( pass, *pipeline, submesh, primitive )
 							, submesh
 							, culled
 							, instanced.frontCulled );
@@ -251,10 +231,9 @@ namespace castor3d
 
 				if ( pipeline )
 				{
-					auto node = renderPass.createStaticNode( pass, *pipeline, submesh, primitive );
-					doAddRenderNode( pass
+					doAddInstantiatedRenderNode( pass
 						, *pipeline
-						, node
+						, renderPass.createStaticNode( pass, *pipeline, submesh, primitive )
 						, submesh
 						, culled
 						, instanced.backCulled );
@@ -280,7 +259,6 @@ namespace castor3d
 
 		SceneRenderNodes::AnimatedObjects doAdjustFlags( RenderSystem const & renderSystem
 			, ProgramFlags & programFlags
-			, PassFlags const & passFlags
 			, SceneFlags const & sceneFlags
 			, Scene const & scene
 			, Pass const & pass
@@ -359,7 +337,6 @@ namespace castor3d
 						auto textures = pass->getTexturesMask();
 						auto animated = doAdjustFlags( *renderPass.getEngine()->getRenderSystem()
 							, programFlags
-							, passFlags
 							, sceneFlags
 							, scene
 							, *pass
@@ -451,52 +428,52 @@ namespace castor3d
 
 		//*****************************************************************************************
 
-		template< typename MapType >
+		template< typename NodeT >
 		void doInitialiseNodes( SceneRenderPass & renderPass
-			, MapType & pipelineNodes
+			, NodeByPipelineMapT< NodeT > & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )
 		{
-			for ( auto & pipelineNode : pipelineNodes )
+			for ( auto & pipelineNodes : nodes )
 			{
-				RenderPipeline & pipeline = *pipelineNode.first;
-				pipeline.createDescriptorPools( uint32_t( pipelineNode.second.size() ) );
+				RenderPipeline & pipeline = *pipelineNodes.first;
+				pipeline.createDescriptorPools( uint32_t( pipelineNodes.second.size() ) );
 
-				for ( auto & node : pipelineNode.second )
+				for ( auto & culledNode : pipelineNodes.second )
 				{
+					NodeT & node = culledNode.second;
 					renderPass.initialiseUboDescriptor( pipeline
 						, pipeline.getDescriptorPool( RenderPipeline::eBuffers )
-						, node.second );
-					Pass & pass = node.second.passNode.pass;
+						, node );
 
 					if ( pipeline.hasDescriptorPool( RenderPipeline::eTextures ) )
 					{
 						renderPass.initialiseTextureDescriptor( pipeline
 							, pipeline.getDescriptorPool( RenderPipeline::eTextures )
-							, node.second );
+							, node );
 					}
 
 					if ( pipeline.hasDescriptorPool( RenderPipeline::eAdditional ) )
 					{
 						renderPass.initialiseAdditionalDescriptor( pipeline
 							, pipeline.getDescriptorPool( RenderPipeline::eAdditional )
-							, node.second
+							, node
 							, shadowMaps );
 					}
 				}
 			}
 		}
 
-		template< typename MapType >
+		template< typename NodeT >
 		void doInitialiseInstancedNodes( SceneRenderPass & renderPass
-			, MapType & pipelineNodes
+			, ObjectNodesByPipelineMapT< NodeT > & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )
 		{
-			for ( auto & pipelineNode : pipelineNodes )
+			for ( auto & pipelineNodes : nodes )
 			{
 				uint32_t size = 0u;
-				RenderPipeline & pipeline = *pipelineNode.first;
+				RenderPipeline & pipeline = *pipelineNodes.first;
 
-				for ( auto & passNodes : pipelineNode.second )
+				for ( auto & passNodes : pipelineNodes.second )
 				{
 					size += uint32_t( passNodes.second.size() );
 				}
@@ -504,20 +481,20 @@ namespace castor3d
 				pipeline.createDescriptorPools( size );
 				renderPass.initialiseUboDescriptor( pipeline
 					, pipeline.getDescriptorPool( RenderPipeline::eBuffers )
-					, pipelineNode.second );
+					, pipelineNodes.second );
 
 				if ( pipeline.hasDescriptorPool( RenderPipeline::eTextures ) )
 				{
 					renderPass.initialiseTextureDescriptor( pipeline
 						, pipeline.getDescriptorPool( RenderPipeline::eTextures )
-						, pipelineNode.second );
+						, pipelineNodes.second );
 				}
 
 				if ( pipeline.hasDescriptorPool( RenderPipeline::eAdditional ) )
 				{
 					renderPass.initialiseAdditionalDescriptor( pipeline
 						, pipeline.getDescriptorPool( RenderPipeline::eAdditional )
-						, pipelineNode.second
+						, pipelineNodes.second
 						, shadowMaps );
 				}
 			}
@@ -558,17 +535,13 @@ namespace castor3d
 				doInitialiseNodes( renderPass, skinnedNodes.backCulled, shadowMaps );
 				doInitialiseNodes( renderPass, morphingNodes.frontCulled, shadowMaps );
 				doInitialiseNodes( renderPass, morphingNodes.backCulled, shadowMaps );
+				doInitialiseNodes( renderPass, billboardNodes.frontCulled, shadowMaps );
+				doInitialiseNodes( renderPass, billboardNodes.backCulled, shadowMaps );
 
 				doInitialiseInstancedNodes( renderPass, instancedStaticNodes.frontCulled, shadowMaps );
 				doInitialiseInstancedNodes( renderPass, instancedStaticNodes.backCulled, shadowMaps );
 				doInitialiseInstancedNodes( renderPass, instancedSkinnedNodes.frontCulled, shadowMaps );
 				doInitialiseInstancedNodes( renderPass, instancedSkinnedNodes.backCulled, shadowMaps );
-			} ) );
-		renderPass.getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [&renderPass, this, shadowMaps]( RenderDevice const & device )
-			{
-				doInitialiseNodes( renderPass, billboardNodes.frontCulled, shadowMaps );
-				doInitialiseNodes( renderPass, billboardNodes.backCulled, shadowMaps );
 			} ) );
 	}
 
