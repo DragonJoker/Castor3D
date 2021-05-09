@@ -259,14 +259,14 @@ namespace castor3d
 		m_sceneUbo.cpuUpdate( m_scene, &m_camera );
 	}
 
-	ashes::VkDescriptorSetLayoutBindingArray VoxelizePass::doCreateAdditionalBindings( PipelineFlags const & flags )const
+	void VoxelizePass::doFillAdditionalBindings( PipelineFlags const & flags
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
-		auto index = 0u;
-		ashes::VkDescriptorSetLayoutBindingArray addBindings;
-		addBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+		auto index = uint32_t( PassUboIdx::eCount );
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		addBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
@@ -275,17 +275,15 @@ namespace castor3d
 			if ( checkFlag( flags.sceneFlags, SceneFlag( uint8_t( SceneFlag::eShadowBegin ) << j ) ) )
 			{
 				// Depth
-				addBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 				// Variance
-				addBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 			}
 		}
-
-		return addBindings;
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo VoxelizePass::doCreateDepthStencilState( PipelineFlags const & flags )const
@@ -320,43 +318,41 @@ namespace castor3d
 		}
 
 		void fillAdditionalDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSet & descriptorSet
+			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps
 			, VoxelizerUbo const & voxlizerUbo
 			, ashes::Buffer< Voxel > const & voxels )
 		{
-			uint32_t index = 0u;
+			auto index = uint32_t( PassUboIdx::eCount );
 			auto & flags = pipeline.getFlags();
-			ashes::WriteDescriptorSetArray writes;
-			writes.push_back( voxlizerUbo.getDescriptorWrite( index++ ) );
-			writes.push_back( getDescriptorWrite( voxels, index++ ) );
+			descriptorWrites.push_back( voxlizerUbo.getDescriptorWrite( index++ ) );
+			descriptorWrites.push_back( getDescriptorWrite( voxels, index++ ) );
 			bindShadowMaps( flags
 				, shadowMaps
-				, writes
+				, descriptorWrites
 				, index );
-			descriptorSet.setBindings( writes );
 		}
 	}
 
 	void VoxelizePass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSet & descriptorSet
+		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, BillboardListRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		fillAdditionalDescriptor( pipeline
-			, descriptorSet
+			, descriptorWrites
 			, shadowMaps
 			, m_voxelizerUbo
 			, m_voxels );
 	}
 
 	void VoxelizePass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSet & descriptorSet
+		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, SubmeshRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		fillAdditionalDescriptor( pipeline
-			, descriptorSet
+			, descriptorWrites
 			, shadowMaps
 			, m_voxelizerUbo
 			, m_voxels );
@@ -369,9 +365,6 @@ namespace castor3d
 		bool hasTextures = !flags.textures.empty();
 
 		// Inputs
-		UBO_MATRIX( writer
-			, uint32_t( NodeUboIdx::eMatrix )
-			, RenderPipeline::eBuffers );
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
@@ -383,6 +376,10 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eMorphing )
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
+
+		UBO_MATRIX( writer
+			, uint32_t( PassUboIdx::eMatrix )
+			, RenderPipeline::eAdditional );
 
 		shader::VertexSurface inSurface{ writer
 			, flags.programFlags
@@ -432,18 +429,21 @@ namespace castor3d
 		// Shader inputs
 		auto inPosition = writer.declInput< Vec4 >( "inPosition", 0u );
 		auto center = writer.declInput< Vec3 >( "center", 2u );
-		UBO_MATRIX( writer
-			, uint32_t( NodeUboIdx::eMatrix )
-			, RenderPipeline::eBuffers );
-		UBO_SCENE( writer
-			, uint32_t( NodeUboIdx::eScene )
-			, RenderPipeline::eBuffers );
+
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
 		UBO_BILLBOARD( writer
 			, uint32_t( NodeUboIdx::eBillboard )
 			, RenderPipeline::eBuffers );
+
+		UBO_MATRIX( writer
+			, uint32_t( PassUboIdx::eMatrix )
+			, RenderPipeline::eAdditional );
+		UBO_SCENE( writer
+			, uint32_t( PassUboIdx::eScene )
+			, RenderPipeline::eAdditional );
+
 		auto in = writer.getIn();
 
 		// Outputs
@@ -614,9 +614,6 @@ namespace castor3d
 				, RenderPipeline::eBuffers );
 		}
 
-		UBO_SCENE( writer
-			, uint32_t( NodeUboIdx::eScene )
-			, RenderPipeline::eBuffers );
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
@@ -627,7 +624,10 @@ namespace castor3d
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
 
-		uint32_t addIndex = 0u;
+		UBO_SCENE( writer
+			, uint32_t( PassUboIdx::eScene )
+			, RenderPipeline::eAdditional );
+		auto addIndex = uint32_t( PassUboIdx::eCount );
 		UBO_VOXELIZER( writer
 			, addIndex++
 			, RenderPipeline::eAdditional
@@ -772,9 +772,6 @@ namespace castor3d
 				, RenderPipeline::eBuffers );
 		}
 
-		UBO_SCENE( writer
-			, uint32_t( NodeUboIdx::eScene )
-			, RenderPipeline::eBuffers );
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
@@ -785,7 +782,10 @@ namespace castor3d
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
 
-		uint32_t addIndex = 0u;
+		UBO_SCENE( writer
+			, uint32_t( PassUboIdx::eScene )
+			, RenderPipeline::eAdditional );
+		auto addIndex = uint32_t( PassUboIdx::eCount );
 		UBO_VOXELIZER( writer
 			, addIndex++
 			, RenderPipeline::eAdditional
@@ -924,9 +924,6 @@ namespace castor3d
 				, RenderPipeline::eBuffers );
 		}
 
-		UBO_SCENE( writer
-			, uint32_t( NodeUboIdx::eScene )
-			, RenderPipeline::eBuffers );
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
@@ -937,7 +934,10 @@ namespace castor3d
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
 
-		uint32_t addIndex = 0u;
+		UBO_SCENE( writer
+			, uint32_t( PassUboIdx::eScene )
+			, RenderPipeline::eAdditional );
+		auto addIndex = uint32_t( PassUboIdx::eCount );
 		UBO_VOXELIZER( writer
 			, addIndex++
 			, RenderPipeline::eAdditional
