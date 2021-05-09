@@ -497,7 +497,7 @@ namespace castor3d
 		writer.outputLayout( ast::stmt::OutputLayout::eTriangleStrip, 3u );
 
 		UBO_VOXELIZER( writer
-			, 0u
+			, uint32_t( PassUboIdx::eCount )
 			, RenderPipeline::eAdditional
 			, true );
 
