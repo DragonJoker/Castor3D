@@ -12,7 +12,6 @@ namespace castor3d
 {
 	SkinningRenderNode::SkinningRenderNode( PassRenderNode passNode
 		, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
-		, UniformBufferOffsetT< PickingUboConfiguration > pickingBuffer
 		, UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesBuffer
 		, GeometryBuffers const & buffers
 		, SceneNode & sceneNode
@@ -22,7 +21,6 @@ namespace castor3d
 		, UniformBufferOffsetT< SkinningUboConfiguration > skinningUbo )
 		: SubmeshRenderNode{ std::move( passNode )
 			, modelBuffer
-			, pickingBuffer
 			, modelInstancesBuffer
 			, buffers
 			, sceneNode

@@ -4,12 +4,14 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
+#include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
@@ -65,11 +67,12 @@ namespace castor3d
 			};
 		}
 
-		template< typename MapType, typename FuncType >
+		template< typename NodeT, typename FuncT >
 		inline void traverseNodes( PickingPass & pass
-			, MapType & nodes
+			, std::unordered_map< SubmeshRenderNode const *, UniformBufferOffsetT< PickingUboConfiguration > > & ubos
+			, ObjectNodesPtrByPipelineMapT< NodeT > & nodes
 			, PickNodeType type
-			, FuncType function )
+			, FuncT function )
 		{
 			uint32_t count{ 1u };
 
@@ -85,7 +88,10 @@ namespace castor3d
 					{
 						if ( !itSubmeshes.second.empty() )
 						{
-							PickingUbo::update( itSubmeshes.second[0]->pickingUbo.getData()
+							auto renderNode = itSubmeshes.second.front();
+							auto it = ubos.find( renderNode );
+							CU_Require( it != ubos.end() );
+							PickingUbo::update( it->second.getData()
 								, drawIndex
 								, index++ );
 							function( *itPipelines.first
@@ -101,10 +107,11 @@ namespace castor3d
 			}
 		}
 
-		template< typename MapType >
+		template< typename NodeT >
 		inline void updateNonInstanced( PickingPass & pass
+			, std::unordered_map< NodeBaseT< NodeT > const *, UniformBufferOffsetT< PickingUboConfiguration > > & ubos
 			, PickNodeType type
-			, MapType & nodes )
+			, NodePtrByPipelineMapT< NodeT > & nodes )
 		{
 			uint32_t count{ 1u };
 
@@ -116,7 +123,9 @@ namespace castor3d
 
 				for ( auto & renderNode : itPipelines.second )
 				{
-					PickingUbo::update( renderNode->pickingUbo.getData()
+					auto it = ubos.find( renderNode );
+					CU_Require( it != ubos.end() );
+					PickingUbo::update( it->second.getData()
 						, drawIndex
 						, index++ );
 				}
@@ -431,6 +440,19 @@ namespace castor3d
 	PickingPass::~PickingPass()
 	{
 		m_commandBuffer.reset();
+
+		for ( auto & ubo : m_submeshBuffers )
+		{
+			m_device.uboPools->putBuffer( ubo.second );
+		}
+
+		for ( auto & ubo : m_billboardBuffers )
+		{
+			m_device.uboPools->putBuffer( ubo.second );
+		}
+
+		m_submeshBuffers.clear();
+		m_billboardBuffers.clear();
 		m_scenes.clear();
 		m_stagingBuffer.reset();
 		m_frameBuffer.reset();
@@ -662,9 +684,42 @@ namespace castor3d
 		return result;
 	}
 
+	void PickingPass::doUpdate( StaticRenderNodePtrByPipelineMap & nodes )
+	{
+		updateNonInstanced( *this
+			, m_submeshBuffers
+			, PickNodeType::eStatic
+			, nodes );
+	}
+
+	void PickingPass::doUpdate( SkinningRenderNodePtrByPipelineMap & nodes )
+	{
+		updateNonInstanced( *this
+			, m_submeshBuffers
+			, PickNodeType::eSkinning
+			, nodes );
+	}
+
+	void PickingPass::doUpdate( MorphingRenderNodePtrByPipelineMap & nodes )
+	{
+		updateNonInstanced( *this
+			, m_submeshBuffers
+			, PickNodeType::eMorphing
+			, nodes );
+	}
+
+	void PickingPass::doUpdate( BillboardRenderNodePtrByPipelineMap & nodes )
+	{
+		updateNonInstanced( *this
+			, m_billboardBuffers
+			, PickNodeType::eBillboard
+			, nodes );
+	}
+
 	void PickingPass::doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes )
 	{
 		traverseNodes( *this
+			, m_submeshBuffers
 			, nodes
 			, PickNodeType::eInstantiatedStatic
 			, [this]( RenderPipeline & pipeline
@@ -683,24 +738,11 @@ namespace castor3d
 				}
 			} );
 	}
-
-	void PickingPass::doUpdate( StaticRenderNodesPtrByPipelineMap & nodes )
-	{
-		updateNonInstanced( *this
-			, PickNodeType::eStatic
-			, nodes );
-	}
-
-	void PickingPass::doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes )
-	{
-		updateNonInstanced( *this
-			, PickNodeType::eSkinning
-			, nodes );
-	}
 	
 	void PickingPass::doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes )
 	{
 		traverseNodes( *this
+			, m_submeshBuffers
 			, nodes
 			, PickNodeType::eInstantiatedSkinning
 			, [this]( RenderPipeline & pipeline
@@ -722,20 +764,6 @@ namespace castor3d
 			} );
 	}
 
-	void PickingPass::doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes )
-	{
-		updateNonInstanced( *this
-			, PickNodeType::eMorphing
-			, nodes );
-	}
-
-	void PickingPass::doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes )
-	{
-		updateNonInstanced( *this
-			, PickNodeType::eBillboard
-			, nodes );
-	}
-
 	void PickingPass::doFillAdditionalBindings( PipelineFlags const & flags
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
@@ -749,7 +777,14 @@ namespace castor3d
 		, BillboardListRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		descriptorWrites.push_back( node.pickingUbo.getDescriptorWrite( uint32_t( PassUboIdx::eCount ) ) );
+		auto ires = m_billboardBuffers.insert( { &node, {} } );
+
+		if ( ires.second )
+		{
+			ires.first->second = m_device.uboPools->getBuffer< PickingUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+		}
+
+		descriptorWrites.push_back( ires.first->second.getDescriptorWrite( uint32_t( PassUboIdx::eCount ) ) );
 	}
 
 	void PickingPass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
@@ -757,7 +792,14 @@ namespace castor3d
 		, SubmeshRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		descriptorWrites.push_back( node.pickingUbo.getDescriptorWrite( uint32_t( PassUboIdx::eCount ) ) );
+		auto ires = m_submeshBuffers.insert( { &node, {} } );
+
+		if ( ires.second )
+		{
+			ires.first->second = m_device.uboPools->getBuffer< PickingUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+		}
+
+		descriptorWrites.push_back( ires.first->second.getDescriptorWrite( uint32_t( PassUboIdx::eCount ) ) );
 	}
 
 	void PickingPass::doUpdate( RenderQueueArray & CU_UnusedParam( queues ) )

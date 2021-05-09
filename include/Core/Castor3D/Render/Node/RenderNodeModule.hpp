@@ -119,50 +119,9 @@ namespace castor3d
 
 	using SubmeshRenderNode = ObjectRenderNode< Submesh, Geometry >;
 	using BillboardListRenderNode = ObjectRenderNode< BillboardBase, BillboardBase >;
-}
 
-namespace castor
-{
-	/**
-	*\~english
-	*\brief
-	*	Deleter structure.
-	*\remarks
-	*	Specialisation to hide implementation in .cpp (to reduce includes dependencies).
-	*\~french
-	*\brief
-	*	Structure de destruction.
-	*\remarks
-	*	Spécialisation pour cacher l'implémentation dans un .cpp (et réduire les dépendances).
-	*/
-	template<>
-	struct Deleter< castor3d::SceneRenderNodes >
-	{
-		C3D_API void operator()( castor3d::SceneRenderNodes * ptr )noexcept;
-	};
-	/**
-	*\~english
-	*\brief
-	*	Deleter structure.
-	*\remarks
-	*	Specialisation to hide implementation in .cpp (to reduce includes dependencies).
-	*\~french
-	*\brief
-	*	Structure de destruction.
-	*\remarks
-	*	Spécialisation pour cacher l'implémentation dans un .cpp (et réduire les dépendances).
-	*/
-	template<>
-	struct Deleter< castor3d::SceneCulledRenderNodes >
-	{
-		C3D_API void operator()( castor3d::SceneCulledRenderNodes * ptr )noexcept;
-	};
-}
-
-namespace castor3d
-{
-	using SceneRenderNodesPtr = castor::UniquePtr< SceneRenderNodes >;
-	using SceneCulledRenderNodesPtr = castor::UniquePtr< SceneCulledRenderNodes >;
+	CU_DeclareCUSmartPtr( castor3d, SceneRenderNodes, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, SceneCulledRenderNodes, C3D_API );
 
 	//@}
 	//@}
