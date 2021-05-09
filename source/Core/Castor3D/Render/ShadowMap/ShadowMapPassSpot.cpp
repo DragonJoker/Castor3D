@@ -287,7 +287,7 @@ namespace castor3d
 		if ( hasTextures )
 		{
 			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( NodeUboIdx::eTexturesBuffer )
+				, uint32_t( NodeUboIdx::eTextures )
 				, RenderPipeline::eBuffers );
 		}
 
@@ -459,7 +459,7 @@ namespace castor3d
 		if ( hasTextures )
 		{
 			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( NodeUboIdx::eTexturesBuffer )
+				, uint32_t( NodeUboIdx::eTextures )
 				, RenderPipeline::eBuffers );
 		}
 
@@ -631,7 +631,7 @@ namespace castor3d
 		if ( hasTextures )
 		{
 			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( NodeUboIdx::eTexturesBuffer )
+				, uint32_t( NodeUboIdx::eTextures )
 				, RenderPipeline::eBuffers );
 		}
 
