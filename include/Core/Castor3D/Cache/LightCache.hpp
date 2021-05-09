@@ -157,6 +157,7 @@ namespace castor3d
 		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( GpuUpdater & updater );
+		C3D_API ashes::WriteDescriptorSet getDescriptorWrite( uint32_t binding )const;
 		/**
 		 *\~english
 		 *\return		The texture buffer.

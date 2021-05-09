@@ -2,6 +2,7 @@
 
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -212,34 +213,13 @@ namespace castor3d
 		m_sceneUbo.cpuUpdate( m_scene, m_camera );
 	}
 
-	ashes::PipelineDepthStencilStateCreateInfo RenderTechniquePass::doCreateDepthStencilState( PipelineFlags const & flags )const
-	{
-		if ( m_environment )
-		{
-			return ashes::PipelineDepthStencilStateCreateInfo{ 0u
-				, VK_TRUE
-				, m_mode != RenderMode::eTransparentOnly };
-		}
-		else
-		{
-			return ashes::PipelineDepthStencilStateCreateInfo{ 0u
-				, VK_TRUE
-				, VK_FALSE
-				, ( m_mode != RenderMode::eTransparentOnly
-					? VK_COMPARE_OP_EQUAL
-					: VK_COMPARE_OP_LESS_OR_EQUAL ) };
-		}
-	}
-
-	ashes::PipelineColorBlendStateCreateInfo RenderTechniquePass::doCreateBlendState( PipelineFlags const & flags )const
-	{
-		return SceneRenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 1u );
-	}
-
 	void RenderTechniquePass::doFillAdditionalBindings( PipelineFlags const & flags
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 		auto index = uint32_t( PassUboIdx::eCount );
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
 		if ( checkFlag( flags.passFlags, PassFlag::eReflection )
 			|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
@@ -345,6 +325,7 @@ namespace castor3d
 		{
 			auto index = uint32_t( PassUboIdx::eCount );
 			auto & flags = pipeline.getFlags();
+			descriptorWrites.push_back( scene.getLightCache().getDescriptorWrite( index++ ) );
 
 			if ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
@@ -469,6 +450,30 @@ namespace castor3d
 			, m_lpvResult
 			, m_vctFirstBounce
 			, m_vctSecondaryBounce );
+	}
+
+	ashes::PipelineDepthStencilStateCreateInfo RenderTechniquePass::doCreateDepthStencilState( PipelineFlags const & flags )const
+	{
+		if ( m_environment )
+		{
+			return ashes::PipelineDepthStencilStateCreateInfo{ 0u
+				, VK_TRUE
+				, m_mode != RenderMode::eTransparentOnly };
+		}
+		else
+		{
+			return ashes::PipelineDepthStencilStateCreateInfo{ 0u
+				, VK_TRUE
+				, VK_FALSE
+				, ( m_mode != RenderMode::eTransparentOnly
+					? VK_COMPARE_OP_EQUAL
+					: VK_COMPARE_OP_LESS_OR_EQUAL ) };
+		}
+	}
+
+	ashes::PipelineColorBlendStateCreateInfo RenderTechniquePass::doCreateBlendState( PipelineFlags const & flags )const
+	{
+		return SceneRenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 1u );
 	}
 
 	ShaderPtr RenderTechniquePass::doGetVertexShaderSource( PipelineFlags const & flags )const
