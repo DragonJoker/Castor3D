@@ -582,7 +582,7 @@ namespace castor3d
 			if ( !pipeline.getFlags().textures.empty() )
 			{
 				engine.getMaterialCache().getTextureBuffer().createBinding( descriptorSet
-					, layout.getBinding( uint32_t( NodeUboIdx::eTexturesBuffer ) ) );
+					, layout.getBinding( uint32_t( NodeUboIdx::eTextures ) ) );
 			}
 
 			if ( checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eLighting ) )
@@ -1299,10 +1299,7 @@ namespace castor3d
 
 		if ( !flags.textures.empty() )
 		{
-			uboBindings.emplace_back( getEngine()->getMaterialCache().getTextureBuffer().createLayoutBinding( uint32_t( NodeUboIdx::eTexturesBuffer ) ) );
-			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eTexturesConfig )
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			uboBindings.emplace_back( getEngine()->getMaterialCache().getTextureBuffer().createLayoutBinding( uint32_t( NodeUboIdx::eTextures ) ) );
 		}
 
 		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eModel )

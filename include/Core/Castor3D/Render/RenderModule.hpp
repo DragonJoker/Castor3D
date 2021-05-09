@@ -84,8 +84,7 @@ namespace castor3d
 	{
 		eMaterials,
 		eLights,
-		eTexturesBuffer,
-		eTexturesConfig,
+		eTextures,
 		eModel,
 		eBillboard,
 		eSkinning,
