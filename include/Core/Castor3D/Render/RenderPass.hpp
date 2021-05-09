@@ -1085,19 +1085,23 @@ namespace castor3d
 		C3D_API ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const;
 		/**
 		 *\~english
-		 *\brief		Creates the common textures descriptor layout bindings.
-		 *\param[in]	flags	The pipeline flags.
+		 *\brief			Fills the render pass specific descriptor layout bindings.
+		 *\param[in]		flags		The pipeline flags.
+		 *\param[in,out]	bindings	Receives the additional bindings.
 		 *\~french
-		 *\brief		Crée les attaches de layout de descripteurs communs pour les textures.
-		 *\param[in]	flags	Les indicateurs de pipeline.
+		 *\brief			Remplit les attaches de layout de descripteurs spécifiques à une passe de rendu.
+		 *\param[in]		flags		Les indicateurs de pipeline.
+		 *\param[in,out]	bindings	Reçoit les attaches additionnelles.
 		 */
-		C3D_API virtual ashes::VkDescriptorSetLayoutBindingArray doCreateAdditionalBindings( PipelineFlags const & flags )const;
+		C3D_API virtual void doFillAdditionalBindings( PipelineFlags const & flags
+			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const = 0;
 
 	private:
 		C3D_API std::map< PipelineFlags, RenderPipelineUPtr > & doGetFrontPipelines();
 		C3D_API std::map< PipelineFlags, RenderPipelineUPtr > & doGetBackPipelines();
 		C3D_API std::map< PipelineFlags, RenderPipelineUPtr > const & doGetFrontPipelines()const;
 		C3D_API std::map< PipelineFlags, RenderPipelineUPtr > const & doGetBackPipelines()const;
+		C3D_API ashes::VkDescriptorSetLayoutBindingArray doCreateAdditionalBindings( PipelineFlags const & flags )const;
 		C3D_API void doInitialisePipeline( RenderDevice const & device
 			, RenderPipeline & pipeline )const;
 		C3D_API void doPrepareFrontPipeline( ShaderProgramSPtr program
@@ -1139,11 +1143,9 @@ namespace castor3d
 		 *\param[in]		shadowMaps	Les shadow maps.
 		 */
 		C3D_API virtual void doFillAdditionalDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSet & descriptorSet
+			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, BillboardListRenderNode & node
-			, ShadowMapLightTypeArray const & shadowMaps )
-		{
-		}
+			, ShadowMapLightTypeArray const & shadowMaps ) = 0;
 		/**
 		 *\~english
 		 *\brief			Initialises the additional descriptor set of a submesh node.
@@ -1159,11 +1161,9 @@ namespace castor3d
 		 *\param[in]		shadowMaps	Les shadow maps.
 		 */
 		C3D_API virtual void doFillAdditionalDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSet & descriptorSet
+			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, SubmeshRenderNode & node
-			, ShadowMapLightTypeArray const & shadowMaps )
-		{
-		}
+			, ShadowMapLightTypeArray const & shadowMaps ) = 0;
 
 	private:
 		/**

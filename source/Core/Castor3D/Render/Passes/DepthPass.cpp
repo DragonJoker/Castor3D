@@ -205,12 +205,6 @@ namespace castor3d
 			, hasTextures };
 		auto in = writer.getIn();
 
-		UBO_MATRIX( writer
-			, uint32_t( NodeUboIdx::eMatrix )
-			, RenderPipeline::eBuffers );
-		UBO_SCENE( writer
-			, uint32_t( NodeUboIdx::eScene )
-			, RenderPipeline::eBuffers );
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
@@ -222,6 +216,13 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eMorphing )
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
+
+		UBO_MATRIX( writer
+			, uint32_t( PassUboIdx::eMatrix )
+			, RenderPipeline::eAdditional );
+		UBO_SCENE( writer
+			, uint32_t( PassUboIdx::eScene )
+			, RenderPipeline::eAdditional );
 
 		// Outputs
 		shader::OutFragmentSurface outSurface{ writer
