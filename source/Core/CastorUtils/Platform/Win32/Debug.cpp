@@ -133,7 +133,7 @@ namespace castor
 		void initialise()
 		{
 			::SymSetOptions( SYMOPT_UNDNAME | SYMOPT_LOAD_LINES );
-			doGetInitialisationStatus() = ::SymInitialize( doGetProcess(), nullptr, TRUE ) == TRUE;
+			doGetInitialisationStatus() = ::SymInitialize( doGetProcess(), nullptr, FALSE ) == TRUE;
 
 			if ( !doGetInitialisationStatus() )
 			{
