@@ -47,10 +47,9 @@ namespace castor3d
 		enum class OverlayBindingId : uint32_t
 		{
 			eMaterials,
-			eTexturesBuffer,
+			eTextures,
 			eMatrix,
 			eOverlay,
-			eTexturesConfig,
 			eTextMap,
 			eMaps,
 		};
@@ -640,7 +639,7 @@ namespace castor3d
 			, pipeline.descriptorLayout->getBinding( uint32_t( OverlayBindingId::eMaterials ) ) );
 		// Textures buffer
 		getRenderSystem()->getEngine()->getMaterialCache().getTextureBuffer().createBinding( *result
-			, pipeline.descriptorLayout->getBinding( uint32_t( OverlayBindingId::eTexturesBuffer ) ) );
+			, pipeline.descriptorLayout->getBinding( uint32_t( OverlayBindingId::eTextures ) ) );
 		// Matrix UBO
 		m_matrixUbo.createSizedBinding( *result
 			, pipeline.descriptorLayout->getBinding( uint32_t( OverlayBindingId::eMatrix ) ) );
@@ -788,16 +787,13 @@ namespace castor3d
 		ashes::VkDescriptorSetLayoutBindingArray bindings;
 
 		bindings.emplace_back( materials.getPassBuffer().createLayoutBinding( uint32_t( OverlayBindingId::eMaterials ) ) );
-		bindings.emplace_back( materials.getTextureBuffer().createLayoutBinding( uint32_t( OverlayBindingId::eTexturesBuffer ) ) );
+		bindings.emplace_back( materials.getTextureBuffer().createLayoutBinding( uint32_t( OverlayBindingId::eTextures ) ) );
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eMatrix )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_VERTEX_BIT ) );
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eOverlay )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eTexturesConfig )
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
 		auto textures = filterTexturesFlags( pass.getTexturesMask(), TextureFlag::eAlbedo | TextureFlag::eOpacity );
 		auto vertexLayout = ( textures.empty() 
@@ -942,7 +938,7 @@ namespace castor3d
 			if ( hasTexture )
 			{
 				textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-					, uint32_t( OverlayBindingId::eTexturesBuffer )
+					, uint32_t( OverlayBindingId::eTextures )
 					, 0u );
 			}
 
