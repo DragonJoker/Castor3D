@@ -776,6 +776,7 @@ namespace castor3d
 	{
 		auto & target = *getRenderTarget();
 		m_pickingPass = std::make_shared< PickingPass >( m_device
+			, m_size
 			, target.getTechnique()->getMatrixUbo()
 			, target.getCuller() );
 	}
