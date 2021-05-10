@@ -140,9 +140,6 @@ namespace castor3d
 		: public castor::OwnedBy< Engine >
 		, public castor::Named
 	{
-	public:
-		using DistanceSortedNodeMap = std::multimap< double, std::unique_ptr< DistanceRenderNodeBase > >;
-
 	protected:
 		/**
 		 *\~english
@@ -211,101 +208,57 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Prepares the pipeline matching the given flags, for back face culling nodes.
-		 *\param[in]		colourBlendMode	The colour blend mode.
-		 *\param[in]		alphaBlendMode	The alpha blend mode.
-		 *\param[in]		alphaFunc		The alpha test function.
-		 *\param[in,out]	passFlags		A combination of PassFlag.
-		 *\param[in,out]	textures		The textures configuration.
-		 *\param[in,out]	heightMapIndex	The height map index.
-		 *\param[in,out]	programFlags	A combination of ProgramFlag.
-		 *\param[in,out]	sceneFlags		Scene related flags.
-		 *\param[in]		topology		The render topology.
-		 *\param[in]		layouts			The vertex buffers layouts.
+		 *\param[in]		pass				The pass for whic the pipeline is created.
+		 *\param[in,out]	textures			The textures configuration.
+		 *\param[in,out]	programFlags		A combination of ProgramFlag.
+		 *\param[in,out]	sceneFlags			Scene related flags.
+		 *\param[in]		topology			The render topology.
+		 *\param[in]		vertexLayouts		The vertex buffers layouts.
+		 *\param[in]		descriptorLayouts	The render node descriptor set layouts.
 		 *\~french
 		 *\brief			Prépare le pipeline qui correspond aux indicateurs donnés, pour les noeuds en back face culling.
-		 *\param[in]		colourBlendMode	Le mode de mélange de couleurs.
-		 *\param[in]		alphaBlendMode	Le mode de mélange alpha.
-		 *\param[in]		alphaFunc		La fonction de test alpha.
-		 *\param[in,out]	passFlags		Une combinaison de PassFlag.
-		 *\param[in,out]	textures		La configuration des textures.
-		 *\param[in,out]	heightMapIndex	L'indice de la texture contenant de hauteur.
-		 *\param[in,out]	programFlags	Une combinaison de ProgramFlag.
-		 *\param[in,out]	sceneFlags		Les indicateurs relatifs à la scène.
-		 *\param[in]		topology		La topologie de rendu.
-		 *\param[in]		layouts			Les layouts des tampons de sommets.
+		 *\param[in]		pass				La passe pour laquelle le pipeline est créé.
+		 *\param[in,out]	textures			La configuration des textures.
+		 *\param[in,out]	programFlags		Une combinaison de ProgramFlag.
+		 *\param[in,out]	sceneFlags			Les indicateurs relatifs à la scène.
+		 *\param[in]		topology			La topologie de rendu.
+		 *\param[in]		vertexLayouts		Les layouts des tampons de sommets.
+		 *\param[in]		descriptorLayouts	Les layouts des descriptor sets de noeud de rendu.
 		 */
-		C3D_API PipelineFlags prepareBackPipeline( BlendMode colourBlendMode
-			, BlendMode alphaBlendMode
-			, VkCompareOp alphaFunc
-			, VkCompareOp blendAlphaFunc
-			, PassFlags const & passFlags
+		C3D_API PipelineFlags prepareBackPipeline( Pass const & pass
 			, TextureFlagsArray const & textures
-			, uint32_t heightMapIndex
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, VkPrimitiveTopology topology
-			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts );
-		/**
-		 *\~english
-		 *\brief			Prepares the pipeline matching the given flags, for back face culling nodes.
-		 *\param[in,out]	flags	The pipeline flags.
-		 *\param[in]		layouts	The vertex buffers layouts.
-		 *\~french
-		 *\brief			Prépare le pipeline qui correspond aux indicateurs donnés, pour les noeuds en back face culling.
-		 *\param[in,out]	flags	Les indicateurs de pipeline.
-		 *\param[in]		layouts	Les layouts des tampons de sommets.
-		 */
-		C3D_API void prepareBackPipeline( PipelineFlags & flags
-			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts );
+			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+			, ashes::DescriptorSetLayoutCRefArray descriptorLayouts );
 		/**
 		 *\~english
 		 *\brief			Prepares the pipeline matching the given flags, for front face culling nodes.
-		 *\param[in]		colourBlendMode	The colour blend mode.
-		 *\param[in]		alphaBlendMode	The alpha blend mode.
-		 *\param[in]		alphaFunc		The alpha test function.
-		 *\param[in,out]	passFlags		A combination of PassFlag.
-		 *\param[in,out]	textures		The textures configuration.
-		 *\param[in,out]	heightMapIndex	The height map index.
-		 *\param[in,out]	programFlags	A combination of ProgramFlag.
-		 *\param[in,out]	sceneFlags		Scene related flags.
-		 *\param[in]		topology		The render topology.
-		 *\param[in]		layouts			The vertex buffers layouts.
+		 *\param[in]		pass				The pass for whic the pipeline is created.
+		 *\param[in,out]	textures			The textures configuration.
+		 *\param[in,out]	programFlags		A combination of ProgramFlag.
+		 *\param[in,out]	sceneFlags			Scene related flags.
+		 *\param[in]		topology			The render topology.
+		 *\param[in]		vertexLayouts		The vertex buffers layouts.
+		 *\param[in]		descriptorLayouts	The render node descriptor set layouts.
 		 *\~french
 		 *\brief			Prépare le pipeline qui correspond aux indicateurs donnés, pour les noeuds en front face culling.
-		 *\param[in]		colourBlendMode	Le mode de mélange de couleurs.
-		 *\param[in]		alphaBlendMode	Le mode de mélange alpha.
-		 *\param[in]		alphaFunc		La fonction de test alpha.
-		 *\param[in,out]	passFlags		Une combinaison de PassFlag.
-		 *\param[in,out]	textures		La configuration des textures.
-		 *\param[in,out]	heightMapIndex	L'indice de la texture contenant de hauteur.
-		 *\param[in,out]	programFlags	Une combinaison de ProgramFlag.
-		 *\param[in,out]	sceneFlags		Les indicateurs relatifs à la scène.
-		 *\param[in]		topology		La topologie de rendu.
-		 *\param[in]		layouts			Les layouts des tampons de sommets.
+		 *\param[in]		pass				La passe pour laquelle le pipeline est créé.
+		 *\param[in,out]	textures			La configuration des textures.
+		 *\param[in,out]	programFlags		Une combinaison de ProgramFlag.
+		 *\param[in,out]	sceneFlags			Les indicateurs relatifs à la scène.
+		 *\param[in]		topology			La topologie de rendu.
+		 *\param[in]		vertexLayouts		Les layouts des tampons de sommets.
+		 *\param[in]		descriptorLayouts	Les layouts des descriptor sets de noeud de rendu.
 		 */
-		C3D_API PipelineFlags prepareFrontPipeline( BlendMode colourBlendMode
-			, BlendMode alphaBlendMode
-			, VkCompareOp alphaFunc
-			, VkCompareOp blendAlphaFunc
-			, PassFlags const & passFlags
+		C3D_API PipelineFlags prepareFrontPipeline( Pass const & pass
 			, TextureFlagsArray const & textures
-			, uint32_t heightMapIndex
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, VkPrimitiveTopology topology
-			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts );
-		/**
-		 *\~english
-		 *\brief			Prepares the pipeline matching the given flags, for front face culling nodes.
-		 *\param[in,out]	flags	The pipeline flags.
-		 *\param[in]		layouts	The vertex buffers layouts.
-		 *\~french
-		 *\brief			Prépare le pipeline qui correspond aux indicateurs donnés, pour les noeuds en front face culling.
-		 *\param[in,out]	flags	Les indicateurs de pipeline.
-		 *\param[in]		layouts	Les layouts des tampons de sommets.
-		 */
-		C3D_API void prepareFrontPipeline( PipelineFlags & flags
-			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts );
+			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+			, ashes::DescriptorSetLayoutCRefArray descriptorLayouts );
 		/**
 		 *\~english
 		 *\brief		Retrieves the pipeline matching the given flags, for front face culling.
@@ -346,7 +299,7 @@ namespace castor3d
 		 *\param[in]	skeleton	Le squelette animé.
 		 *\return		Le noeud de rendu.
 		 */
-		C3D_API SkinningRenderNode createSkinningNode( Pass & pass
+		C3D_API SubmeshRenderNode * createSkinningNode( Pass & pass
 			, RenderPipeline & pipeline
 			, Submesh & submesh
 			, Geometry & primitive
@@ -369,7 +322,7 @@ namespace castor3d
 		 *\param[in]	mesh		Le maillage animé.
 		 *\return		Le noeud de rendu.
 		 */
-		C3D_API MorphingRenderNode createMorphingNode( Pass & pass
+		C3D_API SubmeshRenderNode * createMorphingNode( Pass & pass
 			, RenderPipeline & pipeline
 			, Submesh & submesh
 			, Geometry & primitive
@@ -390,7 +343,7 @@ namespace castor3d
 		 *\param[in]	primitive	La géométrie.
 		 *\return		Le noeud de rendu.
 		 */
-		C3D_API StaticRenderNode createStaticNode( Pass & pass
+		C3D_API SubmeshRenderNode * createStaticNode( Pass & pass
 			, RenderPipeline & pipeline
 			, Submesh & submesh
 			, Geometry & primitive );
@@ -408,7 +361,7 @@ namespace castor3d
 		 *\param[in]	billboard	Le billboard.
 		 *\return		Le noeud de rendu.
 		 */
-		C3D_API BillboardRenderNode createBillboardNode( Pass & pass
+		C3D_API BillboardRenderNode * createBillboardNode( Pass & pass
 			, RenderPipeline & pipeline
 			, BillboardBase & billboard );
 		/**
@@ -420,174 +373,6 @@ namespace castor3d
 		 *\param[in]	pipeline	Le pipeline de rendu.
 		 */
 		C3D_API void updatePipeline( RenderPipeline & pipeline );
-		/**
-		 *\~english
-		 *\brief		Initialises the UBO descriptor set of a billboard node.
-		 *\param[in]	descriptorPool	The pool.
-		 *\param[in]	node			The node.
-		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs d'UBO pour un noeud de billboard.
-		 *\param[in]	descriptorPool	Le pool.
-		 *\param[in]	node			Le noeud.
-		 */
-		C3D_API void initialiseUboDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSetPool const & descriptorPool
-			, BillboardRenderNode & node );
-		/**
-		 *\~english
-		 *\brief		Initialises the UBO descriptor set of a morphing node.
-		 *\param[in]	descriptorPool	The pool.
-		 *\param[in]	node			The node.
-		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs d'UBO pour un noeud de morphing.
-		 *\param[in]	descriptorPool	Le pool.
-		 *\param[in]	node			Le noeud.
-		 */
-		C3D_API void initialiseUboDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSetPool const & descriptorPool
-			, MorphingRenderNode & node );
-		/**
-		 *\~english
-		 *\brief		Initialises the UBO descriptor set of a skinning node.
-		 *\param[in]	descriptorPool	The pool.
-		 *\param[in]	node			The node.
-		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs d'UBO pour un noeud de skinning.
-		 *\param[in]	descriptorPool	Le pool.
-		 *\param[in]	node			Le noeud.
-		 */
-		C3D_API void initialiseUboDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSetPool const & descriptorPool
-			, SkinningRenderNode & node );
-		/**
-		 *\~english
-		 *\brief		Initialises the UBO descriptor set of a static node.
-		 *\param[in]	descriptorPool	The pool.
-		 *\param[in]	node			The node.
-		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs d'UBO pour un noeud statique.
-		 *\param[in]	descriptorPool	Le pool.
-		 *\param[in]	node			Le noeud.
-		 */
-		C3D_API void initialiseUboDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSetPool const & descriptorPool
-			, StaticRenderNode & node );
-		/**
-		 *\~english
-		 *\brief		Initialises the UBO descriptor set of skining nodes.
-		 *\param[in]	descriptorPool	The pool.
-		 *\param[in]	nodes			The nodes.
-		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs d'UBO pour des noeuds de skining.
-		 *\param[in]	descriptorPool	Le pool.
-		 *\param[in]	nodes			Les noeuds.
-		 */
-		C3D_API void initialiseUboDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSetPool const & descriptorPool
-			, SubmeshSkinninRenderNodesByPassMap & nodes );
-		/**
-		 *\~english
-		 *\brief		Initialises the UBO descriptor set of static nodes.
-		 *\param[in]	descriptorPool	The pool.
-		 *\param[in]	nodes			The nodes.
-		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs d'UBO pour des noeuds statiques.
-		 *\param[in]	descriptorPool	Le pool.
-		 *\param[in]	nodes			Les noeuds.
-		 */
-		C3D_API void initialiseUboDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSetPool const & descriptorPool
-			, SubmeshStaticRenderNodesByPassMap & nodes );
-		/**
-		 *\~english
-		 *\brief		Initialises the textures descriptor set of a billboard node.
-		 *\param[in]	descriptorPool	The pool.
-		 *\param[in]	node			The node.
-		 *\param[in]	shadowMaps		The shadow maps.
-		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs de textures pour un noeud de billboard.
-		 *\param[in]	descriptorPool	Le pool.
-		 *\param[in]	node			Le noeud.
-		 *\param[in]	shadowMaps		Les shadow maps.
-		 */
-		C3D_API void initialiseTextureDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSetPool const & descriptorPool
-			, BillboardRenderNode & node );
-		/**
-		 *\~english
-		 *\brief		Initialises the textures descriptor set of a morphing node.
-		 *\param[in]	descriptorPool	The pool.
-		 *\param[in]	node			The node.
-		 *\param[in]	shadowMaps		The shadow maps.
-		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs de textures pour un noeud de morphing.
-		 *\param[in]	descriptorPool	Le pool.
-		 *\param[in]	node			Le noeud.
-		 *\param[in]	shadowMaps		Les shadow maps.
-		 */
-		C3D_API void initialiseTextureDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSetPool const & descriptorPool
-			, MorphingRenderNode & node );
-		/**
-		 *\~english
-		 *\brief		Initialises the textures descriptor set of a skinning node.
-		 *\param[in]	descriptorPool	The pool.
-		 *\param[in]	node			The node.
-		 *\param[in]	shadowMaps		The shadow maps.
-		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs de textures pour un noeud de skinning.
-		 *\param[in]	descriptorPool	Le pool.
-		 *\param[in]	node			Les noeud.
-		 *\param[in]	shadowMaps		Les shadow maps.
-		 */
-		C3D_API void initialiseTextureDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSetPool const & descriptorPool
-			, SkinningRenderNode & node );
-		/**
-		 *\~english
-		 *\brief		Initialises the textures descriptor set of a static node.
-		 *\param[in]	descriptorPool	The pool.
-		 *\param[in]	node			The node.
-		 *\param[in]	shadowMaps		The shadow maps.
-		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs de textures pour un noeud statique.
-		 *\param[in]	descriptorPool	Le pool.
-		 *\param[in]	node			Le noeud.
-		 *\param[in]	shadowMaps		Les shadow maps.
-		 */
-		C3D_API void initialiseTextureDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSetPool const & descriptorPool
-			, StaticRenderNode & node );
-		/**
-		 *\~english
-		 *\brief		Initialises the textures descriptor set of skinning nodes.
-		 *\param[in]	descriptorPool	The pool.
-		 *\param[in]	nodes			The nodes.
-		 *\param[in]	shadowMaps		The shadow maps.
-		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs de textures pour des noeuds de skinning.
-		 *\param[in]	descriptorPool	Le pool.
-		 *\param[in]	nodes			Les noeuds.
-		 *\param[in]	shadowMaps		Les shadow maps.
-		 */
-		C3D_API void initialiseTextureDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSetPool const & descriptorPool
-			, SubmeshSkinninRenderNodesByPassMap & nodes );
-		/**
-		 *\~english
-		 *\brief		Initialises the textures descriptor set of static nodes.
-		 *\param[in]	descriptorPool	The pool.
-		 *\param[in]	nodes			The nodes.
-		 *\param[in]	shadowMaps		The shadow maps.
-		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs de textures pour des noeuds statiques.
-		 *\param[in]	descriptorPool	Le pool.
-		 *\param[in]	nodes			Les noeuds.
-		 *\param[in]	shadowMaps		Les shadow maps.
-		 */
-		C3D_API void initialiseTextureDescriptor( RenderPipeline const & pipeline
-			, ashes::DescriptorSetPool const & descriptorPool
-			, SubmeshStaticRenderNodesByPassMap & nodes );
 		/**
 		 *\~english
 		 *\brief		Initialises the additional descriptor set of a billboard node.
@@ -604,73 +389,31 @@ namespace castor3d
 			, ShadowMapLightTypeArray const & shadowMaps );
 		/**
 		 *\~english
-		 *\brief		Initialises the additional descriptor set of a morphing node.
+		 *\brief		Initialises the additional descriptor set of a submesh node.
 		 *\param[in]	descriptorPool	The pool.
 		 *\param[in]	node			The node.
 		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs additionnels pour un noeud de morphing.
+		 *\brief		Initialise l'ensemble de descripteurs additionnels pour un noeud de submesh.
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	node			Le noeud.
 		 */
 		C3D_API void initialiseAdditionalDescriptor( RenderPipeline & pipeline
 			, ashes::DescriptorSetPool const & descriptorPool
-			, MorphingRenderNode & node
+			, SubmeshRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps );
 		/**
 		 *\~english
-		 *\brief		Initialises the additional descriptor set of a skinning node.
-		 *\param[in]	descriptorPool	The pool.
-		 *\param[in]	node			The node.
-		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs additionnels pour un noeud de skinning.
-		 *\param[in]	descriptorPool	Le pool.
-		 *\param[in]	node			Le noeud.
-		 */
-		C3D_API void initialiseAdditionalDescriptor( RenderPipeline & pipeline
-			, ashes::DescriptorSetPool const & descriptorPool
-			, SkinningRenderNode & node
-			, ShadowMapLightTypeArray const & shadowMaps );
-		/**
-		 *\~english
-		 *\brief		Initialises the additional descriptor set of a static node.
-		 *\param[in]	descriptorPool	The pool.
-		 *\param[in]	node			The node.
-		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs additionnels pour un noeud statique.
-		 *\param[in]	descriptorPool	Le pool.
-		 *\param[in]	node			Le noeud.
-		 */
-		C3D_API void initialiseAdditionalDescriptor( RenderPipeline & pipeline
-			, ashes::DescriptorSetPool const & descriptorPool
-			, StaticRenderNode & node
-			, ShadowMapLightTypeArray const & shadowMaps );
-		/**
-		 *\~english
-		 *\brief		Initialises the additional descriptor set of skining nodes.
+		 *\brief		Initialises the additional descriptor set of instantiated submesh nodes.
 		 *\param[in]	descriptorPool	The pool.
 		 *\param[in]	nodes			The nodes.
 		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs additionnels pour des noeuds de skining.
+		 *\brief		Initialise l'ensemble de descripteurs additionnels pour des noeuds de submesh instanciés.
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	nodes			Les noeuds.
 		 */
 		C3D_API void initialiseAdditionalDescriptor( RenderPipeline & pipeline
 			, ashes::DescriptorSetPool const & descriptorPool
-			, SubmeshSkinninRenderNodesByPassMap & nodes
-			, ShadowMapLightTypeArray const & shadowMaps );
-		/**
-		 *\~english
-		 *\brief		Initialises the additional descriptor set of static nodes.
-		 *\param[in]	descriptorPool	The pool.
-		 *\param[in]	nodes			The nodes.
-		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs additionnels pour des noeuds statiques.
-		 *\param[in]	descriptorPool	Le pool.
-		 *\param[in]	nodes			Les noeuds.
-		 */
-		C3D_API void initialiseAdditionalDescriptor( RenderPipeline & pipeline
-			, ashes::DescriptorSetPool const & descriptorPool
-			, SubmeshStaticRenderNodesByPassMap & nodes
+			, SubmeshRenderNodesByPassMap & nodes
 			, ShadowMapLightTypeArray const & shadowMaps );
 		/**
 		 *\~english
@@ -802,54 +545,31 @@ namespace castor3d
 		{
 			return m_forceTwoSided;
 		}
+
+		RenderMode getRenderMode()const
+		{
+			return m_mode;
+		}
 		/**@}*/
 
 	protected:
 		/**
 		 *\~english
-		 *\brief		Creates a render node.
-		 *\param[in]	pass		The pass.
-		 *\param[in]	pipeline	The pipeline.
-		 *\return		The render node.
-		 *\~french
-		 *\brief		Crée un noeud de rendu.
-		 *\param[in]	pass		La passe.
-		 *\param[in]	pipeline	Le pipeline.
-		 *\return		Le noeud de rendu.
-		 */
-		C3D_API PassRenderNode doCreatePassRenderNode( Pass & pass
-			, RenderPipeline & pipeline );
-		/**
-		 *\~english
-		 *\brief		Creates a scene render node.
-		 *\param[in]	scene		The scene.
-		 *\param[in]	pipeline	The pipeline.
-		 *\return		The render node.
-		 *\~french
-		 *\brief		Crée un noeud de rendu de scène.
-		 *\param[in]	scene		La scène.
-		 *\param[in]	pipeline	Le pipeline.
-		 *\return		Le noeud de rendu.
-		 */
-		C3D_API SceneRenderNode doCreateSceneRenderNode( Scene & scene
-			, RenderPipeline & pipeline );
-		/**
-		 *\~english
-		 *\brief		Copies the instanced nodes model matrices into given matrix buffer.
-		 *\param[in]	renderNodes		The instanced nodes.
+		 *\brief		Copies the instantiated nodes model matrices into given matrix buffer.
+		 *\param[in]	renderNodes		The instantiated nodes.
 		 *\param[in]	matrixBuffer	The matrix buffer.
 		 *\~french
 		 *\brief		Copie les matrices de noeuds instanciés dans le tampon de matrices donné.
 		 *\param[in]	renderNodes		Les noeuds instanciés.
 		 *\param[in]	matrixBuffer	Le tampon de matrices.
 		 */
-		C3D_API uint32_t doCopyNodesMatrices( StaticRenderNodePtrArray const & renderNodes
+		C3D_API uint32_t doCopyNodesMatrices( SubmeshRenderNodePtrArray const & renderNodes
 			, std::vector< InstantiationData > & matrixBuffer )const;
 		/**
 		 *\~english
-		 *\brief			Copies the instanced nodes model matrices into given matrix buffer.
+		 *\brief			Copies the instantiated nodes model matrices into given matrix buffer.
 		 *\remarks			The nodes which are copied will be registered in the rendered nodes list.
-		 *\param[in]		renderNodes		The instanced nodes.
+		 *\param[in]		renderNodes		The instantiated nodes.
 		 *\param[in]		matrixBuffer	The matrix buffer.
 		 *\param[in, out]	info			Receives the render informations.
 		 *\~french
@@ -859,55 +579,26 @@ namespace castor3d
 		 *\param[in]		matrixBuffer	Le tampon de matrices.
 		 *\param[in,out]	info			Reçoit les informations de rendu.
 		 */
-		C3D_API uint32_t doCopyNodesMatrices( StaticRenderNodePtrArray const & renderNodes
+		C3D_API uint32_t doCopyNodesMatrices( SubmeshRenderNodePtrArray const & renderNodes
 			, std::vector< InstantiationData > & matrixBuffer
 			, RenderInfo & info )const;
 		/**
 		 *\~english
-		 *\brief		Copies the instanced nodes model matrices into given matrix buffer.
-		 *\param[in]	renderNodes		The instanced nodes.
-		 *\param[in]	matrixBuffer	The matrix buffer.
-		 *\~french
-		 *\brief		Copie les matrices de noeuds instanciés dans le tampon de matrices donné.
-		 *\param[in]	renderNodes		Les noeuds instanciés.
-		 *\param[in]	matrixBuffer	Le tampon de matrices.
-		 */
-		C3D_API uint32_t doCopyNodesMatrices( SkinningRenderNodePtrArray const & renderNodes
-			, std::vector< InstantiationData > & matrixBuffer )const;
-		/**
-		 *\~english
-		 *\brief			Copies the instanced nodes model matrices into given matrix buffer.
-		 *\remarks			The nodes which are copied will be registered in the rendered nodes list.
-		 *\param[in]		renderNodes		The instanced nodes.
-		 *\param[in]		matrixBuffer	The matrix buffer.
-		 *\param[in, out]	info			Receives the render informations.
-		 *\~french
-		 *\brief			Copie les matrices de noeuds instanciés dans le tampon de matrices donné.
-		 *\remarks			Les noeuds pour lesquels les matrices sont copiées seront enregistrés dans la liste des noeuds dessinés.
-		 *\param[in]		renderNodes		Les noeuds instanciés.
-		 *\param[in]		matrixBuffer	Le tampon de matrices.
-		 *\param[in,out]	info			Reçoit les informations de rendu.
-		 */
-		C3D_API uint32_t doCopyNodesMatrices( SkinningRenderNodePtrArray const & renderNodes
-			, std::vector< InstantiationData > & matrixBuffer
-			, RenderInfo & info )const;
-		/**
-		 *\~english
-		 *\brief		Copies the instanced skinned nodes model matrices into given matrix buffer.
-		 *\param[in]	renderNodes	The instanced nodes.
+		 *\brief		Copies the instantiated skinned nodes model matrices into given matrix buffer.
+		 *\param[in]	renderNodes	The instantiated nodes.
 		 *\param[in]	bonesBuffer	The bones matrix buffer.
 		 *\~french
 		 *\brief		Copie les matrices de noeuds skinnés instanciés dans le tampon de matrices donné.
 		 *\param[in]	renderNodes	Les noeuds instanciés.
 		 *\param[in]	bonesBuffer	Le tampon de matrices des os.
 		 */
-		C3D_API uint32_t doCopyNodesBones( SkinningRenderNodePtrArray const & renderNodes
+		C3D_API uint32_t doCopyNodesBones( SubmeshRenderNodePtrArray const & renderNodes
 			, ShaderBuffer & bonesBuffer )const;
 		/**
 		 *\~english
-		 *\brief			Copies the instanced skinned nodes model matrices into given matrix buffer.
+		 *\brief			Copies the instantiated skinned nodes model matrices into given matrix buffer.
 		 *\remarks			The nodes which are copied will be registered in the rendered nodes list.
-		 *\param[in]		renderNodes	The instanced nodes.
+		 *\param[in]		renderNodes	The instantiated nodes.
 		 *\param[in]		bonesBuffer	The bones matrix buffer.
 		 *\param[in, out]	info		Receives the render informations.
 		 *\~french
@@ -917,21 +608,21 @@ namespace castor3d
 		 *\param[in]		bonesBuffer	Le tampon de matrices des os.
 		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
-		C3D_API uint32_t doCopyNodesBones( SkinningRenderNodePtrArray const & renderNodes
+		C3D_API uint32_t doCopyNodesBones( SubmeshRenderNodePtrArray const & renderNodes
 			, ShaderBuffer & bonesBuffer
 			, RenderInfo & info )const;
 		/**
 		 *\~english
-		 *\brief		Updates instanced submeshes.
+		 *\brief		Updates instantiated submeshes.
 		 *\param[in]	nodes	The render nodes.
 		 *\~french
 		 *\brief		Met à jour des sous maillages instanciés.
 		 *\param[in]	nodes	Les noeuds de rendu.
 		 */
-		C3D_API void doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes );
+		C3D_API void doUpdate( SubmeshRenderNodesPtrByPipelineMap & nodes );
 		/**
 		 *\~english
-		 *\brief			Updates instanced submeshes.
+		 *\brief			Updates instantiated submeshes.
 		 *\param[in]		nodes	The render nodes.
 		 *\param[in, out]	info	Receives the render informations.
 		 *\~french
@@ -939,20 +630,20 @@ namespace castor3d
 		 *\param[in]		nodes	Les noeuds de rendu.
 		 *\param[in,out]	info	Reçoit les informations de rendu.
 		 */
-		C3D_API void doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes
+		C3D_API void doUpdate( SubmeshRenderNodesPtrByPipelineMap & nodes
 			, RenderInfo & info );
 		/**
 		 *\~english
-		 *\brief		Updates non instanced submeshes.
+		 *\brief		Updates non instantiated submeshes.
 		 *\param[in]	nodes	The render nodes.
 		 *\~french
 		 *\brief		Met à jour des sous maillages non instanciés.
 		 *\param[in]	nodes	Les noeuds de rendu.
 		 */
-		C3D_API void doUpdate( StaticRenderNodePtrByPipelineMap & nodes );
+		C3D_API void doUpdate( SubmeshRenderNodePtrByPipelineMap & nodes );
 		/**
 		 *\~english
-		 *\brief			Updates non instanced submeshes.
+		 *\brief			Updates non instantiated submeshes.
 		 *\param[in]		nodes	The render nodes.
 		 *\param[in, out]	info	Receives the render informations.
 		 *\~french
@@ -960,70 +651,7 @@ namespace castor3d
 		 *\param[in]		nodes	Les noeuds de rendu.
 		 *\param[in,out]	info	Reçoit les informations de rendu.
 		 */
-		C3D_API void doUpdate( StaticRenderNodePtrByPipelineMap & nodes
-			, RenderInfo & info );
-		/**
-		 *\~english
-		 *\brief		Updates non instanced submeshes.
-		 *\param[in]	nodes	The render nodes.
-		 *\~french
-		 *\brief		Met à jour des sous maillages non instanciés.
-		 *\param[in]	nodes	Les noeuds de rendu.
-		 */
-		C3D_API void doUpdate( SkinningRenderNodePtrByPipelineMap & nodes );
-		/**
-		 *\~english
-		 *\brief			Updates non instanced submeshes.
-		 *\param[in]		nodes	The render nodes.
-		 *\param[in, out]	info	Receives the render informations.
-		 *\~french
-		 *\brief			Met à jour des sous maillages non instanciés.
-		 *\param[in]		nodes	Les noeuds de rendu.
-		 *\param[in,out]	info	Reçoit les informations de rendu.
-		 */
-		C3D_API void doUpdate( SkinningRenderNodePtrByPipelineMap & nodes
-			, RenderInfo & info );
-		/**
-		 *\~english
-		 *\brief		Updates instanced submeshes.
-		 *\param[in]	nodes	The render nodes.
-		 *\~french
-		 *\brief		Met à jour des sous maillages instanciés.
-		 *\param[in]	nodes	Les noeuds de rendu.
-		 */
-		C3D_API void doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes );
-		/**
-		 *\~english
-		 *\brief			Updates instanced submeshes.
-		 *\param[in]		nodes	The render nodes.
-		 *\param[in, out]	info	Receives the render informations.
-		 *\~french
-		 *\brief			Met à jour des sous maillages instanciés.
-		 *\param[in]		nodes	Les noeuds de rendu.
-		 *\param[in,out]	info	Reçoit les informations de rendu.
-		 */
-		C3D_API void doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes
-			, RenderInfo & info );
-		/**
-		 *\~english
-		 *\brief		Updates non instanced submeshes.
-		 *\param[in]	nodes	The render nodes.
-		 *\~french
-		 *\brief		Met à jour des sous maillages non instanciés.
-		 *\param[in]	nodes	Les noeuds de rendu.
-		 */
-		C3D_API void doUpdate( MorphingRenderNodePtrByPipelineMap & nodes );
-		/**
-		 *\~english
-		 *\brief			Updates non instanced submeshes.
-		 *\param[in]		nodes	The render nodes.
-		 *\param[in, out]	info	Receives the render informations.
-		 *\~french
-		 *\brief			Met à jour des sous maillages non instanciés.
-		 *\param[in]		nodes	Les noeuds de rendu.
-		 *\param[in,out]	info	Reçoit les informations de rendu.
-		 */
-		C3D_API void doUpdate( MorphingRenderNodePtrByPipelineMap & nodes
+		C3D_API void doUpdate( SubmeshRenderNodePtrByPipelineMap & nodes
 			, RenderInfo & info );
 		/**
 		 *\~english
@@ -1068,24 +696,6 @@ namespace castor3d
 		C3D_API virtual void doUpdateUbos( CpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief		Creates the common UBO descriptor layout bindings.
-		 *\param[in]	flags	The pipeline flags.
-		 *\~french
-		 *\brief		Crée les attaches de layout de descripteurs communs pour les UBO.
-		 *\param[in]	flags	Les indicateurs de pipeline.
-		 */
-		C3D_API ashes::VkDescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const;
-		/**
-		 *\~english
-		 *\brief		Creates the common textures descriptor layout bindings.
-		 *\param[in]	flags	The pipeline flags.
-		 *\~french
-		 *\brief		Crée les attaches de layout de descripteurs communs pour les textures.
-		 *\param[in]	flags	Les indicateurs de pipeline.
-		 */
-		C3D_API ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const;
-		/**
-		 *\~english
 		 *\brief			Fills the render pass specific descriptor layout bindings.
 		 *\param[in]		flags		The pipeline flags.
 		 *\param[in,out]	bindings	Receives the additional bindings.
@@ -1099,19 +709,34 @@ namespace castor3d
 		C3D_API virtual bool doIsValidPass( PassFlags const & passFlags )const;
 
 	private:
-		C3D_API std::map< PipelineFlags, RenderPipelineUPtr > & doGetFrontPipelines();
-		C3D_API std::map< PipelineFlags, RenderPipelineUPtr > & doGetBackPipelines();
-		C3D_API std::map< PipelineFlags, RenderPipelineUPtr > const & doGetFrontPipelines()const;
-		C3D_API std::map< PipelineFlags, RenderPipelineUPtr > const & doGetBackPipelines()const;
-		C3D_API ashes::VkDescriptorSetLayoutBindingArray doCreateAdditionalBindings( PipelineFlags const & flags )const;
-		C3D_API void doInitialisePipeline( RenderDevice const & device
-			, RenderPipeline & pipeline )const;
-		C3D_API void doPrepareFrontPipeline( ShaderProgramSPtr program
-			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts
+		ashes::VkDescriptorSetLayoutBindingArray doCreateAdditionalBindings( PipelineFlags const & flags )const;
+		std::map< PipelineFlags, RenderPipelineUPtr > & doGetFrontPipelines();
+		std::map< PipelineFlags, RenderPipelineUPtr > & doGetBackPipelines();
+		std::map< PipelineFlags, RenderPipelineUPtr > const & doGetFrontPipelines()const;
+		std::map< PipelineFlags, RenderPipelineUPtr > const & doGetBackPipelines()const;
+		void doPrepareBackPipeline( PipelineFlags & flags
+			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+			, ashes::DescriptorSetLayoutCRefArray descriptorLayouts );
+		void doPrepareFrontPipeline( PipelineFlags & flags
+			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+			, ashes::DescriptorSetLayoutCRefArray descriptorLayouts );
+		void doInitialisePipeline( RenderDevice const & device
+			, RenderPipeline & pipeline
+			, ashes::DescriptorSetLayoutCRefArray descriptorLayouts )const;
+		void doPrepareFrontPipeline( ShaderProgramSPtr program
+			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+			, ashes::DescriptorSetLayoutCRefArray descriptorLayouts
 			, PipelineFlags const & flags );
-		C3D_API void doPrepareBackPipeline( ShaderProgramSPtr program
-			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts
+		void doPrepareBackPipeline( ShaderProgramSPtr program
+			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+			, ashes::DescriptorSetLayoutCRefArray descriptorLayouts
 			, PipelineFlags const & flags );
+		SubmeshRenderNode * doCreateSubmeshNode( Pass & pass
+			, RenderPipeline & pipeline
+			, Submesh & submesh
+			, Geometry & primitive
+			, AnimatedMesh * mesh
+			, AnimatedSkeleton * skeleton );
 		/**
 		 *\~english
 		 *\brief		Creates the depth stencil state.
@@ -1146,7 +771,7 @@ namespace castor3d
 		 */
 		C3D_API virtual void doFillAdditionalDescriptor( RenderPipeline const & pipeline
 			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, BillboardListRenderNode & node
+			, BillboardRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps ) = 0;
 		/**
 		 *\~english

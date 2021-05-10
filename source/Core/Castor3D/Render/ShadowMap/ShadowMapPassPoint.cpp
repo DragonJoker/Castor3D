@@ -10,7 +10,7 @@
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
+#include "Castor3D/Render/Node/QueueCulledRenderNodes.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapPoint.hpp"
 #include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
@@ -191,7 +191,7 @@ namespace castor3d
 		m_matrixUbo.cpuUpdate( m_matrices[updater.index], m_projection );
 	}
 
-	void ShadowMapPassPoint::doUpdateNodes( SceneCulledRenderNodes & nodes )
+	void ShadowMapPassPoint::doUpdateNodes( QueueCulledRenderNodes & nodes )
 	{
 		SceneRenderPass::doUpdate( nodes.instancedStaticNodes.backCulled );
 		SceneRenderPass::doUpdate( nodes.staticNodes.backCulled );
@@ -241,7 +241,8 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
 		auto skinningData = SkinningUbo::declare( writer
-			, uint32_t( NodeUboIdx::eSkinning )
+			, uint32_t( NodeUboIdx::eSkinningUbo )
+			, uint32_t( NodeUboIdx::eSkinningSsbo )
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
 		UBO_MORPHING( writer
