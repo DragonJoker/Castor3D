@@ -174,7 +174,7 @@ namespace castor3d
 		using SceneRenderPass::update;
 
 	private:
-		virtual void doUpdateNodes( SceneCulledRenderNodes & nodes
+		virtual void doUpdateNodes( QueueCulledRenderNodes & nodes
 			, castor::Point2f const & jitter
 			, RenderInfo & info );
 		void doUpdateUbos( CpuUpdater & updater )override;
@@ -184,7 +184,7 @@ namespace castor3d
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
 		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
 			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, BillboardListRenderNode & node
+			, BillboardRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
 			, ashes::WriteDescriptorSetArray & descriptorWrites
@@ -208,7 +208,6 @@ namespace castor3d
 	protected:
 		Scene const & m_scene;
 		Camera * m_camera{ nullptr };
-		SceneRenderNode m_sceneNode;
 		bool m_environment{ false };
 		SsaoConfig m_ssaoConfig;
 		LpvGridConfigUbo const * m_lpvConfigUbo;

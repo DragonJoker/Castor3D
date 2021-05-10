@@ -9,7 +9,7 @@
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
-#include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
+#include "Castor3D/Render/Node/QueueCulledRenderNodes.hpp"
 
 using namespace castor;
 
@@ -22,15 +22,14 @@ namespace castor3d
 		, RenderMode mode
 		, SceneNode const * ignored )
 		: OwnedBy< SceneRenderPass >{ renderPass }
-		, m_mode{ mode }
 		, m_ignoredNode{ ignored }
 		, m_culler{ getOwner()->getCuller() }
 		, m_onCullerCompute( m_culler.onCompute.connect( [this]( SceneCuller const & culler )
 			{
 				doOnCullerCompute( culler );
 			} ) )
-		, m_renderNodes{ new SceneRenderNodes( m_culler.getScene() ) }
-		, m_culledRenderNodes{ new SceneCulledRenderNodes( m_culler.getScene() ) }
+		, m_renderNodes{ castor::makeUnique< QueueRenderNodes >( *this ) }
+		, m_culledRenderNodes{ castor::makeUnique < QueueCulledRenderNodes >( *this ) }
 		, m_viewport{ castor::makeChangeTracked< ashes::Optional< VkViewport > >( m_culledChanged, ashes::nullopt ) }
 		, m_scissor{ castor::makeChangeTracked< ashes::Optional< VkRect2D > >( m_culledChanged, ashes::nullopt ) }
 	{
@@ -112,6 +111,11 @@ namespace castor3d
 			: false );
 	}
 
+	RenderMode RenderQueue::getMode()const
+	{
+		return getOwner()->getRenderMode();
+	}
+
 	void RenderQueue::doPrepareCommandBuffer()
 	{
 		auto & culledNodes = getCulledRenderNodes();
@@ -123,13 +127,13 @@ namespace castor3d
 	void RenderQueue::doParseAllRenderNodes( ShadowMapLightTypeArray & shadowMaps )
 	{
 		auto & allNodes = getAllRenderNodes();
-		allNodes.parse( *this, shadowMaps );
+		allNodes.parse( shadowMaps );
 	}
 
 	void RenderQueue::doParseCulledRenderNodes()
 	{
 		auto & culledNodes = getCulledRenderNodes();
-		culledNodes.parse( *this );
+		culledNodes.parse();
 	}
 
 	void RenderQueue::doOnCullerCompute( SceneCuller const & culler )
