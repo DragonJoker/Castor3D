@@ -27,54 +27,22 @@ namespace castor3d
 			return stream;
 		}
 
-		auto doAddModule( VkShaderStageFlagBits stage
+		bool doAddModule( VkShaderStageFlagBits stage
 			, std::string const & name
 			, std::map< VkShaderStageFlagBits, ShaderModule > & modules )
 		{
+			bool added = false;
 			auto it = modules.find( stage );
 
 			if ( it == modules.end() )
 			{
 				it = modules.emplace( stage, ShaderModule{ stage, name } ).first;
+				added = true;
 			}
 
-			return it;
+			return added;
 		}
 	}
-
-	//*************************************************************************************************
-
-	struct VariableApply
-	{
-		template <class T> void operator()( T & p ) const
-		{
-			p->apply();
-		}
-	};
-
-	//*************************************************************************************************
-
-	const String ShaderProgram::Position = cuT( "position" );
-	const String ShaderProgram::Normal = cuT( "normal" );
-	const String ShaderProgram::Tangent = cuT( "tangent" );
-	const String ShaderProgram::Bitangent = cuT( "bitangent" );
-	const String ShaderProgram::Texture = cuT( "texture" );
-	const String ShaderProgram::Colour = cuT( "colour" );
-	const String ShaderProgram::Position2 = cuT( "inPosition2" );
-	const String ShaderProgram::Normal2 = cuT( "inNormal2" );
-	const String ShaderProgram::Tangent2 = cuT( "inTangent2" );
-	const String ShaderProgram::Bitangent2 = cuT( "inBitangent2" );
-	const String ShaderProgram::Texture2 = cuT( "inTexture2" );
-	const String ShaderProgram::Colour2 = cuT( "colour2" );
-	const String ShaderProgram::Text = cuT( "text" );
-	const String ShaderProgram::BoneIds0 = cuT( "inBoneIds0" );
-	const String ShaderProgram::BoneIds1 = cuT( "inBoneIds1" );
-	const String ShaderProgram::Weights0 = cuT( "inWeights0" );
-	const String ShaderProgram::Weights1 = cuT( "inWeights1" );
-	const String ShaderProgram::Transform = cuT( "transform" );
-	const String ShaderProgram::Material = cuT( "material" );
-
-	const String ShaderProgram::Lights = cuT( "c3d_sLights" );
 
 	//*************************************************************************************************
 
@@ -95,33 +63,17 @@ namespace castor3d
 		{
 			auto loadShader = [this, &device]( VkShaderStageFlagBits stage )
 			{
-				static std::map< VkShaderStageFlagBits, std::string > type
+				auto it = m_compiled.find( stage );
+
+				if ( it != m_compiled.end() )
 				{
-					{ VK_SHADER_STAGE_VERTEX_BIT, "Vtx" },
-					{ VK_SHADER_STAGE_GEOMETRY_BIT, "Geo" },
-					{ VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT, "Tsc" },
-					{ VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT, "Tse" },
-					{ VK_SHADER_STAGE_FRAGMENT_BIT, "Pxl" },
-				};
-				auto itModule = m_modules.find( stage );
+					auto & module = it->second;
 
-				if ( itModule != m_modules.end() )
-				{
-					auto & module = itModule->second;
-					auto itFile = m_files.find( stage );
-
-					if ( !itFile->second.empty() )
+					if ( !module.shader.spirv.empty() )
 					{
-						TextFile file{ getFile( stage ), File::OpenMode::eRead };
-						file.copyToString( module.source );
-					}
-
-					if ( module.shader || !module.source.empty() )
-					{
-						auto compiled = compileShader( device, module );
 						m_states.push_back( makeShaderState( *device
-							, module.stage
-							, compiled
+							, stage
+							, module.shader
 							, module.name ) );
 					}
 				}
@@ -153,7 +105,19 @@ namespace castor3d
 	void ShaderProgram::setFile( VkShaderStageFlagBits target, Path const & pathFile )
 	{
 		m_files[target] = pathFile;
-		doAddModule( target, getName(), m_modules );
+		TextFile file{ pathFile, File::OpenMode::eRead };
+		castor::String source;
+		file.copyToString( source );
+		auto added = doAddModule( target, getName(), m_modules );
+
+		if ( added )
+		{
+			auto it = m_modules.find( target );
+			it->second.source = source;
+			m_compiled.emplace( target
+				, CompiledShader{ getName()
+				, getRenderSystem()->compileShader( it->second ) } );
+		}
 	}
 
 	Path ShaderProgram::getFile( VkShaderStageFlagBits target )const
@@ -173,17 +137,31 @@ namespace castor3d
 	void ShaderProgram::setSource( VkShaderStageFlagBits target, String const & source )
 	{
 		m_files[target].clear();
-		auto it = doAddModule( target, getName(), m_modules );
-		it->second.source = source;
-		it->second.shader = nullptr;
+		auto added = doAddModule( target, getName(), m_modules );
+
+		if ( added )
+		{
+			auto it = m_modules.find( target );
+			it->second.source = source;
+			m_compiled.emplace( target
+				, CompiledShader{ getName()
+					, getRenderSystem()->compileShader( it->second ) } );
+		}
 	}
 
 	void ShaderProgram::setSource( VkShaderStageFlagBits target, ShaderPtr shader )
 	{
 		m_files[target].clear();
-		auto it = doAddModule( target, getName(), m_modules );
-		it->second.source.clear();
-		it->second.shader = std::move( shader );
+		auto added = doAddModule( target, getName(), m_modules );
+
+		if ( added )
+		{
+			auto it = m_modules.find( target );
+			it->second.shader = std::move( shader );
+			m_compiled.emplace( target
+				, CompiledShader{ getName()
+					, getRenderSystem()->compileShader( target, getName(), *it->second.shader ) } );
+		}
 	}
 
 	ShaderModule const & ShaderProgram::getSource( VkShaderStageFlagBits target )const
@@ -195,9 +173,9 @@ namespace castor3d
 
 	bool ShaderProgram::hasSource( VkShaderStageFlagBits target )const
 	{
-		auto it = m_modules.find( target );
-		return it != m_modules.end()
-			&& ( !it->second.source.empty() || it->second.shader != nullptr );
+		auto it = m_compiled.find( target );
+		return it != m_compiled.end()
+			&& !it->second.shader.spirv.empty();
 	}
 
 	SpirVShader compileShader( RenderSystem const & renderSystem

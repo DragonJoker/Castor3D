@@ -568,77 +568,94 @@ namespace castor3d
 
 	SpirVShader RenderSystem::compileShader( castor3d::ShaderModule const & module )const
 	{
-		SpirVShader result;
-
 		if ( module.shader )
 		{
-			result.spirv = spirv::serialiseSpirv( *module.shader );
+			return compileShader( module.stage
+				, module.name
+				, *module.shader );
+		}
+
+		return compileShader( module.stage
+			, module.name
+			, module.source );
+	}
+
+	SpirVShader RenderSystem::compileShader( VkShaderStageFlagBits stage
+		, castor::String const & name
+		, ast::Shader const & shader )const
+	{
+		SpirVShader result;
+		result.spirv = spirv::serialiseSpirv( shader );
 
 #if !defined( NDEBUG )
 #	if C3D_HasGLSL
-			std::string glsl = glsl::compileGlsl( *module.shader
-				, ast::SpecialisationInfo{}
-				, glsl::GlslConfig
-				{
-					module.shader->getType(),
-					460,
-					true,
-					false,
-					true,
-					true,
-					true,
-					true,
-				} );
+		std::string glsl = glsl::compileGlsl( shader
+			, ast::SpecialisationInfo{}
+			, glsl::GlslConfig
+			{
+				shader.getType(),
+				460,
+				true,
+				false,
+				true,
+				true,
+				true,
+				true,
+			} );
 #	else
-			std::string glsl;
+		std::string glsl;
 #	endif
 
-			result.text = glsl + "\n" + spirv::writeSpirv( *module.shader );
+		result.text = glsl + "\n" + spirv::writeSpirv( shader );
 
 #	if C3D_HasSPIRVCross && C3D_DebugSpirV && C3D_HasGlslang
-			std::string name = module.name + "_" + ashes::getName( module.stage );
+		std::string name = name + "_" + ashes::getName( stage );
 
-			try
+		try
+		{
+			auto glslFromSpv = compileSpvToGlsl( *getMainRenderDevice()
+				, result.spirv
+				, stage );
+			const_cast< castor3d::ShaderModule & >( module ).source += "\n" + glslFromSpv;
+		}
+		catch ( std::exception & exc )
+		{
+			std::cerr << result.text << std::endl;
+			std::cerr << exc.what() << std::endl;
 			{
-				auto glslFromSpv = compileSpvToGlsl( *getMainRenderDevice()
-					, result.spirv
-					, module.stage );
-				const_cast< castor3d::ShaderModule & >( module ).source += "\n" + glslFromSpv;
+				castor::BinaryFile file{ castor::File::getExecutableDirectory() / ( name + "_sdw.spv" )
+					, castor::File::OpenMode::eWrite };
+				file.writeArray( result.spirv.data()
+					, result.spirv.size() );
 			}
-			catch ( std::exception & exc )
-			{
-				std::cerr << module.source << std::endl;
-				std::cerr << exc.what() << std::endl;
-				{
-					castor::BinaryFile file{ castor::File::getExecutableDirectory() / ( name + "_sdw.spv" )
-						, castor::File::OpenMode::eWrite };
-					file.writeArray( result.spirv.data()
-						, result.spirv.size() );
-				}
 
-				auto ref = castor3d::compileGlslToSpv( *getMainRenderDevice()
-					, module.stage
-					, glsl );
-				{
-					castor::BinaryFile file{ castor::File::getExecutableDirectory() / ( name + "_glslang.spv" )
-						, castor::File::OpenMode::eWrite };
-					file.writeArray( ref.data()
-						, ref.size() );
-				}
+			auto ref = castor3d::compileGlslToSpv( *getMainRenderDevice()
+				, stage
+				, glsl );
+			{
+				castor::BinaryFile file{ castor::File::getExecutableDirectory() / ( name + "_glslang.spv" )
+					, castor::File::OpenMode::eWrite };
+				file.writeArray( ref.data()
+					, ref.size() );
 			}
+		}
 
 #	endif
 #endif
-		}
-		else
-		{
-			CU_Require( !module.source.empty() );
-			result.text = module.source;
-			result.spirv = castor3d::compileGlslToSpv( *getMainRenderDevice()
-				, module.stage
-				, module.source );
-		}
 
+		return result;
+	}
+
+	SpirVShader RenderSystem::compileShader( VkShaderStageFlagBits stage
+		, castor::String const & name
+		, castor::String const & glsl )const
+	{
+		SpirVShader result;
+		CU_Require( !glsl.empty() );
+		result.text = glsl;
+		result.spirv = castor3d::compileGlslToSpv( *getMainRenderDevice()
+			, stage
+			, glsl );
 		return result;
 	}
 

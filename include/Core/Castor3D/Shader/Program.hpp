@@ -28,6 +28,13 @@ namespace castor3d
 		friend class castor::TextWriter< castor3d::ShaderProgram >;
 
 	public:
+		struct CompiledShader
+		{
+			castor::String name;
+			SpirVShader shader;
+		};
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -157,81 +164,10 @@ namespace castor3d
 		}
 		/**@}*/
 
-	public:
-		/**@name Attributes */
-		//@{
-
-		//!\~english	Name of the position attribute.
-		//!\~french		Nom de l'attribut position.
-		C3D_API static const castor::String Position;
-		//!\~english	Name of the normal attribute.
-		//!\~french		Nom de l'attribut normale.
-		C3D_API static const castor::String Normal;
-		//!\~english	Name of the tangent attribute.
-		//!\~french		Nom de l'attribut tangente.
-		C3D_API static const castor::String Tangent;
-		//!\~english	Name of the bitangent attribute.
-		//!\~french		Nom de l'attribut bitangente.
-		C3D_API static const castor::String Bitangent;
-		//!\~english	Name of the texture attribute.
-		//!\~french		Nom du de l'attribut texture.
-		C3D_API static const castor::String Texture;
-		//!\~english	Name of the colour attribute.
-		//!\~french		Nom du de l'attribut couleur.
-		C3D_API static const castor::String Colour;
-		//!\~english	Name of the position attribute for per-vertex animations.
-		//!\~french		Nom de l'attribut position pour les animations par sommet.
-		C3D_API static const castor::String Position2;
-		//!\~english	Name of the normal attribute for per-vertex animations.
-		//!\~french		Nom de l'attribut normale pour les animations par sommet.
-		C3D_API static const castor::String Normal2;
-		//!\~english	Name of the tangent attribute for per-vertex animations.
-		//!\~french		Nom de l'attribut tangente pour les animations par sommet.
-		C3D_API static const castor::String Tangent2;
-		//!\~english	Name of the bitangent attribute for per-vertex animations.
-		//!\~french		Nom de l'attribut bitangente pour les animations par sommet.
-		C3D_API static const castor::String Bitangent2;
-		//!\~english	Name of the texture attribute for per-vertex animations.
-		//!\~french		Nom du de l'attribut texture pour les animations par sommet.
-		C3D_API static const castor::String Texture2;
-		//!\~english	Name of the colour attribute for per-vertex animations.
-		//!\~french		Nom du de l'attribut couleur pour les animations par sommet.
-		C3D_API static const castor::String Colour2;
-		//!\~english	Name of the text overlay texture attribute.
-		//!\~french		Nom du de l'attribut texture pour les incrustations texte.
-		C3D_API static const castor::String Text;
-		//!\~english	Name of the first bones ID attribute.
-		//!\~french		Nom du premier attribut d'ID des bones.
-		C3D_API static const castor::String BoneIds0;
-		//!\~english	Name of the second bones ID attribute.
-		//!\~french		Nom du second attribut d'ID des bones.
-		C3D_API static const castor::String BoneIds1;
-		//!\~english	Name of the first bones weight attribute.
-		//!\~french		Nom du premier attribut de poids des bones.
-		C3D_API static const castor::String Weights0;
-		//!\~english	Name of the second bones weight attribute.
-		//!\~french		Nom du second attribut de poids des bones.
-		C3D_API static const castor::String Weights1;
-		//!\~english	Name of the instance transform attribute.
-		//!\~french		Nom de l'attribut d'instance de transformation.
-		C3D_API static const castor::String Transform;
-		//!\~english	Name of the instance material index attribute.
-		//!\~french		Nom de l'attribut d'instance d'indice de matériau.
-		C3D_API static const castor::String Material;
-
-		//@}
-		/**@name Scene */
-		//@{
-
-		//!\~english	Name of the lights frame variable.
-		//!\~french		Nom de la frame variable contenant les lumières.
-		C3D_API static const castor::String Lights;
-
-		//@}
-
 	protected:
 		std::map< VkShaderStageFlagBits, castor::Path > m_files;
 		std::map< VkShaderStageFlagBits, ShaderModule > m_modules;
+		std::map< VkShaderStageFlagBits, CompiledShader > m_compiled;
 		ashes::PipelineShaderStageCreateInfoArray m_states;
 	};
 
