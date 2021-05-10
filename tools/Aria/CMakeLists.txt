@@ -1,6 +1,9 @@
 project( Aria )
 
+set( CMAKE_MAP_IMPORTED_CONFIG_MINSIZEREL "" Release )
+set( CMAKE_MAP_IMPORTED_CONFIG_RELWITHDEBINFO "" Release )
 find_package( SQLite3 QUIET )
+
 find_package( Boost QUIET COMPONENTS date_time )
 
 if ( SQLite3_FOUND AND Boost_FOUND )
