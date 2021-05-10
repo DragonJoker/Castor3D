@@ -123,25 +123,22 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doUpdateNodes( SceneCulledRenderNodes & nodes );
+		void doUpdateNodes( QueueCulledRenderNodes & nodes );
 		castor::Point4f doFboPick( RenderDevice const & device
 			, castor::Position const & position
 			, Camera const & camera
 			, ashes::CommandBuffer const & commandBuffer );
 		PickNodeType doPick( castor::Point4f const & pixel
-			, SceneCulledRenderNodes & nodes );
-		void doUpdate( StaticRenderNodePtrByPipelineMap & nodes );
-		void doUpdate( SkinningRenderNodePtrByPipelineMap & nodes );
-		void doUpdate( MorphingRenderNodePtrByPipelineMap & nodes );
+			, QueueCulledRenderNodes & nodes );
+		void doUpdate( SubmeshRenderNodePtrByPipelineMap & nodes );
 		void doUpdate( BillboardRenderNodePtrByPipelineMap & nodes );
-		void doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes );
-		void doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes );
+		void doUpdate( SubmeshRenderNodesPtrByPipelineMap & nodes );
 		bool doIsValidPass( PassFlags const & passFlags )const override;
 		void doFillAdditionalBindings( PipelineFlags const & flags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
 		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
 			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, BillboardListRenderNode & node
+			, BillboardRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
 			, ashes::WriteDescriptorSetArray & descriptorWrites
@@ -188,7 +185,7 @@ namespace castor3d
 		PickNodeType m_pickNodeType{ PickNodeType::eNone };
 		std::atomic_bool m_picking{ false };
 		std::unordered_map< SubmeshRenderNode const *, UniformBufferOffsetT< PickingUboConfiguration > > m_submeshBuffers;
-		std::unordered_map< BillboardListRenderNode const *, UniformBufferOffsetT< PickingUboConfiguration > > m_billboardBuffers;
+		std::unordered_map< BillboardRenderNode const *, UniformBufferOffsetT< PickingUboConfiguration > > m_billboardBuffers;
 	};
 }
 

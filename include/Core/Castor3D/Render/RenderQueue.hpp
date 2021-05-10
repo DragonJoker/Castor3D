@@ -6,7 +6,6 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/Node/RenderNodeModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
-#include "Castor3D/Render/Node/RenderNode.hpp"
 
 #include <CastorUtils/Design/GroupChangeTracked.hpp>
 
@@ -92,14 +91,15 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API bool hasNodes()const;
+		C3D_API RenderMode getMode()const;
 
-		SceneRenderNodes & getAllRenderNodes()const
+		QueueRenderNodes & getAllRenderNodes()const
 		{
 			CU_Require( m_renderNodes );
 			return *m_renderNodes;
 		}
 
-		SceneCulledRenderNodes & getCulledRenderNodes()const
+		QueueCulledRenderNodes & getCulledRenderNodes()const
 		{
 			CU_Require( m_culledRenderNodes );
 			return *m_culledRenderNodes;
@@ -110,9 +110,9 @@ namespace castor3d
 			return *m_commandBuffer;
 		}
 
-		RenderMode getMode()const
+		SceneCuller const & getCuller()const
 		{
-			return m_mode;
+			return m_culler;
 		}
 
 		SceneNode const * getIgnoredNode()const
@@ -130,10 +130,9 @@ namespace castor3d
 	private:
 		SceneCuller const & m_culler;
 		SceneCullerSignalConnection m_onCullerCompute;
-		RenderMode m_mode;
 		SceneNode const * m_ignoredNode{ nullptr };
-		SceneRenderNodesUPtr m_renderNodes;
-		SceneCulledRenderNodesUPtr m_culledRenderNodes;
+		QueueRenderNodesUPtr m_renderNodes;
+		QueueCulledRenderNodesUPtr m_culledRenderNodes;
 		ashes::CommandBufferPtr m_commandBuffer;
 		bool m_allChanged{};
 		bool m_culledChanged{};

@@ -107,7 +107,8 @@ namespace castor3d
 		*	La passe de rendu à laquelle ce pipeline est lié.
 		*/
 		C3D_API void initialise( RenderDevice const & device
-			, ashes::RenderPass const & renderPass );
+			, ashes::RenderPass const & renderPass
+			, ashes::DescriptorSetLayoutCRefArray descriptorLayouts );
 		/**
 		*\~english
 		*\brief
@@ -148,10 +149,10 @@ namespace castor3d
 		**/
 		/**@{*/
 		C3D_API void setVertexLayouts( ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts );
-		C3D_API void setDescriptorSetLayouts( std::vector< ashes::DescriptorSetLayoutPtr > layouts );
+		C3D_API void setDescriptorSetLayout( ashes::DescriptorSetLayoutPtr layout );
 		C3D_API void setAdditionalDescriptorSet( SubmeshRenderNode const & node
 			, ashes::DescriptorSetPtr descriptorSet );
-		C3D_API void setAdditionalDescriptorSet( BillboardListRenderNode const & node
+		C3D_API void setAdditionalDescriptorSet( BillboardRenderNode const & node
 			, ashes::DescriptorSetPtr descriptorSet );
 
 		void setVertexLayouts( std::vector< ashes::PipelineVertexInputStateCreateInfo > layouts )
@@ -188,7 +189,7 @@ namespace castor3d
 		**/
 		/**@{*/
 		C3D_API ashes::DescriptorSet const & getAdditionalDescriptorSet( SubmeshRenderNode const & node )const;
-		C3D_API ashes::DescriptorSet const & getAdditionalDescriptorSet( BillboardListRenderNode const & node )const;
+		C3D_API ashes::DescriptorSet const & getAdditionalDescriptorSet( BillboardRenderNode const & node )const;
 
 		PipelineFlags const & getFlags()const
 		{
@@ -212,21 +213,19 @@ namespace castor3d
 			return *m_pipelineLayout;
 		}
 
-		ashes::DescriptorSetLayout const & getDescriptorSetLayout( Descriptor index )const
+		ashes::DescriptorSetLayout const & getDescriptorSetLayout()const
 		{
-			CU_Require( index < m_descriptorLayouts.size() );
-			return *m_descriptorLayouts[index];
+			return *m_descriptorLayout;
 		}
 
-		bool hasDescriptorPool( Descriptor index )const
+		bool hasDescriptorSetLayout()const
 		{
-			return m_descriptorPools[index] != nullptr;
+			return m_descriptorLayout != nullptr;
 		}
 
-		ashes::DescriptorSetPool const & getDescriptorPool( Descriptor index )const
+		ashes::DescriptorSetPool const & getDescriptorPool()const
 		{
-			CU_Require( index < m_descriptorPools.size() );
-			return *m_descriptorPools[index];
+			return *m_descriptorPool;
 		}
 
 		RenderSystem & getRenderSystem()const
@@ -244,15 +243,15 @@ namespace castor3d
 		ShaderProgramSPtr m_program;
 		PipelineFlags m_flags;
 		std::vector< ashes::PipelineVertexInputStateCreateInfo > m_vertexLayouts;
-		std::vector< ashes::DescriptorSetLayoutPtr > m_descriptorLayouts;
-		std::vector< ashes::DescriptorSetPoolPtr > m_descriptorPools;
+		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
+		ashes::DescriptorSetPoolPtr m_descriptorPool;
 		ashes::VkPushConstantRangeArray m_pushConstantRanges;
 		std::unique_ptr< VkViewport > m_viewport;
 		std::unique_ptr< VkRect2D > m_scissor;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
 		ashes::GraphicsPipelinePtr m_pipeline;
 		std::unordered_map< SubmeshRenderNode const *, ashes::DescriptorSetPtr > m_submeshAddDescriptors;
-		std::unordered_map< BillboardListRenderNode const *, ashes::DescriptorSetPtr > m_billboardAddDescriptors;
+		std::unordered_map< BillboardRenderNode const *, ashes::DescriptorSetPtr > m_billboardAddDescriptors;
 	};
 }
 
