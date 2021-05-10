@@ -53,21 +53,6 @@ namespace castor3d
 			, ProgramFlags const & flags );
 		/**
 		 *\~english
-		 *\brief		Creates the descriptor set layout binding for the skinning UBO/SSBO.
-		 *\param[in]	uboBinding	The descriptor set binding point for UBO.
-		 *\param[in]	sboBinding	The descriptor set binding point for SBO.
-		 *\param[in]	flags	The program flags.
-		 *\~french
-		 *\brief		Crée l'attache de layout de descripteur pour l'UBO/SSBO de skinning.
-		 *\param[in]	uboBinding	Le point d'attache du descriptor set for UBO.
-		 *\param[in]	sboBinding	Le point d'attache du descriptor set for SBO.
-		 *\param[in]	flags	Les indicateurs du programme.
-		 */
-		C3D_API static VkDescriptorSetLayoutBinding createLayoutBinding( uint32_t uboBinding
-			, uint32_t sboBinding
-			, ProgramFlags const & flags );
-		/**
-		 *\~english
 		 *\brief		Computes skinning transformation in vertex shader.
 		 *\param[in]	data	The skinning data.
 		 *\param[in]	writer	The shader writer.
