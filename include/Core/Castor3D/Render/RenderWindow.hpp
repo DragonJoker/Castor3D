@@ -100,7 +100,7 @@ namespace castor3d
 			 */
 			bool doInitialise()override
 			{
-				doAddHandler( m_window );
+				doAddHandler( m_window->shared_from_this() );
 				return true;
 			}
 			/**
@@ -108,7 +108,7 @@ namespace castor3d
 			 */
 			void doCleanup()override
 			{
-				doRemoveHandler( m_window );
+				doRemoveHandler( *m_window );
 			}
 
 		private:
