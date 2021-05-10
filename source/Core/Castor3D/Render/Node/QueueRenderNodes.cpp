@@ -350,7 +350,7 @@ namespace castor3d
 							, submesh.getTopology()
 							, submesh.getGeometryBuffers( renderPass.getShaderFlags(), material, instanceMult, textures ).layouts
 							, nodes.getDescriptorSetLayouts( *pass
-								, nullptr
+								, submesh
 								, animated.mesh.get()
 								, animated.skeleton.get() ) );
 						nodes.addRenderNode( flags
@@ -375,7 +375,7 @@ namespace castor3d
 								, submesh.getTopology()
 								, submesh.getGeometryBuffers( renderPass.getShaderFlags(), material, instanceMult, textures ).layouts
 								, nodes.getDescriptorSetLayouts( *pass
-									, nullptr
+									, submesh
 									, animated.mesh.get()
 									, animated.skeleton.get() ) );
 							nodes.addRenderNode( flags
@@ -411,9 +411,7 @@ namespace castor3d
 						, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP
 						, billboard.getGeometryBuffers().layouts
 						, nodes.getDescriptorSetLayouts( *pass
-							, &billboard
-							, nullptr
-							, nullptr ) );
+							, billboard ) );
 
 					nodes.addRenderNode( flags
 						, culledNode
@@ -654,12 +652,19 @@ namespace castor3d
 	}
 
 	ashes::DescriptorSetLayoutCRefArray QueueRenderNodes::getDescriptorSetLayouts( Pass const & pass
-		, BillboardBase const * billboard
+		, BillboardBase const & billboard )
+	{
+		return m_allNodes.getDescriptorSetLayouts( pass
+			, billboard );
+	}
+
+	ashes::DescriptorSetLayoutCRefArray QueueRenderNodes::getDescriptorSetLayouts( Pass const & pass
+		, Submesh const & submesh
 		, AnimatedMesh const * mesh
 		, AnimatedSkeleton const * skeleton )
 	{
 		return m_allNodes.getDescriptorSetLayouts( pass
-			, billboard
+			, submesh
 			, mesh
 			, skeleton );
 	}
