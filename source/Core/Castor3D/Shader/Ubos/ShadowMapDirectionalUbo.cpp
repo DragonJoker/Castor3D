@@ -10,6 +10,7 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
+#include "Castor3D/Shader/Ubos/ModelInstancesUbo.hpp"
 
 namespace castor3d
 {
@@ -56,6 +57,13 @@ namespace castor3d
 				, makeType( writer.getTypesCache() ) );
 		}
 
+		sdw::UInt ShadowMapDirectionalData::getTileIndex( ModelInstancesData const & modelInstances
+			, sdw::InVertex const & in )const
+		{
+			return min( modelInstances.instanceCount - 1_u
+				, modelInstances.instances[in.instanceIndex / 4][in.instanceIndex % 4] );
+		}
+
 		sdw::Vec2 ShadowMapDirectionalData::getTileMin( sdw::UInt const & tileIndex )const
 		{
 			auto & writer = *getWriter();
@@ -81,9 +89,9 @@ namespace castor3d
 			return m_lightProjections[tileIndex] * pos;
 		}
 
-		DirectionalLight ShadowMapDirectionalData::getDirectionalLight( LightingModel const & lighting )const
+		TiledDirectionalLight ShadowMapDirectionalData::getDirectionalLight( LightingModel const & lighting )const
 		{
-			return lighting.getDirectionalLight( getWriter()->cast< sdw::Int >( m_lightIndex ) );
+			return lighting.getTiledDirectionalLight( getWriter()->cast< sdw::Int >( m_lightIndex ) );
 		}
 	}
 

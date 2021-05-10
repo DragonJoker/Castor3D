@@ -1,5 +1,6 @@
 #include "Castor3D/Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/UniformBuffer.hpp"
@@ -253,9 +254,15 @@ namespace castor3d
 
 	void DirectionalLightPass::Program::doBind( Light const & light )
 	{
+#if C3D_UseTiledDirectionalShadowMap
+		auto & data = m_lightPass.m_tiledUbo->getData( 0u );
+		light.bind( &data.base.colourIndex );
+		m_lightPass.m_tiledUbo->upload();
+#else
 		auto & data = m_lightPass.m_ubo->getData( 0u );
 		light.bind( &data.base.colourIndex );
 		m_lightPass.m_ubo->upload();
+#endif
 	}
 
 	//*********************************************************************************************
@@ -276,15 +283,28 @@ namespace castor3d
 				, false )
 			, lpConfig
 			, vctConfig }
+#if C3D_UseTiledDirectionalShadowMap
+		, m_tiledUbo{ makeUniformBuffer< TiledConfig >( device.renderSystem
+			, 1u
+			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "DirectionalLightUbo" ) }
+#else
 		, m_ubo{ makeUniformBuffer< Config >( device.renderSystem
 			, 1u
 			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "SsaoConfigUbo" ) }
+			, "DirectionalLightUbo" ) }
+#endif
 		, m_viewport{ m_engine }
 	{
+#if C3D_UseTiledDirectionalShadowMap
+		m_tiledUbo->initialise( device );
+		m_baseUbo = m_tiledUbo.get();
+#else
 		m_ubo->initialise( device );
 		m_baseUbo = m_ubo.get();
+#endif
 		m_viewport.setOrtho( -1, 1, -1, 1, -1, 1 );
 		log::trace << cuT( "Created " ) << getName() << std::endl;
 	}

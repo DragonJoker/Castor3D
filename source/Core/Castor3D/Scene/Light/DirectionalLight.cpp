@@ -1,5 +1,6 @@
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Viewport.hpp"
@@ -206,6 +207,8 @@ namespace castor3d
 
 	void DirectionalLight::doBind( Point4f * buffer )const
 	{
+#if C3D_UseTiledDirectionalShadowMap
+
 		auto shadowTilesX = float( ShadowMapPassDirectional::TileCountX );
 		auto shadowTilesY = float( ShadowMapPassDirectional::TileCountY );
 		doCopyComponent( m_direction, float( m_cascades.size() ), buffer );
@@ -247,5 +250,32 @@ namespace castor3d
 		{
 			doCopyComponent( Matrix4x4f{ .0f }, buffer );
 		}
+
+#else
+
+		doCopyComponent( m_direction, float( m_cascades.size() ), buffer );
+		Point4f splitDepths;
+		Point4f splitScales;
+
+		for ( uint32_t i = 0u; i < m_cascades.size(); ++i )
+		{
+			splitDepths[i] = m_cascades[i].splitDepthScale->x;
+			splitScales[i] = m_cascades[i].splitDepthScale->y;
+		}
+
+		doCopyComponent( splitDepths, buffer );
+		doCopyComponent( splitScales, buffer );
+
+		for ( uint32_t i = 0u; i < m_cascades.size(); ++i )
+		{
+			doCopyComponent( m_cascades[i].viewProjMatrix, buffer );
+		}
+
+		for ( auto i = uint32_t( m_cascades.size() ); i < shader::DirectionalMaxCascadesCount; ++i )
+		{
+			doCopyComponent( Matrix4x4f{ .0f }, buffer );
+		}
+
+#endif
 	}
 }

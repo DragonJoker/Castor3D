@@ -29,6 +29,13 @@ namespace castor3d
 				, SceneData const & sceneData
 				, Surface surface
 				, OutputComponents & output )const;
+			C3D_API void compute( TiledDirectionalLight const & light
+				, sdw::Vec3 const & worldEye
+				, sdw::Vec3 const & specular
+				, sdw::Float const & glossiness
+				, sdw::Int const & receivesShadows
+				, Surface surface
+				, OutputComponents & output )const;
 			C3D_API void compute( DirectionalLight const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & specular
@@ -55,6 +62,12 @@ namespace castor3d
 				, sdw::Float const & glossiness
 				, sdw::Int const & receivesShadows
 				, SceneData const & sceneData
+				, Surface surface )const;
+			C3D_API sdw::Vec3 computeDiffuse( TiledDirectionalLight const & light
+				, sdw::Vec3 const & worldEye
+				, sdw::Vec3 const & specular
+				, sdw::Float const & glossiness
+				, sdw::Int const & receivesShadows
 				, Surface surface )const;
 			C3D_API sdw::Vec3 computeDiffuse( DirectionalLight const & light
 				, sdw::Vec3 const & worldEye
@@ -175,6 +188,14 @@ namespace castor3d
 			C3D_API static const castor::String Name;
 			CookTorranceBRDF m_cookTorrance;
 			sdw::Function< sdw::Void
+				, InTiledDirectionalLight
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InFloat
+				, sdw::InInt
+				, InSurface
+				, OutputComponents & > m_computeTiledDirectional;
+			sdw::Function< sdw::Void
 				, InDirectionalLight
 				, sdw::InVec3
 				, sdw::InVec3
@@ -198,6 +219,13 @@ namespace castor3d
 				, sdw::InInt
 				, InSurface
 				, OutputComponents & > m_computeSpot;
+			sdw::Function< sdw::Vec3
+				, InTiledDirectionalLight
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InFloat
+				, sdw::InInt
+				, InSurface > m_computeTiledDirectionalDiffuse;
 			sdw::Function< sdw::Vec3
 				, InDirectionalLight
 				, sdw::InVec3

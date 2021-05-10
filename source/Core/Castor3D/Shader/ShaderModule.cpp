@@ -1,5 +1,6 @@
 #include "Castor3D/Shader/ShaderModule.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Material/Pass/PassModule.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 
@@ -73,10 +74,17 @@ namespace castor3d
 			static constexpr uint32_t SpotShadowMapCount = 10u;
 			static constexpr uint32_t PointShadowMapCount = 6u;
 			static constexpr uint32_t BaseLightComponentsCount = 5u;
-			// DirectionalLight => BaseLightComponentsCount + 30 => BaseLightComponentsCount+ 1(directionCount) + 1(tiles) + 2(splitDepths) + 2(splitScales) + (6 * 4)(transforms)
+#if C3D_UseTiledDirectionalShadowMap
+			// DirectionalLight => BaseLightComponentsCount + 30 => BaseLightComponentsCount + 1(directionCount) + 1(tiles) + 2(splitDepths) + 2(splitScales) + (6 * 4)(transforms)
 			// PointLight => BaseLightComponentsCount + 2
 			// SpotLight => BaseLightComponentsCount + 8
 			static constexpr uint32_t MaxLightComponentsCount = 35u;
+#else
+			// DirectionalLight => BaseLightComponentsCount + 19 => BaseLightComponentsCount + 1(directionCount) + 1(splitDepths) + 1(splitScales) + (4 * 4)(transforms)
+			// PointLight => BaseLightComponentsCount + 2
+			// SpotLight => BaseLightComponentsCount + 8
+			static constexpr uint32_t MaxLightComponentsCount = 24u;
+#endif
 		}
 
 		uint32_t getSpotShadowMapCount()

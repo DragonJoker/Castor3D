@@ -60,6 +60,31 @@ namespace castor3d
 			// Raw values
 			Light m_lightBase;
 			sdw::Vec4 m_directionCount;
+			sdw::Vec4 m_splitDepths;
+			sdw::Vec4 m_splitScales;
+			sdw::Array< sdw::Mat4 > m_transforms;
+			// Specific values
+			sdw::Vec3 m_direction;
+			sdw::UInt m_cascadeCount;
+
+		private:
+			using sdw::StructInstance::getMember;
+			using sdw::StructInstance::getMemberArray;
+		};
+
+		struct TiledDirectionalLight
+			: public sdw::StructInstance
+		{
+			C3D_API TiledDirectionalLight( sdw::ShaderWriter & writer
+				, ast::expr::ExprPtr expr
+				, bool enabled );
+
+			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+
+			// Raw values
+			Light m_lightBase;
+			sdw::Vec4 m_directionCount;
 			sdw::Vec4 m_tiles;
 			sdw::Array< sdw::Vec4 > m_splitDepths;
 			sdw::Array< sdw::Vec4 > m_splitScales;
