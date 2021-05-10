@@ -130,15 +130,27 @@ namespace castor3d
 			sdw::Function< sdw::Float
 				, sdw::InVec4
 				, sdw::InVec2
-				, sdw::InSampledImage2DRgba32
+				, sdw::InSampledImage2DArrayRgba32
 				, sdw::InUInt
 				, sdw::InFloat > m_textureProjCascade;
+			sdw::Function< sdw::Float
+				, sdw::InVec4
+				, sdw::InSampledImage2DArrayRgba32
+				, sdw::InVec2
+				, sdw::InUInt
+				, sdw::InFloat > m_filterPCFCascade;
+			sdw::Function< sdw::Float
+				, sdw::InVec4
+				, sdw::InVec2
+				, sdw::InSampledImage2DRgba32
+				, sdw::InUInt
+				, sdw::InFloat > m_textureProjTile;
 			sdw::Function< sdw::Float
 				, sdw::InVec4
 				, sdw::InSampledImage2DRgba32
 				, sdw::InVec2
 				, sdw::InUInt
-				, sdw::InFloat > m_filterPCFCascade;
+				, sdw::InFloat > m_filterPCFTile;
 			sdw::Function< sdw::Vec4
 				, sdw::InMat4
 				, sdw::InVec3 > m_getLightSpacePosition;

@@ -803,7 +803,11 @@ namespace castor3d
 					{
 					case LightType::eDirectional:
 					{
+#if C3D_UseTiledDirectionalShadowMap
+						auto c3d_light = writer.getVariable< shader::TiledDirectionalLight >( "c3d_light" );
+#else
 						auto c3d_light = writer.getVariable< shader::DirectionalLight >( "c3d_light" );
+#endif
 						auto light = writer.declLocale( "light", c3d_light );
 						lighting->compute( light
 							, eye
@@ -1041,7 +1045,11 @@ namespace castor3d
 					{
 					case LightType::eDirectional:
 					{
+#if C3D_UseTiledDirectionalShadowMap
+						auto c3d_light = writer.getVariable< shader::TiledDirectionalLight >( "c3d_light" );
+#else
 						auto c3d_light = writer.getVariable< shader::DirectionalLight >( "c3d_light" );
+#endif
 						auto light = writer.declLocale( "light", c3d_light );
 #if !C3D_DisableSSSTransmittance
 						IF( writer, !c3d_debugDeferredSSSTransmittance )
@@ -1352,7 +1360,11 @@ namespace castor3d
 					{
 					case LightType::eDirectional:
 					{
+#if C3D_UseTiledDirectionalShadowMap
+						auto c3d_light = writer.getVariable< shader::TiledDirectionalLight >( "c3d_light" );
+#else
 						auto c3d_light = writer.getVariable< shader::DirectionalLight >( "c3d_light" );
+#endif
 						auto light = writer.declLocale( "light", c3d_light );
 						lighting->compute( light
 							, eye

@@ -1,5 +1,6 @@
 #include "Castor3D/Render/ShadowMap/ShadowMapDirectional.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
@@ -9,6 +10,7 @@
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/Culling/FrustumCuller.hpp"
 #include "Castor3D/Render/Culling/InstantiatedFrustumCuller.hpp"
 #include "Castor3D/Render/Passes/GaussianBlur.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapPassDirectional.hpp"
@@ -36,7 +38,8 @@ namespace castor3d
 	{
 		std::vector< ShadowMap::PassData > createPasses( RenderDevice const & device
 			, Scene & scene
-			, ShadowMap & shadowMap )
+			, ShadowMap & shadowMap
+			, uint32_t cascadeCount )
 		{
 			auto & engine = *scene.getEngine();
 			std::vector< ShadowMap::PassData > result;
@@ -48,6 +51,9 @@ namespace castor3d
 			viewport.setOrtho( -w / 2, w / 2, -h / 2, h / 2, -5120.0, 5120.0 );
 			viewport.resize( { width, height } );
 			viewport.update();
+
+#if C3D_UseTiledDirectionalShadowMap
+
 			ShadowMap::PassData passData
 			{
 				std::make_unique< MatrixUbo >( device ),
@@ -68,6 +74,32 @@ namespace castor3d
 				, shadowMap
 				, scene.getDirectionalShadowCascades() );
 			result.emplace_back( std::move( passData ) );
+
+#else
+
+			for ( uint32_t cascade = 0u; cascade < cascadeCount; ++cascade )
+			{
+				ShadowMap::PassData passData
+				{
+					std::make_unique< MatrixUbo >( device ),
+					std::make_shared< Camera >( cuT( "ShadowMapDirectional_" ) + string::toString( cascade + 1, std::locale{ "C" } )
+					, scene
+						, *scene.getCameraRootNode()
+						, viewport
+						, true ),
+					nullptr,
+					nullptr,
+				};
+				passData.culler = std::make_unique< FrustumCuller >( scene, *passData.camera );
+				passData.pass = std::make_shared< ShadowMapPassDirectional >( device
+					, *passData.matrixUbo
+					, *passData.culler
+					, shadowMap
+					, cascade );
+				result.emplace_back( std::move( passData ) );
+			}
+
+#endif
 			return result;
 		}
 	}
@@ -80,14 +112,21 @@ namespace castor3d
 			, ShadowMapResult{ *scene.getEngine()
 				, cuT( "Directional" )
 				, 0u
+#if C3D_UseTiledDirectionalShadowMap
 				, Size{ ShadowMapPassDirectional::TileSize * ShadowMapPassDirectional::TileCountX
 					, ShadowMapPassDirectional::TileSize * ShadowMapPassDirectional::TileCountY }
 				, 1u }
 			, 1u }
+		, m_frameBuffers{ 1u }
+#else
+				, Size{ ShadowMapPassDirectional::TileSize, ShadowMapPassDirectional::TileSize }
+				, scene.getDirectionalShadowCascades() }
+			, 1u }
+		, m_frameBuffers( scene.getDirectionalShadowCascades() )
+#endif
 		, m_cascades{ scene.getDirectionalShadowCascades() }
 	{
-		m_passes = createPasses( device, scene, *this );
-		m_frameBuffers.resize( m_passes.size() );
+		m_passes = createPasses( device, scene, *this, scene.getDirectionalShadowCascades() );
 		log::trace << "Created ShadowMapDirectional" << std::endl;
 	}
 
@@ -108,24 +147,85 @@ namespace castor3d
 
 		auto & directional = *light.getDirectionalLight();
 
+#if C3D_UseTiledDirectionalShadowMap
 		if ( directional.updateShadow( camera )
 			|| m_passes[0u].pass->isDirty() )
 		{
 			m_passes[0u].pass->update( updater );
 		}
+#else
+		if ( directional.updateShadow( camera ) )
+		{
+			for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
+			{
+				auto & culler = m_passes[cascade].pass->getCuller();
+				auto & lightCamera = culler.getCamera();
+				lightCamera.attachTo( *node );
+				lightCamera.setProjection( directional.getProjMatrix( m_cascades - 1u ) );
+				lightCamera.setView( directional.getViewMatrix( m_cascades - 1u ) );
+				lightCamera.updateFrustum();
+
+				updater.index = cascade;
+				m_passes[cascade].pass->update( updater );
+			}
+		}
+#endif
 	}
 
 	void ShadowMapDirectional::update( GpuUpdater & updater )
 	{
-		m_passes[0u].pass->update( updater );
+		for ( uint32_t cascade = 0u; cascade < std::min( m_cascades, uint32_t( m_passes.size() ) ); ++cascade )
+		{
+			updater.index = cascade;
+			m_passes[cascade].pass->update( updater );
+		}
 	}
 
 	void ShadowMapDirectional::doInitialiseFramebuffers( RenderDevice const & device )
 	{
+#if C3D_UseTiledDirectionalShadowMap
 		VkExtent2D const size
 		{
 			ShadowMapPassDirectional::TileSize * ShadowMapPassDirectional::TileCountX,
 			ShadowMapPassDirectional::TileSize * ShadowMapPassDirectional::TileCountY,
+		};
+
+		auto & depth = m_result[SmTexture::eDepth].getTexture()->getDefault();
+		auto & linear = m_result[SmTexture::eNormalLinear].getTexture()->getDefault();
+		auto & variance = m_result[SmTexture::eVariance].getTexture()->getDefault();
+		auto & position = m_result[SmTexture::ePosition].getTexture()->getDefault();
+		auto & flux = m_result[SmTexture::eFlux].getTexture()->getDefault();
+
+		std::string debugName = "ShadowMapDirectional";
+		auto cascade = 0u;
+		auto & pass = m_passes[cascade];
+		auto & renderPass = pass.pass->getRenderPass();
+		auto & frameBuffer = m_frameBuffers[cascade];
+		frameBuffer.depthView = depth.view->getTargetView();
+		frameBuffer.linearView = linear.view->getTargetView();
+		frameBuffer.varianceView = variance.view->getTargetView();
+		frameBuffer.positionView = position.view->getTargetView();
+		frameBuffer.fluxView = flux.view->getTargetView();
+		ashes::ImageViewCRefArray attaches;
+		attaches.emplace_back( frameBuffer.depthView );
+		attaches.emplace_back( frameBuffer.linearView );
+		attaches.emplace_back( frameBuffer.varianceView );
+		attaches.emplace_back( frameBuffer.positionView );
+		attaches.emplace_back( frameBuffer.fluxView );
+		frameBuffer.frameBuffer = renderPass.createFrameBuffer( debugName, size, std::move( attaches ) );
+
+		m_blur = std::make_unique< GaussianBlur >( *getEngine()
+			, device
+			, "ShadowMapDirectional"
+			, *variance.view
+			, 5u );
+
+		frameBuffer.blurCommands = m_blur->getCommands( true );
+#else
+		VkExtent2D const size
+		{
+			ShadowMapPassDirectional::TileSize,
+			ShadowMapPassDirectional::TileSize,
 		};
 
 		if ( m_passes.size() == 1u )
@@ -160,7 +260,7 @@ namespace castor3d
 			attaches.emplace_back( frameBuffer.fluxView );
 			frameBuffer.frameBuffer = renderPass.createFrameBuffer( debugName, size, std::move( attaches ) );
 
-			frameBuffer.blurCommands = m_blur->getCommands( true );
+			frameBuffer.blurCommands = m_blur->getCommands( true, cascade );
 		}
 		else
 		{
@@ -198,6 +298,7 @@ namespace castor3d
 				frameBuffer.blurCommands = m_blur->getCommands( true, cascade );
 			}
 		}
+#endif
 	}
 
 	void ShadowMapDirectional::doInitialise( RenderDevice const & device )
@@ -223,24 +324,18 @@ namespace castor3d
 		auto & myTimer = m_passes[0].pass->getTimer();
 		auto timerBlock = myTimer.start();
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-		m_commandBuffer->beginDebugBlock(
-			{
-				m_name + " generation " + std::to_string( index ),
-				makeFloatArray( getEngine()->getNextRainbowColour() ),
-			} );
+		m_commandBuffer->beginDebugBlock( { m_name + " generation " + std::to_string( index )
+			, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
 
-		if ( m_passes.size() == 1u )
+		for ( uint32_t cascade = 0u; cascade < std::min( m_cascades, uint32_t( m_passes.size() ) ); ++cascade )
 		{
-			auto & pass = m_passes[0u];
+			auto & pass = m_passes[cascade];
 			auto & timer = pass.pass->getTimer();
 			auto & renderPass = pass.pass->getRenderPass();
-			auto & frameBuffer = m_frameBuffers.front();
+			auto & frameBuffer = m_frameBuffers[cascade];
 
-			m_commandBuffer->beginDebugBlock(
-				{
-					m_name + " " + std::to_string( index ),
-					makeFloatArray( getEngine()->getNextRainbowColour() ),
-				} );
+			m_commandBuffer->beginDebugBlock( { m_name + " " + std::to_string( index ) + " cascade " + std::to_string( cascade )
+				, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
 			timerBlock->notifyPassRender();
 			timerBlock->beginPass( *m_commandBuffer );
 			m_commandBuffer->beginRenderPass( pass.pass->getRenderPass()
@@ -259,39 +354,6 @@ namespace castor3d
 			m_commandBuffer->endDebugBlock();
 			pass.pass->setUpToDate();
 		}
-		else
-		{
-			for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
-			{
-				auto & pass = m_passes[cascade];
-				auto & timer = pass.pass->getTimer();
-				auto & renderPass = pass.pass->getRenderPass();
-				auto & frameBuffer = m_frameBuffers[cascade];
-
-				m_commandBuffer->beginDebugBlock(
-					{
-						m_name + " " + std::to_string( index ) + " cascade " + std::to_string( cascade ),
-						makeFloatArray( getEngine()->getNextRainbowColour() ),
-					} );
-				timerBlock->notifyPassRender();
-				timerBlock->beginPass( *m_commandBuffer );
-				m_commandBuffer->beginRenderPass( pass.pass->getRenderPass()
-					, *frameBuffer.frameBuffer
-					, getClearValues()
-					, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
-
-				if ( pass.pass->hasNodes() )
-				{
-					m_commandBuffer->executeCommands( { pass.pass->getCommandBuffer() } );
-				}
-
-				m_commandBuffer->endRenderPass();
-				timerBlock->endPass( *m_commandBuffer );
-
-				m_commandBuffer->endDebugBlock();
-				pass.pass->setUpToDate();
-			}
-		}
 
 		m_commandBuffer->endDebugBlock();
 		m_commandBuffer->end();
@@ -305,28 +367,15 @@ namespace castor3d
 
 		if ( m_shadowType == ShadowType::eVariance )
 		{
-			if ( m_passes.size() == 1u )
+			for ( uint32_t cascade = 0u; cascade < std::min( m_cascades, uint32_t( m_passes.size() ) ); ++cascade )
 			{
-				auto & blurCommands = m_frameBuffers[0].blurCommands;
+				auto & blurCommands = m_frameBuffers[cascade].blurCommands;
 				device.graphicsQueue->submit( *blurCommands.commandBuffer
 					, *result
 					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 					, *blurCommands.semaphore
 					, nullptr );
 				result = blurCommands.semaphore.get();
-			}
-			else
-			{
-				for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
-				{
-					auto & blurCommands = m_frameBuffers[cascade].blurCommands;
-					device.graphicsQueue->submit( *blurCommands.commandBuffer
-						, *result
-						, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-						, *blurCommands.semaphore
-						, nullptr );
-					result = blurCommands.semaphore.get();
-				}
 			}
 		}
 
