@@ -16,7 +16,10 @@
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Render/Node/RenderNode_Render.hpp"
+#include "Castor3D/Render/Culling/SceneCuller.hpp"
+#include "Castor3D/Render/Node/BillboardRenderNode.hpp"
+#include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
+#include "Castor3D/Render/Node/QueueRenderNodes.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
@@ -50,6 +53,26 @@ namespace castor3d
 
 	namespace
 	{
+		uint32_t getPrimitiveCount( Submesh const & submesh )
+		{
+			return submesh.getFaceCount();
+		}
+
+		uint32_t getPrimitiveCount( BillboardBase const & instance )
+		{
+			return instance.getCount() * 2u;
+		}
+
+		uint32_t getVertexCount( Submesh const & submesh )
+		{
+			return submesh.getPointsCount();
+		}
+
+		uint32_t getVertexCount( BillboardBase const & instance )
+		{
+			return instance.getCount();
+		}
+
 		template< typename MapType, typename SubFuncType >
 		inline void subTraverseNodes( MapType & nodes
 			, SubFuncType subFunction )
@@ -193,97 +216,51 @@ namespace castor3d
 		return result;
 	}
 
-	void SceneRenderPass::prepareBackPipeline( PipelineFlags & flags
-		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts )
-	{
-		doUpdateFlags( flags );
-		remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
-
-		if ( doIsValidPass( flags.passFlags )
-			&& ( !checkFlag( flags.programFlags, ProgramFlag::eBillboards )
-				|| !isShadowMapProgram( flags.programFlags ) ) )
-		{
-			if ( m_mode != RenderMode::eTransparentOnly )
-			{
-				flags.alphaBlendMode = BlendMode::eNoBlend;
-			}
-
-			doPrepareBackPipeline( getShaderProgramCache().getAutomaticProgram( *this, flags )
-				, layouts
-				, flags );
-		}
-	}
-
-	PipelineFlags SceneRenderPass::prepareBackPipeline( BlendMode colourBlendMode
-		, BlendMode alphaBlendMode
-		, VkCompareOp alphaFunc
-		, VkCompareOp blendAlphaFunc
-		, PassFlags const & passFlags
+	PipelineFlags SceneRenderPass::prepareBackPipeline( Pass const & pass
 		, TextureFlagsArray const & textures
-		, uint32_t heightMapIndex
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, VkPrimitiveTopology topology
-		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts )
+		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+		, ashes::DescriptorSetLayoutCRefArray descriptorLayouts )
 	{
-		auto flags = PipelineFlags{ colourBlendMode
-			, alphaBlendMode
-			, passFlags
-			, heightMapIndex
+		auto flags = PipelineFlags{ pass.getColourBlendMode()
+			, pass.getAlphaBlendMode()
+			, pass.getPassFlags()
+			, pass.getHeightTextureIndex()
 			, programFlags
 			, sceneFlags
 			, topology
-			, alphaFunc
-			, blendAlphaFunc
+			, pass.getAlphaFunc()
+			, pass.getBlendAlphaFunc()
 			, textures };
-		prepareBackPipeline( flags, layouts );
+		doPrepareBackPipeline( flags
+			, vertexLayouts
+			, std::move( descriptorLayouts ) );
 		return flags;
 	}
 
-	void SceneRenderPass::prepareFrontPipeline( PipelineFlags & flags
-		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts )
-	{
-		doUpdateFlags( flags );
-		addFlag( flags.programFlags, ProgramFlag::eInvertNormals );
-
-		if ( doIsValidPass( flags.passFlags )
-			&& ( !checkFlag( flags.programFlags, ProgramFlag::eBillboards )
-				|| !isShadowMapProgram( flags.programFlags ) ) )
-		{
-			if ( m_mode != RenderMode::eTransparentOnly )
-			{
-				flags.alphaBlendMode = BlendMode::eNoBlend;
-			}
-
-			doPrepareFrontPipeline( getShaderProgramCache().getAutomaticProgram( *this, flags )
-				, layouts
-				, flags );
-		}
-	}
-
-	PipelineFlags SceneRenderPass::prepareFrontPipeline( BlendMode colourBlendMode
-		, BlendMode alphaBlendMode
-		, VkCompareOp alphaFunc
-		, VkCompareOp blendAlphaFunc
-		, PassFlags const & passFlags
+	PipelineFlags SceneRenderPass::prepareFrontPipeline( Pass const & pass
 		, TextureFlagsArray const & textures
-		, uint32_t heightMapIndex
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, VkPrimitiveTopology topology
-		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts )
+		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+		, ashes::DescriptorSetLayoutCRefArray descriptorLayouts )
 	{
-		auto flags = PipelineFlags{ colourBlendMode
-			, alphaBlendMode
-			, passFlags
-			, heightMapIndex
+		auto flags = PipelineFlags{ pass.getColourBlendMode()
+			, pass.getAlphaBlendMode()
+			, pass.getPassFlags()
+			, pass.getHeightTextureIndex()
 			, programFlags
 			, sceneFlags
 			, topology
-			, alphaFunc
-			, blendAlphaFunc
+			, pass.getAlphaFunc()
+			, pass.getBlendAlphaFunc()
 			, textures };
-		prepareFrontPipeline( flags, layouts );
+		doPrepareFrontPipeline( flags
+			, vertexLayouts
+			, std::move( descriptorLayouts ) );
 		return flags;
 	}
 
@@ -325,99 +302,48 @@ namespace castor3d
 		return result;
 	}
 
-	SkinningRenderNode SceneRenderPass::createSkinningNode( Pass & pass
+	SubmeshRenderNode * SceneRenderPass::createSkinningNode( Pass & pass
 		, RenderPipeline & pipeline
 		, Submesh & submesh
 		, Geometry & primitive
 		, AnimatedSkeleton & skeleton )
 	{
-		auto & buffers = submesh.getGeometryBuffers( getShaderFlags()
-			, pass.getOwner()->shared_from_this()
-			, getInstanceMult()
-			, pass.getTexturesMask() );
-		auto & scene = *primitive.getScene();
-		auto geometryEntry = scene.getGeometryCache().getUbos( primitive
-			, submesh
-			, pass
-			, getInstanceMult() );
-		auto animationEntry = scene.getAnimatedObjectGroupCache().getUbos( skeleton );
-		auto it = m_modelsInstances.emplace( geometryEntry.hash
-			, geometryEntry.modelInstancesUbo ).first;
-		it->second = geometryEntry.modelInstancesUbo;
-		m_isDirty = true;
-
-		return SkinningRenderNode{ doCreatePassRenderNode( pass, pipeline )
-			, geometryEntry.modelUbo
-			, geometryEntry.modelInstancesUbo
-			, buffers
-			, *primitive.getParent()
+		return doCreateSubmeshNode( pass
+			, pipeline
 			, submesh
 			, primitive
-			, skeleton
-			, animationEntry.skinningUbo };
+			, nullptr
+			, &skeleton );
 	}
 
-	MorphingRenderNode SceneRenderPass::createMorphingNode( Pass & pass
+	SubmeshRenderNode * SceneRenderPass::createMorphingNode( Pass & pass
 		, RenderPipeline & pipeline
 		, Submesh & submesh
 		, Geometry & primitive
 		, AnimatedMesh & mesh )
 	{
-		auto & buffers = submesh.getGeometryBuffers( getShaderFlags()
-			, pass.getOwner()->shared_from_this()
-			, getInstanceMult()
-			, pass.getTexturesMask() );
-		auto & scene = *primitive.getScene();
-		auto geometryEntry = scene.getGeometryCache().getUbos( primitive
-			, submesh
-			, pass
-			, getInstanceMult() );
-		auto animationEntry = scene.getAnimatedObjectGroupCache().getUbos( mesh );
-		auto it = m_modelsInstances.emplace( geometryEntry.hash
-			, geometryEntry.modelInstancesUbo ).first;
-		it->second = geometryEntry.modelInstancesUbo;
-		m_isDirty = true;
-
-		return MorphingRenderNode{ doCreatePassRenderNode( pass, pipeline )
-			, geometryEntry.modelUbo
-			, geometryEntry.modelInstancesUbo
-			, buffers
-			, *primitive.getParent()
+		return doCreateSubmeshNode( pass
+			, pipeline
 			, submesh
 			, primitive
-			, mesh
-			, animationEntry.morphingUbo };
+			, &mesh
+			, nullptr );
 	}
 
-	StaticRenderNode SceneRenderPass::createStaticNode( Pass & pass
+	SubmeshRenderNode * SceneRenderPass::createStaticNode( Pass & pass
 		, RenderPipeline & pipeline
 		, Submesh & submesh
 		, Geometry & primitive )
 	{
-		auto & buffers = submesh.getGeometryBuffers( getShaderFlags()
-			, pass.getOwner()->shared_from_this()
-			, getInstanceMult()
-			, pass.getTexturesMask() );
-		auto & scene = *primitive.getScene();
-		auto geometryEntry = scene.getGeometryCache().getUbos( primitive
+		return doCreateSubmeshNode( pass
+			, pipeline
 			, submesh
-			, pass
-			, getInstanceMult() );
-		auto it = m_modelsInstances.emplace( geometryEntry.hash
-			, geometryEntry.modelInstancesUbo ).first;
-		it->second = geometryEntry.modelInstancesUbo;
-		m_isDirty = true;
-
-		return StaticRenderNode{ doCreatePassRenderNode( pass, pipeline )
-			, geometryEntry.modelUbo
-			, geometryEntry.modelInstancesUbo
-			, buffers
-			, *primitive.getParent()
-			, submesh
-			, primitive };
+			, primitive
+			, nullptr
+			, nullptr );
 	}
 
-	BillboardRenderNode SceneRenderPass::createBillboardNode( Pass & pass
+	BillboardRenderNode * SceneRenderPass::createBillboardNode( Pass & pass
 		, RenderPipeline & pipeline
 		, BillboardBase & billboard )
 	{
@@ -431,13 +357,13 @@ namespace castor3d
 		it->second = billboardEntry.modelInstancesUbo;
 		m_isDirty = true;
 
-		return BillboardRenderNode{ doCreatePassRenderNode( pass, pipeline )
+		return &m_renderQueue.getAllRenderNodes().createNode( PassRenderNode{ pass }
 			, billboardEntry.modelUbo
-			, billboardEntry.billboardUbo
 			, billboardEntry.modelInstancesUbo
 			, buffers
 			, *billboard.getNode()
-			, billboard };
+			, billboard
+			, billboardEntry.billboardUbo );
 	}
 
 	void SceneRenderPass::updatePipeline( RenderPipeline & pipeline )
@@ -561,272 +487,6 @@ namespace castor3d
 		return doIsValidPass( pass.getPassFlags() );
 	}
 
-	namespace
-	{
-		template< typename RenderNodeT >
-		void initialiseCommonUboDescriptor( Engine & engine
-			, RenderPipeline const & pipeline
-			, ashes::DescriptorSetLayout const & layout
-			, RenderNodeT & node
-			, ashes::DescriptorSet & descriptorSet
-			, MatrixUbo & matrixUbo
-			, SceneUbo const & sceneUbo )
-		{
-			engine.getMaterialCache().getPassBuffer().createBinding( descriptorSet
-				, layout.getBinding( uint32_t( NodeUboIdx::eMaterials ) ) );
-
-			if ( !pipeline.getFlags().textures.empty() )
-			{
-				engine.getMaterialCache().getTextureBuffer().createBinding( descriptorSet
-					, layout.getBinding( uint32_t( NodeUboIdx::eTextures ) ) );
-			}
-
-			if ( checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eInstanceMult ) )
-			{
-				CU_Require( node.modelInstancesUbo );
-				node.modelInstancesUbo.createSizedBinding( descriptorSet
-					, layout.getBinding( uint32_t( NodeUboIdx::eModelInstances ) ) );
-			}
-
-			node.modelUbo.createSizedBinding( descriptorSet
-				, layout.getBinding( uint32_t( NodeUboIdx::eModel ) ) );
-		}
-	}
-
-	void SceneRenderPass::initialiseUboDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetPool const & descriptorPool
-		, BillboardRenderNode & node )
-	{
-		auto & layout = descriptorPool.getLayout();
-		node.uboDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_BillboardUbo"
-			, RenderPipeline::eBuffers );
-		auto & descriptorSet = *node.uboDescriptorSet;
-		initialiseCommonUboDescriptor( *getEngine()
-			, pipeline
-			, layout
-			, node
-			, descriptorSet
-			, m_matrixUbo
-			, m_sceneUbo );
-		node.billboardUbo.createSizedBinding( descriptorSet
-			, layout.getBinding( uint32_t( NodeUboIdx::eBillboard ) ) );
-		descriptorSet.update();
-	}
-
-	void SceneRenderPass::initialiseUboDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetPool const & descriptorPool
-		, MorphingRenderNode & node )
-	{
-		auto & layout = descriptorPool.getLayout();
-		node.uboDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Ubo"
-			, RenderPipeline::eBuffers );
-		auto & descriptorSet = *node.uboDescriptorSet;
-		initialiseCommonUboDescriptor( *getEngine()
-			, pipeline
-			, layout
-			, node
-			, descriptorSet
-			, m_matrixUbo
-			, m_sceneUbo );
-		node.morphingUbo.createSizedBinding( descriptorSet
-			, layout.getBinding( uint32_t( NodeUboIdx::eMorphing ) ) );
-		descriptorSet.update();
-	}
-
-	void SceneRenderPass::initialiseUboDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetPool const & descriptorPool
-		, SkinningRenderNode & node )
-	{
-		auto & layout = descriptorPool.getLayout();
-		node.uboDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Ubo"
-			, RenderPipeline::eBuffers );
-		auto & descriptorSet = *node.uboDescriptorSet;
-		initialiseCommonUboDescriptor( *getEngine()
-			, pipeline
-			, layout
-			, node
-			, descriptorSet
-			, m_matrixUbo
-			, m_sceneUbo );
-
-		if ( checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eInstantiation ) )
-		{
-			node.data.getInstantiatedBones().getInstancedBonesBuffer().createBinding( descriptorSet
-				, layout.getBinding( uint32_t( NodeUboIdx::eSkinning ) ) );
-		}
-		else
-		{
-			node.skinningUbo.createSizedBinding( descriptorSet
-				, layout.getBinding( uint32_t( NodeUboIdx::eSkinning ) ) );
-		}
-
-		descriptorSet.update();
-	}
-
-	void SceneRenderPass::initialiseUboDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetPool const & descriptorPool
-		, StaticRenderNode & node )
-	{
-		auto & layout = descriptorPool.getLayout();
-		node.uboDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Ubo"
-			, RenderPipeline::eBuffers );
-		auto & descriptorSet = *node.uboDescriptorSet;
-		initialiseCommonUboDescriptor( *getEngine()
-			, pipeline
-			, layout
-			, node
-			, descriptorSet
-			, m_matrixUbo
-			, m_sceneUbo );
-		descriptorSet.update();
-	}
-
-	void SceneRenderPass::initialiseUboDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetPool const & descriptorPool
-		, SubmeshSkinninRenderNodesByPassMap & nodes )
-	{
-		for ( auto & passNodes : nodes )
-		{
-			for ( auto & submeshNodes : passNodes.second )
-			{
-				initialiseUboDescriptor( pipeline
-					, descriptorPool
-					, submeshNodes.second.begin()->second );
-			}
-		}
-	}
-
-	void SceneRenderPass::initialiseUboDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetPool const & descriptorPool
-		, SubmeshStaticRenderNodesByPassMap & nodes )
-	{
-		for ( auto & passNodes : nodes )
-		{
-			for ( auto & submeshNodes : passNodes.second )
-			{
-				initialiseUboDescriptor( pipeline
-					, descriptorPool
-					, submeshNodes.second.begin()->second );
-			}
-		}
-	}
-
-	void SceneRenderPass::initialiseTextureDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetPool const & descriptorPool
-		, BillboardRenderNode & node )
-	{
-		uint32_t index = 0u;
-		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_BillboardTex"
-			, RenderPipeline::eTextures );
-		auto & descriptorSet = *node.texDescriptorSet;
-
-		if ( !pipeline.getFlags().textures.empty() )
-		{
-			node.passNode.fillDescriptor( descriptorSet.getLayout()
-				, index
-				, descriptorSet
-				, pipeline.getFlags().textures );
-		}
-
-		descriptorSet.update();
-	}
-
-	void SceneRenderPass::initialiseTextureDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetPool const & descriptorPool
-		, MorphingRenderNode & node )
-	{
-		uint32_t index = 0u;
-		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Tex"
-			, RenderPipeline::eTextures );
-		auto & descriptorSet = *node.texDescriptorSet;
-
-		if ( !pipeline.getFlags().textures.empty() )
-		{
-			node.passNode.fillDescriptor( descriptorSet.getLayout()
-				, index
-				, descriptorSet
-				, pipeline.getFlags().textures );
-		}
-
-		descriptorSet.update();
-	}
-
-	void SceneRenderPass::initialiseTextureDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetPool const & descriptorPool
-		, SkinningRenderNode & node )
-	{
-		uint32_t index = 0u;
-		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Tex"
-			, RenderPipeline::eTextures );
-		auto & descriptorSet = *node.texDescriptorSet;
-
-		if ( !pipeline.getFlags().textures.empty() )
-		{
-			node.passNode.fillDescriptor( descriptorSet.getLayout()
-				, index
-				, descriptorSet
-				, pipeline.getFlags().textures );
-		}
-
-		descriptorSet.update();
-	}
-
-	void SceneRenderPass::initialiseTextureDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetPool const & descriptorPool
-		, StaticRenderNode & node )
-	{
-		uint32_t index = 0u;
-		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Tex"
-			, RenderPipeline::eTextures );
-		auto & descriptorSet = *node.texDescriptorSet;
-
-		if ( !pipeline.getFlags().textures.empty() )
-		{
-			node.passNode.fillDescriptor( descriptorSet.getLayout()
-				, index
-				, descriptorSet
-				, pipeline.getFlags().textures );
-		}
-
-		descriptorSet.update();
-	}
-
-	void SceneRenderPass::initialiseTextureDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetPool const & descriptorPool
-		, SubmeshSkinninRenderNodesByPassMap & nodes )
-	{
-		for ( auto & passNodes : nodes )
-		{
-			for ( auto & submeshNodes : passNodes.second )
-			{
-				if ( pipeline.hasDescriptorPool( RenderPipeline::eTextures ) )
-				{
-					initialiseTextureDescriptor( pipeline
-						, descriptorPool
-						, submeshNodes.second.begin()->second );
-				}
-			}
-		}
-	}
-
-	void SceneRenderPass::initialiseTextureDescriptor( RenderPipeline const & pipeline
-		, ashes::DescriptorSetPool const & descriptorPool
-		, SubmeshStaticRenderNodesByPassMap & nodes )
-	{
-		for ( auto & passNodes : nodes )
-		{
-			for ( auto & submeshNodes : passNodes.second )
-			{
-				if ( pipeline.hasDescriptorPool( RenderPipeline::eTextures ) )
-				{
-					initialiseTextureDescriptor( pipeline
-						, descriptorPool
-						, submeshNodes.second.begin()->second );
-				}
-			}
-		}
-	}
-
 	void SceneRenderPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
 		, ashes::DescriptorSetPool const & descriptorPool
 		, BillboardRenderNode & node
@@ -849,7 +509,7 @@ namespace castor3d
 
 	void SceneRenderPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
 		, ashes::DescriptorSetPool const & descriptorPool
-		, MorphingRenderNode & node
+		, SubmeshRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		auto & layout = descriptorPool.getLayout();
@@ -869,47 +529,7 @@ namespace castor3d
 
 	void SceneRenderPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
 		, ashes::DescriptorSetPool const & descriptorPool
-		, SkinningRenderNode & node
-		, ShadowMapLightTypeArray const & shadowMaps )
-	{
-		auto & layout = descriptorPool.getLayout();
-		auto descriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Add"
-			, RenderPipeline::eAdditional );
-		ashes::WriteDescriptorSetArray descriptorWrites;
-		descriptorWrites.push_back( m_matrixUbo.getDescriptorWrite( uint32_t( PassUboIdx::eMatrix ) ) );
-		descriptorWrites.push_back( m_sceneUbo.getDescriptorWrite( uint32_t( PassUboIdx::eScene ) ) );
-		doFillAdditionalDescriptor( pipeline
-			, descriptorWrites
-			, node
-			, shadowMaps );
-		descriptorSet->setBindings( descriptorWrites );
-		descriptorSet->update();
-		pipeline.setAdditionalDescriptorSet( node, std::move( descriptorSet ) );
-	}
-
-	void SceneRenderPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
-		, ashes::DescriptorSetPool const & descriptorPool
-		, StaticRenderNode & node
-		, ShadowMapLightTypeArray const & shadowMaps )
-	{
-		auto & layout = descriptorPool.getLayout();
-		auto descriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Add"
-			, RenderPipeline::eAdditional );
-		ashes::WriteDescriptorSetArray descriptorWrites;
-		descriptorWrites.push_back( m_matrixUbo.getDescriptorWrite( uint32_t( PassUboIdx::eMatrix ) ) );
-		descriptorWrites.push_back( m_sceneUbo.getDescriptorWrite( uint32_t( PassUboIdx::eScene ) ) );
-		doFillAdditionalDescriptor( pipeline
-			, descriptorWrites
-			, node
-			, shadowMaps );
-		descriptorSet->setBindings( descriptorWrites );
-		descriptorSet->update();
-		pipeline.setAdditionalDescriptorSet( node, std::move( descriptorSet ) );
-	}
-
-	void SceneRenderPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
-		, ashes::DescriptorSetPool const & descriptorPool
-		, SubmeshSkinninRenderNodesByPassMap & nodes
+		, SubmeshRenderNodesByPassMap & nodes
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		for ( auto & passNodes : nodes )
@@ -918,83 +538,40 @@ namespace castor3d
 			{
 				initialiseAdditionalDescriptor( pipeline
 					, descriptorPool
-					, submeshNodes.second.begin()->second
+					, *submeshNodes.second.begin()->second
 					, shadowMaps );
 			}
 		}
 	}
 
-	void SceneRenderPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
-		, ashes::DescriptorSetPool const & descriptorPool
-		, SubmeshStaticRenderNodesByPassMap & nodes
-		, ShadowMapLightTypeArray const & shadowMaps )
-	{
-		for ( auto & passNodes : nodes )
-		{
-			for ( auto & submeshNodes : passNodes.second )
-			{
-				initialiseAdditionalDescriptor( pipeline
-					, descriptorPool
-					, submeshNodes.second.begin()->second
-					, shadowMaps );
-			}
-		}
-	}
-
-	PassRenderNode SceneRenderPass::doCreatePassRenderNode( Pass & pass
-		, RenderPipeline & pipeline )
-	{
-		return PassRenderNode
-		{
-			pass,
-		};
-	}
-
-	SceneRenderNode SceneRenderPass::doCreateSceneRenderNode( Scene & scene
-		, RenderPipeline & pipeline )
-	{
-		return SceneRenderNode{};
-	}
-
-	namespace
-	{
-		template< typename NodeT >
-		uint32_t copyNodesMatrices( std::vector< NodeT * > const & renderNodes
-			, std::vector< InstantiationData > & matrixBuffer
-			, uint32_t instanceMult )
-		{
-			auto const count = std::min( uint32_t( matrixBuffer.size() / instanceMult )
-				, uint32_t( renderNodes.size() ) );
-			auto buffer = matrixBuffer.data();
-			auto it = renderNodes.begin();
-			auto i = 0u;
-
-			while ( i < count )
-			{
-				auto & node = *it;
-
-				for ( auto inst = 0u; inst < instanceMult; ++inst )
-				{
-					buffer->m_matrix = node->sceneNode.getDerivedTransformationMatrix();
-					buffer->m_material = node->passNode.pass.getId();
-					++buffer;
-				}
-
-				++i;
-				++it;
-			}
-
-			return count;
-		}
-	}
-
-	uint32_t SceneRenderPass::doCopyNodesMatrices( StaticRenderNodePtrArray const & renderNodes
+	uint32_t SceneRenderPass::doCopyNodesMatrices( SubmeshRenderNodePtrArray const & renderNodes
 		, std::vector< InstantiationData > & matrixBuffer )const
 	{
-		return copyNodesMatrices( renderNodes, matrixBuffer, m_instanceMult );
+		auto const count = std::min( uint32_t( matrixBuffer.size() / m_instanceMult )
+			, uint32_t( renderNodes.size() ) );
+		auto buffer = matrixBuffer.data();
+		auto it = renderNodes.begin();
+		auto i = 0u;
+
+		while ( i < count )
+		{
+			auto & node = *it;
+
+			for ( auto inst = 0u; inst < m_instanceMult; ++inst )
+			{
+				buffer->m_matrix = node->sceneNode.getDerivedTransformationMatrix();
+				buffer->m_material = node->passNode.pass.getId();
+				++buffer;
+			}
+
+			++i;
+			++it;
+		}
+
+		return count;
 	}
 
-	uint32_t SceneRenderPass::doCopyNodesMatrices( StaticRenderNodePtrArray const & renderNodes
+	uint32_t SceneRenderPass::doCopyNodesMatrices( SubmeshRenderNodePtrArray const & renderNodes
 		, std::vector< InstantiationData > & matrixBuffer
 		, RenderInfo & info )const
 	{
@@ -1003,22 +580,7 @@ namespace castor3d
 		return count;
 	}
 
-	uint32_t SceneRenderPass::doCopyNodesMatrices( SkinningRenderNodePtrArray const & renderNodes
-		, std::vector< InstantiationData > & matrixBuffer )const
-	{
-		return copyNodesMatrices( renderNodes, matrixBuffer, m_instanceMult );
-	}
-
-	uint32_t SceneRenderPass::doCopyNodesMatrices( SkinningRenderNodePtrArray const & renderNodes
-		, std::vector< InstantiationData > & matrixBuffer
-		, RenderInfo & info )const
-	{
-		auto count = doCopyNodesMatrices( renderNodes, matrixBuffer );
-		info.m_visibleObjectsCount += count;
-		return count;
-	}
-
-	uint32_t SceneRenderPass::doCopyNodesBones( SkinningRenderNodePtrArray const & renderNodes
+	uint32_t SceneRenderPass::doCopyNodesBones( SubmeshRenderNodePtrArray const & renderNodes
 		, ShaderBuffer & bonesBuffer )const
 	{
 		uint32_t const mtxSize = sizeof( float ) * 16;
@@ -1035,7 +597,7 @@ namespace castor3d
 
 			for ( auto inst = 0u; inst < m_instanceMult; ++inst )
 			{
-				node->skeleton.fillBuffer( buffer );
+				node->skeleton->fillBuffer( buffer );
 				buffer += stride;
 			}
 
@@ -1047,7 +609,7 @@ namespace castor3d
 		return count;
 	}
 
-	uint32_t SceneRenderPass::doCopyNodesBones( SkinningRenderNodePtrArray const & renderNodes
+	uint32_t SceneRenderPass::doCopyNodesBones( SubmeshRenderNodePtrArray const & renderNodes
 		, ShaderBuffer & bonesBuffer
 		, RenderInfo & info )const
 	{
@@ -1056,14 +618,14 @@ namespace castor3d
 		return count;
 	}
 
-	void SceneRenderPass::doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes )
+	void SceneRenderPass::doUpdate( SubmeshRenderNodesPtrByPipelineMap & nodes )
 	{
 		traverseNodes( nodes
 			, [this]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, InstantiationComponent & instantiation
-				, StaticRenderNodePtrArray & renderNodes )
+				, SubmeshRenderNodePtrArray & renderNodes )
 			{
 				auto it = instantiation.find( pass.getOwner()->shared_from_this(), m_instanceMult );
 				auto index = instantiation.getIndex( m_instanceMult );
@@ -1074,11 +636,18 @@ namespace castor3d
 				{
 					doCopyNodesMatrices( renderNodes
 						, it->second[index].data );
+					auto & instantiatedBones = submesh.getInstantiatedBones();
+
+					if ( renderNodes.front()->skeleton
+						&& instantiatedBones.hasInstancedBonesBuffer() )
+					{
+						doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
+					}
 				}
 			} );
 	}
 
-	void SceneRenderPass::doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes
+	void SceneRenderPass::doUpdate( SubmeshRenderNodesPtrByPipelineMap & nodes
 		, RenderInfo & info )
 	{
 		traverseNodes( nodes
@@ -1086,7 +655,7 @@ namespace castor3d
 				, Pass & pass
 				, Submesh & submesh
 				, InstantiationComponent & instantiation
-				, StaticRenderNodePtrArray & renderNodes )
+				, SubmeshRenderNodePtrArray & renderNodes )
 			{
 				auto it = instantiation.find( pass.getOwner()->shared_from_this(), m_instanceMult );
 				auto index = instantiation.getIndex( m_instanceMult );
@@ -1095,21 +664,28 @@ namespace castor3d
 					&& it != instantiation.end()
 					&& it->second[index].buffer )
 				{
-					uint32_t count = doCopyNodesMatrices( renderNodes
-						, it->second[index].data
-						, info );
-					info.m_visibleFaceCount += submesh.getFaceCount() * count;
-					info.m_visibleVertexCount += submesh.getPointsCount() * count;
+					uint32_t count1 = doCopyNodesMatrices( renderNodes
+						, it->second[index].data );
+					info.m_visibleFaceCount += submesh.getFaceCount() * count1;
+					info.m_visibleVertexCount += submesh.getPointsCount() * count1;
 					++info.m_drawCalls;
+					auto & instantiatedBones = submesh.getInstantiatedBones();
+
+					if ( renderNodes.front()->skeleton
+						&& instantiatedBones.hasInstancedBonesBuffer() )
+					{
+						uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
+						CU_Require( count1 == count2 );
+					}
 				}
 			} );
 	}
 
 	namespace
 	{
-		template< typename MapType >
+		template< typename NodeT >
 		inline void renderNonInstanced( SceneRenderPass & pass
-			, MapType & nodes )
+			, NodePtrByPipelineMapT< NodeT > & nodes )
 		{
 			for ( auto & itPipelines : nodes )
 			{
@@ -1117,19 +693,16 @@ namespace castor3d
 			}
 		}
 
-		template< typename MapType >
-		inline void renderNonInstanced( SceneRenderPass & pass
-			, MapType & nodes
+		template< typename NodeT >
+		inline void doUpdateInfos( NodePtrByPipelineMapT< NodeT > & nodes
 			, RenderInfo & info )
 		{
 			for ( auto & itPipelines : nodes )
 			{
-				pass.updatePipeline( *itPipelines.first );
-
 				for ( auto & renderNode : itPipelines.second )
 				{
-					info.m_visibleFaceCount += details::getPrimitiveCount( renderNode->data );
-					info.m_visibleVertexCount += details::getVertexCount( renderNode->data );
+					info.m_visibleFaceCount += getPrimitiveCount( renderNode->data );
+					info.m_visibleVertexCount += getVertexCount( renderNode->data );
 					++info.m_drawCalls;
 					++info.m_visibleObjectsCount;
 				}
@@ -1137,100 +710,16 @@ namespace castor3d
 		}
 	}
 
-	void SceneRenderPass::doUpdate( StaticRenderNodePtrByPipelineMap & nodes )
+	void SceneRenderPass::doUpdate( SubmeshRenderNodePtrByPipelineMap & nodes )
 	{
-		renderNonInstanced( *this
-			, nodes );
+		renderNonInstanced( *this, nodes );
 	}
 
-	void SceneRenderPass::doUpdate( StaticRenderNodePtrByPipelineMap & nodes
+	void SceneRenderPass::doUpdate( SubmeshRenderNodePtrByPipelineMap & nodes
 		, RenderInfo & info )
 	{
-		renderNonInstanced( *this
-			, nodes
-			, info );
-	}
-
-	void SceneRenderPass::doUpdate( SkinningRenderNodePtrByPipelineMap & nodes )
-	{
-		renderNonInstanced( *this
-			, nodes );
-	}
-
-	void SceneRenderPass::doUpdate( SkinningRenderNodePtrByPipelineMap & nodes
-		, RenderInfo & info )
-	{
-		renderNonInstanced( *this
-			, nodes
-			, info );
-	}
-
-	void SceneRenderPass::doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes )
-	{
-		traverseNodes( nodes
-			, [this]( RenderPipeline & pipeline
-				, Pass & pass
-				, Submesh & submesh
-				, InstantiationComponent & instantiation
-				, SkinningRenderNodePtrArray & renderNodes )
-			{
-				auto & instantiatedBones = submesh.getInstantiatedBones();
-				auto it = instantiation.find( pass.getOwner()->shared_from_this(), m_instanceMult );
-				auto index = instantiation.getIndex( m_instanceMult );
-
-				if ( !renderNodes.empty()
-					&& it != instantiation.end()
-					&& it->second[index].buffer
-					&& instantiatedBones.hasInstancedBonesBuffer() )
-				{
-					uint32_t count1 = doCopyNodesMatrices( renderNodes, it->second[index].data );
-					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
-					CU_Require( count1 == count2 );
-				}
-			} );
-	}
-
-	void SceneRenderPass::doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes
-		, RenderInfo & info )
-	{
-		traverseNodes( nodes
-			, [this, &info]( RenderPipeline & pipeline
-				, Pass & pass
-				, Submesh & submesh
-				, InstantiationComponent & instantiation
-				, SkinningRenderNodePtrArray & renderNodes )
-			{
-				auto & instantiatedBones = submesh.getInstantiatedBones();
-				auto it = instantiation.find( pass.getOwner()->shared_from_this(), m_instanceMult );
-				auto index = instantiation.getIndex( m_instanceMult );
-
-				if ( !renderNodes.empty()
-					&& it != instantiation.end()
-					&& it->second[index].buffer
-					&& instantiatedBones.hasInstancedBonesBuffer() )
-				{
-					uint32_t count1 = doCopyNodesMatrices( renderNodes, it->second[index].data, info );
-					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer(), info );
-					CU_Require( count1 == count2 );
-					info.m_visibleFaceCount += submesh.getFaceCount() * count1;
-					info.m_visibleVertexCount += submesh.getPointsCount() * count1;
-					++info.m_drawCalls;
-				}
-			} );
-	}
-
-	void SceneRenderPass::doUpdate( MorphingRenderNodePtrByPipelineMap & nodes )
-	{
-		renderNonInstanced( *this
-			, nodes );
-	}
-
-	void SceneRenderPass::doUpdate( MorphingRenderNodePtrByPipelineMap & nodes
-		, RenderInfo & info )
-	{
-		renderNonInstanced( *this
-			, nodes
-			, info );
+		doUpdate( nodes );
+		doUpdateInfos( nodes, info );
 	}
 
 	void SceneRenderPass::doUpdate( BillboardRenderNodePtrByPipelineMap & nodes )
@@ -1242,9 +731,8 @@ namespace castor3d
 	void SceneRenderPass::doUpdate( BillboardRenderNodePtrByPipelineMap & nodes
 		, RenderInfo & info )
 	{
-		renderNonInstanced( *this
-			, nodes
-			, info );
+		doUpdate( nodes );
+		doUpdateInfos( nodes, info );
 	}
 
 	void SceneRenderPass::doUpdate( RenderQueueArray & queues )
@@ -1274,70 +762,21 @@ namespace castor3d
 		}
 	}
 
-	ashes::VkDescriptorSetLayoutBindingArray SceneRenderPass::doCreateUboBindings( PipelineFlags const & flags )const
+	bool SceneRenderPass::doIsValidPass( PassFlags const & passFlags )const
 	{
-		ashes::VkDescriptorSetLayoutBindingArray uboBindings;
-		uboBindings.emplace_back( getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding( uint32_t( NodeUboIdx::eMaterials ) ) );
-
-		if ( !flags.textures.empty() )
+		if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) )
 		{
-			uboBindings.emplace_back( getEngine()->getMaterialCache().getTextureBuffer().createLayoutBinding( uint32_t( NodeUboIdx::eTextures ) ) );
+			if ( checkFlag( passFlags, PassFlag::eAlphaTest ) )
+			{
+				return true;
+			}
+
+			return m_mode == RenderMode::eBoth
+				|| m_mode == RenderMode::eTransparentOnly;
 		}
 
-		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eModel )
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, ( VK_SHADER_STAGE_FRAGMENT_BIT
-				| ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
-					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
-					: VK_SHADER_STAGE_VERTEX_BIT ) ) ) );
-
-		if ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) )
-		{
-			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eBillboard )
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
-					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
-					: VK_SHADER_STAGE_VERTEX_BIT ) ) );
-		}
-
-		if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
-		{
-			uboBindings.push_back( SkinningUbo::createLayoutBinding( uint32_t( NodeUboIdx::eSkinning )
-				, flags.programFlags ) );
-		}
-
-		if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
-		{
-			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eMorphing )
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
-					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
-					: VK_SHADER_STAGE_VERTEX_BIT ) ) );
-		}
-
-		if ( checkFlag( flags.programFlags, ProgramFlag::eInstanceMult ) )
-		{
-			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eModelInstances )
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_VERTEX_BIT ) );
-		}
-
-		return uboBindings;
-	}
-
-	ashes::VkDescriptorSetLayoutBindingArray SceneRenderPass::doCreateTextureBindings( PipelineFlags const & flags )const
-	{
-		ashes::VkDescriptorSetLayoutBindingArray texBindings;
-
-		if ( !flags.textures.empty() )
-		{
-			texBindings.emplace_back( makeDescriptorSetLayoutBinding( 0u
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT
-				, uint32_t( flags.textures.size() ) ) );
-		}
-
-		return texBindings;
+		return m_mode == RenderMode::eBoth
+			|| m_mode == RenderMode::eOpaqueOnly;
 	}
 
 	ashes::VkDescriptorSetLayoutBindingArray SceneRenderPass::doCreateAdditionalBindings( PipelineFlags const & flags )const
@@ -1379,46 +818,68 @@ namespace castor3d
 		return m_backPipelines;
 	}
 
-	bool SceneRenderPass::doIsValidPass( PassFlags const & passFlags )const
+	void SceneRenderPass::doPrepareBackPipeline( PipelineFlags & flags
+		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+		, ashes::DescriptorSetLayoutCRefArray descriptorLayouts )
 	{
-		if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) )
+		doUpdateFlags( flags );
+		remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
+
+		if ( doIsValidPass( flags.passFlags )
+			&& ( !checkFlag( flags.programFlags, ProgramFlag::eBillboards )
+				|| !isShadowMapProgram( flags.programFlags ) ) )
 		{
-			if ( checkFlag( passFlags, PassFlag::eAlphaTest ) )
+			if ( m_mode != RenderMode::eTransparentOnly )
 			{
-				return true;
+				flags.alphaBlendMode = BlendMode::eNoBlend;
 			}
 
-			return m_mode == RenderMode::eBoth
-				|| m_mode == RenderMode::eTransparentOnly;
+			doPrepareBackPipeline( getShaderProgramCache().getAutomaticProgram( *this, flags )
+				, vertexLayouts
+				, std::move( descriptorLayouts )
+				, flags );
 		}
+	}
 
-		return m_mode == RenderMode::eBoth
-			|| m_mode == RenderMode::eOpaqueOnly;
+	void SceneRenderPass::doPrepareFrontPipeline( PipelineFlags & flags
+		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+		, ashes::DescriptorSetLayoutCRefArray descriptorLayouts )
+	{
+		doUpdateFlags( flags );
+		addFlag( flags.programFlags, ProgramFlag::eInvertNormals );
+
+		if ( doIsValidPass( flags.passFlags )
+			&& ( !checkFlag( flags.programFlags, ProgramFlag::eBillboards )
+				|| !isShadowMapProgram( flags.programFlags ) ) )
+		{
+			if ( m_mode != RenderMode::eTransparentOnly )
+			{
+				flags.alphaBlendMode = BlendMode::eNoBlend;
+			}
+
+			doPrepareFrontPipeline( getShaderProgramCache().getAutomaticProgram( *this, flags )
+				, vertexLayouts
+				, std::move( descriptorLayouts )
+				, flags );
+		}
 	}
 
 	void SceneRenderPass::doInitialisePipeline( RenderDevice const & device
-		, RenderPipeline & pipeline )const
+		, RenderPipeline & pipeline
+		, ashes::DescriptorSetLayoutCRefArray descriptorLayouts )const
 	{
 		auto & flags = pipeline.getFlags();
-		auto uboBindings = doCreateUboBindings( flags );
-		auto texBindings = doCreateTextureBindings( flags );
 		auto addBindings = doCreateAdditionalBindings( flags );
-		auto uboLayout = device->createDescriptorSetLayout( getName() + "Ubo"
-			, std::move( uboBindings ) );
-		auto texLayout = device->createDescriptorSetLayout( getName() + "Tex"
-			, std::move( texBindings ) );
-		auto addLayout = device->createDescriptorSetLayout( getName() + "Add"
-			, std::move( addBindings ) );
-		std::vector< ashes::DescriptorSetLayoutPtr > dsLayouts;
-		dsLayouts.emplace_back( std::move( uboLayout ) );
-		dsLayouts.emplace_back( std::move( texLayout ) );
-		dsLayouts.emplace_back( std::move( addLayout ) );
-		pipeline.setDescriptorSetLayouts( std::move( dsLayouts ) );
-		pipeline.initialise( device, getRenderPass() );
+		pipeline.setDescriptorSetLayout( device->createDescriptorSetLayout( getName() + "Add"
+			, std::move( addBindings ) ) );
+		pipeline.initialise( device
+			, getRenderPass()
+			, std::move( descriptorLayouts ) );
 	}
 
 	void SceneRenderPass::doPrepareFrontPipeline( ShaderProgramSPtr program
-		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts
+		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+		, ashes::DescriptorSetLayoutCRefArray descriptorLayouts
 		, PipelineFlags const & flags )
 	{
 		auto & pipelines = doGetFrontPipelines();
@@ -1436,7 +897,7 @@ namespace castor3d
 					, ashes::PipelineMultisampleStateCreateInfo{}
 					, program
 					, flags ) ).first->second;
-			pipeline.setVertexLayouts( layouts );
+			pipeline.setVertexLayouts( vertexLayouts );
 			pipeline.setViewport( makeViewport( m_size ) );
 
 			if ( !checkFlag( flags.programFlags, ProgramFlag::ePicking ) )
@@ -1445,15 +906,16 @@ namespace castor3d
 			}
 
 			getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [this, &pipeline]( RenderDevice const & device )
+				, [this, &pipeline, descriptorLayouts]( RenderDevice const & device )
 				{
-					doInitialisePipeline( device, pipeline );
+					doInitialisePipeline( device, pipeline, std::move( descriptorLayouts ) );
 				} ) );
 		}
 	}
 
 	void SceneRenderPass::doPrepareBackPipeline( ShaderProgramSPtr program
-		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts
+		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+		, ashes::DescriptorSetLayoutCRefArray descriptorLayouts
 		, PipelineFlags const & flags )
 	{
 		auto & pipelines = doGetBackPipelines();
@@ -1471,7 +933,7 @@ namespace castor3d
 					, ashes::PipelineMultisampleStateCreateInfo{}
 					, program
 					, flags ) ).first->second;
-			pipeline.setVertexLayouts( layouts );
+			pipeline.setVertexLayouts( vertexLayouts );
 			pipeline.setViewport( makeViewport( m_size ) );
 
 			if ( !checkFlag( flags.programFlags, ProgramFlag::ePicking ) )
@@ -1480,11 +942,59 @@ namespace castor3d
 			}
 
 			getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [this, &pipeline]( RenderDevice const & device )
+				, [this, &pipeline, descriptorLayouts]( RenderDevice const & device )
 				{
-					doInitialisePipeline( device, pipeline );
+					doInitialisePipeline( device, pipeline, std::move( descriptorLayouts ) );
 				} ) );
 		}
+	}
+
+	SubmeshRenderNode * SceneRenderPass::doCreateSubmeshNode( Pass & pass
+		, RenderPipeline & pipeline
+		, Submesh & submesh
+		, Geometry & primitive
+		, AnimatedMesh * mesh
+		, AnimatedSkeleton * skeleton )
+	{
+		auto & buffers = submesh.getGeometryBuffers( getShaderFlags()
+			, pass.getOwner()->shared_from_this()
+			, getInstanceMult()
+			, pass.getTexturesMask() );
+		auto & scene = *primitive.getScene();
+		auto geometryEntry = scene.getGeometryCache().getUbos( primitive
+			, submesh
+			, pass
+			, getInstanceMult() );
+		auto it = m_modelsInstances.emplace( geometryEntry.hash
+			, geometryEntry.modelInstancesUbo ).first;
+		it->second = geometryEntry.modelInstancesUbo;
+		m_isDirty = true;
+
+		auto & result = m_renderQueue.getAllRenderNodes().createNode( PassRenderNode{ pass }
+			, geometryEntry.modelUbo
+			, geometryEntry.modelInstancesUbo
+			, buffers
+			, *primitive.getParent()
+			, submesh
+			, primitive
+			, mesh
+			, skeleton );
+
+		if ( mesh )
+		{
+			CU_Require( result.mesh );
+			auto animationEntry = scene.getAnimatedObjectGroupCache().getUbos( *mesh );
+			result.morphingUbo = animationEntry.morphingUbo;
+		}
+
+		if ( skeleton )
+		{
+			CU_Require( result.skeleton );
+			auto animationEntry = scene.getAnimatedObjectGroupCache().getUbos( *skeleton );
+			result.skinningUbo = animationEntry.skinningUbo;
+		}
+
+		return &result;
 	}
 
 	ShaderPtr SceneRenderPass::doGetVertexShaderSource( PipelineFlags const & flags )const
@@ -1504,7 +1014,8 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
 		auto skinningData = SkinningUbo::declare( writer
-			, uint32_t( NodeUboIdx::eSkinning )
+			, uint32_t( NodeUboIdx::eSkinningUbo )
+			, uint32_t( NodeUboIdx::eSkinningSsbo )
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
 		UBO_MORPHING( writer

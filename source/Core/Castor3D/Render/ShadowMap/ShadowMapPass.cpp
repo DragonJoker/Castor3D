@@ -6,7 +6,7 @@
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
+#include "Castor3D/Render/Node/QueueCulledRenderNodes.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
@@ -56,7 +56,7 @@ namespace castor3d
 	{
 	}
 
-	void ShadowMapPass::doUpdateNodes( SceneCulledRenderNodes & nodes )
+	void ShadowMapPass::doUpdateNodes( QueueCulledRenderNodes & nodes )
 	{
 		if ( nodes.hasNodes() )
 		{
@@ -91,7 +91,7 @@ namespace castor3d
 
 	void ShadowMapPass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, BillboardListRenderNode & node
+		, BillboardRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		fillAdditionalDescriptor( pipeline

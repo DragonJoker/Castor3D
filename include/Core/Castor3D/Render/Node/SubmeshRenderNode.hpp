@@ -1,32 +1,31 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_ObjectRenderNode_H___
-#define ___C3D_ObjectRenderNode_H___
+#ifndef ___C3D_SubmeshRenderNode_H___
+#define ___C3D_SubmeshRenderNode_H___
 
 #include "RenderNodeModule.hpp"
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Render/Node/PassRenderNode.hpp"
-#include "Castor3D/Render/Node/SceneRenderNode.hpp"
+#include "Castor3D/Scene/Animation/AnimationModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 
 namespace castor3d
 {
-	template< typename DataTypeT, typename InstanceTypeT >
-	struct ObjectRenderNode
+	struct SubmeshRenderNode
 	{
-		using DataType = DataTypeT;
-		using InstanceType = InstanceTypeT;
+		using DataType = Submesh;
+		using InstanceType = Geometry;
 
-		C3D_API ObjectRenderNode( ObjectRenderNode const & ) = delete;
-		C3D_API ObjectRenderNode( ObjectRenderNode && ) = default;
-		C3D_API ObjectRenderNode & operator=( ObjectRenderNode const & ) = delete;
-		C3D_API ObjectRenderNode & operator=( ObjectRenderNode && ) = default;
+		C3D_API SubmeshRenderNode( SubmeshRenderNode const & ) = delete;
+		C3D_API SubmeshRenderNode( SubmeshRenderNode && ) = delete;
+		C3D_API SubmeshRenderNode & operator=( SubmeshRenderNode const & ) = delete;
+		C3D_API SubmeshRenderNode & operator=( SubmeshRenderNode && ) = delete;
 
-		C3D_API ObjectRenderNode( PassRenderNode passNode
+		C3D_API SubmeshRenderNode( PassRenderNode passNode
 			, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
 			, UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesBuffer
 			, GeometryBuffers const & buffers
@@ -43,6 +42,12 @@ namespace castor3d
 		InstanceType & instance;
 		ashes::DescriptorSetPtr uboDescriptorSet;
 		ashes::DescriptorSetPtr texDescriptorSet;
+		// Morphing node
+		AnimatedMesh * mesh{};
+		UniformBufferOffsetT< MorphingUboConfiguration > morphingUbo{};
+		// Skinning node
+		AnimatedSkeleton * skeleton{};
+		UniformBufferOffsetT< SkinningUboConfiguration > skinningUbo{};
 	};
 }
 

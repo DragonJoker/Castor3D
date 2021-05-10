@@ -14,7 +14,8 @@
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
+#include "Castor3D/Render/Culling/SceneCuller.hpp"
+#include "Castor3D/Render/Node/QueueCulledRenderNodes.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
@@ -109,7 +110,7 @@ namespace castor3d
 
 		template< typename NodeT >
 		inline void updateNonInstanced( PickingPass & pass
-			, std::unordered_map< NodeBaseT< NodeT > const *, UniformBufferOffsetT< PickingUboConfiguration > > & ubos
+			, std::unordered_map< NodeT const *, UniformBufferOffsetT< PickingUboConfiguration > > & ubos
 			, PickNodeType type
 			, NodePtrByPipelineMapT< NodeT > & nodes )
 		{
@@ -514,7 +515,7 @@ namespace castor3d
 		return SceneRenderPass::doIsValidPass( passFlags );
 	}
 
-	void PickingPass::doUpdateNodes( SceneCulledRenderNodes & nodes )
+	void PickingPass::doUpdateNodes( QueueCulledRenderNodes & nodes )
 	{
 		auto & myCamera = getCuller().getCamera();
 		auto & myScene = getCuller().getScene();
@@ -640,7 +641,7 @@ namespace castor3d
 	}
 
 	PickNodeType PickingPass::doPick( Point4f const & pixel
-		, SceneCulledRenderNodes & nodes )
+		, QueueCulledRenderNodes & nodes )
 	{
 		PickNodeType result{ PickNodeType::eNone };
 
@@ -684,27 +685,11 @@ namespace castor3d
 		return result;
 	}
 
-	void PickingPass::doUpdate( StaticRenderNodePtrByPipelineMap & nodes )
+	void PickingPass::doUpdate( SubmeshRenderNodePtrByPipelineMap & nodes )
 	{
 		updateNonInstanced( *this
 			, m_submeshBuffers
 			, PickNodeType::eStatic
-			, nodes );
-	}
-
-	void PickingPass::doUpdate( SkinningRenderNodePtrByPipelineMap & nodes )
-	{
-		updateNonInstanced( *this
-			, m_submeshBuffers
-			, PickNodeType::eSkinning
-			, nodes );
-	}
-
-	void PickingPass::doUpdate( MorphingRenderNodePtrByPipelineMap & nodes )
-	{
-		updateNonInstanced( *this
-			, m_submeshBuffers
-			, PickNodeType::eMorphing
 			, nodes );
 	}
 
@@ -716,7 +701,7 @@ namespace castor3d
 			, nodes );
 	}
 
-	void PickingPass::doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes )
+	void PickingPass::doUpdate( SubmeshRenderNodesPtrByPipelineMap & nodes )
 	{
 		traverseNodes( *this
 			, m_submeshBuffers
@@ -726,7 +711,7 @@ namespace castor3d
 				, Pass & pass
 				, Submesh & submesh
 				, InstantiationComponent & component
-				, StaticRenderNodePtrArray & renderNodes )
+				, SubmeshRenderNodePtrArray & renderNodes )
 			{
 				auto it = component.find( pass.getOwner()->shared_from_this() );
 
@@ -735,31 +720,12 @@ namespace castor3d
 				{
 					doCopyNodesMatrices( renderNodes
 						, it->second[0].data );
-				}
-			} );
-	}
-	
-	void PickingPass::doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes )
-	{
-		traverseNodes( *this
-			, m_submeshBuffers
-			, nodes
-			, PickNodeType::eInstantiatedSkinning
-			, [this]( RenderPipeline & pipeline
-				, Pass & pass
-				, Submesh & submesh
-				, InstantiationComponent & component
-				, SkinningRenderNodePtrArray & renderNodes )
-			{
-				auto & instantiatedBones = submesh.getInstantiatedBones();
-				auto it = component.find( pass.getOwner()->shared_from_this() );
+					auto & instantiatedBones = submesh.getInstantiatedBones();
 
-				if ( !renderNodes.empty()
-					&& it != component.end()
-					&& it->second[0].buffer
-					&& instantiatedBones.hasInstancedBonesBuffer() )
-				{
-					doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
+					if ( instantiatedBones.hasInstancedBonesBuffer() )
+					{
+						doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
+					}
 				}
 			} );
 	}
@@ -774,7 +740,7 @@ namespace castor3d
 
 	void PickingPass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, BillboardListRenderNode & node
+		, BillboardRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		auto ires = m_billboardBuffers.insert( { &node, {} } );
@@ -823,7 +789,8 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
 		auto skinningData = SkinningUbo::declare( writer
-			, uint32_t( NodeUboIdx::eSkinning )
+			, uint32_t( NodeUboIdx::eSkinningUbo )
+			, uint32_t( NodeUboIdx::eSkinningSsbo )
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
 		UBO_MORPHING( writer

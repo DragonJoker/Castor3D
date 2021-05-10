@@ -12,8 +12,8 @@
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Render/Node/RenderNode_Render.hpp"
-#include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
+#include "Castor3D/Render/Culling/SceneCuller.hpp"
+#include "Castor3D/Render/Node/QueueCulledRenderNodes.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Render/Technique/Voxelize/VoxelSceneData.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -342,7 +342,7 @@ namespace castor3d
 
 	void VoxelizePass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, BillboardListRenderNode & node
+		, BillboardRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		fillAdditionalDescriptor( pipeline
@@ -377,7 +377,8 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
 		auto skinningData = SkinningUbo::declare( writer
-			, uint32_t( NodeUboIdx::eSkinning )
+			, uint32_t( NodeUboIdx::eSkinningUbo )
+			, uint32_t( NodeUboIdx::eSkinningSsbo )
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
 		UBO_MORPHING( writer

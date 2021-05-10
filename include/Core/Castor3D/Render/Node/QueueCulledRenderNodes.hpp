@@ -4,24 +4,24 @@ See LICENSE file in root folder
 #ifndef ___C3D_SceneCulledRenderNodes_H___
 #define ___C3D_SceneCulledRenderNodes_H___
 
-#include "Castor3D/Render/Node/SceneRenderNodes.hpp"
+#include "Castor3D/Render/Node/QueueRenderNodes.hpp"
+
+#include <CastorUtils/Design/OwnedBy.hpp>
 
 #include <ashespp/Command/CommandBuffer.hpp>
 
 namespace castor3d
 {
-	struct SceneCulledRenderNodes
+	struct QueueCulledRenderNodes
+		: public castor::OwnedBy< RenderQueue const >
 	{
-		using StaticNodesMap = RenderNodesT< StaticRenderNode, StaticRenderNodePtrByPipelineMap >;
-		using SkinnedNodesMap = RenderNodesT< SkinningRenderNode, SkinningRenderNodePtrByPipelineMap >;
-		using InstantiatedStaticNodesMap = RenderNodesT< StaticRenderNode, SubmeshStaticRenderNodesPtrByPipelineMap >;
-		using InstantiatedSkinnedNodesMap = RenderNodesT< SkinningRenderNode, SubmeshSkinningRenderNodesPtrByPipelineMap >;
-		using MorphingNodesMap = RenderNodesT< MorphingRenderNode, MorphingRenderNodePtrByPipelineMap >;
+		using StaticNodesMap = RenderNodesT< SubmeshRenderNode, SubmeshRenderNodePtrByPipelineMap >;
+		using SkinnedNodesMap = RenderNodesT< SubmeshRenderNode, SubmeshRenderNodePtrByPipelineMap >;
+		using InstantiatedStaticNodesMap = RenderNodesT< SubmeshRenderNode, SubmeshRenderNodesPtrByPipelineMap >;
+		using InstantiatedSkinnedNodesMap = RenderNodesT< SubmeshRenderNode, SubmeshRenderNodesPtrByPipelineMap >;
+		using MorphingNodesMap = RenderNodesT< SubmeshRenderNode, SubmeshRenderNodePtrByPipelineMap >;
 		using BillboardNodesMap = RenderNodesT< BillboardRenderNode, BillboardRenderNodePtrByPipelineMap >;
 
-		//!\~english	The scene.
-		//!\~french		La scène.
-		Scene const & scene;
 		//!\~english	The static render nodes, sorted by shader program.
 		//!\~french		Les noeuds de rendu statiques, triés par programme shader.
 		StaticNodesMap staticNodes;
@@ -41,31 +41,13 @@ namespace castor3d
 		//!\~french		Les noeuds de rendu de billboards, triés par programme shader.
 		BillboardNodesMap billboardNodes;
 
-		inline explicit SceneCulledRenderNodes( Scene const & scene )
-			: scene{ scene }
-		{
-		}
+		C3D_API QueueCulledRenderNodes( RenderQueue const & queue );
 
-		C3D_API void parse( RenderQueue const & queue );
+		C3D_API void parse();
 		C3D_API void prepareCommandBuffers( RenderQueue const & queue
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissors );
-
-		inline bool hasNodes()const
-		{
-			return !staticNodes.backCulled.empty()
-				|| !staticNodes.frontCulled.empty()
-				|| !skinnedNodes.backCulled.empty()
-				|| !skinnedNodes.frontCulled.empty()
-				|| !instancedStaticNodes.backCulled.empty()
-				|| !instancedStaticNodes.frontCulled.empty()
-				|| !instancedSkinnedNodes.backCulled.empty()
-				|| !instancedSkinnedNodes.frontCulled.empty()
-				|| !morphingNodes.backCulled.empty()
-				|| !morphingNodes.frontCulled.empty()
-				|| !billboardNodes.backCulled.empty()
-				|| !billboardNodes.frontCulled.empty();
-		}
+		C3D_API bool hasNodes()const;
 	};
 }
 

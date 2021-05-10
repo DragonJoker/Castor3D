@@ -18,86 +18,21 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Helper structure used to render billboards.
+	*	Node used to render billboards.
 	*\~french
 	*\brief
-	*	Structure d'aide utilisée pour le dessin des billboards.
+	*	Noeud utilisé pour le dessin de billboards.
 	*/
 	struct BillboardRenderNode;
 	/**
 	*\~english
 	*\brief
-	*	Helper structure used to render distance sorted nodes.
+	*	Node used to render a submesh.
 	*\~french
 	*\brief
-	*	Structure d'aide utilisée pour le dessin de noeuds triés par distance.
+	*	Noeud utilisé pour le dessin un submesh.
 	*/
-	struct DistanceRenderNodeBase;
-	/**
-	*\~english
-	*\brief
-	*	Helper structure used to render distance sorted typed nodes.
-	*\~french
-	*\brief
-	*	Structure d'aide utilisée pour le dessin de noeuds typés, triés par distance.
-	*/
-	template< typename NodeType >
-	struct DistanceRenderNode;
-	/**
-	*\~english
-	*\brief
-	*	Helper structure used to render animated submeshes.
-	*\~french
-	*\brief
-	*	Structure d'aide utilisée pour le dessin des sous-maillages animés.
-	*/
-	struct MorphingRenderNode;
-	/**
-	*\~english
-	*\brief
-	*	Helper structure used to render objects.
-	*\~french
-	*\brief
-	*	Structure d'aide utilisée pour le dessin d'objets.
-	*/
-	template< typename DataTypeT, typename InstanceTypeT >
-	struct ObjectRenderNode;
-	/**
-	*\~english
-	*\brief
-	*	Helper structure used link a pass and a shader program.
-	*\~french
-	*\brief
-	*	Structure d'aide utilisée pour lier une passe et un programme shader.
-	*/
-	struct PassRenderNode;
-	/**
-	*\~english
-	*\brief
-	*	Helper structure used to render submeshes.
-	*\~french
-	*\brief
-	*	Structure d'aide utilisée pour le dessin des sous-maillages.
-	*/
-	struct SceneRenderNode;
-	/**
-	*\~english
-	*\brief
-	*	Helper structure used to render skeleton animated submeshes.
-	*\~french
-	*\brief
-	*	Structure d'aide utilisée pour le dessin des sous-maillages animés par squelette.
-	*/
-	struct SkinningRenderNode;
-	/**
-	*\~english
-	*\brief
-	*	Helper structure used to render static submeshes.
-	*\~french
-	*\brief
-	*	Structure d'aide utilisée pour le dessin des sous-maillages non animés.
-	*/
-	struct StaticRenderNode;
+	struct SubmeshRenderNode;
 	/**
 	*\~english
 	*\brief
@@ -106,7 +41,7 @@ namespace castor3d
 	*\brief
 	*	Les noeuds utilisés pour dessiner une scène (non culled).
 	*/
-	struct SceneRenderNodes;
+	struct QueueRenderNodes;
 	/**
 	*\~english
 	*\brief
@@ -115,14 +50,122 @@ namespace castor3d
 	*\brief
 	*	Les noeuds utilisés pour dessiner une scène (culled).
 	*/
-	struct SceneCulledRenderNodes;
+	struct QueueCulledRenderNodes;
+	/**
+	*\~english
+	*\brief
+	*	The base holder of all the render nodes of a scene.
+	*\~french
+	*\brief
+	*	Le conteneur de base de tous les noeuds de rendu d'une scène.
+	*/
+	struct SceneRenderNodes;
 
-	using SubmeshRenderNode = ObjectRenderNode< Submesh, Geometry >;
-	using BillboardListRenderNode = ObjectRenderNode< BillboardBase, BillboardBase >;
-
+	CU_DeclareCUSmartPtr( castor3d, BillboardRenderNode, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, SubmeshRenderNode, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, QueueRenderNodes, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, QueueCulledRenderNodes, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, SceneRenderNodes, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, SceneCulledRenderNodes, C3D_API );
 
+	/**@name Traits */
+	//@{
+
+	template< typename NodeT >
+	struct RenderNodeTraitsT
+	{
+		using Culled = CulledSubmesh;
+		using Object = Submesh;
+	};
+
+	template<>
+	struct RenderNodeTraitsT< BillboardRenderNode >
+	{
+		using Culled = CulledBillboard;
+		using Object = BillboardList;
+	};
+
+	template< typename NodeT >
+	using NodeCulledT = typename RenderNodeTraitsT< NodeT >::Culled;
+	template< typename NodeT >
+	using NodeObjectT = typename RenderNodeTraitsT< NodeT >::Object;
+
+	//@}
+	/**@name All nodes */
+	//@{
+	/**@name Non instanced */
+	//@{
+
+	template< typename NodeT >
+	using NodeMapT = std::map< NodeCulledT< NodeT > const *, NodeT * >;
+
+	using SubmeshRenderNodeMap = NodeMapT< SubmeshRenderNode >;
+	using BillboardRenderNodeMap = NodeMapT< BillboardRenderNode >;
+
+	template< typename NodeT >
+	using NodeByPipelineMapT = std::map< RenderPipelineRPtr, NodeMapT< NodeT > >;
+
+	using SubmeshRenderNodeByPipelineMap = NodeByPipelineMapT< SubmeshRenderNode >;
+	using BillboardRenderNodeByPipelineMap = NodeByPipelineMapT< BillboardRenderNode >;
+
+	//@}
+	/**@name Instanced */
+	//@{
+
+	template< typename NodeT >
+	using ObjectNodesMapT = std::map< NodeObjectT< NodeT > *, NodeMapT< NodeT > >;
+
+	using SubmeshRenderNodesMap = ObjectNodesMapT< SubmeshRenderNode >;
+
+	template< typename NodeT >
+	using ObjectNodesByPassMapT = std::map< PassRPtr, ObjectNodesMapT< NodeT > >;
+
+	using SubmeshRenderNodesByPassMap = ObjectNodesByPassMapT< SubmeshRenderNode >;
+
+	template< typename NodeT >
+	using ObjectNodesByPipelineMapT = std::map< RenderPipelineRPtr, ObjectNodesByPassMapT< NodeT > >;
+
+	using SubmeshRenderNodesByPipelineMap = ObjectNodesByPipelineMapT< SubmeshRenderNode >;
+
+	//@}
+	//@}
+	/**@name Culled nodes */
+	//@{
+	/**@name Non instanced */
+	//@{
+
+	template< typename NodeT >
+	using NodePtrArrayT = std::vector< NodeT * >;
+
+	using SubmeshRenderNodePtrArray = NodePtrArrayT< SubmeshRenderNode >;
+	using BillboardRenderNodePtrArray = NodePtrArrayT< BillboardRenderNode >;
+
+	template< typename NodeT >
+	using NodePtrByPipelineMapT = std::map< RenderPipelineRPtr, NodePtrArrayT< NodeT > >;
+
+	using SubmeshRenderNodePtrByPipelineMap = NodePtrByPipelineMapT< SubmeshRenderNode >;
+	using BillboardRenderNodePtrByPipelineMap = NodePtrByPipelineMapT< BillboardRenderNode >;
+
+	//@}
+	/**@name Instanced */
+	//@{
+
+	template< typename NodeT >
+	using ObjectNodesPtrMapT = std::map< NodeObjectT< NodeT > *, NodePtrArrayT< NodeT > >;
+
+	using SubmeshRenderNodesPtrMap = ObjectNodesPtrMapT< SubmeshRenderNode >;
+
+	template< typename NodeT >
+	using ObjectNodesPtrByPassT = std::map< PassRPtr, ObjectNodesPtrMapT< NodeT > >;
+
+	using SubmeshRenderNodesPtrByPassMap = ObjectNodesPtrByPassT< SubmeshRenderNode >;
+
+	template< typename NodeT >
+	using ObjectNodesPtrByPipelineMapT = std::map< RenderPipelineRPtr, ObjectNodesPtrByPassT< NodeT > >;
+
+	using SubmeshRenderNodesPtrByPipelineMap = ObjectNodesPtrByPipelineMapT< SubmeshRenderNode >;
+
+	//@}
+	//@}
 	//@}
 	//@}
 }

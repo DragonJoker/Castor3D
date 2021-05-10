@@ -101,14 +101,14 @@ namespace castor3d
 		 *\brief		Met à jour les noeuds donnés.
 		 *\param		nodes	Les noeuds.
 		 */
-		void doUpdateNodes( SceneCulledRenderNodes & nodes );
+		void doUpdateNodes( QueueCulledRenderNodes & nodes );
 
 	private:
 		void doFillAdditionalBindings( PipelineFlags const & flags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
 		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
 			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, BillboardListRenderNode & node
+			, BillboardRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
 			, ashes::WriteDescriptorSetArray & descriptorWrites

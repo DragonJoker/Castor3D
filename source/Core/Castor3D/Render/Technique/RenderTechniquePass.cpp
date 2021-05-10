@@ -14,8 +14,7 @@
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp"
-#include "Castor3D/Render/Node/RenderNode_Render.hpp"
-#include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
+#include "Castor3D/Render/Node/QueueCulledRenderNodes.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -48,30 +47,6 @@ using namespace castor;
 
 namespace castor3d
 {
-	//*************************************************************************************************
-
-	namespace
-	{
-		template< typename MapType >
-		void doSortAlpha( MapType & input
-			, Camera const & camera
-			, SceneRenderPass::DistanceSortedNodeMap & output )
-		{
-			for ( auto & itPipelines : input )
-			{
-				for ( auto & renderNode : itPipelines.second )
-				{
-					Matrix4x4f worldMeshMatrix = renderNode.sceneNode.getDerivedTransformationMatrix().getInverse().transpose();
-					Point3f worldCameraPosition = camera.getParent()->getDerivedPosition();
-					Point3f meshCameraPosition = worldCameraPosition * worldMeshMatrix;
-					renderNode.data.sortByDistance( meshCameraPosition );
-					meshCameraPosition -= renderNode.sceneNode.getPosition();
-					output.emplace( point::lengthSquared( meshCameraPosition ), makeDistanceNode( renderNode ) );
-				}
-			}
-		}
-	}
-
 	//*************************************************************************************************
 
 	void bindTexture( ashes::ImageView const & view
@@ -126,7 +101,6 @@ namespace castor3d
 		: SceneRenderPass{ device, category, name, renderPassDesc, std::move( renderPass ) }
 		, m_scene{ renderPassDesc.m_culler.getScene() }
 		, m_camera{ renderPassDesc.m_culler.hasCamera() ? &renderPassDesc.m_culler.getCamera() : nullptr }
-		, m_sceneNode{}
 		, m_environment{ techniquePassDesc.m_environment }
 		, m_ssaoConfig{ techniquePassDesc.m_ssaoConfig }
 		, m_lpvConfigUbo{ techniquePassDesc.m_lpvConfigUbo }
@@ -150,7 +124,7 @@ namespace castor3d
 			, updater.info );
 	}
 
-	void RenderTechniquePass::doUpdateNodes( SceneCulledRenderNodes & nodes
+	void RenderTechniquePass::doUpdateNodes( QueueCulledRenderNodes & nodes
 		, castor::Point2f const & jitter
 		, RenderInfo & info )
 	{
@@ -418,7 +392,7 @@ namespace castor3d
 
 	void RenderTechniquePass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, BillboardListRenderNode & node
+		, BillboardRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		fillAdditionalDescriptor( pipeline
@@ -497,7 +471,8 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
 		auto skinningData = SkinningUbo::declare( writer
-			, uint32_t( NodeUboIdx::eSkinning )
+			, uint32_t( NodeUboIdx::eSkinningUbo )
+			, uint32_t( NodeUboIdx::eSkinningSsbo )
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
 		UBO_MORPHING( writer

@@ -31,34 +31,40 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Declares the variables needed to compute skinning in vertex shader.
-		 *\param[in]	writer	The shader writer.
-		 *\param[in]	binding	The descriptor set binding point.
-		 *\param[in]	set		The descriptor set index.
-		 *\param[in]	flags	The program flags.
+		 *\param[in]	writer		The shader writer.
+		 *\param[in]	uboBinding	The descriptor set binding point for UBO.
+		 *\param[in]	sboBinding	The descriptor set binding point for SBO.
+		 *\param[in]	set			The descriptor set index.
+		 *\param[in]	flags		The program flags.
 		 *\return		The skinning data.
 		 *\~french
 		 *\brief		Déclare les variables nécessaires au calcul du skinning dans le vertex shader.
-		 *\param[in]	writer	Le shader writer.
-		 *\param[in]	binding	Le point d'attache du descriptor set.
-		 *\param[in]	set		L'index du descriptor set.
-		 *\param[in]	flags	Les indicateurs du programme.
+		 *\param[in]	writer		Le shader writer.
+		 *\param[in]	uboBinding	Le point d'attache du descriptor set for UBO.
+		 *\param[in]	sboBinding	Le point d'attache du descriptor set for SBO.
+		 *\param[in]	set			L'index du descriptor set.
+		 *\param[in]	flags		Les indicateurs du programme.
 		 *\return		Les données de skinning.
 		 */
 		C3D_API static shader::SkinningData declare( sdw::ShaderWriter & writer
-			, uint32_t binding
+			, uint32_t uboBinding
+			, uint32_t sboBinding
 			, uint32_t set
 			, ProgramFlags const & flags );
 		/**
 		 *\~english
 		 *\brief		Creates the descriptor set layout binding for the skinning UBO/SSBO.
-		 *\param[in]	binding	The descriptor binding index.
+		 *\param[in]	uboBinding	The descriptor set binding point for UBO.
+		 *\param[in]	sboBinding	The descriptor set binding point for SBO.
 		 *\param[in]	flags	The program flags.
 		 *\~french
 		 *\brief		Crée l'attache de layout de descripteur pour l'UBO/SSBO de skinning.
-		 *\param[in]	binding	L'index d'attache du descripteur.
+		 *\param[in]	uboBinding	Le point d'attache du descriptor set for UBO.
+		 *\param[in]	sboBinding	Le point d'attache du descriptor set for SBO.
 		 *\param[in]	flags	Les indicateurs du programme.
 		 */
-		C3D_API static VkDescriptorSetLayoutBinding createLayoutBinding( uint32_t binding
+		C3D_API static VkDescriptorSetLayoutBinding createLayoutBinding( uint32_t uboBinding
+			, uint32_t sboBinding
 			, ProgramFlags const & flags );
 		/**
 		 *\~english

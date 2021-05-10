@@ -2,7 +2,7 @@
 #	pragma warning( disable:4503 )
 #endif
 
-#include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
+#include "Castor3D/Render/Node/QueueCulledRenderNodes.hpp"
 
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
 #include "Castor3D/Material/Material.hpp"
@@ -31,7 +31,7 @@
 
 #include <ashespp/Command/CommandBufferInheritanceInfo.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, SceneCulledRenderNodes )
+CU_ImplementCUSmartPtr( castor3d, QueueCulledRenderNodes )
 
 using ashes::operator==;
 using ashes::operator!=;
@@ -64,7 +64,7 @@ namespace castor3d
 
 					if ( it != culledNodes.objects.end() )
 					{
-						doAddRenderNode( *pipelines.first, &node.second, outputNodes );
+						doAddRenderNode( *pipelines.first, node.second, outputNodes );
 					}
 				}
 			}
@@ -98,7 +98,7 @@ namespace castor3d
 
 				if ( it != culledNodes.objects.end() )
 				{
-					doAddInstantiatedRenderNode( pass, pipeline, &node.second, ( *it )->data, outputNodes );
+					doAddInstantiatedRenderNode( pass, pipeline, node.second, ( *it )->data, outputNodes );
 				}
 			}
 		}
@@ -162,7 +162,7 @@ namespace castor3d
 					commandBuffer.bindDescriptorSet( *node.texDescriptorSet, pipeline.getPipelineLayout() );
 				}
 
-				if ( pipeline.hasDescriptorPool( RenderPipeline::eAdditional ) )
+				if ( pipeline.hasDescriptorSetLayout() )
 				{
 					commandBuffer.bindDescriptorSet( pipeline.getAdditionalDescriptorSet( node ), pipeline.getPipelineLayout() );
 				}
@@ -230,7 +230,7 @@ namespace castor3d
 					commandBuffer.bindDescriptorSet( *node.texDescriptorSet, pipeline.getPipelineLayout() );
 				}
 
-				if ( pipeline.hasDescriptorPool( RenderPipeline::eAdditional ) )
+				if ( pipeline.hasDescriptorSetLayout() )
 				{
 					commandBuffer.bindDescriptorSet( pipeline.getAdditionalDescriptorSet( node ), pipeline.getPipelineLayout() );
 				}
@@ -348,8 +348,14 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	void SceneCulledRenderNodes::parse( RenderQueue const & queue )
+	QueueCulledRenderNodes::QueueCulledRenderNodes( RenderQueue const & queue )
+		: castor::OwnedBy< RenderQueue const >{ queue }
 	{
+	}
+
+	void QueueCulledRenderNodes::parse()
+	{
+		auto & queue = *getOwner();
 		auto & culler = queue.getOwner()->getCuller();
 
 		auto & allNodes = queue.getAllRenderNodes();
@@ -370,7 +376,7 @@ namespace castor3d
 			, [this, &queue, &culler]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
-				, StaticRenderNodeMap & nodes )
+				, SubmeshRenderNodeMap & nodes )
 			{
 				doParseInstantiatedRenderNodes( instancedStaticNodes.frontCulled
 					, pipeline
@@ -382,7 +388,7 @@ namespace castor3d
 			, [this, &queue, &culler]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
-				, StaticRenderNodeMap & nodes )
+				, SubmeshRenderNodeMap & nodes )
 			{
 				doParseInstantiatedRenderNodes( instancedStaticNodes.backCulled
 					, pipeline
@@ -394,7 +400,7 @@ namespace castor3d
 			, [this, &queue, &culler]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
-				, SkinningRenderNodeMap & nodes )
+				, SubmeshRenderNodeMap & nodes )
 			{
 				doParseInstantiatedRenderNodes( instancedSkinnedNodes.frontCulled
 					, pipeline
@@ -406,7 +412,7 @@ namespace castor3d
 			, [this, &queue, &culler]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
-				, SkinningRenderNodeMap & nodes )
+				, SubmeshRenderNodeMap & nodes )
 			{
 				doParseInstantiatedRenderNodes( instancedSkinnedNodes.backCulled
 					, pipeline
@@ -444,7 +450,7 @@ namespace castor3d
 			, culler.getCulledBillboards( queue.getMode() ) );
 	}
 
-	void SceneCulledRenderNodes::prepareCommandBuffers( RenderQueue const & queue
+	void QueueCulledRenderNodes::prepareCommandBuffers( RenderQueue const & queue
 		, ashes::Optional< VkViewport > const & viewport
 		, ashes::Optional< VkRect2D > const & scissors )
 	{
@@ -460,7 +466,7 @@ namespace castor3d
 			, [&queue, &viewport, &scissors]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
-				, StaticRenderNodePtrArray & nodes )
+				, SubmeshRenderNodePtrArray & nodes )
 			{
 				doParseInstantiatedRenderNodesCommands( queue.getCommandBuffer()
 					, viewport
@@ -476,7 +482,7 @@ namespace castor3d
 			, [&queue, &viewport, &scissors]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
-				, StaticRenderNodePtrArray & nodes )
+				, SubmeshRenderNodePtrArray & nodes )
 			{
 				doParseInstantiatedRenderNodesCommands( queue.getCommandBuffer()
 					, viewport
@@ -492,7 +498,7 @@ namespace castor3d
 			, [&queue, &viewport, &scissors]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
-				, SkinningRenderNodePtrArray & nodes )
+				, SubmeshRenderNodePtrArray & nodes )
 			{
 				doParseInstantiatedRenderNodesCommands( queue.getCommandBuffer()
 					, viewport
@@ -508,7 +514,7 @@ namespace castor3d
 			, [&queue, &viewport, &scissors]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
-				, SkinningRenderNodePtrArray & nodes )
+				, SubmeshRenderNodePtrArray & nodes )
 			{
 				doParseInstantiatedRenderNodesCommands( queue.getCommandBuffer()
 					, viewport
@@ -576,5 +582,20 @@ namespace castor3d
 		queue.getCommandBuffer().end();
 	}
 
+	bool QueueCulledRenderNodes::hasNodes()const
+	{
+		return !staticNodes.backCulled.empty()
+			|| !staticNodes.frontCulled.empty()
+			|| !skinnedNodes.backCulled.empty()
+			|| !skinnedNodes.frontCulled.empty()
+			|| !instancedStaticNodes.backCulled.empty()
+			|| !instancedStaticNodes.frontCulled.empty()
+			|| !instancedSkinnedNodes.backCulled.empty()
+			|| !instancedSkinnedNodes.frontCulled.empty()
+			|| !morphingNodes.backCulled.empty()
+			|| !morphingNodes.frontCulled.empty()
+			|| !billboardNodes.backCulled.empty()
+			|| !billboardNodes.frontCulled.empty();
+	}
 	//*************************************************************************************************
 }

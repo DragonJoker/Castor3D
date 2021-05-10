@@ -1,5 +1,6 @@
 #include "Castor3D/Render/Technique/ForwardRenderTechniquePass.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/ShaderCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
@@ -11,7 +12,6 @@
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
-#include "Castor3D/Render/Node/RenderNode_Render.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"

@@ -55,7 +55,7 @@ namespace castor3d
 		void update( GpuUpdater & updater )override;
 
 	protected:
-		void doUpdateNodes( SceneCulledRenderNodes & nodes );
+		void doUpdateNodes( QueueCulledRenderNodes & nodes );
 
 	private:
 		void doUpdateUbos( CpuUpdater & updater )override;

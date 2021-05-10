@@ -58,7 +58,7 @@ namespace castor3d
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
 		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
 			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, BillboardListRenderNode & node
+			, BillboardRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
 			, ashes::WriteDescriptorSetArray & descriptorWrites

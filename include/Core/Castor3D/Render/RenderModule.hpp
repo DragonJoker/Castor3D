@@ -86,7 +86,8 @@ namespace castor3d
 		eTextures,
 		eModel,
 		eBillboard,
-		eSkinning,
+		eSkinningUbo,
+		eSkinningSsbo,
 		eMorphing,
 		eModelInstances,
 		eLpvGridConfig,
@@ -484,7 +485,7 @@ namespace castor3d
 	*\brief
 	*	Les noeuds de rendu pour une scène spécifique.
 	*/
-	struct SceneRenderNodes;
+	struct QueueRenderNodes;
 	/**
 	*\~english
 	*\brief
@@ -493,7 +494,7 @@ namespace castor3d
 	*\brief
 	*	Les noeuds de rendu culled pour une scène spécifique.
 	*/
-	struct SceneCulledRenderNodes;
+	struct QueueCulledRenderNodes;
 	/**
 	*\~english
 	*\brief

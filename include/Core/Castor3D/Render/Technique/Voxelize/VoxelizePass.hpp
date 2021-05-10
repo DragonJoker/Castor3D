@@ -111,7 +111,7 @@ namespace castor3d
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
 			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, BillboardListRenderNode & node
+			, BillboardRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
 			, ashes::WriteDescriptorSetArray & descriptorWrites
