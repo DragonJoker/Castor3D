@@ -28,6 +28,7 @@
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderWindow.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
+#include "Castor3D/Render/Node/SceneRenderNodes.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
@@ -142,6 +143,7 @@ namespace castor3d
 		, m_background{ std::make_shared< ColourBackground >( engine, *this ) }
 		, m_colourBackground{ std::make_shared< ColourBackground >( engine, *this, cuT( "Default" ) ) }
 		, m_lightFactory{ std::make_shared< LightFactory >() }
+		, m_renderNodes{ castor::makeUnique< SceneRenderNodes >( *this ) }
 	{
 		auto mergeObject = [this]( auto const & source
 			, auto & destination
