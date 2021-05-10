@@ -67,6 +67,32 @@ namespace castor3d
 		 *\param[in]	module	Le shader à compiler.
 		 *\return		Le shader compilé.
 		 */
+		C3D_API SpirVShader compileShader( VkShaderStageFlagBits stage
+			, castor::String const & name
+			, ast::Shader const & shader )const;
+		/**
+		 *\~english
+		 *\brief		Compiles a shader module to the necessary shader language.
+		 *\param[in]	module	The shader to compile.
+		 *\return		The compiled shader.
+		 *\~french
+		 *\brief		Compile un shader dans le langage shader nécessaire.
+		 *\param[in]	module	Le shader à compiler.
+		 *\return		Le shader compilé.
+		 */
+		C3D_API SpirVShader compileShader( VkShaderStageFlagBits stage
+			, castor::String const & name
+			, castor::String const & glsl )const;
+		/**
+		 *\~english
+		 *\brief		Compiles a shader module to the necessary shader language.
+		 *\param[in]	module	The shader to compile.
+		 *\return		The compiled shader.
+		 *\~french
+		 *\brief		Compile un shader dans le langage shader nécessaire.
+		 *\param[in]	module	Le shader à compiler.
+		 *\return		Le shader compilé.
+		 */
 		C3D_API SpirVShader compileShader( ShaderModule const & module )const;
 		/**
 		*\~english
