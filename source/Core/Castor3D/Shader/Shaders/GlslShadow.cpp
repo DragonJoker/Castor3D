@@ -1,5 +1,6 @@
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapPassDirectional.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapPassSpot.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
@@ -59,13 +60,23 @@ namespace castor3d
 						, vec4( 0.1875_f, 0.6875_f, 0.0625_f, 0.5625_f )
 						, vec4( 0.9375_f, 0.4375_f, 0.8125_f, 0.3125_f ) } );
 
+#if C3D_UseTiledDirectionalShadowMap
+				m_writer.declSampledImage< FImg2DRgba32 >( MapNormalDepthDirectional
+					, ( directionalEnabled ? index++ : index )
+					, set
+					, directionalEnabled );
+				m_writer.declSampledImage< FImg2DRg32 >( MapVarianceDirectional
+					, ( directionalEnabled ? index++ : index )
+					, set
+					, directionalEnabled );
+#else
 				if ( DirectionalMaxCascadesCount > 1u )
 				{
-					m_writer.declSampledImage< FImg2DRgba32 >( MapNormalDepthDirectional
+					m_writer.declSampledImage< FImg2DArrayRgba32 >( MapNormalDepthDirectional
 						, ( directionalEnabled ? index++ : index )
 						, set
 						, directionalEnabled );
-					m_writer.declSampledImage< FImg2DRg32 >( MapVarianceDirectional
+					m_writer.declSampledImage< FImg2DArrayRg32 >( MapVarianceDirectional
 						, ( directionalEnabled ? index++ : index )
 						, set
 						, directionalEnabled );
@@ -81,6 +92,7 @@ namespace castor3d
 						, set
 						, directionalEnabled );
 				}
+#endif
 
 				m_writer.declSampledImage< FImgCubeArrayRgba32 >( MapNormalDepthPoint
 					, ( pointEnabled ? index++ : index )
@@ -143,12 +155,20 @@ namespace castor3d
 						, vec4( 0.1875_f, 0.6875_f, 0.0625_f, 0.5625_f )
 						, vec4( 0.9375_f, 0.4375_f, 0.8125_f, 0.3125_f ) } );
 
+#if C3D_UseTiledDirectionalShadowMap
+				m_writer.declSampledImage< FImg2DRgba32 >( MapNormalDepthDirectional
+					, index++
+					, set );
+				m_writer.declSampledImage< FImg2DRg32 >( MapVarianceDirectional
+					, index++
+					, set );
+#else
 				if ( DirectionalMaxCascadesCount > 1u )
 				{
-					m_writer.declSampledImage< FImg2DRgba32 >( MapNormalDepthDirectional
+					m_writer.declSampledImage< FImg2DArrayRgba32 >( MapNormalDepthDirectional
 						, index++
 						, set );
-					m_writer.declSampledImage< FImg2DRg32 >( MapVarianceDirectional
+					m_writer.declSampledImage< FImg2DArrayRg32 >( MapVarianceDirectional
 						, index++
 						, set );
 				}
@@ -161,6 +181,7 @@ namespace castor3d
 						, index++
 						, set );
 				}
+#endif
 
 				m_utils.declareInvertVec2Y();
 				doDeclareGetRandom();
@@ -518,7 +539,8 @@ namespace castor3d
 
 		void Shadow::doDeclareTextureProjCascade()
 		{
-			m_textureProjCascade = m_writer.implementFunction< Float >( "textureProjCascade"
+#if C3D_UseTiledDirectionalShadowMap
+			m_textureProjTile = m_writer.implementFunction< Float >( "textureProjCascade"
 				, [this]( Vec4 const & lightSpacePosition
 					, Vec2 const & offset
 					, SampledImage2DRgba32 const & shadowMap
@@ -552,13 +574,90 @@ namespace castor3d
 				, InSampledImage2DRgba32{ m_writer, "shadowMap" }
 				, InUInt{ m_writer, "cascadeIndex" }
 				, InFloat{ m_writer, "bias" } );
+#else
+			m_textureProjCascade = m_writer.implementFunction< Float >( "textureProjCascade"
+				, [this]( Vec4 const & lightSpacePosition
+					, Vec2 const & offset
+					, SampledImage2DArrayRgba32 const & shadowMap
+					, UInt const & cascadeIndex
+					, Float const & bias )
+				{
+					auto shadow = m_writer.declLocale( "shadow"
+						, 1.0_f );
+					auto shadowCoord = m_writer.declLocale( "shadowCoord"
+						, lightSpacePosition );
+
+					IF( m_writer, shadowCoord.z() > -1.0_f && shadowCoord.z() < 1.0_f )
+					{
+						auto uv = m_writer.declLocale( "uv"
+							, shadowCoord.st() + offset );
+						auto dist = m_writer.declLocale( "dist"
+							, shadowMap.sample( vec3( uv, m_writer.cast< Float >( cascadeIndex ) ) ) );
+
+						IF( m_writer, shadowCoord.w() > 0 )
+						{
+							shadow = step( shadowCoord.z() - bias, dist.w() );
+						}
+						FI;
+					}
+					FI;
+
+					m_writer.returnStmt( shadow );
+				}
+				, InVec4{ m_writer, "lightSpacePosition" }
+				, InVec2{ m_writer, "offset" }
+				, InSampledImage2DArrayRgba32{ m_writer, "shadowMap" }
+				, InUInt{ m_writer, "cascadeIndex" }
+				, InFloat{ m_writer, "bias" } );
+#endif
 		}
 
 		void Shadow::doDeclareFilterPCFCascade()
 		{
-			m_filterPCFCascade = m_writer.implementFunction< Float >( "filterPCFCascade"
+#if C3D_UseTiledDirectionalShadowMap
+			m_filterPCFTile = m_writer.implementFunction< Float >( "filterPCFCascade"
 				, [this]( Vec4 const & lightSpacePosition
 					, SampledImage2DRgba32 const & shadowMap
+					, Vec2 const & invTexDim
+					, UInt const & cascadeIndex
+					, Float const & bias )
+				{
+					auto scale = m_writer.declLocale( "scale"
+						, 1.0_f );
+					auto dx = m_writer.declLocale( "dx"
+						, scale * invTexDim.x() );
+					auto dy = m_writer.declLocale( "dy"
+						, scale * invTexDim.y() );
+
+					auto shadowFactor = m_writer.declLocale( "shadowFactor"
+						, 0.0_f );
+					auto count = 0;
+					auto const range = 1;
+
+					for ( int x = -range; x <= range; ++x )
+					{
+						for ( int y = -range; y <= range; ++y )
+						{
+							shadowFactor += m_textureProjTile( lightSpacePosition
+								, vec2( dx * float( x ), dy * float( y ) )
+								, shadowMap
+								, cascadeIndex
+								, bias );
+							++count;
+						}
+					}
+
+					m_writer.returnStmt( shadowFactor / float( count ) );
+				}
+				, InVec4{ m_writer, "lightSpacePosition" }
+				, InSampledImage2DRgba32{ m_writer, "shadowMap" }
+				, InVec2{ m_writer, "invTexDim" }
+				, InUInt{ m_writer, "cascadeIndex" }
+				, InFloat{ m_writer, "bias" } );
+#else
+			m_filterPCFCascade = m_writer.implementFunction< Float >( "filterPCFCascade"
+				, [this]( Vec4 const & lightSpacePosition
+					, SampledImage2DArrayRgba32 const & shadowMap
 					, Vec2 const & invTexDim
 					, UInt const & cascadeIndex
 					, Float const & bias )
@@ -591,10 +690,11 @@ namespace castor3d
 					m_writer.returnStmt( shadowFactor / float( count ) );
 				}
 				, InVec4{ m_writer, "lightSpacePosition" }
-				, InSampledImage2DRgba32{ m_writer, "shadowMap" }
+				, InSampledImage2DArrayRgba32{ m_writer, "shadowMap" }
 				, InVec2{ m_writer, "invTexDim" }
 				, InUInt{ m_writer, "cascadeIndex" }
 				, InFloat{ m_writer, "bias" } );
+#endif
 		}
 
 		void Shadow::doDeclareGetLightSpacePosition()
@@ -630,16 +730,29 @@ namespace castor3d
 
 						if ( DirectionalMaxCascadesCount > 1u )
 						{
+#if C3D_UseTiledDirectionalShadowMap
 							auto c3d_mapNormalDepthDirectional = m_writer.getVariable< SampledImage2DRgba32 >( Shadow::MapNormalDepthDirectional );
 							auto c3d_mapVarianceDirectional = m_writer.getVariable< SampledImage2DRg32 >( Shadow::MapVarianceDirectional );
+#else
+							auto c3d_mapNormalDepthDirectional = m_writer.getVariable< SampledImage2DArrayRgba32 >( Shadow::MapNormalDepthDirectional );
+							auto c3d_mapVarianceDirectional = m_writer.getVariable< SampledImage2DArrayRg32 >( Shadow::MapVarianceDirectional );
+#endif
 							auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
 								, getLightSpacePosition( lightMatrix, surface.worldPosition ) );
 
 							IF( m_writer, light.m_shadowType == Int( int( ShadowType::eVariance ) ) )
 							{
+#if C3D_UseTiledDirectionalShadowMap
 								auto moments = m_writer.declLocale( "moments"
 									, c3d_mapVarianceDirectional.lod( lightSpacePosition.xy()
 										, 0.0_f ) );
+#else
+								auto moments = m_writer.declLocale( "moments"
+									, c3d_mapVarianceDirectional
+										.lod( vec3( lightSpacePosition.xy()
+											, m_writer.cast< Float >( cascadeIndex ) )
+										, 0.0_f ) );
+#endif
 								result = m_chebyshevUpperBound( moments
 									, lightSpacePosition.z()
 									, light.m_vsmShadowVariance.x()
@@ -654,11 +767,19 @@ namespace castor3d
 										, lightDirection
 										, light.m_pcfShadowOffsets.x()
 										, light.m_pcfShadowOffsets.y() ) );
+#if C3D_UseTiledDirectionalShadowMap
+									result = m_filterPCFTile( lightSpacePosition
+										, c3d_mapNormalDepthDirectional
+										, vec2( Float( 1.0f / float( ShadowMapPassDirectional::TileSize ) ) )
+										, cascadeIndex
+										, bias );
+#else
 									result = m_filterPCFCascade( lightSpacePosition
 										, c3d_mapNormalDepthDirectional
 										, vec2( Float( 1.0f / float( ShadowMapPassDirectional::TileSize ) ) )
 										, cascadeIndex
 										, bias );
+#endif
 								}
 								ELSE
 								{
@@ -667,11 +788,19 @@ namespace castor3d
 										, lightDirection
 										, light.m_rawShadowOffsets.x()
 										, light.m_rawShadowOffsets.y() ) );
+#if C3D_UseTiledDirectionalShadowMap
+									result = m_textureProjTile( lightSpacePosition
+										, vec2( 0.0_f )
+										, c3d_mapNormalDepthDirectional
+										, cascadeIndex
+										, bias );
+#else
 									result = m_textureProjCascade( lightSpacePosition
 										, vec2( 0.0_f )
 										, c3d_mapNormalDepthDirectional
 										, cascadeIndex
 										, bias );
+#endif
 								}
 								FI;
 							}

@@ -1,5 +1,6 @@
 #include "Castor3D/Render/ShadowMap/ShadowMapResult.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
@@ -97,9 +98,13 @@ namespace castor3d
 
 	uint32_t getMipLevels( SmTexture texture, castor::Size const & size )
 	{
+#if C3D_UseTiledDirectionalShadowMap
+		return 1u;
+#else
 		return texture == SmTexture::eVariance
 			? getMipLevels( VkExtent3D{ size.getWidth(), size.getHeight(), 1u }, getFormat( texture ) )
 			: 1u;
+#endif
 	}
 
 	//*********************************************************************************************

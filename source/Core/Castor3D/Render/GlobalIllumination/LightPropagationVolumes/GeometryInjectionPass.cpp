@@ -1,5 +1,6 @@
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/GeometryInjectionPass.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
@@ -71,12 +72,21 @@ namespace castor3d
 				auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
 					, LightsIdx
 					, 0u );
+#if C3D_UseTiledDirectionalShadowMap
 				auto c3d_rsmNormalMap = writer.declSampledImage< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormalLinear )
 					, RsmNormalsIdx
 					, 0u );
 				auto c3d_rsmPositionMap = writer.declSampledImage< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::ePosition )
 					, RsmPositionIdx
 					, 0u );
+#else
+				auto c3d_rsmNormalMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormalLinear )
+					, RsmNormalsIdx
+					, 0u );
+				auto c3d_rsmPositionMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::ePosition )
+					, RsmPositionIdx
+					, 0u );
+#endif
 				UBO_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u, true );
 				UBO_LPVLIGHTCONFIG( writer, LpvLightUboIdx, 0u );
 				auto in = writer.getIn();
@@ -121,9 +131,16 @@ namespace castor3d
 							, lightingModel->getDirectionalLight( c3d_lpvLightData.lightIndex ) );
 						auto cascadeIndex = writer.declLocale( "cascadeIndex"
 							, writer.cast< Int >( max( 1_u, light.m_cascadeCount ) - 1_u ) );
+#if C3D_UseTiledDirectionalShadowMap
 						auto rsmCoords = writer.declLocale( "rsmCoords"
 							, ivec2( in.vertexIndex % rsmTexSize
 								, in.vertexIndex / rsmTexSize ) );
+#else
+						auto rsmCoords = writer.declLocale( "rsmCoords"
+							, ivec3( in.vertexIndex % rsmTexSize
+								, in.vertexIndex / rsmTexSize
+								, cascadeIndex ) );
+#endif
 
 						outRsmPos = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
 						outRsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();

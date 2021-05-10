@@ -1,5 +1,6 @@
 #include "Castor3D/Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapResult.hpp"
 #include "Castor3D/Shader/Ubos/RsmConfigUbo.hpp"
 
@@ -32,6 +33,19 @@ namespace castor3d
 			CU_Failure( "Unsupported LightType" );
 			break;
 		}
+	}
+
+	sdw::Vec3 ReflectiveShadowMapping::directional( shader::TiledDirectionalLight const & light
+		, sdw::Vec3 const & viewPosition
+		, sdw::Vec3 const & worldPosition
+		, sdw::Vec3 const & worldNormal
+		, shader::RsmConfigData const & rsmData )
+	{
+		return m_tiledDirectional( light
+			, viewPosition
+			, worldPosition
+			, worldNormal
+			, rsmData );
 	}
 
 	sdw::Vec3 ReflectiveShadowMapping::directional( shader::DirectionalLight const & light
@@ -72,8 +86,11 @@ namespace castor3d
 	void ReflectiveShadowMapping::doDeclareDirectional()
 	{
 		using namespace sdw;
-		m_directional = m_writer.implementFunction< Vec3 >( "reflectiveShadowMapping"
-			, [&]( shader::DirectionalLight const & light
+
+#if C3D_UseTiledDirectionalShadowMap
+
+		m_tiledDirectional = m_writer.implementFunction< Vec3 >( "reflectiveShadowMapping"
+			, [&]( shader::TiledDirectionalLight const & light
 				, Vec3 const & viewPosition
 				, Vec3 const & worldPosition
 				, Vec3 const & worldNormal
@@ -150,11 +167,99 @@ namespace castor3d
 					, vec3( 0.0_f )
 					, vec3( 1.0_f ) ) );
 			}
+			, shader::InTiledDirectionalLight{ m_writer, "light" }
+			, InVec3{ m_writer, "viewPosition" }
+			, InVec3{ m_writer, "worldPosition" }
+			, InVec3{ m_writer, "worldNormal" }
+			, shader::InRsmConfigData{ m_writer, "rsmData" } );
+
+#else
+
+		m_directional = m_writer.implementFunction< Vec3 >( "reflectiveShadowMapping"
+			, [&]( shader::DirectionalLight const & light
+				, Vec3 const & viewPosition
+				, Vec3 const & worldPosition
+				, Vec3 const & worldNormal
+				, shader::RsmConfigData const & rsmData )
+			{
+				auto c3d_rsmNormalMap = m_writer.getVariable< SampledImage2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormalLinear ) );
+				auto c3d_rsmPositionMap = m_writer.getVariable< SampledImage2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::ePosition ) );
+				auto c3d_rsmFluxMap = m_writer.getVariable< SampledImage2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eFlux ) );
+				auto maxCount = m_writer.declLocale( "maxCount"
+					, max( light.m_cascadeCount, 1_u ) - 1_u );
+				auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
+					, 0_u );
+
+#if C3D_RSMGIUseCascasdes
+
+				// Get cascade index for the current fragment's view position
+				FOR( m_writer, UInt, i, 0u, i < maxCount, ++i )
+				{
+					IF( m_writer, viewPosition.z() < light.m_splitDepths[i] )
+					{
+						cascadeIndex = i + 1_u;
+					}
+					FI;
+				}
+				ROF;
+
+				auto rMax = m_writer.declLocale< Float >( "rMax"
+					, rsmData.rsmRMax / light.m_splitScales[cascadeIndex] );
+#else
+				auto rMax = m_writer.declLocale< Float >( "rMax"
+					, rsmData.rsmRMax / light.m_splitScales[cascadeIndex] );
+#endif
+				auto lightSpacePosition = m_writer.declLocale< Vec4 >( "lightSpacePosition"
+					, light.m_transforms[cascadeIndex] * vec4( worldPosition, 1.0 ) );
+				lightSpacePosition.xy() = sdw::fma( lightSpacePosition.xy()
+					, vec2( 0.5_f )
+					, vec2( 0.5_f ) );
+				auto indirectIllumination = m_writer.declLocale( "indirectIllumination"
+					, vec3( 0.0_f ) );
+
+				FOR( m_writer, UInt, i, 0_u, i < rsmData.rsmSampleCount, ++i )
+				{
+					auto rnd = m_writer.declLocale( "rnd"
+						, m_rsmSamples[i].xy() );
+
+					auto coords = m_writer.declLocale( "coords"
+						, vec3( lightSpacePosition.xy() + rMax * rnd
+							, m_writer.cast< Float >( cascadeIndex ) ) );
+
+					auto vplPositionWS = m_writer.declLocale( "vplPositionWS"
+						, c3d_rsmPositionMap.sample( coords ).xyz() );
+					auto vplNormalWS = m_writer.declLocale( "vplNormalWS"
+						, c3d_rsmNormalMap.sample( coords ).xyz() );
+					auto vplFlux = m_writer.declLocale( "vplFlux"
+						, c3d_rsmFluxMap.sample( coords ).xyz() );
+					auto dot1 = m_writer.declLocale( "dot1"
+						, max( 0.0_f, dot( vplNormalWS, worldPosition - vplPositionWS ) ) );
+					auto dot2 = m_writer.declLocale( "dot2"
+						, max( 0.0_f, dot( worldNormal, vplPositionWS - worldPosition ) ) );
+					auto diff = m_writer.declLocale( "diff"
+						, worldPosition - vplPositionWS );
+					auto sqdist = m_writer.declLocale( "sqdist"
+						, dot( diff, diff ) );
+
+					auto result = m_writer.declLocale( "result"
+						, vplFlux * ( dot1 * dot2 ) / ( sqdist * sqdist ) );
+
+					result *= rnd.x() * rnd.x();
+					indirectIllumination += result;
+				}
+				ROF;
+
+				m_writer.returnStmt( clamp( indirectIllumination * rsmData.rsmIntensity
+					, vec3( 0.0_f )
+					, vec3( 1.0_f ) ) );
+			}
 			, shader::InDirectionalLight{ m_writer, "light" }
 			, InVec3{ m_writer, "viewPosition" }
 			, InVec3{ m_writer, "worldPosition" }
 			, InVec3{ m_writer, "worldNormal" }
 			, shader::InRsmConfigData{ m_writer, "rsmData" } );
+
+#endif
 	}
 
 	void ReflectiveShadowMapping::doDeclarePoint()

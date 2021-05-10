@@ -13,7 +13,6 @@ See LICENSE file in root folder
 
 #include <ShaderWriter/BaseTypes/Array.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
-#include <ShaderWriter/CompositeTypes/Builtins.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
 
 namespace castor3d
@@ -31,15 +30,13 @@ namespace castor3d
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
-			C3D_API sdw::UInt getTileIndex( sdw::InVertex const & in )const;
-
 		private:
 			using sdw::StructInstance::getMember;
 			using sdw::StructInstance::getMemberArray;
 
-		private:
-			sdw::Array< sdw::UVec4 > m_instances;
-			sdw::UInt m_instanceCount;
+		public:
+			sdw::Array< sdw::UVec4 > instances;
+			sdw::UInt instanceCount;
 		};
 	}
 

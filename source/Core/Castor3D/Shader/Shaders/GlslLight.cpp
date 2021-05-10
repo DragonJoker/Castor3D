@@ -70,9 +70,8 @@ namespace castor3d
 			: StructInstance{ writer, std::move( expr ), enabled }
 			, m_lightBase{ getMember< Light >( "m_lightBase" ) }
 			, m_directionCount{ getMember< Vec4 >( "m_directionCount" ) }
-			, m_tiles{ getMember< Vec4 >( "m_tiles" ) }
-			, m_splitDepths{ getMemberArray< Vec4 >( "m_splitDepths" ) }
-			, m_splitScales{ getMemberArray< Vec4 >( "m_splitScales" ) }
+			, m_splitDepths{ getMember< Vec4 >( "m_splitDepths" ) }
+			, m_splitScales{ getMember< Vec4 >( "m_splitScales" ) }
 			, m_transforms{ getMemberArray< Mat4 >( "m_transforms" ) }
 			, m_direction{ m_directionCount.xyz() }
 			, m_cascadeCount{ writer.cast< UInt >( m_directionCount.w() ) }
@@ -88,6 +87,46 @@ namespace castor3d
 			{
 				result->declMember( "m_lightBase", Light::makeType( cache ) );
 				result->declMember( "m_directionCount", ast::type::Kind::eVec4F );
+				result->declMember( "m_splitDepths", ast::type::Kind::eVec4F );
+				result->declMember( "m_splitScales", ast::type::Kind::eVec4F );
+				result->declMember( "m_transforms", ast::type::Kind::eMat4x4F, DirectionalMaxCascadesCount );
+			}
+
+			return result;
+		}
+
+		std::unique_ptr< sdw::Struct > DirectionalLight::declare( sdw::ShaderWriter & writer )
+		{
+			return std::make_unique< sdw::Struct >( writer
+				, makeType( writer.getTypesCache() ) );
+		}
+
+		//*********************************************************************************************
+
+		TiledDirectionalLight::TiledDirectionalLight( ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstance{ writer, std::move( expr ), enabled }
+			, m_lightBase{ getMember< Light >( "m_lightBase" ) }
+			, m_directionCount{ getMember< Vec4 >( "m_directionCount" ) }
+			, m_tiles{ getMember< Vec4 >( "m_tiles" ) }
+			, m_splitDepths{ getMemberArray< Vec4 >( "m_splitDepths" ) }
+			, m_splitScales{ getMemberArray< Vec4 >( "m_splitScales" ) }
+			, m_transforms{ getMemberArray< Mat4 >( "m_transforms" ) }
+			, m_direction{ m_directionCount.xyz() }
+			, m_cascadeCount{ writer.cast< UInt >( m_directionCount.w() ) }
+		{
+		}
+
+		ast::type::StructPtr TiledDirectionalLight::makeType( ast::type::TypesCache & cache )
+		{
+			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
+				, "TiledDirectionalLight" );
+
+			if ( result->empty() )
+			{
+				result->declMember( "m_lightBase", Light::makeType( cache ) );
+				result->declMember( "m_directionCount", ast::type::Kind::eVec4F );
 				result->declMember( "m_tiles", ast::type::Kind::eVec4F );
 				result->declMember( "m_splitDepths", ast::type::Kind::eVec4F, 2u );
 				result->declMember( "m_splitScales", ast::type::Kind::eVec4F, 2u );
@@ -97,7 +136,7 @@ namespace castor3d
 			return result;
 		}
 
-		std::unique_ptr< sdw::Struct > DirectionalLight::declare( sdw::ShaderWriter & writer )
+		std::unique_ptr< sdw::Struct > TiledDirectionalLight::declare( sdw::ShaderWriter & writer )
 		{
 			return std::make_unique< sdw::Struct >( writer
 				, makeType( writer.getTypesCache() ) );

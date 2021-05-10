@@ -84,6 +84,7 @@ namespace castor3d
 		class Fog;
 		struct Light;
 		struct DirectionalLight;
+		struct TiledDirectionalLight;
 		struct PointLight;
 		struct SpotLight;
 		class Materials;
@@ -112,6 +113,7 @@ namespace castor3d
 
 		Writer_Parameter( Light );
 		Writer_Parameter( DirectionalLight );
+		Writer_Parameter( TiledDirectionalLight );
 		Writer_Parameter( PointLight );
 		Writer_Parameter( SpotLight );
 		Writer_Parameter( TextureConfigData );

@@ -1,5 +1,6 @@
 #include "Castor3D/Shader/Shaders/GlslSpecularBrdfLighting.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
@@ -45,6 +46,19 @@ namespace castor3d
 			auto end = m_writer.declLocale( "end"
 				, sceneData.getDirectionalLightCount() );
 
+#if C3D_UseTiledDirectionalShadowMap
+			FOR( m_writer, Int, dir, begin, dir < end, ++dir )
+			{
+				compute( getTiledDirectionalLight( dir )
+					, worldEye
+					, specular
+					, glossiness
+					, receivesShadows
+					, surface
+					, parentOutput );
+			}
+			ROF;
+#else
 			FOR( m_writer, Int, dir, begin, dir < end, ++dir )
 			{
 				compute( getDirectionalLight( dir )
@@ -56,6 +70,7 @@ namespace castor3d
 					, parentOutput );
 			}
 			ROF;
+#endif
 
 			begin = end;
 			end += sceneData.getPointLightCount();
@@ -88,6 +103,23 @@ namespace castor3d
 			ROF;
 		}
 
+		void SpecularBrdfLightingModel::compute( TiledDirectionalLight const & light
+			, Vec3 const & worldEye
+			, Vec3 const & specular
+			, Float const & glossiness
+			, Int const & receivesShadows
+			, Surface surface
+			, OutputComponents & parentOutput )const
+		{
+			m_computeTiledDirectional( light
+				, worldEye
+				, specular
+				, glossiness
+				, receivesShadows
+				, surface
+				, parentOutput );
+		}
+
 		void SpecularBrdfLightingModel::compute( DirectionalLight const & light
 			, Vec3 const & worldEye
 			, Vec3 const & specular
@@ -96,7 +128,7 @@ namespace castor3d
 			, Surface surface
 			, OutputComponents & parentOutput )const
 		{
-			m_computeDirectional( DirectionalLight{ light }
+			m_computeDirectional( light
 				, worldEye
 				, specular
 				, glossiness
@@ -113,7 +145,7 @@ namespace castor3d
 			, Surface surface
 			, OutputComponents & parentOutput )const
 		{
-			m_computePoint( PointLight{ light }
+			m_computePoint( light
 				, worldEye
 				, specular
 				, glossiness
@@ -130,7 +162,7 @@ namespace castor3d
 			, Surface surface
 			, OutputComponents & parentOutput )const
 		{
-			m_computeSpot( SpotLight{ light }
+			m_computeSpot( light
 				, worldEye
 				, specular
 				, glossiness
@@ -153,6 +185,18 @@ namespace castor3d
 			auto result = m_writer.declLocale( "result"
 				, vec3( 0.0_f ) );
 
+#if C3D_UseTiledDirectionalShadowMap
+			FOR( m_writer, Int, dir, begin, dir < end, ++dir )
+			{
+				result += computeDiffuse( getTiledDirectionalLight( dir )
+					, worldEye
+					, specular
+					, glossiness
+					, receivesShadows
+					, surface );
+			}
+			ROF;
+#else
 			FOR( m_writer, Int, dir, begin, dir < end, ++dir )
 			{
 				result += computeDiffuse( getDirectionalLight( dir )
@@ -163,6 +207,7 @@ namespace castor3d
 					, surface );
 			}
 			ROF;
+#endif
 
 			begin = end;
 			end += sceneData.getPointLightCount();
@@ -195,6 +240,21 @@ namespace castor3d
 			return result;
 		}
 
+		Vec3 SpecularBrdfLightingModel::computeDiffuse( TiledDirectionalLight const & light
+			, Vec3 const & worldEye
+			, Vec3 const & specular
+			, Float const & glossiness
+			, Int const & receivesShadows
+			, Surface surface )const
+		{
+			return m_computeTiledDirectionalDiffuse( light
+				, worldEye
+				, specular
+				, glossiness
+				, receivesShadows
+				, surface );
+		}
+
 		Vec3 SpecularBrdfLightingModel::computeDiffuse( DirectionalLight const & light
 			, Vec3 const & worldEye
 			, Vec3 const & specular
@@ -202,7 +262,7 @@ namespace castor3d
 			, Int const & receivesShadows
 			, Surface surface )const
 		{
-			return m_computeDirectionalDiffuse( DirectionalLight{ light }
+			return m_computeDirectionalDiffuse( light
 				, worldEye
 				, specular
 				, glossiness
@@ -217,7 +277,7 @@ namespace castor3d
 			, Int const & receivesShadows
 			, Surface surface )const
 		{
-			return m_computePointDiffuse( PointLight{ light }
+			return m_computePointDiffuse( light
 				, worldEye
 				, specular
 				, glossiness
@@ -232,7 +292,7 @@ namespace castor3d
 			, Int const & receivesShadows
 			, Surface surface )const
 		{
-			return m_computeSpotDiffuse( SpotLight{ light }
+			return m_computeSpotDiffuse( light
 				, worldEye
 				, specular
 				, glossiness
@@ -458,6 +518,171 @@ namespace castor3d
 		void SpecularBrdfLightingModel::doDeclareComputeDirectionalLight()
 		{
 			OutputComponents output{ m_writer };
+#if C3D_UseTiledDirectionalShadowMap
+			m_computeTiledDirectional = m_writer.implementFunction< sdw::Void >( "computeDirectionalLight"
+				, [this]( TiledDirectionalLight const & light
+					, Vec3 const & worldEye
+					, Vec3 const & specular
+					, Float const & glossiness
+					, Int const & receivesShadows
+					, Surface surface
+					, OutputComponents & parentOutput )
+				{
+					OutputComponents output
+					{
+						m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) ),
+						m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
+					};
+					PbrSGMaterials materials{ m_writer };
+					auto lightDirection = m_writer.declLocale( "lightDirection"
+						, normalize( -light.m_direction ) );
+
+					if ( m_shadowModel->isEnabled() )
+					{
+						IF( m_writer, light.m_lightBase.m_shadowType != Int( int( ShadowType::eNone ) ) )
+						{
+							auto cascadeFactors = m_writer.declLocale( "cascadeFactors"
+								, vec3( 0.0_f, 1.0_f, 0.0_f ) );
+							auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
+								, 0_u );
+							auto shadowFactor = m_writer.declLocale( "shadowFactor"
+								, 1.0_f );
+
+							IF ( m_writer, receivesShadows != 0_i )
+							{
+								auto c3d_maxCascadeCount = m_writer.getVariable< UInt >( "c3d_maxCascadeCount" );
+								auto maxCount = m_writer.declLocale( "maxCount"
+									, m_writer.cast< UInt >( clamp( light.m_cascadeCount, 1_u, c3d_maxCascadeCount ) - 1_u ) );
+
+								// Get cascade index for the current fragment's view position
+								FOR( m_writer, UInt, i, 0u, i < maxCount, ++i )
+								{
+									auto factors = m_writer.declLocale( "factors"
+										, m_getTileFactors( Vec3{ surface.viewPosition }
+											, light.m_splitDepths
+											, i ) );
+
+									IF( m_writer, factors.x() != 0.0_f )
+									{
+										cascadeFactors = factors;
+									}
+									FI;
+								}
+								ROF;
+
+								cascadeIndex = m_writer.cast< UInt >( cascadeFactors.x() );
+								shadowFactor = cascadeFactors.y()
+									* max( 1.0_f - m_writer.cast< Float >( receivesShadows )
+										, m_shadowModel->computeDirectional( light.m_lightBase
+											, surface
+											, light.m_transforms[cascadeIndex]
+											, -lightDirection
+											, cascadeIndex
+											, light.m_cascadeCount ) );
+
+								IF( m_writer, cascadeIndex > 0_u )
+								{
+									shadowFactor += cascadeFactors.z()
+										* max( 1.0_f - m_writer.cast< Float >( receivesShadows )
+											, m_shadowModel->computeDirectional( light.m_lightBase
+												, surface
+												, light.m_transforms[cascadeIndex - 1u]
+												, -lightDirection
+												, cascadeIndex - 1u
+												, light.m_cascadeCount ) );
+								}
+								FI;
+							}
+							FI;
+
+							IF( m_writer, shadowFactor )
+							{
+								m_cookTorrance.compute( light.m_lightBase
+									, worldEye
+									, lightDirection
+									, specular
+									, 1.0_f - glossiness
+									, surface
+									, output );
+								output.m_diffuse *= shadowFactor;
+								output.m_specular *= shadowFactor;
+							}
+							FI;
+
+							if ( m_isOpaqueProgram )
+							{
+								IF( m_writer, light.m_lightBase.m_volumetricSteps != 0_u )
+								{
+									m_shadowModel->computeVolumetric( light.m_lightBase
+										, surface
+										, worldEye
+										, light.m_transforms[cascadeIndex]
+										, light.m_direction
+										, cascadeIndex
+										, light.m_cascadeCount
+										, output );
+								}
+								FI;
+							}
+
+#if C3D_DebugCascades
+							IF( m_writer, cascadeIndex == 0_u )
+							{
+								output.m_diffuse.rgb() *= vec3( 1.0_f, 0.25f, 0.25f );
+								output.m_specular.rgb() *= vec3( 1.0_f, 0.25f, 0.25f );
+							}
+							ELSEIF( cascadeIndex == 1_u )
+							{
+								output.m_diffuse.rgb() *= vec3( 0.25_f, 1.0f, 0.25f );
+								output.m_specular.rgb() *= vec3( 0.25_f, 1.0f, 0.25f );
+							}
+							ELSEIF( cascadeIndex == 2_u )
+							{
+								output.m_diffuse.rgb() *= vec3( 0.25_f, 0.25f, 1.0f );
+								output.m_specular.rgb() *= vec3( 0.25_f, 0.25f, 1.0f );
+							}
+							ELSE
+							{
+								output.m_diffuse.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
+								output.m_specular.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
+							}
+							FI;
+#endif
+						}
+						ELSE
+						{
+							m_cookTorrance.compute( light.m_lightBase
+								, worldEye
+								, lightDirection
+								, specular
+								, 1.0_f - glossiness
+								, surface
+								, output );
+						}
+						FI;
+					}
+					else
+					{
+						m_cookTorrance.compute( light.m_lightBase
+							, worldEye
+							, lightDirection
+							, specular
+							, 1.0_f - glossiness
+							, surface
+							, output );
+					}
+
+					parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
+					parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
+				}
+				, InTiledDirectionalLight( m_writer, "light" )
+				, InVec3( m_writer, "worldEye" )
+				, InVec3( m_writer, "specular" )
+				, InFloat( m_writer, "glossiness" )
+				, InInt( m_writer, "receivesShadows" )
+				, InSurface{ m_writer, "surface" }
+				, output );
+#else
 			m_computeDirectional = m_writer.implementFunction< sdw::Void >( "computeDirectionalLight"
 				, [this]( DirectionalLight const & light
 					, Vec3 const & worldEye
@@ -621,6 +846,7 @@ namespace castor3d
 				, InInt( m_writer, "receivesShadows" )
 				, InSurface{ m_writer, "surface" }
 				, output );
+#endif
 		}
 
 		void SpecularBrdfLightingModel::doDeclareComputePointLight()
@@ -827,6 +1053,82 @@ namespace castor3d
 
 		void SpecularBrdfLightingModel::doDeclareComputeDirectionalLightDiffuse()
 		{
+#if C3D_UseTiledDirectionalShadowMap
+			m_computeTiledDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeDirectionalLight"
+				, [this]( TiledDirectionalLight const & light
+					, Vec3 const & worldEye
+					, Vec3 const & specular
+					, Float const & glossiness
+					, Int const & receivesShadows
+					, Surface surface )
+				{
+					PbrSGMaterials materials{ m_writer };
+					auto diffuse = m_writer.declLocale( "diffuse"
+						, vec3( 0.0_f ) );
+					auto lightDirection = m_writer.declLocale( "lightDirection"
+						, normalize( -light.m_direction ) );
+
+					if ( m_shadowModel->isEnabled() )
+					{
+						IF( m_writer, light.m_lightBase.m_shadowType != Int( int( ShadowType::eNone ) ) )
+						{
+							auto cascadeFactors = m_writer.declLocale( "cascadeFactors"
+								, vec3( 0.0_f, 1.0_f, 0.0_f ) );
+							auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
+								, light.m_cascadeCount - 1_u );
+							auto shadowFactor = m_writer.declLocale( "shadowFactor"
+								, 1.0_f );
+
+							IF ( m_writer, receivesShadows != 0_i )
+							{
+								shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
+									, m_shadowModel->computeDirectional( light.m_lightBase
+										, surface
+										, light.m_transforms[cascadeIndex]
+										, -lightDirection
+										, cascadeIndex
+										, light.m_cascadeCount ) );
+							}
+							FI;
+
+							IF( m_writer, shadowFactor )
+							{
+								diffuse = shadowFactor * m_cookTorrance.computeDiffuse( light.m_lightBase
+									, worldEye
+									, lightDirection
+									, specular
+									, surface );
+							}
+							FI;
+						}
+						ELSE
+						{
+							diffuse = m_cookTorrance.computeDiffuse( light.m_lightBase
+								, worldEye
+								, lightDirection
+								, specular
+								, surface );
+						}
+						FI;
+					}
+					else
+					{
+						diffuse = m_cookTorrance.computeDiffuse( light.m_lightBase
+							, worldEye
+							, lightDirection
+							, specular
+							, surface );
+					}
+
+					m_writer.returnStmt( max( vec3( 0.0_f ), diffuse ) );
+				}
+				, InTiledDirectionalLight( m_writer, "light" )
+				, InVec3( m_writer, "worldEye" )
+				, InVec3( m_writer, "specular" )
+				, InFloat( m_writer, "glossiness" )
+				, InInt( m_writer, "receivesShadows" )
+				, InSurface{ m_writer, "surface" } );
+#else
 			m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeDirectionalLight"
 				, [this]( DirectionalLight const & light
 					, Vec3 const & worldEye
@@ -901,6 +1203,7 @@ namespace castor3d
 				, InFloat( m_writer, "glossiness" )
 				, InInt( m_writer, "receivesShadows" )
 				, InSurface{ m_writer, "surface" } );
+#endif
 		}
 
 		void SpecularBrdfLightingModel::doDeclareComputePointLightDiffuse()
