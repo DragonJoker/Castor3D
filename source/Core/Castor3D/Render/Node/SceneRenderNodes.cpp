@@ -10,6 +10,8 @@
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/Node/BillboardRenderNode.hpp"
+#include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -20,6 +22,8 @@
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
+
+#include <CastorUtils/Multithreading/MultithreadingModule.hpp>
 
 CU_ImplementCUSmartPtr( castor3d, SceneRenderNodes )
 
@@ -206,9 +210,12 @@ namespace castor3d
 				CU_Require( node.modelUbo );
 				node.modelUbo.createSizedBinding( descriptorSet
 					, layout.getBinding( uint32_t( NodeUboIdx::eModel ) ) );
-				CU_Require( node.modelInstancesUbo );
-				node.modelInstancesUbo.createSizedBinding( descriptorSet
-					, layout.getBinding( uint32_t( NodeUboIdx::eModelInstances ) ) );
+
+				if ( node.modelInstancesUbo )
+				{
+					node.modelInstancesUbo.createSizedBinding( descriptorSet
+						, layout.getBinding( uint32_t( NodeUboIdx::eModelInstances ) ) );
+				}
 
 				if constexpr ( std::is_same_v< NodeT, SubmeshRenderNode > )
 				{
@@ -338,6 +345,7 @@ namespace castor3d
 		, AnimatedMesh * mesh
 		, AnimatedSkeleton * skeleton )
 	{
+		auto lock( castor::makeUniqueLock( m_nodesMutex ) );
 		auto it = m_submeshNodes.emplace( makeHash( sceneNode, data, instance ), nullptr );
 
 		if ( it.second )
@@ -365,6 +373,7 @@ namespace castor3d
 		, BillboardBase & instance
 		, UniformBufferOffsetT< BillboardUboConfiguration > billboardBuffer )
 	{
+		auto lock( castor::makeUniqueLock( m_nodesMutex ) );
 		auto it = m_billboardNodes.emplace( makeHash( sceneNode, instance ), nullptr );
 
 		if ( it.second )
@@ -415,6 +424,7 @@ namespace castor3d
 		, AnimatedMesh const * mesh
 		, AnimatedSkeleton const * skeleton )
 	{
+		auto lock( castor::makeUniqueLock( m_layoutsMutex ) );
 		auto textures = pass.getTexturesMask();
 		size_t hash = makeLayoutHash( textures.size(), billboard, submesh, mesh, skeleton );
 		auto ires = m_descriptorLayouts.emplace( hash, DescriptorSetLayouts{} );

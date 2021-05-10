@@ -7,12 +7,15 @@ See LICENSE file in root folder
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
+#include "Castor3D/Scene/Animation/AnimationModule.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
-#include "Castor3D/Render/Node/BillboardRenderNode.hpp"
-#include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
+#include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Render/Node/PassRenderNode.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
+
+#include <mutex>
 
 namespace castor3d
 {
@@ -75,8 +78,10 @@ namespace castor3d
 		};
 
 	private:
+		std::mutex m_nodesMutex;
 		std::unordered_map< size_t, SubmeshRenderNodeUPtr > m_submeshNodes;
 		std::unordered_map< size_t, BillboardRenderNodeUPtr > m_billboardNodes;
+		std::mutex m_layoutsMutex;
 		std::unordered_map< size_t, DescriptorSetLayouts > m_descriptorLayouts;
 		uint32_t m_currentPoolSize{};
 		struct DescriptorCounts

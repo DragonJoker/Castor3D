@@ -8,6 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Overlay/OverlayModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMapModule.hpp"
+#include "Castor3D/Render/Node/RenderNodeModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Render/Technique/Voxelize/VoxelSceneData.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
@@ -330,6 +331,11 @@ namespace castor3d
 		{
 			return m_voxelConfig;
 		}
+
+		SceneRenderNodes & getRenderNodes()const
+		{
+			return *m_renderNodes;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -421,6 +427,7 @@ namespace castor3d
 		std::map< castor::String, OnLightChangedConnection > m_lightConnections;
 		float m_lpvIndirectAttenuation{ 1.7f };
 		VoxelSceneData m_voxelConfig;
+		SceneRenderNodesUPtr m_renderNodes;
 
 	public:
 		//!\~english	The cameras root node name.

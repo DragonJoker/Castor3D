@@ -15,6 +15,7 @@
 #include "Castor3D/Render/RenderQueue.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
+#include "Castor3D/Render/Node/SceneRenderNodes.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -481,7 +482,6 @@ namespace castor3d
 
 	QueueRenderNodes::QueueRenderNodes( RenderQueue const & queue )
 		: castor::OwnedBy< RenderQueue const >{ queue }
-		, m_allNodes{ queue.getCuller().getScene() }
 	{
 	}
 
@@ -511,7 +511,7 @@ namespace castor3d
 		renderPass.getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
 			, [&renderPass, this, shadowMaps]( RenderDevice const & device )
 			{
-				m_allNodes.initialiseNodes( device );
+				getOwner()->getCuller().getScene().getRenderNodes().initialiseNodes( device );
 
 				doInitialiseNodes( renderPass, staticNodes.frontCulled, shadowMaps );
 				doInitialiseNodes( renderPass, staticNodes.backCulled, shadowMaps );
@@ -623,7 +623,7 @@ namespace castor3d
 		, AnimatedMesh * mesh
 		, AnimatedSkeleton * skeleton )
 	{
-		return m_allNodes.createNode( passNode
+		return getOwner()->getCuller().getScene().getRenderNodes().createNode( passNode
 			, std::move( modelBuffer )
 			, std::move( modelInstancesBuffer )
 			, buffers
@@ -642,7 +642,7 @@ namespace castor3d
 		, BillboardBase & instance
 		, UniformBufferOffsetT< BillboardUboConfiguration > billboardBuffer )
 	{
-		return m_allNodes.createNode( passNode
+		return getOwner()->getCuller().getScene().getRenderNodes().createNode( passNode
 			, std::move( modelBuffer )
 			, std::move( modelInstancesBuffer )
 			, buffers
@@ -654,7 +654,7 @@ namespace castor3d
 	ashes::DescriptorSetLayoutCRefArray QueueRenderNodes::getDescriptorSetLayouts( Pass const & pass
 		, BillboardBase const & billboard )
 	{
-		return m_allNodes.getDescriptorSetLayouts( pass
+		return getOwner()->getCuller().getScene().getRenderNodes().getDescriptorSetLayouts( pass
 			, billboard );
 	}
 
@@ -663,7 +663,7 @@ namespace castor3d
 		, AnimatedMesh const * mesh
 		, AnimatedSkeleton const * skeleton )
 	{
-		return m_allNodes.getDescriptorSetLayouts( pass
+		return getOwner()->getCuller().getScene().getRenderNodes().getDescriptorSetLayouts( pass
 			, submesh
 			, mesh
 			, skeleton );

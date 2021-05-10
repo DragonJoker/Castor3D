@@ -4,9 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_QueueRenderNodes_H___
 #define ___C3D_QueueRenderNodes_H___
 
-#include "Castor3D/Render/Node/RenderNodeModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
-#include "Castor3D/Render/Node/SceneRenderNodes.hpp"
+#include "Castor3D/Scene/Animation/AnimationModule.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
+
+#include "Castor3D/Buffer/UniformBufferOffset.hpp"
+#include "Castor3D/Render/Node/PassRenderNode.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 
@@ -97,9 +100,6 @@ namespace castor3d
 			, Submesh const & submesh
 			, AnimatedMesh const * mesh
 			, AnimatedSkeleton const * skeleton );
-
-	private:
-		SceneRenderNodes m_allNodes;
 	};
 }
 
