@@ -60,7 +60,7 @@ namespace castor3d
 		while ( it != m_handlers.end() )
 		{
 			auto handler = *it;
-			doRemoveHandler( handler );
+			doRemoveHandler( *handler );
 			it = m_handlers.begin();
 		}
 	}
