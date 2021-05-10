@@ -15,6 +15,8 @@
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp"
 #include "Castor3D/Render/Node/QueueCulledRenderNodes.hpp"
+#include "Castor3D/Render/Node/BillboardRenderNode.hpp"
+#include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
