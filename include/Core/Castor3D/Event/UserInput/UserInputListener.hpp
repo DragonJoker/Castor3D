@@ -371,7 +371,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les gestionnaires, de manière thread-safe.
 		 */
-		inline std::vector< EventHandler * > doGetHandlers()const
+		inline std::vector< EventHandlerSPtr > doGetHandlers()const
 		{
 			auto lock( castor::makeUniqueLock( m_mutexHandlers ) );
 			return m_handlers;
@@ -397,7 +397,7 @@ namespace castor3d
 		 *\remarks		Vous *DEVEZ* appeler cette fonction lors de l'ajout d'un gestionnaire dans vos listes, si vous voulez qu'il soit mis à jour.
 		 *\param[in]	handler	Le gestionnaire.
 		 */
-		inline void doAddHandler( EventHandler * handler )
+		inline void doAddHandler( EventHandlerSPtr handler )
 		{
 			auto lock( castor::makeUniqueLock( m_mutexHandlers ) );
 
@@ -418,10 +418,15 @@ namespace castor3d
 		 *\remarks		Vous *DEVEZ* appeler cette fonction lors de l'ajout d'un gestionnaire dans vos listes, si vous voulez qu'il soit mis à jour.
 		 *\param[in]	handler	Le gestionnaire.
 		 */
-		inline void doRemoveHandler( EventHandler * handler )
+		inline void doRemoveHandler( EventHandler const & handler )
 		{
 			auto lock( castor::makeUniqueLock( m_mutexHandlers ) );
-			m_handlers.erase( std::find( std::begin( m_handlers ), std::end( m_handlers ), handler ) );
+			m_handlers.erase( std::find_if( std::begin( m_handlers )
+				, std::end( m_handlers )
+				, [&handler]( auto lookup )
+				{
+					return lookup.get() == &handler;
+				} ) );
 		}
 
 	private:
@@ -457,7 +462,7 @@ namespace castor3d
 		mutable std::mutex m_mutexHandlers;
 		//!\~english	The handlers array.
 		//!\~french		Le tableau de gestionnaires.
-		std::vector< EventHandler * > m_handlers;
+		std::vector< EventHandlerSPtr > m_handlers;
 		//!\~english	The associated frame listener.
 		//!\~french		Le frame listener associé.
 		FrameListenerSPtr m_frameListener;

@@ -219,14 +219,12 @@ namespace castor3d
 			, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT | VK_COMMAND_POOL_CREATE_TRANSIENT_BIT );
 		doCreateProgram();
 		doCreateSwapchain();
-		getEngine()->registerWindow( *this );
 	}
 
 	RenderWindow::~RenderWindow()
 	{
 		log::debug << "Destroyed render window " << m_index << std::endl;
 		auto & engine = *getEngine();
-		engine.unregisterWindow( *this );
 		auto listener = getListener();
 		engine.getFrameListenerCache().remove( getName() + castor::string::toString( m_index ) );
 		doDestroySwapchain();
@@ -310,12 +308,14 @@ namespace castor3d
 
 		m_dirty = false;
 
+		getEngine()->registerWindow( *this );
 		log::debug << "Created render window " << m_index << std::endl;
 	}
 
 	void RenderWindow::cleanup()
 	{
 		auto & engine = *getEngine();
+		engine.unregisterWindow( *this );
 		bool hasCurrent = engine.getRenderSystem()->hasCurrentRenderDevice();
 
 		if ( hasCurrent

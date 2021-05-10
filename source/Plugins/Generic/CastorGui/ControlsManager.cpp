@@ -45,7 +45,7 @@ namespace CastorGui
 
 		for ( auto handler : m_handlers )
 		{
-			static_cast< Control * >( handler )->destroy();
+			std::static_pointer_cast< Control >( handler )->destroy();
 		}
 	}
 
@@ -118,7 +118,7 @@ namespace CastorGui
 
 	void ControlsManager::addControl( ControlSPtr p_control )
 	{
-		doAddHandler( p_control.get() );
+		doAddHandler( p_control );
 		LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
 
 		if ( m_controlsById.find( p_control->getId() ) != m_controlsById.end() )
@@ -295,7 +295,7 @@ namespace CastorGui
 
 			for ( auto handler : handlers )
 			{
-				m_controlsByZIndex.push_back( static_cast< Control * >( handler ) );
+				m_controlsByZIndex.push_back( static_cast< Control * >( handler.get() ) );
 			}
 		}
 
@@ -331,7 +331,7 @@ namespace CastorGui
 		}
 
 		m_changed = true;
-		doRemoveHandler( handler );
+		doRemoveHandler( *handler );
 	}
 
 	std::vector< Control * > ControlsManager::doGetControlsByZIndex()const
