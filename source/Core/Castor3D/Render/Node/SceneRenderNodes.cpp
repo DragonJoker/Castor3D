@@ -19,6 +19,7 @@
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
+#include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 
 CU_ImplementCUSmartPtr( castor3d, SceneRenderNodes )
 
@@ -30,6 +31,7 @@ namespace castor3d
 	{
 		size_t makeLayoutHash( size_t texturesCount
 			, BillboardBase const * billboard
+			, Submesh const * submesh
 			, AnimatedMesh const * mesh
 			, AnimatedSkeleton const * skeleton )
 		{
@@ -61,6 +63,7 @@ namespace castor3d
 		{
 			return makeLayoutHash( node.passNode.pass.getTexturesMask().size()
 				, nullptr
+				, &node.data
 				, node.mesh
 				, node.skeleton );
 		}
@@ -69,6 +72,7 @@ namespace castor3d
 		{
 			return makeLayoutHash( node.passNode.pass.getTexturesMask().size()
 				, &node.data
+				, nullptr
 				, nullptr
 				, nullptr );
 		}
@@ -96,6 +100,7 @@ namespace castor3d
 		ashes::VkDescriptorSetLayoutBindingArray doCreateUboBindings( Engine const & engine
 			, size_t texturesCount
 			, BillboardBase const * billboard
+			, Submesh const * submesh
 			, AnimatedMesh const * mesh
 			, AnimatedSkeleton const * skeleton )
 		{
@@ -121,12 +126,27 @@ namespace castor3d
 			{
 				if ( skeleton )
 				{
-					uboBindings.push_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eSkinningUbo )
-						, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-						, VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT ) );
-					uboBindings.push_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eSkinningSsbo )
-						, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-						, VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT ) );
+					if ( submesh->getInstantiatedBones().hasInstancedBonesBuffer() )
+					{
+						if ( engine.getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers ) )
+						{
+							uboBindings.push_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eSkinningSsbo )
+								, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+								, VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT ) );
+						}
+						else
+						{
+							uboBindings.push_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eSkinningSsbo )
+								, VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER
+								, VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT ) );
+						}
+					}
+					else
+					{
+						uboBindings.push_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eSkinningUbo )
+							, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+							, VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT ) );
+					}
 				}
 
 				if ( mesh )
@@ -202,13 +222,15 @@ namespace castor3d
 
 					if ( submeshNode.skeleton )
 					{
-						submeshNode.skinningUbo.createSizedBinding( descriptorSet
-							, layout.getBinding( uint32_t( NodeUboIdx::eSkinningUbo ) ) );
-
 						if ( submeshNode.data.getInstantiatedBones().hasInstancedBonesBuffer() )
 						{
 							submeshNode.data.getInstantiatedBones().getInstancedBonesBuffer().createBinding( descriptorSet
 								, layout.getBinding( uint32_t( NodeUboIdx::eSkinningSsbo ) ) );
+						}
+						else
+						{
+							submeshNode.skinningUbo.createSizedBinding( descriptorSet
+								, layout.getBinding( uint32_t( NodeUboIdx::eSkinningUbo ) ) );
 						}
 					}
 				}
@@ -320,7 +342,7 @@ namespace castor3d
 
 		if ( it.second )
 		{
-			doUpdateDescriptorsCounts( passNode.pass, nullptr, mesh, skeleton );
+			doUpdateDescriptorsCounts( passNode.pass, nullptr, &data, mesh, skeleton );
 			it.first->second = castor::makeUnique< SubmeshRenderNode >( std::move( passNode )
 				, std::move( modelBuffer )
 				, std::move( modelInstancesBuffer )
@@ -347,7 +369,7 @@ namespace castor3d
 
 		if ( it.second )
 		{
-			doUpdateDescriptorsCounts( passNode.pass, &instance, nullptr, nullptr );
+			doUpdateDescriptorsCounts( passNode.pass, &instance, nullptr, nullptr, nullptr );
 			it.first->second = castor::makeUnique< BillboardRenderNode >( std::move( passNode )
 				, std::move( modelBuffer )
 				, std::move( modelInstancesBuffer )
@@ -361,12 +383,40 @@ namespace castor3d
 	}
 
 	ashes::DescriptorSetLayoutCRefArray SceneRenderNodes::getDescriptorSetLayouts( Pass const & pass
+		, BillboardBase const & billboard )
+	{
+		return doGetDescriptorSetLayouts( pass, &billboard, nullptr, nullptr, nullptr );
+	}
+
+	ashes::DescriptorSetLayoutCRefArray SceneRenderNodes::getDescriptorSetLayouts( Pass const & pass
+		, Submesh const & submesh
+		, AnimatedMesh const * mesh
+		, AnimatedSkeleton const * skeleton )
+	{
+		return doGetDescriptorSetLayouts( pass, nullptr, &submesh, mesh, skeleton );
+	}
+
+	void SceneRenderNodes::update( GpuUpdater & updater )
+	{
+		for ( auto & node : m_submeshNodes )
+		{
+			doUpdateNode( *node.second );
+		}
+
+		for ( auto & node : m_billboardNodes )
+		{
+			doUpdateNode( *node.second );
+		}
+	}
+
+	ashes::DescriptorSetLayoutCRefArray SceneRenderNodes::doGetDescriptorSetLayouts( Pass const & pass
 		, BillboardBase const * billboard
+		, Submesh const * submesh
 		, AnimatedMesh const * mesh
 		, AnimatedSkeleton const * skeleton )
 	{
 		auto textures = pass.getTexturesMask();
-		size_t hash = makeLayoutHash( textures.size(), billboard, mesh, skeleton );
+		size_t hash = makeLayoutHash( textures.size(), billboard, submesh, mesh, skeleton );
 		auto ires = m_descriptorLayouts.emplace( hash, DescriptorSetLayouts{} );
 
 		if ( ires.second )
@@ -376,6 +426,7 @@ namespace castor3d
 			ires.first->second.ubo = device->createDescriptorSetLayout( doCreateUboBindings( engine
 				, textures.size()
 				, billboard
+				, submesh
 				, mesh
 				, skeleton ) );
 			ires.first->second.tex = device->createDescriptorSetLayout( doCreateTextureBindings( textures.size() ) );
@@ -389,6 +440,7 @@ namespace castor3d
 
 	void SceneRenderNodes::doUpdateDescriptorsCounts( Pass const & pass
 		, BillboardBase * billboard
+		, Submesh const * submesh
 		, AnimatedMesh * mesh
 		, AnimatedSkeleton * skeleton )
 	{
@@ -412,9 +464,21 @@ namespace castor3d
 
 			if ( skeleton )
 			{
-				m_descriptorCounts.uniformBuffers++; // Skinning UBO
-				m_descriptorCounts.texelBuffers++; // Instantiated Skinning TBO
-				m_descriptorCounts.storageBuffers++; // Instantiated Skinning SSBO
+				if ( submesh->getInstantiatedBones().hasInstancedBonesBuffer() )
+				{
+					if ( getOwner()->getEngine()->getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers ) )
+					{
+						m_descriptorCounts.storageBuffers++; // Instantiated Skinning SSBO
+					}
+					else
+					{
+						m_descriptorCounts.texelBuffers++; // Instantiated Skinning TBO
+					}
+				}
+				else
+				{
+					m_descriptorCounts.uniformBuffers++; // Skinning UBO
+				}
 			}
 		}
 
@@ -474,6 +538,14 @@ namespace castor3d
 				, std::move( sizes ) );
 			m_currentPoolSize = newSize;
 		}
+	}
+
+	void SceneRenderNodes::doUpdateNode( SubmeshRenderNode & node )
+	{
+	}
+
+	void SceneRenderNodes::doUpdateNode( BillboardRenderNode & node )
+	{
 	}
 
 	//*************************************************************************************************

@@ -30,7 +30,7 @@ namespace castor3d
 					, SkinningUbo::BufferSkinning
 					, writer.getTypesCache().getMat4x4F()
 					, ast::type::MemoryLayout::eStd140
-					, uboBinding
+					, sboBinding
 					, set
 					, true );
 			}
@@ -38,7 +38,7 @@ namespace castor3d
 			{
 				result.ubo = std::make_unique< sdw::Ubo >( writer
 					, SkinningUbo::BufferSkinning
-					, sboBinding
+					, uboBinding
 					, set );
 				result.ubo->declMember< sdw::Mat4 >( SkinningUbo::Bones
 					, 400
@@ -48,28 +48,6 @@ namespace castor3d
 		}
 
 		return result;
-	}
-
-	VkDescriptorSetLayoutBinding SkinningUbo::createLayoutBinding( uint32_t uboBinding
-		, uint32_t sboBinding
-		, ProgramFlags const & flags )
-	{
-		CU_Require( checkFlag( flags, ProgramFlag::eSkinning ) );
-
-		if ( checkFlag( flags, ProgramFlag::eInstantiation ) )
-		{
-			return makeDescriptorSetLayoutBinding( uboBinding
-				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, ( checkFlag( flags, ProgramFlag::eHasGeometry )
-					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
-					: VK_SHADER_STAGE_VERTEX_BIT ) );
-		}
-
-		return makeDescriptorSetLayoutBinding( sboBinding
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, ( checkFlag( flags, ProgramFlag::eHasGeometry )
-				? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
-				: VK_SHADER_STAGE_VERTEX_BIT ) );
 	}
 
 	sdw::Mat4 SkinningUbo::computeTransform( shader::SkinningData const & data

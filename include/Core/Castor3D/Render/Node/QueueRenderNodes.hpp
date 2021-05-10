@@ -92,7 +92,9 @@ namespace castor3d
 			, BillboardBase & instance
 			, UniformBufferOffsetT< BillboardUboConfiguration > billboardBuffer );
 		C3D_API ashes::DescriptorSetLayoutCRefArray getDescriptorSetLayouts( Pass const & pass
-			, BillboardBase const * billboard
+			, BillboardBase const & billboard );
+		C3D_API ashes::DescriptorSetLayoutCRefArray getDescriptorSetLayouts( Pass const & pass
+			, Submesh const & submesh
 			, AnimatedMesh const * mesh
 			, AnimatedSkeleton const * skeleton );
 
