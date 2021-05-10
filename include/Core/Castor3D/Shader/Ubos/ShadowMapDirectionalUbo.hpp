@@ -10,6 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Light/LightModule.hpp"
 
 #include <ShaderWriter/BaseTypes/Array.hpp>
+#include <ShaderWriter/CompositeTypes/Builtins.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 
@@ -28,13 +29,15 @@ namespace castor3d
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
+			C3D_API sdw::UInt getTileIndex( ModelInstancesData const & modelInstances
+				, sdw::InVertex const & in )const;
 			C3D_API sdw::Vec2 getTileMin( sdw::UInt const & tileIndex )const;
 			C3D_API sdw::Vec2 getTileMax( sdw::Vec2 const & tileMin )const;
 			C3D_API sdw::Vec4 worldToView( sdw::UInt const & tileIndex
 				, sdw::Vec4 const & pos )const;
 			C3D_API sdw::Vec4 viewToProj( sdw::UInt const & tileIndex
 				, sdw::Vec4 const & pos )const;
-			C3D_API DirectionalLight getDirectionalLight( LightingModel const & lighting )const;
+			C3D_API TiledDirectionalLight getDirectionalLight( LightingModel const & lighting )const;
 
 		private:
 			using sdw::StructInstance::getMember;

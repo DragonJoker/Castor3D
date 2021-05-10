@@ -33,6 +33,12 @@ namespace castor3d
 				, sdw::Int const & receivesShadows
 				, Surface surface
 				, OutputComponents & output )const;
+			C3D_API void compute( TiledDirectionalLight const & light
+				, sdw::Vec3 const & worldEye
+				, sdw::Float const & shininess
+				, sdw::Int const & receivesShadows
+				, Surface surface
+				, OutputComponents & output )const;
 			C3D_API void compute( PointLight const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Float const & shininess
@@ -49,6 +55,11 @@ namespace castor3d
 				, sdw::Float const & shininess
 				, sdw::Int const & receivesShadows
 				, SceneData const & sceneData
+				, Surface surface )const;
+			C3D_API sdw::Vec3 computeDiffuse( TiledDirectionalLight const & light
+				, sdw::Vec3 const & worldEye
+				, sdw::Float const & shininess
+				, sdw::Int const & receivesShadows
 				, Surface surface )const;
 			C3D_API sdw::Vec3 computeDiffuse( DirectionalLight const & light
 				, sdw::Vec3 const & worldEye
@@ -192,6 +203,13 @@ namespace castor3d
 				, InSurface
 				, OutputComponents & > m_computeDirectional;
 			sdw::Function< sdw::Void
+				, InTiledDirectionalLight
+				, sdw::InVec3
+				, sdw::InFloat
+				, sdw::InInt
+				, InSurface
+				, OutputComponents & > m_computeTiledDirectional;
+			sdw::Function< sdw::Void
 				, InPointLight
 				, sdw::InVec3
 				, sdw::InFloat
@@ -211,6 +229,12 @@ namespace castor3d
 				, sdw::InVec3
 				, sdw::InFloat
 				, InSurface > m_computeLightDiffuse;
+			sdw::Function< sdw::Vec3
+				, InTiledDirectionalLight
+				, sdw::InVec3
+				, sdw::InFloat
+				, sdw::InInt
+				, InSurface > m_computeTiledDirectionalDiffuse;
 			sdw::Function< sdw::Vec3
 				, InDirectionalLight
 				, sdw::InVec3

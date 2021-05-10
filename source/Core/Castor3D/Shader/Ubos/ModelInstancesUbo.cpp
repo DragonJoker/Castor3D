@@ -18,8 +18,8 @@ namespace castor3d
 			, ast::expr::ExprPtr expr
 			, bool enabled )
 			: StructInstance{ writer, std::move( expr ), enabled }
-			, m_instances{ getMemberArray< sdw::UVec4 >( "instances" ) }
-			, m_instanceCount{ getMember< sdw::UInt >( "instanceCount" ) }
+			, instances{ getMemberArray< sdw::UVec4 >( "instances" ) }
+			, instanceCount{ getMember< sdw::UInt >( "instanceCount" ) }
 		{
 		}
 
@@ -47,12 +47,6 @@ namespace castor3d
 		{
 			return std::make_unique< sdw::Struct >( writer
 				, makeType( writer.getTypesCache() ) );
-		}
-
-		sdw::UInt ModelInstancesData::getTileIndex( sdw::InVertex const & in )const
-		{
-			return min( m_instanceCount - 1_u
-				, m_instances[in.instanceIndex / 4][in.instanceIndex % 4] );
 		}
 	}
 
