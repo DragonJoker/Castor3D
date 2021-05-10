@@ -38,6 +38,7 @@ namespace castor3d
 				, uint32_t set );
 			// Calls
 			C3D_API DirectionalLight getDirectionalLight( sdw::Int const & index )const;
+			C3D_API TiledDirectionalLight getTiledDirectionalLight( sdw::Int const & index )const;
 			C3D_API PointLight getPointLight( sdw::Int const & index )const;
 			C3D_API SpotLight getSpotLight( sdw::Int const & index )const;
 
@@ -48,10 +49,6 @@ namespace castor3d
 
 		protected:
 			C3D_API Light getBaseLight( sdw::Int const & value )const;
-			C3D_API void doDeclareLight();
-			C3D_API void doDeclareDirectionalLight();
-			C3D_API void doDeclarePointLight();
-			C3D_API void doDeclareSpotLight();
 			C3D_API void doDeclareDirectionalLightUbo( uint32_t binding );
 			C3D_API void doDeclarePointLightUbo( uint32_t binding );
 			C3D_API void doDeclareSpotLightUbo( uint32_t binding );
@@ -77,20 +74,22 @@ namespace castor3d
 			std::shared_ptr< Shadow > m_shadowModel;
 			sdw::Function< sdw::Vec3
 				, sdw::InVec3
-				, sdw::InParam< sdw::Array< sdw::Vec4 > >
+				, sdw::InVec4
 				, sdw::InUInt > m_getCascadeFactors;
+			sdw::Function< sdw::Vec3
+				, sdw::InVec3
+				, sdw::InParam< sdw::Array< sdw::Vec4 > >
+				, sdw::InUInt > m_getTileFactors;
 			sdw::Function< shader::Light
 				, sdw::InInt > m_getBaseLight;
 			sdw::Function< shader::DirectionalLight
 				, sdw::InInt > m_getDirectionalLight;
+			sdw::Function< shader::TiledDirectionalLight
+				, sdw::InInt > m_getTiledDirectionalLight;
 			sdw::Function< shader::PointLight
 				, sdw::InInt > m_getPointLight;
 			sdw::Function< shader::SpotLight
 				, sdw::InInt > m_getSpotLight;
-			std::unique_ptr< sdw::Struct > m_lightType;
-			std::unique_ptr< sdw::Struct > m_directionalLightType;
-			std::unique_ptr< sdw::Struct > m_pointLightType;
-			std::unique_ptr< sdw::Struct > m_spotLightType;
 		};
 	}
 }
