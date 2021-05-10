@@ -164,7 +164,6 @@ namespace castor3d
 			, culler
 			, shadowMap
 			, createRenderPass( device, shadowMap, getPassName( cascadeCount ) )
-			, cascadeCount }
 			, 1u }
 #endif
 		, m_shadowMapDirectionalUbo{ device }
@@ -240,7 +239,7 @@ namespace castor3d
 
 	void ShadowMapPassDirectional::doFillAdditionalDescriptor( RenderPipeline const & pipeline
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, BillboardListRenderNode & node
+		, BillboardRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		fillAdditionalDescriptor( pipeline
@@ -305,7 +304,8 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
 		auto skinningData = SkinningUbo::declare( writer
-			, uint32_t( NodeUboIdx::eSkinning )
+			, uint32_t( NodeUboIdx::eSkinningUbo )
+			, uint32_t( NodeUboIdx::eSkinningSsbo )
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
 		UBO_MORPHING( writer

@@ -4,96 +4,78 @@ See LICENSE file in root folder
 #ifndef ___C3D_SceneRenderNodes_H___
 #define ___C3D_SceneRenderNodes_H___
 
-#include "Castor3D/Render/Node/RenderNodeModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
-#include "Castor3D/Render/Node/RenderNode.hpp"
+#include "Castor3D/Scene/SceneModule.hpp"
+
+#include "Castor3D/Render/Node/BillboardRenderNode.hpp"
+#include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
+#include "Castor3D/Render/Node/PassRenderNode.hpp"
+
+#include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {
-	template< typename NodeType, typename MapType >
-	struct RenderNodesT
-	{
-		//!\~english	The geometries, sorted by shader program.
-		//!\~french		Les géométries, triées par programme shader.
-		MapType frontCulled;
-		//!\~english	The geometries, sorted by shader program.
-		//!\~french		Les géométries, triées par programme shader.
-		MapType backCulled;
-	};
-
 	struct SceneRenderNodes
+		: castor::OwnedBy< Scene const >
 	{
-		struct AnimatedObjects
+		C3D_API explicit SceneRenderNodes( Scene const & scene );
+
+		C3D_API void initialiseNodes( RenderDevice const & device );
+		C3D_API SubmeshRenderNode & createNode( PassRenderNode passNode
+			, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
+			, UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesBuffer
+			, GeometryBuffers const & buffers
+			, SceneNode & sceneNode
+			, Submesh & data
+			, Geometry & instance
+			, AnimatedMesh * mesh
+			, AnimatedSkeleton * skeleton );
+		C3D_API BillboardRenderNode & createNode( PassRenderNode passNode
+			, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
+			, UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesBuffer
+			, GeometryBuffers const & buffers
+			, SceneNode & sceneNode
+			, BillboardBase & instance
+			, UniformBufferOffsetT< BillboardUboConfiguration > billboardBuffer );
+		C3D_API ashes::DescriptorSetLayoutCRefArray getDescriptorSetLayouts( Pass const & pass
+			, BillboardBase const * billboard
+			, AnimatedMesh const * mesh
+			, AnimatedSkeleton const * skeleton );
+
+		bool hasNodes()const
 		{
-			AnimatedMeshSPtr mesh;
-			AnimatedSkeletonSPtr skeleton;
+			return !m_submeshNodes.empty()
+				|| !m_billboardNodes.empty();
+		}
+
+	private:
+		void doUpdateDescriptorsCounts( Pass const & pass
+			, BillboardBase * billboard
+			, AnimatedMesh * mesh
+			, AnimatedSkeleton * skeleton );
+		void doInitialiseDescriptorPool( RenderDevice const & device );
+
+	public:
+		struct DescriptorSetLayouts
+		{
+			ashes::DescriptorSetLayoutPtr ubo;
+			ashes::DescriptorSetLayoutPtr tex;
 		};
 
-		using StaticNodesMap = RenderNodesT< StaticRenderNode, StaticRenderNodeByPipelineMap >;
-		using SkinnedNodesMap = RenderNodesT< SkinningRenderNode, SkinningRenderNodeByPipelineMap >;
-		using InstantiatedStaticNodesMap = RenderNodesT< StaticRenderNode, SubmeshStaticRenderNodesByPipelineMap >;
-		using InstantiatedSkinnedNodesMap = RenderNodesT< SkinningRenderNode, SubmeshSkinningRenderNodesByPipelineMap >;
-		using MorphingNodesMap = RenderNodesT< MorphingRenderNode, MorphingRenderNodeByPipelineMap >;
-		using BillboardNodesMap = RenderNodesT< BillboardRenderNode, BillboardRenderNodeByPipelineMap >;
-
-		//!\~english	The scene.
-		//!\~french		La scène.
-		Scene const & scene;
-		//!\~english	The static render nodes, sorted by shader program.
-		//!\~french		Les noeuds de rendu statiques, triés par programme shader.
-		StaticNodesMap staticNodes;
-		//!\~english	The animated render nodes, sorted by shader program.
-		//!\~french		Les noeuds de rendu animés, triés par programme shader.
-		SkinnedNodesMap skinnedNodes;
-		//!\~english	The instanced render nodes, sorted by shader program.
-		//!\~french		Les noeuds de rendu instanciés, triés par programme shader.
-		InstantiatedStaticNodesMap instancedStaticNodes;
-		//!\~english	The animated render nodes, sorted by shader program.
-		//!\~french		Les noeuds de rendu animés, triés par programme shader.
-		InstantiatedSkinnedNodesMap instancedSkinnedNodes;
-		//!\~english	The animated render nodes, sorted by shader program.
-		//!\~french		Les noeuds de rendu animés, triés par programme shader.
-		MorphingNodesMap morphingNodes;
-		//!\~english	The billboards render nodes, sorted by shader program.
-		//!\~french		Les noeuds de rendu de billboards, triés par programme shader.
-		BillboardNodesMap billboardNodes;
-
-		inline explicit SceneRenderNodes( Scene const & scene )
-			: scene{ scene }
+	private:
+		std::unordered_map< size_t, SubmeshRenderNodeUPtr > m_submeshNodes;
+		std::unordered_map< size_t, BillboardRenderNodeUPtr > m_billboardNodes;
+		std::unordered_map< size_t, DescriptorSetLayouts > m_descriptorLayouts;
+		uint32_t m_currentPoolSize{};
+		struct DescriptorCounts
 		{
-		}
-
-		C3D_API void parse( RenderQueue const & queue
-			, ShadowMapLightTypeArray & shadowMaps );
-
-		C3D_API void addRenderNode( PipelineFlags const & flags
-			, AnimatedObjects const & animated
-			, CulledSubmesh const & culledNode
-			, Geometry & instance
-			, Pass & pass
-			, Submesh & submesh
-			, SceneRenderPass & renderPass );
-		C3D_API void addRenderNode( PipelineFlags const & flags
-			, CulledBillboard const & culledNode
-			, Pass & pass
-			, BillboardBase & billboard
-			, SceneRenderPass & renderPass );
-
-		inline bool hasNodes()const
-		{
-			return !staticNodes.backCulled.empty()
-				|| !staticNodes.frontCulled.empty()
-				|| !skinnedNodes.backCulled.empty()
-				|| !skinnedNodes.frontCulled.empty()
-				|| !instancedStaticNodes.backCulled.empty()
-				|| !instancedStaticNodes.frontCulled.empty()
-				|| !instancedSkinnedNodes.backCulled.empty()
-				|| !instancedSkinnedNodes.frontCulled.empty()
-				|| !morphingNodes.backCulled.empty()
-				|| !morphingNodes.frontCulled.empty()
-				|| !billboardNodes.backCulled.empty()
-				|| !billboardNodes.frontCulled.empty();
-		}
+			uint32_t uniformBuffers{};
+			uint32_t storageBuffers{};
+			uint32_t samplers{};
+			uint32_t texelBuffers{};
+		};
+		DescriptorCounts m_descriptorCounts;
+		ashes::DescriptorPoolPtr m_descriptorPool;
 	};
 }
 

@@ -11,7 +11,7 @@
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
-#include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
+#include "Castor3D/Render/Node/QueueCulledRenderNodes.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPass.hpp"
 #include "Castor3D/Shader/Program.hpp"
@@ -224,7 +224,7 @@ namespace castor3d
 
 	void OpaquePass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, BillboardListRenderNode & node
+		, BillboardRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 	}
