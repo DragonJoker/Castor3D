@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_SceneRenderNodes_H___
 #define ___C3D_SceneRenderNodes_H___
 
+#include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 
@@ -38,9 +39,12 @@ namespace castor3d
 			, BillboardBase & instance
 			, UniformBufferOffsetT< BillboardUboConfiguration > billboardBuffer );
 		C3D_API ashes::DescriptorSetLayoutCRefArray getDescriptorSetLayouts( Pass const & pass
-			, BillboardBase const * billboard
+			, BillboardBase const & billboard );
+		C3D_API ashes::DescriptorSetLayoutCRefArray getDescriptorSetLayouts( Pass const & pass
+			, Submesh const & submesh
 			, AnimatedMesh const * mesh
 			, AnimatedSkeleton const * skeleton );
+		C3D_API void update( GpuUpdater & updater );
 
 		bool hasNodes()const
 		{
@@ -49,11 +53,19 @@ namespace castor3d
 		}
 
 	private:
+		ashes::DescriptorSetLayoutCRefArray doGetDescriptorSetLayouts( Pass const & pass
+			, BillboardBase const * billboard
+			, Submesh const * submesh
+			, AnimatedMesh const * mesh
+			, AnimatedSkeleton const * skeleton );;
 		void doUpdateDescriptorsCounts( Pass const & pass
 			, BillboardBase * billboard
+			, Submesh const * submesh
 			, AnimatedMesh * mesh
 			, AnimatedSkeleton * skeleton );
 		void doInitialiseDescriptorPool( RenderDevice const & device );
+		void doUpdateNode( SubmeshRenderNode & node );
+		void doUpdateNode( BillboardRenderNode & node );
 
 	public:
 		struct DescriptorSetLayouts
