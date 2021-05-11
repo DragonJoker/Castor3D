@@ -707,6 +707,7 @@ namespace castor3d
 		C3D_API virtual void doFillAdditionalBindings( PipelineFlags const & flags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const = 0;
 		C3D_API virtual bool doIsValidPass( PassFlags const & passFlags )const;
+		C3D_API ShaderProgramSPtr doGetProgram( PipelineFlags & flags );
 
 	private:
 		ashes::VkDescriptorSetLayoutBindingArray doCreateAdditionalBindings( PipelineFlags const & flags )const;
@@ -714,23 +715,10 @@ namespace castor3d
 		std::map< PipelineFlags, RenderPipelineUPtr > & doGetBackPipelines();
 		std::map< PipelineFlags, RenderPipelineUPtr > const & doGetFrontPipelines()const;
 		std::map< PipelineFlags, RenderPipelineUPtr > const & doGetBackPipelines()const;
-		void doPrepareBackPipeline( PipelineFlags & flags
-			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
-			, ashes::DescriptorSetLayoutCRefArray descriptorLayouts );
-		void doPrepareFrontPipeline( PipelineFlags & flags
-			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
-			, ashes::DescriptorSetLayoutCRefArray descriptorLayouts );
-		void doInitialisePipeline( RenderDevice const & device
-			, RenderPipeline & pipeline
-			, ashes::DescriptorSetLayoutCRefArray descriptorLayouts )const;
-		void doPrepareFrontPipeline( ShaderProgramSPtr program
-			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+		void doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 			, ashes::DescriptorSetLayoutCRefArray descriptorLayouts
-			, PipelineFlags const & flags );
-		void doPrepareBackPipeline( ShaderProgramSPtr program
-			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
-			, ashes::DescriptorSetLayoutCRefArray descriptorLayouts
-			, PipelineFlags const & flags );
+			, PipelineFlags & flags
+			, VkCullModeFlags cullMode );
 		SubmeshRenderNode * doCreateSubmeshNode( Pass & pass
 			, RenderPipeline & pipeline
 			, Submesh & submesh
@@ -791,8 +779,6 @@ namespace castor3d
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, SubmeshRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps ) = 0;
-
-	private:
 		/**
 		 *\~english
 		 *\brief			Modifies the given flags to make them match the render pass requirements.
