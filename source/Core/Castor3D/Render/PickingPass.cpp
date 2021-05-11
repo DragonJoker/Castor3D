@@ -722,11 +722,15 @@ namespace castor3d
 				{
 					doCopyNodesMatrices( renderNodes
 						, it->second[0].data );
-					auto & instantiatedBones = submesh.getInstantiatedBones();
 
-					if ( instantiatedBones.hasInstancedBonesBuffer() )
+					if ( renderNodes.front()->skeleton )
 					{
-						doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
+						auto & instantiatedBones = submesh.getInstantiatedBones();
+
+						if ( instantiatedBones.hasInstancedBonesBuffer() )
+						{
+							doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
+						}
 					}
 				}
 			} );
