@@ -216,7 +216,7 @@ namespace castor3d
 		std::unique_ptr< DebugOverlays > m_debugOverlays;
 		//!\~english	The pool used to update the render queues.
 		//!\~french		Le pool de mise à jour des files de rendu.
-		castor::AsyncJobQueue m_queueUpdater;
+		castor::ThreadPool m_queueUpdater;
 		struct UploadResources
 		{
 			//!\~english	The command buffer and semaphore used for UBO uploads.
