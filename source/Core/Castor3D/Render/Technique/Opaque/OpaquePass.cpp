@@ -151,9 +151,8 @@ namespace castor3d
 
 	void OpaquePass::accept( RenderTechniqueVisitor & visitor )
 	{
-		auto & flags = visitor.getFlags();
-		auto shaderProgram = getShaderProgramCache().getAutomaticProgram( *this
-			, flags );
+		auto flags = visitor.getFlags();
+		auto shaderProgram = doGetProgram( flags );
 		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ) );
 		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
 	}

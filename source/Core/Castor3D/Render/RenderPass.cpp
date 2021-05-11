@@ -785,6 +785,12 @@ namespace castor3d
 			|| m_mode == RenderMode::eOpaqueOnly;
 	}
 
+	ShaderProgramSPtr SceneRenderPass::doGetProgram( PipelineFlags & flags )
+	{
+		doUpdateFlags( flags );
+		return m_shaderCache->getAutomaticProgram( *this, flags );
+	}
+
 	ashes::VkDescriptorSetLayoutBindingArray SceneRenderPass::doCreateAdditionalBindings( PipelineFlags const & flags )const
 	{
 		ashes::VkDescriptorSetLayoutBindingArray addBindings;

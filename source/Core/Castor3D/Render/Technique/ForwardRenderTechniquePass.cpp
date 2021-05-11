@@ -167,8 +167,8 @@ namespace castor3d
 
 	void ForwardRenderTechniquePass::accept( RenderTechniqueVisitor & visitor )
 	{
-		auto shaderProgram = getShaderProgramCache().getAutomaticProgram( *this
-			, visitor.getFlags() );
+		auto flags = visitor.getFlags();
+		auto shaderProgram = doGetProgram( flags );
 		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ) );
 		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
 	}
