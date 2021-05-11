@@ -636,12 +636,15 @@ namespace castor3d
 				{
 					doCopyNodesMatrices( renderNodes
 						, it->second[index].data );
-					auto & instantiatedBones = submesh.getInstantiatedBones();
 
-					if ( renderNodes.front()->skeleton
-						&& instantiatedBones.hasInstancedBonesBuffer() )
+					if ( renderNodes.front()->skeleton )
 					{
-						doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
+						auto & instantiatedBones = submesh.getInstantiatedBones();
+
+						if ( instantiatedBones.hasInstancedBonesBuffer() )
+						{
+							doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
+						}
 					}
 				}
 			} );
@@ -669,13 +672,16 @@ namespace castor3d
 					info.m_visibleFaceCount += submesh.getFaceCount() * count1;
 					info.m_visibleVertexCount += submesh.getPointsCount() * count1;
 					++info.m_drawCalls;
-					auto & instantiatedBones = submesh.getInstantiatedBones();
 
-					if ( renderNodes.front()->skeleton
-						&& instantiatedBones.hasInstancedBonesBuffer() )
+					if ( renderNodes.front()->skeleton )
 					{
-						uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
-						CU_Require( count1 == count2 );
+						auto & instantiatedBones = submesh.getInstantiatedBones();
+
+						if ( instantiatedBones.hasInstancedBonesBuffer() )
+						{
+							uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
+							CU_Require( count1 == count2 );
+						}
 					}
 				}
 			} );
