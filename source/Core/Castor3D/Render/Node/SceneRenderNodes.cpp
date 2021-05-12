@@ -23,6 +23,7 @@
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 
+#include <CastorUtils/Miscellaneous/Hash.hpp>
 #include <CastorUtils/Multithreading/MultithreadingModule.hpp>
 
 CU_ImplementCUSmartPtr( castor3d, SceneRenderNodes )
