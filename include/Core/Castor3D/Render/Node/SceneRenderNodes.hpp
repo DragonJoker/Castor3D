@@ -60,7 +60,7 @@ namespace castor3d
 			, BillboardBase const * billboard
 			, Submesh const * submesh
 			, AnimatedMesh const * mesh
-			, AnimatedSkeleton const * skeleton );;
+			, AnimatedSkeleton const * skeleton );
 		void doUpdateDescriptorsCounts( Pass const & pass
 			, BillboardBase * billboard
 			, Submesh const * submesh
