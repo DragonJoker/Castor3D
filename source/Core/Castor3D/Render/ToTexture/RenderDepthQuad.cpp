@@ -74,11 +74,6 @@ namespace castor3d
 		m_program.setSource( VK_SHADER_STAGE_FRAGMENT_BIT, std::move( pxl.shader ) );
 	}
 
-	void RenderDepthQuad::initialise()
-	{
-		m_program.initialise( m_device );
-	}
-
 	void RenderDepthQuad::render( ashes::RenderPass const & renderPass
 		, ashes::FrameBuffer const & frameBuffer
 		, Position const & position

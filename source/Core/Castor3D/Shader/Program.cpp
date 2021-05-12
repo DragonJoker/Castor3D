@@ -42,6 +42,16 @@ namespace castor3d
 
 			return added;
 		}
+
+		ashes::PipelineShaderStageCreateInfo loadShader( RenderDevice const & device
+			, ShaderProgram::CompiledShader const & compiled
+			, VkShaderStageFlagBits stage )
+		{
+			return makeShaderState( *device
+				, stage
+				, compiled.shader
+				, compiled.name );
+		}
 	}
 
 	//*************************************************************************************************
@@ -57,51 +67,6 @@ namespace castor3d
 	{
 	}
 
-	bool ShaderProgram::initialise( RenderDevice const & device )
-	{
-		if ( m_states.empty() )
-		{
-			auto loadShader = [this, &device]( VkShaderStageFlagBits stage )
-			{
-				auto it = m_compiled.find( stage );
-
-				if ( it != m_compiled.end() )
-				{
-					auto & module = it->second;
-
-					if ( !module.shader.spirv.empty() )
-					{
-						m_states.push_back( makeShaderState( *device
-							, stage
-							, module.shader
-							, module.name ) );
-					}
-				}
-			};
-
-			if ( hasSource( VK_SHADER_STAGE_COMPUTE_BIT )
-				|| hasFile( VK_SHADER_STAGE_COMPUTE_BIT ) )
-			{
-				loadShader( VK_SHADER_STAGE_COMPUTE_BIT );
-			}
-			else
-			{
-				loadShader( VK_SHADER_STAGE_VERTEX_BIT );
-				loadShader( VK_SHADER_STAGE_GEOMETRY_BIT );
-				loadShader( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT );
-				loadShader( VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT );
-				loadShader( VK_SHADER_STAGE_FRAGMENT_BIT );
-			}
-		}
-
-		return m_states.size() == m_modules.size();
-	}
-
-	void ShaderProgram::cleanup( RenderDevice const & device )
-	{
-		m_states.clear();
-	}
-
 	void ShaderProgram::setFile( VkShaderStageFlagBits target, Path const & pathFile )
 	{
 		m_files[target] = pathFile;
@@ -112,11 +77,15 @@ namespace castor3d
 
 		if ( added )
 		{
+			auto & renderSystem = *getRenderSystem();
 			auto it = m_modules.find( target );
 			it->second.source = source;
 			m_compiled.emplace( target
 				, CompiledShader{ getName()
-				, getRenderSystem()->compileShader( it->second ) } );
+				, renderSystem.compileShader( it->second ) } );
+			m_states.push_back( loadShader( *renderSystem.getMainRenderDevice()
+				, m_compiled[target]
+				, target ) );
 		}
 	}
 
@@ -141,11 +110,15 @@ namespace castor3d
 
 		if ( added )
 		{
+			auto & renderSystem = *getRenderSystem();
 			auto it = m_modules.find( target );
 			it->second.source = source;
 			m_compiled.emplace( target
 				, CompiledShader{ getName()
-					, getRenderSystem()->compileShader( it->second ) } );
+					, renderSystem.compileShader( it->second ) } );
+			m_states.push_back( loadShader( *renderSystem.getMainRenderDevice()
+				, m_compiled[target]
+				, target ) );
 		}
 	}
 
@@ -156,11 +129,15 @@ namespace castor3d
 
 		if ( added )
 		{
+			auto & renderSystem = *getRenderSystem();
 			auto it = m_modules.find( target );
 			it->second.shader = std::move( shader );
 			m_compiled.emplace( target
 				, CompiledShader{ getName()
-					, getRenderSystem()->compileShader( target, getName(), *it->second.shader ) } );
+					, renderSystem.compileShader( target, getName(), *it->second.shader ) } );
+			m_states.push_back( loadShader( *renderSystem.getMainRenderDevice()
+				, m_compiled[target]
+				, target ) );
 		}
 	}
 

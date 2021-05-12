@@ -53,25 +53,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~ShaderProgram();
-		/**
-		 *\~english
-		 *\brief		Initialises the program.
-		 *\param[in]	device	The GPU device.
-		 *\~french
-		 *\brief		Initialise le programme.
-		 *\param[in]	device	Le device GPU.
-		 */
-		C3D_API bool initialise( RenderDevice const & device );
-		/**
-		 *\~english
-		 *\brief		Cleans the program up.
-		 *\param[in]	device	The GPU device.
-		 *\~french
-		 *\brief		Nettoie le programme.
-		 *\param[in]	device	Le device GPU.
-		 */
-		C3D_API void cleanup( RenderDevice const & device );
+		C3D_API ~ShaderProgram();
 		/**
 		 *\~english
 		 *\brief		Sets the shader file.

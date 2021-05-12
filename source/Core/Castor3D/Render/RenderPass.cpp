@@ -152,7 +152,6 @@ namespace castor3d
 			: m_ownTimer.get() ) }
 		, m_index{ desc.m_index }
 		, m_instanceMult{ desc.m_instanceMult }
-		, m_shaderCache{ makeCache( *getEngine() ) }
 	{
 		m_sceneUbo.setWindowSize( m_size );
 		m_culler.getScene().getGeometryCache().registerPass( *this );
@@ -801,7 +800,6 @@ namespace castor3d
 			remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
 		}
 
-		//return m_shaderCache->getAutomaticProgram( *this, flags );
 		return getEngine()->getShaderProgramCache().getAutomaticProgram( *this, flags );
 	}
 

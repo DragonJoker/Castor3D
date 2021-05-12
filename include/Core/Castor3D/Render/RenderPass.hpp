@@ -5,7 +5,6 @@ See LICENSE file in root folder
 #define ___C3D_RenderPass_H___
 
 #include "RenderModule.hpp"
-#include "Castor3D/Cache/ShaderCache.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp"
 #include "Castor3D/Render/RenderInfo.hpp"
 #include "Castor3D/Render/RenderQueue.hpp"
@@ -910,7 +909,6 @@ namespace castor3d
 		uint32_t m_index{ 0u };
 		uint32_t const m_instanceMult{ 1u };
 		std::map< size_t, UniformBufferOffsetT< ModelInstancesUboConfiguration > > m_modelsInstances;
-		DECLARE_CACHE_MEMBER( shader, ShaderProgram );
 
 	private:
 		std::map< PipelineFlags, RenderPipelineUPtr > m_frontPipelines;

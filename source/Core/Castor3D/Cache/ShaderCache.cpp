@@ -22,16 +22,6 @@ namespace castor3d
 	{
 	}
 
-	void ShaderProgramCache::cleanup()
-	{
-		auto lock( castor::makeUniqueLock( m_mutex ) );
-
-		for ( auto & program : m_programs )
-		{
-			getEngine()->postEvent( makeGpuCleanupEvent( *program ) );
-		}
-	}
-
 	void ShaderProgramCache::clear()
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
@@ -45,12 +35,6 @@ namespace castor3d
 		auto result = std::make_shared< ShaderProgram >( name , *getEngine()->getRenderSystem() );
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 		doAddProgram( result );
-
-		if ( initialise )
-		{
-			getEngine()->sendEvent( makeGpuInitialiseEvent( *result ) );
-		}
-
 		return result;
 	}
 
@@ -80,7 +64,6 @@ namespace castor3d
 		result = doCreateAutomaticProgram( renderPass, flags );
 		CU_Require( result );
 		doAddAutomaticProgram( result, flags );
-		getEngine()->sendEvent( makeGpuInitialiseEvent( *result ) );
 		return result;
 	}
 

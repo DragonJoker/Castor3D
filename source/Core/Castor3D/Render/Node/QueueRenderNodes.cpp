@@ -437,13 +437,11 @@ namespace castor3d
 
 				for ( auto & culledNode : pipelineNodes.second )
 				{
-					NodeT & node = *culledNode.second;
-
 					if ( pipeline.hasDescriptorSetLayout() )
 					{
 						renderPass.initialiseAdditionalDescriptor( pipeline
 							, pipeline.getDescriptorPool()
-							, node
+							, *culledNode.second
 							, shadowMaps );
 					}
 				}
