@@ -3,20 +3,16 @@ get_filename_component( CASTOR_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR} DIRECTORY 
 
 option( CASTOR_BUILDGRP_TOOL "Build Castoro3D tools." OFF )
 option( CASTOR_BUILD_TOOL_IMG_CONVERTER "Build ImgConverter (needs wxWidgets library)" ON )
-option( CASTOR_BUILD_TOOL_DIFF_IMAGE "Build DiffImage" ON )
 option( CASTOR_BUILD_TOOL_MESH_UPGRADER "Build CastorMeshUpgrader" ON )
 option( CASTOR_BUILD_TOOL_MESH_CONVERTER "Build CastorMeshConverter" ON )
 option( CASTOR_BUILD_TOOL_CASTOR_TEST_LAUNCHER "Build CastorTestLauncher" ON )
-option( CASTOR_BUILD_TOOL_ARIA "Build Aria (Castor3D render tests manager)" ON )
 option( CASTOR_BUILD_TOOL_HGT_MAP_TO_NML_MAP "Build HeightMapToNormalMap" ON )
 
 function( ToolsInit )
 	set( ImgConv "no (Not wanted)" PARENT_SCOPE )
-	set( DiffImg "no (Not wanted)" PARENT_SCOPE )
 	set( MshUpgd "no (Not wanted)" PARENT_SCOPE )
 	set( MshConv "no (Not wanted)" PARENT_SCOPE )
 	set( TestLcr "no (Not wanted)" PARENT_SCOPE )
-	set( Aria "no (Not wanted)" PARENT_SCOPE )
 	set( HgtNml "no (Not wanted)" PARENT_SCOPE )
 endfunction( ToolsInit )
 
@@ -29,8 +25,7 @@ function( ToolsBuild )
 		)
 
 		if( CASTOR_BUILD_TOOL_IMG_CONVERTER
-			OR CASTOR_BUILD_TOOL_CASTOR_TEST_LAUNCHER
-			OR CASTOR_BUILD_TOOL_ARIA )
+			OR CASTOR_BUILD_TOOL_CASTOR_TEST_LAUNCHER )
 			if( APPLE )
 				set( GTK2_FOUND TRUE )
 				set( GTK2_LIBRARIES
@@ -98,16 +93,6 @@ function( ToolsBuild )
 					set( HgtNml ${Build} PARENT_SCOPE )
 				endif ()
 
-				if( CASTOR_BUILD_TOOL_ARIA )
-					set( Build ${Aria} )
-					add_subdirectory( Aria )
-					set( CPACK_PACKAGE_EXECUTABLES
-						${CPACK_PACKAGE_EXECUTABLES}
-						Aria "Aria"
-						PARENT_SCOPE )
-					set( Aria ${Build} PARENT_SCOPE )
-				endif ()
-
 				if( CASTOR_BUILD_CASTOR3D AND CASTOR_BUILD_TOOL_CASTOR_TEST_LAUNCHER )
 					set( Build ${TestLcr} )
 					add_subdirectory( CastorTestLauncher )
@@ -128,17 +113,6 @@ function( ToolsBuild )
 					set( Aria "no (GTK2 libraries not found)" PARENT_SCOPE )
 				endif()
 			endif()
-		endif()
-
-		if( CASTOR_BUILD_TOOL_DIFF_IMAGE )
-			add_subdirectory( DiffImageLib )
-			set( Build ${DiffImg} )
-			add_subdirectory( DiffImage )
-			set( CPACK_PACKAGE_EXECUTABLES
-				${CPACK_PACKAGE_EXECUTABLES}
-				DiffImage "DiffImage"
-				PARENT_SCOPE )
-			set( DiffImg ${Build} PARENT_SCOPE )
 		endif()
 
 		if( CASTOR_BUILD_CASTOR3D AND CASTOR_BUILD_TOOL_MESH_UPGRADER )
@@ -179,12 +153,6 @@ function( ToolsSummary )
 		if( CASTOR_BUILD_TOOL_IMG_CONVERTER )
 			set( msg_tmp "${msg_tmp}\n    ImgConverter         ${ImgConv}" )
 		endif ()
-		if( CASTOR_BUILD_TOOL_DIFF_IMAGE )
-			set( msg_tmp "${msg_tmp}\n    DiffImage            ${DiffImg}" )
-		endif ()
-		if( CASTOR_BUILD_TOOL_ARIA )
-			set( msg_tmp "${msg_tmp}\n    Aria                 ${Aria}" )
-		endif ()
 		if( CASTOR_BUILD_CASTOR3D )
 			if( CASTOR_BUILD_TOOL_MESH_UPGRADER )
 				set( msg_tmp "${msg_tmp}\n    CastorMeshUpgrader   ${MshUpgd}" )
@@ -210,24 +178,6 @@ function( ToolsSetup )
 			cpack_add_component( ImgConverter
 				DISPLAY_NAME "ImgConverter application"
 				DESCRIPTION "A small image converter, to convert from any image format to ICO or XPM."
-				GROUP Tools
-				INSTALL_TYPES Full Developer
-			)
-		endif()
-
-		if( CASTOR_BUILD_TOOL_DIFF_IMAGE )
-			cpack_add_component( DiffImage
-				DISPLAY_NAME "DiffImage application"
-				DESCRIPTION "An application used to compare images."
-				GROUP Tools
-				INSTALL_TYPES Full Developer
-			)
-		endif()
-
-		if( CASTOR_BUILD_TOOL_ARIA )
-			cpack_add_component( Aria
-				DISPLAY_NAME "Aria application"
-				DESCRIPTION "An application used to manage Castor3D render tests."
 				GROUP Tools
 				INSTALL_TYPES Full Developer
 			)
