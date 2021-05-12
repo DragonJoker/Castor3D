@@ -707,7 +707,8 @@ namespace castor3d
 		C3D_API virtual void doFillAdditionalBindings( PipelineFlags const & flags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const = 0;
 		C3D_API virtual bool doIsValidPass( PassFlags const & passFlags )const;
-		C3D_API ShaderProgramSPtr doGetProgram( PipelineFlags & flags );
+		C3D_API ShaderProgramSPtr doGetProgram( PipelineFlags & flags
+			, VkCullModeFlags cullMode = VK_CULL_MODE_NONE );
 
 	private:
 		ashes::VkDescriptorSetLayoutBindingArray doCreateAdditionalBindings( PipelineFlags const & flags )const;

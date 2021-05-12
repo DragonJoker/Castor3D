@@ -234,9 +234,10 @@ namespace castor3d
 			, pass.getAlphaFunc()
 			, pass.getBlendAlphaFunc()
 			, textures };
-		doPrepareBackPipeline( flags
-			, vertexLayouts
-			, std::move( descriptorLayouts ) );
+		doPreparePipeline( vertexLayouts
+			, std::move( descriptorLayouts )
+			, flags
+			, VK_CULL_MODE_BACK_BIT );
 		return flags;
 	}
 
@@ -258,9 +259,10 @@ namespace castor3d
 			, pass.getAlphaFunc()
 			, pass.getBlendAlphaFunc()
 			, textures };
-		doPrepareFrontPipeline( flags
-			, vertexLayouts
-			, std::move( descriptorLayouts ) );
+		doPreparePipeline( vertexLayouts
+			, std::move( descriptorLayouts )
+			, flags
+			, VK_CULL_MODE_FRONT_BIT );
 		return flags;
 	}
 
@@ -785,10 +787,22 @@ namespace castor3d
 			|| m_mode == RenderMode::eOpaqueOnly;
 	}
 
-	ShaderProgramSPtr SceneRenderPass::doGetProgram( PipelineFlags & flags )
+	ShaderProgramSPtr SceneRenderPass::doGetProgram( PipelineFlags & flags
+		, VkCullModeFlags cullMode )
 	{
 		doUpdateFlags( flags );
-		return m_shaderCache->getAutomaticProgram( *this, flags );
+
+		if ( checkFlag( cullMode, VK_CULL_MODE_FRONT_BIT ) )
+		{
+			addFlag( flags.programFlags, ProgramFlag::eInvertNormals );
+		}
+		else
+		{
+			remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
+		}
+
+		//return m_shaderCache->getAutomaticProgram( *this, flags );
+		return getEngine()->getShaderProgramCache().getAutomaticProgram( *this, flags );
 	}
 
 	ashes::VkDescriptorSetLayoutBindingArray SceneRenderPass::doCreateAdditionalBindings( PipelineFlags const & flags )const
@@ -830,12 +844,12 @@ namespace castor3d
 		return m_backPipelines;
 	}
 
-	void SceneRenderPass::doPrepareBackPipeline( PipelineFlags & flags
-		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
-		, ashes::DescriptorSetLayoutCRefArray descriptorLayouts )
+	void SceneRenderPass::doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+		, ashes::DescriptorSetLayoutCRefArray descriptorLayouts
+		, PipelineFlags & flags
+		, VkCullModeFlags cullMode )
 	{
-		doUpdateFlags( flags );
-		remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
+		auto program = doGetProgram( flags, cullMode );
 
 		if ( doIsValidPass( flags.passFlags )
 			&& ( !checkFlag( flags.programFlags, ProgramFlag::eBillboards )
@@ -846,118 +860,41 @@ namespace castor3d
 				flags.alphaBlendMode = BlendMode::eNoBlend;
 			}
 
-			doPrepareBackPipeline( getShaderProgramCache().getAutomaticProgram( *this, flags )
-				, vertexLayouts
-				, std::move( descriptorLayouts )
-				, flags );
-		}
-	}
+			auto & pipelines = checkFlag( cullMode, VK_CULL_MODE_FRONT_BIT )
+				? doGetFrontPipelines()
+				: doGetBackPipelines();
+			auto ires = pipelines.emplace( flags, nullptr );
 
-	void SceneRenderPass::doPrepareFrontPipeline( PipelineFlags & flags
-		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
-		, ashes::DescriptorSetLayoutCRefArray descriptorLayouts )
-	{
-		doUpdateFlags( flags );
-		addFlag( flags.programFlags, ProgramFlag::eInvertNormals );
-
-		if ( doIsValidPass( flags.passFlags )
-			&& ( !checkFlag( flags.programFlags, ProgramFlag::eBillboards )
-				|| !isShadowMapProgram( flags.programFlags ) ) )
-		{
-			if ( m_mode != RenderMode::eTransparentOnly )
+			if ( ires.second )
 			{
-				flags.alphaBlendMode = BlendMode::eNoBlend;
-			}
-
-			doPrepareFrontPipeline( getShaderProgramCache().getAutomaticProgram( *this, flags )
-				, vertexLayouts
-				, std::move( descriptorLayouts )
-				, flags );
-		}
-	}
-
-	void SceneRenderPass::doInitialisePipeline( RenderDevice const & device
-		, RenderPipeline & pipeline
-		, ashes::DescriptorSetLayoutCRefArray descriptorLayouts )const
-	{
-		auto & flags = pipeline.getFlags();
-		auto addBindings = doCreateAdditionalBindings( flags );
-		pipeline.setDescriptorSetLayout( device->createDescriptorSetLayout( getName() + "Add"
-			, std::move( addBindings ) ) );
-		pipeline.initialise( device
-			, getRenderPass()
-			, std::move( descriptorLayouts ) );
-	}
-
-	void SceneRenderPass::doPrepareFrontPipeline( ShaderProgramSPtr program
-		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
-		, ashes::DescriptorSetLayoutCRefArray descriptorLayouts
-		, PipelineFlags const & flags )
-	{
-		auto & pipelines = doGetFrontPipelines();
-
-		if ( pipelines.find( flags ) == pipelines.end() )
-		{
-			auto dsState = doCreateDepthStencilState( flags );
-			auto bdState = doCreateBlendState( flags );
-			auto & pipeline = *pipelines.emplace( flags
-				, castor::makeUnique< RenderPipeline >( *this
-					, *getEngine()->getRenderSystem()
+				auto & renderSystem = *getEngine()->getRenderSystem();
+				auto dsState = doCreateDepthStencilState( flags );
+				auto bdState = doCreateBlendState( flags );
+				ires.first->second = castor::makeUnique< RenderPipeline >( *this
+					, renderSystem
 					, std::move( dsState )
-					, ashes::PipelineRasterizationStateCreateInfo{ 0u, false, false, VK_POLYGON_MODE_FILL, VK_CULL_MODE_FRONT_BIT }
+					, ashes::PipelineRasterizationStateCreateInfo{ 0u, false, false, VK_POLYGON_MODE_FILL, cullMode }
 					, std::move( bdState )
 					, ashes::PipelineMultisampleStateCreateInfo{}
 					, program
-					, flags ) ).first->second;
-			pipeline.setVertexLayouts( vertexLayouts );
-			pipeline.setViewport( makeViewport( m_size ) );
+					, flags );
+				auto & pipeline = *ires.first->second;
+				pipeline.setVertexLayouts( vertexLayouts );
+				pipeline.setViewport( makeViewport( m_size ) );
 
-			if ( !checkFlag( flags.programFlags, ProgramFlag::ePicking ) )
-			{
-				pipeline.setScissor( makeScissor( m_size ) );
-			}
-
-			getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [this, &pipeline, descriptorLayouts]( RenderDevice const & device )
+				if ( !checkFlag( flags.programFlags, ProgramFlag::ePicking ) )
 				{
-					doInitialisePipeline( device, pipeline, std::move( descriptorLayouts ) );
-				} ) );
-		}
-	}
+					pipeline.setScissor( makeScissor( m_size ) );
+				}
 
-	void SceneRenderPass::doPrepareBackPipeline( ShaderProgramSPtr program
-		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
-		, ashes::DescriptorSetLayoutCRefArray descriptorLayouts
-		, PipelineFlags const & flags )
-	{
-		auto & pipelines = doGetBackPipelines();
-
-		if ( pipelines.find( flags ) == pipelines.end() )
-		{
-			auto dsState = doCreateDepthStencilState( flags );
-			auto bdState = doCreateBlendState( flags );
-			auto & pipeline = *pipelines.emplace( flags
-				, castor::makeUnique< RenderPipeline >( *this
-					, *getEngine()->getRenderSystem()
-					, std::move( dsState )
-					, ashes::PipelineRasterizationStateCreateInfo{ 0u, false, false, VK_POLYGON_MODE_FILL, VK_CULL_MODE_BACK_BIT }
-					, std::move( bdState )
-					, ashes::PipelineMultisampleStateCreateInfo{}
-					, program
-					, flags ) ).first->second;
-			pipeline.setVertexLayouts( vertexLayouts );
-			pipeline.setViewport( makeViewport( m_size ) );
-
-			if ( !checkFlag( flags.programFlags, ProgramFlag::ePicking ) )
-			{
-				pipeline.setScissor( makeScissor( m_size ) );
+				auto & device = *renderSystem.getMainRenderDevice();
+				auto addBindings = doCreateAdditionalBindings( flags );
+				pipeline.setDescriptorSetLayout( device->createDescriptorSetLayout( getName() + "Add"
+					, std::move( addBindings ) ) );
+				pipeline.initialise( device
+					, getRenderPass()
+					, std::move( descriptorLayouts ) );
 			}
-
-			getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [this, &pipeline, descriptorLayouts]( RenderDevice const & device )
-				{
-					doInitialisePipeline( device, pipeline, std::move( descriptorLayouts ) );
-				} ) );
 		}
 	}
 
