@@ -12,6 +12,8 @@
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Ubos/ModelInstancesUbo.hpp"
 
+#include <ShaderWriter/Source.hpp>
+
 namespace castor3d
 {
 	//*********************************************************************************************

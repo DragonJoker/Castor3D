@@ -15,6 +15,7 @@
 #include <CastorUtils/Design/ArrayView.hpp>
 
 #include <ashespp/Core/Device.hpp>
+#include <ashespp/Descriptor/DescriptorSet.hpp>
 
 using namespace castor;
 
