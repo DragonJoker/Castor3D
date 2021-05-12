@@ -126,7 +126,6 @@ namespace castor3d
 		auto shadowTilesY = data.lightTiles->y;
 		auto & light = directional.getLight();
 		data.lightIndex = light.getBufferIndex();
-		auto position = light.getParent()->getDerivedPosition();
 
 		for ( auto i = 0u; i < light.getScene()->getDirectionalShadowCascades(); ++i )
 		{

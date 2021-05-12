@@ -272,8 +272,13 @@ namespace castor3d
 		{
 			for ( auto & queue : techniqueQueues.queues )
 			{
-				queue.get().update( techniqueQueues.shadowMaps );
+				m_queueUpdater.pushJob( [&queue, &techniqueQueues]()
+					{
+						queue.get().update( techniqueQueues.shadowMaps );
+					} );
 			}
 		}
+
+		m_queueUpdater.waitAll( castor::Milliseconds::max() );
 	}
 }
