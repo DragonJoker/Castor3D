@@ -33,13 +33,6 @@ namespace castor3d
 			, RenderDevice const & device );
 		/**
 		 *\~english
-		 *\brief		Initialises the program.
-		 *\~french
-		 *\brief		Initialise le programme.
-		 */
-		C3D_API void initialise();
-		/**
-		 *\~english
 		 *\brief		Renders the given depth texture to the given frame buffer.
 		 *\param[in]	renderPass	The render pass.
 		 *\param[in]	frameBuffer	The frame buffer.

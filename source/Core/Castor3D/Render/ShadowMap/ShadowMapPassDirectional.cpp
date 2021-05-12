@@ -181,7 +181,6 @@ namespace castor3d
 #if C3D_UseTiledDirectionalShadowMap
 		auto & light = *updater.light;
 		auto & camera = *updater.camera;
-		auto node = light.getParent();
 		auto & directional = *light.getDirectionalLight();
 		auto & culler = static_cast< InstantiatedFrustumCuller & >( getCuller() );
 		std::vector< Frustum > frustums;

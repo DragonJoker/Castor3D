@@ -343,7 +343,6 @@ namespace castor3d
 			m_samplerCache->cleanup();
 			m_overlayCache->cleanup();
 			m_materialCache->cleanup();
-			m_shaderCache->cleanup();
 
 			if ( m_lightsSampler )
 			{

@@ -41,7 +41,7 @@ namespace castor3d
 		//!\~french		Les noeuds de rendu de billboards, triés par programme shader.
 		BillboardNodesMap billboardNodes;
 
-		C3D_API QueueCulledRenderNodes( RenderQueue const & queue );
+		C3D_API explicit QueueCulledRenderNodes( RenderQueue const & queue );
 
 		C3D_API void parse();
 		C3D_API void prepareCommandBuffers( RenderQueue const & queue

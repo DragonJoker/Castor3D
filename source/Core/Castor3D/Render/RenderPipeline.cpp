@@ -70,7 +70,6 @@ namespace castor3d
 			descriptorLayouts.emplace_back( *m_descriptorLayout );
 		}
 
-		m_program->initialise( device );
 		ashes::VkDynamicStateArray dynamicStates;
 		ashes::VkViewportArray viewports;
 		ashes::VkScissorArray scissors;
