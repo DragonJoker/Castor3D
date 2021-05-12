@@ -40,13 +40,6 @@ namespace castor3d
 		C3D_API void clear();
 		/**
 		 *\~english
-		 *\brief		Cleans up all the shaders.
-		 *\~french
-		 *\brief		Nettoie tous les shaders.
-		 */
-		C3D_API void cleanup();
-		/**
-		 *\~english
 		 *\brief		Creates a new program.
 		 *\param[in]	name		The program name.
 		 *\param[in]	initialise	Tells if we want the program to be initialised.

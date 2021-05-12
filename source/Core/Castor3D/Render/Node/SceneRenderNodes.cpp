@@ -259,7 +259,6 @@ namespace castor3d
 		{
 			if ( !node.texDescriptorSet )
 			{
-				uint32_t index = 0u;
 				node.texDescriptorSet = descriptorPool.createDescriptorSet( getName( node ) + "Tex"
 					, layout
 					, RenderPipeline::eTextures );
@@ -269,6 +268,7 @@ namespace castor3d
 
 				if ( !textures.empty() )
 				{
+					uint32_t index = 0u;
 					node.passNode.fillDescriptor( descriptorSet.getLayout()
 						, index
 						, writes
