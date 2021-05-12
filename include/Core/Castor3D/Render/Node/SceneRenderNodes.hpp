@@ -78,6 +78,7 @@ namespace castor3d
 		};
 
 	private:
+		ashes::DescriptorPoolPtr m_descriptorPool;
 		std::mutex m_nodesMutex;
 		std::unordered_map< size_t, SubmeshRenderNodeUPtr > m_submeshNodes;
 		std::unordered_map< size_t, BillboardRenderNodeUPtr > m_billboardNodes;
@@ -92,7 +93,6 @@ namespace castor3d
 			uint32_t texelBuffers{};
 		};
 		DescriptorCounts m_descriptorCounts;
-		ashes::DescriptorPoolPtr m_descriptorPool;
 	};
 }
 
