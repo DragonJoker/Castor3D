@@ -142,18 +142,6 @@ namespace castor3d
 		}
 	}
 
-	void InstantiationComponent::setMaterial( MaterialSPtr oldMaterial
-		, MaterialSPtr newMaterial
-		, bool update )
-	{
-		if ( oldMaterial != getOwner()->getDefaultMaterial() )
-		{
-			unref( oldMaterial );
-		}
-
-		ref( newMaterial );
-	}
-
 	SubmeshComponentSPtr InstantiationComponent::clone( Submesh & submesh )const
 	{
 		auto result = std::make_shared< InstantiationComponent >( submesh, m_threshold );

@@ -106,6 +106,7 @@ namespace castor3d
 			, size_t texturesCount
 			, BillboardBase const * billboard
 			, Submesh const * submesh
+			, bool instantiated
 			, AnimatedMesh const * mesh
 			, AnimatedSkeleton const * skeleton )
 		{
@@ -117,9 +118,6 @@ namespace castor3d
 				, ( VK_SHADER_STAGE_FRAGMENT_BIT
 					| VK_SHADER_STAGE_GEOMETRY_BIT
 					| VK_SHADER_STAGE_VERTEX_BIT ) ) );
-			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eModelInstances )
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_VERTEX_BIT ) );
 
 			if ( billboard )
 			{
@@ -131,7 +129,7 @@ namespace castor3d
 			{
 				if ( skeleton )
 				{
-					if ( submesh->getInstantiatedBones().hasInstancedBonesBuffer() )
+					if ( instantiated )
 					{
 						if ( engine.getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers ) )
 						{
@@ -162,6 +160,9 @@ namespace castor3d
 				}
 			}
 
+			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eModelInstances )
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_VERTEX_BIT ) );
 			return uboBindings;
 		}
 
@@ -212,12 +213,6 @@ namespace castor3d
 				node.modelUbo.createSizedBinding( descriptorSet
 					, layout.getBinding( uint32_t( NodeUboIdx::eModel ) ) );
 
-				if ( node.modelInstancesUbo )
-				{
-					node.modelInstancesUbo.createSizedBinding( descriptorSet
-						, layout.getBinding( uint32_t( NodeUboIdx::eModelInstances ) ) );
-				}
-
 				if constexpr ( std::is_same_v< NodeT, SubmeshRenderNode > )
 				{
 					SubmeshRenderNode & submeshNode = node;
@@ -230,7 +225,7 @@ namespace castor3d
 
 					if ( submeshNode.skeleton )
 					{
-						if ( submeshNode.data.getInstantiatedBones().hasInstancedBonesBuffer() )
+						if ( submeshNode.data.getInstantiation().isInstanced( submeshNode.passNode.pass.getOwner()->shared_from_this() ) )
 						{
 							submeshNode.data.getInstantiatedBones().getInstancedBonesBuffer().createBinding( descriptorSet
 								, layout.getBinding( uint32_t( NodeUboIdx::eSkinningSsbo ) ) );
@@ -246,6 +241,12 @@ namespace castor3d
 				{
 					node.billboardUbo.createSizedBinding( descriptorSet
 						, layout.getBinding( uint32_t( NodeUboIdx::eBillboard ) ) );
+				}
+
+				if ( node.modelInstancesUbo )
+				{
+					node.modelInstancesUbo.createSizedBinding( descriptorSet
+						, layout.getBinding( uint32_t( NodeUboIdx::eModelInstances ) ) );
 				}
 
 				descriptorSet.update();
@@ -438,6 +439,9 @@ namespace castor3d
 				, textures.size()
 				, billboard
 				, submesh
+				, ( billboard
+					? false
+					: submesh->getInstantiation().isInstanced( pass.getOwner()->shared_from_this() ) )
 				, mesh
 				, skeleton ) );
 			ires.first->second.tex = device->createDescriptorSetLayout( doCreateTextureBindings( textures.size() ) );

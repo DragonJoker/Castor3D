@@ -43,10 +43,4 @@ namespace castor3d
 			m_dirty = false;
 		}
 	}
-
-	void SubmeshComponent::setMaterial( MaterialSPtr oldMaterial
-		, MaterialSPtr newMaterial
-		, bool update )
-	{
-	}
 }

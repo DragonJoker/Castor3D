@@ -227,7 +227,7 @@ namespace castor3d
 		return result;
 	}
 
-	PipelineFlags SceneRenderPass::prepareBackPipeline( Pass const & pass
+	RenderPipeline * SceneRenderPass::prepareBackPipeline( Pass const & pass
 		, TextureFlagsArray const & textures
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
@@ -245,14 +245,13 @@ namespace castor3d
 			, pass.getAlphaFunc()
 			, pass.getBlendAlphaFunc()
 			, textures };
-		doPreparePipeline( vertexLayouts
+		return doPreparePipeline( vertexLayouts
 			, std::move( descriptorLayouts )
 			, flags
 			, VK_CULL_MODE_BACK_BIT );
-		return flags;
 	}
 
-	PipelineFlags SceneRenderPass::prepareFrontPipeline( Pass const & pass
+	RenderPipeline * SceneRenderPass::prepareFrontPipeline( Pass const & pass
 		, TextureFlagsArray const & textures
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
@@ -270,41 +269,10 @@ namespace castor3d
 			, pass.getAlphaFunc()
 			, pass.getBlendAlphaFunc()
 			, textures };
-		doPreparePipeline( vertexLayouts
+		return doPreparePipeline( vertexLayouts
 			, std::move( descriptorLayouts )
 			, flags
 			, VK_CULL_MODE_FRONT_BIT );
-		return flags;
-	}
-
-	RenderPipeline * SceneRenderPass::getPipelineFront( PipelineFlags flags )const
-	{
-		updateFlags( flags, VK_CULL_MODE_FRONT_BIT );
-		auto & pipelines = doGetFrontPipelines();
-		auto it = findPipeline( flags, pipelines );
-		RenderPipeline * result{ nullptr };
-
-		if ( it != pipelines.end() )
-		{
-			result = it->get();
-		}
-
-		return result;
-	}
-
-	RenderPipeline * SceneRenderPass::getPipelineBack( PipelineFlags flags )const
-	{
-		updateFlags( flags, VK_CULL_MODE_BACK_BIT );
-		auto & pipelines = doGetBackPipelines();
-		auto it = findPipeline( flags, pipelines );
-		RenderPipeline * result{ nullptr };
-
-		if ( it != pipelines.end() )
-		{
-			result = it->get();
-		}
-
-		return result;
 	}
 
 	SubmeshRenderNode * SceneRenderPass::createSkinningNode( Pass & pass
@@ -851,11 +819,12 @@ namespace castor3d
 		return m_backPipelines;
 	}
 
-	void SceneRenderPass::doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+	RenderPipeline * SceneRenderPass::doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 		, ashes::DescriptorSetLayoutCRefArray descriptorLayouts
 		, PipelineFlags & flags
 		, VkCullModeFlags cullMode )
 	{
+		RenderPipeline * result{};
 		auto program = doGetProgram( flags, cullMode );
 
 		if ( doIsValidPass( flags.passFlags )
@@ -901,8 +870,13 @@ namespace castor3d
 					, getRenderPass()
 					, std::move( descriptorLayouts ) );
 				pipelines.emplace_back( std::move( pipeline ) );
+				it = pipelines.begin() + ( pipelines.size() - 1u );
 			}
+
+			result = it->get();
 		}
+
+		return result;
 	}
 
 	SubmeshRenderNode * SceneRenderPass::doCreateSubmeshNode( Pass & pass

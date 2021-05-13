@@ -225,7 +225,7 @@ namespace castor3d
 		 *\param[in]		vertexLayouts		Les layouts des tampons de sommets.
 		 *\param[in]		descriptorLayouts	Les layouts des descriptor sets de noeud de rendu.
 		 */
-		C3D_API PipelineFlags prepareBackPipeline( Pass const & pass
+		C3D_API RenderPipeline * prepareBackPipeline( Pass const & pass
 			, TextureFlagsArray const & textures
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -252,35 +252,13 @@ namespace castor3d
 		 *\param[in]		vertexLayouts		Les layouts des tampons de sommets.
 		 *\param[in]		descriptorLayouts	Les layouts des descriptor sets de noeud de rendu.
 		 */
-		C3D_API PipelineFlags prepareFrontPipeline( Pass const & pass
+		C3D_API RenderPipeline * prepareFrontPipeline( Pass const & pass
 			, TextureFlagsArray const & textures
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, VkPrimitiveTopology topology
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 			, ashes::DescriptorSetLayoutCRefArray descriptorLayouts );
-		/**
-		 *\~english
-		 *\brief		Retrieves the pipeline matching the given flags, for front face culling.
-		 *\param[in]	flags	The pipeline flags.
-		 *\return		The ready to use pipeline, \p nullptr if none is available for wanted configuration.
-		 *\~french
-		 *\brief		Récupère le pipeline qui correspond aux indicateurs donnés, pour les faces avant supprimées.
-		 *\param[in]	flags	Les indicateurs du pipeline.
-		 *\return		Le pipeline prêt à l'utilisation, \p nullptr si aucun pipeline n'est disponible pour la configuration voulue.
-		 */
-		C3D_API RenderPipeline * getPipelineFront( PipelineFlags flags )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the pipeline matching the given flags, for back face culling.
-		 *\param[in]	flags	The pipeline flags.
-		 *\return		The ready to use pipeline, \p nullptr if none is available for wanted configuration.
-		 *\~french
-		 *\brief		Récupère le pipeline qui correspond aux indicateurs donnés, pour les faces arrière supprimées.
-		 *\param[in]	flags	Les indicateurs du pipeline.
-		 *\return		Le pipeline prêt à l'utilisation, \p nullptr si aucun pipeline n'est disponible pour la configuration voulue.
-		 */
-		C3D_API RenderPipeline * getPipelineBack( PipelineFlags flags )const;
 		/**
 		 *\~english
 		 *\brief		Creates an animated render node.
@@ -717,7 +695,7 @@ namespace castor3d
 		std::vector< RenderPipelineUPtr > & doGetBackPipelines();
 		std::vector< RenderPipelineUPtr > const & doGetFrontPipelines()const;
 		std::vector< RenderPipelineUPtr > const & doGetBackPipelines()const;
-		void doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+		RenderPipeline * doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 			, ashes::DescriptorSetLayoutCRefArray descriptorLayouts
 			, PipelineFlags & flags
 			, VkCullModeFlags cullMode );

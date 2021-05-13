@@ -64,14 +64,15 @@ namespace castor3d
 		C3D_API explicit QueueRenderNodes( RenderQueue const & queue );
 
 		C3D_API void parse( ShadowMapLightTypeArray & shadowMaps );
-		C3D_API void addRenderNode( PipelineFlags const & flags
+		C3D_API void addRenderNode( RenderPipeline & pipeline
 			, AnimatedObjects const & animated
 			, CulledSubmesh const & culledNode
 			, Geometry & instance
 			, Pass & pass
 			, Submesh & submesh
-			, SceneRenderPass & renderPass );
-		C3D_API void addRenderNode( PipelineFlags const & flags
+			, SceneRenderPass & renderPass
+			, bool front );
+		C3D_API void addRenderNode( RenderPipeline & pipeline
 			, CulledBillboard const & culledNode
 			, Pass & pass
 			, BillboardBase & billboard
