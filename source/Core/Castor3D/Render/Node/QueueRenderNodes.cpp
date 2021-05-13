@@ -80,183 +80,104 @@ namespace castor3d
 			return result;
 		}
 
-		template< typename ContT
-			, typename CulledT
-			, typename CreatorT >
-		void doAddNode( SceneRenderPass & renderPass
-			, PipelineFlags const & flags
-			, Pass & pass
-			, ContT & nodes
-			, VkPrimitiveTopology topology
-			, CulledT const & culled
-			, CreatorT creator )
-		{
-			if ( pass.isTwoSided()
-				|| renderPass.forceTwoSided()
-				|| pass.hasAlphaBlending() )
-			{
-				auto pipeline = renderPass.getPipelineFront( flags );
-
-				if ( pipeline )
-				{
-					doAddRenderNode( *pipeline
-						, creator( *pipeline )
-						, culled
-						, nodes.frontCulled );
-				}
-			}
-
-			auto pipeline = renderPass.getPipelineBack( flags );
-
-			if ( pipeline )
-			{
-				doAddRenderNode( *pipeline
-					, creator( *pipeline )
-					, culled
-					, nodes.backCulled );
-			}
-		}
-
 		void doAddSkinningNode( SceneRenderPass & renderPass
-			, PipelineFlags const & flags
+			, RenderPipeline & pipeline
 			, Pass & pass
 			, Submesh & submesh
 			, Geometry & primitive
 			, AnimatedSkeleton & skeleton
 			, CulledSubmesh const & culled
 			, QueueRenderNodes::SkinnedNodesMap & animated
-			, QueueRenderNodes::InstantiatedSkinnedNodesMap & instanced )
+			, QueueRenderNodes::InstantiatedSkinnedNodesMap & instanced
+			, bool front )
 		{
-			if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
+			if ( checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eInstantiation ) )
 			{
-				if ( pass.hasAlphaBlending()
-					|| pass.isTwoSided()
-					|| renderPass.forceTwoSided() )
-				{
-					auto pipeline = renderPass.getPipelineFront( flags );
-
-					if ( pipeline )
-					{
-						doAddInstantiatedRenderNode( pass
-							, *pipeline
-							, renderPass.createSkinningNode( pass, *pipeline, submesh, primitive, skeleton )
-							, submesh
-							, culled
-							, instanced.frontCulled );
-					}
-				}
-
-				auto pipeline = renderPass.getPipelineBack( flags );
-
-				if ( pipeline )
-				{
-					doAddInstantiatedRenderNode( pass
-						, *pipeline
-						, renderPass.createSkinningNode( pass, *pipeline, submesh, primitive, skeleton )
+				doAddInstantiatedRenderNode( pass
+					, pipeline
+					, renderPass.createSkinningNode( pass
+						, pipeline
 						, submesh
-						, culled
-						, instanced.backCulled );
-				}
+						, primitive
+						, skeleton )
+					, submesh
+					, culled
+					, ( front
+						? instanced.frontCulled
+						: instanced.backCulled ) );
 			}
 			else
 			{
-				doAddNode( renderPass
-					, flags
-					, pass
-					, animated
-					, submesh.getTopology()
+				doAddRenderNode( pipeline
+					, renderPass.createSkinningNode( pass
+						, pipeline
+						, submesh
+						, primitive
+						, skeleton )
 					, culled
-					, [&renderPass, &pass, &submesh, &primitive, &skeleton]( RenderPipeline & pipeline )
-					{
-						return renderPass.createSkinningNode( pass
-							, pipeline
-							, submesh
-							, primitive
-							, skeleton );
-					} );
+					, ( front
+						? animated.frontCulled
+						: animated.backCulled ) );
 			}
 		}
 
 		void doAddMorphingNode( SceneRenderPass & renderPass
-			, PipelineFlags const & flags
+			, RenderPipeline & pipeline
 			, Pass & pass
 			, Submesh & submesh
 			, Geometry & primitive
 			, AnimatedMesh & mesh
 			, CulledSubmesh const & culled
-			, QueueRenderNodes::MorphingNodesMap & animated )
+			, QueueRenderNodes::MorphingNodesMap & animated
+			, bool front )
 		{
-			doAddNode( renderPass
-				, flags
-				, pass
-				, animated
-				, submesh.getTopology()
+			doAddRenderNode( pipeline
+				, renderPass.createMorphingNode( pass
+					, pipeline
+					, submesh
+					, primitive
+					, mesh )
 				, culled
-				, [&renderPass, &pass, &submesh, &primitive, &mesh]( RenderPipeline & pipeline )
-				{
-					return renderPass.createMorphingNode( pass
-						, pipeline
-						, submesh
-						, primitive
-						, mesh );
-				} );
+				, ( front
+					? animated.frontCulled
+					: animated.backCulled ) );
 		}
 
 		void doAddStaticNode( SceneRenderPass & renderPass
-			, PipelineFlags const & flags
+			, RenderPipeline & pipeline
 			, Pass & pass
 			, Submesh & submesh
 			, Geometry & primitive
 			, CulledSubmesh const & culled
 			, QueueRenderNodes::StaticNodesMap & statics
-			, QueueRenderNodes::InstantiatedStaticNodesMap & instanced )
+			, QueueRenderNodes::InstantiatedStaticNodesMap & instanced
+			, bool front )
 		{
-			if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
+			if ( checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eInstantiation ) )
 			{
-				if ( pass.hasAlphaBlending()
-					|| pass.isTwoSided()
-					|| renderPass.forceTwoSided() )
-				{
-					auto pipeline = renderPass.getPipelineFront( flags );
-
-					if ( pipeline )
-					{
-						doAddInstantiatedRenderNode( pass
-							, *pipeline
-							, renderPass.createStaticNode( pass, *pipeline, submesh, primitive )
-							, submesh
-							, culled
-							, instanced.frontCulled );
-					}
-				}
-
-				auto pipeline = renderPass.getPipelineBack( flags );
-
-				if ( pipeline )
-				{
-					doAddInstantiatedRenderNode( pass
-						, *pipeline
-						, renderPass.createStaticNode( pass, *pipeline, submesh, primitive )
+				doAddInstantiatedRenderNode( pass
+					, pipeline
+					, renderPass.createStaticNode( pass
+						, pipeline
 						, submesh
-						, culled
-						, instanced.backCulled );
-				}
+						, primitive )
+					, submesh
+					, culled
+					, ( front
+						? instanced.frontCulled
+						: instanced.backCulled ) );
 			}
 			else
 			{
-				doAddNode( renderPass
-					, flags
-					, pass
-					, statics
-					, submesh.getTopology()
+				doAddRenderNode( pipeline
+					, renderPass.createStaticNode( pass
+						, pipeline
+						, submesh
+						, primitive )
 					, culled
-					, [&renderPass, &pass, &submesh, &primitive]( RenderPipeline & pipeline )
-					{
-						return renderPass.createStaticNode( pass
-							, pipeline
-							, submesh
-							, primitive );
-					} );
+					, ( front
+						? statics.frontCulled
+						: statics.backCulled ) );
 			}
 		}
 
@@ -344,7 +265,7 @@ namespace castor3d
 							, *pass
 							, renderPass
 							, instance.getName() );
-						auto flags = renderPass.prepareBackPipeline( *pass
+						auto backPipeline = renderPass.prepareBackPipeline( *pass
 							, textures
 							, programFlags
 							, sceneFlags
@@ -354,13 +275,18 @@ namespace castor3d
 								, submesh
 								, animated.mesh.get()
 								, animated.skeleton.get() ) );
-						nodes.addRenderNode( flags
-							, animated
-							, culledNode
-							, instance
-							, *pass
-							, submesh
-							, renderPass );
+
+						if ( backPipeline )
+						{
+							nodes.addRenderNode( *backPipeline
+								, animated
+								, culledNode
+								, instance
+								, *pass
+								, submesh
+								, renderPass
+								, false );
+						}
 
 						auto needsFront = ( mode == RenderMode::eTransparentOnly )
 							|| pass->isTwoSided()
@@ -369,7 +295,7 @@ namespace castor3d
 
 						if ( needsFront )
 						{
-							auto flags = renderPass.prepareFrontPipeline( *pass
+							auto frontPipeline = renderPass.prepareFrontPipeline( *pass
 								, textures
 								, programFlags
 								, sceneFlags
@@ -379,13 +305,18 @@ namespace castor3d
 									, submesh
 									, animated.mesh.get()
 									, animated.skeleton.get() ) );
-							nodes.addRenderNode( flags
-								, animated
-								, culledNode
-								, instance
-								, *pass
-								, submesh
-								, renderPass );
+
+							if ( frontPipeline )
+							{
+								nodes.addRenderNode( *frontPipeline
+									, animated
+									, culledNode
+									, instance
+									, *pass
+									, submesh
+									, renderPass
+									, true );
+							}
 						}
 					}
 				}
@@ -405,7 +336,7 @@ namespace castor3d
 				{
 					auto sceneFlags = scene.getFlags();
 					auto textures = pass->getTexturesMask();
-					auto flags = renderPass.prepareBackPipeline( *pass
+					auto pipeline = renderPass.prepareBackPipeline( *pass
 						, textures
 						, programFlags
 						, sceneFlags
@@ -414,11 +345,14 @@ namespace castor3d
 						, nodes.getDescriptorSetLayouts( *pass
 							, billboard ) );
 
-					nodes.addRenderNode( flags
-						, culledNode
-						, *pass
-						, billboard
-						, renderPass );
+					if ( pipeline )
+					{
+						nodes.addRenderNode( *pipeline
+							, culledNode
+							, *pass
+							, billboard
+							, renderPass );
+					}
 				}
 			}
 		}
@@ -527,72 +461,70 @@ namespace castor3d
 			} ) );
 	}
 
-	void QueueRenderNodes::addRenderNode( PipelineFlags const & flags
+	void QueueRenderNodes::addRenderNode( RenderPipeline & pipeline
 		, AnimatedObjects const & animated
 		, CulledSubmesh const & culledNode
 		, Geometry & instance
 		, Pass & pass
 		, Submesh & submesh
-		, SceneRenderPass & renderPass )
+		, SceneRenderPass & renderPass
+		, bool front )
 	{
 		if ( instance.isShadowCaster()
-			|| ( !isShadowMapProgram( flags.programFlags ) ) )
+			|| ( !isShadowMapProgram( pipeline.getFlags().programFlags ) ) )
 		{
 			if ( animated.skeleton )
 			{
 				doAddSkinningNode( renderPass
-					, flags
+					, pipeline
 					, pass
 					, submesh
 					, instance
 					, *animated.skeleton
 					, culledNode
 					, skinnedNodes
-					, instancedSkinnedNodes );
+					, instancedSkinnedNodes
+					, front );
 			}
 			else if ( animated.mesh )
 			{
 				doAddMorphingNode( renderPass
-					, flags
+					, pipeline
 					, pass
 					, submesh
 					, instance
 					, *animated.mesh
 					, culledNode
-					, morphingNodes );
+					, morphingNodes
+					, front );
 			}
 			else
 			{
 				doAddStaticNode( renderPass
-					, flags
+					, pipeline
 					, pass
 					, submesh
 					, instance
 					, culledNode
 					, staticNodes
-					, instancedStaticNodes );
+					, instancedStaticNodes
+					, front );
 			}
 		}
 	}
 
-	void QueueRenderNodes::addRenderNode( PipelineFlags const & flags
+	void QueueRenderNodes::addRenderNode( RenderPipeline & pipeline
 		, CulledBillboard const & culledNode
 		, Pass & pass
 		, BillboardBase & billboard
 		, SceneRenderPass & renderPass )
 	{
-		doAddNode( renderPass
-			, flags
-			, pass
-			, billboardNodes
-			, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP
+		doAddRenderNode( pipeline
+			, renderPass.createBillboardNode( pass
+				, pipeline
+				, billboard )
 			, culledNode
-			, [&renderPass, &pass, &billboard]( RenderPipeline & pipeline )
-			{
-				return renderPass.createBillboardNode( pass
-					, pipeline
-					, billboard );
-			} );
+			, billboardNodes.backCulled );
 	}
 
 	bool QueueRenderNodes::hasNodes()const
