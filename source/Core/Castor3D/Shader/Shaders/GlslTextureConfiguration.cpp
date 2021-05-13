@@ -48,31 +48,40 @@ namespace castor3d
 			, ast::expr::ExprPtr expr
 			, bool enabled )
 			: sdw::StructInstance{ writer, std::move( expr ), enabled }
-			, colrSpec{ getMember< sdw::Vec4 >( "colrSpec" ) }
-			, glossOpa{ getMember< sdw::Vec4 >( "glossOpa" ) }
-			, emisOccl{ getMember< sdw::Vec4 >( "emisOccl" ) }
-			, trnsDumm{ getMember< sdw::Vec4 >( "trnsDumm" ) }
-			, normalFc{ getMember< sdw::Vec4 >( "normalFc" ) }
-			, heightFc{ getMember< sdw::Vec4 >( "heightFc" ) }
-			, miscVals{ getMember< sdw::Vec4 >( "miscVals" ) }
-			, translate{ getMember< sdw::Vec4 >( "translate" ) }
-			, rotate{ getMember< sdw::Vec4 >( "rotate" ) }
-			, scale{ getMember< sdw::Vec4 >( "scale" ) }
-			, colourMask{ colrSpec.xy() }
-			, specularMask{ colrSpec.zw() }
-			, glossinessMask{ glossOpa.xy() }
-			, opacityMask{ glossOpa.zw() }
-			, normalMask{ normalFc.xy() }
-			, normalFactor{ normalFc.z() }
-			, normalGMultiplier{ normalFc.w() }
-			, heightMask{ heightFc.xy() }
-			, heightFactor{ heightFc.z() }
-			, emissiveMask{ emisOccl.xy() }
-			, occlusionMask{ emisOccl.zw() }
-			, transmittanceMask{ trnsDumm.xy() }
-			, needsGammaCorrection{ writer.cast< sdw::UInt >( miscVals.x() ) }
-			, fneedsYInversion{ miscVals.y() }
-			, needsYInversion{ writer.cast< sdw::UInt >( miscVals.y() ) }
+			, colOpa{ getMember< sdw::Vec4 >( "colOpa" ) }
+			, spcShn{ getMember< sdw::Vec4 >( "spcShn" ) }
+			, emsOcc{ getMember< sdw::Vec4 >( "emsOcc" ) }
+			, trsDum{ getMember< sdw::Vec4 >( "trsDum" ) }
+			, nmlFcr{ getMember< sdw::Vec4 >( "nmlFcr" ) }
+			, hgtFcr{ getMember< sdw::Vec4 >( "hgtFcr" ) }
+			, mscVls{ getMember< sdw::Vec4 >( "mscVls" ) }
+			, texTrn{ getMember< sdw::Vec4 >( "texTrn" ) }
+			, texRot{ getMember< sdw::Vec4 >( "texRot" ) }
+			, texScl{ getMember< sdw::Vec4 >( "texScl" ) }
+			, colEnbl{ colOpa.x() }
+			, colMask{ colOpa.y() }
+			, opaEnbl{ colOpa.z() }
+			, opaMask{ colOpa.w() }
+			, spcEnbl{ spcShn.x() }
+			, spcMask{ spcShn.y() }
+			, shnEnbl{ spcShn.z() }
+			, shnMask{ spcShn.w() }
+			, emsEnbl{ emsOcc.x() }
+			, emsMask{ emsOcc.y() }
+			, occEnbl{ emsOcc.z() }
+			, occMask{ emsOcc.w() }
+			, trsEnbl{ trsDum.x() }
+			, trsMask{ trsDum.y() }
+			, nmlEnbl{ nmlFcr.x() }
+			, nmlMask{ nmlFcr.y() }
+			, nmlFact{ nmlFcr.z() }
+			, nmlGMul{ nmlFcr.w() }
+			, hgtEnbl{ hgtFcr.x() }
+			, hgtMask{ hgtFcr.y() }
+			, hgtFact{ hgtFcr.z() }
+			, needsGC{ writer.cast< sdw::UInt >( mscVls.x() ) }
+			, fneedYI{ mscVls.y() }
+			, needsYI{ writer.cast< sdw::UInt >( mscVls.y() ) }
 		{
 		}
 
@@ -87,16 +96,16 @@ namespace castor3d
 
 			if ( result->empty() )
 			{
-				result->declMember( "colrSpec", ast::type::Kind::eVec4F );
-				result->declMember( "glossOpa", ast::type::Kind::eVec4F );
-				result->declMember( "emisOccl", ast::type::Kind::eVec4F );
-				result->declMember( "trnsDumm", ast::type::Kind::eVec4F );
-				result->declMember( "normalFc", ast::type::Kind::eVec4F );
-				result->declMember( "heightFc", ast::type::Kind::eVec4F );
-				result->declMember( "miscVals", ast::type::Kind::eVec4F );
-				result->declMember( "translate", ast::type::Kind::eVec4F );
-				result->declMember( "rotate", ast::type::Kind::eVec4F );
-				result->declMember( "scale", ast::type::Kind::eVec4F );
+				result->declMember( "colOpa", ast::type::Kind::eVec4F );
+				result->declMember( "spcShn", ast::type::Kind::eVec4F );
+				result->declMember( "emsOcc", ast::type::Kind::eVec4F );
+				result->declMember( "trsDum", ast::type::Kind::eVec4F );
+				result->declMember( "nmlFcr", ast::type::Kind::eVec4F );
+				result->declMember( "hgtFcr", ast::type::Kind::eVec4F );
+				result->declMember( "mscVls", ast::type::Kind::eVec4F );
+				result->declMember( "texTrn", ast::type::Kind::eVec4F );
+				result->declMember( "texRot", ast::type::Kind::eVec4F );
+				result->declMember( "texScl", ast::type::Kind::eVec4F );
 			}
 
 			return result;
@@ -108,7 +117,7 @@ namespace castor3d
 			, sdw::Float gamma )const
 		{
 			return diffuse * removeGamma( writer
-				, getVec3( writer, sampled, colourMask )
+				, getVec3( writer, sampled, colMask )
 				, gamma );
 		}
 
@@ -118,7 +127,7 @@ namespace castor3d
 			, sdw::Float gamma )const
 		{
 			return albedo * removeGamma( writer
-				, getVec3( writer, sampled, colourMask )
+				, getVec3( writer, sampled, colMask )
 				, gamma );
 		}
 
@@ -128,7 +137,7 @@ namespace castor3d
 			, sdw::Float gamma )const
 		{
 			return emissive * removeGamma( writer
-				, getVec3( writer, sampled, emissiveMask )
+				, getVec3( writer, sampled, emsMask )
 				, gamma );
 		}
 
@@ -136,14 +145,14 @@ namespace castor3d
 			, sdw::Vec4 const & sampled
 			, sdw::Vec3 const & specular )const
 		{
-			return specular * getVec3( writer, sampled, specularMask );
+			return specular * getVec3( writer, sampled, spcMask );
 		}
 
 		sdw::Float TextureConfigData::getMetalness( sdw::ShaderWriter & writer
 			, sdw::Vec4 const & sampled
 			, sdw::Float const & metalness )const
 		{
-			return metalness * getFloat( writer, sampled, specularMask );
+			return metalness * getFloat( writer, sampled, spcMask );
 		}
 
 		sdw::Float TextureConfigData::getShininess( sdw::ShaderWriter & writer
@@ -151,7 +160,7 @@ namespace castor3d
 			, sdw::Float const & shininess )const
 		{
 			return shininess
-				* clamp( getFloat( writer, sampled, glossinessMask )
+				* clamp( getFloat( writer, sampled, shnMask )
 					, 0.00390625_f // 1 / 256
 					, 1.0_f );
 		}
@@ -160,21 +169,21 @@ namespace castor3d
 			, sdw::Vec4 const & sampled
 			, sdw::Float const & glossiness )const
 		{
-			return glossiness * getFloat( writer, sampled, glossinessMask );
+			return glossiness * getFloat( writer, sampled, shnMask );
 		}
 
 		sdw::Float TextureConfigData::getRoughness( sdw::ShaderWriter & writer
 			, sdw::Vec4 const & sampled
 			, sdw::Float const & roughness )const
 		{
-			return roughness * getFloat( writer, sampled, glossinessMask );
+			return roughness * getFloat( writer, sampled, shnMask );
 		}
 
 		sdw::Float TextureConfigData::getOpacity( sdw::ShaderWriter & writer
 			, sdw::Vec4 const & sampled
 			, sdw::Float const & opacity )const
 		{
-			return opacity * getFloat( writer, sampled, opacityMask );
+			return opacity * getFloat( writer, sampled, opaMask );
 		}
 
 		sdw::Vec3 TextureConfigData::getNormal( sdw::ShaderWriter & writer
@@ -182,7 +191,7 @@ namespace castor3d
 			, sdw::Mat3 const & tbn )const
 		{
 			return normalize( tbn
-				* fma( getVec3( writer, sampled, normalMask )
+				* fma( getVec3( writer, sampled, nmlMask )
 					, vec3( 2.0_f )
 					, -vec3( 1.0_f ) ) );
 		}
@@ -201,35 +210,35 @@ namespace castor3d
 		sdw::Float TextureConfigData::getHeight( sdw::ShaderWriter & writer
 			, sdw::Vec4 const & sampled )const
 		{
-			return heightFactor * getFloat( writer, sampled, heightMask );
+			return hgtFact * getFloat( writer, sampled, hgtMask );
 		}
 
 		sdw::Float TextureConfigData::getOcclusion( sdw::ShaderWriter & writer
 			, sdw::Vec4 const & sampled
 			, sdw::Float const & occlusion )const
 		{
-			return getFloat( writer, sampled, occlusionMask );
+			return getFloat( writer, sampled, occMask );
 		}
 
 		sdw::Float TextureConfigData::getTransmittance( sdw::ShaderWriter & writer
 			, sdw::Vec4 const & sampled
 			, sdw::Float const & transmittance )const
 		{
-			return getFloat( writer, sampled, transmittanceMask );
+			return getFloat( writer, sampled, trsMask );
 		}
 
 		sdw::Float TextureConfigData::getFloat( sdw::ShaderWriter & writer
 			, sdw::Vec4 const & sampled
-			, sdw::Vec2 const & mask )const
+			, sdw::Float const & mask )const
 		{
-			return sampled[writer.cast< sdw::UInt >( mask.y() )];
+			return sampled[writer.cast< sdw::UInt >( mask )];
 		}
 
 		sdw::Vec3 TextureConfigData::getVec3( sdw::ShaderWriter & writer
 			, sdw::Vec4 const & sampled
-			, sdw::Vec2 const & mask )const
+			, sdw::Float const & mask )const
 		{
-			return writer.ternary( mask.y() == 0.0_f
+			return writer.ternary( mask == 0.0_f
 				, sampled.rgb()
 				, sampled.gba() );
 		}
@@ -240,28 +249,28 @@ namespace castor3d
 		{
 			return mix( srgb
 				, pow( max( srgb, vec3( 0.0_f, 0.0_f, 0.0_f ) ), vec3( gamma ) )
-				, vec3( writer.cast< sdw::Float >( needsGammaCorrection ) ) );
+				, vec3( writer.cast< sdw::Float >( needsGC ) ) );
 		}
 
 		void TextureConfigData::convertUV( sdw::ShaderWriter & writer
 			, sdw::Vec2 & uv )const
 		{
 			uv = vec2( uv.x()
-				, mix( uv.y(), 1.0_f - uv.y(), fneedsYInversion ) );
-			uv = scaleUV( scale.xy(), uv );
-			uv = rotateUV( rotate.xy(), uv );
-			uv = translateUV( translate.xy(), uv );
+				, mix( uv.y(), 1.0_f - uv.y(), fneedYI ) );
+			uv = scaleUV( texScl.xy(), uv );
+			uv = rotateUV( texRot.xy(), uv );
+			uv = translateUV( texTrn.xy(), uv );
 		}
 
 		void TextureConfigData::convertUVW( sdw::ShaderWriter & writer
 			, sdw::Vec3 & uvw )const
 		{
 			uvw = vec3( uvw.x()
-				, mix( uvw.y(), 1.0_f - uvw.y(), fneedsYInversion )
+				, mix( uvw.y(), 1.0_f - uvw.y(), fneedYI )
 				, uvw.z() );
-			uvw = scaleUV( scale.xyz(), uvw );
-			uvw = rotateUV( rotate.xyz(), uvw );
-			uvw = translateUV( translate.xyz(), uvw );
+			uvw = scaleUV( texScl.xyz(), uvw );
+			uvw = rotateUV( texRot.xyz(), uvw );
+			uvw = translateUV( texTrn.xyz(), uvw );
 		}
 
 		//*********************************************************************************************
@@ -295,16 +304,16 @@ namespace castor3d
 						auto result = m_writer.declLocale< TextureConfigData >( "result" );
 						auto offset = m_writer.declLocale( cuT( "offset" )
 							, m_writer.cast< sdw::Int >( index ) * sdw::Int( shader::MaxTextureConfigurationComponentsCount ) );
-						result.colrSpec = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
-						result.glossOpa = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
-						result.emisOccl = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
-						result.trnsDumm = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
-						result.normalFc = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
-						result.heightFc = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
-						result.miscVals = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
-						result.translate = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
-						result.rotate = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
-						result.scale = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
+						result.colOpa = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
+						result.spcShn = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
+						result.emsOcc = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
+						result.trsDum = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
+						result.nmlFcr = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
+						result.hgtFcr = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
+						result.mscVls = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
+						result.texTrn = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
+						result.texRot = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
+						result.texScl = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
 						m_writer.returnStmt( result );
 					}
 					, sdw::InUInt{ m_writer, cuT( "index" ) } );

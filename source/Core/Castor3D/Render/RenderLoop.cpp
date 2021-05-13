@@ -247,7 +247,6 @@ namespace castor3d
 		doProcessEvents( EventType::ePostRender );
 		CpuUpdater updater;
 		updater.tslf = tslf;
-		getEngine()->getMaterialCache().update( updater );
 		getEngine()->getSceneCache().forEach( [&updater]( Scene & scene )
 			{
 				scene.update( updater );

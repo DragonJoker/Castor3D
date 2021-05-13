@@ -22,25 +22,25 @@ namespace castor3d
 		TextureConfigurationBuffer::TextureConfigurationsData doBindData( uint8_t * buffer
 			, uint32_t count )
 		{
-			auto colrSpec = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
+			auto colOpa = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
 				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
 			buffer += sizeof( castor::Point4f ) * count;
-			auto glossOpa = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
+			auto glsShn = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
 				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
 			buffer += sizeof( castor::Point4f ) * count;
-			auto emisOccl = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
+			auto emsOcc = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
 				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
 			buffer += sizeof( castor::Point4f ) * count;
-			auto trnsDumm = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
+			auto trsDum = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
 				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
 			buffer += sizeof( castor::Point4f ) * count;
-			auto normalFc = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
+			auto nmlFcr = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
 				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
 			buffer += sizeof( castor::Point4f ) * count;
-			auto heightFc = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
+			auto hgtFcr = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
 				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
 			buffer += sizeof( castor::Point4f ) * count;
-			auto miscVals = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
+			auto mscVls = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
 				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
 			buffer += sizeof( castor::Point4f ) * count;
 			auto translate = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
@@ -53,13 +53,13 @@ namespace castor3d
 				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
 			return
 			{
-				colrSpec,
-				glossOpa,
-				emisOccl,
-				trnsDumm,
-				normalFc,
-				heightFc,
-				miscVals,
+				colOpa,
+				glsShn,
+				emsOcc,
+				trsDum,
+				nmlFcr,
+				hgtFcr,
+				mscVls,
 				translate,
 				rotate,
 				scale,
@@ -134,8 +134,20 @@ namespace castor3d
 	{
 		CU_Require( unit.getId() == 0u );
 		CU_Require( m_configurations.size() < m_configMaxCount - 1u );
-		m_configurations.emplace_back( &unit );
-		unit.setId( m_configID++ );
+		auto & config = unit.getConfiguration();
+		auto it = unit.hasAnimation()
+			? m_configurations.end()
+			: std::find( m_configurations.begin()
+				, m_configurations.end()
+				, config );
+
+		if ( it == m_configurations.end() )
+		{
+			m_configurations.push_back( config );
+			it = m_configurations.begin() + ( m_configurations.size() - 1u );
+		}
+
+		unit.setId( uint32_t( std::distance( m_configurations.begin(), it ) ) + 1u );
 		m_connections.emplace_back( unit.onChanged.connect( [this]( TextureUnit const & unit )
 		{
 			m_dirty.emplace_back( &unit );
@@ -146,22 +158,7 @@ namespace castor3d
 
 	void TextureConfigurationBuffer::removeTextureConfiguration( TextureUnit & unit )
 	{
-		auto id = unit.getId() - 1u;
-		CU_Require( id < m_configurations.size() );
-		CU_Require( &unit == m_configurations[id] );
-		auto it = m_configurations.erase( m_configurations.begin() + id );
-		m_connections.erase( m_connections.begin() + id );
-		++id;
-
-		while ( it != m_configurations.end() )
-		{
-			( *it )->setId( id );
-			++it;
-			++id;
-		}
-
 		unit.setId( 0u );
-		m_configID--;
 	}
 
 	void TextureConfigurationBuffer::update()
@@ -177,18 +174,18 @@ namespace castor3d
 				, [this]( TextureUnit const * unit )
 				{
 					CU_Require( unit->getId() > 0 );
-					auto index = unit->getId() - 1u;
 					auto & config = unit->getConfiguration();
+					auto index = unit->getId() - 1u;
 
 #if C3D_TextureConfigStructOfArrays
 
-					m_data.colrSpec[index] = writeFlags( config.colourMask, config.specularMask );
-					m_data.glossOpa[index] = writeFlags( config.glossinessMask, config.opacityMask );
-					m_data.emisOccl[index] = writeFlags( config.emissiveMask, config.occlusionMask );
-					m_data.trnsDumm[index] = writeFlags( config.transmittanceMask, {} );
-					m_data.normalFc[index] = writeFlags( config.normalMask, config.normalFactor, config.normalGMultiplier );
-					m_data.heightFc[index] = writeFlags( config.heightMask, config.heightFactor );
-					m_data.miscVals[index] = writeFlags( float( config.needsGammaCorrection )
+					m_data.colOpa[index] = writeFlags( config.colourMask, config.opacityMask );
+					m_data.spcShn[index] = writeFlags( config.specularMask, config.glossinessMask );
+					m_data.emsOcc[index] = writeFlags( config.emissiveMask, config.occlusionMask );
+					m_data.trsDum[index] = writeFlags( config.transmittanceMask, {} );
+					m_data.nmlFcr[index] = writeFlags( config.normalMask, config.normalFactor, config.normalGMultiplier );
+					m_data.hgtFcr[index] = writeFlags( config.heightMask, config.heightFactor );
+					m_data.mscVls[index] = writeFlags( float( config.needsGammaCorrection )
 						, float( config.needsYInversion ) );
 					m_data.data.translate[index] = config.translate;
 					m_data.data.rotate[index] = config.rotate;
@@ -197,13 +194,13 @@ namespace castor3d
 #else
 
 					auto & data = m_data[index];
-					data.colrSpec = writeFlags( config.colourMask, config.specularMask );
-					data.glossOpa = writeFlags( config.glossinessMask, config.opacityMask );
-					data.emisOccl = writeFlags( config.emissiveMask, config.occlusionMask );
-					data.trnsDumm = writeFlags( config.transmittanceMask, {} );
-					data.normalFc = writeFlags( config.normalMask, config.normalFactor, config.normalGMultiplier );
-					data.heightFc = writeFlags( config.heightMask, config.heightFactor );
-					data.miscVals = writeFlags( float( config.needsGammaCorrection )
+					data.colOpa = writeFlags( config.colourMask, config.opacityMask );
+					data.spcShn = writeFlags( config.specularMask, config.glossinessMask );
+					data.emsOcc = writeFlags( config.emissiveMask, config.occlusionMask );
+					data.trsDum = writeFlags( config.transmittanceMask, {} );
+					data.nmlFcr = writeFlags( config.normalMask, config.normalFactor, config.normalGMultiplier );
+					data.hgtFcr = writeFlags( config.heightMask, config.heightFactor );
+					data.mscVls = writeFlags( float( config.needsGammaCorrection )
 						, float( config.needsYInversion ) );
 					data.translate = config.transform.translate;
 					data.rotate = { config.transform.rotate.cos(), config.transform.rotate.sin(), 0.0f, 0.0f };
