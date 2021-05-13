@@ -91,13 +91,13 @@ namespace castor3d
 
 		struct TextureConfigurationsData
 		{
-			castor::ArrayView< castor::Point4f > colrSpec;
-			castor::ArrayView< castor::Point4f > glossOpa;
-			castor::ArrayView< castor::Point4f > emisOccl;
-			castor::ArrayView< castor::Point4f > trnsDumm;
-			castor::ArrayView< castor::Point4f > normalFc;
-			castor::ArrayView< castor::Point4f > heightFc;
-			castor::ArrayView< castor::Point4f > miscVals;
+			castor::ArrayView< castor::Point4f > colOpa;
+			castor::ArrayView< castor::Point4f > spcShn;
+			castor::ArrayView< castor::Point4f > emsOcc;
+			castor::ArrayView< castor::Point4f > trsDum;
+			castor::ArrayView< castor::Point4f > nmlFcr;
+			castor::ArrayView< castor::Point4f > hgtFcr;
+			castor::ArrayView< castor::Point4f > mscVls;
 			castor::ArrayView< castor::Point4f > translate;
 			castor::ArrayView< castor::Point4f > rotate;
 			castor::ArrayView< castor::Point4f > scale;
@@ -107,13 +107,13 @@ namespace castor3d
 
 		struct Data
 		{
-			castor::Point4f colrSpec;
-			castor::Point4f glossOpa;
-			castor::Point4f emisOccl;
-			castor::Point4f trnsDumm;
-			castor::Point4f normalFc;
-			castor::Point4f heightFc;
-			castor::Point4f miscVals;
+			castor::Point4f colOpa;
+			castor::Point4f spcShn;
+			castor::Point4f emsOcc;
+			castor::Point4f trsDum;
+			castor::Point4f nmlFcr;
+			castor::Point4f hgtFcr;
+			castor::Point4f mscVls;
 			castor::Point4f translate;
 			castor::Point4f rotate;
 			castor::Point4f scale;
@@ -127,11 +127,10 @@ namespace castor3d
 
 	private:
 		ShaderBuffer m_buffer;
-		std::vector< TextureUnit * > m_configurations;
+		std::vector< TextureConfiguration > m_configurations;
 		std::vector< TextureUnit const * > m_dirty;
 		std::vector< OnTextureUnitChangedConnection > m_connections;
 		uint32_t m_configMaxCount;
-		uint32_t m_configID{ 1u };
 		TextureConfigurationsData m_data;
 	};
 }
