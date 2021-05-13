@@ -19,14 +19,6 @@ namespace castor3d
 		{
 			return PoolType::eMatrix;
 		}
-		else if constexpr ( std::is_same_v< DataT, HdrConfig > )
-		{
-			return PoolType::eHdrConfig;
-		}
-		else if constexpr ( std::is_same_v< DataT, RsmUboConfiguration > )
-		{
-			return PoolType::eRsmConfig;
-		}
 		else if constexpr ( std::is_same_v< DataT, ModelUboConfiguration > )
 		{
 			return PoolType::eModel;
@@ -39,14 +31,6 @@ namespace castor3d
 		{
 			return PoolType::eBillboard;
 		}
-		else if constexpr ( std::is_same_v< DataT, PickingUboConfiguration > )
-		{
-			return PoolType::ePicking;
-		}
-		else if constexpr ( std::is_same_v< DataT, ShadowMapUboConfiguration > )
-		{
-			return PoolType::eShadowMap;
-		}
 		else if constexpr ( std::is_same_v< DataT, SkinningUboConfiguration > )
 		{
 			return PoolType::eSkinning;
@@ -55,9 +39,9 @@ namespace castor3d
 		{
 			return PoolType::eMorphing;
 		}
-		else if constexpr ( std::is_same_v< DataT, ShadowMapDirectionalUboConfiguration > )
+		else if constexpr ( std::is_same_v< DataT, PickingUboConfiguration > )
 		{
-			return PoolType::eShadowMapDirectional;
+			return PoolType::ePicking;
 		}
 		else
 		{

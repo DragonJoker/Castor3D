@@ -68,17 +68,11 @@ namespace castor3d
 		{
 			eMatrix,
 			eModel,
-			eModelMatrix,
 			eModelInstances,
 			eBillboard,
 			eSkinning,
 			eMorphing,
 			ePicking,
-			eTextures,
-			eShadowMap,
-			eShadowMapDirectional,
-			eHdrConfig,
-			eRsmConfig,
 			eGeneric,
 			eCount,
 		};
