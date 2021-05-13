@@ -561,7 +561,7 @@ namespace castor3d::shader
 					, sdw::SampledImage2DRgba32 const & heightMap
 					, TextureConfigData const & textureConfig )
 				{
-					IF( m_writer, textureConfig.heightMask.x() == 0.0_f )
+					IF( m_writer, textureConfig.hgtEnbl == 0.0_f )
 					{
 						m_writer.returnStmt( texCoords );
 					}
@@ -584,7 +584,7 @@ namespace castor3d::shader
 						, 0.0_f );
 					// the amount to shift the texture coordinates per layer (from vector P)
 					auto p = m_writer.declLocale( "p"
-						, viewDir.xy() / viewDir.z() * textureConfig.heightFactor );
+						, viewDir.xy() / viewDir.z() * textureConfig.hgtFact );
 					auto deltaTexCoords = m_writer.declLocale( "deltaTexCoords"
 						, p / numLayers );
 
@@ -595,7 +595,7 @@ namespace castor3d::shader
 					auto dy = m_writer.declLocale( "dy"
 						, dFdxCoarse( currentTexCoords ) );
 					auto heightIndex = m_writer.declLocale( "heightIndex"
-						, m_writer.cast< sdw::UInt >( textureConfig.heightMask.y() ) );
+						, m_writer.cast< sdw::UInt >( textureConfig.hgtMask ) );
 					auto sampled = m_writer.declLocale( "sampled"
 						, heightMap.grad( currentTexCoords, dx, dy ) );
 					auto currentDepthMapValue = m_writer.declLocale( "currentDepthMapValue"
@@ -857,7 +857,7 @@ namespace castor3d::shader
 					, sdw::SampledImage2DRgba32 const & heightMap
 					, TextureConfigData const & textureConfig )
 				{
-					IF( m_writer, textureConfig.heightMask[0] == 0.0_f )
+					IF( m_writer, textureConfig.hgtEnbl == 0.0_f )
 					{
 						m_writer.returnStmt( 1.0_f );
 					}
@@ -884,7 +884,7 @@ namespace castor3d::shader
 						auto layerHeight = m_writer.declLocale( "layerHeight"
 							, initialHeight / numLayers );
 						auto texStep = m_writer.declLocale( "deltaTexCoords"
-							, ( lightDir.xy() * textureConfig.heightFactor ) / lightDir.z() / numLayers );
+							, ( lightDir.xy() * textureConfig.hgtFact ) / lightDir.z() / numLayers );
 
 						// current parameters
 						auto currentLayerHeight = m_writer.declLocale( "currentLayerHeight"
@@ -892,7 +892,7 @@ namespace castor3d::shader
 						auto currentTextureCoords = m_writer.declLocale( "currentTextureCoords"
 							, initialTexCoord + texStep );
 						auto heightIndex = m_writer.declLocale( "heightIndex"
-							, m_writer.cast< sdw::UInt >( textureConfig.heightMask.y() ) );
+							, m_writer.cast< sdw::UInt >( textureConfig.hgtMask ) );
 						auto sampled = m_writer.declLocale( "sampled"
 							, heightMap.sample( currentTextureCoords ) );
 						auto heightFromTexture = m_writer.declLocale( "heightFromTexture"

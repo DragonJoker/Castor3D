@@ -82,10 +82,10 @@ namespace castor3d
 		private:
 			sdw::Float getFloat( sdw::ShaderWriter & writer
 				, sdw::Vec4 const & sampled
-				, sdw::Vec2 const & mask )const;
+				, sdw::Float const & mask )const;
 			sdw::Vec3 getVec3( sdw::ShaderWriter & writer
 				, sdw::Vec4 const & sampled
-				, sdw::Vec2 const & mask )const;
+				, sdw::Float const & mask )const;
 			sdw::Vec3 removeGamma( sdw::ShaderWriter & writer
 				, sdw::Vec3 const & srgb
 				, sdw::Float const & gamma )const;
@@ -95,33 +95,42 @@ namespace castor3d
 			using sdw::StructInstance::getMemberArray;
 
 		public:
-			sdw::Vec4 colrSpec;
-			sdw::Vec4 glossOpa;
-			sdw::Vec4 emisOccl;
-			sdw::Vec4 trnsDumm;
-			sdw::Vec4 normalFc;
-			sdw::Vec4 heightFc;
-			sdw::Vec4 miscVals;
-			sdw::Vec4 translate;
-			sdw::Vec4 rotate;
-			sdw::Vec4 scale;
+			sdw::Vec4 colOpa;
+			sdw::Vec4 spcShn;
+			sdw::Vec4 emsOcc;
+			sdw::Vec4 trsDum;
+			sdw::Vec4 nmlFcr;
+			sdw::Vec4 hgtFcr;
+			sdw::Vec4 mscVls;
+			sdw::Vec4 texTrn;
+			sdw::Vec4 texRot;
+			sdw::Vec4 texScl;
 
 		public:
-			sdw::Vec2 colourMask;
-			sdw::Vec2 specularMask;
-			sdw::Vec2 glossinessMask;
-			sdw::Vec2 opacityMask;
-			sdw::Vec2 emissiveMask;
-			sdw::Vec2 normalMask;
-			sdw::Float normalFactor;
-			sdw::Float normalGMultiplier;
-			sdw::Vec2 heightMask;
-			sdw::Float heightFactor;
-			sdw::Vec2 occlusionMask;
-			sdw::Vec2 transmittanceMask;
-			sdw::UInt needsGammaCorrection;
-			sdw::Float fneedsYInversion;
-			sdw::UInt needsYInversion;
+			sdw::Float colEnbl;
+			sdw::Float colMask;
+			sdw::Float opaEnbl;
+			sdw::Float opaMask;
+			sdw::Float spcEnbl;
+			sdw::Float spcMask;
+			sdw::Float shnEnbl;
+			sdw::Float shnMask;
+			sdw::Float emsEnbl;
+			sdw::Float emsMask;
+			sdw::Float occEnbl;
+			sdw::Float occMask;
+			sdw::Float trsEnbl;
+			sdw::Float trsMask;
+			sdw::Float nmlEnbl;
+			sdw::Float nmlMask;
+			sdw::Float nmlFact;
+			sdw::Float nmlGMul;
+			sdw::Float hgtEnbl;
+			sdw::Float hgtMask;
+			sdw::Float hgtFact;
+			sdw::UInt needsGC;
+			sdw::Float fneedYI;
+			sdw::UInt needsYI;
 		};
 
 		class TextureConfigurations
