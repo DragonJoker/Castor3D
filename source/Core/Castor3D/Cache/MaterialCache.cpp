@@ -67,19 +67,6 @@ namespace castor3d
 		}
 	}
 
-	void MaterialCache::update( CpuUpdater & updater )
-	{
-		if ( m_passBuffer )
-		{
-			LockType lock{ castor::makeUniqueLock( m_elements ) };
-
-			for ( auto & material : m_elements )
-			{
-				doAddMaterial( *material.second );
-			}
-		}
-	}
-
 	void MaterialCache::update( GpuUpdater & updater )
 	{
 		if ( m_passBuffer )
@@ -119,7 +106,6 @@ namespace castor3d
 			doReportNull();
 		}
 
-		doAddMaterial( *result );
 		return result;
 	}
 
@@ -141,33 +127,11 @@ namespace castor3d
 			doReportDuplicate( name );
 		}
 
-		doAddMaterial( *result );
 		return result;
 	}
 
 	void MaterialCache::remove( Key const & name )
 	{
-		auto material = find( name );
-
-		if ( material )
-		{
-			for ( auto & pass : *material )
-			{
-				if ( pass->getId() != 0 )
-				{
-					m_passBuffer->removePass( *pass );
-
-					for ( auto & unit : *pass )
-					{
-						if ( unit->getId() != 0u )
-						{
-							m_textureBuffer->removeTextureConfiguration( *unit );
-						}
-					}
-				}
-			}
-		}
-
 		m_elements.erase( name );
 	}
 
@@ -184,7 +148,7 @@ namespace castor3d
 		}
 	}
 
-	void MaterialCache::doAddMaterial( Material const & material )
+	void MaterialCache::registerMaterial( Material const & material )
 	{
 		for ( auto & pass : material )
 		{
@@ -198,6 +162,28 @@ namespace castor3d
 					{
 						m_textureBuffer->addTextureConfiguration( *unit );
 					}
+				}
+			}
+		}
+	}
+
+	void MaterialCache::unregisterMaterial( Material const & material )
+	{
+		if ( m_passBuffer )
+		{
+			for ( auto & pass : material )
+			{
+				if ( pass->getId() != 0 )
+				{
+					for ( auto & unit : *pass )
+					{
+						if ( unit->getId() != 0u )
+						{
+							m_textureBuffer->removeTextureConfiguration( *unit );
+						}
+					}
+
+					m_passBuffer->removePass( *pass );
 				}
 			}
 		}

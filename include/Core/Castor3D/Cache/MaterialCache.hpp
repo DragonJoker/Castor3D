@@ -103,15 +103,6 @@ namespace castor3d
 		C3D_API void clear();
 		/**
 		 *\~english
-		 *\brief			Updates the render pass, CPU wise.
-		 *\param[in, out]	updater	The update data.
-		 *\~french
-		 *\brief			Met à jour la passe de rendu, au niveau CPU.
-		 *\param[in, out]	updater	Les données d'update.
-		 */
-		C3D_API void update( CpuUpdater & updater );
-		/**
-		 *\~english
 		 *\brief			Updates the render pass, GPU wise.
 		 *\param[in, out]	updater	The update data.
 		 *\~french
@@ -161,6 +152,8 @@ namespace castor3d
 		 *\param[out]	names	La liste de noms
 		 */
 		C3D_API void getNames( castor::StringArray & names );
+		C3D_API void registerMaterial( Material const & material );
+		C3D_API void unregisterMaterial( Material const & material );
 		/**
 		 *\~english
 		 *\brief		Retrieves the default material
@@ -193,9 +186,6 @@ namespace castor3d
 			CU_Require( m_textureBuffer );
 			return *m_textureBuffer;
 		}
-
-	private:
-		void doAddMaterial( Material const & material );
 
 	private:
 		MaterialSPtr m_defaultMaterial;
