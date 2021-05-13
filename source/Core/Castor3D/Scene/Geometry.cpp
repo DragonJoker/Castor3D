@@ -207,6 +207,7 @@ namespace castor3d
 
 			for ( auto submesh : *mesh )
 			{
+				submesh->getInstantiation().ref( submesh->getDefaultMaterial() );
 				m_submeshesMaterials[submesh.get()] = submesh->getDefaultMaterial();
 				m_submeshesBoxes.emplace( submesh.get(), submesh->getBoundingBox() );
 				m_submeshesSpheres.emplace( submesh.get(), submesh->getBoundingSphere() );
