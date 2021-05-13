@@ -64,21 +64,6 @@ namespace castor3d
 		C3D_API void upload();
 		/**
 		 *\~english
-		 *\brief		Sets the material.
-		 *\param[in]	oldMaterial	The old material.
-		 *\param[in]	newMaterial	The new material.
-		 *\param[in]	update		Tells if the buffers must be updated.
-		 *\~french
-		 *\brief		Définit le materiau.
-		 *\param[in]	oldMaterial	Le matériau précédent.
-		 *\param[in]	newMaterial	Le nouveau matériau.
-		 *\param[in]	update		Dit si les tampons doivent être mis à jour.
-		 */
-		C3D_API virtual void setMaterial( MaterialSPtr oldMaterial
-			, MaterialSPtr newMaterial
-			, bool update );
-		/**
-		 *\~english
 		 *\brief		Gathers buffers that need to go in a VAO.
 		 *\~french
 		 *\brief		Récupère les tampons qui doivent aller dans un VAO.
