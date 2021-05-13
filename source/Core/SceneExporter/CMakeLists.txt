@@ -56,6 +56,7 @@ set_target_properties( ${PROJECT_NAME}
 		CXX_STANDARD 17
 		CXX_EXTENSIONS OFF
 		FOLDER "Core"
+		PREFIX ${C3D_LIB_PREFIX}
 )
 add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
 
