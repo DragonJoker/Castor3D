@@ -121,6 +121,18 @@ namespace castor3d
 				++instancesIt;
 			}
 		}
+
+		template< typename PipelineContT >
+		auto findPipeline( PipelineFlags const & flags
+			, PipelineContT & pipelines )
+		{
+			return std::find_if( pipelines.begin()
+				, pipelines.end()
+				, [&flags]( auto & lookup )
+				{
+					return lookup->getFlags() == flags;
+				} );
+		}
 	}
 
 	//*********************************************************************************************
@@ -267,18 +279,14 @@ namespace castor3d
 
 	RenderPipeline * SceneRenderPass::getPipelineFront( PipelineFlags flags )const
 	{
-		if ( m_mode != RenderMode::eTransparentOnly )
-		{
-			flags.alphaBlendMode = BlendMode::eNoBlend;
-		}
-
+		updateFlags( flags, VK_CULL_MODE_FRONT_BIT );
 		auto & pipelines = doGetFrontPipelines();
-		auto it = pipelines.find( flags );
+		auto it = findPipeline( flags, pipelines );
 		RenderPipeline * result{ nullptr };
 
 		if ( it != pipelines.end() )
 		{
-			result = it->second.get();
+			result = it->get();
 		}
 
 		return result;
@@ -286,18 +294,14 @@ namespace castor3d
 
 	RenderPipeline * SceneRenderPass::getPipelineBack( PipelineFlags flags )const
 	{
-		if ( m_mode != RenderMode::eTransparentOnly )
-		{
-			flags.alphaBlendMode = BlendMode::eNoBlend;
-		}
-
+		updateFlags( flags, VK_CULL_MODE_BACK_BIT );
 		auto & pipelines = doGetBackPipelines();
-		auto it = pipelines.find( flags );
+		auto it = findPipeline( flags, pipelines );
 		RenderPipeline * result{ nullptr };
 
 		if ( it != pipelines.end() )
 		{
-			result = it->second.get();
+			result = it->get();
 		}
 
 		return result;
@@ -372,9 +376,24 @@ namespace castor3d
 		doUpdatePipeline( pipeline );
 	}
 
-	void SceneRenderPass::updateFlags( PipelineFlags & flags )const
+	void SceneRenderPass::updateFlags( PipelineFlags & flags
+		, VkCullModeFlags cullMode )const
 	{
 		doUpdateFlags( flags );
+
+		if ( m_mode != RenderMode::eTransparentOnly )
+		{
+			flags.alphaBlendMode = BlendMode::eNoBlend;
+		}
+
+		if ( checkFlag( cullMode, VK_CULL_MODE_FRONT_BIT ) )
+		{
+			addFlag( flags.programFlags, ProgramFlag::eInvertNormals );
+		}
+		else
+		{
+			remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
+		}
 	}
 
 	FilteredTextureFlags SceneRenderPass::filterTexturesFlags( TextureFlagsArray const & textures )const
@@ -789,17 +808,7 @@ namespace castor3d
 	ShaderProgramSPtr SceneRenderPass::doGetProgram( PipelineFlags & flags
 		, VkCullModeFlags cullMode )
 	{
-		doUpdateFlags( flags );
-
-		if ( checkFlag( cullMode, VK_CULL_MODE_FRONT_BIT ) )
-		{
-			addFlag( flags.programFlags, ProgramFlag::eInvertNormals );
-		}
-		else
-		{
-			remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
-		}
-
+		updateFlags( flags, cullMode );
 		return getEngine()->getShaderProgramCache().getAutomaticProgram( *this, flags );
 	}
 
@@ -822,22 +831,22 @@ namespace castor3d
 		return addBindings;
 	}
 
-	std::map< PipelineFlags, RenderPipelineUPtr > & SceneRenderPass::doGetFrontPipelines()
+	std::vector< RenderPipelineUPtr > & SceneRenderPass::doGetFrontPipelines()
 	{
 		return m_frontPipelines;
 	}
 
-	std::map< PipelineFlags, RenderPipelineUPtr > & SceneRenderPass::doGetBackPipelines()
+	std::vector< RenderPipelineUPtr > & SceneRenderPass::doGetBackPipelines()
 	{
 		return m_backPipelines;
 	}
 
-	std::map< PipelineFlags, RenderPipelineUPtr > const & SceneRenderPass::doGetFrontPipelines()const
+	std::vector< RenderPipelineUPtr > const & SceneRenderPass::doGetFrontPipelines()const
 	{
 		return m_frontPipelines;
 	}
 
-	std::map< PipelineFlags, RenderPipelineUPtr > const & SceneRenderPass::doGetBackPipelines()const
+	std::vector< RenderPipelineUPtr > const & SceneRenderPass::doGetBackPipelines()const
 	{
 		return m_backPipelines;
 	}
@@ -861,14 +870,14 @@ namespace castor3d
 			auto & pipelines = checkFlag( cullMode, VK_CULL_MODE_FRONT_BIT )
 				? doGetFrontPipelines()
 				: doGetBackPipelines();
-			auto ires = pipelines.emplace( flags, nullptr );
+			auto it = findPipeline( flags, pipelines );
 
-			if ( ires.second )
+			if ( it == pipelines.end() )
 			{
 				auto & renderSystem = *getEngine()->getRenderSystem();
 				auto dsState = doCreateDepthStencilState( flags );
 				auto bdState = doCreateBlendState( flags );
-				ires.first->second = castor::makeUnique< RenderPipeline >( *this
+				auto pipeline = castor::makeUnique< RenderPipeline >( *this
 					, renderSystem
 					, std::move( dsState )
 					, ashes::PipelineRasterizationStateCreateInfo{ 0u, false, false, VK_POLYGON_MODE_FILL, cullMode }
@@ -876,22 +885,22 @@ namespace castor3d
 					, ashes::PipelineMultisampleStateCreateInfo{}
 					, program
 					, flags );
-				auto & pipeline = *ires.first->second;
-				pipeline.setVertexLayouts( vertexLayouts );
-				pipeline.setViewport( makeViewport( m_size ) );
+				pipeline->setVertexLayouts( vertexLayouts );
+				pipeline->setViewport( makeViewport( m_size ) );
 
 				if ( !checkFlag( flags.programFlags, ProgramFlag::ePicking ) )
 				{
-					pipeline.setScissor( makeScissor( m_size ) );
+					pipeline->setScissor( makeScissor( m_size ) );
 				}
 
 				auto & device = *renderSystem.getMainRenderDevice();
 				auto addBindings = doCreateAdditionalBindings( flags );
-				pipeline.setDescriptorSetLayout( device->createDescriptorSetLayout( getName() + "Add"
+				pipeline->setDescriptorSetLayout( device->createDescriptorSetLayout( getName() + "Add"
 					, std::move( addBindings ) ) );
-				pipeline.initialise( device
+				pipeline->initialise( device
 					, getRenderPass()
 					, std::move( descriptorLayouts ) );
+				pipelines.emplace_back( std::move( pipeline ) );
 			}
 		}
 	}

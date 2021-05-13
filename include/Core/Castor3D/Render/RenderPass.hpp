@@ -8,6 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp"
 #include "Castor3D/Render/RenderInfo.hpp"
 #include "Castor3D/Render/RenderQueue.hpp"
+#include "Castor3D/Scene/Animation/AnimationModule.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
@@ -422,7 +423,8 @@ namespace castor3d
 		 *\brief			Modifie les indicateurs donnés pour le faire correspondre au pré-requis de la passe de rendus.
 		 *\param[in,out]	flags	Les indicateurs de pipeline.
 		 */
-		C3D_API void updateFlags( PipelineFlags & flags )const;
+		C3D_API void updateFlags( PipelineFlags & flags
+			, VkCullModeFlags cullMode )const;
 		/**
 		 *\~english
 		 *\brief		Filters the given textures flags using this pass needed textures.
@@ -711,10 +713,10 @@ namespace castor3d
 
 	private:
 		ashes::VkDescriptorSetLayoutBindingArray doCreateAdditionalBindings( PipelineFlags const & flags )const;
-		std::map< PipelineFlags, RenderPipelineUPtr > & doGetFrontPipelines();
-		std::map< PipelineFlags, RenderPipelineUPtr > & doGetBackPipelines();
-		std::map< PipelineFlags, RenderPipelineUPtr > const & doGetFrontPipelines()const;
-		std::map< PipelineFlags, RenderPipelineUPtr > const & doGetBackPipelines()const;
+		std::vector< RenderPipelineUPtr > & doGetFrontPipelines();
+		std::vector< RenderPipelineUPtr > & doGetBackPipelines();
+		std::vector< RenderPipelineUPtr > const & doGetFrontPipelines()const;
+		std::vector< RenderPipelineUPtr > const & doGetBackPipelines()const;
 		void doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 			, ashes::DescriptorSetLayoutCRefArray descriptorLayouts
 			, PipelineFlags & flags
@@ -911,8 +913,8 @@ namespace castor3d
 		std::map< size_t, UniformBufferOffsetT< ModelInstancesUboConfiguration > > m_modelsInstances;
 
 	private:
-		std::map< PipelineFlags, RenderPipelineUPtr > m_frontPipelines;
-		std::map< PipelineFlags, RenderPipelineUPtr > m_backPipelines;
+		std::vector< RenderPipelineUPtr > m_frontPipelines;
+		std::vector< RenderPipelineUPtr > m_backPipelines;
 	};
 }
 
