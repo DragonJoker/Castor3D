@@ -330,7 +330,7 @@ namespace castor3d
 		TextureFlagsArray textures;
 		TextureFlags texturesFlags;
 	};
-	C3D_API bool operator<( PipelineFlags const & lhs, PipelineFlags const & rhs );
+	C3D_API bool operator==( PipelineFlags const & lhs, PipelineFlags const & rhs );
 	/**
 	*\~english
 	*\brief
