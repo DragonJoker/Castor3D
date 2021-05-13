@@ -1,5 +1,7 @@
 #include "Castor3D/Material/Material.hpp"
 
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Material/Pass/PhongPass.hpp"
 #include "Castor3D/Material/Pass/MetallicRoughnessPbrPass.hpp"
@@ -32,10 +34,14 @@ namespace castor3d
 		{
 			pass->initialise( device );
 		}
+
+		getEngine()->getMaterialCache().registerMaterial( *this );
 	}
 
 	void Material::cleanup()
 	{
+		getEngine()->getMaterialCache().unregisterMaterial( *this );
+
 		for ( auto pass : m_passes )
 		{
 			pass->cleanup();
