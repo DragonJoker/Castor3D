@@ -399,11 +399,6 @@ namespace castor3d
 		{
 			getOwner()->getScene()->setChanged();
 		}
-
-		for ( auto & component : m_components )
-		{
-			component.second->setMaterial( oldMaterial, newMaterial, update );
-		}
 	}
 
 	GeometryBuffers const & Submesh::getGeometryBuffers( ShaderFlags const & flags

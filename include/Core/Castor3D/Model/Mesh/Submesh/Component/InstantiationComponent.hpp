@@ -115,12 +115,6 @@ namespace castor3d
 			, uint32_t instanceMult
 			, TextureFlagsArray const & mask )override;
 		/**
-		 *\copydoc		castor3d::SubmeshComponent::setMaterial
-		 */
-		C3D_API void setMaterial( MaterialSPtr oldMaterial
-			, MaterialSPtr newMaterial
-			, bool update )override;
-		/**
 		 *\copydoc		castor3d::SubmeshComponent::clone
 		 */
 		C3D_API SubmeshComponentSPtr clone( Submesh & submesh )const override;
