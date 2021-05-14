@@ -269,18 +269,17 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 	set( Ashes_BINARY_DIR ${EXTERNAL_BINARY_DIR}/Ashes )
 
 	add_subdirectory( source )
+	add_subdirectory( tools )
 
 	if ( CASTOR_BUILD_CASTOR3D )
 		add_subdirectory( samples )
 	endif ()
 
-	add_subdirectory( tools )
-
 	if( CASTOR_BUILDGRP_TEST )
 		add_subdirectory( test )
 	endif()
 
-	if ( ${CASTOR_BUILDGRP_SETUP} )
+	if ( CASTOR_BUILDGRP_SETUP )
 		if ( ( "${PROJECTS_PACKAGE_WIX}" STREQUAL "ON" ) OR ( "${PROJECTS_PACKAGE_DEB}" STREQUAL "ON" ) OR ( "${PROJECTS_PACKAGE_RPM}" STREQUAL "ON" ) )
 			file( MAKE_DIRECTORY "${PROJECTS_SETUP_OUTPUT_DIR}/${CMAKE_BUILD_TYPE}" )
 			set( CPACK_PACKAGE_NAME "Castor3D" )

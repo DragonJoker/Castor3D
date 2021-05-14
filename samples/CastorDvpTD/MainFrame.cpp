@@ -1,8 +1,8 @@
-#include "CastorDvpTD/MainFrame.hpp"
+#include "MainFrame.hpp"
 
-#include "CastorDvpTD/RenderPanel.hpp"
-#include "CastorDvpTD/CastorDvpTD.hpp"
-#include "CastorDvpTD/Game.hpp"
+#include "RenderPanel.hpp"
+#include "CastorDvpTD.hpp"
+#include "Game.hpp"
 
 #include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>

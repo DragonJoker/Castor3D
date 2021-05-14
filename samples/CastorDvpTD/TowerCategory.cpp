@@ -1,4 +1,4 @@
-#include "CastorDvpTD/TowerCategory.hpp"
+#include "TowerCategory.hpp"
 
 using namespace castor;
 using namespace castor3d;

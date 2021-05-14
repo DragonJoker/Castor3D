@@ -1,7 +1,7 @@
-#include "CastorDvpTD/RenderPanel.hpp"
+#include "RenderPanel.hpp"
 
-#include "CastorDvpTD/CastorDvpTD.hpp"
-#include "CastorDvpTD/Game.hpp"
+#include "CastorDvpTD.hpp"
+#include "Game.hpp"
 
 #include <Castor3D/Cache/SceneNodeCache.hpp>
 #include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>

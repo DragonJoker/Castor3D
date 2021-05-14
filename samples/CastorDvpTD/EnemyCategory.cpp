@@ -1,4 +1,4 @@
-#include "CastorDvpTD/EnemyCategory.hpp"
+#include "EnemyCategory.hpp"
 
 using namespace castor;
 using namespace castor3d;

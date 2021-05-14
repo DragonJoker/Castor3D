@@ -1,6 +1,6 @@
-#include "CastorDvpTD/Hud.hpp"
+#include "Hud.hpp"
 
-#include "CastorDvpTD/Game.hpp"
+#include "Game.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/OverlayCache.hpp>

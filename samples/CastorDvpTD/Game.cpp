@@ -1,4 +1,4 @@
-#include "CastorDvpTD/Game.hpp"
+#include "Game.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Animation/Animation.hpp>

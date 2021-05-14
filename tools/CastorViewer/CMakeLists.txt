@@ -7,22 +7,22 @@ set( ${PROJECT_NAME}_VERSION_MINOR 8 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 set( ${PROJECT_NAME}_HDR_FILES
-	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/CastorViewer.hpp
-	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/KeyboardEvent.hpp
-	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/MainFrame.hpp
-	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/MouseNodeEvent.hpp
-	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/RenderPanel.hpp
-	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/RotateNodeEvent.hpp
-	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/TranslateNodeEvent.hpp
+	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/CastorViewer.hpp
+	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/KeyboardEvent.hpp
+	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/MainFrame.hpp
+	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/MouseNodeEvent.hpp
+	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/RenderPanel.hpp
+	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/RotateNodeEvent.hpp
+	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/TranslateNodeEvent.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
-	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/CastorViewer.cpp
-	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/KeyboardEvent.cpp
-	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/MainFrame.cpp
-	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/MouseNodeEvent.cpp
-	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/RenderPanel.cpp
-	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/RotateNodeEvent.cpp
-	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/TranslateNodeEvent.cpp
+	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/CastorViewer.cpp
+	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/KeyboardEvent.cpp
+	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/MainFrame.cpp
+	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/MouseNodeEvent.cpp
+	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/RenderPanel.cpp
+	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/RotateNodeEvent.cpp
+	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/TranslateNodeEvent.cpp
 )
 source_group( "Header Files"
 	FILES
@@ -38,8 +38,8 @@ endif ()
 add_target_min(
 	${PROJECT_NAME}
 	bin
-	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/PrecompiledHeader.hpp
-	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/PrecompiledHeader.cpp
+	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/PrecompiledHeader.hpp
+	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/PrecompiledHeader.cpp
 )
 target_include_directories( ${PROJECT_NAME}
 	PRIVATE
@@ -54,12 +54,12 @@ set_target_properties( ${PROJECT_NAME}
 	PROPERTIES
 		CXX_STANDARD 17
 		CXX_EXTENSIONS OFF
-		FOLDER "Samples"
+		FOLDER "Tools"
 )
 install_target_ex( ${PROJECT_NAME}
 	${PROJECT_NAME}
 	bin
-	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}
+	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}
 )
 # Copying internationalisation files (french, for now) for CastorViewer
 copy_languages_ex( ${PROJECT_NAME}

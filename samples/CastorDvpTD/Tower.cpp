@@ -1,7 +1,7 @@
-#include "CastorDvpTD/Tower.hpp"
+#include "Tower.hpp"
 
-#include "CastorDvpTD/Enemy.hpp"
-#include "CastorDvpTD/Game.hpp"
+#include "Enemy.hpp"
+#include "Game.hpp"
 
 #include <Castor3D/Scene/Animation/AnimatedObjectGroup.hpp>
 

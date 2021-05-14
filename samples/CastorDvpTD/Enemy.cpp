@@ -1,6 +1,6 @@
-#include "CastorDvpTD/Enemy.hpp"
+#include "Enemy.hpp"
 
-#include "CastorDvpTD/Game.hpp"
+#include "Game.hpp"
 
 using namespace castor;
 using namespace castor3d;

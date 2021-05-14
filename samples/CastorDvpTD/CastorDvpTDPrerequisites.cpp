@@ -1,4 +1,4 @@
-#include "CastorDvpTD/CastorDvpTDPrerequisites.hpp"
+#include "CastorDvpTDPrerequisites.hpp"
 
 #if defined( CU_PlatformWindows  ) && !defined( NDEBUG ) && !defined( VLD_AVAILABLE )
 #	define _CRTDBG_MAP_ALLOC
