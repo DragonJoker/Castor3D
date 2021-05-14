@@ -23,8 +23,7 @@ namespace castor3d
 	\~french
 	\brief		Cache de BillboardList.
 	*/
-	template<>
-	class ObjectCache< BillboardList, castor::String >
+	class BillboardListCache
 		: public ObjectCacheBase< BillboardList, castor::String >
 	{
 	public:
@@ -78,7 +77,7 @@ namespace castor3d
 		 *\param[in]	attach			L'attacheur d'objet (à un noeud de scène).
 		 *\param[in]	detach			Le détacheur d'objet (d'un noeud de scène).
 		 */
-		C3D_API ObjectCache( Engine & engine
+		C3D_API BillboardListCache( Engine & engine
 			, Scene & scene
 			, SceneNodeSPtr rootNode
 			, SceneNodeSPtr rootCameraNode
@@ -95,7 +94,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~ObjectCache();
+		C3D_API ~BillboardListCache();
 
 		C3D_API void registerPass( SceneRenderPass const & renderPass );
 		C3D_API void unregisterPass( SceneRenderPass const * renderPass
@@ -183,7 +182,6 @@ namespace castor3d
 		using RenderPassSet = std::set< SceneRenderPass const * >;
 		std::map< uint32_t, RenderPassSet > m_instances;
 	};
-	using BillboardListCache = ObjectCache< BillboardList, castor::String >;
 	CU_DeclareSmartPtr( BillboardListCache );
 }
 
