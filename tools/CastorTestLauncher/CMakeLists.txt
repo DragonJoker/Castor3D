@@ -44,7 +44,7 @@ add_target_min(
 	""
 )
 target_include_directories( ${PROJECT_NAME} PRIVATE
-	${CASTOR_SOURCE_DIR}/samples/GuiCommon/xpms
+	${CASTOR_SOURCE_DIR}/tools/GuiCommon/xpms
 	${Castor3DIncludeDirs}
 	${CASTOR_SOURCE_DIR}/tools
 	${CASTOR_BINARY_DIR}/tools
