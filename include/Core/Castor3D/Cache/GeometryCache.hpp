@@ -27,8 +27,7 @@ namespace castor3d
 	\~french
 	\brief		Cache de Geometry.
 	*/
-	template<>
-	class ObjectCache< Geometry, castor::String >
+	class GeometryCache
 		: public ObjectCacheBase< Geometry, castor::String >
 	{
 	public:
@@ -82,7 +81,7 @@ namespace castor3d
 		 *\param[in]	attach			L'attacheur d'objet (à un noeud de scène).
 		 *\param[in]	detach			Le détacheur d'objet (d'un noeud de scène).
 		 */
-		C3D_API ObjectCache( Engine & engine
+		C3D_API GeometryCache( Engine & engine
 			, Scene & scene
 			, SceneNodeSPtr rootNode
 			, SceneNodeSPtr rootCameraNode
@@ -99,7 +98,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~ObjectCache();
+		C3D_API ~GeometryCache();
 
 		C3D_API void registerPass( SceneRenderPass const & renderPass );
 		C3D_API void unregisterPass( SceneRenderPass const * renderPass

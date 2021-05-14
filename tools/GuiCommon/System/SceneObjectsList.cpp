@@ -27,6 +27,7 @@
 #include <wx/artprov.h>
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/AnimatedObjectGroupCache.hpp>
 #include <Castor3D/Cache/CacheView.hpp>
 #include <Castor3D/Cache/CameraCache.hpp>
 #include <Castor3D/Cache/GeometryCache.hpp>

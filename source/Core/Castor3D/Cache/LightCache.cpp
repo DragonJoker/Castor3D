@@ -81,7 +81,7 @@ namespace castor3d
 		};
 	}
 
-	ObjectCache< Light, castor::String >::ObjectCache( Engine & engine
+	LightCache::LightCache( Engine & engine
 		, Scene & scene
 		, SceneNodeSPtr rootNode
 		, SceneNodeSPtr rootCameraNode
@@ -106,11 +106,11 @@ namespace castor3d
 	{
 	}
 
-	ObjectCache< Light, castor::String >::~ObjectCache()
+	LightCache::~LightCache()
 	{
 	}
 
-	void ObjectCache< Light, castor::String >::initialise()
+	void LightCache::initialise()
 	{
 		m_lightsBuffer.resize( 300ull * shader::getMaxLightComponentsCount() );
 		getScene()->getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
@@ -136,7 +136,7 @@ namespace castor3d
 			} ) );
 	}
 
-	void ObjectCache< Light, castor::String >::cleanup()
+	void LightCache::cleanup()
 	{
 		m_scene.getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
 			, [this]( RenderDevice const & device )
@@ -149,7 +149,7 @@ namespace castor3d
 		MyObjectCache::cleanup();
 	}
 
-	ObjectCache< Light, castor::String >::ElementPtr ObjectCache< Light, castor::String >::add( Key const & name, ElementPtr element )
+	LightCache::ElementPtr LightCache::add( Key const & name, ElementPtr element )
 	{
 		ElementPtr result{ element };
 
@@ -185,7 +185,7 @@ namespace castor3d
 		return result;
 	}
 
-	ObjectCache< Light, castor::String >::ElementPtr ObjectCache< Light, String >::add( Key const & name, SceneNode & parent, LightType type )
+	LightCache::ElementPtr LightCache::add( Key const & name, SceneNode & parent, LightType type )
 	{
 		auto lock( castor::makeUniqueLock( m_elements ) );
 		ElementPtr result;
@@ -217,7 +217,7 @@ namespace castor3d
 		return result;
 	}
 
-	void ObjectCache< Light, castor::String >::remove( Key const & name )
+	void LightCache::remove( Key const & name )
 	{
 		auto lock( castor::makeUniqueLock( m_elements ) );
 
@@ -231,7 +231,7 @@ namespace castor3d
 		}
 	}
 
-	void ObjectCache< Light, castor::String >::update( CpuUpdater & updater )
+	void LightCache::update( CpuUpdater & updater )
 	{
 		if ( !m_dirtyLights.empty() )
 		{
@@ -246,7 +246,7 @@ namespace castor3d
 		}
 	}
 
-	void ObjectCache< Light, castor::String >::update( GpuUpdater & updater )
+	void LightCache::update( GpuUpdater & updater )
 	{
 		auto & camera = *updater.camera;
 		uint32_t index = 0;
@@ -281,7 +281,7 @@ namespace castor3d
 		}
 	}
 
-	ashes::WriteDescriptorSet ObjectCache< Light, castor::String >::getDescriptorWrite( uint32_t binding )const
+	ashes::WriteDescriptorSet LightCache::getDescriptorWrite( uint32_t binding )const
 	{
 		auto & buffer = getBuffer().getBuffer();
 		auto & view = getView();
@@ -296,12 +296,12 @@ namespace castor3d
 		return write;
 	}
 
-	void ObjectCache< Light, castor::String >::onLightChanged( Light & light )
+	void LightCache::onLightChanged( Light & light )
 	{
 		m_dirtyLights.emplace_back( &light );
 	}
 
-	bool ObjectCache< Light, castor::String >::doCheckUniqueDirectionalLight( LightType toAdd )
+	bool LightCache::doCheckUniqueDirectionalLight( LightType toAdd )
 	{
 		bool result = toAdd != LightType::eDirectional
 			|| getLightsCount( LightType::eDirectional ) == 0u;

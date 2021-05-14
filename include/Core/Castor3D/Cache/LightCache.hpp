@@ -21,8 +21,7 @@ namespace castor3d
 	\~french
 	\brief		Cache de Light.
 	*/
-	template<>
-	class ObjectCache< Light, castor::String >
+	class LightCache
 		: public ObjectCacheBase< Light, castor::String >
 	{
 	public:
@@ -67,7 +66,7 @@ namespace castor3d
 		 *\param[in]	attach			L'attacheur d'objet (à un noeud de scène).
 		 *\param[in]	detach			Le détacheur d'objet (d'un noeud de scène).
 		 */
-		C3D_API ObjectCache( Engine & engine
+		C3D_API LightCache( Engine & engine
 			, Scene & scene
 			, SceneNodeSPtr rootNode
 			, SceneNodeSPtr rootCameraNode
@@ -84,7 +83,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~ObjectCache();
+		C3D_API ~LightCache();
 		/**
 		 *\~english
 		 *\brief		Initialises the lights texture.
