@@ -7,8 +7,13 @@ option( CASTOR_BUILD_TOOL_MESH_UPGRADER "Build CastorMeshUpgrader" ON )
 option( CASTOR_BUILD_TOOL_MESH_CONVERTER "Build CastorMeshConverter" ON )
 option( CASTOR_BUILD_TOOL_CASTOR_TEST_LAUNCHER "Build CastorTestLauncher" ON )
 option( CASTOR_BUILD_TOOL_HGT_MAP_TO_NML_MAP "Build HeightMapToNormalMap" ON )
+option( CASTOR_BUILD_TOOL_GUICOMMON "Build GuiCommon library (needs wxWidgets library)" TRUE )
+option( CASTOR_BUILD_TOOL_CASTOR_VIEWER "Build CastorViewer (needs GuiCommon library)" TRUE )
+option( CASTOR_TOOL_CASTOR_VIEWER_RECORDS "Allow video recording from CastorViewer" FALSE )
 
 function( ToolsInit )
+	set( GuiCmn "no (Not wanted)" PARENT_SCOPE )
+	set( CViewer "no (Not wanted)" PARENT_SCOPE )
 	set( ImgConv "no (Not wanted)" PARENT_SCOPE )
 	set( MshUpgd "no (Not wanted)" PARENT_SCOPE )
 	set( MshConv "no (Not wanted)" PARENT_SCOPE )
@@ -25,7 +30,9 @@ function( ToolsBuild )
 		)
 
 		if( CASTOR_BUILD_TOOL_IMG_CONVERTER
-			OR CASTOR_BUILD_TOOL_CASTOR_TEST_LAUNCHER )
+			OR CASTOR_BUILD_TOOL_CASTOR_TEST_LAUNCHER
+			OR CASTOR_BUILD_TOOL_GUICOMMON
+			OR CASTOR_BUILD_TOOL_CASTOR_VIEWER )
 			if( APPLE )
 				set( GTK2_FOUND TRUE )
 				set( GTK2_LIBRARIES
@@ -41,12 +48,16 @@ function( ToolsBuild )
 			endif()
 
 			#we look for wxWidgets
+			if ( WIN32 )
 			set( wxWidgets_IGNORE_VCPKG ON )
-			find_package( wxWidgets COMPONENTS core base adv aui scintilla stc )
+				find_package( wxWidgets COMPONENTS core base adv aui scintilla stc propgrid regex )
 
-			if ( CASTOR_USE_DEPS_WXWIDGETS AND NOT wxWidgets_FOUND )
-				set( wxWidgets_LIB_DIR ${DEPENDENCIES_DIR}/wxWidgets/lib CACHE PATH "wxWidgets libraries directory" )
-				find_package( wxWidgets QUIET COMPONENTS core base adv aui scintilla stc )
+				if ( CASTOR_USE_DEPS_WXWIDGETS AND NOT wxWidgets_FOUND )
+					set( wxWidgets_LIB_DIR ${DEPENDENCIES_DIR}/wxWidgets/lib CACHE PATH "wxWidgets libraries directory" )
+					find_package( wxWidgets QUIET COMPONENTS core base adv aui scintilla stc propgrid regex )
+				endif ()
+			else ()
+				find_package( wxWidgets COMPONENTS core base stc aui adv propgrid )
 			endif ()
 
 			if( wxWidgets_FOUND AND GTK2_FOUND )
@@ -93,46 +104,69 @@ function( ToolsBuild )
 					set( HgtNml ${Build} PARENT_SCOPE )
 				endif ()
 
-				if( CASTOR_BUILD_CASTOR3D AND CASTOR_BUILD_TOOL_CASTOR_TEST_LAUNCHER )
-					set( Build ${TestLcr} )
-					add_subdirectory( CastorTestLauncher )
-					set( CPACK_PACKAGE_EXECUTABLES
-						${CPACK_PACKAGE_EXECUTABLES}
-						CastorTestLauncher "CastorTestLauncher"
-						PARENT_SCOPE )
-					set( TestLcr ${Build} PARENT_SCOPE )
+				if( CASTOR_BUILD_CASTOR3D )
+					if( CASTOR_BUILD_TOOL_GUICOMMON )
+						set( Build ${GuiCmn} )
+						add_subdirectory( GuiCommon )
+						set( GuiCmn ${Build} PARENT_SCOPE )
+
+						if( CASTOR_BUILD_TOOL_CASTOR_VIEWER )
+							set( Build ${CViewer} )
+							add_subdirectory( CastorViewer )
+							set( CPACK_PACKAGE_EXECUTABLES
+								${CPACK_PACKAGE_EXECUTABLES}
+								CastorViewer "CastorViewer"
+								PARENT_SCOPE )
+							set( CViewer ${Build} PARENT_SCOPE )
+						endif()
+					elseif ( CASTOR_BUILD_TOOL_CASTOR_VIEWER )
+						message( WARNING "You need GuiCommon to be able to build CastorViewer" )
+					endif()
+					if ( CASTOR_BUILD_TOOL_CASTOR_TEST_LAUNCHER )
+						set( Build ${TestLcr} )
+						add_subdirectory( CastorTestLauncher )
+						set( CPACK_PACKAGE_EXECUTABLES
+							${CPACK_PACKAGE_EXECUTABLES}
+							CastorTestLauncher "CastorTestLauncher"
+							PARENT_SCOPE )
+						set( TestLcr ${Build} PARENT_SCOPE )
+					endif ()
 				endif ()
 			else()
 				if( NOT wxWidgets_FOUND )
+					set( GuiCmn "no (wxWidgets libraries not found)" PARENT_SCOPE )
+					set( CViewer "no (wxWidgets libraries not found)" PARENT_SCOPE )
 					set( ImgConv "no (wxWidgets libraries not found)" PARENT_SCOPE )
 					set( TestLcr "no (wxWidgets libraries not found)" PARENT_SCOPE )
-					set( Aria "no (wxWidgets libraries not found)" PARENT_SCOPE )
 				else()
+					set( GuiCmn "no (GTK2 libraries not found)" PARENT_SCOPE )
+					set( CViewer "no (GTK2 libraries not found)" PARENT_SCOPE )
 					set( ImgConv "no (GTK2 libraries not found)" PARENT_SCOPE )
 					set( TestLcr "no (GTK2 libraries not found)" PARENT_SCOPE )
-					set( Aria "no (GTK2 libraries not found)" PARENT_SCOPE )
 				endif()
 			endif()
 		endif()
 
-		if( CASTOR_BUILD_CASTOR3D AND CASTOR_BUILD_TOOL_MESH_UPGRADER )
-			set( Build ${MshUpgd} )
-			add_subdirectory( CastorMeshUpgrader )
-			set( CPACK_PACKAGE_EXECUTABLES
-				${CPACK_PACKAGE_EXECUTABLES}
-				CastorMeshUpgrader "CastorMeshUpgrader"
-				PARENT_SCOPE )
-			set( MshUpgd ${Build} PARENT_SCOPE )
-		endif()
+		if( CASTOR_BUILD_CASTOR3D )
+			if ( CASTOR_BUILD_TOOL_MESH_UPGRADER )
+				set( Build ${MshUpgd} )
+				add_subdirectory( CastorMeshUpgrader )
+				set( CPACK_PACKAGE_EXECUTABLES
+					${CPACK_PACKAGE_EXECUTABLES}
+					CastorMeshUpgrader "CastorMeshUpgrader"
+					PARENT_SCOPE )
+				set( MshUpgd ${Build} PARENT_SCOPE )
+			endif()
 
-		if( CASTOR_BUILD_CASTOR3D AND CASTOR_BUILD_TOOL_MESH_CONVERTER )
-			set( Build ${MshConv} )
-			add_subdirectory( CastorMeshConverter )
-			set( CPACK_PACKAGE_EXECUTABLES
-				${CPACK_PACKAGE_EXECUTABLES}
-				CastorMeshConverter "CastorMeshConverter"
-				PARENT_SCOPE )
-			set( MshConv ${Build} PARENT_SCOPE )
+			if( CASTOR_BUILD_TOOL_MESH_CONVERTER )
+				set( Build ${MshConv} )
+				add_subdirectory( CastorMeshConverter )
+				set( CPACK_PACKAGE_EXECUTABLES
+					${CPACK_PACKAGE_EXECUTABLES}
+					CastorMeshConverter "CastorMeshConverter"
+					PARENT_SCOPE )
+				set( MshConv ${Build} PARENT_SCOPE )
+			endif()
 		endif()
 
 		set( CastorMinLibraries
@@ -153,7 +187,16 @@ function( ToolsSummary )
 		if( CASTOR_BUILD_TOOL_IMG_CONVERTER )
 			set( msg_tmp "${msg_tmp}\n    ImgConverter         ${ImgConv}" )
 		endif ()
+		if( CASTOR_BUILD_TOOL_HGT_MAP_TO_NML_MAP )
+			set( msg_tmp "${msg_tmp}\n    HeightMapToNormalMap ${HgtNml}" )
+		endif ()
 		if( CASTOR_BUILD_CASTOR3D )
+			if( CASTOR_BUILD_TOOL_GUICOMMON )
+				set( msg_tmp "${msg_tmp}\n    GuiCommon            ${GuiCmn}" )
+			endif ()
+			if( CASTOR_BUILD_TOOL_CASTOR_VIEWER )
+				set( msg_tmp "${msg_tmp}\n    CastorViewer         ${CViewer}" )
+			endif ()
 			if( CASTOR_BUILD_TOOL_MESH_UPGRADER )
 				set( msg_tmp "${msg_tmp}\n    CastorMeshUpgrader   ${MshUpgd}" )
 			endif ()
@@ -162,9 +205,6 @@ function( ToolsSummary )
 			endif ()
 			if( CASTOR_BUILD_TOOL_CASTOR_TEST_LAUNCHER )
 				set( msg_tmp "${msg_tmp}\n    CastorTestLauncher   ${TestLcr}" )
-			endif ()
-			if( CASTOR_BUILD_TOOL_HGT_MAP_TO_NML_MAP )
-				set( msg_tmp "${msg_tmp}\n    HeightMapToNormalMap ${HgtNml}" )
 			endif ()
 		endif ()
 		set( msg "${msg}${msg_tmp}" )
@@ -193,6 +233,33 @@ function( ToolsSetup )
 		endif()
 
 		if( CASTOR_BUILD_CASTOR3D )
+			if( CASTOR_BUILD_TOOL_GUICOMMON )
+				cpack_add_component( GuiCommon
+					DISPLAY_NAME "GuiCommon"
+					DESCRIPTION "Common classes and functions for CastorViewer and CastorShape."
+					GROUP Tools
+					DEPENDS Castor3D
+					INSTALL_TYPES Developer Full
+				)
+				cpack_add_component( GuiCommon_dev
+					DISPLAY_NAME "GuiCommon SDK"
+					DESCRIPTION "Common classes and functions for CastorViewer and CastorShape."
+					GROUP Development
+					DEPENDS GuiCommon
+					INSTALL_TYPES Developer Full
+				)
+
+				if( CASTOR_BUILD_TOOL_CASTOR_VIEWER )
+					cpack_add_component( CastorViewer
+						DISPLAY_NAME "CastorViewer"
+						DESCRIPTION "A simple scene viewer using Castor3D."
+						GROUP Tools
+						DEPENDS GuiCommon
+						INSTALL_TYPES Full
+					)
+				endif ()
+			endif ()
+
 			if( CASTOR_BUILD_TOOL_MESH_UPGRADER )
 				cpack_add_component( CastorMeshUpgrader
 					DISPLAY_NAME "CastorMeshUpgrader application"
