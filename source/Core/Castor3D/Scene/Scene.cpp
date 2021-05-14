@@ -236,7 +236,7 @@ namespace castor3d
 		m_rootCameraNode->attachTo( *m_rootNode );
 		m_rootObjectNode->attachTo( *m_rootNode );
 
-		m_billboardCache = makeObjectCache< BillboardList, String >( engine
+		m_billboardCache = std::make_unique< BillboardListCache >( engine
 			, *this
 			, m_rootNode
 			, m_rootCameraNode
@@ -277,7 +277,7 @@ namespace castor3d
 				{
 					element->detach();
 				} );
-		m_geometryCache = makeObjectCache< Geometry, String >( engine
+		m_geometryCache = std::make_unique< GeometryCache >( engine
 			, *this
 			, m_rootNode
 			, m_rootCameraNode
@@ -299,7 +299,7 @@ namespace castor3d
 				{
 					element->detach();
 				} );
-		m_lightCache = makeObjectCache< Light, String >( engine
+		m_lightCache = std::make_unique< LightCache >( engine
 			, *this
 			, m_rootNode
 			, m_rootCameraNode
@@ -370,7 +370,7 @@ namespace castor3d
 				{
 					element->detach();
 				} );
-		m_animatedObjectGroupCache = makeCache< AnimatedObjectGroup, String >( engine
+		m_animatedObjectGroupCache = std::make_unique< AnimatedObjectGroupCache >( engine
 			, [this]( castor::String const & name )
 				{
 					return std::make_shared< AnimatedObjectGroup >( name, *this );

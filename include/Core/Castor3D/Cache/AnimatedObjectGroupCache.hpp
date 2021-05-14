@@ -14,16 +14,12 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		29/01/2016
-	\version	0.8.0
 	\~english
 	\brief		AnimatedObjectGroup cache.
 	\~french
 	\brief		Cache de AnimatedObjectGroup.
 	*/
-	template<>
-	class Cache< AnimatedObjectGroup, castor::String >
+	class AnimatedObjectGroupCache
 		: public CacheBase< AnimatedObjectGroup, castor::String >
 	{
 	public:
@@ -66,7 +62,7 @@ namespace castor3d
 		 *\param[in]	clean			Le nettoyeur d'objet.
 		 *\param[in]	merge			Le fusionneur de collection d'objets.
 		 */
-		C3D_API Cache( Engine & engine
+		C3D_API AnimatedObjectGroupCache( Engine & engine
 			, Producer && produce
 			, Initialiser && initialise = Initialiser{}
 			, Cleaner && clean = Cleaner{}
@@ -77,7 +73,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~Cache();
+		C3D_API ~AnimatedObjectGroupCache();
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
