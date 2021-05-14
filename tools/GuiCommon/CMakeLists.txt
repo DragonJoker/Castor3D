@@ -1,5 +1,9 @@
 project( GuiCommon )
 
+if ( CASTOR_TOOL_CASTOR_VIEWER_RECORDS )
+	find_package( FFMPEG QUIET COMPONENTS avcodec avformat avutil swscale swresample )
+endif ()
+
 set( Castor3DBinsDependencies
 	${Castor3DBinsDependencies}
 	castor::${PROJECT_NAME}
@@ -262,8 +266,8 @@ source_group( "Source Files\\System" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 add_target_min(
 	${PROJECT_NAME}
 	lib
-	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
-	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
+	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
+	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
 )
 add_library( castor::${PROJECT_NAME}
 	ALIAS
@@ -271,8 +275,8 @@ add_library( castor::${PROJECT_NAME}
 )
 target_include_directories( ${PROJECT_NAME}
 	PUBLIC
-		${CASTOR_SOURCE_DIR}/samples
-		${CASTOR_BINARY_DIR}/samples
+		${CASTOR_SOURCE_DIR}/tools
+		${CASTOR_BINARY_DIR}/tools
 		${wxWidgets_INCLUDE_DIRS}
 		${GTK2_INCLUDE_DIRS}
 	PRIVATE
@@ -294,6 +298,13 @@ target_compile_definitions( ${PROJECT_NAME}
 	PUBLIC
 		${wxWidgets_DEFINITIONS}
 )
+if( CASTOR_TOOL_CASTOR_VIEWER_RECORDS AND FFMPEG_FOUND )
+	target_compile_definitions( ${PROJECT_NAME}
+		PUBLIC
+			GUICOMMON_RECORDS
+			GUICOMMON_FFMPEG
+	)
+endif()
 if ( CASTOR_SAMPLE_CASTOR_VIEWER_RECORDS )
 	target_compile_definitions( ${PROJECT_NAME}
 		PUBLIC
@@ -319,13 +330,13 @@ endif ()
 install_target_ex( ${PROJECT_NAME}
 	${PROJECT_NAME}
 	lib
-	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}
+	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}
 )
 set_target_properties( ${PROJECT_NAME}
 	PROPERTIES
 		CXX_STANDARD 17
 		CXX_EXTENSIONS OFF
-		FOLDER "Samples"
+		FOLDER "Tools"
 )
 
 add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )

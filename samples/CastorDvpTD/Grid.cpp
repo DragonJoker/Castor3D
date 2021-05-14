@@ -1,4 +1,4 @@
-#include "CastorDvpTD/Grid.hpp"
+#include "Grid.hpp"
 
 namespace castortd
 {
