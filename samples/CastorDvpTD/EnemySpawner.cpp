@@ -1,6 +1,6 @@
-#include "CastorDvpTD/EnemySpawner.hpp"
+#include "EnemySpawner.hpp"
 
-#include "CastorDvpTD/Game.hpp"
+#include "Game.hpp"
 
 #include <Castor3D/Cache/SceneNodeCache.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
