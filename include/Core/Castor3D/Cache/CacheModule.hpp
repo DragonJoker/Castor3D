@@ -500,13 +500,16 @@ namespace castor3d
 	using OnCacheChanged = castor::Signal < OnCacheChangedFunction >;
 
 
-	using AnimatedObjectGroupCache = Cache< AnimatedObjectGroup, castor::String >;
-	using BillboardListCache = ObjectCache< BillboardList, castor::String >;
-	using CameraCache = ObjectCache< Camera, castor::String >;
-	using GeometryCache = ObjectCache< Geometry, castor::String >;
-	using LightCache = ObjectCache< Light, castor::String >;
-	using FrameListenerCache = Cache< FrameListener, castor::String >;
+	class AnimatedObjectGroupCache;
+	class BillboardListCache;
+	class GeometryCache;
+	class LightCache;
 	class MaterialCache;
+	class RenderTargetCache;
+	class ShaderProgramCache;
+
+	using CameraCache = ObjectCache< Camera, castor::String >;
+	using FrameListenerCache = Cache< FrameListener, castor::String >;
 	using MeshCache = Cache< Mesh, castor::String >;
 	using OverlayCache = Cache< Overlay, castor::String >;
 	using ParticleSystemCache = ObjectCache< ParticleSystem, castor::String >;
@@ -514,10 +517,8 @@ namespace castor3d
 	using SamplerCache = Cache< Sampler, castor::String >;
 	using SceneCache = Cache< Scene, castor::String >;
 	using SceneNodeCache = ObjectCache< SceneNode, castor::String >;
-	class RenderTargetCache;
 	using RenderTechniqueCache = Cache< RenderTechnique, castor::String >;
 	using RenderWindowCache = Cache< RenderWindow, castor::String >;
-	class ShaderProgramCache;
 
 	CU_DeclareSmartPtr( AnimatedObjectGroupCache );
 	CU_DeclareSmartPtr( BillboardListCache );
