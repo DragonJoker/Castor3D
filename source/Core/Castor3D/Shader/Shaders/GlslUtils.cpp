@@ -1245,7 +1245,7 @@ namespace castor3d::shader
 				auto i = textureIt.first;
 				auto name = castor::string::stringCast< char >( castor::string::toString( i ) );
 				auto config = m_writer.declLocale( "config" + name
-					, textureConfigs.getTextureConfiguration( sdw::UInt( textureIt.second.id + 1u ) ) );
+					, textureConfigs.getTextureConfiguration( sdw::UInt( textureIt.second.id ) ) );
 				auto texCoord = m_writer.declLocale( "texCoord" + name
 					, texCoords.xy() );
 				config.convertUV( m_writer, texCoord );
@@ -1277,7 +1277,7 @@ namespace castor3d::shader
 		{
 			auto i = it->first;
 			auto config = m_writer.declLocale( "opacityMapConfig"
-				, textureConfigs.getTextureConfiguration(  sdw::UInt( it->second.id + 1u ) ) );
+				, textureConfigs.getTextureConfiguration(  sdw::UInt( it->second.id ) ) );
 			auto texCoord = m_writer.declLocale( "texCoordOpacity"
 				, texCoords.xy() );
 			config.convertUV( m_writer, texCoord );
