@@ -73,6 +73,7 @@ namespace castor3d
 		castor::Point3f multiply{ 1.0f, 1.0f, 1.0f };
 		castor::Point3f add{};
 		castor::Point4f const * grid{ nullptr };
+		bool invertY{ false };
 
 		static TextureFactors tex2D( castor::Point3f multiply = castor::Point3f{ 1.0f, 1.0f, 1.0f }
 			, castor::Point3f add = castor::Point3f{} )
@@ -88,6 +89,12 @@ namespace castor3d
 			TextureFactors result;
 			result.grid = grid;
 			return result;
+		}
+
+		TextureFactors & invert( bool value )
+		{
+			invertY = value;
+			return *this;
 		}
 	};
 	/**

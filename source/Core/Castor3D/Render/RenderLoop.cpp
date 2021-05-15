@@ -198,8 +198,7 @@ namespace castor3d
 
 			// GPU Update
 			GpuUpdater updater{ device, info };
-			getEngine()->getMaterialCache().update( updater );
-			getEngine()->getRenderTargetCache().update( updater );
+			getEngine()->update( updater );
 
 			auto & uploadResources = m_uploadResources[m_currentUpdate];
 			uploadResources.commands.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
@@ -247,32 +246,16 @@ namespace castor3d
 		doProcessEvents( EventType::ePostRender );
 		CpuUpdater updater;
 		updater.tslf = tslf;
-		getEngine()->getSceneCache().forEach( [&updater]( Scene & scene )
-			{
-				scene.update( updater );
-			} );
-		getEngine()->getRenderTargetCache().update( updater );
-		std::vector< TechniqueQueues > techniquesQueues;
-		getEngine()->getRenderTechniqueCache().forEach( [&updater, &techniquesQueues]( RenderTechnique & technique )
-			{
-				TechniqueQueues techniqueQueues;
-				updater.queues = &techniqueQueues.queues;
-				technique.update( updater );
-				techniqueQueues.shadowMaps = technique.getShadowMaps();
-				techniquesQueues.push_back( techniqueQueues );
-			} );
-		doUpdateQueues( techniquesQueues );
-		m_debugOverlays->endCpuTask();
-	}
+		getEngine()->update( updater );
 
-	void RenderLoop::doUpdateQueues( std::vector< TechniqueQueues > & techniquesQueues )
-	{
-		for ( auto & techniqueQueues : techniquesQueues )
+		for ( auto & techniqueQueues : updater.techniquesQueues )
 		{
 			for ( auto & queue : techniqueQueues.queues )
 			{
 				queue.get().update( techniqueQueues.shadowMaps );
 			}
 		}
+
+		m_debugOverlays->endCpuTask();
 	}
 }
