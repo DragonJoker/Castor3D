@@ -166,6 +166,24 @@ namespace castor3d
 			}
 		};
 
+		template<>
+		struct DefaultValueGetterT< IntermediateView >
+		{
+			static IntermediateView const & get()
+			{
+				static IntermediateView const result = IntermediateView{ []()
+					{
+						IntermediateView result
+						{ 
+							cuT( "Undefined" ),
+							ashes::ImageView{},
+						};
+						return result;
+				}( ) };
+				return result;
+			}
+		};
+
 		template< typename TypeT >
 		static inline TypeT const & defaultV = DefaultValueGetterT< TypeT >::get();
 
@@ -196,7 +214,8 @@ namespace castor3d
 		, m_config{ ( config.bindings ? *config.bindings : defaultV< rq::BindingDescriptionArray > )
 			, ( config.range ? *config.range : defaultV< VkImageSubresourceRange > )
 			, ( config.texcoordConfig ? *config.texcoordConfig : defaultV< rq::Texcoord > )
-			, ( config.blendMode ? *config.blendMode : defaultV< BlendMode > ) }
+			, ( config.blendMode ? *config.blendMode : defaultV< BlendMode > )
+			, ( config.tex3DResult ? *config.tex3DResult : defaultV< IntermediateView > ) }
 		, m_useTexCoord{ config.texcoordConfig }
 	{
 		m_sampler->initialise( m_device );
@@ -214,8 +233,10 @@ namespace castor3d
 		, m_pipeline{ std::move( rhs.m_pipeline ) }
 		, m_descriptorSetPool{ std::move( rhs.m_descriptorSetPool ) }
 		, m_passes{ std::move( rhs.m_passes ) }
+		, m_invertY{ std::move( rhs.m_invertY ) }
 		, m_descriptorSets{ std::move( rhs.m_descriptorSets ) }
 		, m_vertexBuffer{ std::move( rhs.m_vertexBuffer ) }
+		, m_uvInvVertexBuffer{ std::move( rhs.m_uvInvVertexBuffer ) }
 	{
 	}
 
@@ -237,6 +258,7 @@ namespace castor3d
 		}
 
 		m_vertexBuffer.reset();
+		m_uvInvVertexBuffer.reset();
 		m_descriptorSets.clear();
 		m_descriptorSetPool.reset();
 		m_pipeline.reset();
@@ -264,24 +286,56 @@ namespace castor3d
 			std::array< TexturedQuad::Vertex, 4u > vertexData
 			{
 				TexturedQuad::Vertex{ Point2f{ -1.0, -1.0 }
-				, ( m_useTexCoord
-					? Point2f{ ( m_config.texcoordConfig.invertU ? 1.0 : 0.0 ), ( m_config.texcoordConfig.invertV ? 1.0 : 0.0 ) }
-					: Point2f{} ) },
+					, ( m_useTexCoord
+						? Point2f{ ( m_config.texcoordConfig.invertU ? 1.0 : 0.0 ), ( m_config.texcoordConfig.invertV ? 1.0 : 0.0 ) }
+						: Point2f{} ) },
 				TexturedQuad::Vertex{ Point2f{ -1.0, +1.0 }
-				, ( m_useTexCoord ? Point2f{ ( m_config.texcoordConfig.invertU ? 1.0 : 0.0 ), ( m_config.texcoordConfig.invertV ? 0.0 : 1.0 ) }
-					: Point2f{} ) },
+					, ( m_useTexCoord ? Point2f{ ( m_config.texcoordConfig.invertU ? 1.0 : 0.0 ), ( m_config.texcoordConfig.invertV ? 0.0 : 1.0 ) }
+						: Point2f{} ) },
 				TexturedQuad::Vertex{ Point2f{ +1.0, -1.0 }
-				, ( m_useTexCoord
-					? Point2f{ ( m_config.texcoordConfig.invertU ? 0.0 : 1.0 ), ( m_config.texcoordConfig.invertV ? 1.0 : 0.0 ) }
-					: Point2f{} ) },
+					, ( m_useTexCoord
+						? Point2f{ ( m_config.texcoordConfig.invertU ? 0.0 : 1.0 ), ( m_config.texcoordConfig.invertV ? 1.0 : 0.0 ) }
+						: Point2f{} ) },
 				TexturedQuad::Vertex{ Point2f{ +1.0, +1.0 }
-				, ( m_useTexCoord
-					? Point2f{ ( m_config.texcoordConfig.invertU ? 0.0 : 1.0 ), ( m_config.texcoordConfig.invertV ? 0.0 : 1.0 ) }
-					: Point2f{} ) },
+					, ( m_useTexCoord
+						? Point2f{ ( m_config.texcoordConfig.invertU ? 0.0 : 1.0 ), ( m_config.texcoordConfig.invertV ? 0.0 : 1.0 ) }
+						: Point2f{} ) },
 			};
 			std::copy( vertexData.begin(), vertexData.end(), buffer );
 			m_vertexBuffer->flush( 0u, 4u );
 			m_vertexBuffer->unlock();
+		}
+
+		// Initialise the V inverted vertex buffer.
+		m_uvInvVertexBuffer = makeVertexBuffer< TexturedQuad::Vertex >( m_device
+			, 4u
+			, 0u
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, getName() );
+
+		if ( auto buffer = m_uvInvVertexBuffer->lock( 0u, 4u, 0u ) )
+		{
+			std::array< TexturedQuad::Vertex, 4u > vertexData
+			{
+				TexturedQuad::Vertex{ Point2f{ -1.0, -1.0 }
+					, ( m_useTexCoord
+						? Point2f{ ( m_config.texcoordConfig.invertU ? 1.0 : 0.0 ), ( m_config.texcoordConfig.invertV ? 0.0 : 1.0 ) }
+						: Point2f{} ) },
+				TexturedQuad::Vertex{ Point2f{ -1.0, +1.0 }
+					, ( m_useTexCoord ? Point2f{ ( m_config.texcoordConfig.invertU ? 1.0 : 0.0 ), ( m_config.texcoordConfig.invertV ? 1.0 : 0.0 ) }
+						: Point2f{} ) },
+				TexturedQuad::Vertex{ Point2f{ +1.0, -1.0 }
+					, ( m_useTexCoord
+						? Point2f{ ( m_config.texcoordConfig.invertU ? 0.0 : 1.0 ), ( m_config.texcoordConfig.invertV ? 0.0 : 1.0 ) }
+						: Point2f{} ) },
+				TexturedQuad::Vertex{ Point2f{ +1.0, +1.0 }
+					, ( m_useTexCoord
+						? Point2f{ ( m_config.texcoordConfig.invertU ? 0.0 : 1.0 ), ( m_config.texcoordConfig.invertV ? 1.0 : 0.0 ) }
+						: Point2f{} ) },
+			};
+			std::copy( vertexData.begin(), vertexData.end(), buffer );
+			m_uvInvVertexBuffer->flush( 0u, 4u );
+			m_uvInvVertexBuffer->unlock();
 		}
 
 		// Initialise the vertex layout.
@@ -342,11 +396,13 @@ namespace castor3d
 			) );
 	}
 
-	void RenderQuad::registerPassInputs( ashes::WriteDescriptorSetArray const & writes )
+	void RenderQuad::registerPassInputs( ashes::WriteDescriptorSetArray const & writes
+		, bool invertY )
 	{
 		CU_Require( checkWrites( writes, m_config.bindings ) );
 
 		m_passes.emplace_back( writes );
+		m_invertY.emplace_back( invertY );
 	}
 
 	void RenderQuad::initialisePasses()
@@ -386,6 +442,7 @@ namespace castor3d
 			, pushRanges
 			, std::move( dsState ) );
 		m_passes.emplace_back( writes );
+		m_invertY.emplace_back( false );
 		initialisePasses();
 	}
 
@@ -393,7 +450,16 @@ namespace castor3d
 		, uint32_t descriptorSetIndex )const
 	{
 		commandBuffer.bindPipeline( *m_pipeline );
-		commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
+
+		if ( m_invertY[descriptorSetIndex] )
+		{
+			commandBuffer.bindVertexBuffer( 0u, m_uvInvVertexBuffer->getBuffer(), 0u );
+		}
+		else
+		{
+			commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
+		}
+
 		commandBuffer.bindDescriptorSet( *m_descriptorSets[descriptorSetIndex], *m_pipelineLayout );
 		doRegisterPass( commandBuffer );
 		commandBuffer.draw( 4u );

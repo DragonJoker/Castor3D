@@ -56,6 +56,8 @@
 #include "GuiCommon/xpms/post_effect_sel.xpm"
 #include "GuiCommon/xpms/render_target.xpm"
 #include "GuiCommon/xpms/render_target_sel.xpm"
+#include "GuiCommon/xpms/render_window.xpm"
+#include "GuiCommon/xpms/render_window_sel.xpm"
 #include "GuiCommon/xpms/scene.xpm"
 #include "GuiCommon/xpms/scene_sel.xpm"
 #include "GuiCommon/xpms/skeleton.xpm"
@@ -423,6 +425,8 @@ namespace GuiCommon
 		ImagesLoader::addBitmap( eBMP_TONE_MAPPING_SEL, tone_mapping_sel_xpm );
 		ImagesLoader::addBitmap( eBMP_RENDER_TARGET, render_target_xpm );
 		ImagesLoader::addBitmap( eBMP_RENDER_TARGET_SEL, render_target_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_RENDER_WINDOW, render_window_xpm );
+		ImagesLoader::addBitmap( eBMP_RENDER_WINDOW_SEL, render_window_sel_xpm );
 		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE, frame_variable_xpm );
 		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE_SEL, frame_variable_sel_xpm );
 		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE_BUFFER, frame_variable_buffer_xpm );

@@ -337,6 +337,7 @@ namespace castor3d
 		: m_engine{ engine }
 		, m_vertexShader{ vertexShader }
 		, m_pixelShader{ pixelShader }
+		, m_config{ config }
 		, m_image{ ( config.resultTexture
 			? std::move( *config.resultTexture )
 			: doCreateTexture( *engine.getRenderSystem(), device, prefix, outputSize, outputFormat ) ) }
@@ -345,7 +346,6 @@ namespace castor3d
 		, m_lhsViews{ doCreateSampledViews( config, lhsViews, m_view ) }
 		, m_rhsBarrierView{ doCreateBarrierView( rhsView ) }
 		, m_rhsView{ doCreateSampledView( rhsView ) }
-		, m_config{ config }
 		, m_prefix{ prefix }
 		, m_timer{ std::make_shared< RenderPassTimer >( device, m_prefix, cuT( "Combine" ) ) }
 		, m_renderPass{ doCreateRenderPass( device, m_prefix, outputFormat ) }

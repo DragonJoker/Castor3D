@@ -806,12 +806,14 @@ namespace castor3d
 		{
 			visitor.visit( "SSSSS Blur " + castor::string::toString( i )
 				, m_blurResults[i].getTexture()->getDefaultView().getSampledView()
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, TextureFactors{}.invert( true ) );
 		}
 
 		visitor.visit( "SSSSS Result"
 			, m_result.getTexture()->getDefaultView().getSampledView()
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, TextureFactors{}.invert( true ) );
 
 		visitor.visit( m_blurHorizVertexShader );
 		visitor.visit( m_blurHorizPixelShader );

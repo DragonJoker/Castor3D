@@ -53,15 +53,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Shadow mapping implementation.
-	*\~french
-	*\brief
-	*	Implémentation du mappage d'ombres.
-	*/
-	class ShadowMap;
-	/**
-	*\~english
-	*\brief
 	*	Shadow mapping implementation for directional lights.
 	*\~french
 	*\brief
@@ -134,10 +125,6 @@ namespace castor3d
 
 	CU_DeclareCUSmartPtr( castor3d, ShadowMap, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, ShadowMapPass, C3D_API );
-
-	using ShadowMapRefIds = std::pair< std::reference_wrapper< ShadowMap >, UInt32Array >;
-	using ShadowMapRefArray = std::vector< ShadowMapRefIds >;
-	using ShadowMapLightTypeArray = std::array< ShadowMapRefArray, size_t( LightType::eCount ) >;
 	/**
 	*\~english
 	*\brief
