@@ -68,7 +68,7 @@ namespace castor3d
 		{
 		public:
 			static void submit( RenderTechnique & technique
-				, std::vector< IntermediateView > & intermediates )
+				, IntermediateViewArray & intermediates )
 			{
 				std::set< VkImageViewCreateInfo, VkImageViewCreateInfoComp > cache;
 
@@ -85,7 +85,7 @@ namespace castor3d
 			IntermediatesLister( PipelineFlags const & flags
 				, Scene const & scene
 				, std::set< VkImageViewCreateInfo, VkImageViewCreateInfoComp > & cache
-				, std::vector< IntermediateView > & result )
+				, IntermediateViewArray & result )
 				: RenderTechniqueVisitor{ flags, scene, { true, false } }
 				, m_result{ result }
 				, m_cache{ cache }
@@ -112,7 +112,7 @@ namespace castor3d
 			}
 
 		private:
-			std::vector< IntermediateView > & m_result;
+			IntermediateViewArray & m_result;
 			std::set< VkImageViewCreateInfo, VkImageViewCreateInfoComp > & m_cache;
 		};
 
@@ -680,7 +680,7 @@ namespace castor3d
 		m_opaquePass.reset();
 	}
 
-	void RenderTechnique::listIntermediates( std::vector< IntermediateView > & intermediates )
+	void RenderTechnique::listIntermediates( IntermediateViewArray & intermediates )
 	{
 		IntermediatesLister::submit( *this, intermediates );
 	}
@@ -817,10 +817,12 @@ namespace castor3d
 	{
 		visitor.visit( "Technique Colour"
 			, m_colourTexture.getTexture()->getDefaultView().getSampledView()
-			, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL );
+			, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
+			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Technique Depth"
 			, m_depthBuffer.getTexture()->getDefaultView().getSampledView()
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL
+			, TextureFactors{}.invert( true ) );
 
 		m_voxelizer->listIntermediates( visitor );
 

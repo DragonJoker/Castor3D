@@ -58,7 +58,8 @@ namespace castor3d
 								, view->getSampledView()
 								, ( ashes::isDepthOrStencilFormat( view->getTargetView()->format )
 									? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
-									: VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+									: VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )
+								, TextureFactors{}.invert( true ) );
 						} );
 				}
 				else
@@ -69,7 +70,8 @@ namespace castor3d
 								, view->getSampledView()
 								, ( ashes::isDepthOrStencilFormat( view->getTargetView()->format )
 									? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
-									: VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+									: VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )
+								, TextureFactors{}.invert( true ) );
 						} );
 				}
 			}
