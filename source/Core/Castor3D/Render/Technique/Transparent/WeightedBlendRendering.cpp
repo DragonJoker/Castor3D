@@ -69,10 +69,12 @@ namespace castor3d
 	{
 		visitor.visit( "Transparent Accumulation"
 			, m_transparentPassResult[WbTexture::eAccumulation].getTexture()->getDefaultView().getSampledView()
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Transparent Revealage"
 			, m_transparentPassResult[WbTexture::eRevealage].getTexture()->getDefaultView().getSampledView()
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, TextureFactors{}.invert( true ) );
 		m_transparentPass.accept( visitor );
 		m_finalCombinePass.accept( visitor );
 	}

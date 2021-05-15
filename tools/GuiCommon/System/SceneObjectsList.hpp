@@ -26,6 +26,7 @@ namespace GuiCommon
 		~SceneObjectsList();
 
 		void loadScene( castor3d::Engine * engine
+			, castor3d::RenderWindow & window
 			, castor3d::SceneSPtr scene );
 		void unloadScene();
 		void select( castor3d::GeometrySPtr geometry

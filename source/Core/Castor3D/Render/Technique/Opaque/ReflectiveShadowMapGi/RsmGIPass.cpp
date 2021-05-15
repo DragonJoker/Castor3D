@@ -671,10 +671,12 @@ namespace castor3d
 	{
 		visitor.visit( getName() + " GI"
 			, m_result[0].getTexture()->getDefaultView().getSampledView()
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, TextureFactors{}.invert( true ) );
 		visitor.visit( getName() + " Normal"
 			, m_result[1].getTexture()->getDefaultView().getSampledView()
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, TextureFactors{}.invert( true ) );
 
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );

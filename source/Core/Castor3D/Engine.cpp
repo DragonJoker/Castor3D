@@ -431,6 +431,34 @@ namespace castor3d
 		return inputListener && inputListener->fireMouseMove( position );
 	}
 
+	void Engine::update( CpuUpdater & updater )
+	{
+		for ( auto & window : m_renderWindows )
+		{
+			window.second->update( updater );
+		}
+
+		getSceneCache().forEach( [&updater]( Scene & scene )
+			{
+				scene.update( updater );
+			} );
+		getRenderTargetCache().update( updater );
+		getRenderTechniqueCache().forEach( [&updater]( RenderTechnique & technique )
+			{
+				TechniqueQueues techniqueQueues;
+				updater.queues = &techniqueQueues.queues;
+				technique.update( updater );
+				techniqueQueues.shadowMaps = technique.getShadowMaps();
+				updater.techniquesQueues.push_back( techniqueQueues );
+			} );
+	}
+
+	void Engine::update( GpuUpdater & updater )
+	{
+		getMaterialCache().update( updater );
+		getRenderTargetCache().update( updater );
+	}
+
 	Path Engine::getPluginsDirectory()
 	{
 		Path binDir = File::getExecutableDirectory();
