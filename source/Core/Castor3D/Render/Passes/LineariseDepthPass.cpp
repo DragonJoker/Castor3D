@@ -466,7 +466,8 @@ namespace castor3d
 		{
 			visitor.visit( "Linearised Depth " + string::toString( index++ )
 				, layer.view->getSampledView()
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, TextureFactors{}.invert( true ) );
 		}
 
 		visitor.visit( m_lineariseVertexShader );

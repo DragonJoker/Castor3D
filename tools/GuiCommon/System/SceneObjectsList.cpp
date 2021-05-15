@@ -90,6 +90,8 @@ namespace GuiCommon
 			ImagesLoader::getBitmap( eBMP_VIEWPORT_SEL ),
 			ImagesLoader::getBitmap( eBMP_RENDER_TARGET ),
 			ImagesLoader::getBitmap( eBMP_RENDER_TARGET_SEL ),
+			ImagesLoader::getBitmap( eBMP_RENDER_WINDOW ),
+			ImagesLoader::getBitmap( eBMP_RENDER_WINDOW_SEL ),
 			ImagesLoader::getBitmap( eBMP_FRAME_VARIABLE ),
 			ImagesLoader::getBitmap( eBMP_FRAME_VARIABLE_SEL ),
 			ImagesLoader::getBitmap( eBMP_FRAME_VARIABLE_BUFFER ),
@@ -156,14 +158,21 @@ namespace GuiCommon
 	}
 
 	void SceneObjectsList::loadScene( Engine * engine
-		, SceneSPtr scene )
+		, castor3d::RenderWindow & window
+		, castor3d::SceneSPtr scene )
 	{
 		m_scene = scene;
 		m_engine = engine;
 
 		if ( scene )
 		{
-			wxTreeItemId sceneId = AddRoot( scene->getName()
+			auto rootId = AddRoot( make_wxString( window.getName() )
+				, eBMP_RENDER_WINDOW
+				, eBMP_RENDER_WINDOW_SEL
+				, new RenderWindowTreeItemProperty( m_propertiesHolder->isEditable(), window ) );
+			
+			wxTreeItemId sceneId = AppendItem( rootId
+				, scene->getName()
 				, eBMP_SCENE
 				, eBMP_SCENE_SEL
 				, new SceneTreeItemProperty( this, m_propertiesHolder->isEditable(), *scene ) );
@@ -295,6 +304,7 @@ namespace GuiCommon
 			}
 
 			CollapseAll();
+			Expand( rootId );
 			Expand( sceneId );
 		}
 	}

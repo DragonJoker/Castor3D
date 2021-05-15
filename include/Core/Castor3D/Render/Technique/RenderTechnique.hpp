@@ -16,7 +16,6 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Technique/Transparent/TransparentModule.hpp"
 #include "Castor3D/Render/Technique/Voxelize/VoxelizeModule.hpp"
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
-#include "Castor3D/Shader/Ubos/DebugConfig.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
@@ -210,16 +209,6 @@ namespace castor3d
 		{
 			return m_ssaoConfig;
 		}
-
-		DebugConfig const & getDebugConfig()const
-		{
-			return m_debugConfig;
-		}
-
-		DebugConfig & getDebugConfig()
-		{
-			return m_debugConfig;
-		}
 		/**@}*/
 
 	public:
@@ -284,7 +273,6 @@ namespace castor3d
 		ShadowMapUPtr m_pointShadowMap;
 		ShadowMapUPtr m_spotShadowMap;
 		CommandsSemaphore m_clearLpv;
-		DebugConfig m_debugConfig;
 		RenderPassTimerSPtr m_particleTimer;
 		ShadowMapLightTypeArray m_allShadowMaps;
 		ShadowMapLightTypeArray m_activeShadowMaps;

@@ -73,9 +73,6 @@ namespace GuiCommon
 		static wxString PROPERTY_CATEGORY_RENDER_TARGET = _( "Render Target: " );
 		static wxString PROPERTY_RENDER_TARGET_SHADER = _( "Shader" );
 		static wxString PROPERTY_RENDER_TARGET_EDIT_SHADER = _( "View Shaders..." );
-#if C3D_DebugQuads
-		static wxString PROPERTY_RENDER_TARGET_DEBUG_VIEW = _( "Debug View" );
-#endif
 
 		auto & target = getRenderTarget();
 		wxString TARGETS[] =
@@ -85,18 +82,6 @@ namespace GuiCommon
 		};
 
 		addProperty( grid, PROPERTY_CATEGORY_RENDER_TARGET + TARGETS[size_t( target.getTargetType() )] );
-
-#if C3D_DebugQuads
-		auto & debugConfig = target.getTechnique()->getDebugConfig();
-		wxArrayString debugChoices;
-
-		for ( auto & intermediate : target.getIntermediateViews() )
-		{
-			debugChoices.Add( make_wxString( intermediate.name ) );
-		}
-
-		addPropertyET( grid, PROPERTY_RENDER_TARGET_DEBUG_VIEW, debugChoices, &debugConfig.debugIndex );
-#endif
 		doCreateSsaoProperties( editor, grid );
 	}
 

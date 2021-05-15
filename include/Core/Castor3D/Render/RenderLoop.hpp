@@ -185,18 +185,11 @@ namespace castor3d
 		C3D_API void doRenderFrame( castor::Milliseconds tslf = 0_ms );
 
 	private:
-		struct TechniqueQueues
-		{
-			RenderQueueArray queues;
-			ShadowMapLightTypeArray shadowMaps;
-		};
-
 		void doProcessEvents( EventType eventType );
 		void doProcessEvents( EventType eventType
 			, RenderDevice const & device );
 		void doGpuStep( RenderInfo & info );
 		void doCpuStep( castor::Milliseconds tslf );
-		void doUpdateQueues( std::vector< TechniqueQueues > & queues );
 
 	protected:
 		//!\~english	The current RenderSystem.

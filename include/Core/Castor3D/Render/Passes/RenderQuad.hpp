@@ -78,6 +78,7 @@ namespace castor3d
 			WrapperT< VkImageSubresourceRange > range;
 			WrapperT< Texcoord > texcoordConfig;
 			WrapperT< BlendMode > blendMode;
+			WrapperT< IntermediateView > tex3DResult;
 		};
 
 		template< typename TypeT >
@@ -191,7 +192,8 @@ namespace castor3d
 		*\param[in] writes
 		*	Les descriptor writes de la passe.
 		*/
-		C3D_API void registerPassInputs( ashes::WriteDescriptorSetArray const & writes );
+		C3D_API void registerPassInputs( ashes::WriteDescriptorSetArray const & writes
+			, bool invertY = false );
 		/**
 		*\~english
 		*\brief
@@ -538,7 +540,9 @@ namespace castor3d
 		ashes::DescriptorSetPoolPtr m_descriptorSetPool;
 		std::vector< ashes::WriteDescriptorSetArray > m_passes;
 		std::vector< ashes::DescriptorSetPtr > m_descriptorSets;
+		std::vector< bool > m_invertY;
 		ashes::VertexBufferPtr< TexturedQuad::Vertex > m_vertexBuffer;
+		ashes::VertexBufferPtr< TexturedQuad::Vertex > m_uvInvVertexBuffer;
 	};
 
 	template< typename ConfigT, typename BuilderT >
@@ -666,6 +670,25 @@ namespace castor3d
 			, VkShaderStageFlags stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT )
 		{
 			return binding( rq::BindingDescription{ descriptor, view, stageFlags } );
+		}
+		/**
+		*\~english
+		*	Sets the result used for for 3D texture inputs.
+		*\remarks
+		*	The 3D textures must be preprocessed externally to this result.
+		*\param[in] result
+		*	The result.
+		*\~french
+		*	Définit le résultat utilisé pour les textures 3D en entrée.
+		*\remarks
+		*	Les textures 3D doivent être traitées en externe dans ce résultat.
+		*\param[in] result
+		*	Le résultat.
+		*/
+		BuilderT & tex3DResult( IntermediateView result )
+		{
+			m_config.tex3DResult = result;
+			return static_cast< BuilderT & >( *this );
 		}
 		/**
 		*\~english

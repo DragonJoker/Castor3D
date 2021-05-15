@@ -150,6 +150,24 @@ namespace castor3d
 		C3D_API bool fireMouseMove( castor::Position const & position );
 		/**
 		 *\~english
+		 *\brief			Updates the engine, CPU wise.
+		 *\param[in, out]	updater	The update data.
+		 *\~french
+		 *\brief			Met à jour le moteur, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
+		 */
+		C3D_API void update( CpuUpdater & updater );
+		/**
+		 *\~english
+		 *\brief			Updates the engine, GPU wise.
+		 *\param[in, out]	updater	The update data.
+		 *\~french
+		 *\brief			Met à jour le moteur, au niveau GPU.
+		 *\param[in, out]	updater	Les données d'update.
+		 */
+		C3D_API void update( GpuUpdater & updater );
+		/**
+		 *\~english
 		 *\brief		Retrieves the cleanup status
 		 *\remarks		Thread-safe
 		 *\return		\p true if cleaned up

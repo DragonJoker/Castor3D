@@ -853,16 +853,20 @@ namespace castor3d
 	{
 		visitor.visit( "Light Diffuse"
 			, m_result[LpTexture::eDiffuse].getTexture()->getDefaultView().getSampledView()
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Light Specular"
 			, m_result[LpTexture::eSpecular].getTexture()->getDefaultView().getSampledView()
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Light Indirect Diffuse"
 			, m_result[LpTexture::eIndirectDiffuse].getTexture()->getDefaultView().getSampledView()
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Light Indirect Specular"
 			, m_result[LpTexture::eIndirectSpecular].getTexture()->getDefaultView().getSampledView()
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, TextureFactors{}.invert( true ) );
 
 		for ( auto & lightPass : m_active )
 		{

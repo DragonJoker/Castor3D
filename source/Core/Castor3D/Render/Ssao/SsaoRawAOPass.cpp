@@ -833,14 +833,16 @@ namespace castor3d
 		{
 			visitor.visit( "SSAO Raw AO"
 				, getResult().getTexture()->getDefaultView().getSampledView()
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, TextureFactors{}.invert( true ) );
 		}
 
 		if ( getBentResult().isTextured() )
 		{
 			visitor.visit( "SSAO Bent Normals"
 				, getBentResult().getTexture()->getDefaultView().getSampledView()
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, TextureFactors{}.invert( true ) );
 		}
 
 		auto index = m_ssaoConfig.useNormalsBuffer

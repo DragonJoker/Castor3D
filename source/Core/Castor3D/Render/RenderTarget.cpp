@@ -300,26 +300,6 @@ namespace castor3d
 		{
 			effect->update( updater );
 		}
-
-#if C3D_DebugQuads
-		auto technique = this->getTechnique();
-		auto & debugConfig = technique->getDebugConfig();
-		updater.combineIndex = debugConfig.debugIndex;
-
-		if ( m_intermediates[debugConfig.debugIndex].factors.grid )
-		{
-			updater.cellSize = ( *m_intermediates[debugConfig.debugIndex].factors.grid )[3];
-			updater.gridCenter = castor::Point3f{ *m_intermediates[debugConfig.debugIndex].factors.grid };
-		}
-		else
-		{
-			updater.cellSize = 0.0f;
-			updater.gridCenter = {};
-		}
-
-		m_texture3Dto2D->update( updater );
-		m_combinePass->update( updater );
-#endif
 	}
 
 	void RenderTarget::update( GpuUpdater & updater )
@@ -484,6 +464,27 @@ namespace castor3d
 		m_techniqueParameters.add( parameters );
 	}
 
+	void RenderTarget::listIntermediateViews( IntermediateViewArray & result )const
+	{
+		result.push_back( { "Target Colour"
+			, m_objectsFrameBuffer.colourTexture.getTexture()->getDefaultView().getSampledView()
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, TextureFactors{}.invert( true ) } );
+		result.push_back( { "Target Overlays"
+			, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView().getSampledView()
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, TextureFactors{}.invert( true ) } );
+		result.push_back( { "Target Velocity"
+			, m_velocityTexture.getTexture()->getDefaultView().getSampledView()
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, TextureFactors{}.invert( true ) } );
+
+		if ( auto technique = getTechnique() )
+		{
+			technique->listIntermediates( result );
+		}
+	}
+
 	void RenderTarget::doInitialiseRenderPass( RenderDevice const & device )
 	{
 		ashes::VkAttachmentDescriptionArray attaches
@@ -554,9 +555,6 @@ namespace castor3d
 
 		if ( result )
 		{
-			addIntermediateView( "Target Colour"
-				, m_objectsFrameBuffer.colourTexture.getTexture()->getDefaultView().getSampledView()
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			result = m_overlaysFrameBuffer.initialise( device
 				, *m_renderPass
 				, VK_FORMAT_R8G8B8A8_UNORM
@@ -565,9 +563,6 @@ namespace castor3d
 
 		if ( result )
 		{
-			addIntermediateView( "Target Overlays"
-				, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView().getSampledView()
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			result = m_combinedFrameBuffer.initialise( device
 				, *m_renderPass
 				, getPixelFormat()
@@ -597,16 +592,7 @@ namespace castor3d
 			, getName() + cuT( "Velocity" ) );
 		m_velocityTexture.setTexture( std::move( velocityTexture ) );
 		m_velocityTexture.setSampler( getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + getName() + cuT( "Nearest" ) ) );
-		bool result = m_velocityTexture.initialise( device );
-
-		if ( result )
-		{
-			addIntermediateView( "Target Velocity"
-				, m_velocityTexture.getTexture()->getDefaultView().getSampledView()
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		}
-
-		return  result;
+		return m_velocityTexture.initialise( device );
 	}
 
 	bool RenderTarget::doInitialiseTechnique( RenderDevice const & device )
@@ -783,21 +769,13 @@ namespace castor3d
 		mainBuilder.resultTexture( m_combinedFrameBuffer.colourTexture.getTexture() );
 		mainBuilder.texcoordConfig( rq::Texcoord{} );
 
-		m_texture3Dto2D = castor::makeUnique< Texture3DTo2D >( device
-			, extent
-			, m_renderTechnique->getMatrixUbo() );
-
-#if C3D_DebugQuads
-		auto intermediates = m_intermediates;
-#else
-		IntermediateViewArray intermediates{ m_intermediates[0] };
-#endif
-		m_texture3Dto2D->createPasses( intermediates );
-
+		IntermediateViewArray intermediates{ 1u
+			, { "Target Colour"
+				, m_objectsFrameBuffer.colourTexture.getTexture()->getDefaultView().getSampledView()
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } };
 		m_combinePass = CombinePassBuilder{ mainBuilder }
 			.binding( VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D )
 			.binding( VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D )
-			.tex3DResult( m_texture3Dto2D->getTarget() )
 			.build( *getEngine()
 				, device
 				, "Target"
@@ -955,7 +933,6 @@ namespace castor3d
 	ashes::Semaphore const & RenderTarget::doCombine( ashes::Semaphore const & toWait )
 	{
 		ashes::Semaphore const * result = &toWait;
-		result = &m_texture3Dto2D->render( *result );
 		return m_combinePass->combine( *result );
 	}
 }

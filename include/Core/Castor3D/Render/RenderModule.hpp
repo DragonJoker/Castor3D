@@ -542,6 +542,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Shadow mapping implementation.
+	*\~french
+	*\brief
+	*	Implémentation du mappage d'ombres.
+	*/
+	class ShadowMap;
+	/**
+	*\~english
+	*\brief
 	*	A render viewport.
 	*\~french
 	*\brief
@@ -566,6 +575,16 @@ namespace castor3d
 
 	using RenderQueueArray = std::vector< std::reference_wrapper< RenderQueue > >;
 
+	using ShadowMapRefIds = std::pair< std::reference_wrapper< ShadowMap >, UInt32Array >;
+	using ShadowMapRefArray = std::vector< ShadowMapRefIds >;
+	using ShadowMapLightTypeArray = std::array< ShadowMapRefArray, size_t( LightType::eCount ) >;
+
+	struct TechniqueQueues
+	{
+		RenderQueueArray queues;
+		ShadowMapLightTypeArray shadowMaps;
+	};
+
 	struct CpuUpdater
 	{
 		CpuUpdater()
@@ -585,6 +604,7 @@ namespace castor3d
 		castor::Milliseconds tslf;
 		castor::Milliseconds time;
 		castor::Milliseconds total;
+		std::vector< TechniqueQueues > techniquesQueues;
 	};
 
 	struct GpuUpdater

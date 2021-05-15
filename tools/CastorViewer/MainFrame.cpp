@@ -210,7 +210,7 @@ namespace CastorViewer
 
 					if ( scene )
 					{
-						m_sceneObjects->getList()->loadScene( engine, scene );
+						m_sceneObjects->getList()->loadScene( engine, *m_renderPanel->getRenderWindow(), scene );
 						m_materials->getList()->loadMaterials( engine, *scene );
 					}
 

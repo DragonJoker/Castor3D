@@ -10,6 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Event/UserInput/UserInputListener.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/Passes/RenderQuad.hpp"
+#include "Castor3D/Render/ToTexture/RenderToTextureModule.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
@@ -27,6 +28,11 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	struct DebugConfig
+	{
+		uint32_t debugIndex{ 0u };
+	};
+
 	struct RenderWindowDesc
 	{
 		castor::String name;
@@ -155,6 +161,15 @@ namespace castor3d
 		 *\brief		Nettoie l'instance.
 		 */
 		C3D_API void cleanup();
+		/**
+		 *\~english
+		 *\brief			Updates the render window, CPU wise.
+		 *\param[in, out]	updater	The update data.
+		 *\~french
+		 *\brief			Met à jour la render window, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
+		 */
+		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Renders one frame.
@@ -317,6 +332,13 @@ namespace castor3d
 		 */
 		C3D_API PickNodeType pick( castor::Position const & position );
 		/**
+		 *\~english
+		 *\return		The intermediate views used by this render window.
+		 *\~french
+		 *\return		Les vues intermédiaires utilisées par cette render window.
+		 */
+		C3D_API IntermediateViewArray const & listIntermediateViews()const;
+		/**
 		*\~english
 		*name
 		*	Getters.
@@ -365,20 +387,15 @@ namespace castor3d
 			return m_saveBuffer;
 		}
 
-		bool isPickingDebugEnabled()const
-		{
-			return m_enablePickingDebug;
-		}
-
-		void enablePickingDebug( bool v )
-		{
-			m_enablePickingDebug = v;
-		}
-
 		ashes::Surface const & getSurface()const
 		{
 			CU_Require( m_surface );
 			return *m_surface;
+		}
+
+		DebugConfig & getDebugConfig()
+		{
+			return m_debugConfig;
 		}
 		/**@}*/
 		/**
@@ -423,6 +440,10 @@ namespace castor3d
 		void doDestroyFrameBuffers();
 		void doCreateCommandBuffers();
 		void doDestroyCommandBuffers();
+		void doCreateIntermediateViews();
+		void doDestroyIntermediateViews();
+		void doCreateSaveData();
+		void doDestroySaveData();
 		void doResetSwapChain();
 		RenderingResources * doGetResources();
 		void doWaitFrame();
@@ -451,7 +472,7 @@ namespace castor3d
 		CommandsSemaphore m_transferCommands;
 		ashes::ImageViewArray m_views;
 		std::vector< ashes::FrameBufferPtr > m_frameBuffers;
-		std::array< ashes::CommandBufferPtrArray, 2u > m_commandBuffers;
+		std::vector< ashes::CommandBufferPtrArray > m_commandBuffers;
 		ashes::PipelineShaderStageCreateInfoArray m_program;
 		RenderQuadUPtr m_renderQuad;
 		RenderTargetWPtr m_renderTarget;
@@ -464,7 +485,12 @@ namespace castor3d
 		castor::PxBufferBaseSPtr m_saveBuffer;
 		PickingPassSPtr m_pickingPass;
 		castor::Position m_mousePosition;
-		bool m_enablePickingDebug{ false };
+		Texture3DTo2DUPtr m_texture3Dto2D;
+		IntermediateView m_tex3DTo2DIntermediate;
+		IntermediateViewArray m_intermediates;
+		IntermediateViewArray m_intermediateBarrierViews;
+		IntermediateViewArray m_intermediateSampledViews;
+		DebugConfig m_debugConfig;
 	};
 }
 

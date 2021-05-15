@@ -688,13 +688,15 @@ namespace castor3d
 			{
 				visitor.visit( "SSAO HBlurred AO"
 					, getResult().getTexture()->getDefaultView().getSampledView()
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+					, TextureFactors{}.invert( true ) );
 			}
 			else
 			{
 				visitor.visit( "SSAO Blurred AO"
 					, getResult().getTexture()->getDefaultView().getSampledView()
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+					, TextureFactors{}.invert( true ) );
 			}
 		}
 		
@@ -704,13 +706,15 @@ namespace castor3d
 			{
 				visitor.visit( "HBlurred Bent Normals"
 					, getBentResult().getTexture()->getDefaultView().getSampledView()
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+					, TextureFactors{}.invert( true ) );
 			}
 			else
 			{
 				visitor.visit( "Blurred Bent Normals"
 					, getBentResult().getTexture()->getDefaultView().getSampledView()
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+					, TextureFactors{}.invert( true ) );
 			}
 		}
 

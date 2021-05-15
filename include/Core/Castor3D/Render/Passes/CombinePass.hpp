@@ -36,7 +36,6 @@ namespace castor3d
 		WrapperT< TextureLayoutSPtr > resultTexture;
 		WrapperT< VkImageLayout > lhsLayout;
 		WrapperT< VkImageLayout > rhsLayout;
-		WrapperT< IntermediateView > tex3DResult;
 	};
 
 	using CombinePassConfig = CombinePassConfigT< ashes::Optional >;
@@ -101,13 +100,13 @@ namespace castor3d
 		Engine & m_engine;
 		ShaderModule const & m_vertexShader;
 		ShaderModule const & m_pixelShader;
+		CombinePassConfig m_config;
 		TextureLayoutSPtr m_image;
 		ashes::ImageView m_view;
 		IntermediateViewArray m_lhsBarrierViews;
 		IntermediateViewArray m_lhsViews;
 		IntermediateView m_rhsBarrierView;
 		IntermediateView m_rhsView;
-		CombinePassConfig m_config;
 		castor::String m_prefix;
 		RenderPassTimerSPtr m_timer;
 		CommandsSemaphoreArray m_commands;
@@ -143,14 +142,6 @@ namespace castor3d
 			return *this;
 		}
 
-		CombinePassBuilder & tex3DResult( ashes::ImageView result )
-		{
-			m_config.tex3DResult = { "Texture3DTo2DResult"
-				, result
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL };
-			return *this;
-		}
-
 		CombinePassUPtr build( Engine & engine
 			, RenderDevice const & device
 			, castor::String const & prefix
@@ -161,19 +152,16 @@ namespace castor3d
 			, IntermediateViewArray const & lhsViews
 			, IntermediateView const & rhsView )
 		{
-			return castor::UniquePtr< CombinePass >( new CombinePass
-				{
-					engine,
-					device,
-					prefix,
-					outputFormat,
-					outputSize,
-					vertexShader,
-					pixelShader,
-					lhsViews,
-					rhsView,
-					std::move( m_config ),
-				} );
+			return castor::UniquePtr< CombinePass >( new CombinePass{ engine
+				, device
+				, prefix
+				, outputFormat
+				, outputSize
+				, vertexShader
+				, pixelShader
+				, lhsViews
+				, rhsView
+				, std::move( m_config ) } );
 		}
 
 	private:

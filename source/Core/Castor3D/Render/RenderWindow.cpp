@@ -15,8 +15,9 @@
 #include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
-#include "Castor3D/Render/Technique/RenderTechnique.hpp"
 #include "Castor3D/Render/Passes/RenderQuad.hpp"
+#include "Castor3D/Render/Technique/RenderTechnique.hpp"
+#include "Castor3D/Render/ToTexture/Texture3DTo2D.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
 #include <CastorUtils/Graphics/PixelBufferBase.hpp>
@@ -179,6 +180,108 @@ namespace castor3d
 				nullptr
 			};
 		}
+
+		IntermediateView doCreateBarrierView( IntermediateView const & view )
+		{
+			ashes::ImageViewCreateInfo createInfo{ view.view->flags
+				, view.view->image
+				, view.view->viewType
+				, view.view->format
+				, view.view->components
+				, { VkImageAspectFlags( ashes::isDepthStencilFormat( view.view->format )
+						? VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT
+						: ( ashes::isDepthFormat( view.view->format )
+							? VK_IMAGE_ASPECT_DEPTH_BIT
+							: ( ashes::isStencilFormat( view.view->format )
+								? VK_IMAGE_ASPECT_STENCIL_BIT
+								: VK_IMAGE_ASPECT_COLOR_BIT ) ) )
+					, view.view->subresourceRange.baseMipLevel
+					, view.view->subresourceRange.levelCount
+					, view.view->subresourceRange.baseArrayLayer
+					, view.view->subresourceRange.layerCount } };
+			return{ view.name
+				, view.view.image->createView( std::move( createInfo ) )
+				, view.layout
+				, view.factors };
+		}
+
+		IntermediateViewArray doCreateBarrierViews( IntermediateView const & tex3DResult
+			, IntermediateViewArray const & views )
+		{
+			using castor3d::operator!=;
+			IntermediateViewArray result;
+
+			if ( views.size() == 1u )
+			{
+				auto & view = views[0u];
+				result.push_back( doCreateBarrierView( view ) );
+				return result;
+			}
+
+			for ( auto & view : views )
+			{
+				if ( view.view->viewType == VK_IMAGE_VIEW_TYPE_3D )
+				{
+					result.push_back( doCreateBarrierView( tex3DResult ) );
+				}
+				else
+				{
+					result.push_back( doCreateBarrierView( view ) );
+				}
+			}
+
+			return result;
+		}
+
+		IntermediateView doCreateSampledView( IntermediateView const & view )
+		{
+			ashes::ImageViewCreateInfo createInfo{ view.view->flags
+				, view.view->image
+				, view.view->viewType
+				, view.view->format
+				, view.view->components
+				, { VkImageAspectFlags( ( ashes::isDepthFormat( view.view->format ) || ashes::isDepthOrStencilFormat( view.view->format ) )
+						? VK_IMAGE_ASPECT_DEPTH_BIT
+						: ( ashes::isStencilFormat( view.view->format )
+							? VK_IMAGE_ASPECT_STENCIL_BIT
+							: VK_IMAGE_ASPECT_COLOR_BIT ) )
+					, view.view->subresourceRange.baseMipLevel
+					, view.view->subresourceRange.levelCount
+					, view.view->subresourceRange.baseArrayLayer
+					, view.view->subresourceRange.layerCount } };
+			return { view.name
+				, view.view.image->createView( std::move( createInfo ) )
+				, view.layout
+				, view.factors };
+		}
+
+		IntermediateViewArray doCreateSampledViews( IntermediateView const & tex3DResult
+			, IntermediateViewArray const & views )
+		{
+			using castor3d::operator!=;
+			IntermediateViewArray result;
+
+			if ( views.size() == 1u )
+			{
+				auto & view = views[0u];
+				result.push_back( doCreateSampledView( view ) );
+				return result;
+			}
+
+			for ( auto & view : views )
+			{
+				if ( view.view->viewType == VK_IMAGE_VIEW_TYPE_3D )
+				{
+					result.push_back( doCreateBarrierView( tex3DResult ) );
+				}
+				else
+				{
+					result.push_back( doCreateSampledView( view ) );
+				}
+			}
+
+			return result;
+		}
 	}
 
 	//*************************************************************************************************
@@ -243,71 +346,11 @@ namespace castor3d
 
 		target->initialise( m_device );
 		doCreatePickingPass();
+		doCreateIntermediateViews();
 		doCreateRenderQuad();
 		doCreateCommandBuffers();
-
-		m_saveBuffer = castor::PxBufferBase::create( target->getSize(), convert( target->getPixelFormat() ) );
-		auto bufferSize = ashes::getAlignedSize( ashes::getLevelsSize( VkExtent2D{ m_saveBuffer->getWidth(), m_saveBuffer->getHeight() }
-			, target->getPixelFormat()
-			, 0u
-			, 1u
-			, 1u )
-			, getDevice()->getProperties().limits.nonCoherentAtomSize );
-		m_stagingBuffer = getDevice()->createBuffer( "Snapshot"
-			, bufferSize
-			, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT );
-		auto requirements = m_stagingBuffer->getMemoryRequirements();
-		auto deduced = getDevice()->deduceMemoryType( requirements.memoryTypeBits
-			, VkMemoryPropertyFlagBits::VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
-		m_stagingBuffer->bindMemory( getDevice()->allocateMemory( "Snapshot"
-			, {
-				VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
-				nullptr,
-				requirements.size,
-				deduced
-			} ) );
-		m_stagingData = castor::makeArrayView( m_stagingBuffer->lock( 0u, bufferSize, 0u )
-			, bufferSize );
-		m_transferCommands = { getDevice(), "Snapshot" };
-		auto & view = target->getTexture().getTexture()->getDefaultView().getTargetView();
-		auto & commands = *m_transferCommands.commandBuffer;
-		commands.begin();
-		commands.beginDebugBlock( { "Staging Texture Download"
-			, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
-		commands.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, view.makeTransferSource( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-		commands.memoryBarrier( VK_PIPELINE_STAGE_HOST_BIT
-			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_stagingBuffer->makeTransferDestination() );
-		auto extent = view.image->getDimensions();
-		auto mipLevel = view->subresourceRange.baseMipLevel;
-		extent.width = std::max( 1u, extent.width >> mipLevel );
-		extent.height = std::max( 1u, extent.height >> mipLevel );
-		commands.copyToBuffer( VkBufferImageCopy{ 0u
-			, 0u
-			, 0u
-			, { view->subresourceRange.aspectMask
-			, mipLevel
-			, view->subresourceRange.baseArrayLayer
-			, view->subresourceRange.layerCount }
-			, VkOffset3D{}
-			, VkExtent3D{ std::max( 1u, extent.width )
-			, std::max( 1u, extent.height )
-			, 1u } }
-			, *view.image
-			, *m_stagingBuffer );
-		commands.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, view.makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
-		commands.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-			, VK_PIPELINE_STAGE_HOST_BIT
-			, m_stagingBuffer->makeHostRead() );
-		commands.endDebugBlock();
-		commands.end();
-
+		doCreateSaveData();
 		m_dirty = false;
-
 		getEngine()->registerWindow( *this );
 		log::debug << "Created render window " << m_index << std::endl;
 	}
@@ -337,6 +380,30 @@ namespace castor3d
 		{
 			doCleanup( !hasCurrent );
 		}
+	}
+
+	void RenderWindow::update( CpuUpdater & updater )
+	{
+#if C3D_DebugQuads
+		if ( auto target = getRenderTarget() )
+		{
+			auto technique = target->getTechnique();
+			updater.combineIndex = m_debugConfig.debugIndex;
+
+			if ( m_intermediates[m_debugConfig.debugIndex].factors.grid )
+			{
+				updater.cellSize = ( *m_intermediates[m_debugConfig.debugIndex].factors.grid )[3];
+				updater.gridCenter = castor::Point3f{ *m_intermediates[m_debugConfig.debugIndex].factors.grid };
+			}
+			else
+			{
+				updater.cellSize = 0.0f;
+				updater.gridCenter = {};
+			}
+
+			m_texture3Dto2D->update( updater );
+		}
+#endif
 	}
 
 	void RenderWindow::render( bool waitOnly )
@@ -578,7 +645,6 @@ namespace castor3d
 
 		return m_pickingPass->getPickedNodeType();
 
-
 #else
 		PickNodeType result = PickNodeType::eNone;
 		auto camera = getCamera();
@@ -593,6 +659,11 @@ namespace castor3d
 		return result;
 
 #endif
+	}
+
+	IntermediateViewArray const & RenderWindow::listIntermediateViews()const
+	{
+		return m_intermediates;
 	}
 
 	GeometrySPtr RenderWindow::getPickedGeometry()const
@@ -791,6 +862,7 @@ namespace castor3d
 		auto & target = *getRenderTarget();
 		m_renderQuad = RenderQuadBuilder{}
 			.texcoordConfig( rq::Texcoord{} )
+			.tex3DResult( m_tex3DTo2DIntermediate )
 			.build( m_device
 				, "RenderWindow" + getName()
 				, VK_FILTER_LINEAR );
@@ -798,22 +870,15 @@ namespace castor3d
 			, castor::Position{}
 			, m_program
 			, *m_renderPass );
-		m_renderQuad->registerPassInputs(
-			{
-#if C3D_DebugPicking
-				RenderQuad::makeDescriptorWrite( m_pickingPass->getResult()
-#else
-				RenderQuad::makeDescriptorWrite( target.getTexture().getTexture()->getDefaultView().getSampledView()
-#endif
-					, m_renderQuad->getSampler().getSampler()
-					, 0u ),
-			} );
-		m_renderQuad->registerPassInputs(
-			{
-				RenderQuad::makeDescriptorWrite( m_pickingPass->getResult()
-					, m_renderQuad->getSampler().getSampler()
-					, 0u ),
-			} );
+
+		for ( auto & intermediate : m_intermediateSampledViews )
+		{
+			m_renderQuad->registerPassInputs( { RenderQuad::makeDescriptorWrite( intermediate.view
+				, m_renderQuad->getSampler().getSampler()
+					, 0u ) }
+				, intermediate.factors.invertY );
+		}
+
 		m_renderQuad->initialisePasses();
 	}
 
@@ -837,13 +902,11 @@ namespace castor3d
 					, m_swapChain->getFormat()
 					, VkComponentMapping{}
 					, VkImageSubresourceRange
-					{ 
-						ashes::getAspectMask( m_swapChain->getFormat() ),
-						0u,
-						1u,
-						0u,
-						1u,
-					} ) ) );
+					{  ashes::getAspectMask( m_swapChain->getFormat() )
+						, 0u
+						, 1u
+						, 0u
+						, 1u } ) ) );
 				attaches.emplace_back( m_views.back() );
 			}
 
@@ -869,30 +932,54 @@ namespace castor3d
 	void RenderWindow::doCreateCommandBuffers()
 	{
 		auto pass = 0u;
+		m_commandBuffers.resize( m_intermediates.size() );
 
 		for ( auto & commandBuffers : m_commandBuffers )
 		{
 			commandBuffers.resize( m_swapChainImages.size() );
+			auto & intermediate = m_intermediates[pass];
+			auto & intermediateBarrierView = m_intermediateBarrierViews[pass];
+			auto & intermediateSampledView = m_intermediateSampledViews[pass];
 			uint32_t index = 0u;
 
 			for ( auto & commandBuffer : commandBuffers )
 			{
 				auto & frameBuffer = *m_frameBuffers[index];
-				commandBuffer = m_commandPool->createCommandBuffer( getName() + castor::string::toString( index++ ) );
+				commandBuffer = m_commandPool->createCommandBuffer( getName() + castor::string::toString( index ) );
 				commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
-				commandBuffer->beginDebugBlock(
-					{
-						"RenderWindow Render",
-						makeFloatArray( getEngine()->getNextRainbowColour() ),
-					} );
+				commandBuffer->beginDebugBlock( { "RenderWindow Render"
+					, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
+
+				if ( intermediate.layout != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )
+				{
+					commandBuffer->memoryBarrier( ashes::getStageMask( intermediateBarrierView.layout )
+						, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+						, intermediateBarrierView.view.makeLayoutTransition( intermediateBarrierView.layout
+							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+							, VK_QUEUE_FAMILY_IGNORED
+							, VK_QUEUE_FAMILY_IGNORED ) );
+				}
+
 				commandBuffer->beginRenderPass( *m_renderPass
 					, frameBuffer
 					, { opaqueWhiteClearColor }
-				, VK_SUBPASS_CONTENTS_INLINE );
+					, VK_SUBPASS_CONTENTS_INLINE );
 				m_renderQuad->registerPass( *commandBuffer, pass );
 				commandBuffer->endRenderPass();
+
+				if ( intermediate.layout != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )
+				{
+					commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+						, ashes::getStageMask( intermediateBarrierView.layout )
+						, intermediateBarrierView.view.makeLayoutTransition( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+							, intermediateBarrierView.layout
+							, VK_QUEUE_FAMILY_IGNORED
+							, VK_QUEUE_FAMILY_IGNORED ) );
+				}
+
 				commandBuffer->endDebugBlock();
 				commandBuffer->end();
+				index++;
 			}
 
 			++pass;
@@ -905,6 +992,116 @@ namespace castor3d
 		{
 			commandBuffers.clear();
 		}
+
+		m_commandBuffers.clear();
+	}
+
+	void RenderWindow::doCreateIntermediateViews()
+	{
+		auto target = m_renderTarget.lock();
+		CU_Require( target );
+		m_intermediates.push_back( { "Target Result"
+			, target->getTexture().getTexture()->getDefaultView().getSampledView()
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
+		target->listIntermediateViews( m_intermediates );
+
+		VkExtent2D extent{ m_size.getWidth(), m_size.getHeight() };
+		m_texture3Dto2D = castor::makeUnique< Texture3DTo2D >( getDevice()
+			, extent
+			, target->getTechnique()->getMatrixUbo() );
+		m_tex3DTo2DIntermediate = { "Texture3DTo2DResult"
+			, m_texture3Dto2D->getTarget()
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL };
+#if C3D_DebugQuads
+		auto intermediates = m_intermediates;
+#else
+		IntermediateViewArray intermediates{ m_intermediates[0] };
+#endif
+		m_texture3Dto2D->createPasses( intermediates );
+
+		m_intermediateBarrierViews = doCreateBarrierViews( m_tex3DTo2DIntermediate
+			, m_intermediates );
+		m_intermediateSampledViews = doCreateSampledViews( m_tex3DTo2DIntermediate
+			, m_intermediates );
+	}
+
+	void RenderWindow::doDestroyIntermediateViews()
+	{
+		m_texture3Dto2D.reset();
+		m_intermediateSampledViews.clear();
+		m_intermediateBarrierViews.clear();
+		m_intermediates.clear();
+	}
+
+	void RenderWindow::doCreateSaveData()
+	{
+		auto target = getRenderTarget();
+		m_saveBuffer = castor::PxBufferBase::create( target->getSize(), convert( target->getPixelFormat() ) );
+		auto bufferSize = ashes::getAlignedSize( ashes::getLevelsSize( VkExtent2D{ m_saveBuffer->getWidth(), m_saveBuffer->getHeight() }
+			, target->getPixelFormat()
+			, 0u
+			, 1u
+			, 1u )
+			, getDevice()->getProperties().limits.nonCoherentAtomSize );
+		m_stagingBuffer = getDevice()->createBuffer( "Snapshot"
+			, bufferSize
+			, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT );
+		auto requirements = m_stagingBuffer->getMemoryRequirements();
+		auto deduced = getDevice()->deduceMemoryType( requirements.memoryTypeBits
+			, VkMemoryPropertyFlagBits::VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
+		m_stagingBuffer->bindMemory( getDevice()->allocateMemory( "Snapshot"
+			, {
+				VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
+				nullptr,
+				requirements.size,
+				deduced
+			} ) );
+		m_stagingData = castor::makeArrayView( m_stagingBuffer->lock( 0u, bufferSize, 0u )
+			, bufferSize );
+		m_transferCommands = { getDevice(), "Snapshot" };
+		auto & view = target->getTexture().getTexture()->getDefaultView().getTargetView();
+		auto & commands = *m_transferCommands.commandBuffer;
+		commands.begin();
+		commands.beginDebugBlock( { "Staging Texture Download"
+			, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
+		commands.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, view.makeTransferSource( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		commands.memoryBarrier( VK_PIPELINE_STAGE_HOST_BIT
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, m_stagingBuffer->makeTransferDestination() );
+		auto extent = view.image->getDimensions();
+		auto mipLevel = view->subresourceRange.baseMipLevel;
+		extent.width = std::max( 1u, extent.width >> mipLevel );
+		extent.height = std::max( 1u, extent.height >> mipLevel );
+		commands.copyToBuffer( VkBufferImageCopy{ 0u
+			, 0u
+			, 0u
+			, { view->subresourceRange.aspectMask
+			, mipLevel
+			, view->subresourceRange.baseArrayLayer
+			, view->subresourceRange.layerCount }
+			, VkOffset3D{}
+			, VkExtent3D{ std::max( 1u, extent.width )
+			, std::max( 1u, extent.height )
+			, 1u } }
+			, *view.image
+			, *m_stagingBuffer );
+		commands.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, view.makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
+		commands.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			, VK_PIPELINE_STAGE_HOST_BIT
+			, m_stagingBuffer->makeHostRead() );
+		commands.endDebugBlock();
+		commands.end();
+	}
+
+	void RenderWindow::doDestroySaveData()
+	{
+		m_transferCommands = {};
+		m_stagingBuffer.reset();
+		m_saveBuffer.reset();
 	}
 
 	void RenderWindow::doResetSwapChain()
@@ -913,11 +1110,13 @@ namespace castor3d
 
 		doDestroyCommandBuffers();
 		doDestroyRenderQuad();
+		doDestroyIntermediateViews();
 		doDestroyPickingPass();
 		doDestroySwapchain();
 
 		doCreateSwapchain();
 		doCreatePickingPass();
+		doCreateIntermediateViews();
 		doCreateRenderQuad();
 		doCreateCommandBuffers();
 	}
@@ -966,10 +1165,9 @@ namespace castor3d
 			toWait = m_transferCommands.semaphore.get();
 			waitStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
 		}
-		
-		getDevice().graphicsQueue->submit( { ( m_enablePickingDebug
-			? *m_commandBuffers[1][resources->imageIndex]
-			: *m_commandBuffers[0][resources->imageIndex] ) }
+
+		toWait = &m_texture3Dto2D->render( *toWait );
+		getDevice().graphicsQueue->submit( { *m_commandBuffers[m_debugConfig.debugIndex][resources->imageIndex] }
 			, { *resources->imageAvailableSemaphore, *toWait }
 			, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, waitStage }
 			, {}
@@ -1051,11 +1249,10 @@ namespace castor3d
 
 		if ( target )
 		{
-			m_transferCommands = {};
-			m_stagingBuffer.reset();
-			m_saveBuffer.reset();
+			doDestroySaveData();
 			doDestroyCommandBuffers();
 			doDestroyRenderQuad();
+			doDestroyIntermediateViews();
 			doDestroyPickingPass();
 			target->cleanup( m_device );
 		}

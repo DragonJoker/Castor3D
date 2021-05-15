@@ -205,6 +205,15 @@ namespace castor3d
 		 */
 		C3D_API void addPostEffect( PostEffectSPtr effect );
 		/**
+		 *\~english
+		 *\brief			Lists the intermediate views used by this render target.
+		 *\param[in,out]	result	Receives the views.
+		 *\~french
+		 *\brief			Liste les vues intermédiaires utilisées par cette render target.
+		 *\param[in,out]	result	Reçoit les vues.
+		 */
+		C3D_API void listIntermediateViews( IntermediateViewArray & result )const;
+		/**
 		*\~english
 		*name
 		*	Getters.
@@ -315,11 +324,6 @@ namespace castor3d
 			return m_name;
 		}
 
-		std::vector< IntermediateView > const & getIntermediateViews()const
-		{
-			return m_intermediates;
-		}
-
 		HdrConfigUbo const & getHdrConfigUbo()const
 		{
 			CU_Require( m_hdrConfigUbo );
@@ -388,13 +392,6 @@ namespace castor3d
 			, ashes::Semaphore const & toWait );
 		C3D_API ashes::Semaphore const & doCombine( ashes::Semaphore const & toWait );
 
-		void addIntermediateView( castor::String name
-			, ashes::ImageView view
-			, VkImageLayout layout )
-		{
-			m_intermediates.push_back( { std::move( name ), std::move( view ), layout } );
-		}
-
 	public:
 		//!\~english The render target default sampler name	\~french Le nom du sampler par défaut pour la cible de rendu
 		C3D_API static const castor::String DefaultSamplerName;
@@ -437,8 +434,6 @@ namespace castor3d
 		ashes::Semaphore const * m_signalFinished{ nullptr };
 		castor::PreciseTimer m_timer;
 		SceneCullerUPtr m_culler;
-		IntermediateViewArray m_intermediates;
-		Texture3DTo2DUPtr m_texture3Dto2D;
 	};
 }
 
