@@ -205,6 +205,24 @@ namespace castor3d
 			, bool isStatic = false );
 		/**
 		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	renderSystem		The render system.
+		 *\param[in]	info				The image informations.
+		 *\param[in]	memoryProperties	The required memory properties.
+		 *\param[in]	debugName			The debug name for this layout.
+		 *\param[in]	isStatic			Tells if this layout is static.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	renderSystem		Le render system.
+		 *\param[in]	info				Les informations de l'image.
+		 *\param[in]	memoryProperties	Les propriétés requise pour la mémoire.
+		 *\param[in]	debugName			Le nom de debug pour ce layout.
+		 *\param[in]	isStatic			Dit si ce layout est statique.
+		 */
+		C3D_API TextureLayout( RenderSystem & renderSystem
+			, ashes::ImageView imageView );
+		/**
+		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
@@ -759,7 +777,8 @@ namespace castor3d
 		ArrayView< MipView > m_arrayView;
 		ArrayView< CubeView > m_cubeView;
 		SliceView< MipView > m_sliceView;
-		ashes::ImagePtr m_texture;
+		ashes::ImagePtr m_ownTexture;
+		ashes::Image * m_texture;
 	};
 
 	inline ashes::ImagePtr makeImage( RenderDevice const & device
