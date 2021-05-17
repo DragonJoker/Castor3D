@@ -169,7 +169,8 @@ namespace grayscale
 		, castor3d::RenderPassTimer const & timer )
 	{
 		auto & renderSystem = *getRenderSystem();
-		VkExtent2D size{ m_target->getWidth(), m_target->getHeight() };
+		VkExtent2D size{ m_target->image->getDimensions().width
+			, m_target->image->getDimensions().height };
 		m_vertexShader.shader = getVertexProgram( renderSystem );
 		m_pixelShader.shader = getFragmentProgram();
 		ashes::PipelineShaderStageCreateInfoArray stages;
@@ -185,7 +186,7 @@ namespace grayscale
 		{
 			{
 				0u,
-				m_target->getPixelFormat(),
+				m_target->getFormat(),
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 				VK_ATTACHMENT_STORE_OP_STORE,
@@ -252,15 +253,15 @@ namespace grayscale
 			, {
 				m_quad->makeDescriptorWrite( m_configUbo
 					, GrayCfgUboIdx ),
-				m_quad->makeDescriptorWrite( m_target->getDefaultView().getSampledView()
+				m_quad->makeDescriptorWrite( *m_target
 					, m_quad->getSampler().getSampler()
 					, ColorTexIdx ),
 			} );
 
 		auto result = m_surface.initialise( device
 			, *m_renderPass
-			, castor::Size{ m_target->getWidth(), m_target->getHeight() }
-			, m_target->getPixelFormat() );
+			, castor::Size{ size.width, size.height }
+			, m_target->getFormat() );
 
 		if ( result )
 		{
@@ -286,7 +287,7 @@ namespace grayscale
 			m_commands.emplace_back( std::move( commands ) );
 		}
 
-		m_result = m_surface.colourTexture.get();
+		m_result = &m_surface.colourTexture->getDefaultView().getSampledView();
 		return result;
 	}
 

@@ -90,7 +90,8 @@ namespace Bloom
 	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
 		, castor3d::RenderPassTimer const & timer )
 	{
-		VkExtent2D size{ m_target->getWidth(), m_target->getHeight() };
+		VkExtent2D size{ m_target->image->getDimensions().width
+			, m_target->image->getDimensions().height };
 
 #if !Bloom_DebugHiPass
 		// Create vertex buffer
@@ -118,7 +119,7 @@ namespace Bloom
 			m_vertexBuffer->unlock();
 		}
 
-		auto format = m_target->getPixelFormat();
+		auto format = m_target->getFormat();
 		ashes::ImageCreateInfo image
 		{
 			0u,
@@ -140,13 +141,13 @@ namespace Bloom
 #endif
 
 		m_hiPass = std::make_unique< HiPass >( device
-			, m_target->getPixelFormat()
-			, m_target->getDefaultView().getSampledView()
+			, m_target->getFormat()
+			, *m_target
 			, size
 			, m_blurPassesCount );
 #if !Bloom_DebugHiPass
 		m_blurXPass = std::make_unique< BlurPass >( device
-			, m_target->getPixelFormat()
+			, m_target->getFormat()
 			, m_hiPass->getResult()
 			, *m_blurTexture
 			, size
@@ -154,7 +155,7 @@ namespace Bloom
 			, m_blurPassesCount
 			, false );
 		m_blurYPass = std::make_unique< BlurPass >( device
-			, m_target->getPixelFormat()
+			, m_target->getFormat()
 			, *m_blurTexture
 			, m_hiPass->getResult()
 			, size
@@ -162,8 +163,8 @@ namespace Bloom
 			, m_blurPassesCount
 			, true );
 		m_combinePass = std::make_unique< CombinePass >( device
-			, m_target->getPixelFormat()
-			, m_target->getDefaultView().getSampledView()
+			, m_target->getFormat()
+			, *m_target
 			, m_hiPass->getResult().getDefaultView().getSampledView()
 			, size
 			, m_blurPassesCount );
@@ -188,7 +189,7 @@ namespace Bloom
 #if Bloom_DebugHiPass
 		m_result = &m_hiPass->getResult();
 #else
-		m_result = &m_combinePass->getResult();
+		m_result = &m_combinePass->getResult().getDefaultView().getSampledView();
 #endif
 		return true;
 	}

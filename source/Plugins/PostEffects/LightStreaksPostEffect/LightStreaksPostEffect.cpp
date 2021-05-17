@@ -276,7 +276,8 @@ namespace light_streaks
 		m_kawaseUbo.initialise( device );
 		m_linearSampler->initialise( device );
 		m_nearestSampler->initialise( device );
-		VkExtent2D size{ m_target->getWidth(), m_target->getHeight() };
+		VkExtent2D size{ m_target->image->getDimensions().width
+			, m_target->image->getDimensions().height };
 
 		// Create vertex buffer
 		m_vertexBuffer = castor3d::makeVertexBuffer< castor3d::NonTexturedQuad >( device
@@ -347,7 +348,7 @@ namespace light_streaks
 
 		// Create the render pass.
 		ashes::VkAttachmentDescriptionArray attachments{ { 0u
-			, m_target->getPixelFormat()
+			, m_target->getFormat()
 			, VK_SAMPLE_COUNT_1_BIT
 			, VK_ATTACHMENT_LOAD_OP_CLEAR
 			, VK_ATTACHMENT_STORE_OP_STORE
@@ -402,13 +403,13 @@ namespace light_streaks
 		{
 			m_pipelines.hiPass.surfaces.emplace_back( *getRenderSystem()
 				, device
-				, m_target->getPixelFormat()
+				, m_target->getFormat()
 				, size
 				, *m_renderPass
 				, cuT( "LightStreaksHiPassSurface" ) );
 			m_pipelines.kawase.surfaces.emplace_back( *getRenderSystem()
 				, device
-				, m_target->getPixelFormat()
+				, m_target->getFormat()
 				, size
 				, *m_renderPass
 				, cuT( "LightStreaksKawaseSurface" ) );
@@ -440,7 +441,7 @@ namespace light_streaks
 			result = doBuildCommandBuffer( device, timer );
 		}
 
-		m_result = m_pipelines.combine.surfaces[0].image.get();
+		m_result = &m_pipelines.combine.surfaces[0].image->getDefaultView().getSampledView();
 		return result;
 	}
 
@@ -517,7 +518,8 @@ namespace light_streaks
 
 	bool PostEffect::doInitialiseHiPassProgram( castor3d::RenderDevice const & device )
 	{
-		VkExtent2D size{ m_target->getWidth(), m_target->getHeight() };
+		VkExtent2D size{ m_target->image->getDimensions().width
+			, m_target->image->getDimensions().height };
 		m_pipelines.hiPass.vertexShader.shader = getVertexProgram( getRenderSystem() );
 		m_pipelines.hiPass.pixelShader.shader = getHiPassProgram( getRenderSystem() );
 
@@ -555,7 +557,7 @@ namespace light_streaks
 			surface.descriptorSets.emplace_back( m_pipelines.hiPass.layout.descriptorPool->createDescriptorSet( 0u ) );
 			auto & descriptorSet = *surface.descriptorSets.back();
 			descriptorSet.createBinding( m_pipelines.hiPass.layout.descriptorLayout->getBinding( 0u )
-				, m_target->getDefaultView().getSampledView()
+				, *m_target
 				, m_linearSampler->getSampler()
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			descriptorSet.update();
@@ -566,7 +568,8 @@ namespace light_streaks
 
 	bool PostEffect::doInitialiseKawaseProgram( castor3d::RenderDevice const & device )
 	{
-		VkExtent2D size{ m_target->getWidth(), m_target->getHeight() };
+		VkExtent2D size{ m_target->image->getDimensions().width
+			, m_target->image->getDimensions().height };
 		m_pipelines.kawase.vertexShader.shader = getVertexProgram( getRenderSystem() );
 		m_pipelines.kawase.pixelShader.shader = getKawaseProgram( getRenderSystem() );
 
@@ -627,7 +630,8 @@ namespace light_streaks
 
 	bool PostEffect::doInitialiseCombineProgram( castor3d::RenderDevice const & device )
 	{
-		VkExtent2D size{ m_target->getWidth(), m_target->getHeight() };
+		VkExtent2D size{ m_target->image->getDimensions().width
+			, m_target->image->getDimensions().height };
 		auto & renderSystem = *getRenderSystem();
 		m_pipelines.combine.vertexShader.shader = getVertexProgram( &renderSystem );
 		m_pipelines.combine.pixelShader.shader = getCombineProgram( &renderSystem );
@@ -666,7 +670,7 @@ namespace light_streaks
 		// Create view and associated frame buffer.
 		m_pipelines.combine.surfaces.emplace_back( *getRenderSystem()
 			, device
-			, m_target->getPixelFormat()
+			, m_target->getFormat()
 			, size
 			, *m_renderPass
 			, cuT( "LightStreaksCombineSurface" ) );
@@ -676,7 +680,7 @@ namespace light_streaks
 		surface.descriptorSets.emplace_back( m_pipelines.combine.layout.descriptorPool->createDescriptorSet( 0u ) );
 		auto & descriptorSet = *surface.descriptorSets.back();
 		descriptorSet.createBinding( m_pipelines.combine.layout.descriptorLayout->getBinding( 0u )
-			, m_target->getDefaultView().getSampledView()
+			, *m_target
 			, m_linearSampler->getSampler()
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 
@@ -696,7 +700,8 @@ namespace light_streaks
 	bool PostEffect::doBuildCommandBuffer( castor3d::RenderDevice const & device
 		, castor3d::RenderPassTimer const & timer )
 	{
-		VkExtent2D size{ m_target->getWidth(), m_target->getHeight() };
+		VkExtent2D size{ m_target->image->getDimensions().width
+			, m_target->image->getDimensions().height };
 
 		// Fill command buffers.
 		static ashes::VkClearValueArray const clearValues[Count + 1]
