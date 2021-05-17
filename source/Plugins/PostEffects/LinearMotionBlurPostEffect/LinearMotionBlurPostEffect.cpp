@@ -192,7 +192,8 @@ namespace motion_blur
 		, castor3d::RenderPassTimer const & timer )
 	{
 		auto & renderSystem = *getRenderSystem();
-		VkExtent2D size{ m_target->getWidth(), m_target->getHeight() };
+		VkExtent2D size{ m_target->image->getDimensions().width
+			, m_target->image->getDimensions().height };
 		m_vertexShader.shader = getVertexProgram( getRenderSystem() );
 		m_pixelShader.shader = getFragmentProgram( getRenderSystem() );
 		ashes::PipelineShaderStageCreateInfoArray stages;
@@ -204,7 +205,7 @@ namespace motion_blur
 		{
 			{
 				0u,
-				m_target->getPixelFormat(),
+				m_target->getFormat(),
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 				VK_ATTACHMENT_STORE_OP_STORE,
@@ -282,15 +283,15 @@ namespace motion_blur
 				m_quad->makeDescriptorWrite( m_renderTarget.getVelocity().getTexture()->getDefaultView().getSampledView()
 					, m_renderTarget.getVelocity().getSampler()->getSampler()
 					, VelocityTexIdx ),
-				m_quad->makeDescriptorWrite( m_target->getDefaultView().getSampledView()
+				m_quad->makeDescriptorWrite( *m_target
 					, m_quad->getSampler().getSampler()
 					, VelocityTexIdx ),
 			} );
 
 		auto result = m_surface.initialise( device
 			, *m_renderPass
-			, castor::Size{ m_target->getWidth(), m_target->getHeight() }
-			, m_target->getPixelFormat() );
+			, castor::Size{ size.width, size.height }
+			, m_target->getFormat() );
 
 		if ( result )
 		{
@@ -306,7 +307,7 @@ namespace motion_blur
 			// Put target image in shader input layout.
 			cmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, m_target->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+				, m_target->makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 
 			cmd.beginRenderPass( *m_renderPass
 				, *m_surface.frameBuffer
@@ -320,7 +321,7 @@ namespace motion_blur
 			m_commands.emplace_back( std::move( commands ) );
 		}
 
-		m_result = m_surface.colourTexture.get();
+		m_result = &m_surface.colourTexture->getDefaultView().getSampledView();
 		m_saved = Clock::now();
 		return result;
 	}

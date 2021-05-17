@@ -154,14 +154,14 @@ namespace smaa
 		}
 
 		ashes::FrameBufferPtr doCreateFrameBuffer( ashes::RenderPass const & renderPass
-			, castor3d::TextureLayout const & texture )
+			, ashes::ImageView const & texture )
 		{
 			ashes::ImageViewCRefArray attaches
 			{
-				{ texture.getDefaultView().getSampledView() }
+				{ texture }
 			};
 			return renderPass.createFrameBuffer( "SMAA"
-				, { texture.getWidth(), texture.getHeight() }
+				, { texture.image->getDimensions().width, texture.image->getDimensions().height }
 				, std::move( attaches ) );
 		}
 	}
@@ -325,7 +325,7 @@ namespace smaa
 	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
 		, castor3d::RenderPassTimer const & timer )
 	{
-		m_srgbTextureView = &m_target->getDefaultView().getSampledView();
+		m_srgbTextureView = m_target;
 		m_hdrTextureView = &m_renderTarget.getTechnique()->getResult().getDefaultView().getSampledView();
 
 		switch ( m_config.data.edgeDetection )
@@ -407,7 +407,7 @@ namespace smaa
 
 		m_copyProgram.push_back( castor3d::makeShaderState( device, { VK_SHADER_STAGE_VERTEX_BIT, "SmaaCopy", doGetCopyVertexShader() } ) );
 		m_copyProgram.push_back( castor3d::makeShaderState( device, { VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaCopy", doGetCopyPixelShader( m_config ) } ) );
-		m_copyRenderPass = doCreateRenderPass( device, m_target->getPixelFormat() );
+		m_copyRenderPass = doCreateRenderPass( device, m_target->getFormat() );
 		m_copyFrameBuffer = doCreateFrameBuffer( *m_copyRenderPass, *m_target );
 
 		doBuildCommandBuffers( device, timer );

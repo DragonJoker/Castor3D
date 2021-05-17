@@ -361,7 +361,8 @@ namespace film_grain
 		, castor3d::RenderPassTimer const & timer )
 	{
 		auto & renderSystem = *getRenderSystem();
-		VkExtent2D size{ m_target->getWidth(), m_target->getHeight() };
+		VkExtent2D size{ m_target->image->getDimensions().width
+			, m_target->image->getDimensions().height };
 		m_sampler->initialise( device );
 		m_vertexShader.shader = getVertexProgram( getRenderSystem() );
 		m_pixelShader.shader = getFragmentProgram( getRenderSystem() );
@@ -375,7 +376,7 @@ namespace film_grain
 		{
 			{
 				0u,
-				m_target->getPixelFormat(),
+				m_target->getFormat(),
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 				VK_ATTACHMENT_STORE_OP_STORE,
@@ -440,15 +441,15 @@ namespace film_grain
 				m_quad->makeDescriptorWrite( m_quad->getNoiseView()
 					, m_sampler->getSampler()
 					, NoiseTexIdx ),
-				m_quad->makeDescriptorWrite( m_target->getDefaultView().getSampledView()
+				m_quad->makeDescriptorWrite( *m_target
 					, m_sampler->getSampler()
 					, SourceTexIdx ),
 			} );
 
 		auto result = m_surface.initialise( device
 			, *m_renderPass
-			, castor::Size{ m_target->getWidth(), m_target->getHeight() }
-			, m_target->getPixelFormat() );
+			, castor::Size{ size.width, size.height }
+			, m_target->getFormat() );
 
 		if ( result )
 		{
@@ -474,7 +475,7 @@ namespace film_grain
 			m_commands.emplace_back( std::move( commands ) );
 		}
 
-		m_result = m_surface.colourTexture.get();
+		m_result = &m_surface.colourTexture->getDefaultView().getSampledView();
 		return result;
 	}
 

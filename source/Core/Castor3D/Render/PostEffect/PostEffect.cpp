@@ -55,7 +55,7 @@ namespace castor3d
 	}
 
 	bool PostEffect::initialise( castor3d::RenderDevice const & device
-		, TextureLayout const & texture )
+		, ashes::ImageView const & texture )
 	{
 		m_target = &texture;
 		auto name = m_fullName;
@@ -101,13 +101,13 @@ namespace castor3d
 		// Put target image in transfer destination layout.
 		commandBuffer.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_target->getDefaultView().getTargetView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+			, m_target->makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		// Copy result to target.
 		commandBuffer.copyImage( result
-			, m_target->getDefaultView().getTargetView() );
+			, *m_target );
 		// Put target image in fragment shader input layout.
 		commandBuffer.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_target->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+			, m_target->makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
 	}
 }

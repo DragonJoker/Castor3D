@@ -1001,7 +1001,7 @@ namespace castor3d
 		auto target = m_renderTarget.lock();
 		CU_Require( target );
 		m_intermediates.push_back( { "Target Result"
-			, target->getTexture().getTexture()->getDefaultView().getSampledView()
+			, target->getTexture()
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
 		target->listIntermediateViews( m_intermediates );
 
@@ -1059,7 +1059,7 @@ namespace castor3d
 		m_stagingData = castor::makeArrayView( m_stagingBuffer->lock( 0u, bufferSize, 0u )
 			, bufferSize );
 		m_transferCommands = { getDevice(), "Snapshot" };
-		auto & view = target->getTexture().getTexture()->getDefaultView().getTargetView();
+		auto & view = target->getTexture();
 		auto & commands = *m_transferCommands.commandBuffer;
 		commands.begin();
 		commands.beginDebugBlock( { "Staging Texture Download"
