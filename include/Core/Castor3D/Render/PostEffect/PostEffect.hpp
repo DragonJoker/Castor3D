@@ -90,7 +90,7 @@ namespace castor3d
 		 *\return		\p true if ok.
 		 */
 		C3D_API bool initialise( castor3d::RenderDevice const & device
-			, TextureLayout const & texture );
+			, ashes::ImageView const & texture );
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
@@ -153,7 +153,7 @@ namespace castor3d
 			return m_kind == Kind::eSRGB;
 		}
 
-		TextureLayout const & getResult()const
+		ashes::ImageView const & getResult()const
 		{
 			CU_Require( m_result );
 			return *m_result;
@@ -213,9 +213,9 @@ namespace castor3d
 		uint32_t m_currentPass{ 0u };
 		std::unique_ptr< RenderPassTimer > m_timer;
 		Kind m_kind{ Kind::eHDR };
-		TextureLayout const * m_target{ nullptr };
+		ashes::ImageView const * m_target{ nullptr };
 		CommandsSemaphoreArray m_commands;
-		TextureLayout const * m_result{ nullptr };
+		ashes::ImageView const * m_result{ nullptr };
 	};
 }
 
