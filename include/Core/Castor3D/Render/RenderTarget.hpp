@@ -46,16 +46,13 @@ namespace castor3d
 		public:
 			explicit TargetFbo( RenderTarget & renderTarget );
 			bool initialise( RenderDevice const & device
-				, ashes::RenderPass & renderPass
-				, VkFormat format
-				, castor::Size const & size );
+				, ashes::ImagePtr image
+				, ashes::ImageView view
+				, ashes::RenderPass & renderPass );
 			void cleanup( RenderDevice const & device );
 
-			//!\~english	The texture receiving the color render.
-			//!\~french		La texture recevant le rendu couleur.
-			TextureUnit colourTexture;
-			//!\~english	The frame buffer.
-			//!\~french		Le tampon d'image.
+			ashes::ImagePtr colourImage;
+			ashes::ImageView colourView;
 			ashes::FrameBufferPtr frameBuffer;
 
 		private:
@@ -258,9 +255,9 @@ namespace castor3d
 			return m_camera.lock();
 		}
 
-		TextureUnit const & getTexture()const
+		ashes::ImageView const & getTexture()const
 		{
-			return m_combinedFrameBuffer.colourTexture;
+			return m_combinedFrameBuffer.colourView;
 		}
 
 		TextureUnit const & getVelocity()const
@@ -368,7 +365,6 @@ namespace castor3d
 
 	private:
 		C3D_API void doInitialiseRenderPass( RenderDevice const & device );
-		C3D_API bool doInitialiseFrameBuffer( RenderDevice const & device );
 		C3D_API bool doInitialiseVelocityTexture( RenderDevice const & device );
 		C3D_API bool doInitialiseTechnique( RenderDevice const & device );
 		C3D_API bool doInitialiseToneMapping( RenderDevice const & device );
@@ -378,7 +374,6 @@ namespace castor3d
 			, ashes::ImageView const & source
 			, ashes::ImageView const & target );
 		C3D_API void doInitCombineProgram();
-		C3D_API void doInitialiseCombine( RenderDevice const & device );
 		C3D_API void doRender( RenderDevice const & device
 			, RenderInfo & info
 			, TargetFbo & fbo
@@ -393,7 +388,7 @@ namespace castor3d
 			, ashes::Semaphore const & toWait );
 		C3D_API ashes::Semaphore const & doRenderOverlays( RenderDevice const & device
 			, ashes::Semaphore const & toWait );
-		C3D_API ashes::Semaphore const & doCombine( ashes::Semaphore const & toWait );
+		C3D_API ashes::Semaphore doCombine( ashes::Semaphore const & toWait );
 
 	public:
 		//!\~english The render target default sampler name	\~french Le nom du sampler par défaut pour la cible de rendu
@@ -428,7 +423,7 @@ namespace castor3d
 		RenderPassTimerSPtr m_overlaysTimer;
 		ShaderModule m_combineVtx{ VK_SHADER_STAGE_VERTEX_BIT, "Target - Combine" };
 		ShaderModule m_combinePxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "Target - Combine" };
-		CombinePassUPtr m_combinePass;
+		ashes::PipelineShaderStageCreateInfoArray m_combineStages;
 		SsaoConfig m_ssaoConfig;
 		castor::Point2f m_jitter;
 		TextureUnit m_velocityTexture;

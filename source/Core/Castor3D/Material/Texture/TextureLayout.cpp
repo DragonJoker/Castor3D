@@ -894,6 +894,72 @@ namespace castor3d
 		}
 	}
 
+	TextureLayout::TextureLayout( RenderSystem & renderSystem
+		, ashes::ImageView imageView )
+		: OwnedBy< RenderSystem >{ renderSystem }
+		, m_static{ false }
+		, m_info{ imageView.image->getFlags()
+			, imageView.image->getType()
+			, imageView.image->getFormat()
+			, imageView.image->getDimensions()
+			, imageView.image->getMipmapLevels()
+			, imageView.image->getLayerCount()
+			, imageView.image->getSampleCount()
+			, imageView.image->getTiling()
+			, imageView.image->getUsage() }
+		, m_properties{}
+		, m_image{ castor::cuEmptyString
+			, castor::Path{ castor::cuEmptyString }
+			, { imageView.image->getDimensions().width, imageView.image->getDimensions().height }
+			, castor::PixelFormat( imageView.image->getFormat() ) }
+		, m_defaultView{ createViews( m_info, *this, m_image.getName() ) }
+		, m_cubeView{ &m_defaultView }
+		, m_arrayView{ &m_defaultView }
+		, m_sliceView{ &m_defaultView }
+	{
+		m_info->mipLevels = std::max( 1u, m_info->mipLevels );
+
+		if ( m_info->arrayLayers > 1u )
+		{
+			if ( m_info->arrayLayers >= 6u
+				&& ( m_info->arrayLayers % 6u ) == 0u
+				&& checkFlag( m_info->flags, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT ) )
+			{
+				m_cubeView.layers.resize( m_info->arrayLayers / 6u );
+				createViews( m_info, *this, m_image.getName(), m_cubeView );
+			}
+			else
+			{
+				m_arrayView.layers.resize( m_info->arrayLayers );
+				createViews( m_info, *this, m_image.getName(), m_arrayView );
+			}
+		}
+		else if ( m_info->extent.depth > 1u )
+		{
+			m_sliceView.slices.resize( m_info->extent.depth );
+			createViews( m_info, *this, m_image.getName(), m_sliceView );
+		}
+
+		m_defaultView.forEachView( []( TextureViewUPtr const & view )
+			{
+				view->initialise();
+			} );
+		m_arrayView.forEachView( []( TextureViewUPtr const & view )
+			{
+				view->initialise();
+			} );
+		m_cubeView.forEachView( []( TextureViewUPtr const & view )
+			{
+				view->initialise();
+			} );
+		m_sliceView.forEachView( []( TextureViewUPtr const & view )
+			{
+				view->initialise();
+			} );
+
+		m_initialised = true;
+	}
+
 	TextureLayout::~TextureLayout()
 	{
 		m_sliceView.slices.clear();
@@ -945,7 +1011,7 @@ namespace castor3d
 				m_info->mipLevels = 1u;
 			}
 
-			m_texture = makeImage( device
+			m_ownTexture = makeImage( device
 				, m_info
 				, m_properties
 				, m_image.getName() );
@@ -1015,7 +1081,7 @@ namespace castor3d
 				{
 					view->cleanup();
 				} );
-			m_texture.reset();
+			m_ownTexture.reset();
 		}
 
 		m_initialised = false;

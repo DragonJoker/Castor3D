@@ -292,14 +292,15 @@ namespace fxaa
 		m_sampler->initialise( device );
 
 		auto & renderSystem = *getRenderSystem();
-		VkExtent2D size{ m_target->getWidth(), m_target->getHeight() };
+		VkExtent2D size{ m_target->image->getDimensions().width
+			, m_target->image->getDimensions().height };
 
 		// Create the render pass.
 		ashes::VkAttachmentDescriptionArray attachments
 		{
 			{
 				0u,
-				m_target->getPixelFormat(),
+				m_target->getFormat(),
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 				VK_ATTACHMENT_STORE_OP_STORE,
@@ -375,7 +376,7 @@ namespace fxaa
 			, {
 				m_fxaaQuad->makeDescriptorWrite( m_fxaaQuad->getUbo()
 					, FxaaCfgUboIdx ),
-				m_fxaaQuad->makeDescriptorWrite( m_target->getDefaultView().getSampledView()
+				m_fxaaQuad->makeDescriptorWrite( *m_target
 					, m_fxaaQuad->getSampler().getSampler()
 					, ColorTexIdx ),
 			} );
@@ -384,7 +385,7 @@ namespace fxaa
 		auto result = m_surface.initialise( device
 			, *m_renderPass
 			, castor::Size{ size.width, size.height }
-			, m_target->getPixelFormat() );
+			, m_target->getFormat() );
 
 		if ( result )
 		{
@@ -395,7 +396,7 @@ namespace fxaa
 			};
 			auto & cmd = *commands.commandBuffer;
 			// Initialise the command buffer.
-			auto & targetView = m_target->getDefaultView().getSampledView();
+			auto & targetView = *m_target;
 
 			cmd.begin();
 			timer.beginPass( cmd );
@@ -420,7 +421,7 @@ namespace fxaa
 		m_subpixShift.reset();
 		m_spanMax.reset();
 		m_reduceMul.reset();
-		m_result = m_surface.colourTexture.get();
+		m_result = &m_surface.colourTexture->getDefaultView().getSampledView();
 		return result;
 	}
 
