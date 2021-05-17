@@ -22,6 +22,3 @@
 [submodule "external/gli"]
 	path = external/gli
 	url = https://github.com/g-truc/gli.git
-[submodule "external/cvtt"]
-	path = external/cvtt
-	url = https://github.com/elasota/ConvectionKernels.git
