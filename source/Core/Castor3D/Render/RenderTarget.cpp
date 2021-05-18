@@ -93,6 +93,63 @@ namespace castor3d
 		, m_combinedFrameBuffer{ *this }
 		, m_velocityTexture{ *getEngine() }
 		, m_graph{ m_name }
+		, m_objectsImg{ m_graph.createImage( crg::ImageData{ "ObjectsResult"
+			, 0u
+			, VK_IMAGE_TYPE_2D
+			, VK_FORMAT_R8G8B8A8_UNORM
+			, castor3d::makeExtent3D( m_size )
+			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+				| VK_IMAGE_USAGE_SAMPLED_BIT ) } ) }
+		, m_overlaysImg{ m_graph.createImage( crg::ImageData{ "OverlaysResult"
+			, 0u
+			, VK_IMAGE_TYPE_2D
+			, VK_FORMAT_R8G8B8A8_UNORM
+			, castor3d::makeExtent3D( m_size )
+			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+				| VK_IMAGE_USAGE_SAMPLED_BIT ) } ) }
+		, m_combinedImg{ m_graph.createImage( crg::ImageData{ "CombinedResult"
+			, 0u
+			, VK_IMAGE_TYPE_2D
+			, getPixelFormat()
+			, castor3d::makeExtent3D( m_size )
+			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+				| VK_IMAGE_USAGE_SAMPLED_BIT
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } ) }
+		, m_combinePass{ "CombinePass"
+			, [this]( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph )
+			{
+				return crg::RenderQuadBuilder{}
+					.renderPosition( {} )
+					.renderSize( makeExtent2D( m_size ) )
+					.texcoordConfig( {} )
+					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_combineStages ) )
+					.build( pass, context, graph );
+			} }
+		, m_objectsSampledAttach{ m_combinePass.createSampled( crg::ImageViewData{ "ObjectsResult"
+				, m_objectsImg
+				, 0u
+				, VK_IMAGE_VIEW_TYPE_2D
+				, m_objectsImg.data->info.format
+				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } }
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, VK_FILTER_NEAREST ) }
+		, m_overlaysSampledAttach{ m_combinePass.createSampled( crg::ImageViewData{ "OverlaysResult"
+				, m_overlaysImg
+				, 0u
+				, VK_IMAGE_VIEW_TYPE_2D
+				, m_overlaysImg.data->info.format
+				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } }
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, VK_FILTER_NEAREST ) }
+		, m_combinedTargetAttach{ m_combinePass.createOutputColour( crg::ImageViewData{ "CombinedResult"
+				, m_combinedImg
+				, 0u
+				, VK_IMAGE_VIEW_TYPE_2D
+				, m_combinedImg.data->info.format
+				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } }
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) }
 	{
 		SamplerSPtr sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + getName() + cuT( "Linear" ) );
 		sampler->setMinFilter( VK_FILTER_LINEAR );
@@ -101,6 +158,8 @@ namespace castor3d
 		sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + getName() + cuT( "Nearest" ) );
 		sampler->setMinFilter( VK_FILTER_NEAREST );
 		sampler->setMagFilter( VK_FILTER_NEAREST );
+
+		m_graph.add( m_combinePass );
 	}
 
 	RenderTarget::~RenderTarget()
@@ -112,84 +171,6 @@ namespace castor3d
 		if ( !m_initialised )
 		{
 			auto & renderSystem = device.renderSystem;
-			auto objectsImg = m_graph.createImage( crg::ImageData{ "ObjectsResult"
-				, 0u
-				, VK_IMAGE_TYPE_2D
-				, VK_FORMAT_R8G8B8A8_UNORM
-				, castor3d::makeExtent2D( m_size )
-				, 1u
-				, 1u
-				, VK_SAMPLE_COUNT_1_BIT
-				, VK_IMAGE_TILING_OPTIMAL
-				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_SAMPLED_BIT ) } );
-			auto overlaysImg = m_graph.createImage( crg::ImageData{ "OverlaysResult"
-				, 0u
-				, VK_IMAGE_TYPE_2D
-				, VK_FORMAT_R8G8B8A8_UNORM
-				, castor3d::makeExtent2D( m_size )
-				, 1u
-				, 1u
-				, VK_SAMPLE_COUNT_1_BIT
-				, VK_IMAGE_TILING_OPTIMAL
-				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_SAMPLED_BIT ) } );
-			auto combinedImg = m_graph.createImage( crg::ImageData{ "CombinedResult"
-				, 0u
-				, VK_IMAGE_TYPE_2D
-				, getPixelFormat()
-				, castor3d::makeExtent2D( m_size )
-				, 1u
-				, 1u
-				, VK_SAMPLE_COUNT_1_BIT
-				, VK_IMAGE_TILING_OPTIMAL
-				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_SAMPLED_BIT
-					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } );
-			auto objectsSampledAttach = crg::Attachment::createSampled( crg::ImageViewData{ "ObjectsResult"
-					, objectsImg
-					, 0u
-					, VK_IMAGE_VIEW_TYPE_2D
-					, objectsImg.data->format
-					, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } }
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-			auto overlaysSampledAttach = crg::Attachment::createSampled( crg::ImageViewData{ "OverlaysResult"
-					, overlaysImg
-					, 0u
-					, VK_IMAGE_VIEW_TYPE_2D
-					, overlaysImg.data->format
-					, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } }
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-			auto combinedTargetAttach = crg::Attachment::createOutputColour( crg::ImageViewData{ "CombinedResult"
-					, combinedImg
-					, 0u
-					, VK_IMAGE_VIEW_TYPE_2D
-					, combinedImg.data->format
-					, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } }
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-			crg::RenderPass combinePass{ "CombinePass"
-				, { objectsSampledAttach, overlaysSampledAttach }
-				, { combinedTargetAttach }
-				, [this, &device]( crg::RenderPass const & pass
-					, crg::GraphContext const & context
-					, crg::RunnableGraph const & graph )
-				{
-					doInitCombineProgram();
-					return crg::RenderQuadBuilder{}
-						.renderPosition( {} )
-						.renderSize( makeExtent2D( m_size ) )
-						.texcoordConfig( {} )
-						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_combineStages ) )
-						.build( pass, context, graph );
-				} };
-			m_graph.add( combinePass );
-			m_runnable = std::make_unique< crg::RunnableGraph >( std::move( m_graph )
-				, crg::GraphContext{ *device
-					, VK_NULL_HANDLE
-					, device->getAllocationCallbacks()
-					, device->getMemoryProperties()
-					, device->vkGetDeviceProcAddr } );
-			m_runnable->record();
 
 			m_hdrConfigUbo = std::make_unique< HdrConfigUbo >( device );
 
@@ -204,96 +185,60 @@ namespace castor3d
 
 			m_culler = std::make_unique< FrustumCuller >( *getScene(), *getCamera() );
 			doInitialiseRenderPass( device );
-			auto colourImage = m_runnable->getImage( objectsSampledAttach );
-			auto colourView = m_runnable->getImageView( objectsSampledAttach );
-			auto image = std::make_unique< ashes::Image >( *device
-				, colourImage
-				, ashes::ImageCreateInfo{ objectsSampledAttach.viewData.image.data->flags
-					, objectsSampledAttach.viewData.image.data->imageType
-					, objectsSampledAttach.viewData.image.data->format
-					, { objectsSampledAttach.viewData.image.data->extent.width
-						, objectsSampledAttach.viewData.image.data->extent.height
-						, 1u }
-					, objectsSampledAttach.viewData.image.data->mipLevels
-					, objectsSampledAttach.viewData.image.data->arrayLayers
-					, objectsSampledAttach.viewData.image.data->samples
-					, objectsSampledAttach.viewData.image.data->tiling
-					, objectsSampledAttach.viewData.image.data->usage } );
-			ashes::ImageView view{ ashes::ImageViewCreateInfo{ objectsSampledAttach.viewData.flags
-					, colourImage
-					, objectsSampledAttach.viewData.viewType
-					, objectsSampledAttach.viewData.format
-					, VkComponentMapping{}
-					, objectsSampledAttach.viewData.subresourceRange }
-				, colourView
-				, image.get() };
-			m_objectsFrameBuffer.initialise( device
-				, std::move( image )
-				, view
-				, *m_renderPass );
-			auto overlaysImage = m_runnable->getImage( overlaysSampledAttach );
-			auto overlaysView = m_runnable->getImageView( overlaysSampledAttach );
-			image = std::make_unique< ashes::Image >( *device
-				, overlaysImage
-				, ashes::ImageCreateInfo{ overlaysSampledAttach.viewData.image.data->flags
-					, overlaysSampledAttach.viewData.image.data->imageType
-					, overlaysSampledAttach.viewData.image.data->format
-					, { overlaysSampledAttach.viewData.image.data->extent.width
-						, overlaysSampledAttach.viewData.image.data->extent.height
-						, 1u }
-					, overlaysSampledAttach.viewData.image.data->mipLevels
-					, overlaysSampledAttach.viewData.image.data->arrayLayers
-					, overlaysSampledAttach.viewData.image.data->samples
-					, overlaysSampledAttach.viewData.image.data->tiling
-					, overlaysSampledAttach.viewData.image.data->usage } );
-			view = ashes::ImageView{ ashes::ImageViewCreateInfo{ overlaysSampledAttach.viewData.flags
-					, overlaysImage
-					, overlaysSampledAttach.viewData.viewType
-					, overlaysSampledAttach.viewData.format
-					, VkComponentMapping{}
-					, overlaysSampledAttach.viewData.subresourceRange }
-				, overlaysView
-				, image.get() };
-			m_overlaysFrameBuffer.initialise( device
-				, std::move( image )
-				, view
-				, *m_renderPass );
-			auto combineImage = m_runnable->getImage( combinedTargetAttach );
-			auto combineView = m_runnable->getImageView( combinedTargetAttach );
-			image = std::make_unique< ashes::Image >( *device
-				, combineImage
-				, ashes::ImageCreateInfo{ combinedTargetAttach.viewData.image.data->flags
-					, combinedTargetAttach.viewData.image.data->imageType
-					, combinedTargetAttach.viewData.image.data->format
-					, { combinedTargetAttach.viewData.image.data->extent.width
-						, combinedTargetAttach.viewData.image.data->extent.height
-						, 1u }
-					, combinedTargetAttach.viewData.image.data->mipLevels
-					, combinedTargetAttach.viewData.image.data->arrayLayers
-					, combinedTargetAttach.viewData.image.data->samples
-					, combinedTargetAttach.viewData.image.data->tiling
-					, combinedTargetAttach.viewData.image.data->usage } );
-			view = ashes::ImageView{ ashes::ImageViewCreateInfo{ combinedTargetAttach.viewData.flags
-					, combineImage
-					, combinedTargetAttach.viewData.viewType
-					, combinedTargetAttach.viewData.format
-					, VkComponentMapping{}
-					, combinedTargetAttach.viewData.subresourceRange }
-				, combineView
-				, image.get() };
-			m_combinedFrameBuffer.initialise( device
-				, std::move( image )
-				, view
-				, *m_renderPass );
+			doInitCombineProgram();
 
-			if ( m_initialised )
-			{
-				m_initialised = doInitialiseVelocityTexture( device );
-			}
+			m_initialised = doInitialiseVelocityTexture( device );
 
 			if ( m_initialised )
 			{
 				m_initialised = doInitialiseTechnique( device );
+			}
+
+			if ( m_initialised )
+			{
+				m_runnable = std::make_unique< crg::RunnableGraph >( std::move( m_graph )
+					, crg::GraphContext{ *device
+					, VK_NULL_HANDLE
+					, device->getAllocationCallbacks()
+					, device->getMemoryProperties()
+					, device->vkGetDeviceProcAddr } );
+				auto colourImage = m_runnable->getImage( m_objectsImg );
+				auto colourView = m_runnable->getImageView( m_objectsSampledAttach );
+				auto image = std::make_unique< ashes::Image >( *device
+					, colourImage
+					, ashes::ImageCreateInfo{ m_objectsSampledAttach.viewData.image.data->info } );
+				ashes::ImageView view{ ashes::ImageViewCreateInfo{ colourImage, m_objectsSampledAttach.viewData.info }
+					, colourView
+					, image.get() };
+				m_objectsFrameBuffer.initialise( device
+					, std::move( image )
+					, view
+					, *m_renderPass );
+				auto overlaysImage = m_runnable->getImage( m_overlaysImg );
+				auto overlaysView = m_runnable->getImageView( m_overlaysSampledAttach );
+				image = std::make_unique< ashes::Image >( *device
+					, overlaysImage
+					, ashes::ImageCreateInfo{ m_overlaysSampledAttach.viewData.image.data->info } );
+				view = ashes::ImageView{ ashes::ImageViewCreateInfo{ overlaysImage, m_overlaysSampledAttach.viewData.info }
+					, overlaysView
+					, image.get() };
+				m_overlaysFrameBuffer.initialise( device
+					, std::move( image )
+					, view
+					, *m_renderPass );
+				auto combineImage = m_runnable->getImage( m_combinedImg );
+				auto combineView = m_runnable->getImageView( m_combinedTargetAttach );
+				image = std::make_unique< ashes::Image >( *device
+					, combineImage
+					, ashes::ImageCreateInfo{ m_combinedTargetAttach.viewData.image.data->info } );
+				view = ashes::ImageView{ ashes::ImageViewCreateInfo{ combineImage, m_combinedTargetAttach.viewData.info }
+					, combineView
+					, image.get() };
+				m_combinedFrameBuffer.initialise( device
+					, std::move( image )
+					, view
+					, *m_renderPass );
+				m_runnable->record();
 			}
 
 			m_overlaysTimer = std::make_shared< RenderPassTimer >( device, cuT( "Overlays" ), cuT( "Overlays" ) );
@@ -312,12 +257,15 @@ namespace castor3d
 					}
 				}
 
-				doInitialiseCopyCommands( device
-					, "HDR"
-					, m_hdrCopyCommands
-					, *sourceView
-					, m_renderTechnique->getResult().getDefaultView().getTargetView() );
-				m_hdrCopyFinished = device->createSemaphore( getName() + "HDRCopy" );
+				if ( m_initialised )
+				{
+					doInitialiseCopyCommands( device
+						, "HDR"
+						, m_hdrCopyCommands
+						, *sourceView
+						, m_renderTechnique->getResult().getDefaultView().getTargetView() );
+					m_hdrCopyFinished = device->createSemaphore( getName() + "HDRCopy" );
+				}
 			}
 
 			if ( m_initialised )
@@ -338,12 +286,15 @@ namespace castor3d
 					}
 				}
 
-				doInitialiseCopyCommands( device
-					, "SRGB"
-					, m_srgbCopyCommands
-					, *sourceView
-					, m_objectsFrameBuffer.colourView );
-				m_srgbCopyFinished = device->createSemaphore( getName() + "SRGBCopy" );
+				if ( m_initialised )
+				{
+					doInitialiseCopyCommands( device
+						, "SRGB"
+						, m_srgbCopyCommands
+						, *sourceView
+						, m_objectsFrameBuffer.colourView );
+					m_srgbCopyFinished = device->createSemaphore( getName() + "SRGBCopy" );
+				}
 			}
 
 			m_overlayRenderer = std::make_shared< OverlayRenderer >( device
@@ -1002,11 +953,12 @@ namespace castor3d
 		return *result;
 	}
 
-	ashes::Semaphore RenderTarget::doCombine( ashes::Semaphore const & toWait )
+	ashes::Semaphore const & RenderTarget::doCombine( ashes::Semaphore const & toWait )
 	{
 		ashes::Semaphore const * result = &toWait;
 		auto & device = *getEngine()->getRenderSystem()->getMainRenderDevice();
-		return ashes::Semaphore{ *device
-			, m_runnable->run( { *result, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT }, *device.graphicsQueue ).semaphore };
+		m_combineSemaphore = std::make_unique< ashes::Semaphore >( *device
+			, m_runnable->run( { *result, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT }, *device.graphicsQueue ).semaphore );
+		return *m_combineSemaphore;
 	}
 }

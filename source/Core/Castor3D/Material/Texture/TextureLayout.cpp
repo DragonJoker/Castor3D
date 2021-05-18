@@ -1015,6 +1015,7 @@ namespace castor3d
 				, m_info
 				, m_properties
 				, m_image.getName() );
+			m_texture = m_ownTexture.get();
 			CU_Require( m_info->mipLevels <= 1u
 				|| ( checkFlag( props.optimalTilingFeatures, VK_FORMAT_FEATURE_BLIT_DST_BIT )
 					|| !m_defaultView.view->isMipmapsGenerationNeeded() ) );
