@@ -18,7 +18,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
-#include <RenderGraph/RenderGraph.hpp>
+#include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/RunnableGraph.hpp>
 
 #include <ashespp/RenderPass/FrameBuffer.hpp>
@@ -329,6 +329,11 @@ namespace castor3d
 			CU_Require( m_hdrConfigUbo );
 			return *m_hdrConfigUbo;
 		}
+
+		crg::FrameGraph & getGraph()
+		{
+			return m_graph;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -388,7 +393,7 @@ namespace castor3d
 			, ashes::Semaphore const & toWait );
 		C3D_API ashes::Semaphore const & doRenderOverlays( RenderDevice const & device
 			, ashes::Semaphore const & toWait );
-		C3D_API ashes::Semaphore doCombine( ashes::Semaphore const & toWait );
+		C3D_API ashes::Semaphore const & doCombine( ashes::Semaphore const & toWait );
 
 	public:
 		//!\~english The render target default sampler name	\~french Le nom du sampler par défaut pour la cible de rendu
@@ -432,8 +437,16 @@ namespace castor3d
 		ashes::Semaphore const * m_signalFinished{ nullptr };
 		castor::PreciseTimer m_timer;
 		SceneCullerUPtr m_culler;
-		crg::RenderGraph m_graph;
+		crg::FrameGraph m_graph;
+		crg::ImageId m_objectsImg;
+		crg::ImageId m_overlaysImg;
+		crg::ImageId m_combinedImg;
+		crg::FramePass m_combinePass;
+		crg::Attachment m_objectsSampledAttach;
+		crg::Attachment m_overlaysSampledAttach;
+		crg::Attachment m_combinedTargetAttach;
 		crg::RunnableGraphPtr m_runnable;
+		ashes::SemaphorePtr m_combineSemaphore;
 	};
 }
 
