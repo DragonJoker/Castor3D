@@ -778,7 +778,7 @@ namespace castor3d
 		ArrayView< CubeView > m_cubeView;
 		SliceView< MipView > m_sliceView;
 		ashes::ImagePtr m_ownTexture;
-		ashes::Image * m_texture;
+		ashes::Image * m_texture{};
 	};
 
 	inline ashes::ImagePtr makeImage( RenderDevice const & device

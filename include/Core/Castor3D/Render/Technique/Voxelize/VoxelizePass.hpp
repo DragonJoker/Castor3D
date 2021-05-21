@@ -34,7 +34,10 @@ namespace castor3d
 		 *\param[in]	voxels			Le tampon de voxels.
 		 *\param[in]	voxelConfig		La configuration du voxelizer.
 		 */
-		C3D_API VoxelizePass( RenderDevice const & device
+		C3D_API VoxelizePass( crg::FramePass const & pass
+			, crg::GraphContext const & context
+			, crg::RunnableGraph & graph
+			, RenderDevice const & device
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, VoxelizerUbo const & voxelizerUbo

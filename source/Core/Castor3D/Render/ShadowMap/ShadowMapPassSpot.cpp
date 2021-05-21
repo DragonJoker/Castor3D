@@ -114,17 +114,22 @@ namespace castor3d
 
 	uint32_t const ShadowMapPassSpot::TextureSize = 512u;
 
-	ShadowMapPassSpot::ShadowMapPassSpot( RenderDevice const & device
+	ShadowMapPassSpot::ShadowMapPassSpot( crg::FramePass const & pass
+		, crg::GraphContext const & context
+		, crg::RunnableGraph & graph
+		, RenderDevice const & device
 		, uint32_t index
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap )
-		: ShadowMapPass{ device
+		: ShadowMapPass{ pass
+			, context
+			, graph
+			, device
 			, getPassName( index )
 			, matrixUbo
 			, culler
-			, shadowMap
-			, createRenderPass( device, shadowMap, getPassName( index ) ) }
+			, shadowMap }
 	{
 		log::trace << "Created " << m_name << std::endl;
 	}

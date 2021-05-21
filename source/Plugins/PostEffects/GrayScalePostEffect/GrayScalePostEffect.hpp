@@ -19,15 +19,6 @@ namespace grayscale
 	class PostEffect
 		: public castor3d::PostEffect
 	{
-	private:
-		class Quad
-			: public castor3d::RenderQuad
-		{
-		public:
-			Quad( castor3d::RenderSystem & renderSystem
-				, castor3d::RenderDevice const & device );
-		};
-
 	public:
 		PostEffect( castor3d::RenderTarget & renderTarget
 			, castor3d::RenderSystem & renderSystem
@@ -65,13 +56,11 @@ namespace grayscale
 		static castor::String Name;
 
 	private:
-		castor3d::PostEffectSurface m_surface;
-		ashes::RenderPassPtr m_renderPass;
 		castor3d::UniformBufferOffsetT< castor::Point3f > m_configUbo;
-		std::unique_ptr< Quad > m_quad;
 		castor::ChangeTracked< castor::Point3f > m_factors{ castor::Point3f{ 0.2126f, 0.7152f, 0.0722f } };
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
+		ashes::PipelineShaderStageCreateInfoArray m_stages;
 	};
 }
 

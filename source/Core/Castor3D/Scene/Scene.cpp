@@ -768,9 +768,9 @@ namespace castor3d
 		getEngine()->setMaterialsType( value );
 	}
 
-	ashes::SemaphoreCRefArray Scene::getRenderTargetsSemaphores()const
+	crg::SemaphoreWaitArray Scene::getRenderTargetsSemaphores()const
 	{
-		ashes::SemaphoreCRefArray result;
+		crg::SemaphoreWaitArray result;
 
 		for ( auto & target : getEngine()->getRenderTargetCache().getRenderTargets( TargetType::eTexture ) )
 		{

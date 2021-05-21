@@ -128,20 +128,22 @@ namespace castor3d
 	String const OpaquePass::Output4 = "outData4";
 	String const OpaquePass::Output5 = "outData5";
 
-	OpaquePass::OpaquePass( RenderDevice const & device
+	OpaquePass::OpaquePass( crg::FramePass const & pass
+		, crg::GraphContext const & context
+		, crg::RunnableGraph & graph
+		, RenderDevice const & device
 		, castor::Size const & size
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
-		, SsaoConfig const & config
-		, OpaquePassResult const & gpResult )
-		: RenderTechniquePass{ device
+		, SsaoConfig const & config )
+		: RenderTechniquePass{ pass
+			, context
+			, graph
+			, device
 			, cuT( "Opaque" )
 			, cuT( "Geometry pass" )
 			, { { size.getWidth(), size.getHeight(), 1u }, matrixUbo, culler }
-			, { false, config }
-			, createRenderPass( device, gpResult ) }
-		, m_frameBuffer{ createFramebuffer( *m_renderPass, gpResult ) }
-		, m_nodesCommands{ m_device.graphicsCommandPool->createCommandBuffer( "OpaquePass" ) }
+			, { false, config } }
 	{
 	}
 
@@ -155,48 +157,6 @@ namespace castor3d
 		auto shaderProgram = doGetProgram( flags );
 		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ) );
 		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
-	}
-
-	ashes::Semaphore const & OpaquePass::render( ashes::Semaphore const & toWait )
-	{
-		static ashes::VkClearValueArray const clearValues{ defaultClearDepthStencil
-			, transparentBlackClearColor
-			, transparentBlackClearColor
-			, transparentBlackClearColor
-			, transparentBlackClearColor
-			, transparentBlackClearColor };
-
-		auto * result = &toWait;
-		auto timerBlock = getTimer().start();
-
-		m_nodesCommands->begin();
-		m_nodesCommands->beginDebugBlock( { "Deferred - Geometry"
-				, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
-		timerBlock->beginPass( *m_nodesCommands );
-		timerBlock->notifyPassRender();
-		m_nodesCommands->beginRenderPass( getRenderPass()
-			, *m_frameBuffer
-			, clearValues
-			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
-
-		if ( m_renderQueue.hasNodes() )
-		{
-			m_nodesCommands->executeCommands( { getCommandBuffer() } );
-		}
-
-		m_nodesCommands->endRenderPass();
-		timerBlock->endPass( *m_nodesCommands );
-		m_nodesCommands->endDebugBlock();
-		m_nodesCommands->end();
-
-		m_device.graphicsQueue->submit( *m_nodesCommands
-			, *result
-			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, getSemaphore()
-			, nullptr );
-		result = &getSemaphore();
-
-		return *result;
 	}
 
 	TextureFlags OpaquePass::getTexturesMask()const

@@ -192,8 +192,8 @@ namespace motion_blur
 		, castor3d::RenderPassTimer const & timer )
 	{
 		auto & renderSystem = *getRenderSystem();
-		VkExtent2D size{ m_target->image->getDimensions().width
-			, m_target->image->getDimensions().height };
+		VkExtent2D size{ m_target->viewData.image.data->info.extent.width
+			, m_target->viewData.image.data->info.extent.height };
 		m_vertexShader.shader = getVertexProgram( getRenderSystem() );
 		m_pixelShader.shader = getFragmentProgram( getRenderSystem() );
 		ashes::PipelineShaderStageCreateInfoArray stages;

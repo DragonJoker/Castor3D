@@ -39,6 +39,13 @@ namespace castor3d
 			, SceneNode const * ignored );
 		/**
 		 *\~english
+		 *\brief		Initialises the queue.
+		 *\~french
+		 *\brief		Initialise la file de rendu.
+		 */
+		void initialise();
+		/**
+		 *\~english
 		 *\brief		Cleans the queue up.
 		 *\~french
 		 *\brief		Nettoie la file de rendu.

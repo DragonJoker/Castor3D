@@ -49,119 +49,22 @@ using namespace castor;
 
 namespace castor3d
 {
-	//*********************************************************************************************
-
-	namespace
-	{
-		ashes::RenderPassPtr createRenderPass( RenderDevice const & device
-			, castor::String const & name
-			, ashes::ImageView const & colourView
-			, ashes::ImageView const & depthView
-			, bool clear )
-		{
-			ashes::VkAttachmentDescriptionArray attaches
-			{
-				{ 0u
-					, depthView.getFormat()
-					, VK_SAMPLE_COUNT_1_BIT
-					, ( clear
-						? VK_ATTACHMENT_LOAD_OP_CLEAR
-						: VK_ATTACHMENT_LOAD_OP_LOAD )
-					, VK_ATTACHMENT_STORE_OP_STORE
-					, ( ( clear && ashes::isDepthStencilFormat( depthView.getFormat() ) )
-						? VK_ATTACHMENT_LOAD_OP_CLEAR
-						: VK_ATTACHMENT_LOAD_OP_DONT_CARE )
-					, VK_ATTACHMENT_STORE_OP_DONT_CARE
-					, ( clear
-						? VK_IMAGE_LAYOUT_UNDEFINED
-						: VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL )
-					, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL }
-				, { 0u
-					, colourView.getFormat()
-					, VK_SAMPLE_COUNT_1_BIT
-					, ( clear
-						? VK_ATTACHMENT_LOAD_OP_CLEAR
-						: VK_ATTACHMENT_LOAD_OP_LOAD )
-					, VK_ATTACHMENT_STORE_OP_STORE
-					, VK_ATTACHMENT_LOAD_OP_DONT_CARE
-					, VK_ATTACHMENT_STORE_OP_DONT_CARE
-					, ( clear
-						? VK_IMAGE_LAYOUT_UNDEFINED
-						: VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL )
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } };
-			ashes::SubpassDescriptionArray subpasses;
-			subpasses.push_back( { 0u
-				, VK_PIPELINE_BIND_POINT_GRAPHICS
-				, {}
-				, { { 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } }
-				, {}
-				, VkAttachmentReference{ 0u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL }
-				, {} } );
-			ashes::VkSubpassDependencyArray dependencies
-			{
-				{ VK_SUBPASS_EXTERNAL
-					, 0u
-					, VkPipelineStageFlags( clear
-						? VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-						: VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT )
-					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-					, VkAccessFlags( clear
-						? VK_ACCESS_SHADER_READ_BIT
-						: VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT )
-					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-					, VK_DEPENDENCY_BY_REGION_BIT }
-				, { 0u
-					, VK_SUBPASS_EXTERNAL
-					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-					, VkPipelineStageFlags( clear
-						? VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-						: VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT )
-					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-					, VkAccessFlags( clear
-						? VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-						: VK_ACCESS_SHADER_READ_BIT )
-					, VK_DEPENDENCY_BY_REGION_BIT } };
-			ashes::RenderPassCreateInfo createInfo{ 0u
-				, std::move( attaches )
-				, std::move( subpasses )
-				, std::move( dependencies ) };
-			return device->createRenderPass( name
-				, std::move( createInfo ) );
-		}
-
-		ashes::FrameBufferPtr createFramebuffer( ashes::RenderPass const & renderPass
-			, castor::String const & name
-			, ashes::ImageView const & colourView
-			, ashes::ImageView const & depthView )
-		{
-			ashes::ImageViewCRefArray fbAttaches;
-			fbAttaches.emplace_back( depthView );
-			fbAttaches.emplace_back( colourView );
-
-			return renderPass.createFrameBuffer( name
-				, { colourView.image->getDimensions().width, colourView.image->getDimensions().height }
-			, std::move( fbAttaches ) );
-		}
-	}
-
-	//*********************************************************************************************
-
-	ForwardRenderTechniquePass::ForwardRenderTechniquePass( RenderDevice const & device
+	ForwardRenderTechniquePass::ForwardRenderTechniquePass( crg::FramePass const & pass
+		, crg::GraphContext const & context
+		, crg::RunnableGraph & graph
+		, RenderDevice const & device
 		, castor::String const & category
 		, castor::String const & name
 		, SceneRenderPassDesc const & renderPassDesc
-		, RenderTechniquePassDesc const & techniqueDesc
-		, ashes::ImageView const & colourView
-		, ashes::ImageView const & depthView
-		, bool clear )
-		: RenderTechniquePass{ device
+		, RenderTechniquePassDesc const & techniquePassDesc )
+		: RenderTechniquePass{ pass
+			, context
+			, graph
+			, device
 			, category
 			, name
 			, renderPassDesc
-			, techniqueDesc
-			, createRenderPass( device, name, colourView, depthView, clear ) }
-		, m_frameBuffer{ createFramebuffer( *m_renderPass, name, colourView, depthView ) }
-		, m_nodesCommands{ m_device.graphicsCommandPool->createCommandBuffer( getName() ) }
+			, techniquePassDesc }
 	{
 	}
 
@@ -171,51 +74,6 @@ namespace castor3d
 		auto shaderProgram = doGetProgram( flags );
 		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ) );
 		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
-	}
-
-	ashes::Semaphore const & ForwardRenderTechniquePass::render( ashes::Semaphore const & toWait )
-	{
-		ashes::Semaphore const * result = &toWait;
-
-		static ashes::VkClearValueArray const clearValues
-		{
-			defaultClearDepthStencil,
-			opaqueBlackClearColor,
-		};
-
-		RenderPassTimerBlock timerBlock{ getTimer().start() };
-
-		m_nodesCommands->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-		m_nodesCommands->beginDebugBlock(
-			{
-				"Forward Pass",
-				makeFloatArray( getEngine()->getNextRainbowColour() ),
-			} );
-		timerBlock->beginPass( *m_nodesCommands );
-		timerBlock->notifyPassRender();
-		m_nodesCommands->beginRenderPass( getRenderPass()
-			, *m_frameBuffer
-			, clearValues
-			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
-
-		if ( hasNodes() )
-		{
-			m_nodesCommands->executeCommands( { getCommandBuffer() } );
-		}
-
-		m_nodesCommands->endRenderPass();
-		timerBlock->endPass( *m_nodesCommands );
-		m_nodesCommands->endDebugBlock();
-		m_nodesCommands->end();
-
-		m_device.graphicsQueue->submit( { *m_nodesCommands }
-			, { *result }
-			, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT }
-			, { getSemaphore() }
-			, nullptr );
-		result = &getSemaphore();
-
-		return *result;
 	}
 
 	ShaderPtr ForwardRenderTechniquePass::doGetPhongPixelShaderSource( PipelineFlags const & flags )const
@@ -1130,6 +988,4 @@ namespace castor3d
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
-
-	//*********************************************************************************************
 }

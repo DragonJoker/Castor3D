@@ -49,7 +49,7 @@ namespace castor3d
 	}
 
 	void RenderPipeline::initialise( RenderDevice const & device
-		, ashes::RenderPass const & renderPass
+		, VkRenderPass renderPass
 		, ashes::DescriptorSetLayoutCRefArray descriptorLayouts )
 	{
 		ashes::VkVertexInputBindingDescriptionArray bindings;

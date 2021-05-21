@@ -10,6 +10,8 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/Factory.hpp>
 
+#include <RenderGraph/FrameGraphPrerequisites.hpp>
+
 namespace castor3d
 {
 	/**@name Render */
@@ -66,7 +68,15 @@ namespace castor3d
 	using ToneMappingFactory = castor::Factory< ToneMapping
 		, castor::String
 		, ToneMappingSPtr
-		, std::function< ToneMappingSPtr( Engine &, RenderDevice const &, HdrConfigUbo &, Parameters const & ) > >;
+		, std::function< ToneMappingSPtr( Engine &
+			, RenderDevice const &
+			, castor::Size const &
+			, crg::FrameGraph &
+			, crg::ImageViewId const &
+			, crg::ImageViewId const &
+			, crg::FramePass const &
+			, HdrConfigUbo &
+			, Parameters const & ) > >;
 
 	//@}
 	//@}

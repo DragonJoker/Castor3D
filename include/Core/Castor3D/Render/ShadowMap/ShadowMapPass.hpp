@@ -40,12 +40,14 @@ namespace castor3d
 		 *\param[in]	shadowMap		La shadow map parente.
 		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
 		 */
-		C3D_API ShadowMapPass( RenderDevice const & device
+		C3D_API ShadowMapPass( crg::FramePass const & pass
+			, crg::GraphContext const & context
+			, crg::RunnableGraph & graph
+			, RenderDevice const & device
 			, castor::String name
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, ShadowMap const & shadowMap
-			, ashes::RenderPassPtr renderPass
 			, uint32_t instanceMult = 1u );
 		/**
 		 *\~english
@@ -65,11 +67,6 @@ namespace castor3d
 		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API virtual void update( GpuUpdater & updater ) = 0;
-
-		RenderPassTimer & getTimer()
-		{
-			return *m_timer;
-		}
 
 		bool isUpToDate()const
 		{
