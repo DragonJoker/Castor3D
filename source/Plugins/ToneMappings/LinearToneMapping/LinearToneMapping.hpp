@@ -33,6 +33,11 @@ namespace Linear
 		 */
 		ToneMapping( castor3d::Engine & engine
 			, castor3d::RenderDevice const & device
+			, castor::Size const & size
+			, crg::FrameGraph & graph
+			, crg::ImageViewId const & source
+			, crg::ImageViewId const & target
+			, crg::FramePass const & previousPass
 			, castor3d::HdrConfigUbo & hdrConfigUbo
 			, castor3d::Parameters const & parameters );
 		/**
@@ -54,6 +59,11 @@ namespace Linear
 		 */
 		static castor3d::ToneMappingSPtr create( castor3d::Engine & engine
 			, castor3d::RenderDevice const & device
+			, castor::Size const & size
+			, crg::FrameGraph & graph
+			, crg::ImageViewId const & source
+			, crg::ImageViewId const & target
+			, crg::FramePass const & previousPass
 			, castor3d::HdrConfigUbo & hdrConfigUbo
 			, castor3d::Parameters const & parameters );
 

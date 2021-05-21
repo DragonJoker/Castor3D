@@ -137,17 +137,22 @@ namespace castor3d
 
 	uint32_t const ShadowMapPassPoint::TextureSize = 512u;
 
-	ShadowMapPassPoint::ShadowMapPassPoint( RenderDevice const & device
+	ShadowMapPassPoint::ShadowMapPassPoint( crg::FramePass const & pass
+		, crg::GraphContext const & context
+		, crg::RunnableGraph & graph
+		, RenderDevice const & device
 		, uint32_t index
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap )
-		: ShadowMapPass{ device
+		: ShadowMapPass{ pass
+			, context
+			, graph
+			, device
 			, getPassName( index )
 			, matrixUbo
 			, culler
-			, shadowMap
-			, createRenderPass( device, shadowMap, getPassName( index ) ) }
+			, shadowMap }
 		, m_viewport{ *device.renderSystem.getEngine() }
 	{
 		float const aspect = float( ShadowMapPassPoint::TextureSize ) / ShadowMapPassPoint::TextureSize;

@@ -29,20 +29,13 @@ namespace castor3d
 		: public castor::OwnedBy< Engine >
 		, public castor::Named
 	{
-	protected:
-		struct Cube
+	public:
+		enum DescriptorIdx : uint32_t
 		{
-			struct Quad
-			{
-				struct Vertex
-				{
-					castor::Point3f position;
-				};
-
-				Vertex vertex[4];
-			};
-
-			Quad faces[6];
+			MtxUboIdx = 0u,
+			MdlMtxUboIdx = 1u,
+			HdrCfgUboIdx = 2u,
+			SkyBoxImgIdx = 3u,
 		};
 
 	public:
@@ -89,8 +82,6 @@ namespace castor3d
 		*	Initialisation function.
 		*\param[in] device
 		*	The current device.
-		*\param[in] renderPass
-		*	The render pass into which the background is drawn.
 		*\param[in] hdrConfigUbo
 		*	The HDR configuration UBO.
 		*\return
@@ -100,16 +91,12 @@ namespace castor3d
 		*	Fonction d'initialisation.
 		*\param[in] device
 		*	Le device actuel.
-		*\param[in] renderPass
-		*	La passe de rendu dans laquelle le fond est dessiné.
 		*\param[in] hdrConfigUbo
 		*	L'UBO de configuration HDR.
 		*\return
 		*	\p true if ok.
 		*/
-		C3D_API bool initialise( RenderDevice const & device
-			, ashes::RenderPass const & renderPass
-			, HdrConfigUbo const & hdrConfigUbo );
+		C3D_API bool initialise( RenderDevice const & device );
 		/**
 		*\~english
 		*\brief
@@ -150,123 +137,6 @@ namespace castor3d
 		*/
 		C3D_API void update( GpuUpdater & updater );
 		/**
-		*\~english
-		*\brief
-		*	Records the commands used to draw the background.
-		*\param[out] commandBuffer
-		*	Receives the commands.
-		*\param[in] size
-		*	The rendering size.
-		*\param[in] renderPass
-		*	The render pass into which the background is drawn.
-		*\param[in] frameBuffer
-		*	The frame buffer into which the background is drawn.
-		*\~french
-		*\brief
-		*	Enregistre les commandes utilisées pour dessiner le fond.
-		*\param[out] commandBuffer
-		*	Reçoit les commandes.
-		*\param[in] size
-		*	Les dimensions de rendu.
-		*\param[in] renderPass
-		*	La passe de rendu dans laquelle le fond est dessiné.
-		*\param[in] frameBuffer
-		*	Le tampon d'images dans laquelle le fond est dessiné.
-		*/
-		C3D_API bool prepareFrame( ashes::CommandBuffer & commandBuffer
-			, castor::Size const & size
-			, ashes::RenderPass const & renderPass
-			, ashes::FrameBuffer const & frameBuffer );
-		/**
-		*\~english
-		*\brief
-		*	Records the commands used to draw the background.
-		*\param[out] commandBuffer
-		*	Receives the commands.
-		*\param[in] size
-		*	The rendering size.
-		*\param[in] renderPass
-		*	The render pass into which the background is drawn.
-		*\~french
-		*\brief
-		*	Enregistre les commandes utilisées pour dessiner le fond.
-		*\param[out] commandBuffer
-		*	Reçoit les commandes.
-		*\param[in] size
-		*	Les dimensions de rendu.
-		*\param[in] renderPass
-		*	La passe de rendu dans laquelle le fond est dessiné.
-		*/
-		C3D_API bool prepareFrame( ashes::CommandBuffer & commandBuffer
-			, castor::Size const & size
-			, ashes::RenderPass const & renderPass );
-		/**
-		*\~english
-		*\brief
-		*	Records the commands used to draw the background.
-		*\param[out] commandBuffer
-		*	Receives the commands.
-		*\param[in] size
-		*	The rendering size.
-		*\param[in] renderPass
-		*	The render pass into which the background is drawn.
-		*\param[in] uboDescriptorSet
-		*	The descriptors set used for UBO.
-		*\param[in] texDescriptorSet
-		*	The descriptors set used for textures.
-		*\~french
-		*\brief
-		*	Enregistre les commandes utilisées pour dessiner le fond.
-		*\param[out] commandBuffer
-		*	Reçoit les commandes.
-		*\param[in] size
-		*	Les dimensions de rendu.
-		*\param[in] renderPass
-		*	La passe de rendu dans laquelle le fond est dessiné.
-		*\param[in] uboDescriptorSet
-		*	L'ensemble de descripteurs pour les UBO.
-		*\param[in] texDescriptorSet
-		*	L'ensemble de descripteurs pour les textures.
-		*/
-		C3D_API bool prepareFrame( ashes::CommandBuffer & commandBuffer
-			, castor::Size const & size
-			, ashes::RenderPass const & renderPass
-			, ashes::DescriptorSet const & uboDescriptorSet
-			, ashes::DescriptorSet const & texDescriptorSet )const;
-		/**
-		*\~english
-		*\return
-		*	Initialises the descriptor set.
-		*\param[in] matrixUbo
-		*	The scene matrices UBO.
-		*\param[in] modelMatrixUbo
-		*	The model matrices UBO.
-		*\param[in] hdrConfigUbo
-		*	The HDR configuration UBO.
-		*\param[in] uboDescriptorSet
-		*	The descriptors set used for UBO.
-		*\param[in] texDescriptorSet
-		*	The descriptors set used for textures.
-		*\~french
-		*\brief
-		*	Initialise l'ensemble de descripteurs.
-		*\param[in] matrixUbo
-		*	L'UBO des matrices de la scène.
-		*\param[in] modelMatrixUbo
-		*	L'UBO des matrices de modèle.
-		*\param[in] hdrConfigUbo
-		*	L'UBO de configuration HDR.
-		*\param[in] uboDescriptorSet
-		*	L'ensemble de descripteurs pour les UBO.
-		*\param[in] texDescriptorSet
-		*	L'ensemble de descripteurs pour les textures.
-		*/
-		C3D_API virtual void initialiseDescriptorSets( MatrixUbo & matrixUbo
-			, UniformBufferOffsetT< ModelUboConfiguration > const & modelUbo
-			, HdrConfigUbo const & hdrConfigUbo
-			, ashes::DescriptorSet & uboDescriptorSet
-			, ashes::DescriptorSet & texDescriptorSet )const;
-		/**
 		 *\~english
 		 *\brief		Starts the CPU timer, resets GPU time.
 		 *\~french
@@ -304,10 +174,14 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline ashes::Semaphore const & getSemaphore()const
+		inline UniformBufferOffsetT< ModelUboConfiguration > const & getModelUbo()const
 		{
-			CU_Require( m_semaphore );
-			return *m_semaphore;
+			return m_modelUbo;
+		}
+		
+		inline MatrixUbo const & getMatrixUbo()const
+		{
+			return m_matrixUbo;
 		}
 
 		inline Scene const & getScene()const
@@ -349,6 +223,11 @@ namespace castor3d
 			return m_texture->getDefaultView().getSampledView();
 		}
 
+		inline bool isHdr()const
+		{
+			return m_hdr;
+		}
+
 		inline bool hasIbl()const
 		{
 			return m_ibl != nullptr;
@@ -360,63 +239,19 @@ namespace castor3d
 			return *m_ibl;
 		}
 
-		inline ashes::PipelineLayout const & getPipelineLayout()const
+		inline Sampler const & getSampler()const
 		{
-			CU_Require( m_pipelineLayout );
-			return *m_pipelineLayout;
-		}
-
-		inline ashes::GraphicsPipeline const & getPipeline()const
-		{
-			CU_Require( m_pipeline );
-			return *m_pipeline;
-		}
-
-		inline ashes::DescriptorSetLayout const & getUboDescriptorLayout()const
-		{
-			CU_Require( m_uboDescriptorLayout );
-			return *m_uboDescriptorLayout;
-		}
-		
-		inline ashes::DescriptorSetLayout const & getTexDescriptorLayout()const
-		{
-			CU_Require( m_texDescriptorLayout );
-			return *m_texDescriptorLayout;
-		}
-
-		inline ashes::VertexBuffer< Cube > const & getVertexBuffer()const
-		{
-			CU_Require( m_vertexBuffer );
-			return *m_vertexBuffer;
-		}
-
-		inline ashes::Buffer< uint16_t > const & getIndexBuffer()const
-		{
-			CU_Require( m_indexBuffer );
-			return *m_indexBuffer;
+			auto result = m_sampler.lock();
+			CU_Require( result );
+			return *result;
 		}
 		/**@}*/
 
 	private:
-		void doPrepareFrame( ashes::CommandBuffer & commandBuffer
-			, castor::Size const & size
-			, ashes::RenderPass const & renderPass
-			, ashes::DescriptorSet const & uboDescriptorSet
-			, ashes::DescriptorSet const & texDescriptorSet )const;
-		virtual ashes::PipelineShaderStageCreateInfoArray doInitialiseShader( RenderDevice const & device );
-		virtual void doInitialiseDescriptorLayouts( RenderDevice const & device );
-		virtual bool doInitialise( RenderDevice const & device
-			, ashes::RenderPass const & renderPass ) = 0;
+		virtual bool doInitialise( RenderDevice const & device ) = 0;
 		virtual void doCleanup() = 0;
 		virtual void doCpuUpdate( CpuUpdater & updater ) = 0;
 		virtual void doGpuUpdate( GpuUpdater & updater ) = 0;
-
-	private:
-		bool doInitialiseVertexBuffer( RenderDevice const & device );
-		bool doInitialisePipeline( RenderDevice const & device
-			, ashes::PipelineShaderStageCreateInfoArray program
-			, ashes::RenderPass const & renderPass
-			, HdrConfigUbo const & hdrConfigUbo );
 
 	public:
 		OnBackgroundChanged onChanged;
@@ -426,31 +261,13 @@ namespace castor3d
 		BackgroundType m_type;
 		std::atomic_bool m_initialised{ false };
 		bool m_hdr{ true };
-		std::unique_ptr< MatrixUbo > m_matrixUbo;
+		MatrixUbo m_matrixUbo;
 		UniformBufferOffsetT< ModelUboConfiguration > m_modelUbo;
 		castor::Matrix4x4f m_mtxModel;
-		ashes::SemaphorePtr m_semaphore;
-		ashes::DescriptorSetLayoutPtr m_uboDescriptorLayout;
-		ashes::DescriptorSetPoolPtr m_uboDescriptorPool;
-		ashes::DescriptorSetPtr m_uboDescriptorSet;
-		ashes::DescriptorSetLayoutPtr m_texDescriptorLayout;
-		ashes::DescriptorSetPoolPtr m_texDescriptorPool;
-		ashes::DescriptorSetPtr m_texDescriptorSet;
-		ashes::PipelineLayoutPtr m_pipelineLayout;
-		ashes::GraphicsPipelinePtr m_pipeline;
-		ashes::VertexBufferPtr< Cube > m_vertexBuffer;
-		ashes::BufferPtr< uint16_t > m_indexBuffer;
 		RenderPassTimerSPtr m_timer;
 		TextureLayoutSPtr m_texture;
 		SamplerWPtr m_sampler;
 		std::unique_ptr< IblTextures > m_ibl;
-
-		C3D_API static uint32_t constexpr UboSetIdx = 0u;
-		C3D_API static uint32_t constexpr MtxUboIdx = 0u;
-		C3D_API static uint32_t constexpr MdlMtxUboIdx = 1u;
-		C3D_API static uint32_t constexpr HdrCfgUboIdx = 2u;
-		C3D_API static uint32_t constexpr TexSetIdx = 1u;
-		C3D_API static uint32_t constexpr SkyBoxImgIdx = 0u;
 	};
 }
 

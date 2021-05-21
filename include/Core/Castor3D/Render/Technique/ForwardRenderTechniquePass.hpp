@@ -36,38 +36,23 @@ namespace castor3d
 		 *\param[in]	depthView			La vue profondeur cible.
 		 *\param[in]	clear				Dit si les attaches doivent être vidées au début de la passe.
 		 */
-		C3D_API ForwardRenderTechniquePass( RenderDevice const & device
+		C3D_API ForwardRenderTechniquePass( crg::FramePass const & pass
+			, crg::GraphContext const & context
+			, crg::RunnableGraph & graph
+			, RenderDevice const & device
 			, castor::String const & category
 			, castor::String const & name
 			, SceneRenderPassDesc const & renderPassDesc
-			, RenderTechniquePassDesc const & techniqueDesc
-			, ashes::ImageView const & colourView
-			, ashes::ImageView const & depthView
-			, bool clear );
+			, RenderTechniquePassDesc const & techniquePassDesc );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
-		/**
-		 *\~english
-		 *\brief		Renders nodes.
-		 *\param[in]	device	The GPU device.
-		 *\param[out]	toWait	The semaphore to wait for.
-		 *\~french
-		 *\brief		Dessine les noeuds.
-		 *\param[in]	device	Le device GPU.
-		 *\param[out]	toWait	Le sémaphore à attendre.
-		 */
-		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait );
 
 	private:
 		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const override;
-
-	protected:
-		ashes::FrameBufferPtr m_frameBuffer;
-		ashes::CommandBufferPtr m_nodesCommands;
 	};
 }
 

@@ -11,13 +11,15 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/Named.hpp>
 
+#include <RenderGraph/FramePass.hpp>
+
 #include <ashespp/Sync/Semaphore.hpp>
 
 namespace castor3d
 {
 	class ToneMapping
 		: public castor::OwnedBy< Engine >
-		, private RenderQuad
+		, public castor::Named
 	{
 	public:
 		/**
@@ -42,6 +44,11 @@ namespace castor3d
 			, castor::String const & fullName
 			, Engine & engine
 			, RenderDevice const & device
+			, castor::Size const & size
+			, crg::FrameGraph & graph
+			, crg::ImageViewId const & source
+			, crg::ImageViewId const & target
+			, crg::FramePass const & previousPass
 			, HdrConfigUbo & hdrConfigUbo
 			, Parameters const & parameters );
 		/**
@@ -63,9 +70,7 @@ namespace castor3d
 		 *\param[in]	source		La texture source.
 		 *\param[in]	renderPass	La passe de rendu à utiliser.
 		 */
-		C3D_API bool initialise( castor::Size const & size
-			, TextureLayout const & source
-			, ashes::RenderPass const & renderPass );
+		C3D_API bool initialise();
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
@@ -109,23 +114,23 @@ namespace castor3d
 		*	Accesseurs.
 		**/
 		/**@{*/
-		ashes::Semaphore const & getSemaphore()const
-		{
-			CU_Require( m_signalFinished );
-			return *m_signalFinished;
-		}
-
 		castor::String const & getFullName()const
 		{
 			return m_fullName;
 		}
+
+		crg::FramePass const & getPass()const
+		{
+			return *m_pass;
+		}
 		/**@}*/
 
-	public:
-		using RenderQuad::registerPass;
-		using RenderQuad::getName;
-
 	private:
+		crg::FramePass & doCreatePass( castor::Size const & size
+			, crg::FrameGraph & graph
+			, crg::ImageViewId const & source
+			, crg::ImageViewId const & target
+			, crg::FramePass const & previousPass );
 		C3D_API virtual ShaderPtr doCreate() = 0;
 		C3D_API virtual void doDestroy() = 0;
 		/**
@@ -150,9 +155,10 @@ namespace castor3d
 	protected:
 		castor::String m_fullName;
 		HdrConfigUbo & m_hdrConfigUbo;
-		ashes::SemaphorePtr m_signalFinished;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
+		ashes::PipelineShaderStageCreateInfoArray m_program;
+		crg::FramePass * m_pass;
 	};
 }
 

@@ -26,12 +26,14 @@ namespace castor3d
 		 *\param[in]	culler		Le culler pour cette passe.
 		 *\param[in]	config		La configuration du SSAO.
 		 */
-		C3D_API OpaquePass( RenderDevice const & device
+		C3D_API OpaquePass( crg::FramePass const & pass
+			, crg::GraphContext const & context
+			, crg::RunnableGraph & graph
+			, RenderDevice const & device
 			, castor::Size const & size
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
-			, SsaoConfig const & config
-			, OpaquePassResult const & gpResult );
+			, SsaoConfig const & config );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -43,17 +45,6 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
-		/**
-		 *\~english
-		 *\brief		Renders transparent nodes.
-		 *\param[in]	device	The GPU device.
-		 *\param[in]	toWait	The semaphore from the previous render pass.
-		 *\~french
-		 *\brief		Dessine les noeuds transparents.
-		 *\param[in]	device	Le device GPU.
-		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
-		 */
-		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait );
 
 		C3D_API TextureFlags getTexturesMask()const override;
 
@@ -89,9 +80,6 @@ namespace castor3d
 		static castor::String const Output3;
 		static castor::String const Output4;
 		static castor::String const Output5;
-
-		ashes::FrameBufferPtr m_frameBuffer;
-		ashes::CommandBufferPtr m_nodesCommands;
 	};
 }
 

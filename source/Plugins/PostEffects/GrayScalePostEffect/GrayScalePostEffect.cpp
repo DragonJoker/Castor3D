@@ -30,6 +30,8 @@
 
 #include <ShaderWriter/Source.hpp>
 
+#include <RenderGraph/RenderQuad.hpp>
+
 #include <numeric>
 
 namespace grayscale
@@ -104,19 +106,6 @@ namespace grayscale
 
 	//*********************************************************************************************
 
-	PostEffect::Quad::Quad( castor3d::RenderSystem & renderSystem
-		, castor3d::RenderDevice const & device )
-		: castor3d::RenderQuad{ device
-			, cuT( "GrayScale" )
-			, VK_FILTER_NEAREST
-			, { createBindings()
-				, ashes::nullopt
-				, castor3d::rq::Texcoord{} } }
-	{
-	}
-
-	//*********************************************************************************************
-
 	castor::String PostEffect::Type = cuT( "grayscale" );
 	castor::String PostEffect::Name = cuT( "GrayScale PostEffect" );
 
@@ -128,7 +117,6 @@ namespace grayscale
 			, renderTarget
 			, renderSystem
 			, params }
-		, m_surface{ *renderSystem.getEngine(), cuT( "GrayScale" ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "GrayScale" }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "GrayScale" }
 	{
@@ -169,133 +157,60 @@ namespace grayscale
 		, castor3d::RenderPassTimer const & timer )
 	{
 		auto & renderSystem = *getRenderSystem();
-		VkExtent2D size{ m_target->image->getDimensions().width
-			, m_target->image->getDimensions().height };
+		VkExtent2D size{ castor3d::makeExtent2D( m_renderTarget.getSize() ) };
+		auto & graph = m_renderTarget.getGraph();
+
 		m_vertexShader.shader = getVertexProgram( renderSystem );
 		m_pixelShader.shader = getFragmentProgram();
-		ashes::PipelineShaderStageCreateInfoArray stages;
-		stages.push_back( makeShaderState( device, m_vertexShader ) );
-		stages.push_back( makeShaderState( device, m_pixelShader ) );
+		m_stages.push_back( makeShaderState( device, m_vertexShader ) );
+		m_stages.push_back( makeShaderState( device, m_pixelShader ) );
 
 		m_configUbo = device.uboPools->getBuffer< castor::Point3f >( 0u );
 		m_configUbo.getData() = m_factors.value();
 		m_factors.reset();
 
-		// Create the render pass.
-		ashes::VkAttachmentDescriptionArray attachments
-		{
+		crg::ImageId resultImg{ graph.createImage( crg::ImageData{ "GrayScaleResult"
+			, 0u
+			, VK_IMAGE_TYPE_2D
+			, m_renderTarget.getPixelFormat()
+			, castor3d::makeExtent3D( m_renderTarget.getSize() )
+			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+				| VK_IMAGE_USAGE_SAMPLED_BIT ) } ) };
+		crg::FramePass pass{ "GrayScalePass"
+			, [this, size]( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph )
 			{
-				0u,
-				m_target->getFormat(),
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-				VK_ATTACHMENT_STORE_OP_STORE,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_UNDEFINED,
-				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-			}
-		};
-		ashes::SubpassDescriptionArray subpasses;
-		subpasses.emplace_back( ashes::SubpassDescription
-			{
-				0u,
-				VK_PIPELINE_BIND_POINT_GRAPHICS,
-				{},
-				{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
-				{},
-				ashes::nullopt,
-				{},
-			} );
-		ashes::VkSubpassDependencyArray dependencies
-		{
-			{
-				VK_SUBPASS_EXTERNAL,
-				0u,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-				VK_ACCESS_SHADER_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			},
-			{
-				0u,
-				VK_SUBPASS_EXTERNAL,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-				VK_ACCESS_SHADER_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			},
-		};
-		ashes::RenderPassCreateInfo createInfo
-		{
-			0u,
-			std::move( attachments ),
-			std::move( subpasses ),
-			std::move( dependencies ),
-		};
-		m_renderPass = device->createRenderPass( "GrayScale"
-			, std::move( createInfo ) );
+				return crg::RenderQuadBuilder{}
+					.renderPosition( {} )
+					.renderSize( size )
+					.texcoordConfig( {} )
+					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
+					.build( pass, context, graph );
+		} };
+		pass.createUniform( m_configUbo.getBuffer().getBuffer()
+			, GrayCfgUboIdx
+			, m_configUbo.offset
+			, m_configUbo.range );
+		crg::Attachment targetAttach{ pass.createSampled( m_target->viewData
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, ColorTexIdx
+			, VK_FILTER_NEAREST ) };
+		crg::Attachment resultAttach{ pass.createOutputColour( crg::ImageViewData{ "GrayScaleResult"
+				, resultImg
+				, 0u
+				, VK_IMAGE_VIEW_TYPE_2D
+				, resultImg.data->info.format
+				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } }
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) };
+		graph.add( pass );
 
-		ashes::VkDescriptorSetLayoutBindingArray bindings
-		{
-			castor3d::makeDescriptorSetLayoutBinding( 0u
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT )
-		};
-		m_quad = std::make_unique< Quad >( renderSystem
-			, device );
-		m_quad->createPipelineAndPass( size
-			, castor::Position{}
-			, stages
-			, *m_renderPass
-			, {
-				m_quad->makeDescriptorWrite( m_configUbo
-					, GrayCfgUboIdx ),
-				m_quad->makeDescriptorWrite( *m_target
-					, m_quad->getSampler().getSampler()
-					, ColorTexIdx ),
-			} );
-
-		auto result = m_surface.initialise( device
-			, *m_renderPass
-			, castor::Size{ size.width, size.height }
-			, m_target->getFormat() );
-
-		if ( result )
-		{
-			castor3d::CommandsSemaphore commands
-			{
-				device.graphicsCommandPool->createCommandBuffer( "GrayScale" ),
-				device->createSemaphore( "GrayScale" )
-			};
-			auto & cmd = *commands.commandBuffer;
-			cmd.begin();
-			timer.beginPass( cmd );
-			cmd.beginDebugBlock( { "GrayScale"
-				, castor3d::makeFloatArray( getOwner()->getEngine()->getNextRainbowColour() ) } );
-			cmd.beginRenderPass( *m_renderPass
-				, *m_surface.frameBuffer
-				, { castor3d::transparentBlackClearColor }
-				, VK_SUBPASS_CONTENTS_INLINE );
-			m_quad->registerPass( cmd );
-			cmd.endRenderPass();
-			cmd.endDebugBlock();
-			timer.endPass( cmd );
-			cmd.end();
-			m_commands.emplace_back( std::move( commands ) );
-		}
-
-		m_result = &m_surface.colourTexture->getDefaultView().getSampledView();
-		return result;
+		return true;
 	}
 
 	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
 	{
-		m_quad.reset();
-		m_renderPass.reset();
-		m_surface.cleanup( device );
+		m_stages.clear();
 		device.uboPools->putBuffer( m_configUbo );
 	}
 

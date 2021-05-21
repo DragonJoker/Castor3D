@@ -313,8 +313,7 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		bool doInitialise( RenderDevice const & device
-			, ashes::RenderPass const & renderPass )override;
+		bool doInitialise( RenderDevice const & device )override;
 		void doCleanup()override;
 		void doCpuUpdate( CpuUpdater & updater )override;
 		void doGpuUpdate( GpuUpdater & updater )override;

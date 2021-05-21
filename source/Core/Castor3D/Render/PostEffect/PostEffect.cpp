@@ -55,7 +55,8 @@ namespace castor3d
 	}
 
 	bool PostEffect::initialise( castor3d::RenderDevice const & device
-		, ashes::ImageView const & texture )
+		, crg::ImageViewId const & texture
+		, crg::FramePass const & previousPass )
 	{
 		m_target = &texture;
 		auto name = m_fullName;
@@ -65,7 +66,9 @@ namespace castor3d
 			, getKindName( m_kind ) + cuT( " PostEffect" )
 			, name
 			, m_passesCount );
-		auto result = doInitialise( device, *m_timer );
+		auto result = doInitialise( device
+			, *m_timer
+			, previousPass );
 		CU_Ensure( m_result != nullptr );
 		return result;
 	}
@@ -92,6 +95,7 @@ namespace castor3d
 	}
 
 	void PostEffect::doCopyResultToTarget( ashes::ImageView const & result
+		, ashes::ImageView const & target
 		, ashes::CommandBuffer & commandBuffer )
 	{
 		// Put result image in transfer source layout.
@@ -101,13 +105,12 @@ namespace castor3d
 		// Put target image in transfer destination layout.
 		commandBuffer.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_target->makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+			, target.makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		// Copy result to target.
-		commandBuffer.copyImage( result
-			, *m_target );
+		commandBuffer.copyImage( result, target );
 		// Put target image in fragment shader input layout.
 		commandBuffer.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_target->makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+			, target.makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
 	}
 }

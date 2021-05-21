@@ -61,11 +61,11 @@ namespace castor3d
 					nullptr,
 				};
 				passData.culler = std::make_unique< FrustumCuller >( scene, *passData.camera );
-				passData.pass = std::make_shared< ShadowMapPassSpot >( device
-					, i
-					, *passData.matrixUbo
-					, *passData.culler
-					, shadowMap );
+				//passData.pass = std::make_shared< ShadowMapPassSpot >( device
+				//	, i
+				//	, *passData.matrixUbo
+				//	, *passData.culler
+				//	, shadowMap );
 				result.emplace_back( std::move( passData ) );
 			}
 
@@ -126,7 +126,7 @@ namespace castor3d
 		for ( auto i = 0u; i < m_passes.size(); ++i )
 		{
 			std::string debugName = "ShadowMapSpot" + std::to_string( i );
-			auto & renderPass = m_passes[i].pass->getRenderPass();
+			auto renderPass = m_passes[i].pass->getRenderPass();
 			ashes::ImageViewCRefArray attaches;
 			attaches.emplace_back( depth.getLayer2DView( i ).getTargetView() );
 			attaches.emplace_back( linear.getLayer2DView( i ).getTargetView() );
@@ -136,7 +136,11 @@ namespace castor3d
 			m_passesData.push_back(
 				{
 					device.graphicsCommandPool->createCommandBuffer( debugName ),
-					renderPass.createFrameBuffer( debugName, size, std::move( attaches ) ),
+					std::make_unique< ashes::FrameBuffer >( *device
+						, debugName
+						, renderPass
+						, size
+						, std::move( attaches ) ),
 					device->createSemaphore( debugName ),
 					{ nullptr, nullptr }
 				} );
@@ -167,6 +171,7 @@ namespace castor3d
 		timerBlock->beginPass( commandBuffer );
 		commandBuffer.beginRenderPass( pass.pass->getRenderPass()
 			, frameBuffer
+			, frameBuffer.getDimensions()
 			, getClearValues()
 			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 

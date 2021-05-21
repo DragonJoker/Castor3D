@@ -361,8 +361,8 @@ namespace film_grain
 		, castor3d::RenderPassTimer const & timer )
 	{
 		auto & renderSystem = *getRenderSystem();
-		VkExtent2D size{ m_target->image->getDimensions().width
-			, m_target->image->getDimensions().height };
+		VkExtent2D size{ m_target->viewData.image.data->info.extent.width
+			, m_target->viewData.image.data->info.extent.height };
 		m_sampler->initialise( device );
 		m_vertexShader.shader = getVertexProgram( getRenderSystem() );
 		m_pixelShader.shader = getFragmentProgram( getRenderSystem() );
@@ -376,7 +376,7 @@ namespace film_grain
 		{
 			{
 				0u,
-				m_target->getFormat(),
+				m_target->viewData.info.format,
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 				VK_ATTACHMENT_STORE_OP_STORE,
@@ -449,7 +449,7 @@ namespace film_grain
 		auto result = m_surface.initialise( device
 			, *m_renderPass
 			, castor::Size{ size.width, size.height }
-			, m_target->getFormat() );
+			, m_target->viewData.info.format );
 
 		if ( result )
 		{

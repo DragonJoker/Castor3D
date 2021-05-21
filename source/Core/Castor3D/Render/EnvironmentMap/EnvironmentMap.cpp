@@ -256,34 +256,34 @@ namespace castor3d
 
 	bool EnvironmentMap::initialise()
 	{
-		if ( !m_backgroundUboDescriptorPool )
-		{
-			auto & background = *m_node.getScene()->getBackground();
-			m_backgroundUboDescriptorPool = background.getUboDescriptorLayout().createPool( "EnvironmentMapUbo", 6u );
-			m_backgroundTexDescriptorPool = background.getTexDescriptorLayout().createPool( "EnvironmentMapTex", 6u );
+		//if ( !m_backgroundUboDescriptorPool )
+		//{
+		//	auto & background = *m_node.getScene()->getBackground();
+		//	m_backgroundUboDescriptorPool = background.getUboDescriptorLayout().createPool( "EnvironmentMapUbo", 6u );
+		//	m_backgroundTexDescriptorPool = background.getTexDescriptorLayout().createPool( "EnvironmentMapTex", 6u );
 
-			for ( auto & pass : m_passes )
-			{
-				pass->initialise( *m_renderPass
-					, background
-					, *m_backgroundUboDescriptorPool
-					, *m_backgroundTexDescriptorPool );
-			}
+		//	for ( auto & pass : m_passes )
+		//	{
+		//		pass->initialise( *m_renderPass
+		//			, background
+		//			, *m_backgroundUboDescriptorPool
+		//			, *m_backgroundTexDescriptorPool );
+		//	}
 
-			auto & cmd = *m_generateMipmaps.commandBuffer;
-			cmd.begin();
-			m_timer->beginPass( cmd, 6u );
-			cmd.beginDebugBlock( { m_environmentMap->getTexture()->getName() + " Mipmaps Generation"
-				, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
-			auto & image = m_environmentMap->getTexture()->getTexture();
-			image.generateMipmaps( cmd
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-				, VK_IMAGE_LAYOUT_UNDEFINED
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-			cmd.endDebugBlock();
-			m_timer->endPass( cmd, 6u );
-			cmd.end();
-		}
+		//	auto & cmd = *m_generateMipmaps.commandBuffer;
+		//	cmd.begin();
+		//	m_timer->beginPass( cmd, 6u );
+		//	cmd.beginDebugBlock( { m_environmentMap->getTexture()->getName() + " Mipmaps Generation"
+		//		, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
+		//	auto & image = m_environmentMap->getTexture()->getTexture();
+		//	image.generateMipmaps( cmd
+		//		, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+		//		, VK_IMAGE_LAYOUT_UNDEFINED
+		//		, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		//	cmd.endDebugBlock();
+		//	m_timer->endPass( cmd, 6u );
+		//	cmd.end();
+		//}
 
 		return true;
 	}

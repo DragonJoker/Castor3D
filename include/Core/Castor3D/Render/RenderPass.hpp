@@ -14,6 +14,8 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/Named.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
 
+#include <RenderGraph/RenderPass.hpp>
+
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
 
@@ -23,13 +25,13 @@ namespace castor3d
 {
 	struct SceneRenderPassDesc
 	{
-		SceneRenderPassDesc( VkExtent3D const & size
+		SceneRenderPassDesc( VkExtent3D size
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, RenderMode mode
 			, bool oit
 			, bool forceTwoSided )
-			: m_size{ size }
+			: m_size{ std::move( size ) }
 			, m_matrixUbo{ matrixUbo }
 			, m_culler{ culler }
 			, m_mode{ mode }
@@ -49,10 +51,10 @@ namespace castor3d
 		 *\param[in]	culler			Le culler pour cette passe.
 		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
 		 */
-		SceneRenderPassDesc( VkExtent3D const & size
+		SceneRenderPassDesc( VkExtent3D size
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler )
-			: SceneRenderPassDesc{ size
+			: SceneRenderPassDesc{ std::move( size )
 				, matrixUbo
 				, culler
 				, RenderMode::eOpaqueOnly
@@ -74,11 +76,11 @@ namespace castor3d
 		 *\param[in]	oit				Le statut de rendu indépendant de l'ordre des objets.
 		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
 		 */
-		SceneRenderPassDesc( VkExtent3D const & size
+		SceneRenderPassDesc( VkExtent3D size
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, bool oit )
-			: SceneRenderPassDesc{ size
+			: SceneRenderPassDesc{ std::move( size )
 				, matrixUbo
 				, culler
 				, RenderMode::eTransparentOnly
@@ -108,21 +110,6 @@ namespace castor3d
 			m_ignored = &value;
 			return *this;
 		}
-		/**
-		 *\~english
-		 *\param[in]	timer	The render pass timer the resulting render pass will use.
-		 *\param[in]	index	The render pass index, for the given timer.
-		 *\~french
-		 *\param[in]	timer	Le timer de render pass que la passe résultante utilisera.
-		 *\param[in]	index	L'indice de la passe de rendu, dans le timer donné.
-		 */
-		SceneRenderPassDesc & timer( RenderPassTimer & timer
-			, uint32_t index )
-		{
-			m_timer = &timer;
-			m_index = index;
-			return *this;
-		}
 
 		VkExtent3D m_size;
 		MatrixUbo & m_matrixUbo;
@@ -131,7 +118,6 @@ namespace castor3d
 		bool m_oit;
 		bool m_forceTwoSided;
 		SceneNode const * m_ignored{};
-		RenderPassTimer * m_timer{};
 		uint32_t m_index{ 0u };
 		uint32_t m_instanceMult{ 1u };
 	};
@@ -139,6 +125,7 @@ namespace castor3d
 	class SceneRenderPass
 		: public castor::OwnedBy< Engine >
 		, public castor::Named
+		, public crg::RenderPass
 	{
 	protected:
 		/**
@@ -155,11 +142,13 @@ namespace castor3d
 		 *\param[in]	name		Le nom de la passe.
 		 *\param[in]	desc		Les données de construction.
 		 */
-		C3D_API SceneRenderPass( RenderDevice const & device
+		C3D_API SceneRenderPass( crg::FramePass const & pass
+			, crg::GraphContext const & context
+			, crg::RunnableGraph & graph
+			, RenderDevice const & device
 			, castor::String const & category
 			, castor::String const & name
-			, SceneRenderPassDesc const & desc
-			, ashes::RenderPassPtr renderPass = nullptr );
+			, SceneRenderPassDesc const & desc );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -489,21 +478,6 @@ namespace castor3d
 			return m_renderQueue.hasNodes();
 		}
 
-		ashes::RenderPass const & getRenderPass()const
-		{
-			return *m_renderPass;
-		}
-
-		RenderPassTimer const & getTimer()const
-		{
-			return *m_timer;
-		}
-
-		RenderPassTimer & getTimer()
-		{
-			return *m_timer;
-		}
-
 		uint32_t getPipelinesCount()const
 		{
 			return uint32_t( m_backPipelines.size()
@@ -530,6 +504,14 @@ namespace castor3d
 			return m_mode;
 		}
 		/**@}*/
+
+	protected:
+		C3D_API void doSubInitialise()override;
+		C3D_API void doSubRecordInto( VkCommandBuffer commandBuffer )const override;
+		C3D_API  VkSubpassContents doGetSubpassContents( uint32_t subpassIndex )const override
+		{
+			return VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS;
+		}
 
 	protected:
 		/**
@@ -883,9 +865,6 @@ namespace castor3d
 		bool m_forceTwoSided{ false };
 		bool m_isDirty{ true };
 		SceneUbo m_sceneUbo;
-		ashes::RenderPassPtr m_renderPass;
-		RenderPassTimerSPtr m_ownTimer;
-		RenderPassTimer * m_timer{ nullptr };
 		uint32_t m_index{ 0u };
 		uint32_t const m_instanceMult{ 1u };
 		std::map< size_t, UniformBufferOffsetT< ModelInstancesUboConfiguration > > m_modelsInstances;

@@ -296,10 +296,9 @@ namespace castor3d
 			return m_toneMapping;
 		}
 
-		ashes::Semaphore const & getSemaphore()const
+		crg::SemaphoreWait const & getSemaphore()const
 		{
-			CU_Require( m_signalFinished );
-			return *m_signalFinished;
+			return m_signalFinished;
 		}
 
 		SceneCuller const & getCuller()const
@@ -369,31 +368,22 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		C3D_API void doInitialiseRenderPass( RenderDevice const & device );
-		C3D_API bool doInitialiseVelocityTexture( RenderDevice const & device );
-		C3D_API bool doInitialiseTechnique( RenderDevice const & device );
-		C3D_API bool doInitialiseToneMapping( RenderDevice const & device );
-		C3D_API void doInitialiseCopyCommands( RenderDevice const & device
+		crg::FramePass & doCreateCombinePass();
+		void doInitialiseRenderPass( RenderDevice const & device );
+		bool doInitialiseVelocityTexture( RenderDevice const & device );
+		bool doInitialiseTechnique( RenderDevice const & device );
+		void doInitialiseCopyCommands( RenderDevice const & device
 			, castor::String const & name
-			, ashes::CommandBufferPtr & commandBuffer
-			, ashes::ImageView const & source
-			, ashes::ImageView const & target );
-		C3D_API void doInitCombineProgram();
-		C3D_API void doRender( RenderDevice const & device
+			, crg::ImageViewId const & source
+			, crg::ImageViewId const & target
+			, crg::FramePass const & previousPass );
+		void doInitCombineProgram();
+		void doRender( RenderDevice const & device
 			, RenderInfo & info
 			, TargetFbo & fbo
 			, CameraSPtr camera );
-		C3D_API ashes::Semaphore const & doApplyPostEffects( RenderDevice const & device
-			, ashes::Semaphore const & toWait
-			, PostEffectPtrArray const & effects
-			, ashes::CommandBufferPtr const & copyCommandBuffer
-			, ashes::SemaphorePtr const & copyFinished
-			, castor::Nanoseconds const & elapsedTime );
-		C3D_API ashes::Semaphore const & doApplyToneMapping( RenderDevice const & device
-			, ashes::Semaphore const & toWait );
-		C3D_API ashes::Semaphore const & doRenderOverlays( RenderDevice const & device
-			, ashes::Semaphore const & toWait );
-		C3D_API ashes::Semaphore const & doCombine( ashes::Semaphore const & toWait );
+		crg::SemaphoreWait doRenderOverlays( RenderDevice const & device
+			, crg::SemaphoreWaitArray const & toWait );
 
 	public:
 		//!\~english The render target default sampler name	\~french Le nom du sampler par défaut pour la cible de rendu
@@ -409,7 +399,6 @@ namespace castor3d
 		SceneWPtr m_scene;
 		CameraWPtr m_camera;
 		ashes::RenderPassPtr m_renderPass;
-		ashes::CommandBufferPtr m_toneMappingCommandBuffer;
 		TargetFbo m_objectsFrameBuffer;
 		TargetFbo m_overlaysFrameBuffer;
 		TargetFbo m_combinedFrameBuffer;
@@ -418,13 +407,8 @@ namespace castor3d
 		castor::String m_name;
 		Parameters m_techniqueParameters;
 		PostEffectPtrArray m_hdrPostEffects;
-		ashes::CommandBufferPtr m_hdrCopyCommands;
-		ashes::SemaphorePtr m_hdrCopyFinished;
 		ToneMappingSPtr m_toneMapping;
 		PostEffectPtrArray m_srgbPostEffects;
-		ashes::CommandBufferPtr m_srgbCopyCommands;
-		ashes::SemaphorePtr m_srgbCopyFinished;
-		RenderPassTimerSPtr m_toneMappingTimer;
 		RenderPassTimerSPtr m_overlaysTimer;
 		ShaderModule m_combineVtx{ VK_SHADER_STAGE_VERTEX_BIT, "Target - Combine" };
 		ShaderModule m_combinePxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "Target - Combine" };
@@ -434,17 +418,18 @@ namespace castor3d
 		TextureUnit m_velocityTexture;
 		OverlayRendererSPtr m_overlayRenderer;
 		ashes::SemaphorePtr m_signalReady;
-		ashes::Semaphore const * m_signalFinished{ nullptr };
+		crg::SemaphoreWait m_signalFinished{};
 		castor::PreciseTimer m_timer;
 		SceneCullerUPtr m_culler;
 		crg::FrameGraph m_graph;
 		crg::ImageId m_objectsImg;
+		crg::ImageViewId m_objectsView;
 		crg::ImageId m_overlaysImg;
+		crg::ImageViewId m_overlaysView;
 		crg::ImageId m_combinedImg;
-		crg::FramePass m_combinePass;
-		crg::Attachment m_objectsSampledAttach;
-		crg::Attachment m_overlaysSampledAttach;
-		crg::Attachment m_combinedTargetAttach;
+		crg::ImageViewId m_combinedView;
+		crg::FramePass & m_combinePass;
+		crg::FramePass const * m_hdrLastPass{};
 		crg::RunnableGraphPtr m_runnable;
 		ashes::SemaphorePtr m_combineSemaphore;
 	};

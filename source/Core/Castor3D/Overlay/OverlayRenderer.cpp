@@ -541,7 +541,7 @@ namespace castor3d
 	}
 
 	void OverlayRenderer::beginPrepare( RenderPassTimer const & timer
-		, ashes::Semaphore const & toWait )
+		, crg::SemaphoreWaitArray const & toWait )
 	{
 		m_toWait = &toWait;
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
@@ -582,16 +582,26 @@ namespace castor3d
 		m_sizeChanged = false;
 	}
 
-	void OverlayRenderer::render( RenderPassTimer & timer )
+	crg::SemaphoreWait OverlayRenderer::render( RenderPassTimer & timer )
 	{
 		auto & queue = *m_device.graphicsQueue;
 		RenderPassTimerBlock timerBlock{ timer.start() };
 		timerBlock->notifyPassRender();
+		std::vector< VkSemaphore > semaphores;
+		std::vector< VkPipelineStageFlags > dstStageMasks;
+
+		for ( auto & wait : *m_toWait )
+		{
+			semaphores.push_back( wait.semaphore );
+			dstStageMasks.push_back( wait.dstStageMask );
+		}
+
 		queue.submit( *m_commandBuffer
-			, *m_toWait
-			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, *m_finished
-			, nullptr );
+			, semaphores
+			, dstStageMasks
+			, *m_finished );
+		return { *m_finished
+			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
 	}
 
 	OverlayRenderer::OverlayRenderNode & OverlayRenderer::doGetPanelNode( RenderDevice const & device

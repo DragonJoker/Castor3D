@@ -48,117 +48,24 @@ using namespace castor;
 
 namespace castor3d
 {
-	//************************************************************************************************
-	
-	namespace
-	{
-		ashes::RenderPassPtr createRenderPass( RenderDevice const & device
-			, TransparentPassResult const & wbpResult )
-		{
-			ashes::VkAttachmentDescriptionArray attaches
-			{
-				{ 0u
-					, wbpResult[WbTexture::eDepth].getTexture()->getPixelFormat()
-					, VK_SAMPLE_COUNT_1_BIT
-					, VK_ATTACHMENT_LOAD_OP_LOAD
-					, VK_ATTACHMENT_STORE_OP_DONT_CARE
-					, VK_ATTACHMENT_LOAD_OP_DONT_CARE
-					, VK_ATTACHMENT_STORE_OP_DONT_CARE
-					, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL
-					, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL }
-				, { 0u
-					, wbpResult[WbTexture::eAccumulation].getTexture()->getPixelFormat()
-					, VK_SAMPLE_COUNT_1_BIT
-					, VK_ATTACHMENT_LOAD_OP_CLEAR
-					, VK_ATTACHMENT_STORE_OP_STORE
-					, VK_ATTACHMENT_LOAD_OP_DONT_CARE
-					, VK_ATTACHMENT_STORE_OP_DONT_CARE
-					, VK_IMAGE_LAYOUT_UNDEFINED
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL }
-				, { 0u
-					, wbpResult[WbTexture::eRevealage].getTexture()->getPixelFormat()
-					, VK_SAMPLE_COUNT_1_BIT
-					, VK_ATTACHMENT_LOAD_OP_CLEAR
-					, VK_ATTACHMENT_STORE_OP_STORE
-					, VK_ATTACHMENT_LOAD_OP_DONT_CARE
-					, VK_ATTACHMENT_STORE_OP_DONT_CARE
-					, VK_IMAGE_LAYOUT_UNDEFINED
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL }
-				, { 0u
-					, wbpResult[WbTexture::eVelocity].getTexture()->getPixelFormat()
-					, VK_SAMPLE_COUNT_1_BIT
-					, VK_ATTACHMENT_LOAD_OP_LOAD
-					, VK_ATTACHMENT_STORE_OP_STORE
-					, VK_ATTACHMENT_LOAD_OP_DONT_CARE
-					, VK_ATTACHMENT_STORE_OP_DONT_CARE
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } };
-			ashes::SubpassDescriptionArray subpasses;
-			subpasses.emplace_back( ashes::SubpassDescription{ 0u
-				, VK_PIPELINE_BIND_POINT_GRAPHICS
-				, {}
-				, { { 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL }
-					, { 2u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL }
-					, { 3u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } }
-				, {}
-				, VkAttachmentReference{ 0u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL }
-				, {} } );
-			ashes::VkSubpassDependencyArray dependencies
-			{
-				{ VK_SUBPASS_EXTERNAL
-					, 0u
-					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-					, VK_DEPENDENCY_BY_REGION_BIT }
-				, { 0u
-					, VK_SUBPASS_EXTERNAL
-					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-					, VK_ACCESS_SHADER_READ_BIT
-					, VK_DEPENDENCY_BY_REGION_BIT } };
-			ashes::RenderPassCreateInfo createInfo{ 0u
-				, std::move( attaches )
-				, std::move( subpasses )
-				, std::move( dependencies ) };
-			return device->createRenderPass( "TransparentPass"
-				, std::move( createInfo ) );
-		}
-
-		ashes::FrameBufferPtr createFramebuffer( ashes::RenderPass const & renderPass
-			, TransparentPassResult const & wbpResult )
-		{
-			ashes::ImageViewCRefArray fbAttaches;
-
-			for ( auto view : wbpResult )
-			{
-				fbAttaches.emplace_back( view->getTexture()->getDefaultView().getTargetView() );
-			}
-
-			return renderPass.createFrameBuffer( "TransparentPass"
-				, { wbpResult[WbTexture::eDepth].getTexture()->getWidth()
-					, wbpResult[WbTexture::eDepth].getTexture()->getHeight() }
-				, std::move( fbAttaches ) );
-		}
-	}
-
-	//************************************************************************************************
-
-	TransparentPass::TransparentPass( RenderDevice const & device
+	TransparentPass::TransparentPass( crg::FramePass const & pass
+		, crg::GraphContext const & context
+		, crg::RunnableGraph & graph
+		, RenderDevice const & device
 		, castor::Size const & size
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, SsaoConfig const & config
-		, TransparentPassResult const & transparentPassResult
 		, LpvGridConfigUbo const & lpvConfigUbo
 		, LayeredLpvGridConfigUbo const & llpvConfigUbo
 		, VoxelizerUbo const & vctConfigUbo
 		, LightVolumePassResult const & lpvResult
 		, TextureUnit const & vctFirstBounce
 		, TextureUnit const & vctSecondaryBounce )
-		: castor3d::RenderTechniquePass{ device
+		: castor3d::RenderTechniquePass{ pass
+			, context
+			, graph
+			, device
 			, "Transparent"
 			, "Accumulation"
 			, SceneRenderPassDesc{ { size.getWidth(), size.getHeight(), 1u }, matrixUbo, culler, true }
@@ -168,54 +75,12 @@ namespace castor3d
 				.vctConfigUbo( vctConfigUbo )
 				.lpvResult( lpvResult )
 				.vctFirstBounce( vctFirstBounce )
-				.vctSecondaryBounce( vctSecondaryBounce )
-			, createRenderPass( device, transparentPassResult ) }
-		, m_frameBuffer{ createFramebuffer( *m_renderPass, transparentPassResult ) }
-		, m_nodesCommands{ m_device.graphicsCommandPool->createCommandBuffer( "TransparentPass" ) }
+				.vctSecondaryBounce( vctSecondaryBounce ) }
 	{
 	}
 
 	TransparentPass::~TransparentPass()
 	{
-	}
-
-	ashes::Semaphore const & TransparentPass::render( ashes::Semaphore const & toWait )
-	{
-		static ashes::VkClearValueArray const clearValues{ defaultClearDepthStencil
-			, transparentBlackClearColor
-			, opaqueWhiteClearColor
-			, transparentBlackClearColor };
-		auto * result = &toWait;
-		auto timerBlock = getTimer().start();
-
-		m_nodesCommands->begin();
-		m_nodesCommands->beginDebugBlock( { "Weighted Blended - Transparent accumulation"
-			, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
-		timerBlock->beginPass( *m_nodesCommands );
-		timerBlock->notifyPassRender();
-		m_nodesCommands->beginRenderPass( *m_renderPass
-			, *m_frameBuffer
-			, clearValues
-			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
-
-		if ( hasNodes() )
-		{
-			m_nodesCommands->executeCommands( { getCommandBuffer() } );
-		}
-
-		m_nodesCommands->endRenderPass();
-		timerBlock->endPass( *m_nodesCommands );
-		m_nodesCommands->endDebugBlock();
-		m_nodesCommands->end();
-
-		m_device.graphicsQueue->submit( *m_nodesCommands
-			, *result
-			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, getSemaphore()
-			, nullptr );
-		result = &getSemaphore();
-
-		return *result;
 	}
 
 	TextureFlags TransparentPass::getTexturesMask()const

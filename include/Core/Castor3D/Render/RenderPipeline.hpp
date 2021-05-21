@@ -107,7 +107,7 @@ namespace castor3d
 		*	La passe de rendu à laquelle ce pipeline est lié.
 		*/
 		C3D_API void initialise( RenderDevice const & device
-			, ashes::RenderPass const & renderPass
+			, VkRenderPass renderPass
 			, ashes::DescriptorSetLayoutCRefArray descriptorLayouts );
 		/**
 		*\~english

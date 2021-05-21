@@ -32,130 +32,31 @@
 
 CU_ImplementCUSmartPtr( castor3d, DepthPass )
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
-	{
-		ashes::RenderPassPtr createRenderPass( RenderDevice const & device
-			, TextureLayout const & depthBuffer )
-		{
-			// Create the render pass.
-			ashes::VkAttachmentDescriptionArray attaches{ { 0u
-				, depthBuffer.getPixelFormat()
-				, VK_SAMPLE_COUNT_1_BIT
-				, VK_ATTACHMENT_LOAD_OP_CLEAR
-				, VK_ATTACHMENT_STORE_OP_STORE
-				, VK_ATTACHMENT_LOAD_OP_CLEAR
-				, VK_ATTACHMENT_STORE_OP_STORE
-				, VK_IMAGE_LAYOUT_UNDEFINED
-				, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL } };
-			ashes::SubpassDescriptionArray subpasses;
-			subpasses.emplace_back( ashes::SubpassDescription{ 0u
-				, VK_PIPELINE_BIND_POINT_GRAPHICS
-				, {}
-				, {}
-				, {}
-				, VkAttachmentReference{ 0u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL }
-				, {} } );
-			ashes::VkSubpassDependencyArray dependencies
-			{
-				{ VK_SUBPASS_EXTERNAL
-					, 0u
-					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-					, VK_ACCESS_SHADER_READ_BIT
-					, VK_DEPENDENCY_BY_REGION_BIT }
-				, { 0u
-					, VK_SUBPASS_EXTERNAL
-					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-					, VK_ACCESS_SHADER_READ_BIT
-					, VK_DEPENDENCY_BY_REGION_BIT } };
-			ashes::RenderPassCreateInfo createInfo{ 0u
-				, std::move( attaches )
-				, std::move( subpasses )
-				, std::move( dependencies ) };
-			return device->createRenderPass( "DepthPass"
-				, std::move( createInfo ) );
-		}
-
-		ashes::FrameBufferPtr createFramebuffer( ashes::RenderPass const & renderPass
-			, TextureLayout const & depthBuffer )
-		{
-			ashes::ImageViewCRefArray fbattaches;
-			fbattaches.emplace_back( depthBuffer.getDefaultView().getTargetView() );
-			return renderPass.createFrameBuffer( "DepthPass"
-				, { depthBuffer.getDimensions().width, depthBuffer.getDimensions().height }
-				, std::move( fbattaches ) );
-		}
-	}
-
-	//*********************************************************************************************
-
-	DepthPass::DepthPass( String const & prefix
+	DepthPass::DepthPass( crg::FramePass const & pass
+		, crg::GraphContext const & context
+		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, SsaoConfig const & ssaoConfig
-		, TextureLayoutSPtr depthBuffer )
-		: RenderTechniquePass{ device
-			, prefix
+		, VkExtent3D extent )
+		: RenderTechniquePass{ pass
+			, context
+			, graph
+			, device
+			, pass.name
 			, "DepthPass"
-			, { depthBuffer->getDimensions(), matrixUbo, culler }
-			, { false, ssaoConfig }
-			, createRenderPass( device, *depthBuffer ) }
-		, m_nodesCommands{ m_device.graphicsCommandPool->createCommandBuffer( "DepthPass" ) }
-		, m_frameBuffer{ createFramebuffer( *m_renderPass, *depthBuffer ) }
+			, { std::move( extent ), matrixUbo, culler }
+			, { false, ssaoConfig } }
 	{
 	}
 
 	DepthPass::~DepthPass()
 	{
-	}
-
-	ashes::Semaphore const & DepthPass::render( ashes::SemaphoreCRefArray const & semaphores )
-	{
-		static ashes::VkClearValueArray const clearValues
-		{
-			defaultClearDepthStencil,
-		};
-
-		RenderPassTimerBlock timerBlock{ getTimer().start() };
-
-		m_nodesCommands->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-		m_nodesCommands->beginDebugBlock( { "Depth Pass"
-			, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
-		timerBlock->beginPass( *m_nodesCommands );
-		timerBlock->notifyPassRender();
-		m_nodesCommands->beginRenderPass( getRenderPass()
-			, *m_frameBuffer
-			, clearValues
-			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
-
-		if ( hasNodes() )
-		{
-			m_nodesCommands->executeCommands( { getCommandBuffer() } );
-		}
-
-		m_nodesCommands->endRenderPass();
-		timerBlock->endPass( *m_nodesCommands );
-		m_nodesCommands->endDebugBlock();
-		m_nodesCommands->end();
-
-		ashes::VkPipelineStageFlagsArray const stages( semaphores.size(), VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT );
-		m_device.graphicsQueue->submit( { *m_nodesCommands }
-			, semaphores
-			, stages
-			, { getSemaphore() }
-			, nullptr );
-
-		return getSemaphore();
 	}
 
 	TextureFlags DepthPass::getTexturesMask()const

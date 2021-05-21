@@ -19,9 +19,24 @@ namespace Linear
 
 	ToneMapping::ToneMapping( Engine & engine
 		, RenderDevice const & device
+		, castor::Size const & size
+		, crg::FrameGraph & graph
+		, crg::ImageViewId const & source
+		, crg::ImageViewId const & target
+		, crg::FramePass const & previousPass
 		, HdrConfigUbo & hdrConfigUbo
 		, Parameters const & parameters )
-		: castor3d::ToneMapping{ Type, Name, engine, device, hdrConfigUbo, parameters }
+		: castor3d::ToneMapping{ Type
+			, Name
+			, engine
+			, device
+			, size
+			, graph
+			, source
+			, target
+			, previousPass
+			, hdrConfigUbo
+			, parameters }
 	{
 	}
 
@@ -31,11 +46,21 @@ namespace Linear
 
 	ToneMappingSPtr ToneMapping::create( Engine & engine
 		, castor3d::RenderDevice const & device
+		, castor::Size const & size
+		, crg::FrameGraph & graph
+		, crg::ImageViewId const & source
+		, crg::ImageViewId const & target
+		, crg::FramePass const & previousPass
 		, HdrConfigUbo & hdrConfigUbo
 		, Parameters const & parameters )
 	{
 		return std::make_shared< ToneMapping >( engine
 			, device
+			, size
+			, graph
+			, source
+			, target
+			, previousPass
 			, hdrConfigUbo
 			, parameters );
 	}

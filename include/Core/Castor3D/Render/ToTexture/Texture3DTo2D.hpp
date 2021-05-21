@@ -17,6 +17,8 @@ See LICENSE file in root folder
 #include <ashespp/Pipeline/GraphicsPipeline.hpp>
 #include <ashespp/Pipeline/PipelineLayout.hpp>
 
+#include <RenderGraph/FrameGraphPrerequisites.hpp>
+
 namespace castor3d
 {
 	struct Texture3DTo2DData
@@ -36,7 +38,7 @@ namespace castor3d
 		C3D_API void createPasses( IntermediateViewArray intermediates );
 		C3D_API void initialise();
 		C3D_API void update( CpuUpdater & updater );
-		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait );
+		C3D_API crg::SemaphoreWait render( crg::SemaphoreWait const & toWait );
 
 		ashes::ImageView const & getTarget()
 		{

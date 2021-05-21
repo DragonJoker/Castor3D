@@ -372,7 +372,7 @@ namespace castor3d
 	*\brief
 	*	Passe de picking, utilisant les FBO.
 	*/
-	class PickingPass;
+	class Picking;
 	/**
 	*\~english
 	*\brief
@@ -558,7 +558,7 @@ namespace castor3d
 	*/
 	class Viewport;
 
-	CU_DeclareCUSmartPtr( castor3d, PickingPass, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, Picking, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, RenderDevice, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, RenderLoop, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, RenderPassTimer, C3D_API );

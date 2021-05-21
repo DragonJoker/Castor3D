@@ -11,7 +11,7 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
-#include "Castor3D/Render/PickingPass.hpp"
+#include "Castor3D/Render/Picking.hpp"
 #include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
@@ -635,7 +635,7 @@ namespace castor3d
 
 		if ( camera )
 		{
-			m_pickingPass->addScene( scene, *camera );
+			m_picking->addScene( scene, *camera );
 		}
 	}
 
@@ -649,9 +649,9 @@ namespace castor3d
 		PickNodeType result = PickNodeType::eNone;
 		auto camera = getCamera();
 
-		if ( camera && !m_pickingPass->isPicking() )
+		if ( camera && !m_picking->isPicking() )
 		{
-			result = m_pickingPass->pick( m_device
+			result = m_picking->pick( m_device
 				, position
 				, *camera );
 		}
@@ -668,22 +668,22 @@ namespace castor3d
 
 	GeometrySPtr RenderWindow::getPickedGeometry()const
 	{
-		return m_pickingPass->getPickedGeometry();
+		return m_picking->getPickedGeometry();
 	}
 
 	BillboardBaseSPtr RenderWindow::getPickedBillboard()const
 	{
-		return m_pickingPass->getPickedBillboard();
+		return m_picking->getPickedBillboard();
 	}
 
 	SubmeshSPtr RenderWindow::getPickedSubmesh()const
 	{
-		return m_pickingPass->getPickedSubmesh();
+		return m_picking->getPickedSubmesh();
 	}
 
 	uint32_t RenderWindow::getPickedFace()const
 	{
-		return m_pickingPass->getPickedFace();
+		return m_picking->getPickedFace();
 	}
 
 	void RenderWindow::doCreateRenderPass()
@@ -846,7 +846,7 @@ namespace castor3d
 	void RenderWindow::doCreatePickingPass()
 	{
 		auto & target = *getRenderTarget();
-		m_pickingPass = std::make_shared< PickingPass >( m_device
+		m_picking = std::make_shared< Picking >( m_device
 			, m_size
 			, target.getTechnique()->getMatrixUbo()
 			, target.getCuller() );
@@ -854,7 +854,7 @@ namespace castor3d
 
 	void RenderWindow::doDestroyPickingPass()
 	{
-		m_pickingPass.reset();
+		m_picking.reset();
 	}
 
 	void RenderWindow::doCreateRenderQuad()
@@ -1143,35 +1143,32 @@ namespace castor3d
 
 	void RenderWindow::doWaitFrame()
 	{
-		getDevice().graphicsQueue->submit( {}
-			, { getRenderTarget()->getSemaphore() }
-			, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT }
-			, {}
-			, nullptr );
+		getDevice().graphicsQueue->submit( ashes::VkCommandBufferArray{}
+			, ashes::VkSemaphoreArray{ getRenderTarget()->getSemaphore().semaphore }
+			, { getRenderTarget()->getSemaphore().dstStageMask }
+			, ashes::VkSemaphoreArray{} );
 	}
 
 	void RenderWindow::doSubmitFrame( RenderingResources * resources )
 	{
-		auto toWait = &getRenderTarget()->getSemaphore();
-		VkPipelineStageFlags waitStage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+		auto toWait = getRenderTarget()->getSemaphore();
 
 		if ( m_toSave )
 		{
-			getDevice().graphicsQueue->submit( { *m_transferCommands.commandBuffer }
-				, { *toWait }
-				, { waitStage }
-				, { *m_transferCommands.semaphore }
-				, nullptr );
-			toWait = m_transferCommands.semaphore.get();
-			waitStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
+			getDevice().graphicsQueue->submit( ashes::VkCommandBufferArray{ *m_transferCommands.commandBuffer }
+				, ashes::VkSemaphoreArray{ toWait.semaphore }
+				, { toWait.dstStageMask }
+				, ashes::VkSemaphoreArray{ *m_transferCommands.semaphore } );
+			toWait.semaphore = *m_transferCommands.semaphore;
+			toWait.dstStageMask = VK_PIPELINE_STAGE_TRANSFER_BIT;
 		}
 
-		toWait = &m_texture3Dto2D->render( *toWait );
-		getDevice().graphicsQueue->submit( { *m_commandBuffers[m_debugConfig.debugIndex][resources->imageIndex] }
-			, { *resources->imageAvailableSemaphore, *toWait }
-			, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, waitStage }
-			, {}
-			, resources->fence.get() );
+		toWait = m_texture3Dto2D->render( toWait );
+		getDevice().graphicsQueue->submit( ashes::VkCommandBufferArray{ *m_commandBuffers[m_debugConfig.debugIndex][resources->imageIndex] }
+			, ashes::VkSemaphoreArray{ *resources->imageAvailableSemaphore, toWait.semaphore }
+			, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, toWait.dstStageMask }
+			, ashes::VkSemaphoreArray{}
+			, *resources->fence );
 	}
 
 	void RenderWindow::doPresentFrame( RenderingResources * resources )

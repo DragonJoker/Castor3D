@@ -456,7 +456,7 @@ namespace castor3d
 		, ashes::Optional< VkViewport > const & viewport
 		, ashes::Optional< VkRect2D > const & scissors )
 	{
-		queue.getCommandBuffer().begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
+		queue.getCommandBuffer().begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
 			, makeVkType< VkCommandBufferInheritanceInfo >( VkRenderPass( queue.getOwner()->getRenderPass() )
 				, 0u
 				, VkFramebuffer( VK_NULL_HANDLE )

@@ -144,13 +144,19 @@ namespace castor3d
 	uint32_t const ShadowMapPassDirectional::TileCountX = ShadowMapDirectionalTileCountX;
 	uint32_t const ShadowMapPassDirectional::TileCountY = ShadowMapDirectionalTileCountY;
 
-	ShadowMapPassDirectional::ShadowMapPassDirectional( RenderDevice const & device
+	ShadowMapPassDirectional::ShadowMapPassDirectional( crg::FramePass const & pass
+		, crg::GraphContext const & context
+		, crg::RunnableGraph & graph
+		, RenderDevice const & device
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap
 		, uint32_t cascadeCount )
 #if C3D_UseTiledDirectionalShadowMap
-		: ShadowMapPass{ device
+		: ShadowMapPass{ pass
+			, context
+			, graph
+			, device
 			, cuT( "ShadowMapPassDirectional" )
 			, matrixUbo
 			, culler
@@ -158,12 +164,14 @@ namespace castor3d
 			, createRenderPass( device, shadowMap, cuT( "ShadowMapPassDirectional" ) )
 			, cascadeCount }
 #else
-		: ShadowMapPass{ device
+		: ShadowMapPass{ pass
+			, context
+			, graph
+			, device
 			, getPassName( cascadeCount )
 			, matrixUbo
 			, culler
 			, shadowMap
-			, createRenderPass( device, shadowMap, getPassName( cascadeCount ) )
 			, 1u }
 #endif
 		, m_shadowMapDirectionalUbo{ device }

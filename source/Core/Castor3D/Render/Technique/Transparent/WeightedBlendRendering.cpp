@@ -59,7 +59,7 @@ namespace castor3d
 		, ashes::Semaphore const & toWait )
 	{
 		auto * result = &toWait;
-		result = &m_transparentPass.render( *result );
+		//result = &m_transparentPass.render( *result );
 		result = &m_finalCombinePass.render( scene.getFog().getType()
 			, *result );
 		return *result;

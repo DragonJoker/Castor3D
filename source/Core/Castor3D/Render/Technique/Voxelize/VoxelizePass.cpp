@@ -90,34 +90,42 @@ namespace castor3d
 				, std::move( createInfo ) );
 		}
 
-		ashes::FrameBufferPtr createFramebuffer( ashes::RenderPass const & renderPass
+		ashes::FrameBufferPtr createFramebuffer( RenderDevice const & device
+			, VkRenderPass renderPass
 			, VoxelSceneData const & voxelConfig )
 		{
 			ashes::ImageViewCRefArray fbAttaches;
-			return renderPass.createFrameBuffer( "Voxelization"
-				, { voxelConfig.gridSize.value(), voxelConfig.gridSize.value() }
+			return std::make_unique< ashes::FrameBuffer >( *device
+				, "Voxelization"
+				, renderPass
+				, VkExtent2D{ voxelConfig.gridSize.value(), voxelConfig.gridSize.value() }
 				, std::move( fbAttaches ) );
 		}
 	}
 
 	//*********************************************************************************************
 
-	VoxelizePass::VoxelizePass( RenderDevice const & device
+	VoxelizePass::VoxelizePass( crg::FramePass const & pass
+		, crg::GraphContext const & context
+		, crg::RunnableGraph & graph
+		, RenderDevice const & device
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, VoxelizerUbo const & voxelizerUbo
 		, ashes::Buffer< Voxel > const & voxels
 		, VoxelSceneData const & voxelConfig )
-		: SceneRenderPass{ device
+		: SceneRenderPass{ pass
+			, context
+			, graph
+			, device
 			, "Voxelize"
 			, "Voxelization"
-			, SceneRenderPassDesc{ { voxelConfig.gridSize.value(), voxelConfig.gridSize.value(), 1u }, matrixUbo, culler, RenderMode::eBoth, true, true }
-			, createRenderPass( device ) }
+			, SceneRenderPassDesc{ { voxelConfig.gridSize.value(), voxelConfig.gridSize.value(), 1u }, matrixUbo, culler, RenderMode::eBoth, true, true } }
 		, m_scene{ culler.getScene() }
 		, m_camera{ culler.getCamera() }
 		, m_voxels{ voxels }
 		, m_commands{ device, getName() }
-		, m_frameBuffer{ createFramebuffer( *m_renderPass, voxelConfig ) }
+		, m_frameBuffer{ createFramebuffer( device, m_renderPass, voxelConfig ) }
 		, m_voxelizerUbo{ voxelizerUbo }
 		, m_voxelConfig{ voxelConfig }
 	{
@@ -200,7 +208,7 @@ namespace castor3d
 
 		if ( hasNodes() && m_voxelConfig.enabled )
 		{
-			RenderPassTimerBlock timerBlock{ getTimer().start() };
+			auto timerBlock( getTimer().start() );
 
 			auto & cmd = *m_commands.commandBuffer;
 			cmd.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
@@ -213,6 +221,7 @@ namespace castor3d
 				} );
 			cmd.beginRenderPass( getRenderPass()
 				, *m_frameBuffer
+				, m_frameBuffer->getDimensions()
 				, { opaqueBlackClearColor }
 				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 				cmd.executeCommands( { getCommandBuffer() } );

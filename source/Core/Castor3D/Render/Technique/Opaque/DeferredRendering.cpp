@@ -186,7 +186,7 @@ namespace castor3d
 		, ashes::Semaphore const & toWait )
 	{
 		ashes::Semaphore const * result = &toWait;
-		result = &m_opaquePass.render( *result );
+		//result = &m_opaquePass.render( *result );
 
 		if ( m_ssaoConfig.enabled )
 		{

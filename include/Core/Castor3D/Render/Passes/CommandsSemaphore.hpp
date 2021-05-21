@@ -9,6 +9,8 @@ See LICENSE file in root folder
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Sync/Semaphore.hpp>
 
+#include <RenderGraph/FrameGraphPrerequisites.hpp>
+
 namespace castor3d
 {
 	struct CommandsSemaphore
@@ -21,6 +23,8 @@ namespace castor3d
 		C3D_API void submit( ashes::Queue const & queue )const;
 		C3D_API ashes::Semaphore const & submit( ashes::Queue const & queue
 			, ashes::Semaphore const & toWait )const;
+		C3D_API ashes::Semaphore const & submit( ashes::Queue const & queue
+			, crg::SemaphoreWait const & toWait )const;
 
 		ashes::CommandBufferPtr commandBuffer;
 		ashes::SemaphorePtr semaphore;

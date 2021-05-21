@@ -89,22 +89,22 @@ namespace castor3d
 		, m_secondaryBounce{ createTexture( m_engine, device, "VoxelizedSceneSecondaryBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
 		, m_voxels{ createSsbo( m_engine, device, "VoxelizedSceneBuffer", m_voxelConfig.gridSize.value() ) }
 		, m_voxelizerUbo{ voxelizerUbo }
-		, m_voxelizePass{ castor::makeUnique< VoxelizePass >( device
-			, m_matrixUbo
-			, m_culler
-			, m_voxelizerUbo
-			, *m_voxels
-			, m_voxelConfig ) }
-		, m_voxelToTexture{ castor::makeUnique< VoxelBufferToTexture >( device
-			, m_voxelConfig
-			, *m_voxels
-			, m_firstBounce ) }
-		, m_voxelSecondaryBounce{ castor::makeUnique< VoxelSecondaryBounce >( device
-			, m_voxelConfig
-			, *m_voxels
-			, m_voxelizerUbo
-			, m_firstBounce
-			, m_secondaryBounce ) }
+		//, m_voxelizePass{ castor::makeUnique< VoxelizePass >( device
+		//	, m_matrixUbo
+		//	, m_culler
+		//	, m_voxelizerUbo
+		//	, *m_voxels
+		//	, m_voxelConfig ) }
+		//, m_voxelToTexture{ castor::makeUnique< VoxelBufferToTexture >( device
+		//	, m_voxelConfig
+		//	, *m_voxels
+		//	, m_firstBounce ) }
+		//, m_voxelSecondaryBounce{ castor::makeUnique< VoxelSecondaryBounce >( device
+		//	, m_voxelConfig
+		//	, *m_voxels
+		//	, m_voxelizerUbo
+		//	, m_firstBounce
+		//	, m_secondaryBounce ) }
 	{
 	}
 
@@ -122,24 +122,30 @@ namespace castor3d
 
 	void Voxelizer::update( CpuUpdater & updater )
 	{
-		auto & camera = *updater.camera;
-		auto & aabb = camera.getScene()->getBoundingBox();
-		auto max = std::max( aabb.getDimensions()->x, std::max( aabb.getDimensions()->y, aabb.getDimensions()->z ) );
-		auto cellSize = m_voxelConfig.gridSize.value() / max;
-		auto voxelSize = ( cellSize * m_voxelConfig.voxelSizeFactor );
-		m_grid = castor::Point4f{ 0.0f
-			, 0.0f
-			, 0.0f
-			, voxelSize };
-		m_voxelizePass->update( updater );
-		m_voxelizerUbo.cpuUpdate( m_voxelConfig
-			, voxelSize
-			, m_voxelConfig.gridSize.value() );
+		if ( m_voxelizePass )
+		{
+			auto & camera = *updater.camera;
+			auto & aabb = camera.getScene()->getBoundingBox();
+			auto max = std::max( aabb.getDimensions()->x, std::max( aabb.getDimensions()->y, aabb.getDimensions()->z ) );
+			auto cellSize = m_voxelConfig.gridSize.value() / max;
+			auto voxelSize = ( cellSize * m_voxelConfig.voxelSizeFactor );
+			m_grid = castor::Point4f{ 0.0f
+				, 0.0f
+				, 0.0f
+				, voxelSize };
+			m_voxelizePass->update( updater );
+			m_voxelizerUbo.cpuUpdate( m_voxelConfig
+				, voxelSize
+				, m_voxelConfig.gridSize.value() );
+		}
 	}
 
 	void Voxelizer::update( GpuUpdater & updater )
 	{
-		m_voxelizePass->update( updater );
+		if ( m_voxelizePass )
+		{
+			m_voxelizePass->update( updater );
+		}
 	}
 
 	ashes::Semaphore const & Voxelizer::render( RenderDevice const & device

@@ -203,8 +203,7 @@ namespace castor3d
 		notifyChanged();
 	}
 
-	bool SkyboxBackground::doInitialise( RenderDevice const & device
-		, ashes::RenderPass const & renderPass )
+	bool SkyboxBackground::doInitialise( RenderDevice const & device )
 	{
 		CU_Require( m_texture );
 		return doInitialiseTexture( device );
@@ -221,7 +220,7 @@ namespace castor3d
 			, 0.1f
 			, 2.0f );
 		m_viewport.update();
-		m_matrixUbo->cpuUpdate( updater.camera->getView()
+		m_matrixUbo.cpuUpdate( updater.camera->getView()
 			, m_viewport.getProjection() );
 	}
 

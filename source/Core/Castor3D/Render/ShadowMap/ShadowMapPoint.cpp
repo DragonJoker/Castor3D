@@ -58,11 +58,11 @@ namespace castor3d
 					std::make_unique< DummyCuller >( scene ),
 					nullptr,
 				};
-				passData.pass = std::make_shared< ShadowMapPassPoint >( device
-					, i
-					, *passData.matrixUbo
-					, *passData.culler
-					, shadowMap );
+				//passData.pass = std::make_shared< ShadowMapPassPoint >( device
+				//	, i
+				//	, *passData.matrixUbo
+				//	, *passData.culler
+				//	, shadowMap );
 				result.emplace_back( std::move( passData ) );
 			}
 
@@ -153,7 +153,7 @@ namespace castor3d
 				auto face = CubeMapFace( passIndex % 6u );
 				auto fbDebugName = debugName + getName( face );
 				auto & pass = m_passes[passIndex];
-				auto & renderPass = pass.pass->getRenderPass();
+				auto renderPass = pass.pass->getRenderPass();
 				frameBuffer.views =
 				{
 					depth.getLayerCubeFaceView( layer, face ).getTargetView(),
@@ -169,7 +169,9 @@ namespace castor3d
 					attaches.emplace_back( view );
 				}
 
-				frameBuffer.frameBuffer = renderPass.createFrameBuffer( fbDebugName
+				frameBuffer.frameBuffer = std::make_unique< ashes::FrameBuffer >( *device
+					, fbDebugName
+					, renderPass
 					, size
 					, std::move( attaches ) );
 
@@ -219,7 +221,7 @@ namespace castor3d
 			auto & pass = m_passes[offset + face];
 			auto & timer = pass.pass->getTimer();
 			auto timerBlock = timer.start();
-			auto & renderPass = pass.pass->getRenderPass();
+			auto renderPass = pass.pass->getRenderPass();
 			auto & frameBuffer = passData.frameBuffers[face];
 
 			commandBuffer.beginDebugBlock(
@@ -231,6 +233,7 @@ namespace castor3d
 			timerBlock->beginPass( commandBuffer );
 			commandBuffer.beginRenderPass( renderPass
 				, *frameBuffer.frameBuffer
+				, frameBuffer.frameBuffer->getDimensions()
 				, getClearValues()
 				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 

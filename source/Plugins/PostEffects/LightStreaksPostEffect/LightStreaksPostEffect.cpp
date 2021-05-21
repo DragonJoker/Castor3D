@@ -276,8 +276,8 @@ namespace light_streaks
 		m_kawaseUbo.initialise( device );
 		m_linearSampler->initialise( device );
 		m_nearestSampler->initialise( device );
-		VkExtent2D size{ m_target->image->getDimensions().width
-			, m_target->image->getDimensions().height };
+		VkExtent2D size{ m_target->viewData.image.data->info.extent.width
+			, m_target->viewData.image.data->info.extent.height };
 
 		// Create vertex buffer
 		m_vertexBuffer = castor3d::makeVertexBuffer< castor3d::NonTexturedQuad >( device

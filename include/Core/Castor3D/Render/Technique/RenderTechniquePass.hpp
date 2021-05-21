@@ -120,12 +120,14 @@ namespace castor3d
 		 *\param[in]	renderPassDesc		Les données de construction de passe de rendu de scène.
 		 *\param[in]	techniquePassDesc	Les données de construction de passe de rendu de technique.
 		 */
-		C3D_API RenderTechniquePass( RenderDevice const & device
+		C3D_API RenderTechniquePass( crg::FramePass const & pass
+			, crg::GraphContext const & context
+			, crg::RunnableGraph & graph
+			, RenderDevice const & device
 			, castor::String const & category
 			, castor::String const & name
 			, SceneRenderPassDesc const & renderPassDesc
-			, RenderTechniquePassDesc const & techniquePassDesc
-			, ashes::RenderPassPtr renderPass = nullptr );
+			, RenderTechniquePassDesc const & techniquePassDesc );
 
 	public:
 		/**

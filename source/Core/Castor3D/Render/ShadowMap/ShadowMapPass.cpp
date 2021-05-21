@@ -38,19 +38,23 @@ namespace castor3d
 		}
 	}
 
-	ShadowMapPass::ShadowMapPass( RenderDevice const & device
+	ShadowMapPass::ShadowMapPass( crg::FramePass const & pass
+		, crg::GraphContext const & context
+		, crg::RunnableGraph & graph
+		, RenderDevice const & device
 		, castor::String name
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap
-		, ashes::RenderPassPtr renderPass
 		, uint32_t instanceMult )
-		: SceneRenderPass{ device
+		: SceneRenderPass{ pass
+			, context
+			, graph
+			, device
 			, cuT( "ShadowMap" )
 			, std::move( name )
 			, SceneRenderPassDesc{ shadowMap.getShadowPassResult()[SmTexture::eDepth].getTexture()->getDimensions(), matrixUbo, culler, RenderMode::eBoth, true, false }
-				.instanceMult( instanceMult )
-			, std::move( renderPass ) }
+				.instanceMult( instanceMult ) }
 		, m_shadowMap{ shadowMap }
 		, m_shadowMapUbo{ device }
 	{
