@@ -16,6 +16,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	The render pass used to display the background.
+	*\~french
+	*\brief
+	*	Lapasse de rendu utilisée pour l'affichage du background.
+	*/
+	class BackgroundPass;
+	/**
+	*\~english
+	*\brief
 	*	Holds a command buffer and its semaphore.
 	*\~french
 	*\brief
@@ -89,6 +98,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Picking render pass.
+	*\~french
+	*\brief
+	*	Passe de rendu pour le picking.
+	*/
+	class PickingPass;
+	/**
+	*\~english
+	*\brief
 	*	Class used to render a texture into a 3D grid.
 	*\~french
 	*\brief
@@ -157,6 +175,7 @@ namespace castor3d
 	CU_DeclareCUSmartPtr( castor3d, DownscalePass, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, GaussianBlur, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, LineariseDepthPass, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, PickingPass, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, RenderQuad, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, RenderGrid, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, StencilPass, C3D_API );

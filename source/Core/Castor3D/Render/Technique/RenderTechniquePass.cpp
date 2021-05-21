@@ -94,13 +94,15 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	RenderTechniquePass::RenderTechniquePass( RenderDevice const & device
+	RenderTechniquePass::RenderTechniquePass( crg::FramePass const & pass
+		, crg::GraphContext const & context
+		, crg::RunnableGraph & graph
+		, RenderDevice const & device
 		, String const & category
 		, String const & name
 		, SceneRenderPassDesc const & renderPassDesc
-		, RenderTechniquePassDesc const & techniquePassDesc
-		, ashes::RenderPassPtr renderPass )
-		: SceneRenderPass{ device, category, name, renderPassDesc, std::move( renderPass ) }
+		, RenderTechniquePassDesc const & techniquePassDesc )
+		: SceneRenderPass{ pass, context, graph, device, category, name, renderPassDesc }
 		, m_scene{ renderPassDesc.m_culler.getScene() }
 		, m_camera{ renderPassDesc.m_culler.hasCamera() ? &renderPassDesc.m_culler.getCamera() : nullptr }
 		, m_environment{ techniquePassDesc.m_environment }

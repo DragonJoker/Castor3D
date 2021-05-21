@@ -91,11 +91,11 @@ namespace castor3d
 					nullptr,
 				};
 				passData.culler = std::make_unique< FrustumCuller >( scene, *passData.camera );
-				passData.pass = std::make_shared< ShadowMapPassDirectional >( device
-					, *passData.matrixUbo
-					, *passData.culler
-					, shadowMap
-					, cascade );
+				//passData.pass = std::make_shared< ShadowMapPassDirectional >( device
+				//	, *passData.matrixUbo
+				//	, *passData.culler
+				//	, shadowMap
+				//	, cascade );
 				result.emplace_back( std::move( passData ) );
 			}
 
@@ -245,7 +245,7 @@ namespace castor3d
 			std::string debugName = "ShadowMapDirectional";
 			auto cascade = 0u;
 			auto & pass = m_passes[cascade];
-			auto & renderPass = pass.pass->getRenderPass();
+			auto renderPass = pass.pass->getRenderPass();
 			auto & frameBuffer = m_frameBuffers[cascade];
 			frameBuffer.depthView = depth.view->getTargetView();
 			frameBuffer.linearView = linear.view->getTargetView();
@@ -258,7 +258,11 @@ namespace castor3d
 			attaches.emplace_back( frameBuffer.varianceView );
 			attaches.emplace_back( frameBuffer.positionView );
 			attaches.emplace_back( frameBuffer.fluxView );
-			frameBuffer.frameBuffer = renderPass.createFrameBuffer( debugName, size, std::move( attaches ) );
+			frameBuffer.frameBuffer = std::make_unique< ashes::FrameBuffer >( *device
+				, debugName
+				, renderPass
+				, size
+				, std::move( attaches ) );
 
 			frameBuffer.blurCommands = m_blur->getCommands( true, cascade );
 		}
@@ -280,7 +284,7 @@ namespace castor3d
 			{
 				std::string debugName = "ShadowMapDirectionalCascade" + std::to_string( cascade );
 				auto & pass = m_passes[cascade];
-				auto & renderPass = pass.pass->getRenderPass();
+				auto renderPass = pass.pass->getRenderPass();
 				auto & frameBuffer = m_frameBuffers[cascade];
 				frameBuffer.depthView = depth.layers[cascade].view->getTargetView();
 				frameBuffer.linearView = linear.layers[cascade].view->getTargetView();
@@ -293,7 +297,11 @@ namespace castor3d
 				attaches.emplace_back( frameBuffer.varianceView );
 				attaches.emplace_back( frameBuffer.positionView );
 				attaches.emplace_back( frameBuffer.fluxView );
-				frameBuffer.frameBuffer = renderPass.createFrameBuffer( debugName, size, std::move( attaches ) );
+				frameBuffer.frameBuffer = std::make_unique< ashes::FrameBuffer >( *device
+					, debugName
+					, renderPass
+					, size
+					, std::move( attaches ) );
 
 				frameBuffer.blurCommands = m_blur->getCommands( true, cascade );
 			}
@@ -331,15 +339,16 @@ namespace castor3d
 		{
 			auto & pass = m_passes[cascade];
 			auto & timer = pass.pass->getTimer();
-			auto & renderPass = pass.pass->getRenderPass();
+			auto renderPass = pass.pass->getRenderPass();
 			auto & frameBuffer = m_frameBuffers[cascade];
 
 			m_commandBuffer->beginDebugBlock( { m_name + " " + std::to_string( index ) + " cascade " + std::to_string( cascade )
 				, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
 			timerBlock->notifyPassRender();
 			timerBlock->beginPass( *m_commandBuffer );
-			m_commandBuffer->beginRenderPass( pass.pass->getRenderPass()
+			m_commandBuffer->beginRenderPass( renderPass
 				, *frameBuffer.frameBuffer
+				, frameBuffer.frameBuffer->getDimensions()
 				, getClearValues()
 				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 

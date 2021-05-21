@@ -70,9 +70,7 @@ namespace castor3d
 		C3D_API void accept( BackgroundVisitor & visitor )override;
 
 	private:
-		ashes::PipelineShaderStageCreateInfoArray doInitialiseShader( RenderDevice const & device )override;
-		bool doInitialise( RenderDevice const & device
-			, ashes::RenderPass const & renderPass )override;
+		bool doInitialise( RenderDevice const & device )override;
 		void doCleanup()override;
 		void doCpuUpdate( CpuUpdater & updater )override;
 		void doGpuUpdate( GpuUpdater & updater )override;

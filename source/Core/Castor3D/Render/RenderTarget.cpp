@@ -26,6 +26,7 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
+#include <RenderGraph/ImageCopy.hpp>
 #include <RenderGraph/RenderQuad.hpp>
 
 #include <ashespp/Command/CommandBuffer.hpp>
@@ -93,13 +94,19 @@ namespace castor3d
 		, m_combinedFrameBuffer{ *this }
 		, m_velocityTexture{ *getEngine() }
 		, m_graph{ m_name }
-		, m_objectsImg{ m_graph.createImage( crg::ImageData{ "ObjectsResult"
+		, m_objectsImg{ m_graph.createImage( crg::ImageData{ "SceneResult"
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, VK_FORMAT_R8G8B8A8_UNORM
 			, castor3d::makeExtent3D( m_size )
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT ) } ) }
+		, m_objectsView{ m_graph.createView( crg::ImageViewData{ m_objectsImg.data->name
+				, m_objectsImg
+				, 0u
+				, VK_IMAGE_VIEW_TYPE_2D
+				, m_objectsImg.data->info.format
+				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
 		, m_overlaysImg{ m_graph.createImage( crg::ImageData{ "OverlaysResult"
 			, 0u
 			, VK_IMAGE_TYPE_2D
@@ -107,7 +114,13 @@ namespace castor3d
 			, castor3d::makeExtent3D( m_size )
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT ) } ) }
-		, m_combinedImg{ m_graph.createImage( crg::ImageData{ "CombinedResult"
+		, m_overlaysView{ m_graph.createView( crg::ImageViewData{ m_overlaysImg.data->name
+				, m_overlaysImg
+				, 0u
+				, VK_IMAGE_VIEW_TYPE_2D
+				, m_overlaysImg.data->info.format
+				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
+		, m_combinedImg{ m_graph.createImage( crg::ImageData{ "TargetResult"
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, getPixelFormat()
@@ -115,41 +128,13 @@ namespace castor3d
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } ) }
-		, m_combinePass{ "CombinePass"
-			, [this]( crg::FramePass const & pass
-				, crg::GraphContext const & context
-				, crg::RunnableGraph & graph )
-			{
-				return crg::RenderQuadBuilder{}
-					.renderPosition( {} )
-					.renderSize( makeExtent2D( m_size ) )
-					.texcoordConfig( {} )
-					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_combineStages ) )
-					.build( pass, context, graph );
-			} }
-		, m_objectsSampledAttach{ m_combinePass.createSampled( crg::ImageViewData{ "ObjectsResult"
-				, m_objectsImg
-				, 0u
-				, VK_IMAGE_VIEW_TYPE_2D
-				, m_objectsImg.data->info.format
-				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } }
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, VK_FILTER_NEAREST ) }
-		, m_overlaysSampledAttach{ m_combinePass.createSampled( crg::ImageViewData{ "OverlaysResult"
-				, m_overlaysImg
-				, 0u
-				, VK_IMAGE_VIEW_TYPE_2D
-				, m_overlaysImg.data->info.format
-				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } }
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, VK_FILTER_NEAREST ) }
-		, m_combinedTargetAttach{ m_combinePass.createOutputColour( crg::ImageViewData{ "CombinedResult"
+		, m_combinedView{ m_graph.createView( crg::ImageViewData{ m_combinedImg.data->name
 				, m_combinedImg
 				, 0u
 				, VK_IMAGE_VIEW_TYPE_2D
 				, m_combinedImg.data->info.format
-				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } }
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) }
+				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
+		, m_combinePass{ doCreateCombinePass() }
 	{
 		SamplerSPtr sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + getName() + cuT( "Linear" ) );
 		sampler->setMinFilter( VK_FILTER_LINEAR );
@@ -158,8 +143,6 @@ namespace castor3d
 		sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + getName() + cuT( "Nearest" ) );
 		sampler->setMinFilter( VK_FILTER_NEAREST );
 		sampler->setMagFilter( VK_FILTER_NEAREST );
-
-		m_graph.add( m_combinePass );
 	}
 
 	RenderTarget::~RenderTarget()
@@ -174,15 +157,6 @@ namespace castor3d
 
 			m_hdrConfigUbo = std::make_unique< HdrConfigUbo >( device );
 
-			if ( !m_toneMapping )
-			{
-				m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( cuT( "linear" )
-					, *getEngine()
-					, device
-					, *m_hdrConfigUbo
-					, Parameters{} );
-			}
-
 			m_culler = std::make_unique< FrustumCuller >( *getScene(), *getCamera() );
 			doInitialiseRenderPass( device );
 			doInitCombineProgram();
@@ -194,65 +168,21 @@ namespace castor3d
 				m_initialised = doInitialiseTechnique( device );
 			}
 
-			if ( m_initialised )
-			{
-				m_runnable = std::make_unique< crg::RunnableGraph >( std::move( m_graph )
-					, crg::GraphContext{ *device
-					, VK_NULL_HANDLE
-					, device->getAllocationCallbacks()
-					, device->getMemoryProperties()
-					, device->vkGetDeviceProcAddr } );
-				auto colourImage = m_runnable->getImage( m_objectsImg );
-				auto colourView = m_runnable->getImageView( m_objectsSampledAttach );
-				auto image = std::make_unique< ashes::Image >( *device
-					, colourImage
-					, ashes::ImageCreateInfo{ m_objectsSampledAttach.viewData.image.data->info } );
-				ashes::ImageView view{ ashes::ImageViewCreateInfo{ colourImage, m_objectsSampledAttach.viewData.info }
-					, colourView
-					, image.get() };
-				m_objectsFrameBuffer.initialise( device
-					, std::move( image )
-					, view
-					, *m_renderPass );
-				auto overlaysImage = m_runnable->getImage( m_overlaysImg );
-				auto overlaysView = m_runnable->getImageView( m_overlaysSampledAttach );
-				image = std::make_unique< ashes::Image >( *device
-					, overlaysImage
-					, ashes::ImageCreateInfo{ m_overlaysSampledAttach.viewData.image.data->info } );
-				view = ashes::ImageView{ ashes::ImageViewCreateInfo{ overlaysImage, m_overlaysSampledAttach.viewData.info }
-					, overlaysView
-					, image.get() };
-				m_overlaysFrameBuffer.initialise( device
-					, std::move( image )
-					, view
-					, *m_renderPass );
-				auto combineImage = m_runnable->getImage( m_combinedImg );
-				auto combineView = m_runnable->getImageView( m_combinedTargetAttach );
-				image = std::make_unique< ashes::Image >( *device
-					, combineImage
-					, ashes::ImageCreateInfo{ m_combinedTargetAttach.viewData.image.data->info } );
-				view = ashes::ImageView{ ashes::ImageViewCreateInfo{ combineImage, m_combinedTargetAttach.viewData.info }
-					, combineView
-					, image.get() };
-				m_combinedFrameBuffer.initialise( device
-					, std::move( image )
-					, view
-					, *m_renderPass );
-				m_runnable->record();
-			}
-
 			m_overlaysTimer = std::make_shared< RenderPassTimer >( device, cuT( "Overlays" ), cuT( "Overlays" ) );
-			m_toneMappingTimer = std::make_shared< RenderPassTimer >( device, cuT( "Tone Mapping" ), cuT( "Tone Mapping" ) );
+			auto * previousPass = &m_renderTechnique->getTransparentPass();
 
 			if ( !m_hdrPostEffects.empty() )
 			{
-				auto const * sourceView = &m_renderTechnique->getResult().getDefaultView().getSampledView();
+				auto const * sourceView = &m_renderTechnique->getResultImgView();
 
 				for ( auto effect : m_hdrPostEffects )
 				{
 					if ( m_initialised )
 					{
-						m_initialised = effect->initialise( device, *sourceView );
+						m_initialised = effect->initialise( device
+							, *sourceView
+							, *previousPass );
+						previousPass = &effect->getPass();
 						sourceView = &effect->getResult();
 					}
 				}
@@ -261,27 +191,41 @@ namespace castor3d
 				{
 					doInitialiseCopyCommands( device
 						, "HDR"
-						, m_hdrCopyCommands
 						, *sourceView
-						, m_renderTechnique->getResult().getDefaultView().getTargetView() );
-					m_hdrCopyFinished = device->createSemaphore( getName() + "HDRCopy" );
+						, m_renderTechnique->getResultImgView()
+						, *previousPass );
 				}
 			}
 
 			if ( m_initialised )
 			{
-				m_initialised = doInitialiseToneMapping( device );
+				m_hdrLastPass = previousPass;
+				m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( cuT( "linear" )
+					, *getEngine()
+					, device
+					, m_size
+					, m_graph
+					, m_renderTechnique->getResultImgView()
+					, m_objectsView
+					, *m_hdrLastPass
+					, *m_hdrConfigUbo
+					, Parameters{} );
+				m_initialised = m_toneMapping->initialise();
+				previousPass = &m_toneMapping->getPass();
 			}
 
-			if ( !m_srgbPostEffects.empty() )
+			if ( !m_srgbPostEffects.empty() ) 
 			{
-				auto const * sourceView = &m_objectsFrameBuffer.colourView;
+				auto const * sourceView = &m_objectsView;
 
 				for ( auto effect : m_srgbPostEffects )
 				{
 					if ( m_initialised )
 					{
-						m_initialised = effect->initialise( device, *sourceView );
+						m_initialised = effect->initialise( device
+							, *sourceView
+							, *previousPass );
+						previousPass = &effect->getPass();
 						sourceView = &effect->getResult();
 					}
 				}
@@ -290,11 +234,60 @@ namespace castor3d
 				{
 					doInitialiseCopyCommands( device
 						, "SRGB"
-						, m_srgbCopyCommands
 						, *sourceView
-						, m_objectsFrameBuffer.colourView );
-					m_srgbCopyFinished = device->createSemaphore( getName() + "SRGBCopy" );
+						, m_objectsView
+						, *previousPass );
 				}
+			}
+
+			if ( m_initialised )
+			{
+				m_combinePass.addDependency( *previousPass );
+				m_runnable = std::make_unique< crg::RunnableGraph >( std::move( m_graph )
+					, crg::GraphContext{ *device
+						, VK_NULL_HANDLE
+						, device->getAllocationCallbacks()
+						, device->getMemoryProperties()
+						, device->getProperties()
+						, false
+						, device->vkGetDeviceProcAddr } );
+				auto colourImage = m_runnable->getImage( m_objectsImg );
+				auto colourView = m_runnable->getImageView( m_objectsView );
+				auto image = std::make_unique< ashes::Image >( *device
+					, colourImage
+					, ashes::ImageCreateInfo{ m_objectsView.data->image.data->info } );
+				ashes::ImageView view{ ashes::ImageViewCreateInfo{ colourImage, m_objectsView.data->info }
+					, colourView
+					, image.get() };
+				m_objectsFrameBuffer.initialise( device
+					, std::move( image )
+					, view
+					, *m_renderPass );
+				auto overlaysImage = m_runnable->getImage( m_overlaysImg );
+				auto overlaysView = m_runnable->getImageView( m_overlaysView );
+				image = std::make_unique< ashes::Image >( *device
+					, overlaysImage
+					, ashes::ImageCreateInfo{ m_overlaysView.data->image.data->info } );
+				view = ashes::ImageView{ ashes::ImageViewCreateInfo{ overlaysImage, m_overlaysView.data->info }
+					, overlaysView
+					, image.get() };
+				m_overlaysFrameBuffer.initialise( device
+					, std::move( image )
+					, view
+					, *m_renderPass );
+				auto combineImage = m_runnable->getImage( m_combinedImg );
+				auto combineView = m_runnable->getImageView( m_combinedView );
+				image = std::make_unique< ashes::Image >( *device
+					, combineImage
+					, ashes::ImageCreateInfo{ m_combinedView.data->image.data->info } );
+				view = ashes::ImageView{ ashes::ImageViewCreateInfo{ combineImage, m_combinedView.data->info }
+					, combineView
+					, image.get() };
+				m_combinedFrameBuffer.initialise( device
+					, std::move( image )
+					, view
+					, *m_renderPass );
+				m_runnable->record();
 			}
 
 			m_overlayRenderer = std::make_shared< OverlayRenderer >( device
@@ -314,7 +307,6 @@ namespace castor3d
 			m_signalReady.reset();
 			m_runnable.reset();
 
-			m_toneMappingCommandBuffer.reset();
 			m_overlayRenderer.reset();
 
 			for ( auto effect : m_srgbPostEffects )
@@ -333,15 +325,10 @@ namespace castor3d
 				effect->cleanup( device );
 			}
 
-			m_hdrCopyCommands.reset();
-			m_srgbCopyCommands.reset();
-			m_hdrCopyFinished.reset();
-			m_srgbCopyFinished.reset();
 			m_hdrPostEffects.clear();
 			m_srgbPostEffects.clear();
 
 			m_overlaysTimer.reset();
-			m_toneMappingTimer.reset();
 
 			m_velocityTexture.cleanup();
 			m_velocityTexture.setTexture( nullptr );
@@ -483,7 +470,6 @@ namespace castor3d
 			{
 				if ( m_toneMapping )
 				{
-					m_toneMappingCommandBuffer.reset();
 					ToneMappingSPtr toneMapping;
 					std::swap( m_toneMapping, toneMapping );
 					toneMapping->cleanup();
@@ -492,9 +478,14 @@ namespace castor3d
 				m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( name
 					, *getEngine()
 					, device
+					, m_size
+					, m_graph
+					, m_renderTechnique->getResultImgView()
+					, m_objectsView
+					, *m_hdrLastPass
 					, *m_hdrConfigUbo
 					, parameters );
-				doInitialiseToneMapping( device );
+				m_initialised = m_toneMapping->initialise();
 			} ) );
 	}
 
@@ -565,6 +556,32 @@ namespace castor3d
 		{
 			technique->listIntermediates( result );
 		}
+	}
+
+	crg::FramePass & RenderTarget::doCreateCombinePass()
+	{
+		auto & result = m_graph.createPass( "CombinePass"
+			, [this]( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph )
+			{
+				return crg::RenderQuadBuilder{}
+					.renderPosition( {} )
+					.renderSize( makeExtent2D( m_size ) )
+					.texcoordConfig( {} )
+					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_combineStages ) )
+					.build( pass, context, graph );
+			} );
+		result.addSampledView( m_objectsView
+			, 0u
+			, {}
+			, VK_FILTER_NEAREST );
+		result.addSampledView( m_overlaysView
+			, 1u
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, VK_FILTER_NEAREST );
+		result.addOutputColourView( m_combinedView );
+		return result;
 	}
 
 	void RenderTarget::doInitialiseRenderPass( RenderDevice const & device )
@@ -673,74 +690,28 @@ namespace castor3d
 		return true;
 	}
 
-	bool RenderTarget::doInitialiseToneMapping( RenderDevice const & device )
-	{
-		auto result = m_toneMapping->initialise( getSize()
-			, m_renderTechnique->getResult()
-			, *m_renderPass );
-
-		m_toneMappingCommandBuffer = device.graphicsCommandPool->createCommandBuffer( "ToneMapping" );
-		auto const clear{ makeClearValue( 0.0f, 0.0f, 1.0f, 1.0f ) };
-
-		if ( result )
-		{
-			m_toneMappingCommandBuffer->begin();
-			m_toneMappingCommandBuffer->beginDebugBlock(
-				{
-					"Tone Mapping",
-					makeFloatArray( getEngine()->getNextRainbowColour() ),
-				} );
-			m_toneMappingTimer->beginPass( *m_toneMappingCommandBuffer );
-			m_toneMappingCommandBuffer->beginRenderPass( *m_renderPass
-				, *m_objectsFrameBuffer.frameBuffer
-				, { clear }
-				, VK_SUBPASS_CONTENTS_INLINE );
-			m_toneMapping->registerPass( *m_toneMappingCommandBuffer );
-			m_toneMappingCommandBuffer->endRenderPass();
-			// Put render technique image back in colour attachment layout.
-			m_toneMappingCommandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-				, m_renderTechnique->getResult().getDefaultView().getTargetView().makeColourAttachment( VK_IMAGE_LAYOUT_UNDEFINED ) );
-			m_toneMappingTimer->endPass( *m_toneMappingCommandBuffer );
-			m_toneMappingCommandBuffer->endDebugBlock();
-			m_toneMappingCommandBuffer->end();
-		}
-
-		return result;
-	}
-
 	void RenderTarget::doInitialiseCopyCommands( RenderDevice const & device
 		, castor::String const & name
-		, ashes::CommandBufferPtr & commandBuffer
-		, ashes::ImageView const & source
-		, ashes::ImageView const & target )
+		, crg::ImageViewId const & source
+		, crg::ImageViewId const & target
+		, crg::FramePass const & previousPass )
 	{
-		commandBuffer = device.graphicsCommandPool->createCommandBuffer( getName() + name + "Copy" );
-
-		commandBuffer->begin();
-
-		if ( source->image != target->image )
+		if ( source != target )
 		{
-			commandBuffer->beginDebugBlock( { getName() + " - " + name + " Copy"
-				, makeFloatArray( getEngine()->getNextRainbowColour() ), } );
-			// Put source image in transfer source layout.
-			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, source.makeTransferSource( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-			// Put target image in transfer destination layout.
-			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, target.makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
-			// Copy source to target.
-			commandBuffer->copyImage( source, target );
-			// Put target image in fragment shader input layout.
-			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, target.makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
-			commandBuffer->endDebugBlock();
+			auto & pass = m_graph.createPass( getName() + name + "Copy"
+				, [this, &source, &target]( crg::FramePass const & pass
+					, crg::GraphContext const & context
+					, crg::RunnableGraph & graph )
+				{
+					return std::make_unique< crg::ImageCopy >( pass
+						, context
+						, graph
+						, makeExtent3D( m_size ) );
+				} );
+			pass.addDependency( previousPass );
+			pass.addTransferInputView( source );
+			pass.addTransferOutputView( target );
 		}
-
-		commandBuffer->end();
 	}
 
 	void RenderTarget::doInitCombineProgram()
@@ -819,146 +790,46 @@ namespace castor3d
 	{
 		auto elapsedTime = m_timer.getElapsed();
 		SceneSPtr scene = getScene();
-		ashes::SemaphoreCRefArray signalsToWait;
+		crg::SemaphoreWaitArray signalsToWait;
 
 		if ( m_type == TargetType::eWindow )
 		{
 			signalsToWait = scene->getRenderTargetsSemaphores();
 		}
 
-		//signalsToWait.push_back( toWait );
+		// Render overlays.
+		m_signalFinished = doRenderOverlays( device
+			, signalsToWait );
 
-		// Render the scene through the RenderTechnique.
-		m_signalFinished = &m_renderTechnique->render( device
-			, signalsToWait
-			, info );
-
-		// Draw HDR post effects.
-		m_signalFinished = &doApplyPostEffects( device
-			, *m_signalFinished
-			, m_hdrPostEffects
-			, m_hdrCopyCommands
-			, m_hdrCopyFinished
-			, elapsedTime );
-
-		// Then draw the render's result to the RenderTarget's frame buffer, applying the tone mapping operator.
-		m_signalFinished = &doApplyToneMapping( device
-			, *m_signalFinished );
-
-		// Apply the sRGB post effects.
-		m_signalFinished = &doApplyPostEffects( device
-			, *m_signalFinished
-			, m_srgbPostEffects
-			, m_srgbCopyCommands
-			, m_srgbCopyFinished
-			, elapsedTime );
-
-		// And now render overlays.
-		m_signalFinished = &doRenderOverlays( device
-			, *m_signalFinished );
-
-		// Combine objects and overlays framebuffers, flipping them if necessary.
-		m_signalFinished = &doCombine( *m_signalFinished );
+		// Then run the graph
+		m_signalFinished = m_runnable->run( m_signalFinished
+			, *device.graphicsQueue );
 	}
 
-	ashes::Semaphore const & RenderTarget::doApplyPostEffects( RenderDevice const & device
-		, ashes::Semaphore const & toWait
-		, PostEffectPtrArray const & effects
-		, ashes::CommandBufferPtr const & copyCommandBuffer
-		, ashes::SemaphorePtr const & copyFinished
-		, castor::Nanoseconds const & elapsedTime )
+	crg::SemaphoreWait RenderTarget::doRenderOverlays( RenderDevice const & device
+		, crg::SemaphoreWaitArray const & toWait )
 	{
-		auto * result = &toWait;
-
-		if ( !effects.empty() )
-		{
-			auto & queue = *device.graphicsQueue;
-
-			for ( auto effect : effects )
-			{
-				auto timerBlock = effect->start();
-				uint32_t index = 0u;
-
-				for ( auto & commands : effect->getCommands() )
-				{
-					timerBlock->notifyPassRender( index++ );
-
-					queue.submit( *commands.commandBuffer
-						, *result
-						, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-						, *commands.semaphore
-						, nullptr );
-					result = commands.semaphore.get();
-				}
-			}
-
-			queue.submit( *copyCommandBuffer
-				, *result
-				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-				, *copyFinished
-				, nullptr );
-			result = copyFinished.get();
-		}
-
-		return *result;
-	}
-
-	ashes::Semaphore const & RenderTarget::doApplyToneMapping( RenderDevice const & device
-		, ashes::Semaphore const & toWait )
-	{
-		auto & queue = *device.graphicsQueue;
-		auto timerBlock = m_toneMappingTimer->start();
-		timerBlock->notifyPassRender();
-		auto * result = &toWait;
-
-		queue.submit( *m_toneMappingCommandBuffer
-			, *result
-			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, m_toneMapping->getSemaphore()
-			, nullptr );
-		result = &m_toneMapping->getSemaphore();
-
-		return *result;
-	}
-
-	ashes::Semaphore const & RenderTarget::doRenderOverlays( RenderDevice const & device
-		, ashes::Semaphore const & toWait )
-	{
-		auto * result = &toWait;
+		crg::SemaphoreWait result;
 		auto timerBlock = m_overlaysTimer->start();
+		using LockType = std::unique_lock< OverlayCache >;
+		LockType lock{ castor::makeUniqueLock( getEngine()->getOverlayCache() ) };
+		m_overlayRenderer->beginPrepare( *m_overlaysTimer, toWait );
+		auto preparer = m_overlayRenderer->getPreparer( device );
+
+		for ( auto category : getEngine()->getOverlayCache() )
 		{
-			using LockType = std::unique_lock< OverlayCache >;
-			LockType lock{ castor::makeUniqueLock( getEngine()->getOverlayCache() ) };
-			m_overlayRenderer->beginPrepare( *m_overlaysTimer
-				, *result );
-			auto preparer = m_overlayRenderer->getPreparer( device );
+			SceneSPtr scene = category->getOverlay().getScene();
 
-			for ( auto category : getEngine()->getOverlayCache() )
+			if ( category->getOverlay().isVisible()
+				&& ( ( !scene && m_type == TargetType::eWindow )
+					|| scene.get() == getScene().get() ) )
 			{
-				SceneSPtr scene = category->getOverlay().getScene();
-
-				if ( category->getOverlay().isVisible()
-					&& ( ( !scene && m_type == TargetType::eWindow )
-						|| scene.get() == getScene().get() ) )
-				{
-					category->update( *m_overlayRenderer );
-					category->accept( preparer );
-				}
+				category->update( *m_overlayRenderer );
+				category->accept( preparer );
 			}
-
-			m_overlayRenderer->endPrepare( *m_overlaysTimer );
-			m_overlayRenderer->render( *m_overlaysTimer );
-			result = &m_overlayRenderer->getSemaphore();
 		}
-		return *result;
-	}
 
-	ashes::Semaphore const & RenderTarget::doCombine( ashes::Semaphore const & toWait )
-	{
-		ashes::Semaphore const * result = &toWait;
-		auto & device = *getEngine()->getRenderSystem()->getMainRenderDevice();
-		m_combineSemaphore = std::make_unique< ashes::Semaphore >( *device
-			, m_runnable->run( { *result, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT }, *device.graphicsQueue ).semaphore );
-		return *m_combineSemaphore;
+		m_overlayRenderer->endPrepare( *m_overlaysTimer );
+		return m_overlayRenderer->render( *m_overlaysTimer );
 	}
 }

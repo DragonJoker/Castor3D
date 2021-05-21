@@ -528,16 +528,17 @@ namespace castor3d
 		}
 	}
 
-	ashes::Semaphore const & Texture3DTo2D::render( ashes::Semaphore const & toWait )
+	crg::SemaphoreWait Texture3DTo2D::render( crg::SemaphoreWait const & toWait )
 	{
-		auto result = &toWait;
+		auto result = toWait;
 
 		if ( m_texture3DToScreen[m_index].commands.commandBuffer )
 		{
-			result = &m_texture3DToScreen[m_index].commands.submit( *m_device.graphicsQueue, *result );
+			result.semaphore = m_texture3DToScreen[m_index].commands.submit( *m_device.graphicsQueue
+				, result );
 		}
 
-		return *result;
+		return result;
 	}
 
 	//*********************************************************************************************
