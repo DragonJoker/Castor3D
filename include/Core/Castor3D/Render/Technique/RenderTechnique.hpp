@@ -23,8 +23,10 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
 #include <CastorUtils/Design/DelayedInitialiser.hpp>
-
 #include <CastorUtils/Design/Named.hpp>
+
+#include <RenderGraph/Attachment.hpp>
+#include <RenderGraph/FramePass.hpp>
 
 namespace castor3d
 {
@@ -92,21 +94,6 @@ namespace castor3d
 		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief		Render function
-		 *\param[in]	device			The GPU device.
-		 *\param[in]	waitSemaphores	The semaphores to wait for.
-		 *\param[out]	info			Receives the render informations.
-		 *\~french
-		 *\brief		Fonction de rendu.
-		 *\param[in]	device			Le device GPU.
-		 *\param[in]	waitSemaphores	Les sémaphores à attendre.
-		 *\param[out]	info			Reçoit les informations de rendu.
-		 */
-		C3D_API ashes::Semaphore const & render( RenderDevice const & device
-			, ashes::SemaphoreCRefArray const & waitSemaphores
-			, RenderInfo & info );
-		/**
-		 *\~english
 		 *\brief		Writes the technique into a text file.
 		 *\param[in]	file	The file.
 		 *\~french
@@ -147,6 +134,16 @@ namespace castor3d
 			return *m_colourTexture.getTexture();
 		}
 
+		crg::ImageId const & getResultImg()const
+		{
+			return m_colourImage;
+		}
+
+		crg::ImageViewId const & getResultImgView()const
+		{
+			return m_colourView;
+		}
+
 		TextureLayout const & getDepth()const
 		{
 			return *m_depthBuffer.getTexture();
@@ -167,16 +164,19 @@ namespace castor3d
 			return m_matrixUbo;
 		}
 
-		RenderTechniquePass const & getOpaquePass()const
+		crg::FramePass const & getOpaquePass()const
 		{
-			CU_Require( m_opaquePass );
-			return *m_opaquePass;
+			return *m_opaquePassDesc;
 		}
 
-		RenderTechniquePass const & getTransparentPass()const
+		crg::FramePass const & getBackgroundPass()const
 		{
-			CU_Require( m_transparentPass );
-			return *m_transparentPass;
+			return *m_backgroundPassDesc;
+		}
+
+		crg::FramePass const & getTransparentPass()const
+		{
+			return *m_transparentPassDesc;
 		}
 
 		ShadowMapLightTypeArray const & getShadowMaps()const
@@ -215,6 +215,10 @@ namespace castor3d
 		using ShadowMapArray = std::vector< ShadowMapUPtr >;
 
 	private:
+		crg::FramePass & doCreateDepthPass();
+		crg::FramePass & doCreateBackgroundPass();
+		crg::FramePass & doCreateOpaquePass();
+		crg::FramePass & doCreateTransparentPass();
 		void doInitialiseShadowMaps();
 		void doInitialiseLpv();
 		void doUpdateShadowMaps( CpuUpdater & updater );
@@ -229,44 +233,37 @@ namespace castor3d
 			, ashes::Semaphore const & semaphore );
 		ashes::Semaphore const & doRenderEnvironmentMaps( RenderDevice const & device
 			, ashes::Semaphore const & semaphore );
-		ashes::Semaphore const & doRenderDepth( RenderDevice const & device
-			, ashes::SemaphoreCRefArray const & semaphores );
-		ashes::Semaphore const & doRenderBackground( RenderDevice const & device
-			, ashes::Semaphore const & semaphore );
-		ashes::Semaphore const & doRenderBackground( RenderDevice const & device
-			, ashes::SemaphoreCRefArray const & semaphores );
-		ashes::Semaphore const & doRenderOpaque( RenderDevice const & device
-			, ashes::Semaphore const & semaphore );
-		ashes::Semaphore const & doRenderTransparent( RenderDevice const & device
-			, ashes::Semaphore const & semaphore );
 
 	private:
 		RenderTarget & m_renderTarget;
 		RenderDevice const & m_device;
 		castor::Size m_size;
 		SsaoConfig m_ssaoConfig;
+		crg::ImageId m_colourImage;
+		crg::ImageViewId m_colourView;
 		TextureUnit m_colourTexture;
+		crg::ImageId m_depthImage;
+		crg::ImageViewId m_depthView;
 		TextureUnit m_depthBuffer;
 		MatrixUbo m_matrixUbo;
 		GpInfoUbo m_gpInfoUbo;
 		LpvGridConfigUbo m_lpvConfigUbo;
 		LayeredLpvGridConfigUbo m_llpvConfigUbo;
 		VoxelizerUbo m_vctConfigUbo;
-		DepthPassUPtr m_depthPass;
+		crg::FramePass * m_depthPassDecl;
+		DepthPass * m_depthPass{};
 		VoxelizerUPtr m_voxelizer;
 		LightVolumePassResultUPtr m_lpvResult;
 		LightVolumePassResultArray m_llpvResult;
-		ashes::RenderPassPtr m_bgRenderPass;
-		ashes::FrameBufferPtr m_bgFrameBuffer;
-		ashes::CommandBufferPtr m_bgCommandBuffer;
-		ashes::CommandBufferPtr m_cbgCommandBuffer;
-		OnBackgroundChangedConnection m_onBgChanged;
-		OnBackgroundChangedConnection m_onCBgChanged;
+		crg::FramePass * m_backgroundPassDesc;
+		BackgroundPass * m_backgroundPass;
 		OpaquePassResultUPtr m_opaquePassResult;
-		RenderTechniquePassUPtr m_opaquePass;
+		crg::FramePass * m_opaquePassDesc;
+		RenderTechniquePass * m_opaquePass;
 		DeferredRenderingUPtr m_deferredRendering;
 		TransparentPassResultUPtr m_transparentPassResult;
-		RenderTechniquePassUPtr m_transparentPass;
+		crg::FramePass * m_transparentPassDesc;
+		RenderTechniquePass * m_transparentPass;
 		WeightedBlendRenderingUPtr m_weightedBlendRendering;
 		ashes::SemaphorePtr m_signalFinished;
 		ShadowMapUPtr m_directionalShadowMap;

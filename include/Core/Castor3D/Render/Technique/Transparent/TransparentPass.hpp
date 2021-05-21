@@ -35,12 +35,14 @@ namespace castor3d
 		 *\param[in]	llpvConfigUbo	L'UBO de configuration des Layered LPV.
 		 *\param[in]	vctConfigUbo	L'UBO de configuration du VCT.
 		 */
-		C3D_API TransparentPass( RenderDevice const & device
+		C3D_API TransparentPass( crg::FramePass const & pass
+			, crg::GraphContext const & context
+			, crg::RunnableGraph & graph
+			, RenderDevice const & device
 			, castor::Size const & size
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, SsaoConfig const & ssaoConfig
-			, TransparentPassResult const & transparentPassResult
 			, LpvGridConfigUbo const & lpvConfigUbo
 			, LayeredLpvGridConfigUbo const & llpvConfigUbo
 			, VoxelizerUbo const & vctConfigUbo
@@ -58,17 +60,6 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
-		/**
-		 *\~english
-		 *\brief		Renders transparent nodes.
-		 *\param[in]	device	The GPU device.
-		 *\param[in]	toWait	The semaphore to wait for.
-		 *\~french
-		 *\brief		Dessine les noeuds transparents.
-		 *\param[in]	device	Le device GPU.
-		 *\param[in]	toWait	Le sémaphore à attendre.
-		 */
-		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait );
 
 		C3D_API TextureFlags getTexturesMask()const override;
 		/**

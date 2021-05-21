@@ -30,7 +30,10 @@ namespace castor3d
 		 *\param[in]	matrixUbo	L'UBO de matrices de la scène.
 		 *\param[in]	culler		Le culler pour cette passe.
 		 */
-		C3D_API explicit PickingPass( RenderDevice const & device
+		C3D_API explicit PickingPass( crg::FramePass const & pass
+			, crg::GraphContext const & context
+			, crg::RunnableGraph & graph
+			, RenderDevice const & device
 			, castor::Size const & size
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler );
@@ -67,9 +70,7 @@ namespace castor3d
 		 *\param[in]	camera		La caméra regardant la scène.
 		 *\return		PickingPass::PickNodeType si rien n'a été pické.
 		 */
-		C3D_API PickNodeType pick( RenderDevice const & device
-			, castor::Position position
-			, Camera const & camera );
+		C3D_API bool updateNodes( VkRect2D const & scissor );
 		/**
 		*\~english
 		*name
@@ -79,57 +80,17 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
+		C3D_API QueueCulledRenderNodes const & getCulledRenderNodes()const;
 		C3D_API TextureFlags getTexturesMask()const override;
 
 		C3D_API ShaderFlags getShaderFlags()const override
 		{
 			return ShaderFlag::eNone;
 		}
-
-		GeometrySPtr getPickedGeometry()const
-		{
-			return m_geometry.lock();
-		}
-
-		BillboardBaseSPtr getPickedBillboard()const
-		{
-			return m_billboard.lock();
-		}
-
-		SubmeshSPtr getPickedSubmesh()const
-		{
-			return m_submesh.lock();
-		}
-
-		uint32_t getPickedFace()const
-		{
-			return m_face;
-		}
-
-		ashes::ImageView const & getResult()const
-		{
-			return m_colourView;
-		}
-
-		PickNodeType getPickedNodeType()const
-		{
-			return m_pickNodeType;
-		}
-
-		bool isPicking()const
-		{
-			return m_picking;
-		}
 		/**@}*/
 
 	private:
 		void doUpdateNodes( QueueCulledRenderNodes & nodes );
-		castor::Point4f doFboPick( RenderDevice const & device
-			, castor::Position const & position
-			, Camera const & camera
-			, ashes::CommandBuffer const & commandBuffer );
-		PickNodeType doPick( castor::Point4f const & pixel
-			, QueueCulledRenderNodes & nodes );
 		void doUpdate( SubmeshRenderNodePtrByPipelineMap & nodes );
 		void doUpdate( BillboardRenderNodePtrByPipelineMap & nodes );
 		void doUpdate( SubmeshRenderNodesPtrByPipelineMap & nodes );
@@ -165,25 +126,6 @@ namespace castor3d
 
 	private:
 		std::map< castor::String, GeometryWPtr > m_pickable;
-		ashes::ImagePtr m_colourTexture;
-		ashes::ImagePtr m_depthTexture;
-		ashes::ImageView m_colourView;
-		ashes::ImageView m_depthView;
-		ashes::FrameBufferPtr m_frameBuffer;
-		VkBufferImageCopy m_copyRegion;
-		VkBufferImageCopy m_transferDisplayRegion;
-		std::vector< VkBufferImageCopy > m_pickDisplayRegions;
-		ashes::CommandBufferPtr m_commandBuffer;
-		ashes::BufferPtr< castor::Point4f > m_stagingBuffer;
-		std::map< Scene const *, CameraQueueMap > m_scenes;
-		GeometryWPtr m_geometry;
-		BillboardBaseWPtr m_billboard;
-		SubmeshWPtr m_submesh;
-		uint32_t m_face{ 0u };
-		std::vector< castor::Point4f > m_buffer;
-		ashes::FencePtr m_transferFence;
-		PickNodeType m_pickNodeType{ PickNodeType::eNone };
-		std::atomic_bool m_picking{ false };
 		std::unordered_map< SubmeshRenderNode const *, UniformBufferOffsetT< PickingUboConfiguration > > m_submeshBuffers;
 		std::unordered_map< BillboardRenderNode const *, UniformBufferOffsetT< PickingUboConfiguration > > m_billboardBuffers;
 	};

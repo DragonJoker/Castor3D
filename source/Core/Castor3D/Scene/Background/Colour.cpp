@@ -70,8 +70,7 @@ namespace castor3d
 		visitor.visit( *this );
 	}
 
-	bool ColourBackground::doInitialise( RenderDevice const & device
-		, ashes::RenderPass const & renderPass )
+	bool ColourBackground::doInitialise( RenderDevice const & device )
 	{
 		auto & value = m_scene.getBackgroundColour();
 		m_colour = HdrRgbColour::fromComponents( value.red(), value.green(), value.blue() );
@@ -116,7 +115,7 @@ namespace castor3d
 			, 0.1f
 			, 2.0f );
 		m_viewport.update();
-		m_matrixUbo->cpuUpdate( updater.camera->getView()
+		m_matrixUbo.cpuUpdate( updater.camera->getView()
 			, m_viewport.getProjection() );
 	}
 

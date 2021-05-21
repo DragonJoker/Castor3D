@@ -6,10 +6,14 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
 #include "Castor3D/Render/Node/QueueCulledRenderNodes.hpp"
+
+#include <ashespp/Command/CommandBufferInheritanceInfo.hpp>
 
 using namespace castor;
 
@@ -32,12 +36,20 @@ namespace castor3d
 		, m_culledRenderNodes{ castor::makeUnique < QueueCulledRenderNodes >( *this ) }
 		, m_viewport{ castor::makeChangeTracked< ashes::Optional< VkViewport > >( m_culledChanged, ashes::nullopt ) }
 		, m_scissor{ castor::makeChangeTracked< ashes::Optional< VkRect2D > >( m_culledChanged, ashes::nullopt ) }
+		, m_commandBuffer{ renderPass.getEngine()->getRenderSystem()->getMainRenderDevice()->graphicsCommandPool->createCommandBuffer( "RenderQueue", VK_COMMAND_BUFFER_LEVEL_SECONDARY ) }
 	{
-		getOwner()->getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [this]( RenderDevice const & device )
-			{
-				m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( "RenderQueue", VK_COMMAND_BUFFER_LEVEL_SECONDARY );
-			} ) );
+	}
+
+	void RenderQueue::initialise()
+	{
+		getCommandBuffer().begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
+			, makeVkType< VkCommandBufferInheritanceInfo >( VkRenderPass( getOwner()->getRenderPass() )
+				, 0u
+				, VkFramebuffer( VK_NULL_HANDLE )
+				, VkBool32( VK_FALSE )
+				, 0u
+				, 0u ) );
+		getCommandBuffer().end();
 	}
 
 	void RenderQueue::cleanup()
@@ -78,12 +90,14 @@ namespace castor3d
 			getOwner()->getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
 				, [this]( RenderDevice const & device )
 				{
+					getOwner()->resetCommandBuffer();
 					m_preparation = Preparation::eRunning;
 					m_commandBuffer->reset();
 					doPrepareCommandBuffer();
 					m_preparation = ( m_preparation == Preparation::eWaiting )
 						? Preparation::eWaiting
 						: Preparation::eDone;
+					getOwner()->record();
 				} ) );
 		}
 	}

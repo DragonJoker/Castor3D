@@ -45,6 +45,8 @@
 
 #include <ShaderWriter/Source.hpp>
 
+#include <RenderGraph/GraphContext.hpp>
+
 using namespace castor;
 
 namespace castor3d
@@ -137,13 +139,16 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	SceneRenderPass::SceneRenderPass( RenderDevice const & device
+	SceneRenderPass::SceneRenderPass( crg::FramePass const & pass
+		, crg::GraphContext const & context
+		, crg::RunnableGraph & graph
+		, RenderDevice const & device
 		, String const & category
 		, String const & name
-		, SceneRenderPassDesc const & desc
-		, ashes::RenderPassPtr renderPass )
+		, SceneRenderPassDesc const & desc )
 		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
 		, Named{ name }
+		, crg::RenderPass{ pass, context, graph }
 		, m_device{ device }
 		, m_renderSystem{ m_device.renderSystem }
 		, m_matrixUbo{ desc.m_matrixUbo }
@@ -155,13 +160,6 @@ namespace castor3d
 		, m_forceTwoSided{ desc.m_forceTwoSided }
 		, m_mode{ desc.m_mode }
 		, m_sceneUbo{ m_device }
-		, m_renderPass{ std::move( renderPass ) }
-		, m_ownTimer{ ( desc.m_timer
-			? nullptr
-			: std::make_shared< RenderPassTimer >( m_device, m_category, name ) ) }
-		, m_timer{ ( desc.m_timer
-			? desc.m_timer
-			: m_ownTimer.get() ) }
 		, m_index{ desc.m_index }
 		, m_instanceMult{ desc.m_instanceMult }
 	{
@@ -172,9 +170,7 @@ namespace castor3d
 
 	SceneRenderPass::~SceneRenderPass()
 	{
-		m_renderPass.reset();
 		m_renderQueue.cleanup();
-		m_ownTimer.reset();
 		m_backPipelines.clear();
 		m_frontPipelines.clear();
 	}
@@ -530,6 +526,19 @@ namespace castor3d
 					, shadowMaps );
 			}
 		}
+	}
+
+	void SceneRenderPass::doSubInitialise()
+	{
+		m_renderQueue.initialise();
+	}
+
+	void SceneRenderPass::doSubRecordInto( VkCommandBuffer commandBuffer )const
+	{
+		VkCommandBuffer secondary = getCommandBuffer();
+		m_context.vkCmdExecuteCommands( commandBuffer
+			, 1u
+			, &secondary );
 	}
 
 	uint32_t SceneRenderPass::doCopyNodesMatrices( SubmeshRenderNodePtrArray const & renderNodes

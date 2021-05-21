@@ -120,80 +120,7 @@ namespace castor3d
 		visitor.visit( *this );
 	}
 
-	ashes::PipelineShaderStageCreateInfoArray ImageBackground::doInitialiseShader( RenderDevice const & device )
-	{
-		using namespace sdw;
-		auto & renderSystem = *getEngine()->getRenderSystem();
-
-		ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "ImageBackground" };
-		{
-			VertexWriter writer;
-
-			// Inputs
-			auto position = writer.declInput< Vec3 >( "position", 0u );
-			UBO_MATRIX( writer, MtxUboIdx, UboSetIdx );
-			UBO_MODEL( writer, MdlMtxUboIdx, UboSetIdx );
-
-			// Outputs
-			auto vtx_texture = writer.declOutput< Vec3 >( "vtx_texture", 0u );
-			auto out = writer.getOut();
-
-			std::function< void() > main = [&]()
-			{
-				out.vtx.position = c3d_matrixData.worldToCurProj( c3d_modelData.modelToWorld( vec4( position, 1.0_f ) ) ).xyww();
-				vtx_texture = position;
-			};
-
-			writer.implementFunction< sdw::Void >( "main", main );
-			vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "ImageBackground" };
-		{
-			FragmentWriter writer;
-
-			// Inputs
-			UBO_HDR_CONFIG( writer, 2, 0 );
-			auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture", 0u );
-			auto c3d_mapSkybox = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapSkybox", SkyBoxImgIdx, TexSetIdx );
-			shader::Utils utils{ writer };
-
-			if ( !m_hdr )
-			{
-				utils.declareRemoveGamma();
-			}
-
-			// Outputs
-			auto pxl_FragColor = writer.declOutput< Vec4 >( "pxl_FragColor", 0u );
-
-			std::function< void() > main = [&]()
-			{
-				auto colour = writer.declLocale( "colour"
-					, c3d_mapSkybox.sample( vtx_texture ) );
-
-				if ( !m_hdr )
-				{
-					pxl_FragColor = vec4( c3d_hdrConfigData.removeGamma( colour.xyz() ), colour.w() );
-				}
-				else
-				{
-					pxl_FragColor = vec4( colour.xyz(), colour.w() );
-				}
-			};
-
-			writer.implementFunction< sdw::Void >( "main", main );
-			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		return ashes::PipelineShaderStageCreateInfoArray
-		{
-			makeShaderState( device, vtx ),
-			makeShaderState( device, pxl ),
-		};
-	}
-
-	bool ImageBackground::doInitialise( RenderDevice const & device
-		, ashes::RenderPass const & renderPass )
+	bool ImageBackground::doInitialise( RenderDevice const & device )
 	{
 		doInitialise2DTexture( device );
 		m_hdr = m_texture->getPixelFormat() == VK_FORMAT_R32_SFLOAT
@@ -226,7 +153,7 @@ namespace castor3d
 			, node->getDerivedPosition()
 			, node->getDerivedPosition() + Point3f{ 0.0f, 0.0f, 1.0f }
 			, Point3f{ 0.0f, 1.0f, 0.0f } );
-		m_matrixUbo->cpuUpdate( view
+		m_matrixUbo.cpuUpdate( view
 			, m_viewport.getProjection() );
 	}
 
