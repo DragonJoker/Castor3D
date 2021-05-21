@@ -90,7 +90,8 @@ namespace castor3d
 		 *\return		\p true if ok.
 		 */
 		C3D_API bool initialise( castor3d::RenderDevice const & device
-			, ashes::ImageView const & texture );
+			, crg::ImageViewId const & texture
+			, crg::FramePass const & previousPass );
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
@@ -143,6 +144,7 @@ namespace castor3d
 		*	Accesseurs.
 		**/
 		/**@{*/
+		C3D_API virtual crg::FramePass const & getPass()const = 0;
 		CommandsSemaphoreArray const & getCommands()const
 		{
 			return m_commands;
@@ -153,7 +155,7 @@ namespace castor3d
 			return m_kind == Kind::eSRGB;
 		}
 
-		ashes::ImageView const & getResult()const
+		crg::ImageViewId const & getResult()const
 		{
 			CU_Require( m_result );
 			return *m_result;
@@ -167,6 +169,7 @@ namespace castor3d
 
 	protected:
 		C3D_API void doCopyResultToTarget( ashes::ImageView const & result
+			, ashes::ImageView const & target
 			, ashes::CommandBuffer & commandBuffer );
 
 	private:
@@ -183,7 +186,8 @@ namespace castor3d
 		 *\return		\p true if ok.
 		 */
 		C3D_API virtual bool doInitialise( castor3d::RenderDevice const & device
-			, RenderPassTimer const & timer ) = 0;
+			, RenderPassTimer const & timer
+			, crg::FramePass const & previousPass ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
@@ -213,9 +217,9 @@ namespace castor3d
 		uint32_t m_currentPass{ 0u };
 		std::unique_ptr< RenderPassTimer > m_timer;
 		Kind m_kind{ Kind::eHDR };
-		ashes::ImageView const * m_target{ nullptr };
+		crg::ImageViewId const * m_target{ nullptr };
 		CommandsSemaphoreArray m_commands;
-		ashes::ImageView const * m_result{ nullptr };
+		crg::ImageViewId const * m_result{ nullptr };
 	};
 }
 

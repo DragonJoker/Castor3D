@@ -91,6 +91,12 @@ namespace castor3d
 		 */
 		C3D_API void cpuUpdate( castor::Matrix4x4f const & projection );
 
+		void createPassBinding( crg::FramePass & pass
+			, uint32_t binding )const
+		{
+			return m_ubo.createPassBinding( pass, binding );
+		}
+
 		void createSizedBinding( ashes::DescriptorSet & descriptorSet
 			, VkDescriptorSetLayoutBinding const & layoutBinding )const
 		{

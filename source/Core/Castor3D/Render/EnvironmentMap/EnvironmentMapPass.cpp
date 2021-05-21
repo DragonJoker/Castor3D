@@ -87,26 +87,26 @@ namespace castor3d
 			, m_envView
 			, getName() ) }
 		, m_matrixUbo{ device }
-		, m_opaquePass{ std::make_shared< ForwardRenderTechniquePass >( device
-			, cuT( "EnvironmentMap" )
-			, getName() + cuT( "Opaque" )
-			, SceneRenderPassDesc{ reflectionMap.getSize(), m_matrixUbo, *m_culler }
-				.ignored( objectNode )
-				.timer( timer, uint32_t( face ) * 3u + 0u )
-			, RenderTechniquePassDesc{ true, SsaoConfig{} }
-			, m_envView
-			, getOwner()->getDepthView()
-			, true ) }
-		, m_transparentPass{ std::make_shared< ForwardRenderTechniquePass >( device
-			, cuT( "EnvironmentMap" )
-			, getName() + cuT( "Transparent" )
-			, SceneRenderPassDesc{ reflectionMap.getSize(), m_matrixUbo, *m_culler, false }
-				.ignored( objectNode )
-				.timer( timer, uint32_t( face ) * 3u + 2u )
-			, RenderTechniquePassDesc{ true, SsaoConfig{} }
-			, m_envView
-			, getOwner()->getDepthView()
-			, false ) }
+		//, m_opaquePass{ std::make_shared< ForwardRenderTechniquePass >( device
+		//	, cuT( "EnvironmentMap" )
+		//	, getName() + cuT( "Opaque" )
+		//	, SceneRenderPassDesc{ reflectionMap.getSize(), m_matrixUbo, *m_culler }
+		//		.ignored( objectNode )
+		//		.timer( timer, uint32_t( face ) * 3u + 0u )
+		//	, RenderTechniquePassDesc{ true, SsaoConfig{} }
+		//	, m_envView
+		//	, getOwner()->getDepthView()
+		//	, true ) }
+		//, m_transparentPass{ std::make_shared< ForwardRenderTechniquePass >( device
+		//	, cuT( "EnvironmentMap" )
+		//	, getName() + cuT( "Transparent" )
+		//	, SceneRenderPassDesc{ reflectionMap.getSize(), m_matrixUbo, *m_culler, false }
+		//		.ignored( objectNode )
+		//		.timer( timer, uint32_t( face ) * 3u + 2u )
+		//	, RenderTechniquePassDesc{ true, SsaoConfig{} }
+		//	, m_envView
+		//	, getOwner()->getDepthView()
+		//	, false ) }
 		, m_commands{ m_device, getName() }
 		, m_mtxView{ m_camera->getView() }
 		, m_modelUbo{ m_device.uboPools->getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
@@ -146,25 +146,25 @@ namespace castor3d
 	{
 		auto size = getOwner()->getSize();
 
-		// Create custom background pass.
-		m_backgroundCommands = m_device.graphicsCommandPool->createCommandBuffer( getName()
-			, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
-		auto & commandBuffer = *m_backgroundCommands;
-		m_renderPass = &renderPass;
-		m_backgroundUboDescriptorSet = uboPool.createDescriptorSet( getName() + "Ubo", 0u );
-		m_backgroundTexDescriptorSet = texPool.createDescriptorSet( getName() + "Tex", 0u );
-		background.initialiseDescriptorSets( m_matrixUbo
-			, m_modelUbo
-			, m_hdrConfigUbo
-			, *m_backgroundUboDescriptorSet
-			, *m_backgroundTexDescriptorSet );
-		m_backgroundUboDescriptorSet->update();
-		m_backgroundTexDescriptorSet->update();
-		background.prepareFrame( commandBuffer
-			, { size.width, size.height }
-			, renderPass
-			, *m_backgroundUboDescriptorSet
-			, *m_backgroundTexDescriptorSet );
+		//// Create custom background pass.
+		//m_backgroundCommands = m_device.graphicsCommandPool->createCommandBuffer( getName()
+		//	, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
+		//auto & commandBuffer = *m_backgroundCommands;
+		//m_renderPass = &renderPass;
+		//m_backgroundUboDescriptorSet = uboPool.createDescriptorSet( getName() + "Ubo", 0u );
+		//m_backgroundTexDescriptorSet = texPool.createDescriptorSet( getName() + "Tex", 0u );
+		//background.initialiseDescriptorSets( m_matrixUbo
+		//	, m_modelUbo
+		//	, m_hdrConfigUbo
+		//	, *m_backgroundUboDescriptorSet
+		//	, *m_backgroundTexDescriptorSet );
+		//m_backgroundUboDescriptorSet->update();
+		//m_backgroundTexDescriptorSet->update();
+		//background.prepareFrame( commandBuffer
+		//	, { size.width, size.height }
+		//	, renderPass
+		//	, *m_backgroundUboDescriptorSet
+		//	, *m_backgroundTexDescriptorSet );
 
 		return true;
 	}

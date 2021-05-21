@@ -8,6 +8,8 @@ See LICENSE file in root folder
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 
+#include <RenderGraph/FramePass.hpp>
+
 namespace castor3d
 {
 	template< typename DataT >
@@ -30,6 +32,20 @@ namespace castor3d
 		{
 			return buffer
 				&& buffer->hasBuffer();
+		}
+
+		VkDeviceSize getByteOffset()const
+		{
+			auto & uniformBuffer = buffer->getBuffer();
+			auto size = uniformBuffer.getAlignedSize();
+			return offset * size;
+		}
+
+		VkDeviceSize getByteRange()const
+		{
+			auto & uniformBuffer = buffer->getBuffer();
+			auto size = uniformBuffer.getAlignedSize();
+			return range * size;
 		}
 
 		DataT const & getData()const
@@ -65,6 +81,15 @@ namespace castor3d
 		uint32_t getAlignedSize()const
 		{
 			return buffer->getAlignedSize( sizeof( DataT ) );
+		}
+
+		void createPassBinding( crg::FramePass & pass
+			, uint32_t binding )const
+		{
+			pass.addUniformBuffer( getBuffer()
+				, binding
+				, getByteOffset()
+				, getByteRange() );
 		}
 
 		void createSizedBinding( ashes::DescriptorSet & descriptorSet

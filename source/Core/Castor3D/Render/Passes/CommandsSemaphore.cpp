@@ -20,24 +20,25 @@ namespace castor3d
 
 	void CommandsSemaphore::submit( ashes::Queue const & queue )const
 	{
-		queue.submit( { *commandBuffer }
-			, {}
+		queue.submit( ashes::VkCommandBufferArray{ *commandBuffer }
+			, ashes::VkSemaphoreArray{}
 			, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT }
-			, {}
-			, nullptr );
+			, ashes::VkSemaphoreArray{} );
 	}
 
 	ashes::Semaphore const & CommandsSemaphore::submit( ashes::Queue const & queue
 		, ashes::Semaphore const & toWait )const
 	{
-		auto * result = &toWait;
+		return submit( queue, { toWait, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT } );
+	}
 
+	ashes::Semaphore const & CommandsSemaphore::submit( ashes::Queue const & queue
+		, crg::SemaphoreWait const & toWait )const
+	{
 		queue.submit( *commandBuffer
-			, *result
-			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, *semaphore
-			, nullptr );
-
+			, toWait.semaphore
+			, toWait.dstStageMask
+			, *semaphore );
 		return *semaphore;
 	}
 }

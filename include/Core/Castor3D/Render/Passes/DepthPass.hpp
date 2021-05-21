@@ -32,12 +32,14 @@ namespace castor3d
 		 *\param[in]	ssaoConfig	La configuration du SSAO.
 		 *\param[in]	depthBuffer	Le tampon de profondeur cible.
 		 */
-		C3D_API DepthPass( castor::String const & prefix
+		C3D_API DepthPass( crg::FramePass const & pass
+			, crg::GraphContext const & context
+			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, SsaoConfig const & ssaoConfig
-			, TextureLayoutSPtr depthBuffer );
+			, VkExtent3D extent );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -45,17 +47,6 @@ namespace castor3d
 		 *\brief		Destructeur
 		 */
 		C3D_API ~DepthPass();
-		/**
-		 *\~english
-		 *\brief		Renders nodes.
-		 *\param		device		The GPU device.
-		 *\param[out]	semaphores	The semaphores to wait for.
-		 *\~french
-		 *\brief		Dessine les noeuds.
-		 *\param[in]	device		Le device GPU.
-		 *\param[out]	semaphores	Les sémaphores à attendre.
-		 */
-		C3D_API ashes::Semaphore const & render( ashes::SemaphoreCRefArray const & semaphores );
 
 		C3D_API TextureFlags getTexturesMask()const override;
 
@@ -96,10 +87,6 @@ namespace castor3d
 		ShaderPtr doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const;
-
-	private:
-		ashes::FrameBufferPtr m_frameBuffer;
-		ashes::CommandBufferPtr m_nodesCommands;
 	};
 }
 

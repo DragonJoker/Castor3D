@@ -26,6 +26,8 @@ See LICENSE file in root folder
 #include <CastorUtils/Log/Logger.hpp>
 #include <CastorUtils/Multithreading/ThreadPool.hpp>
 
+#include <RenderGraph/FrameGraphPrerequisites.hpp>
+
 #include <atomic>
 
 namespace castor3d
@@ -208,7 +210,7 @@ namespace castor3d
 		C3D_API bool needsGlobalIllumination()const;
 		C3D_API bool needsGlobalIllumination( LightType ltType
 			, GlobalIlluminationType giType )const;
-		C3D_API ashes::SemaphoreCRefArray getRenderTargetsSemaphores()const;
+		C3D_API crg::SemaphoreWaitArray getRenderTargetsSemaphores()const;
 
 		castor::BoundingBox const & getBoundingBox()const
 		{
