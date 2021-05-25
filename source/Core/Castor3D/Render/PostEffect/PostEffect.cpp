@@ -66,11 +66,10 @@ namespace castor3d
 			, getKindName( m_kind ) + cuT( " PostEffect" )
 			, name
 			, m_passesCount );
-		auto result = doInitialise( device
+		m_result = doInitialise( device
 			, *m_timer
 			, previousPass );
-		CU_Ensure( m_result != nullptr );
-		return result;
+		return m_result != nullptr;
 	}
 
 	void PostEffect::cleanup( castor3d::RenderDevice const & device )

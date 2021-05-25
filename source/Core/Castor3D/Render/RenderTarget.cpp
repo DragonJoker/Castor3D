@@ -192,7 +192,7 @@ namespace castor3d
 
 				if ( m_initialised )
 				{
-					doInitialiseCopyCommands( device
+					previousPass = &doInitialiseCopyCommands( device
 						, "HDR"
 						, *sourceView
 						, m_renderTechnique->getResultImgView()
@@ -234,7 +234,7 @@ namespace castor3d
 
 				if ( m_initialised )
 				{
-					doInitialiseCopyCommands( device
+					previousPass = &doInitialiseCopyCommands( device
 						, "SRGB"
 						, *sourceView
 						, m_objectsView
@@ -666,7 +666,7 @@ namespace castor3d
 		return true;
 	}
 
-	void RenderTarget::doInitialiseCopyCommands( RenderDevice const & device
+	crg::FramePass const & RenderTarget::doInitialiseCopyCommands( RenderDevice const & device
 		, castor::String const & name
 		, crg::ImageViewId const & source
 		, crg::ImageViewId const & target
@@ -687,7 +687,10 @@ namespace castor3d
 			pass.addDependency( previousPass );
 			pass.addTransferInputView( source );
 			pass.addTransferOutputView( target );
+			return pass;
 		}
+
+		return previousPass;
 	}
 
 	void RenderTarget::doInitCombineProgram()
