@@ -46,7 +46,9 @@ namespace castor3d
 		 *\param[in]	type	Le type de cible de rendu
 		 *\return		La cible de rendu
 		 */
-		C3D_API RenderTargetSPtr add( TargetType type );
+		C3D_API RenderTargetSPtr add( TargetType type
+			, castor::Size const & size
+			, castor::PixelFormat pixelFormat );
 		/**
 		 *\~english
 		 *\brief		Removes a render target from the render loop
@@ -199,6 +201,7 @@ namespace castor3d
 		mutable std::mutex m_mutex;
 		ToneMappingFactory m_toneMappingFactory;
 		PostEffectFactory m_postEffectFactory;
+		castor::StrStrMap m_toneMappings;
 	};
 }
 
