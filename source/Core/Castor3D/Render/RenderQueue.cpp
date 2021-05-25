@@ -90,14 +90,11 @@ namespace castor3d
 			getOwner()->getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
 				, [this]( RenderDevice const & device )
 				{
-					getOwner()->resetCommandBuffer();
 					m_preparation = Preparation::eRunning;
-					m_commandBuffer->reset();
 					doPrepareCommandBuffer();
 					m_preparation = ( m_preparation == Preparation::eWaiting )
 						? Preparation::eWaiting
 						: Preparation::eDone;
-					getOwner()->record();
 				} ) );
 		}
 	}
@@ -132,10 +129,13 @@ namespace castor3d
 
 	void RenderQueue::doPrepareCommandBuffer()
 	{
+		getOwner()->resetCommandBuffer();
+		m_commandBuffer->reset();
 		auto & culledNodes = getCulledRenderNodes();
 		culledNodes.prepareCommandBuffers( *this
 			, m_viewport.value()
 			, m_scissor.value() );
+		getOwner()->record();
 	}
 
 	void RenderQueue::doParseAllRenderNodes( ShadowMapLightTypeArray & shadowMaps )
