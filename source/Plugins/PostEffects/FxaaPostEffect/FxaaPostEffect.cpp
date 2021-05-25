@@ -20,6 +20,8 @@
 
 #include <ShaderWriter/Source.hpp>
 
+#include <RenderGraph/RenderQuad.hpp>
+
 #include <numeric>
 
 using namespace castor;
@@ -30,7 +32,13 @@ namespace fxaa
 	{
 		static String const PosPos = cuT( "vtx_posPos" );
 
-		std::unique_ptr< ast::Shader > getFxaaVertexProgram( castor3d::RenderSystem * renderSystem )
+		enum Idx : uint32_t
+		{
+			FxaaCfgUboIdx,
+			ColorTexIdx,
+		};
+
+		std::unique_ptr< ast::Shader > getVertexProgram()
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -59,13 +67,7 @@ namespace fxaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		enum Idx : uint32_t
-		{
-			FxaaCfgUboIdx,
-			ColorTexIdx,
-		};
-
-		std::unique_ptr< ast::Shader > getFxaaFragmentProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< ast::Shader > getFragmentProgram()
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -152,39 +154,6 @@ namespace fxaa
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
-
-		castor3d::rq::BindingDescriptionArray createBindings()
-		{
-			return
-			{
-				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, std::nullopt, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT },
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
-			};
-		}
-	}
-
-	//*********************************************************************************************
-
-	RenderQuad::RenderQuad( castor3d::RenderSystem & renderSystem
-		, castor3d::RenderDevice const & device
-		, Size const & size )
-		: castor3d::RenderQuad{ device
-			, cuT( "Fxaa" )
-			, VK_FILTER_LINEAR
-			, { createBindings()
-				, ashes::nullopt
-				, castor3d::rq::Texcoord{} } }
-		, m_fxaaUbo{ device, size }
-	{
-	}
-
-	void RenderQuad::cpuUpdate( float subpixShift
-		, float spanMax
-		, float reduceMul )
-	{
-		m_fxaaUbo.cpuUpdate( subpixShift
-			, spanMax
-			, reduceMul );
 	}
 
 	//*********************************************************************************************
@@ -201,9 +170,11 @@ namespace fxaa
 			, renderSystem
 			, parameters
 			, 1u }
-		, m_surface{ *renderSystem.getEngine(), cuT( "Fxaa" ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "Fxaa" }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "Fxaa" }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "Fxaa", getVertexProgram() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "Fxaa", getFragmentProgram() }
+		, m_stages{ makeShaderState( *renderSystem.getMainRenderDevice(), m_vertexShader )
+			, makeShaderState( *renderSystem.getMainRenderDevice(), m_pixelShader ) }
+		, m_fxaaUbo{ *renderSystem.getMainRenderDevice(), m_renderTarget.getSize() }
 	{
 		String param;
 
@@ -221,22 +192,6 @@ namespace fxaa
 		{
 			m_reduceMul = string::toFloat( param );
 		}
-
-		String name = cuT( "FXAA" );
-
-		if ( !m_renderTarget.getEngine()->getSamplerCache().has( name ) )
-		{
-			m_sampler = m_renderTarget.getEngine()->getSamplerCache().add( name );
-			m_sampler->setMinFilter( VK_FILTER_NEAREST );
-			m_sampler->setMagFilter( VK_FILTER_NEAREST );
-			m_sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER );
-			m_sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER );
-			m_sampler->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER );
-		}
-		else
-		{
-			m_sampler = m_renderTarget.getEngine()->getSamplerCache().find( name );
-		}
 	}
 
 	PostEffect::~PostEffect()
@@ -247,7 +202,9 @@ namespace fxaa
 		, castor3d::RenderSystem & renderSystem
 		, castor3d::Parameters const & params )
 	{
-		return std::make_shared< PostEffect >( renderTarget, renderSystem, params );
+		return std::make_shared< PostEffect >( renderTarget
+			, renderSystem
+			, params );
 	}
 
 	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
@@ -277,7 +234,7 @@ namespace fxaa
 			|| m_spanMax.isDirty()
 			|| m_reduceMul.isDirty() )
 		{
-			m_fxaaQuad->cpuUpdate( m_subpixShift
+			m_fxaaUbo.cpuUpdate( m_subpixShift
 				, m_spanMax
 				, m_reduceMul );
 			m_subpixShift.reset();
@@ -286,150 +243,48 @@ namespace fxaa
 		}
 	}
 
-	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
-		, castor3d::RenderPassTimer const & timer )
+	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
+		, castor3d::RenderPassTimer const & timer
+		, crg::FramePass const & previousPass )
 	{
-		m_sampler->initialise( device );
-
-		auto & renderSystem = *getRenderSystem();
-		VkExtent2D size{ m_target->viewData.image.data->info.extent.width
-			, m_target->viewData.image.data->info.extent.height };
-
-		// Create the render pass.
-		ashes::VkAttachmentDescriptionArray attachments
-		{
+		m_resultImg = m_renderTarget.getGraph().createImage( crg::ImageData{ "FxaaResult"
+			, 0u
+			, VK_IMAGE_TYPE_2D
+			, m_target->data->info.format
+			, castor3d::makeExtent3D( m_renderTarget.getSize() )
+			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+				| VK_IMAGE_USAGE_SAMPLED_BIT
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } );
+		m_resultView = m_renderTarget.getGraph().createView( crg::ImageViewData{ "FxaaResult"
+			, m_resultImg
+			, 0u
+			, VK_IMAGE_VIEW_TYPE_2D
+			, m_resultImg.data->info.format
+			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } );
+		m_pass = &m_renderTarget.getGraph().createPass( "FxaaPass"
+			, [this]( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph )
 			{
-				0u,
-				m_target->getFormat(),
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-				VK_ATTACHMENT_STORE_OP_STORE,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_UNDEFINED,
-				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-			}
-		};
-		ashes::SubpassDescriptionArray subpasses;
-		subpasses.emplace_back( ashes::SubpassDescription
-			{
-				0u,
-				VK_PIPELINE_BIND_POINT_GRAPHICS,
-				{},
-				{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
-				{},
-				ashes::nullopt,
-				{},
+				return crg::RenderQuadBuilder{}
+					.renderPosition( {} )
+					.renderSize( castor3d::makeExtent2D( m_renderTarget.getSize() ) )
+					.texcoordConfig( {} )
+					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
+					.build( pass, context, graph );
 			} );
-		ashes::VkSubpassDependencyArray dependencies
-		{
-			{
-				VK_SUBPASS_EXTERNAL,
-				0u,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-				VK_ACCESS_SHADER_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			},
-			{
-				0u,
-				VK_SUBPASS_EXTERNAL,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-				VK_ACCESS_SHADER_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			},
-		};
-		ashes::RenderPassCreateInfo createInfo
-		{
-			0u,
-			std::move( attachments ),
-			std::move( subpasses ),
-			std::move( dependencies ),
-		};
-		m_renderPass = device->createRenderPass( "Fxaa"
-			, std::move( createInfo ) );
-
-		// Create the FXAA quad renderer.
-		ashes::VkDescriptorSetLayoutBindingArray bindings
-		{
-			castor3d::makeDescriptorSetLayoutBinding( 0u
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ),
-		};
-		m_vertexShader.shader = getFxaaVertexProgram( getRenderSystem() );
-		m_pixelShader.shader = getFxaaFragmentProgram( getRenderSystem() );
-
-		ashes::PipelineShaderStageCreateInfoArray stages;
-		stages.push_back( makeShaderState( device, m_vertexShader ) );
-		stages.push_back( makeShaderState( device, m_pixelShader ) );
-
-		m_fxaaQuad = std::make_unique< RenderQuad >( renderSystem
-			, device
-			, castor::Size{ size.width, size.height } );
-		m_fxaaQuad->createPipelineAndPass( size
-			, Position{}
-			, stages
-			, *m_renderPass
-			, {
-				m_fxaaQuad->makeDescriptorWrite( m_fxaaQuad->getUbo()
-					, FxaaCfgUboIdx ),
-				m_fxaaQuad->makeDescriptorWrite( *m_target
-					, m_fxaaQuad->getSampler().getSampler()
-					, ColorTexIdx ),
-			} );
-
-		// Initialise the surface.
-		auto result = m_surface.initialise( device
-			, *m_renderPass
-			, castor::Size{ size.width, size.height }
-			, m_target->getFormat() );
-
-		if ( result )
-		{
-			castor3d::CommandsSemaphore commands
-			{
-				device.graphicsCommandPool->createCommandBuffer( "Fxaa" ),
-				device->createSemaphore( "Fxaa" )
-			};
-			auto & cmd = *commands.commandBuffer;
-			// Initialise the command buffer.
-			auto & targetView = *m_target;
-
-			cmd.begin();
-			timer.beginPass( cmd );
-			cmd.beginDebugBlock( { "FXAA"
-				, castor3d::makeFloatArray( getOwner()->getEngine()->getNextRainbowColour() ) } );
-			// Render the effect.
-			cmd.beginRenderPass( *m_renderPass
-				, *m_surface.frameBuffer
-				, { castor3d::transparentBlackClearColor }
-				, VK_SUBPASS_CONTENTS_INLINE );
-			m_fxaaQuad->registerPass( cmd );
-			cmd.endRenderPass();
-			cmd.endDebugBlock();
-			timer.endPass( cmd );
-			cmd.end();
-			m_commands.emplace_back( std::move( commands ) );
-		}
-
-		m_fxaaQuad->cpuUpdate( m_subpixShift
-			, m_spanMax
-			, m_reduceMul );
-		m_subpixShift.reset();
-		m_spanMax.reset();
-		m_reduceMul.reset();
-		m_result = &m_surface.colourTexture->getDefaultView().getSampledView();
-		return result;
+		m_pass->addDependency( previousPass );
+		m_fxaaUbo.createPassBinding( *m_pass
+			, FxaaCfgUboIdx );
+		m_pass->addSampledView( *m_target
+			, ColorTexIdx
+			, VK_IMAGE_LAYOUT_UNDEFINED );
+		m_pass->addOutputColourView( m_resultView );
+		return &m_resultView;
 	}
 
 	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
 	{
-		m_fxaaQuad.reset();
-		m_surface.cleanup( device );
-		m_renderPass.reset();
 	}
 
 	bool PostEffect::doWriteInto( StringStream & file, String const & tabs )
