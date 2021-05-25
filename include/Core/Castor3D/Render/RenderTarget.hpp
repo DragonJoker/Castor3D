@@ -358,7 +358,7 @@ namespace castor3d
 		void doInitialiseRenderPass( RenderDevice const & device );
 		bool doInitialiseVelocityTexture( RenderDevice const & device );
 		bool doInitialiseTechnique( RenderDevice const & device );
-		void doInitialiseCopyCommands( RenderDevice const & device
+		crg::FramePass const & doInitialiseCopyCommands( RenderDevice const & device
 			, castor::String const & name
 			, crg::ImageViewId const & source
 			, crg::ImageViewId const & target
