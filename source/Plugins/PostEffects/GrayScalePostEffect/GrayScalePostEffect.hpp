@@ -36,12 +36,19 @@ namespace grayscale
 		 */
 		void accept( castor3d::PipelineVisitorBase & visitor )override;
 
+		crg::FramePass const & getPass()const override
+		{
+			CU_Require( m_pass );
+			return *m_pass;
+		}
+
 	private:
 		/**
 		*\copydoc		castor3d::PostEffect::doInitialise
 		*/
-		bool doInitialise( castor3d::RenderDevice const & device
-			, castor3d::RenderPassTimer const & timer ) override;
+		crg::ImageViewId const * doInitialise( castor3d::RenderDevice const & device
+			, castor3d::RenderPassTimer const & timer
+			, crg::FramePass const & previousPass ) override;
 		/**
 		*\copydoc		castor3d::PostEffect::doCleanup
 		*/
@@ -61,6 +68,9 @@ namespace grayscale
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
+		crg::ImageId m_resultImg;
+		crg::ImageViewId m_resultView;
+		crg::FramePass * m_pass{};
 	};
 }
 
