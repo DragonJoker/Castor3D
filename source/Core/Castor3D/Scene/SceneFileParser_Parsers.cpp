@@ -386,7 +386,9 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserWindowRenderTarget )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
-		parsingContext->renderTarget = parsingContext->parser->getEngine()->getRenderTargetCache().add( TargetType::eWindow );
+		parsingContext->targetType = TargetType::eWindow;
+		parsingContext->size = { 1u, 1u };
+		parsingContext->pixelFormat = castor::PixelFormat::eUNDEFINED;
 	}
 	CU_EndAttributePush( CSCNSection::eRenderTarget )
 
@@ -420,7 +422,7 @@ namespace castor3d
 
 		if ( !parsingContext->renderTarget )
 		{
-			CU_ParsingError( cuT( "No target initialised." ) );
+			CU_ParsingError( cuT( "No target initialised. (Did you forget to set its size and format ?)" ) );
 		}
 		else if ( !params.empty() )
 		{
@@ -445,7 +447,7 @@ namespace castor3d
 
 		if ( !parsingContext->renderTarget )
 		{
-			CU_ParsingError( cuT( "No target initialised." ) );
+			CU_ParsingError( cuT( "No target initialised. (Did you forget to set its size and format ?)" ) );
 		}
 		else if ( !params.empty() )
 		{
@@ -465,14 +467,16 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 
-		if ( !parsingContext->renderTarget )
+		if ( !params.empty() )
 		{
-			CU_ParsingError( cuT( "No target initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			Size size;
-			parsingContext->renderTarget->setSize( params[0]->get( size ) );
+			params[0]->get( parsingContext->size );
+
+			if ( parsingContext->pixelFormat != castor::PixelFormat::eUNDEFINED )
+			{
+				parsingContext->renderTarget = parsingContext->parser->getEngine()->getRenderTargetCache().add( parsingContext->targetType
+					, parsingContext->size
+					, parsingContext->pixelFormat );
+			}
 		}
 	}
 	CU_EndAttribute()
@@ -481,18 +485,18 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 
-		if ( !parsingContext->renderTarget )
+		if ( !params.empty() )
 		{
-			CU_ParsingError( cuT( "No target initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			PixelFormat ePF;
-			params[0]->get( ePF );
+			params[0]->get( parsingContext->pixelFormat );
 
-			if ( ePF < PixelFormat::eD16_UNORM )
+			if ( parsingContext->pixelFormat < PixelFormat::eD16_UNORM )
 			{
-				parsingContext->renderTarget->setPixelFormat( convert( ePF ) );
+				if ( parsingContext->size != castor::Size{ 1u, 1u } )
+				{
+					parsingContext->renderTarget = parsingContext->parser->getEngine()->getRenderTargetCache().add( parsingContext->targetType
+						, parsingContext->size
+						, parsingContext->pixelFormat );
+				}
 			}
 			else
 			{
@@ -508,7 +512,7 @@ namespace castor3d
 
 		if ( !parsingContext->renderTarget )
 		{
-			CU_ParsingError( cuT( "No target initialised." ) );
+			CU_ParsingError( cuT( "No target initialised. (Did you forget to set its size and format ?)" ) );
 		}
 		else if ( !params.empty() )
 		{
@@ -530,7 +534,7 @@ namespace castor3d
 
 		if ( !parsingContext->renderTarget )
 		{
-			CU_ParsingError( cuT( "No target initialised." ) );
+			CU_ParsingError( cuT( "No target initialised. (Did you forget to set its size and format ?)" ) );
 		}
 		else if ( !params.empty() )
 		{
@@ -565,7 +569,7 @@ namespace castor3d
 
 		if ( !parsingContext->renderTarget )
 		{
-			CU_ParsingError( cuT( "No target initialised." ) );
+			CU_ParsingError( cuT( "No target initialised. (Did you forget to set its size and format ?)" ) );
 		}
 		else if ( params.empty() )
 		{
@@ -594,7 +598,7 @@ namespace castor3d
 
 		if ( !parsingContext->renderTarget )
 		{
-			CU_ParsingError( cuT( "No render target initialised." ) );
+			CU_ParsingError( cuT( "No target initialised. (Did you forget to set its size and format ?)" ) );
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eSsao )
@@ -603,7 +607,11 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 
-		if ( parsingContext->renderTarget->getTargetType() == TargetType::eTexture )
+		if ( !parsingContext->renderTarget )
+		{
+			CU_ParsingError( cuT( "No target initialised. (Did you forget to set its size and format ?)" ) );
+		}
+		else if ( parsingContext->renderTarget->getTargetType() == TargetType::eTexture )
 		{
 			parsingContext->textureUnit->setRenderTarget( parsingContext->renderTarget );
 		}
@@ -3771,7 +3779,9 @@ namespace castor3d
 		}
 		else
 		{
-			parsingContext->renderTarget = parsingContext->parser->getEngine()->getRenderTargetCache().add( TargetType::eTexture );
+			parsingContext->targetType = TargetType::eTexture;
+			parsingContext->size = { 1u, 1u };
+			parsingContext->pixelFormat = castor::PixelFormat::eUNDEFINED;
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eRenderTarget )

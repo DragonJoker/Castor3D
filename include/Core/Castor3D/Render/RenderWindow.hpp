@@ -304,15 +304,6 @@ namespace castor3d
 		C3D_API VkFormat getPixelFormat()const;
 		/**
 		 *\~english
-		 *\brief		Sets the window pixel format.
-		 *\param[in]	value	The new window pixel format.
-		 *\~french
-		 *\brief		Définit le format des pixels de la fenêtre.
-		 *\param[in]	value	Le nouveau format des pixels de la fenêtre.
-		 */
-		C3D_API void setPixelFormat( VkFormat value );
-		/**
-		 *\~english
 		 *\brief		Adds a scene that can be picked.
 		 *\param[in]	scene	The scene.
 		 *\~french

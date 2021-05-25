@@ -80,12 +80,15 @@ namespace castor3d
 	uint32_t RenderTarget::sm_uiCount = 0;
 	const castor::String RenderTarget::DefaultSamplerName = cuT( "DefaultRTSampler" );
 
-	RenderTarget::RenderTarget( Engine & engine, TargetType type )
+	RenderTarget::RenderTarget( Engine & engine
+		, TargetType type
+		, castor::Size const & size
+		, castor::PixelFormat pixelFormat )
 		: OwnedBy< Engine >{ engine }
 		, m_type{ type }
-		, m_pixelFormat{ VK_FORMAT_R8G8B8A8_UNORM }
+		, m_size{ size }
+		, m_pixelFormat{ VkFormat( pixelFormat ) }
 		, m_initialised{ false }
-		, m_size{ Size{ 100u, 100u } }
 		, m_renderTechnique{}
 		, m_index{ ++sm_uiCount }
 		, m_name{ cuT( "Target" ) + string::toString( m_index ) }
@@ -97,7 +100,7 @@ namespace castor3d
 		, m_objectsImg{ m_graph.createImage( crg::ImageData{ "SceneResult"
 			, 0u
 			, VK_IMAGE_TYPE_2D
-			, VK_FORMAT_R8G8B8A8_UNORM
+			, getPixelFormat()
 			, castor3d::makeExtent3D( m_size )
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT ) } ) }
@@ -519,17 +522,6 @@ namespace castor3d
 	void RenderTarget::setGamma( float value )
 	{
 		getCamera()->setGamma( value );
-	}
-
-	void RenderTarget::setSize( Size const & size )
-	{
-		m_size = size;
-		auto camera = getCamera();
-
-		if ( camera )
-		{
-			camera->resize( m_size );
-		}
 	}
 
 	void RenderTarget::addTechniqueParameters( Parameters const & parameters )

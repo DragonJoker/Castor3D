@@ -116,10 +116,12 @@ namespace castor3d
 		SubmeshSPtr submesh;
 		LightSPtr light;
 		CameraSPtr camera;
+		castor::PixelFormat pixelFormat;
 		MaterialSPtr material;
 		bool createMaterial{};
 		uint32_t passIndex{};
 		SamplerSPtr sampler;
+		TargetType targetType;
 		RenderTargetSPtr renderTarget;
 		PhongPassSPtr phongPass;
 		MetallicRoughnessPbrPassSPtr pbrMRPass;
