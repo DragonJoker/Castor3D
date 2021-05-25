@@ -17,30 +17,7 @@ namespace Reinhard
 	String ToneMapping::Type = cuT( "reinhard" );
 	String ToneMapping::Name = cuT( "Reinhard Tone Mapping" );
 
-	ToneMapping::ToneMapping( Engine & engine
-		, castor3d::RenderDevice const & device
-		, HdrConfigUbo & hdrConfigUbo
-		, Parameters const & parameters )
-		: castor3d::ToneMapping{ Type, Name, engine, device, hdrConfigUbo, parameters }
-	{
-	}
-
-	ToneMapping::~ToneMapping()
-	{
-	}
-
-	ToneMappingSPtr ToneMapping::create( Engine & engine
-		, castor3d::RenderDevice const & device
-		, HdrConfigUbo & hdrConfigUbo
-		, Parameters const & parameters )
-	{
-		return std::make_shared< ToneMapping >( engine
-			, device
-			, hdrConfigUbo
-			, parameters );
-	}
-
-	castor3d::ShaderPtr ToneMapping::doCreate()
+	castor3d::ShaderPtr ToneMapping::create()
 	{
 		using namespace sdw;
 		FragmentWriter writer;
@@ -69,13 +46,5 @@ namespace Reinhard
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-	}
-
-	void ToneMapping::doDestroy()
-	{
-	}
-
-	void ToneMapping::doCpuUpdate()
-	{
 	}
 }

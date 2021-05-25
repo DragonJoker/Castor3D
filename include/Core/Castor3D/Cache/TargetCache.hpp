@@ -96,6 +96,14 @@ namespace castor3d
 		 */
 		C3D_API void clear();
 		/**
+		 *\~english
+		 *\brief		Registers tone mapping display name.
+		 *\~french
+		 *\brief		Enregistre le nom affiché d'un tone mapping.
+		 */
+		C3D_API void registerToneMappingName( castor::String const & name
+			, castor::String const & fullName );
+		/**
 		*\~english
 		*name
 		*	Getters.
@@ -104,6 +112,13 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
+		castor::String const & getToneMappingName( castor::String const & name )const
+		{
+			auto it = m_toneMappings.find( name );
+			CU_Require( it != m_toneMappings.end() );
+			return it->second;
+		}
+		
 		ToneMappingFactory const & getToneMappingFactory()const
 		{
 			return m_toneMappingFactory;
