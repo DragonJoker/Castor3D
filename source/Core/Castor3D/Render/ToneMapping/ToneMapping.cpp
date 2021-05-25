@@ -100,8 +100,7 @@ namespace castor3d
 			, HdrCfgUboIdx );
 		result.addSampledView( source
 			, HdrMapIdx
-			, {}
-			, VK_FILTER_LINEAR );
+			, {} );
 		result.addOutputColourView( target );
 		return result;
 	}

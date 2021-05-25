@@ -184,8 +184,7 @@ namespace grayscale
 			, GrayCfgUboIdx );
 		m_pass->addSampledView( *m_target
 			, ColorTexIdx
-			, VK_IMAGE_LAYOUT_UNDEFINED
-			, VK_FILTER_NEAREST );
+			, VK_IMAGE_LAYOUT_UNDEFINED );
 		m_pass->addOutputColourView( m_resultView );
 		return &m_resultView;
 	}

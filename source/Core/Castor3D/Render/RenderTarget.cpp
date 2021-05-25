@@ -550,12 +550,10 @@ namespace castor3d
 			} );
 		result.addSampledView( m_objectsView
 			, 0u
-			, {}
-			, VK_FILTER_NEAREST );
+			, {} );
 		result.addSampledView( m_overlaysView
 			, 1u
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, VK_FILTER_NEAREST );
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		result.addOutputColourView( m_combinedView );
 		return result;
 	}
