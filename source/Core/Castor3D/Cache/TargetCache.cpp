@@ -20,10 +20,15 @@ namespace castor3d
 	{
 	}
 
-	RenderTargetSPtr RenderTargetCache::add( TargetType type )
+	RenderTargetSPtr RenderTargetCache::add( TargetType type
+		, castor::Size const & size
+		, castor::PixelFormat pixelFormat )
 	{
 		LockType lock{ castor::makeUniqueLock( *this ) };
-		RenderTargetSPtr result = std::make_shared< RenderTarget >( *getEngine(), type );
+		RenderTargetSPtr result = std::make_shared< RenderTarget >( *getEngine()
+			, type
+			, size
+			, pixelFormat );
 		m_renderTargets[size_t( type )].push_back( result );
 		return result;
 	}

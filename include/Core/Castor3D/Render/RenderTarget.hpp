@@ -71,7 +71,9 @@ namespace castor3d
 		 *\param[in]	type	Le type de render target.
 		 */
 		C3D_API RenderTarget( Engine & engine
-			, TargetType type );
+			, TargetType type
+			, castor::Size const & size
+			, castor::PixelFormat pixelFormat );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -127,17 +129,6 @@ namespace castor3d
 		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API void cleanup( RenderDevice const & device );
-		/**
-		 *\~english
-		 *\brief		Sets the target dimensions.
-		 *\remarks		This method must be called before initialisation, otherwise it will have no effect.
-		 *\param[in]	size	The new dimensions.
-		 *\~french
-		 *\brief		Définit les dimensions la cible.
-		 *\remarks		Cette méthode doit être appelée avant l'initialisation, sinon elle n'aura aucun effet.
-		 *\param[in]	size	Les nouvelles dimensions.
-		 */
-		C3D_API void setSize( castor::Size const & size );
 		/**
 		 *\~english
 		 *\brief		adds RenderTechnique parameters.
@@ -356,11 +347,6 @@ namespace castor3d
 			m_ssaoConfig = config;
 		}
 
-		void setPixelFormat( VkFormat value )
-		{
-			m_pixelFormat = value;
-		}
-
 		void setJitter( castor::Point2f const & value )
 		{
 			m_jitter = value;
@@ -392,8 +378,9 @@ namespace castor3d
 	private:
 		static uint32_t sm_uiCount;
 		TargetType m_type;
-		bool m_initialised;
 		castor::Size m_size;
+		VkFormat m_pixelFormat;
+		bool m_initialised;
 		std::unique_ptr< HdrConfigUbo > m_hdrConfigUbo;
 		RenderTechniqueSPtr m_renderTechnique;
 		SceneWPtr m_scene;
@@ -402,7 +389,6 @@ namespace castor3d
 		TargetFbo m_objectsFrameBuffer;
 		TargetFbo m_overlaysFrameBuffer;
 		TargetFbo m_combinedFrameBuffer;
-		VkFormat m_pixelFormat;
 		uint32_t m_index;
 		castor::String m_name;
 		Parameters m_techniqueParameters;
