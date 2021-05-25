@@ -185,7 +185,7 @@ namespace castor3d
 		 *\param[in]	timer	Le timer de la passe de rendu.
 		 *\return		\p true if ok.
 		 */
-		C3D_API virtual bool doInitialise( castor3d::RenderDevice const & device
+		C3D_API virtual crg::ImageViewId const * doInitialise( castor3d::RenderDevice const & device
 			, RenderPassTimer const & timer
 			, crg::FramePass const & previousPass ) = 0;
 		/**
