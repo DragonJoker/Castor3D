@@ -2,6 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
+#include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -25,20 +26,9 @@ namespace castor3d
 	{
 		static uint32_t constexpr HdrCfgUboIdx = 0u;
 		static uint32_t constexpr HdrMapIdx = 1u;
-
-		rq::BindingDescriptionArray createBindings()
-		{
-			return rq::BindingDescriptionArray
-			{
-				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, ashes::nullopt },	// HdrConfig UBO
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },	// HDR Map
-			};
-		}
 	}
 
-	ToneMapping::ToneMapping( castor::String const & name
-		, castor::String const & fullName
-		, Engine & engine
+	ToneMapping::ToneMapping( Engine & engine
 		, RenderDevice const & device
 		, castor::Size const & size
 		, crg::FrameGraph & graph
@@ -48,9 +38,8 @@ namespace castor3d
 		, HdrConfigUbo & hdrConfigUbo
 		, Parameters const & parameters )
 		: OwnedBy< Engine >{ engine }
-		, Named{ name }
+		, m_name{ cuT( "linear" ) }
 		, m_hdrConfigUbo{ hdrConfigUbo }
-		, m_fullName{ fullName }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "ToneMapping" }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "ToneMapping" }
 		, m_pass{ &doCreatePass( size, graph, source, target, previousPass ) }
@@ -61,8 +50,65 @@ namespace castor3d
 	{
 	}
 
-	bool ToneMapping::initialise()
+	void ToneMapping::initialise( castor::String const & name )
 	{
+		doCreate( name );
+	}
+
+	castor::String const & ToneMapping::getFullName()const
+	{
+		return getEngine()->getRenderTargetCache().getToneMappingName( m_name );
+	}
+
+	void ToneMapping::updatePipeline( castor::String const & name )
+	{
+		if ( name != m_name )
+		{
+			doCreate( name );
+			m_quad->resetPipeline( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_program ) );
+		}
+	}
+
+	void ToneMapping::accept( ToneMappingVisitor & visitor )
+	{
+		visitor.visit( m_vertexShader );
+		visitor.visit( m_pixelShader );
+	}
+
+	crg::FramePass & ToneMapping::doCreatePass( castor::Size const & size
+		, crg::FrameGraph & graph
+		, crg::ImageViewId const & source
+		, crg::ImageViewId const & target
+		, crg::FramePass const & previousPass )
+	{
+		auto & result = graph.createPass( "ToneMapping"
+			, [this, size]( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph )
+			{
+				auto result = crg::RenderQuadBuilder{}
+					.renderPosition( {} )
+					.renderSize( makeExtent2D( size ) )
+					.texcoordConfig( {} )
+					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_program ) )
+					.build( pass, context, graph );
+				m_quad = result.get();
+				return result;
+			} );
+		result.addDependency( previousPass );
+		m_hdrConfigUbo.createPassBinding( result
+			, HdrCfgUboIdx );
+		result.addSampledView( source
+			, HdrMapIdx
+			, {}
+			, VK_FILTER_LINEAR );
+		result.addOutputColourView( target );
+		return result;
+	}
+
+	void ToneMapping::doCreate( castor::String const & name )
+	{
+		m_name = name;
 		{
 			VertexWriter writer;
 
@@ -84,63 +130,12 @@ namespace castor3d
 			m_vertexShader.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		m_pixelShader.shader = doCreate();
+		m_pixelShader.shader = getEngine()->getRenderTargetCache().getToneMappingFactory().create( name );
 		auto & device = *getEngine()->getRenderSystem()->getMainRenderDevice();
 		m_program =
 		{
 			makeShaderState( device, m_vertexShader ),
 			makeShaderState( device, m_pixelShader ),
 		};
-		return true;
-	}
-
-	void ToneMapping::cleanup()
-	{
-		doDestroy();
-	}
-
-	void ToneMapping::update( CpuUpdater & updater )
-	{
-		doCpuUpdate();
-	}
-
-	void ToneMapping::update( GpuUpdater & updater )
-	{
-		doGpuUpdate();
-	}
-
-	void ToneMapping::accept( ToneMappingVisitor & visitor )
-	{
-		visitor.visit( m_vertexShader );
-		visitor.visit( m_pixelShader );
-	}
-
-	crg::FramePass & ToneMapping::doCreatePass( castor::Size const & size
-		, crg::FrameGraph & graph
-		, crg::ImageViewId const & source
-		, crg::ImageViewId const & target
-		, crg::FramePass const & previousPass )
-	{
-		auto & result = graph.createPass( m_fullName
-			, [this, size]( crg::FramePass const & pass
-				, crg::GraphContext const & context
-				, crg::RunnableGraph & graph )
-			{
-				return crg::RenderQuadBuilder{}
-					.renderPosition( {} )
-					.renderSize( makeExtent2D( size ) )
-					.texcoordConfig( {} )
-					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_program ) )
-					.build( pass, context, graph );
-			} );
-		result.addDependency( previousPass );
-		m_hdrConfigUbo.createPassBinding( result
-			, HdrCfgUboIdx );
-		result.addSampledView( source
-			, HdrMapIdx
-			, {}
-			, VK_FILTER_LINEAR );
-		result.addOutputColourView( target );
-		return result;
 	}
 }

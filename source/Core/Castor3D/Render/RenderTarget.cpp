@@ -203,8 +203,7 @@ namespace castor3d
 			if ( m_initialised )
 			{
 				m_hdrLastPass = previousPass;
-				m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( cuT( "linear" )
-					, *getEngine()
+				m_toneMapping = std::make_shared< ToneMapping >( *getEngine()
 					, device
 					, m_size
 					, m_graph
@@ -213,7 +212,7 @@ namespace castor3d
 					, *m_hdrLastPass
 					, *m_hdrConfigUbo
 					, Parameters{} );
-				m_initialised = m_toneMapping->initialise();
+				m_toneMapping->initialise( cuT( "linear" ) );
 				previousPass = &m_toneMapping->getPass();
 			}
 
@@ -317,11 +316,7 @@ namespace castor3d
 				effect->cleanup( device );
 			}
 
-			if ( m_toneMapping )
-			{
-				m_toneMapping->cleanup();
-				m_toneMapping.reset();
-			}
+			m_toneMapping.reset();
 
 			for ( auto effect : m_hdrPostEffects )
 			{
@@ -387,7 +382,6 @@ namespace castor3d
 
 		updater.scene->update( updater );
 
-		m_toneMapping->update( updater );
 		m_renderTechnique->update( updater );
 		m_overlayRenderer->update( updater );
 
@@ -471,24 +465,14 @@ namespace castor3d
 		getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
 			, [this, name, parameters]( RenderDevice const & device )
 			{
-				if ( m_toneMapping )
+				if ( m_initialised )
 				{
-					ToneMappingSPtr toneMapping;
-					std::swap( m_toneMapping, toneMapping );
-					toneMapping->cleanup();
+					m_toneMapping->updatePipeline( name );
 				}
-
-				m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( name
-					, *getEngine()
-					, device
-					, m_size
-					, m_graph
-					, m_renderTechnique->getResultImgView()
-					, m_objectsView
-					, *m_hdrLastPass
-					, *m_hdrConfigUbo
-					, parameters );
-				m_initialised = m_toneMapping->initialise();
+				else
+				{
+					m_toneMapping->initialise( name );
+				}
 			} ) );
 	}
 

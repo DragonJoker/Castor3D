@@ -100,4 +100,10 @@ namespace castor3d
 			array.clear();
 		}
 	}
+
+	void RenderTargetCache::registerToneMappingName( castor::String const & name
+		, castor::String const & fullName )
+	{
+		m_toneMappings[name] = fullName;
+	}
 }
