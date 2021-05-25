@@ -10,14 +10,17 @@ See LICENSE file in root folder
 #include <Castor3D/Render/Passes/RenderQuad.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
 
+#include <CastorUtils/Graphics/Image.hpp>
 #include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 
 #include <ShaderAST/Shader.hpp>
 
+#include <array>
+
 namespace film_grain
 {
-	class RenderQuad
-		: public castor3d::RenderQuad
+	class PostEffect
+		: public castor3d::PostEffect
 	{
 	private:
 		struct Configuration
@@ -28,39 +31,6 @@ namespace film_grain
 			float m_time;
 		};
 
-	public:
-		explicit RenderQuad( castor3d::RenderSystem & renderSystem
-			, castor3d::RenderDevice const & device
-			, VkExtent2D const & size );
-		void update( castor3d::CpuUpdater & updater );
-
-		inline ashes::ImageView const & getNoiseView()const
-		{
-			return m_noiseView;
-		}
-
-		inline castor3d::UniformBufferOffsetT< Configuration > const & getUbo()const
-		{
-			return m_configUbo;
-		}
-
-		inline castor3d::UniformBufferOffsetT< Configuration > & getUbo()
-		{
-			return m_configUbo;
-		}
-
-	private:
-		uint64_t m_time{ 0ull };
-		VkExtent2D m_size;
-		castor3d::UniformBufferOffsetT< Configuration > m_configUbo;
-		castor3d::SamplerSPtr m_sampler;
-		ashes::ImagePtr m_noise;
-		ashes::ImageView m_noiseView;
-	};
-
-	class PostEffect
-		: public castor3d::PostEffect
-	{
 	public:
 		PostEffect( castor3d::RenderTarget & renderTarget
 			, castor3d::RenderSystem & renderSystem
@@ -78,12 +48,19 @@ namespace film_grain
 		 */
 		void accept( castor3d::PipelineVisitorBase & visitor )override;
 
+		crg::FramePass const & getPass()const override
+		{
+			CU_Require( m_pass );
+			return *m_pass;
+		}
+
 	private:
 		/**
 		 *\copydoc		castor3d::PostEffect::doInitialise
 		 */
-		bool doInitialise( castor3d::RenderDevice const & device
-			, castor3d::RenderPassTimer const & timer )override;
+		crg::ImageViewId const * doInitialise( castor3d::RenderDevice const & device
+			, castor3d::RenderPassTimer const & timer
+			, crg::FramePass const & previousPass )override;
 		/**
 		 *\copydoc		castor3d::PostEffect::doCleanup
 		 */
@@ -96,15 +73,22 @@ namespace film_grain
 	public:
 		static castor::String Type;
 		static castor::String Name;
+		static uint32_t constexpr NoiseMapCount = 6u;
 
 	private:
 		castor3d::SamplerSPtr m_sampler;
-		castor3d::PostEffectSurface m_surface;
 		castor::PreciseTimer m_timer;
-		ashes::RenderPassPtr m_renderPass;
-		std::unique_ptr< RenderQuad > m_quad;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
+		ashes::PipelineShaderStageCreateInfoArray m_stages;
+		uint64_t m_time{ 0ull };
+		castor3d::UniformBufferOffsetT< Configuration > m_configUbo;
+		std::array< castor::Image, NoiseMapCount > m_noiseImages;
+		crg::ImageId m_noiseImg;
+		crg::ImageViewId m_noiseView;
+		crg::ImageId m_resultImg;
+		crg::ImageViewId m_resultView;
+		crg::FramePass * m_pass{};
 	};
 }
 
