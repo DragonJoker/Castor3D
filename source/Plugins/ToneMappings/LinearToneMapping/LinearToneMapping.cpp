@@ -17,55 +17,7 @@ namespace Linear
 	String ToneMapping::Type = cuT( "linear" );
 	String ToneMapping::Name = cuT( "Linear Tone Mapping" );
 
-	ToneMapping::ToneMapping( Engine & engine
-		, RenderDevice const & device
-		, castor::Size const & size
-		, crg::FrameGraph & graph
-		, crg::ImageViewId const & source
-		, crg::ImageViewId const & target
-		, crg::FramePass const & previousPass
-		, HdrConfigUbo & hdrConfigUbo
-		, Parameters const & parameters )
-		: castor3d::ToneMapping{ Type
-			, Name
-			, engine
-			, device
-			, size
-			, graph
-			, source
-			, target
-			, previousPass
-			, hdrConfigUbo
-			, parameters }
-	{
-	}
-
-	ToneMapping::~ToneMapping()
-	{
-	}
-
-	ToneMappingSPtr ToneMapping::create( Engine & engine
-		, castor3d::RenderDevice const & device
-		, castor::Size const & size
-		, crg::FrameGraph & graph
-		, crg::ImageViewId const & source
-		, crg::ImageViewId const & target
-		, crg::FramePass const & previousPass
-		, HdrConfigUbo & hdrConfigUbo
-		, Parameters const & parameters )
-	{
-		return std::make_shared< ToneMapping >( engine
-			, device
-			, size
-			, graph
-			, source
-			, target
-			, previousPass
-			, hdrConfigUbo
-			, parameters );
-	}
-
-	castor3d::ShaderPtr ToneMapping::doCreate()
+	castor3d::ShaderPtr ToneMapping::create()
 	{
 		FragmentWriter writer;
 
@@ -90,13 +42,5 @@ namespace Linear
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-	}
-
-	void ToneMapping::doDestroy()
-	{
-	}
-
-	void ToneMapping::doCpuUpdate()
-	{
 	}
 }
