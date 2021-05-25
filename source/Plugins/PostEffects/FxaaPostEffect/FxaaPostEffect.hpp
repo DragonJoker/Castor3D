@@ -19,26 +19,6 @@ See LICENSE file in root folder
 
 namespace fxaa
 {
-	class RenderQuad
-		: public castor3d::RenderQuad
-	{
-	public:
-		explicit RenderQuad( castor3d::RenderSystem & renderSystem
-			, castor3d::RenderDevice const & device
-			, castor::Size const & size );
-		void cpuUpdate( float subpixShift
-			, float spanMax
-			, float reduceMul );
-
-		castor3d::UniformBufferOffsetT< FxaaUboConfiguration > const & getUbo()const
-		{
-			return m_fxaaUbo.getUbo();
-		}
-
-	private:
-		FxaaUbo m_fxaaUbo;
-	};
-
 	class PostEffect
 		: public castor3d::PostEffect
 	{
@@ -59,12 +39,19 @@ namespace fxaa
 		 */
 		void accept( castor3d::PipelineVisitorBase & visitor )override;
 
+		crg::FramePass const & getPass()const override
+		{
+			CU_Require( m_pass );
+			return *m_pass;
+		}
+
 	private:
 		/**
 		*\copydoc		castor3d::PostEffect::doInitialise
 		*/
-		bool doInitialise( castor3d::RenderDevice const & device
-			, castor3d::RenderPassTimer const & timer ) override;
+		crg::ImageViewId const * doInitialise( castor3d::RenderDevice const & device
+			, castor3d::RenderPassTimer const & timer
+			, crg::FramePass const & previousPass ) override;
 		/**
 		*\copydoc		castor3d::PostEffect::doCleanup
 		*/
@@ -82,12 +69,13 @@ namespace fxaa
 		castor::ChangeTracked< float > m_subpixShift{ { 1.0f / 4.0f } };
 		castor::ChangeTracked< float > m_spanMax{ { 8.0f } };
 		castor::ChangeTracked< float > m_reduceMul{ { 1.0f / 8.0f } };
-		castor3d::SamplerSPtr m_sampler;
-		castor3d::PostEffectSurface m_surface;
-		ashes::RenderPassPtr m_renderPass;
-		std::unique_ptr< RenderQuad > m_fxaaQuad;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
+		ashes::PipelineShaderStageCreateInfoArray m_stages;
+		FxaaUbo m_fxaaUbo;
+		crg::ImageId m_resultImg;
+		crg::ImageViewId m_resultView;
+		crg::FramePass * m_pass{};
 	};
 }
 
