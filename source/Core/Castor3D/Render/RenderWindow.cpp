@@ -558,16 +558,6 @@ namespace castor3d
 		return result;
 	}
 
-	void RenderWindow::setPixelFormat( VkFormat value )
-	{
-		RenderTargetSPtr target = getRenderTarget();
-
-		if ( target )
-		{
-			target->setPixelFormat( value );
-		}
-	}
-
 	void RenderWindow::setScene( SceneSPtr value )
 	{
 		RenderTargetSPtr target = getRenderTarget();
