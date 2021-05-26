@@ -95,8 +95,20 @@ namespace castor3d
 		, m_objectsFrameBuffer{ *this }
 		, m_overlaysFrameBuffer{ *this }
 		, m_combinedFrameBuffer{ *this }
-		, m_velocityTexture{ *getEngine() }
 		, m_graph{ m_name }
+		, m_velocityImg{ m_graph.createImage( crg::ImageData{ "Velocity"
+			, 0u
+			, VK_IMAGE_TYPE_2D
+			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, castor3d::makeExtent3D( m_size )
+			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+				| VK_IMAGE_USAGE_SAMPLED_BIT ) } ) }
+		, m_velocityView{ m_graph.createView( crg::ImageViewData{ m_velocityImg.data->name
+			, m_velocityImg
+			, 0u
+			, VK_IMAGE_VIEW_TYPE_2D
+			, m_velocityImg.data->info.format
+			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
 		, m_objectsImg{ m_graph.createImage( crg::ImageData{ "SceneResult"
 			, 0u
 			, VK_IMAGE_TYPE_2D
@@ -163,13 +175,7 @@ namespace castor3d
 			m_culler = std::make_unique< FrustumCuller >( *getScene(), *getCamera() );
 			doInitialiseRenderPass( device );
 			doInitCombineProgram();
-
-			m_initialised = doInitialiseVelocityTexture( device );
-
-			if ( m_initialised )
-			{
-				m_initialised = doInitialiseTechnique( device );
-			}
+			m_initialised = doInitialiseTechnique( device );
 
 			m_overlaysTimer = std::make_shared< RenderPassTimer >( device, cuT( "Overlays" ), cuT( "Overlays" ) );
 			auto * previousPass = &m_renderTechnique->getTransparentPass();
@@ -273,6 +279,13 @@ namespace castor3d
 				view = ashes::ImageView{ ashes::ImageViewCreateInfo{ overlaysImage, m_overlaysView.data->info }
 					, overlaysView
 					, image.get() };
+				auto velocityImage = m_runnable->getImage( m_velocityImg );
+				m_velocityImage = std::make_unique< ashes::Image >( *device
+					, velocityImage
+					, ashes::ImageCreateInfo{ m_velocityImg.data->info } );
+				m_velocityImageView = ashes::ImageView{ ashes::ImageViewCreateInfo{ velocityImage, m_velocityView.data->info }
+					, m_runnable->getImageView( m_velocityView )
+					, image.get() };
 				m_overlaysFrameBuffer.initialise( device
 					, std::move( image )
 					, view
@@ -327,9 +340,6 @@ namespace castor3d
 			m_srgbPostEffects.clear();
 
 			m_overlaysTimer.reset();
-
-			m_velocityTexture.cleanup();
-			m_velocityTexture.setTexture( nullptr );
 
 			m_hdrConfigUbo.reset();
 			m_overlaysFrameBuffer.cleanup( device );
@@ -524,7 +534,7 @@ namespace castor3d
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) } );
 		result.push_back( { "Target Velocity"
-			, m_velocityTexture.getTexture()->getDefaultView().getSampledView()
+			, m_velocityImageView
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) } );
 
@@ -615,29 +625,6 @@ namespace castor3d
 		};
 		m_renderPass = device->createRenderPass( getName()
 			, std::move( createInfo ) );
-	}
-
-	bool RenderTarget::doInitialiseVelocityTexture( RenderDevice const & device )
-	{
-		ashes::ImageCreateInfo image
-		{
-			0u,
-			VK_IMAGE_TYPE_2D,
-			VK_FORMAT_R16G16B16A16_SFLOAT,
-			{ m_size[0], m_size[1], 1u },
-			1u,
-			1u,
-			VK_SAMPLE_COUNT_1_BIT,
-			VK_IMAGE_TILING_OPTIMAL,
-			VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
-		};
-		auto velocityTexture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
-			, std::move( image )
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, getName() + cuT( "Velocity" ) );
-		m_velocityTexture.setTexture( std::move( velocityTexture ) );
-		m_velocityTexture.setSampler( getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + getName() + cuT( "Nearest" ) ) );
-		return m_velocityTexture.initialise( device );
 	}
 
 	bool RenderTarget::doInitialiseTechnique( RenderDevice const & device )

@@ -78,6 +78,7 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 	endif ()
 
 	# RenderGraph external library
+	set( CRG_BUILD_STATIC OFF )
 	set( CRG_BUILD_TESTS OFF )
 	set( CRG_BUILD_EXAMPLES OFF )
 	set( CRG_BASE_DIR "External/RenderGraph" )

@@ -227,6 +227,8 @@ namespace castor3d
 				, RenderPipeline::eBuffers );
 		}
 
+		auto velocity = writer.declOutput< Vec4 >( "velocity", 0u );
+
 		shader::Utils utils{ writer };
 		utils.declareParallaxMappingFunc( flags.passFlags
 			, getTexturesMask() );
@@ -257,6 +259,7 @@ namespace castor3d
 				utils.applyAlphaFunc( flags.alphaFunc
 					, opacity
 					, alphaRef );
+				velocity = vec4( inSurface.getVelocity(), writer.cast< Float >( inSurface.material ), 0.0_f );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

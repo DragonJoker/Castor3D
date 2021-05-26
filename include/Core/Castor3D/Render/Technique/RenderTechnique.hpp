@@ -277,7 +277,6 @@ namespace castor3d
 		LayeredLightPropagationVolumesLightType m_layeredLightPropagationVolumes;
 		LightPropagationVolumesGLightType m_lightPropagationVolumesG;
 		LayeredLightPropagationVolumesGLightType m_layeredLightPropagationVolumesG;
-		CommandsSemaphore m_colorTexTransition;
 	};
 }
 
