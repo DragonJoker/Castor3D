@@ -33,13 +33,22 @@
 
 #include <ShaderWriter/Source.hpp>
 
+#include <RenderGraph/RenderQuad.hpp>
+
 #include <numeric>
 
 namespace motion_blur
 {
 	namespace
 	{
-		std::unique_ptr< ast::Shader > getVertexProgram( castor3d::RenderSystem * renderSystem )
+		enum Idx : uint32_t
+		{
+			BlurCfgUboIdx,
+			VelocityTexIdx,
+			ColorTexIdx,
+		};
+
+		std::unique_ptr< ast::Shader > getVertexProgram()
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -61,14 +70,7 @@ namespace motion_blur
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		enum Idx : uint32_t
-		{
-			BlurCfgUboIdx,
-			VelocityTexIdx,
-			ColorTexIdx,
-		};
-
-		std::unique_ptr< ast::Shader > getFragmentProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< ast::Shader > getFragmentProgram()
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -106,29 +108,6 @@ namespace motion_blur
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
-
-		castor3d::rq::BindingDescriptionArray createBindings()
-		{
-			return
-			{
-				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, std::nullopt },
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
-			};
-		}
-	}
-
-	//*********************************************************************************************
-
-	PostEffect::Quad::Quad( castor3d::RenderSystem & renderSystem
-		, castor3d::RenderDevice const & device )
-		: castor3d::RenderQuad{ device
-			, cuT( "LinearMotionBlur" )
-			, VK_FILTER_NEAREST
-			, { createBindings()
-				, ashes::nullopt
-				, castor3d::rq::Texcoord{} } }
-	{
 	}
 
 	//*********************************************************************************************
@@ -145,9 +124,11 @@ namespace motion_blur
 			, renderSystem
 			, parameters
 			, 1u }
-		, m_surface{ *renderSystem.getEngine(), cuT( "LinearMotionBlur" ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "LinearMotionBlur" }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "LinearMotionBlur" }
+		, m_ubo{ renderSystem.getMainRenderDevice()->uboPools->getBuffer< Configuration >( 0u ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "LinearMotionBlur", getVertexProgram() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "LinearMotionBlur", getFragmentProgram() }
+		, m_stages{ makeShaderState( *renderSystem.getMainRenderDevice(), m_vertexShader )
+			, makeShaderState( *renderSystem.getMainRenderDevice(), m_pixelShader ) }
 	{
 		parameters.get( cuT( "vectorDivider" ), m_configuration.vectorDivider );
 		parameters.get( cuT( "samplesCount" ), m_configuration.samplesCount );
@@ -156,6 +137,7 @@ namespace motion_blur
 
 	PostEffect::~PostEffect()
 	{
+		getRenderSystem()->getMainRenderDevice()->uboPools->putBuffer( m_ubo );
 	}
 
 	castor3d::PostEffectSPtr PostEffect::create( castor3d::RenderTarget & renderTarget
@@ -188,150 +170,52 @@ namespace motion_blur
 		visitor.visit( m_pixelShader );
 	}
 
-	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
-		, castor3d::RenderPassTimer const & timer )
+	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
+		, castor3d::RenderPassTimer const & timer
+		, crg::FramePass const & previousPass )
 	{
-		auto & renderSystem = *getRenderSystem();
-		VkExtent2D size{ m_target->viewData.image.data->info.extent.width
-			, m_target->viewData.image.data->info.extent.height };
-		m_vertexShader.shader = getVertexProgram( getRenderSystem() );
-		m_pixelShader.shader = getFragmentProgram( getRenderSystem() );
-		ashes::PipelineShaderStageCreateInfoArray stages;
-		stages.push_back( makeShaderState( device, m_vertexShader ) );
-		stages.push_back( makeShaderState( device, m_pixelShader ) );
-
-		// Create the render pass.
-		ashes::VkAttachmentDescriptionArray attachments
-		{
+		m_resultImg = m_renderTarget.getGraph().createImage( crg::ImageData{ "LinearMotionBlurResult"
+			, 0u
+			, VK_IMAGE_TYPE_2D
+			, m_target->data->info.format
+			, castor3d::makeExtent3D( m_renderTarget.getSize() )
+			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+				| VK_IMAGE_USAGE_SAMPLED_BIT
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } );
+		m_resultView = m_renderTarget.getGraph().createView( crg::ImageViewData{ "LinearMotionBlurResult"
+			, m_resultImg
+			, 0u
+			, VK_IMAGE_VIEW_TYPE_2D
+			, m_resultImg.data->info.format
+			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } );
+		m_pass = &m_renderTarget.getGraph().createPass( "LinearMotionBlurPass"
+			, [this]( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph )
 			{
-				0u,
-				m_target->getFormat(),
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-				VK_ATTACHMENT_STORE_OP_STORE,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_UNDEFINED,
-				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-			}
-		};
-		ashes::SubpassDescriptionArray subpasses;
-		subpasses.emplace_back( ashes::SubpassDescription
-			{
-				0u,
-				VK_PIPELINE_BIND_POINT_GRAPHICS,
-				{},
-				{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
-				{},
-				ashes::nullopt,
-				{},
+				return crg::RenderQuadBuilder{}
+					.renderPosition( {} )
+					.renderSize( castor3d::makeExtent2D( m_renderTarget.getSize() ) )
+					.texcoordConfig( {} )
+					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
+					.build( pass, context, graph );
 			} );
-		ashes::VkSubpassDependencyArray dependencies
-		{
-			{
-				VK_SUBPASS_EXTERNAL,
-				0u,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-				VK_ACCESS_SHADER_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			},
-			{
-				0u,
-				VK_SUBPASS_EXTERNAL,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-				VK_ACCESS_SHADER_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			},
-		};
-		ashes::RenderPassCreateInfo createInfo
-		{
-			0u,
-			std::move( attachments ),
-			std::move( subpasses ),
-			std::move( dependencies ),
-		};
-		m_renderPass = device->createRenderPass( "LinearMotionBlur"
-			, std::move( createInfo ) );
-
-		m_ubo = device.uboPools->getBuffer< Configuration >( 0u );
-		auto & configuration = m_ubo.getData();
-		configuration.samplesCount = m_configuration.samplesCount;
-		configuration.vectorDivider = m_configuration.vectorDivider;
-
-		ashes::VkDescriptorSetLayoutBindingArray bindings
-		{
-			castor3d::makeDescriptorSetLayoutBinding( 0u
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			castor3d::makeDescriptorSetLayoutBinding( 1u
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-		};
-		m_quad = std::make_unique< Quad >( renderSystem
-			, device );
-		m_quad->createPipelineAndPass( size
-			, castor::Position{}
-			, stages
-			, *m_renderPass
-			, {
-				m_quad->makeDescriptorWrite( m_ubo
-					, BlurCfgUboIdx ),
-				m_quad->makeDescriptorWrite( m_renderTarget.getVelocity().getTexture()->getDefaultView().getSampledView()
-					, m_renderTarget.getVelocity().getSampler()->getSampler()
-					, VelocityTexIdx ),
-				m_quad->makeDescriptorWrite( *m_target
-					, m_quad->getSampler().getSampler()
-					, VelocityTexIdx ),
-			} );
-
-		auto result = m_surface.initialise( device
-			, *m_renderPass
-			, castor::Size{ size.width, size.height }
-			, m_target->getFormat() );
-
-		if ( result )
-		{
-			castor3d::CommandsSemaphore commands
-			{
-				device.graphicsCommandPool->createCommandBuffer( "LinearMotionBlur" ),
-				device->createSemaphore( "LinearMotionBlur" )
-			};
-			auto & cmd = *commands.commandBuffer;
-			cmd.begin();
-			timer.beginPass( cmd );
-
-			// Put target image in shader input layout.
-			cmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, m_target->makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
-
-			cmd.beginRenderPass( *m_renderPass
-				, *m_surface.frameBuffer
-				, { castor3d::transparentBlackClearColor }
-				, VK_SUBPASS_CONTENTS_INLINE );
-			m_quad->registerPass( cmd );
-			cmd.endRenderPass();
-
-			timer.endPass( cmd );
-			cmd.end();
-			m_commands.emplace_back( std::move( commands ) );
-		}
-
-		m_result = &m_surface.colourTexture->getDefaultView().getSampledView();
+		m_pass->addDependency( previousPass );
+		m_ubo.createPassBinding( *m_pass
+			, BlurCfgUboIdx );
+		m_pass->addSampledView( *m_target
+			, ColorTexIdx
+			, VK_IMAGE_LAYOUT_UNDEFINED );
+		m_pass->addSampledView( m_renderTarget.getVelocityId()
+			, VelocityTexIdx
+			, VK_IMAGE_LAYOUT_UNDEFINED );
+		m_pass->addOutputColourView( m_resultView );
 		m_saved = Clock::now();
-		return result;
+		return &m_resultView;
 	}
 
 	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
 	{
-		m_quad.reset();
-		device.uboPools->putBuffer( m_ubo );
-		m_renderPass.reset();
-		m_surface.cleanup( device );
 	}
 
 	bool PostEffect::doWriteInto( castor::StringStream & file, castor::String const & tabs )

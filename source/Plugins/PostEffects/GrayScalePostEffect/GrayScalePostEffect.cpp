@@ -118,6 +118,7 @@ namespace grayscale
 
 	PostEffect::~PostEffect()
 	{
+		getRenderSystem()->getMainRenderDevice()->uboPools->putBuffer( m_configUbo );
 	}
 
 	castor3d::PostEffectSPtr PostEffect::create( castor3d::RenderTarget & renderTarget

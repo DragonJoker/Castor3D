@@ -26,15 +26,6 @@ namespace motion_blur
 	class PostEffect
 		: public castor3d::PostEffect
 	{
-	private:
-		class Quad
-			: public castor3d::RenderQuad
-		{
-		public:
-			Quad( castor3d::RenderSystem & renderSystem
-				, castor3d::RenderDevice const & device );
-		};
-
 	public:
 		PostEffect( castor3d::RenderTarget & renderTarget
 			, castor3d::RenderSystem & renderSystem
@@ -52,12 +43,19 @@ namespace motion_blur
 		 */
 		void accept( castor3d::PipelineVisitorBase & visitor )override;
 
+		crg::FramePass const & getPass()const override
+		{
+			CU_Require( m_pass );
+			return *m_pass;
+		}
+
 	private:
 		/**
 		*\copydoc		castor3d::PostEffect::doInitialise
 		*/
-		bool doInitialise( castor3d::RenderDevice const & device
-			, castor3d::RenderPassTimer const & timer )override;
+		crg::ImageViewId const * doInitialise( castor3d::RenderDevice const & device
+			, castor3d::RenderPassTimer const & timer
+			, crg::FramePass const & previousPass )override;
 		/**
 		*\copydoc		castor3d::PostEffect::doCleanup
 		*/
@@ -74,13 +72,14 @@ namespace motion_blur
 	private:
 		using Clock = std::chrono::high_resolution_clock;
 		using TimePoint = Clock::time_point;
-		castor3d::PostEffectSurface m_surface;
-		ashes::RenderPassPtr m_renderPass;
-		std::unique_ptr< Quad > m_quad;
 		Configuration m_configuration;
 		castor3d::UniformBufferOffsetT< Configuration > m_ubo;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
+		ashes::PipelineShaderStageCreateInfoArray m_stages;
+		crg::ImageId m_resultImg;
+		crg::ImageViewId m_resultView;
+		crg::FramePass * m_pass{};
 		TimePoint m_saved;
 		bool m_fpsScale{ true };
 	};
