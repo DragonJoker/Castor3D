@@ -307,7 +307,7 @@ namespace castor3d
 
 		CommandsSemaphore doPrepareColourTransitionCommands( RenderDevice const & device
 			, TextureUnit const & colourTexture
-			, TextureUnit const & velocityTexture )
+			, ashes::ImageView velocityTexture )
 		{
 			auto & engine = *device.renderSystem.getEngine();
 			CommandsSemaphore result{ device, "TechniqueColourTexTransition" };
@@ -323,12 +323,12 @@ namespace castor3d
 				, colourTexture.getTexture()->getDefaultView().getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
 			cmd.memoryBarrier( VK_PIPELINE_STAGE_HOST_BIT
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, velocityTexture.getTexture()->getDefaultView().getTargetView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
-			cmd.clear( velocityTexture.getTexture()->getDefaultView().getTargetView()
+				, velocityTexture.makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+			cmd.clear( velocityTexture
 				, transparentBlackClearColor.color );
 			cmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, velocityTexture.getTexture()->getDefaultView().getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+				, velocityTexture.makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
 			cmd.endDebugBlock();
 			cmd.end();
 
@@ -455,9 +455,6 @@ namespace castor3d
 			, *m_renderTarget.getScene() ) }
 		, m_clearLpv{ doCreateClearLpvCommands( device, getName(), *m_lpvResult, m_llpvResult ) }
 		, m_particleTimer{ std::make_shared< RenderPassTimer >( device, cuT( "Particles" ), cuT( "Particles" ) ) }
-		, m_colorTexTransition{ doPrepareColourTransitionCommands( device
-			, m_colourTexture
-			, m_renderTarget.getVelocity() ) }
 	{
 		m_allShadowMaps[size_t( LightType::eDirectional )].emplace_back( std::ref( *m_directionalShadowMap ), UInt32Array{} );
 		m_allShadowMaps[size_t( LightType::eSpot )].emplace_back( std::ref( *m_spotShadowMap ), UInt32Array{} );
@@ -676,6 +673,7 @@ namespace castor3d
 			} );
 		result.addOutputDepthView( m_depthView
 			, defaultClearDepthStencil );
+		result.addOutputColourView( m_renderTarget.getVelocityId() );
 		return result;
 	}
 
