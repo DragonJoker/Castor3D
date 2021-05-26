@@ -251,9 +251,14 @@ namespace castor3d
 			return m_combinedFrameBuffer.colourView;
 		}
 
-		TextureUnit const & getVelocity()const
+		ashes::ImageView const & getVelocity()const
 		{
-			return m_velocityTexture;
+			return m_velocityImageView;
+		}
+
+		crg::ImageViewId const & getVelocityId()const
+		{
+			return m_velocityView;
 		}
 
 		VkFormat getPixelFormat()const
@@ -356,7 +361,6 @@ namespace castor3d
 	private:
 		crg::FramePass & doCreateCombinePass();
 		void doInitialiseRenderPass( RenderDevice const & device );
-		bool doInitialiseVelocityTexture( RenderDevice const & device );
 		bool doInitialiseTechnique( RenderDevice const & device );
 		crg::FramePass const & doInitialiseCopyCommands( RenderDevice const & device
 			, castor::String const & name
@@ -401,13 +405,14 @@ namespace castor3d
 		ashes::PipelineShaderStageCreateInfoArray m_combineStages;
 		SsaoConfig m_ssaoConfig;
 		castor::Point2f m_jitter;
-		TextureUnit m_velocityTexture;
 		OverlayRendererSPtr m_overlayRenderer;
 		ashes::SemaphorePtr m_signalReady;
 		crg::SemaphoreWait m_signalFinished{};
 		castor::PreciseTimer m_timer;
 		SceneCullerUPtr m_culler;
 		crg::FrameGraph m_graph;
+		crg::ImageId m_velocityImg;
+		crg::ImageViewId m_velocityView;
 		crg::ImageId m_objectsImg;
 		crg::ImageViewId m_objectsView;
 		crg::ImageId m_overlaysImg;
@@ -418,6 +423,8 @@ namespace castor3d
 		crg::FramePass const * m_hdrLastPass{};
 		crg::RunnableGraphPtr m_runnable;
 		ashes::SemaphorePtr m_combineSemaphore;
+		ashes::ImagePtr m_velocityImage;
+		ashes::ImageView m_velocityImageView;
 	};
 }
 
