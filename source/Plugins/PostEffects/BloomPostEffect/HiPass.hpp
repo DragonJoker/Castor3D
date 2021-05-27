@@ -5,49 +5,41 @@ See LICENSE file in root folder
 #define ___C3D_Bloom_HiPass___
 
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
-#include <Castor3D/Render/PostEffect/PostEffectSurface.hpp>
-#include <Castor3D/Render/Passes/RenderQuad.hpp>
-
-#include <ShaderAST/Shader.hpp>
 
 #define Bloom_DebugHiPass 0
 
 namespace Bloom
 {
 	class HiPass
-		: public castor3d::RenderQuad
 	{
 	public:
-		HiPass( castor3d::RenderDevice const & device
-			, VkFormat format
-			, ashes::ImageView const & sceneView
+		HiPass( crg::FrameGraph & graph
+			, crg::FramePass const & previousPass
+			, castor3d::RenderDevice const & device
+			, crg::ImageViewId const & sceneView
 			, VkExtent2D size
 			, uint32_t blurPassesCount );
-		castor3d::CommandsSemaphore getCommands( castor3d::RenderPassTimer const & timer
-			, uint32_t & index )const;
 		void accept( castor3d::PipelineVisitorBase & visitor );
 
-		inline castor3d::ShaderModule const & getVertexShader()const
+		crg::ImageViewIdArray const & getResult()const
 		{
-			return m_vertexShader;
+			return m_resultViews;
 		}
 
-		inline castor3d::ShaderModule const & getPixelShader()const
+		crg::FramePass const & getPass()const
 		{
-			return m_pixelShader;
-		}
-
-		inline castor3d::TextureLayout const & getResult()const
-		{
-			return *m_surface.colourTexture;
+			return m_pass;
 		}
 
 	private:
-		ashes::ImageView const & m_sceneView;
+		crg::ImageViewId const & m_sceneView;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
-		ashes::RenderPassPtr m_renderPass;
-		castor3d::PostEffectSurface m_surface;
+		ashes::PipelineShaderStageCreateInfoArray m_stages;
+		crg::ImageId m_resultImg;
+		crg::ImageViewId m_resultView;
+		crg::ImageViewIdArray m_resultViews;
+		crg::FramePass & m_pass;
 	};
 }
 

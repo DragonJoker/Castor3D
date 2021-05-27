@@ -3,26 +3,13 @@
 #include "BloomPostEffect/BloomPostEffect.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Cache/SamplerCache.hpp>
-#include <Castor3D/Material/Texture/Sampler.hpp>
-#include <Castor3D/Material/Texture/TextureLayout.hpp>
-#include <Castor3D/Miscellaneous/Parameter.hpp>
-#include <Castor3D/Model/Vertex.hpp>
-#include <Castor3D/Render/RenderSystem.hpp>
-#include <Castor3D/Render/RenderTarget.hpp>
-#include <Castor3D/Render/RenderPassTimer.hpp>
 #include <Castor3D/Shader/Program.hpp>
 
 #include <CastorUtils/Graphics/Image.hpp>
 
-#include <ashespp/Buffer/VertexBuffer.hpp>
-#include <ashespp/Image/Image.hpp>
-#include <ashespp/Image/ImageView.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
-#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
-#include <ashespp/RenderPass/SubpassDescription.hpp>
-
 #include <ShaderWriter/Source.hpp>
+
+#include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
 #include <numeric>
 
@@ -32,6 +19,162 @@ namespace Bloom
 {
 	namespace
 	{
+		template< typename T >
+		inline constexpr T getSubresourceDimension( T const & extent
+			, uint32_t mipLevel )noexcept
+		{
+			return std::max( T( 1 ), T( extent >> mipLevel ) );
+		}
+
+		class HiPassQuad
+			: public crg::RenderQuad
+		{
+		public:
+			HiPassQuad( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph
+				, crg::VkPipelineShaderStageCreateInfoArray program
+				, VkExtent2D const & renderSize )
+				: crg::RenderQuad{ pass
+					, context
+					, graph
+					, crg::rq::Config{ std::move( program )
+						, crg::rq::Texcoord{}
+						, renderSize
+						, VkOffset2D{} } }
+#if !Bloom_DebugHiPass
+				, m_viewDesc{ pass.colourInOuts.front().view }
+				, m_imageDesc{ m_viewDesc.data->image }
+				, m_image{ graph.getImage( m_imageDesc ) }
+#endif
+			{
+#if !Bloom_DebugHiPass
+				auto const imageViewType = VkImageViewType( m_imageDesc.data->info.imageType );
+				crg::ImageViewData viewData{ m_imageDesc.data->name
+					, m_imageDesc
+					, 0u
+					, imageViewType
+					, m_imageDesc.data->info.format
+					, { m_viewDesc.data->info.subresourceRange.aspectMask, 0u, 1u, 0u, 1u } };
+
+				viewData.info.subresourceRange.baseMipLevel = m_viewDesc.data->info.subresourceRange.baseMipLevel;
+				crg::ImageViewId prevLevelView = m_graph.createView( viewData );
+
+				for ( uint32_t levelIdx = 1u; levelIdx < m_imageDesc.data->info.mipLevels; ++levelIdx )
+				{
+					viewData.info.subresourceRange.baseMipLevel = m_viewDesc.data->info.subresourceRange.baseMipLevel + levelIdx;
+					crg::ImageViewId currLevelView = m_graph.createView( viewData );
+					m_mipGens.push_back( { prevLevelView, currLevelView } );
+					prevLevelView = currLevelView;
+				}
+#endif
+			}
+
+		private:
+			void doRecordInto( VkCommandBuffer commandBuffer )const override
+			{
+				crg::RenderQuad::doRecordInto( commandBuffer );
+
+#if !Bloom_DebugHiPass
+				auto const width = int32_t( m_imageDesc.data->info.extent.width );
+				auto const height = int32_t( m_imageDesc.data->info.extent.height );
+				auto const depth = int32_t( m_imageDesc.data->info.extent.depth );
+				auto const imageViewType = VkImageViewType( m_imageDesc.data->info.imageType );
+				auto const aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+				auto finalLayout = m_graph.getOutputLayout( m_pass, m_viewDesc );
+				auto srcLayout = m_graph.getCurrentLayout( m_viewDesc );
+				// Transition source view to transfer src layout
+				m_graph.memoryBarrier( commandBuffer
+					, m_viewDesc
+					, srcLayout
+					, m_graph.updateCurrentLayout( m_viewDesc, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
+
+				for ( auto & mipGen : m_mipGens )
+				{
+					VkImageBlit imageBlit{};
+
+					imageBlit.srcSubresource.aspectMask = aspectMask;
+					imageBlit.srcSubresource.mipLevel = mipGen.src.data->info.subresourceRange.baseMipLevel;
+					imageBlit.srcSubresource.baseArrayLayer = 0u;
+					imageBlit.srcSubresource.layerCount = 1;
+
+					imageBlit.srcOffsets[0].x = 0;
+					imageBlit.srcOffsets[0].y = 0;
+					imageBlit.srcOffsets[0].z = 0;
+					imageBlit.srcOffsets[1].x = getSubresourceDimension( width, imageBlit.srcSubresource.mipLevel );
+					imageBlit.srcOffsets[1].y = getSubresourceDimension( height, imageBlit.srcSubresource.mipLevel );
+					imageBlit.srcOffsets[1].z = getSubresourceDimension( depth, imageBlit.srcSubresource.mipLevel );
+
+					imageBlit.dstSubresource.aspectMask = aspectMask;
+					imageBlit.dstSubresource.mipLevel = mipGen.dst.data->info.subresourceRange.baseMipLevel;
+					imageBlit.dstSubresource.baseArrayLayer = 0u;
+					imageBlit.dstSubresource.layerCount = 1;
+
+					imageBlit.dstOffsets[0].x = 0;
+					imageBlit.dstOffsets[0].y = 0;
+					imageBlit.dstOffsets[0].z = 0;
+					imageBlit.dstOffsets[1].x = getSubresourceDimension( width, imageBlit.dstSubresource.mipLevel );
+					imageBlit.dstOffsets[1].y = getSubresourceDimension( height, imageBlit.dstSubresource.mipLevel );
+					imageBlit.dstOffsets[1].z = getSubresourceDimension( depth, imageBlit.dstSubresource.mipLevel );
+
+					// Transition destination mip level to transfer dst layout
+					auto dstLayout = m_graph.getCurrentLayout( mipGen.dst );
+					m_graph.memoryBarrier( commandBuffer
+						, mipGen.dst
+						, dstLayout
+						, m_graph.updateCurrentLayout( mipGen.dst, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+
+					// Perform blit
+					m_context.vkCmdBlitImage( commandBuffer
+						, m_image
+						, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+						, m_image
+						, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+						, 1u
+						, &imageBlit
+						, VK_FILTER_LINEAR );
+
+					// Transition destination mip level to transfer src layout
+					dstLayout = m_graph.getCurrentLayout( mipGen.dst );
+					m_graph.memoryBarrier( commandBuffer
+						, mipGen.dst
+						, dstLayout
+						, m_graph.updateCurrentLayout( mipGen.dst, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
+
+					// Transition source mip level to wanted output layout
+					srcLayout = m_graph.getCurrentLayout( mipGen.src );
+					m_graph.memoryBarrier( commandBuffer
+						, mipGen.src
+						, srcLayout
+						, m_graph.updateCurrentLayout( mipGen.src, finalLayout ) );
+				}
+
+				// Transition last destination mip level to wanted output layout
+				auto & mipGen = m_mipGens.back();
+				auto dstLayout = m_graph.getCurrentLayout( mipGen.dst );
+				m_graph.memoryBarrier( commandBuffer
+					, mipGen.dst
+					, dstLayout
+					, m_graph.updateCurrentLayout( mipGen.dst, finalLayout ) );
+
+				m_graph.updateCurrentLayout( m_viewDesc, finalLayout );
+#endif
+			}
+
+#if !Bloom_DebugHiPass
+		private:
+			struct LevelMipGen
+			{
+				crg::ImageViewId src;
+				crg::ImageViewId dst;
+			};
+			crg::ImageViewId m_viewDesc;
+			crg::ImageId m_imageDesc;
+			VkImage m_image{};
+			std::vector< LevelMipGen > m_mipGens;
+#endif
+		};
+
 		std::unique_ptr< ast::Shader > getVertexProgram()
 		{
 			using namespace sdw;
@@ -86,146 +229,67 @@ namespace Bloom
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
-
-		ashes::RenderPassPtr doCreateRenderPass( castor3d::RenderDevice const & device
-			, VkFormat format )
-		{
-			ashes::VkAttachmentDescriptionArray attaches
-			{
-				{
-					0u,
-					format,
-					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
-					VK_ATTACHMENT_STORE_OP_STORE,
-					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
-					VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-				}
-			};
-			ashes::SubpassDescriptionArray subpasses;
-			subpasses.emplace_back( ashes::SubpassDescription
-				{
-					0u,
-					VK_PIPELINE_BIND_POINT_GRAPHICS,
-					{},
-					{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
-					{},
-					ashes::nullopt,
-					{},
-				} );
-			ashes::VkSubpassDependencyArray dependencies
-			{
-				{
-					VK_SUBPASS_EXTERNAL,
-					0u,
-					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-					VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-					VK_ACCESS_SHADER_READ_BIT,
-					VK_DEPENDENCY_BY_REGION_BIT,
-				},
-				{
-					0u,
-					VK_SUBPASS_EXTERNAL,
-					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-					VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-					VK_ACCESS_SHADER_READ_BIT,
-					VK_DEPENDENCY_BY_REGION_BIT,
-				},
-			};
-			ashes::RenderPassCreateInfo createInfo
-			{
-				0u,
-				std::move( attaches ),
-				std::move( subpasses ),
-				std::move( dependencies ),
-			};
-			auto result = device->createRenderPass( "BloomHiPass"
-				, std::move( createInfo ) );
-			return result;
-		}
 	}
 
 	//*********************************************************************************************
 
-	HiPass::HiPass( castor3d::RenderDevice const & device
-		, VkFormat format
-		, ashes::ImageView const & sceneView
+	HiPass::HiPass( crg::FrameGraph & graph
+		, crg::FramePass const & previousPass
+		, castor3d::RenderDevice const & device
+		, crg::ImageViewId const & sceneView
 		, VkExtent2D size
 		, uint32_t blurPassesCount )
-		: castor3d::RenderQuad{ device
-			, cuT( "BloomHiPass" )
-			, VK_FILTER_NEAREST
-			, { ashes::nullopt
-				, ashes::nullopt
-				, castor3d::rq::Texcoord{} } }
-		, m_sceneView{ sceneView }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram() }
-		, m_renderPass{ doCreateRenderPass( m_device, format ) }
-		, m_surface{ *device.renderSystem.getEngine(), getName() }
-	{
-		ashes::PipelineShaderStageCreateInfoArray shaderStages;
-		shaderStages.push_back( makeShaderState( m_device, m_vertexShader ) );
-		shaderStages.push_back( makeShaderState( m_device, m_pixelShader ) );
-
+		: m_sceneView{ sceneView }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "BloomHiPass", getVertexProgram() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "BloomHiPass", getPixelProgram() }
+		, m_stages{ makeShaderState( device, m_vertexShader )
+			, makeShaderState( device, m_pixelShader ) }
 #if !Bloom_DebugHiPass
-		size.width >>= 1;
-		size.height >>= 1;
+		, m_resultImg{ graph.createImage( crg::ImageData{ "BLHi"
+			, 0u
+			, VK_IMAGE_TYPE_2D
+			, sceneView.data->info.format
+			, VkExtent3D{ size.width >> 1, size.height >> 1, 1u }
+			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+				| VK_IMAGE_USAGE_SAMPLED_BIT
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
+				| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
+			, blurPassesCount } ) }
 #else
-		blurPassesCount = 1u;
+		, m_resultImg{ graph.createImage( crg::ImageData{ "BLHi"
+			, 0u
+			, VK_IMAGE_TYPE_2D
+			, sceneView.data->info.format
+			, VkExtent3D{ size.width, size.height, 1u }
+			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+				| VK_IMAGE_USAGE_SAMPLED_BIT
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } ) }
 #endif
-
-		ashes::VkDescriptorSetLayoutBindingArray bindings;
-		createPipelineAndPass( size
-			, {}
-			, shaderStages
-			, *m_renderPass
-			, { makeDescriptorWrite( sceneView, m_sampler->getSampler(), 0u ) }
-			, {} );
-		m_surface.initialise( device
-			, *m_renderPass
-			, { size.width, size.height }
-			, m_sceneView.getFormat()
-			, blurPassesCount );
-	}
-
-	castor3d::CommandsSemaphore HiPass::getCommands( castor3d::RenderPassTimer const & timer
-		, uint32_t & index )const
+		, m_pass{ graph.createPass( "BloomHiPass"
+			, [this, size]( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph )
+			{
+				return std::make_unique< HiPassQuad >( pass
+					, context
+					, graph
+					, ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages )
+					, VkExtent2D{ m_resultImg.data->info.extent.width, m_resultImg.data->info.extent.height } );
+			} ) }
 	{
-		castor3d::CommandsSemaphore commands
+		for ( uint32_t i = 0u; i < blurPassesCount; ++i )
 		{
-			m_device.graphicsCommandPool->createCommandBuffer( getName() ),
-			m_device->createSemaphore( getName() )
-		};
-		auto & cmd = *commands.commandBuffer;
+			m_resultViews.push_back( graph.createView( crg::ImageViewData{ m_resultImg.data->name + castor::string::toString( i )
+				, m_resultImg
+				, 0u
+				, VK_IMAGE_VIEW_TYPE_2D
+				, m_resultImg.data->info.format
+				, { VK_IMAGE_ASPECT_COLOR_BIT, i, 1u, 0u, 1u } } ) );
+		}
 
-		cmd.begin();
-		timer.beginPass( cmd, index );
-		cmd.beginDebugBlock( { "BloomHiPass"
-			, castor3d::makeFloatArray( m_renderSystem.getEngine()->getNextRainbowColour() ) } );
-		cmd.beginRenderPass( *m_renderPass
-			, *m_surface.frameBuffer
-			, { castor3d::transparentBlackClearColor }
-			, VK_SUBPASS_CONTENTS_INLINE );
-		registerPass( cmd );
-		cmd.endDebugBlock();
-		cmd.endRenderPass();
-#if !Bloom_DebugHiPass
-		m_surface.colourTexture->getTexture().generateMipmaps( cmd
-			, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
-			, VK_IMAGE_LAYOUT_UNDEFINED
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-#endif
-
-		timer.endPass( cmd, index );
-		cmd.end();
-
-		++index;
-		return commands;
+		m_pass.addDependency( previousPass );
+		m_pass.addSampledView( m_sceneView, 0u );
+		m_pass.addOutputColourView( m_pass.mergeViews( m_resultViews, false ) );
 	}
 
 	void HiPass::accept( castor3d::PipelineVisitorBase & visitor )
