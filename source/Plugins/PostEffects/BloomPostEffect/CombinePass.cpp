@@ -111,7 +111,6 @@ namespace Bloom
 				return crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( size )
-					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.build( pass, context, graph );
 			} ) }

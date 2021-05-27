@@ -31,8 +31,7 @@ namespace Bloom
 			, PostEffect::Name
 			, renderTarget
 			, renderSystem
-			, params
-			, BaseFilterCount + BaseFilterCount + 1u + 1u }
+			, params }
 		, m_blurKernelSize{ BaseKernelSize }
 		, m_blurPassesCount{ BaseFilterCount }
 	{
