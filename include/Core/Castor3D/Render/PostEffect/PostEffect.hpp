@@ -145,10 +145,6 @@ namespace castor3d
 		**/
 		/**@{*/
 		C3D_API virtual crg::FramePass const & getPass()const = 0;
-		CommandsSemaphoreArray const & getCommands()const
-		{
-			return m_commands;
-		}
 
 		bool isAfterToneMapping()const
 		{
@@ -218,7 +214,6 @@ namespace castor3d
 		std::unique_ptr< RenderPassTimer > m_timer;
 		Kind m_kind{ Kind::eHDR };
 		crg::ImageViewId const * m_target{ nullptr };
-		CommandsSemaphoreArray m_commands;
 		crg::ImageViewId const * m_result{ nullptr };
 	};
 }
