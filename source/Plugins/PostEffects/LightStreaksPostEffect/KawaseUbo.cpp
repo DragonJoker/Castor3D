@@ -17,30 +17,21 @@ namespace light_streaks
 	String const KawaseUbo::Attenuation = cuT( "c3d_attenuation" );
 	String const KawaseUbo::Pass = cuT( "c3d_passCount" );
 
-	KawaseUbo::KawaseUbo( Engine & engine )
-		: m_engine{ engine }
+	KawaseUbo::KawaseUbo( castor3d::RenderDevice const & device )
+		: m_device{ device }
 	{
-	}
-
-	void KawaseUbo::initialise( castor3d::RenderDevice const & device )
-	{
-		if ( m_ubo.empty() )
+		for ( uint32_t i = 0u; i < PostEffect::Count * 3u; ++i )
 		{
-			for ( uint32_t i = 0u; i < PostEffect::Count * 3u; ++i )
-			{
-				m_ubo.push_back( device.uboPools->getBuffer< Configuration >( 0u ) );
-			}
+			m_ubo.push_back( device.uboPools->getBuffer< Configuration >( 0u ) );
 		}
 	}
 
-	void KawaseUbo::cleanup( castor3d::RenderDevice const & device )
+	KawaseUbo::~KawaseUbo()
 	{
 		for ( auto & ubo : m_ubo )
 		{
-			device.uboPools->putBuffer( ubo );
+			m_device.uboPools->putBuffer( ubo );
 		}
-
-		m_ubo.clear();
 	}
 
 	void KawaseUbo::update( uint32_t index

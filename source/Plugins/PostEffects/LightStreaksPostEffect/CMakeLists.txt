@@ -16,13 +16,19 @@ set( PROJECT_VERSION "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION
 set( PROJECT_SOVERSION "${${PROJECT_NAME}_VERSION_BUILD}" )
 
 set( ${PROJECT_NAME}_HDR_FILES
-	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/LightStreaksPostEffect.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/CombinePass.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/HiPass.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/KawasePass.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/KawaseUbo.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/LightStreaksPostEffect.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
+	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/CombinePass.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/HiPass.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/KawasePass.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/KawaseUbo.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/LightStreaksPostEffect.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/LightStreaksPostEffectPlugin.cpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/KawaseUbo.cpp
 )
 source_group( "Header Files"
 	FILES
