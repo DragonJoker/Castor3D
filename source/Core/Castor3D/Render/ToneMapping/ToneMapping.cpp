@@ -11,7 +11,7 @@
 #include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/ImageData.hpp>
 #include <RenderGraph/ImageViewData.hpp>
-#include <RenderGraph/RenderQuad.hpp>
+#include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
 #include <CastorUtils/Graphics/Size.hpp>
 
