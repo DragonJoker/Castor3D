@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "PassesModule.hpp"
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
 
-#include <RenderGraph/RenderPass.hpp>
+#include <RenderGraph/RunnablePasses/RenderPass.hpp>
 
 #include <ashespp/Pipeline/GraphicsPipeline.hpp>
 
