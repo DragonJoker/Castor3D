@@ -2,28 +2,14 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Buffer/GpuBuffer.hpp>
-#include <Castor3D/Cache/SamplerCache.hpp>
-#include <Castor3D/Model/Vertex.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
-#include <Castor3D/Render/RenderTarget.hpp>
-#include <Castor3D/Render/RenderPassTimer.hpp>
-#include <Castor3D/Material/Texture/Sampler.hpp>
-#include <Castor3D/Material/Texture/TextureLayout.hpp>
 
 #include <CastorUtils/Graphics/Image.hpp>
-
-#include <ashespp/Buffer/VertexBuffer.hpp>
-#include <ashespp/Image/Image.hpp>
-#include <ashespp/Image/ImageView.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
-#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
 #include <numeric>
-
-using namespace castor;
 
 namespace Bloom
 {
@@ -35,8 +21,8 @@ namespace Bloom
 
 	//*********************************************************************************************
 
-	String const PostEffect::Type = cuT( "bloom" );
-	String const PostEffect::Name = cuT( "Bloom PostEffect" );
+	castor::String const PostEffect::Type = cuT( "bloom" );
+	castor::String const PostEffect::Name = cuT( "Bloom PostEffect" );
 
 	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
 		, castor3d::RenderSystem & renderSystem
@@ -50,16 +36,16 @@ namespace Bloom
 		, m_blurKernelSize{ BaseKernelSize }
 		, m_blurPassesCount{ BaseFilterCount }
 	{
-		String count;
+		castor::String count;
 
 		if ( params.get( cuT( "Size" ), count ) )
 		{
-			m_blurKernelSize = uint32_t( string::toLong( count ) );
+			m_blurKernelSize = uint32_t( castor::string::toLong( count ) );
 		}
 
 		if ( params.get( cuT( "Passes" ), count ) )
 		{
-			m_blurPassesCount = uint32_t( string::toLong( count ) );
+			m_blurPassesCount = uint32_t( castor::string::toLong( count ) );
 		}
 
 		m_passesCount = m_blurPassesCount * 2u + 2u;
@@ -87,111 +73,77 @@ namespace Bloom
 #endif
 	}
 
-	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
-		, castor3d::RenderPassTimer const & timer )
+	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
+		, castor3d::RenderPassTimer const & timer
+		, crg::FramePass const & previousPass )
 	{
-		VkExtent2D size{ m_target->viewData.image.data->info.extent.width
-			, m_target->viewData.image.data->info.extent.height };
+		VkExtent2D size{ m_target->data->image.data->info.extent.width
+			, m_target->data->image.data->info.extent.height };
+		auto & graph = m_renderTarget.getGraph();
 
 #if !Bloom_DebugHiPass
-		// Create vertex buffer
-		m_vertexBuffer = castor3d::makeVertexBuffer< castor3d::NonTexturedQuad >( device
-			, 1u
+		m_blurImg = graph.createImage( crg::ImageData{ "Blur"
 			, 0u
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "PostEffect" );
+			, VK_IMAGE_TYPE_2D
+			, m_target->data->info.format
+			, VkExtent3D{ size.width >> 1, size.height >> 1, 1u }
+			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+				| VK_IMAGE_USAGE_SAMPLED_BIT
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
+			, m_blurPassesCount } );
 
-		if ( auto data = m_vertexBuffer->lock( 0u, 1u, 0u ) )
+		for ( uint32_t i = 0u; i < m_blurPassesCount; ++i )
 		{
-			castor3d::NonTexturedQuad buffer
-			{
-				{ 
-					Point2f{ -1.0, -1.0 },
-					Point2f{ -1.0, +1.0 },
-					Point2f{ +1.0, -1.0 },
-					Point2f{ +1.0, -1.0 },
-					Point2f{ -1.0, +1.0 },
-					Point2f{ +1.0, +1.0 }
-				},
-			};
-			*data = buffer;
-			m_vertexBuffer->flush( 0u, 1u );
-			m_vertexBuffer->unlock();
+			m_blurViews.push_back( graph.createView( crg::ImageViewData{ m_blurImg.data->name + castor::string::toString( i )
+				, m_blurImg
+				, 0u
+				, VK_IMAGE_VIEW_TYPE_2D
+				, m_blurImg.data->info.format
+				, { VK_IMAGE_ASPECT_COLOR_BIT, i, 1u, 0u, 1u } } ) );
 		}
-
-		auto format = m_target->viewData.info.format;
-		ashes::ImageCreateInfo image
-		{
-			0u,
-			VK_IMAGE_TYPE_2D,
-			format,
-			{ size.width >> 1, size.height >> 1, 1u },
-			m_blurPassesCount,
-			1u,
-			VK_SAMPLE_COUNT_1_BIT,
-			VK_IMAGE_TILING_OPTIMAL,
-			( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT ),
-		};
-		m_blurTexture = std::make_shared< castor3d::TextureLayout >( *getRenderSystem()
-			, image
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, cuT( "BloomBlur" ) );
-		m_blurTexture->initialise( device );
 #endif
 
-		m_hiPass = std::make_unique< HiPass >( device
-			, m_target->viewData.info.format
+		m_hiPass = std::make_unique< HiPass >( graph
+			, previousPass
+			, device
 			, *m_target
 			, size
 			, m_blurPassesCount );
 #if !Bloom_DebugHiPass
-		m_blurXPass = std::make_unique< BlurPass >( device
-			, m_target->viewData.info.format
+		m_blurXPass = std::make_unique< BlurPass >( graph
+			, m_hiPass->getPass()
+			, device
 			, m_hiPass->getResult()
-			, *m_blurTexture
+			, m_blurViews
 			, size
 			, m_blurKernelSize
 			, m_blurPassesCount
 			, false );
-		m_blurYPass = std::make_unique< BlurPass >( device
-			, m_target->viewData.info.format
-			, *m_blurTexture
+		m_blurYPass = std::make_unique< BlurPass >( graph
+			, m_blurXPass->getPasses()
+			, device
+			, m_blurViews
 			, m_hiPass->getResult()
 			, size
 			, m_blurKernelSize
 			, m_blurPassesCount
 			, true );
-		m_combinePass = std::make_unique< CombinePass >( device
-			, m_target->viewData.info.format
+		m_combinePass = std::make_unique< CombinePass >( graph
+			, m_blurYPass->getPasses()
+			, device
 			, *m_target
-			, m_hiPass->getResult().getDefaultView().getSampledView()
+			, m_hiPass->getResult()
 			, size
 			, m_blurPassesCount );
 #endif
-		uint32_t index = 0u;
-		m_commands.emplace_back( std::move( m_hiPass->getCommands( timer, index ) ) );
-
-#if !Bloom_DebugHiPass
-		for ( auto & command : m_blurXPass->getCommands( timer, index, *m_vertexBuffer ) )
-		{
-			m_commands.emplace_back( std::move( command ) );
-		}
-
-		for ( auto & command : m_blurYPass->getCommands( timer, index, *m_vertexBuffer ) )
-		{
-			m_commands.emplace_back( std::move( command ) );
-		}
-
-		m_commands.emplace_back( std::move( m_combinePass->getCommands( timer, index, *m_vertexBuffer ) ) );
-#endif
 
 #if Bloom_DebugHiPass
-		m_result = &m_hiPass->getResult();
+		m_pass = &m_hiPass->getPass();
+		return &m_hiPass->getResult();
 #else
-		m_result = &m_combinePass->getResult().getDefaultView().getSampledView();
+		m_pass = &m_combinePass->getPass();
+		return &m_combinePass->getResult();
 #endif
-		return true;
 	}
 
 	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
@@ -200,14 +152,12 @@ namespace Bloom
 		m_blurXPass.reset();
 		m_blurYPass.reset();
 		m_hiPass.reset();
-		m_blurTexture.reset();
-		m_vertexBuffer.reset();
 	}
 
-	bool PostEffect::doWriteInto( StringStream & file, String const & tabs )
+	bool PostEffect::doWriteInto( castor::StringStream & file, castor::String const & tabs )
 	{
-		file << ( tabs + cuT( "postfx \"" ) + Type + cuT( "\" -Size=" ) + string::toString( m_blurKernelSize )
-			+ cuT( " -Passes=" ) + string::toString( m_blurPassesCount ) );
+		file << ( tabs + cuT( "postfx \"" ) + Type + cuT( "\" -Size=" ) + castor::string::toString( m_blurKernelSize )
+			+ cuT( " -Passes=" ) + castor::string::toString( m_blurPassesCount ) );
 		return true;
 	}
 }

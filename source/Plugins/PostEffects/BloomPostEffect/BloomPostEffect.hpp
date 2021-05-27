@@ -28,12 +28,19 @@ namespace Bloom
 		 */
 		void accept( castor3d::PipelineVisitorBase & visitor )override;
 
+		crg::FramePass const & getPass()const override
+		{
+			CU_Require( m_pass );
+			return *m_pass;
+		}
+
 	private:
 		/**
 		*\copydoc		castor3d::PostEffect::doInitialise
 		*/
-		bool doInitialise( castor3d::RenderDevice const & device
-			, castor3d::RenderPassTimer const & timer )override;
+		crg::ImageViewId const * doInitialise( castor3d::RenderDevice const & device
+			, castor3d::RenderPassTimer const & timer
+			, crg::FramePass const & previousPass )override;
 		/**
 		*\copydoc		castor3d::PostEffect::doCleanup
 		*/
@@ -49,11 +56,11 @@ namespace Bloom
 
 	private:
 		castor3d::SamplerSPtr doCreateSampler( bool linear );
-		bool doBuildCommandBuffer( castor3d::RenderPassTimer const & timer );
 
 	private:
-		ashes::VertexBufferPtr< castor3d::NonTexturedQuad > m_vertexBuffer;
-		castor3d::TextureLayoutSPtr m_blurTexture;
+		crg::ImageId m_blurImg;
+		crg::ImageViewIdArray m_blurViews;
+		crg::FramePass const * m_pass{};
 		std::unique_ptr< CombinePass > m_combinePass;
 		std::unique_ptr< HiPass > m_hiPass;
 		std::unique_ptr< BlurPass > m_blurXPass;

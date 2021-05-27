@@ -13,30 +13,23 @@ namespace Bloom
 	class CombinePass
 	{
 	public:
-		CombinePass( castor3d::RenderDevice const & device
-			, VkFormat format
-			, ashes::ImageView const & sceneView
-			, ashes::ImageView const & blurView
+		CombinePass( crg::FrameGraph & graph
+			, crg::FramePassArray const & previousPasses
+			, castor3d::RenderDevice const & device
+			, crg::ImageViewId const & sceneView
+			, crg::ImageViewIdArray const & blurViews
 			, VkExtent2D const & size
 			, uint32_t blurPassesCount );
-		castor3d::CommandsSemaphore getCommands( castor3d::RenderPassTimer const & timer
-			, uint32_t & index
-			, ashes::VertexBuffer< castor3d::NonTexturedQuad > const & vertexBuffer )const;
 		void accept( castor3d::PipelineVisitorBase & visitor );
 
-		inline castor3d::ShaderModule const & getVertexShader()const
+		crg::ImageViewId const & getResult()const
 		{
-			return m_vertexShader;
+			return m_resultView;
 		}
 
-		inline castor3d::ShaderModule const & getPixelShader()const
+		crg::FramePass const & getPass()const
 		{
-			return m_pixelShader;
-		}
-
-		inline castor3d::TextureLayout const & getResult()const
-		{
-			return *m_image;
+			return m_pass;
 		}
 
 	public:
@@ -45,21 +38,13 @@ namespace Bloom
 
 	private:
 		castor3d::RenderDevice const & m_device;
-		castor3d::TextureLayoutSPtr m_image;
-		ashes::ImageView m_view;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
-		ashes::RenderPassPtr m_renderPass;
-		ashes::FrameBufferPtr m_frameBuffer;
-		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
-		ashes::PipelineLayoutPtr m_pipelineLayout;
-		ashes::GraphicsPipelinePtr m_pipeline;
-		ashes::SamplerPtr m_sceneSampler;
-		ashes::SamplerPtr m_blurSampler;
-		ashes::DescriptorSetPoolPtr m_descriptorPool;
-		ashes::DescriptorSetPtr m_descriptorSet;
-		ashes::CommandBufferPtr m_commandBuffer;
+		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		uint32_t m_blurPassesCount;
+		crg::ImageId m_resultImg;
+		crg::ImageViewId m_resultView;
+		crg::FramePass & m_pass;
 	};
 }
 
