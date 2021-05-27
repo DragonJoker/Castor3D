@@ -20,6 +20,12 @@ namespace Bloom
 {
 	namespace
 	{
+		enum Idx
+		{
+			GaussCfgUboIdx,
+			DifImgIdx,
+		};
+
 		std::unique_ptr< ast::Shader > getVertexProgram()
 		{
 			using namespace sdw;
@@ -40,12 +46,6 @@ namespace Bloom
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
-
-		enum Idx
-		{
-			GaussCfgUboIdx,
-			DifImgIdx,
-		};
 
 		std::unique_ptr< ast::Shader > getPixelProgram()
 		{
@@ -180,15 +180,14 @@ namespace Bloom
 					.renderPosition( {} )
 					.renderSize( { dimensions.width >> ( index + 1 )
 						, dimensions.height >> ( index + 1 ) } )
-					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) )
 					.build( pass, context, graph );
 			} ) }
 	{
 		pass.addDependency( previousPass );
-		blurUbo.createPassBinding( pass, 0u );
+		blurUbo.createPassBinding( pass, GaussCfgUboIdx );
 		pass.addSampledView( srcView
-			, 1u
+			, DifImgIdx
 			, {}
 			, crg::SamplerDesc{ VK_FILTER_NEAREST
 				, VK_FILTER_NEAREST
