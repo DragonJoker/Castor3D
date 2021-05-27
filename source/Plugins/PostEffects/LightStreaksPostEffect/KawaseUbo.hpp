@@ -25,9 +25,8 @@ namespace light_streaks
 		using Configuration = KawaseUboConfiguration;
 
 	public:
-		explicit KawaseUbo( castor3d::Engine & engine );
-		void initialise( castor3d::RenderDevice const & device );
-		void cleanup( castor3d::RenderDevice const & device );
+		explicit KawaseUbo( castor3d::RenderDevice const & device );
+		~KawaseUbo();
 		void update( uint32_t index
 			, VkExtent2D const & size
 			, castor::Point2f const & direction
@@ -50,6 +49,13 @@ namespace light_streaks
 			return m_ubo[index].createSizedBinding( descriptorSet, layoutBinding );
 		}
 
+		void createPassBinding( crg::FramePass & pass
+			, uint32_t binding
+			, uint32_t index )const
+		{
+			return m_ubo[index].createPassBinding( pass, binding );
+		}
+
 	public:
 		static castor::String const Name;
 		static castor::String const PixelSize;
@@ -59,7 +65,7 @@ namespace light_streaks
 		static castor::String const Pass;
 
 	private:
-		castor3d::Engine & m_engine;
+		castor3d::RenderDevice const & m_device;
 		std::vector< castor3d::UniformBufferOffsetT< Configuration > > m_ubo;
 	};
 }
