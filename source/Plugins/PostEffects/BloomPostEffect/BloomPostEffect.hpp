@@ -9,7 +9,6 @@ See LICENSE file in root folder
 #include "BloomPostEffect/HiPass.hpp"
 
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
-#include <Castor3D/Material/Texture/TextureUnit.hpp>
 
 namespace Bloom
 {
@@ -53,9 +52,6 @@ namespace Bloom
 	public:
 		static castor::String const Type;
 		static castor::String const Name;
-
-	private:
-		castor3d::SamplerSPtr doCreateSampler( bool linear );
 
 	private:
 		crg::ImageId m_blurImg;
