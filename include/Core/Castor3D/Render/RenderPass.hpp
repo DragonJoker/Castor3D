@@ -14,7 +14,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/Named.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
 
-#include <RenderGraph/RenderPass.hpp>
+#include <RenderGraph/RunnablePasses/RenderPass.hpp>
 
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>

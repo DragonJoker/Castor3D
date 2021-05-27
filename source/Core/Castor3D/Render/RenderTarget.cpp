@@ -26,8 +26,8 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
-#include <RenderGraph/ImageCopy.hpp>
-#include <RenderGraph/RenderQuad.hpp>
+#include <RenderGraph/RunnablePasses/ImageCopy.hpp>
+#include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Core/Device.hpp>
