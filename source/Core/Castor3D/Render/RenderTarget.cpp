@@ -109,7 +109,7 @@ namespace castor3d
 			, VK_IMAGE_VIEW_TYPE_2D
 			, m_velocityImg.data->info.format
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
-		, m_objectsImg{ m_graph.createImage( crg::ImageData{ "SceneResult"
+		, m_objectsImg{ m_graph.createImage( crg::ImageData{ "Scene"
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, getPixelFormat()
@@ -122,7 +122,7 @@ namespace castor3d
 				, VK_IMAGE_VIEW_TYPE_2D
 				, m_objectsImg.data->info.format
 				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
-		, m_overlaysImg{ m_graph.createImage( crg::ImageData{ "OverlaysResult"
+		, m_overlaysImg{ m_graph.createImage( crg::ImageData{ "Overlays"
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, VK_FORMAT_R8G8B8A8_UNORM
@@ -135,7 +135,7 @@ namespace castor3d
 				, VK_IMAGE_VIEW_TYPE_2D
 				, m_overlaysImg.data->info.format
 				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
-		, m_combinedImg{ m_graph.createImage( crg::ImageData{ "TargetResult"
+		, m_combinedImg{ m_graph.createImage( crg::ImageData{ "Target"
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, getPixelFormat()

@@ -32,7 +32,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-#include <RenderGraph/RenderQuad.hpp>
+#include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
 #include <numeric>
 
@@ -253,20 +253,20 @@ namespace film_grain
 		auto & graph = m_renderTarget.getGraph();
 		auto dim = m_noiseImages[0].getDimensions();
 		auto format = castor3d::convert( m_noiseImages[0].getPixelFormat() );
-		m_noiseImg = graph.createImage( crg::ImageData{ "FilmGrainNoise"
+		m_noiseImg = graph.createImage( crg::ImageData{ "FGNoise"
 			, 0u
 			, VK_IMAGE_TYPE_3D
 			, format
 			, { dim.getWidth(), dim.getHeight(), NoiseMapCount }
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) } );
-		m_noiseView = graph.createView( crg::ImageViewData{ "FilmGrainNoise"
+		m_noiseView = graph.createView( crg::ImageViewData{ "FGNoise"
 			, m_noiseImg
 			, 0u
 			, VK_IMAGE_VIEW_TYPE_3D
 			, m_noiseImg.data->info.format
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } );
-		m_resultImg = graph.createImage( crg::ImageData{ "FilmGrainResult"
+		m_resultImg = graph.createImage( crg::ImageData{ "FGRes"
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, m_target->data->info.format
@@ -274,7 +274,7 @@ namespace film_grain
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } );
-		m_resultView = m_renderTarget.getGraph().createView( crg::ImageViewData{ "FilmGrainResult"
+		m_resultView = m_renderTarget.getGraph().createView( crg::ImageViewData{ "FGRes"
 			, m_resultImg
 			, 0u
 			, VK_IMAGE_VIEW_TYPE_2D
