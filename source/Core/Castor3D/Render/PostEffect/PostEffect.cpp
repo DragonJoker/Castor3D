@@ -74,7 +74,6 @@ namespace castor3d
 
 	void PostEffect::cleanup( castor3d::RenderDevice const & device )
 	{
-		m_commands.clear();
 		doCleanup( device );
 		m_timer.reset();
 	}
