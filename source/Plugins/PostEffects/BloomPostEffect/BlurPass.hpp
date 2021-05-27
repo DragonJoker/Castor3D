@@ -15,27 +15,29 @@ namespace Bloom
 	class BlurPass
 	{
 	public:
-		BlurPass( castor3d::RenderDevice const & device
-			, VkFormat format
-			, castor3d::TextureLayout const & srcImage
-			, castor3d::TextureLayout const & dstImage
+		BlurPass( crg::FrameGraph & graph
+			, crg::FramePassArray const & previousPasses
+			, castor3d::RenderDevice const & device
+			, crg::ImageViewIdArray const & srcImages
+			, crg::ImageViewIdArray const & dstImages
 			, VkExtent2D dimensions
 			, uint32_t blurKernelSize
 			, uint32_t blurPassesCount
 			, bool isVertical );
-		castor3d::CommandsSemaphoreArray getCommands( castor3d::RenderPassTimer const & timer
-			, uint32_t & index
-			, ashes::VertexBuffer< castor3d::NonTexturedQuad > const & vertexBuffer )const;
+		BlurPass( crg::FrameGraph & graph
+			, crg::FramePass const & previousPass
+			, castor3d::RenderDevice const & device
+			, crg::ImageViewIdArray const & srcImages
+			, crg::ImageViewIdArray const & dstImages
+			, VkExtent2D dimensions
+			, uint32_t blurKernelSize
+			, uint32_t blurPassesCount
+			, bool isVertical );
 		void accept( castor3d::PipelineVisitorBase & visitor );
 
-		inline castor3d::ShaderModule const & getVertexShader()const
+		crg::FramePassArray const & getPasses()const
 		{
-			return m_vertexShader;
-		}
-
-		inline castor3d::ShaderModule const & getPixelShader()const
-		{
-			return m_pixelShader;
+			return m_passes;
 		}
 
 	public:
@@ -43,23 +45,18 @@ namespace Bloom
 
 		struct Subpass
 		{
-			Subpass( castor3d::RenderDevice const & device
-				, VkFormat format
-				, ashes::ImageView const & srcView
-				, ashes::ImageView const & dstView
-				, ashes::RenderPass const & renderPass
-				, ashes::DescriptorSetPool const & descriptorPool
-				, ashes::PipelineLayout const & pipelineLayout
+			Subpass( crg::FrameGraph & graph
+				, crg::FramePass const & previousPass
+				, castor3d::RenderDevice const & device
+				, crg::ImageViewId const & srcView
+				, crg::ImageViewId const & dstView
 				, VkExtent2D dimensions
-				, castor3d::ShaderModule const & vertexShader
-				, castor3d::ShaderModule const & pixelShader
+				, ashes::PipelineShaderStageCreateInfoArray const & stages
 				, castor3d::UniformBufferOffsetT< castor3d::GaussianBlur::Configuration > const & blurUbo
-				, uint32_t index );
+				, uint32_t index
+				, bool isVertical );
 
-			ashes::FrameBufferPtr frameBuffer;
-			ashes::DescriptorSetPtr descriptorSet;
-			ashes::GraphicsPipelinePtr pipeline;
-			ashes::SamplerPtr sampler;
+			crg::FramePass & pass;
 		};
 
 	private:
@@ -67,13 +64,11 @@ namespace Bloom
 		uint32_t m_blurKernelSize;
 		uint32_t m_blurPassesCount;
 		UboOffsetArray m_blurUbo;
-		ashes::RenderPassPtr m_renderPass;
-		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
-		ashes::PipelineLayoutPtr m_pipelineLayout;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
-		ashes::DescriptorSetPoolPtr m_descriptorPool;
-		std::vector< Subpass > m_passes;
+		ashes::PipelineShaderStageCreateInfoArray m_stages;
+		crg::FramePassArray m_passes;
+		std::vector< Subpass > m_subpasses;
 		bool m_isVertical;
 	};
 }
