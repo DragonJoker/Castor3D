@@ -4,15 +4,11 @@ See LICENSE file in root folder
 #ifndef ___C3D_LightStreaksPostEffect___
 #define ___C3D_LightStreaksPostEffect___
 
-#include "KawaseUbo.hpp"
+#include "CombinePass.hpp"
+#include "HiPass.hpp"
+#include "KawasePass.hpp"
 
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
-#include <Castor3D/Render/PostEffect/PostEffectSurface.hpp>
-#include <Castor3D/Material/Texture/TextureUnit.hpp>
-#include <Castor3D/Render/Viewport.hpp>
-#include <Castor3D/Shader/Ubos/MatrixUbo.hpp>
-
-#include <ShaderAST/Shader.hpp>
 
 namespace light_streaks
 {
@@ -23,7 +19,6 @@ namespace light_streaks
 		PostEffect( castor3d::RenderTarget & renderTarget
 			, castor3d::RenderSystem & renderSystem
 			, castor3d::Parameters const & params );
-		virtual ~PostEffect();
 		static castor3d::PostEffectSPtr create( castor3d::RenderTarget & renderTarget
 			, castor3d::RenderSystem & renderSystem
 			, castor3d::Parameters const & params );
@@ -32,83 +27,43 @@ namespace light_streaks
 		 */
 		void accept( castor3d::PipelineVisitorBase & visitor )override;
 
+		crg::FramePass const & getPass()const override
+		{
+			CU_Require( m_pass );
+			return *m_pass;
+		}
+
 	private:
 		/**
 		*\copydoc		castor3d::PostEffect::doInitialise
 		*/
-		virtual bool doInitialise( castor3d::RenderDevice const & device
-			, castor3d::RenderPassTimer const & timer )override;
+		crg::ImageViewId const * doInitialise( castor3d::RenderDevice const & device
+			, castor3d::RenderPassTimer const & timer
+			, crg::FramePass const & previousPass )override;
 		/**
 		*\copydoc		castor3d::PostEffect::doCleanup
 		*/
-		virtual void doCleanup( castor3d::RenderDevice const & device )override;
+		void doCleanup( castor3d::RenderDevice const & device )override;
 		/**
 		 *\copydoc		castor3d::PostEffect::doWriteInto
 		 */
-		virtual bool doWriteInto( castor::StringStream & file, castor::String const & tabs )override;
+		bool doWriteInto( castor::StringStream & file, castor::String const & tabs )override;
 
 	public:
 		static castor::String const Type;
 		static castor::String const Name;
-		static castor::String const CombineMapScene;
-		static castor::String const CombineMapKawase1;
-		static castor::String const CombineMapKawase2;
-		static castor::String const CombineMapKawase3;
-		static castor::String const CombineMapKawase4;
-		static constexpr uint32_t Count{ 4u };
-		using SurfaceArray = std::array< castor3d::PostEffectSurface, Count >;
+		static uint32_t const Count = 4u;
 
 	private:
-		castor3d::SamplerSPtr doCreateSampler( bool linear );
-		bool doInitialiseHiPassProgram( castor3d::RenderDevice const & device );
-		bool doInitialiseKawaseProgram( castor3d::RenderDevice const & device );
-		bool doInitialiseCombineProgram( castor3d::RenderDevice const & device );
-		bool doBuildCommandBuffer( castor3d::RenderDevice const & device
-			, castor3d::RenderPassTimer const & timer );
-
-	private:
-		struct Layout
-		{
-			ashes::DescriptorSetLayoutPtr descriptorLayout;
-			ashes::DescriptorSetPoolPtr descriptorPool;
-			ashes::PipelineLayoutPtr pipelineLayout;
-		};
-
-		struct Surface
-		{
-			Surface( castor3d::RenderSystem & renderSystem
-				, castor3d::RenderDevice const & device
-				, VkFormat format
-				, VkExtent2D const & size
-				, ashes::RenderPass const & renderPass
-				, castor::String debugName );
-			castor3d::TextureLayoutSPtr image;
-			ashes::FrameBufferPtr frameBuffer;
-			std::vector< ashes::DescriptorSetPtr > descriptorSets;
-		};
-
-		struct Pipeline
-		{
-			castor3d::ShaderModule vertexShader;
-			castor3d::ShaderModule pixelShader;
-			Layout layout;
-			std::vector< Surface > surfaces;
-			ashes::GraphicsPipelinePtr pipeline;
-		};
-
-		castor3d::SamplerSPtr m_linearSampler;
-		castor3d::SamplerSPtr m_nearestSampler;
-		ashes::RenderPassPtr m_renderPass;
+		crg::ImageId m_hiImage;
+		crg::ImageViewIdArray m_hiViews;
+		crg::ImageId m_kawaseImage;
+		crg::ImageViewIdArray m_kawaseViews;
 		KawaseUbo m_kawaseUbo;
-		std::vector< ashes::ImageView > m_hiPassViews;
-		ashes::VertexBufferPtr< castor3d::NonTexturedQuad > m_vertexBuffer;
-
-		struct
-		{
-			Pipeline hiPass;
-			Pipeline kawase;
-			Pipeline combine;
-		} m_pipelines;
+		crg::FramePass const * m_pass{};
+		std::unique_ptr< HiPass > m_hiPass;
+		std::unique_ptr< KawasePass > m_kawasePass;
+		std::unique_ptr< CombinePass > m_combinePass;
 	};
 }
 
