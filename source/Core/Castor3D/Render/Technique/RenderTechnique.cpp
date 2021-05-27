@@ -349,7 +349,7 @@ namespace castor3d
 		, m_device{ device }
 		, m_size{ m_renderTarget.getSize() }
 		, m_ssaoConfig{ ssaoConfig }
-		, m_colourImage{ renderTarget.getGraph().createImage( { "TechniqueColour"
+		, m_colourImage{ renderTarget.getGraph().createImage( { "TechCol"
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, VK_FORMAT_R16G16B16A16_SFLOAT
@@ -364,7 +364,7 @@ namespace castor3d
 			, VK_IMAGE_VIEW_TYPE_2D
 			, m_colourImage.data->info.format
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
-		, m_depthImage{ renderTarget.getGraph().createImage( { "TechniqueDepth"
+		, m_depthImage{ renderTarget.getGraph().createImage( { "TechDpt"
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT

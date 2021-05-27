@@ -30,7 +30,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-#include <RenderGraph/RenderQuad.hpp>
+#include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
 #include <numeric>
 
@@ -154,7 +154,7 @@ namespace grayscale
 		, castor3d::RenderPassTimer const & timer
 		, crg::FramePass const & previousPass )
 	{
-		m_resultImg = m_renderTarget.getGraph().createImage( crg::ImageData{ "GrayScaleResult"
+		m_resultImg = m_renderTarget.getGraph().createImage( crg::ImageData{ "GSRes"
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, m_target->data->info.format
@@ -162,7 +162,7 @@ namespace grayscale
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } );
-		m_resultView = m_renderTarget.getGraph().createView( crg::ImageViewData{ "GrayScaleResult"
+		m_resultView = m_renderTarget.getGraph().createView( crg::ImageViewData{ "GSRes"
 			, m_resultImg
 			, 0u
 			, VK_IMAGE_VIEW_TYPE_2D
