@@ -33,7 +33,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-#include <RenderGraph/RenderQuad.hpp>
+#include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
 #include <numeric>
 
@@ -174,7 +174,7 @@ namespace motion_blur
 		, castor3d::RenderPassTimer const & timer
 		, crg::FramePass const & previousPass )
 	{
-		m_resultImg = m_renderTarget.getGraph().createImage( crg::ImageData{ "LinearMotionBlurResult"
+		m_resultImg = m_renderTarget.getGraph().createImage( crg::ImageData{ "LMBRes"
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, m_target->data->info.format
@@ -182,7 +182,7 @@ namespace motion_blur
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } );
-		m_resultView = m_renderTarget.getGraph().createView( crg::ImageViewData{ "LinearMotionBlurResult"
+		m_resultView = m_renderTarget.getGraph().createView( crg::ImageViewData{ "LMBRes"
 			, m_resultImg
 			, 0u
 			, VK_IMAGE_VIEW_TYPE_2D
