@@ -7,41 +7,45 @@ See LICENSE file in root folder
 #include "SmaaPostEffect/SmaaConfig.hpp"
 
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
-#include <Castor3D/Render/PostEffect/PostEffectSurface.hpp>
-#include <Castor3D/Render/Passes/RenderQuad.hpp>
+
+#include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
 #include <ShaderAST/Shader.hpp>
 
 namespace smaa
 {
 	class NeighbourhoodBlending
-		: public castor3d::RenderQuad
 	{
 	public:
-		NeighbourhoodBlending( castor3d::RenderTarget & renderTarget
+		NeighbourhoodBlending( crg::FramePass const & previousPass
+			, castor3d::RenderTarget & renderTarget
 			, castor3d::RenderDevice const & device
-			, ashes::ImageView const & sourceView
-			, ashes::ImageView const & blendView
-			, ashes::ImageView const * velocityView
+			, crg::ImageViewId const & sourceView
+			, crg::ImageViewId const & blendView
+			, crg::ImageViewId const * velocityView
 			, SmaaConfig const & config );
-		castor3d::CommandsSemaphore prepareCommands( castor3d::RenderPassTimer const & timer
-			, uint32_t passIndex
-			, uint32_t index );
 		void accept( castor3d::PipelineVisitorBase & visitor );
 
-		inline castor3d::TextureLayoutSPtr getSurface( uint32_t index )const
+		crg::ImageViewIdArray const & getResult()const
 		{
-			return m_surfaces[index].colourTexture;
+			return m_imageViews;
+		}
+
+		crg::FramePass const & getPass()const
+		{
+			return m_pass;
 		}
 
 	private:
-		ashes::RenderPassPtr m_renderPass;
-		std::vector< castor3d::PostEffectSurface > m_surfaces;
-		ashes::ImageView const & m_sourceView;
-		ashes::ImageView const & m_blendView;
-		ashes::ImageView const * m_velocityView;
+		crg::ImageViewId const & m_sourceView;
+		crg::ImageViewId const & m_blendView;
+		crg::ImageViewId const * m_velocityView;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
+		ashes::PipelineShaderStageCreateInfoArray m_stages;
+		crg::ImageIdArray m_images;
+		crg::ImageViewIdArray m_imageViews;
+		crg::FramePass & m_pass;
 	};
 }
 

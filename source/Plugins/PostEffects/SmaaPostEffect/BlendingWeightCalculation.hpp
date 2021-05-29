@@ -8,43 +8,47 @@ See LICENSE file in root folder
 
 #include <Castor3D/Buffer/UniformBuffer.hpp>
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
-#include <Castor3D/Render/PostEffect/PostEffectSurface.hpp>
-#include <Castor3D/Render/Passes/RenderQuad.hpp>
 
 #include <ShaderAST/Shader.hpp>
 
 namespace smaa
 {
 	class BlendingWeightCalculation
-		: public castor3d::RenderQuad
 	{
 	public:
-		BlendingWeightCalculation( castor3d::RenderTarget & renderTarget
+		BlendingWeightCalculation( crg::FramePass const & previousPass
+			, castor3d::RenderTarget & renderTarget
 			, castor3d::RenderDevice const & device
-			, ashes::ImageView const & edgeDetectionView
-			, castor3d::TextureLayoutSPtr depthView
+			, crg::ImageViewId const & edgeDetectionView
+			, crg::ImageViewId const & stencilView
 			, SmaaConfig const & config );
 		~BlendingWeightCalculation();
-		castor3d::CommandsSemaphore prepareCommands( castor3d::RenderPassTimer const & timer
-			, uint32_t passIndex );
 		void cpuUpdate( castor::Point4f const & subsampleIndices );
 		void accept( castor3d::PipelineVisitorBase & visitor );
 
-		inline castor3d::TextureLayoutSPtr getSurface()const
+		crg::ImageViewId const & getResult()const
 		{
-			return m_surface.colourTexture;
+			return m_resultView;
+		}
+
+		crg::FramePass const & getPass()const
+		{
+			return m_pass;
 		}
 
 	private:
-		ashes::ImageView const & m_edgeDetectionView;
-		ashes::RenderPassPtr m_renderPass;
-		castor3d::PostEffectSurface m_surface;
-		ashes::SamplerPtr m_pointSampler;
+		castor3d::RenderDevice const & m_device;
 		castor3d::UniformBufferOffsetT< castor::Point4f > m_ubo;
-		castor3d::TextureLayoutSPtr m_areaTex;
-		castor3d::TextureLayoutSPtr m_searchTex;
+		crg::ImageId m_areaImg;
+		crg::ImageViewId m_areaView;
+		crg::ImageId m_searchImg;
+		crg::ImageViewId m_searchView;
+		crg::ImageId m_resultImg;
+		crg::ImageViewId m_resultView;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
+		ashes::PipelineShaderStageCreateInfoArray m_stages;
+		crg::FramePass & m_pass;
 	};
 }
 
