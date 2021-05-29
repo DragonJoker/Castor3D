@@ -12,20 +12,16 @@ namespace smaa
 		: public EdgeDetection
 	{
 	public:
-		LumaEdgeDetection( castor3d::RenderTarget & renderTarget
+		LumaEdgeDetection( crg::FramePass const & previousPass
+			, castor3d::RenderTarget & renderTarget
 			, castor3d::RenderDevice const & device
-			, ashes::ImageView const & colourView
-			, ashes::Image const * predication
+			, crg::ImageViewId const & colourView
+			, crg::ImageViewId const * predication
 			, SmaaConfig const & config );
-		castor3d::CommandsSemaphore prepareCommands( castor3d::RenderPassTimer const & timer
-			, uint32_t passIndex )override;
 
 	private:
-		virtual void doInitialisePipeline()override;
-
-	private:
-		ashes::ImageView const & m_colourView;
-		std::unique_ptr< ashes::ImageView > m_predicationView;
+		crg::ImageViewId const & m_colourView;
+		crg::ImageViewId m_predicationView;
 	};
 }
 

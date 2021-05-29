@@ -34,10 +34,14 @@ namespace smaa
 			DepthTexIdx,
 		};
 
-		std::unique_ptr< ast::Shader > doGetEdgeDetectionFP( castor3d::RenderSystem & renderSystem
-			, Point4f const & renderTargetMetrics
+		std::unique_ptr< ast::Shader > doGetEdgeDetectionFP( castor::Size const & size
 			, SmaaConfig const & config )
 		{
+			auto renderTargetMetrics = Point4f{ 1.0f / size.getWidth()
+				, 1.0f / size.getHeight()
+				, float( size.getWidth() )
+				, float( size.getHeight() ) };
+
 			using namespace sdw;
 			FragmentWriter writer;
 
@@ -110,116 +114,41 @@ namespace smaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ashes::ImageView doCreateDepthView( castor3d::RenderDevice const & device
-			, ashes::ImageView const & depthView )
+		crg::ImageViewData doCreateDepthView( crg::ImageViewId const & depthView )
 		{
-			ashes::ImageViewCreateInfo view
-			{
-				0u,
-				*depthView.image,
-				VK_IMAGE_VIEW_TYPE_2D,
-				depthView.getFormat(),
-				VkComponentMapping{},
-				{ VK_IMAGE_ASPECT_DEPTH_BIT, 0u, 1u, 0u, 1u }
-			};
-			return depthView.image->createView( view );
-		}
-
-		castor3d::rq::BindingDescriptionArray createBindings()
-		{
-			return
-			{
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
-			};
+			return crg::ImageViewData{ "SMDEDTgt"
+				, depthView.data->image
+				, 0u
+				, VK_IMAGE_VIEW_TYPE_2D
+				, depthView.data->info.format
+				, { VK_IMAGE_ASPECT_DEPTH_BIT, 0u, 1u, 0u, 1u } };
 		}
 	}
 
 	//*********************************************************************************************
 
-	DepthEdgeDetection::DepthEdgeDetection( castor3d::RenderTarget & renderTarget
+	DepthEdgeDetection::DepthEdgeDetection( crg::FramePass const & previousPass
+		, castor3d::RenderTarget & renderTarget
 		, castor3d::RenderDevice const & device
-		, ashes::ImageView const & depthView
+		, crg::ImageViewId const & depthView
 		, SmaaConfig const & config )
-		: EdgeDetection{ renderTarget, device, config, createBindings() }
-		, m_depthView{ doCreateDepthView( device, depthView ) }
+		: EdgeDetection{ previousPass
+			, renderTarget
+			, device
+			, config
+			, doGetEdgeDetectionFP( renderTarget.getSize(), config ) }
+		, m_depthView{ renderTarget.getGraph().createView( doCreateDepthView( depthView ) ) }
 		, m_sourceView{ depthView }
 	{
-		VkExtent2D size{ m_depthView.image->getDimensions().width
-			, m_depthView.image->getDimensions().height };
-		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
-		m_pixelShader.shader = doGetEdgeDetectionFP( *renderTarget.getEngine()->getRenderSystem()
-			, pixelSize
-			, config );
-		doInitialisePipeline();
-	}
-
-	castor3d::CommandsSemaphore DepthEdgeDetection::prepareCommands( castor3d::RenderPassTimer const & timer
-		, uint32_t passIndex )
-	{
-		castor3d::CommandsSemaphore edgeDetectionCommands
-		{
-			m_device.graphicsCommandPool->createCommandBuffer( "DepthEdgeDetection" ),
-			m_device->createSemaphore( "DepthEdgeDetection" )
-		};
-		auto & edgeDetectionCmd = *edgeDetectionCommands.commandBuffer;
-
-		edgeDetectionCmd.begin();
-		edgeDetectionCmd.beginDebugBlock(
-			{
-				"SMAA DepthEdgeDetection",
-				castor3d::makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ),
-			} );
-		timer.beginPass( edgeDetectionCmd, passIndex );
-		edgeDetectionCmd.memoryBarrier( VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_depthView.image->makeTransition( VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-				, { VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT, 0u, 1u, 0u, 1u } ) );
-		edgeDetectionCmd.beginRenderPass( *m_renderPass
-			, *m_surface.frameBuffer
-			, {
-				castor3d::transparentBlackClearColor,
-				castor3d::defaultClearDepthStencil,
-			}
-			, VK_SUBPASS_CONTENTS_INLINE );
-		registerPass( edgeDetectionCmd );
-		edgeDetectionCmd.endRenderPass();
-		edgeDetectionCmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
-			, m_depthView.image->makeTransition( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-				, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL
-				, { VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT, 0u, 1u, 0u, 1u } ) );
-		timer.endPass( edgeDetectionCmd, passIndex );
-		edgeDetectionCmd.endDebugBlock();
-		edgeDetectionCmd.end();
-
-		return std::move( edgeDetectionCommands );
-	}
-
-	void DepthEdgeDetection::doInitialisePipeline()
-	{
-		VkExtent2D size{ m_depthView.image->getDimensions().width
-			, m_depthView.image->getDimensions().height };
-		ashes::PipelineShaderStageCreateInfoArray stages;
-		stages.push_back( makeShaderState( m_device, m_vertexShader ) );
-		stages.push_back( makeShaderState( m_device, m_pixelShader ) );
-
-		ashes::PipelineDepthStencilStateCreateInfo dsstate{ 0u, VK_FALSE, VK_FALSE };
-		dsstate->stencilTestEnable = true;
-		dsstate->front.passOp = VK_STENCIL_OP_REPLACE;
-		dsstate->front.reference = 1u;
-		dsstate->back = dsstate->front;
-		ashes::VkDescriptorSetLayoutBindingArray setLayoutBindings;
-		createPipelineAndPass( size
-			, castor::Position{}
-			, stages
-			, *m_renderPass
-			, {
-				makeDescriptorWrite( m_depthView
-					, getSampler().getSampler()
-					, DepthTexIdx ),
-			}
+		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR
+			, VK_SAMPLER_MIPMAP_MODE_NEAREST
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE };
+		m_pass.addSampledView( m_pass.mergeViews( { m_depthView, depthView } )
+			, DepthTexIdx
 			, {}
-			, std::move( dsstate ) );
+			, linearSampler );
 	}
 }

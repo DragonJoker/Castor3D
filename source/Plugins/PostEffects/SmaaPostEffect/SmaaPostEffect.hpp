@@ -24,7 +24,6 @@ namespace smaa
 		PostEffect( castor3d::RenderTarget & renderTarget
 			, castor3d::RenderSystem & renderSystem
 			, castor3d::Parameters const & parameters );
-		~PostEffect();
 		static castor3d::PostEffectSPtr create( castor3d::RenderTarget & renderTarget
 			, castor3d::RenderSystem & renderSystem
 			, castor3d::Parameters const & parameters );
@@ -37,12 +36,19 @@ namespace smaa
 		 */
 		void accept( castor3d::PipelineVisitorBase & visitor )override;
 
+		crg::FramePass const & getPass()const override
+		{
+			CU_Require( m_pass );
+			return *m_pass;
+		}
+
 	private:
 		/**
 		*\copydoc		castor3d::PostEffect::doInitialise
 		*/
-		bool doInitialise( castor3d::RenderDevice const & device
-			, castor3d::RenderPassTimer const & timer )override;
+		crg::ImageViewId const * doInitialise( castor3d::RenderDevice const & device
+			, castor3d::RenderPassTimer const & timer
+			, crg::FramePass const & previousPass )override;
 		/**
 		*\copydoc		castor3d::PostEffect::doCleanup
 		*/
@@ -52,13 +58,8 @@ namespace smaa
 		 */
 		bool doWriteInto( castor::StringStream & file, castor::String const & tabs )override;
 
-		ashes::Image const * doGetPredicationTexture();
-		ashes::ImageView const * doGetVelocityView();
-		void doBuildCommandBuffers( castor3d::RenderDevice const & device
-			, castor3d::RenderPassTimer const & timer );
-		castor3d::CommandsSemaphoreArray doBuildCommandBuffer( castor3d::RenderDevice const & device
-			, castor3d::RenderPassTimer const & timer
-			, uint32_t index );
+		crg::ImageViewId const * doGetPredicationTexture();
+		crg::ImageViewId const * doGetVelocityView();
 
 	public:
 		static castor::String Type;
@@ -67,22 +68,19 @@ namespace smaa
 	private:
 		SmaaConfig m_config;
 		uint32_t m_frameIndex{ 0u };
+		ashes::PipelineShaderStageCreateInfoArray m_stages;
 
 		std::unique_ptr< EdgeDetection > m_edgeDetection;
 		std::unique_ptr< BlendingWeightCalculation > m_blendingWeightCalculation;
 		std::unique_ptr< NeighbourhoodBlending > m_neighbourhoodBlending;
-		std::vector< std::unique_ptr< Reproject > > m_reproject;
-		std::vector< castor3d::CommandsSemaphoreArray > m_commandBuffers;
+		std::unique_ptr< Reproject > m_reproject;
 		// sRGB view.
-		ashes::ImageView const * m_srgbTextureView{ nullptr };
+		crg::ImageViewId const * m_srgbTextureView{ nullptr };
 		// Gamma view.
-		ashes::ImageView const * m_hdrTextureView{ nullptr };
-		castor3d::TextureLayout * m_smaaResult{ nullptr };
+		crg::ImageViewId const * m_hdrTextureView{ nullptr };
+		crg::ImageViewId * m_smaaResult{ nullptr };
 
-		ashes::PipelineShaderStageCreateInfoArray m_copyProgram;
-		ashes::RenderPassPtr m_copyRenderPass;
-		ashes::FrameBufferPtr m_copyFrameBuffer;
-		std::vector< castor3d::RenderQuadUPtr > m_copyQuads;
+		crg::FramePass const * m_pass{};
 	};
 }
 
