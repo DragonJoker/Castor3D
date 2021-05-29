@@ -12,19 +12,15 @@ namespace smaa
 		: public EdgeDetection
 	{
 	public:
-		DepthEdgeDetection( castor3d::RenderTarget & renderTarget
+		DepthEdgeDetection( crg::FramePass const & previousPass
+			, castor3d::RenderTarget & renderTarget
 			, castor3d::RenderDevice const & device
-			, ashes::ImageView const & depthView
+			, crg::ImageViewId const & depthView
 			, SmaaConfig const & config );
-		castor3d::CommandsSemaphore prepareCommands( castor3d::RenderPassTimer const & timer
-			, uint32_t passIndex )override;
 
 	private:
-		virtual void doInitialisePipeline()override;
-
-	private:
-		ashes::ImageView m_depthView;
-		ashes::ImageView const & m_sourceView;
+		crg::ImageViewId m_depthView;
+		crg::ImageViewId const & m_sourceView;
 	};
 }
 

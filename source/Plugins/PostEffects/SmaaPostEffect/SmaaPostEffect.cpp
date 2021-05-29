@@ -19,12 +19,10 @@
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
 #include <ashespp/Buffer/UniformBuffer.hpp>
-#include <ashespp/Buffer/VertexBuffer.hpp>
-#include <ashespp/RenderPass/FrameBuffer.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
-#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
+
+#include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
 #include <numeric>
 
@@ -90,79 +88,6 @@ namespace smaa
 					}
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		ashes::RenderPassPtr doCreateRenderPass( castor3d::RenderDevice const & device
-			, VkFormat format )
-		{
-			ashes::VkAttachmentDescriptionArray attachments
-			{
-				{
-					0u,
-					format,
-					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
-					VK_ATTACHMENT_STORE_OP_STORE,
-					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
-					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-				},
-			};
-			ashes::SubpassDescriptionArray subpasses;
-			subpasses.emplace_back( ashes::SubpassDescription
-				{
-					0u,
-					VK_PIPELINE_BIND_POINT_GRAPHICS,
-					{},
-					{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
-					{},
-					ashes::nullopt,
-					{},
-				} );
-			ashes::VkSubpassDependencyArray dependencies
-			{
-				{
-					VK_SUBPASS_EXTERNAL,
-					0u,
-					VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
-					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-					VK_ACCESS_MEMORY_READ_BIT,
-					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-					VK_DEPENDENCY_BY_REGION_BIT,
-				},
-				{
-					0u,
-					VK_SUBPASS_EXTERNAL,
-					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-					VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
-					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-					VK_ACCESS_MEMORY_READ_BIT,
-					VK_DEPENDENCY_BY_REGION_BIT,
-				},
-			};
-			ashes::RenderPassCreateInfo createInfo
-			{
-				0u,
-				std::move( attachments ),
-				std::move( subpasses ),
-				std::move( dependencies ),
-			};
-			auto result = device->createRenderPass( "SMAA"
-				, std::move( createInfo ) );
-			return result;
-		}
-
-		ashes::FrameBufferPtr doCreateFrameBuffer( ashes::RenderPass const & renderPass
-			, ashes::ImageView const & texture )
-		{
-			ashes::ImageViewCRefArray attaches
-			{
-				{ texture }
-			};
-			return renderPass.createFrameBuffer( "SMAA"
-				, { texture.image->getDimensions().width, texture.image->getDimensions().height }
-				, std::move( attaches ) );
 		}
 	}
 
@@ -262,15 +187,13 @@ namespace smaa
 			, 5u
 			, Kind::eSRGB }
 		, m_config{ parameters }
+		, m_stages{ castor3d::makeShaderState( *renderSystem.getMainRenderDevice(), { VK_SHADER_STAGE_VERTEX_BIT, "SmaaCopy", doGetCopyVertexShader() } )
+			, castor3d::makeShaderState( *renderSystem.getMainRenderDevice(), { VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaCopy", doGetCopyPixelShader( m_config ) } ) }
 	{
 		if ( m_config.data.mode == Mode::eT2X )
 		{
 			m_passesCount += m_config.maxSubsampleIndices;
 		}
-	}
-
-	PostEffect::~PostEffect()
-	{
 	}
 
 	castor3d::PostEffectSPtr PostEffect::create( castor3d::RenderTarget & renderTarget
@@ -299,9 +222,9 @@ namespace smaa
 			m_neighbourhoodBlending->accept( visitor );
 		}
 
-		for ( auto & reproject : m_reproject )
+		if ( m_reproject )
 		{
-			reproject->accept( visitor );
+			m_reproject->accept( visitor );
 		}
 	}
 
@@ -309,36 +232,40 @@ namespace smaa
 	{
 		if ( m_config.maxSubsampleIndices > 1u )
 		{
-			std::swap( m_commands, m_commandBuffers[m_frameIndex] );
 			m_frameIndex = ( m_config.subsampleIndex + 1 ) % m_config.maxSubsampleIndices;
-			std::swap( m_commands, m_commandBuffers[m_frameIndex] );
 		}
 
 		if ( m_blendingWeightCalculation )
 		{
 			m_blendingWeightCalculation->cpuUpdate( m_config.subsampleIndices[m_config.subsampleIndex] );
-			m_config.subsampleIndex = m_frameIndex;
-			m_renderTarget.setJitter( m_config.jitters[m_config.subsampleIndex] );
+			m_renderTarget.setJitter( m_config.jitters[m_frameIndex] );
 		}
+
+		m_config.subsampleIndex = m_frameIndex;
 	}
 
-	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
-		, castor3d::RenderPassTimer const & timer )
+	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
+		, castor3d::RenderPassTimer const & timer
+		, crg::FramePass const & previousPass )
 	{
 		m_srgbTextureView = m_target;
-		m_hdrTextureView = &m_renderTarget.getTechnique()->getResult().getDefaultView().getSampledView();
+		m_hdrTextureView = &m_renderTarget.getTechnique()->getResultImgView();
+		auto previous = &previousPass;
+		crg::ImageViewIdArray smaaResult;
 
 		switch ( m_config.data.edgeDetection )
 		{
 		case EdgeDetectionType::eDepth:
-			m_edgeDetection = std::make_unique< DepthEdgeDetection >( m_renderTarget
+			m_edgeDetection = std::make_unique< DepthEdgeDetection >( *previous
+				, m_renderTarget
 				, device
-				, m_renderTarget.getTechnique()->getDepth().getDefaultView().getTargetView()
+				, m_renderTarget.getTechnique()->getDepthImgView()
 				, m_config );
 			break;
 
 		case EdgeDetectionType::eColour:
-			m_edgeDetection = std::make_unique< ColourEdgeDetection >( m_renderTarget
+			m_edgeDetection = std::make_unique< ColourEdgeDetection >( *previous
+				, m_renderTarget
 				, device
 				, *m_srgbTextureView
 				, doGetPredicationTexture()
@@ -346,7 +273,8 @@ namespace smaa
 			break;
 
 		case EdgeDetectionType::eLuma:
-			m_edgeDetection = std::make_unique< LumaEdgeDetection >( m_renderTarget
+			m_edgeDetection = std::make_unique< LumaEdgeDetection >( *previous
+				, m_renderTarget
 				, device
 				, *m_srgbTextureView
 				, doGetPredicationTexture()
@@ -354,182 +282,95 @@ namespace smaa
 			break;
 		}
 
+		previous = &m_edgeDetection->getPass();
+		smaaResult = { m_edgeDetection->getColourResult() };
+
 #if !C3D_DebugEdgeDetection
-		m_blendingWeightCalculation = std::make_unique< BlendingWeightCalculation >( m_renderTarget
+		m_blendingWeightCalculation = std::make_unique< BlendingWeightCalculation >( *previous
+			, m_renderTarget
 			, device
-			, m_edgeDetection->getSurface()->getDefaultView().getSampledView()
-			, m_edgeDetection->getDepth()
+			, m_edgeDetection->getColourResult()
+			, m_edgeDetection->getDepthResult()
 			, m_config );
+		previous = &m_blendingWeightCalculation->getPass();
+		smaaResult = { m_blendingWeightCalculation->getResult() };
 
 #	if !C3D_DebugBlendingWeightCalculation
 		auto * velocityView = doGetVelocityView();
-		m_neighbourhoodBlending = std::make_unique< NeighbourhoodBlending >( m_renderTarget
+		m_neighbourhoodBlending = std::make_unique< NeighbourhoodBlending >( *previous
+			, m_renderTarget
 			, device
 			, *m_srgbTextureView
-			, m_blendingWeightCalculation->getSurface()->getDefaultView().getSampledView()
+			, m_blendingWeightCalculation->getResult()
 			, velocityView
 			, m_config );
+		previous = &m_neighbourhoodBlending->getPass();
+		smaaResult = m_neighbourhoodBlending->getResult();
 
 #		if !C3D_DebugNeighbourhoodBlending
 		if ( m_config.data.mode == Mode::eT2X )
 		{
-			auto commandBuffer = device.graphicsCommandPool->createCommandBuffer();
-			commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+			crg::ImageViewIdArray currentViews = m_neighbourhoodBlending->getResult();
+			crg::ImageViewIdArray previousViews;
 
-			for ( uint32_t i = 0u; i < m_config.maxSubsampleIndices; ++i )
+			for ( auto i = 0; i < currentViews.size(); ++i )
 			{
-				auto & previous = i == 0u
-					? m_neighbourhoodBlending->getSurface( m_config.maxSubsampleIndices - 1 )->getDefaultView().getSampledView()
-					: m_neighbourhoodBlending->getSurface( i - 1 )->getDefaultView().getSampledView();
-				auto & current = m_neighbourhoodBlending->getSurface( i )->getDefaultView().getSampledView();
-				m_reproject.emplace_back( std::make_unique< Reproject >( m_renderTarget
-					, device
-					, current
-					, previous
-					, velocityView
-					, m_config ) );
-				commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
-					, VK_PIPELINE_STAGE_TRANSFER_BIT
-					, m_neighbourhoodBlending->getSurface( i )->getDefaultView().getTargetView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
-				commandBuffer->clear( m_neighbourhoodBlending->getSurface( i )->getDefaultView().getTargetView()
-					, castor3d::opaqueBlackClearColor.color );
-				commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-					, m_neighbourhoodBlending->getSurface( i )->getDefaultView().getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+				previousViews.push_back( i == 0u
+					? currentViews[m_config.maxSubsampleIndices - 1]
+					: currentViews[i - 1] );
 			}
 
-			commandBuffer->end();
-			device.graphicsQueue->submit( *commandBuffer, nullptr );
+			m_reproject = std::make_unique< Reproject >( *previous
+				, m_renderTarget
+				, device
+				, currentViews
+				, previousViews
+				, velocityView
+				, m_config );
+			previous = &m_reproject->getPass();
+			smaaResult = { m_reproject->getResult() };
 		}
 #		endif
 #	endif
 #endif
 
-		m_copyProgram.push_back( castor3d::makeShaderState( device, { VK_SHADER_STAGE_VERTEX_BIT, "SmaaCopy", doGetCopyVertexShader() } ) );
-		m_copyProgram.push_back( castor3d::makeShaderState( device, { VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaCopy", doGetCopyPixelShader( m_config ) } ) );
-		m_copyRenderPass = doCreateRenderPass( device, m_target->getFormat() );
-		m_copyFrameBuffer = doCreateFrameBuffer( *m_copyRenderPass, *m_target );
+		auto & pass = m_renderTarget.getGraph().createPass( "SmaaCopy"
+			, [this]( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph )
+			{
+				return crg::RenderQuadBuilder{}
+					.renderPosition( {} )
+					.renderSize( castor3d::makeExtent2D( m_renderTarget.getSize() ) )
+					.texcoordConfig( {} )
+					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
+					.passIndex( &m_config.subsampleIndex )
+					.build( pass, context, graph, m_config.maxSubsampleIndices );
+			} );
+		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR
+			, VK_SAMPLER_MIPMAP_MODE_NEAREST
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE };
+		pass.addDependency( *previous );
+		pass.addSampledView( smaaResult
+			, 0u
+			, {}
+			, linearSampler );
+		pass.addOutputColourView( *m_target );
+		previous = &pass;
 
-		doBuildCommandBuffers( device, timer );
-		m_result = m_target;
-		return true;
+		m_pass = previous;
+		return m_target;
 	}
 
 	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
 	{
-		m_copyQuads.clear();
-		m_copyFrameBuffer.reset();
-		m_copyRenderPass.reset();
-		m_copyProgram.clear();
-		m_reproject.clear();
+		m_reproject.reset();
 		m_neighbourhoodBlending.reset();
 		m_blendingWeightCalculation.reset();
 		m_edgeDetection.reset();
-	}
-
-	void PostEffect::doBuildCommandBuffers( castor3d::RenderDevice const & device
-		, castor3d::RenderPassTimer const & timer )
-	{
-		for ( uint32_t i = 0u; i < m_config.maxSubsampleIndices; ++i )
-		{
-			m_commandBuffers.emplace_back( doBuildCommandBuffer( device, timer, i ) );
-		}
-
-		if ( m_config.maxSubsampleIndices == 1 )
-		{
-			m_commands = std::move( m_commandBuffers[0] );
-		}
-		else
-		{
-			m_frameIndex = m_config.maxSubsampleIndices - 1u;
-			m_config.subsampleIndex = m_frameIndex;
-			std::swap( m_commands, m_commandBuffers[m_frameIndex] );
-		}
-	}
-
-	castor3d::CommandsSemaphoreArray PostEffect::doBuildCommandBuffer( castor3d::RenderDevice const & device
-		, castor3d::RenderPassTimer const & timer
-		, uint32_t index )
-	{
-		castor3d::CommandsSemaphoreArray result;
-		uint32_t passIndex = 0u;
-
-		if ( m_edgeDetection )
-		{
-			result.emplace_back( m_edgeDetection->prepareCommands( timer, passIndex++ ) );
-			m_smaaResult = m_edgeDetection->getSurface().get();
-		}
-
-		if ( m_blendingWeightCalculation )
-		{
-			result.emplace_back( m_blendingWeightCalculation->prepareCommands( timer, passIndex++ ) );
-			m_smaaResult = m_blendingWeightCalculation->getSurface().get();
-		}
-
-		if ( m_neighbourhoodBlending )
-		{
-			result.emplace_back( m_neighbourhoodBlending->prepareCommands( timer, passIndex++, index ) );
-			m_smaaResult = m_neighbourhoodBlending->getSurface( index ).get();
-		}
-
-		if ( !m_reproject.empty() )
-		{
-			auto & reproject = *m_reproject[index];
-			result.emplace_back( reproject.prepareCommands( timer, passIndex++ ) );
-			m_smaaResult = reproject.getSurface().get();
-		}
-
-		if ( m_config.data.enableReprojection
-			&& m_config.data.mode == Mode::eT2X
-			&& C3D_DebugVelocity )
-		{
-			m_smaaResult = m_renderTarget.getVelocity().getTexture().get();
-		}
-
-		ashes::VkDescriptorSetLayoutBindingArray bindings;
-		auto copyQuad = castor3d::RenderQuadBuilder{}
-			.texcoordConfig( castor3d::rq::Texcoord{} )
-			.build( device
-				, cuT( "SmaaCopy" )
-				, VK_FILTER_NEAREST );
-		copyQuad->createPipelineAndPass( { m_renderTarget.getSize().getWidth(), m_renderTarget.getSize().getHeight() }
-			, {}
-			, m_copyProgram
-			, *m_copyRenderPass
-			, {
-				copyQuad->makeDescriptorWrite( m_smaaResult->getDefaultView().getSampledView()
-					, copyQuad->getSampler().getSampler()
-					, 0u )
-			}
-			, {} );
-
-		castor3d::CommandsSemaphore copyCommands
-		{
-			device.graphicsCommandPool->createCommandBuffer( "SMAA Copy" ),
-			device->createSemaphore( "SMAA Copy" )
-		};
-		auto & copyCmd = *copyCommands.commandBuffer;
-
-		copyCmd.begin();
-		copyCmd.beginDebugBlock(
-			{
-				"SMAA Copy",
-				castor3d::makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ),
-			} );
-		timer.beginPass( copyCmd, passIndex );
-		copyCmd.beginRenderPass( *m_copyRenderPass
-			, *m_copyFrameBuffer
-			, { castor3d::transparentBlackClearColor }
-			, VK_SUBPASS_CONTENTS_INLINE );
-		copyQuad->registerPass( copyCmd );
-		copyCmd.endRenderPass();
-		timer.endPass( copyCmd, passIndex );
-		copyCmd.endDebugBlock();
-		copyCmd.end();
-		result.emplace_back( std::move( copyCommands ) );
-		m_copyQuads.emplace_back( std::move( copyQuad ) );
-
-		return result;
 	}
 
 	bool PostEffect::doWriteInto( StringStream & p_file, String const & tabs )
@@ -599,28 +440,28 @@ namespace smaa
 		return true;
 	}
 
-	ashes::Image const * PostEffect::doGetPredicationTexture()
+	crg::ImageViewId const * PostEffect::doGetPredicationTexture()
 	{
-		ashes::Image const * predication = nullptr;
+		crg::ImageViewId const * predication = nullptr;
 
 		if ( m_config.data.enablePredication )
 		{
-			predication = &m_renderTarget.getTechnique()->getDepth().getTexture();
+			predication = &m_renderTarget.getTechnique()->getDepthImgView();
 		}
 
 		return predication;
 	}
 
-	ashes::ImageView const * PostEffect::doGetVelocityView()
+	crg::ImageViewId const * PostEffect::doGetVelocityView()
 	{
-		ashes::ImageView const * velocityView = nullptr;
+		crg::ImageViewId const * velocityView = nullptr;
 
 		switch ( m_config.data.mode )
 		{
 		case Mode::eT2X:
 			if ( m_config.data.enableReprojection )
 			{
-				velocityView = &m_renderTarget.getVelocity().getTexture()->getDefaultView().getSampledView();
+				velocityView = &m_renderTarget.getVelocityId();
 			}
 			break;
 

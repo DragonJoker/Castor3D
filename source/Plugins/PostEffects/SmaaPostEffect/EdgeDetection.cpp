@@ -6,8 +6,7 @@
 #include <Castor3D/Render/RenderPassTimer.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
-#include <Castor3D/Material/Texture/Sampler.hpp>
-#include <Castor3D/Material/Texture/TextureLayout.hpp>
+#include <Castor3D/Shader/Program.hpp>
 
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>
@@ -25,10 +24,13 @@ namespace smaa
 {
 	namespace
 	{
-		std::unique_ptr< ast::Shader > doGetEdgeDetectionVP( castor3d::RenderSystem const & renderSystem
-			, Point4f const & renderTargetMetrics
+		std::unique_ptr< ast::Shader > doGetEdgeDetectionVP( castor::Size const & size
 			, SmaaConfig const & config )
 		{
+			Point4f renderTargetMetrics{ 1.0f / size.getWidth()
+				, 1.0f / size.getHeight()
+				, float( size.getWidth() )
+				, float( size.getHeight() ) };
 			using namespace sdw;
 			VertexWriter writer;
 
@@ -75,105 +77,66 @@ namespace smaa
 
 	//*********************************************************************************************
 
-	EdgeDetection::EdgeDetection( castor3d::RenderTarget & renderTarget
+	EdgeDetection::EdgeDetection( crg::FramePass const & previousPass
+		, castor3d::RenderTarget & renderTarget
 		, castor3d::RenderDevice const & device
 		, SmaaConfig const & config
-		, castor3d::rq::BindingDescriptionArray const & bindings )
-		: castor3d::RenderQuad{ device
-			, cuT( "SmaaEdgeDetection" )
-			, VK_FILTER_LINEAR
-			, { bindings
-				, ashes::nullopt
-				, castor3d::rq::Texcoord{} } }
-		, m_config{ config }
-		, m_surface{ *renderTarget.getEngine(), getName() }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName() }
+		, std::unique_ptr< ast::Shader > pixelShader )
+		: m_config{ config }
+		, m_outColourImg{ renderTarget.getGraph().createImage( crg::ImageData{ "SMEDRes"
+			, 0u
+			, VK_IMAGE_TYPE_2D
+			, VK_FORMAT_R8G8B8A8_UNORM
+			, castor3d::makeExtent3D( renderTarget.getSize() )
+			, ( VK_IMAGE_USAGE_SAMPLED_BIT
+				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } ) }
+		, m_outColourView{ renderTarget.getGraph().createView( crg::ImageViewData{ "SMEDRes"
+			, m_outColourImg
+			, 0u
+			, VK_IMAGE_VIEW_TYPE_2D
+			, m_outColourImg.data->info.format
+			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
+		, m_outDepthImg{ renderTarget.getGraph().createImage( crg::ImageData{ "SMEDStRes"
+			, 0u
+			, VK_IMAGE_TYPE_2D
+			, device.selectSuitableStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT )
+			, castor3d::makeExtent3D( renderTarget.getSize() )
+			, ( VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT ) } ) }
+		, m_outDepthStencilView{ renderTarget.getGraph().createView( crg::ImageViewData{ "SMEDStRes"
+			, m_outDepthImg
+			, 0u
+			, VK_IMAGE_VIEW_TYPE_2D
+			, m_outDepthImg.data->info.format
+			, { VK_IMAGE_ASPECT_STENCIL_BIT, 0u, 1u, 0u, 1u } } ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaEdge", doGetEdgeDetectionVP( renderTarget.getSize(), config ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaEdge", std::move( pixelShader ) }
+		, m_stages{ makeShaderState( device, m_vertexShader )
+			, makeShaderState( device, m_pixelShader ) }
+		, m_pass{ renderTarget.getGraph().createPass( "SmaaEdge"
+			, [this, &renderTarget]( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph )
+			{
+				ashes::PipelineDepthStencilStateCreateInfo dsState{ 0u, VK_FALSE, VK_FALSE };
+				dsState->stencilTestEnable = VK_TRUE;
+				dsState->front.passOp = VK_STENCIL_OP_REPLACE;
+				dsState->front.reference = 1u;
+				dsState->back = dsState->front;
+				return crg::RenderQuadBuilder{}
+					.renderPosition( {} )
+					.renderSize( castor3d::makeExtent2D( renderTarget.getSize() ) )
+					.texcoordConfig( {} )
+					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
+					.depthStencilState( dsState )
+					.build( pass, context, graph );
+			} ) }
 	{
-		static constexpr VkFormat colourFormat = VK_FORMAT_R8G8B8A8_UNORM;
-		const VkFormat depthFormat = m_device.selectSuitableStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT );
-
-		VkExtent2D size{ renderTarget.getSize().getWidth()
-			, renderTarget.getSize().getHeight() };
-
-		// Create the render pass.
-		ashes::VkAttachmentDescriptionArray attachments
-		{
-			{
-				0u,
-				colourFormat,
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_CLEAR,
-				VK_ATTACHMENT_STORE_OP_STORE,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_UNDEFINED,
-				VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-			},
-			{
-				0u,
-				depthFormat,
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_CLEAR,
-				VK_ATTACHMENT_STORE_OP_STORE,
-				VK_ATTACHMENT_LOAD_OP_CLEAR,
-				VK_ATTACHMENT_STORE_OP_STORE,
-				VK_IMAGE_LAYOUT_UNDEFINED,
-				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-			},
-		};
-		ashes::SubpassDescriptionArray subpasses;
-		subpasses.emplace_back( ashes::SubpassDescription
-			{
-				0u,
-				VK_PIPELINE_BIND_POINT_GRAPHICS,
-				{},
-				{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
-				{},
-				VkAttachmentReference{ 1u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL },
-				{},
-			} );
-		ashes::VkSubpassDependencyArray dependencies
-		{
-			{
-				VK_SUBPASS_EXTERNAL,
-				0u,
-				VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_ACCESS_MEMORY_READ_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			},
-			{
-				0u,
-				VK_SUBPASS_EXTERNAL,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_READ_BIT,
-				VK_ACCESS_MEMORY_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			},
-		};
-		ashes::RenderPassCreateInfo createInfo
-		{
-			0u,
-			std::move( attachments ),
-			std::move( subpasses ),
-			std::move( dependencies ),
-		};
-		m_renderPass = m_device->createRenderPass( getName()
-			, std::move( createInfo ) );
-
-		m_surface.initialise( m_device
-			, *m_renderPass
-			, renderTarget.getSize()
-			, colourFormat
-			, depthFormat );
-
-		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
-		m_vertexShader.shader = doGetEdgeDetectionVP( m_renderSystem
-			, pixelSize
-			, m_config );
+		m_pass.addDependency( previousPass );
+		m_pass.addOutputStencilView( m_outDepthStencilView
+			, castor3d::defaultClearDepthStencil );
+		m_pass.addOutputColourView( m_outColourView
+			, castor3d::transparentBlackClearColor );
 	}
 
 	void EdgeDetection::accept( castor3d::PipelineVisitorBase & visitor )

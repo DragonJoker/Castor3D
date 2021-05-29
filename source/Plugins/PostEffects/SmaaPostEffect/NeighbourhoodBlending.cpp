@@ -29,10 +29,21 @@ namespace smaa
 {
 	namespace
 	{
-		std::unique_ptr< ast::Shader > doGetNeighbourhoodBlendingVP( castor3d::RenderSystem & renderSystem
-			, Point4f const & renderTargetMetrics
+		enum Idx : uint32_t
+		{
+			ColorTexIdx,
+			BlendTexIdx,
+			VelocityTexIdx,
+		};
+
+		std::unique_ptr< ast::Shader > doGetNeighbourhoodBlendingVP( castor::Size const & size
 			, SmaaConfig const & config )
 		{
+			Point4f renderTargetMetrics{ 1.0f / size.getWidth()
+				, 1.0f / size.getHeight()
+				, float( size.getWidth() )
+				, float( size.getHeight() ) };
+
 			using namespace sdw;
 			VertexWriter writer;
 
@@ -71,18 +82,15 @@ namespace smaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		enum Idx : uint32_t
-		{
-			ColorTexIdx,
-			BlendTexIdx,
-			VelocityTexIdx,
-		};
-
-		std::unique_ptr< ast::Shader > doGetNeighbourhoodBlendingFP( castor3d::RenderSystem & renderSystem
-			, Point4f const & renderTargetMetrics
+		std::unique_ptr< ast::Shader > doGetNeighbourhoodBlendingFP( castor::Size const & size
 			, SmaaConfig const & config
 			, bool reprojection )
 		{
+			Point4f renderTargetMetrics{ 1.0f / size.getWidth()
+				, 1.0f / size.getHeight()
+				, float( size.getWidth() )
+				, float( size.getHeight() ) };
+
 			using namespace sdw;
 			FragmentWriter writer;
 
@@ -238,163 +246,84 @@ namespace smaa
 
 	//*********************************************************************************************
 
-	NeighbourhoodBlending::NeighbourhoodBlending( castor3d::RenderTarget & renderTarget
+	NeighbourhoodBlending::NeighbourhoodBlending( crg::FramePass const & previousPass
+		, castor3d::RenderTarget & renderTarget
 		, castor3d::RenderDevice const & device
-		, ashes::ImageView const & sourceView
-		, ashes::ImageView const & blendView
-		, ashes::ImageView const * velocityView
+		, crg::ImageViewId const & sourceView
+		, crg::ImageViewId const & blendView
+		, crg::ImageViewId const * velocityView
 		, SmaaConfig const & config )
-		: castor3d::RenderQuad{ device
-			, "SmaaNeighbourhoodBlending"
-			, VK_FILTER_LINEAR
-			, { createBindings( velocityView )
-				, ashes::nullopt
-				, castor3d::rq::Texcoord{} } }
-		, m_sourceView{ sourceView }
+		: m_sourceView{ sourceView }
 		, m_blendView{ blendView }
 		, m_velocityView{ velocityView }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName() }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaNeighbourhood", doGetNeighbourhoodBlendingVP( renderTarget.getSize(), config ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaNeighbourhood", doGetNeighbourhoodBlendingFP( renderTarget.getSize(), config, velocityView != nullptr ) }
+		, m_stages{ makeShaderState( device, m_vertexShader )
+			, makeShaderState( device, m_pixelShader ) }
+		, m_pass{ renderTarget.getGraph().createPass( "SmaaNeighbourhood"
+			, [this, &config]( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph )
+			{
+				auto size = m_sourceView.data->image.data->info.extent;
+				return crg::RenderQuadBuilder{}
+					.renderPosition( {} )
+					.renderSize( { size.width, size.height } )
+					.texcoordConfig( {} )
+					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
+					.passIndex( &config.subsampleIndex )
+					.build( pass, context, graph, config.maxSubsampleIndices );
+			} ) }
 	{
-		static constexpr VkFormat colourFormat = VK_FORMAT_R8G8B8A8_SRGB;
-
-		VkExtent2D size{ sourceView.image->getDimensions().width, sourceView.image->getDimensions().height };
-		auto & renderSystem = m_renderSystem;
-
-		// Create the render pass.
-		ashes::VkAttachmentDescriptionArray attachments
-		{
-			{
-				0u,
-				colourFormat,
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_CLEAR,
-				VK_ATTACHMENT_STORE_OP_STORE,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_UNDEFINED,
-				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-			}
-		};
-		ashes::SubpassDescriptionArray subpasses;
-		subpasses.emplace_back( ashes::SubpassDescription
-			{
-				0u,
-				VK_PIPELINE_BIND_POINT_GRAPHICS,
-				{},
-				{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
-				{},
-				ashes::nullopt,
-				{},
-			} );
-		ashes::VkSubpassDependencyArray dependencies
-		{
-			{
-				VK_SUBPASS_EXTERNAL,
-				0u,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-				VK_ACCESS_SHADER_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			},
-			{
-				0u,
-				VK_SUBPASS_EXTERNAL,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-				VK_ACCESS_SHADER_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			},
-		};
-		ashes::RenderPassCreateInfo createInfo
-		{
-			0u,
-			std::move( attachments ),
-			std::move( subpasses ),
-			std::move( dependencies ),
-		};
-		m_renderPass = m_device->createRenderPass( getName()
-			, std::move( createInfo ) );
-
-		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
-		m_vertexShader.shader = doGetNeighbourhoodBlendingVP( *renderTarget.getEngine()->getRenderSystem()
-			, pixelSize
-			, config );
-		m_pixelShader.shader = doGetNeighbourhoodBlendingFP( *renderTarget.getEngine()->getRenderSystem()
-			, pixelSize
-			, config
-			, velocityView != nullptr );
-
-		ashes::PipelineShaderStageCreateInfoArray stages;
-		stages.push_back( makeShaderState( m_device, m_vertexShader ) );
-		stages.push_back( makeShaderState( m_device, m_pixelShader ) );
-
-		ashes::WriteDescriptorSetArray writes
-		{
-			makeDescriptorWrite( m_sourceView
-				, getSampler().getSampler()
-				, ColorTexIdx ),
-			makeDescriptorWrite( m_blendView
-				, getSampler().getSampler()
-				, BlendTexIdx ),
-		};
+		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR
+			, VK_SAMPLER_MIPMAP_MODE_NEAREST
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE };
+		m_pass.addDependency( previousPass );
+		m_pass.addSampledView( m_sourceView
+			, ColorTexIdx
+			, {}
+			, linearSampler );
+		m_pass.addSampledView( m_blendView
+			, BlendTexIdx
+			, {}
+			, linearSampler );
 
 		if ( m_velocityView )
 		{
-			writes.emplace_back( makeDescriptorWrite( *m_velocityView
-				, getSampler().getSampler()
-				, VelocityTexIdx ) );
+			m_pass.addSampledView( *m_velocityView
+				, VelocityTexIdx
+				, {}
+				, linearSampler );
 		}
 
-		createPipelineAndPass( size
-			, castor::Position{}
-			, stages
-			, *m_renderPass
-			, writes
-			, {} );
+		auto size = castor3d::makeExtent3D( renderTarget.getSize() );
+		auto & graph = renderTarget.getGraph();
 
 		for ( uint32_t i = 0; i < config.maxSubsampleIndices; ++i )
 		{
-			m_surfaces.emplace_back( *renderTarget.getEngine()
-				, getName() );
-			m_surfaces.back().initialise( m_device
-				, *m_renderPass
-				, castor::Size{ size.width, size.height }
-				, colourFormat );
+			m_images.push_back( graph.createImage( crg::ImageData{ "SMNBRes" + std::to_string( i )
+				, 0u
+				, VK_IMAGE_TYPE_2D
+				, VK_FORMAT_R8G8B8A8_SRGB
+				, size
+				, ( VK_IMAGE_USAGE_SAMPLED_BIT
+					| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
+					| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) } ) );
+			auto image = m_images.back();
+			m_imageViews.push_back( graph.createView( crg::ImageViewData{ image.data->name
+				, image
+				, 0u
+				, VK_IMAGE_VIEW_TYPE_2D
+				, image.data->info.format
+				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) );
 		}
-	}
 
-	castor3d::CommandsSemaphore NeighbourhoodBlending::prepareCommands( castor3d::RenderPassTimer const & timer
-		, uint32_t passIndex
-		, uint32_t index )
-	{
-		castor3d::CommandsSemaphore neighbourhoodBlendingCommands
-		{
-			m_device.graphicsCommandPool->createCommandBuffer( getName() ),
-			m_device->createSemaphore( getName() )
-		};
-		auto & neighbourhoodBlendingCmd = *neighbourhoodBlendingCommands.commandBuffer;
-
-		neighbourhoodBlendingCmd.begin();
-		neighbourhoodBlendingCmd.beginDebugBlock(
-			{
-				"SMAA NeighbourhoodBlending",
-				castor3d::makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ),
-			} );
-		timer.beginPass( neighbourhoodBlendingCmd, passIndex );
-		neighbourhoodBlendingCmd.beginRenderPass( *m_renderPass
-			, *m_surfaces[index].frameBuffer
-			, { castor3d::transparentBlackClearColor }
-			, VK_SUBPASS_CONTENTS_INLINE );
-		registerPass( neighbourhoodBlendingCmd );
-		neighbourhoodBlendingCmd.endRenderPass();
-		timer.endPass( neighbourhoodBlendingCmd, passIndex );
-		neighbourhoodBlendingCmd.endDebugBlock();
-		neighbourhoodBlendingCmd.end();
-
-		return std::move( neighbourhoodBlendingCommands );
+		m_pass.addOutputColourView( m_imageViews
+			, castor3d::transparentBlackClearColor );
 	}
 
 	void NeighbourhoodBlending::accept( castor3d::PipelineVisitorBase & visitor )

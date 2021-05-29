@@ -7,44 +7,48 @@ See LICENSE file in root folder
 #include "SmaaPostEffect/SmaaConfig.hpp"
 
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
-#include <Castor3D/Render/PostEffect/PostEffectSurface.hpp>
-#include <Castor3D/Render/Passes/RenderQuad.hpp>
+
+#include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
 #include <ShaderAST/Shader.hpp>
 
 namespace smaa
 {
 	class EdgeDetection
-		: public castor3d::RenderQuad
 	{
 	public:
-		EdgeDetection( castor3d::RenderTarget & renderTarget
+		EdgeDetection( crg::FramePass const & previousPass
+			, castor3d::RenderTarget & renderTarget
 			, castor3d::RenderDevice const & device
 			, SmaaConfig const & config
-			, castor3d::rq::BindingDescriptionArray const & bindings );
-		virtual castor3d::CommandsSemaphore prepareCommands( castor3d::RenderPassTimer const & timer
-			, uint32_t passIndex ) = 0;
+			, std::unique_ptr< ast::Shader > pixelShader );
 		void accept( castor3d::PipelineVisitorBase & visitor );
 
-		inline castor3d::TextureLayoutSPtr getSurface()const
+		crg::ImageViewId const & getColourResult()const
 		{
-			return m_surface.colourTexture;
+			return m_outColourView;
 		}
 
-		inline castor3d::TextureLayoutSPtr const & getDepth()const
+		crg::ImageViewId const & getDepthResult()const
 		{
-			return m_surface.depthTexture;
+			return m_outDepthStencilView;
 		}
 
-	protected:
-		virtual void doInitialisePipeline() = 0;
+		crg::FramePass const & getPass()const
+		{
+			return m_pass;
+		}
 
 	protected:
 		SmaaConfig const & m_config;
-		ashes::RenderPassPtr m_renderPass;
-		castor3d::PostEffectSurface m_surface;
+		crg::ImageId m_outColourImg;
+		crg::ImageViewId m_outColourView;
+		crg::ImageId m_outDepthImg;
+		crg::ImageViewId m_outDepthStencilView;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
+		ashes::PipelineShaderStageCreateInfoArray m_stages;
+		crg::FramePass & m_pass;
 	};
 }
 

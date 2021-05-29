@@ -35,10 +35,13 @@ namespace smaa
 			PredicationTexIdx,
 		};
 
-		std::unique_ptr< ast::Shader > doGetEdgeDetectionFPPredication( castor3d::RenderSystem & renderSystem
-			, Point4f const & renderTargetMetrics
+		std::unique_ptr< ast::Shader > doGetEdgeDetectionFPPredication( castor::Size const & size
 			, SmaaConfig const & config )
 		{
+			auto renderTargetMetrics = Point4f{ 1.0f / size.getWidth()
+				, 1.0f / size.getHeight()
+				, float( size.getWidth() )
+				, float( size.getHeight() ) };
 			using namespace sdw;
 			FragmentWriter writer;
 
@@ -187,10 +190,13 @@ namespace smaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< ast::Shader > doGetEdgeDetectionFPNoPredication( castor3d::RenderSystem & renderSystem
-			, Point4f const & renderTargetMetrics
+		std::unique_ptr< ast::Shader > doGetEdgeDetectionFPNoPredication( castor::Size const & size
 			, SmaaConfig const & config )
 		{
+			auto renderTargetMetrics = Point4f{ 1.0f / size.getWidth()
+				, 1.0f / size.getHeight()
+				, float( size.getWidth() )
+				, float( size.getHeight() ) };
 			using namespace sdw;
 			FragmentWriter writer;
 
@@ -298,136 +304,54 @@ namespace smaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ashes::ImageView doCreatePredicationView( ashes::Image const & texture )
+		crg::ImageViewData doCreatePredicationView( crg::ImageViewId const & pred )
 		{
-			ashes::ImageViewCreateInfo view
-			{
-				0u,
-				texture,
-				VK_IMAGE_VIEW_TYPE_2D,
-				texture.getFormat(),
-				VkComponentMapping{},
-				{ VK_IMAGE_ASPECT_DEPTH_BIT, 0u, 1u, 0u, 1u }
-			};
-			return texture.createView( view );
-		}
-
-		castor3d::rq::BindingDescriptionArray createBindings( bool predication )
-		{
-			castor3d::rq::BindingDescriptionArray result
-			{
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
-			};
-
-			if ( predication )
-			{
-				result.push_back( { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D } );
-			}
-
-			return result;
+			return crg::ImageViewData{ "SMCEDPred"
+				, pred.data->image
+				, 0u
+				, VK_IMAGE_VIEW_TYPE_2D
+				, pred.data->info.format
+				, { VK_IMAGE_ASPECT_DEPTH_BIT, 0u, 1u, 0u, 1u } };
 		}
 	}
 
 	//*********************************************************************************************
 
-	ColourEdgeDetection::ColourEdgeDetection( castor3d::RenderTarget & renderTarget
+	ColourEdgeDetection::ColourEdgeDetection( crg::FramePass const & previousPass
+		, castor3d::RenderTarget & renderTarget
 		, castor3d::RenderDevice const & device
-		, ashes::ImageView const & colourView
-		, ashes::Image const * predication
+		, crg::ImageViewId const & colourView
+		, crg::ImageViewId const * predication
 		, SmaaConfig const & config )
-		: EdgeDetection{ renderTarget, device, config, createBindings( predication ) }
+		: EdgeDetection{ previousPass
+			, renderTarget
+			, device
+			, config
+			, ( predication
+				? doGetEdgeDetectionFPPredication( renderTarget.getSize(), config )
+				: doGetEdgeDetectionFPNoPredication( renderTarget.getSize(), config ) ) }
 		, m_colourView{ colourView }
 		, m_predicationView{ ( predication
-			? std::make_unique< ashes::ImageView >( doCreatePredicationView( *predication ) )
-			: nullptr ) }
+			? renderTarget.getGraph().createView( doCreatePredicationView( *predication ) )
+			: crg::ImageViewId{} ) }
 	{
-		VkExtent2D size{ m_colourView.image->getDimensions().width
-			, m_colourView.image->getDimensions().height };
-		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
-
-		if ( m_predicationView )
-		{
-			m_pixelShader.shader = doGetEdgeDetectionFPPredication( *renderTarget.getEngine()->getRenderSystem()
-				, pixelSize
-				, config );
-		}
-		else
-		{
-			m_pixelShader.shader = doGetEdgeDetectionFPNoPredication( *renderTarget.getEngine()->getRenderSystem()
-				, pixelSize
-				, config );
-		}
-
-		doInitialisePipeline();
-	}
-
-	castor3d::CommandsSemaphore ColourEdgeDetection::prepareCommands( castor3d::RenderPassTimer const & timer
-		, uint32_t passIndex )
-	{
-		castor3d::CommandsSemaphore edgeDetectionCommands
-		{
-			m_device.graphicsCommandPool->createCommandBuffer( "ColourEdgeDetection" ),
-			m_device->createSemaphore( "ColourEdgeDetection" )
-		};
-		auto & edgeDetectionCmd = *edgeDetectionCommands.commandBuffer;
-
-		edgeDetectionCmd.begin();
-		edgeDetectionCmd.beginDebugBlock(
-			{
-				"SMAA ColourEdgeDetection",
-				castor3d::makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ),
-			} );
-		timer.beginPass( edgeDetectionCmd, passIndex );
-		edgeDetectionCmd.beginRenderPass( *m_renderPass
-			, *m_surface.frameBuffer
-			, {
-				castor3d::transparentBlackClearColor,
-				castor3d::defaultClearDepthStencil,
-			}
-			, VK_SUBPASS_CONTENTS_INLINE );
-		registerPass( edgeDetectionCmd );
-		edgeDetectionCmd.endRenderPass();
-		timer.endPass( edgeDetectionCmd, passIndex );
-		edgeDetectionCmd.endDebugBlock();
-		edgeDetectionCmd.end();
-
-		return std::move( edgeDetectionCommands );
-	}
-
-	void ColourEdgeDetection::doInitialisePipeline()
-	{
-		VkExtent2D size{ m_colourView.image->getDimensions().width
-			, m_colourView.image->getDimensions().height };
-		ashes::PipelineShaderStageCreateInfoArray stages;
-		stages.push_back( makeShaderState( m_device, m_vertexShader ) );
-		stages.push_back( makeShaderState( m_device, m_pixelShader ) );
-
-		ashes::PipelineDepthStencilStateCreateInfo dsstate{ 0u, VK_FALSE, VK_FALSE };
-		dsstate->stencilTestEnable = true;
-		dsstate->front.passOp = VK_STENCIL_OP_REPLACE;
-		dsstate->front.reference = 1u;
-		dsstate->back = dsstate->front;
-
-		ashes::WriteDescriptorSetArray writes
-		{
-			makeDescriptorWrite( m_colourView
-				, getSampler().getSampler()
-				, ColorTexIdx ),
-		};
-
-		if ( m_predicationView )
-		{
-			writes.emplace_back( makeDescriptorWrite( *m_predicationView
-				, getSampler().getSampler()
-				, PredicationTexIdx ) );
-		}
-
-		createPipelineAndPass( size
-			, castor::Position{}
-			, stages
-			, *m_renderPass
-			, std::move( writes )
+		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR
+			, VK_SAMPLER_MIPMAP_MODE_NEAREST
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE };
+		m_pass.addSampledView( m_colourView
+			, ColorTexIdx
 			, {}
-			, std::move( dsstate ) );
+			, linearSampler );
+
+		if ( predication )
+		{
+			m_pass.addSampledView( m_predicationView
+				, PredicationTexIdx
+				, {}
+				, linearSampler );
+		}
 	}
 }

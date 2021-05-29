@@ -22,6 +22,8 @@
 
 #include <ShaderWriter/Source.hpp>
 
+#include <RenderGraph/RunnablePasses/RenderQuad.hpp>
+
 #include <numeric>
 
 using namespace castor;
@@ -30,10 +32,21 @@ namespace smaa
 {
 	namespace
 	{
-		std::unique_ptr< ast::Shader > doGetReprojectVP( castor3d::RenderSystem const & renderSystem
-			, Point4f const & renderTargetMetrics
+		enum Idx : uint32_t
+		{
+			CurColTexIdx,
+			PrvColTexIdx,
+			VelocityTexIdx,
+		};
+
+		std::unique_ptr< ast::Shader > doGetReprojectVP( castor::Size const & size
 			, SmaaConfig const & config )
 		{
+			Point4f renderTargetMetrics{ 1.0f / size.getWidth()
+				, 1.0f / size.getHeight()
+				, float( size.getWidth() )
+				, float( size.getHeight() ) };
+
 			using namespace sdw;
 			VertexWriter writer;
 
@@ -57,18 +70,15 @@ namespace smaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		enum Idx : uint32_t
-		{
-			CurColTexIdx,
-			PrvColTexIdx,
-			VelocityTexIdx,
-		};
-
-		std::unique_ptr< ast::Shader > doGetReprojectFP( castor3d::RenderSystem const & renderSystem
-			, Point4f const & renderTargetMetrics
+		std::unique_ptr< ast::Shader > doGetReprojectFP( castor::Size const & size
 			, SmaaConfig const & config
 			, bool reprojection )
 		{
+			Point4f renderTargetMetrics{ 1.0f / size.getWidth()
+				, 1.0f / size.getHeight()
+				, float( size.getWidth() )
+				, float( size.getHeight() ) };
+
 			using namespace sdw;
 			FragmentWriter writer;
 			auto c3d_reprojectionWeightScale = writer.declConstant( constants::ReprojectionWeightScale
@@ -133,167 +143,104 @@ namespace smaa
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
-
-		castor3d::rq::BindingDescriptionArray createBindings()
-		{
-			return
-			{
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
-			};
-		}
 	}
 	
 	//*********************************************************************************************
 
-	Reproject::Reproject( castor3d::RenderTarget & renderTarget
+	Reproject::Reproject( crg::FramePass const & previousPass
+		, castor3d::RenderTarget & renderTarget
 		, castor3d::RenderDevice const & device
-		, ashes::ImageView const & currentColourView
-		, ashes::ImageView const & previousColourView
-		, ashes::ImageView const * velocityView
+		, crg::ImageViewIdArray const & currentColourViews
+		, crg::ImageViewIdArray const & previousColourViews
+		, crg::ImageViewId const * velocityView
 		, SmaaConfig const & config )
-		: castor3d::RenderQuad{ device
-			, cuT( "SmaaReproject" )
-			, VK_FILTER_NEAREST
-			, { createBindings()
-				, ashes::nullopt
-				, castor3d::rq::Texcoord{} } }
-		, m_currentColourView{ currentColourView }
-		, m_previousColourView{ previousColourView }
+		: m_currentColourViews{ currentColourViews }
+		, m_previousColourViews{ previousColourViews }
 		, m_velocityView{ velocityView }
-		, m_surface{ *renderTarget.getEngine(), getName() }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName() }
-	{
-		VkExtent2D size{ m_currentColourView.image->getDimensions().width, m_currentColourView.image->getDimensions().height };
-
-		// Create the render pass.
-		ashes::VkAttachmentDescriptionArray attachments
-		{
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaReproject", doGetReprojectVP( renderTarget.getSize(), config ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaReproject", doGetReprojectFP( renderTarget.getSize(), config, velocityView != nullptr ) }
+		, m_stages{ makeShaderState( device, m_vertexShader )
+			, makeShaderState( device, m_pixelShader ) }
+		, m_resultImg{ renderTarget.getGraph().createImage( crg::ImageData{ "SMRpRes"
+			, 0u
+			, VK_IMAGE_TYPE_2D
+			, renderTarget.getPixelFormat()
+			, castor3d::makeExtent3D( renderTarget.getSize() )
+			, ( VK_IMAGE_USAGE_SAMPLED_BIT
+				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } ) }
+		, m_resultView{ renderTarget.getGraph().createView( crg::ImageViewData{ "SMRpRes"
+			, m_resultImg
+			, 0u
+			, VK_IMAGE_VIEW_TYPE_2D
+			, m_resultImg.data->info.format
+			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
+		, m_pass{ renderTarget.getGraph().createPass( "SmaaReproject"
+			, [this, &config, &device, &currentColourViews]( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph )
 			{
-				0u,
-				renderTarget.getPixelFormat(),
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_CLEAR,
-				VK_ATTACHMENT_STORE_OP_STORE,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_UNDEFINED,
-				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-			},
-		};
-		ashes::SubpassDescriptionArray subpasses;
-		subpasses.emplace_back( ashes::SubpassDescription
-			{
-				0u,
-				VK_PIPELINE_BIND_POINT_GRAPHICS,
-				{},
-				{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
-				{},
-				ashes::nullopt,
-				{},
-			} );
-		ashes::VkSubpassDependencyArray dependencies
-		{
-			{
-				VK_SUBPASS_EXTERNAL,
-				0u,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-				VK_ACCESS_SHADER_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			},
-			{
-				0u,
-				VK_SUBPASS_EXTERNAL,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-				VK_ACCESS_SHADER_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			},
-		};
-		ashes::RenderPassCreateInfo createInfo
-		{
-			0u,
-			std::move( attachments ),
-			std::move( subpasses ),
-			std::move( dependencies ),
-		};
-		m_renderPass = m_device->createRenderPass( getName()
-			, std::move( createInfo ) );
+				auto commandBuffer = device.graphicsCommandPool->createCommandBuffer();
+				commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 
-		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
-		m_vertexShader.shader = doGetReprojectVP( m_renderSystem
-			, pixelSize
-			, config );
-		m_pixelShader.shader = doGetReprojectFP( m_renderSystem
-			, pixelSize
-			, config
-			, velocityView != nullptr );
+				for ( auto & view : m_currentColourViews )
+				{
+					ashes::ImagePtr image = std::make_unique< ashes::Image >( *device
+						, graph.getImage( view )
+						, view.data->image.data->info );
+					auto createInfo = view.data->info;
+					createInfo.image = *image;
+					auto imageView = image->createView( createInfo );
+					commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
+						, VK_PIPELINE_STAGE_TRANSFER_BIT
+						, imageView.makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+					commandBuffer->clear( imageView
+						, castor3d::opaqueBlackClearColor.color );
+					commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+						, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+						, imageView.makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+					graph.updateCurrentLayout( view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+				}
 
-		ashes::PipelineShaderStageCreateInfoArray stages;
-		stages.push_back( makeShaderState( m_device, m_vertexShader ) );
-		stages.push_back( makeShaderState( m_device, m_pixelShader ) );
+				commandBuffer->end();
+				device.graphicsQueue->submit( *commandBuffer, nullptr );
+				device.graphicsQueue->waitIdle();
+				commandBuffer.reset();
 
-		ashes::WriteDescriptorSetArray writes
-		{
-			makeDescriptorWrite( m_currentColourView
-				, getSampler().getSampler()
-				, CurColTexIdx ),
-			makeDescriptorWrite( m_previousColourView
-				, getSampler().getSampler()
-				, PrvColTexIdx ),
-		};
+				auto size = m_resultImg.data->info.extent;
+				return crg::RenderQuadBuilder{}
+					.renderPosition( {} )
+					.renderSize( { size.width, size.height } )
+					.texcoordConfig( {} )
+					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
+					.passIndex( &config.subsampleIndex )
+					.build( pass, context, graph, config.maxSubsampleIndices );
+			} ) }
+	{	
+		crg::SamplerDesc pointSampler{ VK_FILTER_NEAREST
+			, VK_FILTER_NEAREST
+			, VK_SAMPLER_MIPMAP_MODE_NEAREST
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE };
+		m_pass.addDependency( previousPass );
+		m_pass.addOutputColourView( m_resultView );
+		m_pass.addSampledView( m_currentColourViews
+			, CurColTexIdx
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, pointSampler );
+		m_pass.addSampledView( m_previousColourViews
+			, PrvColTexIdx
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, pointSampler );
 
 		if ( m_velocityView )
 		{
-			writes.push_back( makeDescriptorWrite( *m_velocityView
-				, m_sampler->getSampler()
-				, VelocityTexIdx ) );
+			m_pass.addSampledView( *m_velocityView
+				, VelocityTexIdx
+				, {}
+				, pointSampler );
 		}
-
-		createPipelineAndPass( size
-			, castor::Position{}
-			, stages
-			, *m_renderPass
-			, writes );
-		m_surface.initialise( m_device
-			, *m_renderPass
-			, castor::Size{ size.width, size.height }
-			, renderTarget.getPixelFormat() );
-	}
-
-	castor3d::CommandsSemaphore Reproject::prepareCommands( castor3d::RenderPassTimer const & timer
-		, uint32_t passIndex )
-	{
-		castor3d::CommandsSemaphore reprojectCommands
-		{
-			m_device.graphicsCommandPool->createCommandBuffer( getName() ),
-			m_device->createSemaphore( getName() )
-		};
-		auto & reprojectCmd = *reprojectCommands.commandBuffer;
-
-		reprojectCmd.begin();
-		reprojectCmd.beginDebugBlock(
-			{
-				"SMAA Reproject",
-				castor3d::makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ),
-			} );
-		timer.beginPass( reprojectCmd, passIndex );
-		reprojectCmd.beginRenderPass( *m_renderPass
-			, *m_surface.frameBuffer
-			, { castor3d::transparentBlackClearColor }
-			, VK_SUBPASS_CONTENTS_INLINE );
-		registerPass( reprojectCmd );
-		reprojectCmd.endRenderPass();
-		timer.endPass( reprojectCmd, passIndex );
-		reprojectCmd.endDebugBlock();
-		reprojectCmd.end();
-
-		return std::move( reprojectCommands );
 	}
 
 	void Reproject::accept( castor3d::PipelineVisitorBase & visitor )
