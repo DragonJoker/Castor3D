@@ -39,11 +39,12 @@ namespace light_streaks
 				: crg::RenderQuad{ pass
 					, context
 					, graph
+					, 1u
 					, crg::rq::Config{ std::move( program )
 						, crg::rq::Texcoord{}
 						, renderSize
 						, VkOffset2D{} } }
-				, m_viewDesc{ pass.colourInOuts.front().view }
+				, m_viewDesc{ pass.colourInOuts.front().view() }
 				, m_imageDesc{ m_viewDesc.data->image }
 				, m_image{ graph.getImage( m_imageDesc ) }
 			{
@@ -65,12 +66,13 @@ namespace light_streaks
 			}
 
 		private:
-			void doRecordInto( VkCommandBuffer commandBuffer )const override
+			void doRecordInto( VkCommandBuffer commandBuffer
+				, uint32_t index )override
 			{
-				crg::RenderQuad::doRecordInto( commandBuffer );
+				crg::RenderQuad::doRecordInto( commandBuffer, index );
 				auto const imageViewType = VkImageViewType( m_imageDesc.data->info.imageType );
 				auto const aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-				auto finalLayout = m_graph.getOutputLayout( m_pass, m_viewDesc );
+				auto transition = doGetTransition( m_viewDesc );
 
 				VkImageCopy imageCopy{};
 
@@ -87,22 +89,20 @@ namespace light_streaks
 				imageCopy.dstOffset = {};
 
 				// Transition source layer to transfer src layout
-				auto srcLayout = m_graph.getCurrentLayout( m_viewDesc );
 				m_graph.memoryBarrier( commandBuffer
 					, m_viewDesc
-					, srcLayout
-					, m_graph.updateCurrentLayout( m_viewDesc, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
+					, transition.toLayout
+					, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL );
 
 				for ( auto & dst : m_copyDestinations )
 				{
 					imageCopy.dstSubresource.baseArrayLayer = dst.data->info.subresourceRange.baseArrayLayer;
 
 					// Transition destination layer to transfer dst layout
-					auto dstLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 					m_graph.memoryBarrier( commandBuffer
 						, dst
-						, dstLayout
-						, m_graph.updateCurrentLayout( dst, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+						, VK_IMAGE_LAYOUT_UNDEFINED
+						, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL );
 
 					// Perform blit
 					m_context.vkCmdCopyImage( commandBuffer
@@ -114,19 +114,17 @@ namespace light_streaks
 						, &imageCopy );
 
 					// Transition destination layer to wanted output layout
-					dstLayout = m_graph.getCurrentLayout( dst );
 					m_graph.memoryBarrier( commandBuffer
 						, dst
-						, dstLayout
-						, m_graph.updateCurrentLayout( dst, finalLayout ) );
+						, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+						, transition.toLayout );
 				}
 
 				// Transition source layer to wanted output layout
-				srcLayout = m_graph.getCurrentLayout( m_viewDesc );
 				m_graph.memoryBarrier( commandBuffer
 					, m_viewDesc
-					, srcLayout
-					, m_graph.updateCurrentLayout( m_viewDesc, finalLayout ) );
+					, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+					, transition.toLayout );
 			}
 
 		private:
