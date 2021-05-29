@@ -99,10 +99,11 @@ namespace light_streaks
 		, KawaseUbo const & kawaseUbo
 		, uint32_t index )
 		: pass{ graph.createPass( "LightStreaksKawasePass" + std::to_string( index )
-			, [this, &stages, dimensions, index]( crg::FramePass const & pass
+			, [this, &stages, dimensions, index, &srcView]( crg::FramePass const & pass
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
 			{
+				graph.updateCurrentLayout( srcView, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 				return crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( dimensions )
