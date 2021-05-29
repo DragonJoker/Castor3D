@@ -7,40 +7,43 @@ See LICENSE file in root folder
 #include "SmaaPostEffect/SmaaConfig.hpp"
 
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
-#include <Castor3D/Render/PostEffect/PostEffectSurface.hpp>
-#include <Castor3D/Render/Passes/RenderQuad.hpp>
 
 #include <ShaderAST/Shader.hpp>
 
 namespace smaa
 {
 	class Reproject
-		: public castor3d::RenderQuad
 	{
 	public:
-		Reproject( castor3d::RenderTarget & renderTarget
+		Reproject( crg::FramePass const & previousPass
+			, castor3d::RenderTarget & renderTarget
 			, castor3d::RenderDevice const & device
-			, ashes::ImageView const & currentColourView
-			, ashes::ImageView const & previousColourView
-			, ashes::ImageView const * velocityView
+			, crg::ImageViewIdArray const & currentColourViews
+			, crg::ImageViewIdArray const & previousColourViews
+			, crg::ImageViewId const * velocityView
 			, SmaaConfig const & config );
-		castor3d::CommandsSemaphore prepareCommands( castor3d::RenderPassTimer const & timer
-			, uint32_t passIndex );
 		void accept( castor3d::PipelineVisitorBase & visitor );
 
-		inline castor3d::TextureLayoutSPtr getSurface()const
+		crg::ImageViewId const & getResult()const
 		{
-			return m_surface.colourTexture;
+			return m_resultView;
+		}
+
+		crg::FramePass const & getPass()const
+		{
+			return m_pass;
 		}
 
 	private:
-		ashes::RenderPassPtr m_renderPass;
-		castor3d::PostEffectSurface m_surface;
-		ashes::ImageView const & m_currentColourView;
-		ashes::ImageView const & m_previousColourView;
-		ashes::ImageView const * m_velocityView;
+		crg::ImageViewIdArray m_currentColourViews;
+		crg::ImageViewIdArray m_previousColourViews;
+		crg::ImageViewId const * m_velocityView;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
+		ashes::PipelineShaderStageCreateInfoArray m_stages;
+		crg::ImageId m_resultImg;
+		crg::ImageViewId m_resultView;
+		crg::FramePass & m_pass;
 	};
 }
 
