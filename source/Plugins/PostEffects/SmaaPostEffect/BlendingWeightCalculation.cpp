@@ -16,13 +16,14 @@
 #include <CastorUtils/Graphics/PixelBufferBase.hpp>
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
+#include <ashespp/Image/StagingTexture.hpp>
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
-#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 #include <ashespp/Pipeline/PipelineDepthStencilStateCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
+
+#include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
 #include <numeric>
 
@@ -32,10 +33,13 @@ namespace smaa
 {
 	namespace
 	{
-		std::unique_ptr< ast::Shader > doBlendingWeightCalculationVP( castor3d::RenderSystem & renderSystem
-			, Point4f const & renderTargetMetrics
+		std::unique_ptr< ast::Shader > doBlendingWeightCalculationVP( VkExtent2D const & size
 			, SmaaConfig const & config )
 		{
+			Point4f renderTargetMetrics{ 1.0f / size.width
+				, 1.0f / size.height
+				, float( size.width )
+				, float( size.height ) };
 			using namespace sdw;
 			VertexWriter writer;
 
@@ -99,10 +103,14 @@ namespace smaa
 			EdgesTexIdx,
 		};
 
-		std::unique_ptr< ast::Shader > doBlendingWeightCalculationFP( castor3d::RenderSystem & renderSystem
-			, Point4f const & renderTargetMetrics
+		std::unique_ptr< ast::Shader > doBlendingWeightCalculationFP( VkExtent2D const & size
 			, SmaaConfig const & config )
 		{
+			Point4f renderTargetMetrics{ 1.0f / size.width
+				, 1.0f / size.height
+				, float( size.width )
+				, float( size.height ) };
+
 			using namespace sdw;
 			FragmentWriter writer;
 
@@ -879,227 +887,160 @@ namespace smaa
 
 	//*********************************************************************************************
 
-	BlendingWeightCalculation::BlendingWeightCalculation( castor3d::RenderTarget & renderTarget
+	BlendingWeightCalculation::BlendingWeightCalculation( crg::FramePass const & previousPass
+		, castor3d::RenderTarget & renderTarget
 		, castor3d::RenderDevice const & device
-		, ashes::ImageView const & edgeDetectionView
-		, castor3d::TextureLayoutSPtr depthView
+		, crg::ImageViewId const & edgeDetectionView
+		, crg::ImageViewId const & stencilView
 		, SmaaConfig const & config )
-		: castor3d::RenderQuad{ device
-			, cuT( "SmaaBlendingWeightCalculation" )
-			, VK_FILTER_LINEAR
-			, { createBindings()
-				, ashes::nullopt
-				, castor3d::rq::Texcoord{} } }
-		, m_edgeDetectionView{ edgeDetectionView }
-		, m_surface{ *renderTarget.getEngine(), getName() }
-		, m_pointSampler{ doCreateSampler( device, cuT( "SMAA_Point" ) ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName() }
+		: m_device{ device }
+		, m_ubo{ m_device.uboPools->getBuffer< castor::Point4f >( 0u ) }
+		, m_areaImg{ renderTarget.getGraph().createImage( crg::ImageData{ "SMBWArea"
+			, 0u
+			, VK_IMAGE_TYPE_2D
+			, VK_FORMAT_R8G8_UNORM
+			, { AREATEX_WIDTH, AREATEX_HEIGHT, 1u }
+			, ( VK_IMAGE_USAGE_SAMPLED_BIT
+				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) } ) }
+		, m_areaView{ renderTarget.getGraph().createView( crg::ImageViewData{ "SMBWArea"
+			, m_areaImg
+			, 0u
+			, VK_IMAGE_VIEW_TYPE_2D
+			, m_areaImg.data->info.format
+			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
+		, m_searchImg{ renderTarget.getGraph().createImage( crg::ImageData{ "SMBWSearch"
+			, 0u
+			, VK_IMAGE_TYPE_2D
+			, VK_FORMAT_R8_UNORM
+			, { SEARCHTEX_WIDTH, SEARCHTEX_HEIGHT, 1u }
+			, ( VK_IMAGE_USAGE_SAMPLED_BIT
+				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) } ) }
+		, m_searchView{ renderTarget.getGraph().createView( crg::ImageViewData{ "SMBWSearch"
+			, m_searchImg
+			, 0u
+			, VK_IMAGE_VIEW_TYPE_2D
+			, m_searchImg.data->info.format
+			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
+		, m_resultImg{ renderTarget.getGraph().createImage( crg::ImageData{ "SMBWRes"
+			, 0u
+			, VK_IMAGE_TYPE_2D
+			, VK_FORMAT_R8G8B8A8_UNORM
+			, edgeDetectionView.data->image.data->info.extent
+			, ( VK_IMAGE_USAGE_SAMPLED_BIT
+				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } ) }
+		, m_resultView{ renderTarget.getGraph().createView( crg::ImageViewData{ "SMBWRes"
+			, m_resultImg
+			, 0u
+			, VK_IMAGE_VIEW_TYPE_2D
+			, m_resultImg.data->info.format
+			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaBlendingWeight", doBlendingWeightCalculationVP( { edgeDetectionView.data->image.data->info.extent.width
+				, edgeDetectionView.data->image.data->info.extent.height }
+			, config ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaBlendingWeight", doBlendingWeightCalculationFP( { edgeDetectionView.data->image.data->info.extent.width
+				, edgeDetectionView.data->image.data->info.extent.height }
+			, config ) }
+		, m_stages{ makeShaderState( m_device, m_vertexShader )
+			, makeShaderState( m_device, m_pixelShader ) }
+		, m_pass{ renderTarget.getGraph().createPass( "SmaaBlendingWeight"
+			, [this, edgeDetectionView]( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph )
+			{
+				{
+					// Upload area image data.
+					auto dim = m_areaImg.data->info.extent;
+					auto format = m_areaImg.data->info.format;
+					auto staging = m_device->createStagingTexture( format
+						, VkExtent2D{ dim.width, dim.height } );
+					ashes::ImagePtr areaImg = std::make_unique< ashes::Image >( *m_device
+						, graph.getImage( m_areaImg )
+						, m_areaImg.data->info );
+					ashes::ImageView noiseView{ ashes::ImageViewCreateInfo{ *areaImg, m_areaView.data->info }
+						, graph.getImageView( m_areaView )
+						, areaImg.get() };
+					staging->uploadTextureData( *m_device.graphicsQueue
+						, *m_device.graphicsCommandPool
+						, { m_areaView.data->info.subresourceRange.aspectMask
+						, m_areaView.data->info.subresourceRange.baseMipLevel
+						, m_areaView.data->info.subresourceRange.baseArrayLayer
+						, m_areaView.data->info.subresourceRange.layerCount }
+						, format
+						, { 0, 0, 0 }
+						, VkExtent2D{ dim.width, dim.height }
+						, areaTexBytes
+						, noiseView );
+					graph.updateCurrentLayout( m_areaView, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+				}
+				{
+					// Upload search image data.
+					auto dim = m_searchImg.data->info.extent;
+					auto format = m_searchImg.data->info.format;
+					auto staging = m_device->createStagingTexture( format
+						, VkExtent2D{ dim.width, dim.height } );
+					ashes::ImagePtr searchImg = std::make_unique< ashes::Image >( *m_device
+						, graph.getImage( m_searchImg )
+						, m_searchImg.data->info );
+					ashes::ImageView noiseView{ ashes::ImageViewCreateInfo{ *searchImg, m_searchView.data->info }
+						, graph.getImageView( m_searchView )
+						, searchImg.get() };
+					staging->uploadTextureData( *m_device.graphicsQueue
+						, *m_device.graphicsCommandPool
+						, { m_searchView.data->info.subresourceRange.aspectMask
+						, m_searchView.data->info.subresourceRange.baseMipLevel
+						, m_searchView.data->info.subresourceRange.baseArrayLayer
+						, m_searchView.data->info.subresourceRange.layerCount }
+						, format
+						, { 0, 0, 0 }
+						, VkExtent2D{ dim.width, dim.height }
+						, searchTexBytes
+						, noiseView );
+					graph.updateCurrentLayout( m_searchView, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+				}
+
+				ashes::PipelineDepthStencilStateCreateInfo dsState{ 0u, VK_FALSE, VK_FALSE };
+				dsState->stencilTestEnable = VK_TRUE;
+				dsState->front.compareOp = VK_COMPARE_OP_EQUAL;
+				dsState->front.reference = 1u;
+				dsState->back = dsState->front;
+				auto size = edgeDetectionView.data->image.data->info.extent;
+				return crg::RenderQuadBuilder{}
+					.renderPosition( {} )
+					.renderSize( { size.width, size.height } )
+					.texcoordConfig( {} )
+					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
+					.depthStencilState( dsState )
+					.build( pass, context, graph );
+			} ) }
 	{
-		static constexpr VkFormat colourFormat = VK_FORMAT_R8G8B8A8_UNORM;
-
-		VkExtent2D size{ m_edgeDetectionView.image->getDimensions().width
-			, m_edgeDetectionView.image->getDimensions().height };
-
-		m_ubo = m_device.uboPools->getBuffer< castor::Point4f >( 0u );
-		
-		ashes::ImageCreateInfo image
-		{
-			0u,
-			VK_IMAGE_TYPE_2D,
-			VK_FORMAT_R8G8_UNORM,
-			{ size.width, size.height, 1u },
-			1u,
-			1u,
-			VK_SAMPLE_COUNT_1_BIT,
-			VK_IMAGE_TILING_OPTIMAL,
-			( VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ),
-		};
-
-		auto areaTexBuffer = PxBufferBase::create( Size{ AREATEX_WIDTH, AREATEX_HEIGHT }
-			, PixelFormat::eR8G8_UNORM
-			, areaTexBytes
-			, PixelFormat::eR8G8_UNORM );
-		m_areaTex = std::make_shared< castor3d::TextureLayout >( m_renderSystem
-			, image
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, cuT( "SmaaAreaTex" ) );
-		m_areaTex->setSource( areaTexBuffer, true );
-		m_areaTex->initialise( m_device );
-
-		auto searchTexBuffer = PxBufferBase::create( Size{ SEARCHTEX_WIDTH, SEARCHTEX_HEIGHT }
-			, PixelFormat::eR8_UNORM
-			, searchTexBytes
-			, PixelFormat::eR8_UNORM );
-		image->format = VK_FORMAT_R8_UNORM;
-		m_searchTex = std::make_shared< castor3d::TextureLayout >( m_renderSystem
-			, image
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, cuT( "SmaaSearchTex" ) );
-		m_searchTex->setSource( searchTexBuffer, true );
-		m_searchTex->initialise( m_device );
-
-		// Create the render pass.
-		ashes::VkAttachmentDescriptionArray attachments
-		{
-			{
-				0u,
-				colourFormat,
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_CLEAR,
-				VK_ATTACHMENT_STORE_OP_STORE,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_UNDEFINED,
-				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-			},
-			{
-				0u,
-				depthView->getDefaultView().getTargetView()->format,
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_CLEAR,
-				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_ATTACHMENT_LOAD_OP_LOAD,
-				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-			},
-		};
-		ashes::SubpassDescriptionArray subpasses;
-		subpasses.emplace_back( ashes::SubpassDescription
-			{
-				0u,
-				VK_PIPELINE_BIND_POINT_GRAPHICS,
-				{},
-				{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
-				{},
-				VkAttachmentReference{ 1u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL },
-				{},
-			} );
-		ashes::VkSubpassDependencyArray dependencies
-		{
-			{
-				VK_SUBPASS_EXTERNAL,
-				0u,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-				VK_ACCESS_SHADER_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			},
-			{
-				0u,
-				VK_SUBPASS_EXTERNAL,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-				VK_ACCESS_SHADER_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			},
-		};
-		ashes::RenderPassCreateInfo createInfo
-		{
-			0u,
-			std::move( attachments ),
-			std::move( subpasses ),
-			std::move( dependencies ),
-		};
-		m_renderPass = m_device->createRenderPass( getName()
-			, std::move( createInfo ) );
-
-		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
-		m_vertexShader.shader = doBlendingWeightCalculationVP( *renderTarget.getEngine()->getRenderSystem()
-			, pixelSize
-			, config );
-		m_pixelShader.shader = doBlendingWeightCalculationFP( *renderTarget.getEngine()->getRenderSystem()
-			, pixelSize
-			, config );
-
-		ashes::PipelineShaderStageCreateInfoArray stages;
-		stages.push_back( makeShaderState( m_device, m_vertexShader ) );
-		stages.push_back( makeShaderState( m_device, m_pixelShader ) );
-
-		ashes::PipelineDepthStencilStateCreateInfo dsstate{ 0u, VK_FALSE, VK_FALSE };
-		dsstate->stencilTestEnable = VK_TRUE;
-		dsstate->front.compareOp = VK_COMPARE_OP_EQUAL;
-		dsstate->front.reference = 1u;
-		dsstate->back = dsstate->front;
-
-		createPipelineAndPass( size
-			, castor::Position{}
-			, stages
-			, *m_renderPass
-			, {
-				makeDescriptorWrite( m_ubo
-					, SubsampleCfgIdx ),
-				makeDescriptorWrite( m_areaTex->getDefaultView().getSampledView()
-					, m_sampler->getSampler()
-					, AreaTexIdx),
-				makeDescriptorWrite( m_searchTex->getDefaultView().getSampledView()
-					, *m_pointSampler
-					, SearchTexIdx ),
-				makeDescriptorWrite( m_edgeDetectionView
-					, getSampler().getSampler()
-					, EdgesTexIdx ),
-			}
+		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR
+			, VK_SAMPLER_MIPMAP_MODE_NEAREST
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE };
+		m_pass.addDependency( previousPass );
+		m_ubo.createPassBinding( m_pass, SubsampleCfgIdx );
+		m_pass.addSampledView( m_areaView
+			, AreaTexIdx
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, linearSampler );
+		m_pass.addSampledView( m_searchView
+			, SearchTexIdx
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		m_pass.addSampledView( edgeDetectionView
+			, EdgesTexIdx
 			, {}
-			, std::move( dsstate ) );
-		m_surface.initialise( m_device 
-			, *m_renderPass
-			, castor::Size{ size.width, size.height }
-			, colourFormat
-			, depthView );
+			, linearSampler );
+		m_pass.addInputStencilView( stencilView );
+		m_pass.addOutputColourView( m_resultView
+			, castor3d::transparentBlackClearColor );
 	}
 
 	BlendingWeightCalculation::~BlendingWeightCalculation()
 	{
-		m_searchTex->cleanup();
-		m_searchTex.reset();
-		m_areaTex->cleanup();
-		m_areaTex.reset();
 		m_device.uboPools->putBuffer( m_ubo );
-		m_pointSampler.reset();
-		m_surface.cleanup( m_device );
-		m_renderPass.reset();
-	}
-
-	castor3d::CommandsSemaphore BlendingWeightCalculation::prepareCommands( castor3d::RenderPassTimer const & timer
-		, uint32_t passIndex )
-	{
-		castor3d::CommandsSemaphore blendingWeightCommands
-		{
-			m_device.graphicsCommandPool->createCommandBuffer( getName() ),
-			m_device->createSemaphore( getName() )
-		};
-		auto & blendingWeightCmd = *blendingWeightCommands.commandBuffer;
-
-		blendingWeightCmd.begin();
-		blendingWeightCmd.beginDebugBlock(
-			{
-				"SMAA BlendingWeightCalculation",
-				castor3d::makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ),
-			} );
-		timer.beginPass( blendingWeightCmd, passIndex );
-		// Put edge detection image in shader input layout.
-		blendingWeightCmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_edgeDetectionView.makeShaderInputResource( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
-
-		blendingWeightCmd.beginRenderPass( *m_renderPass
-			, *m_surface.frameBuffer
-			, {
-				castor3d::transparentBlackClearColor,
-				castor3d::defaultClearDepthStencil,
-			}
-			, VK_SUBPASS_CONTENTS_INLINE );
-		registerPass( blendingWeightCmd );
-		blendingWeightCmd.endRenderPass();
-		timer.endPass( blendingWeightCmd, passIndex );
-		blendingWeightCmd.endDebugBlock();
-		blendingWeightCmd.end();
-
-		return std::move( blendingWeightCommands );
 	}
 
 	void BlendingWeightCalculation::accept( castor3d::PipelineVisitorBase & visitor )
