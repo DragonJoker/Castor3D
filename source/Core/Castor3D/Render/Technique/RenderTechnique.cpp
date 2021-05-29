@@ -367,10 +367,12 @@ namespace castor3d
 		, m_depthImage{ renderTarget.getGraph().createImage( { "TechDpt"
 			, 0u
 			, VK_IMAGE_TYPE_2D
-			, device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
+			, device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
+				| VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
 				| VK_FORMAT_FEATURE_TRANSFER_SRC_BIT )
 			, makeExtent3D( m_size )
-			, ( VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
+			, ( VK_IMAGE_USAGE_SAMPLED_BIT
+				| VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } ) }
 		, m_depthView{ renderTarget.getGraph().createView( { m_depthImage.data->name
 				, m_depthImage

@@ -144,6 +144,11 @@ namespace castor3d
 			return m_colourView;
 		}
 
+		crg::ImageViewId const & getDepthImgView()const
+		{
+			return m_depthView;
+		}
+
 		TextureLayout const & getDepth()const
 		{
 			return *m_depthBuffer.getTexture();

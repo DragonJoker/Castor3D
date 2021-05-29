@@ -69,7 +69,8 @@ namespace castor3d
 		doCreatePipeline();
 	}
 
-	void BackgroundPass::doSubRecordInto( VkCommandBuffer commandBuffer )const
+	void BackgroundPass::doSubRecordInto( VkCommandBuffer commandBuffer
+		, uint32_t index )
 	{
 		VkDeviceSize offset{};
 		VkDescriptorSet descriptorSet = *m_descriptorSet;
@@ -242,8 +243,8 @@ namespace castor3d
 			, 0u
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VkDescriptorImageInfo{ m_background.getSampler().getSampler()
-			, m_background.getTexture().getDefaultView().getSampledView()
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } );
+				, m_background.getTexture().getDefaultView().getSampledView()
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } );
 	}
 
 	void BackgroundPass::doCreateDescriptorSet()

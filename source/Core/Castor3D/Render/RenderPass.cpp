@@ -533,7 +533,8 @@ namespace castor3d
 		m_renderQueue.initialise();
 	}
 
-	void SceneRenderPass::doSubRecordInto( VkCommandBuffer commandBuffer )const
+	void SceneRenderPass::doSubRecordInto( VkCommandBuffer commandBuffer
+		, uint32_t index )
 	{
 		VkCommandBuffer secondary = getCommandBuffer();
 		m_context.vkCmdExecuteCommands( commandBuffer

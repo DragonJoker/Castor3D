@@ -52,7 +52,8 @@ namespace castor3d
 
 	private:
 		void doSubInitialise()override;
-		void doSubRecordInto( VkCommandBuffer commandBuffer )const override;
+		void doSubRecordInto( VkCommandBuffer commandBuffer
+			, uint32_t index )override;
 
 		void doInitialiseVertexBuffer();
 		ashes::PipelineShaderStageCreateInfoArray doInitialiseShader();

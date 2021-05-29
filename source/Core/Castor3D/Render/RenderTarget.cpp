@@ -115,7 +115,8 @@ namespace castor3d
 			, getPixelFormat()
 			, castor3d::makeExtent3D( m_size )
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT ) } ) }
+				| VK_IMAGE_USAGE_SAMPLED_BIT
+				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) } ) }
 		, m_objectsView{ m_graph.createView( crg::ImageViewData{ m_objectsImg.data->name
 				, m_objectsImg
 				, 0u
