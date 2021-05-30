@@ -199,7 +199,6 @@ namespace smaa
 					commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 						, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 						, imageView.makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
-					graph.updateCurrentLayout( view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 				}
 
 				commandBuffer->end();

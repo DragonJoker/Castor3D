@@ -957,7 +957,7 @@ namespace smaa
 					ashes::ImagePtr areaImg = std::make_unique< ashes::Image >( *m_device
 						, graph.getImage( m_areaImg )
 						, m_areaImg.data->info );
-					ashes::ImageView noiseView{ ashes::ImageViewCreateInfo{ *areaImg, m_areaView.data->info }
+					ashes::ImageView areaView{ ashes::ImageViewCreateInfo{ *areaImg, m_areaView.data->info }
 						, graph.getImageView( m_areaView )
 						, areaImg.get() };
 					staging->uploadTextureData( *m_device.graphicsQueue
@@ -970,8 +970,7 @@ namespace smaa
 						, { 0, 0, 0 }
 						, VkExtent2D{ dim.width, dim.height }
 						, areaTexBytes
-						, noiseView );
-					graph.updateCurrentLayout( m_areaView, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+						, areaView );
 				}
 				{
 					// Upload search image data.
@@ -982,7 +981,7 @@ namespace smaa
 					ashes::ImagePtr searchImg = std::make_unique< ashes::Image >( *m_device
 						, graph.getImage( m_searchImg )
 						, m_searchImg.data->info );
-					ashes::ImageView noiseView{ ashes::ImageViewCreateInfo{ *searchImg, m_searchView.data->info }
+					ashes::ImageView searchView{ ashes::ImageViewCreateInfo{ *searchImg, m_searchView.data->info }
 						, graph.getImageView( m_searchView )
 						, searchImg.get() };
 					staging->uploadTextureData( *m_device.graphicsQueue
@@ -995,8 +994,7 @@ namespace smaa
 						, { 0, 0, 0 }
 						, VkExtent2D{ dim.width, dim.height }
 						, searchTexBytes
-						, noiseView );
-					graph.updateCurrentLayout( m_searchView, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+						, searchView );
 				}
 
 				ashes::PipelineDepthStencilStateCreateInfo dsState{ 0u, VK_FALSE, VK_FALSE };
