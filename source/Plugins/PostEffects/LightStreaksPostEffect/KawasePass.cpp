@@ -103,7 +103,6 @@ namespace light_streaks
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
 			{
-				graph.updateCurrentLayout( srcView, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 				return crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( dimensions )
@@ -123,7 +122,7 @@ namespace light_streaks
 			, index );
 		pass.addSampledView( srcView
 			, DifImgIdx
-			, {}
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, linearSampler );
 		pass.addOutputColourView( dstView );
 	}
