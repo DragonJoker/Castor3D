@@ -224,7 +224,6 @@ namespace castor3d
 		crg::FramePass & doCreateBackgroundPass();
 		crg::FramePass & doCreateOpaquePass();
 		crg::FramePass & doCreateTransparentPass();
-		void doInitialiseShadowMaps();
 		void doInitialiseLpv();
 		void doUpdateShadowMaps( CpuUpdater & updater );
 		void doUpdateShadowMaps( GpuUpdater & updater );
@@ -232,8 +231,6 @@ namespace castor3d
 		void doUpdateLpv( GpuUpdater & updater );
 		void doUpdateParticles( CpuUpdater & updater );
 		void doUpdateParticles( GpuUpdater & updater );
-		ashes::Semaphore const & doRenderShadowMaps( RenderDevice const & device
-			, ashes::Semaphore const & semaphore );
 		ashes::Semaphore const & doRenderLpv( RenderDevice const & device
 			, ashes::Semaphore const & semaphore );
 		ashes::Semaphore const & doRenderEnvironmentMaps( RenderDevice const & device

@@ -29,14 +29,15 @@
 #include <CastorUtils/Graphics/Image.hpp>
 #include <CastorUtils/Miscellaneous/BlockTracker.hpp>
 
-using namespace castor;
-using namespace castor3d;
+#include <RenderGraph/FrameGraph.hpp>
 
 namespace castor3d
 {
 	namespace
 	{
-		std::vector< ShadowMap::PassData > createPasses( RenderDevice const & device
+		std::vector< ShadowMap::PassData > createPasses( crg::FrameGraph & graph
+			, crg::FramePass const *& previousPass
+			, RenderDevice const & device
 			, Scene & scene
 			, ShadowMap & shadowMap
 			, uint32_t cascadeCount )
@@ -51,6 +52,12 @@ namespace castor3d
 			viewport.setOrtho( -w / 2, w / 2, -h / 2, h / 2, -5120.0, 5120.0 );
 			viewport.resize( { width, height } );
 			viewport.update();
+			auto & smResult = shadowMap.getShadowPassResult();
+			auto & depth = smResult[SmTexture::eDepth];
+			auto & linear = smResult[SmTexture::eNormalLinear];
+			auto & variance = smResult[SmTexture::eVariance];
+			auto & position = smResult[SmTexture::ePosition];
+			auto & flux = smResult[SmTexture::eFlux];
 
 #if C3D_UseTiledDirectionalShadowMap
 
@@ -68,22 +75,44 @@ namespace castor3d
 			passData.culler = std::make_unique< InstantiatedFrustumCuller >( scene
 				, *passData.camera
 				, scene.getDirectionalShadowCascades() );
-			passData.pass = std::make_shared< ShadowMapPassDirectional >( device
-				, *passData.matrixUbo
-				, *passData.culler
-				, shadowMap
-				, scene.getDirectionalShadowCascades() );
+			auto index = result.size();
+			auto & matrixUbo = *passData.matrixUbo;
+			auto & culler = *passData.culler;
+			auto & pass = graph.createPass( passData.camera->getName()
+				, [index, &matrixUbo, &culler, &previousPass, &device, &shadowMap, &scene]( crg::FramePass const & pass
+					, crg::GraphContext const & context
+					, crg::RunnableGraph & graph )
+				{
+					auto result = std::make_unique< ShadowMapPassDirectional >( pass
+						, context
+						, graph
+						, device
+						, matrixUbo
+						, culler
+						, shadowMap
+						, scene.getDirectionalShadowCascades() );
+					shadowMap.setPass( index, result.get() );
+					return result;
+				} );
+			pass.addDependency( *previousPass );
+			previousPass = &pass;
+			pass.addOutputDepthView( depth.wholeView, getClearValue( SmTexture::eDepth ) );
+			pass.addOutputColourView( linear.wholeView, getClearValue( SmTexture::eNormalLinear ) );
+			pass.addOutputColourView( variance.wholeView, getClearValue( SmTexture::eVariance ) );
+			pass.addOutputColourView( position.wholeView, getClearValue( SmTexture::ePosition ) );
+			pass.addOutputColourView( flux.wholeView, getClearValue( SmTexture::eFlux ) );
 			result.emplace_back( std::move( passData ) );
 
 #else
 
 			for ( uint32_t cascade = 0u; cascade < cascadeCount; ++cascade )
 			{
+				std::string debugName = "DirectionalSMC" + std::to_string( cascade + 1u );
 				ShadowMap::PassData passData
 				{
 					std::make_unique< MatrixUbo >( device ),
-					std::make_shared< Camera >( cuT( "ShadowMapDirectional_" ) + string::toString( cascade + 1, std::locale{ "C" } )
-					, scene
+					std::make_shared< Camera >( debugName
+						, scene
 						, *scene.getCameraRootNode()
 						, viewport
 						, true ),
@@ -91,11 +120,45 @@ namespace castor3d
 					nullptr,
 				};
 				passData.culler = std::make_unique< FrustumCuller >( scene, *passData.camera );
-				//passData.pass = std::make_shared< ShadowMapPassDirectional >( device
-				//	, *passData.matrixUbo
-				//	, *passData.culler
-				//	, shadowMap
-				//	, cascade );
+				auto index = uint32_t( result.size() );
+				auto & matrixUbo = *passData.matrixUbo;
+				auto & culler = *passData.culler;
+				auto & pass = graph.createPass( debugName
+					, [index, &matrixUbo, &culler, &previousPass, &device, &shadowMap, &cascade]( crg::FramePass const & pass
+						, crg::GraphContext const & context
+						, crg::RunnableGraph & graph )
+					{
+						auto result = std::make_unique< ShadowMapPassDirectional >( pass
+							, context
+							, graph
+							, device
+							, matrixUbo
+							, culler
+							, shadowMap
+							, cascade );
+						shadowMap.setPass( index, result.get() );
+						return result;
+					} );
+				pass.addDependency( *previousPass );
+				previousPass = &pass;
+
+				if ( cascadeCount == 1u )
+				{
+					pass.addOutputDepthView( depth.wholeView, getClearValue( SmTexture::eDepth ) );
+					pass.addOutputColourView( linear.wholeView, getClearValue( SmTexture::eNormalLinear ) );
+					pass.addOutputColourView( variance.wholeView, getClearValue( SmTexture::eVariance ) );
+					pass.addOutputColourView( position.wholeView, getClearValue( SmTexture::ePosition ) );
+					pass.addOutputColourView( flux.wholeView, getClearValue( SmTexture::eFlux ) );
+				}
+				else
+				{
+					pass.addOutputDepthView( depth.subViews[cascade], getClearValue( SmTexture::eDepth ) );
+					pass.addOutputColourView( linear.subViews[cascade], getClearValue( SmTexture::eNormalLinear ) );
+					pass.addOutputColourView( variance.subViews[cascade], getClearValue( SmTexture::eVariance ) );
+					pass.addOutputColourView( position.subViews[cascade], getClearValue( SmTexture::ePosition ) );
+					pass.addOutputColourView( flux.subViews[cascade], getClearValue( SmTexture::eFlux ) );
+				}
+
 				result.emplace_back( std::move( passData ) );
 			}
 
@@ -104,37 +167,42 @@ namespace castor3d
 		}
 	}
 
-	ShadowMapDirectional::ShadowMapDirectional( RenderDevice const & device
+	ShadowMapDirectional::ShadowMapDirectional( crg::FrameGraph & graph
+		, crg::FramePass const & previousPass
+		, RenderDevice const & device
 		, Scene & scene )
 		: ShadowMap{ device
 			, scene
 			, LightType::eDirectional
-			, ShadowMapResult{ *scene.getEngine()
+			, ShadowMapResult{ graph
+				, device
 				, cuT( "Directional" )
 				, 0u
 #if C3D_UseTiledDirectionalShadowMap
 				, Size{ ShadowMapPassDirectional::TileSize * ShadowMapPassDirectional::TileCountX
 					, ShadowMapPassDirectional::TileSize * ShadowMapPassDirectional::TileCountY }
 				, 1u }
-			, 1u }
-		, m_frameBuffers{ 1u }
 #else
-				, Size{ ShadowMapPassDirectional::TileSize, ShadowMapPassDirectional::TileSize }
+				, { ShadowMapPassDirectional::TileSize, ShadowMapPassDirectional::TileSize }
 				, scene.getDirectionalShadowCascades() }
-			, 1u }
-		, m_frameBuffers( scene.getDirectionalShadowCascades() )
 #endif
+			, 1u }
 		, m_cascades{ scene.getDirectionalShadowCascades() }
 	{
-		m_passes = createPasses( device, scene, *this, scene.getDirectionalShadowCascades() );
+		auto previous = &previousPass;
+		m_passes = createPasses( graph
+			, previous
+			, device
+			, scene
+			, *this
+			, scene.getDirectionalShadowCascades() );
+		//m_blur = std::make_unique< GaussianBlur >( graph
+		//	, *previous
+		//	, device
+		//	, "DirectionalSM"
+		//	, m_result[SmTexture::eVariance].wholeView
+		//	, 5u );
 		log::trace << "Created ShadowMapDirectional" << std::endl;
-	}
-
-	ShadowMapDirectional::~ShadowMapDirectional()
-	{
-		m_commandBuffer.reset();
-		m_frameBuffers.clear();
-		m_blur.reset();
 	}
 
 	void ShadowMapDirectional::update( CpuUpdater & updater )
@@ -181,140 +249,6 @@ namespace castor3d
 		}
 	}
 
-	void ShadowMapDirectional::doInitialiseFramebuffers( RenderDevice const & device )
-	{
-#if C3D_UseTiledDirectionalShadowMap
-		VkExtent2D const size
-		{
-			ShadowMapPassDirectional::TileSize * ShadowMapPassDirectional::TileCountX,
-			ShadowMapPassDirectional::TileSize * ShadowMapPassDirectional::TileCountY,
-		};
-
-		auto & depth = m_result[SmTexture::eDepth].getTexture()->getDefault();
-		auto & linear = m_result[SmTexture::eNormalLinear].getTexture()->getDefault();
-		auto & variance = m_result[SmTexture::eVariance].getTexture()->getDefault();
-		auto & position = m_result[SmTexture::ePosition].getTexture()->getDefault();
-		auto & flux = m_result[SmTexture::eFlux].getTexture()->getDefault();
-
-		std::string debugName = "ShadowMapDirectional";
-		auto cascade = 0u;
-		auto & pass = m_passes[cascade];
-		auto & renderPass = pass.pass->getRenderPass();
-		auto & frameBuffer = m_frameBuffers[cascade];
-		frameBuffer.depthView = depth.view->getTargetView();
-		frameBuffer.linearView = linear.view->getTargetView();
-		frameBuffer.varianceView = variance.view->getTargetView();
-		frameBuffer.positionView = position.view->getTargetView();
-		frameBuffer.fluxView = flux.view->getTargetView();
-		ashes::ImageViewCRefArray attaches;
-		attaches.emplace_back( frameBuffer.depthView );
-		attaches.emplace_back( frameBuffer.linearView );
-		attaches.emplace_back( frameBuffer.varianceView );
-		attaches.emplace_back( frameBuffer.positionView );
-		attaches.emplace_back( frameBuffer.fluxView );
-		frameBuffer.frameBuffer = renderPass.createFrameBuffer( debugName, size, std::move( attaches ) );
-
-		m_blur = std::make_unique< GaussianBlur >( *getEngine()
-			, device
-			, "ShadowMapDirectional"
-			, *variance.view
-			, 5u );
-
-		frameBuffer.blurCommands = m_blur->getCommands( true );
-#else
-		VkExtent2D const size
-		{
-			ShadowMapPassDirectional::TileSize,
-			ShadowMapPassDirectional::TileSize,
-		};
-
-		if ( m_passes.size() == 1u )
-		{
-			auto & depth = m_result[SmTexture::eDepth].getTexture()->getDefault();
-			auto & linear = m_result[SmTexture::eNormalLinear].getTexture()->getDefault();
-			auto & variance = m_result[SmTexture::eVariance].getTexture()->getDefault();
-			auto & position = m_result[SmTexture::ePosition].getTexture()->getDefault();
-			auto & flux = m_result[SmTexture::eFlux].getTexture()->getDefault();
-
-			m_blur = std::make_unique< GaussianBlur >( *getEngine()
-				, device
-				, "ShadowMapDirectional"
-				, *variance.view
-				, 5u );
-
-			std::string debugName = "ShadowMapDirectional";
-			auto cascade = 0u;
-			auto & pass = m_passes[cascade];
-			auto renderPass = pass.pass->getRenderPass();
-			auto & frameBuffer = m_frameBuffers[cascade];
-			frameBuffer.depthView = depth.view->getTargetView();
-			frameBuffer.linearView = linear.view->getTargetView();
-			frameBuffer.varianceView = variance.view->getTargetView();
-			frameBuffer.positionView = position.view->getTargetView();
-			frameBuffer.fluxView = flux.view->getTargetView();
-			ashes::ImageViewCRefArray attaches;
-			attaches.emplace_back( frameBuffer.depthView );
-			attaches.emplace_back( frameBuffer.linearView );
-			attaches.emplace_back( frameBuffer.varianceView );
-			attaches.emplace_back( frameBuffer.positionView );
-			attaches.emplace_back( frameBuffer.fluxView );
-			frameBuffer.frameBuffer = std::make_unique< ashes::FrameBuffer >( *device
-				, debugName
-				, renderPass
-				, size
-				, std::move( attaches ) );
-
-			frameBuffer.blurCommands = m_blur->getCommands( true, cascade );
-		}
-		else
-		{
-			auto & depth = m_result[SmTexture::eDepth].getTexture()->getArray2D();
-			auto & linear = m_result[SmTexture::eNormalLinear].getTexture()->getArray2D();
-			auto & variance = m_result[SmTexture::eVariance].getTexture()->getArray2D();
-			auto & position = m_result[SmTexture::ePosition].getTexture()->getArray2D();
-			auto & flux = m_result[SmTexture::eFlux].getTexture()->getArray2D();
-
-			m_blur = std::make_unique< GaussianBlur >( *getEngine()
-				, device
-				, "ShadowMapDirectional"
-				, *variance.view->view
-				, 5u );
-
-			for ( uint32_t cascade = 0u; cascade < m_passes.size(); ++cascade )
-			{
-				std::string debugName = "ShadowMapDirectionalCascade" + std::to_string( cascade );
-				auto & pass = m_passes[cascade];
-				auto renderPass = pass.pass->getRenderPass();
-				auto & frameBuffer = m_frameBuffers[cascade];
-				frameBuffer.depthView = depth.layers[cascade].view->getTargetView();
-				frameBuffer.linearView = linear.layers[cascade].view->getTargetView();
-				frameBuffer.varianceView = variance.layers[cascade].view->getTargetView();
-				frameBuffer.positionView = position.layers[cascade].view->getTargetView();
-				frameBuffer.fluxView = flux.layers[cascade].view->getTargetView();
-				ashes::ImageViewCRefArray attaches;
-				attaches.emplace_back( frameBuffer.depthView );
-				attaches.emplace_back( frameBuffer.linearView );
-				attaches.emplace_back( frameBuffer.varianceView );
-				attaches.emplace_back( frameBuffer.positionView );
-				attaches.emplace_back( frameBuffer.fluxView );
-				frameBuffer.frameBuffer = std::make_unique< ashes::FrameBuffer >( *device
-					, debugName
-					, renderPass
-					, size
-					, std::move( attaches ) );
-
-				frameBuffer.blurCommands = m_blur->getCommands( true, cascade );
-			}
-		}
-#endif
-	}
-
-	void ShadowMapDirectional::doInitialise( RenderDevice const & device )
-	{
-		doInitialiseFramebuffers( device );
-		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( m_name );
-	}
-
 	bool ShadowMapDirectional::isUpToDate( uint32_t index )const
 	{
 		return std::all_of( m_passes.begin()
@@ -323,71 +257,5 @@ namespace castor3d
 			{
 				return data.pass->isUpToDate();
 			} );
-	}
-
-	ashes::Semaphore const & ShadowMapDirectional::doRender( RenderDevice const & device
-		, ashes::Semaphore const & toWait
-		, uint32_t index )
-	{
-		auto & myTimer = m_passes[0].pass->getTimer();
-		auto timerBlock = myTimer.start();
-		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-		m_commandBuffer->beginDebugBlock( { m_name + " generation " + std::to_string( index )
-			, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
-
-		for ( uint32_t cascade = 0u; cascade < std::min( m_cascades, uint32_t( m_passes.size() ) ); ++cascade )
-		{
-			auto & pass = m_passes[cascade];
-			auto & timer = pass.pass->getTimer();
-			auto renderPass = pass.pass->getRenderPass();
-			auto & frameBuffer = m_frameBuffers[cascade];
-
-			m_commandBuffer->beginDebugBlock( { m_name + " " + std::to_string( index ) + " cascade " + std::to_string( cascade )
-				, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
-			timerBlock->notifyPassRender();
-			timerBlock->beginPass( *m_commandBuffer );
-			m_commandBuffer->beginRenderPass( renderPass
-				, *frameBuffer.frameBuffer
-				, frameBuffer.frameBuffer->getDimensions()
-				, getClearValues()
-				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
-
-			if ( pass.pass->hasNodes() )
-			{
-				m_commandBuffer->executeCommands( { pass.pass->getCommandBuffer() } );
-			}
-
-			m_commandBuffer->endRenderPass();
-			timerBlock->endPass( *m_commandBuffer );
-
-			m_commandBuffer->endDebugBlock();
-			pass.pass->setUpToDate();
-		}
-
-		m_commandBuffer->endDebugBlock();
-		m_commandBuffer->end();
-		auto * result = &toWait;
-		device.graphicsQueue->submit( *m_commandBuffer
-			, *result
-			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, *m_finished
-			, nullptr );
-		result = m_finished.get();
-
-		if ( m_shadowType == ShadowType::eVariance )
-		{
-			for ( uint32_t cascade = 0u; cascade < std::min( m_cascades, uint32_t( m_passes.size() ) ); ++cascade )
-			{
-				auto & blurCommands = m_frameBuffers[cascade].blurCommands;
-				device.graphicsQueue->submit( *blurCommands.commandBuffer
-					, *result
-					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-					, *blurCommands.semaphore
-					, nullptr );
-				result = blurCommands.semaphore.get();
-			}
-		}
-
-		return *result;
 	}
 }

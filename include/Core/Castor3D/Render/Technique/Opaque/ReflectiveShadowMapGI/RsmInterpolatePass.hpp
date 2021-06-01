@@ -24,7 +24,8 @@ namespace castor3d
 		: public RenderQuad
 	{
 	public:
-		C3D_API RsmInterpolatePass( Engine & engine
+		C3D_API RsmInterpolatePass( crg::FrameGraph & graph
+			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, LightCache const & lightCache
 			, LightType lightType
@@ -34,9 +35,9 @@ namespace castor3d
 			, ShadowMapResult const & smResult
 			, RsmConfigUbo const & rsmConfigUbo
 			, ashes::Buffer< castor::Point2f > const & rsmSamplesSsbo
-			, TextureUnit const & gi
-			, TextureUnit const & nml
-			, TextureUnit const & dst );
+			, crg::ImageViewId const & gi
+			, crg::ImageViewId const & nml
+			, crg::ImageViewId const & dst );
 		C3D_API ashes::Semaphore const & compute( ashes::Semaphore const & toWait )const;
 		C3D_API CommandsSemaphore getCommands( RenderPassTimer const & timer
 			, uint32_t index )const;
@@ -47,8 +48,8 @@ namespace castor3d
 		GpInfoUbo const & m_gpInfo;
 		OpaquePassResult const & m_gpResult;
 		ShadowMapResult const & m_smResult;
-		TextureUnit const & m_gi;
-		TextureUnit const & m_nml;
+		crg::ImageViewId const & m_gi;
+		crg::ImageViewId const & m_nml;
 		RsmConfigUbo const & m_rsmConfigUbo;
 		ashes::Buffer< castor::Point2f > const & m_rsmSamplesSsbo;
 		ShaderModule m_vertexShader;

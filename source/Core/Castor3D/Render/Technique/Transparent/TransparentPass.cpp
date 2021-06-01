@@ -52,30 +52,18 @@ namespace castor3d
 		, crg::GraphContext const & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
-		, castor::Size const & size
-		, MatrixUbo & matrixUbo
-		, SceneCuller & culler
-		, SsaoConfig const & config
-		, LpvGridConfigUbo const & lpvConfigUbo
-		, LayeredLpvGridConfigUbo const & llpvConfigUbo
-		, VoxelizerUbo const & vctConfigUbo
-		, LightVolumePassResult const & lpvResult
-		, TextureUnit const & vctFirstBounce
-		, TextureUnit const & vctSecondaryBounce )
+		, castor::String const & category
+		, castor::String const & name
+		, SceneRenderPassDesc const & renderPassDesc
+		, RenderTechniquePassDesc const & techniquePassDesc )
 		: castor3d::RenderTechniquePass{ pass
 			, context
 			, graph
 			, device
-			, "Transparent"
-			, "Accumulation"
-			, SceneRenderPassDesc{ { size.getWidth(), size.getHeight(), 1u }, matrixUbo, culler, true }
-			, RenderTechniquePassDesc{ false, config }
-				.lpvConfigUbo( lpvConfigUbo  )
-				.llpvConfigUbo( llpvConfigUbo )
-				.vctConfigUbo( vctConfigUbo )
-				.lpvResult( lpvResult )
-				.vctFirstBounce( vctFirstBounce )
-				.vctSecondaryBounce( vctSecondaryBounce ) }
+			, category
+			, name
+			, renderPassDesc
+			, techniquePassDesc }
 	{
 	}
 

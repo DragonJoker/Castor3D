@@ -536,7 +536,7 @@ namespace castor3d
 			, *m_renderPass );
 	}
 
-	void LightPropagationPass::registerPassIO( TextureUnit const * occlusion
+	void LightPropagationPass::registerPassIO( crg::ImageId const * occlusion
 		, LightVolumePassResult const & injection
 		, LpvGridConfigUbo const & lpvConfigUbo
 		, LightVolumePassResult const & accumulation
@@ -545,30 +545,34 @@ namespace castor3d
 		ashes::WriteDescriptorSetArray writes{
 			makeDescriptorWrite( lpvConfigUbo.getUbo()
 				, LpvGridUboIdx ),
-			makeDescriptorWrite( injection[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
-				, injection[LpvTexture::eR].getSampler()->getSampler()
-				, RLpvGridIdx ),
-			makeDescriptorWrite( injection[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
-				, injection[LpvTexture::eG].getSampler()->getSampler()
-				, GLpvGridIdx ),
-			makeDescriptorWrite( injection[LpvTexture::eB].getTexture()->getDefaultView().getSampledView()
-				, injection[LpvTexture::eB].getSampler()->getSampler()
-				, BLpvGridIdx ), };
+			// TODO: CRG
+			//makeDescriptorWrite( injection[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
+			//	, injection[LpvTexture::eR].getSampler()->getSampler()
+			//	, RLpvGridIdx ),
+			//makeDescriptorWrite( injection[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
+			//	, injection[LpvTexture::eG].getSampler()->getSampler()
+			//	, GLpvGridIdx ),
+			//makeDescriptorWrite( injection[LpvTexture::eB].getTexture()->getDefaultView().getSampledView()
+			//	, injection[LpvTexture::eB].getSampler()->getSampler()
+			//	, BLpvGridIdx )
+		};
 
 		if ( occlusion )
 		{
-			writes.emplace_back( makeDescriptorWrite( occlusion->getTexture()->getDefaultView().getSampledView()
-				, occlusion->getSampler()->getSampler()
-				, GpGridIdx ) );
+			// TODO: CRG
+			//writes.emplace_back( makeDescriptorWrite( occlusion->getTexture()->getDefaultView().getSampledView()
+			//	, occlusion->getSampler()->getSampler()
+			//	, GpGridIdx ) );
 		}
 
 		registerPassInputs( writes );
-		registerPassOutputs( { accumulation[LpvTexture::eR].getTexture()->getDefaultView().getTargetView()
-			, accumulation[LpvTexture::eG].getTexture()->getDefaultView().getTargetView()
-			, accumulation[LpvTexture::eB].getTexture()->getDefaultView().getTargetView()
-			, propagate[LpvTexture::eR].getTexture()->getDefaultView().getTargetView()
-			, propagate[LpvTexture::eG].getTexture()->getDefaultView().getTargetView()
-			, propagate[LpvTexture::eB].getTexture()->getDefaultView().getTargetView() } );
+		// TODO: CRG
+		//registerPassOutputs( { accumulation[LpvTexture::eR].getTexture()->getDefaultView().getTargetView()
+		//	, accumulation[LpvTexture::eG].getTexture()->getDefaultView().getTargetView()
+		//	, accumulation[LpvTexture::eB].getTexture()->getDefaultView().getTargetView()
+		//	, propagate[LpvTexture::eR].getTexture()->getDefaultView().getTargetView()
+		//	, propagate[LpvTexture::eG].getTexture()->getDefaultView().getTargetView()
+		//	, propagate[LpvTexture::eB].getTexture()->getDefaultView().getTargetView() } );
 	}
 
 	void LightPropagationPass::registerPassOutputs( ashes::ImageViewCRefArray const & outputs )

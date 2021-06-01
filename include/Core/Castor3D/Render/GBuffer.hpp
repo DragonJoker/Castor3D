@@ -11,22 +11,43 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/Named.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
 
+#include <RenderGraph/ImageData.hpp>
+#include <RenderGraph/ImageViewData.hpp>
+
 namespace castor3d
 {
+	struct Texture
+	{
+		crg::ImageId image;
+		crg::ImageViewId wholeView;
+		crg::ImageViewIdArray subViews;
+		ashes::Sampler const * sampler;
+
+		VkFormat getFormat()const
+		{
+			return image.data->info.format;
+		}
+
+		VkExtent3D getExtent()const
+		{
+			return image.data->info.extent;
+		}
+	};
+	using TextureArray = std::vector< Texture >;
+
 	class GBufferBase
 		: public castor::Named
 	{
 	public:
-		using Textures = std::vector< TextureUnit const * >;
-
-	public:
-		C3D_API explicit GBufferBase( castor::String name )
+		C3D_API explicit GBufferBase( RenderDevice const & device
+			, castor::String name )
 			: castor::Named{ std::move( name ) }
+			, m_device{ device }
 		{
 		}
 
 	protected:
-		C3D_API static TextureUnit doCreateTexture( Engine & engine
+		C3D_API Texture doCreateTexture( crg::FrameGraph & graph
 			, castor::String const & name
 			, VkImageCreateFlags createFlags
 			, VkExtent3D const & size
@@ -34,7 +55,7 @@ namespace castor3d
 			, uint32_t mipLevels
 			, VkFormat format
 			, VkImageUsageFlags usageFlags
-			, VkBorderColor const & borderColor );
+			, VkBorderColor const & borderColor )const;
 		/**
 		*\~english
 		*\brief
@@ -68,21 +89,21 @@ namespace castor3d
 		*	Le nombre de layers du g-buffer.
 		*/
 		template< typename TextureEnumT >
-		static TextureUnitArray doCreateTextures( Engine & engine
-			, std::array< TextureUnit const *, size_t( TextureEnumT::eCount ) > const & inputs
+		TextureArray doCreateTextures( crg::FrameGraph & graph
+			, std::array< crg::ImageId const *, size_t( TextureEnumT::eCount ) > const & inputs
 			, castor::String const & prefix
 			, VkImageCreateFlags createFlags
 			, castor::Size const & size
-			, uint32_t layerCount = 1u )
+			, uint32_t layerCount = 1u )const
 		{
-			TextureUnitArray result;
+			TextureArray result;
 
 			for ( uint32_t i = 0u; i < inputs.size(); ++i )
 			{
 				if ( !inputs[i] )
 				{
 					auto texture = TextureEnumT( i );
-					result.emplace_back( doCreateTexture( engine
+					result.emplace_back( doCreateTexture( graph
 						, prefix + castor3d::getName( texture )
 						, createFlags
 						, { size.getWidth(), size.getHeight(), 1u }
@@ -125,20 +146,20 @@ namespace castor3d
 		*	Les dimensions du g-buffer.
 		*/
 		template< typename TextureEnumT >
-		static TextureUnitArray doCreateTextures( Engine & engine
-			, std::array< TextureUnit const *, size_t( TextureEnumT::eCount ) > const & inputs
+		TextureArray doCreateTextures( crg::FrameGraph & graph
+			, std::array< crg::ImageId const *, size_t( TextureEnumT::eCount ) > const & inputs
 			, castor::String const & prefix
 			, VkImageCreateFlags createFlags
-			, VkExtent3D const & size )
+			, VkExtent3D const & size )const
 		{
-			TextureUnitArray result;
+			TextureArray result;
 
 			for ( uint32_t i = 0u; i < inputs.size(); ++i )
 			{
 				if ( !inputs[i] )
 				{
 					auto texture = TextureEnumT( i );
-					result.emplace_back( doCreateTexture( engine
+					result.emplace_back( doCreateTexture( graph
 						, prefix + castor3d::getName( texture )
 						, createFlags
 						, size
@@ -152,6 +173,9 @@ namespace castor3d
 
 			return result;
 		}
+
+	protected:
+		RenderDevice const & m_device;
 	};
 
 	template< typename TextureEnumT >
@@ -191,35 +215,21 @@ namespace castor3d
 		*\param[in] layerCount
 		*	Le nombre de layers du g-buffer.
 		*/
-		GBufferT( Engine & engine
+		GBufferT( crg::FrameGraph & graph
+			, RenderDevice const & device
 			, castor::String name
-			, std::array< TextureUnit const *, size_t( TextureEnumT::eCount ) > const & inputs
+			, std::array< crg::ImageId const *, size_t( TextureEnumT::eCount ) > const & inputs
 			, VkImageCreateFlags createFlags
 			, castor::Size const & size
 			, uint32_t layerCount = 1u )
-			: GBufferBase{ std::move( name ) }
-			, m_engine{ engine }
-			, m_owned{ GBufferBase::doCreateTextures< TextureEnumT >( m_engine
+			: GBufferBase{ device, std::move( name ) }
+			, m_result{ doCreateTextures< TextureEnumT >( graph
 				, inputs
 				, getName()
 				, createFlags
 				, size
 				, layerCount ) }
 		{
-			auto itOwned = m_owned.begin();
-
-			for ( uint32_t i = 0; i < inputs.size(); ++i )
-			{
-				if ( inputs[i] )
-				{
-					m_result.push_back( inputs[i] );
-				}
-				else
-				{
-					m_result.push_back( &( *itOwned ) );
-					++itOwned;
-				}
-			}
 		}
 		/**
 		*\~english
@@ -249,49 +259,19 @@ namespace castor3d
 		*\param[in] size
 		*	Les dimensions du g-buffer.
 		*/
-		GBufferT( Engine & engine
+		GBufferT( crg::FrameGraph & graph
+			, RenderDevice const & device
 			, castor::String name
-			, std::array< TextureUnit const *, size_t( TextureEnumT::eCount ) > const & inputs
+			, std::array< crg::ImageId const *, size_t( TextureEnumT::eCount ) > const & inputs
 			, VkImageCreateFlags createFlags
 			, VkExtent3D const & size )
-			: GBufferBase{ std::move( name ) }
-			, m_engine{ engine }
-			, m_owned{ GBufferBase::doCreateTextures< TextureEnumT >( m_engine
+			: GBufferBase{ device, std::move( name ) }
+			, m_result{ doCreateTextures< TextureEnumT >( graph
 				, inputs
 				, getName()
 				, createFlags
 				, size ) }
 		{
-			auto itOwned = m_owned.begin();
-
-			for ( uint32_t i = 0; i < inputs.size(); ++i )
-			{
-				if ( inputs[i] )
-				{
-					m_result.push_back( inputs[i] );
-				}
-				else
-				{
-					m_result.push_back( &( *itOwned ) );
-					++itOwned;
-				}
-			}
-		}
-
-		void initialise( RenderDevice const & device )
-		{
-			for ( auto & unit : m_owned )
-			{
-				unit.initialise( device );
-			}
-		}
-
-		void cleanup()
-		{
-			for ( auto & unit : m_owned )
-			{
-				unit.cleanup();
-			}
 		}
 		/**
 		*\~english
@@ -302,46 +282,44 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		TextureUnit const & operator[]( TextureEnumT texture )const
+		Texture const & operator[]( TextureEnumT texture )const
 		{
-			return *m_result[size_t( texture )];
+			return m_result[size_t( texture )];
 		}
 
-		Textures::const_iterator cbegin()const
+		TextureArray::const_iterator cbegin()const
 		{
 			return m_result.begin();
 		}
 
-		Textures::const_iterator cend()const
+		TextureArray::const_iterator cend()const
 		{
 			return m_result.end();
 		}
 
-		Textures::const_iterator begin()const
+		TextureArray::const_iterator begin()const
 		{
 			return m_result.begin();
 		}
 
-		Textures::const_iterator end()const
+		TextureArray::const_iterator end()const
 		{
 			return m_result.end();
 		}
 
-		Textures::iterator begin()
+		TextureArray::iterator begin()
 		{
 			return m_result.begin();
 		}
 
-		Textures::iterator end()
+		TextureArray::iterator end()
 		{
 			return m_result.end();
 		}
 		/**@}*/
 
 	protected:
-		Engine & m_engine;
-		TextureUnitArray m_owned;
-		Textures m_result;
+		TextureArray m_result;
 	};
 }
 

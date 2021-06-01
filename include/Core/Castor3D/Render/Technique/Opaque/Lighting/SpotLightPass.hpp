@@ -84,7 +84,9 @@ namespace castor3d
 		 *\param[in]	lpConfig	La configuration de la passe d'éclairage.
 		 *\param[in]	vctConfig	L'UBO du voxelizer.
 		 */
-		SpotLightPass( RenderDevice const & device
+		SpotLightPass( crg::FrameGraph & graph
+			, crg::FramePass const *& previousPass
+			, RenderDevice const & device
 			, castor::String const & suffix
 			, LightPassConfig const & lpConfig
 			, VoxelizerUbo const * vctConfig = nullptr );
@@ -100,10 +102,14 @@ namespace castor3d
 		 *\param[in]	lpConfig	La configuration de la passe d'éclairage.
 		 *\param[in]	vctConfig	L'UBO du voxelizer.
 		 */
-		SpotLightPass( RenderDevice const & device
+		SpotLightPass( crg::FrameGraph & graph
+			, crg::FramePass const *& previousPass
+			, RenderDevice const & device
 			, LightPassConfig const & lpConfig
 			, VoxelizerUbo const * vctConfig = nullptr )
-			: SpotLightPass{ device
+			: SpotLightPass{ graph
+				, previousPass
+				, device
 				, castor::String{}
 				, lpConfig
 				, vctConfig }

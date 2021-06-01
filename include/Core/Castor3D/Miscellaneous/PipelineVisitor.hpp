@@ -13,6 +13,8 @@ See LICENSE file in root folder
 
 #include <ashespp/Image/ImageView.hpp>
 
+#include <RenderGraph/ImageViewData.hpp>
+
 namespace castor3d
 {
 	class PipelineVisitorBase
@@ -61,6 +63,16 @@ namespace castor3d
 			, TextureFactors const & factors = {} )
 		{
 			if ( doFilter( view.createInfo ) )
+			{
+				doVisit( name, view, layout, factors );
+			}
+		}
+		inline void visit( castor::String const & name
+			, crg::ImageViewId const & view
+			, VkImageLayout layout
+			, TextureFactors const & factors = {} )
+		{
+			if ( doFilter( view.data->info ) )
 			{
 				doVisit( name, view, layout, factors );
 			}
@@ -284,6 +296,10 @@ namespace castor3d
 
 		virtual void doVisit( castor::String const & name
 			, ashes::ImageView const & view
+			, VkImageLayout layout
+			, TextureFactors const & factors = {} ) = 0;
+		virtual void doVisit( castor::String const & name
+			, crg::ImageViewId const & view
 			, VkImageLayout layout
 			, TextureFactors const & factors = {} ) = 0;
 
@@ -687,6 +703,13 @@ namespace castor3d
 
 		void doVisit( castor::String const & name
 			, ashes::ImageView const & view
+			, VkImageLayout layout
+			, TextureFactors const & factors = TextureFactors{} )override
+		{
+		}
+
+		void doVisit( castor::String const & name
+			, crg::ImageViewId const & view
 			, VkImageLayout layout
 			, TextureFactors const & factors = TextureFactors{} )override
 		{

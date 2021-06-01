@@ -56,11 +56,12 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	DeferredRendering::DeferredRendering( Engine & engine
+	DeferredRendering::DeferredRendering( crg::FrameGraph & graph
+		, crg::FramePass const *& previousPass
 		, RenderDevice const & device
 		, OpaquePass & opaquePass
 		, OpaquePassResult const & opaquePassResult
-		, TextureUnit const & resultTexture
+		, crg::ImageViewId const & resultTexture
 		, ShadowMapResult const & smDirectionalResult
 		, ShadowMapResult const & smPointResult
 		, ShadowMapResult const & smSpotResult
@@ -76,25 +77,27 @@ namespace castor3d
 		, LayeredLpvGridConfigUbo const & llpvConfigUbo
 		, VoxelizerUbo const & vctConfigUbo
 		, SsaoConfig & ssaoConfig )
-		: m_engine{ engine }
-		, m_scene{ scene }
+		: m_scene{ scene }
 		, m_device{ device }
 		, m_ssaoConfig{ ssaoConfig }
 		, m_opaquePass{ opaquePass }
 		, m_opaquePassResult{ opaquePassResult }
 		, m_size{ size }
 		, m_gpInfoUbo{ gpInfoUbo }
-		, m_linearisePass{ castor::makeUnique< LineariseDepthPass >( m_device
+		, m_linearisePass{ castor::makeUnique< LineariseDepthPass >( graph
+			, m_device
 			, cuT( "Deferred" )
 			, m_size
-			, opaquePassResult[DsTexture::eDepth].getTexture()->getDefaultView().getSampledView() ) }
-		, m_ssao{ castor::makeUnique< SsaoPass >( m_device
+			, opaquePassResult[DsTexture::eDepth].wholeView ) }
+		, m_ssao{ castor::makeUnique< SsaoPass >( graph
+			, m_device
 			, m_size
 			, m_ssaoConfig
 			, m_linearisePass->getResult()
 			, opaquePassResult
 			, m_gpInfoUbo ) }
-		, m_lightingPass{ std::make_unique< LightingPass >( m_engine
+		, m_lightingPass{ std::make_unique< LightingPass >( graph
+			, *previousPass
 			, m_device
 			, m_size
 			, scene
@@ -106,29 +109,31 @@ namespace castor3d
 			, llpvResult
 			, vctFirstBounce
 			, vctSecondaryBounce
-			, opaquePassResult[DsTexture::eDepth].getTexture()->getDefaultView().getTargetView()
+			, opaquePassResult[DsTexture::eDepth].wholeView
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
 			, lpvConfigUbo
 			, llpvConfigUbo
 			, vctConfigUbo ) }
-		, m_subsurfaceScattering{ castor::makeUnique< SubsurfaceScatteringPass >( m_engine
+		, m_subsurfaceScattering{ castor::makeUnique< SubsurfaceScatteringPass >( graph
+			, previousPass
 			, m_device
 			, m_gpInfoUbo
 			, m_opaquePass.getSceneUbo()
 			, m_size
 			, opaquePassResult
 			, m_lightingPass->getResult() ) }
-		, m_resolve{ castor::makeUnique< OpaqueResolvePass >( m_engine
+		, m_resolve{ castor::makeUnique< OpaqueResolvePass >( graph
+			, previousPass
 			, m_device
 			, scene
 			, opaquePassResult
 			, *m_ssao
 			, m_subsurfaceScattering->getResult()
-			, m_lightingPass->getResult()[LpTexture::eDiffuse]
-			, m_lightingPass->getResult()[LpTexture::eSpecular]
-			, m_lightingPass->getResult()[LpTexture::eIndirectDiffuse]
-			, m_lightingPass->getResult()[LpTexture::eIndirectSpecular]
+			, m_lightingPass->getResult()[LpTexture::eDiffuse].wholeView
+			, m_lightingPass->getResult()[LpTexture::eSpecular].wholeView
+			, m_lightingPass->getResult()[LpTexture::eIndirectDiffuse].wholeView
+			, m_lightingPass->getResult()[LpTexture::eIndirectSpecular].wholeView
 			, resultTexture
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
@@ -199,11 +204,6 @@ namespace castor3d
 			, m_opaquePassResult
 			, *result );
 
-		if ( scene.needsSubsurfaceScattering() )
-		{
-			result = &m_subsurfaceScattering->render( m_device, *result );
-		}
-
 		result = &m_resolve->render( *result );
 		return *result;
 	}
@@ -211,23 +211,23 @@ namespace castor3d
 	void DeferredRendering::accept( RenderTechniqueVisitor & visitor )
 	{
 		visitor.visit( "Opaque Data1"
-			, m_opaquePassResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView()
+			, m_opaquePassResult[DsTexture::eData1].wholeView
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Opaque Data2"
-			, m_opaquePassResult[DsTexture::eData2].getTexture()->getDefaultView().getSampledView()
+			, m_opaquePassResult[DsTexture::eData2].wholeView
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Opaque Data3"
-			, m_opaquePassResult[DsTexture::eData3].getTexture()->getDefaultView().getSampledView()
+			, m_opaquePassResult[DsTexture::eData3].wholeView
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Opaque Data4"
-			, m_opaquePassResult[DsTexture::eData4].getTexture()->getDefaultView().getSampledView()
+			, m_opaquePassResult[DsTexture::eData4].wholeView
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Opaque Data5"
-			, m_opaquePassResult[DsTexture::eData5].getTexture()->getDefaultView().getSampledView()
+			, m_opaquePassResult[DsTexture::eData5].wholeView
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 

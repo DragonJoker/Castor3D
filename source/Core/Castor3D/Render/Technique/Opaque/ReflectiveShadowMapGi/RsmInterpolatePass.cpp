@@ -67,8 +67,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderPtr getDirectionalPixelShaderSource( RenderSystem const & renderSystem
-			, LightType lightType
+		ShaderPtr getDirectionalPixelShaderSource( LightType lightType
 			, uint32_t width
 			, uint32_t height )
 		{
@@ -168,8 +167,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderPtr getSpotPixelShaderSource( RenderSystem const & renderSystem
-			, LightType lightType
+		ShaderPtr getSpotPixelShaderSource( LightType lightType
 			, uint32_t width
 			, uint32_t height )
 		{
@@ -272,8 +270,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderPtr getPointPixelShaderSource( RenderSystem const & renderSystem
-			, LightType lightType
+		ShaderPtr getPointPixelShaderSource( LightType lightType
 			, uint32_t width
 			, uint32_t height )
 		{
@@ -362,28 +359,18 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< ast::Shader > getPixelProgram( Engine const & engine
-			, LightType lightType
+		std::unique_ptr< ast::Shader > getPixelProgram( LightType lightType
 			, uint32_t width
 			, uint32_t height )
 		{
 			switch ( lightType )
 			{
 			case LightType::eDirectional:
-				return getDirectionalPixelShaderSource( *engine.getRenderSystem()
-					, lightType
-					, width
-					, height );
+				return getDirectionalPixelShaderSource( lightType, width, height );
 			case LightType::eSpot:
-				return getSpotPixelShaderSource( *engine.getRenderSystem()
-					, lightType
-					, width
-					, height );
+				return getSpotPixelShaderSource( lightType, width, height );
 			case LightType::ePoint:
-				return getPointPixelShaderSource( *engine.getRenderSystem()
-					, lightType
-					, width
-					, height );
+				return getPointPixelShaderSource( lightType, width, height );
 			default:
 				CU_Failure( "Unexpected MaterialType" );
 				return nullptr;
@@ -483,7 +470,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	RsmInterpolatePass::RsmInterpolatePass( Engine & engine
+	RsmInterpolatePass::RsmInterpolatePass( crg::FrameGraph & graph
+		, crg::FramePass const *& previousPass
 		, RenderDevice const & device
 		, LightCache const & lightCache
 		, LightType lightType
@@ -493,9 +481,9 @@ namespace castor3d
 		, ShadowMapResult const & smResult
 		, RsmConfigUbo const & rsmConfigUbo
 		, ashes::Buffer< castor::Point2f > const & rsmSamplesSsbo
-		, TextureUnit const & gi
-		, TextureUnit const & nml
-		, TextureUnit const & dst )
+		, crg::ImageViewId const & gi
+		, crg::ImageViewId const & nml
+		, crg::ImageViewId const & dst )
 		: RenderQuad{ device
 			, "RsmInterpolate"
 			, VK_FILTER_LINEAR
@@ -512,53 +500,52 @@ namespace castor3d
 		, m_rsmConfigUbo{ rsmConfigUbo }
 		, m_rsmSamplesSsbo{ rsmSamplesSsbo }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram( engine, lightType, gi.getTexture()->getWidth(), gi.getTexture()->getHeight() ) }
-		, m_renderPass{ doCreateRenderPass( m_device, dst.getTexture()->getPixelFormat() ) }
-		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, dst.getTexture()->getDefaultView().getTargetView() ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram( lightType, getExtent( gi ).width, getExtent( gi ).height ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_device, cuT( "Reflective Shadow Maps" ), cuT( "Interpolate" ) ) }
 	{
 		ashes::PipelineShaderStageCreateInfoArray shaderStages;
 		shaderStages.push_back( makeShaderState( m_device, m_vertexShader ) );
 		shaderStages.push_back( makeShaderState( m_device, m_pixelShader ) );
-		createPipelineAndPass( size
-			, {}
-			, shaderStages
-			, *m_renderPass
-			, {
-				makeDescriptorWrite( m_rsmConfigUbo.getUbo()
-					, RsmCfgUboIdx ),
-				makeDescriptorWrite( m_rsmSamplesSsbo.getBuffer()
-					, RsmSamplesIdx
-					, 0u
-					, uint32_t( m_rsmSamplesSsbo.getMemoryRequirements().size ) ),
-				makeDescriptorWrite( m_gpInfo.getUbo()
-					, GpInfoUboIdx ),
-				makeDescriptorWrite( m_lightCache.getBuffer()
-					, m_lightCache.getView()
-					, LightsMapIdx ),
-				makeDescriptorWrite( m_gi.getTexture()->getDefaultView().getSampledView()
-					, m_gi.getSampler()->getSampler()
-					, GiMapIdx ),
-				makeDescriptorWrite( m_nml.getTexture()->getDefaultView().getSampledView()
-					, m_nml.getSampler()->getSampler()
-					, NmlMapIdx ),
-				makeDescriptorWrite( m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getSampledView()
-					, m_gpResult[DsTexture::eDepth].getSampler()->getSampler()
-					, DepthMapIdx ),
-				makeDescriptorWrite( m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView()
-					, m_gpResult[DsTexture::eData1].getSampler()->getSampler()
-					, Data1MapIdx ),
-				makeDescriptorWrite( m_smResult[SmTexture::eNormalLinear].getTexture()->getDefaultView().getSampledView()
-					, m_smResult[SmTexture::eNormalLinear].getSampler()->getSampler()
-					, RsmNormalsIdx ),
-				makeDescriptorWrite( m_smResult[SmTexture::ePosition].getTexture()->getDefaultView().getSampledView()
-					, m_smResult[SmTexture::ePosition].getSampler()->getSampler()
-					, RsmPositionIdx ),
-				makeDescriptorWrite( m_smResult[SmTexture::eFlux].getTexture()->getDefaultView().getSampledView()
-					, m_smResult[SmTexture::eFlux].getSampler()->getSampler()
-					, RsmFluxIdx ),
-			} );
-		m_commands = getCommands( *m_timer, 0u );
+		// TODO CRG
+		//createPipelineAndPass( size
+		//	, {}
+		//	, shaderStages
+		//	, *m_renderPass
+		//	, {
+		//		makeDescriptorWrite( m_rsmConfigUbo.getUbo()
+		//			, RsmCfgUboIdx ),
+		//		makeDescriptorWrite( m_rsmSamplesSsbo.getBuffer()
+		//			, RsmSamplesIdx
+		//			, 0u
+		//			, uint32_t( m_rsmSamplesSsbo.getMemoryRequirements().size ) ),
+		//		makeDescriptorWrite( m_gpInfo.getUbo()
+		//			, GpInfoUboIdx ),
+		//		makeDescriptorWrite( m_lightCache.getBuffer()
+		//			, m_lightCache.getView()
+		//			, LightsMapIdx ),
+		//		makeDescriptorWrite( m_gi.getTexture()->getDefaultView().getSampledView()
+		//			, m_gi.getSampler()->getSampler()
+		//			, GiMapIdx ),
+		//		makeDescriptorWrite( m_nml.getTexture()->getDefaultView().getSampledView()
+		//			, m_nml.getSampler()->getSampler()
+		//			, NmlMapIdx ),
+		//		makeDescriptorWrite( m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getSampledView()
+		//			, m_gpResult[DsTexture::eDepth].getSampler()->getSampler()
+		//			, DepthMapIdx ),
+		//		makeDescriptorWrite( m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView()
+		//			, m_gpResult[DsTexture::eData1].getSampler()->getSampler()
+		//			, Data1MapIdx ),
+		//		makeDescriptorWrite( m_smResult[SmTexture::eNormalLinear].getTexture()->getDefaultView().getSampledView()
+		//			, m_smResult[SmTexture::eNormalLinear].getSampler()->getSampler()
+		//			, RsmNormalsIdx ),
+		//		makeDescriptorWrite( m_smResult[SmTexture::ePosition].getTexture()->getDefaultView().getSampledView()
+		//			, m_smResult[SmTexture::ePosition].getSampler()->getSampler()
+		//			, RsmPositionIdx ),
+		//		makeDescriptorWrite( m_smResult[SmTexture::eFlux].getTexture()->getDefaultView().getSampledView()
+		//			, m_smResult[SmTexture::eFlux].getSampler()->getSampler()
+		//			, RsmFluxIdx ),
+		//	} );
+		//m_commands = getCommands( *m_timer, 0u );
 	}
 
 	ashes::Semaphore const & RsmInterpolatePass::compute( ashes::Semaphore const & toWait )const
@@ -588,28 +575,29 @@ namespace castor3d
 		};
 		auto & cmd = *commands.commandBuffer;
 
-		cmd.begin();
-		timer.beginPass( cmd, index );
-		cmd.beginDebugBlock(
-			{
-				"Lighting - Interpolate GI",
-				castor3d::makeFloatArray( m_renderSystem.getEngine()->getNextRainbowColour() ),
-			} );
-		cmd.memoryBarrier( VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ) );
-		cmd.beginRenderPass( *m_renderPass
-			, *m_frameBuffer
-			, { castor3d::transparentBlackClearColor }
-			, VK_SUBPASS_CONTENTS_INLINE );
-		registerPass( cmd );
-		cmd.endRenderPass();
-		cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
-			, m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-		cmd.endDebugBlock();
-		timer.endPass( cmd, index );
-		cmd.end();
+		// TODO CRG
+		//cmd.begin();
+		//timer.beginPass( cmd, index );
+		//cmd.beginDebugBlock(
+		//	{
+		//		"Lighting - Interpolate GI",
+		//		castor3d::makeFloatArray( m_renderSystem.getEngine()->getNextRainbowColour() ),
+		//	} );
+		//cmd.memoryBarrier( VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
+		//	, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+		//	, m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ) );
+		//cmd.beginRenderPass( *m_renderPass
+		//	, *m_frameBuffer
+		//	, { castor3d::transparentBlackClearColor }
+		//	, VK_SUBPASS_CONTENTS_INLINE );
+		//registerPass( cmd );
+		//cmd.endRenderPass();
+		//cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+		//	, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
+		//	, m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		//cmd.endDebugBlock();
+		//timer.endPass( cmd, index );
+		//cmd.end();
 
 		return commands;
 	}

@@ -397,7 +397,9 @@ namespace castor3d
 		 *\param[in]	lpConfig		La configuration de la passe d'éclairage.
 		 *\param[in]	vctConfig		L'UBO du voxelizer.
 		 */
-		LightPass( RenderDevice const & device
+		LightPass( crg::FrameGraph & graph
+			, crg::FramePass const *& previousPass
+			, RenderDevice const & device
 			, castor::String const & suffix
 			, ashes::RenderPassPtr firstRenderPass
 			, ashes::RenderPassPtr blendRenderPass
@@ -573,6 +575,8 @@ namespace castor3d
 
 		Engine & m_engine;
 		RenderDevice const & m_device;
+		crg::FrameGraph & m_graph;
+		crg::FramePass const & m_previousPass;
 		Scene const * m_scene{ nullptr };
 		SceneUbo * m_sceneUbo{ nullptr };
 		UniformBufferT< ModelUboConfiguration > const * m_optModelUbo{ nullptr };

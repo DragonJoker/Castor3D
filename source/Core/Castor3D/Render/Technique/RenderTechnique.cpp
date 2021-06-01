@@ -158,15 +158,6 @@ namespace castor3d
 
 			if ( count > 0 )
 			{
-				if ( !shadowMap.isInitialised() )
-				{
-					cache.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-						, [&shadowMap]( RenderDevice const & device )
-						{
-							shadowMap.initialise();
-						} ) );
-				}
-
 				uint32_t index = 0u;
 				auto lightIt = lights.begin();
 				activeShadowMaps[size_t( type )].emplace_back( std::ref( shadowMap ), UInt32Array{} );
@@ -248,14 +239,15 @@ namespace castor3d
 			return result;
 		}
 
-		LightVolumePassResultArray doCreateLLPVResult( RenderDevice const & device )
+		LightVolumePassResultArray doCreateLLPVResult( crg::FrameGraph & graph
+			, RenderDevice const & device )
 		{
 			LightVolumePassResultArray result;
 			auto & engine = *device.renderSystem.getEngine();
 
 			for ( uint32_t i = 0u; i < shader::LpvMaxCascadesCount; ++i )
 			{
-				result.emplace_back( castor::makeUnique< LightVolumePassResult >( engine
+				result.emplace_back( castor::makeUnique< LightVolumePassResult >( graph
 					, device
 					, castor::string::toString( i )
 					, engine.getLpvGridSize() ) );
@@ -271,37 +263,38 @@ namespace castor3d
 		{
 			CommandsSemaphore result{ device
 				, name + cuT( "ClearLpv" ) };
-			ashes::CommandBuffer & cmd = *result.commandBuffer;
-			auto clearTex = [&cmd]( LightVolumePassResult const & result
-				, LpvTexture tex )
-			{
-				cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-					, VK_PIPELINE_STAGE_TRANSFER_BIT
-					, result[tex].getTexture()->getDefaultView().getSampledView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
-				cmd.clear( result[tex].getTexture()->getDefaultView().getSampledView(), getClearValue( tex ).color );
-				cmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-					, result[tex].getTexture()->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
-			};
-			cmd.begin();
-			cmd.beginDebugBlock(
-				{
-					"Lighting - " + name + " - Clear Injection",
-					castor3d::makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ),
-				} );
-			clearTex( lpvResult, LpvTexture::eR );
-			clearTex( lpvResult, LpvTexture::eG );
-			clearTex( lpvResult, LpvTexture::eB );
+			// TODO CRG
+			//ashes::CommandBuffer & cmd = *result.commandBuffer;
+			//auto clearTex = [&cmd]( LightVolumePassResult const & result
+			//	, LpvTexture tex )
+			//{
+			//	cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			//		, VK_PIPELINE_STAGE_TRANSFER_BIT
+			//		, result[tex].getTexture()->getDefaultView().getSampledView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+			//	cmd.clear( result[tex].getTexture()->getDefaultView().getSampledView(), getClearValue( tex ).color );
+			//	cmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			//		, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			//		, result[tex].getTexture()->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+			//};
+			//cmd.begin();
+			//cmd.beginDebugBlock(
+			//	{
+			//		"Lighting - " + name + " - Clear Injection",
+			//		castor3d::makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ),
+			//	} );
+			//clearTex( lpvResult, LpvTexture::eR );
+			//clearTex( lpvResult, LpvTexture::eG );
+			//clearTex( lpvResult, LpvTexture::eB );
 
-			for ( auto & lpvResult : llpvResult )
-			{
-				clearTex( *lpvResult, LpvTexture::eR );
-				clearTex( *lpvResult, LpvTexture::eG );
-				clearTex( *lpvResult, LpvTexture::eB );
-			}
+			//for ( auto & lpvResult : llpvResult )
+			//{
+			//	clearTex( *lpvResult, LpvTexture::eR );
+			//	clearTex( *lpvResult, LpvTexture::eG );
+			//	clearTex( *lpvResult, LpvTexture::eB );
+			//}
 
-			cmd.endDebugBlock();
-			cmd.end();
+			//cmd.endDebugBlock();
+			//cmd.end();
 			return result;
 		}
 
@@ -349,7 +342,7 @@ namespace castor3d
 		, m_device{ device }
 		, m_size{ m_renderTarget.getSize() }
 		, m_ssaoConfig{ ssaoConfig }
-		, m_colourImage{ renderTarget.getGraph().createImage( { "TechCol"
+		, m_colourImage{ m_renderTarget.getGraph().createImage( { "TechCol"
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, VK_FORMAT_R16G16B16A16_SFLOAT
@@ -358,13 +351,13 @@ namespace castor3d
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } ) }
-		, m_colourView{ renderTarget.getGraph().createView( { m_colourImage.data->name
+		, m_colourView{ m_renderTarget.getGraph().createView( { m_colourImage.data->name
 			, m_colourImage
 			, 0u
 			, VK_IMAGE_VIEW_TYPE_2D
 			, m_colourImage.data->info.format
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
-		, m_depthImage{ renderTarget.getGraph().createImage( { "TechDpt"
+		, m_depthImage{ m_renderTarget.getGraph().createImage( { "TechDpt"
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
@@ -374,7 +367,7 @@ namespace castor3d
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } ) }
-		, m_depthView{ renderTarget.getGraph().createView( { m_depthImage.data->name
+		, m_depthView{ m_renderTarget.getGraph().createView( { m_depthImage.data->name
 				, m_depthImage
 				, 0u
 				, VK_IMAGE_VIEW_TYPE_2D
@@ -396,18 +389,20 @@ namespace castor3d
 			, m_matrixUbo
 			, m_vctConfigUbo
 			, m_renderTarget.getScene()->getVoxelConeTracingConfig() ) }
-		, m_lpvResult{ castor::makeUnique< LightVolumePassResult >( *getEngine()
+		, m_lpvResult{ castor::makeUnique< LightVolumePassResult >( m_renderTarget.getGraph()
 			, m_device
 			, cuEmptyString
 			, getEngine()->getLpvGridSize() ) }
-		, m_llpvResult{ doCreateLLPVResult( device ) }
+		, m_llpvResult{ doCreateLLPVResult( m_renderTarget.getGraph()
+			, m_device ) }
 		, m_backgroundPassDesc{ &doCreateBackgroundPass() }
 #if C3D_UseDeferredRendering
-		, m_opaquePassResult{ castor::makeUnique< OpaquePassResult >( device
+		, m_opaquePassResult{ castor::makeUnique< OpaquePassResult >( m_renderTarget.getGraph()
+			, device
 			, m_depthBuffer
 			, m_renderTarget.getVelocity() ) }
 		, m_opaquePassDesc{ &doCreateOpaquePass() }
-		, m_deferredRendering{ castor::makeUnique< DeferredRendering >( *getEngine()
+		, m_deferredRendering{ castor::makeUnique< DeferredRendering >( m_renderTarget.getGraph()
 			, m_device
 			, static_cast< OpaquePass & >( *m_opaquePass )
 			, *m_opaquePassResult
@@ -432,11 +427,13 @@ namespace castor3d
 		, m_opaquePassDesc{ &doCreateOpaquePass() }
 #endif
 #if C3D_UseWeightedBlendedRendering
-		, m_transparentPassResult{ castor::makeUnique< TransparentPassResult >( device
-			, m_depthBuffer
-			, m_renderTarget.getVelocity() ) }
+		, m_transparentPassResult{ castor::makeUnique< TransparentPassResult >( m_renderTarget.getGraph()
+			, m_device
+			, m_depthImage
+			, m_renderTarget.getVelocityId().data->image ) }
 		, m_transparentPassDesc{ &doCreateTransparentPass() }
-		, m_weightedBlendRendering{ castor::makeUnique< WeightedBlendRendering >( m_device
+		, m_weightedBlendRendering{ castor::makeUnique< WeightedBlendRendering >( m_renderTarget.getGraph()
+			, m_device
 			, static_cast< TransparentPass & >( *m_transparentPass )
 			, *m_transparentPassResult
 			, m_colourTexture.getTexture()->getDefaultView().getTargetView()
@@ -449,11 +446,17 @@ namespace castor3d
 		, m_transparentPassDesc{ &doCreateTransparentPass() }
 #endif
 		, m_signalFinished{ m_device->createSemaphore( "RenderTechnique" ) }
-		, m_directionalShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapDirectional >( m_device
+		, m_directionalShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapDirectional >( m_renderTarget.getGraph()
+			, *m_depthPassDecl
+			, m_device
 			, *m_renderTarget.getScene() ) }
-		, m_spotShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapSpot >( m_device
+		, m_spotShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapSpot >( m_renderTarget.getGraph()
+			, *m_depthPassDecl
+			, m_device
 			, *m_renderTarget.getScene() ) }
-		, m_pointShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapPoint >( m_device
+		, m_pointShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapPoint >( m_renderTarget.getGraph()
+			, *m_depthPassDecl
+			, m_device
 			, *m_renderTarget.getScene() ) }
 		, m_clearLpv{ doCreateClearLpvCommands( device, getName(), *m_lpvResult, m_llpvResult ) }
 		, m_particleTimer{ std::make_shared< RenderPassTimer >( device, cuT( "Particles" ), cuT( "Particles" ) ) }
@@ -461,7 +464,6 @@ namespace castor3d
 		m_allShadowMaps[size_t( LightType::eDirectional )].emplace_back( std::ref( *m_directionalShadowMap ), UInt32Array{} );
 		m_allShadowMaps[size_t( LightType::eSpot )].emplace_back( std::ref( *m_spotShadowMap ), UInt32Array{} );
 		m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( std::ref( *m_pointShadowMap ), UInt32Array{} );
-		doInitialiseShadowMaps();
 		doInitialiseLpv();
 
 		auto & maps = m_renderTarget.getScene()->getEnvironmentMaps();
@@ -477,7 +479,6 @@ namespace castor3d
 		m_particleTimer.reset();
 #if C3D_UseWeightedBlendedRendering
 		m_weightedBlendRendering.reset();
-		m_transparentPassResult->cleanup();
 		m_transparentPassResult.reset();
 #endif
 #if C3D_UseDeferredRendering
@@ -572,7 +573,6 @@ namespace castor3d
 		updater.camera = m_renderTarget.getCamera();
 		updater.voxelConeTracing = m_renderTarget.getScene()->getVoxelConeTracingConfig().enabled;
 
-		doInitialiseShadowMaps();
 		doInitialiseLpv();
 
 		for ( auto & map : m_renderTarget.getScene()->getEnvironmentMaps() )
@@ -750,32 +750,27 @@ namespace castor3d
 
 	crg::FramePass & RenderTechnique::doCreateTransparentPass()
 	{
-#if C3D_UseWeightedBlendedRendering
-		, m_transparentPass{ castor::makeUniqueDerived< RenderTechniquePass, TransparentPass >( m_device
-			, m_size
-			, m_matrixUbo
-			, m_renderTarget.getCuller()
-			, m_ssaoConfig
-			, *m_transparentPassResult
-			, m_lpvConfigUbo
-			, m_llpvConfigUbo
-			, m_vctConfigUbo
-			, *m_lpvResult
-			, m_voxelizer->getFirstBounce()
-			, m_voxelizer->getSecondaryBounce() ) };
-#else
 		auto & result = m_renderTarget.getGraph().createPass( "TransparentPass"
 			, [this]( crg::FramePass const & pass
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< ForwardRenderTechniquePass >( pass
+#if C3D_UseWeightedBlendedRendering
+				using PassType = TransparentPass;
+				castor::String name = cuT( "Accumulation" );
+				bool isOit = true;
+#else
+				using PassType = ForwardRenderTechniquePass;
+				castor::String name = cuT( "Forward" );
+				bool isOit = false;
+#endif
+				auto result = std::make_unique< PassType >( pass
 					, context
 					, graph
 					, m_device
 					, cuT( "Transparent" )
-					, cuT( "Forward" )
-					, SceneRenderPassDesc{ { m_size.getWidth(), m_size.getHeight(), 1u }, m_matrixUbo, m_renderTarget.getCuller(), false }
+					, name
+					, SceneRenderPassDesc{ { m_size.getWidth(), m_size.getHeight(), 1u }, m_matrixUbo, m_renderTarget.getCuller(), isOit }
 					, RenderTechniquePassDesc{ false, m_ssaoConfig }
 						.lpvConfigUbo( m_lpvConfigUbo )
 						.llpvConfigUbo( m_llpvConfigUbo )
@@ -788,20 +783,22 @@ namespace castor3d
 			} );
 		result.addDependency( *m_opaquePassDesc );
 		result.addInOutDepthView( m_depthView );
-		result.addInOutColourView( m_colourView );
-		return result;
-#endif
-	}
 
-	void RenderTechnique::doInitialiseShadowMaps()
-	{
-		m_directionalShadowMap->initialise();
-		m_spotShadowMap->initialise();
-		m_pointShadowMap->initialise();
+#if C3D_UseWeightedBlendedRendering
+		for ( auto & passResult : *m_transparentPassResult )
+		{
+			//result.addInOutColourView( passResult );
+		}
+#else
+		result.addInOutColourView( m_colourView );
+#endif
+
+		return result;
 	}
 
 	void RenderTechnique::doInitialiseLpv()
 	{
+		auto & graph = m_renderTarget.getGraph();
 		auto & scene = *m_renderTarget.getScene();
 
 		for ( auto i = uint32_t( LightType::eMin ); i < uint32_t( LightType::eCount ); ++i )
@@ -817,7 +814,8 @@ namespace castor3d
 
 			if ( needLpv && !m_lightPropagationVolumes[i] )
 			{
-				m_lightPropagationVolumes[i] = castor::makeUnique< LightPropagationVolumes >( scene
+				m_lightPropagationVolumes[i] = castor::makeUnique< LightPropagationVolumes >( graph
+					, scene
 					, LightType( i )
 					, m_device
 					, m_allShadowMaps[i].front().first.get().getShadowPassResult()
@@ -828,7 +826,8 @@ namespace castor3d
 
 			if ( needLpvG && !m_lightPropagationVolumesG[i] )
 			{
-				m_lightPropagationVolumesG[i] = castor::makeUnique< LightPropagationVolumesG >( scene
+				m_lightPropagationVolumesG[i] = castor::makeUnique< LightPropagationVolumesG >( graph
+					, scene
 					, LightType( i )
 					, m_device
 					, m_allShadowMaps[i].front().first.get().getShadowPassResult()
@@ -839,7 +838,8 @@ namespace castor3d
 
 			if ( needLLpv && !m_layeredLightPropagationVolumes[i] )
 			{
-				m_layeredLightPropagationVolumes[i] = castor::makeUnique< LayeredLightPropagationVolumes >( scene
+				m_layeredLightPropagationVolumes[i] = castor::makeUnique< LayeredLightPropagationVolumes >( graph
+					, scene
 					, LightType( i )
 					, m_device
 					, m_allShadowMaps[i].front().first.get().getShadowPassResult()
@@ -850,7 +850,8 @@ namespace castor3d
 
 			if ( needLLpvG && !m_layeredLightPropagationVolumesG[i] )
 			{
-				m_layeredLightPropagationVolumesG[i] = castor::makeUnique< LayeredLightPropagationVolumesG >( scene
+				m_layeredLightPropagationVolumesG[i] = castor::makeUnique< LayeredLightPropagationVolumesG >( graph
+					, scene
 					, LightType( i )
 					, m_device
 					, m_allShadowMaps[i].front().first.get().getShadowPassResult()
@@ -988,29 +989,6 @@ namespace castor3d
 				updater.info.m_particlesCount += particleSystem.second->getParticlesCount();
 			}
 		}
-	}
-
-	ashes::Semaphore const & RenderTechnique::doRenderShadowMaps( RenderDevice const & device
-		, ashes::Semaphore const & semaphore )
-	{
-		ashes::Semaphore const * result = &semaphore;
-		auto & scene = *m_renderTarget.getScene();
-
-		if ( scene.hasShadows() )
-		{
-			for ( auto & array : m_activeShadowMaps )
-			{
-				for ( auto & shadowMap : array )
-				{
-					for ( auto & index : shadowMap.second )
-					{
-						result = &shadowMap.first.get().render( device, *result, index );
-					}
-				}
-			}
-		}
-
-		return *result;
 	}
 
 	ashes::Semaphore const & RenderTechnique::doRenderLpv( RenderDevice const & device

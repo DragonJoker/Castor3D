@@ -90,16 +90,17 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	TransparentPassResult::TransparentPassResult( RenderDevice const & device
-		, TextureUnit const & depthTexture
-		, TextureUnit const & velocityTexture )
-		: GBufferT< WbTexture >{ *device.renderSystem.getEngine()
+	TransparentPassResult::TransparentPassResult( crg::FrameGraph & graph
+		, RenderDevice const & device
+		, crg::ImageId const & depthTexture
+		, crg::ImageId const & velocityTexture )
+		: GBufferT< WbTexture >{ graph
+			, device
 			, cuT( "WBResult" )
 			, { &depthTexture, nullptr, nullptr, &velocityTexture }
 			, 0u
-			, castor::Size{ depthTexture.getTexture()->getDimensions().width, depthTexture.getTexture()->getDimensions().height } }
+			, castor::Size{ depthTexture.data->info.extent.width, depthTexture.data->info.extent.height } }
 	{
-		initialise( device );
 	}
 
 	//*********************************************************************************************
