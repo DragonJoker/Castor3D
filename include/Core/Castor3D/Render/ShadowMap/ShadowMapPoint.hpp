@@ -67,22 +67,6 @@ namespace castor3d
 		bool isUpToDate( uint32_t index )const override;
 
 	private:
-		struct FrameBuffer
-		{
-			std::array< ashes::ImageView, size_t( SmTexture::eCount ) > views;
-			ashes::ImageView varianceView;
-			ashes::FrameBufferPtr frameBuffer;
-			CommandsSemaphore blurCommands{ nullptr, nullptr };
-		};
-		struct PassData
-		{
-			ashes::CommandBufferPtr commandBuffer;
-			std::array< FrameBuffer, 6u > frameBuffers;
-			ashes::SemaphorePtr finished;
-			ShadowType shadowType;
-			std::array< ashes::ImageView, size_t( SmTexture::eCount ) > views;
-		};
-		std::vector< PassData > m_passesData;
 		std::unique_ptr< GaussianBlur > m_blur;
 	};
 }
