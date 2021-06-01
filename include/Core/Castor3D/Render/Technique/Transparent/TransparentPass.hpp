@@ -39,16 +39,10 @@ namespace castor3d
 			, crg::GraphContext const & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
-			, castor::Size const & size
-			, MatrixUbo & matrixUbo
-			, SceneCuller & culler
-			, SsaoConfig const & ssaoConfig
-			, LpvGridConfigUbo const & lpvConfigUbo
-			, LayeredLpvGridConfigUbo const & llpvConfigUbo
-			, VoxelizerUbo const & vctConfigUbo
-			, LightVolumePassResult const & lpvResult
-			, TextureUnit const & vctFirstBounce
-			, TextureUnit const & vctSecondaryBounce );
+			, castor::String const & category
+			, castor::String const & name
+			, SceneRenderPassDesc const & renderPassDesc
+			, RenderTechniquePassDesc const & techniquePassDesc );
 		/**
 		 *\~english
 		 *\brief		Destructor

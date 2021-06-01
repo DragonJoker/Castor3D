@@ -71,11 +71,11 @@ namespace castor3d
 		static std::array< VkImageUsageFlags, size_t( SmTexture::eCount ) > Values
 		{
 			{
-				VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,						// Depth
-				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,	// NormalLinear
-				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,	// Variance
-				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,	// Position
-				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,	// Flux
+				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,	// Depth
+				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,			// NormalLinear
+				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,			// Variance
+				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,			// Position
+				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,			// Flux
 			}
 		};
 		return Values[size_t( texture )];
@@ -109,20 +109,19 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	ShadowMapResult::ShadowMapResult( Engine & engine
+	ShadowMapResult::ShadowMapResult( crg::FrameGraph & graph
+		, RenderDevice const & device
 		, castor::String const & prefix
 		, VkImageCreateFlags createFlags
 		, castor::Size const & size
 		, uint32_t layerCount )
-		: GBufferT< SmTexture >
-		{
-			engine,
-			prefix + cuT( "SmResult" ),
-			{ nullptr, nullptr, nullptr, nullptr, nullptr },
-			createFlags,
-			size,
-			layerCount,
-		}
+		: GBufferT< SmTexture >{ graph
+			, device
+			, prefix + cuT( "SMRes" )
+			, { nullptr, nullptr, nullptr, nullptr, nullptr }
+			, createFlags
+			, size
+			, layerCount }
 	{
 	}
 

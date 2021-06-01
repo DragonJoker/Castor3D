@@ -558,15 +558,16 @@ namespace castor3d
 			result->createBinding( descriptorSetLayout.getBinding( LightsIdx )
 				, lightCache.getBuffer()
 				, lightCache.getView() );
-			result->createBinding( descriptorSetLayout.getBinding( RsmNormalsIdx )
-				, smResult[SmTexture::eNormalLinear].getTexture()->getDefaultView().getSampledView()
-				, smResult[SmTexture::eNormalLinear].getSampler()->getSampler() );
-			result->createBinding( descriptorSetLayout.getBinding( RsmPositionIdx )
-				, smResult[SmTexture::ePosition].getTexture()->getDefaultView().getSampledView()
-				, smResult[SmTexture::ePosition].getSampler()->getSampler() );
-			result->createBinding( descriptorSetLayout.getBinding( RsmFluxIdx )
-				, smResult[SmTexture::eFlux].getTexture()->getDefaultView().getSampledView()
-				, smResult[SmTexture::eFlux].getSampler()->getSampler() );
+			// TODO: CRG
+			//result->createBinding( descriptorSetLayout.getBinding( RsmNormalsIdx )
+			//	, smResult[SmTexture::eNormalLinear].getTexture()->getDefaultView().getSampledView()
+			//	, smResult[SmTexture::eNormalLinear].getSampler()->getSampler() );
+			//result->createBinding( descriptorSetLayout.getBinding( RsmPositionIdx )
+			//	, smResult[SmTexture::ePosition].getTexture()->getDefaultView().getSampledView()
+			//	, smResult[SmTexture::ePosition].getSampler()->getSampler() );
+			//result->createBinding( descriptorSetLayout.getBinding( RsmFluxIdx )
+			//	, smResult[SmTexture::eFlux].getTexture()->getDefaultView().getSampledView()
+			//	, smResult[SmTexture::eFlux].getSampler()->getSampler() );
 			lpvGridUbo.createSizedBinding( *result
 				, descriptorSetLayout.getBinding( LpvGridUboIdx ) );
 			lpvLightUbo.createSizedBinding( *result
@@ -648,7 +649,7 @@ namespace castor3d
 		, m_engine{ engine }
 		, m_device{ device }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_device, cuT( "Light Propagation Volumes" ), cuT( " Light Injection" ) ) }
-		, m_rsmSize{ smResult[SmTexture::eDepth].getTexture()->getWidth() }
+		, m_rsmSize{ smResult[SmTexture::eDepth].getExtent().width }
 		, m_vertexBuffer{ doCreateVertexBuffer( getName(), m_device, m_rsmSize ) }
 		, m_descriptorSetLayout{ doCreateDescriptorLayout( getName(), m_device ) }
 		, m_pipelineLayout{ m_device->createPipelineLayout( getName(), *m_descriptorSetLayout ) }
@@ -660,7 +661,7 @@ namespace castor3d
 			, lpvGridConfigUbo.getUbo()
 			, lpvLightConfigUbo.getUbo()
 			, result ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram( lightType, smResult[SmTexture::eDepth].getTexture()->getWidth(), layerIndex ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram( lightType, smResult[SmTexture::eDepth].getExtent().width, layerIndex ) }
 		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), getGeometryProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram() }
 		, m_renderPass{ doCreateRenderPass( getName()
@@ -674,14 +675,15 @@ namespace castor3d
 			, m_geometryShader
 			, m_pixelShader
 			, gridSize ) }
-		, m_frameBuffer{ m_renderPass->createFrameBuffer( getName()
-			, VkExtent2D{ gridSize, gridSize }
-			, {
-				result[LpvTexture::eR].getTexture()->getDefaultView().getTargetView(),
-				result[LpvTexture::eG].getTexture()->getDefaultView().getTargetView(),
-				result[LpvTexture::eB].getTexture()->getDefaultView().getTargetView(),
-			}
-			, gridSize ) }
+		// TODO: CRG
+		//, m_frameBuffer{ m_renderPass->createFrameBuffer( getName()
+		//	, VkExtent2D{ gridSize, gridSize }
+		//	, {
+		//		result[LpvTexture::eR].getTexture()->getDefaultView().getTargetView(),
+		//		result[LpvTexture::eG].getTexture()->getDefaultView().getTargetView(),
+		//		result[LpvTexture::eB].getTexture()->getDefaultView().getTargetView(),
+		//	}
+		//	, gridSize ) }
 		, m_commands{ getCommands( *m_timer, 0u ) }
 	{
 	}

@@ -26,7 +26,9 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	scene	La scène.
 		 */
-		C3D_API explicit ShadowMapSpot( RenderDevice const & device
+		C3D_API explicit ShadowMapSpot( crg::FrameGraph & graph
+			, crg::FramePass const & previousPass
+			, RenderDevice const & device
 			, Scene & scene );
 		/**
 		 *\~english
@@ -45,10 +47,6 @@ namespace castor3d
 		C3D_API void update( GpuUpdater & updater )override;
 
 	private:
-		void doInitialise( RenderDevice const & device )override;
-		ashes::Semaphore const & doRender( RenderDevice const & device
-			, ashes::Semaphore const & toWait
-			, uint32_t index )override;
 		bool isUpToDate( uint32_t index )const override;
 
 	public:
