@@ -69,11 +69,12 @@ namespace castor3d
 		 *\param[in]	vctConfigUbo		L'UBO de configuration du VCT.
 		 *\param[in]	ssaoConfig			La configuration du SSAO.
 		 */
-		DeferredRendering( Engine & engine
+		DeferredRendering( crg::FrameGraph & graph
+			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, OpaquePass & opaquePass
 			, OpaquePassResult const & opaquePassResult
-			, TextureUnit const & resultTexture
+			, crg::ImageViewId const & resultTexture
 			, ShadowMapResult const & smDirectionalResult
 			, ShadowMapResult const & smPointResult
 			, ShadowMapResult const & smSpotResult
@@ -142,7 +143,6 @@ namespace castor3d
 		void accept( RenderTechniqueVisitor & visitor );
 
 	private:
-		Engine & m_engine;
 		Scene const & m_scene;
 		RenderDevice const & m_device;
 		SsaoConfig & m_ssaoConfig;

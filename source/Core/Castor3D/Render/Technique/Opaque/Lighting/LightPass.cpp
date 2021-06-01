@@ -293,28 +293,31 @@ namespace castor3d
 		, bool generatesIndirect )
 		: renderPass{ std::move( renderPass ) }
 	{
-		ashes::ImageViewCRefArray attaches
-		{
-			lpResult[LpTexture::eDepth].getTexture()->getDefaultView().getTargetView(),
-			lpResult[LpTexture::eDiffuse].getTexture()->getDefaultView().getTargetView(),
-			lpResult[LpTexture::eSpecular].getTexture()->getDefaultView().getTargetView(),
-		};
+		// TODO CRG
+		//ashes::ImageViewCRefArray attaches
+		//{
+		//	lpResult[LpTexture::eDepth].getTexture()->getDefaultView().getTargetView(),
+		//	lpResult[LpTexture::eDiffuse].getTexture()->getDefaultView().getTargetView(),
+		//	lpResult[LpTexture::eSpecular].getTexture()->getDefaultView().getTargetView(),
+		//};
 
-		if ( generatesIndirect )
-		{
-			attaches.emplace_back( lpResult[LpTexture::eIndirectDiffuse].getTexture()->getDefaultView().getTargetView() );
-			attaches.emplace_back( lpResult[LpTexture::eIndirectSpecular].getTexture()->getDefaultView().getTargetView() );
-		}
+		//if ( generatesIndirect )
+		//{
+		//	attaches.emplace_back( lpResult[LpTexture::eIndirectDiffuse].getTexture()->getDefaultView().getTargetView() );
+		//	attaches.emplace_back( lpResult[LpTexture::eIndirectSpecular].getTexture()->getDefaultView().getTargetView() );
+		//}
 
-		frameBuffer = this->renderPass->createFrameBuffer( name
-			, { lpResult[LpTexture::eDepth].getTexture()->getWidth()
-				, lpResult[LpTexture::eDepth].getTexture()->getHeight() }
-			, std::move( attaches ) );
+		//frameBuffer = this->renderPass->createFrameBuffer( name
+		//	, { lpResult[LpTexture::eDepth].getTexture()->getWidth()
+		//		, lpResult[LpTexture::eDepth].getTexture()->getHeight() }
+		//	, std::move( attaches ) );
 	}
 
 	//************************************************************************************************
 
-	LightPass::LightPass( RenderDevice const & device
+	LightPass::LightPass( crg::FrameGraph & graph
+		, crg::FramePass const *& previousPass
+		, RenderDevice const & device
 		, String const & suffix
 		, ashes::RenderPassPtr firstRenderPass
 		, ashes::RenderPassPtr blendRenderPass
@@ -323,6 +326,8 @@ namespace castor3d
 		: castor::Named{ "LightPass" + suffix }
 		, m_engine{ *device.renderSystem.getEngine() }
 		, m_device{ device }
+		, m_graph{ graph }
+		, m_previousPass{ *previousPass }
 		, m_vctUbo{ vctConfig }
 		, m_firstRenderPass{ getName() + "First", std::move( firstRenderPass ), lpConfig.lpResult, lpConfig.generatesIndirect }
 		, m_blendRenderPass{ getName() + "Blend", std::move( blendRenderPass ), lpConfig.lpResult, lpConfig.generatesIndirect }
@@ -520,57 +525,58 @@ namespace castor3d
 		pipeline.textureDescriptorSet = pipeline.program->getTextureDescriptorPool().createDescriptorSet( getName() + "Tex"
 			, 1u );
 		auto & texLayout = pipeline.program->getTextureDescriptorLayout();
-		auto writeBinding = [&gp, this]( uint32_t index, VkImageLayout layout )
-		{
-			auto & unit = gp[DsTexture( index )];
-			return ashes::WriteDescriptorSet
-			{
-				index,
-				0u,
-				VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-				{ { unit.getSampler()->getSampler(), unit.getTexture()->getDefaultView().getSampledView(), layout } }
-			};
-		};
-		uint32_t index = 0u;
-		pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ) );
-		pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-		pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-		pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-		pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-		pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		// TODO CRG
+		//auto writeBinding = [&gp, this]( uint32_t index, VkImageLayout layout )
+		//{
+		//	auto & unit = gp[DsTexture( index )];
+		//	return ashes::WriteDescriptorSet
+		//	{
+		//		index,
+		//		0u,
+		//		VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+		//		{ { unit.getSampler()->getSampler(), unit.getTexture()->getDefaultView().getSampledView(), layout } }
+		//	};
+		//};
+		//uint32_t index = 0u;
+		//pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ) );
+		//pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		//pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		//pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		//pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		//pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 
-		if ( vctFirstBounce && vctSecondaryBounce && m_voxels )
-		{
-			pipeline.textureWrites.push_back( ashes::WriteDescriptorSet{ index++
-				, 0u
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-				{ { vctFirstBounce->getSampler()->getSampler()
-					, vctFirstBounce->getTexture()->getDefaultView().getSampledView()
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
-			pipeline.textureWrites.push_back( ashes::WriteDescriptorSet{ index++
-				, 0u
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-				{ { vctSecondaryBounce->getSampler()->getSampler()
-					, vctSecondaryBounce->getTexture()->getDefaultView().getSampledView()
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
-		}
+		//if ( vctFirstBounce && vctSecondaryBounce && m_voxels )
+		//{
+		//	pipeline.textureWrites.push_back( ashes::WriteDescriptorSet{ index++
+		//		, 0u
+		//		, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+		//		{ { vctFirstBounce->getSampler()->getSampler()
+		//			, vctFirstBounce->getTexture()->getDefaultView().getSampledView()
+		//			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
+		//	pipeline.textureWrites.push_back( ashes::WriteDescriptorSet{ index++
+		//		, 0u
+		//		, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+		//		{ { vctSecondaryBounce->getSampler()->getSampler()
+		//			, vctSecondaryBounce->getTexture()->getDefaultView().getSampledView()
+		//			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
+		//}
 
-		if ( shadowMap && m_shadows )
-		{
-			auto & smResult = shadowMap->getShadowPassResult();
-			pipeline.textureWrites.push_back( ashes::WriteDescriptorSet{ index++
-				, 0u
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-				{ { shadowMap->getSampler( SmTexture::eNormalLinear )
-					, shadowMap->getView( SmTexture::eNormalLinear )
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
-			pipeline.textureWrites.push_back( ashes::WriteDescriptorSet{ index++
-				, 0u
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-				{ { shadowMap->getSampler( SmTexture::eVariance )
-					, shadowMap->getView( SmTexture::eVariance )
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
-		}
+		//if ( shadowMap && m_shadows )
+		//{
+		//	auto & smResult = shadowMap->getShadowPassResult();
+		//	pipeline.textureWrites.push_back( ashes::WriteDescriptorSet{ index++
+		//		, 0u
+		//		, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+		//		{ { shadowMap->getSampler( SmTexture::eNormalLinear )
+		//			, shadowMap->getView( SmTexture::eNormalLinear )
+		//			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
+		//	pipeline.textureWrites.push_back( ashes::WriteDescriptorSet{ index++
+		//		, 0u
+		//		, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+		//		{ { shadowMap->getSampler( SmTexture::eVariance )
+		//			, shadowMap->getView( SmTexture::eVariance )
+		//			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
+		//}
 
 		pipeline.textureDescriptorSet->setBindings( pipeline.textureWrites );
 		pipeline.textureDescriptorSet->update();

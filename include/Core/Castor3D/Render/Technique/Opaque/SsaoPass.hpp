@@ -36,7 +36,8 @@ namespace castor3d
 		 *\param[in]	gpResult		Le résultat de la geometry pass.
 		 *\param[in]	gpInfoUbo		L'UBO de configuration du GBuffer
 		 */
-		C3D_API SsaoPass( RenderDevice const & device
+		C3D_API SsaoPass( crg::FrameGraph & graph
+			, RenderDevice const & device
 			, castor::Size const & size
 			, SsaoConfig & ssaoConfig
 			, TextureUnit const & linearisedDepth
@@ -93,7 +94,6 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
-		Engine & m_engine;
 		SsaoConfig & m_ssaoConfig;
 		TextureUnit const & m_linearisedDepth;
 		OpaquePassResult const & m_gpResult;

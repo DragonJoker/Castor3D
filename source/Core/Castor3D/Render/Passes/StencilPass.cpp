@@ -22,6 +22,8 @@
 
 #include <ShaderWriter/Source.hpp>
 
+#include <RenderGraph/FrameGraph.hpp>
+
 CU_ImplementCUSmartPtr( castor3d, StencilPass )
 
 using namespace castor;
@@ -32,48 +34,6 @@ namespace castor3d
 
 	namespace
 	{
-		ashes::RenderPassPtr doCreateRenderPass( castor::String const & name
-			, RenderDevice const & device
-			, ashes::ImageView const & depthView )
-		{
-			ashes::VkAttachmentDescriptionArray attaches
-			{
-				{
-					0u,
-					depthView->format,
-					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_LOAD,
-					VK_ATTACHMENT_STORE_OP_STORE,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
-					VK_ATTACHMENT_STORE_OP_STORE,
-					VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-					VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-				}
-			};
-			ashes::SubpassDescriptionArray subpasses;
-			subpasses.emplace_back( ashes::SubpassDescription
-				{
-					0u,
-					VK_PIPELINE_BIND_POINT_GRAPHICS,
-					{},
-					{},
-					{},
-					VkAttachmentReference{ 0u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL },
-					{},
-				} );
-			ashes::VkSubpassDependencyArray dependencies;
-			ashes::RenderPassCreateInfo createInfo
-			{
-				0u,
-				std::move( attaches ),
-				std::move( subpasses ),
-				std::move( dependencies ),
-			};
-			auto result = device->createRenderPass( name
-				, std::move( createInfo ) );
-			return result;
-		}
-
 		ShaderPtr doGetVertexShader( RenderSystem & renderSystem )
 		{
 			using namespace sdw;
@@ -101,7 +61,7 @@ namespace castor3d
 
 	StencilPass::StencilPass( Engine const & engine
 		, String const & prefix
-		, ashes::ImageView const & depthView
+		, crg::ImageViewId depthView
 		, MatrixUbo & matrixUbo
 		, UniformBufferT< ModelUboConfiguration > const & modelUbo )
 		: m_engine{ engine }
@@ -118,7 +78,8 @@ namespace castor3d
 	{
 		m_vbo = &vbo;
 		auto & renderSystem = *m_engine.getRenderSystem();
-		VkExtent2D size{ m_depthView.image->getDimensions().width, m_depthView.image->getDimensions().height };
+		VkExtent2D size{ m_depthView.data->image.data->info.extent.width
+			, m_depthView.data->image.data->info.extent.height };
 		auto name = m_prefix + "StencilPass";
 
 		ashes::VkDescriptorSetLayoutBindingArray setLayoutBindings
@@ -142,13 +103,6 @@ namespace castor3d
 		m_descriptorSet->createSizedBinding( m_descriptorLayout->getBinding( 1u )
 			, m_modelUbo.getBuffer() );
 		m_descriptorSet->update();
-
-		m_renderPass = doCreateRenderPass( name, device, m_depthView );
-		ashes::ImageViewCRefArray attaches
-		{
-			m_depthView
-		};
-		m_frameBuffer = m_renderPass->createFrameBuffer( name, size, std::move( attaches ) );
 
 		m_program =
 		{
@@ -196,29 +150,30 @@ namespace castor3d
 				*m_renderPass,
 			} );
 
-		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( name, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
-		m_finished = device->createSemaphore( name );
+		// TODO CRG
+		//m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( name, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
+		//m_finished = device->createSemaphore( name );
 
-		m_commandBuffer->begin();
-		m_commandBuffer->beginDebugBlock(
-			{
-				"Deferred - Stencil",
-				makeFloatArray( m_engine.getNextRainbowColour() ),
-			} );
-		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
-			, m_depthView.makeDepthStencilAttachment( VK_IMAGE_LAYOUT_UNDEFINED ) );
-		m_commandBuffer->beginRenderPass( *m_renderPass
-			, *m_frameBuffer
-			, { defaultClearDepthStencil }
-			, VK_SUBPASS_CONTENTS_INLINE );
-		m_commandBuffer->bindPipeline( *m_pipeline );
-		m_commandBuffer->bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );
-		m_commandBuffer->bindVertexBuffer( 0u, vbo.getBuffer(), 0u );
-		m_commandBuffer->draw( uint32_t( vbo.getSize() / vertexLayout.vertexBindingDescriptions[0].stride ) );
-		m_commandBuffer->endRenderPass();
-		m_commandBuffer->endDebugBlock();
-		m_commandBuffer->end();
+		//m_commandBuffer->begin();
+		//m_commandBuffer->beginDebugBlock(
+		//	{
+		//		"Deferred - Stencil",
+		//		makeFloatArray( m_engine.getNextRainbowColour() ),
+		//	} );
+		//m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+		//	, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
+		//	, m_depthView.makeDepthStencilAttachment( VK_IMAGE_LAYOUT_UNDEFINED ) );
+		//m_commandBuffer->beginRenderPass( *m_renderPass
+		//	, *m_frameBuffer
+		//	, { defaultClearDepthStencil }
+		//	, VK_SUBPASS_CONTENTS_INLINE );
+		//m_commandBuffer->bindPipeline( *m_pipeline );
+		//m_commandBuffer->bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );
+		//m_commandBuffer->bindVertexBuffer( 0u, vbo.getBuffer(), 0u );
+		//m_commandBuffer->draw( uint32_t( vbo.getSize() / vertexLayout.vertexBindingDescriptions[0].stride ) );
+		//m_commandBuffer->endRenderPass();
+		//m_commandBuffer->endDebugBlock();
+		//m_commandBuffer->end();
 	}
 
 	void StencilPass::cleanup()

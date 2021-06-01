@@ -88,7 +88,9 @@ namespace castor3d
 		 *\param[in]	vctConfig		L'UBO du voxelizer.
 		 *\param[in]	type			Le type de source lumineuse.
 		 */
-		MeshLightPass( RenderDevice const & device
+		MeshLightPass( crg::FrameGraph & graph
+			, crg::FramePass const *& previousPass
+			, RenderDevice const & device
 			, castor::String const & suffix
 			, LightPassConfig const & lpConfig
 			, VoxelizerUbo const * vctConfig

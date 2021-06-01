@@ -52,7 +52,7 @@ namespace castor3d
 			{
 				{
 					0u,
-					lpResult[LpTexture::eDepth].getTexture()->getPixelFormat(),
+					lpResult[LpTexture::eDepth].getFormat(),
 					VK_SAMPLE_COUNT_1_BIT,
 					VK_ATTACHMENT_LOAD_OP_LOAD,
 					VK_ATTACHMENT_STORE_OP_STORE,
@@ -63,7 +63,7 @@ namespace castor3d
 				},
 				{
 					0u,
-					lpResult[LpTexture::eDiffuse].getTexture()->getPixelFormat(),
+					lpResult[LpTexture::eDiffuse].getFormat(),
 					VK_SAMPLE_COUNT_1_BIT,
 					loadOp,
 					VK_ATTACHMENT_STORE_OP_STORE,
@@ -74,7 +74,7 @@ namespace castor3d
 				},
 				{
 					0u,
-					lpResult[LpTexture::eSpecular].getTexture()->getPixelFormat(),
+					lpResult[LpTexture::eSpecular].getFormat(),
 					VK_SAMPLE_COUNT_1_BIT,
 					loadOp,
 					VK_ATTACHMENT_STORE_OP_STORE,
@@ -94,7 +94,7 @@ namespace castor3d
 			{
 				attaches.push_back( {
 					0u,
-					lpResult[LpTexture::eIndirectDiffuse].getTexture()->getPixelFormat(),
+					lpResult[LpTexture::eIndirectDiffuse].getFormat(),
 					VK_SAMPLE_COUNT_1_BIT,
 					VK_ATTACHMENT_LOAD_OP_CLEAR,
 					VK_ATTACHMENT_STORE_OP_STORE,
@@ -105,7 +105,7 @@ namespace castor3d
 					} );
 				attaches.push_back( {
 					0u,
-					lpResult[LpTexture::eIndirectSpecular].getTexture()->getPixelFormat(),
+					lpResult[LpTexture::eIndirectSpecular].getFormat(),
 					VK_SAMPLE_COUNT_1_BIT,
 					VK_ATTACHMENT_LOAD_OP_CLEAR,
 					VK_ATTACHMENT_STORE_OP_STORE,
@@ -267,11 +267,15 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	DirectionalLightPass::DirectionalLightPass( RenderDevice const & device
+	DirectionalLightPass::DirectionalLightPass( crg::FrameGraph & graph
+		, crg::FramePass const *& previousPass
+		, RenderDevice const & device
 		, castor::String const & suffix
 		, LightPassConfig const & lpConfig
 		, VoxelizerUbo const * vctConfig )
-		: LightPass{ device
+		: LightPass{ graph
+			, previousPass
+			, device
 			, "Directional" + suffix
 			, doCreateRenderPass( device
 				, lpConfig.lpResult

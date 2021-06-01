@@ -72,11 +72,15 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	SpotLightPass::SpotLightPass( RenderDevice const & device
+	SpotLightPass::SpotLightPass( crg::FrameGraph & graph
+		, crg::FramePass const *& previousPass
+		, RenderDevice const & device
 		, castor::String const & suffix
 		, LightPassConfig const & lpConfig
 		, VoxelizerUbo const * vctConfig )
-		: MeshLightPass{ device
+		: MeshLightPass{ graph
+			, previousPass
+			, device
 			, cuT( "Spot" ) + suffix
 			, lpConfig
 			, vctConfig

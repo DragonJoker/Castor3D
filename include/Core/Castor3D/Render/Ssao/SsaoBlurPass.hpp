@@ -54,7 +54,7 @@ namespace castor3d
 		 *\param[in]	bentInput		La texture de bent normals à flouter
 		 *\param[in]	normals			Le tampon de normales.
 		 */
-		SsaoBlurPass( Engine & engine
+		SsaoBlurPass( crg::FrameGraph & graph
 			, RenderDevice const & device
 			, castor::String const & prefix
 			, VkExtent2D const & size
@@ -64,7 +64,7 @@ namespace castor3d
 			, castor::Point2i const & axis
 			, TextureUnit const & input
 			, TextureUnit const & bentInput
-			, ashes::ImageView const & normals );
+			, crg::ImageViewId const & normals );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -136,12 +136,12 @@ namespace castor3d
 			castor::Point4f gaussian[2];
 		};
 
-		Engine & m_engine;
+		RenderDevice const & m_device;
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		GpInfoUbo const & m_gpInfoUbo;
 		TextureUnit const & m_input;
 		TextureUnit const & m_bentInput;
-		ashes::ImageView const & m_normals;
+		crg::ImageViewId const & m_normals;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
 		SsaoConfig const & m_config;
@@ -149,8 +149,6 @@ namespace castor3d
 		VkExtent2D m_size;
 		TextureUnit m_result;
 		TextureUnit m_bentResult;
-		ashes::RenderPassPtr m_renderPass;
-		ashes::FrameBufferPtr m_fbo;
 		RenderPassTimerSPtr m_timer;
 		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::SemaphorePtr m_finished;

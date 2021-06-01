@@ -32,14 +32,17 @@
 #include <CastorUtils/Graphics/Image.hpp>
 #include <CastorUtils/Miscellaneous/BlockTracker.hpp>
 
+#include <RenderGraph/FrameGraph.hpp>
+
 using namespace castor;
-using namespace castor3d;
 
 namespace castor3d
 {
 	namespace
 	{
-		std::vector< ShadowMap::PassData > createPasses( RenderDevice const & device
+		std::vector< ShadowMap::PassData > createPasses( crg::FrameGraph & graph
+			, crg::FramePass const *& previousPass
+			, RenderDevice const & device
 			, Scene & scene
 			, ShadowMap & shadowMap )
 		{
@@ -47,9 +50,16 @@ namespace castor3d
 			std::vector< ShadowMap::PassData > result;
 			Viewport viewport{ engine };
 			viewport.resize( Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize } );
+			auto & smResult = shadowMap.getShadowPassResult();
+			auto & depth = smResult[SmTexture::eDepth];
+			auto & linear = smResult[SmTexture::eNormalLinear];
+			auto & variance = smResult[SmTexture::eVariance];
+			auto & position = smResult[SmTexture::ePosition];
+			auto & flux = smResult[SmTexture::eFlux];
 
 			for ( auto i = 0u; i < shader::getSpotShadowMapCount(); ++i )
 			{
+				std::string debugName = "SpotSM" + std::to_string( i );
 				ShadowMap::PassData passData
 				{
 					std::make_unique< MatrixUbo >( device ),
@@ -61,11 +71,32 @@ namespace castor3d
 					nullptr,
 				};
 				passData.culler = std::make_unique< FrustumCuller >( scene, *passData.camera );
-				//passData.pass = std::make_shared< ShadowMapPassSpot >( device
-				//	, i
-				//	, *passData.matrixUbo
-				//	, *passData.culler
-				//	, shadowMap );
+				auto index = uint32_t( result.size() );
+				auto & matrixUbo = *passData.matrixUbo;
+				auto & culler = *passData.culler;
+				auto & pass = graph.createPass( debugName
+					, [index, &matrixUbo, &culler, &previousPass, &device, &shadowMap, &scene]( crg::FramePass const & pass
+						, crg::GraphContext const & context
+						, crg::RunnableGraph & graph )
+					{
+						auto result = std::make_unique< ShadowMapPassSpot >( pass
+							, context
+							, graph
+							, device
+							, index
+							, matrixUbo
+							, culler
+							, shadowMap );
+						shadowMap.setPass( index, result.get() );
+						return result;
+					} );
+				pass.addDependency( *previousPass );
+				previousPass = &pass;
+				pass.addOutputDepthView( depth.subViews[i], getClearValue( SmTexture::eDepth ) );
+				pass.addOutputColourView( linear.subViews[i], getClearValue( SmTexture::eNormalLinear ) );
+				pass.addOutputColourView( variance.subViews[i], getClearValue( SmTexture::eVariance ) );
+				pass.addOutputColourView( position.subViews[i], getClearValue( SmTexture::ePosition ) );
+				pass.addOutputColourView( flux.subViews[i], getClearValue( SmTexture::eFlux ) );
 				result.emplace_back( std::move( passData ) );
 			}
 
@@ -73,19 +104,33 @@ namespace castor3d
 		}
 	}
 
-	ShadowMapSpot::ShadowMapSpot( RenderDevice const & device
+	ShadowMapSpot::ShadowMapSpot( crg::FrameGraph & graph
+		, crg::FramePass const & previousPass
+		, RenderDevice const & device
 		, Scene & scene )
 		: ShadowMap{ device
 			, scene
 			, LightType::eSpot
-			, ShadowMapResult{ *scene.getEngine()
+			, ShadowMapResult{ graph
+				, device
 				, cuT( "Spot" )
 				, 0u
 				, Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize }
 				, shader::getSpotShadowMapCount() }
 			, shader::getSpotShadowMapCount() }
 	{
-		m_passes = createPasses( device, scene, *this );
+		auto previous = &previousPass;
+		m_passes = createPasses( graph
+			, previous
+			, device
+			, scene
+			, *this );
+		//m_blur = std::make_unique< GaussianBlur >( graph
+		//	, *previous
+		//	, device
+		//	, "SpotSM"
+		//	, m_result[SmTexture::eVariance].wholeView
+		//	, 5u );
 		log::trace << "Created ShadowMapSpot" << std::endl;
 	}
 
@@ -103,109 +148,6 @@ namespace castor3d
 	void ShadowMapSpot::update( GpuUpdater & updater )
 	{
 		m_passes[updater.index].pass->update( updater );
-	}
-
-	void ShadowMapSpot::doInitialise( RenderDevice const & device )
-	{
-		VkExtent2D size
-		{
-			ShadowMapPassSpot::TextureSize,
-			ShadowMapPassSpot::TextureSize,
-		};
-		auto & depth = *m_result[SmTexture::eDepth].getTexture();
-		auto & linear = *m_result[SmTexture::eNormalLinear].getTexture();
-		auto & variance = *m_result[SmTexture::eVariance].getTexture();
-		auto & position = *m_result[SmTexture::ePosition].getTexture();
-		auto & flux = *m_result[SmTexture::eFlux].getTexture();
-		m_blur = std::make_unique< GaussianBlur >( *getEngine()
-			, device
-			, "ShadowMapSpot"
-			, variance.getDefaultView()
-			, 5u );
-
-		for ( auto i = 0u; i < m_passes.size(); ++i )
-		{
-			std::string debugName = "ShadowMapSpot" + std::to_string( i );
-			auto renderPass = m_passes[i].pass->getRenderPass();
-			ashes::ImageViewCRefArray attaches;
-			attaches.emplace_back( depth.getLayer2DView( i ).getTargetView() );
-			attaches.emplace_back( linear.getLayer2DView( i ).getTargetView() );
-			attaches.emplace_back( variance.getLayer2DView( i ).getTargetView() );
-			attaches.emplace_back( position.getLayer2DView( i ).getTargetView() );
-			attaches.emplace_back( flux.getLayer2DView( i ).getTargetView() );
-			m_passesData.push_back(
-				{
-					device.graphicsCommandPool->createCommandBuffer( debugName ),
-					std::make_unique< ashes::FrameBuffer >( *device
-						, debugName
-						, renderPass
-						, size
-						, std::move( attaches ) ),
-					device->createSemaphore( debugName ),
-					{ nullptr, nullptr }
-				} );
-			m_passesData.back().blurCommands = m_blur->getCommands( true, i );
-		}
-	}
-
-	ashes::Semaphore const & ShadowMapSpot::doRender( RenderDevice const & device
-		, ashes::Semaphore const & toWait
-		, uint32_t index )
-	{
-		auto & pass = m_passes[index];
-		auto & commandBuffer = *m_passesData[index].commandBuffer;
-		auto & frameBuffer = *m_passesData[index].frameBuffer;
-		auto & finished = *m_passesData[index].finished;
-		auto & blurCommands = m_passesData[index].blurCommands;
-
-		auto & timer = pass.pass->getTimer();
-		auto timerBlock = timer.start();
-
-		commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-		commandBuffer.beginDebugBlock(
-			{
-				m_name + " generation " + std::to_string( index ),
-				makeFloatArray( getEngine()->getNextRainbowColour() ),
-			} );
-		timerBlock->notifyPassRender();
-		timerBlock->beginPass( commandBuffer );
-		commandBuffer.beginRenderPass( pass.pass->getRenderPass()
-			, frameBuffer
-			, frameBuffer.getDimensions()
-			, getClearValues()
-			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
-
-		if ( pass.pass->hasNodes() )
-		{
-			commandBuffer.executeCommands( { pass.pass->getCommandBuffer() } );
-		}
-
-		commandBuffer.endRenderPass();
-		timerBlock->endPass( commandBuffer );
-		commandBuffer.endDebugBlock();
-		commandBuffer.end();
-
-		pass.pass->setUpToDate();
-
-		auto * result = &toWait;
-		device.graphicsQueue->submit( commandBuffer
-			, *result
-			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, finished
-			, nullptr );
-		result = &finished;
-
-		if ( static_cast< ShadowMapPassSpot const & >( *pass.pass ).getShadowType() == ShadowType::eVariance )
-		{
-			device.graphicsQueue->submit( *blurCommands.commandBuffer
-				, *result
-				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-				, *blurCommands.semaphore
-				, nullptr );
-			result = blurCommands.semaphore.get();
-		}
-
-		return *result;
 	}
 
 	bool ShadowMapSpot::isUpToDate( uint32_t index )const

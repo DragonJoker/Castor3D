@@ -43,7 +43,7 @@ namespace castor3d
 			BntImgIdx,
 		};
 
-		ShaderPtr doGetVertexProgram( Engine & engine )
+		ShaderPtr doGetVertexProgram()
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -62,8 +62,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 		
-		ShaderPtr doGetPixelProgram( Engine & engine
-			, bool useNormalsBuffer )
+		ShaderPtr doGetPixelProgram( bool useNormalsBuffer )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -348,14 +347,13 @@ namespace castor3d
 #undef keyPassThrough
 		}
 
-		ashes::PipelineShaderStageCreateInfoArray doGetProgram( Engine & engine
-			, RenderDevice const & device
+		ashes::PipelineShaderStageCreateInfoArray doGetProgram( RenderDevice const & device
 			, SsaoConfig const & config
 			, ShaderModule & vertexShader
 			, ShaderModule & pixelShader )
 		{
-			vertexShader.shader = doGetVertexProgram( engine );
-			pixelShader.shader = doGetPixelProgram( engine, config.useNormalsBuffer );
+			vertexShader.shader = doGetVertexProgram();
+			pixelShader.shader = doGetPixelProgram( config.useNormalsBuffer );
 			ashes::PipelineShaderStageCreateInfoArray result
 			{
 				makeShaderState( device, vertexShader ),
@@ -364,10 +362,11 @@ namespace castor3d
 			return result;
 		}
 
-		SamplerSPtr doCreateSampler( Engine & engine
+		SamplerSPtr doCreateSampler( RenderDevice const & device
 			, String const & name
 			, VkSamplerAddressMode mode )
 		{
+			auto & engine = *device.renderSystem.getEngine();
 			SamplerSPtr sampler;
 
 			if ( engine.getSamplerCache().has( name ) )
@@ -386,14 +385,13 @@ namespace castor3d
 			return sampler;
 		}
 
-		TextureUnit doCreateTexture( Engine & engine
-			, RenderDevice const & device
+		TextureUnit doCreateTexture( RenderDevice const & device
 			, String const & name
 			, VkFormat format
 			, VkExtent2D const & size )
 		{
-			auto & renderSystem = *engine.getRenderSystem();
-			auto sampler = doCreateSampler( engine, name, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+			auto & renderSystem = device.renderSystem;
+			auto sampler = doCreateSampler( device, name, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 			
 			ashes::ImageCreateInfo image
 			{
@@ -412,7 +410,7 @@ namespace castor3d
 				, image
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, name );
-			TextureUnit result{ engine };
+			TextureUnit result{ *renderSystem.getEngine() };
 			result.setTexture( ssaoResult );
 			result.setSampler( sampler );
 			result.initialise( device );
@@ -526,7 +524,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	SsaoBlurPass::SsaoBlurPass( Engine & engine
+	SsaoBlurPass::SsaoBlurPass( crg::FrameGraph & graph
 		, RenderDevice const & device
 		, String const & prefix
 		, VkExtent2D const & size
@@ -536,12 +534,12 @@ namespace castor3d
 		, Point2i const & axis
 		, TextureUnit const & input
 		, TextureUnit const & bentInput
-		, ashes::ImageView const & normals )
+		, crg::ImageViewId const & normals )
 		: RenderQuad{ device
 			, prefix + cuT( "SsaoBlur" )
 			, VK_FILTER_NEAREST
 			, { createBlurBindings() } }
-		, m_engine{ engine }
+		, m_device{ device }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_input{ input }
@@ -550,64 +548,61 @@ namespace castor3d
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName() }
 		, m_config{ config }
-		, m_program{ doGetProgram( m_engine, m_device, m_config, m_vertexShader, m_pixelShader ) }
+		, m_program{ doGetProgram( m_device, m_config, m_vertexShader, m_pixelShader ) }
 		, m_size{ size }
-		, m_result{ doCreateTexture( m_engine, m_device, getName() + cuT( "Result" ), SsaoBlurPass::ResultFormat, m_size ) }
-		, m_bentResult{ doCreateTexture( m_engine, m_device, getName() + cuT( "BentNormals" ), m_bentInput.getTexture()->getPixelFormat(), m_size ) }
-		, m_renderPass{ doCreateRenderPass( m_device, getName() ) }
-		, m_fbo{ doCreateFrameBuffer( m_engine, getName(), *m_renderPass, m_result, m_bentResult ) }
+		, m_result{ doCreateTexture( m_device, getName() + cuT( "Result" ), SsaoBlurPass::ResultFormat, m_size ) }
+		, m_bentResult{ doCreateTexture( m_device, getName() + cuT( "BentNormals" ), m_bentInput.getTexture()->getPixelFormat(), m_size ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_device, cuT( "Scalable Ambient Obscurance" ), prefix + cuT( " Blur" ) ) }
 		, m_finished{ m_device->createSemaphore( getName() ) }
 		, m_configurationUbo{ m_device.uboPools->getBuffer< Configuration >( 0u ) }
 	{
-		auto & configuration = m_configurationUbo.getData();
-		configuration.axis = axis;
-			makeDescriptorSetLayoutBinding( InpImgIdx
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-		createPipelineAndPass( m_size
-			, Position{}
-			, m_program
-			, *m_renderPass
-			, {
-				makeDescriptorWrite( m_ssaoConfigUbo.getUbo(), SsaoCfgUboIdx ),
-				makeDescriptorWrite( m_gpInfoUbo.getUbo(), GpInfoUboIdx ),
-				makeDescriptorWrite( m_configurationUbo, BlurCfgUboIdx ),
-				makeDescriptorWrite( m_normals
-					, m_sampler->getSampler()
-					, NmlImgIdx ),
-				makeDescriptorWrite( m_input.getTexture()->getDefaultView().getSampledView()
-					, m_input.getSampler()->getSampler()
-					, InpImgIdx ),
-				makeDescriptorWrite( m_bentInput.getTexture()->getDefaultView().getSampledView()
-					, m_bentInput.getSampler()->getSampler()
-					, BntImgIdx ),
-			} );
-		m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer( getName() );
+		// TODO CRG
+		//auto & configuration = m_configurationUbo.getData();
+		//configuration.axis = axis;
+		//	makeDescriptorSetLayoutBinding( InpImgIdx
+		//		, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+		//		, VK_SHADER_STAGE_FRAGMENT_BIT ),
+		//createPipelineAndPass( m_size
+		//	, Position{}
+		//	, m_program
+		//	, *m_renderPass
+		//	, {
+		//		makeDescriptorWrite( m_ssaoConfigUbo.getUbo(), SsaoCfgUboIdx ),
+		//		makeDescriptorWrite( m_gpInfoUbo.getUbo(), GpInfoUboIdx ),
+		//		makeDescriptorWrite( m_configurationUbo, BlurCfgUboIdx ),
+		//		makeDescriptorWrite( m_normals
+		//			, m_sampler->getSampler()
+		//			, NmlImgIdx ),
+		//		makeDescriptorWrite( m_input.getTexture()->getDefaultView().getSampledView()
+		//			, m_input.getSampler()->getSampler()
+		//			, InpImgIdx ),
+		//		makeDescriptorWrite( m_bentInput.getTexture()->getDefaultView().getSampledView()
+		//			, m_bentInput.getSampler()->getSampler()
+		//			, BntImgIdx ),
+		//	} );
+		//m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer( getName() );
 
-		m_commandBuffer->begin();
-		m_commandBuffer->beginDebugBlock(
-			{
-				"SSAO - " + getName(),
-				makeFloatArray( m_engine.getNextRainbowColour() ),
-			} );
-		m_timer->beginPass( *m_commandBuffer );
-		m_commandBuffer->beginRenderPass( *m_renderPass
-			, *m_fbo
-			, { opaqueWhiteClearColor, opaqueWhiteClearColor }
-			, VK_SUBPASS_CONTENTS_INLINE );
-		registerPass( *m_commandBuffer );
-		m_timer->endPass( *m_commandBuffer );
-		m_commandBuffer->endRenderPass();
-		m_commandBuffer->endDebugBlock();
-		m_commandBuffer->end();
+		//m_commandBuffer->begin();
+		//m_commandBuffer->beginDebugBlock(
+		//	{
+		//		"SSAO - " + getName(),
+		//		makeFloatArray( m_engine.getNextRainbowColour() ),
+		//	} );
+		//m_timer->beginPass( *m_commandBuffer );
+		//m_commandBuffer->beginRenderPass( *m_renderPass
+		//	, *m_fbo
+		//	, { opaqueWhiteClearColor, opaqueWhiteClearColor }
+		//	, VK_SUBPASS_CONTENTS_INLINE );
+		//registerPass( *m_commandBuffer );
+		//m_timer->endPass( *m_commandBuffer );
+		//m_commandBuffer->endRenderPass();
+		//m_commandBuffer->endDebugBlock();
+		//m_commandBuffer->end();
 	}
 
 	SsaoBlurPass::~SsaoBlurPass()
 	{
 		m_timer.reset();
-		m_fbo.reset();
-		m_renderPass.reset();
 		m_result.cleanup();
 	}
 
