@@ -48,14 +48,16 @@ namespace castor3d
 		 *\param[in]	smResult		La shadow map.
 		 *\param[in]	downscaleResult	Le résultat downscaled.
 		 */
-		C3D_API RsmGIPass( RenderDevice const & device
+		C3D_API RsmGIPass( crg::FrameGraph & graph
+			, crg::FramePass const *& previousPass
+			, RenderDevice const & device
 			, LightCache const & lightCache
 			, LightType lightType
 			, VkExtent2D const & size
 			, GpInfoUbo const & gpInfo
 			, OpaquePassResult const & gpResult
 			, ShadowMapResult const & smResult
-			, TextureUnitArray const & downscaleResult );
+			, crg::ImageViewIdArray const & downscaleResult );
 		/**
 		 *\~english
 		 *\brief		Renders the pass.
@@ -73,9 +75,9 @@ namespace castor3d
 		C3D_API void accept( PipelineVisitorBase & visitor );
 		C3D_API void update( Light const & light );
 
-		TextureUnitArray const & getResult()const
+		crg::ImageViewIdArray const & getResult()const
 		{
-			return m_result;
+			return m_resultViews;
 		}
 
 		RsmConfigUbo const & getConfigUbo()const
@@ -93,7 +95,8 @@ namespace castor3d
 		OpaquePassResult const & m_gpResult;
 		ShadowMapResult const & m_smResult;
 		GpInfoUbo const & m_gpInfo;
-		TextureUnitArray m_result;
+		crg::ImageIdArray m_result;
+		crg::ImageViewIdArray m_resultViews;
 		LightType m_lightType;
 		ShaderModule m_vertexShader;
 		ShaderModule m_pixelShader;

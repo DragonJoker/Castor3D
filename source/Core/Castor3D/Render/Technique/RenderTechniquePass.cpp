@@ -51,6 +51,19 @@ namespace castor3d
 {
 	//*************************************************************************************************
 
+	void bindTexture( VkImageView view
+		, VkSampler sampler
+		, ashes::WriteDescriptorSetArray & writes
+		, uint32_t & index )
+	{
+		writes.push_back( { index++
+			, 0u
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, { { sampler
+				, view
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
+	}
+	
 	void bindTexture( ashes::ImageView const & view
 		, ashes::Sampler const & sampler
 		, ashes::WriteDescriptorSetArray & writes
@@ -64,7 +77,8 @@ namespace castor3d
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
 	}
 
-	void bindShadowMaps( PipelineFlags const & pipelineFlags
+	void bindShadowMaps( crg::RunnableGraph const & graph
+		, PipelineFlags const & pipelineFlags
 		, ShadowMapLightTypeArray const & shadowMaps
 		, ashes::WriteDescriptorSetArray & writes
 		, uint32_t & index )
@@ -77,14 +91,16 @@ namespace castor3d
 				{
 					auto & shadowMap = shadowMapRef.first.get();
 					auto & result = shadowMap.getShadowPassResult();
-					CU_Require( result[SmTexture::eNormalLinear].getTexture()->isInitialised() );
-					bindTexture( result[SmTexture::eNormalLinear].getTexture()->getDefaultView().getSampledView()
-						, result[SmTexture::eNormalLinear].getSampler()->getSampler()
+					auto shadow = graph.getImageView( result[SmTexture::eNormalLinear].wholeView );
+					CU_Require( shadow != VK_NULL_HANDLE );
+					bindTexture( shadow
+						, *result[SmTexture::eNormalLinear].sampler
 						, writes
 						, index );
-					CU_Require( result[SmTexture::eVariance].getTexture()->isInitialised() );
-					bindTexture( result[SmTexture::eVariance].getTexture()->getDefaultView().getSampledView()
-						, result[SmTexture::eVariance].getSampler()->getSampler()
+					auto variance = graph.getImageView( result[SmTexture::eVariance].wholeView );
+					CU_Require( variance != VK_NULL_HANDLE );
+					bindTexture( variance
+						, *result[SmTexture::eVariance].sampler
 						, writes
 						, index );
 				}
@@ -289,7 +305,8 @@ namespace castor3d
 
 	namespace
 	{
-		void fillAdditionalDescriptor( RenderPipeline const & pipeline
+		void fillAdditionalDescriptor( crg::RunnableGraph const & graph
+			, RenderPipeline const & pipeline
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, Scene const & scene
 			, SceneNode const & sceneNode
@@ -338,7 +355,8 @@ namespace castor3d
 				}
 			}
 
-			bindShadowMaps( pipeline.getFlags()
+			bindShadowMaps( graph
+				, pipeline.getFlags()
 				, shadowMaps
 				, descriptorWrites
 				, index );
@@ -372,24 +390,25 @@ namespace castor3d
 					descriptorWrites.push_back( llpvConfigUbo->getDescriptorWrite( index++ ) );
 				}
 
-				if ( checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
-					|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) )
-				{
-					CU_Require( lpvResult );
-					auto & lpv = *lpvResult;
-					bindTexture( lpv[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
-						, lpv[LpvTexture::eR].getSampler()->getSampler()
-						, descriptorWrites
-						, index );
-					bindTexture( lpv[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
-						, lpv[LpvTexture::eG].getSampler()->getSampler()
-						, descriptorWrites
-						, index );
-					bindTexture( lpv[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
-						, lpv[LpvTexture::eG].getSampler()->getSampler()
-						, descriptorWrites
-						, index );
-				}
+				// TODO CRG
+				//if ( checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
+				//	|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) )
+				//{
+				//	CU_Require( lpvResult );
+				//	auto & lpv = *lpvResult;
+				//	bindTexture( lpv[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
+				//		, *lpv[LpvTexture::eR].sampler
+				//		, descriptorWrites
+				//		, index );
+				//	bindTexture( lpv[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
+				//		, *lpv[LpvTexture::eG].sampler
+				//		, descriptorWrites
+				//		, index );
+				//	bindTexture( lpv[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
+				//		, *lpv[LpvTexture::eG].sampler
+				//		, descriptorWrites
+				//		, index );
+				//}
 			}
 		}
 	}
@@ -399,7 +418,8 @@ namespace castor3d
 		, BillboardRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		fillAdditionalDescriptor( pipeline
+		fillAdditionalDescriptor( m_graph
+			, pipeline
 			, descriptorWrites
 			, m_scene
 			, node.sceneNode
@@ -417,7 +437,8 @@ namespace castor3d
 		, SubmeshRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		fillAdditionalDescriptor( pipeline
+		fillAdditionalDescriptor( m_graph
+			, pipeline
 			, descriptorWrites
 			, m_scene
 			, node.sceneNode

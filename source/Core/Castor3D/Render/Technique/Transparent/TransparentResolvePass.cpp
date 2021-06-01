@@ -172,15 +172,16 @@ namespace castor3d
 		{
 			auto & layout = pool.getLayout();
 			auto result = pool.createDescriptorSet( "TransparentResolveTex", 1u );
-			result->createBinding( layout.getBinding( depthTexIndex )
-				, wbResult[WbTexture::eDepth].getTexture()->getDefaultView().getSampledView()
-				, sampler.getSampler() );
-			result->createBinding( layout.getBinding( accumTexIndex )
-				, wbResult[WbTexture::eAccumulation].getTexture()->getDefaultView().getSampledView()
-				, sampler.getSampler() );
-			result->createBinding( layout.getBinding( revealTexIndex )
-				, wbResult[WbTexture::eRevealage].getTexture()->getDefaultView().getSampledView()
-				, sampler.getSampler() );
+			// TODO CRG
+			//result->createBinding( layout.getBinding( depthTexIndex )
+			//	, wbResult[WbTexture::eDepth].getTexture()->getDefaultView().getSampledView()
+			//	, sampler.getSampler() );
+			//result->createBinding( layout.getBinding( accumTexIndex )
+			//	, wbResult[WbTexture::eAccumulation].getTexture()->getDefaultView().getSampledView()
+			//	, sampler.getSampler() );
+			//result->createBinding( layout.getBinding( revealTexIndex )
+			//	, wbResult[WbTexture::eRevealage].getTexture()->getDefaultView().getSampledView()
+			//	, sampler.getSampler() );
 			result->update();
 			return result;
 		}
@@ -476,33 +477,34 @@ namespace castor3d
 		, ashes::BufferBase const & vbo
 		, TransparentPassResult const & wbResult )
 	{
-		m_commandBuffer->begin();
-		m_commandBuffer->beginDebugBlock(
-			{
-				"Weighted Blended - Transparent resolve",
-				makeFloatArray( m_engine.getNextRainbowColour() ),
-			} );
-		m_timer.beginPass( *m_commandBuffer );
-		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, wbResult[WbTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ) );
-		m_commandBuffer->beginRenderPass( m_renderPass
-			, frameBuffer
-			, { transparentBlackClearColor }
-			, VK_SUBPASS_CONTENTS_INLINE );
-		m_commandBuffer->bindPipeline( *m_pipeline );
-		m_commandBuffer->setViewport( ashes::makeViewport( frameBuffer.getDimensions() ) );
-		m_commandBuffer->setScissor( ashes::makeScissor( frameBuffer.getDimensions() ) );
-		m_commandBuffer->bindDescriptorSets( { uboDescriptorSet, texDescriptorSet }, *m_pipelineLayout );
-		m_commandBuffer->bindVertexBuffer( 0u, vbo, 0u );
-		m_commandBuffer->draw( 6u );
-		m_commandBuffer->endRenderPass();
-		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
-			, wbResult[WbTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-		m_timer.endPass( *m_commandBuffer );
-		m_commandBuffer->endDebugBlock();
-		m_commandBuffer->end();
+		// TODO CRG
+		//m_commandBuffer->begin();
+		//m_commandBuffer->beginDebugBlock(
+		//	{
+		//		"Weighted Blended - Transparent resolve",
+		//		makeFloatArray( m_engine.getNextRainbowColour() ),
+		//	} );
+		//m_timer.beginPass( *m_commandBuffer );
+		//m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT
+		//	, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+		//	, wbResult[WbTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ) );
+		//m_commandBuffer->beginRenderPass( m_renderPass
+		//	, frameBuffer
+		//	, { transparentBlackClearColor }
+		//	, VK_SUBPASS_CONTENTS_INLINE );
+		//m_commandBuffer->bindPipeline( *m_pipeline );
+		//m_commandBuffer->setViewport( ashes::makeViewport( frameBuffer.getDimensions() ) );
+		//m_commandBuffer->setScissor( ashes::makeScissor( frameBuffer.getDimensions() ) );
+		//m_commandBuffer->bindDescriptorSets( { uboDescriptorSet, texDescriptorSet }, *m_pipelineLayout );
+		//m_commandBuffer->bindVertexBuffer( 0u, vbo, 0u );
+		//m_commandBuffer->draw( 6u );
+		//m_commandBuffer->endRenderPass();
+		//m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+		//	, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
+		//	, wbResult[WbTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		//m_timer.endPass( *m_commandBuffer );
+		//m_commandBuffer->endDebugBlock();
+		//m_commandBuffer->end();
 	}
 
 	void TransparentResolveProgram::accept( PipelineVisitorBase & visitor )

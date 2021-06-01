@@ -27,127 +27,34 @@ namespace castor3d
 		, m_device{ device }
 		, m_scene{ scene }
 		, m_lightType{ lightType }
-		, m_name{ cuT( "ShadowMap" ) + castor::string::snakeToCamelCase( getName( lightType ) ) }
+		, m_name{ castor::string::snakeToCamelCase( getName( lightType ) ) + "SM" }
 		, m_result{ std::move( result ) }
 		, m_count{ count }
-		, m_finished{ m_device->createSemaphore( m_name ) }
 	{
-	}
-
-	ShadowMap::~ShadowMap()
-	{
-		m_finished.reset();
-		m_passes.clear();
-		m_initialised = false;
-		m_result.cleanup();
 	}
 
 	void ShadowMap::accept( PipelineVisitorBase & visitor )
 	{
-		if ( m_initialised )
+		for ( uint32_t i = 1u; i < uint32_t( SmTexture::eCount ); ++i )
 		{
-			for ( uint32_t i = 1u; i < uint32_t( SmTexture::eCount ); ++i )
-			{
-				uint32_t index = 0u;
+			uint32_t index = 0u;
 
-				if ( visitor.config.forceMiplevelsVisit )
-				{
-					m_result[SmTexture( i )].getTexture()->forEachLeafView( [&index, &visitor, this, i]( TextureViewUPtr const & view )
-						{
-							visitor.visit( m_name + getName( SmTexture( i ) ) + cuT( "L" ) + castor::string::toString( index++ )
-								, view->getSampledView()
-								, ( ashes::isDepthOrStencilFormat( view->getTargetView()->format )
-									? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
-									: VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )
-								, TextureFactors{}.invert( true ) );
-						} );
-				}
-				else
-				{
-					m_result[SmTexture( i )].getTexture()->forEachView( [&index, &visitor, this, i]( TextureViewUPtr const & view )
-						{
-							visitor.visit( m_name + getName( SmTexture( i ) ) + cuT( "L" ) + castor::string::toString( index++ )
-								, view->getSampledView()
-								, ( ashes::isDepthOrStencilFormat( view->getTargetView()->format )
-									? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
-									: VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )
-								, TextureFactors{}.invert( true ) );
-						} );
-				}
+			for ( auto & view : m_result[SmTexture( i )].subViews )
+			{
+				visitor.visit( m_name + getName( SmTexture( i ) ) + cuT( "L" ) + castor::string::toString( index++ )
+					, view
+					, ( ashes::isDepthOrStencilFormat( view.data->info.format )
+						? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
+						: VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )
+					, TextureFactors{}.invert( true ) );
 			}
 		}
 	}
 
-	bool ShadowMap::initialise()
+	void ShadowMap::setPass( uint32_t index
+		, ShadowMapPass * pass )
 	{
-		if ( !m_initialised
-			&& m_scene.hasShadows( m_lightType ) )
-		{
-			m_result.initialise( m_device );
-			{
-				auto cmdBuffer = m_device.graphicsCommandPool->createCommandBuffer( m_name + "Clear" );
-				cmdBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-				uint32_t index = 0u;
-
-				for ( auto & texture : m_result )
-				{
-					cmdBuffer->beginDebugBlock(
-						{
-							m_name + getName( SmTexture( index ) ) + " clear",
-							makeFloatArray( getEngine()->getNextRainbowColour() ),
-						} );
-					texture->getTexture()->forEachLeafView( [&cmdBuffer, index]( TextureViewUPtr const & view )
-						{
-							cmdBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
-								, VK_PIPELINE_STAGE_TRANSFER_BIT
-								, view->getTargetView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
-
-							if ( ashes::isDepthOrStencilFormat( view->getTargetView()->format ) )
-							{
-								cmdBuffer->clear( view->getTargetView()
-									, getClearValue( SmTexture( index ) ).depthStencil );
-								cmdBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-									, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
-									, view->getTargetView().makeDepthStencilAttachment( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
-							}
-							else
-							{
-								cmdBuffer->clear( view->getTargetView()
-									, getClearValue( SmTexture( index ) ).color );
-								cmdBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-									, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-									, view->getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
-							}
-						} );
-					cmdBuffer->endDebugBlock();
-					++index;
-				}
-
-				cmdBuffer->end();
-				auto fence = m_device->createFence( m_name + "Clear" );
-				m_device.graphicsQueue->submit( *cmdBuffer, fence.get() );
-				fence->wait( ashes::MaxTimeout );
-			}
-
-			doInitialise( m_device );
-			m_initialised = true;
-		}
-
-		return m_initialised;
-	}
-
-	ashes::Semaphore const & ShadowMap::render( RenderDevice const & device
-		, ashes::Semaphore const & toWait
-		, uint32_t index )
-	{
-#if !C3D_MeasureShadowMapImpact
-		if ( isUpToDate( index ) )
-		{
-			return toWait;
-		}
-#endif
-
-		return doRender( device, toWait, index );
+		m_passes[index].pass = pass;
 	}
 
 	ashes::VkClearValueArray const & ShadowMap::getClearValues()const
@@ -172,12 +79,12 @@ namespace castor3d
 	ashes::Sampler const & ShadowMap::getSampler( SmTexture texture
 		, uint32_t index )const
 	{
-		return m_result[texture].getSampler()->getSampler();
+		return *m_result[texture].sampler;
 	}
 
-	ashes::ImageView const & ShadowMap::getView( SmTexture texture
+	crg::ImageViewId ShadowMap::getView( SmTexture texture
 		, uint32_t index )const
 	{
-		return m_result[texture].getTexture()->getDefaultView().getSampledView();
+		return m_result[texture].wholeView;
 	}
 }

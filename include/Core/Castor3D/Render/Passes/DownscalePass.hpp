@@ -13,6 +13,8 @@ See LICENSE file in root folder
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Sync/Semaphore.hpp>
 
+#include <RenderGraph/FrameGraphPrerequisites.hpp>
+
 namespace castor3d
 {
 	class DownscalePass
@@ -34,20 +36,12 @@ namespace castor3d
 		 *\param[in]	srcViews	Les vues source (devant avoir le mêmes dimensions).
 		 *\param[in]	dstSize		La taille voulue.
 		 */
-		C3D_API DownscalePass( Engine & engine
+		C3D_API DownscalePass( crg::FrameGraph & graph
+			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, castor::String const & category
-			, ashes::ImageViewArray const & srcViews
+			, crg::ImageViewIdArray const & srcViews
 			, VkExtent2D const & dstSize );
-		/**
-		 *\~english
-		 *\brief		Renders the stencil pass.
-		 *\param[in]	toWait	The semaphore to wait.
-		 *\~french
-		 *\brief		Dessine la passe de stencil.
-		 *\param[in]	toWait	Le sémaphore à attendre.
-		 */
-		C3D_API ashes::Semaphore const & compute( ashes::Semaphore const & toWait );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -61,19 +55,16 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline TextureUnitArray const & getResult()const
+		inline crg::ImageViewIdArray const & getResult()const
 		{
-			return m_result;
+			return m_resultViews;
 		}
 		/**@}*/
 
 	private:
-		Engine const & m_engine;
 		RenderDevice const & m_device;
-		TextureUnitArray m_result;
-		RenderPassTimerSPtr m_timer;
-		ashes::CommandBufferPtr m_commandBuffer;
-		ashes::SemaphorePtr m_finished;
+		crg::ImageIdArray m_result;
+		crg::ImageViewIdArray m_resultViews;
 	};
 }
 

@@ -17,6 +17,8 @@ See LICENSE file in root folder
 #include <ashespp/Pipeline/PipelineLayout.hpp>
 #include <ashespp/Sync/Semaphore.hpp>
 
+#include <RenderGraph/FrameGraphPrerequisites.hpp>
+
 namespace castor3d
 {
 	class StencilPass
@@ -40,7 +42,7 @@ namespace castor3d
 		 */
 		StencilPass( Engine const & engine
 			, castor::String const & prefix
-			, ashes::ImageView const & depthView
+			, crg::ImageViewId depthView
 			, MatrixUbo & matrixUbo
 			, UniformBufferT< ModelUboConfiguration > const & modelUbo );
 		/**
@@ -96,7 +98,7 @@ namespace castor3d
 	private:
 		Engine const & m_engine;
 		castor::String m_prefix;
-		ashes::ImageView const & m_depthView;
+		crg::ImageViewId const & m_depthView;
 		MatrixUbo & m_matrixUbo;
 		UniformBufferT< ModelUboConfiguration > const & m_modelUbo;
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;

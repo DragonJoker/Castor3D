@@ -25,15 +25,10 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	scene	La scène.
 		 */
-		C3D_API explicit ShadowMapDirectional( RenderDevice const & device
+		C3D_API explicit ShadowMapDirectional( crg::FrameGraph & graph
+			, crg::FramePass const & previousPass
+			, RenderDevice const & device
 			, Scene & scene );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~ShadowMapDirectional();
 		/**
 		 *\copydoc		castor3d::ShadowMap::update
 		 */
@@ -44,11 +39,6 @@ namespace castor3d
 		C3D_API void update( GpuUpdater & updater )override;
 
 	private:
-		void doInitialiseFramebuffers( RenderDevice const & device );
-		void doInitialise( RenderDevice const & device )override;
-		ashes::Semaphore const & doRender( RenderDevice const & device
-			, ashes::Semaphore const & toWait
-			, uint32_t index )override;
 		bool isUpToDate( uint32_t index )const override;
 
 	public:
@@ -56,20 +46,8 @@ namespace castor3d
 		static VkFormat constexpr LinearDepthFormat = VK_FORMAT_R32_SFLOAT;
 
 	private:
-		struct FrameBuffer
-		{
-			ashes::FrameBufferPtr frameBuffer;
-			ashes::ImageView depthView;
-			ashes::ImageView linearView;
-			ashes::ImageView varianceView;
-			ashes::ImageView positionView;
-			ashes::ImageView fluxView;
-			CommandsSemaphore blurCommands{ nullptr, nullptr };
-		};
-		ashes::CommandBufferPtr m_commandBuffer;
 		CameraSPtr m_camera;
 		std::unique_ptr< GaussianBlur > m_blur;
-		std::vector< FrameBuffer > m_frameBuffers;
 		ShadowType m_shadowType{ ShadowType::eRaw };
 		uint32_t m_cascades;
 	};

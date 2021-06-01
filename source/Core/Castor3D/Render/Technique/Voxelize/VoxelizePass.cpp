@@ -330,7 +330,8 @@ namespace castor3d
 			return result;
 		}
 
-		void fillAdditionalDescriptor( RenderPipeline const & pipeline
+		void fillAdditionalDescriptor( crg::RunnableGraph const & graph
+			, RenderPipeline const & pipeline
 			, Scene const & scene
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps
@@ -342,7 +343,8 @@ namespace castor3d
 			descriptorWrites.push_back( scene.getLightCache().getDescriptorWrite( index++ ) );
 			descriptorWrites.push_back( voxelizerUbo.getDescriptorWrite( index++ ) );
 			descriptorWrites.push_back( getDescriptorWrite( voxels, index++ ) );
-			bindShadowMaps( flags
+			bindShadowMaps( graph
+				, flags
 				, shadowMaps
 				, descriptorWrites
 				, index );
@@ -354,7 +356,8 @@ namespace castor3d
 		, BillboardRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		fillAdditionalDescriptor( pipeline
+		fillAdditionalDescriptor( m_graph
+			, pipeline
 			, m_scene
 			, descriptorWrites
 			, shadowMaps
@@ -367,7 +370,8 @@ namespace castor3d
 		, SubmeshRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		fillAdditionalDescriptor( pipeline
+		fillAdditionalDescriptor( m_graph
+			, pipeline
 			, m_scene
 			, descriptorWrites
 			, shadowMaps

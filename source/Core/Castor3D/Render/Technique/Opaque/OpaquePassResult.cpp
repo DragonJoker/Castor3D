@@ -100,16 +100,17 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	OpaquePassResult::OpaquePassResult( RenderDevice const & device
-		, TextureUnit const & depthTexture
-		, TextureUnit const & velocityTexture )
-		: GBufferT< DsTexture >{ *device.renderSystem.getEngine()
+	OpaquePassResult::OpaquePassResult( crg::FrameGraph & graph
+		, RenderDevice const & device
+		, crg::ImageId const & depthTexture
+		, crg::ImageId const & velocityTexture )
+		: GBufferT< DsTexture >{ graph
+			, device
 			, cuT( "GPResult" )
 			, { &depthTexture, nullptr, nullptr, nullptr, nullptr, &velocityTexture }
 			, 0u
-			, castor::Size{ depthTexture.getTexture()->getDimensions().width, depthTexture.getTexture()->getDimensions().height } }
+			, castor::Size{ getExtent( depthTexture ).width, getExtent( depthTexture ).height } }
 	{
-		initialise( device );
 	}
 
 	//*********************************************************************************************

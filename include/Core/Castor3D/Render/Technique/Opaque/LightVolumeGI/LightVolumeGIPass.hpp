@@ -49,7 +49,8 @@ namespace castor3d
 		 *\param[in]	dst					Le résultat de GI.
 		 *\param[in]	blendMode			Le mode de mélange.
 		 */
-		C3D_API LightVolumeGIPass( Engine & engine
+		C3D_API LightVolumeGIPass( crg::FrameGraph & graph
+			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, castor::String const & prefix
 			, LightType lightType
@@ -57,7 +58,7 @@ namespace castor3d
 			, LpvGridConfigUbo const & lpvGridConfigUbo
 			, OpaquePassResult const & gpResult
 			, LightVolumePassResult const & lpvResult
-			, TextureUnit const & dst
+			, crg::ImageViewId const & dst
 			, BlendMode blendMode );
 		/**
 		 *\~english

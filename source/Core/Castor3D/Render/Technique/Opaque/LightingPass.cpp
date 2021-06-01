@@ -115,7 +115,7 @@ namespace castor3d
 			}
 		}
 
-		LightingPass::Type getLightingType( Engine const & engine
+		LightingPass::Type getLightingType( RenderDevice const & device
 			, bool voxelConeTracing
 			, bool shadow
 			, GlobalIlluminationType giType )
@@ -125,7 +125,7 @@ namespace castor3d
 				giType = GlobalIlluminationType::eVoxelConeTracing;
 			}
 
-			if ( !engine.getRenderSystem()->getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
+			if ( !device.renderSystem.getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
 			{
 				giType = std::min( GlobalIlluminationType::eRsm, giType );
 			}
@@ -335,6 +335,8 @@ namespace castor3d
 
 		template< LightingPass::Type PassT >
 		LightPassUPtr makeLightPassNoGIT( LightType lightType
+			, crg::FrameGraph & graph
+			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, LightPassResult const & lpResult
 			, GpInfoUbo const & gpInfoUbo
@@ -345,11 +347,20 @@ namespace castor3d
 			switch ( lightType )
 			{
 			case LightType::eDirectional:
-				return std::make_unique< PassTypeT< PassT, LightType::eDirectional > >( device, lpConfig );
+				return std::make_unique< PassTypeT< PassT, LightType::eDirectional > >( graph
+					, previousPass
+					, device
+					, lpConfig );
 			case LightType::ePoint:
-				return std::make_unique< PassTypeT< PassT, LightType::ePoint > >( device, lpConfig );
+				return std::make_unique< PassTypeT< PassT, LightType::ePoint > >( graph
+					, previousPass
+					, device
+					, lpConfig );
 			case LightType::eSpot:
-				return std::make_unique< PassTypeT< PassT, LightType::eSpot > >( device, lpConfig );
+				return std::make_unique< PassTypeT< PassT, LightType::eSpot > >( graph
+					, previousPass
+					, device
+					, lpConfig );
 			default:
 				CU_Failure( "Unsupported LightType" );
 				return LightPassUPtr{};
@@ -358,6 +369,8 @@ namespace castor3d
 
 		template< LightingPass::Type PassT >
 		LightPassUPtr makeLightPassVctGIT( LightType lightType
+			, crg::FrameGraph & graph
+			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, LightPassResult const & lpResult
 			, GpInfoUbo const & gpInfoUbo
@@ -369,11 +382,23 @@ namespace castor3d
 			switch ( lightType )
 			{
 			case LightType::eDirectional:
-				return std::make_unique< PassTypeT< PassT, LightType::eDirectional > >( device, lpConfig, &vctConfig );
+				return std::make_unique< PassTypeT< PassT, LightType::eDirectional > >( graph
+					, previousPass
+					, device
+					, lpConfig
+					, &vctConfig );
 			case LightType::ePoint:
-				return std::make_unique< PassTypeT< PassT, LightType::ePoint > >( device, lpConfig, &vctConfig );
+				return std::make_unique< PassTypeT< PassT, LightType::ePoint > >( graph
+					, previousPass
+					, device
+					, lpConfig
+					, &vctConfig );
 			case LightType::eSpot:
-				return std::make_unique< PassTypeT< PassT, LightType::eSpot > >( device, lpConfig, &vctConfig );
+				return std::make_unique< PassTypeT< PassT, LightType::eSpot > >( graph
+					, previousPass
+					, device
+					, lpConfig
+					, &vctConfig );
 			default:
 				CU_Failure( "Unsupported LightType" );
 				return LightPassUPtr{};
@@ -382,6 +407,8 @@ namespace castor3d
 
 		template< LightingPass::Type PassT >
 		LightPassUPtr makeLightPassRsmGIT( LightType lightType
+			, crg::FrameGraph & graph
+			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, LightPassResult const & lpResult
 			, GpInfoUbo const & gpInfoUbo
@@ -394,19 +421,25 @@ namespace castor3d
 			switch ( lightType )
 			{
 			case LightType::eDirectional:
-				return std::make_unique< PassTypeT< PassT, LightType::eDirectional > >( device
+				return std::make_unique< PassTypeT< PassT, LightType::eDirectional > >( graph
+					, previousPass
+					, device
 					, RsmLightPassConfig{ { lpResult, gpInfoUbo }
 						, lightCache
 						, gpResult
 						, smDirectionalResult } );
 			case LightType::ePoint:
-				return std::make_unique< PassTypeT< PassT, LightType::ePoint > >( device
+				return std::make_unique< PassTypeT< PassT, LightType::ePoint > >( graph
+					, previousPass
+					, device
 					, RsmLightPassConfig{ { lpResult, gpInfoUbo }
 						, lightCache
 						, gpResult
 						, smPointResult } );
 			case LightType::eSpot:
-				return std::make_unique< PassTypeT< PassT, LightType::eSpot > >( device
+				return std::make_unique< PassTypeT< PassT, LightType::eSpot > >( graph
+					, previousPass
+					, device
 					, RsmLightPassConfig{ { lpResult, gpInfoUbo }
 						, lightCache
 						, gpResult
@@ -419,6 +452,8 @@ namespace castor3d
 
 		template< LightingPass::Type PassT >
 		LightPassUPtr makeLightPassLpvGIT( LightType lightType
+			, crg::FrameGraph & graph
+			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, LightPassResult const & lpResult
 			, GpInfoUbo const & gpInfoUbo
@@ -433,7 +468,9 @@ namespace castor3d
 			switch ( lightType )
 			{
 			case LightType::eDirectional:
-				return std::make_unique< PassTypeT< PassT, LightType::eDirectional > >( device
+				return std::make_unique< PassTypeT< PassT, LightType::eDirectional > >( graph
+					, previousPass
+					, device
 					, LpvLightPassConfig{ LightPassConfig{ lpResult, gpInfoUbo }
 						, lightCache
 						, gpResult
@@ -441,7 +478,9 @@ namespace castor3d
 						, lpvResult
 						, lpvConfigUbo } );
 			//case LightType::ePoint:
-			//	return std::make_unique< PassTypeT< PassT, LightType::ePoint > >( device
+			//	return std::make_unique< PassTypeT< PassT, LightType::ePoint > >( graph
+			//		, previousPass
+			//		, device
 			//		, LpvLightPassConfig{ LightPassConfig{ lpResult, gpInfoUbo }
 			//			, lightCache
 			//			, gpResult
@@ -449,7 +488,9 @@ namespace castor3d
 			//			, lpvResult
 			//			, lpvConfigUbo } );
 			case LightType::eSpot:
-				return std::make_unique< PassTypeT< PassT, LightType::eSpot > >( device
+				return std::make_unique< PassTypeT< PassT, LightType::eSpot > >( graph
+					, previousPass
+					, device
 					, LpvLightPassConfig{ LightPassConfig{ lpResult, gpInfoUbo }
 						, lightCache
 						, gpResult
@@ -464,6 +505,8 @@ namespace castor3d
 
 		template< LightingPass::Type PassT >
 		LightPassUPtr makeLightPassLlpvGIT( LightType lightType
+			, crg::FrameGraph & graph
+			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, LightPassResult const & lpResult
 			, GpInfoUbo const & gpInfoUbo
@@ -478,7 +521,9 @@ namespace castor3d
 			switch ( lightType )
 			{
 			case LightType::eDirectional:
-				return std::make_unique< PassTypeT< PassT, LightType::eDirectional > >( device
+				return std::make_unique< PassTypeT< PassT, LightType::eDirectional > >( graph
+					, previousPass
+					, device
 					, LayeredLpvLightPassConfig{ LightPassConfig{ lpResult, gpInfoUbo }
 						, lightCache
 						, gpResult
@@ -486,7 +531,9 @@ namespace castor3d
 						, lpvResult
 						, lpvConfigUbo } );
 			//case LightType::ePoint:
-			//	return std::make_unique< PassTypeT< PassT, LightType::ePoint > >( device
+			//	return std::make_unique< PassTypeT< PassT, LightType::ePoint > >( graph
+			//		, previousPass
+			//		, device
 			//		, LayeredLpvLightPassConfig{ LightPassConfig{ lpResult, gpInfoUbo }
 			//			, lightCache
 			//			, gpResult
@@ -495,7 +542,9 @@ namespace castor3d
 			//			, lpvConfigUbo
 			//			, lpvConfigUbos } );
 			//case LightType::eSpot:
-			//	return std::make_unique< PassTypeT< PassT, LightType::eSpot > >( device
+			//	return std::make_unique< PassTypeT< PassT, LightType::eSpot > >( graph
+			//		, previousPass
+			//		, device
 			//		, LayeredLpvLightPassConfig{ LightPassConfig{ lpResult, gpInfoUbo }
 			//			, lightCache
 			//			, gpResult
@@ -509,7 +558,8 @@ namespace castor3d
 			}
 		}
 
-		LightPassUPtr makeLightPass( Engine & engine
+		LightPassUPtr makeLightPass( crg::FrameGraph & graph
+			, crg::FramePass const *& previousPass
 			, LightingPass::Type passType
 			, LightType lightType
 			, RenderDevice const & device
@@ -530,12 +580,16 @@ namespace castor3d
 			{
 			case LightingPass::Type::eNoShadow:
 				return makeLightPassNoGIT< LightingPass::Type::eNoShadow >( lightType
+					, graph
+					, previousPass
 					, device
 					, lpResult
 					, gpInfoUbo
 					, false );
 			case LightingPass::Type::eNoShadowVoxelConeTracingGI:
 				return makeLightPassVctGIT< LightingPass::Type::eNoShadowVoxelConeTracingGI >( lightType
+					, graph
+					, previousPass
 					, device
 					, lpResult
 					, gpInfoUbo
@@ -543,12 +597,16 @@ namespace castor3d
 					, vctConfig );
 			case LightingPass::Type::eShadowNoGI:
 				return makeLightPassNoGIT< LightingPass::Type::eShadowNoGI >( lightType
+					, graph
+					, previousPass
 					, device
 					, lpResult
 					, gpInfoUbo
 					, true );
 			case LightingPass::Type::eShadowVoxelConeTracingGI:
 				return makeLightPassVctGIT< LightingPass::Type::eShadowVoxelConeTracingGI >( lightType
+					, graph
+					, previousPass
 					, device
 					, lpResult
 					, gpInfoUbo
@@ -556,6 +614,8 @@ namespace castor3d
 					, vctConfig );
 			case LightingPass::Type::eShadowRsmGI:
 				return makeLightPassRsmGIT< LightingPass::Type::eShadowRsmGI >( lightType
+					, graph
+					, previousPass
 					, device
 					, lpResult
 					, gpInfoUbo
@@ -565,9 +625,11 @@ namespace castor3d
 					, smPointResult
 					, smSpotResult );
 			case LightingPass::Type::eShadowLpvGI:
-				if ( engine.getRenderSystem()->getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
+				if ( device.renderSystem.getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
 				{
 					return makeLightPassLpvGIT< LightingPass::Type::eShadowLpvGI >( lightType
+						, graph
+						, previousPass
 						, device
 						, lpResult
 						, gpInfoUbo
@@ -581,9 +643,11 @@ namespace castor3d
 				}
 				return LightPassUPtr{};
 			case LightingPass::Type::eShadowLpvGGI:
-				if ( engine.getRenderSystem()->getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
+				if ( device.renderSystem.getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
 				{
 					return makeLightPassLpvGIT< LightingPass::Type::eShadowLpvGGI >( lightType
+						, graph
+						, previousPass
 						, device
 						, lpResult
 						, gpInfoUbo
@@ -597,9 +661,11 @@ namespace castor3d
 				}
 				return LightPassUPtr{};
 			case LightingPass::Type::eShadowLayeredLpvGI:
-				if ( engine.getRenderSystem()->getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
+				if ( device.renderSystem.getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
 				{
 					return makeLightPassLlpvGIT< LightingPass::Type::eShadowLayeredLpvGI >( lightType
+						, graph
+						, previousPass
 						, device
 						, lpResult
 						, gpInfoUbo
@@ -613,9 +679,11 @@ namespace castor3d
 				}
 				return LightPassUPtr{};
 			case LightingPass::Type::eShadowLayeredLpvGGI:
-				if ( engine.getRenderSystem()->getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
+				if ( device.renderSystem.getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
 				{
 					return makeLightPassLlpvGIT< LightingPass::Type::eShadowLayeredLpvGGI >( lightType
+						, graph
+						, previousPass
 						, device
 						, lpResult
 						, gpInfoUbo
@@ -635,7 +703,8 @@ namespace castor3d
 		}
 	}
 
-	LightingPass::LightingPass( Engine & engine
+	LightingPass::LightingPass( crg::FrameGraph & graph
+		, crg::FramePass const & previousPass
 		, RenderDevice const & device
 		, castor::Size const & size
 		, Scene & scene
@@ -647,13 +716,14 @@ namespace castor3d
 		, LightVolumePassResultArray const & llpvResult
 		, TextureUnit const & vctFirstBounce
 		, TextureUnit const & vctSecondaryBounce
-		, ashes::ImageView const & depthView
+		, crg::ImageViewId const & depthView
 		, SceneUbo & sceneUbo
 		, GpInfoUbo const & gpInfoUbo
 		, LpvGridConfigUbo const & lpvConfigUbo
 		, LayeredLpvGridConfigUbo const & llpvConfigUbo
 		, VoxelizerUbo const & vctConfigUbo )
-		: m_engine{ engine }
+		: m_graph{ graph }
+		, m_previousPass{ previousPass }
 		, m_device{ device }
 		, m_gpResult{ gpResult }
 		, m_smDirectionalResult{ smDirectionalResult }
@@ -670,88 +740,55 @@ namespace castor3d
 		, m_llpvConfigUbo{ llpvConfigUbo }
 		, m_vctConfigUbo{ vctConfigUbo }
 		, m_size{ size }
-		, m_result{ engine, size }
+		, m_result{ m_graph, device, size }
 		, m_timer{ std::make_shared< RenderPassTimer >( device, cuT( "Opaque" ), cuT( "Lighting pass" ) ) }
 		, m_srcDepth{ depthView }
-		, m_blitDepth
-		{
-			m_device.graphicsCommandPool->createCommandBuffer( "LPBlitDepth", VK_COMMAND_BUFFER_LEVEL_PRIMARY ),
-			m_device->createSemaphore( "LPBlitDepth" ),
-		}
-		, m_lpResultBarrier
-		{
-			m_device.graphicsCommandPool->createCommandBuffer( "LPResultBarrier", VK_COMMAND_BUFFER_LEVEL_PRIMARY ),
-			m_device->createSemaphore( "LPResultBarrier" ),
-		}
 	{
-		auto & lightCache = scene.getLightCache();
-		lightCache.initialise();
-		m_result.initialise( m_device );
+		//auto & lightCache = scene.getLightCache();
+		//lightCache.initialise();
 
-		VkImageCopy copy
-		{
-			{ m_srcDepth->subresourceRange.aspectMask, 0u, 0u, 1u },
-			VkOffset3D{ 0, 0, 0 },
-			{ m_srcDepth->subresourceRange.aspectMask, 0u, 0u, 1u },
-			VkOffset3D{ 0, 0, 0 },
-			m_srcDepth.image->getDimensions(),
-		};
-		m_blitDepth.commandBuffer->begin();
-		m_blitDepth.commandBuffer->beginDebugBlock(
-			{
-				"Deferred - Ligth Depth Blit",
-				makeFloatArray( m_engine.getNextRainbowColour() ),
-			} );
-		// Src depth buffer from depth attach to transfer source
-		m_blitDepth.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT
-			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_srcDepth.makeTransferSource( VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ) );
-		// Dst depth buffer from unknown to transfer destination
-		m_blitDepth.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
-			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_result[LpTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
-		// Copy Src to Dst
-		m_blitDepth.commandBuffer->copyImage( copy
-			, *m_srcDepth.image
-			, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-			, m_result[LpTexture::eDepth].getTexture()->getTexture()
-			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL );
-		// Dst depth buffer from transfer destination to depth attach
-		m_blitDepth.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
-			, m_result[LpTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeDepthStencilAttachment( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
-		// Src depth buffer from transfer source to depth stencil read only
-		m_blitDepth.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
-			, m_srcDepth.makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
-		m_blitDepth.commandBuffer->endDebugBlock();
-		m_blitDepth.commandBuffer->end();
-
-		m_lpResultBarrier.commandBuffer->begin();
-		m_lpResultBarrier.commandBuffer->beginDebugBlock(
-			{
-				"Deferred - Ligth Pass Result Barrier",
-				makeFloatArray( m_engine.getNextRainbowColour() ),
-			} );
-
-		for ( auto i = size_t( LpTexture::eMin ) + 1u; i < size_t( LpTexture::eCount ); ++i )
-		{
-			m_lpResultBarrier.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, m_result[LpTexture( i )].getTexture()->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
-		}
-
-		m_lpResultBarrier.commandBuffer->endDebugBlock();
-		m_lpResultBarrier.commandBuffer->end();
+		//VkImageCopy copy
+		//{
+		//	{ m_srcDepth->subresourceRange.aspectMask, 0u, 0u, 1u },
+		//	VkOffset3D{ 0, 0, 0 },
+		//	{ m_srcDepth->subresourceRange.aspectMask, 0u, 0u, 1u },
+		//	VkOffset3D{ 0, 0, 0 },
+		//	m_srcDepth.image->getDimensions(),
+		//};
+		//m_blitDepth.commandBuffer->begin();
+		//m_blitDepth.commandBuffer->beginDebugBlock(
+		//	{
+		//		"Deferred - Ligth Depth Blit",
+		//		makeFloatArray( m_engine.getNextRainbowColour() ),
+		//	} );
+		//// Src depth buffer from depth attach to transfer source
+		//m_blitDepth.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT
+		//	, VK_PIPELINE_STAGE_TRANSFER_BIT
+		//	, m_srcDepth.makeTransferSource( VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ) );
+		//// Dst depth buffer from unknown to transfer destination
+		//m_blitDepth.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
+		//	, VK_PIPELINE_STAGE_TRANSFER_BIT
+		//	, m_result[LpTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+		//// Copy Src to Dst
+		//m_blitDepth.commandBuffer->copyImage( copy
+		//	, *m_srcDepth.image
+		//	, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+		//	, m_result[LpTexture::eDepth].getTexture()->getTexture()
+		//	, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL );
+		//// Dst depth buffer from transfer destination to depth attach
+		//m_blitDepth.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+		//	, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
+		//	, m_result[LpTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeDepthStencilAttachment( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+		//// Src depth buffer from transfer source to depth stencil read only
+		//m_blitDepth.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+		//	, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
+		//	, m_srcDepth.makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
+		//m_blitDepth.commandBuffer->endDebugBlock();
+		//m_blitDepth.commandBuffer->end();
 	}
 
 	LightingPass::~LightingPass()
 	{
-		m_lpResultBarrier.semaphore.reset();
-		m_lpResultBarrier.commandBuffer.reset();
-		m_blitDepth.semaphore.reset();
-		m_blitDepth.commandBuffer.reset();
-
 		for ( auto & lightPasses : m_lightPasses )
 		{
 			for ( auto & lightPass : lightPasses )
@@ -763,8 +800,6 @@ namespace castor3d
 				}
 			}
 		}
-
-		m_result.cleanup();
 	}
 
 	void LightingPass::update( CpuUpdater & updater )
@@ -809,12 +844,12 @@ namespace castor3d
 				timerBlock->updateCount( count );
 			}
 
-			m_device.graphicsQueue->submit( *m_blitDepth.commandBuffer
-				, *result
-				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-				, *m_blitDepth.semaphore
-				, nullptr );
-			result = m_blitDepth.semaphore.get();
+			//m_device.graphicsQueue->submit( *m_blitDepth.commandBuffer
+			//	, *result
+			//	, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+			//	, *m_blitDepth.semaphore
+			//	, nullptr );
+			//result = m_blitDepth.semaphore.get();
 
 			uint32_t index = 0;
 			result = &doRenderLights( scene
@@ -836,15 +871,6 @@ namespace castor3d
 				, *result
 				, index );
 		}
-		else
-		{
-			m_device.graphicsQueue->submit( *m_lpResultBarrier.commandBuffer
-				, *result
-				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-				, *m_lpResultBarrier.semaphore
-				, nullptr );
-			result = m_lpResultBarrier.semaphore.get();
-		}
 
 		return *result;
 	}
@@ -852,19 +878,19 @@ namespace castor3d
 	void LightingPass::accept( PipelineVisitorBase & visitor )
 	{
 		visitor.visit( "Light Diffuse"
-			, m_result[LpTexture::eDiffuse].getTexture()->getDefaultView().getSampledView()
+			, m_result[LpTexture::eDiffuse].wholeView
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Light Specular"
-			, m_result[LpTexture::eSpecular].getTexture()->getDefaultView().getSampledView()
+			, m_result[LpTexture::eSpecular].wholeView
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Light Indirect Diffuse"
-			, m_result[LpTexture::eIndirectDiffuse].getTexture()->getDefaultView().getSampledView()
+			, m_result[LpTexture::eIndirectDiffuse].wholeView
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Light Indirect Specular"
-			, m_result[LpTexture::eIndirectSpecular].getTexture()->getDefaultView().getSampledView()
+			, m_result[LpTexture::eIndirectSpecular].wholeView
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 
@@ -880,6 +906,7 @@ namespace castor3d
 		auto & camera = *updater.camera;
 		auto & scene = *updater.camera->getScene();
 		auto & cache = scene.getLightCache();
+		auto previous = &m_previousPass;
 
 		for ( auto & light : cache.getLights( lightType ) )
 		{
@@ -887,7 +914,7 @@ namespace castor3d
 				|| camera.isVisible( light->getBoundingBox(), light->getParent()->getDerivedTransformationMatrix() ) )
 			{
 				auto giType = light->getGlobalIlluminationType();
-				auto type = getLightingType( m_engine
+				auto type = getLightingType( m_device
 					, m_voxelConeTracing
 					, light->isShadowProducer()
 					, giType );
@@ -897,7 +924,8 @@ namespace castor3d
 
 				if ( !lightPass )
 				{
-					lightPass = makeLightPass( m_engine
+					lightPass = makeLightPass( m_graph
+						, previous
 						, type
 						, lightType
 						, m_device
@@ -965,7 +993,7 @@ namespace castor3d
 		, bool shadows
 		, GlobalIlluminationType giType )const
 	{
-		return getLightPass( getLightingType( m_engine, m_voxelConeTracing, shadows, giType )
+		return getLightPass( getLightingType( m_device, m_voxelConeTracing, shadows, giType )
 			, lightType
 			, m_lightPasses );
 	}

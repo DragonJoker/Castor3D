@@ -9,6 +9,8 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Graphics/Size.hpp>
 
+#include <RenderGraph/FrameGraphPrerequisites.hpp>
+
 namespace castor3d
 {
 	/**@name Render */
@@ -133,7 +135,8 @@ namespace castor3d
 	*\brief
 	*	Ecrit les descripteurs des shadow maps dans les writes donnés.
 	*/
-	void bindShadowMaps( PipelineFlags const & pipelineFlags
+	void bindShadowMaps( crg::RunnableGraph const & graph
+		, PipelineFlags const & pipelineFlags
 		, ShadowMapLightTypeArray const & shadowMaps
 		, ashes::WriteDescriptorSetArray & writes
 		, uint32_t & index );

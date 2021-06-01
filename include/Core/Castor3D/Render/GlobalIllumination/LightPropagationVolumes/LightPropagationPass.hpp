@@ -62,7 +62,7 @@ namespace castor3d
 			, bool occlusion
 			, uint32_t gridSize
 			, BlendMode blendMode );
-		C3D_API void registerPassIO( TextureUnit const * occlusion
+		C3D_API void registerPassIO( crg::ImageId const * occlusion
 			, LightVolumePassResult const & injection
 			, LpvGridConfigUbo const & lpvConfigUbo
 			, LightVolumePassResult const & accumulation

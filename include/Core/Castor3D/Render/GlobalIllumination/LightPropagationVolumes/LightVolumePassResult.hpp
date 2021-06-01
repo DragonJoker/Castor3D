@@ -14,7 +14,7 @@ namespace castor3d
 		: public GBufferT< LpvTexture >
 	{
 	public:
-		C3D_API LightVolumePassResult( Engine & engine
+		C3D_API LightVolumePassResult( crg::FrameGraph & graph
 			, RenderDevice const & device
 			, castor::String const & prefix
 			, uint32_t size );

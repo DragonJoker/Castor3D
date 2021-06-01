@@ -49,9 +49,13 @@ namespace castor3d
 		 *\param[in]	device		Le device GPU.
 		 *\param[in]	lpConfig	La configuration de la passe d'éclairage.
 		 */
-		LightPassVolumePropagationShadowT( RenderDevice const & device
+		LightPassVolumePropagationShadowT( crg::FrameGraph & graph
+			, crg::FramePass const *& previousPass
+			, RenderDevice const & device
 			, LpvLightPassConfig lpConfig )
-			: LightPassShadow< LtType >{ device
+			: LightPassShadow< LtType >{ graph
+				, previousPass
+				, device
 				, "LPVShadow"
 				, { lpConfig.base.lpResult, lpConfig.base.gpInfoUbo, true, false, true } }
 			, m_gpResult{ lpConfig.gpResult }
@@ -60,6 +64,28 @@ namespace castor3d
 			, m_lpvResult{ lpConfig.lpvResult }
 			, m_gpInfoUbo{ lpConfig.base.gpInfoUbo }
 			, m_lpvConfigUbo{ lpConfig.lpvConfigUbo }
+			, m_lightVolumeGIPasses{ castor::makeUnique< LightVolumeGIPass >( graph
+					, previousPass
+					, m_device
+					, getName()
+					, LtType
+					, m_gpInfoUbo
+					, m_lpvConfigUbo
+					, m_gpResult
+					, m_lpvResult
+					, m_lpResult[LpTexture::eIndirectDiffuse].wholeView
+					, BlendMode::eNoBlend )
+				, castor::makeUnique< LightVolumeGIPass >( graph
+					, previousPass
+					, m_device
+					, getName()
+					, LtType
+					, m_gpInfoUbo
+					, m_lpvConfigUbo
+					, m_gpResult
+					, m_lpvResult
+					, m_lpResult[LpTexture::eIndirectDiffuse].wholeView
+					, BlendMode::eAdditive ) }
 		{
 		}
 		/**
@@ -71,26 +97,6 @@ namespace castor3d
 			, RenderPassTimer & timer )override
 		{
 			auto & lightCache = scene.getLightCache();
-			m_lightVolumeGIPasses = { castor::makeUnique< LightVolumeGIPass >( this->m_engine
-					, this->m_device
-					, this->getName()
-					, LtType
-					, m_gpInfoUbo
-					, m_lpvConfigUbo
-					, m_gpResult
-					, m_lpvResult
-					, m_lpResult[LpTexture::eIndirectDiffuse]
-					, BlendMode::eNoBlend )
-				, castor::makeUnique< LightVolumeGIPass >( this->m_engine
-					, this->m_device
-					, this->getName()
-					, LtType
-					, m_gpInfoUbo
-					, m_lpvConfigUbo
-					, m_gpResult
-					, m_lpvResult
-					, m_lpResult[LpTexture::eIndirectDiffuse]
-					, BlendMode::eAdditive ) };
 			LightPassShadow< LtType >::initialise( scene, gp, sceneUbo, timer );
 		}
 		/**

@@ -72,6 +72,9 @@ See LICENSE file in root folder
 #include <CastorUtils/Miscellaneous/StringUtils.hpp>
 
 #include <ShaderWriter/Source.hpp>
+
 #include <ashespp/Core/Device.hpp>
+
+#include <RenderGraph/FrameGraphPrerequisites.hpp>
 
 #endif

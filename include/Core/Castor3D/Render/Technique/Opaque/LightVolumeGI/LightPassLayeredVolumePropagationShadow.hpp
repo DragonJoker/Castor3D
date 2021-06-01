@@ -53,9 +53,13 @@ namespace castor3d
 		 *\param[in]	device		Le device GPU.
 		 *\param[in]	lpConfig	La configuration de la passe d'éclairage.
 		 */
-		LightPassLayeredVolumePropagationShadowT( RenderDevice const & device
+		LightPassLayeredVolumePropagationShadowT( crg::FrameGraph & graph
+			, crg::FramePass const *& previousPass
+			, RenderDevice const & device
 			, LayeredLpvLightPassConfig lpConfig )
-			: LightPassShadow< LtType >{ device
+			: LightPassShadow< LtType >{ graph
+				, previousPass
+				, device
 				, "LayeredLPVShadow"
 				, { lpConfig.base.lpResult, lpConfig.base.gpInfoUbo, true, false , true } }
 			, m_gpResult{ lpConfig.gpResult }
@@ -82,7 +86,7 @@ namespace castor3d
 					, m_lpvConfigUbo
 					, m_gpResult
 					, m_lpvResult
-					, m_lpResult[LpTexture::eIndirectDiffuse]
+					, m_lpResult[LpTexture::eIndirectDiffuse].wholeView
 					, BlendMode::eNoBlend )
 				, castor::makeUnique< LayeredLightVolumeGIPass >( this->m_engine
 					, this->m_device
@@ -91,7 +95,7 @@ namespace castor3d
 					, m_lpvConfigUbo
 					, m_gpResult
 					, m_lpvResult
-					, m_lpResult[LpTexture::eIndirectDiffuse]
+					, m_lpResult[LpTexture::eIndirectDiffuse].wholeView
 					, BlendMode::eAdditive ) };
 			LightPassShadow< LtType >::initialise( scene, gp, sceneUbo, timer );
 		}

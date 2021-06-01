@@ -42,14 +42,14 @@ namespace castor3d
 		 *\param[in]	linearisedDepthBuffer	Le tampon de profondeur linéarisé.
 		 *\param[in]	normals					Le tampon de normales.
 		 */
-		SsaoRawAOPass( Engine & engine
+		SsaoRawAOPass( crg::FrameGraph & graph
 			, RenderDevice const & device
 			, VkExtent2D const & size
 			, SsaoConfig const & config
 			, SsaoConfigUbo & ssaoConfigUbo
 			, GpInfoUbo const & gpInfoUbo
 			, TextureUnit const & linearisedDepthBuffer
-			, ashes::ImageView const & normals );
+			, crg::ImageViewId const & normals );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -124,20 +124,16 @@ namespace castor3d
 		};
 
 	private:
-		Engine & m_engine;
 		RenderDevice const & m_device;
 		SsaoConfig const & m_ssaoConfig;
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		GpInfoUbo const & m_gpInfoUbo;
 		TextureUnit const & m_linearisedDepthBuffer;
-		ashes::ImageView const & m_normals;
+		crg::ImageViewId const & m_normals;
 		VkExtent2D m_size;
 		TextureUnit m_result;
 		TextureUnit m_bentNormals;
-		ashes::RenderPassPtr m_renderPass;
-		ashes::FrameBufferPtr m_frameBuffer;
-		std::array< RenderQuad, 2u > m_quads;
-		std::array < ashes::CommandBufferPtr, 2u > m_commandBuffers;
+		//std::array< RenderQuad, 2u > m_quads;
 		ashes::SemaphorePtr m_finished;
 		RenderPassTimerSPtr m_timer;
 	};

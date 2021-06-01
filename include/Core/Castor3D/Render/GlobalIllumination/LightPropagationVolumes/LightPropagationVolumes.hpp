@@ -26,7 +26,8 @@ namespace castor3d
 		static constexpr uint32_t MaxPropagationSteps = 8u;
 
 	protected:
-		C3D_API LightPropagationVolumesBase( Scene const & scene
+		C3D_API LightPropagationVolumesBase( crg::FrameGraph & graph
+			, Scene const & scene
 			, LightType lightType
 			, RenderDevice const & device
 			, ShadowMapResult const & smResult
@@ -53,7 +54,7 @@ namespace castor3d
 		bool m_initialised{ false };
 		LightType m_lightType;
 		LightVolumePassResult m_injection;
-		TextureUnit m_geometry;
+		crg::ImageId m_geometry;
 		std::array< LightVolumePassResult, 2u > m_propagate;
 		CommandsSemaphore m_clearCommands;
 		struct LightLpv
@@ -67,7 +68,7 @@ namespace castor3d
 				, LightVolumePassResult const & injection
 				, uint32_t cascadeIndex
 				, float lpvCellSize
-				, TextureUnit * geometry );
+				, crg::ImageId * geometry );
 			bool update( CpuUpdater & updater );
 			LpvLightConfigUbo lpvLightConfigUbo;
 			float lpvCellSize;
@@ -87,13 +88,15 @@ namespace castor3d
 		: public LightPropagationVolumesBase
 	{
 	public:
-		LightPropagationVolumesT( Scene const & scene
+		LightPropagationVolumesT( crg::FrameGraph & graph
+			, Scene const & scene
 			, LightType lightType
 			, RenderDevice const & device
 			, ShadowMapResult const & smResult
 			, LightVolumePassResult const & lpvResult
 			, LpvGridConfigUbo & lpvGridConfigUbo )
-			: LightPropagationVolumesBase{ scene
+			: LightPropagationVolumesBase{ graph
+				, scene
 				, lightType
 				, device
 				, smResult

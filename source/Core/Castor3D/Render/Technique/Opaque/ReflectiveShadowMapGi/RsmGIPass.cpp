@@ -363,138 +363,30 @@ namespace castor3d
 			return sampler;
 		}
 
-		TextureUnit doCreateTexture( RenderDevice const & device
+		crg::ImageId doCreateImage( crg::FrameGraph & graph
 			, castor::String const & name
 			, VkFormat format
 			, VkExtent2D const & size )
 		{
-			auto & renderSystem = device.renderSystem;
-			auto & engine = *renderSystem.getEngine();
-			auto sampler = doCreateSampler( engine, name, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER );
-
-			ashes::ImageCreateInfo image
-			{
-				0u,
-				VK_IMAGE_TYPE_2D,
-				format,
-				{ size.width, size.height, 1u },
-				1u,
-				1u,
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_IMAGE_TILING_OPTIMAL,
-				( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_SAMPLED_BIT ),
-			};
-			auto ssaoResult = std::make_shared< TextureLayout >( renderSystem
-				, image
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, name );
-			TextureUnit result{ engine };
-			result.setTexture( ssaoResult );
-			result.setSampler( sampler );
-			result.initialise( device );
-			return result;
+			return graph.createImage( crg::ImageData{ name
+				, 0u
+				, VK_IMAGE_TYPE_2D
+				, format
+				, { size.width, size.height, 1u }
+				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+					| VK_IMAGE_USAGE_SAMPLED_BIT ) } );
 		}
 
-		TextureUnitArray doCreateTextures( RenderDevice const & device
+		crg::ImageIdArray doCreateImages( crg::FrameGraph & graph
 			, castor::String const & name
 			, VkFormat format1
 			, VkFormat format2
 			, VkExtent2D const & size )
 		{
-			TextureUnitArray result;
-			result.emplace_back( doCreateTexture( device, name, format1, size ) );
-			result.emplace_back( doCreateTexture( device, name, format2, size ) );
+			crg::ImageIdArray result;
+			result.emplace_back( doCreateImage( graph, name, format1, size ) );
+			result.emplace_back( doCreateImage( graph, name, format2, size ) );
 			return result;
-		}
-		
-		ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
-			, VkFormat format1
-			, VkFormat format2 )
-		{
-			ashes::VkAttachmentDescriptionArray attaches
-			{
-				{
-					0u,
-					format1,
-					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
-					VK_ATTACHMENT_STORE_OP_STORE,
-					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
-					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-				},
-				{
-					0u,
-					format2,
-					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
-					VK_ATTACHMENT_STORE_OP_STORE,
-					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
-					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-				},
-			};
-			ashes::SubpassDescriptionArray subpasses;
-			subpasses.emplace_back( ashes::SubpassDescription
-				{
-					0u,
-					VK_PIPELINE_BIND_POINT_GRAPHICS,
-					{},
-					{
-						{ 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-						{ 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-					},
-					{},
-					ashes::nullopt,
-					{},
-				} );
-			ashes::VkSubpassDependencyArray dependencies
-			{
-				{
-					VK_SUBPASS_EXTERNAL,
-					0u,
-					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-					VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-					VK_ACCESS_SHADER_READ_BIT,
-					VK_DEPENDENCY_BY_REGION_BIT,
-				},
-				{
-					0u,
-					VK_SUBPASS_EXTERNAL,
-					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-					VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-					VK_ACCESS_SHADER_READ_BIT,
-					VK_DEPENDENCY_BY_REGION_BIT,
-				},
-			};
-			ashes::RenderPassCreateInfo createInfo
-			{
-				0u,
-				std::move( attaches ),
-				std::move( subpasses ),
-				std::move( dependencies ),
-			};
-			auto result = device->createRenderPass( "RsmGI"
-				, std::move( createInfo ) );
-			return result;
-		}
-
-		ashes::FrameBufferPtr doCreateFrameBuffer( ashes::RenderPass const & renderPass
-			, ashes::ImageView const & view1
-			, ashes::ImageView const & view2 )
-		{
-			ashes::ImageViewCRefArray attaches;
-			attaches.emplace_back( view1 );
-			attaches.emplace_back( view2 );
-			auto size = view1.image->getDimensions();
-			return renderPass.createFrameBuffer( "RsmGI"
-				, VkExtent2D{ size.width, size.height }
-				, std::move( attaches ) );
 		}
 
 		rq::BindingDescriptionArray createBindings()
@@ -516,14 +408,16 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	RsmGIPass::RsmGIPass( RenderDevice const & device
+	RsmGIPass::RsmGIPass( crg::FrameGraph & graph
+		, crg::FramePass const *& previousPass
+		, RenderDevice const & device
 		, LightCache const & lightCache
 		, LightType lightType
 		, VkExtent2D const & size
 		, GpInfoUbo const & gpInfo
 		, OpaquePassResult const & gpResult
 		, ShadowMapResult const & smResult
-		, TextureUnitArray const & downscaleResult )
+		, crg::ImageViewIdArray const & downscaleResult )
 		: RenderQuad{ device
 			, castor3d::getName( lightType ) + "RsmGI"
 			, VK_FILTER_LINEAR
@@ -535,10 +429,10 @@ namespace castor3d
 		, m_gpResult{ gpResult }
 		, m_smResult{ smResult }
 		, m_gpInfo{ gpInfo }
-		, m_result{ doCreateTextures( m_device
+		, m_result{ doCreateImages( graph
 			, getName() + "Result"
-			, downscaleResult[0u].getTexture()->getPixelFormat()
-			, downscaleResult[1u].getTexture()->getPixelFormat()
+			, getFormat( downscaleResult[0u] )
+			, getFormat( downscaleResult[1u] )
 			, size ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram( lightType, size.width, size.height ) }
@@ -548,13 +442,6 @@ namespace castor3d
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, "RsmSamples" ) }
-		, m_renderPass{ doCreateRenderPass( m_device
-			, m_result[0].getTexture()->getPixelFormat()
-			, m_result[1].getTexture()->getPixelFormat() ) }
-		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass
-			, m_result[0].getTexture()->getDefaultView().getTargetView()
-			, m_result[1].getTexture()->getDefaultView().getTargetView() ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( m_device, cuT( "Reflective Shadow Maps" ), cuT( "GI Resolve" ) ) }
 	{
 		if ( auto buffer = m_rsmSamplesSsbo->lock( 0u, RsmConfig::MaxRange, 0u ) )
 		{
@@ -594,21 +481,22 @@ namespace castor3d
 				makeDescriptorWrite( m_lightCache.getBuffer()
 					, m_lightCache.getView()
 					, LightsMapIdx ),
-				makeDescriptorWrite( m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getSampledView()
-					, m_gpResult[DsTexture::eDepth].getSampler()->getSampler()
-					, DepthMapIdx ),
-				makeDescriptorWrite( m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView()
-					, m_gpResult[DsTexture::eData1].getSampler()->getSampler()
-					, Data1MapIdx ),
-				makeDescriptorWrite( m_smResult[SmTexture::eNormalLinear].getTexture()->getDefaultView().getSampledView()
-					, m_smResult[SmTexture::eNormalLinear].getSampler()->getSampler()
-					, RsmNormalsIdx ),
-				makeDescriptorWrite( m_smResult[SmTexture::ePosition].getTexture()->getDefaultView().getSampledView()
-					, m_smResult[SmTexture::ePosition].getSampler()->getSampler()
-					, RsmPositionIdx ),
-				makeDescriptorWrite( m_smResult[SmTexture::eFlux].getTexture()->getDefaultView().getSampledView()
-					, m_smResult[SmTexture::eFlux].getSampler()->getSampler()
-					, RsmFluxIdx ),
+				// TODO CRG
+				//makeDescriptorWrite( m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getSampledView()
+				//	, m_gpResult[DsTexture::eDepth].getSampler()->getSampler()
+				//	, DepthMapIdx ),
+				//makeDescriptorWrite( m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView()
+				//	, m_gpResult[DsTexture::eData1].getSampler()->getSampler()
+				//	, Data1MapIdx ),
+				//makeDescriptorWrite( m_smResult[SmTexture::eNormalLinear].getTexture()->getDefaultView().getSampledView()
+				//	, m_smResult[SmTexture::eNormalLinear].getSampler()->getSampler()
+				//	, RsmNormalsIdx ),
+				//makeDescriptorWrite( m_smResult[SmTexture::ePosition].getTexture()->getDefaultView().getSampledView()
+				//	, m_smResult[SmTexture::ePosition].getSampler()->getSampler()
+				//	, RsmPositionIdx ),
+				//makeDescriptorWrite( m_smResult[SmTexture::eFlux].getTexture()->getDefaultView().getSampledView()
+				//	, m_smResult[SmTexture::eFlux].getSampler()->getSampler()
+				//	, RsmFluxIdx ),
 			}
 			, {} );
 		m_commands = getCommands( *m_timer, 0u );
@@ -641,28 +529,29 @@ namespace castor3d
 		};
 		auto & cmd = *commands.commandBuffer;
 
-		cmd.begin();
-		timer.beginPass( cmd, index );
-		cmd.beginDebugBlock(
-			{
-				"Lighting - RSM GI",
-				castor3d::makeFloatArray( m_renderSystem.getEngine()->getNextRainbowColour() ),
-			} );
-		cmd.memoryBarrier( VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ) );
-		cmd.beginRenderPass( *m_renderPass
-			, *m_frameBuffer
-			, { castor3d::transparentBlackClearColor, castor3d::transparentBlackClearColor }
-			, VK_SUBPASS_CONTENTS_INLINE );
-		registerPass( cmd );
-		cmd.endRenderPass();
-		cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
-			, m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-		cmd.endDebugBlock();
-		timer.endPass( cmd, index );
-		cmd.end();
+		// TODO CRG
+		//cmd.begin();
+		//timer.beginPass( cmd, index );
+		//cmd.beginDebugBlock(
+		//	{
+		//		"Lighting - RSM GI",
+		//		castor3d::makeFloatArray( m_renderSystem.getEngine()->getNextRainbowColour() ),
+		//	} );
+		//cmd.memoryBarrier( VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
+		//	, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+		//	, m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ) );
+		//cmd.beginRenderPass( *m_renderPass
+		//	, *m_frameBuffer
+		//	, { castor3d::transparentBlackClearColor, castor3d::transparentBlackClearColor }
+		//	, VK_SUBPASS_CONTENTS_INLINE );
+		//registerPass( cmd );
+		//cmd.endRenderPass();
+		//cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+		//	, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
+		//	, m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		//cmd.endDebugBlock();
+		//timer.endPass( cmd, index );
+		//cmd.end();
 
 		return commands;
 	}
@@ -670,11 +559,11 @@ namespace castor3d
 	void RsmGIPass::accept( PipelineVisitorBase & visitor )
 	{
 		visitor.visit( getName() + " GI"
-			, m_result[0].getTexture()->getDefaultView().getSampledView()
+			, m_resultViews[0]
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( getName() + " Normal"
-			, m_result[1].getTexture()->getDefaultView().getSampledView()
+			, m_resultViews[1]
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 

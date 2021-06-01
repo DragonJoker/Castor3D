@@ -65,17 +65,18 @@ namespace castor3d
 		 *\param[in]	gpInfoUbo				L'UBO de la passe géométrique.
 		 *\param[in]	hdrConfigUbo			L'UBO HDR.
 		 */
-		C3D_API OpaqueResolvePass( Engine & engine
+		C3D_API OpaqueResolvePass( crg::FrameGraph & graph
+			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, Scene & scene
 			, OpaquePassResult const & gp
 			, SsaoPass const & ssao
-			, TextureUnit const & subsurfaceScattering
-			, TextureUnit const & lightDiffuse
-			, TextureUnit const & lightSpecular
-			, TextureUnit const & lightIndirectDiffuse
-			, TextureUnit const & lightIndirectSpecular
-			, TextureUnit const & result
+			, crg::ImageViewId const & subsurfaceScattering
+			, crg::ImageViewId const & lightDiffuse
+			, crg::ImageViewId const & lightSpecular
+			, crg::ImageViewId const & lightIndirectDiffuse
+			, crg::ImageViewId const & lightIndirectSpecular
+			, crg::ImageViewId const & result
 			, SceneUbo const & sceneUbo
 			, GpInfoUbo const & gpInfoUbo
 			, HdrConfigUbo const & hdrConfigUbo );
@@ -117,12 +118,12 @@ namespace castor3d
 				, OpaquePassResult const & gp
 				, ashes::DescriptorSetLayout const & uboLayout
 				, ashes::RenderPass const & renderPass
-				, ashes::ImageView const * ssao
-				, ashes::ImageView const * subsurfaceScattering
-				, ashes::ImageView const & lightDiffuse
-				, ashes::ImageView const & lightSpecular
-				, ashes::ImageView const * lightIndirectDiffuse
-				, ashes::ImageView const * lightIndirectSpecular
+				, crg::ImageViewId const * ssao
+				, crg::ImageViewId const * subsurfaceScattering
+				, crg::ImageViewId const & lightDiffuse
+				, crg::ImageViewId const & lightSpecular
+				, crg::ImageViewId const * lightIndirectDiffuse
+				, crg::ImageViewId const * lightIndirectSpecular
 				, SamplerSPtr const & sampler
 				, VkExtent2D const & size
 				, FogType fogType
@@ -161,7 +162,7 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		Scene const & m_scene;
-		TextureUnit const & m_result;
+		crg::ImageViewId const & m_result;
 		SceneUbo const & m_sceneUbo;
 		GpInfoUbo const & m_gpInfoUbo;
 		HdrConfigUbo const & m_hdrConfigUbo;
@@ -170,18 +171,16 @@ namespace castor3d
 		Viewport m_viewport;
 		SamplerSPtr m_sampler;
 		OpaquePassResult const & m_opaquePassResult;
-		TextureUnit const & m_subsurfaceScattering;
-		TextureUnit const & m_lightDiffuse;
-		TextureUnit const & m_lightSpecular;
-		TextureUnit const & m_lightIndirectDiffuse;
-		TextureUnit const & m_lightIndirectSpecular;
+		crg::ImageViewId const & m_subsurfaceScattering;
+		crg::ImageViewId const & m_lightDiffuse;
+		crg::ImageViewId const & m_lightSpecular;
+		crg::ImageViewId const & m_lightIndirectDiffuse;
+		crg::ImageViewId const & m_lightIndirectSpecular;
 		ashes::VertexBufferBasePtr m_vertexBuffer;
 		ashes::DescriptorSetLayoutPtr m_uboDescriptorLayout;
 		ashes::DescriptorSetPoolPtr m_uboDescriptorPool;
 		ashes::DescriptorSetPtr m_uboDescriptorSet;
 		ashes::WriteDescriptorSetArray m_texDescriptorWrites;
-		ashes::RenderPassPtr m_renderPass;
-		ashes::FrameBufferPtr m_frameBuffer;
 		ashes::SemaphorePtr m_finished;
 		RenderPassTimerSPtr m_timer;
 		ReflectionPrograms m_programs;

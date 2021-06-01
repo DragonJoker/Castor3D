@@ -41,48 +41,13 @@ namespace castor3d
 		 *\param[in]	view		La texture.
 		 *\param[in]	kernelSize	Le nombre de coefficients du kernel.
 		 */
-		C3D_API GaussianBlur( Engine & engine
+		C3D_API GaussianBlur( crg::FrameGraph & graph
+			, crg::FramePass const & previousPass
 			, RenderDevice const & device
 			, castor::String const & prefix
-			, TextureView const & view
+			, crg::ImageViewId const & view
 			, uint32_t kernelSize );
 		C3D_API ~GaussianBlur();
-		/**
-		 *\~english
-		 *\brief		Blurs given texture.
-		 *\param[in]	toWait	The semaphore to wait for.
-		 *\~french
-		 *\brief		Applique le flou sur la texture.
-		 *\param[in]	toWait	Le sémaphore à attendre.
-		 */
-		C3D_API ashes::Semaphore const & blur( ashes::Semaphore const & toWait );
-		/**
-		 *\~english
-		 *\param[in]	generateMipmaps	Tells if mipmaps generation is to be executed after blur.
-		 *\param[in]	layer			The layer to blur.
-		 *\return		The commands used to render the pass.
-		 *\~french
-		 *\param[in]	generateMipmaps	Dit si la génération de mipmaps doit être effectuée après le flou.
-		 *\param[in]	layer			La layer à flouter
-		 *\return		Les commandes utilisées pour rendre la passe.
-		 */
-		C3D_API CommandsSemaphore getCommands( bool generateMipmaps = false
-			, uint32_t layer = 0u )const;
-		/**
-		 *\~english
-		 *\param[in]	timer			The render timer.
-		 *\param[in]	layer			The layer to blur.
-		 *\param[in]	generateMipmaps	Tells if mipmaps generation is to be executed after blur.
-		 *\return		The commands used to render the pass.
-		 *\~french
-		 *\param[in]	timer			Le timer de rendu.
-		 *\param[in]	layer			La layer à flouter
-		 *\param[in]	generateMipmaps	Dit si la génération de mipmaps doit être effectuée après le flou.
-		 *\return		Les commandes utilisées pour rendre la passe.
-		 */
-		C3D_API CommandsSemaphore getCommands( RenderPassTimer const & timer
-			, uint32_t layer
-			, bool generateMipmaps = false )const;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -100,32 +65,6 @@ namespace castor3d
 		{
 			CU_Require( m_renderPass );
 			return *m_renderPass;
-		}
-
-		ashes::FrameBuffer const & getBlurXFrameBuffer( uint32_t level )const
-		{
-			CU_Require( ( !m_blurX.fbos.empty() )
-				&& m_blurX.fbos[0u].size() > level
-				&& m_blurX.fbos[0u][level] );
-			return *m_blurX.fbos[0u][level];
-		}
-
-		ashes::FrameBuffer const & getBlurYFrameBuffer( uint32_t layer, uint32_t level )const
-		{
-			CU_Require( m_blurY.fbos.size() > layer
-				&& m_blurY.fbos[layer].size() > level
-				&& m_blurY.fbos[layer][level] );
-			return *m_blurY.fbos[layer][level];
-		}
-
-		ashes::CommandBuffer const & getBlurXCommandBuffer()const
-		{
-			return *m_blurX.commandBuffer;
-		}
-
-		ashes::CommandBuffer const & getBlurYCommandBuffer()const
-		{
-			return *m_blurY.commandBuffer;
 		}
 
 		ShaderModule const & getBlurXVertexModule()const
@@ -188,66 +127,34 @@ namespace castor3d
 			std::array< castor::Point4f, GaussianBlur::MaxCoefficients / 4u > blurCoeffs; // We then allow for 60 coeffs max, to have a 256 bytes struct.
 		};
 
-		class RenderQuad
-			: public castor3d::RenderQuad
-		{
-		public:
-			RenderQuad( RenderSystem & renderSystem
-				, RenderDevice const & device
-				, castor::String const & name
-				, ashes::ImageView const & src
-				, VkImageSubresourceRange const & srcRange
-				, UniformBufferOffsetT< Configuration > const & blurUbo
-				, ShaderModule const & vertexShader
-				, ShaderModule const & pixelShader
-				, ashes::RenderPass const & renderPass
-				, VkExtent2D const & textureSize );
-
-		public:
-			ashes::ImageView srcView;
-
-		private:
-			UniformBufferOffsetT< Configuration > const & m_blurUbo;
-		};
-		using RenderQuadPtr = std::unique_ptr< RenderQuad >;
-
 		struct BlurPass
 		{
 			ShaderModule vertexShader;
 			ShaderModule pixelShader;
-			RenderQuad quad;
-			ashes::SemaphorePtr semaphore;
-			ashes::ImageViewArray views;
-			std::vector< ashes::FrameBufferPtrArray > fbos;
-			ashes::CommandBufferPtr commandBuffer;
+			ashes::PipelineShaderStageCreateInfoArray stages;
 			bool isHorizontal;
 
-			BlurPass( Engine & engine
+			BlurPass( crg::FrameGraph & graph
+				, crg::FramePass const *& previousPass
 				, RenderDevice const & device
 				, castor::String const & name
-				, ashes::ImageView const & input
-				, ashes::ImageView const & output
+				, crg::ImageViewId const & input
+				, crg::ImageViewId const & output
 				, UniformBufferOffsetT< GaussianBlur::Configuration > const & blurUbo
 				, VkFormat format
 				, VkExtent2D const & textureSize
-				, ashes::RenderPass const & renderPass
 				, bool isHorizontal );
-			void getCommands( ashes::CommandBuffer & cmd
-				, ashes::RenderPass const & renderPass
-				, uint32_t layer
-				, bool generateMipmaps )const;
-
-		private:
-			Engine & m_engine;
 		};
 
 	private:
-		TextureView const & m_source;
+		crg::ImageViewId const & m_source;
 		RenderDevice const & m_device;
+		crg::FramePass const * m_previousPass;
 		castor::String m_prefix;
 		VkExtent2D m_size;
 		VkFormat m_format;
-		TextureUnit m_intermediate;
+		crg::ImageId m_intermediate;
+		crg::ImageViewId m_intermediateView;
 		ashes::RenderPassPtr m_renderPass;
 		UniformBufferOffsetT< Configuration > m_blurUbo;
 		std::vector< float > m_kernel;

@@ -1270,12 +1270,12 @@ namespace castor3d
 			, ashes::DescriptorSetPool & pool
 			, ashes::DescriptorSetLayout const & layout
 			, OpaquePassResult const & gp
-			, ashes::ImageView const * ssao
-			, ashes::ImageView const * sssss
-			, ashes::ImageView const & lightDiffuse
-			, ashes::ImageView const & lightSpecular
-			, ashes::ImageView const * lightIndirectDiffuse
-			, ashes::ImageView const * lightIndirectSpecular
+			, crg::ImageViewId const * ssao
+			, crg::ImageViewId const * sssss
+			, crg::ImageViewId const & lightDiffuse
+			, crg::ImageViewId const & lightSpecular
+			, crg::ImageViewId const * lightIndirectDiffuse
+			, crg::ImageViewId const * lightIndirectSpecular
 			, SamplerSPtr sampler
 			, Scene const & scene
 			, MaterialType matType
@@ -1287,85 +1287,81 @@ namespace castor3d
 			auto imgLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 			ashes::WriteDescriptorSetArray writes;
 
-			for ( auto unit : gp )
-			{
-				writes.push_back( {
-					index++,
-					0u,
-					VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-					{
-						{
-							unit->getSampler()->getSampler(),
-							unit->getTexture()->getDefaultView().getSampledView(),
-							imgLayout
-						}
-					} } );
-			}
+			// TODO CRG
+			//for ( auto unit : gp )
+			//{
+			//	writes.push_back( { index++
+			//		, 0u
+			//		, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			//		, { { unit.sampler
+			//			, unit.wholeView
+			//			, imgLayout } } } );
+			//}
 
-			if ( ssao )
-			{
-				writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { sampler->getSampler(), *ssao, imgLayout } } } );
-			}
+			//if ( ssao )
+			//{
+			//	writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { sampler->getSampler(), *ssao, imgLayout } } } );
+			//}
 
-			if ( sssss )
-			{
-				writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { sampler->getSampler(), *sssss, imgLayout } } } );
-			}
-			else
-			{
-				writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { sampler->getSampler(), lightDiffuse, imgLayout } } } );
-			}
+			//if ( sssss )
+			//{
+			//	writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { sampler->getSampler(), *sssss, imgLayout } } } );
+			//}
+			//else
+			//{
+			//	writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { sampler->getSampler(), lightDiffuse, imgLayout } } } );
+			//}
 
-			writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { sampler->getSampler(), lightSpecular, imgLayout } } } );
+			//writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { sampler->getSampler(), lightSpecular, imgLayout } } } );
 
-			if ( lightIndirectDiffuse )
-			{
-				writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { sampler->getSampler(), *lightIndirectDiffuse, imgLayout } } } );
-			}
+			//if ( lightIndirectDiffuse )
+			//{
+			//	writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { sampler->getSampler(), *lightIndirectDiffuse, imgLayout } } } );
+			//}
 
-			if ( lightIndirectSpecular )
-			{
-				writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { sampler->getSampler(), *lightIndirectSpecular, imgLayout } } } );
-			}
+			//if ( lightIndirectSpecular )
+			//{
+			//	writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { sampler->getSampler(), *lightIndirectSpecular, imgLayout } } } );
+			//}
 
-			auto & background = *scene.getBackground();
-			auto envMapCount = c_noIblEnvironmentCount;
+			//auto & background = *scene.getBackground();
+			//auto envMapCount = c_noIblEnvironmentCount;
 
-			if ( matType != MaterialType::ePhong
-				&& background.hasIbl() )
-			{
-				auto & ibl = background.getIbl();
-				writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { ibl.getPrefilteredBrdfSampler(), ibl.getPrefilteredBrdfTexture(), imgLayout } } } );
-				writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { ibl.getIrradianceSampler(), ibl.getIrradianceTexture(), imgLayout } } } );
-				writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { ibl.getPrefilteredEnvironmentSampler(), ibl.getPrefilteredEnvironmentTexture(), imgLayout } } } );
-				envMapCount -= c_iblTexturesCount;
-			}
+			//if ( matType != MaterialType::ePhong
+			//	&& background.hasIbl() )
+			//{
+			//	auto & ibl = background.getIbl();
+			//	writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { ibl.getPrefilteredBrdfSampler(), ibl.getPrefilteredBrdfTexture(), imgLayout } } } );
+			//	writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { ibl.getIrradianceSampler(), ibl.getIrradianceTexture(), imgLayout } } } );
+			//	writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { ibl.getPrefilteredEnvironmentSampler(), ibl.getPrefilteredEnvironmentTexture(), imgLayout } } } );
+			//	envMapCount -= c_iblTexturesCount;
+			//}
 
-			writes.push_back( { index++, 0u, envMapCount, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER } );
-			CU_Require( index < device.properties.limits.maxDescriptorSetSampledImages );
+			//writes.push_back( { index++, 0u, envMapCount, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER } );
+			//CU_Require( index < device.properties.limits.maxDescriptorSetSampledImages );
 
-			writes.back().imageInfo.reserve( envMapCount );
+			//writes.back().imageInfo.reserve( envMapCount );
 
-			auto & envWrites = writes.back();
-			auto it = envMaps.begin();
-			uint32_t i = 0u;
+			//auto & envWrites = writes.back();
+			//auto it = envMaps.begin();
+			//uint32_t i = 0u;
 
-			while ( it != envMaps.end() && i < envMapCount )
-			{
-				envWrites.imageInfo.push_back( { it->get().getTexture().getSampler()->getSampler()
-					, it->get().getTexture().getTexture()->getDefaultView().getSampledView()
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
-				++i;
-				++it;
-			}
+			//while ( it != envMaps.end() && i < envMapCount )
+			//{
+			//	envWrites.imageInfo.push_back( { it->get().getTexture().getSampler()->getSampler()
+			//		, it->get().getTexture().getTexture()->getDefaultView().getSampledView()
+			//		, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
+			//	++i;
+			//	++it;
+			//}
 
-			while ( i < envMapCount )
-			{
-				envWrites.imageInfo.push_back( { sampler->getSampler()
-					, background.getView()
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
-				++i;
-			}
+			//while ( i < envMapCount )
+			//{
+			//	envWrites.imageInfo.push_back( { sampler->getSampler()
+			//		, background.getView()
+			//		, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
+			//	++i;
+			//}
 
 			descriptorSet->setBindings( writes );
 			descriptorSet->update();
@@ -1440,12 +1436,12 @@ namespace castor3d
 		, OpaquePassResult const & gp
 		, ashes::DescriptorSetLayout const & uboLayout
 		, ashes::RenderPass const & renderPass
-		, ashes::ImageView const * ssao
-		, ashes::ImageView const * subsurfaceScattering
-		, ashes::ImageView const & lightDiffuse
-		, ashes::ImageView const & lightSpecular
-		, ashes::ImageView const * lightIndirectDiffuse
-		, ashes::ImageView const * lightIndirectSpecular
+		, crg::ImageViewId const * ssao
+		, crg::ImageViewId const * subsurfaceScattering
+		, crg::ImageViewId const & lightDiffuse
+		, crg::ImageViewId const & lightSpecular
+		, crg::ImageViewId const * lightIndirectDiffuse
+		, crg::ImageViewId const * lightIndirectSpecular
 		, SamplerSPtr const & sampler
 		, VkExtent2D const & size
 		, FogType fogType
@@ -1494,31 +1490,32 @@ namespace castor3d
 		, ashes::FrameBuffer const & frameBuffer
 		, RenderPassTimer & timer )
 	{
-		commandBuffer->begin();
-		commandBuffer->beginDebugBlock(
-			{
-				"Deferred - Resolve",
-				makeFloatArray( engine.getNextRainbowColour() ),
-			} );
-		timer.beginPass( *commandBuffer );
-		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, opaquePassResult[DsTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ) );
-		commandBuffer->beginRenderPass( *renderPass
-			, frameBuffer
-			, { transparentBlackClearColor }
-			, VK_SUBPASS_CONTENTS_INLINE );
-		commandBuffer->bindPipeline( *pipeline );
-		commandBuffer->bindDescriptorSets( { uboSet, *texDescriptorSet }, *pipelineLayout );
-		commandBuffer->bindVertexBuffer( 0u, vbo.getBuffer(), 0u );
-		commandBuffer->draw( 6u );
-		commandBuffer->endRenderPass();
-		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
-			, opaquePassResult[DsTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-		timer.endPass( *commandBuffer );
-		commandBuffer->endDebugBlock();
-		commandBuffer->end();
+		// TODO CRG
+		//commandBuffer->begin();
+		//commandBuffer->beginDebugBlock(
+		//	{
+		//		"Deferred - Resolve",
+		//		makeFloatArray( engine.getNextRainbowColour() ),
+		//	} );
+		//timer.beginPass( *commandBuffer );
+		//commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT
+		//	, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+		//	, opaquePassResult[DsTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ) );
+		//commandBuffer->beginRenderPass( *renderPass
+		//	, frameBuffer
+		//	, { transparentBlackClearColor }
+		//	, VK_SUBPASS_CONTENTS_INLINE );
+		//commandBuffer->bindPipeline( *pipeline );
+		//commandBuffer->bindDescriptorSets( { uboSet, *texDescriptorSet }, *pipelineLayout );
+		//commandBuffer->bindVertexBuffer( 0u, vbo.getBuffer(), 0u );
+		//commandBuffer->draw( 6u );
+		//commandBuffer->endRenderPass();
+		//commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+		//	, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
+		//	, opaquePassResult[DsTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		//timer.endPass( *commandBuffer );
+		//commandBuffer->endDebugBlock();
+		//commandBuffer->end();
 	}
 
 	void OpaqueResolvePass::ProgramPipeline::accept( PipelineVisitorBase & visitor )
@@ -1529,21 +1526,22 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	OpaqueResolvePass::OpaqueResolvePass( Engine & engine
+	OpaqueResolvePass::OpaqueResolvePass( crg::FrameGraph & graph
+		, crg::FramePass const *& previousPass
 		, RenderDevice const & device
 		, Scene & scene
 		, OpaquePassResult const & gp
 		, SsaoPass const & ssao
-		, TextureUnit const & subsurfaceScattering
-		, TextureUnit const & lightDiffuse
-		, TextureUnit const & lightSpecular
-		, TextureUnit const & lightIndirectDiffuse
-		, TextureUnit const & lightIndirectSpecular
-		, TextureUnit const & result
+		, crg::ImageViewId const & subsurfaceScattering
+		, crg::ImageViewId const & lightDiffuse
+		, crg::ImageViewId const & lightSpecular
+		, crg::ImageViewId const & lightIndirectDiffuse
+		, crg::ImageViewId const & lightIndirectSpecular
+		, crg::ImageViewId const & result
 		, SceneUbo const & sceneUbo
 		, GpInfoUbo const & gpInfoUbo
 		, HdrConfigUbo const & hdrConfigUbo )
-		: OwnedBy< Engine >{ engine }
+		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
 		, m_device{ device }
 		, m_scene{ scene }
 		, m_result{ result }
@@ -1551,14 +1549,14 @@ namespace castor3d
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_hdrConfigUbo{ hdrConfigUbo }
 		, m_ssao{ ssao }
-		, m_sampler{ engine.getDefaultSampler() }
+		, m_sampler{ getEngine()->getDefaultSampler() }
 		, m_opaquePassResult{ gp }
 		, m_subsurfaceScattering{ subsurfaceScattering }
 		, m_lightDiffuse{ lightDiffuse }
 		, m_lightSpecular{ lightSpecular }
 		, m_lightIndirectDiffuse{ lightIndirectDiffuse }
 		, m_lightIndirectSpecular{ lightIndirectSpecular }
-		, m_viewport{ engine }
+		, m_viewport{ *getEngine() }
 		, m_programs{ nullptr }
 	{
 	}
@@ -1566,14 +1564,15 @@ namespace castor3d
 	void OpaqueResolvePass::initialise()
 	{
 		auto & engine = *getEngine();
-		auto & result = *m_result.getTexture();
-		VkExtent2D size{ result.getWidth(), result.getHeight() };
+		auto & result = m_result;
+		VkExtent2D size{ getExtent(result ).width, getExtent( result ).height };
 		m_vertexBuffer = doCreateVbo( m_device );
 		m_uboDescriptorLayout = doCreateUboDescriptorLayout( engine, m_device );
 		m_uboDescriptorPool = m_uboDescriptorLayout->createPool( "OpaqueResolvePassUbo", 1u );
 		m_uboDescriptorSet = doCreateUboDescriptorSet( engine, *m_uboDescriptorPool, m_sceneUbo, m_gpInfoUbo, m_hdrConfigUbo );
-		m_renderPass = doCreateRenderPass( m_device, result.getPixelFormat() );
-		m_frameBuffer = doCreateFrameBuffer( *m_renderPass, size, result.getDefaultView().getSampledView() );
+		// TODO CRG
+		//m_renderPass = doCreateRenderPass( m_device, getFormat( result ) );
+		//m_frameBuffer = doCreateFrameBuffer( *m_renderPass, size, result );
 		m_finished = m_device->createSemaphore( "OpaqueResolvePass" );
 		m_timer = std::make_shared< RenderPassTimer >( m_device, cuT( "Opaque" ), cuT( "Resolve pass" ) );
 		m_viewport.setOrtho( 0, 1, 0, 1, 0, 1 );
@@ -1586,8 +1585,6 @@ namespace castor3d
 		m_programs = {};
 		m_timer.reset();
 		m_finished.reset();
-		m_frameBuffer.reset();
-		m_renderPass.reset();
 		m_uboDescriptorSet.reset();
 		m_uboDescriptorPool.reset();
 		m_uboDescriptorLayout.reset();
@@ -1598,10 +1595,11 @@ namespace castor3d
 	{
 		m_voxelConeTracing = updater.voxelConeTracing;
 		auto & program = getProgram();
-		program.updateCommandBuffer( *m_vertexBuffer
-			, *m_uboDescriptorSet
-			, *m_frameBuffer
-			, *m_timer );
+		// TODO CRG
+		//program.updateCommandBuffer( *m_vertexBuffer
+		//	, *m_uboDescriptorSet
+		//	, *m_frameBuffer
+		//	, *m_timer );
 		m_currentProgram = &program;
 	}
 
@@ -1641,36 +1639,37 @@ namespace castor3d
 			+ ( hasSpecularGi ? 1u : 0u );
 		auto & result = m_programs[index];
 
-		if ( !result )
-		{
-			auto & engine = *getEngine();
-			auto & tex = *m_result.getTexture();
-			VkExtent2D size{ tex.getWidth(), tex.getHeight() };
-			result = std::make_unique< ProgramPipeline >( engine
-				, m_device
-				, m_opaquePassResult
-				, *m_uboDescriptorLayout
-				, *m_renderPass
-				, ( hasSsao
-					? &m_ssao.getResult().getTexture()->getDefaultView().getSampledView()
-					: nullptr )
-				, ( hasSssss
-					? &m_subsurfaceScattering.getTexture()->getDefaultView().getSampledView()
-					: nullptr )
-				, m_lightDiffuse.getTexture()->getDefaultView().getSampledView()
-				, m_lightSpecular.getTexture()->getDefaultView().getSampledView()
-				, ( hasDiffuseGi
-					? &m_lightIndirectDiffuse.getTexture()->getDefaultView().getSampledView()
-					: nullptr )
-				, ( hasSpecularGi
-					? &m_lightIndirectSpecular.getTexture()->getDefaultView().getSampledView()
-					: nullptr )
-				, m_sampler
-				, size
-				, fog
-				, engine.getMaterialsType()
-				, m_scene );
-		}
+		// TODO CRG
+		//if ( !result )
+		//{
+		//	auto & engine = *getEngine();
+		//	auto & tex = *m_result.getTexture();
+		//	VkExtent2D size{ tex.getWidth(), tex.getHeight() };
+		//	result = std::make_unique< ProgramPipeline >( engine
+		//		, m_device
+		//		, m_opaquePassResult
+		//		, *m_uboDescriptorLayout
+		//		, *m_renderPass
+		//		, ( hasSsao
+		//			? &m_ssao.getResult().getTexture()->getDefaultView().getSampledView()
+		//			: nullptr )
+		//		, ( hasSssss
+		//			? &m_subsurfaceScattering.getTexture()->getDefaultView().getSampledView()
+		//			: nullptr )
+		//		, m_lightDiffuse.getTexture()->getDefaultView().getSampledView()
+		//		, m_lightSpecular.getTexture()->getDefaultView().getSampledView()
+		//		, ( hasDiffuseGi
+		//			? &m_lightIndirectDiffuse.getTexture()->getDefaultView().getSampledView()
+		//			: nullptr )
+		//		, ( hasSpecularGi
+		//			? &m_lightIndirectSpecular.getTexture()->getDefaultView().getSampledView()
+		//			: nullptr )
+		//		, m_sampler
+		//		, size
+		//		, fog
+		//		, engine.getMaterialsType()
+		//		, m_scene );
+		//}
 
 		return *result;
 	}

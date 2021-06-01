@@ -47,10 +47,11 @@ namespace castor3d
 		 *\param[in]	size		Les dimensions de la zone de rendu.
 		 *\param[in]	depthBuffer	Le tampon de profondeur non linéarisé.
 		 */
-		C3D_API LineariseDepthPass( RenderDevice const & device
+		C3D_API LineariseDepthPass( crg::FrameGraph & graph
+			, RenderDevice const & device
 			, castor::String const & prefix
 			, castor::Size const & size
-			, ashes::ImageView const & depthBuffer );
+			, crg::ImageViewId const & depthBuffer );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -140,8 +141,8 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		Engine & m_engine;
-		ashes::ImageView const & m_srcDepthBuffer;
-		ashes::ImageView m_depthBuffer;
+		crg::ImageViewId const & m_srcDepthBuffer;
+		crg::ImageViewId m_depthBuffer;
 		castor::String m_prefix;
 		VkExtent2D m_size;
 		TextureUnit m_result;

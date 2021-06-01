@@ -22,7 +22,8 @@ using namespace castor;
 
 namespace castor3d
 {
-	WeightedBlendRendering::WeightedBlendRendering( RenderDevice const & device
+	WeightedBlendRendering::WeightedBlendRendering( crg::FrameGraph & graph
+		, RenderDevice const & device
 		, TransparentPass & transparentPass
 		, TransparentPassResult const & transparentPassResult
 		, ashes::ImageView const & colourView
@@ -68,11 +69,11 @@ namespace castor3d
 	void WeightedBlendRendering::accept( RenderTechniqueVisitor & visitor )
 	{
 		visitor.visit( "Transparent Accumulation"
-			, m_transparentPassResult[WbTexture::eAccumulation].getTexture()->getDefaultView().getSampledView()
+			, m_transparentPassResult[WbTexture::eAccumulation].wholeView
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Transparent Revealage"
-			, m_transparentPassResult[WbTexture::eRevealage].getTexture()->getDefaultView().getSampledView()
+			, m_transparentPassResult[WbTexture::eRevealage].wholeView
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 		m_transparentPass.accept( visitor );

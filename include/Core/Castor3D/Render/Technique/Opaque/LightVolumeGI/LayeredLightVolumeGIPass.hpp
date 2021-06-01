@@ -54,7 +54,7 @@ namespace castor3d
 			, LayeredLpvGridConfigUbo const & lpvConfigUbo
 			, OpaquePassResult const & gpResult
 			, LightVolumePassResultArray const & lpvResult
-			, TextureUnit const & dst
+			, crg::ImageViewId const & dst
 			, BlendMode blendMode );
 		/**
 		 *\~english
@@ -77,7 +77,7 @@ namespace castor3d
 		LayeredLpvGridConfigUbo const & m_lpvConfigUbo;
 		OpaquePassResult const & m_gpResult;
 		LightVolumePassResultArray const & m_lpvResult;
-		TextureUnit const & m_result;
+		crg::ImageViewId const & m_result;
 		ShaderModule m_vertexShader;
 		ShaderModule m_pixelShader;
 		ashes::RenderPassPtr m_renderPass;

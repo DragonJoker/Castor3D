@@ -26,7 +26,7 @@ namespace castor3d
 			std::unique_ptr< MatrixUbo > matrixUbo;
 			CameraSPtr camera;
 			SceneCullerUPtr culler;
-			ShadowMapPassSPtr pass;
+			ShadowMapPass * pass;
 		};
 
 	public:
@@ -57,16 +57,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~ShadowMap();
-		/**
-		 *\~english
-		 *\brief		Initialises the frame buffer and light type specific data.
-		 *\param[in]	device	The GPU device.
-		 *\~french
-		 *\brief		Initialise le frame buffer et les données spécifiques au type de source lumineuse.
-		 *\param[in]	device	Le device GPU.
-		 */
-		C3D_API bool initialise();
+		C3D_API virtual ~ShadowMap() = default;
 		/**
 		*\~english
 		*\brief
@@ -98,21 +89,8 @@ namespace castor3d
 		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API virtual void update( GpuUpdater & updater ) = 0;
-		/**
-		 *\~english
-		 *\brief		Renders the light's shadow map.
-		 *\param[in]	device	The GPU device.
-		 *\param[out]	toWait	The semaphore from previous render pass.
-		 *\param[out]	index	The map index.
-		 *\~french
-		 *\brief		Dessine la shadow map de la lumière.
-		 *\param[in]	device	Le device GPU.
-		 *\param[out]	toWait	Le sémaphore de la précédente passe de rendu.
-		 *\param[out]	index	L'indice de la texture.
-		 */
-		C3D_API ashes::Semaphore const & render( RenderDevice const & device
-			, ashes::Semaphore const & toWait
-			, uint32_t index );
+		C3D_API void setPass( uint32_t index
+			, ShadowMapPass * pass );
 		/**
 		*\~english
 		*name
@@ -125,7 +103,7 @@ namespace castor3d
 		C3D_API ashes::VkClearValueArray const & getClearValues()const;
 		C3D_API ashes::Sampler const & getSampler( SmTexture texture
 			, uint32_t index = 0u )const;
-		C3D_API virtual ashes::ImageView const & getView( SmTexture texture
+		C3D_API virtual crg::ImageViewId getView( SmTexture texture
 			, uint32_t index = 0u )const;
 
 		ShadowMapResult const & getShadowPassResult()const
@@ -142,11 +120,6 @@ namespace castor3d
 		{
 			return m_count;
 		}
-
-		bool isInitialised()const
-		{
-			return m_initialised;
-		}
 		/**@}*/
 	public:
 		static constexpr TextureFlags textureFlags{ TextureFlag::eOpacity
@@ -158,22 +131,6 @@ namespace castor3d
 			| TextureFlag::eTransmittance };
 
 	private:
-		/**
-		 *\copydoc		castor3d::ShadowMap::initialise
-		 */
-		C3D_API virtual void doInitialise( RenderDevice const & device ) = 0;
-		/**
-		 *\copydoc		castor3d::ShadowMap::render
-		 */
-		C3D_API virtual ashes::Semaphore const & doRender( RenderDevice const & device
-			, ashes::Semaphore const & toWait
-			, uint32_t index ) = 0;
-		/**
-		 *\~english
-		 *\brief		Checks if all passes for given map index are up to date.
-		 *\~french
-		 *\brief		Vérifie si toutes les passes pour l'index de map donné sont à jour.
-		 */
 		C3D_API virtual bool isUpToDate( uint32_t index )const = 0;
 
 	protected:
@@ -181,13 +138,10 @@ namespace castor3d
 		Scene & m_scene;
 		LightType m_lightType;
 		castor::String m_name;
-		ashes::FencePtr m_fence;
 		std::set< std::reference_wrapper< GeometryBuffers > > m_geometryBuffers;
 		std::vector< PassData > m_passes;
 		uint32_t m_count;
-		ashes::SemaphorePtr m_finished;
 		ShadowMapResult m_result;
-		bool m_initialised{ false };
 	};
 }
 

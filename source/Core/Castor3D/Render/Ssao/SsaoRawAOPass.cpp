@@ -516,10 +516,11 @@ namespace castor3d
 			};
 		}
 
-		SamplerSPtr doCreateSampler( Engine & engine
+		SamplerSPtr doCreateSampler( RenderDevice const & device
 			, String const & name
 			, VkSamplerAddressMode mode )
 		{
+			auto & engine = *device.renderSystem.getEngine();
 			SamplerSPtr sampler;
 
 			if ( engine.getSamplerCache().has( name ) )
@@ -538,14 +539,13 @@ namespace castor3d
 			return sampler;
 		}
 
-		TextureUnit doCreateTexture( Engine & engine
-			, RenderDevice const & device
+		TextureUnit doCreateTexture( RenderDevice const & device
 			, castor::String const & name
 			, VkFormat format
 			, VkExtent2D const & size )
 		{
-			auto & renderSystem = *engine.getRenderSystem();
-			auto sampler = doCreateSampler( engine, name, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+			auto & renderSystem = device.renderSystem;
+			auto sampler = doCreateSampler( device, name, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 
 			ashes::ImageCreateInfo image
 			{
@@ -564,7 +564,7 @@ namespace castor3d
 				, image
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, name );
-			TextureUnit result{ engine };
+			TextureUnit result{ *renderSystem.getEngine() };
 			result.setTexture( ssaoResult );
 			result.setSampler( sampler );
 			result.initialise( device );
@@ -725,86 +725,78 @@ namespace castor3d
 	
 	//*********************************************************************************************
 
-	SsaoRawAOPass::SsaoRawAOPass( Engine & engine
+	SsaoRawAOPass::SsaoRawAOPass( crg::FrameGraph & graph
 		, RenderDevice const & device
 		, VkExtent2D const & size
 		, SsaoConfig const & config
 		, SsaoConfigUbo & ssaoConfigUbo
 		, GpInfoUbo const & gpInfoUbo
 		, TextureUnit const & linearisedDepthBuffer
-		, ashes::ImageView const & normals )
-		: m_engine{ engine }
-		, m_device{ device }
+		, crg::ImageViewId const & normals )
+		: m_device{ device }
 		, m_ssaoConfig{ config }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_linearisedDepthBuffer{ linearisedDepthBuffer }
 		, m_normals{ normals }
 		, m_size{ size }
-		, m_result{ doCreateTexture( m_engine
-			, m_device
+		, m_result{ doCreateTexture( m_device
 			, "SsaoRawAOResult"
 			, SsaoRawAOPass::ResultFormat
 			, m_size ) }
-		, m_bentNormals{ doCreateTexture( m_engine
-			, m_device
+		, m_bentNormals{ doCreateTexture( m_device
 			, "BentNormals"
 			, VK_FORMAT_R32G32B32A32_SFLOAT
 			, m_size ) }
-		, m_renderPass{ doCreateRenderPass( m_device, { m_result, m_bentNormals } ) }
-		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, { m_result, m_bentNormals } ) }
-		, m_quads{ RenderQuad{ m_engine
-				, m_device
-				, *m_renderPass
-				, m_size
-				, m_ssaoConfigUbo
-				, m_gpInfoUbo
-				, m_linearisedDepthBuffer
-				, nullptr }
-			, RenderQuad{ m_engine
-				, m_device
-				, *m_renderPass
-				, m_size
-				, m_ssaoConfigUbo
-				, m_gpInfoUbo
-				, m_linearisedDepthBuffer
-				, &m_normals } }
-		, m_commandBuffers{ m_device.graphicsCommandPool->createCommandBuffer( "SsaoRawAO" )
-			, m_device.graphicsCommandPool->createCommandBuffer( "SsaoRawAONormals" ) }
+		// TODO CRG
+		//, m_renderPass{ doCreateRenderPass( m_device, { m_result, m_bentNormals } ) }
+		//, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, { m_result, m_bentNormals } ) }
+		//, m_quads{ RenderQuad{ m_device
+		//		, *m_renderPass
+		//		, m_size
+		//		, m_ssaoConfigUbo
+		//		, m_gpInfoUbo
+		//		, m_linearisedDepthBuffer
+		//		, nullptr }
+		//	, RenderQuad{ m_device
+		//		, *m_renderPass
+		//		, m_size
+		//		, m_ssaoConfigUbo
+		//		, m_gpInfoUbo
+		//		, m_linearisedDepthBuffer
+		//		, &m_normals } }
+		//, m_commandBuffers{ m_device.graphicsCommandPool->createCommandBuffer( "SsaoRawAO" )
+		//	, m_device.graphicsCommandPool->createCommandBuffer( "SsaoRawAONormals" ) }
 		, m_finished{ m_device->createSemaphore( "SsaoRawAO" ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_device, cuT( "Scalable Ambient Obscurance" ), cuT( "Raw AO" ) ) }
 	{
-		for ( auto i = 0u; i < m_commandBuffers.size(); ++i )
-		{
-			auto & cmd = *m_commandBuffers[i];
-			auto & quad = m_quads[i];
+		// TODO SRG
+		//for ( auto i = 0u; i < m_commandBuffers.size(); ++i )
+		//{
+		//	auto & cmd = *m_commandBuffers[i];
+		//	auto & quad = m_quads[i];
 
-			cmd.begin();
-			cmd.beginDebugBlock(
-				{
-					"SSAO - Raw AO",
-					makeFloatArray( m_engine.getNextRainbowColour() ),
-				} );
-			m_timer->beginPass( cmd );
-			cmd.beginRenderPass( *m_renderPass
-				, *m_frameBuffer
-				, { opaqueWhiteClearColor, opaqueWhiteClearColor }
-				, VK_SUBPASS_CONTENTS_INLINE );
-			quad.registerPass( cmd );
-			cmd.endRenderPass();
-			m_timer->endPass( cmd );
-			cmd.endDebugBlock();
-			cmd.end();
-		}
+		//	cmd.begin();
+		//	cmd.beginDebugBlock(
+		//		{
+		//			"SSAO - Raw AO",
+		//			makeFloatArray( m_engine.getNextRainbowColour() ),
+		//		} );
+		//	m_timer->beginPass( cmd );
+		//	cmd.beginRenderPass( *m_renderPass
+		//		, *m_frameBuffer
+		//		, { opaqueWhiteClearColor, opaqueWhiteClearColor }
+		//		, VK_SUBPASS_CONTENTS_INLINE );
+		//	quad.registerPass( cmd );
+		//	cmd.endRenderPass();
+		//	m_timer->endPass( cmd );
+		//	cmd.endDebugBlock();
+		//	cmd.end();
+		//}
 	}
 
 	SsaoRawAOPass::~SsaoRawAOPass()
 	{
-		for ( auto & quad : m_quads )
-		{
-			quad.cleanup();
-		}
-
 		m_bentNormals.cleanup();
 		m_result.cleanup();
 	}
@@ -814,15 +806,16 @@ namespace castor3d
 		RenderPassTimerBlock timerBlock{ m_timer->start() };
 		timerBlock->notifyPassRender();
 		auto * result = &toWait;
-		auto index = m_ssaoConfig.useNormalsBuffer
-			? 1u
-			: 0u;
-		m_device.graphicsQueue->submit( *m_commandBuffers[index]
-			, toWait
-			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, *m_finished
-			, nullptr );
-		result = m_finished.get();
+		// TODO CRG
+		//auto index = m_ssaoConfig.useNormalsBuffer
+		//	? 1u
+		//	: 0u;
+		//m_device.graphicsQueue->submit( *m_commandBuffers[index]
+		//	, toWait
+		//	, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+		//	, *m_finished
+		//	, nullptr );
+		//result = m_finished.get();
 		return *result;
 	}
 
@@ -845,11 +838,12 @@ namespace castor3d
 				, TextureFactors{}.invert( true ) );
 		}
 
-		auto index = m_ssaoConfig.useNormalsBuffer
-			? 1u
-			: 0u;
-		visitor.visit( m_quads[index].vertexShader );
-		visitor.visit( m_quads[index].pixelShader );
-		config.accept( m_quads[index].pixelShader.name, visitor );
+		// TODO CRG
+		//auto index = m_ssaoConfig.useNormalsBuffer
+		//	? 1u
+		//	: 0u;
+		//visitor.visit( m_quads[index].vertexShader );
+		//visitor.visit( m_quads[index].pixelShader );
+		//config.accept( m_quads[index].pixelShader.name, visitor );
 	}
 }

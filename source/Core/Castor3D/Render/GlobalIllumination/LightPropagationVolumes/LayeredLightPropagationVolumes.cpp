@@ -31,7 +31,7 @@ namespace castor3d
 		, ShadowMapResult const & smResult
 		, LpvGridConfigUboArray const & lpvGridConfigUbos
 		, std::vector< LightVolumePassResult > const & injection
-		, std::vector< TextureUnit > const * geometry
+		, crg::ImageIdArray const * geometry
 		, std::vector< float > lpvCellSizes )
 		: lpvCellSizes{ std::move( lpvCellSizes ) }
 	{
@@ -91,7 +91,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	LayeredLightPropagationVolumesBase::LayeredLightPropagationVolumesBase( Scene const & scene
+	LayeredLightPropagationVolumesBase::LayeredLightPropagationVolumesBase( crg::FrameGraph & graph
+		, Scene const & scene
 		, LightType lightType
 		, RenderDevice const & device
 		, ShadowMapResult const & smResult
@@ -109,24 +110,24 @@ namespace castor3d
 		, m_geometryVolumes{ geometryVolumes }
 		, m_propagate
 		{
-			LightVolumePassResult{ m_engine, m_device, getName() + "Propagate0", m_engine.getLpvGridSize() },
-			LightVolumePassResult{ m_engine, m_device, getName() + "Propagate1", m_engine.getLpvGridSize() },
+			LightVolumePassResult{ graph, m_device, getName() + "Propagate0", m_engine.getLpvGridSize() },
+			LightVolumePassResult{ graph, m_device, getName() + "Propagate1", m_engine.getLpvGridSize() },
 		}
 	{
 		for ( uint32_t cascade = 0u; cascade < CascadeCount; ++cascade )
 		{
 			m_lpvGridConfigUbos.emplace_back( m_device );
-			m_injection.emplace_back( m_engine
+			m_injection.emplace_back( graph
 				, m_device
 				, this->getName() + "Injection" + castor::string::toString( cascade )
 				, m_engine.getLpvGridSize() );
 			m_geometry.emplace_back( m_geometryVolumes
-				? GeometryInjectionPass::createResult( m_engine
+				? GeometryInjectionPass::createResult( graph
 					, m_device
 					, this->getName()
 					, cascade
 					, m_engine.getLpvGridSize() )
-				: TextureUnit{ m_engine } );
+				: crg::ImageId{} );
 		}
 	}
 
@@ -138,11 +139,6 @@ namespace castor3d
 					? GlobalIlluminationType::eLayeredLpvG
 					: GlobalIlluminationType::eLayeredLpv ) ) )
 		{
-			for ( auto & injection : m_injection )
-			{
-				injection.initialise( m_device );
-			}
-
 			auto & lightCache = m_scene.getLightCache();
 			m_aabb = m_scene.getBoundingBox();
 			m_lightPropagationPasses = { castor::makeUnique< LightPropagationPass >( m_device
@@ -166,13 +162,14 @@ namespace castor3d
 				, LightVolumePassResult const & result
 				, LpvTexture tex )
 			{
-				cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-					, VK_PIPELINE_STAGE_TRANSFER_BIT
-					, result[tex].getTexture()->getDefaultView().getSampledView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
-				cmd.clear( result[tex].getTexture()->getDefaultView().getSampledView(), getClearValue( tex ).color );
-				cmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-					, result[tex].getTexture()->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+				// TODO: CRG
+				//cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+				//	, VK_PIPELINE_STAGE_TRANSFER_BIT
+				//	, result[tex].getTexture()->getDefaultView().getSampledView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+				//cmd.clear( result[tex].getTexture()->getDefaultView().getSampledView(), getClearValue( tex ).color );
+				//cmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+				//	, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+				//	, result[tex].getTexture()->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
 			};
 
 			m_clearCommand = CommandsSemaphore{ m_device
@@ -195,19 +192,13 @@ namespace castor3d
 			cmd.endDebugBlock();
 			cmd.end();
 
-			for ( auto & propagate : m_propagate )
-			{
-				propagate.initialise( m_device );
-			}
-
 			for ( uint32_t cascade = 0u; cascade < CascadeCount; ++cascade )
 			{
-				TextureUnit * geometry{ nullptr };
+				crg::ImageId * geometry{ nullptr };
 
 				if ( m_geometryVolumes )
 				{
 					geometry = &m_geometry[cascade];
-					geometry->initialise( m_device );
 				}
 
 				uint32_t propIndex = 0u;

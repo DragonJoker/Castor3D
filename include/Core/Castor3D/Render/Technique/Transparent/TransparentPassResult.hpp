@@ -14,9 +14,10 @@ namespace castor3d
 		: public GBufferT< WbTexture >
 	{
 	public:
-		C3D_API TransparentPassResult( RenderDevice const & device
-			, TextureUnit const & depthTexture
-			, TextureUnit const & velocityTexture );
+		C3D_API TransparentPassResult( crg::FrameGraph & graph
+			, RenderDevice const & device
+			, crg::ImageId const & depthTexture
+			, crg::ImageId const & velocityTexture );
 	};
 }
 

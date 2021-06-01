@@ -40,7 +40,8 @@ namespace castor3d
 		 *\param[in]	gpInfoUbo		L'UBO de la passe géométrique.
 		 *\param[in]	lpvResult		Le résultat du LPV.
 		 */
-		WeightedBlendRendering( RenderDevice const & device
+		WeightedBlendRendering( crg::FrameGraph & graph
+			, RenderDevice const & device
 			, TransparentPass & transparentPass
 			, TransparentPassResult const & transparentPassResult
 			, ashes::ImageView const & colourView

@@ -29,7 +29,9 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	scene	La scène.
 		 */
-		C3D_API explicit ShadowMapPoint( RenderDevice const & device
+		C3D_API explicit ShadowMapPoint( crg::FrameGraph & graph
+			, crg::FramePass const & previousPass
+			, RenderDevice const & device
 			, Scene & scene );
 		/**
 		 *\~english
@@ -55,18 +57,13 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		TextureUnit const & getTexture()const
+		Texture const & getTexture()const
 		{
 			return m_result[SmTexture::eVariance];
 		}
 		/**@}*/
 
 	private:
-		void doInitialiseFramebuffers( RenderDevice const & device );
-		void doInitialise( RenderDevice const & device )override;
-		ashes::Semaphore const & doRender( RenderDevice const & device
-			, ashes::Semaphore const & toWait
-			, uint32_t index )override;
 		bool isUpToDate( uint32_t index )const override;
 
 	private:

@@ -40,6 +40,8 @@
 
 #include <ShaderWriter/Source.hpp>
 
+#include <RenderGraph/FrameGraph.hpp>
+
 #include <numeric>
 #include <random>
 
@@ -679,12 +681,13 @@ namespace castor3d
 			result->createBinding( descriptorSetLayout.getBinding( LightsIdx )
 				, lightCache.getBuffer()
 				, lightCache.getView() );
-			result->createBinding( descriptorSetLayout.getBinding( RsmNormalsIdx )
-				, smResult[SmTexture::eNormalLinear].getTexture()->getDefaultView().getSampledView()
-				, smResult[SmTexture::eNormalLinear].getSampler()->getSampler() );
-			result->createBinding( descriptorSetLayout.getBinding( RsmPositionIdx )
-				, smResult[SmTexture::ePosition].getTexture()->getDefaultView().getSampledView()
-				, smResult[SmTexture::ePosition].getSampler()->getSampler() );
+			// TODO: CRG
+			//result->createBinding( descriptorSetLayout.getBinding( RsmNormalsIdx )
+			//	, smResult[SmTexture::eNormalLinear].getTexture()->getDefaultView().getSampledView()
+			//	, smResult[SmTexture::eNormalLinear].getSampler()->getSampler() );
+			//result->createBinding( descriptorSetLayout.getBinding( RsmPositionIdx )
+			//	, smResult[SmTexture::ePosition].getTexture()->getDefaultView().getSampledView()
+			//	, smResult[SmTexture::ePosition].getSampler()->getSampler() );
 			lpvGrid.createSizedBinding( *result
 				, descriptorSetLayout.getBinding( LpvGridUboIdx ) );
 			lpvLight.createSizedBinding( *result
@@ -759,14 +762,14 @@ namespace castor3d
 		, ShadowMapResult const & smResult
 		, LpvGridConfigUbo const & lpvGridConfigUbo
 		, LpvLightConfigUbo const & lpvLightConfigUbo
-		, TextureUnit const & result
+		, crg::ImageId const & result
 		, uint32_t gridSize
 		, uint32_t layerIndex )
 		: Named{ prefix + "GeometryInjection" + string::toString( layerIndex ) }
 		, m_engine{ engine }
 		, m_device{ device }
 		, m_timer{ std::make_shared< RenderPassTimer >( device, cuT( "Light Propagation Volumes" ), cuT( "Geometry Injection" ) ) }
-		, m_rsmSize{ smResult[SmTexture::eDepth].getTexture()->getWidth() }
+		, m_rsmSize{ smResult[SmTexture::eDepth].getExtent().width }
 		, m_vertexBuffer{ doCreateVertexBuffer( getName(), m_device, m_rsmSize ) }
 		, m_descriptorSetLayout{ doCreateDescriptorLayout( getName(), m_device ) }
 		, m_pipelineLayout{ m_device->createPipelineLayout( getName(), *m_descriptorSetLayout ) }
@@ -791,12 +794,13 @@ namespace castor3d
 			, m_geometryShader
 			, m_pixelShader
 			, gridSize ) }
-		, m_frameBuffer{ m_renderPass->createFrameBuffer( getName()
-			, VkExtent2D{ gridSize, gridSize }
-			, {
-				result.getTexture()->getDefaultView().getTargetView(),
-			}
-			, gridSize ) }
+		// TODO CRG
+		//, m_frameBuffer{ m_renderPass->createFrameBuffer( getName()
+		//	, VkExtent2D{ gridSize, gridSize }
+		//	, {
+		//		result.getTexture()->getDefaultView().getTargetView(),
+		//	}
+		//	, gridSize ) }
 		, m_commands{ getCommands( *m_timer, 0u ) }
 	{
 	}
@@ -860,18 +864,17 @@ namespace castor3d
 		visitor.visit( m_pixelShader );
 	}
 
-	TextureUnit GeometryInjectionPass::createResult( Engine & engine
+	crg::ImageId GeometryInjectionPass::createResult( crg::FrameGraph & graph
 		, RenderDevice const & device
 		, castor::String const & prefix
 		, uint32_t index
 		, uint32_t gridSize )
 	{
-		return TextureUnit::create( engine
-			, device
-			, prefix + cuT( "GeometryInjectionResult" ) + string::toString( index )
+		return graph.createImage( crg::ImageData{ prefix + cuT( "GeometryInjectionResult" ) + string::toString( index )
+			, VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT
+			, VK_IMAGE_TYPE_3D
 			, VK_FORMAT_R16G16B16A16_SFLOAT
 			, { gridSize, gridSize, gridSize }
-			, VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT
-			, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT );
+			, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT } );
 	}
 }

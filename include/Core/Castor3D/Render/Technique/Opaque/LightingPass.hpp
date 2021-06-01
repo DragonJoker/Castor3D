@@ -89,7 +89,8 @@ namespace castor3d
 		 *\param[in]	llpvConfigUbo		L'UBO de configuration des Layered LPV.
 		 *\param[in]	vctConfigUbo		L'UBO de configuration du VCT.
 		 */
-		LightingPass( Engine & engine
+		LightingPass( crg::FrameGraph & graph
+			, crg::FramePass const & previousPass
 			, RenderDevice const & device
 			, castor::Size const & size
 			, Scene & scene
@@ -101,7 +102,7 @@ namespace castor3d
 			, LightVolumePassResultArray const & llpvResult
 			, TextureUnit const & vctFirstBounce
 			, TextureUnit const & vctSecondaryBounce
-			, ashes::ImageView const & depthView
+			, crg::ImageViewId const & depthView
 			, SceneUbo & sceneUbo
 			, GpInfoUbo const & gpInfoUbo
 			, LpvGridConfigUbo const & lpvConfigUbo
@@ -179,7 +180,8 @@ namespace castor3d
 			, GlobalIlluminationType giType )const;
 
 	private:
-		Engine & m_engine;
+		crg::FrameGraph & m_graph;
+		crg::FramePass const & m_previousPass;
 		RenderDevice const & m_device;
 		OpaquePassResult const & m_gpResult;
 		ShadowMapResult const & m_smDirectionalResult;
@@ -189,7 +191,7 @@ namespace castor3d
 		LightVolumePassResultArray const & m_llpvResult;
 		TextureUnit const & m_vctFirstBounce;
 		TextureUnit const & m_vctSecondaryBounce;
-		ashes::ImageView const & m_depthView;
+		crg::ImageViewId const & m_depthView;
 		SceneUbo & m_sceneUbo;
 		GpInfoUbo const & m_gpInfoUbo;
 		LpvGridConfigUbo const & m_lpvConfigUbo;
@@ -200,9 +202,7 @@ namespace castor3d
 		LightPasses m_lightPasses;
 		RenderPassTimerSPtr m_timer;
 		ashes::FencePtr m_fence;
-		ashes::ImageView const & m_srcDepth;
-		CommandsSemaphore m_blitDepth;
-		CommandsSemaphore m_lpResultBarrier;
+		crg::ImageViewId const & m_srcDepth;
 		std::unordered_set< LightPass * > m_active;
 		bool m_voxelConeTracing{ false };
 	};
