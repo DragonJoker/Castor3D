@@ -137,13 +137,11 @@ namespace castor3d
 
 	ShadowMapPoint::~ShadowMapPoint()
 	{
-		m_passesData.clear();
 		m_blur.reset();
 	}
 
 	void ShadowMapPoint::update( CpuUpdater & updater )
 	{
-		m_passesData[updater.index].shadowType = updater.light->getShadowType();
 		uint32_t offset = updater.index * 6u;
 		updater.light->getPointLight()->updateShadow( updater.index );
 
