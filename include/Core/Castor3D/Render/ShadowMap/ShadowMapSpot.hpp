@@ -54,14 +54,6 @@ namespace castor3d
 		static VkFormat constexpr LinearDepthFormat = VK_FORMAT_R32_SFLOAT;
 
 	private:
-		struct PassData
-		{
-			ashes::CommandBufferPtr commandBuffer;
-			ashes::FrameBufferPtr frameBuffer;
-			ashes::SemaphorePtr finished;
-			CommandsSemaphore blurCommands;
-		};
-		std::vector< PassData > m_passesData;
 		std::unique_ptr< GaussianBlur > m_blur;
 	};
 }
