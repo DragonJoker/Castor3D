@@ -125,18 +125,17 @@ namespace castor3d
 			, device
 			, scene
 			, *this );
-		//m_blur = std::make_unique< GaussianBlur >( graph
-		//	, *previous
-		//	, device
-		//	, "SpotSM"
-		//	, m_result[SmTexture::eVariance].wholeView
-		//	, 5u );
+		m_blur = std::make_unique< GaussianBlur >( graph
+			, *previous
+			, device
+			, "SpotSM"
+			, m_result[SmTexture::eVariance].wholeView
+			, 5u );
 		log::trace << "Created ShadowMapSpot" << std::endl;
 	}
 
 	ShadowMapSpot::~ShadowMapSpot()
 	{
-		m_passesData.clear();
 		m_blur.reset();
 	}
 	
