@@ -179,7 +179,7 @@ namespace castor3d
 				, cuT( "Directional" )
 				, 0u
 #if C3D_UseTiledDirectionalShadowMap
-				, Size{ ShadowMapPassDirectional::TileSize * ShadowMapPassDirectional::TileCountX
+				, { ShadowMapPassDirectional::TileSize * ShadowMapPassDirectional::TileCountX
 					, ShadowMapPassDirectional::TileSize * ShadowMapPassDirectional::TileCountY }
 				, 1u }
 #else
@@ -196,12 +196,13 @@ namespace castor3d
 			, scene
 			, *this
 			, scene.getDirectionalShadowCascades() );
-		//m_blur = std::make_unique< GaussianBlur >( graph
-		//	, *previous
-		//	, device
-		//	, "DirectionalSM"
-		//	, m_result[SmTexture::eVariance].wholeView
-		//	, 5u );
+		m_blur = std::make_unique< GaussianBlur >( graph
+			, *previous
+			, device
+			, "DirectionalSM"
+			, m_result[SmTexture::eVariance].wholeView
+			, 5u );
+
 		log::trace << "Created ShadowMapDirectional" << std::endl;
 	}
 

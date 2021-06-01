@@ -76,7 +76,9 @@ namespace castor3d
 			, ( size.depth > 1u
 				? VK_IMAGE_VIEW_TYPE_3D
 				: ( layerCount > 1u 
-					? VK_IMAGE_VIEW_TYPE_2D_ARRAY
+					? ( checkFlag( createFlags, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT )
+						? VK_IMAGE_VIEW_TYPE_CUBE_ARRAY
+						: VK_IMAGE_VIEW_TYPE_2D_ARRAY )
 					: VK_IMAGE_VIEW_TYPE_2D ) )
 			, format
 			, { ashes::getAspectMask( format ), 0u, 1u, 0u, layerCount } } );
