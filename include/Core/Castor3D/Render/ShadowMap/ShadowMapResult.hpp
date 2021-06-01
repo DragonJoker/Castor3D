@@ -14,7 +14,8 @@ namespace castor3d
 		: public GBufferT< SmTexture >
 	{
 	public:
-		C3D_API ShadowMapResult( Engine & engine
+		C3D_API ShadowMapResult( crg::FrameGraph & graph
+			, RenderDevice const & device
 			, castor::String const & prefix
 			, VkImageCreateFlags createFlags
 			, castor::Size const & size

@@ -89,7 +89,9 @@ namespace castor3d
 		 *\param[in]	lpConfig		La configuration de la passe d'éclairage.
 		 *\param[in]	vctConfig		L'UBO du voxelizer.
 		 */
-		DirectionalLightPass( RenderDevice const & device
+		DirectionalLightPass( crg::FrameGraph & graph
+			, crg::FramePass const *& previousPass
+			, RenderDevice const & device
 			, castor::String const & suffix
 			, LightPassConfig const & lpConfig
 			, VoxelizerUbo const * vctConfig = nullptr );
@@ -105,10 +107,14 @@ namespace castor3d
 		 *\param[in]	lpConfig		La configuration de la passe d'éclairage.
 		 *\param[in]	vctConfig		L'UBO du voxelizer.
 		 */
-		DirectionalLightPass( RenderDevice const & device
+		DirectionalLightPass( crg::FrameGraph & graph
+			, crg::FramePass const *& previousPass
+			, RenderDevice const & device
 			, LightPassConfig const & lpConfig
 			, VoxelizerUbo const * vctConfig = nullptr )
-			: DirectionalLightPass{ device
+			: DirectionalLightPass{ graph
+				, previousPass
+				, device
 				, castor::String{}
 				, lpConfig
 				, vctConfig }

@@ -19,6 +19,9 @@
 
 #include <ShaderWriter/Source.hpp>
 
+#include <RenderGraph/FrameGraph.hpp>
+#include <RenderGraph/RunnablePasses/RenderQuad.hpp>
+
 CU_ImplementCUSmartPtr( castor3d, GaussianBlur )
 
 using namespace castor;
@@ -33,7 +36,7 @@ namespace castor3d
 			DifImgIdx,
 		};
 
-		ShaderPtr getVertexProgram( RenderSystem & renderSystem )
+		ShaderPtr getVertexProgram()
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -55,7 +58,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderPtr getBlurXProgram( RenderSystem & renderSystem, bool isDepth )
+		ShaderPtr getBlurXProgram( bool isDepth )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -97,8 +100,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderPtr getBlurXProgramLayer( RenderSystem & renderSystem
-			, bool isDepth
+		ShaderPtr getBlurXProgramLayer( bool isDepth
 			, uint32_t layer )
 		{
 			using namespace sdw;
@@ -141,7 +143,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderPtr getBlurYProgram( RenderSystem & renderSystem, bool isDepth )
+		ShaderPtr getBlurYProgram( bool isDepth )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -194,16 +196,14 @@ namespace castor3d
 				if ( layerCount > 1u
 					&& !renderSystem.getDescription().features.hasImageTexture )
 				{
-					return getBlurXProgramLayer( renderSystem
-						, isDepth
+					return getBlurXProgramLayer( isDepth
 						, baseArrayLayer );
 				}
 
-				return getBlurXProgram( renderSystem
-					, isDepth );
+				return getBlurXProgram( isDepth );
 			}
 
-			return getBlurYProgram( renderSystem, isDepth );
+			return getBlurYProgram( isDepth );
 		}
 
 		std::vector< float > getHalfPascal( uint32_t height )
@@ -244,126 +244,6 @@ namespace castor3d
 			return result;
 		}
 
-		SamplerSPtr createSampler( Engine & engine
-			, String const & name )
-		{
-			SamplerSPtr sampler;
-
-			if ( engine.getSamplerCache().has( name ) )
-			{
-				sampler = engine.getSamplerCache().find( name );
-			}
-			else
-			{
-				sampler = engine.getSamplerCache().add( name );
-				sampler->setMinFilter( VK_FILTER_NEAREST );
-				sampler->setMagFilter( VK_FILTER_NEAREST );
-				sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-			}
-
-			return sampler;
-		}
-
-		TextureUnit createTexture( Engine & engine
-			, RenderDevice const & device
-			, VkExtent2D const & size
-			, VkFormat format
-			, VkImageSubresourceRange const & range
-			, String const & name )
-		{
-			auto & renderSystem = *engine.getRenderSystem();
-			auto sampler = createSampler( engine, name );
-			ashes::ImageCreateInfo image
-			{
-				0u,
-				VK_IMAGE_TYPE_2D,
-				format,
-				{ size.width, size.height, 1u },
-				range.levelCount,
-				1u,
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_IMAGE_TILING_OPTIMAL,
-				( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_SAMPLED_BIT
-					| ( range.levelCount > 1u
-						? ( VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
-						: 0u ) ),
-			};
-			auto texture = std::make_shared< TextureLayout >( renderSystem
-				, std::move( image )
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, name );
-			TextureUnit unit{ engine };
-			unit.setTexture( texture );
-			unit.setSampler( sampler );
-			unit.initialise( device );
-			return unit;
-		}
-
-		ashes::RenderPassPtr createRenderPass( RenderDevice const & device
-			, castor::String const & name
-			, VkFormat format
-			, uint32_t subpassCount )
-		{
-			ashes::VkAttachmentDescriptionArray attaches
-			{
-				{
-					0u,
-					format,
-					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
-					VK_ATTACHMENT_STORE_OP_STORE,
-					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
-					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-				}
-			};
-			ashes::SubpassDescriptionArray subpasses;
-			subpasses.emplace_back( ashes::SubpassDescription
-				{
-					0u,
-					VK_PIPELINE_BIND_POINT_GRAPHICS,
-					{},
-					{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
-					{},
-					ashes::nullopt,
-					{},
-				} );
-			ashes::VkSubpassDependencyArray dependencies
-			{
-				{
-					VK_SUBPASS_EXTERNAL,
-					0u,
-					VK_PIPELINE_STAGE_HOST_BIT,
-					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-					VK_ACCESS_HOST_WRITE_BIT,
-					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-					VK_DEPENDENCY_BY_REGION_BIT,
-				},
-				{
-					0u,
-					VK_SUBPASS_EXTERNAL,
-					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-					VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-					VK_ACCESS_SHADER_READ_BIT,
-					VK_DEPENDENCY_BY_REGION_BIT,
-				}
-			};
-			ashes::RenderPassCreateInfo createInfo
-			{
-				0u,
-				std::move( attaches ),
-				std::move( subpasses ),
-				std::move( dependencies ),
-			};
-			auto result = device->createRenderPass( name
-				, std::move( createInfo ) );
-			return result;
-		}
-
 		VkImageViewType getNonArrayType( VkImageViewType in )
 		{
 			switch ( in )
@@ -381,173 +261,80 @@ namespace castor3d
 			}
 		}
 
-		std::vector< ashes::FrameBufferPtrArray > createFbos( std::string const & prefix
-			, ashes::RenderPass const & renderPass
-			, ashes::ImageView const & view
-			, ashes::ImageViewArray & views
-			, VkExtent2D const & size )
-		{
-			std::vector< ashes::FrameBufferPtrArray > result;
-			auto createInfo = view.createInfo;
-			createInfo.subresourceRange.layerCount = 1u;
-			createInfo.subresourceRange.levelCount = 1u;
-			createInfo.viewType = getNonArrayType( createInfo.viewType );
-
-			for ( uint32_t layerOff = 0u; layerOff < view->subresourceRange.layerCount; ++layerOff )
-			{
-				auto layerName = prefix + ", Layer " + string::toString( view->subresourceRange.baseArrayLayer );
-				ashes::FrameBufferPtrArray layerFbos;
-				VkExtent2D mipSize{ size };
-				createInfo.subresourceRange.baseMipLevel = view->subresourceRange.baseMipLevel;
-
-				for ( uint32_t levelOff = 0u; levelOff < view->subresourceRange.levelCount; ++levelOff )
-				{
-					auto name = layerName + ", Level " + string::toString( view->subresourceRange.baseMipLevel );
-					ashes::ImageViewCRefArray attaches;
-					views.emplace_back( view.image->createView( name, createInfo ) );
-					attaches.emplace_back( views.back() );
-					layerFbos.emplace_back( renderPass.createFrameBuffer( name
-						, mipSize
-						, std::move( attaches ) ) );
-					++createInfo.subresourceRange.baseMipLevel;
-					mipSize.width >>= 1u;
-					mipSize.height >>= 1u;
-				}
-
-				result.emplace_back( std::move( layerFbos ) );
-				++createInfo.subresourceRange.baseArrayLayer;
-			}
-
-			return result;
-		}
-
-		ashes::ImageView createImageView( castor::String const & name
-			, ashes::ImageView const & view
+		crg::ImageViewData createImageView( castor::String const & name
+			, crg::ImageViewId const & view
 			, VkImageSubresourceRange const & range
 			, VkImageAspectFlags aspectMask )
 		{
-			auto createInfo = view.createInfo;
-			createInfo.subresourceRange.aspectMask = aspectMask;
-			createInfo.subresourceRange.baseMipLevel = range.baseMipLevel;
-			createInfo.subresourceRange.levelCount = range.levelCount;
-			auto result = view.image->createView( name
-				, std::move( createInfo ) );
+			auto result = *view.data;
+			result.info.subresourceRange.aspectMask = aspectMask;
+			result.info.subresourceRange.baseMipLevel = range.baseMipLevel;
+			result.info.subresourceRange.levelCount = range.levelCount;
 			return result;
 		}
 
-		ashes::ImageView createImageView( castor::String const & name
-			, ashes::ImageView const & view
+		crg::ImageViewData createImageView( castor::String const & name
+			, crg::ImageViewId const & view
 			, VkImageSubresourceRange const & range )
 		{
 			return createImageView( name
 				, view
 				, range
-				, view->subresourceRange.aspectMask );
+				, view.data->info.subresourceRange.aspectMask );
 		}
 
-		ashes::ImageView createSampledView( castor::String const & prefix
-			, ashes::ImageView const & view )
+		crg::ImageViewData createSampledView( castor::String const & prefix
+			, crg::ImageViewId const & view )
 		{
 			return createImageView( prefix + "Sampled"
 				, view
-				, view->subresourceRange
-				, VkImageAspectFlags( ( ashes::isDepthFormat( view->format ) || ashes::isDepthOrStencilFormat( view->format ) )
+				, view.data->info.subresourceRange
+				, VkImageAspectFlags( ( ashes::isDepthFormat( getFormat( view ) ) || ashes::isDepthOrStencilFormat( getFormat( view ) ) )
 					? VK_IMAGE_ASPECT_DEPTH_BIT
-					: ( ashes::isStencilFormat( view->format )
+					: ( ashes::isStencilFormat( getFormat( view ) )
 						? VK_IMAGE_ASPECT_STENCIL_BIT
 						: VK_IMAGE_ASPECT_COLOR_BIT ) ) );
 		}
 
-		ashes::ImageView createTargetView( castor::String const & prefix
-			, ashes::ImageView const & view )
+		crg::ImageViewData createTargetView( castor::String const & prefix
+			, crg::ImageViewId const & view )
 		{
 			return createImageView( prefix + "Target"
 				, view
-				, view->subresourceRange
-				, VkImageAspectFlags( ( ashes::isDepthFormat( view->format ) || ashes::isDepthOrStencilFormat( view->format ) )
+				, view.data->info.subresourceRange
+				, VkImageAspectFlags( ( ashes::isDepthFormat( getFormat( view ) ) || ashes::isDepthOrStencilFormat( getFormat( view ) ) )
 					? VK_IMAGE_ASPECT_DEPTH_BIT
-					: ( ashes::isStencilFormat( view->format )
+					: ( ashes::isStencilFormat( getFormat( view ) )
 						? VK_IMAGE_ASPECT_STENCIL_BIT
 						: VK_IMAGE_ASPECT_COLOR_BIT ) ) );
 		}
 
-		CommandsSemaphore doGetCommands( RenderDevice const & device
-			, castor::String prefix
-			, GaussianBlur::BlurPass const & blurX
-			, GaussianBlur::BlurPass const & blurY
-			, ashes::RenderPass const & renderPass
-			, TextureView const & source
-			, RenderPassTimer const * timer
-			, bool generateMipmaps
-			, uint32_t layer )
-		{
-			prefix += "GaussianBlur, Layer " + string::toString( layer );
-			castor3d::CommandsSemaphore commands
-			{
-				device.graphicsCommandPool->createCommandBuffer( prefix ),
-				device->createSemaphore( prefix )
-			};
-			auto & cmd = *commands.commandBuffer;
-			cmd.begin();
-
-			if ( timer )
-			{
-				timer->beginPass( cmd, layer );
-			}
-
-			blurX.getCommands( cmd, renderPass, layer, generateMipmaps );
-			blurY.getCommands( cmd, renderPass, layer, generateMipmaps );
-
-			if ( generateMipmaps )
-			{
-				cmd.beginDebugBlock(
-					{
-						prefix + " Mipmaps Generation",
-						makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ),
-					} );
-				source.getSampledView().image->generateMipmaps( cmd
-					, layer
-					, 1u
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-				cmd.endDebugBlock();
-			}
-
-			if ( timer )
-			{
-				timer->endPass( cmd, layer );
-			}
-
-			cmd.end();
-			return commands;
-		}
-
-		ashes::ImageView createMipView( castor::String name
-			, ashes::ImageView const & source
+		crg::ImageViewData createMipView( castor::String const & name
+			, crg::ImageViewId const & source
 			, uint32_t layer
 			, uint32_t level )
 		{
-			auto createInfo = source.createInfo;
-			createInfo.subresourceRange.baseArrayLayer = layer;
-			createInfo.subresourceRange.baseMipLevel = level;
-			createInfo.subresourceRange.layerCount = 1u;
-			createInfo.subresourceRange.levelCount = 1u;
+			auto result = *source.data;
+			result.info.subresourceRange.baseArrayLayer = layer;
+			result.info.subresourceRange.baseMipLevel = level;
+			result.info.subresourceRange.layerCount = 1u;
+			result.info.subresourceRange.levelCount = 1u;
 
-			if ( createInfo.viewType == VK_IMAGE_VIEW_TYPE_1D_ARRAY )
+			if ( result.info.viewType == VK_IMAGE_VIEW_TYPE_1D_ARRAY )
 			{
-				createInfo.viewType = VK_IMAGE_VIEW_TYPE_1D;
+				result.info.viewType = VK_IMAGE_VIEW_TYPE_1D;
 			}
-			else if ( createInfo.viewType == VK_IMAGE_VIEW_TYPE_2D_ARRAY
-				|| createInfo.viewType == VK_IMAGE_VIEW_TYPE_CUBE_ARRAY
-				|| createInfo.viewType == VK_IMAGE_VIEW_TYPE_3D )
+			else if ( result.info.viewType == VK_IMAGE_VIEW_TYPE_2D_ARRAY
+				|| result.info.viewType == VK_IMAGE_VIEW_TYPE_CUBE_ARRAY
+				|| result.info.viewType == VK_IMAGE_VIEW_TYPE_3D )
 			{
-				createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+				result.info.viewType = VK_IMAGE_VIEW_TYPE_2D;
 			}
 
-			name += ", Layer " + string::toString( layer );
-			name += ", Level " + string::toString( level );
-			return source.image->createView( name, std::move( createInfo ) );
+			result.name = name;
+			result.name += "L" + string::toString( layer );
+			result.name += "M" + string::toString( level );
+			return result;
 		}
 
 		uint32_t getDescriptorSetIndex( uint32_t descriptorBaseIndex
@@ -569,130 +356,54 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	GaussianBlur::RenderQuad::RenderQuad( RenderSystem & renderSystem
+	GaussianBlur::BlurPass::BlurPass( crg::FrameGraph & graph
+		, crg::FramePass const *& previousPass
 		, RenderDevice const & device
 		, castor::String const & name
-		, ashes::ImageView const & src
-		, VkImageSubresourceRange const & srcRange
-		, UniformBufferOffsetT< Configuration > const & blurUbo
-		, ShaderModule const & vertexShader
-		, ShaderModule const & pixelShader
-		, ashes::RenderPass const & renderPass
-		, VkExtent2D const & textureSize )
-		: castor3d::RenderQuad{ device
-			, name
-			, VK_FILTER_LINEAR
-			, { createBindings()
-				, ashes::nullopt
-				, rq::Texcoord{} } }
-		, srcView{ createImageView( name, src, srcRange ) }
-		, m_blurUbo{ blurUbo }
-	{
-		m_sampler->initialise( device );
-
-		for ( auto layer = srcView->subresourceRange.baseArrayLayer; layer < srcView->subresourceRange.layerCount; ++layer )
-		{
-			for ( auto level = srcView->subresourceRange.baseMipLevel; level < srcView->subresourceRange.levelCount; ++level )
-			{
-				registerPassInputs( { makeDescriptorWrite( m_blurUbo, GaussCfgIdx )
-					, makeDescriptorWrite( createMipView( name, srcView, layer, level ), m_sampler->getSampler(), DifImgIdx ) } );
-			}
-		}
-
-		ashes::PipelineShaderStageCreateInfoArray program
-		{
-			makeShaderState( device, vertexShader ),
-			makeShaderState( device, pixelShader ),
-		};
-		createPipeline( textureSize
-			, Position{}
-			, program
-			, renderPass );
-		initialisePasses();
-	}
-
-	//*********************************************************************************************
-
-	GaussianBlur::BlurPass::BlurPass( Engine & engine
-		, RenderDevice const & device
-		, castor::String const & name
-		, ashes::ImageView const & input
-		, ashes::ImageView const & output
+		, crg::ImageViewId const & input
+		, crg::ImageViewId const & output
 		, UniformBufferOffsetT< GaussianBlur::Configuration > const & blurUbo
 		, VkFormat format
 		, VkExtent2D const & textureSize
-		, ashes::RenderPass const & renderPass
 		, bool isHorizontal )
-		: vertexShader
-		{
-			VK_SHADER_STAGE_VERTEX_BIT,
-			name,
-			getVertexProgram( *engine.getRenderSystem() ),
-		}
-		, pixelShader
-		{
-			VK_SHADER_STAGE_FRAGMENT_BIT,
-			name,
-			getPixelProgram( *engine.getRenderSystem()
-				, input->subresourceRange.baseArrayLayer
-				, input->subresourceRange.layerCount
+		: vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, name, getVertexProgram() }
+		, pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT
+			, name
+			, getPixelProgram( device.renderSystem
+				, input.data->info.subresourceRange.baseArrayLayer
+				, input.data->info.subresourceRange.layerCount
 				, isHorizontal
 				, ashes::isDepthFormat( format ) ),
 		}
-		, quad{ *engine.getRenderSystem()
-			, device
-			, name
-			, input
-			, input->subresourceRange
-			, blurUbo
-			, vertexShader
-			, pixelShader
-			, renderPass
-			, textureSize }
-		, semaphore{ device->createSemaphore( name ) }
-		, fbos{ createFbos( name, renderPass, output, views, textureSize ) }
-		, m_engine{ engine }
+		, stages{ makeShaderState( device, vertexShader )
+			, makeShaderState( device, pixelShader ) }
 		, isHorizontal{ isHorizontal }
 	{
-	}
+		auto subresourceRange = input.data->info.subresourceRange;
 
-	void GaussianBlur::BlurPass::getCommands( ashes::CommandBuffer & cmd
-		, ashes::RenderPass const & renderPass
-		, uint32_t layer
-		, bool generateMipmaps )const
-	{
-		auto prefix = vertexShader.name
-			+ ", Layer " + string::toString( layer )
-			+ ", Level ";
-		uint32_t targetLayer = isHorizontal ? 0u : layer;
-		uint32_t sampledLayer = isHorizontal ? layer : 0u;
-		uint32_t level = 0u;
-		auto processLevel = [this, &cmd, &prefix, &renderPass, sampledLayer]( ashes::FrameBuffer const & levelFbo
-			, uint32_t level )
+		for ( auto layer = subresourceRange.baseArrayLayer; layer < subresourceRange.layerCount; ++layer )
 		{
-			cmd.beginDebugBlock(
-				{
-					prefix + string::toString( level ),
-					makeFloatArray( m_engine.getNextRainbowColour() ),
-				} );
-			cmd.beginRenderPass( renderPass
-				, levelFbo
-				, { transparentBlackClearColor }
-			, VK_SUBPASS_CONTENTS_INLINE );
-			quad.registerPass( cmd
-				, getDescriptorSetIndex( sampledLayer
-					, level
-					, quad.srcView->subresourceRange.levelCount ) );
-			cmd.endRenderPass();
-			cmd.endDebugBlock();
-		};
-		processLevel( *fbos[targetLayer][level], level );
-
-		if ( !generateMipmaps )
-		{
-			while ( ++level < fbos[targetLayer].size() )
+			for ( auto level = subresourceRange.baseMipLevel; level < subresourceRange.levelCount; ++level )
 			{
-				processLevel( *fbos[targetLayer][level], level );
+				auto & pass = graph.createPass( name + "L" + std::to_string( layer ) + "M" + std::to_string( level )
+					, [this, &input]( crg::FramePass const & pass
+						, crg::GraphContext const & context
+						, crg::RunnableGraph & graph )
+					{
+						auto extent = getExtent( input );
+						return crg::RenderQuadBuilder{}
+							.renderPosition( {} )
+							.renderSize( { extent.width, extent.height } )
+							.texcoordConfig( {} )
+							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) )
+							.build( pass, context, graph );
+					} );
+				pass.addDependency( *previousPass );
+				previousPass = &pass;
+				blurUbo.createPassBinding( pass, GaussCfgIdx );
+				pass.addSampledView( graph.createView( createMipView( name, input, layer, level ) )
+					, DifImgIdx );
+				pass.addOutputColourView( output );
 			}
 		}
 	}
@@ -704,47 +415,56 @@ namespace castor3d
 	String const GaussianBlur::CoefficientsCount = cuT( "c3d_coefficientsCount" );
 	String const GaussianBlur::TextureSize = cuT( "c3d_textureSize" );
 
-	GaussianBlur::GaussianBlur( Engine & engine
+	GaussianBlur::GaussianBlur( crg::FrameGraph & graph
+		, crg::FramePass const & previousPass
 		, RenderDevice const & device
 		, castor::String const & prefix
-		, TextureView const & view
+		, crg::ImageViewId const & view
 		, uint32_t kernelSize )
-		: OwnedBy< Engine >{ engine }
+		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
 		, m_device{ device }
+		, m_previousPass{ &previousPass }
 		, m_prefix{ prefix }
 		, m_source{ view }
-		, m_size{ m_source.getOwner()->getWidth(), m_source.getOwner()->getHeight() }
-		, m_format{ m_source.getOwner()->getPixelFormat() }
-		, m_intermediate{ createTexture( engine
-			, m_device
-			, m_size
+		, m_size{ getExtent( m_source ).width, getExtent( m_source ).height }
+		, m_format{ getFormat( m_source ) }
+		, m_intermediate{ graph.createImage( crg::ImageData{ prefix + "GB"
+			, 0u
+			, VK_IMAGE_TYPE_2D
 			, m_format
-			, m_source.getSubresourceRange()
-			, m_prefix + cuT( "GaussianBlur" ) ) }
-		, m_renderPass{ createRenderPass( m_device
-			, m_prefix + cuT( "GaussianBlur" )
+			, { m_size.width, m_size.height, 1u }
+			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+				| VK_IMAGE_USAGE_SAMPLED_BIT
+				| ( getMipLevels( m_source ) > 1u
+					? ( VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
+					: 0u ) )
+			, getMipLevels( m_source ) } ) }
+		, m_intermediateView{ graph.createView( crg::ImageViewData{ prefix + "GB"
+			, m_intermediate
+			, 0u
+			, VK_IMAGE_VIEW_TYPE_2D
 			, m_format
-			, m_source.getSubresourceRange().levelCount ) }
+			, { ashes::getAspectMask( m_format ), 0u, getMipLevels( m_source ), 0u, 1u } } ) }
 		, m_blurUbo{ m_device.uboPools->getBuffer< Configuration >( 0u ) }
-		, m_blurX{ engine
+		, m_blurX{ graph
+			, m_previousPass
 			, m_device
-			, m_prefix + cuT( " - GaussianBlur - X Pass" )
-			, m_source.getSampledView()
-			, m_intermediate.getTexture()->getDefaultView().getSampledView()
+			, m_prefix + cuT( "GBX" )
+			, m_source
+			, m_intermediateView
 			, m_blurUbo
 			, m_format
 			, m_size
-			, *m_renderPass
 			, true }
-		, m_blurY{ engine
+		, m_blurY{ graph
+			, m_previousPass
 			, m_device
-			, m_prefix + cuT( " - GaussianBlur - Y Pass" )
-			, m_intermediate.getTexture()->getDefaultView().getSampledView()
-			, m_source.getSampledView()
+			, m_prefix + cuT( "GBY" )
+			, m_intermediateView
+			, m_source
 			, m_blurUbo
 			, m_format
 			, m_size
-			, *m_renderPass
 			, false }
 		, m_kernel{ getHalfPascal( kernelSize ) }
 	{
@@ -761,72 +481,19 @@ namespace castor3d
 
 	GaussianBlur::~GaussianBlur()
 	{
-		getEngine()->getSamplerCache().remove( m_prefix + cuT( "GaussianBlur" ) );
 	}
 
 	void GaussianBlur::accept( PipelineVisitorBase & visitor )
 	{
-		if ( m_intermediate.isTextured() )
-		{
-			visitor.visit( m_prefix + " GaussianBlur Intermediate"
-				, m_intermediate.getTexture()->getDefaultView().getSampledView()
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-				, TextureFactors{}.invert( true ) );
-		}
+		visitor.visit( m_prefix + " GaussianBlur Intermediate"
+			, m_intermediateView
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, TextureFactors{}.invert( true ) );
 
 		visitor.visit( m_blurX.vertexShader );
 		visitor.visit( m_blurX.pixelShader );
 
 		visitor.visit( m_blurY.vertexShader );
 		visitor.visit( m_blurY.pixelShader );
-	}
-
-	CommandsSemaphore GaussianBlur::getCommands( bool generateMipmaps
-		, uint32_t layer )const
-	{
-		return doGetCommands( m_device
-			, m_prefix
-			, m_blurX
-			, m_blurY
-			, *m_renderPass
-			, m_source
-			, nullptr
-			, generateMipmaps
-			, layer );
-	}
-
-	CommandsSemaphore GaussianBlur::getCommands( RenderPassTimer const & timer
-		, uint32_t layer
-		, bool generateMipmaps )const
-	{
-		return doGetCommands( m_device
-			, m_prefix
-			, m_blurX
-			, m_blurY
-			, *m_renderPass
-			, m_source
-			, &timer
-			, generateMipmaps
-			, layer );
-	}
-
-	ashes::Semaphore const & GaussianBlur::blur( ashes::Semaphore const & toWait )
-	{
-		auto * result = &toWait;
-		m_device.graphicsQueue->submit( *m_blurX.commandBuffer
-			, *result
-			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, *m_blurX.semaphore
-			, nullptr );
-		result = m_blurX.semaphore.get();
-
-		m_device.graphicsQueue->submit( *m_blurY.commandBuffer
-			, *result
-			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, *m_blurY.semaphore
-			, nullptr );
-		result = m_blurY.semaphore.get();
-
-		return *result;
 	}
 }

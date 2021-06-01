@@ -75,7 +75,7 @@ namespace castor3d
 			, ShadowMapResult const & smResult
 			, LpvGridConfigUbo const & lpvGridConfigUbo
 			, LpvLightConfigUbo const & lpvLightConfigUbo
-			, TextureUnit const & result
+			, crg::ImageId const & result
 			, uint32_t gridSize
 			, uint32_t layerIndex );
 		/**
@@ -94,7 +94,7 @@ namespace castor3d
 		 */
 		C3D_API void accept( PipelineVisitorBase & visitor );
 
-		static TextureUnit createResult( Engine & engine
+		static crg::ImageId createResult( crg::FrameGraph & graph
 			, RenderDevice const & device
 			, castor::String const & prefix
 			, uint32_t index

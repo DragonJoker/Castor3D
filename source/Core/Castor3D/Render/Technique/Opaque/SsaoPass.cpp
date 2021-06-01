@@ -18,14 +18,14 @@ CU_ImplementCUSmartPtr( castor3d, SsaoPass )
 
 namespace castor3d
 {
-	SsaoPass::SsaoPass( RenderDevice const & device
+	SsaoPass::SsaoPass( crg::FrameGraph & graph
+		, RenderDevice const & device
 		, castor::Size const & size
 		, SsaoConfig & ssaoConfig
 		, TextureUnit const & linearisedDepth
 		, OpaquePassResult const & gpResult
 		, GpInfoUbo const & gpInfoUbo )
 		: m_device{ device }
-		, m_engine{ *m_device.renderSystem.getEngine() }
 		, m_ssaoConfig{ ssaoConfig }
 		, m_linearisedDepth{ linearisedDepth }
 		, m_gpResult{ gpResult }
@@ -33,16 +33,16 @@ namespace castor3d
 		, m_size{ makeExtent2D( size ) }
 		, m_matrixUbo{ m_device }
 		, m_ssaoConfigUbo{ std::make_shared< SsaoConfigUbo >( m_device ) }
-		, m_rawAoPass{ std::make_shared< SsaoRawAOPass >( m_engine
+		, m_rawAoPass{ std::make_shared< SsaoRawAOPass >( graph
 			, m_device
 			, m_size
 			, m_ssaoConfig
 			, *m_ssaoConfigUbo
 			, m_gpInfoUbo
 			, m_linearisedDepth
-			, m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView() ) }
+			, m_gpResult[DsTexture::eData1].wholeView ) }
 #if !C3D_DebugRawPass
-		, m_horizontalBlur{ std::make_shared< SsaoBlurPass >( m_engine
+		, m_horizontalBlur{ std::make_shared< SsaoBlurPass >( graph
 			, m_device
 			, cuT( "Horizontal" )
 			, m_size
@@ -52,8 +52,8 @@ namespace castor3d
 			, castor::Point2i{ 1, 0 }
 			, m_rawAoPass->getResult()
 			, m_rawAoPass->getBentResult()
-			, m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView() ) }
-		, m_verticalBlur{ std::make_shared< SsaoBlurPass >( m_engine
+			, m_gpResult[DsTexture::eData1].wholeView ) }
+		, m_verticalBlur{ std::make_shared< SsaoBlurPass >( graph
 			, m_device
 			, cuT( "Vertical" )
 			, m_size
@@ -63,7 +63,7 @@ namespace castor3d
 			, castor::Point2i{ 0, 1 }
 			, m_horizontalBlur->getResult()
 			, m_horizontalBlur->getBentResult()
-			, m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView() ) }
+			, m_gpResult[DsTexture::eData1].wholeView ) }
 #endif
 	{
 	}

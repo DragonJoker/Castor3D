@@ -44,7 +44,8 @@ namespace castor3d
 		 *\param[in]	gpResult	Le résultat de la geometry pass.
 		 *\param[in]	lpResult	Le résultat de la light pass.
 		 */
-		C3D_API SubsurfaceScatteringPass( Engine & engine
+		C3D_API SubsurfaceScatteringPass( crg::FrameGraph & graph
+			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, GpInfoUbo const & gpInfoUbo
 			, SceneUbo & sceneUbo
@@ -77,25 +78,13 @@ namespace castor3d
 		 */
 		C3D_API void cleanup( RenderDevice const & device );
 		/**
-		 *\~english
-		 *\brief		Renders the subsurfaces scattering.
-		 *\param[in]	device	The GPU device.
-		 *\param[in]	toWait	The semaphore to wait.
-		 *\~french
-		 *\brief		Dessine le subsurfaces scattering.
-		 *\param[in]	device	Le device GPU.
-		 *\param[in]	toWait	Le sémaphore à attendre.
-		 */
-		C3D_API ashes::Semaphore const & render( RenderDevice const & device
-			, ashes::Semaphore const & toWait )const;
-		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( PipelineVisitorBase & visitor );
 
-		inline TextureUnit const & getResult()const
+		inline crg::ImageViewId const & getResult()const
 		{
-			return m_result;
+			return m_resultView;
 		}
 
 	public:
@@ -130,12 +119,11 @@ namespace castor3d
 				, GpInfoUbo const & gpInfoUbo
 				, SceneUbo & sceneUbo
 				, OpaquePassResult const & gpResult
-				, TextureUnit const & source
-				, TextureUnit const & destination
+				, crg::ImageViewId const & source
+				, crg::ImageViewId const & destination
 				, bool isVertic
 				, ashes::PipelineShaderStageCreateInfoArray const & shaderStages );
 			Blur( Blur && rhs )noexcept;
-			void prepareFrame( ashes::CommandBuffer & commandBuffer )const;
 
 		private:
 			OpaquePassResult const & m_geometryBufferResult;
@@ -146,7 +134,8 @@ namespace castor3d
 			ashes::FrameBufferPtr m_frameBuffer;
 		};
 		static constexpr uint32_t PassCount = 3u;
-		using BlurResult = std::array< TextureUnit, PassCount >;
+		using BlurImages = std::array< crg::ImageId, PassCount >;
+		using BlurViews = std::array< crg::ImageViewId, PassCount >;
 		using BlurArray = std::array< std::unique_ptr< Blur >, PassCount >;
 
 		class Combine
@@ -157,20 +146,17 @@ namespace castor3d
 				, RenderDevice const & device
 				, castor::Size const & size
 				, OpaquePassResult const & gpResult
-				, TextureUnit const & source
-				, BlurResult const & blurResults
-				, TextureUnit const & destination
+				, crg::ImageViewId const & source
+				, BlurViews const & blurResults
+				, crg::ImageViewId const & destination
 				, ashes::PipelineShaderStageCreateInfoArray const & shaderStages );
 			Combine( Combine && rhs )noexcept;
-			void prepareFrame( ashes::CommandBuffer & commandBuffer )const;
 
 		private:
 			UniformBufferOffsetT< BlurWeights > m_blurUbo;
 			OpaquePassResult const & m_geometryBufferResult;
-			TextureUnit const & m_source;
-			BlurResult const & m_blurResults;
-			ashes::RenderPassPtr m_renderPass;
-			ashes::FrameBufferPtr m_frameBuffer;
+			crg::ImageViewId const & m_source;
+			BlurViews const & m_blurResults;
 		};
 
 	private:
@@ -179,9 +165,12 @@ namespace castor3d
 		OpaquePassResult const & m_gpResult;
 		LightPassResult const & m_lpResult;
 		castor::Size m_size;
-		TextureUnit m_intermediate;
-		BlurResult m_blurResults;
-		TextureUnit m_result;
+		crg::ImageId m_intermediate;
+		crg::ImageViewId m_intermediateView;
+		BlurImages m_blurImages;
+		BlurViews m_blurViews;
+		crg::ImageId m_result;
+		crg::ImageViewId m_resultView;
 		ShaderModule m_blurHorizVertexShader;
 		ShaderModule m_blurHorizPixelShader;
 		BlurArray m_blurX;
@@ -191,9 +180,6 @@ namespace castor3d
 		ShaderModule m_combineVertexShader;
 		ShaderModule m_combinePixelShader;
 		std::unique_ptr< Combine > m_combine;
-		ashes::CommandBufferPtr m_commandBuffer;
-		ashes::SemaphorePtr m_finished;
-		RenderPassTimerSPtr m_timer;
 		bool m_initialised{ false };
 	};
 }

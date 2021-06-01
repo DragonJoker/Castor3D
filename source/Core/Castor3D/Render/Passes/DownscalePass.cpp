@@ -11,6 +11,8 @@
 
 #include <ashespp/Image/ImageView.hpp>
 
+#include <RenderGraph/FrameGraph.hpp>
+
 CU_ImplementCUSmartPtr( castor3d, DownscalePass )
 
 using namespace castor;
@@ -41,54 +43,51 @@ namespace castor3d
 		return sampler;
 	}
 
-	TextureUnit doCreateTexture( Engine & engine
-		, RenderDevice const & device
+	crg::ImageId doCreateImage( crg::FrameGraph & graph
 		, castor::String const & name
 		, VkFormat format
 		, VkExtent2D const & size )
 	{
-		auto & renderSystem = *engine.getRenderSystem();
-		auto sampler = doCreateSampler( engine, name, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-
-		ashes::ImageCreateInfo image
-		{
-			0u,
-			VK_IMAGE_TYPE_2D,
-			format,
-			{ size.width, size.height, 1u },
-			1u,
-			1u,
-			VK_SAMPLE_COUNT_1_BIT,
-			VK_IMAGE_TILING_OPTIMAL,
-			( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-			| VK_IMAGE_USAGE_SAMPLED_BIT ),
-		};
-		auto layout = std::make_shared< TextureLayout >( renderSystem
-			, image
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, name );
-		TextureUnit result{ engine };
-		result.setTexture( layout );
-		result.setSampler( sampler );
-		result.initialise( device );
-		return result;
+		return graph.createImage( crg::ImageData{ name
+			, 0u
+			, VK_IMAGE_TYPE_2D
+			, format
+			, { size.width, size.height, 1u }
+			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+				| VK_IMAGE_USAGE_SAMPLED_BIT ) } );
 	}
 
-	TextureUnitArray doCreateTextures( Engine & engine
-		, RenderDevice const & device
+	crg::ImageIdArray doCreateImages( crg::FrameGraph & graph
 		, castor::String const & name
-		, ashes::ImageViewArray const & views
+		, crg::ImageViewIdArray const & views
 		, VkExtent2D const & size )
 	{
-		TextureUnitArray result;
+		crg::ImageIdArray result;
 
 		for ( auto & view : views )
 		{
-			result.emplace_back( doCreateTexture( engine
-				, device
+			result.emplace_back( doCreateImage( graph
 				, name + string::toString( result.size() )
-				, view->format
+				, getFormat( view )
 				, size ) );
+		}
+
+		return result;
+	}
+
+	crg::ImageViewIdArray doCreateViews( crg::FrameGraph & graph
+		, crg::ImageIdArray const & images )
+	{
+		crg::ImageViewIdArray result;
+
+		for ( auto & image : images )
+		{
+			result.emplace_back( graph.createView( crg::ImageViewData{ image.data->name
+				, image
+				, 0u
+				, VK_IMAGE_VIEW_TYPE_2D
+				, getFormat( image )
+				, { ashes::getAspectMask( getFormat( image ) ), 0u, 1u, 0u, 1u } } ) );
 		}
 
 		return result;
@@ -96,106 +95,89 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	DownscalePass::DownscalePass( Engine & engine
+	DownscalePass::DownscalePass( crg::FrameGraph & graph
+		, crg::FramePass const *& previousPass
 		, RenderDevice const & device
 		, castor::String const & category
-		, ashes::ImageViewArray const & srcViews
+		, crg::ImageViewIdArray const & srcViews
 		, VkExtent2D const & dstSize )
-		: m_engine{ engine }
-		, m_device{ device }
-		, m_result{ doCreateTextures( engine, m_device, "Downscaled", srcViews, dstSize ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( device, category, cuT( "Downscale" ) ) }
-		, m_commandBuffer{ m_device.graphicsCommandPool->createCommandBuffer( "Downscale", VK_COMMAND_BUFFER_LEVEL_PRIMARY ) }
-		, m_finished{ m_device->createSemaphore( "Downscale" ) }
+		: m_device{ device }
+		, m_result{ doCreateImages( graph, "Downscaled", srcViews, dstSize ) }
+		, m_resultViews{ doCreateViews( graph, m_result ) }
 	{
-		m_commandBuffer->begin();
-		m_timer->beginPass( *m_commandBuffer, 0u );
-		m_commandBuffer->beginDebugBlock(
-			{
-				"Downscale",
-				makeFloatArray( m_engine.getNextRainbowColour() ),
-			} );
-		auto it = m_result.begin();
+		// TODO CRG
+		//m_commandBuffer->begin();
+		//m_timer->beginPass( *m_commandBuffer, 0u );
+		//m_commandBuffer->beginDebugBlock(
+		//	{
+		//		"Downscale",
+		//		makeFloatArray( m_engine.getNextRainbowColour() ),
+		//	} );
+		//auto it = m_result.begin();
 
-		for ( auto & srcView : srcViews )
-		{
-			auto srcSize = srcView.image->getDimensions();
-			auto dstView = it->getTexture()->getDefaultView().getTargetView();
+		//for ( auto & srcView : srcViews )
+		//{
+		//	auto srcSize = srcView.image->getDimensions();
+		//	auto dstView = it->getTexture()->getDefaultView().getTargetView();
 
-			m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, srcView.makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
-			m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, dstView.makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
-			m_commandBuffer->blitImage( *srcView.image
-				, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-				, *dstView.image
-				, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-				, {
-					VkImageBlit
-					{
-						{
-							srcView->subresourceRange.aspectMask,
-							srcView->subresourceRange.baseMipLevel,
-							srcView->subresourceRange.baseArrayLayer,
-							srcView->subresourceRange.layerCount,
-						},
-						{
-							{ 0, 0, 0 },
-							{ int32_t( srcSize.width ), int32_t( srcSize.height ), 1 },
-						},
-						{
-							dstView->subresourceRange.aspectMask,
-							dstView->subresourceRange.baseMipLevel,
-							dstView->subresourceRange.baseArrayLayer,
-							dstView->subresourceRange.layerCount,
-						},
-						{
-							{ 0, 0, 0 },
-							{ int32_t( dstSize.width ), int32_t( dstSize.height ), 1 },
-						},
-					}
-				}
-				, VK_FILTER_NEAREST );
-			m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, srcView.makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
-			m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, dstView.makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
-			++it;
-		}
+		//	m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+		//		, VK_PIPELINE_STAGE_TRANSFER_BIT
+		//		, srcView.makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+		//	m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+		//		, VK_PIPELINE_STAGE_TRANSFER_BIT
+		//		, dstView.makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+		//	m_commandBuffer->blitImage( *srcView.image
+		//		, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+		//		, *dstView.image
+		//		, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+		//		, {
+		//			VkImageBlit
+		//			{
+		//				{
+		//					srcView->subresourceRange.aspectMask,
+		//					srcView->subresourceRange.baseMipLevel,
+		//					srcView->subresourceRange.baseArrayLayer,
+		//					srcView->subresourceRange.layerCount,
+		//				},
+		//				{
+		//					{ 0, 0, 0 },
+		//					{ int32_t( srcSize.width ), int32_t( srcSize.height ), 1 },
+		//				},
+		//				{
+		//					dstView->subresourceRange.aspectMask,
+		//					dstView->subresourceRange.baseMipLevel,
+		//					dstView->subresourceRange.baseArrayLayer,
+		//					dstView->subresourceRange.layerCount,
+		//				},
+		//				{
+		//					{ 0, 0, 0 },
+		//					{ int32_t( dstSize.width ), int32_t( dstSize.height ), 1 },
+		//				},
+		//			}
+		//		}
+		//		, VK_FILTER_NEAREST );
+		//	m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+		//		, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+		//		, srcView.makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
+		//	m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+		//		, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+		//		, dstView.makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+		//	++it;
+		//}
 
-		m_commandBuffer->endDebugBlock();
-		m_timer->endPass( *m_commandBuffer, 0u );
-		m_commandBuffer->end();
-	}
-
-	ashes::Semaphore const & DownscalePass::compute( ashes::Semaphore const & toWait )
-	{
-		RenderPassTimerBlock timerBlock{ m_timer->start() };
-		timerBlock->notifyPassRender();
-		auto * result = &toWait;
-
-		m_device.graphicsQueue->submit( *m_commandBuffer
-			, *result
-			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, *m_finished
-			, nullptr );
-		result = m_finished.get();
-
-		return *result;
+		//m_commandBuffer->endDebugBlock();
+		//m_timer->endPass( *m_commandBuffer, 0u );
+		//m_commandBuffer->end();
 	}
 
 	void DownscalePass::accept( PipelineVisitorBase & visitor )
 	{
 		uint32_t index{};
 
-		for ( auto & unit : m_result )
+		for ( auto & unit : m_resultViews )
 		{
 			visitor.visit( "Downscale" + string::toString( index++ )
-				, unit.getTexture()->getDefaultView().getSampledView()
+				, unit
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, TextureFactors{}.invert( true ) );
 		}

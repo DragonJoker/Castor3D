@@ -40,15 +40,27 @@ namespace castor3d
 		 *\param[in]	device		Le device GPU.
 		 *\param[in]	lpConfig	La configuration de la passe d'éclairage.
 		 */
-		LightPassReflectiveShadow( RenderDevice const & device
+		LightPassReflectiveShadow( crg::FrameGraph & graph
+			, crg::FramePass const *& previousPass
+			, RenderDevice const & device
 			, RsmLightPassConfig const & lpConfig )
-			: LightPassShadow< LtType >{ device
+			: LightPassShadow< LtType >{ graph
+				, previousPass
+				, device
 				, "ReflectiveShadow"
 				, { lpConfig.base.lpResult, lpConfig.base.gpInfoUbo, true, false, true } }
 			, m_gpResult{ lpConfig.gpResult }
 			, m_smResult{ lpConfig.smResult }
 			, m_lpResult{ lpConfig.base.lpResult }
 			, m_gpInfoUbo{ lpConfig.base.gpInfoUbo }
+			, m_downscalePass{ castor::makeUnique< DownscalePass >( graph
+				, previousPass
+				, m_device
+				, cuT( "Reflective Shadow Maps" )
+				, crg::ImageViewIdArray{ m_lpResult[LpTexture::eDiffuse].wholeView
+					, m_gpResult[DsTexture::eData1].wholeView }
+				, VkExtent2D{ getExtent( m_lpResult[LpTexture::eDiffuse].wholeView ).width >> 2
+					, getExtent( m_lpResult[LpTexture::eDiffuse].wholeView ).height >> 2 } ) }
 		{
 		}
 		/**
@@ -60,37 +72,25 @@ namespace castor3d
 			, RenderPassTimer & timer )override
 		{
 			auto & lightCache = scene.getLightCache();
-			auto size = VkExtent2D
-			{
-				m_lpResult[LpTexture::eDiffuse].getTexture()->getWidth() >> 2,
-				m_lpResult[LpTexture::eDiffuse].getTexture()->getHeight() >> 2,
-			};
-			m_downscalePass = castor::makeUnique< DownscalePass >( this->m_engine
-				, this->m_device
-				, cuT( "Reflective Shadow Maps" )
-				, ashes::ImageViewArray
-				{
-					m_lpResult[LpTexture::eDiffuse].getTexture()->getDefaultView().getTargetView(),
-					m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getTargetView(),
-				}
-				, size );
-			m_rsmGiPass = std::make_unique< RsmGIPass >( this->m_device
-				, lightCache
+			auto previousPass = &m_previousPass;
+			m_rsmGiPass = std::make_unique< RsmGIPass >( m_graph
+				, previousPass
+				, m_device
+				, scene.getLightCache()
 				, LtType
-				, size
+				, VkExtent2D{ getExtent( m_lpResult[LpTexture::eDiffuse].wholeView ).width >> 2
+					, getExtent( m_lpResult[LpTexture::eDiffuse].wholeView ).height >> 2 }
 				, m_gpInfoUbo
 				, m_gpResult
 				, m_smResult
 				, m_downscalePass->getResult() );
-			m_interpolatePass = std::make_unique< RsmInterpolatePass >( this->m_engine
-				, this->m_device
-				, lightCache
+			m_interpolatePass = std::make_unique< RsmInterpolatePass >( m_graph
+				, previousPass
+				, m_device
+				, scene.getLightCache()
 				, LtType
-				, VkExtent2D
-				{
-					m_lpResult[LpTexture::eDiffuse].getTexture()->getWidth(),
-					m_lpResult[LpTexture::eDiffuse].getTexture()->getHeight(),
-				}
+				, VkExtent2D{ getExtent( m_lpResult[LpTexture::eDiffuse].wholeView ).width >> 2
+					, getExtent( m_lpResult[LpTexture::eDiffuse].wholeView ).height >> 2 }
 				, m_gpInfoUbo
 				, m_gpResult
 				, m_smResult
@@ -98,7 +98,7 @@ namespace castor3d
 				, m_rsmGiPass->getSamplesSsbo()
 				, m_rsmGiPass->getResult()[0]
 				, m_rsmGiPass->getResult()[1]
-				, m_lpResult[LpTexture::eIndirectDiffuse] );
+				, m_lpResult[LpTexture::eIndirectDiffuse].wholeView );
 			LightPassShadow< LtType >::initialise( scene, gp, sceneUbo, timer );
 		}
 		/**
@@ -110,20 +110,6 @@ namespace castor3d
 			m_interpolatePass.reset();
 			m_rsmGiPass.reset();
 			m_downscalePass.reset();
-		}
-		/**
-		 *\copydoc		castor3d::LightPass::render
-		 */
-		ashes::Semaphore const & render( uint32_t index
-			, ashes::Semaphore const & toWait )override
-		{
-			auto result = &toWait;
-			result = &my_pass_type::render( index, *result );
-			result = &m_downscalePass->compute( *result );
-			result = &m_rsmGiPass->compute( *result );
-			result = &m_interpolatePass->compute( *result );
-
-			return *result;
 		}
 		/**
 		 *\copydoc		castor3d::LightPass::accept

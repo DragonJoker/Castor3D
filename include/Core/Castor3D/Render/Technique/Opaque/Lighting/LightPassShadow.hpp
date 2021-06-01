@@ -162,11 +162,15 @@ namespace castor3d
 		 *\param[in]	lpConfig	La configuration de la passe d'éclairage.
 		 *\param[in]	vctConfig	L'UBO du voxelizer.
 		 */
-		LightPassShadow( RenderDevice const & device
+		LightPassShadow( crg::FrameGraph & graph
+			, crg::FramePass const *& previousPass
+			, RenderDevice const & device
 			, castor::String const & suffix
 			, LightPassConfig const & lpConfig
 			, VoxelizerUbo const * vctConfig = nullptr )
-			: my_pass_type{ device
+			: my_pass_type{ graph
+				, previousPass
+				, device
 				, suffix
 				, LightPassConfig{ lpConfig.lpResult
 					, lpConfig.gpInfoUbo
@@ -188,10 +192,14 @@ namespace castor3d
 		 *\param[in]	lpConfig	La configuration de la passe d'éclairage.
 		 *\param[in]	vctConfig	L'UBO du voxelizer.
 		 */
-		LightPassShadow( RenderDevice const & device
+		LightPassShadow( crg::FrameGraph & graph
+			, crg::FramePass const *& previousPass
+			, RenderDevice const & device
 			, LightPassConfig const & lpConfig
 			, VoxelizerUbo const * vctConfig = nullptr )
-			: LightPassShadow{ device
+			: LightPassShadow{ graph
+				, previousPass
+				, device
 				, cuT( "Shadow" )
 				, lpConfig
 				, vctConfig }
