@@ -29,7 +29,11 @@ namespace castor
 
 		if ( auto block{ beginBlock( file, "render_target" ) } )
 		{
-			if ( target.getScene() )
+			result = writeNamedSub( file, cuT( "size" ), target.getSize() )
+				&& write( file, cuT( "format" ), getFormatName( convert( target.getPixelFormat() ) ) )
+				&& writeName( file, cuT( "tone_mapping" ), target.getToneMapping()->getName() );
+
+			if ( result && target.getScene() )
 			{
 				result = writeName( file, cuT( "scene" ), target.getScene()->getName() );
 			}
@@ -37,13 +41,6 @@ namespace castor
 			if ( result && target.getCamera() )
 			{
 				result = writeName( file, cuT( "camera" ), target.getCamera()->getName() );
-			}
-
-			if ( result )
-			{
-				result = writeNamedSub( file, cuT( "size" ), target.getSize() )
-					&& write( file, cuT( "format" ), getFormatName( convert( target.getPixelFormat() ) ) )
-					&& writeName( file, cuT( "tone_mapping" ), target.getToneMapping()->getName() );
 			}
 
 			if ( result )
