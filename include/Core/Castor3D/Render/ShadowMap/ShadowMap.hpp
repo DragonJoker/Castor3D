@@ -12,8 +12,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/ShadowMap/ShadowMapResult.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
-#include <ashespp/Sync/Fence.hpp>
-#include <ashespp/Sync/Semaphore.hpp>
+#include <RenderGraph/RunnableGraph.hpp>
 
 namespace castor3d
 {
@@ -105,6 +104,8 @@ namespace castor3d
 			, uint32_t index = 0u )const;
 		C3D_API virtual crg::ImageViewId getView( SmTexture texture
 			, uint32_t index = 0u )const;
+		C3D_API virtual crg::ImageViewIdArray getViews( SmTexture texture
+			, uint32_t index = 0u )const;
 
 		ShadowMapResult const & getShadowPassResult()const
 		{
@@ -119,6 +120,11 @@ namespace castor3d
 		uint32_t getCount()const
 		{
 			return m_count;
+		}
+
+		crg::FramePass const & getLastPass()const
+		{
+			return *m_lastPass;
 		}
 		/**@}*/
 	public:
@@ -140,6 +146,7 @@ namespace castor3d
 		castor::String m_name;
 		std::set< std::reference_wrapper< GeometryBuffers > > m_geometryBuffers;
 		std::vector< PassData > m_passes;
+		crg::FramePass const * m_lastPass;
 		uint32_t m_count;
 		ShadowMapResult m_result;
 	};

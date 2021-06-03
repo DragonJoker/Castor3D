@@ -100,49 +100,6 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderPtr getBlurXProgramLayer( bool isDepth
-			, uint32_t layer )
-		{
-			using namespace sdw;
-			FragmentWriter writer;
-
-			// Shader inputs
-			Ubo config{ writer, GaussianBlur::Config, GaussCfgIdx, 0u };
-			auto c3d_textureSize = config.declMember< Vec2 >( GaussianBlur::TextureSize );
-			auto c3d_coefficientsCount = config.declMember< UInt >( GaussianBlur::CoefficientsCount );
-			auto c3d_dump = config.declMember< UInt >( "c3d_dump" ); // to keep a 16 byte alignment.
-			auto c3d_coefficients = config.declMember< Vec4 >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients / 4u );
-			config.end();
-			auto c3d_mapSource = writer.declSampledImage< FImg2DArrayRgba32 >( "c3d_mapSource", DifImgIdx, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
-
-			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0u );
-			auto out = writer.getOut();
-
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
-				{
-					auto base = writer.declLocale( "base", vec2( 1.0_f, 0.0_f ) / c3d_textureSize );
-					auto offset = writer.declLocale( "offset", vec2( 0.0_f, 0.0_f ) );
-					pxl_fragColor = c3d_mapSource.sample( vec3( vtx_texture, Float( float( layer ) ) ) ) * c3d_coefficients[0_u][0_u];
-
-					FOR( writer, UInt, i, 1_u, i < c3d_coefficientsCount, ++i )
-					{
-						offset += base;
-						pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( vec3( vtx_texture - offset, Float( float( layer ) ) ) );
-						pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( vec3( vtx_texture + offset, Float( float( layer ) ) ) );
-					}
-					ROF;
-
-					if ( isDepth )
-					{
-						out.fragDepth = pxl_fragColor.r();
-					}
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
 		ShaderPtr getBlurYProgram( bool isDepth )
 		{
 			using namespace sdw;
@@ -183,27 +140,6 @@ namespace castor3d
 					}
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		ShaderPtr getPixelProgram( RenderSystem & renderSystem
-			, uint32_t baseArrayLayer
-			, uint32_t layerCount
-			, bool isHorizontal
-			, bool isDepth )
-		{
-			if ( isHorizontal )
-			{
-				if ( layerCount > 1u
-					&& !renderSystem.getDescription().features.hasImageTexture )
-				{
-					return getBlurXProgramLayer( isDepth
-						, baseArrayLayer );
-				}
-
-				return getBlurXProgram( isDepth );
-			}
-
-			return getBlurYProgram( isDepth );
 		}
 
 		std::vector< float > getHalfPascal( uint32_t height )
@@ -309,8 +245,7 @@ namespace castor3d
 						: VK_IMAGE_ASPECT_COLOR_BIT ) ) );
 		}
 
-		crg::ImageViewData createMipView( castor::String const & name
-			, crg::ImageViewId const & source
+		crg::ImageViewData createMipView( crg::ImageViewId const & source
 			, uint32_t layer
 			, uint32_t level )
 		{
@@ -331,7 +266,7 @@ namespace castor3d
 				result.info.viewType = VK_IMAGE_VIEW_TYPE_2D;
 			}
 
-			result.name = name;
+			result.name = source.data->name;
 			result.name += "L" + string::toString( layer );
 			result.name += "M" + string::toString( level );
 			return result;
@@ -352,59 +287,51 @@ namespace castor3d
 				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, std::nullopt },
 			};
 		}
-	}
 
-	//*********************************************************************************************
-
-	GaussianBlur::BlurPass::BlurPass( crg::FrameGraph & graph
-		, crg::FramePass const *& previousPass
-		, RenderDevice const & device
-		, castor::String const & name
-		, crg::ImageViewId const & input
-		, crg::ImageViewId const & output
-		, UniformBufferOffsetT< GaussianBlur::Configuration > const & blurUbo
-		, VkFormat format
-		, VkExtent2D const & textureSize
-		, bool isHorizontal )
-		: vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, name, getVertexProgram() }
-		, pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT
-			, name
-			, getPixelProgram( device.renderSystem
-				, input.data->info.subresourceRange.baseArrayLayer
-				, input.data->info.subresourceRange.layerCount
-				, isHorizontal
-				, ashes::isDepthFormat( format ) ),
-		}
-		, stages{ makeShaderState( device, vertexShader )
-			, makeShaderState( device, pixelShader ) }
-		, isHorizontal{ isHorizontal }
-	{
-		auto subresourceRange = input.data->info.subresourceRange;
-
-		for ( auto layer = subresourceRange.baseArrayLayer; layer < subresourceRange.layerCount; ++layer )
+		crg::ImageViewId createIntermediate( crg::FrameGraph & graph
+			, castor::String const & prefix
+			, VkFormat format
+			, VkExtent3D const & size
+			, uint32_t mipLevels )
 		{
-			for ( auto level = subresourceRange.baseMipLevel; level < subresourceRange.levelCount; ++level )
+			auto intermediate = graph.createImage( crg::ImageData{ prefix + "GB"
+				, 0u
+				, VK_IMAGE_TYPE_2D
+				, format
+				, { size.width, size.height, 1u }
+				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+					| VK_IMAGE_USAGE_SAMPLED_BIT
+					| ( mipLevels > 1u
+						? ( VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
+						: 0u ) )
+				, mipLevels } );
+			return graph.createView( crg::ImageViewData{ prefix + "GB"
+				, intermediate
+				, 0u
+				, VK_IMAGE_VIEW_TYPE_2D
+				, format
+				, { ashes::getAspectMask( format ), 0u, mipLevels, 0u, 1u } } );
+		}
+
+		crg::ImageViewIdArray createViews( crg::FrameGraph & graph
+			, crg::ImageViewId input )
+		{
+			crg::ImageViewIdArray result;
+
+			auto subresourceRange = input.data->info.subresourceRange;
+
+			for ( auto layerIdx = 0u; layerIdx < subresourceRange.layerCount; ++layerIdx )
 			{
-				auto & pass = graph.createPass( name + "L" + std::to_string( layer ) + "M" + std::to_string( level )
-					, [this, &input]( crg::FramePass const & pass
-						, crg::GraphContext const & context
-						, crg::RunnableGraph & graph )
-					{
-						auto extent = getExtent( input );
-						return crg::RenderQuadBuilder{}
-							.renderPosition( {} )
-							.renderSize( { extent.width, extent.height } )
-							.texcoordConfig( {} )
-							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) )
-							.build( pass, context, graph );
-					} );
-				pass.addDependency( *previousPass );
-				previousPass = &pass;
-				blurUbo.createPassBinding( pass, GaussCfgIdx );
-				pass.addSampledView( graph.createView( createMipView( name, input, layer, level ) )
-					, DifImgIdx );
-				pass.addOutputColourView( output );
+				auto layer = subresourceRange.baseArrayLayer + layerIdx;
+
+				for ( auto levelIdx = subresourceRange.baseMipLevel; levelIdx < subresourceRange.levelCount; ++levelIdx )
+				{
+					auto level = subresourceRange.baseMipLevel + levelIdx;
+					result.push_back( graph.createView( createMipView( input, layer, level ) ) );
+				}
 			}
+
+			return result;
 		}
 	}
 
@@ -419,54 +346,24 @@ namespace castor3d
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
 		, castor::String const & prefix
-		, crg::ImageViewId const & view
+		, crg::ImageViewIdArray const & views
+		, crg::ImageViewId const & intermediateView
 		, uint32_t kernelSize )
 		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
+		, m_sources{ views }
 		, m_device{ device }
-		, m_previousPass{ &previousPass }
+		, m_lastPass{ &previousPass }
 		, m_prefix{ prefix }
-		, m_source{ view }
-		, m_size{ getExtent( m_source ).width, getExtent( m_source ).height }
-		, m_format{ getFormat( m_source ) }
-		, m_intermediate{ graph.createImage( crg::ImageData{ prefix + "GB"
-			, 0u
-			, VK_IMAGE_TYPE_2D
-			, m_format
-			, { m_size.width, m_size.height, 1u }
-			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT
-				| ( getMipLevels( m_source ) > 1u
-					? ( VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
-					: 0u ) )
-			, getMipLevels( m_source ) } ) }
-		, m_intermediateView{ graph.createView( crg::ImageViewData{ prefix + "GB"
-			, m_intermediate
-			, 0u
-			, VK_IMAGE_VIEW_TYPE_2D
-			, m_format
-			, { ashes::getAspectMask( m_format ), 0u, getMipLevels( m_source ), 0u, 1u } } ) }
+		, m_size{ makeExtent2D( getExtent( m_sources[0] ) ) }
+		, m_format{ getFormat( m_sources[0] ) }
+		, m_intermediateView{ intermediateView }
 		, m_blurUbo{ m_device.uboPools->getBuffer< Configuration >( 0u ) }
-		, m_blurX{ graph
-			, m_previousPass
-			, m_device
-			, m_prefix + cuT( "GBX" )
-			, m_source
-			, m_intermediateView
-			, m_blurUbo
-			, m_format
-			, m_size
-			, true }
-		, m_blurY{ graph
-			, m_previousPass
-			, m_device
-			, m_prefix + cuT( "GBY" )
-			, m_intermediateView
-			, m_source
-			, m_blurUbo
-			, m_format
-			, m_size
-			, false }
 		, m_kernel{ getHalfPascal( kernelSize ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + cuT( "GB" ), getVertexProgram() }
+		, m_pixelShaderX{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + cuT( "GBX" ), getBlurXProgram( ashes::isDepthFormat( m_format ) ) }
+		, m_pixelShaderY{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + cuT( "GBY" ), getBlurYProgram( ashes::isDepthFormat( m_format ) ) }
+		, m_stagesX{ makeShaderState( device, m_vertexShader ), makeShaderState( device, m_pixelShaderX ) }
+		, m_stagesY{ makeShaderState( device, m_vertexShader ), makeShaderState( device, m_pixelShaderY ) }
 	{
 		CU_Require( kernelSize < MaxCoefficients );
 		auto & data = m_blurUbo.getData();
@@ -477,9 +374,100 @@ namespace castor3d
 			, sizeof( float ) * std::min( size_t( MaxCoefficients ), m_kernel.size() ) );
 		data.textureSize[0] = float( m_size.width );
 		data.textureSize[1] = float( m_size.height );
+
+		for ( auto & input : m_sources )
+		{
+			{
+				auto name = input.data->name + "BlurX";
+				auto & passX = graph.createPass( name
+					, [this, &input]( crg::FramePass const & pass
+						, crg::GraphContext const & context
+						, crg::RunnableGraph & graph )
+					{
+						auto extent = getExtent( input );
+						return crg::RenderQuadBuilder{}
+							.renderPosition( {} )
+							.renderSize( { extent.width, extent.height } )
+							.texcoordConfig( {} )
+							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stagesX ) )
+							.build( pass, context, graph );
+					} );
+				passX.addDependency( *m_lastPass );
+				m_lastPass = &passX;
+				m_blurUbo.createPassBinding( passX, GaussCfgIdx );
+				passX.addSampledView( input, DifImgIdx );
+				passX.addOutputColourView( m_intermediateView );
+			}
+			{
+				auto name = input.data->name + "BlurY";
+				auto & passY = graph.createPass( name
+					, [this, &input]( crg::FramePass const & pass
+						, crg::GraphContext const & context
+						, crg::RunnableGraph & graph )
+					{
+						auto extent = getExtent( input );
+						return crg::RenderQuadBuilder{}
+							.renderPosition( {} )
+							.renderSize( { extent.width, extent.height } )
+							.texcoordConfig( {} )
+							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stagesY ) )
+							.build( pass, context, graph );
+					} );
+				passY.addDependency( *m_lastPass );
+				m_lastPass = &passY;
+				m_blurUbo.createPassBinding( passY, GaussCfgIdx );
+				passY.addSampledView( m_intermediateView, DifImgIdx );
+				passY.addOutputColourView( input );
+			}
+		}
 	}
 
-	GaussianBlur::~GaussianBlur()
+	GaussianBlur::GaussianBlur( crg::FrameGraph & graph
+		, crg::FramePass const & previousPass
+		, RenderDevice const & device
+		, castor::String const & prefix
+		, crg::ImageViewIdArray const & views
+		, uint32_t kernelSize )
+		: GaussianBlur{ graph
+			, previousPass
+			, device
+			, prefix
+			, views
+			, createIntermediate( graph, prefix, getFormat( views[0] ), getExtent( views[0] ), getMipLevels( views[0] ) )
+			, kernelSize }
+	{
+	}
+
+	GaussianBlur::GaussianBlur( crg::FrameGraph & graph
+		, crg::FramePass const & previousPass
+		, RenderDevice const & device
+		, castor::String const & prefix
+		, crg::ImageViewId const & view
+		, uint32_t kernelSize )
+		: GaussianBlur{ graph
+		, previousPass
+		, device
+		, prefix
+		, createViews( graph, view )
+		, createIntermediate( graph, prefix, getFormat( view ), getExtent( view ), getMipLevels( view ) )
+		, kernelSize }
+	{
+	}
+
+	GaussianBlur::GaussianBlur( crg::FrameGraph & graph
+		, crg::FramePass const & previousPass
+		, RenderDevice const & device
+		, castor::String const & prefix
+		, crg::ImageViewId const & view
+		, crg::ImageViewId const & intermediateView
+		, uint32_t kernelSize )
+		: GaussianBlur{ graph
+		, previousPass
+		, device
+		, prefix
+		, createViews( graph, view )
+		, intermediateView
+		, kernelSize }
 	{
 	}
 
@@ -490,10 +478,10 @@ namespace castor3d
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 
-		visitor.visit( m_blurX.vertexShader );
-		visitor.visit( m_blurX.pixelShader );
+		visitor.visit( m_vertexShader );
+		visitor.visit( m_pixelShaderX );
 
-		visitor.visit( m_blurY.vertexShader );
-		visitor.visit( m_blurY.pixelShader );
+		visitor.visit( m_vertexShader );
+		visitor.visit( m_pixelShaderY );
 	}
 }
