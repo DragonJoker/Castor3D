@@ -205,13 +205,19 @@ namespace castor3d
 						, inSurface.tangentSpaceFragPosition );
 				}
 
-				utils.applyAlphaFunc( flags.blendAlphaFunc
-					, opacity
-					, material.m_alphaRef
-					, false );
-				utils.applyAlphaFunc( flags.alphaFunc
-					, opacity
-					, material.m_alphaRef );
+				if ( m_mode == RenderMode::eTransparentOnly )
+				{
+					utils.applyAlphaFunc( flags.blendAlphaFunc
+						, opacity
+						, material.m_alphaRef
+						, false );
+				}
+				else
+				{
+					utils.applyAlphaFunc( flags.alphaFunc
+						, opacity
+						, material.m_alphaRef );
+				}
 
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 				{
@@ -471,13 +477,19 @@ namespace castor3d
 						, inSurface.tangentSpaceFragPosition );
 				}
 
-				utils.applyAlphaFunc( flags.blendAlphaFunc
-					, opacity
-					, material.m_alphaRef
-					, false );
-				utils.applyAlphaFunc( flags.alphaFunc
-					, opacity
-					, material.m_alphaRef );
+				if ( m_mode == RenderMode::eTransparentOnly )
+				{
+					utils.applyAlphaFunc( flags.blendAlphaFunc
+						, opacity
+						, material.m_alphaRef
+						, false );
+				}
+				else
+				{
+					utils.applyAlphaFunc( flags.alphaFunc
+						, opacity
+						, material.m_alphaRef );
+				}
 
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 				{
@@ -805,13 +817,19 @@ namespace castor3d
 						, inSurface.tangentSpaceFragPosition );
 				}
 
-				utils.applyAlphaFunc( flags.blendAlphaFunc
-					, opacity
-					, material.m_alphaRef
-					, false );
-				utils.applyAlphaFunc( flags.alphaFunc
-					, opacity
-					, material.m_alphaRef );
+				if ( m_mode == RenderMode::eTransparentOnly )
+				{
+					utils.applyAlphaFunc( flags.blendAlphaFunc
+						, opacity
+						, material.m_alphaRef
+						, false );
+				}
+				else
+				{
+					utils.applyAlphaFunc( flags.alphaFunc
+						, opacity
+						, material.m_alphaRef );
+				}
 
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 				{
