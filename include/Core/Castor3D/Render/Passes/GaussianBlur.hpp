@@ -45,9 +45,28 @@ namespace castor3d
 			, crg::FramePass const & previousPass
 			, RenderDevice const & device
 			, castor::String const & prefix
+			, crg::ImageViewIdArray const & views
+			, crg::ImageViewId const & intermediateView
+			, uint32_t kernelSize );
+		C3D_API GaussianBlur( crg::FrameGraph & graph
+			, crg::FramePass const & previousPass
+			, RenderDevice const & device
+			, castor::String const & prefix
+			, crg::ImageViewIdArray const & views
+			, uint32_t kernelSize );
+		C3D_API GaussianBlur( crg::FrameGraph & graph
+			, crg::FramePass const & previousPass
+			, RenderDevice const & device
+			, castor::String const & prefix
 			, crg::ImageViewId const & view
 			, uint32_t kernelSize );
-		C3D_API ~GaussianBlur();
+		C3D_API GaussianBlur( crg::FrameGraph & graph
+			, crg::FramePass const & previousPass
+			, RenderDevice const & device
+			, castor::String const & prefix
+			, crg::ImageViewId const & view
+			, crg::ImageViewId const & intermediateView
+			, uint32_t kernelSize );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -61,54 +80,10 @@ namespace castor3d
 		*	Accesseurs.
 		**/
 		/**@{*/
-		ashes::RenderPass const & getRenderPass()const
+		crg::FramePass const & getLastPass()const
 		{
-			CU_Require( m_renderPass );
-			return *m_renderPass;
-		}
-
-		ShaderModule const & getBlurXVertexModule()const
-		{
-			return m_blurX.vertexShader;
-		}
-
-		ShaderModule const & getBlurXPixelModule()const
-		{
-			return m_blurX.pixelShader;
-		}
-
-		ShaderModule const & getBlurYVertexModule()const
-		{
-			return m_blurY.vertexShader;
-		}
-
-		ShaderModule const & getBlurYPixelModule()const
-		{
-			return m_blurY.pixelShader;
-		}
-
-		ast::Shader const & getBlurXVertexShader()const
-		{
-			CU_Require( m_blurX.vertexShader.shader );
-			return *m_blurX.vertexShader.shader;
-		}
-
-		ast::Shader const & getBlurXPixelShader()const
-		{
-			CU_Require( m_blurX.pixelShader.shader );
-			return *m_blurX.pixelShader.shader;
-		}
-
-		ast::Shader const & getBlurYVertexShader()const
-		{
-			CU_Require( m_blurY.vertexShader.shader );
-			return *m_blurY.vertexShader.shader;
-		}
-
-		ast::Shader const & getBlurYPixelShader()const
-		{
-			CU_Require( m_blurY.pixelShader.shader );
-			return *m_blurY.pixelShader.shader;
+			CU_Require( m_lastPass );
+			return *m_lastPass;
 		}
 		/**@}*/
 
@@ -127,39 +102,21 @@ namespace castor3d
 			std::array< castor::Point4f, GaussianBlur::MaxCoefficients / 4u > blurCoeffs; // We then allow for 60 coeffs max, to have a 256 bytes struct.
 		};
 
-		struct BlurPass
-		{
-			ShaderModule vertexShader;
-			ShaderModule pixelShader;
-			ashes::PipelineShaderStageCreateInfoArray stages;
-			bool isHorizontal;
-
-			BlurPass( crg::FrameGraph & graph
-				, crg::FramePass const *& previousPass
-				, RenderDevice const & device
-				, castor::String const & name
-				, crg::ImageViewId const & input
-				, crg::ImageViewId const & output
-				, UniformBufferOffsetT< GaussianBlur::Configuration > const & blurUbo
-				, VkFormat format
-				, VkExtent2D const & textureSize
-				, bool isHorizontal );
-		};
-
 	private:
-		crg::ImageViewId const & m_source;
+		crg::ImageViewIdArray m_sources;
 		RenderDevice const & m_device;
-		crg::FramePass const * m_previousPass;
+		crg::FramePass const * m_lastPass;
 		castor::String m_prefix;
 		VkExtent2D m_size;
 		VkFormat m_format;
-		crg::ImageId m_intermediate;
 		crg::ImageViewId m_intermediateView;
-		ashes::RenderPassPtr m_renderPass;
 		UniformBufferOffsetT< Configuration > m_blurUbo;
 		std::vector< float > m_kernel;
-		BlurPass m_blurX;
-		BlurPass m_blurY;
+		ShaderModule m_vertexShader;
+		ShaderModule m_pixelShaderX;
+		ShaderModule m_pixelShaderY;
+		ashes::PipelineShaderStageCreateInfoArray m_stagesX;
+		ashes::PipelineShaderStageCreateInfoArray m_stagesY;
 	};
 }
 

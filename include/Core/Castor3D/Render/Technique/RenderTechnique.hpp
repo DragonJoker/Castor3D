@@ -64,7 +64,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~RenderTechnique();
+		C3D_API ~RenderTechnique();
 		/**
 		 *\~english
 		 *\brief		Lists the intermediate view used by the whole technique.
@@ -252,25 +252,25 @@ namespace castor3d
 		LpvGridConfigUbo m_lpvConfigUbo;
 		LayeredLpvGridConfigUbo m_llpvConfigUbo;
 		VoxelizerUbo m_vctConfigUbo;
-		crg::FramePass * m_depthPassDecl;
+		crg::FramePass * m_depthPassDecl{};
 		DepthPass * m_depthPass{};
 		VoxelizerUPtr m_voxelizer;
 		LightVolumePassResultUPtr m_lpvResult;
 		LightVolumePassResultArray m_llpvResult;
-		crg::FramePass * m_backgroundPassDesc;
-		BackgroundPass * m_backgroundPass;
-		OpaquePassResultUPtr m_opaquePassResult;
-		crg::FramePass * m_opaquePassDesc;
-		RenderTechniquePass * m_opaquePass;
-		DeferredRenderingUPtr m_deferredRendering;
-		TransparentPassResultUPtr m_transparentPassResult;
-		crg::FramePass * m_transparentPassDesc;
-		RenderTechniquePass * m_transparentPass;
-		WeightedBlendRenderingUPtr m_weightedBlendRendering;
-		ashes::SemaphorePtr m_signalFinished;
+		crg::FramePass * m_backgroundPassDesc{};
+		BackgroundPass * m_backgroundPass{};
 		ShadowMapUPtr m_directionalShadowMap;
 		ShadowMapUPtr m_pointShadowMap;
 		ShadowMapUPtr m_spotShadowMap;
+		OpaquePassResultUPtr m_opaquePassResult;
+		crg::FramePass * m_opaquePassDesc{};
+		RenderTechniquePass * m_opaquePass{};
+		DeferredRenderingUPtr m_deferredRendering;
+		TransparentPassResultUPtr m_transparentPassResult;
+		crg::FramePass * m_transparentPassDesc{};
+		RenderTechniquePass * m_transparentPass{};
+		WeightedBlendRenderingUPtr m_weightedBlendRendering;
+		ashes::SemaphorePtr m_signalFinished;
 		CommandsSemaphore m_clearLpv;
 		RenderPassTimerSPtr m_particleTimer;
 		ShadowMapLightTypeArray m_allShadowMaps;

@@ -396,6 +396,18 @@ namespace castor3d
 		, m_llpvResult{ doCreateLLPVResult( m_renderTarget.getGraph()
 			, m_device ) }
 		, m_backgroundPassDesc{ &doCreateBackgroundPass() }
+		, m_directionalShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapDirectional >( m_renderTarget.getGraph()
+			, *m_backgroundPassDesc
+			, m_device
+			, *m_renderTarget.getScene() ) }
+		, m_pointShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapPoint >( m_renderTarget.getGraph()
+			, m_directionalShadowMap->getLastPass()
+			, m_device
+			, *m_renderTarget.getScene() ) }
+		, m_spotShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapSpot >( m_renderTarget.getGraph()
+			, m_pointShadowMap->getLastPass()
+			, m_device
+			, *m_renderTarget.getScene() ) }
 #if C3D_UseDeferredRendering
 		, m_opaquePassResult{ castor::makeUnique< OpaquePassResult >( m_renderTarget.getGraph()
 			, device
@@ -446,18 +458,6 @@ namespace castor3d
 		, m_transparentPassDesc{ &doCreateTransparentPass() }
 #endif
 		, m_signalFinished{ m_device->createSemaphore( "RenderTechnique" ) }
-		, m_directionalShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapDirectional >( m_renderTarget.getGraph()
-			, *m_depthPassDecl
-			, m_device
-			, *m_renderTarget.getScene() ) }
-		, m_spotShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapSpot >( m_renderTarget.getGraph()
-			, *m_depthPassDecl
-			, m_device
-			, *m_renderTarget.getScene() ) }
-		, m_pointShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapPoint >( m_renderTarget.getGraph()
-			, *m_depthPassDecl
-			, m_device
-			, *m_renderTarget.getScene() ) }
 		, m_clearLpv{ doCreateClearLpvCommands( device, getName(), *m_lpvResult, m_llpvResult ) }
 		, m_particleTimer{ std::make_shared< RenderPassTimer >( device, cuT( "Particles" ), cuT( "Particles" ) ) }
 	{
@@ -741,9 +741,29 @@ namespace castor3d
 				m_opaquePass = result.get();
 				return result;
 			} );
-		result.addDependency( *m_backgroundPassDesc );
+		result.addDependency( m_spotShadowMap->getLastPass() );
 		result.addInOutDepthView( m_depthView );
 		result.addInOutColourView( m_colourView );
+
+		uint32_t index = 0u;
+		result.addSampledView( m_directionalShadowMap->getView( SmTexture::eVariance ), index, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL );
+		result.addSampledView( result.mergeViews( m_directionalShadowMap->getViews( SmTexture::eNormalLinear ) ), index++, {} );
+		result.addSampledView( result.mergeViews( m_directionalShadowMap->getViews( SmTexture::eVariance ) ), index++, {} );
+		result.addSampledView( result.mergeViews( m_directionalShadowMap->getViews( SmTexture::ePosition ) ), index++, {} );
+		result.addSampledView( result.mergeViews( m_directionalShadowMap->getViews( SmTexture::eFlux ) ), index++, {} );
+
+		result.addSampledView( m_pointShadowMap->getView( SmTexture::eVariance ), index, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL );
+		result.addSampledView( result.mergeViews( m_pointShadowMap->getViews( SmTexture::eNormalLinear ) ), index++, {} );
+		result.addSampledView( result.mergeViews( m_pointShadowMap->getViews( SmTexture::eVariance ) ), index++, {} );
+		result.addSampledView( result.mergeViews( m_pointShadowMap->getViews( SmTexture::ePosition ) ), index++, {} );
+		result.addSampledView( result.mergeViews( m_pointShadowMap->getViews( SmTexture::eFlux ) ), index++, {} );
+
+		result.addSampledView( m_spotShadowMap->getView( SmTexture::eVariance ), index, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL );
+		result.addSampledView( result.mergeViews( m_spotShadowMap->getViews( SmTexture::eNormalLinear ) ), index++, {} );
+		result.addSampledView( result.mergeViews( m_spotShadowMap->getViews( SmTexture::eVariance ) ), index++, {} );
+		result.addSampledView( result.mergeViews( m_spotShadowMap->getViews( SmTexture::ePosition ) ), index++, {} );
+		result.addSampledView( result.mergeViews( m_spotShadowMap->getViews( SmTexture::eFlux ) ), index++, {} );
+
 		return result;
 #endif
 	}

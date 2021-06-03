@@ -87,4 +87,10 @@ namespace castor3d
 	{
 		return m_result[texture].wholeView;
 	}
+
+	crg::ImageViewIdArray ShadowMap::getViews( SmTexture texture
+		, uint32_t index )const
+	{
+		return m_result[texture].subViews;
+	}
 }

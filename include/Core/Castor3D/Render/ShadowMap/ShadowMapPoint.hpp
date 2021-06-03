@@ -67,7 +67,9 @@ namespace castor3d
 		bool isUpToDate( uint32_t index )const override;
 
 	private:
-		std::unique_ptr< GaussianBlur > m_blur;
+		crg::ImageId m_blurIntermediate;
+		crg::ImageViewId m_blurIntermediateView;
+		std::vector< std::unique_ptr< GaussianBlur > > m_blurs;
 	};
 }
 

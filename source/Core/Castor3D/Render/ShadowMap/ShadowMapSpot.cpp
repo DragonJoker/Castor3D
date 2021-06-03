@@ -33,6 +33,7 @@
 #include <CastorUtils/Miscellaneous/BlockTracker.hpp>
 
 #include <RenderGraph/FrameGraph.hpp>
+#include <RenderGraph/RunnableGraph.hpp>
 
 using namespace castor;
 
@@ -42,6 +43,8 @@ namespace castor3d
 	{
 		std::vector< ShadowMap::PassData > createPasses( crg::FrameGraph & graph
 			, crg::FramePass const *& previousPass
+			, std::vector< std::unique_ptr< GaussianBlur > > & blurs
+			, crg::ImageViewId intermediate
 			, RenderDevice const & device
 			, Scene & scene
 			, ShadowMap & shadowMap )
@@ -75,7 +78,7 @@ namespace castor3d
 				auto & matrixUbo = *passData.matrixUbo;
 				auto & culler = *passData.culler;
 				auto & pass = graph.createPass( debugName
-					, [index, &matrixUbo, &culler, &previousPass, &device, &shadowMap, &scene]( crg::FramePass const & pass
+					, [index, &matrixUbo, &culler, &device, &shadowMap, &scene]( crg::FramePass const & pass
 						, crg::GraphContext const & context
 						, crg::RunnableGraph & graph )
 					{
@@ -98,6 +101,15 @@ namespace castor3d
 				pass.addOutputColourView( position.subViews[i], getClearValue( SmTexture::ePosition ) );
 				pass.addOutputColourView( flux.subViews[i], getClearValue( SmTexture::eFlux ) );
 				result.emplace_back( std::move( passData ) );
+
+				blurs.push_back( std::make_unique< GaussianBlur >( graph
+					, *previousPass
+					, device
+					, debugName
+					, variance.subViews[i]
+					, intermediate
+					, 5u ) );
+				previousPass = &blurs.back()->getLastPass();
 			}
 
 			return result;
@@ -118,25 +130,32 @@ namespace castor3d
 				, Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize }
 				, shader::getSpotShadowMapCount() }
 			, shader::getSpotShadowMapCount() }
+		, m_blurIntermediate{ graph.createImage( crg::ImageData{ "SpotGB"
+			, 0u
+			, VK_IMAGE_TYPE_2D
+			, getFormat( SmTexture::eVariance )
+			, m_result.begin()->getExtent()
+			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT ) } ) }
+		, m_blurIntermediateView{ graph.createView( crg::ImageViewData{ m_blurIntermediate.data->name
+			, m_blurIntermediate
+			, 0u
+			, VK_IMAGE_VIEW_TYPE_2D
+			, getFormat( m_blurIntermediate )
+			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
 	{
-		auto previous = &previousPass;
+		m_lastPass = &previousPass;
 		m_passes = createPasses( graph
-			, previous
+			, m_lastPass
+			, m_blurs
+			, m_blurIntermediateView
 			, device
 			, scene
 			, *this );
-		m_blur = std::make_unique< GaussianBlur >( graph
-			, *previous
-			, device
-			, "SpotSM"
-			, m_result[SmTexture::eVariance].wholeView
-			, 5u );
 		log::trace << "Created ShadowMapSpot" << std::endl;
 	}
 
 	ShadowMapSpot::~ShadowMapSpot()
 	{
-		m_blur.reset();
 	}
 	
 	void ShadowMapSpot::update( CpuUpdater & updater )

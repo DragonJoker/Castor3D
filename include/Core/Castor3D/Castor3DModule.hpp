@@ -10,6 +10,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Exception/Assertion.hpp>
 #include <CastorUtils/Graphics/GraphicsModule.hpp>
+#include <CastorUtils/Graphics/Size.hpp>
 #include <CastorUtils/Math/Coords.hpp>
 #include <CastorUtils/Math/Point.hpp>
 
@@ -86,6 +87,21 @@ namespace castor3d
 			stageFlags,
 			pImmutableSamplers,
 		};
+	}
+
+	inline castor::Size makeSize( VkExtent2D const & size )
+	{
+		return castor::Size{ size.width, size.height };
+	}
+
+	inline castor::Size makeSize( VkExtent3D const & size )
+	{
+		return castor::Size{ size.width, size.height };
+	}
+
+	inline VkExtent2D makeExtent2D( VkExtent3D const & size )
+	{
+		return VkExtent2D{ size.width, size.height };
 	}
 
 	inline VkExtent2D makeExtent2D( castor::Coords2ui const & size )
