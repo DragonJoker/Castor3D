@@ -47,7 +47,9 @@ namespace castor3d
 
 	private:
 		CameraSPtr m_camera;
-		std::unique_ptr< GaussianBlur > m_blur;
+		crg::ImageId m_blurIntermediate;
+		crg::ImageViewId m_blurIntermediateView;
+		std::vector< std::unique_ptr< GaussianBlur > > m_blurs;
 		ShadowType m_shadowType{ ShadowType::eRaw };
 		uint32_t m_cascades;
 	};

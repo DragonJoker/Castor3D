@@ -54,7 +54,9 @@ namespace castor3d
 		static VkFormat constexpr LinearDepthFormat = VK_FORMAT_R32_SFLOAT;
 
 	private:
-		std::unique_ptr< GaussianBlur > m_blur;
+		crg::ImageId m_blurIntermediate;
+		crg::ImageViewId m_blurIntermediateView;
+		std::vector< std::unique_ptr< GaussianBlur > > m_blurs;
 	};
 }
 
