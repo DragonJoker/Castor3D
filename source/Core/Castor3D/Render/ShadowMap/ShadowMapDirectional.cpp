@@ -30,6 +30,7 @@
 #include <CastorUtils/Miscellaneous/BlockTracker.hpp>
 
 #include <RenderGraph/FrameGraph.hpp>
+#include <RenderGraph/RunnableGraph.hpp>
 
 namespace castor3d
 {
@@ -37,6 +38,8 @@ namespace castor3d
 	{
 		std::vector< ShadowMap::PassData > createPasses( crg::FrameGraph & graph
 			, crg::FramePass const *& previousPass
+			, std::vector< std::unique_ptr< GaussianBlur > > & blurs
+			, crg::ImageViewId intermediate
 			, RenderDevice const & device
 			, Scene & scene
 			, ShadowMap & shadowMap
@@ -124,7 +127,7 @@ namespace castor3d
 				auto & matrixUbo = *passData.matrixUbo;
 				auto & culler = *passData.culler;
 				auto & pass = graph.createPass( debugName
-					, [index, &matrixUbo, &culler, &previousPass, &device, &shadowMap, &cascade]( crg::FramePass const & pass
+					, [index, &matrixUbo, &culler, &device, &shadowMap, &cascade]( crg::FramePass const & pass
 						, crg::GraphContext const & context
 						, crg::RunnableGraph & graph )
 					{
@@ -149,6 +152,13 @@ namespace castor3d
 					pass.addOutputColourView( variance.wholeView, getClearValue( SmTexture::eVariance ) );
 					pass.addOutputColourView( position.wholeView, getClearValue( SmTexture::ePosition ) );
 					pass.addOutputColourView( flux.wholeView, getClearValue( SmTexture::eFlux ) );
+
+					blurs.push_back( std::make_unique< GaussianBlur >( graph
+						, *previousPass
+						, device
+						, debugName
+						, variance.wholeView
+						, 5u ) );
 				}
 				else
 				{
@@ -157,12 +167,22 @@ namespace castor3d
 					pass.addOutputColourView( variance.subViews[cascade], getClearValue( SmTexture::eVariance ) );
 					pass.addOutputColourView( position.subViews[cascade], getClearValue( SmTexture::ePosition ) );
 					pass.addOutputColourView( flux.subViews[cascade], getClearValue( SmTexture::eFlux ) );
+
+					blurs.push_back( std::make_unique< GaussianBlur >( graph
+						, *previousPass
+						, device
+						, debugName
+						, variance.subViews[cascade]
+						, intermediate
+						, 5u ) );
 				}
 
+				previousPass = &blurs.back()->getLastPass();
 				result.emplace_back( std::move( passData ) );
 			}
 
 #endif
+
 			return result;
 		}
 	}
@@ -187,22 +207,29 @@ namespace castor3d
 				, scene.getDirectionalShadowCascades() }
 #endif
 			, 1u }
+		, m_blurIntermediate{ graph.createImage( crg::ImageData{ "DirectionalGB"
+			, 0u
+			, VK_IMAGE_TYPE_2D
+			, getFormat( SmTexture::eVariance )
+			, m_result.begin()->getExtent()
+			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT ) } ) }
+		, m_blurIntermediateView{ graph.createView( crg::ImageViewData{ m_blurIntermediate.data->name
+			, m_blurIntermediate
+			, 0u
+			, VK_IMAGE_VIEW_TYPE_2D
+			, getFormat( m_blurIntermediate )
+			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
 		, m_cascades{ scene.getDirectionalShadowCascades() }
 	{
-		auto previous = &previousPass;
+		m_lastPass = &previousPass;
 		m_passes = createPasses( graph
-			, previous
+			, m_lastPass
+			, m_blurs
+			, m_blurIntermediateView
 			, device
 			, scene
 			, *this
 			, scene.getDirectionalShadowCascades() );
-		m_blur = std::make_unique< GaussianBlur >( graph
-			, *previous
-			, device
-			, "DirectionalSM"
-			, m_result[SmTexture::eVariance].wholeView
-			, 5u );
-
 		log::trace << "Created ShadowMapDirectional" << std::endl;
 	}
 
