@@ -219,8 +219,7 @@ namespace castor3d
 			, "PickingPassStagingBuffer" ) }
 		, m_buffer{ PickingWidth * PickingWidth }
 	{
-		m_runnable = std::make_unique< crg::RunnableGraph >( std::move( m_graph )
-			, crg::GraphContext{ *device
+		m_runnable = m_graph.compile( crg::GraphContext{ *device
 			, VK_NULL_HANDLE
 			, device->getAllocationCallbacks()
 			, device->getMemoryProperties()

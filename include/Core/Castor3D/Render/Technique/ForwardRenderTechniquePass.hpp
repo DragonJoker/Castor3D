@@ -22,9 +22,6 @@ namespace castor3d
 		 *\param[in]	name				The pass name.
 		 *\param[in]	renderPassDesc		The scene render pass construction data.
 		 *\param[in]	techniquePassDesc	The technique render pass construction data.
-		 *\param[in]	colourView			The target colour view.
-		 *\param[in]	depthView			The target depth view.
-		 *\param[in]	clear				Tells if the attaches must be cleared at the beginning of the pass.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	device				Le render device.
@@ -32,9 +29,6 @@ namespace castor3d
 		 *\param[in]	name				Le nom de la passe.
 		 *\param[in]	renderPassDesc		Les données de construction de passe de rendu de scène.
 		 *\param[in]	techniquePassDesc	Les données de construction de passe de rendu de technique.
-		 *\param[in]	colourView			La vue couleur cible.
-		 *\param[in]	depthView			La vue profondeur cible.
-		 *\param[in]	clear				Dit si les attaches doivent être vidées au début de la passe.
 		 */
 		C3D_API ForwardRenderTechniquePass( crg::FramePass const & pass
 			, crg::GraphContext const & context
