@@ -754,19 +754,19 @@ namespace castor3d
 
 #	if !C3D_DebugDisableShadowMaps
 		uint32_t index = 0u;
-		result.addSampledView( m_directionalShadowMap->getView( SmTexture::eVariance ), index, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL );
+		result.addSampledView( m_directionalShadowMap->getView( SmTexture::eVariance ), index );
 		result.addSampledView( result.mergeViews( m_directionalShadowMap->getViews( SmTexture::eNormalLinear ) ), index++, {} );
 		result.addSampledView( result.mergeViews( m_directionalShadowMap->getViews( SmTexture::eVariance ) ), index++, {} );
 		result.addSampledView( result.mergeViews( m_directionalShadowMap->getViews( SmTexture::ePosition ) ), index++, {} );
 		result.addSampledView( result.mergeViews( m_directionalShadowMap->getViews( SmTexture::eFlux ) ), index++, {} );
 
-		result.addSampledView( m_pointShadowMap->getView( SmTexture::eVariance ), index, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL );
+		result.addSampledView( m_pointShadowMap->getView( SmTexture::eVariance ), index );
 		result.addSampledView( result.mergeViews( m_pointShadowMap->getViews( SmTexture::eNormalLinear ) ), index++, {} );
 		result.addSampledView( result.mergeViews( m_pointShadowMap->getViews( SmTexture::eVariance ) ), index++, {} );
 		result.addSampledView( result.mergeViews( m_pointShadowMap->getViews( SmTexture::ePosition ) ), index++, {} );
 		result.addSampledView( result.mergeViews( m_pointShadowMap->getViews( SmTexture::eFlux ) ), index++, {} );
 
-		result.addSampledView( m_spotShadowMap->getView( SmTexture::eVariance ), index, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL );
+		result.addSampledView( m_spotShadowMap->getView( SmTexture::eVariance ), index );
 		result.addSampledView( result.mergeViews( m_spotShadowMap->getViews( SmTexture::eNormalLinear ) ), index++, {} );
 		result.addSampledView( result.mergeViews( m_spotShadowMap->getViews( SmTexture::eVariance ) ), index++, {} );
 		result.addSampledView( result.mergeViews( m_spotShadowMap->getViews( SmTexture::ePosition ) ), index++, {} );
