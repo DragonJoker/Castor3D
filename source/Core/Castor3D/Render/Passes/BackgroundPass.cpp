@@ -16,14 +16,14 @@ namespace castor3d
 		, crg::GraphContext const & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
-		, crg::ImageId const & colourImage
-		, crg::ImageId const & depthImage
-		, SceneBackground & background )
+		, SceneBackground & background
+		, VkExtent2D const & size
+		, bool usesDepth )
 		: crg::RenderPass{ pass, context, graph }
 		, m_device{ device }
-		, m_colourImage{ colourImage }
-		, m_depthImage{ depthImage }
 		, m_background{ background }
+		, m_size{ size }
+		, m_usesDepth{ usesDepth }
 		, m_onBackgroundChanged{ background.onChanged.connect( [this]( SceneBackground const & )
 			{
 				//getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
@@ -80,10 +80,6 @@ namespace castor3d
 		m_context.vkCmdBindVertexBuffers( commandBuffer, 0u, 1u, &vbo, &offset );
 		m_context.vkCmdBindIndexBuffer( commandBuffer, m_indexBuffer->getBuffer(), 0u, VK_INDEX_TYPE_UINT16 );
 		m_context.vkCmdDrawIndexed( commandBuffer, uint32_t( m_indexBuffer->getCount() ), 1u, 0u, 0u, 0u );
-
-		if ( m_background.hasIbl() )
-		{
-		}
 	}
 
 	void BackgroundPass::doInitialiseVertexBuffer()
@@ -272,7 +268,9 @@ namespace castor3d
 			, doCreateViewportState()
 			, ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE }
 			, ashes::PipelineMultisampleStateCreateInfo{}
-			, ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_TRUE, VK_FALSE, VK_COMPARE_OP_LESS_OR_EQUAL }
+			, ( m_usesDepth
+				? std::make_optional( ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_TRUE, VK_FALSE, VK_COMPARE_OP_LESS_OR_EQUAL } )
+				: std::nullopt )
 			, ashes::PipelineColorBlendStateCreateInfo{ 0u, VK_FALSE, VK_LOGIC_OP_COPY, m_blendAttachs }
 			, std::nullopt
 			, *m_pipelineLayout
@@ -284,13 +282,13 @@ namespace castor3d
 		ashes::VkViewportArray viewports( 1u
 			, { float( 0.0f )
 				, float( 0.0f )
-				, float( m_colourImage.data->info.extent.width )
-				, float( m_colourImage.data->info.extent.height ) } );
+				, float( m_size.width )
+				, float( m_size.height ) } );
 		ashes::VkScissorArray scissors( 1u
 			, { 0
 				, 0
-				, m_colourImage.data->info.extent.width
-				, m_colourImage.data->info.extent.height } );
+				, m_size.width
+				, m_size.height } );
 		return { 0u
 			, uint32_t( viewports.size())
 			, viewports
