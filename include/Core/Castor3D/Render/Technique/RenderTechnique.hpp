@@ -94,6 +94,15 @@ namespace castor3d
 		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
+		 *\brief			Renders environment maps.
+		 *\param[in, out]	updater	The update data.
+		 *\~french
+		 *\brief			Dessine les environment maps.
+		 *\param[in, out]	updater	Les données d'update.
+		 */
+		C3D_API crg::SemaphoreWait preRender( crg::SemaphoreWait const & toWait );
+		/**
+		 *\~english
 		 *\brief		Writes the technique into a text file.
 		 *\param[in]	file	The file.
 		 *\~french
@@ -233,8 +242,7 @@ namespace castor3d
 		void doUpdateParticles( GpuUpdater & updater );
 		ashes::Semaphore const & doRenderLpv( RenderDevice const & device
 			, ashes::Semaphore const & semaphore );
-		ashes::Semaphore const & doRenderEnvironmentMaps( RenderDevice const & device
-			, ashes::Semaphore const & semaphore );
+		crg::SemaphoreWait doRenderEnvironmentMaps( crg::SemaphoreWait const & semaphore );
 
 	private:
 		RenderTarget & m_renderTarget;

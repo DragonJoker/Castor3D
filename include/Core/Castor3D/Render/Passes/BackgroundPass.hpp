@@ -21,9 +21,9 @@ namespace castor3d
 			, crg::GraphContext const & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
-			, crg::ImageId const & colourImage
-			, crg::ImageId const & depthImage
-			, SceneBackground & background );
+			, SceneBackground & background
+			, VkExtent2D const & size
+			, bool usesDepth = true );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -80,9 +80,9 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
-		crg::ImageId const & m_colourImage;
-		crg::ImageId const & m_depthImage;
 		SceneBackground & m_background;
+		VkExtent2D m_size;
+		bool m_usesDepth;
 		OnBackgroundChangedConnection m_onBackgroundChanged;
 		ashes::VertexBufferPtr< Cube > m_vertexBuffer;
 		ashes::BufferPtr< uint16_t > m_indexBuffer;

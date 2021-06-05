@@ -252,8 +252,7 @@ namespace castor3d
 			if ( m_initialised )
 			{
 				m_combinePass.addDependency( *previousPass );
-				m_runnable = std::make_unique< crg::RunnableGraph >( std::move( m_graph )
-					, crg::GraphContext{ *device
+				m_runnable = m_graph.compile( crg::GraphContext{ *device
 						, VK_NULL_HANDLE
 						, device->getAllocationCallbacks()
 						, device->getMemoryProperties()
@@ -765,6 +764,8 @@ namespace castor3d
 		// Render overlays.
 		m_signalFinished = doRenderOverlays( device
 			, signalsToWait );
+
+		m_signalFinished = m_renderTechnique->preRender( m_signalFinished );
 
 		// Then run the graph
 		m_signalFinished = m_runnable->run( m_signalFinished
