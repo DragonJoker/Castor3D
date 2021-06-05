@@ -15,4 +15,6 @@ See LICENSE file in root folder
 #define C3D_DebugBackgroundPicking 0
 #define C3D_DebugPickingTransfer 0
 
+#define C3D_DebugDisableShadowMaps 0
+
 #endif
