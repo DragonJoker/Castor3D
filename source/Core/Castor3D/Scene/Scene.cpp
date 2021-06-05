@@ -28,6 +28,7 @@
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderWindow.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
+#include "Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp"
 #include "Castor3D/Render/Node/SceneRenderNodes.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -505,15 +506,6 @@ namespace castor3d
 		m_lightCache->cleanup();
 		m_sceneNodeCache->cleanup();
 
-		for ( auto & pass : m_reflectionMapsArray )
-		{
-			getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [&pass]( RenderDevice const & device )
-				{
-					pass.get().cleanup();
-				} ) );
-		}
-
 		m_materialCacheView->clear();
 		m_samplerCacheView->clear();
 		m_overlayCacheView->clear();
@@ -713,12 +705,6 @@ namespace castor3d
 			auto it = m_reflectionMaps.emplace( &node, std::make_unique< EnvironmentMap >( *getEngine()->getRenderSystem()->getMainRenderDevice(), node ) ).first;
 			auto & pass = *it->second;
 			m_reflectionMapsArray.emplace_back( pass );
-
-			getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [&pass]( RenderDevice const & device )
-				{
-					pass.initialise();
-				} ) );
 		}
 	}
 

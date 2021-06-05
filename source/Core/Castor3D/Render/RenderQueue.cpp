@@ -36,7 +36,7 @@ namespace castor3d
 		, m_culledRenderNodes{ castor::makeUnique < QueueCulledRenderNodes >( *this ) }
 		, m_viewport{ castor::makeChangeTracked< ashes::Optional< VkViewport > >( m_culledChanged, ashes::nullopt ) }
 		, m_scissor{ castor::makeChangeTracked< ashes::Optional< VkRect2D > >( m_culledChanged, ashes::nullopt ) }
-		, m_commandBuffer{ renderPass.getEngine()->getRenderSystem()->getMainRenderDevice()->graphicsCommandPool->createCommandBuffer( "RenderQueue", VK_COMMAND_BUFFER_LEVEL_SECONDARY ) }
+		, m_commandBuffer{ renderPass.getEngine()->getRenderSystem()->getMainRenderDevice()->graphicsCommandPool->createCommandBuffer( renderPass.getName(), VK_COMMAND_BUFFER_LEVEL_SECONDARY ) }
 	{
 	}
 

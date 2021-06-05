@@ -16,25 +16,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	struct Texture
-	{
-		crg::ImageId image;
-		crg::ImageViewId wholeView;
-		crg::ImageViewIdArray subViews;
-		ashes::Sampler const * sampler;
-
-		VkFormat getFormat()const
-		{
-			return image.data->info.format;
-		}
-
-		VkExtent3D getExtent()const
-		{
-			return image.data->info.extent;
-		}
-	};
-	using TextureArray = std::vector< Texture >;
-
 	class GBufferBase
 		: public castor::Named
 	{

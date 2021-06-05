@@ -144,12 +144,10 @@ namespace castor3d
 								, VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT ) );
 						}
 					}
-					else
-					{
-						uboBindings.push_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eSkinningUbo )
-							, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-							, VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT ) );
-					}
+
+					uboBindings.push_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eSkinningUbo )
+						, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+						, VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT ) );
 				}
 
 				if ( mesh )
@@ -230,11 +228,9 @@ namespace castor3d
 							submeshNode.data.getInstantiatedBones().getInstancedBonesBuffer().createBinding( descriptorSet
 								, layout.getBinding( uint32_t( NodeUboIdx::eSkinningSsbo ) ) );
 						}
-						else
-						{
-							submeshNode.skinningUbo.createSizedBinding( descriptorSet
-								, layout.getBinding( uint32_t( NodeUboIdx::eSkinningUbo ) ) );
-						}
+
+						submeshNode.skinningUbo.createSizedBinding( descriptorSet
+							, layout.getBinding( uint32_t( NodeUboIdx::eSkinningUbo ) ) );
 					}
 				}
 				else

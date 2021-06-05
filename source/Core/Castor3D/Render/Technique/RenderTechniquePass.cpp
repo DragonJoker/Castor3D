@@ -77,35 +77,48 @@ namespace castor3d
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
 	}
 
+	void bindTexture( crg::RunnableGraph const & graph
+		, crg::ImageViewId const & view
+		, VkSampler const & sampler
+		, ashes::WriteDescriptorSetArray & writes
+		, uint32_t & index )
+	{
+		auto texture = graph.getImageView( view );
+		CU_Require( texture != VK_NULL_HANDLE );
+		bindTexture( texture
+			, sampler
+			, writes
+			, index );
+	}
+
 	void bindShadowMaps( crg::RunnableGraph const & graph
 		, PipelineFlags const & pipelineFlags
 		, ShadowMapLightTypeArray const & shadowMaps
 		, ashes::WriteDescriptorSetArray & writes
 		, uint32_t & index )
 	{
+#if !C3D_DebugDisableShadowMaps
 		for ( auto i = 0u; i < uint32_t( LightType::eCount ); ++i )
 		{
 			if ( checkFlag( pipelineFlags.sceneFlags, SceneFlag( uint8_t( SceneFlag::eShadowBegin ) << i ) ) )
 			{
 				for ( auto & shadowMapRef : shadowMaps[i] )
 				{
-					auto & shadowMap = shadowMapRef.first.get();
-					auto & result = shadowMap.getShadowPassResult();
-					auto shadow = graph.getImageView( result[SmTexture::eNormalLinear].wholeView );
-					CU_Require( shadow != VK_NULL_HANDLE );
-					bindTexture( shadow
+					auto & result = shadowMapRef.first.get().getShadowPassResult();
+					bindTexture( graph
+						, result[SmTexture::eNormalLinear].wholeView
 						, *result[SmTexture::eNormalLinear].sampler
 						, writes
 						, index );
-					auto variance = graph.getImageView( result[SmTexture::eVariance].wholeView );
-					CU_Require( variance != VK_NULL_HANDLE );
-					bindTexture( variance
+					bindTexture( graph
+						, result[SmTexture::eVariance].wholeView
 						, *result[SmTexture::eVariance].sampler
 						, writes
 						, index );
 				}
 			}
 		}
+#endif
 	}
 
 	//*************************************************************************************************
@@ -326,8 +339,8 @@ namespace castor3d
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
 			{
 				auto & envMap = scene.getEnvironmentMap( sceneNode );
-				bindTexture( envMap.getTexture().getTexture()->getDefaultView().getSampledView()
-					, envMap.getTexture().getSampler()->getSampler()
+				bindTexture( envMap.getColourView()
+					, *envMap.getColourId().sampler
 					, descriptorWrites
 					, index );
 			}

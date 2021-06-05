@@ -18,6 +18,8 @@ See LICENSE file in root folder
 #include <ashespp/Image/ImageView.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
 
+#include <RenderGraph/FrameGraph.hpp>
+
 namespace castor3d
 {
 	class EnvironmentMap
@@ -41,31 +43,6 @@ namespace castor3d
 		 */
 		C3D_API EnvironmentMap( RenderDevice const & device
 			, SceneNode & node );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~EnvironmentMap();
-		/**
-		 *\~english
-		 *\brief		Initialises the frame buffer.
-		 *\param[in]	device	The GPU device.
-		 *\~french
-		 *\brief		Initialise le frame buffer.
-		 *\param[in]	device	Le device GPU.
-		 */
-		C3D_API bool initialise();
-		/**
-		 *\~english
-		 *\brief		Cleans up the frame buffer.
-		 *\param[in]	device	The GPU device.
-		 *\~french
-		 *\brief		Nettoie le frame buffer.
-		 *\param[in]	device	Le device GPU.
-		 */
-		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -94,7 +71,7 @@ namespace castor3d
 		 *\param[in]	device	Le device GPU.
 		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
-		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait );
+		C3D_API crg::SemaphoreWait render( crg::SemaphoreWait const & toWait );
 		/**
 		*\~english
 		*name
@@ -104,26 +81,29 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API VkExtent3D const & getSize()const;
-
-		TextureUnit & getTexture()
+		VkExtent3D const & getSize()const
 		{
-			return *m_environmentMap;
+			return m_extent;
 		}
 
-		TextureUnit const & getTexture()const
+		Texture getColourId()const
 		{
-			return *m_environmentMap;
+			return m_environmentMap;
 		}
 
-		ashes::ImageView & getDepthView()
+		VkImageView getColourView()const
 		{
-			return m_depthBufferView;
+			return m_environmentMapView;
 		}
 
-		ashes::ImageView const & getDepthView()const
+		crg::ImageViewId getColourViewId( CubeMapFace face )const
 		{
-			return m_depthBufferView;
+			return m_environmentMap.subViews[uint32_t( face )];
+		}
+
+		crg::ImageViewId getDepthViewId( CubeMapFace face )const
+		{
+			return m_depthBuffer.subViews[uint32_t( face )];
 		}
 
 		RenderPassTimer & getTimer()const
@@ -135,33 +115,24 @@ namespace castor3d
 		{
 			return m_index;
 		}
-
-		ashes::RenderPass const & getRenderPass()const
-		{
-			return *m_renderPass;
-		}
 		/**@}*/
 
 	private:
-		RenderDevice const & m_device;
 		static uint32_t m_count;
-		TextureUnitSPtr m_environmentMap;
-		ashes::ImagePtr m_depthBuffer;
-		ashes::ImageView m_depthBufferView;
-		ashes::RenderPassPtr m_renderPass;
-		ashes::DescriptorSetPoolPtr m_backgroundUboDescriptorPool;
-		ashes::DescriptorSetPoolPtr m_backgroundTexDescriptorPool;
+		RenderDevice const & m_device;
+		crg::FrameGraph m_graph;
+		Texture m_environmentMap;
+		Texture m_depthBuffer;
 		SceneNode const & m_node;
-		OnSceneNodeChangedConnection m_onNodeChanged;
-		CubeMatrices m_matrices;
-		castor::Size m_size;
+		VkExtent3D m_extent;
 		uint32_t m_index{ 0u };
 		RenderPassTimerSPtr m_timer;
 		EnvironmentMapPasses m_passes;
 		bool m_first{ true };
 		uint32_t m_render{ 0u };
-		std::shared_ptr< IblTextures > m_ibl;
-		CommandsSemaphore m_generateMipmaps;
+		OnSceneNodeChangedConnection m_onNodeChanged;
+		crg::RunnableGraphPtr m_runnable;
+		VkImageView m_environmentMapView;
 	};
 }
 

@@ -13,6 +13,9 @@ See LICENSE file in root folder
 
 #include <ashespp/Image/ImageView.hpp>
 
+#include <RenderGraph/ImageData.hpp>
+#include <RenderGraph/ImageViewData.hpp>
+
 namespace castor3d
 {
 	/**@name Render */
@@ -71,6 +74,36 @@ namespace castor3d
 
 		Quad faces[6];
 	};
+	struct Texture
+	{
+		C3D_API Texture();
+		C3D_API Texture( RenderDevice const & device
+			, crg::FrameGraph & graph
+			, castor::String const & name
+			, VkImageCreateFlags createFlags
+			, VkExtent3D const & size
+			, uint32_t layerCount
+			, uint32_t mipLevels
+			, VkFormat format
+			, VkImageUsageFlags usageFlags
+			, VkBorderColor const & borderColor );
+
+		VkFormat getFormat()const
+		{
+			return image.data->info.format;
+		}
+
+		VkExtent3D getExtent()const
+		{
+			return image.data->info.extent;
+		}
+
+		crg::ImageId image;
+		crg::ImageViewId wholeView;
+		crg::ImageViewIdArray subViews;
+		ashes::Sampler const * sampler;
+	};
+	using TextureArray = std::vector< Texture >;
 	/**
 	*\~english
 	*\brief

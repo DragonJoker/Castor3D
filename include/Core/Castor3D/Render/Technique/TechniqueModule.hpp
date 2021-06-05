@@ -72,6 +72,11 @@ namespace castor3d
 		, ashes::Sampler const & sampler
 		, ashes::WriteDescriptorSetArray & writes
 		, uint32_t & index );
+	void bindTexture( crg::RunnableGraph const & graph
+		, crg::ImageViewId const & view
+		, VkSampler const & sampler
+		, ashes::WriteDescriptorSetArray & writes
+		, uint32_t & index );
 
 	CU_DeclareSmartPtr( RenderTechnique );
 	CU_DeclareCUSmartPtr( castor3d, RenderTechniquePass, C3D_API );
