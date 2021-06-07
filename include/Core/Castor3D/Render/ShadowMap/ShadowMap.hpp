@@ -148,9 +148,9 @@ namespace castor3d
 		ShadowMapResult m_result;
 		uint32_t m_count;
 		std::set< std::reference_wrapper< GeometryBuffers > > m_geometryBuffers;
+		std::vector< PassData > m_passes;
 		std::vector< std::unique_ptr< crg::FrameGraph > > m_graphs;
 		std::vector< crg::RunnableGraphPtr > m_runnables;
-		std::vector< PassData > m_passes;
 	};
 }
 

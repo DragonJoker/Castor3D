@@ -66,6 +66,7 @@ namespace castor3d
 				std::string debugName = "PointSML" + std::to_string( layer );
 				graphs.push_back( std::make_unique< crg::FrameGraph >( handler, debugName ) );
 				auto & graph = *graphs.back();
+				runnables.push_back( nullptr );
 				crg::FramePass const * previousPass{};
 
 				for ( uint32_t face = 0u; face < 6u; ++face )
@@ -115,7 +116,6 @@ namespace castor3d
 						, intermediate
 						, 5u ) );
 
-					runnables.push_back( nullptr );
 					result.emplace_back( std::move( passData ) );
 				}
 			}
@@ -165,29 +165,35 @@ namespace castor3d
 
 	void ShadowMapPoint::update( CpuUpdater & updater )
 	{
-		uint32_t offset = updater.index * 6u;
-		updater.light->getPointLight()->updateShadow( updater.index );
-
-		for ( uint32_t face = offset; face < offset + 6u; ++face )
+		if ( m_runnables[updater.index] )
 		{
-			if ( m_passes[face].pass )
+			uint32_t offset = updater.index * 6u;
+			updater.light->getPointLight()->updateShadow( updater.index );
+
+			for ( uint32_t face = offset; face < offset + 6u; ++face )
 			{
-				updater.index = face - offset;
-				m_passes[face].pass->update( updater );
+				if ( m_passes[face].pass )
+				{
+					updater.index = face - offset;
+					m_passes[face].pass->update( updater );
+				}
 			}
 		}
 	}
 
 	void ShadowMapPoint::update( GpuUpdater & updater )
 	{
-		uint32_t offset = updater.index * 6u;
-
-		for ( uint32_t face = offset; face < offset + 6u; ++face )
+		if ( m_runnables[updater.index] )
 		{
-			if ( m_passes[face].pass )
+			uint32_t offset = updater.index * 6u;
+
+			for ( uint32_t face = offset; face < offset + 6u; ++face )
 			{
-				updater.index = face - offset;
-				m_passes[face].pass->update( updater );
+				if ( m_passes[face].pass )
+				{
+					updater.index = face - offset;
+					m_passes[face].pass->update( updater );
+				}
 			}
 		}
 	}

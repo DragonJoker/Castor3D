@@ -157,12 +157,18 @@ namespace castor3d
 	
 	void ShadowMapSpot::update( CpuUpdater & updater )
 	{
-		m_passes[updater.index].pass->update( updater );
+		if ( m_runnables[updater.index] )
+		{
+			m_passes[updater.index].pass->update( updater );
+		}
 	}
 
 	void ShadowMapSpot::update( GpuUpdater & updater )
 	{
-		m_passes[updater.index].pass->update( updater );
+		if ( m_runnables[updater.index] )
+		{
+			m_passes[updater.index].pass->update( updater );
+		}
 	}
 
 	bool ShadowMapSpot::isUpToDate( uint32_t index )const
