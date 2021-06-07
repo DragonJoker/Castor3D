@@ -25,8 +25,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	scene	La scène.
 		 */
-		C3D_API explicit ShadowMapDirectional( crg::FrameGraph & graph
-			, crg::FramePass const & previousPass
+		C3D_API explicit ShadowMapDirectional( crg::ResourceHandler & handler
 			, RenderDevice const & device
 			, Scene & scene );
 		/**

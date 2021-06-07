@@ -100,22 +100,22 @@ namespace castor3d
 		, m_lightType{ lightType }
 		, m_lpvGridConfigUbo{ lpvGridConfigUbo }
 		, m_geometryVolumes{ geometryVolumes }
-		, m_injection{ graph
+		, m_injection{ m_engine.getGraphResourceHandler()
 			, m_device
 			, this->getName() + "Injection"
 			, m_engine.getLpvGridSize() }
 		, m_geometry{ ( geometryVolumes
-			? GeometryInjectionPass::createResult( graph
+			? GeometryInjectionPass::createResult( m_engine.getGraphResourceHandler()
 				, m_device
 				, this->getName()
 				, 0u
 				, m_engine.getLpvGridSize() )
 			: crg::ImageId{} ) }
-		, m_propagate{ LightVolumePassResult{ graph
+		, m_propagate{ LightVolumePassResult{ m_engine.getGraphResourceHandler()
 				, m_device
 				, this->getName() + "Propagate0"
 				, m_engine.getLpvGridSize() }
-			, LightVolumePassResult{ graph
+			, LightVolumePassResult{ m_engine.getGraphResourceHandler()
 				, m_device
 				, this->getName() + "Propagate1"
 				, m_engine.getLpvGridSize() } }

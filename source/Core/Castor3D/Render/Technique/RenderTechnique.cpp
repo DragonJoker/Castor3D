@@ -239,7 +239,7 @@ namespace castor3d
 			return result;
 		}
 
-		LightVolumePassResultArray doCreateLLPVResult( crg::FrameGraph & graph
+		LightVolumePassResultArray doCreateLLPVResult( crg::ResourceHandler & handler
 			, RenderDevice const & device )
 		{
 			LightVolumePassResultArray result;
@@ -247,7 +247,7 @@ namespace castor3d
 
 			for ( uint32_t i = 0u; i < shader::LpvMaxCascadesCount; ++i )
 			{
-				result.emplace_back( castor::makeUnique< LightVolumePassResult >( graph
+				result.emplace_back( castor::makeUnique< LightVolumePassResult >( handler
 					, device
 					, castor::string::toString( i )
 					, engine.getLpvGridSize() ) );
@@ -383,30 +383,28 @@ namespace castor3d
 		, m_llpvConfigUbo{ m_device }
 		, m_vctConfigUbo{ m_device }
 		, m_depthPassDecl{ &doCreateDepthPass() }
-		, m_voxelizer{ castor::makeUnique< Voxelizer >( device
+		, m_voxelizer{ castor::makeUnique< Voxelizer >( getOwner()->getGraphResourceHandler()
+			, device
 			, *m_renderTarget.getScene()
 			, *m_renderTarget.getCamera()
 			, m_matrixUbo
 			, m_vctConfigUbo
 			, m_renderTarget.getScene()->getVoxelConeTracingConfig() ) }
-		, m_lpvResult{ castor::makeUnique< LightVolumePassResult >( m_renderTarget.getGraph()
+		, m_lpvResult{ castor::makeUnique< LightVolumePassResult >( getOwner()->getGraphResourceHandler()
 			, m_device
 			, cuEmptyString
 			, getEngine()->getLpvGridSize() ) }
-		, m_llpvResult{ doCreateLLPVResult( m_renderTarget.getGraph()
+		, m_llpvResult{ doCreateLLPVResult( getOwner()->getGraphResourceHandler()
 			, m_device ) }
 		, m_backgroundPassDesc{ &doCreateBackgroundPass() }
 #if !C3D_DebugDisableShadowMaps
-		, m_directionalShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapDirectional >( m_renderTarget.getGraph()
-			, *m_backgroundPassDesc
+		, m_directionalShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapDirectional >( getOwner()->getGraphResourceHandler()
 			, m_device
 			, *m_renderTarget.getScene() ) }
-		, m_pointShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapPoint >( m_renderTarget.getGraph()
-			, m_directionalShadowMap->getLastPass()
+		, m_pointShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapPoint >( getOwner()->getGraphResourceHandler()
 			, m_device
 			, *m_renderTarget.getScene() ) }
-		, m_spotShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapSpot >( m_renderTarget.getGraph()
-			, m_pointShadowMap->getLastPass()
+		, m_spotShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapSpot >( getOwner()->getGraphResourceHandler()
 			, m_device
 			, *m_renderTarget.getScene() ) }
 #endif
@@ -614,7 +612,11 @@ namespace castor3d
 
 	crg::SemaphoreWait RenderTechnique::preRender( crg::SemaphoreWait const & toWait )
 	{
-		return doRenderEnvironmentMaps( toWait );
+		auto result = toWait;
+		result = doRenderShadowMaps( result );
+		result = doRenderEnvironmentMaps( result );
+		result = doRenderVCT( result );
+		return result;
 	}
 
 	bool RenderTechnique::writeInto( castor::TextFile & file )
@@ -704,6 +706,7 @@ namespace castor3d
 		background.getMatrixUbo().createPassBinding( result
 			, SceneBackground::MtxUboIdx );
 		background.getModelUbo().createPassBinding( result
+			, "Model"
 			, SceneBackground::MdlMtxUboIdx );
 		getRenderTarget().getHdrConfigUbo().createPassBinding( result
 			, SceneBackground::HdrCfgUboIdx );
@@ -744,35 +747,9 @@ namespace castor3d
 				m_opaquePass = result.get();
 				return result;
 			} );
-#	if !C3D_DebugDisableShadowMaps
-		result.addDependency( m_spotShadowMap->getLastPass() );
-#	else
 		result.addDependency( *m_backgroundPassDesc );
-#	endif
 		result.addInOutDepthView( m_depthView );
 		result.addInOutColourView( m_colourView );
-
-#	if !C3D_DebugDisableShadowMaps
-		uint32_t index = 0u;
-		result.addSampledView( m_directionalShadowMap->getView( SmTexture::eVariance ), index );
-		result.addSampledView( result.mergeViews( m_directionalShadowMap->getViews( SmTexture::eNormalLinear ) ), index++, {} );
-		result.addSampledView( result.mergeViews( m_directionalShadowMap->getViews( SmTexture::eVariance ) ), index++, {} );
-		result.addSampledView( result.mergeViews( m_directionalShadowMap->getViews( SmTexture::ePosition ) ), index++, {} );
-		result.addSampledView( result.mergeViews( m_directionalShadowMap->getViews( SmTexture::eFlux ) ), index++, {} );
-
-		result.addSampledView( m_pointShadowMap->getView( SmTexture::eVariance ), index );
-		result.addSampledView( result.mergeViews( m_pointShadowMap->getViews( SmTexture::eNormalLinear ) ), index++, {} );
-		result.addSampledView( result.mergeViews( m_pointShadowMap->getViews( SmTexture::eVariance ) ), index++, {} );
-		result.addSampledView( result.mergeViews( m_pointShadowMap->getViews( SmTexture::ePosition ) ), index++, {} );
-		result.addSampledView( result.mergeViews( m_pointShadowMap->getViews( SmTexture::eFlux ) ), index++, {} );
-
-		result.addSampledView( m_spotShadowMap->getView( SmTexture::eVariance ), index );
-		result.addSampledView( result.mergeViews( m_spotShadowMap->getViews( SmTexture::eNormalLinear ) ), index++, {} );
-		result.addSampledView( result.mergeViews( m_spotShadowMap->getViews( SmTexture::eVariance ) ), index++, {} );
-		result.addSampledView( result.mergeViews( m_spotShadowMap->getViews( SmTexture::ePosition ) ), index++, {} );
-		result.addSampledView( result.mergeViews( m_spotShadowMap->getViews( SmTexture::eFlux ) ), index++, {} );
-#	endif
-
 		return result;
 #endif
 	}
@@ -1058,13 +1035,47 @@ namespace castor3d
 		return *result;
 	}
 
-	crg::SemaphoreWait RenderTechnique::doRenderEnvironmentMaps( crg::SemaphoreWait const & semaphore )
+	crg::SemaphoreWait RenderTechnique::doRenderShadowMaps( crg::SemaphoreWait const & semaphore )const
+	{
+		crg::SemaphoreWait result = semaphore;
+		auto & scene = *m_renderTarget.getScene();
+
+		if ( scene.hasShadows() )
+		{
+			for ( auto & array : m_activeShadowMaps )
+			{
+				for ( auto & shadowMap : array )
+				{
+					for ( auto & index : shadowMap.second )
+					{
+						result = shadowMap.first.get().render( result, index );
+					}
+				}
+			}
+		}
+
+		return result;
+	}
+
+	crg::SemaphoreWait RenderTechnique::doRenderEnvironmentMaps( crg::SemaphoreWait const & semaphore )const
 	{
 		crg::SemaphoreWait result = semaphore;
 
 		for ( auto & map : m_renderTarget.getScene()->getEnvironmentMaps() )
 		{
 			result = map.get().render( result );
+		}
+
+		return result;
+	}
+
+	crg::SemaphoreWait RenderTechnique::doRenderVCT( crg::SemaphoreWait const & semaphore )const
+	{
+		crg::SemaphoreWait result = semaphore;
+
+		if ( m_renderTarget.getScene()->getVoxelConeTracingConfig().enabled )
+		{
+			result = m_voxelizer->render( result );
 		}
 
 		return result;

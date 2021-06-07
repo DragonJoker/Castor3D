@@ -36,12 +36,12 @@ namespace castor3d
 		static Size const MapSize{ 128, 128 };
 
 		Texture doCreateTexture( RenderDevice const & device
-			, crg::FrameGraph & graph
+			, crg::ResourceHandler & handler
 			, std::string const & name
 			, Size const & size )
 		{
 			return Texture{ device
-				, graph
+				, handler
 				, name
 				, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
 				, makeExtent3D( size )
@@ -56,12 +56,12 @@ namespace castor3d
 		}
 
 		Texture doCreateDepthBuffer( RenderDevice const & device
-			, crg::FrameGraph & graph
+			, crg::ResourceHandler & handler
 			, std::string const & name
 			, Size const & size )
 		{
 			return Texture{ device
-				, graph
+				, handler
 				, name + "Dpt"
 				, 0u
 				, makeExtent3D( size )
@@ -124,15 +124,16 @@ namespace castor3d
 
 	uint32_t EnvironmentMap::m_count = 0u;
 
-	EnvironmentMap::EnvironmentMap( RenderDevice const & device
+	EnvironmentMap::EnvironmentMap( crg::ResourceHandler & handler
+		, RenderDevice const & device
 		, SceneNode & node )
 		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
 		, m_device{ device }
-		, m_graph{ "Environment" + node.getName() }
-		, m_environmentMap{ doCreateTexture( device, m_graph, "Env" + node.getName(), MapSize ) }
-		, m_depthBuffer{ doCreateDepthBuffer( device, m_graph, "Env" + node.getName(), MapSize ) }
+		, m_graph{ handler, "Environment" + node.getName() }
+		, m_environmentMap{ doCreateTexture( device, handler, "Env" + node.getName(), MapSize ) }
+		, m_depthBuffer{ doCreateDepthBuffer( device, handler, "Env" + node.getName(), MapSize ) }
 		, m_node{ node }
-		, m_extent{ getExtent( m_environmentMap.image ) }
+		, m_extent{ getExtent( m_environmentMap.imageId ) }
 		, m_index{ ++m_count }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_device
 			, cuT( "EnvironmentMap" )
@@ -156,7 +157,7 @@ namespace castor3d
 			mipsGen.addDependency( pass->getLastPass() );
 		}
 
-		mipsGen.addTransferInputView( mipsGen.mergeViews( m_environmentMap.subViews ) );
+		mipsGen.addTransferInOutView( mipsGen.mergeViews( m_environmentMap.subViewsId ) );
 
 		m_runnable = m_graph.compile( crg::GraphContext{ *device
 			, VK_NULL_HANDLE
@@ -165,7 +166,7 @@ namespace castor3d
 			, device->getProperties()
 			, false
 			, device->vkGetDeviceProcAddr } );
-		m_environmentMapView = m_runnable->getImageView( m_environmentMap.wholeView );
+		m_environmentMapView = m_runnable->createImageView( m_environmentMap.wholeViewId );
 		m_runnable->record();
 		log::trace << "Created EnvironmentMap " << node.getName() << std::endl;
 	}

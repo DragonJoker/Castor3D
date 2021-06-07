@@ -110,19 +110,19 @@ namespace castor3d
 		, m_geometryVolumes{ geometryVolumes }
 		, m_propagate
 		{
-			LightVolumePassResult{ graph, m_device, getName() + "Propagate0", m_engine.getLpvGridSize() },
-			LightVolumePassResult{ graph, m_device, getName() + "Propagate1", m_engine.getLpvGridSize() },
+			LightVolumePassResult{ m_engine.getGraphResourceHandler(), m_device, getName() + "Propagate0", m_engine.getLpvGridSize() },
+			LightVolumePassResult{ m_engine.getGraphResourceHandler(), m_device, getName() + "Propagate1", m_engine.getLpvGridSize() },
 		}
 	{
 		for ( uint32_t cascade = 0u; cascade < CascadeCount; ++cascade )
 		{
 			m_lpvGridConfigUbos.emplace_back( m_device );
-			m_injection.emplace_back( graph
+			m_injection.emplace_back( m_engine.getGraphResourceHandler()
 				, m_device
 				, this->getName() + "Injection" + castor::string::toString( cascade )
 				, m_engine.getLpvGridSize() );
 			m_geometry.emplace_back( m_geometryVolumes
-				? GeometryInjectionPass::createResult( graph
+				? GeometryInjectionPass::createResult( m_engine.getGraphResourceHandler()
 					, m_device
 					, this->getName()
 					, cascade

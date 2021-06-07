@@ -202,6 +202,7 @@ namespace motion_blur
 			} );
 		m_pass->addDependency( previousPass );
 		m_ubo.createPassBinding( *m_pass
+			, "BlurCfg"
 			, BlurCfgUboIdx );
 		m_pass->addSampledView( *m_target
 			, ColorTexIdx

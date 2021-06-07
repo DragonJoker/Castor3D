@@ -242,7 +242,9 @@ namespace castor3d
 		void doUpdateParticles( GpuUpdater & updater );
 		ashes::Semaphore const & doRenderLpv( RenderDevice const & device
 			, ashes::Semaphore const & semaphore );
-		crg::SemaphoreWait doRenderEnvironmentMaps( crg::SemaphoreWait const & semaphore );
+		crg::SemaphoreWait doRenderShadowMaps( crg::SemaphoreWait const & semaphore )const;
+		crg::SemaphoreWait doRenderEnvironmentMaps( crg::SemaphoreWait const & semaphore )const;
+		crg::SemaphoreWait doRenderVCT( crg::SemaphoreWait const & semaphore )const;
 
 	private:
 		RenderTarget & m_renderTarget;

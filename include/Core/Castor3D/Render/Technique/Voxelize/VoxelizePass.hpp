@@ -73,17 +73,6 @@ namespace castor3d
 		 */
 		C3D_API void update( GpuUpdater & updater );
 		/**
-		 *\~english
-		 *\brief		Renders nodes.
-		 *\param[in]	device	The GPU device.
-		 *\param[out]	toWait	The semaphore to wait for.
-		 *\~french
-		 *\brief		Dessine les noeuds.
-		 *\param[in]	device	Le device GPU.
-		 *\param[out]	toWait	Le sémaphore à attendre.
-		 */
-		ashes::Semaphore const & render( ashes::Semaphore const & toWait );
-		/**
 		*\~english
 		*name
 		*	Getters.
@@ -92,12 +81,6 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		ashes::Semaphore const & getSemaphore()const
-		{
-			CU_Require( m_commands.semaphore );
-			return *m_commands.semaphore;
-		}
-
 		C3D_API ShaderFlags getShaderFlags()const override
 		{
 			return ShaderFlag::eWorldSpace
@@ -133,8 +116,6 @@ namespace castor3d
 		Scene const & m_scene;
 		Camera const & m_camera;
 		ashes::Buffer< Voxel > const & m_voxels;
-		CommandsSemaphore m_commands;
-		ashes::FrameBufferPtr m_frameBuffer;
 		VoxelizerUbo const & m_voxelizerUbo;
 		VoxelSceneData const & m_voxelConfig;
 	};
