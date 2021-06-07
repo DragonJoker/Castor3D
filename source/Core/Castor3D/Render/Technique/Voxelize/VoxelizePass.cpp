@@ -40,71 +40,10 @@
 
 #include <ShaderWriter/Source.hpp>
 
-#include <ashespp/Descriptor/DescriptorSet.hpp>
-#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
-#include <ashespp/Image/Image.hpp>
-#include <ashespp/Image/ImageView.hpp>
-#include <ashespp/RenderPass/FrameBuffer.hpp>
-#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
-
 CU_ImplementCUSmartPtr( castor3d, VoxelizePass )
 
 namespace castor3d
 {
-	//*********************************************************************************************
-
-	namespace
-	{
-		ashes::RenderPassPtr createRenderPass( RenderDevice const & device )
-		{
-			ashes::VkAttachmentDescriptionArray attaches;
-			ashes::SubpassDescriptionArray subpasses;
-			subpasses.push_back( { 0u
-				, VK_PIPELINE_BIND_POINT_GRAPHICS
-				, {}
-				, {}
-				, {}
-				, ashes::nullopt
-				, {} } );
-			ashes::VkSubpassDependencyArray dependencies
-			{
-				{ VK_SUBPASS_EXTERNAL
-					, 0u
-					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-					, VK_DEPENDENCY_BY_REGION_BIT }
-				, { 0u
-					, VK_SUBPASS_EXTERNAL
-					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-					, VK_ACCESS_SHADER_READ_BIT
-					, VK_DEPENDENCY_BY_REGION_BIT } };
-			ashes::RenderPassCreateInfo createInfo{ 0u
-				, std::move( attaches )
-				, std::move( subpasses )
-				, std::move( dependencies ) };
-			return device->createRenderPass( "Voxelization"
-				, std::move( createInfo ) );
-		}
-
-		ashes::FrameBufferPtr createFramebuffer( RenderDevice const & device
-			, VkRenderPass renderPass
-			, VoxelSceneData const & voxelConfig )
-		{
-			ashes::ImageViewCRefArray fbAttaches;
-			return std::make_unique< ashes::FrameBuffer >( *device
-				, "Voxelization"
-				, renderPass
-				, VkExtent2D{ voxelConfig.gridSize.value(), voxelConfig.gridSize.value() }
-				, std::move( fbAttaches ) );
-		}
-	}
-
-	//*********************************************************************************************
-
 	VoxelizePass::VoxelizePass( crg::FramePass const & pass
 		, crg::GraphContext const & context
 		, crg::RunnableGraph & graph
@@ -124,8 +63,6 @@ namespace castor3d
 		, m_scene{ culler.getScene() }
 		, m_camera{ culler.getCamera() }
 		, m_voxels{ voxels }
-		, m_commands{ device, getName() }
-		, m_frameBuffer{ createFramebuffer( device, m_renderPass, voxelConfig ) }
 		, m_voxelizerUbo{ voxelizerUbo }
 		, m_voxelConfig{ voxelConfig }
 	{
@@ -200,46 +137,6 @@ namespace castor3d
 				, ortho
 				, jitterProjSpace );
 		}
-	}
-
-	ashes::Semaphore const & VoxelizePass::render( ashes::Semaphore const & toWait )
-	{
-		ashes::Semaphore const * result = &toWait;
-
-		if ( hasNodes() && m_voxelConfig.enabled )
-		{
-			auto timerBlock( getTimer().start() );
-
-			auto & cmd = *m_commands.commandBuffer;
-			cmd.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-			timerBlock->beginPass( cmd );
-			timerBlock->notifyPassRender();
-			cmd.beginDebugBlock(
-				{
-					"Voxelization Pass",
-					makeFloatArray( getEngine()->getNextRainbowColour() ),
-				} );
-			cmd.beginRenderPass( getRenderPass()
-				, *m_frameBuffer
-				, m_frameBuffer->getDimensions()
-				, { opaqueBlackClearColor }
-				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
-				cmd.executeCommands( { getCommandBuffer() } );
-
-			cmd.endRenderPass();
-			cmd.endDebugBlock();
-			timerBlock->endPass( cmd );
-			cmd.end();
-
-			m_device.graphicsQueue->submit( { cmd }
-				, { *result }
-				, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT }
-				, { getSemaphore() }
-				, nullptr );
-			result = &getSemaphore();
-		}
-
-		return *result;
 	}
 
 	void VoxelizePass::doUpdateFlags( PipelineFlags & flags )const
@@ -330,7 +227,7 @@ namespace castor3d
 			return result;
 		}
 
-		void fillAdditionalDescriptor( crg::RunnableGraph const & graph
+		void fillAdditionalDescriptor( crg::RunnableGraph & graph
 			, RenderPipeline const & pipeline
 			, Scene const & scene
 			, ashes::WriteDescriptorSetArray & descriptorWrites
@@ -1063,6 +960,4 @@ namespace castor3d
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
-
-	//*********************************************************************************************
 }

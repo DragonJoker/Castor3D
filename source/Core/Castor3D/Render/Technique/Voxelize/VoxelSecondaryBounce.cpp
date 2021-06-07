@@ -25,6 +25,9 @@
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>
 
+#include <RenderGraph/GraphContext.hpp>
+#include <RenderGraph/RunnableGraph.hpp>
+
 CU_ImplementCUSmartPtr( castor3d, VoxelSecondaryBounce )
 
 namespace castor3d
@@ -61,25 +64,43 @@ namespace castor3d
 				, std::move( bindings ) );
 		}
 
-		ashes::DescriptorSetPtr createDescriptorSet( ashes::DescriptorSetPool const & pool
-			, ashes::Buffer< Voxel > const & voxels
-			, VoxelizerUbo const & voxelUbo
-			, TextureUnit const & firstBounce
-			, TextureUnit const & result
+		ashes::DescriptorSetPtr createDescriptorSet( crg::RunnableGraph & graph
+			, ashes::DescriptorSetPool const & pool
+			, crg::FramePass const & pass
 			, uint32_t voxelGridSize )
 		{
-			auto descriptorSet = pool.createDescriptorSet( "VoxelSecondaryBounce" );
-			descriptorSet->createBinding( pool.getLayout().getBinding( eVoxelBuffer )
-				, voxels
+			auto voxelsBuffer = pass.buffers.front();
+			auto voxelsUbo = pass.buffers.back();
+			auto firstBounce = pass.images.front();
+			auto secondBounce = pass.images.back();
+			ashes::WriteDescriptorSetArray writes;
+			auto write = voxelsBuffer.getBufferWrite();
+			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
+				, write->dstArrayElement
+				, write->descriptorCount
+				, write->descriptorType } );
+			writes.back().bufferInfo = write.bufferInfo;
+			write = voxelsUbo.getBufferWrite();
+			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
+				, write->dstArrayElement
+				, write->descriptorCount
+				, write->descriptorType } );
+			writes.back().bufferInfo = write.bufferInfo;
+			writes.push_back( ashes::WriteDescriptorSet{ firstBounce.binding
 				, 0u
-				, voxels.getCount() );
-			voxelUbo.createSizedBinding( *descriptorSet
-				, pool.getLayout().getBinding( eVoxelConfig ) );
-			descriptorSet->createBinding( pool.getLayout().getBinding( eFirstBounce )
-				, firstBounce.getTexture()->getDefaultView().getSampledView()
-				, firstBounce.getSampler()->getSampler() );
-			descriptorSet->createBinding( pool.getLayout().getBinding( eResult )
-				, result.getTexture()->getDefaultView().getSampledView() );
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, { VkDescriptorImageInfo{ graph.createSampler( firstBounce.image.samplerDesc )
+					, graph.createImageView( firstBounce.view() )
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
+			writes.push_back( ashes::WriteDescriptorSet{ secondBounce.binding
+				, 0u
+				, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
+				, { VkDescriptorImageInfo{ VK_NULL_HANDLE
+					, graph.createImageView( secondBounce.view() )
+					, VK_IMAGE_LAYOUT_GENERAL } } } );
+
+			auto descriptorSet = pool.createDescriptorSet( "VoxelSecondaryBounce" );
+			descriptorSet->setBindings( writes );
 			descriptorSet->update();
 			return descriptorSet;
 		}
@@ -100,50 +121,6 @@ namespace castor3d
 				, ashes::ComputePipelineCreateInfo( 0u
 					, makeShaderState( device, computeShader )
 					, layout ) );
-		}
-
-		CommandsSemaphore createCommandBuffer( RenderDevice const & device
-			, ashes::PipelineLayout const & pipelineLayout
-			, ashes::ComputePipeline const & pipeline
-			, ashes::DescriptorSet const & descriptorSet
-			, ashes::BufferBase const & voxels
-			, TextureUnit const & firstBounce
-			, TextureUnit const & secondaryBounce
-			, RenderPassTimer & timer
-			, uint32_t voxelGridSize )
-		{
-			CommandsSemaphore result{ device, "VoxelSecondaryBounce" };
-			auto & cmd = *result.commandBuffer;
-			cmd.begin();
-			timer.beginPass( cmd );
-			cmd.beginDebugBlock( { "Voxel Secondary Bounce"
-				, makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ) } );
-			// Clear result
-			cmd.memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
-				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, secondaryBounce.getTexture()->getDefaultView().getSampledView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
-			cmd.clear( secondaryBounce.getTexture()->getDefaultView().getSampledView()
-				, transparentBlackClearColor.color );
-			cmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-				, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
-				, secondaryBounce.getTexture()->getDefaultView().getSampledView().makeGeneralLayout( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-					, VK_ACCESS_SHADER_WRITE_BIT ) );
-
-			cmd.bindPipeline( pipeline );
-			cmd.bindDescriptorSet( descriptorSet
-				, pipelineLayout
-				, VK_PIPELINE_BIND_POINT_COMPUTE );
-			cmd.dispatch( voxelGridSize * voxelGridSize * voxelGridSize / 64u, 1u, 1u );
-
-			secondaryBounce.getTexture()->getTexture().generateMipmaps( cmd
-				, VK_IMAGE_LAYOUT_GENERAL
-				, VK_IMAGE_LAYOUT_GENERAL
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-			cmd.endDebugBlock();
-			timer.endPass( cmd );
-			cmd.end();
-
-			return result;
 		}
 
 		ShaderPtr createShader( uint32_t voxelGridSize )
@@ -221,52 +198,83 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	VoxelSecondaryBounce::SecondaryBounce::SecondaryBounce( RenderDevice const & device
-		, ashes::PipelineLayout const & pipelineLayout
-		, ashes::DescriptorSet const & descriptorSet
-		, ashes::Buffer< Voxel > const & voxels
-		, VoxelizerUbo const & voxelUbo
-		, TextureUnit const & firstBounce
-		, TextureUnit const & result
-		, RenderPassTimer & timer
-		, uint32_t voxelGridSize )
-		: computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, "VoxelSecondaryBounce", createShader( voxelGridSize ) }
-		, pipeline{ createPipeline( device, pipelineLayout, computeShader ) }
-		, commands{ createCommandBuffer( device, pipelineLayout, *pipeline, descriptorSet, voxels.getBuffer(), firstBounce, result, timer, voxelGridSize ) }
-	{
-	}
-
-	//*********************************************************************************************
-
-	VoxelSecondaryBounce::VoxelSecondaryBounce( RenderDevice const & device
-		, VoxelSceneData const & vctConfig
-		, ashes::Buffer< Voxel > const & voxels
-		, VoxelizerUbo const & voxelUbo
-		, TextureUnit const & firstBounce
-		, TextureUnit const & result )
-		: m_vctConfig{ vctConfig }
+	VoxelSecondaryBounce::VoxelSecondaryBounce( crg::FramePass const & pass
+		, crg::GraphContext const & context
+		, crg::RunnableGraph & graph
+		, RenderDevice const & device
+		, VoxelSceneData const & vctConfig )
+		: crg::RunnablePass{ pass, context, graph, 2u }
+		, m_vctConfig{ vctConfig }
 		, m_timer{ std::make_shared< RenderPassTimer >( device, "Voxelize", "Secondary Bounce" ) }
-		, m_descriptorSetLayout{ createDescriptorLayout( device, vctConfig.gridSize.value() ) }
+		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, "VoxelSecondaryBounce", createShader( m_vctConfig.gridSize.value() ) }
+		, m_descriptorSetLayout{ createDescriptorLayout( device, m_vctConfig.gridSize.value() ) }
 		, m_pipelineLayout{ createPipelineLayout( device, *m_descriptorSetLayout ) }
+		, m_pipeline{ createPipeline( device, *m_pipelineLayout, m_shader ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
-		, m_descriptorSet{ createDescriptorSet( *m_descriptorSetPool, voxels, voxelUbo, firstBounce, result, vctConfig.gridSize.value() ) }
-		, m_secondaryBounce{ device, *m_pipelineLayout, *m_descriptorSet, voxels, voxelUbo, firstBounce, result, *m_timer, vctConfig.gridSize.value() }
+		, m_descriptorSet{ createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass, m_vctConfig.gridSize.value() ) }
 	{
 	}
 
 	void VoxelSecondaryBounce::accept( RenderTechniqueVisitor & visitor )
 	{
-		visitor.visit( m_secondaryBounce.computeShader );
+		visitor.visit( m_shader );
 	}
 
-	ashes::Semaphore const & VoxelSecondaryBounce::render( RenderDevice const & device
-		, ashes::Semaphore const & toWait )
+	void VoxelSecondaryBounce::doInitialise()
 	{
-		auto result = &toWait;
-		auto timerBlock = m_timer->start();
-		timerBlock->notifyPassRender();
-		result = &m_secondaryBounce.commands.submit( *device.computeQueue, *result );
-		return *result;
+	}
+
+	void VoxelSecondaryBounce::doRecordInto( VkCommandBuffer commandBuffer
+		, uint32_t index )
+	{
+		auto voxelGridSize = m_vctConfig.gridSize.value();
+		VkDescriptorSet descriptorSet = *m_descriptorSet;
+		auto view = m_pass.images.back().view();
+		auto transition = doGetTransition( index, view );
+		auto image = m_graph.createImage( view.data->image );
+
+		// Clear result
+		m_graph.memoryBarrier( commandBuffer
+			, view
+			, transition.needed
+			, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+				, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
+				, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) } );
+		m_context.vkCmdClearColorImage( commandBuffer
+			, image
+			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+			, &transparentBlackClearColor.color
+			, 1
+			, &view.data->info.subresourceRange );
+		m_graph.memoryBarrier( commandBuffer
+			, view
+			, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+				, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
+				, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) }
+			, transition.needed );
+
+		m_context.vkCmdBindPipeline( commandBuffer
+			, VK_PIPELINE_BIND_POINT_COMPUTE
+			, *m_pipeline );
+		m_context.vkCmdBindDescriptorSets( commandBuffer
+			, VK_PIPELINE_BIND_POINT_COMPUTE
+			, *m_pipelineLayout
+			, 0u
+			, 1u
+			, &descriptorSet
+			, 0u
+			, nullptr );
+		m_context.vkCmdDispatch( commandBuffer, voxelGridSize * voxelGridSize * voxelGridSize / 64u, 1u, 1u );
+	}
+
+	VkPipelineStageFlags VoxelSecondaryBounce::doGetSemaphoreWaitFlags()const
+	{
+		return VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
+	}
+
+	bool VoxelSecondaryBounce::doIsComputePass()const
+	{
+		return true;
 	}
 
 	//*********************************************************************************************

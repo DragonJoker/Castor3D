@@ -34,6 +34,8 @@ See LICENSE file in root folder
 
 #include <ashespp/Core/RendererList.hpp>
 
+#include <RenderGraph/ResourceHandler.hpp>
+
 namespace castor3d
 {
 	class Engine
@@ -510,6 +512,11 @@ namespace castor3d
 		{
 			return m_renderWindows;
 		}
+
+		crg::ResourceHandler & getGraphResourceHandler()
+		{
+			return m_resourceHandler;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -582,6 +589,7 @@ namespace castor3d
 		RenderDepthQuadSPtr m_renderDepth;
 		uint32_t m_lpvGridSize{ 32u };
 		castor::AsyncJobQueue m_jobs;
+		crg::ResourceHandler m_resourceHandler;
 	};
 }
 

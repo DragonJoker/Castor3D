@@ -44,9 +44,9 @@ namespace Bloom
 						, renderSize
 						, VkOffset2D{} } }
 #if !Bloom_DebugHiPass
-				, m_viewDesc{ pass.colourInOuts.front().view() }
+				, m_viewDesc{ pass.images.back().view() }
 				, m_imageDesc{ m_viewDesc.data->image }
-				, m_image{ graph.getImage( m_imageDesc ) }
+				, m_image{ graph.createImage( m_imageDesc ) }
 #endif
 			{
 #if !Bloom_DebugHiPass
@@ -83,13 +83,15 @@ namespace Bloom
 				auto const depth = int32_t( m_imageDesc.data->info.extent.depth );
 				auto const imageViewType = VkImageViewType( m_imageDesc.data->info.imageType );
 				auto const aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-				auto transition = doGetTransition( m_viewDesc );
+				auto transition = doGetTransition( index, m_viewDesc );
 
 				// Transition source view to transfer src layout
 				m_graph.memoryBarrier( commandBuffer
 					, m_viewDesc
-					, transition.toLayout
-					, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL );
+					, transition.to
+					, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+						, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
+						, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) } );
 
 				for ( auto & mipGen : m_mipGens )
 				{
@@ -122,8 +124,12 @@ namespace Bloom
 					// Transition destination mip level to transfer dst layout
 					m_graph.memoryBarrier( commandBuffer
 						, mipGen.dst
-						, VK_IMAGE_LAYOUT_UNDEFINED
-						, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL );
+						, { VK_IMAGE_LAYOUT_UNDEFINED
+							, crg::getAccessMask( VK_IMAGE_LAYOUT_UNDEFINED )
+							, crg::getStageMask( VK_IMAGE_LAYOUT_UNDEFINED ) }
+						, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+							, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
+							, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) } );
 
 					// Perform blit
 					m_context.vkCmdBlitImage( commandBuffer
@@ -138,22 +144,30 @@ namespace Bloom
 					// Transition destination mip level to transfer src layout
 					m_graph.memoryBarrier( commandBuffer
 						, mipGen.dst
-						, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-						, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL );
+						, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+							, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
+							, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) }
+						, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+							, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
+							, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) } );
 
 					// Transition source mip level to wanted output layout
 					m_graph.memoryBarrier( commandBuffer
 						, mipGen.src
-						, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-						, transition.toLayout );
+						, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+							, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
+							, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) }
+						, transition.to );
 				}
 
 				// Transition last destination mip level to wanted output layout
 				auto & mipGen = m_mipGens.back();
 				m_graph.memoryBarrier( commandBuffer
 					, mipGen.dst
-					, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-					, transition.toLayout );
+					, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+						, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
+						, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) }
+					, transition.to );
 #endif
 			}
 

@@ -12,6 +12,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/ShadowMap/ShadowMapResult.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
+#include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/RunnableGraph.hpp>
 
 namespace castor3d
@@ -45,10 +46,13 @@ namespace castor3d
 		 *\param[in]	passes		Les passes utilisées pour rendre cette texture.
 		 *\param[in]	count		Le nombre de passes.
 		 */
-		C3D_API ShadowMap( RenderDevice const & device
+		C3D_API ShadowMap( crg::ResourceHandler & handler
+			, RenderDevice const & device
 			, Scene & scene
 			, LightType lightType
-			, ShadowMapResult result
+			, VkImageCreateFlags createFlags
+			, castor::Size const & size
+			, uint32_t layerCount
 			, uint32_t count );
 		/**
 		 *\~english
@@ -88,6 +92,8 @@ namespace castor3d
 		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API virtual void update( GpuUpdater & updater ) = 0;
+		C3D_API crg::SemaphoreWait render( crg::SemaphoreWait const & toWait
+			, uint32_t index );
 		C3D_API void setPass( uint32_t index
 			, ShadowMapPass * pass );
 		/**
@@ -121,11 +127,6 @@ namespace castor3d
 		{
 			return m_count;
 		}
-
-		crg::FramePass const & getLastPass()const
-		{
-			return *m_lastPass;
-		}
 		/**@}*/
 	public:
 		static constexpr TextureFlags textureFlags{ TextureFlag::eOpacity
@@ -142,13 +143,14 @@ namespace castor3d
 	protected:
 		RenderDevice const & m_device;
 		Scene & m_scene;
-		LightType m_lightType;
 		castor::String m_name;
-		std::set< std::reference_wrapper< GeometryBuffers > > m_geometryBuffers;
-		std::vector< PassData > m_passes;
-		crg::FramePass const * m_lastPass;
-		uint32_t m_count;
+		LightType m_lightType;
 		ShadowMapResult m_result;
+		uint32_t m_count;
+		std::set< std::reference_wrapper< GeometryBuffers > > m_geometryBuffers;
+		std::vector< std::unique_ptr< crg::FrameGraph > > m_graphs;
+		std::vector< crg::RunnableGraphPtr > m_runnables;
+		std::vector< PassData > m_passes;
 	};
 }
 

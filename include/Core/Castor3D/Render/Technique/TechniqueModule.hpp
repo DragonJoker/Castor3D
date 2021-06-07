@@ -72,7 +72,7 @@ namespace castor3d
 		, ashes::Sampler const & sampler
 		, ashes::WriteDescriptorSetArray & writes
 		, uint32_t & index );
-	void bindTexture( crg::RunnableGraph const & graph
+	void bindTexture( crg::RunnableGraph & graph
 		, crg::ImageViewId const & view
 		, VkSampler const & sampler
 		, ashes::WriteDescriptorSetArray & writes

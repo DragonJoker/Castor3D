@@ -28,7 +28,7 @@ namespace castor3d
 		}
 
 	protected:
-		C3D_API Texture doCreateTexture( crg::FrameGraph & graph
+		C3D_API Texture doCreateTexture( crg::ResourceHandler & handler
 			, castor::String const & name
 			, VkImageCreateFlags createFlags
 			, VkExtent3D const & size
@@ -70,7 +70,7 @@ namespace castor3d
 		*	Le nombre de layers du g-buffer.
 		*/
 		template< typename TextureEnumT >
-		TextureArray doCreateTextures( crg::FrameGraph & graph
+		TextureArray doCreateTextures( crg::ResourceHandler & handler
 			, std::array< crg::ImageId const *, size_t( TextureEnumT::eCount ) > const & inputs
 			, castor::String const & prefix
 			, VkImageCreateFlags createFlags
@@ -84,7 +84,7 @@ namespace castor3d
 				if ( !inputs[i] )
 				{
 					auto texture = TextureEnumT( i );
-					result.emplace_back( doCreateTexture( graph
+					result.emplace_back( doCreateTexture( handler
 						, prefix + castor3d::getName( texture )
 						, createFlags
 						, { size.getWidth(), size.getHeight(), 1u }
@@ -127,7 +127,7 @@ namespace castor3d
 		*	Les dimensions du g-buffer.
 		*/
 		template< typename TextureEnumT >
-		TextureArray doCreateTextures( crg::FrameGraph & graph
+		TextureArray doCreateTextures( crg::ResourceHandler & handler
 			, std::array< crg::ImageId const *, size_t( TextureEnumT::eCount ) > const & inputs
 			, castor::String const & prefix
 			, VkImageCreateFlags createFlags
@@ -140,7 +140,7 @@ namespace castor3d
 				if ( !inputs[i] )
 				{
 					auto texture = TextureEnumT( i );
-					result.emplace_back( doCreateTexture( graph
+					result.emplace_back( doCreateTexture( handler
 						, prefix + castor3d::getName( texture )
 						, createFlags
 						, size
@@ -196,7 +196,7 @@ namespace castor3d
 		*\param[in] layerCount
 		*	Le nombre de layers du g-buffer.
 		*/
-		GBufferT( crg::FrameGraph & graph
+		GBufferT( crg::ResourceHandler & handler
 			, RenderDevice const & device
 			, castor::String name
 			, std::array< crg::ImageId const *, size_t( TextureEnumT::eCount ) > const & inputs
@@ -204,7 +204,7 @@ namespace castor3d
 			, castor::Size const & size
 			, uint32_t layerCount = 1u )
 			: GBufferBase{ device, std::move( name ) }
-			, m_result{ doCreateTextures< TextureEnumT >( graph
+			, m_result{ doCreateTextures< TextureEnumT >( handler
 				, inputs
 				, getName()
 				, createFlags
@@ -240,14 +240,14 @@ namespace castor3d
 		*\param[in] size
 		*	Les dimensions du g-buffer.
 		*/
-		GBufferT( crg::FrameGraph & graph
+		GBufferT( crg::ResourceHandler & handler
 			, RenderDevice const & device
 			, castor::String name
 			, std::array< crg::ImageId const *, size_t( TextureEnumT::eCount ) > const & inputs
 			, VkImageCreateFlags createFlags
 			, VkExtent3D const & size )
 			: GBufferBase{ device, std::move( name ) }
-			, m_result{ doCreateTextures< TextureEnumT >( graph
+			, m_result{ doCreateTextures< TextureEnumT >( handler
 				, inputs
 				, getName()
 				, createFlags

@@ -10,6 +10,9 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Culling/DummyCuller.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
+#include <RenderGraph/FrameGraph.hpp>
+#include <RenderGraph/RunnableGraph.hpp>
+
 namespace castor3d
 {
 	class Voxelizer
@@ -33,7 +36,8 @@ namespace castor3d
 		 *\param[in]	voxelizerUbo	L'UBO de configuration du voxelizer.
 		 *\param[in]	voxelConfig		La configuration du voxelizer.
 		 */
-		C3D_API Voxelizer( RenderDevice const & device
+		C3D_API Voxelizer( crg::ResourceHandler & handler
+			, RenderDevice const & device
 			, Scene & scene
 			, Camera & camera
 			, MatrixUbo & matrixUbo
@@ -59,47 +63,52 @@ namespace castor3d
 		 */
 		C3D_API void update( GpuUpdater & updater );
 		/**
-		 *\~english
-		 *\brief		Renders nodes.
-		 *\param[in]	device	The GPU device.
-		 *\param[in]	toWait	The semaphore from the previous render pass.
-		 *\~french
-		 *\brief		Dessine les noeuds.
-		 *\param[in]	device	Le device GPU.
-		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
-		 */
-		C3D_API ashes::Semaphore const & render( RenderDevice const & device
-			, ashes::Semaphore const & toWait );
-		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
+		C3D_API crg::SemaphoreWait render( crg::SemaphoreWait const & semaphore );
 
 		C3D_API void listIntermediates( RenderTechniqueVisitor & visitor );
 
-		TextureUnit const & getFirstBounce()const
+		Texture const & getFirstBounce()const
 		{
 			return m_firstBounce;
 		}
-		
-		TextureUnit const & getSecondaryBounce()const
+
+		Texture const & getSecondaryBounce()const
 		{
 			return m_secondaryBounce;
 		}
 
 	private:
+		crg::FramePass & doCreateVoxelizePass();
+		crg::FramePass & doCreateVoxelToTexture( crg::FramePass const & previousPass );
+		crg::FramePass & doCreateVoxelMipGen( crg::FramePass const & previousPass
+			, std::string const & name
+			, crg::ImageViewId const & view );
+		crg::FramePass & doCreateVoxelSecondaryBounce( crg::FramePass const & previousPass );
+
+	private:
 		Engine & m_engine;
+		RenderDevice const & m_device;
 		VoxelSceneData const & m_voxelConfig;
+		crg::FrameGraph m_graph;
 		DummyCuller m_culler;
 		MatrixUbo m_matrixUbo;
-		TextureUnit m_firstBounce;
-		TextureUnit m_secondaryBounce;
+		Texture m_firstBounce;
+		Texture m_secondaryBounce;
 		ashes::BufferPtr< Voxel > m_voxels;
 		VoxelizerUbo & m_voxelizerUbo;
-		VoxelizePassUPtr m_voxelizePass;
-		VoxelBufferToTextureUPtr m_voxelToTexture;
-		VoxelSecondaryBounceUPtr m_voxelSecondaryBounce;
 		castor::Point4f m_grid;
+		crg::FramePass & m_voxelizePassDesc;
+		VoxelizePass * m_voxelizePass;
+		crg::FramePass & m_voxelToTextureDesc;
+		VoxelBufferToTexture * m_voxelToTexture;
+		crg::FramePass & m_voxelMipGen;
+		crg::FramePass & m_voxelSecondaryBounceDesc;
+		VoxelSecondaryBounce * m_voxelSecondaryBounce;
+		crg::FramePass & m_voxelSecondaryMipGen;
+		crg::RunnableGraphPtr m_runnable;
 	};
 }
 

@@ -702,7 +702,9 @@ namespace castor3d
 	{
 		if ( !hasEnvironmentMap( node ) )
 		{
-			auto it = m_reflectionMaps.emplace( &node, std::make_unique< EnvironmentMap >( *getEngine()->getRenderSystem()->getMainRenderDevice(), node ) ).first;
+			auto it = m_reflectionMaps.emplace( &node, std::make_unique< EnvironmentMap >( getOwner()->getGraphResourceHandler()
+				, *getEngine()->getRenderSystem()->getMainRenderDevice()
+				, node ) ).first;
 			auto & pass = *it->second;
 			m_reflectionMapsArray.emplace_back( pass );
 		}

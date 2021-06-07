@@ -77,13 +77,13 @@ namespace castor3d
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
 	}
 
-	void bindTexture( crg::RunnableGraph const & graph
+	void bindTexture( crg::RunnableGraph & graph
 		, crg::ImageViewId const & view
 		, VkSampler const & sampler
 		, ashes::WriteDescriptorSetArray & writes
 		, uint32_t & index )
 	{
-		auto texture = graph.getImageView( view );
+		auto texture = graph.createImageView( view );
 		CU_Require( texture != VK_NULL_HANDLE );
 		bindTexture( texture
 			, sampler
@@ -91,7 +91,7 @@ namespace castor3d
 			, index );
 	}
 
-	void bindShadowMaps( crg::RunnableGraph const & graph
+	void bindShadowMaps( crg::RunnableGraph & graph
 		, PipelineFlags const & pipelineFlags
 		, ShadowMapLightTypeArray const & shadowMaps
 		, ashes::WriteDescriptorSetArray & writes
@@ -106,12 +106,12 @@ namespace castor3d
 				{
 					auto & result = shadowMapRef.first.get().getShadowPassResult();
 					bindTexture( graph
-						, result[SmTexture::eNormalLinear].wholeView
+						, result[SmTexture::eNormalLinear].wholeViewId
 						, *result[SmTexture::eNormalLinear].sampler
 						, writes
 						, index );
 					bindTexture( graph
-						, result[SmTexture::eVariance].wholeView
+						, result[SmTexture::eVariance].wholeViewId
 						, *result[SmTexture::eVariance].sampler
 						, writes
 						, index );
@@ -318,7 +318,7 @@ namespace castor3d
 
 	namespace
 	{
-		void fillAdditionalDescriptor( crg::RunnableGraph const & graph
+		void fillAdditionalDescriptor( crg::RunnableGraph & graph
 			, RenderPipeline const & pipeline
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, Scene const & scene
@@ -328,8 +328,8 @@ namespace castor3d
 			, LayeredLpvGridConfigUbo const * llpvConfigUbo
 			, VoxelizerUbo const * vctConfigUbo
 			, LightVolumePassResult const * lpvResult
-			, TextureUnit const * vctFirstBounce
-			, TextureUnit const * vctSecondaryBounce )
+			, Texture const * vctFirstBounce
+			, Texture const * vctSecondaryBounce )
 		{
 			auto index = uint32_t( PassUboIdx::eCount );
 			auto & flags = pipeline.getFlags();
@@ -380,12 +380,12 @@ namespace castor3d
 				CU_Require( vctFirstBounce );
 				CU_Require( vctSecondaryBounce );
 				descriptorWrites.push_back( vctConfigUbo->getDescriptorWrite( index++ ) );
-				bindTexture( vctFirstBounce->getTexture()->getDefaultView().getSampledView()
-					, vctFirstBounce->getSampler()->getSampler()
+				bindTexture( vctFirstBounce->wholeView
+					, *vctFirstBounce->sampler
 					, descriptorWrites
 					, index );
-				bindTexture( vctSecondaryBounce->getTexture()->getDefaultView().getSampledView()
-					, vctSecondaryBounce->getSampler()->getSampler()
+				bindTexture( vctSecondaryBounce->wholeView
+					, *vctSecondaryBounce->sampler
 					, descriptorWrites
 					, index );
 			}

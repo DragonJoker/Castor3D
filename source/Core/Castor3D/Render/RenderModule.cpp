@@ -225,15 +225,17 @@ namespace castor3d
 	}
 
 	Texture::Texture()
-		: image{}
+		: imageId{}
+		, image{}
+		, wholeViewId{}
 		, wholeView{}
-		, subViews{}
+		, subViewsId{}
 		, sampler{}
 	{
 	}
 
 	Texture::Texture( RenderDevice const & device
-		, crg::FrameGraph & graph
+		, crg::ResourceHandler & handler
 		, castor::String const & name
 		, VkImageCreateFlags createFlags
 		, VkExtent3D const & size
@@ -241,11 +243,12 @@ namespace castor3d
 		, uint32_t mipLevels
 		, VkFormat format
 		, VkImageUsageFlags usageFlags
-		, VkBorderColor const & borderColor )
+		, VkBorderColor const & borderColor
+		, bool createSubviews )
 	{
 		mipLevels = std::max( 1u, mipLevels );
 		layerCount = ( size.depth > 1u ? 1u : layerCount );
-		image = graph.createImage( crg::ImageData{ name
+		imageId = handler.createImageId( crg::ImageData{ name
 			, ( createFlags
 				| ( size.depth > 1u
 					? VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT
@@ -261,8 +264,8 @@ namespace castor3d
 					: 0u ) )
 			, mipLevels
 			, layerCount } );
-		wholeView = graph.createView( crg::ImageViewData{ name + "Whole"
-			, image
+		wholeViewId = handler.createViewId( crg::ImageViewData{ name + "Whole"
+			, imageId
 			, 0u
 			, ( size.depth > 1u
 				? VK_IMAGE_VIEW_TYPE_3D
@@ -275,17 +278,21 @@ namespace castor3d
 					: VK_IMAGE_VIEW_TYPE_2D ) )
 			, format
 			, { ashes::getAspectMask( format ), 0u, mipLevels, 0u, layerCount } } );
-		auto sliceLayerCount = std::max( size.depth, layerCount );
-		auto data = *wholeView.data;
 
-		for ( uint32_t index = 0u; index < sliceLayerCount; ++index )
+		if ( createSubviews )
 		{
-			subViews.push_back( graph.createView( crg::ImageViewData{ name + "Sub" + std::to_string( index )
-				, image
-				, 0u
-				, VK_IMAGE_VIEW_TYPE_2D
-				, format
-				, { ashes::getAspectMask( format ), 0u, 1u, index, 1u } } ) );
+			auto sliceLayerCount = std::max( size.depth, layerCount );
+			auto data = *wholeViewId.data;
+
+			for ( uint32_t index = 0u; index < sliceLayerCount; ++index )
+			{
+				subViewsId.push_back( handler.createViewId( crg::ImageViewData{ name + "Sub" + std::to_string( index )
+					, imageId
+					, 0u
+					, VK_IMAGE_VIEW_TYPE_2D
+					, format
+					, { ashes::getAspectMask( format ), 0u, 1u, index, 1u } } ) );
+			}
 		}
 
 		auto & engine = *device.renderSystem.getEngine();

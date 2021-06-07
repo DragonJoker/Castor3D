@@ -78,7 +78,7 @@ namespace castor3d
 	{
 		C3D_API Texture();
 		C3D_API Texture( RenderDevice const & device
-			, crg::FrameGraph & graph
+			, crg::ResourceHandler & handler
 			, castor::String const & name
 			, VkImageCreateFlags createFlags
 			, VkExtent3D const & size
@@ -86,21 +86,24 @@ namespace castor3d
 			, uint32_t mipLevels
 			, VkFormat format
 			, VkImageUsageFlags usageFlags
-			, VkBorderColor const & borderColor );
+			, VkBorderColor const & borderColor
+			, bool createSubviews = true );
 
 		VkFormat getFormat()const
 		{
-			return image.data->info.format;
+			return imageId.data->info.format;
 		}
 
 		VkExtent3D getExtent()const
 		{
-			return image.data->info.extent;
+			return imageId.data->info.extent;
 		}
 
-		crg::ImageId image;
-		crg::ImageViewId wholeView;
-		crg::ImageViewIdArray subViews;
+		crg::ImageId imageId;
+		VkImage image;
+		crg::ImageViewId wholeViewId;
+		VkImageView wholeView;
+		crg::ImageViewIdArray subViewsId;
 		ashes::Sampler const * sampler;
 	};
 	using TextureArray = std::vector< Texture >;

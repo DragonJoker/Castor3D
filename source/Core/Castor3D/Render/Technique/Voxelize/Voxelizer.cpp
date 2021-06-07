@@ -24,6 +24,10 @@
 
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 
+#include <RenderGraph/FrameGraph.hpp>
+#include <RenderGraph/GraphContext.hpp>
+#include <RenderGraph/RunnablePasses/GenerateMipmaps.hpp>
+
 CU_ImplementCUSmartPtr( castor3d, Voxelizer )
 
 using namespace castor;
@@ -34,30 +38,25 @@ namespace castor3d
 
 	namespace
 	{
-		TextureUnit createTexture( Engine & engine
-			, RenderDevice const & device
+		Texture createTexture( RenderDevice const & device
+			, crg::ResourceHandler & handler
 			, String const & name
 			, VkExtent3D const & size )
 		{
-			auto & renderSystem = *engine.getRenderSystem();
-			ashes::ImageCreateInfo image{ VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT
-				, VK_IMAGE_TYPE_3D
-				, VK_FORMAT_R16G16B16A16_SFLOAT
+			return Texture{ device
+				, handler
+				, name
+				, VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT
 				, size
-				, getMipLevels( size, VK_FORMAT_R16G16B16A16_SFLOAT )
 				, 1u
-				, VK_SAMPLE_COUNT_1_BIT
-				, VK_IMAGE_TILING_OPTIMAL
-				, VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT };
-			auto layout = std::make_shared< TextureLayout >( renderSystem
-				, std::move( image )
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, name );
-			TextureUnit result{ engine };
-			result.setSampler( createSampler( engine, name, VK_FILTER_NEAREST, nullptr ) );
-			result.setTexture( layout );
-			result.initialise( device );
-			return result;
+				, getMipLevels( size, VK_FORMAT_R16G16B16A16_SFLOAT )
+				, VK_FORMAT_R16G16B16A16_SFLOAT
+				, ( VK_IMAGE_USAGE_STORAGE_BIT
+					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
+					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
+					| VK_IMAGE_USAGE_SAMPLED_BIT )
+				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK
+				, false };
 		}
 
 		ashes::BufferPtr< Voxel > createSsbo( Engine & engine
@@ -75,47 +74,40 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	Voxelizer::Voxelizer( RenderDevice const & device
+	Voxelizer::Voxelizer( crg::ResourceHandler & handler
+		, RenderDevice const & device
 		, Scene & scene
 		, Camera & camera
 		, MatrixUbo & matrixUbo
 		, VoxelizerUbo & voxelizerUbo
 		, VoxelSceneData const & voxelConfig )
 		: m_engine{ *device.renderSystem.getEngine() }
+		, m_device{ device }
 		, m_voxelConfig{ voxelConfig }
+		, m_graph{ handler, "Voxelizer" }
 		, m_culler{ scene, &camera }
 		, m_matrixUbo{ device }
-		, m_firstBounce{ createTexture( m_engine, device, "VoxelizedSceneFirstBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
-		, m_secondaryBounce{ createTexture( m_engine, device, "VoxelizedSceneSecondaryBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
+		, m_firstBounce{ createTexture( device, handler, "VoxelizedSceneFirstBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
+		, m_secondaryBounce{ createTexture( device, handler, "VoxelizedSceneSecondaryBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
 		, m_voxels{ createSsbo( m_engine, device, "VoxelizedSceneBuffer", m_voxelConfig.gridSize.value() ) }
 		, m_voxelizerUbo{ voxelizerUbo }
-		//, m_voxelizePass{ castor::makeUnique< VoxelizePass >( device
-		//	, m_matrixUbo
-		//	, m_culler
-		//	, m_voxelizerUbo
-		//	, *m_voxels
-		//	, m_voxelConfig ) }
-		//, m_voxelToTexture{ castor::makeUnique< VoxelBufferToTexture >( device
-		//	, m_voxelConfig
-		//	, *m_voxels
-		//	, m_firstBounce ) }
-		//, m_voxelSecondaryBounce{ castor::makeUnique< VoxelSecondaryBounce >( device
-		//	, m_voxelConfig
-		//	, *m_voxels
-		//	, m_voxelizerUbo
-		//	, m_firstBounce
-		//	, m_secondaryBounce ) }
+		, m_voxelizePassDesc{ doCreateVoxelizePass() }
+		, m_voxelToTextureDesc{ doCreateVoxelToTexture( m_voxelizePassDesc ) }
+		, m_voxelMipGen{ doCreateVoxelMipGen( m_voxelToTextureDesc, "FirstBounceMip", m_firstBounce.wholeViewId ) }
+		, m_voxelSecondaryBounceDesc{ doCreateVoxelSecondaryBounce( m_voxelMipGen ) }
+		, m_voxelSecondaryMipGen{ doCreateVoxelMipGen( m_voxelSecondaryBounceDesc, "SecondaryBounceMip", m_secondaryBounce.wholeViewId ) }
+		, m_runnable{ m_graph.compile( m_device.makeContext() ) }
 	{
+		m_firstBounce.image = m_runnable->createImage( m_firstBounce.imageId );
+		m_firstBounce.wholeView = m_runnable->createImageView( m_firstBounce.wholeViewId );
+		m_secondaryBounce.image = m_runnable->createImage( m_secondaryBounce.imageId );
+		m_secondaryBounce.wholeView = m_runnable->createImageView( m_secondaryBounce.wholeViewId );
+		m_runnable->record();
 	}
 
 	Voxelizer::~Voxelizer()
 	{
-		m_voxelSecondaryBounce.reset();
-		m_voxelToTexture.reset();
-		m_voxelizePass.reset();
 		m_voxels.reset();
-		m_secondaryBounce.cleanup();
-		m_firstBounce.cleanup();
 		m_engine.getSamplerCache().remove( "VoxelizedSceneSecondaryBounce" );
 		m_engine.getSamplerCache().remove( "VoxelizedSceneFirstBounce" );
 	}
@@ -148,35 +140,127 @@ namespace castor3d
 		}
 	}
 
-	ashes::Semaphore const & Voxelizer::render( RenderDevice const & device
-		, ashes::Semaphore const & toWait )
-	{
-		ashes::Semaphore const * result = &toWait;
-		result = &m_voxelizePass->render( *result );
-		result = &m_voxelToTexture->render( device, *result );
-
-		if ( m_voxelConfig.enableSecondaryBounce )
-		{
-			result = &m_voxelSecondaryBounce->render( device, *result );
-		}
-
-		return *result;
-	}
-
 	void Voxelizer::accept( RenderTechniqueVisitor & visitor )
 	{
 		m_voxelizePass->accept( visitor );
 	}
 
+	crg::SemaphoreWait Voxelizer::render( crg::SemaphoreWait const & semaphore )
+	{
+		return m_runnable->run( semaphore, *m_device.graphicsQueue );
+	}
+
 	void Voxelizer::listIntermediates( RenderTechniqueVisitor & visitor )
 	{
 		visitor.visit( "Voxelisation Result"
-			, m_firstBounce.getTexture()->getDefaultView().getSampledView()
+			, m_firstBounce.wholeViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors::tex3D( &m_grid ) );
 		visitor.visit( "Voxelisation SecondaryBounce"
-			, m_secondaryBounce.getTexture()->getDefaultView().getSampledView()
+			, m_secondaryBounce.wholeViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors::tex3D( &m_grid ) );
+	}
+
+	crg::FramePass & Voxelizer::doCreateVoxelizePass()
+	{
+		auto & result = m_graph.createPass( "VoxelizePass"
+			, [this]( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph )
+			{
+				auto result = std::make_unique< VoxelizePass >( pass
+					, context
+					, graph
+					, m_device
+					, m_matrixUbo
+					, m_culler
+					, m_voxelizerUbo
+					, *m_voxels
+					, m_voxelConfig );
+				m_voxelizePass = result.get();
+				return result;
+			} );
+		result.addOutputStorageBuffer( { m_voxels->getBuffer(), "Voxels" }
+			, 0u
+			, 0u
+			, m_voxels->getBuffer().getSize() );
+		return result;
+	}
+
+	crg::FramePass & Voxelizer::doCreateVoxelToTexture( crg::FramePass const & previousPass )
+	{
+		auto & result = m_graph.createPass( "VoxelBufferToTexture"
+			, [this]( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph )
+			{
+				auto result = std::make_unique< VoxelBufferToTexture >( pass
+					, context
+					, graph
+					, m_device
+					, m_voxelConfig );
+				m_voxelToTexture = result.get();
+				return result;
+			} );
+		result.addDependency( previousPass );
+		result.addInputStorageBuffer( { m_voxels->getBuffer(), "Voxels" }
+			, 0u
+			, 0u
+			, m_voxels->getBuffer().getSize() );
+		result.addOutputStorageView( m_firstBounce.wholeViewId
+			, 1u
+			, VK_IMAGE_LAYOUT_UNDEFINED );
+		return result;
+	}
+
+	crg::FramePass & Voxelizer::doCreateVoxelMipGen( crg::FramePass const & previousPass
+		, std::string const & name
+		, crg::ImageViewId const & view )
+	{
+		auto & result = m_graph.createPass( name
+			, [this]( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph )
+			{
+				return std::make_unique< crg::GenerateMipmaps >( pass
+					, context
+					, graph
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			} );
+		result.addDependency( previousPass );
+		result.addTransferInOutView( view );
+		return result;
+	}
+
+	crg::FramePass & Voxelizer::doCreateVoxelSecondaryBounce( crg::FramePass const & previousPass )
+	{
+		auto & result = m_graph.createPass( "VoxelSecondaryBounce"
+			, [this]( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph )
+			{
+				auto result = std::make_unique< VoxelSecondaryBounce >( pass
+					, context
+					, graph
+					, m_device
+					, m_voxelConfig );
+				m_voxelSecondaryBounce = result.get();
+				return result;
+			} );
+		result.addDependency( previousPass );
+		result.addInOutStorageBuffer( { m_voxels->getBuffer(), "Voxels" }
+			, 0u
+			, 0u
+			, m_voxels->getBuffer().getSize() );
+		m_voxelizerUbo.createPassBinding( result
+			, 1u );
+		result.addSampledView( m_firstBounce.wholeViewId
+			, 2u
+			, VK_IMAGE_LAYOUT_UNDEFINED );
+		result.addOutputStorageView( m_secondaryBounce.wholeViewId
+			, 3u
+			, VK_IMAGE_LAYOUT_UNDEFINED );
+		return result;
 	}
 }

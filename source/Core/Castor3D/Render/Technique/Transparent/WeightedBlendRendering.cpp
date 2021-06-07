@@ -69,11 +69,11 @@ namespace castor3d
 	void WeightedBlendRendering::accept( RenderTechniqueVisitor & visitor )
 	{
 		visitor.visit( "Transparent Accumulation"
-			, m_transparentPassResult[WbTexture::eAccumulation].wholeView
+			, m_transparentPassResult[WbTexture::eAccumulation].wholeViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Transparent Revealage"
-			, m_transparentPassResult[WbTexture::eRevealage].wholeView
+			, m_transparentPassResult[WbTexture::eRevealage].wholeViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 		m_transparentPass.accept( visitor );

@@ -90,11 +90,11 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	TransparentPassResult::TransparentPassResult( crg::FrameGraph & graph
+	TransparentPassResult::TransparentPassResult( crg::ResourceHandler & handler
 		, RenderDevice const & device
 		, crg::ImageId const & depthTexture
 		, crg::ImageId const & velocityTexture )
-		: GBufferT< WbTexture >{ graph
+		: GBufferT< WbTexture >{ handler
 			, device
 			, cuT( "WBResult" )
 			, { &depthTexture, nullptr, nullptr, &velocityTexture }

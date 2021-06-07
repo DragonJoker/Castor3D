@@ -57,10 +57,10 @@ namespace castor3d
 				, previousPass
 				, m_device
 				, cuT( "Reflective Shadow Maps" )
-				, crg::ImageViewIdArray{ m_lpResult[LpTexture::eDiffuse].wholeView
-					, m_gpResult[DsTexture::eData1].wholeView }
-				, VkExtent2D{ getExtent( m_lpResult[LpTexture::eDiffuse].wholeView ).width >> 2
-					, getExtent( m_lpResult[LpTexture::eDiffuse].wholeView ).height >> 2 } ) }
+				, crg::ImageViewIdArray{ m_lpResult[LpTexture::eDiffuse].wholeViewId
+					, m_gpResult[DsTexture::eData1].wholeViewId }
+				, VkExtent2D{ getExtent( m_lpResult[LpTexture::eDiffuse].wholeViewId ).width >> 2
+					, getExtent( m_lpResult[LpTexture::eDiffuse].wholeViewId ).height >> 2 } ) }
 		{
 		}
 		/**
@@ -78,8 +78,8 @@ namespace castor3d
 				, m_device
 				, scene.getLightCache()
 				, LtType
-				, VkExtent2D{ getExtent( m_lpResult[LpTexture::eDiffuse].wholeView ).width >> 2
-					, getExtent( m_lpResult[LpTexture::eDiffuse].wholeView ).height >> 2 }
+				, VkExtent2D{ getExtent( m_lpResult[LpTexture::eDiffuse].wholeViewId ).width >> 2
+					, getExtent( m_lpResult[LpTexture::eDiffuse].wholeViewId ).height >> 2 }
 				, m_gpInfoUbo
 				, m_gpResult
 				, m_smResult
@@ -89,8 +89,8 @@ namespace castor3d
 				, m_device
 				, scene.getLightCache()
 				, LtType
-				, VkExtent2D{ getExtent( m_lpResult[LpTexture::eDiffuse].wholeView ).width >> 2
-					, getExtent( m_lpResult[LpTexture::eDiffuse].wholeView ).height >> 2 }
+				, VkExtent2D{ getExtent( m_lpResult[LpTexture::eDiffuse].wholeViewId ).width >> 2
+					, getExtent( m_lpResult[LpTexture::eDiffuse].wholeViewId ).height >> 2 }
 				, m_gpInfoUbo
 				, m_gpResult
 				, m_smResult
@@ -98,7 +98,7 @@ namespace castor3d
 				, m_rsmGiPass->getSamplesSsbo()
 				, m_rsmGiPass->getResult()[0]
 				, m_rsmGiPass->getResult()[1]
-				, m_lpResult[LpTexture::eIndirectDiffuse].wholeView );
+				, m_lpResult[LpTexture::eIndirectDiffuse].wholeViewId );
 			LightPassShadow< LtType >::initialise( scene, gp, sceneUbo, timer );
 		}
 		/**

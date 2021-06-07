@@ -88,7 +88,7 @@ namespace castor3d
 			, m_device
 			, cuT( "Deferred" )
 			, m_size
-			, opaquePassResult[DsTexture::eDepth].wholeView ) }
+			, opaquePassResult[DsTexture::eDepth].wholeViewId ) }
 		, m_ssao{ castor::makeUnique< SsaoPass >( graph
 			, m_device
 			, m_size
@@ -109,7 +109,7 @@ namespace castor3d
 			, llpvResult
 			, vctFirstBounce
 			, vctSecondaryBounce
-			, opaquePassResult[DsTexture::eDepth].wholeView
+			, opaquePassResult[DsTexture::eDepth].wholeViewId
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
 			, lpvConfigUbo
@@ -130,10 +130,10 @@ namespace castor3d
 			, opaquePassResult
 			, *m_ssao
 			, m_subsurfaceScattering->getResult()
-			, m_lightingPass->getResult()[LpTexture::eDiffuse].wholeView
-			, m_lightingPass->getResult()[LpTexture::eSpecular].wholeView
-			, m_lightingPass->getResult()[LpTexture::eIndirectDiffuse].wholeView
-			, m_lightingPass->getResult()[LpTexture::eIndirectSpecular].wholeView
+			, m_lightingPass->getResult()[LpTexture::eDiffuse].wholeViewId
+			, m_lightingPass->getResult()[LpTexture::eSpecular].wholeViewId
+			, m_lightingPass->getResult()[LpTexture::eIndirectDiffuse].wholeViewId
+			, m_lightingPass->getResult()[LpTexture::eIndirectSpecular].wholeViewId
 			, resultTexture
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
@@ -211,23 +211,23 @@ namespace castor3d
 	void DeferredRendering::accept( RenderTechniqueVisitor & visitor )
 	{
 		visitor.visit( "Opaque Data1"
-			, m_opaquePassResult[DsTexture::eData1].wholeView
+			, m_opaquePassResult[DsTexture::eData1].wholeViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Opaque Data2"
-			, m_opaquePassResult[DsTexture::eData2].wholeView
+			, m_opaquePassResult[DsTexture::eData2].wholeViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Opaque Data3"
-			, m_opaquePassResult[DsTexture::eData3].wholeView
+			, m_opaquePassResult[DsTexture::eData3].wholeViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Opaque Data4"
-			, m_opaquePassResult[DsTexture::eData4].wholeView
+			, m_opaquePassResult[DsTexture::eData4].wholeViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Opaque Data5"
-			, m_opaquePassResult[DsTexture::eData5].wholeView
+			, m_opaquePassResult[DsTexture::eData5].wholeViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 

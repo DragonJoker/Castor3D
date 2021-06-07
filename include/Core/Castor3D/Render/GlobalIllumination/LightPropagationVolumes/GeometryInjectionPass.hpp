@@ -94,7 +94,7 @@ namespace castor3d
 		 */
 		C3D_API void accept( PipelineVisitorBase & visitor );
 
-		static crg::ImageId createResult( crg::FrameGraph & graph
+		static crg::ImageId createResult( crg::ResourceHandler & handler
 			, RenderDevice const & device
 			, castor::String const & prefix
 			, uint32_t index

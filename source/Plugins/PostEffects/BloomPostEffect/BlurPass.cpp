@@ -185,7 +185,7 @@ namespace Bloom
 			} ) }
 	{
 		pass.addDependency( previousPass );
-		blurUbo.createPassBinding( pass, GaussCfgUboIdx );
+		blurUbo.createPassBinding( pass, std::string{ "BlurCfg" } + ( isVertical ? "Y" : "X" ), GaussCfgUboIdx );
 		pass.addSampledView( srcView
 			, DifImgIdx
 			, {}

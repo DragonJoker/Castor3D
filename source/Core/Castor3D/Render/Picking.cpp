@@ -160,14 +160,15 @@ namespace castor3d
 
 	uint32_t const Picking::UboBindingPoint = 7u;
 
-	Picking::Picking( RenderDevice const & device
+	Picking::Picking( crg::ResourceHandler & handler
+		, RenderDevice const & device
 		, castor::Size const & size
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler )
 		: castor::OwnedBy< Engine >{ *device.renderSystem.getEngine() }
 		, m_device{ device }
 		, m_size{ size }
-		, m_graph{ "PickingGraph" }
+		, m_graph{ handler, "PickingGraph" }
 		, m_colourImage{ m_graph.createImage( { "PickingColour"
 			, 0u
 			, VK_IMAGE_TYPE_2D
@@ -227,10 +228,10 @@ namespace castor3d
 			, false
 			, device->vkGetDeviceProcAddr } );
 		m_colourTexture = std::make_unique< ashes::Image >( *m_device
-			, m_runnable->getImage( m_colourImage )
+			, m_runnable->createImage( m_colourImage )
 			, m_colourImage.data->info );
 		m_colourView = ashes::ImageView{ m_colourImageView.data->info
-			, m_runnable->getImageView( m_colourImageView )
+			, m_runnable->createImageView( m_colourImageView )
 			, m_colourTexture.get() };
 	}
 

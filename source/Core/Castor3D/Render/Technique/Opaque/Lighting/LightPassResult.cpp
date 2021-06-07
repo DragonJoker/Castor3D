@@ -96,10 +96,10 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	LightPassResult::LightPassResult( crg::FrameGraph & graph
+	LightPassResult::LightPassResult( crg::ResourceHandler & handler
 		, RenderDevice const & device
 		, castor::Size const & size )
-		: GBufferT< LpTexture >{ graph
+		: GBufferT< LpTexture >{ handler
 			, device
 			, cuT( "LPResult" )
 			, { nullptr, nullptr, nullptr, nullptr, nullptr }

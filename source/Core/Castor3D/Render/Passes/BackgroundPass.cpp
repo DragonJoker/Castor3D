@@ -222,12 +222,12 @@ namespace castor3d
 
 		for ( auto & uniform : m_pass.buffers )
 		{
-			m_descriptorBindings.push_back( { uniform->dstBinding
-				, uniform->descriptorType
-				, uniform->descriptorCount
+			m_descriptorBindings.push_back( { uniform.binding
+				, uniform.getDescriptorType()
+				, 1u
 				, shaderStage
 				, nullptr } );
-			m_descriptorWrites.push_back( uniform );
+			m_descriptorWrites.push_back( uniform.getBufferWrite() );
 		}
 
 		m_descriptorBindings.push_back( { SceneBackground::SkyBoxImgIdx

@@ -53,7 +53,7 @@ namespace light_streaks
 			, uint32_t binding
 			, uint32_t index )const
 		{
-			return m_ubo[index].createPassBinding( pass, binding );
+			return m_ubo[index].createPassBinding( pass, "KawaseCfg", binding );
 		}
 
 	public:

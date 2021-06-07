@@ -955,10 +955,10 @@ namespace smaa
 					auto staging = m_device->createStagingTexture( format
 						, VkExtent2D{ dim.width, dim.height } );
 					ashes::ImagePtr areaImg = std::make_unique< ashes::Image >( *m_device
-						, graph.getImage( m_areaImg )
+						, graph.createImage( m_areaImg )
 						, m_areaImg.data->info );
 					ashes::ImageView areaView{ ashes::ImageViewCreateInfo{ *areaImg, m_areaView.data->info }
-						, graph.getImageView( m_areaView )
+						, graph.createImageView( m_areaView )
 						, areaImg.get() };
 					staging->uploadTextureData( *m_device.graphicsQueue
 						, *m_device.graphicsCommandPool
@@ -979,10 +979,10 @@ namespace smaa
 					auto staging = m_device->createStagingTexture( format
 						, VkExtent2D{ dim.width, dim.height } );
 					ashes::ImagePtr searchImg = std::make_unique< ashes::Image >( *m_device
-						, graph.getImage( m_searchImg )
+						, graph.createImage( m_searchImg )
 						, m_searchImg.data->info );
 					ashes::ImageView searchView{ ashes::ImageViewCreateInfo{ *searchImg, m_searchView.data->info }
-						, graph.getImageView( m_searchView )
+						, graph.createImageView( m_searchView )
 						, searchImg.get() };
 					staging->uploadTextureData( *m_device.graphicsQueue
 						, *m_device.graphicsCommandPool
@@ -1019,7 +1019,9 @@ namespace smaa
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE };
 		m_pass.addDependency( previousPass );
-		m_ubo.createPassBinding( m_pass, SubsampleCfgIdx );
+		m_ubo.createPassBinding( m_pass
+			, "SubsampleCfg"
+			, SubsampleCfgIdx );
 		m_pass.addSampledView( m_areaView
 			, AreaTexIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL

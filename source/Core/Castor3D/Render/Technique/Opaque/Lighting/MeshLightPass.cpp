@@ -302,7 +302,7 @@ namespace castor3d
 			, 0u ) ) }
 		, m_stencilPass{ m_engine
 			, getName()
-			, lpConfig.lpResult[LpTexture::eDepth].wholeView
+			, lpConfig.lpResult[LpTexture::eDepth].wholeViewId
 			, m_matrixUbo
 			, m_modelUbo }
 		, m_type{ type }

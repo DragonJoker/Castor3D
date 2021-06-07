@@ -41,7 +41,8 @@ namespace castor3d
 		 *\param[in]	engine	Le moteur.
 		 *\param[in]	node	Le noeud de scène.
 		 */
-		C3D_API EnvironmentMap( RenderDevice const & device
+		C3D_API EnvironmentMap( crg::ResourceHandler & handler
+			, RenderDevice const & device
 			, SceneNode & node );
 		/**
 		 *\~english
@@ -98,12 +99,12 @@ namespace castor3d
 
 		crg::ImageViewId getColourViewId( CubeMapFace face )const
 		{
-			return m_environmentMap.subViews[uint32_t( face )];
+			return m_environmentMap.subViewsId[uint32_t( face )];
 		}
 
 		crg::ImageViewId getDepthViewId( CubeMapFace face )const
 		{
-			return m_depthBuffer.subViews[uint32_t( face )];
+			return m_depthBuffer.subViewsId[uint32_t( face )];
 		}
 
 		RenderPassTimer & getTimer()const
