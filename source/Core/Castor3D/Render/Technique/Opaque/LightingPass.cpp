@@ -740,7 +740,7 @@ namespace castor3d
 		, m_llpvConfigUbo{ llpvConfigUbo }
 		, m_vctConfigUbo{ vctConfigUbo }
 		, m_size{ size }
-		, m_result{ m_graph, device, size }
+		, m_result{ scene.getOwner()->getGraphResourceHandler(), device, size }
 		, m_timer{ std::make_shared< RenderPassTimer >( device, cuT( "Opaque" ), cuT( "Lighting pass" ) ) }
 		, m_srcDepth{ depthView }
 	{
@@ -878,19 +878,19 @@ namespace castor3d
 	void LightingPass::accept( PipelineVisitorBase & visitor )
 	{
 		visitor.visit( "Light Diffuse"
-			, m_result[LpTexture::eDiffuse].wholeView
+			, m_result[LpTexture::eDiffuse].wholeViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Light Specular"
-			, m_result[LpTexture::eSpecular].wholeView
+			, m_result[LpTexture::eSpecular].wholeViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Light Indirect Diffuse"
-			, m_result[LpTexture::eIndirectDiffuse].wholeView
+			, m_result[LpTexture::eIndirectDiffuse].wholeViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Light Indirect Specular"
-			, m_result[LpTexture::eIndirectSpecular].wholeView
+			, m_result[LpTexture::eIndirectSpecular].wholeViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 

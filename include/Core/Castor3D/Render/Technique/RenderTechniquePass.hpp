@@ -73,7 +73,7 @@ namespace castor3d
 		 *\~french
 		 *\param[in]	value	Le résultat du premier rebond de VCT.
 		 */
-		RenderTechniquePassDesc & vctFirstBounce( TextureUnit const & value )
+		RenderTechniquePassDesc & vctFirstBounce( Texture const & value )
 		{
 			m_vctFirstBounce = &value;
 			return *this;
@@ -84,7 +84,7 @@ namespace castor3d
 		 *\~french
 		 *\param[in]	value	Le résultat du second rebond de VCT.
 		 */
-		RenderTechniquePassDesc & vctSecondaryBounce( TextureUnit const & value )
+		RenderTechniquePassDesc & vctSecondaryBounce( Texture const & value )
 		{
 			m_vctSecondaryBounce = &value;
 			return *this;
@@ -96,8 +96,8 @@ namespace castor3d
 		LayeredLpvGridConfigUbo const * m_llpvConfigUbo{};
 		VoxelizerUbo const * m_vctConfigUbo{};
 		LightVolumePassResult const * m_lpvResult{};
-		TextureUnit const * m_vctFirstBounce{};
-		TextureUnit const * m_vctSecondaryBounce{};
+		Texture const * m_vctFirstBounce{};
+		Texture const * m_vctSecondaryBounce{};
 	};
 
 	class RenderTechniquePass
@@ -216,8 +216,8 @@ namespace castor3d
 		LayeredLpvGridConfigUbo const * m_llpvConfigUbo;
 		VoxelizerUbo const * m_vctConfigUbo;
 		LightVolumePassResult const * m_lpvResult;
-		TextureUnit const * m_vctFirstBounce;
-		TextureUnit const * m_vctSecondaryBounce;
+		Texture const * m_vctFirstBounce;
+		Texture const * m_vctSecondaryBounce;
 		ashes::SemaphorePtr m_finished;
 	};
 }

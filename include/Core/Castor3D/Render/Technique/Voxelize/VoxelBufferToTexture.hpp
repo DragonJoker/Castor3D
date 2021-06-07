@@ -14,10 +14,20 @@ See LICENSE file in root folder
 #include <ashespp/Pipeline/ComputePipeline.hpp>
 #include <ashespp/Pipeline/PipelineLayout.hpp>
 
+#include <RenderGraph/RunnablePass.hpp>
+
 namespace castor3d
 {
 	class VoxelBufferToTexture
+		: public crg::RunnablePass
 	{
+	public:
+		struct Pipeline
+		{
+			ShaderModule shader;
+			ashes::ComputePipelinePtr pipeline;
+		};
+
 	public:
 		/**
 		 *\~english
@@ -31,57 +41,34 @@ namespace castor3d
 		 *\param[in]	voxels		Le tampon de voxels.
 		 *\param[in]	result		La texture résultante.
 		 */
-		C3D_API VoxelBufferToTexture( RenderDevice const & device
-			, VoxelSceneData const & vctConfig
-			, ashes::Buffer< Voxel > const & voxels
-			, TextureUnit const & result );
-		/**
-		 *\~english
-		 *\brief		Renders nodes.
-		 *\param[in]	device	The GPU device.
-		 *\param[in]	toWait	The semaphore from the previous render pass.
-		 *\~french
-		 *\brief		Dessine les noeuds.
-		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
-		 *\param[in]	device	Le device GPU.
-		 */
-		C3D_API ashes::Semaphore const & render( RenderDevice const & device
-			, ashes::Semaphore const & toWait );
+		C3D_API VoxelBufferToTexture( crg::FramePass const & pass
+			, crg::GraphContext const & context
+			, crg::RunnableGraph & graph
+			, RenderDevice const & device
+			, VoxelSceneData const & vctConfig );
+		C3D_API ~VoxelBufferToTexture();
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
 
 	private:
+		void doInitialise()override;
+		void doRecordInto( VkCommandBuffer commandBuffer
+			, uint32_t index )override;
+		VkPipelineStageFlags doGetSemaphoreWaitFlags()const override;
+		uint32_t doGetPassIndex()const override;
+		bool doIsComputePass()const override;
+
+	private:
 		RenderDevice const & m_device;
 		VoxelSceneData const & m_vctConfig;
-		ashes::Buffer< Voxel > const & m_voxels;
-		TextureUnit const & m_result;
 		RenderPassTimerSPtr m_timer;
 		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
+		std::array< Pipeline, 4u > m_pipelines;
 		ashes::DescriptorSetPoolPtr m_descriptorSetPool;
 		ashes::DescriptorSetPtr m_descriptorSet;
-		struct Pipeline
-		{
-			Pipeline( RenderDevice const & device
-				, ashes::PipelineLayout const & pipelineLayout
-				, ashes::DescriptorSet const & descriptorSet
-				, ashes::Buffer< Voxel > const & voxels
-				, TextureUnit const & result
-				, RenderPassTimer & timer
-				, uint32_t voxelGridSize
-				, bool temporalSmoothing
-				, bool secondaryBounce );
-
-			ShaderModule computeShader;
-			ashes::ComputePipelinePtr pipeline;
-			CommandsSemaphore commands;
-		};
-		std::array< std::unique_ptr< Pipeline >, 4u > m_pipelines;
-
-	private:
-		Pipeline & getPipeline();
 	};
 }
 

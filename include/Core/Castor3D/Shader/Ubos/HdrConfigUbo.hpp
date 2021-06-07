@@ -72,7 +72,7 @@ namespace castor3d
 		void createPassBinding( crg::FramePass & pass
 			, uint32_t binding )const
 		{
-			return m_ubo.createPassBinding( pass, binding );
+			return m_ubo.createPassBinding( pass, "HdrCfg", binding );
 		}
 
 		void createSizedBinding( ashes::DescriptorSet & descriptorSet

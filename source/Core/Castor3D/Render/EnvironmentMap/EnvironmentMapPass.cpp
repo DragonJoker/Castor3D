@@ -130,6 +130,7 @@ namespace castor3d
 		m_matrixUbo.createPassBinding( result
 			, SceneBackground::MtxUboIdx );
 		m_modelUbo.createPassBinding( result
+			, "Model"
 			, SceneBackground::MdlMtxUboIdx );
 		m_hdrConfigUbo.createPassBinding( result
 			, SceneBackground::HdrCfgUboIdx );

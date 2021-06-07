@@ -18,19 +18,100 @@ CU_ImplementCUSmartPtr( castor3d, ShadowMap )
 
 namespace castor3d
 {
-	ShadowMap::ShadowMap( RenderDevice const & device
+	ShadowMap::ShadowMap( crg::ResourceHandler & handler
+		, RenderDevice const & device
 		, Scene & scene
 		, LightType lightType
-		, ShadowMapResult result
+		, VkImageCreateFlags createFlags
+		, castor::Size const & size
+		, uint32_t layerCount
 		, uint32_t count )
 		: OwnedBy< Engine >{ *scene.getEngine() }
 		, m_device{ device }
 		, m_scene{ scene }
-		, m_lightType{ lightType }
 		, m_name{ castor::string::snakeToCamelCase( getName( lightType ) ) + "SM" }
-		, m_result{ std::move( result ) }
+		, m_lightType{ lightType }
+		, m_result{ handler
+			, m_device
+			, m_name
+			, createFlags
+			, size
+			, layerCount }
 		, m_count{ count }
 	{
+		auto context = m_device.makeContext();
+		auto commandBuffer = m_device.graphicsCommandPool->createCommandBuffer();
+		commandBuffer->begin();
+
+		for ( auto & texture : m_result )
+		{
+			texture.image = handler.createImage( context, texture.imageId );
+			VkImageMemoryBarrier transferBarrier{ VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER
+				, nullptr
+				, 0u
+				, VK_ACCESS_TRANSFER_WRITE_BIT
+				, VK_IMAGE_LAYOUT_UNDEFINED
+				, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+				, VK_QUEUE_FAMILY_IGNORED
+				, VK_QUEUE_FAMILY_IGNORED
+				, texture.image
+				, texture.wholeViewId.data->info.subresourceRange };
+			device->vkCmdPipelineBarrier( *commandBuffer
+				, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
+				, VK_PIPELINE_STAGE_TRANSFER_BIT
+				, VK_DEPENDENCY_BY_REGION_BIT
+				, 0u
+				, nullptr
+				, 0u
+				, nullptr
+				, 1u
+				, &transferBarrier );
+
+			if ( ashes::isDepthOrStencilFormat( texture.imageId.data->info.format ) )
+			{
+				device->vkCmdClearDepthStencilImage( *commandBuffer
+					, texture.image
+					, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+					, &defaultClearDepthStencil.depthStencil
+					, 1u
+					, &texture.wholeViewId.data->info.subresourceRange );
+			}
+			else
+			{
+				device->vkCmdClearColorImage( *commandBuffer
+					, texture.image
+					, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+					, &transparentBlackClearColor.color
+					, 1u
+					, &texture.wholeViewId.data->info.subresourceRange );
+			}
+
+			VkImageMemoryBarrier shaderBarrier{ VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER
+				, nullptr
+				, 0u
+				, VK_ACCESS_SHADER_READ_BIT
+				, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, VK_QUEUE_FAMILY_IGNORED
+				, VK_QUEUE_FAMILY_IGNORED
+				, texture.image
+				, texture.wholeViewId.data->info.subresourceRange };
+			device->vkCmdPipelineBarrier( *commandBuffer
+				, VK_PIPELINE_STAGE_TRANSFER_BIT
+				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+				, VK_DEPENDENCY_BY_REGION_BIT
+				, 0u
+				, nullptr
+				, 0u
+				, nullptr
+				, 1u
+				, &shaderBarrier );
+		}
+
+		commandBuffer->end();
+		auto fence = m_device->createFence();
+		m_device.graphicsQueue->submit( *commandBuffer, fence.get() );
+		fence->wait( ashes::MaxTimeout );
 	}
 
 	void ShadowMap::accept( PipelineVisitorBase & visitor )
@@ -39,7 +120,7 @@ namespace castor3d
 		{
 			uint32_t index = 0u;
 
-			for ( auto & view : m_result[SmTexture( i )].subViews )
+			for ( auto & view : m_result[SmTexture( i )].subViewsId )
 			{
 				visitor.visit( m_name + getName( SmTexture( i ) ) + cuT( "L" ) + castor::string::toString( index++ )
 					, view
@@ -49,6 +130,25 @@ namespace castor3d
 					, TextureFactors{}.invert( true ) );
 			}
 		}
+	}
+
+	crg::SemaphoreWait ShadowMap::render( crg::SemaphoreWait const & toWait
+		, uint32_t index )
+	{
+#if !C3D_MeasureShadowMapImpact
+		if ( isUpToDate( index ) )
+		{
+			return toWait;
+		}
+#endif
+
+		if ( !m_runnables[index] )
+		{
+			m_runnables[index] = m_graphs[index]->compile( m_device.makeContext() );
+			m_runnables[index]->record();
+		}
+
+		return m_runnables[index]->run( toWait, *m_device.graphicsQueue );
 	}
 
 	void ShadowMap::setPass( uint32_t index
@@ -85,12 +185,12 @@ namespace castor3d
 	crg::ImageViewId ShadowMap::getView( SmTexture texture
 		, uint32_t index )const
 	{
-		return m_result[texture].wholeView;
+		return m_result[texture].wholeViewId;
 	}
 
 	crg::ImageViewIdArray ShadowMap::getViews( SmTexture texture
 		, uint32_t index )const
 	{
-		return m_result[texture].subViews;
+		return m_result[texture].subViewsId;
 	}
 }

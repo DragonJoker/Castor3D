@@ -33,7 +33,8 @@ namespace castor3d
 		 *\param[in]	matrixUbo	L'UBO de matrices de la scène.
 		 *\param[in]	culler		Le culler pour cette passe.
 		 */
-		C3D_API Picking( RenderDevice const & device
+		C3D_API Picking( crg::ResourceHandler & handler
+			, RenderDevice const & device
 			, castor::Size const & size
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler );
