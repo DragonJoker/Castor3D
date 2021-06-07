@@ -291,10 +291,10 @@ namespace film_grain
 				auto staging = device->createStagingTexture( format
 					, VkExtent2D{ dim.getWidth(), dim.getHeight() } );
 				ashes::ImagePtr noiseImg = std::make_unique< ashes::Image >( *device
-					, graph.getImage( m_noiseImg )
+					, graph.createImage( m_noiseImg )
 					, m_noiseImg.data->info );
 				ashes::ImageView noiseView{ ashes::ImageViewCreateInfo{ *noiseImg, m_noiseView.data->info }
-					, graph.getImageView( m_noiseView )
+					, graph.createImageView( m_noiseView )
 					, noiseImg.get() };
 
 				for ( uint32_t i = 0u; i < NoiseMapCount; ++i )
@@ -321,6 +321,7 @@ namespace film_grain
 			} );
 		m_pass->addDependency( previousPass );
 		m_configUbo.createPassBinding( *m_pass
+			, "FilmCfg"
 			, FilmCfgUboIdx );
 		m_pass->addSampledView( m_noiseView
 			, NoiseTexIdx

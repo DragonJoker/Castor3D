@@ -100,11 +100,11 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	OpaquePassResult::OpaquePassResult( crg::FrameGraph & graph
+	OpaquePassResult::OpaquePassResult( crg::ResourceHandler & handler
 		, RenderDevice const & device
 		, crg::ImageId const & depthTexture
 		, crg::ImageId const & velocityTexture )
-		: GBufferT< DsTexture >{ graph
+		: GBufferT< DsTexture >{ handler
 			, device
 			, cuT( "GPResult" )
 			, { &depthTexture, nullptr, nullptr, nullptr, nullptr, &velocityTexture }

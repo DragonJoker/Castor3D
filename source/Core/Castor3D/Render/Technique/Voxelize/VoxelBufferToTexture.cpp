@@ -20,6 +20,9 @@
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>
 
+#include <RenderGraph/GraphContext.hpp>
+#include <RenderGraph/RunnableGraph.hpp>
+
 CU_ImplementCUSmartPtr( castor3d, VoxelBufferToTexture )
 
 namespace castor3d
@@ -46,17 +49,27 @@ namespace castor3d
 				, std::move( bindings ) );
 		}
 
-		ashes::DescriptorSetPtr createDescriptorSet( ashes::DescriptorSetPool const & pool
-			, ashes::Buffer< Voxel > const & voxels
-			, TextureUnit const & result )
+		ashes::DescriptorSetPtr createDescriptorSet( crg::RunnableGraph & graph
+			, ashes::DescriptorSetPool const & pool
+			, crg::FramePass const & pass )
 		{
-			auto descriptorSet = pool.createDescriptorSet( "VoxelBufferToTexture" );
-			descriptorSet->createBinding( pool.getLayout().getBinding( eVoxels )
-				, voxels
+			auto voxels = pass.buffers.front();
+			auto result = pass.images.front();
+			ashes::WriteDescriptorSetArray writes;
+			auto write = voxels.getBufferWrite();
+			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
+				, write->dstArrayElement
+				, write->descriptorCount
+				, write->descriptorType } );
+			writes.back().bufferInfo = write.bufferInfo;
+			writes.push_back( ashes::WriteDescriptorSet{ result.binding
 				, 0u
-				, voxels.getCount() );
-			descriptorSet->createBinding( pool.getLayout().getBinding( eResult )
-				, result.getTexture()->getDefaultView().getSampledView() );
+				, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
+				, { VkDescriptorImageInfo{ VK_NULL_HANDLE
+					, graph.createImageView( result.view() )
+					, VK_IMAGE_LAYOUT_GENERAL } } } );
+			auto descriptorSet = pool.createDescriptorSet( "VoxelBufferToTexture" );
+			descriptorSet->setBindings( writes );
 			descriptorSet->update();
 			return descriptorSet;
 		}
@@ -69,69 +82,14 @@ namespace castor3d
 		}
 
 		ashes::ComputePipelinePtr createPipeline( RenderDevice const & device
-			, ashes::PipelineLayout const & layout
+			, ashes::PipelineLayout const & pipelineLayout
 			, ShaderModule const & computeShader )
 		{
 			// Initialise the pipeline.
 			return device->createPipeline( "VoxelBufferToTexture"
 				, ashes::ComputePipelineCreateInfo( 0u
 					, makeShaderState( device, computeShader )
-					, layout ) );
-		}
-
-		CommandsSemaphore createCommandBuffer( RenderDevice const & device
-			, ashes::PipelineLayout const & pipelineLayout
-			, ashes::ComputePipeline const & pipeline
-			, ashes::DescriptorSet const & descriptorSet
-			, ashes::BufferBase const & voxels
-			, TextureUnit const & vxResult
-			, RenderPassTimer & timer
-			, uint32_t voxelGridSize
-			, bool temporalSmoothing
-			, bool secondaryBounce )
-		{
-			CommandsSemaphore result{ device, "VoxelBufferToTexture" };
-			auto & cmd = *result.commandBuffer;
-			cmd.begin();
-			timer.beginPass( cmd );
-			cmd.beginDebugBlock( { "Copy voxels to texture"
-				, makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ) } );
-
-			if ( temporalSmoothing )
-			{
-				cmd.memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
-					, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
-					, vxResult.getTexture()->getDefaultView().getSampledView().makeGeneralLayout( VK_IMAGE_LAYOUT_UNDEFINED
-						, VK_ACCESS_SHADER_WRITE_BIT | VK_ACCESS_SHADER_READ_BIT ) );
-			}
-			else
-			{
-				cmd.memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
-					, VK_PIPELINE_STAGE_TRANSFER_BIT
-					, vxResult.getTexture()->getDefaultView().getSampledView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
-				cmd.clear( vxResult.getTexture()->getDefaultView().getSampledView()
-					, transparentBlackClearColor.color );
-				cmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-					, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
-					, vxResult.getTexture()->getDefaultView().getSampledView().makeGeneralLayout( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-						, VK_ACCESS_SHADER_WRITE_BIT ) );
-			}
-
-			cmd.bindPipeline( pipeline );
-			cmd.bindDescriptorSet( descriptorSet
-				, pipelineLayout
-				, VK_PIPELINE_BIND_POINT_COMPUTE );
-			cmd.dispatch( voxelGridSize * voxelGridSize * voxelGridSize / 256, 1u, 1u );
-
-			vxResult.getTexture()->getTexture().generateMipmaps( cmd
-				, VK_IMAGE_LAYOUT_GENERAL
-				, VK_IMAGE_LAYOUT_GENERAL
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-			cmd.endDebugBlock();
-			timer.endPass( cmd );
-			cmd.end();
-
-			return result;
+					, pipelineLayout ) );
 		}
 
 		ShaderPtr createShader( bool temporalSmoothing
@@ -185,79 +143,120 @@ namespace castor3d
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
-	}
 
-	//*********************************************************************************************
+		VoxelBufferToTexture::Pipeline createPipeline( RenderDevice const & device
+			, ashes::PipelineLayout const & pipelineLayout
+			, uint32_t index
+			, uint32_t voxelGridSize )
+		{
+			auto temporalSmoothing = ( ( index >> 0 ) % 2 ) == 1u;
+			VoxelBufferToTexture::Pipeline result{ { VK_SHADER_STAGE_COMPUTE_BIT, "VoxelBufferToTexture", createShader( temporalSmoothing, voxelGridSize ) } };
+			result.pipeline = createPipeline( device, pipelineLayout, result.shader );
+			return result;
+		}
 
-	VoxelBufferToTexture::Pipeline::Pipeline( RenderDevice const & device
-		, ashes::PipelineLayout const & pipelineLayout
-		, ashes::DescriptorSet const & descriptorSet
-		, ashes::Buffer< Voxel > const & voxels
-		, TextureUnit const & result
-		, RenderPassTimer & timer
-		, uint32_t voxelGridSize
-		, bool temporalSmoothing
-		, bool secondaryBounce )
-		: computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, "VoxelBufferToTexture", createShader( temporalSmoothing, voxelGridSize ) }
-		, pipeline{ createPipeline( device, pipelineLayout, computeShader ) }
-		, commands{ createCommandBuffer( device, pipelineLayout, *pipeline, descriptorSet, voxels.getBuffer(), result, timer, voxelGridSize, temporalSmoothing, secondaryBounce ) }
-	{
+		std::array< VoxelBufferToTexture::Pipeline, 4u > createPipelines( RenderDevice const & device
+			, ashes::PipelineLayout const & pipelineLayout
+			, uint32_t voxelGridSize )
+		{
+			return { createPipeline( device, pipelineLayout, 0u, voxelGridSize )
+				, createPipeline( device, pipelineLayout, 1u, voxelGridSize )
+				, createPipeline( device, pipelineLayout, 2u, voxelGridSize )
+				, createPipeline( device, pipelineLayout, 3u, voxelGridSize ) };
+		}
 	}
 	
 	//*********************************************************************************************
 
-	VoxelBufferToTexture::VoxelBufferToTexture( RenderDevice const & device
-		, VoxelSceneData const & vctConfig
-		, ashes::Buffer< Voxel > const & voxels
-		, TextureUnit const & result )
-		: m_device{ device }
+	VoxelBufferToTexture::VoxelBufferToTexture( crg::FramePass const & pass
+		, crg::GraphContext const & context
+		, crg::RunnableGraph & graph
+		, RenderDevice const & device
+		, VoxelSceneData const & vctConfig )
+		: crg::RunnablePass{ pass, context, graph, 2u }
+		, m_device{ device }
 		, m_vctConfig{ vctConfig }
-		, m_voxels{ voxels }
-		, m_result{ result }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_device, "Voxelize", "Buffer To Texture" ) }
 		, m_descriptorSetLayout{ createDescriptorLayout( m_device ) }
 		, m_pipelineLayout{ createPipelineLayout( m_device, *m_descriptorSetLayout ) }
+		, m_pipelines{ createPipelines( device, *m_pipelineLayout, m_vctConfig.gridSize.value() ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
-		, m_descriptorSet{ createDescriptorSet( *m_descriptorSetPool, m_voxels, m_result ) }
+		, m_descriptorSet{ createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass ) }
+	{
+	}
+
+	VoxelBufferToTexture::~VoxelBufferToTexture()
 	{
 	}
 
 	void VoxelBufferToTexture::accept( RenderTechniqueVisitor & visitor )
 	{
-		auto & pipeline = getPipeline();
-		visitor.visit( pipeline.computeShader );
+		visitor.visit( m_pipelines[doGetPassIndex()].shader );
 	}
 
-	ashes::Semaphore const & VoxelBufferToTexture::render( RenderDevice const & device
-		, ashes::Semaphore const & toWait )
+	void VoxelBufferToTexture::doInitialise()
 	{
-		auto result = &toWait;
-		auto timerBlock = m_timer->start();
-		timerBlock->notifyPassRender();
-		auto & pipeline = getPipeline();
-		result = &pipeline.commands.submit( *device.computeQueue, *result );
-		return *result;
 	}
 
-	VoxelBufferToTexture::Pipeline & VoxelBufferToTexture::getPipeline()
+	void VoxelBufferToTexture::doRecordInto( VkCommandBuffer commandBuffer
+		, uint32_t index )
 	{
-		uint32_t index = ( m_vctConfig.enableSecondaryBounce ? 2u : 0u )
-			+ ( m_vctConfig.enableTemporalSmoothing ? 1u : 0u );
+		auto temporalSmoothing = ( ( index >> 0 ) % 2 ) == 1u;
+		auto voxelGridSize = m_vctConfig.gridSize.value();
+		VkDescriptorSet descriptorSet = *m_descriptorSet;
+		auto view = m_pass.images.front().view();
+		auto transition = doGetTransition( index, view );
+		auto image = m_graph.createImage( view.data->image );
 
-		if ( !m_pipelines[index] )
+		if ( !temporalSmoothing )
 		{
-			m_pipelines[index] = std::make_unique< Pipeline >( m_device
-				, *m_pipelineLayout
-				, *m_descriptorSet
-				, m_voxels
-				, m_result
-				, *m_timer
-				, m_vctConfig.gridSize.value()
-				, m_vctConfig.enableTemporalSmoothing
-				, m_vctConfig.enableSecondaryBounce );
+			m_graph.memoryBarrier( commandBuffer
+				, view
+				, transition.needed
+				, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+					, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
+					, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) } );
+			m_context.vkCmdClearColorImage( commandBuffer
+				, image
+				, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+				, &transparentBlackClearColor.color
+				, 1
+				, &view.data->info.subresourceRange );
+			m_graph.memoryBarrier( commandBuffer
+				, view
+				, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+					, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
+					, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) }
+				, transition.needed );
 		}
 
-		return *m_pipelines[index];
+		m_context.vkCmdBindPipeline( commandBuffer
+			, VK_PIPELINE_BIND_POINT_COMPUTE
+			, *m_pipelines[doGetPassIndex()].pipeline );
+		m_context.vkCmdBindDescriptorSets( commandBuffer
+			, VK_PIPELINE_BIND_POINT_COMPUTE
+			, *m_pipelineLayout
+			, 0u
+			, 1u
+			, &descriptorSet
+			, 0u
+			, nullptr );
+		m_context.vkCmdDispatch( commandBuffer, voxelGridSize * voxelGridSize * voxelGridSize / 256, 1u, 1u );
+	}
+
+	VkPipelineStageFlags VoxelBufferToTexture::doGetSemaphoreWaitFlags()const
+	{
+		return VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
+	}
+
+	uint32_t VoxelBufferToTexture::doGetPassIndex()const
+	{
+		return ( m_vctConfig.enableTemporalSmoothing ? 1u : 0u );
+	}
+
+	bool VoxelBufferToTexture::doIsComputePass()const
+	{
+		return true;
 	}
 
 	//*********************************************************************************************

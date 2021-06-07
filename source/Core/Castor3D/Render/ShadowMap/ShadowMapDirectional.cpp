@@ -36,8 +36,9 @@ namespace castor3d
 {
 	namespace
 	{
-		std::vector< ShadowMap::PassData > createPasses( crg::FrameGraph & graph
-			, crg::FramePass const *& previousPass
+		std::vector< ShadowMap::PassData > createPasses( crg::ResourceHandler & handler
+			, std::vector< std::unique_ptr< crg::FrameGraph > > & graphs
+			, std::vector< crg::RunnableGraphPtr > & runnables
 			, std::vector< std::unique_ptr< GaussianBlur > > & blurs
 			, crg::ImageViewId intermediate
 			, RenderDevice const & device
@@ -111,17 +112,16 @@ namespace castor3d
 			for ( uint32_t cascade = 0u; cascade < cascadeCount; ++cascade )
 			{
 				std::string debugName = "DirectionalSMC" + std::to_string( cascade + 1u );
-				ShadowMap::PassData passData
-				{
-					std::make_unique< MatrixUbo >( device ),
-					std::make_shared< Camera >( debugName
+				graphs.push_back( std::make_unique< crg::FrameGraph >( handler, debugName ) );
+				auto & graph = *graphs.back();
+				ShadowMap::PassData passData{ std::make_unique< MatrixUbo >( device )
+					, std::make_shared< Camera >( debugName
 						, scene
 						, *scene.getCameraRootNode()
 						, viewport
-						, true ),
-					nullptr,
-					nullptr,
-				};
+						, true )
+					, nullptr
+					, nullptr };
 				passData.culler = std::make_unique< FrustumCuller >( scene, *passData.camera );
 				auto index = uint32_t( result.size() );
 				auto & matrixUbo = *passData.matrixUbo;
@@ -142,42 +142,41 @@ namespace castor3d
 						shadowMap.setPass( index, result.get() );
 						return result;
 					} );
-				pass.addDependency( *previousPass );
-				previousPass = &pass;
+				auto previousPass = &pass;
 
 				if ( cascadeCount == 1u )
 				{
-					pass.addOutputDepthView( depth.wholeView, getClearValue( SmTexture::eDepth ) );
-					pass.addOutputColourView( linear.wholeView, getClearValue( SmTexture::eNormalLinear ) );
-					pass.addOutputColourView( variance.wholeView, getClearValue( SmTexture::eVariance ) );
-					pass.addOutputColourView( position.wholeView, getClearValue( SmTexture::ePosition ) );
-					pass.addOutputColourView( flux.wholeView, getClearValue( SmTexture::eFlux ) );
+					pass.addOutputDepthView( depth.wholeViewId, getClearValue( SmTexture::eDepth ) );
+					pass.addOutputColourView( linear.wholeViewId, getClearValue( SmTexture::eNormalLinear ) );
+					pass.addOutputColourView( variance.wholeViewId, getClearValue( SmTexture::eVariance ) );
+					pass.addOutputColourView( position.wholeViewId, getClearValue( SmTexture::ePosition ) );
+					pass.addOutputColourView( flux.wholeViewId, getClearValue( SmTexture::eFlux ) );
 
 					blurs.push_back( std::make_unique< GaussianBlur >( graph
 						, *previousPass
 						, device
 						, debugName
-						, variance.wholeView
+						, variance.wholeViewId
 						, 5u ) );
 				}
 				else
 				{
-					pass.addOutputDepthView( depth.subViews[cascade], getClearValue( SmTexture::eDepth ) );
-					pass.addOutputColourView( linear.subViews[cascade], getClearValue( SmTexture::eNormalLinear ) );
-					pass.addOutputColourView( variance.subViews[cascade], getClearValue( SmTexture::eVariance ) );
-					pass.addOutputColourView( position.subViews[cascade], getClearValue( SmTexture::ePosition ) );
-					pass.addOutputColourView( flux.subViews[cascade], getClearValue( SmTexture::eFlux ) );
+					pass.addOutputDepthView( depth.subViewsId[cascade], getClearValue( SmTexture::eDepth ) );
+					pass.addOutputColourView( linear.subViewsId[cascade], getClearValue( SmTexture::eNormalLinear ) );
+					pass.addOutputColourView( variance.subViewsId[cascade], getClearValue( SmTexture::eVariance ) );
+					pass.addOutputColourView( position.subViewsId[cascade], getClearValue( SmTexture::ePosition ) );
+					pass.addOutputColourView( flux.subViewsId[cascade], getClearValue( SmTexture::eFlux ) );
 
 					blurs.push_back( std::make_unique< GaussianBlur >( graph
 						, *previousPass
 						, device
 						, debugName
-						, variance.subViews[cascade]
+						, variance.subViewsId[cascade]
 						, intermediate
 						, 5u ) );
 				}
 
-				previousPass = &blurs.back()->getLastPass();
+				runnables.push_back( nullptr );
 				result.emplace_back( std::move( passData ) );
 			}
 
@@ -187,33 +186,30 @@ namespace castor3d
 		}
 	}
 
-	ShadowMapDirectional::ShadowMapDirectional( crg::FrameGraph & graph
-		, crg::FramePass const & previousPass
+	ShadowMapDirectional::ShadowMapDirectional( crg::ResourceHandler & handler
 		, RenderDevice const & device
 		, Scene & scene )
-		: ShadowMap{ device
+		: ShadowMap{ handler
+			, device
 			, scene
 			, LightType::eDirectional
-			, ShadowMapResult{ graph
-				, device
-				, cuT( "Directional" )
-				, 0u
+			, 0u
 #if C3D_UseTiledDirectionalShadowMap
-				, { ShadowMapPassDirectional::TileSize * ShadowMapPassDirectional::TileCountX
-					, ShadowMapPassDirectional::TileSize * ShadowMapPassDirectional::TileCountY }
-				, 1u }
+			, { ShadowMapPassDirectional::TileSize * ShadowMapPassDirectional::TileCountX
+				, ShadowMapPassDirectional::TileSize * ShadowMapPassDirectional::TileCountY }
+			, 1u
 #else
-				, { ShadowMapPassDirectional::TileSize, ShadowMapPassDirectional::TileSize }
-				, scene.getDirectionalShadowCascades() }
+			, { ShadowMapPassDirectional::TileSize, ShadowMapPassDirectional::TileSize }
+			, scene.getDirectionalShadowCascades()
 #endif
 			, 1u }
-		, m_blurIntermediate{ graph.createImage( crg::ImageData{ "DirectionalGB"
+		, m_blurIntermediate{ handler.createImageId( crg::ImageData{ "DirectionalGB"
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, getFormat( SmTexture::eVariance )
 			, m_result.begin()->getExtent()
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT ) } ) }
-		, m_blurIntermediateView{ graph.createView( crg::ImageViewData{ m_blurIntermediate.data->name
+		, m_blurIntermediateView{ handler.createViewId( crg::ImageViewData{ m_blurIntermediate.data->name
 			, m_blurIntermediate
 			, 0u
 			, VK_IMAGE_VIEW_TYPE_2D
@@ -221,9 +217,9 @@ namespace castor3d
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
 		, m_cascades{ scene.getDirectionalShadowCascades() }
 	{
-		m_lastPass = &previousPass;
-		m_passes = createPasses( graph
-			, m_lastPass
+		m_passes = createPasses( handler
+			, m_graphs
+			, m_runnables
 			, m_blurs
 			, m_blurIntermediateView
 			, device

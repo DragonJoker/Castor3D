@@ -836,7 +836,8 @@ namespace castor3d
 	void RenderWindow::doCreatePickingPass()
 	{
 		auto & target = *getRenderTarget();
-		m_picking = std::make_shared< Picking >( m_device
+		m_picking = std::make_shared< Picking >( getOwner()->getGraphResourceHandler()
+			, m_device
 			, m_size
 			, target.getTechnique()->getMatrixUbo()
 			, target.getCuller() );

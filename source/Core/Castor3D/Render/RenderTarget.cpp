@@ -95,7 +95,7 @@ namespace castor3d
 		, m_objectsFrameBuffer{ *this }
 		, m_overlaysFrameBuffer{ *this }
 		, m_combinedFrameBuffer{ *this }
-		, m_graph{ m_name }
+		, m_graph{ getOwner()->getGraphResourceHandler(), m_name }
 		, m_velocityImg{ m_graph.createImage( crg::ImageData{ "Velocity"
 			, 0u
 			, VK_IMAGE_TYPE_2D
@@ -252,15 +252,9 @@ namespace castor3d
 			if ( m_initialised )
 			{
 				m_combinePass.addDependency( *previousPass );
-				m_runnable = m_graph.compile( crg::GraphContext{ *device
-						, VK_NULL_HANDLE
-						, device->getAllocationCallbacks()
-						, device->getMemoryProperties()
-						, device->getProperties()
-						, false
-						, device->vkGetDeviceProcAddr } );
-				auto colourImage = m_runnable->getImage( m_objectsImg );
-				auto colourView = m_runnable->getImageView( m_objectsView );
+				m_runnable = m_graph.compile( device.makeContext() );
+				auto colourImage = m_runnable->createImage( m_objectsImg );
+				auto colourView = m_runnable->createImageView( m_objectsView );
 				auto image = std::make_unique< ashes::Image >( *device
 					, colourImage
 					, ashes::ImageCreateInfo{ m_objectsView.data->image.data->info } );
@@ -271,27 +265,27 @@ namespace castor3d
 					, std::move( image )
 					, view
 					, *m_renderPass );
-				auto overlaysImage = m_runnable->getImage( m_overlaysImg );
-				auto overlaysView = m_runnable->getImageView( m_overlaysView );
+				auto overlaysImage = m_runnable->createImage( m_overlaysImg );
+				auto overlaysView = m_runnable->createImageView( m_overlaysView );
 				image = std::make_unique< ashes::Image >( *device
 					, overlaysImage
 					, ashes::ImageCreateInfo{ m_overlaysView.data->image.data->info } );
 				view = ashes::ImageView{ ashes::ImageViewCreateInfo{ overlaysImage, m_overlaysView.data->info }
 					, overlaysView
 					, image.get() };
-				auto velocityImage = m_runnable->getImage( m_velocityImg );
+				auto velocityImage = m_runnable->createImage( m_velocityImg );
 				m_velocityImage = std::make_unique< ashes::Image >( *device
 					, velocityImage
 					, ashes::ImageCreateInfo{ m_velocityImg.data->info } );
 				m_velocityImageView = ashes::ImageView{ ashes::ImageViewCreateInfo{ velocityImage, m_velocityView.data->info }
-					, m_runnable->getImageView( m_velocityView )
+					, m_runnable->createImageView( m_velocityView )
 					, image.get() };
 				m_overlaysFrameBuffer.initialise( device
 					, std::move( image )
 					, view
 					, *m_renderPass );
-				auto combineImage = m_runnable->getImage( m_combinedImg );
-				auto combineView = m_runnable->getImageView( m_combinedView );
+				auto combineImage = m_runnable->createImage( m_combinedImg );
+				auto combineView = m_runnable->createImageView( m_combinedView );
 				image = std::make_unique< ashes::Image >( *device
 					, combineImage
 					, ashes::ImageCreateInfo{ m_combinedView.data->image.data->info } );

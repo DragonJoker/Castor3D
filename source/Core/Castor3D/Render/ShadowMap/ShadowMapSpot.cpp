@@ -41,8 +41,9 @@ namespace castor3d
 {
 	namespace
 	{
-		std::vector< ShadowMap::PassData > createPasses( crg::FrameGraph & graph
-			, crg::FramePass const *& previousPass
+		std::vector< ShadowMap::PassData > createPasses( crg::ResourceHandler & handler
+			, std::vector< std::unique_ptr< crg::FrameGraph > > & graphs
+			, std::vector< crg::RunnableGraphPtr > & runnables
 			, std::vector< std::unique_ptr< GaussianBlur > > & blurs
 			, crg::ImageViewId intermediate
 			, RenderDevice const & device
@@ -63,16 +64,15 @@ namespace castor3d
 			for ( auto i = 0u; i < shader::getSpotShadowMapCount(); ++i )
 			{
 				std::string debugName = "SpotSM" + std::to_string( i );
-				ShadowMap::PassData passData
-				{
-					std::make_unique< MatrixUbo >( device ),
-					std::make_shared< Camera >( cuT( "ShadowMapSpot" )
+				graphs.push_back( std::make_unique< crg::FrameGraph >( handler, debugName ) );
+				auto & graph = *graphs.back();
+				ShadowMap::PassData passData{ std::make_unique< MatrixUbo >( device )
+					, std::make_shared< Camera >( cuT( "ShadowMapSpot" )
 						, scene
 						, *scene.getCameraRootNode()
-						, std::move( viewport ) ),
-					nullptr,
-					nullptr,
-				};
+						, std::move( viewport ) )
+					, nullptr
+					, nullptr };
 				passData.culler = std::make_unique< FrustumCuller >( scene, *passData.camera );
 				auto index = uint32_t( result.size() );
 				auto & matrixUbo = *passData.matrixUbo;
@@ -93,59 +93,56 @@ namespace castor3d
 						shadowMap.setPass( index, result.get() );
 						return result;
 					} );
-				pass.addDependency( *previousPass );
-				previousPass = &pass;
-				pass.addOutputDepthView( depth.subViews[i], getClearValue( SmTexture::eDepth ) );
-				pass.addOutputColourView( linear.subViews[i], getClearValue( SmTexture::eNormalLinear ) );
-				pass.addOutputColourView( variance.subViews[i], getClearValue( SmTexture::eVariance ) );
-				pass.addOutputColourView( position.subViews[i], getClearValue( SmTexture::ePosition ) );
-				pass.addOutputColourView( flux.subViews[i], getClearValue( SmTexture::eFlux ) );
-				result.emplace_back( std::move( passData ) );
+				auto previousPass = &pass;
+				pass.addOutputDepthView( depth.subViewsId[i], getClearValue( SmTexture::eDepth ) );
+				pass.addOutputColourView( linear.subViewsId[i], getClearValue( SmTexture::eNormalLinear ) );
+				pass.addOutputColourView( variance.subViewsId[i], getClearValue( SmTexture::eVariance ) );
+				pass.addOutputColourView( position.subViewsId[i], getClearValue( SmTexture::ePosition ) );
+				pass.addOutputColourView( flux.subViewsId[i], getClearValue( SmTexture::eFlux ) );
 
 				blurs.push_back( std::make_unique< GaussianBlur >( graph
 					, *previousPass
 					, device
 					, debugName
-					, variance.subViews[i]
+					, variance.subViewsId[i]
 					, intermediate
 					, 5u ) );
-				previousPass = &blurs.back()->getLastPass();
+
+				runnables.push_back( nullptr );
+				result.emplace_back( std::move( passData ) );
 			}
 
 			return result;
 		}
 	}
 
-	ShadowMapSpot::ShadowMapSpot( crg::FrameGraph & graph
-		, crg::FramePass const & previousPass
+	ShadowMapSpot::ShadowMapSpot( crg::ResourceHandler & handler
 		, RenderDevice const & device
 		, Scene & scene )
-		: ShadowMap{ device
+		: ShadowMap{ handler
+			, device
 			, scene
 			, LightType::eSpot
-			, ShadowMapResult{ graph
-				, device
-				, cuT( "Spot" )
-				, 0u
-				, Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize }
-				, shader::getSpotShadowMapCount() }
+			, 0u
+			, Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize }
+			, shader::getSpotShadowMapCount()
 			, shader::getSpotShadowMapCount() }
-		, m_blurIntermediate{ graph.createImage( crg::ImageData{ "SpotGB"
+		, m_blurIntermediate{ handler.createImageId( crg::ImageData{ "SpotGB"
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, getFormat( SmTexture::eVariance )
 			, m_result.begin()->getExtent()
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT ) } ) }
-		, m_blurIntermediateView{ graph.createView( crg::ImageViewData{ m_blurIntermediate.data->name
+		, m_blurIntermediateView{ handler.createViewId( crg::ImageViewData{ m_blurIntermediate.data->name
 			, m_blurIntermediate
 			, 0u
 			, VK_IMAGE_VIEW_TYPE_2D
 			, getFormat( m_blurIntermediate )
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
 	{
-		m_lastPass = &previousPass;
-		m_passes = createPasses( graph
-			, m_lastPass
+		m_passes = createPasses( handler
+			, m_graphs
+			, m_runnables
 			, m_blurs
 			, m_blurIntermediateView
 			, device

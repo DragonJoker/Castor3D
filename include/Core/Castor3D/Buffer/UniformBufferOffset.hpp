@@ -84,9 +84,10 @@ namespace castor3d
 		}
 
 		void createPassBinding( crg::FramePass & pass
+			, std::string const & name
 			, uint32_t binding )const
 		{
-			pass.addUniformBuffer( getBuffer()
+			pass.addUniformBuffer( { getBuffer(), name }
 				, binding
 				, getByteOffset()
 				, getByteRange() );

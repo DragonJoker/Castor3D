@@ -182,6 +182,7 @@ namespace grayscale
 			} );
 		m_pass->addDependency( previousPass );
 		m_configUbo.createPassBinding( *m_pass
+			, "GrayCfg"
 			, GrayCfgUboIdx );
 		m_pass->addSampledView( *m_target
 			, ColorTexIdx

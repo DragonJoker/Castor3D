@@ -12,6 +12,8 @@ See LICENSE file in root folder
 #include <ashespp/Command/CommandPool.hpp>
 #include <ashespp/Sync/Queue.hpp>
 
+#include <RenderGraph/FrameGraphPrerequisites.hpp>
+
 #include <array>
 #include <vector>
 
@@ -48,6 +50,7 @@ namespace castor3d
 		C3D_API VkFormat selectSuitableDepthStencilFormat( VkFormatFeatureFlags requiredFeatures )const;
 		C3D_API VkFormat selectSuitableFormat( std::vector< VkFormat > const & formats
 			, VkFormatFeatureFlags requiredFeatures )const;
+		C3D_API crg::GraphContext makeContext()const;
 
 		ashes::Device const * operator->()const
 		{
