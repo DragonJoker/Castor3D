@@ -394,7 +394,7 @@ namespace castor3d
 					} );
 				passX.addDependency( *m_lastPass );
 				m_lastPass = &passX;
-				m_blurUbo.createPassBinding( passX, GaussCfgIdx );
+				m_blurUbo.createPassBinding( passX, "BlurCfgX", GaussCfgIdx );
 				passX.addSampledView( input, DifImgIdx );
 				passX.addOutputColourView( m_intermediateView );
 			}
@@ -415,9 +415,11 @@ namespace castor3d
 					} );
 				passY.addDependency( *m_lastPass );
 				m_lastPass = &passY;
-				m_blurUbo.createPassBinding( passY, GaussCfgIdx );
+				m_blurUbo.createPassBinding( passY, "BlurCfgY", GaussCfgIdx );
 				passY.addSampledView( m_intermediateView, DifImgIdx );
-				passY.addOutputColourView( input );
+				passY.addOutputColourView( input
+					, {}
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			}
 		}
 	}
@@ -445,12 +447,12 @@ namespace castor3d
 		, crg::ImageViewId const & view
 		, uint32_t kernelSize )
 		: GaussianBlur{ graph
-		, previousPass
-		, device
-		, prefix
-		, createViews( graph, view )
-		, createIntermediate( graph, prefix, getFormat( view ), getExtent( view ), getMipLevels( view ) )
-		, kernelSize }
+			, previousPass
+			, device
+			, prefix
+			, createViews( graph, view )
+			, createIntermediate( graph, prefix, getFormat( view ), getExtent( view ), getMipLevels( view ) )
+			, kernelSize }
 	{
 	}
 
@@ -462,12 +464,12 @@ namespace castor3d
 		, crg::ImageViewId const & intermediateView
 		, uint32_t kernelSize )
 		: GaussianBlur{ graph
-		, previousPass
-		, device
-		, prefix
-		, createViews( graph, view )
-		, intermediateView
-		, kernelSize }
+			, previousPass
+			, device
+			, prefix
+			, createViews( graph, view )
+			, intermediateView
+			, kernelSize }
 	{
 	}
 

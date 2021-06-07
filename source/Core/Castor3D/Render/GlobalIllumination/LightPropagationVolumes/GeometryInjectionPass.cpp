@@ -864,13 +864,13 @@ namespace castor3d
 		visitor.visit( m_pixelShader );
 	}
 
-	crg::ImageId GeometryInjectionPass::createResult( crg::FrameGraph & graph
+	crg::ImageId GeometryInjectionPass::createResult( crg::ResourceHandler & handler
 		, RenderDevice const & device
 		, castor::String const & prefix
 		, uint32_t index
 		, uint32_t gridSize )
 	{
-		return graph.createImage( crg::ImageData{ prefix + cuT( "GeometryInjectionResult" ) + string::toString( index )
+		return handler.createImageId( crg::ImageData{ prefix + cuT( "GeometryInjectionResult" ) + string::toString( index )
 			, VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT
 			, VK_IMAGE_TYPE_3D
 			, VK_FORMAT_R16G16B16A16_SFLOAT

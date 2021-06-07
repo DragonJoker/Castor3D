@@ -7,6 +7,8 @@
 
 #include <ashespp/Core/Instance.hpp>
 
+#include <RenderGraph/GraphContext.hpp>
+
 CU_ImplementCUSmartPtr( castor3d, RenderDevice )
 
 namespace castor3d
@@ -151,6 +153,7 @@ namespace castor3d
 
 	RenderDevice::~RenderDevice()
 	{
+		renderSystem.getEngine()->getGraphResourceHandler().clear( makeContext() );
 		uboPools.reset();
 		bufferPool.reset();
 		queueFamilies.clear();
@@ -208,5 +211,16 @@ namespace castor3d
 		}
 
 		return *it;
+	}
+
+	crg::GraphContext RenderDevice::makeContext()const
+	{
+		return { *device
+			, VK_NULL_HANDLE
+			, device->getAllocationCallbacks()
+			, device->getMemoryProperties()
+			, device->getProperties()
+			, false
+			, device->vkGetDeviceProcAddr };
 	}
 }

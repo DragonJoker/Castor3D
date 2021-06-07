@@ -44,9 +44,9 @@ namespace light_streaks
 						, crg::rq::Texcoord{}
 						, renderSize
 						, VkOffset2D{} } }
-				, m_viewDesc{ pass.colourInOuts.front().view() }
+				, m_viewDesc{ pass.images.back().view() }
 				, m_imageDesc{ m_viewDesc.data->image }
-				, m_image{ graph.getImage( m_imageDesc ) }
+				, m_image{ graph.createImage( m_imageDesc ) }
 			{
 				auto const imageViewType = VkImageViewType( m_imageDesc.data->info.imageType );
 				crg::ImageViewData viewData{ m_imageDesc.data->name
@@ -72,7 +72,7 @@ namespace light_streaks
 				crg::RenderQuad::doRecordInto( commandBuffer, index );
 				auto const imageViewType = VkImageViewType( m_imageDesc.data->info.imageType );
 				auto const aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-				auto transition = doGetTransition( m_viewDesc );
+				auto transition = doGetTransition( index, m_viewDesc );
 
 				VkImageCopy imageCopy{};
 
@@ -91,8 +91,10 @@ namespace light_streaks
 				// Transition source layer to transfer src layout
 				m_graph.memoryBarrier( commandBuffer
 					, m_viewDesc
-					, transition.toLayout
-					, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL );
+					, transition.to
+					, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+						, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
+						, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) } );
 
 				for ( auto & dst : m_copyDestinations )
 				{
@@ -101,8 +103,12 @@ namespace light_streaks
 					// Transition destination layer to transfer dst layout
 					m_graph.memoryBarrier( commandBuffer
 						, dst
-						, VK_IMAGE_LAYOUT_UNDEFINED
-						, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL );
+						, { VK_IMAGE_LAYOUT_UNDEFINED
+							, crg::getAccessMask( VK_IMAGE_LAYOUT_UNDEFINED )
+							, crg::getStageMask( VK_IMAGE_LAYOUT_UNDEFINED ) }
+						, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+							, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
+							, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) } );
 
 					// Perform blit
 					m_context.vkCmdCopyImage( commandBuffer
@@ -116,15 +122,19 @@ namespace light_streaks
 					// Transition destination layer to wanted output layout
 					m_graph.memoryBarrier( commandBuffer
 						, dst
-						, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-						, transition.toLayout );
+						, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+							, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
+							, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) }
+						, transition.to );
 				}
 
 				// Transition source layer to wanted output layout
 				m_graph.memoryBarrier( commandBuffer
 					, m_viewDesc
-					, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-					, transition.toLayout );
+					, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+						, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
+						, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) }
+					, transition.to );
 			}
 
 		private:

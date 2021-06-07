@@ -40,7 +40,7 @@ namespace castor3d
 			, *m_ssaoConfigUbo
 			, m_gpInfoUbo
 			, m_linearisedDepth
-			, m_gpResult[DsTexture::eData1].wholeView ) }
+			, m_gpResult[DsTexture::eData1].wholeViewId ) }
 #if !C3D_DebugRawPass
 		, m_horizontalBlur{ std::make_shared< SsaoBlurPass >( graph
 			, m_device
@@ -52,7 +52,7 @@ namespace castor3d
 			, castor::Point2i{ 1, 0 }
 			, m_rawAoPass->getResult()
 			, m_rawAoPass->getBentResult()
-			, m_gpResult[DsTexture::eData1].wholeView ) }
+			, m_gpResult[DsTexture::eData1].wholeViewId ) }
 		, m_verticalBlur{ std::make_shared< SsaoBlurPass >( graph
 			, m_device
 			, cuT( "Vertical" )
@@ -63,7 +63,7 @@ namespace castor3d
 			, castor::Point2i{ 0, 1 }
 			, m_horizontalBlur->getResult()
 			, m_horizontalBlur->getBentResult()
-			, m_gpResult[DsTexture::eData1].wholeView ) }
+			, m_gpResult[DsTexture::eData1].wholeViewId ) }
 #endif
 	{
 	}

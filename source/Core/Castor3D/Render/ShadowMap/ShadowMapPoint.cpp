@@ -43,8 +43,9 @@ namespace castor3d
 {
 	namespace
 	{
-		std::vector< ShadowMap::PassData > createPasses( crg::FrameGraph & graph
-			, crg::FramePass const *& previousPass
+		std::vector< ShadowMap::PassData > createPasses( crg::ResourceHandler & handler
+			, std::vector< std::unique_ptr< crg::FrameGraph > > & graphs
+			, std::vector< crg::RunnableGraphPtr > & runnables
 			, std::vector< std::unique_ptr< GaussianBlur > > & blurs
 			, crg::ImageViewId intermediate
 			, RenderDevice const & device
@@ -63,16 +64,16 @@ namespace castor3d
 			for ( uint32_t layer = 0u; layer < shader::getPointShadowMapCount(); ++layer )
 			{
 				std::string debugName = "PointSML" + std::to_string( layer );
+				graphs.push_back( std::make_unique< crg::FrameGraph >( handler, debugName ) );
+				auto & graph = *graphs.back();
+				crg::FramePass const * previousPass{};
 
 				for ( uint32_t face = 0u; face < 6u; ++face )
 				{
-					ShadowMap::PassData passData
-					{
-						std::make_unique< MatrixUbo >( device ),
-						nullptr,
-						std::make_unique< DummyCuller >( scene ),
-						nullptr,
-					};
+					ShadowMap::PassData passData{ std::make_unique< MatrixUbo >( device )
+						, nullptr
+						, std::make_unique< DummyCuller >( scene )
+						, nullptr };
 					auto index = uint32_t( result.size() );
 					auto & matrixUbo = *passData.matrixUbo;
 					auto & culler = *passData.culler;
@@ -93,23 +94,29 @@ namespace castor3d
 							shadowMap.setPass( index, result.get() );
 							return result;
 						} );
-					pass.addDependency( *previousPass );
+
+					if ( previousPass )
+					{
+						pass.addDependency( *previousPass );
+					}
+
 					previousPass = &pass;
-					pass.addOutputDepthView( depth.subViews[layer * 6u + face], getClearValue( SmTexture::eDepth ) );
-					pass.addOutputColourView( linear.subViews[layer * 6u + face], getClearValue( SmTexture::eNormalLinear ) );
-					pass.addOutputColourView( variance.subViews[layer * 6u + face], getClearValue( SmTexture::eVariance ) );
-					pass.addOutputColourView( position.subViews[layer * 6u + face], getClearValue( SmTexture::ePosition ) );
-					pass.addOutputColourView( flux.subViews[layer * 6u + face], getClearValue( SmTexture::eFlux ) );
-					result.emplace_back( std::move( passData ) );
+					pass.addOutputDepthView( depth.subViewsId[layer * 6u + face], getClearValue( SmTexture::eDepth ) );
+					pass.addOutputColourView( linear.subViewsId[layer * 6u + face], getClearValue( SmTexture::eNormalLinear ) );
+					pass.addOutputColourView( variance.subViewsId[layer * 6u + face], getClearValue( SmTexture::eVariance ) );
+					pass.addOutputColourView( position.subViewsId[layer * 6u + face], getClearValue( SmTexture::ePosition ) );
+					pass.addOutputColourView( flux.subViewsId[layer * 6u + face], getClearValue( SmTexture::eFlux ) );
 
 					blurs.push_back( std::make_unique< GaussianBlur >( graph
 						, *previousPass
 						, device
 						, name
-						, variance.subViews[layer * 6u + face]
+						, variance.subViewsId[layer * 6u + face]
 						, intermediate
 						, 5u ) );
-					previousPass = &blurs.back()->getLastPass();
+
+					runnables.push_back( nullptr );
+					result.emplace_back( std::move( passData ) );
 				}
 			}
 
@@ -117,36 +124,33 @@ namespace castor3d
 		}
 	}
 
-	ShadowMapPoint::ShadowMapPoint( crg::FrameGraph & graph
-		, crg::FramePass const & previousPass
+	ShadowMapPoint::ShadowMapPoint( crg::ResourceHandler & handler
 		, RenderDevice const & device
 		, Scene & scene )
-		: ShadowMap{ device
+		: ShadowMap{ handler
+			, device
 			, scene
 			, LightType::ePoint
-			, ShadowMapResult{ graph
-				, device
-				, cuT( "Point" )
-				, VkImageCreateFlags( VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT )
-				, { ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize }
-				, 6u * shader::getPointShadowMapCount() }
+			, VkImageCreateFlags( VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT )
+			, { ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize }
+			, 6u * shader::getPointShadowMapCount()
 			, shader::getPointShadowMapCount() }
-		, m_blurIntermediate{ graph.createImage( crg::ImageData{ "PointGB"
+		, m_blurIntermediate{ handler.createImageId( crg::ImageData{ "PointGB"
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, getFormat( SmTexture::eVariance )
 			, m_result.begin()->getExtent()
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT ) } ) }
-		, m_blurIntermediateView{ graph.createView( crg::ImageViewData{ m_blurIntermediate.data->name
+		, m_blurIntermediateView{ handler.createViewId( crg::ImageViewData{ m_blurIntermediate.data->name
 			, m_blurIntermediate
 			, 0u
 			, VK_IMAGE_VIEW_TYPE_2D
 			, getFormat( m_blurIntermediate )
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
 	{
-		m_lastPass = &previousPass;
-		m_passes = createPasses( graph
-			, m_lastPass
+		m_passes = createPasses( handler
+			, m_graphs
+			, m_runnables
 			, m_blurs
 			, m_blurIntermediateView
 			, device
@@ -166,8 +170,11 @@ namespace castor3d
 
 		for ( uint32_t face = offset; face < offset + 6u; ++face )
 		{
-			updater.index = face - offset;
-			m_passes[face].pass->update( updater );
+			if ( m_passes[face].pass )
+			{
+				updater.index = face - offset;
+				m_passes[face].pass->update( updater );
+			}
 		}
 	}
 
@@ -177,8 +184,11 @@ namespace castor3d
 
 		for ( uint32_t face = offset; face < offset + 6u; ++face )
 		{
-			updater.index = face - offset;
-			m_passes[face].pass->update( updater );
+			if ( m_passes[face].pass )
+			{
+				updater.index = face - offset;
+				m_passes[face].pass->update( updater );
+			}
 		}
 	}
 

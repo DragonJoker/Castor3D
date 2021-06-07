@@ -13,7 +13,7 @@ using namespace castor;
 
 namespace castor3d
 {
-	Texture GBufferBase::doCreateTexture( crg::FrameGraph & graph
+	Texture GBufferBase::doCreateTexture( crg::ResourceHandler & handler
 		, castor::String const & name
 		, VkImageCreateFlags createFlags
 		, VkExtent3D const & size
@@ -24,7 +24,7 @@ namespace castor3d
 		, VkBorderColor const & borderColor )const
 	{
 		return Texture{ m_device
-			, graph
+			, handler
 			, name
 			, createFlags
 			, size

@@ -101,6 +101,12 @@ namespace castor3d
 			, float worldToGrid
 			, uint32_t voxelGridSize );
 
+		void createPassBinding( crg::FramePass & pass
+			, uint32_t binding )const
+		{
+			m_ubo.createPassBinding( pass, "VoxelCfg", binding );
+		}
+
 		void createSizedBinding( ashes::DescriptorSet & descriptorSet
 			, VkDescriptorSetLayoutBinding const & layoutBinding )const
 		{

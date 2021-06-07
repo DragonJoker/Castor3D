@@ -186,7 +186,7 @@ namespace smaa
 				for ( auto & view : m_currentColourViews )
 				{
 					ashes::ImagePtr image = std::make_unique< ashes::Image >( *device
-						, graph.getImage( view )
+						, graph.createImage( view.data->image )
 						, view.data->image.data->info );
 					auto createInfo = view.data->info;
 					createInfo.image = *image;
