@@ -108,12 +108,14 @@ namespace castor3d
 			result.emplace_back( std::move( passData ) );
 
 #else
+			graphs.push_back( std::make_unique< crg::FrameGraph >( handler,  "DirectionalSMC" ) );
+			auto & graph = *graphs.back();
+			runnables.push_back( nullptr );
+			crg::FramePass const * previousPass{};
 
 			for ( uint32_t cascade = 0u; cascade < cascadeCount; ++cascade )
 			{
 				std::string debugName = "DirectionalSMC" + std::to_string( cascade + 1u );
-				graphs.push_back( std::make_unique< crg::FrameGraph >( handler, debugName ) );
-				auto & graph = *graphs.back();
 				ShadowMap::PassData passData{ std::make_unique< MatrixUbo >( device )
 					, std::make_shared< Camera >( debugName
 						, scene
@@ -142,7 +144,13 @@ namespace castor3d
 						shadowMap.setPass( index, result.get() );
 						return result;
 					} );
-				auto previousPass = &pass;
+
+				if ( previousPass )
+				{
+					pass.addDependency( *previousPass );
+				}
+
+				previousPass = &pass;
 
 				if ( cascadeCount == 1u )
 				{
@@ -176,7 +184,6 @@ namespace castor3d
 						, 5u ) );
 				}
 
-				runnables.push_back( nullptr );
 				result.emplace_back( std::move( passData ) );
 			}
 
@@ -231,45 +238,51 @@ namespace castor3d
 
 	void ShadowMapDirectional::update( CpuUpdater & updater )
 	{
-		auto & light = *updater.light;
-		auto & camera = *updater.camera;
-		m_shadowType = light.getShadowType();
-		auto node = light.getParent();
-		node->update();
+		if ( m_runnables[updater.index] )
+		{
+			auto & light = *updater.light;
+			auto & camera = *updater.camera;
+			m_shadowType = light.getShadowType();
+			auto node = light.getParent();
+			node->update();
 
-		auto & directional = *light.getDirectionalLight();
+			auto & directional = *light.getDirectionalLight();
 
 #if C3D_UseTiledDirectionalShadowMap
-		if ( directional.updateShadow( camera )
-			|| m_passes[0u].pass->isDirty() )
-		{
-			m_passes[0u].pass->update( updater );
-		}
-#else
-		if ( directional.updateShadow( camera ) )
-		{
-			for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
+			if ( directional.updateShadow( camera )
+				|| m_passes[0u].pass->isDirty() )
 			{
-				auto & culler = m_passes[cascade].pass->getCuller();
-				auto & lightCamera = culler.getCamera();
-				lightCamera.attachTo( *node );
-				lightCamera.setProjection( directional.getProjMatrix( m_cascades - 1u ) );
-				lightCamera.setView( directional.getViewMatrix( m_cascades - 1u ) );
-				lightCamera.updateFrustum();
-
-				updater.index = cascade;
-				m_passes[cascade].pass->update( updater );
+				m_passes[0u].pass->update( updater );
 			}
-		}
+#else
+			if ( directional.updateShadow( camera ) )
+			{
+				for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
+				{
+					auto & culler = m_passes[cascade].pass->getCuller();
+					auto & lightCamera = culler.getCamera();
+					lightCamera.attachTo( *node );
+					lightCamera.setProjection( directional.getProjMatrix( m_cascades - 1u ) );
+					lightCamera.setView( directional.getViewMatrix( m_cascades - 1u ) );
+					lightCamera.updateFrustum();
+
+					updater.index = cascade;
+					m_passes[cascade].pass->update( updater );
+				}
+			}
 #endif
+		}
 	}
 
 	void ShadowMapDirectional::update( GpuUpdater & updater )
 	{
-		for ( uint32_t cascade = 0u; cascade < std::min( m_cascades, uint32_t( m_passes.size() ) ); ++cascade )
+		if ( m_runnables[updater.index] )
 		{
-			updater.index = cascade;
-			m_passes[cascade].pass->update( updater );
+			for ( uint32_t cascade = 0u; cascade < std::min( m_cascades, uint32_t( m_passes.size() ) ); ++cascade )
+			{
+				updater.index = cascade;
+				m_passes[cascade].pass->update( updater );
+			}
 		}
 	}
 
