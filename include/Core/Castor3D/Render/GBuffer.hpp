@@ -71,7 +71,7 @@ namespace castor3d
 		*/
 		template< typename TextureEnumT >
 		TextureArray doCreateTextures( crg::ResourceHandler & handler
-			, std::array< crg::ImageId const *, size_t( TextureEnumT::eCount ) > const & inputs
+			, std::array< Texture const *, size_t( TextureEnumT::eCount ) > const & inputs
 			, castor::String const & prefix
 			, VkImageCreateFlags createFlags
 			, castor::Size const & size
@@ -93,6 +93,10 @@ namespace castor3d
 						, getFormat( texture )
 						, getUsageFlags( texture )
 						, getBorderColor( texture ) ) );
+				}
+				else
+				{
+					result.push_back( *inputs[i] );
 				}
 			}
 
@@ -128,7 +132,7 @@ namespace castor3d
 		*/
 		template< typename TextureEnumT >
 		TextureArray doCreateTextures( crg::ResourceHandler & handler
-			, std::array< crg::ImageId const *, size_t( TextureEnumT::eCount ) > const & inputs
+			, std::array< Texture const *, size_t( TextureEnumT::eCount ) > const & inputs
 			, castor::String const & prefix
 			, VkImageCreateFlags createFlags
 			, VkExtent3D const & size )const
@@ -149,6 +153,10 @@ namespace castor3d
 						, getFormat( texture )
 						, getUsageFlags( texture )
 						, getBorderColor( texture ) ) );
+				}
+				else
+				{
+					result.push_back( *inputs[i] );
 				}
 			}
 
@@ -199,7 +207,7 @@ namespace castor3d
 		GBufferT( crg::ResourceHandler & handler
 			, RenderDevice const & device
 			, castor::String name
-			, std::array< crg::ImageId const *, size_t( TextureEnumT::eCount ) > const & inputs
+			, std::array< Texture const *, size_t( TextureEnumT::eCount ) > const & inputs
 			, VkImageCreateFlags createFlags
 			, castor::Size const & size
 			, uint32_t layerCount = 1u )
@@ -243,7 +251,7 @@ namespace castor3d
 		GBufferT( crg::ResourceHandler & handler
 			, RenderDevice const & device
 			, castor::String name
-			, std::array< crg::ImageId const *, size_t( TextureEnumT::eCount ) > const & inputs
+			, std::array< Texture const *, size_t( TextureEnumT::eCount ) > const & inputs
 			, VkImageCreateFlags createFlags
 			, VkExtent3D const & size )
 			: GBufferBase{ device, std::move( name ) }
