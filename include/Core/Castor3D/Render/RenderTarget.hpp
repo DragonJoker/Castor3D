@@ -256,9 +256,14 @@ namespace castor3d
 			return m_velocityImageView;
 		}
 
+		Texture const & getVelocityTexture()const
+		{
+			return m_velocity;
+		}
+
 		crg::ImageViewId const & getVelocityId()const
 		{
-			return m_velocityView;
+			return m_velocity.wholeViewId;
 		}
 
 		VkFormat getPixelFormat()const
@@ -411,14 +416,10 @@ namespace castor3d
 		castor::PreciseTimer m_timer;
 		SceneCullerUPtr m_culler;
 		crg::FrameGraph m_graph;
-		crg::ImageId m_velocityImg;
-		crg::ImageViewId m_velocityView;
-		crg::ImageId m_objectsImg;
-		crg::ImageViewId m_objectsView;
-		crg::ImageId m_overlaysImg;
-		crg::ImageViewId m_overlaysView;
-		crg::ImageId m_combinedImg;
-		crg::ImageViewId m_combinedView;
+		Texture m_velocity;
+		Texture m_objects;
+		Texture m_overlays;
+		Texture m_combined;
 		crg::FramePass & m_combinePass;
 		crg::FramePass const * m_hdrLastPass{};
 		crg::RunnableGraphPtr m_runnable;

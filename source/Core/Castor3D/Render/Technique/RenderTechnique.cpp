@@ -42,6 +42,12 @@ namespace castor3d
 
 	namespace
 	{
+#if C3D_UseWeightedBlendedRendering
+		using TransparentPassType = TransparentPass;
+#else
+		using TransparentPassType = ForwardRenderTechniquePass;
+#endif
+
 		struct VkImageViewCreateInfoComp
 		{
 			bool operator()( VkImageViewCreateInfo const & lhs
@@ -342,42 +348,39 @@ namespace castor3d
 		, m_device{ device }
 		, m_size{ m_renderTarget.getSize() }
 		, m_ssaoConfig{ ssaoConfig }
-		, m_colourImage{ m_renderTarget.getGraph().createImage( { "TechCol"
+		, m_colour{ device
+			, getOwner()->getGraphResourceHandler()
+			, "TechCol"
 			, 0u
-			, VK_IMAGE_TYPE_2D
-			, VK_FORMAT_R16G16B16A16_SFLOAT
 			, makeExtent3D( m_size )
+			, 1u
+			, 1u
+			, VK_FORMAT_R16G16B16A16_SFLOAT
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } ) }
-		, m_colourView{ m_renderTarget.getGraph().createView( { m_colourImage.data->name
-			, m_colourImage
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
+			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
+		, m_depth{ device
+			, getOwner()->getGraphResourceHandler()
+			, "TechDpt"
 			, 0u
-			, VK_IMAGE_VIEW_TYPE_2D
-			, m_colourImage.data->info.format
-			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
-		, m_depthImage{ m_renderTarget.getGraph().createImage( { "TechDpt"
-			, 0u
-			, VK_IMAGE_TYPE_2D
+			, makeExtent3D( m_size )
+			, 1u
+			, 1u
 			, device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
 				| VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
 				| VK_FORMAT_FEATURE_TRANSFER_SRC_BIT )
-			, makeExtent3D( m_size )
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } ) }
-		, m_depthView{ m_renderTarget.getGraph().createView( { m_depthImage.data->name
-				, m_depthImage
-				, 0u
-				, VK_IMAGE_VIEW_TYPE_2D
-				, m_depthImage.data->info.format
-				, { VK_IMAGE_ASPECT_DEPTH_BIT, 0u, 1u, 0u, 1u } } ) }
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
+			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_colourTexture{ doCreateTextureUnit( m_device
-			, m_colourImage ) }
+			, m_colour.imageId ) }
 		, m_depthBuffer{ doCreateTextureUnit( m_device
-			, m_depthImage ) }
+			, m_depth.imageId ) }
 		, m_matrixUbo{ m_device }
+		, m_sceneUbo{ m_device }
 		, m_gpInfoUbo{ m_device }
 		, m_lpvConfigUbo{ m_device }
 		, m_llpvConfigUbo{ m_device }
@@ -439,21 +442,20 @@ namespace castor3d
 		, m_opaquePassDesc{ &doCreateOpaquePass() }
 #endif
 #if C3D_UseWeightedBlendedRendering
-		, m_transparentPassResult{ castor::makeUnique< TransparentPassResult >( m_renderTarget.getGraph()
+		, m_transparentPassResult{ castor::makeUnique< TransparentPassResult >( getOwner()->getGraphResourceHandler()
 			, m_device
-			, m_depthImage
-			, m_renderTarget.getVelocityId().data->image ) }
+			, m_depth
+			, m_renderTarget.getVelocityTexture() ) }
 		, m_transparentPassDesc{ &doCreateTransparentPass() }
 		, m_weightedBlendRendering{ castor::makeUnique< WeightedBlendRendering >( m_renderTarget.getGraph()
 			, m_device
-			, static_cast< TransparentPass & >( *m_transparentPass )
+			, *m_transparentPassDesc
 			, *m_transparentPassResult
-			, m_colourTexture.getTexture()->getDefaultView().getTargetView()
+			, m_colour.wholeViewId
 			, m_renderTarget.getSize()
-			, *m_renderTarget.getScene()
+			, m_sceneUbo
 			, m_renderTarget.getHdrConfigUbo()
-			, m_gpInfoUbo
-			, *m_lpvResult )}
+			, m_gpInfoUbo )}
 #else
 		, m_transparentPassDesc{ &doCreateTransparentPass() }
 #endif
@@ -522,11 +524,7 @@ namespace castor3d
 #else
 		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).update( updater );
 #endif
-#if C3D_UseWeightedBlendedRendering
-		m_weightedBlendRendering->update( updater );
-#else
-		static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).update( updater );
-#endif
+		static_cast< TransparentPassType & >( *m_transparentPass ).update( updater );
 
 		if ( m_renderTarget.getScene()->getFog().getType() != FogType::eDisabled )
 		{
@@ -558,6 +556,8 @@ namespace castor3d
 		m_matrixUbo.cpuUpdate( camera.getView()
 			, camera.getProjection()
 			, jitterProjSpace );
+		m_sceneUbo.cpuUpdate( &camera
+			, camera.getScene()->getFog() );
 		m_gpInfoUbo.cpuUpdate( m_size
 			, camera );
 	}
@@ -588,11 +588,7 @@ namespace castor3d
 #else
 		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).update( updater );
 #endif
-#if C3D_UseWeightedBlendedRendering
-		m_weightedBlendRendering->update( updater );
-#else
-		static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).update( updater );
-#endif
+		static_cast< TransparentPassType & >( *m_transparentPass ).update( updater );
 
 		if ( m_renderTarget.getScene()->getFog().getType() != FogType::eDisabled )
 		{
@@ -661,6 +657,15 @@ namespace castor3d
 #endif
 	}
 
+	crg::FramePass const & RenderTechnique::getLastPass()const
+	{
+#if C3D_UseWeightedBlendedRendering
+		return m_weightedBlendRendering->getLastPass();
+#else
+		return *m_transparentPassDesc;
+#endif
+	}
+
 	crg::FramePass & RenderTechnique::doCreateDepthPass()
 	{
 		auto & result = m_renderTarget.getGraph().createPass( "DepthPass"
@@ -675,11 +680,11 @@ namespace castor3d
 					, m_matrixUbo
 					, m_renderTarget.getCuller()
 					, m_ssaoConfig
-					, m_depthImage.data->info.extent );
+					, m_depth.getExtent() );
 				m_depthPass = result.get();
 				return result;
 			} );
-		result.addOutputDepthView( m_depthView
+		result.addOutputDepthView( m_depth.wholeViewId
 			, defaultClearDepthStencil );
 		result.addOutputColourView( m_renderTarget.getVelocityId() );
 		return result;
@@ -698,7 +703,7 @@ namespace castor3d
 					, graph
 					, m_device
 					, background
-					, makeExtent2D( getExtent( m_colourImage ) ) );
+					, makeExtent2D( m_colour.getExtent() ) );
 				m_backgroundPass = result.get();
 				return result;
 			} );
@@ -710,8 +715,8 @@ namespace castor3d
 			, SceneBackground::MdlMtxUboIdx );
 		getRenderTarget().getHdrConfigUbo().createPassBinding( result
 			, SceneBackground::HdrCfgUboIdx );
-		result.addInOutDepthView( m_depthView );
-		result.addOutputColourView( m_colourView );
+		result.addInOutDepthView( m_depth.wholeViewId );
+		result.addOutputColourView( m_colour.wholeViewId );
 		return result;
 	}
 
@@ -748,8 +753,8 @@ namespace castor3d
 				return result;
 			} );
 		result.addDependency( *m_backgroundPassDesc );
-		result.addInOutDepthView( m_depthView );
-		result.addInOutColourView( m_colourView );
+		result.addInOutDepthView( m_depth.wholeViewId );
+		result.addInOutColourView( m_colour.wholeViewId );;
 		return result;
 #endif
 	}
@@ -762,15 +767,13 @@ namespace castor3d
 				, crg::RunnableGraph & graph )
 			{
 #if C3D_UseWeightedBlendedRendering
-				using PassType = TransparentPass;
 				castor::String name = cuT( "Accumulation" );
 				bool isOit = true;
 #else
-				using PassType = ForwardRenderTechniquePass;
 				castor::String name = cuT( "Forward" );
 				bool isOit = false;
 #endif
-				auto result = std::make_unique< PassType >( pass
+				auto result = std::make_unique< TransparentPassType >( pass
 					, context
 					, graph
 					, m_device
@@ -783,18 +786,22 @@ namespace castor3d
 						.vctConfigUbo( m_vctConfigUbo )
 						.lpvResult( *m_lpvResult )
 						.vctFirstBounce( m_voxelizer->getFirstBounce() )
-						.vctSecondaryBounce( m_voxelizer->getSecondaryBounce() ) );
+						.vctSecondaryBounce( m_voxelizer->getSecondaryBounce() )
+						.hasVelocity( true ) );
 				m_transparentPass = result.get();
 				return result;
 			} );
 		result.addDependency( *m_opaquePassDesc );
-		result.addInOutDepthView( m_depthView );
+		result.addInOutDepthView( m_depth.wholeViewId );
 
 #if C3D_UseWeightedBlendedRendering
-		for ( auto & passResult : *m_transparentPassResult )
-		{
-			//result.addInOutColourView( passResult );
-		}
+		auto & transparentPassResult = *m_transparentPassResult;
+		result.addInOutDepthStencilView( transparentPassResult[WbTexture::eDepth].wholeViewId );
+		result.addOutputColourView( transparentPassResult[WbTexture::eAccumulation].wholeViewId
+			, getClearValue( WbTexture::eAccumulation ) );
+		result.addOutputColourView( transparentPassResult[WbTexture::eRevealage].wholeViewId
+			, getClearValue( WbTexture::eRevealage ) );
+		result.addInOutColourView( transparentPassResult[WbTexture::eVelocity].wholeViewId );
 #else
 		result.addInOutColourView( m_colourView );
 #endif

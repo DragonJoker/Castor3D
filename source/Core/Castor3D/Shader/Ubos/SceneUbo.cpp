@@ -30,6 +30,7 @@ namespace castor3d
 			, m_cameraPosition{ getMember< sdw::Vec4 >( "cameraPosition" ) }
 			, m_clipInfo{ getMember< sdw::Vec4 >( "clipInfo" ) }
 			, m_fogInfo{ getMember< sdw::Vec4 >( "fogInfo" ) }
+			, fogType{ writer.cast< sdw::UInt >( m_fogInfo.x() ) }
 		{
 		}
 

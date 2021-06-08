@@ -21,6 +21,7 @@ namespace castor3d
 		{
 			friend struct BillboardData;
 			friend class Fog;
+			friend class CommonFog;
 
 			C3D_API SceneData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
@@ -58,6 +59,9 @@ namespace castor3d
 			sdw::Vec4 m_cameraPosition;
 			sdw::Vec4 m_clipInfo;
 			sdw::Vec4 m_fogInfo;
+
+		public:
+			sdw::UInt fogType;
 		};
 	}
 
@@ -114,6 +118,12 @@ namespace castor3d
 		 *\param[in]	window	Les dimensions de la fenêtre.
 		 */
 		C3D_API void setWindowSize( castor::Size const & window );
+
+		void createPassBinding( crg::FramePass & pass
+			, uint32_t binding )const
+		{
+			return m_ubo.createPassBinding( pass, "Scene", binding );
+		}
 
 		void createSizedBinding( ashes::DescriptorSet & descriptorSet
 			, VkDescriptorSetLayoutBinding const & layoutBinding )const

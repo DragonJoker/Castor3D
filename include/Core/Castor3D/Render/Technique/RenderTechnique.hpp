@@ -20,6 +20,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 #include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
 #include <CastorUtils/Design/DelayedInitialiser.hpp>
@@ -132,6 +133,8 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
+		C3D_API crg::FramePass const & getLastPass()const;
+
 		castor::Size const & getSize()const
 		{
 			return m_size;
@@ -145,17 +148,17 @@ namespace castor3d
 
 		crg::ImageId const & getResultImg()const
 		{
-			return m_colourImage;
+			return m_colour.imageId;
 		}
 
 		crg::ImageViewId const & getResultImgView()const
 		{
-			return m_colourView;
+			return m_colour.wholeViewId;
 		}
 
 		crg::ImageViewId const & getDepthImgView()const
 		{
-			return m_depthView;
+			return m_depth.wholeViewId;
 		}
 
 		TextureLayout const & getDepth()const
@@ -176,21 +179,6 @@ namespace castor3d
 		MatrixUbo & getMatrixUbo()
 		{
 			return m_matrixUbo;
-		}
-
-		crg::FramePass const & getOpaquePass()const
-		{
-			return *m_opaquePassDesc;
-		}
-
-		crg::FramePass const & getBackgroundPass()const
-		{
-			return *m_backgroundPassDesc;
-		}
-
-		crg::FramePass const & getTransparentPass()const
-		{
-			return *m_transparentPassDesc;
 		}
 
 		ShadowMapLightTypeArray const & getShadowMaps()const
@@ -251,13 +239,12 @@ namespace castor3d
 		RenderDevice const & m_device;
 		castor::Size m_size;
 		SsaoConfig m_ssaoConfig;
-		crg::ImageId m_colourImage;
-		crg::ImageViewId m_colourView;
+		Texture m_colour;
 		TextureUnit m_colourTexture;
-		crg::ImageId m_depthImage;
-		crg::ImageViewId m_depthView;
+		Texture m_depth;
 		TextureUnit m_depthBuffer;
 		MatrixUbo m_matrixUbo;
+		SceneUbo m_sceneUbo;
 		GpInfoUbo m_gpInfoUbo;
 		LpvGridConfigUbo m_lpvConfigUbo;
 		LayeredLpvGridConfigUbo m_llpvConfigUbo;
