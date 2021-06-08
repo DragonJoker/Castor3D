@@ -152,6 +152,7 @@ namespace castor3d
 
 		// Fragment Outputs
 		auto pxl_fragColor( writer.declOutput< Vec4 >( "pxl_fragColor", 0 ) );
+		auto pxl_velocity( writer.declOutput< Vec4 >( "pxl_velocity", 1, m_hasVelocity ) );
 
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
@@ -324,6 +325,8 @@ namespace castor3d
 						, inSurface.viewPosition.y()
 						, c3d_sceneData );
 				}
+
+				pxl_velocity.xy() = inSurface.getVelocity();
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -416,6 +419,7 @@ namespace castor3d
 
 		// Fragment Outputs
 		auto pxl_fragColor( writer.declOutput< Vec4 >( "pxl_fragColor", 0 ) );
+		auto pxl_velocity( writer.declOutput< Vec4 >( "pxl_velocity", 1, m_hasVelocity ) );
 
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
@@ -664,6 +668,8 @@ namespace castor3d
 						, inSurface.viewPosition.y()
 						, c3d_sceneData );
 				}
+
+				pxl_velocity.xy() = inSurface.getVelocity();
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -756,6 +762,7 @@ namespace castor3d
 
 		// Fragment Outputs
 		auto pxl_fragColor( writer.declOutput< Vec4 >( "pxl_fragColor", 0 ) );
+		auto pxl_velocity( writer.declOutput< Vec4 >( "pxl_velocity", 1, m_hasVelocity ) );
 
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
@@ -1002,6 +1009,8 @@ namespace castor3d
 						, inSurface.viewPosition.y()
 						, c3d_sceneData );
 				}
+
+				pxl_velocity.xy() = inSurface.getVelocity();
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
