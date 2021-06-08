@@ -135,6 +135,7 @@ namespace castor3d
 		, m_scene{ renderPassDesc.m_culler.getScene() }
 		, m_camera{ renderPassDesc.m_culler.hasCamera() ? &renderPassDesc.m_culler.getCamera() : nullptr }
 		, m_environment{ techniquePassDesc.m_environment }
+		, m_hasVelocity{ techniquePassDesc.m_hasVelocity }
 		, m_ssaoConfig{ techniquePassDesc.m_ssaoConfig }
 		, m_lpvConfigUbo{ techniquePassDesc.m_lpvConfigUbo }
 		, m_llpvConfigUbo{ techniquePassDesc.m_llpvConfigUbo }

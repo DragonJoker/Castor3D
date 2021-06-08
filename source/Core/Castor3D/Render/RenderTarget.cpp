@@ -96,60 +96,52 @@ namespace castor3d
 		, m_overlaysFrameBuffer{ *this }
 		, m_combinedFrameBuffer{ *this }
 		, m_graph{ getOwner()->getGraphResourceHandler(), m_name }
-		, m_velocityImg{ m_graph.createImage( crg::ImageData{ "Velocity"
+		, m_velocity{ *getOwner()->getRenderSystem()->getMainRenderDevice()
+			, getOwner()->getGraphResourceHandler()
+			, "Velocity"
 			, 0u
-			, VK_IMAGE_TYPE_2D
+			, castor3d::makeExtent3D( m_size )
+			, 1u
+			, 1u
 			, VK_FORMAT_R16G16B16A16_SFLOAT
-			, castor3d::makeExtent3D( m_size )
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT ) } ) }
-		, m_velocityView{ m_graph.createView( crg::ImageViewData{ m_velocityImg.data->name
-			, m_velocityImg
+				| VK_IMAGE_USAGE_SAMPLED_BIT )
+			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
+		, m_objects{ *getOwner()->getRenderSystem()->getMainRenderDevice()
+			, getOwner()->getGraphResourceHandler()
+			, "Scene"
 			, 0u
-			, VK_IMAGE_VIEW_TYPE_2D
-			, m_velocityImg.data->info.format
-			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
-		, m_objectsImg{ m_graph.createImage( crg::ImageData{ "Scene"
-			, 0u
-			, VK_IMAGE_TYPE_2D
-			, getPixelFormat()
 			, castor3d::makeExtent3D( m_size )
+			, 1u
+			, 1u
+			, getPixelFormat()
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) } ) }
-		, m_objectsView{ m_graph.createView( crg::ImageViewData{ m_objectsImg.data->name
-				, m_objectsImg
-				, 0u
-				, VK_IMAGE_VIEW_TYPE_2D
-				, m_objectsImg.data->info.format
-				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
-		, m_overlaysImg{ m_graph.createImage( crg::ImageData{ "Overlays"
+				| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
+			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
+		, m_overlays{ *getOwner()->getRenderSystem()->getMainRenderDevice()
+			, getOwner()->getGraphResourceHandler()
+			, "Overlays"
 			, 0u
-			, VK_IMAGE_TYPE_2D
+			, castor3d::makeExtent3D( m_size )
+			, 1u
+			, 1u
 			, VK_FORMAT_R8G8B8A8_UNORM
-			, castor3d::makeExtent3D( m_size )
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT ) } ) }
-		, m_overlaysView{ m_graph.createView( crg::ImageViewData{ m_overlaysImg.data->name
-				, m_overlaysImg
-				, 0u
-				, VK_IMAGE_VIEW_TYPE_2D
-				, m_overlaysImg.data->info.format
-				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
-		, m_combinedImg{ m_graph.createImage( crg::ImageData{ "Target"
+				| VK_IMAGE_USAGE_SAMPLED_BIT )
+			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
+		, m_combined{ *getOwner()->getRenderSystem()->getMainRenderDevice()
+			, getOwner()->getGraphResourceHandler()
+			, "Target"
 			, 0u
-			, VK_IMAGE_TYPE_2D
-			, getPixelFormat()
 			, castor3d::makeExtent3D( m_size )
+			, 1u
+			, 1u
+			, getPixelFormat()
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } ) }
-		, m_combinedView{ m_graph.createView( crg::ImageViewData{ m_combinedImg.data->name
-				, m_combinedImg
-				, 0u
-				, VK_IMAGE_VIEW_TYPE_2D
-				, m_combinedImg.data->info.format
-				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
+			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_combinePass{ doCreateCombinePass() }
 	{
 		SamplerSPtr sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + getName() + cuT( "Linear" ) );
@@ -179,7 +171,7 @@ namespace castor3d
 			m_initialised = doInitialiseTechnique( device );
 
 			m_overlaysTimer = std::make_shared< RenderPassTimer >( device, cuT( "Overlays" ), cuT( "Overlays" ) );
-			auto * previousPass = &m_renderTechnique->getTransparentPass();
+			auto * previousPass = &m_renderTechnique->getLastPass();
 
 			if ( !m_hdrPostEffects.empty() )
 			{
@@ -215,7 +207,7 @@ namespace castor3d
 					, m_size
 					, m_graph
 					, m_renderTechnique->getResultImgView()
-					, m_objectsView
+					, m_objects.wholeViewId
 					, *m_hdrLastPass
 					, *m_hdrConfigUbo
 					, Parameters{} );
@@ -225,7 +217,7 @@ namespace castor3d
 
 			if ( !m_srgbPostEffects.empty() ) 
 			{
-				auto const * sourceView = &m_objectsView;
+				auto const * sourceView = &m_objects.wholeViewId;
 
 				for ( auto effect : m_srgbPostEffects )
 				{
@@ -244,7 +236,7 @@ namespace castor3d
 					previousPass = &doInitialiseCopyCommands( device
 						, "SRGB"
 						, *sourceView
-						, m_objectsView
+						, m_objects.wholeViewId
 						, *previousPass );
 				}
 			}
@@ -253,49 +245,55 @@ namespace castor3d
 			{
 				m_combinePass.addDependency( *previousPass );
 				m_runnable = m_graph.compile( device.makeContext() );
-				auto colourImage = m_runnable->createImage( m_objectsImg );
-				auto colourView = m_runnable->createImageView( m_objectsView );
+
+				m_objects.image = m_runnable->createImage( m_objects.imageId );
+				m_objects.wholeView = m_runnable->createImageView( m_objects.wholeViewId );
 				auto image = std::make_unique< ashes::Image >( *device
-					, colourImage
-					, ashes::ImageCreateInfo{ m_objectsView.data->image.data->info } );
-				ashes::ImageView view{ ashes::ImageViewCreateInfo{ colourImage, m_objectsView.data->info }
-					, colourView
+					, m_objects.image
+					, ashes::ImageCreateInfo{ m_objects.imageId.data->info } );
+				ashes::ImageView view{ ashes::ImageViewCreateInfo{ m_objects.image, m_objects.wholeViewId.data->info }
+					, m_objects.wholeView
 					, image.get() };
 				m_objectsFrameBuffer.initialise( device
 					, std::move( image )
 					, view
 					, *m_renderPass );
-				auto overlaysImage = m_runnable->createImage( m_overlaysImg );
-				auto overlaysView = m_runnable->createImageView( m_overlaysView );
+
+				m_overlays.image = m_runnable->createImage( m_overlays.imageId );
+				m_overlays.wholeView = m_runnable->createImageView( m_overlays.wholeViewId );
 				image = std::make_unique< ashes::Image >( *device
-					, overlaysImage
-					, ashes::ImageCreateInfo{ m_overlaysView.data->image.data->info } );
-				view = ashes::ImageView{ ashes::ImageViewCreateInfo{ overlaysImage, m_overlaysView.data->info }
-					, overlaysView
+					, m_overlays.image
+					, ashes::ImageCreateInfo{ m_overlays.imageId.data->info } );
+				view = ashes::ImageView{ ashes::ImageViewCreateInfo{ m_overlays.image, m_overlays.wholeViewId.data->info }
+					, m_overlays.wholeView
 					, image.get() };
-				auto velocityImage = m_runnable->createImage( m_velocityImg );
+
+				m_velocity.image = m_runnable->createImage( m_velocity.imageId );
+				m_velocity.wholeView = m_runnable->createImageView( m_velocity.wholeViewId );
 				m_velocityImage = std::make_unique< ashes::Image >( *device
-					, velocityImage
-					, ashes::ImageCreateInfo{ m_velocityImg.data->info } );
-				m_velocityImageView = ashes::ImageView{ ashes::ImageViewCreateInfo{ velocityImage, m_velocityView.data->info }
-					, m_runnable->createImageView( m_velocityView )
+					, m_velocity.image
+					, ashes::ImageCreateInfo{ m_velocity.imageId.data->info } );
+				m_velocityImageView = ashes::ImageView{ ashes::ImageViewCreateInfo{ m_velocity.image, m_velocity.wholeViewId.data->info }
+					, m_velocity.wholeView
 					, image.get() };
 				m_overlaysFrameBuffer.initialise( device
 					, std::move( image )
 					, view
 					, *m_renderPass );
-				auto combineImage = m_runnable->createImage( m_combinedImg );
-				auto combineView = m_runnable->createImageView( m_combinedView );
+
+				m_combined.image = m_runnable->createImage( m_combined.imageId );
+				m_combined.wholeView = m_runnable->createImageView( m_combined.wholeViewId );
 				image = std::make_unique< ashes::Image >( *device
-					, combineImage
-					, ashes::ImageCreateInfo{ m_combinedView.data->image.data->info } );
-				view = ashes::ImageView{ ashes::ImageViewCreateInfo{ combineImage, m_combinedView.data->info }
-					, combineView
+					, m_combined.image
+					, ashes::ImageCreateInfo{ m_combined.imageId.data->info } );
+				view = ashes::ImageView{ ashes::ImageViewCreateInfo{ m_combined.image, m_combined.wholeViewId.data->info }
+					, m_combined.wholeView
 					, image.get() };
 				m_combinedFrameBuffer.initialise( device
 					, std::move( image )
 					, view
 					, *m_renderPass );
+
 				m_runnable->record();
 			}
 
@@ -552,13 +550,13 @@ namespace castor3d
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_combineStages ) )
 					.build( pass, context, graph );
 			} );
-		result.addSampledView( m_objectsView
+		result.addSampledView( m_objects.wholeViewId
 			, 0u
 			, {} );
-		result.addSampledView( m_overlaysView
+		result.addSampledView( m_overlays.wholeViewId
 			, 1u
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		result.addOutputColourView( m_combinedView );
+		result.addOutputColourView( m_combined.wholeViewId );
 		return result;
 	}
 
