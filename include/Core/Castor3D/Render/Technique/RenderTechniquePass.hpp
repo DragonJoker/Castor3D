@@ -89,6 +89,17 @@ namespace castor3d
 			m_vctSecondaryBounce = &value;
 			return *this;
 		}
+		/**
+		 *\~english
+		 *\param[in]	value	\p true if the pass writes to velocity texture.
+		 *\~french
+		 *\param[in]	value	\p true si la passe écrit dans la texture de vélocité.
+		 */
+		RenderTechniquePassDesc & hasVelocity( bool value )
+		{
+			m_hasVelocity = value;
+			return *this;
+		}
 
 		bool m_environment;
 		SsaoConfig const & m_ssaoConfig;
@@ -98,6 +109,7 @@ namespace castor3d
 		LightVolumePassResult const * m_lpvResult{};
 		Texture const * m_vctFirstBounce{};
 		Texture const * m_vctSecondaryBounce{};
+		bool m_hasVelocity{};
 	};
 
 	class RenderTechniquePass
@@ -167,7 +179,7 @@ namespace castor3d
 		{
 			return ShaderFlag::eWorldSpace
 				| ShaderFlag::eTangentSpace
-				| ShaderFlag::eVelocity
+				| ( m_hasVelocity ? ShaderFlag::eVelocity : ShaderFlag::eNone )
 				| ShaderFlag::eViewSpace;
 		}
 		/**@}*/
@@ -211,6 +223,7 @@ namespace castor3d
 		Scene const & m_scene;
 		Camera * m_camera{ nullptr };
 		bool m_environment{ false };
+		bool m_hasVelocity{ false };
 		SsaoConfig m_ssaoConfig;
 		LpvGridConfigUbo const * m_lpvConfigUbo;
 		LayeredLpvGridConfigUbo const * m_llpvConfigUbo;

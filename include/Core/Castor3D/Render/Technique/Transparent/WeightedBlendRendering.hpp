@@ -17,82 +17,63 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises deferred rendering related stuff.
-		 *\param[in]	device			The GPU device.
-		 *\param[in]	transparentPass	The transparent nodes render pass.
-		 *\param[in]	depthView		The target depth buffer.
-		 *\param[in]	colourView		The target colour buffer.
-		 *\param[in]	velocityTexture	The velocity buffer.
-		 *\param[in]	size			The render dimensions.
-		 *\param[in]	scene			The rendered scene.
-		 *\param[in]	hdrConfigUbo	The HDR configuration UBO.
-		 *\param[in]	gpInfoUbo		The geometry pass UBO.
-		 *\param[in]	lpvResult		The LPV result.
+		 *\param[in]	graph					The frame graph.
+		 *\param[in]	device					The GPU device.
+		 *\param[in]	transparentPassDesc		The transparent nodes render pass.
+		 *\param[in]	transparentPassResult	The Weighted Blended OIT result.
+		 *\param[in]	targetColourView		The target colour buffer.
+		 *\param[in]	size					The render dimensions.
+		 *\param[in]	sceneUbo				The scene UBO.
+		 *\param[in]	hdrConfigUbo			The HDR configuration UBO.
+		 *\param[in]	gpInfoUbo				The geometry pass UBO.
 		 *\~french
 		 *\brief		Initialise les données liées au deferred rendering.
-		 *\param[in]	device			Le device GPU.
-		 *\param[in]	transparentPass	La passe de rendu des noeuds transparents.
-		 *\param[in]	depthView		Le tampon de profondeur cible.
-		 *\param[in]	colourView		Le tampon de couleurs cible.
-		 *\param[in]	velocityTexture	Le tampon de vélocité.
-		 *\param[in]	size			Les dimensions du rendu.
-		 *\param[in]	scene			La scène rendue.
-		 *\param[in]	hdrConfigUbo	L'UBO de configuration HDR.
-		 *\param[in]	gpInfoUbo		L'UBO de la passe géométrique.
-		 *\param[in]	lpvResult		Le résultat du LPV.
+		 *\param[in]	graph					Le frame graph.
+		 *\param[in]	device					Le device GPU.
+		 *\param[in]	transparentPassDesc		La passe de rendu des noeuds transparents.
+		 *\param[in]	transparentPassResult	Le résultat du Weighted Blended OIT.
+		 *\param[in]	targetColourView		Le tampon de couleurs cible.
+		 *\param[in]	size					Les dimensions du rendu.
+		 *\param[in]	sceneUbo				L'UBO de scène.
+		 *\param[in]	hdrConfigUbo			L'UBO de configuration HDR.
+		 *\param[in]	gpInfoUbo				L'UBO de la passe géométrique.
 		 */
 		WeightedBlendRendering( crg::FrameGraph & graph
 			, RenderDevice const & device
-			, TransparentPass & transparentPass
+			, crg::FramePass const & transparentPassDesc
 			, TransparentPassResult const & transparentPassResult
-			, ashes::ImageView const & colourView
+			, crg::ImageViewId const & targetColourView
 			, castor::Size const & size
-			, Scene const & scene
+			, SceneUbo & sceneUbo
 			, HdrConfigUbo const & hdrConfigUbo
-			, GpInfoUbo const & gpInfoUbo
-			, LightVolumePassResult const & lpvResult );
-		/**
-		 *\~english
-		 *\brief			Updates the render pass, CPU wise.
-		 *\param[in, out]	updater	The update data.
-		 *\~french
-		 *\brief			Met à jour la passe de rendu, au niveau CPU.
-		 *\param[in, out]	updater	Les données d'update.
-		 */
-		void update( CpuUpdater & updater );
-		/**
-		 *\~english
-		 *\brief			Updates the render pass, GPU wise.
-		 *\param[in, out]	updater	The update data.
-		 *\~french
-		 *\brief			Met à jour la passe de rendu, au niveau GPU.
-		 *\param[in, out]	updater	Les données d'update.
-		 */
-		void update( GpuUpdater & updater );
-		/**
-		 *\~english
-		 *\brief		Renders opaque nodes.
-		 *\param[in]	device	The GPU device.
-		 *\param[in]	scene	The rendered scene.
-		 *\param[in]	toWait	The semaphore to wait for.
-		 *\~french
-		 *\brief		Dessine les noeuds opaques.
-		 *\param[in]	device	Le device GPU.
-		 *\param[in]	scene	La scène rendue.
-		 *\param[in]	toWait	Le sémaphore à attendre.
-		 */
-		ashes::Semaphore const & render( Scene const & scene
-			, ashes::Semaphore const & toWait );
+			, GpInfoUbo const & gpInfoUbo );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		void accept( RenderTechniqueVisitor & visitor );
 
+		crg::FramePass const & getLastPass()const
+		{
+			return m_finalCombinePassDesc;
+		}
+
+	private:
+		crg::FramePass & doCreateFinalCombine( crg::FrameGraph & graph
+			, crg::FramePass const & transparentPassDesc
+			, crg::ImageViewId const & targetColourView
+			, SceneUbo & sceneUbo
+			, HdrConfigUbo const & hdrConfigUbo
+			, GpInfoUbo const & gpInfoUbo );
+
 	private:
 		RenderDevice const & m_device;
-		TransparentPass & m_transparentPass;
 		TransparentPassResult const & m_transparentPassResult;
+		crg::ImageViewId m_depthOnlyView;
 		castor::Size m_size;
-		TransparentResolvePass m_finalCombinePass;
+		ShaderModule m_vertexShader;
+		ShaderModule m_pixelShader;
+		ashes::PipelineShaderStageCreateInfoArray m_stages;
+		crg::FramePass & m_finalCombinePassDesc;
 	};
 }
 
