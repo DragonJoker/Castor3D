@@ -290,19 +290,17 @@ namespace castor3d
 
 						diffuse = vec3( 0.0_f );
 					}
-					else
-					{
-						diffuse *= lightDiffuse;
-					}
 
 					ambient *= occlusion;
 					auto colour = writer.declLocale( "colour"
 						, indirect.computeDiffuse( flags.sceneFlags
 							, surface
+							, lightDiffuse
 							, diffuse
-							, diffuse + reflected + refracted + emissive
 							, ambient
 							, occlusion ) );
+					colour += emissive;
+					colour += reflected + refracted;
 					colour += indirect.computeSpecular( flags.sceneFlags
 						, worldEye
 						, surface
@@ -642,10 +640,12 @@ namespace castor3d
 					auto colour = writer.declLocale( "colour"
 						, indirect.computeDiffuse( flags.sceneFlags
 							, surface
-							, lightDiffuse * albedo
-							, lightDiffuse * albedo + reflected + refracted + emissive
+							, lightDiffuse
+							, albedo
 							, ambient
 							, occlusion ) );
+					colour += emissive;
+					colour += reflected + refracted;
 					colour += indirect.computeSpecular( flags.sceneFlags
 						, worldEye
 						, surface
@@ -983,10 +983,12 @@ namespace castor3d
 					auto colour = writer.declLocale( "colour"
 						, indirect.computeDiffuse( flags.sceneFlags
 							, surface
-							, lightDiffuse * albedo
-							, lightDiffuse * albedo + reflected + refracted + emissive
+							, lightDiffuse
+							, albedo
 							, ambient
 							, occlusion ) );
+					colour += emissive;
+					colour += reflected + refracted;
 					colour += indirect.computeSpecular( flags.sceneFlags
 						, worldEye
 						, surface
