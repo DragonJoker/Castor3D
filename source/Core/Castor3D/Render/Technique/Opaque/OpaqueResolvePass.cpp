@@ -1532,12 +1532,12 @@ namespace castor3d
 		, Scene & scene
 		, OpaquePassResult const & gp
 		, SsaoPass const & ssao
-		, crg::ImageViewId const & subsurfaceScattering
-		, crg::ImageViewId const & lightDiffuse
-		, crg::ImageViewId const & lightSpecular
-		, crg::ImageViewId const & lightIndirectDiffuse
-		, crg::ImageViewId const & lightIndirectSpecular
-		, crg::ImageViewId const & result
+		, Texture const & subsurfaceScattering
+		, Texture const & lightDiffuse
+		, Texture const & lightSpecular
+		, Texture const & lightIndirectDiffuse
+		, Texture const & lightIndirectSpecular
+		, Texture const & result
 		, SceneUbo const & sceneUbo
 		, GpInfoUbo const & gpInfoUbo
 		, HdrConfigUbo const & hdrConfigUbo )
@@ -1565,7 +1565,8 @@ namespace castor3d
 	{
 		auto & engine = *getEngine();
 		auto & result = m_result;
-		VkExtent2D size{ getExtent(result ).width, getExtent( result ).height };
+		VkExtent2D size{ getExtent( result.imageId ).width
+			, getExtent( result.imageId ).height };
 		m_vertexBuffer = doCreateVbo( m_device );
 		m_uboDescriptorLayout = doCreateUboDescriptorLayout( engine, m_device );
 		m_uboDescriptorPool = m_uboDescriptorLayout->createPool( "OpaqueResolvePassUbo", 1u );

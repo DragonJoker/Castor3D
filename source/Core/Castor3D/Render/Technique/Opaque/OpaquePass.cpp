@@ -47,18 +47,18 @@ namespace castor3d
 		, crg::GraphContext const & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
-		, castor::Size const & size
-		, MatrixUbo & matrixUbo
-		, SceneCuller & culler
-		, SsaoConfig const & config )
+		, castor::String const & category
+		, castor::String const & name
+		, SceneRenderPassDesc const & renderPassDesc
+		, RenderTechniquePassDesc const & techniquePassDesc )
 		: RenderTechniquePass{ pass
 			, context
 			, graph
 			, device
-			, cuT( "Opaque" )
-			, cuT( "Geometry pass" )
-			, { { size.getWidth(), size.getHeight(), 1u }, matrixUbo, culler }
-			, { false, config } }
+			, category
+			, name
+			, renderPassDesc
+			, techniquePassDesc }
 	{
 	}
 
