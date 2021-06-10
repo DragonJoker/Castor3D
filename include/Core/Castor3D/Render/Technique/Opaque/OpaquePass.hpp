@@ -30,10 +30,10 @@ namespace castor3d
 			, crg::GraphContext const & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
-			, castor::Size const & size
-			, MatrixUbo & matrixUbo
-			, SceneCuller & culler
-			, SsaoConfig const & config );
+			, castor::String const & category
+			, castor::String const & name
+			, SceneRenderPassDesc const & renderPassDesc
+			, RenderTechniquePassDesc const & techniquePassDesc );
 		/**
 		 *\~english
 		 *\brief		Destructor
