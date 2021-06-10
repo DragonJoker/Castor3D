@@ -98,7 +98,7 @@ namespace castor3d
 				, m_rsmGiPass->getSamplesSsbo()
 				, m_rsmGiPass->getResult()[0]
 				, m_rsmGiPass->getResult()[1]
-				, m_lpResult[LpTexture::eIndirectDiffuse].wholeViewId );
+				, m_lpResult[LpTexture::eIndirectDiffuse].targetViewId );
 			LightPassShadow< LtType >::initialise( scene, gp, sceneUbo, timer );
 		}
 		/**

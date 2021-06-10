@@ -94,7 +94,7 @@ namespace castor3d
 
 		VkImageView getColourView()const
 		{
-			return m_environmentMapView;
+			return m_environmentMap.wholeView;
 		}
 
 		crg::ImageViewId getColourViewId( CubeMapFace face )const
@@ -133,7 +133,6 @@ namespace castor3d
 		uint32_t m_render{ 0u };
 		OnSceneNodeChangedConnection m_onNodeChanged;
 		crg::RunnableGraphPtr m_runnable;
-		VkImageView m_environmentMapView;
 	};
 }
 
