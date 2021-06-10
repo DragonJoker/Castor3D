@@ -25,19 +25,27 @@ See LICENSE file in root folder
 #include <ShaderAST/Shader.hpp>
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
-#include <ashespp/Descriptor/DescriptorSet.hpp>
-#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
-#include <ashespp/Descriptor/DescriptorSetPool.hpp>
-#include <ashespp/Pipeline/GraphicsPipeline.hpp>
-#include <ashespp/Pipeline/PipelineLayout.hpp>
-#include <ashespp/RenderPass/FrameBuffer.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
+
+#include <RenderGraph/RunnablePasses/RenderPass.hpp>
+#include <RenderGraph/RunnablePasses/PipelineHolder.hpp>
 
 namespace castor3d
 {
 	class LightInjectionPass
 		: public castor::Named
+		, public crg::RenderPass
 	{
+	public:
+		enum Idx : uint32_t
+		{
+			LightsIdx,
+			RsmNormalsIdx,
+			RsmPositionIdx,
+			RsmFluxIdx,
+			LpvGridUboIdx,
+			LpvLightUboIdx,
+		};
+
 	public:
 		/**
 		 *\~english
@@ -67,51 +75,56 @@ namespace castor3d
 		 *\param[in]	gridSize			Les dimensions de la grille.
 		 *\param[in]	layerIndex			L'indice de la layer.
 		 */
-		C3D_API LightInjectionPass( Engine & engine
+		C3D_API LightInjectionPass( crg::FramePass const & pass
+			, crg::GraphContext const & context
+			, crg::RunnableGraph & graph
 			, RenderDevice const & device
-			, castor::String const & prefix
-			, LightCache const & lightCache
 			, LightType lightType
-			, ShadowMapResult const & smResult
-			, LpvGridConfigUbo const & lpvGridConfigUbo
-			, LpvLightConfigUbo const & lpvLightConfigUbo
-			, LightVolumePassResult const & result
 			, uint32_t gridSize
-			, uint32_t layerIndex );
-		/**
-		 *\~english
-		 *\brief		Renders the pass.
-		 *\param[in]	toWait	The semaphore from the previous render pass.
-		 *\~french
-		 *\brief		Dessine la passe.
-		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
-		 */
-		C3D_API ashes::Semaphore const & compute( ashes::Semaphore const & toWait )const;
-		C3D_API CommandsSemaphore getCommands( RenderPassTimer const & timer
-			, uint32_t index )const;
+			, uint32_t layerIndex
+			, uint32_t rsmSize );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( PipelineVisitorBase & visitor );
 
-	private:
-		Engine & m_engine;
-		RenderDevice const & m_device;
-		RenderPassTimerSPtr m_timer;
-		uint32_t m_rsmSize;
+	protected:
+		C3D_API void doSubInitialise()override;
+		C3D_API void doSubRecordInto( VkCommandBuffer commandBuffer
+			, uint32_t index )override;
 
+	private:
+		class PipelineHolder
+			: public crg::PipelineHolder
+		{
+		public:
+			PipelineHolder( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph
+				, crg::pp::Config config
+				, uint32_t lpvSize );
+
+			void initialise( VkRenderPass renderPass );
+			void recordInto( VkCommandBuffer commandBuffer
+				, uint32_t index );
+
+		protected:
+			void doCreatePipeline()override;
+
+		private:
+			uint32_t m_lpvSize;
+			VkRenderPass m_renderPass;
+		};
+
+	private:
+		RenderDevice const & m_device;
+		uint32_t m_rsmSize;
 		ashes::VertexBufferPtr< NonTexturedQuad::Vertex > m_vertexBuffer;
-		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;
-		ashes::PipelineLayoutPtr m_pipelineLayout;
-		ashes::DescriptorSetPoolPtr m_descriptorSetPool;
-		ashes::DescriptorSetPtr m_descriptorSet;
 		ShaderModule m_vertexShader;
 		ShaderModule m_geometryShader;
 		ShaderModule m_pixelShader;
-		ashes::RenderPassPtr m_renderPass;
-		ashes::GraphicsPipelinePtr m_pipeline;
-		ashes::FrameBufferPtr m_frameBuffer;
-		CommandsSemaphore m_commands;
+		ashes::PipelineShaderStageCreateInfoArray m_stages;
+		PipelineHolder m_holder;
 	};
 }
 

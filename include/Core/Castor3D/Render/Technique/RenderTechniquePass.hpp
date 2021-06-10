@@ -69,6 +69,17 @@ namespace castor3d
 		}
 		/**
 		 *\~english
+		 *\param[in]	value	The LPV result.
+		 *\~french
+		 *\param[in]	value	Le résultat du LPV.
+		 */
+		RenderTechniquePassDesc & llpvResult( LightVolumePassResultArray const & value )
+		{
+			m_llpvResult = &value;
+			return *this;
+		}
+		/**
+		 *\~english
 		 *\param[in]	value	The VCT first bounce result.
 		 *\~french
 		 *\param[in]	value	Le résultat du premier rebond de VCT.
@@ -107,6 +118,7 @@ namespace castor3d
 		LayeredLpvGridConfigUbo const * m_llpvConfigUbo{};
 		VoxelizerUbo const * m_vctConfigUbo{};
 		LightVolumePassResult const * m_lpvResult{};
+		LightVolumePassResultArray const * m_llpvResult{};
 		Texture const * m_vctFirstBounce{};
 		Texture const * m_vctSecondaryBounce{};
 		bool m_hasVelocity{};
@@ -229,6 +241,7 @@ namespace castor3d
 		LayeredLpvGridConfigUbo const * m_llpvConfigUbo;
 		VoxelizerUbo const * m_vctConfigUbo;
 		LightVolumePassResult const * m_lpvResult;
+		LightVolumePassResultArray const * m_llpvResult;
 		Texture const * m_vctFirstBounce;
 		Texture const * m_vctSecondaryBounce;
 		ashes::SemaphorePtr m_finished;
