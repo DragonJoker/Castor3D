@@ -478,8 +478,8 @@ namespace castor3d
 
 		sdw::Vec3 GlobalIllumination::computeDiffuse( SceneFlags sceneFlags
 			, Surface surface
-			, sdw::Vec3 diffuse
-			, sdw::Vec3 allButAmbient
+			, sdw::Vec3 lightDiffuse
+			, sdw::Vec3 albedo
 			, sdw::Vec3 ambient
 			, sdw::Float occlusion )
 		{
@@ -490,8 +490,8 @@ namespace castor3d
 				auto voxelData = m_writer.getVariable< VoxelData >( "c3d_voxelData" );
 				auto mapVoxelsFirstBounce = m_writer.getVariable< SampledImage3DRgba32 >( "c3d_mapVoxelsFirstBounce" );
 				auto mapVoxelsSecondaryBounce = m_writer.getVariable< SampledImage3DRgba32 >( "c3d_mapVoxelsSecondaryBounce" );
-				auto indirectDiffuse = m_writer.declLocale< sdw::Vec3 >( "indirectDiffuse"
-					, ambient );
+				auto indirectDiffuse = m_writer.declLocale( "indirectDiffuse"
+					, vec3( 1.0_f ) );
 				auto vxlPosition = m_writer.declLocale( "vxlPosition"
 					, voxelData.worldToClip( surface.worldPosition ) );
 				vxlPosition = clamp( abs( vxlPosition ), vec3( -1.0_f ), vec3( 1.0_f ) );
@@ -520,7 +520,9 @@ namespace castor3d
 				}
 				FI;
 
-				return indirectDiffuse * occlusion + allButAmbient;
+				return ( lightDiffuse + ( indirectDiffuse * occlusion ) ) * albedo
+					+ ( lightDiffuse * ambient );
+				//return indirectDiffuse * occlusion;
 			}
 			else if ( !m_deferred )
 			{
@@ -528,26 +530,26 @@ namespace castor3d
 				{
 					auto llpvGridData = m_writer.getVariable< LayeredLpvGridData >( "c3d_llpvGridData" );
 					auto indirect = m_writer.declLocale( "indirect"
-						, computeLLPVRadiance( surface
+						, llpvGridData.indirectAttenuation / Float{ castor::Pi< float > }
+							* computeLLPVRadiance( surface
 							, llpvGridData ) );
-					return ( ( indirect * diffuse * ambient / Float{ castor::Pi< float > } )
-						+ ( indirect * llpvGridData.indirectAttenuation / Float{ castor::Pi< float > } )
-						+ allButAmbient ) * occlusion;
+					return ( lightDiffuse + ( indirect * occlusion ) ) * albedo
+						+ ( lightDiffuse * indirect * ambient );
 				}
 
 				if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 				{
 					auto lpvGridData = m_writer.getVariable< LpvGridData >( "c3d_lpvGridData" );
 					auto indirect = m_writer.declLocale( "indirect"
-						, computeLPVRadiance( surface
-							, lpvGridData ) );
-					return ( ( indirect * diffuse * ambient / Float{ castor::Pi< float > } )
-						+ ( indirect * lpvGridData.indirectAttenuation / Float{ castor::Pi< float > } )
-						+ allButAmbient ) * occlusion;
+						, lpvGridData.indirectAttenuation / Float{ castor::Pi< float > }
+							* computeLPVRadiance( surface
+								, lpvGridData ) );
+					return ( lightDiffuse + ( indirect * occlusion ) ) * albedo
+						+ ( lightDiffuse * indirect * ambient );
 				}
 			}
 
-			return ambient + allButAmbient;
+			return ( lightDiffuse * albedo ) + ( ambient * occlusion );
 		}
 
 		sdw::Vec3 GlobalIllumination::computeSpecular( SceneFlags sceneFlags
