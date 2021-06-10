@@ -714,10 +714,10 @@ namespace castor3d
 		, ShadowMapResult const & smSpotResult
 		, LightVolumePassResult const & lpvResult
 		, LightVolumePassResultArray const & llpvResult
-		, TextureUnit const & vctFirstBounce
-		, TextureUnit const & vctSecondaryBounce
-		, crg::ImageViewId const & depthView
-		, SceneUbo & sceneUbo
+		, Texture const & vctFirstBounce
+		, Texture const & vctSecondaryBounce
+		, Texture const & depthView
+		, SceneUbo const & sceneUbo
 		, GpInfoUbo const & gpInfoUbo
 		, LpvGridConfigUbo const & lpvConfigUbo
 		, LayeredLpvGridConfigUbo const & llpvConfigUbo
@@ -739,10 +739,10 @@ namespace castor3d
 		, m_lpvConfigUbo{ lpvConfigUbo }
 		, m_llpvConfigUbo{ llpvConfigUbo }
 		, m_vctConfigUbo{ vctConfigUbo }
+		, m_srcDepth{ depthView }
 		, m_size{ size }
 		, m_result{ scene.getOwner()->getGraphResourceHandler(), device, size }
 		, m_timer{ std::make_shared< RenderPassTimer >( device, cuT( "Opaque" ), cuT( "Lighting pass" ) ) }
-		, m_srcDepth{ depthView }
 	{
 		//auto & lightCache = scene.getLightCache();
 		//lightCache.initialise();

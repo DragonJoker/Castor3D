@@ -47,6 +47,11 @@ namespace castor3d
 #else
 		using TransparentPassType = ForwardRenderTechniquePass;
 #endif
+#if C3D_UseDeferredRendering
+		using OpaquePassType = OpaquePass;
+#else
+		using OpaquePassType = ForwardRenderTechniquePass;
+#endif
 
 		struct VkImageViewCreateInfoComp
 		{
@@ -416,16 +421,16 @@ namespace castor3d
 			, *m_renderTarget.getScene() ) }
 #endif
 #if C3D_UseDeferredRendering
-		, m_opaquePassResult{ castor::makeUnique< OpaquePassResult >( m_renderTarget.getGraph()
+		, m_opaquePassResult{ castor::makeUnique< OpaquePassResult >( getOwner()->getGraphResourceHandler()
 			, device
-			, m_depthBuffer
-			, m_renderTarget.getVelocity() ) }
+			, m_depth
+			, m_renderTarget.getVelocityTexture() ) }
 		, m_opaquePassDesc{ &doCreateOpaquePass() }
 		, m_deferredRendering{ castor::makeUnique< DeferredRendering >( m_renderTarget.getGraph()
+			, *m_opaquePassDesc
 			, m_device
-			, static_cast< OpaquePass & >( *m_opaquePass )
 			, *m_opaquePassResult
-			, m_colourTexture
+			, m_colour
 			, m_directionalShadowMap->getShadowPassResult()
 			, m_pointShadowMap->getShadowPassResult()
 			, m_spotShadowMap->getShadowPassResult()
@@ -435,6 +440,7 @@ namespace castor3d
 			, m_voxelizer->getSecondaryBounce()
 			, m_renderTarget.getSize()
 			, *m_renderTarget.getScene()
+			, m_sceneUbo
 			, m_renderTarget.getHdrConfigUbo()
 			, m_gpInfoUbo
 			, m_lpvConfigUbo
@@ -486,7 +492,6 @@ namespace castor3d
 #endif
 #if C3D_UseDeferredRendering
 		m_deferredRendering.reset();
-		m_opaquePassResult->cleanup();
 		m_opaquePassResult.reset();
 #endif
 		m_llpvResult.clear();
@@ -529,12 +534,12 @@ namespace castor3d
 		m_backgroundPass->update( updater );
 		m_voxelizer->update( updater );
 
+		static_cast< OpaquePassType & >( *m_opaquePass ).update( updater );
+		static_cast< TransparentPassType & >( *m_transparentPass ).update( updater );
+
 #if C3D_UseDeferredRendering
 		m_deferredRendering->update( updater );
-#else
-		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).update( updater );
 #endif
-		static_cast< TransparentPassType & >( *m_transparentPass ).update( updater );
 
 		if ( m_renderTarget.getScene()->getFog().getType() != FogType::eDisabled )
 		{
@@ -598,12 +603,12 @@ namespace castor3d
 			m_voxelizer->update( updater );
 		}
 
+		static_cast< OpaquePassType & >( *m_opaquePass ).update( updater );
+		static_cast< TransparentPassType & >( *m_transparentPass ).update( updater );
+
 #if C3D_UseDeferredRendering
 		m_deferredRendering->update( updater );
-#else
-		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).update( updater );
 #endif
-		static_cast< TransparentPassType & >( *m_transparentPass ).update( updater );
 
 		if ( m_renderTarget.getScene()->getFog().getType() != FogType::eDisabled )
 		{
@@ -651,29 +656,29 @@ namespace castor3d
 
 		if ( checkFlag( visitor.getFlags().passFlags, PassFlag::eAlphaBlending ) )
 		{
+			if ( m_transparentPass )
+			{
+				m_transparentPass->accept( visitor );
+			}
+
 #if C3D_UseWeightedBlendedRendering
 			if ( m_weightedBlendRendering )
 			{
 				m_weightedBlendRendering->accept( visitor );
 			}
-#else
-			if ( m_transparentPass )
-			{
-				m_transparentPass->accept( visitor );
-			}
 #endif
 		}
 		else
 		{
+			if ( m_opaquePass )
+			{
+				m_opaquePass->accept( visitor );
+			}
+
 #if C3D_UseDeferredRendering
 			if ( m_deferredRendering )
 			{
 				m_deferredRendering->accept( visitor );
-			}
-#else
-			if ( m_opaquePass )
-			{
-				m_opaquePass->accept( visitor );
 			}
 #endif
 		}
@@ -751,15 +756,12 @@ namespace castor3d
 	crg::FramePass & RenderTechnique::doCreateOpaquePass()
 	{
 #if C3D_UseDeferredRendering
-		, m_opaquePass{ castor::makeUniqueDerived< RenderTechniquePass, OpaquePass >( m_device
-			, m_size
-			, m_matrixUbo
-			, m_renderTarget.getCuller()
-			, m_ssaoConfig
-			, *m_opaquePassResult ) };
+		castor::String name = cuT( "Geometry" );
 #else
+		castor::String name = cuT( "Forward" );
+#endif
 		auto & result = m_renderTarget.getGraph().createPass( "OpaquePass"
-			, [this]( crg::FramePass const & pass
+			, [this, name]( crg::FramePass const & pass
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
 			{
@@ -768,7 +770,7 @@ namespace castor3d
 					, graph
 					, m_device
 					, cuT( "Opaque" )
-					, cuT( "Forward" )
+					, name
 					, SceneRenderPassDesc{ { m_size.getWidth(), m_size.getHeight(), 1u }, m_matrixUbo, m_renderTarget.getCuller() }
 					, RenderTechniquePassDesc{ false, m_ssaoConfig }
 						.lpvConfigUbo( m_lpvConfigUbo )
@@ -783,9 +785,22 @@ namespace castor3d
 			} );
 		result.addDependency( *m_backgroundPassDesc );
 		result.addInOutDepthView( m_depth.targetViewId );
+#if C3D_UseDeferredRendering
+		auto & opaquePassResult = *m_opaquePassResult;
+		result.addOutputColourView( opaquePassResult[DsTexture::eData1].targetViewId
+			, getClearValue( DsTexture::eData1 ) );
+		result.addOutputColourView( opaquePassResult[DsTexture::eData2].targetViewId
+			, getClearValue( DsTexture::eData2 ) );
+		result.addOutputColourView( opaquePassResult[DsTexture::eData3].targetViewId
+			, getClearValue( DsTexture::eData3 ) );
+		result.addOutputColourView( opaquePassResult[DsTexture::eData4].targetViewId
+			, getClearValue( DsTexture::eData4 ) );
+		result.addOutputColourView( opaquePassResult[DsTexture::eData5].targetViewId
+			, getClearValue( DsTexture::eData5 ) );
+#else
 		result.addInOutColourView( m_colour.targetViewId );
-		return result;
 #endif
+		return result;
 	}
 
 	crg::FramePass & RenderTechnique::doCreateTransparentPass()
@@ -821,7 +836,11 @@ namespace castor3d
 				m_transparentPass = result.get();
 				return result;
 			} );
+#if C3D_UseDeferredRendering
+		result.addDependency( m_deferredRendering->getLastPass() );
+#else
 		result.addDependency( *m_opaquePassDesc );
+#endif
 		result.addInOutDepthView( m_depth.targetViewId );
 
 #if C3D_UseWeightedBlendedRendering
