@@ -98,10 +98,8 @@ namespace castor3d
 		, m_voxelSecondaryMipGen{ doCreateVoxelMipGen( m_voxelSecondaryBounceDesc, "SecondaryBounceMip", m_secondaryBounce.wholeViewId ) }
 		, m_runnable{ m_graph.compile( m_device.makeContext() ) }
 	{
-		m_firstBounce.image = m_runnable->createImage( m_firstBounce.imageId );
-		m_firstBounce.wholeView = m_runnable->createImageView( m_firstBounce.wholeViewId );
-		m_secondaryBounce.image = m_runnable->createImage( m_secondaryBounce.imageId );
-		m_secondaryBounce.wholeView = m_runnable->createImageView( m_secondaryBounce.wholeViewId );
+		m_firstBounce.create();
+		m_secondaryBounce.create();
 		m_runnable->record();
 	}
 

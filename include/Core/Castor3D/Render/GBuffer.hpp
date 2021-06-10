@@ -21,11 +21,7 @@ namespace castor3d
 	{
 	public:
 		C3D_API explicit GBufferBase( RenderDevice const & device
-			, castor::String name )
-			: castor::Named{ std::move( name ) }
-			, m_device{ device }
-		{
-		}
+			, castor::String name );
 
 	protected:
 		C3D_API Texture doCreateTexture( crg::ResourceHandler & handler
@@ -261,6 +257,14 @@ namespace castor3d
 				, createFlags
 				, size ) }
 		{
+		}
+
+		void create()
+		{
+			for ( auto & texture : m_result )
+			{
+				texture.create();
+			}
 		}
 		/**
 		*\~english

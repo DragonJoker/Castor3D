@@ -73,7 +73,7 @@ namespace castor3d
 					, m_lpvConfigUbo
 					, m_gpResult
 					, m_lpvResult
-					, m_lpResult[LpTexture::eIndirectDiffuse].wholeViewId
+					, m_lpResult[LpTexture::eIndirectDiffuse].targetViewId
 					, BlendMode::eNoBlend )
 				, castor::makeUnique< LightVolumeGIPass >( graph
 					, previousPass
@@ -84,7 +84,7 @@ namespace castor3d
 					, m_lpvConfigUbo
 					, m_gpResult
 					, m_lpvResult
-					, m_lpResult[LpTexture::eIndirectDiffuse].wholeViewId
+					, m_lpResult[LpTexture::eIndirectDiffuse].targetViewId
 					, BlendMode::eAdditive ) }
 		{
 		}

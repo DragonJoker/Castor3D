@@ -100,11 +100,11 @@ namespace castor3d
 				} );
 			pass.addDependency( *previousPass );
 			previousPass = &pass;
-			pass.addOutputDepthView( depth.wholeView, getClearValue( SmTexture::eDepth ) );
-			pass.addOutputColourView( linear.wholeView, getClearValue( SmTexture::eNormalLinear ) );
-			pass.addOutputColourView( variance.wholeView, getClearValue( SmTexture::eVariance ) );
-			pass.addOutputColourView( position.wholeView, getClearValue( SmTexture::ePosition ) );
-			pass.addOutputColourView( flux.wholeView, getClearValue( SmTexture::eFlux ) );
+			pass.addOutputDepthView( depth.wholeViewId, getClearValue( SmTexture::eDepth ) );
+			pass.addOutputColourView( linear.wholeViewId, getClearValue( SmTexture::eNormalLinear ) );
+			pass.addOutputColourView( variance.wholeViewId, getClearValue( SmTexture::eVariance ) );
+			pass.addOutputColourView( position.wholeViewId, getClearValue( SmTexture::ePosition ) );
+			pass.addOutputColourView( flux.wholeViewId, getClearValue( SmTexture::eFlux ) );
 			result.emplace_back( std::move( passData ) );
 
 #else
@@ -154,11 +154,11 @@ namespace castor3d
 
 				if ( cascadeCount == 1u )
 				{
-					pass.addOutputDepthView( depth.wholeViewId, getClearValue( SmTexture::eDepth ) );
-					pass.addOutputColourView( linear.wholeViewId, getClearValue( SmTexture::eNormalLinear ) );
-					pass.addOutputColourView( variance.wholeViewId, getClearValue( SmTexture::eVariance ) );
-					pass.addOutputColourView( position.wholeViewId, getClearValue( SmTexture::ePosition ) );
-					pass.addOutputColourView( flux.wholeViewId, getClearValue( SmTexture::eFlux ) );
+					pass.addOutputDepthView( depth.targetViewId, getClearValue( SmTexture::eDepth ) );
+					pass.addOutputColourView( linear.targetViewId, getClearValue( SmTexture::eNormalLinear ) );
+					pass.addOutputColourView( variance.targetViewId, getClearValue( SmTexture::eVariance ) );
+					pass.addOutputColourView( position.targetViewId, getClearValue( SmTexture::ePosition ) );
+					pass.addOutputColourView( flux.targetViewId, getClearValue( SmTexture::eFlux ) );
 
 					blurs.push_back( std::make_unique< GaussianBlur >( graph
 						, *previousPass

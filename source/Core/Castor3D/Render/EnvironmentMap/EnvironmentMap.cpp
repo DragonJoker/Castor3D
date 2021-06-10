@@ -166,7 +166,7 @@ namespace castor3d
 			, device->getProperties()
 			, false
 			, device->vkGetDeviceProcAddr } );
-		m_environmentMapView = m_runnable->createImageView( m_environmentMap.wholeViewId );
+		m_environmentMap.create();
 		m_runnable->record();
 		log::trace << "Created EnvironmentMap " << node.getName() << std::endl;
 	}

@@ -751,9 +751,9 @@ namespace castor3d
 		ashes::ImageCreateInfo createInfo
 		{
 			0u,
-			( buffer->getHeight() > 1u
-				? VK_IMAGE_TYPE_2D
-				: VK_IMAGE_TYPE_1D ),
+			( buffer->getHeight() <= 1u && buffer->getWidth() > 1u
+				? VK_IMAGE_TYPE_1D
+				: VK_IMAGE_TYPE_2D ),
 			VK_FORMAT_UNDEFINED,
 			{ buffer->getWidth(), buffer->getHeight(), 1u },
 			uint32_t( castor::getBitSize( std::min( buffer->getWidth(), buffer->getHeight() ) ) ),
@@ -788,7 +788,7 @@ namespace castor3d
 			return castor::ImageLayout::e3D;
 		}
 
-		if ( extent.height > 1u )
+		if ( extent.height > 1u || extent.width <= 1u )
 		{
 			if ( checkFlag( flags, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT ) )
 			{

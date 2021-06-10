@@ -13,6 +13,13 @@ using namespace castor;
 
 namespace castor3d
 {
+	GBufferBase::GBufferBase( RenderDevice const & device
+		, castor::String name )
+		: castor::Named{ std::move( name ) }
+		, m_device{ device }
+	{
+	}
+
 	Texture GBufferBase::doCreateTexture( crg::ResourceHandler & handler
 		, castor::String const & name
 		, VkImageCreateFlags createFlags

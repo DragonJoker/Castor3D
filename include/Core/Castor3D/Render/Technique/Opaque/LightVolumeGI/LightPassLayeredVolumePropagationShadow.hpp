@@ -86,7 +86,7 @@ namespace castor3d
 					, m_lpvConfigUbo
 					, m_gpResult
 					, m_lpvResult
-					, m_lpResult[LpTexture::eIndirectDiffuse].wholeViewId
+					, m_lpResult[LpTexture::eIndirectDiffuse].targetViewId
 					, BlendMode::eNoBlend )
 				, castor::makeUnique< LayeredLightVolumeGIPass >( this->m_engine
 					, this->m_device
@@ -95,7 +95,7 @@ namespace castor3d
 					, m_lpvConfigUbo
 					, m_gpResult
 					, m_lpvResult
-					, m_lpResult[LpTexture::eIndirectDiffuse].wholeViewId
+					, m_lpResult[LpTexture::eIndirectDiffuse].targetViewId
 					, BlendMode::eAdditive ) };
 			LightPassShadow< LtType >::initialise( scene, gp, sceneUbo, timer );
 		}

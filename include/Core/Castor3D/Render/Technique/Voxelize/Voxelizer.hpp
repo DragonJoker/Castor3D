@@ -101,12 +101,12 @@ namespace castor3d
 		VoxelizerUbo & m_voxelizerUbo;
 		castor::Point4f m_grid;
 		crg::FramePass & m_voxelizePassDesc;
-		VoxelizePass * m_voxelizePass;
+		VoxelizePass * m_voxelizePass{};
 		crg::FramePass & m_voxelToTextureDesc;
-		VoxelBufferToTexture * m_voxelToTexture;
+		VoxelBufferToTexture * m_voxelToTexture{};
 		crg::FramePass & m_voxelMipGen;
 		crg::FramePass & m_voxelSecondaryBounceDesc;
-		VoxelSecondaryBounce * m_voxelSecondaryBounce;
+		VoxelSecondaryBounce * m_voxelSecondaryBounce{};
 		crg::FramePass & m_voxelSecondaryMipGen;
 		crg::RunnableGraphPtr m_runnable;
 	};
