@@ -89,6 +89,8 @@ namespace castor3d
 			, VkBorderColor const & borderColor
 			, bool createSubviews = true );
 
+		C3D_API void create();
+
 		VkFormat getFormat()const
 		{
 			return imageId.data->info.format;
@@ -99,12 +101,16 @@ namespace castor3d
 			return imageId.data->info.extent;
 		}
 
-		crg::ImageId imageId;
-		VkImage image;
-		crg::ImageViewId wholeViewId;
-		VkImageView wholeView;
-		crg::ImageViewIdArray subViewsId;
-		ashes::Sampler const * sampler;
+		crg::ResourceHandler * handler{};
+		RenderDevice const * device{};
+		crg::ImageId imageId{};
+		VkImage image{};
+		crg::ImageViewId wholeViewId{};
+		crg::ImageViewId targetViewId{};
+		VkImageView wholeView{};
+		VkImageView targetView{};
+		crg::ImageViewIdArray subViewsId{};
+		ashes::Sampler const * sampler{};
 	};
 	using TextureArray = std::vector< Texture >;
 	/**

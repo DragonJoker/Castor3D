@@ -225,10 +225,14 @@ namespace castor3d
 	}
 
 	Texture::Texture()
-		: imageId{}
+		: handler{}
+		, device{}
+		, imageId{}
 		, image{}
 		, wholeViewId{}
+		, targetViewId{}
 		, wholeView{}
+		, targetView{}
 		, subViewsId{}
 		, sampler{}
 	{
@@ -245,6 +249,8 @@ namespace castor3d
 		, VkImageUsageFlags usageFlags
 		, VkBorderColor const & borderColor
 		, bool createSubviews )
+		: handler{ &handler }
+		, device{ &device }
 	{
 		mipLevels = std::max( 1u, mipLevels );
 		layerCount = ( size.depth > 1u ? 1u : layerCount );
@@ -278,6 +284,20 @@ namespace castor3d
 					: VK_IMAGE_VIEW_TYPE_2D ) )
 			, format
 			, { ashes::getAspectMask( format ), 0u, mipLevels, 0u, layerCount } } );
+
+		if ( wholeViewId.data->info.viewType == VK_IMAGE_VIEW_TYPE_3D )
+		{
+			auto createInfo = *wholeViewId.data;
+			createInfo.info.viewType = VK_IMAGE_VIEW_TYPE_2D_ARRAY;
+			createInfo.name = name + "Target";
+			createInfo.info.subresourceRange.baseArrayLayer = 0u;
+			createInfo.info.subresourceRange.layerCount = createInfo.image.data->info.extent.depth;
+			targetViewId = handler.createViewId( createInfo );
+		}
+		else
+		{
+			targetViewId = wholeViewId;
+		}
 
 		if ( createSubviews )
 		{
@@ -316,5 +336,26 @@ namespace castor3d
 		}
 
 		sampler = &c3dSampler->getSampler();
+	}
+
+	void Texture::create()
+	{
+		if ( !device )
+		{
+			return;
+		}
+
+		auto context = device->makeContext();
+		image = handler->createImage( context, imageId );
+		wholeView = handler->createImageView( context, wholeViewId );
+
+		if ( wholeViewId != targetViewId )
+		{
+			targetView = handler->createImageView( context, targetViewId );
+		}
+		else
+		{
+			targetView = wholeView;
+		}
 	}
 }

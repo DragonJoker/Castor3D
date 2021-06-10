@@ -512,6 +512,11 @@ namespace castor3d
 
 	void RenderTechnique::update( CpuUpdater & updater )
 	{
+		if ( !m_depthPass )
+		{
+			return;
+		}
+
 		updater.camera = m_renderTarget.getCamera();
 		updater.voxelConeTracing = m_renderTarget.getScene()->getVoxelConeTracingConfig().enabled;
 
@@ -564,6 +569,11 @@ namespace castor3d
 
 	void RenderTechnique::update( GpuUpdater & updater )
 	{
+		if ( !m_depthPass )
+		{
+			return;
+		}
+
 		updater.scene = m_renderTarget.getScene();
 		updater.camera = m_renderTarget.getCamera();
 		updater.voxelConeTracing = m_renderTarget.getScene()->getVoxelConeTracingConfig().enabled;
@@ -636,17 +646,29 @@ namespace castor3d
 		if ( checkFlag( visitor.getFlags().passFlags, PassFlag::eAlphaBlending ) )
 		{
 #if C3D_UseWeightedBlendedRendering
-			m_weightedBlendRendering->accept( visitor );
+			if ( m_weightedBlendRendering )
+			{
+				m_weightedBlendRendering->accept( visitor );
+			}
 #else
-			m_transparentPass->accept( visitor );
+			if ( m_transparentPass )
+			{
+				m_transparentPass->accept( visitor );
+			}
 #endif
 		}
 		else
 		{
 #if C3D_UseDeferredRendering
-			m_deferredRendering->accept( visitor );
+			if ( m_deferredRendering )
+			{
+				m_deferredRendering->accept( visitor );
+			}
 #else
-			m_opaquePass->accept( visitor );
+			if ( m_opaquePass )
+			{
+				m_opaquePass->accept( visitor );
+			}
 #endif
 		}
 
@@ -684,7 +706,7 @@ namespace castor3d
 				m_depthPass = result.get();
 				return result;
 			} );
-		result.addOutputDepthView( m_depth.wholeViewId
+		result.addOutputDepthView( m_depth.targetViewId
 			, defaultClearDepthStencil );
 		result.addOutputColourView( m_renderTarget.getVelocityId() );
 		return result;
@@ -715,8 +737,8 @@ namespace castor3d
 			, SceneBackground::MdlMtxUboIdx );
 		getRenderTarget().getHdrConfigUbo().createPassBinding( result
 			, SceneBackground::HdrCfgUboIdx );
-		result.addInOutDepthView( m_depth.wholeViewId );
-		result.addOutputColourView( m_colour.wholeViewId );
+		result.addInOutDepthView( m_depth.targetViewId );
+		result.addOutputColourView( m_colour.targetViewId );
 		return result;
 	}
 
@@ -753,8 +775,8 @@ namespace castor3d
 				return result;
 			} );
 		result.addDependency( *m_backgroundPassDesc );
-		result.addInOutDepthView( m_depth.wholeViewId );
-		result.addInOutColourView( m_colour.wholeViewId );;
+		result.addInOutDepthView( m_depth.targetViewId );
+		result.addInOutColourView( m_colour.targetViewId );
 		return result;
 #endif
 	}
@@ -792,16 +814,16 @@ namespace castor3d
 				return result;
 			} );
 		result.addDependency( *m_opaquePassDesc );
-		result.addInOutDepthView( m_depth.wholeViewId );
+		result.addInOutDepthView( m_depth.targetViewId );
 
 #if C3D_UseWeightedBlendedRendering
 		auto & transparentPassResult = *m_transparentPassResult;
-		result.addInOutDepthStencilView( transparentPassResult[WbTexture::eDepth].wholeViewId );
-		result.addOutputColourView( transparentPassResult[WbTexture::eAccumulation].wholeViewId
+		result.addInOutDepthStencilView( transparentPassResult[WbTexture::eDepth].targetViewId );
+		result.addOutputColourView( transparentPassResult[WbTexture::eAccumulation].targetViewId
 			, getClearValue( WbTexture::eAccumulation ) );
-		result.addOutputColourView( transparentPassResult[WbTexture::eRevealage].wholeViewId
+		result.addOutputColourView( transparentPassResult[WbTexture::eRevealage].targetViewId
 			, getClearValue( WbTexture::eRevealage ) );
-		result.addInOutColourView( transparentPassResult[WbTexture::eVelocity].wholeViewId );
+		result.addInOutColourView( transparentPassResult[WbTexture::eVelocity].targetViewId );
 #else
 		result.addInOutColourView( m_colourView );
 #endif
