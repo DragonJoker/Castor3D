@@ -70,20 +70,20 @@ namespace castor3d
 		 *\param[in]	ssaoConfig			La configuration du SSAO.
 		 */
 		DeferredRendering( crg::FrameGraph & graph
-			, crg::FramePass const *& previousPass
+			, crg::FramePass const & opaquePass
 			, RenderDevice const & device
-			, OpaquePass & opaquePass
 			, OpaquePassResult const & opaquePassResult
-			, crg::ImageViewId const & resultTexture
+			, Texture const & resultTexture
 			, ShadowMapResult const & smDirectionalResult
 			, ShadowMapResult const & smPointResult
 			, ShadowMapResult const & smSpotResult
 			, LightVolumePassResult const & lpvResult
 			, LightVolumePassResultArray const & llpvResult
-			, TextureUnit const & vctFirstBounce
-			, TextureUnit const & vctSecondaryBounce
+			, Texture const & vctFirstBounce
+			, Texture const & vctSecondaryBounce
 			, castor::Size const & size
 			, Scene & scene
+			, SceneUbo const & sceneUbo
 			, HdrConfigUbo const & hdrConfigUbo
 			, GpInfoUbo const & gpInfoUbo
 			, LpvGridConfigUbo const & lpvConfigUbo
@@ -142,11 +142,17 @@ namespace castor3d
 		 */
 		void accept( RenderTechniqueVisitor & visitor );
 
+		crg::FramePass const & getLastPass()const
+		{
+			return *m_lastPass;
+		}
+
 	private:
 		Scene const & m_scene;
 		RenderDevice const & m_device;
 		SsaoConfig & m_ssaoConfig;
-		OpaquePass & m_opaquePass;
+		crg::FramePass const & m_opaquePass;
+		crg::FramePass const * m_lastPass{};
 		OpaquePassResult const & m_opaquePassResult;
 		GpInfoUbo const & m_gpInfoUbo;
 		castor::Size m_size;
