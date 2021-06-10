@@ -57,20 +57,20 @@ namespace castor3d
 	//*********************************************************************************************
 
 	DeferredRendering::DeferredRendering( crg::FrameGraph & graph
-		, crg::FramePass const *& previousPass
+		, crg::FramePass const & opaquePass
 		, RenderDevice const & device
-		, OpaquePass & opaquePass
 		, OpaquePassResult const & opaquePassResult
-		, crg::ImageViewId const & resultTexture
+		, Texture const & resultTexture
 		, ShadowMapResult const & smDirectionalResult
 		, ShadowMapResult const & smPointResult
 		, ShadowMapResult const & smSpotResult
 		, LightVolumePassResult const & lpvResult
 		, LightVolumePassResultArray const & llpvResult
-		, TextureUnit const & vctFirstBounce
-		, TextureUnit const & vctSecondaryBounce
+		, Texture const & vctFirstBounce
+		, Texture const & vctSecondaryBounce
 		, castor::Size const & size
 		, Scene & scene
+		, SceneUbo const & sceneUbo
 		, HdrConfigUbo const & hdrConfigUbo
 		, GpInfoUbo const & gpInfoUbo
 		, LpvGridConfigUbo const & lpvConfigUbo
@@ -81,6 +81,7 @@ namespace castor3d
 		, m_device{ device }
 		, m_ssaoConfig{ ssaoConfig }
 		, m_opaquePass{ opaquePass }
+		, m_lastPass{ &m_opaquePass }
 		, m_opaquePassResult{ opaquePassResult }
 		, m_size{ size }
 		, m_gpInfoUbo{ gpInfoUbo }
@@ -97,7 +98,7 @@ namespace castor3d
 			, opaquePassResult
 			, m_gpInfoUbo ) }
 		, m_lightingPass{ std::make_unique< LightingPass >( graph
-			, *previousPass
+			, opaquePass
 			, m_device
 			, m_size
 			, scene
@@ -109,33 +110,33 @@ namespace castor3d
 			, llpvResult
 			, vctFirstBounce
 			, vctSecondaryBounce
-			, opaquePassResult[DsTexture::eDepth].wholeViewId
-			, m_opaquePass.getSceneUbo()
+			, opaquePassResult[DsTexture::eDepth]
+			, sceneUbo
 			, m_gpInfoUbo
 			, lpvConfigUbo
 			, llpvConfigUbo
 			, vctConfigUbo ) }
-		, m_subsurfaceScattering{ castor::makeUnique< SubsurfaceScatteringPass >( graph
-			, previousPass
-			, m_device
-			, m_gpInfoUbo
-			, m_opaquePass.getSceneUbo()
-			, m_size
-			, opaquePassResult
-			, m_lightingPass->getResult() ) }
+		//, m_subsurfaceScattering{ castor::makeUnique< SubsurfaceScatteringPass >( graph
+		//	, m_lastPass
+		//	, m_device
+		//	, m_gpInfoUbo
+		//	, sceneUbo
+		//	, m_size
+		//	, opaquePassResult
+		//	, m_lightingPass->getResult() ) }
 		, m_resolve{ castor::makeUnique< OpaqueResolvePass >( graph
-			, previousPass
+			, m_lastPass
 			, m_device
 			, scene
 			, opaquePassResult
 			, *m_ssao
 			, m_subsurfaceScattering->getResult()
-			, m_lightingPass->getResult()[LpTexture::eDiffuse].wholeViewId
-			, m_lightingPass->getResult()[LpTexture::eSpecular].wholeViewId
-			, m_lightingPass->getResult()[LpTexture::eIndirectDiffuse].wholeViewId
-			, m_lightingPass->getResult()[LpTexture::eIndirectSpecular].wholeViewId
+			, m_lightingPass->getResult()[LpTexture::eDiffuse]
+			, m_lightingPass->getResult()[LpTexture::eSpecular]
+			, m_lightingPass->getResult()[LpTexture::eIndirectDiffuse]
+			, m_lightingPass->getResult()[LpTexture::eIndirectSpecular]
 			, resultTexture
-			, m_opaquePass.getSceneUbo()
+			, sceneUbo
 			, m_gpInfoUbo
 			, hdrConfigUbo ) }
 	{
@@ -155,7 +156,6 @@ namespace castor3d
 
 	void DeferredRendering::update( CpuUpdater & updater )
 	{
-		m_opaquePass.update( updater );
 		m_lightingPass->update( updater );
 
 		if ( m_ssaoConfig.enabled )
@@ -176,7 +176,6 @@ namespace castor3d
 			m_subsurfaceScattering->initialise( m_device );
 		}
 
-		m_opaquePass.update( updater );
 		m_lightingPass->update( updater );
 		m_resolve->update( updater );
 
@@ -230,8 +229,6 @@ namespace castor3d
 			, m_opaquePassResult[DsTexture::eData5].wholeViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
-
-		m_opaquePass.accept( visitor );
 
 		if ( m_ssaoConfig.enabled
 			|| visitor.config.forceSubPassesVisit )

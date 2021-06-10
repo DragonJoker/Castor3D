@@ -100,10 +100,10 @@ namespace castor3d
 			, ShadowMapResult const & smSpotResult
 			, LightVolumePassResult const & lpvResult
 			, LightVolumePassResultArray const & llpvResult
-			, TextureUnit const & vctFirstBounce
-			, TextureUnit const & vctSecondaryBounce
-			, crg::ImageViewId const & depthView
-			, SceneUbo & sceneUbo
+			, Texture const & vctFirstBounce
+			, Texture const & vctSecondaryBounce
+			, Texture const & depthView
+			, SceneUbo const & sceneUbo
 			, GpInfoUbo const & gpInfoUbo
 			, LpvGridConfigUbo const & lpvConfigUbo
 			, LayeredLpvGridConfigUbo const & llpvConfigUbo
@@ -189,20 +189,20 @@ namespace castor3d
 		ShadowMapResult const & m_smSpotResult;
 		LightVolumePassResult const & m_lpvResult;
 		LightVolumePassResultArray const & m_llpvResult;
-		TextureUnit const & m_vctFirstBounce;
-		TextureUnit const & m_vctSecondaryBounce;
-		crg::ImageViewId const & m_depthView;
-		SceneUbo & m_sceneUbo;
+		Texture const & m_vctFirstBounce;
+		Texture const & m_vctSecondaryBounce;
+		Texture const & m_depthView;
+		SceneUbo const & m_sceneUbo;
 		GpInfoUbo const & m_gpInfoUbo;
 		LpvGridConfigUbo const & m_lpvConfigUbo;
 		LayeredLpvGridConfigUbo const & m_llpvConfigUbo;
 		VoxelizerUbo const & m_vctConfigUbo;
+		Texture const & m_srcDepth;
 		castor::Size const m_size;
 		LightPassResult m_result;
 		LightPasses m_lightPasses;
 		RenderPassTimerSPtr m_timer;
 		ashes::FencePtr m_fence;
-		crg::ImageViewId const & m_srcDepth;
 		std::unordered_set< LightPass * > m_active;
 		bool m_voxelConeTracing{ false };
 	};

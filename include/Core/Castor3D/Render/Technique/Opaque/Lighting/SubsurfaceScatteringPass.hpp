@@ -48,7 +48,7 @@ namespace castor3d
 			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, GpInfoUbo const & gpInfoUbo
-			, SceneUbo & sceneUbo
+			, SceneUbo const & sceneUbo
 			, castor::Size const & textureSize
 			, OpaquePassResult const & gpResult
 			, LightPassResult const & lpResult );
@@ -82,9 +82,9 @@ namespace castor3d
 		 */
 		C3D_API void accept( PipelineVisitorBase & visitor );
 
-		inline crg::ImageViewId const & getResult()const
+		inline Texture const & getResult()const
 		{
-			return m_resultView;
+			return m_result;
 		}
 
 	public:
@@ -119,8 +119,8 @@ namespace castor3d
 				, GpInfoUbo const & gpInfoUbo
 				, SceneUbo & sceneUbo
 				, OpaquePassResult const & gpResult
-				, crg::ImageViewId const & source
-				, crg::ImageViewId const & destination
+				, Texture const & source
+				, Texture const & destination
 				, bool isVertic
 				, ashes::PipelineShaderStageCreateInfoArray const & shaderStages );
 			Blur( Blur && rhs )noexcept;
@@ -134,8 +134,7 @@ namespace castor3d
 			ashes::FrameBufferPtr m_frameBuffer;
 		};
 		static constexpr uint32_t PassCount = 3u;
-		using BlurImages = std::array< crg::ImageId, PassCount >;
-		using BlurViews = std::array< crg::ImageViewId, PassCount >;
+		using BlurImages = std::array< Texture, PassCount >;
 		using BlurArray = std::array< std::unique_ptr< Blur >, PassCount >;
 
 		class Combine
@@ -146,31 +145,28 @@ namespace castor3d
 				, RenderDevice const & device
 				, castor::Size const & size
 				, OpaquePassResult const & gpResult
-				, crg::ImageViewId const & source
-				, BlurViews const & blurResults
-				, crg::ImageViewId const & destination
+				, Texture const & source
+				, BlurImages const & blurResults
+				, Texture const & destination
 				, ashes::PipelineShaderStageCreateInfoArray const & shaderStages );
 			Combine( Combine && rhs )noexcept;
 
 		private:
 			UniformBufferOffsetT< BlurWeights > m_blurUbo;
 			OpaquePassResult const & m_geometryBufferResult;
-			crg::ImageViewId const & m_source;
-			BlurViews const & m_blurResults;
+			Texture const & m_source;
+			BlurImages const & m_blurResults;
 		};
 
 	private:
 		GpInfoUbo const & m_gpInfoUbo;
-		SceneUbo & m_sceneUbo;
+		SceneUbo const & m_sceneUbo;
 		OpaquePassResult const & m_gpResult;
 		LightPassResult const & m_lpResult;
 		castor::Size m_size;
-		crg::ImageId m_intermediate;
-		crg::ImageViewId m_intermediateView;
+		Texture m_intermediate;
 		BlurImages m_blurImages;
-		BlurViews m_blurViews;
-		crg::ImageId m_result;
-		crg::ImageViewId m_resultView;
+		Texture m_result;
 		ShaderModule m_blurHorizVertexShader;
 		ShaderModule m_blurHorizPixelShader;
 		BlurArray m_blurX;

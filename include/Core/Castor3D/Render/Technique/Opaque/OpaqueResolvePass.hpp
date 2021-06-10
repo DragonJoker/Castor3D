@@ -71,12 +71,12 @@ namespace castor3d
 			, Scene & scene
 			, OpaquePassResult const & gp
 			, SsaoPass const & ssao
-			, crg::ImageViewId const & subsurfaceScattering
-			, crg::ImageViewId const & lightDiffuse
-			, crg::ImageViewId const & lightSpecular
-			, crg::ImageViewId const & lightIndirectDiffuse
-			, crg::ImageViewId const & lightIndirectSpecular
-			, crg::ImageViewId const & result
+			, Texture const & subsurfaceScattering
+			, Texture const & lightDiffuse
+			, Texture const & lightSpecular
+			, Texture const & lightIndirectDiffuse
+			, Texture const & lightIndirectSpecular
+			, Texture const & result
 			, SceneUbo const & sceneUbo
 			, GpInfoUbo const & gpInfoUbo
 			, HdrConfigUbo const & hdrConfigUbo );
@@ -162,7 +162,7 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		Scene const & m_scene;
-		crg::ImageViewId const & m_result;
+		Texture const & m_result;
 		SceneUbo const & m_sceneUbo;
 		GpInfoUbo const & m_gpInfoUbo;
 		HdrConfigUbo const & m_hdrConfigUbo;
@@ -171,11 +171,11 @@ namespace castor3d
 		Viewport m_viewport;
 		SamplerSPtr m_sampler;
 		OpaquePassResult const & m_opaquePassResult;
-		crg::ImageViewId const & m_subsurfaceScattering;
-		crg::ImageViewId const & m_lightDiffuse;
-		crg::ImageViewId const & m_lightSpecular;
-		crg::ImageViewId const & m_lightIndirectDiffuse;
-		crg::ImageViewId const & m_lightIndirectSpecular;
+		Texture const & m_subsurfaceScattering;
+		Texture const & m_lightDiffuse;
+		Texture const & m_lightSpecular;
+		Texture const & m_lightIndirectDiffuse;
+		Texture const & m_lightIndirectSpecular;
 		ashes::VertexBufferBasePtr m_vertexBuffer;
 		ashes::DescriptorSetLayoutPtr m_uboDescriptorLayout;
 		ashes::DescriptorSetPoolPtr m_uboDescriptorPool;

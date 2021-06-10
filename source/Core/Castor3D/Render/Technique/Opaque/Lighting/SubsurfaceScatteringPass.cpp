@@ -334,17 +334,22 @@ namespace castor3d
 			return sampler;
 		}
 
-		crg::ImageId doCreateImage( crg::FrameGraph & graph
+		Texture doCreateImage( crg::FrameGraph & graph
+			, RenderDevice const & device
 			, castor::Size const & size
 			, std::string name )
 		{
-			return graph.createImage( crg::ImageData{ name
+			return { device
+				, graph.getHandler()
+				, name
 				, 0u
-				, VK_IMAGE_TYPE_2D
+				, makeExtent3D( size )
+				, 1u
+				, 1u
 				, VK_FORMAT_R32G32B32A32_SFLOAT
-				, { size.getWidth(), size.getHeight(), 1u }
 				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_SAMPLED_BIT ) } );
+					| VK_IMAGE_USAGE_SAMPLED_BIT )
+				, VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK };
 		}
 
 		crg::ImageViewId doCreateView( crg::FrameGraph & graph
@@ -447,8 +452,8 @@ namespace castor3d
 		, GpInfoUbo const & gpInfoUbo
 		, SceneUbo & sceneUbo
 		, OpaquePassResult const & gpResult
-		, crg::ImageViewId const & source
-		, crg::ImageViewId const & destination
+		, Texture const & source
+		, Texture const & destination
 		, bool isVertic
 		, ashes::PipelineShaderStageCreateInfoArray const & shaderStages )
 		: RenderQuad{ device
@@ -508,9 +513,9 @@ namespace castor3d
 		, RenderDevice const & device
 		, castor::Size const & size
 		, OpaquePassResult const & gpResult
-		, crg::ImageViewId const & source
-		, SubsurfaceScatteringPass::BlurViews const & blurResults
-		, crg::ImageViewId const & destination
+		, Texture const & source
+		, SubsurfaceScatteringPass::BlurImages const & blurResults
+		, Texture const & destination
 		, ashes::PipelineShaderStageCreateInfoArray const & shaderStages )
 		: RenderQuad{ device
 			, cuT( "SubscatteringCombine" )
@@ -579,7 +584,7 @@ namespace castor3d
 		, crg::FramePass const *& previousPass
 		, RenderDevice const & device
 		, GpInfoUbo const & gpInfoUbo
-		, SceneUbo & sceneUbo
+		, SceneUbo const & sceneUbo
 		, castor::Size const & textureSize
 		, OpaquePassResult const & gpResult
 		, LightPassResult const & lpResult )
@@ -589,22 +594,17 @@ namespace castor3d
 		, m_gpResult{ gpResult }
 		, m_lpResult{ lpResult }
 		, m_size{ textureSize }
-		, m_intermediate{ doCreateImage( graph, textureSize, "SubsurfaceScattering intermediate" ) }
-		, m_intermediateView{ doCreateView( graph, m_intermediate ) }
+		, m_intermediate{ doCreateImage( graph, device, textureSize, "SubsurfaceScattering intermediate" ) }
 		, m_blurHorizVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SssBlurX" }
 		, m_blurHorizPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SssBlurX" }
 		, m_blurVerticVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SssBlurY" }
 		, m_blurVerticPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SssBlurY" }
 		, m_combineVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SssCombine" }
 		, m_combinePixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SssCombine" }
-		, m_blurImages{ doCreateImage( graph, textureSize, "SubsurfaceScattering Blur 0" )
-			, doCreateImage( graph, textureSize, "SubsurfaceScattering Blur 1" )
-			, doCreateImage( graph, textureSize, "SubsurfaceScattering Blur 2" ) }
-		, m_blurViews{ { doCreateView( graph, m_blurImages[0] )
-			, doCreateView( graph, m_blurImages[1] )
-			, doCreateView( graph, m_blurImages[2] ) } }
-		, m_result{ doCreateImage( graph, textureSize, "SubsurfaceScattering Result" ) }
-		, m_resultView{ doCreateView( graph, m_result ) }
+		, m_blurImages{ doCreateImage( graph, device, textureSize, "SubsurfaceScattering Blur 0" )
+			, doCreateImage( graph, device, textureSize, "SubsurfaceScattering Blur 1" )
+			, doCreateImage( graph, device, textureSize, "SubsurfaceScattering Blur 2" ) }
+		, m_result{ doCreateImage( graph, device, textureSize, "SubsurfaceScattering Result" ) }
 	{
 	}
 
@@ -742,16 +742,16 @@ namespace castor3d
 
 	void SubsurfaceScatteringPass::accept( PipelineVisitorBase & visitor )
 	{
-		for ( size_t i{ 0u }; i < m_blurViews.size(); ++i )
+		for ( size_t i{ 0u }; i < m_blurImages.size(); ++i )
 		{
 			visitor.visit( "SSSSS Blur " + castor::string::toString( i )
-				, m_blurViews[i]
+				, m_blurImages[i].wholeViewId
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, TextureFactors{}.invert( true ) );
 		}
 
 		visitor.visit( "SSSSS Result"
-			, m_resultView
+			, m_result.wholeViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 
