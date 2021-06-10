@@ -211,6 +211,7 @@ namespace castor3d
 		C3D_API bool needsGlobalIllumination( LightType ltType
 			, GlobalIlluminationType giType )const;
 		C3D_API crg::SemaphoreWaitArray getRenderTargetsSemaphores()const;
+		C3D_API uint32_t getLpvGridSize()const;
 
 		castor::BoundingBox const & getBoundingBox()const
 		{

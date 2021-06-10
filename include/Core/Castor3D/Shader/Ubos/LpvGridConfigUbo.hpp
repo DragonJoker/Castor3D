@@ -79,6 +79,12 @@ namespace castor3d
 			return m_ubo;
 		}
 
+		void createPassBinding( crg::FramePass & pass
+			, uint32_t binding )const
+		{
+			return m_ubo.createPassBinding( pass, "LpvGridCfg", binding );
+		}
+
 		void createSizedBinding( ashes::DescriptorSet & descriptorSet
 			, VkDescriptorSetLayoutBinding const & layoutBinding )const
 		{

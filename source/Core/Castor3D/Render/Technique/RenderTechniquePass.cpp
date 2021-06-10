@@ -141,6 +141,7 @@ namespace castor3d
 		, m_llpvConfigUbo{ techniquePassDesc.m_llpvConfigUbo }
 		, m_vctConfigUbo{ techniquePassDesc.m_vctConfigUbo }
 		, m_lpvResult{ techniquePassDesc.m_lpvResult }
+		, m_llpvResult{ techniquePassDesc.m_llpvResult }
 		, m_vctFirstBounce{ techniquePassDesc.m_vctFirstBounce }
 		, m_vctSecondaryBounce{ techniquePassDesc.m_vctSecondaryBounce }
 		, m_finished{ m_device->createSemaphore( name ) }
@@ -300,8 +301,7 @@ namespace castor3d
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 			}
 
-			if ( checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
-				|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) )
+			if ( checkFlag( flags.sceneFlags, SceneFlag::eLpvGI ) )
 			{
 				CU_Require( m_lpvResult );
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
@@ -313,6 +313,24 @@ namespace castor3d
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationB
+			}
+
+			if ( checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) )
+			{
+				CU_Require( m_llpvResult );
+
+				for ( auto & lpv : *m_llpvResult )
+				{
+					bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+						, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+						, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationRn
+					bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+						, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+						, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationGn
+					bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+						, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+						, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationBn
+				}
 			}
 		}
 	}
@@ -329,6 +347,7 @@ namespace castor3d
 			, LayeredLpvGridConfigUbo const * llpvConfigUbo
 			, VoxelizerUbo const * vctConfigUbo
 			, LightVolumePassResult const * lpvResult
+			, LightVolumePassResultArray const * llpvResult
 			, Texture const * vctFirstBounce
 			, Texture const * vctSecondaryBounce )
 		{
@@ -404,25 +423,45 @@ namespace castor3d
 					descriptorWrites.push_back( llpvConfigUbo->getDescriptorWrite( index++ ) );
 				}
 
-				// TODO CRG
-				//if ( checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
-				//	|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) )
-				//{
-				//	CU_Require( lpvResult );
-				//	auto & lpv = *lpvResult;
-				//	bindTexture( lpv[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
-				//		, *lpv[LpvTexture::eR].sampler
-				//		, descriptorWrites
-				//		, index );
-				//	bindTexture( lpv[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
-				//		, *lpv[LpvTexture::eG].sampler
-				//		, descriptorWrites
-				//		, index );
-				//	bindTexture( lpv[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
-				//		, *lpv[LpvTexture::eG].sampler
-				//		, descriptorWrites
-				//		, index );
-				//}
+				if ( checkFlag( flags.sceneFlags, SceneFlag::eLpvGI ) )
+				{
+					CU_Require( lpvResult );
+					auto & lpv = *lpvResult;
+					bindTexture( lpv[LpvTexture::eR].wholeView
+						, *lpv[LpvTexture::eR].sampler
+						, descriptorWrites
+						, index );
+					bindTexture( lpv[LpvTexture::eG].wholeView
+						, *lpv[LpvTexture::eG].sampler
+						, descriptorWrites
+						, index );
+					bindTexture( lpv[LpvTexture::eB].wholeView
+						, *lpv[LpvTexture::eB].sampler
+						, descriptorWrites
+						, index );
+				}
+
+				if ( checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) )
+				{
+					CU_Require( llpvResult );
+
+					for ( auto & plpv : *llpvResult )
+					{
+						auto & lpv = *plpv;
+						bindTexture( lpv[LpvTexture::eR].wholeView
+							, *lpv[LpvTexture::eR].sampler
+							, descriptorWrites
+							, index );
+						bindTexture( lpv[LpvTexture::eG].wholeView
+							, *lpv[LpvTexture::eG].sampler
+							, descriptorWrites
+							, index );
+						bindTexture( lpv[LpvTexture::eB].wholeView
+							, *lpv[LpvTexture::eB].sampler
+							, descriptorWrites
+							, index );
+					}
+				}
 			}
 		}
 	}
@@ -442,6 +481,7 @@ namespace castor3d
 			, m_llpvConfigUbo
 			, m_vctConfigUbo
 			, m_lpvResult
+			, m_llpvResult
 			, m_vctFirstBounce
 			, m_vctSecondaryBounce );
 	}
@@ -461,6 +501,7 @@ namespace castor3d
 			, m_llpvConfigUbo
 			, m_vctConfigUbo
 			, m_lpvResult
+			, m_llpvResult
 			, m_vctFirstBounce
 			, m_vctSecondaryBounce );
 	}

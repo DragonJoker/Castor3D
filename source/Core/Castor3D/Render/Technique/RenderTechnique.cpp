@@ -262,74 +262,78 @@ namespace castor3d
 			return result;
 		}
 
-		CommandsSemaphore doCreateClearLpvCommands( RenderDevice const & device
+		crg::FrameGraph doCreateClearLpvCommands( crg::ResourceHandler & handler
+			, RenderDevice const & device
 			, castor::String const & name
 			, LightVolumePassResult  const & lpvResult
 			, LightVolumePassResultArray const & llpvResult )
 		{
-			CommandsSemaphore result{ device
-				, name + cuT( "ClearLpv" ) };
-			// TODO CRG
-			//ashes::CommandBuffer & cmd = *result.commandBuffer;
-			//auto clearTex = [&cmd]( LightVolumePassResult const & result
-			//	, LpvTexture tex )
-			//{
-			//	cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			//		, VK_PIPELINE_STAGE_TRANSFER_BIT
-			//		, result[tex].getTexture()->getDefaultView().getSampledView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
-			//	cmd.clear( result[tex].getTexture()->getDefaultView().getSampledView(), getClearValue( tex ).color );
-			//	cmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-			//		, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			//		, result[tex].getTexture()->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
-			//};
-			//cmd.begin();
-			//cmd.beginDebugBlock(
-			//	{
-			//		"Lighting - " + name + " - Clear Injection",
-			//		castor3d::makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ),
-			//	} );
-			//clearTex( lpvResult, LpvTexture::eR );
-			//clearTex( lpvResult, LpvTexture::eG );
-			//clearTex( lpvResult, LpvTexture::eB );
-
-			//for ( auto & lpvResult : llpvResult )
-			//{
-			//	clearTex( *lpvResult, LpvTexture::eR );
-			//	clearTex( *lpvResult, LpvTexture::eG );
-			//	clearTex( *lpvResult, LpvTexture::eB );
-			//}
-
-			//cmd.endDebugBlock();
-			//cmd.end();
-			return result;
-		}
-
-		CommandsSemaphore doPrepareColourTransitionCommands( RenderDevice const & device
-			, TextureUnit const & colourTexture
-			, ashes::ImageView velocityTexture )
-		{
-			auto & engine = *device.renderSystem.getEngine();
-			CommandsSemaphore result{ device, "TechniqueColourTexTransition" };
-			auto & cmd = *result.commandBuffer;
-			cmd.begin();
-			cmd.beginDebugBlock(
+			class LpvClear
+				: public crg::RunnablePass
+			{
+			public:
+				LpvClear( crg::FramePass const & pass
+					, crg::GraphContext const & context
+					, crg::RunnableGraph & graph )
+					: crg::RunnablePass{ pass, context, graph }
 				{
-					"Technique Colour Texture Transition",
-					makeFloatArray( engine.getNextRainbowColour() ),
+				}
+
+			protected:
+				void doInitialise()override
+				{
+				}
+
+				void doRecordInto( VkCommandBuffer commandBuffer
+					, uint32_t index )override
+				{
+					auto clearValue = transparentBlackClearColor.color;
+
+					for ( auto & attach : m_pass.images )
+					{
+						auto view = attach.view();
+						auto image = m_graph.createImage( view.data->image );
+						assert( attach.isTransferOutputView() );
+						m_context.vkCmdClearColorImage( commandBuffer
+							, image
+							, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+							, &clearValue
+							, 1u
+							, &view.data->info.subresourceRange );
+					}
+				}
+
+				VkPipelineStageFlags doGetSemaphoreWaitFlags()const override
+				{
+					return VK_PIPELINE_STAGE_TRANSFER_BIT;
+				}
+			};
+
+			crg::FrameGraph result{ handler, name + "ClearLpv" };
+			auto & pass = result.createPass( name + "LpvClear"
+				, []( crg::FramePass const & pass
+					, crg::GraphContext const & context
+					, crg::RunnableGraph & graph )
+				{
+					return std::make_unique< LpvClear >( pass
+						, context
+						, graph );
 				} );
-			cmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, colourTexture.getTexture()->getDefaultView().getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
-			cmd.memoryBarrier( VK_PIPELINE_STAGE_HOST_BIT
-				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, velocityTexture.makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
-			cmd.clear( velocityTexture
-				, transparentBlackClearColor.color );
-			cmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, velocityTexture.makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
-			cmd.endDebugBlock();
-			cmd.end();
+
+			for ( auto & texture : lpvResult )
+			{
+				pass.addTransferOutputView( texture.wholeViewId
+					, VK_IMAGE_LAYOUT_UNDEFINED );
+			}
+
+			for ( auto & textures : llpvResult )
+			{
+				for ( auto & texture : *textures )
+				{
+					pass.addTransferOutputView( texture.wholeViewId
+						, VK_IMAGE_LAYOUT_UNDEFINED );
+				}
+			}
 
 			return result;
 		}
@@ -460,9 +464,11 @@ namespace castor3d
 		, m_transparentPassDesc{ &doCreateTransparentPass() }
 #endif
 		, m_signalFinished{ m_device->createSemaphore( "RenderTechnique" ) }
-		, m_clearLpv{ doCreateClearLpvCommands( device, getName(), *m_lpvResult, m_llpvResult ) }
+		, m_clearLpvGraph{ doCreateClearLpvCommands( getOwner()->getGraphResourceHandler(), device, getName(), *m_lpvResult, m_llpvResult ) }
+		, m_clearLpvRunnable{ m_clearLpvGraph.compile( m_device.makeContext() ) }
 		, m_particleTimer{ std::make_shared< RenderPassTimer >( device, cuT( "Particles" ), cuT( "Particles" ) ) }
 	{
+		m_clearLpvRunnable->record();
 #if !C3D_DebugDisableShadowMaps
 		m_allShadowMaps[size_t( LightType::eDirectional )].emplace_back( std::ref( *m_directionalShadowMap ), UInt32Array{} );
 		m_allShadowMaps[size_t( LightType::eSpot )].emplace_back( std::ref( *m_spotShadowMap ), UInt32Array{} );
@@ -483,7 +489,6 @@ namespace castor3d
 		m_opaquePassResult->cleanup();
 		m_opaquePassResult.reset();
 #endif
-		m_clearLpv = {};
 		m_llpvResult.clear();
 		m_lpvResult.reset();
 		m_voxelizer.reset();
@@ -620,6 +625,7 @@ namespace castor3d
 	{
 		auto result = toWait;
 		result = doRenderShadowMaps( result );
+		result = doRenderLPV( result );
 		result = doRenderEnvironmentMaps( result );
 		result = doRenderVCT( result );
 		return result;
@@ -769,6 +775,7 @@ namespace castor3d
 						.llpvConfigUbo( m_llpvConfigUbo )
 						.vctConfigUbo( m_vctConfigUbo )
 						.lpvResult( *m_lpvResult )
+						.llpvResult( m_llpvResult )
 						.vctFirstBounce( m_voxelizer->getFirstBounce() )
 						.vctSecondaryBounce( m_voxelizer->getSecondaryBounce() ) );
 				m_opaquePass = result.get();
@@ -807,6 +814,7 @@ namespace castor3d
 						.llpvConfigUbo( m_llpvConfigUbo )
 						.vctConfigUbo( m_vctConfigUbo )
 						.lpvResult( *m_lpvResult )
+						.llpvResult( m_llpvResult )
 						.vctFirstBounce( m_voxelizer->getFirstBounce() )
 						.vctSecondaryBounce( m_voxelizer->getSecondaryBounce() )
 						.hasVelocity( true ) );
@@ -847,9 +855,22 @@ namespace castor3d
 			auto needLLpvG = scene.needsGlobalIllumination( LightType( i )
 				, GlobalIlluminationType::eLayeredLpvG );
 
+			if ( needLpv || needLpvG )
+			{
+				m_lpvResult->create();
+			}
+
+			if ( needLLpv || needLLpvG )
+			{
+				for ( auto & lpvResult : m_llpvResult )
+				{
+					lpvResult->create();
+				}
+			}
+
 			if ( needLpv && !m_lightPropagationVolumes[i] )
 			{
-				m_lightPropagationVolumes[i] = castor::makeUnique< LightPropagationVolumes >( graph
+				m_lightPropagationVolumes[i] = castor::makeUnique< LightPropagationVolumes >( getOwner()->getGraphResourceHandler()
 					, scene
 					, LightType( i )
 					, m_device
@@ -861,7 +882,7 @@ namespace castor3d
 
 			if ( needLpvG && !m_lightPropagationVolumesG[i] )
 			{
-				m_lightPropagationVolumesG[i] = castor::makeUnique< LightPropagationVolumesG >( graph
+				m_lightPropagationVolumesG[i] = castor::makeUnique< LightPropagationVolumesG >( getOwner()->getGraphResourceHandler()
 					, scene
 					, LightType( i )
 					, m_device
@@ -873,7 +894,7 @@ namespace castor3d
 
 			if ( needLLpv && !m_layeredLightPropagationVolumes[i] )
 			{
-				m_layeredLightPropagationVolumes[i] = castor::makeUnique< LayeredLightPropagationVolumes >( graph
+				m_layeredLightPropagationVolumes[i] = castor::makeUnique< LayeredLightPropagationVolumes >( getOwner()->getGraphResourceHandler()
 					, scene
 					, LightType( i )
 					, m_device
@@ -885,7 +906,7 @@ namespace castor3d
 
 			if ( needLLpvG && !m_layeredLightPropagationVolumesG[i] )
 			{
-				m_layeredLightPropagationVolumesG[i] = castor::makeUnique< LayeredLightPropagationVolumesG >( graph
+				m_layeredLightPropagationVolumesG[i] = castor::makeUnique< LayeredLightPropagationVolumesG >( getOwner()->getGraphResourceHandler()
 					, scene
 					, LightType( i )
 					, m_device
@@ -1028,40 +1049,39 @@ namespace castor3d
 		}
 	}
 
-	ashes::Semaphore const & RenderTechnique::doRenderLpv( RenderDevice const & device
-		, ashes::Semaphore const & semaphore )
+	crg::SemaphoreWait RenderTechnique::doRenderLPV( crg::SemaphoreWait const & semaphore )
 	{
-		ashes::Semaphore const * result = &semaphore;
+		crg::SemaphoreWait result = semaphore;
 
 		if ( m_renderTarget.getScene()->needsGlobalIllumination() )
 		{
-			result = &m_clearLpv.submit( *device.graphicsQueue, *result );
+			result = m_clearLpvRunnable->run( result, *m_device.graphicsQueue );
 
 			for ( auto i = uint32_t( LightType::eMin ); i < uint32_t( LightType::eCount ); ++i )
 			{
 				if ( m_lightPropagationVolumes[i] )
 				{
-					result = &m_lightPropagationVolumes[i]->render( *result );
+					result = m_lightPropagationVolumes[i]->render( result );
 				}
 
 				if ( m_lightPropagationVolumesG[i] )
 				{
-					result = &m_lightPropagationVolumesG[i]->render( *result );
+					result = m_lightPropagationVolumesG[i]->render( result );
 				}
 
 				if ( m_layeredLightPropagationVolumes[i] )
 				{
-					result = &m_layeredLightPropagationVolumes[i]->render( *result );
+					result = m_layeredLightPropagationVolumes[i]->render( result );
 				}
 
 				if ( m_layeredLightPropagationVolumesG[i] )
 				{
-					result = &m_layeredLightPropagationVolumesG[i]->render( *result );
+					result = m_layeredLightPropagationVolumesG[i]->render( result );
 				}
 			}
 		}
 
-		return *result;
+		return result;
 	}
 
 	crg::SemaphoreWait RenderTechnique::doRenderShadowMaps( crg::SemaphoreWait const & semaphore )const

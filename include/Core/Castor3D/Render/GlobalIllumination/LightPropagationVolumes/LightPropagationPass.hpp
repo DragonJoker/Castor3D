@@ -22,21 +22,37 @@ See LICENSE file in root folder
 
 #include <ShaderAST/Shader.hpp>
 
-#include <ashespp/Command/CommandBuffer.hpp>
-#include <ashespp/Descriptor/DescriptorSet.hpp>
-#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
-#include <ashespp/Descriptor/DescriptorSetPool.hpp>
-#include <ashespp/Pipeline/GraphicsPipeline.hpp>
-#include <ashespp/Pipeline/PipelineLayout.hpp>
-#include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
-#include <ashespp/Pipeline/PipelineViewportStateCreateInfo.hpp>
-#include <ashespp/RenderPass/FrameBuffer.hpp>
+#include <ashespp/Buffer/VertexBuffer.hpp>
+
+#include <RenderGraph/RunnablePasses/RenderPass.hpp>
+#include <RenderGraph/RunnablePasses/PipelineHolder.hpp>
 
 namespace castor3d
 {
 	class LightPropagationPass
-		: public RenderGrid
+		: public castor::Named
+		, public crg::RenderPass
 	{
+	public:
+		enum InIdx
+		{
+			LpvGridUboIdx,
+			RLpvGridIdx,
+			GLpvGridIdx,
+			BLpvGridIdx,
+			GpGridIdx,
+		};
+
+		enum OutIdx
+		{
+			RLpvAccumulatorIdx,
+			GLpvAccumulatorIdx,
+			BLpvAccumulatorIdx,
+			RLpvNextStepIdx,
+			GLpvNextStepIdx,
+			BLpvNextStepIdx,
+		};
+
 	public:
 		/**
 		 *\~english
@@ -56,61 +72,57 @@ namespace castor3d
 		 *\param[in]	gridSize	Les dimensions de la grille.
 		 *\param[in]	blendMode	Le mode de mélange.
 		 */
-		C3D_API LightPropagationPass( RenderDevice const & device
-			, castor::String const & prefix
-			, castor::String const & suffix
+		C3D_API LightPropagationPass( crg::FramePass const & pass
+			, crg::GraphContext const & context
+			, crg::RunnableGraph & graph
+			, RenderDevice const & device
 			, bool occlusion
 			, uint32_t gridSize
 			, BlendMode blendMode );
-		C3D_API void registerPassIO( crg::ImageId const * occlusion
-			, LightVolumePassResult const & injection
-			, LpvGridConfigUbo const & lpvConfigUbo
-			, LightVolumePassResult const & accumulation
-			, LightVolumePassResult const & propagate );
-		/**
-		*\~english
-		*\brief
-		*	Initialises the descriptor sets for all registered passes.
-		*\~french
-		*\brief
-		*	Crée les descriptor sets pour toute les passes enregistrées.
-		*/
-		C3D_API void initialisePasses();
-		/**
-		 *\~english
-		 *\brief		Renders the pass.
-		 *\param[in]	toWait	The semaphore from the previous render pass.
-		 *\param[in]	index	The pass index.
-		 *\~french
-		 *\brief		Dessine la passe.
-		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
-		 *\param[in]	index	L'indice de la passe.
-		 */
-		C3D_API ashes::Semaphore const & compute( ashes::Semaphore const & toWait
-			, uint32_t index )const;
-		C3D_API CommandsSemaphore getCommands( RenderPassTimer const & timer
-			, uint32_t index )const;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( PipelineVisitorBase & visitor );
 
+	protected:
+		C3D_API void doSubInitialise()override;
+		C3D_API void doSubRecordInto( VkCommandBuffer commandBuffer
+			, uint32_t index )override;
+
 	private:
-		using RenderGrid::registerPassInputs;
+		class PipelineHolder
+			: public crg::PipelineHolder
+		{
+		public:
+			PipelineHolder( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph
+				, crg::pp::Config config
+				, uint32_t gridSize
+				, BlendMode blendMode );
 
-		void registerPassOutputs( ashes::ImageViewCRefArray const & outputs );
+			void initialise( VkRenderPass renderPass );
+			void recordInto( VkCommandBuffer commandBuffer
+				, uint32_t index );
+
+		protected:
+			void doCreatePipeline()override;
+
+		private:
+			uint32_t m_gridSize;
+			BlendMode m_blendMode;
+			VkRenderPass m_renderPass;
+		};
 
 	private:
-		Engine & m_engine;
-		RenderPassTimerSPtr m_timer;
-
+		RenderDevice const & m_device;
+		uint32_t m_gridSize;
+		ashes::VertexBufferPtr< castor::Point3f > m_vertexBuffer;
 		ShaderModule m_vertexShader;
 		ShaderModule m_geometryShader;
 		ShaderModule m_pixelShader;
-		ashes::RenderPassPtr m_renderPass;
-		std::vector< ashes::ImageViewCRefArray > m_passesOutputs;
-		ashes::FrameBufferPtrArray m_frameBuffers;
-		std::vector< CommandsSemaphore > m_commands;
+		ashes::PipelineShaderStageCreateInfoArray m_stages;
+		PipelineHolder m_holder;
 	};
 }
 

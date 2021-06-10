@@ -228,9 +228,9 @@ namespace castor3d
 		void doUpdateLpv( GpuUpdater & updater );
 		void doUpdateParticles( CpuUpdater & updater );
 		void doUpdateParticles( GpuUpdater & updater );
-		ashes::Semaphore const & doRenderLpv( RenderDevice const & device
-			, ashes::Semaphore const & semaphore );
+
 		crg::SemaphoreWait doRenderShadowMaps( crg::SemaphoreWait const & semaphore )const;
+		crg::SemaphoreWait doRenderLPV( crg::SemaphoreWait const & semaphore );
 		crg::SemaphoreWait doRenderEnvironmentMaps( crg::SemaphoreWait const & semaphore )const;
 		crg::SemaphoreWait doRenderVCT( crg::SemaphoreWait const & semaphore )const;
 
@@ -268,7 +268,8 @@ namespace castor3d
 		RenderTechniquePass * m_transparentPass{};
 		WeightedBlendRenderingUPtr m_weightedBlendRendering;
 		ashes::SemaphorePtr m_signalFinished;
-		CommandsSemaphore m_clearLpv;
+		crg::FrameGraph m_clearLpvGraph;
+		crg::RunnableGraphPtr m_clearLpvRunnable;
 		RenderPassTimerSPtr m_particleTimer;
 		ShadowMapLightTypeArray m_allShadowMaps;
 		ShadowMapLightTypeArray m_activeShadowMaps;

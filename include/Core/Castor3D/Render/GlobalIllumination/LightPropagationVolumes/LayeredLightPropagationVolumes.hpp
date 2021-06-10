@@ -19,6 +19,9 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/Named.hpp>
 #include <CastorUtils/Graphics/BoundingBox.hpp>
 
+#include <RenderGraph/FrameGraph.hpp>
+#include <RenderGraph/RunnableGraph.hpp>
+
 #include <array>
 
 namespace castor3d
@@ -31,7 +34,7 @@ namespace castor3d
 		static constexpr uint32_t CascadeCount = shader::LpvMaxCascadesCount;
 
 	protected:
-		C3D_API LayeredLightPropagationVolumesBase( crg::FrameGraph & graph
+		C3D_API LayeredLightPropagationVolumesBase( crg::ResourceHandler & handler
 			, Scene const & scene
 			, LightType lightType
 			, RenderDevice const & device
@@ -45,48 +48,87 @@ namespace castor3d
 		C3D_API void cleanup();
 		C3D_API void registerLight( LightSPtr light );
 		C3D_API void update( CpuUpdater & updater );
-		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait );
+		C3D_API crg::SemaphoreWait render( crg::SemaphoreWait const & toWait );
 		C3D_API void accept( PipelineVisitorBase & visitor );
 
 	private:
+		crg::FramePass & doCreateClearInjectionPass();
+		crg::FramePass & doCreatePropagationPass( std::vector< crg::FramePass const * > previousPasses
+			, std::string const & name
+			, LightVolumePassResult const & injection
+			, LightVolumePassResult const & lpvResult
+			, LightVolumePassResult const & propagation
+			, uint32_t cascade
+			, uint32_t index );
+		std::vector< crg::FramePass * > doCreatePropagationPasses();
+
+	private:
 		Scene const & m_scene;
-		Engine & m_engine;
 		RenderDevice const & m_device;
 		ShadowMapResult const & m_smResult;
 		LightVolumePassResultArray const & m_lpvResult;
 		LayeredLpvGridConfigUbo & m_lpvGridConfigUbo;
 		LpvGridConfigUboArray m_lpvGridConfigUbos;
-		bool m_initialised{ false };
 		bool m_geometryVolumes{ false };
+		crg::FrameGraph m_graph;
+		bool m_initialised{ false };
 		LightType m_lightType;
 		std::vector< LightVolumePassResult > m_injection;
-		crg::ImageIdArray m_geometry;
-		std::array< LightVolumePassResult, 2u > m_propagate;
-		CommandsSemaphore m_clearCommand;
-		std::vector< CommandsSemaphore > m_clearCommands;
+		TextureArray m_geometry;
+		std::vector< std::array< LightVolumePassResult, 2u > > m_propagate;
 		struct LightLpv
 		{
-			LightLpv( RenderDevice const & device
+			LightLpv( crg::FrameGraph & graph
+				, crg::FramePass const & previousPass
+				, RenderDevice const & device
 				, castor::String const & name
 				, LightCache const & lightCache
 				, LightType lightType
 				, ShadowMapResult const & smResult
 				, LpvGridConfigUboArray const & lpvGridConfigUbos
 				, std::vector< LightVolumePassResult > const & injection
-				, crg::ImageIdArray const * geometry
-				, std::vector< float > lpvCellSizes );
-			bool update( CpuUpdater & updater );
+				, TextureArray const * geometry );
+			bool update( CpuUpdater & updater
+				, std::vector< float > const & lpvCellSizes );
+
 			LpvLightConfigUboArray lpvLightConfigUbos;
-			std::vector< float > lpvCellSizes;
-			LightInjectionPassArray lightInjectionPasses;
-			GeometryInjectionPassArray geometryInjectionPasses;
+			crg::FramePass const * lastLightPass{};
+			crg::FramePass const * lastGeomPass{};
+			std::vector< LightInjectionPass * > lightInjectionPasses{};
+			std::vector< crg::FramePass * > lightInjectionPassesDesc;
+			std::vector< GeometryInjectionPass * > geometryInjectionPasses{};
+			std::vector< crg::FramePass * > geometryInjectionPassesDesc{};
+
+		private:
+			crg::FramePass & doCreateInjectionPass( crg::FrameGraph & graph
+				, RenderDevice const & device
+				, castor::String const & name
+				, LightCache const & lightCache
+				, LightType lightType
+				, ShadowMapResult const & smResult
+				, LpvGridConfigUboArray const & lpvGridConfigUbos
+				, std::vector< LightVolumePassResult > const & injection
+				, uint32_t cascade );
+			crg::FramePass & doCreateGeometryPass( crg::FrameGraph & graph
+				, RenderDevice const & device
+				, castor::String const & name
+				, LightCache const & lightCache
+				, LightType lightType
+				, ShadowMapResult const & smResult
+				, LpvGridConfigUboArray const & lpvGridConfigUbos
+				, TextureArray const & geometry
+				, uint32_t cascade );
 		};
+
+		crg::FramePass & m_clearInjectionPass;
 		std::unordered_map< LightSPtr, LightLpv > m_lightLpvs;
-		LightPropagationPassArray m_lightPropagationPasses;
+		std::vector< crg::FramePass * > m_lightPropagationPassesDesc;
+		std::vector< LightPropagationPass * > m_lightPropagationPasses;
 
 		castor::BoundingBox m_aabb;
 		castor::Point3f m_cameraPos;
 		castor::Point3f m_cameraDir;
+		crg::RunnableGraphPtr m_runnable;
 	};
 
 	template< bool GeometryVolumesT >
@@ -94,14 +136,14 @@ namespace castor3d
 		: public LayeredLightPropagationVolumesBase
 	{
 	public:
-		LayeredLightPropagationVolumesT( crg::FrameGraph & graph
+		LayeredLightPropagationVolumesT( crg::ResourceHandler & handler
 			, Scene const & scene
 			, LightType lightType
 			, RenderDevice const & device
 			, ShadowMapResult const & smResult
 			, LightVolumePassResultArray const & lpvResult
 			, LayeredLpvGridConfigUbo & lpvGridConfigUbo )
-			: LayeredLightPropagationVolumesBase{ graph
+			: LayeredLightPropagationVolumesBase{ handler
 				, scene
 				, lightType
 				, device

@@ -25,15 +25,9 @@
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
 
-#include <CastorUtils/Graphics/Image.hpp>
-
-#include <ashespp/Image/Image.hpp>
-#include <ashespp/Image/ImageView.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
-#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
-#include <ashespp/RenderPass/SubpassDescription.hpp>
-
 #include <ShaderWriter/Source.hpp>
+
+#include <RenderGraph/GraphContext.hpp>
 
 #include <numeric>
 #include <random>
@@ -46,25 +40,6 @@ namespace castor3d
 {
 	namespace
 	{
-		enum InIdx
-		{
-			LpvGridUboIdx,
-			RLpvGridIdx,
-			GLpvGridIdx,
-			BLpvGridIdx,
-			GpGridIdx,
-		};
-		
-		enum OutIdx
-		{
-			RLpvAccumulatorIdx,
-			GLpvAccumulatorIdx,
-			BLpvAccumulatorIdx,
-			RLpvNextStepIdx,
-			GLpvNextStepIdx,
-			BLpvNextStepIdx,
-		};
-
 		std::unique_ptr< ast::Shader > getVertexProgram()
 		{
 			using namespace sdw;
@@ -75,7 +50,7 @@ namespace castor3d
 			auto outCellIndex = writer.declOutput< IVec3 >( "outCellIndex", 0u );
 			auto out = writer.getOut();
 
-			UBO_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u, true );
+			UBO_LPVGRIDCONFIG( writer, LightPropagationPass::LpvGridUboIdx, 0u, true );
 
 			writer.implementFunction< Void >( "main"
 				, [&]()
@@ -165,18 +140,18 @@ namespace castor3d
 					ivec2( 0_i, -1_i ),
 				} );
 
-			UBO_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u, true );
-			auto c3d_lpvGridR = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Grid" ), RLpvGridIdx, 0u );
-			auto c3d_lpvGridG = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Grid" ), GLpvGridIdx, 0u );
-			auto c3d_lpvGridB = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Grid" ), BLpvGridIdx, 0u );
-			auto c3d_geometryVolume = writer.declSampledImage< FImg3DRgba16 >( "c3d_geometryVolume", GpGridIdx, 0u, occlusion );
+			UBO_LPVGRIDCONFIG( writer, LightPropagationPass::LpvGridUboIdx, 0u, true );
+			auto c3d_lpvGridR = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Grid" ), LightPropagationPass::RLpvGridIdx, 0u );
+			auto c3d_lpvGridG = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Grid" ), LightPropagationPass::GLpvGridIdx, 0u );
+			auto c3d_lpvGridB = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Grid" ), LightPropagationPass::BLpvGridIdx, 0u );
+			auto c3d_geometryVolume = writer.declSampledImage< FImg3DRgba16 >( "c3d_geometryVolume", LightPropagationPass::GpGridIdx, 0u, occlusion );
 
-			auto outLpvAccumulatorR = writer.declOutput< Vec4 >( "outLpvAccumulatorR", RLpvAccumulatorIdx );
-			auto outLpvAccumulatorG = writer.declOutput< Vec4 >( "outLpvAccumulatorG", GLpvAccumulatorIdx );
-			auto outLpvAccumulatorB = writer.declOutput< Vec4 >( "outLpvAccumulatorB", BLpvAccumulatorIdx );
-			auto outLpvNextStepR = writer.declOutput< Vec4 >( "outLpvNextStepR", RLpvNextStepIdx );
-			auto outLpvNextStepG = writer.declOutput< Vec4 >( "outLpvNextStepG", GLpvNextStepIdx );
-			auto outLpvNextStepB = writer.declOutput< Vec4 >( "outLpvNextStepB", BLpvNextStepIdx );
+			auto outLpvAccumulatorR = writer.declOutput< Vec4 >( "outLpvAccumulatorR", LightPropagationPass::RLpvAccumulatorIdx );
+			auto outLpvAccumulatorG = writer.declOutput< Vec4 >( "outLpvAccumulatorG", LightPropagationPass::GLpvAccumulatorIdx );
+			auto outLpvAccumulatorB = writer.declOutput< Vec4 >( "outLpvAccumulatorB", LightPropagationPass::BLpvAccumulatorIdx );
+			auto outLpvNextStepR = writer.declOutput< Vec4 >( "outLpvNextStepR", LightPropagationPass::RLpvNextStepIdx );
+			auto outLpvNextStepG = writer.declOutput< Vec4 >( "outLpvNextStepG", LightPropagationPass::GLpvNextStepIdx );
+			auto outLpvNextStepB = writer.declOutput< Vec4 >( "outLpvNextStepB", LightPropagationPass::BLpvNextStepIdx );
 
 			auto inCellIndex = writer.declInput< IVec3 >( "inCellIndex", 0u );
 			auto in = writer.getIn();
@@ -344,174 +319,173 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ashes::RenderPassPtr doCreateRenderPass( castor::String const & name
-			, RenderDevice const & device
-			, VkFormat format
-			, BlendMode blendMode )
+		ashes::VertexBufferPtr< castor::Point3f > createVertexBuffer( RenderDevice const & device
+			, castor::String const & name
+			, uint32_t gridSize )
 		{
-			auto loadOp = ( blendMode == BlendMode::eNoBlend
-				? VK_ATTACHMENT_LOAD_OP_CLEAR
-				: VK_ATTACHMENT_LOAD_OP_LOAD );
-			auto srcImageLayout = ( blendMode == BlendMode::eNoBlend
-				? VK_IMAGE_LAYOUT_UNDEFINED
-				: VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-			ashes::VkAttachmentDescriptionArray attaches
+			auto bufferSize = gridSize * gridSize * gridSize;
+			auto vertexBuffer = makeVertexBuffer< castor::Point3f >( device
+				, bufferSize
+				, 0u
+				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+				, name );
+
+			if ( auto buffer = vertexBuffer->lock( 0u, bufferSize, 0u ) )
 			{
+				for ( uint32_t d = 0; d < gridSize; d++ )
 				{
-					0u,
-					format,
-					VK_SAMPLE_COUNT_1_BIT,
-					loadOp,
-					VK_ATTACHMENT_STORE_OP_STORE,
-					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					srcImageLayout,
-					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-				},
-				{
-					0u,
-					format,
-					VK_SAMPLE_COUNT_1_BIT,
-					loadOp,
-					VK_ATTACHMENT_STORE_OP_STORE,
-					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					srcImageLayout,
-					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-				},
-				{
-					0u,
-					format,
-					VK_SAMPLE_COUNT_1_BIT,
-					loadOp,
-					VK_ATTACHMENT_STORE_OP_STORE,
-					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					srcImageLayout,
-					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-				},
-				{
-					0u,
-					format,
-					VK_SAMPLE_COUNT_1_BIT,
-					loadOp,
-					VK_ATTACHMENT_STORE_OP_STORE,
-					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					srcImageLayout,
-					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-				},
-				{
-					0u,
-					format,
-					VK_SAMPLE_COUNT_1_BIT,
-					loadOp,
-					VK_ATTACHMENT_STORE_OP_STORE,
-					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					srcImageLayout,
-					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-				},
-				{
-					0u,
-					format,
-					VK_SAMPLE_COUNT_1_BIT,
-					loadOp,
-					VK_ATTACHMENT_STORE_OP_STORE,
-					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					srcImageLayout,
-					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-				},
-			};
-			ashes::SubpassDescriptionArray subpasses;
-			subpasses.emplace_back( ashes::SubpassDescription
-				{
-					0u,
-					VK_PIPELINE_BIND_POINT_GRAPHICS,
-					{},
+					for ( uint32_t c = 0; c < gridSize; c++ )
 					{
-						{ RLpvAccumulatorIdx, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-						{ GLpvAccumulatorIdx, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-						{ BLpvAccumulatorIdx, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-						{ RLpvNextStepIdx, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-						{ GLpvNextStepIdx, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-						{ BLpvNextStepIdx, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-					},
-					{},
-					ashes::nullopt,
-					{},
-				} );
-			ashes::VkSubpassDependencyArray dependencies
-			{
-				{
-					VK_SUBPASS_EXTERNAL,
-					0u,
-					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-					VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-					VK_ACCESS_SHADER_READ_BIT,
-					VK_DEPENDENCY_BY_REGION_BIT,
-				},
-				{
-					0u,
-					VK_SUBPASS_EXTERNAL,
-					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-					VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-					VK_ACCESS_SHADER_READ_BIT,
-					VK_DEPENDENCY_BY_REGION_BIT,
-				},
-			};
-			ashes::RenderPassCreateInfo createInfo
-			{
-				0u,
-				std::move( attaches ),
-				std::move( subpasses ),
-				std::move( dependencies ),
-			};
-			auto result = device->createRenderPass( name
-				, std::move( createInfo ) );
-			return result;
-		}
+						for ( uint32_t r = 0; r < gridSize; r++ )
+						{
+							*buffer = castor::Point3f{ float( r ), float( c ), float( d ) };
+							++buffer;
+						}
+					}
+				}
 
-		rq::BindingDescriptionArray createBindings( bool occlusion )
-		{
-			rq::BindingDescriptionArray result
-			{
-				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, ashes::nullopt, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_VERTEX_BIT },
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
-			};
-
-			if ( occlusion )
-			{
-				result.push_back( { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D } );
+				vertexBuffer->flush( 0u, 4u );
+				vertexBuffer->unlock();
 			}
 
+			return vertexBuffer;
+		}
+
+		crg::pp::Config getConfig( ashes::PipelineShaderStageCreateInfoArray const & stages )
+		{
+			crg::pp::Config result;
+			result.program = crg::makeVkArray< VkPipelineShaderStageCreateInfo >( stages );
 			return result;
 		}
 	}
 
 	//*********************************************************************************************
 
-	LightPropagationPass::LightPropagationPass( RenderDevice const & device
-		, castor::String const & prefix
-		, castor::String const & suffix
+	LightPropagationPass::PipelineHolder::PipelineHolder( crg::FramePass const & pass
+		, crg::GraphContext const & context
+		, crg::RunnableGraph & graph
+		, crg::pp::Config config
+		, uint32_t gridSize
+		, BlendMode blendMode )
+		: crg::PipelineHolder{ pass, context, graph, std::move( config ), VK_PIPELINE_BIND_POINT_GRAPHICS }
+		, m_gridSize{ gridSize }
+		, m_blendMode{ blendMode }
+	{
+		m_descriptorSets.resize( 1u );
+	}
+
+	void LightPropagationPass::PipelineHolder::initialise( VkRenderPass renderPass )
+	{
+		m_renderPass = renderPass;
+		doPreInitialise();
+	}
+
+	void LightPropagationPass::PipelineHolder::recordInto( VkCommandBuffer commandBuffer
+		, uint32_t index )
+	{
+		doPreRecordInto( commandBuffer, index );
+	}
+
+	void LightPropagationPass::PipelineHolder::doCreatePipeline()
+	{
+		ashes::PipelineVertexInputStateCreateInfo vertexState{ 0u
+			, { { 0u
+				, sizeof( castor::Point3f )
+				, VK_VERTEX_INPUT_RATE_VERTEX } }
+			, ashes::VkVertexInputAttributeDescriptionArray{ { 0u
+				, 0u
+				, VK_FORMAT_R32G32B32_SFLOAT
+				, 0u } } };
+		VkViewport viewport{ 0.0f, 0.0f, float( m_gridSize ), float( m_gridSize ) };
+		VkRect2D scissor{ 0, 0, m_gridSize, m_gridSize };
+		ashes::PipelineViewportStateCreateInfo viewportState{ 0u
+			, 1u
+			, ashes::VkViewportArray{ viewport }
+			, 1u
+			, ashes::VkScissorArray{ scissor } };
+		auto blendState = SceneRenderPass::createBlendState( m_blendMode, m_blendMode, 6u );
+		VkPipelineInputAssemblyStateCreateInfo iaState{ VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO
+			, nullptr
+			, 0u
+			, VK_PRIMITIVE_TOPOLOGY_POINT_LIST
+			, VK_FALSE };
+		VkPipelineMultisampleStateCreateInfo msState{ VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO
+			, nullptr
+			, 0u
+			, VK_SAMPLE_COUNT_1_BIT
+			, VK_FALSE
+			, 0.0f
+			, nullptr
+			, VK_FALSE
+			, VK_FALSE };
+		VkPipelineRasterizationStateCreateInfo rsState{ VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO
+			, nullptr
+			, 0u
+			, VK_FALSE
+			, VK_FALSE
+			, VK_POLYGON_MODE_FILL
+			, VK_CULL_MODE_NONE
+			, VK_FRONT_FACE_COUNTER_CLOCKWISE
+			, VK_FALSE
+			, 0.0f
+			, 0.0f
+			, 0.0f
+			, 0.0f };
+		VkPipelineDepthStencilStateCreateInfo dsState{ VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO
+			, nullptr
+			, 0u
+			, VK_FALSE
+			, VK_FALSE };
+		VkPipelineViewportStateCreateInfo vpState = viewportState;
+		VkPipelineVertexInputStateCreateInfo viState = vertexState;
+		VkPipelineColorBlendStateCreateInfo cbState = blendState;
+		VkGraphicsPipelineCreateInfo createInfo{ VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO
+			, nullptr
+			, 0u
+			, uint32_t( m_baseConfig.program.size() )
+			, m_baseConfig.program.data()
+			, &viState
+			, &iaState
+			, nullptr
+			, &vpState
+			, &rsState
+			, &msState
+			, &dsState
+			, &cbState
+			, nullptr
+			, m_pipelineLayout
+			, m_renderPass
+			, 0u
+			, VK_NULL_HANDLE
+			, 0u };
+		auto res = m_phContext.vkCreateGraphicsPipelines( m_phContext.device
+			, m_phContext.cache
+			, 1u
+			, &createInfo
+			, m_phContext.allocator
+			, &m_pipeline );
+		crg::checkVkResult( res, m_phPass.name + " - Pipeline creation" );
+		crgRegisterObject( m_phContext, m_phPass.name, m_pipeline );
+	}
+
+	//*********************************************************************************************
+
+	LightPropagationPass::LightPropagationPass( crg::FramePass const & pass
+		, crg::GraphContext const & context
+		, crg::RunnableGraph & graph
+		, RenderDevice const & device
 		, bool occlusion
 		, uint32_t gridSize
 		, BlendMode blendMode )
-		: RenderGrid{ device
-			, prefix + "Propagation" + suffix
-			, VK_FILTER_LINEAR
-			, gridSize
-			, { createBindings( occlusion )
-				, std::nullopt
-				, std::nullopt
-				, blendMode } }
-		, m_engine{ *device.renderSystem.getEngine() }
-		, m_timer{ std::make_shared< RenderPassTimer >( m_device, cuT( "Light Propagation Volumes" ), cuT( "Light Propagation" ) ) }
+		: castor::Named{ pass.name }
+		, crg::RenderPass{ pass
+			, context
+			, graph
+			, { gridSize, gridSize }
+			, 1u }
+		, m_device{ device }
+		, m_gridSize{ gridSize }
+		, m_vertexBuffer{ createVertexBuffer( device, getName(), m_gridSize ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
 			, getName()
 			, getVertexProgram() }
@@ -521,141 +495,32 @@ namespace castor3d
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT
 			, getName()
 			, getPixelProgram( occlusion ) }
-		, m_renderPass{ doCreateRenderPass( getName()
-			, m_device
-			, getFormat( LpvTexture::eR )
-			, blendMode ) }
+		, m_stages{ makeShaderState( device, m_vertexShader )
+			, makeShaderState( device, m_geometryShader )
+			, makeShaderState( device, m_pixelShader ) }
+		, m_holder{ pass
+			, context
+			, graph
+			, getConfig( m_stages )
+			, gridSize
+			, blendMode }
 	{
-		ashes::PipelineShaderStageCreateInfoArray shaderStages
-		{
-			makeShaderState( device, m_vertexShader ),
-			makeShaderState( device, m_geometryShader ),
-			makeShaderState( device, m_pixelShader ),
-		};;
-		createPipeline( std::move( shaderStages )
-			, *m_renderPass );
 	}
 
-	void LightPropagationPass::registerPassIO( crg::ImageId const * occlusion
-		, LightVolumePassResult const & injection
-		, LpvGridConfigUbo const & lpvConfigUbo
-		, LightVolumePassResult const & accumulation
-		, LightVolumePassResult const & propagate )
+	void LightPropagationPass::doSubInitialise()
 	{
-		ashes::WriteDescriptorSetArray writes{
-			makeDescriptorWrite( lpvConfigUbo.getUbo()
-				, LpvGridUboIdx ),
-			// TODO: CRG
-			//makeDescriptorWrite( injection[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
-			//	, injection[LpvTexture::eR].getSampler()->getSampler()
-			//	, RLpvGridIdx ),
-			//makeDescriptorWrite( injection[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
-			//	, injection[LpvTexture::eG].getSampler()->getSampler()
-			//	, GLpvGridIdx ),
-			//makeDescriptorWrite( injection[LpvTexture::eB].getTexture()->getDefaultView().getSampledView()
-			//	, injection[LpvTexture::eB].getSampler()->getSampler()
-			//	, BLpvGridIdx )
-		};
-
-		if ( occlusion )
-		{
-			// TODO: CRG
-			//writes.emplace_back( makeDescriptorWrite( occlusion->getTexture()->getDefaultView().getSampledView()
-			//	, occlusion->getSampler()->getSampler()
-			//	, GpGridIdx ) );
-		}
-
-		registerPassInputs( writes );
-		// TODO: CRG
-		//registerPassOutputs( { accumulation[LpvTexture::eR].getTexture()->getDefaultView().getTargetView()
-		//	, accumulation[LpvTexture::eG].getTexture()->getDefaultView().getTargetView()
-		//	, accumulation[LpvTexture::eB].getTexture()->getDefaultView().getTargetView()
-		//	, propagate[LpvTexture::eR].getTexture()->getDefaultView().getTargetView()
-		//	, propagate[LpvTexture::eG].getTexture()->getDefaultView().getTargetView()
-		//	, propagate[LpvTexture::eB].getTexture()->getDefaultView().getTargetView() } );
+		m_holder.initialise( m_renderPass );
 	}
 
-	void LightPropagationPass::registerPassOutputs( ashes::ImageViewCRefArray const & outputs )
+	void LightPropagationPass::doSubRecordInto( VkCommandBuffer commandBuffer
+		, uint32_t index )
 	{
-		m_passesOutputs.push_back( outputs );
-	}
-
-	void LightPropagationPass::initialisePasses()
-	{
-		RenderGrid::initialisePasses();
-		auto gridSize = getGridSize();
-		auto dimensions = VkExtent2D{ gridSize, gridSize };
-		auto prefix = getName() + ", Pass ";
-		uint32_t index = 0u;
-
-		for ( auto & pass : m_passesOutputs )
-		{
-			m_frameBuffers.emplace_back( m_renderPass->createFrameBuffer( prefix + string::toString( index++ )
-				, dimensions
-				, pass
-				, gridSize ) );
-		}
-
-		m_timer->updateCount( uint32_t( m_frameBuffers.size() ) );
-
-		for ( uint32_t index = 0u; index < m_frameBuffers.size(); ++index )
-		{
-			m_commands.push_back( getCommands( *m_timer, index ) );
-		}
-	}
-
-	ashes::Semaphore const & LightPropagationPass::compute( ashes::Semaphore const & toWait
-		, uint32_t index )const
-	{
-		RenderPassTimerBlock timerBlock{ m_timer->start() };
-		timerBlock->notifyPassRender();
-		auto * result = &toWait;
-		auto & commands = m_commands[index];
-
-		m_device.graphicsQueue->submit( *commands.commandBuffer
-			, toWait
-			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, *commands.semaphore
-			, nullptr );
-		result = commands.semaphore.get();
-
-		return *result;
-	}
-
-	CommandsSemaphore LightPropagationPass::getCommands( RenderPassTimer const & timer
-		, uint32_t index )const
-	{
-		auto name = getName() + ", Pass " + string::toString( index );
-		castor3d::CommandsSemaphore commands
-		{
-			m_device.graphicsCommandPool->createCommandBuffer( name ),
-			m_device->createSemaphore( name )
-		};
-		auto & cmd = *commands.commandBuffer;
-
-		cmd.begin();
-		timer.beginPass( cmd, index );
-		cmd.beginDebugBlock(
-			{
-				"Lighting - " + name,
-				castor3d::makeFloatArray( m_engine.getNextRainbowColour() ),
-			} );
-		cmd.beginRenderPass( *m_renderPass
-			, *m_frameBuffers[index]
-			, { getClearValue( LpvTexture::eR )
-				, getClearValue( LpvTexture::eG )
-				, getClearValue( LpvTexture::eB )
-				, getClearValue( LpvTexture::eR )
-				, getClearValue( LpvTexture::eG )
-				, getClearValue( LpvTexture::eB ) }
-			, VK_SUBPASS_CONTENTS_INLINE );
-		registerPass( cmd, index );
-		cmd.endRenderPass();
-		cmd.endDebugBlock();
-		timer.endPass( cmd, index );
-		cmd.end();
-
-		return commands;
+		m_holder.recordInto( commandBuffer, index );
+		auto vplCount = m_gridSize * m_gridSize * m_gridSize;
+		VkDeviceSize offset{};
+		VkBuffer vertexBuffer = m_vertexBuffer->getBuffer();
+		m_context.vkCmdBindVertexBuffers( commandBuffer, 0u, 1u, &vertexBuffer, &offset );
+		m_context.vkCmdDraw( commandBuffer, vplCount, 1u, 0u, 0u );
 	}
 
 	void LightPropagationPass::accept( PipelineVisitorBase & visitor )

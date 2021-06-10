@@ -21,11 +21,65 @@
 
 #include <CastorUtils/Miscellaneous/StringUtils.hpp>
 
+#include <ashespp/Buffer/Buffer.hpp>
+#include <ashespp/Buffer/BufferView.hpp>
+
+#include <RenderGraph/GraphContext.hpp>
+#include <RenderGraph/RunnablePass.hpp>
+
 namespace castor3d
 {
 	//*********************************************************************************************
 
-	LightPropagationVolumesBase::LightLpv::LightLpv( RenderDevice const & device
+	namespace
+	{
+		class LpvClear
+			: public crg::RunnablePass
+		{
+		public:
+			LpvClear( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph )
+				: crg::RunnablePass{ pass, context, graph }
+			{
+			}
+
+		protected:
+			void doInitialise()override
+			{
+			}
+
+			void doRecordInto( VkCommandBuffer commandBuffer
+				, uint32_t index )override
+			{
+				auto clearValue = transparentBlackClearColor.color;
+
+				for ( auto & attach : m_pass.images )
+				{
+					auto view = attach.view();
+					auto image = m_graph.createImage( view.data->image );
+					assert( attach.isTransferOutputView() );
+					m_context.vkCmdClearColorImage( commandBuffer
+						, image
+						, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+						, &clearValue
+						, 1u
+						, &view.data->info.subresourceRange );
+				}
+			}
+
+			VkPipelineStageFlags doGetSemaphoreWaitFlags()const override
+			{
+				return VK_PIPELINE_STAGE_TRANSFER_BIT;
+			}
+		};
+	}
+
+	//*********************************************************************************************
+
+	LightPropagationVolumesBase::LightLpv::LightLpv( crg::FrameGraph & graph
+		, crg::FramePass const & previousPass
+		, RenderDevice const & device
 		, castor::String const & name
 		, LightCache const & lightCache
 		, LightType lightType
@@ -33,40 +87,34 @@ namespace castor3d
 		, LpvGridConfigUbo const & lpvGridConfigUbo
 		, LightVolumePassResult const & injection
 		, uint32_t cascadeIndex
-		, float lpvCellSize
-		, crg::ImageId * geometry )
+		, Texture * geometry )
 		: lpvLightConfigUbo{ device }
-		, lpvCellSize{ lpvCellSize }
-	{
-		lightInjectionPass = castor::makeUnique< LightInjectionPass >( *device.renderSystem.getEngine()
+		, lastPass{ &previousPass }
+		, lightInjectionPassDesc{ doCreateInjectionPass( graph
 			, device
 			, name
 			, lightCache
 			, lightType
 			, smResult
 			, lpvGridConfigUbo
-			, lpvLightConfigUbo
 			, injection
-			, device.renderSystem.getEngine()->getLpvGridSize()
-			, cascadeIndex );
-
-		if ( geometry )
-		{
-			geometryInjectionPass = castor::makeUnique< GeometryInjectionPass >( *device.renderSystem.getEngine()
+			, cascadeIndex ) }
+		, geometryInjectionPassDesc{ ( geometry
+			? &doCreateGeometryPass( graph
 				, device
 				, name
 				, lightCache
 				, lightType
 				, smResult
 				, lpvGridConfigUbo
-				, lpvLightConfigUbo
 				, *geometry
-				, device.renderSystem.getEngine()->getLpvGridSize()
-				, cascadeIndex );
-		}
+				, cascadeIndex )
+			: nullptr ) }
+	{
 	}
 
-	bool LightPropagationVolumesBase::LightLpv::update( CpuUpdater & updater )
+	bool LightPropagationVolumesBase::LightLpv::update( CpuUpdater & updater
+		, float lpvCellSize )
 	{
 		auto & light = *updater.light;
 		auto changed = light.hasChanged()
@@ -81,9 +129,112 @@ namespace castor3d
 		return changed;
 	}
 
+	crg::FramePass & LightPropagationVolumesBase::LightLpv::doCreateInjectionPass( crg::FrameGraph & graph
+		, RenderDevice const & device
+		, castor::String const & name
+		, LightCache const & lightCache
+		, LightType lightType
+		, ShadowMapResult const & smResult
+		, LpvGridConfigUbo const & lpvGridConfigUbo
+		, LightVolumePassResult const & injection
+		, uint32_t layerIndex )
+	{
+		auto rsmSize = smResult[SmTexture::eDepth].getExtent().width;
+		auto & result = graph.createPass( name + "LightInjection"
+			, [this, &device, name, lightType, layerIndex, rsmSize]( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph )
+			{
+				auto result = std::make_unique< LightInjectionPass >( pass
+					, context
+					, graph
+					, device
+					, lightType
+					, device.renderSystem.getEngine()->getLpvGridSize()
+					, layerIndex
+					, rsmSize );
+				lightInjectionPass = result.get();
+				return result;
+			} );
+		result.addDependency( *lastPass );
+		result.addUniformBufferView( { lightCache.getBuffer().getBuffer(), "LightCache" }
+			, lightCache.getView()
+			, LightInjectionPass::LightsIdx
+			, lightCache.getView().getOffset()
+			, lightCache.getView().getRange() );
+		result.addSampledView( smResult[SmTexture::eNormalLinear].wholeViewId
+			, LightInjectionPass::RsmNormalsIdx
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		result.addSampledView( smResult[SmTexture::ePosition].wholeViewId
+			, LightInjectionPass::RsmPositionIdx
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		result.addSampledView( smResult[SmTexture::eFlux].wholeViewId
+			, LightInjectionPass::RsmFluxIdx
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		lpvGridConfigUbo.createPassBinding( result
+			, LightInjectionPass::LpvGridUboIdx );
+		lpvLightConfigUbo.createPassBinding( result
+			, LightInjectionPass::LpvLightUboIdx );
+
+		result.addInOutColourView( injection[LpvTexture::eR].targetViewId );
+		result.addInOutColourView( injection[LpvTexture::eG].targetViewId );
+		result.addInOutColourView( injection[LpvTexture::eB].targetViewId );
+		lastPass = &result;
+		return result;
+	}
+
+	crg::FramePass & LightPropagationVolumesBase::LightLpv::doCreateGeometryPass( crg::FrameGraph & graph
+		, RenderDevice const & device
+		, castor::String const & name
+		, LightCache const & lightCache
+		, LightType lightType
+		, ShadowMapResult const & smResult
+		, LpvGridConfigUbo const & lpvGridConfigUbo
+		, Texture & geometry
+		, uint32_t cascade )
+	{
+		auto rsmSize = smResult[SmTexture::eDepth].getExtent().width;
+		auto & result = graph.createPass( name + "GeomInjection"
+			, [this, &device, name, lightType, rsmSize, cascade]( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph )
+			{
+				auto result = std::make_unique< GeometryInjectionPass >( pass
+					, context
+					, graph
+					, device
+					, lightType
+					, device.renderSystem.getEngine()->getLpvGridSize()
+					, cascade
+					, rsmSize );
+				geometryInjectionPass = result.get();
+				return result;
+			} );
+		result.addDependency( *lastPass );
+		result.addUniformBufferView( { lightCache.getBuffer().getBuffer(), "LightCache" }
+			, lightCache.getView()
+			, GeometryInjectionPass::LightsIdx
+			, lightCache.getView().getOffset()
+			, lightCache.getView().getRange() );
+		result.addSampledView( smResult[SmTexture::eNormalLinear].wholeViewId
+			, GeometryInjectionPass::RsmNormalsIdx
+			, VK_IMAGE_LAYOUT_UNDEFINED );
+		result.addSampledView( smResult[SmTexture::ePosition].wholeViewId
+			, GeometryInjectionPass::RsmPositionIdx
+			, VK_IMAGE_LAYOUT_UNDEFINED );
+		lpvGridConfigUbo.createPassBinding( result
+			, GeometryInjectionPass::LpvGridUboIdx );
+		lpvLightConfigUbo.createPassBinding( result
+			, GeometryInjectionPass::LpvLightUboIdx );
+
+		result.addInOutColourView( geometry.targetViewId );
+		lastPass = &result;
+		return result;
+	}
+
 	//*********************************************************************************************
 
-	LightPropagationVolumesBase::LightPropagationVolumesBase( crg::FrameGraph & graph
+	LightPropagationVolumesBase::LightPropagationVolumesBase( crg::ResourceHandler & handler
 		, Scene const & scene
 		, LightType lightType
 		, RenderDevice const & device
@@ -91,34 +242,35 @@ namespace castor3d
 		, LightVolumePassResult const & lpvResult
 		, LpvGridConfigUbo & lpvGridConfigUbo
 		, bool geometryVolumes )
-		: castor::Named{ "LightPropagationVolumes" + ( geometryVolumes ? castor::String( "G" ) : castor::String( "" ) ) }
+		: castor::Named{ "LPV" + ( geometryVolumes ? castor::String( "G" ) : castor::String( "" ) ) }
 		, m_scene{ scene }
-		, m_engine{ *m_scene.getEngine() }
 		, m_device{ device }
 		, m_smResult{ smResult }
 		, m_lpvResult{ lpvResult }
 		, m_lightType{ lightType }
 		, m_lpvGridConfigUbo{ lpvGridConfigUbo }
 		, m_geometryVolumes{ geometryVolumes }
-		, m_injection{ m_engine.getGraphResourceHandler()
+		, m_graph{ handler, getName() }
+		, m_injection{ handler
 			, m_device
-			, this->getName() + "Injection"
-			, m_engine.getLpvGridSize() }
+			, getName() + "LightInjection0"
+			, m_scene.getLpvGridSize() }
 		, m_geometry{ ( geometryVolumes
-			? GeometryInjectionPass::createResult( m_engine.getGraphResourceHandler()
+			? GeometryInjectionPass::createResult( handler
 				, m_device
-				, this->getName()
+				, getName()
 				, 0u
-				, m_engine.getLpvGridSize() )
-			: crg::ImageId{} ) }
-		, m_propagate{ LightVolumePassResult{ m_engine.getGraphResourceHandler()
+				, m_scene.getLpvGridSize() )
+			: Texture{} ) }
+		, m_propagate{ LightVolumePassResult{ handler
 				, m_device
-				, this->getName() + "Propagate0"
-				, m_engine.getLpvGridSize() }
-			, LightVolumePassResult{ m_engine.getGraphResourceHandler()
+				, getName() + "Propagate0"
+				, m_scene.getLpvGridSize() }
+			, LightVolumePassResult{ handler
 				, m_device
-				, this->getName() + "Propagate1"
-				, m_engine.getLpvGridSize() } }
+				, getName() + "Propagate1"
+				, m_scene.getLpvGridSize() } }
+		, m_clearPass{ doCreateClearPass() }
 	{
 	}
 
@@ -130,82 +282,10 @@ namespace castor3d
 					? GlobalIlluminationType::eLpvG
 					: GlobalIlluminationType::eLpv ) ) )
 		{
-			auto & lightCache = m_scene.getLightCache();
 			m_aabb = m_scene.getBoundingBox();
-			m_lightPropagationPasses = { castor::makeUnique< LightPropagationPass >( m_device
-					, this->getName()
-					, cuT( "NoOccNoBlend" )
-					, false
-					, m_engine.getLpvGridSize()
-					, BlendMode::eNoBlend )
-				, castor::makeUnique< LightPropagationPass >( m_device
-					, this->getName()
-					, ( m_geometryVolumes
-						? castor::String{ cuT( "OccBlend" ) }
-						: castor::String{ cuT( "NoOccBlend" ) } )
-					, m_geometryVolumes
-					, m_engine.getLpvGridSize()
-					, BlendMode::eAdditive ) };
-			crg::ImageId * geometry{ nullptr };
-
-			if ( m_geometryVolumes )
-			{
-				geometry = &m_geometry;
-			}
-
-			LightPropagationPass & passNoOcc = *m_lightPropagationPasses[0u];
-			auto & passOcc = *m_lightPropagationPasses[1u];
-			uint32_t propIndex = 0u;
-			passNoOcc.registerPassIO( nullptr
-				, m_injection
-				, m_lpvGridConfigUbo
-				, m_lpvResult
-				, m_propagate[propIndex] );
-
-			for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i )
-			{
-				passOcc.registerPassIO( geometry
-					, m_propagate[propIndex]
-					, m_lpvGridConfigUbo
-					, m_lpvResult
-					, m_propagate[1u - propIndex] );
-				propIndex = 1u - propIndex;
-			}
-
-			passOcc.initialisePasses();
-			passNoOcc.initialisePasses();
-
-			m_clearCommands = CommandsSemaphore{ m_device, this->getName() + cuT( "Clear" ) };
-			ashes::CommandBuffer & cmd = *m_clearCommands.commandBuffer;
-			auto clearTex = [&cmd]( LightVolumePassResult const & result
-				, LpvTexture tex )
-			{
-				// TODO: CRG
-				//cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				//	, VK_PIPELINE_STAGE_TRANSFER_BIT
-				//	, result[tex].getTexture()->getDefaultView().getSampledView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
-				//cmd.clear( result[tex].getTexture()->getDefaultView().getSampledView(), getClearValue( tex ).color );
-				//cmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-				//	, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				//	, result[tex].getTexture()->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
-			};
-			cmd.begin();
-			cmd.beginDebugBlock(
-				{
-					"Lighting - " + this->getName() + " - Clear",
-					castor3d::makeFloatArray( m_engine.getNextRainbowColour() ),
-				} );
-			clearTex( m_injection, LpvTexture::eR );
-			clearTex( m_injection, LpvTexture::eG );
-			clearTex( m_injection, LpvTexture::eB );
-			clearTex( m_propagate[0u], LpvTexture::eR );
-			clearTex( m_propagate[0u], LpvTexture::eG );
-			clearTex( m_propagate[0u], LpvTexture::eB );
-			clearTex( m_propagate[1u], LpvTexture::eR );
-			clearTex( m_propagate[1u], LpvTexture::eG );
-			clearTex( m_propagate[1u], LpvTexture::eB );
-			cmd.endDebugBlock();
-			cmd.end();
+			m_lightPropagationPassesDesc = doCreatePropagationPasses();
+			m_runnable = m_graph.compile( m_device.makeContext() );
+			m_runnable->record();
 			m_initialised = true;
 		}
 	}
@@ -213,7 +293,6 @@ namespace castor3d
 	void LightPropagationVolumesBase::cleanup()
 	{
 		m_initialised = false;
-		m_clearCommands = {};
 		m_lightLpvs.clear();
 		m_lightPropagationPasses = {};
 	}
@@ -227,19 +306,36 @@ namespace castor3d
 
 		if ( it == m_lightLpvs.end() )
 		{
-			m_lightLpvs.emplace( light
-				, LightLpv{ m_device
-					, this->getName() + light->getName()
+			auto ires = m_lightLpvs.emplace( light
+				, LightLpv{ m_graph
+					, m_clearPass
+					, m_device
+					, light->getName()
 					, light->getScene()->getLightCache()
 					, m_lightType
 					, m_smResult
 					, m_lpvGridConfigUbo
 					, m_injection
 					, cascadeIndex
-					, m_lpvGridConfigUbo.getUbo().getData().minVolumeCorner->w
 					, ( m_geometryVolumes
 						? &m_geometry
 						: nullptr ) } );
+			m_lightPropagationPassesDesc.front()->addDependency( ires.first->second.lightInjectionPassDesc );
+
+			if ( m_geometryVolumes )
+			{
+				for ( auto index = 1u; index < m_lightPropagationPassesDesc.size(); ++index )
+				{
+					m_lightPropagationPassesDesc[index]->addDependency( *ires.first->second.geometryInjectionPassDesc );
+				}
+			}
+
+			if ( m_runnable )
+			{
+				m_runnable.reset();
+				m_runnable = m_graph.compile( m_device.makeContext() );
+				m_runnable->record();
+			}
 		}
 	}
 
@@ -266,7 +362,10 @@ namespace castor3d
 		for ( auto & lightLpv : m_lightLpvs )
 		{
 			updater.light = lightLpv.first;
-			changed = lightLpv.second.update( updater )
+			changed = lightLpv.second.update( updater
+				, std::max( std::max( aabb.getDimensions()->x
+					, aabb.getDimensions()->y )
+					, aabb.getDimensions()->z ) / m_scene.getLpvGridSize() )
 				|| changed;
 		}
 
@@ -278,12 +377,12 @@ namespace castor3d
 			m_lpvGridConfigUbo.cpuUpdate( m_aabb
 				, m_cameraPos
 				, m_cameraDir
-				, m_engine.getLpvGridSize()
+				, m_scene.getLpvGridSize()
 				, m_scene.getLpvIndirectAttenuation() );
 		}
 	}
 
-	ashes::Semaphore const & LightPropagationVolumesBase::render( ashes::Semaphore const & toWait )
+	crg::SemaphoreWait LightPropagationVolumesBase::render( crg::SemaphoreWait const & toWait )
 	{
 		if ( !m_initialised
 			|| !m_scene.needsGlobalIllumination( m_lightType
@@ -295,27 +394,7 @@ namespace castor3d
 			return toWait;
 		}
 
-		auto result = &toWait;
-		result = &m_clearCommands.submit( *m_device.graphicsQueue, *result );
-
-		for ( auto & lightLpv : m_lightLpvs )
-		{
-			result = &lightLpv.second.lightInjectionPass->compute( *result );
-
-			if ( m_geometryVolumes )
-			{
-				result = &lightLpv.second.geometryInjectionPass->compute( *result );
-			}
-		}
-
-		result = &m_lightPropagationPasses[0]->compute( *result, 0u );
-
-		for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i )
-		{
-			result = &m_lightPropagationPasses[1]->compute( *result, i - 1u );
-		}
-
-		return *result;
+		return m_runnable->run( toWait, *m_device.graphicsQueue );
 	}
 
 	void LightPropagationVolumesBase::accept( PipelineVisitorBase & visitor )
@@ -337,6 +416,174 @@ namespace castor3d
 				pass->accept( visitor );
 			}
 		}
+	}
+
+	crg::FramePass & LightPropagationVolumesBase::doCreateClearPass()
+	{
+		auto & result = m_graph.createPass( "LpvClear"
+			, [this]( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph )
+			{
+				return std::make_unique< LpvClear >( pass
+					, context
+					, graph );
+			} );
+
+		for ( auto & texture : m_injection )
+		{
+			result.addTransferOutputView( texture.wholeViewId
+				, VK_IMAGE_LAYOUT_UNDEFINED );
+		}
+
+		if ( m_geometryVolumes )
+		{
+			result.addTransferOutputView( m_geometry.wholeViewId
+				, VK_IMAGE_LAYOUT_UNDEFINED );
+		}
+
+		return result;
+	}
+
+	crg::FramePass & LightPropagationVolumesBase::doCreatePropagationPass( std::vector< crg::FramePass const * > previousPasses
+		, std::string const & name
+		, LightVolumePassResult const & injection
+		, LightVolumePassResult const & lpvResult
+		, LightVolumePassResult const & propagation
+		, uint32_t index )
+	{
+		auto & result = m_graph.createPass( getName() + name
+			, [this, index]( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph )
+			{
+				auto result = std::make_unique< LightPropagationPass >( pass
+					, context
+					, graph
+					, m_device
+					, m_geometryVolumes && index > 0u
+					, m_scene.getLpvGridSize()
+					, ( index == 0u ? BlendMode::eNoBlend : BlendMode::eAdditive ) );
+				m_lightPropagationPasses.push_back( result.get() );
+				return result;
+			} );
+
+		for ( auto & previousPass : previousPasses )
+		{
+			result.addDependency( *previousPass );
+		}
+
+		m_lpvGridConfigUbo.createPassBinding( result
+			, LightPropagationPass::LpvGridUboIdx );
+		result.addSampledView( injection[LpvTexture::eR].wholeViewId
+			, LightPropagationPass::RLpvGridIdx
+			, VK_IMAGE_LAYOUT_UNDEFINED );
+		result.addSampledView( injection[LpvTexture::eG].wholeViewId
+			, LightPropagationPass::GLpvGridIdx
+			, VK_IMAGE_LAYOUT_UNDEFINED );
+		result.addSampledView( injection[LpvTexture::eB].wholeViewId
+			, LightPropagationPass::BLpvGridIdx
+			, VK_IMAGE_LAYOUT_UNDEFINED );
+
+		if ( index > 0u && m_geometryVolumes )
+		{
+			result.addSampledView( m_geometry.wholeViewId
+				, LightPropagationPass::GpGridIdx
+				, VK_IMAGE_LAYOUT_UNDEFINED );
+		}
+
+		if ( index == 0u )
+		{
+			result.addOutputColourView( lpvResult[LpvTexture::eR].targetViewId );
+			result.addOutputColourView( lpvResult[LpvTexture::eG].targetViewId );
+			result.addOutputColourView( lpvResult[LpvTexture::eB].targetViewId );
+		}
+		else if ( index == MaxPropagationSteps - 1u )
+		{
+			result.addInOutColourView( lpvResult[LpvTexture::eR].targetViewId
+				, {}
+				, VK_IMAGE_LAYOUT_UNDEFINED
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			result.addInOutColourView( lpvResult[LpvTexture::eG].targetViewId
+				, {}
+				, VK_IMAGE_LAYOUT_UNDEFINED
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			result.addInOutColourView( lpvResult[LpvTexture::eB].targetViewId
+				, {}
+				, VK_IMAGE_LAYOUT_UNDEFINED
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		}
+		else
+		{
+			result.addInOutColourView( lpvResult[LpvTexture::eR].targetViewId );
+			result.addInOutColourView( lpvResult[LpvTexture::eG].targetViewId );
+			result.addInOutColourView( lpvResult[LpvTexture::eB].targetViewId );
+		}
+
+		if ( index <= 1u )
+		{
+			result.addOutputColourView( propagation[LpvTexture::eR].targetViewId );
+			result.addOutputColourView( propagation[LpvTexture::eG].targetViewId );
+			result.addOutputColourView( propagation[LpvTexture::eB].targetViewId );
+		}
+		else
+		{
+			result.addInOutColourView( propagation[LpvTexture::eR].targetViewId );
+			result.addInOutColourView( propagation[LpvTexture::eG].targetViewId );
+			result.addInOutColourView( propagation[LpvTexture::eB].targetViewId );
+		}
+
+		return result;
+	}
+
+	std::vector< crg::FramePass * > LightPropagationVolumesBase::doCreatePropagationPasses()
+	{
+		uint32_t propIndex = 0u;
+		std::vector< crg::FramePass * > result;
+		std::vector< crg::FramePass const * > previousPasses;
+
+		for ( auto & lightLpv : m_lightLpvs )
+		{
+			previousPasses.push_back( &lightLpv.second.lightInjectionPassDesc );
+		}
+
+		result.push_back( &doCreatePropagationPass( previousPasses
+			, "PropagationNoOccNoBlend"
+			, m_injection
+			, m_lpvResult
+			, m_propagate[propIndex]
+			, 0u ) );
+		auto previous = result.back();
+		previousPasses.clear();
+
+		if ( m_geometryVolumes )
+		{
+			for ( auto & lightLpv : m_lightLpvs )
+			{
+				previousPasses.push_back( lightLpv.second.geometryInjectionPassDesc );
+			}
+		}
+
+		for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i )
+		{
+			auto & input = m_propagate[propIndex];
+			propIndex = 1u - propIndex;
+			auto & output = m_propagate[propIndex];
+			std::string name = ( m_geometryVolumes
+				? castor::String{ cuT( "OccBlend" ) }
+				: castor::String{ cuT( "NoOccBlend" ) } );
+			previousPasses.push_back( previous );
+			result.push_back( &doCreatePropagationPass( previousPasses
+				, "Propagation" + name + std::to_string( i )
+				, input
+				, m_lpvResult
+				, output
+				, i ) );
+			previousPasses.clear();
+			previous = result.back();
+		}
+
+		return result;
 	}
 
 	//*********************************************************************************************
