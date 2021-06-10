@@ -246,8 +246,7 @@ namespace castor3d
 				m_combinePass.addDependency( *previousPass );
 				m_runnable = m_graph.compile( device.makeContext() );
 
-				m_objects.image = m_runnable->createImage( m_objects.imageId );
-				m_objects.wholeView = m_runnable->createImageView( m_objects.wholeViewId );
+				m_objects.create();
 				auto image = std::make_unique< ashes::Image >( *device
 					, m_objects.image
 					, ashes::ImageCreateInfo{ m_objects.imageId.data->info } );
@@ -259,8 +258,7 @@ namespace castor3d
 					, view
 					, *m_renderPass );
 
-				m_overlays.image = m_runnable->createImage( m_overlays.imageId );
-				m_overlays.wholeView = m_runnable->createImageView( m_overlays.wholeViewId );
+				m_overlays.create();
 				image = std::make_unique< ashes::Image >( *device
 					, m_overlays.image
 					, ashes::ImageCreateInfo{ m_overlays.imageId.data->info } );
@@ -268,8 +266,7 @@ namespace castor3d
 					, m_overlays.wholeView
 					, image.get() };
 
-				m_velocity.image = m_runnable->createImage( m_velocity.imageId );
-				m_velocity.wholeView = m_runnable->createImageView( m_velocity.wholeViewId );
+				m_velocity.create();
 				m_velocityImage = std::make_unique< ashes::Image >( *device
 					, m_velocity.image
 					, ashes::ImageCreateInfo{ m_velocity.imageId.data->info } );
@@ -281,8 +278,7 @@ namespace castor3d
 					, view
 					, *m_renderPass );
 
-				m_combined.image = m_runnable->createImage( m_combined.imageId );
-				m_combined.wholeView = m_runnable->createImageView( m_combined.wholeViewId );
+				m_combined.create();
 				image = std::make_unique< ashes::Image >( *device
 					, m_combined.image
 					, ashes::ImageCreateInfo{ m_combined.imageId.data->info } );
@@ -556,7 +552,7 @@ namespace castor3d
 		result.addSampledView( m_overlays.wholeViewId
 			, 1u
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		result.addOutputColourView( m_combined.wholeViewId );
+		result.addOutputColourView( m_combined.targetViewId );
 		return result;
 	}
 

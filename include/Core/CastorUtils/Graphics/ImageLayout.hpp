@@ -76,12 +76,12 @@ namespace castor
 		static inline Type getType( PxBufferBase const & buffer )
 		{
 			return ( buffer.getLayers() > 1
-				? ( buffer.getHeight() > 1
-					? e2DArray
-					: e1DArray )
-				: ( buffer.getHeight() > 1
-					? e2D
-					: e1D ) );
+				? ( buffer.getHeight() <= 1 && buffer.getWidth() > 1
+					? e1DArray
+					: e2DArray )
+				: ( buffer.getHeight() <= 1 && buffer.getWidth() > 1
+					? e1D
+					: e2D ) );
 		}
 
 		inline Size dimensions()const
