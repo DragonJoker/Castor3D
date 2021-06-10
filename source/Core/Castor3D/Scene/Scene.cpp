@@ -771,6 +771,11 @@ namespace castor3d
 		return result;
 	}
 
+	uint32_t Scene::getLpvGridSize()const
+	{
+		return getEngine()->getLpvGridSize();
+	}
+
 	void Scene::setDirectionalShadowCascades( uint32_t value )
 	{
 		CU_Require( value <= shader::DirectionalMaxCascadesCount );
