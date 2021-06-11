@@ -304,6 +304,34 @@ namespace castor3d
 		*\param[in] dstArrayElement
 		*	L'indice dans le tableau d'éléments.
 		*/
+		C3D_API static ashes::WriteDescriptorSet makeDescriptorWrite( VkImageView const & view
+			, VkSampler const & sampler
+			, uint32_t dstBinding
+			, uint32_t dstArrayElement = 0u );
+		/**
+		*\~english
+		*\brief
+		*	Creates a descriptor write for combined image sampler.
+		*\param[in] view
+		*	The image view.
+		*\param[in] sampler
+		*	The sampler.
+		*\param[in] dstBinding
+		*	The binding inside the descriptor set.
+		*\param[in] dstArrayElement
+		*	The array element index.
+		*\~french
+		*\brief
+		*	Crée un descriptor write pour un sampler et une image combinés.
+		*\param[in] view
+		*	La vue sur l'image.
+		*\param[in] sampler
+		*	Le sampler.
+		*\param[in] dstBinding
+		*	Le binding dans le descriptor set.
+		*\param[in] dstArrayElement
+		*	L'indice dans le tableau d'éléments.
+		*/
 		C3D_API static ashes::WriteDescriptorSet makeDescriptorWrite( ashes::ImageView const & view
 			, ashes::Sampler const & sampler
 			, uint32_t dstBinding

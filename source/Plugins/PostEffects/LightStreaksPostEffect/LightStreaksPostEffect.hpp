@@ -55,10 +55,8 @@ namespace light_streaks
 		static uint32_t const Count = 4u;
 
 	private:
-		crg::ImageId m_hiImage;
-		crg::ImageViewIdArray m_hiViews;
-		crg::ImageId m_kawaseImage;
-		crg::ImageViewIdArray m_kawaseViews;
+		castor3d::Texture m_hiImage;
+		castor3d::Texture m_kawaseImage;
 		KawaseUbo m_kawaseUbo;
 		crg::FramePass const * m_pass{};
 		std::unique_ptr< HiPass > m_hiPass;

@@ -481,9 +481,9 @@ namespace castor3d
 		, ShadowMapResult const & smResult
 		, RsmConfigUbo const & rsmConfigUbo
 		, ashes::Buffer< castor::Point2f > const & rsmSamplesSsbo
-		, crg::ImageViewId const & gi
-		, crg::ImageViewId const & nml
-		, crg::ImageViewId const & dst )
+		, Texture const & gi
+		, Texture const & nml
+		, Texture const & dst )
 		: RenderQuad{ device
 			, "RsmInterpolate"
 			, VK_FILTER_LINEAR
@@ -500,7 +500,7 @@ namespace castor3d
 		, m_rsmConfigUbo{ rsmConfigUbo }
 		, m_rsmSamplesSsbo{ rsmSamplesSsbo }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram( lightType, getExtent( gi ).width, getExtent( gi ).height ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram( lightType, gi.getExtent().width, gi.getExtent().height ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_device, cuT( "Reflective Shadow Maps" ), cuT( "Interpolate" ) ) }
 	{
 		ashes::PipelineShaderStageCreateInfoArray shaderStages;

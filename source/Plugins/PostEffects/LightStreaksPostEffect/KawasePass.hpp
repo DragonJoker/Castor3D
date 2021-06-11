@@ -18,7 +18,7 @@ namespace light_streaks
 	{
 	public:
 		KawasePass( crg::FrameGraph & graph
-			, crg::FramePass const & previousPass
+			, std::vector< crg::FramePass const * > const & previousPasses
 			, castor3d::RenderDevice const & device
 			, crg::ImageViewIdArray const & hiViews
 			, crg::ImageViewIdArray const & kawaseViews
