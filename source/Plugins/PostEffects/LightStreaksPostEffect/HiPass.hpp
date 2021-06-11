@@ -19,18 +19,16 @@ namespace light_streaks
 			, VkExtent2D size );
 		void accept( castor3d::PipelineVisitorBase & visitor );
 
-		crg::FramePass const & getPass()const
+		std::vector< crg::FramePass const * > const & getPasses()const
 		{
-			CU_Require( m_pass );
-			return *m_pass;
+			return m_passes;
 		}
 
 	private:
-		crg::ImageViewId const & m_sceneView;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		crg::FramePass const * m_pass;
+		std::vector< crg::FramePass const * > m_passes;
 	};
 }
 

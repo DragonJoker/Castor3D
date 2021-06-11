@@ -40,7 +40,7 @@ namespace castor3d
 			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, castor::String const & category
-			, crg::ImageViewIdArray const & srcViews
+			, TextureArray const & srcViews
 			, VkExtent2D const & dstSize );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
@@ -55,16 +55,15 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline crg::ImageViewIdArray const & getResult()const
+		inline TextureArray const & getResult()const
 		{
-			return m_resultViews;
+			return m_result;
 		}
 		/**@}*/
 
 	private:
 		RenderDevice const & m_device;
-		crg::ImageIdArray m_result;
-		crg::ImageViewIdArray m_resultViews;
+		TextureArray m_result;
 	};
 }
 

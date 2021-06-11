@@ -363,29 +363,34 @@ namespace castor3d
 			return sampler;
 		}
 
-		crg::ImageId doCreateImage( crg::FrameGraph & graph
+		Texture doCreateImage( RenderDevice const & device
+			, crg::FrameGraph & graph
 			, castor::String const & name
 			, VkFormat format
 			, VkExtent2D const & size )
 		{
-			return graph.createImage( crg::ImageData{ name
+			return Texture{ device
+				, graph.getHandler()
+				, name
 				, 0u
-				, VK_IMAGE_TYPE_2D
-				, format
 				, { size.width, size.height, 1u }
+				, 1u
+				, 1u
+				, format
 				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_SAMPLED_BIT ) } );
+					| VK_IMAGE_USAGE_SAMPLED_BIT ) };
 		}
 
-		crg::ImageIdArray doCreateImages( crg::FrameGraph & graph
+		TextureArray doCreateImages( RenderDevice const & device
+			, crg::FrameGraph & graph
 			, castor::String const & name
 			, VkFormat format1
 			, VkFormat format2
 			, VkExtent2D const & size )
 		{
-			crg::ImageIdArray result;
-			result.emplace_back( doCreateImage( graph, name, format1, size ) );
-			result.emplace_back( doCreateImage( graph, name, format2, size ) );
+			TextureArray result;
+			result.emplace_back( doCreateImage( device, graph, name, format1, size ) );
+			result.emplace_back( doCreateImage( device, graph, name, format2, size ) );
 			return result;
 		}
 
@@ -417,7 +422,7 @@ namespace castor3d
 		, GpInfoUbo const & gpInfo
 		, OpaquePassResult const & gpResult
 		, ShadowMapResult const & smResult
-		, crg::ImageViewIdArray const & downscaleResult )
+		, TextureArray const & downscaleResult )
 		: RenderQuad{ device
 			, castor3d::getName( lightType ) + "RsmGI"
 			, VK_FILTER_LINEAR
@@ -429,10 +434,11 @@ namespace castor3d
 		, m_gpResult{ gpResult }
 		, m_smResult{ smResult }
 		, m_gpInfo{ gpInfo }
-		, m_result{ doCreateImages( graph
+		, m_result{ doCreateImages( device
+			, graph
 			, getName() + "Result"
-			, getFormat( downscaleResult[0u] )
-			, getFormat( downscaleResult[1u] )
+			, downscaleResult[0u].getFormat()
+			, downscaleResult[1u].getFormat()
 			, size ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram( lightType, size.width, size.height ) }

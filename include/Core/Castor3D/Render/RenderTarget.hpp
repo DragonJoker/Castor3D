@@ -10,7 +10,6 @@ See LICENSE file in root folder
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 #include "Castor3D/Overlay/OverlayModule.hpp"
 #include "Castor3D/Render/Culling/CullingModule.hpp"
-#include "Castor3D/Render/Passes/CombinePass.hpp"
 #include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
@@ -34,31 +33,6 @@ namespace castor3d
 		: public std::enable_shared_from_this< RenderTarget >
 		, public castor::OwnedBy< Engine >
 	{
-	public:
-		/**
-		\~english
-		\brief		Internal struct holding a complete frame buffer
-		\~french
-		\brief		Structure interne contenant un tampon d'image complet
-		*/
-		struct TargetFbo
-		{
-		public:
-			explicit TargetFbo( RenderTarget & renderTarget );
-			bool initialise( RenderDevice const & device
-				, ashes::ImagePtr image
-				, ashes::ImageView view
-				, ashes::RenderPass & renderPass );
-			void cleanup( RenderDevice const & device );
-
-			ashes::ImagePtr colourImage;
-			ashes::ImageView colourView;
-			ashes::FrameBufferPtr frameBuffer;
-
-		private:
-			RenderTarget & renderTarget;
-		};
-
 	public:
 		/**
 		 *\~english
@@ -246,24 +220,14 @@ namespace castor3d
 			return m_camera.lock();
 		}
 
-		ashes::ImageView const & getTexture()const
+		Texture const & getTexture()const
 		{
-			return m_combinedFrameBuffer.colourView;
+			return m_combined;
 		}
 
-		ashes::ImageView const & getVelocity()const
-		{
-			return m_velocityImageView;
-		}
-
-		Texture const & getVelocityTexture()const
+		Texture const & getVelocity()const
 		{
 			return m_velocity;
-		}
-
-		crg::ImageViewId const & getVelocityId()const
-		{
-			return m_velocity.wholeViewId;
 		}
 
 		VkFormat getPixelFormat()const
@@ -365,7 +329,6 @@ namespace castor3d
 
 	private:
 		crg::FramePass & doCreateCombinePass();
-		void doInitialiseRenderPass( RenderDevice const & device );
 		bool doInitialiseTechnique( RenderDevice const & device );
 		crg::FramePass const & doInitialiseCopyCommands( RenderDevice const & device
 			, castor::String const & name
@@ -375,7 +338,6 @@ namespace castor3d
 		void doInitCombineProgram();
 		void doRender( RenderDevice const & device
 			, RenderInfo & info
-			, TargetFbo & fbo
 			, CameraSPtr camera );
 		crg::SemaphoreWait doRenderOverlays( RenderDevice const & device
 			, crg::SemaphoreWaitArray const & toWait );
@@ -394,10 +356,6 @@ namespace castor3d
 		RenderTechniqueSPtr m_renderTechnique;
 		SceneWPtr m_scene;
 		CameraWPtr m_camera;
-		ashes::RenderPassPtr m_renderPass;
-		TargetFbo m_objectsFrameBuffer;
-		TargetFbo m_overlaysFrameBuffer;
-		TargetFbo m_combinedFrameBuffer;
 		uint32_t m_index;
 		castor::String m_name;
 		Parameters m_techniqueParameters;
@@ -424,8 +382,6 @@ namespace castor3d
 		crg::FramePass const * m_hdrLastPass{};
 		crg::RunnableGraphPtr m_runnable;
 		ashes::SemaphorePtr m_combineSemaphore;
-		ashes::ImagePtr m_velocityImage;
-		ashes::ImageView m_velocityImageView;
 	};
 }
 

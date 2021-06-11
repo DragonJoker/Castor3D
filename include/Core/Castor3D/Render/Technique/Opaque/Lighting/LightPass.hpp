@@ -115,7 +115,7 @@ namespace castor3d
 				, ashes::RenderPass const & firstRenderPass
 				, ashes::RenderPass const & blendRenderPass
 				, MatrixUbo & matrixUbo
-				, SceneUbo & sceneUbo
+				, SceneUbo const & sceneUbo
 				, GpInfoUbo const & gpInfoUbo
 				, UniformBufferT< ModelUboConfiguration > const * modelUbo
 				, VoxelizerUbo const * voxelUbo );
@@ -260,7 +260,7 @@ namespace castor3d
 		 */
 		virtual void initialise( Scene const & scene
 			, OpaquePassResult const & gp
-			, SceneUbo & sceneUbo
+			, SceneUbo const & sceneUbo
 			, RenderPassTimer & timer ) = 0;
 		/**
 		 *\~english
@@ -294,8 +294,8 @@ namespace castor3d
 			, Light const & light
 			, Camera const & camera
 			, ShadowMap const * shadowMap
-			, TextureUnit const * vctFirstBounce
-			, TextureUnit const * vctSecondaryBounce );
+			, Texture const * vctFirstBounce
+			, Texture const * vctSecondaryBounce );
 		/**
 		 *\~english
 		 *\brief		Renders the light pass.
@@ -355,8 +355,8 @@ namespace castor3d
 		};
 		static size_t makeKey( Light const & light
 			, ShadowMap const * shadowMap
-			, TextureUnit const * vctFirstBounce
-			, TextureUnit const * vctSecondaryBounce );
+			, Texture const * vctFirstBounce
+			, Texture const * vctSecondaryBounce );
 		using PipelinePtr = std::unique_ptr< Pipeline >;
 		using PipelineMap = std::map< size_t, PipelinePtr >;
 		using PipelineArray = std::array< Pipeline, size_t( ShadowType::eCount ) * 2u >; // * 2u for volumetric scattering or not.
@@ -365,15 +365,15 @@ namespace castor3d
 			, ShadowType shadowType
 			, bool rsm
 			, ShadowMap const * shadowMap
-			, TextureUnit const * vctFirstBounce
-			, TextureUnit const * vctSecondaryBounce );
+			, Texture const * vctFirstBounce
+			, Texture const * vctSecondaryBounce );
 
 	protected:
 		virtual Pipeline * doGetPipeline( bool first
 			, Light const & light
 			, ShadowMap const * shadowMap
-			, TextureUnit const * vctFirstBounce
-			, TextureUnit const * vctSecondaryBounce );
+			, Texture const * vctFirstBounce
+			, Texture const * vctSecondaryBounce );
 
 	private:
 		virtual VkClearValue doGetIndirectClearColor()const;
@@ -432,7 +432,7 @@ namespace castor3d
 			, LightType type
 			, ashes::VertexBufferBase & vbo
 			, ashes::PipelineVertexInputStateCreateInfo const & vertexLayout
-			, SceneUbo & sceneUbo
+			, SceneUbo const & sceneUbo
 			, UniformBufferT< ModelUboConfiguration > const * modelUbo
 			, RenderPassTimer & timer );
 		/**
@@ -578,7 +578,7 @@ namespace castor3d
 		crg::FrameGraph & m_graph;
 		crg::FramePass const & m_previousPass;
 		Scene const * m_scene{ nullptr };
-		SceneUbo * m_sceneUbo{ nullptr };
+		SceneUbo const * m_sceneUbo{ nullptr };
 		UniformBufferT< ModelUboConfiguration > const * m_optModelUbo{ nullptr };
 		VoxelizerUbo const * m_vctUbo{ nullptr };
 		ashes::PipelineVertexInputStateCreateInfo m_usedVertexLayout{ 0u, {}, {} };

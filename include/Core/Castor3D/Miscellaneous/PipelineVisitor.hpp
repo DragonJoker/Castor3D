@@ -58,6 +58,16 @@ namespace castor3d
 		**/
 		/**@{*/
 		inline void visit( castor::String const & name
+			, Texture const & view
+			, VkImageLayout layout
+			, TextureFactors const & factors = {} )
+		{
+			if ( doFilter( view.wholeViewId.data->info ) )
+			{
+				doVisit( name, view, layout, factors );
+			}
+		}
+		inline void visit( castor::String const & name
 			, ashes::ImageView const & view
 			, VkImageLayout layout
 			, TextureFactors const & factors = {} )
@@ -294,6 +304,10 @@ namespace castor3d
 	private:
 		virtual bool doFilter( VkImageViewCreateInfo const & info )const = 0;
 
+		virtual void doVisit( castor::String const & name
+			, Texture const & view
+			, VkImageLayout layout
+			, TextureFactors const & factors = {} ) = 0;
 		virtual void doVisit( castor::String const & name
 			, ashes::ImageView const & view
 			, VkImageLayout layout
@@ -699,6 +713,13 @@ namespace castor3d
 		bool doFilter( VkImageViewCreateInfo const & info )const override
 		{
 			return true;
+		}
+
+		void doVisit( castor::String const & name
+			, Texture const & view
+			, VkImageLayout layout
+			, TextureFactors const & factors = TextureFactors{} )override
+		{
 		}
 
 		void doVisit( castor::String const & name
