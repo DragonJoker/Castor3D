@@ -273,7 +273,7 @@ namespace castor3d
 		{
 			target->initialise( device );
 			m_texture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
-				, target->getTexture() );
+				, target->getTexture().wholeViewId );
 			result = true;
 			m_name = cuT( "RT_" ) + castor::string::toString( target->getIndex() );
 		}

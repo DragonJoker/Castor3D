@@ -35,9 +35,9 @@ namespace castor3d
 			, ShadowMapResult const & smResult
 			, RsmConfigUbo const & rsmConfigUbo
 			, ashes::Buffer< castor::Point2f > const & rsmSamplesSsbo
-			, crg::ImageViewId const & gi
-			, crg::ImageViewId const & nml
-			, crg::ImageViewId const & dst );
+			, Texture const & gi
+			, Texture const & nml
+			, Texture const & dst );
 		C3D_API ashes::Semaphore const & compute( ashes::Semaphore const & toWait )const;
 		C3D_API CommandsSemaphore getCommands( RenderPassTimer const & timer
 			, uint32_t index )const;
@@ -48,8 +48,8 @@ namespace castor3d
 		GpInfoUbo const & m_gpInfo;
 		OpaquePassResult const & m_gpResult;
 		ShadowMapResult const & m_smResult;
-		crg::ImageViewId const & m_gi;
-		crg::ImageViewId const & m_nml;
+		Texture const & m_gi;
+		Texture const & m_nml;
 		RsmConfigUbo const & m_rsmConfigUbo;
 		ashes::Buffer< castor::Point2f > const & m_rsmSamplesSsbo;
 		ShaderModule m_vertexShader;

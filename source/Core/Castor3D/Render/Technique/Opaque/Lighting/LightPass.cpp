@@ -150,7 +150,7 @@ namespace castor3d
 		, ashes::RenderPass const & firstRenderPass
 		, ashes::RenderPass const & blendRenderPass
 		, MatrixUbo & matrixUbo
-		, SceneUbo & sceneUbo
+		, SceneUbo const & sceneUbo
 		, GpInfoUbo const & gpInfoUbo
 		, UniformBufferT< ModelUboConfiguration > const * modelUbo
 		, VoxelizerUbo const * voxelUbo )
@@ -350,8 +350,8 @@ namespace castor3d
 		, Light const & light
 		, Camera const & camera
 		, ShadowMap const * shadowMap
-		, TextureUnit const * vctFirstBounce
-		, TextureUnit const * vctSecondaryBounce )
+		, Texture const * vctFirstBounce
+		, Texture const * vctSecondaryBounce )
 	{
 		m_pipeline = doGetPipeline( first
 			, light
@@ -430,8 +430,8 @@ namespace castor3d
 
 	size_t LightPass::makeKey( Light const & light
 		, ShadowMap const * shadowMap
-		, TextureUnit const * vctFirstBounce
-		, TextureUnit const * vctSecondaryBounce )
+		, Texture const * vctFirstBounce
+		, Texture const * vctSecondaryBounce )
 	{
 		size_t hash = std::hash< LightType >{}( light.getLightType() );
 		castor::hashCombine( hash, shadowMap ? light.getShadowType() : ShadowType::eNone );
@@ -447,14 +447,14 @@ namespace castor3d
 		, ShadowType shadowType
 		, bool rsm
 		, ShadowMap const * shadowMap
-		, TextureUnit const * vctFirstBounce
-		, TextureUnit const * vctSecondaryBounce )
+		, Texture const * vctFirstBounce
+		, Texture const * vctSecondaryBounce )
 	{
 		Scene const & scene = *m_scene;
 		OpaquePassResult const & gp = *m_opaquePassResult;
 		ashes::VertexBufferBase & vbo = *m_vertexBuffer;
 		ashes::PipelineVertexInputStateCreateInfo const & vertexLayout = *m_pUsedVertexLayout;
-		SceneUbo & sceneUbo = *m_sceneUbo;
+		SceneUbo const & sceneUbo = *m_sceneUbo;
 		SceneFlags sceneFlags{ scene.getFlags() };
 		LightPass::Pipeline pipeline;
 		m_vertexShader.shader = doGetVertexShaderSource( sceneFlags );
@@ -587,8 +587,8 @@ namespace castor3d
 	LightPass::Pipeline * LightPass::doGetPipeline( bool first
 		, Light const & light
 		, ShadowMap const * shadowMap
-		, TextureUnit const * vctFirstBounce
-		, TextureUnit const * vctSecondaryBounce )
+		, Texture const * vctFirstBounce
+		, Texture const * vctSecondaryBounce )
 	{
 		auto key = makeKey( light
 			, shadowMap
@@ -623,7 +623,7 @@ namespace castor3d
 		, LightType lightType
 		, ashes::VertexBufferBase & vbo
 		, ashes::PipelineVertexInputStateCreateInfo const & vertexLayout
-		, SceneUbo & sceneUbo
+		, SceneUbo const & sceneUbo
 		, UniformBufferT< ModelUboConfiguration > const * modelUbo
 		, RenderPassTimer & timer )
 	{

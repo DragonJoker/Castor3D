@@ -176,7 +176,8 @@ namespace castor3d
 						IntermediateView result
 						{ 
 							cuT( "Undefined" ),
-							ashes::ImageView{},
+							{},
+							{},
 						};
 						return result;
 				}( ) };
@@ -463,6 +464,19 @@ namespace castor3d
 		commandBuffer.bindDescriptorSet( *m_descriptorSets[descriptorSetIndex], *m_pipelineLayout );
 		doRegisterPass( commandBuffer );
 		commandBuffer.draw( 4u );
+	}
+
+	ashes::WriteDescriptorSet RenderQuad::makeDescriptorWrite( VkImageView const & view
+		, VkSampler const & sampler
+		, uint32_t dstBinding
+		, uint32_t dstArrayElement )
+	{
+		auto result = ashes::WriteDescriptorSet{ dstBinding
+			, dstArrayElement
+			, 1u
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER };
+		result.imageInfo.push_back( { sampler, view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
+		return result;
 	}
 
 	ashes::WriteDescriptorSet RenderQuad::makeDescriptorWrite( ashes::ImageView const & view

@@ -461,7 +461,7 @@ namespace smaa
 		case Mode::eT2X:
 			if ( m_config.data.enableReprojection )
 			{
-				velocityView = &m_renderTarget.getVelocityId();
+				velocityView = &m_renderTarget.getVelocity().wholeViewId;
 			}
 			break;
 

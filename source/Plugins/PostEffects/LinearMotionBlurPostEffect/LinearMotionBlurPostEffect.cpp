@@ -207,7 +207,7 @@ namespace motion_blur
 		m_pass->addSampledView( *m_target
 			, ColorTexIdx
 			, VK_IMAGE_LAYOUT_UNDEFINED );
-		m_pass->addSampledView( m_renderTarget.getVelocityId()
+		m_pass->addSampledView( m_renderTarget.getVelocity().wholeViewId
 			, VelocityTexIdx
 			, VK_IMAGE_LAYOUT_UNDEFINED );
 		m_pass->addOutputColourView( m_resultView );
