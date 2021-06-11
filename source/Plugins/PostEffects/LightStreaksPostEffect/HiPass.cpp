@@ -208,13 +208,12 @@ namespace light_streaks
 		, crg::ImageViewId const & sceneView
 		, crg::ImageViewIdArray const & resultViews
 		, VkExtent2D size )
-		: m_sceneView{ sceneView }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "LightStreaksHiPass", getVertexProgram() }
+		: m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "LightStreaksHiPass", getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "LightStreaksHiPass", getPixelProgram() }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 	{
-		m_pass = &previousPass;
+		auto previous = &previousPass;
 		auto & hiPass = graph.createPass( "LightStreaksHiPass"
 			, [this, size]( crg::FramePass const & pass
 				, crg::GraphContext const & context
@@ -232,13 +231,34 @@ namespace light_streaks
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE };
-		hiPass.addDependency( *m_pass );
-		hiPass.addSampledView( m_sceneView
+		hiPass.addDependency( *previous );
+		hiPass.addSampledView( sceneView
 			, 0u
-			, {}
+			, VK_IMAGE_LAYOUT_UNDEFINED
 			, linearSampler );
-		hiPass.addOutputColourView( hiPass.mergeViews( resultViews, false, false ) );
-		m_pass = &hiPass;
+		hiPass.addOutputColourView( resultViews[0] );
+		previous = &hiPass;
+		m_passes.push_back( previous );
+
+		for ( uint32_t i = 1u; i < resultViews.size(); ++i )
+		{
+			auto & pass = graph.createPass( "LightStreaksCopy" + std::to_string( i )
+				, [size]( crg::FramePass const & pass
+					, crg::GraphContext const & context
+					, crg::RunnableGraph & graph )
+				{
+					return std::make_unique< crg::ImageCopy >( pass
+						, context
+						, graph
+						, VkExtent3D{ size.width, size.height, 1u } );
+				} );
+			pass.addDependency( *previous );
+			pass.addTransferInputView( resultViews[0u]
+				, VK_IMAGE_LAYOUT_UNDEFINED );
+			pass.addTransferOutputView( resultViews[i]
+				, VK_IMAGE_LAYOUT_UNDEFINED );
+			m_passes.push_back( &pass );
+		}
 	}
 
 	void HiPass::accept( castor3d::PipelineVisitorBase & visitor )

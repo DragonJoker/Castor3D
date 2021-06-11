@@ -224,6 +224,8 @@ namespace castor3d
 			&& lhs.texturesFlags == rhs.texturesFlags;
 	}
 
+	//*********************************************************************************************
+
 	Texture::Texture()
 		: handler{}
 		, device{}
@@ -358,4 +360,214 @@ namespace castor3d
 			targetView = wholeView;
 		}
 	}
+
+	VkImageMemoryBarrier Texture::makeGeneralLayout( VkImageLayout srcLayout
+		, VkAccessFlags dstAccessFlags
+		, uint32_t srcQueueFamily
+		, uint32_t dstQueueFamily
+		, bool target )const
+	{
+		return makeLayoutTransition( srcLayout
+			, VK_IMAGE_LAYOUT_GENERAL
+			, ashes::getAccessMask( srcLayout )
+			, dstAccessFlags
+			, srcQueueFamily
+			, dstQueueFamily
+			, target );
+	}
+
+	VkImageMemoryBarrier Texture::makeTransferDestination( VkImageLayout srcLayout
+		, uint32_t srcQueueFamily
+		, uint32_t dstQueueFamily
+		, bool target )const
+	{
+		return makeLayoutTransition( srcLayout
+			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+			, srcQueueFamily
+			, dstQueueFamily
+			, target );
+	}
+
+	VkImageMemoryBarrier Texture::makeTransferSource( VkImageLayout srcLayout
+		, uint32_t srcQueueFamily
+		, uint32_t dstQueueFamily
+		, bool target )const
+	{
+		return makeLayoutTransition( srcLayout
+			, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+			, srcQueueFamily
+			, dstQueueFamily
+			, target );
+	}
+
+	VkImageMemoryBarrier Texture::makeShaderInputResource( VkImageLayout srcLayout
+		, uint32_t srcQueueFamily
+		, uint32_t dstQueueFamily
+		, bool target )const
+	{
+		return makeLayoutTransition( srcLayout
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, srcQueueFamily
+			, dstQueueFamily
+			, target );
+	}
+
+	VkImageMemoryBarrier Texture::makeDepthStencilReadOnly( VkImageLayout srcLayout
+		, uint32_t srcQueueFamily
+		, uint32_t dstQueueFamily
+		, bool target )const
+	{
+		return makeLayoutTransition( srcLayout
+			, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL
+			, srcQueueFamily
+			, dstQueueFamily
+			, target );
+	}
+
+	VkImageMemoryBarrier Texture::makeColourAttachment( VkImageLayout srcLayout
+		, uint32_t srcQueueFamily
+		, uint32_t dstQueueFamily
+		, bool target )const
+	{
+		return makeLayoutTransition( srcLayout
+			, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
+			, srcQueueFamily
+			, dstQueueFamily
+			, target );
+	}
+
+	VkImageMemoryBarrier Texture::makeDepthStencilAttachment( VkImageLayout srcLayout
+		, uint32_t srcQueueFamily
+		, uint32_t dstQueueFamily
+		, bool target )const
+	{
+		return makeLayoutTransition( srcLayout
+			, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
+			, srcQueueFamily
+			, dstQueueFamily
+			, target );
+	}
+
+	VkImageMemoryBarrier Texture::makePresentSource( VkImageLayout srcLayout
+		, uint32_t srcQueueFamily
+		, uint32_t dstQueueFamily
+		, bool target )const
+	{
+		return makeLayoutTransition( srcLayout
+			, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR
+			, srcQueueFamily
+			, dstQueueFamily
+			, target );
+	}
+
+	VkImageMemoryBarrier Texture::makeLayoutTransition( VkImageLayout srcLayout
+		, VkImageLayout dstLayout
+		, uint32_t srcQueueFamily
+		, uint32_t dstQueueFamily
+		, bool target )const
+	{
+		return makeLayoutTransition( srcLayout
+			, dstLayout
+			, ashes::getAccessMask( srcLayout )
+			, ashes::getAccessMask( dstLayout )
+			, srcQueueFamily
+			, dstQueueFamily );
+	}
+
+	VkImageMemoryBarrier Texture::makeLayoutTransition( VkImageLayout srcLayout
+		, VkImageLayout dstLayout
+		, VkAccessFlags srcAccessFlags
+		, uint32_t srcQueueFamily
+		, uint32_t dstQueueFamily
+		, bool target )const
+	{
+		return makeLayoutTransition( srcLayout
+			, dstLayout
+			, srcAccessFlags
+			, ashes::getAccessMask( dstLayout )
+			, srcQueueFamily
+			, dstQueueFamily );
+	}
+
+	VkImageMemoryBarrier Texture::makeLayoutTransition( VkImageLayout srcLayout
+		, VkImageLayout dstLayout
+		, VkAccessFlags srcAccessFlags
+		, VkAccessFlags dstAccessMask
+		, uint32_t srcQueueFamily
+		, uint32_t dstQueueFamily
+		, bool target )const
+	{
+		return { VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER
+			, nullptr
+			, srcAccessFlags
+			, dstAccessMask
+			, srcLayout
+			, dstLayout
+			, srcQueueFamily
+			, dstQueueFamily
+			, image
+			, ( target
+				? targetViewId.data->info.subresourceRange
+				: wholeViewId.data->info.subresourceRange ) };
+	}
+
+	//*********************************************************************************************
+
+	VkImageMemoryBarrier makeLayoutTransition( VkImage image
+		, VkImageSubresourceRange const & range
+		, VkImageLayout srcLayout
+		, VkImageLayout dstLayout
+		, uint32_t srcQueueFamily
+		, uint32_t dstQueueFamily )
+	{
+		return makeLayoutTransition( image
+			, range
+			, srcLayout
+			, dstLayout
+			, ashes::getAccessMask( srcLayout )
+			, ashes::getAccessMask( dstLayout )
+			, srcQueueFamily
+			, dstQueueFamily );
+	}
+
+	VkImageMemoryBarrier makeLayoutTransition( VkImage image
+		, VkImageSubresourceRange const & range
+		, VkImageLayout srcLayout
+		, VkImageLayout dstLayout
+		, VkAccessFlags srcAccessFlags
+		, uint32_t srcQueueFamily
+		, uint32_t dstQueueFamily )
+	{
+		return makeLayoutTransition( image
+			, range
+			, srcLayout
+			, dstLayout
+			, srcAccessFlags
+			, ashes::getAccessMask( dstLayout )
+			, srcQueueFamily
+			, dstQueueFamily );
+	}
+
+	VkImageMemoryBarrier makeLayoutTransition( VkImage image
+		, VkImageSubresourceRange const & range
+		, VkImageLayout srcLayout
+		, VkImageLayout dstLayout
+		, VkAccessFlags srcAccessFlags
+		, VkAccessFlags dstAccessMask
+		, uint32_t srcQueueFamily
+		, uint32_t dstQueueFamily )
+	{
+		return { VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER
+			, nullptr
+			, srcAccessFlags
+			, dstAccessMask
+			, srcLayout
+			, dstLayout
+			, srcQueueFamily
+			, dstQueueFamily
+			, image
+			, range };
+	}
+
+	//*********************************************************************************************
 }

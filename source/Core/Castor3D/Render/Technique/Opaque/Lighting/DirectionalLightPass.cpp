@@ -315,7 +315,7 @@ namespace castor3d
 
 	void DirectionalLightPass::initialise( Scene const & scene
 		, OpaquePassResult const & gp
-		, SceneUbo & sceneUbo
+		, SceneUbo const & sceneUbo
 		, RenderPassTimer & timer )
 	{
 		auto & renderSystem = *m_engine.getRenderSystem();

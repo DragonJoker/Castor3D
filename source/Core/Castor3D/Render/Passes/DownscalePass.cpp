@@ -43,51 +43,39 @@ namespace castor3d
 		return sampler;
 	}
 
-	crg::ImageId doCreateImage( crg::FrameGraph & graph
+	Texture doCreateImage( RenderDevice const & device
+		,crg::FrameGraph & graph
 		, castor::String const & name
 		, VkFormat format
 		, VkExtent2D const & size )
 	{
-		return graph.createImage( crg::ImageData{ name
+		return Texture{ device
+			, graph.getHandler()
+			, name
 			, 0u
-			, VK_IMAGE_TYPE_2D
-			, format
 			, { size.width, size.height, 1u }
+			, 1u
+			, 1u
+			, format
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT ) } );
+				| VK_IMAGE_USAGE_SAMPLED_BIT ) };
 	}
 
-	crg::ImageIdArray doCreateImages( crg::FrameGraph & graph
+	TextureArray doCreateImages( RenderDevice const & device
+		, crg::FrameGraph & graph
 		, castor::String const & name
-		, crg::ImageViewIdArray const & views
+		, TextureArray const & views
 		, VkExtent2D const & size )
 	{
-		crg::ImageIdArray result;
+		TextureArray result;
 
 		for ( auto & view : views )
 		{
-			result.emplace_back( doCreateImage( graph
+			result.emplace_back( doCreateImage( device
+				, graph
 				, name + string::toString( result.size() )
-				, getFormat( view )
+				, view.getFormat()
 				, size ) );
-		}
-
-		return result;
-	}
-
-	crg::ImageViewIdArray doCreateViews( crg::FrameGraph & graph
-		, crg::ImageIdArray const & images )
-	{
-		crg::ImageViewIdArray result;
-
-		for ( auto & image : images )
-		{
-			result.emplace_back( graph.createView( crg::ImageViewData{ image.data->name
-				, image
-				, 0u
-				, VK_IMAGE_VIEW_TYPE_2D
-				, getFormat( image )
-				, { ashes::getAspectMask( getFormat( image ) ), 0u, 1u, 0u, 1u } } ) );
 		}
 
 		return result;
@@ -99,11 +87,10 @@ namespace castor3d
 		, crg::FramePass const *& previousPass
 		, RenderDevice const & device
 		, castor::String const & category
-		, crg::ImageViewIdArray const & srcViews
+		, TextureArray const & srcViews
 		, VkExtent2D const & dstSize )
 		: m_device{ device }
-		, m_result{ doCreateImages( graph, "Downscaled", srcViews, dstSize ) }
-		, m_resultViews{ doCreateViews( graph, m_result ) }
+		, m_result{ doCreateImages( device, graph, "Downscaled", srcViews, dstSize ) }
 	{
 		// TODO CRG
 		//m_commandBuffer->begin();
@@ -174,10 +161,10 @@ namespace castor3d
 	{
 		uint32_t index{};
 
-		for ( auto & unit : m_resultViews )
+		for ( auto & texture : m_result )
 		{
 			visitor.visit( "Downscale" + string::toString( index++ )
-				, unit
+				, texture
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, TextureFactors{}.invert( true ) );
 		}

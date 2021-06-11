@@ -79,7 +79,7 @@ namespace castor3d
 				return lhs;
 			}
 
-			log::debug << name + cuT( " - Merging samplers." ) << std::endl;
+			//log::debug << name + cuT( " - Merging samplers." ) << std::endl;
 			auto sampler = std::make_shared< Sampler >( *lhs->getEngine(), name );
 			sampler->setBorderColour( lhs->getBorderColour() );
 			sampler->setCompareOp( lhs->getCompareOp() );
@@ -133,13 +133,13 @@ namespace castor3d
 
 				if ( dimensions != lhs.getDimensions() )
 				{
-					log::debug << name << cuT( " - Resizing LHS image." ) << std::endl;
+					//log::debug << name << cuT( " - Resizing LHS image." ) << std::endl;
 					lhsBuffer = lhs.getResampled( dimensions ).getPixels();
 				}
 
 				if ( dimensions != rhs.getDimensions() )
 				{
-					log::debug << name << cuT( " - Resizing RHS image." ) << std::endl;
+					//log::debug << name << cuT( " - Resizing RHS image." ) << std::endl;
 					rhsBuffer = rhs.getResampled( dimensions ).getPixels();
 				}
 			}
@@ -163,12 +163,12 @@ namespace castor3d
 			auto rhsComponents = getPixelComponents( rhsSrcMask );
 			auto result = castor::PxBufferBase::createUnique( dimensions
 				, getPixelFormat( pixelFormat, getPixelComponents( lhsDstMask | rhsDstMask ) ) );
-			log::debug << name << cuT( " - Copying LHS image components to result." ) << std::endl;
+			//log::debug << name << cuT( " - Copying LHS image components to result." ) << std::endl;
 			copyBufferComponents( lhsComponents
 				, getPixelComponents( lhsDstMask )
 				, *lhsBuffer
 				, *result );
-			log::debug << name << cuT( " - Copying RHS image components to result." ) << std::endl;
+			//log::debug << name << cuT( " - Copying RHS image components to result." ) << std::endl;
 			copyBufferComponents( rhsComponents
 				, getPixelComponents( rhsDstMask )
 				, *rhsBuffer
@@ -191,7 +191,7 @@ namespace castor3d
 			if ( compressedFormat != buffer->getFormat()
 				&& allowCompression )
 			{
-				log::debug << name << cuT( " - Compressing result." ) << std::endl;
+				//log::debug << name << cuT( " - Compressing result." ) << std::endl;
 				buffer = castor::PxBufferBase::createUnique( &loader.getOptions()
 					, buffer->getDimensions()
 					, compressedFormat
@@ -200,7 +200,7 @@ namespace castor3d
 			}
 			else if ( !castor::isCompressed( buffer->getFormat() ) )
 			{
-				log::debug << name << cuT( " - Generating result mipmaps." ) << std::endl;
+				//log::debug << name << cuT( " - Generating result mipmaps." ) << std::endl;
 				buffer->generateMips();
 			}
 
@@ -246,7 +246,7 @@ namespace castor3d
 		{
 			if ( isPreparable( *unit ) )
 			{
-				log::debug << parentName << name << cuT( " - Preparing texture for upload." ) << std::endl;
+				//log::debug << parentName << name << cuT( " - Preparing texture for upload." ) << std::endl;
 				unit->setTexture( getTextureLayout( engine
 					, std::make_unique< castor::PxBufferBase >( unit->getTexture()->getImage().getPxBuffer() )
 					, unit->getTexture()->getName()
@@ -557,7 +557,7 @@ namespace castor3d
 
 			if ( isMergeable( *lhsUnit ) && isMergeable( *rhsUnit ) )
 			{
-				log::debug << getOwner()->getName() << name << cuT( " - Merging textures." ) << std::endl;
+				//log::debug << getOwner()->getName() << name << cuT( " - Merging textures." ) << std::endl;
 				TextureConfiguration resultConfig;
 				getMask( resultConfig, lhsMaskOffset ) = lhsDstMask;
 				getMask( resultConfig, rhsMaskOffset ) = rhsDstMask;

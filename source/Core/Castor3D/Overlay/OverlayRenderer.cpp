@@ -453,7 +453,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	OverlayRenderer::OverlayRenderer( RenderDevice const & device
-		, ashes::ImageView const & target )
+		, Texture const & target )
 		: OwnedBy< RenderSystem >( device.renderSystem )
 		, m_device{ device }
 		, m_uboPools{ *device.uboPools }
@@ -761,9 +761,15 @@ namespace castor3d
 			, std::move( createInfo ) );
 
 		ashes::ImageViewCRefArray fbAttaches;
-		fbAttaches.emplace_back( m_target );
+		auto image = std::make_unique< ashes::Image >( *device
+			, m_target.image
+			, ashes::ImageCreateInfo{ m_target.imageId.data->info } );
+		auto view = ashes::ImageView{ ashes::ImageViewCreateInfo{ m_target.image, m_target.wholeViewId.data->info }
+			, m_target.wholeView
+			, image.get() };
+		fbAttaches.emplace_back( view );
 		m_frameBuffer = m_renderPass->createFrameBuffer( "OverlayRenderer"
-			, { m_target.image->getDimensions().width, m_target.image->getDimensions().height }
+			, makeExtent2D( m_target.getExtent() )
 			, std::move( fbAttaches ) );
 	}
 
