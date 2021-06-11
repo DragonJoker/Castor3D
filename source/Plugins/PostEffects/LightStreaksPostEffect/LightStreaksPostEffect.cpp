@@ -113,44 +113,33 @@ namespace light_streaks
 			}
 		};
 
-		m_hiImage = graph.createImage( crg::ImageData{ "LSHi"
+		m_hiImage = { device
+			, graph.getHandler()
+			, "LSHi"
 			, 0u
-			, VK_IMAGE_TYPE_2D
-			, m_target->data->info.format
 			, VkExtent3D{ size.width, size.height, 1u }
+			, Count + 1u
+			, 1u
+			, m_target->data->info.format
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
-			, 1u
-			, Count } );
-		m_kawaseImage = graph.createImage( crg::ImageData{ "LSKaw"
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) };
+		m_kawaseImage = { device
+			, graph.getHandler()
+			, "LSKaw"
 			, 0u
-			, VK_IMAGE_TYPE_2D
-			, m_target->data->info.format
 			, VkExtent3D{ size.width, size.height, 1u }
+			, Count
+			, 1u
+			, m_target->data->info.format
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
-			, 1u
-			, Count } );
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) };
 
 		for ( auto i = 0u; i < Count; ++i )
 		{
-			m_hiViews.push_back( graph.createView( crg::ImageViewData{ m_hiImage.data->name
-				, m_hiImage
-				, 0u
-				, VK_IMAGE_VIEW_TYPE_2D
-				, m_hiImage.data->info.format
-				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, i, 1u } } ) );
-			m_kawaseViews.push_back( graph.createView( crg::ImageViewData{ m_kawaseImage.data->name
-				, m_kawaseImage
-				, 0u
-				, VK_IMAGE_VIEW_TYPE_2D
-				, m_kawaseImage.data->info.format
-				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, i, 1u } } ) );
-
 			for ( uint32_t j = 0u; j < 3u; ++j )
 			{
 				m_kawaseUbo.update( index
@@ -165,20 +154,20 @@ namespace light_streaks
 			, previousPass
 			, device
 			, *m_target
-			, m_hiViews
+			, m_hiImage.subViewsId
 			, size );
 		m_kawasePass = std::make_unique< KawasePass >( graph
-			, m_hiPass->getPass()
+			, m_hiPass->getPasses()
 			, device
-			, m_hiViews
-			, m_kawaseViews
+			, m_hiImage.subViewsId
+			, m_kawaseImage.subViewsId
 			, m_kawaseUbo
 			, size );
 		m_combinePass = std::make_unique< CombinePass >( graph
 			, m_kawasePass->getPasses()
 			, device
 			, *m_target
-			, m_kawaseViews
+			, m_kawaseImage.subViewsId
 			, dimensions );
 		m_pass = &m_combinePass->getPass();
 		return &m_combinePass->getResult();

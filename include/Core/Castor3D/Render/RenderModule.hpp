@@ -86,10 +86,67 @@ namespace castor3d
 			, uint32_t mipLevels
 			, VkFormat format
 			, VkImageUsageFlags usageFlags
-			, VkBorderColor const & borderColor
+			, VkBorderColor const & borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK
 			, bool createSubviews = true );
 
 		C3D_API void create();
+
+		C3D_API VkImageMemoryBarrier makeGeneralLayout( VkImageLayout srcLayout
+			, VkAccessFlags dstAccessFlags
+			, uint32_t srcQueueFamily = VK_QUEUE_FAMILY_IGNORED
+			, uint32_t dstQueueFamily = VK_QUEUE_FAMILY_IGNORED
+			, bool target = false )const;
+		C3D_API VkImageMemoryBarrier makeTransferDestination( VkImageLayout srcLayout
+			, uint32_t srcQueueFamily = VK_QUEUE_FAMILY_IGNORED
+			, uint32_t dstQueueFamily = VK_QUEUE_FAMILY_IGNORED
+			, bool target = false )const;
+		C3D_API VkImageMemoryBarrier makeTransferSource( VkImageLayout srcLayout
+			, uint32_t srcQueueFamily = VK_QUEUE_FAMILY_IGNORED
+			, uint32_t dstQueueFamily = VK_QUEUE_FAMILY_IGNORED
+			, bool target = false )const;
+		C3D_API VkImageMemoryBarrier makeShaderInputResource( VkImageLayout srcLayout
+			, uint32_t srcQueueFamily = VK_QUEUE_FAMILY_IGNORED
+			, uint32_t dstQueueFamily = VK_QUEUE_FAMILY_IGNORED
+			, bool target = false )const;
+		C3D_API VkImageMemoryBarrier makeDepthStencilReadOnly( VkImageLayout srcLayout
+			, uint32_t srcQueueFamily = VK_QUEUE_FAMILY_IGNORED
+			, uint32_t dstQueueFamily = VK_QUEUE_FAMILY_IGNORED
+			, bool target = false )const;
+		C3D_API VkImageMemoryBarrier makeColourAttachment( VkImageLayout srcLayout
+			, uint32_t srcQueueFamily = VK_QUEUE_FAMILY_IGNORED
+			, uint32_t dstQueueFamily = VK_QUEUE_FAMILY_IGNORED
+			, bool target = false )const;
+		C3D_API VkImageMemoryBarrier makeDepthStencilAttachment( VkImageLayout srcLayout
+			, uint32_t srcQueueFamily = VK_QUEUE_FAMILY_IGNORED
+			, uint32_t dstQueueFamily = VK_QUEUE_FAMILY_IGNORED
+			, bool target = false )const;
+		C3D_API VkImageMemoryBarrier makePresentSource( VkImageLayout srcLayout
+			, uint32_t srcQueueFamily = VK_QUEUE_FAMILY_IGNORED
+			, uint32_t dstQueueFamily = VK_QUEUE_FAMILY_IGNORED
+			, bool target = false )const;
+		C3D_API VkImageMemoryBarrier makeLayoutTransition( VkImageLayout sourceLayout
+			, VkImageLayout destinationLayout
+			, uint32_t srcQueueFamily
+			, uint32_t dstQueueFamily
+			, bool target = false )const;
+		C3D_API VkImageMemoryBarrier makeLayoutTransition( VkImageLayout srcLayout
+			, VkImageLayout dstLayout
+			, VkAccessFlags srcAccessFlags
+			, uint32_t srcQueueFamily
+			, uint32_t dstQueueFamily
+			, bool target = false )const;
+		C3D_API VkImageMemoryBarrier makeLayoutTransition( VkImageLayout srcLayout
+			, VkImageLayout dstLayout
+			, VkAccessFlags srcAccessFlags
+			, VkAccessFlags dstAccessMask
+			, uint32_t srcQueueFamily
+			, uint32_t dstQueueFamily
+			, bool target = false )const;
+
+		uint32_t getMipLevels()const
+		{
+			return imageId.data->info.mipLevels;
+		}
 
 		VkFormat getFormat()const
 		{
@@ -112,6 +169,27 @@ namespace castor3d
 		crg::ImageViewIdArray subViewsId{};
 		ashes::Sampler const * sampler{};
 	};
+	C3D_API VkImageMemoryBarrier makeLayoutTransition( VkImage image
+		, VkImageSubresourceRange const & range
+		, VkImageLayout sourceLayout
+		, VkImageLayout destinationLayout
+		, uint32_t srcQueueFamily
+		, uint32_t dstQueueFamily );
+	C3D_API VkImageMemoryBarrier makeLayoutTransition( VkImage image
+		, VkImageSubresourceRange const & range
+		, VkImageLayout srcLayout
+		, VkImageLayout dstLayout
+		, VkAccessFlags srcAccessFlags
+		, uint32_t srcQueueFamily
+		, uint32_t dstQueueFamily );
+	C3D_API VkImageMemoryBarrier makeLayoutTransition( VkImage image
+		, VkImageSubresourceRange const & range
+		, VkImageLayout srcLayout
+		, VkImageLayout dstLayout
+		, VkAccessFlags srcAccessFlags
+		, VkAccessFlags dstAccessMask
+		, uint32_t srcQueueFamily
+		, uint32_t dstQueueFamily );
 	using TextureArray = std::vector< Texture >;
 	/**
 	*\~english
@@ -384,7 +462,9 @@ namespace castor3d
 	struct IntermediateView
 	{
 		castor::String name;
-		ashes::ImageView view;
+		crg::ImageViewId viewId;
+		VkImage image;
+		VkImageView view;
 		VkImageLayout layout;
 		TextureFactors factors;
 	};
@@ -669,7 +749,6 @@ namespace castor3d
 		castor::Milliseconds time;
 		castor::Milliseconds total;
 	};
-
 	//@}
 }
 

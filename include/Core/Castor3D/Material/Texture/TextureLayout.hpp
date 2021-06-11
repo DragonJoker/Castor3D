@@ -208,19 +208,37 @@ namespace castor3d
 		 *\brief		Constructor.
 		 *\param[in]	renderSystem		The render system.
 		 *\param[in]	info				The image informations.
-		 *\param[in]	memoryProperties	The required memory properties.
-		 *\param[in]	debugName			The debug name for this layout.
-		 *\param[in]	isStatic			Tells if this layout is static.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	renderSystem		Le render system.
 		 *\param[in]	info				Les informations de l'image.
-		 *\param[in]	memoryProperties	Les propriétés requise pour la mémoire.
-		 *\param[in]	debugName			Le nom de debug pour ce layout.
-		 *\param[in]	isStatic			Dit si ce layout est statique.
 		 */
 		C3D_API TextureLayout( RenderSystem & renderSystem
 			, ashes::ImageView imageView );
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	renderSystem		The render system.
+		 *\param[in]	info				The image informations.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	renderSystem		Le render system.
+		 *\param[in]	info				Les informations de l'image.
+		 */
+		C3D_API TextureLayout( RenderSystem & renderSystem
+			, crg::ImageViewId imageView );
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	renderSystem		The render system.
+		 *\param[in]	info				The image informations.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	renderSystem		Le render system.
+		 *\param[in]	info				Les informations de l'image.
+		 */
+		C3D_API TextureLayout( RenderSystem & renderSystem
+			, VkImageCreateInfo const & createInfo );
 		/**
 		 *\~english
 		 *\brief		Destructor

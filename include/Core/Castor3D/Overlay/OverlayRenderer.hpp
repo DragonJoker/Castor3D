@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_OverlayRenderer_H___
 
 #include "Castor3D/Overlay/TextOverlay.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 
 #include "Castor3D/Buffer/GeometryBuffers.hpp"
 #include "Castor3D/Buffer/UniformBuffer.hpp"
@@ -70,7 +71,7 @@ namespace castor3d
 		 *\param[in]	target		La vue de texture cible.
 		 */
 		C3D_API OverlayRenderer( RenderDevice const & device
-			, ashes::ImageView const & target );
+			, Texture const & target );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -270,7 +271,7 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		UniformBufferPools & m_uboPools;
-		ashes::ImageView const & m_target;
+		Texture const & m_target;
 		ashes::CommandBufferPtr m_commandBuffer;
 		std::vector< std::unique_ptr< PanelVertexBufferPool > > m_panelVertexBuffers;
 		std::vector< std::unique_ptr< BorderPanelVertexBufferPool > > m_borderVertexBuffers;

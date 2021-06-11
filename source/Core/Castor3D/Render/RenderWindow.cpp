@@ -181,31 +181,41 @@ namespace castor3d
 			};
 		}
 
-		IntermediateView doCreateBarrierView( IntermediateView const & view )
+		IntermediateView doCreateBarrierView( RenderDevice const & device
+			, IntermediateView const & view )
 		{
-			ashes::ImageViewCreateInfo createInfo{ view.view->flags
-				, view.view->image
-				, view.view->viewType
-				, view.view->format
-				, view.view->components
-				, { VkImageAspectFlags( ashes::isDepthStencilFormat( view.view->format )
+			auto info = view.viewId.data->info;
+			auto & handler = device.renderSystem.getEngine()->getGraphResourceHandler();
+			crg::ImageViewId viewId{ handler.createViewId( crg::ImageViewData{ view.name
+				, view.viewId.data->image
+				, info.flags
+				, info.viewType
+				, info.format
+				, { VkImageAspectFlags( ashes::isDepthStencilFormat( info.format )
 						? VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT
-						: ( ashes::isDepthFormat( view.view->format )
+						: ( ashes::isDepthFormat( info.format )
 							? VK_IMAGE_ASPECT_DEPTH_BIT
-							: ( ashes::isStencilFormat( view.view->format )
+							: ( ashes::isStencilFormat( info.format )
 								? VK_IMAGE_ASPECT_STENCIL_BIT
 								: VK_IMAGE_ASPECT_COLOR_BIT ) ) )
-					, view.view->subresourceRange.baseMipLevel
-					, view.view->subresourceRange.levelCount
-					, view.view->subresourceRange.baseArrayLayer
-					, view.view->subresourceRange.layerCount } };
+					, info.subresourceRange.baseMipLevel
+					, info.subresourceRange.levelCount
+					, info.subresourceRange.baseArrayLayer
+					, info.subresourceRange.layerCount } } ) };
+			VkImageViewCreateInfo createInfo{ viewId.data->info };
+			createInfo.image = view.image;
+			VkImageView barrierView{};
+			device->vkCreateImageView( *device, &createInfo, nullptr, &barrierView );
 			return{ view.name
-				, view.view.image->createView( std::move( createInfo ) )
+				, viewId
+				, view.image
+				, barrierView
 				, view.layout
 				, view.factors };
 		}
 
-		IntermediateViewArray doCreateBarrierViews( IntermediateView const & tex3DResult
+		IntermediateViewArray doCreateBarrierViews( RenderDevice const & device
+			, IntermediateView const & tex3DResult
 			, IntermediateViewArray const & views )
 		{
 			using castor3d::operator!=;
@@ -214,48 +224,58 @@ namespace castor3d
 			if ( views.size() == 1u )
 			{
 				auto & view = views[0u];
-				result.push_back( doCreateBarrierView( view ) );
+				result.push_back( doCreateBarrierView( device, view ) );
 				return result;
 			}
 
 			for ( auto & view : views )
 			{
-				if ( view.view->viewType == VK_IMAGE_VIEW_TYPE_3D )
+				if ( view.viewId.data->info.viewType == VK_IMAGE_VIEW_TYPE_3D )
 				{
-					result.push_back( doCreateBarrierView( tex3DResult ) );
+					result.push_back( doCreateBarrierView( device, tex3DResult ) );
 				}
 				else
 				{
-					result.push_back( doCreateBarrierView( view ) );
+					result.push_back( doCreateBarrierView( device, view ) );
 				}
 			}
 
 			return result;
 		}
 
-		IntermediateView doCreateSampledView( IntermediateView const & view )
+		IntermediateView doCreateSampledView( RenderDevice const & device
+			, IntermediateView const & view )
 		{
-			ashes::ImageViewCreateInfo createInfo{ view.view->flags
-				, view.view->image
-				, view.view->viewType
-				, view.view->format
-				, view.view->components
-				, { VkImageAspectFlags( ( ashes::isDepthFormat( view.view->format ) || ashes::isDepthOrStencilFormat( view.view->format ) )
+			auto info = view.viewId.data->info;
+			auto & handler = device.renderSystem.getEngine()->getGraphResourceHandler();
+			crg::ImageViewId viewId{ handler.createViewId( crg::ImageViewData{ view.name
+				, view.viewId.data->image
+				, info.flags
+				, info.viewType
+				, info.format
+				, { VkImageAspectFlags( ( ashes::isDepthFormat( info.format ) || ashes::isDepthOrStencilFormat( info.format ) )
 						? VK_IMAGE_ASPECT_DEPTH_BIT
-						: ( ashes::isStencilFormat( view.view->format )
+						: ( ashes::isStencilFormat( info.format )
 							? VK_IMAGE_ASPECT_STENCIL_BIT
 							: VK_IMAGE_ASPECT_COLOR_BIT ) )
-					, view.view->subresourceRange.baseMipLevel
-					, view.view->subresourceRange.levelCount
-					, view.view->subresourceRange.baseArrayLayer
-					, view.view->subresourceRange.layerCount } };
+					, info.subresourceRange.baseMipLevel
+					, info.subresourceRange.levelCount
+					, info.subresourceRange.baseArrayLayer
+					, info.subresourceRange.layerCount } } ) };
+			VkImageViewCreateInfo createInfo{ viewId.data->info };
+			createInfo.image = view.image;
+			VkImageView barrierView{};
+			device->vkCreateImageView( *device, &createInfo, nullptr, &barrierView );
 			return { view.name
-				, view.view.image->createView( std::move( createInfo ) )
+				, viewId
+				, view.image
+				, barrierView
 				, view.layout
 				, view.factors };
 		}
 
-		IntermediateViewArray doCreateSampledViews( IntermediateView const & tex3DResult
+		IntermediateViewArray doCreateSampledViews( RenderDevice const & device
+			, IntermediateView const & tex3DResult
 			, IntermediateViewArray const & views )
 		{
 			using castor3d::operator!=;
@@ -264,19 +284,19 @@ namespace castor3d
 			if ( views.size() == 1u )
 			{
 				auto & view = views[0u];
-				result.push_back( doCreateSampledView( view ) );
+				result.push_back( doCreateSampledView( device, view ) );
 				return result;
 			}
 
 			for ( auto & view : views )
 			{
-				if ( view.view->viewType == VK_IMAGE_VIEW_TYPE_3D )
+				if ( view.viewId.data->info.viewType == VK_IMAGE_VIEW_TYPE_3D )
 				{
-					result.push_back( doCreateBarrierView( tex3DResult ) );
+					result.push_back( doCreateBarrierView( device, tex3DResult ) );
 				}
 				else
 				{
-					result.push_back( doCreateSampledView( view ) );
+					result.push_back( doCreateSampledView( device, view ) );
 				}
 			}
 
@@ -945,10 +965,13 @@ namespace castor3d
 				{
 					commandBuffer->memoryBarrier( ashes::getStageMask( intermediateBarrierView.layout )
 						, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-						, intermediateBarrierView.view.makeLayoutTransition( intermediateBarrierView.layout
+						, makeLayoutTransition( intermediateBarrierView.image
+							, intermediateBarrierView.viewId.data->info.subresourceRange
+							, intermediateBarrierView.layout
 							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 							, VK_QUEUE_FAMILY_IGNORED
-							, VK_QUEUE_FAMILY_IGNORED ) );
+							, VK_QUEUE_FAMILY_IGNORED
+							, true ) );
 				}
 
 				commandBuffer->beginRenderPass( *m_renderPass
@@ -962,10 +985,13 @@ namespace castor3d
 				{
 					commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 						, ashes::getStageMask( intermediateBarrierView.layout )
-						, intermediateBarrierView.view.makeLayoutTransition( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+						, makeLayoutTransition( intermediateBarrierView.image
+							, intermediateBarrierView.viewId.data->info.subresourceRange
+							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 							, intermediateBarrierView.layout
 							, VK_QUEUE_FAMILY_IGNORED
-							, VK_QUEUE_FAMILY_IGNORED ) );
+							, VK_QUEUE_FAMILY_IGNORED
+							, true ) );
 				}
 
 				commandBuffer->endDebugBlock();
@@ -992,7 +1018,9 @@ namespace castor3d
 		auto target = m_renderTarget.lock();
 		CU_Require( target );
 		m_intermediates.push_back( { "Target Result"
-			, target->getTexture()
+			, target->getTexture().wholeViewId
+			, target->getTexture().image
+			, target->getTexture().wholeView
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
 		target->listIntermediateViews( m_intermediates );
 
@@ -1001,7 +1029,9 @@ namespace castor3d
 			, extent
 			, target->getTechnique()->getMatrixUbo() );
 		m_tex3DTo2DIntermediate = { "Texture3DTo2DResult"
-			, m_texture3Dto2D->getTarget()
+			, m_texture3Dto2D->getTarget().wholeViewId
+			, m_texture3Dto2D->getTarget().image
+			, m_texture3Dto2D->getTarget().wholeView
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL };
 #if C3D_DebugQuads
 		auto intermediates = m_intermediates;
@@ -1010,9 +1040,11 @@ namespace castor3d
 #endif
 		m_texture3Dto2D->createPasses( intermediates );
 
-		m_intermediateBarrierViews = doCreateBarrierViews( m_tex3DTo2DIntermediate
+		m_intermediateBarrierViews = doCreateBarrierViews( m_device
+			, m_tex3DTo2DIntermediate
 			, m_intermediates );
-		m_intermediateSampledViews = doCreateSampledViews( m_tex3DTo2DIntermediate
+		m_intermediateSampledViews = doCreateSampledViews( m_device
+			, m_tex3DTo2DIntermediate
 			, m_intermediates );
 	}
 
@@ -1061,22 +1093,23 @@ namespace castor3d
 		commands.memoryBarrier( VK_PIPELINE_STAGE_HOST_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
 			, m_stagingBuffer->makeTransferDestination() );
-		auto extent = view.image->getDimensions();
-		auto mipLevel = view->subresourceRange.baseMipLevel;
+		auto extent = view.getExtent();
+		auto subresourceRange = view.targetViewId.data->info.subresourceRange;
+		auto mipLevel = subresourceRange.baseMipLevel;
 		extent.width = std::max( 1u, extent.width >> mipLevel );
 		extent.height = std::max( 1u, extent.height >> mipLevel );
 		commands.copyToBuffer( VkBufferImageCopy{ 0u
 			, 0u
 			, 0u
-			, { view->subresourceRange.aspectMask
-			, mipLevel
-			, view->subresourceRange.baseArrayLayer
-			, view->subresourceRange.layerCount }
+			, { subresourceRange.aspectMask
+				, mipLevel
+				, subresourceRange.baseArrayLayer
+				, subresourceRange.layerCount }
 			, VkOffset3D{}
 			, VkExtent3D{ std::max( 1u, extent.width )
 			, std::max( 1u, extent.height )
 			, 1u } }
-			, *view.image
+			, view.image
 			, *m_stagingBuffer );
 		commands.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT

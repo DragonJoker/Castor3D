@@ -896,22 +896,37 @@ namespace castor3d
 
 	TextureLayout::TextureLayout( RenderSystem & renderSystem
 		, ashes::ImageView imageView )
+		: TextureLayout{ renderSystem
+			, { VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO
+				, nullptr
+				, imageView.image->getFlags()
+				, imageView.image->getType()
+				, imageView.image->getFormat()
+				, imageView.image->getDimensions()
+				, imageView.image->getMipmapLevels()
+				, imageView.image->getLayerCount()
+				, imageView.image->getSampleCount()
+				, imageView.image->getTiling()
+				, imageView.image->getUsage() } }
+	{
+	}
+
+	TextureLayout::TextureLayout( RenderSystem & renderSystem
+		, crg::ImageViewId imageView )
+		: TextureLayout{ renderSystem, imageView.data->image.data->info }
+	{
+	}
+
+	TextureLayout::TextureLayout( RenderSystem & renderSystem
+		, VkImageCreateInfo const & createInfo )
 		: OwnedBy< RenderSystem >{ renderSystem }
 		, m_static{ false }
-		, m_info{ imageView.image->getFlags()
-			, imageView.image->getType()
-			, imageView.image->getFormat()
-			, imageView.image->getDimensions()
-			, imageView.image->getMipmapLevels()
-			, imageView.image->getLayerCount()
-			, imageView.image->getSampleCount()
-			, imageView.image->getTiling()
-			, imageView.image->getUsage() }
+		, m_info{ createInfo }
 		, m_properties{}
 		, m_image{ castor::cuEmptyString
 			, castor::Path{ castor::cuEmptyString }
-			, { imageView.image->getDimensions().width, imageView.image->getDimensions().height }
-			, castor::PixelFormat( imageView.image->getFormat() ) }
+			, makeSize( m_info->extent )
+			, castor::PixelFormat( m_info->format ) }
 		, m_defaultView{ createViews( m_info, *this, m_image.getName() ) }
 		, m_cubeView{ &m_defaultView }
 		, m_arrayView{ &m_defaultView }

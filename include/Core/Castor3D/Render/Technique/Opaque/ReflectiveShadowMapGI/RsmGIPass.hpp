@@ -57,7 +57,7 @@ namespace castor3d
 			, GpInfoUbo const & gpInfo
 			, OpaquePassResult const & gpResult
 			, ShadowMapResult const & smResult
-			, crg::ImageViewIdArray const & downscaleResult );
+			, TextureArray const & downscaleResult );
 		/**
 		 *\~english
 		 *\brief		Renders the pass.
@@ -75,7 +75,7 @@ namespace castor3d
 		C3D_API void accept( PipelineVisitorBase & visitor );
 		C3D_API void update( Light const & light );
 
-		crg::ImageViewIdArray const & getResult()const
+		TextureArray const & getResult()const
 		{
 			return m_resultViews;
 		}
@@ -95,8 +95,8 @@ namespace castor3d
 		OpaquePassResult const & m_gpResult;
 		ShadowMapResult const & m_smResult;
 		GpInfoUbo const & m_gpInfo;
-		crg::ImageIdArray m_result;
-		crg::ImageViewIdArray m_resultViews;
+		TextureArray m_result;
+		TextureArray m_resultViews;
 		LightType m_lightType;
 		ShaderModule m_vertexShader;
 		ShaderModule m_pixelShader;

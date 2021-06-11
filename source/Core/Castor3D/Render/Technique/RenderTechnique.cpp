@@ -105,12 +105,17 @@ namespace castor3d
 			}
 
 			void doVisit( castor::String const & name
-				, ashes::ImageView const & view
+				, Texture const & view
 				, VkImageLayout layout
 				, TextureFactors const & factors )override
 			{
-				m_cache.insert( view.createInfo );
-				m_result.push_back( { name, view, layout, factors } );
+				m_cache.insert( view.wholeViewId.data->info );
+				m_result.push_back( { name
+					, view.wholeViewId
+					, view.image
+					, view.wholeView
+					, layout
+					, factors } );
 			}
 
 			bool doFilter( VkImageViewCreateInfo const & info )const override
@@ -455,7 +460,7 @@ namespace castor3d
 		, m_transparentPassResult{ castor::makeUnique< TransparentPassResult >( getOwner()->getGraphResourceHandler()
 			, m_device
 			, m_depth
-			, m_renderTarget.getVelocityTexture() ) }
+			, m_renderTarget.getVelocity() ) }
 		, m_transparentPassDesc{ &doCreateTransparentPass() }
 		, m_weightedBlendRendering{ castor::makeUnique< WeightedBlendRendering >( m_renderTarget.getGraph()
 			, m_device
@@ -719,7 +724,7 @@ namespace castor3d
 			} );
 		result.addOutputDepthView( m_depth.targetViewId
 			, defaultClearDepthStencil );
-		result.addOutputColourView( m_renderTarget.getVelocityId() );
+		result.addOutputColourView( m_renderTarget.getVelocity().targetViewId );
 		return result;
 	}
 

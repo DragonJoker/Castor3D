@@ -40,18 +40,17 @@ namespace castor3d
 		C3D_API void update( CpuUpdater & updater );
 		C3D_API crg::SemaphoreWait render( crg::SemaphoreWait const & toWait );
 
-		ashes::ImageView const & getTarget()
+		Texture const & getTarget()
 		{
-			return m_targetView;
+			return m_target;
 		}
 
 	private:
 		RenderSystem & m_renderSystem;
 		RenderDevice const & m_device;
 		MatrixUbo const & m_matrixUbo;
-		ashes::ImagePtr m_target;
-		ashes::ImageView m_targetView;
-		TextureUnit m_depthBuffer;
+		Texture m_target;
+		Texture m_depthBuffer;
 		UniformBufferOffsetT< Texture3DTo2DData > m_uniformBuffer;
 		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;
 		ashes::PipelineLayoutPtr m_pipelineLayout;

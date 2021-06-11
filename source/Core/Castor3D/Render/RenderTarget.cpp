@@ -29,14 +29,6 @@
 #include <RenderGraph/RunnablePasses/ImageCopy.hpp>
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
-#include <ashespp/Command/CommandBuffer.hpp>
-#include <ashespp/Core/Device.hpp>
-#include <ashespp/Image/Image.hpp>
-#include <ashespp/RenderPass/FrameBuffer.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
-#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
-#include <ashespp/RenderPass/SubpassDescription.hpp>
-
 #include <CastorUtils/Graphics/Image.hpp>
 #include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 
@@ -48,35 +40,6 @@ using namespace castor;
 
 namespace castor3d
 {
-	RenderTarget::TargetFbo::TargetFbo( RenderTarget & renderTarget )
-		: renderTarget{ renderTarget }
-	{
-	}
-
-	bool RenderTarget::TargetFbo::initialise( RenderDevice const & device
-		, ashes::ImagePtr image
-		, ashes::ImageView view
-		, ashes::RenderPass & renderPass )
-	{
-		colourImage = std::move( image );
-		colourView = std::move( view );
-		ashes::ImageViewCRefArray attaches;
-		attaches.emplace_back( colourView );
-		frameBuffer = renderPass.createFrameBuffer( renderTarget.getName()
-			, VkExtent2D{ colourImage->getDimensions().width, colourImage->getDimensions().height }
-			, std::move( attaches ) );
-
-		return true;
-	}
-
-	void RenderTarget::TargetFbo::cleanup( RenderDevice const & device )
-	{
-		colourImage.reset();
-		frameBuffer.reset();
-	}
-
-	//*************************************************************************************************
-	
 	uint32_t RenderTarget::sm_uiCount = 0;
 	const castor::String RenderTarget::DefaultSamplerName = cuT( "DefaultRTSampler" );
 
@@ -92,9 +55,6 @@ namespace castor3d
 		, m_renderTechnique{}
 		, m_index{ ++sm_uiCount }
 		, m_name{ cuT( "Target" ) + string::toString( m_index ) }
-		, m_objectsFrameBuffer{ *this }
-		, m_overlaysFrameBuffer{ *this }
-		, m_combinedFrameBuffer{ *this }
 		, m_graph{ getOwner()->getGraphResourceHandler(), m_name }
 		, m_velocity{ *getOwner()->getRenderSystem()->getMainRenderDevice()
 			, getOwner()->getGraphResourceHandler()
@@ -166,7 +126,6 @@ namespace castor3d
 			m_hdrConfigUbo = std::make_unique< HdrConfigUbo >( device );
 
 			m_culler = std::make_unique< FrustumCuller >( *getScene(), *getCamera() );
-			doInitialiseRenderPass( device );
 			doInitCombineProgram();
 			m_initialised = doInitialiseTechnique( device );
 
@@ -247,54 +206,14 @@ namespace castor3d
 				m_runnable = m_graph.compile( device.makeContext() );
 
 				m_objects.create();
-				auto image = std::make_unique< ashes::Image >( *device
-					, m_objects.image
-					, ashes::ImageCreateInfo{ m_objects.imageId.data->info } );
-				ashes::ImageView view{ ashes::ImageViewCreateInfo{ m_objects.image, m_objects.wholeViewId.data->info }
-					, m_objects.wholeView
-					, image.get() };
-				m_objectsFrameBuffer.initialise( device
-					, std::move( image )
-					, view
-					, *m_renderPass );
-
 				m_overlays.create();
-				image = std::make_unique< ashes::Image >( *device
-					, m_overlays.image
-					, ashes::ImageCreateInfo{ m_overlays.imageId.data->info } );
-				view = ashes::ImageView{ ashes::ImageViewCreateInfo{ m_overlays.image, m_overlays.wholeViewId.data->info }
-					, m_overlays.wholeView
-					, image.get() };
-
 				m_velocity.create();
-				m_velocityImage = std::make_unique< ashes::Image >( *device
-					, m_velocity.image
-					, ashes::ImageCreateInfo{ m_velocity.imageId.data->info } );
-				m_velocityImageView = ashes::ImageView{ ashes::ImageViewCreateInfo{ m_velocity.image, m_velocity.wholeViewId.data->info }
-					, m_velocity.wholeView
-					, image.get() };
-				m_overlaysFrameBuffer.initialise( device
-					, std::move( image )
-					, view
-					, *m_renderPass );
-
 				m_combined.create();
-				image = std::make_unique< ashes::Image >( *device
-					, m_combined.image
-					, ashes::ImageCreateInfo{ m_combined.imageId.data->info } );
-				view = ashes::ImageView{ ashes::ImageViewCreateInfo{ m_combined.image, m_combined.wholeViewId.data->info }
-					, m_combined.wholeView
-					, image.get() };
-				m_combinedFrameBuffer.initialise( device
-					, std::move( image )
-					, view
-					, *m_renderPass );
-
 				m_runnable->record();
 			}
 
 			m_overlayRenderer = std::make_shared< OverlayRenderer >( device
-				, m_overlaysFrameBuffer.colourView );
+				, m_overlays );
 
 			m_signalReady = device->createSemaphore( getName() + "Ready" );
 		}
@@ -330,11 +249,7 @@ namespace castor3d
 			m_overlaysTimer.reset();
 
 			m_hdrConfigUbo.reset();
-			m_overlaysFrameBuffer.cleanup( device );
-			m_objectsFrameBuffer.cleanup( device );
-			m_combinedFrameBuffer.cleanup( device );
 			m_renderTechnique.reset();
-			m_renderPass.reset();
 			getEngine()->getRenderTechniqueCache().remove( getName() + cuT( "Technique" ) );
 		}
 	}
@@ -414,7 +329,7 @@ namespace castor3d
 				{
 					getEngine()->getRenderSystem()->pushScene( scene.get() );
 					scene->getGeometryCache().fillInfo( info );
-					doRender( device, info, m_objectsFrameBuffer, getCamera() );
+					doRender( device, info, getCamera() );
 					getEngine()->getRenderSystem()->popScene();
 				}
 			}
@@ -514,15 +429,21 @@ namespace castor3d
 	void RenderTarget::listIntermediateViews( IntermediateViewArray & result )const
 	{
 		result.push_back( { "Target Colour"
-			, m_objectsFrameBuffer.colourView
+			, m_objects.wholeViewId
+			, m_objects.image
+			, m_objects.wholeView
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) } );
 		result.push_back( { "Target Overlays"
-			, m_overlaysFrameBuffer.colourView
+			, m_overlays.wholeViewId
+			, m_overlays.image
+			, m_overlays.wholeView
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) } );
 		result.push_back( { "Target Velocity"
-			, m_velocityImageView
+			, m_velocity.wholeViewId
+			, m_velocity.image
+			, m_velocity.wholeView
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) } );
 
@@ -554,65 +475,6 @@ namespace castor3d
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		result.addOutputColourView( m_combined.targetViewId );
 		return result;
-	}
-
-	void RenderTarget::doInitialiseRenderPass( RenderDevice const & device )
-	{
-		ashes::VkAttachmentDescriptionArray attaches
-		{
-			{
-				0u,
-				getPixelFormat(),
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_CLEAR,
-				VK_ATTACHMENT_STORE_OP_STORE,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_UNDEFINED,
-				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-			}
-		};
-		ashes::SubpassDescriptionArray subpasses;
-		subpasses.emplace_back( ashes::SubpassDescription
-			{
-				0u,
-				VK_PIPELINE_BIND_POINT_GRAPHICS,
-				{},
-				{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
-				{},
-				ashes::nullopt,
-				{},
-			} );
-		ashes::VkSubpassDependencyArray dependencies
-		{
-			{
-				VK_SUBPASS_EXTERNAL,
-				0u,
-				VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_ACCESS_MEMORY_READ_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			},
-			{
-				0u,
-				VK_SUBPASS_EXTERNAL,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_READ_BIT,
-				VK_ACCESS_MEMORY_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			},
-		};
-		ashes::RenderPassCreateInfo createInfo
-		{
-			0u,
-			std::move( attaches ),
-			std::move( subpasses ),
-			std::move( dependencies ),
-		};
-		m_renderPass = device->createRenderPass( getName()
-			, std::move( createInfo ) );
 	}
 
 	bool RenderTarget::doInitialiseTechnique( RenderDevice const & device )
@@ -737,7 +599,6 @@ namespace castor3d
 
 	void RenderTarget::doRender( RenderDevice const & device
 		, RenderInfo & info
-		, RenderTarget::TargetFbo & fbo
 		, CameraSPtr camera )
 	{
 		auto elapsedTime = m_timer.getElapsed();

@@ -57,10 +57,10 @@ namespace castor3d
 				, previousPass
 				, m_device
 				, cuT( "Reflective Shadow Maps" )
-				, crg::ImageViewIdArray{ m_lpResult[LpTexture::eDiffuse].wholeViewId
-					, m_gpResult[DsTexture::eData1].wholeViewId }
-				, VkExtent2D{ getExtent( m_lpResult[LpTexture::eDiffuse].wholeViewId ).width >> 2
-					, getExtent( m_lpResult[LpTexture::eDiffuse].wholeViewId ).height >> 2 } ) }
+				, TextureArray{ m_lpResult[LpTexture::eDiffuse]
+					, m_gpResult[DsTexture::eData1] }
+				, VkExtent2D{ m_lpResult[LpTexture::eDiffuse].getExtent().width >> 2
+					, m_lpResult[LpTexture::eDiffuse].getExtent().height >> 2 } ) }
 		{
 		}
 		/**
@@ -68,7 +68,7 @@ namespace castor3d
 		 */
 		void initialise( Scene const & scene
 			, OpaquePassResult const & gp
-			, SceneUbo & sceneUbo
+			, SceneUbo const & sceneUbo
 			, RenderPassTimer & timer )override
 		{
 			auto & lightCache = scene.getLightCache();
@@ -78,8 +78,8 @@ namespace castor3d
 				, m_device
 				, scene.getLightCache()
 				, LtType
-				, VkExtent2D{ getExtent( m_lpResult[LpTexture::eDiffuse].wholeViewId ).width >> 2
-					, getExtent( m_lpResult[LpTexture::eDiffuse].wholeViewId ).height >> 2 }
+				, VkExtent2D{ m_lpResult[LpTexture::eDiffuse].getExtent().width >> 2
+					, m_lpResult[LpTexture::eDiffuse].getExtent().height >> 2 }
 				, m_gpInfoUbo
 				, m_gpResult
 				, m_smResult
@@ -89,8 +89,8 @@ namespace castor3d
 				, m_device
 				, scene.getLightCache()
 				, LtType
-				, VkExtent2D{ getExtent( m_lpResult[LpTexture::eDiffuse].wholeViewId ).width >> 2
-					, getExtent( m_lpResult[LpTexture::eDiffuse].wholeViewId ).height >> 2 }
+				, VkExtent2D{ m_lpResult[LpTexture::eDiffuse].getExtent().width >> 2
+					, m_lpResult[LpTexture::eDiffuse].getExtent().height >> 2 }
 				, m_gpInfoUbo
 				, m_gpResult
 				, m_smResult
@@ -98,7 +98,7 @@ namespace castor3d
 				, m_rsmGiPass->getSamplesSsbo()
 				, m_rsmGiPass->getResult()[0]
 				, m_rsmGiPass->getResult()[1]
-				, m_lpResult[LpTexture::eIndirectDiffuse].targetViewId );
+				, m_lpResult[LpTexture::eIndirectDiffuse] );
 			LightPassShadow< LtType >::initialise( scene, gp, sceneUbo, timer );
 		}
 		/**

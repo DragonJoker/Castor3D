@@ -122,7 +122,7 @@ namespace light_streaks
 			, index );
 		pass.addSampledView( srcView
 			, DifImgIdx
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, VK_IMAGE_LAYOUT_UNDEFINED
 			, linearSampler );
 		pass.addOutputColourView( dstView );
 	}
@@ -137,17 +137,29 @@ namespace light_streaks
 		, KawaseUbo const & kawaseUbo )
 	{
 		std::vector< KawasePass::Subpass > result;
-		assert( srcImages.size() == dstImages.size()
-			&& srcImages.size() == PostEffect::Count );
+		assert( srcImages.size() == dstImages.size() + 1u
+			&& dstImages.size() == PostEffect::Count );
 		uint32_t index = 0u;
 
 		for ( auto i = 0u; i < PostEffect::Count; ++i )
 		{
-			auto * source = &srcImages[i];
+			auto * source = &srcImages[0u];
 			auto * destination = &dstImages[i];
+			result.emplace_back( graph
+				, *previousPasses[0]
+				, device
+				, *source
+				, *destination
+				, dimensions
+				, stages
+				, kawaseUbo
+				, index );
+			++index;
+			source = &srcImages[i + 1u];
 
-			for ( auto j = 0u; j < 3u; ++j )
+			for ( auto j = 1u; j < 3u; ++j )
 			{
+				std::swap( source, destination );
 				result.emplace_back( graph
 					, *previousPasses[i]
 					, device
@@ -157,7 +169,6 @@ namespace light_streaks
 					, stages
 					, kawaseUbo
 					, index );
-				std::swap( source, destination );
 				previousPasses[i] = &result.back().pass;
 				++index;
 			}
@@ -169,7 +180,7 @@ namespace light_streaks
 	//*********************************************************************************************
 
 	KawasePass::KawasePass( crg::FrameGraph & graph
-		, crg::FramePass const & previousPass
+		, std::vector< crg::FramePass const * > const & previousPasses
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewIdArray const & hiViews
 		, crg::ImageViewIdArray const & kawaseViews
@@ -181,7 +192,7 @@ namespace light_streaks
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "LightStreaksKawasePass", getPixelProgram() }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
-		, m_passes{ PostEffect::Count, &previousPass }
+		, m_passes{ previousPasses }
 		, m_subpasses{ doCreateSubpasses( graph
 			, m_passes
 			, m_device

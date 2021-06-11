@@ -59,67 +59,44 @@ namespace castor3d
 			eSource,
 		};
 
-		TextureUnit createTexture( RenderDevice const & device
-			, ashes::ImageView const & colourView
-			, castor::String const & name
-			, VkFormat format
-			, VkImageUsageFlags usage )
+		Texture createDepthBuffer( RenderDevice const & device
+			, Texture const & colourView )
 		{
-			auto & renderSystem = device.renderSystem;
-			auto & engine = *renderSystem.getEngine();
-			auto size = colourView.image->getDimensions();
-			ashes::ImageCreateInfo image{ 0u
-				, VK_IMAGE_TYPE_2D
-				, format
-				, size
+			Texture result{ device
+				, device.renderSystem.getEngine()->getGraphResourceHandler()
+				, "Texture3DToTexture2DDepth"
+				, 0u
+				, colourView.getExtent()
 				, 1u
 				, 1u
-				, VK_SAMPLE_COUNT_1_BIT
-				, VK_IMAGE_TILING_OPTIMAL
-				, usage };
-			auto layout = std::make_shared< TextureLayout >( renderSystem
-				, std::move( image )
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, name );
-			TextureUnit result{ engine };
-			result.setSampler( createSampler( engine, name, VK_FILTER_NEAREST, nullptr ) );
-			result.setTexture( layout );
-			result.initialise( device );
+				, VK_FORMAT_D32_SFLOAT
+				, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
+				, VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK };
+			result.create();
 			return result;
 		}
 
-		TextureUnit createDepthBuffer( RenderDevice const & device
-			, ashes::ImageView const & colourView )
-		{
-			return createTexture( device
-				, colourView
-				, "Texture3DToTexture2DDepth"
-				, VK_FORMAT_D32_SFLOAT
-				, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT );
-		}
-
-		ashes::ImagePtr createTarget( RenderDevice const & device
+		Texture createTarget( RenderDevice const & device
 			, VkExtent2D const & size )
 		{
-			ashes::ImageCreateInfo createInfo{ 0u
-				, VK_IMAGE_TYPE_2D
-				, VK_FORMAT_R8G8B8A8_UNORM
+			Texture result{ device
+				, device.renderSystem.getEngine()->getGraphResourceHandler()
+				, "Texture3DToTexture2DColor"
+				, 0u
 				, { size.width, size.height, 1u }
 				, 1u
 				, 1u
-				, VK_SAMPLE_COUNT_1_BIT
-				, VK_IMAGE_TILING_OPTIMAL
-				, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT };
-			return makeImage( device
-				, createInfo
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, "Texture3DToTexture2DColor" );
+				, VK_FORMAT_R8G8B8A8_UNORM
+				, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT
+				, VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK };
+			result.create();
+			return result;
 		}
 
 		ashes::RenderPassPtr createRenderPass( RenderDevice const & device
 			, castor::String const & name
-			, ashes::ImageView const & color
-			, ashes::ImageView const & depth )
+			, Texture const & color
+			, Texture const & depth )
 		{
 			ashes::VkAttachmentDescriptionArray attaches{ { 0u
 					, color.getFormat()
@@ -174,15 +151,22 @@ namespace castor3d
 
 		ashes::FrameBufferPtr createFramebuffer( ashes::RenderPass const & renderPass
 			, castor::String const & name
-			, ashes::ImageView const & color
-			, ashes::ImageView const & depth )
+			, Texture const & colour
+			, Texture const & depth )
 		{
-			ashes::ImageViewCRefArray fbAttaches;
-			fbAttaches.emplace_back( color );
-			fbAttaches.emplace_back( depth );
+			ashes::VkImageViewArray fbAttaches;
+			fbAttaches.emplace_back( colour.targetView );
+			fbAttaches.emplace_back( depth.targetView );
 			return renderPass.createFrameBuffer( name
-				, { color.image->getDimensions().width, color.image->getDimensions().height }
-			, std::move( fbAttaches ) );
+				, { VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO
+					, nullptr
+					, 0u
+					, renderPass
+					, 2u
+					, fbAttaches.data()
+					, colour.getExtent().width
+					, colour.getExtent().height
+					, 1u} );
 		}
 
 		ashes::DescriptorSetLayoutPtr createDescriptorLayout( RenderDevice const & device )
@@ -203,7 +187,7 @@ namespace castor3d
 		ashes::DescriptorSetPtr createDescriptorSet( ashes::DescriptorSetPool const & pool
 			, UniformBufferOffsetT< Texture3DTo2DData > const & uniformBuffer
 			, MatrixUbo const & matrixUbo
-			, ashes::ImageView const & texture3D )
+			, IntermediateView const & texture3D )
 		{
 			auto descriptorSet = pool.createDescriptorSet( "Texture3DTo2D" );
 			uniformBuffer.createSizedBinding( *descriptorSet
@@ -211,7 +195,7 @@ namespace castor3d
 			matrixUbo.createSizedBinding( *descriptorSet
 				, pool.getLayout().getBinding( eMatrixUbo ) );
 			descriptorSet->createBinding( pool.getLayout().getBinding( eSource )
-				, texture3D );
+				, texture3D.view );
 			descriptorSet->update();
 			return descriptorSet;
 		}
@@ -229,15 +213,15 @@ namespace castor3d
 			, ShaderModule const & vertexShader
 			, ShaderModule const & geometryShader
 			, ShaderModule const & pixelShader
-			, ashes::ImageView const & target )
+			, Texture const & target )
 		{
 			ashes::PipelineShaderStageCreateInfoArray program;
 			program.push_back( makeShaderState( device, vertexShader ) );
 			program.push_back( makeShaderState( device, geometryShader ) );
 			program.push_back( makeShaderState( device, pixelShader ) );
 			// Initialise the pipeline.
-			VkViewport viewport{ 0.0f, 0.0f, float( target.image->getDimensions().width ), float( target.image->getDimensions().height ), 0.0f, 1.0f };
-			VkRect2D scissor{ 0, 0, target.image->getDimensions().width, target.image->getDimensions().height };
+			VkViewport viewport{ 0.0f, 0.0f, float( target.getExtent().width ), float( target.getExtent().height ), 0.0f, 1.0f };
+			VkRect2D scissor{ 0, 0, target.getExtent().width, target.getExtent().height };
 			return device->createPipeline( "Texture3DTo2D"
 				, ashes::GraphicsPipelineCreateInfo( 0u
 					, program
@@ -262,7 +246,7 @@ namespace castor3d
 			, ashes::DescriptorSet const & descriptorSet
 			, IntermediateView const & view )
 		{
-			auto textureSize = view.view.image->getDimensions().width;
+			auto textureSize = getExtent( view.viewId ).width;
 			CommandsSemaphore result{ device, "Texture3DTo2D" };
 			auto & cmd = *result.commandBuffer;
 			cmd.begin();
@@ -273,7 +257,9 @@ namespace castor3d
 			{
 				cmd.memoryBarrier( ashes::getStageMask( view.layout )
 					, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT
-					, view.view.makeLayoutTransition( view.layout
+					, makeLayoutTransition( view.image
+						, view.viewId.data->info.subresourceRange
+						, view.layout
 						, VK_IMAGE_LAYOUT_GENERAL
 						, VK_QUEUE_FAMILY_IGNORED
 						, VK_QUEUE_FAMILY_IGNORED ) );
@@ -292,7 +278,9 @@ namespace castor3d
 			{
 				cmd.memoryBarrier( VK_PIPELINE_STAGE_VERTEX_SHADER_BIT
 					, ashes::getStageMask( view.layout )
-					, view.view.makeLayoutTransition( VK_IMAGE_LAYOUT_GENERAL
+					, makeLayoutTransition( view.image
+						, view.viewId.data->info.subresourceRange
+						, VK_IMAGE_LAYOUT_GENERAL
 						, view.layout
 						, VK_QUEUE_FAMILY_IGNORED
 						, VK_QUEUE_FAMILY_IGNORED ) );
@@ -442,7 +430,7 @@ namespace castor3d
 		, ashes::FrameBuffer const & frameBuffer
 		, ashes::PipelineLayout const & pipelineLayout
 		, ashes::GraphicsPipeline const & pipeline )
-		: descriptorSet{ createDescriptorSet( descriptorSetPool, uniformBuffer, matrixUbo, texture3D.view ) }
+		: descriptorSet{ createDescriptorSet( descriptorSetPool, uniformBuffer, matrixUbo, texture3D ) }
 		, commands{ createCommandBuffer( device, renderPass, frameBuffer, pipelineLayout, pipeline, *descriptorSet, texture3D ) }
 	{
 	}
@@ -460,19 +448,16 @@ namespace castor3d
 		, m_device{ device }
 		, m_matrixUbo{ matrixUbo }
 		, m_target{ createTarget( device, size ) }
-		, m_targetView{ m_target->createView( "Texture3DTo2D"
-			, VK_IMAGE_VIEW_TYPE_2D
-			, VK_FORMAT_R8G8B8A8_UNORM ) }
-		, m_depthBuffer{ createDepthBuffer( device, m_targetView ) }
+		, m_depthBuffer{ createDepthBuffer( device, m_target ) }
 		, m_uniformBuffer{ device.uboPools->getBuffer< Texture3DTo2DData >( 0u ) }
 		, m_descriptorSetLayout{ createDescriptorLayout( device ) }
 		, m_pipelineLayout{ createPipelineLayout( device, *m_descriptorSetLayout ) }
-		, m_renderPass{ createRenderPass( device, "Texture3DTo2D", m_targetView, m_depthBuffer.getTexture()->getDefaultView().getTargetView() ) }
+		, m_renderPass{ createRenderPass( device, "Texture3DTo2D", m_target, m_depthBuffer ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "Texture3DTo2D", getVertexProgram() }
 		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, "Texture3DTo2D", getGeometryProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "Texture3DTo2D", getPixelProgram() }
-		, m_pipeline{ createPipeline( device, *m_pipelineLayout, *m_renderPass, m_vertexShader, m_geometryShader, m_pixelShader, m_targetView ) }
-		, m_frameBuffer{ createFramebuffer( *m_renderPass, "Texture3DTo2D", m_targetView, m_depthBuffer.getTexture()->getDefaultView().getTargetView() ) }
+		, m_pipeline{ createPipeline( device, *m_pipelineLayout, *m_renderPass, m_vertexShader, m_geometryShader, m_pixelShader, m_target ) }
+		, m_frameBuffer{ createFramebuffer( *m_renderPass, "Texture3DTo2D", m_target, m_depthBuffer ) }
 	{
 	}
 
@@ -494,7 +479,7 @@ namespace castor3d
 
 		for ( auto & intermediate : m_textures )
 		{
-			if ( intermediate.view.image->getType() == VK_IMAGE_TYPE_3D )
+			if ( intermediate.viewId.data->image.data->info.imageType == VK_IMAGE_TYPE_3D )
 			{
 				m_texture3DToScreen.emplace_back( m_device
 					, m_uniformBuffer
@@ -524,7 +509,7 @@ namespace castor3d
 				, updater.gridCenter->y
 				, updater.gridCenter->z
 				, updater.cellSize };
-			data.gridSize = m_textures[m_index].view.image->getDimensions().width;
+			data.gridSize = getExtent( m_textures[m_index].viewId ).width;
 		}
 	}
 
