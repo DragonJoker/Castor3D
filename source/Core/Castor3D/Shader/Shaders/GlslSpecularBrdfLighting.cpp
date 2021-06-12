@@ -392,12 +392,16 @@ namespace castor3d
 				, maps
 				, texCoords
 				, opacity
+				, normal
+				, tangent
+				, bitangent
 				, tangentSpaceViewPosition
 				, tangentSpaceFragPosition );
 
 			for ( auto & textureIt : textures )
 			{
 				if ( textureIt.second.flags != TextureFlag::eOpacity
+					&& textureIt.second.flags != TextureFlag::eNormal
 					&& textureIt.second.flags != TextureFlag::eHeight )
 				{
 					auto name = string::stringCast< char >( string::toString( textureIt.first, std::locale{ "C" } ) );
@@ -411,9 +415,6 @@ namespace castor3d
 							, maps[textureIt.first]
 							, gamma
 							, texCoords
-							, normal
-							, tangent
-							, bitangent
 							, emissive
 							, opacity
 							, occlusion

@@ -120,6 +120,9 @@ namespace castor3d::shader
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 			, sdw::Vec3 & texCoords
 			, sdw::Float & opacity
+			, sdw::Vec3 & normal
+			, sdw::Vec3 & tangent
+			, sdw::Vec3 & bitangent
 			, sdw::Vec3 & tangentSpaceViewPosition
 			, sdw::Vec3 & tangentSpaceFragPosition );
 		C3D_API sdw::Vec4 computeCommonMapContribution( TextureFlags const & textureFlags
@@ -129,9 +132,6 @@ namespace castor3d::shader
 			, sdw::SampledImage2DRgba32 const & map
 			, sdw::Float const & gamma
 			, sdw::Vec3 const & texCoords
-			, sdw::Vec3 & normal
-			, sdw::Vec3 & tangent
-			, sdw::Vec3 & bitangent
 			, sdw::Vec3 & emissive
 			, sdw::Float & opacity
 			, sdw::Float & occlusion
@@ -267,6 +267,9 @@ namespace castor3d::shader
 			, sdw::SampledImage2DRgba32 const & map
 			, sdw::Vec3 & texCoords
 			, sdw::Float & opacity
+			, sdw::Vec3 & normal
+			, sdw::Vec3 & tangent
+			, sdw::Vec3 & bitangent
 			, sdw::Vec3 & tangentSpaceViewPosition
 			, sdw::Vec3 & tangentSpaceFragPosition );
 		sdw::Vec2 doParallaxMapping( sdw::Vec2 const & texCoords

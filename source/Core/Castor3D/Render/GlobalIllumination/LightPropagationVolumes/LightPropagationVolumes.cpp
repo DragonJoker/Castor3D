@@ -218,10 +218,10 @@ namespace castor3d
 			, lightCache.getView().getRange() );
 		result.addSampledView( smResult[SmTexture::eNormalLinear].wholeViewId
 			, GeometryInjectionPass::RsmNormalsIdx
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		result.addSampledView( smResult[SmTexture::ePosition].wholeViewId
 			, GeometryInjectionPass::RsmPositionIdx
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		lpvGridConfigUbo.createPassBinding( result
 			, GeometryInjectionPass::LpvGridUboIdx );
 		lpvLightConfigUbo.createPassBinding( result

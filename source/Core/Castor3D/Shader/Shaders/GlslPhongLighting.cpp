@@ -367,12 +367,16 @@ namespace castor3d
 				, maps
 				, texCoords
 				, opacity
+				, normal
+				, tangent
+				, bitangent
 				, tangentSpaceViewPosition
 				, tangentSpaceFragPosition );
 
 			for ( auto & textureIt : textures )
 			{
 				if ( textureIt.second.flags != TextureFlag::eOpacity
+					&& textureIt.second.flags != TextureFlag::eNormal
 					&& textureIt.second.flags != TextureFlag::eHeight )
 				{
 					auto i = textureIt.first;
@@ -387,9 +391,6 @@ namespace castor3d
 							, maps[i]
 							, gamma
 							, texCoords
-							, normal
-							, tangent
-							, bitangent
 							, emissive
 							, opacity
 							, occlusion

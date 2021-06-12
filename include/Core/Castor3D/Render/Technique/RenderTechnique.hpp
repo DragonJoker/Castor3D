@@ -243,6 +243,7 @@ namespace castor3d
 		TextureUnit m_colourTexture;
 		Texture m_depth;
 		TextureUnit m_depthBuffer;
+		Texture m_normal;
 		MatrixUbo m_matrixUbo;
 		SceneUbo m_sceneUbo;
 		GpInfoUbo m_gpInfoUbo;

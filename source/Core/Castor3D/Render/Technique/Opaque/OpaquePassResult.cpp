@@ -103,11 +103,12 @@ namespace castor3d
 	OpaquePassResult::OpaquePassResult( crg::ResourceHandler & handler
 		, RenderDevice const & device
 		, Texture const & depthTexture
+		, Texture const & data1Texture
 		, Texture const & velocityTexture )
 		: GBufferT< DsTexture >{ handler
 			, device
 			, cuT( "GPResult" )
-			, { &depthTexture, nullptr, nullptr, nullptr, nullptr, &velocityTexture }
+			, { &depthTexture, &data1Texture, nullptr, nullptr, nullptr, &velocityTexture }
 			, 0u
 			, makeSize( getExtent( depthTexture.imageId ) ) }
 	{
