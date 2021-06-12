@@ -163,7 +163,6 @@ namespace castor3d
 
 		// Fragment Outputs
 		auto index = 0u;
-		auto outData1 = writer.declOutput< Vec4 >( OpaquePass::Output1, index++ );
 		auto outData2 = writer.declOutput< Vec4 >( OpaquePass::Output2, index++ );
 		auto outData3 = writer.declOutput< Vec4 >( OpaquePass::Output3, index++ );
 		auto outData4 = writer.declOutput< Vec4 >( OpaquePass::Output4, index++ );
@@ -236,16 +235,6 @@ namespace castor3d
 				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
 					, material.m_alphaRef );
-				auto matFlags = writer.declLocale( "flags"
-					, 0.0_f );
-				utils.encodeMaterial( c3d_modelData.isShadowReceiver()
-					, ( checkFlag( flags.passFlags, PassFlag::eReflection ) ) ? 1_i : 0_i
-					, ( checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? 1_i : 0_i
-					, ( checkFlag( flags.passFlags, PassFlag::eLighting ) ) ? 1_i : 0_i
-					, c3d_modelData.getEnvMapIndex()
-					, matFlags );
-
-				outData1 = vec4( normal, matFlags );
 				outData2 = vec4( diffuse, shininess );
 				outData3 = vec4( specular, occlusion );
 				outData4 = vec4( emissive, transmittance );
@@ -298,7 +287,6 @@ namespace castor3d
 
 		// Fragment Outputs
 		auto index = 0u;
-		auto outData1 = writer.declOutput< Vec4 >( OpaquePass::Output1, index++ );
 		auto outData2 = writer.declOutput< Vec4 >( OpaquePass::Output2, index++ );
 		auto outData3 = writer.declOutput< Vec4 >( OpaquePass::Output3, index++ );
 		auto outData4 = writer.declOutput< Vec4 >( OpaquePass::Output4, index++ );
@@ -371,16 +359,6 @@ namespace castor3d
 				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
 					, material.m_alphaRef );
-				auto matFlags = writer.declLocale( "flags"
-					, 0.0_f );
-				utils.encodeMaterial( c3d_modelData.isShadowReceiver()
-					, ( checkFlag( flags.passFlags, PassFlag::eReflection ) ) ? 1_i : 0_i
-					, ( checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? 1_i : 0_i
-					, ( checkFlag( flags.passFlags, PassFlag::eLighting ) ) ? 1_i : 0_i
-					, c3d_modelData.getEnvMapIndex()
-					, matFlags );
-
-				outData1 = vec4( normal, matFlags );
 				outData2 = vec4( albedo, roughness );
 				outData3 = vec4( metallic, 0.0_f, 0.0_f, occlusion );
 				outData4 = vec4( emissive, transmittance );
@@ -433,7 +411,6 @@ namespace castor3d
 
 		// Fragment Outputs
 		auto index = 0u;
-		auto outData1 = writer.declOutput< Vec4 >( OpaquePass::Output1, index++ );
 		auto outData2 = writer.declOutput< Vec4 >( OpaquePass::Output2, index++ );
 		auto outData3 = writer.declOutput< Vec4 >( OpaquePass::Output3, index++ );
 		auto outData4 = writer.declOutput< Vec4 >( OpaquePass::Output4, index++ );
@@ -506,16 +483,6 @@ namespace castor3d
 				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
 					, material.m_alphaRef );
-				auto matFlags = writer.declLocale( "flags"
-					, 0.0_f );
-				utils.encodeMaterial( c3d_modelData.isShadowReceiver()
-					, ( checkFlag( flags.passFlags, PassFlag::eReflection ) ) ? 1_i : 0_i
-					, ( checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? 1_i : 0_i
-					, ( checkFlag( flags.passFlags, PassFlag::eLighting ) ) ? 1_i : 0_i
-					, c3d_modelData.getEnvMapIndex()
-					, matFlags );
-
-				outData1 = vec4( normal, matFlags );
 				outData2 = vec4( albedo, glossiness );
 				outData3 = vec4( specular, occlusion );
 				outData4 = vec4( emissive, transmittance );
