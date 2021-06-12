@@ -1291,6 +1291,7 @@ namespace castor3d::shader
 		, PassFlags const & passFlags )
 	{
 		return checkFlag( flags, TextureFlag::eOpacity )
+			|| checkFlag( flags, TextureFlag::eNormal )
 			|| ( checkFlag( flags, TextureFlag::eHeight )
 				&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
 					|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) );
@@ -1302,6 +1303,9 @@ namespace castor3d::shader
 		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 		, sdw::Vec3 & texCoords
 		, sdw::Float & opacity
+		, sdw::Vec3 & normal
+		, sdw::Vec3 & tangent
+		, sdw::Vec3 & bitangent
 		, sdw::Vec3 & tangentSpaceViewPosition
 		, sdw::Vec3 & tangentSpaceFragPosition )
 	{
@@ -1320,6 +1324,9 @@ namespace castor3d::shader
 					, maps[i]
 					, texCoords
 					, opacity
+					, normal
+					, tangent
+					, bitangent
 					, tangentSpaceViewPosition
 					, tangentSpaceFragPosition );
 			}
@@ -1333,9 +1340,6 @@ namespace castor3d::shader
 		, sdw::SampledImage2DRgba32 const & map
 		, sdw::Float const & gamma
 		, sdw::Vec3 const & texCoords
-		, sdw::Vec3 & normal
-		, sdw::Vec3 & tangent
-		, sdw::Vec3 & bitangent
 		, sdw::Vec3 & emissive
 		, sdw::Float & opacity
 		, sdw::Float & occlusion
@@ -1348,13 +1352,6 @@ namespace castor3d::shader
 		config.convertUV( m_writer, texCoord );
 		auto result = m_writer.declLocale( "result" + name
 			, map.sample( texCoord ) );
-
-		if ( checkFlag( textureFlags, TextureFlag::eNormal ) )
-		{
-			auto tbn = m_writer.declLocale( "tbn"
-				, shader::Utils::getTBN( normal, tangent, bitangent ) );
-			normal = config.getNormal( m_writer, result, tbn );
-		}
 
 		if ( checkFlag( textureFlags, TextureFlag::eEmissive ) )
 		{
@@ -1455,12 +1452,24 @@ namespace castor3d::shader
 		, sdw::SampledImage2DRgba32 const & map
 		, sdw::Vec3 & texCoords
 		, sdw::Float & opacity
+		, sdw::Vec3 & normal
+		, sdw::Vec3 & tangent
+		, sdw::Vec3 & bitangent
 		, sdw::Vec3 & tangentSpaceViewPosition
 		, sdw::Vec3 & tangentSpaceFragPosition )
 	{
 		auto texCoord = m_writer.declLocale( "texCoord" + name
 			, texCoords.xy() );
 		config.convertUV( m_writer, texCoord );
+		auto sampled = m_writer.declLocale( "sampled" + name
+			, map.sample( texCoord ) );
+
+		if ( checkFlag( textureFlags, TextureFlag::eNormal ) )
+		{
+			auto tbn = m_writer.declLocale( "tbn"
+				, shader::Utils::getTBN( normal, tangent, bitangent ) );
+			normal = config.getNormal( m_writer, sampled, tbn );
+		}
 
 		if ( checkFlag( textureFlags, TextureFlag::eHeight )
 			&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
@@ -1487,8 +1496,6 @@ namespace castor3d::shader
 
 		if ( checkFlag( textureFlags, TextureFlag::eOpacity ) )
 		{
-			auto sampled = m_writer.declLocale( "sampled" + name
-				, map.sample( texCoord ) );
 			opacity = config.getOpacity( m_writer, sampled, opacity );
 		}
 	}

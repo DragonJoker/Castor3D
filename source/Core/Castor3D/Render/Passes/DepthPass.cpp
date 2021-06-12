@@ -61,7 +61,9 @@ namespace castor3d
 
 	TextureFlags DepthPass::getTexturesMask()const
 	{
-		return TextureFlags{ TextureFlag::eOpacity | TextureFlag::eHeight };
+		return TextureFlags{ TextureFlag::eOpacity
+			| TextureFlag::eNormal
+			| TextureFlag::eHeight };
 	}
 
 	void DepthPass::doUpdateFlags( PipelineFlags & flags )const
@@ -90,7 +92,7 @@ namespace castor3d
 	{
 		return SceneRenderPass::createBlendState( BlendMode::eNoBlend
 			, BlendMode::eNoBlend
-			, 1u );
+			, 2u );
 	}
 
 	ShaderPtr DepthPass::doGetVertexShaderSource( PipelineFlags const & flags )const
@@ -227,9 +229,15 @@ namespace castor3d
 				, RenderPipeline::eBuffers );
 		}
 
-		auto velocity = writer.declOutput< Vec4 >( "velocity", 0u );
+		UBO_MODEL( writer
+			, uint32_t( NodeUboIdx::eModel )
+			, RenderPipeline::eBuffers );
+
+		auto data1 = writer.declOutput< Vec4 >( "data1", 0u );
+		auto velocity = writer.declOutput< Vec4 >( "velocity", 1u );
 
 		shader::Utils utils{ writer };
+		utils.declareEncodeMaterial();
 		utils.declareParallaxMappingFunc( flags.passFlags
 			, getTexturesMask() );
 
@@ -241,6 +249,12 @@ namespace castor3d
 					, material->m_opacity );
 				auto alphaRef = writer.declLocale( "alphaRef"
 					, material->m_alphaRef );
+				auto normal = writer.declLocale( "normal"
+					, normalize( inSurface.normal ) );
+				auto tangent = writer.declLocale( "tangent"
+					, normalize( inSurface.tangent ) );
+				auto bitangent = writer.declLocale( "bitangent"
+					, normalize( inSurface.bitangent ) );
 
 				if ( hasTextures )
 				{
@@ -252,6 +266,9 @@ namespace castor3d
 						, c3d_maps
 						, texCoord
 						, opacity
+						, normal
+						, tangent
+						, bitangent
 						, inSurface.tangentSpaceViewPosition
 						, inSurface.tangentSpaceFragPosition );
 				}
@@ -259,6 +276,15 @@ namespace castor3d
 				utils.applyAlphaFunc( flags.alphaFunc
 					, opacity
 					, alphaRef );
+				auto matFlags = writer.declLocale( "flags"
+					, 0.0_f );
+				utils.encodeMaterial( c3d_modelData.isShadowReceiver()
+					, ( checkFlag( flags.passFlags, PassFlag::eReflection ) ) ? 1_i : 0_i
+					, ( checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? 1_i : 0_i
+					, ( checkFlag( flags.passFlags, PassFlag::eLighting ) ) ? 1_i : 0_i
+					, c3d_modelData.getEnvMapIndex()
+					, matFlags );
+				data1 = vec4( normal, matFlags );
 				velocity = vec4( inSurface.getVelocity(), writer.cast< Float >( inSurface.material ), 0.0_f );
 			} );
 

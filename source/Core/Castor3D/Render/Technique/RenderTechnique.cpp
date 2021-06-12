@@ -375,6 +375,8 @@ namespace castor3d
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
+		, m_colourTexture{ doCreateTextureUnit( m_device
+			, m_colour.imageId ) }
 		, m_depth{ device
 			, getOwner()->getGraphResourceHandler()
 			, "TechDpt"
@@ -389,10 +391,18 @@ namespace castor3d
 				| VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
-		, m_colourTexture{ doCreateTextureUnit( m_device
-			, m_colour.imageId ) }
 		, m_depthBuffer{ doCreateTextureUnit( m_device
 			, m_depth.imageId ) }
+		, m_normal{device
+			, getOwner()->getGraphResourceHandler()
+			, "TechData1"
+			, 0u
+			, makeExtent3D( m_size )
+			, 1u
+			, 1u
+			, getFormat( DsTexture::eData1 )
+			, getUsageFlags( DsTexture::eData1 )
+			, getBorderColor( DsTexture::eData1 ) }
 		, m_matrixUbo{ m_device }
 		, m_sceneUbo{ m_device }
 		, m_gpInfoUbo{ m_device }
@@ -429,6 +439,7 @@ namespace castor3d
 		, m_opaquePassResult{ castor::makeUnique< OpaquePassResult >( getOwner()->getGraphResourceHandler()
 			, device
 			, m_depth
+			, m_normal
 			, m_renderTarget.getVelocityTexture() ) }
 		, m_opaquePassDesc{ &doCreateOpaquePass() }
 		, m_deferredRendering{ castor::makeUnique< DeferredRendering >( m_renderTarget.getGraph()
@@ -724,6 +735,9 @@ namespace castor3d
 			} );
 		result.addOutputDepthView( m_depth.targetViewId
 			, defaultClearDepthStencil );
+		auto & opaquePassResult = *m_opaquePassResult;
+		result.addOutputColourView( m_normal.targetViewId
+			, getClearValue( DsTexture::eData1 ) );
 		result.addOutputColourView( m_renderTarget.getVelocity().targetViewId );
 		return result;
 	}
@@ -792,8 +806,6 @@ namespace castor3d
 		result.addInOutDepthView( m_depth.targetViewId );
 #if C3D_UseDeferredRendering
 		auto & opaquePassResult = *m_opaquePassResult;
-		result.addOutputColourView( opaquePassResult[DsTexture::eData1].targetViewId
-			, getClearValue( DsTexture::eData1 ) );
 		result.addOutputColourView( opaquePassResult[DsTexture::eData2].targetViewId
 			, getClearValue( DsTexture::eData2 ) );
 		result.addOutputColourView( opaquePassResult[DsTexture::eData3].targetViewId
