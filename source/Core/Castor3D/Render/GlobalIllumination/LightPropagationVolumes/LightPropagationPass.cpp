@@ -354,7 +354,7 @@ namespace castor3d
 		crg::pp::Config getConfig( ashes::PipelineShaderStageCreateInfoArray const & stages )
 		{
 			crg::pp::Config result;
-			result.program = crg::makeVkArray< VkPipelineShaderStageCreateInfo >( stages );
+			result.programs = { crg::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) };
 			return result;
 		}
 	}
@@ -367,7 +367,7 @@ namespace castor3d
 		, crg::pp::Config config
 		, uint32_t gridSize
 		, BlendMode blendMode )
-		: crg::PipelineHolder{ pass, context, graph, std::move( config ), VK_PIPELINE_BIND_POINT_GRAPHICS }
+		: crg::PipelineHolder{ pass, context, graph, std::move( config ), VK_PIPELINE_BIND_POINT_GRAPHICS, 1u }
 		, m_gridSize{ gridSize }
 		, m_blendMode{ blendMode }
 	{
@@ -377,7 +377,7 @@ namespace castor3d
 	void LightPropagationPass::PipelineHolder::initialise( VkRenderPass renderPass )
 	{
 		m_renderPass = renderPass;
-		doPreInitialise();
+		doPreInitialise( 0u );
 	}
 
 	void LightPropagationPass::PipelineHolder::recordInto( VkCommandBuffer commandBuffer
@@ -386,7 +386,7 @@ namespace castor3d
 		doPreRecordInto( commandBuffer, index );
 	}
 
-	void LightPropagationPass::PipelineHolder::doCreatePipeline()
+	void LightPropagationPass::PipelineHolder::doCreatePipeline( uint32_t index )
 	{
 		ashes::PipelineVertexInputStateCreateInfo vertexState{ 0u
 			, { { 0u
@@ -439,11 +439,13 @@ namespace castor3d
 		VkPipelineViewportStateCreateInfo vpState = viewportState;
 		VkPipelineVertexInputStateCreateInfo viState = vertexState;
 		VkPipelineColorBlendStateCreateInfo cbState = blendState;
+		auto & program = doGetProgram( index );
+		auto & pipeline = doGetPipeline( index );
 		VkGraphicsPipelineCreateInfo createInfo{ VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO
 			, nullptr
 			, 0u
-			, uint32_t( m_baseConfig.program.size() )
-			, m_baseConfig.program.data()
+			, uint32_t( program.size() )
+			, program.data()
 			, &viState
 			, &iaState
 			, nullptr
@@ -463,9 +465,9 @@ namespace castor3d
 			, 1u
 			, &createInfo
 			, m_phContext.allocator
-			, &m_pipeline );
+			, &pipeline );
 		crg::checkVkResult( res, m_phPass.name + " - Pipeline creation" );
-		crgRegisterObject( m_phContext, m_phPass.name, m_pipeline );
+		crgRegisterObject( m_phContext, m_phPass.name, pipeline );
 	}
 
 	//*********************************************************************************************
@@ -507,7 +509,7 @@ namespace castor3d
 	{
 	}
 
-	void LightPropagationPass::doSubInitialise()
+	void LightPropagationPass::doSubInitialise( uint32_t index )
 	{
 		m_holder.initialise( m_renderPass );
 	}

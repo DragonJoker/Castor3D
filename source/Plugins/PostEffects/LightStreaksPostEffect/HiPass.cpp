@@ -40,7 +40,7 @@ namespace light_streaks
 					, context
 					, graph
 					, 1u
-					, crg::rq::Config{ std::move( program )
+					, crg::rq::Config{ { std::vector< crg::VkPipelineShaderStageCreateInfoArray >{ std::move( program ) } }
 						, crg::rq::Texcoord{}
 						, renderSize
 						, VkOffset2D{} } }
