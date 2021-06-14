@@ -89,7 +89,7 @@ namespace castor3d
 		C3D_API void accept( PipelineVisitorBase & visitor );
 
 	protected:
-		C3D_API void doSubInitialise()override;
+		C3D_API void doSubInitialise( uint32_t index )override;
 		C3D_API void doSubRecordInto( VkCommandBuffer commandBuffer
 			, uint32_t index )override;
 
@@ -109,7 +109,7 @@ namespace castor3d
 				, uint32_t index );
 
 		protected:
-			void doCreatePipeline()override;
+			void doCreatePipeline( uint32_t index )override;
 
 		private:
 			uint32_t m_lpvSize;

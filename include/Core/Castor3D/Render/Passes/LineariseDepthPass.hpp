@@ -48,9 +48,10 @@ namespace castor3d
 		 *\param[in]	depthBuffer	Le tampon de profondeur non linéarisé.
 		 */
 		C3D_API LineariseDepthPass( crg::FrameGraph & graph
+			, crg::FramePass const & previousPass
 			, RenderDevice const & device
 			, castor::String const & prefix
-			, castor::Size const & size
+			, VkExtent2D const & size
 			, crg::ImageViewId const & depthBuffer );
 		/**
 		 *\~english
@@ -69,40 +70,6 @@ namespace castor3d
 		 */
 		C3D_API void update( CpuUpdater & updater );
 		/**
-		 *\~english
-		 *\brief			Updates the render pass, GPU wise.
-		 *\param[in, out]	updater	The update data.
-		 *\~french
-		 *\brief			Met à jour la passe de rendu, au niveau GPU.
-		 *\param[in, out]	updater	Les données d'update.
-		 */
-		C3D_API void update( GpuUpdater & updater );
-		/**
-		 *\~english
-		 *\brief		Linearises depth buffer.
-		 *\param[in]	device	The GPU device.
-		 *\param[in]	toWait	The semaphore to wait for.
-		 *\~french
-		 *\brief		Linéarise le tampon de profondeur.
-		 *\param[in]	device	Le device GPU.
-		 *\param[in]	toWait	Le sémaphore à attendre.
-		 */
-		C3D_API ashes::Semaphore const & linearise( ashes::Semaphore const & toWait )const;
-		/**
-		 *\~english
-		 *\param[in]	device	The GPU device.
-		 *\param[in]	timer	The render timer.
-		 *\param[in]	index	The render index
-		 *\return		The commands used to render the pass.
-		 *\~french
-		 *\param[in]	device	Le device GPU.
-		 *\param[in]	timer	Le timer de rendu.
-		 *\param[in]	index	L'index de la passe.
-		 *\return		Les commandes utilisées pour rendre la passe.
-		 */
-		C3D_API CommandsSemaphore getCommands( RenderPassTimer const & timer
-			, uint32_t index )const;
-		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( PipelineVisitorBase & visitor );
@@ -115,25 +82,20 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		TextureUnit const & getResult()const
+		Texture const & getResult()const
 		{
 			return m_result;
 		}
 
-		ashes::CommandBuffer const & getCommands()const
+		crg::FramePass const & getLastPass()const
 		{
-			return *m_commandBuffer;
+			return *m_lastPass;
 		}
 		/**@}*/
 
 	private:
-		void doInitialiseLinearisePass();
-		void doInitialiseMinifyPass();
-		void doCleanupLinearisePass();
-		void doCleanupMinifyPass();
-		void doPrepareFrame( ashes::CommandBuffer & cb
-			, RenderPassTimer const & timer
-			, uint32_t index )const;
+		crg::FramePass const & doInitialiseLinearisePass( crg::FrameGraph & graph );
+		void doInitialiseMinifyPass( crg::FrameGraph & graph );
 
 	public:
 		static constexpr uint32_t MaxMipLevel = 5u;
@@ -141,32 +103,13 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		Engine & m_engine;
-		crg::ImageViewId const & m_srcDepthBuffer;
-		crg::ImageViewId m_depthBuffer;
+		crg::ImageViewId m_srcDepthBuffer;
 		castor::String m_prefix;
 		VkExtent2D m_size;
-		TextureUnit m_result;
-		RenderPassTimerSPtr m_timer;
-		ashes::RenderPassPtr m_renderPass;
-		ashes::VertexBufferPtr< NonTexturedQuad > m_vertexBuffer;
-		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;
-		ashes::SamplerPtr m_lineariseSampler;
-		ashes::SamplerPtr m_minifySampler;
-		ashes::CommandBufferPtr m_commandBuffer;
-		ashes::SemaphorePtr m_finished;
+		Texture m_result;
 		UniformBufferOffsetT< castor::Point3f > m_clipInfo;
-		/**
-		*name
-		*	Common.
-		*/
-		/**@{*/
-		struct Layout
-		{
-			ashes::DescriptorSetLayoutPtr descriptorLayout;
-			ashes::DescriptorSetPoolPtr descriptorPool;
-			ashes::PipelineLayoutPtr pipelineLayout;
-		};
-		/**@}*/
+		castor::ChangeTracked< castor::Point3f > m_clipInfoValue;
+		crg::FramePass const * m_lastPass{};
 		/**
 		*name
 		*	Linearisation.
@@ -174,37 +117,19 @@ namespace castor3d
 		/**@{*/
 		ShaderModule m_lineariseVertexShader;
 		ShaderModule m_linearisePixelShader;
+		ashes::PipelineShaderStageCreateInfoArray m_lineariseStages;
 		ashes::ImageView m_linearisedView;
-		Layout m_lineariseLayout;
-		ashes::DescriptorSetPtr m_lineariseDescriptor;
-		ashes::FrameBufferPtr m_lineariseFrameBuffer;
-		ashes::GraphicsPipelinePtr m_linearisePipeline;
-		castor::ChangeTracked< castor::Point3f > m_clipInfoValue;
+		crg::FramePass const & m_linearisePass;
 		/**@}*/
 		/**
 		*name
 		*	Minification.
 		*/
 		/**@{*/
-		struct MinifyConfiguration
-		{
-			castor::Point2i textureSize;
-			int previousLevel;
-		};
-		struct MinifyPipeline
-		{
-			ashes::ImageView const * sourceView;
-			ashes::ImageView targetView;
-			ashes::DescriptorSetPtr descriptor;
-			ashes::FrameBufferPtr frameBuffer;
-			ashes::GraphicsPipelinePtr pipeline;
-		};
-
-		std::vector< UniformBufferOffsetT< MinifyConfiguration > > m_previousLevel;
+		std::vector< UniformBufferOffsetT< castor::Point2i > > m_previousLevel;
 		ShaderModule m_minifyVertexShader;
 		ShaderModule m_minifyPixelShader;
-		Layout m_minifyLayout;
-		std::array< MinifyPipeline, MaxMipLevel > m_minifyPipelines;
+		ashes::PipelineShaderStageCreateInfoArray m_minifyStages;
 		/**@}*/
 
 	};

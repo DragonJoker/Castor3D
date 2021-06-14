@@ -9,7 +9,6 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
-#include "Castor3D/Render/Passes/LineariseDepthPass.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePass.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -68,6 +67,7 @@ namespace castor3d
 		, LightVolumePassResultArray const & llpvResult
 		, Texture const & vctFirstBounce
 		, Texture const & vctSecondaryBounce
+		, Texture const & ssao
 		, castor::Size const & size
 		, Scene & scene
 		, SceneUbo const & sceneUbo
@@ -79,24 +79,11 @@ namespace castor3d
 		, SsaoConfig & ssaoConfig )
 		: m_scene{ scene }
 		, m_device{ device }
-		, m_ssaoConfig{ ssaoConfig }
 		, m_opaquePass{ opaquePass }
 		, m_lastPass{ &m_opaquePass }
 		, m_opaquePassResult{ opaquePassResult }
 		, m_size{ size }
 		, m_gpInfoUbo{ gpInfoUbo }
-		, m_linearisePass{ castor::makeUnique< LineariseDepthPass >( graph
-			, m_device
-			, cuT( "Deferred" )
-			, m_size
-			, opaquePassResult[DsTexture::eDepth].wholeViewId ) }
-		, m_ssao{ castor::makeUnique< SsaoPass >( graph
-			, m_device
-			, m_size
-			, m_ssaoConfig
-			, m_linearisePass->getResult()
-			, opaquePassResult
-			, m_gpInfoUbo ) }
 		, m_lightingPass{ std::make_unique< LightingPass >( graph
 			, opaquePass
 			, m_device
@@ -129,7 +116,7 @@ namespace castor3d
 			, m_device
 			, scene
 			, opaquePassResult
-			, *m_ssao
+			, ssaoConfig
 			, m_subsurfaceScattering->getResult()
 			, m_lightingPass->getResult()[LpTexture::eDiffuse]
 			, m_lightingPass->getResult()[LpTexture::eSpecular]
@@ -157,16 +144,6 @@ namespace castor3d
 	void DeferredRendering::update( CpuUpdater & updater )
 	{
 		m_lightingPass->update( updater );
-
-		if ( m_ssaoConfig.enabled )
-		{
-			m_linearisePass->update( updater );
-		}
-
-		if ( m_ssaoConfig.enabled )
-		{
-			m_ssao->update( updater );
-		}
 	}
 
 	void DeferredRendering::update( GpuUpdater & updater )
@@ -178,11 +155,6 @@ namespace castor3d
 
 		m_lightingPass->update( updater );
 		m_resolve->update( updater );
-
-		if ( m_ssaoConfig.enabled )
-		{
-			m_linearisePass->update( updater );
-		}
 	}
 
 	ashes::Semaphore const & DeferredRendering::render( Scene const & scene
@@ -191,13 +163,6 @@ namespace castor3d
 	{
 		ashes::Semaphore const * result = &toWait;
 		//result = &m_opaquePass.render( *result );
-
-		if ( m_ssaoConfig.enabled )
-		{
-			result = &m_linearisePass->linearise( *result );
-			result = &m_ssao->render( *result );
-		}
-
 		result = &m_lightingPass->render( scene
 			, camera
 			, m_opaquePassResult
@@ -229,13 +194,6 @@ namespace castor3d
 			, m_opaquePassResult[DsTexture::eData5].wholeViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
-
-		if ( m_ssaoConfig.enabled
-			|| visitor.config.forceSubPassesVisit )
-		{
-			m_linearisePass->accept( visitor );
-			m_ssao->accept( visitor );
-		}
 
 		m_lightingPass->accept( visitor );
 

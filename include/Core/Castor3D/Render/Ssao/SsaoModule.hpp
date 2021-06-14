@@ -4,7 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_OpaqueSsaoModule_H___
 #define ___C3D_OpaqueSsaoModule_H___
 
+#include "Castor3D/Castor3DModule.hpp"
+
 #include <CastorUtils/CastorUtilsPrerequisites.hpp>
+#include <CastorUtils/Config/SmartPtr.hpp>
 
 namespace castor3d
 {
@@ -49,6 +52,9 @@ namespace castor3d
 	*	Passe de SSAO.
 	*/
 	class SsaoRawAOPass;
+
+	CU_DeclareCUSmartPtr( castor3d, SsaoBlurPass, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, SsaoRawAOPass, C3D_API );
 
 	//@}
 	//@}
