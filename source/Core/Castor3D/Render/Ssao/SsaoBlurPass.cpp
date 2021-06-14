@@ -27,6 +27,10 @@
 
 #include <ShaderWriter/Source.hpp>
 
+#include <RenderGraph/FrameGraph.hpp>
+
+CU_ImplementCUSmartPtr( castor3d, SsaoBlurPass )
+
 using namespace castor;
 
 namespace castor3d
@@ -43,7 +47,7 @@ namespace castor3d
 			BntImgIdx,
 		};
 
-		ShaderPtr doGetVertexProgram()
+		ShaderPtr getVertexProgram()
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -62,7 +66,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 		
-		ShaderPtr doGetPixelProgram( bool useNormalsBuffer )
+		ShaderPtr getPixelProgram( bool useNormalsBuffer )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -347,263 +351,138 @@ namespace castor3d
 #undef keyPassThrough
 		}
 
-		ashes::PipelineShaderStageCreateInfoArray doGetProgram( RenderDevice const & device
-			, SsaoConfig const & config
-			, ShaderModule & vertexShader
-			, ShaderModule & pixelShader )
-		{
-			vertexShader.shader = doGetVertexProgram();
-			pixelShader.shader = doGetPixelProgram( config.useNormalsBuffer );
-			ashes::PipelineShaderStageCreateInfoArray result
-			{
-				makeShaderState( device, vertexShader ),
-				makeShaderState( device, pixelShader ),
-			};
-			return result;
-		}
-
-		SamplerSPtr doCreateSampler( RenderDevice const & device
-			, String const & name
-			, VkSamplerAddressMode mode )
-		{
-			auto & engine = *device.renderSystem.getEngine();
-			SamplerSPtr sampler;
-
-			if ( engine.getSamplerCache().has( name ) )
-			{
-				sampler = engine.getSamplerCache().find( name );
-			}
-			else
-			{
-				sampler = engine.getSamplerCache().add( name );
-				sampler->setMinFilter( VK_FILTER_NEAREST );
-				sampler->setMagFilter( VK_FILTER_NEAREST );
-				sampler->setWrapS( mode );
-				sampler->setWrapT( mode );
-			}
-
-			return sampler;
-		}
-
-		TextureUnit doCreateTexture( RenderDevice const & device
+		Texture doCreateTexture( RenderDevice const & device
+			, crg::ResourceHandler & handler
 			, String const & name
 			, VkFormat format
 			, VkExtent2D const & size )
 		{
-			auto & renderSystem = device.renderSystem;
-			auto sampler = doCreateSampler( device, name, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-			
-			ashes::ImageCreateInfo image
-			{
-				0u,
-				VK_IMAGE_TYPE_2D,
-				format,
-				{ size.width, size.height, 1u },
-				1u,
-				1u,
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_IMAGE_TILING_OPTIMAL,
-				( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_SAMPLED_BIT ),
-			};
-			auto ssaoResult = std::make_shared< TextureLayout >( renderSystem
-				, image
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, name );
-			TextureUnit result{ *renderSystem.getEngine() };
-			result.setTexture( ssaoResult );
-			result.setSampler( sampler );
-			result.initialise( device );
+			return { device
+				, handler
+				, name
+				, 0u
+				, { size.width, size.height, 1u }
+				, 1u
+				, 1u
+				, format
+				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+					| VK_IMAGE_USAGE_SAMPLED_BIT ) };
+		}
+
+		castor::String getName( bool useNormalsBuffer )
+		{
+			return "SsaoBlur" + ( useNormalsBuffer ? std::string{ "Nml" } : std::string{} );
+		}
+
+		crg::rq::Config getConfig( VkExtent2D const & renderSize
+			, ashes::PipelineShaderStageCreateInfoArray const & stages0
+			, ashes::PipelineShaderStageCreateInfoArray const & stages1 )
+		{
+			crg::rq::Config result;
+			result.renderSize = renderSize;
+			result.baseConfig.programs = { crg::makeVkArray< VkPipelineShaderStageCreateInfo >( stages0 )
+				, crg::makeVkArray< VkPipelineShaderStageCreateInfo >( stages1 ) };
 			return result;
 		}
 
-		ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
-			, String const & name )
-		{
-			ashes::VkAttachmentDescriptionArray attaches
-			{
-				{
-					0u,
-					SsaoBlurPass::ResultFormat,
-					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
-					VK_ATTACHMENT_STORE_OP_STORE,
-					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
-					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-				},
-				{
-					0u,
-					VK_FORMAT_R32G32B32A32_SFLOAT,
-					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
-					VK_ATTACHMENT_STORE_OP_STORE,
-					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
-					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-				},
-			};
-			ashes::SubpassDescriptionArray subpasses;
-			subpasses.emplace_back( ashes::SubpassDescription
-				{
-					0u,
-					VK_PIPELINE_BIND_POINT_GRAPHICS,
-					{},
-					{
-						{ 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-						{ 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-					},
-					{},
-					ashes::nullopt,
-					{},
-				} );
-			ashes::VkSubpassDependencyArray dependencies
-			{
-				{
-					VK_SUBPASS_EXTERNAL,
-					0u,
-					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-					VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-					VK_ACCESS_SHADER_READ_BIT,
-					VK_DEPENDENCY_BY_REGION_BIT,
-				},
-				{
-					0u,
-					VK_SUBPASS_EXTERNAL,
-					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-					VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-					VK_ACCESS_SHADER_READ_BIT,
-					VK_DEPENDENCY_BY_REGION_BIT,
-				},
-			};
-			ashes::RenderPassCreateInfo createInfo
-			{
-				0u,
-				std::move( attaches ),
-				std::move( subpasses ),
-				std::move( dependencies ),
-			};
-			auto result = device->createRenderPass( name
-				, std::move( createInfo ) );
-			return result;
-		}
+	}
 
-		ashes::FrameBufferPtr doCreateFrameBuffer( Engine & engine
-			, String const & name
-			, ashes::RenderPass const & renderPass
-			, TextureUnit const & texture
-			, TextureUnit const & bent )
-		{
-			ashes::ImageViewCRefArray attaches;
-			attaches.emplace_back( texture.getTexture()->getDefaultView().getTargetView() );
-			attaches.emplace_back( bent.getTexture()->getDefaultView().getTargetView() );
-			auto size = texture.getTexture()->getDimensions();
-			auto result = renderPass.createFrameBuffer( name
-				, VkExtent2D{ size.width, size.height }
-				, std::move( attaches ) );
-			return result;
-		}
+	//*********************************************************************************************
 
-		rq::BindingDescriptionArray createBlurBindings()
-		{
-			return rq::BindingDescriptionArray
-			{
-				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, ashes::nullopt },	// SsaoCfg UBO
-				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, ashes::nullopt },	// GpInfo UBO
-				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, ashes::nullopt },	// BlurCfg UBO
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },	// Normal Map
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },	// Input Map
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },	// BentInput Map
-			};
-		}
+	SsaoBlurPass::RenderQuad::RenderQuad( crg::FramePass const & pass
+		, crg::GraphContext const & context
+		, crg::RunnableGraph & graph
+		, crg::rq::Config config
+		, SsaoConfig const & ssaoConfig )
+		: crg::RenderQuad{ pass
+		, context
+		, graph
+		, 2u
+		, std::move( config ) }
+		, ssaoConfig{ ssaoConfig }
+	{
+	}
+
+	uint32_t SsaoBlurPass::RenderQuad::doGetPassIndex()const
+	{
+		return ssaoConfig.useNormalsBuffer ? 1u : 0u;
+	}
+
+	//*********************************************************************************************
+
+	SsaoBlurPass::Program::Program( RenderDevice const & device
+		, bool useNormalsBuffer )
+		: vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
+		, getName( useNormalsBuffer )
+		, getVertexProgram() }
+		, pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT
+		, getName( useNormalsBuffer )
+		, getPixelProgram( useNormalsBuffer ) }
+		, stages{ makeShaderState( device, vertexShader )
+		, makeShaderState( device, pixelShader ) }
+	{
 	}
 
 	//*********************************************************************************************
 
 	SsaoBlurPass::SsaoBlurPass( crg::FrameGraph & graph
 		, RenderDevice const & device
+		, crg::FramePass const & previousPass
 		, String const & prefix
 		, VkExtent2D const & size
 		, SsaoConfig const & config
 		, SsaoConfigUbo & ssaoConfigUbo
 		, GpInfoUbo const & gpInfoUbo
 		, Point2i const & axis
-		, TextureUnit const & input
-		, TextureUnit const & bentInput
-		, crg::ImageViewId const & normals )
-		: RenderQuad{ device
-			, prefix + cuT( "SsaoBlur" )
-			, VK_FILTER_NEAREST
-			, { createBlurBindings() } }
-		, m_device{ device }
+		, Texture const & input
+		, Texture const & bentInput
+		, Texture const & normals )
+		: m_device{ device }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_input{ input }
 		, m_bentInput{ bentInput }
 		, m_normals{ normals }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName() }
 		, m_config{ config }
-		, m_program{ doGetProgram( m_device, m_config, m_vertexShader, m_pixelShader ) }
 		, m_size{ size }
-		, m_result{ doCreateTexture( m_device, getName() + cuT( "Result" ), SsaoBlurPass::ResultFormat, m_size ) }
-		, m_bentResult{ doCreateTexture( m_device, getName() + cuT( "BentNormals" ), m_bentInput.getTexture()->getPixelFormat(), m_size ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( m_device, cuT( "Scalable Ambient Obscurance" ), prefix + cuT( " Blur" ) ) }
-		, m_finished{ m_device->createSemaphore( getName() ) }
+		, m_result{ doCreateTexture( m_device, graph.getHandler(), "SsaoBlur" + prefix, SsaoBlurPass::ResultFormat, m_size ) }
+		, m_bentResult{ doCreateTexture( m_device, graph.getHandler(), "SsaoBentNormals" + prefix, m_bentInput.getFormat(), m_size ) }
 		, m_configurationUbo{ m_device.uboPools->getBuffer< Configuration >( 0u ) }
+		, m_programs{ Program{ device, false }, Program{ device, true } }
 	{
-		// TODO CRG
-		//auto & configuration = m_configurationUbo.getData();
-		//configuration.axis = axis;
-		//	makeDescriptorSetLayoutBinding( InpImgIdx
-		//		, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-		//		, VK_SHADER_STAGE_FRAGMENT_BIT ),
-		//createPipelineAndPass( m_size
-		//	, Position{}
-		//	, m_program
-		//	, *m_renderPass
-		//	, {
-		//		makeDescriptorWrite( m_ssaoConfigUbo.getUbo(), SsaoCfgUboIdx ),
-		//		makeDescriptorWrite( m_gpInfoUbo.getUbo(), GpInfoUboIdx ),
-		//		makeDescriptorWrite( m_configurationUbo, BlurCfgUboIdx ),
-		//		makeDescriptorWrite( m_normals
-		//			, m_sampler->getSampler()
-		//			, NmlImgIdx ),
-		//		makeDescriptorWrite( m_input.getTexture()->getDefaultView().getSampledView()
-		//			, m_input.getSampler()->getSampler()
-		//			, InpImgIdx ),
-		//		makeDescriptorWrite( m_bentInput.getTexture()->getDefaultView().getSampledView()
-		//			, m_bentInput.getSampler()->getSampler()
-		//			, BntImgIdx ),
-		//	} );
-		//m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer( getName() );
-
-		//m_commandBuffer->begin();
-		//m_commandBuffer->beginDebugBlock(
-		//	{
-		//		"SSAO - " + getName(),
-		//		makeFloatArray( m_engine.getNextRainbowColour() ),
-		//	} );
-		//m_timer->beginPass( *m_commandBuffer );
-		//m_commandBuffer->beginRenderPass( *m_renderPass
-		//	, *m_fbo
-		//	, { opaqueWhiteClearColor, opaqueWhiteClearColor }
-		//	, VK_SUBPASS_CONTENTS_INLINE );
-		//registerPass( *m_commandBuffer );
-		//m_timer->endPass( *m_commandBuffer );
-		//m_commandBuffer->endRenderPass();
-		//m_commandBuffer->endDebugBlock();
-		//m_commandBuffer->end();
-	}
-
-	SsaoBlurPass::~SsaoBlurPass()
-	{
-		m_timer.reset();
-		m_result.cleanup();
+		auto & configuration = m_configurationUbo.getData();
+		configuration.axis = axis;
+		auto & pass = graph.createPass( "SsaoBlur" + prefix
+			, [this]( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph )
+			{
+				return std::make_unique< RenderQuad >( pass
+					, context
+					, graph
+					, getConfig( m_size
+						, m_programs[0].stages
+						, m_programs[1].stages )
+					, m_config );
+			} );
+		m_lastPass = &pass;
+		pass.addDependency( previousPass );
+		m_ssaoConfigUbo.createPassBinding( pass, SsaoCfgUboIdx );
+		m_gpInfoUbo.createPassBinding( pass, GpInfoUboIdx );
+		m_configurationUbo.createPassBinding( pass, "SsaoBlurCfg", BlurCfgUboIdx );
+		pass.addSampledView( normals.wholeViewId
+			, NmlImgIdx
+			, VK_IMAGE_LAYOUT_UNDEFINED );
+		pass.addSampledView( input.wholeViewId
+			, InpImgIdx
+			, VK_IMAGE_LAYOUT_UNDEFINED );
+		pass.addSampledView( bentInput.wholeViewId
+			, BntImgIdx
+			, VK_IMAGE_LAYOUT_UNDEFINED );
+		pass.addOutputColourView( m_result.targetViewId, opaqueWhiteClearColor );
+		pass.addOutputColourView( m_bentResult.targetViewId, transparentBlackClearColor );
+		m_result.create();
+		m_bentResult.create();
 	}
 
 	void SsaoBlurPass::update( CpuUpdater & updater )
@@ -657,64 +536,51 @@ namespace castor3d
 		}
 	}
 
-	ashes::Semaphore const & SsaoBlurPass::blur( ashes::Semaphore const & toWait )const
-	{
-		RenderPassTimerBlock timerBlock{ m_timer->start() };
-		timerBlock->notifyPassRender();
-		auto * result = &toWait;
-
-		m_device.graphicsQueue->submit( *m_commandBuffer
-			, *result
-			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, *m_finished
-			, nullptr );
-		result = m_finished.get();
-
-		return *result;
-	}
-
 	void SsaoBlurPass::accept( bool horizontal
 		, SsaoConfig & config
 		, PipelineVisitorBase & visitor )
 	{
-		if ( getResult().isTextured() )
+		if ( horizontal )
 		{
-			if ( horizontal )
-			{
-				visitor.visit( "SSAO HBlurred AO"
-					, getResult().getTexture()->getDefaultView().getSampledView()
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-					, TextureFactors{}.invert( true ) );
-			}
-			else
-			{
-				visitor.visit( "SSAO Blurred AO"
-					, getResult().getTexture()->getDefaultView().getSampledView()
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-					, TextureFactors{}.invert( true ) );
-			}
+			visitor.visit( "SSAO HBlurred AO"
+				, getResult()
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, TextureFactors{}.invert( true ) );
 		}
-		
-		if ( getBentResult().isTextured() )
+		else
 		{
-			if ( horizontal )
-			{
-				visitor.visit( "HBlurred Bent Normals"
-					, getBentResult().getTexture()->getDefaultView().getSampledView()
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-					, TextureFactors{}.invert( true ) );
-			}
-			else
-			{
-				visitor.visit( "Blurred Bent Normals"
-					, getBentResult().getTexture()->getDefaultView().getSampledView()
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-					, TextureFactors{}.invert( true ) );
-			}
+			visitor.visit( "SSAO Blurred AO"
+				, getResult()
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, TextureFactors{}.invert( true ) );
 		}
 
-		visitor.visit( m_vertexShader );
-		visitor.visit( m_pixelShader );
-		config.accept( m_vertexShader.name, visitor );
+		if ( horizontal )
+		{
+			visitor.visit( "HBlurred Bent Normals"
+				, getBentResult()
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, TextureFactors{}.invert( true ) );
+		}
+		else
+		{
+			visitor.visit( "Blurred Bent Normals"
+				, getBentResult()
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, TextureFactors{}.invert( true ) );
+		}
+
+		if ( m_config.useNormalsBuffer )
+		{
+			visitor.visit( m_programs[1].vertexShader );
+			visitor.visit( m_programs[1].pixelShader );
+		}
+		else
+		{
+			visitor.visit( m_programs[0].vertexShader );
+			visitor.visit( m_programs[0].pixelShader );
+		}
+
+		config.accept( "SsaoBlur", visitor );
 	}
 }

@@ -9,21 +9,14 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
-#include "Castor3D/Render/Passes/RenderQuad.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
 
-#include <ashespp/Command/CommandBuffer.hpp>
-#include <ashespp/Image/ImageView.hpp>
-#include <ashespp/RenderPass/FrameBuffer.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
-#include <ashespp/Sync/Semaphore.hpp>
+#include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
 namespace castor3d
 {
 	class SsaoBlurPass
-		: public RenderQuad
 	{
 	public:
 		/**
@@ -56,22 +49,16 @@ namespace castor3d
 		 */
 		SsaoBlurPass( crg::FrameGraph & graph
 			, RenderDevice const & device
+			, crg::FramePass const & previousPass
 			, castor::String const & prefix
 			, VkExtent2D const & size
 			, SsaoConfig const & config
 			, SsaoConfigUbo & ssaoConfigUbo
 			, GpInfoUbo const & gpInfoUbo
 			, castor::Point2i const & axis
-			, TextureUnit const & input
-			, TextureUnit const & bentInput
-			, crg::ImageViewId const & normals );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		~SsaoBlurPass();
+			, Texture const & input
+			, Texture const & bentInput
+			, Texture const & normals );
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -81,15 +68,6 @@ namespace castor3d
 		 *\param[in, out]	updater	Les données d'update.
 		 */
 		void update( CpuUpdater & updater );
-		/**
-		 *\~english
-		 *\brief		Applies the blur.
-		 *\param[in]	toWait	The semaphore from previous render pass.
-		 *\~french
-		 *\brief		Applique le flou.
-		 *\param[in]	toWait	Le sémaphore de la précédente passe de rendu.
-		 */
-		ashes::Semaphore const & blur( ashes::Semaphore const & toWait )const;
 		/**
 		 *\~english
 		 *\brief		Accepts a visitor.
@@ -114,19 +92,51 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		TextureUnit const & getResult()const
+		Texture const & getResult()const
 		{
 			return m_result;
 		}
 
-		TextureUnit const & getBentResult()const
+		Texture const & getBentResult()const
 		{
 			return m_bentResult;
+		}
+
+		crg::FramePass const & getLastPass()const
+		{
+			return *m_lastPass;
 		}
 		/**@}*/
 
 	public:
 		static VkFormat constexpr ResultFormat = VK_FORMAT_R8G8B8A8_UNORM;
+
+	private:
+		struct RenderQuad
+			: crg::RenderQuad
+		{
+			RenderQuad( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph
+				, crg::rq::Config config
+				, SsaoConfig const & ssaoConfig );
+
+		protected:
+			uint32_t doGetPassIndex()const;
+
+		private:
+			SsaoConfig const & ssaoConfig;
+		};
+
+		struct Program
+		{
+			Program( RenderDevice const & device
+				, bool useNormalsBuffer );
+
+			ShaderModule vertexShader;
+			ShaderModule pixelShader;
+			ashes::PipelineShaderStageCreateInfoArray stages;
+		};
 
 	private:
 		struct Configuration
@@ -139,20 +149,16 @@ namespace castor3d
 		RenderDevice const & m_device;
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		GpInfoUbo const & m_gpInfoUbo;
-		TextureUnit const & m_input;
-		TextureUnit const & m_bentInput;
-		crg::ImageViewId const & m_normals;
-		castor3d::ShaderModule m_vertexShader;
-		castor3d::ShaderModule m_pixelShader;
+		Texture const & m_input;
+		Texture const & m_bentInput;
+		Texture const & m_normals;
 		SsaoConfig const & m_config;
-		ashes::PipelineShaderStageCreateInfoArray m_program;
 		VkExtent2D m_size;
-		TextureUnit m_result;
-		TextureUnit m_bentResult;
-		RenderPassTimerSPtr m_timer;
-		ashes::CommandBufferPtr m_commandBuffer;
-		ashes::SemaphorePtr m_finished;
+		Texture m_result;
+		Texture m_bentResult;
 		UniformBufferOffsetT< Configuration > m_configurationUbo;
+		std::array< Program, 2u > m_programs;
+		crg::FramePass const * m_lastPass{};
 
 	};
 }

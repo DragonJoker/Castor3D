@@ -41,9 +41,12 @@
 
 #include <ShaderWriter/Source.hpp>
 
+#include <RenderGraph/FrameGraph.hpp>
+
 #include <random>
 
-using namespace castor;
+CU_ImplementCUSmartPtr( castor3d, SsaoRawAOPass )
+
 using namespace castor3d;
 
 #define C3D_BentNormalsAggregateAll 0
@@ -52,7 +55,15 @@ namespace castor3d
 {
 	namespace
 	{
-		ShaderPtr doGetVertexProgram( Engine & engine )
+		enum Idx
+		{
+			SsaoCfgUboIdx,
+			GpInfoUboIdx,
+			DepthMapIdx,
+			NormalMapIdx,
+		};
+
+		ShaderPtr getVertexProgram()
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -71,16 +82,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		enum Idx
-		{
-			SsaoCfgUboIdx,
-			GpInfoUboIdx,
-			DepthMapIdx,
-			NormalMapIdx,
-		};
-
-		ShaderPtr doGetPixelProgram( Engine & engine
-			, bool useNormalsBuffer )
+		ShaderPtr getPixelProgram( bool useNormalsBuffer )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -501,238 +503,83 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ashes::PipelineShaderStageCreateInfoArray doGetProgram( Engine & engine
+		Texture doCreateTexture( crg::ResourceHandler & handler
 			, RenderDevice const & device
-			, bool useNormalsBuffer
-			, ShaderModule & vertexShader
-			, ShaderModule & pixelShader )
-		{
-			vertexShader.shader = doGetVertexProgram( engine );
-			pixelShader.shader = doGetPixelProgram( engine, useNormalsBuffer );
-			return
-			{
-				makeShaderState( device, vertexShader ),
-				makeShaderState( device, pixelShader ),
-			};
-		}
-
-		SamplerSPtr doCreateSampler( RenderDevice const & device
-			, String const & name
-			, VkSamplerAddressMode mode )
-		{
-			auto & engine = *device.renderSystem.getEngine();
-			SamplerSPtr sampler;
-
-			if ( engine.getSamplerCache().has( name ) )
-			{
-				sampler = engine.getSamplerCache().find( name );
-			}
-			else
-			{
-				sampler = engine.getSamplerCache().add( name );
-				sampler->setMinFilter( VK_FILTER_NEAREST );
-				sampler->setMagFilter( VK_FILTER_NEAREST );
-				sampler->setWrapS( mode );
-				sampler->setWrapT( mode );
-			}
-
-			return sampler;
-		}
-
-		TextureUnit doCreateTexture( RenderDevice const & device
 			, castor::String const & name
 			, VkFormat format
 			, VkExtent2D const & size )
 		{
-			auto & renderSystem = device.renderSystem;
-			auto sampler = doCreateSampler( device, name, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-
-			ashes::ImageCreateInfo image
-			{
-				0u,
-				VK_IMAGE_TYPE_2D,
-				format,
-				{ size.width, size.height, 1u },
-				1u,
-				1u,
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_IMAGE_TILING_OPTIMAL,
-				( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_SAMPLED_BIT ),
-			};
-			auto ssaoResult = std::make_shared< TextureLayout >( renderSystem
-				, image
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, name );
-			TextureUnit result{ *renderSystem.getEngine() };
-			result.setTexture( ssaoResult );
-			result.setSampler( sampler );
-			result.initialise( device );
-			return result;
+			return Texture{ device
+				, handler
+				, name
+				, 0u
+				, VkExtent3D{ size.width, size.height, 1u }
+				, 1u
+				, 1u
+				, format
+				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+					| VK_IMAGE_USAGE_SAMPLED_BIT ) };
 		}
 
-		ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
-			, std::vector< std::reference_wrapper< TextureUnit const > > const & textures )
+		crg::rq::Config getConfig( VkExtent2D const & renderSize
+			, ashes::PipelineShaderStageCreateInfoArray const & stages0
+			, ashes::PipelineShaderStageCreateInfoArray const & stages1 )
 		{
-			ashes::VkAttachmentDescriptionArray attaches;
-			ashes::VkAttachmentReferenceArray references;
-			uint32_t index = 0u;
-
-			for ( auto & texture : textures )
-			{
-				attaches.push_back(
-					{
-						0u,
-						texture.get().getTexture()->getPixelFormat(),
-						VK_SAMPLE_COUNT_1_BIT,
-						VK_ATTACHMENT_LOAD_OP_CLEAR,
-						VK_ATTACHMENT_STORE_OP_STORE,
-						VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-						VK_ATTACHMENT_STORE_OP_DONT_CARE,
-						VK_IMAGE_LAYOUT_UNDEFINED,
-						VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-					} );
-				references.push_back(
-					{
-						index++,
-						VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-					} );
-			}
-
-			ashes::SubpassDescriptionArray subpasses;
-			subpasses.emplace_back( ashes::SubpassDescription
-				{
-					0u,
-					VK_PIPELINE_BIND_POINT_GRAPHICS,
-					{},
-					references,
-					{},
-					ashes::nullopt,
-					{},
-				} );
-			ashes::VkSubpassDependencyArray dependencies
-			{
-				{
-					VK_SUBPASS_EXTERNAL,
-					0u,
-					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-					VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-					VK_ACCESS_SHADER_READ_BIT,
-					VK_DEPENDENCY_BY_REGION_BIT,
-				},
-				{
-					0u,
-					VK_SUBPASS_EXTERNAL,
-					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-					VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-					VK_ACCESS_SHADER_READ_BIT,
-					VK_DEPENDENCY_BY_REGION_BIT,
-				},
-			};
-			ashes::RenderPassCreateInfo createInfo
-			{
-				0u,
-				std::move( attaches ),
-				std::move( subpasses ),
-				std::move( dependencies ),
-			};
-			auto result = device->createRenderPass( "SsaoRawAO"
-				, std::move( createInfo ) );
-			return result;
-		}
-
-		ashes::FrameBufferPtr doCreateFrameBuffer( ashes::RenderPass const & renderPass
-			, std::vector< std::reference_wrapper< TextureUnit const > > const & textures )
-		{
-			ashes::ImageViewCRefArray attaches;
-
-			for ( auto & texture : textures )
-			{
-				attaches.emplace_back( texture.get().getTexture()->getDefaultView().getTargetView() );
-			}
-
-			auto size = textures.front().get().getTexture()->getDimensions();
-			auto result = renderPass.createFrameBuffer( "SsaoRawAO"
-				, VkExtent2D{ size.width, size.height }
-				, std::move( attaches ) );
-			return result;
-		}
-
-		rq::BindingDescriptionArray createBindings( bool normals )
-		{
-			rq::BindingDescriptionArray result
-			{
-				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, ashes::nullopt },	// SsaoCfg UBO
-				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, ashes::nullopt },	// GpInfo UBO
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },	// Depth Map
-			};
-
-			if ( normals )
-			{
-				result.push_back( { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D } );	// Normal Map
-			}
-
+			crg::rq::Config result;
+			result.renderSize = renderSize;
+			result.baseConfig.programs = { crg::makeVkArray< VkPipelineShaderStageCreateInfo >( stages0 )
+				, crg::makeVkArray< VkPipelineShaderStageCreateInfo >( stages1 ) };
 			return result;
 		}
 	}
 
 	//*********************************************************************************************
 
-	SsaoRawAOPass::RenderQuad::RenderQuad( Engine & engine
-		, RenderDevice const & device
-		, ashes::RenderPass const & renderPass
-		, VkExtent2D const & size
-		, SsaoConfigUbo & ssaoConfigUbo
-		, GpInfoUbo const & gpInfoUbo
-		, TextureUnit const & depth
-		, ashes::ImageView const * normals )
-		: castor3d::RenderQuad{ device
-			, cuT( "SsaoRawAO" )
-			, VK_FILTER_NEAREST
-			, { createBindings( normals )
-				, ( normals
-					? ( *normals )->subresourceRange
-					: depth.getTexture()->getDefaultView().getSampledView()->subresourceRange )
-				, ashes::nullopt } }
-		, vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName() }
-		, pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName() }
-		, m_depthView{ normals ? &depth.getTexture()->getDefaultView().getSampledView() : nullptr }
-		, m_depthSampler{ normals ? depth.getSampler() : nullptr }
-		, m_ssaoConfigUbo{ ssaoConfigUbo }
-		, m_gpInfoUbo{ gpInfoUbo }
+	SsaoRawAOPass::RenderQuad::RenderQuad( crg::FramePass const & pass
+		, crg::GraphContext const & context
+		, crg::RunnableGraph & graph
+		, crg::rq::Config config
+		, SsaoConfig const & ssaoConfig )
+		: crg::RenderQuad{ pass
+			, context
+			, graph
+			, 2u
+			, std::move( config ) }
+		, ssaoConfig{ ssaoConfig }
 	{
-		m_sampler->initialise( m_device );
-		ashes::WriteDescriptorSetArray bindings
-		{
-			makeDescriptorWrite( m_ssaoConfigUbo.getUbo(), SsaoCfgUboIdx ),
-			makeDescriptorWrite( m_gpInfoUbo.getUbo(), GpInfoUboIdx ),
-			makeDescriptorWrite( depth.getTexture()->getDefaultView().getTargetView(), m_sampler->getSampler(), DepthMapIdx ),
-		};
+	}
 
-		if ( normals )
-		{
-			bindings.emplace_back( makeDescriptorWrite( *normals, m_sampler->getSampler(), NormalMapIdx ) );
-		}
+	uint32_t SsaoRawAOPass::RenderQuad::doGetPassIndex()const
+	{
+		return ssaoConfig.useNormalsBuffer ? 1u : 0u;
+	}
+	
+	//*********************************************************************************************
 
-		createPipelineAndPass( size
-			, {}
-			, doGetProgram( engine, device, normals != nullptr, vertexShader, pixelShader )
-			, renderPass
-			, bindings );
+	SsaoRawAOPass::Program::Program( RenderDevice const & device
+		, bool useNormalsBuffer )
+		: vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
+			, "SsaoRawAO" + ( useNormalsBuffer ? std::string{ "Normals" } : std::string{} )
+			, getVertexProgram() }
+		, pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT
+			, "SsaoRawAO" + ( useNormalsBuffer ? std::string{ "Normals" } : std::string{} )
+			, getPixelProgram( useNormalsBuffer ) }
+		, stages{ makeShaderState( device, vertexShader )
+			, makeShaderState( device, pixelShader ) }
+	{
 	}
 	
 	//*********************************************************************************************
 
 	SsaoRawAOPass::SsaoRawAOPass( crg::FrameGraph & graph
 		, RenderDevice const & device
+		, crg::FramePass const & previousPass
 		, VkExtent2D const & size
 		, SsaoConfig const & config
 		, SsaoConfigUbo & ssaoConfigUbo
 		, GpInfoUbo const & gpInfoUbo
-		, TextureUnit const & linearisedDepthBuffer
-		, crg::ImageViewId const & normals )
+		, Texture const & linearisedDepthBuffer
+		, Texture const & normals )
 		: m_device{ device }
 		, m_ssaoConfig{ config }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
@@ -740,110 +587,64 @@ namespace castor3d
 		, m_linearisedDepthBuffer{ linearisedDepthBuffer }
 		, m_normals{ normals }
 		, m_size{ size }
-		, m_result{ doCreateTexture( m_device
+		, m_result{ doCreateTexture( graph.getHandler()
+			, m_device
 			, "SsaoRawAOResult"
 			, SsaoRawAOPass::ResultFormat
 			, m_size ) }
-		, m_bentNormals{ doCreateTexture( m_device
+		, m_bentNormals{ doCreateTexture( graph.getHandler()
+			, m_device
 			, "BentNormals"
 			, VK_FORMAT_R32G32B32A32_SFLOAT
 			, m_size ) }
-		// TODO CRG
-		//, m_renderPass{ doCreateRenderPass( m_device, { m_result, m_bentNormals } ) }
-		//, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, { m_result, m_bentNormals } ) }
-		//, m_quads{ RenderQuad{ m_device
-		//		, *m_renderPass
-		//		, m_size
-		//		, m_ssaoConfigUbo
-		//		, m_gpInfoUbo
-		//		, m_linearisedDepthBuffer
-		//		, nullptr }
-		//	, RenderQuad{ m_device
-		//		, *m_renderPass
-		//		, m_size
-		//		, m_ssaoConfigUbo
-		//		, m_gpInfoUbo
-		//		, m_linearisedDepthBuffer
-		//		, &m_normals } }
-		//, m_commandBuffers{ m_device.graphicsCommandPool->createCommandBuffer( "SsaoRawAO" )
-		//	, m_device.graphicsCommandPool->createCommandBuffer( "SsaoRawAONormals" ) }
-		, m_finished{ m_device->createSemaphore( "SsaoRawAO" ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( m_device, cuT( "Scalable Ambient Obscurance" ), cuT( "Raw AO" ) ) }
+		, m_programs{ Program{ device, false }, Program{ device, true } }
 	{
-		// TODO SRG
-		//for ( auto i = 0u; i < m_commandBuffers.size(); ++i )
-		//{
-		//	auto & cmd = *m_commandBuffers[i];
-		//	auto & quad = m_quads[i];
-
-		//	cmd.begin();
-		//	cmd.beginDebugBlock(
-		//		{
-		//			"SSAO - Raw AO",
-		//			makeFloatArray( m_engine.getNextRainbowColour() ),
-		//		} );
-		//	m_timer->beginPass( cmd );
-		//	cmd.beginRenderPass( *m_renderPass
-		//		, *m_frameBuffer
-		//		, { opaqueWhiteClearColor, opaqueWhiteClearColor }
-		//		, VK_SUBPASS_CONTENTS_INLINE );
-		//	quad.registerPass( cmd );
-		//	cmd.endRenderPass();
-		//	m_timer->endPass( cmd );
-		//	cmd.endDebugBlock();
-		//	cmd.end();
-		//}
-	}
-
-	SsaoRawAOPass::~SsaoRawAOPass()
-	{
-		m_bentNormals.cleanup();
-		m_result.cleanup();
-	}
-
-	ashes::Semaphore const & SsaoRawAOPass::compute( ashes::Semaphore const & toWait )const
-	{
-		RenderPassTimerBlock timerBlock{ m_timer->start() };
-		timerBlock->notifyPassRender();
-		auto * result = &toWait;
-		// TODO CRG
-		//auto index = m_ssaoConfig.useNormalsBuffer
-		//	? 1u
-		//	: 0u;
-		//m_device.graphicsQueue->submit( *m_commandBuffers[index]
-		//	, toWait
-		//	, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-		//	, *m_finished
-		//	, nullptr );
-		//result = m_finished.get();
-		return *result;
+		auto & pass = graph.createPass( "SsaoRawAO"
+			, [this]( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph )
+			{
+				return std::make_unique< RenderQuad >( pass
+					, context
+					, graph
+					, getConfig( m_size
+						, m_programs[0].stages
+						, m_programs[1].stages )
+					, m_ssaoConfig );
+			} );
+		m_lastPass = &pass;
+		pass.addDependency( previousPass );
+		m_ssaoConfigUbo.createPassBinding( pass, SsaoCfgUboIdx );
+		m_gpInfoUbo.createPassBinding( pass, GpInfoUboIdx );
+		pass.addSampledView( linearisedDepthBuffer.wholeViewId
+			, DepthMapIdx
+			, VK_IMAGE_LAYOUT_UNDEFINED );
+		pass.addSampledView( normals.wholeViewId
+			, NormalMapIdx
+			, VK_IMAGE_LAYOUT_UNDEFINED );
+		pass.addOutputColourView( m_result.targetViewId, opaqueWhiteClearColor );
+		pass.addOutputColourView( m_bentNormals.targetViewId, transparentBlackClearColor );
+		m_result.create();
+		m_bentNormals.create();
 	}
 
 	void SsaoRawAOPass::accept( SsaoConfig & config
 		, PipelineVisitorBase & visitor )
 	{
-		if ( getResult().isTextured() )
-		{
-			visitor.visit( "SSAO Raw AO"
-				, getResult().getTexture()->getDefaultView().getSampledView()
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-				, TextureFactors{}.invert( true ) );
-		}
+		visitor.visit( "SSAO Raw AO"
+			, getResult()
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, TextureFactors{}.invert( true ) );
+		visitor.visit( "SSAO Bent Normals"
+			, getBentResult()
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, TextureFactors{}.invert( true ) );
 
-		if ( getBentResult().isTextured() )
-		{
-			visitor.visit( "SSAO Bent Normals"
-				, getBentResult().getTexture()->getDefaultView().getSampledView()
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-				, TextureFactors{}.invert( true ) );
-		}
-
-		// TODO CRG
-		//auto index = m_ssaoConfig.useNormalsBuffer
-		//	? 1u
-		//	: 0u;
-		//visitor.visit( m_quads[index].vertexShader );
-		//visitor.visit( m_quads[index].pixelShader );
-		//config.accept( m_quads[index].pixelShader.name, visitor );
+		auto index = m_ssaoConfig.useNormalsBuffer
+			? 1u
+			: 0u;
+		visitor.visit( m_programs[index].vertexShader );
+		visitor.visit( m_programs[index].pixelShader );
+		config.accept( m_programs[index].pixelShader.name, visitor );
 	}
 }

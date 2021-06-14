@@ -12,6 +12,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
+#include "Castor3D/Render/Technique/SsaoPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaqueModule.hpp"
 #include "Castor3D/Render/Technique/Transparent/TransparentModule.hpp"
 #include "Castor3D/Render/Technique/Voxelize/VoxelizeModule.hpp"
@@ -252,6 +253,7 @@ namespace castor3d
 		VoxelizerUbo m_vctConfigUbo;
 		crg::FramePass * m_depthPassDecl{};
 		DepthPass * m_depthPass{};
+		SsaoPassUPtr m_ssao;
 		VoxelizerUPtr m_voxelizer;
 		LightVolumePassResultUPtr m_lpvResult;
 		LightVolumePassResultArray m_llpvResult;

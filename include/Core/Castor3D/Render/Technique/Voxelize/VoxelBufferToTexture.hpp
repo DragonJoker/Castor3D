@@ -53,7 +53,7 @@ namespace castor3d
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
 
 	private:
-		void doInitialise()override;
+		void doInitialise( uint32_t index )override;
 		void doRecordInto( VkCommandBuffer commandBuffer
 			, uint32_t index )override;
 		VkPipelineStageFlags doGetSemaphoreWaitFlags()const override;

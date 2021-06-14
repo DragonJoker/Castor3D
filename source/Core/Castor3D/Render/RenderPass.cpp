@@ -528,9 +528,12 @@ namespace castor3d
 		}
 	}
 
-	void SceneRenderPass::doSubInitialise()
+	void SceneRenderPass::doSubInitialise( uint32_t index )
 	{
-		m_renderQueue.initialise();
+		if ( index == 0u )
+		{
+			m_renderQueue.initialise();
+		}
 	}
 
 	void SceneRenderPass::doSubRecordInto( VkCommandBuffer commandBuffer

@@ -9,7 +9,6 @@ See LICENSE file in root folder
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaqueResolvePass.hpp"
-#include "Castor3D/Render/Technique/Opaque/SsaoPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/LightingPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
@@ -81,6 +80,7 @@ namespace castor3d
 			, LightVolumePassResultArray const & llpvResult
 			, Texture const & vctFirstBounce
 			, Texture const & vctSecondaryBounce
+			, Texture const & ssao
 			, castor::Size const & size
 			, Scene & scene
 			, SceneUbo const & sceneUbo
@@ -150,14 +150,11 @@ namespace castor3d
 	private:
 		Scene const & m_scene;
 		RenderDevice const & m_device;
-		SsaoConfig & m_ssaoConfig;
 		crg::FramePass const & m_opaquePass;
 		crg::FramePass const * m_lastPass{};
 		OpaquePassResult const & m_opaquePassResult;
 		GpInfoUbo const & m_gpInfoUbo;
 		castor::Size m_size;
-		LineariseDepthPassUPtr m_linearisePass;
-		SsaoPassUPtr m_ssao;
 		std::unique_ptr< LightingPass > m_lightingPass;
 		SubsurfaceScatteringPassUPtr m_subsurfaceScattering;
 		OpaqueResolvePassUPtr m_resolve;

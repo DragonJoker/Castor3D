@@ -55,18 +55,21 @@ namespace castor3d
 		m_background.update( updater );
 	}
 
-	void BackgroundPass::doSubInitialise()
+	void BackgroundPass::doSubInitialise( uint32_t index )
 	{
-		m_background.initialise( m_device );
-		doInitialiseVertexBuffer();
-		doFillDescriptorBindings();
-		m_descriptorSetLayout = m_device->createDescriptorSetLayout( m_pass.name
-			, m_descriptorBindings );
-		m_pipelineLayout = m_device->createPipelineLayout( m_pass.name
-			, *m_descriptorSetLayout );
-		m_descriptorSetPool = m_descriptorSetLayout->createPool( 1u );
-		doCreateDescriptorSet();
-		doCreatePipeline();
+		if ( index == 0u )
+		{
+			m_background.initialise( m_device );
+			doInitialiseVertexBuffer();
+			doFillDescriptorBindings();
+			m_descriptorSetLayout = m_device->createDescriptorSetLayout( m_pass.name
+				, m_descriptorBindings );
+			m_pipelineLayout = m_device->createPipelineLayout( m_pass.name
+				, *m_descriptorSetLayout );
+			m_descriptorSetPool = m_descriptorSetLayout->createPool( 1u );
+			doCreateDescriptorSet();
+			doCreatePipeline();
+		}
 	}
 
 	void BackgroundPass::doSubRecordInto( VkCommandBuffer commandBuffer

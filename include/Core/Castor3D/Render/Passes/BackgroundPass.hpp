@@ -51,7 +51,7 @@ namespace castor3d
 		C3D_API void update( GpuUpdater & updater );
 
 	private:
-		void doSubInitialise()override;
+		void doSubInitialise( uint32_t index )override;
 		void doSubRecordInto( VkCommandBuffer commandBuffer
 			, uint32_t index )override;
 

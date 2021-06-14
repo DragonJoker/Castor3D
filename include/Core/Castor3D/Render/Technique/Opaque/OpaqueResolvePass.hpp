@@ -10,6 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/RenderInfo.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
+#include "Castor3D/Render/Ssao/SsaoModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPass.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
@@ -70,7 +71,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, Scene & scene
 			, OpaquePassResult const & gp
-			, SsaoPass const & ssao
+			, SsaoConfig const & ssao
 			, Texture const & subsurfaceScattering
 			, Texture const & lightDiffuse
 			, Texture const & lightSpecular
@@ -166,7 +167,7 @@ namespace castor3d
 		SceneUbo const & m_sceneUbo;
 		GpInfoUbo const & m_gpInfoUbo;
 		HdrConfigUbo const & m_hdrConfigUbo;
-		SsaoPass const & m_ssao;
+		SsaoConfig const & m_ssao;
 		VkExtent2D m_size;
 		Viewport m_viewport;
 		SamplerSPtr m_sampler;

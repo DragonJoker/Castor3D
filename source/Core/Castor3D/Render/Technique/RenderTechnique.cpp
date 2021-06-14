@@ -20,6 +20,7 @@
 #include "Castor3D/Render/Passes/DepthPass.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Render/Technique/ForwardRenderTechniquePass.hpp"
+#include "Castor3D/Render/Technique/SsaoPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePass.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
 #include "Castor3D/Render/Technique/Opaque/DeferredRendering.hpp"
@@ -290,7 +291,7 @@ namespace castor3d
 				}
 
 			protected:
-				void doInitialise()override
+				void doInitialise( uint32_t index )override
 				{
 				}
 
@@ -410,6 +411,14 @@ namespace castor3d
 		, m_llpvConfigUbo{ m_device }
 		, m_vctConfigUbo{ m_device }
 		, m_depthPassDecl{ &doCreateDepthPass() }
+		, m_ssao{ castor::makeUnique< SsaoPass >( m_renderTarget.getGraph()
+			, device
+			, *m_depthPassDecl
+			, m_size
+			, m_ssaoConfig
+			, m_depth
+			, m_normal
+			, m_gpInfoUbo ) }
 		, m_voxelizer{ castor::makeUnique< Voxelizer >( getOwner()->getGraphResourceHandler()
 			, device
 			, *m_renderTarget.getScene()
@@ -575,6 +584,11 @@ namespace castor3d
 			map.get().update( updater );
 		}
 
+		if ( m_ssaoConfig.enabled )
+		{
+			m_ssao->update( updater );
+		}
+
 		doUpdateShadowMaps( updater );
 		doUpdateLpv( updater );
 		doUpdateParticles( updater );
@@ -669,6 +683,11 @@ namespace castor3d
 			, TextureFactors{}.invert( true ) );
 
 		m_voxelizer->listIntermediates( visitor );
+
+		if ( m_ssaoConfig.enabled )
+		{
+			m_ssao->accept( visitor );
+		}
 
 		if ( checkFlag( visitor.getFlags().passFlags, PassFlag::eAlphaBlending ) )
 		{
@@ -792,6 +811,7 @@ namespace castor3d
 					, name
 					, SceneRenderPassDesc{ { m_size.getWidth(), m_size.getHeight(), 1u }, m_matrixUbo, m_renderTarget.getCuller() }
 					, RenderTechniquePassDesc{ false, m_ssaoConfig }
+						.ssao( m_ssao->getResult() )
 						.lpvConfigUbo( m_lpvConfigUbo )
 						.llpvConfigUbo( m_llpvConfigUbo )
 						.vctConfigUbo( m_vctConfigUbo )
@@ -803,6 +823,8 @@ namespace castor3d
 				return result;
 			} );
 		result.addDependency( *m_backgroundPassDesc );
+		result.addDependency( m_ssao->getLastPass() );
+		result.addSampledView( m_ssao->getResult().wholeViewId, 0u, VK_IMAGE_LAYOUT_UNDEFINED );
 		result.addInOutDepthView( m_depth.targetViewId );
 #if C3D_UseDeferredRendering
 		auto & opaquePassResult = *m_opaquePassResult;
@@ -842,6 +864,7 @@ namespace castor3d
 					, name
 					, SceneRenderPassDesc{ { m_size.getWidth(), m_size.getHeight(), 1u }, m_matrixUbo, m_renderTarget.getCuller(), isOit }
 					, RenderTechniquePassDesc{ false, m_ssaoConfig }
+						.lpvConfigUbo( m_lpvConfigUbo )
 						.lpvConfigUbo( m_lpvConfigUbo )
 						.llpvConfigUbo( m_llpvConfigUbo )
 						.vctConfigUbo( m_vctConfigUbo )

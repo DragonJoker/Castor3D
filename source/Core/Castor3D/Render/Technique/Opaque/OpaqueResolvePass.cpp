@@ -11,6 +11,7 @@
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
@@ -29,7 +30,6 @@
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
-#include "Castor3D/Render/Technique/Opaque/SsaoPass.hpp"
 
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Image/Image.hpp>
@@ -1531,7 +1531,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, Scene & scene
 		, OpaquePassResult const & gp
-		, SsaoPass const & ssao
+		, SsaoConfig const & ssao
 		, Texture const & subsurfaceScattering
 		, Texture const & lightDiffuse
 		, Texture const & lightSpecular
@@ -1629,7 +1629,7 @@ namespace castor3d
 	OpaqueResolvePass::ProgramPipeline & OpaqueResolvePass::getProgram()
 	{
 		auto fog = m_scene.getFog().getType();
-		bool hasSsao = m_ssao.getConfig().enabled;
+		bool hasSsao = m_ssao.enabled;
 		bool hasSssss = m_scene.needsSubsurfaceScattering();
 		bool hasDiffuseGi = m_scene.needsGlobalIllumination() || m_voxelConeTracing;
 		bool hasSpecularGi = m_voxelConeTracing;

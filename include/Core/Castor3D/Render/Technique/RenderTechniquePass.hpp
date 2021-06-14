@@ -62,6 +62,17 @@ namespace castor3d
 		 *\~french
 		 *\param[in]	value	Le résultat du LPV.
 		 */
+		RenderTechniquePassDesc & ssao( Texture const & value )
+		{
+			m_ssao = &value;
+			return *this;
+		}
+		/**
+		 *\~english
+		 *\param[in]	value	The LPV result.
+		 *\~french
+		 *\param[in]	value	Le résultat du LPV.
+		 */
 		RenderTechniquePassDesc & lpvResult( LightVolumePassResult const & value )
 		{
 			m_lpvResult = &value;
@@ -114,6 +125,7 @@ namespace castor3d
 
 		bool m_environment;
 		SsaoConfig const & m_ssaoConfig;
+		Texture const * m_ssao{};
 		LpvGridConfigUbo const * m_lpvConfigUbo{};
 		LayeredLpvGridConfigUbo const * m_llpvConfigUbo{};
 		VoxelizerUbo const * m_vctConfigUbo{};
@@ -237,6 +249,7 @@ namespace castor3d
 		bool m_environment{ false };
 		bool m_hasVelocity{ false };
 		SsaoConfig m_ssaoConfig;
+		Texture const * m_ssao;
 		LpvGridConfigUbo const * m_lpvConfigUbo;
 		LayeredLpvGridConfigUbo const * m_llpvConfigUbo;
 		VoxelizerUbo const * m_vctConfigUbo;
