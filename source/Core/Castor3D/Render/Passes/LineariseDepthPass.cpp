@@ -45,6 +45,7 @@
 #include <ShaderWriter/Source.hpp>
 
 #include <RenderGraph/FrameGraph.hpp>
+#include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
 #include <random>
 
@@ -60,7 +61,7 @@ namespace castor3d
 		static uint32_t constexpr ClipInfoUboIdx = 1u;
 		static uint32_t constexpr PrevLvlUboIdx = 1u;
 
-		ShaderPtr doGetVertexProgram()
+		ShaderPtr getVertexProgram()
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -79,7 +80,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 		
-		ShaderPtr doGetLinearisePixelProgram()
+		ShaderPtr getLinearisePixelProgram()
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -112,7 +113,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 		
-		ShaderPtr doGetMinifyPixelProgram()
+		ShaderPtr getMinifyPixelProgram()
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -120,7 +121,6 @@ namespace castor3d
 			// Shader inputs
 			Ubo previousLevel{ writer, "PreviousLevel", PrevLvlUboIdx, 0u, ast::type::MemoryLayout::eStd140 };
 			auto c3d_textureSize = previousLevel.declMember< IVec2 >( "c3d_textureSize" );
-			auto c3d_previousLevel = previousLevel.declMember< Int >( "c3d_previousLevel" );
 			previousLevel.end();
 			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDepth", DepthImgIdx, 0u );
 			auto in = writer.getIn();
@@ -138,157 +138,27 @@ namespace castor3d
 					pxl_fragColor = c3d_mapDepth.fetch( clamp( ssPosition * 2 + ivec2( ssPosition.y() & 1, ssPosition.x() & 1 )
 							, ivec2( 0_i, 0_i )
 							, c3d_textureSize - ivec2( 1_i, 1_i ) )
-						, c3d_previousLevel ).r();
+						, 0_i ).r();
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ashes::PipelineShaderStageCreateInfoArray doGetLineariseProgram( RenderDevice const & device
-			, ShaderModule & vertexShader
-			, ShaderModule & pixelShader )
-		{
-			vertexShader.shader = doGetVertexProgram();
-			pixelShader.shader = doGetLinearisePixelProgram();
-			return ashes::PipelineShaderStageCreateInfoArray
-			{
-				makeShaderState( device, vertexShader ),
-				makeShaderState( device, pixelShader ),
-			};
-		}
-
-		ashes::PipelineShaderStageCreateInfoArray doGetMinifyProgram( RenderDevice const & device
-			, ShaderModule & vertexShader
-			, ShaderModule & pixelShader )
-		{
-			vertexShader.shader = doGetVertexProgram();
-			pixelShader.shader = doGetMinifyPixelProgram();
-			return ashes::PipelineShaderStageCreateInfoArray
-			{
-				makeShaderState( device, vertexShader ),
-				makeShaderState( device, pixelShader ),
-			};
-		}
-
-		SamplerSPtr doCreateSampler( Engine & engine
-			, String const & name
-			, VkSamplerAddressMode mode )
-		{
-			SamplerSPtr sampler;
-
-			if ( engine.getSamplerCache().has( name ) )
-			{
-				sampler = engine.getSamplerCache().find( name );
-			}
-			else
-			{
-				sampler = engine.getSamplerCache().add( name );
-				sampler->setMinFilter( VK_FILTER_NEAREST );
-				sampler->setMagFilter( VK_FILTER_NEAREST );
-				sampler->setMipFilter( VK_SAMPLER_MIPMAP_MODE_NEAREST );
-				sampler->setWrapS( mode );
-				sampler->setWrapT( mode );
-				sampler->setMinLod( 0.0 );
-				sampler->setMaxLod( float( LineariseDepthPass::MaxMipLevel ) );
-			}
-
-			return sampler;
-		}
-
-		crg::ImageViewData doCreateImageView( crg::ImageViewId const & srcView )
-		{
-			auto result = *srcView.data;
-			result.info.subresourceRange.aspectMask = ashes::getAspectMask( result.info.format );
-			return result;
-		}
-
-		TextureUnit doCreateTexture( RenderDevice const & device
+		Texture doCreateTexture( RenderDevice const & device
+			, crg::ResourceHandler & handler
 			, VkExtent2D const & size )
 		{
-			auto & engine = *device.renderSystem.getEngine();
-			auto & renderSystem = *engine.getRenderSystem();
-			auto sampler = doCreateSampler( engine
-				, cuT( "LinearisePass_Result" )
-				, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-
-			ashes::ImageCreateInfo image
-			{
-				0u,
-				VK_IMAGE_TYPE_2D,
-				VK_FORMAT_R32_SFLOAT,
-				{ size.width, size.height, 1u },
-				LineariseDepthPass::MaxMipLevel + 1u,
-				1u,
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_IMAGE_TILING_OPTIMAL,
-				( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+			return Texture{ device
+				, handler
+				, cuT( "LinearisedDepth" )
+				, 0u
+				, { size.width, size.height, 1u }
+				, 1u
+				, LineariseDepthPass::MaxMipLevel + 1u
+				, VK_FORMAT_R32_SFLOAT
+				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 					| VK_IMAGE_USAGE_SAMPLED_BIT
 					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
-					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ),
-			};
-			auto ssaoResult = std::make_shared< TextureLayout >( renderSystem
-				, image
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, cuT( "LinearisePass_Result" ) );
-			TextureUnit result{ engine };
-			result.setTexture( ssaoResult );
-			result.setSampler( sampler );
-			result.initialise( device );
-			return result;
-		}
-
-		ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device )
-		{
-			ashes::VkAttachmentDescriptionArray attachments{ { 0u
-				, VK_FORMAT_R32_SFLOAT
-				, VK_SAMPLE_COUNT_1_BIT
-				, VK_ATTACHMENT_LOAD_OP_CLEAR
-				, VK_ATTACHMENT_STORE_OP_STORE
-				, VK_ATTACHMENT_LOAD_OP_DONT_CARE
-				, VK_ATTACHMENT_STORE_OP_DONT_CARE
-				, VK_IMAGE_LAYOUT_UNDEFINED
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } };
-			ashes::SubpassDescriptionArray subpasses;
-			subpasses.emplace_back( ashes::SubpassDescription{ 0u
-				, VK_PIPELINE_BIND_POINT_GRAPHICS
-				, {}
-				, { { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } }
-				, {}
-				, ashes::nullopt
-				, {} } );
-			ashes::VkSubpassDependencyArray dependencies
-			{
-				{ VK_SUBPASS_EXTERNAL
-					, 0u
-					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-					, VK_DEPENDENCY_BY_REGION_BIT }
-				, { 0u
-					, VK_SUBPASS_EXTERNAL
-					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-					, VK_ACCESS_SHADER_READ_BIT
-					, VK_DEPENDENCY_BY_REGION_BIT } };
-			ashes::RenderPassCreateInfo createInfo{ 0u
-				, std::move( attachments )
-				, std::move( subpasses )
-				, std::move( dependencies ) };
-			auto result = device->createRenderPass( "LineariseDepthPass"
-				, std::move( createInfo ) );
-			return result;
-		}
-
-		ashes::FrameBufferPtr doCreateFrameBuffer( ashes::RenderPass const & renderPass
-			, TextureUnit const & texture )
-		{
-			ashes::ImageViewCRefArray attaches;
-			attaches.emplace_back( texture.getTexture()->getDefaultView().getTargetView() );
-			auto size = texture.getTexture()->getDimensions();
-			return renderPass.createFrameBuffer( "LineariseDepthPass"
-				, VkExtent2D{ size.width, size.height }
-				, std::move( attaches ) );
+					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) };
 		}
 
 		ashes::VertexBufferPtr< NonTexturedQuad > doCreateVertexBuffer( RenderDevice const & device )
@@ -334,70 +204,59 @@ namespace castor3d
 				} };
 			return std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( inputState );
 		}
+
+
+		crg::ImageViewData doCreateDepthView( crg::ImageViewId const & depthView )
+		{
+			return crg::ImageViewData{ depthView.data->name + "Only"
+				, depthView.data->image
+				, 0u
+				, VK_IMAGE_VIEW_TYPE_2D
+				, depthView.data->info.format
+				, { VK_IMAGE_ASPECT_DEPTH_BIT, 0u, 1u, 0u, 1u } };
+		}
 	}
 
 	//*********************************************************************************************
 
 	LineariseDepthPass::LineariseDepthPass( crg::FrameGraph & graph
+		, crg::FramePass const & previousPass
 		, RenderDevice const & device
 		, String const & prefix
-		, castor::Size const & size
+		, VkExtent2D const & size
 		, crg::ImageViewId const & depthBuffer )
 		: m_device{ device }
 		, m_engine{ *m_device.renderSystem.getEngine() }
-		, m_srcDepthBuffer{ depthBuffer }
-		, m_depthBuffer{ graph.createView( doCreateImageView( m_srcDepthBuffer ) ) }
+		, m_srcDepthBuffer{ graph.createView( doCreateDepthView( depthBuffer ) ) }
 		, m_prefix{ prefix }
-		, m_size{ makeExtent2D( size ) }
-		, m_result{ doCreateTexture( m_device, m_size ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( m_device
-			, m_prefix
-			, cuT( "Linearise depth" ) ) }
-		, m_renderPass{ doCreateRenderPass( m_device ) }
-		, m_vertexBuffer{ doCreateVertexBuffer( m_device ) }
-		, m_vertexLayout{ doCreateVertexLayout() }
-		, m_lineariseSampler{ m_device->createSampler( m_prefix + "LineariseDepthLinearise"
-			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-			, VK_FILTER_NEAREST
-			, VK_FILTER_NEAREST ) }
-		, m_minifySampler{ m_device->createSampler( m_prefix + "MinifyDepth"
-			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-			, VK_FILTER_NEAREST
-			, VK_FILTER_NEAREST ) }
-		, m_commandBuffer{ m_device.graphicsCommandPool->createCommandBuffer( m_prefix + "LineariseDepth" ) }
-		, m_finished{ m_device->createSemaphore( m_prefix + "LineariseDepth" ) }
+		, m_size{ size }
+		, m_result{ doCreateTexture( m_device, graph.getHandler(), m_size ) }
 		, m_clipInfo{ m_device.uboPools->getBuffer< Point3f >( 0u ) }
-		, m_lineariseVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + "LineariseDepth" }
-		, m_linearisePixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + "LineariseDepth" }
-		, m_minifyVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + "MinifyDepth" }
-		, m_minifyPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + "MinifyDepth" }
+		, m_lastPass{ &previousPass }
+		, m_lineariseVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + "LineariseDepth", getVertexProgram() }
+		, m_linearisePixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + "LineariseDepth", getLinearisePixelProgram() }
+		, m_lineariseStages{ makeShaderState( m_device, m_lineariseVertexShader )
+			, makeShaderState( m_device, m_linearisePixelShader ) }
+		, m_linearisePass{ doInitialiseLinearisePass( graph ) }
+		, m_minifyVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + "MinifyDepth", getVertexProgram() }
+		, m_minifyPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + "MinifyDepth", getMinifyPixelProgram() }
+		, m_minifyStages{ makeShaderState( m_device, m_minifyVertexShader )
+			, makeShaderState( m_device, m_minifyPixelShader ) }
 	{
-		doInitialiseLinearisePass();
-		doInitialiseMinifyPass();
+		doInitialiseMinifyPass( graph );
 	}
 
 	LineariseDepthPass::~LineariseDepthPass()
 	{
-		doCleanupMinifyPass();
-		doCleanupLinearisePass();
+		for ( auto & level : m_previousLevel )
+		{
+			m_device.uboPools->putBuffer( level );
+		}
 
 		if ( m_clipInfo )
 		{
 			m_device.uboPools->putBuffer( m_clipInfo );
 		}
-
-		m_finished.reset();
-		m_commandBuffer.reset();
-		m_minifySampler.reset();
-		m_lineariseSampler.reset();
-		m_vertexBuffer.reset();
-		m_renderPass.reset();
-		m_timer.reset();
-		m_result.cleanup();
 	}
 
 	void LineariseDepthPass::update( CpuUpdater & updater )
@@ -416,57 +275,18 @@ namespace castor3d
 		if ( m_clipInfoValue.isDirty() )
 		{
 			m_clipInfo.getData() = m_clipInfoValue;
-		}
-	}
-	
-	void LineariseDepthPass::update( GpuUpdater & updater )
-	{
-		if ( m_commandBuffer
-			&& m_clipInfoValue.isDirty() )
-		{
-			auto & commands = *m_commandBuffer;
-			doPrepareFrame( commands, *m_timer, 0u );
 			m_clipInfoValue.reset();
 		}
-	}
-
-	ashes::Semaphore const & LineariseDepthPass::linearise( ashes::Semaphore const & toWait )const
-	{
-		RenderPassTimerBlock timerBlock{ m_timer->start() };
-		timerBlock->notifyPassRender();
-		auto * result = &toWait;
-
-		m_device.graphicsQueue->submit( *m_commandBuffer
-			, *result
-			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, *m_finished
-			, nullptr );
-		result = m_finished.get();
-
-		return *result;
-	}
-
-	CommandsSemaphore LineariseDepthPass::getCommands( RenderPassTimer const & timer
-		, uint32_t index )const
-	{
-		castor3d::CommandsSemaphore commands
-		{
-			m_device.graphicsCommandPool->createCommandBuffer( m_prefix + "LineariseDepthPass" ),
-			m_device->createSemaphore( m_prefix + "LineariseDepthPass" )
-		};
-		auto & cmd = *commands.commandBuffer;
-		doPrepareFrame( cmd, timer, index );
-		return commands;
 	}
 
 	void LineariseDepthPass::accept( PipelineVisitorBase & visitor )
 	{
 		uint32_t index = 0u;
 
-		for ( auto & layer : getResult().getTexture()->getArray2D().layers )
+		for ( auto & layer : getResult().subViewsId )
 		{
 			visitor.visit( "Linearised Depth " + string::toString( index++ )
-				, layer.view->getSampledView()
+				, layer
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, TextureFactors{}.invert( true ) );
 		}
@@ -478,249 +298,71 @@ namespace castor3d
 		visitor.visit( m_minifyPixelShader );
 	}
 
-	void LineariseDepthPass::doInitialiseLinearisePass()
+	crg::FramePass const & LineariseDepthPass::doInitialiseLinearisePass( crg::FrameGraph & graph )
 	{
-		// TODO CRG
-		//auto size = m_result.getTexture()->getDimensions();
-		//auto lineariseProgram = doGetLineariseProgram( m_device
-		//	, m_lineariseVertexShader
-		//	, m_linearisePixelShader );
-		//ashes::ImageViewCRefArray attaches;
-		//m_linearisedView = m_result.getTexture()->getTexture().createView( "LinearisedDepth"
-		//	, VK_IMAGE_VIEW_TYPE_2D
-		//	, m_result.getTexture()->getPixelFormat() );
-		//attaches.emplace_back( m_linearisedView );
-		//m_lineariseFrameBuffer = m_renderPass->createFrameBuffer( "LineariseDepthPass"
-		//	, VkExtent2D{ size.width, size.height }
-		//	, std::move( attaches ) );
-		//auto & renderSystem = *m_engine.getRenderSystem();
-		//ashes::VkDescriptorSetLayoutBindingArray bindings
-		//{
-		//	makeDescriptorSetLayoutBinding( DepthImgIdx
-		//		, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-		//		, VK_SHADER_STAGE_FRAGMENT_BIT ),
-		//	makeDescriptorSetLayoutBinding( ClipInfoUboIdx
-		//		, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-		//		, VK_SHADER_STAGE_FRAGMENT_BIT ),
-		//};
-		//m_lineariseLayout.descriptorLayout = m_device->createDescriptorSetLayout( "LineariseDepthPass"
-		//	, std::move( bindings ) );
-		//m_lineariseLayout.pipelineLayout = m_device->createPipelineLayout( "LineariseDepthPass"
-		//	, *m_lineariseLayout.descriptorLayout );
-
-		//m_lineariseLayout.descriptorPool = m_lineariseLayout.descriptorLayout->createPool( "LineariseDepthPass"
-		//	, 1u );
-		//m_lineariseDescriptor = m_lineariseLayout.descriptorPool->createDescriptorSet( "LineariseDepthPass" );
-		//m_lineariseDescriptor->createBinding( m_lineariseLayout.descriptorLayout->getBinding( 0u )
-		//	, m_srcDepthBuffer
-		//	, *m_lineariseSampler );
-		//m_clipInfo.createSizedBinding( *m_lineariseDescriptor
-		//	, m_lineariseLayout.descriptorLayout->getBinding( 1u ) );
-		//m_lineariseDescriptor->update();
-
-		//m_linearisePipeline = m_device->createPipeline( "LineariseDepthPass"
-		//	, ashes::GraphicsPipelineCreateInfo
-		//	{
-		//		0u,
-		//		lineariseProgram,
-		//		*m_vertexLayout,
-		//		ashes::PipelineInputAssemblyStateCreateInfo{},
-		//		ashes::nullopt,
-		//		ashes::PipelineViewportStateCreateInfo
-		//		{
-		//			0u,
-		//			{ 1u, ashes::makeViewport( size ) },
-		//			{ 1u, ashes::makeScissor( size ) }
-		//		},
-		//		ashes::PipelineRasterizationStateCreateInfo{},
-		//		ashes::PipelineMultisampleStateCreateInfo{},
-		//		ashes::nullopt,
-		//		ashes::PipelineColorBlendStateCreateInfo{},
-		//		ashes::nullopt,
-		//		*m_lineariseLayout.pipelineLayout,
-		//		*m_renderPass,
-		//	} );
+		auto & pass = graph.createPass( "LineariseDepth"
+			, [this]( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph )
+			{
+				return crg::RenderQuadBuilder{}
+					.program( crg::makeVkArray< VkPipelineShaderStageCreateInfo >( m_lineariseStages ) )
+					.renderSize( m_size )
+					.build( pass, context, graph );
+			} );
+		pass.addDependency( *m_lastPass );
+		pass.addSampledView( m_srcDepthBuffer
+			, DepthImgIdx
+			, VK_IMAGE_LAYOUT_UNDEFINED );
+		m_clipInfo.createPassBinding( pass, "ClipInfoCfg", ClipInfoUboIdx );
+		pass.addOutputColourView( m_result.targetViewId );
+		m_result.create();
+		m_lastPass = &pass;
+		return pass;
 	}
 
-	void LineariseDepthPass::doInitialiseMinifyPass()
+	void LineariseDepthPass::doInitialiseMinifyPass( crg::FrameGraph & graph )
 	{
-		// TODO CRG
-		//auto & renderSystem = *m_engine.getRenderSystem();
-		//auto size = m_result.getTexture()->getDimensions();
-		//auto minifyProgram = doGetMinifyProgram( m_device
-		//	, m_minifyVertexShader
-		//	, m_minifyPixelShader );
-		//ashes::VkDescriptorSetLayoutBindingArray bindings
-		//{
-		//	makeDescriptorSetLayoutBinding( DepthImgIdx
-		//		, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-		//		, VK_SHADER_STAGE_FRAGMENT_BIT ),
-		//	makeDescriptorSetLayoutBinding( PrevLvlUboIdx
-		//		, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-		//		, VK_SHADER_STAGE_FRAGMENT_BIT ),
-		//};
-		//m_minifyLayout.descriptorLayout = m_device->createDescriptorSetLayout( "MinifyDepthPass"
-		//	, std::move( bindings ) );
-		//m_minifyLayout.pipelineLayout = m_device->createPipelineLayout( "MinifyDepthPass"
-		//	, *m_minifyLayout.descriptorLayout );
-		//m_minifyLayout.descriptorPool = m_minifyLayout.descriptorLayout->createPool( "MinifyDepthPass"
-		//	, MaxMipLevel );
-		//uint32_t index = 0u;
-		//auto * sourceView = &m_linearisedView;
-		//ashes::ImageViewCreateInfo viewInfo
-		//{
-		//	0u,
-		//	VK_NULL_HANDLE,
-		//	VK_IMAGE_VIEW_TYPE_2D,
-		//	m_result.getTexture()->getPixelFormat(),
-		//	VkComponentMapping{},
-		//	VkImageSubresourceRange
-		//	{
-		//		VK_IMAGE_ASPECT_COLOR_BIT,
-		//		0u,
-		//		1u,
-		//		0u,
-		//		1u,
-		//	},
-		//};
+		uint32_t index = 0u;
+		auto size = m_size;
 
-
-		//for ( auto & pipeline : m_minifyPipelines )
-		//{
-		//	m_previousLevel.push_back( m_device.uboPools->getBuffer< MinifyConfiguration >( 0u ) );
-		//	auto & previousLevel = m_previousLevel.back();
-		//	auto & data = previousLevel.getData();
-		//	data.previousLevel = index;
-		//	data.textureSize = Point2i{ size.width, size.height };
-		//	size.width >>= 1;
-		//	size.height >>= 1;
-		//	pipeline.sourceView = sourceView;
-		//	viewInfo->subresourceRange.baseMipLevel = index + 1u;
-		//	viewInfo->image = m_result.getTexture()->getTexture();
-		//	pipeline.targetView = m_result.getTexture()->getTexture().createView( viewInfo );
-		//	pipeline.descriptor = m_minifyLayout.descriptorPool->createDescriptorSet();
-		//	pipeline.descriptor->createBinding( m_minifyLayout.descriptorLayout->getBinding( 0u )
-		//		, *pipeline.sourceView
-		//		, *m_minifySampler );
-		//	previousLevel.createSizedBinding( *pipeline.descriptor
-		//		, m_minifyLayout.descriptorLayout->getBinding( 1u ) );
-		//	pipeline.descriptor->update();
-		//	ashes::ImageViewCRefArray attaches;
-		//	attaches.emplace_back( pipeline.targetView );
-		//	pipeline.frameBuffer = m_renderPass->createFrameBuffer( "MinifyDepthPass"
-		//		, VkExtent2D{ size.width, size.height }
-		//		, std::move( attaches ) );
-
-		//	pipeline.pipeline = m_device->createPipeline( "MinifyDepthPass"
-		//		, ashes::GraphicsPipelineCreateInfo
-		//		{
-		//			0u,
-		//			minifyProgram,
-		//			*m_vertexLayout,
-		//			ashes::PipelineInputAssemblyStateCreateInfo{},
-		//			ashes::nullopt,
-		//			ashes::PipelineViewportStateCreateInfo
-		//			{
-		//				0u,
-		//				{ 1u, VkViewport{ 0.0f, 0.0f, float( size.width ), float( size.height ), 0.0f, 1.0f } },
-		//				{ 1u, VkRect2D{ 0, 0, size.width, size.height } }
-		//			},
-		//			ashes::PipelineRasterizationStateCreateInfo{},
-		//			ashes::PipelineMultisampleStateCreateInfo{},
-		//			ashes::nullopt,
-		//			ashes::PipelineColorBlendStateCreateInfo{},
-		//			ashes::nullopt,
-		//			*m_minifyLayout.pipelineLayout,
-		//			*m_renderPass,
-		//		} );
-		//	sourceView = &pipeline.targetView;
-		//	++index;
-		//}
-	}
-
-	void LineariseDepthPass::doCleanupLinearisePass()
-	{
-		m_linearisePipeline.reset();
-		m_lineariseLayout.pipelineLayout.reset();
-		m_lineariseDescriptor.reset();
-		m_lineariseLayout.descriptorPool.reset();
-		m_lineariseLayout.descriptorLayout.reset();
-		m_lineariseFrameBuffer.reset();
-	}
-
-	void LineariseDepthPass::doCleanupMinifyPass()
-	{
-		for ( auto & pipeline : m_minifyPipelines )
+		for ( auto index = 0u; index < MaxMipLevel; ++index )
 		{
-			pipeline.pipeline.reset();
-			pipeline.frameBuffer.reset();
-			pipeline.descriptor.reset();
+			m_previousLevel.push_back( m_device.uboPools->getBuffer< castor::Point2i >( 0u ) );
+			auto & previousLevel = m_previousLevel.back();
+			auto & data = previousLevel.getData();
+			data = Point2i{ size.width, size.height };
+			size.width >>= 1;
+			size.height >>= 1;
+			auto source = graph.createView( crg::ImageViewData{ m_result.imageId.data->name + std::to_string( index )
+				, m_result.imageId
+				, 0u
+				, VK_IMAGE_VIEW_TYPE_2D
+				, m_result.getFormat()
+				, VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, index, 1u, 0u, 1u } } );
+			auto destination = graph.createView( crg::ImageViewData{ m_result.imageId.data->name + std::to_string( index + 1u )
+				, m_result.imageId
+				, 0u
+				, VK_IMAGE_VIEW_TYPE_2D
+				, m_result.getFormat()
+				, VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, index + 1u, 1u, 0u, 1u } } );
+			auto & pass = graph.createPass( "MinimiseDepth" + std::to_string( index )
+				, [this, size]( crg::FramePass const & pass
+					, crg::GraphContext const & context
+					, crg::RunnableGraph & graph )
+				{
+					return crg::RenderQuadBuilder{}
+						.program( crg::makeVkArray< VkPipelineShaderStageCreateInfo >( m_minifyStages ) )
+						.renderSize( size )
+						.build( pass, context, graph );
+				} );
+			pass.addDependency( *m_lastPass );
+			pass.addSampledView( source
+				, DepthImgIdx
+				, VK_IMAGE_LAYOUT_UNDEFINED );
+			previousLevel.createPassBinding( pass, "PreviousLvlCfg", PrevLvlUboIdx );
+			pass.addOutputColourView( destination );
+			m_lastPass = &pass;
 		}
-
-		for ( auto & ubo : m_previousLevel )
-		{
-			m_device.uboPools->putBuffer( ubo );
-		}
-
-		m_previousLevel.clear();
-		m_minifyLayout.descriptorPool.reset();
-		m_minifyLayout.pipelineLayout.reset();
-		m_minifyLayout.descriptorLayout.reset();
-	}
-
-	void LineariseDepthPass::doPrepareFrame( ashes::CommandBuffer & cb
-		, RenderPassTimer const & timer
-		, uint32_t index )const
-	{
-		// TODO CRG
-		//cb.begin();
-		//timer.beginPass( cb, index );
-
-		//// Linearisation pass.
-		//cb.beginDebugBlock(
-		//	{
-		//		m_prefix + " - Linearise Depth",
-		//		makeFloatArray( m_engine.getNextRainbowColour() ),
-		//	} );
-		//cb.memoryBarrier( VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
-		//	, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-		//	, m_depthBuffer.makeShaderInputResource( VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ) );
-		//cb.beginRenderPass( *m_renderPass
-		//	, *m_lineariseFrameBuffer
-		//	, { transparentBlackClearColor }
-		//	, VK_SUBPASS_CONTENTS_INLINE );
-		//cb.bindPipeline( *m_linearisePipeline );
-		//cb.bindDescriptorSet( *m_lineariseDescriptor, *m_lineariseLayout.pipelineLayout );
-		//cb.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-		//cb.draw( 6u );
-		//cb.endRenderPass();
-		//cb.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-		//	, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
-		//	, m_depthBuffer.makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-		//cb.endDebugBlock();
-
-		//// Minification passes.
-		//cb.beginDebugBlock(
-		//	{
-		//		m_prefix + " - Minify",
-		//		makeFloatArray( m_engine.getNextRainbowColour() ),
-		//	} );
-
-		//for ( auto & pipeline : m_minifyPipelines )
-		//{
-		//	cb.beginRenderPass( *m_renderPass
-		//		, *pipeline.frameBuffer
-		//		, { transparentBlackClearColor }
-		//		, VK_SUBPASS_CONTENTS_INLINE );
-		//	cb.bindPipeline( *pipeline.pipeline );
-		//	cb.bindDescriptorSet( *pipeline.descriptor, *m_minifyLayout.pipelineLayout );
-		//	cb.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-		//	cb.draw( 6u );
-		//	cb.endRenderPass();
-		//}
-
-		//cb.endDebugBlock();
-		//timer.endPass( cb, index );
-		//cb.end();
 	}
 }

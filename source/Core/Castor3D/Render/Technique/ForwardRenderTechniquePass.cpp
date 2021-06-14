@@ -128,6 +128,10 @@ namespace castor3d
 		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
 			, index++
 			, RenderPipeline::eAdditional );
+		auto c3d_mapOcclusion = writer.declSampledImage< FImg2DR32 >( "c3d_mapOcclusion"
+			, ( m_ssao ? index++ : 0u )
+			, RenderPipeline::eAdditional
+			, m_ssao != nullptr );
 		auto c3d_mapEnvironment( writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment"
 			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? index++ : 0u
@@ -181,6 +185,11 @@ namespace castor3d
 					, 1.0_f );
 				auto transmittance = writer.declLocale( "transmittance"
 					, 0.0_f );
+
+				if ( m_ssao )
+				{
+					occlusion *= c3d_mapOcclusion.fetch( ivec2( in.fragCoord.xy() ), 0_i );
+				}
 
 				if ( hasTextures )
 				{
@@ -385,6 +394,10 @@ namespace castor3d
 		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
 			, index++
 			, RenderPipeline::eAdditional );
+		auto c3d_mapOcclusion = writer.declSampledImage< FImg2DR32 >( "c3d_mapOcclusion"
+			, ( m_ssao ? index++ : 0u )
+			, RenderPipeline::eAdditional
+			, m_ssao != nullptr );
 		auto c3d_mapEnvironment( writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment"
 			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? index++ : 0u
@@ -454,6 +467,11 @@ namespace castor3d
 					, 1.0_f );
 				auto transmittance = writer.declLocale( "transmittance"
 					, 0.0_f );
+
+				if ( m_ssao )
+				{
+					occlusion *= c3d_mapOcclusion.fetch( ivec2( in.fragCoord.xy() ), 0_i );
+				}
 
 				if ( hasTextures )
 				{
@@ -729,6 +747,10 @@ namespace castor3d
 		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
 			, index++
 			, RenderPipeline::eAdditional );
+		auto c3d_mapOcclusion = writer.declSampledImage< FImg2DR32 >( "c3d_mapOcclusion"
+			, ( m_ssao ? index++ : 0u )
+			, RenderPipeline::eAdditional
+			, m_ssao != nullptr );
 		auto c3d_mapEnvironment( writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment"
 			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? index++ : 0u
@@ -799,6 +821,11 @@ namespace castor3d
 					, 1.0_f );
 				auto transmittance = writer.declLocale( "transmittance"
 					, 0.0_f );
+
+				if ( m_ssao )
+				{
+					occlusion *= c3d_mapOcclusion.fetch( ivec2( in.fragCoord.xy() ), 0_i );
+				}
 
 				if ( hasTextures )
 				{

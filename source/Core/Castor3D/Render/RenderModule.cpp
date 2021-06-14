@@ -296,6 +296,14 @@ namespace castor3d
 			createInfo.info.subresourceRange.layerCount = createInfo.image.data->info.extent.depth;
 			targetViewId = handler.createViewId( createInfo );
 		}
+		else if ( wholeViewId.data->info.subresourceRange.levelCount == wholeViewId.data->image.data->info.mipLevels )
+		{
+			auto createInfo = *wholeViewId.data;
+			createInfo.name = name + "Target";
+			createInfo.info.subresourceRange.baseMipLevel = 0u;
+			createInfo.info.subresourceRange.levelCount = 1u;
+			targetViewId = handler.createViewId( createInfo );
+		}
 		else
 		{
 			targetViewId = wholeViewId;
