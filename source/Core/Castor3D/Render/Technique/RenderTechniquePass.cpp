@@ -137,6 +137,7 @@ namespace castor3d
 		, m_environment{ techniquePassDesc.m_environment }
 		, m_hasVelocity{ techniquePassDesc.m_hasVelocity }
 		, m_ssaoConfig{ techniquePassDesc.m_ssaoConfig }
+		, m_ssao{ techniquePassDesc.m_ssao }
 		, m_lpvConfigUbo{ techniquePassDesc.m_lpvConfigUbo }
 		, m_llpvConfigUbo{ techniquePassDesc.m_llpvConfigUbo }
 		, m_vctConfigUbo{ techniquePassDesc.m_vctConfigUbo }
@@ -229,6 +230,9 @@ namespace castor3d
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) ); // c3d_mapOcclusion
 
 		if ( checkFlag( flags.passFlags, PassFlag::eReflection )
 			|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
@@ -343,6 +347,7 @@ namespace castor3d
 			, Scene const & scene
 			, SceneNode const & sceneNode
 			, ShadowMapLightTypeArray const & shadowMaps
+			, Texture const * ssao
 			, LpvGridConfigUbo const * lpvConfigUbo
 			, LayeredLpvGridConfigUbo const * llpvConfigUbo
 			, VoxelizerUbo const * vctConfigUbo
@@ -354,6 +359,14 @@ namespace castor3d
 			auto index = uint32_t( PassUboIdx::eCount );
 			auto & flags = pipeline.getFlags();
 			descriptorWrites.push_back( scene.getLightCache().getDescriptorWrite( index++ ) );
+
+			if ( ssao )
+			{
+				bindTexture( ssao->wholeView
+					, *ssao->sampler
+					, descriptorWrites
+					, index );
+			}
 
 			if ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
@@ -477,6 +490,7 @@ namespace castor3d
 			, m_scene
 			, node.sceneNode
 			, shadowMaps
+			, m_ssao
 			, m_lpvConfigUbo
 			, m_llpvConfigUbo
 			, m_vctConfigUbo
@@ -497,6 +511,7 @@ namespace castor3d
 			, m_scene
 			, node.sceneNode
 			, shadowMaps
+			, m_ssao
 			, m_lpvConfigUbo
 			, m_llpvConfigUbo
 			, m_vctConfigUbo

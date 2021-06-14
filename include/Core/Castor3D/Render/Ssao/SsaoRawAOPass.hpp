@@ -15,6 +15,8 @@ See LICENSE file in root folder
 
 #include <ShaderAST/Shader.hpp>
 
+#include <RenderGraph/RunnablePasses/RenderQuad.hpp>
+
 namespace castor3d
 {
 	class SsaoRawAOPass
@@ -44,28 +46,13 @@ namespace castor3d
 		 */
 		SsaoRawAOPass( crg::FrameGraph & graph
 			, RenderDevice const & device
+			, crg::FramePass const & previousPass
 			, VkExtent2D const & size
 			, SsaoConfig const & config
 			, SsaoConfigUbo & ssaoConfigUbo
 			, GpInfoUbo const & gpInfoUbo
-			, TextureUnit const & linearisedDepthBuffer
-			, crg::ImageViewId const & normals );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		~SsaoRawAOPass();
-		/**
-		 *\~english
-		 *\brief		Renders the pass.
-		 *\param[in]	toWait	The semaphore from the previous render pass.
-		 *\~french
-		 *\brief		Dessine la passe.
-		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
-		 */
-		ashes::Semaphore const & compute( ashes::Semaphore const & toWait )const;
+			, Texture const & linearisedDepthBuffer
+			, Texture const & normals );
 		/**
 		 *\~english
 		 *\brief		Accepts a visitor.
@@ -87,14 +74,19 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		TextureUnit const & getResult()const
+		Texture const & getResult()const
 		{
 			return m_result;
 		}
 
-		TextureUnit const & getBentResult()const
+		Texture const & getBentResult()const
 		{
 			return m_bentNormals;
+		}
+
+		crg::FramePass const & getLastPass()const
+		{
+			return *m_lastPass;
 		}
 		/**@}*/
 
@@ -103,24 +95,29 @@ namespace castor3d
 
 	private:
 		struct RenderQuad
-			: castor3d::RenderQuad
+			: crg::RenderQuad
 		{
-			RenderQuad( Engine & engine
-				, RenderDevice const & device
-				, ashes::RenderPass const & renderPass
-				, VkExtent2D const & size
-				, SsaoConfigUbo & ssaoConfigUbo
-				, GpInfoUbo const & gpInfoUbo
-				, TextureUnit const & depth
-				, ashes::ImageView const * normals );
+			RenderQuad( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph
+				, crg::rq::Config config
+				, SsaoConfig const & ssaoConfig );
 
-			castor3d::ShaderModule vertexShader;
-			castor3d::ShaderModule pixelShader;
+		protected:
+			uint32_t doGetPassIndex()const;
 
-			SsaoConfigUbo & m_ssaoConfigUbo;
-			GpInfoUbo const & m_gpInfoUbo;
-			ashes::ImageView const * m_depthView;
-			SamplerSPtr m_depthSampler;
+		private:
+			SsaoConfig const & ssaoConfig;
+		};
+
+		struct Program
+		{
+			Program( RenderDevice const & device
+				, bool useNormalsBuffer );
+
+			ShaderModule vertexShader;
+			ShaderModule pixelShader;
+			ashes::PipelineShaderStageCreateInfoArray stages;
 		};
 
 	private:
@@ -128,14 +125,13 @@ namespace castor3d
 		SsaoConfig const & m_ssaoConfig;
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		GpInfoUbo const & m_gpInfoUbo;
-		TextureUnit const & m_linearisedDepthBuffer;
-		crg::ImageViewId const & m_normals;
+		Texture const & m_linearisedDepthBuffer;
+		Texture const & m_normals;
 		VkExtent2D m_size;
-		TextureUnit m_result;
-		TextureUnit m_bentNormals;
-		//std::array< RenderQuad, 2u > m_quads;
-		ashes::SemaphorePtr m_finished;
-		RenderPassTimerSPtr m_timer;
+		Texture m_result;
+		Texture m_bentNormals;
+		std::array< Program, 2u > m_programs;
+		crg::FramePass const * m_lastPass{};
 	};
 }
 

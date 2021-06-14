@@ -1,4 +1,4 @@
-#include "Castor3D/Render/Technique/Opaque/SsaoPass.hpp"
+#include "Castor3D/Render/Technique/SsaoPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -6,11 +6,13 @@
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/Passes/LineariseDepthPass.hpp"
 #include "Castor3D/Render/Ssao/SsaoBlurPass.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/Ssao/SsaoRawAOPass.hpp"
-#include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
-#include "Castor3D/Shader/Ubos/SsaoConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
+
+#include <RenderGraph/FrameGraph.hpp>
 
 CU_ImplementCUSmartPtr( castor3d, SsaoPass )
 
@@ -20,65 +22,71 @@ namespace castor3d
 {
 	SsaoPass::SsaoPass( crg::FrameGraph & graph
 		, RenderDevice const & device
+		, crg::FramePass const & previousPass
 		, castor::Size const & size
 		, SsaoConfig & ssaoConfig
-		, TextureUnit const & linearisedDepth
-		, OpaquePassResult const & gpResult
+		, Texture const & depth
+		, Texture const & normal
 		, GpInfoUbo const & gpInfoUbo )
 		: m_device{ device }
 		, m_ssaoConfig{ ssaoConfig }
-		, m_linearisedDepth{ linearisedDepth }
-		, m_gpResult{ gpResult }
+		, m_depth{ depth }
+		, m_normal{ normal }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_size{ makeExtent2D( size ) }
 		, m_matrixUbo{ m_device }
-		, m_ssaoConfigUbo{ std::make_shared< SsaoConfigUbo >( m_device ) }
-		, m_rawAoPass{ std::make_shared< SsaoRawAOPass >( graph
+		, m_ssaoConfigUbo{ m_device }
+		, m_linearisePass{ castor::makeUnique< LineariseDepthPass >( graph
+			, previousPass
 			, m_device
+			, cuT( "Ssao" )
+			, m_size
+			, depth.wholeViewId ) }
+		, m_rawAoPass{ castor::makeUnique< SsaoRawAOPass >( graph
+			, m_device
+			, m_linearisePass->getLastPass()
 			, m_size
 			, m_ssaoConfig
-			, *m_ssaoConfigUbo
+			, m_ssaoConfigUbo
 			, m_gpInfoUbo
-			, m_linearisedDepth
-			, m_gpResult[DsTexture::eData1].wholeViewId ) }
+			, m_linearisePass->getResult()
+			, m_normal ) }
 #if !C3D_DebugRawPass
-		, m_horizontalBlur{ std::make_shared< SsaoBlurPass >( graph
+		, m_horizontalBlur{ castor::makeUnique< SsaoBlurPass >( graph
 			, m_device
+			, m_rawAoPass->getLastPass()
 			, cuT( "Horizontal" )
 			, m_size
 			, m_ssaoConfig
-			, *m_ssaoConfigUbo
+			, m_ssaoConfigUbo
 			, m_gpInfoUbo
 			, castor::Point2i{ 1, 0 }
 			, m_rawAoPass->getResult()
 			, m_rawAoPass->getBentResult()
-			, m_gpResult[DsTexture::eData1].wholeViewId ) }
-		, m_verticalBlur{ std::make_shared< SsaoBlurPass >( graph
+			, m_normal ) }
+		, m_verticalBlur{ castor::makeUnique< SsaoBlurPass >( graph
 			, m_device
+			, m_horizontalBlur->getLastPass()
 			, cuT( "Vertical" )
 			, m_size
 			, m_ssaoConfig
-			, *m_ssaoConfigUbo
+			, m_ssaoConfigUbo
 			, m_gpInfoUbo
 			, castor::Point2i{ 0, 1 }
 			, m_horizontalBlur->getResult()
 			, m_horizontalBlur->getBentResult()
-			, m_gpResult[DsTexture::eData1].wholeViewId ) }
+			, m_normal ) }
+		, m_lastPass{ &m_verticalBlur->getLastPass() }
+#else
+		, m_lastPass{ &m_rawAoPass->getLastPass() }
 #endif
 	{
 	}
 
-	SsaoPass::~SsaoPass()
-	{
-		m_verticalBlur.reset();
-		m_horizontalBlur.reset();
-		m_rawAoPass.reset();
-		m_ssaoConfigUbo.reset();
-	}
-
 	void SsaoPass::update( CpuUpdater & updater )
 	{
-		m_ssaoConfigUbo->cpuUpdate( m_ssaoConfig, *updater.camera );
+		m_linearisePass->update( updater );
+		m_ssaoConfigUbo.cpuUpdate( m_ssaoConfig, *updater.camera );
 #if !C3D_DebugRawPass
 		m_horizontalBlur->update( updater );
 		m_verticalBlur->update( updater );
@@ -86,23 +94,10 @@ namespace castor3d
 		m_ssaoConfig.blurRadius.reset();
 	}
 
-	ashes::Semaphore const & SsaoPass::render( ashes::Semaphore const & toWait )const
-	{
-		auto * result = &toWait;
-		result = &m_rawAoPass->compute( *result );
-#if !C3D_DebugRawPass
-		result = &m_horizontalBlur->blur( *result );
-		result = &m_verticalBlur->blur( *result );
-#endif
-		return *result;
-	}
-
 	void SsaoPass::accept( PipelineVisitorBase & visitor )
 	{
-		if ( m_rawAoPass )
-		{
-			m_rawAoPass->accept( m_ssaoConfig, visitor );
-		}
+		m_linearisePass->accept( visitor );
+		m_rawAoPass->accept( m_ssaoConfig, visitor );
 
 #if !C3D_DebugRawPass
 		if ( m_horizontalBlur )
@@ -117,7 +112,7 @@ namespace castor3d
 #endif
 	}
 
-	TextureUnit const & SsaoPass::getResult()const
+	Texture const & SsaoPass::getResult()const
 	{
 #if C3D_DebugRawPass
 		return m_rawAoPass->getResult();
@@ -126,7 +121,7 @@ namespace castor3d
 #endif
 	}
 
-	TextureUnit const & SsaoPass::getBentNormals()const
+	Texture const & SsaoPass::getBentNormals()const
 	{
 #if C3D_DebugRawPass
 		return m_rawAoPass->getBentResult();
