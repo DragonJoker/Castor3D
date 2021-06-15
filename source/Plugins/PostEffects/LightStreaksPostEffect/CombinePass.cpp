@@ -82,7 +82,8 @@ namespace light_streaks
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewId const & sceneView
 		, crg::ImageViewIdArray const & kawaseViews
-		, VkExtent2D const & size )
+		, VkExtent2D const & size
+		, bool const * enabled )
 		: m_device{ device }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "LightStreaksCombine", getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "LightStreaksCombine", getPixelProgram() }
@@ -103,7 +104,7 @@ namespace light_streaks
 			, m_resultImg.data->info.format
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
 		, m_pass{ graph.createPass( "LightStreaksCombinePass"
-			, [this, size]( crg::FramePass const & pass
+			, [this, &sceneView, size]( crg::FramePass const & pass
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
 			{
@@ -111,6 +112,51 @@ namespace light_streaks
 					.renderPosition( {} )
 					.renderSize( size )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
+					.recordDisabledInto( [this, &context, &graph, &sceneView, size]( crg::RunnablePass const & runnable
+						, VkCommandBuffer commandBuffer
+						, uint32_t index )
+						{
+							auto & srcSubresource = sceneView.data->info.subresourceRange;
+							auto & dstSubresource = m_resultView.data->info.subresourceRange;
+							VkImageCopy region{ VkImageSubresourceLayers{ srcSubresource.aspectMask, srcSubresource.baseMipLevel, srcSubresource.baseArrayLayer, 1u }
+								, VkOffset3D{ 0u, 0u, 0u }
+								, VkImageSubresourceLayers{ dstSubresource.aspectMask, dstSubresource.baseMipLevel, dstSubresource.baseArrayLayer, 1u }
+								, VkOffset3D{ 0u, 0u, 0u }
+							, { size.width, size.height, 1u } };
+							auto srcTransition = runnable.getTransition( index, sceneView );
+							auto dstTransition = runnable.getTransition( index, m_resultView );
+							graph.memoryBarrier( commandBuffer
+								, sceneView
+								, srcTransition.to
+								, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+									, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
+									, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) } );
+							graph.memoryBarrier( commandBuffer
+								, m_resultView
+								, dstTransition.to
+								, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+									, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
+									, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) } );
+							context.vkCmdCopyImage( commandBuffer
+								, graph.createImage( sceneView.data->image )
+								, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+								, graph.createImage( m_resultView.data->image )
+								, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+								, 1u
+								, &region );
+							graph.memoryBarrier( commandBuffer
+								, m_resultView
+								, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+									, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
+									, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) }
+								, dstTransition.to );
+							graph.memoryBarrier( commandBuffer
+								, sceneView
+								, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+									, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
+									, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) }
+								, srcTransition.to );
+						} )
 					.build( pass, context, graph );
 			} ) }
 	{

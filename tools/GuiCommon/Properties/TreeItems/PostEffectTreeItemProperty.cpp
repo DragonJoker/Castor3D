@@ -442,10 +442,12 @@ namespace GuiCommon
 		, wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_POST_EFFECT = _( "Post Effect: " );
+		static wxString PROPERTY_POST_EFFECT_ENABLED = _( "Enabled" );
 		static wxString PROPERTY_POST_EFFECT_SHADER = _( "Shader" );
 		static wxString PROPERTY_POST_EFFECT_EDIT_SHADER = _( "View Shaders..." );
 
 		addProperty( grid, PROPERTY_CATEGORY_POST_EFFECT + m_effect.getName() );
+		addPropertyT( grid, PROPERTY_POST_EFFECT_ENABLED, m_effect.isEnabled(), &m_effect, &PostEffect::enable );
 		addProperty( grid, PROPERTY_POST_EFFECT_SHADER, editor
 			, [this]( wxVariant const & var )
 			{

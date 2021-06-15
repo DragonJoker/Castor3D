@@ -23,7 +23,8 @@ namespace light_streaks
 			, crg::ImageViewIdArray const & hiViews
 			, crg::ImageViewIdArray const & kawaseViews
 			, KawaseUbo & kawaseUbo
-			, VkExtent2D dimensions );
+			, VkExtent2D dimensions
+			, bool const * enabled );
 		void accept( castor3d::PipelineVisitorBase & visitor );
 
 		crg::FramePassArray const & getPasses()const
@@ -44,7 +45,8 @@ namespace light_streaks
 				, VkExtent2D dimensions
 				, ashes::PipelineShaderStageCreateInfoArray const & stages
 				, KawaseUbo const & kawaseUbo
-				, uint32_t index );
+				, uint32_t index
+				, bool const * enabled );
 
 			crg::FramePass & pass;
 		};

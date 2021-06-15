@@ -18,7 +18,8 @@ namespace light_streaks
 			, castor3d::RenderDevice const & device
 			, crg::ImageViewId const & sceneView
 			, crg::ImageViewIdArray const & kawaseViews
-			, VkExtent2D const & size );
+			, VkExtent2D const & size
+			, bool const * enabled );
 		void accept( castor3d::PipelineVisitorBase & visitor );
 
 		crg::ImageViewId const & getResult()const

@@ -155,20 +155,23 @@ namespace light_streaks
 			, device
 			, *m_target
 			, m_hiImage.subViewsId
-			, size );
+			, size
+			, &isEnabled() );
 		m_kawasePass = std::make_unique< KawasePass >( graph
 			, m_hiPass->getPasses()
 			, device
 			, m_hiImage.subViewsId
 			, m_kawaseImage.subViewsId
 			, m_kawaseUbo
-			, size );
+			, size
+			, &isEnabled() );
 		m_combinePass = std::make_unique< CombinePass >( graph
 			, m_kawasePass->getPasses()
 			, device
 			, *m_target
 			, m_kawaseImage.subViewsId
-			, dimensions );
+			, dimensions
+			, &isEnabled() );
 		m_pass = &m_combinePass->getPass();
 		return &m_combinePass->getResult();
 	}
