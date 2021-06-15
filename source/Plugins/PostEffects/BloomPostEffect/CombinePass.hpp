@@ -19,7 +19,8 @@ namespace Bloom
 			, crg::ImageViewId const & sceneView
 			, crg::ImageViewIdArray const & blurViews
 			, VkExtent2D const & size
-			, uint32_t blurPassesCount );
+			, uint32_t blurPassesCount
+			, bool const * enabled );
 		void accept( castor3d::PipelineVisitorBase & visitor );
 
 		crg::ImageViewId const & getResult()const
