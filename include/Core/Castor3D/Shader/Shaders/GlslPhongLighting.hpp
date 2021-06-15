@@ -51,6 +51,15 @@ namespace castor3d
 				, sdw::Int const & receivesShadows
 				, Surface surface
 				, OutputComponents & output )const;
+			C3D_API static sdw::Vec3 combine( sdw::Vec3 const & directDiffuse
+				, sdw::Vec3 const & indirectDiffuse
+				, sdw::Vec3 const & directSpecular
+				, sdw::Vec3 const & indirectSpecular
+				, sdw::Float const & ambientOcclusion
+				, sdw::Vec3 const & emissive
+				, sdw::Vec3 const & reflRefr
+				, sdw::Vec3 const & materialDiffuse
+				, sdw::Vec3 const & ambient );
 			C3D_API sdw::Vec3 computeCombinedDiffuse( sdw::Vec3 const & worldEye
 				, sdw::Float const & shininess
 				, sdw::Int const & receivesShadows
