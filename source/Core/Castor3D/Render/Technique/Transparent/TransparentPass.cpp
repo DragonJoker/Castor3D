@@ -151,6 +151,7 @@ namespace castor3d
 		utils.declareComputeAccumulation();
 		utils.declareParallaxMappingFunc( flags.passFlags
 			, getTexturesMask() );
+		utils.declareFresnelSchlick();
 
 		// Fragment Intputs
 		shader::InFragmentSurface inSurface{ writer
@@ -190,6 +191,10 @@ namespace castor3d
 		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
 			, index++
 			, RenderPipeline::eAdditional );
+		auto c3d_mapOcclusion = writer.declSampledImage< FImg2DR32 >( "c3d_mapOcclusion"
+			, ( m_ssao ? index++ : 0u )
+			, RenderPipeline::eAdditional
+			, m_ssao != nullptr );
 		auto c3d_mapEnvironment( writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment"
 			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? index++ : 0u
@@ -250,6 +255,12 @@ namespace castor3d
 					, material.m_opacity );
 				auto environment = writer.declLocale( "environment"
 					, 0_u );
+
+				if ( m_ssao )
+				{
+					occlusion *= c3d_mapOcclusion.fetch( ivec2( in.fragCoord.xy() ), 0_i );
+				}
+
 				lighting->computeMapContributions( flags.passFlags
 					, textures
 					, gamma
@@ -341,24 +352,39 @@ namespace castor3d
 
 						diffuse = vec3( 0.0_f );
 					}
+					else
+					{
+						diffuse *= lightDiffuse;
+					}
 
-					ambient *= occlusion;
-					auto colour = writer.declLocale( "colour"
-						, indirect.computeDiffuse( flags.sceneFlags
-							, surface
-							, lightDiffuse
-							, diffuse
-							, ambient
-							, occlusion ) );
-					colour += emissive;
-					colour += reflected + refracted;
-					colour += indirect.computeSpecular( flags.sceneFlags
+					auto roughness = writer.declLocale( "roughness"
+						, ( 256.0_f - shininess ) / 256.0_f );
+					auto indirectOcclusion = writer.declLocale( "indirectOcclusion"
+						, 1.0_f );
+					auto lightIndirectDiffuse = indirect.computeDiffuse( flags.sceneFlags
+						, surface
+						, indirectOcclusion );
+					auto lightIndirectSpecular = indirect.computeSpecular( flags.sceneFlags
 						, worldEye
 						, surface
-						, ( 256.0_f - shininess ) / 256.0_f
-						, specular
-						, lightSpecular
-						, occlusion );
+						, roughness
+						, indirectOcclusion );
+					auto V = writer.declLocale( "V"
+						, normalize( c3d_sceneData.getPosToCamera( surface.worldPosition ) ) );
+					auto NdotV = writer.declLocale( "NdotV"
+						, max( 0.0_f, dot( surface.worldNormal, V ) ) );
+					lightIndirectSpecular *= utils.fresnelSchlick( NdotV, specular, roughness );
+
+					auto colour = writer.declLocale( "colour"
+						, shader::PhongLightingModel::combine( lightDiffuse
+							, lightIndirectDiffuse
+							, lightSpecular
+							, lightIndirectSpecular
+							, occlusion
+							, emissive
+							, reflected + refracted
+							, diffuse
+							, ambient ) );
 				}
 				else
 				{
@@ -435,6 +461,10 @@ namespace castor3d
 		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
 			, index++
 			, RenderPipeline::eAdditional );
+		auto c3d_mapOcclusion = writer.declSampledImage< FImg2DR32 >( "c3d_mapOcclusion"
+			, ( m_ssao ? index++ : 0u )
+			, RenderPipeline::eAdditional
+			, m_ssao != nullptr );
 		auto c3d_mapEnvironment( writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment"
 			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? index++ : 0u
@@ -510,6 +540,12 @@ namespace castor3d
 					, inSurface.tangentSpaceViewPosition );
 				auto tangentSpaceFragPosition = writer.declLocale( "tangentSpaceFragPosition"
 					, inSurface.tangentSpaceFragPosition );
+
+				if ( m_ssao )
+				{
+					occlusion *= c3d_mapOcclusion.fetch( ivec2( in.fragCoord.xy() ), 0_i );
+				}
+
 				lighting->computeMapContributions( flags.passFlags
 					, textures
 					, gamma
@@ -676,23 +712,34 @@ namespace castor3d
 						FI;
 					}
 
-					ambient *= occlusion;
-					auto colour = writer.declLocale( "colour"
-						, indirect.computeDiffuse( flags.sceneFlags
-							, surface
-							, lightDiffuse
-							, albedo
-							, ambient
-							, occlusion ) );
-					colour += emissive;
-					colour += reflected + refracted;
-					colour += indirect.computeSpecular( flags.sceneFlags
+					auto specular = writer.declLocale( "specular"
+						, mix( vec3( 0.04_f ), albedo, vec3( metalness ) ) );
+					auto indirectOcclusion = writer.declLocale( "indirectOcclusion"
+						, 1.0_f );
+					auto lightIndirectDiffuse = indirect.computeDiffuse( flags.sceneFlags
+						, surface
+						, indirectOcclusion );
+					auto lightIndirectSpecular = indirect.computeSpecular( flags.sceneFlags
 						, worldEye
 						, surface
 						, roughness
-						, mix( vec3( 0.04_f ), albedo, vec3( metalness ) )
-						, lightSpecular
-						, occlusion );
+						, indirectOcclusion );
+					auto V = writer.declLocale( "V"
+						, normalize( c3d_sceneData.getPosToCamera( surface.worldPosition ) ) );
+					auto NdotV = writer.declLocale( "NdotV"
+						, max( 0.0_f, dot( surface.worldNormal, V ) ) );
+					lightIndirectSpecular *= utils.fresnelSchlick( NdotV, specular, roughness );
+
+					auto colour = writer.declLocale( "colour"
+						, shader::MetallicBrdfLightingModel::combine( lightDiffuse
+							, lightIndirectDiffuse
+							, lightSpecular
+							, lightIndirectSpecular
+							, occlusion
+							, emissive
+							, reflected + refracted
+							, albedo
+							, ambient ) );
 				}
 				else
 				{
@@ -769,6 +816,10 @@ namespace castor3d
 		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
 			, index++
 			, RenderPipeline::eAdditional );
+		auto c3d_mapOcclusion = writer.declSampledImage< FImg2DR32 >( "c3d_mapOcclusion"
+			, ( m_ssao ? index++ : 0u )
+			, RenderPipeline::eAdditional
+			, m_ssao != nullptr );
 		auto c3d_mapEnvironment( writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment"
 			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? index++ : 0u
@@ -844,6 +895,12 @@ namespace castor3d
 					, inSurface.tangentSpaceViewPosition );
 				auto tangentSpaceFragPosition = writer.declLocale( "tangentSpaceFragPosition"
 					, inSurface.tangentSpaceFragPosition );
+
+				if ( m_ssao )
+				{
+					occlusion *= c3d_mapOcclusion.fetch( ivec2( in.fragCoord.xy() ), 0_i );
+				}
+
 				lighting->computeMapContributions( flags.passFlags
 					, textures
 					, gamma
@@ -1008,23 +1065,34 @@ namespace castor3d
 						FI;
 					}
 
-					ambient *= occlusion;
-					auto colour = writer.declLocale( "colour"
-						, indirect.computeDiffuse( flags.sceneFlags
-							, surface
-							, lightDiffuse
-							, albedo
-							, ambient
-							, occlusion ) );
-					colour += emissive;
-					colour += reflected + refracted;
-					colour += indirect.computeSpecular( flags.sceneFlags
+					auto roughness = writer.declLocale( "roughness"
+						, 1.0_f - glossiness );
+					auto indirectOcclusion = writer.declLocale( "indirectOcclusion"
+						, 1.0_f );
+					auto lightIndirectDiffuse = indirect.computeDiffuse( flags.sceneFlags
+						, surface
+						, indirectOcclusion );
+					auto lightIndirectSpecular = indirect.computeSpecular( flags.sceneFlags
 						, worldEye
 						, surface
-						, ( 1.0_f - glossiness )
-						, specular
-						, lightSpecular
-						, occlusion );
+						, roughness
+						, indirectOcclusion );
+					auto V = writer.declLocale( "V"
+						, normalize( c3d_sceneData.getPosToCamera( surface.worldPosition ) ) );
+					auto NdotV = writer.declLocale( "NdotV"
+						, max( 0.0_f, dot( surface.worldNormal, V ) ) );
+					lightIndirectSpecular *= utils.fresnelSchlick( NdotV, specular, roughness );
+
+					auto colour = writer.declLocale( "colour"
+						, shader::MetallicBrdfLightingModel::combine( lightDiffuse
+							, lightIndirectDiffuse
+							, lightSpecular
+							, lightIndirectSpecular
+							, occlusion
+							, emissive
+							, reflected + refracted
+							, albedo
+							, ambient ) );
 				}
 				else
 				{
