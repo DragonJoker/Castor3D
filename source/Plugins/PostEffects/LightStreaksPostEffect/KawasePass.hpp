@@ -18,7 +18,7 @@ namespace light_streaks
 	{
 	public:
 		KawasePass( crg::FrameGraph & graph
-			, std::vector< crg::FramePass const * > const & previousPasses
+			, crg::FramePass const & previousPass
 			, castor3d::RenderDevice const & device
 			, crg::ImageViewIdArray const & hiViews
 			, crg::ImageViewIdArray const & kawaseViews
@@ -27,9 +27,9 @@ namespace light_streaks
 			, bool const * enabled );
 		void accept( castor3d::PipelineVisitorBase & visitor );
 
-		crg::FramePassArray const & getPasses()const
+		crg::FramePass const & getLastPass()const
 		{
-			return m_passes;
+			return *m_lastPass;
 		}
 
 	public:
@@ -57,7 +57,7 @@ namespace light_streaks
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		crg::FramePassArray m_passes;
+		crg::FramePass const * m_lastPass;
 		std::vector< Subpass > m_subpasses;
 	};
 }
