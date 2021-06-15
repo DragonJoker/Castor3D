@@ -35,7 +35,8 @@ namespace light_streaks
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph
 				, crg::VkPipelineShaderStageCreateInfoArray program
-				, VkExtent2D const & renderSize )
+				, VkExtent2D const & renderSize
+				, bool const * enabled )
 				: crg::RenderQuad{ pass
 					, context
 					, graph
@@ -43,7 +44,10 @@ namespace light_streaks
 					, crg::rq::Config{ { std::vector< crg::VkPipelineShaderStageCreateInfoArray >{ std::move( program ) } }
 						, crg::rq::Texcoord{}
 						, renderSize
-						, VkOffset2D{} } }
+						, std::nullopt
+						, std::nullopt
+						, std::nullopt
+						, enabled } }
 				, m_viewDesc{ pass.images.back().view() }
 				, m_imageDesc{ m_viewDesc.data->image }
 				, m_image{ graph.createImage( m_imageDesc ) }
@@ -72,7 +76,7 @@ namespace light_streaks
 				crg::RenderQuad::doRecordInto( commandBuffer, index );
 				auto const imageViewType = VkImageViewType( m_imageDesc.data->info.imageType );
 				auto const aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-				auto transition = doGetTransition( index, m_viewDesc );
+				auto transition = getTransition( index, m_viewDesc );
 
 				VkImageCopy imageCopy{};
 
@@ -207,7 +211,8 @@ namespace light_streaks
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewId const & sceneView
 		, crg::ImageViewIdArray const & resultViews
-		, VkExtent2D size )
+		, VkExtent2D size
+		, bool const * enabled )
 		: m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "LightStreaksHiPass", getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "LightStreaksHiPass", getPixelProgram() }
 		, m_stages{ makeShaderState( device, m_vertexShader )
@@ -215,7 +220,7 @@ namespace light_streaks
 	{
 		auto previous = &previousPass;
 		auto & hiPass = graph.createPass( "LightStreaksHiPass"
-			, [this, size]( crg::FramePass const & pass
+			, [this, size, enabled]( crg::FramePass const & pass
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
 			{
@@ -223,7 +228,8 @@ namespace light_streaks
 					, context
 					, graph
 					, ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages )
-					, size );
+					, size
+					, enabled );
 			} );
 		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
 			, VK_FILTER_LINEAR
@@ -243,14 +249,18 @@ namespace light_streaks
 		for ( uint32_t i = 1u; i < resultViews.size(); ++i )
 		{
 			auto & pass = graph.createPass( "LightStreaksCopy" + std::to_string( i )
-				, [size]( crg::FramePass const & pass
+				, [size, enabled]( crg::FramePass const & pass
 					, crg::GraphContext const & context
 					, crg::RunnableGraph & graph )
 				{
 					return std::make_unique< crg::ImageCopy >( pass
 						, context
 						, graph
-						, VkExtent3D{ size.width, size.height, 1u } );
+						, VkExtent3D{ size.width, size.height, 1u }
+						, 1u
+						, false
+						, nullptr
+						, enabled );
 				} );
 			pass.addDependency( *previous );
 			pass.addTransferInputView( resultViews[0u]

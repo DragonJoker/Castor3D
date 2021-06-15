@@ -97,9 +97,10 @@ namespace light_streaks
 		, VkExtent2D dimensions
 		, ashes::PipelineShaderStageCreateInfoArray const & stages
 		, KawaseUbo const & kawaseUbo
-		, uint32_t index )
+		, uint32_t index
+		, bool const * enabled )
 		: pass{ graph.createPass( "LightStreaksKawasePass" + std::to_string( index )
-			, [this, &stages, dimensions, index, &srcView]( crg::FramePass const & pass
+			, [this, &stages, &srcView, dimensions, index, enabled]( crg::FramePass const & pass
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
 			{
@@ -107,6 +108,7 @@ namespace light_streaks
 					.renderPosition( {} )
 					.renderSize( dimensions )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) )
+					.enabled( enabled )
 					.build( pass, context, graph );
 			} ) }
 	{
@@ -134,7 +136,8 @@ namespace light_streaks
 		, crg::ImageViewIdArray const & dstImages
 		, VkExtent2D dimensions
 		, ashes::PipelineShaderStageCreateInfoArray const & stages
-		, KawaseUbo const & kawaseUbo )
+		, KawaseUbo const & kawaseUbo
+		, bool const * enabled )
 	{
 		std::vector< KawasePass::Subpass > result;
 		assert( srcImages.size() == dstImages.size() + 1u
@@ -153,7 +156,8 @@ namespace light_streaks
 				, dimensions
 				, stages
 				, kawaseUbo
-				, index );
+				, index
+				, enabled );
 			++index;
 			source = &srcImages[i + 1u];
 
@@ -168,7 +172,8 @@ namespace light_streaks
 					, dimensions
 					, stages
 					, kawaseUbo
-					, index );
+					, index
+					, enabled );
 				previousPasses[i] = &result.back().pass;
 				++index;
 			}
@@ -185,7 +190,8 @@ namespace light_streaks
 		, crg::ImageViewIdArray const & hiViews
 		, crg::ImageViewIdArray const & kawaseViews
 		, KawaseUbo & kawaseUbo
-		, VkExtent2D dimensions )
+		, VkExtent2D dimensions
+		, bool const * enabled )
 		: m_device{ device }
 		, m_kawaseUbo{ kawaseUbo }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "LightStreaksKawasePass", getVertexProgram() }
@@ -200,7 +206,8 @@ namespace light_streaks
 			, kawaseViews
 			, dimensions
 			, m_stages
-			, m_kawaseUbo ) }
+			, m_kawaseUbo
+			, enabled ) }
 	{
 	}
 
