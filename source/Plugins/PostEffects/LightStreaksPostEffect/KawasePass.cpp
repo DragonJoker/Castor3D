@@ -130,7 +130,7 @@ namespace light_streaks
 	}
 
 	std::vector< KawasePass::Subpass > doCreateSubpasses( crg::FrameGraph & graph
-		, crg::FramePassArray & previousPasses
+		, crg::FramePass const *& previousPass
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewIdArray const & srcImages
 		, crg::ImageViewIdArray const & dstImages
@@ -149,7 +149,7 @@ namespace light_streaks
 			auto * source = &srcImages[0u];
 			auto * destination = &dstImages[i];
 			result.emplace_back( graph
-				, *previousPasses[0]
+				, *previousPass
 				, device
 				, *source
 				, *destination
@@ -158,14 +158,15 @@ namespace light_streaks
 				, kawaseUbo
 				, index
 				, enabled );
+			previousPass = &result.back().pass;
 			++index;
-			source = &srcImages[i + 1u];
+			source = &srcImages[1u];
 
 			for ( auto j = 1u; j < 3u; ++j )
 			{
 				std::swap( source, destination );
 				result.emplace_back( graph
-					, *previousPasses[i]
+					, *previousPass
 					, device
 					, *source
 					, *destination
@@ -174,7 +175,7 @@ namespace light_streaks
 					, kawaseUbo
 					, index
 					, enabled );
-				previousPasses[i] = &result.back().pass;
+				previousPass = &result.back().pass;
 				++index;
 			}
 		}
@@ -185,7 +186,7 @@ namespace light_streaks
 	//*********************************************************************************************
 
 	KawasePass::KawasePass( crg::FrameGraph & graph
-		, std::vector< crg::FramePass const * > const & previousPasses
+		, crg::FramePass const & previousPass
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewIdArray const & hiViews
 		, crg::ImageViewIdArray const & kawaseViews
@@ -198,9 +199,9 @@ namespace light_streaks
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "LightStreaksKawasePass", getPixelProgram() }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
-		, m_passes{ previousPasses }
+		, m_lastPass{ &previousPass }
 		, m_subpasses{ doCreateSubpasses( graph
-			, m_passes
+			, m_lastPass
 			, m_device
 			, hiViews
 			, kawaseViews

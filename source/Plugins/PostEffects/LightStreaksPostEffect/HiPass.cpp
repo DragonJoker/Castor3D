@@ -217,6 +217,7 @@ namespace light_streaks
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "LightStreaksHiPass", getPixelProgram() }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
+		, m_lastPass{ &previousPass }
 	{
 		auto previous = &previousPass;
 		auto & hiPass = graph.createPass( "LightStreaksHiPass"
@@ -237,14 +238,13 @@ namespace light_streaks
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE };
-		hiPass.addDependency( *previous );
+		hiPass.addDependency( *m_lastPass );
 		hiPass.addSampledView( sceneView
 			, 0u
 			, VK_IMAGE_LAYOUT_UNDEFINED
 			, linearSampler );
 		hiPass.addOutputColourView( resultViews[0] );
-		previous = &hiPass;
-		m_passes.push_back( previous );
+		m_lastPass = &hiPass;
 
 		for ( uint32_t i = 1u; i < resultViews.size(); ++i )
 		{
@@ -262,12 +262,12 @@ namespace light_streaks
 						, nullptr
 						, enabled );
 				} );
-			pass.addDependency( *previous );
-			pass.addTransferInputView( resultViews[0u]
+			pass.addDependency( *m_lastPass );
+			pass.addTransferInputView( resultViews[i - 1u]
 				, VK_IMAGE_LAYOUT_UNDEFINED );
 			pass.addTransferOutputView( resultViews[i]
 				, VK_IMAGE_LAYOUT_UNDEFINED );
-			m_passes.push_back( &pass );
+			m_lastPass = &pass;
 		}
 	}
 

@@ -158,7 +158,7 @@ namespace light_streaks
 			, size
 			, &isEnabled() );
 		m_kawasePass = std::make_unique< KawasePass >( graph
-			, m_hiPass->getPasses()
+			, m_hiPass->getLastPass()
 			, device
 			, m_hiImage.subViewsId
 			, m_kawaseImage.subViewsId
@@ -166,7 +166,7 @@ namespace light_streaks
 			, size
 			, &isEnabled() );
 		m_combinePass = std::make_unique< CombinePass >( graph
-			, m_kawasePass->getPasses()
+			, m_kawasePass->getLastPass()
 			, device
 			, *m_target
 			, m_kawaseImage.subViewsId

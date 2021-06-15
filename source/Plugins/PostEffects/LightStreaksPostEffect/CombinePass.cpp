@@ -78,7 +78,7 @@ namespace light_streaks
 	String const CombinePass::CombineMapKawase = cuT( "c3d_mapKawase" );
 
 	CombinePass::CombinePass( crg::FrameGraph & graph
-		, crg::FramePassArray const & previousPasses
+		, crg::FramePass const & previousPass
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewId const & sceneView
 		, crg::ImageViewIdArray const & kawaseViews
@@ -96,7 +96,8 @@ namespace light_streaks
 			, VkExtent3D{ size.width, size.height, 1u }
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } ) }
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
+				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) } ) }
 		, m_resultView{ graph.createView( crg::ImageViewData{ "LSComb"
 			, m_resultImg
 			, 0u
@@ -104,7 +105,7 @@ namespace light_streaks
 			, m_resultImg.data->info.format
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
 		, m_pass{ graph.createPass( "LightStreaksCombinePass"
-			, [this, &sceneView, size]( crg::FramePass const & pass
+			, [this, &sceneView, size, enabled]( crg::FramePass const & pass
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
 			{
@@ -112,6 +113,7 @@ namespace light_streaks
 					.renderPosition( {} )
 					.renderSize( size )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
+					.enabled( enabled )
 					.recordDisabledInto( [this, &context, &graph, &sceneView, size]( crg::RunnablePass const & runnable
 						, VkCommandBuffer commandBuffer
 						, uint32_t index )
@@ -166,7 +168,7 @@ namespace light_streaks
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE };
-		m_pass.addDependencies( previousPasses );
+		m_pass.addDependency( previousPass );
 		m_pass.addSampledView( sceneView
 			, SceneMapIdx
 			, {}
