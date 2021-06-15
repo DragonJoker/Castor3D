@@ -864,6 +864,7 @@ namespace castor3d
 					, name
 					, SceneRenderPassDesc{ { m_size.getWidth(), m_size.getHeight(), 1u }, m_matrixUbo, m_renderTarget.getCuller(), isOit }
 					, RenderTechniquePassDesc{ false, m_ssaoConfig }
+						.ssao( m_ssao->getResult() )
 						.lpvConfigUbo( m_lpvConfigUbo )
 						.lpvConfigUbo( m_lpvConfigUbo )
 						.llpvConfigUbo( m_llpvConfigUbo )

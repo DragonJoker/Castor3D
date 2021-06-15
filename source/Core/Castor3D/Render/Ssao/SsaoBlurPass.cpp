@@ -375,11 +375,13 @@ namespace castor3d
 		}
 
 		crg::rq::Config getConfig( VkExtent2D const & renderSize
+			, SsaoConfig const & ssaoConfig
 			, ashes::PipelineShaderStageCreateInfoArray const & stages0
 			, ashes::PipelineShaderStageCreateInfoArray const & stages1 )
 		{
 			crg::rq::Config result;
 			result.renderSize = renderSize;
+			result.enabled = &ssaoConfig.enabled;
 			result.baseConfig.programs = { crg::makeVkArray< VkPipelineShaderStageCreateInfo >( stages0 )
 				, crg::makeVkArray< VkPipelineShaderStageCreateInfo >( stages1 ) };
 			return result;
@@ -395,11 +397,11 @@ namespace castor3d
 		, crg::rq::Config config
 		, SsaoConfig const & ssaoConfig )
 		: crg::RenderQuad{ pass
-		, context
-		, graph
-		, 2u
-		, std::move( config ) }
-		, ssaoConfig{ ssaoConfig }
+			, context
+			, graph
+			, 2u
+			, std::move( config ) }
+			, ssaoConfig{ ssaoConfig }
 	{
 	}
 
@@ -453,7 +455,7 @@ namespace castor3d
 		auto & configuration = m_configurationUbo.getData();
 		configuration.axis = axis;
 		auto & pass = graph.createPass( "SsaoBlur" + prefix
-			, [this]( crg::FramePass const & pass
+			, [this, config]( crg::FramePass const & pass
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
 			{
@@ -461,6 +463,7 @@ namespace castor3d
 					, context
 					, graph
 					, getConfig( m_size
+						, config
 						, m_programs[0].stages
 						, m_programs[1].stages )
 					, m_config );
