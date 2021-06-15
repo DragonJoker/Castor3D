@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Render/Ssao/SsaoModule.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
@@ -51,6 +52,7 @@ namespace castor3d
 			, crg::FramePass const & previousPass
 			, RenderDevice const & device
 			, castor::String const & prefix
+			, SsaoConfig const & ssaoConfig
 			, VkExtent2D const & size
 			, crg::ImageViewId const & depthBuffer );
 		/**
@@ -103,6 +105,7 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		Engine & m_engine;
+		SsaoConfig const & m_ssaoConfig;
 		crg::ImageViewId m_srcDepthBuffer;
 		castor::String m_prefix;
 		VkExtent2D m_size;

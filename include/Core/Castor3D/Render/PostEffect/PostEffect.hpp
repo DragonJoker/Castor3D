@@ -138,6 +138,20 @@ namespace castor3d
 		/**
 		*\~english
 		*name
+		*	Mutators.
+		*\~french
+		*name
+		*	Mutateurs.
+		**/
+		/**@{*/
+		void enable( bool value )
+		{
+			m_enabled = value;
+		}
+		/**@}*/
+		/**
+		*\~english
+		*name
 		*	Getters.
 		*\~french
 		*name
@@ -160,6 +174,11 @@ namespace castor3d
 		castor::String const & getFullName()const
 		{
 			return m_fullName;
+		}
+
+		bool const & isEnabled()const
+		{
+			return m_enabled;
 		}
 		/**@}*/
 
@@ -215,6 +234,7 @@ namespace castor3d
 		Kind m_kind{ Kind::eHDR };
 		crg::ImageViewId const * m_target{ nullptr };
 		crg::ImageViewId const * m_result{ nullptr };
+		bool m_enabled;
 	};
 }
 
