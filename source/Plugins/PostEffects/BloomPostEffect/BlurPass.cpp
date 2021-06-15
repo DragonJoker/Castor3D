@@ -170,9 +170,10 @@ namespace Bloom
 		, ashes::PipelineShaderStageCreateInfoArray const & stages
 		, castor3d::UniformBufferOffsetT< castor3d::GaussianBlur::Configuration > const & blurUbo
 		, uint32_t index
-		, bool isVertical )
+		, bool isVertical
+		, bool const * enabled )
 		: pass{ graph.createPass( "BloomBlurPass" + std::to_string( index ) + ( isVertical ? "Y" : "X" )
-			, [this, &stages, dimensions, index]( crg::FramePass const & pass
+			, [this, &stages, dimensions, index, enabled]( crg::FramePass const & pass
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
 			{
@@ -181,6 +182,7 @@ namespace Bloom
 					.renderSize( { dimensions.width >> ( index + 1 )
 						, dimensions.height >> ( index + 1 ) } )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) )
+					.enabled( enabled )
 					.build( pass, context, graph );
 			} ) }
 	{
@@ -210,7 +212,8 @@ namespace Bloom
 		, ashes::PipelineShaderStageCreateInfoArray const & stages
 		, UboOffsetArray const & blurUbo
 		, uint32_t blurPassesCount
-		, bool isVertical )
+		, bool isVertical
+		, bool const * enabled )
 	{
 		std::vector< BlurPass::Subpass > result;
 		assert( srcImages.size() == dstImages.size()
@@ -227,7 +230,8 @@ namespace Bloom
 				, stages
 				, blurUbo[i]
 				, i
-				, isVertical );
+				, isVertical
+				, enabled );
 			previousPasses[i] = &result.back().pass;
 		}
 
@@ -244,7 +248,8 @@ namespace Bloom
 		, VkExtent2D dimensions
 		, uint32_t blurKernelSize
 		, uint32_t blurPassesCount
-		, bool isVertical )
+		, bool isVertical
+		, bool const * enabled )
 		: m_device{ device }
 		, m_blurKernelSize{ blurKernelSize }
 		, m_blurPassesCount{ blurPassesCount }
@@ -263,7 +268,8 @@ namespace Bloom
 			, m_stages
 			, m_blurUbo
 			, m_blurPassesCount
-			, isVertical ) }
+			, isVertical
+			, enabled ) }
 		, m_isVertical{ isVertical }
 	{
 	}
@@ -276,7 +282,8 @@ namespace Bloom
 		, VkExtent2D dimensions
 		, uint32_t blurKernelSize
 		, uint32_t blurPassesCount
-		, bool isVertical )
+		, bool isVertical
+		, bool const * enabled )
 		: BlurPass{ graph
 			, { blurPassesCount, &previousPass }
 			, device
@@ -285,7 +292,8 @@ namespace Bloom
 			, dimensions
 			, blurKernelSize
 			, blurPassesCount
-			, isVertical }
+			, isVertical
+			, enabled }
 	{
 	}
 

@@ -34,15 +34,19 @@ namespace Bloom
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph
 				, crg::VkPipelineShaderStageCreateInfoArray program
-				, VkExtent2D const & renderSize )
+				, VkExtent2D const & renderSize
+				, bool const * enabled )
 				: crg::RenderQuad{ pass
 					, context
 					, graph
 					, 1u
-				, crg::rq::Config{ { std::vector< crg::VkPipelineShaderStageCreateInfoArray >{ std::move( program ) } }
-						, crg::rq::Texcoord{}
-						, renderSize
-						, VkOffset2D{} } }
+					, crg::rq::Config{ { std::vector< crg::VkPipelineShaderStageCreateInfoArray >{ std::move( program ) } }
+							, crg::rq::Texcoord{}
+							, renderSize
+							, std::nullopt
+							, std::nullopt
+							, std::nullopt
+							, enabled } }
 #if !Bloom_DebugHiPass
 				, m_viewDesc{ pass.images.back().view() }
 				, m_imageDesc{ m_viewDesc.data->image }
@@ -83,7 +87,7 @@ namespace Bloom
 				auto const depth = int32_t( m_imageDesc.data->info.extent.depth );
 				auto const imageViewType = VkImageViewType( m_imageDesc.data->info.imageType );
 				auto const aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-				auto transition = doGetTransition( index, m_viewDesc );
+				auto transition = getTransition( index, m_viewDesc );
 
 				// Transition source view to transfer src layout
 				m_graph.memoryBarrier( commandBuffer
@@ -248,7 +252,8 @@ namespace Bloom
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewId const & sceneView
 		, VkExtent2D size
-		, uint32_t blurPassesCount )
+		, uint32_t blurPassesCount
+		, bool const * enabled )
 		: m_sceneView{ sceneView }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "BloomHiPass", getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "BloomHiPass", getPixelProgram() }
@@ -276,7 +281,7 @@ namespace Bloom
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } ) }
 #endif
 		, m_pass{ graph.createPass( "BloomHiPass"
-			, [this, size]( crg::FramePass const & pass
+			, [this, size, enabled]( crg::FramePass const & pass
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
 			{
@@ -284,7 +289,8 @@ namespace Bloom
 					, context
 					, graph
 					, ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages )
-					, VkExtent2D{ m_resultImg.data->info.extent.width, m_resultImg.data->info.extent.height } );
+					, VkExtent2D{ m_resultImg.data->info.extent.width, m_resultImg.data->info.extent.height }
+					, enabled );
 			} ) }
 	{
 		for ( uint32_t i = 0u; i < blurPassesCount; ++i )
