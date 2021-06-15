@@ -14,6 +14,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
+#include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Shader/GlslToSpv.hpp"
 #include "Castor3D/Shader/Program.hpp"
@@ -223,10 +224,12 @@ namespace castor3d
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
 		, String const & prefix
+		, SsaoConfig const & ssaoConfig
 		, VkExtent2D const & size
 		, crg::ImageViewId const & depthBuffer )
 		: m_device{ device }
 		, m_engine{ *m_device.renderSystem.getEngine() }
+		, m_ssaoConfig{ ssaoConfig }
 		, m_srcDepthBuffer{ graph.createView( doCreateDepthView( depthBuffer ) ) }
 		, m_prefix{ prefix }
 		, m_size{ size }
@@ -308,7 +311,8 @@ namespace castor3d
 				return crg::RenderQuadBuilder{}
 					.program( crg::makeVkArray< VkPipelineShaderStageCreateInfo >( m_lineariseStages ) )
 					.renderSize( m_size )
-					.build( pass, context, graph );
+					.enabled( &m_ssaoConfig.enabled )
+					.build( pass, context, graph, 1u );
 			} );
 		pass.addDependency( *m_lastPass );
 		pass.addSampledView( m_srcDepthBuffer
@@ -354,7 +358,8 @@ namespace castor3d
 					return crg::RenderQuadBuilder{}
 						.program( crg::makeVkArray< VkPipelineShaderStageCreateInfo >( m_minifyStages ) )
 						.renderSize( size )
-						.build( pass, context, graph );
+						.enabled( &m_ssaoConfig.enabled )
+						.build( pass, context, graph, 1u );
 				} );
 			pass.addDependency( *m_lastPass );
 			pass.addSampledView( source

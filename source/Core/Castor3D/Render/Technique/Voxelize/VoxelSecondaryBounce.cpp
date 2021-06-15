@@ -230,7 +230,7 @@ namespace castor3d
 		auto voxelGridSize = m_vctConfig.gridSize.value();
 		VkDescriptorSet descriptorSet = *m_descriptorSet;
 		auto view = m_pass.images.back().view();
-		auto transition = doGetTransition( index, view );
+		auto transition = getTransition( index, view );
 		auto image = m_graph.createImage( view.data->image );
 
 		// Clear result
