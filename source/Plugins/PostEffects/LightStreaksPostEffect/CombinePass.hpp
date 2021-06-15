@@ -14,7 +14,7 @@ namespace light_streaks
 	{
 	public:
 		CombinePass( crg::FrameGraph & graph
-			, crg::FramePassArray const & previousPasses
+			, crg::FramePass const & previousPass
 			, castor3d::RenderDevice const & device
 			, crg::ImageViewId const & sceneView
 			, crg::ImageViewIdArray const & kawaseViews
