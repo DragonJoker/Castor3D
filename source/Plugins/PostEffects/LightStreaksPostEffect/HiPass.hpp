@@ -20,16 +20,16 @@ namespace light_streaks
 			, bool const * enabled );
 		void accept( castor3d::PipelineVisitorBase & visitor );
 
-		std::vector< crg::FramePass const * > const & getPasses()const
+		crg::FramePass const & getLastPass()const
 		{
-			return m_passes;
+			return *m_lastPass;
 		}
 
 	private:
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		std::vector< crg::FramePass const * > m_passes;
+		crg::FramePass const * m_lastPass;
 	};
 }
 
