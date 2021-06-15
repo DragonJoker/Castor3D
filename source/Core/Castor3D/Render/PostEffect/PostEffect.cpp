@@ -42,6 +42,7 @@ namespace castor3d
 		, m_renderTarget{ renderTarget }
 		, m_passesCount{ passesCount }
 		, m_kind{ kind }
+		, m_enabled{ true }
 	{
 	}
 

@@ -107,7 +107,8 @@ namespace Bloom
 			, device
 			, *m_target
 			, size
-			, m_blurPassesCount );
+			, m_blurPassesCount
+			, &isEnabled() );
 #if !Bloom_DebugHiPass
 		m_blurXPass = std::make_unique< BlurPass >( graph
 			, m_hiPass->getPass()
@@ -117,7 +118,8 @@ namespace Bloom
 			, size
 			, m_blurKernelSize
 			, m_blurPassesCount
-			, false );
+			, false
+			, &isEnabled() );
 		m_blurYPass = std::make_unique< BlurPass >( graph
 			, m_blurXPass->getPasses()
 			, device
@@ -126,14 +128,16 @@ namespace Bloom
 			, size
 			, m_blurKernelSize
 			, m_blurPassesCount
-			, true );
+			, true
+			, &isEnabled() );
 		m_combinePass = std::make_unique< CombinePass >( graph
 			, m_blurYPass->getPasses()
 			, device
 			, *m_target
 			, m_hiPass->getResult()
 			, size
-			, m_blurPassesCount );
+			, m_blurPassesCount
+			, &isEnabled() );
 #endif
 
 #if Bloom_DebugHiPass

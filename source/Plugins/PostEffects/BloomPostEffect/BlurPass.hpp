@@ -23,7 +23,8 @@ namespace Bloom
 			, VkExtent2D dimensions
 			, uint32_t blurKernelSize
 			, uint32_t blurPassesCount
-			, bool isVertical );
+			, bool isVertical
+			, bool const * enabled );
 		BlurPass( crg::FrameGraph & graph
 			, crg::FramePass const & previousPass
 			, castor3d::RenderDevice const & device
@@ -32,7 +33,8 @@ namespace Bloom
 			, VkExtent2D dimensions
 			, uint32_t blurKernelSize
 			, uint32_t blurPassesCount
-			, bool isVertical );
+			, bool isVertical
+			, bool const * enabled );
 		void accept( castor3d::PipelineVisitorBase & visitor );
 
 		crg::FramePassArray const & getPasses()const
@@ -54,7 +56,8 @@ namespace Bloom
 				, ashes::PipelineShaderStageCreateInfoArray const & stages
 				, castor3d::UniformBufferOffsetT< castor3d::GaussianBlur::Configuration > const & blurUbo
 				, uint32_t index
-				, bool isVertical );
+				, bool isVertical
+				, bool const * enabled );
 
 			crg::FramePass & pass;
 		};
