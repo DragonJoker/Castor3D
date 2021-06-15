@@ -89,6 +89,7 @@ namespace castor3d
 		utils.declareRemoveGamma();
 		utils.declareParallaxMappingFunc( flags.passFlags
 			, getTexturesMask() );
+		utils.declareFresnelSchlick();
 
 		// Fragment Intputs
 		shader::InFragmentSurface inSurface{ writer
@@ -300,24 +301,34 @@ namespace castor3d
 						diffuse = vec3( 0.0_f );
 					}
 
-					ambient *= occlusion;
-					auto colour = writer.declLocale( "colour"
-						, indirect.computeDiffuse( flags.sceneFlags
-							, surface
-							, lightDiffuse
-							, diffuse
-							, ambient
-							, occlusion ) );
-					colour += emissive;
-					colour += reflected + refracted;
-					colour += indirect.computeSpecular( flags.sceneFlags
+					auto roughness = writer.declLocale( "roughness"
+						, ( 256.0_f - shininess ) / 256.0_f );
+					auto indirectOcclusion = writer.declLocale( "indirectOcclusion"
+						, 1.0_f );
+					auto lightIndirectDiffuse = indirect.computeDiffuse( flags.sceneFlags
+						, surface
+						, indirectOcclusion );
+					auto lightIndirectSpecular = indirect.computeSpecular( flags.sceneFlags
 						, worldEye
 						, surface
-						, ( 256.0_f - shininess ) / 256.0_f
-						, specular
-						, lightSpecular
-						, occlusion );
-					pxl_fragColor = vec4( colour, opacity );
+						, roughness
+						, indirectOcclusion );
+					auto V = writer.declLocale( "V"
+						, normalize( c3d_sceneData.getPosToCamera( surface.worldPosition ) ) );
+					auto NdotV = writer.declLocale( "NdotV"
+						, max( 0.0_f, dot( surface.worldNormal, V ) ) );
+					lightIndirectSpecular *= utils.fresnelSchlick( NdotV, specular, roughness );
+
+					pxl_fragColor = vec4( shader::PhongLightingModel::combine( lightDiffuse
+							, lightIndirectDiffuse
+							, lightSpecular
+							, lightIndirectSpecular
+							, occlusion
+							, emissive
+							, reflected + refracted
+							, diffuse
+							, ambient )
+						, opacity );
 				}
 				else
 				{
@@ -654,24 +665,34 @@ namespace castor3d
 						FI;
 					}
 
-					ambient *= occlusion;
-					auto colour = writer.declLocale( "colour"
-						, indirect.computeDiffuse( flags.sceneFlags
-							, surface
-							, lightDiffuse
-							, albedo
-							, ambient
-							, occlusion ) );
-					colour += emissive;
-					colour += reflected + refracted;
-					colour += indirect.computeSpecular( flags.sceneFlags
+					auto specular = writer.declLocale( "specular"
+						, mix( vec3( 0.04_f ), albedo, vec3( metalness ) ) );
+					auto indirectOcclusion = writer.declLocale( "indirectOcclusion"
+						, 1.0_f );
+					auto lightIndirectDiffuse = indirect.computeDiffuse( flags.sceneFlags
+						, surface
+						, indirectOcclusion );
+					auto lightIndirectSpecular = indirect.computeSpecular( flags.sceneFlags
 						, worldEye
 						, surface
 						, roughness
-						, mix( vec3( 0.04_f ), albedo, vec3( metalness ) )
-						, lightSpecular
-						, occlusion );
-					pxl_fragColor = vec4( colour, opacity );
+						, indirectOcclusion );
+					auto V = writer.declLocale( "V"
+						, normalize( c3d_sceneData.getPosToCamera( surface.worldPosition ) ) );
+					auto NdotV = writer.declLocale( "NdotV"
+						, max( 0.0_f, dot( surface.worldNormal, V ) ) );
+					lightIndirectSpecular *= utils.fresnelSchlick( NdotV, specular, roughness );
+
+					pxl_fragColor = vec4( shader::MetallicBrdfLightingModel::combine( lightDiffuse
+							, lightIndirectDiffuse
+							, lightSpecular
+							, lightIndirectSpecular
+							, occlusion
+							, emissive
+							, reflected + refracted
+							, albedo
+							, ambient )
+						, opacity );
 				}
 				else
 				{
@@ -1006,24 +1027,34 @@ namespace castor3d
 						FI;
 					}
 
-					ambient *= occlusion;
-					auto colour = writer.declLocale( "colour"
-						, indirect.computeDiffuse( flags.sceneFlags
-							, surface
-							, lightDiffuse
-							, albedo
-							, ambient
-							, occlusion ) );
-					colour += emissive;
-					colour += reflected + refracted;
-					colour += indirect.computeSpecular( flags.sceneFlags
+					auto roughness = writer.declLocale( "roughness"
+						, 1.0_f - glossiness );
+					auto indirectOcclusion = writer.declLocale( "indirectOcclusion"
+						, 1.0_f );
+					auto lightIndirectDiffuse = indirect.computeDiffuse( flags.sceneFlags
+						, surface
+						, indirectOcclusion );
+					auto lightIndirectSpecular = indirect.computeSpecular( flags.sceneFlags
 						, worldEye
 						, surface
-						, ( 1.0_f - glossiness )
-						, specular
-						, lightSpecular
-						, occlusion );
-					pxl_fragColor = vec4( colour, opacity );
+						, roughness
+						, indirectOcclusion );
+					auto V = writer.declLocale( "V"
+						, normalize( c3d_sceneData.getPosToCamera( surface.worldPosition ) ) );
+					auto NdotV = writer.declLocale( "NdotV"
+						, max( 0.0_f, dot( surface.worldNormal, V ) ) );
+					lightIndirectSpecular *= utils.fresnelSchlick( NdotV, specular, roughness );
+
+					pxl_fragColor = vec4( shader::MetallicBrdfLightingModel::combine( lightDiffuse
+							, lightIndirectDiffuse
+							, lightSpecular
+							, lightIndirectSpecular
+							, occlusion
+							, emissive
+							, reflected + refracted
+							, albedo
+							, ambient )
+						, opacity );
 				}
 				else
 				{

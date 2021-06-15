@@ -159,6 +159,23 @@ namespace castor3d
 				, parentOutput );
 		}
 
+		sdw::Vec3 PhongLightingModel::combine( sdw::Vec3 const & directDiffuse
+			, sdw::Vec3 const & indirectDiffuse
+			, sdw::Vec3 const & directSpecular
+			, sdw::Vec3 const & indirectSpecular
+			, sdw::Float const & ambientOcclusion
+			, sdw::Vec3 const & emissive
+			, sdw::Vec3 const & reflRefr
+			, sdw::Vec3 const & materialDiffuse
+			, sdw::Vec3 const & ambient )
+		{
+			return materialDiffuse * ( directDiffuse + ( indirectDiffuse * ambientOcclusion ) )
+				+ ( directSpecular + ( indirectSpecular * ambientOcclusion ) )
+				+ ( ambient + indirectDiffuse ) * ambientOcclusion
+				+ emissive
+				+ reflRefr;
+		}
+
 		Vec3 PhongLightingModel::computeCombinedDiffuse( Vec3 const & worldEye
 			, Float const & shininess
 			, Int const & receivesShadows

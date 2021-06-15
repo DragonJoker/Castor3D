@@ -184,6 +184,23 @@ namespace castor3d
 				, parentOutput );
 		}
 
+		sdw::Vec3 MetallicBrdfLightingModel::combine( sdw::Vec3 const & directDiffuse
+			, sdw::Vec3 const & indirectDiffuse
+			, sdw::Vec3 const & directSpecular
+			, sdw::Vec3 const & indirectSpecular
+			, sdw::Float const & ambientOcclusion
+			, sdw::Vec3 const & emissive
+			, sdw::Vec3 const & reflRefr
+			, sdw::Vec3 const & materialAlbedo
+			, sdw::Vec3 const & ambient )
+		{
+			return materialAlbedo * ( directDiffuse + ( indirectDiffuse * ambientOcclusion ) )
+				+ directSpecular + ( indirectSpecular * ambientOcclusion )
+				+ ( ambient + indirectDiffuse ) * ambientOcclusion
+				+ emissive
+				+ reflRefr;
+		}
+
 		Vec3 MetallicBrdfLightingModel::computeCombinedDiffuse( Vec3 const & worldEye
 			, Vec3 const & albedo
 			, Float const & metallic

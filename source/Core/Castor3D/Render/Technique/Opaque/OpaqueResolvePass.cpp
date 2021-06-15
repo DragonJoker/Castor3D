@@ -19,7 +19,9 @@
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslMetallicBrdfLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMetallicPbrReflection.hpp"
+#include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslSpecularPbrReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
@@ -343,22 +345,17 @@ namespace castor3d
 
 							diffuse = vec3( 0.0_f );
 						}
-						ELSE
-						{
-							diffuse *= lightDiffuse;
-						}
 						FI;
 
-						ambient *= occlusion;
-						ambient *= lightIndirectDiffuse;
-						lightDiffuse += lightIndirectDiffuse * occlusion;
-						lightSpecular += lightIndirectSpecular * occlusion;
-						pxl_fragColor = vec4( diffuse
-								+ reflected
-								+ refracted
-								+ lightSpecular
-								+ emissive
-								+ ambient
+						pxl_fragColor = vec4( shader::PhongLightingModel::combine( lightDiffuse
+								, lightIndirectDiffuse
+								, lightSpecular
+								, lightIndirectSpecular
+								, occlusion
+								, emissive
+								, reflected + refracted
+								, diffuse
+								, ambient )
 							, 1.0_f );
 					}
 					ELSE
@@ -681,15 +678,15 @@ namespace castor3d
 						}
 						FI;
 
-						ambient *= occlusion;
-						ambient *= lightIndirectDiffuse;
-						lightDiffuse += lightIndirectDiffuse * occlusion;
-						lightSpecular += lightIndirectSpecular * occlusion;
-						pxl_fragColor = vec4( lightDiffuse * albedo
-								+ lightSpecular
-								+ emissive
-								+ ambient
-								+ reflected + refracted
+						pxl_fragColor = vec4( shader::MetallicBrdfLightingModel::combine( lightDiffuse
+								, lightIndirectDiffuse
+								, lightSpecular
+								, lightIndirectSpecular
+								, occlusion
+								, emissive
+								, reflected + refracted
+								, albedo
+								, ambient )
 							, 1.0_f );
 					}
 					ELSE
@@ -1011,15 +1008,15 @@ namespace castor3d
 						}
 						FI;
 
-						ambient *= occlusion;
-						ambient *= lightIndirectDiffuse;
-						lightDiffuse += lightIndirectDiffuse * occlusion;
-						lightSpecular += lightIndirectSpecular * occlusion;
-						pxl_fragColor = vec4( lightDiffuse * diffuse
-								+ lightSpecular
-								+ emissive
-								+ ambient
-								+ reflected + refracted
+						pxl_fragColor = vec4( shader::MetallicBrdfLightingModel::combine( lightDiffuse
+								, lightIndirectDiffuse
+								, lightSpecular
+								, lightIndirectSpecular
+								, occlusion
+								, emissive
+								, reflected + refracted
+								, diffuse
+								, ambient )
 							, 1.0_f );
 					}
 					ELSE
