@@ -3,7 +3,6 @@
 #include "SmaaPostEffect/SmaaUbo.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Render/RenderPassTimer.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Shader/Program.hpp>
@@ -117,7 +116,7 @@ namespace smaa
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_pass{ m_graph.createPass( "SmaaEdge"
-			, [this, &renderTarget]( crg::FramePass const & pass
+			, [this, &device, &renderTarget]( crg::FramePass const & pass
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
 			{
@@ -126,13 +125,16 @@ namespace smaa
 				dsState->front.passOp = VK_STENCIL_OP_REPLACE;
 				dsState->front.reference = 1u;
 				dsState->back = dsState->front;
-				return crg::RenderQuadBuilder{}
+				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( castor3d::makeExtent2D( renderTarget.getSize() ) )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.depthStencilState( dsState )
 					.build( pass, context, graph );
+				device.renderSystem.getEngine()->registerTimer( "SMAA"
+					, result->getTimer() );
+				return result;
 			} ) }
 	{
 		m_pass.addDependency( previousPass );

@@ -173,17 +173,20 @@ namespace Bloom
 		, bool isVertical
 		, bool const * enabled )
 		: pass{ graph.createPass( "BloomBlurPass" + std::to_string( index ) + ( isVertical ? "Y" : "X" )
-			, [this, &stages, dimensions, index, enabled]( crg::FramePass const & pass
+			, [this, &device, &stages, dimensions, index, enabled]( crg::FramePass const & pass
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
 			{
-				return crg::RenderQuadBuilder{}
+				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( { dimensions.width >> ( index + 1 )
 						, dimensions.height >> ( index + 1 ) } )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) )
 					.enabled( enabled )
 					.build( pass, context, graph );
+				device.renderSystem.getEngine()->registerTimer( "Bloom"
+					, result->getTimer() );
+				return result;
 			} ) }
 	{
 		pass.addDependency( previousPass );

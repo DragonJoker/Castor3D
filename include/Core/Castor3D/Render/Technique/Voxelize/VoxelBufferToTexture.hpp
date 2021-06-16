@@ -63,7 +63,6 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		VoxelSceneData const & m_vctConfig;
-		RenderPassTimerSPtr m_timer;
 		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
 		std::array< Pipeline, 4u > m_pipelines;

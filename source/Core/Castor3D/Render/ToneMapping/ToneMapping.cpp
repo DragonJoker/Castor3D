@@ -92,6 +92,9 @@ namespace castor3d
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_program ) )
 					.build( pass, context, graph );
+				getEngine()->registerTimer( "ToneMapping"
+					, result->getTimer() );
+				return result;
 				m_quad = result.get();
 				return result;
 			} );

@@ -5,7 +5,6 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Material/Texture/Sampler.hpp>
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
-#include <Castor3D/Render/RenderPassTimer.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Shader/Program.hpp>
@@ -263,18 +262,21 @@ namespace smaa
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_pass{ m_graph.createPass( "SmaaNeighbourhood"
-			, [this, &config]( crg::FramePass const & pass
+			, [this, &device, &config]( crg::FramePass const & pass
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
 			{
 				auto size = m_sourceView.data->image.data->info.extent;
-				return crg::RenderQuadBuilder{}
+				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( { size.width, size.height } )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.passIndex( &config.subsampleIndex )
 					.build( pass, context, graph, config.maxSubsampleIndices );
+				device.renderSystem.getEngine()->registerTimer( "SMAA"
+					, result->getTimer() );
+				return result;
 			} ) }
 	{
 		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR

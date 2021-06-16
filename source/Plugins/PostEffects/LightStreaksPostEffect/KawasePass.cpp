@@ -100,16 +100,19 @@ namespace light_streaks
 		, uint32_t index
 		, bool const * enabled )
 		: pass{ graph.createPass( "LightStreaksKawasePass" + std::to_string( index )
-			, [this, &stages, &srcView, dimensions, index, enabled]( crg::FramePass const & pass
+			, [this, &device, &stages, &srcView, dimensions, index, enabled]( crg::FramePass const & pass
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
 			{
-				return crg::RenderQuadBuilder{}
+				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( dimensions )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) )
 					.enabled( enabled )
 					.build( pass, context, graph );
+				device.renderSystem.getEngine()->registerTimer( "LightStreaks"
+					, result->getTimer() );
+				return result;
 			} ) }
 	{
 		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
