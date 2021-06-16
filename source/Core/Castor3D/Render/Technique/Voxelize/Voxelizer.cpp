@@ -151,12 +151,12 @@ namespace castor3d
 	void Voxelizer::listIntermediates( RenderTechniqueVisitor & visitor )
 	{
 		visitor.visit( "Voxelisation Result"
-			, m_firstBounce.wholeViewId
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, m_firstBounce
+			, m_graph.getFinalLayout( m_firstBounce.wholeViewId ).layout
 			, TextureFactors::tex3D( &m_grid ) );
 		visitor.visit( "Voxelisation SecondaryBounce"
-			, m_secondaryBounce.wholeViewId
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, m_secondaryBounce
+			, m_graph.getFinalLayout( m_secondaryBounce.wholeViewId ).layout
 			, TextureFactors::tex3D( &m_grid ) );
 	}
 

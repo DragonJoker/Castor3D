@@ -228,25 +228,26 @@ namespace castor3d
 		, VkExtent2D const & size
 		, crg::ImageViewId const & depthBuffer )
 		: m_device{ device }
+		, m_graph{ graph }
 		, m_engine{ *m_device.renderSystem.getEngine() }
 		, m_ssaoConfig{ ssaoConfig }
-		, m_srcDepthBuffer{ graph.createView( doCreateDepthView( depthBuffer ) ) }
+		, m_srcDepthBuffer{ m_graph.createView( doCreateDepthView( depthBuffer ) ) }
 		, m_prefix{ prefix }
 		, m_size{ size }
-		, m_result{ doCreateTexture( m_device, graph.getHandler(), m_size ) }
+		, m_result{ doCreateTexture( m_device, m_graph.getHandler(), m_size ) }
 		, m_clipInfo{ m_device.uboPools->getBuffer< Point3f >( 0u ) }
 		, m_lastPass{ &previousPass }
 		, m_lineariseVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + "LineariseDepth", getVertexProgram() }
 		, m_linearisePixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + "LineariseDepth", getLinearisePixelProgram() }
 		, m_lineariseStages{ makeShaderState( m_device, m_lineariseVertexShader )
 			, makeShaderState( m_device, m_linearisePixelShader ) }
-		, m_linearisePass{ doInitialiseLinearisePass( graph ) }
+		, m_linearisePass{ doInitialiseLinearisePass() }
 		, m_minifyVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + "MinifyDepth", getVertexProgram() }
 		, m_minifyPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + "MinifyDepth", getMinifyPixelProgram() }
 		, m_minifyStages{ makeShaderState( m_device, m_minifyVertexShader )
 			, makeShaderState( m_device, m_minifyPixelShader ) }
 	{
-		doInitialiseMinifyPass( graph );
+		doInitialiseMinifyPass();
 	}
 
 	LineariseDepthPass::~LineariseDepthPass()
@@ -290,7 +291,9 @@ namespace castor3d
 		{
 			visitor.visit( "Linearised Depth " + string::toString( index++ )
 				, layer
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, getResult().image
+				, m_graph.getHandler().createImageView( m_device.makeContext(), layer )
+				, m_graph.getFinalLayout( layer ).layout
 				, TextureFactors{}.invert( true ) );
 		}
 
@@ -301,9 +304,9 @@ namespace castor3d
 		visitor.visit( m_minifyPixelShader );
 	}
 
-	crg::FramePass const & LineariseDepthPass::doInitialiseLinearisePass( crg::FrameGraph & graph )
+	crg::FramePass const & LineariseDepthPass::doInitialiseLinearisePass()
 	{
-		auto & pass = graph.createPass( "LineariseDepth"
+		auto & pass = m_graph.createPass( "LineariseDepth"
 			, [this]( crg::FramePass const & pass
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
@@ -325,7 +328,7 @@ namespace castor3d
 		return pass;
 	}
 
-	void LineariseDepthPass::doInitialiseMinifyPass( crg::FrameGraph & graph )
+	void LineariseDepthPass::doInitialiseMinifyPass()
 	{
 		uint32_t index = 0u;
 		auto size = m_size;
@@ -338,19 +341,19 @@ namespace castor3d
 			data = Point2i{ size.width, size.height };
 			size.width >>= 1;
 			size.height >>= 1;
-			auto source = graph.createView( crg::ImageViewData{ m_result.imageId.data->name + std::to_string( index )
+			auto source = m_graph.createView( crg::ImageViewData{ m_result.imageId.data->name + std::to_string( index )
 				, m_result.imageId
 				, 0u
 				, VK_IMAGE_VIEW_TYPE_2D
 				, m_result.getFormat()
 				, VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, index, 1u, 0u, 1u } } );
-			auto destination = graph.createView( crg::ImageViewData{ m_result.imageId.data->name + std::to_string( index + 1u )
+			auto destination = m_graph.createView( crg::ImageViewData{ m_result.imageId.data->name + std::to_string( index + 1u )
 				, m_result.imageId
 				, 0u
 				, VK_IMAGE_VIEW_TYPE_2D
 				, m_result.getFormat()
 				, VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, index + 1u, 1u, 0u, 1u } } );
-			auto & pass = graph.createPass( "MinimiseDepth" + std::to_string( index )
+			auto & pass = m_graph.createPass( "MinimiseDepth" + std::to_string( index )
 				, [this, size]( crg::FramePass const & pass
 					, crg::GraphContext const & context
 					, crg::RunnableGraph & graph )

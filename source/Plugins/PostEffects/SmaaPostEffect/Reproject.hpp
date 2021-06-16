@@ -26,7 +26,7 @@ namespace smaa
 
 		crg::ImageViewId const & getResult()const
 		{
-			return m_resultView;
+			return m_result.wholeViewId;
 		}
 
 		crg::FramePass const & getPass()const
@@ -35,14 +35,15 @@ namespace smaa
 		}
 
 	private:
+		castor3d::RenderDevice const & m_device;
+		crg::FrameGraph & m_graph;
 		crg::ImageViewIdArray m_currentColourViews;
 		crg::ImageViewIdArray m_previousColourViews;
 		crg::ImageViewId const * m_velocityView;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		crg::ImageId m_resultImg;
-		crg::ImageViewId m_resultView;
+		castor3d::Texture m_result;
 		crg::FramePass & m_pass;
 	};
 }
