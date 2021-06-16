@@ -88,6 +88,29 @@ namespace light_streaks
 		m_hiPass->accept( visitor );
 		m_kawasePass->accept( visitor );
 		m_combinePass->accept( visitor );
+		auto & device = *getOwner()->getMainRenderDevice();
+		auto & context = device.makeContext();
+		auto & handler = m_renderTarget.getGraph().getHandler();
+
+		for ( auto & view : m_hiImage.subViewsId )
+		{
+			visitor.visit( view.data->name
+				, view
+				, m_hiImage.image
+				, handler.createImageView( context, view )
+				, m_renderTarget.getGraph().getFinalLayout( view ).layout
+				, castor3d::TextureFactors{}.invert( true ) );
+		}
+
+		for ( auto & view : m_kawaseImage.subViewsId )
+		{
+			visitor.visit( view.data->name
+				, view
+				, m_kawaseImage.image
+				, handler.createImageView( context, view )
+				, m_renderTarget.getGraph().getFinalLayout( view ).layout
+				, castor3d::TextureFactors{}.invert( true ) );
+		}
 	}
 
 	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
@@ -173,6 +196,8 @@ namespace light_streaks
 			, dimensions
 			, &isEnabled() );
 		m_pass = &m_combinePass->getPass();
+		m_hiImage.create();
+		m_kawaseImage.create();
 		return &m_combinePass->getResult();
 	}
 

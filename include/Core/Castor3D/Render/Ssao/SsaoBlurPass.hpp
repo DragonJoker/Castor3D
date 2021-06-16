@@ -147,6 +147,7 @@ namespace castor3d
 		};
 
 		RenderDevice const & m_device;
+		crg::FrameGraph & m_graph;
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		GpInfoUbo const & m_gpInfoUbo;
 		Texture const & m_input;

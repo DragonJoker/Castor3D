@@ -54,86 +54,6 @@ namespace castor3d
 		using OpaquePassType = ForwardRenderTechniquePass;
 #endif
 
-		struct VkImageViewCreateInfoComp
-		{
-			bool operator()( VkImageViewCreateInfo const & lhs
-				, VkImageViewCreateInfo const & rhs )const
-			{
-				return ( lhs.image < rhs.image
-					|| ( lhs.image == rhs.image
-						&& ( lhs.subresourceRange.baseArrayLayer < rhs.subresourceRange.baseArrayLayer
-							|| ( lhs.subresourceRange.baseArrayLayer == rhs.subresourceRange.baseArrayLayer
-								&& ( lhs.subresourceRange.baseMipLevel < rhs.subresourceRange.baseMipLevel
-									|| ( lhs.subresourceRange.baseMipLevel == rhs.subresourceRange.baseMipLevel
-										&& ( lhs.subresourceRange.layerCount < rhs.subresourceRange.layerCount
-											|| ( lhs.subresourceRange.layerCount == rhs.subresourceRange.layerCount
-												&& ( lhs.subresourceRange.levelCount < rhs.subresourceRange.levelCount
-													|| ( lhs.subresourceRange.levelCount == rhs.subresourceRange.levelCount
-														&& ( lhs.viewType < rhs.viewType
-															|| ( lhs.viewType == rhs.viewType
-																&& ( lhs.format < rhs.format ) ) ) ) ) ) ) ) ) ) ) ) );
-
-			}
-		};
-
-		class IntermediatesLister
-			: public RenderTechniqueVisitor
-		{
-		public:
-			static void submit( RenderTechnique & technique
-				, IntermediateViewArray & intermediates )
-			{
-				std::set< VkImageViewCreateInfo, VkImageViewCreateInfoComp > cache;
-
-				PipelineFlags flags{};
-				IntermediatesLister visOpaque{ flags, *technique.getRenderTarget().getScene(), cache, intermediates };
-				technique.accept( visOpaque );
-
-				flags.passFlags |= PassFlag::eAlphaBlending;
-				IntermediatesLister visTransparent{ flags, *technique.getRenderTarget().getScene(), cache, intermediates };
-				technique.accept( visTransparent );
-			}
-
-		private:
-			IntermediatesLister( PipelineFlags const & flags
-				, Scene const & scene
-				, std::set< VkImageViewCreateInfo, VkImageViewCreateInfoComp > & cache
-				, IntermediateViewArray & result )
-				: RenderTechniqueVisitor{ flags, scene, { true, false } }
-				, m_result{ result }
-				, m_cache{ cache }
-			{
-			}
-
-			void doVisit( castor::String const & name
-				, Texture const & view
-				, VkImageLayout layout
-				, TextureFactors const & factors )override
-			{
-				m_cache.insert( view.wholeViewId.data->info );
-				m_result.push_back( { name
-					, view.wholeViewId
-					, view.image
-					, view.wholeView
-					, layout
-					, factors } );
-			}
-
-			bool doFilter( VkImageViewCreateInfo const & info )const override
-			{
-				return ( info.viewType == VK_IMAGE_VIEW_TYPE_3D
-					|| ( info.viewType == VK_IMAGE_VIEW_TYPE_2D
-						&& info.subresourceRange.baseMipLevel == 0u
-						&& info.subresourceRange.levelCount == 1u
-						&& info.subresourceRange.layerCount == 1u ) )
-					&& m_cache.end() == m_cache.find( info );
-			}
-
-		private:
-			IntermediateViewArray & m_result;
-			std::set< VkImageViewCreateInfo, VkImageViewCreateInfoComp > & m_cache;
-		};
-
 		std::map< double, LightSPtr > doSortLights( LightCache const & cache
 			, LightType type
 			, Camera const & camera )
@@ -499,7 +419,12 @@ namespace castor3d
 		, m_clearLpvRunnable{ m_clearLpvGraph.compile( m_device.makeContext() ) }
 		, m_particleTimer{ std::make_shared< RenderPassTimer >( device, cuT( "Particles" ), cuT( "Particles" ) ) }
 	{
+		m_colour.create();
+		m_depth.create();
 		m_clearLpvRunnable->record();
+#if C3D_UseWeightedBlendedRendering
+		m_transparentPassResult->create();
+#endif
 #if !C3D_DebugDisableShadowMaps
 		m_allShadowMaps[size_t( LightType::eDirectional )].emplace_back( std::ref( *m_directionalShadowMap ), UInt32Array{} );
 		m_allShadowMaps[size_t( LightType::eSpot )].emplace_back( std::ref( *m_spotShadowMap ), UInt32Array{} );
@@ -538,11 +463,6 @@ namespace castor3d
 		m_spotShadowMap.reset();
 		m_deferredRendering.reset();
 		m_weightedBlendRendering.reset();
-	}
-
-	void RenderTechnique::listIntermediates( IntermediateViewArray & intermediates )
-	{
-		IntermediatesLister::submit( *this, intermediates );
 	}
 
 	void RenderTechnique::update( CpuUpdater & updater )
@@ -674,12 +594,12 @@ namespace castor3d
 	void RenderTechnique::accept( RenderTechniqueVisitor & visitor )
 	{
 		visitor.visit( "Technique Colour"
-			, m_colourTexture.getTexture()->getDefaultView().getSampledView()
-			, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
+			, m_colour
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Technique Depth"
-			, m_depthBuffer.getTexture()->getDefaultView().getSampledView()
-			, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL
+			, m_depth
+			, m_renderTarget.getGraph().getFinalLayout( m_depth.wholeViewId ).layout
 			, TextureFactors{}.invert( true ) );
 
 		m_voxelizer->listIntermediates( visitor );

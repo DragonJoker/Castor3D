@@ -18,6 +18,7 @@
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
 #include "Castor3D/Render/PostEffect/PostEffect.hpp"
 #include "Castor3D/Render/Technique/RenderTechnique.hpp"
+#include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Render/ToneMapping/ToneMapping.hpp"
 #include "Castor3D/Render/ToTexture/Texture3DTo2D.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -40,6 +41,102 @@ using namespace castor;
 
 namespace castor3d
 {
+	namespace
+	{
+		class IntermediatesLister
+			: public RenderTechniqueVisitor
+		{
+			struct VkImageViewCreateInfoComp
+			{
+				bool operator()( VkImageViewCreateInfo const & lhs
+					, VkImageViewCreateInfo const & rhs )const
+				{
+					return ( lhs.image < rhs.image
+						|| ( lhs.image == rhs.image
+							&& ( lhs.subresourceRange.baseArrayLayer < rhs.subresourceRange.baseArrayLayer
+								|| ( lhs.subresourceRange.baseArrayLayer == rhs.subresourceRange.baseArrayLayer
+									&& ( lhs.subresourceRange.baseMipLevel < rhs.subresourceRange.baseMipLevel
+										|| ( lhs.subresourceRange.baseMipLevel == rhs.subresourceRange.baseMipLevel
+											&& ( lhs.subresourceRange.layerCount < rhs.subresourceRange.layerCount
+												|| ( lhs.subresourceRange.layerCount == rhs.subresourceRange.layerCount
+													&& ( lhs.subresourceRange.levelCount < rhs.subresourceRange.levelCount
+														|| ( lhs.subresourceRange.levelCount == rhs.subresourceRange.levelCount
+															&& ( lhs.viewType < rhs.viewType
+																|| ( lhs.viewType == rhs.viewType
+																	&& ( lhs.format < rhs.format ) ) ) ) ) ) ) ) ) ) ) ) );
+
+				}
+			};
+
+		public:
+			static void submit( RenderTechnique & technique
+				, IntermediateViewArray & intermediates )
+			{
+				std::set< VkImageViewCreateInfo, VkImageViewCreateInfoComp > cache;
+
+				PipelineFlags flags{};
+				IntermediatesLister visOpaque{ flags, *technique.getRenderTarget().getScene(), cache, intermediates };
+				technique.accept( visOpaque );
+
+				flags.passFlags |= PassFlag::eAlphaBlending;
+				IntermediatesLister visTransparent{ flags, *technique.getRenderTarget().getScene(), cache, intermediates };
+				technique.accept( visTransparent );
+			}
+
+			static void submit( Scene const & scene
+				, PostEffect & effect
+				, IntermediateViewArray & intermediates )
+			{
+				std::set< VkImageViewCreateInfo, VkImageViewCreateInfoComp > cache;
+
+				PipelineFlags flags{};
+				IntermediatesLister vis{ flags, scene, cache, intermediates };
+				effect.accept( vis );
+			}
+
+		private:
+			IntermediatesLister( PipelineFlags const & flags
+				, Scene const & scene
+				, std::set< VkImageViewCreateInfo, VkImageViewCreateInfoComp > & cache
+				, IntermediateViewArray & result )
+				: RenderTechniqueVisitor{ flags, scene, { true, false } }
+				, m_result{ result }
+				, m_cache{ cache }
+			{
+			}
+
+			void doVisit( castor::String const & name
+				, crg::ImageViewId const & viewId
+				, VkImage image
+				, VkImageView view
+				, VkImageLayout layout
+				, TextureFactors const & factors )override
+			{
+				m_cache.insert( viewId.data->info );
+				m_result.push_back( { name
+					, viewId
+					, image
+					, view
+					, layout
+					, factors } );
+			}
+
+			bool doFilter( VkImageViewCreateInfo const & info )const override
+			{
+				return ( info.viewType == VK_IMAGE_VIEW_TYPE_3D
+					|| ( info.viewType == VK_IMAGE_VIEW_TYPE_2D
+						&& info.subresourceRange.baseMipLevel == 0u
+						&& info.subresourceRange.levelCount == 1u
+						&& info.subresourceRange.layerCount == 1u ) )
+					&& m_cache.end() == m_cache.find( info );
+			}
+
+		private:
+			IntermediateViewArray & m_result;
+			std::set< VkImageViewCreateInfo, VkImageViewCreateInfoComp > & m_cache;
+		};
+	}
+
 	uint32_t RenderTarget::sm_uiCount = 0;
 	const castor::String RenderTarget::DefaultSamplerName = cuT( "DefaultRTSampler" );
 
@@ -428,6 +525,11 @@ namespace castor3d
 
 	void RenderTarget::listIntermediateViews( IntermediateViewArray & result )const
 	{
+		result.push_back( { "Target Result"
+			, m_combined.wholeViewId
+			, m_combined.image
+			, m_combined.wholeView
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
 		result.push_back( { "Target Colour"
 			, m_objects.wholeViewId
 			, m_objects.image
@@ -449,7 +551,17 @@ namespace castor3d
 
 		if ( auto technique = getTechnique() )
 		{
-			technique->listIntermediates( result );
+			IntermediatesLister::submit( *technique, result );
+		}
+
+		for ( auto & postEffect : m_hdrPostEffects )
+		{
+			IntermediatesLister::submit( *getScene(), *postEffect, result );
+		}
+
+		for ( auto & postEffect : m_srgbPostEffects )
+		{
+			IntermediatesLister::submit( *getScene(), *postEffect, result );
 		}
 	}
 

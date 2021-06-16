@@ -39,7 +39,7 @@ namespace castor3d
 			, layerCount }
 		, m_count{ count }
 	{
-		auto context = m_device.makeContext();
+		auto & context = m_device.makeContext();
 		auto commandBuffer = m_device.graphicsCommandPool->createCommandBuffer();
 		commandBuffer->begin();
 
@@ -119,11 +119,14 @@ namespace castor3d
 		for ( uint32_t i = 1u; i < uint32_t( SmTexture::eCount ); ++i )
 		{
 			uint32_t index = 0u;
+			auto & result = m_result[SmTexture( i )];
 
-			for ( auto & view : m_result[SmTexture( i )].subViewsId )
+			for ( auto & view : result.subViewsId )
 			{
 				visitor.visit( m_name + getName( SmTexture( i ) ) + cuT( "L" ) + castor::string::toString( index++ )
 					, view
+					, result.image
+					, m_graphs.front()->getHandler().createImageView( m_device.makeContext(), view )
 					, ( ashes::isDepthOrStencilFormat( view.data->info.format )
 						? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
 						: VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )

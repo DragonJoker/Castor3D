@@ -13,6 +13,7 @@ See LICENSE file in root folder
 #include <ashespp/Sync/Queue.hpp>
 
 #include <RenderGraph/FrameGraphPrerequisites.hpp>
+#include <RenderGraph/GraphContext.hpp>
 
 #include <array>
 #include <vector>
@@ -50,7 +51,10 @@ namespace castor3d
 		C3D_API VkFormat selectSuitableDepthStencilFormat( VkFormatFeatureFlags requiredFeatures )const;
 		C3D_API VkFormat selectSuitableFormat( std::vector< VkFormat > const & formats
 			, VkFormatFeatureFlags requiredFeatures )const;
-		C3D_API crg::GraphContext makeContext()const;
+		C3D_API crg::GraphContext & makeContext()const
+		{
+			return *m_context;
+		};
 
 		ashes::Device const * operator->()const
 		{
@@ -109,6 +113,7 @@ namespace castor3d
 		ashes::Queue * transferQueue{};
 		GpuBufferPoolSPtr bufferPool;
 		UniformBufferPoolsSPtr uboPools;
+		std::unique_ptr< crg::GraphContext > m_context;
 	};
 }
 

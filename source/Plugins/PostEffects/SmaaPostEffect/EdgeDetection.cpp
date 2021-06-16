@@ -82,38 +82,41 @@ namespace smaa
 		, castor3d::RenderDevice const & device
 		, SmaaConfig const & config
 		, std::unique_ptr< ast::Shader > pixelShader )
-		: m_config{ config }
-		, m_outColourImg{ renderTarget.getGraph().createImage( crg::ImageData{ "SMEDRes"
+		: m_device{ device }
+		, m_graph{ renderTarget.getGraph() }
+		, m_config{ config }
+		, m_outColour{ m_device
+			, m_graph.getHandler()
+			, "SMEDRes"
 			, 0u
-			, VK_IMAGE_TYPE_2D
-			, VK_FORMAT_R8G8B8A8_UNORM
 			, castor3d::makeExtent3D( renderTarget.getSize() )
+			, 1u
+			, 1u
+			, VK_FORMAT_R8G8B8A8_UNORM
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } ) }
-		, m_outColourView{ renderTarget.getGraph().createView( crg::ImageViewData{ "SMEDRes"
-			, m_outColourImg
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) }
+		, m_outDepth{ m_device
+			, m_graph.getHandler()
+			, "SMEDStRes"
 			, 0u
-			, VK_IMAGE_VIEW_TYPE_2D
-			, m_outColourImg.data->info.format
-			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
-		, m_outDepthImg{ renderTarget.getGraph().createImage( crg::ImageData{ "SMEDStRes"
-			, 0u
-			, VK_IMAGE_TYPE_2D
-			, device.selectSuitableStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT )
 			, castor3d::makeExtent3D( renderTarget.getSize() )
-			, ( VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT ) } ) }
-		, m_outDepthStencilView{ renderTarget.getGraph().createView( crg::ImageViewData{ "SMEDStRes"
-			, m_outDepthImg
+			, 1u
+			, 1u
+			, device.selectSuitableStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT )
+			, ( VK_IMAGE_USAGE_SAMPLED_BIT
+				| VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT ) }
+		, m_outDepthStencilView{ m_graph.createView( crg::ImageViewData{ "SMEDStRes"
+			, m_outDepth.imageId
 			, 0u
 			, VK_IMAGE_VIEW_TYPE_2D
-			, m_outDepthImg.data->info.format
+			, m_outDepth.imageId.data->info.format
 			, { VK_IMAGE_ASPECT_STENCIL_BIT, 0u, 1u, 0u, 1u } } ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaEdge", doGetEdgeDetectionVP( renderTarget.getSize(), config ) }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaEdge", std::move( pixelShader ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
-		, m_pass{ renderTarget.getGraph().createPass( "SmaaEdge"
+		, m_pass{ m_graph.createPass( "SmaaEdge"
 			, [this, &renderTarget]( crg::FramePass const & pass
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
@@ -135,13 +138,21 @@ namespace smaa
 		m_pass.addDependency( previousPass );
 		m_pass.addOutputStencilView( m_outDepthStencilView
 			, castor3d::defaultClearDepthStencil );
-		m_pass.addOutputColourView( m_outColourView
+		m_pass.addOutputColourView( m_outColour.wholeViewId
 			, castor3d::transparentBlackClearColor );
+		m_outColour.create();
+		m_outDepth.create();
 	}
 
 	void EdgeDetection::accept( castor3d::PipelineVisitorBase & visitor )
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
+		auto & context = m_device.makeContext();
+		auto & handler = m_graph.getHandler();
+		visitor.visit( "SMAA EdgeDetection Colour"
+			, m_outColour
+			, m_graph.getFinalLayout( m_outColour.wholeViewId ).layout
+			, castor3d::TextureFactors{}.invert( true ) );
 	}
 }

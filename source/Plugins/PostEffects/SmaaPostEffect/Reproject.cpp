@@ -154,28 +154,27 @@ namespace smaa
 		, crg::ImageViewIdArray const & previousColourViews
 		, crg::ImageViewId const * velocityView
 		, SmaaConfig const & config )
-		: m_currentColourViews{ currentColourViews }
+		: m_device{ device }
+		, m_graph{ renderTarget.getGraph() }
+		, m_currentColourViews{ currentColourViews }
 		, m_previousColourViews{ previousColourViews }
 		, m_velocityView{ velocityView }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaReproject", doGetReprojectVP( renderTarget.getSize(), config ) }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaReproject", doGetReprojectFP( renderTarget.getSize(), config, velocityView != nullptr ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
-		, m_resultImg{ renderTarget.getGraph().createImage( crg::ImageData{ "SMRpRes"
+		, m_result{ m_device
+			, m_graph.getHandler()
+			, "SMRpRes"
 			, 0u
-			, VK_IMAGE_TYPE_2D
-			, renderTarget.getPixelFormat()
 			, castor3d::makeExtent3D( renderTarget.getSize() )
+			, 1u
+			, 1u
+			, renderTarget.getPixelFormat()
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } ) }
-		, m_resultView{ renderTarget.getGraph().createView( crg::ImageViewData{ "SMRpRes"
-			, m_resultImg
-			, 0u
-			, VK_IMAGE_VIEW_TYPE_2D
-			, m_resultImg.data->info.format
-			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
-		, m_pass{ renderTarget.getGraph().createPass( "SmaaReproject"
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) }
+		, m_pass{ m_graph.createPass( "SmaaReproject"
 			, [this, &config, &device, &currentColourViews]( crg::FramePass const & pass
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
@@ -206,7 +205,7 @@ namespace smaa
 				device.graphicsQueue->waitIdle();
 				commandBuffer.reset();
 
-				auto size = m_resultImg.data->info.extent;
+				auto size = m_result.imageId.data->info.extent;
 				return crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( { size.width, size.height } )
@@ -223,7 +222,7 @@ namespace smaa
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE };
 		m_pass.addDependency( previousPass );
-		m_pass.addOutputColourView( m_resultView );
+		m_pass.addOutputColourView( m_result.wholeViewId );
 		m_pass.addSampledView( m_currentColourViews
 			, CurColTexIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
@@ -232,6 +231,7 @@ namespace smaa
 			, PrvColTexIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, pointSampler );
+		m_result.create();
 
 		if ( m_velocityView )
 		{
@@ -246,6 +246,10 @@ namespace smaa
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
+		visitor.visit( "SMAA Reproject"
+			, m_result
+			, m_graph.getFinalLayout( m_result.wholeViewId ).layout
+			, castor3d::TextureFactors{}.invert( true ) );
 	}
 
 	//*********************************************************************************************

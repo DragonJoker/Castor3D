@@ -163,6 +163,7 @@ namespace castor3d
 		, HdrConfigUbo const & hdrConfigUbo
 		, GpInfoUbo const & gpInfoUbo )
 		: m_device{ device }
+		, m_graph{ graph }
 		, m_transparentPassResult{ transparentPassResult }
 		, m_depthOnlyView{ createDepthOnlyView( graph, m_transparentPassResult[WbTexture::eDepth].wholeViewId ) }
 		, m_size{ size }
@@ -182,12 +183,12 @@ namespace castor3d
 	void WeightedBlendRendering::accept( RenderTechniqueVisitor & visitor )
 	{
 		visitor.visit( "Transparent Accumulation"
-			, m_transparentPassResult[WbTexture::eAccumulation].wholeViewId
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, m_transparentPassResult[WbTexture::eAccumulation]
+			, m_graph.getFinalLayout( m_transparentPassResult[WbTexture::eAccumulation].wholeViewId ).layout
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Transparent Revealage"
-			, m_transparentPassResult[WbTexture::eRevealage].wholeViewId
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, m_transparentPassResult[WbTexture::eRevealage]
+			, m_graph.getFinalLayout( m_transparentPassResult[WbTexture::eRevealage].wholeViewId ).layout
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
