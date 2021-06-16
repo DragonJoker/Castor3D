@@ -102,14 +102,15 @@ namespace castor3d
 			, lpvConfigUbo
 			, llpvConfigUbo
 			, vctConfigUbo ) }
-		//, m_subsurfaceScattering{ castor::makeUnique< SubsurfaceScatteringPass >( graph
-		//	, m_lastPass
-		//	, m_device
-		//	, m_gpInfoUbo
-		//	, sceneUbo
-		//	, m_size
-		//	, opaquePassResult
-		//	, m_lightingPass->getResult() ) }
+		, m_subsurfaceScattering{ castor::makeUnique< SubsurfaceScatteringPass >( graph
+			, m_lastPass
+			, m_device
+			, scene
+			, m_gpInfoUbo
+			, sceneUbo
+			, m_size
+			, opaquePassResult
+			, m_lightingPass->getResult() ) }
 		, m_resolve{ castor::makeUnique< OpaqueResolvePass >( graph
 			, m_lastPass
 			, m_device
@@ -126,49 +127,24 @@ namespace castor3d
 			, m_gpInfoUbo
 			, hdrConfigUbo ) }
 	{
-		if ( scene.needsSubsurfaceScattering() )
-		{
-			m_subsurfaceScattering->initialise( m_device );
-		}
-
 		m_resolve->initialise();
 	}
 
 	DeferredRendering::~DeferredRendering()
 	{
 		m_resolve->cleanup();
-		m_subsurfaceScattering->cleanup( m_device );
 	}
 
 	void DeferredRendering::update( CpuUpdater & updater )
 	{
+		m_subsurfaceScattering->update( updater );
 		m_lightingPass->update( updater );
 	}
 
 	void DeferredRendering::update( GpuUpdater & updater )
 	{
-		if ( m_scene.needsSubsurfaceScattering() )
-		{
-			m_subsurfaceScattering->initialise( m_device );
-		}
-
 		m_lightingPass->update( updater );
 		m_resolve->update( updater );
-	}
-
-	ashes::Semaphore const & DeferredRendering::render( Scene const & scene
-		, Camera const & camera
-		, ashes::Semaphore const & toWait )
-	{
-		ashes::Semaphore const * result = &toWait;
-		//result = &m_opaquePass.render( *result );
-		result = &m_lightingPass->render( scene
-			, camera
-			, m_opaquePassResult
-			, *result );
-
-		result = &m_resolve->render( *result );
-		return *result;
 	}
 
 	void DeferredRendering::accept( RenderTechniqueVisitor & visitor )
