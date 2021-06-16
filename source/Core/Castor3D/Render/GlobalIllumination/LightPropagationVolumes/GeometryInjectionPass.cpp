@@ -580,7 +580,7 @@ namespace castor3d
 		, crg::RunnableGraph & graph
 		, crg::pp::Config config
 		, uint32_t lpvSize )
-		: crg::PipelineHolder{ pass, context, graph, std::move( config ), VK_PIPELINE_BIND_POINT_GRAPHICS, 1u }
+		: crg::PipelineHolder{ pass, context, graph, std::move( config ), VK_PIPELINE_BIND_POINT_GRAPHICS }
 		, m_lpvSize{ lpvSize }
 	{
 		m_descriptorSets.resize( 1u );
