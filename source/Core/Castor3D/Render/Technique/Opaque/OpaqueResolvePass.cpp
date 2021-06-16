@@ -351,11 +351,12 @@ namespace castor3d
 								, lightIndirectDiffuse
 								, lightSpecular
 								, lightIndirectSpecular
+								, ambient
+								, hasDiffuseGi ? lightIndirectDiffuse : vec3( 1.0_f )
 								, occlusion
 								, emissive
 								, reflected + refracted
-								, diffuse
-								, ambient )
+								, diffuse )
 							, 1.0_f );
 					}
 					ELSE
@@ -682,11 +683,12 @@ namespace castor3d
 								, lightIndirectDiffuse
 								, lightSpecular
 								, lightIndirectSpecular
+								, ambient
+								, hasDiffuseGi ? lightIndirectDiffuse : vec3( 1.0_f )
 								, occlusion
 								, emissive
 								, reflected + refracted
-								, albedo
-								, ambient )
+								, albedo )
 							, 1.0_f );
 					}
 					ELSE
@@ -1012,11 +1014,12 @@ namespace castor3d
 								, lightIndirectDiffuse
 								, lightSpecular
 								, lightIndirectSpecular
+								, ambient
+								, hasDiffuseGi ? lightIndirectDiffuse : vec3( 1.0_f )
 								, occlusion
 								, emissive
 								, reflected + refracted
-								, diffuse
-								, ambient )
+								, diffuse )
 							, 1.0_f );
 					}
 					ELSE

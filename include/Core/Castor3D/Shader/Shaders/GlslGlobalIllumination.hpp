@@ -59,6 +59,8 @@ namespace castor3d
 			C3D_API sdw::Vec3 computeDiffuse( SceneFlags sceneFlags
 				, Surface surface
 				, sdw::Float indirectOcclusion );
+			C3D_API sdw::Vec3 computeAmbient( SceneFlags sceneFlags
+				, sdw::Vec3 const & indirectDiffuse );
 			C3D_API sdw::Vec3 computeSpecular( SceneFlags sceneFlags
 				, sdw::Vec3 wsCamera
 				, Surface surface
