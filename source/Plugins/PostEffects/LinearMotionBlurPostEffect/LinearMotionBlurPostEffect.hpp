@@ -54,7 +54,6 @@ namespace motion_blur
 		*\copydoc		castor3d::PostEffect::doInitialise
 		*/
 		crg::ImageViewId const * doInitialise( castor3d::RenderDevice const & device
-			, castor3d::RenderPassTimer const & timer
 			, crg::FramePass const & previousPass )override;
 		/**
 		*\copydoc		castor3d::PostEffect::doCleanup

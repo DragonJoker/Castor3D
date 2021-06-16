@@ -177,6 +177,8 @@ namespace castor3d
 					, *m_voxels
 					, m_voxelConfig );
 				m_voxelizePass = result.get();
+				m_device.renderSystem.getEngine()->registerTimer( "Voxelizer"
+					, result->getTimer() );
 				return result;
 			} );
 		result.addOutputStorageBuffer( { m_voxels->getBuffer(), "Voxels" }
@@ -199,6 +201,8 @@ namespace castor3d
 					, m_device
 					, m_voxelConfig );
 				m_voxelToTexture = result.get();
+				m_device.renderSystem.getEngine()->registerTimer( "Voxelizer"
+					, result->getTimer() );
 				return result;
 			} );
 		result.addDependency( previousPass );
@@ -221,10 +225,13 @@ namespace castor3d
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
 			{
-				return std::make_unique< crg::GenerateMipmaps >( pass
+				auto result = std::make_unique< crg::GenerateMipmaps >( pass
 					, context
 					, graph
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+				m_device.renderSystem.getEngine()->registerTimer( "Voxelizer"
+					, result->getTimer() );
+				return result;
 			} );
 		result.addDependency( previousPass );
 		result.addTransferInOutView( view );
@@ -244,6 +251,8 @@ namespace castor3d
 					, m_device
 					, m_voxelConfig );
 				m_voxelSecondaryBounce = result.get();
+				m_device.renderSystem.getEngine()->registerTimer( "Voxelizer"
+					, result->getTimer() );
 				return result;
 			} );
 		result.addDependency( previousPass );

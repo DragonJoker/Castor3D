@@ -52,7 +52,6 @@ namespace castor3d
 
 	private:
 		VoxelSceneData const & m_vctConfig;
-		RenderPassTimerSPtr m_timer;
 		ShaderModule m_shader;
 		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;
 		ashes::PipelineLayoutPtr m_pipelineLayout;

@@ -8,7 +8,6 @@ See LICENSE file in root folder
 
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
-#include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 
@@ -103,13 +102,6 @@ namespace castor3d
 		C3D_API void cleanup( castor3d::RenderDevice const & device );
 		/**
 		 *\~english
-		 *\brief		Starts rendering the effect.
-		 *\~french
-		 *\brief		Démarre le rendu de l'effet.
-		 */
-		C3D_API RenderPassTimerBlock start();
-		/**
-		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
 		 *\param[in, out]	updater	The update data.
 		 *\~french
@@ -201,7 +193,6 @@ namespace castor3d
 		 *\return		\p true if ok.
 		 */
 		C3D_API virtual crg::ImageViewId const * doInitialise( castor3d::RenderDevice const & device
-			, RenderPassTimer const & timer
 			, crg::FramePass const & previousPass ) = 0;
 		/**
 		 *\~english
@@ -229,8 +220,6 @@ namespace castor3d
 		castor::String m_fullName;
 		RenderTarget & m_renderTarget;
 		uint32_t m_passesCount{ 1u };
-		uint32_t m_currentPass{ 0u };
-		std::unique_ptr< RenderPassTimer > m_timer;
 		Kind m_kind{ Kind::eHDR };
 		crg::ImageViewId const * m_target{ nullptr };
 		crg::ImageViewId const * m_result{ nullptr };

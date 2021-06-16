@@ -103,6 +103,18 @@ namespace castor3d
 		uint32_t registerTimer( RenderPassTimer & timer );
 		/**
 		 *\~english
+		 *\brief		Registers a render pass timer.
+		 *\param[in]	timer	The timer to register.
+		 *\return		The query ID.
+		 *\~french
+		 *\brief		Enregistre un timer de passe de rendu.
+		 *\param[in]	timer	Le timer à enregistrer.
+		 *\return		L'ID de la requête.
+		 */
+		uint32_t registerTimer( castor::String const & category
+			, crg::FramePassTimer & timer );
+		/**
+		 *\~english
 		 *\brief		Unregisters a render pass timer.
 		 *\param[in]	timer	The timer to unregister.
 		 *\~french
@@ -110,6 +122,16 @@ namespace castor3d
 		 *\param[in]	timer	Le timer à désenregistrer.
 		 */
 		void unregisterTimer( RenderPassTimer & timer );
+		/**
+		 *\~english
+		 *\brief		Unregisters a render pass timer.
+		 *\param[in]	timer	The timer to unregister.
+		 *\~french
+		 *\brief		Désenregistre un timer de passe de rendu.
+		 *\param[in]	timer	Le timer à désenregistrer.
+		 */
+		void unregisterTimer( castor::String const & category
+			, crg::FramePassTimer & timer );
 		/**
 		 *\~english
 		 *\return		The debug overlays shown status.
@@ -225,12 +247,15 @@ namespace castor3d
 				, OverlaySPtr parent
 				, castor::String const & category
 				, castor::String const & name
-				, uint32_t index );
+				, uint32_t index
+				, bool const & detailed );
 			~PassOverlays();
 			void retrieveGpuTime();
 			void update();
 			void addTimer( RenderPassTimer & timer );
+			void addTimer( crg::FramePassTimer & timer );
 			bool removeTimer( RenderPassTimer & timer );
+			bool removeTimer( crg::FramePassTimer & timer );
 
 			inline castor::Nanoseconds getGpuTime()
 			{
@@ -249,9 +274,11 @@ namespace castor3d
 
 		private:
 			OverlayCache & m_cache;
+			bool const & m_detailed;
 			castor::String m_name;
 			uint32_t m_index;
 			std::vector< RenderPassTimer * > m_timers;
+			std::vector< crg::FramePassTimer * > m_crgtimers;
 			PanelOverlaySPtr m_panel;
 			TextOverlaySPtr m_passName;
 			TimeOverlays m_cpu;
@@ -276,11 +303,14 @@ namespace castor3d
 			CategoryOverlays( CategoryOverlays && ) = default;
 			CategoryOverlays & operator=( CategoryOverlays && ) = delete;
 			CategoryOverlays( castor::String const & category
-				, OverlayCache & cache );
+				, OverlayCache & cache
+				, bool const & detailed );
 			~CategoryOverlays();
 			void initialise( uint32_t offset );
 			void addTimer( RenderPassTimer & timer );
+			void addTimer( crg::FramePassTimer & timer );
 			bool removeTimer( RenderPassTimer & timer );
+			bool removeTimer( crg::FramePassTimer & timer );
 			void retrieveGpuTime();
 			void update();
 			void setVisible( bool visible );
@@ -302,6 +332,8 @@ namespace castor3d
 
 		private:
 			OverlayCache & m_cache;
+			bool const & m_detailed;
+			castor::String m_categoryName;
 			int m_posX{ 0 };
 			std::vector< PassOverlaysPtr > m_passes;
 			PanelOverlaySPtr m_container;
@@ -327,6 +359,7 @@ namespace castor3d
 		std::array< castor::Nanoseconds, FRAME_SAMPLES_COUNT > m_framesTimes{};
 		uint32_t m_frameIndex{ 0 };
 		bool m_visible{ false };
+		bool m_detailed{ false };
 		castor::Nanoseconds m_cpuTime{ 0 };
 		castor::Nanoseconds m_gpuClientTime{ 0 };
 		castor::Nanoseconds m_gpuTotalTime{ 0 };

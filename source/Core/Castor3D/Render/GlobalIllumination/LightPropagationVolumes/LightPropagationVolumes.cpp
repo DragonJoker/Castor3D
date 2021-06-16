@@ -154,6 +154,8 @@ namespace castor3d
 					, layerIndex
 					, rsmSize );
 				lightInjectionPass = result.get();
+				device.renderSystem.getEngine()->registerTimer( "LPV"
+					, result->getTimer() );
 				return result;
 			} );
 		result.addDependency( *lastPass );
@@ -208,6 +210,8 @@ namespace castor3d
 					, cascade
 					, rsmSize );
 				geometryInjectionPass = result.get();
+				device.renderSystem.getEngine()->registerTimer( "LPV"
+					, result->getTimer() );
 				return result;
 			} );
 		result.addDependency( *lastPass );
@@ -465,6 +469,8 @@ namespace castor3d
 					, m_scene.getLpvGridSize()
 					, ( index == 0u ? BlendMode::eNoBlend : BlendMode::eAdditive ) );
 				m_lightPropagationPasses.push_back( result.get() );
+				m_device.renderSystem.getEngine()->registerTimer( "LPV"
+					, result->getTimer() );
 				return result;
 			} );
 

@@ -5,7 +5,6 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Material/Texture/Sampler.hpp>
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
-#include <Castor3D/Render/RenderPassTimer.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
@@ -206,13 +205,16 @@ namespace smaa
 				commandBuffer.reset();
 
 				auto size = m_result.imageId.data->info.extent;
-				return crg::RenderQuadBuilder{}
+				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( { size.width, size.height } )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.passIndex( &config.subsampleIndex )
 					.build( pass, context, graph, config.maxSubsampleIndices );
+				device.renderSystem.getEngine()->registerTimer( "SMAA"
+					, result->getTimer() );
+				return result;
 			} ) }
 	{	
 		crg::SamplerDesc pointSampler{ VK_FILTER_NEAREST

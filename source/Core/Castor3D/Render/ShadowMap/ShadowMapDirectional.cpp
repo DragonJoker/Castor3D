@@ -7,7 +7,6 @@
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
-#include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
@@ -142,6 +141,8 @@ namespace castor3d
 							, shadowMap
 							, cascade );
 						shadowMap.setPass( index, result.get() );
+						device.renderSystem.getEngine()->registerTimer( cuT( "ShadowMapDirectional" )
+							, result->getTimer() );
 						return result;
 					} );
 
@@ -163,6 +164,7 @@ namespace castor3d
 					blurs.push_back( std::make_unique< GaussianBlur >( graph
 						, *previousPass
 						, device
+						, cuT( "ShadowMapDirectional" )
 						, debugName
 						, variance.wholeViewId
 						, 5u ) );
@@ -178,6 +180,7 @@ namespace castor3d
 					blurs.push_back( std::make_unique< GaussianBlur >( graph
 						, *previousPass
 						, device
+						, cuT( "ShadowMapDirectional" )
 						, debugName
 						, variance.subViewsId[cascade]
 						, intermediate

@@ -295,6 +295,48 @@ namespace castor3d
 		C3D_API castor::RgbaColour getNextRainbowColour()const;
 		/**
 		 *\~english
+		 *\brief		Registers a render pass timer.
+		 *\param[in]	timer	The timer to register.
+		 *\return		The query ID.
+		 *\~french
+		 *\brief		Enregistre un timer de passe de rendu.
+		 *\param[in]	timer	Le timer à enregistrer.
+		 *\return		L'ID de la requête.
+		 */
+		C3D_API uint32_t registerTimer( RenderPassTimer & timer );
+		/**
+		 *\~english
+		 *\brief		Registers a render pass timer.
+		 *\param[in]	timer	The timer to register.
+		 *\return		The query ID.
+		 *\~french
+		 *\brief		Enregistre un timer de passe de rendu.
+		 *\param[in]	timer	Le timer à enregistrer.
+		 *\return		L'ID de la requête.
+		 */
+		C3D_API uint32_t registerTimer( castor::String const & category
+			, crg::FramePassTimer & timer );
+		/**
+		 *\~english
+		 *\brief		Unregisters a render pass timer.
+		 *\param[in]	timer	The timer to unregister.
+		 *\~french
+		 *\brief		Désenregistre un timer de passe de rendu.
+		 *\param[in]	timer	Le timer à désenregistrer.
+		 */
+		C3D_API void unregisterTimer( RenderPassTimer & timer );
+		/**
+		 *\~english
+		 *\brief		Unregisters a render pass timer.
+		 *\param[in]	timer	The timer to unregister.
+		 *\~french
+		 *\brief		Désenregistre un timer de passe de rendu.
+		 *\param[in]	timer	Le timer à désenregistrer.
+		 */
+		C3D_API void unregisterTimer( castor::String const & category
+			, crg::FramePassTimer & timer );
+		/**
+		 *\~english
 		 *\brief		Retrieves plug-ins path
 		 *\return		The plug-ins path
 		 *\~french
