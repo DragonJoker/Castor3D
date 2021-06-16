@@ -367,7 +367,7 @@ namespace castor3d
 		, crg::pp::Config config
 		, uint32_t gridSize
 		, BlendMode blendMode )
-		: crg::PipelineHolder{ pass, context, graph, std::move( config ), VK_PIPELINE_BIND_POINT_GRAPHICS, 1u }
+		: crg::PipelineHolder{ pass, context, graph, std::move( config ), VK_PIPELINE_BIND_POINT_GRAPHICS }
 		, m_gridSize{ gridSize }
 		, m_blendMode{ blendMode }
 	{
