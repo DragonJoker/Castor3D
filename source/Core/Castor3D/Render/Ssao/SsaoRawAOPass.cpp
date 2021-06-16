@@ -583,6 +583,7 @@ namespace castor3d
 		, Texture const & linearisedDepthBuffer
 		, Texture const & normals )
 		: m_device{ device }
+		, m_graph{ graph }
 		, m_ssaoConfig{ config }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
@@ -636,11 +637,11 @@ namespace castor3d
 	{
 		visitor.visit( "SSAO Raw AO"
 			, getResult()
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, m_graph.getFinalLayout( getResult().wholeViewId ).layout
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "SSAO Bent Normals"
 			, getBentResult()
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, m_graph.getFinalLayout( getBentResult().wholeViewId ).layout
 			, TextureFactors{}.invert( true ) );
 
 		auto index = m_ssaoConfig.useNormalsBuffer

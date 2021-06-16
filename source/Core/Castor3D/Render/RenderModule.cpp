@@ -355,7 +355,7 @@ namespace castor3d
 			return;
 		}
 
-		auto context = device->makeContext();
+		auto & context = device->makeContext();
 		image = handler->createImage( context, imageId );
 		wholeView = handler->createImageView( context, wholeViewId );
 

@@ -440,6 +440,7 @@ namespace castor3d
 		, Texture const & bentInput
 		, Texture const & normals )
 		: m_device{ device }
+		, m_graph{ graph }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_input{ input }
@@ -547,14 +548,14 @@ namespace castor3d
 		{
 			visitor.visit( "SSAO HBlurred AO"
 				, getResult()
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, m_graph.getFinalLayout( getResult().wholeViewId ).layout
 				, TextureFactors{}.invert( true ) );
 		}
 		else
 		{
 			visitor.visit( "SSAO Blurred AO"
 				, getResult()
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, m_graph.getFinalLayout( getResult().wholeViewId ).layout
 				, TextureFactors{}.invert( true ) );
 		}
 
@@ -562,14 +563,14 @@ namespace castor3d
 		{
 			visitor.visit( "HBlurred Bent Normals"
 				, getBentResult()
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, m_graph.getFinalLayout( getBentResult().wholeViewId ).layout
 				, TextureFactors{}.invert( true ) );
 		}
 		else
 		{
 			visitor.visit( "Blurred Bent Normals"
 				, getBentResult()
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, m_graph.getFinalLayout( getBentResult().wholeViewId ).layout
 				, TextureFactors{}.invert( true ) );
 		}
 
