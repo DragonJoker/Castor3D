@@ -9,7 +9,6 @@
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
-#include <Castor3D/Render/RenderPassTimer.hpp>
 #include <Castor3D/Shader/Program.hpp>
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 
@@ -114,7 +113,6 @@ namespace light_streaks
 	}
 
 	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
-		, castor3d::RenderPassTimer const & timer
 		, crg::FramePass const & previousPass )
 	{
 		VkExtent2D dimensions{ m_target->data->image.data->info.extent.width

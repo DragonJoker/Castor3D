@@ -517,6 +517,44 @@ namespace castor3d
 		return RgbaColour::fromHSB( currentColourHue, 1.0f, 1.0f );
 	}
 
+	uint32_t Engine::registerTimer( RenderPassTimer & timer )
+	{
+		if ( hasRenderLoop() )
+		{
+			return m_renderLoop->registerTimer( timer );
+		}
+
+		return 0u;
+	}
+
+	uint32_t Engine::registerTimer( castor::String const & category
+		, crg::FramePassTimer & timer )
+	{
+		if ( hasRenderLoop() )
+		{
+			return m_renderLoop->registerTimer( category, timer );
+		}
+
+		return 0u;
+	}
+
+	void Engine::unregisterTimer( RenderPassTimer & timer )
+	{
+		if ( hasRenderLoop() )
+		{
+			m_renderLoop->unregisterTimer( timer );
+		}
+	}
+
+	void Engine::unregisterTimer( castor::String const & category
+		, crg::FramePassTimer & timer )
+	{
+		if ( hasRenderLoop() )
+		{
+			m_renderLoop->unregisterTimer( category, timer );
+		}
+	}
+
 	bool Engine::isCleaned()
 	{
 		return m_cleaned;

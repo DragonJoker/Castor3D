@@ -9,7 +9,6 @@
 #include <Castor3D/Material/Texture/Sampler.hpp>
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
-#include <Castor3D/Render/RenderPassTimer.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/Technique/RenderTechnique.hpp>
@@ -245,7 +244,6 @@ namespace smaa
 	}
 
 	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
-		, castor3d::RenderPassTimer const & timer
 		, crg::FramePass const & previousPass )
 	{
 		m_srgbTextureView = m_target;

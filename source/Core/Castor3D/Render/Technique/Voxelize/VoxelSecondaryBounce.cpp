@@ -5,7 +5,6 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
-#include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Render/Technique/Voxelize/VoxelSceneData.hpp"
@@ -205,7 +204,6 @@ namespace castor3d
 		, VoxelSceneData const & vctConfig )
 		: crg::RunnablePass{ pass, context, graph, 2u }
 		, m_vctConfig{ vctConfig }
-		, m_timer{ std::make_shared< RenderPassTimer >( device, "Voxelize", "Secondary Bounce" ) }
 		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, "VoxelSecondaryBounce", createShader( m_vctConfig.gridSize.value() ) }
 		, m_descriptorSetLayout{ createDescriptorLayout( device, m_vctConfig.gridSize.value() ) }
 		, m_pipelineLayout{ createPipelineLayout( device, *m_descriptorSetLayout ) }

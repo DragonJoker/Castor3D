@@ -1,7 +1,6 @@
 #include "Castor3D/Render/RenderPassTimer.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
 #include <ashespp/Command/CommandBuffer.hpp>
@@ -65,16 +64,12 @@ namespace castor3d
 		, m_gpuTime{ 0_ns }
 		, m_startedPasses( size_t( m_passesCount ), { false, false } )
 	{
-		m_engine.getRenderLoop().registerTimer( *this );
+		m_engine.registerTimer( *this );
 	}
 
 	RenderPassTimer::~RenderPassTimer()
 	{
-		if ( m_engine.hasRenderLoop() )
-		{
-			m_engine.getRenderLoop().unregisterTimer( *this );
-		}
-
+		m_engine.unregisterTimer( *this );
 		m_timerQuery.reset();
 	}
 

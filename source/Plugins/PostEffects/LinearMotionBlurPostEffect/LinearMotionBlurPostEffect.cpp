@@ -12,7 +12,6 @@
 #include <Castor3D/Model/Vertex.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>
 #include <Castor3D/Render/RenderPass.hpp>
-#include <Castor3D/Render/RenderPassTimer.hpp>
 #include <Castor3D/Render/RenderPipeline.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
@@ -171,7 +170,6 @@ namespace motion_blur
 	}
 
 	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
-		, castor3d::RenderPassTimer const & timer
 		, crg::FramePass const & previousPass )
 	{
 		m_resultImg = m_renderTarget.getGraph().createImage( crg::ImageData{ "LMBRes"
@@ -189,11 +187,11 @@ namespace motion_blur
 			, m_resultImg.data->info.format
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } );
 		m_pass = &m_renderTarget.getGraph().createPass( "LinearMotionBlurPass"
-			, [this]( crg::FramePass const & pass
+			, [this, &device]( crg::FramePass const & pass
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
 			{
-				return crg::RenderQuadBuilder{}
+				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( castor3d::makeExtent2D( m_renderTarget.getSize() ) )
 					.texcoordConfig( {} )
@@ -247,6 +245,9 @@ namespace motion_blur
 							, srcTransition.to );
 						} )
 					.build( pass, context, graph );
+				device.renderSystem.getEngine()->registerTimer( "LinearMotionBlur"
+					, result->getTimer() );
+				return result;
 			} );
 		m_pass->addDependency( previousPass );
 		m_ubo.createPassBinding( *m_pass

@@ -12,7 +12,6 @@
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapResult.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"

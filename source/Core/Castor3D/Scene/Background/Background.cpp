@@ -86,11 +86,6 @@ namespace castor3d
 					, sampler );
 				m_ibl->update();
 			}
-
-			if ( m_initialised )
-			{
-				m_timer = std::make_shared< RenderPassTimer >( device, cuT( "Background" ), getName() );
-			}
 		}
 
 		return m_initialised;
@@ -98,8 +93,6 @@ namespace castor3d
 
 	void SceneBackground::cleanup( RenderDevice const & device )
 	{
-		m_timer.reset();
-
 		doCleanup();
 
 		device.uboPools->putBuffer( m_modelUbo );
@@ -137,11 +130,6 @@ namespace castor3d
 		{
 			doGpuUpdate( updater );
 		}
-	}
-
-	RenderPassTimerBlock SceneBackground::start()
-	{
-		return m_timer->start();
 	}
 
 	void SceneBackground::notifyChanged()
