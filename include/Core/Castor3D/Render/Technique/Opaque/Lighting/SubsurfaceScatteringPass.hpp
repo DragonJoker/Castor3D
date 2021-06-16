@@ -12,9 +12,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPass.hpp"
 
-#include <ashespp/Command/CommandBuffer.hpp>
-#include <ashespp/Sync/Fence.hpp>
-#include <ashespp/Sync/Semaphore.hpp>
+#include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
 #include <ShaderAST/Shader.hpp>
 
@@ -47,6 +45,7 @@ namespace castor3d
 		C3D_API SubsurfaceScatteringPass( crg::FrameGraph & graph
 			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
+			, Scene const & scene
 			, GpInfoUbo const & gpInfoUbo
 			, SceneUbo const & sceneUbo
 			, castor::Size const & textureSize
@@ -54,35 +53,19 @@ namespace castor3d
 			, LightPassResult const & lpResult );
 		/**
 		 *\~english
-		 *\brief		Destructor.
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Destructeur.
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
-		C3D_API ~SubsurfaceScatteringPass() = default;
-		/**
-		 *\~english
-		 *\brief		Initialises the GPU elements.
-		 *\param[in]	device	The GPU device.
-		 *\~french
-		 *\brief		Initialise les éléments GPU.
-		 *\param[in]	device	Le device GPU.
-		 */
-		C3D_API void initialise( RenderDevice const & device );
-		/**
-		 *\~english
-		 *\brief		Cleans up the GPU elements.
-		 *\param[in]	device	The GPU device.
-		 *\~french
-		 *\brief		Nettoie les éléments GPU.
-		 *\param[in]	device	Le device GPU.
-		 */
-		C3D_API void cleanup( RenderDevice const & device );
+		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( PipelineVisitorBase & visitor );
 
-		inline Texture const & getResult()const
+		Texture const & getResult()const
 		{
 			return m_result;
 		}
@@ -109,74 +92,31 @@ namespace castor3d
 		};
 
 	private:
-		class Blur
-			: private RenderQuad
-		{
-		public:
-			Blur( RenderSystem & renderSystem
-				, RenderDevice const & device
-				, castor::Size const & size
-				, GpInfoUbo const & gpInfoUbo
-				, SceneUbo & sceneUbo
-				, OpaquePassResult const & gpResult
-				, Texture const & source
-				, Texture const & destination
-				, bool isVertic
-				, ashes::PipelineShaderStageCreateInfoArray const & shaderStages );
-			Blur( Blur && rhs )noexcept;
-
-		private:
-			OpaquePassResult const & m_geometryBufferResult;
-			GpInfoUbo const & m_gpInfoUbo;
-			SceneUbo & m_sceneUbo;
-			UniformBufferOffsetT< BlurConfiguration > m_blurUbo;
-			ashes::RenderPassPtr m_renderPass;
-			ashes::FrameBufferPtr m_frameBuffer;
-		};
 		static constexpr uint32_t PassCount = 3u;
-		using BlurImages = std::array< Texture, PassCount >;
-		using BlurArray = std::array< std::unique_ptr< Blur >, PassCount >;
-
-		class Combine
-			: private RenderQuad
-		{
-		public:
-			explicit Combine( RenderSystem & renderSystem
-				, RenderDevice const & device
-				, castor::Size const & size
-				, OpaquePassResult const & gpResult
-				, Texture const & source
-				, BlurImages const & blurResults
-				, Texture const & destination
-				, ashes::PipelineShaderStageCreateInfoArray const & shaderStages );
-			Combine( Combine && rhs )noexcept;
-
-		private:
-			UniformBufferOffsetT< BlurWeights > m_blurUbo;
-			OpaquePassResult const & m_geometryBufferResult;
-			Texture const & m_source;
-			BlurImages const & m_blurResults;
-		};
 
 	private:
+		RenderDevice const & m_device;
 		GpInfoUbo const & m_gpInfoUbo;
 		SceneUbo const & m_sceneUbo;
 		OpaquePassResult const & m_gpResult;
 		LightPassResult const & m_lpResult;
+		Scene const & m_scene;
+		bool m_enabled;
 		castor::Size m_size;
 		Texture m_intermediate;
-		BlurImages m_blurImages;
+		TextureArray m_blurImages;
 		Texture m_result;
+		UniformBufferOffsetT< BlurConfiguration > m_blurCfgUbo;
+		UniformBufferOffsetT< BlurWeights > m_blurWgtUbo;
 		ShaderModule m_blurHorizVertexShader;
 		ShaderModule m_blurHorizPixelShader;
-		BlurArray m_blurX;
+		ashes::PipelineShaderStageCreateInfoArray m_blurXShader;
 		ShaderModule m_blurVerticVertexShader;
 		ShaderModule m_blurVerticPixelShader;
-		BlurArray m_blurY;
+		ashes::PipelineShaderStageCreateInfoArray m_blurYShader;
 		ShaderModule m_combineVertexShader;
 		ShaderModule m_combinePixelShader;
-		std::unique_ptr< Combine > m_combine;
-		bool m_initialised{ false };
+		ashes::PipelineShaderStageCreateInfoArray m_combineShader;
 	};
 }
 

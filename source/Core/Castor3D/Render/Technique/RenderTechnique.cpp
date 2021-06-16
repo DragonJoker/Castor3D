@@ -369,7 +369,7 @@ namespace castor3d
 			, device
 			, m_depth
 			, m_normal
-			, m_renderTarget.getVelocityTexture() ) }
+			, m_renderTarget.getVelocity() ) }
 		, m_opaquePassDesc{ &doCreateOpaquePass() }
 		, m_deferredRendering{ castor::makeUnique< DeferredRendering >( m_renderTarget.getGraph()
 			, *m_opaquePassDesc

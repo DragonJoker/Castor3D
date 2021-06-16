@@ -6,6 +6,8 @@
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 
+#include <RenderGraph/FramePass.hpp>
+
 CU_ImplementCUSmartPtr( castor3d, ShaderBuffer )
 
 using namespace castor;
@@ -92,6 +94,27 @@ namespace castor3d
 	VkDescriptorSetLayoutBinding ShaderBuffer::createLayoutBinding( uint32_t index )const
 	{
 		return makeDescriptorSetLayoutBinding( index, m_type, VK_SHADER_STAGE_FRAGMENT_BIT );
+	}
+
+	void ShaderBuffer::createPassBinding( crg::FramePass & pass
+		, castor::String const & name
+		, uint32_t binding )const
+	{
+		if ( checkFlag( m_buffer->getUsage(), VkBufferUsageFlagBits::VK_BUFFER_USAGE_STORAGE_BUFFER_BIT ) )
+		{
+			pass.addInputStorageBuffer( { *m_buffer, name }
+				, binding
+				, 0u
+				, uint32_t( m_size ) );
+		}
+		else
+		{
+			pass.addUniformBufferView( { *m_buffer, name }
+				, *m_bufferView
+				, binding
+				, m_bufferView->getOffset()
+				, m_bufferView->getRange() );
+		}
 	}
 
 	ashes::WriteDescriptorSet ShaderBuffer::getBinding( uint32_t binding )const
