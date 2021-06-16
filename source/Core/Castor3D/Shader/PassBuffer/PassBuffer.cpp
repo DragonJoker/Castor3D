@@ -129,6 +129,11 @@ namespace castor3d
 		return m_buffer.createLayoutBinding( binding );
 	}
 
+	void PassBuffer::createPassBinding( crg::FramePass & pass, uint32_t binding )const
+	{
+		return m_buffer.createPassBinding( pass, cuT( "Materials" ), binding );
+	}
+
 	void PassBuffer::createBinding( ashes::DescriptorSet & descriptorSet
 		, VkDescriptorSetLayoutBinding const & binding )const
 	{
