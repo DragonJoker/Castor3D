@@ -188,15 +188,16 @@ namespace castor3d
 			, sdw::Vec3 const & indirectDiffuse
 			, sdw::Vec3 const & directSpecular
 			, sdw::Vec3 const & indirectSpecular
+			, sdw::Vec3 const & ambient
+			, sdw::Vec3 const & indirectAmbient
 			, sdw::Float const & ambientOcclusion
 			, sdw::Vec3 const & emissive
 			, sdw::Vec3 const & reflRefr
-			, sdw::Vec3 const & materialAlbedo
-			, sdw::Vec3 const & ambient )
+			, sdw::Vec3 const & materialAlbedo )
 		{
 			return materialAlbedo * ( directDiffuse + ( indirectDiffuse * ambientOcclusion ) )
 				+ directSpecular + ( indirectSpecular * ambientOcclusion )
-				+ ( ambient + indirectDiffuse ) * ambientOcclusion
+				+ ( ambient * indirectAmbient * ambientOcclusion )
 				+ emissive
 				+ reflRefr;
 		}

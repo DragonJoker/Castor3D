@@ -380,11 +380,12 @@ namespace castor3d
 							, lightIndirectDiffuse
 							, lightSpecular
 							, lightIndirectSpecular
+							, ambient
+							, indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse )
 							, occlusion
 							, emissive
 							, reflected + refracted
-							, diffuse
-							, ambient ) );
+							, diffuse ) );
 				}
 				else
 				{
@@ -735,11 +736,12 @@ namespace castor3d
 							, lightIndirectDiffuse
 							, lightSpecular
 							, lightIndirectSpecular
+							, ambient
+							, indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse )
 							, occlusion
 							, emissive
 							, reflected + refracted
-							, albedo
-							, ambient ) );
+							, albedo ) );
 				}
 				else
 				{
@@ -1088,11 +1090,12 @@ namespace castor3d
 							, lightIndirectDiffuse
 							, lightSpecular
 							, lightIndirectSpecular
+							, ambient
+							, indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse )
 							, occlusion
 							, emissive
 							, reflected + refracted
-							, albedo
-							, ambient ) );
+							, albedo ) );
 				}
 				else
 				{

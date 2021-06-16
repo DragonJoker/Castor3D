@@ -448,6 +448,19 @@ namespace castor3d
 			return indirectDiffuse;
 		}
 
+		sdw::Vec3 GlobalIllumination::computeAmbient( SceneFlags sceneFlags
+			, sdw::Vec3 const & indirectDiffuse )
+		{
+			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing )
+				|| checkFlag( sceneFlags, SceneFlag::eLpvGI )
+				|| checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
+			{
+				return indirectDiffuse;
+			}
+
+			return vec3( 1.0_f );
+		}
+
 		sdw::Vec3 GlobalIllumination::computeSpecular( SceneFlags sceneFlags
 			, sdw::Vec3 wsCamera
 			, Surface surface
