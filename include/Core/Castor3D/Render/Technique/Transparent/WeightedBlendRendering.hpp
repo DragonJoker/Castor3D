@@ -66,6 +66,7 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
+		crg::FrameGraph & m_graph;
 		TransparentPassResult const & m_transparentPassResult;
 		crg::ImageViewId m_depthOnlyView;
 		castor::Size m_size;

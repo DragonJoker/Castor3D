@@ -253,11 +253,13 @@ namespace castor3d
 				, info.flags
 				, info.viewType
 				, info.format
-				, { VkImageAspectFlags( ( ashes::isDepthFormat( info.format ) || ashes::isDepthOrStencilFormat( info.format ) )
+				, { VkImageAspectFlags( ashes::isDepthFormat( info.format )
 						? VK_IMAGE_ASPECT_DEPTH_BIT
 						: ( ashes::isStencilFormat( info.format )
 							? VK_IMAGE_ASPECT_STENCIL_BIT
-							: VK_IMAGE_ASPECT_COLOR_BIT ) )
+							: ( ashes::isDepthOrStencilFormat( info.format )
+								? VK_IMAGE_ASPECT_DEPTH_BIT
+								: VK_IMAGE_ASPECT_COLOR_BIT ) ) )
 					, info.subresourceRange.baseMipLevel
 					, info.subresourceRange.levelCount
 					, info.subresourceRange.baseArrayLayer
@@ -970,8 +972,7 @@ namespace castor3d
 							, intermediateBarrierView.layout
 							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 							, VK_QUEUE_FAMILY_IGNORED
-							, VK_QUEUE_FAMILY_IGNORED
-							, true ) );
+							, VK_QUEUE_FAMILY_IGNORED ) );
 				}
 
 				commandBuffer->beginRenderPass( *m_renderPass
@@ -981,7 +982,8 @@ namespace castor3d
 				m_renderQuad->registerPass( *commandBuffer, pass );
 				commandBuffer->endRenderPass();
 
-				if ( intermediate.layout != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )
+				if ( intermediate.layout != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+					&& intermediate.layout != VK_IMAGE_LAYOUT_UNDEFINED )
 				{
 					commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 						, ashes::getStageMask( intermediateBarrierView.layout )
@@ -990,8 +992,7 @@ namespace castor3d
 							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 							, intermediateBarrierView.layout
 							, VK_QUEUE_FAMILY_IGNORED
-							, VK_QUEUE_FAMILY_IGNORED
-							, true ) );
+							, VK_QUEUE_FAMILY_IGNORED ) );
 				}
 
 				commandBuffer->endDebugBlock();
@@ -1017,11 +1018,6 @@ namespace castor3d
 	{
 		auto target = m_renderTarget.lock();
 		CU_Require( target );
-		m_intermediates.push_back( { "Target Result"
-			, target->getTexture().wholeViewId
-			, target->getTexture().image
-			, target->getTexture().wholeView
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
 		target->listIntermediateViews( m_intermediates );
 
 		VkExtent2D extent{ m_size.getWidth(), m_size.getHeight() };
@@ -1032,7 +1028,8 @@ namespace castor3d
 			, m_texture3Dto2D->getTarget().wholeViewId
 			, m_texture3Dto2D->getTarget().image
 			, m_texture3Dto2D->getTarget().wholeView
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL };
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, castor3d::TextureFactors{}.invert( true ) };
 #if C3D_DebugQuads
 		auto intermediates = m_intermediates;
 #else

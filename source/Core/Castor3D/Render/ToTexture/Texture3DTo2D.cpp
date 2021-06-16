@@ -274,7 +274,8 @@ namespace castor3d
 			cmd.draw( textureSize * textureSize * textureSize );
 			cmd.endRenderPass();
 
-			if ( view.layout != VK_IMAGE_LAYOUT_GENERAL )
+			if ( view.layout != VK_IMAGE_LAYOUT_GENERAL
+				&& view.layout != VK_IMAGE_LAYOUT_UNDEFINED )
 			{
 				cmd.memoryBarrier( VK_PIPELINE_STAGE_VERTEX_SHADER_BIT
 					, ashes::getStageMask( view.layout )

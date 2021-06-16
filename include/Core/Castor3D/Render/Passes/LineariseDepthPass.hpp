@@ -96,14 +96,15 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		crg::FramePass const & doInitialiseLinearisePass( crg::FrameGraph & graph );
-		void doInitialiseMinifyPass( crg::FrameGraph & graph );
+		crg::FramePass const & doInitialiseLinearisePass();
+		void doInitialiseMinifyPass();
 
 	public:
 		static constexpr uint32_t MaxMipLevel = 5u;
 
 	private:
 		RenderDevice const & m_device;
+		crg::FrameGraph & m_graph;
 		Engine & m_engine;
 		SsaoConfig const & m_ssaoConfig;
 		crg::ImageViewId m_srcDepthBuffer;

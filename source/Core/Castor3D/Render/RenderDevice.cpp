@@ -149,6 +149,13 @@ namespace castor3d
 
 		bufferPool = std::make_shared< GpuBufferPool >( renderSystem, *this, cuT( "GlobalBufferPool" ) );
 		uboPools = std::make_shared< UniformBufferPools >( renderSystem, *this );
+		m_context = std::make_unique< crg::GraphContext >( *device
+			, VkPipelineCache{}
+			, device->getAllocationCallbacks()
+			, device->getMemoryProperties()
+			, device->getProperties()
+			, false
+			, device->vkGetDeviceProcAddr );
 	}
 
 	RenderDevice::~RenderDevice()
@@ -211,16 +218,5 @@ namespace castor3d
 		}
 
 		return *it;
-	}
-
-	crg::GraphContext RenderDevice::makeContext()const
-	{
-		return { *device
-			, VK_NULL_HANDLE
-			, device->getAllocationCallbacks()
-			, device->getMemoryProperties()
-			, device->getProperties()
-			, false
-			, device->vkGetDeviceProcAddr };
 	}
 }

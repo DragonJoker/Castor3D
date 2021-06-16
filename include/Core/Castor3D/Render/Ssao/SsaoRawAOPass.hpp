@@ -122,6 +122,7 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
+		crg::FrameGraph & m_graph;
 		SsaoConfig const & m_ssaoConfig;
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		GpInfoUbo const & m_gpInfoUbo;

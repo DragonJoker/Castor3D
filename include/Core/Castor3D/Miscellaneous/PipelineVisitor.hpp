@@ -58,14 +58,28 @@ namespace castor3d
 		**/
 		/**@{*/
 		inline void visit( castor::String const & name
+			, crg::ImageViewId const & viewId
+			, VkImage image
+			, VkImageView imageView
+			, VkImageLayout layout
+			, TextureFactors const & factors = {} )
+		{
+			if ( doFilter( viewId.data->info ) )
+			{
+				doVisit( name, viewId, image, imageView, layout, factors );
+			}
+		}
+		inline void visit( castor::String const & name
 			, Texture const & view
 			, VkImageLayout layout
 			, TextureFactors const & factors = {} )
 		{
-			if ( doFilter( view.wholeViewId.data->info ) )
-			{
-				doVisit( name, view, layout, factors );
-			}
+			visit( name
+				, view.wholeViewId
+				, view.image
+				, view.wholeView
+				, layout
+				, factors );
 		}
 		inline void visit( castor::String const & name
 			, ashes::ImageView const & view
@@ -305,9 +319,11 @@ namespace castor3d
 		virtual bool doFilter( VkImageViewCreateInfo const & info )const = 0;
 
 		virtual void doVisit( castor::String const & name
-			, Texture const & view
+			, crg::ImageViewId const & viewId
+			, VkImage image
+			, VkImageView view
 			, VkImageLayout layout
-			, TextureFactors const & factors = {} ) = 0;
+			, TextureFactors const & factors ) = 0;
 		virtual void doVisit( castor::String const & name
 			, ashes::ImageView const & view
 			, VkImageLayout layout
@@ -716,7 +732,9 @@ namespace castor3d
 		}
 
 		void doVisit( castor::String const & name
-			, Texture const & view
+			, crg::ImageViewId const & viewId
+			, VkImage image
+			, VkImageView view
 			, VkImageLayout layout
 			, TextureFactors const & factors = TextureFactors{} )override
 		{
