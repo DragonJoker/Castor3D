@@ -117,23 +117,6 @@ namespace castor3d
 		void update( GpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief		Renders the light passes on currently bound framebuffer.
-		 *\param[in]	device	The GPU device.
-		 *\param[in]	scene	The scene.
-		 *\param[in]	camera	The viewing camera.
-		 *\param[out]	toWait	The semaphore from previous render pass.
-		 *\~french
-		 *\brief		Dessine les passes d'éclairage sur le tampon d'image donné.
-		 *\param[in]	device	Le device GPU.
-		 *\param[in]	scene	La scène.
-		 *\param[in]	camera	La caméra.
-		 *\param[out]	toWait	Le sémaphore de la passe de rendu précédente.
-		 */
-		ashes::Semaphore const & render( Scene const & scene
-			, Camera const & camera
-			, ashes::Semaphore const & toWait );
-		/**
-		 *\~english
 		 *\brief		Visitor acceptance function.
 		 *\param		visitor	The ... visitor.
 		 *\~french
