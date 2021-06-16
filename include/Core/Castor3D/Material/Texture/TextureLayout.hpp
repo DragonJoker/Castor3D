@@ -214,18 +214,7 @@ namespace castor3d
 		 *\param[in]	info				Les informations de l'image.
 		 */
 		C3D_API TextureLayout( RenderSystem & renderSystem
-			, ashes::ImageView imageView );
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	renderSystem		The render system.
-		 *\param[in]	info				The image informations.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	renderSystem		Le render system.
-		 *\param[in]	info				Les informations de l'image.
-		 */
-		C3D_API TextureLayout( RenderSystem & renderSystem
+			, VkImage image
 			, crg::ImageViewId imageView );
 		/**
 		 *\~english
@@ -238,6 +227,7 @@ namespace castor3d
 		 *\param[in]	info				Les informations de l'image.
 		 */
 		C3D_API TextureLayout( RenderSystem & renderSystem
+			, ashes::ImagePtr image
 			, VkImageCreateInfo const & createInfo );
 		/**
 		 *\~english

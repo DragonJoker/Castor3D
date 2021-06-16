@@ -895,29 +895,18 @@ namespace castor3d
 	}
 
 	TextureLayout::TextureLayout( RenderSystem & renderSystem
-		, ashes::ImageView imageView )
-		: TextureLayout{ renderSystem
-			, { VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO
-				, nullptr
-				, imageView.image->getFlags()
-				, imageView.image->getType()
-				, imageView.image->getFormat()
-				, imageView.image->getDimensions()
-				, imageView.image->getMipmapLevels()
-				, imageView.image->getLayerCount()
-				, imageView.image->getSampleCount()
-				, imageView.image->getTiling()
-				, imageView.image->getUsage() } }
-	{
-	}
-
-	TextureLayout::TextureLayout( RenderSystem & renderSystem
+		, VkImage image
 		, crg::ImageViewId imageView )
-		: TextureLayout{ renderSystem, imageView.data->image.data->info }
+		: TextureLayout{ renderSystem
+			, std::make_unique< ashes::Image >( *( *renderSystem.getMainRenderDevice() )
+				, image
+				, m_info )
+			, imageView.data->image.data->info }
 	{
 	}
 
 	TextureLayout::TextureLayout( RenderSystem & renderSystem
+		, ashes::ImagePtr image
 		, VkImageCreateInfo const & createInfo )
 		: OwnedBy< RenderSystem >{ renderSystem }
 		, m_static{ false }
@@ -931,6 +920,8 @@ namespace castor3d
 		, m_cubeView{ &m_defaultView }
 		, m_arrayView{ &m_defaultView }
 		, m_sliceView{ &m_defaultView }
+		, m_ownTexture{ std::move( image ) }
+		, m_texture{ m_ownTexture.get() }
 	{
 		m_info->mipLevels = std::max( 1u, m_info->mipLevels );
 
@@ -1026,10 +1017,14 @@ namespace castor3d
 				m_info->mipLevels = 1u;
 			}
 
-			m_ownTexture = makeImage( device
-				, m_info
-				, m_properties
-				, m_image.getName() );
+			if ( !m_ownTexture )
+			{
+				m_ownTexture = makeImage( device
+					, m_info
+					, m_properties
+					, m_image.getName() );
+			}
+
 			m_texture = m_ownTexture.get();
 			CU_Require( m_info->mipLevels <= 1u
 				|| ( checkFlag( props.optimalTilingFeatures, VK_FORMAT_FEATURE_BLIT_DST_BIT )
