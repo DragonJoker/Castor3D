@@ -50,24 +50,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Program used to combine the transparent and opaque passes.
-	*\~french
-	*\brief
-	*	Programme utilisé pour combiner les passes opaque et transparente.
-	*/
-	struct TransparentResolveProgram;
-	/**
-	*\~english
-	*\brief
-	*	Pass used to combine the transparent and opaque passes.
-	*\~french
-	*\brief
-	*	Passe utilisé pour combiner les passes opaque et transparente.
-	*/
-	class TransparentResolvePass;
-	/**
-	*\~english
-	*\brief
 	*	Transparent nodes pass using Weighted Blend OIT.
 	*\~french
 	*\brief
