@@ -87,7 +87,6 @@ namespace Bloom
 	}
 
 	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
-		, castor3d::RenderPassTimer const & timer
 		, crg::FramePass const & previousPass )
 	{
 		VkExtent2D size{ m_target->data->image.data->info.extent.width

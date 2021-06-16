@@ -3,6 +3,8 @@
 #include "LightStreaksPostEffect/LightStreaksPostEffect.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Render/RenderDevice.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Shader/Program.hpp>
 
 #include <CastorUtils/Graphics/Image.hpp>
@@ -221,16 +223,19 @@ namespace light_streaks
 	{
 		auto previous = &previousPass;
 		auto & hiPass = graph.createPass( "LightStreaksHiPass"
-			, [this, size, enabled]( crg::FramePass const & pass
+			, [this, &device, size, enabled]( crg::FramePass const & pass
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
 			{
-				return std::make_unique< HiPassQuad >( pass
+				auto result = std::make_unique< HiPassQuad >( pass
 					, context
 					, graph
 					, ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages )
 					, size
 					, enabled );
+				device.renderSystem.getEngine()->registerTimer( "LightStreaks"
+					, result->getTimer() );
+				return result;
 			} );
 		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
 			, VK_FILTER_LINEAR
@@ -249,11 +254,11 @@ namespace light_streaks
 		for ( uint32_t i = 1u; i < resultViews.size(); ++i )
 		{
 			auto & pass = graph.createPass( "LightStreaksCopy" + std::to_string( i )
-				, [size, enabled]( crg::FramePass const & pass
+				, [&device, size, enabled]( crg::FramePass const & pass
 					, crg::GraphContext const & context
 					, crg::RunnableGraph & graph )
 				{
-					return std::make_unique< crg::ImageCopy >( pass
+					auto result = std::make_unique< crg::ImageCopy >( pass
 						, context
 						, graph
 						, VkExtent3D{ size.width, size.height, 1u }
@@ -261,6 +266,9 @@ namespace light_streaks
 						, false
 						, nullptr
 						, enabled );
+					device.renderSystem.getEngine()->registerTimer( "LightStreaks"
+						, result->getTimer() );
+					return result;
 				} );
 			pass.addDependency( *m_lastPass );
 			pass.addTransferInputView( resultViews[i - 1u]

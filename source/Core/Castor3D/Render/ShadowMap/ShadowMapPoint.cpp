@@ -7,7 +7,6 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
-#include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Culling/DummyCuller.hpp"
@@ -93,6 +92,8 @@ namespace castor3d
 								, culler
 								, shadowMap );
 							shadowMap.setPass( index, result.get() );
+							device.renderSystem.getEngine()->registerTimer( cuT( "ShadowMapPoint" )
+								, result->getTimer() );
 							return result;
 						} );
 
@@ -111,6 +112,7 @@ namespace castor3d
 					blurs.push_back( std::make_unique< GaussianBlur >( graph
 						, *previousPass
 						, device
+						, cuT( "ShadowMapPoint" )
 						, name
 						, variance.subViewsId[layer * 6u + face]
 						, intermediate

@@ -10,7 +10,7 @@
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
-#include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp"
@@ -670,6 +670,8 @@ namespace castor3d
 					, m_ssaoConfig
 					, m_depth.getExtent() );
 				m_depthPass = result.get();
+				getEngine()->registerTimer( m_renderTarget.getGraph().getName()
+					, result->getTimer() );
 				return result;
 			} );
 		result.addOutputDepthView( m_depth.targetViewId
@@ -696,6 +698,8 @@ namespace castor3d
 					, background
 					, makeExtent2D( m_colour.getExtent() ) );
 				m_backgroundPass = result.get();
+				getEngine()->registerTimer( m_renderTarget.getGraph().getName()
+					, result->getTimer() );
 				return result;
 			} );
 		result.addDependency( *m_depthPassDecl );
@@ -740,6 +744,8 @@ namespace castor3d
 						.vctFirstBounce( m_voxelizer->getFirstBounce() )
 						.vctSecondaryBounce( m_voxelizer->getSecondaryBounce() ) );
 				m_opaquePass = result.get();
+				getEngine()->registerTimer( m_renderTarget.getGraph().getName()
+					, result->getTimer() );
 				return result;
 			} );
 		result.addDependency( *m_backgroundPassDesc );
@@ -795,6 +801,8 @@ namespace castor3d
 						.vctSecondaryBounce( m_voxelizer->getSecondaryBounce() )
 						.hasVelocity( true ) );
 				m_transparentPass = result.get();
+				getEngine()->registerTimer( m_renderTarget.getGraph().getName()
+					, result->getTimer() );
 				return result;
 			} );
 #if C3D_UseDeferredRendering

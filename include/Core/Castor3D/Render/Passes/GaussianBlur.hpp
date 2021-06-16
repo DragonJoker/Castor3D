@@ -44,6 +44,7 @@ namespace castor3d
 		C3D_API GaussianBlur( crg::FrameGraph & graph
 			, crg::FramePass const & previousPass
 			, RenderDevice const & device
+			, castor::String const & category
 			, castor::String const & prefix
 			, crg::ImageViewIdArray const & views
 			, crg::ImageViewId const & intermediateView
@@ -51,18 +52,21 @@ namespace castor3d
 		C3D_API GaussianBlur( crg::FrameGraph & graph
 			, crg::FramePass const & previousPass
 			, RenderDevice const & device
+			, castor::String const & category
 			, castor::String const & prefix
 			, crg::ImageViewIdArray const & views
 			, uint32_t kernelSize );
 		C3D_API GaussianBlur( crg::FrameGraph & graph
 			, crg::FramePass const & previousPass
 			, RenderDevice const & device
+			, castor::String const & category
 			, castor::String const & prefix
 			, crg::ImageViewId const & view
 			, uint32_t kernelSize );
 		C3D_API GaussianBlur( crg::FrameGraph & graph
 			, crg::FramePass const & previousPass
 			, RenderDevice const & device
+			, castor::String const & category
 			, castor::String const & prefix
 			, crg::ImageViewId const & view
 			, crg::ImageViewId const & intermediateView

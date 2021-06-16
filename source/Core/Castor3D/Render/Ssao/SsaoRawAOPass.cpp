@@ -9,7 +9,6 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
-#include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -607,7 +606,7 @@ namespace castor3d
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
 			{
-				return std::make_unique< RenderQuad >( pass
+				auto result = std::make_unique< RenderQuad >( pass
 					, context
 					, graph
 					, getConfig( m_size
@@ -615,6 +614,9 @@ namespace castor3d
 						, m_programs[0].stages
 						, m_programs[1].stages )
 					, m_ssaoConfig );
+				m_device.renderSystem.getEngine()->registerTimer( "SSAO"
+					, result->getTimer() );
+				return result;
 			} );
 		m_lastPass = &pass;
 		pass.addDependency( previousPass );

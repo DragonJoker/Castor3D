@@ -16,7 +16,6 @@
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>
-#include <Castor3D/Render/RenderPassTimer.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Shader/Program.hpp>
@@ -245,7 +244,6 @@ namespace film_grain
 	}
 
 	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
-		, castor3d::RenderPassTimer const & timer
 		, crg::FramePass const & previousPass )
 	{
 		VkExtent2D size{ m_target->data->image.data->info.extent.width
@@ -312,12 +310,15 @@ namespace film_grain
 						, noiseView );
 				}
 
-				return crg::RenderQuadBuilder{}
+				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( castor3d::makeExtent2D( m_renderTarget.getSize() ) )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.build( pass, context, graph );
+				device.renderSystem.getEngine()->registerTimer( "FilmGrain"
+					, result->getTimer() );
+				return result;
 			} );
 		m_pass->addDependency( previousPass );
 		m_configUbo.createPassBinding( *m_pass

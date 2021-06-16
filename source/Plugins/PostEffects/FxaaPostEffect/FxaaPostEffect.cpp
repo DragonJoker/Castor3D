@@ -7,7 +7,6 @@
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
-#include <Castor3D/Render/RenderPassTimer.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Shader/Program.hpp>
@@ -244,7 +243,6 @@ namespace fxaa
 	}
 
 	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
-		, castor3d::RenderPassTimer const & timer
 		, crg::FramePass const & previousPass )
 	{
 		m_resultImg = m_renderTarget.getGraph().createImage( crg::ImageData{ "FxaaRes"
@@ -262,11 +260,11 @@ namespace fxaa
 			, m_resultImg.data->info.format
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } );
 		m_pass = &m_renderTarget.getGraph().createPass( "FxaaPass"
-			, [this]( crg::FramePass const & pass
+			, [this, &device]( crg::FramePass const & pass
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
 			{
-				return crg::RenderQuadBuilder{}
+				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( castor3d::makeExtent2D( m_renderTarget.getSize() ) )
 					.texcoordConfig( {} )
@@ -320,6 +318,9 @@ namespace fxaa
 							, srcTransition.to );
 						} )
 					.build( pass, context, graph );
+				device.renderSystem.getEngine()->registerTimer( "FXAA"
+					, result->getTimer() );
+				return result;
 			} );
 		m_pass->addDependency( previousPass );
 		m_fxaaUbo.createPassBinding( *m_pass

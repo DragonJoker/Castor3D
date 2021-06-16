@@ -6,7 +6,6 @@ See LICENSE file in root folder
 
 #include "BackgroundModule.hpp"
 
-#include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Render/PBR/IblTextures.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
@@ -137,13 +136,6 @@ namespace castor3d
 		*/
 		C3D_API void update( GpuUpdater & updater );
 		/**
-		 *\~english
-		 *\brief		Starts the CPU timer, resets GPU time.
-		 *\~french
-		 *\brief		Démarre le timer CPU, réinitialise le temps GPU.
-		 */
-		C3D_API RenderPassTimerBlock start();
-		/**
 		*\~english
 		*\return
 		*	Notifies a change to apply on GPU for the background.
@@ -264,7 +256,6 @@ namespace castor3d
 		MatrixUbo m_matrixUbo;
 		UniformBufferOffsetT< ModelUboConfiguration > m_modelUbo;
 		castor::Matrix4x4f m_mtxModel;
-		RenderPassTimerSPtr m_timer;
 		TextureLayoutSPtr m_texture;
 		SamplerWPtr m_sampler;
 		std::unique_ptr< IblTextures > m_ibl;

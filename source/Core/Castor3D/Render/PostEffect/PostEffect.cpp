@@ -63,12 +63,7 @@ namespace castor3d
 		auto name = m_fullName;
 		name = castor::string::replace( name, cuT( "PostEffect" ), castor::String{} );
 		name = castor::string::replace( name, cuT( "Post Effect" ), castor::String{} );
-		m_timer = std::make_unique< RenderPassTimer >( device
-			, getKindName( m_kind ) + cuT( " PostEffect" )
-			, name
-			, m_passesCount );
 		m_result = doInitialise( device
-			, *m_timer
 			, previousPass );
 		return m_result != nullptr;
 	}
@@ -76,13 +71,6 @@ namespace castor3d
 	void PostEffect::cleanup( castor3d::RenderDevice const & device )
 	{
 		doCleanup( device );
-		m_timer.reset();
-	}
-
-	RenderPassTimerBlock PostEffect::start()
-	{
-		m_currentPass = 0u;
-		return m_timer->start();
 	}
 
 	void PostEffect::update( CpuUpdater & updater )

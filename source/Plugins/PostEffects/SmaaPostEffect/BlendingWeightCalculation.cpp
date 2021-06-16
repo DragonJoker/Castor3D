@@ -8,7 +8,6 @@
 #include <Castor3D/Buffer/UniformBufferPools.hpp>
 #include <Castor3D/Material/Texture/Sampler.hpp>
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
-#include <Castor3D/Render/RenderPassTimer.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Shader/Program.hpp>
@@ -942,7 +941,7 @@ namespace smaa
 		, m_stages{ makeShaderState( m_device, m_vertexShader )
 			, makeShaderState( m_device, m_pixelShader ) }
 		, m_pass{ renderTarget.getGraph().createPass( "SmaaBlendingWeight"
-			, [this, edgeDetectionView]( crg::FramePass const & pass
+			, [this, &device, edgeDetectionView]( crg::FramePass const & pass
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
 			{
@@ -1001,13 +1000,16 @@ namespace smaa
 				dsState->front.reference = 1u;
 				dsState->back = dsState->front;
 				auto size = edgeDetectionView.data->image.data->info.extent;
-				return crg::RenderQuadBuilder{}
+				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( { size.width, size.height } )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.depthStencilState( dsState )
 					.build( pass, context, graph );
+				device.renderSystem.getEngine()->registerTimer( "SMAA"
+					, result->getTimer() );
+				return result;
 			} ) }
 	{
 		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
