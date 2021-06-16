@@ -26,7 +26,7 @@ namespace smaa
 
 		crg::ImageViewId const & getColourResult()const
 		{
-			return m_outColourView;
+			return m_outColour.wholeViewId;
 		}
 
 		crg::ImageViewId const & getDepthResult()const
@@ -40,10 +40,11 @@ namespace smaa
 		}
 
 	protected:
+		castor3d::RenderDevice const & m_device;
+		crg::FrameGraph & m_graph;
 		SmaaConfig const & m_config;
-		crg::ImageId m_outColourImg;
-		crg::ImageViewId m_outColourView;
-		crg::ImageId m_outDepthImg;
+		castor3d::Texture m_outColour;
+		castor3d::Texture m_outDepth;
 		crg::ImageViewId m_outDepthStencilView;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;

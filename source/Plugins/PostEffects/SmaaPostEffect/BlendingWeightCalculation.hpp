@@ -28,7 +28,7 @@ namespace smaa
 
 		crg::ImageViewId const & getResult()const
 		{
-			return m_resultView;
+			return m_result.wholeViewId;
 		}
 
 		crg::FramePass const & getPass()const
@@ -38,13 +38,13 @@ namespace smaa
 
 	private:
 		castor3d::RenderDevice const & m_device;
+		crg::FrameGraph & m_graph;
 		castor3d::UniformBufferOffsetT< castor::Point4f > m_ubo;
 		crg::ImageId m_areaImg;
 		crg::ImageViewId m_areaView;
 		crg::ImageId m_searchImg;
 		crg::ImageViewId m_searchView;
-		crg::ImageId m_resultImg;
-		crg::ImageViewId m_resultView;
+		castor3d::Texture m_result;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;

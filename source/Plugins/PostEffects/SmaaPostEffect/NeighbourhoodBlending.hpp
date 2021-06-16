@@ -37,13 +37,15 @@ namespace smaa
 		}
 
 	private:
+		castor3d::RenderDevice const & m_device;
+		crg::FrameGraph & m_graph;
 		crg::ImageViewId const & m_sourceView;
 		crg::ImageViewId const & m_blendView;
 		crg::ImageViewId const * m_velocityView;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		crg::ImageIdArray m_images;
+		castor3d::TextureArray m_images;
 		crg::ImageViewIdArray m_imageViews;
 		crg::FramePass & m_pass;
 	};

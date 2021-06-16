@@ -894,6 +894,7 @@ namespace smaa
 		, crg::ImageViewId const & stencilView
 		, SmaaConfig const & config )
 		: m_device{ device }
+		, m_graph{ renderTarget.getGraph() }
 		, m_ubo{ m_device.uboPools->getBuffer< castor::Point4f >( 0u ) }
 		, m_areaImg{ renderTarget.getGraph().createImage( crg::ImageData{ "SMBWArea"
 			, 0u
@@ -921,20 +922,17 @@ namespace smaa
 			, VK_IMAGE_VIEW_TYPE_2D
 			, m_searchImg.data->info.format
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
-		, m_resultImg{ renderTarget.getGraph().createImage( crg::ImageData{ "SMBWRes"
+		, m_result{ m_device
+			, m_graph.getHandler()
+			, "SMBWRes"
 			, 0u
-			, VK_IMAGE_TYPE_2D
-			, VK_FORMAT_R8G8B8A8_UNORM
 			, edgeDetectionView.data->image.data->info.extent
+			, 1u
+			, 1u
+			, VK_FORMAT_R8G8B8A8_UNORM
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } ) }
-		, m_resultView{ renderTarget.getGraph().createView( crg::ImageViewData{ "SMBWRes"
-			, m_resultImg
-			, 0u
-			, VK_IMAGE_VIEW_TYPE_2D
-			, m_resultImg.data->info.format
-			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaBlendingWeight", doBlendingWeightCalculationVP( { edgeDetectionView.data->image.data->info.extent.width
 				, edgeDetectionView.data->image.data->info.extent.height }
 			, config ) }
@@ -1034,8 +1032,9 @@ namespace smaa
 			, {}
 			, linearSampler );
 		m_pass.addInputStencilView( stencilView );
-		m_pass.addOutputColourView( m_resultView
+		m_pass.addOutputColourView( m_result.wholeViewId
 			, castor3d::transparentBlackClearColor );
+		m_result.create();
 	}
 
 	BlendingWeightCalculation::~BlendingWeightCalculation()
@@ -1047,6 +1046,10 @@ namespace smaa
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
+		visitor.visit( "SMAA BlendingWeight Colour"
+			, m_result
+			, m_graph.getFinalLayout( m_result.wholeViewId ).layout
+			, castor3d::TextureFactors{}.invert( true ) );
 	}
 
 	void BlendingWeightCalculation::cpuUpdate( castor::Point4f const & subsampleIndices )

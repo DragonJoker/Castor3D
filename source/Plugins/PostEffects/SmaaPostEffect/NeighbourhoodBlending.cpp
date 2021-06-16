@@ -253,14 +253,16 @@ namespace smaa
 		, crg::ImageViewId const & blendView
 		, crg::ImageViewId const * velocityView
 		, SmaaConfig const & config )
-		: m_sourceView{ sourceView }
+		: m_device{ device }
+		, m_graph{ renderTarget.getGraph() }
+		, m_sourceView{ sourceView }
 		, m_blendView{ blendView }
 		, m_velocityView{ velocityView }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaNeighbourhood", doGetNeighbourhoodBlendingVP( renderTarget.getSize(), config ) }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaNeighbourhood", doGetNeighbourhoodBlendingFP( renderTarget.getSize(), config, velocityView != nullptr ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
-		, m_pass{ renderTarget.getGraph().createPass( "SmaaNeighbourhood"
+		, m_pass{ m_graph.createPass( "SmaaNeighbourhood"
 			, [this, &config]( crg::FramePass const & pass
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
@@ -300,26 +302,24 @@ namespace smaa
 		}
 
 		auto size = castor3d::makeExtent3D( renderTarget.getSize() );
-		auto & graph = renderTarget.getGraph();
 
 		for ( uint32_t i = 0; i < config.maxSubsampleIndices; ++i )
 		{
-			m_images.push_back( graph.createImage( crg::ImageData{ "SMNBRes" + std::to_string( i )
+			m_images.emplace_back( m_device
+				, m_graph.getHandler()
+				, "SMNBRes" + std::to_string( i )
 				, 0u
-				, VK_IMAGE_TYPE_2D
-				, VK_FORMAT_R8G8B8A8_SRGB
 				, size
+				, 1u
+				, 1u
+				, VK_FORMAT_R8G8B8A8_SRGB
 				, ( VK_IMAGE_USAGE_SAMPLED_BIT
 					| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
-					| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) } ) );
-			auto image = m_images.back();
-			m_imageViews.push_back( graph.createView( crg::ImageViewData{ image.data->name
-				, image
-				, 0u
-				, VK_IMAGE_VIEW_TYPE_2D
-				, image.data->info.format
-				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) );
+					| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) );
+			auto & image = m_images.back();
+			image.create();
+			m_imageViews.push_back( image.wholeViewId );
 		}
 
 		m_pass.addOutputColourView( m_imageViews
@@ -330,6 +330,14 @@ namespace smaa
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
+
+		for ( uint32_t i = 0; i < m_images.size(); ++i )
+		{
+			visitor.visit( "SMAA NeighbourhoodBlending " + std::to_string( i )
+				, m_images[i]
+				, m_graph.getFinalLayout( m_images[i].wholeViewId ).layout
+				, castor3d::TextureFactors{}.invert( true ) );
+		}
 	}
 
 	//*********************************************************************************************
