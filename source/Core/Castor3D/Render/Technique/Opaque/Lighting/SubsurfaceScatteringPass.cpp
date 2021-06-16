@@ -15,6 +15,7 @@
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPassResult.hpp"
 #include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
@@ -43,9 +44,31 @@ namespace castor3d
 {
 	namespace
 	{
-		ShaderPtr doGetVertexProgram( Engine & engine )
+		enum BlurId : size_t
 		{
-			auto & renderSystem = *engine.getRenderSystem();
+			BlurMaterialsUboId,
+			BlurSceneUboId,
+			BlurGpInfoUboId,
+			BlurSssUboId,
+			BlurDepthImgId,
+			BlurData4ImgId,
+			BlurData5ImgId,
+			BlurLgtDiffImgId,
+		};
+
+		enum CombId : size_t
+		{
+			CombMaterialsUboId,
+			CombData4ImgId,
+			CombData5ImgId,
+			CombBlur1ImgId,
+			CombBlur2ImgId,
+			CombBlur3ImgId,
+			CombLgtDiffImgId,
+		};
+
+		ShaderPtr getVertexProgram()
+		{
 			using namespace sdw;
 			VertexWriter writer;
 
@@ -66,22 +89,9 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		enum BlurId : size_t
-		{
-			BlurMaterialsUboId,
-			BlurSceneUboId,
-			BlurGpInfoUboId,
-			BlurSssUboId,
-			BlurDepthImgId,
-			BlurData4ImgId,
-			BlurData5ImgId,
-			BlurLgtDiffImgId,
-		};
-
-		ShaderPtr doGetBlurProgram( Engine & engine
+		ShaderPtr getBlurProgram( RenderSystem const & renderSystem
 			, bool isVertic )
 		{
-			auto & renderSystem = *engine.getRenderSystem();
 			using namespace sdw;
 			FragmentWriter writer;
 
@@ -194,25 +204,14 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		enum CombId : size_t
+		ShaderPtr getCombineProgram( RenderSystem const & renderSystem )
 		{
-			CombData4ImgId = 1u,
-			CombData5ImgId,
-			CombBlur1ImgId,
-			CombBlur2ImgId,
-			CombBlur3ImgId,
-			CombLgtDiffImgId,
-		};
-
-		ShaderPtr doGetCombineProgram( Engine & engine )
-		{
-			auto & renderSystem = *engine.getRenderSystem();
 			using namespace sdw;
 			FragmentWriter writer;
 
 			// Shader inputs
 			auto materials = shader::createMaterials( writer, PassFlag( 0u ) );
-			materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers(), BlurMaterialsUboId, 0u );
+			materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers(), CombMaterialsUboId, 0u );
 
 			auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), CombData4ImgId, 0u );
 			auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), CombData5ImgId, 0u );
@@ -282,20 +281,16 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ashes::PipelineShaderStageCreateInfoArray doCreateBlurProgram( Engine & engine
-			, RenderDevice const & device
+		ashes::PipelineShaderStageCreateInfoArray doCreateBlurProgram( RenderDevice const & device
 			, bool isVertic
 			, ShaderModule & vertexShader
 			, ShaderModule & pixelShader )
 		{
-			vertexShader.shader = doGetVertexProgram( engine );
-			pixelShader.shader = doGetBlurProgram( engine, isVertic );
+			vertexShader.shader = getVertexProgram();
+			pixelShader.shader = getBlurProgram( device.renderSystem, isVertic );
 
-			return ashes::PipelineShaderStageCreateInfoArray
-			{
-				makeShaderState( device, vertexShader ),
-				makeShaderState( device, pixelShader ),
-			};
+			return { makeShaderState( device, vertexShader )
+				, makeShaderState( device, pixelShader ) };
 		}
 
 		ashes::PipelineShaderStageCreateInfoArray doCreateCombineProgram( Engine & engine
@@ -303,14 +298,11 @@ namespace castor3d
 			, ShaderModule & vertexShader
 			, ShaderModule & pixelShader )
 		{
-			vertexShader.shader = doGetVertexProgram( engine );
-			pixelShader.shader = doGetCombineProgram( engine );
+			vertexShader.shader = getVertexProgram();
+			pixelShader.shader = getCombineProgram( device.renderSystem );
 
-			return ashes::PipelineShaderStageCreateInfoArray
-			{
-				makeShaderState( device, vertexShader ),
-				makeShaderState( device, pixelShader ),
-			};
+			return { makeShaderState( device, vertexShader )
+				, makeShaderState( device, pixelShader ) };
 		}
 
 		SamplerSPtr doCreateSampler( Engine & engine )
@@ -363,212 +355,16 @@ namespace castor3d
 				, { ashes::getAspectMask( getFormat( image ) ), 0u, 1u, 0u, 1u } } );
 		}
 
-		ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
-			, VkFormat format
-			, std::string name )
+		crg::rq::Config createConfig( castor::Size const & size
+			, ashes::PipelineShaderStageCreateInfoArray const & shaderStages
+			, bool const * enabled )
 		{
-			ashes::VkAttachmentDescriptionArray attachments{ { 0u
-				, format
-				, VK_SAMPLE_COUNT_1_BIT
-				, VK_ATTACHMENT_LOAD_OP_CLEAR
-				, VK_ATTACHMENT_STORE_OP_STORE
-				, VK_ATTACHMENT_LOAD_OP_DONT_CARE
-				, VK_ATTACHMENT_STORE_OP_DONT_CARE
-				, VK_IMAGE_LAYOUT_UNDEFINED
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } };
-			ashes::SubpassDescriptionArray subpasses;
-			subpasses.emplace_back( ashes::SubpassDescription{ 0u
-				, VK_PIPELINE_BIND_POINT_GRAPHICS
-				, {}
-				, { { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } }
-				, {}
-				, ashes::nullopt
-				, {} } );
-			ashes::VkSubpassDependencyArray dependencies{ { VK_SUBPASS_EXTERNAL
-					, 0u
-					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-					, VK_ACCESS_SHADER_READ_BIT
-					, VK_DEPENDENCY_BY_REGION_BIT }
-				, { 0u
-					, VK_SUBPASS_EXTERNAL
-					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-					, VK_ACCESS_SHADER_READ_BIT
-					, VK_DEPENDENCY_BY_REGION_BIT } };
-			ashes::RenderPassCreateInfo createInfo{ 0u
-				, std::move( attachments )
-				, std::move( subpasses )
-				, std::move( dependencies ) };
-			auto result = device->createRenderPass( std::move( name )
-				, std::move( createInfo ) );
+			crg::rq::Config result;
+			result.renderSize = makeExtent2D( size );
+			result.baseConfig.programs = { crg::makeVkArray< VkPipelineShaderStageCreateInfo >( shaderStages ) };
+			result.enabled = enabled;
 			return result;
 		}
-
-		ashes::FrameBufferPtr doCreateFrameBuffer( ashes::RenderPass const & renderPass
-			, castor::Size const & size
-			, ashes::ImageView const & view
-			, std::string name )
-		{
-			ashes::ImageViewCRefArray attaches;
-			attaches.emplace_back( view );
-			auto result = renderPass.createFrameBuffer( std::move( name )
-				, { size.getWidth(), size.getHeight() }
-				, std::move( attaches ) );
-			return result;
-		}
-
-		rq::BindingDescriptionArray createBlurBindings( PassBuffer const & buffer )
-		{
-			return rq::BindingDescriptionArray{ { buffer.getType(), ashes::nullopt }		// Pass Buffer
-				, { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, ashes::nullopt }						// Scene UBO
-				, { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, ashes::nullopt }						// GpInfo UBO
-				, { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, ashes::nullopt }						// Blur UBO
-				, { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D }		// Depth
-				, { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D }		// Translucency
-				, { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D }		// MaterialIndex
-				, { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D } };	// LightDiffuse
-		}
-
-		rq::BindingDescriptionArray createCombineBindings( PassBuffer const & buffer )
-		{
-			return rq::BindingDescriptionArray{ { buffer.getType(), ashes::nullopt }		// Pass Buffer
-				, { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D }		// Translucency
-				, { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D }		// MaterialIndex
-				, { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D }		// BlurResult 0
-				, { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D }		// BlurResult 1
-				, { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D }		// BlurResult 2
-				, { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D } };	// LightDiffuse
-		}
-	}
-
-	//*********************************************************************************************
-
-	SubsurfaceScatteringPass::Blur::Blur( RenderSystem & renderSystem
-		, RenderDevice const & device
-		, castor::Size const & size
-		, GpInfoUbo const & gpInfoUbo
-		, SceneUbo & sceneUbo
-		, OpaquePassResult const & gpResult
-		, Texture const & source
-		, Texture const & destination
-		, bool isVertic
-		, ashes::PipelineShaderStageCreateInfoArray const & shaderStages )
-		: RenderQuad{ device
-			, "SubscatteringBlur"
-			, VK_FILTER_LINEAR
-			, { createBlurBindings( renderSystem.getEngine()->getMaterialCache().getPassBuffer() )
-				, ashes::nullopt
-				, rq::Texcoord{} } }
-		, m_geometryBufferResult{ gpResult }
-		, m_gpInfoUbo{ gpInfoUbo }
-		, m_sceneUbo{ sceneUbo }
-		, m_blurUbo{ m_device.uboPools->getBuffer< BlurConfiguration >( 0u ) }
-	{
-		auto & configuration = m_blurUbo.getData();
-		configuration.blurCorrection = 1.0f;
-		configuration.blurPixelSize = castor::Point2f{ 1.0f / size.getWidth(), 1.0f / size.getHeight() };
-		// TODO CRG
-		//VkExtent2D extent{ size.getWidth(), size.getHeight() };
-		//createPipelineAndPass( extent
-		//	, castor::Position{}
-		//	, shaderStages
-		//	, *m_renderPass
-		//	, { m_renderSystem.getEngine()->getMaterialCache().getPassBuffer().getBinding( BlurMaterialsUboId )
-		//		, makeDescriptorWrite( m_sceneUbo.getUbo(), BlurSceneUboId )
-		//		, makeDescriptorWrite( m_gpInfoUbo.getUbo(), BlurGpInfoUboId )
-		//		, makeDescriptorWrite( m_blurUbo, BlurSssUboId )
-		//		, makeDescriptorWrite( m_geometryBufferResult[DsTexture::eDepth].getTexture()->getDefaultView().getSampledView()
-		//			, m_sampler->getSampler()
-		//			, BlurDepthImgId )
-		//		, makeDescriptorWrite( m_geometryBufferResult[DsTexture::eData4].getTexture()->getDefaultView().getSampledView()
-		//			, m_sampler->getSampler()
-		//			, BlurData4ImgId )
-		//		, makeDescriptorWrite( m_geometryBufferResult[DsTexture::eData5].getTexture()->getDefaultView().getSampledView()
-		//			, m_sampler->getSampler()
-		//			, BlurData5ImgId )
-		//		, makeDescriptorWrite( source.getTexture()->getDefaultView().getSampledView()
-		//			, m_sampler->getSampler()
-		//			, BlurLgtDiffImgId )
-		//		}
-		//	, {} );
-	}
-
-	SubsurfaceScatteringPass::Blur::Blur( Blur && rhs )noexcept
-		: RenderQuad{ std::forward< RenderQuad >( rhs ) }
-		, m_geometryBufferResult{ rhs.m_geometryBufferResult }
-		, m_gpInfoUbo{ rhs.m_gpInfoUbo }
-		, m_sceneUbo{ rhs.m_sceneUbo }
-		, m_blurUbo{ rhs.m_blurUbo }
-		, m_renderPass{ std::move( rhs.m_renderPass ) }
-		, m_frameBuffer{ std::move( rhs.m_frameBuffer ) }
-	{
-	}
-
-	//*********************************************************************************************
-
-	SubsurfaceScatteringPass::Combine::Combine( RenderSystem & renderSystem
-		, RenderDevice const & device
-		, castor::Size const & size
-		, OpaquePassResult const & gpResult
-		, Texture const & source
-		, SubsurfaceScatteringPass::BlurImages const & blurResults
-		, Texture const & destination
-		, ashes::PipelineShaderStageCreateInfoArray const & shaderStages )
-		: RenderQuad{ device
-			, cuT( "SubscatteringCombine" )
-			, VK_FILTER_LINEAR
-			, { createCombineBindings( renderSystem.getEngine()->getMaterialCache().getPassBuffer() )
-				, ashes::nullopt
-				, rq::Texcoord{} } }
-		, m_blurUbo{ m_device.uboPools->getBuffer< BlurWeights >( 0u ) }
-		, m_geometryBufferResult{ gpResult }
-		, m_source{ source }
-		, m_blurResults{ blurResults }
-	{
-		auto & weights = m_blurUbo.getData();
-		weights.originalWeight = castor::Point4f{ 0.2406f, 0.4475f, 0.6159f, 0.25f };
-		weights.blurWeights[0] = castor::Point4f{ 0.1158, 0.3661, 0.3439, 0.25 };
-		weights.blurWeights[1] = castor::Point4f{ 0.1836, 0.1864, 0.0, 0.25 };
-		weights.blurWeights[2] = castor::Point4f{ 0.46, 0.0, 0.0402, 0.25 };
-		weights.blurVariance = castor::Point4f{ 0.0516, 0.2719, 2.0062 };
-		// TODO CRG
-		//VkExtent2D extent{ size.getWidth(), size.getHeight() };
-		//createPipelineAndPass( extent
-		//	, castor::Position{}
-		//	, shaderStages
-		//	, *m_renderPass
-		//	, { m_renderSystem.getEngine()->getMaterialCache().getPassBuffer().getBinding( BlurMaterialsUboId )
-		//		, makeDescriptorWrite( m_geometryBufferResult[DsTexture::eData4].getTexture()->getDefaultView().getSampledView()
-		//			, m_sampler->getSampler()
-		//			, CombData4ImgId )
-		//		, makeDescriptorWrite( m_geometryBufferResult[DsTexture::eData5].getTexture()->getDefaultView().getSampledView()
-		//			, m_sampler->getSampler()
-		//			, CombData5ImgId )
-		//		, makeDescriptorWrite( m_blurResults[0].getTexture()->getDefaultView().getSampledView()
-		//			, m_blurResults[0].getSampler()->getSampler()
-		//			, CombBlur1ImgId )
-		//		, makeDescriptorWrite( m_blurResults[1].getTexture()->getDefaultView().getSampledView()
-		//			, m_blurResults[1].getSampler()->getSampler()
-		//			, CombBlur2ImgId )
-		//		, makeDescriptorWrite( m_blurResults[2].getTexture()->getDefaultView().getSampledView()
-		//			, m_blurResults[2].getSampler()->getSampler()
-		//			, CombBlur3ImgId )
-		//		, makeDescriptorWrite( source.getTexture()->getDefaultView().getSampledView()
-		//			, m_sampler->getSampler()
-		//			, CombLgtDiffImgId ) }
-		//	, {} );
-	}
-
-	SubsurfaceScatteringPass::Combine::Combine( Combine && rhs )noexcept
-		: RenderQuad{ std::forward< RenderQuad >( rhs ) }
-		, m_blurUbo{ rhs.m_blurUbo }
-		, m_geometryBufferResult{ rhs.m_geometryBufferResult }
-		, m_source{ rhs.m_source }
-		, m_blurResults{ rhs.m_blurResults }
-	{
 	}
 
 	//*********************************************************************************************
@@ -583,161 +379,187 @@ namespace castor3d
 	SubsurfaceScatteringPass::SubsurfaceScatteringPass( crg::FrameGraph & graph
 		, crg::FramePass const *& previousPass
 		, RenderDevice const & device
+		, Scene const & scene
 		, GpInfoUbo const & gpInfoUbo
 		, SceneUbo const & sceneUbo
 		, castor::Size const & textureSize
 		, OpaquePassResult const & gpResult
 		, LightPassResult const & lpResult )
 		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
+		, m_device{ device }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_sceneUbo{ sceneUbo }
 		, m_gpResult{ gpResult }
 		, m_lpResult{ lpResult }
+		, m_scene{ scene }
+		, m_enabled{ m_scene.needsSubsurfaceScattering() }
 		, m_size{ textureSize }
-		, m_intermediate{ doCreateImage( graph, device, textureSize, "SubsurfaceScattering intermediate" ) }
-		, m_blurHorizVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SssBlurX" }
-		, m_blurHorizPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SssBlurX" }
-		, m_blurVerticVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SssBlurY" }
-		, m_blurVerticPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SssBlurY" }
-		, m_combineVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SssCombine" }
-		, m_combinePixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SssCombine" }
-		, m_blurImages{ doCreateImage( graph, device, textureSize, "SubsurfaceScattering Blur 0" )
-			, doCreateImage( graph, device, textureSize, "SubsurfaceScattering Blur 1" )
-			, doCreateImage( graph, device, textureSize, "SubsurfaceScattering Blur 2" ) }
-		, m_result{ doCreateImage( graph, device, textureSize, "SubsurfaceScattering Result" ) }
+		, m_intermediate{ doCreateImage( graph, m_device, textureSize, "SSSIntermediate" ) }
+		, m_blurImages{ doCreateImage( graph, m_device, textureSize, "SSSBlur0" )
+			, doCreateImage( graph, m_device, textureSize, "SSSBlur1" )
+			, doCreateImage( graph, m_device, textureSize, "SSSBlur2" ) }
+		, m_result{ doCreateImage( graph, m_device, textureSize, "SSSResult" ) }
+		, m_blurCfgUbo{ m_device.uboPools->getBuffer< BlurConfiguration >( 0u ) }
+		, m_blurWgtUbo{ m_device.uboPools->getBuffer< BlurWeights >( 0u ) }
+		, m_blurHorizVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SSSBlurX", getVertexProgram() }
+		, m_blurHorizPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SSSBlurX", getBlurProgram( m_device.renderSystem, false ) }
+		, m_blurXShader{ makeShaderState( m_device, m_blurHorizVertexShader )
+			, makeShaderState( m_device, m_blurHorizPixelShader ) }
+		, m_blurVerticVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SSSBlurY", getVertexProgram() }
+		, m_blurVerticPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SSSBlurY", getBlurProgram( m_device.renderSystem, true ) }
+		, m_blurYShader{ makeShaderState( m_device, m_blurVerticVertexShader )
+			, makeShaderState( m_device, m_blurVerticPixelShader ) }
+		, m_combineVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SSSCombine", getVertexProgram() }
+		, m_combinePixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SSSCombine", getCombineProgram( m_device.renderSystem ) }
+		, m_combineShader{ makeShaderState( m_device, m_combineVertexShader )
+			, makeShaderState( m_device, m_combinePixelShader ) }
 	{
-	}
+		auto & configuration = m_blurCfgUbo.getData();
+		configuration.blurCorrection = 1.0f;
+		configuration.blurPixelSize = castor::Point2f{ 1.0f / m_size.getWidth(), 1.0f / m_size.getHeight() };
 
-	void SubsurfaceScatteringPass::initialise( RenderDevice const & device )
-	{
-		if ( m_initialised )
+		auto & weights = m_blurWgtUbo.getData();
+		weights.originalWeight = castor::Point4f{ 0.2406f, 0.4475f, 0.6159f, 0.25f };
+		weights.blurWeights[0] = castor::Point4f{ 0.1158, 0.3661, 0.3439, 0.25 };
+		weights.blurWeights[1] = castor::Point4f{ 0.1836, 0.1864, 0.0, 0.25 };
+		weights.blurWeights[2] = castor::Point4f{ 0.46, 0.0, 0.0402, 0.25 };
+		weights.blurVariance = castor::Point4f{ 0.0516, 0.2719, 2.0062 };
+		auto blurXSource = &m_lpResult[LpTexture::eDiffuse];
+
+		for ( uint32_t i = 0u; i < PassCount; ++i )
 		{
-			return;
+			auto blurYDestination = &m_blurImages[i];
+			auto & blurX = graph.createPass( "SSSBlurX" + std::to_string( i )
+				, [this]( crg::FramePass const & pass
+					, crg::GraphContext const & context
+					, crg::RunnableGraph & graph )
+				{
+					auto result = std::make_unique< crg::RenderQuad >( pass
+						, context
+						, graph
+						, 1u
+						, createConfig( m_size, m_blurXShader, &m_enabled ) );
+					getEngine()->registerTimer( "SSS"
+						, result->getTimer() );
+					return result;
+				} );
+			blurX.addDependency( *previousPass );
+			previousPass = &blurX;
+			getEngine()->getMaterialCache().getPassBuffer().createPassBinding( blurX
+				, BlurMaterialsUboId );
+			m_sceneUbo.createPassBinding( blurX
+				, BlurSceneUboId );
+			m_gpInfoUbo.createPassBinding( blurX
+				, BlurGpInfoUboId );
+			m_blurCfgUbo.createPassBinding( blurX
+				, "BlurCfg"
+				, BlurSssUboId );
+			blurX.addSampledView( m_gpResult[DsTexture::eDepth].wholeViewId
+				, BlurDepthImgId
+				, VK_IMAGE_LAYOUT_UNDEFINED );
+			blurX.addSampledView( m_gpResult[DsTexture::eData4].wholeViewId
+				, BlurData4ImgId
+				, VK_IMAGE_LAYOUT_UNDEFINED );
+			blurX.addSampledView( m_gpResult[DsTexture::eData5].wholeViewId
+				, BlurData5ImgId
+				, VK_IMAGE_LAYOUT_UNDEFINED );
+			blurX.addSampledView( blurXSource->wholeViewId
+				, BlurLgtDiffImgId
+				, VK_IMAGE_LAYOUT_UNDEFINED );
+			blurX.addOutputColourView( m_intermediate.targetViewId );
+
+			auto & blurY = graph.createPass( "SSSBlurY" + std::to_string( i )
+				, [this]( crg::FramePass const & pass
+					, crg::GraphContext const & context
+					, crg::RunnableGraph & graph )
+				{
+					auto result = std::make_unique< crg::RenderQuad >( pass
+						, context
+						, graph
+						, 1u
+						, createConfig( m_size, m_blurYShader, &m_enabled ) );
+					getEngine()->registerTimer( "SSS"
+						, result->getTimer() );
+					return result;
+				} );
+			blurY.addDependency( *previousPass );
+			previousPass = &blurY;
+			getEngine()->getMaterialCache().getPassBuffer().createPassBinding( blurY
+				, BlurMaterialsUboId );
+			m_sceneUbo.createPassBinding( blurY
+				, BlurSceneUboId );
+			m_gpInfoUbo.createPassBinding( blurY
+				, BlurGpInfoUboId );
+			m_blurCfgUbo.createPassBinding( blurY
+				, "BlurCfg"
+				, BlurSssUboId );
+			blurY.addSampledView( m_gpResult[DsTexture::eDepth].wholeViewId
+				, BlurDepthImgId
+				, VK_IMAGE_LAYOUT_UNDEFINED );
+			blurY.addSampledView( m_gpResult[DsTexture::eData4].wholeViewId
+				, BlurData4ImgId
+				, VK_IMAGE_LAYOUT_UNDEFINED );
+			blurY.addSampledView( m_gpResult[DsTexture::eData5].wholeViewId
+				, BlurData5ImgId
+				, VK_IMAGE_LAYOUT_UNDEFINED );
+			blurY.addSampledView( m_intermediate.wholeViewId
+				, BlurLgtDiffImgId
+				, VK_IMAGE_LAYOUT_UNDEFINED );
+			blurX.addOutputColourView( blurYDestination->targetViewId );
+
+			blurXSource = blurYDestination;
 		}
 
-		auto & engine = *getEngine();
+		auto & pass = graph.createPass("SSSCombine"
+			, [this]( crg::FramePass const & pass
+				, crg::GraphContext const & context
+				, crg::RunnableGraph & graph )
+			{
+				auto result = std::make_unique< crg::RenderQuad >( pass
+					, context
+					, graph
+					, 1u
+					, createConfig( m_size, m_combineShader, &m_enabled ) );
+				getEngine()->registerTimer( "SSS"
+					, result->getTimer() );
+				return result;
+			} );
+		pass.addDependency( *previousPass );
+		previousPass = &pass;
+		getEngine()->getMaterialCache().getPassBuffer().createPassBinding( pass
+			, CombMaterialsUboId );
+		pass.addSampledView( m_gpResult[DsTexture::eData4].wholeViewId
+			, CombData4ImgId
+			, VK_IMAGE_LAYOUT_UNDEFINED );
+		pass.addSampledView( m_gpResult[DsTexture::eData5].wholeViewId
+			, CombData5ImgId
+			, VK_IMAGE_LAYOUT_UNDEFINED );
+		pass.addSampledView( m_blurImages[0].wholeViewId
+			, CombBlur1ImgId
+			, VK_IMAGE_LAYOUT_UNDEFINED );
+		pass.addSampledView( m_blurImages[1].wholeViewId
+			, CombBlur2ImgId
+			, VK_IMAGE_LAYOUT_UNDEFINED );
+		pass.addSampledView( m_blurImages[2].wholeViewId
+			, CombBlur3ImgId
+			, VK_IMAGE_LAYOUT_UNDEFINED );
+		pass.addSampledView( m_lpResult[LpTexture::eDiffuse].wholeViewId
+			, CombLgtDiffImgId
+			, VK_IMAGE_LAYOUT_UNDEFINED );
+		pass.addOutputColourView( m_result.targetViewId );
 
-		// TODO CRG
-		//// Horizontal blur pass
-		//auto blurHorizProgram = doCreateBlurProgram( engine
-		//	, device
-		//	, false
-		//	, m_blurHorizVertexShader
-		//	, m_blurHorizPixelShader );
-		//m_blurX = { std::make_unique< Blur >( *engine.getRenderSystem()
-		//		, device
-		//		, m_size
-		//		, m_gpInfoUbo
-		//		, m_sceneUbo
-		//		, m_gpResult
-		//		, m_lpResult[LpTexture::eDiffuse]
-		//		, m_intermediate
-		//		, false
-		//		, blurHorizProgram )
-		//	, std::make_unique< Blur >( *engine.getRenderSystem()
-		//		, device
-		//		, m_size
-		//		, m_gpInfoUbo
-		//		, m_sceneUbo
-		//		, m_gpResult
-		//		, m_blurResults[0]
-		//		, m_intermediate
-		//		, false
-		//		, blurHorizProgram )
-		//	, std::make_unique< Blur >( *engine.getRenderSystem()
-		//		, device
-		//		, m_size
-		//		, m_gpInfoUbo
-		//		, m_sceneUbo
-		//		, m_gpResult
-		//		, m_blurResults[1]
-		//		, m_intermediate
-		//		, false
-		//		, blurHorizProgram ) };
+		m_result.create();
+		m_intermediate.create();
 
-		//// Vertical blur pass
-		//auto blurVerticProgram = doCreateBlurProgram( engine
-		//	, device
-		//	, true
-		//	, m_blurVerticVertexShader
-		//	, m_blurVerticPixelShader );
-		//m_blurY = { std::make_unique< Blur >( *engine.getRenderSystem()
-		//		, device
-		//		, m_size
-		//		, m_gpInfoUbo
-		//		, m_sceneUbo
-		//		, m_gpResult
-		//		, m_intermediate
-		//		, m_blurResults[0]
-		//		, true
-		//		, blurVerticProgram )
-		//	, std::make_unique< Blur >( *engine.getRenderSystem()
-		//		, device
-		//		, m_size
-		//		, m_gpInfoUbo
-		//		, m_sceneUbo
-		//		, m_gpResult
-		//		, m_intermediate
-		//		, m_blurResults[1]
-		//		, true
-		//		, blurVerticProgram )
-		//	, std::make_unique< Blur >( *engine.getRenderSystem()
-		//		, device
-		//		, m_size
-		//		, m_gpInfoUbo
-		//		, m_sceneUbo
-		//		, m_gpResult
-		//		, m_intermediate
-		//		, m_blurResults[2]
-		//		, true
-		//		, blurVerticProgram ) };
-
-		//// Combine pass
-		//auto combineProgram = doCreateCombineProgram( engine
-		//	, device
-		//	, m_combineVertexShader
-		//	, m_combinePixelShader );
-		//m_combine = std::make_unique< Combine >( *engine.getRenderSystem()
-		//	, device
-		//	, m_size
-		//	, m_gpResult
-		//	, m_lpResult[LpTexture::eDiffuse]
-		//	, m_blurResults
-		//	, m_result
-		//	, combineProgram );
-
-		// Commands.
-		//m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( "SSSSS pass" );
-		//m_commandBuffer->begin();
-		//m_commandBuffer->beginDebugBlock( { "Deferred - Subsurface Subscattering"
-		//	, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
-		//m_timer->beginPass( *m_commandBuffer );
-		//m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT
-		//	, VK_PIPELINE_STAGE_TRANSFER_BIT
-		//	, m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ) );
-
-		//for ( size_t i{ 0u }; i < m_blurResults.size(); ++i )
-		//{
-		//	m_blurX[i]->prepareFrame( *m_commandBuffer );
-		//	m_blurY[i]->prepareFrame( *m_commandBuffer );
-		//}
-
-		//m_combine->prepareFrame( *m_commandBuffer );
-		//m_timer->endPass( *m_commandBuffer );
-		//m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-		//	, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
-		//	, m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-		//m_commandBuffer->endDebugBlock();
-		//m_commandBuffer->end();
-
-		m_initialised = true;
+		for ( auto & texture : m_blurImages )
+		{
+			texture.create();
+		}
 	}
 
-	void SubsurfaceScatteringPass::cleanup( RenderDevice const & device )
+	void SubsurfaceScatteringPass::update( CpuUpdater & updater )
 	{
-		m_blurY = { nullptr, nullptr, nullptr };
-		m_blurX = { nullptr, nullptr, nullptr };
-		m_combine.reset();
+		m_enabled = m_scene.needsSubsurfaceScattering();
 	}
 
 	void SubsurfaceScatteringPass::accept( PipelineVisitorBase & visitor )
@@ -745,13 +567,13 @@ namespace castor3d
 		for ( size_t i{ 0u }; i < m_blurImages.size(); ++i )
 		{
 			visitor.visit( "SSSSS Blur " + castor::string::toString( i )
-				, m_blurImages[i].wholeViewId
+				, m_blurImages[i]
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, TextureFactors{}.invert( true ) );
 		}
 
 		visitor.visit( "SSSSS Result"
-			, m_result.wholeViewId
+			, m_result
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 

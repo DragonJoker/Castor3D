@@ -71,6 +71,13 @@ namespace castor3d
 		C3D_API VkDescriptorSetLayoutBinding createLayoutBinding( uint32_t binding )const;
 		/**
 		 *\~english
+		 *\brief		Creates a frame pass binding.
+		 *\~french
+		 *\brief		Crée une attache de frame pass.
+		 */
+		C3D_API void createPassBinding( crg::FramePass & pass, uint32_t binding )const;
+		/**
+		 *\~english
 		 *\brief		Creates the descriptor write for this buffer.
 		 *\~french
 		 *\brief		Crée le descriptor write pour ce tampon.
