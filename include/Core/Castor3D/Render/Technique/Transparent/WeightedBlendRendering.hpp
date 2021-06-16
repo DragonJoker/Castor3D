@@ -7,7 +7,6 @@ See LICENSE file in root folder
 #include "TransparentModule.hpp"
 
 #include "Castor3D/Render/Technique/Transparent/TransparentPass.hpp"
-#include "Castor3D/Render/Technique/Transparent/TransparentResolvePass.hpp"
 
 namespace castor3d
 {
