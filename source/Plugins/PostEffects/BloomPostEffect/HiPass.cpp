@@ -3,6 +3,8 @@
 #include "BloomPostEffect/BloomPostEffect.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Render/RenderDevice.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Shader/Program.hpp>
 
 #include <CastorUtils/Graphics/Image.hpp>
@@ -281,16 +283,19 @@ namespace Bloom
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } ) }
 #endif
 		, m_pass{ graph.createPass( "BloomHiPass"
-			, [this, size, enabled]( crg::FramePass const & pass
+			, [this, &device, size, enabled]( crg::FramePass const & pass
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
 			{
-				return std::make_unique< HiPassQuad >( pass
+				auto result = std::make_unique< HiPassQuad >( pass
 					, context
 					, graph
 					, ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages )
 					, VkExtent2D{ m_resultImg.data->info.extent.width, m_resultImg.data->info.extent.height }
 					, enabled );
+				device.renderSystem.getEngine()->registerTimer( "Bloom"
+					, result->getTimer() );
+				return result;
 			} ) }
 	{
 		for ( uint32_t i = 0u; i < blurPassesCount; ++i )

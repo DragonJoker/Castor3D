@@ -8,7 +8,6 @@
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
@@ -345,6 +344,7 @@ namespace castor3d
 	GaussianBlur::GaussianBlur( crg::FrameGraph & graph
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
+		, castor::String const & category
 		, castor::String const & prefix
 		, crg::ImageViewIdArray const & views
 		, crg::ImageViewId const & intermediateView
@@ -380,17 +380,20 @@ namespace castor3d
 			{
 				auto name = input.data->name + "BlurX";
 				auto & passX = graph.createPass( name
-					, [this, &input]( crg::FramePass const & pass
+					, [this, category, &input]( crg::FramePass const & pass
 						, crg::GraphContext const & context
 						, crg::RunnableGraph & graph )
 					{
 						auto extent = getExtent( input );
-						return crg::RenderQuadBuilder{}
+						auto result = crg::RenderQuadBuilder{}
 							.renderPosition( {} )
 							.renderSize( { extent.width, extent.height } )
 							.texcoordConfig( {} )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stagesX ) )
 							.build( pass, context, graph );
+						m_device.renderSystem.getEngine()->registerTimer( category
+							, result->getTimer() );
+						return result;
 					} );
 				passX.addDependency( *m_lastPass );
 				m_lastPass = &passX;
@@ -401,17 +404,20 @@ namespace castor3d
 			{
 				auto name = input.data->name + "BlurY";
 				auto & passY = graph.createPass( name
-					, [this, &input]( crg::FramePass const & pass
+					, [this, category, &input]( crg::FramePass const & pass
 						, crg::GraphContext const & context
 						, crg::RunnableGraph & graph )
 					{
 						auto extent = getExtent( input );
-						return crg::RenderQuadBuilder{}
+						auto result = crg::RenderQuadBuilder{}
 							.renderPosition( {} )
 							.renderSize( { extent.width, extent.height } )
 							.texcoordConfig( {} )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stagesY ) )
 							.build( pass, context, graph );
+						m_device.renderSystem.getEngine()->registerTimer( category
+							, result->getTimer() );
+						return result;
 					} );
 				passY.addDependency( *m_lastPass );
 				m_lastPass = &passY;
@@ -427,12 +433,14 @@ namespace castor3d
 	GaussianBlur::GaussianBlur( crg::FrameGraph & graph
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
+		, castor::String const & category
 		, castor::String const & prefix
 		, crg::ImageViewIdArray const & views
 		, uint32_t kernelSize )
 		: GaussianBlur{ graph
 			, previousPass
 			, device
+			, category
 			, prefix
 			, views
 			, createIntermediate( graph, prefix, getFormat( views[0] ), getExtent( views[0] ), getMipLevels( views[0] ) )
@@ -443,12 +451,14 @@ namespace castor3d
 	GaussianBlur::GaussianBlur( crg::FrameGraph & graph
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
+		, castor::String const & category
 		, castor::String const & prefix
 		, crg::ImageViewId const & view
 		, uint32_t kernelSize )
 		: GaussianBlur{ graph
 			, previousPass
 			, device
+			, category
 			, prefix
 			, createViews( graph, view )
 			, createIntermediate( graph, prefix, getFormat( view ), getExtent( view ), getMipLevels( view ) )
@@ -459,6 +469,7 @@ namespace castor3d
 	GaussianBlur::GaussianBlur( crg::FrameGraph & graph
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
+		, castor::String const & category
 		, castor::String const & prefix
 		, crg::ImageViewId const & view
 		, crg::ImageViewId const & intermediateView
@@ -466,6 +477,7 @@ namespace castor3d
 		: GaussianBlur{ graph
 			, previousPass
 			, device
+			, category
 			, prefix
 			, createViews( graph, view )
 			, intermediateView

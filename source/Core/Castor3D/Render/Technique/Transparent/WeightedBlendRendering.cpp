@@ -1,5 +1,8 @@
 #include "Castor3D/Render/Technique/Transparent/WeightedBlendRendering.hpp"
 
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Render/RenderDevice.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Technique/Transparent/TransparentPassResult.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Program.hpp"
@@ -206,12 +209,15 @@ namespace castor3d
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
 			{
-				return crg::RenderQuadBuilder{}
+				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( makeExtent2D( m_size ) )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.build( pass, context, graph );
+				m_device.renderSystem.getEngine()->registerTimer( m_graph.getName()
+					, result->getTimer() );
+				return result;
 			} );
 		result.addDependency( transparentPassDesc );
 		sceneUbo.createPassBinding( result

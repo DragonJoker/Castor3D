@@ -9,7 +9,6 @@
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
-#include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Viewport.hpp"
@@ -311,11 +310,14 @@ namespace castor3d
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
 			{
-				return crg::RenderQuadBuilder{}
+				auto result = crg::RenderQuadBuilder{}
 					.program( crg::makeVkArray< VkPipelineShaderStageCreateInfo >( m_lineariseStages ) )
 					.renderSize( m_size )
 					.enabled( &m_ssaoConfig.enabled )
 					.build( pass, context, graph, 1u );
+				m_device.renderSystem.getEngine()->registerTimer( "SSAO"
+					, result->getTimer() );
+				return result;
 			} );
 		pass.addDependency( *m_lastPass );
 		pass.addSampledView( m_srcDepthBuffer
@@ -358,11 +360,14 @@ namespace castor3d
 					, crg::GraphContext const & context
 					, crg::RunnableGraph & graph )
 				{
-					return crg::RenderQuadBuilder{}
+					auto result = crg::RenderQuadBuilder{}
 						.program( crg::makeVkArray< VkPipelineShaderStageCreateInfo >( m_minifyStages ) )
 						.renderSize( size )
 						.enabled( &m_ssaoConfig.enabled )
 						.build( pass, context, graph, 1u );
+					m_device.renderSystem.getEngine()->registerTimer( "SSAO"
+						, result->getTimer() );
+					return result;
 				} );
 			pass.addDependency( *m_lastPass );
 			pass.addSampledView( source

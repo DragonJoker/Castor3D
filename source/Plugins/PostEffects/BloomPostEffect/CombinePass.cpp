@@ -3,6 +3,8 @@
 #include "BloomPostEffect/BloomPostEffect.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Render/RenderDevice.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Shader/Program.hpp>
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 
@@ -106,11 +108,11 @@ namespace Bloom
 			, m_resultImg.data->info.format
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
 		, m_pass{ graph.createPass( "BloomCombinePass"
-			, [this, size, enabled, &sceneView]( crg::FramePass const & pass
+			, [this, &device, &sceneView, size, enabled]( crg::FramePass const & pass
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
 			{
-				return crg::RenderQuadBuilder{}
+				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( size )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
@@ -161,6 +163,9 @@ namespace Bloom
 								, srcTransition.to );
 						} )
 					.build( pass, context, graph );
+				device.renderSystem.getEngine()->registerTimer( "Bloom"
+							, result->getTimer() );
+				return result;
 			} ) }
 	{
 		m_pass.addDependencies( previousPasses );
