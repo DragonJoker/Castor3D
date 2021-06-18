@@ -213,11 +213,11 @@ namespace castor3d
 			timer->reset();
 		}
 
-		for ( auto timer : m_crgtimers )
+		for ( auto & timer : m_crgtimers )
 		{
-			m_cpu.time += timer->getCpuTime();
-			m_gpu.time += timer->getGpuTime();
-			timer->reset();
+			m_cpu.time += timer.first->getCpuTime();
+			m_gpu.time += timer.first->getGpuTime();
+			timer.first->reset();
 		}
 
 		m_cpu.value->setCaption( makeStringStream() << m_cpu.time );
@@ -238,9 +238,9 @@ namespace castor3d
 			timer->retrieveGpuTime();
 		}
 
-		for ( auto timer : m_crgtimers )
+		for ( auto & timer : m_crgtimers )
 		{
-			timer->retrieveGpuTime();
+			timer.first->retrieveGpuTime();
 		}
 	}
 
@@ -251,7 +251,11 @@ namespace castor3d
 
 	void DebugOverlays::PassOverlays::addTimer( crg::FramePassTimer & timer )
 	{
-		m_crgtimers.emplace_back( &timer );
+		m_crgtimers.emplace( &timer
+			, timer.onDestroy.connect( [this]( crg::FramePassTimer & timer )
+				{
+					removeTimer( timer );
+				} ) );
 	}
 
 	bool DebugOverlays::PassOverlays::removeTimer( RenderPassTimer & timer )
@@ -273,12 +277,7 @@ namespace castor3d
 
 	bool DebugOverlays::PassOverlays::removeTimer( crg::FramePassTimer & timer )
 	{
-		auto it = std::find_if( m_crgtimers.begin()
-			, m_crgtimers.end()
-			, [&timer]( auto const & lookup )
-			{
-				return lookup == &timer;
-			} );
+		auto it = m_crgtimers.find( &timer );
 
 		if ( it != m_crgtimers.end() )
 		{
