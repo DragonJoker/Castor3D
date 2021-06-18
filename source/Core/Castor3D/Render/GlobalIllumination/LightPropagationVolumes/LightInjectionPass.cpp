@@ -429,22 +429,22 @@ namespace castor3d
 		, crg::RunnableGraph & graph
 		, crg::pp::Config config
 		, uint32_t lpvSize )
-		: crg::PipelineHolder{ pass, context, graph, std::move( config ), VK_PIPELINE_BIND_POINT_GRAPHICS }
+		: m_holder{ pass, context, graph, std::move( config ), VK_PIPELINE_BIND_POINT_GRAPHICS, 1u }
 		, m_lpvSize{ lpvSize }
 	{
-		m_descriptorSets.resize( 1u );
 	}
 
 	void LightInjectionPass::PipelineHolder::initialise( VkRenderPass renderPass )
 	{
 		m_renderPass = renderPass;
-		doPreInitialise( 0u );
+		m_holder.initialise();
+		doCreatePipeline( 0u );
 	}
 
 	void LightInjectionPass::PipelineHolder::recordInto( VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
-		doPreRecordInto( commandBuffer, index );
+		m_holder.recordInto( commandBuffer, index );
 	}
 
 	void LightInjectionPass::PipelineHolder::doCreatePipeline( uint32_t index )
@@ -500,8 +500,8 @@ namespace castor3d
 		VkPipelineViewportStateCreateInfo vpState = viewportState;
 		VkPipelineVertexInputStateCreateInfo viState = vertexState;
 		VkPipelineColorBlendStateCreateInfo cbState = blendState;
-		auto & program = doGetProgram( index );
-		auto & pipeline = doGetPipeline( index );
+		auto & program = m_holder.getProgram( index );
+		auto & pipeline = m_holder.getPipeline( index );
 		VkGraphicsPipelineCreateInfo createInfo{ VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO
 			, nullptr
 			, 0u
@@ -516,19 +516,19 @@ namespace castor3d
 			, &dsState
 			, &cbState
 			, nullptr
-			, m_pipelineLayout
+			, m_holder.getPipelineLayout()
 			, m_renderPass
 			, 0u
 			, VK_NULL_HANDLE
 			, 0u };
-		auto res = m_phContext.vkCreateGraphicsPipelines( m_phContext.device
-			, m_phContext.cache
+		auto res = m_holder.getContext().vkCreateGraphicsPipelines( m_holder.getContext().device
+			, m_holder.getContext().cache
 			, 1u
 			, &createInfo
-			, m_phContext.allocator
+			, m_holder.getContext().allocator
 			, &pipeline );
-		crg::checkVkResult( res, m_phPass.name + " - Pipeline creation" );
-		crgRegisterObject( m_phContext, m_phPass.name, pipeline );
+		crg::checkVkResult( res, m_holder.getPass().name + " - Pipeline creation" );
+		crgRegisterObject( m_holder.getContext(), m_holder.getPass().name, pipeline );
 	}
 
 	//*********************************************************************************************
@@ -566,7 +566,7 @@ namespace castor3d
 
 	void LightInjectionPass::doSubInitialise( uint32_t index )
 	{
-		m_holder.initialise( m_renderPass );
+		m_holder.initialise( getRenderPass() );
 	}
 
 	void LightInjectionPass::doSubRecordInto( VkCommandBuffer commandBuffer
