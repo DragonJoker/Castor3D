@@ -28,7 +28,7 @@ namespace smaa
 
 		crg::ImageViewId const & getResult()const
 		{
-			return m_result.wholeViewId;
+			return m_result.sampledViewId;
 		}
 
 		crg::FramePass const & getPass()const
