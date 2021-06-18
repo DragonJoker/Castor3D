@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Background/Visitor.hpp"
@@ -55,10 +56,19 @@ namespace castor3d
 		, m_viewport{ engine }
 	{
 		m_hdr = false;
+		m_textureId = { *engine.getRenderSystem()->getMainRenderDevice()
+			, engine.getGraphResourceHandler()
+			, cuT( "ColourBackground_Colour" )
+			, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
+			, { Dim, Dim, 1u }
+			, 6u
+			, 1u
+			, VK_FORMAT_R32G32B32A32_SFLOAT
+			, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT };
+		m_textureId.create();
 		m_texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
-			, doGetImageCreate()
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, cuT( "ColourBackground_Colour" ) );
+			, m_textureId.image
+			, m_textureId.wholeViewId );
 	}
 
 	ColourBackground::~ColourBackground()

@@ -187,6 +187,29 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
+		*	Sets a skybox's face texture.
+		*\param[in] folder
+		*	The image folder.
+		*\param[in] relative
+		*	The image file path, relative to \p folder.
+		*\param[in] face
+		*	The face into which the image will be loaded.
+		*\~french
+		*\brief
+		*	Définit la texture d'une face de la skybox.
+		*\param[in] folder
+		*	Le dossier de l'image.
+		*\param[in] relative
+		*	Le chemin d'accès à l'image, relatif à \p folder.
+		*\param[in] face
+		*	La face dans laquelle l'image sera chargée.
+		*/
+		C3D_API void setFaceTexture( castor::Path const & folder
+			, castor::Path const & relative
+			, CubeMapFace face );
+		/**
+		*\~english
+		*\brief
 		*	Sets the skybox's equirectangular texture.
 		*\param[in] texture
 		*	The texture.
@@ -318,10 +341,13 @@ namespace castor3d
 		void doCpuUpdate( CpuUpdater & updater )override;
 		void doGpuUpdate( GpuUpdater & updater )override;
 		bool doInitialiseTexture( RenderDevice const & device );
+		void doInitialiseLayerTexture( RenderDevice const & device );
 		void doInitialiseEquiTexture( RenderDevice const & device );
 		void doInitialiseCrossTexture( RenderDevice const & device );
 
 	private:
+		std::array< TextureLayoutSPtr, 6u > m_layerTexture;
+		std::array< castor::Path, 6u > m_layerTexturePath;
 		TextureLayoutSPtr m_equiTexture;
 		castor::Path m_equiTexturePath;
 		castor::Size m_equiSize;
