@@ -140,7 +140,7 @@ namespace smaa
 		m_pass.addDependency( previousPass );
 		m_pass.addOutputStencilView( m_outDepthStencilView
 			, castor3d::defaultClearDepthStencil );
-		m_pass.addOutputColourView( m_outColour.wholeViewId
+		m_pass.addOutputColourView( m_outColour.targetViewId
 			, castor3d::transparentBlackClearColor );
 		m_outColour.create();
 		m_outDepth.create();
@@ -154,7 +154,7 @@ namespace smaa
 		auto & handler = m_graph.getHandler();
 		visitor.visit( "SMAA EdgeDetection Colour"
 			, m_outColour
-			, m_graph.getFinalLayout( m_outColour.wholeViewId ).layout
+			, m_graph.getFinalLayout( m_outColour.sampledViewId ).layout
 			, castor3d::TextureFactors{}.invert( true ) );
 	}
 }

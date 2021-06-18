@@ -164,13 +164,13 @@ namespace castor3d
 			, LightInjectionPass::LightsIdx
 			, lightCache.getView().getOffset()
 			, lightCache.getView().getRange() );
-		result.addSampledView( smResult[SmTexture::eNormalLinear].wholeViewId
+		result.addSampledView( smResult[SmTexture::eNormalLinear].sampledViewId
 			, LightInjectionPass::RsmNormalsIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		result.addSampledView( smResult[SmTexture::ePosition].wholeViewId
+		result.addSampledView( smResult[SmTexture::ePosition].sampledViewId
 			, LightInjectionPass::RsmPositionIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		result.addSampledView( smResult[SmTexture::eFlux].wholeViewId
+		result.addSampledView( smResult[SmTexture::eFlux].sampledViewId
 			, LightInjectionPass::RsmFluxIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		lpvGridConfigUbo.createPassBinding( result
@@ -220,10 +220,10 @@ namespace castor3d
 			, GeometryInjectionPass::LightsIdx
 			, lightCache.getView().getOffset()
 			, lightCache.getView().getRange() );
-		result.addSampledView( smResult[SmTexture::eNormalLinear].wholeViewId
+		result.addSampledView( smResult[SmTexture::eNormalLinear].sampledViewId
 			, GeometryInjectionPass::RsmNormalsIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		result.addSampledView( smResult[SmTexture::ePosition].wholeViewId
+		result.addSampledView( smResult[SmTexture::ePosition].sampledViewId
 			, GeometryInjectionPass::RsmPositionIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		lpvGridConfigUbo.createPassBinding( result
@@ -481,19 +481,19 @@ namespace castor3d
 
 		m_lpvGridConfigUbo.createPassBinding( result
 			, LightPropagationPass::LpvGridUboIdx );
-		result.addSampledView( injection[LpvTexture::eR].wholeViewId
+		result.addSampledView( injection[LpvTexture::eR].sampledViewId
 			, LightPropagationPass::RLpvGridIdx
 			, VK_IMAGE_LAYOUT_UNDEFINED );
-		result.addSampledView( injection[LpvTexture::eG].wholeViewId
+		result.addSampledView( injection[LpvTexture::eG].sampledViewId
 			, LightPropagationPass::GLpvGridIdx
 			, VK_IMAGE_LAYOUT_UNDEFINED );
-		result.addSampledView( injection[LpvTexture::eB].wholeViewId
+		result.addSampledView( injection[LpvTexture::eB].sampledViewId
 			, LightPropagationPass::BLpvGridIdx
 			, VK_IMAGE_LAYOUT_UNDEFINED );
 
 		if ( index > 0u && m_geometryVolumes )
 		{
-			result.addSampledView( m_geometry.wholeViewId
+			result.addSampledView( m_geometry.sampledViewId
 				, LightPropagationPass::GpGridIdx
 				, VK_IMAGE_LAYOUT_UNDEFINED );
 		}
