@@ -727,7 +727,7 @@ namespace castor3d
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< ForwardRenderTechniquePass >( pass
+				auto result = std::make_unique< OpaquePassType >( pass
 					, context
 					, graph
 					, m_device
@@ -807,14 +807,15 @@ namespace castor3d
 			} );
 #if C3D_UseDeferredRendering
 		result.addDependency( m_deferredRendering->getLastPass() );
+		result.addInOutDepthStencilView( m_depth.targetViewId
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 #else
 		result.addDependency( *m_opaquePassDesc );
+		result.addInOutDepthStencilView( m_depth.targetViewId );
 #endif
-		result.addInOutDepthView( m_depth.targetViewId );
 
 #if C3D_UseWeightedBlendedRendering
 		auto & transparentPassResult = *m_transparentPassResult;
-		result.addInOutDepthStencilView( transparentPassResult[WbTexture::eDepth].targetViewId );
 		result.addOutputColourView( transparentPassResult[WbTexture::eAccumulation].targetViewId
 			, getClearValue( WbTexture::eAccumulation ) );
 		result.addOutputColourView( transparentPassResult[WbTexture::eRevealage].targetViewId

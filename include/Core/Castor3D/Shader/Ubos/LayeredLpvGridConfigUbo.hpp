@@ -55,6 +55,12 @@ namespace castor3d
 		C3D_API void cpuUpdate( std::array< castor::Grid, shader::LpvMaxCascadesCount > const & grids
 			, float indirectAttenuation );
 
+		void createPassBinding( crg::FramePass & pass
+			, uint32_t dstBinding )const
+		{
+			return m_ubo.createPassBinding( pass, "LLPVGridCfg", dstBinding );
+		}
+
 		void createSizedBinding( ashes::DescriptorSet & descriptorSet
 			, VkDescriptorSetLayoutBinding const & layoutBinding )const
 		{

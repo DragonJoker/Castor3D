@@ -396,15 +396,14 @@ namespace castor3d
 		m_pipeline->program->bind( light );
 	}
 
-	ShaderPtr MeshLightPass::doGetVertexShaderSource( SceneFlags const & sceneFlags )const
+	ShaderPtr MeshLightPass::getVertexShaderSource()
 	{
 		using namespace sdw;
 		VertexWriter writer;
 
 		// Shader inputs
-		UBO_MATRIX( writer, uint32_t( LightPassUboIdx::eMatrix ), 0u );
-		UBO_GPINFO( writer, uint32_t( LightPassUboIdx::eGpInfo ), 0u );
-		UBO_MODEL( writer, uint32_t( LightPassUboIdx::eModelMatrix ), 0u );
+		UBO_MATRIX( writer, uint32_t( LightPassLgtIdx::eMatrix ), 1u );
+		UBO_MODEL( writer, uint32_t( LightPassLgtIdx::eModelMatrix ), 1u );
 		auto vertex = writer.declInput< Vec3 >( "position", 0u );
 
 		// Shader outputs
@@ -417,6 +416,11 @@ namespace castor3d
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+	}
+
+	ShaderPtr MeshLightPass::doGetVertexShaderSource()const
+	{
+		return getVertexShaderSource();
 	}
 
 	//*********************************************************************************************

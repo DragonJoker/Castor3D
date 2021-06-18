@@ -112,7 +112,7 @@ namespace castor3d
 
 	ashes::PipelineColorBlendStateCreateInfo OpaquePass::doCreateBlendState( PipelineFlags const & flags )const
 	{
-		return SceneRenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 5u );
+		return SceneRenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 4u );
 	}
 
 	ShaderPtr OpaquePass::doGetGeometryShaderSource( PipelineFlags const & flags )const
