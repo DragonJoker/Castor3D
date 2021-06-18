@@ -313,6 +313,114 @@ namespace castor3d
 		 */
 		virtual void accept( PipelineVisitorBase & visitor ) = 0;
 		/**
+		 *\~english
+		 *\brief		Retrieves the vertex shader source for this light pass.
+		 *\param[in]	sceneFlags	The scene flags.
+		 *\return		The source.
+		 *\~french
+		 *\brief		Récupère le source du vertex shader pour cette passe lumineuse.
+		 *\param[in]	sceneFlags	Les indicateurs de scène.
+		 *\return		Le source.
+		 */
+		static ShaderPtr getVertexShaderSource( LightType lightType );
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel shader source for this light pass.
+		 *\param[in]	sceneFlags	The scene flags.
+		 *\param[in]	lightType	The light source type.
+		 *\param[in]	shadowType	The shadow type.
+		 *\param[in]	rsm			Tells if RSM are to be generated.
+		 *\return		The source.
+		 *\~french
+		 *\brief		Récupère le source du pixel shader pour cette passe lumineuse.
+		 *\param[in]	sceneFlags	Les indicateurs de scène.
+		 *\param[in]	lightType	Le type de source lumineuse.
+		 *\param[in]	shadowType	Le type d'ombres.
+		 *\param[in]	rsm			Dit si les RSM doivent être générées.
+		 *\return		Le source.
+		 */
+		static ShaderPtr getPixelShaderSource( MaterialType materialType
+			, RenderSystem const & renderSystem
+			, SceneFlags const & sceneFlags
+			, LightType lightType
+			, ShadowType shadowType
+			, bool shadows
+			, bool rsm
+			, bool generatesIndirect
+			, bool voxels );
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel shader source for this light pass.
+		 *\param[in]	sceneFlags	The scene flags.
+		 *\param[in]	lightType	The light source type.
+		 *\param[in]	shadowType	The shadow type.
+		 *\param[in]	rsm			Tells if RSM are to be generated.
+		 *\return		The source.
+		 *\~french
+		 *\brief		Récupère le source du pixel shader pour cette passe lumineuse.
+		 *\param[in]	sceneFlags	Les indicateurs de scène.
+		 *\param[in]	lightType	Le type de source lumineuse.
+		 *\param[in]	shadowType	Le type d'ombres.
+		 *\param[in]	rsm			Dit si les RSM doivent être générées.
+		 *\return		Le source.
+		 */
+		static ShaderPtr getPhongPixelShaderSource( RenderSystem const & renderSystem
+			, SceneFlags const & sceneFlags
+			, LightType lightType
+			, ShadowType shadowType
+			, bool shadows
+			, bool rsm
+			, bool generatesIndirect
+			, bool voxels );
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel shader source for this light pass.
+		 *\param[in]	sceneFlags	The scene flags.
+		 *\param[in]	lightType	The light source type.
+		 *\param[in]	shadowType	The shadow type.
+		 *\param[in]	rsm			Tells if RSM are to be generated.
+		 *\return		The source.
+		 *\~french
+		 *\brief		Récupère le source du pixel shader pour cette passe lumineuse.
+		 *\param[in]	sceneFlags	Les indicateurs de scène.
+		 *\param[in]	lightType	Le type de source lumineuse.
+		 *\param[in]	shadowType	Le type d'ombres.
+		 *\param[in]	rsm			Dit si les RSM doivent être générées.
+		 *\return		Le source.
+		 */
+		static ShaderPtr getPbrMRPixelShaderSource( RenderSystem const & renderSystem
+			, SceneFlags const & sceneFlags
+			, LightType lightType
+			, ShadowType shadowType
+			, bool shadows
+			, bool rsm
+			, bool generatesIndirect
+			, bool voxels );
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel shader source for this light pass.
+		 *\param[in]	sceneFlags	The scene flags.
+		 *\param[in]	lightType	The light source type.
+		 *\param[in]	shadowType	The shadow type.
+		 *\param[in]	rsm			Tells if RSM are to be generated.
+		 *\return		The source.
+		 *\~french
+		 *\brief		Récupère le source du pixel shader pour cette passe lumineuse.
+		 *\param[in]	sceneFlags	Les indicateurs de scène.
+		 *\param[in]	lightType	Le type de source lumineuse.
+		 *\param[in]	shadowType	Le type d'ombres.
+		 *\param[in]	rsm			Dit si les RSM doivent être générées.
+		 *\return		Le source.
+		 */
+		static ShaderPtr getPbrSGPixelShaderSource( RenderSystem const & renderSystem
+			, SceneFlags const & sceneFlags
+			, LightType lightType
+			, ShadowType shadowType
+			, bool shadows
+			, bool rsm
+			, bool generatesIndirect
+			, bool voxels );
+		/**
 		*\~english
 		*name
 		*	Getters.
@@ -542,7 +650,7 @@ namespace castor3d
 		 *\param[in]	sceneFlags	Les indicateurs de scène.
 		 *\return		Le source.
 		 */
-		virtual ShaderPtr doGetVertexShaderSource( SceneFlags const & sceneFlags )const = 0;
+		virtual ShaderPtr doGetVertexShaderSource()const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a light pass program.

@@ -39,6 +39,7 @@ namespace castor3d
 			, layerCount }
 		, m_count{ count }
 	{
+		m_result.create();
 		auto & context = m_device.makeContext();
 		auto commandBuffer = m_device.graphicsCommandPool->createCommandBuffer();
 		commandBuffer->begin();

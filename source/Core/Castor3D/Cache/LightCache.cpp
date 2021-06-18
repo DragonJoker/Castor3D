@@ -5,7 +5,7 @@
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
-#include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
@@ -104,6 +104,19 @@ namespace castor3d
 			, std::move( attach )
 			, std::move( detach ) )
 	{
+		m_lightsBuffer.resize( 300ull * shader::getMaxLightComponentsCount() );
+		m_textureBuffer = makeBuffer< castor::Point4f >( *engine.getRenderSystem()->getMainRenderDevice()
+			, uint32_t( m_lightsBuffer.size() )
+			, ( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+				| VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT
+				| VK_BUFFER_USAGE_TRANSFER_DST_BIT )
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "LightsBuffer" );
+		m_textureView = ( *engine.getRenderSystem()->getMainRenderDevice() )->createBufferView( "LightsBufferView"
+			, m_textureBuffer->getBuffer()
+			, VK_FORMAT_R32G32B32A32_SFLOAT
+			, 0u
+			, uint32_t( m_lightsBuffer.size() * sizeof( Point4f ) ) );
 	}
 
 	LightCache::~LightCache()
@@ -112,38 +125,10 @@ namespace castor3d
 
 	void LightCache::initialise()
 	{
-		m_lightsBuffer.resize( 300ull * shader::getMaxLightComponentsCount() );
-		getScene()->getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [this]( RenderDevice const & device )
-			{
-				if ( !m_textureBuffer )
-				{
-					m_textureBuffer = makeBuffer< castor::Point4f >( device
-						, uint32_t( m_lightsBuffer.size() )
-						, VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-						, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-						, "LightsBuffer" );
-				}
-
-				if ( !m_textureView )
-				{
-					m_textureView = device->createBufferView( "LightsBufferView"
-						, m_textureBuffer->getBuffer()
-						, VK_FORMAT_R32G32B32A32_SFLOAT
-						, 0u
-						, uint32_t( m_lightsBuffer.size() * sizeof( Point4f ) ) );
-				}
-			} ) );
 	}
 
 	void LightCache::cleanup()
 	{
-		m_scene.getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [this]( RenderDevice const & device )
-			{
-				m_textureView.reset();
-				m_textureBuffer.reset();
-			} ) );
 		m_dirtyLights.clear();
 		m_connections.clear();
 		MyObjectCache::cleanup();

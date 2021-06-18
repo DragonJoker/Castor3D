@@ -57,8 +57,8 @@ namespace castor3d
 				defaultClearDepthStencil,
 				opaqueBlackClearColor,
 				opaqueBlackClearColor,
-				opaqueWhiteClearColor,
-				opaqueWhiteClearColor,
+				opaqueBlackClearColor,
+				opaqueBlackClearColor,
 			}
 		};
 		return Values[size_t( texture )];

@@ -74,10 +74,11 @@ namespace castor3d
 
 		void LightingModel::declareDirectionalModel( bool lightUbo
 			, uint32_t uboBinding
+			, uint32_t uboSet
 			, uint32_t & index
-			, uint32_t set )
+			, uint32_t shadowMapSet )
 		{
-			m_shadowModel->declareDirectional( index, set );
+			m_shadowModel->declareDirectional( index, shadowMapSet );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			m_writer.inlineComment( "// LIGHTS" );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
@@ -85,7 +86,7 @@ namespace castor3d
 
 			if ( lightUbo )
 			{
-				doDeclareDirectionalLightUbo( uboBinding );
+				doDeclareDirectionalLightUbo( uboBinding, uboSet );
 			}
 			else
 			{
@@ -102,17 +103,18 @@ namespace castor3d
 
 		void LightingModel::declarePointModel( bool lightUbo
 			, uint32_t uboBinding
+			, uint32_t uboSet
 			, uint32_t & index
-			, uint32_t set )
+			, uint32_t shadowMapSet )
 		{
-			m_shadowModel->declarePoint( index, set );
+			m_shadowModel->declarePoint( index, shadowMapSet );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			m_writer.inlineComment( "// LIGHTS" );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 
 			if ( lightUbo )
 			{
-				doDeclarePointLightUbo( uboBinding );
+				doDeclarePointLightUbo( uboBinding, uboSet );
 			}
 			else
 			{
@@ -129,17 +131,18 @@ namespace castor3d
 
 		void LightingModel::declareSpotModel( bool lightUbo
 			, uint32_t uboBinding
+			, uint32_t uboSet
 			, uint32_t & index
-			, uint32_t set )
+			, uint32_t shadowMapSet )
 		{
-			m_shadowModel->declareSpot( index, set );
+			m_shadowModel->declareSpot( index, shadowMapSet );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			m_writer.inlineComment( "// LIGHTS" );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 
 			if ( lightUbo )
 			{
-				doDeclareSpotLightUbo( uboBinding );
+				doDeclareSpotLightUbo( uboBinding, uboSet );
 			}
 			else
 			{
@@ -179,9 +182,10 @@ namespace castor3d
 			return m_getBaseLight( value );
 		}
 
-		void LightingModel::doDeclareDirectionalLightUbo( uint32_t binding )
+		void LightingModel::doDeclareDirectionalLightUbo( uint32_t binding
+			, uint32_t set )
 		{
-			Ubo lightUbo{ m_writer, "LightUbo", binding, 0u };
+			Ssbo lightUbo{ m_writer, "LightSsbo", binding, set };
 #if C3D_UseTiledDirectionalShadowMap
 			lightUbo.declStructMember< TiledDirectionalLight >( "c3d_light" );
 #else
@@ -190,16 +194,18 @@ namespace castor3d
 			lightUbo.end();
 		}
 
-		void LightingModel::doDeclarePointLightUbo( uint32_t binding )
+		void LightingModel::doDeclarePointLightUbo( uint32_t binding
+			, uint32_t set )
 		{
-			Ubo lightUbo{ m_writer, "LightUbo", binding, 0u };
+			Ssbo lightUbo{ m_writer, "LightSsbo", binding, set };
 			lightUbo.declStructMember< PointLight >( "c3d_light" );
 			lightUbo.end();
 		}
 
-		void LightingModel::doDeclareSpotLightUbo( uint32_t binding )
+		void LightingModel::doDeclareSpotLightUbo( uint32_t binding
+			, uint32_t set )
 		{
-			Ubo lightUbo{ m_writer, "LightUbo", binding, 0u };
+			Ssbo lightUbo{ m_writer, "LightSsbo", binding, set };
 			lightUbo.declStructMember< SpotLight >( "c3d_light" );
 			lightUbo.end();
 		}

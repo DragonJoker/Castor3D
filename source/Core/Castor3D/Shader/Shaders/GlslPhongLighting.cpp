@@ -313,9 +313,10 @@ namespace castor3d
 			, LightType lightType
 			, bool lightUbo
 			, uint32_t lightUboBinding
+			, uint32_t lightUboSet
 			, ShadowOptions const & shadows
 			, uint32_t & index
-			, uint32_t set )
+			, uint32_t shadowMapSet )
 		{
 			auto result = std::make_shared< PhongLightingModel >( writer
 				, utils
@@ -325,15 +326,15 @@ namespace castor3d
 			switch ( lightType )
 			{
 			case LightType::eDirectional:
-				result->declareDirectionalModel( lightUbo, lightUboBinding, index, set );
+				result->declareDirectionalModel( lightUbo, lightUboBinding, lightUboSet, index, shadowMapSet );
 				break;
 
 			case LightType::ePoint:
-				result->declarePointModel( lightUbo, lightUboBinding, index, set );
+				result->declarePointModel( lightUbo, lightUboBinding, lightUboSet, index, shadowMapSet );
 				break;
 
 			case LightType::eSpot:
-				result->declareSpotModel( lightUbo, lightUboBinding, index, set );
+				result->declareSpotModel( lightUbo, lightUboBinding, lightUboSet, index, shadowMapSet );
 				break;
 
 			default:
