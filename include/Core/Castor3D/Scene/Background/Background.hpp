@@ -191,6 +191,11 @@ namespace castor3d
 			return m_type;
 		}
 
+		inline Texture const & getTextureId()const
+		{
+			return m_textureId;
+		}
+
 		inline TextureLayout const & getTexture()const
 		{
 			CU_Require( m_texture );
@@ -256,6 +261,7 @@ namespace castor3d
 		MatrixUbo m_matrixUbo;
 		UniformBufferOffsetT< ModelUboConfiguration > m_modelUbo;
 		castor::Matrix4x4f m_mtxModel;
+		Texture m_textureId;
 		TextureLayoutSPtr m_texture;
 		SamplerWPtr m_sampler;
 		std::unique_ptr< IblTextures > m_ibl;

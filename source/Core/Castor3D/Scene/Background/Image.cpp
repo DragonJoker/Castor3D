@@ -175,11 +175,21 @@ namespace castor3d
 			auto yOffset = ( dim - extent.height ) / 2u;
 			VkOffset3D const srcOffset{ 0, 0, 0 };
 			VkOffset3D const dstOffset{ int32_t( xOffset ), int32_t( yOffset ), 0 };
+			m_textureId = { device
+				, getEngine()->getGraphResourceHandler()
+				, cuT( "ImageBackgroundCube" )
+				, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
+				, { dim, dim, 1u }
+				, 6u
+				, 1u
+				, m_2dTexture->getPixelFormat()
+				, ( VK_IMAGE_USAGE_SAMPLED_BIT
+					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
+					| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT ) };
+			m_textureId.create();
 			m_texture = std::make_shared< TextureLayout >( device.renderSystem
-				, doGetImageCreate( m_2dTexture->getPixelFormat(), { dim, dim }, true )
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, cuT( "ImageBackgroundCube" ) );
-			m_texture->initialise( device );
+				, m_textureId.image
+				, m_textureId.wholeViewId );
 
 			VkImageSubresourceLayers srcSubresource
 			{
