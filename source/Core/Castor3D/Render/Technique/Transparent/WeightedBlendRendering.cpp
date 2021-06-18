@@ -168,7 +168,7 @@ namespace castor3d
 		: m_device{ device }
 		, m_graph{ graph }
 		, m_transparentPassResult{ transparentPassResult }
-		, m_depthOnlyView{ createDepthOnlyView( graph, m_transparentPassResult[WbTexture::eDepth].wholeViewId ) }
+		, m_depthOnlyView{ m_transparentPassResult[WbTexture::eDepth].sampledViewId }
 		, m_size{ size }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "TransparentCombine", getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "TransparentCombine", getPixelProgram() }
@@ -187,11 +187,11 @@ namespace castor3d
 	{
 		visitor.visit( "Transparent Accumulation"
 			, m_transparentPassResult[WbTexture::eAccumulation]
-			, m_graph.getFinalLayout( m_transparentPassResult[WbTexture::eAccumulation].wholeViewId ).layout
+			, m_graph.getFinalLayout( m_transparentPassResult[WbTexture::eAccumulation].sampledViewId ).layout
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Transparent Revealage"
 			, m_transparentPassResult[WbTexture::eRevealage]
-			, m_graph.getFinalLayout( m_transparentPassResult[WbTexture::eRevealage].wholeViewId ).layout
+			, m_graph.getFinalLayout( m_transparentPassResult[WbTexture::eRevealage].sampledViewId ).layout
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
@@ -229,9 +229,9 @@ namespace castor3d
 		result.addSampledView( m_depthOnlyView
 			, uint32_t( DepthTexIndex )
 			, VK_IMAGE_LAYOUT_UNDEFINED );
-		result.addSampledView( m_transparentPassResult[WbTexture::eAccumulation].wholeViewId
+		result.addSampledView( m_transparentPassResult[WbTexture::eAccumulation].sampledViewId
 			, uint32_t( AccumTexIndex ) );
-		result.addSampledView( m_transparentPassResult[WbTexture::eRevealage].wholeViewId
+		result.addSampledView( m_transparentPassResult[WbTexture::eRevealage].sampledViewId
 			, uint32_t( RevealTexIndex ) );
 
 		result.addInOutColourView( targetColourView

@@ -164,8 +164,10 @@ namespace castor3d
 		VkImage image{};
 		crg::ImageViewId wholeViewId{};
 		crg::ImageViewId targetViewId{};
+		crg::ImageViewId sampledViewId{};
 		VkImageView wholeView{};
 		VkImageView targetView{};
+		VkImageView sampledView{};
 		crg::ImageViewIdArray subViewsId{};
 		ashes::Sampler const * sampler{};
 	};

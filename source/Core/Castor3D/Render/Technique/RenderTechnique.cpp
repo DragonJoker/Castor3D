@@ -383,6 +383,7 @@ namespace castor3d
 			, m_llpvResult
 			, m_voxelizer->getFirstBounce()
 			, m_voxelizer->getSecondaryBounce()
+			, m_ssao->getResult()
 			, m_renderTarget.getSize()
 			, *m_renderTarget.getScene()
 			, m_sceneUbo
@@ -391,8 +392,7 @@ namespace castor3d
 			, m_lpvConfigUbo
 			, m_llpvConfigUbo
 			, m_vctConfigUbo
-			, m_ssaoConfig )
-}
+			, m_ssaoConfig ) }
 #else
 		, m_opaquePassDesc{ &doCreateOpaquePass() }
 #endif
@@ -599,7 +599,7 @@ namespace castor3d
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Technique Depth"
 			, m_depth
-			, m_renderTarget.getGraph().getFinalLayout( m_depth.wholeViewId ).layout
+			, m_renderTarget.getGraph().getFinalLayout( m_depth.sampledViewId ).layout
 			, TextureFactors{}.invert( true ) );
 
 		m_voxelizer->listIntermediates( visitor );
@@ -750,7 +750,7 @@ namespace castor3d
 			} );
 		result.addDependency( *m_backgroundPassDesc );
 		result.addDependency( m_ssao->getLastPass() );
-		result.addSampledView( m_ssao->getResult().wholeViewId, 0u, VK_IMAGE_LAYOUT_UNDEFINED );
+		result.addSampledView( m_ssao->getResult().sampledViewId, 0u, VK_IMAGE_LAYOUT_UNDEFINED );
 		result.addInOutDepthView( m_depth.targetViewId );
 #if C3D_UseDeferredRendering
 		auto & opaquePassResult = *m_opaquePassResult;

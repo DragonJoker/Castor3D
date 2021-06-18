@@ -764,7 +764,7 @@ namespace castor3d
 		auto image = std::make_unique< ashes::Image >( *device
 			, m_target.image
 			, ashes::ImageCreateInfo{ m_target.imageId.data->info } );
-		auto view = ashes::ImageView{ ashes::ImageViewCreateInfo{ m_target.image, m_target.wholeViewId.data->info }
+		auto view = ashes::ImageView{ ashes::ImageViewCreateInfo{ m_target.image, m_target.targetViewId.data->info }
 			, m_target.wholeView
 			, image.get() };
 		fbAttaches.emplace_back( view );

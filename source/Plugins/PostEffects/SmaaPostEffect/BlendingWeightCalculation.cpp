@@ -1034,7 +1034,7 @@ namespace smaa
 			, {}
 			, linearSampler );
 		m_pass.addInputStencilView( stencilView );
-		m_pass.addOutputColourView( m_result.wholeViewId
+		m_pass.addOutputColourView( m_result.targetViewId
 			, castor3d::transparentBlackClearColor );
 		m_result.create();
 	}
@@ -1050,7 +1050,7 @@ namespace smaa
 		visitor.visit( m_pixelShader );
 		visitor.visit( "SMAA BlendingWeight Colour"
 			, m_result
-			, m_graph.getFinalLayout( m_result.wholeViewId ).layout
+			, m_graph.getFinalLayout( m_result.sampledViewId ).layout
 			, castor3d::TextureFactors{}.invert( true ) );
 	}
 

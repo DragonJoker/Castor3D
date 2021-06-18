@@ -233,8 +233,10 @@ namespace castor3d
 		, image{}
 		, wholeViewId{}
 		, targetViewId{}
+		, sampledViewId{}
 		, wholeView{}
 		, targetView{}
+		, sampledView{}
 		, subViewsId{}
 		, sampler{}
 	{
@@ -309,6 +311,17 @@ namespace castor3d
 			targetViewId = wholeViewId;
 		}
 
+		if ( ashes::isDepthStencilFormat( wholeViewId.data->image.data->info.format ) )
+		{
+			auto createInfo = *wholeViewId.data;
+			createInfo.info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+			sampledViewId = handler.createViewId( createInfo );
+		}
+		else
+		{
+			sampledViewId = wholeViewId;
+		}
+
 		if ( createSubviews )
 		{
 			auto sliceLayerCount = std::max( size.depth, layerCount );
@@ -366,6 +379,15 @@ namespace castor3d
 		else
 		{
 			targetView = wholeView;
+		}
+
+		if ( wholeViewId != sampledViewId )
+		{
+			sampledView = handler->createImageView( context, sampledViewId );
+		}
+		else
+		{
+			sampledView = wholeView;
 		}
 	}
 
@@ -516,7 +538,7 @@ namespace castor3d
 			, image
 			, ( target
 				? targetViewId.data->info.subresourceRange
-				: wholeViewId.data->info.subresourceRange ) };
+				: sampledViewId.data->info.subresourceRange ) };
 	}
 
 	//*********************************************************************************************
