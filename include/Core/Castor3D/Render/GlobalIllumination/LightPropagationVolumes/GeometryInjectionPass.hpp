@@ -100,7 +100,6 @@ namespace castor3d
 
 	private:
 		class PipelineHolder
-			: public crg::PipelineHolder
 		{
 		public:
 			PipelineHolder( crg::FramePass const & pass
@@ -114,9 +113,10 @@ namespace castor3d
 				, uint32_t index );
 
 		protected:
-			void doCreatePipeline( uint32_t index )override;
+			void doCreatePipeline( uint32_t index );
 
 		private:
+			crg::PipelineHolder m_holder;
 			uint32_t m_lpvSize;
 			VkRenderPass m_renderPass;
 		};
