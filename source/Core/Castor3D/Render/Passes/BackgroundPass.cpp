@@ -274,10 +274,10 @@ namespace castor3d
 			, ( m_usesDepth
 				? std::make_optional( ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_TRUE, VK_FALSE, VK_COMPARE_OP_LESS_OR_EQUAL } )
 				: std::nullopt )
-			, ashes::PipelineColorBlendStateCreateInfo{ 0u, VK_FALSE, VK_LOGIC_OP_COPY, m_blendAttachs }
+			, ashes::PipelineColorBlendStateCreateInfo{ 0u, VK_FALSE, VK_LOGIC_OP_COPY, doGetBlendAttachs() }
 			, std::nullopt
 			, *m_pipelineLayout
-			, m_renderPass } );
+			, getRenderPass() } );
 	}
 
 	ashes::PipelineViewportStateCreateInfo BackgroundPass::doCreateViewportState()
