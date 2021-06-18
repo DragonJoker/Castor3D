@@ -526,24 +526,24 @@ namespace castor3d
 	void RenderTarget::listIntermediateViews( IntermediateViewArray & result )const
 	{
 		result.push_back( { "Target Result"
-			, m_combined.wholeViewId
+			, m_combined.sampledViewId
 			, m_combined.image
 			, m_combined.wholeView
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
 		result.push_back( { "Target Colour"
-			, m_objects.wholeViewId
+			, m_objects.sampledViewId
 			, m_objects.image
 			, m_objects.wholeView
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) } );
 		result.push_back( { "Target Overlays"
-			, m_overlays.wholeViewId
+			, m_overlays.sampledViewId
 			, m_overlays.image
 			, m_overlays.wholeView
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) } );
 		result.push_back( { "Target Velocity"
-			, m_velocity.wholeViewId
+			, m_velocity.sampledViewId
 			, m_velocity.image
 			, m_velocity.wholeView
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
@@ -579,10 +579,10 @@ namespace castor3d
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_combineStages ) )
 					.build( pass, context, graph );
 			} );
-		result.addSampledView( m_objects.wholeViewId
+		result.addSampledView( m_objects.sampledViewId
 			, 0u
 			, {} );
-		result.addSampledView( m_overlays.wholeViewId
+		result.addSampledView( m_overlays.sampledViewId
 			, 1u
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		result.addOutputColourView( m_combined.targetViewId );

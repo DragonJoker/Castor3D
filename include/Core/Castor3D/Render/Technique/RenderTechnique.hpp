@@ -154,12 +154,12 @@ namespace castor3d
 
 		crg::ImageViewId const & getResultImgView()const
 		{
-			return m_colour.wholeViewId;
+			return m_colour.sampledViewId;
 		}
 
 		crg::ImageViewId const & getDepthImgView()const
 		{
-			return m_depth.wholeViewId;
+			return m_depth.sampledViewId;
 		}
 
 		TextureLayout const & getDepth()const
