@@ -125,6 +125,10 @@ namespace castor3d
 		 *\return		Le nombre de primitives à dessiner.
 		 */
 		uint32_t getCount()const override;
+		/**
+		 *\copydoc		castor3d::LightPass::doGetVertexShaderSource
+		 */
+		static ShaderPtr getVertexShaderSource();
 
 	protected:
 		/**
@@ -137,7 +141,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::LightPass::doGetVertexShaderSource
 		 */
-		ShaderPtr doGetVertexShaderSource( SceneFlags const & sceneFlags )const override;
+		ShaderPtr doGetVertexShaderSource()const override;
 		/**
 		 *\~english
 		 *\return		The vertices needed to draw the mesh.

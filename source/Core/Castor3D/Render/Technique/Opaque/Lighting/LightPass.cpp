@@ -13,7 +13,9 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPassResult.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/MeshLightPass.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Shader/Program.hpp"
@@ -156,30 +158,26 @@ namespace castor3d
 		, VoxelizerUbo const * voxelUbo )
 	{
 		ashes::VkDescriptorSetLayoutBindingArray setLayoutBindings;
-		setLayoutBindings.emplace_back( m_engine.getMaterialCache().getPassBuffer().createLayoutBinding( uint32_t( LightPassUboIdx::eMaterials ) ) );
-		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassUboIdx::eMatrix )
+		setLayoutBindings.emplace_back( m_engine.getMaterialCache().getPassBuffer().createLayoutBinding( uint32_t( LightPassIdx::eMaterials ) ) );
+		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassIdx::eGpInfo )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassUboIdx::eGpInfo )
+		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassIdx::eScene )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassUboIdx::eScene )
+		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassLgtIdx::eMatrix )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassUboIdx::eLight )
+		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassLgtIdx::eLight )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-
-		if ( modelUbo )
-		{
-			setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassUboIdx::eModelMatrix )
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_VERTEX_BIT ) );
-		}
+		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassLgtIdx::eModelMatrix )
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, VK_SHADER_STAGE_VERTEX_BIT ) );
 
 		if ( voxelUbo )
 		{
-			setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassUboIdx::eVoxelData )
+			setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassIdx::eVoxelData )
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		}
@@ -428,296 +426,78 @@ namespace castor3d
 		return *result;
 	}
 
-	size_t LightPass::makeKey( Light const & light
-		, ShadowMap const * shadowMap
-		, Texture const * vctFirstBounce
-		, Texture const * vctSecondaryBounce )
+	ShaderPtr LightPass::getVertexShaderSource( LightType lightType )
 	{
-		size_t hash = std::hash< LightType >{}( light.getLightType() );
-		castor::hashCombine( hash, shadowMap ? light.getShadowType() : ShadowType::eNone );
-		castor::hashCombine( hash, shadowMap ? light.getVolumetricSteps() > 0 : false );
-		castor::hashCombine( hash, shadowMap ? light.needsRsmShadowMaps() : false );
-		castor::hashCombine( hash, shadowMap );
-		castor::hashCombine( hash, vctFirstBounce );
-		castor::hashCombine( hash, vctSecondaryBounce );
-		return hash;
+		switch ( lightType )
+		{
+		case castor3d::LightType::eDirectional:
+			return DirectionalLightPass::getVertexShaderSource();
+		case castor3d::LightType::ePoint:
+		case castor3d::LightType::eSpot:
+			return MeshLightPass::getVertexShaderSource();
+		default:
+			CU_Failure( "LightPass: Unsupported LightType" );
+			return nullptr;
+		}
 	}
 
-	LightPass::Pipeline LightPass::createPipeline( LightType lightType
+	ShaderPtr LightPass::getPixelShaderSource( MaterialType materialType
+		, RenderSystem const & renderSystem
+		, SceneFlags const & sceneFlags
+		, LightType lightType
 		, ShadowType shadowType
+		, bool shadows
 		, bool rsm
-		, ShadowMap const * shadowMap
-		, Texture const * vctFirstBounce
-		, Texture const * vctSecondaryBounce )
+		, bool generatesIndirect
+		, bool voxels )
 	{
-		Scene const & scene = *m_scene;
-		OpaquePassResult const & gp = *m_opaquePassResult;
-		ashes::VertexBufferBase & vbo = *m_vertexBuffer;
-		ashes::PipelineVertexInputStateCreateInfo const & vertexLayout = *m_pUsedVertexLayout;
-		SceneUbo const & sceneUbo = *m_sceneUbo;
-		SceneFlags sceneFlags{ scene.getFlags() };
-		LightPass::Pipeline pipeline;
-		m_vertexShader.shader = doGetVertexShaderSource( sceneFlags );
-
-		if ( scene.getMaterialsType() == MaterialType::eMetallicRoughness )
+		switch ( materialType )
 		{
-			m_pixelShader.shader = doGetPbrMRPixelShaderSource( sceneFlags
+		case castor3d::MaterialType::ePhong:
+			return getPhongPixelShaderSource( renderSystem
+				, sceneFlags
 				, lightType
 				, shadowType
-				, rsm );
-		}
-		else if ( scene.getMaterialsType() == MaterialType::eSpecularGlossiness )
-		{
-			m_pixelShader.shader = doGetPbrSGPixelShaderSource( sceneFlags
+				, shadows
+				, rsm
+				, generatesIndirect
+				, voxels );
+		case castor3d::MaterialType::eMetallicRoughness:
+			return getPbrMRPixelShaderSource( renderSystem
+				, sceneFlags
 				, lightType
 				, shadowType
-				, rsm );
-		}
-		else
-		{
-			m_pixelShader.shader = doGetPhongPixelShaderSource( sceneFlags
+				, shadows
+				, rsm
+				, generatesIndirect
+				, voxels );
+		case castor3d::MaterialType::eSpecularGlossiness:
+			return getPbrSGPixelShaderSource( renderSystem
+				, sceneFlags
 				, lightType
 				, shadowType
-				, rsm );
-		}
-
-		pipeline.program = doCreateProgram();
-		pipeline.program->initialise( vbo
-			, vertexLayout
-			, *m_firstRenderPass.renderPass
-			, *m_blendRenderPass.renderPass
-			, m_matrixUbo
-			, sceneUbo
-			, m_gpInfoUbo
-			, m_optModelUbo
-			, m_vctUbo );
-		pipeline.uboDescriptorSet = pipeline.program->getUboDescriptorPool().createDescriptorSet( getName() + "Ubo", 0u );
-		auto & uboLayout = pipeline.program->getUboDescriptorLayout();
-		m_engine.getMaterialCache().getPassBuffer().createBinding( *pipeline.uboDescriptorSet, uboLayout.getBinding( uint32_t( LightPassUboIdx::eMaterials ) ) );
-		m_matrixUbo.createSizedBinding( *pipeline.uboDescriptorSet
-			, uboLayout.getBinding( uint32_t( LightPassUboIdx::eMatrix ) ) );
-		m_gpInfoUbo.createSizedBinding( *pipeline.uboDescriptorSet
-			, uboLayout.getBinding( uint32_t( LightPassUboIdx::eGpInfo ) ) );
-		sceneUbo.createSizedBinding( *pipeline.uboDescriptorSet
-			, uboLayout.getBinding( uint32_t( LightPassUboIdx::eScene ) ) );
-		pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( uint32_t( LightPassUboIdx::eLight ) )
-			, *m_baseUbo );
-
-		if ( m_optModelUbo )
-		{
-			pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( uint32_t( LightPassUboIdx::eModelMatrix ) )
-				, m_optModelUbo->getBuffer() );
-		}
-
-		if ( m_vctUbo )
-		{
-			m_vctUbo->createSizedBinding( *pipeline.uboDescriptorSet
-				, uboLayout.getBinding( uint32_t( LightPassUboIdx::eVoxelData ) ) );
-		}
-
-		pipeline.uboDescriptorSet->update();
-
-		pipeline.firstCommandBuffer = m_device.graphicsCommandPool->createCommandBuffer( getName() + "First"
-			, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
-		pipeline.blendCommandBuffer = m_device.graphicsCommandPool->createCommandBuffer( getName() + "Blend"
-			, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
-
-		pipeline.textureDescriptorSet = pipeline.program->getTextureDescriptorPool().createDescriptorSet( getName() + "Tex"
-			, 1u );
-		auto & texLayout = pipeline.program->getTextureDescriptorLayout();
-		// TODO CRG
-		//auto writeBinding = [&gp, this]( uint32_t index, VkImageLayout layout )
-		//{
-		//	auto & unit = gp[DsTexture( index )];
-		//	return ashes::WriteDescriptorSet
-		//	{
-		//		index,
-		//		0u,
-		//		VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-		//		{ { unit.getSampler()->getSampler(), unit.getTexture()->getDefaultView().getSampledView(), layout } }
-		//	};
-		//};
-		//uint32_t index = 0u;
-		//pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ) );
-		//pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-		//pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-		//pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-		//pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-		//pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-
-		//if ( vctFirstBounce && vctSecondaryBounce && m_voxels )
-		//{
-		//	pipeline.textureWrites.push_back( ashes::WriteDescriptorSet{ index++
-		//		, 0u
-		//		, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-		//		{ { vctFirstBounce->getSampler()->getSampler()
-		//			, vctFirstBounce->getTexture()->getDefaultView().getSampledView()
-		//			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
-		//	pipeline.textureWrites.push_back( ashes::WriteDescriptorSet{ index++
-		//		, 0u
-		//		, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-		//		{ { vctSecondaryBounce->getSampler()->getSampler()
-		//			, vctSecondaryBounce->getTexture()->getDefaultView().getSampledView()
-		//			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
-		//}
-
-		//if ( shadowMap && m_shadows )
-		//{
-		//	auto & smResult = shadowMap->getShadowPassResult();
-		//	pipeline.textureWrites.push_back( ashes::WriteDescriptorSet{ index++
-		//		, 0u
-		//		, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-		//		{ { shadowMap->getSampler( SmTexture::eNormalLinear )
-		//			, shadowMap->getView( SmTexture::eNormalLinear )
-		//			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
-		//	pipeline.textureWrites.push_back( ashes::WriteDescriptorSet{ index++
-		//		, 0u
-		//		, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-		//		{ { shadowMap->getSampler( SmTexture::eVariance )
-		//			, shadowMap->getView( SmTexture::eVariance )
-		//			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
-		//}
-
-		pipeline.textureDescriptorSet->setBindings( pipeline.textureWrites );
-		pipeline.textureDescriptorSet->update();
-
-		return pipeline;
-	}
-
-	LightPass::Pipeline * LightPass::doGetPipeline( bool first
-		, Light const & light
-		, ShadowMap const * shadowMap
-		, Texture const * vctFirstBounce
-		, Texture const * vctSecondaryBounce )
-	{
-		auto key = makeKey( light
-			, shadowMap
-			, vctFirstBounce
-			, vctSecondaryBounce );
-		auto it = m_pipelines.emplace( key, nullptr );
-
-		if ( it.second )
-		{
-			it.first->second = std::make_unique< Pipeline >( createPipeline( light.getLightType()
-				, ( shadowMap
-					? light.getShadowType()
-					: ShadowType::eNone )
-				, light.needsRsmShadowMaps()
-				, shadowMap
-				, vctFirstBounce
-				, vctSecondaryBounce ) );
-		}
-
-		doPrepareCommandBuffer( *it.first->second
-			, first );
-		return it.first->second.get();
-	}
-
-	VkClearValue LightPass::doGetIndirectClearColor()const
-	{
-		return opaqueBlackClearColor;
-	}
-
-	void LightPass::doInitialise( Scene const & scene
-		, OpaquePassResult const & gp
-		, LightType lightType
-		, ashes::VertexBufferBase & vbo
-		, ashes::PipelineVertexInputStateCreateInfo const & vertexLayout
-		, SceneUbo const & sceneUbo
-		, UniformBufferT< ModelUboConfiguration > const * modelUbo
-		, RenderPassTimer & timer )
-	{
-		m_scene = &scene;
-		m_sceneUbo = &sceneUbo;
-		m_optModelUbo = modelUbo;
-		m_usedVertexLayout = vertexLayout;
-		m_pUsedVertexLayout = &m_usedVertexLayout;
-		m_timer = &timer;
-		m_opaquePassResult = &gp;
-		m_commandBuffers[0] = m_device.graphicsCommandPool->createCommandBuffer( getName() + "0"
-			, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
-		m_commandBuffers[1] = m_device.graphicsCommandPool->createCommandBuffer( getName() + "1"
-			, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
-	}
-
-	void LightPass::doCleanup()
-	{
-		m_commandBuffers[0].reset();
-		m_commandBuffers[1].reset();
-		m_pipelines.clear();
-	}
-
-	void LightPass::doPrepareCommandBuffer( Pipeline & pipeline
-		, bool first )
-	{
-		if ( ( first && !pipeline.isFirstSet )
-			|| ( !first && !pipeline.isBlendSet ) )
-		{
-			auto & renderPass = first
-				? m_firstRenderPass
-				: m_blendRenderPass;
-			auto & commandBuffer = first
-				? *pipeline.firstCommandBuffer
-				: *pipeline.blendCommandBuffer;
-			auto & dimensions = renderPass.frameBuffer->getDimensions();
-
-			commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
-				, makeVkType< VkCommandBufferInheritanceInfo >( *renderPass.renderPass
-					, 0u
-					, *renderPass.frameBuffer
-					, VkBool32( VK_FALSE )
-					, 0u
-					, 0u ) );
-			commandBuffer.setViewport( ashes::makeViewport( dimensions ) );
-			commandBuffer.setScissor( ashes::makeScissor( dimensions ) );
-			commandBuffer.bindDescriptorSets( { *pipeline.uboDescriptorSet, *pipeline.textureDescriptorSet }, pipeline.program->getPipelineLayout() );
-			commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-			pipeline.program->render( commandBuffer, getCount(), first, m_offset );
-			commandBuffer.end();
-
-			pipeline.isFirstSet = pipeline.isFirstSet || first;
-			pipeline.isBlendSet = pipeline.isBlendSet || !first;
+				, shadows
+				, rsm
+				, generatesIndirect
+				, voxels );
+		default:
+			CU_Failure( "LightPass: Unsupported MaterialType" );
+			return nullptr;
 		}
 	}
-	
-	ShaderPtr LightPass::doGetPhongPixelShaderSource( SceneFlags const & sceneFlags
+
+	ShaderPtr LightPass::getPhongPixelShaderSource( RenderSystem const & renderSystem
+		, SceneFlags const & sceneFlags
 		, LightType lightType
 		, ShadowType shadowType
-		, bool rsm )const
+		, bool shadows
+		, bool rsm
+		, bool generatesIndirect
+		, bool voxels )
 	{
 		using namespace sdw;
 		FragmentWriter writer;
-		auto & renderSystem = *m_engine.getRenderSystem();
 
-		// Shader outputs
-		auto pxl_diffuse = writer.declOutput< Vec3 >( "pxl_diffuse", 0 );
-		auto pxl_specular = writer.declOutput< Vec3 >( "pxl_specular", 1 );
-		auto pxl_indirectDiffuse = writer.declOutput< Vec3 >( "pxl_indirectDiffuse", 2, m_generatesIndirect );
-		auto pxl_indirectSpecular = writer.declOutput< Vec3 >( "pxl_indirectSpecular", 3, m_generatesIndirect );
-
-		// Shader inputs
-		shader::PhongMaterials materials{ writer };
-		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-			, uint32_t( LightPassUboIdx::eMaterials )
-			, 0u );
-		UBO_MATRIX( writer, uint32_t( LightPassUboIdx::eMatrix ), 0u );
-		UBO_GPINFO( writer, uint32_t( LightPassUboIdx::eGpInfo ), 0u );
-		UBO_SCENE( writer, uint32_t( LightPassUboIdx::eScene ), 0u );
-		auto index = 0u;
-		auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), index++, 1u );
-		auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), index++, 1u );
-		auto c3d_mapData2 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), index++, 1u );
-		auto c3d_mapData3 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), index++, 1u );
-		auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), index++, 1u );
-		auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), index++, 1u );
-		auto in = writer.getIn();
-
-		shadowType = m_shadows
-			? shadowType
-			: ShadowType::eNone;
-
-		// Utility functions
-		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		shader::Utils utils{ writer };
 		utils.declareCalcTexCoord();
 		utils.declareCalcVSPosition();
@@ -725,29 +505,58 @@ namespace castor3d
 		utils.declareDecodeReceiver();
 		utils.declareInvertVec2Y();
 
-		shader::GlobalIllumination indirect{ writer, utils, true };
+		// Shader outputs
+		auto pxl_diffuse = writer.declOutput< Vec3 >( "pxl_diffuse", 0 );
+		auto pxl_specular = writer.declOutput< Vec3 >( "pxl_specular", 1 );
+		auto pxl_indirectDiffuse = writer.declOutput< Vec3 >( "pxl_indirectDiffuse", 2 );
+		auto pxl_indirectSpecular = writer.declOutput< Vec3 >( "pxl_indirectSpecular", 3 );
 
-		if ( m_voxels )
+		// Shader inputs
+		shader::PhongMaterials materials{ writer };
+		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+			, uint32_t( LightPassIdx::eMaterials )
+			, 0u );
+		UBO_GPINFO( writer, uint32_t( LightPassIdx::eGpInfo ), 0u );
+		UBO_SCENE( writer, uint32_t( LightPassIdx::eScene ), 0u );
+		shader::GlobalIllumination indirect{ writer, utils, true };
+		uint32_t index = uint32_t( LightPassIdx::eData5 ) + 1u;
+
+		if ( voxels )
 		{
-			indirect.declare( uint32_t( LightPassUboIdx::eVoxelData )
-				, uint32_t( LightPassUboIdx::eLpvGridConfig )
-				, uint32_t( LightPassUboIdx::eLayeredLpvGridConfig )
+			indirect.declare( uint32_t( LightPassIdx::eVoxelData )
+				, uint32_t( LightPassIdx::eLpvGridConfig )
+				, uint32_t( LightPassIdx::eLayeredLpvGridConfig )
 				, index
-				, 1u
+				, 0u
 				, sceneFlags );
 		}
 
+		auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), uint32_t( LightPassIdx::eDepth ), 0u );
+		auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), uint32_t( LightPassIdx::eData1 ), 0u );
+		auto c3d_mapData2 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), uint32_t( LightPassIdx::eData2 ), 0u );
+		auto c3d_mapData3 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), uint32_t( LightPassIdx::eData3 ), 0u );
+		auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), uint32_t( LightPassIdx::eData4 ), 0u );
+		auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), uint32_t( LightPassIdx::eData5 ), 0u );
+		auto in = writer.getIn();
+
+		shadowType = shadows
+			? shadowType
+			: ShadowType::eNone;
+
+		// Utility functions
+		index = uint32_t( LightPassLgtIdx::eSmNormalLinear );
 		auto lighting = shader::PhongLightingModel::createModel( writer
 			, utils
 			, lightType
-			, uint32_t( LightPassUboIdx::eLight )
-			, shader::ShadowOptions{ m_shadows, lightType, rsm }
+			, uint32_t( LightPassLgtIdx::eLight )
+			, 1u
+			, shader::ShadowOptions{ shadows, lightType, rsm }
 			, index
 			, 1u );
 		shader::SssTransmittance sss{ writer
 			, lighting->getShadowModel()
 			, utils
-			, m_shadows };
+			, shadows };
 		sss.declare( lightType );
 
 		writer.implementFunction< sdw::Void >( "main"
@@ -884,7 +693,7 @@ namespace castor3d
 					pxl_diffuse = lightDiffuse;
 					pxl_specular = lightSpecular;
 
-					if ( m_voxels )
+					if ( voxels )
 					{
 						auto occlusion = indirect.computeOcclusion( sceneFlags
 							, lightType
@@ -902,7 +711,7 @@ namespace castor3d
 					}
 					else
 					{
-						pxl_indirectDiffuse = vec3( 1.0_f, 1.0_f, 1.0_f );
+						pxl_indirectDiffuse = vec3( 0.0_f, 0.0_f, 0.0_f );
 						pxl_indirectSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
 					}
 				}
@@ -911,6 +720,9 @@ namespace castor3d
 					auto diffuse = writer.declLocale( "diffuse"
 						, data2.xyz() );
 					pxl_diffuse = diffuse;
+					pxl_specular = vec3( 0.0_f, 0.0_f, 0.0_f );
+					pxl_indirectDiffuse = vec3( 0.0_f, 0.0_f, 0.0_f );
+					pxl_indirectSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
 				}
 				FI;
 			} );
@@ -918,44 +730,18 @@ namespace castor3d
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 	
-	ShaderPtr LightPass::doGetPbrMRPixelShaderSource( SceneFlags const & sceneFlags
+	ShaderPtr LightPass::getPbrMRPixelShaderSource( RenderSystem const & renderSystem
+		, SceneFlags const & sceneFlags
 		, LightType lightType
 		, ShadowType shadowType
-		, bool rsm )const
+		, bool shadows
+		, bool rsm
+		, bool generatesIndirect
+		, bool voxels )
 	{
 		using namespace sdw;
 		FragmentWriter writer;
-		auto & renderSystem = *m_engine.getRenderSystem();
 
-		// Shader outputs
-		auto pxl_diffuse = writer.declOutput< Vec3 >( "pxl_diffuse", 0 );
-		auto pxl_specular = writer.declOutput< Vec3 >( "pxl_specular", 1 );
-		auto pxl_indirectDiffuse = writer.declOutput< Vec3 >( "pxl_indirectDiffuse", 2, m_generatesIndirect );
-		auto pxl_indirectSpecular = writer.declOutput< Vec3 >( "pxl_indirectSpecular", 3, m_generatesIndirect );
-
-		// Shader inputs
-		shader::PbrMRMaterials materials{ writer };
-		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-			, uint32_t( LightPassUboIdx::eMaterials )
-			, 0u );
-		UBO_MATRIX( writer, uint32_t( LightPassUboIdx::eMatrix ), 0u );
-		UBO_GPINFO( writer, uint32_t( LightPassUboIdx::eGpInfo ), 0u );
-		UBO_SCENE( writer, uint32_t( LightPassUboIdx::eScene ), 0u );
-		auto index = 0u;
-		auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), index++, 1u );
-		auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), index++, 1u );
-		auto c3d_mapData2 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), index++, 1u );
-		auto c3d_mapData3 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), index++, 1u );
-		auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), index++, 1u );
-		auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), index++, 1u );
-		auto in = writer.getIn();
-
-		shadowType = m_shadows
-			? shadowType
-			: ShadowType::eNone;
-
-		// Utility functions
-		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		shader::Utils utils{ writer };
 		utils.declareCalcTexCoord();
 		utils.declareCalcVSPosition();
@@ -963,29 +749,58 @@ namespace castor3d
 		utils.declareDecodeReceiver();
 		utils.declareInvertVec2Y();
 
-		shader::GlobalIllumination indirect{ writer, utils, true };
+		// Shader outputs
+		auto pxl_diffuse = writer.declOutput< Vec3 >( "pxl_diffuse", 0 );
+		auto pxl_specular = writer.declOutput< Vec3 >( "pxl_specular", 1 );
+		auto pxl_indirectDiffuse = writer.declOutput< Vec3 >( "pxl_indirectDiffuse", 2 );
+		auto pxl_indirectSpecular = writer.declOutput< Vec3 >( "pxl_indirectSpecular", 3 );
 
-		if ( m_voxels )
+		// Shader inputs
+		shader::PbrMRMaterials materials{ writer };
+		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+			, uint32_t( LightPassIdx::eMaterials )
+			, 0u );
+		UBO_GPINFO( writer, uint32_t( LightPassIdx::eGpInfo ), 0u );
+		UBO_SCENE( writer, uint32_t( LightPassIdx::eScene ), 0u );
+		shader::GlobalIllumination indirect{ writer, utils, true };
+		uint32_t index = uint32_t( LightPassIdx::eData5 ) + 1u;
+
+		if ( voxels )
 		{
-			indirect.declare( uint32_t( LightPassUboIdx::eVoxelData )
-				, uint32_t( LightPassUboIdx::eLpvGridConfig )
-				, uint32_t( LightPassUboIdx::eLayeredLpvGridConfig )
+			indirect.declare( uint32_t( LightPassIdx::eVoxelData )
+				, uint32_t( LightPassIdx::eLpvGridConfig )
+				, uint32_t( LightPassIdx::eLayeredLpvGridConfig )
 				, index
-				, 1u
+				, 0u
 				, sceneFlags );
 		}
 
+		auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), uint32_t( LightPassIdx::eDepth ), 0u );
+		auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), uint32_t( LightPassIdx::eData1 ), 0u );
+		auto c3d_mapData2 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), uint32_t( LightPassIdx::eData2 ), 0u );
+		auto c3d_mapData3 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), uint32_t( LightPassIdx::eData3 ), 0u );
+		auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), uint32_t( LightPassIdx::eData4 ), 0u );
+		auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), uint32_t( LightPassIdx::eData5 ), 0u );
+		auto in = writer.getIn();
+
+		shadowType = shadows
+			? shadowType
+			: ShadowType::eNone;
+
+		// Utility functions
+		index = uint32_t( LightPassLgtIdx::eSmNormalLinear );
 		auto lighting = shader::MetallicBrdfLightingModel::createModel( writer
 			, utils
 			, lightType
-			, uint32_t( LightPassUboIdx::eLight )
-			, shader::ShadowOptions{ m_shadows, lightType, rsm }
+			, uint32_t( LightPassLgtIdx::eLight )
+			, 1u
+			, shader::ShadowOptions{ shadows, lightType, rsm }
 			, index
 			, 1u );
 		shader::SssTransmittance sss{ writer
 			, lighting->getShadowModel()
 			, utils
-			, m_shadows && shadowType != ShadowType::eNone };
+			, shadows && shadowType != ShadowType::eNone };
 		sss.declare( lightType );
 
 		writer.implementFunction< sdw::Void >( "main"
@@ -1201,7 +1016,7 @@ namespace castor3d
 					pxl_diffuse = lightDiffuse;
 					pxl_specular = lightSpecular;
 
-					if ( m_voxels )
+					if ( voxels )
 					{
 						auto occlusion = indirect.computeOcclusion( sceneFlags
 							, lightType
@@ -1219,13 +1034,16 @@ namespace castor3d
 					}
 					else
 					{
-						pxl_indirectDiffuse = vec3( 1.0_f, 1.0_f, 1.0_f );
+						pxl_indirectDiffuse = vec3( 0.0_f, 0.0_f, 0.0_f );
 						pxl_indirectSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
 					}
 				}
 				ELSE
 				{
 					pxl_diffuse = albedo;
+					pxl_specular = vec3( 0.0_f, 0.0_f, 0.0_f );
+					pxl_indirectDiffuse = vec3( 0.0_f, 0.0_f, 0.0_f );
+					pxl_indirectSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
 				}
 				FI;
 			} );
@@ -1233,38 +1051,18 @@ namespace castor3d
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 	
-	ShaderPtr LightPass::doGetPbrSGPixelShaderSource( SceneFlags const & sceneFlags
+	ShaderPtr LightPass::getPbrSGPixelShaderSource( RenderSystem const & renderSystem
+		, SceneFlags const & sceneFlags
 		, LightType lightType
 		, ShadowType shadowType
-		, bool rsm )const
+		, bool shadows
+		, bool rsm
+		, bool generatesIndirect
+		, bool voxels )
 	{
 		using namespace sdw;
 		FragmentWriter writer;
-		auto & renderSystem = *m_engine.getRenderSystem();
 
-		// Shader inputs
-		shader::PbrSGMaterials materials{ writer };
-		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-			, uint32_t( LightPassUboIdx::eMaterials )
-			, 0u );
-		UBO_MATRIX( writer, uint32_t( LightPassUboIdx::eMatrix ), 0u );
-		UBO_GPINFO( writer, uint32_t( LightPassUboIdx::eGpInfo ), 0u );
-		UBO_SCENE( writer, uint32_t( LightPassUboIdx::eScene ), 0u );
-		auto index = 0u;
-		auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), index++, 1u );
-		auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), index++, 1u );
-		auto c3d_mapData2 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), index++, 1u );
-		auto c3d_mapData3 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), index++, 1u );
-		auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), index++, 1u );
-		auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), index++, 1u );
-		auto in = writer.getIn();
-
-		shadowType = m_shadows
-			? shadowType
-			: ShadowType::eNone;
-
-		// Utility functions
-		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		shader::Utils utils{ writer };
 		utils.declareCalcTexCoord();
 		utils.declareCalcVSPosition();
@@ -1272,36 +1070,59 @@ namespace castor3d
 		utils.declareDecodeReceiver();
 		utils.declareInvertVec2Y();
 
+		// Shader inputs
+		shader::PbrSGMaterials materials{ writer };
+		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+			, uint32_t( LightPassIdx::eMaterials )
+			, 0u );
+		UBO_GPINFO( writer, uint32_t( LightPassIdx::eGpInfo ), 0u );
+		UBO_SCENE( writer, uint32_t( LightPassIdx::eScene ), 0u );
 		shader::GlobalIllumination indirect{ writer, utils, true };
+		uint32_t index = uint32_t( LightPassIdx::eData5 ) + 1u;
 
-		if ( m_voxels )
+		if ( voxels )
 		{
-			indirect.declare( uint32_t( LightPassUboIdx::eVoxelData )
-				, uint32_t( LightPassUboIdx::eLpvGridConfig )
-				, uint32_t( LightPassUboIdx::eLayeredLpvGridConfig )
+			indirect.declare( uint32_t( LightPassIdx::eVoxelData )
+				, uint32_t( LightPassIdx::eLpvGridConfig )
+				, uint32_t( LightPassIdx::eLayeredLpvGridConfig )
 				, index
-				, 1u
+				, 0u
 				, sceneFlags );
 		}
 
+		auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), uint32_t( LightPassIdx::eDepth ), 0u );
+		auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), uint32_t( LightPassIdx::eData1 ), 0u );
+		auto c3d_mapData2 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), uint32_t( LightPassIdx::eData2 ), 0u );
+		auto c3d_mapData3 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), uint32_t( LightPassIdx::eData3 ), 0u );
+		auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), uint32_t( LightPassIdx::eData4 ), 0u );
+		auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), uint32_t( LightPassIdx::eData5 ), 0u );
+		auto in = writer.getIn();
+
+		shadowType = shadows
+			? shadowType
+			: ShadowType::eNone;
+
+		// Utility functions
+		index = uint32_t( LightPassLgtIdx::eSmNormalLinear );
 		auto lighting = shader::SpecularBrdfLightingModel::createModel( writer
 			, utils
 			, lightType
-			, uint32_t( LightPassUboIdx::eLight )
-			, shader::ShadowOptions{ m_shadows, lightType, rsm }
+			, uint32_t( LightPassLgtIdx::eLight )
+			, 1u
+			, shader::ShadowOptions{ shadows, lightType, rsm }
 			, index
 			, 1u );
 		shader::SssTransmittance sss{ writer
 			, lighting->getShadowModel()
 			, utils
-			, m_shadows && shadowType != ShadowType::eNone };
+			, shadows && shadowType != ShadowType::eNone };
 		sss.declare( lightType );
 
 		// Shader outputs
 		auto pxl_diffuse = writer.declOutput< Vec3 >( "pxl_diffuse", 0 );
 		auto pxl_specular = writer.declOutput< Vec3 >( "pxl_specular", 1 );
-		auto pxl_indirectDiffuse = writer.declOutput< Vec3 >( "pxl_indirectDiffuse", 2, m_generatesIndirect );
-		auto pxl_indirectSpecular = writer.declOutput< Vec3 >( "pxl_indirectSpecular", 3, m_generatesIndirect );
+		auto pxl_indirectDiffuse = writer.declOutput< Vec3 >( "pxl_indirectDiffuse", 2 );
+		auto pxl_indirectSpecular = writer.declOutput< Vec3 >( "pxl_indirectSpecular", 3 );
 
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
@@ -1444,7 +1265,7 @@ namespace castor3d
 					pxl_diffuse = lightDiffuse;
 					pxl_specular = lightSpecular;
 
-					if ( m_voxels )
+					if ( voxels )
 					{
 						auto occlusion = indirect.computeOcclusion( sceneFlags
 							, lightType
@@ -1462,18 +1283,318 @@ namespace castor3d
 					}
 					else
 					{
-						pxl_indirectDiffuse = vec3( 1.0_f, 1.0_f, 1.0_f );
+						pxl_indirectDiffuse = vec3( 0.0_f, 0.0_f, 0.0_f );
 						pxl_indirectSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
 					}
 				}
 				ELSE
 				{
 					pxl_diffuse = diffuse;
+					pxl_specular = vec3( 0.0_f, 0.0_f, 0.0_f );
+					pxl_indirectDiffuse = vec3( 0.0_f, 0.0_f, 0.0_f );
+					pxl_indirectSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
 				}
 				FI;
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+	}
+
+	size_t LightPass::makeKey( Light const & light
+		, ShadowMap const * shadowMap
+		, Texture const * vctFirstBounce
+		, Texture const * vctSecondaryBounce )
+	{
+		size_t hash = std::hash< LightType >{}( light.getLightType() );
+		castor::hashCombine( hash, shadowMap ? light.getShadowType() : ShadowType::eNone );
+		castor::hashCombine( hash, shadowMap ? light.getVolumetricSteps() > 0 : false );
+		castor::hashCombine( hash, shadowMap ? light.needsRsmShadowMaps() : false );
+		castor::hashCombine( hash, shadowMap );
+		castor::hashCombine( hash, vctFirstBounce );
+		castor::hashCombine( hash, vctSecondaryBounce );
+		return hash;
+	}
+
+	LightPass::Pipeline LightPass::createPipeline( LightType lightType
+		, ShadowType shadowType
+		, bool rsm
+		, ShadowMap const * shadowMap
+		, Texture const * vctFirstBounce
+		, Texture const * vctSecondaryBounce )
+	{
+		Scene const & scene = *m_scene;
+		OpaquePassResult const & gp = *m_opaquePassResult;
+		ashes::VertexBufferBase & vbo = *m_vertexBuffer;
+		ashes::PipelineVertexInputStateCreateInfo const & vertexLayout = *m_pUsedVertexLayout;
+		SceneUbo const & sceneUbo = *m_sceneUbo;
+		SceneFlags sceneFlags{ scene.getFlags() };
+		LightPass::Pipeline pipeline;
+		m_vertexShader.shader = doGetVertexShaderSource();
+
+		if ( scene.getMaterialsType() == MaterialType::eMetallicRoughness )
+		{
+			m_pixelShader.shader = doGetPbrMRPixelShaderSource( sceneFlags
+				, lightType
+				, shadowType
+				, rsm );
+		}
+		else if ( scene.getMaterialsType() == MaterialType::eSpecularGlossiness )
+		{
+			m_pixelShader.shader = doGetPbrSGPixelShaderSource( sceneFlags
+				, lightType
+				, shadowType
+				, rsm );
+		}
+		else
+		{
+			m_pixelShader.shader = doGetPhongPixelShaderSource( sceneFlags
+				, lightType
+				, shadowType
+				, rsm );
+		}
+
+		pipeline.program = doCreateProgram();
+		pipeline.program->initialise( vbo
+			, vertexLayout
+			, *m_firstRenderPass.renderPass
+			, *m_blendRenderPass.renderPass
+			, m_matrixUbo
+			, sceneUbo
+			, m_gpInfoUbo
+			, m_optModelUbo
+			, m_vctUbo );
+		pipeline.uboDescriptorSet = pipeline.program->getUboDescriptorPool().createDescriptorSet( getName() + "Ubo", 0u );
+		auto & uboLayout = pipeline.program->getUboDescriptorLayout();
+		m_engine.getMaterialCache().getPassBuffer().createBinding( *pipeline.uboDescriptorSet, uboLayout.getBinding( uint32_t( LightPassIdx::eMaterials ) ) );
+		m_matrixUbo.createSizedBinding( *pipeline.uboDescriptorSet
+			, uboLayout.getBinding( uint32_t( LightPassLgtIdx::eMatrix ) ) );
+		m_gpInfoUbo.createSizedBinding( *pipeline.uboDescriptorSet
+			, uboLayout.getBinding( uint32_t( LightPassIdx::eGpInfo ) ) );
+		sceneUbo.createSizedBinding( *pipeline.uboDescriptorSet
+			, uboLayout.getBinding( uint32_t( LightPassIdx::eScene ) ) );
+		pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( uint32_t( LightPassLgtIdx::eLight ) )
+			, *m_baseUbo );
+
+		if ( m_optModelUbo )
+		{
+			pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( uint32_t( LightPassLgtIdx::eModelMatrix ) )
+				, m_optModelUbo->getBuffer() );
+		}
+
+		if ( m_vctUbo )
+		{
+			m_vctUbo->createSizedBinding( *pipeline.uboDescriptorSet
+				, uboLayout.getBinding( uint32_t( LightPassIdx::eVoxelData ) ) );
+		}
+
+		pipeline.uboDescriptorSet->update();
+
+		pipeline.firstCommandBuffer = m_device.graphicsCommandPool->createCommandBuffer( getName() + "First"
+			, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
+		pipeline.blendCommandBuffer = m_device.graphicsCommandPool->createCommandBuffer( getName() + "Blend"
+			, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
+
+		pipeline.textureDescriptorSet = pipeline.program->getTextureDescriptorPool().createDescriptorSet( getName() + "Tex"
+			, 1u );
+		auto & texLayout = pipeline.program->getTextureDescriptorLayout();
+		// TODO CRG
+		//auto writeBinding = [&gp, this]( uint32_t index, VkImageLayout layout )
+		//{
+		//	auto & unit = gp[DsTexture( index )];
+		//	return ashes::WriteDescriptorSet
+		//	{
+		//		index,
+		//		0u,
+		//		VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+		//		{ { unit.getSampler()->getSampler(), unit.getTexture()->getDefaultView().getSampledView(), layout } }
+		//	};
+		//};
+		//uint32_t index = 0u;
+		//pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ) );
+		//pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		//pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		//pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		//pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		//pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+
+		//if ( vctFirstBounce && vctSecondaryBounce && m_voxels )
+		//{
+		//	pipeline.textureWrites.push_back( ashes::WriteDescriptorSet{ index++
+		//		, 0u
+		//		, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+		//		{ { vctFirstBounce->getSampler()->getSampler()
+		//			, vctFirstBounce->getTexture()->getDefaultView().getSampledView()
+		//			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
+		//	pipeline.textureWrites.push_back( ashes::WriteDescriptorSet{ index++
+		//		, 0u
+		//		, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+		//		{ { vctSecondaryBounce->getSampler()->getSampler()
+		//			, vctSecondaryBounce->getTexture()->getDefaultView().getSampledView()
+		//			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
+		//}
+
+		//if ( shadowMap && m_shadows )
+		//{
+		//	auto & smResult = shadowMap->getShadowPassResult();
+		//	pipeline.textureWrites.push_back( ashes::WriteDescriptorSet{ index++
+		//		, 0u
+		//		, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+		//		{ { shadowMap->getSampler( SmTexture::eNormalLinear )
+		//			, shadowMap->getView( SmTexture::eNormalLinear )
+		//			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
+		//	pipeline.textureWrites.push_back( ashes::WriteDescriptorSet{ index++
+		//		, 0u
+		//		, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+		//		{ { shadowMap->getSampler( SmTexture::eVariance )
+		//			, shadowMap->getView( SmTexture::eVariance )
+		//			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
+		//}
+
+		pipeline.textureDescriptorSet->setBindings( pipeline.textureWrites );
+		pipeline.textureDescriptorSet->update();
+
+		return pipeline;
+	}
+
+	LightPass::Pipeline * LightPass::doGetPipeline( bool first
+		, Light const & light
+		, ShadowMap const * shadowMap
+		, Texture const * vctFirstBounce
+		, Texture const * vctSecondaryBounce )
+	{
+		auto key = makeKey( light
+			, shadowMap
+			, vctFirstBounce
+			, vctSecondaryBounce );
+		auto it = m_pipelines.emplace( key, nullptr );
+
+		if ( it.second )
+		{
+			it.first->second = std::make_unique< Pipeline >( createPipeline( light.getLightType()
+				, ( shadowMap
+					? light.getShadowType()
+					: ShadowType::eNone )
+				, light.needsRsmShadowMaps()
+				, shadowMap
+				, vctFirstBounce
+				, vctSecondaryBounce ) );
+		}
+
+		doPrepareCommandBuffer( *it.first->second
+			, first );
+		return it.first->second.get();
+	}
+
+	VkClearValue LightPass::doGetIndirectClearColor()const
+	{
+		return opaqueBlackClearColor;
+	}
+
+	void LightPass::doInitialise( Scene const & scene
+		, OpaquePassResult const & gp
+		, LightType lightType
+		, ashes::VertexBufferBase & vbo
+		, ashes::PipelineVertexInputStateCreateInfo const & vertexLayout
+		, SceneUbo const & sceneUbo
+		, UniformBufferT< ModelUboConfiguration > const * modelUbo
+		, RenderPassTimer & timer )
+	{
+		m_scene = &scene;
+		m_sceneUbo = &sceneUbo;
+		m_optModelUbo = modelUbo;
+		m_usedVertexLayout = vertexLayout;
+		m_pUsedVertexLayout = &m_usedVertexLayout;
+		m_timer = &timer;
+		m_opaquePassResult = &gp;
+		m_commandBuffers[0] = m_device.graphicsCommandPool->createCommandBuffer( getName() + "0"
+			, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
+		m_commandBuffers[1] = m_device.graphicsCommandPool->createCommandBuffer( getName() + "1"
+			, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
+	}
+
+	void LightPass::doCleanup()
+	{
+		m_commandBuffers[0].reset();
+		m_commandBuffers[1].reset();
+		m_pipelines.clear();
+	}
+
+	void LightPass::doPrepareCommandBuffer( Pipeline & pipeline
+		, bool first )
+	{
+		if ( ( first && !pipeline.isFirstSet )
+			|| ( !first && !pipeline.isBlendSet ) )
+		{
+			auto & renderPass = first
+				? m_firstRenderPass
+				: m_blendRenderPass;
+			auto & commandBuffer = first
+				? *pipeline.firstCommandBuffer
+				: *pipeline.blendCommandBuffer;
+			auto & dimensions = renderPass.frameBuffer->getDimensions();
+
+			commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
+				, makeVkType< VkCommandBufferInheritanceInfo >( *renderPass.renderPass
+					, 0u
+					, *renderPass.frameBuffer
+					, VkBool32( VK_FALSE )
+					, 0u
+					, 0u ) );
+			commandBuffer.setViewport( ashes::makeViewport( dimensions ) );
+			commandBuffer.setScissor( ashes::makeScissor( dimensions ) );
+			commandBuffer.bindDescriptorSets( { *pipeline.uboDescriptorSet, *pipeline.textureDescriptorSet }, pipeline.program->getPipelineLayout() );
+			commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
+			pipeline.program->render( commandBuffer, getCount(), first, m_offset );
+			commandBuffer.end();
+
+			pipeline.isFirstSet = pipeline.isFirstSet || first;
+			pipeline.isBlendSet = pipeline.isBlendSet || !first;
+		}
+	}
+
+	ShaderPtr LightPass::doGetPhongPixelShaderSource( SceneFlags const & sceneFlags
+		, LightType lightType
+		, ShadowType shadowType
+		, bool rsm )const
+	{
+		return getPhongPixelShaderSource( *m_engine.getRenderSystem()
+			, sceneFlags
+			, lightType
+			, shadowType
+			, m_shadows
+			, rsm
+			, m_generatesIndirect
+			, m_voxels );
+	}
+
+	ShaderPtr LightPass::doGetPbrMRPixelShaderSource( SceneFlags const & sceneFlags
+		, LightType lightType
+		, ShadowType shadowType
+		, bool rsm )const
+	{
+		return getPbrMRPixelShaderSource( *m_engine.getRenderSystem()
+			, sceneFlags
+			, lightType
+			, shadowType
+			, m_shadows
+			, rsm
+			, m_generatesIndirect
+			, m_voxels );
+	}
+
+	ShaderPtr LightPass::doGetPbrSGPixelShaderSource( SceneFlags const & sceneFlags
+		, LightType lightType
+		, ShadowType shadowType
+		, bool rsm )const
+	{
+		return getPbrSGPixelShaderSource( *m_engine.getRenderSystem()
+			, sceneFlags
+			, lightType
+			, shadowType
+			, m_shadows
+			, rsm
+			, m_generatesIndirect
+			, m_voxels );
 	}
 
 	//************************************************************************************************

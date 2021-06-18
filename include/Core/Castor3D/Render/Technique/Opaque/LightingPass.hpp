@@ -9,6 +9,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
+#include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
@@ -22,10 +23,178 @@ See LICENSE file in root folder
 #include <ashespp/Sync/Fence.hpp>
 #include <ashespp/Sync/Semaphore.hpp>
 
+#include <RenderGraph/RunnablePasses/PipelineHolder.hpp>
+#include <RenderGraph/RunnablePasses/RenderPass.hpp>
+
 #include <unordered_set>
 
 namespace castor3d
 {
+	struct LightPipelineConfig
+	{
+		LightPipelineConfig( MaterialType materialType
+			, SceneFlags const & sceneFlags
+			, Light const & light );
+
+		size_t makeHash()const;
+
+		MaterialType materialType;
+		SceneFlags const & sceneFlags;
+		LightType lightType;
+		ShadowType shadowType;
+		bool shadows;
+		bool rsm;
+		bool voxels;
+		bool generatesIndirect;
+	};
+
+	struct LightRenderPass
+	{
+		ashes::RenderPassPtr renderPass;
+		ashes::FrameBufferPtr framebuffer;
+		ashes::VkClearValueArray clearValues;
+	};
+
+	struct LightDescriptors
+	{
+		LightDescriptors( RenderDevice const & device );
+
+		MatrixUbo matrixUbo;
+		UniformBufferOffsetT< ModelUboConfiguration > modelMatrixUbo;
+		ashes::DescriptorSetPtr descriptorSet;
+	};
+
+	class LightPipeline
+	{
+	public:
+		LightPipeline( crg::FramePass const & pass
+			, crg::GraphContext const & context
+			, crg::RunnableGraph & graph
+			, LightPipelineConfig const & config
+			, std::vector< LightRenderPass > const & renderPasses
+			, ashes::PipelineShaderStageCreateInfoArray stages
+			, VkDescriptorSetLayout descriptorSetLayout );
+
+		VkPipeline getPipeline( uint32_t index )
+		{
+			return m_holder.getPipeline( index );
+		}
+
+		VkPipelineLayout getPipelineLayout()
+		{
+			return m_holder.getPipelineLayout();
+		}
+
+		VkDescriptorSet getDescriptorSet()
+		{
+			return m_holder.getDescriptorSet( 0u );
+		}
+
+	protected:
+		void doCreatePipeline( uint32_t index );
+
+	private:
+		ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout();
+		ashes::PipelineViewportStateCreateInfo doCreateViewportState( ashes::FrameBuffer const & framebuffer );
+		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( bool blend );
+
+	private:
+		crg::PipelineHolder m_holder;
+		LightPipelineConfig const & m_config;
+		std::vector< LightRenderPass > const & m_renderPasses;
+		VkDescriptorSetLayout m_descriptorSetLayout;
+	};
+
+	struct LightsPipeline
+	{
+		LightsPipeline( crg::FramePass const & pass
+			, crg::GraphContext const & context
+			, crg::RunnableGraph & graph
+			, RenderDevice const & device
+			, LightPipelineConfig const & config
+			, LightPassResult const & lpResult
+			, ShadowMapResult const & smResult
+			, std::vector< LightRenderPass > const & renderPasses );
+
+		void clear();
+		void addLight( Camera const & camera
+			, Light const & light );
+		void recordInto( VkCommandBuffer commandBuffer
+			, uint32_t & index );
+
+	private:
+		ashes::DescriptorSetLayoutPtr doCreateDescriptorLayout();
+		LightDescriptors & doCreateLightEntry( Light const & light );
+		castor::Matrix4x4f doComputeModelMatrix( castor3d::Light const & light
+			, Camera const & camera )const;
+		ashes::VertexBufferPtr< float > doCreateVertexBuffer();
+
+	private:
+		crg::GraphContext const & m_context;
+		ShadowMapResult const & m_smResult;
+		RenderDevice const & m_device;
+		std::vector< LightRenderPass > const & m_renderPasses;
+		LightPipelineConfig m_config;
+		ShaderModule m_vertexShader;
+		ShaderModule m_pixelShader;
+		ashes::PipelineShaderStageCreateInfoArray m_stages;
+		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
+		ashes::DescriptorSetPoolPtr m_descriptorPool;
+		LightPipeline m_pipeline;
+		uint32_t m_count{};
+		ashes::VertexBufferPtr< float > m_vertexBuffer;
+		std::map< size_t, std::unique_ptr< LightDescriptors > > m_lightDescriptors;
+		std::vector< LightDescriptors const * > m_enabledLights;
+		Viewport m_viewport;
+	};
+
+	using LightsPipelinePtr = std::unique_ptr< LightsPipeline >;
+
+	class RunnableLightingPass
+		: public crg::RunnablePass
+	{
+	public:
+		RunnableLightingPass( crg::FramePass const & pass
+			, crg::GraphContext const & context
+			, crg::RunnableGraph & graph
+			, RenderDevice const & device
+			, Scene const & scene
+			, LightPassResult const & lpResult
+			, ShadowMapResult const & smDirectionalResult
+			, ShadowMapResult const & smPointResult
+			, ShadowMapResult const & smSpotResult );
+
+		void clear();
+		void enableLight( Camera const & camera
+			, Light const & light );
+		void resetCommandBuffer();
+
+	protected:
+		void doInitialise( uint32_t index )override;
+		void doRecordInto( VkCommandBuffer commandBuffer
+			, uint32_t index )override;
+
+		VkPipelineStageFlags doGetSemaphoreWaitFlags()const override
+		{
+			return VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+		}
+
+	private:
+		LightRenderPass doCreateRenderPass( bool blend
+			, LightPassResult const & result );
+		LightsPipeline & doFindPipeline( Light const & light );
+
+	private:
+		RenderDevice const & m_device;
+		Scene const & m_scene;
+		LightPassResult const & m_lpResult;
+		ShadowMapResult const & m_smDirectionalResult;
+		ShadowMapResult const & m_smPointResult;
+		ShadowMapResult const & m_smSpotResult;
+		std::vector< LightRenderPass > m_renderPasses;
+		std::map< size_t, LightsPipelinePtr > m_pipelines;
+	};
+
 	class LightingPass
 	{
 	public:
@@ -90,7 +259,7 @@ namespace castor3d
 		 *\param[in]	vctConfigUbo		L'UBO de configuration du VCT.
 		 */
 		LightingPass( crg::FrameGraph & graph
-			, crg::FramePass const & previousPass
+			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, castor::Size const & size
 			, Scene & scene
@@ -110,13 +279,6 @@ namespace castor3d
 			, VoxelizerUbo const & vctConfigUbo );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		~LightingPass();
-		/**
-		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
 		 *\param[in, out]	updater	The update data.
 		 *\~french
@@ -134,24 +296,6 @@ namespace castor3d
 		 */
 		void update( GpuUpdater & updater );
 		/**
-		 *\~english
-		 *\brief		Renders the light passes on currently bound framebuffer.
-		 *\param[in]	scene	The scene.
-		 *\param[in]	camera	The viewing camera.
-		 *\param[in]	gp		The geometry pass result.
-		 *\param[out]	toWait	The semaphore from previous render pass.
-		 *\~french
-		 *\brief		Dessine les passes d'éclairage sur le tampon d'image donné.
-		 *\param[in]	scene	La scène.
-		 *\param[in]	camera	La caméra.
-		 *\param[in]	gp		Le résultat de la geometry pass.
-		 *\param[out]	toWait	Le sémaphore de la passe de rendu précédente.
-		 */
-		ashes::Semaphore const & render( Scene const & scene
-			, Camera const & camera
-			, OpaquePassResult const & gp
-			, ashes::Semaphore const & toWait );
-		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		void accept( PipelineVisitorBase & visitor );
@@ -167,17 +311,13 @@ namespace castor3d
 		}
 
 	private:
-		void doUpdateLightPasses( GpuUpdater & updater
+		crg::FramePass const & doCreateDepthBlitPass( crg::FrameGraph & graph
+			, crg::FramePass const & previousPass );
+		crg::FramePass const & doCreateLightingPass( crg::FrameGraph & graph
+			, crg::FramePass const & previousPass
+			, Scene const & scene );
+		void doUpdateLightPasses( CpuUpdater & updater
 			, LightType lightType );
-		ashes::Semaphore const & doRenderLights( Scene const & scene
-			, Camera const & camera
-			, LightType type
-			, OpaquePassResult const & gp
-			, ashes::Semaphore const & toWait
-			, uint32_t & index );
-		LightPass * doGetLightPass( LightType lightType
-			, bool shadows
-			, GlobalIlluminationType giType )const;
 
 	private:
 		crg::FrameGraph & m_graph;
@@ -200,11 +340,8 @@ namespace castor3d
 		Texture const & m_srcDepth;
 		castor::Size const m_size;
 		LightPassResult m_result;
-		LightPasses m_lightPasses;
-		RenderPassTimerSPtr m_timer;
-		ashes::FencePtr m_fence;
-		std::unordered_set< LightPass * > m_active;
 		bool m_voxelConeTracing{ false };
+		RunnableLightingPass * m_lightPass{};
 	};
 }
 

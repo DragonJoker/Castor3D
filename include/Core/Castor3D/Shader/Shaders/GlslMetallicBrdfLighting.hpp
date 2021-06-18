@@ -132,6 +132,7 @@ namespace castor3d
 					, light
 					, false
 					, 0u
+					, 0u
 					, shadows
 					, index
 					, set );
@@ -140,18 +141,20 @@ namespace castor3d
 				, Utils & utils
 				, LightType light
 				, uint32_t lightUboBinding
+				, uint32_t lightUboSet
 				, ShadowOptions const & shadows
 				, uint32_t & index
-				, uint32_t set )
+				, uint32_t shadowMapSet )
 			{
 				return createModel( writer
 					, utils
 					, light
 					, true
 					, lightUboBinding
+					, lightUboSet
 					, shadows
 					, index
-					, set );
+					, shadowMapSet );
 			}
 
 			C3D_API void computeMapContributions( PassFlags const & passFlags
@@ -201,9 +204,10 @@ namespace castor3d
 				, LightType light
 				, bool lightUbo
 				, uint32_t lightUboBinding
+				, uint32_t lightUboSet
 				, ShadowOptions const & shadows
 				, uint32_t & index
-				, uint32_t set );
+				, uint32_t shadowMapSet );
 
 		public:
 			C3D_API static const castor::String Name;
