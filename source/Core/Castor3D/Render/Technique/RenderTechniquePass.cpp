@@ -105,12 +105,12 @@ namespace castor3d
 				{
 					auto & result = shadowMapRef.first.get().getShadowPassResult();
 					bindTexture( graph
-						, result[SmTexture::eNormalLinear].wholeViewId
+						, result[SmTexture::eNormalLinear].sampledViewId
 						, *result[SmTexture::eNormalLinear].sampler
 						, writes
 						, index );
 					bindTexture( graph
-						, result[SmTexture::eVariance].wholeViewId
+						, result[SmTexture::eVariance].sampledViewId
 						, *result[SmTexture::eVariance].sampler
 						, writes
 						, index );

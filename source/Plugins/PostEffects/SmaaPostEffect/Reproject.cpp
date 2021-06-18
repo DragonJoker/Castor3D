@@ -224,7 +224,7 @@ namespace smaa
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE };
 		m_pass.addDependency( previousPass );
-		m_pass.addOutputColourView( m_result.wholeViewId );
+		m_pass.addOutputColourView( m_result.targetViewId );
 		m_pass.addSampledView( m_currentColourViews
 			, CurColTexIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
@@ -250,7 +250,7 @@ namespace smaa
 		visitor.visit( m_pixelShader );
 		visitor.visit( "SMAA Reproject"
 			, m_result
-			, m_graph.getFinalLayout( m_result.wholeViewId ).layout
+			, m_graph.getFinalLayout( m_result.sampledViewId ).layout
 			, castor3d::TextureFactors{}.invert( true ) );
 	}
 

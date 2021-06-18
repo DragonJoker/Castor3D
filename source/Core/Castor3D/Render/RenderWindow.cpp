@@ -1025,7 +1025,7 @@ namespace castor3d
 			, extent
 			, target->getTechnique()->getMatrixUbo() );
 		m_tex3DTo2DIntermediate = { "Texture3DTo2DResult"
-			, m_texture3Dto2D->getTarget().wholeViewId
+			, m_texture3Dto2D->getTarget().sampledViewId
 			, m_texture3Dto2D->getTarget().image
 			, m_texture3Dto2D->getTarget().wholeView
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL

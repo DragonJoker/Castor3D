@@ -75,9 +75,9 @@ namespace castor3d
 			, TextureFactors const & factors = {} )
 		{
 			visit( name
-				, view.wholeViewId
+				, view.sampledViewId
 				, view.image
-				, view.wholeView
+				, view.sampledView
 				, layout
 				, factors );
 		}

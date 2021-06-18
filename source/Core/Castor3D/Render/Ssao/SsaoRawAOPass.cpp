@@ -622,10 +622,10 @@ namespace castor3d
 		pass.addDependency( previousPass );
 		m_ssaoConfigUbo.createPassBinding( pass, SsaoCfgUboIdx );
 		m_gpInfoUbo.createPassBinding( pass, GpInfoUboIdx );
-		pass.addSampledView( linearisedDepthBuffer.wholeViewId
+		pass.addSampledView( linearisedDepthBuffer.sampledViewId
 			, DepthMapIdx
 			, VK_IMAGE_LAYOUT_UNDEFINED );
-		pass.addSampledView( normals.wholeViewId
+		pass.addSampledView( normals.sampledViewId
 			, NormalMapIdx
 			, VK_IMAGE_LAYOUT_UNDEFINED );
 		pass.addOutputColourView( m_result.targetViewId, opaqueWhiteClearColor );
@@ -639,11 +639,11 @@ namespace castor3d
 	{
 		visitor.visit( "SSAO Raw AO"
 			, getResult()
-			, m_graph.getFinalLayout( getResult().wholeViewId ).layout
+			, m_graph.getFinalLayout( getResult().sampledViewId ).layout
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "SSAO Bent Normals"
 			, getBentResult()
-			, m_graph.getFinalLayout( getBentResult().wholeViewId ).layout
+			, m_graph.getFinalLayout( getBentResult().sampledViewId ).layout
 			, TextureFactors{}.invert( true ) );
 
 		auto index = m_ssaoConfig.useNormalsBuffer

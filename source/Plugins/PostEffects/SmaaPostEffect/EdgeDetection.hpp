@@ -26,7 +26,7 @@ namespace smaa
 
 		crg::ImageViewId const & getColourResult()const
 		{
-			return m_outColour.wholeViewId;
+			return m_outColour.sampledViewId;
 		}
 
 		crg::ImageViewId const & getDepthResult()const
