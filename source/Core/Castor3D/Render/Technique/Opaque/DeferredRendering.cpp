@@ -84,7 +84,7 @@ namespace castor3d
 		, m_size{ size }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_lightingPass{ std::make_unique< LightingPass >( graph
-			, opaquePass
+			, m_lastPass
 			, m_device
 			, m_size
 			, scene
@@ -117,6 +117,7 @@ namespace castor3d
 			, scene
 			, opaquePassResult
 			, ssaoConfig
+			, ssao
 			, m_subsurfaceScattering->getResult()
 			, m_lightingPass->getResult()[LpTexture::eDiffuse]
 			, m_lightingPass->getResult()[LpTexture::eSpecular]
@@ -127,12 +128,6 @@ namespace castor3d
 			, m_gpInfoUbo
 			, hdrConfigUbo ) }
 	{
-		m_resolve->initialise();
-	}
-
-	DeferredRendering::~DeferredRendering()
-	{
-		m_resolve->cleanup();
 	}
 
 	void DeferredRendering::update( CpuUpdater & updater )

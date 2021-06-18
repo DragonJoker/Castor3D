@@ -92,13 +92,6 @@ namespace castor3d
 			, SsaoConfig & ssaoConfig );
 		/**
 		 *\~english
-		 *\brief		Destroys deferred rendering related stuff.
-		 *\~french
-		 *\brief		Détruit les données liées au deferred rendering.
-		 */
-		~DeferredRendering();
-		/**
-		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
 		 *\param[in, out]	updater	The update data.
 		 *\~french

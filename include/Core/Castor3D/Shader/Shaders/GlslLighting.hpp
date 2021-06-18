@@ -26,16 +26,19 @@ namespace castor3d
 				, uint32_t set );
 			C3D_API void declareDirectionalModel( bool lightUbo
 				, uint32_t uboBinding
+				, uint32_t uboSet
 				, uint32_t & index
-				, uint32_t set );
+				, uint32_t shadowMapSet );
 			C3D_API void declarePointModel( bool lightUbo
 				, uint32_t uboBinding
+				, uint32_t uboSet
 				, uint32_t & index
-				, uint32_t set );
+				, uint32_t shadowMapSet );
 			C3D_API void declareSpotModel( bool lightUbo
 				, uint32_t uboBinding
+				, uint32_t uboSet
 				, uint32_t & index
-				, uint32_t set );
+				, uint32_t shadowMapSet );
 			// Calls
 			C3D_API DirectionalLight getDirectionalLight( sdw::Int const & index )const;
 			C3D_API TiledDirectionalLight getTiledDirectionalLight( sdw::Int const & index )const;
@@ -49,9 +52,12 @@ namespace castor3d
 
 		protected:
 			C3D_API Light getBaseLight( sdw::Int const & value )const;
-			C3D_API void doDeclareDirectionalLightUbo( uint32_t binding );
-			C3D_API void doDeclarePointLightUbo( uint32_t binding );
-			C3D_API void doDeclareSpotLightUbo( uint32_t binding );
+			C3D_API void doDeclareDirectionalLightUbo( uint32_t binding
+				, uint32_t set );
+			C3D_API void doDeclarePointLightUbo( uint32_t binding
+				, uint32_t set );
+			C3D_API void doDeclareSpotLightUbo( uint32_t binding
+				, uint32_t set );
 			C3D_API void doDeclareGetBaseLight();
 			C3D_API void doDeclareGetDirectionalLight();
 			C3D_API void doDeclareGetPointLight();

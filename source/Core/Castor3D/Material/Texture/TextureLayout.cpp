@@ -900,7 +900,7 @@ namespace castor3d
 		: TextureLayout{ renderSystem
 			, std::make_unique< ashes::Image >( *( *renderSystem.getMainRenderDevice() )
 				, image
-				, m_info )
+				, imageView.data->image.data->info )
 			, imageView.data->image.data->info }
 	{
 	}

@@ -34,6 +34,7 @@
 #include <ShaderWriter/Source.hpp>
 
 #include <RenderGraph/FrameGraph.hpp>
+#include <RenderGraph/RunnableGraph.hpp>
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
 #include <random>
@@ -281,54 +282,10 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ashes::PipelineShaderStageCreateInfoArray doCreateBlurProgram( RenderDevice const & device
-			, bool isVertic
-			, ShaderModule & vertexShader
-			, ShaderModule & pixelShader )
-		{
-			vertexShader.shader = getVertexProgram();
-			pixelShader.shader = getBlurProgram( device.renderSystem, isVertic );
-
-			return { makeShaderState( device, vertexShader )
-				, makeShaderState( device, pixelShader ) };
-		}
-
-		ashes::PipelineShaderStageCreateInfoArray doCreateCombineProgram( Engine & engine
-			, RenderDevice const & device
-			, ShaderModule & vertexShader
-			, ShaderModule & pixelShader )
-		{
-			vertexShader.shader = getVertexProgram();
-			pixelShader.shader = getCombineProgram( device.renderSystem );
-
-			return { makeShaderState( device, vertexShader )
-				, makeShaderState( device, pixelShader ) };
-		}
-
-		SamplerSPtr doCreateSampler( Engine & engine )
-		{
-			SamplerSPtr sampler;
-			castor::String const name{ cuT( "SubsurfaceScatteringPass" ) };
-
-			if ( engine.getSamplerCache().has( name ) )
-			{
-				sampler = engine.getSamplerCache().find( name );
-			}
-			else
-			{
-				sampler = engine.getSamplerCache().add( name );
-				sampler->setMinFilter( VK_FILTER_NEAREST );
-				sampler->setMagFilter( VK_FILTER_NEAREST );
-				sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-			}
-
-			return sampler;
-		}
-
 		Texture doCreateImage( crg::FrameGraph & graph
 			, RenderDevice const & device
 			, castor::Size const & size
+			, VkFormat format
 			, std::string name )
 		{
 			return { device
@@ -338,21 +295,11 @@ namespace castor3d
 				, makeExtent3D( size )
 				, 1u
 				, 1u
-				, VK_FORMAT_R32G32B32A32_SFLOAT
+				, format
 				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_SAMPLED_BIT )
+					| VK_IMAGE_USAGE_SAMPLED_BIT
+					| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
 				, VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK };
-		}
-
-		crg::ImageViewId doCreateView( crg::FrameGraph & graph
-			, crg::ImageId image )
-		{
-			return graph.createView( crg::ImageViewData{ image.data->name
-				, image
-				, 0u
-				, VK_IMAGE_VIEW_TYPE_2D
-				, getFormat( image )
-				, { ashes::getAspectMask( getFormat( image ) ), 0u, 1u, 0u, 1u } } );
 		}
 
 		crg::rq::Config createConfig( castor::Size const & size
@@ -360,6 +307,7 @@ namespace castor3d
 			, bool const * enabled )
 		{
 			crg::rq::Config result;
+			result.texcoordConfig = crg::rq::Texcoord{};
 			result.renderSize = makeExtent2D( size );
 			result.baseConfig.programs = { crg::makeVkArray< VkPipelineShaderStageCreateInfo >( shaderStages ) };
 			result.enabled = enabled;
@@ -394,11 +342,11 @@ namespace castor3d
 		, m_scene{ scene }
 		, m_enabled{ m_scene.needsSubsurfaceScattering() }
 		, m_size{ textureSize }
-		, m_intermediate{ doCreateImage( graph, m_device, textureSize, "SSSIntermediate" ) }
-		, m_blurImages{ doCreateImage( graph, m_device, textureSize, "SSSBlur0" )
-			, doCreateImage( graph, m_device, textureSize, "SSSBlur1" )
-			, doCreateImage( graph, m_device, textureSize, "SSSBlur2" ) }
-		, m_result{ doCreateImage( graph, m_device, textureSize, "SSSResult" ) }
+		, m_intermediate{ doCreateImage( graph, m_device, textureSize, m_lpResult[LpTexture::eDiffuse].getFormat(), "SSSIntermediate" ) }
+		, m_blurImages{ doCreateImage( graph, m_device, textureSize, m_intermediate.getFormat(), "SSSBlur0" )
+			, doCreateImage( graph, m_device, textureSize, m_intermediate.getFormat(), "SSSBlur1" )
+			, doCreateImage( graph, m_device, textureSize, m_intermediate.getFormat(), "SSSBlur2" ) }
+		, m_result{ doCreateImage( graph, m_device, textureSize, m_intermediate.getFormat(), "SSSResult" ) }
 		, m_blurCfgUbo{ m_device.uboPools->getBuffer< BlurConfiguration >( 0u ) }
 		, m_blurWgtUbo{ m_device.uboPools->getBuffer< BlurWeights >( 0u ) }
 		, m_blurHorizVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SSSBlurX", getVertexProgram() }
@@ -454,16 +402,16 @@ namespace castor3d
 			m_blurCfgUbo.createPassBinding( blurX
 				, "BlurCfg"
 				, BlurSssUboId );
-			blurX.addSampledView( m_gpResult[DsTexture::eDepth].wholeViewId
+			blurX.addSampledView( m_gpResult[DsTexture::eDepth].sampledViewId
 				, BlurDepthImgId
 				, VK_IMAGE_LAYOUT_UNDEFINED );
-			blurX.addSampledView( m_gpResult[DsTexture::eData4].wholeViewId
+			blurX.addSampledView( m_gpResult[DsTexture::eData4].sampledViewId
 				, BlurData4ImgId
 				, VK_IMAGE_LAYOUT_UNDEFINED );
-			blurX.addSampledView( m_gpResult[DsTexture::eData5].wholeViewId
+			blurX.addSampledView( m_gpResult[DsTexture::eData5].sampledViewId
 				, BlurData5ImgId
 				, VK_IMAGE_LAYOUT_UNDEFINED );
-			blurX.addSampledView( blurXSource->wholeViewId
+			blurX.addSampledView( blurXSource->sampledViewId
 				, BlurLgtDiffImgId
 				, VK_IMAGE_LAYOUT_UNDEFINED );
 			blurX.addOutputColourView( m_intermediate.targetViewId );
@@ -493,19 +441,19 @@ namespace castor3d
 			m_blurCfgUbo.createPassBinding( blurY
 				, "BlurCfg"
 				, BlurSssUboId );
-			blurY.addSampledView( m_gpResult[DsTexture::eDepth].wholeViewId
+			blurY.addSampledView( m_gpResult[DsTexture::eDepth].sampledViewId
 				, BlurDepthImgId
 				, VK_IMAGE_LAYOUT_UNDEFINED );
-			blurY.addSampledView( m_gpResult[DsTexture::eData4].wholeViewId
+			blurY.addSampledView( m_gpResult[DsTexture::eData4].sampledViewId
 				, BlurData4ImgId
 				, VK_IMAGE_LAYOUT_UNDEFINED );
-			blurY.addSampledView( m_gpResult[DsTexture::eData5].wholeViewId
+			blurY.addSampledView( m_gpResult[DsTexture::eData5].sampledViewId
 				, BlurData5ImgId
 				, VK_IMAGE_LAYOUT_UNDEFINED );
-			blurY.addSampledView( m_intermediate.wholeViewId
+			blurY.addSampledView( m_intermediate.sampledViewId
 				, BlurLgtDiffImgId
 				, VK_IMAGE_LAYOUT_UNDEFINED );
-			blurX.addOutputColourView( blurYDestination->targetViewId );
+			blurY.addOutputColourView( blurYDestination->targetViewId );
 
 			blurXSource = blurYDestination;
 		}
@@ -515,11 +463,60 @@ namespace castor3d
 				, crg::GraphContext const & context
 				, crg::RunnableGraph & graph )
 			{
+				auto config = createConfig( m_size, m_combineShader, &m_enabled );
+				config.recordDisabledInto = [this, &graph, &context]( crg::RunnablePass const & runnable
+					, VkCommandBuffer commandBuffer
+					, uint32_t passIndex )
+				{
+					auto & srcView = m_lpResult[LpTexture::eDiffuse].wholeViewId;
+					auto & dstView = m_result.wholeViewId;
+					auto size = m_result.getExtent();
+					auto & srcSubresource = srcView.data->info.subresourceRange;
+					auto & dstSubresource = dstView.data->info.subresourceRange;
+					VkImageCopy region{ VkImageSubresourceLayers{ srcSubresource.aspectMask, srcSubresource.baseMipLevel, srcSubresource.baseArrayLayer, 1u }
+						, VkOffset3D{ 0u, 0u, 0u }
+						, VkImageSubresourceLayers{ dstSubresource.aspectMask, dstSubresource.baseMipLevel, dstSubresource.baseArrayLayer, 1u }
+						, VkOffset3D{ 0u, 0u, 0u }
+						, { size.width, size.height, 1u } };
+					auto srcTransition = runnable.getTransition( passIndex, srcView );
+					auto dstTransition = runnable.getTransition( passIndex, dstView );
+					graph.memoryBarrier( commandBuffer
+						, srcView
+						, srcTransition.to
+						, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+							, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
+							, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) } );
+					graph.memoryBarrier( commandBuffer
+						, dstView
+						, dstTransition.to
+						, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+							, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
+							, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) } );
+					context.vkCmdCopyImage( commandBuffer
+						, graph.createImage( srcView.data->image )
+						, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+						, graph.createImage( dstView.data->image )
+						, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+						, 1u
+						, &region );
+					graph.memoryBarrier( commandBuffer
+						, dstView
+						, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+							, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
+							, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) }
+						, dstTransition.to );
+					graph.memoryBarrier( commandBuffer
+						, srcView
+						, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+							, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
+							, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) }
+						, srcTransition.to );
+				};
 				auto result = std::make_unique< crg::RenderQuad >( pass
 					, context
 					, graph
 					, 1u
-					, createConfig( m_size, m_combineShader, &m_enabled ) );
+					, config );
 				getEngine()->registerTimer( "SSS"
 					, result->getTimer() );
 				return result;
@@ -528,22 +525,22 @@ namespace castor3d
 		previousPass = &pass;
 		getEngine()->getMaterialCache().getPassBuffer().createPassBinding( pass
 			, CombMaterialsUboId );
-		pass.addSampledView( m_gpResult[DsTexture::eData4].wholeViewId
+		pass.addSampledView( m_gpResult[DsTexture::eData4].sampledViewId
 			, CombData4ImgId
 			, VK_IMAGE_LAYOUT_UNDEFINED );
-		pass.addSampledView( m_gpResult[DsTexture::eData5].wholeViewId
+		pass.addSampledView( m_gpResult[DsTexture::eData5].sampledViewId
 			, CombData5ImgId
 			, VK_IMAGE_LAYOUT_UNDEFINED );
-		pass.addSampledView( m_blurImages[0].wholeViewId
+		pass.addSampledView( m_blurImages[0].sampledViewId
 			, CombBlur1ImgId
 			, VK_IMAGE_LAYOUT_UNDEFINED );
-		pass.addSampledView( m_blurImages[1].wholeViewId
+		pass.addSampledView( m_blurImages[1].sampledViewId
 			, CombBlur2ImgId
 			, VK_IMAGE_LAYOUT_UNDEFINED );
-		pass.addSampledView( m_blurImages[2].wholeViewId
+		pass.addSampledView( m_blurImages[2].sampledViewId
 			, CombBlur3ImgId
 			, VK_IMAGE_LAYOUT_UNDEFINED );
-		pass.addSampledView( m_lpResult[LpTexture::eDiffuse].wholeViewId
+		pass.addSampledView( m_lpResult[LpTexture::eDiffuse].sampledViewId
 			, CombLgtDiffImgId
 			, VK_IMAGE_LAYOUT_UNDEFINED );
 		pass.addOutputColourView( m_result.targetViewId );
