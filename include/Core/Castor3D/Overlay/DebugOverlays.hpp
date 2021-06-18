@@ -11,6 +11,8 @@ See LICENSE file in root folder
 
 #include <ashespp/Miscellaneous/QueryPool.hpp>
 
+#include <RenderGraph/FramePassTimer.hpp>
+
 namespace castor3d
 {
 	class DebugOverlays
@@ -278,7 +280,7 @@ namespace castor3d
 			castor::String m_name;
 			uint32_t m_index;
 			std::vector< RenderPassTimer * > m_timers;
-			std::vector< crg::FramePassTimer * > m_crgtimers;
+			std::map< crg::FramePassTimer *, crg::OnFramePassDestroyConnection > m_crgtimers;
 			PanelOverlaySPtr m_panel;
 			TextOverlaySPtr m_passName;
 			TimeOverlays m_cpu;
