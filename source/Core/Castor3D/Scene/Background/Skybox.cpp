@@ -84,50 +84,68 @@ namespace castor3d
 	void SkyboxBackground::loadLeftImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::eNegativeX, folder, relative, false, false );
-		notifyChanged();
+		setFaceTexture( folder, relative, CubeMapFace::eNegativeX );
 	}
 
 	void SkyboxBackground::loadRightImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::ePositiveX, folder, relative, false, false );
-		notifyChanged();
+		setFaceTexture( folder, relative, CubeMapFace::ePositiveX );
 	}
 
 	void SkyboxBackground::loadTopImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::eNegativeY, folder, relative, false, false );
-		notifyChanged();
+		setFaceTexture( folder, relative, CubeMapFace::eNegativeY );
 	}
 
 	void SkyboxBackground::loadBottomImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::ePositiveY, folder, relative, false, false );
-		notifyChanged();
+		setFaceTexture( folder, relative, CubeMapFace::ePositiveY );
 	}
 
 	void SkyboxBackground::loadFrontImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::eNegativeZ, folder, relative, false, false );
-		notifyChanged();
+		setFaceTexture( folder, relative, CubeMapFace::eNegativeZ );
 	}
 
 	void SkyboxBackground::loadBackImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::ePositiveZ, folder, relative, false, false );
-		notifyChanged();
+		setFaceTexture( folder, relative, CubeMapFace::ePositiveZ );
 	}
 
 	void SkyboxBackground::loadFaceImage( castor::Path const & folder
 		, castor::Path const & relative
 		, CubeMapFace face )
 	{
-		getTexture().setLayerCubeFaceSource( 0u, face, folder, relative, false, false );
+		setFaceTexture( folder, relative, face );
+	}
+
+	void SkyboxBackground::setFaceTexture( castor::Path const & folder
+		, castor::Path const & relative
+		, CubeMapFace face )
+	{
+		ashes::ImageCreateInfo image{ 0u
+			, VK_IMAGE_TYPE_2D
+			, VK_FORMAT_UNDEFINED
+			, { 1u, 1u, 1u }
+			, 1u
+			, 1u
+			, VK_SAMPLE_COUNT_1_BIT
+			, VK_IMAGE_TILING_OPTIMAL
+			, ( VK_IMAGE_USAGE_SAMPLED_BIT
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
+				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) };
+		auto texture = std::make_shared< TextureLayout >( *getScene().getEngine()->getRenderSystem()
+			, std::move( image )
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, cuT( "SkyboxBackground" ) + castor3d::getName( face ) );
+		texture->setSource( folder, relative, false, false );
+		m_layerTexturePath[size_t( face )] = castor::Path( texture->getImage().getPath() );
+		m_layerTexture[size_t( face )] = texture;
 		notifyChanged();
 	}
 
@@ -238,6 +256,10 @@ namespace castor3d
 		{
 			doInitialiseCrossTexture( device );
 		}
+		else
+		{
+			doInitialiseLayerTexture( device );
+		}
 
 		m_hdr = m_texture->getPixelFormat() == VK_FORMAT_R32_SFLOAT
 			|| m_texture->getPixelFormat() == VK_FORMAT_R32G32_SFLOAT
@@ -250,6 +272,86 @@ namespace castor3d
 		return m_texture->initialise( device );
 	}
 
+	void SkyboxBackground::doInitialiseLayerTexture( RenderDevice const & device )
+	{
+		uint32_t maxDim{};
+
+		for ( auto & layer : m_layerTexture )
+		{
+			layer->initialise( device );
+			auto dim = layer->getDimensions();
+			maxDim = std::max( maxDim
+				, std::max( dim.width, dim.height ) );
+		}
+
+		auto & engine = *getEngine();
+		auto & renderSystem = *engine.getRenderSystem();
+
+		// create the cube texture if needed.
+		m_textureId = { device
+			, getEngine()->getGraphResourceHandler()
+			, cuT( "SkyboxBackgroundLayerCube" )
+			, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
+			, { maxDim, maxDim, 1u }
+			, 6u
+			, 1u
+			, m_crossTexture->getPixelFormat()
+			, ( VK_IMAGE_USAGE_SAMPLED_BIT
+				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
+				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT ) };
+		m_textureId.create();
+		m_texture = std::make_shared< TextureLayout >( device.renderSystem
+			, m_textureId.image
+			, m_textureId.wholeViewId );
+
+		auto commandBuffer = device.graphicsCommandPool->createCommandBuffer( "SkyboxBackground" );
+		commandBuffer->begin();
+		commandBuffer->beginDebugBlock(
+			{
+				"Layer to Skybox",
+				makeFloatArray( getScene().getEngine()->getNextRainbowColour() ),
+			} );
+		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, m_texture->getLayerCubeView( 0u ).getTargetView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+		VkImageSubresourceLayers srcSubresource{ VK_IMAGE_ASPECT_COLOR_BIT, 0u, 0u, 1u };
+		VkImageSubresourceLayers dstSubresource{ VK_IMAGE_ASPECT_COLOR_BIT, 0u, 0u, 1u };
+
+		for ( auto & layer : m_layerTexture )
+		{
+			auto dim = layer->getDimensions();
+			VkImageBlit blitInfo{ srcSubresource
+				, { {}, { int32_t( dim.width ), int32_t( dim.height ), 1 } }
+				, dstSubresource
+				, { {}, { int32_t( maxDim ), int32_t( maxDim ), 1 } } };
+			dstSubresource.baseArrayLayer++;
+
+			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
+				, VK_PIPELINE_STAGE_TRANSFER_BIT
+				, layer->getDefaultView().getTargetView().makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+			commandBuffer->blitImage( layer->getTexture()
+				, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+				, m_texture->getTexture()
+				, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+				, { blitInfo }
+				, VK_FILTER_LINEAR );
+		}
+
+		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, m_texture->getLayerCubeView( 0u ).getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+		commandBuffer->endDebugBlock();
+		commandBuffer->end();
+
+		device.graphicsQueue->submit( *commandBuffer, nullptr );
+		device.graphicsQueue->waitIdle();
+
+		for ( auto & layer : m_layerTexture )
+		{
+			layer->cleanup();
+		}
+	}
+
 	void SkyboxBackground::doInitialiseEquiTexture( RenderDevice const & device )
 	{
 		m_equiTexture->initialise( device );
@@ -258,11 +360,21 @@ namespace castor3d
 		if ( m_texture->getDimensions().width != m_equiSize.getWidth()
 			|| m_texture->getDimensions().height != m_equiSize.getHeight() )
 		{
+			m_textureId = { device
+				, getEngine()->getGraphResourceHandler()
+				, cuT( "SkyboxBackgroundEquiCube" )
+				, 0
+				, makeExtent3D( m_equiSize )
+				, 1u
+				, 1u
+				, m_equiTexture->getPixelFormat()
+				, ( VK_IMAGE_USAGE_SAMPLED_BIT
+					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
+					| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT ) };
+			m_textureId.create();
 			m_texture = std::make_shared< TextureLayout >( device.renderSystem
-				, doGetImageCreate( m_equiTexture->getPixelFormat(), m_equiSize, true )
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, cuT( "SkyboxBackgroundEquiCube" ) );
-			m_texture->initialise( device );
+				, m_textureId.image
+				, m_textureId.wholeViewId );
 
 			EquirectangularToCube equiToCube{ *m_equiTexture
 				, device
@@ -288,11 +400,21 @@ namespace castor3d
 		CU_Require( width == height );
 
 		// create the cube texture if needed.
-		m_texture = std::make_shared< TextureLayout >( renderSystem
-			, doGetImageCreate( m_crossTexture->getPixelFormat(), Size{ width, width }, true )
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, cuT( "SkyboxBackgroundCrossCube" ) );
-		m_texture->initialise( device );
+		m_textureId = { device
+			, getEngine()->getGraphResourceHandler()
+			, cuT( "SkyboxBackgroundCrossCube" )
+			, 0
+			, { width, width, 1u }
+			, 1u
+			, 1u
+			, m_crossTexture->getPixelFormat()
+			, ( VK_IMAGE_USAGE_SAMPLED_BIT
+				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
+				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT ) };
+		m_textureId.create();
+		m_texture = std::make_shared< TextureLayout >( device.renderSystem
+			, m_textureId.image
+			, m_textureId.wholeViewId );
 
 		VkImageSubresourceLayers srcSubresource
 		{
