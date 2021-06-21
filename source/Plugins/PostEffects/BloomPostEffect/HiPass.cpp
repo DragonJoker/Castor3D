@@ -33,7 +33,7 @@ namespace Bloom
 		{
 		public:
 			HiPassQuad( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph
 				, crg::VkPipelineShaderStageCreateInfoArray program
 				, VkExtent2D const & renderSize
@@ -284,7 +284,7 @@ namespace Bloom
 #endif
 		, m_pass{ graph.createPass( "BloomHiPass"
 			, [this, &device, size, enabled]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = std::make_unique< HiPassQuad >( pass

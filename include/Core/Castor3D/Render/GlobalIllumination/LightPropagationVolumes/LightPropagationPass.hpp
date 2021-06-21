@@ -72,7 +72,7 @@ namespace castor3d
 		 *\param[in]	blendMode	Le mode de mélange.
 		 */
 		C3D_API LightPropagationPass( crg::FramePass const & pass
-			, crg::GraphContext const & context
+			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, bool occlusion
@@ -93,7 +93,7 @@ namespace castor3d
 		{
 		public:
 			PipelineHolder( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph
 				, crg::pp::Config config
 				, uint32_t gridSize

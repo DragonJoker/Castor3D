@@ -143,7 +143,7 @@ namespace castor3d
 		 *\param[in]	desc		Les données de construction.
 		 */
 		C3D_API SceneRenderPass( crg::FramePass const & pass
-			, crg::GraphContext const & context
+			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, castor::String const & category

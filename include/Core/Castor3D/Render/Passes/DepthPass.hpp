@@ -33,7 +33,7 @@ namespace castor3d
 		 *\param[in]	depthBuffer	Le tampon de profondeur cible.
 		 */
 		C3D_API DepthPass( crg::FramePass const & pass
-			, crg::GraphContext const & context
+			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, MatrixUbo & matrixUbo

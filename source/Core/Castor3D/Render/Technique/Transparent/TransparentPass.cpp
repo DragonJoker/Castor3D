@@ -49,7 +49,7 @@ using namespace castor;
 namespace castor3d
 {
 	TransparentPass::TransparentPass( crg::FramePass const & pass
-		, crg::GraphContext const & context
+		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, castor::String const & category

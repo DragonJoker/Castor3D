@@ -36,7 +36,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	DepthPass::DepthPass( crg::FramePass const & pass
-		, crg::GraphContext const & context
+		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, MatrixUbo & matrixUbo

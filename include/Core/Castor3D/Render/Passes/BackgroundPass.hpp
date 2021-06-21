@@ -18,7 +18,7 @@ namespace castor3d
 	{
 	public:
 		C3D_API BackgroundPass( crg::FramePass const & pass
-			, crg::GraphContext const & context
+			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, SceneBackground & background

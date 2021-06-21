@@ -101,7 +101,7 @@ namespace light_streaks
 		, bool const * enabled )
 		: pass{ graph.createPass( "LightStreaksKawasePass" + std::to_string( index )
 			, [this, &device, &stages, &srcView, dimensions, index, enabled]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = crg::RenderQuadBuilder{}

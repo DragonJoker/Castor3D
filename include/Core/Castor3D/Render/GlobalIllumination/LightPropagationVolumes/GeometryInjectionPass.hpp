@@ -75,7 +75,7 @@ namespace castor3d
 		 *\param[in]	layerIndex			L'indice de la layer.
 		 */
 		C3D_API GeometryInjectionPass( crg::FramePass const & pass
-			, crg::GraphContext const & context
+			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, LightType lightType
@@ -103,7 +103,7 @@ namespace castor3d
 		{
 		public:
 			PipelineHolder( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph
 				, crg::pp::Config config
 				, uint32_t lpvSize );

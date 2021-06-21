@@ -220,13 +220,7 @@ namespace castor3d
 			, "PickingPassStagingBuffer" ) }
 		, m_buffer{ PickingWidth * PickingWidth }
 	{
-		m_runnable = m_graph.compile( crg::GraphContext{ *device
-			, VK_NULL_HANDLE
-			, device->getAllocationCallbacks()
-			, device->getMemoryProperties()
-			, device->getProperties()
-			, false
-			, device->vkGetDeviceProcAddr } );
+		m_runnable = m_graph.compile( device.makeContext() );
 		m_colourTexture = std::make_unique< ashes::Image >( *m_device
 			, m_runnable->createImage( m_colourImage )
 			, m_colourImage.data->info );
@@ -287,7 +281,7 @@ namespace castor3d
 	{
 		auto & result = m_graph.createPass( "PickingPass"
 			, [this, &matrixUbo, &culler]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = std::make_unique< PickingPass >( pass

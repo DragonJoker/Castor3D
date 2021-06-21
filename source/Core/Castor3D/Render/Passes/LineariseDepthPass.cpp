@@ -307,7 +307,7 @@ namespace castor3d
 	{
 		auto & pass = m_graph.createPass( "LineariseDepth"
 			, [this]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = crg::RenderQuadBuilder{}
@@ -357,7 +357,7 @@ namespace castor3d
 				, VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, index + 1u, 1u, 0u, 1u } } );
 			auto & pass = m_graph.createPass( "MinimiseDepth" + std::to_string( index )
 				, [this, size]( crg::FramePass const & pass
-					, crg::GraphContext const & context
+					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
 					auto result = crg::RenderQuadBuilder{}
