@@ -27,12 +27,13 @@ namespace castor3d
 		{
 		public:
 			MipRenderCube( RenderDevice const & device
+				, crg::ResourceHandler & handler
 				, ashes::RenderPass const & renderPass
 				, uint32_t mipLevel
 				, VkExtent2D const & originalSize
 				, VkExtent2D const & size
 				, ashes::ImageView const & srcView
-				, ashes::Image const & dstTexture
+				, Texture const & dstTexture
 				, SamplerSPtr sampler );
 			void registerFrames();
 			void render();
@@ -41,7 +42,7 @@ namespace castor3d
 		private:
 			struct FrameBuffer
 			{
-				ashes::ImageView dstView;
+				VkImageView dstView;
 				ashes::FrameBufferPtr frameBuffer;
 			};
 			ashes::RenderPass const & m_renderPass;
@@ -70,7 +71,7 @@ namespace castor3d
 		C3D_API explicit EnvironmentPrefilter( Engine & engine
 			, RenderDevice const & device
 			, castor::Size const & size
-			, ashes::Image const & srcTexture
+			, Texture const & srcTexture
 			, SamplerSPtr sampler );
 		/**
 		 *\~english
@@ -97,9 +98,9 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline ashes::ImageView const & getResult()const
+		inline Texture const & getResult()const
 		{
-			return m_resultView;
+			return m_result;
 		}
 
 		inline ashes::Sampler const & getSampler()const
@@ -110,9 +111,10 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
-		ashes::ImageView m_srcView;
-		ashes::ImagePtr m_result;
-		ashes::ImageView m_resultView;
+		Texture const & m_srcView;
+		ashes::ImagePtr m_srcImage;
+		ashes::ImageView m_srcImageView;
+		Texture m_result;
 		SamplerSPtr m_sampler;
 		ashes::RenderPassPtr m_renderPass;
 		std::vector< std::unique_ptr< MipRenderCube > > m_renderPasses;
