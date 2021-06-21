@@ -18,6 +18,8 @@
 
 #include <ShaderWriter/Source.hpp>
 
+#include <RenderGraph/ResourceHandler.hpp>
+
 using namespace castor;
 
 namespace castor3d
@@ -26,25 +28,21 @@ namespace castor3d
 
 	namespace
 	{
-		ashes::ImagePtr doCreatePrefilteredTexture( RenderDevice const & device
+		Texture doCreatePrefilteredTexture( RenderDevice const & device
+			, crg::ResourceHandler & handler
 			, Size const & size )
 		{
-			ashes::ImageCreateInfo image
-			{
-				VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT,
-				VK_IMAGE_TYPE_2D,
-				VK_FORMAT_R32G32B32A32_SFLOAT,
-				{ size[0], size[1], 1u },
-				shader::Utils::MaxIblReflectionLod + 1u,
-				6u,
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_IMAGE_TILING_OPTIMAL,
-				VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
-			};
-			return makeImage( device
-				, std::move( image )
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, "EnvironmentPrefilterResult" );
+			Texture result{ device
+				, handler
+				, "EnvironmentPrefilterResult"
+				, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
+				, { size[0], size[1], 1u }
+				, 6u
+				, shader::Utils::MaxIblReflectionLod + 1u
+				, VK_FORMAT_R32G32B32A32_SFLOAT
+				, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT };
+			result.create();
+			return result;
 		}
 
 		SamplerSPtr doCreateSampler( Engine & engine
@@ -342,12 +340,13 @@ namespace castor3d
 	//*********************************************************************************************
 
 	EnvironmentPrefilter::MipRenderCube::MipRenderCube( RenderDevice const & device
+		, crg::ResourceHandler & handler
 		, ashes::RenderPass const & renderPass
 		, uint32_t mipLevel
 		, VkExtent2D const & originalSize
 		, VkExtent2D const & size
 		, ashes::ImageView const & srcView
-		, ashes::Image const & dstTexture
+		, Texture const & dstTexture
 		, SamplerSPtr sampler )
 		: RenderCube{ device, false, std::move( sampler ) }
 		, m_renderPass{ renderPass }
@@ -355,22 +354,30 @@ namespace castor3d
 	{
 		for ( auto face = 0u; face < 6u; ++face )
 		{
-			auto name = "EnvironmentPrefilter" + string::toString( face );
+			auto name = "EnvironmentPrefilterL" + string::toString( face ) + "M" + string::toString( mipLevel );
 			auto & facePass = m_frameBuffers[face];
 			// Create the views.
-			facePass.dstView = dstTexture.createView( name
-				, VK_IMAGE_VIEW_TYPE_2D
-				, dstTexture.getFormat()
-				, mipLevel
-				, 1u
-				, face
-				, 1u );
+			auto data = *dstTexture.wholeViewId.data;
+			data.name = name;
+			data.info.viewType = VK_IMAGE_VIEW_TYPE_2D;
+			data.info.subresourceRange.baseArrayLayer = face;
+			data.info.subresourceRange.layerCount = 1u;
+			data.info.subresourceRange.baseMipLevel = mipLevel;
+			data.info.subresourceRange.levelCount = 1u;
+			auto viewId = handler.createViewId( data );
+			facePass.dstView = handler.createImageView( device.makeContext(), viewId );
 			// Initialise the frame buffer.
-			ashes::ImageViewCRefArray attaches;
-			attaches.emplace_back( facePass.dstView );
+			VkFramebufferCreateInfo createInfo{ VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO
+				, nullptr
+				, 0u
+				, renderPass
+				, 1u
+				, &facePass.dstView
+				, size.width
+				, size.height
+				, 1u };
 			facePass.frameBuffer = renderPass.createFrameBuffer( name
-				, VkExtent2D{ size.width, size.height }
-				, std::move( attaches ) );
+				, std::move( createInfo ) );
 		}
 
 		createPipelines( size
@@ -418,28 +425,30 @@ namespace castor3d
 	EnvironmentPrefilter::EnvironmentPrefilter( Engine & engine
 		, RenderDevice const & device
 		, castor::Size const & size
-		, ashes::Image const & srcTexture
+		, Texture const & srcTexture
 		, SamplerSPtr sampler )
 		: m_device{ device }
-		, m_srcView{ srcTexture.createView( "EnvironmentPrefilterSrc", VK_IMAGE_VIEW_TYPE_CUBE, srcTexture.getFormat(), 0u, srcTexture.getMipmapLevels(), 0u, 6u ) }
-		, m_result{ doCreatePrefilteredTexture( m_device, size ) }
-		, m_resultView{ m_result->createView( "EnvironmentPrefilterDst", VK_IMAGE_VIEW_TYPE_CUBE, m_result->getFormat(), 0u, m_result->getMipmapLevels(), 0u, 6u ) }
-		, m_sampler{ doCreateSampler( engine, m_device, m_result->getMipmapLevels() - 1u ) }
-		, m_renderPass{ doCreateRenderPass( m_device, m_result->getFormat() ) }
+		, m_srcView{ srcTexture }
+		, m_srcImage{ std::make_unique< ashes::Image >( *device, m_srcView.image, m_srcView.imageId.data->info ) }
+		, m_srcImageView{ m_srcImage->createView( "EnvironmentPrefilterSrc", VK_IMAGE_VIEW_TYPE_CUBE, srcTexture.getFormat(), 0u, m_srcView.getMipLevels(), 0u, 6u ) }
+		, m_result{ doCreatePrefilteredTexture( m_device, engine.getGraphResourceHandler(), size ) }
+		, m_sampler{ doCreateSampler( engine, m_device, m_result.getMipLevels() - 1u ) }
+		, m_renderPass{ doCreateRenderPass( m_device, m_result.getFormat() ) }
 	{
 		VkExtent2D originalSize{ size.getWidth(), size.getHeight() };
 
 		for ( auto mipLevel = 0u; mipLevel < shader::Utils::MaxIblReflectionLod + 1u; ++mipLevel )
 		{
-			VkExtent2D mipSize{ uint32_t( originalSize.width * std::pow( 0.5, mipLevel ) )
-				, uint32_t( originalSize.height * std::pow( 0.5, mipLevel ) ) };
+			VkExtent2D mipSize{ uint32_t( originalSize.width >> mipLevel )
+				, uint32_t( originalSize.height >> mipLevel ) };
 			m_renderPasses.emplace_back( std::make_unique< MipRenderCube >( m_device
+				, engine.getGraphResourceHandler()
 				, *m_renderPass
 				, mipLevel
 				, originalSize
 				, mipSize
-				, m_srcView
-				, *m_result
+				, m_srcImageView
+				, m_result
 				, sampler ) );
 		}
 
