@@ -20,6 +20,8 @@
 
 #include <ShaderWriter/Source.hpp>
 
+#include <RenderGraph/ResourceHandler.hpp>
+
 using namespace castor;
 
 namespace castor3d
@@ -28,25 +30,20 @@ namespace castor3d
 
 	namespace
 	{
-		ashes::ImagePtr doCreateRadianceTexture( RenderDevice const & device
+		Texture doCreateRadianceTexture( RenderDevice const & device
+			, crg::ResourceHandler & handler
 			, Size const & size )
 		{
-			ashes::ImageCreateInfo image
-			{
-				VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT,
-				VK_IMAGE_TYPE_2D,
-				VK_FORMAT_R32G32B32A32_SFLOAT,
-				{ size[0], size[1], 1u },
-				1u,
-				6u,
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_IMAGE_TILING_OPTIMAL,
-				VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
-			};
-			auto result = makeImage( device
-				, std::move( image )
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, "RadianceComputerResult" );
+			Texture result{ device
+				, handler
+				, "RadianceComputerResult"
+				, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
+				, { size[0], size[1], 1u }
+				, 6u
+				, 1u
+				, VK_FORMAT_R32G32B32A32_SFLOAT
+				, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT };
+			result.create();
 			return result;
 		}
 
@@ -235,43 +232,45 @@ namespace castor3d
 	RadianceComputer::RadianceComputer( Engine & engine
 		, RenderDevice const & device
 		, Size const & size
-		, ashes::Image const & srcTexture )
+		, Texture const & srcTexture )
 		: RenderCube{ device, false }
-		, m_result{ doCreateRadianceTexture( m_device, size ) }
-		, m_resultView{ m_result->createView( "RadianceComputerResult", VK_IMAGE_VIEW_TYPE_CUBE, m_result->getFormat(), 0u, m_result->getMipmapLevels(), 0u, 6u ) }
+		, m_result{ doCreateRadianceTexture( m_device, engine.getGraphResourceHandler(), size ) }
 		, m_sampler{ doCreateSampler( engine, m_device ) }
-		, m_srcView{ doCreateSrcView( srcTexture ) }
-		, m_renderPass{ doCreateRenderPass( m_device, m_result->getFormat() ) }
+		, m_srcView{ srcTexture }
+		, m_srcImage{ std::make_unique< ashes::Image >( *device, m_srcView.image, m_srcView.imageId.data->info ) }
+		, m_srcImageView{ doCreateSrcView( *m_srcImage ) }
+		, m_renderPass{ doCreateRenderPass( m_device, m_result.getFormat() ) }
 		, m_commands{ m_device, "RadianceComputer" }
 	{
-		auto & dstTexture = *m_result;
+		auto & handler = engine.getGraphResourceHandler();
+		auto & dstTexture = m_result;
 		
 		for ( auto face = 0u; face < 6u; ++face )
 		{
 			auto & facePass = m_renderPasses[face];
 			auto name = "RadianceComputer" + string::toString( face );
-
 			// Create the views.
-			facePass.dstView = dstTexture.createView( name
-				, VK_IMAGE_VIEW_TYPE_2D
-				, dstTexture.getFormat()
-				, 0u
-				, 1u
-				, face
-				, 1u );
+			facePass.dstView = handler.createImageView( device.makeContext()
+				, dstTexture.subViewsId[face] );
 			// Initialise the frame buffer.
-			ashes::ImageViewCRefArray attaches;
-			attaches.emplace_back( facePass.dstView );
+			VkFramebufferCreateInfo createInfo{ VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO
+				, nullptr
+				, 0u
+				, *m_renderPass
+				, 1u
+				, &facePass.dstView
+				, size.getWidth()
+				, size.getHeight()
+				, 1u };
 			facePass.frameBuffer = m_renderPass->createFrameBuffer( name
-				, VkExtent2D{ size.getWidth(), size.getHeight() }
-				, std::move( attaches ) );
+				, std::move( createInfo ) );
 		}
 
 		auto program = doCreateProgram( m_device );
 		createPipelines( { size.getWidth(), size.getHeight() }
 			, Position{}
 			, program
-			, m_srcView
+			, m_srcImageView
 			, *m_renderPass
 			, {} );
 

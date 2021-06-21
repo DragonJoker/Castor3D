@@ -34,15 +34,8 @@ namespace castor3d
 		 */
 		C3D_API explicit IblTextures( Scene & scene
 			, RenderDevice const & device
-			, ashes::Image const & source
+			, Texture const & source
 			, SamplerSPtr sampler );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API virtual ~IblTextures();
 		/**
 		 *\~english
 		 *\brief		Updates the environment maps.
@@ -60,15 +53,6 @@ namespace castor3d
 		 */
 		C3D_API ashes::Semaphore const & update( ashes::Semaphore const & toWait );
 		/**
-		 *\~english
-		 *\brief		Displays the maps.
-		 *\param[in]	size	The render size.
-		 *\~french
-		 *\brief		Affiche les textures.
-		 *\param[in]	size	La taille du rendu.
-		 */
-		C3D_API void debugDisplay( castor::Size const & size )const;
-		/**
 		*\~english
 		*name
 		*	Getters.
@@ -77,19 +61,19 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline ashes::ImageView const & getIrradianceTexture()const
+		inline Texture const & getIrradianceTexture()const
 		{
 			return m_radianceComputer.getResult();
 		}
 
-		inline ashes::ImageView const & getPrefilteredEnvironmentTexture()const
+		inline Texture const & getPrefilteredEnvironmentTexture()const
 		{
 			return m_environmentPrefilter.getResult();
 		}
 
-		inline ashes::ImageView const & getPrefilteredBrdfTexture()const
+		inline Texture const & getPrefilteredBrdfTexture()const
 		{
-			return m_prefilteredBrdfView;
+			return m_prefilteredBrdf;
 		}
 
 		inline ashes::Sampler const & getIrradianceSampler()const
@@ -109,8 +93,7 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		ashes::ImagePtr m_prefilteredBrdf;
-		ashes::ImageView m_prefilteredBrdfView;
+		Texture m_prefilteredBrdf;
 		SamplerSPtr m_sampler;
 		RadianceComputer m_radianceComputer;
 		EnvironmentPrefilter m_environmentPrefilter;

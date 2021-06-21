@@ -82,7 +82,7 @@ namespace castor3d
 			{
 				m_ibl = std::make_unique< IblTextures >( m_scene
 					, device
-					, m_texture->getTexture()
+					, m_textureId
 					, sampler );
 				m_ibl->update();
 			}
