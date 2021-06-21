@@ -674,7 +674,7 @@ namespace castor3d
 					, result->getTimer() );
 				return result;
 			} );
-		result.addOutputDepthView( m_depth.targetViewId
+		result.addOutputDepthStencilView( m_depth.targetViewId
 			, defaultClearDepthStencil );
 		auto & opaquePassResult = *m_opaquePassResult;
 		result.addOutputColourView( m_normal.targetViewId
@@ -710,7 +710,7 @@ namespace castor3d
 			, SceneBackground::MdlMtxUboIdx );
 		getRenderTarget().getHdrConfigUbo().createPassBinding( result
 			, SceneBackground::HdrCfgUboIdx );
-		result.addInOutDepthView( m_depth.targetViewId );
+		result.addInOutDepthStencilView( m_depth.targetViewId );
 		result.addOutputColourView( m_colour.targetViewId );
 		return result;
 	}
@@ -751,7 +751,7 @@ namespace castor3d
 		result.addDependency( *m_backgroundPassDesc );
 		result.addDependency( m_ssao->getLastPass() );
 		result.addSampledView( m_ssao->getResult().sampledViewId, 0u, VK_IMAGE_LAYOUT_UNDEFINED );
-		result.addInOutDepthView( m_depth.targetViewId );
+		result.addInOutDepthStencilView( m_depth.targetViewId );
 #if C3D_UseDeferredRendering
 		auto & opaquePassResult = *m_opaquePassResult;
 		result.addOutputColourView( opaquePassResult[DsTexture::eData2].targetViewId

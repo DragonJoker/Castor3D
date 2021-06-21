@@ -204,17 +204,6 @@ namespace castor3d
 				} };
 			return std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( inputState );
 		}
-
-
-		crg::ImageViewData doCreateDepthView( crg::ImageViewId const & depthView )
-		{
-			return crg::ImageViewData{ depthView.data->name + "Only"
-				, depthView.data->image
-				, 0u
-				, VK_IMAGE_VIEW_TYPE_2D
-				, depthView.data->info.format
-				, { VK_IMAGE_ASPECT_DEPTH_BIT, 0u, 1u, 0u, 1u } };
-		}
 	}
 
 	//*********************************************************************************************
@@ -230,7 +219,7 @@ namespace castor3d
 		, m_graph{ graph }
 		, m_engine{ *m_device.renderSystem.getEngine() }
 		, m_ssaoConfig{ ssaoConfig }
-		, m_srcDepthBuffer{ m_graph.createView( doCreateDepthView( depthBuffer ) ) }
+		, m_srcDepthBuffer{ depthBuffer }
 		, m_prefix{ prefix }
 		, m_size{ size }
 		, m_result{ doCreateTexture( m_device, m_graph.getHandler(), m_size ) }
