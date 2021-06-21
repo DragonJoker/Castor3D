@@ -32,7 +32,7 @@ namespace castor3d
 		 *\param[in]	cascadeCount	Le nombre de cascades, utilisé pour instancier les objets.
 		 */
 		C3D_API ShadowMapPassDirectional( crg::FramePass const & pass
-			, crg::GraphContext const & context
+			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, MatrixUbo & matrixUbo

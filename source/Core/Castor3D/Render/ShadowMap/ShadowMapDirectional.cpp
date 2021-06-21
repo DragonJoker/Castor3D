@@ -83,7 +83,7 @@ namespace castor3d
 			auto & culler = *passData.culler;
 			auto & pass = graph.createPass( passData.camera->getName()
 				, [index, &matrixUbo, &culler, &previousPass, &device, &shadowMap, &scene]( crg::FramePass const & pass
-					, crg::GraphContext const & context
+					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
 					auto result = std::make_unique< ShadowMapPassDirectional >( pass
@@ -129,7 +129,7 @@ namespace castor3d
 				auto & culler = *passData.culler;
 				auto & pass = graph.createPass( debugName
 					, [index, &matrixUbo, &culler, &device, &shadowMap, &cascade]( crg::FramePass const & pass
-						, crg::GraphContext const & context
+						, crg::GraphContext & context
 						, crg::RunnableGraph & graph )
 					{
 						auto result = std::make_unique< ShadowMapPassDirectional >( pass

@@ -168,7 +168,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	VoxelBufferToTexture::VoxelBufferToTexture( crg::FramePass const & pass
-		, crg::GraphContext const & context
+		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, VoxelSceneData const & vctConfig )

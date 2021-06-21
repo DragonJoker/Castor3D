@@ -379,7 +379,7 @@ namespace castor3d
 			auto blurYDestination = &m_blurImages[i];
 			auto & blurX = graph.createPass( "SSSBlurX" + std::to_string( i )
 				, [this]( crg::FramePass const & pass
-					, crg::GraphContext const & context
+					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
 					auto result = std::make_unique< crg::RenderQuad >( pass
@@ -418,7 +418,7 @@ namespace castor3d
 
 			auto & blurY = graph.createPass( "SSSBlurY" + std::to_string( i )
 				, [this]( crg::FramePass const & pass
-					, crg::GraphContext const & context
+					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
 					auto result = std::make_unique< crg::RenderQuad >( pass
@@ -460,7 +460,7 @@ namespace castor3d
 
 		auto & pass = graph.createPass("SSSCombine"
 			, [this]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto config = createConfig( m_size, m_combineShader, &m_enabled );

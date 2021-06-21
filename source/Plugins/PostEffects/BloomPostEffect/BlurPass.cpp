@@ -174,7 +174,7 @@ namespace Bloom
 		, bool const * enabled )
 		: pass{ graph.createPass( "BloomBlurPass" + std::to_string( index ) + ( isVertical ? "Y" : "X" )
 			, [this, &device, &stages, dimensions, index, enabled]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = crg::RenderQuadBuilder{}

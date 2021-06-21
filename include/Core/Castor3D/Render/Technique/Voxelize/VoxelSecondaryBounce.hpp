@@ -34,7 +34,7 @@ namespace castor3d
 		 *\param[in]	voxelConfig		La configuration du voxelizer.
 		 */
 		C3D_API VoxelSecondaryBounce( crg::FramePass const & pass
-			, crg::GraphContext const & context
+			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, VoxelSceneData const & voxelConfig );

@@ -42,7 +42,7 @@ namespace castor3d
 		 *\param[in]	result		La texture résultante.
 		 */
 		C3D_API VoxelBufferToTexture( crg::FramePass const & pass
-			, crg::GraphContext const & context
+			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, VoxelSceneData const & vctConfig );

@@ -537,7 +537,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	SsaoRawAOPass::RenderQuad::RenderQuad( crg::FramePass const & pass
-		, crg::GraphContext const & context
+		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, crg::rq::Config config
 		, SsaoConfig const & ssaoConfig )
@@ -603,7 +603,7 @@ namespace castor3d
 	{
 		auto & pass = graph.createPass( "SsaoRawAO"
 			, [this]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = std::make_unique< RenderQuad >( pass

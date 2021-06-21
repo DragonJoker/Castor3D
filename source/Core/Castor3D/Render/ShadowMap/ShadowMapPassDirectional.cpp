@@ -78,7 +78,7 @@ namespace castor3d
 	uint32_t const ShadowMapPassDirectional::TileCountY = ShadowMapDirectionalTileCountY;
 
 	ShadowMapPassDirectional::ShadowMapPassDirectional( crg::FramePass const & pass
-		, crg::GraphContext const & context
+		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, MatrixUbo & matrixUbo

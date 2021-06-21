@@ -48,7 +48,7 @@ namespace castor3d
 	uint32_t const ShadowMapPassSpot::TextureSize = 512u;
 
 	ShadowMapPassSpot::ShadowMapPassSpot( crg::FramePass const & pass
-		, crg::GraphContext const & context
+		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, uint32_t index

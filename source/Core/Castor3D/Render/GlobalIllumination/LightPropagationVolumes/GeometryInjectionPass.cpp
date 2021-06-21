@@ -575,7 +575,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	GeometryInjectionPass::PipelineHolder::PipelineHolder( crg::FramePass const & pass
-		, crg::GraphContext const & context
+		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, crg::pp::Config config
 		, uint32_t lpvSize )
@@ -684,7 +684,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	GeometryInjectionPass::GeometryInjectionPass( crg::FramePass const & pass
-		, crg::GraphContext const & context
+		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, LightType lightType

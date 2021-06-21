@@ -145,7 +145,7 @@ namespace castor3d
 	{
 		auto & mipsGen = m_graph.createPass( "Env" + node.getName() + "Mips"
 			, [this]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				return std::make_unique< crg::GenerateMipmaps >( pass
@@ -160,13 +160,7 @@ namespace castor3d
 
 		mipsGen.addTransferInOutView( mipsGen.mergeViews( m_environmentMap.subViewsId ) );
 
-		m_runnable = m_graph.compile( crg::GraphContext{ *device
-			, VK_NULL_HANDLE
-			, device->getAllocationCallbacks()
-			, device->getMemoryProperties()
-			, device->getProperties()
-			, false
-			, device->vkGetDeviceProcAddr } );
+		m_runnable = m_graph.compile( device.makeContext() );
 		m_environmentMap.create();
 		m_runnable->record();
 		log::trace << "Created EnvironmentMap " << node.getName() << std::endl;

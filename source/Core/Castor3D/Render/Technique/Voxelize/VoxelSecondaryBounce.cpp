@@ -198,7 +198,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	VoxelSecondaryBounce::VoxelSecondaryBounce( crg::FramePass const & pass
-		, crg::GraphContext const & context
+		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, VoxelSceneData const & vctConfig )

@@ -34,7 +34,7 @@ namespace castor3d
 		{
 		public:
 			LpvClear( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 				: crg::RunnablePass{ pass, context, graph }
 			{
@@ -209,7 +209,7 @@ namespace castor3d
 		auto rsmSize = smResult[SmTexture::eDepth].getExtent().width;
 		auto & result = graph.createPass( name + "LightInjection" + std::to_string( cascade )
 			, [this, &device, name, lightType, rsmSize, cascade]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = std::make_unique< LightInjectionPass >( pass
@@ -265,7 +265,7 @@ namespace castor3d
 		auto rsmSize = smResult[SmTexture::eDepth].getExtent().width;
 		auto & result = graph.createPass( name + "GeomInjection" + std::to_string( cascade )
 			, [this, &device, name, lightType, rsmSize, cascade]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = std::make_unique< GeometryInjectionPass >( pass
@@ -497,7 +497,7 @@ namespace castor3d
 	{
 		auto & result = m_graph.createPass( "LLpvClearInjection"
 			, [this]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				return std::make_unique< LpvClear >( pass
@@ -536,7 +536,7 @@ namespace castor3d
 	{
 		auto & result = m_graph.createPass( getName() + name + std::to_string( cascade )
 			, [this, index]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = std::make_unique< LightPropagationPass >( pass

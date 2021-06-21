@@ -117,7 +117,7 @@ namespace smaa
 			, makeShaderState( device, m_pixelShader ) }
 		, m_pass{ m_graph.createPass( "SmaaEdge"
 			, [this, &device, &renderTarget]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				ashes::PipelineDepthStencilStateCreateInfo dsState{ 0u, VK_FALSE, VK_FALSE };

@@ -113,7 +113,7 @@ namespace castor3d
 	{
 		auto & result = m_graph.createPass( getName() + "BackgroundPass"
 			, [this, &objectNode]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = std::make_unique< BackgroundPass >( pass
@@ -144,7 +144,7 @@ namespace castor3d
 	{
 		auto & result = m_graph.createPass( getName() + "OpaquePass"
 			, [this, &objectNode]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = std::make_unique< ForwardRenderTechniquePass >( pass
@@ -172,7 +172,7 @@ namespace castor3d
 	{
 		auto & result = m_graph.createPass( getName() + "TransparentPass"
 			, [this, &objectNode]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = std::make_unique< ForwardRenderTechniquePass >( pass

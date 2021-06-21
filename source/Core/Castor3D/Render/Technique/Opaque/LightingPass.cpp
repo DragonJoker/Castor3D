@@ -774,7 +774,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	LightPipeline::LightPipeline( crg::FramePass const & pass
-		, crg::GraphContext const & context
+		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, LightPipelineConfig const & config
 		, std::vector< LightRenderPass > const & renderPasses
@@ -947,7 +947,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	LightsPipeline::LightsPipeline( crg::FramePass const & pass
-		, crg::GraphContext const & context
+		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, LightPipelineConfig const & config
@@ -1280,7 +1280,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	RunnableLightingPass::RunnableLightingPass( crg::FramePass const & pass
-		, crg::GraphContext const & context
+		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, Scene const & scene
@@ -1613,7 +1613,7 @@ namespace castor3d
 		auto & engine = *m_device.renderSystem.getEngine();
 		auto & pass = graph.createPass( "DepthBlit"
 			, [this, &engine]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = std::make_unique< crg::ImageCopy >( pass
@@ -1639,7 +1639,7 @@ namespace castor3d
 		auto & engine = *m_device.renderSystem.getEngine();
 		auto & pass = graph.createPass( "LightPass"
 			, [this, &engine, &scene]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = std::make_unique< RunnableLightingPass >( pass
