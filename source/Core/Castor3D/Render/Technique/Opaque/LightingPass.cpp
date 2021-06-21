@@ -787,22 +787,19 @@ namespace castor3d
 					, crg::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) }
 				, std::vector< VkDescriptorSetLayout >{ descriptorSetLayout } }
 			, VK_PIPELINE_BIND_POINT_GRAPHICS
-			, 1u }
+			, 2u }
 		, m_config{ config }
 		, m_renderPasses{ renderPasses }
 	{
 		m_holder.initialise();
-		doCreatePipeline( 0u );
-		doCreatePipeline( 1u );
+		doCreatePipeline();
 	}
 
-	void LightPipeline::doCreatePipeline( uint32_t index )
+	void LightPipeline::doCreatePipeline()
 	{
 		ashes::PipelineVertexInputStateCreateInfo vertexLayout = doCreateVertexLayout();
 		crg::VkVertexInputAttributeDescriptionArray vertexAttribs;
 		crg::VkVertexInputBindingDescriptionArray vertexBindings;
-		auto viewportState = doCreateViewportState( *m_renderPasses[index].framebuffer );
-		auto colourBlend = doCreateBlendState( index != 0u );
 		ashes::PipelineDepthStencilStateCreateInfo depthStencil{ 0u, false, false };
 		VkPipelineInputAssemblyStateCreateInfo iaState{ VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO
 			, nullptr
@@ -831,39 +828,45 @@ namespace castor3d
 			, 0.0f
 			, 0.0f
 			, 0.0f };
-		auto & program = m_holder.getProgram( index );
-		auto & pipeline = m_holder.getPipeline( index );
 		VkPipelineVertexInputStateCreateInfo const & vsState = vertexLayout;
 		VkPipelineDepthStencilStateCreateInfo const & dsState = depthStencil;
-		VkPipelineColorBlendStateCreateInfo const & cbState = colourBlend;
-		VkPipelineViewportStateCreateInfo const & vpState = viewportState;
-		VkGraphicsPipelineCreateInfo createInfo{ VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO
-			, nullptr
-			, 0u
-			, uint32_t( program.size() )
-			, program.data()
-			, &vsState
-			, &iaState
-			, nullptr
-			, &vpState
-			, &rsState
-			, &msState
-			, &dsState
-			, &cbState
-			, nullptr
-			, m_holder.getPipelineLayout()
-			, *m_renderPasses[index].renderPass
-			, 0u
-			, VK_NULL_HANDLE
-			, 0u };
-		auto res = m_holder.getContext().vkCreateGraphicsPipelines( m_holder.getContext().device
-			, m_holder.getContext().cache
-			, 1u
-			, &createInfo
-			, m_holder.getContext().allocator
-			, &pipeline );
-		crg::checkVkResult( res, m_holder.getPass().name + " - Pipeline creation" );
-		crgRegisterObject( m_holder.getContext(), m_holder.getPass().name, pipeline );
+
+		for ( uint32_t index = 0u; index < 2u; ++index )
+		{
+			auto viewportState = doCreateViewportState( *m_renderPasses[index].framebuffer );
+			auto colourBlend = doCreateBlendState( index != 0u );
+			auto & program = m_holder.getProgram( index );
+			auto & pipeline = m_holder.getPipeline( index );
+			VkPipelineColorBlendStateCreateInfo const & cbState = colourBlend;
+			VkPipelineViewportStateCreateInfo const & vpState = viewportState;
+			VkGraphicsPipelineCreateInfo createInfo{ VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO
+				, nullptr
+				, 0u
+				, uint32_t( program.size() )
+				, program.data()
+				, &vsState
+				, &iaState
+				, nullptr
+				, &vpState
+				, &rsState
+				, &msState
+				, &dsState
+				, &cbState
+				, nullptr
+				, m_holder.getPipelineLayout()
+				, *m_renderPasses[index].renderPass
+				, 0u
+				, VK_NULL_HANDLE
+				, 0u };
+			auto res = m_holder.getContext().vkCreateGraphicsPipelines( m_holder.getContext().device
+				, m_holder.getContext().cache
+				, 1u
+				, &createInfo
+				, m_holder.getContext().allocator
+				, &pipeline );
+			crg::checkVkResult( res, m_holder.getPass().name + " - Pipeline creation" );
+			crgRegisterObject( m_holder.getContext(), m_holder.getPass().name, pipeline );
+		}
 	}
 
 	ashes::PipelineVertexInputStateCreateInfo LightPipeline::doCreateVertexLayout()
@@ -1321,14 +1324,14 @@ namespace castor3d
 		crg::RunnablePass::record();
 	}
 
-	void RunnableLightingPass::doInitialise( uint32_t index )
+	void RunnableLightingPass::doInitialise()
 	{
 	}
 
 	void RunnableLightingPass::doRecordInto( VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
-		auto & renderPass = m_renderPasses[0];
+		auto & renderPass = m_renderPasses[0u];
 		VkRenderPassBeginInfo beginRenderPass{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO
 			, nullptr
 			, *renderPass.renderPass

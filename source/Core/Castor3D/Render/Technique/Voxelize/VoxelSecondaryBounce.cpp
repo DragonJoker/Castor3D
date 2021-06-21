@@ -218,7 +218,7 @@ namespace castor3d
 		visitor.visit( m_shader );
 	}
 
-	void VoxelSecondaryBounce::doInitialise( uint32_t index )
+	void VoxelSecondaryBounce::doInitialise()
 	{
 	}
 
