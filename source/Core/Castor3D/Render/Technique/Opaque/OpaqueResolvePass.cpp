@@ -1125,7 +1125,7 @@ namespace castor3d
 		auto & passBuffer = engine.getMaterialCache().getPassBuffer();
 		auto & pass = graph.createPass( "DeferredResolve"
 			, [this, &engine]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = crg::RenderQuadBuilder{}

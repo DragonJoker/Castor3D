@@ -44,7 +44,7 @@ namespace castor3d
 	String const OpaquePass::Output5 = "outData5";
 
 	OpaquePass::OpaquePass( crg::FramePass const & pass
-		, crg::GraphContext const & context
+		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, castor::String const & category

@@ -263,7 +263,7 @@ namespace smaa
 			, makeShaderState( device, m_pixelShader ) }
 		, m_pass{ m_graph.createPass( "SmaaNeighbourhood"
 			, [this, &device, &config]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto size = m_sourceView.data->image.data->info.extent;

@@ -44,7 +44,7 @@ CU_ImplementCUSmartPtr( castor3d, VoxelizePass )
 namespace castor3d
 {
 	VoxelizePass::VoxelizePass( crg::FramePass const & pass
-		, crg::GraphContext const & context
+		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, MatrixUbo & matrixUbo

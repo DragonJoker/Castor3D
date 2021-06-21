@@ -68,7 +68,7 @@ namespace castor3d
 	{
 	public:
 		LightPipeline( crg::FramePass const & pass
-			, crg::GraphContext const & context
+			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, LightPipelineConfig const & config
 			, std::vector< LightRenderPass > const & renderPasses
@@ -108,7 +108,7 @@ namespace castor3d
 	struct LightsPipeline
 	{
 		LightsPipeline( crg::FramePass const & pass
-			, crg::GraphContext const & context
+			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, LightPipelineConfig const & config
@@ -130,7 +130,7 @@ namespace castor3d
 		ashes::VertexBufferPtr< float > doCreateVertexBuffer();
 
 	private:
-		crg::GraphContext const & m_context;
+		crg::GraphContext & m_context;
 		ShadowMapResult const & m_smResult;
 		RenderDevice const & m_device;
 		std::vector< LightRenderPass > const & m_renderPasses;
@@ -155,7 +155,7 @@ namespace castor3d
 	{
 	public:
 		RunnableLightingPass( crg::FramePass const & pass
-			, crg::GraphContext const & context
+			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, Scene const & scene

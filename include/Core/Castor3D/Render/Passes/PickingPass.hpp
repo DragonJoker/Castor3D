@@ -31,7 +31,7 @@ namespace castor3d
 		 *\param[in]	culler		Le culler pour cette passe.
 		 */
 		C3D_API explicit PickingPass( crg::FramePass const & pass
-			, crg::GraphContext const & context
+			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, castor::Size const & size

@@ -108,7 +108,7 @@ namespace light_streaks
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
 		, m_pass{ graph.createPass( "LightStreaksCombinePass"
 			, [this, &device, &sceneView, size, enabled]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = crg::RenderQuadBuilder{}

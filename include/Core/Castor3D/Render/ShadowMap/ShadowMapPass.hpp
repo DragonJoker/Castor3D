@@ -41,7 +41,7 @@ namespace castor3d
 		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
 		 */
 		C3D_API ShadowMapPass( crg::FramePass const & pass
-			, crg::GraphContext const & context
+			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, castor::String name
