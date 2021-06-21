@@ -337,7 +337,6 @@ namespace castor3d
 		LpvGridConfigUbo const & m_lpvConfigUbo;
 		LayeredLpvGridConfigUbo const & m_llpvConfigUbo;
 		VoxelizerUbo const & m_vctConfigUbo;
-		Texture const & m_srcDepth;
 		castor::Size const m_size;
 		LightPassResult m_result;
 		bool m_voxelConeTracing{ false };

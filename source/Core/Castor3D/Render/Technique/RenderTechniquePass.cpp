@@ -385,15 +385,15 @@ namespace castor3d
 				if ( background.hasIbl() )
 				{
 					auto & ibl = background.getIbl();
-					bindTexture( ibl.getIrradianceTexture()
+					bindTexture( ibl.getIrradianceTexture().wholeView
 						, ibl.getIrradianceSampler()
 						, descriptorWrites
 						, index );
-					bindTexture( ibl.getPrefilteredEnvironmentTexture()
+					bindTexture( ibl.getPrefilteredEnvironmentTexture().wholeView
 						, ibl.getPrefilteredEnvironmentSampler()
 						, descriptorWrites
 						, index );
-					bindTexture( ibl.getPrefilteredBrdfTexture()
+					bindTexture( ibl.getPrefilteredBrdfTexture().wholeView
 						, ibl.getPrefilteredBrdfSampler()
 						, descriptorWrites
 						, index );

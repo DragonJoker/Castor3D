@@ -1536,7 +1536,6 @@ namespace castor3d
 		, m_lpvConfigUbo{ lpvConfigUbo }
 		, m_llpvConfigUbo{ llpvConfigUbo }
 		, m_vctConfigUbo{ vctConfigUbo }
-		, m_srcDepth{ depthView }
 		, m_size{ size }
 		, m_result{ scene.getOwner()->getGraphResourceHandler(), device, size }
 	{
@@ -1625,7 +1624,7 @@ namespace castor3d
 				return result;
 			} );
 		pass.addDependency( previousPass );
-		pass.addTransferInputView( m_srcDepth.wholeViewId
+		pass.addTransferInputView( m_depthView.wholeViewId
 			, VK_IMAGE_LAYOUT_UNDEFINED );
 		pass.addTransferOutputView( m_result[LpTexture::eDepth].wholeViewId
 			, VK_IMAGE_LAYOUT_UNDEFINED );
