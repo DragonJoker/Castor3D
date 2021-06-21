@@ -314,6 +314,7 @@ namespace castor3d
 		if ( ashes::isDepthStencilFormat( wholeViewId.data->image.data->info.format ) )
 		{
 			auto createInfo = *wholeViewId.data;
+			createInfo.name = name + "Sampled";
 			createInfo.info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
 			sampledViewId = handler.createViewId( createInfo );
 		}

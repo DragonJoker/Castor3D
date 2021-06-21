@@ -295,7 +295,7 @@ namespace castor3d
 			, { maxDim, maxDim, 1u }
 			, 6u
 			, 1u
-			, m_crossTexture->getPixelFormat()
+			, m_layerTexture[0]->getPixelFormat()
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT ) };
@@ -363,9 +363,9 @@ namespace castor3d
 			m_textureId = { device
 				, getEngine()->getGraphResourceHandler()
 				, cuT( "SkyboxBackgroundEquiCube" )
-				, 0
+				, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
 				, makeExtent3D( m_equiSize )
-				, 1u
+				, 6u
 				, 1u
 				, m_equiTexture->getPixelFormat()
 				, ( VK_IMAGE_USAGE_SAMPLED_BIT
@@ -403,9 +403,9 @@ namespace castor3d
 		m_textureId = { device
 			, getEngine()->getGraphResourceHandler()
 			, cuT( "SkyboxBackgroundCrossCube" )
-			, 0
+			, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
 			, { width, width, 1u }
-			, 1u
+			, 6u
 			, 1u
 			, m_crossTexture->getPixelFormat()
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT

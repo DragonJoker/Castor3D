@@ -412,7 +412,7 @@ namespace castor3d
 			auto c3d_mapBrdf = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf", uint32_t( ResolveBind::eBrdf ), 0u );
 			auto c3d_mapIrradiance = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapIrradiance", uint32_t( ResolveBind::eIrradiance ), 0u );
 			auto c3d_mapPrefiltered = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapPrefiltered", uint32_t( ResolveBind::ePrefiltered ), 0u );
-			auto c3d_mapEnvironment = writer.declSampledImageArray< FImgCubeRgba32 >( "c3d_mapEnvironment", uint32_t( ResolveBind::eEnvironment ), 0u, c_noIblEnvironmentCount );
+			auto c3d_mapEnvironment = writer.declSampledImageArray< FImgCubeRgba32 >( "c3d_mapEnvironment", uint32_t( ResolveBind::eEnvironment ), 0u, c_iblEnvironmentCount );
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
@@ -740,7 +740,7 @@ namespace castor3d
 			auto c3d_mapBrdf = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf", uint32_t( ResolveBind::eBrdf ), 0u );
 			auto c3d_mapIrradiance = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapIrradiance", uint32_t( ResolveBind::eIrradiance ), 0u );
 			auto c3d_mapPrefiltered = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapPrefiltered", uint32_t( ResolveBind::ePrefiltered ), 0u );
-			auto c3d_mapEnvironment = writer.declSampledImageArray< FImgCubeRgba32 >( "c3d_mapEnvironment", uint32_t( ResolveBind::eEnvironment ), 0u, c_noIblEnvironmentCount );
+			auto c3d_mapEnvironment = writer.declSampledImageArray< FImgCubeRgba32 >( "c3d_mapEnvironment", uint32_t( ResolveBind::eEnvironment ), 0u, c_iblEnvironmentCount );
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
@@ -1184,6 +1184,7 @@ namespace castor3d
 			, VK_IMAGE_LAYOUT_UNDEFINED );
 
 		auto & background = *m_scene.getBackground();
+		background.initialise( m_device );
 		auto envMapCount = c_noIblEnvironmentCount;
 
 		//if ( m_scene.getMaterialsType() != MaterialType::ePhong )
