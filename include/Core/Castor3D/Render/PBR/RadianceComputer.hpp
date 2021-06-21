@@ -38,7 +38,7 @@ namespace castor3d
 		C3D_API explicit RadianceComputer( Engine & engine
 			, RenderDevice const & device
 			, castor::Size const & size
-			, ashes::Image const & srcTexture );
+			, Texture const & srcTexture );
 		/**
 		 *\~english
 		 *\brief		Computes the radiance map.
@@ -66,24 +66,25 @@ namespace castor3d
 		/**@{*/
 		C3D_API ashes::Sampler const & getSampler()const;
 
-		inline ashes::ImageView const & getResult()const
+		Texture const & getResult()const
 		{
-			return m_resultView;
+			return m_result;
 		}
 		/**@}*/
 
 	private:
 		struct RenderPass
 		{
-			ashes::ImageView dstView;
+			VkImageView dstView;
 			ashes::FrameBufferPtr frameBuffer;
 		};
 		using RenderPasses = std::array< RenderPass, 6 >;
 
-		ashes::ImagePtr m_result;
-		ashes::ImageView m_resultView;
+		Texture m_result;
 		SamplerSPtr m_sampler;
-		ashes::ImageView m_srcView;
+		Texture const & m_srcView;
+		ashes::ImagePtr m_srcImage;
+		ashes::ImageView m_srcImageView;
 		ashes::RenderPassPtr m_renderPass;
 		RenderPasses m_renderPasses;
 		CommandsSemaphore m_commands;
