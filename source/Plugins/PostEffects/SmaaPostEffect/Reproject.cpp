@@ -175,7 +175,7 @@ namespace smaa
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) }
 		, m_pass{ m_graph.createPass( "SmaaReproject"
 			, [this, &config, &device, &currentColourViews]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto commandBuffer = device.graphicsCommandPool->createCommandBuffer();

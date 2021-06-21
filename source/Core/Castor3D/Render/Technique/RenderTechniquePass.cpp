@@ -123,7 +123,7 @@ namespace castor3d
 	//*************************************************************************************************
 
 	RenderTechniquePass::RenderTechniquePass( crg::FramePass const & pass
-		, crg::GraphContext const & context
+		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, String const & category

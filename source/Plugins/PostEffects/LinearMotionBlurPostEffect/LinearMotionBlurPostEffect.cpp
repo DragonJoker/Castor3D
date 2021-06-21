@@ -188,7 +188,7 @@ namespace motion_blur
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } );
 		m_pass = &m_renderTarget.getGraph().createPass( "LinearMotionBlurPass"
 			, [this, &device]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = crg::RenderQuadBuilder{}

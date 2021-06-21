@@ -164,7 +164,7 @@ namespace castor3d
 	{
 		auto & result = m_graph.createPass( "VoxelizePass"
 			, [this]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = std::make_unique< VoxelizePass >( pass
@@ -192,7 +192,7 @@ namespace castor3d
 	{
 		auto & result = m_graph.createPass( "VoxelBufferToTexture"
 			, [this]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = std::make_unique< VoxelBufferToTexture >( pass
@@ -222,7 +222,7 @@ namespace castor3d
 	{
 		auto & result = m_graph.createPass( name
 			, [this]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = std::make_unique< crg::GenerateMipmaps >( pass
@@ -242,7 +242,7 @@ namespace castor3d
 	{
 		auto & result = m_graph.createPass( "VoxelSecondaryBounce"
 			, [this]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = std::make_unique< VoxelSecondaryBounce >( pass

@@ -27,7 +27,7 @@ namespace castor3d
 		 *\param[in]	config		La configuration du SSAO.
 		 */
 		C3D_API OpaquePass( crg::FramePass const & pass
-			, crg::GraphContext const & context
+			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, castor::String const & category

@@ -80,7 +80,7 @@ namespace castor3d
 					auto name = debugName + "F" + std::to_string( face );
 					auto & pass = graph.createPass( name
 						, [index, &matrixUbo, &culler, &device, &shadowMap, &scene]( crg::FramePass const & pass
-							, crg::GraphContext const & context
+							, crg::GraphContext & context
 							, crg::RunnableGraph & graph )
 						{
 							auto result = std::make_unique< ShadowMapPassPoint >( pass

@@ -34,7 +34,7 @@ namespace light_streaks
 		{
 		public:
 			HiPassQuad( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph
 				, crg::VkPipelineShaderStageCreateInfoArray program
 				, VkExtent2D const & renderSize
@@ -224,7 +224,7 @@ namespace light_streaks
 		auto previous = &previousPass;
 		auto & hiPass = graph.createPass( "LightStreaksHiPass"
 			, [this, &device, size, enabled]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = std::make_unique< HiPassQuad >( pass
@@ -255,7 +255,7 @@ namespace light_streaks
 		{
 			auto & pass = graph.createPass( "LightStreaksCopy" + std::to_string( i )
 				, [&device, size, enabled]( crg::FramePass const & pass
-					, crg::GraphContext const & context
+					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
 					auto result = std::make_unique< crg::ImageCopy >( pass

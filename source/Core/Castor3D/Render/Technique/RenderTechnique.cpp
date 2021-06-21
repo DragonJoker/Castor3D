@@ -204,7 +204,7 @@ namespace castor3d
 			{
 			public:
 				LpvClear( crg::FramePass const & pass
-					, crg::GraphContext const & context
+					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 					: crg::RunnablePass{ pass, context, graph }
 				{
@@ -243,7 +243,7 @@ namespace castor3d
 			crg::FrameGraph result{ handler, name + "ClearLpv" };
 			auto & pass = result.createPass( name + "LpvClear"
 				, []( crg::FramePass const & pass
-					, crg::GraphContext const & context
+					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
 					return std::make_unique< LpvClear >( pass
@@ -658,7 +658,7 @@ namespace castor3d
 	{
 		auto & result = m_renderTarget.getGraph().createPass( "DepthPass"
 			, [this]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = std::make_unique< DepthPass >( pass
@@ -688,7 +688,7 @@ namespace castor3d
 		auto & background = *getRenderTarget().getScene()->getBackground();
 		auto & result = m_renderTarget.getGraph().createPass( "BackgroundPass"
 			, [this, &background]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = std::make_unique< BackgroundPass >( pass
@@ -724,7 +724,7 @@ namespace castor3d
 #endif
 		auto & result = m_renderTarget.getGraph().createPass( "OpaquePass"
 			, [this, name]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = std::make_unique< OpaquePassType >( pass
@@ -772,7 +772,7 @@ namespace castor3d
 	{
 		auto & result = m_renderTarget.getGraph().createPass( "TransparentPass"
 			, [this]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 #if C3D_UseWeightedBlendedRendering

@@ -361,7 +361,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	LightPropagationPass::PipelineHolder::PipelineHolder( crg::FramePass const & pass
-		, crg::GraphContext const & context
+		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, crg::pp::Config config
 		, uint32_t gridSize
@@ -472,7 +472,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	LightPropagationPass::LightPropagationPass( crg::FramePass const & pass
-		, crg::GraphContext const & context
+		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, bool occlusion
