@@ -91,7 +91,7 @@ namespace castor3d
 		}
 
 	protected:
-		void doCreatePipeline( uint32_t index );
+		void doCreatePipeline();
 
 	private:
 		ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout();
@@ -170,7 +170,7 @@ namespace castor3d
 		void resetCommandBuffer();
 
 	protected:
-		void doInitialise( uint32_t index )override;
+		void doInitialise()override;
 		void doRecordInto( VkCommandBuffer commandBuffer
 			, uint32_t index )override;
 

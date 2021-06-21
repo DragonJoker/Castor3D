@@ -508,7 +508,7 @@ namespace castor3d
 	{
 	}
 
-	void LightPropagationPass::doSubInitialise( uint32_t index )
+	void LightPropagationPass::doSubInitialise()
 	{
 		m_holder.initialise( getRenderPass() );
 	}
