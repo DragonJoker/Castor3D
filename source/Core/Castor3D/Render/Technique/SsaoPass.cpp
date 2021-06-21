@@ -42,7 +42,7 @@ namespace castor3d
 			, cuT( "Ssao" )
 			, m_ssaoConfig
 			, m_size
-			, depth.wholeViewId ) }
+			, depth.sampledViewId ) }
 		, m_rawAoPass{ castor::makeUnique< SsaoRawAOPass >( graph
 			, m_device
 			, m_linearisePass->getLastPass()
