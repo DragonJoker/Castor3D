@@ -564,7 +564,7 @@ namespace castor3d
 	{
 	}
 
-	void LightInjectionPass::doSubInitialise( uint32_t index )
+	void LightInjectionPass::doSubInitialise()
 	{
 		m_holder.initialise( getRenderPass() );
 	}
