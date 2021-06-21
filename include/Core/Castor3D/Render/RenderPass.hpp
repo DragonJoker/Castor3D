@@ -506,10 +506,10 @@ namespace castor3d
 		/**@}*/
 
 	protected:
-		C3D_API void doSubInitialise( uint32_t index )override;
+		C3D_API void doSubInitialise()override;
 		C3D_API void doSubRecordInto( VkCommandBuffer commandBuffer
 			, uint32_t index )override;
-		C3D_API  VkSubpassContents doGetSubpassContents( uint32_t subpassIndex )const override
+		C3D_API  VkSubpassContents doGetSubpassContents()const override
 		{
 			return VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS;
 		}

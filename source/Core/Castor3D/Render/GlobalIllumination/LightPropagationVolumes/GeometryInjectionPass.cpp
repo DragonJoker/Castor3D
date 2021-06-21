@@ -588,7 +588,7 @@ namespace castor3d
 	{
 		m_renderPass = renderPass;
 		m_holder.initialise();
-		doCreatePipeline( 0u );
+		doCreatePipeline();
 	}
 
 	void GeometryInjectionPass::PipelineHolder::recordInto( VkCommandBuffer commandBuffer
@@ -597,7 +597,7 @@ namespace castor3d
 		m_holder.recordInto( commandBuffer, index );
 	}
 
-	void GeometryInjectionPass::PipelineHolder::doCreatePipeline( uint32_t index )
+	void GeometryInjectionPass::PipelineHolder::doCreatePipeline()
 	{
 		ashes::PipelineVertexInputStateCreateInfo vertexState{ 0u
 			, ashes::VkVertexInputBindingDescriptionArray{ { 0u
@@ -650,8 +650,8 @@ namespace castor3d
 		VkPipelineViewportStateCreateInfo vpState = viewportState;
 		VkPipelineVertexInputStateCreateInfo viState = vertexState;
 		VkPipelineColorBlendStateCreateInfo cbState = blendState;
-		auto & program = m_holder.getProgram( index );
-		auto & pipeline = m_holder.getPipeline( index );
+		auto & program = m_holder.getProgram( 0u );
+		auto & pipeline = m_holder.getPipeline( 0u );
 		VkGraphicsPipelineCreateInfo createInfo{ VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO
 			, nullptr
 			, 0u
@@ -714,7 +714,7 @@ namespace castor3d
 	{
 	}
 
-	void GeometryInjectionPass::doSubInitialise( uint32_t index )
+	void GeometryInjectionPass::doSubInitialise()
 	{
 		m_holder.initialise( getRenderPass() );
 	}
