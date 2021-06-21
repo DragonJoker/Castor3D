@@ -192,7 +192,7 @@ namespace castor3d
 		visitor.visit( m_pipelines[doGetPassIndex()].shader );
 	}
 
-	void VoxelBufferToTexture::doInitialise( uint32_t index )
+	void VoxelBufferToTexture::doInitialise()
 	{
 	}
 

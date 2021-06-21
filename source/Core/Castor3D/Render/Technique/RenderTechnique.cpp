@@ -211,7 +211,7 @@ namespace castor3d
 				}
 
 			protected:
-				void doInitialise( uint32_t index )override
+				void doInitialise()override
 				{
 				}
 
