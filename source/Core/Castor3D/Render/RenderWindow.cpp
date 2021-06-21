@@ -186,7 +186,7 @@ namespace castor3d
 		{
 			auto info = view.viewId.data->info;
 			auto & handler = device.renderSystem.getEngine()->getGraphResourceHandler();
-			crg::ImageViewId viewId{ handler.createViewId( crg::ImageViewData{ view.name
+			crg::ImageViewId viewId{ handler.createViewId( crg::ImageViewData{ view.name + "Barrier"
 				, view.viewId.data->image
 				, info.flags
 				, info.viewType
@@ -202,10 +202,8 @@ namespace castor3d
 					, info.subresourceRange.levelCount
 					, info.subresourceRange.baseArrayLayer
 					, info.subresourceRange.layerCount } } ) };
-			VkImageViewCreateInfo createInfo{ viewId.data->info };
-			createInfo.image = view.image;
-			VkImageView barrierView{};
-			device->vkCreateImageView( *device, &createInfo, nullptr, &barrierView );
+			VkImageView barrierView = handler.createImageView( device.makeContext()
+				, viewId );
 			return{ view.name
 				, viewId
 				, view.image
@@ -248,7 +246,7 @@ namespace castor3d
 		{
 			auto info = view.viewId.data->info;
 			auto & handler = device.renderSystem.getEngine()->getGraphResourceHandler();
-			crg::ImageViewId viewId{ handler.createViewId( crg::ImageViewData{ view.name
+			crg::ImageViewId viewId{ handler.createViewId( crg::ImageViewData{ view.name + "Sampled"
 				, view.viewId.data->image
 				, info.flags
 				, info.viewType
@@ -264,14 +262,12 @@ namespace castor3d
 					, info.subresourceRange.levelCount
 					, info.subresourceRange.baseArrayLayer
 					, info.subresourceRange.layerCount } } ) };
-			VkImageViewCreateInfo createInfo{ viewId.data->info };
-			createInfo.image = view.image;
-			VkImageView barrierView{};
-			device->vkCreateImageView( *device, &createInfo, nullptr, &barrierView );
+			VkImageView sampledView = handler.createImageView( device.makeContext()
+				, viewId );
 			return { view.name
 				, viewId
 				, view.image
-				, barrierView
+				, sampledView
 				, view.layout
 				, view.factors };
 		}

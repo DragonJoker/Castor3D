@@ -38,7 +38,7 @@ namespace castor3d
 	}
 
 	ShadowMapPass::ShadowMapPass( crg::FramePass const & pass
-		, crg::GraphContext const & context
+		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, castor::String name

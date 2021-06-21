@@ -154,7 +154,7 @@ namespace castor3d
 	uint32_t const PickingPass::UboBindingPoint = 7u;
 
 	PickingPass::PickingPass( crg::FramePass const & pass
-		, crg::GraphContext const & context
+		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, castor::Size const & size

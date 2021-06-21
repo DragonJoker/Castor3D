@@ -391,7 +391,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	SsaoBlurPass::RenderQuad::RenderQuad( crg::FramePass const & pass
-		, crg::GraphContext const & context
+		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, crg::rq::Config config
 		, SsaoConfig const & ssaoConfig )
@@ -456,7 +456,7 @@ namespace castor3d
 		configuration.axis = axis;
 		auto & pass = graph.createPass( "SsaoBlur" + prefix
 			, [this, config]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = std::make_unique< RenderQuad >( pass

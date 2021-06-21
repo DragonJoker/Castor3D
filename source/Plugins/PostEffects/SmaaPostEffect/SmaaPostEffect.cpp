@@ -334,7 +334,7 @@ namespace smaa
 
 		auto & pass = m_renderTarget.getGraph().createPass( "SmaaCopy"
 			, [this]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				return crg::RenderQuadBuilder{}

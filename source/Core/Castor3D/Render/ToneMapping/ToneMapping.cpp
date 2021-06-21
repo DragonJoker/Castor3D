@@ -83,7 +83,7 @@ namespace castor3d
 	{
 		auto & result = graph.createPass( "ToneMapping"
 			, [this, size]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = crg::RenderQuadBuilder{}

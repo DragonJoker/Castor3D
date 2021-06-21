@@ -569,7 +569,7 @@ namespace castor3d
 	{
 		auto & result = m_graph.createPass( "CombinePass"
 			, [this]( crg::FramePass const & pass
-				, crg::GraphContext const & context
+				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				return crg::RenderQuadBuilder{}
@@ -623,7 +623,7 @@ namespace castor3d
 		{
 			auto & pass = m_graph.createPass( getName() + name + "Copy"
 				, [this, &source, &target]( crg::FramePass const & pass
-					, crg::GraphContext const & context
+					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
 					return std::make_unique< crg::ImageCopy >( pass
