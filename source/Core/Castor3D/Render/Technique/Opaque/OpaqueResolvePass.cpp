@@ -1187,24 +1187,20 @@ namespace castor3d
 		background.initialise( m_device );
 		auto envMapCount = c_noIblEnvironmentCount;
 
-		//if ( m_scene.getMaterialsType() != MaterialType::ePhong )
-		//{
-
-		//	if ( background.hasIbl() )
-		//	{
-		//		auto & ibl = background.getIbl();;
-		//		pass.addSampledView( ibl.getPrefilteredBrdfTexture().sampledViewId
-		//			, uint32_t( ResolveBind::eIndirectSpecular )
-		//			, VK_IMAGE_LAYOUT_UNDEFINED );
-		//		pass.addSampledView( ibl.getIrradianceTexture().sampledViewId
-		//			, uint32_t( ResolveBind::eIndirectSpecular )
-		//			, VK_IMAGE_LAYOUT_UNDEFINED );
-		//		pass.addSampledView( ibl.getPrefilteredEnvironmentTexture().sampledViewId
-		//			, uint32_t( ResolveBind::eIndirectSpecular )
-		//			, VK_IMAGE_LAYOUT_UNDEFINED );
-		//		envMapCount -= c_iblTexturesCount;
-		//	}
-		//}
+		if ( m_scene.getMaterialsType() != MaterialType::ePhong )
+		{
+			if ( background.hasIbl() )
+			{
+				auto & ibl = background.getIbl();;
+				pass.addSampledView( ibl.getPrefilteredBrdfTexture().sampledViewId
+					, uint32_t( ResolveBind::eBrdf ) );
+				pass.addSampledView( ibl.getIrradianceTexture().sampledViewId
+					, uint32_t( ResolveBind::eIrradiance ) );
+				pass.addSampledView( ibl.getPrefilteredEnvironmentTexture().sampledViewId
+					, uint32_t( ResolveBind::ePrefiltered ) );
+				envMapCount -= c_iblTexturesCount;
+			}
+		}
 
 		auto & envMaps = m_scene.getEnvironmentMaps();
 		auto it = envMaps.begin();
