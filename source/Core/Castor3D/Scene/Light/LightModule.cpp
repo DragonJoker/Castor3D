@@ -1,5 +1,7 @@
 #include "Castor3D/Scene/Light/LightModule.hpp"
 
+#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
+
 namespace castor3d
 {
 	castor::String getName( LightType value )
@@ -16,5 +18,25 @@ namespace castor3d
 			CU_Failure( "Unsupported LightType" );
 			return castor::cuEmptyString;
 		}
+	}
+
+	void RsmConfig::accept( castor::String const & name
+		, PipelineVisitorBase & visitor )
+	{
+		visitor.visit( name
+			, VK_SHADER_STAGE_FRAGMENT_BIT
+			, cuT( "RSM" )
+			, cuT( "Intensity" )
+			, intensity );
+		visitor.visit( name
+			, VK_SHADER_STAGE_FRAGMENT_BIT
+			, cuT( "RSM" )
+			, cuT( "Max Radius" )
+			, maxRadius );
+		visitor.visit( name
+			, VK_SHADER_STAGE_FRAGMENT_BIT
+			, cuT( "RSM" )
+			, cuT( "Sample Count" )
+			, sampleCount );
 	}
 }

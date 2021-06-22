@@ -125,26 +125,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Traits structure to specialise light passes with shadows.
-	*\~french
-	*\brief
-	*	Structure de traits pour spécialiser les passes d'éclairage avec des ombres.
-	*/
-	template< LightType LtType >
-	struct LightPassShadowTraits;
-	/**
-	*\~english
-	*\brief
-	*	Base class for all light passes with shadow.
-	*\~french
-	*\brief
-	*	Classe de base pour toutes les passes d'éclairage avec des ombres.
-	*/
-	template< LightType LtType >
-	class LightPassShadow;
-	/**
-	*\~english
-	*\brief
 	*	Directional light pass.
 	*\~french
 	*\brief
@@ -237,17 +217,7 @@ namespace castor3d
 		, castor::Point3f const & attenuation
 		, float max );
 
-	CU_DeclareSmartPtr( LightPass );
 	CU_DeclareCUSmartPtr( castor3d, SubsurfaceScatteringPass, C3D_API );
-
-	struct LightPassConfig
-	{
-		LightPassResult const & lpResult;
-		GpInfoUbo const & gpInfoUbo;
-		bool hasShadows{ false };
-		bool hasVoxels{ false };
-		bool generatesIndirect{ false };
-	};
 
 	//@}
 	//@}
