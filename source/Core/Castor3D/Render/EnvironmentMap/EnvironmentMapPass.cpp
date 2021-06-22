@@ -58,6 +58,7 @@ namespace castor3d
 		, m_matrixUbo{ m_device }
 		, m_modelUbo{ m_device.uboPools->getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
 		, m_hdrConfigUbo{ m_device }
+		, m_sceneUbo{ m_device }
 		, m_colourView{ environmentMap.getColourViewId( m_face ) }
 		, m_backgroundPassDesc{ &doCreateBackgroundPass( previousPass, objectNode ) }
 		, m_opaquePassDesc{ &doCreateOpaquePass( previousPass, objectNode ) }
@@ -78,6 +79,7 @@ namespace castor3d
 			, 1.0f
 			, 0.0f, 2.0f ) );
 		m_matrixUbo.cpuUpdate( m_mtxView, projection );
+		m_sceneUbo.setWindowSize( makeSize( size ) );
 		log::trace << "Created EnvironmentMapPass " << getName() << std::endl;
 	}
 
@@ -104,6 +106,7 @@ namespace castor3d
 	void EnvironmentMapPass::update( GpuUpdater & updater )
 	{
 		RenderInfo info;
+		m_sceneUbo.cpuUpdate( *m_camera->getScene(), m_camera.get() );
 		m_opaquePass->update( updater );
 		m_transparentPass->update( updater );
 	}
@@ -134,6 +137,8 @@ namespace castor3d
 			, SceneBackground::MdlMtxUboIdx );
 		m_hdrConfigUbo.createPassBinding( result
 			, SceneBackground::HdrCfgUboIdx );
+		m_sceneUbo.createPassBinding( result
+			, SceneBackground::SceneUboIdx );
 		result.addOutputColourView( m_colourView
 			, opaqueBlackClearColor );
 		return result;

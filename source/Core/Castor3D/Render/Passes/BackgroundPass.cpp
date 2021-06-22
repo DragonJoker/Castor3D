@@ -4,6 +4,7 @@
 #include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <RenderGraph/RunnableGraph.hpp>
 #include <RenderGraph/GraphContext.hpp>
@@ -177,10 +178,12 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Inputs
+			UBO_SCENE( writer, SceneBackground::SceneUboIdx, 0u );
 			UBO_HDR_CONFIG( writer, SceneBackground::HdrCfgUboIdx, 0u );
 			auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture", 0u );
 			auto c3d_mapSkybox = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapSkybox", SceneBackground::SkyBoxImgIdx, 0u );
 			shader::Utils utils{ writer };
+			utils.declareRemoveGamma();
 
 			if ( !m_background.isHdr() )
 			{
@@ -192,17 +195,25 @@ namespace castor3d
 
 			std::function< void() > main = [&]()
 			{
-				auto colour = writer.declLocale( "colour"
-					, c3d_mapSkybox.sample( vtx_texture ) );
+				IF( writer, c3d_sceneData.fogType == UInt( uint32_t( FogType::eDisabled ) ) )
+				{
+					auto colour = writer.declLocale( "colour"
+						, c3d_mapSkybox.sample( vtx_texture ) );
 
-				if ( !m_background.isHdr() )
-				{
-					pxl_FragColor = vec4( c3d_hdrConfigData.removeGamma( colour.xyz() ), colour.w() );
+					if ( !m_background.isHdr() )
+					{
+						pxl_FragColor = vec4( c3d_hdrConfigData.removeGamma( colour.xyz() ), colour.w() );
+					}
+					else
+					{
+						pxl_FragColor = vec4( colour.xyz(), colour.w() );
+					}
 				}
-				else
+				ELSE
 				{
-					pxl_FragColor = vec4( colour.xyz(), colour.w() );
+					pxl_FragColor = vec4( c3d_sceneData.getBackgroundColour( utils, c3d_hdrConfigData.getGamma() ).xyz(), 1.0_f );
 				}
+				FI;
 			};
 
 			writer.implementFunction< sdw::Void >( "main", main );
