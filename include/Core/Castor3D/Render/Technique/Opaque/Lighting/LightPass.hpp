@@ -45,10 +45,7 @@ namespace castor3d
 			, SceneFlags const & sceneFlags
 			, LightType lightType
 			, ShadowType shadowType
-			, bool shadows
-			, bool rsm
-			, bool generatesIndirect
-			, bool voxels );
+			, bool shadows );
 
 	private:
 		/**
@@ -71,10 +68,7 @@ namespace castor3d
 			, SceneFlags const & sceneFlags
 			, LightType lightType
 			, ShadowType shadowType
-			, bool shadows
-			, bool rsm
-			, bool generatesIndirect
-			, bool voxels );
+			, bool shadows );
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source for this light pass.
@@ -95,10 +89,7 @@ namespace castor3d
 			, SceneFlags const & sceneFlags
 			, LightType lightType
 			, ShadowType shadowType
-			, bool shadows
-			, bool rsm
-			, bool generatesIndirect
-			, bool voxels );
+			, bool shadows );
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source for this light pass.
@@ -119,10 +110,7 @@ namespace castor3d
 			, SceneFlags const & sceneFlags
 			, LightType lightType
 			, ShadowType shadowType
-			, bool shadows
-			, bool rsm
-			, bool generatesIndirect
-			, bool voxels );
+			, bool shadows );
 	};
 }
 

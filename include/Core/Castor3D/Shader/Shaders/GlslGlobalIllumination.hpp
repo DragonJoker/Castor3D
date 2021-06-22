@@ -30,7 +30,9 @@ namespace castor3d
 			C3D_API void declare( uint32_t vctUboBindingIndex
 				, uint32_t lpvUboBindingIndex
 				, uint32_t llpvUboBindingIndex
-				, uint32_t & texBindingIndex
+				, uint32_t & vctTexBindingIndex
+				, uint32_t & lpvTexBindingIndex
+				, uint32_t & llpvTexBindingIndex
 				, uint32_t texSetIndex
 				, SceneFlags sceneFlags );
 			C3D_API void declareTraceConeRadiance();
