@@ -118,8 +118,8 @@ namespace castor3d
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
 		ashes::PipelineShaderStageCreateInfoArray m_program;
-		crg::FramePass * m_pass;
-		crg::RenderQuad * m_quad;
+		crg::FramePass * m_pass{};
+		crg::RenderQuad * m_quad{};
 	};
 }
 

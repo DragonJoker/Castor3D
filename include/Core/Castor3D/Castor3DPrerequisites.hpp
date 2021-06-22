@@ -39,8 +39,6 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Technique/TechniqueModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaqueModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightingModule.hpp"
-#include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightVolumeGIModule.hpp"
-#include "Castor3D/Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp"
 #include "Castor3D/Render/Technique/Transparent/TransparentModule.hpp"
 #include "Castor3D/Render/Technique/Voxelize/VoxelizeModule.hpp"
 #include "Castor3D/Render/ToneMapping/ToneMappingModule.hpp"
