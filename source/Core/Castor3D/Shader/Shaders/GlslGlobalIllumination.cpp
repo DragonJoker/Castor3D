@@ -233,20 +233,23 @@ namespace castor3d
 				, Float{ sqrt( 3.0f / castor::Pi< float > ) / 2.0f } );
 
 			// no normalization
-			m_evalSH = m_writer.implementFunction< Vec4 >( "evalSH"
-				, [this]( Vec3 direction )
-				{
-					auto SH_C0 = m_writer.getVariable< Float >( "SH_C0" );
-					auto SH_C1 = m_writer.getVariable< Float >( "SH_C1" );
+			if ( !m_evalSH )
+			{
+				m_evalSH = m_writer.implementFunction< Vec4 >( "evalSH"
+					, [this]( Vec3 direction )
+					{
+						auto SH_C0 = m_writer.getVariable< Float >( "SH_C0" );
+						auto SH_C1 = m_writer.getVariable< Float >( "SH_C1" );
 
-					m_writer.returnStmt( vec4( SH_C0
-						, -SH_C1 * direction.y()
-						, SH_C1 * direction.z()
-						, -SH_C1 * direction.x() ) );
-				}
-			, InVec3{ m_writer, "direction" } );
+						m_writer.returnStmt( vec4( SH_C0
+							, -SH_C1 * direction.y()
+							, SH_C1 * direction.z()
+							, -SH_C1 * direction.x() ) );
+					}
+					, InVec3{ m_writer, "direction" } );
+			}
 
-			m_computeLLPVRadiance = m_writer.implementFunction< sdw::Vec3 >( "computeLPVRadiance"
+			m_computeLLPVRadiance = m_writer.implementFunction< sdw::Vec3 >( "computeLLPVRadiance"
 				, [this]( Surface surface
 					, LayeredLpvGridData llpvGridData )
 				{
