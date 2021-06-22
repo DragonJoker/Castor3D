@@ -273,9 +273,7 @@ namespace castor3d
 		ashes::WriteDescriptorSet write{ binding
 			, 0u
 			, 1u
-			, ( ( buffer.getUsage() & VK_BUFFER_USAGE_STORAGE_BUFFER_BIT )
-				? VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER
-					: VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER ) };
+			, VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER };
 		write.bufferInfo.push_back( { buffer, view.getOffset(), view.getRange() } );
 		write.texelBufferView.push_back( view );
 		return write;
