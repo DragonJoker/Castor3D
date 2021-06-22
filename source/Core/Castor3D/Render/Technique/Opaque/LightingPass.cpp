@@ -34,6 +34,7 @@
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 #include <CastorUtils/Math/TransformationMatrix.hpp>
+#include <CastorUtils/Miscellaneous/Hash.hpp>
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/RenderPass/FrameBuffer.hpp>
