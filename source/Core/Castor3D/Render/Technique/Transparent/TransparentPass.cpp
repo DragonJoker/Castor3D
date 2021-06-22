@@ -352,10 +352,6 @@ namespace castor3d
 
 						diffuse = vec3( 0.0_f );
 					}
-					else
-					{
-						diffuse *= lightDiffuse;
-					}
 
 					auto roughness = writer.declLocale( "roughness"
 						, ( 256.0_f - shininess ) / 256.0_f );
