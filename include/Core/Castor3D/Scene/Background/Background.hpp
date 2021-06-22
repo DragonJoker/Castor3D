@@ -34,7 +34,8 @@ namespace castor3d
 			MtxUboIdx = 0u,
 			MdlMtxUboIdx = 1u,
 			HdrCfgUboIdx = 2u,
-			SkyBoxImgIdx = 3u,
+			SceneUboIdx = 3u,
+			SkyBoxImgIdx = 4u,
 		};
 
 	public:
