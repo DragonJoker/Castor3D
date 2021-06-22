@@ -15,7 +15,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaqueResolvePass.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPassResult.hpp"
-#include "Castor3D/Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp"
+#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
 #include <CastorUtils/Design/DelayedInitialiser.hpp>
 
@@ -197,24 +197,6 @@ namespace castor3d
 
 	class LightingPass
 	{
-	public:
-		enum class Type
-		{
-			eNoShadow = 0u,
-			eNoShadowVoxelConeTracingGI,
-			eShadowNoGI,
-			eShadowVoxelConeTracingGI,
-			eShadowRsmGI,
-			eShadowLpvGI,
-			eShadowLpvGGI,
-			eShadowLayeredLpvGI,
-			eShadowLayeredLpvGGI,
-			CU_ScopedEnumBounds( eNoShadow ),
-		};
-		static_assert( uint32_t( Type::eCount ) == uint32_t( GlobalIlluminationType::eCount ) + 2u );
-		using TypeLightPasses = std::array< LightPassUPtr, size_t( LightType::eCount ) >;
-		using LightPasses = std::array< TypeLightPasses, size_t( Type::eCount ) >;
-
 	public:
 		/**
 		 *\~english
