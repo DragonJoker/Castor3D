@@ -11,6 +11,10 @@
 
 #include <ashes/ashes.hpp>
 
+#include <ashespp/Buffer/StagingBuffer.hpp>
+
+#include <ShaderWriter/Source.hpp>
+
 namespace castor3d
 {
 	BackgroundPass::BackgroundPass( crg::FramePass const & pass

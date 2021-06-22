@@ -84,11 +84,11 @@ namespace castor3d
 			bool hasSpecularGi;
 			uint32_t index;
 
-			static size_t constexpr SsaoCount = 2u;
-			static size_t constexpr SsssCount = 2u;
-			static size_t constexpr DiffuseGiCount = 2u;
-			static size_t constexpr SpecularGiCount = 2u;
-			static size_t constexpr MaxProgramsCount = SsaoCount * SsssCount * DiffuseGiCount * SpecularGiCount;
+			static uint32_t constexpr SsaoCount = 2u;
+			static uint32_t constexpr SsssCount = 2u;
+			static uint32_t constexpr DiffuseGiCount = 2u;
+			static uint32_t constexpr SpecularGiCount = 2u;
+			static uint32_t constexpr MaxProgramsCount = SsaoCount * SsssCount * DiffuseGiCount * SpecularGiCount;
 		};
 
 		ShaderPtr createVertexProgram()
