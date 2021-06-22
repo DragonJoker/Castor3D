@@ -63,6 +63,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Screen Space Ambient Occlusion pass.
+	*\~french
+	*\brief
+	*	Passe de Occlusion Ambiante en Espace Ecran.
+	*/
+	class SsaoPass;
+	/**
+	*\~english
+	*\brief
 	*	Writes the image view and sampler descriptor to the given writes.
 	*\~french
 	*\brief
@@ -80,6 +89,7 @@ namespace castor3d
 
 	CU_DeclareSmartPtr( RenderTechnique );
 	CU_DeclareCUSmartPtr( castor3d, RenderTechniquePass, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, SsaoPass, C3D_API );
 
 	//@}
 	//@}

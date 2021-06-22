@@ -14,8 +14,6 @@
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
-#include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp"
-#include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp"
 #include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePass.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
@@ -31,11 +29,8 @@
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
-#include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
-#include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelUbo.hpp"
-#include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 #include <CastorUtils/Math/TransformationMatrix.hpp>
@@ -47,6 +42,8 @@
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
 #include <ShaderWriter/Source.hpp>
+
+CU_ImplementCUSmartPtr( castor3d, LightingPass )
 
 namespace castor3d
 {
@@ -81,10 +78,6 @@ namespace castor3d
 		, lightType{ light.getLightType() }
 		, shadowType{ light.getShadowType() }
 		, shadows{ shadowType != ShadowType::eNone }
-		, rsm{ light.needsRsmShadowMaps() }
-		, voxels{ checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) }
-		, generatesIndirect{ voxels
-			|| light.getGlobalIlluminationType() != GlobalIlluminationType::eNone }
 	{
 	}
 
@@ -95,9 +88,6 @@ namespace castor3d
 		hash = castor::hashCombine( hash, uint32_t( lightType ) );
 		hash = castor::hashCombine( hash, uint32_t( shadowType ) );
 		hash = castor::hashCombine( hash, shadows );
-		hash = castor::hashCombine( hash, rsm );
-		hash = castor::hashCombine( hash, voxels );
-		hash = castor::hashCombine( hash, generatesIndirect );
 		return hash;
 	}
 
@@ -275,8 +265,6 @@ namespace castor3d
 		}
 
 		attachs.push_back( attachs.back() );
-		attachs.push_back( attachs.back() );
-		attachs.push_back( attachs.back() );
 
 		return { 0u
 			, VK_FALSE
@@ -319,10 +307,7 @@ namespace castor3d
 				, m_config.sceneFlags
 				, m_config.lightType
 				, m_config.shadowType
-				, m_config.shadows
-				, m_config.rsm
-				, m_config.generatesIndirect
-				, m_config.voxels ) }
+				, m_config.shadows ) }
 		, m_stages{ makeShaderState( m_device, m_vertexShader )
 			, makeShaderState( m_device, m_pixelShader ) }
 		, m_descriptorLayout{ doCreateDescriptorLayout() }
@@ -687,6 +672,23 @@ namespace castor3d
 	void RunnableLightingPass::doRecordInto( VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
+		if ( m_pipelines.empty() )
+		{
+			auto & renderPass = m_renderPasses[0u];
+			VkRenderPassBeginInfo beginRenderPass{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO
+				, nullptr
+				, *renderPass.renderPass
+				, *renderPass.framebuffer
+				, { {}, renderPass.framebuffer->getDimensions() }
+				, uint32_t( renderPass.clearValues.size() )
+				, renderPass.clearValues.data() };
+			m_context.vkCmdBeginRenderPass( commandBuffer
+				, &beginRenderPass
+				, VK_SUBPASS_CONTENTS_INLINE );
+			m_context.vkCmdEndRenderPass( commandBuffer );
+			return;
+		}
+
 		uint32_t pipelineIndex = 0u;
 
 		for ( auto & pipeline : m_pipelines )
@@ -734,29 +736,9 @@ namespace castor3d
 				, VK_ATTACHMENT_LOAD_OP_DONT_CARE
 				, VK_ATTACHMENT_STORE_OP_DONT_CARE
 				, layout
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL }
-			, { 0u
-				, lpResult[LpTexture::eIndirectDiffuse].getFormat()
-				, VK_SAMPLE_COUNT_1_BIT
-				, loadOp
-				, VK_ATTACHMENT_STORE_OP_STORE
-				, VK_ATTACHMENT_LOAD_OP_DONT_CARE
-				, VK_ATTACHMENT_STORE_OP_DONT_CARE
-				, layout
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL }
-			, { 0u
-				, lpResult[LpTexture::eIndirectSpecular].getFormat()
-				, VK_SAMPLE_COUNT_1_BIT
-				, loadOp
-				, VK_ATTACHMENT_STORE_OP_STORE
-				, VK_ATTACHMENT_LOAD_OP_DONT_CARE
-				, VK_ATTACHMENT_STORE_OP_DONT_CARE
-				, layout
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } };
 		ashes::VkAttachmentReferenceArray references{ { 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL }
-			, { 2u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL }
-			, { 3u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL }
-			, { 4u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } };
+			, { 2u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } };
 
 		ashes::SubpassDescriptionArray subpasses;
 		subpasses.emplace_back( ashes::SubpassDescription{ 0u
@@ -795,9 +777,7 @@ namespace castor3d
 
 		std::vector< VkImageView > viewAttaches{ lpResult[LpTexture::eDepth].targetView
 			, lpResult[LpTexture::eDiffuse].targetView
-			, lpResult[LpTexture::eSpecular].targetView
-			, lpResult[LpTexture::eIndirectDiffuse].targetView
-			, lpResult[LpTexture::eIndirectSpecular].targetView };
+			, lpResult[LpTexture::eSpecular].targetView };
 		VkFramebufferCreateInfo fbCreateInfo{ VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO, nullptr, 0u };
 		fbCreateInfo.renderPass = *result.renderPass;
 		fbCreateInfo.attachmentCount = uint32_t( viewAttaches.size() );
@@ -811,8 +791,6 @@ namespace castor3d
 		result.clearValues.push_back( getClearValue( LpTexture::eDepth ) );
 		result.clearValues.push_back( getClearValue( LpTexture::eDiffuse ) );
 		result.clearValues.push_back( getClearValue( LpTexture::eSpecular ) );
-		result.clearValues.push_back( getClearValue( LpTexture::eIndirectDiffuse ) );
-		result.clearValues.push_back( getClearValue( LpTexture::eIndirectSpecular ) );
 		return result;
 	}
 
@@ -855,16 +833,9 @@ namespace castor3d
 		, ShadowMapResult const & smDirectionalResult
 		, ShadowMapResult const & smPointResult
 		, ShadowMapResult const & smSpotResult
-		, LightVolumePassResult const & lpvResult
-		, LightVolumePassResultArray const & llpvResult
-		, Texture const & vctFirstBounce
-		, Texture const & vctSecondaryBounce
-		, Texture const & depthView
+		, LightPassResult const & lpResult
 		, SceneUbo const & sceneUbo
-		, GpInfoUbo const & gpInfoUbo
-		, LpvGridConfigUbo const & lpvConfigUbo
-		, LayeredLpvGridConfigUbo const & llpvConfigUbo
-		, VoxelizerUbo const & vctConfigUbo )
+		, GpInfoUbo const & gpInfoUbo )
 		: m_graph{ graph }
 		, m_previousPass{ *previousPass }
 		, m_device{ device }
@@ -872,25 +843,16 @@ namespace castor3d
 		, m_smDirectionalResult{ smDirectionalResult }
 		, m_smPointResult{ smPointResult }
 		, m_smSpotResult{ smSpotResult }
-		, m_lpvResult{ lpvResult }
-		, m_llpvResult{ llpvResult }
-		, m_vctFirstBounce{ vctFirstBounce }
-		, m_vctSecondaryBounce{ vctSecondaryBounce }
-		, m_depthView{ depthView }
+		, m_lpResult{ lpResult }
 		, m_sceneUbo{ sceneUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
-		, m_lpvConfigUbo{ lpvConfigUbo }
-		, m_llpvConfigUbo{ llpvConfigUbo }
-		, m_vctConfigUbo{ vctConfigUbo }
 		, m_size{ size }
-		, m_result{ scene.getOwner()->getGraphResourceHandler(), device, size }
 	{
 		previousPass = &doCreateDepthBlitPass( graph
 			, *previousPass );
 		previousPass = &doCreateLightingPass( graph
 			, *previousPass
 			, scene );
-		m_result.create();
 	}
 
 	void LightingPass::update( CpuUpdater & updater )
@@ -909,27 +871,14 @@ namespace castor3d
 		m_lightPass->resetCommandBuffer();
 	}
 
-	void LightingPass::update( GpuUpdater & updater )
-	{
-		m_voxelConeTracing = updater.voxelConeTracing;
-	}
-
 	void LightingPass::accept( PipelineVisitorBase & visitor )
 	{
 		visitor.visit( "Light Diffuse"
-			, m_result[LpTexture::eDiffuse]
+			, m_lpResult[LpTexture::eDiffuse]
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Light Specular"
-			, m_result[LpTexture::eSpecular]
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, TextureFactors{}.invert( true ) );
-		visitor.visit( "Light Indirect Diffuse"
-			, m_result[LpTexture::eIndirectDiffuse]
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, TextureFactors{}.invert( true ) );
-		visitor.visit( "Light Indirect Specular"
-			, m_result[LpTexture::eIndirectSpecular]
+			, m_lpResult[LpTexture::eSpecular]
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 	}
@@ -970,9 +919,9 @@ namespace castor3d
 				return result;
 			} );
 		pass.addDependency( previousPass );
-		pass.addTransferInputView( m_depthView.wholeViewId
+		pass.addTransferInputView( m_gpResult[DsTexture::eDepth].wholeViewId
 			, VK_IMAGE_LAYOUT_UNDEFINED );
-		pass.addTransferOutputView( m_result[LpTexture::eDepth].wholeViewId
+		pass.addTransferOutputView( m_lpResult[LpTexture::eDepth].wholeViewId
 			, VK_IMAGE_LAYOUT_UNDEFINED );
 		return pass;
 	}
@@ -992,7 +941,7 @@ namespace castor3d
 					, graph
 					, m_device
 					, scene
-					, m_result
+					, m_lpResult
 					, m_smDirectionalResult
 					, m_smPointResult
 					, m_smSpotResult );
@@ -1008,12 +957,6 @@ namespace castor3d
 			, uint32_t( LightPassIdx::eGpInfo ) );
 		m_sceneUbo.createPassBinding( pass
 			, uint32_t( LightPassIdx::eScene ) );
-		m_lpvConfigUbo.createPassBinding( pass
-			, uint32_t( LightPassIdx::eLpvGridConfig ) );
-		m_llpvConfigUbo.createPassBinding( pass
-			, uint32_t( LightPassIdx::eLayeredLpvGridConfig ) );
-		m_vctConfigUbo.createPassBinding( pass
-			, uint32_t( LightPassIdx::eVoxelData ) );
 		pass.addSampledView( m_gpResult[DsTexture::eDepth].sampledViewId
 			, uint32_t( LightPassIdx::eDepth )
 			, VK_IMAGE_LAYOUT_UNDEFINED );
@@ -1032,18 +975,10 @@ namespace castor3d
 		pass.addSampledView( m_gpResult[DsTexture::eData5].sampledViewId
 			, uint32_t( LightPassIdx::eData5 )
 			, VK_IMAGE_LAYOUT_UNDEFINED );
-		pass.addSampledView( m_vctFirstBounce.sampledViewId
-			, uint32_t( LightPassIdx::eVctFirstBounce )
-			, VK_IMAGE_LAYOUT_UNDEFINED );
-		pass.addSampledView( m_vctSecondaryBounce.sampledViewId
-			, uint32_t( LightPassIdx::eVctSecondBounce )
-			, VK_IMAGE_LAYOUT_UNDEFINED );
 
-		pass.addInOutDepthStencilView( m_result[LpTexture::eDepth].targetViewId );
-		pass.addOutputColourView( m_result[LpTexture::eDiffuse].targetViewId );
-		pass.addOutputColourView( m_result[LpTexture::eSpecular].targetViewId );
-		pass.addOutputColourView( m_result[LpTexture::eIndirectDiffuse].targetViewId );
-		pass.addOutputColourView( m_result[LpTexture::eIndirectSpecular].targetViewId );
+		pass.addInOutDepthStencilView( m_lpResult[LpTexture::eDepth].targetViewId );
+		pass.addOutputColourView( m_lpResult[LpTexture::eDiffuse].targetViewId );
+		pass.addOutputColourView( m_lpResult[LpTexture::eSpecular].targetViewId );
 		return pass;
 	}
 }

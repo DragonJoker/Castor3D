@@ -36,17 +36,12 @@ namespace castor3d
 		eMaterials,
 		eGpInfo,
 		eScene,
-		eLpvGridConfig,
-		eLayeredLpvGridConfig,
-		eVoxelData,
 		eDepth,
 		eData1,
 		eData2,
 		eData3,
 		eData4,
 		eData5,
-		eVctFirstBounce,
-		eVctSecondBounce,
 	};
 	/**
 	*\~english
