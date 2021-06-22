@@ -1461,15 +1461,17 @@ namespace castor3d::shader
 		auto texCoord = m_writer.declLocale( "texCoord" + name
 			, texCoords.xy() );
 		config.convertUV( m_writer, texCoord );
+
 		if ( checkFlag( textureFlags, TextureFlag::eHeight )
 			&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
 				|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) )
 			&& m_parallaxMapping )
 		{
-			texCoords.xy() = doParallaxMapping( texCoord.xy()
+			texCoord = doParallaxMapping( texCoord
 				, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
 				, map
 				, config );
+			texCoords.xy() = texCoord;
 
 			if ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne ) )
 			{
@@ -1485,7 +1487,7 @@ namespace castor3d::shader
 		}
 
 		auto sampled = m_writer.declLocale( "sampled" + name
-			, map.sample( texCoords.xy() ) );
+			, map.sample( texCoord ) );
 
 		if ( checkFlag( textureFlags, TextureFlag::eNormal ) )
 		{
