@@ -141,7 +141,7 @@ namespace castor3d
 		VkPipelineInputAssemblyStateCreateInfo iaState{ VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO
 			, nullptr
 			, 0u
-			, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP
+			, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
 			, VK_FALSE };
 		VkPipelineMultisampleStateCreateInfo msState{ VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO
 			, nullptr
