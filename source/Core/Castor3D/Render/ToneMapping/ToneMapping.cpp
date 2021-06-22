@@ -62,7 +62,8 @@ namespace castor3d
 
 	void ToneMapping::updatePipeline( castor::String const & name )
 	{
-		if ( name != m_name )
+		if ( name != m_name
+			&& m_quad )
 		{
 			doCreate( name );
 			m_quad->resetPipeline( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_program ) );
@@ -94,7 +95,6 @@ namespace castor3d
 					.build( pass, context, graph );
 				getEngine()->registerTimer( "ToneMapping"
 					, result->getTimer() );
-				return result;
 				m_quad = result.get();
 				return result;
 			} );
