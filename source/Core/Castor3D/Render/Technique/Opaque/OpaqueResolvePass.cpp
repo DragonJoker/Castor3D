@@ -1193,11 +1193,23 @@ namespace castor3d
 			{
 				auto & ibl = background.getIbl();;
 				pass.addSampledView( ibl.getPrefilteredBrdfTexture().sampledViewId
-					, uint32_t( ResolveBind::eBrdf ) );
+					, uint32_t( ResolveBind::eBrdf )
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+					, crg::SamplerDesc{ VK_FILTER_LINEAR
+					, VK_FILTER_LINEAR
+					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
 				pass.addSampledView( ibl.getIrradianceTexture().sampledViewId
-					, uint32_t( ResolveBind::eIrradiance ) );
+					, uint32_t( ResolveBind::eIrradiance )
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+					, crg::SamplerDesc{ VK_FILTER_LINEAR
+					, VK_FILTER_LINEAR
+					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
 				pass.addSampledView( ibl.getPrefilteredEnvironmentTexture().sampledViewId
-					, uint32_t( ResolveBind::ePrefiltered ) );
+					, uint32_t( ResolveBind::ePrefiltered )
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+					, crg::SamplerDesc{ VK_FILTER_LINEAR
+					, VK_FILTER_LINEAR
+					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
 				envMapCount -= c_iblTexturesCount;
 			}
 		}
@@ -1221,7 +1233,10 @@ namespace castor3d
 
 		pass.addSampledViews( envViews
 			, uint32_t( ResolveBind::eEnvironment )
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, VK_IMAGE_LAYOUT_UNDEFINED
+			, crg::SamplerDesc{ VK_FILTER_LINEAR
+				, VK_FILTER_LINEAR
+				, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
 
 		pass.addInOutColourView( m_result.targetViewId );
 		return pass;
