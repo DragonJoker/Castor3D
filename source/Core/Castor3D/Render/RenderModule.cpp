@@ -7,6 +7,8 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
+#include <ashespp/Image/Image.hpp>
+
 #include <RenderGraph/RunnableGraph.hpp>
 
 CU_ImplementExportedOwnedBy( castor3d::RenderSystem, RenderSystem )
