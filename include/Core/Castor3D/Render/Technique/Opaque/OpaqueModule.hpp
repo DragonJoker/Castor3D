@@ -58,10 +58,19 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Handles the light passes.
+	*	Handles the indirect lighting passes.
 	*\~french
 	*\brief
-	*	Gère les passes d'éclairage.
+	*	Gère les passes d'éclairage indirect.
+	*/
+	class IndirectLightingPass;
+	/**
+	*\~english
+	*\brief
+	*	Handles the direct lighting passes.
+	*\~french
+	*\brief
+	*	Gère les passes d'éclairage direct.
 	*/
 	class LightingPass;
 	/**
@@ -91,20 +100,12 @@ namespace castor3d
 	*	La passe de résolution post éclairage.
 	*/
 	class OpaqueResolvePass;
-	/**
-	*\~english
-	*\brief
-	*	Screen Space Ambient Occlusion pass.
-	*\~french
-	*\brief
-	*	Passe de Occlusion Ambiante en Espace Ecran.
-	*/
-	class SsaoPass;
 
 	CU_DeclareCUSmartPtr( castor3d, DeferredRendering, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, IndirectLightingPass, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, LightingPass, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, OpaqueResolvePass, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, OpaquePassResult, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, SsaoPass, C3D_API );
 
 	//@}
 	//@}

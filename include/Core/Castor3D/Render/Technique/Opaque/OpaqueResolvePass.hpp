@@ -91,7 +91,7 @@ namespace castor3d
 		 *\brief			Met à jour la passe de rendu, au niveau GPU.
 		 *\param[in, out]	updater	Les données d'update.
 		 */
-		C3D_API void update( GpuUpdater & updater );
+		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -119,7 +119,7 @@ namespace castor3d
 		Texture const & m_lightIndirectDiffuse;
 		Texture const & m_lightIndirectSpecular;
 		std::vector< Program > m_programs;
-		uint32_t m_programIndex;
+		uint32_t m_programIndex{};
 	};
 }
 

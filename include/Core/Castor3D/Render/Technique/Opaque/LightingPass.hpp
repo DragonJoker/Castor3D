@@ -43,9 +43,6 @@ namespace castor3d
 		LightType lightType;
 		ShadowType shadowType;
 		bool shadows;
-		bool rsm;
-		bool voxels;
-		bool generatesIndirect;
 	};
 
 	struct LightRenderPass
@@ -210,16 +207,9 @@ namespace castor3d
 		 *\param[in]	smDirectionalResult	The directional lights shadow map.
 		 *\param[in]	smPointResult		The point lights shadow map.
 		 *\param[in]	smSpotResult		The spot lights shadow map.
-		 *\param[in]	lpvResult			The LPV result.
-		 *\param[in]	llpvResult			The Layered LPV result.
-		 *\param[in]	vctFirstBounce		The VCT first bounce result.
-		 *\param[in]	vctSecondaryBounce	The VCT secondary bounce result.
 		 *\param[in]	depthView			The depth buffer attach.
 		 *\param[in]	sceneUbo			The scene UBO.
 		 *\param[in]	gpInfoUbo			The GBuffer configuration UBO.
-		 *\param[in]	lpvConfigUbo		The LPV configuration UBO.
-		 *\param[in]	llpvConfigUbo		The Layered LPV configuration UBO.
-		 *\param[in]	vctConfigUbo		The VCT configuration UBO.
 		 *\~french
 		 *\brief		Initialise les données liées au deferred rendering.
 		 *\param[in]	engine				Le moteur.
@@ -230,16 +220,9 @@ namespace castor3d
 		 *\param[in]	smDirectionalResult	La shadow map des source lumineuses directionnelles.
 		 *\param[in]	smPointResult		La shadow map des source lumineuses omnidirectionnelles.
 		 *\param[in]	smSpotResult		La shadow map des source lumineuses projecteurs.
-		 *\param[in]	lpvResult			Le résultat du LPV.
-		 *\param[in]	llpvResult			Le résultat du Layered LPV.
-		 *\param[in]	vctFirstBounce		Le résultat du premier rebond de VCT.
-		 *\param[in]	vctSecondaryBounce	Le résultat du second rebond de VCT.
 		 *\param[in]	depthView			L'attache du tampon de profondeur.
 		 *\param[in]	sceneUbo			L'UBO de scène.
 		 *\param[in]	gpInfoUbo			L'UBO de configuration du GBuffer.
-		 *\param[in]	lpvConfigUbo		L'UBO de configuration des LPV.
-		 *\param[in]	llpvConfigUbo		L'UBO de configuration des Layered LPV.
-		 *\param[in]	vctConfigUbo		L'UBO de configuration du VCT.
 		 */
 		LightingPass( crg::FrameGraph & graph
 			, crg::FramePass const *& previousPass
@@ -250,16 +233,9 @@ namespace castor3d
 			, ShadowMapResult const & smDirectionalResult
 			, ShadowMapResult const & smPointResult
 			, ShadowMapResult const & smSpotResult
-			, LightVolumePassResult const & lpvResult
-			, LightVolumePassResultArray const & llpvResult
-			, Texture const & vctFirstBounce
-			, Texture const & vctSecondaryBounce
-			, Texture const & depthView
+			, LightPassResult const & lpResult
 			, SceneUbo const & sceneUbo
-			, GpInfoUbo const & gpInfoUbo
-			, LpvGridConfigUbo const & lpvConfigUbo
-			, LayeredLpvGridConfigUbo const & llpvConfigUbo
-			, VoxelizerUbo const & vctConfigUbo );
+			, GpInfoUbo const & gpInfoUbo );
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -270,28 +246,9 @@ namespace castor3d
 		 */
 		void update( CpuUpdater & updater );
 		/**
-		 *\~english
-		 *\brief			Updates the render pass, GPU wise.
-		 *\param[in, out]	updater	The update data.
-		 *\~french
-		 *\brief			Met à jour la passe de rendu, au niveau GPU.
-		 *\param[in, out]	updater	Les données d'update.
-		 */
-		void update( GpuUpdater & updater );
-		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		void accept( PipelineVisitorBase & visitor );
-		/**
-		 *\~english
-		 *\return		The light pass diffuse result.
-		 *\~french
-		 *\return		Le résultat diffus de la passe d'éclairage.
-		 */
-		inline LightPassResult const & getResult()const
-		{
-			return m_result;
-		}
 
 	private:
 		crg::FramePass const & doCreateDepthBlitPass( crg::FrameGraph & graph
@@ -310,19 +267,10 @@ namespace castor3d
 		ShadowMapResult const & m_smDirectionalResult;
 		ShadowMapResult const & m_smPointResult;
 		ShadowMapResult const & m_smSpotResult;
-		LightVolumePassResult const & m_lpvResult;
-		LightVolumePassResultArray const & m_llpvResult;
-		Texture const & m_vctFirstBounce;
-		Texture const & m_vctSecondaryBounce;
-		Texture const & m_depthView;
+		LightPassResult const & m_lpResult;
 		SceneUbo const & m_sceneUbo;
 		GpInfoUbo const & m_gpInfoUbo;
-		LpvGridConfigUbo const & m_lpvConfigUbo;
-		LayeredLpvGridConfigUbo const & m_llpvConfigUbo;
-		VoxelizerUbo const & m_vctConfigUbo;
 		castor::Size const m_size;
-		LightPassResult m_result;
-		bool m_voxelConeTracing{ false };
 		RunnableLightingPass * m_lightPass{};
 	};
 }

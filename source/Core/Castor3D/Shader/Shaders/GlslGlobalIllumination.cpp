@@ -50,7 +50,9 @@ namespace castor3d
 		void GlobalIllumination::declare( uint32_t vctUboBindingIndex
 			, uint32_t lpvUboBindingIndex
 			, uint32_t llpvUboBindingIndex
-			, uint32_t & texBindingIndex
+			, uint32_t & vctTexBindingIndex
+			, uint32_t & lpvTexBindingIndex
+			, uint32_t & llpvTexBindingIndex
 			, uint32_t texSetIndex
 			, SceneFlags sceneFlags )
 		{
@@ -58,18 +60,18 @@ namespace castor3d
 
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
-				declareVct( vctUboBindingIndex, texBindingIndex, 0u, texSetIndex );
+				declareVct( vctUboBindingIndex, vctTexBindingIndex, 0u, texSetIndex );
 			}
-			else if ( !m_deferred )
+			else
 			{
 				if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 				{
-					declareLpv( lpvUboBindingIndex, texBindingIndex, 0u, texSetIndex );
+					declareLpv( lpvUboBindingIndex, lpvTexBindingIndex, 0u, texSetIndex );
 				}
 
 				if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
 				{
-					declareLayeredLpv( llpvUboBindingIndex, texBindingIndex, 0u, texSetIndex );
+					declareLayeredLpv( llpvUboBindingIndex, llpvTexBindingIndex, 0u, texSetIndex );
 				}
 			}
 		}
@@ -429,20 +431,15 @@ namespace castor3d
 					, vxlRadiance.xyz() * indirectOcclusion
 					, vec3( vxlRadiance.a() * vxlBlend * indirectOcclusion ) );
 			}
-			else if ( !m_deferred )
+			else if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
 			{
-				if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
-				{
-					auto llpvGridData = m_writer.getVariable< LayeredLpvGridData >( "c3d_llpvGridData" );
-					indirectDiffuse = llpvGridData.indirectAttenuation / Float{ castor::Pi< float > }
-						* computeLLPVRadiance( surface, llpvGridData );
-				}
-				else if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
-				{
-					auto lpvGridData = m_writer.getVariable< LpvGridData >( "c3d_lpvGridData" );
-					indirectDiffuse = lpvGridData.indirectAttenuation / Float{ castor::Pi< float > }
-						* computeLPVRadiance( surface, lpvGridData );
-				}
+				auto llpvGridData = m_writer.getVariable< LayeredLpvGridData >( "c3d_llpvGridData" );
+				indirectDiffuse = ( computeLLPVRadiance( surface, llpvGridData ) * llpvGridData.indirectAttenuation ) / Float{ castor::Pi< float > };
+			}
+			else if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
+			{
+				auto lpvGridData = m_writer.getVariable< LpvGridData >( "c3d_lpvGridData" );
+				indirectDiffuse = ( computeLPVRadiance( surface, lpvGridData ) * lpvGridData.indirectAttenuation ) / Float{ castor::Pi< float > };
 			}
 
 			return indirectDiffuse;
@@ -451,11 +448,21 @@ namespace castor3d
 		sdw::Vec3 GlobalIllumination::computeAmbient( SceneFlags sceneFlags
 			, sdw::Vec3 const & indirectDiffuse )
 		{
-			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing )
-				|| checkFlag( sceneFlags, SceneFlag::eLpvGI )
-				|| checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
+			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
 				return indirectDiffuse;
+			}
+
+			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
+			{
+				auto llpvGridData = m_writer.getVariable< LayeredLpvGridData >( "c3d_llpvGridData" );
+				return indirectDiffuse / llpvGridData.indirectAttenuation;
+			}
+
+			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
+			{
+				auto lpvGridData = m_writer.getVariable< LpvGridData >( "c3d_lpvGridData" );
+				return indirectDiffuse / lpvGridData.indirectAttenuation;
 			}
 
 			return vec3( 1.0_f );
