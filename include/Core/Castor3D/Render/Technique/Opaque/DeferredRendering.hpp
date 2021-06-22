@@ -6,14 +6,14 @@ See LICENSE file in root folder
 
 #include "OpaqueModule.hpp"
 
+#include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp"
+#include "Castor3D/Render/Ssao/SsaoModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
-#include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
-#include "Castor3D/Render/Technique/Opaque/OpaqueResolvePass.hpp"
-#include "Castor3D/Render/Technique/Opaque/LightingPass.hpp"
-#include "Castor3D/Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp"
-#include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightingModule.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightPassResult.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
-#include <CastorUtils/Design/DelayedInitialiser.hpp>
+#include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
 
 namespace castor3d
 {
@@ -101,15 +101,6 @@ namespace castor3d
 		void update( CpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief			Updates the render pass, GPU wise.
-		 *\param[in, out]	updater	The update data.
-		 *\~french
-		 *\brief			Met à jour la passe de rendu, au niveau GPU.
-		 *\param[in, out]	updater	Les données d'update.
-		 */
-		void update( GpuUpdater & updater );
-		/**
-		 *\~english
 		 *\brief		Visitor acceptance function.
 		 *\param		visitor	The ... visitor.
 		 *\~french
@@ -131,7 +122,9 @@ namespace castor3d
 		OpaquePassResult const & m_opaquePassResult;
 		GpInfoUbo const & m_gpInfoUbo;
 		castor::Size m_size;
-		std::unique_ptr< LightingPass > m_lightingPass;
+		LightPassResult m_lightPassResult;
+		LightingPassUPtr m_lightingPass;
+		IndirectLightingPassUPtr m_indirectLightingPass;
 		SubsurfaceScatteringPassUPtr m_subsurfaceScattering;
 		OpaqueResolvePassUPtr m_resolve;
 		std::vector< ashes::ImagePtr > m_results;
