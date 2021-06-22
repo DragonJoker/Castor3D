@@ -686,6 +686,7 @@ namespace castor3d
 	crg::FramePass & RenderTechnique::doCreateBackgroundPass()
 	{
 		auto & background = *getRenderTarget().getScene()->getBackground();
+		background.initialise( *getEngine()->getRenderSystem()->getMainRenderDevice() );
 		auto & result = m_renderTarget.getGraph().createPass( "BackgroundPass"
 			, [this, &background]( crg::FramePass const & pass
 				, crg::GraphContext & context
@@ -710,6 +711,10 @@ namespace castor3d
 			, SceneBackground::MdlMtxUboIdx );
 		getRenderTarget().getHdrConfigUbo().createPassBinding( result
 			, SceneBackground::HdrCfgUboIdx );
+		m_sceneUbo.createPassBinding( result
+			, SceneBackground::SceneUboIdx );
+		result.addSampledView( background.getTextureId().sampledViewId
+			, SceneBackground::SkyBoxImgIdx );
 		result.addInOutDepthStencilView( m_depth.targetViewId );
 		result.addOutputColourView( m_colour.targetViewId );
 		return result;
