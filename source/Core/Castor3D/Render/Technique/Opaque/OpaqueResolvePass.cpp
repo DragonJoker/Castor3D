@@ -58,8 +58,10 @@ namespace castor3d
 				, SsaoConfig const & ssao )
 				: hasSsao{ ssao.enabled }
 				, hasSssss{ scene.needsSubsurfaceScattering() }
-				, hasDiffuseGi{ scene.needsGlobalIllumination() }
-				, hasSpecularGi{ scene.getVoxelConeTracingConfig().enabled }
+				, hasDiffuseGi{ checkFlag( scene.getFlags(), SceneFlag::eLayeredLpvGI )
+					|| checkFlag( scene.getFlags(), SceneFlag::eLpvGI )
+					|| checkFlag( scene.getFlags(), SceneFlag::eVoxelConeTracing ) }
+				, hasSpecularGi{ checkFlag( scene.getFlags(), SceneFlag::eVoxelConeTracing ) }
 				, index{ ( ( hasSsao ? 1u : 0 ) * SsssCount * DiffuseGiCount * SpecularGiCount )
 					+ ( ( hasSssss ? 1u : 0u ) * DiffuseGiCount * SpecularGiCount )
 					+ ( ( hasDiffuseGi ? 1u : 0u ) * SpecularGiCount )
@@ -1234,7 +1236,7 @@ namespace castor3d
 
 		pass.addSampledViews( envViews
 			, uint32_t( ResolveBind::eEnvironment )
-			, VK_IMAGE_LAYOUT_UNDEFINED
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, crg::SamplerDesc{ VK_FILTER_LINEAR
 				, VK_FILTER_LINEAR
 				, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
@@ -1243,7 +1245,7 @@ namespace castor3d
 		return pass;
 	}
 
-	void OpaqueResolvePass::update( GpuUpdater & updater )
+	void OpaqueResolvePass::update( CpuUpdater & updater )
 	{
 		ResolveProgramConfig config{ m_scene, m_ssao };
 		m_programIndex = config.index;

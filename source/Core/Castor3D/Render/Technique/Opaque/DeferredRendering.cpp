@@ -9,7 +9,11 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Render/Technique/Opaque/IndirectLightingPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/LightingPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePass.hpp"
+#include "Castor3D/Render/Technique/Opaque/OpaqueResolvePass.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
@@ -82,21 +86,30 @@ namespace castor3d
 		, m_lastPass{ &m_opaquePass }
 		, m_opaquePassResult{ opaquePassResult }
 		, m_size{ size }
+		, m_lightPassResult{ scene.getOwner()->getGraphResourceHandler(), device, size }
 		, m_gpInfoUbo{ gpInfoUbo }
-		, m_lightingPass{ std::make_unique< LightingPass >( graph
+		, m_lightingPass{ castor::makeUnique< LightingPass >( graph
 			, m_lastPass
 			, m_device
 			, m_size
 			, scene
-			, opaquePassResult
+			, m_opaquePassResult
 			, smDirectionalResult
 			, smPointResult
 			, smSpotResult
+			, m_lightPassResult
+			, sceneUbo
+			, m_gpInfoUbo ) }
+		, m_indirectLightingPass{ castor::makeUnique< IndirectLightingPass >( m_device
+			, scene
+			, graph
+			, m_lastPass
+			, m_opaquePassResult
+			, m_lightPassResult
 			, lpvResult
 			, llpvResult
 			, vctFirstBounce
 			, vctSecondaryBounce
-			, opaquePassResult[DsTexture::eDepth]
 			, sceneUbo
 			, m_gpInfoUbo
 			, lpvConfigUbo
@@ -109,8 +122,8 @@ namespace castor3d
 			, m_gpInfoUbo
 			, sceneUbo
 			, m_size
-			, opaquePassResult
-			, m_lightingPass->getResult() ) }
+			, m_opaquePassResult
+			, m_lightPassResult ) }
 		, m_resolve{ castor::makeUnique< OpaqueResolvePass >( graph
 			, m_lastPass
 			, m_device
@@ -119,26 +132,23 @@ namespace castor3d
 			, ssaoConfig
 			, ssao
 			, m_subsurfaceScattering->getResult()
-			, m_lightingPass->getResult()[LpTexture::eDiffuse]
-			, m_lightingPass->getResult()[LpTexture::eSpecular]
-			, m_lightingPass->getResult()[LpTexture::eIndirectDiffuse]
-			, m_lightingPass->getResult()[LpTexture::eIndirectSpecular]
+			, m_lightPassResult[LpTexture::eDiffuse]
+			, m_lightPassResult[LpTexture::eSpecular]
+			, m_lightPassResult[LpTexture::eIndirectDiffuse]
+			, m_lightPassResult[LpTexture::eIndirectSpecular]
 			, resultTexture
 			, sceneUbo
 			, m_gpInfoUbo
 			, hdrConfigUbo ) }
 	{
+		m_lightPassResult.create();
 	}
 
 	void DeferredRendering::update( CpuUpdater & updater )
 	{
 		m_subsurfaceScattering->update( updater );
 		m_lightingPass->update( updater );
-	}
-
-	void DeferredRendering::update( GpuUpdater & updater )
-	{
-		m_lightingPass->update( updater );
+		m_indirectLightingPass->update( updater );
 		m_resolve->update( updater );
 	}
 
@@ -166,6 +176,7 @@ namespace castor3d
 			, TextureFactors{}.invert( true ) );
 
 		m_lightingPass->accept( visitor );
+		m_indirectLightingPass->accept( visitor );
 
 		if ( visitor.getScene().needsSubsurfaceScattering()
 			|| visitor.config.forceSubPassesVisit )

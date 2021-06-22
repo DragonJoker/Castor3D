@@ -13,6 +13,7 @@
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
+#include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp"
@@ -555,10 +556,6 @@ namespace castor3d
 
 		static_cast< OpaquePassType & >( *m_opaquePass ).update( updater );
 		static_cast< TransparentPassType & >( *m_transparentPass ).update( updater );
-
-#if C3D_UseDeferredRendering
-		m_deferredRendering->update( updater );
-#endif
 
 		if ( m_renderTarget.getScene()->getFog().getType() != FogType::eDisabled )
 		{

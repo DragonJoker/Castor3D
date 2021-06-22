@@ -10,7 +10,6 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
-#include "Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
@@ -23,7 +22,6 @@
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
-#include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
 
@@ -114,10 +112,7 @@ namespace castor3d
 		, SceneFlags const & sceneFlags
 		, LightType lightType
 		, ShadowType shadowType
-		, bool shadows
-		, bool rsm
-		, bool generatesIndirect
-		, bool voxels )
+		, bool shadows )
 	{
 		switch ( materialType )
 		{
@@ -126,28 +121,19 @@ namespace castor3d
 				, sceneFlags
 				, lightType
 				, shadowType
-				, shadows
-				, rsm
-				, generatesIndirect
-				, voxels );
+				, shadows );
 		case castor3d::MaterialType::eMetallicRoughness:
 			return getPbrMRPixelShaderSource( renderSystem
 				, sceneFlags
 				, lightType
 				, shadowType
-				, shadows
-				, rsm
-				, generatesIndirect
-				, voxels );
+				, shadows );
 		case castor3d::MaterialType::eSpecularGlossiness:
 			return getPbrSGPixelShaderSource( renderSystem
 				, sceneFlags
 				, lightType
 				, shadowType
-				, shadows
-				, rsm
-				, generatesIndirect
-				, voxels );
+				, shadows );
 		default:
 			CU_Failure( "LightPass: Unsupported MaterialType" );
 			return nullptr;
@@ -158,10 +144,7 @@ namespace castor3d
 		, SceneFlags const & sceneFlags
 		, LightType lightType
 		, ShadowType shadowType
-		, bool shadows
-		, bool rsm
-		, bool generatesIndirect
-		, bool voxels )
+		, bool shadows )
 	{
 		using namespace sdw;
 		FragmentWriter writer;
@@ -176,8 +159,6 @@ namespace castor3d
 		// Shader outputs
 		auto pxl_diffuse = writer.declOutput< Vec3 >( "pxl_diffuse", 0 );
 		auto pxl_specular = writer.declOutput< Vec3 >( "pxl_specular", 1 );
-		auto pxl_indirectDiffuse = writer.declOutput< Vec3 >( "pxl_indirectDiffuse", 2 );
-		auto pxl_indirectSpecular = writer.declOutput< Vec3 >( "pxl_indirectSpecular", 3 );
 
 		// Shader inputs
 		shader::PhongMaterials materials{ writer };
@@ -186,18 +167,7 @@ namespace castor3d
 			, 0u );
 		UBO_GPINFO( writer, uint32_t( LightPassIdx::eGpInfo ), 0u );
 		UBO_SCENE( writer, uint32_t( LightPassIdx::eScene ), 0u );
-		shader::GlobalIllumination indirect{ writer, utils, true };
 		uint32_t index = uint32_t( LightPassIdx::eData5 ) + 1u;
-
-		if ( voxels )
-		{
-			indirect.declare( uint32_t( LightPassIdx::eVoxelData )
-				, uint32_t( LightPassIdx::eLpvGridConfig )
-				, uint32_t( LightPassIdx::eLayeredLpvGridConfig )
-				, index
-				, 0u
-				, sceneFlags );
-		}
 
 		auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), uint32_t( LightPassIdx::eDepth ), 0u );
 		auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), uint32_t( LightPassIdx::eData1 ), 0u );
@@ -218,7 +188,7 @@ namespace castor3d
 			, lightType
 			, uint32_t( LightPassLgtIdx::eLight )
 			, 1u
-			, shader::ShadowOptions{ shadows, lightType, rsm }
+			, shader::ShadowOptions{ shadows, lightType, false }
 			, index
 			, 1u );
 		shader::SssTransmittance sss{ writer
@@ -360,28 +330,6 @@ namespace castor3d
 
 					pxl_diffuse = lightDiffuse;
 					pxl_specular = lightSpecular;
-
-					if ( voxels )
-					{
-						auto occlusion = indirect.computeOcclusion( sceneFlags
-							, lightType
-							, surface );
-						auto indirectDiffuse = indirect.computeDiffuse( sceneFlags
-							, surface
-							, occlusion );
-						auto indirectSpecular = indirect.computeSpecular( sceneFlags
-							, eye
-							, surface
-							, ( 256.0_f - shininess ) / 256.0_f
-							, occlusion );
-						pxl_indirectDiffuse = indirectDiffuse;
-						pxl_indirectSpecular = indirectSpecular;
-					}
-					else
-					{
-						pxl_indirectDiffuse = vec3( 0.0_f, 0.0_f, 0.0_f );
-						pxl_indirectSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
-					}
 				}
 				ELSE
 				{
@@ -389,8 +337,6 @@ namespace castor3d
 						, data2.xyz() );
 					pxl_diffuse = diffuse;
 					pxl_specular = vec3( 0.0_f, 0.0_f, 0.0_f );
-					pxl_indirectDiffuse = vec3( 0.0_f, 0.0_f, 0.0_f );
-					pxl_indirectSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
 				}
 				FI;
 			} );
@@ -402,10 +348,7 @@ namespace castor3d
 		, SceneFlags const & sceneFlags
 		, LightType lightType
 		, ShadowType shadowType
-		, bool shadows
-		, bool rsm
-		, bool generatesIndirect
-		, bool voxels )
+		, bool shadows )
 	{
 		using namespace sdw;
 		FragmentWriter writer;
@@ -420,8 +363,6 @@ namespace castor3d
 		// Shader outputs
 		auto pxl_diffuse = writer.declOutput< Vec3 >( "pxl_diffuse", 0 );
 		auto pxl_specular = writer.declOutput< Vec3 >( "pxl_specular", 1 );
-		auto pxl_indirectDiffuse = writer.declOutput< Vec3 >( "pxl_indirectDiffuse", 2 );
-		auto pxl_indirectSpecular = writer.declOutput< Vec3 >( "pxl_indirectSpecular", 3 );
 
 		// Shader inputs
 		shader::PbrMRMaterials materials{ writer };
@@ -430,18 +371,7 @@ namespace castor3d
 			, 0u );
 		UBO_GPINFO( writer, uint32_t( LightPassIdx::eGpInfo ), 0u );
 		UBO_SCENE( writer, uint32_t( LightPassIdx::eScene ), 0u );
-		shader::GlobalIllumination indirect{ writer, utils, true };
 		uint32_t index = uint32_t( LightPassIdx::eData5 ) + 1u;
-
-		if ( voxels )
-		{
-			indirect.declare( uint32_t( LightPassIdx::eVoxelData )
-				, uint32_t( LightPassIdx::eLpvGridConfig )
-				, uint32_t( LightPassIdx::eLayeredLpvGridConfig )
-				, index
-				, 0u
-				, sceneFlags );
-		}
 
 		auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), uint32_t( LightPassIdx::eDepth ), 0u );
 		auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), uint32_t( LightPassIdx::eData1 ), 0u );
@@ -462,7 +392,7 @@ namespace castor3d
 			, lightType
 			, uint32_t( LightPassLgtIdx::eLight )
 			, 1u
-			, shader::ShadowOptions{ shadows, lightType, rsm }
+			, shader::ShadowOptions{ shadows, lightType, false }
 			, index
 			, 1u );
 		shader::SssTransmittance sss{ writer
@@ -683,35 +613,11 @@ namespace castor3d
 
 					pxl_diffuse = lightDiffuse;
 					pxl_specular = lightSpecular;
-
-					if ( voxels )
-					{
-						auto occlusion = indirect.computeOcclusion( sceneFlags
-							, lightType
-							, surface );
-						auto indirectDiffuse = indirect.computeDiffuse( sceneFlags
-							, surface
-							, occlusion );
-						auto indirectSpecular = indirect.computeSpecular( sceneFlags
-							, eye
-							, surface
-							, roughness
-							, occlusion );
-						pxl_indirectDiffuse = indirectDiffuse;
-						pxl_indirectSpecular = indirectSpecular;
-					}
-					else
-					{
-						pxl_indirectDiffuse = vec3( 0.0_f, 0.0_f, 0.0_f );
-						pxl_indirectSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
-					}
 				}
 				ELSE
 				{
 					pxl_diffuse = albedo;
 					pxl_specular = vec3( 0.0_f, 0.0_f, 0.0_f );
-					pxl_indirectDiffuse = vec3( 0.0_f, 0.0_f, 0.0_f );
-					pxl_indirectSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
 				}
 				FI;
 			} );
@@ -723,10 +629,7 @@ namespace castor3d
 		, SceneFlags const & sceneFlags
 		, LightType lightType
 		, ShadowType shadowType
-		, bool shadows
-		, bool rsm
-		, bool generatesIndirect
-		, bool voxels )
+		, bool shadows )
 	{
 		using namespace sdw;
 		FragmentWriter writer;
@@ -745,18 +648,7 @@ namespace castor3d
 			, 0u );
 		UBO_GPINFO( writer, uint32_t( LightPassIdx::eGpInfo ), 0u );
 		UBO_SCENE( writer, uint32_t( LightPassIdx::eScene ), 0u );
-		shader::GlobalIllumination indirect{ writer, utils, true };
 		uint32_t index = uint32_t( LightPassIdx::eData5 ) + 1u;
-
-		if ( voxels )
-		{
-			indirect.declare( uint32_t( LightPassIdx::eVoxelData )
-				, uint32_t( LightPassIdx::eLpvGridConfig )
-				, uint32_t( LightPassIdx::eLayeredLpvGridConfig )
-				, index
-				, 0u
-				, sceneFlags );
-		}
 
 		auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), uint32_t( LightPassIdx::eDepth ), 0u );
 		auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), uint32_t( LightPassIdx::eData1 ), 0u );
@@ -777,7 +669,7 @@ namespace castor3d
 			, lightType
 			, uint32_t( LightPassLgtIdx::eLight )
 			, 1u
-			, shader::ShadowOptions{ shadows, lightType, rsm }
+			, shader::ShadowOptions{ shadows, lightType, false }
 			, index
 			, 1u );
 		shader::SssTransmittance sss{ writer
@@ -789,8 +681,6 @@ namespace castor3d
 		// Shader outputs
 		auto pxl_diffuse = writer.declOutput< Vec3 >( "pxl_diffuse", 0 );
 		auto pxl_specular = writer.declOutput< Vec3 >( "pxl_specular", 1 );
-		auto pxl_indirectDiffuse = writer.declOutput< Vec3 >( "pxl_indirectDiffuse", 2 );
-		auto pxl_indirectSpecular = writer.declOutput< Vec3 >( "pxl_indirectSpecular", 3 );
 
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
@@ -932,35 +822,11 @@ namespace castor3d
 
 					pxl_diffuse = lightDiffuse;
 					pxl_specular = lightSpecular;
-
-					if ( voxels )
-					{
-						auto occlusion = indirect.computeOcclusion( sceneFlags
-							, lightType
-							, surface );
-						auto indirectDiffuse = indirect.computeDiffuse( sceneFlags
-							, surface
-							, occlusion );
-						auto indirectSpecular = indirect.computeSpecular( sceneFlags
-							, eye
-							, surface
-							, 1.0_f - glossiness
-							, occlusion );
-						pxl_indirectDiffuse = indirectDiffuse;
-						pxl_indirectSpecular = indirectSpecular;
-					}
-					else
-					{
-						pxl_indirectDiffuse = vec3( 0.0_f, 0.0_f, 0.0_f );
-						pxl_indirectSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
-					}
 				}
 				ELSE
 				{
 					pxl_diffuse = diffuse;
 					pxl_specular = vec3( 0.0_f, 0.0_f, 0.0_f );
-					pxl_indirectDiffuse = vec3( 0.0_f, 0.0_f, 0.0_f );
-					pxl_indirectSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
 				}
 				FI;
 			} );

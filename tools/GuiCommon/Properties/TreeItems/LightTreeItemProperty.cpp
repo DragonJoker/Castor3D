@@ -104,7 +104,6 @@ namespace GuiCommon
 		static wxString PROPERTY_CATEGORY_GLOBAL_ILLUM = _( "Global Illumination" );
 		static wxString PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE = _( "GI Type" );
 		static wxString PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_NONE = _( "None" );
-		static wxString PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_RSM = _( "RSM" );
 		static wxString PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LPV = _( "LPV" );
 		static wxString PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LPVG = _( "LPV (Geometry)" );
 		static wxString PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LAYERED_LPV = _( "Layered LPV" );
@@ -121,7 +120,6 @@ namespace GuiCommon
 		shadowChoices.Add( PROPERTY_SHADOW_TYPE_VSM );
 		wxArrayString giChoices;
 		giChoices.Add( PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_NONE );
-		giChoices.Add( PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_RSM );
 
 		if ( m_light.getLightType() != LightType::ePoint )
 		{
@@ -156,18 +154,13 @@ namespace GuiCommon
 		addPropertyT( vsm, PROPERTY_SHADOW_VARIANCE_BIAS, m_light.getCategory()->getShadowVariance()[1], m_light.getCategory().get(), &LightCategory::setVsmVarianceBias );
 
 		auto globalIllum = addProperty( shadows, PROPERTY_CATEGORY_GLOBAL_ILLUM );
-		addPropertyE( globalIllum, PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE, giChoices, m_light.getGlobalIlluminationType()
+		addPropertyE( globalIllum, PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE, giChoices, GlobalIlluminationType( uint32_t( m_light.getGlobalIlluminationType() ) - 2u )
 			, [this]( GlobalIlluminationType type )
 			{
-				m_light.setGlobalIlluminationType( type );
+				// +2 to account for RSM and VCT.
+				m_light.setGlobalIlluminationType( GlobalIlluminationType( uint32_t( type ) + 2u ) );
 				doUpdateGIProperties( type );
 			} );
-
-		auto & rsmConfig = m_light.getRsmConfig();
-		m_rsmProperties = addProperty( globalIllum, PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_RSM );
-		addPropertyT( m_rsmProperties, PROPERTY_SHADOW_RSM_INTENSITY, &rsmConfig.intensity );
-		addPropertyT( m_rsmProperties, PROPERTY_SHADOW_RSM_MAX_RADIUS, &rsmConfig.maxRadius );
-		addPropertyT( m_rsmProperties, PROPERTY_SHADOW_RSM_SAMPLE_COUNT, &rsmConfig.sampleCount );
 
 		if ( m_light.getLightType() != LightType::ePoint )
 		{
