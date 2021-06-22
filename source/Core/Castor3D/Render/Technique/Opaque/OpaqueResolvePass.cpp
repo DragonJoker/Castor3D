@@ -1222,6 +1222,7 @@ namespace castor3d
 		while ( it != envMaps.end() && i < envMapCount )
 		{
 			envViews.push_back( it->get().getColourId().sampledViewId );
+			++i;
 			++it;
 		}
 
