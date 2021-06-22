@@ -540,17 +540,16 @@ namespace castor3d
 		{
 			auto scale = doCalcPointLightBSphere( *light.getPointLight()
 				, float( farZ - castor::point::distance( lightPos, camPos ) - ( farZ / 50.0f ) ) );
-			castor::matrix::setTransform( model
+			model = castor::matrix::setTransform( model
 				, lightPos
 				, castor::Point3f{ scale, scale, scale }
 				, castor::Quaternion::identity() );
-			return model;
 		}
 		else
 		{
 			auto scale = doCalcSpotLightBCone( *light.getSpotLight()
 				, float( farZ - castor::point::distance( lightPos, camPos ) - ( farZ / 50.0f ) ) );
-			castor::matrix::setTransform( model
+			model = castor::matrix::setTransform( model
 				, lightPos
 				, castor::Point3f{ scale[0], scale[0], scale[1] }
 				, light.getParent()->getDerivedOrientation() );
