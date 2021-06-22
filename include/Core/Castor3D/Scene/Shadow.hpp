@@ -7,7 +7,6 @@ See LICENSE file in root folder
 #include "SceneModule.hpp"
 
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LpvConfig.hpp"
-#include "Castor3D/Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp"
 
 namespace castor3d
 {

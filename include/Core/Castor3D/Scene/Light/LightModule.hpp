@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_LightModule_H___
 
 #include "Castor3D/Scene/SceneModule.hpp"
+#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 
 namespace castor3d
 {
@@ -134,6 +135,18 @@ namespace castor3d
 	using OnLightChangedFunction = std::function< void( Light & ) >;
 	using OnLightChanged = castor::Signal< OnLightChangedFunction >;
 	using OnLightChangedConnection = OnLightChanged::connection;
+
+	struct RsmConfig
+	{
+		C3D_API void accept( castor::String const & name
+			, PipelineVisitorBase & visitor );
+
+		static constexpr uint32_t MaxRange = 800u;
+
+		castor::ChangeTracked< float > intensity;
+		castor::ChangeTracked< float > maxRadius;
+		castor::ChangeTracked< castor::RangedValue< uint32_t > > sampleCount{ castor::makeRangedValue( 100u, 20u, MaxRange ) };
+	};
 
 	//@}
 	//@}

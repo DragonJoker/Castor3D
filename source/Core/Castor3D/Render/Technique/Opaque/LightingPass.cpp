@@ -18,17 +18,15 @@
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp"
 #include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePass.hpp"
-#include "Castor3D/Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp"
-#include "Castor3D/Render/Technique/Opaque/Lighting/LightPassShadow.hpp"
-#include "Castor3D/Render/Technique/Opaque/Lighting/PointLightPass.hpp"
-#include "Castor3D/Render/Technique/Opaque/Lighting/SpotLightPass.hpp"
-#include "Castor3D/Render/Technique/Opaque/ReflectiveShadowMapGI/LightPassReflectiveShadow.hpp"
-#include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp"
-#include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp"
+#include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightPass.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapResult.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
+#include "Castor3D/Scene/Light/SpotLight.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
@@ -54,668 +52,6 @@ namespace castor3d
 {
 	namespace
 	{
-		constexpr uint32_t getDirectionalGIidx( LightingPass::Type type )
-		{
-			return std::min( uint32_t( type ), uint32_t( LightingPass::Type::eShadowLayeredLpvGGI ) );
-		}
-
-		constexpr uint32_t getPointGIidx( LightingPass::Type type )
-		{
-			return std::min( uint32_t( type ), uint32_t( LightingPass::Type::eShadowRsmGI ) );
-		}
-
-		constexpr uint32_t getSpotGIidx( LightingPass::Type type )
-		{
-			return std::min( uint32_t( type ), uint32_t( LightingPass::Type::eShadowLpvGGI ) );
-		}
-
-		constexpr LightingPass::Type getLightType( LightingPass::Type passType
-			, LightType lightType )
-		{
-			switch ( lightType )
-			{
-			case LightType::eDirectional:
-				return LightingPass::Type( getDirectionalGIidx( passType ) );
-			case LightType::ePoint:
-				return LightingPass::Type( getPointGIidx( passType ) );
-			case LightType::eSpot:
-				return LightingPass::Type( getSpotGIidx( passType ) );
-			default:
-				CU_Failure( "Unsupported LightType" );
-				return LightingPass::Type( std::min( uint32_t( passType ), uint32_t( LightingPass::Type::eShadowNoGI ) ) );
-			}
-		}
-
-		LightPass * getLightPass( LightingPass::Type passType
-			, LightType lightType
-			, LightingPass::LightPasses const & passes )
-		{
-			auto lt = uint32_t( lightType );
-
-			switch ( lightType )
-			{
-			case LightType::eDirectional:
-				return passes[getDirectionalGIidx( passType )][lt].get();
-			case LightType::ePoint:
-				return passes[getPointGIidx( passType )][lt].get();
-			case LightType::eSpot:
-				return passes[getSpotGIidx( passType )][lt].get();
-			default:
-				CU_Failure( "Unsupported LightType" );
-				return nullptr;
-			}
-		}
-
-		LightPassUPtr & getLightPass( LightingPass::Type passType
-			, LightType lightType
-			, LightingPass::LightPasses & passes )
-		{
-			auto lt = uint32_t( lightType );
-
-			switch ( lightType )
-			{
-			case LightType::eDirectional:
-				return passes[getDirectionalGIidx( passType )][lt];
-			case LightType::ePoint:
-				return passes[getPointGIidx( passType )][lt];
-			case LightType::eSpot:
-				return passes[getSpotGIidx( passType )][lt];
-			default:
-				{
-					static LightPassUPtr dummy;
-					CU_Failure( "Unsupported LightType" );
-					return dummy;
-				}
-			}
-		}
-
-		LightingPass::Type getLightingType( RenderDevice const & device
-			, bool voxelConeTracing
-			, bool shadow
-			, GlobalIlluminationType giType )
-		{
-			if ( voxelConeTracing )
-			{
-				giType = GlobalIlluminationType::eVoxelConeTracing;
-			}
-
-			if ( !device.renderSystem.getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
-			{
-				giType = std::min( GlobalIlluminationType::eRsm, giType );
-			}
-
-			if ( shadow )
-			{
-				switch ( giType )
-				{
-				case GlobalIlluminationType::eNone:
-					return LightingPass::Type::eShadowNoGI;
-				case GlobalIlluminationType::eVoxelConeTracing:
-					return LightingPass::Type::eShadowVoxelConeTracingGI;
-				case GlobalIlluminationType::eRsm:
-					return LightingPass::Type::eShadowRsmGI;
-				case GlobalIlluminationType::eLpv:
-					return LightingPass::Type::eShadowLpvGI;
-				case GlobalIlluminationType::eLpvG:
-					return LightingPass::Type::eShadowLpvGGI;
-				case GlobalIlluminationType::eLayeredLpv:
-					return LightingPass::Type::eShadowLayeredLpvGI;
-				case GlobalIlluminationType::eLayeredLpvG:
-					return LightingPass::Type::eShadowLayeredLpvGGI;
-				default:
-					return LightingPass::Type::eShadowNoGI;
-				}
-			}
-
-			switch ( giType )
-			{
-			case GlobalIlluminationType::eNone:
-				return LightingPass::Type::eNoShadow;
-			case GlobalIlluminationType::eVoxelConeTracing:
-				return LightingPass::Type::eNoShadowVoxelConeTracingGI;
-			default:
-				CU_Failure( "Unsupported GI without shadow maps (WTF are you doing here)" );
-				return LightingPass::Type::eNoShadow;
-			}
-		}
-
-		template< LightingPass::Type PassT, LightType LightT >
-		struct PassInfoT;
-
-		template<>
-		struct PassInfoT< LightingPass::Type::eNoShadow, LightType::eDirectional >
-		{
-			using Type = DirectionalLightPass;
-		};
-
-		template<>
-		struct PassInfoT< LightingPass::Type::eNoShadow, LightType::ePoint >
-		{
-			using Type = PointLightPass;
-		};
-
-		template<>
-		struct PassInfoT< LightingPass::Type::eNoShadow, LightType::eSpot >
-		{
-			using Type = SpotLightPass;
-		};
-
-		template<>
-		struct PassInfoT< LightingPass::Type::eNoShadowVoxelConeTracingGI, LightType::eDirectional >
-		{
-			using Type = DirectionalLightPass;
-		};
-
-		template<>
-		struct PassInfoT< LightingPass::Type::eNoShadowVoxelConeTracingGI, LightType::ePoint >
-		{
-			using Type = PointLightPass;
-		};
-
-		template<>
-		struct PassInfoT< LightingPass::Type::eNoShadowVoxelConeTracingGI, LightType::eSpot >
-		{
-			using Type = SpotLightPass;
-		};
-
-		template<>
-		struct PassInfoT< LightingPass::Type::eShadowNoGI, LightType::eDirectional >
-		{
-			using Type = DirectionalLightPassShadow;
-		};
-
-		template<>
-		struct PassInfoT< LightingPass::Type::eShadowNoGI, LightType::ePoint >
-		{
-			using Type = PointLightPassShadow;
-		};
-
-		template<>
-		struct PassInfoT< LightingPass::Type::eShadowNoGI, LightType::eSpot >
-		{
-			using Type = SpotLightPassShadow;
-		};
-
-		template<>
-		struct PassInfoT< LightingPass::Type::eShadowVoxelConeTracingGI, LightType::eDirectional >
-		{
-			using Type = DirectionalLightPassShadow;
-		};
-
-		template<>
-		struct PassInfoT< LightingPass::Type::eShadowVoxelConeTracingGI, LightType::ePoint >
-		{
-			using Type = PointLightPassShadow;
-		};
-
-		template<>
-		struct PassInfoT< LightingPass::Type::eShadowVoxelConeTracingGI, LightType::eSpot >
-		{
-			using Type = SpotLightPassShadow;
-		};
-
-		template<>
-		struct PassInfoT< LightingPass::Type::eShadowRsmGI, LightType::eDirectional >
-		{
-			using Type = DirectionalLightPassReflectiveShadow;
-		};
-
-		template<>
-		struct PassInfoT< LightingPass::Type::eShadowRsmGI, LightType::ePoint >
-		{
-			using Type = PointLightPassReflectiveShadow;
-		};
-
-		template<>
-		struct PassInfoT< LightingPass::Type::eShadowRsmGI, LightType::eSpot >
-		{
-			using Type = SpotLightPassReflectiveShadow;
-		};
-
-		template<>
-		struct PassInfoT< LightingPass::Type::eShadowLpvGI, LightType::eDirectional >
-		{
-			using Type = DirectionalLightPassLPVShadow;
-		};
-
-		template<>
-		struct PassInfoT< LightingPass::Type::eShadowLpvGI, LightType::ePoint >
-		{
-			using Type = PointLightPassShadow;
-		};
-
-		template<>
-		struct PassInfoT< LightingPass::Type::eShadowLpvGI, LightType::eSpot >
-		{
-			using Type = SpotLightPassLPVShadow;
-		};
-
-		template<>
-		struct PassInfoT< LightingPass::Type::eShadowLayeredLpvGI, LightType::eDirectional >
-		{
-			using Type = DirectionalLightPassLayeredLPVShadow;
-		};
-
-		template<>
-		struct PassInfoT< LightingPass::Type::eShadowLayeredLpvGI, LightType::ePoint >
-		{
-			using Type = PointLightPassShadow;
-		};
-
-		template<>
-		struct PassInfoT< LightingPass::Type::eShadowLayeredLpvGI, LightType::eSpot >
-		{
-			using Type = SpotLightPassLPVShadow;
-		};
-
-		template<>
-		struct PassInfoT< LightingPass::Type::eShadowLpvGGI, LightType::eDirectional >
-		{
-			using Type = DirectionalLightPassLPVShadow;
-		};
-
-		template<>
-		struct PassInfoT< LightingPass::Type::eShadowLpvGGI, LightType::ePoint >
-		{
-			using Type = PointLightPassShadow;
-		};
-
-		template<>
-		struct PassInfoT< LightingPass::Type::eShadowLpvGGI, LightType::eSpot >
-		{
-			using Type = SpotLightPassLPVShadow;
-		};
-
-		template<>
-		struct PassInfoT< LightingPass::Type::eShadowLayeredLpvGGI, LightType::eDirectional >
-		{
-			using Type = DirectionalLightPassLayeredLPVShadow;
-		};
-
-		template<>
-		struct PassInfoT< LightingPass::Type::eShadowLayeredLpvGGI, LightType::ePoint >
-		{
-			using Type = PointLightPassShadow;
-		};
-
-		template<>
-		struct PassInfoT< LightingPass::Type::eShadowLayeredLpvGGI, LightType::eSpot >
-		{
-			using Type = SpotLightPassLPVShadow;
-		};
-
-		template< LightingPass::Type PassT, LightType LightT >
-		using PassTypeT = typename PassInfoT< PassT, LightT >::Type;
-
-		template< LightingPass::Type PassT >
-		LightPassUPtr makeLightPassNoGIT( LightType lightType
-			, crg::FrameGraph & graph
-			, crg::FramePass const *& previousPass
-			, RenderDevice const & device
-			, LightPassResult const & lpResult
-			, GpInfoUbo const & gpInfoUbo
-			, bool shadows )
-		{
-			LightPassConfig lpConfig{ lpResult, gpInfoUbo, shadows, false, false };
-
-			switch ( lightType )
-			{
-			case LightType::eDirectional:
-				return std::make_unique< PassTypeT< PassT, LightType::eDirectional > >( graph
-					, previousPass
-					, device
-					, lpConfig );
-			case LightType::ePoint:
-				return std::make_unique< PassTypeT< PassT, LightType::ePoint > >( graph
-					, previousPass
-					, device
-					, lpConfig );
-			case LightType::eSpot:
-				return std::make_unique< PassTypeT< PassT, LightType::eSpot > >( graph
-					, previousPass
-					, device
-					, lpConfig );
-			default:
-				CU_Failure( "Unsupported LightType" );
-				return LightPassUPtr{};
-			}
-		}
-
-		template< LightingPass::Type PassT >
-		LightPassUPtr makeLightPassVctGIT( LightType lightType
-			, crg::FrameGraph & graph
-			, crg::FramePass const *& previousPass
-			, RenderDevice const & device
-			, LightPassResult const & lpResult
-			, GpInfoUbo const & gpInfoUbo
-			, bool shadows
-			, VoxelizerUbo const & vctConfig )
-		{
-			LightPassConfig lpConfig{ lpResult, gpInfoUbo, shadows, true, true };
-
-			switch ( lightType )
-			{
-			case LightType::eDirectional:
-				return std::make_unique< PassTypeT< PassT, LightType::eDirectional > >( graph
-					, previousPass
-					, device
-					, lpConfig
-					, &vctConfig );
-			case LightType::ePoint:
-				return std::make_unique< PassTypeT< PassT, LightType::ePoint > >( graph
-					, previousPass
-					, device
-					, lpConfig
-					, &vctConfig );
-			case LightType::eSpot:
-				return std::make_unique< PassTypeT< PassT, LightType::eSpot > >( graph
-					, previousPass
-					, device
-					, lpConfig
-					, &vctConfig );
-			default:
-				CU_Failure( "Unsupported LightType" );
-				return LightPassUPtr{};
-			}
-		}
-
-		template< LightingPass::Type PassT >
-		LightPassUPtr makeLightPassRsmGIT( LightType lightType
-			, crg::FrameGraph & graph
-			, crg::FramePass const *& previousPass
-			, RenderDevice const & device
-			, LightPassResult const & lpResult
-			, GpInfoUbo const & gpInfoUbo
-			, LightCache const & lightCache
-			, OpaquePassResult const & gpResult
-			, ShadowMapResult const & smDirectionalResult
-			, ShadowMapResult const & smPointResult
-			, ShadowMapResult const & smSpotResult )
-		{
-			switch ( lightType )
-			{
-			case LightType::eDirectional:
-				return std::make_unique< PassTypeT< PassT, LightType::eDirectional > >( graph
-					, previousPass
-					, device
-					, RsmLightPassConfig{ { lpResult, gpInfoUbo }
-						, lightCache
-						, gpResult
-						, smDirectionalResult } );
-			case LightType::ePoint:
-				return std::make_unique< PassTypeT< PassT, LightType::ePoint > >( graph
-					, previousPass
-					, device
-					, RsmLightPassConfig{ { lpResult, gpInfoUbo }
-						, lightCache
-						, gpResult
-						, smPointResult } );
-			case LightType::eSpot:
-				return std::make_unique< PassTypeT< PassT, LightType::eSpot > >( graph
-					, previousPass
-					, device
-					, RsmLightPassConfig{ { lpResult, gpInfoUbo }
-						, lightCache
-						, gpResult
-						, smSpotResult } );
-			default:
-				CU_Failure( "Unsupported LightType" );
-				return LightPassUPtr{};
-			}
-		}
-
-		template< LightingPass::Type PassT >
-		LightPassUPtr makeLightPassLpvGIT( LightType lightType
-			, crg::FrameGraph & graph
-			, crg::FramePass const *& previousPass
-			, RenderDevice const & device
-			, LightPassResult const & lpResult
-			, GpInfoUbo const & gpInfoUbo
-			, LightCache const & lightCache
-			, OpaquePassResult const & gpResult
-			, ShadowMapResult const & smDirectionalResult
-			, ShadowMapResult const & smPointResult
-			, ShadowMapResult const & smSpotResult
-			, LightVolumePassResult const & lpvResult
-			, LpvGridConfigUbo const & lpvConfigUbo )
-		{
-			switch ( lightType )
-			{
-			case LightType::eDirectional:
-				return std::make_unique< PassTypeT< PassT, LightType::eDirectional > >( graph
-					, previousPass
-					, device
-					, LpvLightPassConfig{ LightPassConfig{ lpResult, gpInfoUbo }
-						, lightCache
-						, gpResult
-						, smDirectionalResult
-						, lpvResult
-						, lpvConfigUbo } );
-			//case LightType::ePoint:
-			//	return std::make_unique< PassTypeT< PassT, LightType::ePoint > >( graph
-			//		, previousPass
-			//		, device
-			//		, LpvLightPassConfig{ LightPassConfig{ lpResult, gpInfoUbo }
-			//			, lightCache
-			//			, gpResult
-			//			, smPointResult
-			//			, lpvResult
-			//			, lpvConfigUbo } );
-			case LightType::eSpot:
-				return std::make_unique< PassTypeT< PassT, LightType::eSpot > >( graph
-					, previousPass
-					, device
-					, LpvLightPassConfig{ LightPassConfig{ lpResult, gpInfoUbo }
-						, lightCache
-						, gpResult
-						, smSpotResult
-						, lpvResult
-						, lpvConfigUbo } );
-			default:
-				CU_Failure( "Unsupported LightType" );
-				return LightPassUPtr{};
-			}
-		}
-
-		template< LightingPass::Type PassT >
-		LightPassUPtr makeLightPassLlpvGIT( LightType lightType
-			, crg::FrameGraph & graph
-			, crg::FramePass const *& previousPass
-			, RenderDevice const & device
-			, LightPassResult const & lpResult
-			, GpInfoUbo const & gpInfoUbo
-			, LightCache const & lightCache
-			, OpaquePassResult const & gpResult
-			, ShadowMapResult const & smDirectionalResult
-			, ShadowMapResult const & smPointResult
-			, ShadowMapResult const & smSpotResult
-			, LightVolumePassResultArray const & lpvResult
-			, LayeredLpvGridConfigUbo const & lpvConfigUbo )
-		{
-			switch ( lightType )
-			{
-			case LightType::eDirectional:
-				return std::make_unique< PassTypeT< PassT, LightType::eDirectional > >( graph
-					, previousPass
-					, device
-					, LayeredLpvLightPassConfig{ LightPassConfig{ lpResult, gpInfoUbo }
-						, lightCache
-						, gpResult
-						, smDirectionalResult
-						, lpvResult
-						, lpvConfigUbo } );
-			//case LightType::ePoint:
-			//	return std::make_unique< PassTypeT< PassT, LightType::ePoint > >( graph
-			//		, previousPass
-			//		, device
-			//		, LayeredLpvLightPassConfig{ LightPassConfig{ lpResult, gpInfoUbo }
-			//			, lightCache
-			//			, gpResult
-			//			, smPointResult
-			//			, lpvResult
-			//			, lpvConfigUbo
-			//			, lpvConfigUbos } );
-			//case LightType::eSpot:
-			//	return std::make_unique< PassTypeT< PassT, LightType::eSpot > >( graph
-			//		, previousPass
-			//		, device
-			//		, LayeredLpvLightPassConfig{ LightPassConfig{ lpResult, gpInfoUbo }
-			//			, lightCache
-			//			, gpResult
-			//			, smSpotResult
-			//			, lpvResult
-			//			, lpvConfigUbo
-			//			, lpvConfigUbos } );
-			default:
-				CU_Failure( "Unsupported LightType" );
-				return LightPassUPtr{};
-			}
-		}
-
-		LightPassUPtr makeLightPass( crg::FrameGraph & graph
-			, crg::FramePass const *& previousPass
-			, LightingPass::Type passType
-			, LightType lightType
-			, RenderDevice const & device
-			, LightCache const & lightCache
-			, OpaquePassResult const & gpResult
-			, ShadowMapResult const & smDirectionalResult
-			, ShadowMapResult const & smPointResult
-			, ShadowMapResult const & smSpotResult
-			, LightPassResult const & lpResult
-			, LightVolumePassResult const & lpvResult
-			, LightVolumePassResultArray const & llpvResult
-			, GpInfoUbo const & gpInfoUbo
-			, LpvGridConfigUbo const & lpvConfigUbo
-			, LayeredLpvGridConfigUbo const & llpvConfigUbo
-			, VoxelizerUbo const & vctConfig )
-		{
-			switch ( passType )
-			{
-			case LightingPass::Type::eNoShadow:
-				return makeLightPassNoGIT< LightingPass::Type::eNoShadow >( lightType
-					, graph
-					, previousPass
-					, device
-					, lpResult
-					, gpInfoUbo
-					, false );
-			case LightingPass::Type::eNoShadowVoxelConeTracingGI:
-				return makeLightPassVctGIT< LightingPass::Type::eNoShadowVoxelConeTracingGI >( lightType
-					, graph
-					, previousPass
-					, device
-					, lpResult
-					, gpInfoUbo
-					, false
-					, vctConfig );
-			case LightingPass::Type::eShadowNoGI:
-				return makeLightPassNoGIT< LightingPass::Type::eShadowNoGI >( lightType
-					, graph
-					, previousPass
-					, device
-					, lpResult
-					, gpInfoUbo
-					, true );
-			case LightingPass::Type::eShadowVoxelConeTracingGI:
-				return makeLightPassVctGIT< LightingPass::Type::eShadowVoxelConeTracingGI >( lightType
-					, graph
-					, previousPass
-					, device
-					, lpResult
-					, gpInfoUbo
-					, true
-					, vctConfig );
-			case LightingPass::Type::eShadowRsmGI:
-				return makeLightPassRsmGIT< LightingPass::Type::eShadowRsmGI >( lightType
-					, graph
-					, previousPass
-					, device
-					, lpResult
-					, gpInfoUbo
-					, lightCache
-					, gpResult
-					, smDirectionalResult
-					, smPointResult
-					, smSpotResult );
-			case LightingPass::Type::eShadowLpvGI:
-				if ( device.renderSystem.getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
-				{
-					return makeLightPassLpvGIT< LightingPass::Type::eShadowLpvGI >( lightType
-						, graph
-						, previousPass
-						, device
-						, lpResult
-						, gpInfoUbo
-						, lightCache
-						, gpResult
-						, smDirectionalResult
-						, smPointResult
-						, smSpotResult
-						, lpvResult
-						, lpvConfigUbo );
-				}
-				return LightPassUPtr{};
-			case LightingPass::Type::eShadowLpvGGI:
-				if ( device.renderSystem.getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
-				{
-					return makeLightPassLpvGIT< LightingPass::Type::eShadowLpvGGI >( lightType
-						, graph
-						, previousPass
-						, device
-						, lpResult
-						, gpInfoUbo
-						, lightCache
-						, gpResult
-						, smDirectionalResult
-						, smPointResult
-						, smSpotResult
-						, lpvResult
-						, lpvConfigUbo );
-				}
-				return LightPassUPtr{};
-			case LightingPass::Type::eShadowLayeredLpvGI:
-				if ( device.renderSystem.getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
-				{
-					return makeLightPassLlpvGIT< LightingPass::Type::eShadowLayeredLpvGI >( lightType
-						, graph
-						, previousPass
-						, device
-						, lpResult
-						, gpInfoUbo
-						, lightCache
-						, gpResult
-						, smDirectionalResult
-						, smPointResult
-						, smSpotResult
-						, llpvResult
-						, llpvConfigUbo );
-				}
-				return LightPassUPtr{};
-			case LightingPass::Type::eShadowLayeredLpvGGI:
-				if ( device.renderSystem.getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
-				{
-					return makeLightPassLlpvGIT< LightingPass::Type::eShadowLayeredLpvGGI >( lightType
-						, graph
-						, previousPass
-						, device
-						, lpResult
-						, gpInfoUbo
-						, lightCache
-						, gpResult
-						, smDirectionalResult
-						, smPointResult
-						, smSpotResult
-						, llpvResult
-						, llpvConfigUbo );
-				}
-				return LightPassUPtr{};
-			default:
-				CU_Failure( "Unsupported LightingPass::Type" );
-				return LightPassUPtr{};
-			}
-		}
-
 		castor::Point2f doCalcSpotLightBCone( const castor3d::SpotLight & light
 			, float max )
 		{
@@ -821,7 +157,7 @@ namespace castor3d
 			, VK_FALSE
 			, VK_FALSE
 			, VK_POLYGON_MODE_FILL
-			, VK_CULL_MODE_NONE
+			, doGetCullMode()
 			, VK_FRONT_FACE_COUNTER_CLOCKWISE
 			, VK_FALSE
 			, 0.0f
@@ -947,6 +283,16 @@ namespace castor3d
 			, std::move( attachs ) };
 	}
 
+	VkCullModeFlags LightPipeline::doGetCullMode()const
+	{
+		if ( m_config.lightType == LightType::eDirectional )
+		{
+			return VK_CULL_MODE_NONE;
+		}
+
+		return VK_CULL_MODE_BACK_BIT;
+	}
+
 	//*********************************************************************************************
 
 	LightsPipeline::LightsPipeline( crg::FramePass const & pass
@@ -1020,6 +366,19 @@ namespace castor3d
 	{
 		if ( !m_enabledLights.empty() )
 		{
+			VkBuffer vertexBuffer = m_vertexBuffer->getBuffer();
+			VkDeviceSize offset{};
+			auto & renderPass = m_renderPasses[index];
+			VkRenderPassBeginInfo beginRenderPass{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO
+				, nullptr
+				, *renderPass.renderPass
+				, *renderPass.framebuffer
+				, { {}, renderPass.framebuffer->getDimensions() }
+				, uint32_t( renderPass.clearValues.size() )
+				, renderPass.clearValues.data() };
+			m_context.vkCmdBeginRenderPass( commandBuffer
+				, &beginRenderPass
+				, VK_SUBPASS_CONTENTS_INLINE );
 			auto pipeline = m_pipeline.getPipeline( index );
 			m_context.vkCmdBindPipeline( commandBuffer
 				, VK_PIPELINE_BIND_POINT_GRAPHICS
@@ -1043,8 +402,6 @@ namespace castor3d
 				, &specDS
 				, 0u
 				, nullptr );
-			VkBuffer vertexBuffer = m_vertexBuffer->getBuffer();
-			VkDeviceSize offset{};
 			m_context.vkCmdBindVertexBuffers( commandBuffer
 				, 0u
 				, 1u
@@ -1055,21 +412,24 @@ namespace castor3d
 				, 1u
 				, 0u
 				, 0u );
+			m_context.vkCmdEndRenderPass( commandBuffer );
+			index = 1u;
 
 			if ( m_enabledLights.size() > 1u )
 			{
-				if ( index == 0u )
+				auto & renderPasses = m_renderPasses[index];
+				VkRenderPassBeginInfo beginRenderPass{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO
+					, nullptr
+					, *renderPasses.renderPass
+					, *renderPasses.framebuffer
+					, { {}, renderPasses.framebuffer->getDimensions() }
+					, uint32_t( renderPasses.clearValues.size() )
+					, renderPasses.clearValues.data() };
+
+				for ( size_t i = 1u; i < m_enabledLights.size(); ++i )
 				{
-					index = 1u;
-					m_context.vkCmdEndRenderPass( commandBuffer );
-					auto & renderPasses = m_renderPasses[index];
-					VkRenderPassBeginInfo beginRenderPass{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO
-						, nullptr
-						, *renderPasses.renderPass
-						, *renderPasses.framebuffer
-						, { {}, renderPasses.framebuffer->getDimensions() }
-						, uint32_t( renderPasses.clearValues.size() )
-						, renderPasses.clearValues.data() };
+					auto & descriptors = m_enabledLights[i];
+					specDS = *descriptors->descriptorSet;
 					m_context.vkCmdBeginRenderPass( commandBuffer
 						, &beginRenderPass
 						, VK_SUBPASS_CONTENTS_INLINE );
@@ -1085,12 +445,6 @@ namespace castor3d
 						, &baseDS
 						, 0u
 						, nullptr );
-				}
-
-				for ( size_t i = 1u; i < m_enabledLights.size(); ++i )
-				{
-					auto & descriptors = m_enabledLights[i];
-					specDS = *descriptors->descriptorSet;
 					m_context.vkCmdBindDescriptorSets( commandBuffer
 						, VK_PIPELINE_BIND_POINT_GRAPHICS
 						, m_pipeline.getPipelineLayout()
@@ -1109,6 +463,7 @@ namespace castor3d
 						, 1u
 						, 0u
 						, 0u );
+					m_context.vkCmdEndRenderPass( commandBuffer );
 				}
 			}
 		}
@@ -1331,25 +686,12 @@ namespace castor3d
 	void RunnableLightingPass::doRecordInto( VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
-		auto & renderPass = m_renderPasses[0u];
-		VkRenderPassBeginInfo beginRenderPass{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO
-			, nullptr
-			, *renderPass.renderPass
-			, *renderPass.framebuffer
-			, { {}, renderPass.framebuffer->getDimensions() }
-			, uint32_t( renderPass.clearValues.size() )
-			, renderPass.clearValues.data() };
-		m_context.vkCmdBeginRenderPass( commandBuffer
-			, &beginRenderPass
-			, VK_SUBPASS_CONTENTS_INLINE );
 		uint32_t pipelineIndex = 0u;
 
 		for ( auto & pipeline : m_pipelines )
 		{
 			pipeline.second->recordInto( commandBuffer, pipelineIndex );
 		}
-
-		m_context.vkCmdEndRenderPass( commandBuffer );
 	}
 
 	LightRenderPass RunnableLightingPass::doCreateRenderPass( bool blend
