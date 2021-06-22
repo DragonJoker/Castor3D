@@ -80,6 +80,7 @@ namespace castor3d
 		, sceneFlags{ sceneFlags }
 		, lightType{ light.getLightType() }
 		, shadowType{ light.getShadowType() }
+		, shadows{ shadowType != ShadowType::eNone }
 		, rsm{ light.needsRsmShadowMaps() }
 		, voxels{ checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) }
 		, generatesIndirect{ voxels

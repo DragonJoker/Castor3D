@@ -97,6 +97,7 @@ namespace castor3d
 		ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout();
 		ashes::PipelineViewportStateCreateInfo doCreateViewportState( ashes::FrameBuffer const & framebuffer );
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( bool blend );
+		VkCullModeFlags doGetCullMode()const;
 
 	private:
 		crg::PipelineHolder m_holder;
