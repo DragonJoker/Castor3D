@@ -10,6 +10,8 @@ See LICENSE file in root folder
 
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
+#include <ashespp/Pipeline/PipelineShaderStageCreateInfo.hpp>
+
 #include <array>
 
 namespace castor3d

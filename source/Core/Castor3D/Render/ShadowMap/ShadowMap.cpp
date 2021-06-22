@@ -11,8 +11,9 @@
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
 #include <ashespp/Command/CommandBuffer.hpp>
-#include <ashespp/Sync/Semaphore.hpp>
 #include <ashespp/Image/ImageView.hpp>
+#include <ashespp/Sync/Fence.hpp>
+#include <ashespp/Sync/Semaphore.hpp>
 
 CU_ImplementCUSmartPtr( castor3d, ShadowMap )
 

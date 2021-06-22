@@ -15,6 +15,10 @@
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 
+#include <ashespp/Image/Image.hpp>
+#include <ashespp/Sync/Fence.hpp>
+#include <ashespp/Sync/Queue.hpp>
+
 CU_ImplementCUSmartPtr( castor3d, Picking )
 
 namespace castor3d
