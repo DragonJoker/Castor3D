@@ -15,8 +15,6 @@ namespace castor3d::shader
 	uint32_t constexpr LightingOffset = 3u;
 	uint32_t constexpr EnvMapIndexOffset = 4u;
 
-	uint32_t const Utils::MaxIblReflectionLod = 4;
-
 	Utils::Utils( sdw::ShaderWriter & writer )
 		: m_writer{ writer }
 	{
@@ -304,70 +302,6 @@ namespace castor3d::shader
 			, sdw::InFloat{ m_writer, "product" }
 			, sdw::InVec3{ m_writer, "f0" }
 			, sdw::InFloat{ m_writer, "roughness" } );
-	}
-
-	void Utils::declareComputeIBL()
-	{
-		if ( m_computeIBL )
-		{
-			return;
-		}
-
-		m_computeIBL = m_writer.implementFunction< sdw::Vec3 >( "computeIBL"
-			, [&]( Surface const & surface
-				, sdw::Vec3 const & baseColour
-				, sdw::Vec3 const & f0
-				, sdw::Float const & roughness
-				, sdw::Float const & metallic
-				, sdw::Vec3 const & worldEye
-				, sdw::SampledImageCubeRgba32 const & irradianceMap
-				, sdw::SampledImageCubeRgba32 const & prefilteredEnvMap
-				, sdw::SampledImage2DRgba32 const & brdfMap )
-			{
-				auto V = m_writer.declLocale( "V"
-					, normalize( worldEye - surface.worldPosition ) );
-				auto NdotV = m_writer.declLocale( "NdotV"
-					, max( dot( surface.worldNormal, V ), 0.0_f ) );
-				auto F = m_writer.declLocale( "F"
-					, fresnelSchlick( NdotV, f0, roughness ) );
-				auto kS = m_writer.declLocale( "kS"
-					, F );
-				auto kD = m_writer.declLocale( "kD"
-					, vec3( 1.0_f ) - kS );
-				kD *= 1.0_f - metallic;
-
-				auto irradiance = m_writer.declLocale( "irradiance"
-					, irradianceMap.sample( vec3( surface.worldNormal.x(), -surface.worldNormal.y(), surface.worldNormal.z() ) ).rgb() );
-				auto diffuseReflection = m_writer.declLocale( "diffuseReflection"
-					, irradiance * baseColour );
-				auto R = m_writer.declLocale( "R"
-					, reflect( -V, surface.worldNormal ) );
-				R.y() = -R.y();
-
-				auto prefilteredColor = m_writer.declLocale( "prefilteredColor"
-					, prefilteredEnvMap.lod( R, roughness * sdw::Float( float( MaxIblReflectionLod ) ) ).rgb() );
-				auto envBRDFCoord = m_writer.declLocale( "envBRDFCoord"
-					, vec2( NdotV, roughness ) );
-				auto envBRDF = m_writer.declLocale( "envBRDF"
-					, brdfMap.sample( envBRDFCoord ).rg() );
-				auto specularReflection = m_writer.declLocale( "specularReflection"
-					, prefilteredColor * sdw::fma( kS
-						, vec3( envBRDF.x() )
-						, vec3( envBRDF.y() ) ) );
-
-				m_writer.returnStmt( sdw::fma( kD
-					, diffuseReflection
-					, specularReflection ) );
-			}
-			, InSurface{ m_writer, "surface" }
-			, sdw::InVec3{ m_writer, "albedo" }
-			, sdw::InVec3{ m_writer, "f0" }
-			, sdw::InFloat{ m_writer, "roughness" }
-			, sdw::InFloat{ m_writer, "metallic" }
-			, sdw::InVec3{ m_writer, "worldEye" }
-			, sdw::InSampledImageCubeRgba32{ m_writer, "irradianceMap" }
-			, sdw::InSampledImageCubeRgba32{ m_writer, "prefilteredEnvMap" }
-			, sdw::InSampledImage2DRgba32{ m_writer, "brdfMap" } );
 	}
 
 	void Utils::declareInvertVec2Y()
@@ -1183,46 +1117,6 @@ namespace castor3d::shader
 			, roughness );
 	}
 
-	sdw::Vec3 Utils::computeMetallicIBL( Surface surface
-		, sdw::Vec3 const & albedo
-		, sdw::Float const & metallic
-		, sdw::Float const & roughness
-		, sdw::Vec3 const & worldEye
-		, sdw::SampledImageCubeRgba32 const & irradianceMap
-		, sdw::SampledImageCubeRgba32 const & prefilteredEnvMap
-		, sdw::SampledImage2DRgba32 const & brdfMap )const
-	{
-		return m_computeIBL( surface
-			, albedo
-			, mix( vec3( 0.04_f ), albedo, vec3( metallic ) )
-			, roughness
-			, metallic
-			, worldEye
-			, irradianceMap
-			, prefilteredEnvMap
-			, brdfMap );
-	}
-
-	sdw::Vec3 Utils::computeSpecularIBL( Surface surface
-		, sdw::Vec3 const & diffuse
-		, sdw::Vec3 const & specular
-		, sdw::Float const & glossiness
-		, sdw::Vec3 const & worldEye
-		, sdw::SampledImageCubeRgba32 const & irradianceMap
-		, sdw::SampledImageCubeRgba32 const & prefilteredEnvMap
-		, sdw::SampledImage2DRgba32 const & brdfMap )const
-	{
-		return m_computeIBL( surface
-			, diffuse
-			, specular
-			, 1.0_f - glossiness
-			, length( specular )
-			, worldEye
-			, irradianceMap
-			, prefilteredEnvMap
-			, brdfMap );
-	}
-
 	sdw::Mat3 Utils::getTBN( sdw::Vec3 const & normal
 		, sdw::Vec3 const & tangent
 		, sdw::Vec3 const & bitangent )
@@ -1511,6 +1405,5 @@ namespace castor3d::shader
 			, viewDir
 			, heightMap
 			, textureConfig );
-
 	}
 }

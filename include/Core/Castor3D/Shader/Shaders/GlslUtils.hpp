@@ -24,7 +24,6 @@ namespace castor3d::shader
 		C3D_API void declareGetMapNormal();
 		C3D_API void declareComputeAccumulation();
 		C3D_API void declareFresnelSchlick();
-		C3D_API void declareComputeIBL();
 		// 1.0 - y
 		C3D_API void declareInvertVec2Y();
 		C3D_API void declareInvertVec3Y();
@@ -87,22 +86,6 @@ namespace castor3d::shader
 		C3D_API static sdw::Mat3 getTBN( sdw::Vec3 const & normal
 			, sdw::Vec3 const & tangent
 			, sdw::Vec3 const & bitangent );
-		C3D_API sdw::Vec3 computeMetallicIBL( Surface surface
-			, sdw::Vec3 const & albedo
-			, sdw::Float const & metalness
-			, sdw::Float const & roughness
-			, sdw::Vec3 const & worldEye
-			, sdw::SampledImageCubeRgba32 const & irradiance
-			, sdw::SampledImageCubeRgba32 const & prefiltered
-			, sdw::SampledImage2DRgba32 const & brdf )const;
-		C3D_API sdw::Vec3 computeSpecularIBL( Surface surface
-			, sdw::Vec3 const & diffuse
-			, sdw::Vec3 const & specular
-			, sdw::Float const & glossiness
-			, sdw::Vec3 const & worldEye
-			, sdw::SampledImageCubeRgba32 const & irradiance
-			, sdw::SampledImageCubeRgba32 const & prefiltered
-			, sdw::SampledImage2DRgba32 const & brdf )const;
 		C3D_API void compute2DMapsContributions( FilteredTextureFlags const & flags
 			, TextureConfigurations const & textureConfigs
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
@@ -256,9 +239,6 @@ namespace castor3d::shader
 		C3D_API sdw::UVec3 unflatten( sdw::UInt const & p
 			, sdw::UVec3 const & dim )const;
 
-	public:
-		C3D_API static uint32_t const MaxIblReflectionLod;
-
 	private:
 		void doComputeGeometryMapContribution( TextureFlags const & textureFlags
 			, PassFlags const & passFlags
@@ -315,16 +295,6 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, sdw::InVec3
 			, sdw::InFloat > m_fresnelSchlick;
-		sdw::Function< sdw::Vec3
-			, InSurface
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InFloat
-			, sdw::InFloat
-			, sdw::InVec3
-			, sdw::InSampledImageCubeRgba32
-			, sdw::InSampledImageCubeRgba32
-			, sdw::InSampledImage2DRgba32 > m_computeIBL;
 		sdw::Function< sdw::Vec2
 			, sdw::InVec2 > m_invertVec2Y;
 		sdw::Function< sdw::Vec3
