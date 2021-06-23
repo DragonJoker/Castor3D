@@ -20,10 +20,9 @@
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslMetallicBrdfLighting.hpp"
-#include "Castor3D/Shader/Shaders/GlslMetallicPbrReflection.hpp"
+#include "Castor3D/Shader/Shaders/GlslPbrReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongReflection.hpp"
-#include "Castor3D/Shader/Shaders/GlslSpecularPbrReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -162,7 +161,6 @@ namespace castor3d
 			auto c3d_mapLightSpecular = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightSpecular", uint32_t( ResolveBind::eDirectSpecular ), 0u );
 			auto c3d_mapLightIndirectDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightIndirectDiffuse", uint32_t( ResolveBind::eIndirectDiffuse ), 0u, config.hasDiffuseGi );
 			auto c3d_mapLightIndirectSpecular = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightIndirectSpecular", uint32_t( ResolveBind::eIndirectSpecular ), 0u, config.hasSpecularGi );
-			auto c3d_mapEnvironment = writer.declSampledImageArray< FImgCubeRgba32 >( "c3d_mapEnvironment", uint32_t( ResolveBind::eEnvironment ), 0u, c_noIblEnvironmentCount );
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
@@ -178,7 +176,11 @@ namespace castor3d
 				utils.declareFresnelSchlick();
 			}
 
-			shader::PhongReflectionModel reflections{ writer, utils };
+			shader::PhongReflectionModel reflections{ writer
+				, utils
+				, uint32_t( ResolveBind::eEnvironment )
+				, 0u
+				, c_noIblEnvironmentCount };
 			shader::CommonFog fog{ writer };
 
 			// Shader outputs
@@ -270,87 +272,28 @@ namespace castor3d
 							lightIndirectSpecular *= utils.fresnelSchlick( NdotV, specular, ( 256.0_f - shininess ) / 256.0_f );
 						}
 
-						auto reflected = writer.declLocale( "reflected"
-							, vec3( 0.0_f ) );
-						auto refracted = writer.declLocale( "refracted"
-							, vec3( 0.0_f ) );
-
 						if ( config.hasSsao )
 						{
 							occlusion *= c3d_mapSsao.lod( vtx_texture, 0.0_f ).r();
 						}
 
-						IF( writer, envMapIndex > 0_i && ( reflection != 0_i || refraction != 0_i ) )
-						{
-							auto incident = writer.declLocale( "incident"
-								, reflections.computeIncident( surface.worldPosition, c3d_sceneData.getCameraPosition() ) );
-							envMapIndex = envMapIndex - 1_i;
-							ambient = vec3( 0.0_f );
-
-							IF( writer, envMapIndex >= Int( c_noIblEnvironmentCount ) )
-							{
-								envMapIndex = 0_i;
-							}
-							FI;
-
-							IF( writer, reflection != 0_i && refraction != 0_i )
-							{
-								for ( auto i = 0; i < c_noIblEnvironmentCount; ++i )
-								{
-									IF( writer, envMapIndex == Int( i ) )
-									{
-										reflections.computeReflRefr( incident
-											, surface.worldNormal
-											, c3d_mapEnvironment[Int( i )]
-											, material.m_refractionRatio
-											, specular
-											, material.m_transmission * diffuse
-											, shininess
-											, reflected
-											, refracted );
-									}
-									FI;
-								}
-							}
-							ELSEIF( reflection != 0_i )
-							{
-								for ( auto i = 0; i < c_noIblEnvironmentCount; ++i )
-								{
-									IF( writer, envMapIndex == Int( i ) )
-									{
-										reflected = reflections.computeRefl( incident
-											, surface.worldNormal
-											, c3d_mapEnvironment[Int( i )]
-											, shininess
-											, specular );
-									}
-									FI;
-								}
-							}
-							ELSE
-							{
-								for ( auto i = 0; i < c_noIblEnvironmentCount; ++i )
-								{
-									IF( writer, envMapIndex == Int( i ) )
-									{
-										reflections.computeRefr( incident
-											, surface.worldNormal
-											, c3d_mapEnvironment[Int( i )]
-											, material.m_refractionRatio
-											, material.m_transmission * diffuse
-											, shininess
-											, reflected
-											, refracted );
-									}
-									FI;
-								}
-							}
-							FI;
-
-							diffuse = vec3( 0.0_f );
-						}
-						FI;
-
+						auto reflected = writer.declLocale( "reflected"
+							, vec3( 0.0_f ) );
+						auto refracted = writer.declLocale( "refracted"
+							, vec3( 0.0_f ) );
+						reflections.computeDeferred( envMapIndex
+							, reflection
+							, refraction
+							, material.m_refractionRatio
+							, specular
+							, shininess
+							, material.m_transmission
+							, surface
+							, c3d_sceneData
+							, ambient
+							, diffuse
+							, reflected
+							, refracted );
 						pxl_fragColor = vec4( shader::PhongLightingModel::combine( lightDiffuse
 								, config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 0.0_f )
 								, lightSpecular
@@ -414,7 +357,6 @@ namespace castor3d
 			auto c3d_mapBrdf = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf", uint32_t( ResolveBind::eBrdf ), 0u );
 			auto c3d_mapIrradiance = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapIrradiance", uint32_t( ResolveBind::eIrradiance ), 0u );
 			auto c3d_mapPrefiltered = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapPrefiltered", uint32_t( ResolveBind::ePrefiltered ), 0u );
-			auto c3d_mapEnvironment = writer.declSampledImageArray< FImgCubeRgba32 >( "c3d_mapEnvironment", uint32_t( ResolveBind::eEnvironment ), 0u, c_iblEnvironmentCount );
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
@@ -422,17 +364,14 @@ namespace castor3d
 			utils.declareRemoveGamma();
 			utils.declareCalcWSPosition();
 			utils.declareCalcVSPosition();
-			utils.declareFresnelSchlick();
-			utils.declareComputeIBL();
 			utils.declareDecodeMaterial();
 			utils.declareInvertVec2Y();
 
-			if ( config.hasSpecularGi )
-			{
-				utils.declareFresnelSchlick();
-			}
-
-			shader::MetallicPbrReflectionModel reflections{ writer, utils };
+			shader::PbrReflectionModel reflections{ writer
+				, utils
+				, uint32_t( ResolveBind::eEnvironment )
+				, 0u
+				, c_iblEnvironmentCount };
 			shader::CommonFog fog{ writer };
 
 			// Shader outputs
@@ -523,162 +462,32 @@ namespace castor3d
 							lightIndirectSpecular *= utils.fresnelSchlick( NdotV, mix( vec3( 0.04_f ), albedo, vec3( metalness ) ), roughness );
 						}
 
-						auto reflected = writer.declLocale( "reflected"
-							, vec3( 0.0_f ) );
-						auto refracted = writer.declLocale( "refracted"
-							, vec3( 0.0_f ) );
-
 						if ( config.hasSsao )
 						{
 							occlusion *= c3d_mapSsao.lod( fixedTexCoord, 0.0_f ).r();
 						}
 
-						IF( writer, envMapIndex > 0_i )
-						{
-							envMapIndex = envMapIndex - 1_i;
-
-							IF( writer, envMapIndex >= Int( c_iblEnvironmentCount ) )
-							{
-								envMapIndex = 0_i;
-							}
-							FI;
-
-							auto incident = writer.declLocale( "incident"
-								, normalize( c3d_sceneData.getCameraToPos( surface.worldPosition ) ) );
-							auto ratio = writer.declLocale( "ratio"
-								, material.m_refractionRatio );
-
-							IF( writer, reflection != 0_i )
-							{
-								ambient = vec3( 0.0_f );
-
-								for ( auto i = 0; i < c_iblEnvironmentCount; ++i )
-								{
-									IF( writer, envMapIndex == Int( i ) )
-									{
-										// Reflection from environment map.
-										reflected = reflections.computeRefl( incident
-											, surface.worldNormal
-											, c3d_mapEnvironment[Int( i )]
-											, albedo
-											, metalness
-											, roughness );
-									}
-									FI;
-								}
-
-								IF( writer, refraction != 0_i )
-								{
-									for ( auto i = 0; i < c_iblEnvironmentCount; ++i )
-									{
-										IF( writer, envMapIndex == Int( i ) )
-										{
-											// Refraction from environment map.
-											reflections.computeRefrEnvMap( incident
-												, surface.worldNormal
-												, c3d_mapEnvironment[Int( i )]
-												, material.m_refractionRatio
-												, material.m_transmission * albedo
-												, roughness
-												, reflected
-												, refracted );
-										}
-										FI;
-									}
-								}
-								ELSEIF( ratio != 0.0_f )
-								{
-									// Refraction from background skybox.
-									reflections.computeRefrSkybox( incident
-										, surface.worldNormal
-										, c3d_mapPrefiltered
-										, material.m_refractionRatio
-										, material.m_transmission * albedo
-										, roughness
-										, reflected
-										, refracted );
-								}
-								FI;
-							}
-							ELSE
-							{
-								// Reflection from background skybox.
-								ambient *= utils.computeMetallicIBL( surface
-									, albedo
-									, metalness
-									, roughness
-									, c3d_sceneData.getCameraPosition()
-									, c3d_mapIrradiance
-									, c3d_mapPrefiltered
-									, c3d_mapBrdf );
-
-								IF( writer, refraction != 0_i )
-								{
-									for ( auto i = 0; i < c_iblEnvironmentCount; ++i )
-									{
-										IF( writer, envMapIndex == Int( i ) )
-										{
-											// Refraction from environment map.
-											reflections.computeRefrEnvMap( incident
-												, surface.worldNormal
-												, c3d_mapEnvironment[Int( i )]
-												, material.m_refractionRatio
-												, material.m_transmission * albedo
-												, roughness
-												, ambient
-												, refracted );
-										}
-										FI;
-									}
-								}
-								ELSEIF( ratio != 0.0_f )
-								{
-									// Refraction from background skybox.
-									reflections.computeRefrSkybox( incident
-										, surface.worldNormal
-										, c3d_mapPrefiltered
-										, material.m_refractionRatio
-										, material.m_transmission * albedo
-										, roughness
-										, ambient
-										, refracted );
-								}
-								FI;
-							}
-							FI;
-						}
-						ELSE
-						{
-							// Reflection from background skybox.
-							ambient *= utils.computeMetallicIBL( surface
-								, albedo
-								, metalness
-								, roughness
-								, c3d_sceneData.getCameraPosition()
-								, c3d_mapIrradiance
-								, c3d_mapPrefiltered
-								, c3d_mapBrdf );
-							auto ratio = writer.declLocale( "ratio"
-								, material.m_refractionRatio );
-
-							IF( writer, ratio != 0.0_f )
-							{
-								// Refraction from background skybox.
-								auto incident = writer.declLocale( "incident"
-									, normalize( c3d_sceneData.getCameraToPos( surface.worldPosition ) ) );
-								reflections.computeRefrSkybox( incident
-									, surface.worldNormal
-									, c3d_mapPrefiltered
-									, material.m_refractionRatio
-									, material.m_transmission * albedo
-									, roughness
-									, ambient
-									, refracted );
-							}
-							FI;
-						}
-						FI;
-
+						auto reflected = writer.declLocale( "reflected"
+							, vec3( 0.0_f ) );
+						auto refracted = writer.declLocale( "refracted"
+							, vec3( 0.0_f ) );
+						reflections.computeDeferred( c3d_mapBrdf
+							, c3d_mapIrradiance
+							, c3d_mapPrefiltered
+							, envMapIndex
+							, reflection
+							, refraction
+							, material.m_refractionRatio
+							, albedo
+							, reflections.computeSpecular( albedo, metalness )
+							, roughness
+							, metalness
+							, material.m_transmission
+							, surface
+							, c3d_sceneData
+							, ambient
+							, reflected
+							, refracted );
 						pxl_fragColor = vec4( shader::MetallicBrdfLightingModel::combine( lightDiffuse
 								, config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 0.0_f )
 								, lightSpecular
@@ -742,7 +551,6 @@ namespace castor3d
 			auto c3d_mapBrdf = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf", uint32_t( ResolveBind::eBrdf ), 0u );
 			auto c3d_mapIrradiance = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapIrradiance", uint32_t( ResolveBind::eIrradiance ), 0u );
 			auto c3d_mapPrefiltered = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapPrefiltered", uint32_t( ResolveBind::ePrefiltered ), 0u );
-			auto c3d_mapEnvironment = writer.declSampledImageArray< FImgCubeRgba32 >( "c3d_mapEnvironment", uint32_t( ResolveBind::eEnvironment ), 0u, c_iblEnvironmentCount );
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
@@ -750,17 +558,14 @@ namespace castor3d
 			utils.declareRemoveGamma();
 			utils.declareCalcWSPosition();
 			utils.declareCalcVSPosition();
-			utils.declareFresnelSchlick();
-			utils.declareComputeIBL();
 			utils.declareDecodeMaterial();
 			utils.declareInvertVec2Y();
 
-			if ( config.hasSpecularGi )
-			{
-				utils.declareFresnelSchlick();
-			}
-
-			shader::SpecularPbrReflectionModel reflections{ writer, utils };
+			shader::PbrReflectionModel reflections{ writer
+				, utils
+				, uint32_t( ResolveBind::eEnvironment )
+				, 0u
+				, c_iblEnvironmentCount };
 			shader::CommonFog fog{ writer };
 
 			// Shader outputs
@@ -851,161 +656,32 @@ namespace castor3d
 							lightIndirectSpecular *= utils.fresnelSchlick( NdotV, specular, 1.0_f - glossiness );
 						}
 
-						auto reflected = writer.declLocale( "reflected"
-							, vec3( 0.0_f ) );
-						auto refracted = writer.declLocale( "refracted"
-							, vec3( 0.0_f ) );
-
 						if ( config.hasSsao )
 						{
 							occlusion *= c3d_mapSsao.lod( fixedTexCoord, 0.0_f ).r();
 						}
 
-						IF( writer, envMapIndex > 0_i )
-						{
-							envMapIndex = envMapIndex - 1_i;
-
-							IF( writer, envMapIndex >= Int( c_iblEnvironmentCount ) )
-							{
-								envMapIndex = 0_i;
-							}
-							FI;
-
-							auto incident = writer.declLocale( "incident"
-								, normalize( c3d_sceneData.getCameraToPos( surface.worldPosition ) ) );
-							auto ratio = writer.declLocale( "ratio"
-								, material.m_refractionRatio );
-
-							IF( writer, reflection != 0_i )
-							{
-								ambient = vec3( 0.0_f );
-
-								for ( auto i = 0; i < c_iblEnvironmentCount; ++i )
-								{
-									IF( writer, envMapIndex == Int( i ) )
-									{
-										// Reflection from environment map.
-										reflected = reflections.computeRefl( incident
-											, surface.worldNormal
-											, c3d_mapEnvironment[Int( i )]
-											, specular
-											, glossiness );
-									}
-									FI;
-								}
-
-								IF( writer, refraction != 0_i )
-								{
-									for ( auto i = 0; i < c_iblEnvironmentCount; ++i )
-									{
-										IF( writer, envMapIndex == Int( i ) )
-										{
-											// Refraction from environment map.
-											reflections.computeRefrEnvMap( incident
-												, surface.worldNormal
-												, c3d_mapEnvironment[Int( i )]
-												, material.m_refractionRatio
-												, material.m_transmission * diffuse
-												, glossiness
-												, reflected
-												, refracted );
-										}
-										FI;
-									}
-								}
-								ELSEIF( ratio != 0.0_f )
-								{
-									// Refraction from background skybox.
-									reflections.computeRefrSkybox( incident
-										, surface.worldNormal
-										, c3d_mapPrefiltered
-										, material.m_refractionRatio
-										, material.m_transmission * diffuse
-										, glossiness
-										, reflected
-										, refracted );
-								}
-								FI;
-							}
-							ELSE
-							{
-								// Reflection from background skybox.
-								ambient *= utils.computeSpecularIBL( surface
-									, diffuse
-									, specular
-									, glossiness
-									, c3d_sceneData.getCameraPosition()
-									, c3d_mapIrradiance
-									, c3d_mapPrefiltered
-									, c3d_mapBrdf );
-
-								IF( writer, refraction != 0_i )
-								{
-									for ( auto i = 0; i < c_iblEnvironmentCount; ++i )
-									{
-										IF( writer, envMapIndex == Int( i ) )
-										{
-											// Refraction from environment map.
-											reflections.computeRefrEnvMap( incident
-												, surface.worldNormal
-												, c3d_mapEnvironment[Int( i )]
-												, material.m_refractionRatio
-												, material.m_transmission * diffuse
-												, glossiness
-												, ambient
-												, refracted );
-										}
-										FI;
-									}
-								}
-								ELSEIF( ratio != 0.0_f )
-								{
-									// Refraction from background skybox.
-									reflections.computeRefrSkybox( incident
-										, surface.worldNormal
-										, c3d_mapPrefiltered
-										, material.m_refractionRatio
-										, material.m_transmission * diffuse
-										, glossiness
-										, ambient
-										, refracted );
-								}
-								FI;
-							}
-							FI;
-						}
-						ELSE
-						{
-							// Reflection from background skybox.
-							ambient *= utils.computeSpecularIBL( surface
-								, diffuse
-								, specular
-								, glossiness
-								, c3d_sceneData.getCameraPosition()
-								, c3d_mapIrradiance
-								, c3d_mapPrefiltered
-								, c3d_mapBrdf );
-							auto ratio = writer.declLocale( "ratio"
-								, material.m_refractionRatio );
-
-							IF( writer, ratio != 0.0_f )
-							{
-								// Refraction from background skybox.
-								auto incident = writer.declLocale( "incident"
-									, normalize( c3d_sceneData.getCameraToPos( surface.worldPosition ) ) );
-								reflections.computeRefrSkybox( incident
-									, surface.worldNormal
-									, c3d_mapPrefiltered
-									, material.m_refractionRatio
-									, material.m_transmission * diffuse
-									, glossiness
-									, ambient
-									, refracted );
-							}
-							FI;
-						}
-						FI;
-
+						auto reflected = writer.declLocale( "reflected"
+							, vec3( 0.0_f ) );
+						auto refracted = writer.declLocale( "refracted"
+							, vec3( 0.0_f ) );
+						reflections.computeDeferred( c3d_mapBrdf
+							, c3d_mapIrradiance
+							, c3d_mapPrefiltered
+							, envMapIndex
+							, reflection
+							, refraction
+							, material.m_refractionRatio
+							, diffuse
+							, specular
+							, 1.0_f - glossiness
+							, length( specular )
+							, material.m_transmission
+							, surface
+							, c3d_sceneData
+							, ambient
+							, reflected
+							, refracted );
 						pxl_fragColor = vec4( shader::MetallicBrdfLightingModel::combine( lightDiffuse
 								, config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 0.0_f )
 								, lightSpecular

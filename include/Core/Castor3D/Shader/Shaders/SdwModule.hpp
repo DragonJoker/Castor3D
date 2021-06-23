@@ -92,6 +92,8 @@ namespace castor3d
 		class PbrMRMaterials;
 		class PbrSGMaterials;
 		class LightingModel;
+		class PhongReflectionModel;
+		class PbrReflectionModel;
 		class PhongLightingModel;
 		class MetallicBrdfLightingModel;
 		class SpecularBrdfLightingModel;
@@ -106,7 +108,7 @@ namespace castor3d
 		class LayeredLpvGridData;
 		class LpvLightData;
 		class VoxelData;
-		class Surface;
+		struct Surface;
 		struct VertexSurface;
 		struct OutFragmentSurface;
 		struct InFragmentSurface;
