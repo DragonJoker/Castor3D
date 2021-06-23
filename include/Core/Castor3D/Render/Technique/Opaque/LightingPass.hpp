@@ -54,7 +54,7 @@ namespace castor3d
 
 	struct LightDescriptors
 	{
-		LightDescriptors( RenderDevice const & device );
+		explicit LightDescriptors( RenderDevice const & device );
 
 		MatrixUbo matrixUbo;
 		UniformBufferOffsetT< ModelUboConfiguration > modelMatrixUbo;

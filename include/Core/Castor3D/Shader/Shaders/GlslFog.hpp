@@ -37,7 +37,7 @@ namespace castor3d
 		class CommonFog
 		{
 		public:
-			C3D_API CommonFog( sdw::ShaderWriter & writer );
+			C3D_API explicit CommonFog( sdw::ShaderWriter & writer );
 			C3D_API sdw::Vec4 apply( sdw::Vec4 const & bgColour
 				, sdw::Vec4 const & colour
 				, sdw::Float const & dist
