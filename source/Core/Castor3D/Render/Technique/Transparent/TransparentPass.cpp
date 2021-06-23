@@ -214,7 +214,6 @@ namespace castor3d
 
 		auto in = writer.getIn();
 
-		shader::Fog fog{ getFogType( flags.sceneFlags ), writer };
 		shader::PhongReflectionModel reflections{ writer, utils };
 
 		// Fragment Outputs

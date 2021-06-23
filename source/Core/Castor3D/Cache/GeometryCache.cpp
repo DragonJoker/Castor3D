@@ -397,7 +397,6 @@ namespace castor3d
 
 	void GeometryCache::doUnregister( Geometry & geometry )
 	{
-		auto & device = *getScene()->getEngine()->getRenderSystem()->getMainRenderDevice();
 		m_connections.erase( &geometry );
 
 		if ( geometry.getMesh() )
@@ -406,7 +405,10 @@ namespace castor3d
 			{
 				for ( auto & pass : *geometry.getMaterial( *submesh ) )
 				{
-					doRemoveEntry( device, geometry, *submesh, *pass );
+					doRemoveEntry( *getScene()->getEngine()->getRenderSystem()->getMainRenderDevice()
+						, geometry
+						, *submesh
+						, *pass );
 				}
 			}
 		}
