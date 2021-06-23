@@ -889,7 +889,6 @@ namespace castor3d
 		auto & camera = *updater.camera;
 		auto & scene = *updater.camera->getScene();
 		auto & cache = scene.getLightCache();
-		auto previous = &m_previousPass;
 
 		for ( auto & light : cache.getLights( lightType ) )
 		{
