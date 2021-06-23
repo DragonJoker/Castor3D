@@ -328,7 +328,6 @@ namespace castor3d
 		if ( createSubviews )
 		{
 			auto sliceLayerCount = std::max( size.depth, layerCount );
-			auto data = *wholeViewId.data;
 
 			for ( uint32_t index = 0u; index < sliceLayerCount; ++index )
 			{
