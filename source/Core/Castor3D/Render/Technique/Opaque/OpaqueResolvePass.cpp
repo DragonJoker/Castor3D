@@ -69,7 +69,7 @@ namespace castor3d
 			{
 			}
 
-			ResolveProgramConfig( uint32_t value )
+			explicit ResolveProgramConfig( uint32_t value )
 				: hasSsao{ ( ( value >> 3 ) % 2 ) != 0 }
 				, hasSssss{ ( ( value >> 2 ) % 2 ) != 0 }
 				, hasDiffuseGi{ ( ( value >> 1 ) % 2 ) != 0 }

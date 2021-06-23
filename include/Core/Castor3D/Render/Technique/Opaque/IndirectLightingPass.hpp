@@ -61,8 +61,8 @@ namespace castor3d
 
 		struct Config
 		{
-			Config( SceneFlags const & sceneFlags );
-			Config( uint32_t index );
+			explicit Config( SceneFlags const & sceneFlags );
+			explicit Config( uint32_t index );
 
 			SceneFlags sceneFlags{};
 			bool voxels{};
