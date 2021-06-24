@@ -163,7 +163,16 @@ namespace castor3d
 		 *\return		Crée une reflection map pour le noeud donné.
 		 *\param[in]	node	Le noeud de scène depuis lequel la reflection map est générée.
 		 */
-		C3D_API void createEnvironmentMap( SceneNode & node );
+		C3D_API void addEnvironmentMap( SceneNode & node );
+		/**
+		 *\~english
+		 *\return		Creates a reflection map for given node.
+		 *\param[in]	node	The scene node from which the reflection map is generated.
+		 *\~french
+		 *\return		Crée une reflection map pour le noeud donné.
+		 *\param[in]	node	Le noeud de scène depuis lequel la reflection map est générée.
+		 */
+		C3D_API void removeEnvironmentMap( SceneNode & node );
 		/**
 		 *\~english
 		 *\return		Tells if there is a reflection map for given node.
@@ -172,7 +181,7 @@ namespace castor3d
 		 *\return		Dit s'il y a une reflection map pour le noeud donné.
 		 *\param[in]	node	Le noeud de scène.
 		 */
-		C3D_API bool hasEnvironmentMap( SceneNode const & node )const;
+		C3D_API bool hasEnvironmentMap( SceneNode & node )const;
 		/**
 		 *\~english
 		 *\remarks		Call hasEnvironmentMap before calling this function (since this one returns a reference to an existing EnvironmentMap).
@@ -183,7 +192,7 @@ namespace castor3d
 		 *\return		Récupère la reflection map pour le noeud donné.
 		 *\param[in]	node	Le noeud de scène.
 		 */
-		C3D_API EnvironmentMap & getEnvironmentMap( SceneNode const & node );
+		C3D_API EnvironmentMap & getEnvironmentMap()const;
 		/**
 		 *\~english
 		 *\remarks		Call hasEnvironmentMap before calling this function (since this one returns a reference to an existing EnvironmentMap).
@@ -194,7 +203,7 @@ namespace castor3d
 		 *\return		Récupère la reflection map pour le noeud donné.
 		 *\param[in]	node	Le noeud de scène.
 		 */
-		C3D_API EnvironmentMap const & getEnvironmentMap( SceneNode const & node )const;
+		C3D_API uint32_t getEnvironmentMapIndex( SceneNode const & node )const;
 		C3D_API AnimatedObjectSPtr addAnimatedTexture( TextureUnit & texture
 			, Pass & pass );
 		/**
@@ -231,16 +240,6 @@ namespace castor3d
 		SceneBackground & getColourBackground()
 		{
 			return *m_colourBackground;
-		}
-
-		std::vector< std::reference_wrapper< EnvironmentMap > > & getEnvironmentMaps()
-		{
-			return m_reflectionMapsArray;
-		}
-
-		std::vector< std::reference_wrapper< EnvironmentMap > > const & getEnvironmentMaps()const
-		{
-			return m_reflectionMapsArray;
 		}
 
 		castor::RgbColour const & getBackgroundColour()const
@@ -413,8 +412,7 @@ namespace castor3d
 		LightFactorySPtr m_lightFactory;
 		Fog m_fog;
 		FrameListenerWPtr m_listener;
-		std::map< SceneNode const *, std::unique_ptr< EnvironmentMap > > m_reflectionMaps;
-		std::vector< std::reference_wrapper< EnvironmentMap > > m_reflectionMapsArray;
+		std::unique_ptr< EnvironmentMap > m_reflectionMap;
 		castor::ThreadPool m_animationUpdater;
 		bool m_needsSubsurfaceScattering{ false };
 		bool m_hasOpaqueObjects{ false };

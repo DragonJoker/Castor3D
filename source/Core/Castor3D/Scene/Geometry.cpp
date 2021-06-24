@@ -68,7 +68,7 @@ namespace castor3d
 
 		if ( hasEnvironmentMapping )
 		{
-			getScene()->createEnvironmentMap( *getParent() );
+			getScene()->addEnvironmentMap( *getParent() );
 		}
 	}
 
@@ -114,7 +114,7 @@ namespace castor3d
 
 				if ( material->hasEnvironmentMapping() )
 				{
-					getScene()->createEnvironmentMap( *getParent() );
+					getScene()->addEnvironmentMap( *getParent() );
 				}
 
 				onMaterialChanged( *this, submesh, oldMaterial, material );

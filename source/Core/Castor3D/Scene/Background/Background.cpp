@@ -86,6 +86,8 @@ namespace castor3d
 					, sampler );
 				m_ibl->update();
 			}
+
+			onChanged( *this );
 		}
 
 		return m_initialised;

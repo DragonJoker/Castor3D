@@ -24,23 +24,14 @@ namespace castor3d
 		, SceneBackground & background
 		, VkExtent2D const & size
 		, bool usesDepth )
-		: crg::RenderPass{ pass, context, graph }
+		: crg::RenderPass{ pass, context, graph, size, 1u, true }
 		, m_device{ device }
 		, m_background{ background }
 		, m_size{ size }
 		, m_usesDepth{ usesDepth }
 		, m_onBackgroundChanged{ background.onChanged.connect( [this]( SceneBackground const & )
 			{
-				//getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				//	, [this]( RenderDevice const & device )
-				//	{
-				//		doPrepareBgCommands( m_device
-				//			, *m_renderTarget.getScene()->getBackground()
-				//			, *m_bgRenderPass
-				//			, *m_bgFrameBuffer
-				//			, m_renderTarget.getHdrConfigUbo()
-				//			, *m_bgCommandBuffer );
-				//	} ) );
+				doResetPipeline();
 			} ) }
 	{
 	}
@@ -62,29 +53,40 @@ namespace castor3d
 
 	void BackgroundPass::doSubInitialise()
 	{
-		m_background.initialise( m_device );
 		doInitialiseVertexBuffer();
-		doFillDescriptorBindings();
-		m_descriptorSetLayout = m_device->createDescriptorSetLayout( m_pass.name
-			, m_descriptorBindings );
-		m_pipelineLayout = m_device->createPipelineLayout( m_pass.name
-			, *m_descriptorSetLayout );
-		m_descriptorSetPool = m_descriptorSetLayout->createPool( 1u );
-		doCreateDescriptorSet();
-		doCreatePipeline();
+
+		if ( doIsEnabled() )
+		{
+			doFillDescriptorBindings();
+			m_descriptorSetLayout = m_device->createDescriptorSetLayout( m_pass.name
+				, m_descriptorBindings );
+			m_pipelineLayout = m_device->createPipelineLayout( m_pass.name
+				, *m_descriptorSetLayout );
+			m_descriptorSetPool = m_descriptorSetLayout->createPool( 1u );
+			doCreateDescriptorSet();
+			doCreatePipeline();
+		}
 	}
 
 	void BackgroundPass::doSubRecordInto( VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
-		VkDeviceSize offset{};
-		VkDescriptorSet descriptorSet = *m_descriptorSet;
-		VkBuffer vbo = m_vertexBuffer->getBuffer();
-		m_context.vkCmdBindPipeline( commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, *m_pipeline );
-		m_context.vkCmdBindDescriptorSets( commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, *m_pipelineLayout, 0u, 1u, &descriptorSet, 0u, nullptr );
-		m_context.vkCmdBindVertexBuffers( commandBuffer, 0u, 1u, &vbo, &offset );
-		m_context.vkCmdBindIndexBuffer( commandBuffer, m_indexBuffer->getBuffer(), 0u, VK_INDEX_TYPE_UINT16 );
-		m_context.vkCmdDrawIndexed( commandBuffer, uint32_t( m_indexBuffer->getCount() ), 1u, 0u, 0u, 0u );
+		if ( doIsEnabled() )
+		{
+			VkDeviceSize offset{};
+			VkDescriptorSet descriptorSet = *m_descriptorSet;
+			VkBuffer vbo = m_vertexBuffer->getBuffer();
+			m_context.vkCmdBindPipeline( commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, *m_pipeline );
+			m_context.vkCmdBindDescriptorSets( commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, *m_pipelineLayout, 0u, 1u, &descriptorSet, 0u, nullptr );
+			m_context.vkCmdBindVertexBuffers( commandBuffer, 0u, 1u, &vbo, &offset );
+			m_context.vkCmdBindIndexBuffer( commandBuffer, m_indexBuffer->getBuffer(), 0u, VK_INDEX_TYPE_UINT16 );
+			m_context.vkCmdDrawIndexed( commandBuffer, uint32_t( m_indexBuffer->getCount() ), 1u, 0u, 0u, 0u );
+		}
+	}
+
+	bool BackgroundPass::doIsEnabled()const
+	{
+		return m_background.isInitialised();
 	}
 
 	void BackgroundPass::doInitialiseVertexBuffer()
@@ -309,5 +311,29 @@ namespace castor3d
 			, viewports
 			, uint32_t( scissors.size())
 			, scissors };
+	}
+
+	void BackgroundPass::doResetPipeline()
+	{
+		if ( m_vertexBuffer )
+		{
+			resetCommandBuffer();
+			m_descriptorSet.reset();
+			m_descriptorSetPool.reset();
+			m_pipeline.reset();
+			m_pipelineLayout.reset();
+			m_descriptorSetLayout.reset();
+			m_descriptorBindings.clear();
+			m_descriptorWrites.clear();
+			doFillDescriptorBindings();
+			m_descriptorSetLayout = m_device->createDescriptorSetLayout( m_pass.name
+				, m_descriptorBindings );
+			m_pipelineLayout = m_device->createPipelineLayout( m_pass.name
+				, *m_descriptorSetLayout );
+			m_descriptorSetPool = m_descriptorSetLayout->createPool( 1u );
+			doCreateDescriptorSet();
+			doCreatePipeline();
+			record();
+		}
 	}
 }
