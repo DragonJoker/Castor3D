@@ -163,7 +163,7 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		Scene const & m_scene;
-		std::vector< crg::FrameGraph > m_graphs;
+		std::vector< std::unique_ptr< crg::FrameGraph > > m_graphs;
 		Texture m_environmentMap;
 		Texture m_depthBuffer;
 		VkExtent3D m_extent;
