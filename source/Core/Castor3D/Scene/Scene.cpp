@@ -436,10 +436,14 @@ namespace castor3d
 		m_onGeometryChanged = m_geometryCache->onChanged.connect( setThisChanged );
 		m_onSceneNodeChanged = m_sceneNodeCache->onChanged.connect( setThisChanged );
 		m_animatedObjectGroupCache->add( cuT( "C3D_Textures" ) );
+		m_reflectionMap = std::make_unique< EnvironmentMap >( engine.getGraphResourceHandler()
+			, *engine.getRenderSystem()->getMainRenderDevice()
+			, *this );
 	}
 
 	Scene::~Scene()
 	{
+		m_reflectionMap.reset();
 		m_onSceneNodeChanged.disconnect();
 		m_onGeometryChanged.disconnect();
 		m_onBillboardListChanged.disconnect();
@@ -447,8 +451,7 @@ namespace castor3d
 
 		m_meshCache->clear();
 
-		m_reflectionMapsArray.clear();
-		m_reflectionMaps.clear();
+		m_reflectionMap.reset();
 
 		m_background.reset();
 		m_colourBackground.reset();
@@ -504,6 +507,7 @@ namespace castor3d
 		m_billboardCache->cleanup();
 		m_geometryCache->cleanup();
 		m_lightCache->cleanup();
+		m_reflectionMap->cleanup();
 		m_sceneNodeCache->cleanup();
 
 		m_materialCacheView->clear();
@@ -698,33 +702,29 @@ namespace castor3d
 		return m_hasShadows[size_t( lightType )];
 	}
 
-	void Scene::createEnvironmentMap( SceneNode & node )
+	void Scene::addEnvironmentMap( SceneNode & node )
 	{
-		if ( !hasEnvironmentMap( node ) )
-		{
-			auto it = m_reflectionMaps.emplace( &node, std::make_unique< EnvironmentMap >( getOwner()->getGraphResourceHandler()
-				, *getEngine()->getRenderSystem()->getMainRenderDevice()
-				, node ) ).first;
-			auto & pass = *it->second;
-			m_reflectionMapsArray.emplace_back( pass );
-		}
+		m_reflectionMap->addNode( node );
 	}
 
-	bool Scene::hasEnvironmentMap( SceneNode const & node )const
+	void Scene::removeEnvironmentMap( SceneNode & node )
 	{
-		return m_reflectionMaps.end() != m_reflectionMaps.find( &node );
+		m_reflectionMap->removeNode( node );
 	}
 
-	EnvironmentMap & Scene::getEnvironmentMap( SceneNode const & node )
+	bool Scene::hasEnvironmentMap( SceneNode & node )const
 	{
-		CU_Require( hasEnvironmentMap( node ) );
-		return *m_reflectionMaps.find( &node )->second;
+		return m_reflectionMap->hasNode( node );
 	}
 
-	EnvironmentMap const & Scene::getEnvironmentMap( SceneNode const & node )const
+	EnvironmentMap & Scene::getEnvironmentMap()const
 	{
-		CU_Require( hasEnvironmentMap( node ) );
-		return *m_reflectionMaps.find( &node )->second;
+		return *m_reflectionMap;
+	}
+
+	uint32_t Scene::getEnvironmentMapIndex( SceneNode const & node )const
+	{
+		return m_reflectionMap->getIndex( node );
 	}
 
 	AnimatedObjectSPtr Scene::addAnimatedTexture( TextureUnit & texture

@@ -47,10 +47,6 @@ namespace castor3d
 {
 	namespace
 	{
-		static uint32_t constexpr c_noIblEnvironmentCount = 5u;
-		static uint32_t constexpr c_iblTexturesCount = 3u;
-		static uint32_t constexpr c_iblEnvironmentCount = c_noIblEnvironmentCount - c_iblTexturesCount;
-
 		struct ResolveProgramConfig
 		{
 			ResolveProgramConfig( Scene const & scene
@@ -179,8 +175,7 @@ namespace castor3d
 			shader::PhongReflectionModel reflections{ writer
 				, utils
 				, uint32_t( ResolveBind::eEnvironment )
-				, 0u
-				, c_noIblEnvironmentCount };
+				, 0u };
 			shader::CommonFog fog{ writer };
 
 			// Shader outputs
@@ -370,8 +365,7 @@ namespace castor3d
 			shader::PbrReflectionModel reflections{ writer
 				, utils
 				, uint32_t( ResolveBind::eEnvironment )
-				, 0u
-				, c_iblEnvironmentCount };
+				, 0u };
 			shader::CommonFog fog{ writer };
 
 			// Shader outputs
@@ -564,8 +558,7 @@ namespace castor3d
 			shader::PbrReflectionModel reflections{ writer
 				, utils
 				, uint32_t( ResolveBind::eEnvironment )
-				, 0u
-				, c_iblEnvironmentCount };
+				, 0u };
 			shader::CommonFog fog{ writer };
 
 			// Shader outputs
@@ -863,7 +856,6 @@ namespace castor3d
 
 		auto & background = *m_scene.getBackground();
 		background.initialise( m_device );
-		auto envMapCount = c_noIblEnvironmentCount;
 
 		if ( m_scene.getMaterialsType() != MaterialType::ePhong )
 		{
@@ -888,29 +880,10 @@ namespace castor3d
 					, crg::SamplerDesc{ VK_FILTER_LINEAR
 					, VK_FILTER_LINEAR
 					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
-				envMapCount -= c_iblTexturesCount;
 			}
 		}
 
-		auto & envMaps = m_scene.getEnvironmentMaps();
-		auto it = envMaps.begin();
-		uint32_t i = 0u;
-		crg::ImageViewIdArray envViews;
-
-		while ( it != envMaps.end() && i < envMapCount )
-		{
-			envViews.push_back( it->get().getColourId().sampledViewId );
-			++i;
-			++it;
-		}
-
-		while ( i < envMapCount )
-		{
-			envViews.push_back( background.getTextureId().sampledViewId );
-			++i;
-		}
-
-		pass.addSampledViews( envViews
+		pass.addSampledView( m_scene.getEnvironmentMap().getColourId().sampledViewId
 			, uint32_t( ResolveBind::eEnvironment )
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, crg::SamplerDesc{ VK_FILTER_LINEAR

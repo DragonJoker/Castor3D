@@ -87,6 +87,7 @@ namespace castor3d
 		 */
 		C3D_API void update( ShadowMapLightTypeArray & shadowMaps
 			, VkRect2D const & scissor );
+		C3D_API void setIgnoredNode( SceneNode const & node );
 		/**@}*/
 		/**
 		*\~english
