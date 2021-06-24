@@ -115,6 +115,12 @@ namespace castor3d
 		update( shadowMaps );
 	}
 
+	void RenderQueue::setIgnoredNode( SceneNode const & node )
+	{
+		m_allChanged = m_allChanged || ( m_ignoredNode != &node );
+		m_ignoredNode = &node;
+	}
+
 	bool RenderQueue::hasNodes()const
 	{
 		return ( m_renderNodes

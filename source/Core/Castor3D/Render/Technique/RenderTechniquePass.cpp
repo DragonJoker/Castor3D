@@ -370,8 +370,9 @@ namespace castor3d
 			if ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
 			{
-				auto & envMap = scene.getEnvironmentMap( sceneNode );
-				bindTexture( envMap.getColourView()
+				auto & envMap = scene.getEnvironmentMap();
+				auto envMapIndex = scene.getEnvironmentMapIndex( sceneNode );
+				bindTexture( envMap.getColourView( envMapIndex )
 					, *envMap.getColourId().sampler
 					, descriptorWrites
 					, index );

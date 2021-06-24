@@ -26,8 +26,6 @@ namespace castor3d
 		: public castor::OwnedBy< Engine >
 	{
 	public:
-		using CubeMatrices = std::array< castor::Matrix4x4f, size_t( CubeMapFace::eCount ) >;
-		using CubeCameras = std::array< CameraSPtr, size_t( CubeMapFace::eCount ) >;
 		using EnvironmentMapPasses = std::array< std::unique_ptr< EnvironmentMapPass >, size_t( CubeMapFace::eCount ) >;
 
 	public:
@@ -43,7 +41,14 @@ namespace castor3d
 		 */
 		C3D_API EnvironmentMap( crg::ResourceHandler & handler
 			, RenderDevice const & device
-			, SceneNode & node );
+			, Scene const & scene );
+		/**
+		 *\~english
+		 *\brief		Clears the passes.
+		 *\~french
+		 *\brief		Vide les passes.
+		 */
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -74,6 +79,44 @@ namespace castor3d
 		 */
 		C3D_API crg::SemaphoreWait render( crg::SemaphoreWait const & toWait );
 		/**
+		 *\~english
+		 *\return		Creates a reflection map for given node.
+		 *\param[in]	node	The scene node from which the reflection map is generated.
+		 *\~french
+		 *\return		Crée une reflection map pour le noeud donné.
+		 *\param[in]	node	Le noeud de scène depuis lequel la reflection map est générée.
+		 */
+		C3D_API void addNode( SceneNode & node );
+		/**
+		 *\~english
+		 *\return		Creates a reflection map for given node.
+		 *\param[in]	node	The scene node from which the reflection map is generated.
+		 *\~french
+		 *\return		Crée une reflection map pour le noeud donné.
+		 *\param[in]	node	Le noeud de scène depuis lequel la reflection map est générée.
+		 */
+		C3D_API void removeNode( SceneNode & node );
+		/**
+		 *\~english
+		 *\return		Tells if there is a reflection map for given node.
+		 *\param[in]	node	The scene node.
+		 *\~french
+		 *\return		Dit s'il y a une reflection map pour le noeud donné.
+		 *\param[in]	node	Le noeud de scène.
+		 */
+		C3D_API bool hasNode( SceneNode & node )const;
+		/**
+		 *\~english
+		 *\remarks		Call hasEnvironmentMap before calling this function (since this one returns a reference to an existing EnvironmentMap).
+		 *\return		Retrieves the reflection map for given node.
+		 *\param[in]	node	The scene node.
+		 *\~french
+		 *\remarks		Appelez hasEnvironmentMap avant d'appeler cette fonction (celle-ci retournant une référence sur une EnvironmentMap existante)
+		 *\return		Récupère la reflection map pour le noeud donné.
+		 *\param[in]	node	Le noeud de scène.
+		 */
+		C3D_API uint32_t getIndex( SceneNode const & node )const;
+		/**
 		*\~english
 		*name
 		*	Getters.
@@ -92,47 +135,49 @@ namespace castor3d
 			return m_environmentMap;
 		}
 
-		VkImageView getColourView()const
+		VkImageView getColourView( uint32_t index )const
 		{
-			return m_environmentMap.wholeView;
+			return m_environmentMapViews[index];
 		}
 
-		crg::ImageViewId getColourViewId( CubeMapFace face )const
+		crg::ImageViewId getColourViewId( uint32_t index
+			, CubeMapFace face )const
 		{
-			return m_environmentMap.subViewsId[uint32_t( face )];
+			return m_environmentMap.subViewsId[index * 6u + uint32_t( face )];
 		}
 
-		crg::ImageViewId getDepthViewId( CubeMapFace face )const
+		crg::ImageViewId getDepthViewId( uint32_t index
+			, CubeMapFace face )const
 		{
-			return m_depthBuffer.subViewsId[uint32_t( face )];
-		}
-
-		RenderPassTimer & getTimer()const
-		{
-			return *m_timer;
-		}
-
-		uint32_t getIndex()const
-		{
-			return m_index;
+			return m_depthBuffer.subViewsId[index * 6u + uint32_t( face )];
 		}
 		/**@}*/
 
 	private:
-		static uint32_t m_count;
+		void doAddPass();
+
+	public:
+		C3D_API static uint32_t const Count;
+		C3D_API static uint32_t const Size;
+
+	private:
 		RenderDevice const & m_device;
-		crg::FrameGraph m_graph;
+		Scene const & m_scene;
+		std::vector< crg::FrameGraph > m_graphs;
 		Texture m_environmentMap;
 		Texture m_depthBuffer;
-		SceneNode const & m_node;
 		VkExtent3D m_extent;
-		uint32_t m_index{ 0u };
-		RenderPassTimerSPtr m_timer;
-		EnvironmentMapPasses m_passes;
+		std::set< SceneNode * > m_reflectionNodes;
+		std::set< SceneNode * > m_savedReflectionNodes;
+		std::map< SceneNode const *, uint32_t > m_sortedNodes;
+		std::vector< EnvironmentMapPasses > m_passes;
 		bool m_first{ true };
 		uint32_t m_render{ 0u };
+		uint32_t m_count{ 0u };
 		OnSceneNodeChangedConnection m_onNodeChanged;
-		crg::RunnableGraphPtr m_runnable;
+		std::vector< crg::RunnableGraphPtr > m_runnables;
+		ashes::ImagePtr m_image;
+		std::vector< ashes::ImageView > m_environmentMapViews;
 	};
 }
 

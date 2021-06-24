@@ -167,6 +167,11 @@ namespace castor3d
 		m_culler.getScene().getBillboardListCache().registerPass( *this );
 	}
 
+	void SceneRenderPass::setIgnoredNode( SceneNode const & node )
+	{
+		m_renderQueue.setIgnoredNode( node );
+	}
+
 	SceneRenderPass::~SceneRenderPass()
 	{
 		m_renderQueue.cleanup();

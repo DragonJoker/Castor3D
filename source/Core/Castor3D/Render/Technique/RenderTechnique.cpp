@@ -498,11 +498,9 @@ namespace castor3d
 			background.update( updater );
 		}
 
-		auto & maps = m_renderTarget.getScene()->getEnvironmentMaps();
-
-		for ( auto & map : maps )
+		if ( m_renderTarget.getTargetType() == TargetType::eWindow )
 		{
-			map.get().update( updater );
+			m_renderTarget.getScene()->getEnvironmentMap().update( updater );
 		}
 
 		if ( m_ssaoConfig.enabled )
@@ -541,9 +539,9 @@ namespace castor3d
 
 		doInitialiseLpv();
 
-		for ( auto & map : m_renderTarget.getScene()->getEnvironmentMaps() )
+		if ( m_renderTarget.getTargetType() == TargetType::eWindow )
 		{
-			map.get().update( updater );
+			m_renderTarget.getScene()->getEnvironmentMap().update( updater );
 		}
 
 		m_depthPass->update( updater );
@@ -1101,9 +1099,9 @@ namespace castor3d
 	{
 		crg::SemaphoreWait result = semaphore;
 
-		for ( auto & map : m_renderTarget.getScene()->getEnvironmentMaps() )
+		if ( m_renderTarget.getTargetType() == TargetType::eWindow )
 		{
-			result = map.get().render( result );
+			result = m_renderTarget.getScene()->getEnvironmentMap().render( result );
 		}
 
 		return result;
