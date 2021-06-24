@@ -54,6 +54,7 @@ namespace castor3d
 		void doSubInitialise()override;
 		void doSubRecordInto( VkCommandBuffer commandBuffer
 			, uint32_t index )override;
+		bool doIsEnabled()const override;
 
 		void doInitialiseVertexBuffer();
 		ashes::PipelineShaderStageCreateInfoArray doInitialiseShader();
@@ -61,6 +62,7 @@ namespace castor3d
 		void doCreateDescriptorSet();
 		void doCreatePipeline();
 		ashes::PipelineViewportStateCreateInfo doCreateViewportState();
+		void doResetPipeline();
 
 	private:
 		struct Cube

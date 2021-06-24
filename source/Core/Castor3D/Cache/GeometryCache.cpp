@@ -212,8 +212,7 @@ namespace castor3d
 
 				if ( entry.pass.hasEnvironmentMapping() )
 				{
-					auto & envMap = getScene()->getEnvironmentMap( *entry.geometry.getParent() );
-					modelData.environmentIndex = envMap.getIndex();
+					modelData.environmentIndex = getScene()->getEnvironmentMapIndex( *entry.geometry.getParent() ) + 1u;
 				}
 
 				modelData.prvModel = modelData.curModel;

@@ -20,8 +20,7 @@ namespace castor3d::shader
 		C3D_API PbrReflectionModel( sdw::ShaderWriter & writer
 			, Utils & utils
 			, uint32_t envMapBinding
-			, uint32_t envMapSet
-			, uint32_t maxEnvMapsCount );
+			, uint32_t envMapSet );
 		C3D_API void computeDeferred( sdw::SampledImage2DRgba32 const & brdf
 			, sdw::SampledImageCubeRgba32 const & irradiance
 			, sdw::SampledImageCubeRgba32 const & prefiltered
@@ -81,6 +80,21 @@ namespace castor3d::shader
 			, sdw::Float const & roughness
 			, sdw::Vec3 & reflection
 			, sdw::Vec3 & refraction )const;
+		sdw::Vec3 computeReflEnvMaps( sdw::Vec3 const & wsIncident
+			, sdw::Vec3 const & wsNormal
+			, sdw::SampledImageCubeArrayRgba32 const & envMap
+			, sdw::Int const & envMapIndex
+			, sdw::Vec3 const & specular
+			, sdw::Float const & roughness )const;
+		sdw::Void computeRefrEnvMaps( sdw::Vec3 const & wsIncident
+			, sdw::Vec3 const & wsNormal
+			, sdw::SampledImageCubeArrayRgba32 const & envMap
+			, sdw::Int const & envMapIndex
+			, sdw::Float const & refractionRatio
+			, sdw::Vec3 const & transmission
+			, sdw::Float const & roughness
+			, sdw::Vec3 & reflection
+			, sdw::Vec3 & refraction )const;
 		sdw::Void computeRefrSkybox( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::SampledImageCubeRgba32 const & envMap
@@ -92,6 +106,8 @@ namespace castor3d::shader
 		void doDeclareComputeIBL();
 		void doDeclareComputeReflEnvMap();
 		void doDeclareComputeRefrEnvMap();
+		void doDeclareComputeReflEnvMaps();
+		void doDeclareComputeRefrEnvMaps();
 		void doDeclareComputeRefrSkybox();
 
 	public:
@@ -100,7 +116,6 @@ namespace castor3d::shader
 	private:
 		sdw::ShaderWriter & m_writer;
 		Utils & m_utils;
-		uint32_t m_maxEnvMapsCount;
 		PassFlags m_passFlags;
 		sdw::Function< sdw::Vec3
 			, InSurface
@@ -136,6 +151,23 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, sdw::InOutVec3
 			, sdw::OutVec3 > m_computeRefrSkybox;
+		sdw::Function< sdw::Vec3
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InSampledImageCubeArrayRgba32
+			, sdw::InInt
+			, sdw::InVec3
+			, sdw::InFloat > m_computeReflEnvMaps;
+		sdw::Function< sdw::Void
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InSampledImageCubeArrayRgba32
+			, sdw::InInt
+			, sdw::InFloat
+			, sdw::InVec3
+			, sdw::InFloat
+			, sdw::InOutVec3
+			, sdw::OutVec3 > m_computeRefrEnvMaps;
 	};
 }
 
