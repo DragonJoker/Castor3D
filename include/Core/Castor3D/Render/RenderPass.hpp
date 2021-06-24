@@ -403,6 +403,7 @@ namespace castor3d
 		 *\return		Les indicateurs filtrés.
 		 */
 		C3D_API FilteredTextureFlags filterTexturesFlags( TextureFlagsArray const & textures )const;
+		C3D_API void setIgnoredNode( SceneNode const & node );
 		/**
 		 *\~english
 		 *\brief		Creates a blend state matching given blend modes.

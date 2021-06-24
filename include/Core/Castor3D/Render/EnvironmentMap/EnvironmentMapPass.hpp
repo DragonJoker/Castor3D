@@ -45,14 +45,13 @@ namespace castor3d
 		 *\param[in]	face			La face de cube que cette passe dessine.
 		 */
 		C3D_API EnvironmentMapPass( crg::FrameGraph & graph
-			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, EnvironmentMap & environmentMap
 			, SceneNodeSPtr faceNode
-			, SceneNode const & objectNode
+			, uint32_t index
 			, CubeMapFace face
-			, RenderPassTimer & timer
 			, SceneBackground & background );
+		C3D_API ~EnvironmentMapPass();
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -71,6 +70,7 @@ namespace castor3d
 		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( GpuUpdater & updater );
+		C3D_API void attachTo( SceneNode & node );
 
 		crg::FramePass const & getLastPass()const
 		{
@@ -78,20 +78,20 @@ namespace castor3d
 		}
 
 	private:
-		crg::FramePass & doCreateBackgroundPass( crg::FramePass const *& previousPass
-			, SceneNode const & objectNode );
-		crg::FramePass & doCreateOpaquePass( crg::FramePass const *& previousPass
-			, SceneNode const & objectNode );
-		crg::FramePass & doCreateTransparentPass( crg::FramePass const *& previousPass
-			, SceneNode const & objectNode );
+		crg::FramePass & doCreateBackgroundPass();
+		crg::FramePass & doCreateOpaquePass( crg::FramePass const * previousPass );
+		crg::FramePass & doCreateTransparentPass( crg::FramePass const * previousPass );
+		void doCreateGenMipmapsPass( crg::FramePass const * previousPass );
 
 	private:
 		RenderDevice const & m_device;
 		crg::FrameGraph & m_graph;
 		SceneBackground & m_background;
 		SceneNodeSPtr m_node;
+		uint32_t m_index;
 		CubeMapFace m_face;
 		CameraSPtr m_camera;
+		SceneNode const * m_currentNode{};
 		SceneCullerUPtr m_culler;
 		castor::Matrix4x4f m_mtxView;
 		castor::Matrix4x4f m_mtxModel;

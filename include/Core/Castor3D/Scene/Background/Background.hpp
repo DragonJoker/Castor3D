@@ -167,77 +167,82 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline UniformBufferOffsetT< ModelUboConfiguration > const & getModelUbo()const
+		UniformBufferOffsetT< ModelUboConfiguration > const & getModelUbo()const
 		{
 			return m_modelUbo;
 		}
 		
-		inline MatrixUbo const & getMatrixUbo()const
+		MatrixUbo const & getMatrixUbo()const
 		{
 			return m_matrixUbo;
 		}
 
-		inline Scene const & getScene()const
+		Scene const & getScene()const
 		{
 			return m_scene;
 		}
 
-		inline Scene & getScene()
+		Scene & getScene()
 		{
 			return m_scene;
 		}
 
-		inline BackgroundType getType()const
+		BackgroundType getType()const
 		{
 			return m_type;
 		}
 
-		inline Texture const & getTextureId()const
+		Texture const & getTextureId()const
 		{
 			return m_textureId;
 		}
 
-		inline TextureLayout const & getTexture()const
+		TextureLayout const & getTexture()const
 		{
 			CU_Require( m_texture );
 			return *m_texture;
 		}
 
-		inline TextureLayout & getTexture()
+		TextureLayout & getTexture()
 		{
 			CU_Require( m_texture );
 			return *m_texture;
 		}
 
-		inline ashes::Image const & getImage()const
+		ashes::Image const & getImage()const
 		{
 			CU_Require( m_texture );
 			return m_texture->getTexture();
 		}
 
-		inline ashes::ImageView const & getView()const
+		ashes::ImageView const & getView()const
 		{
 			CU_Require( m_texture );
 			return m_texture->getDefaultView().getSampledView();
 		}
 
-		inline bool isHdr()const
+		bool isHdr()const
 		{
 			return m_hdr;
 		}
 
-		inline bool hasIbl()const
+		bool hasIbl()const
 		{
 			return m_ibl != nullptr;
 		}
 
-		inline IblTextures const & getIbl()const
+		bool isInitialised()const
+		{
+			return m_initialised;
+		}
+
+		IblTextures const & getIbl()const
 		{
 			CU_Require( m_ibl );
 			return *m_ibl;
 		}
 
-		inline Sampler const & getSampler()const
+		Sampler const & getSampler()const
 		{
 			auto result = m_sampler.lock();
 			CU_Require( result );
