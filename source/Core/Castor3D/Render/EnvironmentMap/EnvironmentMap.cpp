@@ -371,8 +371,8 @@ namespace castor3d
 	void EnvironmentMap::doAddPass()
 	{
 		auto index = uint32_t( m_graphs.size() );
-		m_graphs.emplace_back( getEngine()->getGraphResourceHandler(), "Env" + m_scene.getName() + std::to_string( index ) );
-		auto & graph = m_graphs.back();
+		m_graphs.emplace_back( std::make_unique< crg::FrameGraph >( getEngine()->getGraphResourceHandler(), "Env" + m_scene.getName() + std::to_string( index ) ) );
+		auto & graph = *m_graphs.back();
 		m_passes.emplace_back( createPass( graph
 			, m_device
 			, *this
