@@ -845,10 +845,10 @@ namespace castor3d::exporter
 					stream << "\n";
 					stream << "	render_target\n";
 					stream << "	{\n";
-					stream << "		scene \"" << name << "\"\n";
-					stream << "		camera \"MainCamera\"\n";
 					stream << "		size 1920 1080\n";
 					stream << "		format argb32\n";
+					stream << "		scene \"" << name << "\"\n";
+					stream << "		camera \"MainCamera\"\n";
 					stream << "		tone_mapping \"linear\"\n";
 					stream << "	}\n";
 					stream << "}\n";
