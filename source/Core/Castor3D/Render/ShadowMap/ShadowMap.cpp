@@ -117,6 +117,25 @@ namespace castor3d
 		fence->wait( ashes::MaxTimeout );
 	}
 
+	void ShadowMap::update( CpuUpdater & updater )
+	{
+		if ( updater.index < doGetMaxCount()
+			&& updater.index >= m_runnables.size() )
+		{
+			auto passes = doCreatePass( updater.index );
+
+			for ( auto & pass : passes )
+			{
+				m_passes.emplace_back( std::move( pass ) );
+			}
+
+			m_runnables.push_back( m_graphs.back()->compile( m_device.makeContext() ) );
+			m_runnables.back()->record();
+		}
+
+		doUpdate( updater );
+	}
+
 	void ShadowMap::accept( PipelineVisitorBase & visitor )
 	{
 		for ( uint32_t i = 1u; i < uint32_t( SmTexture::eCount ); ++i )
@@ -155,12 +174,6 @@ namespace castor3d
 		}
 
 		return m_runnables[index]->run( toWait, *m_device.graphicsQueue );
-	}
-
-	void ShadowMap::setPass( uint32_t index
-		, ShadowMapPass * pass )
-	{
-		m_passes[index].pass = pass;
 	}
 
 	ashes::VkClearValueArray const & ShadowMap::getClearValues()const

@@ -35,7 +35,7 @@ namespace castor3d
 {
 	namespace
 	{
-		std::vector< ShadowMap::PassData > createPasses( crg::ResourceHandler & handler
+		std::vector< ShadowMap::PassDataPtr > createPasses( crg::ResourceHandler & handler
 			, std::vector< std::unique_ptr< crg::FrameGraph > > & graphs
 			, std::vector< crg::RunnableGraphPtr > & runnables
 			, std::vector< std::unique_ptr< GaussianBlur > > & blurs
@@ -46,7 +46,7 @@ namespace castor3d
 			, uint32_t cascadeCount )
 		{
 			auto & engine = *scene.getEngine();
-			std::vector< ShadowMap::PassData > result;
+			std::vector< ShadowMap::PassDataPtr > result;
 			auto const width = ShadowMapPassDirectional::TileSize;
 			auto const height = ShadowMapPassDirectional::TileSize;
 			auto const w = float( width );
@@ -64,25 +64,19 @@ namespace castor3d
 
 #if C3D_UseTiledDirectionalShadowMap
 
-			ShadowMap::PassData passData
-			{
-				std::make_unique< MatrixUbo >( device ),
-				std::make_shared< Camera >( cuT( "ShadowMapDirectional" )
+			result.emplace_back( std::make_unique< ShadowMap::PassData >( std::make_unique< MatrixUbo >( device ),
+				, std::make_shared< Camera >( cuT( "ShadowMapDirectional" )
 					, scene
 					, *scene.getCameraRootNode()
 					, viewport
-					, true ),
-				nullptr,
-				nullptr,
-			};
+					, true )
+				, nullptr ) );
+			auto & passData = *result.back();
 			passData.culler = std::make_unique< InstantiatedFrustumCuller >( scene
 				, *passData.camera
 				, scene.getDirectionalShadowCascades() );
-			auto index = result.size();
-			auto & matrixUbo = *passData.matrixUbo;
-			auto & culler = *passData.culler;
 			auto & pass = graph.createPass( passData.camera->getName()
-				, [index, &matrixUbo, &culler, &previousPass, &device, &shadowMap, &scene]( crg::FramePass const & pass
+				, [&passData, &matrixUbo, &culler, &previousPass, &device, &shadowMap, &scene]( crg::FramePass const & pass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
@@ -90,11 +84,11 @@ namespace castor3d
 						, context
 						, graph
 						, device
-						, matrixUbo
-						, culler
+						, *passData.matrixUbo
+						, *passData.culler
 						, shadowMap
 						, scene.getDirectionalShadowCascades() );
-					shadowMap.setPass( index, result.get() );
+					passData.pass = result.get();
 					return result;
 				} );
 			pass.addDependency( *previousPass );
@@ -109,26 +103,22 @@ namespace castor3d
 #else
 			graphs.push_back( std::make_unique< crg::FrameGraph >( handler,  "DirectionalSMC" ) );
 			auto & graph = *graphs.back();
-			runnables.push_back( nullptr );
 			crg::FramePass const * previousPass{};
 
 			for ( uint32_t cascade = 0u; cascade < cascadeCount; ++cascade )
 			{
 				std::string debugName = "DirectionalSMC" + std::to_string( cascade + 1u );
-				ShadowMap::PassData passData{ std::make_unique< MatrixUbo >( device )
+				result.emplace_back( std::make_unique< ShadowMap::PassData >( std::make_unique< MatrixUbo >( device )
 					, std::make_shared< Camera >( debugName
 						, scene
 						, *scene.getCameraRootNode()
 						, viewport
 						, true )
-					, nullptr
-					, nullptr };
+					, nullptr ) );
+				auto & passData = *result.back();
 				passData.culler = std::make_unique< FrustumCuller >( scene, *passData.camera );
-				auto index = uint32_t( result.size() );
-				auto & matrixUbo = *passData.matrixUbo;
-				auto & culler = *passData.culler;
 				auto & pass = graph.createPass( debugName
-					, [index, &matrixUbo, &culler, &device, &shadowMap, &cascade]( crg::FramePass const & pass
+					, [&passData, &device, &shadowMap, &cascade]( crg::FramePass const & pass
 						, crg::GraphContext & context
 						, crg::RunnableGraph & graph )
 					{
@@ -136,11 +126,11 @@ namespace castor3d
 							, context
 							, graph
 							, device
-							, matrixUbo
-							, culler
+							, *passData.matrixUbo
+							, *passData.culler
 							, shadowMap
 							, cascade );
-						shadowMap.setPass( index, result.get() );
+						passData.pass = result.get();
 						device.renderSystem.getEngine()->registerTimer( cuT( "ShadowMapDirectional" )
 							, result->getTimer() );
 						return result;
@@ -186,8 +176,6 @@ namespace castor3d
 						, intermediate
 						, 5u ) );
 				}
-
-				result.emplace_back( std::move( passData ) );
 			}
 
 #endif
@@ -227,19 +215,45 @@ namespace castor3d
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
 		, m_cascades{ scene.getDirectionalShadowCascades() }
 	{
-		m_passes = createPasses( handler
+		log::trace << "Created ShadowMapDirectional" << std::endl;
+	}
+
+	void ShadowMapDirectional::update( GpuUpdater & updater )
+	{
+		if ( m_runnables[updater.index] )
+		{
+			for ( uint32_t cascade = 0u; cascade < std::min( m_cascades, uint32_t( m_passes.size() ) ); ++cascade )
+			{
+				updater.index = cascade;
+				m_passes[cascade]->pass->update( updater );
+			}
+		}
+	}
+
+	std::vector< ShadowMap::PassDataPtr > ShadowMapDirectional::doCreatePass( uint32_t index )
+	{
+		return createPasses( m_handler
 			, m_graphs
 			, m_runnables
 			, m_blurs
 			, m_blurIntermediateView
-			, device
-			, scene
+			, m_device
+			, m_scene
 			, *this
-			, scene.getDirectionalShadowCascades() );
-		log::trace << "Created ShadowMapDirectional" << std::endl;
+			, m_scene.getDirectionalShadowCascades() );
 	}
 
-	void ShadowMapDirectional::update( CpuUpdater & updater )
+	bool ShadowMapDirectional::doIsUpToDate( uint32_t index )const
+	{
+		return std::all_of( m_passes.begin()
+			, m_passes.begin() + std::min( m_cascades, uint32_t( m_passes.size() ) )
+			, []( ShadowMap::PassDataPtr const & data )
+			{
+				return data->pass->isUpToDate();
+			} );
+	}
+
+	void ShadowMapDirectional::doUpdate( CpuUpdater & updater )
 	{
 		if ( m_runnables[updater.index] )
 		{
@@ -262,7 +276,7 @@ namespace castor3d
 			{
 				for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
 				{
-					auto & culler = m_passes[cascade].pass->getCuller();
+					auto & culler = m_passes[cascade]->pass->getCuller();
 					auto & lightCamera = culler.getCamera();
 					lightCamera.attachTo( *node );
 					lightCamera.setProjection( directional.getProjMatrix( m_cascades - 1u ) );
@@ -270,32 +284,10 @@ namespace castor3d
 					lightCamera.updateFrustum();
 
 					updater.index = cascade;
-					m_passes[cascade].pass->update( updater );
+					m_passes[cascade]->pass->update( updater );
 				}
 			}
 #endif
 		}
-	}
-
-	void ShadowMapDirectional::update( GpuUpdater & updater )
-	{
-		if ( m_runnables[updater.index] )
-		{
-			for ( uint32_t cascade = 0u; cascade < std::min( m_cascades, uint32_t( m_passes.size() ) ); ++cascade )
-			{
-				updater.index = cascade;
-				m_passes[cascade].pass->update( updater );
-			}
-		}
-	}
-
-	bool ShadowMapDirectional::isUpToDate( uint32_t index )const
-	{
-		return std::all_of( m_passes.begin()
-			, m_passes.begin() + std::min( m_cascades, uint32_t( m_passes.size() ) )
-			, []( ShadowMap::PassData const & data )
-			{
-				return data.pass->isUpToDate();
-			} );
 	}
 }
