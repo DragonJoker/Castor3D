@@ -40,7 +40,7 @@ namespace castor3d
 {
 	namespace
 	{
-		ShadowMap::PassData createPass( crg::ResourceHandler & handler
+		std::vector< ShadowMap::PassDataPtr > createPass( crg::ResourceHandler & handler
 			, std::vector< std::unique_ptr< crg::FrameGraph > > & graphs
 			, std::vector< std::unique_ptr< GaussianBlur > > & blurs
 			, crg::ImageViewId intermediate
@@ -50,7 +50,7 @@ namespace castor3d
 			, ShadowMap & shadowMap )
 		{
 			auto & engine = *scene.getEngine();
-			std::vector< ShadowMap::PassData > result;
+			std::vector< ShadowMap::PassDataPtr > result;
 			Viewport viewport{ engine };
 			viewport.resize( Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize } );
 			auto & smResult = shadowMap.getShadowPassResult();
@@ -63,18 +63,16 @@ namespace castor3d
 			std::string debugName = "SpotSM" + std::to_string( shadowMapIndex );
 			graphs.push_back( std::make_unique< crg::FrameGraph >( handler, debugName ) );
 			auto & graph = *graphs.back();
-			ShadowMap::PassData passData{ std::make_unique< MatrixUbo >( device )
+			result.emplace_back( std::make_unique< ShadowMap::PassData >( std::make_unique< MatrixUbo >( device )
 				, std::make_shared< Camera >( cuT( "ShadowMapSpot" )
 					, scene
 					, *scene.getCameraRootNode()
 					, std::move( viewport ) )
-				, nullptr
-				, nullptr };
+				, nullptr ) );
+			auto & passData = *result.back();
 			passData.culler = std::make_unique< FrustumCuller >( scene, *passData.camera );
-			auto & matrixUbo = *passData.matrixUbo;
-			auto & culler = *passData.culler;
 			auto & pass = graph.createPass( debugName
-				, [shadowMapIndex, &matrixUbo, &culler, &device, &shadowMap, &scene]( crg::FramePass const & pass
+				, [shadowMapIndex, &passData, &device, &shadowMap, &scene]( crg::FramePass const & pass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
@@ -83,10 +81,10 @@ namespace castor3d
 						, graph
 						, device
 						, shadowMapIndex
-						, matrixUbo
-						, culler
+						, *passData.matrixUbo
+						, *passData.culler
 						, shadowMap );
-					shadowMap.setPass( shadowMapIndex, result.get() );
+					passData.pass = result.get();
 					device.renderSystem.getEngine()->registerTimer( cuT( "ShadowMapSpot" )
 						, result->getTimer() );
 					return result;
@@ -107,7 +105,7 @@ namespace castor3d
 				, intermediate
 				, 5u ) );
 
-			return passData;
+			return result;
 		}
 	}
 
@@ -141,47 +139,49 @@ namespace castor3d
 	ShadowMapSpot::~ShadowMapSpot()
 	{
 	}
-	
-	void ShadowMapSpot::update( CpuUpdater & updater )
-	{
-		if ( updater.index < shader::getSpotShadowMapCount()
-			&& updater.index >= m_runnables.size() )
-		{
-			m_passes.emplace_back( createPass( m_handler
-				, m_graphs
-				, m_blurs
-				, m_blurIntermediateView
-				, updater.index
-				, m_device
-				, m_scene
-				, *this ) );
-			m_runnables.push_back( m_graphs.back()->compile( m_device.makeContext() ) );
-			m_runnables.back()->record();
-		}
-
-		if ( m_runnables.size() > updater.index
-			&& m_runnables[updater.index] )
-		{
-			m_passes[updater.index].pass->update( updater );
-		}
-	}
 
 	void ShadowMapSpot::update( GpuUpdater & updater )
 	{
 		if ( m_runnables.size() > updater.index
 			&& m_runnables[updater.index] )
 		{
-			m_passes[updater.index].pass->update( updater );
+			m_passes[updater.index]->pass->update( updater );
 		}
 	}
 
-	bool ShadowMapSpot::isUpToDate( uint32_t index )const
+	std::vector< ShadowMap::PassDataPtr > ShadowMapSpot::doCreatePass( uint32_t index )
+	{
+		return createPass( m_handler
+			, m_graphs
+			, m_blurs
+			, m_blurIntermediateView
+			, index
+			, m_device
+			, m_scene
+			, *this );
+	}
+
+	bool ShadowMapSpot::doIsUpToDate( uint32_t index )const
 	{
 		if ( m_passes.size() > index )
 		{
-			return m_passes[index].pass->isUpToDate();
+			return m_passes[index]->pass->isUpToDate();
 		}
 
 		return true;
+	}
+
+	void ShadowMapSpot::doUpdate( CpuUpdater & updater )
+	{
+		if ( m_runnables.size() > updater.index
+			&& m_runnables[updater.index] )
+		{
+			m_passes[updater.index]->pass->update( updater );
+		}
+	}
+
+	uint32_t ShadowMapSpot::doGetMaxCount()const
+	{
+		return shader::getSpotShadowMapCount();
 	}
 }
