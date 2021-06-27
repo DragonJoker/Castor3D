@@ -27,7 +27,6 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderWindow.hpp"
-#include "Castor3D/Render/ToTexture/RenderDepthQuad.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Render/Technique/RenderTechnique.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
@@ -643,22 +642,6 @@ namespace castor3d
 		}
 
 		m_additionalSections.erase( it );
-	}
-
-	void Engine::renderDepth( ashes::RenderPass const & renderPass
-		, ashes::FrameBuffer const & frameBuffer
-		, castor::Position const & position
-		, castor::Size const & size
-		, TextureLayout const & texture )
-	{
-		if ( m_renderDepth )
-		{
-			m_renderDepth->render( renderPass
-				, frameBuffer
-				, position
-				, size
-				, texture );
-		}
 	}
 
 	void Engine::prepareTextures( Pass & pass )
