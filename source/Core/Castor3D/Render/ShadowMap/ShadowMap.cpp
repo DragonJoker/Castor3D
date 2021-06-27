@@ -29,6 +29,7 @@ namespace castor3d
 		, uint32_t count )
 		: OwnedBy< Engine >{ *scene.getEngine() }
 		, m_device{ device }
+		, m_handler{ handler }
 		, m_scene{ scene }
 		, m_name{ castor::string::snakeToCamelCase( getName( lightType ) ) + "SM" }
 		, m_lightType{ lightType }
@@ -128,7 +129,7 @@ namespace castor3d
 				visitor.visit( m_name + getName( SmTexture( i ) ) + cuT( "L" ) + castor::string::toString( index++ )
 					, view
 					, result.image
-					, m_graphs.front()->getHandler().createImageView( m_device.makeContext(), view )
+					, m_handler.createImageView( m_device.makeContext(), view )
 					, ( ashes::isDepthOrStencilFormat( view.data->info.format )
 						? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
 						: VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )
@@ -143,7 +144,7 @@ namespace castor3d
 #if !C3D_MeasureShadowMapImpact
 		if ( isUpToDate( index ) )
 		{
-			return toWait;
+			return toWait;	
 		}
 #endif
 
