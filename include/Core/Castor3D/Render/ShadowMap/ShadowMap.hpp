@@ -23,11 +23,22 @@ namespace castor3d
 	public:
 		struct PassData
 		{
+			PassData( std::unique_ptr< MatrixUbo > matrixUbo
+				, CameraSPtr camera
+				, SceneCullerUPtr culler )
+				: matrixUbo{ std::move( matrixUbo ) }
+				, camera{ std::move( camera ) }
+				, culler{ std::move( culler ) }
+				, pass{ nullptr }
+			{
+			}
+
 			std::unique_ptr< MatrixUbo > matrixUbo;
 			CameraSPtr camera;
 			SceneCullerUPtr culler;
 			ShadowMapPass * pass;
 		};
+		using PassDataPtr = std::unique_ptr< PassData >;
 
 	public:
 		/**
@@ -82,7 +93,7 @@ namespace castor3d
 		 *\brief			Met à jour la passe de rendu, au niveau CPU.
 		 *\param[in, out]	updater	Les données d'update.
 		 */
-		C3D_API virtual void update( CpuUpdater & updater ) = 0;
+		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, GPU wise.
@@ -94,8 +105,6 @@ namespace castor3d
 		C3D_API virtual void update( GpuUpdater & updater ) = 0;
 		C3D_API crg::SemaphoreWait render( crg::SemaphoreWait const & toWait
 			, uint32_t index );
-		C3D_API void setPass( uint32_t index
-			, ShadowMapPass * pass );
 		/**
 		*\~english
 		*name
@@ -128,6 +137,7 @@ namespace castor3d
 			return m_count;
 		}
 		/**@}*/
+
 	public:
 		static constexpr TextureFlags textureFlags{ TextureFlag::eOpacity
 			| TextureFlag::eNormal
@@ -138,7 +148,10 @@ namespace castor3d
 			| TextureFlag::eTransmittance };
 
 	private:
-		C3D_API virtual bool isUpToDate( uint32_t index )const = 0;
+		C3D_API virtual std::vector< ShadowMap::PassDataPtr > doCreatePass( uint32_t index ) = 0;
+		C3D_API virtual bool doIsUpToDate( uint32_t index )const = 0;
+		C3D_API virtual void doUpdate( CpuUpdater & updater ) = 0;
+		C3D_API virtual uint32_t doGetMaxCount()const = 0;
 
 	protected:
 		RenderDevice const & m_device;
@@ -149,7 +162,7 @@ namespace castor3d
 		ShadowMapResult m_result;
 		uint32_t m_count;
 		std::set< std::reference_wrapper< GeometryBuffers > > m_geometryBuffers;
-		std::vector< PassData > m_passes;
+		std::vector< PassDataPtr > m_passes;
 		std::vector< std::unique_ptr< crg::FrameGraph > > m_graphs;
 		std::vector< crg::RunnableGraphPtr > m_runnables;
 	};

@@ -42,10 +42,6 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ShadowMap::update
 		 */
-		C3D_API void update( CpuUpdater & updater )override;
-		/**
-		 *\copydoc		castor3d::ShadowMap::update
-		 */
 		C3D_API void update( GpuUpdater & updater )override;
 		/**
 		*\~english
@@ -63,7 +59,10 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		bool isUpToDate( uint32_t index )const override;
+		std::vector< ShadowMap::PassDataPtr > doCreatePass( uint32_t index )override;
+		bool doIsUpToDate( uint32_t index )const override;
+		void doUpdate( CpuUpdater & updater )override;
+		uint32_t doGetMaxCount()const override;
 
 	private:
 		crg::ImageId m_blurIntermediate;
