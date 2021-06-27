@@ -34,33 +34,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Class used to render depth textures.
-	*\~french
-	*\brief
-	*	Classe utilisée pour rendre les textures profondeur.
-	*/
-	class RenderDepthQuad;
-	/**
-	*\~english
-	*\brief
-	*	Projects a texture in a quad.
-	*\~french
-	*\brief
-	*	Projette une texture dans un quad.
-	*/
-	class TextureProjection;
-	/**
-	*\~english
-	*\brief
-	*	Projects a texture in a cube map.
-	*\~french
-	*\brief
-	*	Projette une texture dans une cube map.
-	*/
-	class TextureProjectionToCube;
-	/**
-	*\~english
-	*\brief
 	*	Renders a 3D texture into a 2D texture.
 	*\~french
 	*\brief
@@ -70,9 +43,6 @@ namespace castor3d
 
 	CU_DeclareSmartPtr( EquirectangularToCube );
 	CU_DeclareSmartPtr( RenderCube );
-	CU_DeclareSmartPtr( RenderDepthQuad );
-	CU_DeclareSmartPtr( TextureProjection );
-	CU_DeclareSmartPtr( TextureProjectionToCube );
 
 	CU_DeclareCUSmartPtr( castor3d, Texture3DTo2D, C3D_API );
 
