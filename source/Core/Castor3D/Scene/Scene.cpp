@@ -142,7 +142,6 @@ namespace castor3d
 		, m_listener{ engine.getFrameListenerCache().add( cuT( "Scene_" ) + name + string::toString( (size_t)this ) ) }
 		, m_animationUpdater{ std::max( 2u, engine.getCpuInformations().getCoreCount() - ( engine.isThreaded() ? 2u : 1u ) ) }
 		, m_background{ std::make_shared< ColourBackground >( engine, *this ) }
-		, m_colourBackground{ std::make_shared< ColourBackground >( engine, *this, cuT( "Default" ) ) }
 		, m_lightFactory{ std::make_shared< LightFactory >() }
 		, m_renderNodes{ castor::makeUnique< SceneRenderNodes >( *this ) }
 	{
@@ -454,7 +453,6 @@ namespace castor3d
 		m_reflectionMap.reset();
 
 		m_background.reset();
-		m_colourBackground.reset();
 		m_animatedObjectGroupCache.reset();
 		m_billboardCache.reset();
 		m_particleSystemCache.reset();
@@ -522,7 +520,6 @@ namespace castor3d
 			, [this]( RenderDevice const & device )
 			{
 				m_background->cleanup( device );
-				m_colourBackground->cleanup( device );
 			} ) );
 	}
 
