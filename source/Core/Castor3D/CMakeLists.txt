@@ -1136,19 +1136,13 @@ source_group( "Source Files\\Render\\ToneMapping" FILES ${${PROJECT_NAME}_FOLDER
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/ToTexture/EquirectangularToCube.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/ToTexture/RenderCube.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/ToTexture/RenderDepthQuad.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/ToTexture/Texture3DTo2D.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/ToTexture/TextureProjection.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/ToTexture/TextureProjectionToCube.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/ToTexture/EquirectangularToCube.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/ToTexture/RenderCube.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/ToTexture/RenderDepthQuad.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/ToTexture/RenderToTextureModule.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/ToTexture/TextureProjection.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/ToTexture/Texture3DTo2D.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/ToTexture/TextureProjectionToCube.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
 	${${PROJECT_NAME}_SRC_FILES}
