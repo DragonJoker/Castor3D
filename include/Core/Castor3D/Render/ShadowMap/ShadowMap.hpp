@@ -142,6 +142,7 @@ namespace castor3d
 
 	protected:
 		RenderDevice const & m_device;
+		crg::ResourceHandler & m_handler;
 		Scene & m_scene;
 		castor::String m_name;
 		LightType m_lightType;
