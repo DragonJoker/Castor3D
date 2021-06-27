@@ -244,27 +244,6 @@ namespace castor3d
 		C3D_API void unregisterSections( castor::String const & name );
 		/**
 		 *\~english
-		 *\brief		Renders the given depth texture to the given frame buffer.
-		 *\param[in]	renderPass	The render pass.
-		 *\param[in]	frameBuffer	The frame buffer.
-		 *\param[in]	position	The render viewport position.
-		 *\param[in]	size		The render viewport size.
-		 *\param[in]	texture		The texture.
-		 *\~french
-		 *\brief		Rend la texture profondeur donnée dans le tampon d'image donné.
-		 *\param[in]	renderPass	La passe de rendu.
-		 *\param[in]	frameBuffer	Le frame buffer.
-		 *\param[in]	position	La position du viewport de rendu.
-		 *\param[in]	size		La taille du viewport de rendu.
-		 *\param[in]	texture		La texture.
-		 */
-		C3D_API void renderDepth( ashes::RenderPass const & renderPass
-			, ashes::FrameBuffer const & frameBuffer
-			, castor::Position const & position
-			, castor::Size const & size
-			, TextureLayout const & texture );
-		/**
-		 *\~english
 		 *\brief		Enqueues the given pass textures preparation.
 		 *\param[in]	pass	The pass for which textures need to be prepared.
 		 *\~french
@@ -628,7 +607,6 @@ namespace castor3d
 		MaterialType m_materialType{ MaterialType::ePhong };
 		bool m_enableValidation{ false };
 		bool m_enableApiTrace{ false };
-		RenderDepthQuadSPtr m_renderDepth;
 		uint32_t m_lpvGridSize{ 32u };
 		castor::AsyncJobQueue m_jobs;
 		crg::ResourceHandler m_resourceHandler;
