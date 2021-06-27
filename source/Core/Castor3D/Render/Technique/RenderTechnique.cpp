@@ -487,16 +487,8 @@ namespace castor3d
 		m_deferredRendering->update( updater );
 #endif
 
-		if ( m_renderTarget.getScene()->getFog().getType() != FogType::eDisabled )
-		{
-			auto & background = m_renderTarget.getScene()->getColourBackground();
-			background.update( updater );
-		}
-		else
-		{
-			auto & background = *m_renderTarget.getScene()->getBackground();
-			background.update( updater );
-		}
+		auto & background = *m_renderTarget.getScene()->getBackground();
+		background.update( updater );
 
 		if ( m_renderTarget.getTargetType() == TargetType::eWindow )
 		{
@@ -555,16 +547,8 @@ namespace castor3d
 		static_cast< OpaquePassType & >( *m_opaquePass ).update( updater );
 		static_cast< TransparentPassType & >( *m_transparentPass ).update( updater );
 
-		if ( m_renderTarget.getScene()->getFog().getType() != FogType::eDisabled )
-		{
-			auto & background = m_renderTarget.getScene()->getColourBackground();
-			background.update( updater );
-		}
-		else
-		{
-			auto & background = *m_renderTarget.getScene()->getBackground();
-			background.update( updater );
-		}
+		auto & background = *m_renderTarget.getScene()->getBackground();
+		background.update( updater );
 
 		doUpdateShadowMaps( updater );
 		doUpdateLpv( updater );

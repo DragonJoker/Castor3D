@@ -232,16 +232,6 @@ namespace castor3d
 			return m_background;
 		}
 
-		SceneBackground const & getColourBackground()const
-		{
-			return *m_colourBackground;
-		}
-
-		SceneBackground & getColourBackground()
-		{
-			return *m_colourBackground;
-		}
-
 		castor::RgbColour const & getBackgroundColour()const
 		{
 			return m_backgroundColour;
@@ -408,7 +398,6 @@ namespace castor3d
 		castor::RgbColour m_ambientLight;
 		castor::RgbColour m_backgroundColour;
 		SceneBackgroundSPtr m_background;
-		SceneBackgroundSPtr m_colourBackground;
 		LightFactorySPtr m_lightFactory;
 		Fog m_fog;
 		FrameListenerWPtr m_listener;
