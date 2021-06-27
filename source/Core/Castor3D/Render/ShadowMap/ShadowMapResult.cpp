@@ -39,7 +39,7 @@ namespace castor3d
 		static std::array< VkFormat, size_t( SmTexture::eCount ) > Values
 		{
 			{
-				VK_FORMAT_X8_D24_UNORM_PACK32,	// Depth
+				VK_FORMAT_D16_UNORM,			// Depth
 				VK_FORMAT_R32G32B32A32_SFLOAT,	// NormalLinear
 				VK_FORMAT_R32G32_SFLOAT,		// Variance
 				VK_FORMAT_R16G16B16A16_SFLOAT,	// Position
