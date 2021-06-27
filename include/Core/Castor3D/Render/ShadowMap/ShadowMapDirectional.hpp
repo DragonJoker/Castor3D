@@ -31,14 +31,16 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ShadowMap::update
 		 */
-		C3D_API void update( CpuUpdater & updater )override;
-		/**
-		 *\copydoc		castor3d::ShadowMap::update
-		 */
 		C3D_API void update( GpuUpdater & updater )override;
 
 	private:
-		bool isUpToDate( uint32_t index )const override;
+		std::vector< ShadowMap::PassDataPtr > doCreatePass( uint32_t index )override;
+		void doUpdate( CpuUpdater & updater )override;
+		bool doIsUpToDate( uint32_t index )const override;
+		uint32_t doGetMaxCount()const override
+		{
+			return 1u;
+		}
 
 	public:
 		static VkFormat constexpr VarianceFormat = VK_FORMAT_R32G32_SFLOAT;
