@@ -40,7 +40,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Technique/Opaque/OpaqueModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightingModule.hpp"
 #include "Castor3D/Render/Technique/Transparent/TransparentModule.hpp"
-#include "Castor3D/Render/Technique/Voxelize/VoxelizeModule.hpp"
+#include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelizeModule.hpp"
 #include "Castor3D/Render/ToneMapping/ToneMappingModule.hpp"
 #include "Castor3D/Render/ToTexture/RenderToTextureModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"

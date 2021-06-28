@@ -10,7 +10,7 @@
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
 #include <Castor3D/Render/Technique/RenderTechnique.hpp>
-#include <Castor3D/Render/Technique/Voxelize/VoxelSceneData.hpp>
+#include <Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelSceneData.hpp>
 
 #include <wx/propgrid/advprops.h>
 
