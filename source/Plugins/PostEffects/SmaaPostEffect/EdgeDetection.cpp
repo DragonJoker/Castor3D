@@ -150,9 +150,7 @@ namespace smaa
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
-		auto & context = m_device.makeContext();
-		auto & handler = m_graph.getHandler();
-		visitor.visit( "SMAA EdgeDetection Colour"
+		visitor.visit( "SMAA EdgeDetection Colour Result"
 			, m_outColour
 			, m_graph.getFinalLayout( m_outColour.sampledViewId ).layout
 			, castor3d::TextureFactors{}.invert( true ) );

@@ -173,12 +173,7 @@ namespace castor3d
 			{
 				static IntermediateView const result = IntermediateView{ []()
 					{
-						IntermediateView result
-						{ 
-							cuT( "Undefined" ),
-							{},
-							{},
-						};
+						IntermediateView result{};
 						return result;
 				}( ) };
 				return result;

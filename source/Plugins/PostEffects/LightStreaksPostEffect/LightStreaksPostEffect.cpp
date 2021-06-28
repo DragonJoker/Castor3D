@@ -87,26 +87,19 @@ namespace light_streaks
 		m_hiPass->accept( visitor );
 		m_kawasePass->accept( visitor );
 		m_combinePass->accept( visitor );
-		auto & device = *getOwner()->getMainRenderDevice();
-		auto & context = device.makeContext();
-		auto & handler = m_renderTarget.getGraph().getHandler();
 
 		for ( auto & view : m_hiImage.subViewsId )
 		{
-			visitor.visit( view.data->name
+			visitor.visit( "PostFX: LS - Hi " + std::to_string( view.data->info.subresourceRange.baseArrayLayer )
 				, view
-				, m_hiImage.image
-				, handler.createImageView( context, view )
 				, m_renderTarget.getGraph().getFinalLayout( view ).layout
 				, castor3d::TextureFactors{}.invert( true ) );
 		}
 
 		for ( auto & view : m_kawaseImage.subViewsId )
 		{
-			visitor.visit( view.data->name
+			visitor.visit( "PostFX: LS - Kawase " + std::to_string( view.data->info.subresourceRange.baseArrayLayer )
 				, view
-				, m_kawaseImage.image
-				, handler.createImageView( context, view )
 				, m_renderTarget.getGraph().getFinalLayout( view ).layout
 				, castor3d::TextureFactors{}.invert( true ) );
 		}
