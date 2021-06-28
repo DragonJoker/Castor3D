@@ -332,11 +332,11 @@ namespace castor3d
 
 					auto colour = writer.declLocale( "colour"
 						, shader::PhongLightingModel::combine( lightDiffuse
-							, lightIndirectDiffuse
+							, lightIndirectDiffuse.xyz()
 							, lightSpecular
 							, lightIndirectSpecular
 							, ambient
-							, indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse )
+							, indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() )
 							, occlusion
 							, emissive
 							, reflected + refracted
@@ -575,11 +575,11 @@ namespace castor3d
 
 					auto colour = writer.declLocale( "colour"
 						, shader::MetallicBrdfLightingModel::combine( lightDiffuse
-							, lightIndirectDiffuse
+							, lightIndirectDiffuse.xyz()
 							, lightSpecular
 							, lightIndirectSpecular
 							, ambient
-							, indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse )
+							, indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() )
 							, occlusion
 							, emissive
 							, reflected + refracted
@@ -816,12 +816,12 @@ namespace castor3d
 						, lightIndirectDiffuse.w() );
 
 					auto colour = writer.declLocale( "colour"
-							, lightIndirectDiffuse
 						, shader::SpecularBrdfLightingModel::combine( lightDiffuse
+							, lightIndirectDiffuse.xyz()
 							, lightSpecular
 							, lightIndirectSpecular
 							, ambient
-							, indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse )
+							, indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() )
 							, occlusion
 							, emissive
 							, reflected + refracted
