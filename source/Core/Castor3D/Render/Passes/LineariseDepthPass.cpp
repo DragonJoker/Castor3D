@@ -279,8 +279,6 @@ namespace castor3d
 		{
 			visitor.visit( "Linearised Depth " + string::toString( index++ )
 				, layer
-				, getResult().image
-				, m_graph.getHandler().createImageView( m_device.makeContext(), layer )
 				, m_graph.getFinalLayout( layer ).layout
 				, TextureFactors{}.invert( true ) );
 		}

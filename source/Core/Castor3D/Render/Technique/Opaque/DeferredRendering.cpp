@@ -177,13 +177,7 @@ namespace castor3d
 
 		m_lightingPass->accept( visitor );
 		m_indirectLightingPass->accept( visitor );
-
-		if ( visitor.getScene().needsSubsurfaceScattering()
-			|| visitor.config.forceSubPassesVisit )
-		{
-			m_subsurfaceScattering->accept( visitor );
-		}
-
+		m_subsurfaceScattering->accept( visitor );
 		m_resolve->accept( visitor );
 	}
 }

@@ -581,12 +581,9 @@ namespace castor3d
 			, m_renderTarget.getGraph().getFinalLayout( m_depth.sampledViewId ).layout
 			, TextureFactors{}.invert( true ) );
 
-		m_voxelizer->listIntermediates( visitor );
-
-		if ( m_ssaoConfig.enabled )
-		{
-			m_ssao->accept( visitor );
-		}
+		m_depthPass->accept( visitor );
+		m_voxelizer->accept( visitor );
+		m_ssao->accept( visitor );
 
 		if ( checkFlag( visitor.getFlags().passFlags, PassFlag::eAlphaBlending ) )
 		{
@@ -622,6 +619,38 @@ namespace castor3d
 		m_spotShadowMap->accept( visitor );
 		m_pointShadowMap->accept( visitor );
 #endif
+
+		for ( auto & lpv : m_lightPropagationVolumes )
+		{
+			if ( lpv )
+			{
+				lpv->accept( visitor );
+			}
+		}
+
+		for ( auto & lpv : m_lightPropagationVolumesG )
+		{
+			if ( lpv )
+			{
+				lpv->accept( visitor );
+			}
+		}
+
+		for ( auto & lpv : m_layeredLightPropagationVolumes )
+		{
+			if ( lpv )
+			{
+				lpv->accept( visitor );
+			}
+		}
+
+		for ( auto & lpv : m_layeredLightPropagationVolumesG )
+		{
+			if ( lpv )
+			{
+				lpv->accept( visitor );
+			}
+		}
 	}
 
 	crg::FramePass const & RenderTechnique::getLastPass()const

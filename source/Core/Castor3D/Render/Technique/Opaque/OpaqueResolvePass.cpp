@@ -902,5 +902,8 @@ namespace castor3d
 
 	void OpaqueResolvePass::accept( PipelineVisitorBase & visitor )
 	{
+		auto & program = m_programs[m_programIndex];
+		visitor.visit( program.vertexShader );
+		visitor.visit( program.pixelShader );
 	}
 }

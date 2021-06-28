@@ -66,17 +66,11 @@ namespace Bloom
 		m_blurXPass->accept( visitor );
 		m_blurYPass->accept( visitor );
 		m_combinePass->accept( visitor );
-		auto & device = *getOwner()->getMainRenderDevice();
-		auto & context = device.makeContext();
-		auto & handler = m_renderTarget.getGraph().getHandler();
-		auto blurImg = handler.createImage( context, m_blurImg );
 
 		for ( auto & view : m_blurViews )
 		{
-			visitor.visit( view.data->name
+			visitor.visit( "PostFX: HDRB - Blur " + std::to_string( view.data->info.subresourceRange.baseMipLevel )
 				, view
-				, blurImg
-				, handler.createImageView( context, view )
 				, m_renderTarget.getGraph().getFinalLayout( view ).layout
 				, castor3d::TextureFactors{}.invert( true ) );
 		}

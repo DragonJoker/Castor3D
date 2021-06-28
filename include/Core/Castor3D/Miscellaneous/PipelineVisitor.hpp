@@ -11,6 +11,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Math/RangedValue.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
+#include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>
 
 #include <RenderGraph/ImageViewData.hpp>
@@ -27,15 +28,13 @@ namespace castor3d
 		};
 
 	protected:
-		inline explicit PipelineVisitorBase( Config config )
+		explicit PipelineVisitorBase( Config config )
 			: config{ std::move( config ) }
 		{
 		}
 
 	public:
-		virtual inline ~PipelineVisitorBase()
-		{
-		}
+		C3D_API virtual ~PipelineVisitorBase() = default;
 		/**
 		*\~english
 		*name
@@ -45,8 +44,8 @@ namespace castor3d
 		*	Source de shader.
 		**/
 		/**@{*/
-		virtual void visit( ShaderModule const & shader ) = 0;
-		virtual void visit( DebugConfig const & ubo ) = 0;
+		C3D_API virtual void visit( ShaderModule const & shader ) = 0;
+		C3D_API virtual void visit( DebugConfig const & ubo ) = 0;
 		/**@}*/
 		/**
 		*\~english
@@ -57,49 +56,29 @@ namespace castor3d
 		*	Images intermédiaires.
 		**/
 		/**@{*/
-		inline void visit( castor::String const & name
+		void visit( castor::String const & name
 			, crg::ImageViewId const & viewId
-			, VkImage image
-			, VkImageView imageView
 			, VkImageLayout layout
 			, TextureFactors const & factors = {} )
 		{
-			if ( doFilter( viewId.data->info ) )
+			if ( doFilter( viewId ) )
 			{
-				doVisit( name, viewId, image, imageView, layout, factors );
+				doVisit( name
+					, viewId
+					, layout
+					, factors );
 			}
 		}
-		inline void visit( castor::String const & name
-			, Texture const & view
+
+		void visit( castor::String const & name
+			, Texture const & texture
 			, VkImageLayout layout
 			, TextureFactors const & factors = {} )
 		{
 			visit( name
-				, view.sampledViewId
-				, view.image
-				, view.sampledView
+				, texture.sampledViewId
 				, layout
 				, factors );
-		}
-		inline void visit( castor::String const & name
-			, ashes::ImageView const & view
-			, VkImageLayout layout
-			, TextureFactors const & factors = {} )
-		{
-			if ( doFilter( view.createInfo ) )
-			{
-				doVisit( name, view, layout, factors );
-			}
-		}
-		inline void visit( castor::String const & name
-			, crg::ImageViewId const & view
-			, VkImageLayout layout
-			, TextureFactors const & factors = {} )
-		{
-			if ( doFilter( view.data->info ) )
-			{
-				doVisit( name, view, layout, factors );
-			}
 		}
 		/**@}*/
 		/**
@@ -111,37 +90,37 @@ namespace castor3d
 		*	Configuration globale de l'effet.
 		**/
 		/**@{*/
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, float & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, int32_t & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, uint32_t & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, castor::Point2f & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, castor::Point2i & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, castor::Point2ui & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, castor::Point3f & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, castor::Point3i & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, castor::Point3ui & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, castor::Point4f & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, castor::Point4i & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, castor::Point4ui & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, castor::Matrix4x4f & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, castor::RangedValue< float > & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, castor::RangedValue< int32_t > & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, castor::RangedValue< uint32_t > & value ) = 0;
 		/**@}*/
 		/**
@@ -153,185 +132,176 @@ namespace castor3d
 		*	Configuration d'UBO.
 		**/
 		/**@{*/
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, float & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, int32_t & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, uint32_t & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::Point2f & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::Point2i & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::Point2ui & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::Point3f & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::Point3i & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::Point3ui & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::Point4f & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::Point4i & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::Point4ui & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::Matrix4x4f & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::RangedValue< float > & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::RangedValue< int32_t > & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::RangedValue< uint32_t > & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::ChangeTracked< float > & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::ChangeTracked< int32_t > & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::ChangeTracked< uint32_t > & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::ChangeTracked< castor::Point2f > & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::ChangeTracked< castor::Point2i > & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::ChangeTracked< castor::Point2ui > & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::ChangeTracked< castor::Point3f > & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::ChangeTracked< castor::Point3i > & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::ChangeTracked< castor::Point3ui > & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::ChangeTracked< castor::Point4f > & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::ChangeTracked< castor::Point4i > & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::ChangeTracked< castor::Point4ui > & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::ChangeTracked< castor::Matrix4x4f > & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::ChangeTracked< castor::RangedValue< float > > & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::ChangeTracked< castor::RangedValue< int32_t > > & value ) = 0;
-		virtual void visit( castor::String const & name
+		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::ChangeTracked< castor::RangedValue< uint32_t > > & value ) = 0;
 		/**@}*/
 
-	private:
-		virtual bool doFilter( VkImageViewCreateInfo const & info )const = 0;
+	protected:
+		C3D_API virtual bool doFilter( crg::ImageViewId const & viewId )const = 0;
 
-		virtual void doVisit( castor::String const & name
-			, crg::ImageViewId const & viewId
-			, VkImage image
-			, VkImageView view
+	private:
+		C3D_API virtual void doVisit( castor::String const & name
+			, crg::ImageViewId viewId
 			, VkImageLayout layout
 			, TextureFactors const & factors ) = 0;
-		virtual void doVisit( castor::String const & name
-			, ashes::ImageView const & view
-			, VkImageLayout layout
-			, TextureFactors const & factors = {} ) = 0;
-		virtual void doVisit( castor::String const & name
-			, crg::ImageViewId const & view
-			, VkImageLayout layout
-			, TextureFactors const & factors = {} ) = 0;
 
 	public:
 		Config const config;
@@ -341,15 +311,12 @@ namespace castor3d
 		: public PipelineVisitorBase
 	{
 	protected:
-		inline explicit PipelineVisitor( Config config )
+		explicit PipelineVisitor( Config config )
 			: PipelineVisitorBase{ std::move( config ) }
 		{
 		}
 
 	public:
-		virtual inline ~PipelineVisitor()
-		{
-		}
 		/**
 		*\~english
 		*name
@@ -726,29 +693,13 @@ namespace castor3d
 		using PipelineVisitorBase::visit;
 
 	private:
-		bool doFilter( VkImageViewCreateInfo const & info )const override
+		bool doFilter( crg::ImageViewId const & viewId )const override
 		{
 			return true;
 		}
 
 		void doVisit( castor::String const & name
-			, crg::ImageViewId const & viewId
-			, VkImage image
-			, VkImageView view
-			, VkImageLayout layout
-			, TextureFactors const & factors = TextureFactors{} )override
-		{
-		}
-
-		void doVisit( castor::String const & name
-			, ashes::ImageView const & view
-			, VkImageLayout layout
-			, TextureFactors const & factors = TextureFactors{} )override
-		{
-		}
-
-		void doVisit( castor::String const & name
-			, crg::ImageViewId const & view
+			, crg::ImageViewId viewId
 			, VkImageLayout layout
 			, TextureFactors const & factors = TextureFactors{} )override
 		{

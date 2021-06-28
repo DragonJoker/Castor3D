@@ -25,10 +25,6 @@ namespace castor3d
 		}
 
 	public:
-		virtual inline ~RenderTechniqueVisitor()
-		{
-		}
-
 		/**
 		*\~english
 		*name

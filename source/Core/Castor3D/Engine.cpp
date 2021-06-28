@@ -571,7 +571,7 @@ namespace castor3d
 		m_windowInputListeners.emplace( &window
 			, std::make_shared< RenderWindow::InputListener >( *this, window ) );
 		auto listener = m_windowInputListeners.find( &window )->second;
-		log::debug << "Created UIListener 0x" << std::hex << listener.get() << " for window " << window.getName() << std::endl;
+		log::trace << "Created InputListener [0x" << std::hex << listener.get() << "] - " << window.getName() << std::endl;
 	}
 
 	void Engine::unregisterWindow( RenderWindow const & window )
@@ -584,12 +584,12 @@ namespace castor3d
 			listener->cleanup();
 			auto plistener = listener.get();
 			auto pwindow = &window;
-			log::debug << "Removing UIListener 0x" << std::hex << plistener << std::endl;
+			log::trace << "Removing InputListener [0x" << std::hex << plistener << "]" << std::endl;
 			listener->getFrameListener().postEvent( makeCpuFunctorEvent( EventType::ePostRender
 				, [this, plistener, pwindow]()
 				{
 					m_windowInputListeners.erase( pwindow );
-					log::debug << "Removed UIListener 0x" << std::hex << plistener << std::endl;
+					log::trace << "Removed InputListener [0x" << std::hex << plistener << "]" << std::endl;
 				} ) );
 		}
 
