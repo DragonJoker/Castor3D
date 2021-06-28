@@ -178,6 +178,7 @@ namespace castor3d
 		 *\param[in,out]	result	Reçoit les vues.
 		 */
 		C3D_API void listIntermediateViews( IntermediateViewArray & result )const;
+		C3D_API void resetSemaphore();
 		/**
 		*\~english
 		*name
