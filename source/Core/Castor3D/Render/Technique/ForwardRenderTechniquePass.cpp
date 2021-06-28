@@ -280,11 +280,11 @@ namespace castor3d
 						, lightIndirectDiffuse.w() );
 
 					pxl_fragColor = vec4( shader::PhongLightingModel::combine( lightDiffuse
-							, lightIndirectDiffuse
+							, lightIndirectDiffuse.xyz()
 							, lightSpecular
 							, lightIndirectSpecular
 							, ambient
-							, indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse )
+							, indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() )
 							, occlusion
 							, emissive
 							, reflected + refracted
@@ -532,11 +532,11 @@ namespace castor3d
 						, lightIndirectDiffuse.w() );
 
 					pxl_fragColor = vec4( shader::MetallicBrdfLightingModel::combine( lightDiffuse
-							, lightIndirectDiffuse
+							, lightIndirectDiffuse.xyz()
 							, lightSpecular
 							, lightIndirectSpecular
 							, ambient
-							, indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse )
+							, indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() )
 							, occlusion
 							, emissive
 							, reflected + refracted
@@ -782,12 +782,12 @@ namespace castor3d
 						, indirectOcclusion
 						, lightIndirectDiffuse.w() );
 
-							, lightIndirectDiffuse
 					pxl_fragColor = vec4( shader::SpecularBrdfLightingModel::combine( lightDiffuse
+							, lightIndirectDiffuse.xyz()
 							, lightSpecular
 							, lightIndirectSpecular
 							, ambient
-							, indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse )
+							, indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() )
 							, occlusion
 							, emissive
 							, reflected + refracted
