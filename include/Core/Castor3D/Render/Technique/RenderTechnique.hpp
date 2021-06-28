@@ -15,7 +15,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Technique/SsaoPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaqueModule.hpp"
 #include "Castor3D/Render/Technique/Transparent/TransparentModule.hpp"
-#include "Castor3D/Render/Technique/Voxelize/VoxelizeModule.hpp"
+#include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelizeModule.hpp"
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
