@@ -820,6 +820,32 @@ source_group( "Header Files\\Render\\GlobalIllumination\\LightPropagationVolumes
 source_group( "Source Files\\Render\\GlobalIllumination\\LightPropagationVolumes" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/GlobalIllumination/VoxelConeTracing/Voxelizer.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/GlobalIllumination/VoxelConeTracing/VoxelSceneData.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/GlobalIllumination/VoxelConeTracing/VoxelSecondaryBounce.cpp
+)
+set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/GlobalIllumination/VoxelConeTracing/VoxelizeModule.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/GlobalIllumination/VoxelConeTracing/VoxelSceneData.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/GlobalIllumination/VoxelConeTracing/VoxelSecondaryBounce.hpp
+)
+set( ${PROJECT_NAME}_SRC_FILES
+	${${PROJECT_NAME}_SRC_FILES}
+	${${PROJECT_NAME}_FOLDER_SRC_FILES}
+)
+set( ${PROJECT_NAME}_HDR_FILES
+	${${PROJECT_NAME}_HDR_FILES}
+	${${PROJECT_NAME}_FOLDER_HDR_FILES}
+)
+source_group( "Header Files\\Render\\GlobalIllumination\\VoxelConeTracing" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
+source_group( "Source Files\\Render\\GlobalIllumination\\VoxelConeTracing" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+
+set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Node/BillboardRenderNode.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Node/PassRenderNode.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Node/QueueCulledRenderNodes.cpp
@@ -1083,32 +1109,6 @@ set( ${PROJECT_NAME}_HDR_FILES
 )
 source_group( "Header Files\\Render\\Technique\\Transparent" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
 source_group( "Source Files\\Render\\Technique\\Transparent" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
-
-set( ${PROJECT_NAME}_FOLDER_SRC_FILES
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Voxelize/VoxelBufferToTexture.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Voxelize/VoxelizePass.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Voxelize/Voxelizer.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Voxelize/VoxelSceneData.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Voxelize/VoxelSecondaryBounce.cpp
-)
-set( ${PROJECT_NAME}_FOLDER_HDR_FILES
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Voxelize/VoxelBufferToTexture.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Voxelize/VoxelizeModule.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Voxelize/VoxelizePass.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Voxelize/Voxelizer.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Voxelize/VoxelSceneData.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Voxelize/VoxelSecondaryBounce.hpp
-)
-set( ${PROJECT_NAME}_SRC_FILES
-	${${PROJECT_NAME}_SRC_FILES}
-	${${PROJECT_NAME}_FOLDER_SRC_FILES}
-)
-set( ${PROJECT_NAME}_HDR_FILES
-	${${PROJECT_NAME}_HDR_FILES}
-	${${PROJECT_NAME}_FOLDER_HDR_FILES}
-)
-source_group( "Header Files\\Render\\Technique\\Voxelize" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
-source_group( "Source Files\\Render\\Technique\\Voxelize" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/ToneMapping/HdrConfig.cpp
