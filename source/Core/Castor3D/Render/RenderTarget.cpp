@@ -100,38 +100,126 @@ namespace castor3d
 				, std::set< VkImageViewCreateInfo, VkImageViewCreateInfoComp > & cache
 				, IntermediateViewArray & result )
 				: RenderTechniqueVisitor{ flags, scene, { true, false } }
+				, m_handler{ scene.getEngine()->getGraphResourceHandler() }
 				, m_result{ result }
 				, m_cache{ cache }
 			{
 			}
 
+			void doVisitArray( castor::String const & name
+				, crg::ImageViewId viewId
+				, VkImageLayout layout
+				, TextureFactors const & factors )
+			{
+				auto & info = viewId.data->info;
+
+				if ( ( info.viewType == VK_IMAGE_VIEW_TYPE_2D_ARRAY
+					|| info.viewType == VK_IMAGE_VIEW_TYPE_1D_ARRAY
+					|| info.viewType == VK_IMAGE_VIEW_TYPE_CUBE
+					|| info.viewType == VK_IMAGE_VIEW_TYPE_CUBE_ARRAY ) )
+				{
+					auto layerInfo = info;
+					layerInfo.subresourceRange.layerCount = 1u;
+
+					for ( uint32_t layerIdx = 0u; layerIdx < info.subresourceRange.layerCount; ++layerIdx )
+					{
+						auto layer = layerIdx + info.subresourceRange.baseArrayLayer;
+						auto layerViewId = m_handler.createViewId( crg::ImageViewData{ viewId.data->name + std::to_string( layer )
+							, viewId.data->image
+							, layerInfo.flags
+							, layerInfo.viewType
+							, layerInfo.format
+							, layerInfo.subresourceRange } );
+
+						if ( doFilter( layerViewId ) )
+						{
+							doVisit( name + std::to_string( layer )
+								, layerViewId
+								, layout
+								, factors );
+						}
+
+						layerInfo.subresourceRange.baseArrayLayer++;
+					}
+				}
+			}
+
 			void doVisit( castor::String const & name
-				, crg::ImageViewId const & viewId
-				, VkImage image
-				, VkImageView view
+				, crg::ImageViewId viewId
 				, VkImageLayout layout
 				, TextureFactors const & factors )override
 			{
-				m_cache.insert( viewId.data->info );
-				m_result.push_back( { name
-					, viewId
-					, image
-					, view
-					, layout
-					, factors } );
+				auto info = viewId.data->info;
+
+				if ( ( info.viewType == VK_IMAGE_VIEW_TYPE_3D )
+					|| ( ( info.viewType == VK_IMAGE_VIEW_TYPE_2D )
+						&& ( info.subresourceRange.layerCount == 1u ) ) )
+				{
+					info.image = VkImage( uint64_t( viewId.data->image.id ) );
+					m_cache.insert( info );
+					m_result.emplace_back( name
+						, viewId
+						, layout
+						, factors );
+				}
+				else
+				{
+					doVisitArray( name, viewId, layout, factors );
+				}
 			}
 
-			bool doFilter( VkImageViewCreateInfo const & info )const override
+			bool doFilterArray( crg::ImageViewId const & viewId )const
 			{
-				return ( info.viewType == VK_IMAGE_VIEW_TYPE_3D
-					|| ( info.viewType == VK_IMAGE_VIEW_TYPE_2D
-						&& info.subresourceRange.baseMipLevel == 0u
-						&& info.subresourceRange.levelCount == 1u
-						&& info.subresourceRange.layerCount == 1u ) )
-					&& m_cache.end() == m_cache.find( info );
+				bool result = false;
+				auto & info = viewId.data->info;
+
+				if ( ( info.viewType == VK_IMAGE_VIEW_TYPE_2D_ARRAY
+					|| info.viewType == VK_IMAGE_VIEW_TYPE_1D_ARRAY
+					|| info.viewType == VK_IMAGE_VIEW_TYPE_CUBE
+					|| info.viewType == VK_IMAGE_VIEW_TYPE_CUBE_ARRAY ) )
+				{
+					auto layerInfo = info;
+					layerInfo.subresourceRange.layerCount = 1u;
+
+					for ( uint32_t layerIdx = 0u; layerIdx < info.subresourceRange.layerCount; ++layerIdx )
+					{
+						auto layer = layerIdx + info.subresourceRange.baseArrayLayer;
+						result = doFilter( m_handler.createViewId( crg::ImageViewData{ viewId.data->name + std::to_string( layer )
+							, viewId.data->image
+							, layerInfo.flags
+							, layerInfo.viewType
+							, layerInfo.format
+							, layerInfo.subresourceRange } ) ) && result;
+						layerInfo.subresourceRange.baseArrayLayer++;
+					}
+				}
+
+				return result;
+			}
+
+			bool doFilter( crg::ImageViewId const & viewId )const override
+			{
+				auto info = viewId.data->info;
+
+				if ( info.subresourceRange.levelCount > 1u
+					&& info.viewType != VK_IMAGE_VIEW_TYPE_3D )
+				{
+					return false;
+				}
+
+				if ( ( info.viewType == VK_IMAGE_VIEW_TYPE_3D )
+					|| ( ( info.viewType == VK_IMAGE_VIEW_TYPE_2D )
+						&& ( info.subresourceRange.layerCount == 1u ) ) )
+				{
+					info.image = VkImage( uint64_t( viewId.data->image.id ) );
+					return m_cache.end() == m_cache.find( info );
+				}
+
+				return doFilterArray( viewId );
 			}
 
 		private:
+			crg::ResourceHandler & m_handler;
 			IntermediateViewArray & m_result;
 			std::set< VkImageViewCreateInfo, VkImageViewCreateInfoComp > & m_cache;
 		};
@@ -525,34 +613,21 @@ namespace castor3d
 
 	void RenderTarget::listIntermediateViews( IntermediateViewArray & result )const
 	{
-		result.push_back( { "Target Result"
-			, m_combined.sampledViewId
-			, m_combined.image
-			, m_combined.wholeView
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
-		result.push_back( { "Target Colour"
-			, m_objects.sampledViewId
-			, m_objects.image
-			, m_objects.wholeView
+		result.emplace_back( "Target Result"
+			, m_combined
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		result.emplace_back( "Target Colour"
+			, m_objects
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, TextureFactors{}.invert( true ) } );
-		result.push_back( { "Target Overlays"
-			, m_overlays.sampledViewId
-			, m_overlays.image
-			, m_overlays.wholeView
+			, TextureFactors{}.invert( true ) );
+		result.emplace_back( "Target Overlays"
+			, m_overlays
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, TextureFactors{}.invert( true ) } );
-		result.push_back( { "Target Velocity"
-			, m_velocity.sampledViewId
-			, m_velocity.image
-			, m_velocity.wholeView
+			, TextureFactors{}.invert( true ) );
+		result.emplace_back( "Target Velocity"
+			, m_velocity
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, TextureFactors{}.invert( true ) } );
-
-		if ( auto technique = getTechnique() )
-		{
-			IntermediatesLister::submit( *technique, result );
-		}
+			, TextureFactors{}.invert( true ) );
 
 		for ( auto & postEffect : m_hdrPostEffects )
 		{
@@ -563,6 +638,17 @@ namespace castor3d
 		{
 			IntermediatesLister::submit( *getScene(), *postEffect, result );
 		}
+
+		if ( auto technique = getTechnique() )
+		{
+			IntermediatesLister::submit( *technique, result );
+		}
+	}
+
+	void RenderTarget::resetSemaphore()
+	{
+		m_signalFinished.semaphore = nullptr;
+		m_signalFinished.dstStageMask = 0u;
 	}
 
 	crg::FramePass & RenderTarget::doCreateCombinePass()

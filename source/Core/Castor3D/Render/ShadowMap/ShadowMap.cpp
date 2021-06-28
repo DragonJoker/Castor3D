@@ -147,8 +147,6 @@ namespace castor3d
 			{
 				visitor.visit( m_name + getName( SmTexture( i ) ) + cuT( "L" ) + castor::string::toString( index++ )
 					, view
-					, result.image
-					, m_handler.createImageView( m_device.makeContext(), view )
 					, ( ashes::isDepthOrStencilFormat( view.data->info.format )
 						? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
 						: VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )
