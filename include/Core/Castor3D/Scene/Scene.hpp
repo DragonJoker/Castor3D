@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMapModule.hpp"
 #include "Castor3D/Render/Node/RenderNodeModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
-#include "Castor3D/Render/Technique/Voxelize/VoxelSceneData.hpp"
+#include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelSceneData.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"

@@ -28,7 +28,7 @@
 #include "Castor3D/Render/Technique/Transparent/TransparentPass.hpp"
 #include "Castor3D/Render/Technique/Transparent/TransparentPassResult.hpp"
 #include "Castor3D/Render/Technique/Transparent/WeightedBlendRendering.hpp"
-#include "Castor3D/Render/Technique/Voxelize/Voxelizer.hpp"
+#include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
