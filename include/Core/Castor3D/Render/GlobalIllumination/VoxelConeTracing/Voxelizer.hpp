@@ -68,8 +68,6 @@ namespace castor3d
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
 		C3D_API crg::SemaphoreWait render( crg::SemaphoreWait const & semaphore );
 
-		C3D_API void listIntermediates( RenderTechniqueVisitor & visitor );
-
 		Texture const & getFirstBounce()const
 		{
 			return m_firstBounce;

@@ -1,4 +1,4 @@
-#include "Castor3D/Render/Technique/Voxelize/Voxelizer.hpp"
+#include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp"
 
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
@@ -9,10 +9,10 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
-#include "Castor3D/Render/Technique/Voxelize/VoxelBufferToTexture.hpp"
-#include "Castor3D/Render/Technique/Voxelize/VoxelizePass.hpp"
-#include "Castor3D/Render/Technique/Voxelize/VoxelSceneData.hpp"
-#include "Castor3D/Render/Technique/Voxelize/VoxelSecondaryBounce.hpp"
+#include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp"
+#include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp"
+#include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelSceneData.hpp"
+#include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelSecondaryBounce.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
@@ -140,24 +140,22 @@ namespace castor3d
 
 	void Voxelizer::accept( RenderTechniqueVisitor & visitor )
 	{
+		visitor.visit( "Voxelisation First Bounce"
+			, m_firstBounce
+			, m_graph.getFinalLayout( m_firstBounce.wholeViewId ).layout
+			, TextureFactors::tex3D( &m_grid ) );
+		visitor.visit( "Voxelisation Secondary Bounce"
+			, m_secondaryBounce
+			, m_graph.getFinalLayout( m_secondaryBounce.wholeViewId ).layout
+			, TextureFactors::tex3D( &m_grid ) );
 		m_voxelizePass->accept( visitor );
+		m_voxelToTexture->accept( visitor );
+		m_voxelSecondaryBounce->accept( visitor );
 	}
 
 	crg::SemaphoreWait Voxelizer::render( crg::SemaphoreWait const & semaphore )
 	{
 		return m_runnable->run( semaphore, *m_device.graphicsQueue );
-	}
-
-	void Voxelizer::listIntermediates( RenderTechniqueVisitor & visitor )
-	{
-		visitor.visit( "Voxelisation Result"
-			, m_firstBounce
-			, m_graph.getFinalLayout( m_firstBounce.wholeViewId ).layout
-			, TextureFactors::tex3D( &m_grid ) );
-		visitor.visit( "Voxelisation SecondaryBounce"
-			, m_secondaryBounce
-			, m_graph.getFinalLayout( m_secondaryBounce.wholeViewId ).layout
-			, TextureFactors::tex3D( &m_grid ) );
 	}
 
 	crg::FramePass & Voxelizer::doCreateVoxelizePass()

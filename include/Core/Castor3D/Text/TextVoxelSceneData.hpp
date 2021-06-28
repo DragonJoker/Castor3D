@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_TextVoxelSceneData_H___
 #define ___C3D_TextVoxelSceneData_H___
 
-#include "Castor3D/Render/Technique/Voxelize/VoxelSceneData.hpp"
+#include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelSceneData.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
 

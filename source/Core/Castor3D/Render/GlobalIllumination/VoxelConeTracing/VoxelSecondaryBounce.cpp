@@ -1,4 +1,4 @@
-#include "Castor3D/Render/Technique/Voxelize/VoxelSecondaryBounce.hpp"
+#include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelSecondaryBounce.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
@@ -7,7 +7,7 @@
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
-#include "Castor3D/Render/Technique/Voxelize/VoxelSceneData.hpp"
+#include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelSceneData.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"

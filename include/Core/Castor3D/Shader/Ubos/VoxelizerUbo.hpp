@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "UbosModule.hpp"
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
-#include "Castor3D/Render/Technique/Voxelize/VoxelizeModule.hpp"
+#include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelizeModule.hpp"
 
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 #include <ShaderWriter/MatTypes/Mat4.hpp>
