@@ -23,6 +23,14 @@ namespace castor3d
 
 	castor::String const RenderTypeUndefined = cuT( "Undefined" );
 
+	/**
+	*\~english
+	*\brief
+	*	A quad without UV.
+	*\~french
+	*\brief
+	*	Un quad sans UV.
+	*/
 	struct NonTexturedQuad
 	{
 		struct Vertex
@@ -32,7 +40,14 @@ namespace castor3d
 
 		Vertex vertex[6];
 	};
-
+	/**
+	*\~english
+	*\brief
+	*	A quad with UV.
+	*\~french
+	*\brief
+	*	Un quad avec UV.
+	*/
 	struct TexturedQuad
 	{
 		struct Vertex
@@ -43,7 +58,14 @@ namespace castor3d
 
 		Vertex vertex[6];
 	};
-
+	/**
+	*\~english
+	*\brief
+	*	A cube without UV.
+	*\~french
+	*\brief
+	*	Un cube sans UV.
+	*/
 	struct NonTexturedCube
 	{
 		struct Quad
@@ -58,7 +80,14 @@ namespace castor3d
 
 		Quad faces[6];
 	};
-
+	/**
+	*\~english
+	*\brief
+	*	A cube with UV.
+	*\~french
+	*\brief
+	*	Un cube avec UV.
+	*/
 	struct TexturedCube
 	{
 		struct Quad
@@ -74,6 +103,14 @@ namespace castor3d
 
 		Quad faces[6];
 	};
+	/**
+	*\~english
+	*\brief
+	*	RenderGraph's image view binding.
+	*\~french
+	*\brief
+	*	Binding d'une image RenderGraph.
+	*/
 	struct Texture
 	{
 		C3D_API Texture();
@@ -193,6 +230,46 @@ namespace castor3d
 		, uint32_t srcQueueFamily
 		, uint32_t dstQueueFamily );
 	using TextureArray = std::vector< Texture >;
+	/**
+	*\~english
+	*\brief
+	*	Holds minimal data for an intermediate view.
+	*\~french
+	*\brief
+	*	Contient les données minimales pour une vue intermédiaire.
+	*/
+	struct IntermediateView
+	{
+		C3D_API IntermediateView() = default;
+
+		IntermediateView( castor::String name
+			, crg::ImageViewId const & viewId
+			, VkImageLayout layout
+			, TextureFactors factors = {} )
+			: name{ std::move( name ) }
+			, viewId{ viewId }
+			, layout{ layout }
+			, factors{ std::move( factors ) }
+		{
+		}
+		
+		IntermediateView( castor::String name
+			, Texture const & texture
+			, VkImageLayout layout
+			, TextureFactors factors = {} )
+			: IntermediateView{ std::move( name )
+				, texture.sampledViewId
+				, layout
+				, std::move( factors ) }
+		{
+		}
+
+		castor::String name;
+		crg::ImageViewId viewId;
+		VkImageLayout layout;
+		TextureFactors factors;
+		bool isCrg;
+	};
 	/**
 	*\~english
 	*\brief
@@ -453,23 +530,6 @@ namespace castor3d
 		TextureFlags texturesFlags;
 	};
 	C3D_API bool operator==( PipelineFlags const & lhs, PipelineFlags const & rhs );
-	/**
-	*\~english
-	*\brief
-	*	Holds minimal data for an intermediate view.
-	*\~french
-	*\brief
-	*	Contient les données minimales pour une vue intermédiaire.
-	*/
-	struct IntermediateView
-	{
-		castor::String name;
-		crg::ImageViewId viewId;
-		VkImage image;
-		VkImageView view;
-		VkImageLayout layout;
-		TextureFactors factors;
-	};
 	/**
 	*\~english
 	*\brief

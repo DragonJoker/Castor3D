@@ -184,10 +184,11 @@ namespace castor3d
 		IntermediateView doCreateBarrierView( RenderDevice const & device
 			, IntermediateView const & view )
 		{
-			auto info = view.viewId.data->info;
 			auto & handler = device.renderSystem.getEngine()->getGraphResourceHandler();
+			auto imageId = view.viewId.data->image;
+			auto info = view.viewId.data->info;
 			crg::ImageViewId viewId{ handler.createViewId( crg::ImageViewData{ view.name + "Barrier"
-				, view.viewId.data->image
+				, imageId
 				, info.flags
 				, info.viewType
 				, info.format
@@ -202,12 +203,8 @@ namespace castor3d
 					, info.subresourceRange.levelCount
 					, info.subresourceRange.baseArrayLayer
 					, info.subresourceRange.layerCount } } ) };
-			VkImageView barrierView = handler.createImageView( device.makeContext()
-				, viewId );
-			return{ view.name
+			return { view.name
 				, viewId
-				, view.image
-				, barrierView
 				, view.layout
 				, view.factors };
 		}
@@ -244,10 +241,11 @@ namespace castor3d
 		IntermediateView doCreateSampledView( RenderDevice const & device
 			, IntermediateView const & view )
 		{
-			auto info = view.viewId.data->info;
 			auto & handler = device.renderSystem.getEngine()->getGraphResourceHandler();
+			auto imageId = view.viewId.data->image;
+			auto info = view.viewId.data->info;
 			crg::ImageViewId viewId{ handler.createViewId( crg::ImageViewData{ view.name + "Sampled"
-				, view.viewId.data->image
+				, imageId
 				, info.flags
 				, info.viewType
 				, info.format
@@ -262,12 +260,8 @@ namespace castor3d
 					, info.subresourceRange.levelCount
 					, info.subresourceRange.baseArrayLayer
 					, info.subresourceRange.layerCount } } ) };
-			VkImageView sampledView = handler.createImageView( device.makeContext()
-				, viewId );
 			return { view.name
 				, viewId
-				, view.image
-				, sampledView
 				, view.layout
 				, view.factors };
 		}
@@ -410,7 +404,7 @@ namespace castor3d
 
 			if ( m_intermediates[m_debugConfig.debugIndex].factors.grid )
 			{
-				updater.cellSize = ( *m_intermediates[m_debugConfig.debugIndex].factors.grid )[3];
+				updater.cellSize = ( *m_intermediates[m_debugConfig.debugIndex].factors.grid )->w;
 				updater.gridCenter = castor::Point3f{ *m_intermediates[m_debugConfig.debugIndex].factors.grid };
 			}
 			else
@@ -879,10 +873,12 @@ namespace castor3d
 			, castor::Position{}
 			, m_program
 			, *m_renderPass );
+		auto & handler = m_device.renderSystem.getEngine()->getGraphResourceHandler();
+		auto & context = m_device.makeContext();
 
 		for ( auto & intermediate : m_intermediateSampledViews )
 		{
-			m_renderQuad->registerPassInputs( { RenderQuad::makeDescriptorWrite( intermediate.view
+			m_renderQuad->registerPassInputs( { RenderQuad::makeDescriptorWrite( handler.createImageView( context, intermediate.viewId )
 				, m_renderQuad->getSampler().getSampler()
 					, 0u ) }
 				, intermediate.factors.invertY );
@@ -949,6 +945,8 @@ namespace castor3d
 			auto & intermediate = m_intermediates[pass];
 			auto & intermediateBarrierView = m_intermediateBarrierViews[pass];
 			auto & intermediateSampledView = m_intermediateSampledViews[pass];
+			auto & handler = m_device.renderSystem.getEngine()->getGraphResourceHandler();
+			auto & context = m_device.makeContext();
 			uint32_t index = 0u;
 
 			for ( auto & commandBuffer : commandBuffers )
@@ -963,7 +961,7 @@ namespace castor3d
 				{
 					commandBuffer->memoryBarrier( ashes::getStageMask( intermediateBarrierView.layout )
 						, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-						, makeLayoutTransition( intermediateBarrierView.image
+						, makeLayoutTransition( handler.createImage( context, intermediateBarrierView.viewId.data->image )
 							, intermediateBarrierView.viewId.data->info.subresourceRange
 							, intermediateBarrierView.layout
 							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
@@ -983,7 +981,7 @@ namespace castor3d
 				{
 					commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 						, ashes::getStageMask( intermediateBarrierView.layout )
-						, makeLayoutTransition( intermediateBarrierView.image
+						, makeLayoutTransition( handler.createImage( context, intermediateBarrierView.viewId.data->image )
 							, intermediateBarrierView.viewId.data->info.subresourceRange
 							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 							, intermediateBarrierView.layout
@@ -1022,8 +1020,6 @@ namespace castor3d
 			, target->getTechnique()->getMatrixUbo() );
 		m_tex3DTo2DIntermediate = { "Texture3DTo2DResult"
 			, m_texture3Dto2D->getTarget().sampledViewId
-			, m_texture3Dto2D->getTarget().image
-			, m_texture3Dto2D->getTarget().wholeView
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, castor3d::TextureFactors{}.invert( true ) };
 #if C3D_DebugQuads
@@ -1123,6 +1119,7 @@ namespace castor3d
 
 	void RenderWindow::doResetSwapChain()
 	{
+		doWaitFrame();
 		getDevice()->waitIdle();
 
 		doDestroyCommandBuffers();
@@ -1160,32 +1157,52 @@ namespace castor3d
 
 	void RenderWindow::doWaitFrame()
 	{
-		getDevice().graphicsQueue->submit( ashes::VkCommandBufferArray{}
-			, ashes::VkSemaphoreArray{ getRenderTarget()->getSemaphore().semaphore }
-			, { getRenderTarget()->getSemaphore().dstStageMask }
-			, ashes::VkSemaphoreArray{} );
+		auto toWait = getRenderTarget()->getSemaphore();
+
+		if ( toWait.semaphore )
+		{
+			if ( m_toSave )
+			{
+				getDevice().graphicsQueue->submit( ashes::VkCommandBufferArray{ *m_transferCommands.commandBuffer }
+					, ashes::VkSemaphoreArray{ toWait.semaphore }
+					, { toWait.dstStageMask }
+					, ashes::VkSemaphoreArray{ *m_transferCommands.semaphore } );
+				toWait.semaphore = *m_transferCommands.semaphore;
+				toWait.dstStageMask = VK_PIPELINE_STAGE_TRANSFER_BIT;
+			}
+
+			getDevice().graphicsQueue->submit( ashes::VkCommandBufferArray{}
+				, ashes::VkSemaphoreArray{ toWait.semaphore }
+				, { toWait.dstStageMask }
+				, ashes::VkSemaphoreArray{} );
+			getRenderTarget()->resetSemaphore();
+		}
 	}
 
 	void RenderWindow::doSubmitFrame( RenderingResources * resources )
 	{
 		auto toWait = getRenderTarget()->getSemaphore();
 
-		if ( m_toSave )
+		if ( toWait.semaphore )
 		{
-			getDevice().graphicsQueue->submit( ashes::VkCommandBufferArray{ *m_transferCommands.commandBuffer }
-				, ashes::VkSemaphoreArray{ toWait.semaphore }
-				, { toWait.dstStageMask }
-				, ashes::VkSemaphoreArray{ *m_transferCommands.semaphore } );
-			toWait.semaphore = *m_transferCommands.semaphore;
-			toWait.dstStageMask = VK_PIPELINE_STAGE_TRANSFER_BIT;
-		}
+			if ( m_toSave )
+			{
+				getDevice().graphicsQueue->submit( ashes::VkCommandBufferArray{ *m_transferCommands.commandBuffer }
+					, ashes::VkSemaphoreArray{ toWait.semaphore }
+					, { toWait.dstStageMask }
+					, ashes::VkSemaphoreArray{ *m_transferCommands.semaphore } );
+				toWait.semaphore = *m_transferCommands.semaphore;
+				toWait.dstStageMask = VK_PIPELINE_STAGE_TRANSFER_BIT;
+			}
 
-		toWait = m_texture3Dto2D->render( toWait );
-		getDevice().graphicsQueue->submit( ashes::VkCommandBufferArray{ *m_commandBuffers[m_debugConfig.debugIndex][resources->imageIndex] }
-			, ashes::VkSemaphoreArray{ *resources->imageAvailableSemaphore, toWait.semaphore }
-			, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, toWait.dstStageMask }
-			, ashes::VkSemaphoreArray{}
-			, *resources->fence );
+			toWait = m_texture3Dto2D->render( toWait );
+			getDevice().graphicsQueue->submit( ashes::VkCommandBufferArray{ *m_commandBuffers[m_debugConfig.debugIndex][resources->imageIndex] }
+				, ashes::VkSemaphoreArray{ *resources->imageAvailableSemaphore, toWait.semaphore }
+				, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, toWait.dstStageMask }
+				, ashes::VkSemaphoreArray{}
+				, *resources->fence );
+			getRenderTarget()->resetSemaphore();
+		}
 	}
 
 	void RenderWindow::doPresentFrame( RenderingResources * resources )
