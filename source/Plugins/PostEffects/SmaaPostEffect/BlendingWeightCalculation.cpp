@@ -1048,7 +1048,7 @@ namespace smaa
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
-		visitor.visit( "SMAA BlendingWeight Colour"
+		visitor.visit( "SMAA BlendingWeight Result"
 			, m_result
 			, m_graph.getFinalLayout( m_result.sampledViewId ).layout
 			, castor3d::TextureFactors{}.invert( true ) );

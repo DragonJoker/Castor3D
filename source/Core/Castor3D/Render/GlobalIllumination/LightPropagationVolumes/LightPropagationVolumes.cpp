@@ -383,6 +383,14 @@ namespace castor3d
 				, m_cameraDir
 				, m_scene.getLpvGridSize()
 				, m_scene.getLpvIndirectAttenuation() );
+			auto cellSize = std::max( std::max( m_aabb.getDimensions()->x
+				, m_aabb.getDimensions()->y )
+				, m_aabb.getDimensions()->z ) / m_scene.getLpvGridSize();
+			castor::Grid grid{ m_scene.getLpvGridSize(), cellSize, m_aabb.getMax(), m_aabb.getMin(), 1.0f, 0 };
+			m_gridsSize = castor::Point4f{ grid.getCenter()->x
+				, grid.getCenter()->y
+				, grid.getCenter()->z
+				, grid.getCellSize() };
 		}
 	}
 
@@ -407,9 +415,13 @@ namespace castor3d
 		{
 			for ( auto & lightLpv : m_lightLpvs )
 			{
-				lightLpv.second.lightInjectionPass->accept( visitor );
+				if ( lightLpv.second.lightInjectionPass )
+				{
+					lightLpv.second.lightInjectionPass->accept( visitor );
+				}
 
-				if ( m_geometryVolumes )
+				if ( m_geometryVolumes
+					&& lightLpv.second.geometryInjectionPass )
 				{
 					lightLpv.second.geometryInjectionPass->accept( visitor );
 				}
@@ -417,7 +429,43 @@ namespace castor3d
 
 			for ( auto & pass : m_lightPropagationPasses )
 			{
-				pass->accept( visitor );
+				if ( pass )
+				{
+					pass->accept( visitor );
+				}
+			}
+
+			for ( auto i = 0u; i < uint32_t( LpvTexture::eCount ); ++i )
+			{
+				auto tex = LpvTexture( i );
+				visitor.visit( "LPV Injection " + castor3d::getName( tex )
+					, m_injection[tex]
+					, m_graph.getFinalLayout( m_injection[tex].wholeViewId ).layout
+					, TextureFactors::tex3D( &m_gridsSize ) );
+			}
+
+			if ( m_geometryVolumes )
+			{
+				visitor.visit( "LPV Geometry"
+					, m_geometry
+					, m_graph.getFinalLayout( m_geometry.wholeViewId ).layout
+					, TextureFactors::tex3D( &m_gridsSize ) );
+			}
+
+			uint32_t level = 0u;
+
+			for ( auto & propagate : m_propagate )
+			{
+				for ( auto i = 0u; i < uint32_t( LpvTexture::eCount ); ++i )
+				{
+					auto tex = LpvTexture( i );
+					visitor.visit( "Layered LPV Propagation" + std::to_string( level ) + " " + castor3d::getName( tex )
+						, propagate[tex]
+						, m_graph.getFinalLayout( propagate[tex].wholeViewId ).layout
+						, TextureFactors::tex3D( &m_gridsSize ) );
+				}
+
+				++level;
 			}
 		}
 	}

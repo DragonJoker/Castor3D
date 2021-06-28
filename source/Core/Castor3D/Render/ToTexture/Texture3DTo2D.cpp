@@ -184,18 +184,20 @@ namespace castor3d
 				, std::move( bindings ) );
 		}
 
-		ashes::DescriptorSetPtr createDescriptorSet( ashes::DescriptorSetPool const & pool
+		ashes::DescriptorSetPtr createDescriptorSet( RenderDevice const & device
+			, ashes::DescriptorSetPool const & pool
 			, UniformBufferOffsetT< Texture3DTo2DData > const & uniformBuffer
 			, MatrixUbo const & matrixUbo
 			, IntermediateView const & texture3D )
 		{
+			auto & handler = device.renderSystem.getEngine()->getGraphResourceHandler();
 			auto descriptorSet = pool.createDescriptorSet( "Texture3DTo2D" );
 			uniformBuffer.createSizedBinding( *descriptorSet
 				, pool.getLayout().getBinding( eGridUbo ) );
 			matrixUbo.createSizedBinding( *descriptorSet
 				, pool.getLayout().getBinding( eMatrixUbo ) );
 			descriptorSet->createBinding( pool.getLayout().getBinding( eSource )
-				, texture3D.view );
+				, handler.createImageView( device.makeContext(), texture3D.viewId ) );
 			descriptorSet->update();
 			return descriptorSet;
 		}
@@ -246,6 +248,7 @@ namespace castor3d
 			, ashes::DescriptorSet const & descriptorSet
 			, IntermediateView const & view )
 		{
+			auto & handler = device.renderSystem.getEngine()->getGraphResourceHandler();
 			auto textureSize = getExtent( view.viewId ).width;
 			CommandsSemaphore result{ device, "Texture3DTo2D" };
 			auto & cmd = *result.commandBuffer;
@@ -257,7 +260,7 @@ namespace castor3d
 			{
 				cmd.memoryBarrier( ashes::getStageMask( view.layout )
 					, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT
-					, makeLayoutTransition( view.image
+					, makeLayoutTransition( handler.createImage( device.makeContext(), view.viewId.data->image )
 						, view.viewId.data->info.subresourceRange
 						, view.layout
 						, VK_IMAGE_LAYOUT_GENERAL
@@ -279,7 +282,7 @@ namespace castor3d
 			{
 				cmd.memoryBarrier( VK_PIPELINE_STAGE_VERTEX_SHADER_BIT
 					, ashes::getStageMask( view.layout )
-					, makeLayoutTransition( view.image
+					, makeLayoutTransition( handler.createImage( device.makeContext(), view.viewId.data->image )
 						, view.viewId.data->info.subresourceRange
 						, VK_IMAGE_LAYOUT_GENERAL
 						, view.layout
@@ -431,7 +434,7 @@ namespace castor3d
 		, ashes::FrameBuffer const & frameBuffer
 		, ashes::PipelineLayout const & pipelineLayout
 		, ashes::GraphicsPipeline const & pipeline )
-		: descriptorSet{ createDescriptorSet( descriptorSetPool, uniformBuffer, matrixUbo, texture3D ) }
+		: descriptorSet{ createDescriptorSet( device, descriptorSetPool, uniformBuffer, matrixUbo, texture3D ) }
 		, commands{ createCommandBuffer( device, renderPass, frameBuffer, pipelineLayout, pipeline, *descriptorSet, texture3D ) }
 	{
 	}

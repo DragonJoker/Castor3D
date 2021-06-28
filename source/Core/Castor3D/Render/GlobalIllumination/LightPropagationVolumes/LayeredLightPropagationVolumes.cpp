@@ -434,22 +434,25 @@ namespace castor3d
 			auto cellSize = std::max( std::max( m_aabb.getDimensions()->x
 				, m_aabb.getDimensions()->y )
 				, m_aabb.getDimensions()->z ) / m_scene.getLpvGridSize();
-			std::array< castor::Grid, CascadeCount > grids;
 			castor::Grid grid{ m_scene.getLpvGridSize(), cellSize, m_aabb.getMax(), m_aabb.getMin(), 1.0f, 0 };
 			std::array< float, CascadeCount > const scales{ 1.0f, 0.65f, 0.4f };
 
 			for ( auto i = 0u; i < CascadeCount; ++i )
 			{
-				grids[i] = m_lpvGridConfigUbos[i].cpuUpdate( i
+				m_grids[i] = m_lpvGridConfigUbos[i].cpuUpdate( i
 					, scales[i]
 					, grid
 					, m_aabb
 					, m_cameraPos
 					, m_cameraDir
 					, m_scene.getLpvIndirectAttenuation() );
+				m_gridsSizes[i] = castor::Point4f{ m_grids[i].getCenter()->x
+					, m_grids[i].getCenter()->y
+					, m_grids[i].getCenter()->z
+					, m_grids[i].getCellSize() };
 			}
 
-			m_lpvGridConfigUbo.cpuUpdate( grids
+			m_lpvGridConfigUbo.cpuUpdate( m_grids
 				, m_scene.getLpvIndirectAttenuation() );
 		}
 	}
@@ -475,11 +478,23 @@ namespace castor3d
 		{
 			for ( auto & lightLpv : m_lightLpvs )
 			{
-				lightLpv.second.lightInjectionPasses[0]->accept( visitor );
+				for ( auto & lightInjectionPass : lightLpv.second.lightInjectionPasses )
+				{
+					if ( lightInjectionPass )
+					{
+						lightInjectionPass->accept( visitor );
+					}
+				}
 
 				if ( m_geometryVolumes )
 				{
-					lightLpv.second.geometryInjectionPasses[0]->accept( visitor );
+					for ( auto & geometryInjectionPass : lightLpv.second.geometryInjectionPasses )
+					{
+						if ( geometryInjectionPass )
+						{
+							geometryInjectionPass->accept( visitor );
+						}
+					}
 				}
 			}
 
@@ -489,6 +504,56 @@ namespace castor3d
 				{
 					pass->accept( visitor );
 				}
+			}
+
+			uint32_t layer = 0u;
+
+			for ( auto & injection : m_injection )
+			{
+				for ( auto i = 0u; i < uint32_t( LpvTexture::eCount ); ++i )
+				{
+					auto tex = LpvTexture( i );
+					visitor.visit( "Layered LPV Injection" + std::to_string( layer ) + " " + castor3d::getName( tex )
+						, injection[tex]
+						, m_graph.getFinalLayout( injection[tex].wholeViewId ).layout
+						, TextureFactors::tex3D( &m_gridsSizes[i] ) );
+				}
+
+				++layer;
+			}
+
+			layer = 0u;
+
+			for ( auto & geometry : m_geometry )
+			{
+				visitor.visit( "Layered LPV Geometry" + std::to_string( layer )
+					, geometry
+					, m_graph.getFinalLayout( geometry.wholeViewId ).layout
+					, TextureFactors::tex3D( &m_gridsSizes[layer] ) );
+				++layer;
+			}
+
+			uint32_t level = 0u;
+
+			for ( auto & propagates : m_propagate )
+			{
+				layer = 0u;
+
+				for ( auto & propagate : propagates )
+				{
+					for ( auto i = 0u; i < uint32_t( LpvTexture::eCount ); ++i )
+					{
+						auto tex = LpvTexture( i );
+						visitor.visit( "Layered LPV Propagation" + std::to_string( level ) + "_" + std::to_string( layer ) + " " + castor3d::getName( tex )
+							, propagate[tex]
+							, m_graph.getFinalLayout( propagate[tex].wholeViewId ).layout
+							, TextureFactors::tex3D( &m_gridsSizes[i] ) );
+					}
+
+					++layer;
+				}
+
+				++level;
 			}
 		}
 	}

@@ -256,7 +256,8 @@ namespace Bloom
 		, VkExtent2D size
 		, uint32_t blurPassesCount
 		, bool const * enabled )
-		: m_sceneView{ sceneView }
+		: m_graph{ graph }
+		, m_sceneView{ sceneView }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "BloomHiPass", getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "BloomHiPass", getPixelProgram() }
 		, m_stages{ makeShaderState( device, m_vertexShader )
@@ -317,5 +318,13 @@ namespace Bloom
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
+
+		for ( auto & view : m_resultViews )
+		{
+			visitor.visit( "PostFX: HDRB - Hi " + std::to_string( view.data->info.subresourceRange.baseMipLevel )
+				, view
+				, m_graph.getFinalLayout( view ).layout
+				, castor3d::TextureFactors{}.invert( true ) );
+		}
 	}
 }
