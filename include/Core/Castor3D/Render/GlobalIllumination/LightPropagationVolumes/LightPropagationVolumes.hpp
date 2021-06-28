@@ -61,6 +61,7 @@ namespace castor3d
 		RenderDevice const & m_device;
 		ShadowMapResult const & m_smResult;
 		LightVolumePassResult const & m_lpvResult;
+		castor::Point4f m_gridsSize;
 		LpvGridConfigUbo & m_lpvGridConfigUbo;
 		bool m_geometryVolumes{ false };
 		crg::FrameGraph m_graph;
