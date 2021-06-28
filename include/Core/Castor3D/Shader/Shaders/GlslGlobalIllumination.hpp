@@ -50,24 +50,38 @@ namespace castor3d
 				, uint32_t uboSetIndex = 0u
 				, uint32_t texSetIndex = 0u
 				, bool declUbo = true );
-			C3D_API sdw::Vec3 computeLPVRadiance( Surface surface
+			C3D_API sdw::Vec4 computeVCTRadiance( Surface const & surface
+				, VoxelData const & voxelData
+				, sdw::Float const & indirectOcclusion )const;
+			C3D_API sdw::Vec3 computeVCTSpecular( sdw::Vec3 const & wsCamera
+				, sdw::Vec3 const & vsPosition
+				, Surface const & surface
+				, sdw::Vec3 const & specular
+				, sdw::Float const & roughness
+				, sdw::Float const & indirectOcclusion
+				, sdw::Float const & indirectBlend
+				, VoxelData const & voxelData )const;
+			C3D_API sdw::Vec4 computeLPVRadiance( Surface surface
 				, LpvGridData lpvGridData );
-			C3D_API sdw::Vec3 computeLLPVRadiance( Surface surface
+			C3D_API sdw::Vec4 computeLLPVRadiance( Surface surface
 				, LayeredLpvGridData llpvGridData );
 
 			C3D_API sdw::Float computeOcclusion( SceneFlags sceneFlags
 				, LightType lightType
 				, Surface surface );
-			C3D_API sdw::Vec3 computeDiffuse( SceneFlags sceneFlags
+			C3D_API sdw::Vec4 computeDiffuse( SceneFlags sceneFlags
 				, Surface surface
 				, sdw::Float indirectOcclusion );
 			C3D_API sdw::Vec3 computeAmbient( SceneFlags sceneFlags
 				, sdw::Vec3 const & indirectDiffuse );
 			C3D_API sdw::Vec3 computeSpecular( SceneFlags sceneFlags
 				, sdw::Vec3 wsCamera
+				, sdw::Vec3 vsPosition
 				, Surface surface
+				, sdw::Vec3 specular
 				, sdw::Float roughness
-				, sdw::Float indirectOcclusion );
+				, sdw::Float indirectOcclusion
+				, sdw::Float indirectBlend );
 			sdw::Vec4 traceConeRadiance( sdw::SampledImage3DRgba32 const & voxels
 				, Surface surface
 				, VoxelData const & voxelData )const;
@@ -92,10 +106,10 @@ namespace castor3d
 			bool m_deferred;
 			sdw::Function< sdw::Vec4
 				, sdw::InVec3 > m_evalSH;
-			sdw::Function< sdw::Vec3
+			sdw::Function< sdw::Vec4
 				, InSurface
 				, InLpvGridData > m_computeLPVRadiance;
-			sdw::Function< sdw::Vec3
+			sdw::Function< sdw::Vec4
 				, InSurface
 				, InLayeredLpvGridData > m_computeLLPVRadiance;
 			sdw::Function< sdw::Vec4
