@@ -258,15 +258,6 @@ namespace castor3d
 							, config.hasSpecularGi );
 						lightSpecular *= specular;
 
-						if ( config.hasSpecularGi )
-						{
-							auto V = writer.declLocale( "V"
-								, normalize( c3d_sceneData.getPosToCamera( surface.worldPosition ) ) );
-							auto NdotV = writer.declLocale( "NdotV"
-								, max( 0.0_f, dot( surface.worldNormal, V ) ) );
-							lightIndirectSpecular *= utils.fresnelSchlick( NdotV, specular, ( 256.0_f - shininess ) / 256.0_f );
-						}
-
 						if ( config.hasSsao )
 						{
 							occlusion *= c3d_mapSsao.lod( vtx_texture, 0.0_f ).r();
@@ -446,15 +437,6 @@ namespace castor3d
 						auto lightIndirectSpecular = writer.declLocale( "lightIndirectSpecular"
 							, c3d_mapLightIndirectSpecular.lod( vtx_texture, 0.0_f ).rgb()
 							, config.hasSpecularGi );
-
-						if ( config.hasSpecularGi )
-						{
-							auto V = writer.declLocale( "V"
-								, normalize( c3d_sceneData.getPosToCamera( surface.worldPosition ) ) );
-							auto NdotV = writer.declLocale( "NdotV"
-								, max( 0.0_f, dot( surface.worldNormal, V ) ) );
-							lightIndirectSpecular *= utils.fresnelSchlick( NdotV, mix( vec3( 0.04_f ), albedo, vec3( metalness ) ), roughness );
-						}
 
 						if ( config.hasSsao )
 						{
@@ -639,15 +621,6 @@ namespace castor3d
 						auto lightIndirectSpecular = writer.declLocale( "lightIndirectSpecular"
 							, c3d_mapLightIndirectSpecular.lod( vtx_texture, 0.0_f ).rgb()
 							, config.hasSpecularGi );
-
-						if ( config.hasSpecularGi )
-						{
-							auto V = writer.declLocale( "V"
-								, normalize( c3d_sceneData.getPosToCamera( surface.worldPosition ) ) );
-							auto NdotV = writer.declLocale( "NdotV"
-								, max( 0.0_f, dot( surface.worldNormal, V ) ) );
-							lightIndirectSpecular *= utils.fresnelSchlick( NdotV, specular, 1.0_f - glossiness );
-						}
 
 						if ( config.hasSsao )
 						{

@@ -30,6 +30,7 @@ namespace castor3d
 			eDepth,
 			eData1,
 			eData2,
+			eData3,
 			eVctFirstBounce,
 			eVctSecondBounce,
 			eLpvR,
