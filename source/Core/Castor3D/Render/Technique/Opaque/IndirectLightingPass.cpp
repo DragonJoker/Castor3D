@@ -83,6 +83,7 @@ namespace castor3d
 			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), uint32_t( IndirectLightingPass::eDepth ), 0u );
 			auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), uint32_t( IndirectLightingPass::eData1 ), 0u );
 			auto c3d_mapData2 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), uint32_t( IndirectLightingPass::eData2 ), 0u );
+			auto c3d_mapData3 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), uint32_t( IndirectLightingPass::eData3 ), 0u );
 			auto in = writer.getIn();
 
 			writer.implementFunction< sdw::Void >( "main"
@@ -105,6 +106,8 @@ namespace castor3d
 					{
 						auto data2 = writer.declLocale( "data2"
 							, c3d_mapData2.lod( texCoord, 0.0_f ) );
+						auto data3 = writer.declLocale( "data3"
+							, c3d_mapData3.lod( texCoord, 0.0_f ) );
 						auto depth = writer.declLocale( "depth"
 							, c3d_mapDepth.lod( texCoord, 0.0_f ).x() );
 						auto vsPosition = writer.declLocale( "vsPosition"
@@ -120,6 +123,8 @@ namespace castor3d
 							, c3d_sceneData.getCameraPosition() );
 						auto shininess = writer.declLocale( "shininess"
 							, data2.w() );
+						auto specular = writer.declLocale( "specular"
+							, data3.xyz() );
 
 						//auto occlusion = indirect.computeOcclusion( sceneFlags
 						//	, lightType
@@ -131,10 +136,13 @@ namespace castor3d
 							, occlusion );
 						auto indirectSpecular = indirect.computeSpecular( config.sceneFlags
 							, eye
+							, c3d_sceneData.getPosToCamera( surface.worldPosition )
 							, surface
+							, specular
 							, ( 256.0_f - shininess ) / 256.0_f
-							, occlusion );
-						pxl_indirectDiffuse = indirectDiffuse;
+							, occlusion
+							, indirectDiffuse .w() );
+						pxl_indirectDiffuse = indirectDiffuse.xyz();
 						pxl_indirectSpecular = indirectSpecular;
 					}
 					ELSE
@@ -183,6 +191,7 @@ namespace castor3d
 			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), uint32_t( IndirectLightingPass::eDepth ), 0u );
 			auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), uint32_t( IndirectLightingPass::eData1 ), 0u );
 			auto c3d_mapData2 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), uint32_t( IndirectLightingPass::eData2 ), 0u );
+			auto c3d_mapData3 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), uint32_t( IndirectLightingPass::eData3 ), 0u );
 			auto in = writer.getIn();
 
 			writer.implementFunction< sdw::Void >( "main"
@@ -205,8 +214,14 @@ namespace castor3d
 					{
 						auto data2 = writer.declLocale( "data2"
 							, c3d_mapData2.lod( texCoord, 0.0_f ) );
+						auto data3 = writer.declLocale( "data3"
+							, c3d_mapData3.lod( texCoord, 0.0_f ) );
+						auto albedo = writer.declLocale( "albedo"
+							, data2.rgb() );
 						auto roughness = writer.declLocale( "roughness"
 							, data2.w() );
+						auto metalness = writer.declLocale( "metalness"
+							, data3.r() );
 						auto eye = writer.declLocale( "eye"
 							, c3d_sceneData.getCameraPosition() );
 						auto depth = writer.declLocale( "depth"
@@ -231,10 +246,13 @@ namespace castor3d
 							, occlusion );
 						auto indirectSpecular = indirect.computeSpecular( config.sceneFlags
 							, eye
+							, c3d_sceneData.getPosToCamera( surface.worldPosition )
 							, surface
+							, mix( vec3( 0.04_f ), albedo, vec3( metalness ) )
 							, roughness
-							, occlusion );
-						pxl_indirectDiffuse = indirectDiffuse;
+							, occlusion
+							, indirectDiffuse.w() );
+						pxl_indirectDiffuse = indirectDiffuse.xyz();
 						pxl_indirectSpecular = indirectSpecular;
 					}
 					ELSE
@@ -280,6 +298,7 @@ namespace castor3d
 			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), uint32_t( IndirectLightingPass::eDepth ), 0u );
 			auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), uint32_t( IndirectLightingPass::eData1 ), 0u );
 			auto c3d_mapData2 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), uint32_t( IndirectLightingPass::eData2 ), 0u );
+			auto c3d_mapData3 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), uint32_t( IndirectLightingPass::eData3 ), 0u );
 			auto in = writer.getIn();
 
 			// Shader outputs
@@ -306,8 +325,12 @@ namespace castor3d
 					{
 						auto data2 = writer.declLocale( "data2"
 							, c3d_mapData2.lod( texCoord, 0.0_f ) );
+						auto data3 = writer.declLocale( "data3"
+							, c3d_mapData3.lod( texCoord, 0.0_f ) );
 						auto glossiness = writer.declLocale( "glossiness"
 							, data2.a() );
+						auto specular = writer.declLocale( "specular"
+							, data3.xyz() );
 						auto eye = writer.declLocale( "eye"
 							, c3d_sceneData.getCameraPosition() );
 						auto depth = writer.declLocale( "depth"
@@ -332,10 +355,13 @@ namespace castor3d
 							, occlusion );
 						auto indirectSpecular = indirect.computeSpecular( config.sceneFlags
 							, eye
+							, c3d_sceneData.getPosToCamera( surface.worldPosition )
 							, surface
+							, specular
 							, 1.0_f - glossiness
-							, occlusion );
-						pxl_indirectDiffuse = indirectDiffuse;
+							, occlusion
+							, indirectDiffuse.w() );
+						pxl_indirectDiffuse = indirectDiffuse.xyz();
 						pxl_indirectSpecular = indirectSpecular;
 					}
 					ELSE
@@ -571,6 +597,9 @@ namespace castor3d
 			, VK_IMAGE_LAYOUT_UNDEFINED );
 		pass.addSampledView( m_gpResult[DsTexture::eData2].sampledViewId
 			, uint32_t( IndirectLightingPass::eData2 )
+			, VK_IMAGE_LAYOUT_UNDEFINED );
+		pass.addSampledView( m_gpResult[DsTexture::eData3].sampledViewId
+			, uint32_t( IndirectLightingPass::eData3 )
 			, VK_IMAGE_LAYOUT_UNDEFINED );
 		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
 			, VK_FILTER_LINEAR

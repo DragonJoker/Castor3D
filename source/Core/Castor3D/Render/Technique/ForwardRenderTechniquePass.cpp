@@ -272,14 +272,12 @@ namespace castor3d
 						, indirectOcclusion );
 					auto lightIndirectSpecular = indirect.computeSpecular( flags.sceneFlags
 						, worldEye
+						, c3d_sceneData.getPosToCamera( surface.worldPosition )
 						, surface
+						, specular
 						, roughness
-						, indirectOcclusion );
-					auto V = writer.declLocale( "V"
-						, normalize( c3d_sceneData.getPosToCamera( surface.worldPosition ) ) );
-					auto NdotV = writer.declLocale( "NdotV"
-						, max( 0.0_f, dot( surface.worldNormal, V ) ) );
-					lightIndirectSpecular *= utils.fresnelSchlick( NdotV, specular, roughness );
+						, indirectOcclusion
+						, lightIndirectDiffuse.w() );
 
 					pxl_fragColor = vec4( shader::PhongLightingModel::combine( lightDiffuse
 							, lightIndirectDiffuse
@@ -526,14 +524,12 @@ namespace castor3d
 						, indirectOcclusion );
 					auto lightIndirectSpecular = indirect.computeSpecular( flags.sceneFlags
 						, worldEye
+						, c3d_sceneData.getPosToCamera( surface.worldPosition )
 						, surface
+						, specular
 						, roughness
-						, indirectOcclusion );
-					auto V = writer.declLocale( "V"
-						, normalize( c3d_sceneData.getPosToCamera( surface.worldPosition ) ) );
-					auto NdotV = writer.declLocale( "NdotV"
-						, max( 0.0_f, dot( surface.worldNormal, V ) ) );
-					lightIndirectSpecular *= utils.fresnelSchlick( NdotV, specular, roughness );
+						, indirectOcclusion
+						, lightIndirectDiffuse.w() );
 
 					pxl_fragColor = vec4( shader::MetallicBrdfLightingModel::combine( lightDiffuse
 							, lightIndirectDiffuse
@@ -779,14 +775,12 @@ namespace castor3d
 						, indirectOcclusion );
 					auto lightIndirectSpecular = indirect.computeSpecular( flags.sceneFlags
 						, worldEye
+						, c3d_sceneData.getPosToCamera( surface.worldPosition )
 						, surface
+						, specular
 						, roughness
-						, indirectOcclusion );
-					auto V = writer.declLocale( "V"
-						, normalize( c3d_sceneData.getPosToCamera( surface.worldPosition ) ) );
-					auto NdotV = writer.declLocale( "NdotV"
-						, max( 0.0_f, dot( surface.worldNormal, V ) ) );
-					lightIndirectSpecular *= utils.fresnelSchlick( NdotV, specular, roughness );
+						, indirectOcclusion
+						, lightIndirectDiffuse.w() );
 
 					pxl_fragColor = vec4( shader::MetallicBrdfLightingModel::combine( lightDiffuse
 							, lightIndirectDiffuse

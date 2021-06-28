@@ -29,6 +29,8 @@ namespace castor3d
 			, uint32_t setIndex
 			, SceneFlags sceneFlags )
 		{
+			m_utils.declareFresnelSchlick();
+
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
 				declareVct( bindingIndex, bindingIndex, setIndex, setIndex );
@@ -57,6 +59,7 @@ namespace castor3d
 			, SceneFlags sceneFlags )
 		{
 			using namespace sdw;
+			m_utils.declareFresnelSchlick();
 
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
@@ -181,7 +184,7 @@ namespace castor3d
 				}
 				, InVec3{ m_writer, "direction" } );
 
-			m_computeLPVRadiance = m_writer.implementFunction< sdw::Vec3 >( "computeLPVRadiance"
+			m_computeLPVRadiance = m_writer.implementFunction< sdw::Vec4 >( "computeLPVRadiance"
 				, [this]( Surface surface
 					, LpvGridData lpvGridData )
 				{
@@ -197,7 +200,7 @@ namespace castor3d
 						, vec3( dot( SHintensity, c3d_lpvAccumulatorR.sample( lpvCellCoords ) )
 							, dot( SHintensity, c3d_lpvAccumulatorG.sample( lpvCellCoords ) )
 							, dot( SHintensity, c3d_lpvAccumulatorB.sample( lpvCellCoords ) ) ) );
-					m_writer.returnStmt( max( lpvIntensity, vec3( 0.0_f ) ) );
+					m_writer.returnStmt( vec4( max( lpvIntensity, vec3( 0.0_f ) ), 1.0f ) );
 				}
 				, InSurface{ m_writer, "surface" }
 				, InLpvGridData{ m_writer, "lpvGridData" } );
@@ -249,7 +252,7 @@ namespace castor3d
 					, InVec3{ m_writer, "direction" } );
 			}
 
-			m_computeLLPVRadiance = m_writer.implementFunction< sdw::Vec3 >( "computeLLPVRadiance"
+			m_computeLLPVRadiance = m_writer.implementFunction< sdw::Vec4 >( "computeLLPVRadiance"
 				, [this]( Surface surface
 					, LayeredLpvGridData llpvGridData )
 				{
@@ -285,13 +288,13 @@ namespace castor3d
 							, dot( SHintensity, c3d_lpvAccumulator3G.sample( lpvCellCoords3 ) )
 							, dot( SHintensity, c3d_lpvAccumulator3B.sample( lpvCellCoords3 ) ) ) );
 
-					m_writer.returnStmt( max( lpvIntensity1 + lpvIntensity2 + lpvIntensity3, vec3( 0.0_f ) ) );
+					m_writer.returnStmt( vec4( max( lpvIntensity1 + lpvIntensity2 + lpvIntensity3, vec3( 0.0_f ) ), 1.0f ) );
 				}
 				, InSurface{ m_writer, "surface" }
 				, InLayeredLpvGridData{ m_writer, "llpvGridData" } );
 		}
 
-		sdw::Vec3 GlobalIllumination::computeLPVRadiance( Surface surface
+		sdw::Vec4 GlobalIllumination::computeLPVRadiance( Surface surface
 			, LpvGridData lpvGridData )
 		{
 			CU_Require( m_computeLPVRadiance );
@@ -299,7 +302,7 @@ namespace castor3d
 				, lpvGridData );
 		}
 
-		sdw::Vec3 GlobalIllumination::computeLLPVRadiance( Surface surface
+		sdw::Vec4 GlobalIllumination::computeLLPVRadiance( Surface surface
 			, LayeredLpvGridData llpvGridData )
 		{
 			CU_Require( m_computeLLPVRadiance );
@@ -396,43 +399,87 @@ namespace castor3d
 			return vxlOcclusion;
 		}
 
-		sdw::Vec3 GlobalIllumination::computeDiffuse( SceneFlags sceneFlags
+		sdw::Vec4 GlobalIllumination::computeVCTRadiance( Surface const & surface
+			, VoxelData const & voxelData
+			, sdw::Float const & indirectOcclusion )const
+		{
+			auto mapVoxelsFirstBounce = m_writer.getVariable< SampledImage3DRgba32 >( "c3d_mapVoxelsFirstBounce" );
+			auto mapVoxelsSecondaryBounce = m_writer.getVariable< SampledImage3DRgba32 >( "c3d_mapVoxelsSecondaryBounce" );
+
+			auto vxlRadiance( m_writer.declLocale< sdw::Vec4 >( "vxlRadiance" ) );
+
+			IF( m_writer, voxelData.enableSecondaryBounce )
+			{
+				vxlRadiance = traceConeRadiance( mapVoxelsSecondaryBounce
+					, surface
+					, voxelData );
+			}
+			ELSE
+			{
+				vxlRadiance = traceConeRadiance( mapVoxelsFirstBounce
+				, surface
+					, voxelData );
+			}
+			FI;
+
+			auto vxlPosition = m_writer.declLocale( "vxlPosition"
+				, clamp( abs( voxelData.worldToClip( surface.worldPosition ) ), vec3( -1.0_f ), vec3( 1.0_f ) ) );
+			auto vxlBlend = m_writer.declLocale( "vxlBlend"
+				, 1.0_f - pow( max( vxlPosition.x(), max( vxlPosition.y(), vxlPosition.z() ) ), 4.0_f ) );
+			return vec4( mix( vec3( 0.0_f )
+					, vxlRadiance.xyz() * indirectOcclusion
+					, vec3( vxlRadiance.a() * vxlBlend * indirectOcclusion ) )
+				, vxlBlend );
+		}
+
+		sdw::Vec3 GlobalIllumination::computeVCTSpecular( sdw::Vec3 const & wsCamera
+			, sdw::Vec3 const & vsPosition
+			, Surface const & surface
+			, sdw::Vec3 const & specular
+			, sdw::Float const & roughness
+			, sdw::Float const & indirectOcclusion
+			, sdw::Float const & indirectBlend
+			, VoxelData const & voxelData )const
+		{
+			auto mapVoxelsFirstBounce = m_writer.getVariable< SampledImage3DRgba32 >( "c3d_mapVoxelsFirstBounce" );
+			auto mapVoxelsSecondaryBounce = m_writer.getVariable< SampledImage3DRgba32 >( "c3d_mapVoxelsSecondaryBounce" );
+
+			auto vxlReflection( m_writer.declLocale< sdw::Vec4 >( "vxlReflection" ) );
+
+			IF( m_writer, voxelData.enableSecondaryBounce )
+			{
+				vxlReflection = traceConeReflection( mapVoxelsSecondaryBounce
+					, surface
+					, wsCamera - surface.worldPosition
+					, roughness
+					, voxelData );
+			}
+			ELSE
+			{
+				vxlReflection = traceConeReflection( mapVoxelsFirstBounce
+				, surface
+					, wsCamera - surface.worldPosition
+					, roughness
+					, voxelData );
+			}
+			FI;
+
+			return mix( vec3( 0.0_f )
+					, vxlReflection.xyz()
+					, vec3( vxlReflection.a() * indirectBlend * indirectOcclusion ) );
+		}
+
+		sdw::Vec4 GlobalIllumination::computeDiffuse( SceneFlags sceneFlags
 			, Surface surface
 			, sdw::Float indirectOcclusion )
 		{
-			auto indirectDiffuse = m_writer.declLocale< sdw::Vec3 >( "indirectDiffuse"
-				, vec3( 0.0_f ) );
+			auto indirectDiffuse = m_writer.declLocale( "indirectDiffuse"
+				, vec4( 0.0_f ) );
 
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
 				auto voxelData = m_writer.getVariable< VoxelData >( "c3d_voxelData" );
-				auto mapVoxelsFirstBounce = m_writer.getVariable< SampledImage3DRgba32 >( "c3d_mapVoxelsFirstBounce" );
-				auto mapVoxelsSecondaryBounce = m_writer.getVariable< SampledImage3DRgba32 >( "c3d_mapVoxelsSecondaryBounce" );
-				auto vxlPosition = m_writer.declLocale( "vxlPosition"
-					, voxelData.worldToClip( surface.worldPosition ) );
-				vxlPosition = clamp( abs( vxlPosition ), vec3( -1.0_f ), vec3( 1.0_f ) );
-				auto vxlBlend = m_writer.declLocale( "vxlBlend"
-					, 1.0_f - pow( max( vxlPosition.x(), max( vxlPosition.y(), vxlPosition.z() ) ), 4.0_f ) );
-
-				auto vxlRadiance( m_writer.declLocale< sdw::Vec4 >( "vxlRadiance" ) );
-
-				IF( m_writer, voxelData.enableSecondaryBounce )
-				{
-					vxlRadiance = traceConeRadiance( mapVoxelsSecondaryBounce
-						, surface
-						, voxelData );
-				}
-				ELSE
-				{
-					vxlRadiance = traceConeRadiance( mapVoxelsFirstBounce
-						, surface
-						, voxelData );
-				}
-				FI;
-
-				indirectDiffuse = mix( vec3( 0.0_f )
-					, vxlRadiance.xyz() * indirectOcclusion
-					, vec3( vxlRadiance.a() * vxlBlend * indirectOcclusion ) );
+				indirectDiffuse = computeVCTRadiance( surface, voxelData, indirectOcclusion );
 			}
 			else if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
 			{
@@ -473,9 +520,12 @@ namespace castor3d
 
 		sdw::Vec3 GlobalIllumination::computeSpecular( SceneFlags sceneFlags
 			, sdw::Vec3 wsCamera
+			, sdw::Vec3 vsPosition
 			, Surface surface
+			, sdw::Vec3 specular
 			, sdw::Float roughness
-			, sdw::Float indirectOcclusion )
+			, sdw::Float indirectOcclusion
+			, sdw::Float indirectBlend )
 		{
 			auto indirectSpecular = m_writer.declLocale< sdw::Vec3 >( "indirectSpecular"
 				, vec3( 0.0_f ) );
@@ -483,36 +533,22 @@ namespace castor3d
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
 				auto voxelData = m_writer.getVariable< VoxelData >( "c3d_voxelData" );
-				auto mapVoxelsFirstBounce = m_writer.getVariable< SampledImage3DRgba32 >( "c3d_mapVoxelsFirstBounce" );
-				auto mapVoxelsSecondaryBounce = m_writer.getVariable< SampledImage3DRgba32 >( "c3d_mapVoxelsSecondaryBounce" );
-				auto vxlPosition = m_writer.getVariable< sdw::Vec3 >( "vxlPosition" );
-				auto vxlBlend = m_writer.getVariable< sdw::Float >( "vxlBlend" );
-
-				auto vxlReflection( m_writer.declLocale< sdw::Vec4 >( "vxlReflection" ) );
-
-				IF( m_writer, voxelData.enableSecondaryBounce )
-				{
-					vxlReflection = traceConeReflection( mapVoxelsSecondaryBounce
-						, surface
-						, wsCamera - surface.worldPosition
-						, roughness
-						, voxelData );
-				}
-				ELSE
-				{
-					vxlReflection = traceConeReflection( mapVoxelsFirstBounce
-						, surface
-						, wsCamera - surface.worldPosition
-						, roughness
-						, voxelData );
-				}
-				FI;
-
-				indirectSpecular = mix( vec3( 0.0_f )
-					, vxlReflection.xyz()
-					, vec3( vxlReflection.a() * vxlBlend * indirectOcclusion ) );
+				indirectSpecular = computeVCTSpecular( wsCamera
+					, vsPosition
+					, surface
+					, specular
+					, roughness
+					, indirectOcclusion
+					, indirectBlend
+					, voxelData );
+				auto V = m_writer.declLocale( "V"
+					, normalize( vsPosition ) );
+				auto NdotV = m_writer.declLocale( "NdotV"
+					, max( 0.0_f, dot( surface.worldNormal, V ) ) );
+				indirectSpecular *= m_utils.fresnelSchlick( NdotV
+					, indirectSpecular.xyz()
+					, roughness );
 			}
-
 			return indirectSpecular;
 		}
 
