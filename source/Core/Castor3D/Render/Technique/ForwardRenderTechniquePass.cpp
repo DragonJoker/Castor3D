@@ -782,8 +782,8 @@ namespace castor3d
 						, indirectOcclusion
 						, lightIndirectDiffuse.w() );
 
-					pxl_fragColor = vec4( shader::MetallicBrdfLightingModel::combine( lightDiffuse
 							, lightIndirectDiffuse
+					pxl_fragColor = vec4( shader::SpecularBrdfLightingModel::combine( lightDiffuse
 							, lightSpecular
 							, lightIndirectSpecular
 							, ambient
