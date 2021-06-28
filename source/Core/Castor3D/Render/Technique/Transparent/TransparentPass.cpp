@@ -816,8 +816,8 @@ namespace castor3d
 						, lightIndirectDiffuse.w() );
 
 					auto colour = writer.declLocale( "colour"
-						, shader::MetallicBrdfLightingModel::combine( lightDiffuse
 							, lightIndirectDiffuse
+						, shader::SpecularBrdfLightingModel::combine( lightDiffuse
 							, lightSpecular
 							, lightIndirectSpecular
 							, ambient
