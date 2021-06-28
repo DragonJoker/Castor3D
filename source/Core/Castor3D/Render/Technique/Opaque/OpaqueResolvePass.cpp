@@ -648,7 +648,7 @@ namespace castor3d
 							, ambient
 							, reflected
 							, refracted );
-						pxl_fragColor = vec4( shader::MetallicBrdfLightingModel::combine( lightDiffuse
+						pxl_fragColor = vec4( shader::SpecularBrdfLightingModel::combine( lightDiffuse
 								, config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 0.0_f )
 								, lightSpecular
 								, config.hasSpecularGi ? lightIndirectSpecular : vec3( 0.0_f )
