@@ -177,6 +177,20 @@ namespace castor3d
 			return m_getSpotLight( index );
 		}
 
+		sdw::Vec3 LightingModel::computeF0( sdw::Vec3 const & albedo
+			, sdw::Float const & metalness )
+		{
+			return mix( vec3( 0.04_f ), albedo, vec3( metalness ) );
+		}
+
+		sdw::Float LightingModel::computeMetalness( sdw::Vec3 const & albedo
+			, sdw::Vec3 const & f0 )
+		{
+			return length( f0 );
+			//return ( length( clamp( f0, vec3( 0.04_f ), albedo ) )
+			//		/ length( max( albedo, vec3( 0.04_f ) ) ) );
+		}
+
 		Light LightingModel::getBaseLight( sdw::Int const & value )const
 		{
 			return m_getBaseLight( value );

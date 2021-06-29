@@ -20,10 +20,9 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslMetallicBrdfLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslPbrLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
-#include "Castor3D/Shader/Shaders/GlslSpecularBrdfLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -711,7 +710,7 @@ namespace castor3d
 		auto output( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
 			, addIndex++
 			, RenderPipeline::eAdditional ) );
-		auto lighting = shader::MetallicBrdfLightingModel::createDiffuseModel( writer
+		auto lighting = shader::PbrLightingModel::createDiffuseModel( writer
 			, utils
 			, shader::ShadowOptions{ flags.sceneFlags, false }
 			, addIndex
@@ -777,13 +776,15 @@ namespace castor3d
 
 					if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 					{
+						auto specular = writer.declLocale( "specular"
+							, lighting->computeF0( albedo, metalness ) );
 						auto worldEye = writer.declLocale( "worldEye"
 							, c3d_sceneData.getCameraPosition() );
 						auto surface = writer.declLocale< shader::Surface >( "surface" );
 						surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
 						auto color = writer.declLocale( "color"
 							, lighting->computeCombinedDiffuse( worldEye
-								, albedo
+								, specular
 								, metalness
 								, roughness
 								, c3d_modelData.isShadowReceiver()
@@ -863,7 +864,7 @@ namespace castor3d
 		auto output( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
 			, addIndex++
 			, RenderPipeline::eAdditional ) );
-		auto lighting = shader::SpecularBrdfLightingModel::createDiffuseModel( writer
+		auto lighting = shader::PbrLightingModel::createDiffuseModel( writer
 			, utils
 			, shader::ShadowOptions{ flags.sceneFlags, false }
 			, addIndex
@@ -928,6 +929,10 @@ namespace castor3d
 
 					if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 					{
+						auto roughness = writer.declLocale( "roughness"
+							, 1.0_f - glossiness );
+						auto metalness = writer.declLocale( "metalness"
+							, lighting->computeMetalness( albedo, specular ) );
 						auto worldEye = writer.declLocale( "worldEye"
 							, c3d_sceneData.getCameraPosition() );
 						auto surface = writer.declLocale< shader::Surface >( "surface" );
@@ -935,7 +940,8 @@ namespace castor3d
 						auto color = writer.declLocale( "lightDiffuse"
 							, lighting->computeCombinedDiffuse( worldEye
 								, specular
-								, glossiness
+								, metalness
+								, roughness
 								, c3d_modelData.isShadowReceiver()
 								, c3d_sceneData
 								, surface ) );

@@ -56,7 +56,6 @@ namespace castor3d
 			C3D_API sdw::Vec3 computeVCTSpecular( sdw::Vec3 const & wsCamera
 				, sdw::Vec3 const & vsPosition
 				, Surface const & surface
-				, sdw::Vec3 const & specular
 				, sdw::Float const & roughness
 				, sdw::Float const & indirectOcclusion
 				, sdw::Float const & indirectBlend
@@ -85,6 +84,11 @@ namespace castor3d
 			sdw::Vec4 traceConeRadiance( sdw::SampledImage3DRgba32 const & voxels
 				, Surface surface
 				, VoxelData const & voxelData )const;
+
+			static C3D_API sdw::Vec3 computeF0( sdw::Vec3 const & albedo
+				, sdw::Float const & metalness );
+			static C3D_API sdw::Float computeMetalness( sdw::Vec3 const & albedo
+				, sdw::Vec3 const & specular );
 
 		private:
 			void declareTraceCone();
