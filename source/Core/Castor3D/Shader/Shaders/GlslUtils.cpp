@@ -292,16 +292,15 @@ namespace castor3d::shader
 
 		m_fresnelSchlick = m_writer.implementFunction< sdw::Vec3 >( "fresnelSchlick"
 			, [&]( sdw::Float const & product
-				, sdw::Vec3 const & f0
-				, sdw::Float const & roughness )
+				, sdw::Vec3 const & f0 )
 			{
-				m_writer.returnStmt( sdw::fma( max( vec3( 1.0_f - roughness ), f0 ) - f0
+				auto f90 = clamp( dot( f0, vec3( 50.0_f * 0.33_f ) ), 0.0_f, 1.0_f );
+				m_writer.returnStmt( sdw::fma( max( vec3( f90 ), f0 ) - f0
 					, vec3( pow( clamp( 1.0_f - product, 0.0_f, 1.0_f ), 5.0_f ) )
 					, f0 ) );
 			}
 			, sdw::InFloat{ m_writer, "product" }
-			, sdw::InVec3{ m_writer, "f0" }
-			, sdw::InFloat{ m_writer, "roughness" } );
+			, sdw::InVec3{ m_writer, "f0" } );
 	}
 
 	void Utils::declareInvertVec2Y()
@@ -1109,12 +1108,9 @@ namespace castor3d::shader
 	}
 
 	sdw::Vec3 Utils::fresnelSchlick( sdw::Float const & product
-		, sdw::Vec3 const & f0
-		, sdw::Float const & roughness )const
+		, sdw::Vec3 const & f0 )const
 	{
-		return m_fresnelSchlick( product
-			, f0
-			, roughness );
+		return m_fresnelSchlick( product, f0 );
 	}
 
 	sdw::Mat3 Utils::getTBN( sdw::Vec3 const & normal

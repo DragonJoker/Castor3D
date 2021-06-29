@@ -81,8 +81,7 @@ namespace castor3d::shader
 			, sdw::Float const & farPlane
 			, sdw::Float const & accumulationOperator )const;
 		C3D_API sdw::Vec3 fresnelSchlick( sdw::Float const & product
-			, sdw::Vec3 const & f0
-			, sdw::Float const & roughness )const;
+			, sdw::Vec3 const & f0 )const;
 		C3D_API static sdw::Mat3 getTBN( sdw::Vec3 const & normal
 			, sdw::Vec3 const & tangent
 			, sdw::Vec3 const & bitangent );
@@ -293,8 +292,7 @@ namespace castor3d::shader
 			, sdw::InFloat > m_computeAccumulation;
 		sdw::Function< sdw::Vec3
 			, sdw::InFloat
-			, sdw::InVec3
-			, sdw::InFloat > m_fresnelSchlick;
+			, sdw::InVec3 > m_fresnelSchlick;
 		sdw::Function< sdw::Vec2
 			, sdw::InVec2 > m_invertVec2Y;
 		sdw::Function< sdw::Vec3
