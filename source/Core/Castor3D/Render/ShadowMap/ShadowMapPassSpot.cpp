@@ -242,6 +242,7 @@ namespace castor3d
 			, LightType::eSpot
 			, lightsIndex
 			, RenderPipeline::eAdditional
+			, false
 			, shader::ShadowOptions{ SceneFlag::eNone, false }
 			, index
 			, RenderPipeline::eAdditional );
@@ -414,6 +415,7 @@ namespace castor3d
 			, LightType::eSpot
 			, lightsIndex
 			, RenderPipeline::eAdditional
+			, false
 			, shader::ShadowOptions{ SceneFlag::eNone, false }
 			, index
 			, RenderPipeline::eAdditional );
@@ -586,6 +588,7 @@ namespace castor3d
 			, LightType::eSpot
 			, lightsIndex
 			, RenderPipeline::eAdditional
+			, false
 			, shader::ShadowOptions{ SceneFlag::eNone, false }
 			, index
 			, RenderPipeline::eAdditional );
