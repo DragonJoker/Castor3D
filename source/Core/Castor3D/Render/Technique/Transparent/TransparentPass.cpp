@@ -186,9 +186,7 @@ namespace castor3d
 			, uint32_t( PassUboIdx::eScene )
 			, RenderPipeline::eAdditional );
 		auto index = uint32_t( PassUboIdx::eCount );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
-			, index++
-			, RenderPipeline::eAdditional );
+		auto lightsIndex = index++;
 		auto c3d_mapOcclusion = writer.declSampledImage< FImg2DR32 >( "c3d_mapOcclusion"
 			, ( m_ssao ? index++ : 0u )
 			, RenderPipeline::eAdditional
@@ -200,6 +198,8 @@ namespace castor3d
 			, uint32_t( RenderPipeline::eAdditional ) };
 		auto lighting = shader::PhongLightingModel::createModel( writer
 			, utils
+			, lightsIndex
+			, RenderPipeline::eAdditional
 			, shader::ShadowOptions{ flags.sceneFlags, false }
 			, index
 			, RenderPipeline::eAdditional
@@ -414,9 +414,7 @@ namespace castor3d
 			, uint32_t( PassUboIdx::eScene )
 			, RenderPipeline::eAdditional );
 		auto index = uint32_t( PassUboIdx::eCount );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
-			, index++
-			, RenderPipeline::eAdditional );
+		auto lightsIndex = index++;
 		auto c3d_mapOcclusion = writer.declSampledImage< FImg2DR32 >( "c3d_mapOcclusion"
 			, ( m_ssao ? index++ : 0u )
 			, RenderPipeline::eAdditional
@@ -437,6 +435,8 @@ namespace castor3d
 			, RenderPipeline::eAdditional );
 		auto lighting = shader::PbrLightingModel::createModel( writer
 			, utils
+			, lightsIndex
+			, RenderPipeline::eAdditional
 			, shader::ShadowOptions{ flags.sceneFlags, false }
 			, index
 			, RenderPipeline::eAdditional
@@ -657,9 +657,7 @@ namespace castor3d
 			, uint32_t( PassUboIdx::eScene )
 			, RenderPipeline::eAdditional );
 		auto index = uint32_t( PassUboIdx::eCount );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
-			, index++
-			, RenderPipeline::eAdditional );
+		auto lightsIndex = index++;
 		auto c3d_mapOcclusion = writer.declSampledImage< FImg2DR32 >( "c3d_mapOcclusion"
 			, ( m_ssao ? index++ : 0u )
 			, RenderPipeline::eAdditional
@@ -680,6 +678,8 @@ namespace castor3d
 			, RenderPipeline::eAdditional );
 		auto lighting = shader::PbrLightingModel::createModel( writer
 			, utils
+			, lightsIndex
+			, RenderPipeline::eAdditional
 			, shader::ShadowOptions{ flags.sceneFlags, false }
 			, index
 			, RenderPipeline::eAdditional

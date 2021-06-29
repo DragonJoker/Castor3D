@@ -367,9 +367,7 @@ namespace castor3d
 			, hasTextures ) );
 
 		auto index = uint32_t( PassUboIdx::eCount );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
-			, index++
-			, RenderPipeline::eAdditional );
+		auto lightsIndex = index++;
 #if C3D_UseTiledDirectionalShadowMap
 		UBO_SHADOWMAP_DIRECTIONAL( writer
 			, index++
@@ -382,6 +380,8 @@ namespace castor3d
 		auto lighting = shader::PhongLightingModel::createModel( writer
 			, utils
 			, LightType::eDirectional
+			, lightsIndex
+			, RenderPipeline::eAdditional
 			, shader::ShadowOptions{ SceneFlag::eNone, false }
 			, index
 			, RenderPipeline::eAdditional );
@@ -530,9 +530,7 @@ namespace castor3d
 			, hasTextures ) );
 
 		auto index = uint32_t( PassUboIdx::eCount );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
-			, index++
-			, RenderPipeline::eAdditional );
+		auto lightsIndex = index++;
 #if C3D_UseTiledDirectionalShadowMap
 		UBO_SHADOWMAP_DIRECTIONAL( writer
 			, index++
@@ -545,6 +543,8 @@ namespace castor3d
 		auto lighting = shader::PbrLightingModel::createModel( writer
 			, utils
 			, LightType::eDirectional
+			, lightsIndex
+			, RenderPipeline::eAdditional
 			, shader::ShadowOptions{ SceneFlag::eNone, false }
 			, index
 			, RenderPipeline::eAdditional );
@@ -693,9 +693,7 @@ namespace castor3d
 			, hasTextures ) );
 
 		auto index = uint32_t( PassUboIdx::eCount );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
-			, index++
-			, RenderPipeline::eAdditional );
+		auto lightsIndex = index++;
 #if C3D_UseTiledDirectionalShadowMap
 		UBO_SHADOWMAP_DIRECTIONAL( writer
 			, index++
@@ -708,6 +706,8 @@ namespace castor3d
 		auto lighting = shader::PbrLightingModel::createModel( writer
 			, utils
 			, LightType::eDirectional
+			, lightsIndex
+			, RenderPipeline::eAdditional
 			, shader::ShadowOptions{ SceneFlag::eNone, false }
 			, index
 			, RenderPipeline::eAdditional );
