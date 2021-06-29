@@ -235,6 +235,8 @@ namespace castor3d
 
 						auto surface = writer.declLocale< shader::Surface >( "surface" );
 						surface.create( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal );
+						auto specular = writer.declLocale( "specular"
+							, indirect.computeF0( albedo, metalness ) );
 
 						//auto occlusion = indirect.computeOcclusion( sceneFlags
 						//	, lightType
@@ -248,7 +250,7 @@ namespace castor3d
 							, eye
 							, c3d_sceneData.getPosToCamera( surface.worldPosition )
 							, surface
-							, mix( vec3( 0.04_f ), albedo, vec3( metalness ) )
+							, specular
 							, roughness
 							, occlusion
 							, indirectDiffuse.w() );
@@ -350,6 +352,8 @@ namespace castor3d
 						//	, surface );
 						auto occlusion = writer.declLocale( "occlusion"
 							, 1.0_f );
+						auto roughness = writer.declLocale( "roughness"
+							, 1.0_f - glossiness );
 						auto indirectDiffuse = indirect.computeDiffuse( config.sceneFlags
 							, surface
 							, occlusion );
@@ -358,7 +362,7 @@ namespace castor3d
 							, c3d_sceneData.getPosToCamera( surface.worldPosition )
 							, surface
 							, specular
-							, 1.0_f - glossiness
+							, roughness
 							, occlusion
 							, indirectDiffuse.w() );
 						pxl_indirectDiffuse = indirectDiffuse.xyz();

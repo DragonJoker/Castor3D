@@ -2,6 +2,7 @@
 
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -77,7 +78,6 @@ namespace castor3d::shader
 		, sdw::Vec3 const & transmission
 		, Surface const & surface
 		, SceneData const & sceneData
-		, sdw::Vec3 & ambient
 		, sdw::Vec3 & reflected
 		, sdw::Vec3 & refracted )const
 	{
@@ -91,7 +91,6 @@ namespace castor3d::shader
 
 			IF( m_writer, reflection != 0_i )
 			{
-				ambient = vec3( 0.0_f );
 				// Reflection from environment map.
 				reflected = computeReflEnvMaps( incident
 					, surface.worldNormal
@@ -143,7 +142,6 @@ namespace castor3d::shader
 				IF( m_writer, refraction != 0_i )
 				{
 					// Refraction from environment map.
-					ambient = vec3( 0.0_f );
 					computeRefrEnvMaps( incident
 						, surface.worldNormal
 						, envMap
@@ -157,7 +155,6 @@ namespace castor3d::shader
 				ELSEIF( refractionRatio != 0.0_f )
 				{
 					// Refraction from background skybox.
-					ambient = vec3( 0.0_f );
 					computeRefrSkybox( incident
 						, surface.worldNormal
 						, prefiltered
@@ -166,11 +163,6 @@ namespace castor3d::shader
 						, roughness
 						, reflected
 						, refracted );
-				}
-				ELSE
-				{
-					ambient *= reflected;
-					reflected = vec3( 0.0_f );
 				}
 				FI;
 			}
@@ -192,7 +184,6 @@ namespace castor3d::shader
 			IF( m_writer, refractionRatio != 0.0_f )
 			{
 				// Refraction from background skybox.
-				ambient = vec3( 0.0_f );
 				auto incident = m_writer.declLocale( "incident"
 					, normalize( sceneData.getCameraToPos( surface.worldPosition ) ) );
 				computeRefrSkybox( incident
@@ -203,11 +194,6 @@ namespace castor3d::shader
 					, roughness
 					, reflected
 					, refracted );
-			}
-			ELSE
-			{
-				ambient *= reflected;
-				reflected = vec3( 0.0_f );
 			}
 			FI;
 		}
@@ -225,7 +211,6 @@ namespace castor3d::shader
 		, sdw::Vec3 const & transmission
 		, Surface const & surface
 		, SceneData const & sceneData
-		, sdw::Vec3 & ambient
 		, sdw::Vec3 & reflected
 		, sdw::Vec3 & refracted )const
 	{
@@ -239,7 +224,6 @@ namespace castor3d::shader
 			if ( checkFlag( m_passFlags, PassFlag::eReflection ) )
 			{
 				// Reflection from environment map.
-				ambient = vec3( 0.0_f );
 				reflected = computeReflEnvMap( incident
 					, surface.worldNormal
 					, envMap
@@ -282,7 +266,7 @@ namespace castor3d::shader
 					, albedo
 					, specular
 					, roughness
-					, length( specular )
+					, metalness
 					, sceneData.getCameraPosition()
 					, irradiance
 					, prefiltered
@@ -291,7 +275,6 @@ namespace castor3d::shader
 				if ( checkFlag( m_passFlags, PassFlag::eRefraction ) )
 				{
 					// Refraction from environment map.
-					ambient = vec3( 0.0_f );
 					computeRefrEnvMap( incident
 						, surface.worldNormal
 						, envMap
@@ -306,7 +289,6 @@ namespace castor3d::shader
 					IF( m_writer, refractionRatio != 0.0_f )
 					{
 						// Refraction from background skybox.
-						ambient = vec3( 0.0_f );
 						computeRefrSkybox( incident
 							, surface.worldNormal
 							, prefiltered
@@ -315,11 +297,6 @@ namespace castor3d::shader
 							, roughness
 							, reflected
 							, refracted );
-					}
-					ELSE
-					{
-						ambient *= reflected;
-						reflected = vec3( 0.0_f );
 					}
 					FI;
 				}
@@ -332,7 +309,7 @@ namespace castor3d::shader
 				, albedo
 				, specular
 				, roughness
-				, length( specular )
+				, metalness
 				, sceneData.getCameraPosition()
 				, irradiance
 				, prefiltered
@@ -341,7 +318,6 @@ namespace castor3d::shader
 			IF( m_writer, refractionRatio != 0.0_f )
 			{
 				// Refraction from background skybox.
-				ambient = vec3( 0.0_f );
 				auto incident = m_writer.declLocale( "incident"
 					, computeIncident( surface.worldPosition, sceneData.getCameraPosition() ) );
 				computeRefrSkybox( incident
@@ -353,19 +329,20 @@ namespace castor3d::shader
 					, reflected
 					, refracted );
 			}
-			ELSE
-			{
-				ambient *= reflected;
-				reflected = vec3( 0.0_f );
-			}
 			FI;
 		}
 	}
 
-	sdw::Vec3 PbrReflectionModel::computeSpecular( sdw::Vec3 const & albedo
-		, sdw::Float const & metalness )const
+	sdw::Vec3 PbrReflectionModel::computeF0( sdw::Vec3 const & albedo
+		, sdw::Float const & metalness )
 	{
-		return mix( vec3( 0.04_f ), albedo, vec3( metalness ) );
+		return shader::LightingModel::computeF0( albedo, metalness );
+	}
+
+	sdw::Float PbrReflectionModel::computeMetalness( sdw::Vec3 const & albedo
+		, sdw::Vec3 const & f0 )
+	{
+		return shader::LightingModel::computeMetalness( albedo, f0 );
 	}
 
 	sdw::Vec3 PbrReflectionModel::computeIBL( Surface surface

@@ -16,10 +16,9 @@
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslMetallicBrdfLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslPbrLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
-#include "Castor3D/Shader/Shaders/GlslSpecularBrdfLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -412,7 +411,7 @@ namespace castor3d
 		UBO_SHADOWMAP( writer
 			, index++
 			, RenderPipeline::eAdditional );
-		auto lighting = shader::MetallicBrdfLightingModel::createModel( writer
+		auto lighting = shader::PbrLightingModel::createModel( writer
 			, utils
 			, LightType::eSpot
 			, shader::ShadowOptions{ SceneFlag::eNone, false }
@@ -584,7 +583,7 @@ namespace castor3d
 		UBO_SHADOWMAP( writer
 			, index++
 			, RenderPipeline::eAdditional );
-		auto lighting = shader::SpecularBrdfLightingModel::createModel( writer
+		auto lighting = shader::PbrLightingModel::createModel( writer
 			, utils
 			, LightType::eSpot
 			, shader::ShadowOptions{ SceneFlag::eNone, false }

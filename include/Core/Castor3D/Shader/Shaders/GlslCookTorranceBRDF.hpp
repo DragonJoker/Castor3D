@@ -19,28 +19,16 @@ namespace castor3d
 			C3D_API void compute( Light const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & direction
-				, sdw::Vec3 const & albedo
-				, sdw::Float const & metallic
-				, sdw::Float const & roughness
-				, Surface surface
-				, OutputComponents & output );
-			C3D_API void compute( Light const & light
-				, sdw::Vec3 const & worldEye
-				, sdw::Vec3 const & direction
 				, sdw::Vec3 const & specular
+				, sdw::Float const & metalness
 				, sdw::Float const & roughness
 				, Surface surface
 				, OutputComponents & output );
 			C3D_API sdw::Vec3 computeDiffuse( Light const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & direction
-				, sdw::Vec3 const & albedo
-				, sdw::Float const & metallic
-				, Surface surface );
-			C3D_API sdw::Vec3 computeDiffuse( Light const & light
-				, sdw::Vec3 const & worldEye
-				, sdw::Vec3 const & direction
 				, sdw::Vec3 const & specular
+				, sdw::Float const & metalness
 				, Surface surface );
 
 		protected:
