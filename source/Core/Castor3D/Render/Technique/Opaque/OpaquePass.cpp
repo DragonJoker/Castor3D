@@ -18,9 +18,8 @@
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslMetallicBrdfLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslPbrLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
-#include "Castor3D/Shader/Shaders/GlslSpecularBrdfLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
@@ -299,7 +298,7 @@ namespace castor3d
 		utils.declareParallaxMappingFunc( flags.passFlags
 			, getTexturesMask() );
 
-		shader::MetallicBrdfLightingModel lightingModel{ writer
+		shader::PbrLightingModel lightingModel{ writer
 			, utils
 			, {}
 			, true };
@@ -423,7 +422,7 @@ namespace castor3d
 		utils.declareParallaxMappingFunc( flags.passFlags
 			, getTexturesMask() );
 
-		shader::SpecularBrdfLightingModel lightingModel{ writer
+		shader::PbrLightingModel lightingModel{ writer
 			, utils
 			, {}
 			, true };

@@ -39,26 +39,8 @@ namespace castor3d
 		void CookTorranceBRDF::compute( Light const & light
 			, sdw::Vec3 const & worldEye
 			, sdw::Vec3 const & direction
-			, sdw::Vec3 const & albedo
-			, sdw::Float const & metallic
-			, sdw::Float const & roughness
-			, Surface surface
-			, OutputComponents & output )
-		{
-			m_computeCookTorrance( light
-				, worldEye
-				, direction
-				, mix( vec3( 0.04_f ), albedo, vec3( metallic ) )
-				, metallic
-				, roughness
-				, surface
-				, output );
-		}
-
-		void CookTorranceBRDF::compute( Light const & light
-			, sdw::Vec3 const & worldEye
-			, sdw::Vec3 const & direction
 			, sdw::Vec3 const & specular
+			, sdw::Float const & metalness
 			, sdw::Float const & roughness
 			, Surface surface
 			, OutputComponents & output )
@@ -67,7 +49,7 @@ namespace castor3d
 				, worldEye
 				, direction
 				, specular
-				, length( specular )
+				, metalness
 				, roughness
 				, surface
 				, output );
@@ -76,29 +58,15 @@ namespace castor3d
 		sdw::Vec3 CookTorranceBRDF::computeDiffuse( Light const & light
 			, sdw::Vec3 const & worldEye
 			, sdw::Vec3 const & direction
-			, sdw::Vec3 const & albedo
-			, sdw::Float const & metallic
-			, Surface surface )
-		{
-			return m_computeCookTorranceDiffuse( light
-				, worldEye
-				, direction
-				, mix( vec3( 0.04_f ), albedo, vec3( metallic ) )
-				, metallic
-				, surface );
-		}
-
-		sdw::Vec3 CookTorranceBRDF::computeDiffuse( Light const & light
-			, sdw::Vec3 const & worldEye
-			, sdw::Vec3 const & direction
 			, sdw::Vec3 const & specular
+			, sdw::Float const & metalness
 			, Surface surface )
 		{
 			return m_computeCookTorranceDiffuse( light
 				, worldEye
 				, direction
 				, specular
-				, length( specular )
+				, metalness
 				, surface );
 		}
 
@@ -197,8 +165,8 @@ namespace castor3d
 				, [this]( Light const & light
 					, Vec3 const & worldEye
 					, Vec3 const & direction
-					, Vec3 const & f0
-					, Float const & metallic
+					, Vec3 const & specular
+					, Float const & metalness
 					, Float const & roughness
 					, Surface surface
 					, OutputComponents & output )
@@ -227,14 +195,14 @@ namespace castor3d
 						, max( 0.0_f, dot( L, V ) ) );
 
 					auto F = m_writer.declLocale( "F"
-						, m_schlickFresnel( HdotV, f0 ) );
-					auto NDF = m_writer.declLocale( "NDF"
+						, m_schlickFresnel( HdotV, specular ) );
+					auto D = m_writer.declLocale( "D"
 						, m_distributionGGX( NdotH, roughness ) );
 					auto G = m_writer.declLocale( "G"
 						, m_geometrySmith( NdotV, NdotL, roughness ) );
 
 					auto numerator = m_writer.declLocale( "numerator"
-						, F * NDF * G );
+						, F * D * G );
 					auto denominator = m_writer.declLocale( "denominator"
 						, sdw::fma( 4.0_f
 							, NdotV * NdotL
@@ -246,7 +214,7 @@ namespace castor3d
 					auto kD = m_writer.declLocale( "kD"
 						, vec3( 1.0_f ) - kS );
 
-					kD *= 1.0_f - metallic;
+					kD *= 1.0_f - metalness;
 
 					output.m_diffuse = ( radiance * light.m_intensity.r() * NdotL * kD / Float{ castor::Pi< float > } );
 					output.m_specular = ( specReflectance * radiance * light.m_intensity.g() * NdotL );
@@ -254,8 +222,8 @@ namespace castor3d
 				, InLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )
 				, InVec3( m_writer, "direction" )
-				, InVec3( m_writer, "f0" )
-				, InFloat( m_writer, "metallic" )
+				, InVec3( m_writer, "specular" )
+				, InFloat( m_writer, "metalness" )
 				, InFloat( m_writer, "roughness" )
 				, InSurface{ m_writer, "surface" }
 				, output );
@@ -267,8 +235,8 @@ namespace castor3d
 				, [this]( Light const & light
 					, Vec3 const & worldEye
 					, Vec3 const & direction
-					, Vec3 const & f0
-					, Float const & metallic
+					, Vec3 const & specular
+					, Float const & metalness
 					, Surface surface )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
@@ -289,21 +257,21 @@ namespace castor3d
 						, max( dot( H, V ), 0.0_f ) );
 
 					auto F = m_writer.declLocale( "F"
-						, m_schlickFresnel( HdotV, f0 ) );
+						, m_schlickFresnel( HdotV, specular ) );
 					auto kS = m_writer.declLocale( "kS"
 						, F );
 					auto kD = m_writer.declLocale( "kD"
 						, vec3( 1.0_f ) - kS );
 
-					kD *= 1.0_f - metallic;
+					kD *= 1.0_f - metalness;
 
 					m_writer.returnStmt( ( radiance * light.m_intensity.r() * NdotL * kD / Float{ castor::Pi< float > } ) );
 				}
 				, InLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )
 				, InVec3( m_writer, "direction" )
-				, InVec3( m_writer, "f0" )
-				, InFloat( m_writer, "metallic" )
+				, InVec3( m_writer, "specular" )
+				, InFloat( m_writer, "metalness" )
 				, InSurface{ m_writer, "surface" } );
 		}
 

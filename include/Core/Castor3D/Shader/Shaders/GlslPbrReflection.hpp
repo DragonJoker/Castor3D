@@ -35,7 +35,6 @@ namespace castor3d::shader
 			, sdw::Vec3 const & transmission
 			, Surface const & surface
 			, SceneData const & sceneData
-			, sdw::Vec3 & ambient
 			, sdw::Vec3 & reflected
 			, sdw::Vec3 & refracted )const;
 		C3D_API void computeForward( sdw::SampledImage2DRgba32 const & brdf
@@ -49,11 +48,12 @@ namespace castor3d::shader
 			, sdw::Vec3 const & transmission
 			, Surface const & surface
 			, SceneData const & sceneData
-			, sdw::Vec3 & ambient
 			, sdw::Vec3 & reflected
 			, sdw::Vec3 & refracted )const;
-		sdw::Vec3 computeSpecular( sdw::Vec3 const & albedo
-			, sdw::Float const & metalness )const;
+		static C3D_API sdw::Vec3 computeF0( sdw::Vec3 const & albedo
+			, sdw::Float const & metalness );
+		static C3D_API sdw::Float computeMetalness( sdw::Vec3 const & albedo
+			, sdw::Vec3 const & specular );
 
 	private:
 		sdw::Vec3 computeIBL( Surface surface

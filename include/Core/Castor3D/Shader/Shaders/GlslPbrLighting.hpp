@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_GlslSpecularBrdfLightingModel_H___
-#define ___C3D_GlslSpecularBrdfLightingModel_H___
+#ifndef ___C3D_GlslPbrLightingModel_H___
+#define ___C3D_GlslPbrLightingModel_H___
 
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
@@ -14,17 +14,18 @@ namespace castor3d
 {
 	namespace shader
 	{
-		class SpecularBrdfLightingModel
+		class PbrLightingModel
 			: public LightingModel
 		{
 		public:
-			C3D_API explicit SpecularBrdfLightingModel( sdw::ShaderWriter & writer
+			C3D_API explicit PbrLightingModel( sdw::ShaderWriter & writer
 				, Utils & utils
 				, ShadowOptions shadowOptions
 				, bool isOpaqueProgram );
 			C3D_API void computeCombined( sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & specular
-				, sdw::Float const & glossiness
+				, sdw::Float const & metalness
+				, sdw::Float const & roughness
 				, sdw::Int const & receivesShadows
 				, SceneData const & sceneData
 				, Surface surface
@@ -32,28 +33,32 @@ namespace castor3d
 			C3D_API void compute( TiledDirectionalLight const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & specular
-				, sdw::Float const & glossiness
+				, sdw::Float const & metalness
+				, sdw::Float const & roughness
 				, sdw::Int const & receivesShadows
 				, Surface surface
 				, OutputComponents & output )const;
 			C3D_API void compute( DirectionalLight const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & specular
-				, sdw::Float const & glossiness
+				, sdw::Float const & metalness
+				, sdw::Float const & roughness
 				, sdw::Int const & receivesShadows
 				, Surface surface
 				, OutputComponents & output )const;
 			C3D_API void compute( PointLight const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & specular
-				, sdw::Float const & glossiness
+				, sdw::Float const & metalness
+				, sdw::Float const & roughness
 				, sdw::Int const & receivesShadows
 				, Surface surface
 				, OutputComponents & output )const;
 			C3D_API void compute( SpotLight const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & specular
-				, sdw::Float const & glossiness
+				, sdw::Float const & metalness
+				, sdw::Float const & roughness
 				, sdw::Int const & receivesShadows
 				, Surface surface
 				, OutputComponents & output )const;
@@ -65,51 +70,57 @@ namespace castor3d
 				, sdw::Vec3 const & indirectAmbient
 				, sdw::Float const & ambientOcclusion
 				, sdw::Vec3 const & emissive
-				, sdw::Vec3 const & reflRefr
+				, sdw::Vec3 const & reflected
+				, sdw::Vec3 const & refracted
 				, sdw::Vec3 const & materialAlbedo );
 			C3D_API sdw::Vec3 computeCombinedDiffuse( sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & specular
-				, sdw::Float const & glossiness
+				, sdw::Float const & metalness
+				, sdw::Float const & roughness
 				, sdw::Int const & receivesShadows
 				, SceneData const & sceneData
 				, Surface surface )const;
 			C3D_API sdw::Vec3 computeDiffuse( TiledDirectionalLight const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & specular
-				, sdw::Float const & glossiness
+				, sdw::Float const & metalness
+				, sdw::Float const & roughness
 				, sdw::Int const & receivesShadows
 				, Surface surface )const;
 			C3D_API sdw::Vec3 computeDiffuse( DirectionalLight const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & specular
-				, sdw::Float const & glossiness
+				, sdw::Float const & metalness
+				, sdw::Float const & roughness
 				, sdw::Int const & receivesShadows
 				, Surface surface )const;
 			C3D_API sdw::Vec3 computeDiffuse( PointLight const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & specular
-				, sdw::Float const & glossiness
+				, sdw::Float const & metalness
+				, sdw::Float const & roughness
 				, sdw::Int const & receivesShadows
 				, Surface surface )const;
 			C3D_API sdw::Vec3 computeDiffuse( SpotLight const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & specular
-				, sdw::Float const & glossiness
+				, sdw::Float const & metalness
+				, sdw::Float const & roughness
 				, sdw::Int const & receivesShadows
 				, Surface surface )const;
-			C3D_API static std::shared_ptr< SpecularBrdfLightingModel > createModel( sdw::ShaderWriter & writer
+			C3D_API static std::shared_ptr< PbrLightingModel > createModel( sdw::ShaderWriter & writer
 				, Utils & utils
 				, ShadowOptions const & shadows
 				, uint32_t & index
 				, uint32_t set
 				, bool isOpaqueProgram );
-			C3D_API static std::shared_ptr< SpecularBrdfLightingModel > createDiffuseModel( sdw::ShaderWriter & writer
+			C3D_API static std::shared_ptr< PbrLightingModel > createDiffuseModel( sdw::ShaderWriter & writer
 				, Utils & utils
 				, ShadowOptions const & shadows
 				, uint32_t & index
 				, uint32_t set
 				, bool isOpaqueProgram );
-			static std::shared_ptr< SpecularBrdfLightingModel > createModel( sdw::ShaderWriter & writer
+			static std::shared_ptr< PbrLightingModel > createModel( sdw::ShaderWriter & writer
 				, Utils & utils
 				, LightType light
 				, ShadowOptions const & shadows
@@ -126,7 +137,7 @@ namespace castor3d
 					, index
 					, set );
 			}
-			static std::shared_ptr< SpecularBrdfLightingModel > createModel( sdw::ShaderWriter & writer
+			static std::shared_ptr< PbrLightingModel > createModel( sdw::ShaderWriter & writer
 				, Utils & utils
 				, LightType light
 				, uint32_t lightUboBinding
@@ -145,6 +156,37 @@ namespace castor3d
 					, index
 					, shadowMapSet );
 			}
+
+			C3D_API void computeMapContributions( PassFlags const & passFlags
+				, FilteredTextureFlags const & textures
+				, sdw::Float const & gamma
+				, TextureConfigurations const & textureConfigs
+				, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
+				, sdw::Vec3 & texCoords
+				, sdw::Vec3 & normal
+				, sdw::Vec3 & tangent
+				, sdw::Vec3 & bitangent
+				, sdw::Vec3 & emissive
+				, sdw::Float & opacity
+				, sdw::Float & occlusion
+				, sdw::Float & transmittance
+				, sdw::Vec3 & albedo
+				, sdw::Float & metalness
+				, sdw::Float & roughness
+				, sdw::Vec3 & tangentSpaceViewPosition
+				, sdw::Vec3 & tangentSpaceFragPosition );
+			C3D_API void computeMapVoxelContributions( PassFlags const & passFlags
+				, FilteredTextureFlags const & textures
+				, sdw::Float const & gamma
+				, TextureConfigurations const & textureConfigs
+				, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
+				, sdw::Vec3 const & texCoords
+				, sdw::Vec3 & emissive
+				, sdw::Float & opacity
+				, sdw::Float & occlusion
+				, sdw::Vec3 & albedo
+				, sdw::Float & metalness
+				, sdw::Float & roughness );
 
 			C3D_API void computeMapContributions( PassFlags const & passFlags
 				, FilteredTextureFlags const & textures
@@ -188,7 +230,7 @@ namespace castor3d
 			void doDeclareComputeSpotLightDiffuse()override;
 
 		private:
-			C3D_API static std::shared_ptr< SpecularBrdfLightingModel > createModel( sdw::ShaderWriter & writer
+			C3D_API static std::shared_ptr< PbrLightingModel > createModel( sdw::ShaderWriter & writer
 				, Utils & utils
 				, LightType light
 				, bool lightUbo
@@ -206,6 +248,7 @@ namespace castor3d
 				, sdw::InVec3
 				, sdw::InVec3
 				, sdw::InFloat
+				, sdw::InFloat
 				, sdw::InInt
 				, InSurface
 				, OutputComponents & > m_computeTiledDirectional;
@@ -213,6 +256,7 @@ namespace castor3d
 				, InDirectionalLight
 				, sdw::InVec3
 				, sdw::InVec3
+				, sdw::InFloat
 				, sdw::InFloat
 				, sdw::InInt
 				, InSurface
@@ -222,6 +266,7 @@ namespace castor3d
 				, sdw::InVec3
 				, sdw::InVec3
 				, sdw::InFloat
+				, sdw::InFloat
 				, sdw::InInt
 				, InSurface
 				, OutputComponents & > m_computePoint;
@@ -229,6 +274,7 @@ namespace castor3d
 				, InSpotLight
 				, sdw::InVec3
 				, sdw::InVec3
+				, sdw::InFloat
 				, sdw::InFloat
 				, sdw::InInt
 				, InSurface
@@ -238,12 +284,14 @@ namespace castor3d
 				, sdw::InVec3
 				, sdw::InVec3
 				, sdw::InFloat
+				, sdw::InFloat
 				, sdw::InInt
 				, InSurface > m_computeTiledDirectionalDiffuse;
 			sdw::Function< sdw::Vec3
 				, InDirectionalLight
 				, sdw::InVec3
 				, sdw::InVec3
+				, sdw::InFloat
 				, sdw::InFloat
 				, sdw::InInt
 				, InSurface > m_computeDirectionalDiffuse;
@@ -252,12 +300,14 @@ namespace castor3d
 				, sdw::InVec3
 				, sdw::InVec3
 				, sdw::InFloat
+				, sdw::InFloat
 				, sdw::InInt
 				, InSurface > m_computePointDiffuse;
 			sdw::Function< sdw::Vec3
 				, InSpotLight
 				, sdw::InVec3
 				, sdw::InVec3
+				, sdw::InFloat
 				, sdw::InFloat
 				, sdw::InInt
 				, InSurface > m_computeSpotDiffuse;
