@@ -500,7 +500,7 @@ namespace castor3d::shader
 				auto NdotV = m_writer.declLocale( "NdotV"
 					, max( dot( surface.worldNormal, V ), 0.0_f ) );
 				auto F = m_writer.declLocale( "F"
-					, m_utils.fresnelSchlick( NdotV, f0, roughness ) );
+					, m_utils.fresnelSchlick( NdotV, f0 ) );
 				auto kS = m_writer.declLocale( "kS"
 					, F );
 				auto kD = m_writer.declLocale( "kD"
