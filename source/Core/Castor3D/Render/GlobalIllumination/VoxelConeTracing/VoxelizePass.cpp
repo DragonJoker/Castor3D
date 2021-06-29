@@ -542,9 +542,7 @@ namespace castor3d
 			, uint32_t( PassUboIdx::eScene )
 			, RenderPipeline::eAdditional );
 		auto addIndex = uint32_t( PassUboIdx::eCount );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
-			, addIndex++
-			, RenderPipeline::eAdditional );
+		auto lightsIndex = addIndex++;
 		UBO_VOXELIZER( writer
 			, addIndex++
 			, RenderPipeline::eAdditional
@@ -554,6 +552,8 @@ namespace castor3d
 			, RenderPipeline::eAdditional ) );
 		auto lighting = shader::PhongLightingModel::createDiffuseModel( writer
 			, utils
+			, lightsIndex
+			, RenderPipeline::eAdditional
 			, shader::ShadowOptions{ flags.sceneFlags, false }
 			, addIndex
 			, RenderPipeline::eAdditional
@@ -700,9 +700,7 @@ namespace castor3d
 			, uint32_t( PassUboIdx::eScene )
 			, RenderPipeline::eAdditional );
 		auto addIndex = uint32_t( PassUboIdx::eCount );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
-			, addIndex++
-			, RenderPipeline::eAdditional );
+		auto lightsIndex = addIndex++;
 		UBO_VOXELIZER( writer
 			, addIndex++
 			, RenderPipeline::eAdditional
@@ -712,6 +710,8 @@ namespace castor3d
 			, RenderPipeline::eAdditional ) );
 		auto lighting = shader::PbrLightingModel::createDiffuseModel( writer
 			, utils
+			, lightsIndex
+			, RenderPipeline::eAdditional
 			, shader::ShadowOptions{ flags.sceneFlags, false }
 			, addIndex
 			, RenderPipeline::eAdditional
@@ -854,9 +854,7 @@ namespace castor3d
 			, uint32_t( PassUboIdx::eScene )
 			, RenderPipeline::eAdditional );
 		auto addIndex = uint32_t( PassUboIdx::eCount );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
-			, addIndex++
-			, RenderPipeline::eAdditional );
+		auto lightsIndex = addIndex++;
 		UBO_VOXELIZER( writer
 			, addIndex++
 			, RenderPipeline::eAdditional
@@ -866,6 +864,8 @@ namespace castor3d
 			, RenderPipeline::eAdditional ) );
 		auto lighting = shader::PbrLightingModel::createDiffuseModel( writer
 			, utils
+			, lightsIndex
+			, RenderPipeline::eAdditional
 			, shader::ShadowOptions{ flags.sceneFlags, false }
 			, addIndex
 			, RenderPipeline::eAdditional

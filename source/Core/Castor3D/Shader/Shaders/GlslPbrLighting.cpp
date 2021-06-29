@@ -347,16 +347,21 @@ namespace castor3d
 
 		std::shared_ptr< PbrLightingModel > PbrLightingModel::createModel( sdw::ShaderWriter & writer
 			, Utils & utils
+			, uint32_t lightsBufBinding
+			, uint32_t lightsBufSet
 			, ShadowOptions const & shadows
-			, uint32_t & index
-			, uint32_t set
+			, uint32_t & shadowMapBinding
+			, uint32_t shadowMapSet
 			, bool isOpaqueProgram )
 		{
 			auto result = std::make_shared< PbrLightingModel >( writer
 				, utils
 				, shadows
 				, isOpaqueProgram );
-			result->declareModel( index, set );
+			result->declareModel( lightsBufBinding
+				, lightsBufSet
+				, shadowMapBinding
+				, shadowMapSet );
 			return result;
 		}
 
@@ -366,8 +371,10 @@ namespace castor3d
 			, bool lightUbo
 			, uint32_t lightUboBinding
 			, uint32_t lightUboSet
+			, uint32_t lightsBufBinding
+			, uint32_t lightsBufSet
 			, ShadowOptions const & shadows
-			, uint32_t & index
+			, uint32_t & shadowMapBinding
 			, uint32_t shadowMapSet )
 		{
 			auto result = std::make_shared< PbrLightingModel >( writer
@@ -378,15 +385,33 @@ namespace castor3d
 			switch ( lightType )
 			{
 			case LightType::eDirectional:
-				result->declareDirectionalModel( lightUbo, lightUboBinding, lightUboSet, index, shadowMapSet );
+				result->declareDirectionalModel( lightUbo
+					, lightUboBinding
+					, lightUboSet
+					, lightsBufBinding
+					, lightsBufSet
+					, shadowMapBinding
+					, shadowMapSet );
 				break;
 
 			case LightType::ePoint:
-				result->declarePointModel( lightUbo, lightUboBinding, lightUboSet, index, shadowMapSet );
+				result->declarePointModel( lightUbo
+					, lightUboBinding
+					, lightUboSet
+					, lightsBufBinding
+					, lightsBufSet
+					, shadowMapBinding
+					, shadowMapSet );
 				break;
 
 			case LightType::eSpot:
-				result->declareSpotModel( lightUbo, lightUboBinding, lightUboSet, index, shadowMapSet );
+				result->declareSpotModel( lightUbo
+					, lightUboBinding
+					, lightUboSet
+					, lightsBufBinding
+					, lightsBufSet
+					, shadowMapBinding
+					, shadowMapSet );
 				break;
 
 			default:
@@ -399,16 +424,21 @@ namespace castor3d
 
 		std::shared_ptr< PbrLightingModel > PbrLightingModel::createDiffuseModel( sdw::ShaderWriter & writer
 			, Utils & utils
+			, uint32_t lightsBufBinding
+			, uint32_t lightsBufSet
 			, ShadowOptions const & shadows
-			, uint32_t & index
-			, uint32_t set
+			, uint32_t & shadowMapBinding
+			, uint32_t shadowMapSet
 			, bool isOpaqueProgram )
 		{
 			auto result = std::make_shared< PbrLightingModel >( writer
 				, utils
 				, shadows
 				, isOpaqueProgram );
-			result->declareDiffuseModel( index, set );
+			result->declareDiffuseModel( lightsBufBinding
+				, lightsBufSet
+				, shadowMapBinding
+				, shadowMapSet );
 			return result;
 		}
 

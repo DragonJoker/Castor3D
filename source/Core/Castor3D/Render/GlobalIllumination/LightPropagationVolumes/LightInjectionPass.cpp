@@ -46,8 +46,7 @@ namespace castor3d
 {
 	namespace
 	{
-		std::unique_ptr< ast::Shader > getDirectionalVertexProgram( uint32_t rsmTexSize
-			, uint32_t layerIndex )
+		std::unique_ptr< ast::Shader > getDirectionalVertexProgram( uint32_t rsmTexSize )
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -55,9 +54,6 @@ namespace castor3d
 			if ( shader::DirectionalMaxCascadesCount > 1u )
 			{
 				auto inPosition = writer.declInput< Vec2 >( "inPosition", 0u );
-				auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
-					, LightInjectionPass::LightsIdx
-					, 0u );
 #if C3D_UseTiledDirectionalShadowMap
 				auto c3d_rsmNormalMap = writer.declSampledImage< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormalLinear )
 					, RsmNormalsIdx
@@ -96,6 +92,8 @@ namespace castor3d
 				auto lightingModel = shader::PhongLightingModel::createModel( writer
 					, utils
 					, LightType::eDirectional
+					, uint32_t( LightInjectionPass::LightsIdx )
+					, 0u
 					, shader::ShadowOptions{ SceneFlag::eNone, true }
 					, index
 					, 1u );
@@ -143,9 +141,6 @@ namespace castor3d
 			else
 			{
 				auto inPosition = writer.declInput< Vec2 >( "inPosition", 0u );
-				auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
-					, LightInjectionPass::LightsIdx
-					, 0u );
 				auto c3d_rsmNormalMap = writer.declSampledImage< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormalLinear )
 					, LightInjectionPass::RsmNormalsIdx
 					, 0u );
@@ -172,6 +167,8 @@ namespace castor3d
 				auto lightingModel = shader::PhongLightingModel::createModel( writer
 					, utils
 					, LightType::eDirectional
+					, uint32_t( LightInjectionPass::LightsIdx )
+					, 0u
 					, shader::ShadowOptions{ SceneFlag::eNone, true }
 					, index
 					, 1u );
@@ -217,9 +214,6 @@ namespace castor3d
 			VertexWriter writer;
 
 			auto inPosition = writer.declInput< Vec2 >( "inPosition", 0u );
-			auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
-				, LightInjectionPass::LightsIdx
-				, 0u );
 			auto c3d_rsmNormalMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::eNormalLinear )
 				, LightInjectionPass::RsmNormalsIdx
 				, 0u );
@@ -271,13 +265,12 @@ namespace castor3d
 		}
 
 		ShaderPtr getVertexProgram( LightType lightType
-			, uint32_t rsmTexSize
-			, uint32_t layerIndex )
+			, uint32_t rsmTexSize )
 		{
 			switch ( lightType )
 			{
 			case castor3d::LightType::eDirectional:
-				return getDirectionalVertexProgram( rsmTexSize, layerIndex );
+				return getDirectionalVertexProgram( rsmTexSize );
 			case castor3d::LightType::eSpot:
 				return getSpotVertexProgram( rsmTexSize );
 			default:
@@ -550,9 +543,9 @@ namespace castor3d
 		, m_device{ device }
 		, m_rsmSize{ rsmSize }
 		, m_vertexBuffer{ createVertexBuffer( getName(), m_device, m_rsmSize ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram( lightType, m_rsmSize, layerIndex ) }
 		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), getGeometryProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram() }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram( lightType, m_rsmSize ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_geometryShader )
 			, makeShaderState( device, m_pixelShader ) }
