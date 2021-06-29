@@ -44,6 +44,10 @@ namespace castor3d
 			C3D_API TiledDirectionalLight getTiledDirectionalLight( sdw::Int const & index )const;
 			C3D_API PointLight getPointLight( sdw::Int const & index )const;
 			C3D_API SpotLight getSpotLight( sdw::Int const & index )const;
+			static C3D_API sdw::Vec3 computeF0( sdw::Vec3 const & albedo
+				, sdw::Float const & metalness );
+			static C3D_API sdw::Float computeMetalness( sdw::Vec3 const & albedo
+				, sdw::Vec3 const & specular );
 
 			inline Shadow const & getShadowModel()const
 			{

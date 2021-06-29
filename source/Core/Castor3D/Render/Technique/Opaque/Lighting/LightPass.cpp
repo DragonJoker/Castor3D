@@ -13,10 +13,9 @@
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslMetallicBrdfLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslPbrLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
-#include "Castor3D/Shader/Shaders/GlslSpecularBrdfLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -387,7 +386,7 @@ namespace castor3d
 
 		// Utility functions
 		index = uint32_t( LightPassLgtIdx::eSmNormalLinear );
-		auto lighting = shader::MetallicBrdfLightingModel::createModel( writer
+		auto lighting = shader::PbrLightingModel::createModel( writer
 			, utils
 			, lightType
 			, uint32_t( LightPassLgtIdx::eLight )
@@ -429,7 +428,7 @@ namespace castor3d
 						, c3d_mapData4.lod( texCoord, 0.0_f ) );
 					auto data5 = writer.declLocale( "data5"
 						, c3d_mapData5.lod( texCoord, 0.0_f ) );
-					auto metallic = writer.declLocale( "metallic"
+					auto metalness = writer.declLocale( "metalness"
 						, data3.r() );
 					auto roughness = writer.declLocale( "roughness"
 						, data2.w() );
@@ -459,6 +458,8 @@ namespace castor3d
 					shader::OutputComponents output{ lightDiffuse, lightSpecular };
 					auto surface = writer.declLocale< shader::Surface >( "surface" );
 					surface.create( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal );
+					auto specular = writer.declLocale( "specular"
+						, lighting->computeF0( albedo, metalness ) );
 
 					switch ( lightType )
 					{
@@ -475,8 +476,8 @@ namespace castor3d
 						{
 							lighting->compute( light
 								, eye
-								, albedo
-								, metallic
+								, specular
+								, metalness
 								, roughness
 								, shadowReceiver
 								, surface
@@ -503,8 +504,8 @@ namespace castor3d
 #else
 						lighting->compute( light
 							, eye
-							, albedo
-							, metallic
+							, specular
+							, metalness
 							, roughness
 							, shadowReceiver
 							, surface
@@ -522,8 +523,8 @@ namespace castor3d
 						{
 							lighting->compute( light
 								, eye
-								, albedo
-								, metallic
+								, specular
+								, metalness
 								, roughness
 								, shadowReceiver
 								, surface
@@ -550,8 +551,8 @@ namespace castor3d
 #else
 						lighting->compute( light
 							, eye
-							, albedo
-							, metallic
+							, specular
+							, metalness
 							, roughness
 							, shadowReceiver
 							, surface
@@ -569,8 +570,8 @@ namespace castor3d
 						{
 							lighting->compute( light
 								, eye
-								, albedo
-								, metallic
+								, specular
+								, metalness
 								, roughness
 								, shadowReceiver
 								, surface
@@ -597,8 +598,8 @@ namespace castor3d
 #else
 						lighting->compute( light
 							, eye
-							, albedo
-							, metallic
+							, specular
+							, metalness
 							, roughness
 							, shadowReceiver
 							, surface
@@ -664,7 +665,7 @@ namespace castor3d
 
 		// Utility functions
 		index = uint32_t( LightPassLgtIdx::eSmNormalLinear );
-		auto lighting = shader::SpecularBrdfLightingModel::createModel( writer
+		auto lighting = shader::PbrLightingModel::createModel( writer
 			, utils
 			, lightType
 			, uint32_t( LightPassLgtIdx::eLight )
@@ -698,6 +699,8 @@ namespace castor3d
 					, c3d_mapData4.lod( texCoord, 0.0_f ) );
 				auto data5 = writer.declLocale( "data5"
 					, c3d_mapData5.lod( texCoord, 0.0_f ) );
+				auto albedo = writer.declLocale( "albedo"
+					, data2.xyz() );
 				auto specular = writer.declLocale( "specular"
 					, data3.rgb() );
 				auto glossiness = writer.declLocale( "glossiness"
@@ -740,6 +743,10 @@ namespace castor3d
 					shader::OutputComponents output{ lightDiffuse, lightSpecular };
 					auto surface = writer.declLocale< shader::Surface >( "surface" );
 					surface.create( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal );
+					auto roughness = writer.declLocale( "roughness"
+						, 1.0_f - glossiness );
+					auto metalness = writer.declLocale( "metalness"
+						, lighting->computeMetalness( albedo, specular ) );
 
 					switch ( lightType )
 					{
@@ -754,7 +761,8 @@ namespace castor3d
 						lighting->compute( light
 							, eye
 							, specular
-							, glossiness
+							, metalness
+							, roughness
 							, shadowReceiver
 							, surface
 							, output );
@@ -777,7 +785,8 @@ namespace castor3d
 						lighting->compute( light
 							, eye
 							, specular
-							, glossiness
+							, metalness
+							, roughness
 							, shadowReceiver
 							, surface
 							, output );
@@ -800,7 +809,8 @@ namespace castor3d
 						lighting->compute( light
 							, eye
 							, specular
-							, glossiness
+							, metalness
+							, roughness
 							, shadowReceiver
 							, surface
 							, output );
