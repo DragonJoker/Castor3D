@@ -90,6 +90,7 @@ namespace castor3d
 					, LightType::eDirectional
 					, GeometryInjectionPass::LightsIdx
 					, 0u
+					, false
 					, shader::ShadowOptions{ SceneFlag::eNone, true }
 					, index
 					, 1u );
@@ -171,6 +172,7 @@ namespace castor3d
 					, LightType::eDirectional
 					, GeometryInjectionPass::LightsIdx
 					, 0u
+					, false
 					, shader::ShadowOptions{ SceneFlag::eNone, true }
 					, index
 					, 1u );
@@ -250,6 +252,7 @@ namespace castor3d
 				, LightType::eSpot
 				, GeometryInjectionPass::LightsIdx
 				, 0u
+				, false
 				, shader::ShadowOptions{ SceneFlag::eNone, true }
 				, index
 				, 1u );
@@ -328,6 +331,7 @@ namespace castor3d
 				, LightType::eSpot
 				, GeometryInjectionPass::LightsIdx
 				, 0u
+				, false
 				, shader::ShadowOptions{ SceneFlag::eNone, true }
 				, index
 				, 1u );

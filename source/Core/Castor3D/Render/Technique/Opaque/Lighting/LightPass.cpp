@@ -187,6 +187,7 @@ namespace castor3d
 			, lightType
 			, uint32_t( LightPassLgtIdx::eLight )
 			, 1u
+			, true
 			, shader::ShadowOptions{ shadows, lightType, false }
 			, index
 			, 1u );
@@ -391,6 +392,7 @@ namespace castor3d
 			, lightType
 			, uint32_t( LightPassLgtIdx::eLight )
 			, 1u
+			, true
 			, shader::ShadowOptions{ shadows, lightType, false }
 			, index
 			, 1u );
@@ -670,6 +672,7 @@ namespace castor3d
 			, lightType
 			, uint32_t( LightPassLgtIdx::eLight )
 			, 1u
+			, true
 			, shader::ShadowOptions{ shadows, lightType, false }
 			, index
 			, 1u );

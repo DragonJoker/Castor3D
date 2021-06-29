@@ -29,24 +29,18 @@ namespace castor3d
 				, uint32_t & shadowMapBinding
 				, uint32_t shadowMapSet );
 			C3D_API void declareDirectionalModel( bool lightUbo
-				, uint32_t lightUboBinding
-				, uint32_t lightUboSet
-				, uint32_t lightsBufBinding
-				, uint32_t lightsBufSet
+				, uint32_t lightBinding
+				, uint32_t lightSet
 				, uint32_t & shadowMapBinding
 				, uint32_t shadowMapSet );
 			C3D_API void declarePointModel( bool lightUbo
-				, uint32_t lightUboBinding
-				, uint32_t lightUboSet
-				, uint32_t lightsBufBinding
-				, uint32_t lightsBufSet
+				, uint32_t lightBinding
+				, uint32_t lightSet
 				, uint32_t & shadowMapBinding
 				, uint32_t shadowMapSet );
 			C3D_API void declareSpotModel( bool lightUbo
-				, uint32_t lightUboBinding
-				, uint32_t lightUboSet
-				, uint32_t lightsBufBinding
-				, uint32_t lightsBufSet
+				, uint32_t lightBinding
+				, uint32_t lightSet
 				, uint32_t & shadowMapBinding
 				, uint32_t shadowMapSet );
 			// Calls
