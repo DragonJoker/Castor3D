@@ -29,7 +29,7 @@ namespace castor3d
 				, utils
 				, std::move( shadowOptions )
 				, isOpaqueProgram }
-			, m_cookTorrance{ writer }
+			, m_cookTorrance{ writer, utils }
 		{
 		}
 
