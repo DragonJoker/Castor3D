@@ -369,10 +369,8 @@ namespace castor3d
 			, Utils & utils
 			, LightType lightType
 			, bool lightUbo
-			, uint32_t lightUboBinding
-			, uint32_t lightUboSet
-			, uint32_t lightsBufBinding
-			, uint32_t lightsBufSet
+			, uint32_t lightBinding
+			, uint32_t lightSet
 			, ShadowOptions const & shadows
 			, uint32_t & shadowMapBinding
 			, uint32_t shadowMapSet )
@@ -386,30 +384,24 @@ namespace castor3d
 			{
 			case LightType::eDirectional:
 				result->declareDirectionalModel( lightUbo
-					, lightUboBinding
-					, lightUboSet
-					, lightsBufBinding
-					, lightsBufSet
+					, lightBinding
+					, lightSet
 					, shadowMapBinding
 					, shadowMapSet );
 				break;
 
 			case LightType::ePoint:
 				result->declarePointModel( lightUbo
-					, lightUboBinding
-					, lightUboSet
-					, lightsBufBinding
-					, lightsBufSet
+					, lightBinding
+					, lightSet
 					, shadowMapBinding
 					, shadowMapSet );
 				break;
 
 			case LightType::eSpot:
 				result->declareSpotModel( lightUbo
-					, lightUboBinding
-					, lightUboSet
-					, lightsBufBinding
-					, lightsBufSet
+					, lightBinding
+					, lightSet
 					, shadowMapBinding
 					, shadowMapSet );
 				break;

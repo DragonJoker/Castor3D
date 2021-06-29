@@ -94,6 +94,7 @@ namespace castor3d
 					, LightType::eDirectional
 					, uint32_t( LightInjectionPass::LightsIdx )
 					, 0u
+					, false
 					, shader::ShadowOptions{ SceneFlag::eNone, true }
 					, index
 					, 1u );
@@ -169,6 +170,7 @@ namespace castor3d
 					, LightType::eDirectional
 					, uint32_t( LightInjectionPass::LightsIdx )
 					, 0u
+					, false
 					, shader::ShadowOptions{ SceneFlag::eNone, true }
 					, index
 					, 1u );

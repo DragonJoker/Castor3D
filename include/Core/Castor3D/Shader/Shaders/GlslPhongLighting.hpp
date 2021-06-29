@@ -142,12 +142,13 @@ namespace castor3d
 					, shadowMapSet
 					, isOpaqueProgram );
 			}
-			template< typename LightsBufBindingT >
+			template< typename LightBindingT >
 			static std::shared_ptr< PhongLightingModel > createModel( sdw::ShaderWriter & writer
 				, Utils & utils
 				, LightType light
-				, LightsBufBindingT lightsBufBinding
-				, uint32_t lightsBufSet
+				, LightBindingT lightBinding
+				, uint32_t lightSet
+				, bool lightUbo
 				, ShadowOptions const & shadows
 				, uint32_t & shadowMapBinding
 				, uint32_t shadowMapSet )
@@ -155,35 +156,9 @@ namespace castor3d
 				return createModel( writer
 					, utils
 					, light
-					, false
-					, 0u
-					, 0u
-					, uint32_t( lightsBufBinding )
-					, lightsBufSet
-					, shadows
-					, shadowMapBinding
-					, shadowMapSet );
-			}
-			template< typename LightUboBindingT, typename LightsBufBindingT >
-			static std::shared_ptr< PhongLightingModel > createModel( sdw::ShaderWriter & writer
-				, Utils & utils
-				, LightType light
-				, LightUboBindingT lightUboBinding
-				, uint32_t lightUboSet
-				, LightsBufBindingT lightsBufBinding
-				, uint32_t lightsBufSet
-				, ShadowOptions const & shadows
-				, uint32_t & shadowMapBinding
-				, uint32_t shadowMapSet )
-			{
-				return createModel( writer
-					, utils
-					, light
-					, true
-					, uint32_t( lightUboBinding )
-					, lightUboSet
-					, uint32_t( lightsBufBinding )
-					, lightsBufSet
+					, lightUbo
+					, lightBinding
+					, lightSet
 					, shadows
 					, shadowMapBinding
 					, shadowMapSet );
@@ -235,10 +210,8 @@ namespace castor3d
 				, Utils & utils
 				, LightType light
 				, bool lightUbo
-				, uint32_t lightUboBinding
-				, uint32_t lightUboSet
-				, uint32_t lightsBufBinding
-				, uint32_t lightsBufSet
+				, uint32_t lightBinding
+				, uint32_t lightSet
 				, ShadowOptions const & shadows
 				, uint32_t & shadowMapBinding
 				, uint32_t shadowMapSet );
