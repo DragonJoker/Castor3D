@@ -56,10 +56,12 @@ namespace castor3d
 				, sdw::Vec3 const & directSpecular
 				, sdw::Vec3 const & indirectSpecular
 				, sdw::Vec3 const & ambient
+				, sdw::Float const & ambientFactor
 				, sdw::Vec3 const & indirectAmbient
 				, sdw::Float const & ambientOcclusion
 				, sdw::Vec3 const & emissive
-				, sdw::Vec3 const & reflRefr
+				, sdw::Vec3 const & reflected
+				, sdw::Vec3 const & refracted
 				, sdw::Vec3 const & materialDiffuse );
 			C3D_API sdw::Vec3 computeCombinedDiffuse( sdw::Vec3 const & worldEye
 				, sdw::Float const & shininess

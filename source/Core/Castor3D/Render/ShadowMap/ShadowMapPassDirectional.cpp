@@ -23,10 +23,9 @@
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslMetallicBrdfLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslPbrLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
-#include "Castor3D/Shader/Shaders/GlslSpecularBrdfLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -543,7 +542,7 @@ namespace castor3d
 			, index++
 			, RenderPipeline::eAdditional );
 #endif
-		auto lighting = shader::MetallicBrdfLightingModel::createModel( writer
+		auto lighting = shader::PbrLightingModel::createModel( writer
 			, utils
 			, LightType::eDirectional
 			, shader::ShadowOptions{ SceneFlag::eNone, false }
@@ -706,7 +705,7 @@ namespace castor3d
 			, index++
 			, RenderPipeline::eAdditional );
 #endif
-		auto lighting = shader::SpecularBrdfLightingModel::createModel( writer
+		auto lighting = shader::PbrLightingModel::createModel( writer
 			, utils
 			, LightType::eDirectional
 			, shader::ShadowOptions{ SceneFlag::eNone, false }
