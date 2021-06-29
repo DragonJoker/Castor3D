@@ -55,9 +55,6 @@ namespace castor3d
 			if ( shader::DirectionalMaxCascadesCount > 1u )
 			{
 				auto inPosition = writer.declInput< Vec2 >( "inPosition", 0u );
-				auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
-					, GeometryInjectionPass::LightsIdx
-					, 0u );
 #if C3D_UseTiledDirectionalShadowMap
 				auto c3d_rsmNormalMap = writer.declSampledImage< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormalLinear )
 					, GeometryInjectionPass::RsmNormalsIdx
@@ -91,6 +88,8 @@ namespace castor3d
 				auto lightingModel = shader::PhongLightingModel::createModel( writer
 					, utils
 					, LightType::eDirectional
+					, GeometryInjectionPass::LightsIdx
+					, 0u
 					, shader::ShadowOptions{ SceneFlag::eNone, true }
 					, index
 					, 1u );
@@ -146,9 +145,6 @@ namespace castor3d
 			else
 			{
 				auto inPosition = writer.declInput< Vec2 >( "inPosition", 0u );
-				auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
-					, GeometryInjectionPass::LightsIdx
-					, 0u );
 				auto c3d_rsmNormalMap = writer.declSampledImage< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormalLinear )
 					, GeometryInjectionPass::RsmNormalsIdx
 					, 0u );
@@ -173,6 +169,8 @@ namespace castor3d
 				auto lightingModel = shader::PhongLightingModel::createModel( writer
 					, utils
 					, LightType::eDirectional
+					, GeometryInjectionPass::LightsIdx
+					, 0u
 					, shader::ShadowOptions{ SceneFlag::eNone, true }
 					, index
 					, 1u );
@@ -226,9 +224,6 @@ namespace castor3d
 			VertexWriter writer;
 
 			auto inPosition = writer.declInput< Vec2 >( "inPosition", 0u );
-			auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
-				, GeometryInjectionPass::LightsIdx
-				, 0u );
 			auto c3d_rsmNormalMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::eNormalLinear )
 				, GeometryInjectionPass::RsmNormalsIdx
 				, 0u );
@@ -253,6 +248,8 @@ namespace castor3d
 			auto lightingModel = shader::PhongLightingModel::createModel( writer
 				, utils
 				, LightType::eSpot
+				, GeometryInjectionPass::LightsIdx
+				, 0u
 				, shader::ShadowOptions{ SceneFlag::eNone, true }
 				, index
 				, 1u );
@@ -305,9 +302,6 @@ namespace castor3d
 			VertexWriter writer;
 
 			auto inPosition = writer.declInput< Vec2 >( "inPosition", 0u );
-			auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
-				, GeometryInjectionPass::LightsIdx
-				, 0u );
 			auto c3d_rsmNormalMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::eNormalLinear )
 				, GeometryInjectionPass::RsmNormalsIdx
 				, 0u );
@@ -332,6 +326,8 @@ namespace castor3d
 			auto lightingModel = shader::PhongLightingModel::createModel( writer
 				, utils
 				, LightType::eSpot
+				, GeometryInjectionPass::LightsIdx
+				, 0u
 				, shader::ShadowOptions{ SceneFlag::eNone, true }
 				, index
 				, 1u );
