@@ -95,8 +95,7 @@ namespace castor3d
 		class PhongReflectionModel;
 		class PbrReflectionModel;
 		class PhongLightingModel;
-		class MetallicBrdfLightingModel;
-		class SpecularBrdfLightingModel;
+		class PbrLightingModel;
 		struct BaseMaterial;
 		struct PhongMaterial;
 		struct MetallicRoughnessMaterial;

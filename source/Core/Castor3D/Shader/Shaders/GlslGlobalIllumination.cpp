@@ -2,6 +2,7 @@
 
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
@@ -435,7 +436,6 @@ namespace castor3d
 		sdw::Vec3 GlobalIllumination::computeVCTSpecular( sdw::Vec3 const & wsCamera
 			, sdw::Vec3 const & vsPosition
 			, Surface const & surface
-			, sdw::Vec3 const & specular
 			, sdw::Float const & roughness
 			, sdw::Float const & indirectOcclusion
 			, sdw::Float const & indirectBlend
@@ -443,7 +443,6 @@ namespace castor3d
 		{
 			auto mapVoxelsFirstBounce = m_writer.getVariable< SampledImage3DRgba32 >( "c3d_mapVoxelsFirstBounce" );
 			auto mapVoxelsSecondaryBounce = m_writer.getVariable< SampledImage3DRgba32 >( "c3d_mapVoxelsSecondaryBounce" );
-
 			auto vxlReflection( m_writer.declLocale< sdw::Vec4 >( "vxlReflection" ) );
 
 			IF( m_writer, voxelData.enableSecondaryBounce )
@@ -457,7 +456,7 @@ namespace castor3d
 			ELSE
 			{
 				vxlReflection = traceConeReflection( mapVoxelsFirstBounce
-				, surface
+					, surface
 					, wsCamera - surface.worldPosition
 					, roughness
 					, voxelData );
@@ -536,7 +535,6 @@ namespace castor3d
 				indirectSpecular = computeVCTSpecular( wsCamera
 					, vsPosition
 					, surface
-					, specular
 					, roughness
 					, indirectOcclusion
 					, indirectBlend
@@ -546,8 +544,7 @@ namespace castor3d
 				auto NdotV = m_writer.declLocale( "NdotV"
 					, max( 0.0_f, dot( surface.worldNormal, V ) ) );
 				indirectSpecular *= m_utils.fresnelSchlick( NdotV
-					, indirectSpecular.xyz()
-					, roughness );
+					, indirectSpecular.xyz() );
 			}
 			return indirectSpecular;
 		}
@@ -559,6 +556,18 @@ namespace castor3d
 			return m_traceConeRadiance( voxels
 				, surface
 				, voxelData );
+		}
+
+		sdw::Vec3 GlobalIllumination::computeF0( sdw::Vec3 const & albedo
+			, sdw::Float const & metalness )
+		{
+			return shader::LightingModel::computeF0( albedo, metalness );
+		}
+
+		sdw::Float GlobalIllumination::computeMetalness( sdw::Vec3 const & albedo
+			, sdw::Vec3 const & f0 )
+		{
+			return shader::LightingModel::computeMetalness( albedo, f0 );
 		}
 
 		void GlobalIllumination::declareTraceCone()

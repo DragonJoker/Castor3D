@@ -19,11 +19,10 @@
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslMetallicBrdfLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslPbrLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslPbrReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongReflection.hpp"
-#include "Castor3D/Shader/Shaders/GlslSpecularBrdfLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -244,7 +243,7 @@ namespace castor3d
 						auto emissive = writer.declLocale( "emissive"
 							, data4.xyz() );
 						auto ambient = writer.declLocale( "ambient"
-							, clamp( c3d_sceneData.getAmbientLight() * material.m_ambient * diffuse
+							, clamp( c3d_sceneData.getAmbientLight() * diffuse
 								, vec3( 0.0_f )
 								, vec3( 1.0_f ) ) );
 						auto lightDiffuse = writer.declLocale( "lightDiffuse"
@@ -286,10 +285,12 @@ namespace castor3d
 								, lightSpecular
 								, config.hasSpecularGi ? lightIndirectSpecular : vec3( 0.0_f )
 								, ambient
+								, material.m_ambient
 								, config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 1.0_f )
 								, occlusion
 								, emissive
-								, reflected + refracted
+								, reflected
+								, refracted
 								, diffuse )
 							, 1.0_f );
 					}
@@ -444,6 +445,8 @@ namespace castor3d
 							occlusion *= c3d_mapSsao.lod( fixedTexCoord, 0.0_f ).r();
 						}
 
+						auto specular = writer.declLocale( "specular"
+							, reflections.computeF0( albedo, metalness ) );
 						auto reflected = writer.declLocale( "reflected"
 							, vec3( 0.0_f ) );
 						auto refracted = writer.declLocale( "refracted"
@@ -456,16 +459,15 @@ namespace castor3d
 							, refraction
 							, material.m_refractionRatio
 							, albedo
-							, reflections.computeSpecular( albedo, metalness )
+							, specular
 							, roughness
 							, metalness
 							, material.m_transmission
 							, surface
 							, c3d_sceneData
-							, ambient
 							, reflected
 							, refracted );
-						pxl_fragColor = vec4( shader::MetallicBrdfLightingModel::combine( lightDiffuse
+						pxl_fragColor = vec4( shader::PbrLightingModel::combine( lightDiffuse
 								, config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 0.0_f )
 								, lightSpecular
 								, config.hasSpecularGi ? lightIndirectSpecular : vec3( 0.0_f )
@@ -473,7 +475,8 @@ namespace castor3d
 								, config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 1.0_f )
 								, occlusion
 								, emissive
-								, reflected + refracted
+								, reflected
+								, refracted
 								, albedo )
 							, 1.0_f );
 					}
@@ -588,7 +591,7 @@ namespace castor3d
 
 					auto material = writer.declLocale( "material"
 						, materials.getMaterial( materialId ) );
-					auto diffuse = writer.declLocale( "diffuse"
+					auto albedo = writer.declLocale( "albedo"
 						, data2.xyz() );
 					auto depth = writer.declLocale( "depth"
 						, c3d_mapDepth.lod( vtx_texture, 0.0_f ).x() );
@@ -632,6 +635,10 @@ namespace castor3d
 							, vec3( 0.0_f ) );
 						auto refracted = writer.declLocale( "refracted"
 							, vec3( 0.0_f ) );
+						auto roughness = writer.declLocale( "roughness"
+							, 1.0_f - glossiness );
+						auto metalness = writer.declLocale( "metalness"
+							, reflections.computeMetalness( albedo, specular ) );
 						reflections.computeDeferred( c3d_mapBrdf
 							, c3d_mapIrradiance
 							, c3d_mapPrefiltered
@@ -639,17 +646,16 @@ namespace castor3d
 							, reflection
 							, refraction
 							, material.m_refractionRatio
-							, diffuse
+							, albedo
 							, specular
-							, 1.0_f - glossiness
-							, length( specular )
+							, roughness
+							, metalness
 							, material.m_transmission
 							, surface
 							, c3d_sceneData
-							, ambient
 							, reflected
 							, refracted );
-						pxl_fragColor = vec4( shader::SpecularBrdfLightingModel::combine( lightDiffuse
+						pxl_fragColor = vec4( shader::PbrLightingModel::combine( lightDiffuse
 								, config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 0.0_f )
 								, lightSpecular
 								, config.hasSpecularGi ? lightIndirectSpecular : vec3( 0.0_f )
@@ -657,13 +663,14 @@ namespace castor3d
 								, config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 1.0_f )
 								, occlusion
 								, emissive
-								, reflected + refracted
-								, diffuse )
+								, reflected
+								, refracted
+								, albedo )
 							, 1.0_f );
 					}
 					ELSE
 					{
-						pxl_fragColor = vec4( diffuse, 1.0_f );
+						pxl_fragColor = vec4( albedo, 1.0_f );
 					}
 					FI;
 
