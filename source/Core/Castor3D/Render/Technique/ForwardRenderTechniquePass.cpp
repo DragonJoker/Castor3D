@@ -187,29 +187,26 @@ namespace castor3d
 					occlusion *= c3d_mapOcclusion.fetch( ivec2( in.fragCoord.xy() ), 0_i );
 				}
 
-				if ( hasTextures )
-				{
-					auto texCoord = writer.declLocale( "texCoord"
-						, inSurface.texture );
-					lighting->computeMapContributions( flags.passFlags
-						, textures
-						, gamma
-						, textureConfigs
-						, c3d_maps
-						, texCoord
-						, normal
-						, tangent
-						, bitangent
-						, emissive
-						, opacity
-						, occlusion
-						, transmittance
-						, diffuse
-						, specular
-						, shininess
-						, inSurface.tangentSpaceViewPosition
-						, inSurface.tangentSpaceFragPosition );
-				}
+				auto texCoord = writer.declLocale( "texCoord"
+					, inSurface.texture );
+				lighting->computeMapContributions( flags.passFlags
+					, textures
+					, gamma
+					, textureConfigs
+					, c3d_maps
+					, texCoord
+					, normal
+					, tangent
+					, bitangent
+					, emissive
+					, opacity
+					, occlusion
+					, transmittance
+					, diffuse
+					, specular
+					, shininess
+					, inSurface.tangentSpaceViewPosition
+					, inSurface.tangentSpaceFragPosition );
 
 				if ( m_mode == RenderMode::eTransparentOnly )
 				{
@@ -446,29 +443,26 @@ namespace castor3d
 					occlusion *= c3d_mapOcclusion.fetch( ivec2( in.fragCoord.xy() ), 0_i );
 				}
 
-				if ( hasTextures )
-				{
-					auto texCoord = writer.declLocale( "texCoord"
-						, inSurface.texture );
-					lighting->computeMapContributions( flags.passFlags
-						, textures
-						, gamma
-						, textureConfigs
-						, c3d_maps
-						, texCoord
-						, normal
-						, tangent
-						, bitangent
-						, emissive
-						, opacity
-						, occlusion
-						, transmittance
-						, albedo
-						, metalness
-						, roughness
-						, inSurface.tangentSpaceViewPosition
-						, inSurface.tangentSpaceFragPosition );
-				}
+				auto texCoord = writer.declLocale( "texCoord"
+					, inSurface.texture );
+				lighting->computeMapContributions( flags.passFlags
+					, textures
+					, gamma
+					, textureConfigs
+					, c3d_maps
+					, texCoord
+					, normal
+					, tangent
+					, bitangent
+					, emissive
+					, opacity
+					, occlusion
+					, transmittance
+					, albedo
+					, metalness
+					, roughness
+					, inSurface.tangentSpaceViewPosition
+					, inSurface.tangentSpaceFragPosition );
 
 				if ( m_mode == RenderMode::eTransparentOnly )
 				{
@@ -709,29 +703,26 @@ namespace castor3d
 					occlusion *= c3d_mapOcclusion.fetch( ivec2( in.fragCoord.xy() ), 0_i );
 				}
 
-				if ( hasTextures )
-				{
-					auto texCoord = writer.declLocale( "texCoord"
-						, inSurface.texture );
-					lighting->computeMapContributions( flags.passFlags
-						, textures
-						, gamma
-						, textureConfigs
-						, c3d_maps
-						, texCoord
-						, normal
-						, tangent
-						, bitangent
-						, emissive
-						, opacity
-						, occlusion
-						, transmittance
-						, albedo
-						, specular
-						, glossiness
-						, inSurface.tangentSpaceViewPosition
-						, inSurface.tangentSpaceFragPosition );
-				}
+				auto texCoord = writer.declLocale( "texCoord"
+					, inSurface.texture );
+				lighting->computeMapContributions( flags.passFlags
+					, textures
+					, gamma
+					, textureConfigs
+					, c3d_maps
+					, texCoord
+					, normal
+					, tangent
+					, bitangent
+					, emissive
+					, opacity
+					, occlusion
+					, transmittance
+					, albedo
+					, specular
+					, glossiness
+					, inSurface.tangentSpaceViewPosition
+					, inSurface.tangentSpaceFragPosition );
 
 				if ( m_mode == RenderMode::eTransparentOnly )
 				{
