@@ -195,7 +195,7 @@ namespace GuiCommon
 		: public wxClientData
 	{
 	public:
-		ButtonData( ButtonEventMethod method );
+		explicit ButtonData( ButtonEventMethod method );
 		void Call( wxVariant const & var );
 
 	private:

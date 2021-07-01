@@ -32,7 +32,7 @@ namespace GuiCommon
 
 		for ( auto postEffect : target.getHDRPostEffects() )
 		{
-			wxTreeItemId idPostEffect = list->AppendItem( targetId
+			list->AppendItem( targetId
 				, _( "HDR - " ) + make_wxString( postEffect->getFullName() )
 				, eBMP_POST_EFFECT
 				, eBMP_POST_EFFECT_SEL
@@ -41,14 +41,14 @@ namespace GuiCommon
 
 		for ( auto postEffect : target.getSRGBPostEffects() )
 		{
-			wxTreeItemId idPostEffect = list->AppendItem( targetId
+			list->AppendItem( targetId
 				, _( "SRGB - " ) + make_wxString( postEffect->getFullName() )
 				, eBMP_POST_EFFECT
 				, eBMP_POST_EFFECT_SEL
 				, new PostEffectTreeItemProperty( editable, *postEffect, list ) );
 		}
 
-		wxTreeItemId idToneMapping = list->AppendItem( targetId
+		list->AppendItem( targetId
 			, _( "Tone Mapping" )
 			, eBMP_TONE_MAPPING
 			, eBMP_TONE_MAPPING_SEL

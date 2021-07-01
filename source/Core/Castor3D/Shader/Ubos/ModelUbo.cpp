@@ -58,13 +58,11 @@ namespace castor3d
 			, SkinningData const & skinning
 			, VertexSurface const & surface )const
 		{
-			auto & writer = *getWriter();
-
 			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 			{
 				return SkinningUbo::computeTransform( skinning
 					, surface
-					, writer
+					, *getWriter()
 					, programFlags
 					, m_curMtxModel );
 			}

@@ -60,9 +60,6 @@ namespace castor3d
 		, crg::FramePass const & previousPass )
 	{
 		m_target = &texture;
-		auto name = m_fullName;
-		name = castor::string::replace( name, cuT( "PostEffect" ), castor::String{} );
-		name = castor::string::replace( name, cuT( "Post Effect" ), castor::String{} );
 		m_result = doInitialise( device
 			, previousPass );
 		return m_result != nullptr;

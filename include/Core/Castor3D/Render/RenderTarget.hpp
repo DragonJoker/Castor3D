@@ -372,7 +372,6 @@ namespace castor3d
 		OverlayRendererSPtr m_overlayRenderer;
 		ashes::SemaphorePtr m_signalReady;
 		crg::SemaphoreWait m_signalFinished{};
-		castor::PreciseTimer m_timer;
 		SceneCullerUPtr m_culler;
 		crg::FrameGraph m_graph;
 		Texture m_velocity;
