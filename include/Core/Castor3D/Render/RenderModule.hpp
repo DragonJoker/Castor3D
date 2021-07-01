@@ -268,7 +268,6 @@ namespace castor3d
 		crg::ImageViewId viewId;
 		VkImageLayout layout;
 		TextureFactors factors;
-		bool isCrg;
 	};
 	/**
 	*\~english
