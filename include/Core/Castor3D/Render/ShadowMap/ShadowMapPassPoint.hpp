@@ -76,8 +76,6 @@ namespace castor3d
 	private:
 		OnSceneNodeChangedConnection m_onNodeChanged;
 		castor::Matrix4x4f m_projection;
-		Viewport m_viewport;
-		std::array< castor::Matrix4x4f, size_t( CubeMapFace::eCount ) > m_matrices;
 	};
 }
 

@@ -70,7 +70,7 @@ namespace castor3d
 		m_device.uboPools->putBuffer( m_ubo );
 	}
 
-	void LayeredLpvGridConfigUbo::cpuUpdate( std::array< castor::Grid, shader::LpvMaxCascadesCount > const & grids
+	void LayeredLpvGridConfigUbo::cpuUpdate( std::array< castor::Grid const *, shader::LpvMaxCascadesCount > const & grids
 		, float indirectAttenuation )
 	{
 		CU_Require( m_ubo );
@@ -78,12 +78,12 @@ namespace castor3d
 
 		for ( auto i = 0u; i < grids.size(); ++i )
 		{
-			auto min = grids[i].getMin();
+			auto min = grids[i]->getMin();
 			data.allMinVolumeCorners[i] = castor::Point4f{ min->x, min->y, min->z, 0.0f };
-			data.allCellSizes[i] = grids[i].getCellSize();
+			data.allCellSizes[i] = grids[i]->getCellSize();
 		}
 
-		auto dim = grids[0].getDimensions();
+		auto dim = grids[0]->getDimensions();
 		data.gridSizeAtt = castor::Point4f{ dim->x, dim->y, dim->z, indirectAttenuation };
 	}
 }

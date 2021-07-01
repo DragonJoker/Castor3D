@@ -120,17 +120,13 @@ namespace GuiCommon
 		shadowChoices.Add( PROPERTY_SHADOW_TYPE_VSM );
 		wxArrayString giChoices;
 		giChoices.Add( PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_NONE );
+		giChoices.Add( PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LPV );
+		giChoices.Add( PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LPVG );
 
-		if ( m_light.getLightType() != LightType::ePoint )
+		if ( m_light.getLightType() == LightType::eDirectional )
 		{
-			giChoices.Add( PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LPV );
-			giChoices.Add( PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LPVG );
-
-			if ( m_light.getLightType() == LightType::eDirectional )
-			{
-				giChoices.Add( PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LAYERED_LPV );
-				giChoices.Add( PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LAYERED_LPVG );
-			}
+			giChoices.Add( PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LAYERED_LPV );
+			giChoices.Add( PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LAYERED_LPVG );
 		}
 
 		auto shadows = addProperty( grid, PROPERTY_CATEGORY_SHADOW );
