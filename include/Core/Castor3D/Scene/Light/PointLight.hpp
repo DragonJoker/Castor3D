@@ -8,6 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Light/LightCategory.hpp"
 
 #include <CastorUtils/Design/ChangeTracked.hpp>
+#include <CastorUtils/Math/SquareMatrix.hpp>
 
 namespace castor3d
 {
