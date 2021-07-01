@@ -1157,51 +1157,61 @@ namespace castor3d
 
 	void RenderWindow::doWaitFrame()
 	{
-		auto toWait = getRenderTarget()->getSemaphore();
+		auto target = getRenderTarget();
 
-		if ( toWait.semaphore )
+		if ( target )
 		{
-			if ( m_toSave )
+			auto toWait = target->getSemaphore();
+
+			if ( toWait.semaphore )
 			{
-				getDevice().graphicsQueue->submit( ashes::VkCommandBufferArray{ *m_transferCommands.commandBuffer }
+				if ( m_toSave )
+				{
+					getDevice().graphicsQueue->submit( ashes::VkCommandBufferArray{ *m_transferCommands.commandBuffer }
+						, ashes::VkSemaphoreArray{ toWait.semaphore }
+						, { toWait.dstStageMask }
+					, ashes::VkSemaphoreArray{ *m_transferCommands.semaphore } );
+					toWait.semaphore = *m_transferCommands.semaphore;
+					toWait.dstStageMask = VK_PIPELINE_STAGE_TRANSFER_BIT;
+				}
+
+				getDevice().graphicsQueue->submit( ashes::VkCommandBufferArray{}
 					, ashes::VkSemaphoreArray{ toWait.semaphore }
 					, { toWait.dstStageMask }
-					, ashes::VkSemaphoreArray{ *m_transferCommands.semaphore } );
-				toWait.semaphore = *m_transferCommands.semaphore;
-				toWait.dstStageMask = VK_PIPELINE_STAGE_TRANSFER_BIT;
-			}
-
-			getDevice().graphicsQueue->submit( ashes::VkCommandBufferArray{}
-				, ashes::VkSemaphoreArray{ toWait.semaphore }
-				, { toWait.dstStageMask }
 				, ashes::VkSemaphoreArray{} );
-			getRenderTarget()->resetSemaphore();
+				target->resetSemaphore();
+			}
 		}
 	}
 
 	void RenderWindow::doSubmitFrame( RenderingResources * resources )
 	{
-		auto toWait = getRenderTarget()->getSemaphore();
+		auto target = getRenderTarget();
 
-		if ( toWait.semaphore )
+		if ( target )
 		{
-			if ( m_toSave )
-			{
-				getDevice().graphicsQueue->submit( ashes::VkCommandBufferArray{ *m_transferCommands.commandBuffer }
-					, ashes::VkSemaphoreArray{ toWait.semaphore }
-					, { toWait.dstStageMask }
-					, ashes::VkSemaphoreArray{ *m_transferCommands.semaphore } );
-				toWait.semaphore = *m_transferCommands.semaphore;
-				toWait.dstStageMask = VK_PIPELINE_STAGE_TRANSFER_BIT;
-			}
+			auto toWait = target->getSemaphore();
 
-			toWait = m_texture3Dto2D->render( toWait );
-			getDevice().graphicsQueue->submit( ashes::VkCommandBufferArray{ *m_commandBuffers[m_debugConfig.debugIndex][resources->imageIndex] }
-				, ashes::VkSemaphoreArray{ *resources->imageAvailableSemaphore, toWait.semaphore }
-				, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, toWait.dstStageMask }
-				, ashes::VkSemaphoreArray{}
+			if ( toWait.semaphore )
+			{
+				if ( m_toSave )
+				{
+					getDevice().graphicsQueue->submit( ashes::VkCommandBufferArray{ *m_transferCommands.commandBuffer }
+						, ashes::VkSemaphoreArray{ toWait.semaphore }
+						, { toWait.dstStageMask }
+					, ashes::VkSemaphoreArray{ *m_transferCommands.semaphore } );
+					toWait.semaphore = *m_transferCommands.semaphore;
+					toWait.dstStageMask = VK_PIPELINE_STAGE_TRANSFER_BIT;
+				}
+
+				toWait = m_texture3Dto2D->render( toWait );
+				getDevice().graphicsQueue->submit( ashes::VkCommandBufferArray{ *m_commandBuffers[m_debugConfig.debugIndex][resources->imageIndex] }
+					, ashes::VkSemaphoreArray{ *resources->imageAvailableSemaphore, toWait.semaphore }
+					, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, toWait.dstStageMask }
+					, ashes::VkSemaphoreArray{}
 				, *resources->fence );
-			getRenderTarget()->resetSemaphore();
+				target->resetSemaphore();
+			}
 		}
 	}
 
@@ -1274,6 +1284,7 @@ namespace castor3d
 			engine.getRenderSystem()->setCurrentRenderDevice( &m_device );
 		}
 
+		doWaitFrame();
 		getDevice()->waitIdle();
 
 		RenderTargetSPtr target = getRenderTarget();
