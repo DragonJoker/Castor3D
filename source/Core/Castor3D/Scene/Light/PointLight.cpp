@@ -5,8 +5,6 @@
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPass.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	namespace
@@ -16,17 +14,12 @@ namespace castor3d
 		void doUpdateShadowMatrices( castor::Point3f const & position
 			, std::array< castor::Matrix4x4f, size_t( CubeMapFace::eCount ) > & matrices )
 		{
-			matrices =
-			{
-				{
-					castor::matrix::lookAt( position, position + castor::Point3f{ +1.0f, +0.0f, +0.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ),// Positive X
-					castor::matrix::lookAt( position, position + castor::Point3f{ -1.0f, +0.0f, +0.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ),// Negative X
-					castor::matrix::lookAt( position, position + castor::Point3f{ +0.0f, +1.0f, +0.0f }, castor::Point3f{ +0.0f, +0.0f, +1.0f } ),// Positive Y
-					castor::matrix::lookAt( position, position + castor::Point3f{ +0.0f, -1.0f, +0.0f }, castor::Point3f{ +0.0f, +0.0f, -1.0f } ),// Negative Y
-					castor::matrix::lookAt( position, position + castor::Point3f{ +0.0f, +0.0f, +1.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ),// Positive Z
-					castor::matrix::lookAt( position, position + castor::Point3f{ +0.0f, +0.0f, -1.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ),// Negative Z
-				}
-			};
+			matrices[0] = castor::matrix::lookAt( position, position + castor::Point3f{ +1.0f, +0.0f, +0.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ); /* Positive X */
+			matrices[1] = castor::matrix::lookAt( position, position + castor::Point3f{ -1.0f, +0.0f, +0.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ); /* Negative X */
+			matrices[2] = castor::matrix::lookAt( position, position + castor::Point3f{ +0.0f, +1.0f, +0.0f }, castor::Point3f{ +0.0f, +0.0f, +1.0f } ); /* Positive Y */
+			matrices[3] = castor::matrix::lookAt( position, position + castor::Point3f{ +0.0f, -1.0f, +0.0f }, castor::Point3f{ +0.0f, +0.0f, -1.0f } ); /* Negative Y */
+			matrices[4] = castor::matrix::lookAt( position, position + castor::Point3f{ +0.0f, +0.0f, +1.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ); /* Positive Z */
+			matrices[5] = castor::matrix::lookAt( position, position + castor::Point3f{ +0.0f, +0.0f, -1.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ); /* Negative Z */
 		}
 
 		float doCalcPointLightBSphere( const castor3d::PointLight & light )
@@ -52,16 +45,16 @@ namespace castor3d
 		return std::unique_ptr< PointLight >( new PointLight{ p_light } );
 	}
 
-	Point3fArray const & PointLight::generateVertices()
+	castor::Point3fArray const & PointLight::generateVertices()
 	{
-		static Point3fArray result;
+		static castor::Point3fArray result;
 
 		if ( result.empty() )
 		{
-			Angle const angle = Angle::fromDegrees( 360.0f / FaceCount );
-			std::vector< Point2f > arc{ FaceCount + 1 };
-			Angle alpha;
-			Point3fArray data;
+			castor::Angle const angle = castor::Angle::fromDegrees( 360.0f / FaceCount );
+			std::vector< castor::Point2f > arc{ FaceCount + 1 };
+			castor::Angle alpha;
+			castor::Point3fArray data;
 
 			data.reserve( FaceCount * FaceCount * 4 );
 
@@ -74,8 +67,8 @@ namespace castor3d
 				alpha += angle / 2;
 			}
 
-			Angle iAlpha;
-			Point3f pos;
+			castor::Angle iAlpha;
+			castor::Point3f pos;
 
 			for ( uint32_t k = 0; k < FaceCount; ++k )
 			{
@@ -144,7 +137,7 @@ namespace castor3d
 		auto scale = doCalcPointLightBSphere( *this ) / 2.0f;
 		m_cubeBox.load( castor::Point3f{ -scale, -scale, -scale }
 			, castor::Point3f{ scale, scale, scale } );
-		m_farPlane = float( point::distance( m_cubeBox.getMin(), m_cubeBox.getMax() ) );
+		m_farPlane = float( castor::point::distance( m_cubeBox.getMin(), m_cubeBox.getMax() ) );
 		m_attenuation.reset();
 	}
 
@@ -155,14 +148,14 @@ namespace castor3d
 		doUpdateShadowMatrices( position, m_lightViews );
 	}
 
-	void PointLight::doBind( Point4f * buffer )const
+	void PointLight::doBind( castor::Point4f * buffer )const
 	{
 		auto position = getLight().getParent()->getDerivedPosition();
 		doCopyComponent( position, buffer );
 		doCopyComponent( m_attenuation, buffer );
 	}
 
-	void PointLight::setAttenuation( Point3f const & p_attenuation )
+	void PointLight::setAttenuation( castor::Point3f const & p_attenuation )
 	{
 		m_attenuation = p_attenuation;
 		getLight().onChanged( getLight() );
