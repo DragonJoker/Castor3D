@@ -10,6 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 
 #include <CastorUtils/Graphics/GraphicsModule.hpp>
+#include <CastorUtils/Graphics/Grid.hpp>
 
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 #include <ShaderWriter/MatTypes/Mat4.hpp>
@@ -29,21 +30,43 @@ namespace castor3d
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
+			C3D_API sdw::IVec3 worldToGrid( sdw::Vec3 const & pos )const;
+			C3D_API sdw::IVec3 worldToGrid( sdw::Vec3 const & pos
+				, sdw::Vec3 const & nml )const;
+			C3D_API sdw::Vec3 worldToTex( sdw::Vec3 const & pos )const;
+			C3D_API sdw::Vec2 gridToScreen( sdw::IVec2 const & pos )const;
+			C3D_API sdw::Vec3 nextGrid( sdw::IVec3 const & pos
+				, sdw::Vec3 const & dir )const;
+
+			sdw::Float const & cellSize()const
+			{
+				return m_cellSize;
+			}
+
+			sdw::Float const & indirectAttenuation()const
+			{
+				return m_indirectAttenuation;
+			}
+
+		private:
 			// Raw values
 			sdw::Vec4 minVolumeCornerSize;
 			sdw::Vec4 gridSizeAtt;
+			sdw::Vec4 cameraPos4;
 			// Specific values
 			sdw::Vec3 minVolumeCorner;
-			sdw::Float cellSize;
 			sdw::Float gridWidth;
 			sdw::Float gridHeight;
 			sdw::Float gridDepth;
 			sdw::Vec3 gridSize;
-			sdw::Float indirectAttenuation;
+			sdw::Vec3 cameraPos;
 
 		private:
 			using sdw::StructInstance::getMember;
 			using sdw::StructInstance::getMemberArray;
+
+			sdw::Float m_cellSize;
+			sdw::Float m_indirectAttenuation;
 		};
 	}
 
@@ -56,12 +79,12 @@ namespace castor3d
 		C3D_API explicit LpvGridConfigUbo( RenderDevice const & device );
 		C3D_API ~LpvGridConfigUbo();
 
-		C3D_API void cpuUpdate( castor::BoundingBox const & aabb
+		C3D_API castor::Grid const & cpuUpdate( castor::BoundingBox const & aabb
 			, castor::Point3f const & cameraPos
 			, castor::Point3f const & cameraDir
 			, uint32_t gridDim
 			, float indirectAttenuation );
-		C3D_API castor::Grid cpuUpdate( uint32_t gridLevel
+		C3D_API castor::Grid const & cpuUpdate( uint32_t gridLevel
 			, float gridLevelScale
 			, castor::Grid const & grid
 			, castor::BoundingBox const & aabb
@@ -104,6 +127,7 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		UniformBufferOffsetT< Configuration > m_ubo;
+		castor::Grid m_grid;
 	};
 }
 

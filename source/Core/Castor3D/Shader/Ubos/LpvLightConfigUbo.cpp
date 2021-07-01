@@ -91,19 +91,21 @@ namespace castor3d
 	}
 
 	void LpvLightConfigUbo::cpuUpdate( Light const & light
-		, float lpvCellSize )
+		, float lpvCellSize
+		, uint32_t faceIndex )
 	{
 		CU_Require( m_ubo );
 		auto & lpvConfig = light.getLpvConfig();
 		auto & configuration = m_ubo.getData();
 
-		configuration.lightIndex = float( light.getShadowMapIndex() );
+		configuration.lightIndex = float( light.getBufferIndex() );
 		configuration.texelAreaModifier = lpvConfig.texelAreaModifier;
 		auto ltType = light.getLightType();
 
 		switch ( ltType )
 		{
 		case LightType::eDirectional:
+			CU_Require( faceIndex == 0u );
 			configuration.lightView = snapMatrix( lpvCellSize
 				, light.getDirectionalLight()->getViewMatrix( shader::DirectionalMaxCascadesCount - 1u ) );
 			configuration.tanFovXHalf = 1.0f;
@@ -111,10 +113,20 @@ namespace castor3d
 			break;
 
 		case LightType::ePoint:
+			{
+				CU_Require( faceIndex < 6u );
+				auto lightFov = 90.0_degrees;
+				auto & pointLight = *light.getPointLight();
+				configuration.lightView = snapMatrix( lpvCellSize
+					, pointLight.getViewMatrix( CubeMapFace( faceIndex ) ) );
+				configuration.tanFovXHalf = ( lightFov * 0.5 ).tan();
+				configuration.tanFovYHalf = ( lightFov * 0.5 ).tan();
+			}
 			break;
 
 		case LightType::eSpot:
 			{
+				CU_Require( faceIndex == 0u );
 				auto & spotLight = *light.getSpotLight();
 				configuration.lightView = snapMatrix( lpvCellSize
 					, spotLight.getViewMatrix() );

@@ -99,15 +99,6 @@ namespace castor3d
 					, index
 					, 1u );
 
-				auto convertPointToGridIndex = writer.implementFunction< IVec3 >( "convertPointToGridIndex"
-					, [&]( Vec3 pos
-						, Vec3 normal )
-					{
-						writer.returnStmt( ivec3( ( pos - c3d_lpvGridData.minVolumeCorner ) / vec3( c3d_lpvGridData.cellSize ) + 0.5_f * normal ) );
-					}
-					, InVec3{ writer, "pos" }
-					, InVec3{ writer, "normal" } );
-
 				writer.implementFunction< Void >( "main"
 					, [&]()
 					{
@@ -129,11 +120,11 @@ namespace castor3d
 						outRsmPos = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
 						outRsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
 						outRsmFlux = c3d_rsmFluxMap.fetch( rsmCoords, 0_i );
-						outVolumeCellIndex = convertPointToGridIndex( outRsmPos
+						outVolumeCellIndex = c3d_lpvGridData.worldToGrid( outRsmPos
 							, outRsmNormal );
 
 						auto screenPos = writer.declLocale( "screenPos"
-							, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / c3d_lpvGridData.gridSize.xy() * 2.0_f - 1.0_f );
+							, c3d_lpvGridData.gridToScreen( outVolumeCellIndex.xy() ) );
 
 						out.vtx.position = vec4( screenPos, 0.0, 1.0 );
 						out.vtx.pointSize = 1.0f;
@@ -175,15 +166,6 @@ namespace castor3d
 					, index
 					, 1u );
 
-				auto convertPointToGridIndex = writer.implementFunction< IVec3 >( "convertPointToGridIndex"
-					, [&]( Vec3 pos
-						, Vec3 normal )
-					{
-						writer.returnStmt( ivec3( ( pos - c3d_lpvGridData.minVolumeCorner ) / vec3( c3d_lpvGridData.cellSize ) + 0.5_f * normal ) );
-					}
-					, InVec3{ writer, "pos" }
-					, InVec3{ writer, "normal" } );
-
 				writer.implementFunction< Void >( "main"
 					, [&]()
 					{
@@ -196,17 +178,79 @@ namespace castor3d
 						outRsmPos = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
 						outRsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
 						outRsmFlux = c3d_rsmFluxMap.fetch( rsmCoords, 0_i );
-						outVolumeCellIndex = convertPointToGridIndex( outRsmPos
-							, outRsmNormal );
+						outVolumeCellIndex = c3d_lpvGridData.worldToGrid( outRsmPos, outRsmNormal );
 
 						auto screenPos = writer.declLocale( "screenPos"
-							, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / c3d_lpvGridData.gridSize.xy() * 2.0_f - 1.0_f );
+							, c3d_lpvGridData.gridToScreen( outVolumeCellIndex.xy() ) );
 
 						out.vtx.position = vec4( screenPos, 0.0, 1.0 );
 						out.vtx.pointSize = 1.0f;
 					} );
 			}
 
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+		}
+
+		std::unique_ptr< ast::Shader > getPointVertexProgram( CubeMapFace face
+			, uint32_t rsmTexSize )
+		{
+			using namespace sdw;
+			VertexWriter writer;
+
+			auto inPosition = writer.declInput< Vec2 >( "inPosition", 0u );
+			auto c3d_rsmNormalMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::ePoint, SmTexture::eNormalLinear )
+				, LightInjectionPass::RsmNormalsIdx
+				, 0u );
+			auto c3d_rsmPositionMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::ePoint, SmTexture::ePosition )
+				, LightInjectionPass::RsmPositionIdx
+				, 0u );
+			auto c3d_rsmFluxMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::ePoint, SmTexture::eFlux )
+				, LightInjectionPass::RsmFluxIdx
+				, 0u );
+			UBO_LPVGRIDCONFIG( writer, LightInjectionPass::LpvGridUboIdx, 0u, true );
+			UBO_LPVLIGHTCONFIG( writer, LightInjectionPass::LpvLightUboIdx, 0u );
+			auto in = writer.getIn();
+
+			uint32_t index = 0u;
+			auto outVolumeCellIndex = writer.declOutput< IVec3 >( "outVolumeCellIndex", index++ );
+			auto outRsmPos = writer.declOutput< Vec3 >( "outRsmPos", index++ );
+			auto outRsmNormal = writer.declOutput< Vec3 >( "outRsmNormal", index++ );
+			auto outRsmFlux = writer.declOutput< Vec4 >( "outRsmFlux", index++ );
+			auto out = writer.getOut();
+
+			// Utility functions
+			shader::Utils utils{ writer };
+			index = 0;
+			auto lightingModel = shader::PhongLightingModel::createModel( writer
+				, utils
+				, LightType::ePoint
+				, uint32_t( LightInjectionPass::LightsIdx )
+				, 0u
+				, false
+				, shader::ShadowOptions{ SceneFlag::eNone, true }
+				, index
+				, 1u );
+
+			writer.implementFunction< Void >( "main"
+				, [&]()
+				{
+					auto light = writer.declLocale( "light"
+						, lightingModel->getPointLight( c3d_lpvLightData.lightIndex ) );
+					auto rsmCoords = writer.declLocale( "rsmCoords"
+						, ivec3( in.vertexIndex % rsmTexSize
+							, in.vertexIndex / rsmTexSize
+							, light.m_lightBase.m_index * 6_i + int32_t( face ) ) );
+
+					outRsmPos = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
+					outRsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
+					outRsmFlux = c3d_rsmFluxMap.fetch( rsmCoords, 0_i );
+					outVolumeCellIndex = c3d_lpvGridData.worldToGrid( outRsmPos, outRsmNormal );
+
+					auto screenPos = writer.declLocale( "screenPos"
+						, c3d_lpvGridData.gridToScreen( outVolumeCellIndex.xy() ) );
+					out.vtx.position = vec4( screenPos, 0.0_f, 1.0_f );
+					out.vtx.pointSize = 1.0f;
+				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
@@ -236,30 +280,36 @@ namespace castor3d
 			auto outRsmFlux = writer.declOutput< Vec4 >( "outRsmFlux", index++ );
 			auto out = writer.getOut();
 
-			auto convertPointToGridIndex = writer.implementFunction< IVec3 >( "convertPointToGridIndex"
-				, [&]( Vec3 pos
-					, Vec3 normal )
-				{
-					writer.returnStmt( ivec3( ( pos - c3d_lpvGridData.minVolumeCorner ) / vec3( c3d_lpvGridData.cellSize ) + 0.5_f * normal ) );
-				}
-				, InVec3{ writer, "pos" }
-				, InVec3{ writer, "normal" } );
+			// Utility functions
+			shader::Utils utils{ writer };
+			index = 0;
+			auto lightingModel = shader::PhongLightingModel::createModel( writer
+				, utils
+				, LightType::eSpot
+				, uint32_t( LightInjectionPass::LightsIdx )
+				, 0u
+				, false
+				, shader::ShadowOptions{ SceneFlag::eNone, true }
+				, index
+				, 1u );
 
 			writer.implementFunction< Void >( "main"
 				, [&]()
 				{
+					auto light = writer.declLocale( "light"
+						, lightingModel->getSpotLight( c3d_lpvLightData.lightIndex ) );
 					auto rsmCoords = writer.declLocale( "rsmCoords"
 						, ivec3( in.vertexIndex % rsmTexSize
 							, in.vertexIndex / rsmTexSize
-							, c3d_lpvLightData.lightIndex ) );
+							, light.m_lightBase.m_index ) );
 
 					outRsmPos = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
 					outRsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
 					outRsmFlux = c3d_rsmFluxMap.fetch( rsmCoords, 0_i );
-					outVolumeCellIndex = convertPointToGridIndex( outRsmPos, outRsmNormal );
+					outVolumeCellIndex = c3d_lpvGridData.worldToGrid( outRsmPos, outRsmNormal );
 
 					auto screenPos = writer.declLocale( "screenPos"
-						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / c3d_lpvGridData.gridSize.xy() * 2.0_f - 1.0_f );
+						, c3d_lpvGridData.gridToScreen( outVolumeCellIndex.xy() ) );
 					out.vtx.position = vec4( screenPos, 0.0_f, 1.0_f );
 					out.vtx.pointSize = 1.0f;
 				} );
@@ -366,12 +416,14 @@ namespace castor3d
 			writer.implementFunction< Void >( "main"
 				, [&]()
 				{
+					auto lobeDir = writer.declLocale( "lobeDir"
+						, evalCosineLobeToDir( inRsmNormal ) );
 					auto SHCoeffsR = writer.declLocale( "SHCoeffsR"
-						, evalCosineLobeToDir( inRsmNormal ) / Float{ Pi< float > } * inRsmFlux.r() );
+						, lobeDir / Float{ Pi< float > } * inRsmFlux.r() );
 					auto SHCoeffsG = writer.declLocale( "SHCoeffsG"
-						, evalCosineLobeToDir( inRsmNormal ) / Float{ Pi< float > } * inRsmFlux.g() );
+						, lobeDir / Float{ Pi< float > } * inRsmFlux.g() );
 					auto SHCoeffsB = writer.declLocale( "SHCoeffsB"
-						, evalCosineLobeToDir( inRsmNormal ) / Float{ Pi< float > } * inRsmFlux.b() );
+						, lobeDir / Float{ Pi< float > } * inRsmFlux.b() );
 
 					outLpvGridR = SHCoeffsR;
 					outLpvGridG = SHCoeffsG;
@@ -534,7 +586,6 @@ namespace castor3d
 		, RenderDevice const & device
 		, LightType lightType
 		, uint32_t gridSize
-		, uint32_t layerIndex
 		, uint32_t rsmSize )
 		: Named{ pass.name }
 		, crg::RenderPass{ pass
@@ -545,9 +596,39 @@ namespace castor3d
 		, m_device{ device }
 		, m_rsmSize{ rsmSize }
 		, m_vertexBuffer{ createVertexBuffer( getName(), m_device, m_rsmSize ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram( lightType, m_rsmSize ) }
 		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), getGeometryProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram() }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram( lightType, m_rsmSize ) }
+		, m_stages{ makeShaderState( device, m_vertexShader )
+			, makeShaderState( device, m_geometryShader )
+			, makeShaderState( device, m_pixelShader ) }
+		, m_holder{ pass
+			, context
+			, graph
+			, getConfig( m_stages )
+			, gridSize }
+	{
+	}
+
+	LightInjectionPass::LightInjectionPass( crg::FramePass const & pass
+		, crg::GraphContext & context
+		, crg::RunnableGraph & graph
+		, RenderDevice const & device
+		, CubeMapFace face
+		, uint32_t gridSize
+		, uint32_t rsmSize )
+		: Named{ pass.name }
+		, crg::RenderPass{ pass
+			, context
+			, graph
+			, { gridSize, gridSize }
+			, 1u }
+		, m_device{ device }
+		, m_rsmSize{ rsmSize }
+		, m_vertexBuffer{ createVertexBuffer( getName(), m_device, m_rsmSize ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getPointVertexProgram( face, m_rsmSize ) }
+		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), getGeometryProgram() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram() }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_geometryShader )
 			, makeShaderState( device, m_pixelShader ) }

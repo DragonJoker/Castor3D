@@ -134,6 +134,7 @@ namespace castor3d
 	{
 		castor::Point4f minVolumeCorner;
 		castor::Point4f gridSizeAtt;
+		castor::Point4f cameraPos;
 	};
 	/**
 	*\~english
