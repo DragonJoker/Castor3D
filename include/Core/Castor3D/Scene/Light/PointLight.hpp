@@ -76,14 +76,21 @@ namespace castor3d
 		C3D_API void setAttenuation( castor::Point3f const & value );
 		/**
 		 *\~english
-		 *\return		The attenuation components.
+		 *\name Getters.
 		 *\~french
-		 *\return		Les composantes d'attenuation.
-		 */
+		 *\name Accesseurs.
+		 **/
+		/**@{*/
 		castor::Point3f const & getAttenuation()const
 		{
 			return m_attenuation.value();
 		}
+
+		castor::Matrix4x4f const & getViewMatrix( CubeMapFace face )const
+		{
+			return m_lightViews[size_t( face )];
+		}
+		/**@}*/
 
 	private:
 		void updateNode( SceneNode const & node )override;
@@ -94,6 +101,7 @@ namespace castor3d
 		//!\~english	The attenuation components : constant, linear and quadratic.
 		//!\~french		Les composantes d'attenuation : constante, linéaire et quadratique.
 		castor::ChangeTracked< castor::Point3f > m_attenuation{ castor::Point3f{ 1.0f, 0.0f, 0.0f } };
+		std::array< castor::Matrix4x4f, size_t( CubeMapFace::eCount ) > m_lightViews;
 	};
 }
 

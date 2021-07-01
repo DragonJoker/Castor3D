@@ -189,7 +189,7 @@ namespace castor3d
 
 			for ( auto & lpvLightConfigUbo : lpvLightConfigUbos )
 			{
-				lpvLightConfigUbo.cpuUpdate( light, lpvCellSizes[index++] );
+				lpvLightConfigUbo.cpuUpdate( light, lpvCellSizes[index++], 0u );
 			}
 		}
 
@@ -208,7 +208,7 @@ namespace castor3d
 	{
 		auto rsmSize = smResult[SmTexture::eDepth].getExtent().width;
 		auto & result = graph.createPass( name + "LightInjection" + std::to_string( cascade )
-			, [this, &device, name, lightType, rsmSize, cascade]( crg::FramePass const & pass
+			, [this, &device, name, lightType, rsmSize]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -218,7 +218,6 @@ namespace castor3d
 					, device
 					, lightType
 					, device.renderSystem.getEngine()->getLpvGridSize()
-					, CascadeCount - cascade
 					, rsmSize );
 				lightInjectionPasses.push_back( result.get() );
 				device.renderSystem.getEngine()->registerTimer( "LLPV"
@@ -274,7 +273,6 @@ namespace castor3d
 					, device
 					, lightType
 					, device.renderSystem.getEngine()->getLpvGridSize()
-					, CascadeCount - cascade
 					, rsmSize );
 				geometryInjectionPasses.push_back( result.get() );
 				device.renderSystem.getEngine()->registerTimer( "LLPV"
@@ -439,17 +437,17 @@ namespace castor3d
 
 			for ( auto i = 0u; i < CascadeCount; ++i )
 			{
-				m_grids[i] = m_lpvGridConfigUbos[i].cpuUpdate( i
+				m_grids[i] = &m_lpvGridConfigUbos[i].cpuUpdate( i
 					, scales[i]
 					, grid
 					, m_aabb
 					, m_cameraPos
 					, m_cameraDir
 					, m_scene.getLpvIndirectAttenuation() );
-				m_gridsSizes[i] = castor::Point4f{ m_grids[i].getCenter()->x
-					, m_grids[i].getCenter()->y
-					, m_grids[i].getCenter()->z
-					, m_grids[i].getCellSize() };
+				m_gridsSizes[i] = castor::Point4f{ m_grids[i]->getCenter()->x
+					, m_grids[i]->getCenter()->y
+					, m_grids[i]->getCenter()->z
+					, m_grids[i]->getCellSize() };
 			}
 
 			m_lpvGridConfigUbo.cpuUpdate( m_grids
