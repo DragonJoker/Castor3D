@@ -209,28 +209,24 @@ namespace castor3d
 				auto transmittance = writer.declLocale( "transmittance"
 					, 0.0_f );
 
-				if ( hasTextures )
-				{
-					lightingModel.computeMapContributions( flags.passFlags
-						, textures
-						, gamma
-						, textureConfigs
-						, c3d_maps
-						, texCoord
-						, normal
-						, tangent
-						, bitangent
-						, emissive
-						, alpha
-						, occlusion
-						, transmittance
-						, diffuse
-						, specular
-						, shininess
-						, inSurface.tangentSpaceViewPosition
-						, inSurface.tangentSpaceFragPosition );
-				}
-
+				lightingModel.computeMapContributions( flags.passFlags
+					, textures
+					, gamma
+					, textureConfigs
+					, c3d_maps
+					, texCoord
+					, normal
+					, tangent
+					, bitangent
+					, emissive
+					, alpha
+					, occlusion
+					, transmittance
+					, diffuse
+					, specular
+					, shininess
+					, inSurface.tangentSpaceViewPosition
+					, inSurface.tangentSpaceFragPosition );
 				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
 					, material.m_alphaRef );
@@ -333,28 +329,24 @@ namespace castor3d
 				auto transmittance = writer.declLocale( "transmittance"
 					, 0.0_f );
 
-				if ( hasTextures )
-				{
-					lightingModel.computeMapContributions( flags.passFlags
-						, textures
-						, gamma
-						, textureConfigs
-						, c3d_maps
-						, texCoord
-						, normal
-						, tangent
-						, bitangent
-						, emissive
-						, alpha
-						, occlusion
-						, transmittance
-						, albedo
-						, metallic
-						, roughness
-						, inSurface.tangentSpaceViewPosition
-						, inSurface.tangentSpaceFragPosition );
-				}
-
+				lightingModel.computeMapContributions( flags.passFlags
+					, textures
+					, gamma
+					, textureConfigs
+					, c3d_maps
+					, texCoord
+					, normal
+					, tangent
+					, bitangent
+					, emissive
+					, alpha
+					, occlusion
+					, transmittance
+					, albedo
+					, metallic
+					, roughness
+					, inSurface.tangentSpaceViewPosition
+					, inSurface.tangentSpaceFragPosition );
 				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
 					, material.m_alphaRef );
@@ -457,28 +449,24 @@ namespace castor3d
 				auto transmittance = writer.declLocale( "transmittance"
 					, 0.0_f );
 
-				if ( hasTextures )
-				{
-					lightingModel.computeMapContributions( flags.passFlags
-						, textures
-						, gamma
-						, textureConfigs
-						, c3d_maps
-						, texCoord
-						, normal
-						, tangent
-						, bitangent
-						, emissive
-						, alpha
-						, occlusion
-						, transmittance
-						, albedo
-						, specular
-						, glossiness
-						, inSurface.tangentSpaceViewPosition
-						, inSurface.tangentSpaceFragPosition );
-				}
-
+				lightingModel.computeMapContributions( flags.passFlags
+					, textures
+					, gamma
+					, textureConfigs
+					, c3d_maps
+					, texCoord
+					, normal
+					, tangent
+					, bitangent
+					, emissive
+					, alpha
+					, occlusion
+					, transmittance
+					, albedo
+					, specular
+					, glossiness
+					, inSurface.tangentSpaceViewPosition
+					, inSurface.tangentSpaceFragPosition );
 				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
 					, material.m_alphaRef );
