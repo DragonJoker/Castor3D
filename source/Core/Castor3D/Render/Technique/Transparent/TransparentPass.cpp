@@ -448,6 +448,9 @@ namespace castor3d
 
 		auto in = writer.getIn();
 
+		shader::CookTorranceBRDF cookTorrance{ writer, utils };
+		cookTorrance.declareDiffuse();
+
 		// Fragment Outputs
 		auto pxl_accumulation( writer.declOutput< Vec4 >( getTextureName( WbTexture::eAccumulation ), 0 ) );
 		auto pxl_revealage( writer.declOutput< Float >( getTextureName( WbTexture::eRevealage ), 1 ) );
@@ -572,6 +575,14 @@ namespace castor3d
 						, roughness
 						, indirectOcclusion
 						, lightIndirectDiffuse.w() );
+					auto indirectAmbient = writer.declLocale( "indirectAmbient"
+						, indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() ) );
+					lightIndirectDiffuse.xyz() = cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
+						, c3d_sceneData.getCameraPosition()
+						, -normal
+						, specular
+						, metalness
+						, surface );
 
 					auto colour = writer.declLocale( "colour"
 						, shader::PbrLightingModel::combine( lightDiffuse
@@ -579,7 +590,7 @@ namespace castor3d
 							, lightSpecular
 							, lightIndirectSpecular
 							, ambient
-							, indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() )
+							, indirectAmbient
 							, occlusion
 							, emissive
 							, reflected
@@ -690,6 +701,9 @@ namespace castor3d
 			, flags.sceneFlags );
 
 		auto in = writer.getIn();
+
+		shader::CookTorranceBRDF cookTorrance{ writer, utils };
+		cookTorrance.declareDiffuse();
 
 		// Fragment Outputs
 		auto pxl_accumulation( writer.declOutput< Vec4 >( getTextureName( WbTexture::eAccumulation ), 0 ) );
@@ -817,6 +831,14 @@ namespace castor3d
 						, roughness
 						, indirectOcclusion
 						, lightIndirectDiffuse.w() );
+					auto indirectAmbient = writer.declLocale( "indirectAmbient"
+						, indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() ) );
+					lightIndirectDiffuse.xyz() = cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
+						, c3d_sceneData.getCameraPosition()
+						, -normal
+						, specular
+						, metalness
+						, surface );
 
 					auto colour = writer.declLocale( "colour"
 						, shader::PbrLightingModel::combine( lightDiffuse
@@ -824,7 +846,7 @@ namespace castor3d
 							, lightSpecular
 							, lightIndirectSpecular
 							, ambient
-							, indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() )
+							, indirectAmbient
 							, occlusion
 							, emissive
 							, reflected
