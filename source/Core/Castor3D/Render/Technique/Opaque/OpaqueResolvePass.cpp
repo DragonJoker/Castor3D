@@ -355,6 +355,9 @@ namespace castor3d
 			utils.declareDecodeMaterial();
 			utils.declareInvertVec2Y();
 
+			shader::CookTorranceBRDF cookTorrance{ writer, utils };
+			cookTorrance.declareDiffuse();
+
 			shader::PbrReflectionModel reflections{ writer
 				, utils
 				, uint32_t( ResolveBind::eEnvironment )
@@ -467,12 +470,23 @@ namespace castor3d
 							, c3d_sceneData
 							, reflected
 							, refracted );
+						auto indirectAmbient = writer.declLocale( "indirectAmbient"
+							, config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 1.0_f ) );
+						auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
+							, ( config.hasDiffuseGi
+								? cookTorrance.computeDiffuse( lightIndirectDiffuse
+									, c3d_sceneData.getCameraPosition()
+									, surface.worldNormal
+									, specular
+									, metalness
+									, surface )
+								: vec3( 0.0_f ) ) );
 						pxl_fragColor = vec4( shader::PbrLightingModel::combine( lightDiffuse
-								, config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 0.0_f )
+								, indirectDiffuse
 								, lightSpecular
 								, config.hasSpecularGi ? lightIndirectSpecular : vec3( 0.0_f )
 								, ambient
-								, config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 1.0_f )
+								, indirectAmbient
 								, occlusion
 								, emissive
 								, reflected
@@ -540,6 +554,9 @@ namespace castor3d
 			utils.declareCalcVSPosition();
 			utils.declareDecodeMaterial();
 			utils.declareInvertVec2Y();
+
+			shader::CookTorranceBRDF cookTorrance{ writer, utils };
+			cookTorrance.declareDiffuse();
 
 			shader::PbrReflectionModel reflections{ writer
 				, utils
@@ -655,12 +672,23 @@ namespace castor3d
 							, c3d_sceneData
 							, reflected
 							, refracted );
+						auto indirectAmbient = writer.declLocale( "indirectAmbient"
+							, config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 1.0_f ) );
+						auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
+							, ( config.hasDiffuseGi
+								? cookTorrance.computeDiffuse( lightIndirectDiffuse
+									, c3d_sceneData.getCameraPosition()
+									, surface.worldNormal
+									, specular
+									, metalness
+									, surface )
+								: vec3( 0.0_f ) ) );
 						pxl_fragColor = vec4( shader::PbrLightingModel::combine( lightDiffuse
-								, config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 0.0_f )
+								, indirectDiffuse
 								, lightSpecular
 								, config.hasSpecularGi ? lightIndirectSpecular : vec3( 0.0_f )
 								, ambient
-								, config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 1.0_f )
+								, indirectAmbient
 								, occlusion
 								, emissive
 								, reflected

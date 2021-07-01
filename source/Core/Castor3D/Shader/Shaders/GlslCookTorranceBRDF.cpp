@@ -43,7 +43,7 @@ namespace castor3d::shader
 		, sdw::Float const & metalness
 		, sdw::Float const & roughness
 		, Surface surface
-		, OutputComponents & output )
+		, OutputComponents & output )const
 	{
 		m_computeCookTorrance( light
 			, worldEye
@@ -55,14 +55,31 @@ namespace castor3d::shader
 			, output );
 	}
 
+	sdw::Vec3 CookTorranceBRDF::computeDiffuse( sdw::Vec3 const & colour
+		, sdw::Vec3 const & worldEye
+		, sdw::Vec3 const & direction
+		, sdw::Vec3 const & specular
+		, sdw::Float const & metalness
+		, Surface surface )const
+	{
+		return m_computeCookTorranceDiffuse( normalize( colour )
+			, length( colour )
+			, worldEye
+			, direction
+			, specular
+			, metalness
+			, surface );
+	}
+
 	sdw::Vec3 CookTorranceBRDF::computeDiffuse( Light const & light
 		, sdw::Vec3 const & worldEye
 		, sdw::Vec3 const & direction
 		, sdw::Vec3 const & specular
 		, sdw::Float const & metalness
-		, Surface surface )
+		, Surface surface )const
 	{
-		return m_computeCookTorranceDiffuse( light
+		return m_computeCookTorranceDiffuse( light.m_colour
+			, light.m_intensity.r()
 			, worldEye
 			, direction
 			, specular
@@ -145,7 +162,7 @@ namespace castor3d::shader
 	void CookTorranceBRDF::doDeclareComputeCookTorrance()
 	{
 		OutputComponents output{ m_writer };
-		m_computeCookTorrance = m_writer.implementFunction< Void >( "doComputeCookTorrance"
+		m_computeCookTorrance = m_writer.implementFunction< Void >( "computeCookTorrance"
 			, [this]( Light const & light
 				, Vec3 const & worldEye
 				, Vec3 const & direction
@@ -200,8 +217,8 @@ namespace castor3d::shader
 
 				kD *= 1.0_f - metalness;
 
-				output.m_diffuse = ( radiance * light.m_intensity.r() * NdotL * kD / Float{ castor::Pi< float > } );
-				output.m_specular = ( specReflectance * radiance * light.m_intensity.g() * NdotL );
+				output.m_diffuse = max( radiance * light.m_intensity.r() * NdotL * kD, vec3( 0.0_f ) ) / Float{ castor::Pi< float > };
+				output.m_specular = max( specReflectance * radiance * light.m_intensity.g() * NdotL, vec3( 0.0_f ) );
 			}
 			, InLight( m_writer, "light" )
 			, InVec3( m_writer, "worldEye" )
@@ -215,8 +232,9 @@ namespace castor3d::shader
 
 	void CookTorranceBRDF::doDeclareComputeCookTorranceDiffuse()
 	{
-		m_computeCookTorranceDiffuse = m_writer.implementFunction< Vec3 >( "doComputeCookTorrance"
-			, [this]( Light const & light
+		m_computeCookTorranceDiffuse = m_writer.implementFunction< Vec3 >( "computeCookTorranceDiffuse"
+			, [this]( Vec3 const & colour
+				, Float const intensity
 				, Vec3 const & worldEye
 				, Vec3 const & direction
 				, Vec3 const & specular
@@ -233,7 +251,7 @@ namespace castor3d::shader
 				auto N = m_writer.declLocale( "N"
 					, normalize( surface.worldNormal ) );
 				auto radiance = m_writer.declLocale( "radiance"
-					, light.m_colour );
+					, colour );
 
 				auto NdotL = m_writer.declLocale( "NdotL"
 					, max( dot( N, L ), 0.0_f ) );
@@ -249,9 +267,10 @@ namespace castor3d::shader
 
 				kD *= 1.0_f - metalness;
 
-				m_writer.returnStmt( ( radiance * light.m_intensity.r() * NdotL * kD / Float{ castor::Pi< float > } ) );
+				m_writer.returnStmt( ( max( radiance * intensity * NdotL * kD, vec3( 0.0_f ) ) / Float{ castor::Pi< float > } ) );
 			}
-			, InLight( m_writer, "light" )
+			, InVec3( m_writer, "colour" )
+			, InFloat( m_writer, "intensity" )
 			, InVec3( m_writer, "worldEye" )
 			, InVec3( m_writer, "direction" )
 			, InVec3( m_writer, "specular" )
