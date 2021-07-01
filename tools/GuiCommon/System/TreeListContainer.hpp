@@ -19,7 +19,7 @@ namespace GuiCommon
 		: public wxPanel
 	{
 	public:
-		TreeListContainerT( wxWindow * parent
+		explicit TreeListContainerT( wxWindow * parent
 			, wxPoint const & pos = wxDefaultPosition
 			, wxSize const & size = wxDefaultSize )
 			: wxPanel{ parent, wxID_ANY, pos, size, wxDEFAULT_FRAME_STYLE }

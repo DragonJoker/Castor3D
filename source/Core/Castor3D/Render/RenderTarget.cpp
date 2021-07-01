@@ -799,7 +799,6 @@ namespace castor3d
 		, RenderInfo & info
 		, CameraSPtr camera )
 	{
-		auto elapsedTime = m_timer.getElapsed();
 		SceneSPtr scene = getScene();
 		crg::SemaphoreWaitArray signalsToWait;
 
