@@ -144,7 +144,7 @@ namespace castor3d
 				, uint32_t shadowMapSet
 				, bool isOpaqueProgram );
 			template< typename LightsBufBindingT >
-			static std::shared_ptr< PhongLightingModel > createDiffuseModelT( sdw::ShaderWriter & writer
+			static std::shared_ptr< PbrLightingModel > createDiffuseModelT( sdw::ShaderWriter & writer
 				, Utils & utils
 				, LightsBufBindingT lightsBufBinding
 				, uint32_t lightsBufSet

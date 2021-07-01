@@ -10,7 +10,7 @@
 
 #include <CastorUtils/Graphics/Grid.hpp>
 
-#include <ShaderWriter/Writer.hpp>
+#include <ShaderWriter/Source.hpp>
 
 CU_ImplementCUSmartPtr( castor3d, LpvGridConfigUbo )
 
