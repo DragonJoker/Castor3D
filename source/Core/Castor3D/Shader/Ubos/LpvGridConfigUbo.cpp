@@ -26,13 +26,15 @@ namespace castor3d
 			: StructInstance{ writer, std::move( expr ), enabled }
 			, minVolumeCornerSize{ getMember< sdw::Vec4 >( "minVolumeCornerSize" ) }
 			, gridSizeAtt{ getMember< sdw::Vec4 >( "gridSizeAtt" ) }
+			, cameraPos4{ getMember< sdw::Vec4 >( "cameraPosition" ) }
 			, minVolumeCorner{ minVolumeCornerSize.xyz() }
-			, cellSize{ minVolumeCornerSize.w() }
 			, gridSize{ gridSizeAtt.xyz() }
 			, gridWidth{ gridSizeAtt.x() }
 			, gridHeight{ gridSizeAtt.y() }
 			, gridDepth{ gridSizeAtt.z() }
-			, indirectAttenuation{ gridSizeAtt.w() }
+			, cameraPos{ cameraPos4.xyz() }
+			, m_cellSize{ minVolumeCornerSize.w() }
+			, m_indirectAttenuation{ gridSizeAtt.w() }
 		{
 		}
 
@@ -51,6 +53,7 @@ namespace castor3d
 			{
 				result->declMember( "minVolumeCornerSize", ast::type::Kind::eVec4F );
 				result->declMember( "gridSizeAtt", ast::type::Kind::eVec4F );
+				result->declMember( "cameraPosition", ast::type::Kind::eVec4F );
 			}
 
 			return result;
@@ -60,6 +63,33 @@ namespace castor3d
 		{
 			return std::make_unique< sdw::Struct >( writer
 				, makeType( writer.getTypesCache() ) );
+		}
+
+		sdw::IVec3 LpvGridData::worldToGrid( sdw::Vec3 const & pos )const
+		{
+			return ivec3( ( pos - minVolumeCorner ) / vec3( cellSize() ) - vec3( 0.5_f ) );
+		}
+
+		sdw::IVec3 LpvGridData::worldToGrid( sdw::Vec3 const & pos
+			, sdw::Vec3 const & nml )const
+		{
+			return ivec3( ( pos - minVolumeCorner ) / vec3( cellSize() ) + 0.5_f * nml );
+		}
+
+		sdw::Vec3 LpvGridData::worldToTex( sdw::Vec3 const & pos )const
+		{
+			return ( pos - minVolumeCorner ) / cellSize() / gridSize;
+		}
+
+		sdw::Vec2 LpvGridData::gridToScreen( sdw::IVec2 const & pos )const
+		{
+			return ( vec2( pos.xy() ) + 0.5_f ) / vec2( gridSize.xy() ) * 2.0_f - 1.0_f;
+		}
+
+		sdw::Vec3 LpvGridData::nextGrid( sdw::IVec3 const & pos
+			, sdw::Vec3 const & dir )const
+		{
+			return ( vec3( pos ) + 0.5_f * dir ) / gridSize;
 		}
 	}
 
@@ -79,7 +109,7 @@ namespace castor3d
 		m_device.uboPools->putBuffer( m_ubo );
 	}
 
-	void LpvGridConfigUbo::cpuUpdate( castor::BoundingBox const & aabb
+	castor::Grid const & LpvGridConfigUbo::cpuUpdate( castor::BoundingBox const & aabb
 		, castor::Point3f const & cameraPos
 		, castor::Point3f const & cameraDir
 		, uint32_t gridDim
@@ -90,18 +120,21 @@ namespace castor3d
 		auto cellSize = std::max( std::max( aabb.getDimensions()->x
 			, aabb.getDimensions()->y )
 			, aabb.getDimensions()->z ) / gridDim;
-		castor::Grid grid{ gridDim, cellSize, aabb.getMax(), aabb.getMin(), 1.0f, 0 };
-		grid.transform( cameraPos, cameraDir );
+		m_grid = { gridDim, cellSize, aabb.getMax(), aabb.getMin(), 1.0f, 0 };
+		//m_grid.transform( cameraPos, cameraDir );
 
-		auto minVolumeCorner = grid.getMin();
-		auto gridSize = grid.getDimensions();
-		cellSize = grid.getCellSize();
+		auto minVolumeCorner = m_grid.getMin();
+		auto gridSize = m_grid.getDimensions();
+		cellSize = m_grid.getCellSize();
 
 		configuration.minVolumeCorner = castor::Point4f{ minVolumeCorner->x, minVolumeCorner->y, minVolumeCorner->z, cellSize };
 		configuration.gridSizeAtt = castor::Point4f{ gridSize->x, gridSize->y, gridSize->z, indirectAttenuation };
+		configuration.cameraPos = castor::Point4f{ cameraPos->x, cameraPos->y, cameraPos->z, 0.0f };
+
+		return m_grid;
 	}
 
-	castor::Grid LpvGridConfigUbo::cpuUpdate( uint32_t gridLevel
+	castor::Grid const & LpvGridConfigUbo::cpuUpdate( uint32_t gridLevel
 		, float gridLevelScale
 		, castor::Grid const & grid
 		, castor::BoundingBox const & aabb
@@ -110,16 +143,17 @@ namespace castor3d
 		, float indirectAttenuation )
 	{
 		auto & configuration = m_ubo.getData();
-		castor::Grid levelGrid{ grid, gridLevelScale, gridLevel };
-		levelGrid.transform( cameraPos, cameraDir );
+		m_grid = { grid, gridLevelScale, gridLevel };
+		m_grid.transform( cameraPos, cameraDir );
 
-		auto minVolumeCorner = levelGrid.getMin();
-		auto gridSize = levelGrid.getDimensions();
-		auto cellSize = levelGrid.getCellSize();
+		auto minVolumeCorner = m_grid.getMin();
+		auto gridSize = m_grid.getDimensions();
+		auto cellSize = m_grid.getCellSize();
 
 		configuration.minVolumeCorner = castor::Point4f{ minVolumeCorner->x, minVolumeCorner->y, minVolumeCorner->z, cellSize };
 		configuration.gridSizeAtt = castor::Point4f{ gridSize->x, gridSize->y, gridSize->z, indirectAttenuation };
+		configuration.cameraPos = castor::Point4f{ cameraPos->x, cameraPos->y, cameraPos->z, 0.0f };
 
-		return levelGrid;
+		return m_grid;
 	}
 }

@@ -68,7 +68,7 @@ namespace castor3d
 		ShadowMapResult const & m_smResult;
 		LightVolumePassResultArray const & m_lpvResult;
 		LayeredLpvGridConfigUbo & m_lpvGridConfigUbo;
-		std::array< castor::Grid, CascadeCount > m_grids;
+		std::array< castor::Grid const *, CascadeCount > m_grids;
 		std::array < castor::Point4f, CascadeCount > m_gridsSizes;
 		LpvGridConfigUboArray m_lpvGridConfigUbos;
 		bool m_geometryVolumes{ false };

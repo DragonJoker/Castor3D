@@ -73,6 +73,34 @@ namespace castor3d
 				return VK_PIPELINE_STAGE_TRANSFER_BIT;
 			}
 		};
+
+		crg::ImageViewId createArrayView( crg::FrameGraph & graph
+			, crg::ImageViewId cubeArrayView )
+		{
+			auto data = *cubeArrayView.data;
+			data.info.viewType = VK_IMAGE_VIEW_TYPE_2D_ARRAY;
+			return graph.createView( data );
+		}
+
+		std::vector< LpvLightConfigUbo > createUbos( RenderDevice const & device
+			, LightType lightType )
+		{
+			std::vector< LpvLightConfigUbo > result;
+
+			if ( lightType == LightType::ePoint )
+			{
+				for ( uint32_t i = 0u; i < 6u; ++i )
+				{
+					result.emplace_back( device );
+				}
+			}
+			else
+			{
+				result.emplace_back( device );
+			}
+
+			return result;
+		}
 	}
 
 	//*********************************************************************************************
@@ -86,30 +114,27 @@ namespace castor3d
 		, ShadowMapResult const & smResult
 		, LpvGridConfigUbo const & lpvGridConfigUbo
 		, LightVolumePassResult const & injection
-		, uint32_t cascadeIndex
 		, Texture * geometry )
-		: lpvLightConfigUbo{ device }
+		: lpvLightConfigUbos{ createUbos( device, lightType ) }
 		, lastPass{ &previousPass }
-		, lightInjectionPassDesc{ doCreateInjectionPass( graph
+		, lightInjectionPassDescs{ doCreateInjectionPasses( graph
 			, device
 			, name
 			, lightCache
 			, lightType
 			, smResult
 			, lpvGridConfigUbo
-			, injection
-			, cascadeIndex ) }
-		, geometryInjectionPassDesc{ ( geometry
-			? &doCreateGeometryPass( graph
+			, injection ) }
+		, geometryInjectionPassDescs{ ( geometry
+			? doCreateGeometryPasses( graph
 				, device
 				, name
 				, lightCache
 				, lightType
 				, smResult
 				, lpvGridConfigUbo
-				, *geometry
-				, cascadeIndex )
-			: nullptr ) }
+				, *geometry )
+			: crg::FramePassArray{} ) }
 	{
 	}
 
@@ -123,25 +148,29 @@ namespace castor3d
 
 		if ( changed )
 		{
-			lpvLightConfigUbo.cpuUpdate( light, lpvCellSize );
+			uint32_t index = 0u;
+
+			for ( auto & lpvLightConfigUbo : lpvLightConfigUbos )
+			{
+				lpvLightConfigUbo.cpuUpdate( light, lpvCellSize, index++ );
+			}
 		}
 
 		return changed;
 	}
 
-	crg::FramePass & LightPropagationVolumesBase::LightLpv::doCreateInjectionPass( crg::FrameGraph & graph
+	crg::FramePass const & LightPropagationVolumesBase::LightLpv::doCreateInjectionPass( crg::FrameGraph & graph
 		, RenderDevice const & device
 		, castor::String const & name
 		, LightCache const & lightCache
 		, LightType lightType
 		, ShadowMapResult const & smResult
 		, LpvGridConfigUbo const & lpvGridConfigUbo
-		, LightVolumePassResult const & injection
-		, uint32_t layerIndex )
+		, LightVolumePassResult const & injection )
 	{
 		auto rsmSize = smResult[SmTexture::eDepth].getExtent().width;
-		auto & result = graph.createPass( name + "LightInjection"
-			, [this, &device, name, lightType, layerIndex, rsmSize]( crg::FramePass const & pass
+		auto & pass = graph.createPass( name + "LightInjection"
+			, [this, &device, lightType, rsmSize]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -151,53 +180,153 @@ namespace castor3d
 					, device
 					, lightType
 					, device.renderSystem.getEngine()->getLpvGridSize()
-					, layerIndex
 					, rsmSize );
-				lightInjectionPass = result.get();
+				lightInjectionPasses.push_back( result.get() );
 				device.renderSystem.getEngine()->registerTimer( "LPV"
 					, result->getTimer() );
 				return result;
 			} );
-		result.addDependency( *lastPass );
-		result.addUniformBufferView( { lightCache.getBuffer().getBuffer(), "LightCache" }
+		pass.addDependency( *lastPass );
+		pass.addUniformBufferView( { lightCache.getBuffer().getBuffer(), "LightCache" }
 			, lightCache.getView()
 			, LightInjectionPass::LightsIdx
 			, lightCache.getView().getOffset()
 			, lightCache.getView().getRange() );
-		result.addSampledView( smResult[SmTexture::eNormalLinear].sampledViewId
+		pass.addSampledView( smResult[SmTexture::eNormalLinear].sampledViewId
 			, LightInjectionPass::RsmNormalsIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		result.addSampledView( smResult[SmTexture::ePosition].sampledViewId
+		pass.addSampledView( smResult[SmTexture::ePosition].sampledViewId
 			, LightInjectionPass::RsmPositionIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		result.addSampledView( smResult[SmTexture::eFlux].sampledViewId
+		pass.addSampledView( smResult[SmTexture::eFlux].sampledViewId
 			, LightInjectionPass::RsmFluxIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		lpvGridConfigUbo.createPassBinding( result
+		lpvGridConfigUbo.createPassBinding( pass
 			, LightInjectionPass::LpvGridUboIdx );
-		lpvLightConfigUbo.createPassBinding( result
+		lpvLightConfigUbos[0].createPassBinding( pass
 			, LightInjectionPass::LpvLightUboIdx );
 
-		result.addInOutColourView( injection[LpvTexture::eR].targetViewId );
-		result.addInOutColourView( injection[LpvTexture::eG].targetViewId );
-		result.addInOutColourView( injection[LpvTexture::eB].targetViewId );
-		lastPass = &result;
-		return result;
+		pass.addInOutColourView( injection[LpvTexture::eR].targetViewId );
+		pass.addInOutColourView( injection[LpvTexture::eG].targetViewId );
+		pass.addInOutColourView( injection[LpvTexture::eB].targetViewId );
+
+		return pass;
 	}
 
-	crg::FramePass & LightPropagationVolumesBase::LightLpv::doCreateGeometryPass( crg::FrameGraph & graph
+	crg::FramePass const & LightPropagationVolumesBase::LightLpv::doCreateInjectionPass( crg::FrameGraph & graph
+		, RenderDevice const & device
+		, castor::String const & name
+		, LightCache const & lightCache
+		, std::vector< crg::ImageViewId > const & arrayViews
+		, CubeMapFace face
+		, ShadowMapResult const & smResult
+		, LpvGridConfigUbo const & lpvGridConfigUbo
+		, LightVolumePassResult const & injection )
+	{
+		auto rsmSize = smResult[SmTexture::eDepth].getExtent().width;
+		auto & pass = graph.createPass( name + castor3d::getName( face ) + "LightInjection"
+			, [this, &device, face, rsmSize]( crg::FramePass const & pass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & graph )
+			{
+				auto result = std::make_unique< LightInjectionPass >( pass
+					, context
+					, graph
+					, device
+					, face
+					, device.renderSystem.getEngine()->getLpvGridSize()
+					, rsmSize );
+				lightInjectionPasses.push_back( result.get() );
+				device.renderSystem.getEngine()->registerTimer( "LPV"
+					, result->getTimer() );
+				return result;
+			} );
+		pass.addDependency( *lastPass );
+		pass.addUniformBufferView( { lightCache.getBuffer().getBuffer(), "LightCache" }
+			, lightCache.getView()
+			, LightInjectionPass::LightsIdx
+			, lightCache.getView().getOffset()
+			, lightCache.getView().getRange() );
+		pass.addSampledView( arrayViews[0u]
+			, LightInjectionPass::RsmNormalsIdx
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		pass.addSampledView( arrayViews[1u]
+			, LightInjectionPass::RsmPositionIdx
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		pass.addSampledView( arrayViews[2u]
+			, LightInjectionPass::RsmFluxIdx
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		lpvGridConfigUbo.createPassBinding( pass
+			, LightInjectionPass::LpvGridUboIdx );
+		lpvLightConfigUbos[uint32_t( face )].createPassBinding( pass
+			, LightInjectionPass::LpvLightUboIdx );
+		pass.addInOutColourView( injection[LpvTexture::eR].targetViewId );
+		pass.addInOutColourView( injection[LpvTexture::eG].targetViewId );
+		pass.addInOutColourView( injection[LpvTexture::eB].targetViewId );
+
+		return pass;
+	}
+
+	crg::FramePassArray LightPropagationVolumesBase::LightLpv::doCreateInjectionPasses( crg::FrameGraph & graph
 		, RenderDevice const & device
 		, castor::String const & name
 		, LightCache const & lightCache
 		, LightType lightType
 		, ShadowMapResult const & smResult
 		, LpvGridConfigUbo const & lpvGridConfigUbo
-		, Texture & geometry
-		, uint32_t cascade )
+		, LightVolumePassResult const & injection )
+	{
+		crg::FramePassArray result;
+
+		if ( lightType != LightType::ePoint )
+		{
+			result.push_back( &doCreateInjectionPass( graph
+				, device
+				, name
+				, lightCache
+				, lightType
+				, smResult
+				, lpvGridConfigUbo
+				, injection ) );
+			lastPass = result.back();
+		}
+		else
+		{
+			std::vector< crg::ImageViewId > arrayViews;
+			arrayViews.push_back( createArrayView( graph, smResult[SmTexture::eNormalLinear].sampledViewId ) );
+			arrayViews.push_back( createArrayView( graph, smResult[SmTexture::ePosition].sampledViewId ) );
+			arrayViews.push_back( createArrayView( graph, smResult[SmTexture::eFlux].sampledViewId ) );
+
+			for ( uint32_t faceIndex = 0u; faceIndex < 6u; ++faceIndex )
+			{
+				result.push_back( &doCreateInjectionPass( graph
+					, device
+					, name
+					, lightCache
+					, arrayViews
+					, CubeMapFace( faceIndex )
+					, smResult
+					, lpvGridConfigUbo
+					, injection ) );
+				lastPass = result.back();
+			}
+		}
+
+		return result;
+	}
+
+	crg::FramePass const & LightPropagationVolumesBase::LightLpv::doCreateGeometryPass( crg::FrameGraph & graph
+		, RenderDevice const & device
+		, castor::String const & name
+		, LightCache const & lightCache
+		, LightType lightType
+		, ShadowMapResult const & smResult
+		, LpvGridConfigUbo const & lpvGridConfigUbo
+		, Texture & geometry )
 	{
 		auto rsmSize = smResult[SmTexture::eDepth].getExtent().width;
-		auto & result = graph.createPass( name + "GeomInjection"
-			, [this, &device, name, lightType, rsmSize, cascade]( crg::FramePass const & pass
+		auto & pass = graph.createPass( name + "GeomInjection"
+			, [this, &device, lightType, rsmSize]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -207,32 +336,128 @@ namespace castor3d
 					, device
 					, lightType
 					, device.renderSystem.getEngine()->getLpvGridSize()
-					, cascade
 					, rsmSize );
-				geometryInjectionPass = result.get();
+				geometryInjectionPasses.push_back( result.get() );
 				device.renderSystem.getEngine()->registerTimer( "LPV"
 					, result->getTimer() );
 				return result;
 			} );
-		result.addDependency( *lastPass );
-		result.addUniformBufferView( { lightCache.getBuffer().getBuffer(), "LightCache" }
+		pass.addDependency( *lastPass );
+		pass.addUniformBufferView( { lightCache.getBuffer().getBuffer(), "LightCache" }
 			, lightCache.getView()
 			, GeometryInjectionPass::LightsIdx
 			, lightCache.getView().getOffset()
 			, lightCache.getView().getRange() );
-		result.addSampledView( smResult[SmTexture::eNormalLinear].sampledViewId
+		pass.addSampledView( smResult[SmTexture::eNormalLinear].sampledViewId
 			, GeometryInjectionPass::RsmNormalsIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		result.addSampledView( smResult[SmTexture::ePosition].sampledViewId
+		pass.addSampledView( smResult[SmTexture::ePosition].sampledViewId
 			, GeometryInjectionPass::RsmPositionIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		lpvGridConfigUbo.createPassBinding( result
+		lpvGridConfigUbo.createPassBinding( pass
 			, GeometryInjectionPass::LpvGridUboIdx );
-		lpvLightConfigUbo.createPassBinding( result
+		lpvLightConfigUbos[0].createPassBinding( pass
 			, GeometryInjectionPass::LpvLightUboIdx );
 
-		result.addInOutColourView( geometry.targetViewId );
-		lastPass = &result;
+		pass.addInOutColourView( geometry.targetViewId );
+
+		return pass;
+	}
+
+	crg::FramePass const & LightPropagationVolumesBase::LightLpv::doCreateGeometryPass( crg::FrameGraph & graph
+		, RenderDevice const & device
+		, castor::String const & name
+		, LightCache const & lightCache
+		, std::vector< crg::ImageViewId > const & arrayViews
+		, CubeMapFace face
+		, ShadowMapResult const & smResult
+		, LpvGridConfigUbo const & lpvGridConfigUbo
+		, Texture & geometry )
+	{
+		auto rsmSize = smResult[SmTexture::eDepth].getExtent().width;
+		auto & pass = graph.createPass( name + castor3d::getName( face ) + "GeomInjection"
+			, [this, &device, face, rsmSize]( crg::FramePass const & pass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & graph )
+			{
+				auto result = std::make_unique< GeometryInjectionPass >( pass
+					, context
+					, graph
+					, device
+					, face
+					, device.renderSystem.getEngine()->getLpvGridSize()
+					, rsmSize );
+				geometryInjectionPasses.push_back( result.get() );
+				device.renderSystem.getEngine()->registerTimer( "LPV"
+					, result->getTimer() );
+				return result;
+			} );
+		pass.addDependency( *lastPass );
+		pass.addUniformBufferView( { lightCache.getBuffer().getBuffer(), "LightCache" }
+			, lightCache.getView()
+			, GeometryInjectionPass::LightsIdx
+			, lightCache.getView().getOffset()
+			, lightCache.getView().getRange() );
+		pass.addSampledView( arrayViews[0u]
+			, LightInjectionPass::RsmNormalsIdx
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		pass.addSampledView( arrayViews[1u]
+			, LightInjectionPass::RsmPositionIdx
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		lpvGridConfigUbo.createPassBinding( pass
+			, GeometryInjectionPass::LpvGridUboIdx );
+		lpvLightConfigUbos[uint32_t( face )].createPassBinding( pass
+			, GeometryInjectionPass::LpvLightUboIdx );
+
+		pass.addInOutColourView( geometry.targetViewId );
+
+		return pass;
+	}
+
+	crg::FramePassArray LightPropagationVolumesBase::LightLpv::doCreateGeometryPasses( crg::FrameGraph & graph
+		, RenderDevice const & device
+		, castor::String const & name
+		, LightCache const & lightCache
+		, LightType lightType
+		, ShadowMapResult const & smResult
+		, LpvGridConfigUbo const & lpvGridConfigUbo
+		, Texture & geometry )
+	{
+		crg::FramePassArray result;
+
+		if ( lightType != LightType::ePoint )
+		{
+			result.push_back( &doCreateGeometryPass( graph
+				, device
+				, name
+				, lightCache
+				, lightType
+				, smResult
+				, lpvGridConfigUbo
+				, geometry ) );
+			lastPass = result.back();
+		}
+		else
+		{
+			std::vector< crg::ImageViewId > arrayViews;
+			arrayViews.push_back( createArrayView( graph, smResult[SmTexture::eNormalLinear].sampledViewId ) );
+			arrayViews.push_back( createArrayView( graph, smResult[SmTexture::ePosition].sampledViewId ) );
+
+			for ( uint32_t faceIndex = 0u; faceIndex < 6u; ++faceIndex )
+			{
+				result.push_back( &doCreateGeometryPass( graph
+					, device
+					, name
+					, lightCache
+					, arrayViews
+					, CubeMapFace( faceIndex )
+					, smResult
+					, lpvGridConfigUbo
+					, geometry ) );
+				lastPass = result.back();
+			}
+		}
+
 		return result;
 	}
 
@@ -303,15 +528,12 @@ namespace castor3d
 
 	void LightPropagationVolumesBase::registerLight( LightSPtr light )
 	{
-		auto const cascadeIndex = shader::DirectionalMaxCascadesCount > 1u
-			? shader::DirectionalMaxCascadesCount - 2u
-			: 0u;
 		auto it = m_lightLpvs.find( light );
 
 		if ( it == m_lightLpvs.end() )
 		{
 			auto ires = m_lightLpvs.emplace( light
-				, LightLpv{ m_graph
+				, std::make_unique< LightLpv >( m_graph
 					, m_clearPass
 					, m_device
 					, light->getName()
@@ -320,17 +542,22 @@ namespace castor3d
 					, m_smResult
 					, m_lpvGridConfigUbo
 					, m_injection
-					, cascadeIndex
 					, ( m_geometryVolumes
 						? &m_geometry
-						: nullptr ) } );
-			m_lightPropagationPassesDesc.front()->addDependency( ires.first->second.lightInjectionPassDesc );
+						: nullptr ) ) );
+			for ( auto & lightInjectionPassDesc : ires.first->second->lightInjectionPassDescs )
+			{
+				m_lightPropagationPassesDesc.front()->addDependency( *lightInjectionPassDesc );
+			}
 
 			if ( m_geometryVolumes )
 			{
 				for ( auto index = 1u; index < m_lightPropagationPassesDesc.size(); ++index )
 				{
-					m_lightPropagationPassesDesc[index]->addDependency( *ires.first->second.geometryInjectionPassDesc );
+					for ( auto & geometryInjectionPassDesc : ires.first->second->geometryInjectionPassDescs )
+					{
+						m_lightPropagationPassesDesc[index]->addDependency( *geometryInjectionPassDesc );
+					}
 				}
 			}
 
@@ -366,7 +593,7 @@ namespace castor3d
 		for ( auto & lightLpv : m_lightLpvs )
 		{
 			updater.light = lightLpv.first;
-			changed = lightLpv.second.update( updater
+			changed = lightLpv.second->update( updater
 				, std::max( std::max( aabb.getDimensions()->x
 					, aabb.getDimensions()->y )
 					, aabb.getDimensions()->z ) / m_scene.getLpvGridSize() )
@@ -378,15 +605,11 @@ namespace castor3d
 			m_aabb = aabb;
 			m_cameraPos = camPos;
 			m_cameraDir = camDir;
-			m_lpvGridConfigUbo.cpuUpdate( m_aabb
+			auto & grid = m_lpvGridConfigUbo.cpuUpdate( m_aabb
 				, m_cameraPos
 				, m_cameraDir
 				, m_scene.getLpvGridSize()
 				, m_scene.getLpvIndirectAttenuation() );
-			auto cellSize = std::max( std::max( m_aabb.getDimensions()->x
-				, m_aabb.getDimensions()->y )
-				, m_aabb.getDimensions()->z ) / m_scene.getLpvGridSize();
-			castor::Grid grid{ m_scene.getLpvGridSize(), cellSize, m_aabb.getMax(), m_aabb.getMin(), 1.0f, 0 };
 			m_gridsSize = castor::Point4f{ grid.getCenter()->x
 				, grid.getCenter()->y
 				, grid.getCenter()->z
@@ -415,15 +638,17 @@ namespace castor3d
 		{
 			for ( auto & lightLpv : m_lightLpvs )
 			{
-				if ( lightLpv.second.lightInjectionPass )
+				for ( auto & lightInjectionPass : lightLpv.second->lightInjectionPasses )
 				{
-					lightLpv.second.lightInjectionPass->accept( visitor );
+					lightInjectionPass->accept( visitor );
 				}
 
-				if ( m_geometryVolumes
-					&& lightLpv.second.geometryInjectionPass )
+				if ( m_geometryVolumes )
 				{
-					lightLpv.second.geometryInjectionPass->accept( visitor );
+					for ( auto & geometryInjectionPass : lightLpv.second->geometryInjectionPasses )
+					{
+						geometryInjectionPass->accept( visitor );
+					}
 				}
 			}
 
@@ -598,7 +823,10 @@ namespace castor3d
 
 		for ( auto & lightLpv : m_lightLpvs )
 		{
-			previousPasses.push_back( &lightLpv.second.lightInjectionPassDesc );
+			for ( auto & lightInjectionPassDesc : lightLpv.second->lightInjectionPassDescs )
+			{
+				previousPasses.push_back( lightInjectionPassDesc );
+			}
 		}
 
 		result.push_back( &doCreatePropagationPass( previousPasses
@@ -614,7 +842,10 @@ namespace castor3d
 		{
 			for ( auto & lightLpv : m_lightLpvs )
 			{
-				previousPasses.push_back( lightLpv.second.geometryInjectionPassDesc );
+				for ( auto & geometryInjectionPassDesc : lightLpv.second->geometryInjectionPassDescs )
+				{
+					previousPasses.push_back( geometryInjectionPassDesc );
+				}
 			}
 		}
 

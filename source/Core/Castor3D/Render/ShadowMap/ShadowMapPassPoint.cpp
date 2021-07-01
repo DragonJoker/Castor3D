@@ -13,6 +13,7 @@
 #include "Castor3D/Render/Node/QueueCulledRenderNodes.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapPoint.hpp"
 #include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
@@ -45,22 +46,6 @@ namespace castor3d
 {
 	namespace
 	{
-		void doUpdateShadowMatrices( castor::Point3f const & position
-			, std::array< castor::Matrix4x4f, size_t( CubeMapFace::eCount ) > & matrices )
-		{
-			matrices =
-			{
-				{
-					castor::matrix::lookAt( position, position + castor::Point3f{ +1.0f, +0.0f, +0.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ),// Positive X
-					castor::matrix::lookAt( position, position + castor::Point3f{ -1.0f, +0.0f, +0.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ),// Negative X
-					castor::matrix::lookAt( position, position + castor::Point3f{ +0.0f, +1.0f, +0.0f }, castor::Point3f{ +0.0f, +0.0f, +1.0f } ),// Positive Y
-					castor::matrix::lookAt( position, position + castor::Point3f{ +0.0f, -1.0f, +0.0f }, castor::Point3f{ +0.0f, +0.0f, -1.0f } ),// Negative Y
-					castor::matrix::lookAt( position, position + castor::Point3f{ +0.0f, +0.0f, +1.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ),// Positive Z
-					castor::matrix::lookAt( position, position + castor::Point3f{ +0.0f, +0.0f, -1.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ),// Negative Z
-				}
-			};
-		}
-
 		castor::String getPassName( uint32_t index )
 		{
 			return cuT( "PointSML" ) + string::toString( index / 6u ) + "F" + string::toString( index % 6u );
@@ -85,13 +70,7 @@ namespace castor3d
 			, matrixUbo
 			, culler
 			, shadowMap }
-		, m_viewport{ *device.renderSystem.getEngine() }
 	{
-		float const aspect = float( ShadowMapPassPoint::TextureSize ) / ShadowMapPassPoint::TextureSize;
-		float const nearZ = 1.0f;
-		float const farZ = 2000.0f;
-		m_projection = device.renderSystem.getPerspective( 90.0_degrees, aspect, nearZ, farZ );
-		m_viewport.resize( { ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize } );
 		log::trace << "Created " << m_name << std::endl;
 	}
 
@@ -120,12 +99,19 @@ namespace castor3d
 
 	void ShadowMapPassPoint::doUpdateUbos( CpuUpdater & updater )
 	{
-		m_viewport.updateFar( updater.light->getFarPlane() );
-		auto position = updater.light->getParent()->getDerivedPosition();
-		doUpdateShadowMatrices( position, m_matrices );
-
-		m_shadowMapUbo.update( *updater.light, updater.index );
-		m_matrixUbo.cpuUpdate( m_matrices[updater.index], m_projection );
+		auto & light = *updater.light;
+		auto & aabb = light.getScene()->getBoundingBox();
+		auto farPlane = light.getFarPlane();
+		m_shadowMapUbo.update( light, updater.index );
+		auto & pointLight = *light.getPointLight();
+		m_projection = m_device.renderSystem.getPerspective( 90.0_degrees
+			, 1.0f
+			, ( std::min( double( farPlane ), castor::point::length( aabb.getDimensions() ) ) > 1000.0
+				? 1.0f
+				: 0.1f )
+			, farPlane );
+		m_matrixUbo.cpuUpdate( pointLight.getViewMatrix( CubeMapFace( updater.index ) )
+			, m_projection );
 	}
 
 	void ShadowMapPassPoint::doUpdateNodes( QueueCulledRenderNodes & nodes )
