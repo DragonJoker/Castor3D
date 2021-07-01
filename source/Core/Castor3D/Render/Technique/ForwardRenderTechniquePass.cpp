@@ -398,6 +398,9 @@ namespace castor3d
 		auto in = writer.getIn();
 		shader::Fog fog{ getFogType( flags.sceneFlags ), writer };
 
+		shader::CookTorranceBRDF cookTorrance{ writer, utils };
+		cookTorrance.declareDiffuse();
+
 		// Fragment Outputs
 		auto pxl_fragColor( writer.declOutput< Vec4 >( "pxl_fragColor", 0 ) );
 		auto pxl_velocity( writer.declOutput< Vec4 >( "pxl_velocity", 1, m_hasVelocity ) );
@@ -530,6 +533,14 @@ namespace castor3d
 						, roughness
 						, indirectOcclusion
 						, lightIndirectDiffuse.w() );
+					auto indirectAmbient = writer.declLocale( "indirectAmbient"
+						, indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() ) );
+					lightIndirectDiffuse.xyz() = cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
+						, c3d_sceneData.getCameraPosition()
+						, -normal
+						, specular
+						, metalness
+						, surface );
 
 					pxl_fragColor = vec4( shader::PbrLightingModel::combine( lightDiffuse
 							, lightIndirectDiffuse.xyz()
@@ -647,6 +658,9 @@ namespace castor3d
 			, flags.sceneFlags );
 
 		auto in = writer.getIn();
+
+		shader::CookTorranceBRDF cookTorrance{ writer, utils };
+		cookTorrance.declareDiffuse();
 
 		shader::Fog fog{ getFogType( flags.sceneFlags ), writer };
 
@@ -784,13 +798,21 @@ namespace castor3d
 						, roughness
 						, indirectOcclusion
 						, lightIndirectDiffuse.w() );
+					auto indirectAmbient = writer.declLocale( "indirectAmbient"
+						, indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() ) );
+					lightIndirectDiffuse.xyz() = cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
+						, c3d_sceneData.getCameraPosition()
+						, -normal
+						, specular
+						, metalness
+						, surface );
 
 					pxl_fragColor = vec4( shader::PbrLightingModel::combine( lightDiffuse
 							, lightIndirectDiffuse.xyz()
 							, lightSpecular
 							, lightIndirectSpecular
 							, ambient
-							, indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() )
+							, indirectAmbient
 							, occlusion
 							, emissive
 							, reflected

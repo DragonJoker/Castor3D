@@ -22,13 +22,19 @@ namespace castor3d::shader
 			, sdw::Float const & metalness
 			, sdw::Float const & roughness
 			, Surface surface
-			, OutputComponents & output );
+			, OutputComponents & output )const;
+		C3D_API sdw::Vec3 computeDiffuse( sdw::Vec3 const & colour
+			, sdw::Vec3 const & worldEye
+			, sdw::Vec3 const & direction
+			, sdw::Vec3 const & specular
+			, sdw::Float const & metalness
+			, Surface surface )const;
 		C3D_API sdw::Vec3 computeDiffuse( Light const & light
 			, sdw::Vec3 const & worldEye
 			, sdw::Vec3 const & direction
 			, sdw::Vec3 const & specular
 			, sdw::Float const & metalness
-			, Surface surface );
+			, Surface surface )const;
 
 	protected:
 		void doDeclareDistribution();
@@ -64,7 +70,8 @@ namespace castor3d::shader
 			, InSurface
 			, OutputComponents & > m_computeCookTorrance;
 		sdw::Function< sdw::Vec3
-			, InLight
+			, sdw::InVec3
+			, sdw::InFloat
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InVec3
