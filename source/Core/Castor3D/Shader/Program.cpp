@@ -32,11 +32,10 @@ namespace castor3d
 			, std::map< VkShaderStageFlagBits, ShaderModule > & modules )
 		{
 			bool added = false;
-			auto it = modules.find( stage );
 
-			if ( it == modules.end() )
+			if ( modules.find( stage ) == modules.end() )
 			{
-				it = modules.emplace( stage, ShaderModule{ stage, name } ).first;
+				modules.emplace( stage, ShaderModule{ stage, name } ).first;
 				added = true;
 			}
 

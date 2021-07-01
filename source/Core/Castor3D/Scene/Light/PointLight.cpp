@@ -13,6 +13,22 @@ namespace castor3d
 	{
 		uint32_t constexpr FaceCount = 20u;
 
+		void doUpdateShadowMatrices( castor::Point3f const & position
+			, std::array< castor::Matrix4x4f, size_t( CubeMapFace::eCount ) > & matrices )
+		{
+			matrices =
+			{
+				{
+					castor::matrix::lookAt( position, position + castor::Point3f{ +1.0f, +0.0f, +0.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ),// Positive X
+					castor::matrix::lookAt( position, position + castor::Point3f{ -1.0f, +0.0f, +0.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ),// Negative X
+					castor::matrix::lookAt( position, position + castor::Point3f{ +0.0f, +1.0f, +0.0f }, castor::Point3f{ +0.0f, +0.0f, +1.0f } ),// Positive Y
+					castor::matrix::lookAt( position, position + castor::Point3f{ +0.0f, -1.0f, +0.0f }, castor::Point3f{ +0.0f, +0.0f, -1.0f } ),// Negative Y
+					castor::matrix::lookAt( position, position + castor::Point3f{ +0.0f, +0.0f, +1.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ),// Positive Z
+					castor::matrix::lookAt( position, position + castor::Point3f{ +0.0f, +0.0f, -1.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ),// Negative Z
+				}
+			};
+		}
+
 		float doCalcPointLightBSphere( const castor3d::PointLight & light )
 		{
 			return getMaxDistance( light
@@ -135,6 +151,8 @@ namespace castor3d
 	void PointLight::updateShadow( int32_t index )
 	{
 		m_shadowMapIndex = index;
+		auto position = getLight().getParent()->getDerivedPosition();
+		doUpdateShadowMatrices( position, m_lightViews );
 	}
 
 	void PointLight::doBind( Point4f * buffer )const

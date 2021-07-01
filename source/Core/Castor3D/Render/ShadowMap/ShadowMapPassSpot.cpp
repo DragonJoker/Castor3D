@@ -10,6 +10,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapSpot.hpp"
 #include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
 #include "Castor3D/Shader/Program.hpp"
@@ -92,7 +93,16 @@ namespace castor3d
 	void ShadowMapPassSpot::doUpdateUbos( CpuUpdater & updater )
 	{
 		auto & light = *updater.light;
+		auto & spotLight = *light.getSpotLight();
 		auto & myCamera = getCuller().getCamera();
+		auto & aabb = light.getScene()->getBoundingBox();
+		auto farPlane = light.getFarPlane();
+		myCamera.getViewport().setPerspective( spotLight.getCutOff()
+			, 1.0f
+			, ( std::min( double( farPlane ), castor::point::length( aabb.getDimensions() ) ) > 1000.0
+				? 1.0f
+				: 0.1f )
+			, farPlane );
 		m_shadowType = light.getShadowType();
 		light.getSpotLight()->updateShadow( myCamera
 			, updater.index );

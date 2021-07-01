@@ -52,7 +52,7 @@ namespace castor3d
 		C3D_API explicit LayeredLpvGridConfigUbo( RenderDevice const & device );
 		C3D_API ~LayeredLpvGridConfigUbo();
 
-		C3D_API void cpuUpdate( std::array< castor::Grid, shader::LpvMaxCascadesCount > const & grids
+		C3D_API void cpuUpdate( std::array< castor::Grid const *, shader::LpvMaxCascadesCount > const & grids
 			, float indirectAttenuation );
 
 		void createPassBinding( crg::FramePass & pass

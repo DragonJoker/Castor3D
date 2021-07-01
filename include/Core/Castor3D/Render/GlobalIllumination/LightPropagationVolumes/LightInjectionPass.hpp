@@ -81,7 +81,41 @@ namespace castor3d
 			, RenderDevice const & device
 			, LightType lightType
 			, uint32_t gridSize
-			, uint32_t layerIndex
+			, uint32_t rsmSize );
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	engine				The engine.
+		 *\param[in]	device				The GPU device.
+		 *\param[in]	prefix				The pass name's prefix.
+		 *\param[in]	lightCache			The lights cache.
+		 *\param[in]	lightType			The light source type.
+		 *\param[in]	smResult			The shadow map.
+		 *\param[in]	lpvGridConfigUbo	The LPV grid configuration UBO.
+		 *\param[in]	lpvLightConfigUbo	The LPV light configuration UBO.
+		 *\param[in]	result				The result.
+		 *\param[in]	gridSize			The grid dimensions.
+		 *\param[in]	layerIndex			The layer index.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	engine				Le moteur.
+		 *\param[in]	device				Le device GPU.
+		 *\param[in]	prefix				Le préfixe du nom de la passe.
+		 *\param[in]	lightCache			Le cache de sources lumineuses.
+		 *\param[in]	lightType			Le type de source lumineuse.
+		 *\param[in]	smResult			La shadow map.
+		 *\param[in]	lpvGridConfigUbo	L'UBO de configuration de la grille de LPV.
+		 *\param[in]	lpvLightConfigUbo	L'UBO de configuration de la source lumineuse LPV.
+		 *\param[in]	result				Le résultat.
+		 *\param[in]	gridSize			Les dimensions de la grille.
+		 *\param[in]	layerIndex			L'indice de la layer.
+		 */
+		C3D_API LightInjectionPass( crg::FramePass const & pass
+			, crg::GraphContext & context
+			, crg::RunnableGraph & graph
+			, RenderDevice const & device
+			, CubeMapFace face
+			, uint32_t gridSize
 			, uint32_t rsmSize );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept

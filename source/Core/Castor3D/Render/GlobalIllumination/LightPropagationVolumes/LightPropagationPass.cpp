@@ -56,7 +56,7 @@ namespace castor3d
 				{
 					outCellIndex = ivec3( inPosition );
 					auto screenPos = writer.declLocale( "screenPos"
-						, ( inPosition.xy() + 0.5_f ) / c3d_lpvGridData.gridSize.xy() * 2.0_f - 1.0_f );
+						, c3d_lpvGridData.gridToScreen( outCellIndex.xy() ) );
 					out.vtx.position = vec4( screenPos, 0.0, 1.0 );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -237,7 +237,7 @@ namespace castor3d
 						if ( occlusion )
 						{
 							auto occCoord = writer.declLocale( "occCoord"
-								, ( vec3( neighbourGScellIndex.xyz() ) + 0.5_f * vec3( mainDirection ) ) / c3d_lpvGridData.gridSize );
+								, c3d_lpvGridData.nextGrid( neighbourGScellIndex, vec3( mainDirection ) ) );
 							auto occCoeffs = writer.declLocale( "occCoeffs"
 								, c3d_geometryVolume.sample( occCoord ) );
 							occlusionValue = 1.0 - clamp( occlusionAmplifier * dot( occCoeffs, evalSH_direct( vec3( -mainDirection ) ) ), 0.0_f, 1.0_f );
@@ -268,7 +268,7 @@ namespace castor3d
 							if ( occlusion )
 							{
 								auto occCoord = writer.declLocale( "occCoord"
-									, ( vec3( neighbourGScellIndex.xyz() ) + 0.5_f * evalDirection ) / c3d_lpvGridData.gridSize );
+									, c3d_lpvGridData.nextGrid( neighbourGScellIndex, evalDirection ) );
 								auto occCoeffs = writer.declLocale( "occCoeffs"
 									, c3d_geometryVolume.sample( occCoord ) );
 								occlusionValue = 1.0 - clamp( occlusionAmplifier * dot( occCoeffs, evalSH_direct( -evalDirection ) ), 0.0_f, 1.0_f );
