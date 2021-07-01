@@ -196,7 +196,7 @@ namespace castor3d
 					auto SHintensity = m_writer.declLocale( "SHintensity"
 						, m_evalSH( -surface.worldNormal ) );
 					auto lpvCellCoords = m_writer.declLocale( "lpvCellCoords"
-						, ( surface.worldPosition - lpvGridData.minVolumeCorner ) / lpvGridData.cellSize / lpvGridData.gridSize );
+						, lpvGridData.worldToTex( surface.worldPosition ) );
 					auto lpvIntensity = m_writer.declLocale( "lpvIntensity"
 						, vec3( dot( SHintensity, c3d_lpvAccumulatorR.sample( lpvCellCoords ) )
 							, dot( SHintensity, c3d_lpvAccumulatorG.sample( lpvCellCoords ) )
@@ -478,17 +478,21 @@ namespace castor3d
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
 				auto voxelData = m_writer.getVariable< VoxelData >( "c3d_voxelData" );
-				indirectDiffuse = computeVCTRadiance( surface, voxelData, indirectOcclusion );
+				indirectDiffuse += computeVCTRadiance( surface, voxelData, indirectOcclusion );
 			}
-			else if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
+			else
 			{
-				auto llpvGridData = m_writer.getVariable< LayeredLpvGridData >( "c3d_llpvGridData" );
-				indirectDiffuse = ( computeLLPVRadiance( surface, llpvGridData ) * llpvGridData.indirectAttenuation ) / Float{ castor::Pi< float > };
-			}
-			else if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
-			{
-				auto lpvGridData = m_writer.getVariable< LpvGridData >( "c3d_lpvGridData" );
-				indirectDiffuse = ( computeLPVRadiance( surface, lpvGridData ) * lpvGridData.indirectAttenuation ) / Float{ castor::Pi< float > };
+				if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
+				{
+					auto llpvGridData = m_writer.getVariable< LayeredLpvGridData >( "c3d_llpvGridData" );
+					indirectDiffuse += ( computeLLPVRadiance( surface, llpvGridData ) * llpvGridData.indirectAttenuation ) / Float{ castor::Pi< float > };
+				}
+
+				if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
+				{
+					auto lpvGridData = m_writer.getVariable< LpvGridData >( "c3d_lpvGridData" );
+					indirectDiffuse += ( computeLPVRadiance( surface, lpvGridData ) * lpvGridData.indirectAttenuation() ) / Float{ castor::Pi< float > };
+				}
 			}
 
 			return indirectDiffuse;
@@ -511,7 +515,7 @@ namespace castor3d
 			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 			{
 				auto lpvGridData = m_writer.getVariable< LpvGridData >( "c3d_lpvGridData" );
-				return indirectDiffuse / lpvGridData.indirectAttenuation;
+				return indirectDiffuse / lpvGridData.indirectAttenuation();
 			}
 
 			return vec3( 1.0_f );
@@ -546,6 +550,7 @@ namespace castor3d
 				indirectSpecular *= m_utils.fresnelSchlick( NdotV
 					, indirectSpecular.xyz() );
 			}
+
 			return indirectSpecular;
 		}
 
