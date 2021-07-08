@@ -351,6 +351,7 @@ namespace castor3d
 		static uint32_t sm_uiCount;
 		TargetType m_type;
 		castor::Size m_size;
+		castor::Size m_safeBandedSize;
 		VkFormat m_pixelFormat;
 		bool m_initialised;
 		std::unique_ptr< HdrConfigUbo > m_hdrConfigUbo;

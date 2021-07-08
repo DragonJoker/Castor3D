@@ -83,13 +83,13 @@ namespace castor3d
 		, crg::FramePass const & previousPass )
 	{
 		auto & result = graph.createPass( "ToneMapping"
-			, [this, size]( crg::FramePass const & pass
+			, [this, target]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
-					.renderSize( makeExtent2D( size ) )
+					.renderSize( makeExtent2D( getExtent( target ) ) )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_program ) )
 					.build( pass, context, graph );

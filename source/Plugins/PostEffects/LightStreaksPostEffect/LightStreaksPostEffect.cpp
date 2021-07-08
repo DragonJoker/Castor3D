@@ -108,11 +108,10 @@ namespace light_streaks
 	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
 		, crg::FramePass const & previousPass )
 	{
-		VkExtent2D dimensions{ m_target->data->image.data->info.extent.width
-			, m_target->data->image.data->info.extent.height };
+		auto extent = castor3d::getSafeBandedExtent3D( m_renderTarget.getSize() );
 		auto & graph = m_renderTarget.getGraph();
 
-		auto size = dimensions;
+		auto size = castor3d::makeExtent2D( extent );
 		size.width >>= 2;
 		size.height >>= 2;
 		uint32_t index = 0u;
@@ -184,7 +183,7 @@ namespace light_streaks
 			, device
 			, *m_target
 			, m_kawaseImage.subViewsId
-			, dimensions
+			, castor3d::makeExtent2D( extent )
 			, &isEnabled() );
 		m_pass = &m_combinePass->getPass();
 		m_hiImage.create();

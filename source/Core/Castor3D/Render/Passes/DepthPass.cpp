@@ -39,17 +39,15 @@ namespace castor3d
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
-		, MatrixUbo & matrixUbo
-		, SceneCuller & culler
 		, SsaoConfig const & ssaoConfig
-		, VkExtent3D extent )
+		, SceneRenderPassDesc const & renderPassDesc )
 		: RenderTechniquePass{ pass
 			, context
 			, graph
 			, device
 			, pass.name
 			, "DepthPass"
-			, { std::move( extent ), matrixUbo, culler }
+			, renderPassDesc
 			, { false, ssaoConfig } }
 	{
 	}

@@ -35,6 +35,7 @@ namespace light_streaks
 
 			// Shader inputs
 			Vec2 position = writer.declInput< Vec2 >( "position", 0u );
+			Vec2 uv = writer.declInput< Vec2 >( "uv", 1u );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
@@ -43,7 +44,7 @@ namespace light_streaks
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					vtx_texture = ( position + 1.0_f ) / 2.0_f;
+					vtx_texture = uv;
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -114,6 +115,7 @@ namespace light_streaks
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( size )
+					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( enabled )
 					.recordDisabledInto( [this, &context, &graph, &sceneView, size]( crg::RunnablePass const & runnable

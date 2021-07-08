@@ -282,13 +282,14 @@ namespace castor3d
 		, Named{ name }
 		, m_renderTarget{ renderTarget }
 		, m_device{ device }
-		, m_size{ m_renderTarget.getSize() }
+		, m_targetSize{ m_renderTarget.getSize() }
+		, m_rawSize{ getSafeBandedSize( m_targetSize ) }
 		, m_ssaoConfig{ ssaoConfig }
 		, m_colour{ device
 			, getOwner()->getGraphResourceHandler()
 			, "TechCol"
 			, 0u
-			, makeExtent3D( m_size )
+			, makeExtent3D( m_rawSize )
 			, 1u
 			, 1u
 			, VK_FORMAT_R16G16B16A16_SFLOAT
@@ -303,7 +304,7 @@ namespace castor3d
 			, getOwner()->getGraphResourceHandler()
 			, "TechDpt"
 			, 0u
-			, makeExtent3D( m_size )
+			, m_colour.getExtent()
 			, 1u
 			, 1u
 			, device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
@@ -319,7 +320,7 @@ namespace castor3d
 			, getOwner()->getGraphResourceHandler()
 			, "TechData1"
 			, 0u
-			, makeExtent3D( m_size )
+			, m_colour.getExtent()
 			, 1u
 			, 1u
 			, getFormat( DsTexture::eData1 )
@@ -335,7 +336,7 @@ namespace castor3d
 		, m_ssao{ castor::makeUnique< SsaoPass >( m_renderTarget.getGraph()
 			, device
 			, *m_depthPassDecl
-			, m_size
+			, makeSize( m_colour.getExtent() )
 			, m_ssaoConfig
 			, m_depth
 			, m_normal
@@ -385,7 +386,7 @@ namespace castor3d
 			, m_voxelizer->getFirstBounce()
 			, m_voxelizer->getSecondaryBounce()
 			, m_ssao->getResult()
-			, m_renderTarget.getSize()
+			, m_rawSize
 			, *m_renderTarget.getScene()
 			, m_sceneUbo
 			, m_renderTarget.getHdrConfigUbo()
@@ -408,7 +409,7 @@ namespace castor3d
 			, *m_transparentPassDesc
 			, *m_transparentPassResult
 			, m_colour.wholeViewId
-			, m_renderTarget.getSize()
+			, m_rawSize
 			, m_sceneUbo
 			, m_renderTarget.getHdrConfigUbo()
 			, m_gpInfoUbo )}
@@ -514,7 +515,7 @@ namespace castor3d
 			, jitterProjSpace );
 		m_sceneUbo.cpuUpdate( &camera
 			, camera.getScene()->getFog() );
-		m_gpInfoUbo.cpuUpdate( m_size
+		m_gpInfoUbo.cpuUpdate( makeSize( m_colour.getExtent() )
 			, camera );
 	}
 
@@ -673,10 +674,8 @@ namespace castor3d
 					, context
 					, graph
 					, m_device
-					, m_matrixUbo
-					, m_renderTarget.getCuller()
 					, m_ssaoConfig
-					, m_depth.getExtent() );
+					, SceneRenderPassDesc{ m_depth.getExtent(), m_matrixUbo, m_renderTarget.getCuller() }.safeBand( true ) );
 				m_depthPass = result.get();
 				getEngine()->registerTimer( m_renderTarget.getGraph().getName()
 					, result->getTimer() );
@@ -705,7 +704,8 @@ namespace castor3d
 					, graph
 					, m_device
 					, background
-					, makeExtent2D( m_colour.getExtent() ) );
+					, makeExtent2D( m_colour.getExtent() )
+					, true );
 				m_backgroundPass = result.get();
 				getEngine()->registerTimer( m_renderTarget.getGraph().getName()
 					, result->getTimer() );
@@ -746,7 +746,7 @@ namespace castor3d
 					, m_device
 					, cuT( "Opaque" )
 					, name
-					, SceneRenderPassDesc{ { m_size.getWidth(), m_size.getHeight(), 1u }, m_matrixUbo, m_renderTarget.getCuller() }
+					, SceneRenderPassDesc{ m_colour.getExtent(), m_matrixUbo, m_renderTarget.getCuller() }.safeBand( true )
 					, RenderTechniquePassDesc{ false, m_ssaoConfig }
 						.ssao( m_ssao->getResult() )
 						.lpvConfigUbo( m_lpvConfigUbo )
@@ -801,7 +801,7 @@ namespace castor3d
 					, m_device
 					, cuT( "Transparent" )
 					, name
-					, SceneRenderPassDesc{ { m_size.getWidth(), m_size.getHeight(), 1u }, m_matrixUbo, m_renderTarget.getCuller(), isOit }
+					, SceneRenderPassDesc{ m_colour.getExtent(), m_matrixUbo, m_renderTarget.getCuller(), isOit }.safeBand( true )
 					, RenderTechniquePassDesc{ false, m_ssaoConfig }
 						.ssao( m_ssao->getResult() )
 						.lpvConfigUbo( m_lpvConfigUbo )

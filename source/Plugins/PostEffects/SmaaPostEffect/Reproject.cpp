@@ -38,13 +38,13 @@ namespace smaa
 			VelocityTexIdx,
 		};
 
-		std::unique_ptr< ast::Shader > doGetReprojectVP( castor::Size const & size
+		std::unique_ptr< ast::Shader > doGetReprojectVP( VkExtent3D const & size
 			, SmaaConfig const & config )
 		{
-			Point4f renderTargetMetrics{ 1.0f / size.getWidth()
-				, 1.0f / size.getHeight()
-				, float( size.getWidth() )
-				, float( size.getHeight() ) };
+			Point4f renderTargetMetrics{ 1.0f / size.width
+				, 1.0f / size.height
+				, float( size.width )
+				, float( size.height ) };
 
 			using namespace sdw;
 			VertexWriter writer;
@@ -69,15 +69,10 @@ namespace smaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< ast::Shader > doGetReprojectFP( castor::Size const & size
+		std::unique_ptr< ast::Shader > doGetReprojectFP( VkExtent3D const & size
 			, SmaaConfig const & config
 			, bool reprojection )
 		{
-			Point4f renderTargetMetrics{ 1.0f / size.getWidth()
-				, 1.0f / size.getHeight()
-				, float( size.getWidth() )
-				, float( size.getHeight() ) };
-
 			using namespace sdw;
 			FragmentWriter writer;
 			auto c3d_reprojectionWeightScale = writer.declConstant( constants::ReprojectionWeightScale
@@ -158,15 +153,16 @@ namespace smaa
 		, m_currentColourViews{ currentColourViews }
 		, m_previousColourViews{ previousColourViews }
 		, m_velocityView{ velocityView }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaReproject", doGetReprojectVP( renderTarget.getSize(), config ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaReproject", doGetReprojectFP( renderTarget.getSize(), config, velocityView != nullptr ) }
+		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaReproject", doGetReprojectVP( m_extent, config ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaReproject", doGetReprojectFP( m_extent, config, velocityView != nullptr ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_result{ m_device
 			, m_graph.getHandler()
 			, "SMRpRes"
 			, 0u
-			, castor3d::makeExtent3D( renderTarget.getSize() )
+			, m_extent
 			, 1u
 			, 1u
 			, renderTarget.getPixelFormat()
@@ -174,40 +170,13 @@ namespace smaa
 				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) }
 		, m_pass{ m_graph.createPass( "SmaaReproject"
-			, [this, &config, &device, &currentColourViews]( crg::FramePass const & pass
+			, [this, &device, &renderTarget, &config, &currentColourViews]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto commandBuffer = device.graphicsCommandPool->createCommandBuffer();
-				commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-
-				for ( auto & view : m_currentColourViews )
-				{
-					ashes::ImagePtr image = std::make_unique< ashes::Image >( *device
-						, graph.createImage( view.data->image )
-						, view.data->image.data->info );
-					auto createInfo = view.data->info;
-					createInfo.image = *image;
-					auto imageView = image->createView( createInfo );
-					commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
-						, VK_PIPELINE_STAGE_TRANSFER_BIT
-						, imageView.makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
-					commandBuffer->clear( imageView
-						, castor3d::opaqueBlackClearColor.color );
-					commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-						, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-						, imageView.makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
-				}
-
-				commandBuffer->end();
-				device.graphicsQueue->submit( *commandBuffer, nullptr );
-				device.graphicsQueue->waitIdle();
-				commandBuffer.reset();
-
-				auto size = m_result.imageId.data->info.extent;
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
-					.renderSize( { size.width, size.height } )
+					.renderSize( castor3d::makeExtent2D( m_extent ) )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.passIndex( &config.subsampleIndex )
@@ -216,7 +185,35 @@ namespace smaa
 					, result->getTimer() );
 				return result;
 			} ) }
-	{	
+	{
+		auto & handler = m_graph.getHandler();
+		auto & context = m_device.makeContext();
+		auto commandBuffer = device.graphicsCommandPool->createCommandBuffer();
+		commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+
+		for ( auto & view : m_currentColourViews )
+		{
+			ashes::ImagePtr image = std::make_unique< ashes::Image >( *device
+				, handler.createImage( context, view.data->image )
+				, view.data->image.data->info );
+			auto createInfo = view.data->info;
+			createInfo.image = *image;
+			auto imageView = image->createView( createInfo );
+			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
+				, VK_PIPELINE_STAGE_TRANSFER_BIT
+				, imageView.makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+			commandBuffer->clear( imageView
+				, castor3d::opaqueBlackClearColor.color );
+			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+				, imageView.makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+		}
+
+		commandBuffer->end();
+		device.graphicsQueue->submit( *commandBuffer, nullptr );
+		device.graphicsQueue->waitIdle();
+		commandBuffer.reset();
+
 		crg::SamplerDesc pointSampler{ VK_FILTER_NEAREST
 			, VK_FILTER_NEAREST
 			, VK_SAMPLER_MIPMAP_MODE_NEAREST
