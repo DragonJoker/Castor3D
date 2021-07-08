@@ -35,13 +35,13 @@ namespace smaa
 			VelocityTexIdx,
 		};
 
-		std::unique_ptr< ast::Shader > doGetNeighbourhoodBlendingVP( castor::Size const & size
+		std::unique_ptr< ast::Shader > doGetNeighbourhoodBlendingVP( VkExtent3D const & size
 			, SmaaConfig const & config )
 		{
-			Point4f renderTargetMetrics{ 1.0f / size.getWidth()
-				, 1.0f / size.getHeight()
-				, float( size.getWidth() )
-				, float( size.getHeight() ) };
+			Point4f renderTargetMetrics{ 1.0f / size.width
+				, 1.0f / size.height
+				, float( size.width )
+				, float( size.height ) };
 
 			using namespace sdw;
 			VertexWriter writer;
@@ -81,14 +81,14 @@ namespace smaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< ast::Shader > doGetNeighbourhoodBlendingFP( castor::Size const & size
+		std::unique_ptr< ast::Shader > doGetNeighbourhoodBlendingFP( VkExtent3D const & size
 			, SmaaConfig const & config
 			, bool reprojection )
 		{
-			Point4f renderTargetMetrics{ 1.0f / size.getWidth()
-				, 1.0f / size.getHeight()
-				, float( size.getWidth() )
-				, float( size.getHeight() ) };
+			Point4f renderTargetMetrics{ 1.0f / size.width
+				, 1.0f / size.height
+				, float( size.width )
+				, float( size.height ) };
 
 			using namespace sdw;
 			FragmentWriter writer;
@@ -257,19 +257,19 @@ namespace smaa
 		, m_sourceView{ sourceView }
 		, m_blendView{ blendView }
 		, m_velocityView{ velocityView }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaNeighbourhood", doGetNeighbourhoodBlendingVP( renderTarget.getSize(), config ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaNeighbourhood", doGetNeighbourhoodBlendingFP( renderTarget.getSize(), config, velocityView != nullptr ) }
+		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaNeighbourhood", doGetNeighbourhoodBlendingVP( m_extent, config ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaNeighbourhood", doGetNeighbourhoodBlendingFP( m_extent, config, velocityView != nullptr ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_pass{ m_graph.createPass( "SmaaNeighbourhood"
-			, [this, &device, &config]( crg::FramePass const & pass
+			, [this, &device, &renderTarget, &config]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto size = m_sourceView.data->image.data->info.extent;
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
-					.renderSize( { size.width, size.height } )
+					.renderSize( castor3d::makeExtent2D( m_extent ) )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.passIndex( &config.subsampleIndex )
@@ -303,15 +303,13 @@ namespace smaa
 				, linearSampler );
 		}
 
-		auto size = castor3d::makeExtent3D( renderTarget.getSize() );
-
 		for ( uint32_t i = 0; i < config.maxSubsampleIndices; ++i )
 		{
 			m_images.emplace_back( m_device
 				, m_graph.getHandler()
 				, "SMNBRes" + std::to_string( i )
 				, 0u
-				, size
+				, m_extent
 				, 1u
 				, 1u
 				, VK_FORMAT_R8G8B8A8_SRGB

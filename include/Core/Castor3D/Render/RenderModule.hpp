@@ -788,6 +788,7 @@ namespace castor3d
 		castor::Milliseconds time;
 		castor::Milliseconds total;
 		std::vector< TechniqueQueues > techniquesQueues;
+		castor::Point2f bandRatio;
 	};
 
 	struct GpuUpdater

@@ -138,7 +138,7 @@ namespace castor3d
 
 		castor::Size const & getSize()const
 		{
-			return m_size;
+			return m_rawSize;
 		}
 
 		TextureLayout const & getResult()const
@@ -238,7 +238,8 @@ namespace castor3d
 	private:
 		RenderTarget & m_renderTarget;
 		RenderDevice const & m_device;
-		castor::Size m_size;
+		castor::Size m_targetSize;
+		castor::Size m_rawSize;
 		SsaoConfig m_ssaoConfig;
 		Texture m_colour;
 		TextureUnit m_colourTexture;

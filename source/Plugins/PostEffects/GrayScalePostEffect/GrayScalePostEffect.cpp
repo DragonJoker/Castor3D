@@ -152,11 +152,12 @@ namespace grayscale
 	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
 		, crg::FramePass const & previousPass )
 	{
+		auto extent = castor3d::getSafeBandedExtent3D( m_renderTarget.getSize() );
 		m_resultImg = m_renderTarget.getGraph().createImage( crg::ImageData{ "GSRes"
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, m_target->data->info.format
-			, castor3d::makeExtent3D( m_renderTarget.getSize() )
+			, extent
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } );
@@ -167,29 +168,28 @@ namespace grayscale
 			, m_resultImg.data->info.format
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } );
 		m_pass = &m_renderTarget.getGraph().createPass( "GrayScalePass"
-			, [this, &device]( crg::FramePass const & pass
+			, [this, &device, extent]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
-					.renderSize( castor3d::makeExtent2D( m_renderTarget.getSize() ) )
+					.renderSize( castor3d::makeExtent2D( extent ) )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( &isEnabled() )
-					.recordDisabledInto( [this, &context, &graph]( crg::RunnablePass const & runnable
+					.recordDisabledInto( [this, &context, &graph, extent]( crg::RunnablePass const & runnable
 						, VkCommandBuffer commandBuffer
 						, uint32_t index )
 						{
 							auto & sceneView = *m_target;
-							auto size = castor3d::makeExtent2D( m_renderTarget.getSize() );
 							auto & srcSubresource = sceneView.data->info.subresourceRange;
 							auto & dstSubresource = m_resultView.data->info.subresourceRange;
 							VkImageCopy region{ VkImageSubresourceLayers{ srcSubresource.aspectMask, srcSubresource.baseMipLevel, srcSubresource.baseArrayLayer, 1u }
 								, VkOffset3D{ 0u, 0u, 0u }
 								, VkImageSubresourceLayers{ dstSubresource.aspectMask, dstSubresource.baseMipLevel, dstSubresource.baseArrayLayer, 1u }
 								, VkOffset3D{ 0u, 0u, 0u }
-							, { size.width, size.height, 1u } };
+							, { extent.width, extent.height, 1u } };
 							auto srcTransition = runnable.getTransition( index, sceneView );
 							auto dstTransition = runnable.getTransition( index, m_resultView );
 							graph.memoryBarrier( commandBuffer
