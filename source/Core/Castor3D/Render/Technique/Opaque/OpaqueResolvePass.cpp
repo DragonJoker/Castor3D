@@ -809,7 +809,7 @@ namespace castor3d
 				, crg::RunnableGraph & graph )
 			{
 				auto result = crg::RenderQuadBuilder{}
-					.texcoordConfig( crg::rq::Texcoord{} )
+					.texcoordConfig( crg::Texcoord{} )
 					.renderSize( makeExtent2D( m_result.getExtent() ) )
 					.passIndex( &m_programIndex )
 					.programs( createPrograms( m_programs ) )

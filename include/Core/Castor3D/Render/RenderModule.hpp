@@ -792,7 +792,7 @@ namespace castor3d
 
 	struct GpuUpdater
 	{
-		explicit GpuUpdater( RenderDevice const & device
+		GpuUpdater( RenderDevice const & device
 			, RenderInfo & info )
 			: device{ device }
 			, info{ info }
