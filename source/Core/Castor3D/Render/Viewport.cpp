@@ -9,6 +9,69 @@ using namespace castor;
 
 namespace castor3d
 {
+	namespace
+	{
+		castor::Matrix4x4f getSafeBandedOrtho( RenderSystem const & renderSystem
+			, castor::Size const & size
+			, float left
+			, float right
+			, float bottom
+			, float top
+			, float nearZ
+			, float farZ )
+		{
+			auto bandsSize = double( getSafeBandsSize( size ) );
+			auto width = size.getWidth() + bandsSize;
+			auto height = size.getHeight() + bandsSize;
+			castor::Point2d bandRatio{ width / size.getWidth(), height / size.getHeight() };
+			return renderSystem.getOrtho( left * bandRatio->x
+				, right * bandRatio->x
+				, bottom * bandRatio->y
+				, top * bandRatio->y
+				, nearZ
+				, farZ );
+		}
+
+		castor::Matrix4x4f getSafeBandedFrustum( RenderSystem const & renderSystem
+			, castor::Size const & size
+			, float left
+			, float right
+			, float bottom
+			, float top
+			, float nearZ
+			, float farZ )
+		{
+			auto bandsSize = double( getSafeBandsSize( size ) );
+			auto width = size.getWidth() + bandsSize;
+			auto height = size.getHeight() + bandsSize;
+			castor::Point2d bandRatio{ width / size.getWidth(), height / size.getHeight() };
+			return renderSystem.getFrustum( left * bandRatio->x
+				, right * bandRatio->x
+				, bottom * bandRatio->y
+				, top * bandRatio->y
+				, nearZ
+				, farZ );
+		}
+
+		castor::Matrix4x4f getSafeBandedPerspective( RenderSystem const & renderSystem
+			, castor::Size const & size
+			, Angle fovY
+			, float aspect
+			, float nearZ
+			, float farZ )
+		{
+			auto opp = size.getHeight() / 2.0;
+			auto adj = opp / fovY.tand();
+			auto bandSize = double( getSafeBandSize( size ) );
+			auto halfHeight = opp + bandSize;
+			auto halfWidth = std::ceil( aspect * opp ) + bandSize;
+			return renderSystem.getPerspective( fovY + ( castor::atanf( ( bandSize * 2.85f / 4.0f ) / adj ) )
+				, halfWidth / halfHeight
+				, nearZ
+				, farZ );
+		}
+	}
+
 	const std::array< String, size_t( ViewportType::eCount ) > Viewport::TypeName
 	{
 		cuT( "ortho" ),
@@ -71,6 +134,14 @@ namespace castor3d
 					, m_top
 					, m_near
 					, m_far );
+				m_safeBandedProjection = getSafeBandedOrtho( *m_engine.getRenderSystem()
+					, m_size
+					, m_left
+					, m_right
+					, m_bottom
+					, m_top
+					, m_near
+					, m_far );
 				break;
 
 			case castor3d::ViewportType::ePerspective:
@@ -78,10 +149,24 @@ namespace castor3d
 					, m_ratio
 					, m_near
 					, m_far );
+				m_safeBandedProjection = getSafeBandedPerspective( *m_engine.getRenderSystem()
+					, m_size
+					, m_fovY
+					, m_ratio
+					, m_near
+					, m_far );
 				break;
 
 			case castor3d::ViewportType::eFrustum:
 				m_projection = m_engine.getRenderSystem()->getFrustum( m_left
+					, m_right
+					, m_bottom
+					, m_top
+					, m_near
+					, m_far );
+				m_safeBandedProjection = getSafeBandedFrustum( *m_engine.getRenderSystem()
+					, m_size
+					, m_left
 					, m_right
 					, m_bottom
 					, m_top

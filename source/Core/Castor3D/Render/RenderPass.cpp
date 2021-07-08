@@ -161,6 +161,7 @@ namespace castor3d
 		, m_sceneUbo{ m_device }
 		, m_index{ desc.m_index }
 		, m_instanceMult{ desc.m_instanceMult }
+		, m_safeBand{ desc.m_safeBand }
 	{
 		m_sceneUbo.setWindowSize( m_size );
 		m_culler.getScene().getGeometryCache().registerPass( *this );
@@ -755,7 +756,7 @@ namespace castor3d
 		jitterProjSpace[0] /= camera.getWidth();
 		jitterProjSpace[1] /= camera.getHeight();
 		m_matrixUbo.cpuUpdate( camera.getView()
-			, camera.getProjection()
+			, camera.getProjection( m_safeBand != 0u )
 			, jitterProjSpace );
 		m_sceneUbo.cpuUpdate( *camera.getScene(), &camera );
 

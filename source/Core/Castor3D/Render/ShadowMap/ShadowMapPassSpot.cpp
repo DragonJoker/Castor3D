@@ -107,7 +107,8 @@ namespace castor3d
 		light.getSpotLight()->updateShadow( myCamera
 			, updater.index );
 		m_shadowMapUbo.update( light, updater.index );
-		m_matrixUbo.cpuUpdate( myCamera.getView(), myCamera.getProjection() );
+		m_matrixUbo.cpuUpdate( myCamera.getView()
+			, myCamera.getProjection( false ) );
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo ShadowMapPassSpot::doCreateDepthStencilState( PipelineFlags const & flags )const

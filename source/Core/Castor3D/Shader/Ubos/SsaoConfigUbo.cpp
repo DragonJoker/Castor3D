@@ -158,7 +158,7 @@ namespace castor3d
 		float farZ = std::max( viewport.getFar(), -projScale * radius / MIN_AO_SS_RADIUS );
 		// Hack because setting farZ lower results in banding artefacts on some scenes, should tune later.
 		farZ = std::min( farZ, -1000.0f );
-		auto const & proj = camera.getProjection();
+		auto const & proj = camera.getProjection( true );
 
 		auto & configuration = m_ubo.getData();
 		configuration.numSamples = config.numSamples;
