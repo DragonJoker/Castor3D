@@ -138,11 +138,13 @@ namespace castor3d
 			return m_view;
 		}
 
-		castor::Matrix4x4f const & getProjection()const
+		castor::Matrix4x4f const & getProjection( bool safeBanded )const
 		{
 			return m_ownProjection
 				? m_projection
-				: m_viewport.getProjection();
+				: ( safeBanded
+					? m_viewport.getSafeBandedProjection()
+					: m_viewport.getProjection() );
 		}
 
 		ViewportType getViewportType()const

@@ -110,6 +110,17 @@ namespace castor3d
 			m_ignored = &value;
 			return *this;
 		}
+		/**
+		 *\~english
+		 *\param[in]	value	The scene node to ignore during rendering.
+		 *\~french
+		 *\param[in]	value	Le scene node à ignorer pendant le rendu.
+		 */
+		SceneRenderPassDesc & safeBand( bool value )
+		{
+			m_safeBand = value;
+			return *this;
+		}
 
 		VkExtent3D m_size;
 		MatrixUbo & m_matrixUbo;
@@ -117,6 +128,7 @@ namespace castor3d
 		RenderMode m_mode;
 		bool m_oit;
 		bool m_forceTwoSided;
+		bool m_safeBand{};
 		SceneNode const * m_ignored{};
 		uint32_t m_index{ 0u };
 		uint32_t m_instanceMult{ 1u };
@@ -865,6 +877,7 @@ namespace castor3d
 		RenderMode m_mode{ RenderMode::eBoth };
 		bool m_oit{ false };
 		bool m_forceTwoSided{ false };
+		bool m_safeBand{ false };
 		bool m_isDirty{ true };
 		SceneUbo m_sceneUbo;
 		uint32_t m_index{ 0u };

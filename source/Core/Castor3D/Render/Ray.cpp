@@ -13,7 +13,7 @@ namespace castor3d
 	Ray::Ray( castor::Position const & point
 		, Camera const & camera )
 	{
-		auto const & projection = camera.getProjection();
+		auto const & projection = camera.getProjection( false );
 		auto const & view = camera.getView();
 		auto invProjectionView = ( projection * view ).getInverse();
 		castor::Point4f screen

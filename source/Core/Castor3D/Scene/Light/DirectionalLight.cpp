@@ -37,7 +37,7 @@ namespace castor3d
 			Point3f up{ 0.0f, 1.0f, 0.0f };
 			Point3f right( point::getNormalised( point::cross( up, lightDirection ) ) );
 			up = point::getNormalised( point::cross( lightDirection, right ) );
-			auto cameraVP = camera.getProjection() * camera.getView();
+			auto cameraVP = camera.getProjection( false ) * camera.getView();
 			auto invCameraVP = cameraVP.getInverse();
 
 			auto lightViewMatrix = matrix::lookAt( castor::Point3f{}, lightDirection, up );
