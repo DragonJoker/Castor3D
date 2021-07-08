@@ -225,6 +225,11 @@ namespace castor3d
 			return m_projection;
 		}
 
+		castor::Matrix4x4f const & getSafeBandedProjection()const
+		{
+			return m_safeBandedProjection;
+		}
+
 		VkViewport const & getViewport()const
 		{
 			return m_viewport;
@@ -315,6 +320,7 @@ namespace castor3d
 		castor::Size m_size;
 		castor::Position m_position;
 		castor::Matrix4x4f m_projection;
+		castor::Matrix4x4f m_safeBandedProjection;
 		VkViewport m_viewport;
 		VkRect2D m_scissor;
 	};
