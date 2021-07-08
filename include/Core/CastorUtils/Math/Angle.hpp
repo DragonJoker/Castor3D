@@ -189,6 +189,60 @@ namespace castor
 		inline Type tan()const;
 		/**
 		 *\~english
+		 *\brief		Trigonometric cosine
+		 *\return		Cosine of this angle
+		 *\~french
+		 *\brief		Cosinus trigonométrique
+		 *\return		Le cosinus de cet angle
+		 */
+		inline float cosf()const;
+		/**
+		 *\~english
+		 *\brief		Trigonometric sine
+		 *\return		sine of this angle
+		 *\~french
+		 *\brief		Sinus trigonométrique
+		 *\return		Le sinus de cet angle
+		 */
+		inline float sinf()const;
+		/**
+		 *\~english
+		 *\brief		Trigonometric tangent
+		 *\return		Tangent of this angle
+		 *\~french
+		 *\brief		Tangente trigonométrique
+		 *\return		La tangente de cet angle
+		 */
+		inline float tanf()const;
+		/**
+		 *\~english
+		 *\brief		Trigonometric cosine
+		 *\return		Cosine of this angle
+		 *\~french
+		 *\brief		Cosinus trigonométrique
+		 *\return		Le cosinus de cet angle
+		 */
+		inline double cosd()const;
+		/**
+		 *\~english
+		 *\brief		Trigonometric sine
+		 *\return		sine of this angle
+		 *\~french
+		 *\brief		Sinus trigonométrique
+		 *\return		Le sinus de cet angle
+		 */
+		inline double sind()const;
+		/**
+		 *\~english
+		 *\brief		Trigonometric tangent
+		 *\return		Tangent of this angle
+		 *\~french
+		 *\brief		Tangente trigonométrique
+		 *\return		La tangente de cet angle
+		 */
+		inline double tand()const;
+		/**
+		 *\~english
 		 *\brief		Hyperbolic cosine
 		 *\return		Hyperbolic cosine of this angle
 		 *\~french
@@ -214,33 +268,6 @@ namespace castor
 		 *\return		La tangente hyperbolique de cet angle
 		 */
 		inline Type tanh()const;
-		/**
-		 *\~english
-		 *\brief		Computes this angle's value from the given cosine value
-		 *\param[in]	value	The cosine value
-		 *\~french
-		 *\brief		Calcule la valeur de cet angle à partir du cosinus donné
-		 *\param[in]	value	Le cosinus
-		 */
-		inline void acos( double value );
-		/**
-		 *\~english
-		 *\brief		Computes this angle's value from the given sine value
-		 *\param[in]	value	The sine value
-		 *\~french
-		 *\brief		Calcule la valeur de cet angle à partir du sinus donné
-		 *\param[in]	value	Le sinus
-		 */
-		inline void asin( double value );
-		/**
-		 *\~english
-		 *\brief		Computes this angle's value from the given tangent value
-		 *\param[in]	value	The tangent value
-		 *\~french
-		 *\brief		Calcule la valeur de cet angle à partir de la tangente donné
-		 *\param[in]	value	La tangente
-		 */
-		inline void atan( double value );
 		/**
 		 *\~english
 		 *\brief		Negation operator.
@@ -338,6 +365,90 @@ namespace castor
 		template< typename T >
 		friend bool operator>( AngleT< T > const & lhs, AngleT< T > const & rhs )noexcept;
 	};
+	/**
+	 *\~english
+	 *\brief		Computes this angle's value from the given cosine value
+	 *\param[in]	value	The cosine value
+	 *\~french
+	 *\brief		Calcule la valeur de cet angle à partir du cosinus donné
+	 *\param[in]	value	Le cosinus
+	 */
+	template< typename Type >
+	static inline AngleT< Type > acosT( double value );
+	/**
+	 *\~english
+	 *\brief		Computes this angle's value from the given sine value
+	 *\param[in]	value	The sine value
+	 *\~french
+	 *\brief		Calcule la valeur de cet angle à partir du sinus donné
+	 *\param[in]	value	Le sinus
+	 */
+	template< typename Type >
+	static inline AngleT< Type > asinT( double value );
+	/**
+	 *\~english
+	 *\brief		Computes this angle's value from the given tangent value
+	 *\param[in]	value	The tangent value
+	 *\~french
+	 *\brief		Calcule la valeur de cet angle à partir de la tangente donné
+	 *\param[in]	value	La tangente
+	 */
+	template< typename Type >
+	static inline AngleT< Type > atanT( double value );
+	/**
+	 *\~english
+	 *\brief		Computes this angle's value from the given cosine value
+	 *\param[in]	value	The cosine value
+	 *\~french
+	 *\brief		Calcule la valeur de cet angle à partir du cosinus donné
+	 *\param[in]	value	Le cosinus
+	 */
+	static inline AngleT< float > acosf( double value );
+	/**
+	 *\~english
+	 *\brief		Computes this angle's value from the given sine value
+	 *\param[in]	value	The sine value
+	 *\~french
+	 *\brief		Calcule la valeur de cet angle à partir du sinus donné
+	 *\param[in]	value	Le sinus
+	 */
+	static inline AngleT< float > asinf( double value );
+	/**
+	 *\~english
+	 *\brief		Computes this angle's value from the given tangent value
+	 *\param[in]	value	The tangent value
+	 *\~french
+	 *\brief		Calcule la valeur de cet angle à partir de la tangente donné
+	 *\param[in]	value	La tangente
+	 */
+	static inline AngleT< float > atanf( double value );
+	/**
+	 *\~english
+	 *\brief		Computes this angle's value from the given cosine value
+	 *\param[in]	value	The cosine value
+	 *\~french
+	 *\brief		Calcule la valeur de cet angle à partir du cosinus donné
+	 *\param[in]	value	Le cosinus
+	 */
+	static inline AngleT< double > acosd( double value );
+	/**
+	 *\~english
+	 *\brief		Computes this angle's value from the given sine value
+	 *\param[in]	value	The sine value
+	 *\~french
+	 *\brief		Calcule la valeur de cet angle à partir du sinus donné
+	 *\param[in]	value	Le sinus
+	 */
+	static inline AngleT< double > asind( double value );
+	/**
+	 *\~english
+	 *\brief		Computes this angle's value from the given tangent value
+	 *\param[in]	value	The tangent value
+	 *\~french
+	 *\brief		Calcule la valeur de cet angle à partir de la tangente donné
+	 *\param[in]	value	La tangente
+	 */
+	static inline AngleT< double > atand( double value );
 	/**
 	 *\~english
 	 *\brief		Equality operator
