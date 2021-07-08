@@ -36,10 +36,8 @@ namespace castor3d
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
-			, MatrixUbo & matrixUbo
-			, SceneCuller & culler
 			, SsaoConfig const & ssaoConfig
-			, VkExtent3D extent );
+			, SceneRenderPassDesc const & renderPassDesc );
 		/**
 		 *\~english
 		 *\brief		Destructor

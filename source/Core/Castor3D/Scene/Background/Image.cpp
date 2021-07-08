@@ -138,6 +138,7 @@ namespace castor3d
 
 	void ImageBackground::doCpuUpdate( CpuUpdater & updater )
 	{
+		m_viewport.resize( updater.camera->getSize() );
 		m_viewport.setOrtho( -1.0f
 			, 1.0f
 			, -m_ratio
@@ -152,7 +153,7 @@ namespace castor3d
 			, node->getDerivedPosition() + Point3f{ 0.0f, 0.0f, 1.0f }
 			, Point3f{ 0.0f, 1.0f, 0.0f } );
 		m_matrixUbo.cpuUpdate( view
-			, m_viewport.getProjection() );
+			, m_viewport.getSafeBandedProjection() );
 	}
 
 	void ImageBackground::doGpuUpdate( GpuUpdater & updater )

@@ -243,6 +243,7 @@ namespace castor3d
 		: OwnedBy< Engine >{ engine }
 		, m_type{ type }
 		, m_size{ size }
+		, m_safeBandedSize{ getSafeBandedSize( size ) }
 		, m_pixelFormat{ VkFormat( pixelFormat ) }
 		, m_initialised{ false }
 		, m_renderTechnique{}
@@ -253,7 +254,7 @@ namespace castor3d
 			, getOwner()->getGraphResourceHandler()
 			, "Velocity"
 			, 0u
-			, castor3d::makeExtent3D( m_size )
+			, makeExtent3D( m_safeBandedSize )
 			, 1u
 			, 1u
 			, VK_FORMAT_R16G16B16A16_SFLOAT
@@ -264,7 +265,7 @@ namespace castor3d
 			, getOwner()->getGraphResourceHandler()
 			, "Scene"
 			, 0u
-			, castor3d::makeExtent3D( m_size )
+			, makeExtent3D( m_safeBandedSize )
 			, 1u
 			, 1u
 			, getPixelFormat()
@@ -276,7 +277,7 @@ namespace castor3d
 			, getOwner()->getGraphResourceHandler()
 			, "Overlays"
 			, 0u
-			, castor3d::makeExtent3D( m_size )
+			, makeExtent3D( m_size )
 			, 1u
 			, 1u
 			, VK_FORMAT_R8G8B8A8_UNORM
@@ -287,7 +288,7 @@ namespace castor3d
 			, getOwner()->getGraphResourceHandler()
 			, "Target"
 			, 0u
-			, castor3d::makeExtent3D( m_size )
+			, makeExtent3D( m_size )
 			, 1u
 			, 1u
 			, getPixelFormat()
@@ -668,7 +669,7 @@ namespace castor3d
 			{
 				return crg::RenderQuadBuilder{}
 					.renderPosition( {} )
-					.renderSize( makeExtent2D( m_size ) )
+					.renderSize( makeExtent2D( m_combined.getExtent() ) )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_combineStages ) )
 					.build( pass, context, graph );
@@ -723,7 +724,7 @@ namespace castor3d
 					return std::make_unique< crg::ImageCopy >( pass
 						, context
 						, graph
-						, makeExtent3D( m_size ) );
+						, getSafeBandedExtent3D( m_size ) );
 				} );
 			pass.addDependency( previousPass );
 			pass.addTransferInputView( source );
@@ -736,9 +737,15 @@ namespace castor3d
 
 	void RenderTarget::doInitCombineProgram()
 	{
-		static uint32_t constexpr LhsIdx = 0u;
-		static uint32_t constexpr RhsIdx = 1u;
 		auto & renderSystem = *getEngine()->getRenderSystem();
+		auto bandSize = double( castor3d::getSafeBandSize(m_size ) );
+		auto bandedSize = castor3d::getSafeBandedExtent3D(m_size );
+		auto bandRatioU = bandSize / bandedSize.width;
+		auto bandRatioV = bandSize / bandedSize.height;
+		Point4f velocityMetrics{ bandRatioU
+			, bandRatioV
+			, float( 1.0 - 2.0 * bandRatioU )
+			, float( 1.0 - 2.0 * bandRatioV ) };
 
 		{
 			using namespace sdw;
@@ -756,6 +763,12 @@ namespace castor3d
 			shader::Utils utils{ writer };
 			utils.declareInvertVec2Y();
 
+			auto getSafeBandedCoord = [&]( Vec2 const & texcoord )
+			{
+				return vec2( texcoord.x() * velocityMetrics->z + velocityMetrics->x
+					, texcoord.y() * velocityMetrics->w + velocityMetrics->y );
+			};
+
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
@@ -768,6 +781,7 @@ namespace castor3d
 						vtx_textureRhs.y() = 1.0_f - vtx_textureRhs.y();
 					}
 
+					vtx_textureLhs = getSafeBandedCoord( vtx_textureLhs );
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
 			m_combineVtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

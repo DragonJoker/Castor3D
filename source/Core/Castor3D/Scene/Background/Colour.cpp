@@ -120,13 +120,14 @@ namespace castor3d
 	{
 		auto & value = m_scene.getBackgroundColour();
 		m_colour = HdrRgbColour::fromComponents( value.red(), value.green(), value.blue() );
+		m_viewport.resize( updater.camera->getSize() );
 		m_viewport.setPerspective( 45.0_degrees
 			, updater.camera->getRatio()
 			, 0.1f
 			, 2.0f );
 		m_viewport.update();
 		m_matrixUbo.cpuUpdate( updater.camera->getView()
-			, m_viewport.getProjection() );
+			, m_viewport.getSafeBandedProjection() );
 	}
 
 	void ColourBackground::doGpuUpdate( GpuUpdater & updater )

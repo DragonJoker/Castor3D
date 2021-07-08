@@ -23,13 +23,14 @@ namespace smaa
 {
 	namespace
 	{
-		std::unique_ptr< ast::Shader > doGetEdgeDetectionVP( castor::Size const & size
+		std::unique_ptr< ast::Shader > doGetEdgeDetectionVP( VkExtent3D const & size
 			, SmaaConfig const & config )
 		{
-			Point4f renderTargetMetrics{ 1.0f / size.getWidth()
-				, 1.0f / size.getHeight()
-				, float( size.getWidth() )
-				, float( size.getHeight() ) };
+			Point4f renderTargetMetrics{ 1.0f / size.width
+				, 1.0f / size.height
+				, float( size.width )
+				, float( size.height ) };
+
 			using namespace sdw;
 			VertexWriter writer;
 
@@ -84,11 +85,12 @@ namespace smaa
 		: m_device{ device }
 		, m_graph{ renderTarget.getGraph() }
 		, m_config{ config }
+		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
 		, m_outColour{ m_device
 			, m_graph.getHandler()
 			, "SMEDRes"
 			, 0u
-			, castor3d::makeExtent3D( renderTarget.getSize() )
+			, m_extent
 			, 1u
 			, 1u
 			, VK_FORMAT_R8G8B8A8_UNORM
@@ -99,7 +101,7 @@ namespace smaa
 			, m_graph.getHandler()
 			, "SMEDStRes"
 			, 0u
-			, castor3d::makeExtent3D( renderTarget.getSize() )
+			, m_extent
 			, 1u
 			, 1u
 			, device.selectSuitableStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT )
@@ -111,7 +113,7 @@ namespace smaa
 			, VK_IMAGE_VIEW_TYPE_2D
 			, m_outDepth.imageId.data->info.format
 			, { VK_IMAGE_ASPECT_STENCIL_BIT, 0u, 1u, 0u, 1u } } ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaEdge", doGetEdgeDetectionVP( renderTarget.getSize(), config ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaEdge", doGetEdgeDetectionVP( m_extent, config ) }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaEdge", std::move( pixelShader ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
@@ -127,7 +129,7 @@ namespace smaa
 				dsState->back = dsState->front;
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
-					.renderSize( castor3d::makeExtent2D( renderTarget.getSize() ) )
+					.renderSize( castor3d::makeExtent2D( m_extent ) )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.depthStencilState( dsState )
