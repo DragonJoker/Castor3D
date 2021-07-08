@@ -110,15 +110,16 @@ namespace castor3d
 		CU_Require( m_ubo );
 
 		auto invView = camera.getView().getInverse();
-		auto invProj = camera.getProjection().getInverse();
-		auto invViewProj = ( camera.getProjection() * camera.getView() ).getInverse();
+		auto projection = camera.getProjection( true );
+		auto invProj = projection.getInverse();
+		auto invViewProj = ( projection * camera.getView() ).getInverse();
 
 		auto & configuration = m_ubo.getData();
 		configuration.invViewProj = invViewProj;
 		configuration.invView = invView;
 		configuration.invProj = invProj;
 		configuration.gView = camera.getView();
-		configuration.gProj = camera.getProjection();
+		configuration.gProj = projection;
 		configuration.renderSize = castor::Point2f( renderSize.getWidth(), renderSize.getHeight() );
 	}
 

@@ -811,6 +811,16 @@ namespace castor3d
 		castor::Milliseconds total;
 	};
 	//@}
+
+	C3D_API uint32_t getSafeBandsSize( castor::Size const & size );
+	C3D_API uint32_t getSafeBandSize( castor::Size const & size );
+	C3D_API castor::Size getSafeBandedSize( castor::Size const & size );
+	C3D_API VkExtent3D getSafeBandedExtent3D( castor::Size const & size );
+	C3D_API castor::Angle getSafeBandedFovY( castor::Angle const & fovY
+		, castor::Size const & size );
+	C3D_API float getSafeBandedAspect( float aspect
+		, castor::Size const & size );
+
 }
 
 CU_DeclareExportedOwnedBy( C3D_API, castor3d::RenderSystem, RenderSystem )
