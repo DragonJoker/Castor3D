@@ -7,6 +7,8 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
+#include <CastorUtils/Miscellaneous/BitSize.hpp>
+
 #include <ashespp/Image/Image.hpp>
 
 #include <RenderGraph/RunnableGraph.hpp>
@@ -599,6 +601,46 @@ namespace castor3d
 			, dstQueueFamily
 			, image
 			, range };
+	}
+
+	//*************************************************************************************************
+
+	uint32_t getSafeBandsSize( castor::Size const & size )
+	{
+		return castor::getNextPowerOfTwo( std::min( size.getWidth()
+			, size.getHeight() ) / 10u );
+	}
+	
+	uint32_t getSafeBandSize( castor::Size const & size )
+	{
+		return getSafeBandsSize( size ) / 2u;
+	}
+
+	castor::Size getSafeBandedSize( castor::Size const & size )
+	{
+		auto bandsSize = getSafeBandsSize( size );
+		return { size.getWidth() + bandsSize
+			, size.getHeight() + bandsSize };
+	}
+
+	VkExtent3D getSafeBandedExtent3D( castor::Size const & size )
+	{
+		return makeExtent3D( getSafeBandedSize( size ) );
+	}
+
+	castor::Angle getSafeBandedFovY( castor::Angle const & fovY
+		, castor::Size const & size )
+	{
+		auto bandsSize = double( getSafeBandsSize( size ) );
+		auto ratio = bandsSize / size.getHeight();
+		return fovY + ( fovY * ratio );
+	}
+
+	float getSafeBandedAspect( float aspect
+		, castor::Size const & size )
+	{
+		auto bandsSize = double( getSafeBandsSize( size ) );
+		return ( aspect * size.getHeight() + bandsSize ) / ( size.getHeight() + bandsSize );
 	}
 
 	//*********************************************************************************************
