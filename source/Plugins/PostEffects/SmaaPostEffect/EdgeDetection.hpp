@@ -43,6 +43,7 @@ namespace smaa
 		castor3d::RenderDevice const & m_device;
 		crg::FrameGraph & m_graph;
 		SmaaConfig const & m_config;
+		VkExtent3D m_extent;
 		castor3d::Texture m_outColour;
 		castor3d::Texture m_outDepth;
 		crg::ImageViewId m_outDepthStencilView;
