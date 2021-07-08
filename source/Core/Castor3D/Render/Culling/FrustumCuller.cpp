@@ -53,6 +53,11 @@ namespace castor3d
 	{
 	}
 
+	FrustumCuller::FrustumCuller( Camera & camera )
+		: FrustumCuller{ *camera.getScene(), camera }
+	{
+	}
+
 	void FrustumCuller::doCullGeometries()
 	{
 		cullNodes( getCamera(), m_allSubmeshes, m_culledSubmeshes );
