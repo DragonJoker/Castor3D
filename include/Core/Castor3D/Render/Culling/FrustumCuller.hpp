@@ -14,6 +14,7 @@ namespace castor3d
 	public:
 		C3D_API FrustumCuller( Scene & scene
 			, Camera & camera );
+		C3D_API explicit FrustumCuller( Camera & camera );
 
 	private:
 		void doCullGeometries()override;
