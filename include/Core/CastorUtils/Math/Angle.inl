@@ -68,6 +68,42 @@ namespace castor
 	}
 
 	template< typename Type >
+	float AngleT< Type >::cosf()const
+	{
+		return std::cos( float( m_radians ) );
+	}
+
+	template< typename Type >
+	float AngleT< Type >::sinf()const
+	{
+		return std::sin( float( m_radians ) );
+	}
+
+	template< typename Type >
+	float AngleT< Type >::tanf()const
+	{
+		return std::tan( float( m_radians ) );
+	}
+
+	template< typename Type >
+	double AngleT< Type >::cosd()const
+	{
+		return std::cos( double( m_radians ) );
+	}
+
+	template< typename Type >
+	double AngleT< Type >::sind()const
+	{
+		return std::sin( double( m_radians ) );
+	}
+
+	template< typename Type >
+	double AngleT< Type >::tand()const
+	{
+		return std::tan( double( m_radians ) );
+	}
+
+	template< typename Type >
 	Type AngleT< Type >::cosh()const
 	{
 		return std::cosh( m_radians );
@@ -83,24 +119,6 @@ namespace castor
 	Type AngleT< Type >::tanh()const
 	{
 		return std::tanh( m_radians );
-	}
-
-	template< typename Type >
-	void AngleT< Type >::acos( double p_rValue )
-	{
-		m_radians = Type( std::acos( p_rValue ) );
-	}
-
-	template< typename Type >
-	void AngleT< Type >::asin( double p_rValue )
-	{
-		m_radians = Type( std::asin( p_rValue ) );
-	}
-
-	template< typename Type >
-	void AngleT< Type >::atan( double p_rValue )
-	{
-		m_radians = Type( std::atan( p_rValue ) );
 	}
 
 	template< typename Type >
@@ -150,6 +168,54 @@ namespace castor
 	{
 		m_radians /= Type( p_rhs );
 		return *this;
+	}
+
+	template< typename Type >
+	AngleT< Type > acosT( double value )
+	{
+		return AngleT< Type >::fromRadians( Type( std::acos( value ) ) );
+	}
+
+	template< typename Type >
+	AngleT< Type > asinT( double value )
+	{
+		return AngleT< Type >::fromRadians( Type( std::asin( value ) ) );
+	}
+
+	template< typename Type >
+	AngleT< Type > atanT( double value )
+	{
+		return AngleT< Type >::fromRadians( Type( std::atan( value ) ) );
+	}
+
+	AngleT< float > acosf( double value )
+	{
+		return acosT< float >( value );
+	}
+
+	AngleT< float > asinf( double value )
+	{
+		return asinT< float >( value );
+	}
+
+	AngleT< float > atanf( double value )
+	{
+		return atanT< float >( value );
+	}
+
+	AngleT< double > acosd( double value )
+	{
+		return acosT< double >( value );
+	}
+
+	AngleT< double > asind( double value )
+	{
+		return asinT< double >( value );
+	}
+
+	AngleT< double > atand( double value )
+	{
+		return atanT< double >( value );
 	}
 
 	template< typename Type >
