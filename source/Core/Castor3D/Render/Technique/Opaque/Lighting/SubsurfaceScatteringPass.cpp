@@ -307,7 +307,7 @@ namespace castor3d
 			, bool const * enabled )
 		{
 			crg::rq::Config result;
-			result.texcoordConfig = crg::rq::Texcoord{};
+			result.texcoordConfig = crg::Texcoord{};
 			result.renderSize = makeExtent2D( size );
 			result.baseConfig.programs = { crg::makeVkArray< VkPipelineShaderStageCreateInfo >( shaderStages ) };
 			result.enabled = enabled;
