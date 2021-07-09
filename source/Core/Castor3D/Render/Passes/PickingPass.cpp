@@ -452,7 +452,7 @@ namespace castor3d
 			{
 				auto material = materials->getBaseMaterial( inSurface.material );
 				auto alpha = writer.declLocale( "alpha"
-					, material->m_opacity );
+					, material->opacity );
 				utils.computeOpacityMapContribution( textures
 					, textureConfigs
 					, c3d_maps
@@ -460,7 +460,7 @@ namespace castor3d
 					, alpha );
 				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
-					, material->m_alphaRef );
+					, material->alphaRef );
 				pxl_fragColor = c3d_pickingData.getIndex( inSurface.instance );
 #if C3D_DebugPicking
 				pxl_fragColor /= 255.0_f;

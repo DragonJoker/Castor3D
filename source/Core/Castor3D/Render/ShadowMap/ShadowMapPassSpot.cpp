@@ -19,7 +19,9 @@
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslPbrLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslPbrMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslPhongMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -281,23 +283,23 @@ namespace castor3d
 					, normalize( inSurface.bitangent ) );
 				auto material = materials.getMaterial( inSurface.material );
 				auto gamma = writer.declLocale( "gamma"
-					, material.m_gamma );
+					, material.gamma );
 				auto diffuse = writer.declLocale( "diffuse"
-					, utils.removeGamma( gamma, material.m_diffuse() ) );
+					, utils.removeGamma( gamma, material.diffuse ) );
 				auto specular = writer.declLocale( "specular"
-					, material.m_specular );
+					, material.specular );
 				auto shininess = writer.declLocale( "shininess"
-					, material.m_shininess );
+					, material.shininess );
 				auto emissive = writer.declLocale( "emissive"
-					, vec3( material.m_emissive ) );
+					, vec3( material.emissive ) );
 				auto occlusion = writer.declLocale( "occlusion"
 					, 1.0_f );
 				auto transmittance = writer.declLocale( "transmittance"
 					, 0.0_f );
 				auto alpha = writer.declLocale( "alpha"
-					, material.m_opacity );
+					, material.opacity );
 				auto alphaRef = writer.declLocale( "alphaRef"
-					, material.m_alphaRef );
+					, material.alphaRef );
 				auto tangentSpaceViewPosition = writer.declLocale( "tangentSpaceViewPosition"
 					, inSurface.tangentSpaceViewPosition );
 				auto tangentSpaceFragPosition = writer.declLocale( "tangentSpaceFragPosition"
@@ -453,24 +455,24 @@ namespace castor3d
 				auto bitangent = writer.declLocale( "bitangent"
 					, normalize( inSurface.bitangent ) );
 				auto material = materials.getMaterial( inSurface.material );
-				auto metallic = writer.declLocale( "metallic"
-					, material.m_metallic );
+				auto metalness = writer.declLocale( "metalness"
+					, material.metalness );
 				auto roughness = writer.declLocale( "roughness"
-					, material.m_roughness );
+					, material.roughness );
 				auto gamma = writer.declLocale( "gamma"
-					, material.m_gamma );
+					, material.gamma );
 				auto albedo = writer.declLocale( "albedo"
-					, utils.removeGamma( gamma, material.m_albedo ) );
+					, utils.removeGamma( gamma, material.albedo ) );
 				auto emissive = writer.declLocale( "emissive"
-					, vec3( material.m_emissive ) );
+					, vec3( material.emissive ) );
 				auto occlusion = writer.declLocale( "occlusion"
 					, 1.0_f );
 				auto transmittance = writer.declLocale( "transmittance"
 					, 0.0_f );
 				auto alpha = writer.declLocale( "alpha"
-					, material.m_opacity );
+					, material.opacity );
 				auto alphaRef = writer.declLocale( "alphaRef"
-					, material.m_alphaRef );
+					, material.alphaRef );
 				auto tangentSpaceViewPosition = writer.declLocale( "tangentSpaceViewPosition"
 					, inSurface.tangentSpaceViewPosition );
 				auto tangentSpaceFragPosition = writer.declLocale( "tangentSpaceFragPosition"
@@ -492,7 +494,7 @@ namespace castor3d
 						, occlusion
 						, transmittance
 						, albedo
-						, metallic
+						, metalness
 						, roughness
 						, tangentSpaceViewPosition
 						, tangentSpaceFragPosition );
@@ -627,23 +629,23 @@ namespace castor3d
 					, normalize( inSurface.bitangent ) );
 				auto material = materials.getMaterial( inSurface.material );
 				auto specular = writer.declLocale( "specular"
-					, material.m_specular );
+					, material.specular );
 				auto glossiness = writer.declLocale( "glossiness"
-					, material.m_glossiness );
+					, material.glossiness );
 				auto gamma = writer.declLocale( "gamma"
-					, material.m_gamma );
+					, material.gamma );
 				auto albedo = writer.declLocale( "albedo"
-					, utils.removeGamma( gamma, material.m_diffuse() ) );
+					, utils.removeGamma( gamma, material.albedo ) );
 				auto emissive = writer.declLocale( "emissive"
-					, vec3( material.m_emissive ) );
+					, vec3( material.emissive ) );
 				auto occlusion = writer.declLocale( "occlusion"
 					, 1.0_f );
 				auto transmittance = writer.declLocale( "transmittance"
 					, 0.0_f );
 				auto alpha = writer.declLocale( "alpha"
-					, material.m_opacity );
+					, material.opacity );
 				auto alphaRef = writer.declLocale( "alphaRef"
-					, material.m_alphaRef );
+					, material.alphaRef );
 				auto tangentSpaceViewPosition = writer.declLocale( "tangentSpaceViewPosition"
 					, inSurface.tangentSpaceViewPosition );
 				auto tangentSpaceFragPosition = writer.declLocale( "tangentSpaceFragPosition"

@@ -20,6 +20,11 @@ namespace castor3d
 				, Utils & utils
 				, ShadowOptions shadowOptions
 				, bool isOpaqueProgram );
+			/**
+			*\name
+			*	Forward renderring
+			*/
+			//\{
 			C3D_API void declareModel( uint32_t lightsBufBinding
 				, uint32_t lightsBufSet
 				, uint32_t & shadowMapBinding
@@ -28,6 +33,12 @@ namespace castor3d
 				, uint32_t lightsBufSet
 				, uint32_t & shadowMapBinding
 				, uint32_t shadowMapSet );
+			//\}
+			/**
+			*\name
+			*	Deferred renderring
+			*/
+			//\{
 			C3D_API void declareDirectionalModel( bool lightUbo
 				, uint32_t lightBinding
 				, uint32_t lightSet
@@ -43,15 +54,28 @@ namespace castor3d
 				, uint32_t lightSet
 				, uint32_t & shadowMapBinding
 				, uint32_t shadowMapSet );
-			// Calls
+			//\}
+			/**
+			*\name
+			*	Light accessors
+			*/
+			//\{
 			C3D_API DirectionalLight getDirectionalLight( sdw::Int const & index )const;
 			C3D_API TiledDirectionalLight getTiledDirectionalLight( sdw::Int const & index )const;
 			C3D_API PointLight getPointLight( sdw::Int const & index )const;
 			C3D_API SpotLight getSpotLight( sdw::Int const & index )const;
+			//\}
+			/**
+			*\name
+			*	Convertors
+			*/
+			//\{
 			static C3D_API sdw::Vec3 computeF0( sdw::Vec3 const & albedo
 				, sdw::Float const & metalness );
 			static C3D_API sdw::Float computeMetalness( sdw::Vec3 const & albedo
 				, sdw::Vec3 const & specular );
+			static C3D_API sdw::Float computeRoughness( sdw::Float const & glossiness );
+			//\}
 
 			inline Shadow const & getShadowModel()const
 			{

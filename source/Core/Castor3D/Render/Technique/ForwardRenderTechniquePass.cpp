@@ -23,8 +23,10 @@
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslPbrLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslPbrMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslPbrReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslPhongMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
@@ -160,9 +162,9 @@ namespace castor3d
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( inSurface.material ) );
 				auto opacity = writer.declLocale( "opacity"
-					, material.m_opacity );
+					, material.opacity );
 				auto gamma = writer.declLocale( "gamma"
-					, material.m_gamma );
+					, material.gamma );
 				auto normal = writer.declLocale( "normal"
 					, normalize( inSurface.normal ) );
 				auto tangent = writer.declLocale( "tangent"
@@ -170,13 +172,13 @@ namespace castor3d
 				auto bitangent = writer.declLocale( "bitangent"
 					, normalize( inSurface.bitangent ) );
 				auto diffuse = writer.declLocale( "diffuse"
-					, utils.removeGamma( gamma, material.m_diffuse() ) );
+					, utils.removeGamma( gamma, material.diffuse ) );
 				auto specular = writer.declLocale( "specular"
-					, material.m_specular );
+					, material.specular );
 				auto shininess = writer.declLocale( "shininess"
-					, material.m_shininess );
+					, material.shininess );
 				auto emissive = writer.declLocale( "emissive"
-					, vec3( material.m_emissive ) );
+					, vec3( material.emissive ) );
 				auto occlusion = writer.declLocale( "occlusion"
 					, 1.0_f );
 				auto transmittance = writer.declLocale( "transmittance"
@@ -212,18 +214,20 @@ namespace castor3d
 				{
 					utils.applyAlphaFunc( flags.blendAlphaFunc
 						, opacity
-						, material.m_alphaRef
+						, material.alphaRef
 						, false );
 				}
 				else
 				{
 					utils.applyAlphaFunc( flags.alphaFunc
 						, opacity
-						, material.m_alphaRef );
+						, material.alphaRef );
 				}
 
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 				{
+					auto lightMat = material.getLightMaterial( specular
+						, shininess );
 					auto worldEye = writer.declLocale( "worldEye"
 						, c3d_sceneData.getCameraPosition() );
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
@@ -234,7 +238,7 @@ namespace castor3d
 					auto surface = writer.declLocale< shader::Surface >( "surface" );
 					surface.create( in.fragCoord.xy(), inSurface.viewPosition, inSurface.worldPosition, normal );
 					lighting->computeCombined( worldEye
-						, shininess
+						, lightMat
 						, c3d_modelData.isShadowReceiver()
 						, c3d_sceneData
 						, surface
@@ -249,10 +253,9 @@ namespace castor3d
 						, vec3( 0.0_f ) );
 					auto refracted = writer.declLocale( "refracted"
 						, vec3( 0.0_f ) );
-					reflections.computeForward( material.m_refractionRatio
-						, specular
-						, shininess
-						, material.m_transmission
+					reflections.computeForward( material.refractionRatio
+						, lightMat
+						, material.transmission
 						, surface
 						, c3d_sceneData
 						, ambient
@@ -280,7 +283,7 @@ namespace castor3d
 							, lightSpecular
 							, lightIndirectSpecular
 							, ambient
-							, material.m_ambient
+							, material.ambient
 							, indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() )
 							, occlusion
 							, emissive
@@ -408,7 +411,7 @@ namespace castor3d
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( inSurface.material ) );
 				auto opacity = writer.declLocale( "opacity"
-					, material.m_opacity );
+					, material.opacity );
 				auto normal = writer.declLocale( "normal"
 					, normalize( inSurface.normal ) );
 				auto tangent = writer.declLocale( "tangent"
@@ -418,15 +421,15 @@ namespace castor3d
 				auto ambient = writer.declLocale( "ambient"
 					, c3d_sceneData.getAmbientLight() );
 				auto metalness = writer.declLocale( "metalness"
-					, material.m_metallic );
+					, material.metalness );
 				auto roughness = writer.declLocale( "roughness"
-					, material.m_roughness );
+					, material.roughness );
 				auto gamma = writer.declLocale( "gamma"
-					, material.m_gamma );
+					, material.gamma );
 				auto albedo = writer.declLocale( "albedo"
-					, utils.removeGamma( gamma, material.m_albedo ) );
+					, utils.removeGamma( gamma, material.albedo ) );
 				auto emissive = writer.declLocale( "emissive"
-					, vec3( material.m_emissive ) );
+					, vec3( material.emissive ) );
 				auto worldEye = writer.declLocale( "worldEye"
 					, c3d_sceneData.getCameraPosition() );
 				auto envAmbient = writer.declLocale( "envAmbient"
@@ -468,20 +471,21 @@ namespace castor3d
 				{
 					utils.applyAlphaFunc( flags.blendAlphaFunc
 						, opacity
-						, material.m_alphaRef
+						, material.alphaRef
 						, false );
 				}
 				else
 				{
 					utils.applyAlphaFunc( flags.alphaFunc
 						, opacity
-						, material.m_alphaRef );
+						, material.alphaRef );
 				}
 
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 				{
-					auto specular = writer.declLocale( "specular"
-						, reflections.computeF0( albedo, metalness ) );
+					auto lightMat = material.getLightMaterial( albedo
+						, metalness
+						, roughness );
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
 						, vec3( 0.0_f ) );
 					auto lightSpecular = writer.declLocale( "lightSpecular"
@@ -490,9 +494,7 @@ namespace castor3d
 					auto surface = writer.declLocale< shader::Surface >( "surface" );
 					surface.create( in.fragCoord.xy(), inSurface.viewPosition, inSurface.worldPosition, normal );
 					lighting->computeCombined( worldEye
-						, specular
-						, metalness
-						, roughness
+						, lightMat
 						, c3d_modelData.isShadowReceiver()
 						, c3d_sceneData
 						, surface
@@ -504,12 +506,10 @@ namespace castor3d
 					reflections.computeForward( c3d_mapBrdf
 						, c3d_mapIrradiance
 						, c3d_mapPrefiltered
-						, material.m_refractionRatio
+						, material.refractionRatio
 						, albedo
-						, specular
-						, roughness
-						, metalness
-						, material.m_transmission
+						, lightMat
+						, material.transmission
 						, surface
 						, c3d_sceneData
 						, reflected
@@ -523,7 +523,7 @@ namespace castor3d
 						, worldEye
 						, c3d_sceneData.getPosToCamera( surface.worldPosition )
 						, surface
-						, specular
+						, lightMat.specular
 						, roughness
 						, indirectOcclusion
 						, lightIndirectDiffuse.w() );
@@ -532,8 +532,7 @@ namespace castor3d
 					lightIndirectDiffuse.xyz() = cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
 						, c3d_sceneData.getCameraPosition()
 						, -normal
-						, specular
-						, metalness
+						, lightMat
 						, surface );
 
 					pxl_fragColor = vec4( shader::PbrLightingModel::combine( lightDiffuse
@@ -668,7 +667,7 @@ namespace castor3d
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( inSurface.material ) );
 				auto opacity = writer.declLocale( "opacity"
-					, material.m_opacity );
+					, material.opacity );
 				auto normal = writer.declLocale( "normal"
 					, normalize( inSurface.normal ) );
 				auto tangent = writer.declLocale( "tangent"
@@ -678,15 +677,15 @@ namespace castor3d
 				auto ambient = writer.declLocale( "ambient"
 					, c3d_sceneData.getAmbientLight() );
 				auto specular = writer.declLocale( "specular"
-					, material.m_specular );
+					, material.specular );
 				auto glossiness = writer.declLocale( "glossiness"
-					, material.m_glossiness );
+					, material.glossiness );
 				auto gamma = writer.declLocale( "gamma"
-					, material.m_gamma );
+					, material.gamma );
 				auto albedo = writer.declLocale( "albedo"
-					, utils.removeGamma( gamma, material.m_diffuse() ) );
+					, utils.removeGamma( gamma, material.albedo ) );
 				auto emissive = writer.declLocale( "emissive"
-					, vec3( material.m_emissive ) );
+					, vec3( material.emissive ) );
 				auto worldEye = writer.declLocale( "worldEye"
 					, c3d_sceneData.getCameraPosition() );
 				auto envAmbient = writer.declLocale( "envAmbient"
@@ -728,22 +727,21 @@ namespace castor3d
 				{
 					utils.applyAlphaFunc( flags.blendAlphaFunc
 						, opacity
-						, material.m_alphaRef
+						, material.alphaRef
 						, false );
 				}
 				else
 				{
 					utils.applyAlphaFunc( flags.alphaFunc
 						, opacity
-						, material.m_alphaRef );
+						, material.alphaRef );
 				}
 
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 				{
-					auto roughness = writer.declLocale( "roughness"
-						, 1.0_f - glossiness );
-					auto metalness = writer.declLocale( "metalness"
-						, lighting->computeMetalness( albedo, specular ) );
+					auto lightMat = material.getLightMaterial( albedo
+						, specular
+						, glossiness );
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
 						, vec3( 0.0_f ) );
 					auto lightSpecular = writer.declLocale( "lightSpecular"
@@ -752,9 +750,7 @@ namespace castor3d
 					auto surface = writer.declLocale< shader::Surface >( "surface" );
 					surface.create( in.fragCoord.xy(), inSurface.viewPosition, inSurface.worldPosition, normal );
 					lighting->computeCombined( worldEye
-						, specular
-						, metalness
-						, roughness
+						, lightMat
 						, c3d_modelData.isShadowReceiver()
 						, c3d_sceneData
 						, surface
@@ -766,12 +762,10 @@ namespace castor3d
 					reflections.computeForward( c3d_mapBrdf
 						, c3d_mapIrradiance
 						, c3d_mapPrefiltered
-						, material.m_refractionRatio
+						, material.refractionRatio
 						, albedo
-						, specular
-						, roughness
-						, metalness
-						, material.m_transmission
+						, lightMat
+						, material.transmission
 						, surface
 						, c3d_sceneData
 						, reflected
@@ -786,7 +780,7 @@ namespace castor3d
 						, c3d_sceneData.getPosToCamera( surface.worldPosition )
 						, surface
 						, specular
-						, roughness
+						, lightMat.roughness
 						, indirectOcclusion
 						, lightIndirectDiffuse.w() );
 					auto indirectAmbient = writer.declLocale( "indirectAmbient"
@@ -794,8 +788,7 @@ namespace castor3d
 					lightIndirectDiffuse.xyz() = cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
 						, c3d_sceneData.getCameraPosition()
 						, -normal
-						, specular
-						, metalness
+						, lightMat
 						, surface );
 
 					pxl_fragColor = vec4( shader::PbrLightingModel::combine( lightDiffuse

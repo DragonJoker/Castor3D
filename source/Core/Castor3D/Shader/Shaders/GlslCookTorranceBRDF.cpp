@@ -2,6 +2,7 @@
 
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslPbrMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
@@ -39,18 +40,14 @@ namespace castor3d::shader
 	void CookTorranceBRDF::compute( Light const & light
 		, sdw::Vec3 const & worldEye
 		, sdw::Vec3 const & direction
-		, sdw::Vec3 const & specular
-		, sdw::Float const & metalness
-		, sdw::Float const & roughness
+		, PbrLightMaterial & material
 		, Surface surface
 		, OutputComponents & output )const
 	{
 		m_computeCookTorrance( light
 			, worldEye
 			, direction
-			, specular
-			, metalness
-			, roughness
+			, material
 			, surface
 			, output );
 	}
@@ -58,32 +55,28 @@ namespace castor3d::shader
 	sdw::Vec3 CookTorranceBRDF::computeDiffuse( sdw::Vec3 const & colour
 		, sdw::Vec3 const & worldEye
 		, sdw::Vec3 const & direction
-		, sdw::Vec3 const & specular
-		, sdw::Float const & metalness
+		, PbrLightMaterial & material
 		, Surface surface )const
 	{
 		return m_computeCookTorranceDiffuse( normalize( colour )
 			, length( colour )
 			, worldEye
 			, direction
-			, specular
-			, metalness
+			, material
 			, surface );
 	}
 
 	sdw::Vec3 CookTorranceBRDF::computeDiffuse( Light const & light
 		, sdw::Vec3 const & worldEye
 		, sdw::Vec3 const & direction
-		, sdw::Vec3 const & specular
-		, sdw::Float const & metalness
+		, PbrLightMaterial & material
 		, Surface surface )const
 	{
 		return m_computeCookTorranceDiffuse( light.m_colour
 			, light.m_intensity.r()
 			, worldEye
 			, direction
-			, specular
-			, metalness
+			, material
 			, surface );
 	}
 
@@ -161,14 +154,13 @@ namespace castor3d::shader
 
 	void CookTorranceBRDF::doDeclareComputeCookTorrance()
 	{
+		PbrLightMaterial material{ m_writer };
 		OutputComponents output{ m_writer };
 		m_computeCookTorrance = m_writer.implementFunction< Void >( "computeCookTorrance"
 			, [this]( Light const & light
 				, Vec3 const & worldEye
 				, Vec3 const & direction
-				, Vec3 const & specular
-				, Float const & metalness
-				, Float const & roughness
+				, PbrLightMaterial & material
 				, Surface surface
 				, OutputComponents & output )
 			{
@@ -196,11 +188,11 @@ namespace castor3d::shader
 					, max( 0.0_f, dot( L, V ) ) );
 
 				auto F = m_writer.declLocale( "F"
-					, m_utils.fresnelSchlick( HdotV, specular ) );
+					, m_utils.fresnelSchlick( HdotV, material.specular ) );
 				auto D = m_writer.declLocale( "D"
-					, m_distributionGGX( NdotH, roughness ) );
+					, m_distributionGGX( NdotH, material.roughness ) );
 				auto G = m_writer.declLocale( "G"
-					, m_geometrySmith( NdotV, NdotL, roughness ) );
+					, m_geometrySmith( NdotV, NdotL, material.roughness ) );
 
 				auto numerator = m_writer.declLocale( "numerator"
 					, F * D * G );
@@ -215,7 +207,7 @@ namespace castor3d::shader
 				auto kD = m_writer.declLocale( "kD"
 					, vec3( 1.0_f ) - kS );
 
-				kD *= 1.0_f - metalness;
+				kD *= 1.0_f - material.metalness;
 
 				output.m_diffuse = max( radiance * light.m_intensity.r() * NdotL * kD, vec3( 0.0_f ) ) / Float{ castor::Pi< float > };
 				output.m_specular = max( specReflectance * radiance * light.m_intensity.g() * NdotL, vec3( 0.0_f ) );
@@ -223,22 +215,20 @@ namespace castor3d::shader
 			, InLight( m_writer, "light" )
 			, InVec3( m_writer, "worldEye" )
 			, InVec3( m_writer, "direction" )
-			, InVec3( m_writer, "specular" )
-			, InFloat( m_writer, "metalness" )
-			, InFloat( m_writer, "roughness" )
+			, material
 			, InSurface{ m_writer, "surface" }
 			, output );
 	}
 
 	void CookTorranceBRDF::doDeclareComputeCookTorranceDiffuse()
 	{
+		PbrLightMaterial material{ m_writer };
 		m_computeCookTorranceDiffuse = m_writer.implementFunction< Vec3 >( "computeCookTorranceDiffuse"
 			, [this]( Vec3 const & colour
 				, Float const intensity
 				, Vec3 const & worldEye
 				, Vec3 const & direction
-				, Vec3 const & specular
-				, Float const & metalness
+				, PbrLightMaterial & material
 				, Surface surface )
 			{
 				// From https://learnopengl.com/#!PBR/Lighting
@@ -259,13 +249,13 @@ namespace castor3d::shader
 					, max( dot( H, V ), 0.0_f ) );
 
 				auto F = m_writer.declLocale( "F"
-					, m_utils.fresnelSchlick( HdotV, specular ) );
+					, m_utils.fresnelSchlick( HdotV, material.specular ) );
 				auto kS = m_writer.declLocale( "kS"
 					, F );
 				auto kD = m_writer.declLocale( "kD"
 					, vec3( 1.0_f ) - kS );
 
-				kD *= 1.0_f - metalness;
+				kD *= 1.0_f - material.metalness;
 
 				m_writer.returnStmt( ( max( radiance * intensity * NdotL * kD, vec3( 0.0_f ) ) / Float{ castor::Pi< float > } ) );
 			}
@@ -273,8 +263,7 @@ namespace castor3d::shader
 			, InFloat( m_writer, "intensity" )
 			, InVec3( m_writer, "worldEye" )
 			, InVec3( m_writer, "direction" )
-			, InVec3( m_writer, "specular" )
-			, InFloat( m_writer, "metalness" )
+			, material
 			, InSurface{ m_writer, "surface" } );
 	}
 
