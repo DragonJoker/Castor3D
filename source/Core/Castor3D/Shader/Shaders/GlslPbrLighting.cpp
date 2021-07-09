@@ -4,6 +4,7 @@
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslPbrMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
@@ -34,9 +35,7 @@ namespace castor3d
 		}
 
 		void PbrLightingModel::computeCombined( Vec3 const & worldEye
-			, Vec3 const & specular
-			, Float const & metalness
-			, Float const & roughness
+			, PbrLightMaterial & material
 			, Int const & receivesShadows
 			, SceneData const & sceneData
 			, Surface surface
@@ -52,9 +51,7 @@ namespace castor3d
 			{
 				compute( getTiledDirectionalLight( dir )
 					, worldEye
-					, specular
-					, metalness
-					, roughness
+					, material
 					, receivesShadows
 					, surface
 					, parentOutput );
@@ -65,9 +62,7 @@ namespace castor3d
 			{
 				compute( getDirectionalLight( dir )
 					, worldEye
-					, specular
-					, metalness
-					, roughness
+					, material
 					, receivesShadows
 					, surface
 					, parentOutput );
@@ -82,9 +77,7 @@ namespace castor3d
 			{
 				compute( getPointLight( point )
 					, worldEye
-					, specular
-					, metalness
-					, roughness
+					, material
 					, receivesShadows
 					, surface
 					, parentOutput );
@@ -98,9 +91,7 @@ namespace castor3d
 			{
 				compute( getSpotLight( spot )
 					, worldEye
-					, specular
-					, metalness
-					, roughness
+					, material
 					, receivesShadows
 					, surface
 					, parentOutput );
@@ -110,18 +101,14 @@ namespace castor3d
 
 		void PbrLightingModel::compute( TiledDirectionalLight const & light
 			, Vec3 const & worldEye
-			, Vec3 const & specular
-			, Float const & metalness
-			, Float const & roughness
+			, PbrLightMaterial & material
 			, Int const & receivesShadows
 			, Surface surface
 			, OutputComponents & parentOutput )const
 		{
 			m_computeTiledDirectional( light
 				, worldEye
-				, specular
-				, metalness
-				, roughness
+				, material
 				, receivesShadows
 				, surface
 				, parentOutput );
@@ -129,18 +116,14 @@ namespace castor3d
 
 		void PbrLightingModel::compute( DirectionalLight const & light
 			, Vec3 const & worldEye
-			, Vec3 const & specular
-			, Float const & metalness
-			, Float const & roughness
+			, PbrLightMaterial & material
 			, Int const & receivesShadows
 			, Surface surface
 			, OutputComponents & parentOutput )const
 		{
 			m_computeDirectional( light
 				, worldEye
-				, specular
-				, metalness
-				, roughness
+				, material
 				, receivesShadows
 				, surface
 				, parentOutput );
@@ -148,18 +131,14 @@ namespace castor3d
 
 		void PbrLightingModel::compute( PointLight const & light
 			, Vec3 const & worldEye
-			, Vec3 const & specular
-			, Float const & metalness
-			, Float const & roughness
+			, PbrLightMaterial & material
 			, Int const & receivesShadows
 			, Surface surface
 			, OutputComponents & parentOutput )const
 		{
 			m_computePoint( light
 				, worldEye
-				, specular
-				, metalness
-				, roughness
+				, material
 				, receivesShadows
 				, surface
 				, parentOutput );
@@ -167,18 +146,14 @@ namespace castor3d
 
 		void PbrLightingModel::compute( SpotLight const & light
 			, Vec3 const & worldEye
-			, Vec3 const & specular
-			, Float const & metalness
-			, Float const & roughness
+			, PbrLightMaterial & material
 			, Int const & receivesShadows
 			, Surface surface
 			, OutputComponents & parentOutput )const
 		{
 			m_computeSpot( light
 				, worldEye
-				, specular
-				, metalness
-				, roughness
+				, material
 				, receivesShadows
 				, surface
 				, parentOutput );
@@ -204,9 +179,7 @@ namespace castor3d
 		}
 
 		Vec3 PbrLightingModel::computeCombinedDiffuse( Vec3 const & worldEye
-			, Vec3 const & specular
-			, Float const & metalness
-			, Float const & roughness
+			, PbrLightMaterial & material
 			, Int const & receivesShadows
 			, SceneData const & sceneData
 			, Surface surface )const
@@ -223,9 +196,7 @@ namespace castor3d
 			{
 				result += computeDiffuse( getTiledDirectionalLight( dir )
 					, worldEye
-					, specular
-					, metalness
-					, roughness
+					, material
 					, receivesShadows
 					, surface );
 			}
@@ -235,9 +206,7 @@ namespace castor3d
 			{
 				result += computeDiffuse( getDirectionalLight( dir )
 					, worldEye
-					, specular
-					, metalness
-					, roughness
+					, material
 					, receivesShadows
 					, surface );
 			}
@@ -251,9 +220,7 @@ namespace castor3d
 			{
 				result += computeDiffuse( getPointLight( point )
 					, worldEye
-					, specular
-					, metalness
-					, roughness
+					, material
 					, receivesShadows
 					, surface );
 			}
@@ -266,9 +233,7 @@ namespace castor3d
 			{
 				result += computeDiffuse( getSpotLight( spot )
 					, worldEye
-					, specular
-					, metalness
-					, roughness
+					, material
 					, receivesShadows
 					, surface );
 			}
@@ -279,68 +244,52 @@ namespace castor3d
 
 		Vec3 PbrLightingModel::computeDiffuse( TiledDirectionalLight const & light
 			, Vec3 const & worldEye
-			, Vec3 const & specular
-			, Float const & metalness
-			, Float const & roughness
+			, PbrLightMaterial & material
 			, Int const & receivesShadows
 			, Surface surface )const
 		{
 			return m_computeTiledDirectionalDiffuse( light
 				, worldEye
-				, specular
-				, metalness
-				, roughness
+				, material
 				, receivesShadows
 				, surface );
 		}
 
 		Vec3 PbrLightingModel::computeDiffuse( DirectionalLight const & light
 			, Vec3 const & worldEye
-			, Vec3 const & specular
-			, Float const & metalness
-			, Float const & roughness
+			, PbrLightMaterial & material
 			, Int const & receivesShadows
 			, Surface surface )const
 		{
 			return m_computeDirectionalDiffuse( light
 				, worldEye
-				, specular
-				, metalness
-				, roughness
+				, material
 				, receivesShadows
 				, surface );
 		}
 
 		Vec3 PbrLightingModel::computeDiffuse( PointLight const & light
 			, Vec3 const & worldEye
-			, Vec3 const & specular
-			, Float const & metalness
-			, Float const & roughness
+			, PbrLightMaterial & material
 			, Int const & receivesShadows
 			, Surface surface )const
 		{
 			return m_computePointDiffuse( light
 				, worldEye
-				, specular
-				, metalness
-				, roughness
+				, material
 				, receivesShadows
 				, surface );
 		}
 
 		Vec3 PbrLightingModel::computeDiffuse( SpotLight const & light
 			, Vec3 const & worldEye
-			, Vec3 const & specular
-			, Float const & metalness
-			, Float const & roughness
+			, PbrLightMaterial & material
 			, Int const & receivesShadows
 			, Surface surface )const
 		{
 			return m_computeSpotDiffuse( light
 				, worldEye
-				, specular
-				, metalness
-				, roughness
+				, material
 				, receivesShadows
 				, surface );
 		}
@@ -731,14 +680,13 @@ namespace castor3d
 
 		void PbrLightingModel::doDeclareComputeDirectionalLight()
 		{
+			PbrLightMaterial material{ m_writer };
 			OutputComponents output{ m_writer };
 #if C3D_UseTiledDirectionalShadowMap
 			m_computeTiledDirectional = m_writer.implementFunction< sdw::Void >( "computeDirectionalLight"
 				, [this]( TiledDirectionalLight const & light
 					, Vec3 const & worldEye
-					, Vec3 const & specular
-					, Float const & metalness
-					, Float const & roughness
+					, PbrLightMaterial & material
 					, Int const & receivesShadows
 					, Surface surface
 					, OutputComponents & parentOutput )
@@ -815,9 +763,9 @@ namespace castor3d
 								m_cookTorrance.compute( light.m_lightBase
 									, worldEye
 									, lightDirection
-									, specular
-									, metalness
-									, roughness
+									, material.specular
+									, material.metalness
+									, material.roughness
 									, surface
 									, output );
 								output.m_diffuse *= shadowFactor;
@@ -870,9 +818,9 @@ namespace castor3d
 							m_cookTorrance.compute( light.m_lightBase
 								, worldEye
 								, lightDirection
-								, specular
-								, metalness
-								, roughness
+								, material.specular
+								, material.metalness
+								, material.roughness
 								, surface
 								, output );
 						}
@@ -883,9 +831,9 @@ namespace castor3d
 						m_cookTorrance.compute( light.m_lightBase
 							, worldEye
 							, lightDirection
-							, specular
-							, metalness
-							, roughness
+							, material.specular
+							, material.metalness
+							, material.roughness
 							, surface
 							, output );
 					}
@@ -895,9 +843,7 @@ namespace castor3d
 				}
 				, InTiledDirectionalLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )
-				, InVec3( m_writer, "specular" )
-				, InFloat( m_writer, "metalness" )
-				, InFloat( m_writer, "roughness" )
+				, material
 				, InInt( m_writer, "receivesShadows" )
 				, InSurface{ m_writer, "surface" }
 				, output );
@@ -905,9 +851,7 @@ namespace castor3d
 			m_computeDirectional = m_writer.implementFunction< sdw::Void >( "computeDirectionalLight"
 				, [this]( DirectionalLight const & light
 					, Vec3 const & worldEye
-					, Vec3 const & specular
-					, Float const & metalness
-					, Float const & roughness
+					, PbrLightMaterial & material
 					, Int const & receivesShadows
 					, Surface surface
 					, OutputComponents & parentOutput )
@@ -984,9 +928,7 @@ namespace castor3d
 								m_cookTorrance.compute( light.m_lightBase
 									, worldEye
 									, lightDirection
-									, specular
-									, metalness
-									, roughness
+									, material
 									, surface
 									, output );
 								output.m_diffuse *= shadowFactor;
@@ -1039,9 +981,7 @@ namespace castor3d
 							m_cookTorrance.compute( light.m_lightBase
 								, worldEye
 								, lightDirection
-								, specular
-								, metalness
-								, roughness
+								, material
 								, surface
 								, output );
 						}
@@ -1052,9 +992,7 @@ namespace castor3d
 						m_cookTorrance.compute( light.m_lightBase
 							, worldEye
 							, lightDirection
-							, specular
-							, metalness
-							, roughness
+							, material
 							, surface
 							, output );
 					}
@@ -1064,9 +1002,7 @@ namespace castor3d
 				}
 				, InDirectionalLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )
-				, InVec3( m_writer, "specular" )
-				, InFloat( m_writer, "metalness" )
-				, InFloat( m_writer, "roughness" )
+				, material
 				, InInt( m_writer, "receivesShadows" )
 				, InSurface{ m_writer, "surface" }
 				, output );
@@ -1075,13 +1011,12 @@ namespace castor3d
 
 		void PbrLightingModel::doDeclareComputePointLight()
 		{
+			PbrLightMaterial material{ m_writer };
 			OutputComponents output{ m_writer };
 			m_computePoint = m_writer.implementFunction< sdw::Void >( "computePointLight"
 				, [this]( PointLight const & light
 					, Vec3 const & worldEye
-					, Vec3 const & specular
-					, Float const & metalness
-					, Float const & roughness
+					, PbrLightMaterial & material
 					, Int const & receivesShadows
 					, Surface surface
 					, OutputComponents & parentOutput )
@@ -1120,9 +1055,7 @@ namespace castor3d
 								m_cookTorrance.compute( light.m_lightBase
 									, worldEye
 									, lightDirection
-									, specular
-									, metalness
-									, roughness
+									, material
 									, surface
 									, output );
 								output.m_diffuse *= shadowFactor;
@@ -1135,9 +1068,7 @@ namespace castor3d
 							m_cookTorrance.compute( light.m_lightBase
 								, worldEye
 								, lightDirection
-								, specular
-								, metalness
-								, roughness
+								, material
 								, surface
 								, output );
 						}
@@ -1148,9 +1079,7 @@ namespace castor3d
 						m_cookTorrance.compute( light.m_lightBase
 							, worldEye
 							, lightDirection
-							, specular
-							, metalness
-							, roughness
+							, material
 							, surface
 							, output );
 					}
@@ -1168,9 +1097,7 @@ namespace castor3d
 				}
 				, InPointLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )
-				, InVec3( m_writer, "specular" )
-				, InFloat( m_writer, "metalness" )
-				, InFloat( m_writer, "roughness" )
+				, material
 				, InInt( m_writer, "receivesShadows" )
 				, InSurface{ m_writer, "surface" }
 				, output );
@@ -1178,13 +1105,12 @@ namespace castor3d
 
 		void PbrLightingModel::doDeclareComputeSpotLight()
 		{
+			PbrLightMaterial material{ m_writer };
 			OutputComponents output{ m_writer };
 			m_computeSpot = m_writer.implementFunction< sdw::Void >( "computeSpotLight"
 				, [this]( SpotLight const & light
 					, Vec3 const & worldEye
-					, Vec3 const & specular
-					, Float const & metalness
-					, Float const & roughness
+					, PbrLightMaterial & material
 					, Int const & receivesShadows
 					, Surface surface
 					, OutputComponents & parentOutput )
@@ -1221,9 +1147,7 @@ namespace castor3d
 								m_cookTorrance.compute( light.m_lightBase
 									, worldEye
 									, lightDirection
-									, specular
-									, metalness
-									, roughness
+									, material
 									, surface
 									, output );
 								output.m_diffuse *= shadowFactor;
@@ -1236,9 +1160,7 @@ namespace castor3d
 							m_cookTorrance.compute( light.m_lightBase
 								, worldEye
 								, lightDirection
-								, specular
-								, metalness
-								, roughness
+								, material
 								, surface
 								, output );
 						}
@@ -1249,9 +1171,7 @@ namespace castor3d
 						m_cookTorrance.compute( light.m_lightBase
 							, worldEye
 							, lightDirection
-							, specular
-							, metalness
-							, roughness
+							, material
 							, surface
 							, output );
 					}
@@ -1272,9 +1192,7 @@ namespace castor3d
 				}
 				, InSpotLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )
-				, InVec3( m_writer, "specular" )
-				, InFloat( m_writer, "metalness" )
-				, InFloat( m_writer, "roughness" )
+				, material
 				, InInt( m_writer, "receivesShadows" )
 				, InSurface{ m_writer, "surface" }
 				, output );
@@ -1287,13 +1205,12 @@ namespace castor3d
 
 		void PbrLightingModel::doDeclareComputeDirectionalLightDiffuse()
 		{
+			PbrLightMaterial material{ m_writer };
 #if C3D_UseTiledDirectionalShadowMap
 			m_computeTiledDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeDirectionalLight"
 				, [this]( TiledDirectionalLight const & light
 					, Vec3 const & worldEye
-					, Vec3 const & specular
-					, Float const & metalness
-					, Float const & roughness
+					, PbrLightMaterial & material
 					, Int const & receivesShadows
 					, Surface surface )
 				{
@@ -1331,7 +1248,8 @@ namespace castor3d
 								diffuse = shadowFactor * m_cookTorrance.computeDiffuse( light.m_lightBase
 									, worldEye
 									, lightDirection
-									, specular
+									, material.specular
+									, material.metalness
 									, surface );
 							}
 							FI;
@@ -1341,7 +1259,8 @@ namespace castor3d
 							diffuse = m_cookTorrance.computeDiffuse( light.m_lightBase
 								, worldEye
 								, lightDirection
-								, specular
+								, material.specular
+								, material.metalness
 								, surface );
 						}
 						FI;
@@ -1351,7 +1270,8 @@ namespace castor3d
 						diffuse = m_cookTorrance.computeDiffuse( light.m_lightBase
 							, worldEye
 							, lightDirection
-							, specular
+							, material.specular
+							, material.metalness
 							, surface );
 					}
 
@@ -1359,18 +1279,14 @@ namespace castor3d
 				}
 				, InTiledDirectionalLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )
-				, InVec3( m_writer, "specular" )
-				, InFloat( m_writer, "metalness" )
-				, InFloat( m_writer, "roughness" )
+				, material
 				, InInt( m_writer, "receivesShadows" )
 				, InSurface{ m_writer, "surface" } );
 #else
 			m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeDirectionalLight"
 				, [this]( DirectionalLight const & light
 					, Vec3 const & worldEye
-					, Vec3 const & specular
-					, Float const & metalness
-					, Float const & roughness
+					, PbrLightMaterial & material
 					, Int const & receivesShadows
 					, Surface surface )
 				{
@@ -1408,8 +1324,7 @@ namespace castor3d
 								diffuse = shadowFactor * m_cookTorrance.computeDiffuse( light.m_lightBase
 									, worldEye
 									, lightDirection
-									, specular
-									, metalness
+									, material
 									, surface );
 							}
 							FI;
@@ -1419,8 +1334,7 @@ namespace castor3d
 							diffuse = m_cookTorrance.computeDiffuse( light.m_lightBase
 								, worldEye
 								, lightDirection
-								, specular
-								, metalness
+								, material
 								, surface );
 						}
 						FI;
@@ -1430,8 +1344,7 @@ namespace castor3d
 						diffuse = m_cookTorrance.computeDiffuse( light.m_lightBase
 							, worldEye
 							, lightDirection
-							, specular
-							, metalness
+							, material
 							, surface );
 					}
 
@@ -1439,9 +1352,7 @@ namespace castor3d
 				}
 				, InDirectionalLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )
-				, InVec3( m_writer, "specular" )
-				, InFloat( m_writer, "metalness" )
-				, InFloat( m_writer, "roughness" )
+				, material
 				, InInt( m_writer, "receivesShadows" )
 				, InSurface{ m_writer, "surface" } );
 #endif
@@ -1449,12 +1360,11 @@ namespace castor3d
 
 		void PbrLightingModel::doDeclareComputePointLightDiffuse()
 		{
+			PbrLightMaterial material{ m_writer };
 			m_computePointDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computePointLight"
 				, [this]( PointLight const & light
 					, Vec3 const & worldEye
-					, Vec3 const & specular
-					, Float const & metalness
-					, Float const & roughness
+					, PbrLightMaterial & material
 					, Int const & receivesShadows
 					, Surface surface )
 				{
@@ -1489,8 +1399,7 @@ namespace castor3d
 								diffuse = shadowFactor * m_cookTorrance.computeDiffuse( light.m_lightBase
 									, worldEye
 									, lightDirection
-									, specular
-									, metalness
+									, material
 									, surface );
 							}
 							FI;
@@ -1500,8 +1409,7 @@ namespace castor3d
 							diffuse = m_cookTorrance.computeDiffuse( light.m_lightBase
 								, worldEye
 								, lightDirection
-								, specular
-								, metalness
+								, material
 								, surface );
 						}
 						FI;
@@ -1511,8 +1419,7 @@ namespace castor3d
 						diffuse = m_cookTorrance.computeDiffuse( light.m_lightBase
 							, worldEye
 							, lightDirection
-							, specular
-							, metalness
+							, material
 							, surface );
 					}
 
@@ -1526,21 +1433,18 @@ namespace castor3d
 				}
 				, InPointLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )
-				, InVec3( m_writer, "specular" )
-				, InFloat( m_writer, "metalness" )
-				, InFloat( m_writer, "roughness" )
+				, material
 				, InInt( m_writer, "receivesShadows" )
 				, InSurface{ m_writer, "surface" } );
 		}
 
 		void PbrLightingModel::doDeclareComputeSpotLightDiffuse()
 		{
+			PbrLightMaterial material{ m_writer };
 			m_computeSpotDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeSpotLight"
 				, [this]( SpotLight const & light
 					, Vec3 const & worldEye
-					, Vec3 const & specular
-					, Float const & metalness
-					, Float const & roughness
+					, PbrLightMaterial & material
 					, Int const & receivesShadows
 					, Surface surface )
 				{
@@ -1573,8 +1477,7 @@ namespace castor3d
 								diffuse = shadowFactor * m_cookTorrance.computeDiffuse( light.m_lightBase
 									, worldEye
 									, lightDirection
-									, specular
-									, metalness
+									, material
 									, surface );
 							}
 							FI;
@@ -1584,8 +1487,7 @@ namespace castor3d
 							diffuse = m_cookTorrance.computeDiffuse( light.m_lightBase
 								, worldEye
 								, lightDirection
-								, specular
-								, metalness
+								, material
 								, surface );
 						}
 						FI;
@@ -1595,8 +1497,7 @@ namespace castor3d
 						diffuse = m_cookTorrance.computeDiffuse( light.m_lightBase
 							, worldEye
 							, lightDirection
-							, specular
-							, metalness
+							, material
 							, surface );
 					}
 
@@ -1613,9 +1514,7 @@ namespace castor3d
 				}
 				, InSpotLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )
-				, InVec3( m_writer, "specular" )
-				, InFloat( m_writer, "metalness" )
-				, InFloat( m_writer, "roughness" )
+				, material
 				, InInt( m_writer, "receivesShadows" )
 				, InSurface{ m_writer, "surface" } );
 		}

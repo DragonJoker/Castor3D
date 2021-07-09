@@ -15,7 +15,9 @@
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslPbrLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslPbrMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslPhongMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -244,12 +246,16 @@ namespace castor3d
 						, c3d_sceneData.getCameraPosition() );
 					auto shininess = writer.declLocale( "shininess"
 						, data2.w() );
+					auto specular = writer.declLocale( "specular"
+						, vec3( 0.0_f ) );
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
 						, vec3( 0.0_f ) );
 					auto lightSpecular = writer.declLocale( "lightSpecular"
 						, vec3( 0.0_f ) );
 					auto translucency = writer.declLocale( "translucency"
 						, data4.w() );
+					auto lightMat = material.getLightMaterial( specular
+						, shininess );
 					shader::OutputComponents output{ lightDiffuse, lightSpecular };
 
 					switch ( lightType )
@@ -264,7 +270,7 @@ namespace castor3d
 						auto light = writer.declLocale( "light", c3d_light );
 						lighting->compute( light
 							, eye
-							, shininess
+							, lightMat
 							, shadowReceiver
 							, surface
 							, output );
@@ -286,7 +292,7 @@ namespace castor3d
 						auto light = writer.declLocale( "light", c3d_light );
 						lighting->compute( light
 							, eye
-							, shininess
+							, lightMat
 							, shadowReceiver
 							, surface
 							, output );
@@ -308,7 +314,7 @@ namespace castor3d
 						auto light = writer.declLocale( "light", c3d_light );
 						lighting->compute( light
 							, eye
-							, shininess
+							, lightMat
 							, shadowReceiver
 							, surface
 							, output );
@@ -460,8 +466,9 @@ namespace castor3d
 					shader::OutputComponents output{ lightDiffuse, lightSpecular };
 					auto surface = writer.declLocale< shader::Surface >( "surface" );
 					surface.create( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal );
-					auto specular = writer.declLocale( "specular"
-						, lighting->computeF0( albedo, metalness ) );
+					auto lightMat = material.getLightMaterial( albedo
+						, metalness
+						, roughness );
 
 					switch ( lightType )
 					{
@@ -478,9 +485,7 @@ namespace castor3d
 						{
 							lighting->compute( light
 								, eye
-								, specular
-								, metalness
-								, roughness
+								, lightMat
 								, shadowReceiver
 								, surface
 								, output );
@@ -506,9 +511,7 @@ namespace castor3d
 #else
 						lighting->compute( light
 							, eye
-							, specular
-							, metalness
-							, roughness
+							, lightMat
 							, shadowReceiver
 							, surface
 							, output );
@@ -525,9 +528,7 @@ namespace castor3d
 						{
 							lighting->compute( light
 								, eye
-								, specular
-								, metalness
-								, roughness
+								, lightMat
 								, shadowReceiver
 								, surface
 								, output );
@@ -553,9 +554,7 @@ namespace castor3d
 #else
 						lighting->compute( light
 							, eye
-							, specular
-							, metalness
-							, roughness
+							, lightMat
 							, shadowReceiver
 							, surface
 							, output );
@@ -572,9 +571,7 @@ namespace castor3d
 						{
 							lighting->compute( light
 								, eye
-								, specular
-								, metalness
-								, roughness
+								, lightMat
 								, shadowReceiver
 								, surface
 								, output );
@@ -600,9 +597,7 @@ namespace castor3d
 #else
 						lighting->compute( light
 							, eye
-							, specular
-							, metalness
-							, roughness
+							, lightMat
 							, shadowReceiver
 							, surface
 							, output );
@@ -746,10 +741,9 @@ namespace castor3d
 					shader::OutputComponents output{ lightDiffuse, lightSpecular };
 					auto surface = writer.declLocale< shader::Surface >( "surface" );
 					surface.create( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal );
-					auto roughness = writer.declLocale( "roughness"
-						, 1.0_f - glossiness );
-					auto metalness = writer.declLocale( "metalness"
-						, lighting->computeMetalness( albedo, specular ) );
+					auto lightMat = material.getLightMaterial( albedo
+						, specular
+						, glossiness );
 
 					switch ( lightType )
 					{
@@ -763,9 +757,7 @@ namespace castor3d
 						auto light = writer.declLocale( "light", c3d_light );
 						lighting->compute( light
 							, eye
-							, specular
-							, metalness
-							, roughness
+							, lightMat
 							, shadowReceiver
 							, surface
 							, output );
@@ -787,9 +779,7 @@ namespace castor3d
 						auto light = writer.declLocale( "light", c3d_light );
 						lighting->compute( light
 							, eye
-							, specular
-							, metalness
-							, roughness
+							, lightMat
 							, shadowReceiver
 							, surface
 							, output );
@@ -811,9 +801,7 @@ namespace castor3d
 						auto light = writer.declLocale( "light", c3d_light );
 						lighting->compute( light
 							, eye
-							, specular
-							, metalness
-							, roughness
+							, lightMat
 							, shadowReceiver
 							, surface
 							, output );
