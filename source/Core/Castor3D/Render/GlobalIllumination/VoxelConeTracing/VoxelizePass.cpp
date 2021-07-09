@@ -22,7 +22,9 @@
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslPbrLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslPbrMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslPhongMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -581,19 +583,19 @@ namespace castor3d
 					auto material = writer.declLocale( "material"
 						, materials.getMaterial( inMaterial ) );
 					auto gamma = writer.declLocale( "gamma"
-						, material.m_gamma );
+						, material.gamma );
 					auto normal = writer.declLocale( "normal"
 						, normalize( inNormal ) );
 					auto diffuse = writer.declLocale( "diffuse"
-						, utils.removeGamma( gamma, material.m_diffuse() ) );
+						, utils.removeGamma( gamma, material.diffuse ) );
 					auto specular = writer.declLocale( "specular"
-						, material.m_specular );
+						, material.specular );
 					auto shininess = writer.declLocale( "shininess"
-						, material.m_shininess );
+						, material.shininess );
 					auto emissive = writer.declLocale( "emissive"
-						, vec3( material.m_emissive ) );
+						, vec3( material.emissive ) );
 					auto alpha = writer.declLocale( "alpha"
-						, material.m_opacity );
+						, material.opacity );
 					auto occlusion = writer.declLocale( "occlusion"
 						, 1.0_f );
 
@@ -617,13 +619,15 @@ namespace castor3d
 
 					if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 					{
+						auto lightMat = material.getLightMaterial( specular
+							, shininess );
 						auto worldEye = writer.declLocale( "worldEye"
 							, c3d_sceneData.getCameraPosition() );
 						auto surface = writer.declLocale< shader::Surface >( "surface" );
 						surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
 						auto color = writer.declLocale( "lightDiffuse"
 							, lighting->computeCombinedDiffuse( worldEye
-								, shininess
+								, lightMat
 								, c3d_modelData.isShadowReceiver()
 								, c3d_sceneData
 								, surface ) );
@@ -730,19 +734,19 @@ namespace castor3d
 					auto material = writer.declLocale( "material"
 						, materials.getMaterial( inMaterial ) );
 					auto gamma = writer.declLocale( "gamma"
-						, material.m_gamma );
+						, material.gamma );
 					auto normal = writer.declLocale( "normal"
 						, normalize( inNormal ) );
 					auto albedo = writer.declLocale( "albedo"
-						, utils.removeGamma( gamma, material.m_albedo ) );
+						, utils.removeGamma( gamma, material.albedo ) );
 					auto metalness = writer.declLocale( "metalness"
-						, material.m_metallic );
+						, material.metalness );
 					auto roughness = writer.declLocale( "roughness"
-						, material.m_roughness );
+						, material.roughness );
 					auto emissive = writer.declLocale( "emissive"
-						, vec3( material.m_emissive ) );
+						, vec3( material.emissive ) );
 					auto alpha = writer.declLocale( "alpha"
-						, material.m_opacity );
+						, material.opacity );
 					auto occlusion = writer.declLocale( "occlusion"
 						, 1.0_f );
 					auto transmittance = writer.declLocale( "transmittance"
@@ -776,17 +780,16 @@ namespace castor3d
 
 					if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 					{
-						auto specular = writer.declLocale( "specular"
-							, lighting->computeF0( albedo, metalness ) );
+						auto lightMat = material.getLightMaterial( albedo
+							, metalness
+							, roughness );
 						auto worldEye = writer.declLocale( "worldEye"
 							, c3d_sceneData.getCameraPosition() );
 						auto surface = writer.declLocale< shader::Surface >( "surface" );
 						surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
 						auto color = writer.declLocale( "color"
 							, lighting->computeCombinedDiffuse( worldEye
-								, specular
-								, metalness
-								, roughness
+								, lightMat
 								, c3d_modelData.isShadowReceiver()
 								, c3d_sceneData
 								, surface ) );
@@ -893,19 +896,19 @@ namespace castor3d
 					auto material = writer.declLocale( "material"
 						, materials.getMaterial( inMaterial ) );
 					auto gamma = writer.declLocale( "gamma"
-						, material.m_gamma );
+						, material.gamma );
 					auto normal = writer.declLocale( "normal"
 						, normalize( inNormal ) );
 					auto albedo = writer.declLocale( "albedo"
-						, utils.removeGamma( gamma, material.m_diffuse() ) );
+						, utils.removeGamma( gamma, material.albedo ) );
 					auto specular = writer.declLocale( "specular"
-						, material.m_specular );
+						, material.specular );
 					auto glossiness = writer.declLocale( "glossiness"
-						, material.m_glossiness );
+						, material.glossiness );
 					auto emissive = writer.declLocale( "emissive"
-						, vec3( material.m_emissive ) );
+						, vec3( material.emissive ) );
 					auto alpha = writer.declLocale( "alpha"
-						, material.m_opacity );
+						, material.opacity );
 					auto occlusion = writer.declLocale( "occlusion"
 						, 1.0_f );
 
@@ -929,19 +932,16 @@ namespace castor3d
 
 					if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 					{
-						auto roughness = writer.declLocale( "roughness"
-							, 1.0_f - glossiness );
-						auto metalness = writer.declLocale( "metalness"
-							, lighting->computeMetalness( albedo, specular ) );
+						auto lightMat = material.getLightMaterial( albedo
+							, specular
+							, glossiness );
 						auto worldEye = writer.declLocale( "worldEye"
 							, c3d_sceneData.getCameraPosition() );
 						auto surface = writer.declLocale< shader::Surface >( "surface" );
 						surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
 						auto color = writer.declLocale( "lightDiffuse"
 							, lighting->computeCombinedDiffuse( worldEye
-								, specular
-								, metalness
-								, roughness
+								, lightMat
 								, c3d_modelData.isShadowReceiver()
 								, c3d_sceneData
 								, surface ) );

@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_GlslMetallicPbrReflectionModel_H___
 #define ___C3D_GlslMetallicPbrReflectionModel_H___
 
+#include "Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
@@ -29,9 +30,7 @@ namespace castor3d::shader
 			, sdw::Int const & refraction
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & albedo
-			, sdw::Vec3 const & specular
-			, sdw::Float const & roughness
-			, sdw::Float const & metalness
+			, PbrLightMaterial & material
 			, sdw::Vec3 const & transmission
 			, Surface const & surface
 			, SceneData const & sceneData
@@ -42,9 +41,7 @@ namespace castor3d::shader
 			, sdw::SampledImageCubeRgba32 const & prefiltered
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & albedo
-			, sdw::Vec3 const & specular
-			, sdw::Float const & roughness
-			, sdw::Float const & metalness
+			, PbrLightMaterial & material
 			, sdw::Vec3 const & transmission
 			, Surface const & surface
 			, SceneData const & sceneData
@@ -58,9 +55,7 @@ namespace castor3d::shader
 	private:
 		sdw::Vec3 computeIBL( Surface surface
 			, sdw::Vec3 const & diffuse
-			, sdw::Vec3 const & specular
-			, sdw::Float const & roughness
-			, sdw::Float const & metalness
+			, PbrLightMaterial & material
 			, sdw::Vec3 const & worldEye
 			, sdw::SampledImageCubeRgba32 const & irradiance
 			, sdw::SampledImageCubeRgba32 const & prefiltered
@@ -70,29 +65,27 @@ namespace castor3d::shader
 		sdw::Vec3 computeReflEnvMap( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::SampledImageCubeRgba32 const & envMap
-			, sdw::Vec3 const & specular
-			, sdw::Float const & roughness )const;
+			, PbrLightMaterial & material )const;
 		sdw::Void computeRefrEnvMap( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::SampledImageCubeRgba32 const & envMap
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
-			, sdw::Float const & roughness
+			, PbrLightMaterial & material
 			, sdw::Vec3 & reflection
 			, sdw::Vec3 & refraction )const;
 		sdw::Vec3 computeReflEnvMaps( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::SampledImageCubeArrayRgba32 const & envMap
 			, sdw::Int const & envMapIndex
-			, sdw::Vec3 const & specular
-			, sdw::Float const & roughness )const;
+			, PbrLightMaterial & material )const;
 		sdw::Void computeRefrEnvMaps( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::SampledImageCubeArrayRgba32 const & envMap
 			, sdw::Int const & envMapIndex
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
-			, sdw::Float const & roughness
+			, PbrLightMaterial & material
 			, sdw::Vec3 & reflection
 			, sdw::Vec3 & refraction )const;
 		sdw::Void computeRefrSkybox( sdw::Vec3 const & wsIncident
@@ -100,7 +93,7 @@ namespace castor3d::shader
 			, sdw::SampledImageCubeRgba32 const & envMap
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
-			, sdw::Float const & roughness
+			, PbrLightMaterial & material
 			, sdw::Vec3 & reflection
 			, sdw::Vec3 & refraction )const;
 		void doDeclareComputeIBL();
@@ -120,9 +113,7 @@ namespace castor3d::shader
 		sdw::Function< sdw::Vec3
 			, InSurface
 			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InFloat
-			, sdw::InFloat
+			, PbrLightMaterial &
 			, sdw::InVec3
 			, sdw::InSampledImageCubeRgba32
 			, sdw::InSampledImageCubeRgba32
@@ -131,15 +122,14 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InSampledImageCubeRgba32
-			, sdw::InVec3
-			, sdw::InFloat > m_computeReflEnvMap;
+			, PbrLightMaterial & > m_computeReflEnvMap;
 		sdw::Function< sdw::Void
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InSampledImageCubeRgba32
 			, sdw::InFloat
 			, sdw::InVec3
-			, sdw::InFloat
+			, PbrLightMaterial &
 			, sdw::InOutVec3
 			, sdw::OutVec3 > m_computeRefrEnvMap;
 		sdw::Function< sdw::Void
@@ -148,7 +138,7 @@ namespace castor3d::shader
 			, sdw::InSampledImageCubeRgba32
 			, sdw::InFloat
 			, sdw::InVec3
-			, sdw::InFloat
+			, PbrLightMaterial &
 			, sdw::InOutVec3
 			, sdw::OutVec3 > m_computeRefrSkybox;
 		sdw::Function< sdw::Vec3
@@ -156,8 +146,7 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, sdw::InSampledImageCubeArrayRgba32
 			, sdw::InInt
-			, sdw::InVec3
-			, sdw::InFloat > m_computeReflEnvMaps;
+			, PbrLightMaterial & > m_computeReflEnvMaps;
 		sdw::Function< sdw::Void
 			, sdw::InVec3
 			, sdw::InVec3
@@ -165,7 +154,7 @@ namespace castor3d::shader
 			, sdw::InInt
 			, sdw::InFloat
 			, sdw::InVec3
-			, sdw::InFloat
+			, PbrLightMaterial &
 			, sdw::InOutVec3
 			, sdw::OutVec3 > m_computeRefrEnvMaps;
 	};
