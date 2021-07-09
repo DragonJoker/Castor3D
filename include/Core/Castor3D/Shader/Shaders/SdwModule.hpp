@@ -79,38 +79,43 @@ namespace castor3d
 		static uint32_t constexpr MaxTextureConfigurationCount = 4000u;
 		static int constexpr MaxTextureConfigurationComponentsCount = 9;
 
-		class Utils;
-		class Shadow;
-		class Fog;
-		struct Light;
+		struct BaseMaterial;
 		struct DirectionalLight;
-		struct TiledDirectionalLight;
+		struct InFragmentSurface;
+		struct Light;
+		struct OutputComponents;
+		struct OutFragmentSurface;
 		struct PointLight;
 		struct SpotLight;
+		struct Surface;
+		struct TextureConfigData;
+		struct TiledDirectionalLight;
+		struct VertexSurface;
+
+		class Fog;
 		class Materials;
-		class PhongMaterials;
-		class PbrMRMaterials;
-		class PbrSGMaterials;
+		class LayeredLpvGridData;
 		class LightingModel;
-		class PhongReflectionModel;
-		class PbrReflectionModel;
-		class PhongLightingModel;
-		class PbrLightingModel;
-		struct BaseMaterial;
+		class LpvGridData;
+		class LpvLightData;
+		class Shadow;
+		class TextureConfigurations;
+		class Utils;
+		class VoxelData;
+
 		struct PhongMaterial;
+		class PhongLightingModel;
+		class PhongLightMaterial;
+		class PhongMaterials;
+		class PhongReflectionModel;
+
 		struct MetallicRoughnessMaterial;
 		struct SpecularGlossinessMaterial;
-		struct TextureConfigData;
-		class TextureConfigurations;
-		struct OutputComponents;
-		class LpvGridData;
-		class LayeredLpvGridData;
-		class LpvLightData;
-		class VoxelData;
-		struct Surface;
-		struct VertexSurface;
-		struct OutFragmentSurface;
-		struct InFragmentSurface;
+		class PbrLightingModel;
+		class PbrLightMaterial;
+		class PbrReflectionModel;
+		class PbrMRMaterials;
+		class PbrSGMaterials;
 
 		Writer_Parameter( Light );
 		Writer_Parameter( DirectionalLight );

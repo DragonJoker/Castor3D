@@ -2,6 +2,7 @@
 
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslPhongMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
@@ -58,8 +59,7 @@ namespace castor3d::shader
 		, sdw::Int const & reflection
 		, sdw::Int const & refraction
 		, sdw::Float const & refractionRatio
-		, sdw::Vec3 const & specular
-		, sdw::Float const & shininess
+		, PhongLightMaterial & material
 		, sdw::Vec3 const & transmission
 		, Surface const & surface
 		, SceneData const & sceneData
@@ -84,9 +84,8 @@ namespace castor3d::shader
 					, envMaps
 					, envMapIndex
 					, refractionRatio
-					, specular
 					, transmission * diffuse
-					, shininess
+					, material
 					, reflected
 					, refracted );
 			}
@@ -96,8 +95,7 @@ namespace castor3d::shader
 					, surface.worldNormal
 					, envMaps
 					, envMapIndex
-					, shininess
-					, specular );
+					, material );
 			}
 			ELSE
 			{
@@ -107,7 +105,7 @@ namespace castor3d::shader
 					, envMapIndex
 					, refractionRatio
 					, transmission * diffuse
-					, shininess
+					, material
 					, reflected
 					, refracted );
 			}
@@ -119,8 +117,7 @@ namespace castor3d::shader
 	}
 
 	void PhongReflectionModel::computeForward( sdw::Float const & refractionRatio
-		, sdw::Vec3 const & specular
-		, sdw::Float const & shininess
+		, PhongLightMaterial & material
 		, sdw::Vec3 const & transmission
 		, Surface const & surface
 		, SceneData const & sceneData
@@ -144,9 +141,8 @@ namespace castor3d::shader
 					, surface.worldNormal
 					, envMap
 					, refractionRatio
-					, specular
 					, transmission * diffuse
-					, shininess
+					, material
 					, reflected
 					, refracted );
 			}
@@ -155,8 +151,7 @@ namespace castor3d::shader
 				reflected = computeRefl( incident
 					, surface.worldNormal
 					, envMap
-					, shininess
-					, specular );
+					, material );
 			}
 			else
 			{
@@ -165,7 +160,7 @@ namespace castor3d::shader
 					, envMap
 					, refractionRatio
 					, transmission * diffuse
-					, shininess
+					, material
 					, reflected
 					, refracted );
 			}
@@ -183,22 +178,20 @@ namespace castor3d::shader
 	sdw::Vec3 PhongReflectionModel::computeRefl( sdw::Vec3 const & wsIncident
 		, sdw::Vec3 const & wsNormal
 		, sdw::SampledImageCubeRgba32 const & envMap
-		, sdw::Float const & shininess
-		, sdw::Vec3 const & diffuse )const
+		, PhongLightMaterial & material )const
 	{
 		return m_computeRefl( wsIncident
 			, wsNormal
 			, envMap
-			, shininess
-			, diffuse );
+			, material );
 	}
 
 	void PhongReflectionModel::computeRefr( sdw::Vec3 const & wsIncident
 		, sdw::Vec3 const & wsNormal
 		, sdw::SampledImageCubeRgba32 const & envMap
 		, sdw::Float const & refractionRatio
-		, sdw::Vec3 const & diffuse
-		, sdw::Float const & shininess
+		, sdw::Vec3 const & transmission
+		, PhongLightMaterial & material
 		, sdw::Vec3 & reflection
 		, sdw::Vec3 & refraction )const
 	{
@@ -206,8 +199,8 @@ namespace castor3d::shader
 			, wsNormal
 			, envMap
 			, refractionRatio
-			, diffuse
-			, shininess
+			, transmission
+			, material
 			, reflection
 			, refraction );
 	}
@@ -216,9 +209,8 @@ namespace castor3d::shader
 		, sdw::Vec3 const & wsNormal
 		, sdw::SampledImageCubeRgba32 const & envMap
 		, sdw::Float const & refractionRatio
-		, sdw::Vec3 const & specular
 		, sdw::Vec3 const & transmission
-		, sdw::Float const & shininess
+		, PhongLightMaterial & material
 		, sdw::Vec3 & reflection
 		, sdw::Vec3 & refraction )const
 	{
@@ -226,9 +218,8 @@ namespace castor3d::shader
 			, wsNormal
 			, envMap
 			, refractionRatio
-			, specular
 			, transmission
-			, shininess
+			, material
 			, reflection
 			, refraction );
 	}
@@ -237,15 +228,13 @@ namespace castor3d::shader
 		, sdw::Vec3 const & wsNormal
 		, sdw::SampledImageCubeArrayRgba32 const & envMap
 		, sdw::Int const & envMapIndex
-		, sdw::Float const & shininess
-		, sdw::Vec3 const & diffuse )const
+		, PhongLightMaterial & material )const
 	{
 		return m_computeRefls( wsIncident
 			, wsNormal
 			, envMap
 			, envMapIndex
-			, shininess
-			, diffuse );
+			, material );
 	}
 
 	void PhongReflectionModel::computeRefrs( sdw::Vec3 const & wsIncident
@@ -253,8 +242,8 @@ namespace castor3d::shader
 		, sdw::SampledImageCubeArrayRgba32 const & envMap
 		, sdw::Int const & envMapIndex
 		, sdw::Float const & refractionRatio
-		, sdw::Vec3 const & diffuse
-		, sdw::Float const & shininess
+		, sdw::Vec3 const & transmission
+		, PhongLightMaterial & material
 		, sdw::Vec3 & reflection
 		, sdw::Vec3 & refraction )const
 	{
@@ -263,8 +252,8 @@ namespace castor3d::shader
 			, envMap
 			, envMapIndex
 			, refractionRatio
-			, diffuse
-			, shininess
+			, transmission
+			, material
 			, reflection
 			, refraction );
 	}
@@ -274,9 +263,8 @@ namespace castor3d::shader
 		, sdw::SampledImageCubeArrayRgba32 const & envMap
 		, sdw::Int const & envMapIndex
 		, sdw::Float const & refractionRatio
-		, sdw::Vec3 const & specular
 		, sdw::Vec3 const & transmission
-		, sdw::Float const & shininess
+		, PhongLightMaterial & material
 		, sdw::Vec3 & reflection
 		, sdw::Vec3 & refraction )const
 	{
@@ -285,43 +273,42 @@ namespace castor3d::shader
 			, envMap
 			, envMapIndex
 			, refractionRatio
-			, specular
 			, transmission
-			, shininess
+			, material
 			, reflection
 			, refraction );
 	}
 
 	void PhongReflectionModel::doDeclareComputeRefl()
 	{
+		PhongLightMaterial material{ m_writer };
 		m_computeRefl = m_writer.implementFunction< sdw::Vec3 >( "computeRefl"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeRgba32 const & envMap
-				, sdw::Float const & shininess
-				, sdw::Vec3 const & specular )
+				, PhongLightMaterial & material )
 			{
 				auto reflected = m_writer.declLocale( "reflected"
 					, reflect( wsIncident, wsNormal ) );
-				m_writer.returnStmt( envMap.lod( reflected, ( 256.0f - shininess ) / 32.0f ).xyz()
-					* specular );
+				m_writer.returnStmt( envMap.lod( reflected, ( 256.0f - material.shininess ) / 32.0f ).xyz()
+					* material.specular );
 			}
 			, sdw::InVec3{ m_writer, "wsIncident" }
 			, sdw::InVec3{ m_writer, "wsNormal" }
 			, sdw::InSampledImageCubeRgba32{ m_writer, "envMap" }
-			, sdw::InFloat{ m_writer, "shininess" }
-			, sdw::InVec3{ m_writer, "diffuse" } );
+			, material );
 	}
 
 	void PhongReflectionModel::doDeclareComputeRefr()
 	{
+		PhongLightMaterial material{ m_writer };
 		m_computeRefr = m_writer.implementFunction< sdw::Void >( "computeRefr"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeRgba32 const & envMap
 				, sdw::Float const & refractionRatio
 				, sdw::Vec3 const & transmission
-				, sdw::Float const & shininess
+				, PhongLightMaterial & material
 				, sdw::Vec3 reflection
 				, sdw::Vec3 refraction )
 			{
@@ -342,7 +329,7 @@ namespace castor3d::shader
 				reflection = mix( vec3( 0.0_f )
 					, reflection
 					, vec3( fresnel ) );
-				refraction = mix( envMap.lod( refracted, ( 256.0f - shininess ) / 32.0f ).xyz() * transmission
+				refraction = mix( envMap.lod( refracted, ( 256.0f - material.shininess ) / 32.0f ).xyz() * transmission
 					, vec3( 0.0_f )
 					, vec3( fresnel ) );
 			}
@@ -351,35 +338,34 @@ namespace castor3d::shader
 			, sdw::InSampledImageCubeRgba32{ m_writer, "envMap" }
 			, sdw::InFloat{ m_writer, "refractionRatio" }
 			, sdw::InVec3{ m_writer, "transmission" }
-			, sdw::InFloat{ m_writer, "shininess" }
+			, material
 			, sdw::InOutVec3{ m_writer, "reflection" }
 			, sdw::OutVec3{ m_writer, "refraction" } );
 	}
 
 	void PhongReflectionModel::doDeclareComputeReflRefr()
 	{
+		PhongLightMaterial material{ m_writer };
 		m_computeReflRefr = m_writer.implementFunction< sdw::Void >( "computeReflRefr"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeRgba32 const & envMap
 				, sdw::Float const & refractionRatio
-				, sdw::Vec3 const & specular
 				, sdw::Vec3 const & transmission
-				, sdw::Float const & shininess
+				, PhongLightMaterial & material
 				, sdw::Vec3 reflection
 				, sdw::Vec3 refraction )
 			{
 				reflection = computeRefl( wsIncident
 					, wsNormal
 					, envMap
-					, shininess
-					, specular );
+					, material );
 				computeRefr( wsIncident
 					, wsNormal
 					, envMap
 					, refractionRatio
 					, transmission
-					, shininess
+					, material
 					, reflection
 					, refraction );
 			}
@@ -387,39 +373,38 @@ namespace castor3d::shader
 			, sdw::InVec3{ m_writer, "wsNormal" }
 			, sdw::InSampledImageCubeRgba32{ m_writer, "envMap" }
 			, sdw::InFloat{ m_writer, "refractionRatio" }
-			, sdw::InVec3{ m_writer, "specular" }
 			, sdw::InVec3{ m_writer, "transmission" }
-			, sdw::InFloat{ m_writer, "shininess" }
+			, material
 			, sdw::OutVec3{ m_writer, "reflection" }
 			, sdw::OutVec3{ m_writer, "refraction" } );
 	}
 
 	void PhongReflectionModel::doDeclareComputeRefls()
 	{
+		PhongLightMaterial material{ m_writer };
 		m_computeRefls = m_writer.implementFunction< sdw::Vec3 >( "computeRefl"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeArrayRgba32 const & envMap
 				, sdw::Int const & envMapIndex
-				, sdw::Float const & shininess
-				, sdw::Vec3 const & specular )
+				, PhongLightMaterial & material )
 			{
 				auto reflected = m_writer.declLocale( "reflected"
 					, reflect( wsIncident, wsNormal ) );
 				m_writer.returnStmt( envMap.lod( vec4( reflected, m_writer.cast< sdw::Float >( envMapIndex ) )
-						, ( 256.0f - shininess ) / 32.0f ).xyz()
-					* specular );
+						, ( 256.0f - material.shininess ) / 32.0f ).xyz()
+					* material.specular );
 			}
 			, sdw::InVec3{ m_writer, "wsIncident" }
 			, sdw::InVec3{ m_writer, "wsNormal" }
 			, sdw::InSampledImageCubeArrayRgba32{ m_writer, "envMap" }
 			, sdw::InInt{ m_writer, "envMapIndex" }
-			, sdw::InFloat{ m_writer, "shininess" }
-			, sdw::InVec3{ m_writer, "diffuse" } );
+			, material );
 	}
 
 	void PhongReflectionModel::doDeclareComputeRefrs()
 	{
+		PhongLightMaterial material{ m_writer };
 		m_computeRefrs = m_writer.implementFunction< sdw::Void >( "computeRefr"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
@@ -427,7 +412,7 @@ namespace castor3d::shader
 				, sdw::Int const & envMapIndex
 				, sdw::Float const & refractionRatio
 				, sdw::Vec3 const & transmission
-				, sdw::Float const & shininess
+				, PhongLightMaterial & material
 				, sdw::Vec3 reflection
 				, sdw::Vec3 refraction )
 			{
@@ -449,7 +434,7 @@ namespace castor3d::shader
 					, reflection
 					, vec3( fresnel ) );
 				refraction = mix( envMap.lod( vec4( refracted, m_writer.cast< sdw::Float >( envMapIndex ) )
-						, ( 256.0f - shininess ) / 32.0f ).xyz() * transmission
+						, ( 256.0f - material.shininess ) / 32.0f ).xyz() * transmission
 					, vec3( 0.0_f )
 					, vec3( fresnel ) );
 			}
@@ -459,22 +444,22 @@ namespace castor3d::shader
 			, sdw::InInt{ m_writer, "envMapIndex" }
 			, sdw::InFloat{ m_writer, "refractionRatio" }
 			, sdw::InVec3{ m_writer, "transmission" }
-			, sdw::InFloat{ m_writer, "shininess" }
+			, material
 			, sdw::InOutVec3{ m_writer, "reflection" }
 			, sdw::OutVec3{ m_writer, "refraction" } );
 	}
 
 	void PhongReflectionModel::doDeclareComputeReflRefrs()
 	{
+		PhongLightMaterial material{ m_writer };
 		m_computeReflRefrs = m_writer.implementFunction< sdw::Void >( "computeReflRefr"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeArrayRgba32 const & envMap
 				, sdw::Int const & envMapIndex
 				, sdw::Float const & refractionRatio
-				, sdw::Vec3 const & specular
 				, sdw::Vec3 const & transmission
-				, sdw::Float const & shininess
+				, PhongLightMaterial & material
 				, sdw::Vec3 reflection
 				, sdw::Vec3 refraction )
 			{
@@ -482,15 +467,14 @@ namespace castor3d::shader
 					, wsNormal
 					, envMap
 					, envMapIndex
-					, shininess
-					, specular );
+					, material );
 				computeRefrs( wsIncident
 					, wsNormal
 					, envMap
 					, envMapIndex
 					, refractionRatio
 					, transmission
-					, shininess
+					, material
 					, reflection
 					, refraction );
 			}
@@ -499,9 +483,8 @@ namespace castor3d::shader
 			, sdw::InSampledImageCubeArrayRgba32{ m_writer, "envMap" }
 			, sdw::InInt{ m_writer, "envMapIndex" }
 			, sdw::InFloat{ m_writer, "refractionRatio" }
-			, sdw::InVec3{ m_writer, "specular" }
 			, sdw::InVec3{ m_writer, "transmission" }
-			, sdw::InFloat{ m_writer, "shininess" }
+			, material
 			, sdw::OutVec3{ m_writer, "reflection" }
 			, sdw::OutVec3{ m_writer, "refraction" } );
 	}

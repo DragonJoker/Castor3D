@@ -200,6 +200,11 @@ namespace castor3d
 			//		/ length( max( albedo, vec3( 0.04_f ) ) ) );
 		}
 
+		sdw::Float LightingModel::computeRoughness( sdw::Float const & glossiness )
+		{
+			return 1.0_f - glossiness;
+		}
+
 		Light LightingModel::getBaseLight( sdw::Int const & value )const
 		{
 			return m_getBaseLight( value );
