@@ -136,7 +136,7 @@ namespace castor3d
 
 			if ( m_shadowMap )
 			{
-				IF( m_writer, material.m_subsurfaceScatteringEnabled != 0_i )
+				IF( m_writer, material.subsurfaceScatteringEnabled != 0_i )
 				{
 					auto c3d_mapDepthDirectional = m_writer.getVariable< SampledImage2DRgba32 >( Shadow::MapNormalDepthDirectional );
 					/**
@@ -151,9 +151,9 @@ namespace castor3d
 					auto shadowDepth = m_writer.declLocale( "d1"
 						, c3d_mapDepthDirectional.sample( lightSpacePosition.xy() ).w() );
 					ssstResult = m_compute( shadowDepth
-						, material.m_transmittanceProfileSize
-						, material.m_transmittanceProfile
-						, material.m_gaussianWidth
+						, material.transmittanceProfileSize
+						, material.transmittanceProfile
+						, material.gaussianWidth
 						, lightSpacePosition.xyz()
 						, surface.worldNormal
 						, translucency
@@ -178,7 +178,7 @@ namespace castor3d
 
 			if ( m_shadowMap )
 			{
-				IF( m_writer, material.m_subsurfaceScatteringEnabled != 0_i )
+				IF( m_writer, material.subsurfaceScatteringEnabled != 0_i )
 				{
 					auto c3d_mtxInvViewProj = m_writer.getVariable< Mat4 >( "c3d_mtxInvViewProj" );
 					auto c3d_mapDepthPoint = m_writer.getVariable< SampledImageCubeRgba32 >( Shadow::MapNormalDepthPoint );
@@ -200,9 +200,9 @@ namespace castor3d
 							, shadowDepth
 							, c3d_mtxInvViewProj ) );
 					ssstResult = m_compute( shadowDepth
-						, material.m_transmittanceProfileSize
-						, material.m_transmittanceProfile
-						, material.m_gaussianWidth
+						, material.transmittanceProfileSize
+						, material.transmittanceProfile
+						, material.gaussianWidth
 						, lightSpacePosition
 						, surface.worldNormal
 						, translucency
@@ -227,7 +227,7 @@ namespace castor3d
 
 			if ( m_shadowMap )
 			{
-				IF( m_writer, material.m_subsurfaceScatteringEnabled != 0_i )
+				IF( m_writer, material.subsurfaceScatteringEnabled != 0_i )
 				{
 					auto c3d_mapDepthSpot = m_writer.getVariable< SampledImage2DRgba32 >( Shadow::MapNormalDepthSpot );
 					// We shrink the position inwards the surface to avoid artifacts.
@@ -239,9 +239,9 @@ namespace castor3d
 					auto shadowDepth = m_writer.declLocale( "shadowDepth"
 						, c3d_mapDepthSpot.sample( lightSpacePosition.xy() ).w() );
 					ssstResult = m_compute( shadowDepth
-						, material.m_transmittanceProfileSize
-						, material.m_transmittanceProfile
-						, material.m_gaussianWidth
+						, material.transmittanceProfileSize
+						, material.transmittanceProfile
+						, material.gaussianWidth
 						, lightSpacePosition.xyz()
 						, surface.worldNormal
 						, translucency

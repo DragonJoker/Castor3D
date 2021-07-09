@@ -243,9 +243,9 @@ namespace castor3d
 			{
 				auto material = materials->getBaseMaterial( inSurface.material );
 				auto opacity = writer.declLocale( "opacity"
-					, material->m_opacity );
+					, material->opacity );
 				auto alphaRef = writer.declLocale( "alphaRef"
-					, material->m_alphaRef );
+					, material->alphaRef );
 				auto normal = writer.declLocale( "normal"
 					, normalize( inSurface.normal ) );
 				auto tangent = writer.declLocale( "tangent"
