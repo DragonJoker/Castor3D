@@ -343,7 +343,7 @@ namespace castor
 		}
 		else
 		{
-			p_angle.acos( w );
+			p_angle = castor::acosf( w );
 			p_angle *= 2;
 			p_vector[0] = x / s;
 			p_vector[1] = y / s;
