@@ -198,11 +198,10 @@ namespace castor3d
 					, normalize( inSurface.tangent ) );
 				auto bitangent = writer.declLocale( "bitangent"
 					, normalize( inSurface.bitangent ) );
-				auto diffuse = writer.declLocale( "diffuse"
-					, utils.removeGamma( gamma, material.diffuse ) );
-				auto specular = writer.declLocale( "specular"
-					, material.specular );
-				auto shininess = writer.declLocale( "shininess"
+				auto lightMat = writer.declLocale< shader::PhongLightMaterial >( "lightMat" );
+				lightMat.create< MaterialType::ePhong >( material.diffuse
+					, material.gamma
+					, material.specular
 					, material.shininess );
 				auto emissive = writer.declLocale( "emissive"
 					, vec3( material.emissive ) );
@@ -224,16 +223,14 @@ namespace castor3d
 					, alpha
 					, occlusion
 					, transmittance
-					, diffuse
-					, specular
-					, shininess
+					, lightMat
 					, inSurface.tangentSpaceViewPosition
 					, inSurface.tangentSpaceFragPosition );
 				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
 					, material.alphaRef );
-				outData2 = vec4( diffuse, shininess );
-				outData3 = vec4( specular, occlusion );
+				outData2 = vec4( lightMat.albedo, lightMat.shininess );
+				outData3 = vec4( lightMat.specular, occlusion );
 				outData4 = vec4( emissive, transmittance );
 				outData5 = vec4( inSurface.getVelocity(), writer.cast< Float >( inSurface.material ), 0.0_f );
 			} );
@@ -310,28 +307,27 @@ namespace castor3d
 					, inSurface.texture );
 				auto alpha = writer.declLocale( "alpha"
 					, material.opacity );
+				auto gamma = writer.declLocale( "gamma"
+					, material.gamma );
 				auto normal = writer.declLocale( "normal"
 					, normalize( inSurface.normal ) );
 				auto tangent = writer.declLocale( "tangent"
 					, normalize( inSurface.tangent ) );
 				auto bitangent = writer.declLocale( "bitangent"
 					, normalize( inSurface.bitangent ) );
-				auto albedo = writer.declLocale( "albedo"
-					, material.albedo );
-				auto roughness = writer.declLocale( "roughness"
+				auto lightMat = writer.declLocale< shader::PbrLightMaterial >( "lightMat" );
+				lightMat.create< MaterialType::eMetallicRoughness >( material.albedo
+					, material.metalness
 					, material.roughness );
-				auto metalness = writer.declLocale( "metalness"
-					, material.metalness );
 				auto emissive = writer.declLocale( "emissive"
 					, vec3( material.emissive ) );
-				auto gamma = writer.declLocale( "gamma"
-					, material.gamma );
 				auto occlusion = writer.declLocale( "ambientOcclusion"
 					, 1.0_f );
 				auto transmittance = writer.declLocale( "transmittance"
 					, 0.0_f );
 
 				lightingModel.computeMapContributions( flags.passFlags
+					, MaterialType::eMetallicRoughness
 					, textures
 					, gamma
 					, textureConfigs
@@ -344,16 +340,14 @@ namespace castor3d
 					, alpha
 					, occlusion
 					, transmittance
-					, albedo
-					, metalness
-					, roughness
+					, lightMat
 					, inSurface.tangentSpaceViewPosition
 					, inSurface.tangentSpaceFragPosition );
 				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
 					, material.alphaRef );
-				outData2 = vec4( albedo, roughness );
-				outData3 = vec4( metalness, 0.0_f, 0.0_f, occlusion );
+				outData2 = vec4( lightMat.albedo, lightMat.roughness );
+				outData3 = vec4( lightMat.metalness, 0.0_f, 0.0_f, occlusion );
 				outData4 = vec4( emissive, transmittance );
 				outData5 = vec4( inSurface.getVelocity(), writer.cast< Float >( inSurface.material ), 0.0_f );
 			} );
@@ -436,12 +430,10 @@ namespace castor3d
 					, normalize( inSurface.tangent ) );
 				auto bitangent = writer.declLocale( "bitangent"
 					, normalize( inSurface.bitangent ) );
-				auto albedo = writer.declLocale( "albedo"
-					, material.albedo );
-				auto glossiness = writer.declLocale( "glossiness"
+				auto lightMat = writer.declLocale< shader::PbrLightMaterial >( "lightMat" );
+				lightMat.create< MaterialType::eSpecularGlossiness >( material.albedo
+					, material.specular
 					, material.glossiness );
-				auto specular = writer.declLocale( "specular"
-					, material.specular );
 				auto emissive = writer.declLocale( "emissive"
 					, vec3( material.emissive ) );
 				auto gamma = writer.declLocale( "gamma"
@@ -452,6 +444,7 @@ namespace castor3d
 					, 0.0_f );
 
 				lightingModel.computeMapContributions( flags.passFlags
+					, MaterialType::eSpecularGlossiness
 					, textures
 					, gamma
 					, textureConfigs
@@ -464,16 +457,14 @@ namespace castor3d
 					, alpha
 					, occlusion
 					, transmittance
-					, albedo
-					, specular
-					, glossiness
+					, lightMat
 					, inSurface.tangentSpaceViewPosition
 					, inSurface.tangentSpaceFragPosition );
 				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
 					, material.alphaRef );
-				outData2 = vec4( albedo, glossiness );
-				outData3 = vec4( specular, occlusion );
+				outData2 = vec4( lightMat.albedo, 1.0_f - lightMat.roughness );
+				outData3 = vec4( lightMat.specular, occlusion );
 				outData4 = vec4( emissive, transmittance );
 				outData5 = vec4( inSurface.getVelocity(), writer.cast< Float >( inSurface.material ), 0.0_f );
 			} );

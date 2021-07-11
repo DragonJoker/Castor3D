@@ -586,11 +586,10 @@ namespace castor3d
 						, material.gamma );
 					auto normal = writer.declLocale( "normal"
 						, normalize( inNormal ) );
-					auto diffuse = writer.declLocale( "diffuse"
-						, utils.removeGamma( gamma, material.diffuse ) );
-					auto specular = writer.declLocale( "specular"
-						, material.specular );
-					auto shininess = writer.declLocale( "shininess"
+					auto lightMat = writer.declLocale< shader::PhongLightMaterial >( "lightMat" );
+					lightMat.create< MaterialType::ePhong >( material.diffuse
+						, material.gamma
+						, material.specular
 						, material.shininess );
 					auto emissive = writer.declLocale( "emissive"
 						, vec3( material.emissive ) );
@@ -612,17 +611,11 @@ namespace castor3d
 							, emissive
 							, alpha
 							, occlusion
-							, diffuse
-							, specular
-							, shininess );
+							, lightMat );
 					}
 
 					if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 					{
-						auto lightMat = writer.declLocale< shader::PhongLightMaterial >( "lightMat" );
-						lightMat.create< MaterialType::ePhong >( diffuse
-							, specular
-							, shininess );
 						auto worldEye = writer.declLocale( "worldEye"
 							, c3d_sceneData.getCameraPosition() );
 						auto surface = writer.declLocale< shader::Surface >( "surface" );
@@ -633,7 +626,7 @@ namespace castor3d
 								, c3d_modelData.isShadowReceiver()
 								, c3d_sceneData
 								, surface ) );
-						color *= diffuse * occlusion;
+						color *= lightMat.albedo * occlusion;
 						color += emissive;
 
 						auto encodedColor = writer.declLocale( "encodedColor"
@@ -739,11 +732,9 @@ namespace castor3d
 						, material.gamma );
 					auto normal = writer.declLocale( "normal"
 						, normalize( inNormal ) );
-					auto albedo = writer.declLocale( "albedo"
-						, utils.removeGamma( gamma, material.albedo ) );
-					auto metalness = writer.declLocale( "metalness"
-						, material.metalness );
-					auto roughness = writer.declLocale( "roughness"
+					auto lightMat = writer.declLocale< shader::PbrLightMaterial >( "lightMat" );
+					lightMat.create< MaterialType::eMetallicRoughness >( material.albedo
+						, material.metalness
 						, material.roughness );
 					auto emissive = writer.declLocale( "emissive"
 						, vec3( material.emissive ) );
@@ -757,6 +748,7 @@ namespace castor3d
 						auto texCoord = writer.declLocale( "texCoord"
 							, inTexture );
 						lighting->computeMapVoxelContributions( flags.passFlags
+							, MaterialType::eMetallicRoughness
 							, textures
 							, gamma
 							, textureConfigs
@@ -765,17 +757,11 @@ namespace castor3d
 							, emissive
 							, alpha
 							, occlusion
-							, albedo
-							, metalness
-							, roughness );
+							, lightMat );
 					}
 
 					if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 					{
-						auto lightMat = writer.declLocale< shader::PbrLightMaterial >( "lightMat" );
-						lightMat.create< MaterialType::eMetallicRoughness >( albedo
-							, metalness
-							, roughness );
 						auto worldEye = writer.declLocale( "worldEye"
 							, c3d_sceneData.getCameraPosition() );
 						auto surface = writer.declLocale< shader::Surface >( "surface" );
@@ -786,7 +772,7 @@ namespace castor3d
 								, c3d_modelData.isShadowReceiver()
 								, c3d_sceneData
 								, surface ) );
-						color *= albedo * occlusion;
+						color *= lightMat.albedo * occlusion;
 						color += emissive;
 
 						auto encodedColor = writer.declLocale( "encodedColor"
@@ -892,11 +878,9 @@ namespace castor3d
 						, material.gamma );
 					auto normal = writer.declLocale( "normal"
 						, normalize( inNormal ) );
-					auto albedo = writer.declLocale( "albedo"
-						, utils.removeGamma( gamma, material.albedo ) );
-					auto specular = writer.declLocale( "specular"
-						, material.specular );
-					auto glossiness = writer.declLocale( "glossiness"
+					auto lightMat = writer.declLocale< shader::PbrLightMaterial >( "lightMat" );
+					lightMat.create< MaterialType::eSpecularGlossiness >( material.albedo
+						, material.specular
 						, material.glossiness );
 					auto emissive = writer.declLocale( "emissive"
 						, vec3( material.emissive ) );
@@ -910,6 +894,7 @@ namespace castor3d
 						auto texCoord = writer.declLocale( "texCoord"
 							, inTexture );
 						lighting->computeMapVoxelContributions( flags.passFlags
+							, MaterialType::eSpecularGlossiness
 							, textures
 							, gamma
 							, textureConfigs
@@ -918,17 +903,11 @@ namespace castor3d
 							, emissive
 							, alpha
 							, occlusion
-							, albedo
-							, specular
-							, glossiness );
+							, lightMat );
 					}
 
 					if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 					{
-						auto lightMat = writer.declLocale< shader::PbrLightMaterial >( "lightMat" );
-						lightMat.create< MaterialType::eSpecularGlossiness >( albedo
-							, specular
-							, glossiness );
 						auto worldEye = writer.declLocale( "worldEye"
 							, c3d_sceneData.getCameraPosition() );
 						auto surface = writer.declLocale< shader::Surface >( "surface" );
@@ -939,7 +918,7 @@ namespace castor3d
 								, c3d_modelData.isShadowReceiver()
 								, c3d_sceneData
 								, surface ) );
-						color.xyz() *= albedo * occlusion;
+						color.xyz() *= lightMat.albedo * occlusion;
 						color.xyz() += emissive;
 
 						auto encodedColor = writer.declLocale( "encodedColor"

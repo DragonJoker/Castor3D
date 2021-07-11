@@ -22,9 +22,22 @@ namespace castor3d::shader
 				, sdw::Vec3 const & specular
 				, sdw::Float const & shininess )
 			{
+				material.albedo = albedo;
 				material.specular = specular.rgb();
 				material.metalness = LightingModel::computeMetalness( albedo, specular );
 				material.roughness = LightingModel::computeRoughness( LightingModel::computeGlossiness( shininess ) );
+			}
+			
+			static void create( PbrLightMaterial & material
+				, sdw::Vec3 const & diffuse
+				, sdw::Float const & gamma
+				, sdw::Vec3 const & specular
+				, sdw::Float const & shininess )
+			{
+				create( material
+					, pow( max( diffuse, vec3( 0.0_f, 0.0_f, 0.0_f ) ), vec3( gamma ) )
+					, specular
+					, shininess );
 			}
 
 			static void create( PbrLightMaterial & material
@@ -44,6 +57,7 @@ namespace castor3d::shader
 				, sdw::Float const & metalness
 				, sdw::Float const & roughness )
 			{
+				material.albedo = albedo;
 				material.specular = LightingModel::computeF0( albedo, metalness );
 				material.metalness = metalness;
 				material.roughness = roughness;
@@ -66,6 +80,7 @@ namespace castor3d::shader
 				, sdw::Vec3 const & specular
 				, sdw::Float const & glossiness )
 			{
+				material.albedo = albedo;
 				material.specular = specular;
 				material.metalness = LightingModel::computeMetalness( albedo, specular );
 				material.roughness = LightingModel::computeRoughness( glossiness );
@@ -94,6 +109,7 @@ namespace castor3d::shader
 
 		C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 
+		sdw::Vec3 albedo;
 		sdw::Vec3 specular;
 		sdw::Float metalness;
 		sdw::Float roughness;

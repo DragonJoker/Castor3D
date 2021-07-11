@@ -176,9 +176,7 @@ namespace castor3d
 				, sdw::Float & opacity
 				, sdw::Float & occlusion
 				, sdw::Float & transmittance
-				, sdw::Vec3 & diffuse
-				, sdw::Vec3 & specular
-				, sdw::Float & shininess
+				, PhongLightMaterial & lightMat
 				, sdw::Vec3 & tangentSpaceViewPosition
 				, sdw::Vec3 & tangentSpaceFragPosition );
 			C3D_API void computeMapVoxelContributions( PassFlags const & passFlags
@@ -190,9 +188,7 @@ namespace castor3d
 				, sdw::Vec3 & emissive
 				, sdw::Float & opacity
 				, sdw::Float & occlusion
-				, sdw::Vec3 & diffuse
-				, sdw::Vec3 & specular
-				, sdw::Float & shininess );
+				, PhongLightMaterial & lightMat );
 
 		protected:
 			void doDeclareModel()override;

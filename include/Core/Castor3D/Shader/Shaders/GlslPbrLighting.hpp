@@ -165,6 +165,7 @@ namespace castor3d
 			}
 
 			C3D_API void computeMapContributions( PassFlags const & passFlags
+				, MaterialType materialType
 				, FilteredTextureFlags const & textures
 				, sdw::Float const & gamma
 				, TextureConfigurations const & textureConfigs
@@ -176,13 +177,12 @@ namespace castor3d
 				, sdw::Vec3 & emissive
 				, sdw::Float & opacity
 				, sdw::Float & occlusion
-				, sdw::Float & transmittance
-				, sdw::Vec3 & albedo
-				, sdw::Float & metalness
-				, sdw::Float & roughness
+				, sdw::Float & transmittanc
+				, PbrLightMaterial & lightMat
 				, sdw::Vec3 & tangentSpaceViewPosition
 				, sdw::Vec3 & tangentSpaceFragPosition );
 			C3D_API void computeMapVoxelContributions( PassFlags const & passFlags
+				, MaterialType materialType
 				, FilteredTextureFlags const & textures
 				, sdw::Float const & gamma
 				, TextureConfigurations const & textureConfigs
@@ -191,40 +191,7 @@ namespace castor3d
 				, sdw::Vec3 & emissive
 				, sdw::Float & opacity
 				, sdw::Float & occlusion
-				, sdw::Vec3 & albedo
-				, sdw::Float & metalness
-				, sdw::Float & roughness );
-
-			C3D_API void computeMapContributions( PassFlags const & passFlags
-				, FilteredTextureFlags const & textures
-				, sdw::Float const & gamma
-				, TextureConfigurations const & textureConfigs
-				, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
-				, sdw::Vec3 & texCoords
-				, sdw::Vec3 & normal
-				, sdw::Vec3 & tangent
-				, sdw::Vec3 & bitangent
-				, sdw::Vec3 & emissive
-				, sdw::Float & opacity
-				, sdw::Float & occlusion
-				, sdw::Float & transmittance
-				, sdw::Vec3 & albedo
-				, sdw::Vec3 & specular
-				, sdw::Float & glossiness
-				, sdw::Vec3 & tangentSpaceViewPosition
-				, sdw::Vec3 & tangentSpaceFragPosition );
-			C3D_API void computeMapVoxelContributions( PassFlags const & passFlags
-				, FilteredTextureFlags const & textures
-				, sdw::Float const & gamma
-				, TextureConfigurations const & textureConfigs
-				, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
-				, sdw::Vec3 const & texCoords
-				, sdw::Vec3 & emissive
-				, sdw::Float & opacity
-				, sdw::Float & occlusion
-				, sdw::Vec3 & albedo
-				, sdw::Vec3 & specular
-				, sdw::Float & glossiness );
+				, PbrLightMaterial & lightMat );
 
 		protected:
 			void doDeclareModel()override;
