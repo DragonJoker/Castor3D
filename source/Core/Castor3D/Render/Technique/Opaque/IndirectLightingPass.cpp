@@ -12,6 +12,7 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp"
+#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -139,7 +140,7 @@ namespace castor3d
 							, c3d_sceneData.getPosToCamera( surface.worldPosition )
 							, surface
 							, specular
-							, ( 256.0_f - shininess ) / 256.0_f
+							, shader::LightingModel::computeRoughness( shader::LightingModel::computeGlossiness( shininess ) )
 							, occlusion
 							, indirectDiffuse .w() );
 						pxl_indirectDiffuse = indirectDiffuse.xyz();

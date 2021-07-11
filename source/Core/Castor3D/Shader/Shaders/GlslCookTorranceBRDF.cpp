@@ -1,8 +1,10 @@
 #include "Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp"
 
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslPbrMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslPhongMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
@@ -14,9 +16,42 @@
 
 namespace castor3d::shader
 {
-	using namespace sdw;
+	//*********************************************************************************************
 
-	CookTorranceBRDF::CookTorranceBRDF( ShaderWriter & writer
+	PbrLightMaterial::PbrLightMaterial( sdw::ShaderWriter & writer
+		, sdw::expr::ExprPtr expr
+		, bool enabled )
+		: sdw::StructInstance{ writer, std::move( expr ), enabled }
+		, specular{ getMember< sdw::Vec3 >( "specular" ) }
+		, metalness{ getMember< sdw::Float >( "metalness" ) }
+		, roughness{ getMember< sdw::Float >( "roughness" ) }
+	{
+	}
+
+	PbrLightMaterial & PbrLightMaterial::operator=( PbrLightMaterial const & rhs )
+	{
+		StructInstance::operator=( rhs );
+		return *this;
+	}
+
+	ast::type::StructPtr PbrLightMaterial::makeType( ast::type::TypesCache & cache )
+	{
+		auto result = cache.getStruct( ast::type::MemoryLayout::eStd430
+			, "PbrLightMaterial" );
+
+		if ( result->empty() )
+		{
+			result->declMember( "specular", ast::type::Kind::eVec3F );
+			result->declMember( "metalness", ast::type::Kind::eFloat );
+			result->declMember( "roughness", ast::type::Kind::eFloat );
+		}
+
+		return result;
+	}
+
+	//*********************************************************************************************
+
+	CookTorranceBRDF::CookTorranceBRDF( sdw::ShaderWriter & writer
 		, Utils & utils )
 		: m_writer{ writer }
 		, m_utils{ utils }
@@ -40,7 +75,7 @@ namespace castor3d::shader
 	void CookTorranceBRDF::compute( Light const & light
 		, sdw::Vec3 const & worldEye
 		, sdw::Vec3 const & direction
-		, PbrLightMaterial & material
+		, PbrLightMaterial const & material
 		, Surface surface
 		, OutputComponents & output )const
 	{
@@ -55,7 +90,7 @@ namespace castor3d::shader
 	sdw::Vec3 CookTorranceBRDF::computeDiffuse( sdw::Vec3 const & colour
 		, sdw::Vec3 const & worldEye
 		, sdw::Vec3 const & direction
-		, PbrLightMaterial & material
+		, PbrLightMaterial const & material
 		, Surface surface )const
 	{
 		return m_computeCookTorranceDiffuse( normalize( colour )
@@ -69,7 +104,7 @@ namespace castor3d::shader
 	sdw::Vec3 CookTorranceBRDF::computeDiffuse( Light const & light
 		, sdw::Vec3 const & worldEye
 		, sdw::Vec3 const & direction
-		, PbrLightMaterial & material
+		, PbrLightMaterial const & material
 		, Surface surface )const
 	{
 		return m_computeCookTorranceDiffuse( light.m_colour
@@ -83,9 +118,9 @@ namespace castor3d::shader
 	void CookTorranceBRDF::doDeclareDistribution()
 	{
 		// Distribution Function
-		m_distributionGGX = m_writer.implementFunction< Float >( "Distribution"
-			, [this]( Float const & product
-				, Float const & roughness )
+		m_distributionGGX = m_writer.implementFunction< sdw::Float >( "Distribution"
+			, [this]( sdw::Float const & product
+				, sdw::Float const & roughness )
 			{
 				// From https://learnopengl.com/#!PBR/Lighting
 				auto a = m_writer.declLocale( "a"
@@ -101,20 +136,20 @@ namespace castor3d::shader
 					, sdw::fma( NdotH2
 						, a2 - 1.0_f
 						, 1.0_f ) );
-				denominator = Float{ castor::Pi< float > } * denominator * denominator;
+				denominator = sdw::Float{ castor::Pi< float > } * denominator * denominator;
 
 				m_writer.returnStmt( numerator / denominator );
 			}
-			, InFloat( m_writer, "product" )
-			, InFloat( m_writer, "roughness" ) );
+			, sdw::InFloat( m_writer, "product" )
+			, sdw::InFloat( m_writer, "roughness" ) );
 	}
 	
 	void CookTorranceBRDF::doDeclareGeometry()
 	{
 		// Geometry Functions
-		m_geometrySchlickGGX = m_writer.implementFunction< Float >( "GeometrySchlickGGX"
-			, [this]( Float const & product
-				, Float const & roughness )
+		m_geometrySchlickGGX = m_writer.implementFunction< sdw::Float >( "GeometrySchlickGGX"
+			, [this]( sdw::Float const & product
+				, sdw::Float const & roughness )
 			{
 				// From https://learnopengl.com/#!PBR/Lighting
 				auto r = m_writer.declLocale( "r"
@@ -131,13 +166,13 @@ namespace castor3d::shader
 
 				m_writer.returnStmt( numerator / denominator );
 			}
-			, InFloat( m_writer, "product" )
-			, InFloat( m_writer, "roughness" ) );
+			, sdw::InFloat( m_writer, "product" )
+			, sdw::InFloat( m_writer, "roughness" ) );
 
-		m_geometrySmith = m_writer.implementFunction< Float >( "GeometrySmith"
-			, [this]( Float const & NdotV
-				, Float const & NdotL
-				, Float const & roughness )
+		m_geometrySmith = m_writer.implementFunction< sdw::Float >( "GeometrySmith"
+			, [this]( sdw::Float const & NdotV
+				, sdw::Float const & NdotL
+				, sdw::Float const & roughness )
 			{
 				// From https://learnopengl.com/#!PBR/Lighting
 				auto ggx2 = m_writer.declLocale( "ggx2"
@@ -147,20 +182,19 @@ namespace castor3d::shader
 
 				m_writer.returnStmt( ggx1 * ggx2 );
 			}
-			, InFloat( m_writer, "NdotV" )
-			, InFloat( m_writer, "NdotL" )
-			, InFloat( m_writer, "roughness" ) );
+			, sdw::InFloat( m_writer, "NdotV" )
+			, sdw::InFloat( m_writer, "NdotL" )
+			, sdw::InFloat( m_writer, "roughness" ) );
 	}
 
 	void CookTorranceBRDF::doDeclareComputeCookTorrance()
 	{
-		PbrLightMaterial material{ m_writer };
 		OutputComponents output{ m_writer };
-		m_computeCookTorrance = m_writer.implementFunction< Void >( "computeCookTorrance"
+		m_computeCookTorrance = m_writer.implementFunction< sdw::Void >( "computeCookTorrance"
 			, [this]( Light const & light
-				, Vec3 const & worldEye
-				, Vec3 const & direction
-				, PbrLightMaterial & material
+				, sdw::Vec3 const & worldEye
+				, sdw::Vec3 const & direction
+				, PbrLightMaterial const & material
 				, Surface surface
 				, OutputComponents & output )
 			{
@@ -209,26 +243,25 @@ namespace castor3d::shader
 
 				kD *= 1.0_f - material.metalness;
 
-				output.m_diffuse = max( radiance * light.m_intensity.r() * NdotL * kD, vec3( 0.0_f ) ) / Float{ castor::Pi< float > };
+				output.m_diffuse = max( radiance * light.m_intensity.r() * NdotL * kD, vec3( 0.0_f ) ) / sdw::Float{ castor::Pi< float > };
 				output.m_specular = max( specReflectance * radiance * light.m_intensity.g() * NdotL, vec3( 0.0_f ) );
 			}
 			, InLight( m_writer, "light" )
-			, InVec3( m_writer, "worldEye" )
-			, InVec3( m_writer, "direction" )
-			, material
+			, sdw::InVec3( m_writer, "worldEye" )
+			, sdw::InVec3( m_writer, "direction" )
+			, InPbrLightMaterial{ m_writer, "material" }
 			, InSurface{ m_writer, "surface" }
 			, output );
 	}
 
 	void CookTorranceBRDF::doDeclareComputeCookTorranceDiffuse()
 	{
-		PbrLightMaterial material{ m_writer };
-		m_computeCookTorranceDiffuse = m_writer.implementFunction< Vec3 >( "computeCookTorranceDiffuse"
-			, [this]( Vec3 const & colour
-				, Float const intensity
-				, Vec3 const & worldEye
-				, Vec3 const & direction
-				, PbrLightMaterial & material
+		m_computeCookTorranceDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeCookTorranceDiffuse"
+			, [this]( sdw::Vec3 const & colour
+				, sdw::Float const intensity
+				, sdw::Vec3 const & worldEye
+				, sdw::Vec3 const & direction
+				, PbrLightMaterial const & material
 				, Surface surface )
 			{
 				// From https://learnopengl.com/#!PBR/Lighting
@@ -257,13 +290,13 @@ namespace castor3d::shader
 
 				kD *= 1.0_f - material.metalness;
 
-				m_writer.returnStmt( ( max( radiance * intensity * NdotL * kD, vec3( 0.0_f ) ) / Float{ castor::Pi< float > } ) );
+				m_writer.returnStmt( ( max( radiance * intensity * NdotL * kD, vec3( 0.0_f ) ) / sdw::Float{ castor::Pi< float > } ) );
 			}
-			, InVec3( m_writer, "colour" )
-			, InFloat( m_writer, "intensity" )
-			, InVec3( m_writer, "worldEye" )
-			, InVec3( m_writer, "direction" )
-			, material
+			, sdw::InVec3( m_writer, "colour" )
+			, sdw::InFloat( m_writer, "intensity" )
+			, sdw::InVec3( m_writer, "worldEye" )
+			, sdw::InVec3( m_writer, "direction" )
+			, InPbrLightMaterial{ m_writer, "material" }
 			, InSurface{ m_writer, "surface" } );
 	}
 

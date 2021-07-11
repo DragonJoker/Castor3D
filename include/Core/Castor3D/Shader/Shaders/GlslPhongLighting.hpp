@@ -22,32 +22,32 @@ namespace castor3d
 				, ShadowOptions shadowOptions
 				, bool isOpaqueProgram );
 			C3D_API void computeCombined( sdw::Vec3 const & worldEye
-				, PhongLightMaterial & material
+				, PhongLightMaterial const & material
 				, sdw::Int const & receivesShadows
 				, SceneData const & sceneData
 				, Surface surface
 				, OutputComponents & output )const;
 			C3D_API void compute( DirectionalLight const & light
 				, sdw::Vec3 const & worldEye
-				, PhongLightMaterial & material
+				, PhongLightMaterial const & material
 				, sdw::Int const & receivesShadows
 				, Surface surface
 				, OutputComponents & output )const;
 			C3D_API void compute( TiledDirectionalLight const & light
 				, sdw::Vec3 const & worldEye
-				, PhongLightMaterial & material
+				, PhongLightMaterial const & material
 				, sdw::Int const & receivesShadows
 				, Surface surface
 				, OutputComponents & output )const;
 			C3D_API void compute( PointLight const & light
 				, sdw::Vec3 const & worldEye
-				, PhongLightMaterial & material
+				, PhongLightMaterial const & material
 				, sdw::Int const & receivesShadows
 				, Surface surface
 				, OutputComponents & output )const;
 			C3D_API void compute( SpotLight const & light
 				, sdw::Vec3 const & worldEye
-				, PhongLightMaterial & material
+				, PhongLightMaterial const & material
 				, sdw::Int const & receivesShadows
 				, Surface surface
 				, OutputComponents & output )const;
@@ -56,7 +56,6 @@ namespace castor3d
 				, sdw::Vec3 const & directSpecular
 				, sdw::Vec3 const & indirectSpecular
 				, sdw::Vec3 const & ambient
-				, sdw::Float const & ambientFactor
 				, sdw::Vec3 const & indirectAmbient
 				, sdw::Float const & ambientOcclusion
 				, sdw::Vec3 const & emissive
@@ -64,28 +63,28 @@ namespace castor3d
 				, sdw::Vec3 const & refracted
 				, sdw::Vec3 const & materialDiffuse );
 			C3D_API sdw::Vec3 computeCombinedDiffuse( sdw::Vec3 const & worldEye
-				, PhongLightMaterial & material
+				, PhongLightMaterial const & material
 				, sdw::Int const & receivesShadows
 				, SceneData const & sceneData
 				, Surface surface )const;
 			C3D_API sdw::Vec3 computeDiffuse( TiledDirectionalLight const & light
 				, sdw::Vec3 const & worldEye
-				, PhongLightMaterial & material
+				, PhongLightMaterial const & material
 				, sdw::Int const & receivesShadows
 				, Surface surface )const;
 			C3D_API sdw::Vec3 computeDiffuse( DirectionalLight const & light
 				, sdw::Vec3 const & worldEye
-				, PhongLightMaterial & material
+				, PhongLightMaterial const & material
 				, sdw::Int const & receivesShadows
 				, Surface surface )const;
 			C3D_API sdw::Vec3 computeDiffuse( PointLight const & light
 				, sdw::Vec3 const & worldEye
-				, PhongLightMaterial & material
+				, PhongLightMaterial const & material
 				, sdw::Int const & receivesShadows
 				, Surface surface )const;
 			C3D_API sdw::Vec3 computeDiffuse( SpotLight const & light
 				, sdw::Vec3 const & worldEye
-				, PhongLightMaterial & material
+				, PhongLightMaterial const & material
 				, sdw::Int const & receivesShadows
 				, Surface surface )const;
 			C3D_API static std::shared_ptr< PhongLightingModel > createModel( sdw::ShaderWriter & writer
@@ -218,14 +217,14 @@ namespace castor3d
 			void doComputeLight( Light const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & lightDirection
-				, PhongLightMaterial & material
+				, PhongLightMaterial const & material
 				, Surface surface
 				, OutputComponents & output );
 			void doDeclareComputeLight();
 			sdw::Vec3 doComputeLightDiffuse( Light const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & lightDirection
-				, PhongLightMaterial & material
+				, PhongLightMaterial const & material
 				, Surface surface );
 			void doDeclareComputeLightDiffuse();
 
@@ -235,34 +234,34 @@ namespace castor3d
 				, InLight
 				, sdw::InVec3
 				, sdw::InVec3
-				, PhongLightMaterial &
+				, InPhongLightMaterial
 				, InSurface
 				, OutputComponents & > m_computeLight;
 			sdw::Function< sdw::Void
 				, InDirectionalLight
 				, sdw::InVec3
-				, PhongLightMaterial &
+				, InPhongLightMaterial
 				, sdw::InInt
 				, InSurface
 				, OutputComponents & > m_computeDirectional;
 			sdw::Function< sdw::Void
 				, InTiledDirectionalLight
 				, sdw::InVec3
-				, PhongLightMaterial &
+				, InPhongLightMaterial
 				, sdw::InInt
 				, InSurface
 				, OutputComponents & > m_computeTiledDirectional;
 			sdw::Function< sdw::Void
 				, InPointLight
 				, sdw::InVec3
-				, PhongLightMaterial &
+				, InPhongLightMaterial
 				, sdw::InInt
 				, InSurface
 				, OutputComponents & > m_computePoint;
 			sdw::Function< sdw::Void
 				, InSpotLight
 				, sdw::InVec3
-				, PhongLightMaterial &
+				, InPhongLightMaterial
 				, sdw::InInt
 				, InSurface
 				, OutputComponents & > m_computeSpot;
@@ -270,30 +269,30 @@ namespace castor3d
 				, InLight
 				, sdw::InVec3
 				, sdw::InVec3
-				, PhongLightMaterial &
+				, InPhongLightMaterial
 				, InSurface > m_computeLightDiffuse;
 			sdw::Function< sdw::Vec3
 				, InTiledDirectionalLight
 				, sdw::InVec3
-				, PhongLightMaterial &
+				, InPhongLightMaterial
 				, sdw::InInt
 				, InSurface > m_computeTiledDirectionalDiffuse;
 			sdw::Function< sdw::Vec3
 				, InDirectionalLight
 				, sdw::InVec3
-				, PhongLightMaterial &
+				, InPhongLightMaterial
 				, sdw::InInt
 				, InSurface > m_computeDirectionalDiffuse;
 			sdw::Function< sdw::Vec3
 				, InPointLight
 				, sdw::InVec3
-				, PhongLightMaterial &
+				, InPhongLightMaterial
 				, sdw::InInt
 				, InSurface > m_computePointDiffuse;
 			sdw::Function< sdw::Vec3
 				, InSpotLight
 				, sdw::InVec3
-				, PhongLightMaterial &
+				, InPhongLightMaterial
 				, sdw::InInt
 				, InSurface > m_computeSpotDiffuse;
 		};
