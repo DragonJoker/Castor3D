@@ -384,6 +384,7 @@ namespace castor3d
 		}
 
 		void PbrLightingModel::computeMapContributions( PassFlags const & passFlags
+			, MaterialType materialType
 			, FilteredTextureFlags const & textures
 			, sdw::Float const & gamma
 			, TextureConfigurations const & textureConfigs
@@ -396,9 +397,7 @@ namespace castor3d
 			, sdw::Float & opacity
 			, sdw::Float & occlusion
 			, sdw::Float & transmittance
-			, sdw::Vec3 & albedo
-			, sdw::Float & metalness
-			, sdw::Float & roughness
+			, PbrLightMaterial & lightMat
 			, sdw::Vec3 & tangentSpaceViewPosition
 			, sdw::Vec3 & tangentSpaceFragPosition )
 		{
@@ -441,17 +440,41 @@ namespace castor3d
 
 					if ( checkFlag( textureIt.second.flags, TextureFlag::eAlbedo ) )
 					{
-						albedo = config.getAlbedo( m_writer, sampled, albedo, gamma );
+						lightMat.albedo = config.getAlbedo( m_writer, sampled, lightMat.albedo, gamma );
 					}
 
-					if ( checkFlag( textureIt.second.flags, TextureFlag::eMetalness ) )
+					if ( materialType == MaterialType::eSpecularGlossiness )
 					{
-						metalness = config.getMetalness( m_writer, sampled, metalness );
-					}
+						if ( checkFlag( textureIt.second.flags, TextureFlag::eSpecular ) )
+						{
+							lightMat.specular = config.getSpecular( m_writer, sampled, lightMat.specular );
+							lightMat.metalness = LightingModel::computeMetalness( lightMat.albedo, lightMat.specular );
+						}
 
-					if ( checkFlag( textureIt.second.flags, TextureFlag::eRoughness ) )
+						if ( checkFlag( textureIt.second.flags, TextureFlag::eGlossiness ) )
+						{
+							auto gloss = m_writer.declLocale( "gloss" + name
+								, LightingModel::computeRoughness( lightMat.roughness ) );
+							gloss = config.getGlossiness( m_writer
+									, sampled
+									, gloss );
+							lightMat.roughness = LightingModel::computeRoughness( gloss );
+						}
+					}
+					else
 					{
-						roughness = config.getGlossiness( m_writer, sampled, roughness );
+						if ( checkFlag( textureIt.second.flags, TextureFlag::eMetalness ) )
+						{
+							lightMat.metalness = config.getMetalness( m_writer, sampled, lightMat.metalness );
+							lightMat.specular = LightingModel::computeF0( lightMat.albedo, lightMat.metalness );
+						}
+
+						if ( checkFlag( textureIt.second.flags, TextureFlag::eRoughness ) )
+						{
+							lightMat.roughness = config.getRoughness( m_writer
+								, sampled
+								, lightMat.roughness );
+						}
 					}
 
 					if ( checkFlag( textureIt.second.flags, TextureFlag::eEmissive ) )
@@ -464,11 +487,12 @@ namespace castor3d
 			if ( checkFlag( passFlags, PassFlag::eLighting )
 				&& !hasEmissive )
 			{
-				emissive *= albedo;
+				emissive *= lightMat.albedo;
 			}
 		}
 
 		void PbrLightingModel::computeMapVoxelContributions( PassFlags const & passFlags
+			, MaterialType materialType
 			, FilteredTextureFlags const & textures
 			, sdw::Float const & gamma
 			, TextureConfigurations const & textureConfigs
@@ -477,9 +501,7 @@ namespace castor3d
 			, sdw::Vec3 & emissive
 			, sdw::Float & opacity
 			, sdw::Float & occlusion
-			, sdw::Vec3 & albedo
-			, sdw::Float & metalness
-			, sdw::Float & roughness )
+			, PbrLightMaterial & lightMat )
 		{
 			bool hasEmissive = false;
 
@@ -502,162 +524,41 @@ namespace castor3d
 
 				if ( checkFlag( textureIt.second.flags, TextureFlag::eAlbedo ) )
 				{
-					albedo = config.getAlbedo( m_writer, sampled, albedo, gamma );
+					lightMat.albedo = config.getAlbedo( m_writer, sampled, lightMat.albedo, gamma );
 				}
 
-				if ( checkFlag( textureIt.second.flags, TextureFlag::eMetalness ) )
+				if ( materialType == MaterialType::eSpecularGlossiness )
 				{
-					metalness = config.getMetalness( m_writer, sampled, metalness );
-				}
-
-				if ( checkFlag( textureIt.second.flags, TextureFlag::eRoughness ) )
-				{
-					roughness = config.getGlossiness( m_writer, sampled, roughness );
-				}
-
-				if ( checkFlag( textureIt.second.flags, TextureFlag::eEmissive ) )
-				{
-					hasEmissive = true;
-				}
-			}
-
-			if ( checkFlag( passFlags, PassFlag::eLighting ) 
-				&& !hasEmissive )
-			{
-				emissive *= albedo;
-			}
-		}
-
-		void PbrLightingModel::computeMapContributions( PassFlags const & passFlags
-			, FilteredTextureFlags const & textures
-			, sdw::Float const & gamma
-			, TextureConfigurations const & textureConfigs
-			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
-			, sdw::Vec3 & texCoords
-			, sdw::Vec3 & normal
-			, sdw::Vec3 & tangent
-			, sdw::Vec3 & bitangent
-			, sdw::Vec3 & emissive
-			, sdw::Float & opacity
-			, sdw::Float & occlusion
-			, sdw::Float & transmittance
-			, sdw::Vec3 & albedo
-			, sdw::Vec3 & specular
-			, sdw::Float & glossiness
-			, sdw::Vec3 & tangentSpaceViewPosition
-			, sdw::Vec3 & tangentSpaceFragPosition )
-		{
-			bool hasEmissive = false;
-			m_utils.computeGeometryMapsContributions( textures
-				, passFlags
-				, textureConfigs
-				, maps
-				, texCoords
-				, opacity
-				, normal
-				, tangent
-				, bitangent
-				, tangentSpaceViewPosition
-				, tangentSpaceFragPosition );
-
-			for ( auto & textureIt : textures )
-			{
-				if ( textureIt.second.flags != TextureFlag::eOpacity
-					&& textureIt.second.flags != TextureFlag::eNormal
-					&& textureIt.second.flags != TextureFlag::eHeight )
-				{
-					auto name = string::stringCast< char >( string::toString( textureIt.first, std::locale{ "C" } ) );
-					auto config = m_writer.declLocale( "config" + name
-						, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( textureIt.second.id ) ) );
-					auto sampled = m_writer.declLocale( "sampled" + name
-						, m_utils.computeCommonMapContribution( textureIt.second.flags
-							, passFlags
-							, name
-							, config
-							, maps[textureIt.first]
-							, gamma
-							, texCoords
-							, emissive
-							, opacity
-							, occlusion
-							, transmittance
-							, tangentSpaceViewPosition
-							, tangentSpaceFragPosition ) );
-
-					if ( checkFlag( textureIt.second.flags, TextureFlag::eAlbedo ) )
-					{
-						albedo = config.getAlbedo( m_writer, sampled, albedo, gamma );
-					}
-
 					if ( checkFlag( textureIt.second.flags, TextureFlag::eSpecular ) )
 					{
-						specular = config.getSpecular( m_writer, sampled, specular );
+						lightMat.specular = config.getSpecular( m_writer, sampled, lightMat.specular );
+						lightMat.metalness = LightingModel::computeMetalness( lightMat.albedo, lightMat.specular );
 					}
 
 					if ( checkFlag( textureIt.second.flags, TextureFlag::eGlossiness ) )
 					{
-						glossiness = config.getGlossiness( m_writer, sampled, glossiness );
+						auto gloss = m_writer.declLocale( "gloss" + name
+							, LightingModel::computeRoughness( lightMat.roughness ) );
+						gloss = config.getGlossiness( m_writer
+							, sampled
+							, gloss );
+						lightMat.roughness = LightingModel::computeRoughness( gloss );
 					}
-
-					if ( checkFlag( textureIt.second.flags, TextureFlag::eEmissive ) )
+				}
+				else
+				{
+					if ( checkFlag( textureIt.second.flags, TextureFlag::eMetalness ) )
 					{
-						hasEmissive = true;
+						lightMat.metalness = config.getMetalness( m_writer, sampled, lightMat.metalness );
+						lightMat.specular = LightingModel::computeF0( lightMat.albedo, lightMat.metalness );
 					}
-				}
-			}
 
-			if ( checkFlag( passFlags, PassFlag::eLighting )
-				&& !hasEmissive )
-			{
-				emissive *= albedo;
-			}
-		}
-
-		void PbrLightingModel::computeMapVoxelContributions( PassFlags const & passFlags
-			, FilteredTextureFlags const & textures
-			, sdw::Float const & gamma
-			, TextureConfigurations const & textureConfigs
-			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
-			, sdw::Vec3 const & texCoords
-			, sdw::Vec3 & emissive
-			, sdw::Float & opacity
-			, sdw::Float & occlusion
-			, sdw::Vec3 & albedo
-			, sdw::Vec3 & specular
-			, sdw::Float & glossiness )
-		{
-			bool hasEmissive = false;
-
-			for ( auto & textureIt : textures )
-			{
-				auto name = string::stringCast< char >( string::toString( textureIt.first, std::locale{ "C" } ) );
-				auto config = m_writer.declLocale( "config" + name
-					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( textureIt.second.id ) ) );
-				auto sampled = m_writer.declLocale( "sampled" + name
-					, m_utils.computeCommonMapVoxelContribution( textureIt.second.flags
-						, passFlags
-						, name
-						, config
-						, maps[textureIt.first]
-						, gamma
-						, texCoords
-						, emissive
-						, opacity
-						, occlusion ) );
-
-				if ( checkFlag( textureIt.second.flags, TextureFlag::eAlbedo ) )
-				{
-					albedo = config.getAlbedo( m_writer, sampled, albedo, gamma );
-				}
-
-				if ( checkFlag( textureIt.second.flags, TextureFlag::eSpecular ) )
-				{
-					specular = config.getSpecular( m_writer, sampled, specular );
-				}
-
-				if ( checkFlag( textureIt.second.flags, TextureFlag::eGlossiness ) )
-				{
-					glossiness = config.getGlossiness( m_writer, sampled, glossiness );
+					if ( checkFlag( textureIt.second.flags, TextureFlag::eRoughness ) )
+					{
+						lightMat.roughness = config.getRoughness( m_writer
+							, sampled
+							, lightMat.roughness );
+					}
 				}
 
 				if ( checkFlag( textureIt.second.flags, TextureFlag::eEmissive ) )
@@ -669,7 +570,7 @@ namespace castor3d
 			if ( checkFlag( passFlags, PassFlag::eLighting ) 
 				&& !hasEmissive )
 			{
-				emissive *= albedo;
+				emissive *= lightMat.albedo;
 			}
 		}
 

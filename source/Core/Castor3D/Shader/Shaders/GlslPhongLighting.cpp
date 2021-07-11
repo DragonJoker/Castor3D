@@ -398,9 +398,7 @@ namespace castor3d
 			, sdw::Float & opacity
 			, sdw::Float & occlusion
 			, sdw::Float & transmittance
-			, sdw::Vec3 & diffuse
-			, sdw::Vec3 & specular
-			, sdw::Float & shininess
+			, PhongLightMaterial & lightMat
 			, sdw::Vec3 & tangentSpaceViewPosition
 			, sdw::Vec3 & tangentSpaceFragPosition )
 		{
@@ -444,17 +442,17 @@ namespace castor3d
 
 					if ( checkFlag( textureIt.second.flags, TextureFlag::eDiffuse ) )
 					{
-						diffuse = config.getDiffuse( m_writer, sampled, diffuse, gamma );
+						lightMat.albedo = config.getDiffuse( m_writer, sampled, lightMat.albedo, gamma );
 					}
 
 					if ( checkFlag( textureIt.second.flags, TextureFlag::eSpecular ) )
 					{
-						specular = config.getSpecular( m_writer, sampled, specular );
+						lightMat.specular = config.getSpecular( m_writer, sampled, lightMat.specular );
 					}
 
 					if ( checkFlag( textureIt.second.flags, TextureFlag::eShininess ) )
 					{
-						shininess = config.getShininess( m_writer, sampled, shininess );
+						lightMat.shininess = config.getShininess( m_writer, sampled, lightMat.shininess );
 					}
 
 					if ( checkFlag( textureIt.second.flags, TextureFlag::eEmissive ) )
@@ -467,7 +465,7 @@ namespace castor3d
 			if ( checkFlag( passFlags, PassFlag::eLighting )
 				&& !hasEmissive )
 			{
-				emissive *= diffuse;
+				emissive *= lightMat.albedo;
 			}
 		}
 
@@ -480,9 +478,7 @@ namespace castor3d
 			, sdw::Vec3 & emissive
 			, sdw::Float & opacity
 			, sdw::Float & occlusion
-			, sdw::Vec3 & diffuse
-			, sdw::Vec3 & specular
-			, sdw::Float & shininess )
+			, PhongLightMaterial & lightMat )
 		{
 			bool hasEmissive = false;
 
@@ -506,17 +502,17 @@ namespace castor3d
 
 				if ( checkFlag( textureIt.second.flags, TextureFlag::eDiffuse ) )
 				{
-					diffuse = config.getDiffuse( m_writer, sampled, diffuse, gamma );
+					lightMat.albedo = config.getDiffuse( m_writer, sampled, lightMat.albedo, gamma );
 				}
 
 				if ( checkFlag( textureIt.second.flags, TextureFlag::eSpecular ) )
 				{
-					specular = config.getSpecular( m_writer, sampled, specular );
+					lightMat.specular = config.getSpecular( m_writer, sampled, lightMat.specular );
 				}
 
 				if ( checkFlag( textureIt.second.flags, TextureFlag::eShininess ) )
 				{
-					shininess = config.getShininess( m_writer, sampled, shininess );
+					lightMat.shininess = config.getShininess( m_writer, sampled, lightMat.shininess );
 				}
 
 				if ( checkFlag( textureIt.second.flags, TextureFlag::eEmissive ) )
@@ -528,7 +524,7 @@ namespace castor3d
 			if ( checkFlag( passFlags, PassFlag::eLighting )
 				&& !hasEmissive )
 			{
-				emissive *= diffuse;
+				emissive *= lightMat.albedo;
 			}
 		}
 
