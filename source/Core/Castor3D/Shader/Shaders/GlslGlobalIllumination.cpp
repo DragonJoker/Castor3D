@@ -472,7 +472,7 @@ namespace castor3d
 			, Surface surface
 			, sdw::Float indirectOcclusion )
 		{
-			auto indirectDiffuse = m_writer.declLocale( "indirectDiffuse"
+			auto indirectDiffuse = m_writer.declLocale( "lightIndirectDiffuse"
 				, vec4( 0.0_f ) );
 
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
@@ -530,7 +530,7 @@ namespace castor3d
 			, sdw::Float indirectOcclusion
 			, sdw::Float indirectBlend )
 		{
-			auto indirectSpecular = m_writer.declLocale< sdw::Vec3 >( "indirectSpecular"
+			auto indirectSpecular = m_writer.declLocale< sdw::Vec3 >( "lightIndirectSpecular"
 				, vec3( 0.0_f ) );
 
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )

@@ -127,10 +127,10 @@ namespace castor3d
 			eDirectSpecular,
 			eIndirectDiffuse,
 			eIndirectSpecular,
+			eEnvironment,
 			eBrdf,
 			eIrradiance,
 			ePrefiltered,
-			eEnvironment,
 		};
 
 		ShaderPtr createPhongPixelProgram( RenderSystem const & renderSystem
@@ -169,10 +169,8 @@ namespace castor3d
 			utils.declareDecodeMaterial();
 			utils.declareInvertVec2Y();
 
-			if ( config.hasSpecularGi )
-			{
-				utils.declareFresnelSchlick();
-			}
+			shader::CookTorranceBRDF cookTorrance{ writer, utils };
+			cookTorrance.declareDiffuse();
 
 			shader::PhongReflectionModel reflections{ writer
 				, utils
@@ -222,8 +220,8 @@ namespace castor3d
 						, envMapIndex );
 					auto depth = writer.declLocale( "depth"
 						, c3d_mapDepth.lod( vtx_texture, 0.0_f ).x() );
-					auto diffuse = writer.declLocale( "diffuse"
-						, data2.xyz() );
+					auto albedo = writer.declLocale( "albedo"
+						, data2.rgb() );
 					auto surface = writer.declLocale< shader::Surface >( "surface" );
 					surface.create( c3d_gpInfoData.projToWorld( utils, vtx_texture, depth )
 						, data1.rgb() );
@@ -234,18 +232,18 @@ namespace castor3d
 							, c3d_mapData3.lod( vtx_texture, 0.0_f ) );
 						auto data4 = writer.declLocale( "data4"
 							, c3d_mapData4.lod( vtx_texture, 0.0_f ) );
+
 						auto material = writer.declLocale( "material"
 							, materials.getMaterial( materialId ) );
-						auto shininess = writer.declLocale( "shininess"
-							, data2.w() );
-						auto specular = writer.declLocale( "specular"
-							, data3.xyz() );
 						auto occlusion = writer.declLocale( "occlusion"
 							, data3.a() );
 						auto emissive = writer.declLocale( "emissive"
 							, data4.xyz() );
+						auto lightMat = writer.declLocale< shader::PhongLightMaterial >( "lightMat" );
+						lightMat.create< MaterialType::ePhong >( albedo, data3, data2 );
+
 						auto ambient = writer.declLocale( "ambient"
-							, clamp( c3d_sceneData.getAmbientLight() * diffuse
+							, clamp( c3d_sceneData.getAmbientLight() * albedo
 								, vec3( 0.0_f )
 								, vec3( 1.0_f ) ) );
 						auto lightDiffuse = writer.declLocale( "lightDiffuse"
@@ -258,15 +256,13 @@ namespace castor3d
 						auto lightIndirectSpecular = writer.declLocale( "lightIndirectSpecular"
 							, c3d_mapLightIndirectSpecular.lod( vtx_texture, 0.0_f ).rgb()
 							, config.hasSpecularGi );
-						lightSpecular *= specular;
+						lightSpecular *= lightMat.specular;
 
 						if ( config.hasSsao )
 						{
 							occlusion *= c3d_mapSsao.lod( vtx_texture, 0.0_f ).r();
 						}
 
-						auto lightMat = material.getLightMaterial( specular
-							, shininess );
 						auto reflected = writer.declLocale( "reflected"
 							, vec3( 0.0_f ) );
 						auto refracted = writer.declLocale( "refracted"
@@ -280,209 +276,23 @@ namespace castor3d
 							, surface
 							, c3d_sceneData
 							, ambient
-							, diffuse
-							, reflected
-							, refracted );
-						pxl_fragColor = vec4( shader::PhongLightingModel::combine( lightDiffuse
-								, config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 0.0_f )
-								, lightSpecular
-								, config.hasSpecularGi ? lightIndirectSpecular : vec3( 0.0_f )
-								, ambient
-								, material.ambient
-								, config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 1.0_f )
-								, occlusion
-								, emissive
-								, reflected
-								, refracted
-								, diffuse )
-							, 1.0_f );
-					}
-					ELSE
-					{
-						pxl_fragColor = vec4( diffuse, 1.0_f );
-					}
-					FI;
-
-					IF( writer, c3d_sceneData.fogType != UInt( uint32_t( FogType::eDisabled ) ) )
-					{
-						surface.viewPosition = c3d_gpInfoData.projToView( utils
-							, vtx_texture
-							, c3d_mapDepth.lod( vtx_texture, 0.0_f ).x() );
-						pxl_fragColor = fog.apply( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData )
-							, pxl_fragColor
-							, length( surface.viewPosition )
-							, surface.viewPosition.z()
-							, c3d_sceneData );
-					}
-					FI;
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		ShaderPtr createPbrMRPixelProgram( RenderSystem const & renderSystem
-			, ResolveProgramConfig const & config )
-		{
-			using namespace sdw;
-			FragmentWriter writer;
-
-			// Shader inputs
-			shader::PbrMRMaterials materials{ writer };
-			materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( ResolveBind::eMaterials )
-				, 0u );
-			UBO_SCENE( writer, uint32_t( ResolveBind::eScene ), 0u );
-			UBO_GPINFO( writer, uint32_t( ResolveBind::eGpInfo ), 0u );
-			UBO_HDR_CONFIG( writer, uint32_t( ResolveBind::eHdrConfig ), 0u );
-
-			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), uint32_t( ResolveBind::eDepth ), 0u );
-			auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), uint32_t( ResolveBind::eData1 ), 0u );
-			auto c3d_mapData2 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), uint32_t( ResolveBind::eData2 ), 0u );
-			auto c3d_mapData3 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), uint32_t( ResolveBind::eData3 ), 0u );
-			auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), uint32_t( ResolveBind::eData4 ), 0u );
-			auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), uint32_t( ResolveBind::eData5 ), 0u );
-			auto c3d_mapSsao = writer.declSampledImage< FImg2DRg32 >( "c3d_mapSsao", uint32_t( ResolveBind::eSsao ), 0u, config.hasSsao );
-			auto c3d_mapLightDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightDiffuse", uint32_t( ResolveBind::eDirectDiffuse ), 0u );
-			auto c3d_mapLightSpecular = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightSpecular", uint32_t( ResolveBind::eDirectSpecular ), 0u );
-			auto c3d_mapLightIndirectDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightIndirectDiffuse", uint32_t( ResolveBind::eIndirectDiffuse ), 0u, config.hasDiffuseGi );
-			auto c3d_mapLightIndirectSpecular = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightIndirectSpecular", uint32_t( ResolveBind::eIndirectSpecular ), 0u, config.hasSpecularGi );
-			auto c3d_mapBrdf = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf", uint32_t( ResolveBind::eBrdf ), 0u );
-			auto c3d_mapIrradiance = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapIrradiance", uint32_t( ResolveBind::eIrradiance ), 0u );
-			auto c3d_mapPrefiltered = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapPrefiltered", uint32_t( ResolveBind::ePrefiltered ), 0u );
-
-			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
-
-			shader::Utils utils{ writer };
-			utils.declareRemoveGamma();
-			utils.declareCalcWSPosition();
-			utils.declareCalcVSPosition();
-			utils.declareDecodeMaterial();
-			utils.declareInvertVec2Y();
-
-			shader::CookTorranceBRDF cookTorrance{ writer, utils };
-			cookTorrance.declareDiffuse();
-
-			shader::PbrReflectionModel reflections{ writer
-				, utils
-				, uint32_t( ResolveBind::eEnvironment )
-				, 0u };
-			shader::CommonFog fog{ writer };
-
-			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0u );
-
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
-				{
-					auto fixedTexCoord = writer.declLocale( "fixedTexCoord"
-						, vtx_texture );
-					auto data5 = writer.declLocale( "data5"
-						, c3d_mapData5.lod( fixedTexCoord, 0.0_f ) );
-					auto materialId = writer.declLocale( "materialId"
-						, writer.cast< UInt >( data5.z() ) );
-
-					IF( writer, materialId == 0_u )
-					{
-						writer.discard();
-					}
-					FI;
-
-					auto data1 = writer.declLocale( "data1"
-						, c3d_mapData1.lod( fixedTexCoord, 0.0_f ) );
-					auto data2 = writer.declLocale( "data2"
-						, c3d_mapData2.lod( fixedTexCoord, 0.0_f ) );
-					auto flags = writer.declLocale( "flags"
-						, data1.w() );
-					auto envMapIndex = writer.declLocale( "envMapIndex"
-						, 0_i );
-					auto receiver = writer.declLocale( "receiver"
-						, 0_i );
-					auto reflection = writer.declLocale( "reflection"
-						, 0_i );
-					auto refraction = writer.declLocale( "refraction"
-						, 0_i );
-					auto lighting = writer.declLocale( "lighting"
-						, 0_i );
-					utils.decodeMaterial( flags
-						, receiver
-						, reflection
-						, refraction
-						, lighting
-						, envMapIndex );
-
-					auto material = writer.declLocale( "material"
-						, materials.getMaterial( materialId ) );
-					auto albedo = writer.declLocale( "albedo"
-						, data2.rgb() );
-					auto depth = writer.declLocale( "depth"
-						, c3d_mapDepth.lod( vtx_texture, 0.0_f ).x() );
-					auto surface = writer.declLocale< shader::Surface >( "surface" );
-					surface.create( c3d_gpInfoData.projToWorld( utils, vtx_texture, depth )
-						, data1.rgb() );
-
-					IF( writer, lighting )
-					{
-						auto data3 = writer.declLocale( "data3"
-							, c3d_mapData3.lod( fixedTexCoord, 0.0_f ) );
-						auto data4 = writer.declLocale( "data4"
-							, c3d_mapData4.lod( fixedTexCoord, 0.0_f ) );
-						auto roughness = writer.declLocale( "roughness"
-							, data2.a() );
-						auto metalness = writer.declLocale( "metalness"
-							, data3.r() );
-						auto occlusion = writer.declLocale( "occlusion"
-							, data3.a() );
-						auto emissive = writer.declLocale( "emissive"
-							, data4.rgb() );
-						auto ambient = writer.declLocale( "ambient"
-							, c3d_sceneData.getAmbientLight() );
-						auto lightDiffuse = writer.declLocale( "lightDiffuse"
-							, c3d_mapLightDiffuse.lod( fixedTexCoord, 0.0_f ).rgb() );
-						auto lightSpecular = writer.declLocale( "lightSpecular"
-							, c3d_mapLightSpecular.lod( fixedTexCoord, 0.0_f ).rgb() );
-						auto lightIndirectDiffuse = writer.declLocale( "lightIndirectDiffuse"
-							, c3d_mapLightIndirectDiffuse.lod( vtx_texture, 0.0_f ).rgb()
-							, config.hasDiffuseGi );
-						auto lightIndirectSpecular = writer.declLocale( "lightIndirectSpecular"
-							, c3d_mapLightIndirectSpecular.lod( vtx_texture, 0.0_f ).rgb()
-							, config.hasSpecularGi );
-
-						if ( config.hasSsao )
-						{
-							occlusion *= c3d_mapSsao.lod( fixedTexCoord, 0.0_f ).r();
-						}
-
-						auto lightMat = material.getLightMaterial( albedo
-							, metalness
-							, roughness );
-						auto reflected = writer.declLocale( "reflected"
-							, vec3( 0.0_f ) );
-						auto refracted = writer.declLocale( "refracted"
-							, vec3( 0.0_f ) );
-						reflections.computeDeferred( c3d_mapBrdf
-							, c3d_mapIrradiance
-							, c3d_mapPrefiltered
-							, envMapIndex
-							, reflection
-							, refraction
-							, material.refractionRatio
 							, albedo
-							, lightMat
-							, material.transmission
-							, surface
-							, c3d_sceneData
 							, reflected
 							, refracted );
 						auto indirectAmbient = writer.declLocale( "indirectAmbient"
-							, config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 1.0_f ) );
+							, material.ambient * ( config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 1.0_f ) ) );
+						auto pbrLightMat = writer.declLocale< shader::PbrLightMaterial >( "pbrLightMat"
+							, config.hasDiffuseGi );
+						pbrLightMat.create< MaterialType::ePhong >( albedo, data3, data2 );
 						auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
 							, ( config.hasDiffuseGi
 								? cookTorrance.computeDiffuse( lightIndirectDiffuse
 									, c3d_sceneData.getCameraPosition()
 									, surface.worldNormal
-									, lightMat
+									, pbrLightMat
 									, surface )
 								: vec3( 0.0_f ) ) );
-						pxl_fragColor = vec4( shader::PbrLightingModel::combine( lightDiffuse
+						pxl_fragColor = vec4( shader::PhongLightingModel::combine( lightDiffuse
 								, indirectDiffuse
 								, lightSpecular
 								, config.hasSpecularGi ? lightIndirectSpecular : vec3( 0.0_f )
@@ -505,7 +315,7 @@ namespace castor3d
 					{
 						surface.viewPosition = c3d_gpInfoData.projToView( utils
 							, vtx_texture
-							, c3d_mapDepth.lod( vtx_texture, 0.0_f ).x() );
+							, depth );
 						pxl_fragColor = fog.apply( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData )
 							, pxl_fragColor
 							, length( surface.viewPosition )
@@ -517,14 +327,21 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderPtr createPbrSGPixelProgram( RenderSystem const & renderSystem
+		template< MaterialType MaterialT >
+		ShaderPtr createPbrPixelProgramT( RenderSystem const & renderSystem
 			, ResolveProgramConfig const & config )
 		{
+			using MyTraits = shader::ShaderMaterialTraitsT< MaterialT >;
+			using Materials = typename MyTraits::Materials;
+			using LightingModel = typename MyTraits::LightingModel;
+			using LightMaterial = typename MyTraits::LightMaterial;
+			using ReflectionModel = typename MyTraits::ReflectionModel;
+			
 			using namespace sdw;
 			FragmentWriter writer;
 
 			// Shader inputs
-			shader::PbrSGMaterials materials{ writer };
+			Materials materials{ writer };
 			materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 				, uint32_t( ResolveBind::eMaterials )
 				, 0u );
@@ -543,9 +360,6 @@ namespace castor3d
 			auto c3d_mapLightSpecular = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightSpecular", uint32_t( ResolveBind::eDirectSpecular ), 0u );
 			auto c3d_mapLightIndirectDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightIndirectDiffuse", uint32_t( ResolveBind::eIndirectDiffuse ), 0u, config.hasDiffuseGi );
 			auto c3d_mapLightIndirectSpecular = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightIndirectSpecular", uint32_t( ResolveBind::eIndirectSpecular ), 0u, config.hasSpecularGi );
-			auto c3d_mapBrdf = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf", uint32_t( ResolveBind::eBrdf ), 0u );
-			auto c3d_mapIrradiance = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapIrradiance", uint32_t( ResolveBind::eIrradiance ), 0u );
-			auto c3d_mapPrefiltered = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapPrefiltered", uint32_t( ResolveBind::ePrefiltered ), 0u );
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
@@ -559,7 +373,7 @@ namespace castor3d
 			shader::CookTorranceBRDF cookTorrance{ writer, utils };
 			cookTorrance.declareDiffuse();
 
-			shader::PbrReflectionModel reflections{ writer
+			ReflectionModel reflections{ writer
 				, utils
 				, uint32_t( ResolveBind::eEnvironment )
 				, 0u };
@@ -571,10 +385,8 @@ namespace castor3d
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					auto fixedTexCoord = writer.declLocale( "fixedTexCoord"
-						, vtx_texture );
 					auto data5 = writer.declLocale( "data5"
-						, c3d_mapData5.lod( fixedTexCoord, 0.0_f ) );
+						, c3d_mapData5.lod( vtx_texture, 0.0_f ) );
 					auto materialId = writer.declLocale( "materialId"
 						, writer.cast< UInt >( data5.z() ) );
 
@@ -585,9 +397,9 @@ namespace castor3d
 					FI;
 
 					auto data1 = writer.declLocale( "data1"
-						, c3d_mapData1.lod( fixedTexCoord, 0.0_f ) );
+						, c3d_mapData1.lod( vtx_texture, 0.0_f ) );
 					auto data2 = writer.declLocale( "data2"
-						, c3d_mapData2.lod( fixedTexCoord, 0.0_f ) );
+						, c3d_mapData2.lod( vtx_texture, 0.0_f ) );
 					auto flags = writer.declLocale( "flags"
 						, data1.w() );
 					auto envMapIndex = writer.declLocale( "envMapIndex"
@@ -600,19 +412,17 @@ namespace castor3d
 						, 0_i );
 					auto lighting = writer.declLocale( "lighting"
 						, 0_i );
+
 					utils.decodeMaterial( flags
 						, receiver
 						, reflection
 						, refraction
 						, lighting
 						, envMapIndex );
-
-					auto material = writer.declLocale( "material"
-						, materials.getMaterial( materialId ) );
-					auto albedo = writer.declLocale( "albedo"
-						, data2.xyz() );
 					auto depth = writer.declLocale( "depth"
 						, c3d_mapDepth.lod( vtx_texture, 0.0_f ).x() );
+					auto albedo = writer.declLocale( "albedo"
+						, data2.rgb() );
 					auto surface = writer.declLocale< shader::Surface >( "surface" );
 					surface.create( c3d_gpInfoData.projToWorld( utils, vtx_texture, depth )
 						, data1.rgb() );
@@ -620,23 +430,25 @@ namespace castor3d
 					IF( writer, lighting )
 					{
 						auto data3 = writer.declLocale( "data3"
-							, c3d_mapData3.lod( fixedTexCoord, 0.0_f ) );
+							, c3d_mapData3.lod( vtx_texture, 0.0_f ) );
 						auto data4 = writer.declLocale( "data4"
-							, c3d_mapData4.lod( fixedTexCoord, 0.0_f ) );
-						auto glossiness = writer.declLocale( "glossiness"
-							, data2.w() );
-						auto specular = writer.declLocale( "specular"
-							, data3.xyz() );
+							, c3d_mapData4.lod( vtx_texture, 0.0_f ) );
+
+						auto material = writer.declLocale( "material"
+							, materials.getMaterial( materialId ) );
 						auto occlusion = writer.declLocale( "occlusion"
 							, data3.a() );
 						auto emissive = writer.declLocale( "emissive"
 							, data4.xyz() );
+						auto lightMat = writer.declLocale< LightMaterial >( "lightMat" );
+						lightMat.create< MaterialT >( albedo, data3, data2 );
+
 						auto ambient = writer.declLocale( "ambient"
 							, c3d_sceneData.getAmbientLight() );
 						auto lightDiffuse = writer.declLocale( "lightDiffuse"
-							, c3d_mapLightDiffuse.lod( fixedTexCoord, 0.0_f ).xyz() );
+							, c3d_mapLightDiffuse.lod( vtx_texture, 0.0_f ).xyz() );
 						auto lightSpecular = writer.declLocale( "lightSpecular"
-							, c3d_mapLightSpecular.lod( fixedTexCoord, 0.0_f ).xyz() );
+							, c3d_mapLightSpecular.lod( vtx_texture, 0.0_f ).xyz() );
 						auto lightIndirectDiffuse = writer.declLocale( "lightIndirectDiffuse"
 							, c3d_mapLightIndirectDiffuse.lod( vtx_texture, 0.0_f ).rgb()
 							, config.hasDiffuseGi );
@@ -646,20 +458,14 @@ namespace castor3d
 
 						if ( config.hasSsao )
 						{
-							occlusion *= c3d_mapSsao.lod( fixedTexCoord, 0.0_f ).r();
+							occlusion *= c3d_mapSsao.lod( vtx_texture, 0.0_f ).r();
 						}
 
-						auto lightMat = material.getLightMaterial( albedo
-							, specular
-							, glossiness );
 						auto reflected = writer.declLocale( "reflected"
 							, vec3( 0.0_f ) );
 						auto refracted = writer.declLocale( "refracted"
 							, vec3( 0.0_f ) );
-						reflections.computeDeferred( c3d_mapBrdf
-							, c3d_mapIrradiance
-							, c3d_mapPrefiltered
-							, envMapIndex
+						reflections.computeDeferred( envMapIndex
 							, reflection
 							, refraction
 							, material.refractionRatio
@@ -703,7 +509,7 @@ namespace castor3d
 					{
 						surface.viewPosition = c3d_gpInfoData.projToView( utils
 							, vtx_texture
-							, c3d_mapDepth.lod( vtx_texture, 0.0_f ).x() );
+							, depth );
 						pxl_fragColor = fog.apply( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData )
 							, pxl_fragColor
 							, length( surface.viewPosition )
@@ -722,8 +528,8 @@ namespace castor3d
 			return ( matType == MaterialType::ePhong
 				? createPhongPixelProgram( device.renderSystem, config )
 				: ( matType == MaterialType::eMetallicRoughness
-					? createPbrMRPixelProgram( device.renderSystem, config )
-					: createPbrSGPixelProgram( device.renderSystem, config ) ) );
+					? createPbrPixelProgramT< MaterialType::eMetallicRoughness >( device.renderSystem, config )
+					: createPbrPixelProgramT< MaterialType::eSpecularGlossiness >( device.renderSystem, config ) ) );
 		}
 
 		std::vector< crg::VkPipelineShaderStageCreateInfoArray > createPrograms( std::vector< OpaqueResolvePass::Program > const & programs )

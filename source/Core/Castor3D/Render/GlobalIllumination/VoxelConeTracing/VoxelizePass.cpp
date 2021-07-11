@@ -517,6 +517,15 @@ namespace castor3d
 		utils.declareEncodeNormal();
 		utils.declareFlatten();
 
+		// Shader inputs
+		auto index = 0u;
+		auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition", index++ );
+		auto inViewPosition = writer.declInput< Vec3 >( "inViewPosition", index++ );
+		auto inNormal = writer.declInput< Vec3 >( "inNormal", index++ );
+		auto inTexture = writer.declInput< Vec3 >( "inTexture", index++, hasTextures );
+		auto inMaterial = writer.declInput< UInt >( "inMaterial", index++ );
+		auto in = writer.getIn();
+
 		shader::PhongMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 			, uint32_t( NodeUboIdx::eMaterials )
@@ -560,15 +569,6 @@ namespace castor3d
 			, addIndex
 			, RenderPipeline::eAdditional
 			, m_mode != RenderMode::eTransparentOnly );
-
-		// Shader inputs
-		auto index = 0u;
-		auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition", index++ );
-		auto inViewPosition = writer.declInput< Vec3 >( "inViewPosition", index++ );
-		auto inNormal = writer.declInput< Vec3 >( "inNormal", index++ );
-		auto inTexture = writer.declInput< Vec3 >( "inTexture", index++, hasTextures );
-		auto inMaterial = writer.declInput< UInt >( "inMaterial", index++ );
-		auto in = writer.getIn();
 
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
@@ -619,20 +619,22 @@ namespace castor3d
 
 					if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 					{
-						auto lightMat = material.getLightMaterial( specular
+						auto lightMat = writer.declLocale< shader::PhongLightMaterial >( "lightMat" );
+						lightMat.create< MaterialType::ePhong >( diffuse
+							, specular
 							, shininess );
 						auto worldEye = writer.declLocale( "worldEye"
 							, c3d_sceneData.getCameraPosition() );
 						auto surface = writer.declLocale< shader::Surface >( "surface" );
 						surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
-						auto color = writer.declLocale( "lightDiffuse"
+						auto color = writer.declLocale( "color"
 							, lighting->computeCombinedDiffuse( worldEye
 								, lightMat
 								, c3d_modelData.isShadowReceiver()
 								, c3d_sceneData
 								, surface ) );
-						color.xyz() *= diffuse * occlusion;
-						color.xyz() += emissive;
+						color *= diffuse * occlusion;
+						color += emissive;
 
 						auto encodedColor = writer.declLocale( "encodedColor"
 							, utils.encodeColor( vec4( color, alpha ) ) );
@@ -749,16 +751,6 @@ namespace castor3d
 						, material.opacity );
 					auto occlusion = writer.declLocale( "occlusion"
 						, 1.0_f );
-					auto transmittance = writer.declLocale( "transmittance"
-						, 0.0_f );
-					auto tangentSpaceViewPosition = writer.declLocale( "tangentSpaceViewPosition"
-						, vec3( 0.0_f ) );
-					auto tangentSpaceFragPosition = writer.declLocale( "tangentSpaceFragPosition"
-						, vec3( 0.0_f ) );
-					auto tangent = writer.declLocale( "tangent"
-						, vec3( 0.0_f ) );
-					auto bitangent = writer.declLocale( "bitangent"
-						, vec3( 0.0_f ) );
 
 					if ( hasTextures )
 					{
@@ -780,7 +772,8 @@ namespace castor3d
 
 					if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 					{
-						auto lightMat = material.getLightMaterial( albedo
+						auto lightMat = writer.declLocale< shader::PbrLightMaterial >( "lightMat" );
+						lightMat.create< MaterialType::eMetallicRoughness >( albedo
 							, metalness
 							, roughness );
 						auto worldEye = writer.declLocale( "worldEye"
@@ -830,6 +823,15 @@ namespace castor3d
 		utils.declareEncodeNormal();
 		utils.declareFlatten();
 
+		// Shader inputs
+		auto index = 0u;
+		auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition", index++ );
+		auto inViewPosition = writer.declInput< Vec3 >( "inViewPosition", index++ );
+		auto inNormal = writer.declInput< Vec3 >( "inNormal", index++ );
+		auto inTexture = writer.declInput< Vec3 >( "inTexture", index++, hasTextures );
+		auto inMaterial = writer.declInput< UInt >( "inMaterial", index++ );
+		auto in = writer.getIn();
+
 		shader::PbrSGMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 			, uint32_t( NodeUboIdx::eMaterials )
@@ -873,15 +875,6 @@ namespace castor3d
 			, addIndex
 			, RenderPipeline::eAdditional
 			, m_mode != RenderMode::eTransparentOnly );
-
-		// Shader inputs
-		auto index = 0u;
-		auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition", index++ );
-		auto inViewPosition = writer.declInput< Vec3 >( "inViewPosition", index++ );
-		auto inNormal = writer.declInput< Vec3 >( "inNormal", index++ );
-		auto inTexture = writer.declInput< Vec3 >( "inTexture", index++, hasTextures );
-		auto inMaterial = writer.declInput< UInt >( "inMaterial", index++ );
-		auto in = writer.getIn();
 
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
@@ -932,7 +925,8 @@ namespace castor3d
 
 					if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 					{
-						auto lightMat = material.getLightMaterial( albedo
+						auto lightMat = writer.declLocale< shader::PbrLightMaterial >( "lightMat" );
+						lightMat.create< MaterialType::eSpecularGlossiness >( albedo
 							, specular
 							, glossiness );
 						auto worldEye = writer.declLocale( "worldEye"

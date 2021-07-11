@@ -125,9 +125,9 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
+		auto & renderSystem = *getEngine()->getRenderSystem();
 
 		auto textures = filterTexturesFlags( flags.textures );
-		auto & renderSystem = *getEngine()->getRenderSystem();
 		shader::PhongMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 			, uint32_t( NodeUboIdx::eMaterials )
@@ -245,9 +245,9 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
+		auto & renderSystem = *getEngine()->getRenderSystem();
 
 		auto textures = filterTexturesFlags( flags.textures );
-		auto & renderSystem = *getEngine()->getRenderSystem();
 		shader::PbrMRMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 			, uint32_t( NodeUboIdx::eMaterials )

@@ -4,6 +4,7 @@
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslPbrMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
@@ -16,53 +17,30 @@ namespace castor3d::shader
 {
 	//***********************************************************************************************
 
-	PhongLightMaterial::PhongLightMaterial( sdw::ShaderWriter & writer )
-		: PhongLightMaterial{ { writer, "specular" }, { writer, "shininess" } }
+	PhongLightMaterial::PhongLightMaterial( sdw::ShaderWriter & writer
+		, sdw::expr::ExprPtr expr
+		, bool enabled )
+		: sdw::StructInstance{ writer, std::move( expr ), enabled }
+		, specular{ getMember< sdw::Vec3 >( "specular" ) }
+		, shininess{ getMember< sdw::Float >( "shininess" ) }
 	{
 	}
 
-	PhongLightMaterial::PhongLightMaterial( sdw::InVec3 const & specular
-		, sdw::InFloat const & shininess )
-		: specular{ specular }
-		, shininess{ shininess }
-		, m_expr{ sdw::expr::makeComma( makeExpr( this->specular ), makeExpr( this->shininess ) ) }
+	PhongLightMaterial & PhongLightMaterial::operator=( PhongLightMaterial const & rhs )
 	{
+		StructInstance::operator=( rhs );
+		return *this;
 	}
 
-	ast::expr::Expr * PhongLightMaterial::getExpr()const
+	ast::type::StructPtr PhongLightMaterial::makeType( ast::type::TypesCache & cache )
 	{
-		return m_expr.get();
-	}
+		auto result = cache.getStruct( ast::type::MemoryLayout::eStd430
+			, "PhongLightMaterial" );
 
-	sdw::ShaderWriter * PhongLightMaterial::getWriter()const
-	{
-		return sdw::findWriter( specular, shininess );
-	}
-
-	void PhongLightMaterial::setVar( ast::var::VariableList::const_iterator & var )
-	{
-		specular.setVar( var );
-		shininess.setVar( var );
-	}
-
-	//***********************************************************************************************
-
-	ast::expr::ExprList makeFnArg( sdw::ShaderWriter & writer
-		, PhongLightMaterial const & value )
-	{
-		ast::expr::ExprList result;
-		auto args = sdw::makeFnArg( writer, value.specular );
-
-		for ( auto & expr : args )
+		if ( result->empty() )
 		{
-			result.emplace_back( std::move( expr ) );
-		}
-
-		args = sdw::makeFnArg( writer, value.shininess );
-
-		for ( auto & expr : args )
-		{
-			result.emplace_back( std::move( expr ) );
+			result->declMember( "specular", ast::type::Kind::eVec3F );
+			result->declMember( "shininess", ast::type::Kind::eFloat );
 		}
 
 		return result;
@@ -88,24 +66,6 @@ namespace castor3d::shader
 		return diffuse;
 	}
 
-	PhongLightMaterial PhongMaterial::getLightMaterial()const
-	{
-		return getLightMaterial( m_specShin.xyz()
-			, m_specShin.w() );
-	}
-
-	PhongLightMaterial PhongMaterial::getLightMaterial( sdw::Vec3 specular
-		, sdw::Float shininess )
-	{
-		return { std::move( specular )
-			, std::move( shininess ) };
-	}
-
-	std::unique_ptr< sdw::Struct > PhongMaterial::declare( sdw::ShaderWriter & writer )
-	{
-		return std::make_unique< sdw::Struct >( writer, makeType( writer.getTypesCache() ) );
-	}
-
 	ast::type::StructPtr PhongMaterial::makeType( ast::type::TypesCache & cache )
 	{
 		auto result = cache.getStruct( ast::type::MemoryLayout::eStd140, "LegacyMaterial" );
@@ -122,6 +82,11 @@ namespace castor3d::shader
 		}
 
 		return result;
+	}
+
+	std::unique_ptr< sdw::Struct > PhongMaterial::declare( sdw::ShaderWriter & writer )
+	{
+		return std::make_unique< sdw::Struct >( writer, makeType( writer.getTypesCache() ) );
 	}
 
 	//*********************************************************************************************

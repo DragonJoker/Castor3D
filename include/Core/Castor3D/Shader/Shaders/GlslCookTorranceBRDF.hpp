@@ -9,27 +9,94 @@ See LICENSE file in root folder
 namespace castor3d::shader
 {
 	struct PbrLightMaterial
+		: public sdw::StructInstance
 	{
-		C3D_API explicit PbrLightMaterial( sdw::ShaderWriter & writer );
-		C3D_API PbrLightMaterial( sdw::InOutVec3 const & specular
-			, sdw::InOutFloat const & metalness
-			, sdw::InOutFloat const & roughness );
+		template< MaterialType MaterialT >
+		struct CreatorT;
 
-		C3D_API ast::expr::Expr * getExpr()const;
-		C3D_API sdw::ShaderWriter * getWriter()const;
-		C3D_API void setVar( ast::var::VariableList::const_iterator & var );
-
-		bool isEnabled()const
+		template<>
+		struct CreatorT< MaterialType::ePhong >
 		{
-			return true;
+			static void create( PbrLightMaterial & material
+				, sdw::Vec3 const & albedo
+				, sdw::Vec3 const & specular
+				, sdw::Float const & shininess )
+			{
+				material.specular = specular.rgb();
+				material.metalness = LightingModel::computeMetalness( albedo, specular );
+				material.roughness = LightingModel::computeRoughness( LightingModel::computeGlossiness( shininess ) );
+			}
+
+			static void create( PbrLightMaterial & material
+				, sdw::Vec3 const & albedo
+				, sdw::Vec4 const & data3
+				, sdw::Vec4 const & data2 )
+			{
+				create( material, albedo, data3.rgb(), data2.a() );
+			}
+		};
+
+		template<>
+		struct CreatorT< MaterialType::eMetallicRoughness >
+		{
+			static void create( PbrLightMaterial & material
+				, sdw::Vec3 const & albedo
+				, sdw::Float const & metalness
+				, sdw::Float const & roughness )
+			{
+				material.specular = LightingModel::computeF0( albedo, metalness );
+				material.metalness = metalness;
+				material.roughness = roughness;
+			}
+
+			static void create( PbrLightMaterial & material
+				, sdw::Vec3 const & albedo
+				, sdw::Vec4 const & data3
+				, sdw::Vec4 const & data2 )
+			{
+				create( material, albedo, data3.r(), data2.a() );
+			}
+		};
+
+		template<>
+		struct CreatorT< MaterialType::eSpecularGlossiness >
+		{
+			static void create( PbrLightMaterial & material
+				, sdw::Vec3 const & albedo
+				, sdw::Vec3 const & specular
+				, sdw::Float const & glossiness )
+			{
+				material.specular = specular;
+				material.metalness = LightingModel::computeMetalness( albedo, specular );
+				material.roughness = LightingModel::computeRoughness( glossiness );
+			}
+
+			static void create( PbrLightMaterial & material
+				, sdw::Vec3 const & albedo
+				, sdw::Vec4 const & data3
+				, sdw::Vec4 const & data2 )
+			{
+				create( material, albedo, data3.rgb(), data2.a() );
+			}
+		};
+
+		C3D_API PbrLightMaterial( sdw::ShaderWriter & writer
+			, sdw::expr::ExprPtr expr
+			, bool enabled );
+		C3D_API PbrLightMaterial & operator=( PbrLightMaterial const & rhs );
+
+		template< MaterialType MaterialT
+			, typename ... ParamsT >
+		void create( ParamsT const & ... params )
+		{
+			CreatorT< MaterialT >::create( *this, params... );
 		}
 
-		sdw::InOutVec3 specular;
-		sdw::InOutFloat metalness;
-		sdw::InOutFloat roughness;
+		C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 
-	private:
-		ast::expr::ExprPtr m_expr;
+		sdw::Vec3 specular;
+		sdw::Float metalness;
+		sdw::Float roughness;
 	};
 
 	class CookTorranceBRDF
@@ -42,18 +109,18 @@ namespace castor3d::shader
 		C3D_API void compute( Light const & light
 			, sdw::Vec3 const & worldEye
 			, sdw::Vec3 const & direction
-			, PbrLightMaterial & material
+			, PbrLightMaterial const & material
 			, Surface surface
 			, OutputComponents & output )const;
 		C3D_API sdw::Vec3 computeDiffuse( sdw::Vec3 const & colour
 			, sdw::Vec3 const & worldEye
 			, sdw::Vec3 const & direction
-			, PbrLightMaterial & material
+			, PbrLightMaterial const & material
 			, Surface surface )const;
 		C3D_API sdw::Vec3 computeDiffuse( Light const & light
 			, sdw::Vec3 const & worldEye
 			, sdw::Vec3 const & direction
-			, PbrLightMaterial & material
+			, PbrLightMaterial const & material
 			, Surface surface )const;
 
 	protected:
@@ -84,7 +151,7 @@ namespace castor3d::shader
 			, InLight
 			, sdw::InVec3
 			, sdw::InVec3
-			, PbrLightMaterial &
+			, InPbrLightMaterial
 			, InSurface
 			, OutputComponents & > m_computeCookTorrance;
 		sdw::Function< sdw::Vec3
@@ -92,7 +159,7 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, sdw::InVec3
 			, sdw::InVec3
-			, PbrLightMaterial &
+			, InPbrLightMaterial
 			, InSurface > m_computeCookTorranceDiffuse;
 	};
 }

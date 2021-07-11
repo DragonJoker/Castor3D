@@ -26,6 +26,7 @@ namespace castor3d::shader
 		, m_utils{ utils }
 		, m_passFlags{ passFlags }
 	{
+		auto brdfIndex = envMapBinding + 1u;
 		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 		m_writer.inlineComment( "// REFLECTIONS" );
 		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
@@ -41,6 +42,9 @@ namespace castor3d::shader
 			doDeclareComputeRefrEnvMap();
 		}
 
+		writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf", envMapBinding++, envMapSet );
+		writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapIrradiance", envMapBinding++, envMapSet );
+		writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapPrefiltered", envMapBinding++, envMapSet );
 		doDeclareComputeRefrSkybox();
 		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 	}
@@ -55,7 +59,10 @@ namespace castor3d::shader
 		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 		m_writer.inlineComment( "// REFLECTIONS" );
 		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-		m_writer.declSampledImage< FImgCubeArrayRgba32 >( "c3d_mapEnvironment", envMapBinding, envMapSet );
+		m_writer.declSampledImage< FImgCubeArrayRgba32 >( "c3d_mapEnvironment", envMapBinding++, envMapSet );
+		writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf", envMapBinding++, 0u );
+		writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapIrradiance", envMapBinding++, 0u );
+		writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapPrefiltered", envMapBinding++, 0u );
 		m_utils.declareNegateVec3Y();
 		m_utils.declareFresnelSchlick();
 		doDeclareComputeIBL();
@@ -65,21 +72,21 @@ namespace castor3d::shader
 		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 	}
 
-	void PbrReflectionModel::computeDeferred( sdw::SampledImage2DRgba32 const & brdf
-		, sdw::SampledImageCubeRgba32 const & irradiance
-		, sdw::SampledImageCubeRgba32 const & prefiltered
-		, sdw::Int envMapIndex
+	void PbrReflectionModel::computeDeferred( sdw::Int envMapIndex
 		, sdw::Int const & reflection
 		, sdw::Int const & refraction
 		, sdw::Float const & refractionRatio
 		, sdw::Vec3 const & albedo
-		, PbrLightMaterial & material
+		, PbrLightMaterial const & material
 		, sdw::Vec3 const & transmission
 		, Surface const & surface
 		, SceneData const & sceneData
 		, sdw::Vec3 & reflected
 		, sdw::Vec3 & refracted )const
 	{
+		auto brdf = m_writer.getVariable< sdw::SampledImage2DRgba32 >( "c3d_mapBrdf" );
+		auto irradiance = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapIrradiance" );
+		auto prefiltered = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapPrefiltered" );
 		auto envMap = m_writer.getVariable< sdw::SampledImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
 
 		IF( m_writer, envMapIndex > 0_i )
@@ -194,18 +201,19 @@ namespace castor3d::shader
 		FI;
 	}
 
-	void PbrReflectionModel::computeForward( sdw::SampledImage2DRgba32 const & brdf
-		, sdw::SampledImageCubeRgba32 const & irradiance
-		, sdw::SampledImageCubeRgba32 const & prefiltered
-		, sdw::Float const & refractionRatio
+	void PbrReflectionModel::computeForward( sdw::Float const & refractionRatio
 		, sdw::Vec3 const & albedo
-		, PbrLightMaterial & material
+		, PbrLightMaterial const & material
 		, sdw::Vec3 const & transmission
 		, Surface const & surface
 		, SceneData const & sceneData
 		, sdw::Vec3 & reflected
 		, sdw::Vec3 & refracted )const
 	{
+		auto brdf = m_writer.getVariable< sdw::SampledImage2DRgba32 >( "c3d_mapBrdf" );
+		auto irradiance = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapIrradiance" );
+		auto prefiltered = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapPrefiltered" );
+
 		if ( checkFlag( m_passFlags, PassFlag::eReflection )
 			|| checkFlag( m_passFlags, PassFlag::eRefraction ) )
 		{
@@ -334,7 +342,7 @@ namespace castor3d::shader
 
 	sdw::Vec3 PbrReflectionModel::computeIBL( Surface surface
 		, sdw::Vec3 const & diffuse
-		, PbrLightMaterial & material
+		, PbrLightMaterial const & material
 		, sdw::Vec3 const & worldEye
 		, sdw::SampledImageCubeRgba32 const & irradianceMap
 		, sdw::SampledImageCubeRgba32 const & prefilteredEnvMap
@@ -358,7 +366,7 @@ namespace castor3d::shader
 	sdw::Vec3 PbrReflectionModel::computeReflEnvMap( sdw::Vec3 const & wsIncident
 		, sdw::Vec3 const & wsNormal
 		, sdw::SampledImageCubeRgba32 const & envMap
-		, PbrLightMaterial & material )const
+		, PbrLightMaterial const & material )const
 	{
 		return m_computeReflEnvMap( wsIncident
 			, wsNormal
@@ -371,7 +379,7 @@ namespace castor3d::shader
 		, sdw::SampledImageCubeRgba32 const & envMap
 		, sdw::Float const & refractionRatio
 		, sdw::Vec3 const & transmission
-		, PbrLightMaterial & material
+		, PbrLightMaterial const & material
 		, sdw::Vec3 & reflection
 		, sdw::Vec3 & refraction )const
 	{
@@ -389,7 +397,7 @@ namespace castor3d::shader
 		, sdw::Vec3 const & wsNormal
 		, sdw::SampledImageCubeArrayRgba32 const & envMap
 		, sdw::Int const & envMapIndex
-		, PbrLightMaterial & material )const
+		, PbrLightMaterial const & material )const
 	{
 		return m_computeReflEnvMaps( wsIncident
 			, wsNormal
@@ -404,7 +412,7 @@ namespace castor3d::shader
 		, sdw::Int const & envMapIndex
 		, sdw::Float const & refractionRatio
 		, sdw::Vec3 const & transmission
-		, PbrLightMaterial & material
+		, PbrLightMaterial const & material
 		, sdw::Vec3 & reflection
 		, sdw::Vec3 & refraction )const
 	{
@@ -424,7 +432,7 @@ namespace castor3d::shader
 		, sdw::SampledImageCubeRgba32 const & envMap
 		, sdw::Float const & refractionRatio
 		, sdw::Vec3 const & transmission
-		, PbrLightMaterial & material
+		, PbrLightMaterial const & material
 		, sdw::Vec3 & reflection
 		, sdw::Vec3 & refraction )const
 	{
@@ -440,11 +448,10 @@ namespace castor3d::shader
 
 	void PbrReflectionModel::doDeclareComputeIBL()
 	{
-		PbrLightMaterial material{ m_writer };
 		m_computeIBL = m_writer.implementFunction< sdw::Vec3 >( "computeIBL"
 			, [&]( Surface const & surface
 				, sdw::Vec3 const & baseColour
-				, PbrLightMaterial & material
+				, PbrLightMaterial const & material
 				, sdw::Vec3 const & worldEye
 				, sdw::SampledImageCubeRgba32 const & irradianceMap
 				, sdw::SampledImageCubeRgba32 const & prefilteredEnvMap
@@ -487,7 +494,7 @@ namespace castor3d::shader
 			}
 			, InSurface{ m_writer, "surface" }
 			, sdw::InVec3{ m_writer, "albedo" }
-			, material
+			, InPbrLightMaterial{ m_writer, "material" }
 			, sdw::InVec3{ m_writer, "worldEye" }
 			, sdw::InSampledImageCubeRgba32{ m_writer, "irradianceMap" }
 			, sdw::InSampledImageCubeRgba32{ m_writer, "prefilteredEnvMap" }
@@ -496,12 +503,11 @@ namespace castor3d::shader
 
 	void PbrReflectionModel::doDeclareComputeReflEnvMap()
 	{
-		PbrLightMaterial material{ m_writer };
 		m_computeReflEnvMap = m_writer.implementFunction< sdw::Vec3 >( "computeReflEnvMap"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeRgba32 const & envMap
-				, PbrLightMaterial & material )
+				, PbrLightMaterial const & material )
 			{
 				auto reflected = m_writer.declLocale( "reflected"
 					, reflect( wsIncident, wsNormal ) );
@@ -513,19 +519,18 @@ namespace castor3d::shader
 			, sdw::InVec3{ m_writer, "wsIncident" }
 			, sdw::InVec3{ m_writer, "wsNormal" }
 			, sdw::InSampledImageCubeRgba32{ m_writer, "envMap" }
-			, material );
+			, InPbrLightMaterial{ m_writer, "material" } );
 	}
 
 	void PbrReflectionModel::doDeclareComputeRefrEnvMap()
 	{
-		PbrLightMaterial material{ m_writer };
 		m_computeRefrEnvMap = m_writer.implementFunction< sdw::Void >( "computeRefrEnvMap"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeRgba32 const & envMap
 				, sdw::Float const & refractionRatio
 				, sdw::Vec3 const & transmission
-				, PbrLightMaterial & material
+				, PbrLightMaterial const & material
 				, sdw::Vec3 reflection
 				, sdw::Vec3 refraction )
 			{
@@ -556,20 +561,19 @@ namespace castor3d::shader
 			, sdw::InSampledImageCubeRgba32{ m_writer, "envMap" }
 			, sdw::InFloat{ m_writer, "refractionRatio" }
 			, sdw::InVec3{ m_writer, "transmission" }
-			, material
+			, InPbrLightMaterial{ m_writer, "material" }
 			, sdw::InOutVec3{ m_writer, "reflection" }
 			, sdw::OutVec3{ m_writer, "refraction" } );
 	}
 
 	void PbrReflectionModel::doDeclareComputeReflEnvMaps()
 	{
-		PbrLightMaterial material{ m_writer };
 		m_computeReflEnvMaps = m_writer.implementFunction< sdw::Vec3 >( "computeReflEnvMap"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeArrayRgba32 const & envMap
 				, sdw::Int const & envMapIndex
-				, PbrLightMaterial & material )
+				, PbrLightMaterial const & material )
 			{
 				auto reflected = m_writer.declLocale( "reflected"
 					, reflect( wsIncident, wsNormal ) );
@@ -582,12 +586,11 @@ namespace castor3d::shader
 			, sdw::InVec3{ m_writer, "wsNormal" }
 			, sdw::InSampledImageCubeArrayRgba32{ m_writer, "envMap" }
 			, sdw::InInt{ m_writer, "envMapIndex" }
-			, material );
+			, InPbrLightMaterial{ m_writer, "material" } );
 	}
 
 	void PbrReflectionModel::doDeclareComputeRefrEnvMaps()
 	{
-		PbrLightMaterial material{ m_writer };
 		m_computeRefrEnvMaps = m_writer.implementFunction< sdw::Void >( "computeRefrEnvMap"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
@@ -595,7 +598,7 @@ namespace castor3d::shader
 				, sdw::Int const & envMapIndex
 				, sdw::Float const & refractionRatio
 				, sdw::Vec3 const & transmission
-				, PbrLightMaterial & material
+				, PbrLightMaterial const & material
 				, sdw::Vec3 reflection
 				, sdw::Vec3 refraction )
 			{
@@ -627,21 +630,20 @@ namespace castor3d::shader
 			, sdw::InInt{ m_writer, "envMapIndex" }
 			, sdw::InFloat{ m_writer, "refractionRatio" }
 			, sdw::InVec3{ m_writer, "transmission" }
-			, material
+			, InPbrLightMaterial{ m_writer, "material" }
 			, sdw::InOutVec3{ m_writer, "reflection" }
 			, sdw::OutVec3{ m_writer, "refraction" } );
 	}
 
 	void PbrReflectionModel::doDeclareComputeRefrSkybox()
 	{
-		PbrLightMaterial material{ m_writer };
 		m_computeRefrSkybox = m_writer.implementFunction< sdw::Void >( "computeRefrSkybox"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeRgba32 const & envMap
 				, sdw::Float const & refractionRatio
 				, sdw::Vec3 const & transmission
-				, PbrLightMaterial & material
+				, PbrLightMaterial const & material
 				, sdw::Vec3 reflection
 				, sdw::Vec3 refraction )
 			{
@@ -671,7 +673,7 @@ namespace castor3d::shader
 			, sdw::InSampledImageCubeRgba32{ m_writer, "envMap" }
 			, sdw::InFloat{ m_writer, "refractionRatio" }
 			, sdw::InVec3{ m_writer, "transmission" }
-			, material
+			, InPbrLightMaterial{ m_writer, "material" }
 			, sdw::InOutVec3{ m_writer, "reflection" }
 			, sdw::OutVec3{ m_writer, "refraction" } );
 	}

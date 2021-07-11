@@ -246,13 +246,13 @@ namespace castor3d
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapIrradiance
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapPrefiltered
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
 		}
 
 		// Shadow maps
@@ -386,16 +386,16 @@ namespace castor3d
 				if ( background.hasIbl() )
 				{
 					auto & ibl = background.getIbl();
+					bindTexture( ibl.getPrefilteredBrdfTexture().wholeView
+						, ibl.getPrefilteredBrdfSampler()
+						, descriptorWrites
+						, index );
 					bindTexture( ibl.getIrradianceTexture().wholeView
 						, ibl.getIrradianceSampler()
 						, descriptorWrites
 						, index );
 					bindTexture( ibl.getPrefilteredEnvironmentTexture().wholeView
 						, ibl.getPrefilteredEnvironmentSampler()
-						, descriptorWrites
-						, index );
-					bindTexture( ibl.getPrefilteredBrdfTexture().wholeView
-						, ibl.getPrefilteredBrdfSampler()
 						, descriptorWrites
 						, index );
 				}
