@@ -1,6 +1,7 @@
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 
 #include "Castor3D/DebugDefines.hpp"
+#include "Castor3D/Material/Pass/PhongPass.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
@@ -203,6 +204,16 @@ namespace castor3d
 		sdw::Float LightingModel::computeRoughness( sdw::Float const & glossiness )
 		{
 			return 1.0_f - glossiness;
+		}
+
+		sdw::Float LightingModel::computeGlossiness( sdw::Float const & shininess )
+		{
+			return shininess / PhongPass::MaxShininess;
+		}
+
+		sdw::Float LightingModel::computeShininess( sdw::Float const & glossiness )
+		{
+			return glossiness * PhongPass::MaxShininess;
 		}
 
 		Light LightingModel::getBaseLight( sdw::Int const & value )const

@@ -88,7 +88,9 @@ namespace castor3d
 		utils.declareRemoveGamma();
 		utils.declareParallaxMappingFunc( flags.passFlags
 			, getTexturesMask() );
-		utils.declareFresnelSchlick();
+
+		shader::CookTorranceBRDF cookTorrance{ writer, utils };
+		cookTorrance.declareDiffuse();
 
 		// Fragment Intputs
 		shader::InFragmentSurface inSurface{ writer
@@ -226,7 +228,9 @@ namespace castor3d
 
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 				{
-					auto lightMat = material.getLightMaterial( specular
+					auto lightMat = writer.declLocale< shader::PhongLightMaterial >( "lightMat" );
+					lightMat.create< MaterialType::ePhong >( diffuse
+						, specular
 						, shininess );
 					auto worldEye = writer.declLocale( "worldEye"
 						, c3d_sceneData.getCameraPosition() );
@@ -263,7 +267,7 @@ namespace castor3d
 						, reflected
 						, refracted );
 					auto roughness = writer.declLocale( "roughness"
-						, ( 256.0_f - shininess ) / 256.0_f );
+						, lighting->computeRoughness( lighting->computeGlossiness( shininess ) ) );
 					auto indirectOcclusion = writer.declLocale( "indirectOcclusion"
 						, 1.0_f );
 					auto lightIndirectDiffuse = indirect.computeDiffuse( flags.sceneFlags
@@ -278,13 +282,28 @@ namespace castor3d
 						, indirectOcclusion
 						, lightIndirectDiffuse.w() );
 
+					bool hasDiffuseGI = checkFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing )
+						|| checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
+						|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI );
+					auto indirectAmbient = writer.declLocale( "indirectAmbient"
+						, material.ambient * indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() ) );
+					auto pbrLightMat = writer.declLocale< shader::PbrLightMaterial >( "pbrLightMat"
+						, hasDiffuseGI );
+					pbrLightMat.create< MaterialType::ePhong >( diffuse, vec4( specular, 0.0f ), vec4( 0.0_f, 0.0f, 0.0f, shininess ) );
+					auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
+						, ( hasDiffuseGI
+							? cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
+								, c3d_sceneData.getCameraPosition()
+								, surface.worldNormal
+								, pbrLightMat
+								, surface )
+							: vec3( 0.0_f ) ) );
 					pxl_fragColor = vec4( shader::PhongLightingModel::combine( lightDiffuse
-							, lightIndirectDiffuse.xyz()
+							, indirectDiffuse
 							, lightSpecular
 							, lightIndirectSpecular
 							, ambient
-							, material.ambient
-							, indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() )
+							, indirectAmbient
 							, occlusion
 							, emissive
 							, reflected
@@ -373,15 +392,6 @@ namespace castor3d
 			, flags.passFlags
 			, index
 			, uint32_t( RenderPipeline::eAdditional ) };
-		auto c3d_mapIrradiance = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapIrradiance"
-			, index++
-			, RenderPipeline::eAdditional );
-		auto c3d_mapPrefiltered = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapPrefiltered"
-			, index++
-			, RenderPipeline::eAdditional );
-		auto c3d_mapBrdf = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf"
-			, index++
-			, RenderPipeline::eAdditional );
 		auto lighting = shader::PbrLightingModel::createModel( writer
 			, utils
 			, lightsIndex
@@ -483,7 +493,8 @@ namespace castor3d
 
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 				{
-					auto lightMat = material.getLightMaterial( albedo
+					auto lightMat = writer.declLocale< shader::PbrLightMaterial >( "lightMat" );
+					lightMat.create< MaterialType::eMetallicRoughness >( albedo
 						, metalness
 						, roughness );
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
@@ -503,10 +514,7 @@ namespace castor3d
 						, vec3( 0.0_f ) );
 					auto refracted = writer.declLocale( "refracted"
 						, vec3( 0.0_f ) );
-					reflections.computeForward( c3d_mapBrdf
-						, c3d_mapIrradiance
-						, c3d_mapPrefiltered
-						, material.refractionRatio
+					reflections.computeForward( material.refractionRatio
 						, albedo
 						, lightMat
 						, material.transmission
@@ -628,15 +636,6 @@ namespace castor3d
 			, flags.passFlags
 			, index
 			, uint32_t( RenderPipeline::eAdditional ) };
-		auto c3d_mapIrradiance = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapIrradiance"
-			, index++
-			, RenderPipeline::eAdditional );
-		auto c3d_mapPrefiltered = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapPrefiltered"
-			, index++
-			, RenderPipeline::eAdditional );
-		auto c3d_mapBrdf = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf"
-			, index++
-			, RenderPipeline::eAdditional );
 		auto lighting = shader::PbrLightingModel::createModel( writer
 			, utils
 			, lightsIndex
@@ -739,7 +738,8 @@ namespace castor3d
 
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 				{
-					auto lightMat = material.getLightMaterial( albedo
+					auto lightMat = writer.declLocale< shader::PbrLightMaterial >( "lightMat" );
+					lightMat.create< MaterialType::eSpecularGlossiness >( albedo
 						, specular
 						, glossiness );
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
@@ -759,10 +759,7 @@ namespace castor3d
 						, vec3( 0.0_f ) );
 					auto refracted = writer.declLocale( "refracted"
 						, vec3( 0.0_f ) );
-					reflections.computeForward( c3d_mapBrdf
-						, c3d_mapIrradiance
-						, c3d_mapPrefiltered
-						, material.refractionRatio
+					reflections.computeForward( material.refractionRatio
 						, albedo
 						, lightMat
 						, material.transmission

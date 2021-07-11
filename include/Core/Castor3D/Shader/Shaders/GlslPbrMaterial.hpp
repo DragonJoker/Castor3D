@@ -12,9 +12,6 @@ See LICENSE file in root folder
 
 namespace castor3d::shader
 {
-	C3D_API ast::expr::ExprList makeFnArg( sdw::ShaderWriter & shader
-		, PbrLightMaterial const & value );
-
 	struct MetallicRoughnessMaterial
 		: public BaseMaterial
 	{
@@ -24,10 +21,6 @@ namespace castor3d::shader
 			, ast::expr::ExprPtr expr
 			, bool enabled );
 
-		C3D_API PbrLightMaterial getLightMaterial()const;
-		C3D_API static PbrLightMaterial getLightMaterial( sdw::Vec3 albedo
-			, sdw::Float metalness
-			, sdw::Float roughness );
 		C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 		C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
@@ -52,10 +45,6 @@ namespace castor3d::shader
 			, ast::expr::ExprPtr expr
 			, bool enabled );
 
-		C3D_API PbrLightMaterial getLightMaterial()const;
-		C3D_API static PbrLightMaterial getLightMaterial( sdw::Vec3 albedo
-			, sdw::Vec3 specular
-			, sdw::Float glossiness );
 		C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 		C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 

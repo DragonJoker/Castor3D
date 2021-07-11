@@ -15,72 +15,6 @@
 
 namespace castor3d::shader
 {
-	//***********************************************************************************************
-
-	PbrLightMaterial::PbrLightMaterial( sdw::ShaderWriter & writer )
-		: PbrLightMaterial{ { writer, "specular" }, { writer, "metalness" }, { writer, "roughness" } }
-	{
-	}
-
-	PbrLightMaterial::PbrLightMaterial( sdw::InOutVec3 const & specular
-		, sdw::InOutFloat const & metalness
-		, sdw::InOutFloat const & roughness )
-		: specular{ specular }
-		, metalness{ metalness }
-		, roughness{ roughness }
-		, m_expr{ sdw::expr::makeComma( makeExpr( this->specular )
-			, sdw::expr::makeComma( makeExpr( this->metalness )
-				, makeExpr( this->roughness ) ) ) }
-	{
-	}
-
-	ast::expr::Expr * PbrLightMaterial::getExpr()const
-	{
-		return m_expr.get();
-	}
-
-	sdw::ShaderWriter * PbrLightMaterial::getWriter()const
-	{
-		return sdw::findWriter( specular, metalness, roughness );
-	}
-
-	void PbrLightMaterial::setVar( ast::var::VariableList::const_iterator & var )
-	{
-		specular.setVar( var );
-		metalness.setVar( var );
-		roughness.setVar( var );
-	}
-
-	//***********************************************************************************************
-
-	ast::expr::ExprList makeFnArg( sdw::ShaderWriter & writer
-		, PbrLightMaterial const & value )
-	{
-		ast::expr::ExprList result;
-		auto args = sdw::makeFnArg( writer, value.specular );
-
-		for ( auto & expr : args )
-		{
-			result.emplace_back( std::move( expr ) );
-		}
-
-		args = sdw::makeFnArg( writer, value.metalness );
-
-		for ( auto & expr : args )
-		{
-			result.emplace_back( std::move( expr ) );
-		}
-
-		args = sdw::makeFnArg( writer, value.roughness );
-
-		for ( auto & expr : args )
-		{
-			result.emplace_back( std::move( expr ) );
-		}
-
-		return result;
-	}
-
 	//*****************************************************************************************
 
 	MetallicRoughnessMaterial::MetallicRoughnessMaterial( sdw::ShaderWriter & writer
@@ -100,30 +34,6 @@ namespace castor3d::shader
 		return m_albRough.rgb();
 	}
 
-	std::unique_ptr< sdw::Struct > MetallicRoughnessMaterial::declare( sdw::ShaderWriter & writer )
-	{
-		return std::make_unique< sdw::Struct >( writer, makeType( writer.getTypesCache() ) );
-	}
-
-	PbrLightMaterial MetallicRoughnessMaterial::getLightMaterial()const
-	{
-		return { LightingModel::computeF0( albedo, metalness )
-			, std::move( metalness )
-			, std::move( roughness ) };
-	}
-
-	PbrLightMaterial MetallicRoughnessMaterial::getLightMaterial( sdw::Vec3 albedo
-		, sdw::Float metalness
-		, sdw::Float roughness )
-	{
-		auto & writer = *sdw::findWriter( albedo, metalness, roughness );
-		auto specular = writer.declLocale( "specular"
-			, LightingModel::computeF0( albedo, metalness ) );
-		return { std::move( specular )
-			, std::move( metalness )
-			, std::move( roughness ) };
-	}
-
 	ast::type::StructPtr MetallicRoughnessMaterial::makeType( ast::type::TypesCache & cache )
 	{
 		auto result = cache.getStruct( ast::type::MemoryLayout::eStd140, "MetallicRoughnessMaterial" );
@@ -140,6 +50,11 @@ namespace castor3d::shader
 		}
 
 		return result;
+	}
+
+	std::unique_ptr< sdw::Struct > MetallicRoughnessMaterial::declare( sdw::ShaderWriter & writer )
+	{
+		return std::make_unique< sdw::Struct >( writer, makeType( writer.getTypesCache() ) );
 	}
 
 	//*****************************************************************************************
@@ -161,32 +76,6 @@ namespace castor3d::shader
 		return albedo;
 	}
 
-	std::unique_ptr< sdw::Struct > SpecularGlossinessMaterial::declare( sdw::ShaderWriter & writer )
-	{
-		return std::make_unique< sdw::Struct >( writer, makeType( writer.getTypesCache() ) );
-	}
-
-	PbrLightMaterial SpecularGlossinessMaterial::getLightMaterial()const
-	{
-		return { std::move( specular )
-			, LightingModel::computeMetalness( albedo, specular )
-			, LightingModel::computeRoughness( glossiness ) };
-	}
-
-	PbrLightMaterial SpecularGlossinessMaterial::getLightMaterial( sdw::Vec3 albedo
-		, sdw::Vec3 specular
-		, sdw::Float glossiness )
-	{
-		auto & writer = *sdw::findWriter( albedo, specular, glossiness );
-		auto roughness = writer.declLocale( "roughness"
-			, 1.0_f - glossiness );
-		auto metalness = writer.declLocale( "metalness"
-			, LightingModel::computeMetalness( albedo, specular ) );
-		return { std::move( specular )
-			, LightingModel::computeMetalness( albedo, specular )
-			, LightingModel::computeRoughness( glossiness ) };
-	}
-
 	ast::type::StructPtr SpecularGlossinessMaterial::makeType( ast::type::TypesCache & cache )
 	{
 		auto result = cache.getStruct( ast::type::MemoryLayout::eStd140, "SpecularGlossinessMaterial" );
@@ -203,6 +92,11 @@ namespace castor3d::shader
 		}
 
 		return result;
+	}
+
+	std::unique_ptr< sdw::Struct > SpecularGlossinessMaterial::declare( sdw::ShaderWriter & writer )
+	{
+		return std::make_unique< sdw::Struct >( writer, makeType( writer.getTypesCache() ) );
 	}
 
 	//*********************************************************************************************
