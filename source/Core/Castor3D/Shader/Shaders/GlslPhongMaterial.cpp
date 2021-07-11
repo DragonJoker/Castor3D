@@ -21,6 +21,7 @@ namespace castor3d::shader
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
 		: sdw::StructInstance{ writer, std::move( expr ), enabled }
+		, albedo{ getMember< sdw::Vec3 >( "albedo" ) }
 		, specular{ getMember< sdw::Vec3 >( "specular" ) }
 		, shininess{ getMember< sdw::Float >( "shininess" ) }
 	{
@@ -39,6 +40,7 @@ namespace castor3d::shader
 
 		if ( result->empty() )
 		{
+			result->declMember( "albedo", ast::type::Kind::eVec3F );
 			result->declMember( "specular", ast::type::Kind::eVec3F );
 			result->declMember( "shininess", ast::type::Kind::eFloat );
 		}

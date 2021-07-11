@@ -284,11 +284,10 @@ namespace castor3d
 				auto material = materials.getMaterial( inSurface.material );
 				auto gamma = writer.declLocale( "gamma"
 					, material.gamma );
-				auto diffuse = writer.declLocale( "diffuse"
-					, utils.removeGamma( gamma, material.diffuse ) );
-				auto specular = writer.declLocale( "specular"
-					, material.specular );
-				auto shininess = writer.declLocale( "shininess"
+				auto lightMat = writer.declLocale< shader::PhongLightMaterial >( "lightMat" );
+				lightMat.create< MaterialType::ePhong >( material.diffuse
+					, material.gamma
+					, material.specular
 					, material.shininess );
 				auto emissive = writer.declLocale( "emissive"
 					, vec3( material.emissive ) );
@@ -320,9 +319,7 @@ namespace castor3d
 						, alpha
 						, occlusion
 						, transmittance
-						, diffuse
-						, specular
-						, shininess
+						, lightMat
 						, tangentSpaceViewPosition
 						, tangentSpaceFragPosition );
 				}
@@ -357,7 +354,7 @@ namespace castor3d
 						, 1.0_f / ( 1.0_f - light.m_cutOff )
 						, 1.0_f ) );
 				spotFactor = 1.0_f - step( spotFactor, 0.0_f );
-				pxl_flux.rgb() = ( diffuse
+				pxl_flux.rgb() = ( lightMat.albedo
 						* light.m_lightBase.m_colour
 						* light.m_lightBase.m_intensity.x()
 						* clamp( dot( lightDirection, normal ), 0.0_f, 1.0_f ) )
@@ -455,14 +452,12 @@ namespace castor3d
 				auto bitangent = writer.declLocale( "bitangent"
 					, normalize( inSurface.bitangent ) );
 				auto material = materials.getMaterial( inSurface.material );
-				auto metalness = writer.declLocale( "metalness"
-					, material.metalness );
-				auto roughness = writer.declLocale( "roughness"
+				auto lightMat = writer.declLocale< shader::PbrLightMaterial >( "lightMat" );
+				lightMat.create< MaterialType::eMetallicRoughness >( material.albedo
+					, material.metalness
 					, material.roughness );
 				auto gamma = writer.declLocale( "gamma"
 					, material.gamma );
-				auto albedo = writer.declLocale( "albedo"
-					, utils.removeGamma( gamma, material.albedo ) );
 				auto emissive = writer.declLocale( "emissive"
 					, vec3( material.emissive ) );
 				auto occlusion = writer.declLocale( "occlusion"
@@ -481,6 +476,7 @@ namespace castor3d
 				if ( hasTextures )
 				{
 					lighting->computeMapContributions( flags.passFlags
+						, MaterialType::eMetallicRoughness
 						, textures
 						, gamma
 						, textureConfigs
@@ -493,9 +489,7 @@ namespace castor3d
 						, alpha
 						, occlusion
 						, transmittance
-						, albedo
-						, metalness
-						, roughness
+						, lightMat
 						, tangentSpaceViewPosition
 						, tangentSpaceFragPosition );
 				}
@@ -530,7 +524,7 @@ namespace castor3d
 						, 1.0_f / ( 1.0_f - light.m_cutOff )
 						, 1.0_f ) );
 				spotFactor = 1.0_f - step( spotFactor, 0.0_f );
-				pxl_flux.rgb() = ( albedo
+				pxl_flux.rgb() = ( lightMat.albedo
 						* light.m_lightBase.m_colour
 						* light.m_lightBase.m_intensity.x()
 						* clamp( dot( lightDirection, normal ), 0.0_f, 1.0_f ) )
@@ -628,16 +622,14 @@ namespace castor3d
 				auto bitangent = writer.declLocale( "bitangent"
 					, normalize( inSurface.bitangent ) );
 				auto material = materials.getMaterial( inSurface.material );
-				auto specular = writer.declLocale( "specular"
-					, material.specular );
-				auto glossiness = writer.declLocale( "glossiness"
+				auto lightMat = writer.declLocale< shader::PbrLightMaterial >( "lightMat" );
+				lightMat.create< MaterialType::eSpecularGlossiness >( material.albedo
+					, material.specular
 					, material.glossiness );
-				auto gamma = writer.declLocale( "gamma"
-					, material.gamma );
-				auto albedo = writer.declLocale( "albedo"
-					, utils.removeGamma( gamma, material.albedo ) );
 				auto emissive = writer.declLocale( "emissive"
 					, vec3( material.emissive ) );
+				auto gamma = writer.declLocale( "gamma"
+					, material.gamma );
 				auto occlusion = writer.declLocale( "occlusion"
 					, 1.0_f );
 				auto transmittance = writer.declLocale( "transmittance"
@@ -654,6 +646,7 @@ namespace castor3d
 				if ( hasTextures )
 				{
 					lighting->computeMapContributions( flags.passFlags
+						, MaterialType::eSpecularGlossiness
 						, textures
 						, gamma
 						, textureConfigs
@@ -666,9 +659,7 @@ namespace castor3d
 						, alpha
 						, occlusion
 						, transmittance
-						, albedo
-						, specular
-						, glossiness
+						, lightMat
 						, tangentSpaceViewPosition
 						, tangentSpaceFragPosition );
 				}
@@ -703,7 +694,7 @@ namespace castor3d
 						, 1.0_f / ( 1.0_f - light.m_cutOff )
 						, 1.0_f ) );
 				spotFactor = 1.0_f - step( spotFactor, 0.0_f );
-				pxl_flux.rgb() = ( albedo
+				pxl_flux.rgb() = ( lightMat.albedo
 						* light.m_lightBase.m_colour
 						* light.m_lightBase.m_intensity.x()
 						* clamp( dot( lightDirection, normal ), 0.0_f, 1.0_f ) )
