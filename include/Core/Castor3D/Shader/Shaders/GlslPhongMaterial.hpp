@@ -8,33 +8,100 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 
 namespace castor3d::shader
 {
 	struct PhongLightMaterial
+		: public sdw::StructInstance
 	{
-		C3D_API explicit PhongLightMaterial( sdw::ShaderWriter & writer );
-		C3D_API PhongLightMaterial( sdw::InVec3 const & specular
-			, sdw::InFloat const & shininess );
+		template< MaterialType MaterialT >
+		struct CreatorT;
 
-		C3D_API ast::expr::Expr * getExpr()const;
-		C3D_API sdw::ShaderWriter * getWriter()const;
-		C3D_API void setVar( ast::var::VariableList::const_iterator & var );
-
-		bool isEnabled()const
+		template<>
+		struct CreatorT< MaterialType::ePhong >
 		{
-			return true;
+			static void create( PhongLightMaterial & material
+				, sdw::Vec3 const & albedo
+				, sdw::Vec3 const & specular
+				, sdw::Float const & shininess )
+			{
+				material.specular = specular;
+				material.shininess = shininess;
+			}
+
+			static void create( PhongLightMaterial & material
+				, sdw::Vec3 const & albedo
+				, sdw::Vec4 const & data3
+				, sdw::Vec4 const & data2 )
+			{
+				create( material, albedo, data3.rgb(), data2.a() );
+			}
+		};
+
+		template<>
+		struct CreatorT< MaterialType::eMetallicRoughness >
+		{
+			static void create( PhongLightMaterial & material
+				, sdw::Vec3 const & albedo
+				, sdw::Float const & metalness
+				, sdw::Float const & roughness )
+			{
+				material.specular = LightingModel::computeF0( albedo, metalness );
+				material.shininess = LightingModel::computeShininess( LightingModel::computeRoughness( roughness ) );
+			}
+
+			static void create( PhongLightMaterial & material
+				, sdw::Vec3 const & albedo
+				, sdw::Vec4 const & data3
+				, sdw::Vec4 const & data2 )
+			{
+				create( material, albedo, data3.r(), data2.a() );
+			}
+		};
+
+		template<>
+		struct CreatorT< MaterialType::eSpecularGlossiness >
+		{
+			static void create( PhongLightMaterial & material
+				, sdw::Vec3 const & albedo
+				, sdw::Vec3 const & specular
+				, sdw::Float const & glossiness )
+			{
+				material.specular = specular;
+				material.shininess = LightingModel::computeShininess( glossiness );
+			}
+
+			static void create( PhongLightMaterial & material
+				, sdw::Vec3 const & albedo
+				, sdw::Vec4 const & data3
+				, sdw::Vec4 const & data2 )
+			{
+				create( material, albedo, data3.rgb(), data2.a() );
+			}
+		};
+
+		C3D_API PhongLightMaterial( sdw::ShaderWriter & writer
+			, sdw::expr::ExprPtr expr
+			, bool enabled );
+		C3D_API PhongLightMaterial & operator=( PhongLightMaterial const & rhs );
+
+		template< MaterialType MaterialT
+			, typename ... ParamsT >
+			void create( ParamsT const & ... params )
+		{
+			CreatorT< MaterialT >::create( *this, params... );
 		}
 
-		sdw::InVec3 specular;
-		sdw::InFloat shininess;
+		C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+
+		sdw::Vec3 specular;
+		sdw::Float shininess;
 
 	private:
-		ast::expr::ExprPtr m_expr;
+		using sdw::StructInstance::getMember;
+		using sdw::StructInstance::getMemberArray;
 	};
-
-	C3D_API ast::expr::ExprList makeFnArg( sdw::ShaderWriter & shader
-		, PhongLightMaterial const & value );
 
 	struct PhongMaterial
 		: public BaseMaterial
@@ -45,9 +112,6 @@ namespace castor3d::shader
 			, ast::expr::ExprPtr expr
 			, bool enabled );
 
-		C3D_API PhongLightMaterial getLightMaterial()const;
-		C3D_API static PhongLightMaterial getLightMaterial( sdw::Vec3 specular
-			, sdw::Float shininess );
 		C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 		C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 

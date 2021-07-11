@@ -35,7 +35,7 @@ namespace castor3d
 		}
 
 		void PbrLightingModel::computeCombined( Vec3 const & worldEye
-			, PbrLightMaterial & material
+			, PbrLightMaterial const & material
 			, Int const & receivesShadows
 			, SceneData const & sceneData
 			, Surface surface
@@ -101,7 +101,7 @@ namespace castor3d
 
 		void PbrLightingModel::compute( TiledDirectionalLight const & light
 			, Vec3 const & worldEye
-			, PbrLightMaterial & material
+			, PbrLightMaterial const & material
 			, Int const & receivesShadows
 			, Surface surface
 			, OutputComponents & parentOutput )const
@@ -116,7 +116,7 @@ namespace castor3d
 
 		void PbrLightingModel::compute( DirectionalLight const & light
 			, Vec3 const & worldEye
-			, PbrLightMaterial & material
+			, PbrLightMaterial const & material
 			, Int const & receivesShadows
 			, Surface surface
 			, OutputComponents & parentOutput )const
@@ -131,7 +131,7 @@ namespace castor3d
 
 		void PbrLightingModel::compute( PointLight const & light
 			, Vec3 const & worldEye
-			, PbrLightMaterial & material
+			, PbrLightMaterial const & material
 			, Int const & receivesShadows
 			, Surface surface
 			, OutputComponents & parentOutput )const
@@ -146,7 +146,7 @@ namespace castor3d
 
 		void PbrLightingModel::compute( SpotLight const & light
 			, Vec3 const & worldEye
-			, PbrLightMaterial & material
+			, PbrLightMaterial const & material
 			, Int const & receivesShadows
 			, Surface surface
 			, OutputComponents & parentOutput )const
@@ -179,7 +179,7 @@ namespace castor3d
 		}
 
 		Vec3 PbrLightingModel::computeCombinedDiffuse( Vec3 const & worldEye
-			, PbrLightMaterial & material
+			, PbrLightMaterial const & material
 			, Int const & receivesShadows
 			, SceneData const & sceneData
 			, Surface surface )const
@@ -244,7 +244,7 @@ namespace castor3d
 
 		Vec3 PbrLightingModel::computeDiffuse( TiledDirectionalLight const & light
 			, Vec3 const & worldEye
-			, PbrLightMaterial & material
+			, PbrLightMaterial const & material
 			, Int const & receivesShadows
 			, Surface surface )const
 		{
@@ -257,7 +257,7 @@ namespace castor3d
 
 		Vec3 PbrLightingModel::computeDiffuse( DirectionalLight const & light
 			, Vec3 const & worldEye
-			, PbrLightMaterial & material
+			, PbrLightMaterial const & material
 			, Int const & receivesShadows
 			, Surface surface )const
 		{
@@ -270,7 +270,7 @@ namespace castor3d
 
 		Vec3 PbrLightingModel::computeDiffuse( PointLight const & light
 			, Vec3 const & worldEye
-			, PbrLightMaterial & material
+			, PbrLightMaterial const & material
 			, Int const & receivesShadows
 			, Surface surface )const
 		{
@@ -283,7 +283,7 @@ namespace castor3d
 
 		Vec3 PbrLightingModel::computeDiffuse( SpotLight const & light
 			, Vec3 const & worldEye
-			, PbrLightMaterial & material
+			, PbrLightMaterial const & material
 			, Int const & receivesShadows
 			, Surface surface )const
 		{
@@ -680,13 +680,12 @@ namespace castor3d
 
 		void PbrLightingModel::doDeclareComputeDirectionalLight()
 		{
-			PbrLightMaterial material{ m_writer };
 			OutputComponents output{ m_writer };
 #if C3D_UseTiledDirectionalShadowMap
 			m_computeTiledDirectional = m_writer.implementFunction< sdw::Void >( "computeDirectionalLight"
 				, [this]( TiledDirectionalLight const & light
 					, Vec3 const & worldEye
-					, PbrLightMaterial & material
+					, PbrLightMaterial const & material
 					, Int const & receivesShadows
 					, Surface surface
 					, OutputComponents & parentOutput )
@@ -843,7 +842,7 @@ namespace castor3d
 				}
 				, InTiledDirectionalLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )
-				, material
+				, InPbrLightMaterial{ m_writer, "material" }
 				, InInt( m_writer, "receivesShadows" )
 				, InSurface{ m_writer, "surface" }
 				, output );
@@ -851,7 +850,7 @@ namespace castor3d
 			m_computeDirectional = m_writer.implementFunction< sdw::Void >( "computeDirectionalLight"
 				, [this]( DirectionalLight const & light
 					, Vec3 const & worldEye
-					, PbrLightMaterial & material
+					, PbrLightMaterial const & material
 					, Int const & receivesShadows
 					, Surface surface
 					, OutputComponents & parentOutput )
@@ -1002,7 +1001,7 @@ namespace castor3d
 				}
 				, InDirectionalLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )
-				, material
+				, InPbrLightMaterial{ m_writer, "material" }
 				, InInt( m_writer, "receivesShadows" )
 				, InSurface{ m_writer, "surface" }
 				, output );
@@ -1011,12 +1010,11 @@ namespace castor3d
 
 		void PbrLightingModel::doDeclareComputePointLight()
 		{
-			PbrLightMaterial material{ m_writer };
 			OutputComponents output{ m_writer };
 			m_computePoint = m_writer.implementFunction< sdw::Void >( "computePointLight"
 				, [this]( PointLight const & light
 					, Vec3 const & worldEye
-					, PbrLightMaterial & material
+					, PbrLightMaterial const & material
 					, Int const & receivesShadows
 					, Surface surface
 					, OutputComponents & parentOutput )
@@ -1097,7 +1095,7 @@ namespace castor3d
 				}
 				, InPointLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )
-				, material
+				, InPbrLightMaterial{ m_writer, "material" }
 				, InInt( m_writer, "receivesShadows" )
 				, InSurface{ m_writer, "surface" }
 				, output );
@@ -1105,12 +1103,11 @@ namespace castor3d
 
 		void PbrLightingModel::doDeclareComputeSpotLight()
 		{
-			PbrLightMaterial material{ m_writer };
 			OutputComponents output{ m_writer };
 			m_computeSpot = m_writer.implementFunction< sdw::Void >( "computeSpotLight"
 				, [this]( SpotLight const & light
 					, Vec3 const & worldEye
-					, PbrLightMaterial & material
+					, PbrLightMaterial const & material
 					, Int const & receivesShadows
 					, Surface surface
 					, OutputComponents & parentOutput )
@@ -1192,7 +1189,7 @@ namespace castor3d
 				}
 				, InSpotLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )
-				, material
+				, InPbrLightMaterial{ m_writer, "material" }
 				, InInt( m_writer, "receivesShadows" )
 				, InSurface{ m_writer, "surface" }
 				, output );
@@ -1205,12 +1202,11 @@ namespace castor3d
 
 		void PbrLightingModel::doDeclareComputeDirectionalLightDiffuse()
 		{
-			PbrLightMaterial material{ m_writer };
 #if C3D_UseTiledDirectionalShadowMap
 			m_computeTiledDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeDirectionalLight"
 				, [this]( TiledDirectionalLight const & light
 					, Vec3 const & worldEye
-					, PbrLightMaterial & material
+					, PbrLightMaterial const & material
 					, Int const & receivesShadows
 					, Surface surface )
 				{
@@ -1279,14 +1275,14 @@ namespace castor3d
 				}
 				, InTiledDirectionalLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )
-				, material
+				, InPbrLightMaterial{ m_writer, "material" }
 				, InInt( m_writer, "receivesShadows" )
 				, InSurface{ m_writer, "surface" } );
 #else
 			m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeDirectionalLight"
 				, [this]( DirectionalLight const & light
 					, Vec3 const & worldEye
-					, PbrLightMaterial & material
+					, PbrLightMaterial const & material
 					, Int const & receivesShadows
 					, Surface surface )
 				{
@@ -1352,7 +1348,7 @@ namespace castor3d
 				}
 				, InDirectionalLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )
-				, material
+				, InPbrLightMaterial{ m_writer, "material" }
 				, InInt( m_writer, "receivesShadows" )
 				, InSurface{ m_writer, "surface" } );
 #endif
@@ -1360,11 +1356,10 @@ namespace castor3d
 
 		void PbrLightingModel::doDeclareComputePointLightDiffuse()
 		{
-			PbrLightMaterial material{ m_writer };
 			m_computePointDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computePointLight"
 				, [this]( PointLight const & light
 					, Vec3 const & worldEye
-					, PbrLightMaterial & material
+					, PbrLightMaterial const & material
 					, Int const & receivesShadows
 					, Surface surface )
 				{
@@ -1433,18 +1428,17 @@ namespace castor3d
 				}
 				, InPointLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )
-				, material
+				, InPbrLightMaterial{ m_writer, "material" }
 				, InInt( m_writer, "receivesShadows" )
 				, InSurface{ m_writer, "surface" } );
 		}
 
 		void PbrLightingModel::doDeclareComputeSpotLightDiffuse()
 		{
-			PbrLightMaterial material{ m_writer };
 			m_computeSpotDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeSpotLight"
 				, [this]( SpotLight const & light
 					, Vec3 const & worldEye
-					, PbrLightMaterial & material
+					, PbrLightMaterial const & material
 					, Int const & receivesShadows
 					, Surface surface )
 				{
@@ -1514,7 +1508,7 @@ namespace castor3d
 				}
 				, InSpotLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )
-				, material
+				, InPbrLightMaterial{ m_writer, "material" }
 				, InInt( m_writer, "receivesShadows" )
 				, InSurface{ m_writer, "surface" } );
 		}

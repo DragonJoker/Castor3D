@@ -104,30 +104,32 @@ namespace castor3d
 		class VoxelData;
 
 		struct PhongMaterial;
+		struct PhongLightMaterial;
 		class PhongLightingModel;
-		class PhongLightMaterial;
 		class PhongMaterials;
 		class PhongReflectionModel;
 
 		struct MetallicRoughnessMaterial;
 		struct SpecularGlossinessMaterial;
+		struct PbrLightMaterial;
 		class PbrLightingModel;
-		class PbrLightMaterial;
 		class PbrReflectionModel;
 		class PbrMRMaterials;
 		class PbrSGMaterials;
 
-		Writer_Parameter( Light );
 		Writer_Parameter( DirectionalLight );
-		Writer_Parameter( TiledDirectionalLight );
+		Writer_Parameter( LayeredLpvGridData );
+		Writer_Parameter( Light );
+		Writer_Parameter( LpvGridData );
+		Writer_Parameter( LpvLightData );
+		Writer_Parameter( PbrLightMaterial );
+		Writer_Parameter( PhongLightMaterial );
 		Writer_Parameter( PointLight );
 		Writer_Parameter( SpotLight );
-		Writer_Parameter( TextureConfigData );
-		Writer_Parameter( LayeredLpvGridData );
-		Writer_Parameter( LpvLightData );
-		Writer_Parameter( LpvGridData );
-		Writer_Parameter( VoxelData );
 		Writer_Parameter( Surface );
+		Writer_Parameter( TextureConfigData );
+		Writer_Parameter( TiledDirectionalLight );
+		Writer_Parameter( VoxelData );
 		/**
 		 *\~english
 		 *\brief		Creates the appropriate GLSL materials buffer.
