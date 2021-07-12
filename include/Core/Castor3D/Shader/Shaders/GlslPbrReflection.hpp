@@ -26,19 +26,19 @@ namespace castor3d::shader
 			, sdw::Int const & reflection
 			, sdw::Int const & refraction
 			, sdw::Float const & refractionRatio
-			, sdw::Vec3 const & albedo
 			, PbrLightMaterial const & material
 			, sdw::Vec3 const & transmission
 			, Surface const & surface
 			, SceneData const & sceneData
+			, sdw::Vec3 const & ambient
 			, sdw::Vec3 & reflected
 			, sdw::Vec3 & refracted )const;
 		C3D_API void computeForward( sdw::Float const & refractionRatio
-			, sdw::Vec3 const & albedo
 			, PbrLightMaterial const & material
 			, sdw::Vec3 const & transmission
 			, Surface const & surface
 			, SceneData const & sceneData
+			, sdw::Vec3 const & ambient
 			, sdw::Vec3 & reflected
 			, sdw::Vec3 & refracted )const;
 		static C3D_API sdw::Vec3 computeF0( sdw::Vec3 const & albedo
@@ -48,7 +48,6 @@ namespace castor3d::shader
 
 	private:
 		sdw::Vec3 computeIBL( Surface surface
-			, sdw::Vec3 const & diffuse
 			, PbrLightMaterial const & material
 			, sdw::Vec3 const & worldEye
 			, sdw::SampledImageCubeRgba32 const & irradiance
@@ -106,7 +105,6 @@ namespace castor3d::shader
 		PassFlags m_passFlags;
 		sdw::Function< sdw::Vec3
 			, InSurface
-			, sdw::InVec3
 			, InPbrLightMaterial
 			, sdw::InVec3
 			, sdw::InSampledImageCubeRgba32

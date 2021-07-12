@@ -72,13 +72,6 @@ namespace castor3d
 		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetPbrPixelShaderSource( PipelineFlags const & flags )const override;
-
-	private:
-		static castor::String const Output1;
-		static castor::String const Output2;
-		static castor::String const Output3;
-		static castor::String const Output4;
-		static castor::String const Output5;
 	};
 }
 

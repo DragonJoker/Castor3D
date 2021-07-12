@@ -23,9 +23,10 @@ namespace castor3d::shader
 		return *this;
 	}
 
-	void PbrLightMaterial::createFromPbr( sdw::Vec3 const & albedo
+	void PbrLightMaterial::create( sdw::Vec3 const & albedo
 		, sdw::Vec4 const & data3
-		, sdw::Vec4 const & data2 )
+		, sdw::Vec4 const & data2
+		, sdw::Float const & ambient )
 	{
 		this->albedo = albedo;
 		this->specular = data3.rgb();
@@ -39,6 +40,36 @@ namespace castor3d::shader
 		roughness = material.colourDiv.a();
 		specular = material.specDiv.rgb();
 		metalness = material.specDiv.a();
+	}
+
+	void PbrLightMaterial::output( sdw::Vec4 & outData2, sdw::Vec4 & outData3 )
+	{
+		outData2 = vec4( albedo, roughness );
+		outData3 = vec4( specular, metalness );
+	}
+
+	sdw::Vec3 PbrLightMaterial::getAmbient( sdw::Vec3 const & ambientLight )
+	{
+		return ambientLight;
+	}
+
+	void PbrLightMaterial::adjustDirectSpecular( sdw::Vec3 & directSpecular )const
+	{
+	}
+
+	sdw::Vec3 PbrLightMaterial::getIndirectAmbient( sdw::Vec3 const & indirectAmbient )const
+	{
+		return indirectAmbient;
+	}
+
+	sdw::Float PbrLightMaterial::getMetalness()const
+	{
+		return metalness;
+	}
+
+	sdw::Float PbrLightMaterial::getRoughness()const
+	{
+		return roughness;
 	}
 
 	ast::type::StructPtr PbrLightMaterial::makeType( ast::type::TypesCache & cache )
