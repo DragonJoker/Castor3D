@@ -59,12 +59,11 @@ namespace castor3d::shader
 		, sdw::Int const & reflection
 		, sdw::Int const & refraction
 		, sdw::Float const & refractionRatio
-		, PhongLightMaterial const & material
+		, PhongLightMaterial & material
 		, sdw::Vec3 const & transmission
 		, Surface const & surface
 		, SceneData const & sceneData
 		, sdw::Vec3 & ambient
-		, sdw::Vec3 & diffuse
 		, sdw::Vec3 & reflected
 		, sdw::Vec3 & refracted )const
 	{
@@ -84,7 +83,7 @@ namespace castor3d::shader
 					, envMaps
 					, envMapIndex
 					, refractionRatio
-					, transmission * diffuse
+					, transmission
 					, material
 					, reflected
 					, refracted );
@@ -104,25 +103,24 @@ namespace castor3d::shader
 					, envMaps
 					, envMapIndex
 					, refractionRatio
-					, transmission * diffuse
+					, transmission
 					, material
 					, reflected
 					, refracted );
 			}
 			FI;
 
-			diffuse = vec3( 0.0_f );
+			material.albedo = vec3( 0.0_f );
 		}
 		FI;
 	}
 
 	void PhongReflectionModel::computeForward( sdw::Float const & refractionRatio
-		, PhongLightMaterial const & material
+		, PhongLightMaterial & material
 		, sdw::Vec3 const & transmission
 		, Surface const & surface
 		, SceneData const & sceneData
 		, sdw::Vec3 & ambient
-		, sdw::Vec3 & diffuse
 		, sdw::Vec3 & reflected
 		, sdw::Vec3 & refracted )const
 	{
@@ -141,7 +139,7 @@ namespace castor3d::shader
 					, surface.worldNormal
 					, envMap
 					, refractionRatio
-					, transmission * diffuse
+					, transmission
 					, material
 					, reflected
 					, refracted );
@@ -159,13 +157,13 @@ namespace castor3d::shader
 					, surface.worldNormal
 					, envMap
 					, refractionRatio
-					, transmission * diffuse
+					, transmission
 					, material
 					, reflected
 					, refracted );
 			}
 
-			diffuse = vec3( 0.0_f );
+			material.albedo = vec3( 0.0_f );
 		}
 	}
 
@@ -327,7 +325,7 @@ namespace castor3d::shader
 				reflection = mix( vec3( 0.0_f )
 					, reflection
 					, vec3( fresnel ) );
-				refraction = mix( envMap.lod( refracted, ( 256.0f - material.shininess ) / 32.0f ).xyz() * transmission
+				refraction = mix( envMap.lod( refracted, ( 256.0f - material.shininess ) / 32.0f ).xyz() * transmission * material.albedo
 					, vec3( 0.0_f )
 					, vec3( fresnel ) );
 			}
@@ -429,7 +427,7 @@ namespace castor3d::shader
 					, reflection
 					, vec3( fresnel ) );
 				refraction = mix( envMap.lod( vec4( refracted, m_writer.cast< sdw::Float >( envMapIndex ) )
-						, ( 256.0f - material.shininess ) / 32.0f ).xyz() * transmission
+						, ( 256.0f - material.shininess ) / 32.0f ).xyz() * transmission * material.albedo
 					, vec3( 0.0_f )
 					, vec3( fresnel ) );
 			}

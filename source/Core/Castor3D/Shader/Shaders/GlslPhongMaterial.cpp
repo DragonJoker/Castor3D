@@ -34,12 +34,54 @@ namespace castor3d::shader
 		return *this;
 	}
 
+	void PhongLightMaterial::create( sdw::Vec3 const & albedo
+		, sdw::Vec4 const & data3
+		, sdw::Vec4 const & data2
+		, sdw::Float const & ambient )
+	{
+		this->albedo = albedo;
+		this->specular = data3.rgb();
+		this->ambient = ambient;
+		this->shininess = data2.a();
+	}
+
 	void PhongLightMaterial::create( Material const & material )
 	{
 		albedo = pow( max( material.colourDiv.rgb(), vec3( 0.0_f, 0.0_f, 0.0_f ) ), vec3( material.gamma ) );
 		specular = material.specDiv.rgb();
 		ambient = material.colourDiv.a();
 		shininess = material.specDiv.a();
+	}
+
+	void PhongLightMaterial::output( sdw::Vec4 & outData2, sdw::Vec4 & outData3 )const
+	{
+		outData2 = vec4( albedo, shininess );
+		outData3 = vec4( specular, 0.0_f );
+	}
+
+	sdw::Vec3 PhongLightMaterial::getAmbient( sdw::Vec3 const & ambientLight )const
+	{
+		return ambientLight * albedo;
+	}
+
+	void PhongLightMaterial::adjustDirectSpecular( sdw::Vec3 & directSpecular )const
+	{
+		directSpecular *= specular;
+	}
+
+	sdw::Vec3 PhongLightMaterial::getIndirectAmbient( sdw::Vec3 const & indirectAmbient )const
+	{
+		return indirectAmbient * ambient;
+	}
+
+	sdw::Float PhongLightMaterial::getMetalness()const
+	{
+		return LightingModel::computeMetalness( albedo, specular );
+	}
+
+	sdw::Float PhongLightMaterial::getRoughness()const
+	{
+		return LightingModel::computeRoughness( LightingModel::computeGlossiness( shininess ) );
 	}
 
 	ast::type::StructPtr PhongLightMaterial::makeType( ast::type::TypesCache & cache )
