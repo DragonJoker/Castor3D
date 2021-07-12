@@ -239,7 +239,7 @@ namespace castor3d
 			, hasTextures };
 		auto in = writer.getIn();
 
-		shader::PhongMaterials materials{ writer };
+		shader::Materials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 			, uint32_t( NodeUboIdx::eMaterials )
 			, RenderPipeline::eBuffers );
@@ -297,10 +297,7 @@ namespace castor3d
 			auto gamma = writer.declLocale( "gamma"
 				, material.gamma );
 			auto lightMat = writer.declLocale< shader::PhongLightMaterial >( "lightMat" );
-			lightMat.create< MaterialType::ePhong >( material.diffuse
-				, material.gamma
-				, material.specular
-				, material.shininess );
+			lightMat.create( material );
 			auto emissive = writer.declLocale( "emissive"
 				, vec3( material.emissive ) );
 			auto occlusion = writer.declLocale( "occlusion"
@@ -400,7 +397,7 @@ namespace castor3d
 			, hasTextures };
 		auto in = writer.getIn();
 
-		shader::PbrMaterials materials{ writer };
+		shader::Materials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 			, uint32_t( NodeUboIdx::eMaterials )
 			, RenderPipeline::eBuffers );

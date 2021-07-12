@@ -160,7 +160,7 @@ namespace castor3d
 			, getShaderFlags()
 			, hasTextures };
 
-		shader::PhongMaterials materials{ writer };
+		shader::Materials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 			, uint32_t( NodeUboIdx::eMaterials )
 			, RenderPipeline::eBuffers );
@@ -234,10 +234,7 @@ namespace castor3d
 				auto gamma = writer.declLocale( "gamma"
 					, material.gamma );
 				auto lightMat = writer.declLocale< shader::PhongLightMaterial >( "lightMat" );
-				lightMat.create< MaterialType::ePhong >( material.diffuse
-					, material.gamma
-					, material.specular
-					, material.shininess );
+				lightMat.create( material );
 				auto emissive = writer.declLocale( "emissive"
 					, lightMat.albedo * material.emissive );
 				auto worldEye = writer.declLocale( "worldEye"
@@ -281,10 +278,6 @@ namespace castor3d
 
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 				{
-					auto lightMat = writer.declLocale< shader::PhongLightMaterial >( "lightMat" );
-					lightMat.create< MaterialType::ePhong >( lightMat.albedo
-						, lightMat.specular
-						, lightMat.shininess );
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
 						, vec3( 0.0_f ) );
 					auto lightSpecular = writer.declLocale( "lightSpecular"
@@ -337,7 +330,7 @@ namespace castor3d
 						|| checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
 						|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI );
 					auto indirectAmbient = writer.declLocale( "indirectAmbient"
-						, material.ambient * indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() ) );
+						, lightMat.ambient * indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() ) );
 					auto pbrLightMat = writer.declLocale< shader::PbrLightMaterial >( "pbrLightMat"
 						, hasDiffuseGI );
 					pbrLightMat.create< MaterialType::ePhong >( lightMat.albedo
@@ -406,7 +399,7 @@ namespace castor3d
 			, getShaderFlags()
 			, hasTextures };
 
-		shader::PbrMaterials materials{ writer };
+		shader::Materials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 			, uint32_t( NodeUboIdx::eMaterials )
 			, RenderPipeline::eBuffers );
