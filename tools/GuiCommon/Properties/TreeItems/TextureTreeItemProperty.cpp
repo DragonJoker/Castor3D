@@ -225,9 +225,9 @@ namespace GuiCommon
 			{
 				doAddProperty( grid, PROPERTY_FLAG_ALBEDO, PROPERTY_IS_ALBEDO, PROPERTY_COMP_ALBEDO, TextureFlag::eAlbedo, m_configuration.colourMask, 3u
 					, [this]( wxVariant const & var ){ onChange( var, TextureFlag::eAlbedo, 3u ); } );
-				doAddProperty( grid, PROPERTY_FLAG_METALLIC, PROPERTY_IS_METALLIC, PROPERTY_COMP_METALLIC, TextureFlag::eMetalness, m_configuration.specularMask, 1u
+				doAddProperty( grid, PROPERTY_FLAG_METALLIC, PROPERTY_IS_METALLIC, PROPERTY_COMP_METALLIC, TextureFlag::eMetalness, m_configuration.metalnessMask, 1u
 					, [this]( wxVariant const & var ){ onChange( var, TextureFlag::eMetalness, 1u ); } );
-				doAddProperty( grid, PROPERTY_FLAG_ROUGHNESS, PROPERTY_IS_ROUGHNESS, PROPERTY_COMP_ROUGHNESS, TextureFlag::eRoughness, m_configuration.glossinessMask, 1u
+				doAddProperty( grid, PROPERTY_FLAG_ROUGHNESS, PROPERTY_IS_ROUGHNESS, PROPERTY_COMP_ROUGHNESS, TextureFlag::eRoughness, m_configuration.roughnessMask, 1u
 					, [this]( wxVariant const & var ){ onChange( var, TextureFlag::eRoughness, 1u ); } );
 			}
 

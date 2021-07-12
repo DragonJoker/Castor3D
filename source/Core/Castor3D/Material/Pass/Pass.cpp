@@ -44,7 +44,9 @@ namespace castor3d
 		{
 			mergeMasks( lhs.colourMask[0], rhs.colourMask[0] );
 			mergeMasks( lhs.specularMask[0], rhs.specularMask[0] );
+			mergeMasks( lhs.metalnessMask[0], rhs.metalnessMask[0] );
 			mergeMasks( lhs.glossinessMask[0], rhs.glossinessMask[0] );
+			mergeMasks( lhs.roughnessMask[0], rhs.roughnessMask[0] );
 			mergeMasks( lhs.opacityMask[0], rhs.opacityMask[0] );
 			mergeMasks( lhs.emissiveMask[0], rhs.emissiveMask[0] );
 			mergeMasks( lhs.normalMask[0], rhs.normalMask[0] );
@@ -503,7 +505,9 @@ namespace castor3d
 
 			if ( ( checkFlag( mask, TextureFlag::eAlbedo ) && config.colourMask[0] )
 				|| ( checkFlag( mask, TextureFlag::eSpecular ) && config.specularMask[0] )
+				|| ( checkFlag( mask, TextureFlag::eMetalness ) && config.metalnessMask[0] )
 				|| ( checkFlag( mask, TextureFlag::eGlossiness ) && config.glossinessMask[0] )
+				|| ( checkFlag( mask, TextureFlag::eRoughness ) && config.roughnessMask[0] )
 				|| ( checkFlag( mask, TextureFlag::eOpacity ) && config.opacityMask[0] )
 				|| ( checkFlag( mask, TextureFlag::eEmissive ) && config.emissiveMask[0] )
 				|| ( checkFlag( mask, TextureFlag::eNormal ) && config.normalMask[0] )

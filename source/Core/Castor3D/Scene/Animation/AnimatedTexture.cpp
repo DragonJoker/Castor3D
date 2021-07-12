@@ -33,7 +33,9 @@ namespace castor3d
 			castor::String result;
 			result += writeMask( cuT( "_c" ), configuration.colourMask[0] );
 			result += writeMask( cuT( "_s" ), configuration.specularMask[0] );
+			result += writeMask( cuT( "_m" ), configuration.metalnessMask[0] );
 			result += writeMask( cuT( "_g" ), configuration.glossinessMask[0] );
+			result += writeMask( cuT( "_r" ), configuration.roughnessMask[0] );
 			result += writeMask( cuT( "_a" ), configuration.opacityMask[0] );
 			result += writeMask( cuT( "_e" ), configuration.emissiveMask[0] );
 			result += writeMask( cuT( "_e" ), configuration.emissiveMask[0] );

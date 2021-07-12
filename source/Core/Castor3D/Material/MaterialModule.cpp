@@ -38,17 +38,17 @@ namespace castor3d
 		case TextureFlag::eOpacity:
 			return cuT( "opacity" );
 		case TextureFlag::eSpecular:
-			return ( material == MaterialType::eMetallicRoughness
-				? castor::String{ cuT( "metallic" ) }
-			: castor::String{ cuT( "specular" ) } );
+			return cuT( "specular" );
+		case TextureFlag::eMetalness:
+			return cuT( "metallic" );
 		case TextureFlag::eHeight:
 			return cuT( "height" );
 		case TextureFlag::eGlossiness:
 			return ( material == MaterialType::eSpecularGlossiness
 				? castor::String{ cuT( "glossiness" ) }
-				: ( material == MaterialType::eMetallicRoughness
-					? castor::String{ cuT( "roughness" ) }
-			: castor::String{ cuT( "shininess" ) } ) );
+				: castor::String{ cuT( "shininess" ) } );
+		case TextureFlag::eRoughness:
+			return cuT( "roughness" );
 		case TextureFlag::eEmissive:
 			return cuT( "emissive" );
 		case TextureFlag::eOcclusion:

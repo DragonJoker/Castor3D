@@ -35,26 +35,27 @@ namespace castor3d::shader
 	{
 	}
 
+	void BaseMaterial::create( sdw::SampledImageT< FImgBufferRgba32 > & materials
+		, sdw::Int & offset )
+	{
+		doCreate( materials, offset );
+		m_common = materials.fetch( Int{ offset++ } );
+		m_opacityTransmission = materials.fetch( Int{ offset++ } );
+		m_reflRefr = materials.fetch( Int{ offset++ } );
+		m_sssInfo = materials.fetch( Int{ offset++ } );
+
+		for ( uint32_t i = 0; i < MaxTransmittanceProfileSize; ++i )
+		{
+			transmittanceProfile[i] = materials.fetch( Int{ offset++ } );
+		}
+
+	}
+
 	//*********************************************************************************************
 
 	Materials::Materials( ShaderWriter & writer )
 		: m_writer{ writer }
 	{
-	}
-
-	void Materials::doFetch( BaseMaterial & result
-		, sdw::SampledImageT< FImgBufferRgba32 > & c3d_materials
-		, sdw::Int & offset )
-	{
-		result.m_common = c3d_materials.fetch( Int{ offset++ } );
-		result.m_opacityTransmission = c3d_materials.fetch( Int{ offset++ } );
-		result.m_reflRefr = c3d_materials.fetch( Int{ offset++ } );
-		result.m_sssInfo = c3d_materials.fetch( Int{ offset++ } );
-
-		for ( uint32_t i = 0; i < MaxTransmittanceProfileSize; ++i )
-		{
-			result.transmittanceProfile[i] = c3d_materials.fetch( Int{ offset++ } );
-		}
 	}
 
 	//*********************************************************************************************

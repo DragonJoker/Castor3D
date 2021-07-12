@@ -50,6 +50,7 @@ namespace castor3d
 			: sdw::StructInstance{ writer, std::move( expr ), enabled }
 			, colOpa{ getMember< sdw::Vec4 >( "colOpa" ) }
 			, spcShn{ getMember< sdw::Vec4 >( "spcShn" ) }
+			, metRgh{ getMember< sdw::Vec4 >( "metRgh" ) }
 			, emsOcc{ getMember< sdw::Vec4 >( "emsOcc" ) }
 			, trsDum{ getMember< sdw::Vec4 >( "trsDum" ) }
 			, nmlFcr{ getMember< sdw::Vec4 >( "nmlFcr" ) }
@@ -66,6 +67,10 @@ namespace castor3d
 			, spcMask{ spcShn.y() }
 			, shnEnbl{ spcShn.z() }
 			, shnMask{ spcShn.w() }
+			, metEnbl{ metRgh.x() }
+			, metMask{ metRgh.y() }
+			, rghEnbl{ metRgh.z() }
+			, rghMask{ metRgh.w() }
 			, emsEnbl{ emsOcc.x() }
 			, emsMask{ emsOcc.y() }
 			, occEnbl{ emsOcc.z() }
@@ -98,6 +103,7 @@ namespace castor3d
 			{
 				result->declMember( "colOpa", ast::type::Kind::eVec4F );
 				result->declMember( "spcShn", ast::type::Kind::eVec4F );
+				result->declMember( "metRgh", ast::type::Kind::eVec4F );
 				result->declMember( "emsOcc", ast::type::Kind::eVec4F );
 				result->declMember( "trsDum", ast::type::Kind::eVec4F );
 				result->declMember( "nmlFcr", ast::type::Kind::eVec4F );
@@ -152,7 +158,7 @@ namespace castor3d
 			, sdw::Vec4 const & sampled
 			, sdw::Float const & metalness )const
 		{
-			return metalness * getFloat( writer, sampled, spcMask );
+			return metalness * getFloat( writer, sampled, metMask );
 		}
 
 		sdw::Float TextureConfigData::getShininess( sdw::ShaderWriter & writer
@@ -176,7 +182,7 @@ namespace castor3d
 			, sdw::Vec4 const & sampled
 			, sdw::Float const & roughness )const
 		{
-			return roughness * getFloat( writer, sampled, shnMask );
+			return roughness * getFloat( writer, sampled, rghMask );
 		}
 
 		sdw::Float TextureConfigData::getOpacity( sdw::ShaderWriter & writer
@@ -306,6 +312,7 @@ namespace castor3d
 							, m_writer.cast< sdw::Int >( index ) * sdw::Int( shader::MaxTextureConfigurationComponentsCount ) );
 						result.colOpa = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
 						result.spcShn = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
+						result.metRgh = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
 						result.emsOcc = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
 						result.trsDum = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
 						result.nmlFcr = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );

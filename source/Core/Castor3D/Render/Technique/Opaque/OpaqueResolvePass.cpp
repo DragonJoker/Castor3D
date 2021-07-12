@@ -236,7 +236,7 @@ namespace castor3d
 						auto material = writer.declLocale( "material"
 							, materials.getMaterial( materialId ) );
 						auto occlusion = writer.declLocale( "occlusion"
-							, data3.a() );
+							, data5.a() );
 						auto emissive = writer.declLocale( "emissive"
 							, data4.xyz() );
 						auto lightMat = writer.declLocale< shader::PhongLightMaterial >( "lightMat" );
@@ -327,21 +327,14 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		template< MaterialType MaterialT >
-		ShaderPtr createPbrPixelProgramT( RenderSystem const & renderSystem
+		ShaderPtr createPbrPixelProgram( RenderSystem const & renderSystem
 			, ResolveProgramConfig const & config )
 		{
-			using MyTraits = shader::ShaderMaterialTraitsT< MaterialT >;
-			using Materials = typename MyTraits::Materials;
-			using LightingModel = typename MyTraits::LightingModel;
-			using LightMaterial = typename MyTraits::LightMaterial;
-			using ReflectionModel = typename MyTraits::ReflectionModel;
-			
 			using namespace sdw;
 			FragmentWriter writer;
 
 			// Shader inputs
-			Materials materials{ writer };
+			shader::PbrMaterials materials{ writer };
 			materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 				, uint32_t( ResolveBind::eMaterials )
 				, 0u );
@@ -373,7 +366,7 @@ namespace castor3d
 			shader::CookTorranceBRDF cookTorrance{ writer, utils };
 			cookTorrance.declareDiffuse();
 
-			ReflectionModel reflections{ writer
+			shader::PbrReflectionModel reflections{ writer
 				, utils
 				, uint32_t( ResolveBind::eEnvironment )
 				, 0u };
@@ -437,11 +430,11 @@ namespace castor3d
 						auto material = writer.declLocale( "material"
 							, materials.getMaterial( materialId ) );
 						auto occlusion = writer.declLocale( "occlusion"
-							, data3.a() );
+							, data5.a() );
 						auto emissive = writer.declLocale( "emissive"
 							, data4.xyz() );
-						auto lightMat = writer.declLocale< LightMaterial >( "lightMat" );
-						lightMat.create< MaterialT >( albedo, data3, data2 );
+						auto lightMat = writer.declLocale< shader::PbrLightMaterial >( "lightMat" );
+						lightMat.createFromPbr( albedo, data3, data2 );
 
 						auto ambient = writer.declLocale( "ambient"
 							, c3d_sceneData.getAmbientLight() );
@@ -527,9 +520,7 @@ namespace castor3d
 		{
 			return ( matType == MaterialType::ePhong
 				? createPhongPixelProgram( device.renderSystem, config )
-				: ( matType == MaterialType::eMetallicRoughness
-					? createPbrPixelProgramT< MaterialType::eMetallicRoughness >( device.renderSystem, config )
-					: createPbrPixelProgramT< MaterialType::eSpecularGlossiness >( device.renderSystem, config ) ) );
+				: createPbrPixelProgram( device.renderSystem, config ) );
 		}
 
 		std::vector< crg::VkPipelineShaderStageCreateInfoArray > createPrograms( std::vector< OpaqueResolvePass::Program > const & programs )

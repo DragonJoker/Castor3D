@@ -109,13 +109,11 @@ namespace castor3d
 		class PhongMaterials;
 		class PhongReflectionModel;
 
-		struct MetallicRoughnessMaterial;
-		struct SpecularGlossinessMaterial;
+		struct PbrMaterial;
 		struct PbrLightMaterial;
 		class PbrLightingModel;
 		class PbrReflectionModel;
-		class PbrMRMaterials;
-		class PbrSGMaterials;
+		class PbrMaterials;
 
 		Writer_Parameter( DirectionalLight );
 		Writer_Parameter( LayeredLpvGridData );

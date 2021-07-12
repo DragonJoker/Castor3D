@@ -181,6 +181,7 @@ namespace castor3d
 
 					m_data.colOpa[index] = writeFlags( config.colourMask, config.opacityMask );
 					m_data.spcShn[index] = writeFlags( config.specularMask, config.glossinessMask );
+					m_data.metRgh[index] = writeFlags( config.metalnessMask, config.roughnessMask );
 					m_data.emsOcc[index] = writeFlags( config.emissiveMask, config.occlusionMask );
 					m_data.trsDum[index] = writeFlags( config.transmittanceMask, {} );
 					m_data.nmlFcr[index] = writeFlags( config.normalMask, config.normalFactor, config.normalGMultiplier );
@@ -196,6 +197,7 @@ namespace castor3d
 					auto & data = m_data[index];
 					data.colOpa = writeFlags( config.colourMask, config.opacityMask );
 					data.spcShn = writeFlags( config.specularMask, config.glossinessMask );
+					data.metRgh = writeFlags( config.metalnessMask, config.roughnessMask );
 					data.emsOcc = writeFlags( config.emissiveMask, config.occlusionMask );
 					data.trsDum = writeFlags( config.transmittanceMask, {} );
 					data.nmlFcr = writeFlags( config.normalMask, config.normalFactor, config.normalGMultiplier );

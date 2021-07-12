@@ -397,7 +397,9 @@ namespace castor3d
 			: 0u;
 		doUpdateStartIndex( m_configuration.colourMask, format );
 		doUpdateStartIndex( m_configuration.specularMask, format );
+		doUpdateStartIndex( m_configuration.metalnessMask, format );
 		doUpdateStartIndex( m_configuration.glossinessMask, format );
+		doUpdateStartIndex( m_configuration.roughnessMask, format );
 		doUpdateStartIndex( m_configuration.opacityMask, format );
 		doUpdateStartIndex( m_configuration.emissiveMask, format );
 		doUpdateStartIndex( m_configuration.normalMask, format );

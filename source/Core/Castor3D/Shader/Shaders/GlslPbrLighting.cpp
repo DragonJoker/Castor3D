@@ -384,7 +384,6 @@ namespace castor3d
 		}
 
 		void PbrLightingModel::computeMapContributions( PassFlags const & passFlags
-			, MaterialType materialType
 			, FilteredTextureFlags const & textures
 			, sdw::Float const & gamma
 			, TextureConfigurations const & textureConfigs
@@ -402,6 +401,9 @@ namespace castor3d
 			, sdw::Vec3 & tangentSpaceFragPosition )
 		{
 			bool hasEmissive = false;
+			bool hasAlbedo = false;
+			bool hasMetalness = false;
+			bool hasSpecular = false;
 			m_utils.computeGeometryMapsContributions( textures
 				, passFlags
 				, textureConfigs
@@ -441,46 +443,57 @@ namespace castor3d
 					if ( checkFlag( textureIt.second.flags, TextureFlag::eAlbedo ) )
 					{
 						lightMat.albedo = config.getAlbedo( m_writer, sampled, lightMat.albedo, gamma );
+						hasAlbedo = true;
 					}
 
-					if ( materialType == MaterialType::eSpecularGlossiness )
+					if ( checkFlag( textureIt.second.flags, TextureFlag::eSpecular ) )
 					{
-						if ( checkFlag( textureIt.second.flags, TextureFlag::eSpecular ) )
-						{
-							lightMat.specular = config.getSpecular( m_writer, sampled, lightMat.specular );
-							lightMat.metalness = LightingModel::computeMetalness( lightMat.albedo, lightMat.specular );
-						}
-
-						if ( checkFlag( textureIt.second.flags, TextureFlag::eGlossiness ) )
-						{
-							auto gloss = m_writer.declLocale( "gloss" + name
-								, LightingModel::computeRoughness( lightMat.roughness ) );
-							gloss = config.getGlossiness( m_writer
-									, sampled
-									, gloss );
-							lightMat.roughness = LightingModel::computeRoughness( gloss );
-						}
+						lightMat.specular = config.getSpecular( m_writer, sampled, lightMat.specular );
+						hasSpecular = true;
 					}
-					else
-					{
-						if ( checkFlag( textureIt.second.flags, TextureFlag::eMetalness ) )
-						{
-							lightMat.metalness = config.getMetalness( m_writer, sampled, lightMat.metalness );
-							lightMat.specular = LightingModel::computeF0( lightMat.albedo, lightMat.metalness );
-						}
 
-						if ( checkFlag( textureIt.second.flags, TextureFlag::eRoughness ) )
-						{
-							lightMat.roughness = config.getRoughness( m_writer
-								, sampled
-								, lightMat.roughness );
-						}
+					if ( checkFlag( textureIt.second.flags, TextureFlag::eGlossiness ) )
+					{
+						auto gloss = m_writer.declLocale( "gloss" + name
+							, LightingModel::computeRoughness( lightMat.roughness ) );
+						gloss = config.getGlossiness( m_writer
+							, sampled
+							, gloss );
+						lightMat.roughness = LightingModel::computeRoughness( gloss );
+					}
+
+					if ( checkFlag( textureIt.second.flags, TextureFlag::eMetalness ) )
+					{
+						lightMat.metalness = config.getMetalness( m_writer, sampled, lightMat.metalness );
+						hasMetalness = true;
+					}
+
+					if ( checkFlag( textureIt.second.flags, TextureFlag::eRoughness ) )
+					{
+						lightMat.roughness = config.getRoughness( m_writer
+							, sampled
+							, lightMat.roughness );
 					}
 
 					if ( checkFlag( textureIt.second.flags, TextureFlag::eEmissive ) )
 					{
 						hasEmissive = true;
 					}
+				}
+			}
+
+			if ( checkFlag( passFlags, PassFlag::eSpecularGlossiness ) )
+			{
+				if ( !hasMetalness && ( hasSpecular || hasAlbedo ) )
+				{
+					lightMat.metalness = LightingModel::computeMetalness( lightMat.albedo, lightMat.specular );
+				}
+			}
+			else
+			{
+				if ( !hasSpecular && ( hasMetalness || hasAlbedo ) )
+				{
+					lightMat.specular = LightingModel::computeF0( lightMat.albedo, lightMat.metalness );
 				}
 			}
 
@@ -492,7 +505,6 @@ namespace castor3d
 		}
 
 		void PbrLightingModel::computeMapVoxelContributions( PassFlags const & passFlags
-			, MaterialType materialType
 			, FilteredTextureFlags const & textures
 			, sdw::Float const & gamma
 			, TextureConfigurations const & textureConfigs
@@ -504,6 +516,9 @@ namespace castor3d
 			, PbrLightMaterial & lightMat )
 		{
 			bool hasEmissive = false;
+			bool hasAlbedo = false;
+			bool hasMetalness = false;
+			bool hasSpecular = false;
 
 			for ( auto & textureIt : textures )
 			{
@@ -525,45 +540,56 @@ namespace castor3d
 				if ( checkFlag( textureIt.second.flags, TextureFlag::eAlbedo ) )
 				{
 					lightMat.albedo = config.getAlbedo( m_writer, sampled, lightMat.albedo, gamma );
+					hasAlbedo = true;
 				}
 
-				if ( materialType == MaterialType::eSpecularGlossiness )
+				if ( checkFlag( textureIt.second.flags, TextureFlag::eSpecular ) )
 				{
-					if ( checkFlag( textureIt.second.flags, TextureFlag::eSpecular ) )
-					{
-						lightMat.specular = config.getSpecular( m_writer, sampled, lightMat.specular );
-						lightMat.metalness = LightingModel::computeMetalness( lightMat.albedo, lightMat.specular );
-					}
-
-					if ( checkFlag( textureIt.second.flags, TextureFlag::eGlossiness ) )
-					{
-						auto gloss = m_writer.declLocale( "gloss" + name
-							, LightingModel::computeRoughness( lightMat.roughness ) );
-						gloss = config.getGlossiness( m_writer
-							, sampled
-							, gloss );
-						lightMat.roughness = LightingModel::computeRoughness( gloss );
-					}
+					lightMat.specular = config.getSpecular( m_writer, sampled, lightMat.specular );
+					hasSpecular = true;
 				}
-				else
-				{
-					if ( checkFlag( textureIt.second.flags, TextureFlag::eMetalness ) )
-					{
-						lightMat.metalness = config.getMetalness( m_writer, sampled, lightMat.metalness );
-						lightMat.specular = LightingModel::computeF0( lightMat.albedo, lightMat.metalness );
-					}
 
-					if ( checkFlag( textureIt.second.flags, TextureFlag::eRoughness ) )
-					{
-						lightMat.roughness = config.getRoughness( m_writer
-							, sampled
-							, lightMat.roughness );
-					}
+				if ( checkFlag( textureIt.second.flags, TextureFlag::eGlossiness ) )
+				{
+					auto gloss = m_writer.declLocale( "gloss" + name
+						, LightingModel::computeRoughness( lightMat.roughness ) );
+					gloss = config.getGlossiness( m_writer
+						, sampled
+						, gloss );
+					lightMat.roughness = LightingModel::computeRoughness( gloss );
+				}
+
+				if ( checkFlag( textureIt.second.flags, TextureFlag::eMetalness ) )
+				{
+					lightMat.metalness = config.getMetalness( m_writer, sampled, lightMat.metalness );
+					hasMetalness = true;
+				}
+
+				if ( checkFlag( textureIt.second.flags, TextureFlag::eRoughness ) )
+				{
+					lightMat.roughness = config.getRoughness( m_writer
+						, sampled
+						, lightMat.roughness );
 				}
 
 				if ( checkFlag( textureIt.second.flags, TextureFlag::eEmissive ) )
 				{
 					hasEmissive = true;
+				}
+			}
+
+			if ( checkFlag( passFlags, PassFlag::eSpecularGlossiness ) )
+			{
+				if ( !hasMetalness && ( hasSpecular || hasAlbedo ) )
+				{
+					lightMat.metalness = LightingModel::computeMetalness( lightMat.albedo, lightMat.specular );
+				}
+			}
+			else
+			{
+				if ( !hasSpecular && ( hasMetalness || hasAlbedo ) )
+				{
+					lightMat.specular = LightingModel::computeF0( lightMat.albedo, lightMat.metalness );
 				}
 			}
 
@@ -596,7 +622,6 @@ namespace castor3d
 						m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) ),
 						m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
 					};
-					PbrSGMaterials materials{ m_writer };
 					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( -light.m_direction ) );
 
@@ -761,7 +786,6 @@ namespace castor3d
 						m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) ),
 						m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
 					};
-					PbrSGMaterials materials{ m_writer };
 					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( -light.m_direction ) );
 
@@ -925,7 +949,6 @@ namespace castor3d
 						m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) ),
 						m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
 					};
-					PbrSGMaterials materials{ m_writer };
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
 						, light.m_position.xyz() - surface.worldPosition );
 					auto distance = m_writer.declLocale( "distance"
@@ -1018,7 +1041,6 @@ namespace castor3d
 						m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) ),
 						m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
 					};
-					PbrSGMaterials materials{ m_writer };
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
 						, light.m_position.xyz() - surface.worldPosition );
 					auto distance = m_writer.declLocale( "distance"
@@ -1111,7 +1133,6 @@ namespace castor3d
 					, Int const & receivesShadows
 					, Surface surface )
 				{
-					PbrSGMaterials materials{ m_writer };
 					auto diffuse = m_writer.declLocale( "diffuse"
 						, vec3( 0.0_f ) );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
@@ -1187,7 +1208,6 @@ namespace castor3d
 					, Int const & receivesShadows
 					, Surface surface )
 				{
-					PbrSGMaterials materials{ m_writer };
 					auto diffuse = m_writer.declLocale( "diffuse"
 						, vec3( 0.0_f ) );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
@@ -1264,7 +1284,6 @@ namespace castor3d
 					, Int const & receivesShadows
 					, Surface surface )
 				{
-					PbrSGMaterials materials{ m_writer };
 					auto diffuse = m_writer.declLocale( "diffuse"
 						, vec3( 0.0_f ) );
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
@@ -1343,7 +1362,6 @@ namespace castor3d
 					, Int const & receivesShadows
 					, Surface surface )
 				{
-					PbrSGMaterials materials{ m_writer };
 					auto diffuse = m_writer.declLocale( "diffuse"
 						, vec3( 0.0_f ) );
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
