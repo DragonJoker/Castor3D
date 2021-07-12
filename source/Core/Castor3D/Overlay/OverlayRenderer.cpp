@@ -946,7 +946,7 @@ namespace castor3d
 			auto & renderSystem = *getRenderSystem();
 			FragmentWriter writer;
 
-			auto materials = std::make_unique< shader::PhongMaterials >( writer );
+			auto materials = std::make_unique< shader::Materials >( writer );
 			materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 				, uint32_t( OverlayBindingId::eMaterials )
 				, 0u );
@@ -988,11 +988,11 @@ namespace castor3d
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					auto material = materials->getBaseMaterial( c3d_overlayData.getMaterialIndex() );
+					auto material = materials->getMaterial( c3d_overlayData.getMaterialIndex() );
 					auto diffuse = writer.declLocale( "diffuse"
-						, material->colour() );
+						, material.colour() );
 					auto alpha = writer.declLocale( "alpha"
-						, material->opacity );
+						, material.opacity );
 
 					if ( textOverlay )
 					{
