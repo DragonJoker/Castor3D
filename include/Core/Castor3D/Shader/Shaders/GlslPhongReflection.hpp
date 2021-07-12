@@ -25,21 +25,19 @@ namespace castor3d::shader
 			, sdw::Int const & reflection
 			, sdw::Int const & refraction
 			, sdw::Float const & refractionRatio
-			, PhongLightMaterial const & material
+			, PhongLightMaterial & material
 			, sdw::Vec3 const & transmission
 			, Surface const & surface
 			, SceneData const & sceneData
 			, sdw::Vec3 & ambient
-			, sdw::Vec3 & diffuse
 			, sdw::Vec3 & reflected
 			, sdw::Vec3 & refracted )const;
 		C3D_API void computeForward( sdw::Float const & refractionRatio
-			, PhongLightMaterial const & material
+			, PhongLightMaterial & material
 			, sdw::Vec3 const & transmission
 			, Surface const & surface
 			, SceneData const & sceneData
 			, sdw::Vec3 & ambient
-			, sdw::Vec3 & diffuse
 			, sdw::Vec3 & reflected
 			, sdw::Vec3 & refracted )const;
 

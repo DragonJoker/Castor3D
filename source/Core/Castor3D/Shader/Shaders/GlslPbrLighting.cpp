@@ -852,7 +852,9 @@ namespace castor3d
 								m_cookTorrance.compute( light.m_lightBase
 									, worldEye
 									, lightDirection
-									, material
+									, material.specular
+									, material.getMetalness()
+									, material.getRoughness()
 									, surface
 									, output );
 								output.m_diffuse *= shadowFactor;
@@ -905,7 +907,9 @@ namespace castor3d
 							m_cookTorrance.compute( light.m_lightBase
 								, worldEye
 								, lightDirection
-								, material
+								, material.specular
+								, material.getMetalness()
+								, material.getRoughness()
 								, surface
 								, output );
 						}
@@ -916,7 +920,9 @@ namespace castor3d
 						m_cookTorrance.compute( light.m_lightBase
 							, worldEye
 							, lightDirection
-							, material
+							, material.specular
+							, material.getMetalness()
+							, material.getRoughness()
 							, surface
 							, output );
 					}
@@ -977,7 +983,9 @@ namespace castor3d
 								m_cookTorrance.compute( light.m_lightBase
 									, worldEye
 									, lightDirection
-									, material
+									, material.specular
+									, material.getMetalness()
+									, material.getRoughness()
 									, surface
 									, output );
 								output.m_diffuse *= shadowFactor;
@@ -990,7 +998,9 @@ namespace castor3d
 							m_cookTorrance.compute( light.m_lightBase
 								, worldEye
 								, lightDirection
-								, material
+								, material.specular
+								, material.getMetalness()
+								, material.getRoughness()
 								, surface
 								, output );
 						}
@@ -1001,7 +1011,9 @@ namespace castor3d
 						m_cookTorrance.compute( light.m_lightBase
 							, worldEye
 							, lightDirection
-							, material
+							, material.specular
+							, material.getMetalness()
+							, material.getRoughness()
 							, surface
 							, output );
 					}
@@ -1067,7 +1079,9 @@ namespace castor3d
 								m_cookTorrance.compute( light.m_lightBase
 									, worldEye
 									, lightDirection
-									, material
+									, material.specular
+									, material.getMetalness()
+									, material.getRoughness()
 									, surface
 									, output );
 								output.m_diffuse *= shadowFactor;
@@ -1080,7 +1094,9 @@ namespace castor3d
 							m_cookTorrance.compute( light.m_lightBase
 								, worldEye
 								, lightDirection
-								, material
+								, material.specular
+								, material.getMetalness()
+								, material.getRoughness()
 								, surface
 								, output );
 						}
@@ -1091,7 +1107,9 @@ namespace castor3d
 						m_cookTorrance.compute( light.m_lightBase
 							, worldEye
 							, lightDirection
-							, material
+							, material.specular
+							, material.getMetalness()
+							, material.getRoughness()
 							, surface
 							, output );
 					}
@@ -1241,7 +1259,8 @@ namespace castor3d
 								diffuse = shadowFactor * m_cookTorrance.computeDiffuse( light.m_lightBase
 									, worldEye
 									, lightDirection
-									, material
+									, material.specular
+									, material.getMetalness()
 									, surface );
 							}
 							FI;
@@ -1251,7 +1270,8 @@ namespace castor3d
 							diffuse = m_cookTorrance.computeDiffuse( light.m_lightBase
 								, worldEye
 								, lightDirection
-								, material
+								, material.specular
+								, material.getMetalness()
 								, surface );
 						}
 						FI;
@@ -1261,7 +1281,8 @@ namespace castor3d
 						diffuse = m_cookTorrance.computeDiffuse( light.m_lightBase
 							, worldEye
 							, lightDirection
-							, material
+							, material.specular
+							, material.getMetalness()
 							, surface );
 					}
 
@@ -1314,7 +1335,8 @@ namespace castor3d
 								diffuse = shadowFactor * m_cookTorrance.computeDiffuse( light.m_lightBase
 									, worldEye
 									, lightDirection
-									, material
+									, material.specular
+									, material.getMetalness()
 									, surface );
 							}
 							FI;
@@ -1324,7 +1346,8 @@ namespace castor3d
 							diffuse = m_cookTorrance.computeDiffuse( light.m_lightBase
 								, worldEye
 								, lightDirection
-								, material
+								, material.specular
+								, material.getMetalness()
 								, surface );
 						}
 						FI;
@@ -1334,7 +1357,8 @@ namespace castor3d
 						diffuse = m_cookTorrance.computeDiffuse( light.m_lightBase
 							, worldEye
 							, lightDirection
-							, material
+							, material.specular
+							, material.getMetalness()
 							, surface );
 					}
 
@@ -1390,7 +1414,8 @@ namespace castor3d
 								diffuse = shadowFactor * m_cookTorrance.computeDiffuse( light.m_lightBase
 									, worldEye
 									, lightDirection
-									, material
+									, material.specular
+									, material.getMetalness()
 									, surface );
 							}
 							FI;
@@ -1400,7 +1425,8 @@ namespace castor3d
 							diffuse = m_cookTorrance.computeDiffuse( light.m_lightBase
 								, worldEye
 								, lightDirection
-								, material
+								, material.specular
+								, material.getMetalness()
 								, surface );
 						}
 						FI;
@@ -1410,7 +1436,8 @@ namespace castor3d
 						diffuse = m_cookTorrance.computeDiffuse( light.m_lightBase
 							, worldEye
 							, lightDirection
-							, material
+							, material.specular
+							, material.getMetalness()
 							, surface );
 					}
 

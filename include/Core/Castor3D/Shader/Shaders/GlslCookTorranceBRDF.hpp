@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_GlslCookTorranceBRDF_H___
 
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslPbrMaterial.hpp"
 
 namespace castor3d::shader
 {
@@ -18,18 +19,22 @@ namespace castor3d::shader
 		C3D_API void compute( Light const & light
 			, sdw::Vec3 const & worldEye
 			, sdw::Vec3 const & direction
-			, PbrLightMaterial const & material
+			, sdw::Vec3 const & specular
+			, sdw::Float const & metalness
+			, sdw::Float const & roughness
 			, Surface surface
 			, OutputComponents & output )const;
 		C3D_API sdw::Vec3 computeDiffuse( sdw::Vec3 const & colour
 			, sdw::Vec3 const & worldEye
 			, sdw::Vec3 const & direction
-			, PbrLightMaterial const & material
+			, sdw::Vec3 const & specular
+			, sdw::Float const & metalness
 			, Surface surface )const;
 		C3D_API sdw::Vec3 computeDiffuse( Light const & light
 			, sdw::Vec3 const & worldEye
 			, sdw::Vec3 const & direction
-			, PbrLightMaterial const & material
+			, sdw::Vec3 const & specular
+			, sdw::Float const & metalness
 			, Surface surface )const;
 
 	protected:
@@ -60,7 +65,9 @@ namespace castor3d::shader
 			, InLight
 			, sdw::InVec3
 			, sdw::InVec3
-			, InPbrLightMaterial
+			, sdw::InVec3
+			, sdw::InFloat
+			, sdw::InFloat
 			, InSurface
 			, OutputComponents & > m_computeCookTorrance;
 		sdw::Function< sdw::Vec3
@@ -68,7 +75,8 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, sdw::InVec3
 			, sdw::InVec3
-			, InPbrLightMaterial
+			, sdw::InVec3
+			, sdw::InFloat
 			, InSurface > m_computeCookTorranceDiffuse;
 	};
 }

@@ -76,11 +76,11 @@ namespace castor3d::shader
 		, sdw::Int const & reflection
 		, sdw::Int const & refraction
 		, sdw::Float const & refractionRatio
-		, sdw::Vec3 const & albedo
 		, PbrLightMaterial const & material
 		, sdw::Vec3 const & transmission
 		, Surface const & surface
 		, SceneData const & sceneData
+		, sdw::Vec3 const & ambient
 		, sdw::Vec3 & reflected
 		, sdw::Vec3 & refracted )const
 	{
@@ -112,7 +112,7 @@ namespace castor3d::shader
 						, envMap
 						, envMapIndex
 						, refractionRatio
-						, transmission * albedo
+						, transmission
 						, material
 						, reflected
 						, refracted );
@@ -124,7 +124,7 @@ namespace castor3d::shader
 						, surface.worldNormal
 						, prefiltered
 						, refractionRatio
-						, transmission * albedo
+						, transmission
 						, material
 						, reflected
 						, refracted );
@@ -135,7 +135,6 @@ namespace castor3d::shader
 			{
 				// Reflection from background skybox.
 				reflected = computeIBL( surface
-					, albedo
 					, material
 					, sceneData.getCameraPosition()
 					, irradiance
@@ -150,7 +149,7 @@ namespace castor3d::shader
 						, envMap
 						, envMapIndex
 						, refractionRatio
-						, transmission * albedo
+						, transmission
 						, material
 						, reflected
 						, refracted );
@@ -162,7 +161,7 @@ namespace castor3d::shader
 						, surface.worldNormal
 						, prefiltered
 						, refractionRatio
-						, transmission * albedo
+						, transmission
 						, material
 						, reflected
 						, refracted );
@@ -175,7 +174,6 @@ namespace castor3d::shader
 		{
 			// Reflection from background skybox.
 			reflected = computeIBL( surface
-				, albedo
 				, material
 				, sceneData.getCameraPosition()
 				, irradiance
@@ -191,7 +189,7 @@ namespace castor3d::shader
 					, surface.worldNormal
 					, prefiltered
 					, refractionRatio
-					, transmission * albedo
+					, transmission
 					, material
 					, reflected
 					, refracted );
@@ -202,11 +200,11 @@ namespace castor3d::shader
 	}
 
 	void PbrReflectionModel::computeForward( sdw::Float const & refractionRatio
-		, sdw::Vec3 const & albedo
 		, PbrLightMaterial const & material
 		, sdw::Vec3 const & transmission
 		, Surface const & surface
 		, SceneData const & sceneData
+		, sdw::Vec3 const & ambient
 		, sdw::Vec3 & reflected
 		, sdw::Vec3 & refracted )const
 	{
@@ -236,7 +234,7 @@ namespace castor3d::shader
 						, surface.worldNormal
 						, envMap
 						, refractionRatio
-						, transmission * albedo
+						, transmission
 						, material
 						, reflected
 						, refracted );
@@ -250,7 +248,7 @@ namespace castor3d::shader
 							, surface.worldNormal
 							, prefiltered
 							, refractionRatio
-							, transmission * albedo
+							, transmission
 							, material
 							, reflected
 							, refracted );
@@ -262,7 +260,6 @@ namespace castor3d::shader
 			{
 				// Reflection from background skybox.
 				reflected = computeIBL( surface
-					, albedo
 					, material
 					, sceneData.getCameraPosition()
 					, irradiance
@@ -276,7 +273,7 @@ namespace castor3d::shader
 						, surface.worldNormal
 						, envMap
 						, refractionRatio
-						, transmission * albedo
+						, transmission
 						, material
 						, reflected
 						, refracted );
@@ -290,7 +287,7 @@ namespace castor3d::shader
 							, surface.worldNormal
 							, prefiltered
 							, refractionRatio
-							, transmission * albedo
+							, transmission
 							, material
 							, reflected
 							, refracted );
@@ -303,7 +300,6 @@ namespace castor3d::shader
 		{
 			// Reflection from background skybox.
 			reflected = computeIBL( surface
-				, albedo
 				, material
 				, sceneData.getCameraPosition()
 				, irradiance
@@ -319,7 +315,7 @@ namespace castor3d::shader
 					, surface.worldNormal
 					, prefiltered
 					, refractionRatio
-					, transmission * albedo
+					, transmission
 					, material
 					, reflected
 					, refracted );
@@ -341,7 +337,6 @@ namespace castor3d::shader
 	}
 
 	sdw::Vec3 PbrReflectionModel::computeIBL( Surface surface
-		, sdw::Vec3 const & diffuse
 		, PbrLightMaterial const & material
 		, sdw::Vec3 const & worldEye
 		, sdw::SampledImageCubeRgba32 const & irradianceMap
@@ -349,7 +344,6 @@ namespace castor3d::shader
 		, sdw::SampledImage2DRgba32 const & brdfMap )const
 	{
 		return m_computeIBL( surface
-			, diffuse
 			, material
 			, worldEye
 			, irradianceMap
@@ -450,7 +444,6 @@ namespace castor3d::shader
 	{
 		m_computeIBL = m_writer.implementFunction< sdw::Vec3 >( "computeIBL"
 			, [&]( Surface const & surface
-				, sdw::Vec3 const & baseColour
 				, PbrLightMaterial const & material
 				, sdw::Vec3 const & worldEye
 				, sdw::SampledImageCubeRgba32 const & irradianceMap
@@ -472,7 +465,7 @@ namespace castor3d::shader
 				auto irradiance = m_writer.declLocale( "irradiance"
 					, irradianceMap.sample( vec3( surface.worldNormal.x(), -surface.worldNormal.y(), surface.worldNormal.z() ) ).rgb() );
 				auto diffuseReflection = m_writer.declLocale( "diffuseReflection"
-					, irradiance * baseColour );
+					, irradiance * material.albedo );
 				auto R = m_writer.declLocale( "R"
 					, reflect( -V, surface.worldNormal ) );
 				R.y() = -R.y();
@@ -493,7 +486,6 @@ namespace castor3d::shader
 					, specularReflection ) );
 			}
 			, InSurface{ m_writer, "surface" }
-			, sdw::InVec3{ m_writer, "albedo" }
 			, InPbrLightMaterial{ m_writer, "material" }
 			, sdw::InVec3{ m_writer, "worldEye" }
 			, sdw::InSampledImageCubeRgba32{ m_writer, "irradianceMap" }
@@ -552,7 +544,7 @@ namespace castor3d::shader
 					, reflection
 					, vec3( fresnel ) );
 				refraction = mix( envMap.lod( refracted
-						, material.roughness * sdw::Float( float( castor::getBitSize( EnvironmentMap::Size ) ) ) ).xyz() * transmission
+						, material.roughness * sdw::Float( float( castor::getBitSize( EnvironmentMap::Size ) ) ) ).xyz() * transmission * material.albedo
 					, vec3( 0.0_f )
 					, vec3( fresnel ) );
 			}
@@ -620,7 +612,7 @@ namespace castor3d::shader
 					, reflection
 					, vec3( fresnel ) );
 				refraction = mix( envMap.lod( vec4( refracted, m_writer.cast< sdw::Float >( envMapIndex ) )
-						, material.roughness * sdw::Float( float( castor::getBitSize( EnvironmentMap::Size ) ) ) ).xyz() * transmission
+						, material.roughness * sdw::Float( float( castor::getBitSize( EnvironmentMap::Size ) ) ) ).xyz() * transmission * material.albedo
 					, vec3( 0.0_f )
 					, vec3( fresnel ) );
 			}
@@ -664,7 +656,7 @@ namespace castor3d::shader
 				reflection = mix( vec3( 0.0_f )
 					, reflection
 					, vec3( fresnel ) );
-				refraction = mix( envMap.sample( refracted ).xyz() * transmission
+				refraction = mix( envMap.sample( refracted ).xyz() * transmission * material.albedo
 					, vec3( 0.0_f )
 					, vec3( fresnel ) );
 			}
