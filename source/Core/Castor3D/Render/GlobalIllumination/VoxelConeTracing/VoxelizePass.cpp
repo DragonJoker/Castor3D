@@ -44,6 +44,159 @@ CU_ImplementCUSmartPtr( castor3d, VoxelizePass )
 
 namespace castor3d
 {
+	namespace
+	{
+		template< MaterialType MaterialT >
+		ShaderPtr getPixelShaderSourceT( RenderSystem const & renderSystem
+			, PipelineFlags const & flags
+			, FilteredTextureFlags const & textures
+			, bool isTransparentOnly
+			, uint32_t voxelGridSize )
+		{
+			using MyTraits = shader::ShaderMaterialTraitsT< MaterialT >;
+			using LightingModel = typename MyTraits::LightingModel;
+			using LightMaterial = typename MyTraits::LightMaterial;
+
+			using namespace sdw;
+			FragmentWriter writer;
+			bool hasTextures = !flags.textures.empty();
+
+			shader::Utils utils{ writer };
+			utils.declareApplyGamma();
+			utils.declareRemoveGamma();
+			utils.declareIsSaturated();
+			utils.declareEncodeColor();
+			utils.declareEncodeNormal();
+			utils.declareFlatten();
+
+			// Shader inputs
+			auto index = 0u;
+			auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition", index++ );
+			auto inViewPosition = writer.declInput< Vec3 >( "inViewPosition", index++ );
+			auto inNormal = writer.declInput< Vec3 >( "inNormal", index++ );
+			auto inTexture = writer.declInput< Vec3 >( "inTexture", index++, hasTextures );
+			auto inMaterial = writer.declInput< UInt >( "inMaterial", index++ );
+			auto in = writer.getIn();
+
+			shader::Materials materials{ writer };
+			materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+				, uint32_t( NodeUboIdx::eMaterials )
+				, RenderPipeline::eBuffers );
+			shader::TextureConfigurations textureConfigs{ writer };
+
+			if ( hasTextures )
+			{
+				textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+					, uint32_t( NodeUboIdx::eTextures )
+					, RenderPipeline::eBuffers );
+			}
+
+			UBO_MODEL( writer
+				, uint32_t( NodeUboIdx::eModel )
+				, RenderPipeline::eBuffers );
+
+			auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
+				, 0u
+				, RenderPipeline::eTextures
+				, std::max( 1u, uint32_t( flags.textures.size() ) )
+				, hasTextures ) );
+
+			UBO_SCENE( writer
+				, uint32_t( PassUboIdx::eScene )
+				, RenderPipeline::eAdditional );
+			auto addIndex = uint32_t( PassUboIdx::eCount );
+			auto lightsIndex = addIndex++;
+			UBO_VOXELIZER( writer
+				, addIndex++
+				, RenderPipeline::eAdditional
+				, true );
+			auto output( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
+				, addIndex++
+				, RenderPipeline::eAdditional ) );
+			auto lighting = LightingModel::createDiffuseModel( writer
+				, utils
+				, lightsIndex
+				, RenderPipeline::eAdditional
+				, shader::ShadowOptions{ flags.sceneFlags, false }
+				, addIndex
+				, RenderPipeline::eAdditional
+				, !isTransparentOnly );
+
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
+				{
+					auto diff = writer.declLocale( "diff"
+						, c3d_voxelData.worldToClip( inWorldPosition ) );
+					auto uvw = writer.declLocale( "uvw"
+						, diff * vec3( 0.5_f, -0.5f, 0.5f ) + 0.5f );
+
+					IF( writer, utils.isSaturated( uvw ) )
+					{
+						auto material = writer.declLocale( "material"
+							, materials.getMaterial( inMaterial ) );
+						auto gamma = writer.declLocale( "gamma"
+							, material.gamma );
+						auto normal = writer.declLocale( "normal"
+							, normalize( inNormal ) );
+						auto lightMat = writer.declLocale< LightMaterial >( "lightMat" );
+						lightMat.create( material );
+						auto emissive = writer.declLocale( "emissive"
+							, vec3( material.emissive ) );
+						auto alpha = writer.declLocale( "alpha"
+							, material.opacity );
+						auto occlusion = writer.declLocale( "occlusion"
+							, 1.0_f );
+
+						if ( hasTextures )
+						{
+							auto texCoord = writer.declLocale( "texCoord"
+								, inTexture );
+							lighting->computeMapVoxelContributions( flags.passFlags
+								, textures
+								, gamma
+								, textureConfigs
+								, c3d_maps
+								, texCoord
+								, emissive
+								, alpha
+								, occlusion
+								, lightMat );
+						}
+
+						if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
+						{
+							auto worldEye = writer.declLocale( "worldEye"
+								, c3d_sceneData.getCameraPosition() );
+							auto surface = writer.declLocale< shader::Surface >( "surface" );
+							surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
+							auto color = writer.declLocale( "color"
+								, lighting->computeCombinedDiffuse( worldEye
+									, lightMat
+									, c3d_modelData.isShadowReceiver()
+									, c3d_sceneData
+									, surface ) );
+							color *= lightMat.albedo * occlusion;
+							color += emissive;
+
+							auto encodedColor = writer.declLocale( "encodedColor"
+								, utils.encodeColor( vec4( color, alpha ) ) );
+							auto encodedNormal = writer.declLocale( "encodedNormal"
+								, utils.encodeNormal( normal ) );
+							auto writecoord = writer.declLocale( "writecoord"
+								, uvec3( floor( uvw * c3d_voxelData.clipToGrid ) ) );
+							auto id = writer.declLocale( "id"
+								, utils.flatten( writecoord, uvec3( sdw::UInt{ voxelGridSize } ) ) );
+							atomicMax( output[id].colorMask, encodedColor );
+							atomicMax( output[id].normalMask, encodedNormal );
+						}
+					}
+					FI;
+				} );
+
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+		}
+	}
+
 	VoxelizePass::VoxelizePass( crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
@@ -503,287 +656,19 @@ namespace castor3d
 
 	ShaderPtr VoxelizePass::doGetPhongPixelShaderSource( PipelineFlags const & flags )const
 	{
-		using namespace sdw;
-		FragmentWriter writer;
-		auto textures = filterTexturesFlags( flags.textures );
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		bool hasTextures = !flags.textures.empty();
-
-		shader::Utils utils{ writer };
-		utils.declareApplyGamma();
-		utils.declareRemoveGamma();
-		utils.declareIsSaturated();
-		utils.declareEncodeColor();
-		utils.declareEncodeNormal();
-		utils.declareFlatten();
-
-		// Shader inputs
-		auto index = 0u;
-		auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition", index++ );
-		auto inViewPosition = writer.declInput< Vec3 >( "inViewPosition", index++ );
-		auto inNormal = writer.declInput< Vec3 >( "inNormal", index++ );
-		auto inTexture = writer.declInput< Vec3 >( "inTexture", index++, hasTextures );
-		auto inMaterial = writer.declInput< UInt >( "inMaterial", index++ );
-		auto in = writer.getIn();
-
-		shader::Materials materials{ writer };
-		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-			, uint32_t( NodeUboIdx::eMaterials )
-			, RenderPipeline::eBuffers );
-		shader::TextureConfigurations textureConfigs{ writer };
-
-		if ( hasTextures )
-		{
-			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( NodeUboIdx::eTextures )
-				, RenderPipeline::eBuffers );
-		}
-
-		UBO_MODEL( writer
-			, uint32_t( NodeUboIdx::eModel )
-			, RenderPipeline::eBuffers );
-
-		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-			, 0u
-			, RenderPipeline::eTextures
-			, std::max( 1u, uint32_t( flags.textures.size() ) )
-			, hasTextures ) );
-
-		UBO_SCENE( writer
-			, uint32_t( PassUboIdx::eScene )
-			, RenderPipeline::eAdditional );
-		auto addIndex = uint32_t( PassUboIdx::eCount );
-		auto lightsIndex = addIndex++;
-		UBO_VOXELIZER( writer
-			, addIndex++
-			, RenderPipeline::eAdditional
-			, true );
-		auto output( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
-			, addIndex++
-			, RenderPipeline::eAdditional ) );
-		auto lighting = shader::PhongLightingModel::createDiffuseModel( writer
-			, utils
-			, lightsIndex
-			, RenderPipeline::eAdditional
-			, shader::ShadowOptions{ flags.sceneFlags, false }
-			, addIndex
-			, RenderPipeline::eAdditional
-			, m_mode != RenderMode::eTransparentOnly );
-
-		writer.implementFunction< sdw::Void >( "main"
-			, [&]()
-			{
-				auto diff = writer.declLocale( "diff"
-					, c3d_voxelData.worldToClip( inWorldPosition ) );
-				auto uvw = writer.declLocale( "uvw"
-					, diff * vec3( 0.5_f, -0.5f, 0.5f ) + 0.5f );
-
-				IF( writer, utils.isSaturated( uvw ) )
-				{
-					auto material = writer.declLocale( "material"
-						, materials.getMaterial( inMaterial ) );
-					auto gamma = writer.declLocale( "gamma"
-						, material.gamma );
-					auto normal = writer.declLocale( "normal"
-						, normalize( inNormal ) );
-					auto lightMat = writer.declLocale< shader::PhongLightMaterial >( "lightMat" );
-					lightMat.create( material );
-					auto emissive = writer.declLocale( "emissive"
-						, vec3( material.emissive ) );
-					auto alpha = writer.declLocale( "alpha"
-						, material.opacity );
-					auto occlusion = writer.declLocale( "occlusion"
-						, 1.0_f );
-
-					if ( hasTextures )
-					{
-						auto texCoord = writer.declLocale( "texCoord"
-							, inTexture );
-						lighting->computeMapVoxelContributions( flags.passFlags
-							, textures
-							, gamma
-							, textureConfigs
-							, c3d_maps
-							, texCoord
-							, emissive
-							, alpha
-							, occlusion
-							, lightMat );
-					}
-
-					if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
-					{
-						auto worldEye = writer.declLocale( "worldEye"
-							, c3d_sceneData.getCameraPosition() );
-						auto surface = writer.declLocale< shader::Surface >( "surface" );
-						surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
-						auto color = writer.declLocale( "color"
-							, lighting->computeCombinedDiffuse( worldEye
-								, lightMat
-								, c3d_modelData.isShadowReceiver()
-								, c3d_sceneData
-								, surface ) );
-						color *= lightMat.albedo * occlusion;
-						color += emissive;
-
-						auto encodedColor = writer.declLocale( "encodedColor"
-							, utils.encodeColor( vec4( color, alpha ) ) );
-						auto encodedNormal = writer.declLocale( "encodedNormal"
-							, utils.encodeNormal( normal ) );
-						auto writecoord = writer.declLocale( "writecoord"
-							, uvec3( floor( uvw * c3d_voxelData.clipToGrid ) ) );
-						auto id = writer.declLocale( "id"
-							, utils.flatten( writecoord, uvec3( sdw::UInt{ m_voxelConfig.gridSize.value() } ) ) );
-						atomicMax( output[id].colorMask, encodedColor );
-						atomicMax( output[id].normalMask, encodedNormal );
-					}
-				}
-				FI;
-			} );
-
-		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+		return getPixelShaderSourceT< MaterialType::ePhong >( *getEngine()->getRenderSystem()
+			, flags
+			, filterTexturesFlags( flags.textures )
+			, m_mode == RenderMode::eTransparentOnly
+			, m_voxelConfig.gridSize.value() );
 	}
 
 	ShaderPtr VoxelizePass::doGetPbrPixelShaderSource( PipelineFlags const & flags )const
 	{
-		using namespace sdw;
-		FragmentWriter writer;
-		auto textures = filterTexturesFlags( flags.textures );
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		bool hasTextures = !flags.textures.empty();
-
-		shader::Utils utils{ writer };
-		utils.declareApplyGamma();
-		utils.declareRemoveGamma();
-		utils.declareIsSaturated();
-		utils.declareEncodeColor();
-		utils.declareEncodeNormal();
-		utils.declareFlatten();
-
-		// Shader inputs
-		auto index = 0u;
-		auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition", index++ );
-		auto inViewPosition = writer.declInput< Vec3 >( "inViewPosition", index++ );
-		auto inNormal = writer.declInput< Vec3 >( "inNormal", index++ );
-		auto inTexture = writer.declInput< Vec3 >( "inTexture", index++, hasTextures );
-		auto inMaterial = writer.declInput< UInt >( "inMaterial", index++ );
-		auto in = writer.getIn();
-
-		shader::Materials materials{ writer };
-		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-			, uint32_t( NodeUboIdx::eMaterials )
-			, RenderPipeline::eBuffers );
-		shader::TextureConfigurations textureConfigs{ writer };
-
-		if ( hasTextures )
-		{
-			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( NodeUboIdx::eTextures )
-				, RenderPipeline::eBuffers );
-		}
-
-		UBO_MODEL( writer
-			, uint32_t( NodeUboIdx::eModel )
-			, RenderPipeline::eBuffers );
-
-		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-			, 0u
-			, RenderPipeline::eTextures
-			, std::max( 1u, uint32_t( flags.textures.size() ) )
-			, hasTextures ) );
-
-		UBO_SCENE( writer
-			, uint32_t( PassUboIdx::eScene )
-			, RenderPipeline::eAdditional );
-		auto addIndex = uint32_t( PassUboIdx::eCount );
-		auto lightsIndex = addIndex++;
-		UBO_VOXELIZER( writer
-			, addIndex++
-			, RenderPipeline::eAdditional
-			, true );
-		auto output( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
-			, addIndex++
-			, RenderPipeline::eAdditional ) );
-		auto lighting = shader::PbrLightingModel::createDiffuseModel( writer
-			, utils
-			, lightsIndex
-			, RenderPipeline::eAdditional
-			, shader::ShadowOptions{ flags.sceneFlags, false }
-			, addIndex
-			, RenderPipeline::eAdditional
-			, m_mode != RenderMode::eTransparentOnly );
-
-		writer.implementFunction< sdw::Void >( "main"
-			, [&]()
-			{
-				auto diff = writer.declLocale( "diff"
-					, c3d_voxelData.worldToClip( inWorldPosition ) );
-				auto uvw = writer.declLocale( "uvw"
-					, diff * vec3( 0.5_f, -0.5f, 0.5f ) + 0.5f );
-
-				IF( writer, utils.isSaturated( uvw ) )
-				{
-					auto material = writer.declLocale( "material"
-						, materials.getMaterial( inMaterial ) );
-					auto gamma = writer.declLocale( "gamma"
-						, material.gamma );
-					auto normal = writer.declLocale( "normal"
-						, normalize( inNormal ) );
-					auto lightMat = writer.declLocale< shader::PbrLightMaterial >( "lightMat" );
-					lightMat.create( material );
-					auto emissive = writer.declLocale( "emissive"
-						, vec3( material.emissive ) );
-					auto alpha = writer.declLocale( "alpha"
-						, material.opacity );
-					auto occlusion = writer.declLocale( "occlusion"
-						, 1.0_f );
-
-					if ( hasTextures )
-					{
-						auto texCoord = writer.declLocale( "texCoord"
-							, inTexture );
-						lighting->computeMapVoxelContributions( flags.passFlags
-							, textures
-							, gamma
-							, textureConfigs
-							, c3d_maps
-							, texCoord
-							, emissive
-							, alpha
-							, occlusion
-							, lightMat );
-					}
-
-					if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
-					{
-						auto worldEye = writer.declLocale( "worldEye"
-							, c3d_sceneData.getCameraPosition() );
-						auto surface = writer.declLocale< shader::Surface >( "surface" );
-						surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
-						auto color = writer.declLocale( "color"
-							, lighting->computeCombinedDiffuse( worldEye
-								, lightMat
-								, c3d_modelData.isShadowReceiver()
-								, c3d_sceneData
-								, surface ) );
-						color *= lightMat.albedo * occlusion;
-						color += emissive;
-
-						auto encodedColor = writer.declLocale( "encodedColor"
-							, utils.encodeColor( vec4( color, alpha ) ) );
-						auto encodedNormal = writer.declLocale( "encodedNormal"
-							, utils.encodeNormal( normal ) );
-						auto writecoord = writer.declLocale( "writecoord"
-							, uvec3( floor( uvw * c3d_voxelData.clipToGrid ) ) );
-						auto id = writer.declLocale( "id"
-							, utils.flatten( writecoord, uvec3( sdw::UInt{ m_voxelConfig.gridSize.value() } ) ) );
-						atomicMax( output[id].colorMask, encodedColor );
-						atomicMax( output[id].normalMask, encodedNormal );
-					}
-				}
-				FI;
-			} );
-
-		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+		return getPixelShaderSourceT< MaterialType::eMetallicRoughness >( *getEngine()->getRenderSystem()
+			, flags
+			, filterTexturesFlags( flags.textures )
+			, m_mode == RenderMode::eTransparentOnly
+			, m_voxelConfig.gridSize.value() );
 	}
 }
