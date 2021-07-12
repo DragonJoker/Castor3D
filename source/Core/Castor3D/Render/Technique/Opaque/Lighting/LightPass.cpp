@@ -136,7 +136,7 @@ namespace castor3d
 						auto translucency = writer.declLocale( "translucency"
 							, data4.w() );
 						auto lightMat = writer.declLocale< LightMaterial >( "lightMat" );
-						lightMat.create< MaterialT >( albedo, data3, data2 );
+						lightMat.template create< MaterialT >( albedo, data3, data2 );
 
 						auto eye = writer.declLocale( "eye"
 							, c3d_sceneData.getCameraPosition() );
