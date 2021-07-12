@@ -16,31 +16,31 @@ namespace castor3d::shader
 
 	castor::String const PassBufferName = cuT( "Materials" );
 
-	struct BaseMaterial
+	struct Material
 		: public sdw::StructInstance
 	{
 		friend class Materials;
-		virtual ~BaseMaterial() = default;
+		C3D_API Material( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled );
 
 		C3D_API void create( sdw::SampledImageT< FImgBufferRgba32 > & materials
 			, sdw::Int & offset );
 
-		C3D_API virtual sdw::Vec3 colour()const = 0;
+		C3D_API sdw::Vec3 colour()const;
 
-	protected:
-		C3D_API BaseMaterial( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled );
+		C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+		C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
 	protected:
 		using sdw::StructInstance::getMember;
 		using sdw::StructInstance::getMemberArray;
 
-	private:
-		virtual void doCreate( sdw::SampledImageT< FImgBufferRgba32 > & materials
-			, sdw::Int & offset ) = 0;
+	public:
+		sdw::Vec4 colourDiv;
+		sdw::Vec4 specDiv;
 
-	protected:
+	private:
 		sdw::Vec4 m_common;
 		sdw::Vec4 m_opacityTransmission;
 		sdw::Vec4 m_reflRefr;
@@ -64,23 +64,23 @@ namespace castor3d::shader
 		sdw::Int transmittanceProfileSize;
 	};
 
-	CU_DeclareSmartPtr( BaseMaterial );
+	CU_DeclareSmartPtr( Material );
 
 	class Materials
 	{
-	protected:
-		C3D_API explicit Materials( sdw::ShaderWriter & writer );
-
 	public:
+		C3D_API explicit Materials( sdw::ShaderWriter & writer );
 		virtual ~Materials() = default;
-		C3D_API virtual void declare( bool hasSsbo
+		C3D_API void declare( bool hasSsbo
 			, uint32_t binding
-			, uint32_t set ) = 0;
-		C3D_API virtual BaseMaterialUPtr getBaseMaterial( sdw::UInt const & index )const = 0;
+			, uint32_t set );
+		C3D_API Material getMaterial( sdw::UInt const & index )const;
 
 	protected:
 		sdw::ShaderWriter & m_writer;
 		std::unique_ptr< sdw::Struct > m_type;
+		std::unique_ptr< sdw::ArraySsboT< Material > > m_ssbo;
+		sdw::Function< Material, sdw::InUInt > m_getMaterial;
 	};
 }
 

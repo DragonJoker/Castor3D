@@ -125,7 +125,7 @@ namespace castor3d
 				, InVec3{ m_writer, "lightAttenuation" } );
 		}
 		
-		Vec3 SssTransmittance::compute( BaseMaterial const & material
+		Vec3 SssTransmittance::compute( Material const & material
 			, DirectionalLight const & light
 			, Vec2 const & uv
 			, Surface surface
@@ -167,7 +167,7 @@ namespace castor3d
 			return ssstResult;
 		}
 
-		Vec3 SssTransmittance::compute( BaseMaterial const & material
+		Vec3 SssTransmittance::compute( Material const & material
 			, PointLight const & light
 			, Vec2 const & uv
 			, Surface surface
@@ -216,7 +216,7 @@ namespace castor3d
 			return ssstResult;
 		}
 
-		Vec3 SssTransmittance::compute( BaseMaterial const & material
+		Vec3 SssTransmittance::compute( Material const & material
 			, SpotLight const & light
 			, Vec2 const & uv
 			, Surface surface

@@ -73,16 +73,16 @@ namespace castor3d
 		static uint32_t constexpr DirectionalMaxCascadesCount = ShadowMapDirectionalTileCountX * ShadowMapDirectionalTileCountY;
 		// Pass Buffer.
 		static uint32_t constexpr MaxMaterialsCount = 2000u;
-		static int constexpr MaxMaterialComponentsCount = 15;
+		static int constexpr MaxMaterialComponentsCount = 16;
 		static uint32_t constexpr MaxTransmittanceProfileSize = 10u;
 		// Texture Configuration Buffer.
 		static uint32_t constexpr MaxTextureConfigurationCount = 4000u;
 		static int constexpr MaxTextureConfigurationComponentsCount = 9;
 
-		struct BaseMaterial;
 		struct DirectionalLight;
 		struct InFragmentSurface;
 		struct Light;
+		struct Material;
 		struct OutputComponents;
 		struct OutFragmentSurface;
 		struct PointLight;
@@ -103,17 +103,13 @@ namespace castor3d
 		class Utils;
 		class VoxelData;
 
-		struct PhongMaterial;
 		struct PhongLightMaterial;
 		class PhongLightingModel;
-		class PhongMaterials;
 		class PhongReflectionModel;
 
-		struct PbrMaterial;
 		struct PbrLightMaterial;
 		class PbrLightingModel;
 		class PbrReflectionModel;
-		class PbrMaterials;
 
 		Writer_Parameter( DirectionalLight );
 		Writer_Parameter( LayeredLpvGridData );

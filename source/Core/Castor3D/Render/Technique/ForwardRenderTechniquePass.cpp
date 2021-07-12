@@ -97,7 +97,7 @@ namespace castor3d
 			, getShaderFlags()
 			, hasTextures };
 
-		shader::PhongMaterials materials{ writer };
+		shader::Materials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 			, uint32_t( NodeUboIdx::eMaterials )
 			, RenderPipeline::eBuffers );
@@ -174,10 +174,7 @@ namespace castor3d
 				auto bitangent = writer.declLocale( "bitangent"
 					, normalize( inSurface.bitangent ) );
 				auto lightMat = writer.declLocale< shader::PhongLightMaterial >( "lightMat" );
-				lightMat.create< MaterialType::ePhong >( material.diffuse
-					, material.gamma
-					, material.specular
-					, material.shininess );
+				lightMat.create( material );
 				auto emissive = writer.declLocale( "emissive"
 					, vec3( material.emissive ) );
 				auto occlusion = writer.declLocale( "occlusion"
@@ -279,7 +276,7 @@ namespace castor3d
 						|| checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
 						|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI );
 					auto indirectAmbient = writer.declLocale( "indirectAmbient"
-						, material.ambient * indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() ) );
+						, lightMat.ambient * indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() ) );
 					auto pbrLightMat = writer.declLocale< shader::PbrLightMaterial >( "pbrLightMat"
 						, hasDiffuseGI );
 					pbrLightMat.create< MaterialType::ePhong >( lightMat.albedo
@@ -347,7 +344,7 @@ namespace castor3d
 			, getShaderFlags()
 			, hasTextures };
 
-		shader::PbrMaterials materials{ writer };
+		shader::Materials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 			, uint32_t( NodeUboIdx::eMaterials )
 			, RenderPipeline::eBuffers );

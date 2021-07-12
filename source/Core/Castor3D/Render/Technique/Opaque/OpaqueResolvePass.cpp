@@ -140,7 +140,7 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			shader::PhongMaterials materials{ writer };
+			shader::Materials materials{ writer };
 			materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 				, uint32_t( ResolveBind::eMaterials )
 				, 0u );
@@ -240,7 +240,7 @@ namespace castor3d
 						auto emissive = writer.declLocale( "emissive"
 							, data4.xyz() );
 						auto lightMat = writer.declLocale< shader::PhongLightMaterial >( "lightMat" );
-						lightMat.create< MaterialType::ePhong >( albedo, data3, data2 );
+						lightMat.create< MaterialType::ePhong >( albedo, data3, data2, material.colourDiv.a() );
 
 						auto ambient = writer.declLocale( "ambient"
 							, clamp( c3d_sceneData.getAmbientLight() * albedo
@@ -280,7 +280,7 @@ namespace castor3d
 							, reflected
 							, refracted );
 						auto indirectAmbient = writer.declLocale( "indirectAmbient"
-							, material.ambient * ( config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 1.0_f ) ) );
+							, lightMat.ambient * ( config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 1.0_f ) ) );
 						auto pbrLightMat = writer.declLocale< shader::PbrLightMaterial >( "pbrLightMat"
 							, config.hasDiffuseGi );
 						pbrLightMat.create< MaterialType::ePhong >( albedo, data3, data2 );
@@ -334,7 +334,7 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			shader::PbrMaterials materials{ writer };
+			shader::Materials materials{ writer };
 			materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 				, uint32_t( ResolveBind::eMaterials )
 				, 0u );

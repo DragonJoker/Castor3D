@@ -22,6 +22,7 @@ namespace castor3d::shader
 		, bool enabled )
 		: sdw::StructInstance{ writer, std::move( expr ), enabled }
 		, albedo{ getMember< sdw::Vec3 >( "albedo" ) }
+		, ambient{ getMember< sdw::Float >( "ambient" ) }
 		, specular{ getMember< sdw::Vec3 >( "specular" ) }
 		, shininess{ getMember< sdw::Float >( "shininess" ) }
 	{
@@ -33,6 +34,14 @@ namespace castor3d::shader
 		return *this;
 	}
 
+	void PhongLightMaterial::create( Material const & material )
+	{
+		albedo = pow( max( material.colourDiv.rgb(), vec3( 0.0_f, 0.0_f, 0.0_f ) ), vec3( material.gamma ) );
+		specular = material.specDiv.rgb();
+		ambient = material.colourDiv.a();
+		shininess = material.specDiv.a();
+	}
+
 	ast::type::StructPtr PhongLightMaterial::makeType( ast::type::TypesCache & cache )
 	{
 		auto result = cache.getStruct( ast::type::MemoryLayout::eStd430
@@ -42,120 +51,11 @@ namespace castor3d::shader
 		{
 			result->declMember( "albedo", ast::type::Kind::eVec3F );
 			result->declMember( "specular", ast::type::Kind::eVec3F );
+			result->declMember( "ambient", ast::type::Kind::eFloat );
 			result->declMember( "shininess", ast::type::Kind::eFloat );
 		}
 
 		return result;
-	}
-
-	//*****************************************************************************************
-
-	PhongMaterial::PhongMaterial( sdw::ShaderWriter & writer
-		, ast::expr::ExprPtr expr
-		, bool enabled )
-		: BaseMaterial{ writer, std::move( expr ), enabled }
-		, m_diffAmb{ getMember< sdw::Vec4 >( "diffAmb" ) }
-		, m_specShin{ getMember< sdw::Vec4 >( "specShin" ) }
-		, diffuse{ m_diffAmb.xyz() }
-		, ambient{ m_diffAmb.w() }
-		, specular{ m_specShin.xyz() }
-		, shininess{ m_specShin.w() }
-	{
-	}
-
-	sdw::Vec3 PhongMaterial::colour()const
-	{
-		return diffuse;
-	}
-
-	ast::type::StructPtr PhongMaterial::makeType( ast::type::TypesCache & cache )
-	{
-		auto result = cache.getStruct( ast::type::MemoryLayout::eStd140, "LegacyMaterial" );
-
-		if ( result->empty() )
-		{
-			result->declMember( "diffAmb", ast::type::Kind::eVec4F );
-			result->declMember( "specShin", ast::type::Kind::eVec4F );
-			result->declMember( "common", ast::type::Kind::eVec4F );
-			result->declMember( "opacity", ast::type::Kind::eVec4F );
-			result->declMember( "reflRefr", ast::type::Kind::eVec4F );
-			result->declMember( "sssInfo", ast::type::Kind::eVec4F );
-			result->declMember( "transmittanceProfile", ast::type::Kind::eVec4F, MaxTransmittanceProfileSize );
-		}
-
-		return result;
-	}
-
-	std::unique_ptr< sdw::Struct > PhongMaterial::declare( sdw::ShaderWriter & writer )
-	{
-		return std::make_unique< sdw::Struct >( writer, makeType( writer.getTypesCache() ) );
-	}
-
-	void PhongMaterial::doCreate( sdw::SampledImageT< FImgBufferRgba32 > & materials
-		, sdw::Int & offset )
-	{
-		m_diffAmb = materials.fetch( sdw::Int{ offset++ } );
-		m_specShin = materials.fetch( sdw::Int{ offset++ } );
-	}
-
-	//*********************************************************************************************
-
-	PhongMaterials::PhongMaterials( sdw::ShaderWriter & writer )
-		: Materials{ writer }
-	{
-	}
-
-	void PhongMaterials::declare( bool hasSsbo
-		, uint32_t binding
-		, uint32_t set )
-	{
-		m_type = PhongMaterial::declare( m_writer );
-
-		if ( hasSsbo )
-		{
-			m_ssbo = std::make_unique< sdw::ArraySsboT< PhongMaterial > >( m_writer
-				, PassBufferName
-				, m_type->getType()
-				, binding
-				, set
-				, true );
-		}
-		else
-		{
-			auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( "c3d_materials"
-				, binding
-				, set );
-			m_getMaterial = m_writer.implementFunction< PhongMaterial >( "getMaterial"
-				, [this, &c3d_materials]( sdw::UInt const & index )
-				{
-					auto result = m_writer.declLocale< PhongMaterial >( "result"
-						, *m_type );
-					auto offset = m_writer.declLocale( "offset"
-						, m_writer.cast< sdw::Int >( index ) * sdw::Int( MaxMaterialComponentsCount ) );
-					result.create( c3d_materials, offset );
-					m_writer.returnStmt( result );
-				}
-				, sdw::InUInt{ m_writer, "index" } );
-		}
-	}
-
-	PhongMaterial PhongMaterials::getMaterial( sdw::UInt const & index )const
-	{
-		if ( m_ssbo )
-		{
-			return ( *m_ssbo )[index - 1_u];
-		}
-		else
-		{
-			return m_getMaterial( index - 1_u );
-		}
-	}
-
-	BaseMaterialUPtr PhongMaterials::getBaseMaterial( sdw::UInt const & index )const
-	{
-		auto material = m_writer.declLocale( "material"
-			, getMaterial( index ) );
-		return std::make_unique< PhongMaterial >( material );
 	}
 
 	//*********************************************************************************************

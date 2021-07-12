@@ -21,17 +21,17 @@ namespace castor3d
 				, bool shadowMap );
 			C3D_API void declare( LightType type );
 
-			C3D_API sdw::Vec3 compute( shader::BaseMaterial const & material
+			C3D_API sdw::Vec3 compute( shader::Material const & material
 				, shader::DirectionalLight const & light
 				, sdw::Vec2 const & uv
 				, Surface surface
 				, sdw::Float const & translucency )const;
-			C3D_API sdw::Vec3 compute( shader::BaseMaterial const & material
+			C3D_API sdw::Vec3 compute( shader::Material const & material
 				, shader::PointLight const & light
 				, sdw::Vec2 const & uv
 				, Surface surface
 				, sdw::Float const & translucency )const;
-			C3D_API sdw::Vec3 compute( shader::BaseMaterial const & material
+			C3D_API sdw::Vec3 compute( shader::Material const & material
 				, shader::SpotLight const & light
 				, sdw::Vec2 const & uv
 				, Surface surface
