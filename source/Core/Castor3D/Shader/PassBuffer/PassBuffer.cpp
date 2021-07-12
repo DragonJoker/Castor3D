@@ -152,22 +152,14 @@ namespace castor3d
 
 #if C3D_MaterialsStructOfArrays
 
-		auto & albRough = m_data.albRough[index];
-		auto & metDiv = m_data.metDiv[index];
-		auto & common = data.common[index];
-		auto & opacity = data.opacity[index];
-		auto & reflRefr = m_data.reflRefr[index];
-		auto & extended = m_data.extended;
+		auto & colourDiv = m_data.colourDiv[index];
+		auto & specDiv = m_data.specDiv[index];
 
 #else
 
 		auto & data = m_data[index];
 		auto & colourDiv = data.colourDiv;
 		auto & specDiv = data.specDiv;
-		auto & common = data.common;
-		auto & opacity = data.opacity;
-		auto & reflRefr = data.reflRefr;
-		auto & extended = data.extended;
 
 #endif
 
@@ -179,19 +171,7 @@ namespace castor3d
 		specDiv.g = pass.getSpecular().green();
 		specDiv.b = pass.getSpecular().blue();
 		specDiv.a = pass.getShininess().value();
-		common.r = pass.getOpacity();
-		common.g = pass.getEmissive();
-		common.b = pass.getAlphaValue();
-		common.a = pass.needsGammaCorrection() ? 2.2f : 1.0f;
-		opacity.r = pass.getTransmission()->x;
-		opacity.g = pass.getTransmission()->y;
-		opacity.b = pass.getTransmission()->z;
-		opacity.a = pass.getOpacity();
-		reflRefr.r = pass.getRefractionRatio();
-		reflRefr.g = pass.hasRefraction() ? 1.0f : 0.0f;
-		reflRefr.b = pass.hasReflections() ? 1.0f : 0.0f;
-		reflRefr.a = float( pass.getBWAccumulationOperator() );
-		doVisitExtended( pass, extended );
+		doVisitCommon( pass );
 	}
 
 	void PassBuffer::visit( MetallicRoughnessPbrPass const & pass )
@@ -203,20 +183,12 @@ namespace castor3d
 
 		auto & colourDiv = m_data.colourDiv[index];
 		auto & specDiv = m_data.specDiv[index];
-		auto & common = m_data.common[index];
-		auto & opacity = m_data.opacity[index];
-		auto & reflRefr = m_data.reflRefr[index];
-		auto & extended = m_data.extended;
 
 #else
 
 		auto & data = m_data[index];
 		auto & colourDiv = data.colourDiv;
 		auto & specDiv = data.specDiv;
-		auto & common = data.common;
-		auto & opacity = data.opacity;
-		auto & reflRefr = data.reflRefr;
-		auto & extended = data.extended;
 
 #endif
 
@@ -224,20 +196,12 @@ namespace castor3d
 		colourDiv.g = pass.getAlbedo().green();
 		colourDiv.b = pass.getAlbedo().blue();
 		colourDiv.a = pass.getRoughness();
-		specDiv.r = pass.getMetallic();
-		common.r = pass.getOpacity();
-		common.g = pass.getEmissive();
-		common.b = pass.getAlphaValue();
-		common.a = pass.needsGammaCorrection() ? 2.2f : 1.0f;
-		opacity.r = pass.getTransmission()->x;
-		opacity.g = pass.getTransmission()->y;
-		opacity.b = pass.getTransmission()->z;
-		opacity.a = pass.getOpacity();
-		reflRefr.r = pass.getRefractionRatio();
-		reflRefr.g = pass.hasRefraction() ? 1.0f : 0.0f;
-		reflRefr.b = pass.hasReflections() ? 1.0f : 0.0f;
-		reflRefr.a = float( pass.getBWAccumulationOperator() );
-		doVisitExtended( pass, extended );
+		auto f0 = castor::RgbColour{ 0.04f, 0.04f, 0.04f } * ( 1.0f - pass.getMetallic() ) + pass.getAlbedo() * pass.getMetallic();
+		specDiv.r = f0.red();
+		specDiv.g = f0.green();
+		specDiv.b = f0.blue();
+		specDiv.a = pass.getMetallic();
+		doVisitCommon( pass );
 	}
 
 	void PassBuffer::visit( SpecularGlossinessPbrPass const & pass )
@@ -249,30 +213,75 @@ namespace castor3d
 
 		auto & colourDiv = m_data.colourDiv[index];
 		auto & specDiv = m_data.specDiv[index];
-		auto & common = m_data.common[index];
-		auto & opacity = m_data.opacity[index];
-		auto & reflRefr = m_data.reflRefr[index];
-		auto & extended = m_data.extended;
 
 #else
 
 		auto & data = m_data[index];
 		auto & colourDiv = data.colourDiv;
 		auto & specDiv = data.specDiv;
-		auto & common = data.common;
-		auto & opacity = data.opacity;
-		auto & reflRefr = data.reflRefr;
-		auto & extended = data.extended;
 
 #endif
 
 		colourDiv.r = pass.getDiffuse().red();
 		colourDiv.g = pass.getDiffuse().green();
 		colourDiv.b = pass.getDiffuse().blue();
+		colourDiv.a = 1.0f - pass.getGlossiness();
 		specDiv.r = pass.getSpecular().red();
 		specDiv.g = pass.getSpecular().green();
 		specDiv.b = pass.getSpecular().blue();
-		specDiv.a = pass.getGlossiness();
+		specDiv.a = castor::point::length( castor::Point3f{ pass.getSpecular().constPtr() } );
+		doVisitCommon( pass );
+	}
+
+	void PassBuffer::doVisitCommon( Pass const & pass )
+	{
+		auto index = pass.getId() - 1;
+
+#if C3D_MaterialsStructOfArrays
+
+		auto & common = data.common[index];
+		auto & opacity = data.opacity[index];
+		auto & reflRefr = m_data.reflRefr[index];
+		auto & extended = m_data.extended;
+
+		if ( pass.hasSubsurfaceScattering() )
+		{
+			doVisit( pass.getSubsurfaceScattering()
+				, index
+				, extended );
+		}
+		else
+		{
+			extended.sssInfo[index].r = 0.0f;
+			extended.sssInfo[index].g = 0.0f;
+			extended.sssInfo[index].b = 0.0f;
+			extended.sssInfo[index].a = 0.0f;
+		}
+
+#else
+
+		auto & data = m_data[index];
+		auto & common = data.common;
+		auto & opacity = data.opacity;
+		auto & reflRefr = data.reflRefr;
+		auto & extended = data.extended;
+
+		if ( pass.hasSubsurfaceScattering() )
+		{
+			doVisit( pass.getSubsurfaceScattering()
+				, index
+				, extended );
+		}
+		else
+		{
+			extended.sssInfo.r = 0.0f;
+			extended.sssInfo.g = 0.0f;
+			extended.sssInfo.b = 0.0f;
+			extended.sssInfo.a = 0.0f;
+		}
+
+#endif
+
 		common.r = pass.getOpacity();
 		common.g = pass.getEmissive();
 		common.b = pass.getAlphaValue();
@@ -285,47 +294,6 @@ namespace castor3d
 		reflRefr.g = pass.hasRefraction() ? 1.0f : 0.0f;
 		reflRefr.b = pass.hasReflections() ? 1.0f : 0.0f;
 		reflRefr.a = float( pass.getBWAccumulationOperator() );
-		doVisitExtended( pass, extended );
-	}
-
-	void PassBuffer::doVisitExtended( Pass const & pass
-		, ExtendedData & data )
-	{
-		auto index = pass.getId() - 1;
-
-#if C3D_MaterialsStructOfArrays
-
-		if ( pass.hasSubsurfaceScattering() )
-		{
-			doVisit( pass.getSubsurfaceScattering()
-				, index
-				, data );
-		}
-		else
-		{
-			data.sssInfo[index].r = 0.0f;
-			data.sssInfo[index].g = 0.0f;
-			data.sssInfo[index].b = 0.0f;
-			data.sssInfo[index].a = 0.0f;
-		}
-
-#else
-
-		if ( pass.hasSubsurfaceScattering() )
-		{
-			doVisit( pass.getSubsurfaceScattering()
-				, index
-				, data );
-		}
-		else
-		{
-			data.sssInfo.r = 0.0f;
-			data.sssInfo.g = 0.0f;
-			data.sssInfo.b = 0.0f;
-			data.sssInfo.a = 0.0f;
-		}
-
-#endif
 	}
 
 	void PassBuffer::doVisit( SubsurfaceScattering const & subsurfaceScattering

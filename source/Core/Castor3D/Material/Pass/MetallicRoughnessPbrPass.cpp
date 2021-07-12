@@ -46,10 +46,10 @@ namespace castor3d
 	void MetallicRoughnessPbrPass::doJoinMtlRgh( TextureUnitPtrArray & result )
 	{
 		doMergeImages( TextureFlag::eMetalness
-			, offsetof( TextureConfiguration, specularMask )
+			, offsetof( TextureConfiguration, metalnessMask )
 			, 0x00FF0000
 			, TextureFlag::eRoughness
-			, offsetof( TextureConfiguration, glossinessMask )
+			, offsetof( TextureConfiguration, roughnessMask )
 			, 0x0000FF00
 			, cuT( "MtlRgh" )
 			, result );

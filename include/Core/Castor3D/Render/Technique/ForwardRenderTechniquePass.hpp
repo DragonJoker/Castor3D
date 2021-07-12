@@ -45,8 +45,7 @@ namespace castor3d
 
 	private:
 		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
-		ShaderPtr doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const override;
-		ShaderPtr doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const override;
+		ShaderPtr doGetPbrPixelShaderSource( PipelineFlags const & flags )const override;
 	};
 }
 

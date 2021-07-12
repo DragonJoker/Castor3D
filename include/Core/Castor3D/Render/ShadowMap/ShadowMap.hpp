@@ -143,7 +143,10 @@ namespace castor3d
 			| TextureFlag::eNormal
 			| TextureFlag::eAlbedo
 			| TextureFlag::eSpecular
+			| TextureFlag::eMetalness
 			| TextureFlag::eGlossiness
+			| TextureFlag::eShininess
+			| TextureFlag::eRoughness
 			| TextureFlag::eEmissive
 			| TextureFlag::eTransmittance };
 

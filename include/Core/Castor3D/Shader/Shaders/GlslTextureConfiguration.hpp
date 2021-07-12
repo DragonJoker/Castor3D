@@ -97,6 +97,7 @@ namespace castor3d
 		public:
 			sdw::Vec4 colOpa;
 			sdw::Vec4 spcShn;
+			sdw::Vec4 metRgh;
 			sdw::Vec4 emsOcc;
 			sdw::Vec4 trsDum;
 			sdw::Vec4 nmlFcr;
@@ -115,6 +116,10 @@ namespace castor3d
 			sdw::Float spcMask;
 			sdw::Float shnEnbl;
 			sdw::Float shnMask;
+			sdw::Float metEnbl;
+			sdw::Float metMask;
+			sdw::Float rghEnbl;
+			sdw::Float rghMask;
 			sdw::Float emsEnbl;
 			sdw::Float emsMask;
 			sdw::Float occEnbl;

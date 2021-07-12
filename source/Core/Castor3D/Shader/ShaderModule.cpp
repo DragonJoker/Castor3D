@@ -114,13 +114,10 @@ namespace castor3d
 		{
 			std::unique_ptr< Materials > result;
 
-			if ( checkFlag( passFlags, PassFlag::eMetallicRoughness ) )
+			if ( checkFlag( passFlags, PassFlag::eMetallicRoughness )
+				|| checkFlag( passFlags, PassFlag::eSpecularGlossiness ) )
 			{
-				result = std::make_unique< PbrMRMaterials >( writer );
-			}
-			else if ( checkFlag( passFlags, PassFlag::eSpecularGlossiness ) )
-			{
-				result = std::make_unique< PbrSGMaterials >( writer );
+				result = std::make_unique< PbrMaterials >( writer );
 			}
 			else
 			{

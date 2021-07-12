@@ -383,7 +383,7 @@ namespace castor3d
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
-	ShaderPtr ShadowMapPassPoint::doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const
+	ShaderPtr ShadowMapPassPoint::doGetPbrPixelShaderSource( PipelineFlags const & flags )const
 	{
 		using namespace sdw;
 		FragmentWriter writer;
@@ -400,7 +400,7 @@ namespace castor3d
 			, hasTextures };
 		auto in = writer.getIn();
 
-		shader::PbrMRMaterials materials{ writer };
+		shader::PbrMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 			, uint32_t( NodeUboIdx::eMaterials )
 			, RenderPipeline::eBuffers );
@@ -456,9 +456,7 @@ namespace castor3d
 				, normalize( inSurface.bitangent ) );
 			auto material = materials.getMaterial( inSurface.material );
 			auto lightMat = writer.declLocale< shader::PbrLightMaterial >( "lightMat" );
-			lightMat.create< MaterialType::eMetallicRoughness >( material.albedo
-				, material.metalness
-				, material.roughness );
+			lightMat.create( material );
 			auto gamma = writer.declLocale( "gamma"
 				, material.gamma );
 			auto emissive = writer.declLocale( "emissive"
@@ -479,168 +477,6 @@ namespace castor3d
 			if ( hasTextures )
 			{
 				lighting->computeMapContributions( flags.passFlags
-					, MaterialType::eMetallicRoughness
-					, textures
-					, gamma
-					, textureConfigs
-					, c3d_maps
-					, texCoord
-					, normal
-					, tangent
-					, bitangent
-					, emissive
-					, alpha
-					, occlusion
-					, transmittance
-					, lightMat
-					, tangentSpaceViewPosition
-					, tangentSpaceFragPosition );
-			}
-
-			utils.applyAlphaFunc( flags.alphaFunc
-				, alpha
-				, alphaRef );
-
-			auto lightDiffuse = writer.declLocale( "lightDiffuse"
-				, vec3( 0.0_f ) );
-			auto lightSpecular = writer.declLocale( "lightSpecular"
-				, vec3( 0.0_f ) );
-			shader::OutputComponents output{ lightDiffuse, lightSpecular };
-			auto light = writer.declLocale( "light"
-				, c3d_shadowMapData.getPointLight( *lighting ) );
-			auto lightToVertex = writer.declLocale( "lightToVertex"
-				, light.m_position.xyz() - inSurface.worldPosition );
-			auto distance = writer.declLocale( "distance"
-				, length( lightToVertex ) );
-			auto attenuation = writer.declLocale( "attenuation"
-				, sdw::fma( light.m_attenuation.z()
-					, distance * distance
-					, sdw::fma( light.m_attenuation.y()
-						, distance
-						, light.m_attenuation.x() ) ) );
-			pxl_flux.rgb() = ( lightMat.albedo
-					* light.m_lightBase.m_colour
-					* light.m_lightBase.m_intensity.x()
-					* clamp( dot( lightToVertex / distance, normal ), 0.0_f, 1.0_f ) )
-				/ attenuation;
-
-			auto depth = writer.declLocale( "depth"
-				, c3d_shadowMapData.getLinearisedDepth( inSurface.worldPosition ) );
-			pxl_normalLinear.w() = depth;
-			pxl_normalLinear.xyz() = normal;
-			pxl_position.xyz() = inSurface.worldPosition;
-
-			pxl_variance.x() = depth;
-			pxl_variance.y() = depth * depth;
-
-			auto dx = writer.declLocale( "dx"
-				, dFdx( depth ) );
-			auto dy = writer.declLocale( "dy"
-				, dFdy( depth ) );
-			pxl_variance.y() += 0.25_f * ( dx * dx + dy * dy );
-		};
-
-		writer.implementFunction< sdw::Void >( "main", main );
-		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-	}
-
-	ShaderPtr ShadowMapPassPoint::doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const
-	{
-		using namespace sdw;
-		FragmentWriter writer;
-		auto textures = filterTexturesFlags( flags.textures );
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		bool hasTextures = !flags.textures.empty();
-
-		shader::Utils utils{ writer };
-		utils.declareRemoveGamma();
-
-		// Fragment Intputs
-		shader::InFragmentSurface inSurface{ writer
-			, getShaderFlags()
-			, hasTextures };
-		auto in = writer.getIn();
-
-		shader::PbrSGMaterials materials{ writer };
-		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-			, uint32_t( NodeUboIdx::eMaterials )
-			, RenderPipeline::eBuffers );
-		shader::TextureConfigurations textureConfigs{ writer };
-
-		if ( hasTextures )
-		{
-			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( NodeUboIdx::eTextures )
-				, RenderPipeline::eBuffers );
-		}
-
-		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-			, 0u
-			, RenderPipeline::eTextures
-			, std::max( 1u, uint32_t( flags.textures.size() ) )
-			, hasTextures ) );
-
-		auto index = uint32_t( PassUboIdx::eCount );
-		auto lightsIndex = index++;
-		UBO_SHADOWMAP( writer
-			, index++
-			, RenderPipeline::eAdditional );
-		auto lighting = shader::PbrLightingModel::createModel( writer
-			, utils
-			, LightType::ePoint
-			, lightsIndex
-			, RenderPipeline::eAdditional
-			, false
-			, shader::ShadowOptions{ SceneFlag::eNone, false }
-			, index
-			, RenderPipeline::eAdditional );
-
-		// Fragment Outputs
-		auto pxl_normalLinear( writer.declOutput< Vec4 >( "pxl_normalLinear", 0u ) );
-		auto pxl_variance( writer.declOutput< Vec2 >( "pxl_variance", 1u ) );
-		auto pxl_position( writer.declOutput< Vec4 >( "pxl_position", 2u ) );
-		auto pxl_flux( writer.declOutput< Vec4 >( "pxl_flux", 3u ) );
-
-		auto main = [&]()
-		{
-			pxl_normalLinear = vec4( 0.0_f );
-			pxl_variance = vec2( 0.0_f );
-			pxl_position = vec4( 0.0_f );
-			pxl_flux = vec4( 0.0_f );
-			auto texCoord = writer.declLocale( "texCoord"
-				, inSurface.texture );
-			auto normal = writer.declLocale( "normal"
-				, normalize( inSurface.normal ) );
-			auto tangent = writer.declLocale( "tangent"
-				, normalize( inSurface.tangent ) );
-			auto bitangent = writer.declLocale( "bitangent"
-				, normalize( inSurface.bitangent ) );
-			auto material = materials.getMaterial( inSurface.material );
-			auto lightMat = writer.declLocale< shader::PbrLightMaterial >( "lightMat" );
-			lightMat.create< MaterialType::eSpecularGlossiness >( material.albedo
-				, material.specular
-				, material.glossiness );
-			auto gamma = writer.declLocale( "gamma"
-				, material.gamma );
-			auto emissive = writer.declLocale( "emissive"
-				, vec3( material.emissive ) );
-			auto occlusion = writer.declLocale( "occlusion"
-				, 1.0_f );
-			auto transmittance = writer.declLocale( "transmittance"
-				, 0.0_f );
-			auto alpha = writer.declLocale( "alpha"
-				, material.opacity );
-			auto alphaRef = writer.declLocale( "alphaRef"
-				, material.alphaRef );
-			auto tangentSpaceViewPosition = writer.declLocale( "tangentSpaceViewPosition"
-				, inSurface.tangentSpaceViewPosition );
-			auto tangentSpaceFragPosition = writer.declLocale( "tangentSpaceFragPosition"
-				, inSurface.tangentSpaceFragPosition );
-
-			if ( hasTextures )
-			{
-				lighting->computeMapContributions( flags.passFlags
-					, MaterialType::eSpecularGlossiness
 					, textures
 					, gamma
 					, textureConfigs
