@@ -129,9 +129,9 @@ namespace castor3d
 						, writer.cast< UInt >( data5.z() ) );
 					auto translucency = writer.declLocale( "translucency"
 						, data4.w() );
-					auto material = materials->getBaseMaterial( materialId );
+					auto material = materials->getMaterial( materialId );
 
-					IF( writer, material->subsurfaceScatteringEnabled == 0_i )
+					IF( writer, material.subsurfaceScatteringEnabled == 0_i )
 					{
 						writer.discard();
 					}
@@ -167,7 +167,7 @@ namespace castor3d
 					// The closer the pixel, the stronger the effect needs to be, hence
 					// the factor 1.0 / depthM.
 					auto finalStep = writer.declLocale( "finalStep"
-						, translucency * step * material->subsurfaceScatteringStrength * material->gaussianWidth / depthM );
+						, translucency * step * material.subsurfaceScatteringStrength * material.gaussianWidth / depthM );
 
 					auto offset = writer.declLocale< Vec2 >( "offset" );
 					auto color = writer.declLocale< Vec3 >( "color" );
@@ -238,9 +238,9 @@ namespace castor3d
 						, c3d_mapLightDiffuse.lod( vtx_texture, 0.0_f ) );
 					auto materialId = writer.declLocale( "materialId"
 						, writer.cast< UInt >( data5.z() ) );
-					auto material = materials->getBaseMaterial( materialId );
+					auto material = materials->getMaterial( materialId );
 
-					IF( writer, material->subsurfaceScatteringEnabled == 0_i )
+					IF( writer, material.subsurfaceScatteringEnabled == 0_i )
 					{
 						pxl_fragColor = original;
 					}

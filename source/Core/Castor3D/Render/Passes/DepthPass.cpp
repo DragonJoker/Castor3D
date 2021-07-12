@@ -236,11 +236,11 @@ namespace castor3d
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
 			{
-				auto material = materials->getBaseMaterial( inSurface.material );
+				auto material = materials->getMaterial( inSurface.material );
 				auto opacity = writer.declLocale( "opacity"
-					, material->opacity );
+					, material.opacity );
 				auto alphaRef = writer.declLocale( "alphaRef"
-					, material->alphaRef );
+					, material.alphaRef );
 				auto normal = writer.declLocale( "normal"
 					, normalize( inSurface.normal ) );
 				auto tangent = writer.declLocale( "tangent"

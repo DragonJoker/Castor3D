@@ -15,7 +15,6 @@ namespace castor3d::shader
 	template<>
 	struct ShaderMaterialTraitsT< MaterialType::ePhong >
 	{
-		using Materials = PhongMaterials;
 		using LightingModel = PhongLightingModel;
 		using LightMaterial = PhongLightMaterial;
 		using ReflectionModel = PhongReflectionModel;
@@ -33,10 +32,12 @@ namespace castor3d::shader
 			static void create( PhongLightMaterial & material
 				, sdw::Vec3 const & albedo
 				, sdw::Vec3 const & specular
-				, sdw::Float const & shininess )
+				, sdw::Float const & shininess
+				, sdw::Float const & ambient )
 			{
 				material.albedo = albedo;
 				material.specular = specular;
+				material.ambient = ambient;
 				material.shininess = shininess;
 			}
 
@@ -44,12 +45,14 @@ namespace castor3d::shader
 				, sdw::Vec3 const & diffuse
 				, sdw::Float const & gamma
 				, sdw::Vec3 const & specular
-				, sdw::Float const & shininess )
+				, sdw::Float const & shininess
+				, sdw::Float const & ambient )
 			{
 				create( material
 					, pow( max( diffuse, vec3( 0.0_f, 0.0_f, 0.0_f ) ), vec3( gamma ) )
 					, specular
-					, shininess );
+					, shininess
+					, ambient );
 			}
 
 			static void create( PhongLightMaterial & material
@@ -57,7 +60,16 @@ namespace castor3d::shader
 				, sdw::Vec4 const & data3
 				, sdw::Vec4 const & data2 )
 			{
-				create( material, albedo, data3.rgb(), data2.a() );
+				create( material, albedo, data3.rgb(), data2.a(), 0.0_f );
+			}
+
+			static void create( PhongLightMaterial & material
+				, sdw::Vec3 const & albedo
+				, sdw::Vec4 const & data3
+				, sdw::Vec4 const & data2
+				, sdw::Float const & ambient )
+			{
+				create( material, albedo, data3.rgb(), data2.a(), ambient );
 			}
 		};
 
@@ -119,60 +131,18 @@ namespace castor3d::shader
 			CreatorT< MaterialT >::create( *this, params... );
 		}
 
+		C3D_API void create( Material const & material );
+
 		C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 
 		sdw::Vec3 albedo;
 		sdw::Vec3 specular;
+		sdw::Float ambient;
 		sdw::Float shininess;
 
 	private:
 		using sdw::StructInstance::getMember;
 		using sdw::StructInstance::getMemberArray;
-	};
-
-	struct PhongMaterial
-		: public BaseMaterial
-	{
-		friend class PhongMaterials;
-
-		C3D_API PhongMaterial( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled );
-
-		C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
-		C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
-
-		C3D_API sdw::Vec3 colour()const override;
-
-	private:
-		void doCreate( sdw::SampledImageT< FImgBufferRgba32 > & materials
-			, sdw::Int & offset )override;
-
-	private:
-		sdw::Vec4 m_diffAmb;
-		sdw::Vec4 m_specShin;
-
-	public:
-		sdw::Vec3 diffuse;
-		sdw::Float ambient;
-		sdw::Vec3 specular;
-		sdw::Float shininess;
-	};
-
-	class PhongMaterials
-		: public Materials
-	{
-	public:
-		C3D_API explicit PhongMaterials( sdw::ShaderWriter & writer );
-		C3D_API void declare( bool hasSsbo
-			, uint32_t binding
-			, uint32_t set )override;
-		C3D_API PhongMaterial getMaterial( sdw::UInt const & index )const;
-		C3D_API BaseMaterialUPtr getBaseMaterial( sdw::UInt const & index )const override;
-
-	private:
-		std::unique_ptr< sdw::ArraySsboT< PhongMaterial > > m_ssbo;
-		sdw::Function< PhongMaterial, sdw::InUInt > m_getMaterial;
 	};
 }
 

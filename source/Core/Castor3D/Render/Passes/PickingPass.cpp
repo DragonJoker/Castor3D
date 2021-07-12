@@ -445,9 +445,9 @@ namespace castor3d
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
 			{
-				auto material = materials->getBaseMaterial( inSurface.material );
+				auto material = materials->getMaterial( inSurface.material );
 				auto alpha = writer.declLocale( "alpha"
-					, material->opacity );
+					, material.opacity );
 				utils.computeOpacityMapContribution( textures
 					, textureConfigs
 					, c3d_maps
@@ -455,7 +455,7 @@ namespace castor3d
 					, alpha );
 				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
-					, material->alphaRef );
+					, material.alphaRef );
 				pxl_fragColor = c3d_pickingData.getIndex( inSurface.instance );
 #if C3D_DebugPicking
 				pxl_fragColor /= 255.0_f;
