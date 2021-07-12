@@ -91,6 +91,13 @@ namespace castor3d::shader
 		return std::make_unique< sdw::Struct >( writer, makeType( writer.getTypesCache() ) );
 	}
 
+	void PhongMaterial::doCreate( sdw::SampledImageT< FImgBufferRgba32 > & materials
+		, sdw::Int & offset )
+	{
+		m_diffAmb = materials.fetch( sdw::Int{ offset++ } );
+		m_specShin = materials.fetch( sdw::Int{ offset++ } );
+	}
+
 	//*********************************************************************************************
 
 	PhongMaterials::PhongMaterials( sdw::ShaderWriter & writer )
@@ -125,9 +132,7 @@ namespace castor3d::shader
 						, *m_type );
 					auto offset = m_writer.declLocale( "offset"
 						, m_writer.cast< sdw::Int >( index ) * sdw::Int( MaxMaterialComponentsCount ) );
-					result.m_diffAmb = c3d_materials.fetch( sdw::Int{ offset++ } );
-					result.m_specShin = c3d_materials.fetch( sdw::Int{ offset++ } );
-					doFetch( result, c3d_materials, offset );
+					result.create( c3d_materials, offset );
 					m_writer.returnStmt( result );
 				}
 				, sdw::InUInt{ m_writer, "index" } );

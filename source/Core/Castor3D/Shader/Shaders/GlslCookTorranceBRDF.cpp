@@ -35,6 +35,24 @@ namespace castor3d::shader
 		return *this;
 	}
 
+	void PbrLightMaterial::createFromPbr( sdw::Vec3 const & albedo
+		, sdw::Vec4 const & data3
+		, sdw::Vec4 const & data2 )
+	{
+		this->albedo = albedo;
+		this->specular = data3.rgb();
+		this->metalness = data3.a();
+		this->roughness = data2.a();
+	}
+
+	void PbrLightMaterial::create( PbrMaterial const & material )
+	{
+		this->albedo = material.albedo;
+		this->specular = material.specular;
+		this->metalness = material.metalness;
+		this->roughness = material.roughness;
+	}
+
 	ast::type::StructPtr PbrLightMaterial::makeType( ast::type::TypesCache & cache )
 	{
 		auto result = cache.getStruct( ast::type::MemoryLayout::eStd430

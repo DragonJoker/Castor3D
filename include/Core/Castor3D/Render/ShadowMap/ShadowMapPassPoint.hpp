@@ -67,8 +67,7 @@ namespace castor3d
 		void doUpdateFlags( PipelineFlags & flags )const override;
 		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
-		ShaderPtr doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const override;
-		ShaderPtr doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const override;
+		ShaderPtr doGetPbrPixelShaderSource( PipelineFlags const & flags )const override;
 
 	public:
 		C3D_API static uint32_t const TextureSize;

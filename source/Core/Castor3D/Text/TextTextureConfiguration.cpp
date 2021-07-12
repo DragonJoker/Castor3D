@@ -39,18 +39,12 @@ namespace castor
 
 		if ( result && configuration.specularMask[0] )
 		{
-			switch ( m_type )
-			{
-			case MaterialType::ePhong:
-			case MaterialType::eSpecularGlossiness:
-				result = writeMask( file, cuT( "specular_mask" ), configuration.specularMask[0] );
-				break;
-			case MaterialType::eMetallicRoughness:
-				result = writeMask( file, cuT( "metalness_mask" ), configuration.specularMask[0] );
-				break;
-			default:
-				break;
-			}
+			result = writeMask( file, cuT( "specular_mask" ), configuration.specularMask[0] );
+		}
+
+		if ( result && configuration.metalnessMask[0] )
+		{
+			result = writeMask( file, cuT( "metalness_mask" ), configuration.specularMask[0] );
 		}
 
 		if ( result && configuration.glossinessMask[0] )
@@ -60,9 +54,6 @@ namespace castor
 			case MaterialType::ePhong:
 				result = writeMask( file, cuT( "shininess_mask" ), configuration.glossinessMask[0] );
 				break;
-			case MaterialType::eMetallicRoughness:
-				result = writeMask( file, cuT( "roughness_mask" ), configuration.glossinessMask[0] );
-				break;
 			case MaterialType::eSpecularGlossiness:
 				result = writeMask( file, cuT( "glossiness_mask" ), configuration.glossinessMask[0] );
 				break;
@@ -71,6 +62,11 @@ namespace castor
 			}
 
 			checkError( result, "gloss mask" );
+		}
+
+		if ( result && configuration.roughnessMask[0] )
+		{
+			result = writeMask( file, cuT( "roughness_mask" ), configuration.glossinessMask[0] );
 		}
 
 		if ( result && configuration.opacityMask[0] )

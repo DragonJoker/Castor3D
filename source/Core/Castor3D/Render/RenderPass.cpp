@@ -212,13 +212,10 @@ namespace castor3d
 	{
 		ShaderPtr result;
 
-		if ( checkFlag( flags.passFlags, PassFlag::eMetallicRoughness ) )
+		if ( checkFlag( flags.passFlags, PassFlag::eMetallicRoughness )
+			|| checkFlag( flags.passFlags, PassFlag::eSpecularGlossiness ) )
 		{
-			result = doGetPbrMRPixelShaderSource( flags );
-		}
-		else if ( checkFlag( flags.passFlags, PassFlag::eSpecularGlossiness ) )
-		{
-			result = doGetPbrSGPixelShaderSource( flags );
+			result = doGetPbrPixelShaderSource( flags );
 		}
 		else
 		{

@@ -78,19 +78,19 @@ namespace castor3d
 		eSpecular = 0x0080,
 		//!\~english	Metalness map.
 		//!\~french		Map de metalness.
-		eMetalness = eSpecular,
+		eMetalness = 0x0100,
 		//!\~english	Glossiness map.
 		//!\~french		Map de glossiness.
-		eGlossiness = 0x0100,
+		eGlossiness = 0x0200,
 		//!\~english	Shininess map.
 		//!\~french		Map de shininess.
 		eShininess = eGlossiness,
 		//!\~english	Roughness map.
 		//!\~french		Map de roughness.
-		eRoughness = eGlossiness,
+		eRoughness = 0x0400,
 		//!\~english	Mask for all the texture channels.
 		//!\~french		Masque pour les canaux de texture.
-		eAll = 0x1FF,
+		eAll = 0x07FF,
 		//!\~english	Mask for all the texture channels except for opacity.
 		//!\~french		Masque pour les canaux de texture sauf l'opacité.
 		eAllButOpacity = eAll & ~( eOpacity ),

@@ -396,12 +396,7 @@ namespace castor3d
 		return doGetPixelShaderSource( flags );
 	}
 
-	ShaderPtr PickingPass::doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const
-	{
-		return doGetPixelShaderSource( flags );
-	}
-
-	ShaderPtr PickingPass::doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const
+	ShaderPtr PickingPass::doGetPbrPixelShaderSource( PipelineFlags const & flags )const
 	{
 		return doGetPixelShaderSource( flags );
 	}
