@@ -12,6 +12,15 @@ See LICENSE file in root folder
 
 namespace castor3d::shader
 {
+	template<>
+	struct ShaderMaterialTraitsT< MaterialType::ePhong >
+	{
+		using Materials = PhongMaterials;
+		using LightingModel = PhongLightingModel;
+		using LightMaterial = PhongLightMaterial;
+		using ReflectionModel = PhongReflectionModel;
+	};
+
 	struct PhongLightMaterial
 		: public sdw::StructInstance
 	{
@@ -57,11 +66,12 @@ namespace castor3d::shader
 		{
 			static void create( PhongLightMaterial & material
 				, sdw::Vec3 const & albedo
+				, sdw::Vec3 const & specular
 				, sdw::Float const & metalness
 				, sdw::Float const & roughness )
 			{
 				material.albedo = albedo;
-				material.specular = LightingModel::computeF0( albedo, metalness );
+				material.specular = specular;
 				material.shininess = LightingModel::computeShininess( LightingModel::computeRoughness( roughness ) );
 			}
 
@@ -70,7 +80,7 @@ namespace castor3d::shader
 				, sdw::Vec4 const & data3
 				, sdw::Vec4 const & data2 )
 			{
-				create( material, albedo, data3.r(), data2.a() );
+				create( material, albedo, data3.rgb(), data3.a(), data2.a() );
 			}
 		};
 
@@ -80,11 +90,12 @@ namespace castor3d::shader
 			static void create( PhongLightMaterial & material
 				, sdw::Vec3 const & albedo
 				, sdw::Vec3 const & specular
-				, sdw::Float const & glossiness )
+				, sdw::Float const & metalness
+				, sdw::Float const & roughness )
 			{
 				material.albedo = albedo;
 				material.specular = specular;
-				material.shininess = LightingModel::computeShininess( glossiness );
+				material.shininess = LightingModel::computeShininess( LightingModel::computeRoughness( roughness ) );
 			}
 
 			static void create( PhongLightMaterial & material
@@ -92,7 +103,7 @@ namespace castor3d::shader
 				, sdw::Vec4 const & data3
 				, sdw::Vec4 const & data2 )
 			{
-				create( material, albedo, data3.rgb(), data2.a() );
+				create( material, albedo, data3.rgb(), data3.a(), data2.a() );
 			}
 		};
 
@@ -132,6 +143,10 @@ namespace castor3d::shader
 		C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
 		C3D_API sdw::Vec3 colour()const override;
+
+	private:
+		void doCreate( sdw::SampledImageT< FImgBufferRgba32 > & materials
+			, sdw::Int & offset )override;
 
 	private:
 		sdw::Vec4 m_diffAmb;

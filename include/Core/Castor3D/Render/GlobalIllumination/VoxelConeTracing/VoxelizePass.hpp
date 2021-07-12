@@ -109,8 +109,7 @@ namespace castor3d
 		ShaderPtr doGetBillboardShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
-		ShaderPtr doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const override;
-		ShaderPtr doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const override;
+		ShaderPtr doGetPbrPixelShaderSource( PipelineFlags const & flags )const override;
 
 	private:
 		Scene const & m_scene;

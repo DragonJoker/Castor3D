@@ -212,8 +212,7 @@ namespace castor3d
 		static constexpr uint32_t DataSize = sizeof( PassData );
 
 	protected:
-		C3D_API void doVisitExtended( Pass const & pass
-			, ExtendedData & data );
+		C3D_API void doVisitCommon( Pass const & pass );
 		C3D_API void doVisit( SubsurfaceScattering const & subsurfaceScattering
 			, uint32_t index
 			, ExtendedData & data );

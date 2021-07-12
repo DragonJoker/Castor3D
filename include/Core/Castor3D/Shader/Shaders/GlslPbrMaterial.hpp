@@ -12,12 +12,30 @@ See LICENSE file in root folder
 
 namespace castor3d::shader
 {
-	struct MetallicRoughnessMaterial
+	template<>
+	struct ShaderMaterialTraitsT< MaterialType::eMetallicRoughness >
+	{
+		using Materials = PbrMaterials;
+		using LightingModel = PbrLightingModel;
+		using LightMaterial = PbrLightMaterial;
+		using ReflectionModel = PbrReflectionModel;
+	};
+
+	template<>
+	struct ShaderMaterialTraitsT< MaterialType::eSpecularGlossiness >
+	{
+		using Materials = PbrMaterials;
+		using LightingModel = PbrLightingModel;
+		using LightMaterial = PbrLightMaterial;
+		using ReflectionModel = PbrReflectionModel;
+	};
+
+	struct PbrMaterial
 		: public BaseMaterial
 	{
-		friend class PbrMRMaterials;
+		friend class PbrMaterials;
 
-		C3D_API MetallicRoughnessMaterial( sdw::ShaderWriter & writer
+		C3D_API PbrMaterial( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled );
 
@@ -26,70 +44,35 @@ namespace castor3d::shader
 
 		C3D_API sdw::Vec3 colour()const override;
 
+	private:
+		void doCreate( sdw::SampledImageT< FImgBufferRgba32 > & materials
+			, sdw::Int & offset )override;
+
 	protected:
 		sdw::Vec4 m_albRough;
-		sdw::Vec4 m_metDiv;
+		sdw::Vec4 m_spcMetal;
 
 	public:
 		sdw::Vec3 albedo;
 		sdw::Float roughness;
+		sdw::Vec3 specular;
 		sdw::Float metalness;
 	};
 
-	struct SpecularGlossinessMaterial
-		: public BaseMaterial
-	{
-		friend class PbrSGMaterials;
-
-		C3D_API SpecularGlossinessMaterial( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled );
-
-		C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
-		C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
-
-		C3D_API sdw::Vec3 colour()const override;
-
-	protected:
-		sdw::Vec4 m_diffDiv;
-		sdw::Vec4 m_specGloss;
-
-	public:
-		sdw::Vec3 albedo;
-		sdw::Vec3 specular;
-		sdw::Float glossiness;
-	};
-
-	class PbrMRMaterials
+	class PbrMaterials
 		: public Materials
 	{
 	public:
-		C3D_API explicit PbrMRMaterials( sdw::ShaderWriter & writer );
+		C3D_API explicit PbrMaterials( sdw::ShaderWriter & writer );
 		C3D_API void declare( bool hasSsbo
 			, uint32_t binding
 			, uint32_t set )override;
-		C3D_API MetallicRoughnessMaterial getMaterial( sdw::UInt const & index )const;
+		C3D_API PbrMaterial getMaterial( sdw::UInt const & index )const;
 		C3D_API BaseMaterialUPtr getBaseMaterial( sdw::UInt const & index )const override;
 
 	private:
-		std::unique_ptr< sdw::ArraySsboT< MetallicRoughnessMaterial > > m_ssbo;
-		sdw::Function< MetallicRoughnessMaterial, sdw::InUInt > m_getMaterial;
-	};
-
-	class PbrSGMaterials
-		: public Materials
-	{
-	public:
-		C3D_API explicit PbrSGMaterials( sdw::ShaderWriter & writer );
-		C3D_API void declare( bool hasSsbo
-			, uint32_t binding
-			, uint32_t set )override;
-		C3D_API SpecularGlossinessMaterial getMaterial( sdw::UInt const & index )const;
-		C3D_API BaseMaterialUPtr getBaseMaterial( sdw::UInt const & index )const override;
-
-	private:
-		std::unique_ptr< sdw::ArraySsboT< SpecularGlossinessMaterial > > m_ssbo;
-		sdw::Function< SpecularGlossinessMaterial, sdw::InUInt > m_getMaterial;
+		std::unique_ptr< sdw::ArraySsboT< PbrMaterial > > m_ssbo;
+		sdw::Function< PbrMaterial, sdw::InUInt > m_getMaterial;
 	};
 }
 

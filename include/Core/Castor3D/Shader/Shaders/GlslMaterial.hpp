@@ -14,33 +14,6 @@ namespace castor3d::shader
 	template< MaterialType MaterialT >
 	struct ShaderMaterialTraitsT;
 
-	template<>
-	struct ShaderMaterialTraitsT< MaterialType::ePhong >
-	{
-		using Materials = PhongMaterials;
-		using LightingModel = PhongLightingModel;
-		using LightMaterial = PhongLightMaterial;
-		using ReflectionModel = PhongReflectionModel;
-	};
-
-	template<>
-	struct ShaderMaterialTraitsT< MaterialType::eMetallicRoughness >
-	{
-		using Materials = PbrMRMaterials;
-		using LightingModel = PbrLightingModel;
-		using LightMaterial = PbrLightMaterial;
-		using ReflectionModel = PbrReflectionModel;
-	};
-
-	template<>
-	struct ShaderMaterialTraitsT< MaterialType::eSpecularGlossiness >
-	{
-		using Materials = PbrSGMaterials;
-		using LightingModel = PbrLightingModel;
-		using LightMaterial = PbrLightMaterial;
-		using ReflectionModel = PbrReflectionModel;
-	};
-
 	castor::String const PassBufferName = cuT( "Materials" );
 
 	struct BaseMaterial
@@ -48,6 +21,9 @@ namespace castor3d::shader
 	{
 		friend class Materials;
 		virtual ~BaseMaterial() = default;
+
+		C3D_API void create( sdw::SampledImageT< FImgBufferRgba32 > & materials
+			, sdw::Int & offset );
 
 		C3D_API virtual sdw::Vec3 colour()const = 0;
 
@@ -59,6 +35,10 @@ namespace castor3d::shader
 	protected:
 		using sdw::StructInstance::getMember;
 		using sdw::StructInstance::getMemberArray;
+
+	private:
+		virtual void doCreate( sdw::SampledImageT< FImgBufferRgba32 > & materials
+			, sdw::Int & offset ) = 0;
 
 	protected:
 		sdw::Vec4 m_common;
@@ -97,11 +77,6 @@ namespace castor3d::shader
 			, uint32_t binding
 			, uint32_t set ) = 0;
 		C3D_API virtual BaseMaterialUPtr getBaseMaterial( sdw::UInt const & index )const = 0;
-
-	protected:
-		void doFetch( BaseMaterial & result
-			, sdw::SampledImageT< FImgBufferRgba32 > & c3d_materials
-			, sdw::Int & offset );
 
 	protected:
 		sdw::ShaderWriter & m_writer;

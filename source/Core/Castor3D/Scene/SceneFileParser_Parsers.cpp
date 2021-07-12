@@ -76,7 +76,9 @@ namespace castor3d
 			TextureFlags result = TextureFlag::eNone;
 			mergeMasks( config.colourMask[0], TextureFlag::eDiffuse, result );
 			mergeMasks( config.specularMask[0], TextureFlag::eSpecular, result );
+			mergeMasks( config.metalnessMask[0], TextureFlag::eMetalness, result );
 			mergeMasks( config.glossinessMask[0], TextureFlag::eGlossiness, result );
+			mergeMasks( config.roughnessMask[0], TextureFlag::eRoughness, result );
 			mergeMasks( config.opacityMask[0], TextureFlag::eOpacity, result );
 			mergeMasks( config.emissiveMask[0], TextureFlag::eEmissive, result );
 			mergeMasks( config.normalMask[0], TextureFlag::eNormal, result );
@@ -3817,18 +3819,12 @@ namespace castor3d
 
 			if ( checkFlag( textures, TextureFlag::eSpecular ) )
 			{
-				switch ( parsingContext->pass->getType() )
-				{
-				case MaterialType::ePhong:
-				case MaterialType::eSpecularGlossiness:
-					parsingContext->textureConfiguration.specularMask[0] = 0x00FFFFFF;
-					break;
-				case MaterialType::eMetallicRoughness:
-					parsingContext->textureConfiguration.specularMask[0] = 0x00FF0000;
-					break;
-				default:
-					break;
-				}
+				parsingContext->textureConfiguration.specularMask[0] = 0x00FFFFFF;
+			}
+
+			if ( checkFlag( textures, TextureFlag::eMetalness ) )
+			{
+				parsingContext->textureConfiguration.metalnessMask[0] = 0x00FF0000;
 			}
 
 			if ( checkFlag( textures, TextureFlag::eHeight ) )
@@ -3839,6 +3835,11 @@ namespace castor3d
 			if ( checkFlag( textures, TextureFlag::eGlossiness ) )
 			{
 				parsingContext->textureConfiguration.glossinessMask[0] = 0x00FF0000;
+			}
+
+			if ( checkFlag( textures, TextureFlag::eRoughness ) )
+			{
+				parsingContext->textureConfiguration.roughnessMask[0] = 0x00FF0000;
 			}
 
 			if ( checkFlag( textures, TextureFlag::eEmissive ) )
@@ -3961,7 +3962,7 @@ namespace castor3d
 		}
 		else
 		{
-			params[0]->get( parsingContext->textureConfiguration.specularMask[0] );
+			params[0]->get( parsingContext->textureConfiguration.metalnessMask[0] );
 		}
 	}
 	CU_EndAttribute()
@@ -4007,7 +4008,7 @@ namespace castor3d
 		}
 		else
 		{
-			params[0]->get( parsingContext->textureConfiguration.glossinessMask[0] );
+			params[0]->get( parsingContext->textureConfiguration.roughnessMask[0] );
 		}
 	}
 	CU_EndAttribute()

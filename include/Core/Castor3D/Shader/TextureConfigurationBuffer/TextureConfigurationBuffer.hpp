@@ -109,6 +109,7 @@ namespace castor3d
 		{
 			castor::Point4f colOpa;
 			castor::Point4f spcShn;
+			castor::Point4f metRgh;
 			castor::Point4f emsOcc;
 			castor::Point4f trsDum;
 			castor::Point4f nmlFcr;

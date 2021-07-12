@@ -165,7 +165,6 @@ namespace castor3d
 			}
 
 			C3D_API void computeMapContributions( PassFlags const & passFlags
-				, MaterialType materialType
 				, FilteredTextureFlags const & textures
 				, sdw::Float const & gamma
 				, TextureConfigurations const & textureConfigs
@@ -182,7 +181,6 @@ namespace castor3d
 				, sdw::Vec3 & tangentSpaceViewPosition
 				, sdw::Vec3 & tangentSpaceFragPosition );
 			C3D_API void computeMapVoxelContributions( PassFlags const & passFlags
-				, MaterialType materialType
 				, FilteredTextureFlags const & textures
 				, sdw::Float const & gamma
 				, TextureConfigurations const & textureConfigs
