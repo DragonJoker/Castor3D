@@ -45,7 +45,6 @@ namespace castor3d
 			, bool shadows )
 		{
 			using MyTraits = shader::ShaderMaterialTraitsT< MaterialT >;
-			using Materials = typename MyTraits::Materials;
 			using LightingModel = typename MyTraits::LightingModel;
 			using LightMaterial = typename MyTraits::LightMaterial;
 
@@ -64,7 +63,7 @@ namespace castor3d
 			auto pxl_specular = writer.declOutput< Vec3 >( "pxl_specular", 1 );
 
 			// Shader inputs
-			Materials materials{ writer };
+			shader::Materials materials{ writer };
 			materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 				, uint32_t( LightPassIdx::eMaterials )
 				, 0u );

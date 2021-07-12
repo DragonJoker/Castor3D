@@ -112,19 +112,7 @@ namespace castor3d
 		std::unique_ptr< Materials > createMaterials( sdw::ShaderWriter & writer
 			, PassFlags const & passFlags )
 		{
-			std::unique_ptr< Materials > result;
-
-			if ( checkFlag( passFlags, PassFlag::eMetallicRoughness )
-				|| checkFlag( passFlags, PassFlag::eSpecularGlossiness ) )
-			{
-				result = std::make_unique< PbrMaterials >( writer );
-			}
-			else
-			{
-				result = std::make_unique< PhongMaterials >( writer );
-			}
-
-			return result;
+			return std::make_unique< Materials >( writer );
 		}
 	}
 
