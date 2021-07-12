@@ -30,10 +30,10 @@ namespace castor3d
 	{
 		eDepth,
 		eData1, // RGB => Normal, A => Object Material flags
-		eData2, // RGB => Diffuse/Albedo - SSR: A => Shininess - PBRMR: A => Roughness - PBRSG: A => Glossiness
-		eData3, // A => AO - SSR/PBRSG: RGB => Specular - PBRMR: R => Metallic, G => Unused, B => Unused
+		eData2, // RGB => Diffuse/Albedo - SSR: A => Shininess - PBR: A => Roughness
+		eData3, // RGB => Specular - PBR: A => Metalness - SSR: A => Unused
 		eData4, // RGB => Emissive, A => Transmittance
-		eData5, // RG => Velocity, B => Material Index, A => Unused
+		eData5, // RG => Velocity, B => Material Index, A => AO
 		CU_ScopedEnumBounds( eDepth ),
 	};
 	castor::String getTextureName( DsTexture texture );

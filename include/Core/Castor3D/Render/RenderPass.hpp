@@ -817,16 +817,7 @@ namespace castor3d
 		 *\brief		Récupère le source du pixel shader qui correspond aux indicateurs donnés.
 		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
-		C3D_API virtual ShaderPtr doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const = 0;
-		/**
-		 *\~english
-		 *\brief		Retrieves the pixel shader source matching the given flags.
-		 *\param[in]	flags	The pipeline flags.
-		 *\~french
-		 *\brief		Récupère le source du pixel shader qui correspond aux indicateurs donnés.
-		 *\param[in]	flags	Les indicateurs de pipeline.
-		 */
-		C3D_API virtual ShaderPtr doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const = 0;
+		C3D_API virtual ShaderPtr doGetPbrPixelShaderSource( PipelineFlags const & flags )const = 0;
 
 	public:
 		struct VertexInputs

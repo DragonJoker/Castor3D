@@ -232,12 +232,12 @@ namespace castor3d::exporter
 						strReturn << doExportTexture( pathMtlFolder, cuT( "map_d" ), unit );
 					}
 
-					if ( config.specularMask[0] )
+					if ( config.metalnessMask[0] )
 					{
 						strReturn << doExportTexture( pathMtlFolder, cuT( "map_Ks" ), unit );
 					}
 
-					if ( config.glossinessMask[0] )
+					if ( config.roughnessMask[0] )
 					{
 						strReturn << doExportTexture( pathMtlFolder, cuT( "map_Ns" ), unit );
 					}

@@ -75,8 +75,7 @@ namespace castor3d
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
-		ShaderPtr doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const override;
-		ShaderPtr doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const override;
+		ShaderPtr doGetPbrPixelShaderSource( PipelineFlags const & flags )const override;
 		void doUpdatePipeline( RenderPipeline & pipeline )override;
 
 	private:

@@ -42,7 +42,9 @@ namespace castor3d
 		/**@{*/
 		castor::Point2ui colourMask{ 0u, 0u };
 		castor::Point2ui specularMask{ 0u, 0u };
+		castor::Point2ui metalnessMask{ 0u, 0u };
 		castor::Point2ui glossinessMask{ 0u, 0u };
+		castor::Point2ui roughnessMask{ 0u, 0u };
 		castor::Point2ui opacityMask{ 0u, 0u };
 		castor::Point2ui emissiveMask{ 0u, 0u };
 		castor::Point2ui normalMask{ 0u, 0u };

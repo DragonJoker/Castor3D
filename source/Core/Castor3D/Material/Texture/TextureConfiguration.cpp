@@ -40,7 +40,7 @@ namespace castor3d
 	TextureConfiguration const TextureConfiguration::MetalnessTexture = []()
 	{
 		TextureConfiguration result;
-		result.specularMask[0] = 0x00FF0000;
+		result.metalnessMask[0] = 0x00FF0000;
 		return result;
 	}();
 
@@ -61,7 +61,7 @@ namespace castor3d
 	TextureConfiguration const TextureConfiguration::RoughnessTexture = []()
 	{
 		TextureConfiguration result;
-		result.glossinessMask[0] = 0x00FF0000;
+		result.roughnessMask[0] = 0x00FF0000;
 		return result;
 	}();
 
@@ -111,7 +111,9 @@ namespace castor3d
 	{
 		return lhs.colourMask == rhs.colourMask
 			&& lhs.specularMask == rhs.specularMask
+			&& lhs.metalnessMask == rhs.metalnessMask
 			&& lhs.glossinessMask == rhs.glossinessMask
+			&& lhs.roughnessMask == rhs.roughnessMask
 			&& lhs.opacityMask == rhs.opacityMask
 			&& lhs.emissiveMask == rhs.emissiveMask
 			&& lhs.normalMask == rhs.normalMask
@@ -138,7 +140,9 @@ namespace castor3d
 		TextureFlags result = TextureFlag::eNone;
 		mergeMasks( config.colourMask[0], TextureFlag::eDiffuse, result );
 		mergeMasks( config.specularMask[0], TextureFlag::eSpecular, result );
+		mergeMasks( config.metalnessMask[0], TextureFlag::eMetalness, result );
 		mergeMasks( config.glossinessMask[0], TextureFlag::eGlossiness, result );
+		mergeMasks( config.roughnessMask[0], TextureFlag::eRoughness, result );
 		mergeMasks( config.opacityMask[0], TextureFlag::eOpacity, result );
 		mergeMasks( config.emissiveMask[0], TextureFlag::eEmissive, result );
 		mergeMasks( config.normalMask[0], TextureFlag::eNormal, result );

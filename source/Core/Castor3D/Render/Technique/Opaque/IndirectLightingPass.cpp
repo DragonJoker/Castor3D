@@ -157,7 +157,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 	
-		ShaderPtr getPbrMRPixelShaderSource( RenderSystem const & renderSystem
+		ShaderPtr getPbrPixelShaderSource( RenderSystem const & renderSystem
 			, IndirectLightingPass::Config const & config )
 		{
 			using namespace sdw;
@@ -217,123 +217,10 @@ namespace castor3d
 							, c3d_mapData2.lod( texCoord, 0.0_f ) );
 						auto data3 = writer.declLocale( "data3"
 							, c3d_mapData3.lod( texCoord, 0.0_f ) );
-						auto albedo = writer.declLocale( "albedo"
-							, data2.rgb() );
 						auto roughness = writer.declLocale( "roughness"
-							, data2.w() );
-						auto metalness = writer.declLocale( "metalness"
-							, data3.r() );
-						auto eye = writer.declLocale( "eye"
-							, c3d_sceneData.getCameraPosition() );
-						auto depth = writer.declLocale( "depth"
-							, c3d_mapDepth.lod( texCoord, 0.0_f ).x() );
-						auto vsPosition = writer.declLocale( "vsPosition"
-							, c3d_gpInfoData.projToView( utils, texCoord, depth ) );
-						auto wsPosition = writer.declLocale( "wsPosition"
-							, c3d_gpInfoData.projToWorld( utils, texCoord, depth ) );
-						auto wsNormal = writer.declLocale( "wsNormal"
-							, data1.xyz() );
-
-						auto surface = writer.declLocale< shader::Surface >( "surface" );
-						surface.create( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal );
-						auto specular = writer.declLocale( "specular"
-							, indirect.computeF0( albedo, metalness ) );
-
-						//auto occlusion = indirect.computeOcclusion( sceneFlags
-						//	, lightType
-						//	, surface );
-						auto occlusion = writer.declLocale( "occlusion"
-							, 1.0_f );
-						auto indirectDiffuse = indirect.computeDiffuse( config.sceneFlags
-							, surface
-							, occlusion );
-						auto indirectSpecular = indirect.computeSpecular( config.sceneFlags
-							, eye
-							, c3d_sceneData.getPosToCamera( surface.worldPosition )
-							, surface
-							, specular
-							, roughness
-							, occlusion
-							, indirectDiffuse.w() );
-						pxl_indirectDiffuse = indirectDiffuse.xyz();
-						pxl_indirectSpecular = indirectSpecular;
-					}
-					ELSE
-					{
-						pxl_indirectDiffuse = vec3( 0.0_f, 0.0_f, 0.0_f );
-						pxl_indirectSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
-					}
-					FI;
-				} );
-
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-	
-		ShaderPtr getPbrSGPixelShaderSource( RenderSystem const & renderSystem
-			, IndirectLightingPass::Config const & config )
-		{
-			using namespace sdw;
-			FragmentWriter writer;
-
-			shader::Utils utils{ writer };
-			utils.declareCalcTexCoord();
-			utils.declareCalcVSPosition();
-			utils.declareCalcWSPosition();
-			utils.declareDecodeReceiver();
-			utils.declareInvertVec2Y();
-
-			// Shader inputs
-			UBO_GPINFO( writer, uint32_t( IndirectLightingPass::eGpInfo ), 0u );
-			UBO_SCENE( writer, uint32_t( IndirectLightingPass::eScene ), 0u );
-			shader::GlobalIllumination indirect{ writer, utils, true };
-			uint32_t vctIndex = uint32_t( IndirectLightingPass::eVctStart );
-			uint32_t lpvIndex = uint32_t( IndirectLightingPass::eLpvStart );
-			uint32_t llpvIndex = uint32_t( IndirectLightingPass::eLayeredLpvStart );
-			indirect.declare( uint32_t( IndirectLightingPass::eVoxelData )
-				, uint32_t( IndirectLightingPass::eLpvGridConfig )
-				, uint32_t( IndirectLightingPass::eLayeredLpvGridConfig )
-				, vctIndex
-				, lpvIndex
-				, llpvIndex
-				, 0u
-				, config.sceneFlags );
-
-			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), uint32_t( IndirectLightingPass::eDepth ), 0u );
-			auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), uint32_t( IndirectLightingPass::eData1 ), 0u );
-			auto c3d_mapData2 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), uint32_t( IndirectLightingPass::eData2 ), 0u );
-			auto c3d_mapData3 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), uint32_t( IndirectLightingPass::eData3 ), 0u );
-			auto in = writer.getIn();
-
-			// Shader outputs
-			auto pxl_indirectDiffuse = writer.declOutput< Vec3 >( "pxl_indirectDiffuse", 0 );
-			auto pxl_indirectSpecular = writer.declOutput< Vec3 >( "pxl_indirectSpecular", 1 );
-
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
-				{
-					auto texCoord = writer.declLocale( "texCoord"
-						, c3d_gpInfoData.calcTexCoord( utils
-							, in.fragCoord.xy() ) );
-					auto data1 = writer.declLocale( "data1"
-						, c3d_mapData1.lod( texCoord, 0.0_f ) );
-					auto flags = writer.declLocale( "flags"
-						, writer.cast< Int >( data1.w() ) );
-					auto shadowReceiver = writer.declLocale( "shadowReceiver"
-						, 0_i );
-					auto lightingReceiver = writer.declLocale( "lightingReceiver"
-						, 0_i );
-					utils.decodeReceiver( flags, shadowReceiver, lightingReceiver );
-
-					IF( writer, lightingReceiver )
-					{
-						auto data2 = writer.declLocale( "data2"
-							, c3d_mapData2.lod( texCoord, 0.0_f ) );
-						auto data3 = writer.declLocale( "data3"
-							, c3d_mapData3.lod( texCoord, 0.0_f ) );
-						auto glossiness = writer.declLocale( "glossiness"
 							, data2.a() );
 						auto specular = writer.declLocale( "specular"
-							, data3.xyz() );
+							, data3.rgb() );
 						auto eye = writer.declLocale( "eye"
 							, c3d_sceneData.getCameraPosition() );
 						auto depth = writer.declLocale( "depth"
@@ -353,8 +240,6 @@ namespace castor3d
 						//	, surface );
 						auto occlusion = writer.declLocale( "occlusion"
 							, 1.0_f );
-						auto roughness = writer.declLocale( "roughness"
-							, 1.0_f - glossiness );
 						auto indirectDiffuse = indirect.computeDiffuse( config.sceneFlags
 							, surface
 							, occlusion );
@@ -389,9 +274,8 @@ namespace castor3d
 			case castor3d::MaterialType::ePhong:
 				return getPhongPixelShaderSource( renderSystem, config );
 			case castor3d::MaterialType::eMetallicRoughness:
-				return getPbrMRPixelShaderSource( renderSystem, config );
 			case castor3d::MaterialType::eSpecularGlossiness:
-				return getPbrSGPixelShaderSource( renderSystem, config );
+				return getPbrPixelShaderSource( renderSystem, config );
 			default:
 				CU_Failure( "IndirectLightingPass: Unsupported MaterialType" );
 				return nullptr;
