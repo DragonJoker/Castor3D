@@ -17,17 +17,6 @@ namespace castor3d::shader
 			, PassFlags const & passFlags );
 		C3D_API ReflectionModel( sdw::ShaderWriter & writer
 			, Utils & utils );
-		C3D_API static std::unique_ptr< ReflectionModel > create( sdw::ShaderWriter & writer
-			, Utils & utils
-			, MaterialType materialType
-			, PassFlags const & passFlags
-			, uint32_t & envMapBinding
-			, uint32_t envMapSet );
-		C3D_API static std::unique_ptr< ReflectionModel > create( sdw::ShaderWriter & writer
-			, Utils & utils
-			, MaterialType materialType
-			, uint32_t envMapBinding
-			, uint32_t envMapSet );
 		C3D_API virtual void computeDeferred( LightMaterial & material
 			, Surface const & surface
 			, SceneData const & sceneData
