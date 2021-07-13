@@ -122,7 +122,8 @@ namespace castor3d
 					, layout ) );
 		}
 
-		ShaderPtr createShader( uint32_t voxelGridSize )
+		ShaderPtr createShader( uint32_t voxelGridSize
+			, RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
 			ComputeWriter writer;
@@ -144,7 +145,7 @@ namespace castor3d
 				, eResult
 				, 0u ) );
 
-			shader::Utils utils{ writer };
+			shader::Utils utils{ writer, *renderSystem.getEngine() };
 			utils.declareDecodeNormal();
 			utils.declareUnflatten();
 
@@ -204,7 +205,7 @@ namespace castor3d
 		, VoxelSceneData const & vctConfig )
 		: crg::RunnablePass{ pass, context, graph, 2u }
 		, m_vctConfig{ vctConfig }
-		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, "VoxelSecondaryBounce", createShader( m_vctConfig.gridSize.value() ) }
+	, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, "VoxelSecondaryBounce", createShader( m_vctConfig.gridSize.value(), device.renderSystem ) }
 		, m_descriptorSetLayout{ createDescriptorLayout( device, m_vctConfig.gridSize.value() ) }
 		, m_pipelineLayout{ createPipelineLayout( device, *m_descriptorSetLayout ) }
 		, m_pipeline{ createPipeline( device, *m_pipelineLayout, m_shader ) }

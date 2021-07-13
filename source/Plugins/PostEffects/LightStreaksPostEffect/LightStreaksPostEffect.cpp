@@ -42,9 +42,6 @@ namespace light_streaks
 			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
 			auto out = writer.getOut();
 
-			castor3d::shader::Utils utils{ writer };
-			utils.declareNegateVec2Y();
-
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{

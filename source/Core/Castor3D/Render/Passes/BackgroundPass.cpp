@@ -1,6 +1,8 @@
 #include "Castor3D/Render/Passes/BackgroundPass.hpp"
 
 #include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Render/RenderDevice.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -188,7 +190,7 @@ namespace castor3d
 			UBO_HDR_CONFIG( writer, SceneBackground::HdrCfgUboIdx, 0u );
 			auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture", 0u );
 			auto c3d_mapSkybox = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapSkybox", SceneBackground::SkyBoxImgIdx, 0u );
-			shader::Utils utils{ writer };
+			shader::Utils utils{ writer, *m_device.renderSystem.getEngine() };
 			utils.declareRemoveGamma();
 
 			if ( !m_background.isHdr() )

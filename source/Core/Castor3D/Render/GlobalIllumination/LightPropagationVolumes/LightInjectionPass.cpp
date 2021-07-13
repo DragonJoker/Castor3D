@@ -45,7 +45,8 @@ namespace castor3d
 {
 	namespace
 	{
-		std::unique_ptr< ast::Shader > getDirectionalVertexProgram( uint32_t rsmTexSize )
+		std::unique_ptr< ast::Shader > getDirectionalVertexProgram( uint32_t rsmTexSize
+			, RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -86,11 +87,10 @@ namespace castor3d
 				auto out = writer.getOut();
 
 				// Utility functions
-				shader::Utils utils{ writer };
+				shader::Utils utils{ writer, *renderSystem.getEngine() };
 				index = 0;
-				auto lightingModel = shader::LightingModel::createModel( writer
-					, utils
-					, MaterialType::ePhong
+				auto lightingModel = shader::LightingModel::createModel( utils
+					, "phong"
 					, LightType::eDirectional
 					, uint32_t( LightInjectionPass::LightsIdx )
 					, 0u
@@ -154,11 +154,10 @@ namespace castor3d
 				auto out = writer.getOut();
 
 				// Utility functions
-				shader::Utils utils{ writer };
+				shader::Utils utils{ writer, *renderSystem.getEngine() };
 				index = 0;
-				auto lightingModel = shader::LightingModel::createModel( writer
-					, utils
-					, MaterialType::ePhong
+				auto lightingModel = shader::LightingModel::createModel( utils
+					, "phong"
 					, LightType::eDirectional
 					, uint32_t( LightInjectionPass::LightsIdx )
 					, 0u
@@ -193,7 +192,8 @@ namespace castor3d
 		}
 
 		std::unique_ptr< ast::Shader > getPointVertexProgram( CubeMapFace face
-			, uint32_t rsmTexSize )
+			, uint32_t rsmTexSize
+			, RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -220,11 +220,10 @@ namespace castor3d
 			auto out = writer.getOut();
 
 			// Utility functions
-			shader::Utils utils{ writer };
+			shader::Utils utils{ writer, *renderSystem.getEngine() };
 			index = 0;
-			auto lightingModel = shader::LightingModel::createModel( writer
-				, utils
-				, MaterialType::ePhong
+			auto lightingModel = shader::LightingModel::createModel( utils
+				, "phong"
 				, LightType::ePoint
 				, uint32_t( LightInjectionPass::LightsIdx )
 				, 0u
@@ -256,7 +255,8 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< ast::Shader > getSpotVertexProgram( uint32_t rsmTexSize )
+		std::unique_ptr< ast::Shader > getSpotVertexProgram( uint32_t rsmTexSize
+			, RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -283,11 +283,10 @@ namespace castor3d
 			auto out = writer.getOut();
 
 			// Utility functions
-			shader::Utils utils{ writer };
+			shader::Utils utils{ writer, *renderSystem.getEngine() };
 			index = 0;
-			auto lightingModel = shader::LightingModel::createModel( writer
-				, utils
-				, MaterialType::ePhong
+			auto lightingModel = shader::LightingModel::createModel( utils
+				, "phong"
 				, LightType::eSpot
 				, uint32_t( LightInjectionPass::LightsIdx )
 				, 0u
@@ -320,14 +319,15 @@ namespace castor3d
 		}
 
 		ShaderPtr getVertexProgram( LightType lightType
-			, uint32_t rsmTexSize )
+			, uint32_t rsmTexSize
+			, RenderSystem const & renderSystem )
 		{
 			switch ( lightType )
 			{
 			case castor3d::LightType::eDirectional:
-				return getDirectionalVertexProgram( rsmTexSize );
+				return getDirectionalVertexProgram( rsmTexSize, renderSystem );
 			case castor3d::LightType::eSpot:
-				return getSpotVertexProgram( rsmTexSize );
+				return getSpotVertexProgram( rsmTexSize, renderSystem );
 			default:
 				CU_Failure( "Unsupported light type" );
 				return nullptr;
@@ -599,7 +599,7 @@ namespace castor3d
 		, m_device{ device }
 		, m_rsmSize{ rsmSize }
 		, m_vertexBuffer{ createVertexBuffer( getName(), m_device, m_rsmSize ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram( lightType, m_rsmSize ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram( lightType, m_rsmSize, device.renderSystem ) }
 		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), getGeometryProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram() }
 		, m_stages{ makeShaderState( device, m_vertexShader )
@@ -629,7 +629,7 @@ namespace castor3d
 		, m_device{ device }
 		, m_rsmSize{ rsmSize }
 		, m_vertexBuffer{ createVertexBuffer( getName(), m_device, m_rsmSize ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getPointVertexProgram( face, m_rsmSize ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getPointVertexProgram( face, m_rsmSize, device.renderSystem ) }
 		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), getGeometryProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram() }
 		, m_stages{ makeShaderState( device, m_vertexShader )

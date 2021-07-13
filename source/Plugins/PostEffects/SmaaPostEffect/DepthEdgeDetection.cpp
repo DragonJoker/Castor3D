@@ -33,7 +33,8 @@ namespace smaa
 			DepthTexIdx,
 		};
 
-		std::unique_ptr< ast::Shader > doGetEdgeDetectionFP( castor::Size const & size
+		std::unique_ptr< ast::Shader > doGetEdgeDetectionFP( castor3d::Engine const & engine
+			, castor::Size const & size
 			, SmaaConfig const & config )
 		{
 			auto renderTargetMetrics = Point4f{ 1.0f / size.getWidth()
@@ -52,7 +53,7 @@ namespace smaa
 			auto c3d_rtMetrics = writer.declConstant( constants::RenderTargetMetrics
 				, vec4( Float( renderTargetMetrics[0] ), renderTargetMetrics[1], renderTargetMetrics[2], renderTargetMetrics[3] ) );
 
-			castor3d::shader::Utils utils{ writer };
+			castor3d::shader::Utils utils{ writer, engine };
 			utils.declareInvertVec2Y();
 
 			// Shader inputs
@@ -135,7 +136,7 @@ namespace smaa
 			, renderTarget
 			, device
 			, config
-			, doGetEdgeDetectionFP( renderTarget.getSize(), config ) }
+			, doGetEdgeDetectionFP( *renderTarget.getEngine(), renderTarget.getSize(), config ) }
 		, m_depthView{ renderTarget.getGraph().createView( doCreateDepthView( depthView ) ) }
 		, m_sourceView{ depthView }
 	{
