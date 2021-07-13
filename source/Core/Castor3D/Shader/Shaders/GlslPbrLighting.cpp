@@ -34,6 +34,17 @@ namespace castor3d
 		{
 		}
 
+		LightingModelPtr PbrLightingModel::create( sdw::ShaderWriter & writer
+			, Utils & utils
+			, ShadowOptions shadowOptions
+			, bool isOpaqueProgram )
+		{
+			return std::make_unique< PbrLightingModel >( writer
+				, utils
+				, std::move( shadowOptions )
+				, isOpaqueProgram );
+		}
+
 		sdw::Vec3 PbrLightingModel::combine( sdw::Vec3 const & directDiffuse
 			, sdw::Vec3 const & indirectDiffuse
 			, sdw::Vec3 const & directSpecular

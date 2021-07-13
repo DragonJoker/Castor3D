@@ -30,9 +30,6 @@ namespace Reinhard
 		// Shader outputs
 		auto pxl_rgb = writer.declOutput< Vec4 >( "pxl_rgb", 0 );
 
-		shader::Utils utils{ writer };
-		utils.declareApplyGamma();
-
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
 			{

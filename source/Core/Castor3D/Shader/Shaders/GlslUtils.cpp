@@ -1,5 +1,7 @@
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
@@ -15,9 +17,22 @@ namespace castor3d::shader
 	uint32_t constexpr LightingOffset = 3u;
 	uint32_t constexpr EnvMapIndexOffset = 4u;
 
-	Utils::Utils( sdw::ShaderWriter & writer )
+	Utils::Utils( sdw::ShaderWriter & writer
+		, Engine const & engine )
 		: m_writer{ writer }
+		, m_engine{ engine }
 	{
+	}
+
+	LightingModelPtr Utils::createLightingModel( castor::String const & name
+		, ShadowOptions shadowsOptions
+		, bool isOpaqueProgram )
+	{
+		return m_engine.getLightingModelFactory().create( name
+			, m_writer
+			, *this
+			, std::move( shadowsOptions )
+			, isOpaqueProgram );
 	}
 
 	void Utils::declareCalcTexCoord()

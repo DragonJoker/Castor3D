@@ -14,7 +14,13 @@ namespace castor3d::shader
 	class Utils
 	{
 	public:
-		C3D_API explicit Utils( sdw::ShaderWriter & writer );
+		C3D_API explicit Utils( sdw::ShaderWriter & writer
+			, Engine const & engine );
+
+		C3D_API LightingModelPtr createLightingModel( castor::String const & name
+			, ShadowOptions shadowsOptions
+			, bool isOpaqueProgram );
+
 		C3D_API void declareCalcTexCoord();
 		C3D_API void declareCalcVSPosition();
 		C3D_API void declareCalcWSPosition();
@@ -258,6 +264,7 @@ namespace castor3d::shader
 
 	private:
 		sdw::ShaderWriter & m_writer;
+		Engine const & m_engine;
 		sdw::Function< sdw::Vec2
 			, sdw::InVec2
 			, sdw::InVec2 > m_calcTexCoord;

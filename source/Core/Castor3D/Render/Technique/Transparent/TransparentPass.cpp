@@ -63,7 +63,7 @@ namespace castor3d
 				|| checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
 				|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI );
 
-			shader::Utils utils{ writer };
+			shader::Utils utils{ writer, *renderSystem.getEngine() };
 			utils.declareApplyGamma();
 			utils.declareRemoveGamma();
 			utils.declareLineariseDepth();
@@ -120,9 +120,8 @@ namespace castor3d
 				, flags.passFlags
 				, index
 				, uint32_t( RenderPipeline::eAdditional ) );
-			auto lighting = shader::LightingModel::createModel( writer
-				, utils
-				, MaterialT
+			auto lightingModel = shader::LightingModel::createModel( utils
+				, shader::getLightingModelName( MaterialT )
 				, lightsIndex
 				, RenderPipeline::eAdditional
 				, shader::ShadowOptions{ flags.sceneFlags, false }
@@ -156,7 +155,7 @@ namespace castor3d
 						, material.gamma );
 					auto opacity = writer.declLocale( "opacity"
 						, material.opacity );
-					auto lightMat = lighting->declMaterial( "lightMat" );
+					auto lightMat = lightingModel->declMaterial( "lightMat" );
 					lightMat->create( material );
 					auto emissive = writer.declLocale( "emissive"
 						, lightMat->albedo * material.emissive );
@@ -174,7 +173,7 @@ namespace castor3d
 						occlusion *= c3d_mapOcclusion.fetch( ivec2( in.fragCoord.xy() ), 0_i );
 					}
 
-					lighting->computeMapContributions( flags.passFlags
+					lightingModel->computeMapContributions( flags.passFlags
 						, textures
 						, gamma
 						, textureConfigs
@@ -204,7 +203,7 @@ namespace castor3d
 						shader::OutputComponents output{ lightDiffuse, lightSpecular };
 						auto surface = writer.declLocale< shader::Surface >( "surface" );
 						surface.create( in.fragCoord.xy(), inSurface.viewPosition, inSurface.worldPosition, normal );
-						lighting->computeCombined( *lightMat
+						lightingModel->computeCombined( *lightMat
 							, c3d_sceneData
 							, surface
 							, worldEye
@@ -253,7 +252,7 @@ namespace castor3d
 								: vec3( 0.0_f ) ) );
 
 						auto colour = writer.declLocale( "colour"
-							, lighting->combine( lightDiffuse
+							, lightingModel->combine( lightDiffuse
 								, indirectDiffuse
 								, lightSpecular
 								, lightIndirectSpecular

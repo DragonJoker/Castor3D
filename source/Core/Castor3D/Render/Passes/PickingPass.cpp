@@ -440,7 +440,7 @@ namespace castor3d
 
 		// Fragment Outputs
 		auto pxl_fragColor( writer.declOutput< Vec4 >( "pxl_fragColor", 0 ) );
-		shader::Utils utils{ writer };
+		shader::Utils utils{ writer, *renderSystem.getEngine() };
 
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()

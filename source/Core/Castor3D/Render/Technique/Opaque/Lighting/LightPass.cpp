@@ -45,7 +45,7 @@ namespace castor3d
 			using namespace sdw;
 			FragmentWriter writer;
 
-			shader::Utils utils{ writer };
+			shader::Utils utils{ writer, *renderSystem.getEngine() };
 			utils.declareCalcTexCoord();
 			utils.declareCalcVSPosition();
 			utils.declareCalcWSPosition();
@@ -79,9 +79,8 @@ namespace castor3d
 
 			// Utility functions
 			index = uint32_t( LightPassLgtIdx::eSmNormalLinear );
-			auto lighting = shader::LightingModel::createModel( writer
-				, utils
-				, MaterialT
+			auto lightingModel = shader::LightingModel::createModel( utils
+				, shader::getLightingModelName( MaterialT )
 				, lightType
 				, uint32_t( LightPassLgtIdx::eLight )
 				, 1u
@@ -90,7 +89,7 @@ namespace castor3d
 				, index
 				, 1u );
 			shader::SssTransmittance sss{ writer
-				, lighting->getShadowModel()
+				, lightingModel->getShadowModel()
 				, utils
 				, shadows && shadowType != ShadowType::eNone };
 			sss.declare( lightType );
@@ -130,7 +129,7 @@ namespace castor3d
 							, materials.getMaterial( materialId ) );
 						auto translucency = writer.declLocale( "translucency"
 							, data4.w() );
-						auto lightMat = lighting->declMaterial( "lightMat" );
+						auto lightMat = lightingModel->declMaterial( "lightMat" );
 						lightMat->create( albedo
 							, data3
 							, data2 );
@@ -167,7 +166,7 @@ namespace castor3d
 #if !C3D_DisableSSSTransmittance
 							IF( writer, !c3d_debugDeferredSSSTransmittance )
 							{
-								lighting->compute( light
+								lightingModel->compute( light
 									, eye
 									, *lightMat
 									, shadowReceiver
@@ -193,7 +192,7 @@ namespace castor3d
 							}
 							FI;
 #else
-							lighting->compute( light
+							lightingModel->compute( light
 								, *lightMat
 								, surface
 								, eye
@@ -210,7 +209,7 @@ namespace castor3d
 #if !C3D_DisableSSSTransmittance
 							IF( writer, !c3d_debugDeferredSSSTransmittance )
 							{
-								lighting->compute( light
+								lightingModel->compute( light
 									, eye
 									, *lightMat
 									, shadowReceiver
@@ -236,7 +235,7 @@ namespace castor3d
 							}
 							FI;
 #else
-							lighting->compute( light
+							lightingModel->compute( light
 								, *lightMat
 								, surface
 								, eye
@@ -253,7 +252,7 @@ namespace castor3d
 #if !C3D_DisableSSSTransmittance
 							IF( writer, !c3d_debugDeferredSSSTransmittance )
 							{
-								lighting->compute( light
+								lightingModel->compute( light
 									, eye
 									, *lightMat
 									, shadowReceiver
@@ -279,7 +278,7 @@ namespace castor3d
 							}
 							FI;
 #else
-							lighting->compute( light
+							lightingModel->compute( light
 								, *lightMat
 								, surface
 								, eye

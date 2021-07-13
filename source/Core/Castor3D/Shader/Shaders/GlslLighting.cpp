@@ -5,8 +5,6 @@
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
-#include "Castor3D/Shader/Shaders/GlslPbrLighting.hpp"
-#include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -19,6 +17,30 @@
 
 namespace castor3d::shader
 {
+	//*********************************************************************************************
+
+	castor::String getLightingModelName( PassFlags const & flags )
+	{
+		return ( checkFlag( flags, PassFlag::eMetallicRoughness ) || checkFlag( flags, PassFlag::eSpecularGlossiness ) )
+			? castor::String{ "pbr" }
+			: castor::String{ "phong" };
+	}
+
+	castor::String getLightingModelName( MaterialType materialType )
+	{
+		switch ( materialType )
+		{
+		case castor3d::MaterialType::ePhong:
+			return "phong";
+		case castor3d::MaterialType::eMetallicRoughness:
+		case castor3d::MaterialType::eSpecularGlossiness:
+			return "pbr";
+		default:
+			CU_Failure( "getLightingModelName: Unsupported MaterialType." );
+			return "unknown";
+		}
+	}
+
 	//*********************************************************************************************
 
 	LightMaterial::LightMaterial( sdw::ShaderWriter & writer
@@ -94,32 +116,6 @@ namespace castor3d::shader
 		, m_isOpaqueProgram{ isOpaqueProgram }
 		, m_shadowModel{ std::make_shared< Shadow >( std::move( shadowOptions ), writer, utils ) }
 	{
-	}
-
-	std::shared_ptr< LightingModel > LightingModel::create( sdw::ShaderWriter & writer
-		, Utils & utils
-		, MaterialType materialType
-		, ShadowOptions const & shadowsOptions
-		, bool isOpaqueProgram )
-	{
-		std::shared_ptr< LightingModel > result;
-
-		if ( materialType == MaterialType::ePhong )
-		{
-			result = std::make_shared< PhongLightingModel >( writer
-				, utils
-				, shadowsOptions
-				, isOpaqueProgram );
-		}
-		else
-		{
-			result = std::make_shared< PbrLightingModel >( writer
-				, utils
-				, shadowsOptions
-				, isOpaqueProgram );
-		}
-
-		return result;
 	}
 
 	void LightingModel::declareModel( uint32_t lightsBufBinding
@@ -211,9 +207,8 @@ namespace castor3d::shader
 		ROF;
 	}
 
-	std::shared_ptr< LightingModel > LightingModel::createModel( sdw::ShaderWriter & writer
-		, Utils & utils
-		, MaterialType materialType
+	LightingModelPtr LightingModel::createModel( Utils & utils
+		, castor::String const & name
 		, uint32_t lightsBufBinding
 		, uint32_t lightsBufSet
 		, ShadowOptions const & shadows
@@ -221,11 +216,9 @@ namespace castor3d::shader
 		, uint32_t shadowMapSet
 		, bool isOpaqueProgram )
 	{
-		auto result = create( writer
-			, utils
-			, materialType
+		auto result = utils.createLightingModel( name
 			, shadows
-			, isOpaqueProgram );
+			, true );
 		result->declareModel( lightsBufBinding
 			, lightsBufSet
 			, shadowMapBinding
@@ -233,9 +226,8 @@ namespace castor3d::shader
 		return result;
 	}
 
-	std::shared_ptr< LightingModel > LightingModel::createModel( sdw::ShaderWriter & writer
-		, Utils & utils
-		, MaterialType materialType
+	LightingModelPtr LightingModel::createModel( Utils & utils
+		, castor::String const & name
 		, LightType lightType
 		, bool lightUbo
 		, uint32_t lightBinding
@@ -244,9 +236,7 @@ namespace castor3d::shader
 		, uint32_t & shadowMapBinding
 		, uint32_t shadowMapSet )
 	{
-		auto result = create( writer
-			, utils
-			, materialType
+		auto result = utils.createLightingModel( name
 			, shadows
 			, true );
 
@@ -372,9 +362,8 @@ namespace castor3d::shader
 		return result;
 	}
 
-	std::shared_ptr< LightingModel > LightingModel::createDiffuseModel( sdw::ShaderWriter & writer
-		, Utils & utils
-		, MaterialType materialType
+	LightingModelPtr LightingModel::createDiffuseModel( Utils & utils
+		, castor::String const & name
 		, uint32_t lightsBufBinding
 		, uint32_t lightsBufSet
 		, ShadowOptions const & shadows
@@ -382,9 +371,7 @@ namespace castor3d::shader
 		, uint32_t shadowMapSet
 		, bool isOpaqueProgram )
 	{
-		auto result = create( writer
-			, utils
-			, materialType
+		auto result = utils.createLightingModel( name
 			, shadows
 			, isOpaqueProgram );
 		result->declareDiffuseModel( lightsBufBinding
