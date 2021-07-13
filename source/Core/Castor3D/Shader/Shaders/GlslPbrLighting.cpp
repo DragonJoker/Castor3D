@@ -53,6 +53,11 @@ namespace castor3d
 				+ ( reflected * ambient * indirectAmbient * ambientOcclusion );
 		}
 
+		std::unique_ptr< LightMaterial > PbrLightingModel::declMaterial( std::string const & name )
+		{
+			return m_writer.declDerivedLocale< LightMaterial, PbrLightMaterial >( name );
+		}
+
 		void PbrLightingModel::compute( TiledDirectionalLight const & light
 			, LightMaterial const & material
 			, Surface const & surface

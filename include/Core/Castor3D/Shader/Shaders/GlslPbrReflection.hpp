@@ -94,9 +94,6 @@ namespace castor3d::shader
 		void doDeclareComputeRefrEnvMaps();
 		void doDeclareComputeRefrSkybox();
 
-	public:
-		C3D_API static uint32_t const MaxIblReflectionLod;
-
 	private:
 		sdw::Function< sdw::Vec3
 			, InSurface
