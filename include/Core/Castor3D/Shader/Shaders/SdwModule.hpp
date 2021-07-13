@@ -114,6 +114,7 @@ namespace castor3d::shader
 	class PbrReflectionModel;
 
 	using LightingModelPtr = std::unique_ptr< LightingModel >;
+	using ReflectionModelPtr = std::unique_ptr< ReflectionModel >;
 	using LightingModelCreator = std::function< LightingModelPtr( sdw::ShaderWriter & writer
 		, Utils & utils
 		, ShadowOptions shadowsOptions
