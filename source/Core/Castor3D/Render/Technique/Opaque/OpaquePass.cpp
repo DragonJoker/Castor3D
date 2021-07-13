@@ -43,121 +43,6 @@ namespace castor3d
 		static String const Output3 = "outData3";
 		static String const Output4 = "outData4";
 		static String const Output5 = "outData5";
-
-		ShaderPtr getPixelShaderSource( RenderSystem const & renderSystem
-			, PipelineFlags const & flags
-			, FilteredTextureFlags const & textures
-			, TextureFlags const & texturesMask
-			, ShaderFlags const & shaderFlags
-			, MaterialType materialType )
-		{
-			using namespace sdw;
-			FragmentWriter writer;
-
-			shader::Materials materials{ writer };
-			materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( NodeUboIdx::eMaterials )
-				, RenderPipeline::eBuffers );
-			shader::TextureConfigurations textureConfigs{ writer };
-			bool hasTextures = !flags.textures.empty();
-
-			if ( hasTextures )
-			{
-				textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-					, uint32_t( NodeUboIdx::eTextures )
-					, RenderPipeline::eBuffers );
-			}
-
-			// UBOs
-			UBO_MODEL( writer
-				, uint32_t( NodeUboIdx::eModel )
-				, RenderPipeline::eBuffers );
-
-			auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-				, 0u
-				, RenderPipeline::eTextures
-				, std::max( 1u, uint32_t( flags.textures.size() ) )
-				, hasTextures ) );
-
-			UBO_SCENE( writer
-				, uint32_t( PassUboIdx::eScene )
-				, RenderPipeline::eAdditional );
-
-			// Fragment Inputs
-			shader::InFragmentSurface inSurface{ writer
-				, shaderFlags
-				, hasTextures };
-
-			// Fragment Outputs
-			auto index = 0u;
-			auto outData2 = writer.declOutput< Vec4 >( Output2, index++ );
-			auto outData3 = writer.declOutput< Vec4 >( Output3, index++ );
-			auto outData4 = writer.declOutput< Vec4 >( Output4, index++ );
-			auto outData5 = writer.declOutput< Vec4 >( Output5, index++ );
-			auto out = writer.getOut();
-
-			shader::Utils utils{ writer, *renderSystem.getEngine() };
-			utils.declareRemoveGamma();
-			utils.declareEncodeMaterial();
-			utils.declareParallaxMappingFunc( flags.passFlags
-				, texturesMask );
-
-			auto lightingModel = utils.createLightingModel( shader::getLightingModelName( materialType )
-				, {}
-				, true );
-
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
-				{
-					auto material = writer.declLocale( "material"
-						, materials.getMaterial( inSurface.material ) );
-					auto texCoord = writer.declLocale( "texCoord"
-						, inSurface.texture );
-					auto alpha = writer.declLocale( "alpha"
-						, material.opacity );
-					auto gamma = writer.declLocale( "gamma"
-						, material.gamma );
-					auto emissive = writer.declLocale( "emissive"
-						, vec3( material.emissive ) );
-					auto lightMat = lightingModel->declMaterial( "lightMat" );
-					lightMat->create( material );
-					auto normal = writer.declLocale( "normal"
-						, normalize( inSurface.normal ) );
-					auto tangent = writer.declLocale( "tangent"
-						, normalize( inSurface.tangent ) );
-					auto bitangent = writer.declLocale( "bitangent"
-						, normalize( inSurface.bitangent ) );
-					auto occlusion = writer.declLocale( "occlusion"
-						, 1.0_f );
-					auto transmittance = writer.declLocale( "transmittance"
-						, 0.0_f );
-
-					lightingModel->computeMapContributions( flags.passFlags
-						, textures
-						, gamma
-						, textureConfigs
-						, c3d_maps
-						, texCoord
-						, normal
-						, tangent
-						, bitangent
-						, emissive
-						, alpha
-						, occlusion
-						, transmittance
-						, *lightMat
-						, inSurface.tangentSpaceViewPosition
-						, inSurface.tangentSpaceFragPosition );
-					utils.applyAlphaFunc( flags.alphaFunc
-						, alpha
-						, material.alphaRef );
-					lightMat->output( outData2, outData3 );
-					outData4 = vec4( emissive, transmittance );
-					outData5 = vec4( inSurface.getVelocity(), writer.cast< Float >( inSurface.material ), occlusion );
-				} );
-
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
 	}
 
 	OpaquePass::OpaquePass( crg::FramePass const & pass
@@ -237,23 +122,115 @@ namespace castor3d
 		return nullptr;
 	}
 
-	ShaderPtr OpaquePass::doGetPhongPixelShaderSource( PipelineFlags const & flags )const
+	ShaderPtr OpaquePass::doGetPixelShaderSource( PipelineFlags const & flags )const
 	{
-		return castor3d::getPixelShaderSource( *getEngine()->getRenderSystem()
-			, flags
-			, filterTexturesFlags( flags.textures )
-			, getTexturesMask()
-			, getShaderFlags()
-			, MaterialType::ePhong );
-	}
+		auto & renderSystem = *getEngine()->getRenderSystem();
 
-	ShaderPtr OpaquePass::doGetPbrPixelShaderSource( PipelineFlags const & flags )const
-	{
-		return castor3d::getPixelShaderSource( *getEngine()->getRenderSystem()
-			, flags
-			, filterTexturesFlags( flags.textures )
-			, getTexturesMask()
+		using namespace sdw;
+		FragmentWriter writer;
+
+		shader::Materials materials{ writer };
+		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+			, uint32_t( NodeUboIdx::eMaterials )
+			, RenderPipeline::eBuffers );
+		shader::TextureConfigurations textureConfigs{ writer };
+		bool hasTextures = !flags.textures.empty();
+
+		if ( hasTextures )
+		{
+			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+				, uint32_t( NodeUboIdx::eTextures )
+				, RenderPipeline::eBuffers );
+		}
+
+		// UBOs
+		UBO_MODEL( writer
+			, uint32_t( NodeUboIdx::eModel )
+			, RenderPipeline::eBuffers );
+
+		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
+			, 0u
+			, RenderPipeline::eTextures
+			, std::max( 1u, uint32_t( flags.textures.size() ) )
+			, hasTextures ) );
+
+		UBO_SCENE( writer
+			, uint32_t( PassUboIdx::eScene )
+			, RenderPipeline::eAdditional );
+
+		// Fragment Inputs
+		shader::InFragmentSurface inSurface{ writer
 			, getShaderFlags()
-			, MaterialType::eMetallicRoughness );
+			, hasTextures };
+
+		// Fragment Outputs
+		auto index = 0u;
+		auto outData2 = writer.declOutput< Vec4 >( Output2, index++ );
+		auto outData3 = writer.declOutput< Vec4 >( Output3, index++ );
+		auto outData4 = writer.declOutput< Vec4 >( Output4, index++ );
+		auto outData5 = writer.declOutput< Vec4 >( Output5, index++ );
+		auto out = writer.getOut();
+
+		shader::Utils utils{ writer, *renderSystem.getEngine() };
+		utils.declareRemoveGamma();
+		utils.declareEncodeMaterial();
+		utils.declareParallaxMappingFunc( flags.passFlags
+			, getTexturesMask() );
+
+		auto lightingModel = utils.createLightingModel( shader::getLightingModelName( flags.passFlags )
+			, {}
+			, true );
+
+		writer.implementFunction< sdw::Void >( "main"
+			, [&]()
+			{
+				auto material = writer.declLocale( "material"
+					, materials.getMaterial( inSurface.material ) );
+				auto texCoord = writer.declLocale( "texCoord"
+					, inSurface.texture );
+				auto alpha = writer.declLocale( "alpha"
+					, material.opacity );
+				auto gamma = writer.declLocale( "gamma"
+					, material.gamma );
+				auto emissive = writer.declLocale( "emissive"
+					, vec3( material.emissive ) );
+				auto lightMat = lightingModel->declMaterial( "lightMat" );
+				lightMat->create( material );
+				auto normal = writer.declLocale( "normal"
+					, normalize( inSurface.normal ) );
+				auto tangent = writer.declLocale( "tangent"
+					, normalize( inSurface.tangent ) );
+				auto bitangent = writer.declLocale( "bitangent"
+					, normalize( inSurface.bitangent ) );
+				auto occlusion = writer.declLocale( "occlusion"
+					, 1.0_f );
+				auto transmittance = writer.declLocale( "transmittance"
+					, 0.0_f );
+
+				lightingModel->computeMapContributions( flags.passFlags
+					, filterTexturesFlags( flags.textures )
+					, gamma
+					, textureConfigs
+					, c3d_maps
+					, texCoord
+					, normal
+					, tangent
+					, bitangent
+					, emissive
+					, alpha
+					, occlusion
+					, transmittance
+					, *lightMat
+					, inSurface.tangentSpaceViewPosition
+					, inSurface.tangentSpaceFragPosition );
+				utils.applyAlphaFunc( flags.alphaFunc
+					, alpha
+					, material.alphaRef );
+				lightMat->output( outData2, outData3 );
+				outData4 = vec4( emissive, transmittance );
+				outData5 = vec4( inSurface.getVelocity(), writer.cast< Float >( inSurface.material ), occlusion );
+			} );
+
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 }

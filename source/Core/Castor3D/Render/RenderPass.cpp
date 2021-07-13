@@ -210,19 +210,7 @@ namespace castor3d
 
 	ShaderPtr SceneRenderPass::getPixelShaderSource( PipelineFlags const & flags )const
 	{
-		ShaderPtr result;
-
-		if ( checkFlag( flags.passFlags, PassFlag::eMetallicRoughness )
-			|| checkFlag( flags.passFlags, PassFlag::eSpecularGlossiness ) )
-		{
-			result = doGetPbrPixelShaderSource( flags );
-		}
-		else
-		{
-			result = doGetPhongPixelShaderSource( flags );
-		}
-
-		return result;
+		return doGetPixelShaderSource( flags );
 	}
 
 	RenderPipeline * SceneRenderPass::prepareBackPipeline( Pass const & pass

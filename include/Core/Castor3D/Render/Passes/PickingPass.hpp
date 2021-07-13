@@ -108,9 +108,7 @@ namespace castor3d
 		void doUpdate( RenderQueueArray & queues )override;
 		virtual ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
-		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
-		ShaderPtr doGetPbrPixelShaderSource( PipelineFlags const & flags )const override;
-		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const;
+		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
 		void doUpdatePipeline( RenderPipeline & pipeline )override;
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
