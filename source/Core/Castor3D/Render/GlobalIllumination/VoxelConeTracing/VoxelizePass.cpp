@@ -107,7 +107,7 @@ namespace castor3d
 			auto output( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
 				, addIndex++
 				, RenderPipeline::eAdditional ) );
-			auto lightingModel = shader::LightingModel::createModel( utils
+			auto lightingModel = shader::LightingModel::createDiffuseModel( utils
 				, shader::getLightingModelName( MaterialT )
 				, lightsIndex
 				, RenderPipeline::eAdditional
