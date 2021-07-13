@@ -55,7 +55,7 @@ namespace castor3d
 			FragmentWriter writer;
 			bool hasTextures = !flags.textures.empty();
 
-			shader::Utils utils{ writer };
+			shader::Utils utils{ writer, *renderSystem.getEngine() };
 			utils.declareApplyGamma();
 			utils.declareRemoveGamma();
 			utils.declareIsSaturated();
@@ -107,9 +107,8 @@ namespace castor3d
 			auto output( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
 				, addIndex++
 				, RenderPipeline::eAdditional ) );
-			auto lighting = shader::LightingModel::createDiffuseModel( writer
-				, utils
-				, MaterialT
+			auto lightingModel = shader::LightingModel::createModel( utils
+				, shader::getLightingModelName( MaterialT )
 				, lightsIndex
 				, RenderPipeline::eAdditional
 				, shader::ShadowOptions{ flags.sceneFlags, false }
@@ -133,7 +132,7 @@ namespace castor3d
 							, material.gamma );
 						auto normal = writer.declLocale( "normal"
 							, normalize( inNormal ) );
-						auto lightMat = lighting->declMaterial( "lightMat" );
+						auto lightMat = lightingModel->declMaterial( "lightMat" );
 						lightMat->create( material );
 						auto emissive = writer.declLocale( "emissive"
 							, vec3( material.emissive ) );
@@ -146,7 +145,7 @@ namespace castor3d
 						{
 							auto texCoord = writer.declLocale( "texCoord"
 								, inTexture );
-							lighting->computeMapDiffuseContributions( flags.passFlags
+							lightingModel->computeMapDiffuseContributions( flags.passFlags
 								, textures
 								, gamma
 								, textureConfigs
@@ -165,7 +164,7 @@ namespace castor3d
 							auto surface = writer.declLocale< shader::Surface >( "surface" );
 							surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
 							auto color = writer.declLocale( "color"
-								, lighting->computeCombinedDiffuse( *lightMat
+								, lightingModel->computeCombinedDiffuse( *lightMat
 									, c3d_sceneData
 									, surface
 									, worldEye

@@ -20,6 +20,10 @@ namespace castor3d::shader
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, bool isOpaqueProgram );
+		C3D_API static LightingModelPtr create( sdw::ShaderWriter & writer
+			, Utils & utils
+			, ShadowOptions shadowOptions
+			, bool isOpaqueProgram );
 		C3D_API sdw::Vec3 combine( sdw::Vec3 const & directDiffuse
 			, sdw::Vec3 const & indirectDiffuse
 			, sdw::Vec3 const & directSpecular

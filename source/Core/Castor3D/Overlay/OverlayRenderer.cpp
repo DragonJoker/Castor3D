@@ -980,7 +980,7 @@ namespace castor3d
 				, std::max( 1u, texturesCount )
 				, hasTexture ) );
 
-			shader::Utils utils{ writer };
+			shader::Utils utils{ writer, *renderSystem.getEngine() };
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
