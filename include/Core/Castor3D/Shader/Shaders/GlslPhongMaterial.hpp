@@ -16,7 +16,6 @@ namespace castor3d::shader
 	struct ShaderMaterialTraitsT< MaterialType::ePhong >
 	{
 		using LightMaterial = PhongLightMaterial;
-		using ReflectionModel = PhongReflectionModel;
 	};
 
 	struct PhongLightMaterial

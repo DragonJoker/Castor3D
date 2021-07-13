@@ -5,11 +5,13 @@ See LICENSE file in root folder
 #define ___C3D_GlslPhongReflectionModel_H___
 
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslReflection.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 namespace castor3d::shader
 {
 	class PhongReflectionModel
+		: public ReflectionModel
 	{
 	public:
 		C3D_API PhongReflectionModel( sdw::ShaderWriter & writer
@@ -21,25 +23,25 @@ namespace castor3d::shader
 			, Utils & utils
 			, uint32_t envMapBinding
 			, uint32_t envMapSet );
-		C3D_API void computeDeferred( sdw::Int envMapIndex
+		C3D_API void computeDeferred( LightMaterial & material
+			, Surface const & surface
+			, SceneData const & sceneData
+			, sdw::Int envMapIndex
 			, sdw::Int const & reflection
 			, sdw::Int const & refraction
 			, sdw::Float const & refractionRatio
-			, PhongLightMaterial & material
 			, sdw::Vec3 const & transmission
-			, Surface const & surface
-			, SceneData const & sceneData
 			, sdw::Vec3 & ambient
 			, sdw::Vec3 & reflected
-			, sdw::Vec3 & refracted )const;
-		C3D_API void computeForward( sdw::Float const & refractionRatio
-			, PhongLightMaterial & material
-			, sdw::Vec3 const & transmission
+			, sdw::Vec3 & refracted )const override;
+		C3D_API void computeForward( LightMaterial & material
 			, Surface const & surface
 			, SceneData const & sceneData
+			, sdw::Float const & refractionRatio
+			, sdw::Vec3 const & transmission
 			, sdw::Vec3 & ambient
 			, sdw::Vec3 & reflected
-			, sdw::Vec3 & refracted )const;
+			, sdw::Vec3 & refracted )const override;
 
 	private:
 		sdw::Vec3 computeIncident( sdw::Vec3 const & wsPosition
@@ -95,9 +97,6 @@ namespace castor3d::shader
 		void doDeclareComputeReflRefrs();
 
 	private:
-		sdw::ShaderWriter & m_writer;
-		Utils & m_utils;
-		PassFlags m_passFlags;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3

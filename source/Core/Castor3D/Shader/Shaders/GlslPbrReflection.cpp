@@ -22,9 +22,7 @@ namespace castor3d::shader
 		, PassFlags const & passFlags
 		, uint32_t & envMapBinding
 		, uint32_t envMapSet )
-		: m_writer{ writer }
-		, m_utils{ utils }
-		, m_passFlags{ passFlags }
+		: ReflectionModel{ writer, utils, passFlags }
 	{
 		auto brdfIndex = envMapBinding + 1u;
 		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
@@ -53,8 +51,7 @@ namespace castor3d::shader
 		, Utils & utils
 		, uint32_t envMapBinding
 		, uint32_t envMapSet )
-		: m_writer{ writer }
-		, m_utils{ utils }
+		: ReflectionModel{ writer, utils }
 	{
 		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 		m_writer.inlineComment( "// REFLECTIONS" );
@@ -72,18 +69,19 @@ namespace castor3d::shader
 		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 	}
 
-	void PbrReflectionModel::computeDeferred( sdw::Int envMapIndex
+	void PbrReflectionModel::computeDeferred( LightMaterial & material
+		, Surface const & surface
+		, SceneData const & sceneData
+		, sdw::Int envMapIndex
 		, sdw::Int const & reflection
 		, sdw::Int const & refraction
 		, sdw::Float const & refractionRatio
-		, PbrLightMaterial const & material
 		, sdw::Vec3 const & transmission
-		, Surface const & surface
-		, SceneData const & sceneData
-		, sdw::Vec3 const & ambient
+		, sdw::Vec3 & ambient
 		, sdw::Vec3 & reflected
 		, sdw::Vec3 & refracted )const
 	{
+		auto & pbrMaterial = static_cast< PbrLightMaterial const & >( material );
 		auto brdf = m_writer.getVariable< sdw::SampledImage2DRgba32 >( "c3d_mapBrdf" );
 		auto irradiance = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapIrradiance" );
 		auto prefiltered = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapPrefiltered" );
@@ -102,7 +100,7 @@ namespace castor3d::shader
 					, surface.worldNormal
 					, envMap
 					, envMapIndex
-					, material );
+					, pbrMaterial );
 
 				IF( m_writer, refraction != 0_i )
 				{
@@ -113,7 +111,7 @@ namespace castor3d::shader
 						, envMapIndex
 						, refractionRatio
 						, transmission
-						, material
+						, pbrMaterial
 						, reflected
 						, refracted );
 				}
@@ -125,7 +123,7 @@ namespace castor3d::shader
 						, prefiltered
 						, refractionRatio
 						, transmission
-						, material
+						, pbrMaterial
 						, reflected
 						, refracted );
 				}
@@ -135,7 +133,7 @@ namespace castor3d::shader
 			{
 				// Reflection from background skybox.
 				reflected = computeIBL( surface
-					, material
+					, pbrMaterial
 					, sceneData.getCameraPosition()
 					, irradiance
 					, prefiltered
@@ -150,7 +148,7 @@ namespace castor3d::shader
 						, envMapIndex
 						, refractionRatio
 						, transmission
-						, material
+						, pbrMaterial
 						, reflected
 						, refracted );
 				}
@@ -162,7 +160,7 @@ namespace castor3d::shader
 						, prefiltered
 						, refractionRatio
 						, transmission
-						, material
+						, pbrMaterial
 						, reflected
 						, refracted );
 				}
@@ -174,7 +172,7 @@ namespace castor3d::shader
 		{
 			// Reflection from background skybox.
 			reflected = computeIBL( surface
-				, material
+				, pbrMaterial
 				, sceneData.getCameraPosition()
 				, irradiance
 				, prefiltered
@@ -190,7 +188,7 @@ namespace castor3d::shader
 					, prefiltered
 					, refractionRatio
 					, transmission
-					, material
+					, pbrMaterial
 					, reflected
 					, refracted );
 			}
@@ -199,15 +197,16 @@ namespace castor3d::shader
 		FI;
 	}
 
-	void PbrReflectionModel::computeForward( sdw::Float const & refractionRatio
-		, PbrLightMaterial const & material
-		, sdw::Vec3 const & transmission
+	void PbrReflectionModel::computeForward( LightMaterial & material
 		, Surface const & surface
 		, SceneData const & sceneData
-		, sdw::Vec3 const & ambient
+		, sdw::Float const & refractionRatio
+		, sdw::Vec3 const & transmission
+		, sdw::Vec3 & ambient
 		, sdw::Vec3 & reflected
 		, sdw::Vec3 & refracted )const
 	{
+		auto & pbrMaterial = static_cast< PbrLightMaterial const & >( material );
 		auto brdf = m_writer.getVariable< sdw::SampledImage2DRgba32 >( "c3d_mapBrdf" );
 		auto irradiance = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapIrradiance" );
 		auto prefiltered = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapPrefiltered" );
@@ -225,7 +224,7 @@ namespace castor3d::shader
 				reflected = computeReflEnvMap( incident
 					, surface.worldNormal
 					, envMap
-					, material );
+					, pbrMaterial );
 
 				if ( checkFlag( m_passFlags, PassFlag::eRefraction ) )
 				{
@@ -235,7 +234,7 @@ namespace castor3d::shader
 						, envMap
 						, refractionRatio
 						, transmission
-						, material
+						, pbrMaterial
 						, reflected
 						, refracted );
 				}
@@ -249,7 +248,7 @@ namespace castor3d::shader
 							, prefiltered
 							, refractionRatio
 							, transmission
-							, material
+							, pbrMaterial
 							, reflected
 							, refracted );
 					}
@@ -260,7 +259,7 @@ namespace castor3d::shader
 			{
 				// Reflection from background skybox.
 				reflected = computeIBL( surface
-					, material
+					, pbrMaterial
 					, sceneData.getCameraPosition()
 					, irradiance
 					, prefiltered
@@ -274,7 +273,7 @@ namespace castor3d::shader
 						, envMap
 						, refractionRatio
 						, transmission
-						, material
+						, pbrMaterial
 						, reflected
 						, refracted );
 				}
@@ -288,7 +287,7 @@ namespace castor3d::shader
 							, prefiltered
 							, refractionRatio
 							, transmission
-							, material
+							, pbrMaterial
 							, reflected
 							, refracted );
 					}
@@ -300,7 +299,7 @@ namespace castor3d::shader
 		{
 			// Reflection from background skybox.
 			reflected = computeIBL( surface
-				, material
+				, pbrMaterial
 				, sceneData.getCameraPosition()
 				, irradiance
 				, prefiltered
@@ -316,24 +315,12 @@ namespace castor3d::shader
 					, prefiltered
 					, refractionRatio
 					, transmission
-					, material
+					, pbrMaterial
 					, reflected
 					, refracted );
 			}
 			FI;
 		}
-	}
-
-	sdw::Vec3 PbrReflectionModel::computeF0( sdw::Vec3 const & albedo
-		, sdw::Float const & metalness )
-	{
-		return shader::LightMaterial::computeF0( albedo, metalness );
-	}
-
-	sdw::Float PbrReflectionModel::computeMetalness( sdw::Vec3 const & albedo
-		, sdw::Vec3 const & f0 )
-	{
-		return shader::LightMaterial::computeMetalness( albedo, f0 );
 	}
 
 	sdw::Vec3 PbrReflectionModel::computeIBL( Surface surface

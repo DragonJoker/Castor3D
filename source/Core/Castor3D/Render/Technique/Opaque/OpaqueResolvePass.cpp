@@ -20,9 +20,8 @@
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslPbrMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslPbrReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslPhongReflection.hpp"
+#include "Castor3D/Shader/Shaders/GlslReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -137,7 +136,6 @@ namespace castor3d
 		{
 			using MyTraits = shader::ShaderMaterialTraitsT< MaterialT >;
 			using LightMaterial = typename MyTraits::LightMaterial;
-			using ReflectionModel = typename MyTraits::ReflectionModel;
 
 			using namespace sdw;
 			FragmentWriter writer;
@@ -180,11 +178,11 @@ namespace castor3d
 				, MaterialT
 				, {}
 				, true );
-
-			ReflectionModel reflections{ writer
+			auto reflections = shader::ReflectionModel::create( writer
 				, utils
+				, MaterialT
 				, uint32_t( ResolveBind::eEnvironment )
-				, 0u };
+				, 0u );
 			shader::CommonFog fog{ writer };
 
 			// Shader outputs
@@ -277,14 +275,14 @@ namespace castor3d
 							, vec3( 0.0_f ) );
 						auto refracted = writer.declLocale( "refracted"
 							, vec3( 0.0_f ) );
-						reflections.computeDeferred( envMapIndex
+						reflections->computeDeferred( lightMat
+							, surface
+							, c3d_sceneData
+							, envMapIndex
 							, reflection
 							, refraction
 							, material.refractionRatio
-							, lightMat
 							, material.transmission
-							, surface
-							, c3d_sceneData
 							, ambient
 							, reflected
 							, refracted );

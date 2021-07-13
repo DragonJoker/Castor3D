@@ -18,9 +18,7 @@ namespace castor3d::shader
 		, PassFlags const & passFlags
 		, uint32_t & envMapBinding
 		, uint32_t envMapSet )
-		: m_writer{ writer }
-		, m_utils{ utils }
-		, m_passFlags{ passFlags }
+		: ReflectionModel{ writer, utils, passFlags }
 	{
 		if ( checkFlag( m_passFlags, PassFlag::eReflection )
 			|| checkFlag( m_passFlags, PassFlag::eRefraction ) )
@@ -41,8 +39,7 @@ namespace castor3d::shader
 		, Utils & utils
 		, uint32_t envMapBinding
 		, uint32_t envMapSet )
-		: m_writer{ writer }
-		, m_utils{ utils }
+		: ReflectionModel{ writer, utils }
 	{
 		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 		m_writer.inlineComment( "// REFLECTIONS" );
@@ -55,18 +52,19 @@ namespace castor3d::shader
 		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 	}
 
-	void PhongReflectionModel::computeDeferred( sdw::Int envMapIndex
+	void PhongReflectionModel::computeDeferred( LightMaterial & material
+		, Surface const & surface
+		, SceneData const & sceneData
+		, sdw::Int envMapIndex
 		, sdw::Int const & reflection
 		, sdw::Int const & refraction
 		, sdw::Float const & refractionRatio
-		, PhongLightMaterial & material
 		, sdw::Vec3 const & transmission
-		, Surface const & surface
-		, SceneData const & sceneData
 		, sdw::Vec3 & ambient
 		, sdw::Vec3 & reflected
 		, sdw::Vec3 & refracted )const
 	{
+		auto & phongMaterial = static_cast< PhongLightMaterial & >( material );
 		auto envMaps = m_writer.getVariable< sdw::SampledImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
 
 		IF( m_writer, envMapIndex > 0_i && ( reflection != 0_i || refraction != 0_i ) )
@@ -84,7 +82,7 @@ namespace castor3d::shader
 					, envMapIndex
 					, refractionRatio
 					, transmission
-					, material
+					, phongMaterial
 					, reflected
 					, refracted );
 			}
@@ -94,7 +92,7 @@ namespace castor3d::shader
 					, surface.worldNormal
 					, envMaps
 					, envMapIndex
-					, material );
+					, phongMaterial );
 			}
 			ELSE
 			{
@@ -104,22 +102,22 @@ namespace castor3d::shader
 					, envMapIndex
 					, refractionRatio
 					, transmission
-					, material
+					, phongMaterial
 					, reflected
 					, refracted );
 			}
 			FI;
 
-			material.albedo = vec3( 0.0_f );
+			phongMaterial.albedo = vec3( 0.0_f );
 		}
 		FI;
 	}
 
-	void PhongReflectionModel::computeForward( sdw::Float const & refractionRatio
-		, PhongLightMaterial & material
-		, sdw::Vec3 const & transmission
+	void PhongReflectionModel::computeForward( LightMaterial & material
 		, Surface const & surface
 		, SceneData const & sceneData
+		, sdw::Float const & refractionRatio
+		, sdw::Vec3 const & transmission
 		, sdw::Vec3 & ambient
 		, sdw::Vec3 & reflected
 		, sdw::Vec3 & refracted )const
@@ -127,6 +125,7 @@ namespace castor3d::shader
 		if ( checkFlag( m_passFlags, PassFlag::eReflection )
 			|| checkFlag( m_passFlags, PassFlag::eRefraction ) )
 		{
+			auto & phongMaterial = static_cast< PhongLightMaterial & >( material );
 			auto envMap = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapEnvironment" );
 			auto incident = m_writer.declLocale( "incident"
 				, computeIncident( surface.worldPosition, sceneData.getCameraPosition() ) );
@@ -140,7 +139,7 @@ namespace castor3d::shader
 					, envMap
 					, refractionRatio
 					, transmission
-					, material
+					, phongMaterial
 					, reflected
 					, refracted );
 			}
@@ -149,7 +148,7 @@ namespace castor3d::shader
 				reflected = computeRefl( incident
 					, surface.worldNormal
 					, envMap
-					, material );
+					, phongMaterial );
 			}
 			else
 			{
@@ -158,12 +157,12 @@ namespace castor3d::shader
 					, envMap
 					, refractionRatio
 					, transmission
-					, material
+					, phongMaterial
 					, reflected
 					, refracted );
 			}
 
-			material.albedo = vec3( 0.0_f );
+			phongMaterial.albedo = vec3( 0.0_f );
 		}
 	}
 
