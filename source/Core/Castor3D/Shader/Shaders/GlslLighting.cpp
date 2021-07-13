@@ -92,6 +92,32 @@ namespace castor3d::shader
 	{
 	}
 
+	std::shared_ptr< LightingModel > LightingModel::create( sdw::ShaderWriter & writer
+		, Utils & utils
+		, MaterialType materialType
+		, ShadowOptions const & shadowsOptions
+		, bool isOpaqueProgram )
+	{
+		std::shared_ptr< LightingModel > result;
+
+		if ( materialType == MaterialType::ePhong )
+		{
+			result = std::make_shared< PhongLightingModel >( writer
+				, utils
+				, shadowsOptions
+				, isOpaqueProgram );
+		}
+		else
+		{
+			result = std::make_shared< PbrLightingModel >( writer
+				, utils
+				, shadowsOptions
+				, isOpaqueProgram );
+		}
+
+		return result;
+	}
+
 	void LightingModel::declareModel( uint32_t lightsBufBinding
 		, uint32_t lightsBufSet
 		, uint32_t & shadowMapBinding
@@ -191,23 +217,11 @@ namespace castor3d::shader
 		, uint32_t shadowMapSet
 		, bool isOpaqueProgram )
 	{
-		std::shared_ptr< LightingModel > result;
-
-		if ( materialType == MaterialType::ePhong )
-		{
-			result = std::make_shared< PhongLightingModel >( writer
-				, utils
-				, shadows
-				, isOpaqueProgram );
-		}
-		else
-		{
-			result = std::make_shared< PbrLightingModel >( writer
-				, utils
-				, shadows
-				, isOpaqueProgram );
-		}
-
+		auto result = create( writer
+			, utils
+			, materialType
+			, shadows
+			, isOpaqueProgram );
 		result->declareModel( lightsBufBinding
 			, lightsBufSet
 			, shadowMapBinding
@@ -226,22 +240,11 @@ namespace castor3d::shader
 		, uint32_t & shadowMapBinding
 		, uint32_t shadowMapSet )
 	{
-		std::shared_ptr< LightingModel > result;
-
-		if ( materialType == MaterialType::ePhong )
-		{
-			result = std::make_shared< PhongLightingModel >( writer
-				, utils
-				, shadows
-				, true );
-		}
-		else
-		{
-			result = std::make_shared< PbrLightingModel >( writer
-				, utils
-				, shadows
-				, true );
-		}
+		auto result = create( writer
+			, utils
+			, materialType
+			, shadows
+			, true );
 
 		switch ( lightType )
 		{
@@ -375,23 +378,11 @@ namespace castor3d::shader
 		, uint32_t shadowMapSet
 		, bool isOpaqueProgram )
 	{
-		std::shared_ptr< LightingModel > result;
-
-		if ( materialType == MaterialType::ePhong )
-		{
-			result = std::make_shared< PhongLightingModel >( writer
-				, utils
-				, shadows
-				, isOpaqueProgram );
-		}
-		else
-		{
-			result = std::make_shared< PbrLightingModel >( writer
-				, utils
-				, shadows
-				, isOpaqueProgram );
-		}
-
+		auto result = create( writer
+			, utils
+			, materialType
+			, shadows
+			, isOpaqueProgram );
 		result->declareDiffuseModel( lightsBufBinding
 			, lightsBufSet
 			, shadowMapBinding

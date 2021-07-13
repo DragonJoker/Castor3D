@@ -19,10 +19,8 @@
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslPbrLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslPbrMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslPbrReflection.hpp"
-#include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
@@ -138,7 +136,6 @@ namespace castor3d
 			, ResolveProgramConfig const & config )
 		{
 			using MyTraits = shader::ShaderMaterialTraitsT< MaterialT >;
-			using LightingModel = typename MyTraits::LightingModel;
 			using LightMaterial = typename MyTraits::LightMaterial;
 			using ReflectionModel = typename MyTraits::ReflectionModel;
 
@@ -177,6 +174,12 @@ namespace castor3d
 
 			shader::CookTorranceBRDF cookTorrance{ writer, utils };
 			cookTorrance.declareDiffuse();
+
+			auto lightingModel = shader::LightingModel::create( writer
+				, utils
+				, MaterialT
+				, {}
+				, true );
 
 			ReflectionModel reflections{ writer
 				, utils
@@ -296,7 +299,7 @@ namespace castor3d
 									, lightMat.getMetalness()
 									, surface )
 								: vec3( 0.0_f ) ) );
-						pxl_fragColor = vec4( LightingModel::combine( lightDiffuse
+						pxl_fragColor = vec4( lightingModel->combine( lightDiffuse
 								, indirectDiffuse
 								, lightSpecular
 								, config.hasSpecularGi ? lightIndirectSpecular : vec3( 0.0_f )

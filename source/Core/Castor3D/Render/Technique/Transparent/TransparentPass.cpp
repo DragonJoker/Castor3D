@@ -21,10 +21,8 @@
 #include "Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
-#include "Castor3D/Shader/Shaders/GlslPbrLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslPbrMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslPbrReflection.hpp"
-#include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
@@ -60,7 +58,6 @@ namespace castor3d
 			, bool hasVelocity )
 		{
 			using MyTraits = shader::ShaderMaterialTraitsT< MaterialT >;
-			using LightingModel = typename MyTraits::LightingModel;
 			using LightMaterial = typename MyTraits::LightMaterial;
 			using ReflectionModel = typename MyTraits::ReflectionModel;
 
@@ -127,7 +124,7 @@ namespace castor3d
 				, flags.passFlags
 				, index
 				, uint32_t( RenderPipeline::eAdditional ) };
-			auto lighting = LightingModel::createModel( writer
+			auto lighting = shader::LightingModel::createModel( writer
 				, utils
 				, MaterialT
 				, lightsIndex
@@ -260,7 +257,7 @@ namespace castor3d
 								: vec3( 0.0_f ) ) );
 
 						auto colour = writer.declLocale( "colour"
-							, LightingModel::combine( lightDiffuse
+							, lighting->combine( lightDiffuse
 								, indirectDiffuse
 								, lightSpecular
 								, lightIndirectSpecular
