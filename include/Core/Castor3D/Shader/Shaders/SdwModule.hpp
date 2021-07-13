@@ -82,6 +82,7 @@ namespace castor3d
 		struct DirectionalLight;
 		struct InFragmentSurface;
 		struct Light;
+		struct LightMaterial;
 		struct Material;
 		struct OutputComponents;
 		struct OutFragmentSurface;
@@ -114,6 +115,7 @@ namespace castor3d
 		Writer_Parameter( DirectionalLight );
 		Writer_Parameter( LayeredLpvGridData );
 		Writer_Parameter( Light );
+		Writer_Parameter( LightMaterial );
 		Writer_Parameter( LpvGridData );
 		Writer_Parameter( LpvLightData );
 		Writer_Parameter( PbrLightMaterial );

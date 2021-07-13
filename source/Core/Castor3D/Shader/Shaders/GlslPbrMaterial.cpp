@@ -9,18 +9,12 @@ namespace castor3d::shader
 	PbrLightMaterial::PbrLightMaterial( sdw::ShaderWriter & writer
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
-		: sdw::StructInstance{ writer, std::move( expr ), enabled }
-		, albedo{ getMember< sdw::Vec3 >( "albedo" ) }
-		, specular{ getMember< sdw::Vec3 >( "specular" ) }
-		, metalness{ getMember< sdw::Float >( "metalness" ) }
-		, roughness{ getMember< sdw::Float >( "roughness" ) }
+		: LightMaterial{ writer, std::move( expr ), enabled }
+		, albedo{ m_albDiv.rgb() }
+		, roughness{ m_albDiv.a() }
+		, specular{ m_spcDiv.rgb() }
+		, metalness{ m_spcDiv.a() }
 	{
-	}
-
-	PbrLightMaterial & PbrLightMaterial::operator=( PbrLightMaterial const & rhs )
-	{
-		StructInstance::operator=( rhs );
-		return *this;
 	}
 
 	void PbrLightMaterial::create( sdw::Vec3 const & albedo
@@ -42,13 +36,13 @@ namespace castor3d::shader
 		metalness = material.specDiv.a();
 	}
 
-	void PbrLightMaterial::output( sdw::Vec4 & outData2, sdw::Vec4 & outData3 )
+	void PbrLightMaterial::output( sdw::Vec4 & outData2, sdw::Vec4 & outData3 )const
 	{
 		outData2 = vec4( albedo, roughness );
 		outData3 = vec4( specular, metalness );
 	}
 
-	sdw::Vec3 PbrLightMaterial::getAmbient( sdw::Vec3 const & ambientLight )
+	sdw::Vec3 PbrLightMaterial::getAmbient( sdw::Vec3 const & ambientLight )const
 	{
 		return ambientLight;
 	}
@@ -70,21 +64,5 @@ namespace castor3d::shader
 	sdw::Float PbrLightMaterial::getRoughness()const
 	{
 		return roughness;
-	}
-
-	ast::type::StructPtr PbrLightMaterial::makeType( ast::type::TypesCache & cache )
-	{
-		auto result = cache.getStruct( ast::type::MemoryLayout::eStd430
-			, "PbrLightMaterial" );
-
-		if ( result->empty() )
-		{
-			result->declMember( "albedo", ast::type::Kind::eVec3F );
-			result->declMember( "specular", ast::type::Kind::eVec3F );
-			result->declMember( "metalness", ast::type::Kind::eFloat );
-			result->declMember( "roughness", ast::type::Kind::eFloat );
-		}
-
-		return result;
 	}
 }
