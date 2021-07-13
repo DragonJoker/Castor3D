@@ -5,6 +5,7 @@
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslPhongReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
@@ -69,6 +70,26 @@ namespace castor3d
 		std::unique_ptr< LightMaterial > PhongLightingModel::declMaterial( std::string const & name )
 		{
 			return m_writer.declDerivedLocale< LightMaterial, PhongLightMaterial >( name );
+		}
+
+		ReflectionModelPtr PhongLightingModel::getReflectionModel( PassFlags const & passFlags
+			, uint32_t & envMapBinding
+			, uint32_t envMapSet )const
+		{
+			return std::make_unique< PhongReflectionModel >( m_writer
+				, m_utils
+				, passFlags
+				, envMapBinding
+				, envMapSet );
+		}
+
+		ReflectionModelPtr PhongLightingModel::getReflectionModel( uint32_t envMapBinding
+			, uint32_t envMapSet )const
+		{
+			return std::make_unique< PhongReflectionModel >( m_writer
+				, m_utils
+				, envMapBinding
+				, envMapSet );
 		}
 
 		void PhongLightingModel::compute( TiledDirectionalLight const & light

@@ -233,6 +233,22 @@ namespace castor3d
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) ); // c3d_mapOcclusion
 
+		// Shadow maps
+		for ( uint32_t j = 0u; j < uint32_t( LightType::eCount ); ++j )
+		{
+			if ( checkFlag( flags.sceneFlags, SceneFlag( uint8_t( SceneFlag::eShadowBegin ) << j ) ) )
+			{
+				// Depth
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+				// Variance
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			}
+		}
+
 		if ( checkFlag( flags.passFlags, PassFlag::eReflection )
 			|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
 		{
@@ -253,22 +269,6 @@ namespace castor3d
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapPrefiltered
-		}
-
-		// Shadow maps
-		for ( uint32_t j = 0u; j < uint32_t( LightType::eCount ); ++j )
-		{
-			if ( checkFlag( flags.sceneFlags, SceneFlag( uint8_t( SceneFlag::eShadowBegin ) << j ) ) )
-			{
-				// Depth
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-				// Variance
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-			}
 		}
 
 		if ( checkFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing ) )
@@ -367,6 +367,12 @@ namespace castor3d
 					, index );
 			}
 
+			bindShadowMaps( graph
+				, pipeline.getFlags()
+				, shadowMaps
+				, descriptorWrites
+				, index );
+
 			if ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
 			{
@@ -400,12 +406,6 @@ namespace castor3d
 						, index );
 				}
 			}
-
-			bindShadowMaps( graph
-				, pipeline.getFlags()
-				, shadowMaps
-				, descriptorWrites
-				, index );
 
 			if ( checkFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
