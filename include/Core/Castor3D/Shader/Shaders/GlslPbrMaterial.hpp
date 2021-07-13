@@ -16,14 +16,12 @@ namespace castor3d::shader
 	struct ShaderMaterialTraitsT< MaterialType::eMetallicRoughness >
 	{
 		using LightMaterial = PbrLightMaterial;
-		using ReflectionModel = PbrReflectionModel;
 	};
 
 	template<>
 	struct ShaderMaterialTraitsT< MaterialType::eSpecularGlossiness >
 	{
 		using LightMaterial = PbrLightMaterial;
-		using ReflectionModel = PbrReflectionModel;
 	};
 
 	struct PbrLightMaterial
