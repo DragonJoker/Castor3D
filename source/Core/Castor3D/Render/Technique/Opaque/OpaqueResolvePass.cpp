@@ -130,9 +130,9 @@ namespace castor3d
 			ePrefiltered,
 		};
 
-		template< MaterialType MaterialT >
-		ShaderPtr createPixelProgramT( RenderSystem const & renderSystem
-			, ResolveProgramConfig const & config )
+		ShaderPtr createPixelProgram( RenderSystem const & renderSystem
+			, ResolveProgramConfig const & config
+			, MaterialType materialType )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -170,12 +170,12 @@ namespace castor3d
 			shader::CookTorranceBRDF cookTorrance{ writer, utils };
 			cookTorrance.declareDiffuse();
 
-			auto lightingModel = utils.createLightingModel( shader::getLightingModelName( MaterialT )
+			auto lightingModel = utils.createLightingModel( shader::getLightingModelName( materialType )
 				, {}
 				, true );
 			auto reflections = shader::ReflectionModel::create( writer
 				, utils
-				, MaterialT
+				, materialType
 				, uint32_t( ResolveBind::eEnvironment )
 				, 0u );
 			shader::CommonFog fog{ writer };
@@ -327,15 +327,6 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderPtr createPixelProgram( RenderDevice const & device
-			, ResolveProgramConfig const & config
-			, MaterialType matType )
-		{
-			return ( matType == MaterialType::ePhong
-				? createPixelProgramT< MaterialType::ePhong >( device.renderSystem, config )
-				: createPixelProgramT< MaterialType::eMetallicRoughness >( device.renderSystem, config ) );
-		}
-
 		std::vector< crg::VkPipelineShaderStageCreateInfoArray > createPrograms( std::vector< OpaqueResolvePass::Program > const & programs )
 		{
 			std::vector< crg::VkPipelineShaderStageCreateInfoArray > result;
@@ -395,7 +386,7 @@ namespace castor3d
 		{
 			ResolveProgramConfig config{ i };
 			Program program{ { VK_SHADER_STAGE_VERTEX_BIT, "OpaqueResolve" + std::to_string( i ), createVertexProgram() }
-				, { VK_SHADER_STAGE_FRAGMENT_BIT, "OpaqueResolve" + std::to_string( i ), createPixelProgram( m_device, config, m_scene.getMaterialsType() ) }
+				, { VK_SHADER_STAGE_FRAGMENT_BIT, "OpaqueResolve" + std::to_string( i ), createPixelProgram( m_device.renderSystem, config, m_scene.getMaterialsType() ) }
 				, {} };
 			program.stages = { makeShaderState( m_device, program.vertexShader )
 				, makeShaderState( m_device, program.pixelShader ) };
