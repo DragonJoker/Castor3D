@@ -70,8 +70,7 @@ namespace castor3d
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
-		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
-		ShaderPtr doGetPbrPixelShaderSource( PipelineFlags const & flags )const override;
+		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
 	};
 }
 

@@ -179,16 +179,6 @@ namespace castor3d
 		return ShaderPtr{};
 	}
 
-	ShaderPtr DepthPass::doGetPhongPixelShaderSource( PipelineFlags const & flags )const
-	{
-		return doGetPixelShaderSource( flags );
-	}
-
-	ShaderPtr DepthPass::doGetPbrPixelShaderSource( PipelineFlags const & flags )const
-	{
-		return doGetPixelShaderSource( flags );
-	}
-
 	ShaderPtr DepthPass::doGetPixelShaderSource( PipelineFlags const & flags )const
 	{
 		using namespace sdw;
