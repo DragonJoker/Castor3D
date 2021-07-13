@@ -34,353 +34,64 @@ namespace castor3d
 		{
 		}
 
-		void PbrLightingModel::computeCombined( Vec3 const & worldEye
-			, PbrLightMaterial const & material
-			, Int const & receivesShadows
-			, SceneData const & sceneData
-			, Surface surface
-			, OutputComponents & parentOutput )const
-		{
-			auto begin = m_writer.declLocale( "begin"
-				, 0_i );
-			auto end = m_writer.declLocale( "end"
-				, sceneData.getDirectionalLightCount() );
-
-#if C3D_UseTiledDirectionalShadowMap
-			FOR( m_writer, Int, dir, begin, dir < end, ++dir )
-			{
-				compute( getTiledDirectionalLight( dir )
-					, worldEye
-					, material
-					, receivesShadows
-					, surface
-					, parentOutput );
-			}
-			ROF;
-#else
-			FOR( m_writer, Int, dir, begin, dir < end, ++dir )
-			{
-				compute( getDirectionalLight( dir )
-					, worldEye
-					, material
-					, receivesShadows
-					, surface
-					, parentOutput );
-			}
-			ROF;
-#endif
-
-			begin = end;
-			end += sceneData.getPointLightCount();
-
-			FOR( m_writer, Int, point, begin, point < end, ++point )
-			{
-				compute( getPointLight( point )
-					, worldEye
-					, material
-					, receivesShadows
-					, surface
-					, parentOutput );
-			}
-			ROF;
-
-			begin = end;
-			end += sceneData.getSpotLightCount();
-
-			FOR( m_writer, Int, spot, begin, spot < end, ++spot )
-			{
-				compute( getSpotLight( spot )
-					, worldEye
-					, material
-					, receivesShadows
-					, surface
-					, parentOutput );
-			}
-			ROF;
-		}
-
 		void PbrLightingModel::compute( TiledDirectionalLight const & light
+			, LightMaterial const & material
+			, Surface const & surface
 			, Vec3 const & worldEye
-			, PbrLightMaterial const & material
 			, Int const & receivesShadows
-			, Surface surface
 			, OutputComponents & parentOutput )const
 		{
 			m_computeTiledDirectional( light
-				, worldEye
-				, material
-				, receivesShadows
+				, static_cast< PbrLightMaterial const & >( material )
 				, surface
+				, worldEye
+				, receivesShadows
 				, parentOutput );
 		}
 
 		void PbrLightingModel::compute( DirectionalLight const & light
+			, LightMaterial const & material
+			, Surface const & surface
 			, Vec3 const & worldEye
-			, PbrLightMaterial const & material
 			, Int const & receivesShadows
-			, Surface surface
 			, OutputComponents & parentOutput )const
 		{
 			m_computeDirectional( light
-				, worldEye
-				, material
-				, receivesShadows
+				, static_cast< PbrLightMaterial const & >( material )
 				, surface
+				, worldEye
+				, receivesShadows
 				, parentOutput );
 		}
 
 		void PbrLightingModel::compute( PointLight const & light
+			, LightMaterial const & material
+			, Surface const & surface
 			, Vec3 const & worldEye
-			, PbrLightMaterial const & material
 			, Int const & receivesShadows
-			, Surface surface
 			, OutputComponents & parentOutput )const
 		{
 			m_computePoint( light
-				, worldEye
-				, material
-				, receivesShadows
+				, static_cast< PbrLightMaterial const & >( material )
 				, surface
+				, worldEye
+				, receivesShadows
 				, parentOutput );
 		}
 
 		void PbrLightingModel::compute( SpotLight const & light
+			, LightMaterial const & material
+			, Surface const & surface
 			, Vec3 const & worldEye
-			, PbrLightMaterial const & material
 			, Int const & receivesShadows
-			, Surface surface
 			, OutputComponents & parentOutput )const
 		{
 			m_computeSpot( light
-				, worldEye
-				, material
-				, receivesShadows
+				, static_cast< PbrLightMaterial const & >( material )
 				, surface
+				, worldEye
+				, receivesShadows
 				, parentOutput );
-		}
-
-		sdw::Vec3 PbrLightingModel::combine( sdw::Vec3 const & directDiffuse
-			, sdw::Vec3 const & indirectDiffuse
-			, sdw::Vec3 const & directSpecular
-			, sdw::Vec3 const & indirectSpecular
-			, sdw::Vec3 const & ambient
-			, sdw::Vec3 const & indirectAmbient
-			, sdw::Float const & ambientOcclusion
-			, sdw::Vec3 const & emissive
-			, sdw::Vec3 const & reflected
-			, sdw::Vec3 const & refracted
-			, sdw::Vec3 const & materialAlbedo )
-		{
-			return materialAlbedo * ( directDiffuse + ( indirectDiffuse * ambientOcclusion ) )
-				+ directSpecular + ( indirectSpecular * ambientOcclusion )
-				+ emissive
-				+ refracted
-				+ ( reflected * ambient * indirectAmbient * ambientOcclusion );
-		}
-
-		Vec3 PbrLightingModel::computeCombinedDiffuse( Vec3 const & worldEye
-			, PbrLightMaterial const & material
-			, Int const & receivesShadows
-			, SceneData const & sceneData
-			, Surface surface )const
-		{
-			auto begin = m_writer.declLocale( "begin"
-				, 0_i );
-			auto end = m_writer.declLocale( "end"
-				, sceneData.getDirectionalLightCount() );
-			auto result = m_writer.declLocale( "result"
-				, vec3( 0.0_f ) );
-
-#if C3D_UseTiledDirectionalShadowMap
-			FOR( m_writer, Int, dir, begin, dir < end, ++dir )
-			{
-				result += computeDiffuse( getTiledDirectionalLight( dir )
-					, worldEye
-					, material
-					, receivesShadows
-					, surface );
-			}
-			ROF;
-#else
-			FOR( m_writer, Int, dir, begin, dir < end, ++dir )
-			{
-				result += computeDiffuse( getDirectionalLight( dir )
-					, worldEye
-					, material
-					, receivesShadows
-					, surface );
-			}
-			ROF;
-#endif
-
-			begin = end;
-			end += sceneData.getPointLightCount();
-
-			FOR( m_writer, Int, point, begin, point < end, ++point )
-			{
-				result += computeDiffuse( getPointLight( point )
-					, worldEye
-					, material
-					, receivesShadows
-					, surface );
-			}
-			ROF;
-
-			begin = end;
-			end += sceneData.getSpotLightCount();
-
-			FOR( m_writer, Int, spot, begin, spot < end, ++spot )
-			{
-				result += computeDiffuse( getSpotLight( spot )
-					, worldEye
-					, material
-					, receivesShadows
-					, surface );
-			}
-			ROF;
-
-			return result;
-		}
-
-		Vec3 PbrLightingModel::computeDiffuse( TiledDirectionalLight const & light
-			, Vec3 const & worldEye
-			, PbrLightMaterial const & material
-			, Int const & receivesShadows
-			, Surface surface )const
-		{
-			return m_computeTiledDirectionalDiffuse( light
-				, worldEye
-				, material
-				, receivesShadows
-				, surface );
-		}
-
-		Vec3 PbrLightingModel::computeDiffuse( DirectionalLight const & light
-			, Vec3 const & worldEye
-			, PbrLightMaterial const & material
-			, Int const & receivesShadows
-			, Surface surface )const
-		{
-			return m_computeDirectionalDiffuse( light
-				, worldEye
-				, material
-				, receivesShadows
-				, surface );
-		}
-
-		Vec3 PbrLightingModel::computeDiffuse( PointLight const & light
-			, Vec3 const & worldEye
-			, PbrLightMaterial const & material
-			, Int const & receivesShadows
-			, Surface surface )const
-		{
-			return m_computePointDiffuse( light
-				, worldEye
-				, material
-				, receivesShadows
-				, surface );
-		}
-
-		Vec3 PbrLightingModel::computeDiffuse( SpotLight const & light
-			, Vec3 const & worldEye
-			, PbrLightMaterial const & material
-			, Int const & receivesShadows
-			, Surface surface )const
-		{
-			return m_computeSpotDiffuse( light
-				, worldEye
-				, material
-				, receivesShadows
-				, surface );
-		}
-
-		std::shared_ptr< PbrLightingModel > PbrLightingModel::createModel( sdw::ShaderWriter & writer
-			, Utils & utils
-			, uint32_t lightsBufBinding
-			, uint32_t lightsBufSet
-			, ShadowOptions const & shadows
-			, uint32_t & shadowMapBinding
-			, uint32_t shadowMapSet
-			, bool isOpaqueProgram )
-		{
-			auto result = std::make_shared< PbrLightingModel >( writer
-				, utils
-				, shadows
-				, isOpaqueProgram );
-			result->declareModel( lightsBufBinding
-				, lightsBufSet
-				, shadowMapBinding
-				, shadowMapSet );
-			return result;
-		}
-
-		std::shared_ptr< PbrLightingModel > PbrLightingModel::createModel( sdw::ShaderWriter & writer
-			, Utils & utils
-			, LightType lightType
-			, bool lightUbo
-			, uint32_t lightBinding
-			, uint32_t lightSet
-			, ShadowOptions const & shadows
-			, uint32_t & shadowMapBinding
-			, uint32_t shadowMapSet )
-		{
-			auto result = std::make_shared< PbrLightingModel >( writer
-				, utils
-				, shadows
-				, true );
-
-			switch ( lightType )
-			{
-			case LightType::eDirectional:
-				result->declareDirectionalModel( lightUbo
-					, lightBinding
-					, lightSet
-					, shadowMapBinding
-					, shadowMapSet );
-				break;
-
-			case LightType::ePoint:
-				result->declarePointModel( lightUbo
-					, lightBinding
-					, lightSet
-					, shadowMapBinding
-					, shadowMapSet );
-				break;
-
-			case LightType::eSpot:
-				result->declareSpotModel( lightUbo
-					, lightBinding
-					, lightSet
-					, shadowMapBinding
-					, shadowMapSet );
-				break;
-
-			default:
-				CU_Failure( "Invalid light type" );
-				break;
-			}
-
-			return result;
-		}
-
-		std::shared_ptr< PbrLightingModel > PbrLightingModel::createDiffuseModel( sdw::ShaderWriter & writer
-			, Utils & utils
-			, uint32_t lightsBufBinding
-			, uint32_t lightsBufSet
-			, ShadowOptions const & shadows
-			, uint32_t & shadowMapBinding
-			, uint32_t shadowMapSet
-			, bool isOpaqueProgram )
-		{
-			auto result = std::make_shared< PbrLightingModel >( writer
-				, utils
-				, shadows
-				, isOpaqueProgram );
-			result->declareDiffuseModel( lightsBufBinding
-				, lightsBufSet
-				, shadowMapBinding
-				, shadowMapSet );
-			return result;
 		}
 
 		void PbrLightingModel::computeMapContributions( PassFlags const & passFlags
@@ -396,10 +107,11 @@ namespace castor3d
 			, sdw::Float & opacity
 			, sdw::Float & occlusion
 			, sdw::Float & transmittance
-			, PbrLightMaterial & lightMat
+			, LightMaterial & lightMat
 			, sdw::Vec3 & tangentSpaceViewPosition
 			, sdw::Vec3 & tangentSpaceFragPosition )
 		{
+			auto & pbrLightMat = static_cast< PbrLightMaterial & >( lightMat );
 			bool hasEmissive = false;
 			bool hasAlbedo = false;
 			bool hasMetalness = false;
@@ -442,37 +154,37 @@ namespace castor3d
 
 					if ( checkFlag( textureIt.second.flags, TextureFlag::eAlbedo ) )
 					{
-						lightMat.albedo = config.getAlbedo( m_writer, sampled, lightMat.albedo, gamma );
+						pbrLightMat.albedo = config.getAlbedo( m_writer, sampled, pbrLightMat.albedo, gamma );
 						hasAlbedo = true;
 					}
 
 					if ( checkFlag( textureIt.second.flags, TextureFlag::eSpecular ) )
 					{
-						lightMat.specular = config.getSpecular( m_writer, sampled, lightMat.specular );
+						pbrLightMat.specular = config.getSpecular( m_writer, sampled, pbrLightMat.specular );
 						hasSpecular = true;
 					}
 
 					if ( checkFlag( textureIt.second.flags, TextureFlag::eGlossiness ) )
 					{
 						auto gloss = m_writer.declLocale( "gloss" + name
-							, LightingModel::computeRoughness( lightMat.roughness ) );
+							, LightMaterial::computeRoughness( pbrLightMat.roughness ) );
 						gloss = config.getGlossiness( m_writer
 							, sampled
 							, gloss );
-						lightMat.roughness = LightingModel::computeRoughness( gloss );
+						pbrLightMat.roughness = LightMaterial::computeRoughness( gloss );
 					}
 
 					if ( checkFlag( textureIt.second.flags, TextureFlag::eMetalness ) )
 					{
-						lightMat.metalness = config.getMetalness( m_writer, sampled, lightMat.metalness );
+						pbrLightMat.metalness = config.getMetalness( m_writer, sampled, pbrLightMat.metalness );
 						hasMetalness = true;
 					}
 
 					if ( checkFlag( textureIt.second.flags, TextureFlag::eRoughness ) )
 					{
-						lightMat.roughness = config.getRoughness( m_writer
+						pbrLightMat.roughness = config.getRoughness( m_writer
 							, sampled
-							, lightMat.roughness );
+							, pbrLightMat.roughness );
 					}
 
 					if ( checkFlag( textureIt.second.flags, TextureFlag::eEmissive ) )
@@ -486,25 +198,77 @@ namespace castor3d
 			{
 				if ( !hasMetalness && ( hasSpecular || hasAlbedo ) )
 				{
-					lightMat.metalness = LightingModel::computeMetalness( lightMat.albedo, lightMat.specular );
+					pbrLightMat.metalness = LightMaterial::computeMetalness( pbrLightMat.albedo, pbrLightMat.specular );
 				}
 			}
 			else
 			{
 				if ( !hasSpecular && ( hasMetalness || hasAlbedo ) )
 				{
-					lightMat.specular = LightingModel::computeF0( lightMat.albedo, lightMat.metalness );
+					pbrLightMat.specular = LightMaterial::computeF0( pbrLightMat.albedo, pbrLightMat.metalness );
 				}
 			}
 
 			if ( checkFlag( passFlags, PassFlag::eLighting )
 				&& !hasEmissive )
 			{
-				emissive *= lightMat.albedo;
+				emissive *= pbrLightMat.albedo;
 			}
 		}
 
-		void PbrLightingModel::computeMapVoxelContributions( PassFlags const & passFlags
+		Vec3 PbrLightingModel::computeDiffuse( TiledDirectionalLight const & light
+			, LightMaterial const & material
+			, Surface const & surface
+			, Vec3 const & worldEye
+			, Int const & receivesShadows )const
+		{
+			return m_computeTiledDirectionalDiffuse( light
+				, static_cast< PbrLightMaterial const & >( material )
+				, surface
+				, worldEye
+				, receivesShadows );
+		}
+
+		Vec3 PbrLightingModel::computeDiffuse( DirectionalLight const & light
+			, LightMaterial const & material
+			, Surface const & surface
+			, Vec3 const & worldEye
+			, Int const & receivesShadows )const
+		{
+			return m_computeDirectionalDiffuse( light
+				, static_cast< PbrLightMaterial const & >( material )
+				, surface
+				, worldEye
+				, receivesShadows );
+		}
+
+		Vec3 PbrLightingModel::computeDiffuse( PointLight const & light
+			, LightMaterial const & material
+			, Surface const & surface
+			, Vec3 const & worldEye
+			, Int const & receivesShadows )const
+		{
+			return m_computePointDiffuse( light
+				, static_cast< PbrLightMaterial const & >( material )
+				, surface
+				, worldEye
+				, receivesShadows );
+		}
+
+		Vec3 PbrLightingModel::computeDiffuse( SpotLight const & light
+			, LightMaterial const & material
+			, Surface const & surface
+			, Vec3 const & worldEye
+			, Int const & receivesShadows )const
+		{
+			return m_computeSpotDiffuse( light
+				, static_cast< PbrLightMaterial const & >( material )
+				, surface
+				, worldEye
+				, receivesShadows );
+		}
+
+		void PbrLightingModel::computeMapDiffuseContributions( PassFlags const & passFlags
 			, FilteredTextureFlags const & textures
 			, sdw::Float const & gamma
 			, TextureConfigurations const & textureConfigs
@@ -513,8 +277,9 @@ namespace castor3d
 			, sdw::Vec3 & emissive
 			, sdw::Float & opacity
 			, sdw::Float & occlusion
-			, PbrLightMaterial & lightMat )
+			, LightMaterial & lightMat )
 		{
+			auto & pbrLightMat = static_cast< PbrLightMaterial & >( lightMat );
 			bool hasEmissive = false;
 			bool hasAlbedo = false;
 			bool hasMetalness = false;
@@ -539,37 +304,37 @@ namespace castor3d
 
 				if ( checkFlag( textureIt.second.flags, TextureFlag::eAlbedo ) )
 				{
-					lightMat.albedo = config.getAlbedo( m_writer, sampled, lightMat.albedo, gamma );
+					pbrLightMat.albedo = config.getAlbedo( m_writer, sampled, pbrLightMat.albedo, gamma );
 					hasAlbedo = true;
 				}
 
 				if ( checkFlag( textureIt.second.flags, TextureFlag::eSpecular ) )
 				{
-					lightMat.specular = config.getSpecular( m_writer, sampled, lightMat.specular );
+					pbrLightMat.specular = config.getSpecular( m_writer, sampled, pbrLightMat.specular );
 					hasSpecular = true;
 				}
 
 				if ( checkFlag( textureIt.second.flags, TextureFlag::eGlossiness ) )
 				{
 					auto gloss = m_writer.declLocale( "gloss" + name
-						, LightingModel::computeRoughness( lightMat.roughness ) );
+						, LightMaterial::computeRoughness( pbrLightMat.roughness ) );
 					gloss = config.getGlossiness( m_writer
 						, sampled
 						, gloss );
-					lightMat.roughness = LightingModel::computeRoughness( gloss );
+					pbrLightMat.roughness = LightMaterial::computeRoughness( gloss );
 				}
 
 				if ( checkFlag( textureIt.second.flags, TextureFlag::eMetalness ) )
 				{
-					lightMat.metalness = config.getMetalness( m_writer, sampled, lightMat.metalness );
+					pbrLightMat.metalness = config.getMetalness( m_writer, sampled, pbrLightMat.metalness );
 					hasMetalness = true;
 				}
 
 				if ( checkFlag( textureIt.second.flags, TextureFlag::eRoughness ) )
 				{
-					lightMat.roughness = config.getRoughness( m_writer
+					pbrLightMat.roughness = config.getRoughness( m_writer
 						, sampled
-						, lightMat.roughness );
+						, pbrLightMat.roughness );
 				}
 
 				if ( checkFlag( textureIt.second.flags, TextureFlag::eEmissive ) )
@@ -582,22 +347,41 @@ namespace castor3d
 			{
 				if ( !hasMetalness && ( hasSpecular || hasAlbedo ) )
 				{
-					lightMat.metalness = LightingModel::computeMetalness( lightMat.albedo, lightMat.specular );
+					pbrLightMat.metalness = LightMaterial::computeMetalness( pbrLightMat.albedo, pbrLightMat.specular );
 				}
 			}
 			else
 			{
 				if ( !hasSpecular && ( hasMetalness || hasAlbedo ) )
 				{
-					lightMat.specular = LightingModel::computeF0( lightMat.albedo, lightMat.metalness );
+					pbrLightMat.specular = LightMaterial::computeF0( pbrLightMat.albedo, pbrLightMat.metalness );
 				}
 			}
 
 			if ( checkFlag( passFlags, PassFlag::eLighting ) 
 				&& !hasEmissive )
 			{
-				emissive *= lightMat.albedo;
+				emissive *= pbrLightMat.albedo;
 			}
+		}
+
+		sdw::Vec3 PbrLightingModel::combine( sdw::Vec3 const & directDiffuse
+			, sdw::Vec3 const & indirectDiffuse
+			, sdw::Vec3 const & directSpecular
+			, sdw::Vec3 const & indirectSpecular
+			, sdw::Vec3 const & ambient
+			, sdw::Vec3 const & indirectAmbient
+			, sdw::Float const & ambientOcclusion
+			, sdw::Vec3 const & emissive
+			, sdw::Vec3 const & reflected
+			, sdw::Vec3 const & refracted
+			, sdw::Vec3 const & materialAlbedo )
+		{
+			return materialAlbedo * ( directDiffuse + ( indirectDiffuse * ambientOcclusion ) )
+				+ directSpecular + ( indirectSpecular * ambientOcclusion )
+				+ emissive
+				+ refracted
+				+ ( reflected * ambient * indirectAmbient * ambientOcclusion );
 		}
 
 		void PbrLightingModel::doDeclareModel()
@@ -611,10 +395,10 @@ namespace castor3d
 #if C3D_UseTiledDirectionalShadowMap
 			m_computeTiledDirectional = m_writer.implementFunction< sdw::Void >( "computeDirectionalLight"
 				, [this]( TiledDirectionalLight const & light
-					, Vec3 const & worldEye
 					, PbrLightMaterial const & material
+					, Surface const & surface
+					, Vec3 const & worldEye
 					, Int const & receivesShadows
-					, Surface surface
 					, OutputComponents & parentOutput )
 				{
 					OutputComponents output
@@ -767,18 +551,18 @@ namespace castor3d
 					parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
 				}
 				, InTiledDirectionalLight( m_writer, "light" )
-				, InVec3( m_writer, "worldEye" )
 				, InPbrLightMaterial{ m_writer, "material" }
-				, InInt( m_writer, "receivesShadows" )
 				, InSurface{ m_writer, "surface" }
+				, InVec3( m_writer, "worldEye" )
+				, InInt( m_writer, "receivesShadows" )
 				, output );
 #else
 			m_computeDirectional = m_writer.implementFunction< sdw::Void >( "computeDirectionalLight"
 				, [this]( DirectionalLight const & light
-					, Vec3 const & worldEye
 					, PbrLightMaterial const & material
+					, Surface const & surface
+					, Vec3 const & worldEye
 					, Int const & receivesShadows
-					, Surface surface
 					, OutputComponents & parentOutput )
 				{
 					OutputComponents output
@@ -931,10 +715,10 @@ namespace castor3d
 					parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
 				}
 				, InDirectionalLight( m_writer, "light" )
-				, InVec3( m_writer, "worldEye" )
 				, InPbrLightMaterial{ m_writer, "material" }
-				, InInt( m_writer, "receivesShadows" )
 				, InSurface{ m_writer, "surface" }
+				, InVec3( m_writer, "worldEye" )
+				, InInt( m_writer, "receivesShadows" )
 				, output );
 #endif
 		}
@@ -944,10 +728,10 @@ namespace castor3d
 			OutputComponents output{ m_writer };
 			m_computePoint = m_writer.implementFunction< sdw::Void >( "computePointLight"
 				, [this]( PointLight const & light
-					, Vec3 const & worldEye
 					, PbrLightMaterial const & material
+					, Surface const & surface
+					, Vec3 const & worldEye
 					, Int const & receivesShadows
-					, Surface surface
 					, OutputComponents & parentOutput )
 				{
 					OutputComponents output
@@ -1030,10 +814,10 @@ namespace castor3d
 					parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
 				}
 				, InPointLight( m_writer, "light" )
-				, InVec3( m_writer, "worldEye" )
 				, InPbrLightMaterial{ m_writer, "material" }
-				, InInt( m_writer, "receivesShadows" )
 				, InSurface{ m_writer, "surface" }
+				, InVec3( m_writer, "worldEye" )
+				, InInt( m_writer, "receivesShadows" )
 				, output );
 		}
 
@@ -1042,10 +826,10 @@ namespace castor3d
 			OutputComponents output{ m_writer };
 			m_computeSpot = m_writer.implementFunction< sdw::Void >( "computeSpotLight"
 				, [this]( SpotLight const & light
-					, Vec3 const & worldEye
 					, PbrLightMaterial const & material
+					, Surface const & surface
+					, Vec3 const & worldEye
 					, Int const & receivesShadows
-					, Surface surface
 					, OutputComponents & parentOutput )
 				{
 					OutputComponents output
@@ -1129,10 +913,10 @@ namespace castor3d
 					parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
 				}
 				, InSpotLight( m_writer, "light" )
-				, InVec3( m_writer, "worldEye" )
 				, InPbrLightMaterial{ m_writer, "material" }
-				, InInt( m_writer, "receivesShadows" )
 				, InSurface{ m_writer, "surface" }
+				, InVec3( m_writer, "worldEye" )
+				, InInt( m_writer, "receivesShadows" )
 				, output );
 		}
 
@@ -1146,10 +930,10 @@ namespace castor3d
 #if C3D_UseTiledDirectionalShadowMap
 			m_computeTiledDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeDirectionalLight"
 				, [this]( TiledDirectionalLight const & light
-					, Vec3 const & worldEye
 					, PbrLightMaterial const & material
-					, Int const & receivesShadows
-					, Surface surface )
+					, Surface const & surface
+					, Vec3 const & worldEye
+					, Int const & receivesShadows )
 				{
 					auto diffuse = m_writer.declLocale( "diffuse"
 						, vec3( 0.0_f ) );
@@ -1214,17 +998,17 @@ namespace castor3d
 					m_writer.returnStmt( max( vec3( 0.0_f ), diffuse ) );
 				}
 				, InTiledDirectionalLight( m_writer, "light" )
-				, InVec3( m_writer, "worldEye" )
 				, InPbrLightMaterial{ m_writer, "material" }
-				, InInt( m_writer, "receivesShadows" )
-				, InSurface{ m_writer, "surface" } );
+				, InSurface{ m_writer, "surface" }
+				, InVec3( m_writer, "worldEye" )
+				, InInt( m_writer, "receivesShadows" ) );
 #else
 			m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeDirectionalLight"
 				, [this]( DirectionalLight const & light
-					, Vec3 const & worldEye
 					, PbrLightMaterial const & material
-					, Int const & receivesShadows
-					, Surface surface )
+					, Surface const & surface
+					, Vec3 const & worldEye
+					, Int const & receivesShadows )
 				{
 					auto diffuse = m_writer.declLocale( "diffuse"
 						, vec3( 0.0_f ) );
@@ -1289,10 +1073,10 @@ namespace castor3d
 					m_writer.returnStmt( max( vec3( 0.0_f ), diffuse ) );
 				}
 				, InDirectionalLight( m_writer, "light" )
-				, InVec3( m_writer, "worldEye" )
 				, InPbrLightMaterial{ m_writer, "material" }
-				, InInt( m_writer, "receivesShadows" )
-				, InSurface{ m_writer, "surface" } );
+				, InSurface{ m_writer, "surface" }
+				, InVec3( m_writer, "worldEye" )
+				, InInt( m_writer, "receivesShadows" ) );
 #endif
 		}
 
@@ -1300,10 +1084,10 @@ namespace castor3d
 		{
 			m_computePointDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computePointLight"
 				, [this]( PointLight const & light
-					, Vec3 const & worldEye
 					, PbrLightMaterial const & material
-					, Int const & receivesShadows
-					, Surface surface )
+					, Surface const & surface
+					, Vec3 const & worldEye
+					, Int const & receivesShadows )
 				{
 					auto diffuse = m_writer.declLocale( "diffuse"
 						, vec3( 0.0_f ) );
@@ -1371,20 +1155,20 @@ namespace castor3d
 					m_writer.returnStmt( max( vec3( 0.0_f ), diffuse / attenuation ) );
 				}
 				, InPointLight( m_writer, "light" )
-				, InVec3( m_writer, "worldEye" )
 				, InPbrLightMaterial{ m_writer, "material" }
-				, InInt( m_writer, "receivesShadows" )
-				, InSurface{ m_writer, "surface" } );
+				, InSurface{ m_writer, "surface" }
+				, InVec3( m_writer, "worldEye" )
+				, InInt( m_writer, "receivesShadows" ) );
 		}
 
 		void PbrLightingModel::doDeclareComputeSpotLightDiffuse()
 		{
 			m_computeSpotDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeSpotLight"
 				, [this]( SpotLight const & light
-					, Vec3 const & worldEye
 					, PbrLightMaterial const & material
-					, Int const & receivesShadows
-					, Surface surface )
+					, Surface const & surface
+					, Vec3 const & worldEye
+					, Int const & receivesShadows )
 				{
 					auto diffuse = m_writer.declLocale( "diffuse"
 						, vec3( 0.0_f ) );
@@ -1453,10 +1237,10 @@ namespace castor3d
 					m_writer.returnStmt( max( vec3( 0.0_f ), spotFactor * diffuse / attenuation ) );
 				}
 				, InSpotLight( m_writer, "light" )
-				, InVec3( m_writer, "worldEye" )
 				, InPbrLightMaterial{ m_writer, "material" }
-				, InInt( m_writer, "receivesShadows" )
-				, InSurface{ m_writer, "surface" } );
+				, InSurface{ m_writer, "surface" }
+				, InVec3( m_writer, "worldEye" )
+				, InInt( m_writer, "receivesShadows" ) );
 		}
 
 		//***********************************************************************************************
