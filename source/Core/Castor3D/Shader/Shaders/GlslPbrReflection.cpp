@@ -327,13 +327,13 @@ namespace castor3d::shader
 	sdw::Vec3 PbrReflectionModel::computeF0( sdw::Vec3 const & albedo
 		, sdw::Float const & metalness )
 	{
-		return shader::LightingModel::computeF0( albedo, metalness );
+		return shader::LightMaterial::computeF0( albedo, metalness );
 	}
 
 	sdw::Float PbrReflectionModel::computeMetalness( sdw::Vec3 const & albedo
 		, sdw::Vec3 const & f0 )
 	{
-		return shader::LightingModel::computeMetalness( albedo, f0 );
+		return shader::LightMaterial::computeMetalness( albedo, f0 );
 	}
 
 	sdw::Vec3 PbrReflectionModel::computeIBL( Surface surface

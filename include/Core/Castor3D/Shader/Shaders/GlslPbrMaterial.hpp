@@ -29,12 +29,11 @@ namespace castor3d::shader
 	};
 
 	struct PbrLightMaterial
-		: public sdw::StructInstance
+		: public LightMaterial
 	{
 		C3D_API PbrLightMaterial( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled );
-		C3D_API PbrLightMaterial & operator=( PbrLightMaterial const & rhs );
 
 		template< MaterialType MaterialT
 			, typename ... ParamsT >
@@ -43,21 +42,19 @@ namespace castor3d::shader
 		C3D_API void create( sdw::Vec3 const & albedo
 			, sdw::Vec4 const & data3
 			, sdw::Vec4 const & data2
-			, sdw::Float const & ambient );
-		C3D_API void create( Material const & material );
-		C3D_API void output( sdw::Vec4 & outData2, sdw::Vec4 & outData3 );
-		C3D_API sdw::Vec3 getAmbient( sdw::Vec3 const & ambientLight );
-		C3D_API void adjustDirectSpecular( sdw::Vec3 & directSpecular )const;
-		C3D_API sdw::Vec3 getIndirectAmbient( sdw::Vec3 const & indirectAmbient )const;
-		C3D_API sdw::Float getMetalness()const;
-		C3D_API sdw::Float getRoughness()const;
-
-		C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			, sdw::Float const & ambient )override;
+		C3D_API void create( Material const & material )override;
+		C3D_API void output( sdw::Vec4 & outData2, sdw::Vec4 & outData3 )const override;
+		C3D_API sdw::Vec3 getAmbient( sdw::Vec3 const & ambientLight )const override;
+		C3D_API void adjustDirectSpecular( sdw::Vec3 & directSpecular )const override;
+		C3D_API sdw::Vec3 getIndirectAmbient( sdw::Vec3 const & indirectAmbient )const override;
+		C3D_API sdw::Float getMetalness()const override;
+		C3D_API sdw::Float getRoughness()const override;
 
 		sdw::Vec3 albedo;
+		sdw::Float roughness;
 		sdw::Vec3 specular;
 		sdw::Float metalness;
-		sdw::Float roughness;
 	};
 
 	template< MaterialType MaterialT >
@@ -73,8 +70,8 @@ namespace castor3d::shader
 		{
 			material.albedo = albedo;
 			material.specular = specular.rgb();
-			material.metalness = LightingModel::computeMetalness( albedo, specular );
-			material.roughness = LightingModel::computeRoughness( LightingModel::computeGlossiness( shininess ) );
+			material.metalness = LightMaterial::computeMetalness( albedo, specular );
+			material.roughness = LightMaterial::computeRoughness( LightMaterial::computeGlossiness( shininess ) );
 		}
 
 		static void create( PbrLightMaterial & material
