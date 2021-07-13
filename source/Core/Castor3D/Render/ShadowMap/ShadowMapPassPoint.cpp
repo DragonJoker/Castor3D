@@ -51,11 +51,11 @@ namespace castor3d
 			return cuT( "PointSML" ) + string::toString( index / 6u ) + "F" + string::toString( index % 6u );
 		}
 
-		template< MaterialType MaterialT >
-		ShaderPtr getPixelShaderSourceT( RenderSystem const & renderSystem
+		ShaderPtr getPixelShaderSource( RenderSystem const & renderSystem
 			, PipelineFlags const & flags
 			, FilteredTextureFlags const & textures
-			, ShaderFlags const & shaderFlags )
+			, ShaderFlags const & shaderFlags
+			, MaterialType materialType )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -95,7 +95,7 @@ namespace castor3d
 				, index++
 				, RenderPipeline::eAdditional );
 			auto lightingModel = shader::LightingModel::createModel( utils
-				, shader::getLightingModelName( MaterialT )
+				, shader::getLightingModelName( materialType )
 				, LightType::ePoint
 				, lightsIndex
 				, RenderPipeline::eAdditional
@@ -378,17 +378,19 @@ namespace castor3d
 
 	ShaderPtr ShadowMapPassPoint::doGetPhongPixelShaderSource( PipelineFlags const & flags )const
 	{
-		return getPixelShaderSourceT< MaterialType::ePhong >( *getEngine()->getRenderSystem()
+		return castor3d::getPixelShaderSource( *getEngine()->getRenderSystem()
 			, flags
 			, filterTexturesFlags( flags.textures )
-			, getShaderFlags() );
+			, getShaderFlags()
+			, MaterialType::ePhong );
 	}
 
 	ShaderPtr ShadowMapPassPoint::doGetPbrPixelShaderSource( PipelineFlags const & flags )const
 	{
-		return getPixelShaderSourceT< MaterialType::eMetallicRoughness >( *getEngine()->getRenderSystem()
+		return castor3d::getPixelShaderSource( *getEngine()->getRenderSystem()
 			, flags
 			, filterTexturesFlags( flags.textures )
-			, getShaderFlags() );
+			, getShaderFlags()
+			, MaterialType::eMetallicRoughness );
 	}
 }

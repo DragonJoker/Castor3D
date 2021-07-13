@@ -47,14 +47,14 @@ namespace castor3d
 {
 	namespace
 	{
-		template< MaterialType MaterialT >
-		ShaderPtr getPixelShaderSourceT( RenderSystem const & renderSystem
+		ShaderPtr getPixelShaderSource( RenderSystem const & renderSystem
 			, PipelineFlags const & flags
 			, FilteredTextureFlags const & textures
 			, TextureFlags const & texturesMask
 			, ShaderFlags const & shaderFlags
 			, bool hasSSAO
-			, bool hasVelocity )
+			, bool hasVelocity
+			, MaterialType materialType )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -116,12 +116,12 @@ namespace castor3d
 				, hasSSAO );
 			auto reflections = shader::ReflectionModel::create( writer
 				, utils
-				, MaterialT
+				, materialType
 				, flags.passFlags
 				, index
 				, uint32_t( RenderPipeline::eAdditional ) );
 			auto lightingModel = shader::LightingModel::createModel( utils
-				, shader::getLightingModelName( MaterialT )
+				, shader::getLightingModelName( materialType )
 				, lightsIndex
 				, RenderPipeline::eAdditional
 				, shader::ShadowOptions{ flags.sceneFlags, false }
@@ -374,24 +374,26 @@ namespace castor3d
 
 	ShaderPtr TransparentPass::doGetPhongPixelShaderSource( PipelineFlags const & flags )const
 	{
-		return getPixelShaderSourceT< MaterialType::ePhong >( *getEngine()->getRenderSystem()
+		return castor3d::getPixelShaderSource( *getEngine()->getRenderSystem()
 			, flags
 			, filterTexturesFlags( flags.textures )
 			, getTexturesMask()
 			, getShaderFlags()
 			, m_ssao
-			, m_hasVelocity );
+			, m_hasVelocity
+			, MaterialType::ePhong );
 	}
 
 	ShaderPtr TransparentPass::doGetPbrPixelShaderSource( PipelineFlags const & flags )const
 	{
-		return getPixelShaderSourceT< MaterialType::eMetallicRoughness >( *getEngine()->getRenderSystem()
+		return castor3d::getPixelShaderSource( *getEngine()->getRenderSystem()
 			, flags
 			, filterTexturesFlags( flags.textures )
 			, getTexturesMask()
 			, getShaderFlags()
 			, m_ssao
-			, m_hasVelocity );
+			, m_hasVelocity
+			, MaterialType::eMetallicRoughness );
 	}
 
 	void TransparentPass::doUpdatePipeline( RenderPipeline & pipeline )
