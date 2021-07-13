@@ -18,9 +18,7 @@
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslPbrLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslPbrMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
@@ -53,9 +51,8 @@ namespace castor3d
 			, TextureFlags const & texturesMask
 			, ShaderFlags const & shaderFlags )
 		{
-			using MyTraits = shader::ShaderMaterialTraitsT< MaterialT >;
-			using LightingModel = typename MyTraits::LightingModel;
-			using LightMaterial = typename MyTraits::LightMaterial;
+			using MyTraitsT = shader::ShaderMaterialTraitsT< MaterialT >;
+			using LightMaterialT = typename MyTraitsT::LightMaterial;
 
 			using namespace sdw;
 			FragmentWriter writer;
@@ -108,10 +105,11 @@ namespace castor3d
 			utils.declareParallaxMappingFunc( flags.passFlags
 				, texturesMask );
 
-			LightingModel lightingModel{ writer
+			auto lightingModel = shader::LightingModel::create( writer
 				, utils
+				, MaterialT
 				, {}
-				, true };
+				, true );
 
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
@@ -130,7 +128,7 @@ namespace castor3d
 						, normalize( inSurface.tangent ) );
 					auto bitangent = writer.declLocale( "bitangent"
 						, normalize( inSurface.bitangent ) );
-					auto lightMat = writer.declLocale< LightMaterial >( "lightMat" );
+					auto lightMat = writer.declLocale< LightMaterialT >( "lightMat" );
 					lightMat.create( material );
 					auto emissive = writer.declLocale( "emissive"
 						, vec3( material.emissive ) );
@@ -139,7 +137,7 @@ namespace castor3d
 					auto transmittance = writer.declLocale( "transmittance"
 						, 0.0_f );
 
-					lightingModel.computeMapContributions( flags.passFlags
+					lightingModel->computeMapContributions( flags.passFlags
 						, textures
 						, gamma
 						, textureConfigs

@@ -21,9 +21,7 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
-#include "Castor3D/Shader/Shaders/GlslPbrLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslPbrMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
@@ -54,7 +52,6 @@ namespace castor3d
 			, uint32_t voxelGridSize )
 		{
 			using MyTraitsT = shader::ShaderMaterialTraitsT< MaterialT >;
-			using LightingModelT = typename MyTraitsT::LightingModel;
 			using LightMaterialT = typename MyTraitsT::LightMaterial;
 
 			using namespace sdw;
@@ -113,7 +110,7 @@ namespace castor3d
 			auto output( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
 				, addIndex++
 				, RenderPipeline::eAdditional ) );
-			auto lighting = LightingModelT::createDiffuseModel( writer
+			auto lighting = shader::LightingModel::createDiffuseModel( writer
 				, utils
 				, MaterialT
 				, lightsIndex

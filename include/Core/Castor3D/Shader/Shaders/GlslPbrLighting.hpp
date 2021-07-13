@@ -20,6 +20,17 @@ namespace castor3d::shader
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, bool isOpaqueProgram );
+		C3D_API sdw::Vec3 combine( sdw::Vec3 const & directDiffuse
+			, sdw::Vec3 const & indirectDiffuse
+			, sdw::Vec3 const & directSpecular
+			, sdw::Vec3 const & indirectSpecular
+			, sdw::Vec3 const & ambient
+			, sdw::Vec3 const & indirectAmbient
+			, sdw::Float const & ambientOcclusion
+			, sdw::Vec3 const & emissive
+			, sdw::Vec3 const & reflected
+			, sdw::Vec3 const & refracted
+			, sdw::Vec3 const & materialAlbedo )override;
 		/**
 		*\name
 		*	Diffuse + Specular
@@ -102,17 +113,6 @@ namespace castor3d::shader
 			, sdw::Float & occlusion
 			, LightMaterial & lightMat )override;
 		//\}
-		C3D_API static sdw::Vec3 combine( sdw::Vec3 const & directDiffuse
-			, sdw::Vec3 const & indirectDiffuse
-			, sdw::Vec3 const & directSpecular
-			, sdw::Vec3 const & indirectSpecular
-			, sdw::Vec3 const & ambient
-			, sdw::Vec3 const & indirectAmbient
-			, sdw::Float const & ambientOcclusion
-			, sdw::Vec3 const & emissive
-			, sdw::Vec3 const & reflected
-			, sdw::Vec3 const & refracted
-			, sdw::Vec3 const & materialAlbedo );
 
 	protected:
 		void doDeclareModel()override;

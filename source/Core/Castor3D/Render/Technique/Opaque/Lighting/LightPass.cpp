@@ -14,9 +14,7 @@
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
-#include "Castor3D/Shader/Shaders/GlslPbrLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslPbrMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
@@ -45,7 +43,6 @@ namespace castor3d
 			, bool shadows )
 		{
 			using MyTraits = shader::ShaderMaterialTraitsT< MaterialT >;
-			using LightingModel = typename MyTraits::LightingModel;
 			using LightMaterial = typename MyTraits::LightMaterial;
 
 			using namespace sdw;
@@ -85,7 +82,7 @@ namespace castor3d
 
 			// Utility functions
 			index = uint32_t( LightPassLgtIdx::eSmNormalLinear );
-			auto lighting = LightingModel::createModel( writer
+			auto lighting = shader::LightingModel::createModel( writer
 				, utils
 				, MaterialT
 				, lightType
