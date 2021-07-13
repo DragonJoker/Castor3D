@@ -44,8 +44,7 @@ namespace castor3d
 		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
 
 	private:
-		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
-		ShaderPtr doGetPbrPixelShaderSource( PipelineFlags const & flags )const override;
+		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
 	};
 }
 
