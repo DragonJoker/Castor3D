@@ -50,9 +50,6 @@ namespace castor3d
 			, FilteredTextureFlags const & textures
 			, ShaderFlags const & shaderFlags )
 		{
-			using MyTraitsT = shader::ShaderMaterialTraitsT< MaterialT >;
-			using LightMaterialT = typename MyTraitsT::LightMaterial;
-
 			using namespace sdw;
 			FragmentWriter writer;
 			bool hasTextures = !flags.textures.empty();
@@ -123,24 +120,20 @@ namespace castor3d
 					auto bitangent = writer.declLocale( "bitangent"
 						, normalize( inSurface.bitangent ) );
 					auto material = materials.getMaterial( inSurface.material );
-					auto lightMat = writer.declLocale< LightMaterialT >( "lightMat" );
-					lightMat.create( material );
 					auto gamma = writer.declLocale( "gamma"
 						, material.gamma );
 					auto emissive = writer.declLocale( "emissive"
 						, vec3( material.emissive ) );
-					auto occlusion = writer.declLocale( "occlusion"
-						, 1.0_f );
-					auto transmittance = writer.declLocale( "transmittance"
-						, 0.0_f );
 					auto alpha = writer.declLocale( "alpha"
 						, material.opacity );
 					auto alphaRef = writer.declLocale( "alphaRef"
 						, material.alphaRef );
-					auto tangentSpaceViewPosition = writer.declLocale( "tangentSpaceViewPosition"
-						, inSurface.tangentSpaceViewPosition );
-					auto tangentSpaceFragPosition = writer.declLocale( "tangentSpaceFragPosition"
-						, inSurface.tangentSpaceFragPosition );
+					auto lightMat = lighting->declMaterial( "lightMat" );
+					lightMat->create( material );
+					auto occlusion = writer.declLocale( "occlusion"
+						, 1.0_f );
+					auto transmittance = writer.declLocale( "transmittance"
+						, 0.0_f );
 
 					if ( hasTextures )
 					{
@@ -157,9 +150,9 @@ namespace castor3d
 							, alpha
 							, occlusion
 							, transmittance
-							, lightMat
-							, tangentSpaceViewPosition
-							, tangentSpaceFragPosition );
+							, *lightMat
+							, inSurface.tangentSpaceViewPosition
+							, inSurface.tangentSpaceFragPosition );
 					}
 
 					utils.applyAlphaFunc( flags.alphaFunc
@@ -192,7 +185,7 @@ namespace castor3d
 							, 1.0_f / ( 1.0_f - light.m_cutOff )
 							, 1.0_f ) );
 					spotFactor = 1.0_f - step( spotFactor, 0.0_f );
-					pxl_flux.rgb() = ( lightMat.albedo
+					pxl_flux.rgb() = ( lightMat->albedo
 							* light.m_lightBase.m_colour
 							* light.m_lightBase.m_intensity.x()
 							* clamp( dot( lightDirection, normal ), 0.0_f, 1.0_f ) )

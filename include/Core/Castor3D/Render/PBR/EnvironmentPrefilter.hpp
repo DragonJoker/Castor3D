@@ -109,6 +109,9 @@ namespace castor3d
 		}
 		/**@}*/
 
+	public:
+		C3D_API static uint32_t const MaxIblReflectionLod;
+
 	private:
 		RenderDevice const & m_device;
 		Texture const & m_srcView;

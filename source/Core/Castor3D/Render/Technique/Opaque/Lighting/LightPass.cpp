@@ -42,9 +42,6 @@ namespace castor3d
 			, ShadowType shadowType
 			, bool shadows )
 		{
-			using MyTraits = shader::ShaderMaterialTraitsT< MaterialT >;
-			using LightMaterial = typename MyTraits::LightMaterial;
-
 			using namespace sdw;
 			FragmentWriter writer;
 
@@ -133,8 +130,10 @@ namespace castor3d
 							, materials.getMaterial( materialId ) );
 						auto translucency = writer.declLocale( "translucency"
 							, data4.w() );
-						auto lightMat = writer.declLocale< LightMaterial >( "lightMat" );
-						lightMat.template create< MaterialT >( albedo, data3, data2 );
+						auto lightMat = lighting->declMaterial( "lightMat" );
+						lightMat->create( albedo
+							, data3
+							, data2 );
 
 						auto eye = writer.declLocale( "eye"
 							, c3d_sceneData.getCameraPosition() );
@@ -170,7 +169,7 @@ namespace castor3d
 							{
 								lighting->compute( light
 									, eye
-									, lightMat
+									, *lightMat
 									, shadowReceiver
 									, surface
 									, output );
@@ -195,7 +194,7 @@ namespace castor3d
 							FI;
 #else
 							lighting->compute( light
-								, lightMat
+								, *lightMat
 								, surface
 								, eye
 								, shadowReceiver
@@ -213,7 +212,7 @@ namespace castor3d
 							{
 								lighting->compute( light
 									, eye
-									, lightMat
+									, *lightMat
 									, shadowReceiver
 									, surface
 									, output );
@@ -238,7 +237,7 @@ namespace castor3d
 							FI;
 #else
 							lighting->compute( light
-								, lightMat
+								, *lightMat
 								, surface
 								, eye
 								, shadowReceiver
@@ -256,7 +255,7 @@ namespace castor3d
 							{
 								lighting->compute( light
 									, eye
-									, lightMat
+									, *lightMat
 									, shadowReceiver
 									, surface
 									, output );
@@ -281,7 +280,7 @@ namespace castor3d
 							FI;
 #else
 							lighting->compute( light
-								, lightMat
+								, *lightMat
 								, surface
 								, eye
 								, shadowReceiver
@@ -391,30 +390,20 @@ namespace castor3d
 		, ShadowType shadowType
 		, bool shadows )
 	{
-		switch ( materialType )
+		if ( materialType == MaterialType::ePhong )
 		{
-		case MaterialType::ePhong:
 			return getPixelShaderSourceT< MaterialType::ePhong >( renderSystem
 				, sceneFlags
 				, lightType
 				, shadowType
 				, shadows );
-		case MaterialType::eMetallicRoughness:
-			return getPixelShaderSourceT< MaterialType::eMetallicRoughness >( renderSystem
-				, sceneFlags
-				, lightType
-				, shadowType
-				, shadows );
-		case MaterialType::eSpecularGlossiness:
-			return getPixelShaderSourceT< MaterialType::eSpecularGlossiness >( renderSystem
-				, sceneFlags
-				, lightType
-				, shadowType
-				, shadows );
-		default:
-			CU_Failure( "LightPass: Unsupported MaterialType" );
-			return nullptr;
 		}
+
+		return getPixelShaderSourceT< MaterialType::eMetallicRoughness >( renderSystem
+			, sceneFlags
+			, lightType
+			, shadowType
+			, shadows );
 	}
 
 	//************************************************************************************************

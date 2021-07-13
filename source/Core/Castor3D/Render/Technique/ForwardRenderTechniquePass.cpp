@@ -57,9 +57,6 @@ namespace castor3d
 			, bool hasVelocity
 			, bool isTransparentOnly )
 		{
-			using MyTraits = shader::ShaderMaterialTraitsT< MaterialT >;
-			using LightMaterial = typename MyTraits::LightMaterial;
-
 			using namespace sdw;
 			FragmentWriter writer;
 			bool hasTextures = !flags.textures.empty();
@@ -154,8 +151,8 @@ namespace castor3d
 						, material.gamma );
 					auto emissive = writer.declLocale( "emissive"
 						, vec3( material.emissive ) );
-					auto lightMat = writer.declLocale< LightMaterial >( "lightMat" );
-					lightMat.create( material );
+					auto lightMat = lighting->declMaterial( "lightMat" );
+					lightMat->create( material );
 					auto normal = writer.declLocale( "normal"
 						, normalize( inSurface.normal ) );
 					auto tangent = writer.declLocale( "tangent"
@@ -187,7 +184,7 @@ namespace castor3d
 						, opacity
 						, occlusion
 						, transmittance
-						, lightMat
+						, *lightMat
 						, inSurface.tangentSpaceViewPosition
 						, inSurface.tangentSpaceFragPosition );
 
@@ -216,7 +213,7 @@ namespace castor3d
 						shader::OutputComponents output{ lightDiffuse, lightSpecular };
 						auto surface = writer.declLocale< shader::Surface >( "surface" );
 						surface.create( in.fragCoord.xy(), inSurface.viewPosition, inSurface.worldPosition, normal );
-						lighting->computeCombined( lightMat
+						lighting->computeCombined( *lightMat
 							, c3d_sceneData
 							, surface
 							, worldEye
@@ -224,12 +221,12 @@ namespace castor3d
 							, output );
 
 						auto ambient = writer.declLocale( "ambient"
-							, lightMat.getAmbient( c3d_sceneData.getAmbientLight() ) );
+							, lightMat->getAmbient( c3d_sceneData.getAmbientLight() ) );
 						auto reflected = writer.declLocale( "reflected"
 							, vec3( 0.0_f ) );
 						auto refracted = writer.declLocale( "refracted"
 							, vec3( 0.0_f ) );
-						reflections->computeForward( lightMat
+						reflections->computeForward( *lightMat
 							, surface
 							, c3d_sceneData
 							, material.refractionRatio
@@ -237,7 +234,7 @@ namespace castor3d
 							, ambient
 							, reflected
 							, refracted );
-						lightMat.adjustDirectSpecular( lightSpecular );
+						lightMat->adjustDirectSpecular( lightSpecular );
 
 						auto indirectOcclusion = writer.declLocale( "indirectOcclusion"
 							, 1.0_f );
@@ -248,19 +245,19 @@ namespace castor3d
 							, worldEye
 							, c3d_sceneData.getPosToCamera( surface.worldPosition )
 							, surface
-							, lightMat.specular
-							, lightMat.getRoughness()
+							, lightMat->specular
+							, lightMat->getRoughness()
 							, indirectOcclusion
 							, lightIndirectDiffuse.w() );
 						auto indirectAmbient = writer.declLocale( "indirectAmbient"
-							, lightMat.getIndirectAmbient( indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() ) ) );
+							, lightMat->getIndirectAmbient( indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() ) ) );
 						auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
 							, ( hasDiffuseGI
 								? cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
 									, c3d_sceneData.getCameraPosition()
 									, surface.worldNormal
-									, lightMat.specular
-									, lightMat.getMetalness()
+									, lightMat->specular
+									, lightMat->getMetalness()
 									, surface )
 								: vec3( 0.0_f ) ) );
 
@@ -274,12 +271,12 @@ namespace castor3d
 							, emissive
 							, reflected
 							, refracted
-							, lightMat.albedo )
+							, lightMat->albedo )
 							, opacity );
 					}
 					else
 					{
-						pxl_fragColor = vec4( lightMat.albedo, opacity );
+						pxl_fragColor = vec4( lightMat->albedo, opacity );
 					}
 
 					if ( getFogType( flags.sceneFlags ) != FogType::eDisabled )

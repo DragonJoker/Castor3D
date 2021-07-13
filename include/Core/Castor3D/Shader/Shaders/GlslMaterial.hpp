@@ -11,9 +11,6 @@ See LICENSE file in root folder
 
 namespace castor3d::shader
 {
-	template< MaterialType MaterialT >
-	struct ShaderMaterialTraitsT;
-
 	castor::String const PassBufferName = cuT( "Materials" );
 
 	struct Material

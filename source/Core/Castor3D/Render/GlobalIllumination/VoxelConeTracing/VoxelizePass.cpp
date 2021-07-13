@@ -51,9 +51,6 @@ namespace castor3d
 			, bool isTransparentOnly
 			, uint32_t voxelGridSize )
 		{
-			using MyTraitsT = shader::ShaderMaterialTraitsT< MaterialT >;
-			using LightMaterialT = typename MyTraitsT::LightMaterial;
-
 			using namespace sdw;
 			FragmentWriter writer;
 			bool hasTextures = !flags.textures.empty();
@@ -136,8 +133,8 @@ namespace castor3d
 							, material.gamma );
 						auto normal = writer.declLocale( "normal"
 							, normalize( inNormal ) );
-						auto lightMat = writer.declLocale< LightMaterialT >( "lightMat" );
-						lightMat.create( material );
+						auto lightMat = lighting->declMaterial( "lightMat" );
+						lightMat->create( material );
 						auto emissive = writer.declLocale( "emissive"
 							, vec3( material.emissive ) );
 						auto alpha = writer.declLocale( "alpha"
@@ -158,7 +155,7 @@ namespace castor3d
 								, emissive
 								, alpha
 								, occlusion
-								, lightMat );
+								, *lightMat );
 						}
 
 						if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
@@ -168,12 +165,12 @@ namespace castor3d
 							auto surface = writer.declLocale< shader::Surface >( "surface" );
 							surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
 							auto color = writer.declLocale( "color"
-								, lighting->computeCombinedDiffuse( lightMat
+								, lighting->computeCombinedDiffuse( *lightMat
 									, c3d_sceneData
 									, surface
 									, worldEye
 									, c3d_modelData.isShadowReceiver() ) );
-							color *= lightMat.albedo * occlusion;
+							color *= lightMat->albedo * occlusion;
 							color += emissive;
 
 							auto encodedColor = writer.declLocale( "encodedColor"

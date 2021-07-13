@@ -38,7 +38,7 @@ namespace castor3d
 				, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
 				, { size[0], size[1], 1u }
 				, 6u
-				, shader::PbrReflectionModel::MaxIblReflectionLod + 1u
+				, EnvironmentPrefilter::MaxIblReflectionLod + 1u
 				, VK_FORMAT_R32G32B32A32_SFLOAT
 				, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT };
 			result.create();
@@ -113,7 +113,7 @@ namespace castor3d
 				auto vtx_worldPosition = writer.declInput< Vec3 >( "vtx_worldPosition", 0u );
 				auto c3d_mapEnvironment = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment", 1u, 0u );
 				auto c3d_roughness = writer.declConstant< Float >( "c3d_roughness"
-					, writer.cast< Float >( mipLevel / float( shader::PbrReflectionModel::MaxIblReflectionLod ) ) );
+					, writer.cast< Float >( mipLevel / float( EnvironmentPrefilter::MaxIblReflectionLod ) ) );
 
 				// Outputs
 				auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_FragColor", 0u );
@@ -339,6 +339,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	uint32_t const EnvironmentPrefilter::MaxIblReflectionLod = 4;
+
 	EnvironmentPrefilter::MipRenderCube::MipRenderCube( RenderDevice const & device
 		, crg::ResourceHandler & handler
 		, ashes::RenderPass const & renderPass
@@ -437,7 +439,7 @@ namespace castor3d
 	{
 		VkExtent2D originalSize{ size.getWidth(), size.getHeight() };
 
-		for ( auto mipLevel = 0u; mipLevel < shader::PbrReflectionModel::MaxIblReflectionLod + 1u; ++mipLevel )
+		for ( auto mipLevel = 0u; mipLevel < EnvironmentPrefilter::MaxIblReflectionLod + 1u; ++mipLevel )
 		{
 			VkExtent2D mipSize{ uint32_t( originalSize.width >> mipLevel )
 				, uint32_t( originalSize.height >> mipLevel ) };

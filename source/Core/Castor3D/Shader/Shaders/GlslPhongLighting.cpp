@@ -55,6 +55,11 @@ namespace castor3d
 				+ reflected * ambientOcclusion;
 		}
 
+		std::unique_ptr< LightMaterial > PhongLightingModel::declMaterial( std::string const & name )
+		{
+			return m_writer.declDerivedLocale< LightMaterial, PhongLightMaterial >( name );
+		}
+
 		void PhongLightingModel::compute( TiledDirectionalLight const & light
 			, LightMaterial const & material
 			, Surface const & surface

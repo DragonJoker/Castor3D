@@ -25,8 +25,10 @@ namespace castor3d::shader
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
 		: sdw::StructInstance{ writer, std::move( expr ), enabled }
-		, m_albDiv{ getMember< sdw::Vec4 >( "albDiv" ) }
-		, m_spcDiv{ getMember< sdw::Vec4 >( "spcDiv" ) }
+		, albedo{ getMember< sdw::Vec3 >( "albedo" ) }
+		, specular{ getMember< sdw::Vec3 >( "specular" ) }
+		, albDiv{ getMember< sdw::Float >( "albDiv" ) }
+		, spcDiv{ getMember< sdw::Float >( "spcDiv" ) }
 	{
 	}
 
@@ -43,8 +45,10 @@ namespace castor3d::shader
 
 		if ( result->empty() )
 		{
-			result->declMember( "albDiv", ast::type::Kind::eVec4F );
-			result->declMember( "spcDiv", ast::type::Kind::eVec4F );
+			result->declMember( "albedo", ast::type::Kind::eVec3F );
+			result->declMember( "specular", ast::type::Kind::eVec3F );
+			result->declMember( "albDiv", ast::type::Kind::eFloat );
+			result->declMember( "spcDiv", ast::type::Kind::eFloat );
 		}
 
 		return result;
