@@ -44,12 +44,12 @@ namespace castor3d
 {
 	namespace
 	{
-		template< MaterialType MaterialT >
-		ShaderPtr getPixelShaderSourceT( RenderSystem const & renderSystem
+		ShaderPtr getPixelShaderSource( RenderSystem const & renderSystem
 			, PipelineFlags const & flags
 			, FilteredTextureFlags const & textures
 			, bool isTransparentOnly
-			, uint32_t voxelGridSize )
+			, uint32_t voxelGridSize
+			, MaterialType materialType )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -108,7 +108,7 @@ namespace castor3d
 				, addIndex++
 				, RenderPipeline::eAdditional ) );
 			auto lightingModel = shader::LightingModel::createDiffuseModel( utils
-				, shader::getLightingModelName( MaterialT )
+				, shader::getLightingModelName( materialType )
 				, lightsIndex
 				, RenderPipeline::eAdditional
 				, shader::ShadowOptions{ flags.sceneFlags, false }
@@ -650,19 +650,21 @@ namespace castor3d
 
 	ShaderPtr VoxelizePass::doGetPhongPixelShaderSource( PipelineFlags const & flags )const
 	{
-		return getPixelShaderSourceT< MaterialType::ePhong >( *getEngine()->getRenderSystem()
+		return castor3d::getPixelShaderSource( *getEngine()->getRenderSystem()
 			, flags
 			, filterTexturesFlags( flags.textures )
 			, m_mode == RenderMode::eTransparentOnly
-			, m_voxelConfig.gridSize.value() );
+			, m_voxelConfig.gridSize.value()
+			, MaterialType::ePhong );
 	}
 
 	ShaderPtr VoxelizePass::doGetPbrPixelShaderSource( PipelineFlags const & flags )const
 	{
-		return getPixelShaderSourceT< MaterialType::eMetallicRoughness >( *getEngine()->getRenderSystem()
+		return castor3d::getPixelShaderSource( *getEngine()->getRenderSystem()
 			, flags
 			, filterTexturesFlags( flags.textures )
 			, m_mode == RenderMode::eTransparentOnly
-			, m_voxelConfig.gridSize.value() );
+			, m_voxelConfig.gridSize.value()
+			, MaterialType::eMetallicRoughness );
 	}
 }

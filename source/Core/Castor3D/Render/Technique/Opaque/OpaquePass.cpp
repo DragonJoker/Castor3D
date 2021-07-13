@@ -44,12 +44,12 @@ namespace castor3d
 		static String const Output4 = "outData4";
 		static String const Output5 = "outData5";
 
-		template< MaterialType MaterialT >
-		ShaderPtr doGetPixelShaderSourceT( RenderSystem const & renderSystem
+		ShaderPtr getPixelShaderSource( RenderSystem const & renderSystem
 			, PipelineFlags const & flags
 			, FilteredTextureFlags const & textures
 			, TextureFlags const & texturesMask
-			, ShaderFlags const & shaderFlags )
+			, ShaderFlags const & shaderFlags
+			, MaterialType materialType )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -102,7 +102,7 @@ namespace castor3d
 			utils.declareParallaxMappingFunc( flags.passFlags
 				, texturesMask );
 
-			auto lightingModel = utils.createLightingModel( shader::getLightingModelName( MaterialT )
+			auto lightingModel = utils.createLightingModel( shader::getLightingModelName( materialType )
 				, {}
 				, true );
 
@@ -239,19 +239,21 @@ namespace castor3d
 
 	ShaderPtr OpaquePass::doGetPhongPixelShaderSource( PipelineFlags const & flags )const
 	{
-		return doGetPixelShaderSourceT< MaterialType::ePhong >( *getEngine()->getRenderSystem()
+		return castor3d::getPixelShaderSource( *getEngine()->getRenderSystem()
 			, flags
 			, filterTexturesFlags( flags.textures )
 			, getTexturesMask()
-			, getShaderFlags() );
+			, getShaderFlags()
+			, MaterialType::ePhong );
 	}
 
 	ShaderPtr OpaquePass::doGetPbrPixelShaderSource( PipelineFlags const & flags )const
 	{
-		return doGetPixelShaderSourceT< MaterialType::eMetallicRoughness >( *getEngine()->getRenderSystem()
+		return castor3d::getPixelShaderSource( *getEngine()->getRenderSystem()
 			, flags
 			, filterTexturesFlags( flags.textures )
 			, getTexturesMask()
-			, getShaderFlags() );
+			, getShaderFlags()
+			, MaterialType::eMetallicRoughness );
 	}
 }
