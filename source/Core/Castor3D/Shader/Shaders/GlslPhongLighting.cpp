@@ -35,6 +35,26 @@ namespace castor3d
 		{
 		}
 
+		sdw::Vec3 PhongLightingModel::combine( sdw::Vec3 const & directDiffuse
+			, sdw::Vec3 const & indirectDiffuse
+			, sdw::Vec3 const & directSpecular
+			, sdw::Vec3 const & indirectSpecular
+			, sdw::Vec3 const & ambient
+			, sdw::Vec3 const & indirectAmbient
+			, sdw::Float const & ambientOcclusion
+			, sdw::Vec3 const & emissive
+			, sdw::Vec3 const & reflected
+			, sdw::Vec3 const & refracted
+			, sdw::Vec3 const & materialAlbedo )
+		{
+			return materialAlbedo * ( directDiffuse + ( indirectDiffuse * ambientOcclusion ) )
+				+ ( directSpecular + ( indirectSpecular * ambientOcclusion ) )
+				+ ( ambient * indirectAmbient * ambientOcclusion )
+				+ emissive
+				+ refracted
+				+ reflected * ambientOcclusion;
+		}
+
 		void PhongLightingModel::compute( TiledDirectionalLight const & light
 			, LightMaterial const & material
 			, Surface const & surface
@@ -290,26 +310,6 @@ namespace castor3d
 			{
 				emissive *= phongLightMat.albedo;
 			}
-		}
-
-		sdw::Vec3 PhongLightingModel::combine( sdw::Vec3 const & directDiffuse
-			, sdw::Vec3 const & indirectDiffuse
-			, sdw::Vec3 const & directSpecular
-			, sdw::Vec3 const & indirectSpecular
-			, sdw::Vec3 const & ambient
-			, sdw::Vec3 const & indirectAmbient
-			, sdw::Float const & ambientOcclusion
-			, sdw::Vec3 const & emissive
-			, sdw::Vec3 const & reflected
-			, sdw::Vec3 const & refracted
-			, sdw::Vec3 const & materialDiffuse )
-		{
-			return materialDiffuse * ( directDiffuse + ( indirectDiffuse * ambientOcclusion ) )
-				+ ( directSpecular + ( indirectSpecular * ambientOcclusion ) )
-				+ ( ambient * indirectAmbient * ambientOcclusion )
-				+ emissive
-				+ refracted
-				+ reflected * ambientOcclusion;
 		}
 
 		void PhongLightingModel::doDeclareModel()
