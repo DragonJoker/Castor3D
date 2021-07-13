@@ -296,7 +296,7 @@ namespace castor3d
 			return result;
 		}
 
-		ShaderPtr getVertexProgram()
+		ShaderPtr getVertexProgram( RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -312,7 +312,7 @@ namespace castor3d
 			auto outVoxelColor = writer.declOutput< Vec4 >( "outVoxelColor", 0u );
 			auto out = writer.getOut();
 
-			shader::Utils utils{ writer };
+			shader::Utils utils{ writer, *renderSystem.getEngine() };
 			utils.declareUnflatten();
 
 			writer.implementFunction< void >( "main"
@@ -457,7 +457,7 @@ namespace castor3d
 		, m_descriptorSetLayout{ createDescriptorLayout( device ) }
 		, m_pipelineLayout{ createPipelineLayout( device, *m_descriptorSetLayout ) }
 		, m_renderPass{ createRenderPass( device, "Texture3DTo2D", m_target, m_depthBuffer ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "Texture3DTo2D", getVertexProgram() }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "Texture3DTo2D", getVertexProgram( device.renderSystem ) }
 		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, "Texture3DTo2D", getGeometryProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "Texture3DTo2D", getPixelProgram() }
 		, m_pipeline{ createPipeline( device, *m_pipelineLayout, *m_renderPass, m_vertexShader, m_geometryShader, m_pixelShader, m_target ) }

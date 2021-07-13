@@ -54,7 +54,7 @@ namespace castor3d
 			FragmentWriter writer;
 			bool hasTextures = !flags.textures.empty();
 
-			shader::Utils utils{ writer };
+			shader::Utils utils{ writer, *renderSystem.getEngine() };
 			utils.declareRemoveGamma();
 
 			// Fragment Intputs
@@ -87,9 +87,8 @@ namespace castor3d
 			UBO_SHADOWMAP( writer
 				, index++
 				, RenderPipeline::eAdditional );
-			auto lighting = shader::LightingModel::createModel( writer
-				, utils
-				, MaterialT
+			auto lightingModel = shader::LightingModel::createModel( utils
+				, shader::getLightingModelName( MaterialT )
 				, LightType::eSpot
 				, lightsIndex
 				, RenderPipeline::eAdditional
@@ -128,7 +127,7 @@ namespace castor3d
 						, material.opacity );
 					auto alphaRef = writer.declLocale( "alphaRef"
 						, material.alphaRef );
-					auto lightMat = lighting->declMaterial( "lightMat" );
+					auto lightMat = lightingModel->declMaterial( "lightMat" );
 					lightMat->create( material );
 					auto occlusion = writer.declLocale( "occlusion"
 						, 1.0_f );
@@ -137,7 +136,7 @@ namespace castor3d
 
 					if ( hasTextures )
 					{
-						lighting->computeMapContributions( flags.passFlags
+						lightingModel->computeMapContributions( flags.passFlags
 							, textures
 							, gamma
 							, textureConfigs
@@ -165,7 +164,7 @@ namespace castor3d
 						, vec3( 0.0_f ) );
 					shader::OutputComponents output{ lightDiffuse, lightSpecular };
 					auto light = writer.declLocale( "light"
-						, c3d_shadowMapData.getSpotLight( *lighting ) );
+						, c3d_shadowMapData.getSpotLight( *lightingModel ) );
 					auto lightToVertex = writer.declLocale( "lightToVertex"
 						, light.m_position.xyz() - inSurface.worldPosition );
 					auto distance = writer.declLocale( "distance"

@@ -35,6 +35,17 @@ namespace castor3d
 		{
 		}
 
+		LightingModelPtr PhongLightingModel::create( sdw::ShaderWriter & writer
+			, Utils & utils
+			, ShadowOptions shadowOptions
+			, bool isOpaqueProgram )
+		{
+			return std::make_unique< PhongLightingModel >( writer
+				, utils
+				, std::move( shadowOptions )
+				, isOpaqueProgram );
+		}
+
 		sdw::Vec3 PhongLightingModel::combine( sdw::Vec3 const & directDiffuse
 			, sdw::Vec3 const & indirectDiffuse
 			, sdw::Vec3 const & directSpecular

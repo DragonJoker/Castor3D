@@ -760,7 +760,7 @@ namespace castor3d
 			auto vtx_textureRhs = writer.declOutput< Vec2 >( "vtx_textureRhs", CombineRhsIdx );
 			auto out = writer.getOut();
 
-			shader::Utils utils{ writer };
+			shader::Utils utils{ writer, *getEngine() };
 			utils.declareInvertVec2Y();
 
 			auto getSafeBandedCoord = [&]( Vec2 const & texcoord )

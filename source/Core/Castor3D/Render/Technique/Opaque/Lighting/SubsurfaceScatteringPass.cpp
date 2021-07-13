@@ -111,7 +111,7 @@ namespace castor3d
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
-			shader::Utils utils{ writer };
+			shader::Utils utils{ writer, *renderSystem.getEngine() };
 			utils.declareCalcVSPosition();
 			utils.declareInvertVec2Y();
 
@@ -226,7 +226,7 @@ namespace castor3d
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 
-			shader::Utils utils{ writer };
+			shader::Utils utils{ writer, *renderSystem.getEngine() };
 			utils.declareInvertVec2Y();
 
 			writer.implementFunction< sdw::Void >( "main"

@@ -81,7 +81,7 @@ namespace castor3d
 			FragmentWriter writer;
 			bool hasTextures = !flags.textures.empty();
 
-			shader::Utils utils{ writer };
+			shader::Utils utils{ writer, *renderSystem.getEngine() };
 			utils.declareRemoveGamma();
 
 			// Fragment Intputs
@@ -120,9 +120,8 @@ namespace castor3d
 				, index++
 				, RenderPipeline::eAdditional );
 #endif
-			auto lighting = shader::LightingModel::createModel( writer
-				, utils
-				, MaterialT
+			auto lightingModel = shader::LightingModel::createModel( utils
+				, shader::getLightingModelName( MaterialT )
 				, LightType::eDirectional
 				, lightsIndex
 				, RenderPipeline::eAdditional
@@ -161,7 +160,7 @@ namespace castor3d
 						, material.opacity );
 					auto alphaRef = writer.declLocale( "alphaRef"
 						, material.alphaRef );
-					auto lightMat = lighting->declMaterial( "lightMat" );
+					auto lightMat = lightingModel->declMaterial( "lightMat" );
 					lightMat->create( material );
 					auto occlusion = writer.declLocale( "occlusion"
 						, 1.0_f );
@@ -170,7 +169,7 @@ namespace castor3d
 
 					if ( hasTextures )
 					{
-						lighting->computeMapContributions( flags.passFlags
+						lightingModel->computeMapContributions( flags.passFlags
 							, textures
 							, gamma
 							, textureConfigs
@@ -199,10 +198,10 @@ namespace castor3d
 					shader::OutputComponents output{ lightDiffuse, lightSpecular };
 #if C3D_UseTiledDirectionalShadowMap
 					auto light = writer.declLocale( "light"
-						, c3d_shadowMapDirectionalData.getDirectionalLight( *lighting ) );
+						, c3d_shadowMapDirectionalData.getDirectionalLight( *lightingModel ) );
 #else
 					auto light = writer.declLocale( "light"
-						, c3d_shadowMapData.getDirectionalLight( *lighting ) );
+						, c3d_shadowMapData.getDirectionalLight( *lightingModel ) );
 #endif
 					pxl_flux.rgb() = lightMat->albedo
 						* light.m_lightBase.m_colour

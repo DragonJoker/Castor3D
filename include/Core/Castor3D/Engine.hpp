@@ -15,6 +15,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/ToTexture/RenderToTextureModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightingModule.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleModule.hpp"
+#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include "Castor3D/Miscellaneous/Logger.hpp"
@@ -316,6 +317,21 @@ namespace castor3d
 			, crg::FramePassTimer & timer );
 		/**
 		 *\~english
+		 *\brief		Registers a RenderWindow.
+		 *\~french
+		 *\brief		Enregistre une RenderWindow.
+		 */
+		C3D_API void registerLightingModel( castor::String const & name
+			, shader::LightingModelCreator creator );
+		/**
+		 *\~english
+		 *\brief		Unregisters a RenderWindow.
+		 *\~french
+		 *\brief		Désenregistre une RenderWindow.
+		 */
+		C3D_API void unregisterLightingModel( castor::String const & name );
+		/**
+		 *\~english
 		 *\brief		Retrieves plug-ins path
 		 *\return		The plug-ins path
 		 *\~french
@@ -538,6 +554,11 @@ namespace castor3d
 		{
 			return m_resourceHandler;
 		}
+
+		shader::LightingModelFactory const & getLightingModelFactory()const
+		{
+			return m_lightingModelFactory;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -610,6 +631,7 @@ namespace castor3d
 		uint32_t m_lpvGridSize{ 32u };
 		castor::AsyncJobQueue m_jobs;
 		crg::ResourceHandler m_resourceHandler;
+		shader::LightingModelFactory m_lightingModelFactory;
 	};
 }
 

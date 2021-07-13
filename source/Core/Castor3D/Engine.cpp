@@ -16,6 +16,7 @@
 #include "Castor3D/Event/Frame/InitialiseEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/ImporterFactory.hpp"
 #include "Castor3D/Model/Mesh/MeshFactory.hpp"
@@ -27,9 +28,10 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderWindow.hpp"
-#include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Render/Technique/RenderTechnique.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Scene/SceneFileParser.hpp"
+#include "Castor3D/Shader/Shaders/GlslPbrLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Graphics/Image.hpp>
@@ -131,6 +133,9 @@ namespace castor3d
 		FreeImageLoader::registerLoader( m_imageLoader );
 		StbImageWriter::registerWriter( m_imageWriter );
 		GliImageWriter::registerWriter( m_imageWriter );
+
+		m_lightingModelFactory.registerType( "phong", &shader::PhongLightingModel::create );
+		m_lightingModelFactory.registerType( "pbr", &shader::PbrLightingModel::create );
 
 		// m_listenerCache *MUST* be the first created.
 		m_listenerCache = makeCache< FrameListener, String >( *this
@@ -552,6 +557,17 @@ namespace castor3d
 		{
 			m_renderLoop->unregisterTimer( category, timer );
 		}
+	}
+
+	void Engine::registerLightingModel( castor::String const & name
+		, shader::LightingModelCreator creator )
+	{
+		m_lightingModelFactory.registerType( name, creator );
+	}
+
+	void Engine::unregisterLightingModel( castor::String const & name )
+	{
+		m_lightingModelFactory.unregisterType( name );
 	}
 
 	bool Engine::isCleaned()

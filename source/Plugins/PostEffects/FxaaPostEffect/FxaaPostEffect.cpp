@@ -52,9 +52,6 @@ namespace fxaa
 			auto vtx_posPos = writer.declOutput< Vec4 >( PosPos, 1u );
 			auto out = writer.getOut();
 
-			castor3d::shader::Utils utils{ writer };
-			utils.declareInvertVec2Y();
-
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{

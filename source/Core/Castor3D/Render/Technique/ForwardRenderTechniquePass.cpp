@@ -64,7 +64,7 @@ namespace castor3d
 				|| checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
 				|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI );
 
-			shader::Utils utils{ writer };
+			shader::Utils utils{ writer, *renderSystem.getEngine() };
 			utils.declareApplyGamma();
 			utils.declareRemoveGamma();
 			utils.declareParallaxMappingFunc( flags.passFlags
@@ -119,9 +119,8 @@ namespace castor3d
 				, flags.passFlags
 				, index
 				, uint32_t( RenderPipeline::eAdditional ) );
-			auto lighting = shader::LightingModel::createModel( writer
-				, utils
-				, MaterialT
+			auto lightingModel = shader::LightingModel::createModel( utils
+				, shader::getLightingModelName( MaterialT )
 				, lightsIndex
 				, RenderPipeline::eAdditional
 				, shader::ShadowOptions{ flags.sceneFlags, false }
@@ -151,7 +150,7 @@ namespace castor3d
 						, material.gamma );
 					auto emissive = writer.declLocale( "emissive"
 						, vec3( material.emissive ) );
-					auto lightMat = lighting->declMaterial( "lightMat" );
+					auto lightMat = lightingModel->declMaterial( "lightMat" );
 					lightMat->create( material );
 					auto normal = writer.declLocale( "normal"
 						, normalize( inSurface.normal ) );
@@ -171,7 +170,7 @@ namespace castor3d
 
 					auto texCoord = writer.declLocale( "texCoord"
 						, inSurface.texture );
-					lighting->computeMapContributions( flags.passFlags
+					lightingModel->computeMapContributions( flags.passFlags
 						, textures
 						, gamma
 						, textureConfigs
@@ -213,7 +212,7 @@ namespace castor3d
 						shader::OutputComponents output{ lightDiffuse, lightSpecular };
 						auto surface = writer.declLocale< shader::Surface >( "surface" );
 						surface.create( in.fragCoord.xy(), inSurface.viewPosition, inSurface.worldPosition, normal );
-						lighting->computeCombined( *lightMat
+						lightingModel->computeCombined( *lightMat
 							, c3d_sceneData
 							, surface
 							, worldEye
@@ -261,7 +260,7 @@ namespace castor3d
 									, surface )
 								: vec3( 0.0_f ) ) );
 
-						pxl_fragColor = vec4( lighting->combine( lightDiffuse
+						pxl_fragColor = vec4( lightingModel->combine( lightDiffuse
 							, indirectDiffuse
 							, lightSpecular
 							, lightIndirectSpecular
