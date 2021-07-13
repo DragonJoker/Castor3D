@@ -114,12 +114,6 @@ namespace castor3d
 				, ( hasSSAO ? index++ : 0u )
 				, RenderPipeline::eAdditional
 				, hasSSAO );
-			auto reflections = shader::ReflectionModel::create( writer
-				, utils
-				, materialType
-				, flags.passFlags
-				, index
-				, uint32_t( RenderPipeline::eAdditional ) );
 			auto lightingModel = shader::LightingModel::createModel( utils
 				, shader::getLightingModelName( materialType )
 				, lightsIndex
@@ -128,6 +122,9 @@ namespace castor3d
 				, index
 				, RenderPipeline::eAdditional
 				, false );
+			auto reflections = lightingModel->getReflectionModel( flags.passFlags
+				, index
+				, uint32_t( RenderPipeline::eAdditional ) );
 			shader::GlobalIllumination indirect{ writer, utils };
 			indirect.declare( index
 				, RenderPipeline::eAdditional

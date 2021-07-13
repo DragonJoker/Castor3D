@@ -173,10 +173,7 @@ namespace castor3d
 			auto lightingModel = utils.createLightingModel( shader::getLightingModelName( materialType )
 				, {}
 				, true );
-			auto reflections = shader::ReflectionModel::create( writer
-				, utils
-				, materialType
-				, uint32_t( ResolveBind::eEnvironment )
+			auto reflections = lightingModel->getReflectionModel( uint32_t( ResolveBind::eEnvironment )
 				, 0u );
 			shader::CommonFog fog{ writer };
 
