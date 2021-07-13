@@ -64,6 +64,22 @@ namespace castor3d::shader
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, bool isOpaqueProgram );
+		C3D_API static std::shared_ptr< LightingModel > create( sdw::ShaderWriter & writer
+			, Utils & utils
+			, MaterialType materialType
+			, ShadowOptions const & shadowsOptions
+			, bool isOpaqueProgram );
+		C3D_API virtual sdw::Vec3 combine( sdw::Vec3 const & directDiffuse
+			, sdw::Vec3 const & indirectDiffuse
+			, sdw::Vec3 const & directSpecular
+			, sdw::Vec3 const & indirectSpecular
+			, sdw::Vec3 const & ambient
+			, sdw::Vec3 const & indirectAmbient
+			, sdw::Float const & ambientOcclusion
+			, sdw::Vec3 const & emissive
+			, sdw::Vec3 const & reflected
+			, sdw::Vec3 const & refracted
+			, sdw::Vec3 const & materialAlbedo ) = 0;
 		/**
 		*\name
 		*	Forward renderring
