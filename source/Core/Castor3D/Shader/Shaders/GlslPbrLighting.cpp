@@ -5,6 +5,7 @@
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslPbrMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslPbrReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
@@ -67,6 +68,26 @@ namespace castor3d
 		std::unique_ptr< LightMaterial > PbrLightingModel::declMaterial( std::string const & name )
 		{
 			return m_writer.declDerivedLocale< LightMaterial, PbrLightMaterial >( name );
+		}
+
+		ReflectionModelPtr PbrLightingModel::getReflectionModel( PassFlags const & passFlags
+			, uint32_t & envMapBinding
+			, uint32_t envMapSet )const
+		{
+			return std::make_unique< PbrReflectionModel >( m_writer
+				, m_utils
+				, passFlags
+				, envMapBinding
+				, envMapSet );
+		}
+
+		ReflectionModelPtr PbrLightingModel::getReflectionModel( uint32_t envMapBinding
+			, uint32_t envMapSet )const
+		{
+			return std::make_unique< PbrReflectionModel >( m_writer
+				, m_utils
+				, envMapBinding
+				, envMapSet );
 		}
 
 		void PbrLightingModel::compute( TiledDirectionalLight const & light
