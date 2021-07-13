@@ -129,6 +129,7 @@ namespace castor3d
 				, uint32_t( RenderPipeline::eAdditional ) };
 			auto lighting = LightingModel::createModel( writer
 				, utils
+				, MaterialT
 				, lightsIndex
 				, RenderPipeline::eAdditional
 				, shader::ShadowOptions{ flags.sceneFlags, false }
@@ -210,11 +211,11 @@ namespace castor3d
 						shader::OutputComponents output{ lightDiffuse, lightSpecular };
 						auto surface = writer.declLocale< shader::Surface >( "surface" );
 						surface.create( in.fragCoord.xy(), inSurface.viewPosition, inSurface.worldPosition, normal );
-						lighting->computeCombined( worldEye
-							, lightMat
-							, c3d_modelData.isShadowReceiver()
+						lighting->computeCombined( lightMat
 							, c3d_sceneData
 							, surface
+							, worldEye
+							, c3d_modelData.isShadowReceiver()
 							, output );
 						lightMat.adjustDirectSpecular( lightSpecular );
 

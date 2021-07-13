@@ -140,7 +140,7 @@ namespace castor3d
 							, c3d_sceneData.getPosToCamera( surface.worldPosition )
 							, surface
 							, specular
-							, shader::LightingModel::computeRoughness( shader::LightingModel::computeGlossiness( shininess ) )
+							, shader::LightMaterial::computeRoughness( shader::LightMaterial::computeGlossiness( shininess ) )
 							, occlusion
 							, indirectDiffuse .w() );
 						pxl_indirectDiffuse = indirectDiffuse.xyz();
