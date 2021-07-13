@@ -45,252 +45,6 @@ using namespace castor;
 
 namespace castor3d
 {
-	namespace
-	{
-		ShaderPtr getPixelShaderSource( RenderSystem const & renderSystem
-			, PipelineFlags const & flags
-			, FilteredTextureFlags const & textures
-			, TextureFlags const & texturesMask
-			, ShaderFlags const & shaderFlags
-			, bool hasSSAO
-			, bool hasVelocity
-			, bool isTransparentOnly
-			, MaterialType materialType )
-		{
-			using namespace sdw;
-			FragmentWriter writer;
-			bool hasTextures = !flags.textures.empty();
-			bool hasDiffuseGI = checkFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing )
-				|| checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
-				|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI );
-
-			shader::Utils utils{ writer, *renderSystem.getEngine() };
-			utils.declareApplyGamma();
-			utils.declareRemoveGamma();
-			utils.declareParallaxMappingFunc( flags.passFlags
-				, texturesMask );
-
-			shader::CookTorranceBRDF cookTorrance{ writer, utils };
-			cookTorrance.declareDiffuse();
-
-			// Fragment Intputs
-			shader::InFragmentSurface inSurface{ writer
-				, shaderFlags
-				, hasTextures };
-
-			shader::Materials materials{ writer };
-			materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( NodeUboIdx::eMaterials )
-				, RenderPipeline::eBuffers );
-			shader::TextureConfigurations textureConfigs{ writer };
-
-			if ( hasTextures )
-			{
-				textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-					, uint32_t( NodeUboIdx::eTextures )
-					, RenderPipeline::eBuffers );
-			}
-
-			UBO_MODEL( writer
-				, uint32_t( NodeUboIdx::eModel )
-				, RenderPipeline::eBuffers );
-
-			auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-				, 0u
-				, RenderPipeline::eTextures
-				, std::max( 1u, uint32_t( flags.textures.size() ) )
-				, hasTextures ) );
-
-			UBO_MATRIX( writer
-				, uint32_t( PassUboIdx::eMatrix )
-				, RenderPipeline::eAdditional );
-			UBO_SCENE( writer
-				, uint32_t( PassUboIdx::eScene )
-				, RenderPipeline::eAdditional );
-			auto index = uint32_t( PassUboIdx::eCount );
-			auto lightsIndex = index++;
-			auto c3d_mapOcclusion = writer.declSampledImage< FImg2DR32 >( "c3d_mapOcclusion"
-				, ( hasSSAO ? index++ : 0u )
-				, RenderPipeline::eAdditional
-				, hasSSAO );
-			auto lightingModel = shader::LightingModel::createModel( utils
-				, shader::getLightingModelName( materialType )
-				, lightsIndex
-				, RenderPipeline::eAdditional
-				, shader::ShadowOptions{ flags.sceneFlags, false }
-				, index
-				, RenderPipeline::eAdditional
-				, !isTransparentOnly );
-			auto reflections = lightingModel->getReflectionModel( flags.passFlags
-				, index
-				, uint32_t( RenderPipeline::eAdditional ) );
-			shader::GlobalIllumination indirect{ writer, utils };
-			indirect.declare( index
-				, RenderPipeline::eAdditional
-				, flags.sceneFlags );
-
-			auto in = writer.getIn();
-			shader::Fog fog{ getFogType( flags.sceneFlags ), writer };
-
-			// Fragment Outputs
-			auto pxl_fragColor( writer.declOutput< Vec4 >( "pxl_fragColor", 0 ) );
-			auto pxl_velocity( writer.declOutput< Vec4 >( "pxl_velocity", 1, hasVelocity ) );
-
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
-				{
-					auto material = writer.declLocale( "material"
-						, materials.getMaterial( inSurface.material ) );
-					auto opacity = writer.declLocale( "opacity"
-						, material.opacity );
-					auto gamma = writer.declLocale( "gamma"
-						, material.gamma );
-					auto emissive = writer.declLocale( "emissive"
-						, vec3( material.emissive ) );
-					auto lightMat = lightingModel->declMaterial( "lightMat" );
-					lightMat->create( material );
-					auto normal = writer.declLocale( "normal"
-						, normalize( inSurface.normal ) );
-					auto tangent = writer.declLocale( "tangent"
-						, normalize( inSurface.tangent ) );
-					auto bitangent = writer.declLocale( "bitangent"
-						, normalize( inSurface.bitangent ) );
-					auto occlusion = writer.declLocale( "occlusion"
-						, 1.0_f );
-					auto transmittance = writer.declLocale( "transmittance"
-						, 0.0_f );
-
-					if ( hasSSAO )
-					{
-						occlusion *= c3d_mapOcclusion.fetch( ivec2( in.fragCoord.xy() ), 0_i );
-					}
-
-					auto texCoord = writer.declLocale( "texCoord"
-						, inSurface.texture );
-					lightingModel->computeMapContributions( flags.passFlags
-						, textures
-						, gamma
-						, textureConfigs
-						, c3d_maps
-						, texCoord
-						, normal
-						, tangent
-						, bitangent
-						, emissive
-						, opacity
-						, occlusion
-						, transmittance
-						, *lightMat
-						, inSurface.tangentSpaceViewPosition
-						, inSurface.tangentSpaceFragPosition );
-
-					if ( isTransparentOnly )
-					{
-						utils.applyAlphaFunc( flags.blendAlphaFunc
-							, opacity
-							, material.alphaRef
-							, false );
-					}
-					else
-					{
-						utils.applyAlphaFunc( flags.alphaFunc
-							, opacity
-							, material.alphaRef );
-					}
-
-					if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
-					{
-						auto worldEye = writer.declLocale( "worldEye"
-							, c3d_sceneData.getCameraPosition() );
-						auto lightDiffuse = writer.declLocale( "lightDiffuse"
-							, vec3( 0.0_f ) );
-						auto lightSpecular = writer.declLocale( "lightSpecular"
-							, vec3( 0.0_f ) );
-						shader::OutputComponents output{ lightDiffuse, lightSpecular };
-						auto surface = writer.declLocale< shader::Surface >( "surface" );
-						surface.create( in.fragCoord.xy(), inSurface.viewPosition, inSurface.worldPosition, normal );
-						lightingModel->computeCombined( *lightMat
-							, c3d_sceneData
-							, surface
-							, worldEye
-							, c3d_modelData.isShadowReceiver()
-							, output );
-
-						auto ambient = writer.declLocale( "ambient"
-							, lightMat->getAmbient( c3d_sceneData.getAmbientLight() ) );
-						auto reflected = writer.declLocale( "reflected"
-							, vec3( 0.0_f ) );
-						auto refracted = writer.declLocale( "refracted"
-							, vec3( 0.0_f ) );
-						reflections->computeForward( *lightMat
-							, surface
-							, c3d_sceneData
-							, material.refractionRatio
-							, material.transmission
-							, ambient
-							, reflected
-							, refracted );
-						lightMat->adjustDirectSpecular( lightSpecular );
-
-						auto indirectOcclusion = writer.declLocale( "indirectOcclusion"
-							, 1.0_f );
-						auto lightIndirectDiffuse = indirect.computeDiffuse( flags.sceneFlags
-							, surface
-							, indirectOcclusion );
-						auto lightIndirectSpecular = indirect.computeSpecular( flags.sceneFlags
-							, worldEye
-							, c3d_sceneData.getPosToCamera( surface.worldPosition )
-							, surface
-							, lightMat->specular
-							, lightMat->getRoughness()
-							, indirectOcclusion
-							, lightIndirectDiffuse.w() );
-						auto indirectAmbient = writer.declLocale( "indirectAmbient"
-							, lightMat->getIndirectAmbient( indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() ) ) );
-						auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
-							, ( hasDiffuseGI
-								? cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
-									, c3d_sceneData.getCameraPosition()
-									, surface.worldNormal
-									, lightMat->specular
-									, lightMat->getMetalness()
-									, surface )
-								: vec3( 0.0_f ) ) );
-
-						pxl_fragColor = vec4( lightingModel->combine( lightDiffuse
-							, indirectDiffuse
-							, lightSpecular
-							, lightIndirectSpecular
-							, ambient
-							, indirectAmbient
-							, occlusion
-							, emissive
-							, reflected
-							, refracted
-							, lightMat->albedo )
-							, opacity );
-					}
-					else
-					{
-						pxl_fragColor = vec4( lightMat->albedo, opacity );
-					}
-
-					if ( getFogType( flags.sceneFlags ) != FogType::eDisabled )
-					{
-						pxl_fragColor = fog.apply( c3d_sceneData.getBackgroundColour( utils, gamma )
-							, pxl_fragColor
-							, length( inSurface.viewPosition )
-							, inSurface.viewPosition.y()
-							, c3d_sceneData );
-					}
-
-					pxl_velocity.xy() = inSurface.getVelocity();
-				} );
-
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-	}
-
 	ForwardRenderTechniquePass::ForwardRenderTechniquePass( crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
@@ -318,29 +72,240 @@ namespace castor3d
 		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
 	}
 
-	ShaderPtr ForwardRenderTechniquePass::doGetPhongPixelShaderSource( PipelineFlags const & flags )const
+	ShaderPtr ForwardRenderTechniquePass::doGetPixelShaderSource( PipelineFlags const & flags )const
 	{
-		return castor3d::getPixelShaderSource( *getEngine()->getRenderSystem()
-			, flags
-			, filterTexturesFlags( flags.textures )
-			, getTexturesMask()
-			, getShaderFlags()
-			, m_ssao
-			, m_hasVelocity
-			, m_mode == RenderMode::eTransparentOnly
-			, MaterialType::ePhong );
-	}
+		auto & renderSystem = *getEngine()->getRenderSystem();
 
-	ShaderPtr ForwardRenderTechniquePass::doGetPbrPixelShaderSource( PipelineFlags const & flags )const
-	{
-		return castor3d::getPixelShaderSource( *getEngine()->getRenderSystem()
-			, flags
-			, filterTexturesFlags( flags.textures )
-			, getTexturesMask()
+		using namespace sdw;
+		FragmentWriter writer;
+		bool hasTextures = !flags.textures.empty();
+		bool hasDiffuseGI = checkFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing )
+			|| checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
+			|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI );
+
+		shader::Utils utils{ writer, *renderSystem.getEngine() };
+		utils.declareApplyGamma();
+		utils.declareRemoveGamma();
+		utils.declareParallaxMappingFunc( flags.passFlags
+			, getTexturesMask() );
+
+		shader::CookTorranceBRDF cookTorrance{ writer, utils };
+		cookTorrance.declareDiffuse();
+
+		// Fragment Intputs
+		shader::InFragmentSurface inSurface{ writer
 			, getShaderFlags()
-			, m_ssao
-			, m_hasVelocity
-			, m_mode == RenderMode::eTransparentOnly
-			, MaterialType::eMetallicRoughness );
+			, hasTextures };
+
+		shader::Materials materials{ writer };
+		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+			, uint32_t( NodeUboIdx::eMaterials )
+			, RenderPipeline::eBuffers );
+		shader::TextureConfigurations textureConfigs{ writer };
+
+		if ( hasTextures )
+		{
+			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+				, uint32_t( NodeUboIdx::eTextures )
+				, RenderPipeline::eBuffers );
+		}
+
+		UBO_MODEL( writer
+			, uint32_t( NodeUboIdx::eModel )
+			, RenderPipeline::eBuffers );
+
+		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
+			, 0u
+			, RenderPipeline::eTextures
+			, std::max( 1u, uint32_t( flags.textures.size() ) )
+			, hasTextures ) );
+
+		UBO_MATRIX( writer
+			, uint32_t( PassUboIdx::eMatrix )
+			, RenderPipeline::eAdditional );
+		UBO_SCENE( writer
+			, uint32_t( PassUboIdx::eScene )
+			, RenderPipeline::eAdditional );
+		auto index = uint32_t( PassUboIdx::eCount );
+		auto lightsIndex = index++;
+		auto c3d_mapOcclusion = writer.declSampledImage< FImg2DR32 >( "c3d_mapOcclusion"
+			, ( m_ssao ? index++ : 0u )
+			, RenderPipeline::eAdditional
+			, m_ssao != nullptr );
+		auto lightingModel = shader::LightingModel::createModel( utils
+			, shader::getLightingModelName( flags.passFlags )
+			, lightsIndex
+			, RenderPipeline::eAdditional
+			, shader::ShadowOptions{ flags.sceneFlags, false }
+			, index
+			, RenderPipeline::eAdditional
+			, m_mode != RenderMode::eTransparentOnly );
+		auto reflections = lightingModel->getReflectionModel( flags.passFlags
+			, index
+			, uint32_t( RenderPipeline::eAdditional ) );
+		shader::GlobalIllumination indirect{ writer, utils };
+		indirect.declare( index
+			, RenderPipeline::eAdditional
+			, flags.sceneFlags );
+
+		auto in = writer.getIn();
+		shader::Fog fog{ getFogType( flags.sceneFlags ), writer };
+
+		// Fragment Outputs
+		auto pxl_fragColor( writer.declOutput< Vec4 >( "pxl_fragColor", 0 ) );
+		auto pxl_velocity( writer.declOutput< Vec4 >( "pxl_velocity", 1, m_hasVelocity ) );
+
+		writer.implementFunction< sdw::Void >( "main"
+			, [&]()
+			{
+				auto material = writer.declLocale( "material"
+					, materials.getMaterial( inSurface.material ) );
+				auto opacity = writer.declLocale( "opacity"
+					, material.opacity );
+				auto gamma = writer.declLocale( "gamma"
+					, material.gamma );
+				auto emissive = writer.declLocale( "emissive"
+					, vec3( material.emissive ) );
+				auto lightMat = lightingModel->declMaterial( "lightMat" );
+				lightMat->create( material );
+				auto normal = writer.declLocale( "normal"
+					, normalize( inSurface.normal ) );
+				auto tangent = writer.declLocale( "tangent"
+					, normalize( inSurface.tangent ) );
+				auto bitangent = writer.declLocale( "bitangent"
+					, normalize( inSurface.bitangent ) );
+				auto occlusion = writer.declLocale( "occlusion"
+					, 1.0_f );
+				auto transmittance = writer.declLocale( "transmittance"
+					, 0.0_f );
+
+				if ( m_ssao )
+				{
+					occlusion *= c3d_mapOcclusion.fetch( ivec2( in.fragCoord.xy() ), 0_i );
+				}
+
+				auto texCoord = writer.declLocale( "texCoord"
+					, inSurface.texture );
+				lightingModel->computeMapContributions( flags.passFlags
+					, filterTexturesFlags( flags.textures )
+					, gamma
+					, textureConfigs
+					, c3d_maps
+					, texCoord
+					, normal
+					, tangent
+					, bitangent
+					, emissive
+					, opacity
+					, occlusion
+					, transmittance
+					, *lightMat
+					, inSurface.tangentSpaceViewPosition
+					, inSurface.tangentSpaceFragPosition );
+
+				if ( m_mode == RenderMode::eTransparentOnly )
+				{
+					utils.applyAlphaFunc( flags.blendAlphaFunc
+						, opacity
+						, material.alphaRef
+						, false );
+				}
+				else
+				{
+					utils.applyAlphaFunc( flags.alphaFunc
+						, opacity
+						, material.alphaRef );
+				}
+
+				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
+				{
+					auto worldEye = writer.declLocale( "worldEye"
+						, c3d_sceneData.getCameraPosition() );
+					auto lightDiffuse = writer.declLocale( "lightDiffuse"
+						, vec3( 0.0_f ) );
+					auto lightSpecular = writer.declLocale( "lightSpecular"
+						, vec3( 0.0_f ) );
+					shader::OutputComponents output{ lightDiffuse, lightSpecular };
+					auto surface = writer.declLocale< shader::Surface >( "surface" );
+					surface.create( in.fragCoord.xy(), inSurface.viewPosition, inSurface.worldPosition, normal );
+					lightingModel->computeCombined( *lightMat
+						, c3d_sceneData
+						, surface
+						, worldEye
+						, c3d_modelData.isShadowReceiver()
+						, output );
+
+					auto ambient = writer.declLocale( "ambient"
+						, lightMat->getAmbient( c3d_sceneData.getAmbientLight() ) );
+					auto reflected = writer.declLocale( "reflected"
+						, vec3( 0.0_f ) );
+					auto refracted = writer.declLocale( "refracted"
+						, vec3( 0.0_f ) );
+					reflections->computeForward( *lightMat
+						, surface
+						, c3d_sceneData
+						, material.refractionRatio
+						, material.transmission
+						, ambient
+						, reflected
+						, refracted );
+					lightMat->adjustDirectSpecular( lightSpecular );
+
+					auto indirectOcclusion = writer.declLocale( "indirectOcclusion"
+						, 1.0_f );
+					auto lightIndirectDiffuse = indirect.computeDiffuse( flags.sceneFlags
+						, surface
+						, indirectOcclusion );
+					auto lightIndirectSpecular = indirect.computeSpecular( flags.sceneFlags
+						, worldEye
+						, c3d_sceneData.getPosToCamera( surface.worldPosition )
+						, surface
+						, lightMat->specular
+						, lightMat->getRoughness()
+						, indirectOcclusion
+						, lightIndirectDiffuse.w() );
+					auto indirectAmbient = writer.declLocale( "indirectAmbient"
+						, lightMat->getIndirectAmbient( indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() ) ) );
+					auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
+						, ( hasDiffuseGI
+							? cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
+								, c3d_sceneData.getCameraPosition()
+								, surface.worldNormal
+								, lightMat->specular
+								, lightMat->getMetalness()
+								, surface )
+							: vec3( 0.0_f ) ) );
+
+					pxl_fragColor = vec4( lightingModel->combine( lightDiffuse
+						, indirectDiffuse
+						, lightSpecular
+						, lightIndirectSpecular
+						, ambient
+						, indirectAmbient
+						, occlusion
+						, emissive
+						, reflected
+						, refracted
+						, lightMat->albedo )
+						, opacity );
+				}
+				else
+				{
+					pxl_fragColor = vec4( lightMat->albedo, opacity );
+				}
+
+				if ( getFogType( flags.sceneFlags ) != FogType::eDisabled )
+				{
+					pxl_fragColor = fog.apply( c3d_sceneData.getBackgroundColour( utils, gamma )
+						, pxl_fragColor
+						, length( inSurface.viewPosition )
+						, inSurface.viewPosition.y()
+						, c3d_sceneData );
+				}
+
+				pxl_velocity.xy() = inSurface.getVelocity();
+			} );
+
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 }

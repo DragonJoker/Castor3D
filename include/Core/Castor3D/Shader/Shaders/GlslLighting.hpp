@@ -12,6 +12,7 @@ See LICENSE file in root folder
 
 namespace castor3d::shader
 {
+	castor::String getLightingModelName( PassFlags const & flags );
 	castor::String getLightingModelName( MaterialType materialType );
 
 	struct LightMaterial

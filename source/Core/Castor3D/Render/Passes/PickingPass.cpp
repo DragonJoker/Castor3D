@@ -391,16 +391,6 @@ namespace castor3d
 		return ShaderPtr{};
 	}
 
-	ShaderPtr PickingPass::doGetPhongPixelShaderSource( PipelineFlags const & flags )const
-	{
-		return doGetPixelShaderSource( flags );
-	}
-
-	ShaderPtr PickingPass::doGetPbrPixelShaderSource( PipelineFlags const & flags )const
-	{
-		return doGetPixelShaderSource( flags );
-	}
-
 	ShaderPtr PickingPass::doGetPixelShaderSource( PipelineFlags const & flags )const
 	{
 		using namespace sdw;
