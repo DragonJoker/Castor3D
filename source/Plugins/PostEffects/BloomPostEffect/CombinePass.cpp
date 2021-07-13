@@ -56,9 +56,6 @@ namespace Bloom
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 
-			castor3d::shader::Utils utils{ writer };
-			utils.declareInvertVec2Y();
-
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{

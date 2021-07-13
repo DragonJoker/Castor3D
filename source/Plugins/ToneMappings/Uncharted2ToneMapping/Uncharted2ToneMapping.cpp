@@ -29,9 +29,6 @@ namespace Uncharted2
 		// Shader outputs
 		auto pxl_rgb = writer.declOutput< Vec4 >( "pxl_rgb", 0 );
 
-		shader::Utils utils{ writer };
-		utils.declareApplyGamma();
-
 		auto ShoulderStrength = writer.declConstant( "ShoulderStrength", 0.15_f );
 		auto LinearStrength = writer.declConstant( "LinearStrength", 0.50_f );
 		auto LinearAngle = writer.declConstant( "LinearAngle", 0.10_f );

@@ -228,7 +228,7 @@ namespace castor3d
 		auto data1 = writer.declOutput< Vec4 >( "data1", 0u );
 		auto velocity = writer.declOutput< Vec4 >( "velocity", 1u );
 
-		shader::Utils utils{ writer };
+		shader::Utils utils{ writer, *renderSystem.getEngine() };
 		utils.declareEncodeMaterial();
 		utils.declareParallaxMappingFunc( flags.passFlags
 			, getTexturesMask() );

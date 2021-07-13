@@ -12,6 +12,8 @@ See LICENSE file in root folder
 
 namespace castor3d::shader
 {
+	castor::String getLightingModelName( MaterialType materialType );
+
 	struct LightMaterial
 		: public sdw::StructInstance
 	{
@@ -67,11 +69,6 @@ namespace castor3d::shader
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, bool isOpaqueProgram );
-		C3D_API static std::shared_ptr< LightingModel > create( sdw::ShaderWriter & writer
-			, Utils & utils
-			, MaterialType materialType
-			, ShadowOptions const & shadowsOptions
-			, bool isOpaqueProgram );
 		C3D_API virtual sdw::Vec3 combine( sdw::Vec3 const & directDiffuse
 			, sdw::Vec3 const & indirectDiffuse
 			, sdw::Vec3 const & directSpecular
@@ -104,9 +101,8 @@ namespace castor3d::shader
 			, sdw::Vec3 const & worldEye
 			, sdw::Int const & receivesShadows
 			, OutputComponents & output )const;
-		C3D_API static std::shared_ptr< LightingModel > createModel( sdw::ShaderWriter & writer
-			, Utils & utils
-			, MaterialType materialType
+		C3D_API static LightingModelPtr createModel( Utils & utils
+			, castor::String const & name
 			, uint32_t lightsBufBinding
 			, uint32_t lightsBufSet
 			, ShadowOptions const & shadows
@@ -114,9 +110,8 @@ namespace castor3d::shader
 			, uint32_t shadowMapSet
 			, bool isOpaqueProgram );
 		template< typename LightsBufBindingT >
-		static std::shared_ptr< LightingModel > createModelT( sdw::ShaderWriter & writer
-			, Utils & utils
-			, MaterialType materialType
+		static LightingModelPtr createModelT( Utils & utils
+			, castor::String const & name
 			, LightsBufBindingT lightsBufBinding
 			, uint32_t lightsBufSet
 			, ShadowOptions const & shadows
@@ -124,9 +119,8 @@ namespace castor3d::shader
 			, uint32_t shadowMapSet
 			, bool isOpaqueProgram )
 		{
-			return createModel( writer
-				, utils
-				, materialType
+			return createModel( utils
+				, name
 				, uint32_t( lightsBufBinding )
 				, lightsBufSet
 				, shadows
@@ -135,9 +129,8 @@ namespace castor3d::shader
 				, isOpaqueProgram );
 		}
 		template< typename LightBindingT >
-		static std::shared_ptr< LightingModel > createModel( sdw::ShaderWriter & writer
-			, Utils & utils
-			, MaterialType materialType
+		static LightingModelPtr createModel( Utils & utils
+			, castor::String const & name
 			, LightType light
 			, LightBindingT lightBinding
 			, uint32_t lightSet
@@ -146,9 +139,8 @@ namespace castor3d::shader
 			, uint32_t & shadowMapBinding
 			, uint32_t shadowMapSet )
 		{
-			return createModel( writer
-				, utils
-				, materialType
+			return createModel( utils
+				, name
 				, light
 				, lightUbo
 				, uint32_t( lightBinding )
@@ -172,9 +164,8 @@ namespace castor3d::shader
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
 			, sdw::Int const & receivesShadows )const;
-		C3D_API static std::shared_ptr< LightingModel > createDiffuseModel( sdw::ShaderWriter & writer
-			, Utils & utils
-			, MaterialType materialType
+		C3D_API static LightingModelPtr createDiffuseModel( Utils & utils
+			, castor::String const & name
 			, uint32_t lightsBufBinding
 			, uint32_t lightsBufSet
 			, ShadowOptions const & shadows
@@ -182,9 +173,8 @@ namespace castor3d::shader
 			, uint32_t shadowMapSet
 			, bool isOpaqueProgram );
 		template< typename LightsBufBindingT >
-		static std::shared_ptr< LightingModel > createDiffuseModelT( sdw::ShaderWriter & writer
-			, Utils & utils
-			, MaterialType materialType
+		static LightingModelPtr createDiffuseModelT( Utils & utils
+			, castor::String const & name
 			, LightsBufBindingT lightsBufBinding
 			, uint32_t lightsBufSet
 			, ShadowOptions const & shadows
@@ -192,9 +182,8 @@ namespace castor3d::shader
 			, uint32_t shadowMapSet
 			, bool isOpaqueProgram )
 		{
-			return createDiffuseModel( writer
-				, utils
-				, materialType
+			return createDiffuseModel( utils
+				, name
 				, uint32_t( lightsBufBinding )
 				, lightsBufSet
 				, shadows
@@ -349,9 +338,8 @@ namespace castor3d::shader
 		virtual void doDeclareComputeSpotLightDiffuse() = 0;
 
 	private:
-		C3D_API static std::shared_ptr< LightingModel > createModel( sdw::ShaderWriter & writer
-			, Utils & utils
-			, MaterialType materialType
+		C3D_API static LightingModelPtr createModel( Utils & utils
+			, castor::String const & name
 			, LightType light
 			, bool lightUbo
 			, uint32_t lightBinding

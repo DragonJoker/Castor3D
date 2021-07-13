@@ -96,15 +96,13 @@ namespace castor3d
 			auto outData5 = writer.declOutput< Vec4 >( Output5, index++ );
 			auto out = writer.getOut();
 
-			shader::Utils utils{ writer };
+			shader::Utils utils{ writer, *renderSystem.getEngine() };
 			utils.declareRemoveGamma();
 			utils.declareEncodeMaterial();
 			utils.declareParallaxMappingFunc( flags.passFlags
 				, texturesMask );
 
-			auto lighting = shader::LightingModel::create( writer
-				, utils
-				, MaterialT
+			auto lightingModel = utils.createLightingModel( shader::getLightingModelName( MaterialT )
 				, {}
 				, true );
 
@@ -121,7 +119,7 @@ namespace castor3d
 						, material.gamma );
 					auto emissive = writer.declLocale( "emissive"
 						, vec3( material.emissive ) );
-					auto lightMat = lighting->declMaterial( "lightMat" );
+					auto lightMat = lightingModel->declMaterial( "lightMat" );
 					lightMat->create( material );
 					auto normal = writer.declLocale( "normal"
 						, normalize( inSurface.normal ) );
@@ -134,7 +132,7 @@ namespace castor3d
 					auto transmittance = writer.declLocale( "transmittance"
 						, 0.0_f );
 
-					lighting->computeMapContributions( flags.passFlags
+					lightingModel->computeMapContributions( flags.passFlags
 						, textures
 						, gamma
 						, textureConfigs
