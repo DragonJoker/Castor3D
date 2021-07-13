@@ -10,10 +10,8 @@ namespace castor3d::shader
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
 		: LightMaterial{ writer, std::move( expr ), enabled }
-		, albedo{ m_albDiv.rgb() }
-		, ambient{ m_albDiv.a() }
-		, specular{ m_spcDiv.rgb() }
-		, shininess{ m_spcDiv.a() }
+		, ambient{ albDiv }
+		, shininess{ spcDiv }
 	{
 	}
 

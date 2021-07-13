@@ -134,9 +134,6 @@ namespace castor3d
 		ShaderPtr createPixelProgramT( RenderSystem const & renderSystem
 			, ResolveProgramConfig const & config )
 		{
-			using MyTraits = shader::ShaderMaterialTraitsT< MaterialT >;
-			using LightMaterial = typename MyTraits::LightMaterial;
-
 			using namespace sdw;
 			FragmentWriter writer;
 
@@ -246,14 +243,14 @@ namespace castor3d
 							, data5.a() );
 						auto emissive = writer.declLocale( "emissive"
 							, data4.xyz() );
-						auto lightMat = writer.declLocale< LightMaterial >( "lightMat" );
-						lightMat.create( albedo
+						auto lightMat = lightingModel->declMaterial( "lightMat" );
+						lightMat->create( albedo
 							, data3
 							, data2
 							, material.colourDiv.a() );
 
 						auto ambient = writer.declLocale( "ambient"
-							, lightMat.getAmbient( c3d_sceneData.getAmbientLight() ) );
+							, lightMat->getAmbient( c3d_sceneData.getAmbientLight() ) );
 						auto lightDiffuse = writer.declLocale( "lightDiffuse"
 							, c3d_mapLightDiffuse.lod( vtx_texture, 0.0_f ).xyz() );
 						auto lightSpecular = writer.declLocale( "lightSpecular"
@@ -264,7 +261,7 @@ namespace castor3d
 						auto lightIndirectSpecular = writer.declLocale( "lightIndirectSpecular"
 							, c3d_mapLightIndirectSpecular.lod( vtx_texture, 0.0_f ).rgb()
 							, config.hasSpecularGi );
-						lightMat.adjustDirectSpecular( lightSpecular );
+						lightMat->adjustDirectSpecular( lightSpecular );
 
 						if ( config.hasSsao )
 						{
@@ -275,7 +272,7 @@ namespace castor3d
 							, vec3( 0.0_f ) );
 						auto refracted = writer.declLocale( "refracted"
 							, vec3( 0.0_f ) );
-						reflections->computeDeferred( lightMat
+						reflections->computeDeferred( *lightMat
 							, surface
 							, c3d_sceneData
 							, envMapIndex
@@ -287,14 +284,14 @@ namespace castor3d
 							, reflected
 							, refracted );
 						auto indirectAmbient = writer.declLocale( "indirectAmbient"
-							, lightMat.getIndirectAmbient( config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 1.0_f ) ) );
+							, lightMat->getIndirectAmbient( config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 1.0_f ) ) );
 						auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
 							, ( config.hasDiffuseGi
 								? cookTorrance.computeDiffuse( lightIndirectDiffuse
 									, c3d_sceneData.getCameraPosition()
 									, surface.worldNormal
-									, lightMat.specular
-									, lightMat.getMetalness()
+									, lightMat->specular
+									, lightMat->getMetalness()
 									, surface )
 								: vec3( 0.0_f ) ) );
 						pxl_fragColor = vec4( lightingModel->combine( lightDiffuse
@@ -307,7 +304,7 @@ namespace castor3d
 								, emissive
 								, reflected
 								, refracted
-								, lightMat.albedo )
+								, lightMat->albedo )
 							, 1.0_f );
 					}
 					ELSE
