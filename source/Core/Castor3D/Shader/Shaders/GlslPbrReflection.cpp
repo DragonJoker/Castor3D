@@ -1,6 +1,7 @@
 #include "Castor3D/Shader/Shaders/GlslPbrReflection.hpp"
 
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
+#include "Castor3D/Render/PBR/EnvironmentPrefilter.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
@@ -15,8 +16,6 @@
 
 namespace castor3d::shader
 {
-	uint32_t const PbrReflectionModel::MaxIblReflectionLod = 4;
-
 	PbrReflectionModel::PbrReflectionModel( sdw::ShaderWriter & writer
 		, Utils & utils
 		, PassFlags const & passFlags
@@ -458,7 +457,7 @@ namespace castor3d::shader
 				R.y() = -R.y();
 
 				auto prefilteredColor = m_writer.declLocale( "prefilteredColor"
-					, prefilteredEnvMap.lod( R, material.roughness * sdw::Float( float( MaxIblReflectionLod ) ) ).rgb() );
+					, prefilteredEnvMap.lod( R, material.roughness * sdw::Float( float( EnvironmentPrefilter::MaxIblReflectionLod ) ) ).rgb() );
 				auto envBRDFCoord = m_writer.declLocale( "envBRDFCoord"
 					, vec2( NdotV, material.roughness ) );
 				auto envBRDF = m_writer.declLocale( "envBRDF"

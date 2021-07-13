@@ -23,7 +23,7 @@ namespace castor3d::shader
 		C3D_API virtual void create( sdw::Vec3 const & albedo
 			, sdw::Vec4 const & data3
 			, sdw::Vec4 const & data2
-			, sdw::Float const & ambient ) = 0;
+			, sdw::Float const & ambient = 0.0_f ) = 0;
 		C3D_API virtual void create( Material const & material ) = 0;
 		C3D_API virtual void output( sdw::Vec4 & outData2, sdw::Vec4 & outData3 )const = 0;
 		C3D_API virtual sdw::Vec3 getAmbient( sdw::Vec3 const & ambientLight )const = 0;
@@ -48,9 +48,12 @@ namespace castor3d::shader
 		static C3D_API sdw::Float computeShininess( sdw::Float const & glossiness );
 		//\}
 
+		sdw::Vec3 albedo;
+		sdw::Vec3 specular;
+
 	protected:
-		sdw::Vec4 m_albDiv;
-		sdw::Vec4 m_spcDiv;
+		sdw::Float albDiv;
+		sdw::Float spcDiv;
 
 	private:
 		using sdw::StructInstance::getMember;
@@ -80,6 +83,7 @@ namespace castor3d::shader
 			, sdw::Vec3 const & reflected
 			, sdw::Vec3 const & refracted
 			, sdw::Vec3 const & materialAlbedo ) = 0;
+		C3D_API virtual std::unique_ptr< LightMaterial > declMaterial( std::string const & name ) = 0;
 		/**
 		*\name
 		*	Forward renderring

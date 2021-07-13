@@ -51,9 +51,6 @@ namespace castor3d
 			, TextureFlags const & texturesMask
 			, ShaderFlags const & shaderFlags )
 		{
-			using MyTraitsT = shader::ShaderMaterialTraitsT< MaterialT >;
-			using LightMaterialT = typename MyTraitsT::LightMaterial;
-
 			using namespace sdw;
 			FragmentWriter writer;
 
@@ -105,7 +102,7 @@ namespace castor3d
 			utils.declareParallaxMappingFunc( flags.passFlags
 				, texturesMask );
 
-			auto lightingModel = shader::LightingModel::create( writer
+			auto lighting = shader::LightingModel::create( writer
 				, utils
 				, MaterialT
 				, {}
@@ -122,22 +119,22 @@ namespace castor3d
 						, material.opacity );
 					auto gamma = writer.declLocale( "gamma"
 						, material.gamma );
+					auto emissive = writer.declLocale( "emissive"
+						, vec3( material.emissive ) );
+					auto lightMat = lighting->declMaterial( "lightMat" );
+					lightMat->create( material );
 					auto normal = writer.declLocale( "normal"
 						, normalize( inSurface.normal ) );
 					auto tangent = writer.declLocale( "tangent"
 						, normalize( inSurface.tangent ) );
 					auto bitangent = writer.declLocale( "bitangent"
 						, normalize( inSurface.bitangent ) );
-					auto lightMat = writer.declLocale< LightMaterialT >( "lightMat" );
-					lightMat.create( material );
-					auto emissive = writer.declLocale( "emissive"
-						, vec3( material.emissive ) );
 					auto occlusion = writer.declLocale( "occlusion"
 						, 1.0_f );
 					auto transmittance = writer.declLocale( "transmittance"
 						, 0.0_f );
 
-					lightingModel->computeMapContributions( flags.passFlags
+					lighting->computeMapContributions( flags.passFlags
 						, textures
 						, gamma
 						, textureConfigs
@@ -150,13 +147,13 @@ namespace castor3d
 						, alpha
 						, occlusion
 						, transmittance
-						, lightMat
+						, *lightMat
 						, inSurface.tangentSpaceViewPosition
 						, inSurface.tangentSpaceFragPosition );
 					utils.applyAlphaFunc( flags.alphaFunc
 						, alpha
 						, material.alphaRef );
-					lightMat.output( outData2, outData3 );
+					lightMat->output( outData2, outData3 );
 					outData4 = vec4( emissive, transmittance );
 					outData5 = vec4( inSurface.getVelocity(), writer.cast< Float >( inSurface.material ), occlusion );
 				} );

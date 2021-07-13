@@ -77,9 +77,6 @@ namespace castor3d
 			, FilteredTextureFlags const & textures
 			, ShaderFlags const & shaderFlags )
 		{
-			using MyTraitsT = shader::ShaderMaterialTraitsT< MaterialT >;
-			using LightMaterialT = typename MyTraitsT::LightMaterial;
-
 			using namespace sdw;
 			FragmentWriter writer;
 			bool hasTextures = !flags.textures.empty();
@@ -164,8 +161,8 @@ namespace castor3d
 						, material.opacity );
 					auto alphaRef = writer.declLocale( "alphaRef"
 						, material.alphaRef );
-					auto lightMat = writer.declLocale< LightMaterialT >( "lightMat" );
-					lightMat.create( material );
+					auto lightMat = lighting->declMaterial( "lightMat" );
+					lightMat->create( material );
 					auto occlusion = writer.declLocale( "occlusion"
 						, 1.0_f );
 					auto transmittance = writer.declLocale( "transmittance"
@@ -186,7 +183,7 @@ namespace castor3d
 							, alpha
 							, occlusion
 							, transmittance
-							, lightMat
+							, *lightMat
 							, inSurface.tangentSpaceViewPosition
 							, inSurface.tangentSpaceFragPosition );
 					}
@@ -207,7 +204,7 @@ namespace castor3d
 					auto light = writer.declLocale( "light"
 						, c3d_shadowMapData.getDirectionalLight( *lighting ) );
 #endif
-					pxl_flux.rgb() = lightMat.albedo
+					pxl_flux.rgb() = lightMat->albedo
 						* light.m_lightBase.m_colour
 						* light.m_lightBase.m_intensity.x()
 						/** clamp( dot( normalize( light.m_direction ), normal ), 0.0_f, 1.0_f )*/;
