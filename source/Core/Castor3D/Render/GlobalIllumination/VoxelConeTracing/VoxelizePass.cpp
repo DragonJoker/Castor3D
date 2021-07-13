@@ -53,9 +53,9 @@ namespace castor3d
 			, bool isTransparentOnly
 			, uint32_t voxelGridSize )
 		{
-			using MyTraits = shader::ShaderMaterialTraitsT< MaterialT >;
-			using LightingModel = typename MyTraits::LightingModel;
-			using LightMaterial = typename MyTraits::LightMaterial;
+			using MyTraitsT = shader::ShaderMaterialTraitsT< MaterialT >;
+			using LightingModelT = typename MyTraitsT::LightingModel;
+			using LightMaterialT = typename MyTraitsT::LightMaterial;
 
 			using namespace sdw;
 			FragmentWriter writer;
@@ -113,8 +113,9 @@ namespace castor3d
 			auto output( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
 				, addIndex++
 				, RenderPipeline::eAdditional ) );
-			auto lighting = LightingModel::createDiffuseModel( writer
+			auto lighting = LightingModelT::createDiffuseModel( writer
 				, utils
+				, MaterialT
 				, lightsIndex
 				, RenderPipeline::eAdditional
 				, shader::ShadowOptions{ flags.sceneFlags, false }
@@ -138,7 +139,7 @@ namespace castor3d
 							, material.gamma );
 						auto normal = writer.declLocale( "normal"
 							, normalize( inNormal ) );
-						auto lightMat = writer.declLocale< LightMaterial >( "lightMat" );
+						auto lightMat = writer.declLocale< LightMaterialT >( "lightMat" );
 						lightMat.create( material );
 						auto emissive = writer.declLocale( "emissive"
 							, vec3( material.emissive ) );
@@ -151,7 +152,7 @@ namespace castor3d
 						{
 							auto texCoord = writer.declLocale( "texCoord"
 								, inTexture );
-							lighting->computeMapVoxelContributions( flags.passFlags
+							lighting->computeMapDiffuseContributions( flags.passFlags
 								, textures
 								, gamma
 								, textureConfigs
@@ -170,11 +171,11 @@ namespace castor3d
 							auto surface = writer.declLocale< shader::Surface >( "surface" );
 							surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
 							auto color = writer.declLocale( "color"
-								, lighting->computeCombinedDiffuse( worldEye
-									, lightMat
-									, c3d_modelData.isShadowReceiver()
+								, lighting->computeCombinedDiffuse( lightMat
 									, c3d_sceneData
-									, surface ) );
+									, surface
+									, worldEye
+									, c3d_modelData.isShadowReceiver() ) );
 							color *= lightMat.albedo * occlusion;
 							color += emissive;
 

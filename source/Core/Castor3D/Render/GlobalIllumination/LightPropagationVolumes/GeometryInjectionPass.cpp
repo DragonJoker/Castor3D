@@ -85,8 +85,9 @@ namespace castor3d
 				// Utility functions
 				shader::Utils utils{ writer };
 				index = 0;
-				auto lightingModel = shader::PhongLightingModel::createModel( writer
+				auto lightingModel = shader::LightingModel::createModel( writer
 					, utils
+					, MaterialType::ePhong
 					, LightType::eDirectional
 					, GeometryInjectionPass::LightsIdx
 					, 0u
@@ -160,8 +161,9 @@ namespace castor3d
 				// Utility functions
 				shader::Utils utils{ writer };
 				index = 0;
-				auto lightingModel = shader::PhongLightingModel::createModel( writer
+				auto lightingModel = shader::LightingModel::createModel( writer
 					, utils
+					, MaterialType::ePhong
 					, LightType::eDirectional
 					, GeometryInjectionPass::LightsIdx
 					, 0u
@@ -233,8 +235,9 @@ namespace castor3d
 			// Utility functions
 			shader::Utils utils{ writer };
 			index = 0;
-			auto lightingModel = shader::PhongLightingModel::createModel( writer
+			auto lightingModel = shader::LightingModel::createModel( writer
 				, utils
+				, MaterialType::ePhong
 				, LightType::eSpot
 				, GeometryInjectionPass::LightsIdx
 				, 0u
@@ -306,8 +309,9 @@ namespace castor3d
 			// Utility functions
 			shader::Utils utils{ writer };
 			index = 0;
-			auto lightingModel = shader::PhongLightingModel::createModel( writer
+			auto lightingModel = shader::LightingModel::createModel( writer
 				, utils
+				, MaterialType::ePhong
 				, LightType::ePoint
 				, GeometryInjectionPass::LightsIdx
 				, 0u

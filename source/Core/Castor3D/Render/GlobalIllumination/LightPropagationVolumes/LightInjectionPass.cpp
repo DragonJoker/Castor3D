@@ -89,8 +89,9 @@ namespace castor3d
 				// Utility functions
 				shader::Utils utils{ writer };
 				index = 0;
-				auto lightingModel = shader::PhongLightingModel::createModel( writer
+				auto lightingModel = shader::LightingModel::createModel( writer
 					, utils
+					, MaterialType::ePhong
 					, LightType::eDirectional
 					, uint32_t( LightInjectionPass::LightsIdx )
 					, 0u
@@ -156,8 +157,9 @@ namespace castor3d
 				// Utility functions
 				shader::Utils utils{ writer };
 				index = 0;
-				auto lightingModel = shader::PhongLightingModel::createModel( writer
+				auto lightingModel = shader::LightingModel::createModel( writer
 					, utils
+					, MaterialType::ePhong
 					, LightType::eDirectional
 					, uint32_t( LightInjectionPass::LightsIdx )
 					, 0u
@@ -221,8 +223,9 @@ namespace castor3d
 			// Utility functions
 			shader::Utils utils{ writer };
 			index = 0;
-			auto lightingModel = shader::PhongLightingModel::createModel( writer
+			auto lightingModel = shader::LightingModel::createModel( writer
 				, utils
+				, MaterialType::ePhong
 				, LightType::ePoint
 				, uint32_t( LightInjectionPass::LightsIdx )
 				, 0u
@@ -283,8 +286,9 @@ namespace castor3d
 			// Utility functions
 			shader::Utils utils{ writer };
 			index = 0;
-			auto lightingModel = shader::PhongLightingModel::createModel( writer
+			auto lightingModel = shader::LightingModel::createModel( writer
 				, utils
+				, MaterialType::ePhong
 				, LightType::eSpot
 				, uint32_t( LightInjectionPass::LightsIdx )
 				, 0u

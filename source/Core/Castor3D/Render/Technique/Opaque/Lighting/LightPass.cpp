@@ -87,6 +87,7 @@ namespace castor3d
 			index = uint32_t( LightPassLgtIdx::eSmNormalLinear );
 			auto lighting = LightingModel::createModel( writer
 				, utils
+				, MaterialT
 				, lightType
 				, uint32_t( LightPassLgtIdx::eLight )
 				, 1u
@@ -197,10 +198,10 @@ namespace castor3d
 							FI;
 #else
 							lighting->compute( light
-								, eye
 								, lightMat
-								, shadowReceiver
 								, surface
+								, eye
+								, shadowReceiver
 								, output );
 #endif
 							break;
@@ -240,10 +241,10 @@ namespace castor3d
 							FI;
 #else
 							lighting->compute( light
-								, eye
 								, lightMat
-								, shadowReceiver
 								, surface
+								, eye
+								, shadowReceiver
 								, output );
 #endif
 							break;
@@ -283,10 +284,10 @@ namespace castor3d
 							FI;
 #else
 							lighting->compute( light
-								, eye
 								, lightMat
-								, shadowReceiver
 								, surface
+								, eye
+								, shadowReceiver
 								, output );
 #endif
 							break;

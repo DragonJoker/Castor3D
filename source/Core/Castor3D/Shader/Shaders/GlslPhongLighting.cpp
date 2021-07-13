@@ -35,354 +35,64 @@ namespace castor3d
 		{
 		}
 
-		void PhongLightingModel::computeCombined( Vec3 const & worldEye
-			, PhongLightMaterial const & material
-			, Int const & receivesShadows
-			, SceneData const & sceneData
-			, Surface surface
-			, OutputComponents & parentOutput )const
-		{
-			auto begin = m_writer.declLocale( "begin"
-				, 0_i );
-			auto end = m_writer.declLocale( "end"
-				, sceneData.getDirectionalLightCount() );
-
-#if C3D_UseTiledDirectionalShadowMap
-			FOR( m_writer, Int, dir, begin, dir < end, ++dir )
-			{
-				compute( getTiledDirectionalLight( dir )
-					, worldEye
-					, material
-					, receivesShadows
-					, surface
-					, parentOutput );
-			}
-			ROF;
-#else
-			FOR( m_writer, Int, dir, begin, dir < end, ++dir )
-			{
-				compute( getDirectionalLight( dir )
-					, worldEye
-					, material
-					, receivesShadows
-					, surface
-					, parentOutput );
-			}
-			ROF;
-#endif
-
-			begin = end;
-			end += sceneData.getPointLightCount();
-
-			FOR( m_writer, Int, point, begin, point < end, ++point )
-			{
-				compute( getPointLight( point )
-					, worldEye
-					, material
-					, receivesShadows
-					, surface
-					, parentOutput );
-			}
-			ROF;
-
-			begin = end;
-			end += sceneData.getSpotLightCount();
-
-			FOR( m_writer, Int, spot, begin, spot < end, ++spot )
-			{
-				compute( getSpotLight( spot )
-					, worldEye
-					, material
-					, receivesShadows
-					, surface
-					, parentOutput );
-			}
-			ROF;
-		}
-
 		void PhongLightingModel::compute( TiledDirectionalLight const & light
+			, LightMaterial const & material
+			, Surface const & surface
 			, Vec3 const & worldEye
-			, PhongLightMaterial const & material
 			, Int const & receivesShadows
-			, Surface surface
 			, OutputComponents & parentOutput )const
 		{
 			m_computeTiledDirectional( light
-				, worldEye
-				, material
-				, receivesShadows
+				, static_cast< PhongLightMaterial const & >( material )
 				, surface
+				, worldEye
+				, receivesShadows
 				, parentOutput );
 		}
 
 		void PhongLightingModel::compute( DirectionalLight const & light
+			, LightMaterial const & material
+			, Surface const & surface
 			, Vec3 const & worldEye
-			, PhongLightMaterial const & material
 			, Int const & receivesShadows
-			, Surface surface
 			, OutputComponents & parentOutput )const
 		{
 			m_computeDirectional( light
-				, worldEye
-				, material
-				, receivesShadows
+				, static_cast< PhongLightMaterial const & >( material )
 				, surface
+				, worldEye
+				, receivesShadows
 				, parentOutput );
 		}
 
 		void PhongLightingModel::compute( PointLight const & light
+			, LightMaterial const & material
+			, Surface const & surface
 			, Vec3 const & worldEye
-			, PhongLightMaterial const & material
 			, Int const & receivesShadows
-			, Surface surface
 			, OutputComponents & parentOutput )const
 		{
 			m_computePoint( light
-				, worldEye
-				, material
-				, receivesShadows
+				, static_cast< PhongLightMaterial const & >( material )
 				, surface
+				, worldEye
+				, receivesShadows
 				, parentOutput );
 		}
 
 		void PhongLightingModel::compute( SpotLight const & light
+			, LightMaterial const & material
+			, Surface const & surface
 			, Vec3 const & worldEye
-			, PhongLightMaterial const & material
 			, Int const & receivesShadows
-			, Surface surface
 			, OutputComponents & parentOutput )const
 		{
 			m_computeSpot( light
-				, worldEye
-				, material
-				, receivesShadows
+				, static_cast< PhongLightMaterial const & >( material )
 				, surface
+				, worldEye
+				, receivesShadows
 				, parentOutput );
-		}
-
-		sdw::Vec3 PhongLightingModel::combine( sdw::Vec3 const & directDiffuse
-			, sdw::Vec3 const & indirectDiffuse
-			, sdw::Vec3 const & directSpecular
-			, sdw::Vec3 const & indirectSpecular
-			, sdw::Vec3 const & ambient
-			, sdw::Vec3 const & indirectAmbient
-			, sdw::Float const & ambientOcclusion
-			, sdw::Vec3 const & emissive
-			, sdw::Vec3 const & reflected
-			, sdw::Vec3 const & refracted
-			, sdw::Vec3 const & materialDiffuse )
-		{
-			return materialDiffuse * ( directDiffuse + ( indirectDiffuse * ambientOcclusion ) )
-				+ ( directSpecular + ( indirectSpecular * ambientOcclusion ) )
-				+ ( ambient * indirectAmbient * ambientOcclusion )
-				+ emissive
-				+ refracted
-				+ reflected * ambientOcclusion;
-		}
-
-		Vec3 PhongLightingModel::computeCombinedDiffuse( Vec3 const & worldEye
-			, PhongLightMaterial const & material
-			, Int const & receivesShadows
-			, SceneData const & sceneData
-			, Surface surface )const
-		{
-			auto result = m_writer.declLocale( "result"
-				, vec3( 0.0_f ) );
-			auto begin = m_writer.declLocale( "begin"
-				, 0_i );
-			auto end = m_writer.declLocale( "end"
-				, sceneData.getDirectionalLightCount() );
-
-#if C3D_UseTiledDirectionalShadowMap
-			FOR( m_writer, Int, dir, begin, dir < end, ++dir )
-			{
-				result += computeDiffuse( getTiledDirectionalLight( dir )
-					, worldEye
-					, material
-					, receivesShadows
-					, surface );
-			}
-			ROF;
-#else
-			FOR( m_writer, Int, dir, begin, dir < end, ++dir )
-			{
-				result += computeDiffuse( getDirectionalLight( dir )
-					, worldEye
-					, material
-					, receivesShadows
-					, surface );
-			}
-			ROF;
-#endif
-
-			begin = end;
-			end += sceneData.getPointLightCount();
-
-			FOR( m_writer, Int, point, begin, point < end, ++point )
-			{
-				result += computeDiffuse( getPointLight( point )
-					, worldEye
-					, material
-					, receivesShadows
-					, surface );
-			}
-			ROF;
-
-			begin = end;
-			end += sceneData.getSpotLightCount();
-
-			FOR( m_writer, Int, spot, begin, spot < end, ++spot )
-			{
-				result += computeDiffuse( getSpotLight( spot )
-					, worldEye
-					, material
-					, receivesShadows
-					, surface );
-			}
-			ROF;
-
-			return result;
-		}
-
-		Vec3 PhongLightingModel::computeDiffuse( TiledDirectionalLight const & light
-			, Vec3 const & worldEye
-			, PhongLightMaterial const & material
-			, Int const & receivesShadows
-			, Surface surface )const
-		{
-			return m_computeTiledDirectionalDiffuse( light
-				, worldEye
-				, material
-				, receivesShadows
-				, surface );
-		}
-
-		Vec3 PhongLightingModel::computeDiffuse( DirectionalLight const & light
-			, Vec3 const & worldEye
-			, PhongLightMaterial const & material
-			, Int const & receivesShadows
-			, Surface surface )const
-		{
-			return m_computeDirectionalDiffuse( light
-				, worldEye
-				, material
-				, receivesShadows
-				, surface );
-		}
-
-		Vec3 PhongLightingModel::computeDiffuse( PointLight const & light
-			, Vec3 const & worldEye
-			, PhongLightMaterial const & material
-			, Int const & receivesShadows
-			, Surface surface )const
-		{
-			return m_computePointDiffuse( light
-				, worldEye
-				, material
-				, receivesShadows
-				, surface );
-		}
-
-		Vec3 PhongLightingModel::computeDiffuse( SpotLight const & light
-			, Vec3 const & worldEye
-			, PhongLightMaterial const & material
-			, Int const & receivesShadows
-			, Surface surface )const
-		{
-			return m_computeSpotDiffuse( light
-				, worldEye
-				, material
-				, receivesShadows
-				, surface );
-		}
-
-		std::shared_ptr< PhongLightingModel > PhongLightingModel::createModel( sdw::ShaderWriter & writer
-			, Utils & utils
-			, uint32_t lightsBufBinding
-			, uint32_t lightsBufSet
-			, ShadowOptions const & shadows
-			, uint32_t & shadowMapBinding
-			, uint32_t shadowMapSet
-			, bool isOpaqueProgram )
-		{
-			auto result = std::make_shared< PhongLightingModel >( writer
-				, utils
-				, shadows
-				, isOpaqueProgram );
-			result->declareModel( lightsBufBinding
-				, lightsBufSet
-				, shadowMapBinding
-				, shadowMapSet );
-			return result;
-		}
-
-		std::shared_ptr< PhongLightingModel > PhongLightingModel::createModel( sdw::ShaderWriter & writer
-			, Utils & utils
-			, LightType lightType
-			, bool lightUbo
-			, uint32_t lightBinding
-			, uint32_t lightSet
-			, ShadowOptions const & shadows
-			, uint32_t & shadowMapBinding
-			, uint32_t shadowMapSet )
-		{
-			auto result = std::make_shared< PhongLightingModel >( writer
-				, utils
-				, shadows
-				, true );
-
-			switch ( lightType )
-			{
-			case LightType::eDirectional:
-				result->declareDirectionalModel( lightUbo
-					, lightBinding
-					, lightSet
-					, shadowMapBinding
-					, shadowMapSet );
-				break;
-
-			case LightType::ePoint:
-				result->declarePointModel( lightUbo
-					, lightBinding
-					, lightSet
-					, shadowMapBinding
-					, shadowMapSet );
-				break;
-
-			case LightType::eSpot:
-				result->declareSpotModel( lightUbo
-					, lightBinding
-					, lightSet
-					, shadowMapBinding
-					, shadowMapSet );
-				break;
-
-			default:
-				CU_Failure( "Invalid light type" );
-				break;
-			}
-
-			return result;
-		}
-
-		std::shared_ptr< PhongLightingModel > PhongLightingModel::createDiffuseModel( sdw::ShaderWriter & writer
-			, Utils & utils
-			, uint32_t lightsBufBinding
-			, uint32_t lightsBufSet
-			, ShadowOptions const & shadows
-			, uint32_t & shadowMapBinding
-			, uint32_t shadowMapSet
-			, bool isOpaqueProgram )
-		{
-			auto result = std::make_shared< PhongLightingModel >( writer
-				, utils
-				, shadows
-				, isOpaqueProgram );
-			result->declareDiffuseModel( lightsBufBinding
-				, lightsBufSet
-				, shadowMapBinding
-				, shadowMapSet );
-			return result;
 		}
 
 		void PhongLightingModel::computeMapContributions( PassFlags const & passFlags
@@ -398,10 +108,11 @@ namespace castor3d
 			, sdw::Float & opacity
 			, sdw::Float & occlusion
 			, sdw::Float & transmittance
-			, PhongLightMaterial & lightMat
+			, LightMaterial & lightMat
 			, sdw::Vec3 & tangentSpaceViewPosition
 			, sdw::Vec3 & tangentSpaceFragPosition )
 		{
+			auto & phongLightMat = static_cast< PhongLightMaterial & >( lightMat );
 			bool hasEmissive = false;
 			m_utils.computeGeometryMapsContributions( textures
 				, passFlags
@@ -442,17 +153,17 @@ namespace castor3d
 
 					if ( checkFlag( textureIt.second.flags, TextureFlag::eDiffuse ) )
 					{
-						lightMat.albedo = config.getDiffuse( m_writer, sampled, lightMat.albedo, gamma );
+						phongLightMat.albedo = config.getDiffuse( m_writer, sampled, phongLightMat.albedo, gamma );
 					}
 
 					if ( checkFlag( textureIt.second.flags, TextureFlag::eSpecular ) )
 					{
-						lightMat.specular = config.getSpecular( m_writer, sampled, lightMat.specular );
+						phongLightMat.specular = config.getSpecular( m_writer, sampled, phongLightMat.specular );
 					}
 
 					if ( checkFlag( textureIt.second.flags, TextureFlag::eShininess ) )
 					{
-						lightMat.shininess = config.getShininess( m_writer, sampled, lightMat.shininess );
+						phongLightMat.shininess = config.getShininess( m_writer, sampled, phongLightMat.shininess );
 					}
 
 					if ( checkFlag( textureIt.second.flags, TextureFlag::eEmissive ) )
@@ -465,11 +176,63 @@ namespace castor3d
 			if ( checkFlag( passFlags, PassFlag::eLighting )
 				&& !hasEmissive )
 			{
-				emissive *= lightMat.albedo;
+				emissive *= phongLightMat.albedo;
 			}
 		}
 
-		void PhongLightingModel::computeMapVoxelContributions( PassFlags const & passFlags
+		Vec3 PhongLightingModel::computeDiffuse( TiledDirectionalLight const & light
+			, LightMaterial const & material
+			, Surface const & surface
+			, Vec3 const & worldEye
+			, Int const & receivesShadows )const
+		{
+			return m_computeTiledDirectionalDiffuse( light
+				, static_cast< PhongLightMaterial const & >( material )
+				, surface
+				, worldEye
+				, receivesShadows );
+		}
+
+		Vec3 PhongLightingModel::computeDiffuse( DirectionalLight const & light
+			, LightMaterial const & material
+			, Surface const & surface
+			, Vec3 const & worldEye
+			, Int const & receivesShadows )const
+		{
+			return m_computeDirectionalDiffuse( light
+				, static_cast< PhongLightMaterial const & >( material )
+				, surface
+				, worldEye
+				, receivesShadows );
+		}
+
+		Vec3 PhongLightingModel::computeDiffuse( PointLight const & light
+			, LightMaterial const & material
+			, Surface const & surface
+			, Vec3 const & worldEye
+			, Int const & receivesShadows )const
+		{
+			return m_computePointDiffuse( light
+				, static_cast< PhongLightMaterial const & >( material )
+				, surface
+				, worldEye
+				, receivesShadows );
+		}
+
+		Vec3 PhongLightingModel::computeDiffuse( SpotLight const & light
+			, LightMaterial const & material
+			, Surface const & surface
+			, Vec3 const & worldEye
+			, Int const & receivesShadows )const
+		{
+			return m_computeSpotDiffuse( light
+				, static_cast< PhongLightMaterial const & >( material )
+				, surface
+				, worldEye
+				, receivesShadows );
+		}
+
+		void PhongLightingModel::computeMapDiffuseContributions( PassFlags const & passFlags
 			, FilteredTextureFlags const & textures
 			, sdw::Float const & gamma
 			, TextureConfigurations const & textureConfigs
@@ -478,8 +241,9 @@ namespace castor3d
 			, sdw::Vec3 & emissive
 			, sdw::Float & opacity
 			, sdw::Float & occlusion
-			, PhongLightMaterial & lightMat )
+			, LightMaterial & lightMat )
 		{
+			auto & phongLightMat = static_cast< PhongLightMaterial & >( lightMat );
 			bool hasEmissive = false;
 
 			for ( auto & textureIt : textures )
@@ -502,17 +266,17 @@ namespace castor3d
 
 				if ( checkFlag( textureIt.second.flags, TextureFlag::eDiffuse ) )
 				{
-					lightMat.albedo = config.getDiffuse( m_writer, sampled, lightMat.albedo, gamma );
+					phongLightMat.albedo = config.getDiffuse( m_writer, sampled, phongLightMat.albedo, gamma );
 				}
 
 				if ( checkFlag( textureIt.second.flags, TextureFlag::eSpecular ) )
 				{
-					lightMat.specular = config.getSpecular( m_writer, sampled, lightMat.specular );
+					phongLightMat.specular = config.getSpecular( m_writer, sampled, phongLightMat.specular );
 				}
 
 				if ( checkFlag( textureIt.second.flags, TextureFlag::eShininess ) )
 				{
-					lightMat.shininess = config.getShininess( m_writer, sampled, lightMat.shininess );
+					phongLightMat.shininess = config.getShininess( m_writer, sampled, phongLightMat.shininess );
 				}
 
 				if ( checkFlag( textureIt.second.flags, TextureFlag::eEmissive ) )
@@ -524,8 +288,28 @@ namespace castor3d
 			if ( checkFlag( passFlags, PassFlag::eLighting )
 				&& !hasEmissive )
 			{
-				emissive *= lightMat.albedo;
+				emissive *= phongLightMat.albedo;
 			}
+		}
+
+		sdw::Vec3 PhongLightingModel::combine( sdw::Vec3 const & directDiffuse
+			, sdw::Vec3 const & indirectDiffuse
+			, sdw::Vec3 const & directSpecular
+			, sdw::Vec3 const & indirectSpecular
+			, sdw::Vec3 const & ambient
+			, sdw::Vec3 const & indirectAmbient
+			, sdw::Float const & ambientOcclusion
+			, sdw::Vec3 const & emissive
+			, sdw::Vec3 const & reflected
+			, sdw::Vec3 const & refracted
+			, sdw::Vec3 const & materialDiffuse )
+		{
+			return materialDiffuse * ( directDiffuse + ( indirectDiffuse * ambientOcclusion ) )
+				+ ( directSpecular + ( indirectSpecular * ambientOcclusion ) )
+				+ ( ambient * indirectAmbient * ambientOcclusion )
+				+ emissive
+				+ refracted
+				+ reflected * ambientOcclusion;
 		}
 
 		void PhongLightingModel::doDeclareModel()
@@ -539,10 +323,10 @@ namespace castor3d
 #if C3D_UseTiledDirectionalShadowMap
 			m_computeTiledDirectional = m_writer.implementFunction< sdw::Void >( "computeDirectionalLight"
 				, [this]( TiledDirectionalLight const & light
+					, PhongLightMaterial const & material
+					, Surface const & surface
 					, Vec3 const & worldEye
-					, Float const & shininess
 					, Int const & receivesShadows
-					, Surface surface
 					, OutputComponents & parentOutput )
 				{
 					OutputComponents output
@@ -609,10 +393,10 @@ namespace castor3d
 							IF( m_writer, shadowFactor > 0.0_f )
 							{
 								doComputeLight( light.m_lightBase
+									, material
+									, surface
 									, worldEye
 									, lightDirection
-									, shininess
-									, surface
 									, output );
 								output.m_diffuse *= shadowFactor;
 								output.m_specular *= shadowFactor;
@@ -662,40 +446,40 @@ namespace castor3d
 						ELSE
 						{
 							doComputeLight( light.m_lightBase
+								, material
+								, surface
 								, worldEye
 								, lightDirection
-								, shininess
-								, surface
 								, output );
 						}
 						FI;
 					}
 					else
 					{
-					doComputeLight( light.m_lightBase
-						, worldEye
-						, lightDirection
-						, shininess
-						, surface
-						, output );
+						doComputeLight( light.m_lightBase
+							, material
+							, surface
+							, worldEye
+							, lightDirection
+							, output );
 					}
 
 					parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
 					parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
 				}
 				, InTiledDirectionalLight( m_writer, "light" )
-				, InVec3( m_writer, "worldEye" )
 				, InPhongLightMaterial{ m_writer, "material" }
-				, InInt( m_writer, "receivesShadows" )
 				, InSurface{ m_writer, "surface" }
+				, InVec3( m_writer, "worldEye" )
+				, InInt( m_writer, "receivesShadows" )
 				, output );
 #else
 			m_computeDirectional = m_writer.implementFunction< sdw::Void >( "computeDirectionalLight"
 				, [this]( DirectionalLight const & light
-					, Vec3 const & worldEye
 					, PhongLightMaterial const & material
+					, Surface const & surface
+					, Vec3 const & worldEye
 					, Int const & receivesShadows
-					, Surface surface
 					, OutputComponents & parentOutput )
 				{
 					OutputComponents output
@@ -762,10 +546,10 @@ namespace castor3d
 							IF( m_writer, shadowFactor > 0.0_f )
 							{
 								doComputeLight( light.m_lightBase
-									, worldEye
-									, lightDirection
 									, material
 									, surface
+									, worldEye
+									, lightDirection
 									, output );
 								output.m_diffuse *= shadowFactor;
 								output.m_specular *= shadowFactor;
@@ -815,32 +599,32 @@ namespace castor3d
 						ELSE
 						{
 							doComputeLight( light.m_lightBase
-								, worldEye
-								, lightDirection
 								, material
 								, surface
+								, worldEye
+								, lightDirection
 								, output );
 						}
 						FI;
 					}
 					else
 					{
-					doComputeLight( light.m_lightBase
-						, worldEye
-						, lightDirection
-						, material
-						, surface
-						, output );
+						doComputeLight( light.m_lightBase
+							, material
+							, surface
+							, worldEye
+							, lightDirection
+							, output );
 					}
 
 					parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
 					parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
 				}
 				, InDirectionalLight( m_writer, "light" )
-				, InVec3( m_writer, "worldEye" )
 				, InPhongLightMaterial{ m_writer, "material" }
-				, InInt( m_writer, "receivesShadows" )
 				, InSurface{ m_writer, "surface" }
+				, InVec3( m_writer, "worldEye" )
+				, InInt( m_writer, "receivesShadows" )
 				, output );
 #endif
 		}
@@ -850,10 +634,10 @@ namespace castor3d
 			OutputComponents output{ m_writer };
 			m_computePoint = m_writer.implementFunction< sdw::Void >( "computePointLight"
 				, [this]( PointLight const & light
-					, Vec3 const & worldEye
 					, PhongLightMaterial const & material
+					, Surface const & surface
+					, Vec3 const & worldEye
 					, Int const & receivesShadows
-					, Surface surface
 					, OutputComponents & parentOutput )
 				{
 					OutputComponents output
@@ -887,10 +671,10 @@ namespace castor3d
 							IF( m_writer, shadowFactor > 0.0_f )
 							{
 								doComputeLight( light.m_lightBase
-									, worldEye
-									, lightDirection
 									, material
 									, surface
+									, worldEye
+									, lightDirection
 									, output );
 								output.m_diffuse *= shadowFactor;
 								output.m_specular *= shadowFactor;
@@ -900,10 +684,10 @@ namespace castor3d
 						ELSE
 						{
 							doComputeLight( light.m_lightBase
-								, worldEye
-								, lightDirection
 								, material
 								, surface
+								, worldEye
+								, lightDirection
 								, output );
 						}
 						FI;
@@ -911,10 +695,10 @@ namespace castor3d
 					else
 					{
 						doComputeLight( light.m_lightBase
-							, worldEye
-							, lightDirection
 							, material
 							, surface
+							, worldEye
+							, lightDirection
 							, output );
 					}
 
@@ -935,10 +719,10 @@ namespace castor3d
 #endif
 				}
 				, InPointLight( m_writer, "light" )
-				, InVec3( m_writer, "worldEye" )
 				, InPhongLightMaterial{ m_writer, "material" }
-				, InInt( m_writer, "receivesShadows" )
 				, InSurface{ m_writer, "surface" }
+				, InVec3( m_writer, "worldEye" )
+				, InInt( m_writer, "receivesShadows" )
 				, output );
 		}
 
@@ -947,10 +731,10 @@ namespace castor3d
 			OutputComponents output{ m_writer };
 			m_computeSpot = m_writer.implementFunction< sdw::Void >( "computeSpotLight"
 				, [this]( SpotLight const & light
-					, Vec3 const & worldEye
 					, PhongLightMaterial const & material
+					, Surface const & surface
+					, Vec3 const & worldEye
 					, Int const & receivesShadows
-					, Surface surface
 					, OutputComponents & parentOutput )
 				{
 					OutputComponents output
@@ -998,10 +782,10 @@ namespace castor3d
 							IF( m_writer, shadowFactor > 0.0_f )
 							{
 								doComputeLight( light.m_lightBase
-									, worldEye
-									, lightDirection
 									, material
 									, surface
+									, worldEye
+									, lightDirection
 									, output );
 								output.m_diffuse *= shadowFactor;
 								output.m_specular *= shadowFactor;
@@ -1011,10 +795,10 @@ namespace castor3d
 						ELSE
 						{
 							doComputeLight( light.m_lightBase
-								, worldEye
-								, lightDirection
 								, material
 								, surface
+								, worldEye
+								, lightDirection
 								, output );
 						}
 						FI;
@@ -1022,10 +806,10 @@ namespace castor3d
 					else
 					{
 						doComputeLight( light.m_lightBase
-							, worldEye
-							, lightDirection
 							, material
 							, surface
+							, worldEye
+							, lightDirection
 							, output );
 					}
 
@@ -1049,10 +833,10 @@ namespace castor3d
 #endif
 				}
 				, InSpotLight( m_writer, "light" )
-				, InVec3( m_writer, "worldEye" )
 				, InPhongLightMaterial{ m_writer, "material" }
-				, InInt( m_writer, "receivesShadows" )
 				, InSurface{ m_writer, "surface" }
+				, InVec3( m_writer, "worldEye" )
+				, InInt( m_writer, "receivesShadows" )
 				, output );
 		}
 
@@ -1061,10 +845,10 @@ namespace castor3d
 			OutputComponents output{ m_writer };
 			m_computeLight = m_writer.implementFunction< sdw::Void >( "doComputeLight"
 				, [this]( Light const & light
+					, PhongLightMaterial const & material
+					, Surface const & surface
 					, Vec3 const & worldEye
 					, Vec3 const & lightDirection
-					, PhongLightMaterial const & material
-					, Surface surface
 					, OutputComponents & output )
 				{
 					// Diffuse term.
@@ -1096,25 +880,25 @@ namespace castor3d
 						* pow( specularFactor, clamp( material.shininess, 1.0_f, 256.0_f ) );
 				}
 				, InLight( m_writer, "light" )
-				, InVec3( m_writer, "worldEye" )
-				, InVec3( m_writer, "lightDirection" )
 				, InPhongLightMaterial{ m_writer, "material" }
 				, InSurface{ m_writer, "surface" }
+				, InVec3( m_writer, "worldEye" )
+				, InVec3( m_writer, "lightDirection" )
 				, output );
 		}
 
 		void PhongLightingModel::doComputeLight( Light const & light
+			, PhongLightMaterial const & material
+			, Surface const & surface
 			, Vec3 const & worldEye
 			, Vec3 const & lightDirection
-			, PhongLightMaterial const & material
-			, Surface surface
 			, OutputComponents & parentOutput )
 		{
 			m_computeLight( light
-				, worldEye
-				, lightDirection
 				, material
 				, surface
+				, worldEye
+				, lightDirection
 				, parentOutput );
 		}
 
@@ -1128,10 +912,10 @@ namespace castor3d
 #if C3D_UseTiledDirectionalShadowMap
 			m_computeTiledDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeDirectionalLight"
 				, [this]( TiledDirectionalLight const & light
+					, PhongLightMaterial const & material
+					, Surface const & surface
 					, Vec3 const & worldEye
-					, Float const & shininess
-					, Int const & receivesShadows
-					, Surface surface )
+					, Int const & receivesShadows )
 				{
 					auto diffuse = m_writer.declLocale( "diffuse"
 						, vec3( 0.0_f ) );
@@ -1157,46 +941,46 @@ namespace castor3d
 							IF( m_writer, shadowFactor > 0.0_f )
 							{
 								diffuse = shadowFactor * doComputeLightDiffuse( light.m_lightBase
-									, worldEye
-									, lightDirection
 									, material
-									, surface );
+									, surface
+									, worldEye
+									, lightDirection );
 							}
 							FI;
 						}
 						ELSE
 						{
 							diffuse = doComputeLightDiffuse( light.m_lightBase
+							, material
+								, surface
 								, worldEye
-								, lightDirection
-								, material
-								, surface );
+								, lightDirection );
 						}
 						FI;
 					}
 					else
 					{
 						diffuse = doComputeLightDiffuse( light.m_lightBase
-							, worldEye
-							, lightDirection
 							, material
-							, surface );
+							, surface
+							, worldEye
+							, lightDirection );
 					}
 
 					m_writer.returnStmt( max( vec3( 0.0_f ), diffuse ) );
 				}
 				, InTiledDirectionalLight( m_writer, "light" )
+				, InPhongLightMaterial{ m_writer, "material" }
+				, InSurface{ m_writer, "surface" }
 				, InVec3( m_writer, "worldEye" )
-				, material
-				, InInt( m_writer, "receivesShadows" )
-				, InSurface{ m_writer, "surface" } );
+				, InInt( m_writer, "receivesShadows" ) );
 #else
 			m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeDirectionalLight"
 				, [this]( DirectionalLight const & light
-					, Vec3 const & worldEye
 					, PhongLightMaterial const & material
-					, Int const & receivesShadows
-					, Surface surface )
+					, Surface const & surface
+					, Vec3 const & worldEye
+					, Int const & receivesShadows )
 				{
 					auto diffuse = m_writer.declLocale( "diffuse"
 						, vec3( 0.0_f ) );
@@ -1222,39 +1006,39 @@ namespace castor3d
 							IF( m_writer, shadowFactor > 0.0_f )
 							{
 								diffuse = shadowFactor * doComputeLightDiffuse( light.m_lightBase
-									, worldEye
-									, lightDirection
 									, material
-									, surface );
+									, surface
+									, worldEye
+									, lightDirection );
 							}
 							FI;
 						}
 						ELSE
 						{
 							diffuse = doComputeLightDiffuse( light.m_lightBase
-								, worldEye
-								, lightDirection
 								, material
-								, surface );
+								, surface
+								, worldEye
+								, lightDirection );
 						}
 						FI;
 					}
 					else
 					{
 						diffuse = doComputeLightDiffuse( light.m_lightBase
-							, worldEye
-							, lightDirection
 							, material
-							, surface );
+							, surface
+							, worldEye
+							, lightDirection );
 					}
 
 					m_writer.returnStmt( max( vec3( 0.0_f ), diffuse ) );
 				}
 				, InDirectionalLight( m_writer, "light" )
-				, InVec3( m_writer, "worldEye" )
 				, InPhongLightMaterial{ m_writer, "material" }
-				, InInt( m_writer, "receivesShadows" )
-				, InSurface{ m_writer, "surface" } );
+				, InSurface{ m_writer, "surface" }
+				, InVec3( m_writer, "worldEye" )
+				, InInt( m_writer, "receivesShadows" ) );
 #endif
 		}
 
@@ -1262,10 +1046,10 @@ namespace castor3d
 		{
 			m_computePointDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computePointLight"
 				, [this]( PointLight const & light
-					, Vec3 const & worldEye
 					, PhongLightMaterial const & material
-					, Int const & receivesShadows
-					, Surface surface )
+					, Surface const & surface
+					, Vec3 const & worldEye
+					, Int const & receivesShadows )
 				{
 					auto diffuse = m_writer.declLocale( "diffuse"
 						, vec3( 0.0_f ) );
@@ -1295,30 +1079,30 @@ namespace castor3d
 							IF( m_writer, shadowFactor > 0.0_f )
 							{
 								diffuse = shadowFactor * doComputeLightDiffuse( light.m_lightBase
-									, worldEye
-									, lightDirection
 									, material
-									, surface );
+									, surface
+									, worldEye
+									, lightDirection );
 							}
 							FI;
 						}
 						ELSE
 						{
 							diffuse = doComputeLightDiffuse( light.m_lightBase
-								, worldEye
-								, lightDirection
 								, material
-								, surface );
+								, surface
+								, worldEye
+								, lightDirection );
 						}
 						FI;
 					}
 					else
 					{
 						diffuse = doComputeLightDiffuse( light.m_lightBase
-							, worldEye
-							, lightDirection
 							, material
-							, surface );
+							, surface
+							, worldEye
+							, lightDirection );
 					}
 
 					auto attenuation = m_writer.declLocale( "attenuation"
@@ -1335,20 +1119,20 @@ namespace castor3d
 #endif
 				}
 				, InPointLight( m_writer, "light" )
-				, InVec3( m_writer, "worldEye" )
 				, InPhongLightMaterial{ m_writer, "material" }
-				, InInt( m_writer, "receivesShadows" )
-				, InSurface{ m_writer, "surface" } );
+				, InSurface{ m_writer, "surface" }
+				, InVec3( m_writer, "worldEye" )
+				, InInt( m_writer, "receivesShadows" ) );
 		}
 
 		void PhongLightingModel::doDeclareComputeSpotLightDiffuse()
 		{
 			m_computeSpotDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeSpotLight"
 				, [this]( SpotLight const & light
-					, Vec3 const & worldEye
 					, PhongLightMaterial const & material
-					, Int const & receivesShadows
-					, Surface surface )
+					, Surface const & surface
+					, Vec3 const & worldEye
+					, Int const & receivesShadows )
 				{
 					auto diffuse = m_writer.declLocale( "diffuse"
 						, vec3( 0.0_f ) );
@@ -1397,30 +1181,30 @@ namespace castor3d
 							IF( m_writer, shadowFactor > 0.0_f )
 							{
 								diffuse = shadowFactor * doComputeLightDiffuse( light.m_lightBase
-									, worldEye
-									, lightDirection
 									, material
-									, surface );
+									, surface
+									, worldEye
+									, lightDirection );
 							}
 							FI;
 						}
 						ELSE
 						{
 							diffuse = doComputeLightDiffuse( light.m_lightBase
-								, worldEye
-								, lightDirection
 								, material
-								, surface );
+								, surface
+								, worldEye
+								, lightDirection );
 						}
 						FI;
 					}
 					else
 					{
 						diffuse = doComputeLightDiffuse( light.m_lightBase
-							, worldEye
-							, lightDirection
 							, material
-							, surface );
+							, surface
+							, worldEye
+							, lightDirection );
 					}
 
 					auto attenuation = m_writer.declLocale( "attenuation"
@@ -1439,20 +1223,20 @@ namespace castor3d
 #endif
 				}
 				, InSpotLight( m_writer, "light" )
-				, InVec3( m_writer, "worldEye" )
 				, InPhongLightMaterial{ m_writer, "material" }
-				, InInt( m_writer, "receivesShadows" )
-				, InSurface{ m_writer, "surface" } );
+				, InSurface{ m_writer, "surface" }
+				, InVec3( m_writer, "worldEye" )
+				, InInt( m_writer, "receivesShadows" ) );
 		}
 
 		void PhongLightingModel::doDeclareComputeLightDiffuse()
 		{
 			m_computeLightDiffuse = m_writer.implementFunction< sdw::Vec3 >( "doComputeLight"
 				, [this]( Light const & light
-					, Vec3 const & worldEye
-					, Vec3 const & lightDirection
 					, PhongLightMaterial const & material
-					, Surface surface )
+					, Surface const & surface
+					, Vec3 const & worldEye
+					, Vec3 const & lightDirection )
 				{
 					// Diffuse term.
 					auto diffuseFactor = m_writer.declLocale( "diffuseFactor"
@@ -1465,23 +1249,23 @@ namespace castor3d
 						* diffuseFactor );
 				}
 				, InLight( m_writer, "light" )
-				, InVec3( m_writer, "worldEye" )
-				, InVec3( m_writer, "lightDirection" )
 				, InPhongLightMaterial{ m_writer, "material" }
-				, InSurface{ m_writer, "surface" } );
+				, InSurface{ m_writer, "surface" }
+				, InVec3( m_writer, "worldEye" )
+				, InVec3( m_writer, "lightDirection" ) );
 		}
 
 		Vec3 PhongLightingModel::doComputeLightDiffuse( Light const & light
-			, Vec3 const & worldEye
-			, Vec3 const & lightDirection
 			, PhongLightMaterial const & material
-			, Surface surface )
+			, Surface const & surface
+			, Vec3 const & worldEye
+			, Vec3 const & lightDirection )
 		{
 			return m_computeLightDiffuse( light
-				, worldEye
-				, lightDirection
 				, material
-				, surface );
+				, surface
+				, worldEye
+				, lightDirection );
 		}
 	}
 }
