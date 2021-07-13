@@ -56,9 +56,6 @@ namespace castor3d
 			, bool hasSSAO
 			, bool hasVelocity )
 		{
-			using MyTraits = shader::ShaderMaterialTraitsT< MaterialT >;
-			using LightMaterial = typename MyTraits::LightMaterial;
-
 			using namespace sdw;
 			FragmentWriter writer;
 			bool hasTextures = !flags.textures.empty();
@@ -157,10 +154,12 @@ namespace castor3d
 						, materials.getMaterial( inSurface.material ) );
 					auto gamma = writer.declLocale( "gamma"
 						, material.gamma );
-					auto lightMat = writer.declLocale< LightMaterial >( "lightMat" );
-					lightMat.create( material );
+					auto opacity = writer.declLocale( "opacity"
+						, material.opacity );
+					auto lightMat = lighting->declMaterial( "lightMat" );
+					lightMat->create( material );
 					auto emissive = writer.declLocale( "emissive"
-						, lightMat.albedo * material.emissive );
+						, lightMat->albedo * material.emissive );
 					auto worldEye = writer.declLocale( "worldEye"
 						, c3d_sceneData.getCameraPosition() );
 					auto texCoord = writer.declLocale( "texCoord"
@@ -169,8 +168,6 @@ namespace castor3d
 						, 1.0_f );
 					auto transmittance = writer.declLocale( "transmittance"
 						, 1.0_f );
-					auto opacity = writer.declLocale( "opacity"
-						, material.opacity );
 
 					if ( hasSSAO )
 					{
@@ -190,7 +187,7 @@ namespace castor3d
 						, opacity
 						, occlusion
 						, transmittance
-						, lightMat
+						, *lightMat
 						, inSurface.tangentSpaceViewPosition
 						, inSurface.tangentSpaceFragPosition );
 					utils.applyAlphaFunc( flags.blendAlphaFunc
@@ -207,21 +204,21 @@ namespace castor3d
 						shader::OutputComponents output{ lightDiffuse, lightSpecular };
 						auto surface = writer.declLocale< shader::Surface >( "surface" );
 						surface.create( in.fragCoord.xy(), inSurface.viewPosition, inSurface.worldPosition, normal );
-						lighting->computeCombined( lightMat
+						lighting->computeCombined( *lightMat
 							, c3d_sceneData
 							, surface
 							, worldEye
 							, c3d_modelData.isShadowReceiver()
 							, output );
-						lightMat.adjustDirectSpecular( lightSpecular );
+						lightMat->adjustDirectSpecular( lightSpecular );
 
 						auto ambient = writer.declLocale( "ambient"
-							, lightMat.getAmbient( c3d_sceneData.getAmbientLight() ) );
+							, lightMat->getAmbient( c3d_sceneData.getAmbientLight() ) );
 						auto reflected = writer.declLocale( "reflected"
 							, vec3( 0.0_f ) );
 						auto refracted = writer.declLocale( "refracted"
 							, vec3( 0.0_f ) );
-						reflections->computeForward( lightMat
+						reflections->computeForward( *lightMat
 							, surface
 							, c3d_sceneData
 							, material.refractionRatio
@@ -239,19 +236,19 @@ namespace castor3d
 							, worldEye
 							, c3d_sceneData.getPosToCamera( surface.worldPosition )
 							, surface
-							, lightMat.specular
-							, lightMat.getRoughness()
+							, lightMat->specular
+							, lightMat->getRoughness()
 							, indirectOcclusion
 							, lightIndirectDiffuse.w() );
 						auto indirectAmbient = writer.declLocale( "indirectAmbient"
-							, lightMat.getIndirectAmbient( indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() ) ) );
+							, lightMat->getIndirectAmbient( indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() ) ) );
 						auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
 							, ( hasDiffuseGI
 								? cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
 									, c3d_sceneData.getCameraPosition()
 									, surface.worldNormal
-									, lightMat.specular
-									, lightMat.getMetalness()
+									, lightMat->specular
+									, lightMat->getMetalness()
 									, surface )
 								: vec3( 0.0_f ) ) );
 
@@ -266,12 +263,12 @@ namespace castor3d
 								, emissive
 								, reflected
 								, refracted
-								, lightMat.albedo ) );
+								, lightMat->albedo ) );
 					}
 					else
 					{
 						auto colour = writer.declLocale( "colour"
-							, lightMat.albedo );
+							, lightMat->albedo );
 					}
 
 					auto colour = writer.getVariable < Vec3 >( "colour" );
