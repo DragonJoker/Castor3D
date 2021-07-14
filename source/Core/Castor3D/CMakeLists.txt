@@ -281,19 +281,13 @@ source_group( "Header Files\\Material" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES}
 source_group( "Source Files\\Material" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/MetallicRoughnessPbrPass.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Pass.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/PassModule.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/PhongPass.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/SpecularGlossinessPbrPass.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/SubsurfaceScattering.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/MetallicRoughnessPbrPass.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Pass.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/PassModule.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/PhongPass.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/SpecularGlossinessPbrPass.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/SubsurfaceScattering.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
@@ -306,6 +300,84 @@ set( ${PROJECT_NAME}_HDR_FILES
 )
 source_group( "Header Files\\Material\\Pass" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
 source_group( "Source Files\\Material\\Pass" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+
+set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/PBR/MetallicRoughnessPbrPass.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/PBR/SpecularGlossinessPbrPass.cpp
+)
+set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/PBR/MetallicRoughnessPbrPass.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/PBR/SpecularGlossinessPbrPass.hpp
+)
+set( ${PROJECT_NAME}_SRC_FILES
+	${${PROJECT_NAME}_SRC_FILES}
+	${${PROJECT_NAME}_FOLDER_SRC_FILES}
+)
+set( ${PROJECT_NAME}_HDR_FILES
+	${${PROJECT_NAME}_HDR_FILES}
+	${${PROJECT_NAME}_FOLDER_HDR_FILES}
+)
+source_group( "Header Files\\Material\\Pass\\PBR" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
+source_group( "Source Files\\Material\\Pass\\PBR" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+
+set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/PBR/Shaders/GlslPbrLighting.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/PBR/Shaders/GlslPbrMaterial.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/PBR/Shaders/GlslPbrReflection.cpp
+)
+set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/PBR/Shaders/GlslPbrLighting.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/PBR/Shaders/GlslPbrMaterial.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/PBR/Shaders/GlslPbrReflection.hpp
+)
+set( ${PROJECT_NAME}_SRC_FILES
+	${${PROJECT_NAME}_SRC_FILES}
+	${${PROJECT_NAME}_FOLDER_SRC_FILES}
+)
+set( ${PROJECT_NAME}_HDR_FILES
+	${${PROJECT_NAME}_HDR_FILES}
+	${${PROJECT_NAME}_FOLDER_HDR_FILES}
+)
+source_group( "Header Files\\Material\\Pass\\PBR\\Shaders" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
+source_group( "Source Files\\Material\\Pass\\PBR\\Shaders" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+
+set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Phong/PhongPass.cpp
+)
+set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Phong/PhongPass.hpp
+)
+set( ${PROJECT_NAME}_SRC_FILES
+	${${PROJECT_NAME}_SRC_FILES}
+	${${PROJECT_NAME}_FOLDER_SRC_FILES}
+)
+set( ${PROJECT_NAME}_HDR_FILES
+	${${PROJECT_NAME}_HDR_FILES}
+	${${PROJECT_NAME}_FOLDER_HDR_FILES}
+)
+source_group( "Header Files\\Material\\Pass\\Phong" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
+source_group( "Source Files\\Material\\Pass\\Phong" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+
+set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Phong/Shaders/GlslPhongLighting.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Phong/Shaders/GlslPhongMaterial.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Phong/Shaders/GlslPhongReflection.cpp
+)
+set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Phong/Shaders/GlslPhongLighting.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Phong/Shaders/GlslPhongMaterial.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Phong/Shaders/GlslPhongReflection.hpp
+)
+set( ${PROJECT_NAME}_SRC_FILES
+	${${PROJECT_NAME}_SRC_FILES}
+	${${PROJECT_NAME}_FOLDER_SRC_FILES}
+)
+set( ${PROJECT_NAME}_HDR_FILES
+	${${PROJECT_NAME}_HDR_FILES}
+	${${PROJECT_NAME}_FOLDER_HDR_FILES}
+)
+source_group( "Header Files\\Material\\Pass\\Phong\\Shaders" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
+source_group( "Source Files\\Material\\Pass\\Phong\\Shaders" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Texture/Sampler.cpp
@@ -1429,12 +1501,6 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslLighting.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslMaterial.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslOutputComponents.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslPbrLighting.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslPbrMaterial.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslPbrReflection.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslPhongLighting.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslPhongMaterial.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslPhongReflection.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslReflection.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslShadow.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslSssTransmittance.cpp
@@ -1451,12 +1517,6 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslLighting.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslMaterial.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslOutputComponents.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslPbrLighting.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslPbrMaterial.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslPbrReflection.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslPhongLighting.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslPhongMaterial.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslPhongReflection.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslReflection.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslShadow.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslSssTransmittance.hpp

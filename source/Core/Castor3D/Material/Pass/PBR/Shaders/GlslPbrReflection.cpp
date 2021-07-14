@@ -1,11 +1,11 @@
-#include "Castor3D/Shader/Shaders/GlslPbrReflection.hpp"
+#include "Castor3D/Material/Pass/PBR/Shaders/GlslPbrReflection.hpp"
 
+#include "Castor3D/Material/Pass/PBR/Shaders/GlslPbrMaterial.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Render/PBR/EnvironmentPrefilter.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslPbrMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"

@@ -20,7 +20,6 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslPhongMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"

@@ -3,8 +3,6 @@
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslPbrMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslPhongMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"

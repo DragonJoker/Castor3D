@@ -1,4 +1,4 @@
-#include "Castor3D/Material/Pass/MetallicRoughnessPbrPass.hpp"
+#include "Castor3D/Material/Pass/PBR/MetallicRoughnessPbrPass.hpp"
 
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"

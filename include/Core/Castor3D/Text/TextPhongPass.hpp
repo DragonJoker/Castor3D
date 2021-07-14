@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_TextPhongPass_H___
 #define ___C3D_TextPhongPass_H___
 
-#include "Castor3D/Material/Pass/PhongPass.hpp"
+#include "Castor3D/Material/Pass/Phong/PhongPass.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
 

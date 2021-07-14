@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_TextMetallicRoughnessPbrPass_H___
 #define ___C3D_TextMetallicRoughnessPbrPass_H___
 
-#include "Castor3D/Material/Pass/MetallicRoughnessPbrPass.hpp"
+#include "Castor3D/Material/Pass/PBR/MetallicRoughnessPbrPass.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
 

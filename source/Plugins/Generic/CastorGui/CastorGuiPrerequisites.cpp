@@ -4,9 +4,9 @@
 #include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Event/Frame/InitialiseEvent.hpp>
 #include <Castor3D/Material/Material.hpp>
-#include <Castor3D/Material/Pass/PhongPass.hpp>
-#include <Castor3D/Material/Pass/MetallicRoughnessPbrPass.hpp>
-#include <Castor3D/Material/Pass/SpecularGlossinessPbrPass.hpp>
+#include <Castor3D/Material/Pass/Phong/PhongPass.hpp>
+#include <Castor3D/Material/Pass/PBR/MetallicRoughnessPbrPass.hpp>
+#include <Castor3D/Material/Pass/PBR/SpecularGlossinessPbrPass.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
 #include <Castor3D/Overlay/BorderPanelOverlay.hpp>
 #include <Castor3D/Overlay/Overlay.hpp>
