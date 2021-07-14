@@ -15,9 +15,9 @@
 #include <Castor3D/Cache/SceneNodeCache.hpp>
 #include <Castor3D/Cache/CacheView.hpp>
 #include <Castor3D/Event/Frame/InitialiseEvent.hpp>
-#include <Castor3D/Material/Pass/PhongPass.hpp>
-#include <Castor3D/Material/Pass/MetallicRoughnessPbrPass.hpp>
-#include <Castor3D/Material/Pass/SpecularGlossinessPbrPass.hpp>
+#include <Castor3D/Material/Pass/Phong/PhongPass.hpp>
+#include <Castor3D/Material/Pass/PBR/MetallicRoughnessPbrPass.hpp>
+#include <Castor3D/Material/Pass/PBR/SpecularGlossinessPbrPass.hpp>
 #include <Castor3D/Model/Skeleton/Bone.hpp>
 #include <Castor3D/Plugin/ImporterPlugin.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>

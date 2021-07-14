@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_TextSpecularGlossinessPbrPass_H___
 #define ___C3D_TextSpecularGlossinessPbrPass_H___
 
-#include "Castor3D/Material/Pass/SpecularGlossinessPbrPass.hpp"
+#include "Castor3D/Material/Pass/PBR/SpecularGlossinessPbrPass.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
