@@ -3,9 +3,9 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
-#include "Castor3D/Material/Pass/PhongPass.hpp"
-#include "Castor3D/Material/Pass/MetallicRoughnessPbrPass.hpp"
-#include "Castor3D/Material/Pass/SpecularGlossinessPbrPass.hpp"
+#include "Castor3D/Material/Pass/Phong/PhongPass.hpp"
+#include "Castor3D/Material/Pass/PBR/MetallicRoughnessPbrPass.hpp"
+#include "Castor3D/Material/Pass/PBR/SpecularGlossinessPbrPass.hpp"
 
 using namespace castor;
 

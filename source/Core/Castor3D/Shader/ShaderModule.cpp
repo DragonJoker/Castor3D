@@ -3,8 +3,6 @@
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Material/Pass/PassModule.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslPbrMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslPhongMaterial.hpp"
 
 #include <ShaderWriter/CompositeTypes/Struct.hpp>
 #include <ShaderWriter/CompositeTypes/ArraySsbo.hpp>

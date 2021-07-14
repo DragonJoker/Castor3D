@@ -16,6 +16,8 @@
 #include "Castor3D/Event/Frame/InitialiseEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Material/Pass/PBR/Shaders/GlslPbrLighting.hpp"
+#include "Castor3D/Material/Pass/Phong/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/ImporterFactory.hpp"
@@ -30,8 +32,6 @@
 #include "Castor3D/Render/RenderWindow.hpp"
 #include "Castor3D/Render/Technique/RenderTechnique.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
-#include "Castor3D/Shader/Shaders/GlslPbrLighting.hpp"
-#include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Graphics/Image.hpp>
