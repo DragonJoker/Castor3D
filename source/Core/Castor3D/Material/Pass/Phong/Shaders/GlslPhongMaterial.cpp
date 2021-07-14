@@ -1,4 +1,4 @@
-#include "Castor3D/Shader/Shaders/GlslPhongMaterial.hpp"
+#include "Castor3D/Material/Pass/Phong/Shaders/GlslPhongMaterial.hpp"
 
 #include <ShaderWriter/Source.hpp>
 

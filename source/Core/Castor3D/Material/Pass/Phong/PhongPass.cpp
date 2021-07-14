@@ -1,4 +1,4 @@
-#include "Castor3D/Material/Pass/PhongPass.hpp"
+#include "Castor3D/Material/Pass/Phong/PhongPass.hpp"
 
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"

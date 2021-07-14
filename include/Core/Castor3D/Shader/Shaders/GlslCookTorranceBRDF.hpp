@@ -5,7 +5,6 @@ See LICENSE file in root folder
 #define ___C3D_GlslCookTorranceBRDF_H___
 
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
-#include "Castor3D/Shader/Shaders/GlslPbrMaterial.hpp"
 
 namespace castor3d::shader
 {

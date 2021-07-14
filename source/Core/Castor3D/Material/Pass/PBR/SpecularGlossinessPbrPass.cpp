@@ -1,4 +1,4 @@
-#include "Castor3D/Material/Pass/SpecularGlossinessPbrPass.hpp"
+#include "Castor3D/Material/Pass/PBR/SpecularGlossinessPbrPass.hpp"
 
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
