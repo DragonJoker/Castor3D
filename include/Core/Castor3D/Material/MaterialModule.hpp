@@ -67,12 +67,15 @@ namespace castor3d
 		//!\~english	Light transmittance map.
 		//!\~french		Map de transmission de lumière.
 		eTransmittance = 0x0020,
+		//!\~english	Basic colour map.
+		//!\~french		Map de couleur basique.
+		eColour = 0x0040,
 		//!\~english	Diffuse map.
 		//!\~french		Map de diffuse.
-		eDiffuse = 0x0040,
+		eDiffuse = eColour,
 		//!\~english	Albedo map.
 		//!\~french		Map d'albedo.
-		eAlbedo = eDiffuse,
+		eAlbedo = eColour,
 		//!\~english	Specular map.
 		//!\~french		Map de spéculaire.
 		eSpecular = 0x0080,

@@ -278,7 +278,7 @@ namespace CastorGui
 	 *\param[in]	pass	The pass.
 	 *\return		The material colour.
 	 */
-	castor::RgbColour getMaterialColour( castor3d::Pass const & pass );
+	castor::RgbColour const & getMaterialColour( castor3d::Pass const & pass );
 	/** Creates a colour material.
 	 *\param[in]	engine	The engine.
 	 *\param[in]	p_name		The material name.

@@ -14,9 +14,6 @@
 #include <Castor3D/Event/Frame/GpuFunctorEvent.hpp>
 #include <Castor3D/Event/UserInput/UserInputListener.hpp>
 #include <Castor3D/Material/Material.hpp>
-#include <Castor3D/Material/Pass/Phong/PhongPass.hpp>
-#include <Castor3D/Material/Pass/PBR/MetallicRoughnessPbrPass.hpp>
-#include <Castor3D/Material/Pass/PBR/SpecularGlossinessPbrPass.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Render/ShadowMap/ShadowMapPass.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
