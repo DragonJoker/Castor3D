@@ -12,32 +12,6 @@ using namespace castor;
 
 namespace castor3d
 {
-	//****************************************************************************************************
-
-	namespace
-	{
-		using ashes::getName;
-
-		template< typename EnumT >
-		castor::UInt32StrMap getEnumMapT( EnumT min, EnumT max )
-		{
-			castor::UInt32StrMap result;
-
-			for ( uint32_t i = uint32_t( min ); i <= uint32_t( max ); ++i )
-			{
-				result[getName( EnumT( i ) )] = i;
-			}
-
-			return result;
-		}
-
-		template< typename EnumT >
-		castor::UInt32StrMap getEnumMapT()
-		{
-			return getEnumMapT( EnumT::eMin, EnumT::eMax );
-		}
-	}
-
 	//*********************************************************************************************
 
 	SceneFileContext::SceneFileContext( Path const & path, SceneFileParser * parser )
