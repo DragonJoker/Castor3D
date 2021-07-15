@@ -48,8 +48,6 @@ namespace castor3d::shader
 		static C3D_API sdw::Float computeMetalness( sdw::Vec3 const & albedo
 			, sdw::Vec3 const & specular );
 		static C3D_API sdw::Float computeRoughness( sdw::Float const & glossiness );
-		static C3D_API sdw::Float computeGlossiness( sdw::Float const & shininess );
-		static C3D_API sdw::Float computeShininess( sdw::Float const & glossiness );
 		//\}
 
 		sdw::Vec3 albedo;
