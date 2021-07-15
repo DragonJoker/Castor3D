@@ -1007,7 +1007,7 @@ namespace castor3d::shader
 	{
 		for ( auto & textureIt : flags )
 		{
-			if ( checkFlag( textureIt.second.flags, TextureFlag::eDiffuse )
+			if ( checkFlag( textureIt.second.flags, TextureFlag::eColour )
 				|| checkFlag( textureIt.second.flags, TextureFlag::eOpacity ) )
 			{
 				auto i = textureIt.first;
@@ -1020,7 +1020,7 @@ namespace castor3d::shader
 				auto sampled = m_writer.declLocale< sdw::Vec4 >( "sampled" + name
 					, maps[i].sample( texCoord ) );
 
-				if ( checkFlag( textureIt.second.flags, TextureFlag::eDiffuse ) )
+				if ( checkFlag( textureIt.second.flags, TextureFlag::eColour ) )
 				{
 					colour = config.getDiffuse( m_writer, sampled, colour, 1.0_f );
 				}

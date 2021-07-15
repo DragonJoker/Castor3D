@@ -54,16 +54,18 @@ namespace castor3d
 			, castor::String const & subfolder
 			, castor::StringStream & file )const override;
 		/**
-		 *\~english
-		 *\remarks	Passes are aligned on float[4], so the size of a pass
-		 *			is the number of float[4] needed to contain it.
-		 *\~french
-		 *\remarks	Les passes sont alignées sur 4 flottants, donc la taille d'une passe
-		 *			correspond aux nombres de float[4] qu'il faut pour la contenir.
+		 *\copydoc		castor3d::Pass::setColour
 		 */
-		uint32_t getPassSize()const override
+		void setColour( castor::RgbColour const & value ) override
 		{
-			return 4u;
+			setDiffuse( value );
+		}
+		/**
+		 *\copydoc		castor3d::Pass::getColour
+		 */
+		castor::RgbColour const & getColour()const override
+		{
+			return getDiffuse();
 		}
 		/**
 		 *\~english
