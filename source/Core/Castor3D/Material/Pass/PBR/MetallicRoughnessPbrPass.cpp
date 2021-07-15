@@ -20,6 +20,11 @@ namespace castor3d
 	{
 	}
 
+	PassSPtr MetallicRoughnessPbrPass::create( Material & parent )
+	{
+		return std::make_shared< MetallicRoughnessPbrPass >( parent );
+	}
+
 	void MetallicRoughnessPbrPass::accept( PassBuffer & buffer )const
 	{
 		auto f0 = castor::RgbColour{ 0.04f, 0.04f, 0.04f } *( 1.0f - getMetallic() ) + getAlbedo() * getMetallic();

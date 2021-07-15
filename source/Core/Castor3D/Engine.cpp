@@ -16,6 +16,7 @@
 #include "Castor3D/Event/Frame/InitialiseEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Material/Pass/PBR/Shaders/GlslPbrLighting.hpp"
 #include "Castor3D/Material/Pass/Phong/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
@@ -83,10 +84,11 @@ namespace castor3d
 		, m_enableValidation{ enableValidation }
 		, m_fontCache{ *m_logger }
 		, m_imageCache{ *m_logger, m_imageLoader }
-		, m_meshFactory{ std::make_shared< MeshFactory >() }
-		, m_subdividerFactory{ std::make_shared< MeshSubdividerFactory >() }
-		, m_importerFactory{ std::make_shared< MeshImporterFactory >() }
-		, m_particleFactory{ std::make_shared< ParticleFactory >() }
+		, m_meshFactory{ castor::makeUnique< MeshFactory >() }
+		, m_subdividerFactory{ castor::makeUnique< MeshSubdividerFactory >() }
+		, m_importerFactory{ castor::makeUnique< MeshImporterFactory >() }
+		, m_particleFactory{ castor::makeUnique< ParticleFactory >() }
+		, m_passFactory{ castor::makeUnique< PassFactory >() }
 		, m_enableApiTrace{ C3D_EnableAPITrace }
 		, m_jobs{ castor::CpuInformations{}.getCoreCount() }
 	{

@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Cache/CacheModule.hpp"
 #include "Castor3D/Event/Frame/FrameEventModule.hpp"
 #include "Castor3D/Event/UserInput/UserInputEventModule.hpp"
+#include "Castor3D/Material/Pass/PassModule.hpp"
 #include "Castor3D/Model/Mesh/MeshModule.hpp"
 #include "Castor3D/Overlay/OverlayModule.hpp"
 #include "Castor3D/Plugin/PluginModule.hpp"
@@ -480,6 +481,16 @@ namespace castor3d
 			return *m_meshFactory;
 		}
 
+		PassFactory const & getPassFactory()const
+		{
+			return *m_passFactory;
+		}
+
+		PassFactory & getPassFactory()
+		{
+			return *m_passFactory;
+		}
+
 		MeshSubdividerFactory const & getSubdividerFactory()const
 		{
 			return *m_subdividerFactory;
@@ -620,10 +631,11 @@ namespace castor3d
 		castor::ImageCache m_imageCache;
 		std::map< castor::String, castor::AttributeParsersBySection > m_additionalParsers;
 		std::map< castor::String, castor::StrUInt32Map > m_additionalSections;
-		MeshFactorySPtr m_meshFactory;
-		MeshSubdividerFactorySPtr m_subdividerFactory;
-		MeshImporterFactorySPtr m_importerFactory;
-		ParticleFactorySPtr m_particleFactory;
+		MeshFactoryUPtr m_meshFactory;
+		MeshSubdividerFactoryUPtr m_subdividerFactory;
+		MeshImporterFactoryUPtr m_importerFactory;
+		ParticleFactoryUPtr m_particleFactory;
+		PassFactoryUPtr m_passFactory;
 		castor::CpuInformations m_cpuInformations;
 		MaterialType m_materialType{ MaterialType::ePhong };
 		bool m_enableValidation{ false };

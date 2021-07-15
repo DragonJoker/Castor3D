@@ -1,5 +1,7 @@
 #include "Castor3D/Scene/ParticleSystem/ParticleModule.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, ParticleFactory )
+
 namespace castor3d
 {
 	castor::String getName( ElementUsage value )
