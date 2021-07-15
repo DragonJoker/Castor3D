@@ -103,6 +103,15 @@ namespace castor3d
 		C3D_API void clear();
 		/**
 		 *\~english
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
+		 *\~french
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
+		 */
+		C3D_API void update( CpuUpdater & updater );
+		/**
+		 *\~english
 		 *\brief			Updates the render pass, GPU wise.
 		 *\param[in, out]	updater	The update data.
 		 *\~french

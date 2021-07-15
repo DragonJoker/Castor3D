@@ -103,7 +103,6 @@ namespace GuiCommon
 
 		template< typename ObjectT, typename ValueT >
 		using ValueSetterT = void ( ObjectT:: * )( ValueT );
-
 		wxPGProperty * addProperty( wxPropertyGrid * parent
 			, wxString const & name );
 		wxPGProperty * addProperty( wxPGProperty * parent
@@ -112,115 +111,140 @@ namespace GuiCommon
 		wxPGProperty * createProperty( ParentT * parent
 			, wxString const & name
 			, MyValueT && value
-			, PropertyChangeHandler handler );
+			, PropertyChangeHandler handler
+			, bool * control = nullptr );
 		template< typename ParentT, typename EnumT, typename FuncT >
 		wxPGProperty * addPropertyE( ParentT * parent
 			, wxString const & name
 			, wxArrayString const & choices
-			, FuncT func );
+			, FuncT func
+			, bool * control = nullptr );
 		template< typename ParentT, typename EnumT, typename FuncT >
 		wxPGProperty * addPropertyE( ParentT * parent
 			, wxString const & name
 			, wxArrayString const & choices
 			, EnumT selected
-			, FuncT func );
+			, FuncT func
+			, bool * control = nullptr );
 		wxPGProperty * addProperty( wxPropertyGrid * parent
 			, wxString const & name
 			, wxArrayString const & choices
 			, wxString const & selected
-			, PropertyChangeHandler handler );
+			, PropertyChangeHandler handler
+			, bool * control = nullptr );
 		wxPGProperty * addProperty( wxPGProperty * parent
 			, wxString const & name
 			, wxArrayString const & choices
 			, wxString const & selected
-			, PropertyChangeHandler handler );
+			, PropertyChangeHandler handler
+			, bool * control = nullptr );
 		template< typename ParentT, typename ValueT >
 		wxPGProperty * addProperty( ParentT * parent
 			, wxString const & name
 			, ValueT const & value
-			, PropertyChangeHandler handler );
+			, PropertyChangeHandler handler
+			, bool * control = nullptr );
 		template< typename ParentT, typename ValueT >
 		wxPGProperty * addProperty( ParentT * parent
 			, wxString const & name
 			, ValueT const & value
 			, ValueT const & step
-			, PropertyChangeHandler handler );
+			, PropertyChangeHandler handler
+			, bool * control = nullptr );
 		wxPGProperty * addProperty( wxPropertyGrid * parent
 			, wxString const & name
 			, wxPGEditor * editor
-			, PropertyChangeHandler handler );
+			, PropertyChangeHandler handler
+			, bool * control = nullptr );
 		wxPGProperty * addProperty( wxPGProperty * parent
 			, wxString const & name
 			, wxPGEditor * editor
-			, PropertyChangeHandler handler );
+			, PropertyChangeHandler handler
+			, bool * control = nullptr );
 
 		template< typename ParentT, typename ValueT >
 		wxPGProperty * addPropertyT( ParentT * parent
 			, wxString const & name
-			, castor::RangedValue< ValueT > * value );
+			, castor::RangedValue< ValueT > * value
+			, bool * control = nullptr );
 		template< typename ParentT, typename ValueT >
 		wxPGProperty * addPropertyT( ParentT * parent
 			, wxString const & name
-			, castor::ChangeTracked< castor::RangedValue< ValueT > > * value );
-		template< typename ParentT, typename ValueT >
-		wxPGProperty * addPropertyT( ParentT * parent
-			, wxString const & name
-			, ValueT * value );
+			, castor::ChangeTracked< castor::RangedValue< ValueT > > * value
+			, bool * control = nullptr );
 		template< typename ParentT, typename ValueT >
 		wxPGProperty * addPropertyT( ParentT * parent
 			, wxString const & name
 			, ValueT * value
-			, ValueT step );
+			, bool * control = nullptr );
+		template< typename ParentT, typename ValueT >
+		wxPGProperty * addPropertyT( ParentT * parent
+			, wxString const & name
+			, ValueT * value
+			, ValueT step
+			, bool * control = nullptr );
 		template< typename ParentT, typename ObjectT, typename ObjectU, typename ValueT >
 		wxPGProperty * addPropertyT( ParentT * parent
 			, wxString const & name
 			, ValueT value
 			, ObjectT * object
-			, ValueSetterT< ObjectU, ValueT > setter );
+			, ValueSetterT< ObjectU, ValueT > setter
+			, bool * control = nullptr );
 		template< typename ParentT, typename ObjectT, typename ObjectU, typename ValueT >
 		wxPGProperty * addPropertyT( ParentT * parent
 			, wxString const & name
 			, ValueT  value
 			, ValueT step
 			, ObjectT * object
-			, ValueSetterT< ObjectU, ValueT > setter );
+			, ValueSetterT< ObjectU, ValueT > setter
+			, bool * control = nullptr );
 		template< typename ParentT, typename ObjectT, typename ObjectU, typename ValueT >
 		wxPGProperty * addPropertyT( ParentT * parent
 			, wxString const & name
 			, ValueT const & value
 			, ObjectT * object
-			, ValueRefSetterT< ObjectU, ValueT > setter );
+			, ValueRefSetterT< ObjectU, ValueT > setter
+			, bool * control = nullptr );
 		template< typename ParentT, typename ObjectT, typename ObjectU, typename ValueT >
 		wxPGProperty * addPropertyT( ParentT * parent
 			, wxString const & name
 			, castor::RangedValue< ValueT > const & value
 			, ObjectT * object
-			, ValueSetterT< ObjectU, ValueT > setter );
+			, ValueSetterT< ObjectU, ValueT > setter
+			, bool * control = nullptr );
 		template< typename ParentT, typename ObjectT, typename ObjectU, typename EnumT >
 		wxPGProperty * addPropertyET( ParentT * parent
 			, wxString const & name
 			, wxArrayString const & choices
 			, ObjectT * object
-			, ValueSetterT< ObjectU, EnumT > setter );
+			, ValueSetterT< ObjectU, EnumT > setter
+			, bool * control = nullptr );
 		template< typename ParentT, typename ObjectT, typename ObjectU, typename EnumT >
 		wxPGProperty * addPropertyET( ParentT * parent
 			, wxString const & name
 			, wxArrayString const & choices
 			, EnumT selected
 			, ObjectT * object
-			, ValueSetterT< ObjectU, EnumT > setter );
+			, ValueSetterT< ObjectU, EnumT > setter
+			, bool * control = nullptr );
 		template< typename ParentT, typename EnumT >
 		wxPGProperty * addPropertyET( ParentT * parent
 			, wxString const & name
 			, wxArrayString const & choices
-			, EnumT * value );
+			, EnumT * value
+			, bool * control = nullptr );
 		template< typename ParentT, typename ObjectT, typename ObjectU, typename EnumT >
 		wxPGProperty * addPropertyT( ParentT * parent
 			, wxString const & name
 			, wxArrayString const & choices
 			, wxString const & selected
 			, ObjectT * object
-			, ValueSetterT< ObjectU, EnumT > setter );
+			, ValueSetterT< ObjectU, EnumT > setter
+			, bool * control = nullptr );
+
+	private:
+		PropertyChangeHandler doGetHandler( PropertyChangeHandler handler
+			, bool * control );
 
 	protected:
 		wxMenu * m_menu;

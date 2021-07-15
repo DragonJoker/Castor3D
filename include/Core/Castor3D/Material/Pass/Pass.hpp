@@ -12,6 +12,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 
 #include <CastorUtils/Design/FlagCombination.hpp>
+#include <CastorUtils/Design/GroupChangeTracked.hpp>
 #include <CastorUtils/Design/Signal.hpp>
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
@@ -58,6 +59,13 @@ namespace castor3d
 		 *\brief		Nettoie la passe et toutes ses dépendances.
 		 */
 		C3D_API void cleanup();
+		/**
+		 *\~english
+		 *\brief			Updates the render pass, CPU wise.
+		 *\~french
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 */
+		C3D_API void update();
 		/**
 		 *\~english
 		 *\brief		adds a texture unit.
@@ -151,6 +159,19 @@ namespace castor3d
 		 *\param[in,out]	buffer	Le pass buffer.
 		 */
 		C3D_API virtual void accept( PassBuffer & buffer )const = 0;
+		/**
+		*\~english
+		*\brief
+		*	PipelineVisitor acceptance function.
+		*\param visitor
+		*	The ... visitor.
+		*\~french
+		*\brief
+		*	Fonction d'acceptation de PipelineVisitor.
+		*\param visitor
+		*	Le ... visiteur.
+		*/
+		C3D_API virtual void accept( PipelineVisitorBase & vis );
 		C3D_API virtual uint32_t getSectionID()const = 0;
 		C3D_API virtual bool writeText( castor::String const & tabs
 			, castor::Path const & folder
@@ -203,7 +224,7 @@ namespace castor3d
 
 		uint32_t getBWAccumulationOperator()const
 		{
-			return m_bwAccumulationOperator.value();
+			return m_bwAccumulationOperator->value();
 		}
 
 		float getEmissive()const
@@ -339,25 +360,21 @@ namespace castor3d
 		void setTwoSided( bool value )
 		{
 			m_twoSided = value;
-			onChanged( *this );
 		}
 
 		void setEmissive( float const & value )
 		{
 			m_emissive = value;
-			onChanged( *this );
 		}
 
 		void setRefractionRatio( float value )
 		{
 			m_refractionRatio = value;
-			onChanged( *this );
 		}
 
 		void setTransmission( castor::Point3f value )
 		{
 			m_transmission = std::move( value );
-			onChanged( *this );
 		}
 
 		void setParallaxOcclusion( ParallaxOcclusionMode value )
@@ -367,20 +384,17 @@ namespace castor3d
 				, m_parallaxOcclusionMode == ParallaxOcclusionMode::eOne );
 			updateFlag( PassFlag::eParallaxOcclusionMappingRepeat
 				, m_parallaxOcclusionMode == ParallaxOcclusionMode::eRepeat );
-			onChanged( *this );
 		}
 
 		void setAlphaBlendMode( BlendMode value )
 		{
 			m_alphaBlendMode = value;
 			updateFlag( PassFlag::eAlphaBlending, hasAlphaBlending() );
-			onChanged( *this );
 		}
 
 		void setColourBlendMode( BlendMode value )
 		{
 			m_colourBlendMode = value;
-			onChanged( *this );
 		}
 
 		void setId( uint32_t value )
@@ -397,7 +411,6 @@ namespace castor3d
 		void setAlphaValue( float value )
 		{
 			m_alphaValue = value;
-			onChanged( *this );
 		}
 
 		void setBlendAlphaFunc( VkCompareOp value )
@@ -408,8 +421,7 @@ namespace castor3d
 
 		void setBWAccumulationOperator( uint32_t value )
 		{
-			m_bwAccumulationOperator = value;
-			onChanged( *this );
+			*m_bwAccumulationOperator = value;
 		}
 
 		void enableReflections( bool value = true )
@@ -475,12 +487,15 @@ namespace castor3d
 		void doJoinEmsOcc( TextureUnitPtrArray & result );
 		virtual void doInitialise() = 0;
 		virtual void doCleanup() = 0;
+		virtual void doAccept( PipelineVisitorBase & vis ) = 0;
 		virtual void doSetOpacity( float value ) = 0;
 		virtual void doPrepareTextures( TextureUnitPtrArray & result ) = 0;
 
 		void updateFlag( PassFlag flag
 			, bool value )
 		{
+			auto save = m_flags;
+
 			if ( value )
 			{
 				addFlag( m_flags, flag );
@@ -490,35 +505,38 @@ namespace castor3d
 				remFlag( m_flags, flag );
 			}
 
-			onChanged( *this );
+			m_dirty = m_dirty || ( save != m_flags );
 		}
 
 	public:
 		OnPassChanged onChanged;
 
+	protected:
+		bool m_dirty{ true };
+
 	private:
+		PassFlags m_flags;
 		TextureUnitPtrArray m_textureUnits;
 		TextureFlags m_textures;
 		uint32_t m_id{ 0u };
 		bool m_implicit{ false };
-		float m_opacity{ 1.0f };
-		castor::RangedValue< uint32_t > m_bwAccumulationOperator{ castor::makeRangedValue( 1u, 0u, 8u ) };
-		float m_emissive{ 0.0f };
-		float m_refractionRatio{ 0.0f };
-		bool m_twoSided{ false };
 		bool m_automaticShader{ true };
-		BlendMode m_alphaBlendMode{ BlendMode::eNoBlend };
-		BlendMode m_colourBlendMode{ BlendMode::eNoBlend };
-		float m_alphaValue{ 0.0f };
-		castor::Point3f m_transmission{ 1.0f, 1.0f, 1.0f };
-		VkCompareOp m_alphaFunc{ VK_COMPARE_OP_ALWAYS };
-		VkCompareOp m_blendAlphaFunc{ VK_COMPARE_OP_ALWAYS };
 		std::atomic_bool m_texturesReduced{ false };
+		castor::GroupChangeTracked< float > m_opacity;
+		castor::GroupChangeTracked< castor::RangedValue< uint32_t > > m_bwAccumulationOperator;
+		castor::GroupChangeTracked< float > m_emissive;
+		castor::GroupChangeTracked< float > m_refractionRatio;
+		castor::GroupChangeTracked< bool > m_twoSided;
+		castor::GroupChangeTracked< BlendMode > m_alphaBlendMode;
+		castor::GroupChangeTracked< BlendMode > m_colourBlendMode;
+		castor::GroupChangeTracked< float > m_alphaValue;
+		castor::GroupChangeTracked< castor::Point3f > m_transmission;
+		castor::GroupChangeTracked< VkCompareOp > m_alphaFunc;
+		castor::GroupChangeTracked< VkCompareOp > m_blendAlphaFunc;
+		castor::GroupChangeTracked< ParallaxOcclusionMode > m_parallaxOcclusionMode;
 		SubsurfaceScatteringUPtr m_subsurfaceScattering;
 		SubsurfaceScattering::OnChangedConnection m_sssConnection;
 		uint32_t m_heightTextureIndex{ InvalidIndex };
-		PassFlags m_flags;
-		ParallaxOcclusionMode m_parallaxOcclusionMode{ ParallaxOcclusionMode::eNone };
 	};
 }
 

@@ -84,7 +84,8 @@ StcTextEditor::StcTextEditor( StcContext & context
 	SetViewEOL( m_context.displayEOLEnable );
 	SetIndentationGuides( m_context.indentGuideEnable );
 	SetEdgeMode( m_context.longLineOnEnable ? wxSTC_EDGE_LINE : wxSTC_EDGE_NONE );
-	SetWhitespaceForeground( true, ACTIVE_TAB_COLOUR );
+	static const wxColour WHITESPACE_COLOUR = wxColour( 25, 76, 127, 255 );
+	SetWhitespaceForeground( true, WHITESPACE_COLOUR );
 	SetViewWhiteSpace( wxSTC_WS_VISIBLEALWAYS );
 	SetOvertype( m_context.overTypeInitial );
 	SetReadOnly( m_context.readOnlyInitial );

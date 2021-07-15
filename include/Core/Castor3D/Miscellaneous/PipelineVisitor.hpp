@@ -8,6 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <CastorUtils/Design/ChangeTracked.hpp>
+#include <CastorUtils/Design/GroupChangeTracked.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
@@ -45,7 +46,7 @@ namespace castor3d
 		**/
 		/**@{*/
 		C3D_API virtual void visit( ShaderModule const & shader ) = 0;
-		C3D_API virtual void visit( DebugConfig const & ubo ) = 0;
+		C3D_API virtual void visit( DebugConfig const & config ) = 0;
 		/**@}*/
 		/**
 		*\~english
@@ -84,214 +85,242 @@ namespace castor3d
 		/**
 		*\~english
 		*name
-		*	Global post effect configuration.
+		*	Global pipeline configuration.
 		*\~french
 		*name
-		*	Configuration globale de l'effet.
+		*	Configuration globale du pipeline.
 		**/
 		/**@{*/
 		C3D_API virtual void visit( castor::String const & name
-			, float & value ) = 0;
+			, bool & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
-			, int32_t & value ) = 0;
+			, int16_t & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
-			, uint32_t & value ) = 0;
+			, uint16_t & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
-			, castor::Point2f & value ) = 0;
+			, int32_t & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
-			, castor::Point2i & value ) = 0;
+			, uint32_t & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
-			, castor::Point2ui & value ) = 0;
+			, int64_t & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
-			, castor::Point3f & value ) = 0;
+			, uint64_t & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
-			, castor::Point3i & value ) = 0;
+			, float & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
-			, castor::Point3ui & value ) = 0;
+			, double & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
-			, castor::Point4f & value ) = 0;
+			, BlendMode & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
-			, castor::Point4i & value ) = 0;
+			, ParallaxOcclusionMode & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
-			, castor::Point4ui & value ) = 0;
+			, PassFlags & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
-			, castor::Matrix4x4f & value ) = 0;
+			, VkCompareOp & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
-			, castor::RangedValue< float > & value ) = 0;
+			, castor::RgbColour & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
-			, castor::RangedValue< int32_t > & value ) = 0;
+			, castor::RgbaColour & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
-			, castor::RangedValue< uint32_t > & value ) = 0;
+			, castor::HdrRgbColour & value
+			, bool * control = nullptr ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::HdrRgbaColour & value
+			, bool * control = nullptr ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::Point2f & value
+			, bool * control = nullptr ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::Point2i & value
+			, bool * control = nullptr ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::Point2ui & value
+			, bool * control = nullptr ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::Point3f & value
+			, bool * control = nullptr ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::Point3i & value
+			, bool * control = nullptr ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::Point3ui & value
+			, bool * control = nullptr ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::Point4f & value
+			, bool * control = nullptr ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::Point4i & value
+			, bool * control = nullptr ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::Point4ui & value
+			, bool * control = nullptr ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::Matrix4x4f & value
+			, bool * control = nullptr ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::RangedValue< float > & value
+			, bool * control = nullptr ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::RangedValue< int32_t > & value
+			, bool * control = nullptr ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::RangedValue< uint32_t > & value
+			, bool * control = nullptr ) = 0;
+
+		template< typename TypeT >
+		void visit( castor::String const & name
+			, castor::ChangeTracked< TypeT > & value )
+		{
+			visit( name, *value, &value.control() );
+		}
+
+		template< typename TypeT >
+		void visit( castor::String const & name
+			, castor::GroupChangeTracked< TypeT > & value )
+		{
+			visit( name, *value, &value.control() );
+		}
 		/**@}*/
 		/**
 		*\~english
 		*name
-		*	UBO configuration.
+		*	Shader buffer configuration.
 		*\~french
 		*name
-		*	Configuration d'UBO.
+		*	Configuration de shader buffer.
 		**/
 		/**@{*/
 		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, float & value ) = 0;
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, float & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, int32_t & value ) = 0;
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, int32_t & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, uint32_t & value ) = 0;
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, uint32_t & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::Point2f & value ) = 0;
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, castor::Point2f & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::Point2i & value ) = 0;
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, castor::Point2i & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::Point2ui & value ) = 0;
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, castor::Point2ui & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::Point3f & value ) = 0;
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, castor::Point3f & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::Point3i & value ) = 0;
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, castor::Point3i & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::Point3ui & value ) = 0;
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, castor::Point3ui & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::Point4f & value ) = 0;
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, castor::Point4f & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::Point4i & value ) = 0;
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, castor::Point4i & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::Point4ui & value ) = 0;
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, castor::Point4ui & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::Matrix4x4f & value ) = 0;
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, castor::Matrix4x4f & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::RangedValue< float > & value ) = 0;
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, castor::RangedValue< float > & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::RangedValue< int32_t > & value ) = 0;
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, castor::RangedValue< int32_t > & value
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::RangedValue< uint32_t > & value ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, castor::RangedValue< uint32_t > & value
+			, bool * control = nullptr ) = 0;
+
+		template< typename TypeT >
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< float > & value ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, castor::ChangeTracked< TypeT > & value )
+		{
+			visit( name, shaders, bufferName, varName, *value, &value.control() );
+		}
+
+		template< typename TypeT >
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< int32_t > & value ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< uint32_t > & value ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< castor::Point2f > & value ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< castor::Point2i > & value ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< castor::Point2ui > & value ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< castor::Point3f > & value ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< castor::Point3i > & value ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< castor::Point3ui > & value ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< castor::Point4f > & value ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< castor::Point4i > & value ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< castor::Point4ui > & value ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< castor::Matrix4x4f > & value ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< castor::RangedValue< float > > & value ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< castor::RangedValue< int32_t > > & value ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< castor::RangedValue< uint32_t > > & value ) = 0;
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, castor::GroupChangeTracked< TypeT > & value )
+		{
+			visit( name, shaders, bufferName, varName, *value, &value.control() );
+		}
 		/**@}*/
 
 	protected:
@@ -330,7 +359,7 @@ namespace castor3d
 		{
 		}
 
-		void visit( DebugConfig const & ubo )override
+		void visit( DebugConfig const & config )override
 		{
 		}
 		/**@}*/
@@ -344,82 +373,182 @@ namespace castor3d
 		**/
 		/**@{*/
 		void visit( castor::String const & name
-			, float & value )override
+			, bool & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
-			, int32_t & value )override
+			, int16_t & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
-			, uint32_t & value )override
+			, uint16_t & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
-			, castor::Point2f & value )override
+			, int32_t & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
-			, castor::Point2i & value )override
+			, uint32_t & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
-			, castor::Point2ui & value )override
+			, int64_t & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
-			, castor::Point3f & value )override
+			, uint64_t & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
-			, castor::Point3i & value )override
+			, float & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
-			, castor::Point3ui & value )override
+			, double & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
-			, castor::Point4f & value )override
+			, BlendMode & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
-			, castor::Point4i & value )override
+			, ParallaxOcclusionMode & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
-			, castor::Point4ui & value )override
+			, PassFlags & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
-			, castor::Matrix4x4f & value )override
+			, VkCompareOp & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
-			, castor::RangedValue< float > & value )override
+			, castor::RgbColour & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
-			, castor::RangedValue< int32_t > & value )override
+			, castor::RgbaColour & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
-			, castor::RangedValue< uint32_t > & value )override
+			, castor::HdrRgbColour & value
+			, bool * control )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::HdrRgbaColour & value
+			, bool * control )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::Point2f & value
+			, bool * control )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::Point2i & value
+			, bool * control )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::Point2ui & value
+			, bool * control )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::Point3f & value
+			, bool * control )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::Point3i & value
+			, bool * control )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::Point3ui & value
+			, bool * control )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::Point4f & value
+			, bool * control )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::Point4i & value
+			, bool * control )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::Point4ui & value
+			, bool * control )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::Matrix4x4f & value
+			, bool * control )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::RangedValue< float > & value
+			, bool * control )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::RangedValue< int32_t > & value
+			, bool * control )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::RangedValue< uint32_t > & value
+			, bool * control )override
 		{
 		}
 		/**@}*/
@@ -434,257 +563,145 @@ namespace castor3d
 		/**@{*/
 		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, float & value )override
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, float & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, int32_t & value )override
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, int32_t & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, uint32_t & value )override
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, uint32_t & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::Point2f & value )override
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, castor::Point2f & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::Point2i & value )override
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, castor::Point2i & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::Point2ui & value )override
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, castor::Point2ui & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::Point3f & value )override
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, castor::Point3f & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::Point3i & value )override
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, castor::Point3i & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::Point3ui & value )override
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, castor::Point3ui & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::Point4f & value )override
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, castor::Point4f & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::Point4i & value )override
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, castor::Point4i & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::Point4ui & value )override
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, castor::Point4ui & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::Matrix4x4f & value )override
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, castor::Matrix4x4f & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::RangedValue< float > & value )override
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, castor::RangedValue< float > & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::RangedValue< int32_t > & value )override
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, castor::RangedValue< int32_t > & value
+			, bool * control )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::RangedValue< uint32_t > & value )override
-		{
-		}
-
-		void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< float > & value )override
-		{
-		}
-
-		void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< int32_t > & value )override
-		{
-		}
-
-		void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< uint32_t > & value )override
-		{
-		}
-
-		void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< castor::Point2f > & value )override
-		{
-		}
-
-		void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< castor::Point2i > & value )override
-		{
-		}
-
-		void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< castor::Point2ui > & value )override
-		{
-		}
-
-		void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< castor::Point3f > & value )override
-		{
-		}
-
-		void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< castor::Point3i > & value )override
-		{
-		}
-
-		void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< castor::Point3ui > & value )override
-		{
-		}
-
-		void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< castor::Point4f > & value )override
-		{
-		}
-
-		void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< castor::Point4i > & value )override
-		{
-		}
-
-		void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< castor::Point4ui > & value )override
-		{
-		}
-
-		void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< castor::Matrix4x4f > & value )override
-		{
-		}
-
-		void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< castor::RangedValue< float > > & value )override
-		{
-		}
-
-		void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< castor::RangedValue< int32_t > > & value )override
-		{
-		}
-
-		void visit( castor::String const & name
-			, VkShaderStageFlags shaders
-			, castor::String const & ubo
-			, castor::String const & uniform
-			, castor::ChangeTracked< castor::RangedValue< uint32_t > > & value )override
+			, castor::String const & bufferName
+			, castor::String const & varName
+			, castor::RangedValue< uint32_t > & value
+			, bool * control )override
 		{
 		}
 		/**@}*/

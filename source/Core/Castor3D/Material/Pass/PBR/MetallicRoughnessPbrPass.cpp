@@ -4,6 +4,7 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
+#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 
@@ -118,7 +119,9 @@ namespace castor3d
 
 	MetallicRoughnessPbrPass::MetallicRoughnessPbrPass( Material & parent )
 		: Pass{ parent }
-		, m_albedo{ castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
+		, m_albedo{ m_dirty, castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
+		, m_metalness{ m_dirty, 0.0f }
+		, m_roughness{ m_dirty, 1.0f }
 	{
 	}
 
@@ -187,6 +190,16 @@ namespace castor3d
 
 	void MetallicRoughnessPbrPass::doCleanup()
 	{
+	}
+
+	void MetallicRoughnessPbrPass::doAccept( PipelineVisitorBase & vis )
+	{
+		vis.visit( cuT( "Albedo" )
+			, m_albedo );
+		vis.visit( cuT( "Metalness" )
+			, m_metalness );
+		vis.visit( cuT( "Roughness" )
+			, m_roughness );
 	}
 
 	void MetallicRoughnessPbrPass::doSetOpacity( float value )

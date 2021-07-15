@@ -440,6 +440,7 @@ namespace castor3d
 			window.second->update( updater );
 		}
 
+		getMaterialCache().update( updater );
 		getSceneCache().forEach( [&updater]( Scene & scene )
 			{
 				scene.update( updater );
