@@ -22,7 +22,19 @@ namespace castor3d
 
 	void MetallicRoughnessPbrPass::accept( PassBuffer & buffer )const
 	{
-		buffer.visit( *this );
+		auto f0 = castor::RgbColour{ 0.04f, 0.04f, 0.04f } *( 1.0f - getMetallic() ) + getAlbedo() * getMetallic();
+		auto data = buffer.getData( getId() );
+
+		data.colourDiv->r = getAlbedo().red();
+		data.colourDiv->g = getAlbedo().green();
+		data.colourDiv->b = getAlbedo().blue();
+		data.colourDiv->a = getRoughness();
+		data.specDiv->r = f0.red();
+		data.specDiv->g = f0.green();
+		data.specDiv->b = f0.blue();
+		data.specDiv->a = getMetallic();
+
+		doFillData( data );
 	}
 
 	void MetallicRoughnessPbrPass::doInitialise()

@@ -21,6 +21,90 @@ namespace castor3d
 	{
 	public:
 		/**
+		\~english
+		\brief		3 components colour.
+		\~french
+		\brief		Couleur à 3 composantes.
+		*/
+		struct RgbColour
+		{
+			float r;
+			float g;
+			float b;
+		};
+		/**
+		\~english
+		\brief		4 components colour.
+		\~french
+		\brief		Couleur à 4 composantes.
+		*/
+		struct RgbaColour
+		{
+			float r;
+			float g;
+			float b;
+			float a;
+		};
+
+#if C3D_MaterialsStructOfArrays
+
+		struct ExtendedData
+		{
+			castor::ArrayView< RgbaColour > sssInfo;
+			castor::ArrayView< std::array< RgbaColour, 10u > > transmittanceProfile;
+		};
+
+		struct PassesData
+		{
+			castor::ArrayView< RgbaColour > colourDiv;
+			castor::ArrayView< RgbaColour > specDiv;
+			castor::ArrayView< RgbaColour > common;
+			castor::ArrayView< RgbaColour > opacity;
+			castor::ArrayView< RgbaColour > reflRefr;
+			ExtendedData extended;
+		};
+
+#else
+
+		struct ExtendedData
+		{
+			RgbaColour sssInfo;
+			std::array< RgbaColour, 10u > transmittanceProfile;
+		};
+
+		struct PassData
+		{
+			RgbaColour colourDiv;
+			RgbaColour specDiv;
+			RgbaColour common;
+			RgbaColour opacity;
+			RgbaColour reflRefr;
+			ExtendedData extended;
+		};
+		using PassesData = castor::ArrayView< PassData >;
+
+#endif
+
+		struct ExtendedDataPtr
+		{
+			RgbaColour * sssInfo;
+			std::array< RgbaColour, 10u > * transmittanceProfile;
+		};
+
+		struct PassDataPtr
+		{
+			RgbaColour * colourDiv;
+			RgbaColour * specDiv;
+			RgbaColour * common;
+			RgbaColour * opacity;
+			RgbaColour * reflRefr;
+			ExtendedDataPtr extended;
+		};
+
+		static constexpr uint32_t DataSize = sizeof( PassData );
+
+	public:
+		/**
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine	The engine.
@@ -97,31 +181,11 @@ namespace castor3d
 			, VkDescriptorSetLayoutBinding const & binding )const;
 		/**
 		 *\~english
-		 *\brief		Puts the pass data into the buffer.
-		 *\param[in]	pass	The pass.
+		 *\return		The pointer to the data for given pass ID.
 		 *\~french
-		 *\brief		Met les données de la passe dans le tampon.
-		 *\param[in]	pass	La passe.
+		 *\brief		Le pointeur sur les données pour l'ID de passe donné.
 		 */
-		C3D_API void visit( PhongPass const & pass );
-		/**
-		 *\~english
-		 *\brief		Puts the pass data into the buffer.
-		 *\param[in]	pass	The pass.
-		 *\~french
-		 *\brief		Met les données de la passe dans le tampon.
-		 *\param[in]	pass	La passe.
-		 */
-		C3D_API void visit( MetallicRoughnessPbrPass const & pass );
-		/**
-		 *\~english
-		 *\brief		Puts the pass data into the buffer.
-		 *\param[in]	pass	The pass.
-		 *\~french
-		 *\brief		Met les données de la passe dans le tampon.
-		 *\param[in]	pass	La passe.
-		 */
-		C3D_API void visit( SpecularGlossinessPbrPass const & pass );
+		C3D_API PassDataPtr getData( uint32_t passID );
 		/**
 		 *\~english
 		 *\return		The pointer to the buffer.
@@ -142,80 +206,6 @@ namespace castor3d
 		{
 			return m_buffer.getType();
 		}
-
-	public:
-		/**
-		\~english
-		\brief		3 components colour.
-		\~french
-		\brief		Couleur à 3 composantes.
-		*/
-		struct RgbColour
-		{
-			float r;
-			float g;
-			float b;
-		};
-		/**
-		\~english
-		\brief		4 components colour.
-		\~french
-		\brief		Couleur à 4 composantes.
-		*/
-		struct RgbaColour
-		{
-			float r;
-			float g;
-			float b;
-			float a;
-		};
-
-#if C3D_MaterialsStructOfArrays
-
-		struct ExtendedData
-		{
-			castor::ArrayView< RgbaColour > sssInfo;
-			castor::ArrayView< std::array< RgbaColour, 10u > > transmittanceProfile;
-		};
-
-		struct PassesData
-		{
-			castor::ArrayView< RgbaColour > colourDiv;
-			castor::ArrayView< RgbaColour > specDiv;
-			castor::ArrayView< RgbaColour > common;
-			castor::ArrayView< RgbaColour > opacity;
-			castor::ArrayView< RgbaColour > reflRefr;
-			ExtendedData extended;
-		};
-
-#else
-
-		struct ExtendedData
-		{
-			RgbaColour sssInfo;
-			std::array< RgbaColour, 10u > transmittanceProfile;
-		};
-
-		struct PassData
-		{
-			RgbaColour colourDiv;
-			RgbaColour specDiv;
-			RgbaColour common;
-			RgbaColour opacity;
-			RgbaColour reflRefr;
-			ExtendedData extended;
-		};
-		using PassesData = castor::ArrayView< PassData >;
-
-#endif
-
-		static constexpr uint32_t DataSize = sizeof( PassData );
-
-	protected:
-		C3D_API void doVisitCommon( Pass const & pass );
-		C3D_API void doVisit( SubsurfaceScattering const & subsurfaceScattering
-			, uint32_t index
-			, ExtendedData & data );
 
 	private:
 		ShaderBuffer m_buffer;
