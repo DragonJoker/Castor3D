@@ -540,6 +540,50 @@ namespace castor3d
 		return uint32_t( getTextureUnits( mask ).size() );
 	}
 
+	void Pass::doFillData( PassBuffer::PassDataPtr & data )const
+	{
+		data.common->r = getOpacity();
+		data.common->g = getEmissive();
+		data.common->b = getAlphaValue();
+		data.common->a = needsGammaCorrection() ? 2.2f : 1.0f;
+		data.opacity->r = getTransmission()->x;
+		data.opacity->g = getTransmission()->y;
+		data.opacity->b = getTransmission()->z;
+		data.opacity->a = getOpacity();
+		data.reflRefr->r = getRefractionRatio();
+		data.reflRefr->g = hasRefraction() ? 1.0f : 0.0f;
+		data.reflRefr->b = hasReflections() ? 1.0f : 0.0f;
+		data.reflRefr->a = float( getBWAccumulationOperator() );
+
+		if ( hasSubsurfaceScattering() )
+		{
+			auto & subsurfaceScattering = getSubsurfaceScattering();
+			data.extended.sssInfo->r = 1.0f;
+			data.extended.sssInfo->g = subsurfaceScattering.getGaussianWidth();
+			data.extended.sssInfo->b = subsurfaceScattering.getStrength();
+			data.extended.sssInfo->a = float( subsurfaceScattering.getProfileSize() );
+
+			auto i = 0u;
+			auto & transmittanceProfile = *data.extended.transmittanceProfile;
+
+			for ( auto & factor : subsurfaceScattering )
+			{
+				transmittanceProfile[i].r = factor[0];
+				transmittanceProfile[i].g = factor[1];
+				transmittanceProfile[i].b = factor[2];
+				transmittanceProfile[i].a = factor[3];
+				++i;
+			}
+		}
+		else
+		{
+			data.extended.sssInfo->r = 0.0f;
+			data.extended.sssInfo->g = 0.0f;
+			data.extended.sssInfo->b = 0.0f;
+			data.extended.sssInfo->a = 0.0f;
+		}
+	}
+
 	void Pass::doMergeImages( TextureFlag lhsFlag
 		, uint32_t lhsMaskOffset
 		, uint32_t lhsDstMask
