@@ -294,6 +294,26 @@ namespace castor3d
 		return ashes::makeClearValue( { r, g, b, a } );
 	}
 
+	template< typename EnumT >
+	castor::UInt32StrMap getEnumMapT( EnumT min, EnumT max )
+	{
+		using ashes::getName;
+		castor::UInt32StrMap result;
+
+		for ( uint32_t i = uint32_t( min ); i <= uint32_t( max ); ++i )
+		{
+			result[getName( EnumT( i ) )] = i;
+		}
+
+		return result;
+	}
+
+	template< typename EnumT >
+	castor::UInt32StrMap getEnumMapT()
+	{
+		return getEnumMapT( EnumT::eMin, EnumT::eMax );
+	}
+
 	static VkClearValue const defaultClearDepthStencil{ makeClearValue( 1.0f, 0u ) };
 	static VkClearValue const opaqueBlackClearColor{ makeClearValue( 0.0f, 0.0f, 0.0f, 1.0f ) };
 	static VkClearValue const transparentBlackClearColor{ makeClearValue( 0.0f, 0.0f, 0.0f, 0.0f ) };
