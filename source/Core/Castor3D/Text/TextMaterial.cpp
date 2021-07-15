@@ -1,9 +1,7 @@
 #include "Castor3D/Text/TextMaterial.hpp"
 
 #include "Castor3D/Miscellaneous/Logger.hpp"
-#include "Castor3D/Text/TextPhongPass.hpp"
-#include "Castor3D/Text/TextMetallicRoughnessPbrPass.hpp"
-#include "Castor3D/Text/TextSpecularGlossinessPbrPass.hpp"
+#include "Castor3D/Text/TextPass.hpp"
 
 using namespace castor3d;
 
@@ -28,35 +26,10 @@ namespace castor
 		{
 			result = true;
 
-			switch ( material.getType() )
+			for ( auto pass : material )
 			{
-			case MaterialType::ePhong:
-				for ( auto pass : material )
-				{
-					result = result
-						&& writeSub( file, *std::static_pointer_cast< PhongPass >( pass ), m_folder, m_subfolder );
-				}
-				break;
-
-			case MaterialType::eMetallicRoughness:
-				for ( auto pass : material )
-				{
-					result = result
-						&& writeSub( file, *std::static_pointer_cast< MetallicRoughnessPbrPass >( pass ), m_folder, m_subfolder );
-				}
-				break;
-
-			case MaterialType::eSpecularGlossiness:
-				for ( auto pass : material )
-				{
-					result = result
-						&& writeSub( file, *std::static_pointer_cast< SpecularGlossinessPbrPass >( pass ), m_folder, m_subfolder );
-				}
-				break;
-
-			default:
-				CU_Failure( cuT( "Unsupported pass type" ) );
-				break;
+				result = result
+					&& writeSub( file, *pass, m_folder, m_subfolder );
 			}
 		}
 

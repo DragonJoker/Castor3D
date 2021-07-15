@@ -1627,13 +1627,11 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextLpvConfig.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextMaterial.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextMesh.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextMetallicRoughnessPbrPass.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextOverlay.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextOverlayCategory.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextPanelOverlay.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextParticleSystem.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextPass.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextPhongPass.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextPointLight.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextPostEffect.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextProgram.cpp
@@ -1645,7 +1643,6 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextSceneNode.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextShadow.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextSkyboxBackground.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextSpecularGlossinessPbrPass.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextSpotLight.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextSsaoConfig.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextSubsurfaceScattering.cpp
@@ -1672,13 +1669,11 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextLpvConfig.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextMaterial.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextMesh.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextMetallicRoughnessPbrPass.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextOverlay.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextOverlayCategory.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextPanelOverlay.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextParticleSystem.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextPass.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextPhongPass.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextPointLight.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextPostEffect.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextProgram.hpp
@@ -1690,7 +1685,6 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextSceneNode.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextShadow.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextSkyboxBackground.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextSpecularGlossinessPbrPass.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextSpotLight.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextSsaoConfig.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextSubsurfaceScattering.hpp

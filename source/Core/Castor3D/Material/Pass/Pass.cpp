@@ -2,6 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
+#include "Castor3D/Cache/ShaderCache.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
@@ -9,6 +10,7 @@
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
 #include "Castor3D/Render/Node/PassRenderNode.hpp"
+#include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
 #include <CastorUtils/Graphics/PixelFormat.hpp>
@@ -21,6 +23,372 @@ namespace castor3d
 
 	namespace
 	{
+		using ashes::getName;
+
+		template< typename EnumT >
+		castor::UInt32StrMap getEnumMapT( EnumT min, EnumT max )
+		{
+			castor::UInt32StrMap result;
+
+			for ( uint32_t i = uint32_t( min ); i <= uint32_t( max ); ++i )
+			{
+				result[getName( EnumT( i ) )] = i;
+			}
+
+			return result;
+		}
+
+		template< typename EnumT >
+		castor::UInt32StrMap getEnumMapT()
+		{
+			return getEnumMapT( EnumT::eMin, EnumT::eMax );
+		}
+
+		CU_ImplementAttributeParser( parserPassEmissive )
+		{
+			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+			if ( !parsingContext->pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( !params.empty() )
+			{
+				float value;
+				params[0]->get( value );
+				parsingContext->pass->setEmissive( value );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserPassAlpha )
+		{
+			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+			if ( !parsingContext->pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( !params.empty() )
+			{
+				float fFloat;
+				params[0]->get( fFloat );
+				parsingContext->pass->setOpacity( fFloat );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserPassDoubleFace )
+		{
+			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+			if ( !parsingContext->pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( !params.empty() )
+			{
+				bool value;
+				params[0]->get( value );
+				parsingContext->pass->setTwoSided( value );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserPassTextureUnit )
+		{
+			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+			parsingContext->textureUnit.reset();
+
+			if ( parsingContext->pass )
+			{
+				parsingContext->textureTransform = TextureTransform{};
+
+				if ( parsingContext->createPass
+					|| parsingContext->pass->getTextureUnitsCount() < parsingContext->unitIndex )
+				{
+					parsingContext->textureUnit = std::make_shared< TextureUnit >( *parsingContext->parser->getEngine() );
+					parsingContext->createUnit = true;
+					parsingContext->imageInfo->mipLevels = ashes::RemainingArrayLayers;
+				}
+				else
+				{
+					parsingContext->createUnit = false;
+					parsingContext->textureUnit = parsingContext->pass->getTextureUnit( parsingContext->unitIndex );
+				}
+
+				++parsingContext->unitIndex;
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Pass not initialised" ) );
+			}
+		}
+		CU_EndAttributePush( CSCNSection::eTextureUnit )
+
+		CU_ImplementAttributeParser( parserPassShader )
+		{
+			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+			parsingContext->shaderProgram.reset();
+			parsingContext->shaderStage = VkShaderStageFlagBits( 0u );
+
+			if ( parsingContext->pass )
+			{
+				parsingContext->shaderProgram = parsingContext->parser->getEngine()->getShaderProgramCache().getNewProgram( parsingContext->material->getName() + castor::string::toString( parsingContext->pass->getId() )
+					, true );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Pass not initialised" ) );
+			}
+		}
+		CU_EndAttributePush( CSCNSection::eShaderProgram )
+
+		CU_ImplementAttributeParser( parserPassMixedInterpolative )
+		{
+			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+			if ( !parsingContext->pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( !params.empty() )
+			{
+				bool value;
+				params[0]->get( value );
+
+				if ( value )
+				{
+					parsingContext->pass->setTwoSided( true );
+					parsingContext->pass->setAlphaBlendMode( BlendMode::eInterpolative );
+					parsingContext->pass->setAlphaFunc( VK_COMPARE_OP_GREATER );
+					parsingContext->pass->setBlendAlphaFunc( VK_COMPARE_OP_LESS_OR_EQUAL );
+					parsingContext->pass->setAlphaValue( 0.95f );
+				}
+
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserPassAlphaBlendMode )
+		{
+			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+			if ( !parsingContext->pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( !params.empty() )
+			{
+				uint32_t mode = 0;
+				params[0]->get( mode );
+				parsingContext->pass->setAlphaBlendMode( BlendMode( mode ) );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserPassColourBlendMode )
+		{
+			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+			if ( !parsingContext->pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( !params.empty() )
+			{
+				uint32_t mode = 0;
+				params[0]->get( mode );
+				parsingContext->pass->setColourBlendMode( BlendMode( mode ) );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserPassAlphaFunc )
+		{
+			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+			if ( !parsingContext->pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( !params.empty() )
+			{
+				uint32_t uiFunc;
+				float fFloat;
+				params[0]->get( uiFunc );
+				params[1]->get( fFloat );
+				parsingContext->pass->setAlphaFunc( VkCompareOp( uiFunc ) );
+				parsingContext->pass->setAlphaValue( fFloat );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserPassBlendAlphaFunc )
+		{
+			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+			if ( !parsingContext->pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( !params.empty() )
+			{
+				uint32_t uiFunc;
+				float fFloat;
+				params[0]->get( uiFunc );
+				params[1]->get( fFloat );
+				parsingContext->pass->setBlendAlphaFunc( VkCompareOp( uiFunc ) );
+				parsingContext->pass->setAlphaValue( fFloat );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserPassRefractionRatio )
+		{
+			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+			if ( !parsingContext->pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( !params.empty() )
+			{
+				float value = 0;
+				params[0]->get( value );
+				parsingContext->pass->setRefractionRatio( value );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserPassSubsurfaceScattering )
+		{
+			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+			if ( !parsingContext->pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else
+			{
+				parsingContext->subsurfaceScattering = std::make_unique< SubsurfaceScattering >();
+			}
+		}
+		CU_EndAttributePush( CSCNSection::eSubsurfaceScattering )
+
+		CU_ImplementAttributeParser( parserPassParallaxOcclusion )
+		{
+			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+			if ( !parsingContext->pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( !params.empty() )
+			{
+				auto value = uint32_t( ParallaxOcclusionMode::eNone );
+				params[0]->get( value );
+				parsingContext->pass->setParallaxOcclusion( ParallaxOcclusionMode( value ) );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserPassBWAccumulationOperator )
+		{
+			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+			if ( !parsingContext->pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( !params.empty() )
+			{
+				uint32_t value = 0u;
+				params[0]->get( value );
+				parsingContext->pass->setBWAccumulationOperator( uint8_t( value ) );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserPassReflections )
+		{
+			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+			if ( !parsingContext->pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				bool value{ false };
+				params[0]->get( value );
+				parsingContext->pass->enableReflections( value );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserPassRefractions )
+		{
+			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+			if ( !parsingContext->pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				bool value{ false };
+				params[0]->get( value );
+				parsingContext->pass->enableRefractions( value );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserPassTransmission )
+		{
+			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+			if ( !parsingContext->pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				castor::Point3f value{ 1.0f, 1.0f, 1.0f };
+				params[0]->get( value );
+				parsingContext->pass->setTransmission( value );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserPassEnd )
+		{
+			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+			if ( !parsingContext->pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else
+			{
+				parsingContext->parser->getEngine()->prepareTextures( *parsingContext->pass );
+				parsingContext->pass.reset();
+			}
+		}
+		CU_EndAttributePop()
+
 		void mergeMasks( uint32_t lhs
 			, uint32_t & rhs )
 		{
@@ -582,6 +950,61 @@ namespace castor3d
 			data.extended.sssInfo->b = 0.0f;
 			data.extended.sssInfo->a = 0.0f;
 		}
+	}
+
+	void Pass::parseError( castor::String const & error )
+	{
+		castor::StringStream stream{ castor::makeStringStream() };
+		stream << cuT( "Error, : " ) << error;
+		castor::Logger::logError( stream.str() );
+	}
+
+	void Pass::addParser( castor::AttributeParsersBySection & parsers
+		, uint32_t section
+		, castor::String const & name
+		, castor::ParserFunction function
+		, castor::ParserParameterArray && array )
+	{
+		auto sectionIt = parsers.find( section );
+
+		if ( sectionIt != parsers.end()
+			&& sectionIt->second.find( name ) != sectionIt->second.end() )
+		{
+			parseError( cuT( "Parser " ) + name + cuT( " for section " ) + castor::string::toString( section ) + cuT( " already exists." ) );
+		}
+		else
+		{
+			parsers[section][name] = { function, array };
+		}
+	}
+
+	void Pass::addCommonParsers( uint32_t sectionID
+		, castor::AttributeParsersBySection & result )
+	{
+		using namespace castor;
+
+		static UInt32StrMap const blendModes{ getEnumMapT< BlendMode >() };
+		static UInt32StrMap const comparisonFuncs{ getEnumMapT( VK_COMPARE_OP_NEVER, VK_COMPARE_OP_ALWAYS ) };
+		static UInt32StrMap const parallaxOcclusionModes{ getEnumMapT< ParallaxOcclusionMode >() };
+
+		addParser( result, sectionID, cuT( "emissive" ), parserPassEmissive, { makeParameter< ParameterType::eFloat >() } );
+		addParser( result, sectionID, cuT( "alpha" ), parserPassAlpha, { makeParameter< ParameterType::eFloat >() } );
+		addParser( result, sectionID, cuT( "two_sided" ), parserPassDoubleFace, { makeParameter< ParameterType::eBool >() } );
+		addParser( result, sectionID, cuT( "texture_unit" ), parserPassTextureUnit );
+		addParser( result, sectionID, cuT( "shader_program" ), parserPassShader );
+		addParser( result, sectionID, cuT( "mixed_interpolation" ), parserPassMixedInterpolative, { makeParameter< ParameterType::eBool >() } );
+		addParser( result, sectionID, cuT( "alpha_blend_mode" ), parserPassAlphaBlendMode, { makeParameter< ParameterType::eCheckedText >( blendModes ) } );
+		addParser( result, sectionID, cuT( "colour_blend_mode" ), parserPassColourBlendMode, { makeParameter< ParameterType::eCheckedText >( blendModes ) } );
+		addParser( result, sectionID, cuT( "alpha_func" ), parserPassAlphaFunc, { makeParameter< ParameterType::eCheckedText >( comparisonFuncs ), makeParameter< ParameterType::eFloat >() } );
+		addParser( result, sectionID, cuT( "blend_alpha_func" ), parserPassBlendAlphaFunc, { makeParameter< ParameterType::eCheckedText >( comparisonFuncs ), makeParameter< ParameterType::eFloat >() } );
+		addParser( result, sectionID, cuT( "refraction_ratio" ), parserPassRefractionRatio, { makeParameter< ParameterType::eFloat >() } );
+		addParser( result, sectionID, cuT( "subsurface_scattering" ), parserPassSubsurfaceScattering );
+		addParser( result, sectionID, cuT( "parallax_occlusion" ), parserPassParallaxOcclusion, { makeParameter< ParameterType::eCheckedText >( parallaxOcclusionModes ) } );
+		addParser( result, sectionID, cuT( "bw_accumulation" ), parserPassBWAccumulationOperator, { makeParameter< ParameterType::eUInt32 >( makeRange( 0u, 6u ) ) } );
+		addParser( result, sectionID, cuT( "reflections" ), parserPassReflections, { makeParameter< ParameterType::eBool >() } );
+		addParser( result, sectionID, cuT( "refractions" ), parserPassRefractions, { makeParameter< ParameterType::eBool >() } );
+		addParser( result, sectionID, cuT( "transmission" ), parserPassTransmission, { makeParameter< ParameterType::ePoint3F >() } );
+		addParser( result, sectionID, cuT( "}" ), parserPassEnd );
 	}
 
 	void Pass::doMergeImages( TextureFlag lhsFlag

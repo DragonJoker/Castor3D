@@ -123,9 +123,6 @@ namespace castor3d
 		SamplerSPtr sampler;
 		TargetType targetType;
 		RenderTargetSPtr renderTarget;
-		PhongPassSPtr phongPass;
-		MetallicRoughnessPbrPassSPtr pbrMRPass;
-		SpecularGlossinessPbrPassSPtr pbrSGPass;
 		PassSPtr pass;
 		bool createPass{};
 		uint32_t unitIndex{};
@@ -260,7 +257,6 @@ namespace castor3d
 		UInt32StrMap m_mapBlendFactors;
 		UInt32StrMap m_mapTypes;
 		UInt32StrMap m_mapComparisonFuncs;
-		UInt32StrMap m_mapParallaxOcclusionModes;
 		UInt32StrMap m_mapTextureArguments;
 		UInt32StrMap m_mapTextureBlendModes;
 		UInt32StrMap m_mapTextureChannels;
@@ -279,7 +275,6 @@ namespace castor3d
 		UInt32StrMap m_mapMovables;
 		UInt32StrMap m_mapTextWrappingModes;
 		UInt32StrMap m_mapBorderPositions;
-		UInt32StrMap m_mapBlendModes;
 		UInt32StrMap m_mapVerticalAligns;
 		UInt32StrMap m_mapHorizontalAligns;
 		UInt32StrMap m_mapToneMappings;

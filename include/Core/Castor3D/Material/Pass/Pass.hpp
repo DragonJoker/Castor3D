@@ -13,6 +13,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/FlagCombination.hpp>
 #include <CastorUtils/Design/Signal.hpp>
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
 
 #include <atomic>
@@ -143,6 +144,11 @@ namespace castor3d
 		 *\param[in,out]	buffer	Le pass buffer.
 		 */
 		C3D_API virtual void accept( PassBuffer & buffer )const = 0;
+		C3D_API virtual uint32_t getSectionID()const = 0;
+		C3D_API virtual bool writeText( castor::String const & tabs
+			, castor::Path const & folder
+			, castor::String const & subfolder
+			, castor::StringStream & file )const = 0u;
 		/**
 		*\~english
 		*name
@@ -437,6 +443,14 @@ namespace castor3d
 		C3D_API void doJoinDifOpa( TextureUnitPtrArray & result
 			, castor::String const & name );
 		C3D_API void doFillData( PassBuffer::PassDataPtr & data )const;
+		C3D_API static void parseError( castor::String const & error );
+		C3D_API static void addParser( castor::AttributeParsersBySection & parsers
+			, uint32_t section
+			, castor::String const & name
+			, castor::ParserFunction function
+			, castor::ParserParameterArray && array = castor::ParserParameterArray{} );
+		C3D_API static void addCommonParsers( uint32_t sectionID
+			, castor::AttributeParsersBySection & result );
 
 	private:
 		void onSssChanged( SubsurfaceScattering const & sss );

@@ -61,6 +61,23 @@ namespace castor
 		return result;\
 	}
 
+	//!\~english	Define to ease the implementation of a parser which starts a block.
+	//!\~french		Un define pour faciliter l'implémentation d'un analyseur débutant un bloc.
+#define CU_ImplementAttributeParserBlock( funcname, sectionname )\
+	bool DO_WRITE_PARSER_NAME( funcname )\
+	{\
+		bool result = false;\
+		castor::FileParserContextSPtr context = parser->getContext();\
+		auto sectionName = uint32_t( sectionname );
+
+	//!\~english	Define to ease the implementation of a parser which starts a block.
+	//!\~french		Un define pour faciliter l'implémentation d'un analyseur débutant un bloc.
+#define CU_EndAttributeBlock()\
+		DO_WRITE_PARSER_END( false )\
+		context->m_sections.push_back( uint32_t( sectionName ) );\
+		return result;\
+	}
+
 	//!\~english	Define to ease the call to FileParser::parseError.
 	//!\~french		Un define pour faciliter l'appel de FileParser::parseError.
 #define CU_ParsingError( error )\
