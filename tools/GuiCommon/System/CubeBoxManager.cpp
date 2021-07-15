@@ -9,9 +9,6 @@
 #include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
 #include <Castor3D/Event/Frame/InitialiseEvent.hpp>
 #include <Castor3D/Material/Material.hpp>
-#include <Castor3D/Material/Pass/PBR/MetallicRoughnessPbrPass.hpp>
-#include <Castor3D/Material/Pass/PBR/SpecularGlossinessPbrPass.hpp>
-#include <Castor3D/Material/Pass/Phong/PhongPass.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp>
@@ -79,34 +76,7 @@ namespace GuiCommon
 				auto pass = material->createPass();
 				pass->enableLighting( false );
 				pass->enablePicking( false );
-
-				switch ( scene.getMaterialsType() )
-				{
-				case MaterialType::ePhong:
-					{
-						auto & phong = *std::static_pointer_cast< PhongPass >( pass );
-						phong.setDiffuse( colour );
-					}
-					break;
-
-				case MaterialType::eMetallicRoughness:
-					{
-						auto & pbrmr = *std::static_pointer_cast< MetallicRoughnessPbrPass >( pass );
-						pbrmr.setAlbedo( colour );
-					}
-					break;
-
-				case MaterialType::eSpecularGlossiness:
-					{
-						auto & pbrsg = *std::static_pointer_cast< SpecularGlossinessPbrPass >( pass );
-						pbrsg.setDiffuse( colour );
-					}
-					break;
-
-				default:
-					CU_Failure( "Unsupported MaterialType" );
-					break;
-				}
+				pass->setColour( colour );
 			}
 			else
 			{
