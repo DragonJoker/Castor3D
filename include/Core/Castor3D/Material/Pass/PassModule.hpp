@@ -264,6 +264,8 @@ namespace castor3d
 	using OnPassChanged = castor::Signal< OnPassChangedFunction >;
 	using OnPassChangedConnection = OnPassChanged::connection;
 
+	using PassFactoryBase = castor::Factory< Pass, size_t, PassSPtr, std::function< PassSPtr( Material & ) > >;
+
 	//@}
 	//@}
 }
