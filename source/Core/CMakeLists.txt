@@ -45,6 +45,7 @@ function( CoreSummary msg )
 	set( msg_tmp "\n  Core libraries:" )
 	set( msg_tmp "${msg_tmp}\n    CastorUtils          ${Cutils}" )
 	set( msg_tmp "${msg_tmp}\n    Castor3D             ${C3D}" )
+	set( msg_tmp "${msg_tmp}\n    SceneExporter        ${SEx}" )
 	set( msg "${msg}${msg_tmp}" PARENT_SCOPE )
 endfunction( CoreSummary )
 
