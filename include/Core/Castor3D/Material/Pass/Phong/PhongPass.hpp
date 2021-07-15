@@ -36,10 +36,23 @@ namespace castor3d
 		C3D_API ~PhongPass();
 
 		C3D_API static PassSPtr create( Material & parent );
+		C3D_API static castor::AttributeParsersBySection createParsers();
+		C3D_API static castor::StrUInt32Map createSections();
 		/**
 		 *\copydoc		castor3d::Pass::accept
 		 */
 		C3D_API void accept( PassBuffer & buffer )const override;
+		/**
+		 *\copydoc		castor3d::Pass::getSectionID
+		 */
+		C3D_API uint32_t getSectionID()const override;
+		/**
+		 *\copydoc		castor3d::Pass::writeText
+		 */
+		C3D_API bool writeText( castor::String const & tabs
+			, castor::Path const & folder
+			, castor::String const & subfolder
+			, castor::StringStream & file )const override;
 		/**
 		 *\~english
 		 *\remarks	Passes are aligned on float[4], so the size of a pass
@@ -174,6 +187,7 @@ namespace castor3d
 
 	public:
 		static constexpr float MaxShininess = 256.0f;
+		static castor::String const Type;
 
 	private:
 		//!\~english	Diffuse material colour.

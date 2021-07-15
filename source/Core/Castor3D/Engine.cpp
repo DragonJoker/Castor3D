@@ -17,8 +17,6 @@
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
-#include "Castor3D/Material/Pass/PBR/Shaders/GlslPbrLighting.hpp"
-#include "Castor3D/Material/Pass/Phong/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/ImporterFactory.hpp"
@@ -88,10 +86,11 @@ namespace castor3d
 		, m_subdividerFactory{ castor::makeUnique< MeshSubdividerFactory >() }
 		, m_importerFactory{ castor::makeUnique< MeshImporterFactory >() }
 		, m_particleFactory{ castor::makeUnique< ParticleFactory >() }
-		, m_passFactory{ castor::makeUnique< PassFactory >() }
 		, m_enableApiTrace{ C3D_EnableAPITrace }
 		, m_jobs{ castor::CpuInformations{}.getCoreCount() }
 	{
+		m_passFactory = castor::makeUnique< PassFactory >( *this );
+
 		auto dummy = []( auto element )
 		{
 		};
@@ -135,9 +134,6 @@ namespace castor3d
 		FreeImageLoader::registerLoader( m_imageLoader );
 		StbImageWriter::registerWriter( m_imageWriter );
 		GliImageWriter::registerWriter( m_imageWriter );
-
-		m_lightingModelFactory.registerType( "phong", &shader::PhongLightingModel::create );
-		m_lightingModelFactory.registerType( "pbr", &shader::PbrLightingModel::create );
 
 		// m_listenerCache *MUST* be the first created.
 		m_listenerCache = makeCache< FrameListener, String >( *this
