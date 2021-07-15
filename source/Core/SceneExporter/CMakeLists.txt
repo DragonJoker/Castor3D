@@ -6,20 +6,18 @@ set( CastorBinsDependencies
 	PARENT_SCOPE
 )
 set( ${PROJECT_NAME}_DESCRIPTION "${MAIN_PROJECT_NAME} scene exporter" )
-set( ${PROJECT_NAME}_BRIEF "Scene exporter" )
+set( ${PROJECT_NAME}_BRIEF "Scene exporter for Castor3D" )
 set( ${PROJECT_NAME}_ICON "${CMAKE_SOURCE_DIR}/data/Images/castor-dark-small.png" )
 set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
-set( ${PROJECT_NAME}_VERSION_MINOR 1 )
+set( ${PROJECT_NAME}_VERSION_MINOR 2 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 set( ${PROJECT_NAME}_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/CscnExporter.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/ObjExporter.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/SceneExporter.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/CscnExporter.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/ObjExporter.cpp
 )
 source_group( "Header Files" FILES ${${PROJECT_NAME}_HDR_FILES} )
 source_group( "Source Files" FILES ${${PROJECT_NAME}_SRC_FILES} )
