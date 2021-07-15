@@ -139,7 +139,7 @@ namespace castor3d
 		{
 			OverlayTextures tex{ text ? OverlayTexture::eText : OverlayTexture::eNone };
 
-			if ( checkFlags( textures, TextureFlag::eDiffuse ) != textures.end() )
+			if ( checkFlags( textures, TextureFlag::eColour ) != textures.end() )
 			{
 				tex |= OverlayTexture::eColour;
 			}
@@ -315,7 +315,7 @@ namespace castor3d
 				, device
 				, ( fontTexture
 					? m_renderer.m_textDeclaration
-					: ( filterTexturesFlags( pass.getTexturesMask(), TextureFlag::eAlbedo | TextureFlag::eOpacity ).empty()
+					: ( filterTexturesFlags( pass.getTexturesMask(), TextureFlag::eColour | TextureFlag::eOpacity ).empty()
 						? m_renderer.m_noTexDeclaration
 						: m_renderer.m_texDeclaration ) )
 				, MaxPanelsPerBuffer );
@@ -811,7 +811,7 @@ namespace castor3d
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
-		auto textures = filterTexturesFlags( pass.getTexturesMask(), TextureFlag::eAlbedo | TextureFlag::eOpacity );
+		auto textures = filterTexturesFlags( pass.getTexturesMask(), TextureFlag::eColour | TextureFlag::eOpacity );
 		auto vertexLayout = ( textures.empty() 
 			? &m_noTexDeclaration
 			: &m_texDeclaration );
@@ -875,7 +875,7 @@ namespace castor3d
 			}
 		) );
 		// Remove unwanted flags
-		auto textures = filterTexturesFlags( pass.getTexturesMask(), TextureFlag::eAlbedo | TextureFlag::eOpacity );
+		auto textures = filterTexturesFlags( pass.getTexturesMask(), TextureFlag::eColour | TextureFlag::eOpacity );
 		auto key = makeKey( textures, text );
 		auto it = pipelines.find( key );
 

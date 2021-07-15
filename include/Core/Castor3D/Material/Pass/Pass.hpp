@@ -103,6 +103,22 @@ namespace castor3d
 		C3D_API MaterialType getType()const;
 		/**
 		 *\~english
+		 *\brief		Sets the basic pass colour.
+		 *\param[in]	value	The new value.
+		 *\~french
+		 *\brief		Définit la couleur basique de la passe.
+		 *\param[in]	value	La nouvelle valeur.
+		 */
+		C3D_API virtual void setColour( castor::RgbColour const & value ) = 0;
+		/**
+		 *\~english
+		 *\return		The basic pass colour.
+		 *\~french
+		 *\return		La couleur basique de la passe.
+		 */
+		C3D_API virtual castor::RgbColour const & getColour()const = 0;
+		/**
+		 *\~english
 		 *\brief		Sets the global alpha value.
 		 *\param[in]	value	The new value.
 		 *\~french
@@ -126,15 +142,6 @@ namespace castor3d
 		 *\param[in]	value	La nouvelle valeur.
 		 */
 		C3D_API void setSubsurfaceScattering( SubsurfaceScatteringUPtr value );
-		/**
-		 *\~english
-		 *\remarks	Passes are aligned on float[4], so the size of a pass
-		 *			is the number of float[4] needed to contain it.
-		 *\~french
-		 *\remarks	Les passes sont alignées sur 4 flottants, donc la taille d'une passe
-		 *			correspond aux nombres de float[4] qu'il faut pour la contenir.
-		 */
-		C3D_API virtual uint32_t getPassSize()const = 0;
 		/**
 		 *\~english
 		 *\brief			Fills the pass buffer with this pass data.
