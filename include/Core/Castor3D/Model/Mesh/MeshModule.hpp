@@ -88,12 +88,13 @@ namespace castor3d
 	using MeshSubdividerFactory = castor::Factory< MeshSubdivider, castor::String, std::unique_ptr< MeshSubdivider > >;
 
 	CU_DeclareSmartPtr( Mesh );
-	CU_DeclareSmartPtr( MeshFactory );
 	CU_DeclareSmartPtr( MeshGenerator );
 	CU_DeclareSmartPtr( MeshImporter );
-	CU_DeclareSmartPtr( MeshImporterFactory );
 	CU_DeclareSmartPtr( MeshSubdivider );
-	CU_DeclareSmartPtr( MeshSubdividerFactory );
+
+	CU_DeclareCUSmartPtr( castor3d, MeshFactory, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, MeshImporterFactory, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, MeshSubdividerFactory, C3D_API );
 
 	//! Mesh pointer array
 	CU_DeclareMap( castor::String, MeshSPtr, MeshPtrStr );

@@ -21,6 +21,11 @@ namespace castor3d
 	{
 	}
 
+	PassSPtr SpecularGlossinessPbrPass::create( Material & parent )
+	{
+		return std::make_shared< SpecularGlossinessPbrPass >( parent );
+	}
+
 	void SpecularGlossinessPbrPass::accept( PassBuffer & buffer )const
 	{
 		auto data = buffer.getData( getId() );
