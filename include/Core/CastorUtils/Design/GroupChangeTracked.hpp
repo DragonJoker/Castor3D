@@ -28,7 +28,7 @@ namespace castor
 
 		GroupChangeTracked & operator=( T const & rhs )noexcept
 		{
-			m_dirty |= m_value != rhs;
+			m_dirty = m_dirty || ( m_value != rhs );
 			m_value = rhs;
 			return *this;
 		}
@@ -43,6 +43,11 @@ namespace castor
 			return m_value;
 		}
 
+		bool & control()const noexcept
+		{
+			return m_dirty;
+		}
+
 		bool isDirty()const noexcept
 		{
 			return m_dirty;
@@ -53,8 +58,25 @@ namespace castor
 			return m_value;
 		}
 
+		T const & operator*()const noexcept
+		{
+			return m_value;
+		}
+
+		T & operator*()noexcept
+		{
+			m_dirty = true;
+			return m_value;
+		}
+
 		T const * operator->()const noexcept
 		{
+			return &m_value;
+		}
+
+		T * operator->()noexcept
+		{
+			m_dirty = true;
 			return &m_value;
 		}
 
@@ -113,6 +135,11 @@ namespace castor
 
 	template< typename T >
 	struct IsChangeTrackedT< GroupChangeTracked< T > > : std::true_type
+	{
+	};
+
+	template< typename T >
+	struct IsGroupChangeTrackedT< ChangeTracked< T > > : std::true_type
 	{
 	};
 }

@@ -155,19 +155,19 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Post effect visitor base class.
+	*	Pipeline visitor base class.
 	*\~french
 	*\brief
-	*	Classe de base d'un visiteur d'effet post rendu.
+	*	Classe de base d'un visiteur de pipeline.
 	*/
 	class PipelineVisitorBase;
 	/**
 	*\~english
 	*\brief
-	*	Post effect visitor base class.
+	*	Pipeline visitor base class.
 	*\~french
 	*\brief
-	*	Classe de base d'un visiteur d'effet post rendu.
+	*	Classe de base d'un visiteur de pipeline.
 	*/
 	class PipelineVisitor;
 	/**

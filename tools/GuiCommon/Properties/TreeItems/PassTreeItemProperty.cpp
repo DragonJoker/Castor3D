@@ -7,9 +7,6 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/TargetCache.hpp>
 #include <Castor3D/Material/Material.hpp>
-#include <Castor3D/Material/Pass/Phong/PhongPass.hpp>
-#include <Castor3D/Material/Pass/PBR/MetallicRoughnessPbrPass.hpp>
-#include <Castor3D/Material/Pass/PBR/SpecularGlossinessPbrPass.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
 #include <Castor3D/Render/Technique/RenderTechnique.hpp>
@@ -26,6 +23,173 @@ namespace GuiCommon
 {
 	namespace
 	{
+		class PassTreeGatherer
+			: public castor3d::PipelineVisitor
+		{
+		public:
+			static void submit( Pass & pass
+				, TreeItemProperty * properties
+				, wxPGEditor * editor
+				, wxPropertyGrid * grid )
+			{
+				PassTreeGatherer vis{ properties, editor, grid };
+				pass.accept( vis );
+			}
+
+		private:
+			PassTreeGatherer( TreeItemProperty * properties
+				, wxPGEditor * editor
+				, wxPropertyGrid * grid )
+				: castor3d::PipelineVisitor{ {} }
+				, m_properties{ properties }
+				, m_editor{ editor }
+				, m_grid{ grid }
+			{
+			}
+
+			void visit( castor::String const & name
+				, bool & value
+				, bool * control )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, int16_t & value
+				, bool * control )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, uint16_t & value
+				, bool * control )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, int32_t & value
+				, bool * control )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, uint32_t & value
+				, bool * control )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, int64_t & value
+				, bool * control )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, uint64_t & value
+				, bool * control )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, float & value
+				, bool * control )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, double & value
+				, bool * control )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor3d::BlendMode & value
+				, bool * control )override
+			{
+				wxArrayString choices;
+				choices.push_back( _( "No Blend" ) );
+				choices.push_back( _( "Additive" ) );
+				choices.push_back( _( "Multiplicative" ) );
+				choices.push_back( _( "Interpolative" ) );
+				m_properties->addPropertyET( m_grid, name, choices, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor3d::ParallaxOcclusionMode & value
+				, bool * control )override
+			{
+				wxArrayString choices;
+				choices.push_back( _( "None" ) );
+				choices.push_back( _( "One" ) );
+				choices.push_back( _( "Repeat" ) );
+				m_properties->addPropertyET( m_grid, name, choices, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, VkCompareOp & value
+				, bool * control )override
+			{
+				wxArrayString choices;
+				choices.push_back( _( "Never" ) );
+				choices.push_back( _( "Less" ) );
+				choices.push_back( _( "Equal" ) );
+				choices.push_back( _( "Less Equal" ) );
+				choices.push_back( _( "Greater" ) );
+				choices.push_back( _( "Not Equal" ) );
+				choices.push_back( _( "Greater Equal" ) );
+				choices.push_back( _( "Always" ) );
+				m_properties->addPropertyET( m_grid, name, choices, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::RgbColour & value
+				, bool * control )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::RgbaColour & value
+				, bool * control )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::RangedValue< float > & value
+				, bool * control )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::RangedValue< int32_t > & value
+				, bool * control )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::RangedValue< uint32_t > & value
+				, bool * control )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, control );
+			}
+
+		private:
+			TreeItemProperty * m_properties;
+			wxPGEditor * m_editor;
+			wxPropertyGrid * m_grid;
+		};
+
 		class PassShaderGatherer
 			: public castor3d::RenderTechniqueVisitor
 		{
@@ -78,292 +242,229 @@ namespace GuiCommon
 				doGetSource( module.name ).sources[module.stage] = &module;
 			}
 
-			void visit( castor::String const & name
+			template< typename T >
+			void doVisitUntrackedT( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, float & value )override
+				, T & value )
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				auto & source = doGetSource( name );
+				auto & uboValues = doGetUbo( source, shaders, ubo );
+				uboValues.uniforms.emplace_back( makeUniformValue( uniform, value ) );
+			}
+
+			template< typename T >
+			void doVisitUntrackedT( castor::String const & name
+				, VkShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::RangedValue< T > & value )
+			{
+				auto & source = doGetSource( name );
+				auto & uboValues = doGetUbo( source, shaders, ubo );
+				uboValues.uniforms.emplace_back( makeUniformValue( uniform, value ) );
+			}
+
+			template< typename T >
+			void doVisitTrackedT( castor::String const & name
+				, VkShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, T & value
+				, bool * control )
+			{
+				auto & source = doGetSource( name );
+				auto & uboValues = doGetUbo( source, shaders, ubo );
+				uboValues.uniforms.emplace_back( makeUniformValue( uniform, value, control ) );
+			}
+
+			template< typename T >
+			void doVisitTrackedT( castor::String const & name
+				, VkShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::RangedValue< T > & value
+				, bool * control )
+			{
+				auto & source = doGetSource( name );
+				auto & uboValues = doGetUbo( source, shaders, ubo );
+				uboValues.uniforms.emplace_back( makeUniformValue( uniform, value, control ) );
+			}
+
+			template< typename ValueT, typename ... ParamsT >
+			void doVisitT( ValueT & value
+				, bool * control
+				, ParamsT ... params )
+			{
+				if ( control )
+				{
+					doVisitTrackedT< ValueT >( params..., value, control );
+				}
+				else
+				{
+					doVisitUntrackedT( params..., value );
+				}
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, int32_t & value )override
+				, float & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, uint32_t & value )override
+				, int32_t & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, castor::Point2f & value )override
+				, uint32_t & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, castor::Point2i & value )override
+				, castor::Point2f & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, castor::Point2ui & value )override
+				, castor::Point2i & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, castor::Point3f & value )override
+				, castor::Point2ui & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, castor::Point3i & value )override
+				, castor::Point3f & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, castor::Point3ui & value )override
+				, castor::Point3i & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, castor::Point4f & value )override
+				, castor::Point3ui & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, castor::Point4i & value )override
+				, castor::Point4f & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, castor::Point4ui & value )override
+				, castor::Point4i & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, castor::Matrix4x4f & value )override
+				, castor::Point4ui & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, castor::RangedValue< float > & value )override
+				, castor::Matrix4x4f & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, castor::RangedValue< int32_t > & value )override
+				, castor::RangedValue< float > & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, castor::RangedValue< uint32_t > & value )override
+				, castor::RangedValue< int32_t > & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, castor::ChangeTracked< float > & value )override
+				, castor::RangedValue< uint32_t > & value
+				, bool * control )override
 			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< int32_t > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< uint32_t > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< castor::Point2f > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< castor::Point2i > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< castor::Point2ui > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< castor::Point3f > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< castor::Point3i > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< castor::Point3ui > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< castor::Point4f > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< castor::Point4i > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< castor::Point4ui > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< castor::Matrix4x4f > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< castor::RangedValue< float > > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< castor::RangedValue< int32_t > > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< castor::RangedValue< uint32_t > > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 		private:
@@ -408,54 +509,6 @@ namespace GuiCommon
 				return source.ubos.back();
 			}
 
-			template< typename T >
-			void doVisit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, T & value )
-			{
-				auto & source = doGetSource( name );
-				auto & uboValues = doGetUbo( source, shaders, ubo );
-				uboValues.uniforms.emplace_back( makeUniformValue( uniform, value ) );
-			}
-
-			template< typename T >
-			void doVisit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::RangedValue< T > & value )
-			{
-				auto & source = doGetSource( name );
-				auto & uboValues = doGetUbo( source, shaders, ubo );
-				uboValues.uniforms.emplace_back( makeUniformValue( uniform, value ) );
-			}
-
-			template< typename T >
-			void doVisitTracked( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< T > & value )
-			{
-				auto & source = doGetSource( name );
-				auto & uboValues = doGetUbo( source, shaders, ubo );
-				uboValues.uniforms.emplace_back( makeUniformValue( uniform, value ) );
-			}
-
-			template< typename T >
-			void doVisitTracked( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< castor::RangedValue< T > > & value )
-			{
-				auto & source = doGetSource( name );
-				auto & uboValues = doGetUbo( source, shaders, ubo );
-				uboValues.uniforms.emplace_back( makeUniformValue( uniform, value ) );
-			}
-
 		private:
 			ShaderSources & m_sources;
 		};
@@ -480,24 +533,7 @@ namespace GuiCommon
 	void PassTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_PASS = _( "Pass: " );
-		static wxString PROPERTY_PASS_DIFFUSE = _( "Diffuse" );
-		static wxString PROPERTY_PASS_TRANSMISSION = _( "Transmission" );
-		static wxString PROPERTY_PASS_SPECULAR = _( "Specular" );
-		static wxString PROPERTY_PASS_AMBIENT = _( "Ambient" );
-		static wxString PROPERTY_PASS_EMISSIVE = _( "Emissive" );
-		static wxString PROPERTY_PASS_EXPONENT = _( "Exponent" );
-		static wxString PROPERTY_PASS_TWO_SIDED = _( "Two sided" );
-		static wxString PROPERTY_PASS_OPACITY = _( "Opacity" );
-		static wxString PROPERTY_PASS_ALPHA_REF_VALUE = _( "Alpha Ref. Value" );
-		static wxString PROPERTY_PASS_ALPHA_FUNC = _( "Alpha Func" );
-		static wxString PROPERTY_PASS_BLEND_ALPHA_FUNC = _( "Blend Alpha Func" );
-		static wxString PROPERTY_PASS_ALBEDO = _( "Albedo" );
-		static wxString PROPERTY_PASS_ROUGHNESS = _( "Roughness" );
-		static wxString PROPERTY_PASS_METALLIC = _( "Metallic" );
 		static wxString PROPERTY_PASS_SHADER = _( "Shader" );
-		static wxString PROPERTY_PASS_REFRACTION = _( "Refraction" );
-		static wxString PROPERTY_PASS_GLOSSINESS = _( "Glossiness" );
-		static wxString PROPERTY_PASS_BWACCUM = _( "BW Accumulator" );
 		static wxString PROPERTY_PASS_EDIT_SHADER = _( "View Shaders..." );
 
 		PassSPtr pass = getPass();
@@ -505,66 +541,7 @@ namespace GuiCommon
 		if ( pass )
 		{
 			addProperty( grid, PROPERTY_CATEGORY_PASS + wxString( pass->getOwner()->getName() ) );
-
-			switch ( pass->getType() )
-			{
-			case MaterialType::ePhong:
-				{
-					auto & spec = static_cast< PhongPass & >( *pass );
-					addPropertyT( grid, PROPERTY_PASS_DIFFUSE, spec.getDiffuse(), &spec, &PhongPass::setDiffuse );
-					addPropertyT( grid, PROPERTY_PASS_SPECULAR, spec.getSpecular(), &spec, &PhongPass::setSpecular );
-					addPropertyT( grid, PROPERTY_PASS_AMBIENT, spec.getAmbient(), &spec, &PhongPass::setAmbient );
-					addPropertyT( grid, PROPERTY_PASS_EXPONENT, spec.getShininess(), &spec, &PhongPass::setShininess );
-				}
-				break;
-
-			case MaterialType::eMetallicRoughness:
-				{
-					auto & spec = static_cast< MetallicRoughnessPbrPass & >( *pass );
-					addPropertyT( grid, PROPERTY_PASS_ALBEDO, spec.getAlbedo(), &spec, &MetallicRoughnessPbrPass::setAlbedo );
-					addPropertyT( grid, PROPERTY_PASS_ROUGHNESS, spec.getRoughness(), &spec, &MetallicRoughnessPbrPass::setRoughness );
-					addPropertyT( grid, PROPERTY_PASS_METALLIC, spec.getMetallic(), &spec, &MetallicRoughnessPbrPass::setMetallic );
-				}
-				break;
-
-			case MaterialType::eSpecularGlossiness:
-				{
-				auto & spec = static_cast< SpecularGlossinessPbrPass & >( *pass );
-					addPropertyT( grid, PROPERTY_PASS_DIFFUSE, spec.getDiffuse(), &spec, &SpecularGlossinessPbrPass::setDiffuse );
-					addPropertyT( grid, PROPERTY_PASS_SPECULAR, spec.getSpecular(), &spec, &SpecularGlossinessPbrPass::setSpecular );
-					addPropertyT( grid, PROPERTY_PASS_GLOSSINESS, spec.getGlossiness(), &spec, &SpecularGlossinessPbrPass::setGlossiness );
-				}
-				break;
-
-			default:
-				CU_Failure( "Unsupported MaterialType" );
-				break;
-			}
-
-			wxArrayString alphaFuncs;
-			alphaFuncs.push_back( _( "Never" ) );
-			alphaFuncs.push_back( _( "Less" ) );
-			alphaFuncs.push_back( _( "Equal" ) );
-			alphaFuncs.push_back( _( "Less Equal" ) );
-			alphaFuncs.push_back( _( "Greater" ) );
-			alphaFuncs.push_back( _( "Not Equal" ) );
-			alphaFuncs.push_back( _( "Greater Equal" ) );
-			alphaFuncs.push_back( _( "Always" ) );
-
-			addPropertyT( grid, PROPERTY_PASS_TWO_SIDED, pass->isTwoSided(), pass.get(), &Pass::setTwoSided );
-			addPropertyT( grid, PROPERTY_PASS_EMISSIVE, pass->getEmissive(), pass.get(), &Pass::setEmissive );
-			addPropertyT( grid, PROPERTY_PASS_OPACITY, pass->getOpacity(), pass.get(), &Pass::setOpacity );
-			addPropertyT( grid, PROPERTY_PASS_ALPHA_REF_VALUE, pass->getAlphaValue(), pass.get(), &Pass::setAlphaValue );
-			addPropertyET( grid, PROPERTY_PASS_ALPHA_FUNC, alphaFuncs, pass->getAlphaFunc(), pass.get(), &Pass::setAlphaFunc );
-			addPropertyET( grid, PROPERTY_PASS_BLEND_ALPHA_FUNC, alphaFuncs, pass->getBlendAlphaFunc(), pass.get(), &Pass::setBlendAlphaFunc );
-			addPropertyT( grid, PROPERTY_PASS_TRANSMISSION, pass->getTransmission(), pass.get(), &Pass::setTransmission );
-			addPropertyT( grid, PROPERTY_PASS_BWACCUM, pass->getBWAccumulationOperator(), pass.get(), &Pass::setBWAccumulationOperator );
-
-			if ( pass->hasRefraction() )
-			{
-				addPropertyT( grid, PROPERTY_PASS_REFRACTION, pass->getRefractionRatio(), pass.get(), &Pass::setRefractionRatio );
-			}
-
+			PassTreeGatherer::submit( *pass, this, editor, grid );
 			addProperty( grid, PROPERTY_PASS_SHADER, editor
 				, [this]( wxVariant const & var )
 				{
