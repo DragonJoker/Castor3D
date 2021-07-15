@@ -185,23 +185,6 @@ namespace castor3d
 		{
 			return m_type;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves a pass and returns it.
-		 *\param[in]	index	The index of the wanted pass.
-		 *\return		The retrieved pass or nullptr if not found.
-		 *\~french
-		 *\brief		Récupère une passe.
-		 *\param[in]	index	L'index de la passe voulue.
-		 *\return		La passe récupére ou nullptr si non trouvés.
-		 */
-		template< MaterialType Type >
-		std::shared_ptr< typename PassTyper< Type >::Type > getTypedPass( uint32_t index )const
-		{
-			auto pass = getPass( index );
-			CU_Require( m_type == Type );
-			return std::static_pointer_cast< typename PassTyper< Type >::Type >( pass );
-		}
 
 	private:
 		void onPassChanged( Pass const & pass );
