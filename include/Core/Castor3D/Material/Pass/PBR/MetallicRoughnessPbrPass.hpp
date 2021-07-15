@@ -78,7 +78,6 @@ namespace castor3d
 		void setAlbedo( castor::RgbColour const & value )
 		{
 			m_albedo = value;
-			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -91,7 +90,6 @@ namespace castor3d
 		void setRoughness( float value )
 		{
 			m_roughness = value;
-			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -103,8 +101,7 @@ namespace castor3d
 		 */
 		void setMetallic( float value )
 		{
-			m_metallic = value;
-			onChanged( *this );
+			m_metalness = value;
 		}
 		/**
 		 *\~english
@@ -114,7 +111,7 @@ namespace castor3d
 		 */
 		castor::RgbColour const & getAlbedo()const
 		{
-			return m_albedo;
+			return *m_albedo;
 		}
 		/**
 		 *\~english
@@ -134,7 +131,7 @@ namespace castor3d
 		 */
 		float const & getMetallic()const
 		{
-			return m_metallic;
+			return *m_metalness;
 		}
 
 	public:
@@ -143,6 +140,7 @@ namespace castor3d
 	private:
 		void doInitialise()override;
 		void doCleanup()override;
+		void doAccept( PipelineVisitorBase & vis )override;
 		void doSetOpacity( float value )override;
 		void doPrepareTextures( TextureUnitPtrArray & result )override;
 		void doJoinMtlRgh( TextureUnitPtrArray & result );
@@ -150,13 +148,13 @@ namespace castor3d
 	private:
 		//!\~english	The albedo colour.
 		//!\~french		La couleur d'albédo.
-		castor::RgbColour m_albedo;
+		castor::GroupChangeTracked< castor::RgbColour > m_albedo;
 		//!\~english	The roughness.
 		//!\~french		La rugosité.
-		float m_roughness{ 1.0 };
+		castor::GroupChangeTracked< float > m_roughness;
 		//!\~english	The reflectance.
 		//!\~french		La réflectivité.
-		float m_metallic{ 0.0 };
+		castor::GroupChangeTracked< float > m_metalness;
 	};
 }
 

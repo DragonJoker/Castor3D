@@ -41,292 +41,230 @@ namespace GuiCommon
 				doGetSource( module.name ).sources[module.stage] = &module;
 			}
 
-			void visit( castor::String const & name
+		private:
+			template< typename T >
+			void doVisitUntrackedT( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, float & value )override
+				, T & value )
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				auto & source = doGetSource( name );
+				auto & uboValues = doGetUbo( source, shaders, ubo );
+				uboValues.uniforms.emplace_back( makeUniformValue( uniform, value ) );
+			}
+
+			template< typename T >
+			void doVisitUntrackedT( castor::String const & name
+				, VkShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::RangedValue< T > & value )
+			{
+				auto & source = doGetSource( name );
+				auto & uboValues = doGetUbo( source, shaders, ubo );
+				uboValues.uniforms.emplace_back( makeUniformValue( uniform, value ) );
+			}
+
+			template< typename T >
+			void doVisitTrackedT( castor::String const & name
+				, VkShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, T & value
+				, bool * control )
+			{
+				auto & source = doGetSource( name );
+				auto & uboValues = doGetUbo( source, shaders, ubo );
+				uboValues.uniforms.emplace_back( makeUniformValue( uniform, value, control ) );
+			}
+
+			template< typename T >
+			void doVisitTrackedT( castor::String const & name
+				, VkShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::RangedValue< T > & value
+				, bool * control )
+			{
+				auto & source = doGetSource( name );
+				auto & uboValues = doGetUbo( source, shaders, ubo );
+				uboValues.uniforms.emplace_back( makeUniformValue( uniform, value, control ) );
+			}
+
+			template< typename ValueT, typename ... ParamsT >
+			void doVisitT( ValueT & value
+				, bool * control
+				, ParamsT ... params )
+			{
+				if ( control )
+				{
+					doVisitTrackedT< ValueT >( params..., value, control );
+				}
+				else
+				{
+					doVisitUntrackedT( params..., value );
+				}
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, int32_t & value )override
+				, float & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, uint32_t & value )override
+				, int32_t & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, castor::Point2f & value )override
+				, uint32_t & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, castor::Point2i & value )override
+				, castor::Point2f & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, castor::Point2ui & value )override
+				, castor::Point2i & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, castor::Point3f & value )override
+				, castor::Point2ui & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, castor::Point3i & value )override
+				, castor::Point3f & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, castor::Point3ui & value )override
+				, castor::Point3i & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, castor::Point4f & value )override
+				, castor::Point3ui & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, castor::Point4i & value )override
+				, castor::Point4f & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, castor::Point4ui & value )override
+				, castor::Point4i & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, castor::Matrix4x4f & value )override
+				, castor::Point4ui & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, castor::RangedValue< float > & value )override
+				, castor::Matrix4x4f & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, castor::RangedValue< int32_t > & value )override
+				, castor::RangedValue< float > & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, castor::RangedValue< uint32_t > & value )override
+				, castor::RangedValue< int32_t > & value
+				, bool * control )override
 			{
-				doVisit( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
 				, VkShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
-				, castor::ChangeTracked< float > & value )override
+				, castor::RangedValue< uint32_t > & value
+				, bool * control )override
 			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< int32_t > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< uint32_t > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< castor::Point2f > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< castor::Point2i > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< castor::Point2ui > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< castor::Point3f > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< castor::Point3i > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< castor::Point3ui > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< castor::Point4f > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< castor::Point4i > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< castor::Point4ui > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< castor::Matrix4x4f > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< castor::RangedValue< float > > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< castor::RangedValue< int32_t > > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< castor::RangedValue< uint32_t > > & value )override
-			{
-				doVisitTracked( name, shaders, ubo, uniform, value );
+				doVisitT( value, control, name, shaders, ubo, uniform );
 			}
 
 		private:
@@ -369,54 +307,6 @@ namespace GuiCommon
 				UniformBufferValues ubo{ name, stages };
 				source.ubos.emplace_back( std::move( ubo ) );
 				return source.ubos.back();
-			}
-
-			template< typename T >
-			void doVisit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, T & value )
-			{
-				auto & source = doGetSource( name );
-				auto & uboValues = doGetUbo( source, shaders, ubo );
-				uboValues.uniforms.emplace_back( makeUniformValue( uniform, value ) );
-			}
-
-			template< typename T >
-			void doVisit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::RangedValue< T > & value )
-			{
-				auto & source = doGetSource( name );
-				auto & uboValues = doGetUbo( source, shaders, ubo );
-				uboValues.uniforms.emplace_back( makeUniformValue( uniform, value ) );
-			}
-
-			template< typename T >
-			void doVisitTracked( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< T > & value )
-			{
-				auto & source = doGetSource( name );
-				auto & uboValues = doGetUbo( source, shaders, ubo );
-				uboValues.uniforms.emplace_back( makeUniformValue( uniform, value ) );
-			}
-
-			template< typename T >
-			void doVisitTracked( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::ChangeTracked< castor::RangedValue< T > > & value )
-			{
-				auto & source = doGetSource( name );
-				auto & uboValues = doGetUbo( source, shaders, ubo );
-				uboValues.uniforms.emplace_back( makeUniformValue( uniform, value ) );
 			}
 
 		private:

@@ -293,7 +293,15 @@ namespace castor
 	};
 
 	template< typename T >
+	struct IsGroupChangeTrackedT : std::false_type
+	{
+	};
+
+	template< typename T >
 	static inline bool constexpr isChangeTrackedT = IsChangeTrackedT< T >::value;
+
+	template< typename T >
+	static inline bool constexpr isGroupChangeTrackedT = IsGroupChangeTrackedT< T >::value;
 	//@}
 }
 
