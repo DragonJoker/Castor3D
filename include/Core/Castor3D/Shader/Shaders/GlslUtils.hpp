@@ -88,9 +88,6 @@ namespace castor3d::shader
 			, sdw::Float const & accumulationOperator )const;
 		C3D_API sdw::Vec3 fresnelSchlick( sdw::Float const & product
 			, sdw::Vec3 const & f0 )const;
-		C3D_API static sdw::Mat3 getTBN( sdw::Vec3 const & normal
-			, sdw::Vec3 const & tangent
-			, sdw::Vec3 const & bitangent );
 		C3D_API void compute2DMapsContributions( FilteredTextureFlags const & flags
 			, TextureConfigurations const & textureConfigs
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
@@ -243,6 +240,14 @@ namespace castor3d::shader
 		*/
 		C3D_API sdw::UVec3 unflatten( sdw::UInt const & p
 			, sdw::UVec3 const & dim )const;
+
+		C3D_API static sdw::Mat3 getTBN( sdw::Vec3 const & normal
+			, sdw::Vec3 const & tangent
+			, sdw::Vec3 const & bitangent );
+		C3D_API static bool isGeometryMap( TextureFlags const & flags
+			, PassFlags const & passFlags );
+		C3D_API static bool isGeometryOnlyMap( TextureFlags const & flags
+			, PassFlags const & passFlags );
 
 	private:
 		void doComputeGeometryMapContribution( TextureFlags const & textureFlags
