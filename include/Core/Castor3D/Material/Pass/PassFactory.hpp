@@ -13,7 +13,7 @@ namespace castor3d
 {
 	class PassFactory
 		: public castor::OwnedBy< Engine >
-		, public castor::Factory< Pass, castor::String, PassSPtr, std::function< PassSPtr( Material & ) > >
+		, private PassFactoryBase
 	{
 	public:
 		/**
@@ -30,6 +30,16 @@ namespace castor3d
 		 *\brief		Destructeur
 		 */
 		C3D_API ~PassFactory();
+
+		C3D_API PassSPtr create( castor::String const & passType
+			, Material & parent )const;
+		C3D_API void registerType( castor::String const & passType
+			, PassFactoryBase::Creator creator );
+		C3D_API void unregisterType( castor::String const & passType );
+
+		C3D_API size_t getNameID( castor::String const & passType )const;
+
+		using PassFactoryBase::create;
 	};
 }
 

@@ -11,9 +11,17 @@ CU_ImplementCUSmartPtr( castor3d, PassFactory );
 
 namespace castor3d
 {
+	namespace
+	{
+		size_t computeID( castor::String const & passType )
+		{
+			return std::hash< castor::String >{}( passType );
+		}
+	}
+
 	PassFactory::PassFactory( Engine & engine )
 		: castor::OwnedBy< Engine >{ engine }
-		, castor::Factory< Pass, castor::String, PassSPtr, std::function< PassSPtr( Material & ) > >{}
+		, PassFactoryBase{}
 	{
 		registerType( PhongPass::Type, PhongPass::create );
 		engine.registerParsers( PhongPass::Type, PhongPass::createParsers() );
@@ -33,5 +41,27 @@ namespace castor3d
 
 	PassFactory::~PassFactory()
 	{
+	}
+
+	void PassFactory::registerType( castor::String const & passType
+		, PassFactoryBase::Creator creator )
+	{
+		PassFactoryBase::registerType( getNameID( passType ), creator );
+	}
+
+	void PassFactory::unregisterType( castor::String const & passType )
+	{
+		PassFactoryBase::unregisterType( getNameID( passType ) );
+	}
+
+	PassSPtr PassFactory::create( castor::String const & passType
+		, Material & parent )const
+	{
+		return create( getNameID( passType ), parent );
+	}
+
+	size_t PassFactory::getNameID( castor::String const & passType )const
+	{
+		return computeID( passType );
 	}
 }
