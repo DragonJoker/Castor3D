@@ -60,21 +60,6 @@ namespace GuiCommon
 		{
 			return m_pass.lock();
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the geometry
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la gàomàtrie
-		 *\return		La valeur
-		 */
-		template< castor3d::MaterialType Type >
-		inline std::shared_ptr< typename castor3d::PassTyper< Type >::Type > getTypedPass()
-		{
-			auto pass = m_pass.lock();
-			CU_Require( pass && pass->getType() == Type );
-			return std::static_pointer_cast< typename castor3d::PassTyper< Type >::Type >( pass );
-		}
 
 	private:
 		/**

@@ -143,114 +143,14 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Definition of a Phong pass.
-	*\remarks
-	*	A Phong pass is composed of : base colours (ambient, diffuse, specular, emissive), and shininess.
-	*\~french
-	*\brief
-	*	Définition d'une passe Phong.
-	*\remarks
-	*	Une passe Phong est composée de : couleurs (ambiante, diffuse, spéculaire, émissive), et d'exposant.
-	*/
-	class PhongPass;
-	/**
-	*\~english
-	*\brief
-	*	Definition of a PBR Metallic/Roughness pass.
-	*\remark
-	*	A PBR M/R pass is composed of : colour, roughness, reflectance.
-	*\~french
-	*\brief
-	*	Définition d'une passe PBR Metallic/Roughness.
-	*\remarks
-	*	Une passe PBR M/R est composée de : couleur, rugosité, réflectivité.
-	*/
-	class MetallicRoughnessPbrPass;
-	/**
-	*\~english
-	*\brief
-	*	Definition of a PBR Specular/Glossiness pass.
-	*\remarks
-	*	A PBR S/R pass is composed of : colour, glossiness, specular.
-	*\~french
-	*\brief
-	*	Définition d'une passe PBR Specular/Glossiness.
-	*\remarks
-	*	Une passe PBR S/R est composée de : couleur, polissage, spéculaire.
-	*/
-	class SpecularGlossinessPbrPass;
-	/**
-	*\~english
-	*\brief
 	*	Extended pass information, related to subsurface scattering.
 	*\~french
 	*\brief
 	*	Informations étendues de la passe, relatives au subsurface scattering.
 	*/
 	class SubsurfaceScattering;
-	/**
-	*\~english
-	*\brief
-	*	Helper class to retrieve a pass type from a MaterialType.
-	*\~french
-	*\brief
-	*	Classe d'aide permettant de récupérer le type de passe depuis un MaterialType.
-	*/
-	template< MaterialType Type >
-	struct PassTyper;
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		02/12/2016
-	\~english
-	\brief		Helper class to retrieve a pass type from a MaterialType.
-	\remarks	Specialisation for MaterialType::ePhong.
-	\~french
-	\brief		Classe d'aide permettant de récupérer le type de passe depuis un MaterialType.
-	\remarks	Spécialisation pour MaterialType::ePhong.
-	*/
-	template<>
-	struct PassTyper< MaterialType::ePhong >
-	{
-		using Type = PhongPass;
-	};
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		02/12/2016
-	\~english
-	\brief		Helper class to retrieve a pass type from a MaterialType.
-	\remarks	Specialisation for MaterialType::eMetallicRoughness.
-	\~french
-	\brief		Classe d'aide permettant de récupérer le type de passe depuis un MaterialType.
-	\remarks	Spécialisation pour MaterialType::eMetallicRoughness.
-	*/
-	template<>
-	struct PassTyper< MaterialType::eMetallicRoughness >
-	{
-		using Type = MetallicRoughnessPbrPass;
-	};
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		02/12/2016
-	\~english
-	\brief		Helper class to retrieve a pass type from a MaterialType.
-	\remarks	Specialisation for MaterialType::eMetallicRoughness.
-	\~french
-	\brief		Classe d'aide permettant de récupérer le type de passe depuis un MaterialType.
-	\remarks	Spécialisation pour MaterialType::eMetallicRoughness.
-	*/
-	template<>
-	struct PassTyper< MaterialType::eSpecularGlossiness >
-	{
-		using Type = SpecularGlossinessPbrPass;
-	};
 
 	CU_DeclareSmartPtr( Pass );
-	CU_DeclareSmartPtr( PhongPass );
-	CU_DeclareSmartPtr( MetallicRoughnessPbrPass );
-	CU_DeclareSmartPtr( SpecularGlossinessPbrPass );
 	CU_DeclareSmartPtr( SubsurfaceScattering );
 
 	CU_DeclareCUSmartPtr( castor3d, PassFactory, C3D_API );
