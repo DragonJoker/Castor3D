@@ -51,7 +51,6 @@ namespace castor3d
 		, camera()
 		, material()
 		, pass()
-		, phongPass()
 		, imageInfo
 		{
 			0u,
@@ -89,7 +88,6 @@ namespace castor3d
 	{
 		scene.reset();
 		pass.reset();
-		phongPass.reset();
 		overlay = nullptr;
 		face1 = -1;
 		face2 = -1;
@@ -182,7 +180,6 @@ namespace castor3d
 		m_mapViewportModes = getEnumMapT< ViewportType >();
 		m_mapVariableTypes = getEnumMapT< ParticleFormat >();
 		m_mapMovables = getEnumMapT< MovableType >();
-		m_mapBlendModes = getEnumMapT< BlendMode >();
 		m_fogTypes = getEnumMapT< FogType >();
 		m_mapBillboardTypes = getEnumMapT< BillboardType >();
 		m_mapBillboardSizes = getEnumMapT< BillboardSize >();
@@ -193,7 +190,6 @@ namespace castor3d
 		m_mapHorizontalAligns = getEnumMapT< HAlign >();
 		m_mapTextTexturingModes = getEnumMapT< TextTexturingMode >();
 		m_mapLineSpacingModes = getEnumMapT< TextLineSpacingMode >();
-		m_mapParallaxOcclusionModes = getEnumMapT< ParallaxOcclusionMode >();
 		m_mapShadowFilters = getEnumMapT< ShadowType >();
 		m_mapGlobalIlluminations = getEnumMapT< GlobalIlluminationType >();
 	}
@@ -434,33 +430,6 @@ namespace castor3d
 
 		addParser( uint32_t( CSCNSection::eMaterial ), cuT( "pass" ), parserMaterialPass );
 		addParser( uint32_t( CSCNSection::eMaterial ), cuT( "}" ), parserMaterialEnd );
-
-		addParser( uint32_t( CSCNSection::ePass ), cuT( "diffuse" ), parserPassDiffuse, { makeParameter< ParameterType::eRgbColour >() } );
-		addParser( uint32_t( CSCNSection::ePass ), cuT( "specular" ), parserPassSpecular, { makeParameter< ParameterType::eRgbColour >() } );
-		addParser( uint32_t( CSCNSection::ePass ), cuT( "ambient" ), parserPassAmbient, { makeParameter< ParameterType::eFloat >() } );
-		addParser( uint32_t( CSCNSection::ePass ), cuT( "emissive" ), parserPassEmissive, { makeParameter< ParameterType::eFloat >() } );
-		addParser( uint32_t( CSCNSection::ePass ), cuT( "shininess" ), parserPassShininess, { makeParameter< ParameterType::eFloat >() } );
-		addParser( uint32_t( CSCNSection::ePass ), cuT( "albedo" ), parserPassAlbedo, { makeParameter< ParameterType::eRgbColour >() } );
-		addParser( uint32_t( CSCNSection::ePass ), cuT( "roughness" ), parserPassRoughness, { makeParameter< ParameterType::eFloat >() } );
-		addParser( uint32_t( CSCNSection::ePass ), cuT( "metallic" ), parserPassMetallic, { makeParameter< ParameterType::eFloat >() } );
-		addParser( uint32_t( CSCNSection::ePass ), cuT( "glossiness" ), parserPassGlossiness, { makeParameter< ParameterType::eFloat >() } );
-		addParser( uint32_t( CSCNSection::ePass ), cuT( "alpha" ), parserPassAlpha, { makeParameter< ParameterType::eFloat >() } );
-		addParser( uint32_t( CSCNSection::ePass ), cuT( "two_sided" ), parserPassDoubleFace, { makeParameter< ParameterType::eBool >() } );
-		addParser( uint32_t( CSCNSection::ePass ), cuT( "texture_unit" ), parserPassTextureUnit );
-		addParser( uint32_t( CSCNSection::ePass ), cuT( "shader_program" ), parserPassShader );
-		addParser( uint32_t( CSCNSection::ePass ), cuT( "mixed_interpolation" ), parserPassMixedInterpolative, { makeParameter< ParameterType::eBool >() } );
-		addParser( uint32_t( CSCNSection::ePass ), cuT( "alpha_blend_mode" ), parserPassAlphaBlendMode, { makeParameter< ParameterType::eCheckedText >( m_mapBlendModes ) } );
-		addParser( uint32_t( CSCNSection::ePass ), cuT( "colour_blend_mode" ), parserPassColourBlendMode, { makeParameter< ParameterType::eCheckedText >( m_mapBlendModes ) } );
-		addParser( uint32_t( CSCNSection::ePass ), cuT( "alpha_func" ), parserPassAlphaFunc, { makeParameter< ParameterType::eCheckedText >( m_mapComparisonFuncs ), makeParameter< ParameterType::eFloat >() } );
-		addParser( uint32_t( CSCNSection::ePass ), cuT( "blend_alpha_func" ), parserPassBlendAlphaFunc, { makeParameter< ParameterType::eCheckedText >( m_mapComparisonFuncs ), makeParameter< ParameterType::eFloat >() } );
-		addParser( uint32_t( CSCNSection::ePass ), cuT( "refraction_ratio" ), parserPassRefractionRatio, { makeParameter< ParameterType::eFloat >() } );
-		addParser( uint32_t( CSCNSection::ePass ), cuT( "subsurface_scattering" ), parserPassSubsurfaceScattering );
-		addParser( uint32_t( CSCNSection::ePass ), cuT( "parallax_occlusion" ), parserPassParallaxOcclusion, { makeParameter< ParameterType::eCheckedText >( m_mapParallaxOcclusionModes ) } );
-		addParser( uint32_t( CSCNSection::ePass ), cuT( "bw_accumulation" ), parserPassBWAccumulationOperator, { makeParameter< ParameterType::eUInt32 >( makeRange( 0u, 6u ) ) } );
-		addParser( uint32_t( CSCNSection::ePass ), cuT( "reflections" ), parserPassReflections, { makeParameter< ParameterType::eBool >() } );
-		addParser( uint32_t( CSCNSection::ePass ), cuT( "refractions" ), parserPassRefractions, { makeParameter< ParameterType::eBool >() } );
-		addParser( uint32_t( CSCNSection::ePass ), cuT( "transmission" ), parserPassTransmission, { makeParameter< ParameterType::ePoint3F >() } );
-		addParser( uint32_t( CSCNSection::ePass ), cuT( "}" ), parserPassEnd );
 
 		addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "image" ), parserUnitImage, { makeParameter< ParameterType::ePath >() } );
 		addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "levels_count" ), parserUnitLevelsCount, { makeParameter< ParameterType::eUInt32 >() } );
