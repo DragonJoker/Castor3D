@@ -4,15 +4,121 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
+#include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 
-using namespace castor;
+#include <CastorUtils/FileParser/ParserParameter.hpp>
+#include <CastorUtils/Data/Text/TextRgbColour.hpp>
+
+//*************************************************************************************************
+
+namespace castor
+{
+	template<>
+	class TextWriter< castor3d::MetallicRoughnessPbrPass >
+		: public TextWriterT< castor3d::MetallicRoughnessPbrPass >
+	{
+	public:
+		TextWriter( String const & tabs
+			, Path const & folder
+			, String const & subfolder )
+			: TextWriterT< castor3d::MetallicRoughnessPbrPass >{ tabs }
+			, m_folder{ folder }
+			, m_subfolder{ subfolder }
+		{
+		}
+
+		bool operator()( castor3d::MetallicRoughnessPbrPass const & pass
+			, StringStream & file )
+		{
+			castor3d::log::info << tabs() << cuT( "Writing MetallicRoughnessPbrPass " ) << std::endl;
+			return writeNamedSub( file, "albedo", pass.getAlbedo() )
+				&& write( file, "roughness", pass.getRoughness() )
+				&& write( file, "metallic", pass.getMetallic() );
+		}
+
+	private:
+		Path m_folder;
+		String m_subfolder;
+	};
+}
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
+	namespace pbrmr
+	{
+		enum class Section
+			: uint32_t
+		{
+			eMetallicRoughnessPass = CU_MakeSectionName( 'M', 'T', 'R', 'G' ),
+		};
+
+		static castor::String const Name{ cuT( "pbrmr_pass" ) };
+
+		CU_ImplementAttributeParser( parserPassAlbdeo )
+		{
+			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+			if ( !parsingContext->pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( !params.empty() )
+			{
+				auto & phongPass = static_cast< MetallicRoughnessPbrPass & >( *parsingContext->pass );
+				castor::RgbColour value;
+				params[0]->get( value );
+				phongPass.setAlbedo( value );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserPassMetallic )
+		{
+			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+			if ( !parsingContext->pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( !params.empty() )
+			{
+				auto & phongPass = static_cast< MetallicRoughnessPbrPass & >( *parsingContext->pass );
+				float value;
+				params[0]->get( value );
+				phongPass.setMetallic( value );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserPassRoughness )
+		{
+			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+			if ( !parsingContext->pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( !params.empty() )
+			{
+				auto & phongPass = static_cast< MetallicRoughnessPbrPass & >( *parsingContext->pass );
+				float value;
+				params[0]->get( value );
+				phongPass.setRoughness( value );
+			}
+		}
+		CU_EndAttribute()
+	}
+
+	//*********************************************************************************************
+
+	castor::String const MetallicRoughnessPbrPass::Type = cuT( "metallic_roughness" );
+
 	MetallicRoughnessPbrPass::MetallicRoughnessPbrPass( Material & parent )
 		: Pass{ parent }
-		, m_albedo{ RgbColour::fromRGBA( 0xFFFFFFFF ) }
+		, m_albedo{ castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
 	{
 	}
 
@@ -23,6 +129,26 @@ namespace castor3d
 	PassSPtr MetallicRoughnessPbrPass::create( Material & parent )
 	{
 		return std::make_shared< MetallicRoughnessPbrPass >( parent );
+	}
+
+	castor::AttributeParsersBySection MetallicRoughnessPbrPass::createParsers()
+	{
+		castor::AttributeParsersBySection result;
+
+		Pass::addParser( result, uint32_t( pbrmr::Section::eMetallicRoughnessPass ), cuT( "albedo" ), &pbrmr::parserPassAlbdeo, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
+		Pass::addParser( result, uint32_t( pbrmr::Section::eMetallicRoughnessPass ), cuT( "metallic" ), &pbrmr::parserPassMetallic, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		Pass::addParser( result, uint32_t( pbrmr::Section::eMetallicRoughnessPass ), cuT( "roughness" ), &pbrmr::parserPassRoughness, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		Pass::addCommonParsers( uint32_t( pbrmr::Section::eMetallicRoughnessPass ), result );
+
+		return result;
+	}
+
+	castor::StrUInt32Map MetallicRoughnessPbrPass::createSections()
+	{
+		return
+		{
+			{ uint32_t( pbrmr::Section::eMetallicRoughnessPass ), pbrmr::Name },
+		};
 	}
 
 	void MetallicRoughnessPbrPass::accept( PassBuffer & buffer )const
@@ -40,6 +166,19 @@ namespace castor3d
 		data.specDiv->a = getMetallic();
 
 		doFillData( data );
+	}
+
+	uint32_t MetallicRoughnessPbrPass::getSectionID()const
+	{
+		return uint32_t( pbrmr::Section::eMetallicRoughnessPass );
+	}
+
+	bool MetallicRoughnessPbrPass::writeText( castor::String const & tabs
+		, castor::Path const & folder
+		, castor::String const & subfolder
+		, castor::StringStream & file )const
+	{
+		return castor::TextWriter< MetallicRoughnessPbrPass >{ tabs, folder, subfolder }( *this, file );
 	}
 
 	void MetallicRoughnessPbrPass::doInitialise()

@@ -7,11 +7,13 @@ See LICENSE file in root folder
 #include "PassModule.hpp"
 
 #include <CastorUtils/Design/Factory.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {
 	class PassFactory
-		: public castor::Factory< Pass, castor::String, PassSPtr, std::function< PassSPtr( Material & ) > >
+		: public castor::OwnedBy< Engine >
+		, public castor::Factory< Pass, castor::String, PassSPtr, std::function< PassSPtr( Material & ) > >
 	{
 	public:
 		/**
@@ -20,7 +22,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		C3D_API PassFactory();
+		C3D_API PassFactory( Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
