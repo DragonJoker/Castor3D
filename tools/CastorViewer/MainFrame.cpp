@@ -22,7 +22,6 @@
 #include <GuiCommon/System/TreeListContainer.hpp>
 
 #include <SceneExporter/CscnExporter.hpp>
-#include <SceneExporter/ObjExporter.hpp>
 
 #include <Castor3D/Cache/SceneCache.hpp>
 #include <Castor3D/Cache/TargetCache.hpp>
@@ -1010,8 +1009,6 @@ namespace CastorViewer
 		{
 			wxString wildcard = _( "Castor3D scene" );
 			wildcard += CSCN_WILDCARD;
-			wildcard += _( "Wavefront OBJ" );
-			wildcard += objWildcard;
 			wildcard += wxT( "|" );
 			wxFileDialog fileDialog( this, _( "Export the scene" ), wxEmptyString, wxEmptyString, wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
@@ -1020,18 +1017,8 @@ namespace CastorViewer
 				try
 				{
 					Path pathFile( ( wxChar const * )fileDialog.GetPath().c_str() );
-					bool result = false;
-
-					if ( pathFile.getExtension() == cuT( "obj" ) )
-					{
-						exporter::ObjSceneExporter exporter{ options };
-						result = exporter.exportScene( *scene, pathFile );
-					}
-					else if ( pathFile.getExtension() == cuT( "cscn" ) )
-					{
-						exporter::CscnSceneExporter exporter{ options };
-						result = exporter.exportScene( *scene, pathFile );
-					}
+					exporter::CscnSceneExporter exporter{ options };
+					auto result = exporter.exportScene( *scene, pathFile );
 
 					if ( result )
 					{
@@ -1041,14 +1028,12 @@ namespace CastorViewer
 					}
 					else
 					{
-						wxMessageBox( _( "Scene export failed" )
-							, wxMessageBoxCaptionStr
-							, wxOK | wxCENTRE | wxICON_ERROR );
+						throw std::runtime_error{ "See CastorViewer.log for more details." };
 					}
 				}
 				catch ( std::exception & exc )
 				{
-					wxMessageBox( _( "Scene export failed:" ) + make_wxString( exc.what() )
+					wxMessageBox( _( "Scene export failed:\n" ) + make_wxString( exc.what() )
 						, _( "Error" )
 						, wxOK | wxCENTRE | wxICON_ERROR );
 				}
