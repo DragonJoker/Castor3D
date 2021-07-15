@@ -4,6 +4,7 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
+#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 
@@ -118,8 +119,9 @@ namespace castor3d
 
 	SpecularGlossinessPbrPass::SpecularGlossinessPbrPass( Material & parent )
 		: Pass{ parent }
-		, m_diffuse{ castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
-		, m_specular{ castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
+		, m_diffuse{ m_dirty, castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
+		, m_specular{ m_dirty, castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
+		, m_glossiness{ m_dirty, 0.0f }
 	{
 	}
 
@@ -188,6 +190,16 @@ namespace castor3d
 
 	void SpecularGlossinessPbrPass::doCleanup()
 	{
+	}
+
+	void SpecularGlossinessPbrPass::doAccept( PipelineVisitorBase & vis )
+	{
+		vis.visit( cuT( "Diffuse" )
+			, m_diffuse );
+		vis.visit( cuT( "Specular" )
+			, m_specular );
+		vis.visit( cuT( "Glossiness" )
+			, m_glossiness );
 	}
 
 	void SpecularGlossinessPbrPass::doSetOpacity( float value )

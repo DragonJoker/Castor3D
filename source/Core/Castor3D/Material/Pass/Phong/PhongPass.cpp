@@ -4,6 +4,7 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
+#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 
@@ -137,8 +138,10 @@ namespace castor3d
 
 	PhongPass::PhongPass( Material & p_parent )
 		: Pass{ p_parent }
-		, m_diffuse{ castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
-		, m_specular{ castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
+		, m_diffuse{ m_dirty, castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
+		, m_specular{ m_dirty, castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
+		, m_ambient{ m_dirty, 1.0f }
+		, m_shininess{ m_dirty, { 50.0f, castor::makeRange( 0.0001f, MaxShininess ) } }
 	{
 	}
 
@@ -207,6 +210,18 @@ namespace castor3d
 
 	void PhongPass::doCleanup()
 	{
+	}
+
+	void PhongPass::doAccept( PipelineVisitorBase & vis )
+	{
+		vis.visit( cuT( "Ambient" )
+			, m_ambient );
+		vis.visit( cuT( "Diffuse" )
+			, m_diffuse );
+		vis.visit( cuT( "Specular" )
+			, m_specular );
+		vis.visit( cuT( "Exponent" )
+			, m_shininess );
 	}
 
 	void PhongPass::doSetOpacity( float p_value )

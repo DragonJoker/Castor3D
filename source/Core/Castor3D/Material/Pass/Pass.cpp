@@ -9,6 +9,7 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
+#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Render/Node/PassRenderNode.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Shader/Program.hpp"
@@ -617,6 +618,18 @@ namespace castor3d
 				: ( getType() == MaterialType::eSpecularGlossiness
 					? PassFlag::eSpecularGlossiness
 					: PassFlag::eNone ) ) ) }
+		, m_opacity{ m_dirty, 1.0f }
+		, m_bwAccumulationOperator{ m_dirty, castor::makeRangedValue( 1u, 0u, 8u ) }
+		, m_emissive{ m_dirty, 0.0f }
+		, m_refractionRatio{ m_dirty, 0.0f }
+		, m_twoSided{ m_dirty, false }
+		, m_alphaBlendMode{ m_dirty, BlendMode::eNoBlend }
+		, m_colourBlendMode{ m_dirty, BlendMode::eNoBlend }
+		, m_alphaValue{ m_dirty, 0.0f }
+		, m_transmission{ m_dirty, { 1.0f, 1.0f, 1.0f } }
+		, m_alphaFunc{ m_dirty, VK_COMPARE_OP_ALWAYS }
+		, m_blendAlphaFunc{ m_dirty, VK_COMPARE_OP_ALWAYS }
+		, m_parallaxOcclusionMode{ m_dirty, ParallaxOcclusionMode::eNone }
 	{
 	}
 
@@ -648,6 +661,50 @@ namespace castor3d
 		for ( auto unit : m_textureUnits )
 		{
 			unit->cleanup();
+		}
+	}
+
+	void Pass::update()
+	{
+		if ( m_dirty )
+		{
+			onChanged( *this );
+			m_dirty = false;
+		}
+	}
+
+	void Pass::accept( PipelineVisitorBase & vis )
+	{
+		doAccept( vis );
+		vis.visit( cuT( "Emissive" )
+			, m_emissive );
+		vis.visit( cuT( "Opacity" )
+			, m_opacity );
+		vis.visit( cuT( "Two sided" )
+			, m_twoSided );
+		vis.visit( cuT( "Colour blend mode" )
+			, m_colourBlendMode );
+		vis.visit( cuT( "Alpha blend mode" )
+			, m_alphaBlendMode );
+		vis.visit( cuT( "Pass flags" )
+			, m_flags );
+		vis.visit( cuT( "Alpha func" )
+			, m_alphaFunc );
+		vis.visit( cuT( "Blend alpha func" )
+			, m_blendAlphaFunc );
+		vis.visit( cuT( "Alpha ref. value" )
+			, m_alphaValue );
+		vis.visit( cuT( "Transmission" )
+			, m_transmission );
+		vis.visit( cuT( "Blended weighted accumulator" )
+			, m_bwAccumulationOperator );
+		vis.visit( cuT( "Parallax occlusion mode" )
+			, m_parallaxOcclusionMode );
+
+		if ( hasRefraction() )
+		{
+			vis.visit( cuT( "Refraction ratio" )
+				, m_refractionRatio );
 		}
 	}
 
@@ -813,7 +870,7 @@ namespace castor3d
 		updateFlag( PassFlag::eAlphaTest, hasAlphaTest() );
 		updateFlag( PassFlag::eBlendAlphaTest, hasBlendAlphaTest() );
 		doSetOpacity( value );
-		onChanged( *this );
+		m_dirty = true;
 	}
 
 	PassFlags Pass::getPassFlags()const
@@ -829,7 +886,7 @@ namespace castor3d
 			{
 				onSssChanged( sss );
 			} );
-		onChanged( *this );
+		m_dirty = true;
 	}
 
 	bool Pass::needsGammaCorrection()const
@@ -1076,7 +1133,7 @@ namespace castor3d
 
 	void Pass::onSssChanged( SubsurfaceScattering const & sss )
 	{
-		onChanged( *this );
+		m_dirty = true;
 	}
 
 	TextureUnitSPtr Pass::doMergeImages( castor::Image const & lhs

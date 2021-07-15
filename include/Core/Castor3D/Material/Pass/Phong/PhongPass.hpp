@@ -78,7 +78,6 @@ namespace castor3d
 		void setDiffuse( castor::RgbColour const & value )
 		{
 			m_diffuse = value;
-			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -91,7 +90,6 @@ namespace castor3d
 		void setSpecular( castor::RgbColour const & value )
 		{
 			m_specular = value;
-			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -104,7 +102,6 @@ namespace castor3d
 		void setAmbient( float const & value )
 		{
 			m_ambient = value;
-			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -116,8 +113,7 @@ namespace castor3d
 		 */
 		void setShininess( float value )
 		{
-			m_shininess = value;
-			onChanged( *this );
+			*m_shininess = value;
 		}
 		/**
 		 *\~english
@@ -127,7 +123,7 @@ namespace castor3d
 		 */
 		castor::RangedValue< float > const & getShininess()const
 		{
-			return m_shininess;
+			return *m_shininess;
 		}
 		/**
 		 *\~english
@@ -137,7 +133,7 @@ namespace castor3d
 		 */
 		castor::RgbColour const & getDiffuse()const
 		{
-			return m_diffuse;
+			return *m_diffuse;
 		}
 		/**
 		 *\~english
@@ -147,7 +143,7 @@ namespace castor3d
 		 */
 		castor::RgbColour const & getSpecular()const
 		{
-			return m_specular;
+			return *m_specular;
 		}
 		/**
 		 *\~english
@@ -167,7 +163,7 @@ namespace castor3d
 		 */
 		castor::RgbColour & getDiffuse()
 		{
-			return m_diffuse;
+			return *m_diffuse;
 		}
 		/**
 		 *\~english
@@ -177,12 +173,13 @@ namespace castor3d
 		 */
 		castor::RgbColour & getSpecular()
 		{
-			return m_specular;
+			return *m_specular;
 		}
 
 	private:
 		void doInitialise()override;
 		void doCleanup()override;
+		void doAccept( PipelineVisitorBase & vis )override;
 		void doSetOpacity( float value )override;
 		void doPrepareTextures( TextureUnitPtrArray & result )override;
 		void doJoinSpcShn( TextureUnitPtrArray & result );
@@ -194,16 +191,16 @@ namespace castor3d
 	private:
 		//!\~english	Diffuse material colour.
 		//!\~french		La couleur diffuse
-		castor::RgbColour m_diffuse;
+		castor::GroupChangeTracked< castor::RgbColour > m_diffuse;
 		//!\~english	Specular material colour.
 		//!\~french		La couleur spéculaire.
-		castor::RgbColour m_specular;
+		castor::GroupChangeTracked< castor::RgbColour > m_specular;
 		//!\~english	The ambient contribution factor.
 		//!\~french		Le facteur de contribution a l'ambiente.
-		float m_ambient{ 1.0f };
+		castor::GroupChangeTracked< float > m_ambient;
 		//!\~english	The shininess value.
 		//!\~french		La valeur d'exposant.
-		castor::RangedValue< float > m_shininess{ 50.0f, castor::makeRange( 0.0001f, MaxShininess ) };
+		castor::GroupChangeTracked< castor::RangedValue< float > > m_shininess;
 	};
 }
 
