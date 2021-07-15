@@ -23,7 +23,6 @@ namespace castor3d::shader
 		, uint32_t envMapSet )
 		: ReflectionModel{ writer, utils, passFlags }
 	{
-		auto brdfIndex = envMapBinding + 1u;
 		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 		m_writer.inlineComment( "// REFLECTIONS" );
 		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );

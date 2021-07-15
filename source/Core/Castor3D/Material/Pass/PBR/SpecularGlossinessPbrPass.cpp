@@ -23,7 +23,18 @@ namespace castor3d
 
 	void SpecularGlossinessPbrPass::accept( PassBuffer & buffer )const
 	{
-		buffer.visit( *this );
+		auto data = buffer.getData( getId() );
+
+		data.colourDiv->r = getDiffuse().red();
+		data.colourDiv->g = getDiffuse().green();
+		data.colourDiv->b = getDiffuse().blue();
+		data.colourDiv->a = 1.0f - getGlossiness();
+		data.specDiv->r = getSpecular().red();
+		data.specDiv->g = getSpecular().green();
+		data.specDiv->b = getSpecular().blue();
+		data.specDiv->a = castor::point::length( castor::Point3f{ getSpecular().constPtr() } );
+
+		doFillData( data );
 	}
 
 	void SpecularGlossinessPbrPass::doInitialise()

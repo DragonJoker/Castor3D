@@ -6,10 +6,10 @@ See LICENSE file in root folder
 
 #include "PassModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Material/Texture/TextureModule.hpp"
 
 #include "Castor3D/Material/Pass/SubsurfaceScattering.hpp"
-#include "Castor3D/Material/Texture/TextureModule.hpp"
-#include "Castor3D/Shader/PassBuffer/PassBufferModule.hpp"
+#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 
 #include <CastorUtils/Design/FlagCombination.hpp>
 #include <CastorUtils/Design/Signal.hpp>
@@ -426,7 +426,7 @@ namespace castor3d
 		/**@}*/
 
 	protected:
-		void doMergeImages( TextureFlag lhsFlag
+		C3D_API void doMergeImages( TextureFlag lhsFlag
 			, uint32_t lhsMaskOffset
 			, uint32_t lhsDstMask
 			, TextureFlag rhsFlag
@@ -434,8 +434,9 @@ namespace castor3d
 			, uint32_t rhsDstMask
 			, castor::String const & name
 			, TextureUnitPtrArray & result );
-		void doJoinDifOpa( TextureUnitPtrArray & result
+		C3D_API void doJoinDifOpa( TextureUnitPtrArray & result
 			, castor::String const & name );
+		C3D_API void doFillData( PassBuffer::PassDataPtr & data )const;
 
 	private:
 		void onSssChanged( SubsurfaceScattering const & sss );
