@@ -26,44 +26,46 @@ namespace castor3d
 		 *\remarks		A ne pas utiliser autrement que via la classe Material.
 		 *\param[in]	parent	Le matériau parent.
 		 */
-		C3D_API explicit PhongPass( Material & parent );
+		explicit PhongPass( Material & parent );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~PhongPass();
+		~PhongPass();
 
-		C3D_API static PassSPtr create( Material & parent );
-		C3D_API static castor::AttributeParsersBySection createParsers();
-		C3D_API static castor::StrUInt32Map createSections();
+		static PassSPtr create( Material & parent );
+		static castor::AttributeParsersBySection createParsers();
+		static castor::StrUInt32Map createSections();
 		/**
 		 *\copydoc		castor3d::Pass::accept
 		 */
-		C3D_API void accept( PassBuffer & buffer )const override;
+		void accept( PassBuffer & buffer )const override;
 		/**
 		 *\copydoc		castor3d::Pass::getSectionID
 		 */
-		C3D_API uint32_t getSectionID()const override;
+		uint32_t getSectionID()const override;
 		/**
 		 *\copydoc		castor3d::Pass::writeText
 		 */
-		C3D_API bool writeText( castor::String const & tabs
+		bool writeText( castor::String const & tabs
 			, castor::Path const & folder
 			, castor::String const & subfolder
 			, castor::StringStream & file )const override;
 		/**
-		 *\~english
-		 *\remarks	Passes are aligned on float[4], so the size of a pass
-		 *			is the number of float[4] needed to contain it.
-		 *\~french
-		 *\remarks	Les passes sont alignées sur 4 flottants, donc la taille d'une passe
-		 *			correspond aux nombres de float[4] qu'il faut pour la contenir.
+		 *\copydoc		castor3d::Pass::setColour
 		 */
-		uint32_t getPassSize()const override
+		void setColour( castor::RgbColour const & value ) override
 		{
-			return 4u;
+			setDiffuse( value );
+		}
+		/**
+		 *\copydoc		castor3d::Pass::getColour
+		 */
+		castor::RgbColour const & getColour()const override
+		{
+			return getDiffuse();
 		}
 		/**
 		 *\~english
