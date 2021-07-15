@@ -2,12 +2,13 @@
 
 #include "Castor3D/Binary/CmshImporter.hpp"
 
-using namespace castor;
+CU_ImplementCUSmartPtr( castor3d, MeshImporterFactory )
+CU_ImplementCUSmartPtr( castor3d, MeshSubdividerFactory )
 
 namespace castor3d
 {
 	MeshImporterFactory::MeshImporterFactory()
-		: Factory< MeshImporter, String, MeshImporterUPtr, std::function< MeshImporterUPtr( Engine & ) > >()
+		: Factory< MeshImporter, castor::String, MeshImporterUPtr, std::function< MeshImporterUPtr( Engine & ) > >{}
 	{
 		registerType( CmshImporter::Type, CmshImporter::create );
 	}

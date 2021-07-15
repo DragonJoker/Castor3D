@@ -189,10 +189,11 @@ namespace castor3d
 	CU_DeclareSmartPtr( CpuParticleSystem );
 	CU_DeclareSmartPtr( ParticleElementDeclaration );
 	CU_DeclareSmartPtr( ParticleEmitter );
-	CU_DeclareSmartPtr( ParticleFactory );
 	CU_DeclareSmartPtr( ParticleSystem );
 	CU_DeclareSmartPtr( ParticleSystemImpl );
 	CU_DeclareSmartPtr( ParticleUpdater );
+
+	CU_DeclareCUSmartPtr( castor3d, ParticleFactory, C3D_API );
 
 	CU_DeclareVector( Particle, Particle );
 	CU_DeclareVector( ParticleEmitterUPtr, ParticleEmitter );

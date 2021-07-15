@@ -9,12 +9,12 @@
 #include "Castor3D/Model/Mesh/Generator/Sphere.hpp"
 #include "Castor3D/Model/Mesh/Generator/Torus.hpp"
 
-using namespace castor;
+CU_ImplementCUSmartPtr( castor3d, MeshFactory );
 
 namespace castor3d
 {
 	MeshFactory::MeshFactory()
-		: Factory< MeshGenerator, String >()
+		: Factory< MeshGenerator, castor::String >{}
 	{
 		registerType( cuT( "cone" ), Cone::create );
 		registerType( cuT( "cube" ), Cube::create );

@@ -3,21 +3,18 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
-#include "Castor3D/Material/Pass/Phong/PhongPass.hpp"
-#include "Castor3D/Material/Pass/PBR/MetallicRoughnessPbrPass.hpp"
-#include "Castor3D/Material/Pass/PBR/SpecularGlossinessPbrPass.hpp"
-
-using namespace castor;
+#include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Material/Pass/PassFactory.hpp"
 
 namespace castor3d
 {
 	const castor::String Material::DefaultMaterialName = cuT( "DefaultMaterial" );
 
-	Material::Material( String const & name
+	Material::Material( castor::String const & name
 		, Engine & engine
 		, MaterialType type )
-		: Resource< Material >( name )
-		, OwnedBy< Engine >( engine )
+		: castor::Resource< Material >{ name }
+		, castor::OwnedBy< Engine >{ engine }
 		, m_type{ type }
 	{
 	}
@@ -50,27 +47,7 @@ namespace castor3d
 
 	PassSPtr Material::createPass()
 	{
-		PassSPtr newPass;
-
-		switch ( getType() )
-		{
-		case MaterialType::ePhong:
-			newPass = std::make_shared< PhongPass >( *this );
-			break;
-
-		case MaterialType::eMetallicRoughness:
-			newPass = std::make_shared< MetallicRoughnessPbrPass >( *this );
-			break;
-
-		case MaterialType::eSpecularGlossiness:
-			newPass = std::make_shared< SpecularGlossinessPbrPass >( *this );
-			break;
-
-		default:
-			CU_Failure( cuT( "Unsupported pass type" ) );
-			break;
-		}
-
+		PassSPtr newPass = getEngine()->getPassFactory().create( castor3d::getName( getType() ), *this );
 		CU_Require( newPass );
 		m_passListeners.emplace( newPass, newPass->onChanged.connect( [this]( Pass const & pass )
 			{

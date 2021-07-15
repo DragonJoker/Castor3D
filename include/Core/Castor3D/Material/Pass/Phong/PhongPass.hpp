@@ -34,6 +34,8 @@ namespace castor3d
 		 *\brief		Destructeur.
 		 */
 		C3D_API ~PhongPass();
+
+		C3D_API static PassSPtr create( Material & parent );
 		/**
 		 *\copydoc		castor3d::Pass::accept
 		 */
