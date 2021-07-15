@@ -134,6 +134,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Factory for material passes.
+	*\~french
+	*\brief
+	*	Fabrique de passe de matériau.
+	*/
+	class PassFactory;
+	/**
+	*\~english
+	*\brief
 	*	Definition of a Phong pass.
 	*\remarks
 	*	A Phong pass is composed of : base colours (ambient, diffuse, specular, emissive), and shininess.
@@ -243,6 +252,8 @@ namespace castor3d
 	CU_DeclareSmartPtr( MetallicRoughnessPbrPass );
 	CU_DeclareSmartPtr( SpecularGlossinessPbrPass );
 	CU_DeclareSmartPtr( SubsurfaceScattering );
+
+	CU_DeclareCUSmartPtr( castor3d, PassFactory, C3D_API );
 
 	//! Pass array
 	CU_DeclareVector( Pass, Pass );

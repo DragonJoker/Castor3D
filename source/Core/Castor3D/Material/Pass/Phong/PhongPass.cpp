@@ -21,6 +21,11 @@ namespace castor3d
 	{
 	}
 
+	PassSPtr PhongPass::create( Material & parent )
+	{
+		return std::make_shared< PhongPass >( parent );
+	}
+
 	void PhongPass::accept( PassBuffer & buffer )const
 	{
 		auto data = buffer.getData( getId() );
