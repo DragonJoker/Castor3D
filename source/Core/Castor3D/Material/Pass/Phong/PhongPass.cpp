@@ -21,9 +21,20 @@ namespace castor3d
 	{
 	}
 
-	void PhongPass::accept( PassBuffer & p_buffer )const
+	void PhongPass::accept( PassBuffer & buffer )const
 	{
-		p_buffer.visit( *this );
+		auto data = buffer.getData( getId() );
+
+		data.colourDiv->r = getDiffuse().red();
+		data.colourDiv->g = getDiffuse().green();
+		data.colourDiv->b = getDiffuse().blue();
+		data.colourDiv->a = getAmbient();
+		data.specDiv->r = getSpecular().red();
+		data.specDiv->g = getSpecular().green();
+		data.specDiv->b = getSpecular().blue();
+		data.specDiv->a = getShininess().value();
+
+		doFillData( data );
 	}
 
 	void PhongPass::doInitialise()
