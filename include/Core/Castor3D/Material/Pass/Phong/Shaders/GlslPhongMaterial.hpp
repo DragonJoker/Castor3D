@@ -31,6 +31,9 @@ namespace castor3d::shader
 		C3D_API sdw::Float getMetalness()const override;
 		C3D_API sdw::Float getRoughness()const override;
 
+		static C3D_API sdw::Float computeGlossiness( sdw::Float const & shininess );
+		static C3D_API sdw::Float computeShininess( sdw::Float const & glossiness );
+
 		sdw::Float & ambient;
 		sdw::Float & shininess;
 	};

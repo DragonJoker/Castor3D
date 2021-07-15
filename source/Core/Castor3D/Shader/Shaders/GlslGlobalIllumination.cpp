@@ -563,18 +563,6 @@ namespace castor3d
 				, voxelData );
 		}
 
-		sdw::Vec3 GlobalIllumination::computeF0( sdw::Vec3 const & albedo
-			, sdw::Float const & metalness )
-		{
-			return LightMaterial::computeF0( albedo, metalness );
-		}
-
-		sdw::Float GlobalIllumination::computeMetalness( sdw::Vec3 const & albedo
-			, sdw::Vec3 const & f0 )
-		{
-			return LightMaterial::computeMetalness( albedo, f0 );
-		}
-
 		void GlobalIllumination::declareTraceCone()
 		{
 			if ( m_traceCone )

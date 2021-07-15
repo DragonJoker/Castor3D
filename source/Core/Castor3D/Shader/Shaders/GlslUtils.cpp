@@ -895,136 +895,6 @@ namespace castor3d::shader
 		}
 	}
 
-	void Utils::applyAlphaFunc( VkCompareOp alphaFunc
-		, sdw::Float & alpha
-		, sdw::Float const & alphaRef
-		, bool opaque )const
-	{
-		if ( alphaFunc != VK_COMPARE_OP_ALWAYS )
-		{
-			switch ( alphaFunc )
-			{
-			case VK_COMPARE_OP_NEVER:
-				m_writer.discard();
-				break;
-			case VK_COMPARE_OP_LESS:
-				IF( m_writer, alpha >= alphaRef )
-				{
-					m_writer.discard();
-				}
-				FI;
-				if ( opaque )
-				{
-					alpha = 1.0_f;
-				}
-				break;
-			case VK_COMPARE_OP_EQUAL:
-				IF( m_writer, alpha != alphaRef )
-				{
-					m_writer.discard();
-				}
-				FI;
-				if ( opaque )
-				{
-					alpha = 1.0_f;
-				}
-				break;
-			case VK_COMPARE_OP_LESS_OR_EQUAL:
-				IF( m_writer, alpha > alphaRef )
-				{
-					m_writer.discard();
-				}
-				FI;
-				if ( opaque )
-				{
-					alpha = 1.0_f;
-				}
-				break;
-			case VK_COMPARE_OP_GREATER:
-				IF( m_writer, alpha <= alphaRef )
-				{
-					m_writer.discard();
-				}
-				FI;
-				if ( opaque )
-				{
-					alpha = 1.0_f;
-				}
-				break;
-			case VK_COMPARE_OP_NOT_EQUAL:
-				IF( m_writer, alpha == alphaRef )
-				{
-					m_writer.discard();
-				}
-				FI;
-				if ( opaque )
-				{
-					alpha = 1.0_f;
-				}
-				break;
-			case VK_COMPARE_OP_GREATER_OR_EQUAL:
-				IF( m_writer, alpha < alphaRef )
-				{
-					m_writer.discard();
-				}
-				FI;
-				if ( opaque )
-				{
-					alpha = 1.0_f;
-				}
-				break;
-			case VK_COMPARE_OP_ALWAYS:
-				break;
-
-			default:
-				break;
-			}
-		}
-	}
-
-	sdw::Boolean Utils::isSaturated( sdw::Vec3 const & p )const
-	{
-		return m_isSaturated3D( p );
-	}
-
-	sdw::Boolean Utils::isSaturated( sdw::IVec3 const & p
-		, sdw::Int const & imax )const
-	{
-		return m_isSaturated3DImg( p, imax );
-	}
-
-	sdw::UInt Utils::encodeColor( sdw::Vec4 const & color )const
-	{
-		return m_encodeColor( color );
-	}
-
-	sdw::UInt Utils::encodeNormal( sdw::Vec3 const & normal )const
-	{
-		return m_encodeNormal( normal );
-	}
-
-	sdw::Vec4 Utils::decodeColor( sdw::UInt const & colorMask )const
-	{
-		return m_decodeColor( colorMask );
-	}
-
-	sdw::Vec3 Utils::decodeNormal( sdw::UInt const & normalMask )const
-	{
-		return m_decodeNormal( normalMask );
-	}
-
-	sdw::UInt Utils::flatten( sdw::UVec3 const & p
-		, sdw::UVec3 const & dim )const
-	{
-		return m_flatten3D( p, dim );
-	}
-
-	sdw::UVec3 Utils::unflatten( sdw::UInt const & p
-		, sdw::UVec3 const & dim )const
-	{
-		return m_unflatten3D( p, dim );
-	}
-
 	sdw::Vec2 Utils::topDownToBottomUp( sdw::Vec2 const & texCoord )const
 	{
 		return m_invertVec2Y( texCoord );
@@ -1128,13 +998,6 @@ namespace castor3d::shader
 		return m_fresnelSchlick( product, f0 );
 	}
 
-	sdw::Mat3 Utils::getTBN( sdw::Vec3 const & normal
-		, sdw::Vec3 const & tangent
-		, sdw::Vec3 const & bitangent )
-	{
-		return mat3( normalize( tangent ), normalize( bitangent ), normal );
-	}
-
 	void Utils::compute2DMapsContributions( FilteredTextureFlags const & flags
 		, TextureConfigurations const & textureConfigs
 		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
@@ -1190,16 +1053,6 @@ namespace castor3d::shader
 				, maps[i].sample( texCoord ) );
 			opacity = config.getOpacity( m_writer, sampledOpacity, opacity );
 		}
-	}
-
-	bool isGeometryMap( TextureFlags const & flags
-		, PassFlags const & passFlags )
-	{
-		return checkFlag( flags, TextureFlag::eOpacity )
-			|| checkFlag( flags, TextureFlag::eNormal )
-			|| ( checkFlag( flags, TextureFlag::eHeight )
-				&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
-					|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) );
 	}
 
 	void Utils::computeGeometryMapsContributions( FilteredTextureFlags const & flags
@@ -1348,6 +1201,162 @@ namespace castor3d::shader
 		m_decodeReceiver( encoded
 			, receiver
 			, lighting );
+	}
+
+	void Utils::applyAlphaFunc( VkCompareOp alphaFunc
+		, sdw::Float & alpha
+		, sdw::Float const & alphaRef
+		, bool opaque )const
+	{
+		if ( alphaFunc != VK_COMPARE_OP_ALWAYS )
+		{
+			switch ( alphaFunc )
+			{
+			case VK_COMPARE_OP_NEVER:
+				m_writer.discard();
+				break;
+			case VK_COMPARE_OP_LESS:
+				IF( m_writer, alpha >= alphaRef )
+				{
+					m_writer.discard();
+				}
+				FI;
+				if ( opaque )
+				{
+					alpha = 1.0_f;
+				}
+				break;
+			case VK_COMPARE_OP_EQUAL:
+				IF( m_writer, alpha != alphaRef )
+				{
+					m_writer.discard();
+				}
+				FI;
+				if ( opaque )
+				{
+					alpha = 1.0_f;
+				}
+				break;
+			case VK_COMPARE_OP_LESS_OR_EQUAL:
+				IF( m_writer, alpha > alphaRef )
+				{
+					m_writer.discard();
+				}
+				FI;
+				if ( opaque )
+				{
+					alpha = 1.0_f;
+				}
+				break;
+			case VK_COMPARE_OP_GREATER:
+				IF( m_writer, alpha <= alphaRef )
+				{
+					m_writer.discard();
+				}
+				FI;
+				if ( opaque )
+				{
+					alpha = 1.0_f;
+				}
+				break;
+			case VK_COMPARE_OP_NOT_EQUAL:
+				IF( m_writer, alpha == alphaRef )
+				{
+					m_writer.discard();
+				}
+				FI;
+				if ( opaque )
+				{
+					alpha = 1.0_f;
+				}
+				break;
+			case VK_COMPARE_OP_GREATER_OR_EQUAL:
+				IF( m_writer, alpha < alphaRef )
+				{
+					m_writer.discard();
+				}
+				FI;
+				if ( opaque )
+				{
+					alpha = 1.0_f;
+				}
+				break;
+			case VK_COMPARE_OP_ALWAYS:
+				break;
+
+			default:
+				break;
+			}
+		}
+	}
+
+	sdw::Boolean Utils::isSaturated( sdw::Vec3 const & p )const
+	{
+		return m_isSaturated3D( p );
+	}
+
+	sdw::Boolean Utils::isSaturated( sdw::IVec3 const & p
+		, sdw::Int const & imax )const
+	{
+		return m_isSaturated3DImg( p, imax );
+	}
+
+	sdw::UInt Utils::encodeColor( sdw::Vec4 const & color )const
+	{
+		return m_encodeColor( color );
+	}
+
+	sdw::UInt Utils::encodeNormal( sdw::Vec3 const & normal )const
+	{
+		return m_encodeNormal( normal );
+	}
+
+	sdw::Vec4 Utils::decodeColor( sdw::UInt const & colorMask )const
+	{
+		return m_decodeColor( colorMask );
+	}
+
+	sdw::Vec3 Utils::decodeNormal( sdw::UInt const & normalMask )const
+	{
+		return m_decodeNormal( normalMask );
+	}
+
+	sdw::UInt Utils::flatten( sdw::UVec3 const & p
+		, sdw::UVec3 const & dim )const
+	{
+		return m_flatten3D( p, dim );
+	}
+
+	sdw::UVec3 Utils::unflatten( sdw::UInt const & p
+		, sdw::UVec3 const & dim )const
+	{
+		return m_unflatten3D( p, dim );
+	}
+
+	sdw::Mat3 Utils::getTBN( sdw::Vec3 const & normal
+		, sdw::Vec3 const & tangent
+		, sdw::Vec3 const & bitangent )
+	{
+		return mat3( normalize( tangent ), normalize( bitangent ), normal );
+	}
+
+	bool Utils::isGeometryMap( TextureFlags const & flags
+		, PassFlags const & passFlags )
+	{
+		return checkFlag( flags, TextureFlag::eOpacity )
+			|| checkFlag( flags, TextureFlag::eNormal )
+			|| ( checkFlag( flags, TextureFlag::eHeight )
+				&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
+					|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) );
+	}
+
+	bool Utils::isGeometryOnlyMap( TextureFlags const & flags
+		, PassFlags const & passFlags )
+	{
+		return flags == TextureFlag::eOpacity
+			|| flags == TextureFlag::eNormal
+			|| flags == TextureFlag::eHeight
+			|| flags == ( TextureFlag::eNormal | TextureFlag::eHeight );
 	}
 
 	void Utils::doComputeGeometryMapContribution( TextureFlags const & textureFlags
