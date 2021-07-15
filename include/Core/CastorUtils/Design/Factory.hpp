@@ -16,12 +16,17 @@ namespace castor
 {
 	static const std::string ERROR_UNKNOWN_OBJECT = "Unknown object type";
 
-	template< class Obj, class Key, class PtrType, typename Creator, class Predicate >
+	template< class ObjT, class KeyT, class PtrTypeT, typename CreatorT, class PredicateT >
 	class Factory
 	{
 	protected:
-		typedef PtrType ObjPtr;
-		typedef std::map< Key, Creator, Predicate > ObjMap;
+		using Obj = ObjT;
+		using Key = KeyT;
+		using PtrType = PtrTypeT;
+		using Creator = CreatorT;
+		using Predicate = PredicateT;
+		using ObjPtr = PtrType ;
+		using ObjMap = std::map< Key, Creator, Predicate >;
 
 	public:
 		/**
