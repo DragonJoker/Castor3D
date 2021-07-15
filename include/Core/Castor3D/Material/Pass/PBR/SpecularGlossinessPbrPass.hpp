@@ -78,7 +78,6 @@ namespace castor3d
 		void setDiffuse( castor::RgbColour const & value )
 		{
 			m_diffuse = value;
-			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -91,7 +90,6 @@ namespace castor3d
 		void setGlossiness( float value )
 		{
 			m_glossiness = value;
-			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -104,7 +102,6 @@ namespace castor3d
 		void setSpecular( castor::RgbColour const & value )
 		{
 			m_specular = value;
-			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -114,7 +111,7 @@ namespace castor3d
 		 */
 		castor::RgbColour const & getDiffuse()const
 		{
-			return m_diffuse;
+			return *m_diffuse;
 		}
 		/**
 		 *\~english
@@ -134,7 +131,7 @@ namespace castor3d
 		 */
 		castor::RgbColour const & getSpecular()const
 		{
-			return m_specular;
+			return *m_specular;
 		}
 
 	public:
@@ -143,6 +140,7 @@ namespace castor3d
 	private:
 		void doInitialise()override;
 		void doCleanup()override;
+		void doAccept( PipelineVisitorBase & vis )override;
 		void doSetOpacity( float value )override;
 		void doPrepareTextures( TextureUnitPtrArray & result )override;
 		void doJoinSpcGls( TextureUnitPtrArray & result );
@@ -150,13 +148,13 @@ namespace castor3d
 	private:
 		//!\~english	The diffuse colour.
 		//!\~french		La couleur diffuse.
-		castor::RgbColour m_diffuse;
+		castor::GroupChangeTracked< castor::RgbColour > m_diffuse;
 		//!\~english	The specular colour.
 		//!\~french		La couleur spéculaire.
-		castor::RgbColour m_specular;
+		castor::GroupChangeTracked< castor::RgbColour > m_specular;
 		//!\~english	The reflectance.
 		//!\~french		La réflectivité.
-		float m_glossiness{ 0.0 };
+		castor::GroupChangeTracked< float > m_glossiness;
 	};
 }
 

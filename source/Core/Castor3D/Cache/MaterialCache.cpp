@@ -67,6 +67,20 @@ namespace castor3d
 		}
 	}
 
+	void MaterialCache::update( CpuUpdater & updater )
+	{
+		auto lock( castor::makeUniqueLock( m_elements ) );
+
+		for ( auto it : m_elements )
+		{
+			for ( auto & pass : *it.second )
+			{
+				pass->update();
+			}
+		}
+
+	}
+
 	void MaterialCache::update( GpuUpdater & updater )
 	{
 		if ( m_passBuffer )

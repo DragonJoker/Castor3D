@@ -168,14 +168,17 @@ namespace GuiCommon
 	class UniformValue
 		: public UniformValueBase
 	{
+	public:
 		using ValueType = T;
 		using RefType = ValueType &;
 		using ConstRefType = ValueType const &;
+		static bool constexpr IsTracked = false;
+		static bool constexpr IsRanged = false;
 
 	public:
 		UniformValue( wxString const & name
 			, RefType value )
-			: UniformValueBase{ name, UniformTyper< ValueType >::value, false, false }
+			: UniformValueBase{ name, UniformTyper< ValueType >::value, IsTracked, IsRanged }
 			, m_value{ value }
 		{
 		}
@@ -198,14 +201,18 @@ namespace GuiCommon
 	class UniformValue< castor::ChangeTracked< T > >
 		: public UniformValueBase
 	{
+	public:
 		using ValueType = T;
 		using RefType = castor::ChangeTracked< ValueType > & ;
 		using ConstRefType = ValueType const &;
+		static bool constexpr IsTracked = true;
+		static bool constexpr IsRanged = false;
 
 	public:
 		UniformValue( wxString const & name
-			, RefType & value )
-			: UniformValueBase{ name, UniformTyper< ValueType >::value, true, false }
+			, RefType & value
+			, bool isTracked )
+			: UniformValueBase{ name, UniformTyper< ValueType >::value, IsTracked, IsRanged }
 			, m_value{ value }
 		{
 		}
@@ -228,14 +235,17 @@ namespace GuiCommon
 	class UniformValue< castor::RangedValue< T > >
 		: public UniformValueBase
 	{
+	public:
 		using ValueType = T;
 		using RefType = castor::RangedValue< ValueType > &;
 		using ConstRefType = ValueType const &;
+		static bool constexpr IsTracked = true;
+		static bool constexpr IsRanged = false;
 
 	public:
 		UniformValue( wxString const & name
 			, RefType value )
-			: UniformValueBase{ name, UniformTyper< ValueType >::value, false, true }
+			: UniformValueBase{ name, UniformTyper< ValueType >::value, IsTracked, IsRanged }
 			, m_value{ value }
 		{
 		}
@@ -258,14 +268,17 @@ namespace GuiCommon
 	class UniformValue< castor::ChangeTracked< castor::RangedValue< T > > >
 		: public UniformValueBase
 	{
+	public:
 		using ValueType = T;
 		using RefType = castor::ChangeTracked< castor::RangedValue< ValueType > > &;
 		using ConstRefType = ValueType const &;
+		static bool constexpr IsTracked = true;
+		static bool constexpr IsRanged = false;
 
 	public:
 		UniformValue( wxString const & name
 			, RefType value )
-			: UniformValueBase{ name, UniformTyper< ValueType >::value, true, true }
+			: UniformValueBase{ name, UniformTyper< ValueType >::value, IsTracked, IsRanged }
 			, m_value{ value }
 		{
 		}
@@ -283,10 +296,55 @@ namespace GuiCommon
 	private:
 		RefType m_value;
 	};
+	
+	template< typename T >
+	class TrackedUniformValue
+		: public UniformValueBase
+	{
+	public:
+		using UniformValueType = UniformValue< T >;
+		using ValueType = typename UniformValueType::ValueType;
+		using RefType = typename UniformValueType::RefType;
+		using ConstRefType = typename UniformValueType::ConstRefType;
+		static bool constexpr IsTracked = true;
+		static bool constexpr IsRanged = UniformValueType::IsRanged;
+
+	public:
+		TrackedUniformValue( wxString const & name
+			, RefType value
+			, bool * control )
+			: UniformValueBase{ name, UniformTyper< ValueType >::value, IsTracked, IsRanged }
+			, m_value{ value }
+			, m_control{ control }
+		{
+		}
+
+		inline ConstRefType getValue()const
+		{
+			return m_value;
+		}
+
+		inline RefType getValue()
+		{
+			return m_value;
+		}
+
+	private:
+		RefType m_value;
+		bool * m_control;
+	};
 
 	template< typename T >
 	std::unique_ptr< UniformValueBase > makeUniformValue( wxString const & name
 		, T & value )
+	{
+		return std::make_unique< UniformValue< T > >( name, value );
+	}
+	
+	template< typename T >
+	std::unique_ptr< UniformValueBase > makeUniformValue( wxString const & name
+		, T & value
+		, bool * control )
 	{
 		return std::make_unique< UniformValue< T > >( name, value );
 	}

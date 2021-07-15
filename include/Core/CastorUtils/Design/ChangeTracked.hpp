@@ -56,6 +56,11 @@ namespace castor
 			return m_value;
 		}
 
+		bool & control()noexcept
+		{
+			return m_dirty;
+		}
+
 		bool isDirty()const noexcept
 		{
 			return m_dirty;
@@ -66,8 +71,25 @@ namespace castor
 			return m_value;
 		}
 
+		T const & operator*()const noexcept
+		{
+			return m_value;
+		}
+
+		T & operator*()noexcept
+		{
+			m_dirty = true;
+			return m_value;
+		}
+
 		T const * operator->()const noexcept
 		{
+			return &m_value;
+		}
+
+		T * operator->()noexcept
+		{
+			m_dirty = true;
 			return &m_value;
 		}
 

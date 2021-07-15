@@ -117,9 +117,10 @@ namespace GuiCommon
 		, wxString const & name
 		, wxArrayString const & choices
 		, wxString const & selected
-		, PropertyChangeHandler handler )
+		, PropertyChangeHandler handler
+		, bool * control )
 	{
-		wxPGProperty * prop = createProperty( grid, name, choices, handler );
+		wxPGProperty * prop = createProperty( grid, name, choices, handler, control );
 		prop->SetValue( selected );
 		return prop;
 	}
@@ -128,9 +129,10 @@ namespace GuiCommon
 		, wxString const & name
 		, wxArrayString const & choices
 		, wxString const & selected
-		, PropertyChangeHandler handler )
+		, PropertyChangeHandler handler
+		, bool * control )
 	{
-		wxPGProperty * prop = createProperty( grid, name, choices, handler );
+		wxPGProperty * prop = createProperty( grid, name, choices, handler, control );
 		prop->SetValue( selected );
 		return prop;
 	}
@@ -138,22 +140,39 @@ namespace GuiCommon
 	wxPGProperty * TreeItemProperty::addProperty( wxPropertyGrid * grid
 		, wxString const & name
 		, wxPGEditor * editor
-		, PropertyChangeHandler handler )
+		, PropertyChangeHandler handler
+		, bool * control )
 	{
 		auto prop = grid->Append( new wxStringProperty{ _( "View shaders..." ), wxPG_LABEL, name } );
 		prop->SetEditor( editor );
-		prop->SetClientObject( new ButtonData{ handler } );
+		prop->SetClientObject( new ButtonData{ doGetHandler( handler, control ) } );
 		return prop;
 	}
 
 	wxPGProperty * TreeItemProperty::addProperty( wxPGProperty * grid
 		, wxString const & name
 		, wxPGEditor * editor
-		, PropertyChangeHandler handler )
+		, PropertyChangeHandler handler
+		, bool * control )
 	{
 		auto prop = grid->AppendChild( new wxStringProperty{ _( "View shaders..." ), wxPG_LABEL, name } );
 		prop->SetEditor( editor );
-		prop->SetClientObject( new ButtonData{ handler } );
+		prop->SetClientObject( new ButtonData{ doGetHandler( handler, control ) } );
 		return prop;
+	}
+
+	TreeItemProperty::PropertyChangeHandler TreeItemProperty::doGetHandler( TreeItemProperty::PropertyChangeHandler handler
+		, bool * control )
+	{
+		if ( !control )
+		{
+			return handler;
+		}
+
+		return [control, handler]( wxVariant const & var )
+		{
+			*control = true;
+			handler( var );
+		};
 	}
 }
