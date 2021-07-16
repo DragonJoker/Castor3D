@@ -86,7 +86,7 @@ namespace castor3d
 		 *\param[in]	type	Le type des matériaux.
 		 */
 		C3D_API void initialise( RenderDevice const & device
-			, MaterialType type );
+			, PassTypeID passType );
 		/**
 		 *\~english
 		 *\brief		Sets all the elements to be cleaned up.
@@ -142,7 +142,7 @@ namespace castor3d
 		 *\param[in]	type	Le type de matéeiau.
 		 *\return		L'élément créé.
 		 */
-		C3D_API MaterialSPtr add( Key const & name, MaterialType type );
+		C3D_API MaterialSPtr add( Key const & name, PassTypeID type );
 		/**
 		 *\~english
 		 *\brief		Removes an element, given a name.

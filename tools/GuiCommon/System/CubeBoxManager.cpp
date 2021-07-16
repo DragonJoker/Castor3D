@@ -72,7 +72,7 @@ namespace GuiCommon
 
 			if ( !scene.getEngine()->getMaterialCache().has( matName ) )
 			{
-				material = scene.getEngine()->getMaterialCache().add( matName, scene.getMaterialsType() );
+				material = scene.getEngine()->getMaterialCache().add( matName, scene.getPassesType() );
 				auto pass = material->createPass();
 				pass->enableLighting( false );
 				pass->enablePicking( false );

@@ -732,9 +732,14 @@ namespace castor3d
 		return group->addObject( texture, pass );
 	}
 
-	MaterialType Scene::getMaterialsType()const
+	PassTypeID Scene::getPassesType()const
 	{
-		return getEngine()->getMaterialsType();
+		return getEngine()->getPassesType();
+	}
+
+	castor::String Scene::getPassesName()const
+	{
+		return getEngine()->getPassesName();
 	}
 
 	bool Scene::needsGlobalIllumination()const
@@ -748,9 +753,9 @@ namespace castor3d
 		return m_giTypes[size_t( ltType )].end() != m_giTypes[size_t( ltType )].find( giType );
 	}
 
-	void Scene::setMaterialsType( MaterialType value )
+	void Scene::setPassesType( PassTypeID value )
 	{
-		getEngine()->setMaterialsType( value );
+		getEngine()->setPassesType( value );
 	}
 
 	crg::SemaphoreWaitArray Scene::getRenderTargetsSemaphores()const

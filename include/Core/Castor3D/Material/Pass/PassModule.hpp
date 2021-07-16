@@ -86,39 +86,36 @@ namespace castor3d
 		//!\~english	Shader using alpha test.
 		//\~french		Shader utilisant un test alpha.
 		eBlendAlphaTest = 0x0004,
-		//!\~english	Shader for Metallic/Roughness PBR material (if not set, will use phong material code).
-		//\~french		Shader pour un matériau PBR Metallic/Roughness (si non défini, utilisera le code de matériau phong).
-		eMetallicRoughness = 0x0008,
-		//!\~english	Shader for Specular/Glossiness PBR material (if not set, will use phong material code).
-		//\~french		Shader pour un matériau PBR Specular/Glossiness (si non défini, utilisera le code de matériau phong).
-		eSpecularGlossiness = 0x0010,
+		//!\~english	Shader with Image Based Lighting support.
+		//\~french		Shader supportant l'Image Based Lighting.
+		eImageBasedLighting = 0x0008,
 		//!\~english	Shader for Subsurface Scattering.
 		//\~french		Shader pour le subsurface scattering.
-		eSubsurfaceScattering = 0x0020,
+		eSubsurfaceScattering = 0x0010,
 		//!\~english	Shader using distance based transmittance when computing Subsurface Scattering.
 		//\~french		Shader utilisant la transmission basée sur la distance, lors du calcul du Subsurface Scattering.
-		eDistanceBasedTransmittance = 0x0040,
+		eDistanceBasedTransmittance = 0x0020,
 		//!\~english	Shader using parallax occlusion mapping.
 		//\~french		Shader utilisant le parallax occlusion mapping.
-		eParallaxOcclusionMappingOne = 0x0080,
+		eParallaxOcclusionMappingOne = 0x0040,
 		//!\~english	Shader using parallax occlusion mapping.
 		//\~french		Shader utilisant le parallax occlusion mapping.
-		eParallaxOcclusionMappingRepeat = 0x0100,
+		eParallaxOcclusionMappingRepeat = 0x0080,
 		//!\~english	Reflection map.
 		//!\~french		Map de réflexion.
-		eReflection = 0x0200,
+		eReflection = 0x0100,
 		//!\~english	Refraction map.
 		//!\~french		Map de réfraction.
-		eRefraction = 0x0400,
+		eRefraction = 0x0200,
 		//!\~english	The pass receives lighting.
 		//!\~french		La passe reçoit l'éclairage.
-		eLighting = 0x0800,
+		eLighting = 0x0400,
 		//!\~english	The pass sets an object as pickable.
 		//!\~french		La passe rend l'objet sélectionnable.
-		ePickable = 0x1000,
+		ePickable = 0x0800,
 		//!\~english	All flags.
 		//\~french		Tous les indicateurs.
-		eAll = 0x1FFF,
+		eAll = 0xFFF,
 	};
 	CU_ImplementFlags( PassFlag )
 	C3D_API castor::String getName( PassFlag value );
@@ -143,6 +140,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Pass visitor.
+	*\~french
+	*\brief
+	*	Visiteur de passe.
+	*/
+	class PassVisitorBase;
+	/**
+	*\~english
+	*\brief
 	*	Extended pass information, related to subsurface scattering.
 	*\~french
 	*\brief
@@ -164,7 +170,7 @@ namespace castor3d
 	using OnPassChanged = castor::Signal< OnPassChangedFunction >;
 	using OnPassChangedConnection = OnPassChanged::connection;
 
-	using PassFactoryBase = castor::Factory< Pass, size_t, PassSPtr, std::function< PassSPtr( Material & ) > >;
+	using PassFactoryBase = castor::Factory< Pass, PassTypeID, PassSPtr, std::function< PassSPtr( Material & ) > >;
 
 	//@}
 	//@}

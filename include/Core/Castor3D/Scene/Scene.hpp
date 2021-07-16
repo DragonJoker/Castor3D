@@ -215,7 +215,8 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API MaterialType getMaterialsType()const;
+		C3D_API PassTypeID getPassesType()const;
+		C3D_API castor::String getPassesName()const;
 		C3D_API bool needsGlobalIllumination()const;
 		C3D_API bool needsGlobalIllumination( LightType ltType
 			, GlobalIlluminationType giType )const;
@@ -340,7 +341,7 @@ namespace castor3d
 		/**@{*/
 		C3D_API void setDirectionalShadowCascades( uint32_t value );
 		C3D_API void setLpvIndirectAttenuation( float value );
-		C3D_API void setMaterialsType( MaterialType value );
+		C3D_API void setPassesType( PassTypeID value );
 
 		void setBackgroundColour( castor::RgbColour const & value )
 		{

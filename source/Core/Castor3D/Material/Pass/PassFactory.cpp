@@ -11,32 +11,33 @@ CU_ImplementCUSmartPtr( castor3d, PassFactory );
 
 namespace castor3d
 {
-	namespace
-	{
-		size_t computeID( castor::String const & passType )
-		{
-			return std::hash< castor::String >{}( passType );
-		}
-	}
-
 	PassFactory::PassFactory( Engine & engine )
 		: castor::OwnedBy< Engine >{ engine }
 		, PassFactoryBase{}
 	{
-		registerType( PhongPass::Type, PhongPass::create );
-		engine.registerParsers( PhongPass::Type, PhongPass::createParsers() );
-		engine.registerSections( PhongPass::Type, PhongPass::createSections() );
+		registerType( PhongPass::Type
+			, { PhongPass::LightingModel
+				, PhongPass::create
+				, PhongPass::createParsers()
+				, PhongPass::createSections()
+				, &shader::PhongLightingModel::create
+				, false } );
 
-		registerType( MetallicRoughnessPbrPass::Type, MetallicRoughnessPbrPass::create );
-		engine.registerParsers( MetallicRoughnessPbrPass::Type, MetallicRoughnessPbrPass::createParsers() );
-		engine.registerSections( MetallicRoughnessPbrPass::Type, MetallicRoughnessPbrPass::createSections() );
+		registerType( MetallicRoughnessPbrPass::Type
+			, { MetallicRoughnessPbrPass::LightingModel
+				, MetallicRoughnessPbrPass::create
+				, MetallicRoughnessPbrPass::createParsers()
+				, MetallicRoughnessPbrPass::createSections()
+				, &shader::PbrMRLightingModel::create
+				, true } );
 
-		registerType( SpecularGlossinessPbrPass::Type, SpecularGlossinessPbrPass::create );
-		engine.registerParsers( SpecularGlossinessPbrPass::Type, SpecularGlossinessPbrPass::createParsers() );
-		engine.registerSections( SpecularGlossinessPbrPass::Type, SpecularGlossinessPbrPass::createSections() );
-
-		engine.registerLightingModel( "phong", &shader::PhongLightingModel::create );
-		engine.registerLightingModel( "pbr", &shader::PbrLightingModel::create );
+		registerType( SpecularGlossinessPbrPass::Type
+			, { SpecularGlossinessPbrPass::LightingModel
+				, SpecularGlossinessPbrPass::create
+				, SpecularGlossinessPbrPass::createParsers()
+				, SpecularGlossinessPbrPass::createSections()
+				, &shader::PbrSGLightingModel::create
+				, true } );
 	}
 
 	PassFactory::~PassFactory()
@@ -44,24 +45,102 @@ namespace castor3d
 	}
 
 	void PassFactory::registerType( castor::String const & passType
-		, PassFactoryBase::Creator creator )
+		, RegisterInfo info )
 	{
-		PassFactoryBase::registerType( getNameID( passType ), creator );
+		auto id = uint16_t( m_passTypeNames.size() + 1u );
+		PassFactoryBase::registerType( id, info.passCreator );
+		m_passTypeNames.emplace_back( passType, id );
+		m_lightingModels.emplace( id, info.lightingModel );
+		m_ibls.emplace( id, info.needsIbl );
+		getEngine()->registerParsers( passType, info.parsers );
+		getEngine()->registerSections( passType, info.sections );
+		getEngine()->registerLightingModel( info.lightingModel, info.lightingModelCreator );
 	}
 
 	void PassFactory::unregisterType( castor::String const & passType )
 	{
-		PassFactoryBase::unregisterType( getNameID( passType ) );
+		auto it = std::find_if( m_passTypeNames.begin()
+			, m_passTypeNames.end()
+			, [&passType]( StringIdPair const & lookup )
+			{
+				return lookup.first == passType;
+			} );
+		CU_Require( it != m_passTypeNames.end() );
+		auto id = it->second;
+		auto lightingIt = m_lightingModels.find( id );
+		CU_Require( lightingIt != m_lightingModels.end() );
+		getEngine()->unregisterLightingModel( lightingIt->second );
+		getEngine()->unregisterSections( passType );
+		getEngine()->unregisterParsers( passType );
+		auto iblIt = m_ibls.find( id );
+		CU_Require( iblIt != m_ibls.end() );
+		m_ibls.erase( iblIt );
+		m_lightingModels.erase( lightingIt );
+		m_passTypeNames.erase( it );
+		PassFactoryBase::unregisterType( id );
 	}
 
 	PassSPtr PassFactory::create( castor::String const & passType
 		, Material & parent )const
 	{
-		return create( getNameID( passType ), parent );
+		return create( getNameId( passType ), parent );
 	}
 
-	size_t PassFactory::getNameID( castor::String const & passType )const
+	PassTypeID PassFactory::getNameId( castor::String const & passType )const
 	{
-		return computeID( passType );
+		auto it = std::find_if( m_passTypeNames.begin()
+			, m_passTypeNames.end()
+			, [passType]( StringIdPair const & lookup )
+			{
+				return lookup.first == passType;
+			} );
+
+		if ( it == m_passTypeNames.end() )
+		{
+			CU_Exception( "Unknown pass type ID." );
+		}
+
+		return it->second;
+	}
+
+	castor::String PassFactory::getIdName( PassTypeID passTypeId )const
+	{
+		auto it = std::find_if( m_passTypeNames.begin()
+			, m_passTypeNames.end()
+			, [passTypeId]( StringIdPair const & lookup )
+			{
+				return lookup.second == passTypeId;
+			} );
+
+		if ( it == m_passTypeNames.end() )
+		{
+			CU_Exception( "Unknown pass type ID." );
+		}
+
+		return it->first;
+	}
+
+	castor::String PassFactory::getLightingModelName( PassTypeID passTypeId )const
+	{
+		auto it = m_lightingModels.find( passTypeId );
+
+		if ( it == m_lightingModels.end() )
+		{
+			CU_Exception( "Unknown pass type ID." );
+		}
+
+		return it->second;
+	}
+
+	bool PassFactory::hasIBL( PassTypeID passTypeId )const
+	{
+		auto it = m_ibls.find( passTypeId );
+
+		if ( it == m_ibls.end() )
+		{
+			CU_Exception( "Unknown pass type ID." );
+		}
+
+		return it->second;
 	}
 }

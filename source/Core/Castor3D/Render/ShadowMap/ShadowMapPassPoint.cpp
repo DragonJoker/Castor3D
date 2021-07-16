@@ -261,7 +261,7 @@ namespace castor3d
 			, index++
 			, RenderPipeline::eAdditional );
 		auto lightingModel = shader::LightingModel::createModel( utils
-			, shader::getLightingModelName( flags.passFlags )
+			, shader::getLightingModelName( *getEngine(), flags.passType )
 			, LightType::ePoint
 			, lightsIndex
 			, RenderPipeline::eAdditional

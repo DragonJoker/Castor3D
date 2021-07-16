@@ -79,6 +79,7 @@ if( assimp_FOUND )
 		PUBLIC
 			castor::Castor3D
 		PRIVATE
+			${ImporterDependencies}
 			${assimp_LIBRARIES}
 	)
 	install_target_ex( ${PROJECT_NAME}
