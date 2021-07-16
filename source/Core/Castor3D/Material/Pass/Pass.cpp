@@ -4,14 +4,16 @@
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Cache/ShaderCache.hpp"
 #include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Material/Pass/PassVisitor.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
-#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Render/Node/PassRenderNode.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
+#include "Castor3D/Scene/Animation/AnimatedObject.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
 #include <CastorUtils/Graphics/PixelFormat.hpp>
@@ -24,9 +26,35 @@ namespace castor3d
 
 	namespace
 	{
+		TextureFlags getUsedImageComponents( TextureConfiguration const & config )
+		{
+			auto mergeMasks = []( uint32_t toMerge
+				, TextureFlag flag
+				, TextureFlags & result )
+			{
+				result |= toMerge
+					? flag
+					: TextureFlag::eNone;
+			};
+
+			TextureFlags result = TextureFlag::eNone;
+			mergeMasks( config.colourMask[0], TextureFlag::eDiffuse, result );
+			mergeMasks( config.specularMask[0], TextureFlag::eSpecular, result );
+			mergeMasks( config.metalnessMask[0], TextureFlag::eMetalness, result );
+			mergeMasks( config.glossinessMask[0], TextureFlag::eGlossiness, result );
+			mergeMasks( config.roughnessMask[0], TextureFlag::eRoughness, result );
+			mergeMasks( config.opacityMask[0], TextureFlag::eOpacity, result );
+			mergeMasks( config.emissiveMask[0], TextureFlag::eEmissive, result );
+			mergeMasks( config.normalMask[0], TextureFlag::eNormal, result );
+			mergeMasks( config.heightMask[0], TextureFlag::eHeight, result );
+			mergeMasks( config.occlusionMask[0], TextureFlag::eOcclusion, result );
+			mergeMasks( config.transmittanceMask[0], TextureFlag::eTransmittance, result );
+			return result;
+		}
+
 		CU_ImplementAttributeParser( parserPassEmissive )
 		{
-			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
 
 			if ( !parsingContext->pass )
 			{
@@ -43,7 +71,7 @@ namespace castor3d
 
 		CU_ImplementAttributeParser( parserPassAlpha )
 		{
-			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
 
 			if ( !parsingContext->pass )
 			{
@@ -60,7 +88,7 @@ namespace castor3d
 
 		CU_ImplementAttributeParser( parserPassDoubleFace )
 		{
-			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
 
 			if ( !parsingContext->pass )
 			{
@@ -75,9 +103,9 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		CU_ImplementAttributeParser( parserPassTextureUnit )
+		CU_ImplementAttributeParserBlock( parserPassTextureUnit, CSCNSection::eTextureUnit )
 		{
-			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
 			parsingContext->textureUnit.reset();
 
 			if ( parsingContext->pass )
@@ -98,17 +126,18 @@ namespace castor3d
 				}
 
 				++parsingContext->unitIndex;
+				sectionName = parsingContext->pass->getTextureSectionID();
 			}
 			else
 			{
 				CU_ParsingError( cuT( "Pass not initialised" ) );
 			}
 		}
-		CU_EndAttributePush( CSCNSection::eTextureUnit )
+		CU_EndAttributeBlock()
 
 		CU_ImplementAttributeParser( parserPassShader )
 		{
-			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
 			parsingContext->shaderProgram.reset();
 			parsingContext->shaderStage = VkShaderStageFlagBits( 0u );
 
@@ -126,7 +155,7 @@ namespace castor3d
 
 		CU_ImplementAttributeParser( parserPassMixedInterpolative )
 		{
-			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
 
 			if ( !parsingContext->pass )
 			{
@@ -152,7 +181,7 @@ namespace castor3d
 
 		CU_ImplementAttributeParser( parserPassAlphaBlendMode )
 		{
-			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
 
 			if ( !parsingContext->pass )
 			{
@@ -169,7 +198,7 @@ namespace castor3d
 
 		CU_ImplementAttributeParser( parserPassColourBlendMode )
 		{
-			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
 
 			if ( !parsingContext->pass )
 			{
@@ -186,7 +215,7 @@ namespace castor3d
 
 		CU_ImplementAttributeParser( parserPassAlphaFunc )
 		{
-			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
 
 			if ( !parsingContext->pass )
 			{
@@ -206,7 +235,7 @@ namespace castor3d
 
 		CU_ImplementAttributeParser( parserPassBlendAlphaFunc )
 		{
-			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
 
 			if ( !parsingContext->pass )
 			{
@@ -226,7 +255,7 @@ namespace castor3d
 
 		CU_ImplementAttributeParser( parserPassRefractionRatio )
 		{
-			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
 
 			if ( !parsingContext->pass )
 			{
@@ -243,7 +272,7 @@ namespace castor3d
 
 		CU_ImplementAttributeParser( parserPassSubsurfaceScattering )
 		{
-			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
 
 			if ( !parsingContext->pass )
 			{
@@ -258,7 +287,7 @@ namespace castor3d
 
 		CU_ImplementAttributeParser( parserPassParallaxOcclusion )
 		{
-			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
 
 			if ( !parsingContext->pass )
 			{
@@ -275,7 +304,7 @@ namespace castor3d
 
 		CU_ImplementAttributeParser( parserPassBWAccumulationOperator )
 		{
-			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
 
 			if ( !parsingContext->pass )
 			{
@@ -292,7 +321,7 @@ namespace castor3d
 
 		CU_ImplementAttributeParser( parserPassReflections )
 		{
-			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
 
 			if ( !parsingContext->pass )
 			{
@@ -313,7 +342,7 @@ namespace castor3d
 
 		CU_ImplementAttributeParser( parserPassRefractions )
 		{
-			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
 
 			if ( !parsingContext->pass )
 			{
@@ -334,7 +363,7 @@ namespace castor3d
 
 		CU_ImplementAttributeParser( parserPassTransmission )
 		{
-			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
 
 			if ( !parsingContext->pass )
 			{
@@ -355,7 +384,7 @@ namespace castor3d
 
 		CU_ImplementAttributeParser( parserPassEnd )
 		{
-			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
 
 			if ( !parsingContext->pass )
 			{
@@ -365,6 +394,408 @@ namespace castor3d
 			{
 				parsingContext->parser->getEngine()->prepareTextures( *parsingContext->pass );
 				parsingContext->pass.reset();
+			}
+		}
+		CU_EndAttributePop()
+
+		CU_ImplementAttributeParser( parserUnitImage )
+		{
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+
+			if ( !parsingContext->textureUnit )
+			{
+				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
+			}
+			else if ( !params.empty() )
+			{
+				castor::Path folder;
+				castor::Path relative;
+				params[0]->get( relative );
+
+				if ( castor::File::fileExists( context->m_file.getPath() / relative ) )
+				{
+					folder = context->m_file.getPath();
+				}
+				else if ( !castor::File::fileExists( relative ) )
+				{
+					CU_ParsingError( cuT( "File [" ) + relative + cuT( "] not found, check the relativeness of the path" ) );
+					relative.clear();
+				}
+
+				if ( !relative.empty() )
+				{
+					parsingContext->folder = folder;
+					parsingContext->relative = relative;
+					parsingContext->strName.clear();
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserUnitLevelsCount )
+		{
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+
+			if ( !parsingContext->textureUnit )
+			{
+				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( parsingContext->imageInfo->mipLevels );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserUnitRenderTarget )
+		{
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+
+			if ( !parsingContext->textureUnit )
+			{
+				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
+			}
+			else
+			{
+				parsingContext->targetType = TargetType::eTexture;
+				parsingContext->size = { 1u, 1u };
+				parsingContext->pixelFormat = castor::PixelFormat::eUNDEFINED;
+			}
+		}
+		CU_EndAttributePush( CSCNSection::eRenderTarget )
+
+		CU_ImplementAttributeParser( parserUnitNormalMask )
+		{
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+
+			if ( !parsingContext->textureUnit )
+			{
+				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( parsingContext->textureConfiguration.normalMask[0] );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserUnitOpacityMask )
+		{
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+
+			if ( !parsingContext->textureUnit )
+			{
+				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( parsingContext->textureConfiguration.opacityMask[0] );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserUnitEmissiveMask )
+		{
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+
+			if ( !parsingContext->textureUnit )
+			{
+				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( parsingContext->textureConfiguration.emissiveMask[0] );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserUnitHeightMask )
+		{
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+
+			if ( !parsingContext->textureUnit )
+			{
+				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( parsingContext->textureConfiguration.heightMask[0] );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserUnitOcclusionMask )
+		{
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+
+			if ( !parsingContext->textureUnit )
+			{
+				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( parsingContext->textureConfiguration.occlusionMask[0] );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserUnitTransmittanceMask )
+		{
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+
+			if ( !parsingContext->textureUnit )
+			{
+				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( parsingContext->textureConfiguration.transmittanceMask[0] );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserUnitNormalFactor )
+		{
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+
+			if ( !parsingContext->textureUnit )
+			{
+				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( parsingContext->textureConfiguration.normalFactor );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserUnitHeightFactor )
+		{
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+
+			if ( !parsingContext->textureUnit )
+			{
+				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( parsingContext->textureConfiguration.heightFactor );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserUnitNormalDirectX )
+		{
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+
+			if ( !parsingContext->textureUnit )
+			{
+				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				bool isDirectX;
+				params[0]->get( isDirectX );
+				parsingContext->textureConfiguration.normalGMultiplier = isDirectX
+					? -1.0f
+					: 1.0f;
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserUnitSampler )
+		{
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+
+			if ( !parsingContext->textureUnit )
+			{
+				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
+			}
+			else if ( !params.empty() )
+			{
+				castor::String name;
+				SamplerSPtr sampler = parsingContext->parser->getEngine()->getSamplerCache().find( params[0]->get( name ) );
+
+				if ( sampler )
+				{
+					parsingContext->textureUnit->setSampler( sampler );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Unknown sampler : [" ) + name + cuT( "]" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserUnitInvertY )
+		{
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+
+			if ( !parsingContext->textureUnit )
+			{
+				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				bool value;
+				params[0]->get( value );
+				parsingContext->textureConfiguration.needsYInversion = value
+					? 1u
+					: 0u;
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserUnitTransform )
+		{
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+
+			if ( parsingContext->pass )
+			{
+				if ( !parsingContext->textureUnit )
+				{
+					CU_ParsingError( cuT( "TextureUnit not initialised" ) );
+				}
+			}
+		}
+		CU_EndAttributePush( CSCNSection::eTextureTransform )
+
+		CU_ImplementAttributeParser( parserUnitAnimation )
+		{
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+
+			if ( parsingContext->pass )
+			{
+				if ( !parsingContext->textureUnit )
+				{
+					CU_ParsingError( cuT( "TextureUnit not initialised" ) );
+				}
+				else
+				{
+					parsingContext->textureAnimation = &parsingContext->textureUnit->createAnimation();
+					auto animated = parsingContext->scene->addAnimatedTexture( *parsingContext->textureUnit
+						, *parsingContext->pass );
+					animated->addAnimation( parsingContext->textureAnimation->getName() );
+				}
+			}
+		}
+		CU_EndAttributePush( CSCNSection::eTextureAnimation )
+
+		CU_ImplementAttributeParser( parserUnitEnd )
+		{
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+
+			if ( parsingContext->pass )
+			{
+				if ( !parsingContext->textureUnit )
+				{
+					CU_ParsingError( cuT( "TextureUnit not initialised" ) );
+				}
+				else
+				{
+					if ( parsingContext->textureUnit->getRenderTarget() )
+					{
+						parsingContext->textureUnit->setConfiguration( parsingContext->textureConfiguration );
+						parsingContext->pass->addTextureUnit( std::move( parsingContext->textureUnit ) );
+						parsingContext->renderTarget = nullptr;
+					}
+					else if ( parsingContext->folder.empty() && parsingContext->relative.empty() )
+					{
+						CU_ParsingError( cuT( "TextureUnit's image not initialised" ) );
+						parsingContext->textureUnit.reset();
+					}
+					else
+					{
+						if ( parsingContext->imageInfo->mipLevels == ~uint32_t( 0u ) )
+						{
+							parsingContext->imageInfo->mipLevels = 20;
+						}
+
+						if ( parsingContext->createUnit
+							&& getUsedImageComponents( parsingContext->textureConfiguration ) != TextureFlag::eNone )
+						{
+							auto texture = std::make_shared< TextureLayout >( *parsingContext->parser->getEngine()->getRenderSystem()
+								, parsingContext->imageInfo
+								, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+								, parsingContext->relative );
+							texture->setSource( parsingContext->folder
+								, parsingContext->relative
+								, false
+								, false );
+							parsingContext->textureUnit->setTexture( texture );
+							parsingContext->textureUnit->setConfiguration( parsingContext->textureConfiguration );
+							parsingContext->textureUnit->setTransform( parsingContext->textureTransform );
+							parsingContext->pass->addTextureUnit( std::move( parsingContext->textureUnit ) );
+						}
+						else
+						{
+							parsingContext->textureUnit.reset();
+						}
+					}
+
+					parsingContext->imageInfo =
+					{
+						0u,
+						VK_IMAGE_TYPE_2D,
+						VK_FORMAT_UNDEFINED,
+						{ 1u, 1u, 1u },
+						1u,
+						1u,
+						VK_SAMPLE_COUNT_1_BIT,
+						VK_IMAGE_TILING_OPTIMAL,
+						VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT
+					};
+					parsingContext->textureConfiguration = TextureConfiguration{};
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Pass not initialised" ) );
 			}
 		}
 		CU_EndAttributePop()
@@ -609,15 +1040,14 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	Pass::Pass( Material & parent )
+	Pass::Pass( Material & parent
+		, PassTypeID typeID
+		, PassFlags initialFlags )
 		: OwnedBy< Material >{ parent }
+		, m_typeID{ typeID }
 		, m_flags{ PassFlag::ePickable
 			| PassFlag::eLighting
-			| ( ( getType() == MaterialType::eMetallicRoughness
-				? PassFlag::eMetallicRoughness 
-				: ( getType() == MaterialType::eSpecularGlossiness
-					? PassFlag::eSpecularGlossiness
-					: PassFlag::eNone ) ) ) }
+			| initialFlags }
 		, m_opacity{ m_dirty, 1.0f }
 		, m_bwAccumulationOperator{ m_dirty, castor::makeRangedValue( 1u, 0u, 8u ) }
 		, m_emissive{ m_dirty, 0.0f }
@@ -673,7 +1103,7 @@ namespace castor3d
 		}
 	}
 
-	void Pass::accept( PipelineVisitorBase & vis )
+	void Pass::accept( PassVisitorBase & vis )
 	{
 		doAccept( vis );
 		vis.visit( cuT( "Emissive" )
@@ -706,6 +1136,21 @@ namespace castor3d
 			vis.visit( cuT( "Refraction ratio" )
 				, m_refractionRatio );
 		}
+	}
+
+	void Pass::accept( TextureConfiguration & configuration
+		, PassVisitorBase & vis )
+	{
+		doAccept( configuration, vis );
+		vis.visit( cuT( "Emissive" ), TextureFlag::eEmissive, configuration.emissiveMask, 3u );
+		vis.visit( cuT( "Opacity" ), TextureFlag::eOpacity, configuration.opacityMask, 1u );
+		vis.visit( cuT( "Occlusion" ), TextureFlag::eOcclusion, configuration.occlusionMask, 1u );
+		vis.visit( cuT( "Transmittance" ), TextureFlag::eTransmittance, configuration.transmittanceMask, 1u );
+		vis.visit( cuT( "Normal" ), TextureFlag::eNormal, configuration.normalMask, 3u );
+		vis.visit( cuT( "Normal factor" ), configuration.normalFactor );
+		vis.visit( cuT( "Normal DirectX" ), configuration.normalGMultiplier );
+		vis.visit( cuT( "Height" ), TextureFlag::eHeight, configuration.heightMask, 1u );
+		vis.visit( cuT( "Height factor" ), configuration.heightFactor );
 	}
 
 	void Pass::addTextureUnit( TextureUnitSPtr unit )
@@ -843,11 +1288,6 @@ namespace castor3d
 
 			m_texturesReduced = true;
 		}
-	}
-
-	MaterialType Pass::getType()const
-	{
-		return getOwner()->getType();
 	}
 
 	void Pass::setOpacity( float value )
@@ -1014,7 +1454,8 @@ namespace castor3d
 		}
 	}
 
-	void Pass::addCommonParsers( uint32_t sectionID
+	void Pass::addCommonParsers( uint32_t mtlSectionID
+		, uint32_t texSectionID
 		, castor::AttributeParsersBySection & result )
 	{
 		using namespace castor;
@@ -1023,24 +1464,42 @@ namespace castor3d
 		static UInt32StrMap const comparisonFuncs{ getEnumMapT( VK_COMPARE_OP_NEVER, VK_COMPARE_OP_ALWAYS ) };
 		static UInt32StrMap const parallaxOcclusionModes{ getEnumMapT< ParallaxOcclusionMode >() };
 
-		addParser( result, sectionID, cuT( "emissive" ), parserPassEmissive, { makeParameter< ParameterType::eFloat >() } );
-		addParser( result, sectionID, cuT( "alpha" ), parserPassAlpha, { makeParameter< ParameterType::eFloat >() } );
-		addParser( result, sectionID, cuT( "two_sided" ), parserPassDoubleFace, { makeParameter< ParameterType::eBool >() } );
-		addParser( result, sectionID, cuT( "texture_unit" ), parserPassTextureUnit );
-		addParser( result, sectionID, cuT( "shader_program" ), parserPassShader );
-		addParser( result, sectionID, cuT( "mixed_interpolation" ), parserPassMixedInterpolative, { makeParameter< ParameterType::eBool >() } );
-		addParser( result, sectionID, cuT( "alpha_blend_mode" ), parserPassAlphaBlendMode, { makeParameter< ParameterType::eCheckedText >( blendModes ) } );
-		addParser( result, sectionID, cuT( "colour_blend_mode" ), parserPassColourBlendMode, { makeParameter< ParameterType::eCheckedText >( blendModes ) } );
-		addParser( result, sectionID, cuT( "alpha_func" ), parserPassAlphaFunc, { makeParameter< ParameterType::eCheckedText >( comparisonFuncs ), makeParameter< ParameterType::eFloat >() } );
-		addParser( result, sectionID, cuT( "blend_alpha_func" ), parserPassBlendAlphaFunc, { makeParameter< ParameterType::eCheckedText >( comparisonFuncs ), makeParameter< ParameterType::eFloat >() } );
-		addParser( result, sectionID, cuT( "refraction_ratio" ), parserPassRefractionRatio, { makeParameter< ParameterType::eFloat >() } );
-		addParser( result, sectionID, cuT( "subsurface_scattering" ), parserPassSubsurfaceScattering );
-		addParser( result, sectionID, cuT( "parallax_occlusion" ), parserPassParallaxOcclusion, { makeParameter< ParameterType::eCheckedText >( parallaxOcclusionModes ) } );
-		addParser( result, sectionID, cuT( "bw_accumulation" ), parserPassBWAccumulationOperator, { makeParameter< ParameterType::eUInt32 >( makeRange( 0u, 6u ) ) } );
-		addParser( result, sectionID, cuT( "reflections" ), parserPassReflections, { makeParameter< ParameterType::eBool >() } );
-		addParser( result, sectionID, cuT( "refractions" ), parserPassRefractions, { makeParameter< ParameterType::eBool >() } );
-		addParser( result, sectionID, cuT( "transmission" ), parserPassTransmission, { makeParameter< ParameterType::ePoint3F >() } );
-		addParser( result, sectionID, cuT( "}" ), parserPassEnd );
+		addParser( result, mtlSectionID, cuT( "emissive" ), parserPassEmissive, { makeParameter< ParameterType::eFloat >() } );
+		addParser( result, mtlSectionID, cuT( "alpha" ), parserPassAlpha, { makeParameter< ParameterType::eFloat >() } );
+		addParser( result, mtlSectionID, cuT( "two_sided" ), parserPassDoubleFace, { makeParameter< ParameterType::eBool >() } );
+		addParser( result, mtlSectionID, cuT( "texture_unit" ), parserPassTextureUnit );
+		addParser( result, mtlSectionID, cuT( "shader_program" ), parserPassShader );
+		addParser( result, mtlSectionID, cuT( "mixed_interpolation" ), parserPassMixedInterpolative, { makeParameter< ParameterType::eBool >() } );
+		addParser( result, mtlSectionID, cuT( "alpha_blend_mode" ), parserPassAlphaBlendMode, { makeParameter< ParameterType::eCheckedText >( blendModes ) } );
+		addParser( result, mtlSectionID, cuT( "colour_blend_mode" ), parserPassColourBlendMode, { makeParameter< ParameterType::eCheckedText >( blendModes ) } );
+		addParser( result, mtlSectionID, cuT( "alpha_func" ), parserPassAlphaFunc, { makeParameter< ParameterType::eCheckedText >( comparisonFuncs ), makeParameter< ParameterType::eFloat >() } );
+		addParser( result, mtlSectionID, cuT( "blend_alpha_func" ), parserPassBlendAlphaFunc, { makeParameter< ParameterType::eCheckedText >( comparisonFuncs ), makeParameter< ParameterType::eFloat >() } );
+		addParser( result, mtlSectionID, cuT( "refraction_ratio" ), parserPassRefractionRatio, { makeParameter< ParameterType::eFloat >() } );
+		addParser( result, mtlSectionID, cuT( "subsurface_scattering" ), parserPassSubsurfaceScattering );
+		addParser( result, mtlSectionID, cuT( "parallax_occlusion" ), parserPassParallaxOcclusion, { makeParameter< ParameterType::eCheckedText >( parallaxOcclusionModes ) } );
+		addParser( result, mtlSectionID, cuT( "bw_accumulation" ), parserPassBWAccumulationOperator, { makeParameter< ParameterType::eUInt32 >( makeRange( 0u, 6u ) ) } );
+		addParser( result, mtlSectionID, cuT( "reflections" ), parserPassReflections, { makeParameter< ParameterType::eBool >() } );
+		addParser( result, mtlSectionID, cuT( "refractions" ), parserPassRefractions, { makeParameter< ParameterType::eBool >() } );
+		addParser( result, mtlSectionID, cuT( "transmission" ), parserPassTransmission, { makeParameter< ParameterType::ePoint3F >() } );
+		addParser( result, mtlSectionID, cuT( "}" ), parserPassEnd );
+
+		addParser( result, texSectionID, cuT( "image" ), parserUnitImage, { makeParameter< ParameterType::ePath >() } );
+		addParser( result, texSectionID, cuT( "levels_count" ), parserUnitLevelsCount, { makeParameter< ParameterType::eUInt32 >() } );
+		addParser( result, texSectionID, cuT( "render_target" ), parserUnitRenderTarget );
+		addParser( result, texSectionID, cuT( "normal_mask" ), parserUnitNormalMask, { makeParameter< ParameterType::eUInt32 >() } );
+		addParser( result, texSectionID, cuT( "opacity_mask" ), parserUnitOpacityMask, { makeParameter< ParameterType::eUInt32 >() } );
+		addParser( result, texSectionID, cuT( "emissive_mask" ), parserUnitEmissiveMask, { makeParameter< ParameterType::eUInt32 >() } );
+		addParser( result, texSectionID, cuT( "height_mask" ), parserUnitHeightMask, { makeParameter< ParameterType::eUInt32 >() } );
+		addParser( result, texSectionID, cuT( "occlusion_mask" ), parserUnitOcclusionMask, { makeParameter< ParameterType::eUInt32 >() } );
+		addParser( result, texSectionID, cuT( "transmittance_mask" ), parserUnitTransmittanceMask, { makeParameter< ParameterType::eUInt32 >() } );
+		addParser( result, texSectionID, cuT( "normal_factor" ), parserUnitNormalFactor, { makeParameter< ParameterType::eFloat >() } );
+		addParser( result, texSectionID, cuT( "height_factor" ), parserUnitHeightFactor, { makeParameter< ParameterType::eFloat >() } );
+		addParser( result, texSectionID, cuT( "normal_directx" ), parserUnitNormalDirectX, { makeParameter< ParameterType::eBool >() } );
+		addParser( result, texSectionID, cuT( "sampler" ), parserUnitSampler, { makeParameter< ParameterType::eName >() } );
+		addParser( result, texSectionID, cuT( "invert_y" ), parserUnitInvertY, { makeParameter< ParameterType::eBool >() } );
+		addParser( result, texSectionID, cuT( "transform" ), parserUnitTransform );
+		addParser( result, texSectionID, cuT( "animation" ), parserUnitAnimation );
+		addParser( result, texSectionID, cuT( "}" ), parserUnitEnd );
 	}
 
 	void Pass::doMergeImages( TextureFlag lhsFlag

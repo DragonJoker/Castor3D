@@ -50,10 +50,8 @@ namespace castor3d
 			return cuT( "alpha_blending" );
 		case PassFlag::eAlphaTest:
 			return cuT( "alpha_test" );
-		case PassFlag::eMetallicRoughness:
-			return cuT( "metallic_roughness" );
-		case PassFlag::eSpecularGlossiness:
-			return cuT( "specular_glossiness" );
+		case PassFlag::eImageBasedLighting:
+			return cuT( "image_based_lighing" );
 		case PassFlag::eSubsurfaceScattering:
 			return cuT( "subsurface_scattering" );
 		case PassFlag::eDistanceBasedTransmittance:

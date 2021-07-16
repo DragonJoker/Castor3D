@@ -1,12 +1,6 @@
 #include "AssimpImporter/AssimpImporter.hpp"
 
-#include <Castor3D//Animation/Interpolator.hpp>
-#include <Castor3D/Model/Mesh/Animation/MeshAnimation.hpp>
-#include <Castor3D/Model/Mesh/Animation/MeshAnimationKeyFrame.hpp>
-#include <Castor3D/Model/Mesh/Animation/MeshAnimationSubmesh.hpp>
-#include <Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp>
-#include <Castor3D/Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp>
-#include <Castor3D/Model/Skeleton/Animation/SkeletonAnimationBone.hpp>
+#include <Castor3D/Animation/Interpolator.hpp>
 #include <Castor3D/Cache/GeometryCache.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Cache/MeshCache.hpp>
@@ -15,10 +9,15 @@
 #include <Castor3D/Cache/SceneNodeCache.hpp>
 #include <Castor3D/Cache/CacheView.hpp>
 #include <Castor3D/Event/Frame/InitialiseEvent.hpp>
-#include <Castor3D/Material/Pass/Phong/PhongPass.hpp>
-#include <Castor3D/Material/Pass/PBR/MetallicRoughnessPbrPass.hpp>
-#include <Castor3D/Material/Pass/PBR/SpecularGlossinessPbrPass.hpp>
+#include <Castor3D/Material/Pass/PassFactory.hpp>
+#include <Castor3D/Material/Pass/PassVisitor.hpp>
+#include <Castor3D/Model/Mesh/Animation/MeshAnimation.hpp>
+#include <Castor3D/Model/Mesh/Animation/MeshAnimationKeyFrame.hpp>
+#include <Castor3D/Model/Mesh/Animation/MeshAnimationSubmesh.hpp>
 #include <Castor3D/Model/Skeleton/Bone.hpp>
+#include <Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp>
+#include <Castor3D/Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp>
+#include <Castor3D/Model/Skeleton/Animation/SkeletonAnimationBone.hpp>
 #include <Castor3D/Plugin/ImporterPlugin.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>
 #include <Castor3D/Scene/Geometry.hpp>
@@ -28,6 +27,12 @@
 #include <CastorUtils/Log/Logger.hpp>
 
 #include <assimp/version.h>
+
+// Materials
+#include <PhongPass.hpp>
+#include <MetallicRoughnessPbrPass.hpp>
+#include <SpecularGlossinessPbrPass.hpp>
+#include <ToonPass.hpp>
 
 using namespace castor3d;
 
@@ -196,364 +201,454 @@ namespace C3dAssimp
 			return result;
 		}
 
-		void doProcessPassBaseComponents( PhongPass & pass
-			, aiMaterial const & aiMaterial
-			, aiColor3D const & emissive )
-		{
-			aiColor3D ambient( 1, 1, 1 );
-			aiMaterial.Get( AI_MATKEY_COLOR_AMBIENT, ambient );
-			aiColor3D diffuse( 1, 1, 1 );
-			aiMaterial.Get( AI_MATKEY_COLOR_DIFFUSE, diffuse );
-			aiColor3D specular( 1, 1, 1 );
-			aiMaterial.Get( AI_MATKEY_COLOR_SPECULAR, specular );
-			float shininess = 0.5f;
-			aiMaterial.Get( AI_MATKEY_SHININESS, shininess );
-			float shininessStrength = 1.0f;
-			aiMaterial.Get( AI_MATKEY_SHININESS_STRENGTH, shininessStrength );
-
-			if ( ambient.IsBlack()
-				&& diffuse.IsBlack()
-				&& specular.IsBlack()
-				&& emissive.IsBlack() )
-			{
-				diffuse.r = 1.0;
-				diffuse.g = 1.0;
-				diffuse.b = 1.0;
-			}
-
-			pass.setDiffuse( castor::RgbColour::fromComponents( diffuse.r
-				, diffuse.g
-				, diffuse.b ) );
-			pass.setSpecular( castor::RgbColour::fromComponents( specular.r * shininessStrength
-				, specular.g * shininessStrength
-				, specular.b * shininessStrength ) );
-
-			if ( shininess > 0 )
-			{
-				pass.setShininess( shininess );
-			}
-		}
-
-		void doProcessPassBaseComponents( SpecularGlossinessPbrPass & pass
-			, aiMaterial const & aiMaterial
-			, aiColor3D const & emissive )
-		{
-			aiColor3D diffuse( 1, 1, 1 );
-			aiMaterial.Get( AI_MATKEY_COLOR_DIFFUSE, diffuse );
-			aiColor3D specular( 1, 1, 1 );
-			aiMaterial.Get( AI_MATKEY_COLOR_SPECULAR, specular );
-			float shininess = 0.5f;
-			aiMaterial.Get( AI_MATKEY_SHININESS, shininess );
-			float shininessStrength = 1.0f;
-			aiMaterial.Get( AI_MATKEY_SHININESS_STRENGTH, shininessStrength );
-
-			if ( diffuse.IsBlack()
-				&& specular.IsBlack()
-				&& emissive.IsBlack() )
-			{
-				diffuse.r = 1.0;
-				diffuse.g = 1.0;
-				diffuse.b = 1.0;
-			}
-
-			pass.setDiffuse( castor::RgbColour::fromComponents( diffuse.r
-				, diffuse.g
-				, diffuse.b ) );
-			pass.setSpecular( castor::RgbColour::fromComponents( specular.r
-				, specular.g
-				, specular.b ) );
-			shininess *= shininessStrength;
-			shininess /= PhongPass::MaxShininess;
-
-			if ( shininess > 0 )
-			{
-				pass.setGlossiness( shininess );
-			}
-		}
-
-		void doProcessPassBaseComponents( MetallicRoughnessPbrPass & pass
-			, aiMaterial const & aiMaterial
-			, aiColor3D const & emissive )
-		{
-			aiColor3D albedo( 1, 1, 1 );
-			aiMaterial.Get( AI_MATKEY_COLOR_DIFFUSE, albedo );
-			float metallic = 0.5f;
-			aiMaterial.Get( AI_MATKEY_COLOR_SPECULAR, metallic );
-			float shininess = 0.5f;
-			aiMaterial.Get( AI_MATKEY_SHININESS, shininess );
-			float shininessStrength = 1.0f;
-			aiMaterial.Get( AI_MATKEY_SHININESS_STRENGTH, shininessStrength );
-
-			if ( albedo.IsBlack()
-				&& emissive.IsBlack() )
-			{
-				albedo.r = 1.0;
-				albedo.g = 1.0;
-				albedo.b = 1.0;
-			}
-
-			pass.setAlbedo( castor::RgbColour::fromComponents( albedo.r
-				, albedo.g
-				, albedo.b ) );
-			pass.setMetallic( metallic );
-			shininess *= shininessStrength;
-			shininess /= PhongPass::MaxShininess;
-
-			if ( shininess > 0 )
-			{
-				pass.setRoughness( 1.0f - shininess );
-			}
-		}
-
-		void doProcessPassBaseComponents( Pass & pass
-			, aiMaterial const & aiMaterial )
-		{
-			aiColor3D emissive( 1, 1, 1 );
-			float opacity = 1;
-			int twoSided = 0;
-			aiMaterial.Get( AI_MATKEY_COLOR_EMISSIVE, emissive );
-			aiMaterial.Get( AI_MATKEY_OPACITY, opacity );
-			aiMaterial.Get( AI_MATKEY_TWOSIDED, twoSided );
-			pass.setOpacity( opacity );
-			pass.setTwoSided( twoSided != 0 );
-			pass.setEmissive( float( castor::point::length( castor::Point3f{ emissive.r
-				, emissive.g
-				, emissive.b } ) ) );
-
-			switch ( pass.getType() )
-			{
-			case MaterialType::ePhong:
-				doProcessPassBaseComponents( static_cast< PhongPass & >( pass )
-					, aiMaterial
-					, emissive );
-				break;
-			case MaterialType::eSpecularGlossiness:
-				doProcessPassBaseComponents( static_cast< SpecularGlossinessPbrPass & >( pass )
-					, aiMaterial
-					, emissive );
-				break;
-			case MaterialType::eMetallicRoughness:
-				doProcessPassBaseComponents( static_cast< MetallicRoughnessPbrPass & >( pass )
-					, aiMaterial
-					, emissive );
-				break;
-			default:
-				CU_Failure( "Unsupported MaterialType" );
-				break;
-			}
-		}
-
 		struct TextureInfo
 		{
 			castor::String name;
 			aiUVTransform transform;
 		};
 
-		void convertToNormalMap( TextureInfo & info
-			, castor3d::MeshImporter const & importer
-			, castor3d::TextureConfiguration & config )
+		class PassFiller
+			: public castor3d::PassVisitor
 		{
-			auto path = castor::Path{ info.name };
-
-			if (  importer.convertToNormalMap( path, config ) )
+		public:
+			static void submit( aiMaterial const & material
+				, castor3d::MeshImporter const & importer
+				, castor3d::Pass & pass )
 			{
-				info.name = path;
+				PassFiller vis{ material, importer, pass };
+				pass.accept( vis );
+				vis.finish();
 			}
-		}
 
-		void doLoadTexture( TextureInfo const & info
-			, castor3d::Pass & pass
-			, castor3d::TextureConfiguration const & config
-			, castor3d::MeshImporter const & importer )
-		{
-			if ( !info.name.empty() )
+		private:
+			struct CommonTextureInfos
 			{
-				auto texture = importer.loadTexture( castor::Path{ info.name }
-					, config
-					, pass );
+				TextureInfo colTex{};
+				TextureInfo emiTex{};
+				TextureInfo nmlTex{};
+				TextureInfo spcTex{};
+				TextureInfo hgtTex{};
+				TextureInfo opaTex{};
+				TextureInfo occTex{};
+			};
 
-				if ( texture )
+			struct CommonMaterialInfos
+			{
+				aiColor3D colour{};
+				aiColor3D emissive{};
+				aiColor3D ambient{};
+				aiColor3D specular{};
+			};
+
+			PassFiller( aiMaterial const & material
+				, castor3d::MeshImporter const & importer
+				, castor3d::Pass & result )
+				: castor3d::PassVisitor{ {} }
+				, m_material{ material }
+				, m_importer{ importer }
+				, m_result{ result }
+			{
+			}
+
+			void finish()
+			{
+				if ( !m_texInfos.colTex.name.empty()
+					&& m_texInfos.colTex.name.find( "_Cine_" ) != castor::String::npos
+					&& m_texInfos.colTex.name.find( "/MI_CH_" ) != castor::String::npos )
 				{
-					log::debug << cuT( "  Texture: [" ) << texture->toString() << cuT( "]" ) << std::endl;
-					texture->setTransform( { info.transform.mTranslation.x, info.transform.mTranslation.y, 0.0f }
-						, castor::Angle::fromRadians( info.transform.mRotation )
-						, { info.transform.mScaling.x, info.transform.mScaling.y, 1.0f } );
+					// Workaround for Collada textures.
+					castor::String strGlob = m_texInfos.colTex.name + cuT( ".tga" );
+					castor::string::replace( strGlob, cuT( "/MI_CH_" ), cuT( "TX_CH_" ) );
+					castor::String strDiff = strGlob;
+					castor::String strNorm = strGlob;
+					castor::String strSpec = strGlob;
+					castor::String strOpac = strGlob;
+					m_texInfos.colTex.name = castor::string::replace( strDiff, cuT( "_Cine_" ), cuT( "_D_" ) );
+					m_texInfos.nmlTex.name = castor::string::replace( strNorm, cuT( "_Cine_" ), cuT( "_N_" ) );
+					m_texInfos.spcTex.name = castor::string::replace( strSpec, cuT( "_Cine_" ), cuT( "_S_" ) );
+					m_texInfos.opaTex.name = castor::string::replace( strOpac, cuT( "_Cine_" ), cuT( "_A_" ) );
+					m_texInfos.nmlTex.transform = m_texInfos.colTex.transform;
+					m_texInfos.spcTex.transform = m_texInfos.colTex.transform;
+					m_texInfos.opaTex.transform = m_texInfos.colTex.transform;
 				}
-			}
-		}
 
-		TextureInfo getTextureInfo( aiMaterial const & aiMaterial
-			, aiTextureType type )
-		{
-			TextureInfo result;
-			aiString name;
-			aiMaterial.Get( AI_MATKEY_TEXTURE( type, 0 ), name );
-
-			if ( name.length > 0 )
-			{
-				result.name = castor::string::stringCast< xchar >( name.C_Str() );
-				aiMaterial.Get( AI_MATKEY_UVTRANSFORM( type, 0 ), result.transform );
-			}
-
-			return result;
-		}
-
-		void doProcessPassTextures( MetallicRoughnessPbrPass & pass
-			, aiMaterial const & aiMaterial
-			, MeshImporter const & importer
-			, TextureInfo const & spcTex )
-		{
-			if ( aiGetVersionMajor() >= 4u )
-			{
-				static auto constexpr TextureType_METALNESS = aiTextureType( 15 );
-				static auto constexpr TextureType_DIFFUSE_ROUGHNESS = aiTextureType( 16 );
-
-				auto metTex = getTextureInfo( aiMaterial, TextureType_METALNESS );
-				auto rghTex = getTextureInfo( aiMaterial, TextureType_DIFFUSE_ROUGHNESS );
-				doLoadTexture( metTex, pass, TextureConfiguration::MetalnessTexture, importer );
-				doLoadTexture( rghTex, pass, TextureConfiguration::RoughnessTexture, importer );
-			}
-			else
-			{
-				auto rghTex = getTextureInfo( aiMaterial, aiTextureType_SHININESS );
-				doLoadTexture( spcTex, pass, TextureConfiguration::SpecularTexture, importer );
-				doLoadTexture( rghTex, pass, TextureConfiguration::GlossinessTexture, importer );
-			}
-		}
-
-		void doProcessPassTextures( SpecularGlossinessPbrPass & pass
-			, aiMaterial const & aiMaterial
-			, MeshImporter const & importer
-			, TextureInfo const & spcTex )
-		{
-			auto glsTex = getTextureInfo( aiMaterial, aiTextureType_SHININESS );
-			doLoadTexture( spcTex, pass, TextureConfiguration::SpecularTexture, importer );
-			doLoadTexture( glsTex, pass, TextureConfiguration::GlossinessTexture, importer );
-		}
-
-		void doProcessPassTextures( PhongPass & pass
-			, aiMaterial const & aiMaterial
-			, MeshImporter const & importer
-			, TextureInfo const & spcTex )
-		{
-			auto shnTex = getTextureInfo( aiMaterial, aiTextureType_SHININESS );
-			doLoadTexture( spcTex, pass, TextureConfiguration::SpecularTexture, importer );
-			doLoadTexture( shnTex, pass, TextureConfiguration::ShininessTexture, importer );
-		}
-
-		void doProcessPassTextures( Pass & pass
-			, aiMaterial const & aiMaterial
-			, MeshImporter const & importer )
-		{
-			auto spcTex = getTextureInfo( aiMaterial, aiTextureType_SPECULAR );
-			auto difTex = getTextureInfo( aiMaterial, aiTextureType_DIFFUSE );
-			auto emiTex = getTextureInfo( aiMaterial, aiTextureType_EMISSIVE );
-			auto nmlTex = getTextureInfo( aiMaterial, aiTextureType_NORMALS );
-			auto hgtTex = getTextureInfo( aiMaterial, aiTextureType_HEIGHT );
-			auto opaTex = getTextureInfo( aiMaterial, aiTextureType_OPACITY );
-			TextureInfo occTex;
-
-			if ( aiGetVersionMajor() >= 4u )
-			{
-				static auto constexpr TextureType_AMBIENT_OCCLUSION = aiTextureType( 17 );
-				occTex = getTextureInfo( aiMaterial, TextureType_AMBIENT_OCCLUSION );
-			}
-
-			if ( !difTex.name.empty()
-				&& difTex.name.find( "_Cine_" ) != castor::String::npos
-				&& difTex.name.find( "/MI_CH_" ) != castor::String::npos )
-			{
-				// Workaround for Collada textures.
-				castor::String strGlob = difTex.name + cuT( ".tga" );
-				castor::string::replace( strGlob, cuT( "/MI_CH_" ), cuT( "TX_CH_" ) );
-				castor::String strDiff = strGlob;
-				castor::String strNorm = strGlob;
-				castor::String strSpec = strGlob;
-				castor::String strOpac = strGlob;
-				difTex.name = castor::string::replace( strDiff, cuT( "_Cine_" ), cuT( "_D_" ) );
-				nmlTex.name = castor::string::replace( strNorm, cuT( "_Cine_" ), cuT( "_N_" ) );
-				spcTex.name = castor::string::replace( strSpec, cuT( "_Cine_" ), cuT( "_S_" ) );
-				opaTex.name = castor::string::replace( strOpac, cuT( "_Cine_" ), cuT( "_A_" ) );
-				nmlTex.transform = difTex.transform;
-				spcTex.transform = difTex.transform;
-				opaTex.transform = difTex.transform;
-			}
-
-			doLoadTexture( difTex, pass, TextureConfiguration::DiffuseTexture, importer );
-			doLoadTexture( emiTex, pass, TextureConfiguration::EmissiveTexture, importer );
-			doLoadTexture( occTex, pass, TextureConfiguration::OcclusionTexture, importer );
-
-			if ( !opaTex.name.empty() )
-			{
-				doLoadTexture( opaTex, pass, TextureConfiguration::OpacityTexture, importer );
+				loadTexture( m_texInfos.colTex, TextureConfiguration::DiffuseTexture );
+				loadTexture( m_texInfos.emiTex, TextureConfiguration::EmissiveTexture );
+				loadTexture( m_texInfos.occTex, TextureConfiguration::OcclusionTexture );
 
 				// force non 0.0 opacity when an opacity map is set
-				if ( pass.getOpacity() == 0.0f )
+				if ( !m_texInfos.opaTex.name.empty()
+					&& m_result.getOpacity() == 0.0f )
 				{
-					pass.setOpacity( 1.0f );
+					loadTexture( m_texInfos.opaTex, TextureConfiguration::OpacityTexture );
+					m_result.setOpacity( 1.0f );
+				}
+
+				if ( !m_texInfos.nmlTex.name.empty() )
+				{
+					loadTexture( m_texInfos.nmlTex, TextureConfiguration::NormalTexture );
+					loadTexture( m_texInfos.hgtTex, TextureConfiguration::HeightTexture );
+				}
+				else
+				{
+					auto config = TextureConfiguration::NormalTexture;
+					convertToNormalMap( m_texInfos.hgtTex, config );
+					loadTexture( m_texInfos.hgtTex, config );
+				}
+
+				if ( m_mtlInfos.ambient.IsBlack()
+					&& m_mtlInfos.colour.IsBlack()
+					&& m_mtlInfos.specular.IsBlack()
+					&& m_mtlInfos.emissive.IsBlack() )
+				{
+					m_mtlInfos.colour.r = 1.0;
+					m_mtlInfos.colour.g = 1.0;
+					m_mtlInfos.colour.b = 1.0;
 				}
 			}
 
-			if ( !nmlTex.name.empty() )
+			void visit( castor::String const & name
+				, bool & value
+				, bool * control )override
 			{
-				doLoadTexture( nmlTex, pass, TextureConfiguration::NormalTexture, importer );
-				doLoadTexture( hgtTex, pass, TextureConfiguration::HeightTexture, importer );
-			}
-			else
-			{
-				auto config = TextureConfiguration::NormalTexture;
-				convertToNormalMap( hgtTex, importer, config );
-				doLoadTexture( hgtTex, pass, config, importer );
+				if ( name == "Two sided" )
+				{
+					int twoSided = 0;
+					m_material.Get( AI_MATKEY_TWOSIDED, twoSided );
+					value = ( twoSided != 0 );
+				}
 			}
 
-			switch ( pass.getType() )
+			void visit( castor::String const & name
+				, int16_t & value
+				, bool * control )override
 			{
-			case MaterialType::ePhong:
-				doProcessPassTextures( static_cast< PhongPass & >( pass )
-					, aiMaterial
-					, importer
-					, spcTex );
-				break;
-			case MaterialType::eSpecularGlossiness:
-				doProcessPassTextures( static_cast< SpecularGlossinessPbrPass & >( pass )
-					, aiMaterial
-					, importer
-					, spcTex );
-				break;
-			case MaterialType::eMetallicRoughness:
-				doProcessPassTextures( static_cast< MetallicRoughnessPbrPass & >( pass )
-					, aiMaterial
-					, importer
-					, spcTex );
-				break;
-			default:
-				CU_Failure( "Unsupported MaterialType" );
-				break;
 			}
-		}
 
-		MaterialType convert( aiShadingMode shadingMode )
+			void visit( castor::String const & name
+				, uint16_t & value
+				, bool * control )override
+			{
+			}
+
+			void visit( castor::String const & name
+				, int32_t & value
+				, bool * control )override
+			{
+			}
+
+			void visit( castor::String const & name
+				, uint32_t & value
+				, bool * control )override
+			{
+			}
+
+			void visit( castor::String const & name
+				, int64_t & value
+				, bool * control )override
+			{
+			}
+
+			void visit( castor::String const & name
+				, uint64_t & value
+				, bool * control )override
+			{
+			}
+
+			void visit( castor::String const & name
+				, float & value
+				, bool * control )override
+			{
+				if ( name == "Shininess"
+					|| name == "Glossiness"
+					|| name == "Roughness" )
+				{
+					float shininess = 0.5f;
+					m_material.Get( AI_MATKEY_SHININESS, shininess );
+					float shininessStrength = 1.0f;
+					m_material.Get( AI_MATKEY_SHININESS_STRENGTH, shininessStrength );
+					shininess *= shininessStrength;
+
+					if ( name != "Shininess" )
+					{
+						shininess /= PhongPass::MaxShininess;
+					}
+
+					if ( name == "Shininess" )
+					{
+						shininess = 1.0 - shininess;
+					}
+
+					if ( shininess > 0 )
+					{
+						value = shininess;
+					}
+				}
+				else if ( name == "Metalness" )
+				{
+					float metalness = 0.5f;
+					m_material.Get( AI_MATKEY_COLOR_SPECULAR, metalness );
+					value = metalness;
+					m_mtlInfos.specular.r = metalness;
+				}
+				else if ( name == "Opacity" )
+				{
+					float opacity = 1;
+					m_material.Get( AI_MATKEY_OPACITY, opacity );
+					value = opacity;
+				}
+			}
+
+			void visit( castor::String const & name
+				, double & value
+				, bool * control )override
+			{
+			}
+
+			void visit( castor::String const & name
+				, castor3d::BlendMode & value
+				, bool * control )override
+			{
+			}
+
+			void visit( castor::String const & name
+				, castor3d::ParallaxOcclusionMode & value
+				, bool * control )override
+			{
+			}
+
+			void visit( castor::String const & name
+				, VkCompareOp & value
+				, bool * control )override
+			{
+			}
+
+			void visit( castor::String const & name
+				, castor::RgbColour & value
+				, bool * control )override
+			{
+				if ( name == "Ambient" )
+				{
+					m_mtlInfos.ambient = { 1, 1, 1 };
+					m_material.Get( AI_MATKEY_COLOR_AMBIENT, m_mtlInfos.ambient );
+					value = castor::RgbColour::fromComponents( m_mtlInfos.ambient.r
+						, m_mtlInfos.ambient.g
+						, m_mtlInfos.ambient.b );
+				}
+				else if ( name == "Albedo"
+					|| name == "Colour"
+					|| name == "Diffuse" )
+				{
+					m_mtlInfos.colour = { 1, 1, 1 };
+					m_material.Get( AI_MATKEY_COLOR_DIFFUSE, m_mtlInfos.colour );
+					value = castor::RgbColour::fromComponents( m_mtlInfos.colour.r
+						, m_mtlInfos.colour.g
+						, m_mtlInfos.colour.b );
+				}
+				else if ( name == "Specular" )
+				{
+					m_mtlInfos.specular = { 1, 1, 1 };
+					m_material.Get( AI_MATKEY_COLOR_SPECULAR, m_mtlInfos.specular );
+					value = castor::RgbColour::fromComponents( m_mtlInfos.specular.r
+						, m_mtlInfos.specular.g
+						, m_mtlInfos.specular.b );
+				}
+				else if ( name == "Emissive" )
+				{
+					m_mtlInfos.emissive = { 1, 1, 1 };
+					m_material.Get( AI_MATKEY_COLOR_EMISSIVE, m_mtlInfos.emissive );
+					value = castor::RgbColour::fromComponents( m_mtlInfos.emissive.r
+						, m_mtlInfos.emissive.g
+						, m_mtlInfos.emissive.b );
+				}
+			}
+
+			void visit( castor::String const & name
+				, castor::RgbaColour & value
+				, bool * control )override
+			{
+			}
+
+			void visit( castor::String const & name
+				, castor::RangedValue< float > & value
+				, bool * control )override
+			{
+			}
+
+			void visit( castor::String const & name
+				, castor::RangedValue< int32_t > & value
+				, bool * control )override
+			{
+			}
+
+			void visit( castor::String const & name
+				, castor::RangedValue< uint32_t > & value
+				, bool * control )override
+			{
+			}
+
+			void visit( castor::String const & name
+				, castor3d::TextureFlag textureFlag
+				, castor::Point2ui & mask
+				, uint32_t componentsCount
+				, bool * control )override
+			{
+				castor3d::TextureConfiguration config;
+				auto info = getTextureInfo( name
+					, textureFlag
+					, config );
+				loadTexture( info, config );
+			}
+
+		private:
+			void loadTexture( TextureInfo const & info
+				, castor3d::TextureConfiguration const & config )
+			{
+				if ( !info.name.empty() )
+				{
+					auto texture = m_importer.loadTexture( castor::Path{ info.name }
+						, config
+						, m_result );
+
+					if ( texture )
+					{
+						log::debug << cuT( "  Texture: [" ) << texture->toString() << cuT( "]" ) << std::endl;
+						texture->setTransform( { info.transform.mTranslation.x, info.transform.mTranslation.y, 0.0f }
+							, castor::Angle::fromRadians( info.transform.mRotation )
+							, { info.transform.mScaling.x, info.transform.mScaling.y, 1.0f } );
+					}
+				}
+			}
+
+			TextureInfo getTextureInfo( aiTextureType type )
+			{
+				TextureInfo result;
+				aiString name;
+				m_material.Get( AI_MATKEY_TEXTURE( type, 0 ), name );
+
+				if ( name.length > 0 )
+				{
+					result.name = castor::string::stringCast< xchar >( name.C_Str() );
+					m_material.Get( AI_MATKEY_UVTRANSFORM( type, 0 ), result.transform );
+				}
+
+				return result;
+			}
+
+			TextureInfo getTextureInfo( castor::String const & name
+				, castor3d::TextureFlag flag
+				, castor3d::TextureConfiguration & config )
+			{
+				TextureInfo result{};
+
+				switch ( flag )
+				{
+				case castor3d::TextureFlag::eHeight:
+					m_texInfos.hgtTex = getTextureInfo( aiTextureType_HEIGHT );
+					break;
+				case castor3d::TextureFlag::eOpacity:
+					m_texInfos.opaTex = getTextureInfo( aiTextureType_OPACITY );
+					config = castor3d::TextureConfiguration::OpacityTexture;
+					break;
+				case castor3d::TextureFlag::eNormal:
+					m_texInfos.nmlTex = getTextureInfo( aiTextureType_NORMALS );
+					break;
+				case castor3d::TextureFlag::eEmissive:
+					m_texInfos.emiTex = getTextureInfo( aiTextureType_EMISSIVE );
+					break;
+				case castor3d::TextureFlag::eOcclusion:
+					if ( aiGetVersionMajor() >= 4u )
+					{
+						static auto constexpr TextureType_AMBIENT_OCCLUSION = aiTextureType( 17 );
+						m_texInfos.occTex = getTextureInfo( TextureType_AMBIENT_OCCLUSION );
+					}
+					break;
+				case castor3d::TextureFlag::eTransmittance:
+					break;
+				case castor3d::TextureFlag::eColour:
+					m_texInfos.colTex = getTextureInfo( aiTextureType_DIFFUSE );
+					break;
+				case castor3d::TextureFlag::eSpecular:
+					m_texInfos.spcTex = getTextureInfo( aiTextureType_SPECULAR );
+					config = TextureConfiguration::SpecularTexture;
+					break;
+				case castor3d::TextureFlag::eMetalness:
+					if ( aiGetVersionMajor() >= 4u )
+					{
+						static auto constexpr TextureType_METALNESS = aiTextureType( 15 );
+						result = getTextureInfo( TextureType_METALNESS );
+						config = TextureConfiguration::MetalnessTexture;
+					}
+					else
+					{
+						result = getTextureInfo( aiTextureType_SPECULAR );
+						config = TextureConfiguration::SpecularTexture;
+					}
+					break;
+				case castor3d::TextureFlag::eGlossiness:
+					result = getTextureInfo( aiTextureType_SHININESS );
+					config = TextureConfiguration::ShininessTexture;
+					break;
+				case castor3d::TextureFlag::eRoughness:
+					if ( aiGetVersionMajor() >= 4u )
+					{
+						static auto constexpr TextureType_DIFFUSE_ROUGHNESS = aiTextureType( 16 );
+						result = getTextureInfo( TextureType_DIFFUSE_ROUGHNESS );
+						config = TextureConfiguration::RoughnessTexture;
+					}
+					else
+					{
+						result = getTextureInfo( aiTextureType_SHININESS );
+						config = TextureConfiguration::RoughnessTexture;
+					}
+					break;
+				default:
+					break;
+				}
+
+				return result;
+			}
+
+			void convertToNormalMap( TextureInfo & info
+				, castor3d::TextureConfiguration & config )
+			{
+				auto path = castor::Path{ info.name };
+
+				if ( m_importer.convertToNormalMap( path, config ) )
+				{
+					info.name = path;
+				}
+			}
+
+		private:
+			aiMaterial const & m_material;
+			castor3d::MeshImporter const & m_importer;
+			castor3d::Pass & m_result;
+			CommonTextureInfos m_texInfos{};
+			CommonMaterialInfos m_mtlInfos{};
+		};
+
+		PassTypeID convert( PassFactory const & factory
+			, aiShadingMode shadingMode )
 		{
 			switch ( shadingMode )
 			{
 			case aiShadingMode_NoShading:
 			case aiShadingMode_Minnaert:
 			case aiShadingMode_OrenNayar:
+				return factory.getNameId( castor3d::PhongPass::Type );
 			case aiShadingMode_Toon:
-				return MaterialType::ePhong;
-
+				return factory.getNameId( toon::ToonPass::Type );
 			case aiShadingMode_Flat:
 			case aiShadingMode_Gouraud:
 			case aiShadingMode_Blinn:
 			case aiShadingMode_Phong:
 			case aiShadingMode_Fresnel:
-				return MaterialType::ePhong;
-
+				return factory.getNameId( castor3d::PhongPass::Type );
 			case aiShadingMode::aiShadingMode_CookTorrance:
-				return MaterialType::eMetallicRoughness;
-
+				return factory.getNameId( castor3d::MetallicRoughnessPbrPass::Type );
 			default:
-				return MaterialType::ePhong;
+				return factory.getNameId( castor3d::PhongPass::Type );
 			}
 		}
 
@@ -563,16 +658,16 @@ namespace C3dAssimp
 		{
 			aiShadingMode shadingMode;
 			aiMaterial.Get( AI_MATKEY_SHADING_MODEL, shadingMode );
-			auto srcType = convert( shadingMode );
-			auto dstType = pass.getType();
+			auto & passFactory = importer.getEngine()->getPassFactory();
+			auto srcType = convert( passFactory, shadingMode );
+			auto dstType = pass.getTypeID();
 
 			if ( dstType != srcType )
 			{
-				log::warn << "Switching from " << getName( srcType ) << " to " << getName( dstType ) << " pass type." << std::endl;
+				log::warn << "Switching from " << passFactory.getIdName( srcType ) << " to " << passFactory.getIdName( dstType ) << " pass type." << std::endl;
 			}
 
-			doProcessPassBaseComponents( pass, aiMaterial );
-			doProcessPassTextures( pass, aiMaterial, importer );
+			PassFiller::submit( aiMaterial, importer, pass );
 
 			if ( !pass.getTextureUnits( TextureFlag::eOpacity ).empty()
 				&& pass.getAlphaFunc() == VkCompareOp::VK_COMPARE_OP_ALWAYS )
@@ -990,7 +1085,7 @@ namespace C3dAssimp
 		}
 		else
 		{
-			result = cache.add( name, scene.getMaterialsType() );
+			result = cache.add( name, scene.getPassesType() );
 			auto pass = result->createPass();
 			doProcessMaterialPass( *pass
 				, aiMaterial

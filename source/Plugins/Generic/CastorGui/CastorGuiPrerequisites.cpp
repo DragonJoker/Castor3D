@@ -40,7 +40,7 @@ namespace CastorGui
 
 		if ( !result )
 		{
-			result = cache.add( p_name, engine.getMaterialsType() );
+			result = cache.add( p_name, engine.getPassesType() );
 			result->createPass();
 		}
 
@@ -62,7 +62,7 @@ namespace CastorGui
 
 		if ( !result )
 		{
-			result = cache.add( name, engine.getMaterialsType() );
+			result = cache.add( name, engine.getPassesType() );
 			result->createPass();
 		}
 

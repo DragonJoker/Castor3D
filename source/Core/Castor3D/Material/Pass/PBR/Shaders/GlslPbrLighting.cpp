@@ -82,7 +82,7 @@ namespace castor3d::shader
 			, PbrLightMaterial & pbrLightMat
 			, sdw::Vec3 & emissive )
 		{
-			if ( checkFlag( passFlags, PassFlag::eSpecularGlossiness ) )
+			if ( pbrLightMat.isSpecularGlossiness() )
 			{
 				if ( !mods.hasMetalness && ( mods.hasSpecular || mods.hasAlbedo ) )
 				{
@@ -105,9 +105,8 @@ namespace castor3d::shader
 		}
 	}
 
-	const castor::String PbrLightingModel::Name = cuT( "pbr" );
-
-	PbrLightingModel::PbrLightingModel( sdw::ShaderWriter & writer
+	PbrLightingModel::PbrLightingModel( bool isSpecularGlossiness
+		, sdw::ShaderWriter & writer
 		, Utils & utils
 		, ShadowOptions shadowOptions
 		, bool isOpaqueProgram )
@@ -115,19 +114,9 @@ namespace castor3d::shader
 			, utils
 			, std::move( shadowOptions )
 			, isOpaqueProgram }
+		, m_isSpecularGlossiness{ isSpecularGlossiness }
 		, m_cookTorrance{ writer, utils }
 	{
-	}
-
-	LightingModelPtr PbrLightingModel::create( sdw::ShaderWriter & writer
-		, Utils & utils
-		, ShadowOptions shadowOptions
-		, bool isOpaqueProgram )
-	{
-		return std::make_unique< PbrLightingModel >( writer
-			, utils
-			, std::move( shadowOptions )
-			, isOpaqueProgram );
 	}
 
 	sdw::Vec3 PbrLightingModel::combine( sdw::Vec3 const & directDiffuse
@@ -147,11 +136,6 @@ namespace castor3d::shader
 			+ emissive
 			+ refracted
 			+ ( reflected * ambient * indirectAmbient * ambientOcclusion );
-	}
-
-	std::unique_ptr< LightMaterial > PbrLightingModel::declMaterial( std::string const & name )
-	{
-		return m_writer.declDerivedLocale< LightMaterial, PbrLightMaterial >( name );
 	}
 
 	ReflectionModelPtr PbrLightingModel::getReflectionModel( PassFlags const & passFlags
@@ -1260,6 +1244,76 @@ namespace castor3d::shader
 			, InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
 			, sdw::InInt( m_writer, "receivesShadows" ) );
+	}
+
+	//***********************************************************************************************
+
+	PbrMRLightingModel::PbrMRLightingModel( sdw::ShaderWriter & writer
+		, Utils & utils
+		, ShadowOptions shadowOptions
+		, bool isOpaqueProgram )
+		: PbrLightingModel{ false
+		, writer
+		, utils
+		, std::move( shadowOptions )
+		, isOpaqueProgram }
+	{
+	}
+
+	const castor::String PbrMRLightingModel::getName()
+	{
+		return cuT( "c3d.pbrmr" );
+	}
+
+	LightingModelPtr PbrMRLightingModel::create( sdw::ShaderWriter & writer
+		, Utils & utils
+		, ShadowOptions shadowOptions
+		, bool isOpaqueProgram )
+	{
+		return std::make_unique< PbrMRLightingModel >( writer
+			, utils
+			, std::move( shadowOptions )
+			, isOpaqueProgram );
+	}
+
+	std::unique_ptr< LightMaterial > PbrMRLightingModel::declMaterial( std::string const & name )
+	{
+		return m_writer.declDerivedLocale< LightMaterial, PbrMRLightMaterial >( name );
+	}
+
+	//***********************************************************************************************
+
+	PbrSGLightingModel::PbrSGLightingModel( sdw::ShaderWriter & writer
+		, Utils & utils
+		, ShadowOptions shadowOptions
+		, bool isOpaqueProgram )
+		: PbrLightingModel{ true
+			, writer
+			, utils
+			, std::move( shadowOptions )
+			, isOpaqueProgram }
+	{
+	}
+
+	const castor::String PbrSGLightingModel::getName()
+	{
+		return cuT( "c3d.pbrsg" );
+	}
+
+	LightingModelPtr PbrSGLightingModel::create( sdw::ShaderWriter & writer
+		, Utils & utils
+		, ShadowOptions shadowOptions
+		, bool isOpaqueProgram )
+	{
+		return std::make_unique< PbrSGLightingModel >( writer
+			, utils
+			, std::move( shadowOptions )
+			, isOpaqueProgram );
+	}
+
+	std::unique_ptr< LightMaterial > PbrSGLightingModel::declMaterial( std::string const & name )
+	{
+		return m_writer.declDerivedLocale< LightMaterial, PbrSGLightMaterial >( name );
 	}
 
 	//***********************************************************************************************

@@ -127,7 +127,7 @@ namespace castor3d
 	struct CacheTraits< Material, KeyType >
 	{
 		C3D_API static const castor::String Name;
-		using Producer = std::function< std::shared_ptr< Material >( KeyType const &, MaterialType ) >;
+		using Producer = std::function< std::shared_ptr< Material >( KeyType const &, PassTypeID ) >;
 		using Merger = std::function< void( CacheBase< Material, KeyType > const &
 			, castor::Collection< Material, KeyType > &
 			, std::shared_ptr< Material > ) >;

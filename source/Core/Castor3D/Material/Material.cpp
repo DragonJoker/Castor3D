@@ -12,7 +12,7 @@ namespace castor3d
 
 	Material::Material( castor::String const & name
 		, Engine & engine
-		, MaterialType type )
+		, PassTypeID type )
 		: castor::Resource< Material >{ name }
 		, castor::OwnedBy< Engine >{ engine }
 		, m_type{ type }
@@ -47,7 +47,7 @@ namespace castor3d
 
 	PassSPtr Material::createPass()
 	{
-		PassSPtr newPass = getEngine()->getPassFactory().create( castor3d::getName( getType() ), *this );
+		PassSPtr newPass = getEngine()->getPassFactory().create( getType(), *this );
 		CU_Require( newPass );
 		m_passListeners.emplace( newPass, newPass->onChanged.connect( [this]( Pass const & pass )
 			{

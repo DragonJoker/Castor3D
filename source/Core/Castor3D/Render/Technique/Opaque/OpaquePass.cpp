@@ -176,7 +176,7 @@ namespace castor3d
 		utils.declareParallaxMappingFunc( flags.passFlags
 			, getTexturesMask() );
 
-		auto lightingModel = utils.createLightingModel( shader::getLightingModelName( flags.passFlags )
+		auto lightingModel = utils.createLightingModel( shader::getLightingModelName( *getEngine(), flags.passType )
 			, {}
 			, true );
 

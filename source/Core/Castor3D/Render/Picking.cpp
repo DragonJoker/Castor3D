@@ -193,7 +193,8 @@ namespace castor3d
 			, VK_IMAGE_TYPE_2D
 			, VK_FORMAT_D32_SFLOAT
 			, makeExtent3D( size )
-			, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT } ) }
+			, ( VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
+				| VK_IMAGE_USAGE_SAMPLED_BIT ) } ) }
 		, m_depthImageView{ m_graph.createView( { "PickingDepth"
 			, m_depthImage
 			, 0u

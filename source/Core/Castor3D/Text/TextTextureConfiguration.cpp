@@ -9,9 +9,11 @@ using namespace castor3d;
 namespace castor
 {
 	TextWriter< TextureConfiguration >::TextWriter( String const & tabs
-		, MaterialType type )
+		, PassTypeID type
+		, bool isPbr )
 		: TextWriterT< TextureConfiguration >{ tabs, cuT( "TextureConfiguration" ) }
 		, m_type{ type }
+		, m_isPbr{ isPbr }
 	{
 	}
 
@@ -23,17 +25,13 @@ namespace castor
 
 		if ( configuration.colourMask[0] )
 		{
-			switch ( m_type )
+			if ( m_isPbr )
 			{
-			case MaterialType::ePhong:
-				result = writeMask( file, cuT( "diffuse_mask" ), configuration.colourMask[0] );
-				break;
-			case MaterialType::eMetallicRoughness:
-			case MaterialType::eSpecularGlossiness:
 				result = writeMask( file, cuT( "albedo_mask" ), configuration.colourMask[0] );
-				break;
-			default:
-				break;
+			}
+			else
+			{
+				result = writeMask( file, cuT( "diffuse_mask" ), configuration.colourMask[0] );
 			}
 		}
 
@@ -49,16 +47,13 @@ namespace castor
 
 		if ( result && configuration.glossinessMask[0] )
 		{
-			switch ( m_type )
+			if ( m_isPbr )
 			{
-			case MaterialType::ePhong:
-				result = writeMask( file, cuT( "shininess_mask" ), configuration.glossinessMask[0] );
-				break;
-			case MaterialType::eSpecularGlossiness:
 				result = writeMask( file, cuT( "glossiness_mask" ), configuration.glossinessMask[0] );
-				break;
-			default:
-				break;
+			}
+			else
+			{
+				result = writeMask( file, cuT( "shininess_mask" ), configuration.glossinessMask[0] );
 			}
 
 			checkError( result, "gloss mask" );

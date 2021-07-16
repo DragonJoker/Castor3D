@@ -6,6 +6,7 @@
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
+#include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
@@ -90,7 +91,7 @@ namespace castor3d
 				shader::Utils utils{ writer, *renderSystem.getEngine() };
 				index = 0;
 				auto lightingModel = shader::LightingModel::createModel( utils
-					, "phong"
+					, renderSystem.getEngine()->getPassFactory().getLightingModelName( 1u )
 					, LightType::eDirectional
 					, uint32_t( LightInjectionPass::LightsIdx )
 					, 0u
@@ -157,7 +158,7 @@ namespace castor3d
 				shader::Utils utils{ writer, *renderSystem.getEngine() };
 				index = 0;
 				auto lightingModel = shader::LightingModel::createModel( utils
-					, "phong"
+					, renderSystem.getEngine()->getPassFactory().getLightingModelName( 1u )
 					, LightType::eDirectional
 					, uint32_t( LightInjectionPass::LightsIdx )
 					, 0u
@@ -223,7 +224,7 @@ namespace castor3d
 			shader::Utils utils{ writer, *renderSystem.getEngine() };
 			index = 0;
 			auto lightingModel = shader::LightingModel::createModel( utils
-				, "phong"
+				, renderSystem.getEngine()->getPassFactory().getLightingModelName( 1u )
 				, LightType::ePoint
 				, uint32_t( LightInjectionPass::LightsIdx )
 				, 0u
@@ -286,7 +287,7 @@ namespace castor3d
 			shader::Utils utils{ writer, *renderSystem.getEngine() };
 			index = 0;
 			auto lightingModel = shader::LightingModel::createModel( utils
-				, "phong"
+				, renderSystem.getEngine()->getPassFactory().getLightingModelName( 1u )
 				, LightType::eSpot
 				, uint32_t( LightInjectionPass::LightsIdx )
 				, 0u

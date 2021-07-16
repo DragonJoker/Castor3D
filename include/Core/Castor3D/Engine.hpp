@@ -376,6 +376,8 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
+		C3D_API castor::String getPassesName()const;
+
 		castor::String const & getAppName()const
 		{
 			return m_appName;
@@ -521,9 +523,9 @@ namespace castor3d
 			return m_cpuInformations;
 		}
 
-		MaterialType getMaterialsType()const
+		PassTypeID getPassesType()const
 		{
-			return m_materialType;
+			return m_passesType;
 		}
 
 		castor::ImageLoader const & getImageLoader()const
@@ -585,9 +587,9 @@ namespace castor3d
 			m_userInputListener = listener;
 		}
 
-		void setMaterialsType( MaterialType type )
+		void setPassesType( PassTypeID type )
 		{
-			m_materialType = type;
+			m_passesType = type;
 		}
 
 		void setLpvGridSize( uint32_t size )
@@ -637,7 +639,7 @@ namespace castor3d
 		ParticleFactoryUPtr m_particleFactory;
 		PassFactoryUPtr m_passFactory;
 		castor::CpuInformations m_cpuInformations;
-		MaterialType m_materialType{ MaterialType::ePhong };
+		PassTypeID m_passesType{ 0u };
 		bool m_enableValidation{ false };
 		bool m_enableApiTrace{ false };
 		uint32_t m_lpvGridSize{ 32u };

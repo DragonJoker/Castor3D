@@ -104,7 +104,7 @@ namespace castor3d
 		}
 	}
 
-	ShaderPtr LightPass::getPixelShaderSource( MaterialType materialType
+	ShaderPtr LightPass::getPixelShaderSource( PassTypeID passType
 		, RenderSystem const & renderSystem
 		, SceneFlags const & sceneFlags
 		, LightType lightType
@@ -149,7 +149,7 @@ namespace castor3d
 		// Utility functions
 		index = uint32_t( LightPassLgtIdx::eSmNormalLinear );
 		auto lightingModel = shader::LightingModel::createModel( utils
-			, shader::getLightingModelName( materialType )
+			, shader::getLightingModelName( *renderSystem.getEngine(), passType )
 			, lightType
 			, uint32_t( LightPassLgtIdx::eLight )
 			, 1u
