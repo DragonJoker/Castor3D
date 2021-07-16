@@ -7,6 +7,7 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/TargetCache.hpp>
 #include <Castor3D/Material/Material.hpp>
+#include <Castor3D/Material/Pass/PassVisitor.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
 #include <Castor3D/Render/Technique/RenderTechnique.hpp>
@@ -24,7 +25,7 @@ namespace GuiCommon
 	namespace
 	{
 		class PassTreeGatherer
-			: public castor3d::PipelineVisitor
+			: public castor3d::PassVisitor
 		{
 		public:
 			static void submit( Pass & pass
@@ -40,7 +41,7 @@ namespace GuiCommon
 			PassTreeGatherer( TreeItemProperty * properties
 				, wxPGEditor * editor
 				, wxPropertyGrid * grid )
-				: castor3d::PipelineVisitor{ {} }
+				: castor3d::PassVisitor{ {} }
 				, m_properties{ properties }
 				, m_editor{ editor }
 				, m_grid{ grid }
@@ -212,6 +213,7 @@ namespace GuiCommon
 						pass.getColourBlendMode(),
 						pass.getAlphaBlendMode(),
 						pass.getPassFlags(),
+						pass.getTypeID(),
 						pass.getHeightTextureIndex(),
 						ProgramFlags{},
 						scene.getFlags(),

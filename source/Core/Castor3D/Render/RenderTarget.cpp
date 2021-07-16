@@ -81,6 +81,7 @@ namespace castor3d
 				std::set< VkImageViewCreateInfo, VkImageViewCreateInfoComp > cache;
 
 				PipelineFlags flags{};
+				flags.passType = technique.getEngine()->getPassesType();
 				IntermediatesLister visOpaque{ flags, *technique.getRenderTarget().getScene(), cache, intermediates };
 				technique.accept( visOpaque );
 

@@ -495,6 +495,7 @@ namespace castor3d
 		PipelineFlags( BlendMode colourBlendMode = BlendMode::eNoBlend
 			, BlendMode alphaBlendMode = BlendMode::eNoBlend
 			, PassFlags passFlags = PassFlag::eNone
+			, PassTypeID passType = 0u
 			, uint32_t heightMapIndex = InvalidIndex
 			, ProgramFlags programFlags = ProgramFlag::eNone
 			, SceneFlags sceneFlags = SceneFlag::eNone
@@ -505,6 +506,7 @@ namespace castor3d
 			: colourBlendMode{ colourBlendMode }
 			, alphaBlendMode{ alphaBlendMode }
 			, passFlags{ passFlags }
+			, passType{ passType }
 			, heightMapIndex{ heightMapIndex }
 			, programFlags{ programFlags }
 			, sceneFlags{ sceneFlags }
@@ -519,6 +521,7 @@ namespace castor3d
 		BlendMode colourBlendMode{ BlendMode::eNoBlend };
 		BlendMode alphaBlendMode{ BlendMode::eNoBlend };
 		PassFlags passFlags{ PassFlag::eNone };
+		PassTypeID passType{ 0u };
 		uint32_t heightMapIndex{ InvalidIndex };
 		ProgramFlags programFlags{ ProgramFlag::eNone };
 		SceneFlags sceneFlags{ SceneFlag::eNone };

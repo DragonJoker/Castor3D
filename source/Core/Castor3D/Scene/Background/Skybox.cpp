@@ -1,7 +1,7 @@
 #include "Castor3D/Scene/Background/Skybox.hpp"
 
 #include "Castor3D/Engine.hpp"
-
+#include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/ToTexture/EquirectangularToCube.hpp"
@@ -382,7 +382,7 @@ namespace castor3d
 				, *m_texture };
 			equiToCube.render();
 
-			if ( m_scene.getMaterialsType() != MaterialType::ePhong )
+			if ( m_scene.getEngine()->getPassFactory().hasIBL( m_scene.getPassesType() ) )
 			{
 				m_texture->generateMipmaps( device );
 			}

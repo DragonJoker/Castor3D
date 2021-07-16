@@ -28,12 +28,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	parent	The parent material.
+		 *\param[in]	parent			The parent material.
+		 *\param[in]	typeID			The pass type ID.
+		 *\param[in]	initialFlags	The flags inherited from pass type.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	parent	Le matériau parent.
+		 *\param[in]	parent			Le matériau parent.
+		 *\param[in]	typeID			L'ID du type de la passe.
+		 *\param[in]	initialFlags	Les flags hérités du type de passe.
 		 */
-		C3D_API explicit Pass( Material & parent );
+		C3D_API explicit Pass( Material & parent
+			, PassTypeID typeID
+			, PassFlags initialFlags );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -104,13 +110,6 @@ namespace castor3d
 		C3D_API void prepareTextures();
 		/**
 		 *\~english
-		 *\return		The material type.
-		 *\~french
-		 *\return		Le type de matériau.
-		 */
-		C3D_API MaterialType getType()const;
-		/**
-		 *\~english
 		 *\brief		Sets the basic pass colour.
 		 *\param[in]	value	The new value.
 		 *\~french
@@ -162,17 +161,52 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
-		*	PipelineVisitor acceptance function.
+		*	PassVisitor acceptance function.
 		*\param visitor
 		*	The ... visitor.
 		*\~french
 		*\brief
-		*	Fonction d'acceptation de PipelineVisitor.
+		*	Fonction d'acceptation de PassVisitor.
 		*\param visitor
 		*	Le ... visiteur.
 		*/
-		C3D_API virtual void accept( PipelineVisitorBase & vis );
-		C3D_API virtual uint32_t getSectionID()const = 0;
+		C3D_API virtual void accept( PassVisitorBase & vis );
+		/**
+		*\~english
+		*\brief
+		*	PassVisitor acceptance function, for a specific texture configuration.
+		*\param config
+		*	The texture configuration.
+		*\param visitor
+		*	The ... visitor.
+		*\~french
+		*\brief
+		*	Fonction d'acceptation de PassVisitor, pour une configuration de texture.
+		*\param config
+		*	La configuration de texture.
+		*\param visitor
+		*	Le ... visiteur.
+		*/
+		C3D_API virtual void accept( TextureConfiguration & config
+			, PassVisitorBase & vis );
+		/**
+		*\~english
+		*\return
+		*	The scene file section ID used for the pass effective type.
+		*\~french
+		*\return
+		*	L'ID de section de fichier de scène, utilisé pour le type effectif de la passe.
+		*/
+		C3D_API virtual uint32_t getPassSectionID()const = 0;
+		/**
+		*\~english
+		*\return
+		*	The scene file section ID used for the pass' textures effective type.
+		*\~french
+		*\return
+		*	L'ID de section de fichier de scène, utilisé pour le type effectif des textures de la passe.
+		*/
+		C3D_API virtual uint32_t getTextureSectionID()const = 0;
 		C3D_API virtual bool writeText( castor::String const & tabs
 			, castor::Path const & folder
 			, castor::String const & subfolder
@@ -317,6 +351,16 @@ namespace castor3d
 		bool hasLighting()const
 		{
 			return checkFlag( m_flags, PassFlag::eLighting );
+		}
+
+		bool hasIBL()const
+		{
+			return checkFlag( m_flags, PassFlag::eImageBasedLighting );
+		}
+
+		PassTypeID getTypeID()const
+		{
+			return m_typeID;
 		}
 		/**@}*/
 		/**
@@ -468,7 +512,8 @@ namespace castor3d
 			, castor::String const & name
 			, castor::ParserFunction function
 			, castor::ParserParameterArray && array = castor::ParserParameterArray{} );
-		C3D_API static void addCommonParsers( uint32_t sectionID
+		C3D_API static void addCommonParsers( uint32_t mtlSectionID
+			, uint32_t texSectionID
 			, castor::AttributeParsersBySection & result );
 
 	private:
@@ -487,7 +532,9 @@ namespace castor3d
 		void doJoinEmsOcc( TextureUnitPtrArray & result );
 		virtual void doInitialise() = 0;
 		virtual void doCleanup() = 0;
-		virtual void doAccept( PipelineVisitorBase & vis ) = 0;
+		virtual void doAccept( TextureConfiguration & config
+			, PassVisitorBase & vis ) = 0;
+		virtual void doAccept( PassVisitorBase & vis ) = 0;
 		virtual void doSetOpacity( float value ) = 0;
 		virtual void doPrepareTextures( TextureUnitPtrArray & result ) = 0;
 
@@ -515,6 +562,7 @@ namespace castor3d
 		bool m_dirty{ true };
 
 	private:
+		PassTypeID m_typeID;
 		PassFlags m_flags;
 		TextureUnitPtrArray m_textureUnits;
 		TextureFlags m_textures;

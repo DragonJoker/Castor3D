@@ -224,6 +224,7 @@ namespace castor3d
 		auto flags = PipelineFlags{ pass.getColourBlendMode()
 			, pass.getAlphaBlendMode()
 			, pass.getPassFlags()
+			, pass.getTypeID()
 			, pass.getHeightTextureIndex()
 			, programFlags
 			, sceneFlags
@@ -248,6 +249,7 @@ namespace castor3d
 		auto flags = PipelineFlags{ pass.getColourBlendMode()
 			, pass.getAlphaBlendMode()
 			, pass.getPassFlags()
+			, pass.getTypeID()
 			, pass.getHeightTextureIndex()
 			, programFlags
 			, sceneFlags

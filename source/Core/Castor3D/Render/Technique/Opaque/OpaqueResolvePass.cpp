@@ -4,6 +4,7 @@
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
+#include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -132,7 +133,7 @@ namespace castor3d
 
 		ShaderPtr createPixelProgram( RenderSystem const & renderSystem
 			, ResolveProgramConfig const & config
-			, MaterialType materialType )
+			, PassTypeID passType )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -170,7 +171,7 @@ namespace castor3d
 			shader::CookTorranceBRDF cookTorrance{ writer, utils };
 			cookTorrance.declareDiffuse();
 
-			auto lightingModel = utils.createLightingModel( shader::getLightingModelName( materialType )
+			auto lightingModel = utils.createLightingModel( shader::getLightingModelName( *renderSystem.getEngine(), passType )
 				, {}
 				, true );
 			auto reflections = lightingModel->getReflectionModel( uint32_t( ResolveBind::eEnvironment )
@@ -383,7 +384,7 @@ namespace castor3d
 		{
 			ResolveProgramConfig config{ i };
 			Program program{ { VK_SHADER_STAGE_VERTEX_BIT, "OpaqueResolve" + std::to_string( i ), createVertexProgram() }
-				, { VK_SHADER_STAGE_FRAGMENT_BIT, "OpaqueResolve" + std::to_string( i ), createPixelProgram( m_device.renderSystem, config, m_scene.getMaterialsType() ) }
+				, { VK_SHADER_STAGE_FRAGMENT_BIT, "OpaqueResolve" + std::to_string( i ), createPixelProgram( m_device.renderSystem, config, m_scene.getPassesType() ) }
 				, {} };
 			program.stages = { makeShaderState( m_device, program.vertexShader )
 				, makeShaderState( m_device, program.pixelShader ) };
@@ -461,7 +462,7 @@ namespace castor3d
 		auto & background = *m_scene.getBackground();
 		background.initialise( m_device );
 
-		if ( m_scene.getMaterialsType() != MaterialType::ePhong )
+		if ( m_scene.getEngine()->getPassFactory().hasIBL( m_scene.getPassesType() ) )
 		{
 			if ( background.hasIbl() )
 			{

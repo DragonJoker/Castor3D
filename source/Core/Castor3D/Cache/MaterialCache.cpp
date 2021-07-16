@@ -24,7 +24,7 @@ namespace castor3d
 	template<> const String CacheTraits< Material, String >::Name = cuT( "Material" );
 
 	void MaterialCache::initialise( RenderDevice const & device
-		, MaterialType type )
+		, PassTypeID passType )
 	{
 		if ( !m_passBuffer )
 		{
@@ -32,7 +32,7 @@ namespace castor3d
 
 			if ( !m_elements.has( Material::DefaultMaterialName ) )
 			{
-				m_defaultMaterial = m_produce( Material::DefaultMaterialName, type );
+				m_defaultMaterial = m_produce( Material::DefaultMaterialName, passType );
 				m_defaultMaterial->createPass();
 				m_defaultMaterial->getPass( 0 )->setTwoSided( true );
 			}
@@ -123,7 +123,7 @@ namespace castor3d
 		return result;
 	}
 
-	MaterialSPtr MaterialCache::add( Key const & name, MaterialType type )
+	MaterialSPtr MaterialCache::add( Key const & name, PassTypeID type )
 	{
 		MaterialSPtr result;
 		auto lock( castor::makeUniqueLock( m_elements ) );

@@ -47,6 +47,8 @@ target_include_directories( ${PROJECT_NAME}
 target_link_libraries( ${PROJECT_NAME}
 	PUBLIC
 		castor::Castor3D
+	PRIVATE
+		${ImporterDependencies}
 )
 install_target_ex( ${PROJECT_NAME}
 	Plugins

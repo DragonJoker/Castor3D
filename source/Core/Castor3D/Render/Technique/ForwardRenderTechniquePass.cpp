@@ -133,7 +133,7 @@ namespace castor3d
 			, RenderPipeline::eAdditional
 			, m_ssao != nullptr );
 		auto lightingModel = shader::LightingModel::createModel( utils
-			, shader::getLightingModelName( flags.passFlags )
+			, shader::getLightingModelName( *getEngine(), flags.passType )
 			, lightsIndex
 			, RenderPipeline::eAdditional
 			, shader::ShadowOptions{ flags.sceneFlags, false }
