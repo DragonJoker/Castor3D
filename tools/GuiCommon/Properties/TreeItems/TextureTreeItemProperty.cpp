@@ -3,18 +3,18 @@
 #include "GuiCommon/Properties/AdditionalProperties.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Render/RenderSystem.hpp>
+#include <Castor3D/Material/Pass/PassVisitor.hpp>
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
 #include <Castor3D/Material/Texture/Animation/TextureAnimation.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
 
 #include <wx/propgrid/advprops.h>
 
-using namespace castor3d;
-using namespace castor;
-
 namespace GuiCommon
 {
+	//*********************************************************************************************
+
 	namespace
 	{
 		uint32_t getComponent( castor::Point2ui const & flag )
@@ -72,71 +72,271 @@ namespace GuiCommon
 
 			return result;
 		}
+
+		using onMaskChange = std::function< void ( wxVariant const & var
+				, castor3d::TextureFlag flag
+				, uint32_t componentsCount ) >;
+
+		class UnitTreeGatherer
+			: public castor3d::PassVisitor
+		{
+		public:
+			static std::map< castor3d::TextureFlag, TextureTreeItemProperty::PropertyPair > submit( castor3d::Pass & pass
+				, TextureTreeItemProperty * properties
+				, wxPGEditor * editor
+				, wxPropertyGrid * grid
+				, onMaskChange onChange )
+			{
+				std::map< castor3d::TextureFlag, TextureTreeItemProperty::PropertyPair > result;
+				UnitTreeGatherer vis{ properties, editor, grid, onChange, result };
+				pass.accept( vis );
+				return result;
+			}
+
+		private:
+			UnitTreeGatherer( TextureTreeItemProperty * properties
+				, wxPGEditor * editor
+				, wxPropertyGrid * grid
+				, onMaskChange onChange
+				, std::map< castor3d::TextureFlag, TextureTreeItemProperty::PropertyPair > & result )
+				: castor3d::PassVisitor{ {} }
+				, m_properties{ properties }
+				, m_editor{ editor }
+				, m_grid{ grid }
+				, m_result{ result }
+			{
+			}
+
+			void visit( castor::String const & name
+				, bool & value
+				, bool * control )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, int16_t & value
+				, bool * control )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, uint16_t & value
+				, bool * control )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, int32_t & value
+				, bool * control )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, uint32_t & value
+				, bool * control )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, int64_t & value
+				, bool * control )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, uint64_t & value
+				, bool * control )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, float & value
+				, bool * control )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, double & value
+				, bool * control )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor3d::BlendMode & value
+				, bool * control )override
+			{
+				wxArrayString choices;
+				choices.push_back( _( "No Blend" ) );
+				choices.push_back( _( "Additive" ) );
+				choices.push_back( _( "Multiplicative" ) );
+				choices.push_back( _( "Interpolative" ) );
+				m_properties->addPropertyET( m_grid, name, choices, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor3d::ParallaxOcclusionMode & value
+				, bool * control )override
+			{
+				wxArrayString choices;
+				choices.push_back( _( "None" ) );
+				choices.push_back( _( "One" ) );
+				choices.push_back( _( "Repeat" ) );
+				m_properties->addPropertyET( m_grid, name, choices, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, VkCompareOp & value
+				, bool * control )override
+			{
+				wxArrayString choices;
+				choices.push_back( _( "Never" ) );
+				choices.push_back( _( "Less" ) );
+				choices.push_back( _( "Equal" ) );
+				choices.push_back( _( "Less Equal" ) );
+				choices.push_back( _( "Greater" ) );
+				choices.push_back( _( "Not Equal" ) );
+				choices.push_back( _( "Greater Equal" ) );
+				choices.push_back( _( "Always" ) );
+				m_properties->addPropertyET( m_grid, name, choices, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::RgbColour & value
+				, bool * control )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::RgbaColour & value
+				, bool * control )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::RangedValue< float > & value
+				, bool * control )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::RangedValue< int32_t > & value
+				, bool * control )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::RangedValue< uint32_t > & value
+				, bool * control )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor3d::TextureFlag textureFlag
+				, castor::Point2ui & mask
+				, uint32_t componentsCount
+				, bool * control )override
+			{
+				doAddProperty( name
+					, name + _( " Map" )
+					, name + _( " Component" )
+					, textureFlag
+					, mask
+					, componentsCount );
+			}
+
+		private:
+			void doAddProperty( wxString const & flagName
+				, wxString const & isName
+				, wxString const & compName
+				, castor3d::TextureFlag flag
+				, castor::Point2ui & mask
+				, uint32_t componentsCount )
+			{
+				auto onChange = m_onChange;
+				auto handler = [onChange, flag, componentsCount]( wxVariant const & var )
+				{
+					onChange( var, flag, componentsCount );
+				};
+
+				static wxString PROPERTY_COMPONENT_R = wxT( "R" );
+				static wxString PROPERTY_COMPONENT_G = wxT( "G" );
+				static wxString PROPERTY_COMPONENT_B = wxT( "B" );
+				static wxString PROPERTY_COMPONENT_A = wxT( "A" );
+				static wxString PROPERTY_COMPONENT_RGB = wxT( "RGB" );
+				static wxString PROPERTY_COMPONENT_GBA = wxT( "GBA" );
+
+				m_grid->Append( new wxPropertyCategory( flagName ) );
+				m_properties->addProperty( m_grid, flagName );
+				auto isProp = m_properties->addProperty( m_grid
+					, isName
+					, mask[0] != 0
+					, handler );
+				wxString name;
+				wxString selected;
+				wxArrayString choices;
+
+				if ( componentsCount == 1u )
+				{
+					choices.Add( PROPERTY_COMPONENT_R );
+					choices.Add( PROPERTY_COMPONENT_G );
+					choices.Add( PROPERTY_COMPONENT_B );
+					choices.Add( PROPERTY_COMPONENT_A );
+					selected = choices[getComponent( mask )];
+				}
+				else
+				{
+					choices.Add( PROPERTY_COMPONENT_RGB );
+					choices.Add( PROPERTY_COMPONENT_GBA );
+					selected = choices[getComponent( mask )];
+				}
+
+				auto compProp = m_properties->addProperty( m_grid
+					, compName
+					, choices
+					, selected
+					, handler );
+				compProp->Enable( mask[0] != 0 );
+				m_result.emplace( flag, TextureTreeItemProperty::PropertyPair{ isProp, compProp, mask } );
+			}
+
+		private:
+			TextureTreeItemProperty * m_properties;
+			wxPGEditor * m_editor;
+			wxPropertyGrid * m_grid;
+			onMaskChange m_onChange;
+			std::map< castor3d::TextureFlag, TextureTreeItemProperty::PropertyPair > & m_result;
+		};
 	}
 
+	//*********************************************************************************************
+
 	TextureTreeItemProperty::TextureTreeItemProperty( bool editable
-		, TextureUnitSPtr texture
-		, MaterialType type )
+		, castor3d::Pass & pass
+		, castor3d::TextureUnitSPtr texture )
 		: TreeItemProperty( texture->getEngine(), editable )
+		, m_pass{ pass }
 		, m_texture{ texture }
-		, m_configuration{ texture->getConfiguration()}
-		, m_materialType{ type }
+		, m_configuration{ texture->getConfiguration() }
 	{
 		CreateTreeItemMenu();
 	}
 
 	TextureTreeItemProperty::~TextureTreeItemProperty()
 	{
-	}
-
-	void TextureTreeItemProperty::doAddProperty( wxPropertyGrid * grid
-		, wxString const & flagName
-		, wxString const & isName
-		, wxString const & compName
-		, castor3d::TextureFlag flag
-		, castor::Point2ui & mask
-		, uint32_t componentsCount
-		, PropertyChangeHandler handler )
-	{
-		static wxString PROPERTY_COMPONENT_R = wxT( "R" );
-		static wxString PROPERTY_COMPONENT_G = wxT( "G" );
-		static wxString PROPERTY_COMPONENT_B = wxT( "B" );
-		static wxString PROPERTY_COMPONENT_A = wxT( "A" );
-		static wxString PROPERTY_COMPONENT_RGB = wxT( "RGB" );
-		static wxString PROPERTY_COMPONENT_GBA = wxT( "GBA" );
-
-		grid->Append( new wxPropertyCategory( flagName ) );
-		addProperty( grid, flagName );
-		auto isProp = addProperty( grid
-			, isName
-			, mask[0] != 0
-			, handler );
-		wxString name;
-		wxString selected;
-		wxArrayString choices;
-
-		if ( componentsCount == 1u )
-		{
-			choices.Add( PROPERTY_COMPONENT_R );
-			choices.Add( PROPERTY_COMPONENT_G );
-			choices.Add( PROPERTY_COMPONENT_B );
-			choices.Add( PROPERTY_COMPONENT_A );
-			selected = choices[getComponent( mask )];
-		}
-		else
-		{
-			choices.Add( PROPERTY_COMPONENT_RGB );
-			choices.Add( PROPERTY_COMPONENT_GBA );
-			selected = choices[getComponent( mask )];
-		}
-
-		auto compProp = addProperty( grid
-			, compName
-			, choices
-			, selected
-			, handler );
-		compProp->Enable( mask[0] != 0 );
-		m_properties.emplace( flag, PropertyPair{ isProp, compProp, mask } );
 	}
 
 	void TextureTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )
@@ -188,7 +388,7 @@ namespace GuiCommon
 		static wxString PROPERTY_FACTOR_HEIGHT = _( "Height Factor" );
 		static wxString PROPERTY_DIRECTX_NORMAL = _( "Normal DirectX" );
 
-		TextureUnitSPtr unit = getTexture();
+		auto unit = getTexture();
 
 		if ( unit )
 		{
@@ -196,57 +396,20 @@ namespace GuiCommon
 
 			if ( unit->getTexture()->isStatic() )
 			{
-				addProperty( grid, PROPERTY_TEXTURE_IMAGE, Path{ unit->getTexture()->getPath() }
+				addProperty( grid, PROPERTY_TEXTURE_IMAGE, castor::Path{ unit->getTexture()->getPath() }
 					, [this]( wxVariant const & var )
 					{
 						onImageChange( var );
 					} );
 			}
 
-			if ( m_materialType == MaterialType::ePhong )
-			{
-				doAddProperty( grid, PROPERTY_FLAG_DIFFUSE, PROPERTY_IS_DIFFUSE, PROPERTY_COMP_DIFFUSE, TextureFlag::eDiffuse, m_configuration.colourMask, 3u
-					, [this]( wxVariant const & var ){ onChange( var, TextureFlag::eDiffuse, 3u ); } );
-				doAddProperty( grid, PROPERTY_FLAG_SPECULAR, PROPERTY_IS_SPECULAR, PROPERTY_COMP_SPECULAR, TextureFlag::eSpecular, m_configuration.specularMask, 3u
-					, [this]( wxVariant const & var ){ onChange( var, TextureFlag::eSpecular, 3u ); } );
-				doAddProperty( grid, PROPERTY_FLAG_SHININESS, PROPERTY_IS_SHININESS, PROPERTY_COMP_SHININESS, TextureFlag::eShininess, m_configuration.glossinessMask, 1u
-					, [this]( wxVariant const & var ){ onChange( var, TextureFlag::eShininess, 1u ); } );
-			}
-			else if ( m_materialType == MaterialType::eSpecularGlossiness)
-			{
-				doAddProperty( grid, PROPERTY_FLAG_DIFFUSE, PROPERTY_IS_ALBEDO, PROPERTY_COMP_ALBEDO, TextureFlag::eAlbedo, m_configuration.colourMask, 3u
-					, [this]( wxVariant const & var ){ onChange( var, TextureFlag::eAlbedo, 3u ); } );
-				doAddProperty( grid, PROPERTY_FLAG_SPECULAR, PROPERTY_IS_SPECULAR, PROPERTY_COMP_SPECULAR, TextureFlag::eSpecular, m_configuration.specularMask, 3u
-					, [this]( wxVariant const & var ){ onChange( var, TextureFlag::eSpecular, 3u ); } );
-				doAddProperty( grid, PROPERTY_FLAG_GLOSSINESS, PROPERTY_IS_GLOSSINESS, PROPERTY_COMP_GLOSSINESS, TextureFlag::eGlossiness, m_configuration.glossinessMask, 1u
-					, [this]( wxVariant const & var ){ onChange( var, TextureFlag::eGlossiness, 1u ); } );
-			}
-			else
-			{
-				doAddProperty( grid, PROPERTY_FLAG_ALBEDO, PROPERTY_IS_ALBEDO, PROPERTY_COMP_ALBEDO, TextureFlag::eAlbedo, m_configuration.colourMask, 3u
-					, [this]( wxVariant const & var ){ onChange( var, TextureFlag::eAlbedo, 3u ); } );
-				doAddProperty( grid, PROPERTY_FLAG_METALLIC, PROPERTY_IS_METALLIC, PROPERTY_COMP_METALLIC, TextureFlag::eMetalness, m_configuration.metalnessMask, 1u
-					, [this]( wxVariant const & var ){ onChange( var, TextureFlag::eMetalness, 1u ); } );
-				doAddProperty( grid, PROPERTY_FLAG_ROUGHNESS, PROPERTY_IS_ROUGHNESS, PROPERTY_COMP_ROUGHNESS, TextureFlag::eRoughness, m_configuration.roughnessMask, 1u
-					, [this]( wxVariant const & var ){ onChange( var, TextureFlag::eRoughness, 1u ); } );
-			}
-
-			doAddProperty( grid, PROPERTY_FLAG_EMISSIVE, PROPERTY_IS_EMISSIVE, PROPERTY_COMP_EMISSIVE, TextureFlag::eEmissive, m_configuration.emissiveMask, 3u
-					, [this]( wxVariant const & var ){ onChange( var, TextureFlag::eEmissive, 3u ); } );
-			doAddProperty( grid, PROPERTY_FLAG_OPACITY, PROPERTY_IS_OPACITY, PROPERTY_COMP_OPACITY, TextureFlag::eOpacity, m_configuration.opacityMask, 1u
-					, [this]( wxVariant const & var ){ onChange( var, TextureFlag::eOpacity, 1u ); } );
-			doAddProperty( grid, PROPERTY_FLAG_OCCLUSION, PROPERTY_IS_OCCLUSION, PROPERTY_COMP_OCCLUSION, TextureFlag::eOcclusion, m_configuration.occlusionMask, 1u
-					, [this]( wxVariant const & var ){ onChange( var, TextureFlag::eOcclusion, 1u ); } );
-			doAddProperty( grid, PROPERTY_FLAG_TRANSMITTANCE, PROPERTY_IS_TRANSMITTANCE, PROPERTY_COMP_TRANSMITTANCE, TextureFlag::eTransmittance, m_configuration.transmittanceMask, 1u
-					, [this]( wxVariant const & var ){ onChange( var, TextureFlag::eTransmittance, 1u ); } );
-			doAddProperty( grid, PROPERTY_FLAG_NORMAL, PROPERTY_IS_NORMAL, PROPERTY_COMP_NORMAL, TextureFlag::eNormal, m_configuration.normalMask, 3u
-					, [this]( wxVariant const & var ){ onChange( var, TextureFlag::eNormal, 3u ); } );
-			addPropertyT( grid, PROPERTY_FACTOR_NORMAL, &m_configuration.normalFactor );
-			addProperty( grid, PROPERTY_DIRECTX_NORMAL, m_configuration.normalGMultiplier != 1.0f
-				, [this]( wxVariant const & var ){ m_configuration.normalGMultiplier = var.GetBool() ? -1.0f : 1.0f; } );
-			doAddProperty( grid, PROPERTY_FLAG_HEIGHT, PROPERTY_IS_HEIGHT, PROPERTY_COMP_HEIGHT, TextureFlag::eHeight, m_configuration.heightMask, 1u 
-					, [this]( wxVariant const & var ){ onChange( var, TextureFlag::eHeight, 1u ); } );
-			addPropertyT( grid, PROPERTY_FACTOR_HEIGHT, &m_configuration.heightFactor );
+			m_properties = UnitTreeGatherer::submit( m_pass, this, editor, grid
+				, [this]( wxVariant const & var
+					, castor3d::TextureFlag flag
+					, uint32_t componentsCount )
+				{
+					onChange( var, flag, componentsCount );
+				} );
 
 			if ( unit->hasAnimation() )
 			{
@@ -257,18 +420,18 @@ namespace GuiCommon
 
 				auto & anim = unit->getAnimation();
 				grid->Append( new wxPropertyCategory( CATEGORY_ANIMATION ) );
-				addPropertyT( grid, PROPERTY_ANIMATION_TRANSLATE, anim.getTranslateSpeed(), &anim, &TextureAnimation::setTranslateSpeed );
-				addPropertyT( grid, PROPERTY_ANIMATION_ROTATE, anim.getRotateSpeed(), &anim, &TextureAnimation::setRotateSpeed );
-				addPropertyT( grid, PROPERTY_ANIMATION_SCALE, anim.getScaleSpeed(), &anim, &TextureAnimation::setScaleSpeed );
+				addPropertyT( grid, PROPERTY_ANIMATION_TRANSLATE, anim.getTranslateSpeed(), &anim, &castor3d::TextureAnimation::setTranslateSpeed );
+				addPropertyT( grid, PROPERTY_ANIMATION_ROTATE, anim.getRotateSpeed(), &anim, &castor3d::TextureAnimation::setRotateSpeed );
+				addPropertyT( grid, PROPERTY_ANIMATION_SCALE, anim.getScaleSpeed(), &anim, &castor3d::TextureAnimation::setScaleSpeed );
 			}
 		}
 	}
 
 	void TextureTreeItemProperty::onChange( wxVariant const & var
-		, TextureFlag flag
+		, castor3d::TextureFlag flag
 		, uint32_t componentsCount )
 	{
-		TextureUnitSPtr unit = getTexture();
+		auto unit = getTexture();
 		auto it = m_properties.find( flag );
 		CU_Require( it != m_properties.end() );
 		bool isMap = it->second.isMap->GetValue();
@@ -280,11 +443,11 @@ namespace GuiCommon
 
 	void TextureTreeItemProperty::onImageChange( wxVariant const & var )
 	{
-		TextureUnitSPtr unit = getTexture();
-		Path path{ make_String( var.GetString() ) };
+		auto unit = getTexture();
+		castor::Path path{ make_String( var.GetString() ) };
 
 		// Absolute path
-		if ( File::fileExists( path ) )
+		if ( castor::File::fileExists( path ) )
 		{
 			ashes::ImageCreateInfo image
 			{
@@ -300,14 +463,16 @@ namespace GuiCommon
 					| VK_IMAGE_USAGE_TRANSFER_DST_BIT ),
 			};
 			auto & device = unit->getDevice();
-			auto texture = std::make_shared< TextureLayout >( *unit->getEngine()->getRenderSystem()
+			auto texture = std::make_shared< castor3d::TextureLayout >( *unit->getEngine()->getRenderSystem()
 				, image
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 				, path );
-			texture->setSource( Path{}, path );
+			texture->setSource( castor::Path{}, path );
 			unit->setTexture( texture );
 
 			unit->initialise( device );
 		}
 	}
+
+	//*********************************************************************************************
 }

@@ -41,11 +41,13 @@ namespace castor
 	}
 
 	TextWriter< TextureUnit >::TextWriter( String const & tabs
-		, MaterialType type
+		, PassTypeID type
+		, bool isPbr
 		, Path const & folder
 		, String subFolder )
 		: TextWriterT< TextureUnit >{ tabs, "TextureUnit" }
 		, m_type{ type }
+		, m_isPbr{ isPbr }
 		, m_folder{ folder }
 		, m_subFolder{ subFolder }
 	{
@@ -145,7 +147,7 @@ namespace castor
 
 					if ( result )
 					{
-						result = writeSub( file, unit.getConfiguration(), m_type );
+						result = writeSub( file, unit.getConfiguration(), m_type, m_isPbr );
 						checkError( result, "configuration" );
 					}
 

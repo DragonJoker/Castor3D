@@ -290,6 +290,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Pass.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/PassFactory.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/PassModule.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/PassVisitor.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/SubsurfaceScattering.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
@@ -1711,6 +1712,12 @@ set( Castor3DBinsDependencies
 	castor::${PROJECT_NAME}
 	PARENT_SCOPE
 )
+set( Castor3D_MATERIAL_DIRS
+	${Castor3D_MATERIAL_DIRS}
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/PBR
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Phong
+	PARENT_SCOPE
+)
 add_target_min(
 	${PROJECT_NAME}
 	api_dll
@@ -1805,4 +1812,3 @@ copy_target_files_ex( ${PROJECT_NAME}
 )
 
 set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
-

@@ -71,10 +71,10 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	LightPipelineConfig::LightPipelineConfig( MaterialType materialType
+	LightPipelineConfig::LightPipelineConfig( PassTypeID passType
 		, SceneFlags const & sceneFlags
 		, Light const & light )
-		: materialType{ materialType }
+		: passType{ passType }
 		, sceneFlags{ sceneFlags }
 		, lightType{ light.getLightType() }
 		, shadowType{ light.getShadowType() }
@@ -84,7 +84,7 @@ namespace castor3d
 
 	size_t LightPipelineConfig::makeHash()const
 	{
-		size_t hash = std::hash< uint32_t >{}( uint32_t( materialType ) );
+		size_t hash = std::hash< PassTypeID >{}( passType );
 		hash = castor::hashCombine( hash, uint32_t( sceneFlags ) );
 		hash = castor::hashCombine( hash, uint32_t( lightType ) );
 		hash = castor::hashCombine( hash, uint32_t( shadowType ) );
@@ -303,7 +303,7 @@ namespace castor3d
 			, LightPass::getVertexShaderSource( m_config.lightType ) }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT
 			, castor::string::snakeToCamelCase( getName( m_config.lightType ) )
-			, LightPass::getPixelShaderSource( m_config.materialType
+			, LightPass::getPixelShaderSource( m_config.passType
 				, m_device.renderSystem
 				, m_config.sceneFlags
 				, m_config.lightType
@@ -798,7 +798,7 @@ namespace castor3d
 
 	LightsPipeline & RunnableLightingPass::doFindPipeline( Light const & light )
 	{
-		LightPipelineConfig config{ m_scene.getMaterialsType()
+		LightPipelineConfig config{ m_scene.getPassesType()
 			, m_scene.getFlags()
 			, light };
 		auto hash = config.makeHash();

@@ -31,8 +31,40 @@ namespace castor3d::shader
 		C3D_API sdw::Float getMetalness()const override;
 		C3D_API sdw::Float getRoughness()const override;
 
+		bool isSpecularGlossiness()const
+		{
+			return m_isSpecularGlossiness;
+		}
+
 		sdw::Float & roughness;
 		sdw::Float & metalness;
+
+	protected:
+		bool m_isSpecularGlossiness{};
+	};
+
+	struct PbrMRLightMaterial
+		: public PbrLightMaterial
+	{
+		PbrMRLightMaterial( sdw::ShaderWriter & writer
+			, sdw::expr::ExprPtr expr
+			, bool enabled )
+			: PbrLightMaterial{ writer, std::move( expr ), enabled }
+		{
+			m_isSpecularGlossiness = false;
+		}
+	};
+
+	struct PbrSGLightMaterial
+		: public PbrLightMaterial
+	{
+		PbrSGLightMaterial( sdw::ShaderWriter & writer
+			, sdw::expr::ExprPtr expr
+			, bool enabled )
+			: PbrLightMaterial{ writer, std::move( expr ), enabled }
+		{
+			m_isSpecularGlossiness = true;
+		}
 	};
 }
 

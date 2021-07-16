@@ -56,7 +56,7 @@ namespace C3dPly
 
 		if ( !pMaterial )
 		{
-			pMaterial = p_mesh.getScene()->getMaterialView().add( materialName, MaterialType::ePhong );
+			pMaterial = p_mesh.getScene()->getMaterialView().add( materialName, p_mesh.getScene()->getPassesType() );
 			pMaterial->createPass();
 		}
 

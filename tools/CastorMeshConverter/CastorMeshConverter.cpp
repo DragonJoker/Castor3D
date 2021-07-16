@@ -1,5 +1,4 @@
 #include <Castor3D/Engine.hpp>
-
 #include <Castor3D/Binary/BinaryMesh.hpp>
 #include <Castor3D/Binary/BinarySkeleton.hpp>
 #include <Castor3D/Cache/CacheView.hpp>
@@ -7,6 +6,8 @@
 #include <Castor3D/Cache/MeshCache.hpp>
 #include <Castor3D/Cache/PluginCache.hpp>
 #include <Castor3D/Material/Material.hpp>
+#include <Castor3D/Material/Pass/PassFactory.hpp>
+#include <Castor3D/Material/Pass/PBR/SpecularGlossinessPbrPass.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 #include <Castor3D/Model/Mesh/Importer.hpp>
 #include <Castor3D/Model/Mesh/ImporterFactory.hpp>
@@ -25,7 +26,7 @@ struct Options
 {
 	castor::Path input;
 	castor::String output;
-	castor3d::MaterialType materialType{ castor3d::MaterialType::eSpecularGlossiness };
+	castor::String passType{ castor3d::SpecularGlossinessPbrPass::Type };
 	castor3d::exporter::ExportOptions options;
 };
 
@@ -259,7 +260,7 @@ int main( int argc, char * argv[] )
 			}
 			else
 			{
-				scene.setMaterialsType( options.materialType );
+				scene.setPassesType( scene.getEngine()->getPassFactory().getNameId( options.passType ) );
 				mesh = scene.getMeshCache().add( name );
 				auto importer = engine.getImporterFactory().create( extension, engine );
 

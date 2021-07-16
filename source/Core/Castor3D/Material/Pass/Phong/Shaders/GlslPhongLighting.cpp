@@ -62,7 +62,10 @@ namespace castor3d::shader
 		}
 	}
 
-	const castor::String PhongLightingModel::Name = cuT( "phong" );
+	const castor::String PhongLightingModel::getName()
+	{
+		return cuT( "c3d.phong" );
+	}
 
 	PhongLightingModel::PhongLightingModel( sdw::ShaderWriter & m_writer
 		, Utils & utils

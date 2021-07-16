@@ -23,6 +23,14 @@ namespace GuiCommon
 		: public TreeItemProperty
 	{
 	public:
+		struct PropertyPair
+		{
+			wxPGProperty * isMap;
+			wxPGProperty * components;
+			castor::Point2ui & mask;
+		};
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -34,8 +42,8 @@ namespace GuiCommon
 		 *\param[in]	texture		La texture cible
 		 */
 		TextureTreeItemProperty( bool editable
-			, castor3d::TextureUnitSPtr texture
-			, castor3d::MaterialType type );
+			, castor3d::Pass & pass
+			, castor3d::TextureUnitSPtr texture );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -57,14 +65,6 @@ namespace GuiCommon
 		}
 
 	private:
-		void doAddProperty( wxPropertyGrid * grid
-			, wxString const & flagName
-			, wxString const & isName
-			, wxString const & compName
-			, castor3d::TextureFlag flag
-			, castor::Point2ui & mask
-			, uint32_t componentsCount
-			, PropertyChangeHandler handler );
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
@@ -77,15 +77,9 @@ namespace GuiCommon
 		void onImageChange( wxVariant const & var );
 
 	private:
-		struct PropertyPair
-		{
-			wxPGProperty * isMap;
-			wxPGProperty * components;
-			castor::Point2ui & mask;
-		};
+		castor3d::Pass & m_pass;
 		castor3d::TextureUnitWPtr m_texture;
 		castor3d::TextureConfiguration m_configuration;
-		castor3d::MaterialType m_materialType;
 		std::map< castor3d::TextureFlag, PropertyPair > m_properties;
 	};
 }

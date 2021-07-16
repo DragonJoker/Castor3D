@@ -1,6 +1,8 @@
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 
 #include "Castor3D/DebugDefines.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
@@ -18,26 +20,10 @@ namespace castor3d::shader
 {
 	//*********************************************************************************************
 
-	castor::String getLightingModelName( PassFlags const & flags )
+	castor::String getLightingModelName( Engine const & engine
+		, PassTypeID passType )
 	{
-		return ( checkFlag( flags, PassFlag::eMetallicRoughness ) || checkFlag( flags, PassFlag::eSpecularGlossiness ) )
-			? castor::String{ "pbr" }
-			: castor::String{ "phong" };
-	}
-
-	castor::String getLightingModelName( MaterialType materialType )
-	{
-		switch ( materialType )
-		{
-		case castor3d::MaterialType::ePhong:
-			return "phong";
-		case castor3d::MaterialType::eMetallicRoughness:
-		case castor3d::MaterialType::eSpecularGlossiness:
-			return "pbr";
-		default:
-			CU_Failure( "getLightingModelName: Unsupported MaterialType." );
-			return "unknown";
-		}
+		return engine.getPassFactory().getLightingModelName( passType );
 	}
 
 	//*********************************************************************************************

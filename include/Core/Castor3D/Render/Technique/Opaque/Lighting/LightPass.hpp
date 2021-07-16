@@ -40,7 +40,7 @@ namespace castor3d
 		 *\param[in]	rsm			Dit si les RSM doivent être générées.
 		 *\return		Le source.
 		 */
-		static ShaderPtr getPixelShaderSource( MaterialType materialType
+		static ShaderPtr getPixelShaderSource( PassTypeID passType
 			, RenderSystem const & renderSystem
 			, SceneFlags const & sceneFlags
 			, LightType lightType

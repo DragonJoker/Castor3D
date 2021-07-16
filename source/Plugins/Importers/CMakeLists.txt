@@ -14,6 +14,10 @@ function( ImportersBuild )
 			${CASTOR_BINARY_DIR}/include/Core
 			${CASTOR_SOURCE_DIR}/source/Plugins/Importers
 			${CASTOR_BINARY_DIR}/source/Plugins/Importers
+			${Castor3D_MATERIAL_DIRS}
+		)
+		set( ImporterDependencies
+			${Castor3D_MATERIAL_DEPS}
 		)
 
 		if( ${CASTOR_BUILD_IMPORTER_ASSIMP} )

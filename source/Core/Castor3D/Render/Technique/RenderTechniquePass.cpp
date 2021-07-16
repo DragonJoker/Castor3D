@@ -257,8 +257,7 @@ namespace castor3d
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		}
 
-		if ( checkFlag( flags.passFlags, PassFlag::eMetallicRoughness )
-			|| checkFlag( flags.passFlags, PassFlag::eSpecularGlossiness ) )
+		if ( checkFlag( flags.passFlags, PassFlag::eImageBasedLighting ) )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
@@ -384,8 +383,7 @@ namespace castor3d
 					, index );
 			}
 
-			if ( checkFlag( flags.passFlags, PassFlag::eMetallicRoughness )
-				|| checkFlag( flags.passFlags, PassFlag::eSpecularGlossiness ) )
+			if ( checkFlag( flags.passFlags, PassFlag::eImageBasedLighting ) )
 			{
 				auto & background = *scene.getBackground();
 

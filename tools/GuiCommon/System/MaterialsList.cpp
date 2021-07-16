@@ -160,8 +160,8 @@ namespace GuiCommon
 				, editable
 				, passId
 				, ++unitIndex
+				, *pass
 				, unit
-				, pass->getType()
 				, iconOffset );
 		}
 	}
@@ -170,17 +170,17 @@ namespace GuiCommon
 		, bool editable
 		, wxTreeItemId id
 		, uint32_t index
+		, castor3d::Pass & pass
 		, castor3d::TextureUnitSPtr texture
-		, castor3d::MaterialType type
 		, uint32_t iconOffset )
 	{
 		wxTreeItemId unitId = treeCtrl->AppendItem( id
 			, wxString( _( "Texture Unit " ) ) << index
 			, eBMP_TEXTURE - iconOffset
 			, eBMP_TEXTURE_SEL - iconOffset
-			, new TextureTreeItemProperty( editable
-				, texture
-				, type ) );
+			, new TextureTreeItemProperty{ editable
+				, pass
+				, texture } );
 		RenderTargetSPtr target = texture->getRenderTarget();
 
 		if ( target )

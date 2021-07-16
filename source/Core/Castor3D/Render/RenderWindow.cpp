@@ -329,7 +329,7 @@ namespace castor3d
 			{
 				m_device.renderSystem.setCurrentRenderDevice( nullptr );
 			} );
-		getEngine()->getMaterialCache().initialise( m_device, getEngine()->getMaterialsType() );
+		getEngine()->getMaterialCache().initialise( m_device, getEngine()->getPassesType() );
 		m_commandPool = getDevice()->createCommandPool( getDevice().getGraphicsQueueFamilyIndex()
 			, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT | VK_COMMAND_POOL_CREATE_TRANSIENT_BIT );
 		doCreateProgram();

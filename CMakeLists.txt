@@ -272,6 +272,9 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 	set( RenderGraph_SOURCE_DIR ${EXTERNAL_SOURCE_DIR}/RenderGraph )
 	set( RenderGraph_BINARY_DIR ${EXTERNAL_BINARY_DIR}/RenderGraph )
 
+	set( Castor3D_MATERIAL_DIRS )
+	set( Castor3D_MATERIAL_DEPS )
+
 	add_subdirectory( source )
 	add_subdirectory( tools )
 

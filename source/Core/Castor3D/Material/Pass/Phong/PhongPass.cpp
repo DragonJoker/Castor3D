@@ -1,10 +1,14 @@
 #include "Castor3D/Material/Pass/Phong/PhongPass.hpp"
 
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Material/Pass/PassFactory.hpp"
+#include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Material/Pass/Phong/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
-#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 
@@ -54,14 +58,16 @@ namespace castor3d
 		enum class Section
 			: uint32_t
 		{
-			ePhongPass = CU_MakeSectionName( 'P', 'H', 'O', 'N' ),
+			ePass = CU_MakeSectionName( 'P', 'H', 'O', 'N' ),
+			eTextureUnit = CU_MakeSectionName( 'P', 'H', 'T', 'U' ),
 		};
 
-		static castor::String const Name{ cuT( "phong_pass" ) };
+		static castor::String const PassSectionName{ cuT( "phong_pass" ) };
+		static castor::String const TextureSectionName{ cuT( "phong_texture_unit" ) };
 
 		CU_ImplementAttributeParser( parserPassDiffuse )
 		{
-			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
 
 			if ( !parsingContext->pass )
 			{
@@ -79,7 +85,7 @@ namespace castor3d
 
 		CU_ImplementAttributeParser( parserPassSpecular )
 		{
-			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
 
 			if ( !parsingContext->pass )
 			{
@@ -97,7 +103,7 @@ namespace castor3d
 
 		CU_ImplementAttributeParser( parserPassAmbient )
 		{
-			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
 
 			if ( !parsingContext->pass )
 			{
@@ -115,7 +121,7 @@ namespace castor3d
 
 		CU_ImplementAttributeParser( parserPassShininess )
 		{
-			SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
 
 			if ( !parsingContext->pass )
 			{
@@ -130,14 +136,134 @@ namespace castor3d
 			}
 		}
 		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserUnitChannel )
+		{
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+
+			if ( !parsingContext->textureUnit )
+			{
+				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
+			}
+			else if ( !params.empty() )
+			{
+				uint32_t flags;
+				params[0]->get( flags );
+				auto textures = TextureFlags( uint16_t( flags ) );
+
+				if ( checkFlag( textures, TextureFlag::eNormal ) )
+				{
+					parsingContext->textureConfiguration.normalMask[0] = 0x00FFFFFF;
+				}
+
+				if ( checkFlag( textures, TextureFlag::eOpacity ) )
+				{
+					parsingContext->textureConfiguration.opacityMask[0] = 0xFF000000;
+				}
+
+				if ( checkFlag( textures, TextureFlag::eHeight ) )
+				{
+					parsingContext->textureConfiguration.heightMask[0] = 0x00FF0000;
+				}
+
+				if ( checkFlag( textures, TextureFlag::eEmissive ) )
+				{
+					parsingContext->textureConfiguration.emissiveMask[0] = 0x00FFFFFF;
+				}
+
+				if ( checkFlag( textures, TextureFlag::eOcclusion ) )
+				{
+					parsingContext->textureConfiguration.occlusionMask[0] = 0x00FF0000;
+				}
+
+				if ( checkFlag( textures, TextureFlag::eTransmittance ) )
+				{
+					parsingContext->textureConfiguration.transmittanceMask[0] = 0xFF000000;
+				}
+
+				if ( checkFlag( textures, TextureFlag::eDiffuse ) )
+				{
+					parsingContext->textureConfiguration.colourMask[0] = 0x00FFFFFF;
+				}
+
+				if ( checkFlag( textures, TextureFlag::eSpecular ) )
+				{
+					parsingContext->textureConfiguration.specularMask[0] = 0x00FFFFFF;
+				}
+
+				if ( checkFlag( textures, TextureFlag::eShininess ) )
+				{
+					parsingContext->textureConfiguration.glossinessMask[0] = 0x00FF0000;
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserUnitDiffuseMask )
+		{
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+
+			if ( !parsingContext->textureUnit )
+			{
+				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( parsingContext->textureConfiguration.colourMask[0] );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserUnitSpecularMask )
+		{
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+
+			if ( !parsingContext->textureUnit )
+			{
+				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( parsingContext->textureConfiguration.specularMask[0] );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserUnitShininessMask )
+		{
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+
+			if ( !parsingContext->textureUnit )
+			{
+				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( parsingContext->textureConfiguration.glossinessMask[0] );
+			}
+		}
+		CU_EndAttribute()
 	}
 
 	//*********************************************************************************************
 
 	castor::String const PhongPass::Type = cuT( "phong" );
+	castor::String const PhongPass::LightingModel = shader::PhongLightingModel::getName();
 
-	PhongPass::PhongPass( Material & p_parent )
-		: Pass{ p_parent }
+	PhongPass::PhongPass( Material & parent )
+		: Pass{ parent, parent.getEngine()->getPassFactory().getNameId( Type ), PassFlag::eNone }
 		, m_diffuse{ m_dirty, castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
 		, m_specular{ m_dirty, castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
 		, m_ambient{ m_dirty, 1.0f }
@@ -156,13 +282,35 @@ namespace castor3d
 
 	castor::AttributeParsersBySection PhongPass::createParsers()
 	{
+		static UInt32StrMap const textureChannels = []()
+		{
+			UInt32StrMap result;
+			result[getName( TextureFlag::eNormal, false )] = uint32_t( TextureFlag::eNormal );
+			result[getName( TextureFlag::eHeight, false )] = uint32_t( TextureFlag::eHeight );
+			result[getName( TextureFlag::eOpacity, false )] = uint32_t( TextureFlag::eOpacity );
+			result[getName( TextureFlag::eEmissive, false )] = uint32_t( TextureFlag::eEmissive );
+			result[getName( TextureFlag::eOcclusion, false )] = uint32_t( TextureFlag::eOcclusion );
+			result[getName( TextureFlag::eOcclusion, false )] = uint32_t( TextureFlag::eOcclusion );
+			result[getName( TextureFlag::eTransmittance, false )] = uint32_t( TextureFlag::eTransmittance );
+			result[getName( TextureFlag::eDiffuse, false )] = uint32_t( TextureFlag::eDiffuse );
+			result[getName( TextureFlag::eSpecular, false )] = uint32_t( TextureFlag::eSpecular );
+			result[getName( TextureFlag::eShininess, false )] = uint32_t( TextureFlag::eShininess );
+			return result;
+		}();
+
 		castor::AttributeParsersBySection result;
 
-		Pass::addParser( result, uint32_t( phong::Section::ePhongPass ), cuT( "diffuse" ), &phong::parserPassDiffuse, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
-		Pass::addParser( result, uint32_t( phong::Section::ePhongPass ), cuT( "specular" ), &phong::parserPassSpecular, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
-		Pass::addParser( result, uint32_t( phong::Section::ePhongPass ), cuT( "ambient" ), &phong::parserPassAmbient, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		Pass::addParser( result, uint32_t( phong::Section::ePhongPass ), cuT( "shininess" ), &phong::parserPassShininess, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		Pass::addCommonParsers( uint32_t( phong::Section::ePhongPass ), result );
+		Pass::addParser( result, uint32_t( phong::Section::ePass ), cuT( "diffuse" ), phong::parserPassDiffuse, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
+		Pass::addParser( result, uint32_t( phong::Section::ePass ), cuT( "specular" ), phong::parserPassSpecular, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
+		Pass::addParser( result, uint32_t( phong::Section::ePass ), cuT( "ambient" ), phong::parserPassAmbient, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		Pass::addParser( result, uint32_t( phong::Section::ePass ), cuT( "shininess" ), phong::parserPassShininess, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		Pass::addParser( result, uint32_t( phong::Section::eTextureUnit ), cuT( "diffuse_mask" ), phong::parserUnitDiffuseMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		Pass::addParser( result, uint32_t( phong::Section::eTextureUnit ), cuT( "specular_mask" ), phong::parserUnitSpecularMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		Pass::addParser( result, uint32_t( phong::Section::eTextureUnit ), cuT( "shininess_mask" ), phong::parserUnitShininessMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		Pass::addParser( result, uint32_t( phong::Section::eTextureUnit ), cuT( "channel" ), phong::parserUnitChannel, { castor::makeParameter< castor::ParameterType::eBitwiseOred32BitsCheckedText >( textureChannels ) } );
+		Pass::addCommonParsers( uint32_t( phong::Section::ePass )
+			, uint32_t( phong::Section::eTextureUnit )
+			, result );
 
 		return result;
 	}
@@ -171,7 +319,8 @@ namespace castor3d
 	{
 		return
 		{
-			{ uint32_t( phong::Section::ePhongPass ), phong::Name },
+			{ uint32_t( phong::Section::ePass ), phong::PassSectionName },
+			{ uint32_t( phong::Section::eTextureUnit ), phong::TextureSectionName },
 		};
 	}
 
@@ -191,9 +340,14 @@ namespace castor3d
 		doFillData( data );
 	}
 
-	uint32_t PhongPass::getSectionID()const
+	uint32_t PhongPass::getPassSectionID()const
 	{
-		return uint32_t( phong::Section::ePhongPass );
+		return uint32_t( phong::Section::ePass );
+	}
+
+	uint32_t PhongPass::getTextureSectionID()const
+	{
+		return uint32_t( phong::Section::eTextureUnit );
 	}
 
 	bool PhongPass::writeText( castor::String const & tabs
@@ -212,7 +366,7 @@ namespace castor3d
 	{
 	}
 
-	void PhongPass::doAccept( PipelineVisitorBase & vis )
+	void PhongPass::doAccept( PassVisitorBase & vis )
 	{
 		vis.visit( cuT( "Ambient" )
 			, m_ambient );
@@ -222,6 +376,14 @@ namespace castor3d
 			, m_specular );
 		vis.visit( cuT( "Exponent" )
 			, m_shininess );
+	}
+
+	void PhongPass::doAccept( TextureConfiguration & configuration
+		, PassVisitorBase & vis )
+	{
+		vis.visit( cuT( "Diffuse" ), TextureFlag::eDiffuse, configuration.colourMask, 3u );
+		vis.visit( cuT( "Specular" ), TextureFlag::eSpecular, configuration.specularMask, 3u );
+		vis.visit( cuT( "Shininess" ), TextureFlag::eShininess, configuration.glossinessMask, 1u );
 	}
 
 	void PhongPass::doSetOpacity( float p_value )

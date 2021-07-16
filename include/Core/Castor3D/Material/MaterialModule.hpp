@@ -16,28 +16,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Supported material types enumeration.
-	*\~french
-	*\brief
-	*	Enumération des types de matétiaux supportés.
-	*/
-	enum class MaterialType
-	{
-		//!\~english	Phong (non PBR).
-		//!\~french		Phong (non PBR).
-		ePhong,
-		//!\~english	Metallic/Roughness PBR.
-		//!\~french		PBR Metallic/Roughness.
-		eMetallicRoughness,
-		//!\~english	Specular/Glossiness PBR.
-		//!\~french		PBR Specular/Glossiness.
-		eSpecularGlossiness,
-		CU_ScopedEnumBounds( ePhong )
-	};
-	C3D_API castor::String getName( MaterialType value );
-	/**
-	*\~english
-	*\brief
 	*	Texture channels flags.
 	*\~french
 	*\brief
@@ -106,7 +84,7 @@ namespace castor3d
 	};
 	CU_ImplementFlags( TextureFlag )
 	C3D_API castor::String getName( TextureFlag value
-		, MaterialType material );
+		, bool isPbr );
 	struct TextureFlagsId
 	{
 		TextureFlags flags;
@@ -141,6 +119,8 @@ namespace castor3d
 	using OnMaterialChangedFunction = std::function< void( Material const & ) >;
 	using OnMaterialChanged = castor::Signal< OnMaterialChangedFunction >;
 	using OnMaterialChangedConnection = OnMaterialChanged::connection;
+
+	using PassTypeID = uint16_t;
 
 	C3D_API VkFormat convert( castor::PixelFormat format );
 	C3D_API castor::PixelFormat convert( VkFormat format );
