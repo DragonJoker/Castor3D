@@ -15,15 +15,14 @@ namespace castor3d::shader
 	class PbrLightingModel
 		: public LightingModel
 	{
+	protected:
+		C3D_API explicit PbrLightingModel( bool isSpecularGlossiness
+			, sdw::ShaderWriter & writer
+			, Utils & utils
+			, ShadowOptions shadowOptions
+			, bool isOpaqueProgram );
+
 	public:
-		C3D_API explicit PbrLightingModel( sdw::ShaderWriter & writer
-			, Utils & utils
-			, ShadowOptions shadowOptions
-			, bool isOpaqueProgram );
-		C3D_API static LightingModelPtr create( sdw::ShaderWriter & writer
-			, Utils & utils
-			, ShadowOptions shadowOptions
-			, bool isOpaqueProgram );
 		C3D_API sdw::Vec3 combine( sdw::Vec3 const & directDiffuse
 			, sdw::Vec3 const & indirectDiffuse
 			, sdw::Vec3 const & directSpecular
@@ -35,7 +34,6 @@ namespace castor3d::shader
 			, sdw::Vec3 const & reflected
 			, sdw::Vec3 const & refracted
 			, sdw::Vec3 const & materialAlbedo )override;
-		C3D_API std::unique_ptr< LightMaterial > declMaterial( std::string const & name )override;
 		C3D_API ReflectionModelPtr getReflectionModel( PassFlags const & passFlags
 			, uint32_t & envMapBinding
 			, uint32_t envMapSet )const override;
@@ -135,7 +133,7 @@ namespace castor3d::shader
 		void doDeclareComputeSpotLightDiffuse()override;
 
 	public:
-		C3D_API static const castor::String Name;
+		bool m_isSpecularGlossiness;
 		CookTorranceBRDF m_cookTorrance;
 		sdw::Function< sdw::Void
 			, InTiledDirectionalLight
@@ -189,6 +187,42 @@ namespace castor3d::shader
 			, InSurface
 			, sdw::InVec3
 			, sdw::InInt > m_computeSpotDiffuse;
+	};
+
+	class PbrMRLightingModel
+		: public PbrLightingModel
+	{
+	public:
+		C3D_API PbrMRLightingModel( sdw::ShaderWriter & writer
+			, Utils & utils
+			, ShadowOptions shadowOptions
+			, bool isOpaqueProgram );
+
+		C3D_API static const castor::String getName();
+		C3D_API static LightingModelPtr create( sdw::ShaderWriter & writer
+			, Utils & utils
+			, ShadowOptions shadowOptions
+			, bool isOpaqueProgram );
+
+		C3D_API std::unique_ptr< LightMaterial > declMaterial( std::string const & name )override;
+	};
+
+	class PbrSGLightingModel
+		: public PbrLightingModel
+	{
+	public:
+		C3D_API PbrSGLightingModel( sdw::ShaderWriter & writer
+			, Utils & utils
+			, ShadowOptions shadowOptions
+			, bool isOpaqueProgram );
+
+		C3D_API static const castor::String getName();
+		C3D_API static LightingModelPtr create( sdw::ShaderWriter & writer
+			, Utils & utils
+			, ShadowOptions shadowOptions
+			, bool isOpaqueProgram );
+
+		C3D_API std::unique_ptr< LightMaterial > declMaterial( std::string const & name )override;
 	};
 }
 

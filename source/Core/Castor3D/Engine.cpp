@@ -90,6 +90,7 @@ namespace castor3d
 		, m_jobs{ castor::CpuInformations{}.getCoreCount() }
 	{
 		m_passFactory = castor::makeUnique< PassFactory >( *this );
+		m_passesType = m_passFactory->listRegisteredTypes().begin()->second;
 
 		auto dummy = []( auto element )
 		{
@@ -156,7 +157,7 @@ namespace castor3d
 			, cpuEvtClean
 			, mergeResource );
 		m_materialCache = std::make_unique< MaterialCache >( *this
-			, [this]( String const & name, MaterialType type )
+			, [this]( String const & name, PassTypeID type )
 			{
 				return std::make_shared< Material >( name, *this, type );
 			}
@@ -505,6 +506,11 @@ namespace castor3d
 	{
 		static std::locale const loc{ "C" };
 		return loc;
+	}
+
+	castor::String Engine::getPassesName()const
+	{
+		return m_passFactory->getIdName( m_passesType );
 	}
 
 	RgbaColour Engine::getNextRainbowColour()const

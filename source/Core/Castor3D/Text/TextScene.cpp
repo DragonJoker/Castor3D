@@ -452,7 +452,7 @@ namespace castor
 		bool result = writeComment( file, cuT( "Global configuration" ) )
 			&& writeOpt( file, "debug_overlays", scene.getEngine()->getRenderLoop().hasDebugOverlays() )
 			&& writeOpt( file, "lpv_grid_size", scene.getEngine()->getLpvGridSize(), 32u )
-			&& write( file, "materials", castor3d::getName( scene.getMaterialsType() ) );
+			&& write( file, "materials", scene.getPassesName() );
 
 		if ( result )
 		{

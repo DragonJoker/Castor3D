@@ -43,9 +43,13 @@ namespace castor3d
 		 */
 		C3D_API void accept( PassBuffer & buffer )const override;
 		/**
-		 *\copydoc		castor3d::Pass::getSectionID
+		 *\copydoc		castor3d::Pass::getPassSectionID
 		 */
-		C3D_API uint32_t getSectionID()const override;
+		uint32_t getPassSectionID()const override;
+		/**
+		 *\copydoc		castor3d::Pass::getTextureSectionID
+		 */
+		uint32_t getTextureSectionID()const override;
 		/**
 		 *\copydoc		castor3d::Pass::writeText
 		 */
@@ -135,12 +139,15 @@ namespace castor3d
 		}
 
 	public:
-		static castor::String const Type;
+		C3D_API static castor::String const Type;
+		C3D_API static castor::String const LightingModel;
 
 	private:
 		void doInitialise()override;
 		void doCleanup()override;
-		void doAccept( PipelineVisitorBase & vis )override;
+		void doAccept( PassVisitorBase & vis )override;
+		void doAccept( TextureConfiguration & config
+			, PassVisitorBase & vis )override;
 		void doSetOpacity( float value )override;
 		void doPrepareTextures( TextureUnitPtrArray & result )override;
 		void doJoinSpcGls( TextureUnitPtrArray & result );

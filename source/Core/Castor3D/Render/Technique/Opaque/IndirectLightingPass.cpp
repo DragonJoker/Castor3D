@@ -49,7 +49,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderPtr getPixelShaderSource( MaterialType materialType
+		ShaderPtr getPixelShaderSource( PassTypeID passType
 			, RenderSystem const & renderSystem
 			, IndirectLightingPass::Config const & config )
 		{
@@ -82,7 +82,7 @@ namespace castor3d
 				, llpvIndex
 				, 0u
 				, config.sceneFlags );
-			auto lightingModel = utils.createLightingModel( shader::getLightingModelName( materialType )
+			auto lightingModel = utils.createLightingModel( shader::getLightingModelName( *renderSystem.getEngine(), passType )
 				, {}
 				, true );
 			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), uint32_t( IndirectLightingPass::eDepth ), 0u );
@@ -266,7 +266,7 @@ namespace castor3d
 			, getVertexShaderSource() }
 		, pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT
 			, "IndirectLightingPass"
-			, getPixelShaderSource( scene.getMaterialsType()
+			, getPixelShaderSource( scene.getPassesType()
 				, device.renderSystem
 				, config ) }
 		, stages{ makeShaderState( device, vertexShader )

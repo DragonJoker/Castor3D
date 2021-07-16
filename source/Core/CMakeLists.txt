@@ -39,6 +39,10 @@ function( CoreBuild )
 		${CastorBinsDependencies}
 		PARENT_SCOPE
 	)
+	set( Castor3D_MATERIAL_DIRS
+		${Castor3D_MATERIAL_DIRS}
+		PARENT_SCOPE
+	)
 endfunction( CoreBuild )
 
 function( CoreSummary msg )

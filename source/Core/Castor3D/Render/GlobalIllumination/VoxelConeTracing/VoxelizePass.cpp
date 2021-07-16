@@ -559,7 +559,7 @@ namespace castor3d
 			, addIndex++
 			, RenderPipeline::eAdditional ) );
 		auto lightingModel = shader::LightingModel::createDiffuseModel( utils
-			, shader::getLightingModelName( flags.passFlags )
+			, shader::getLightingModelName( *getEngine(), flags.passType )
 			, lightsIndex
 			, RenderPipeline::eAdditional
 			, shader::ShadowOptions{ flags.sceneFlags, false }

@@ -5,6 +5,7 @@
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
+#include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
@@ -77,7 +78,7 @@ namespace castor3d
 			m_sampler = sampler;
 
 			if ( m_initialised
-				&& m_scene.getMaterialsType() != MaterialType::ePhong
+				&& m_scene.getEngine()->getPassFactory().hasIBL( m_scene.getPassesType() )
 				&& m_texture->getLayersCount() == 6u )
 			{
 				m_ibl = std::make_unique< IblTextures >( m_scene

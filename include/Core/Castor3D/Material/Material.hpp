@@ -33,7 +33,7 @@ namespace castor3d
 		 */
 		C3D_API Material( castor::String const & name
 			, Engine & engine
-			, MaterialType type );
+			, PassTypeID type );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -181,7 +181,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le type de matériau.
 		 */
-		MaterialType getType()const
+		PassTypeID getType()const
 		{
 			return m_type;
 		}
@@ -199,7 +199,7 @@ namespace castor3d
 
 	private:
 		PassPtrArray m_passes;
-		MaterialType m_type{ MaterialType::ePhong };
+		PassTypeID m_type{ 0u };
 		std::map< PassSPtr, OnPassChangedConnection > m_passListeners;
 	};
 }

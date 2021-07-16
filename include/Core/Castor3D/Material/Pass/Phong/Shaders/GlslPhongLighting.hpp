@@ -149,7 +149,7 @@ namespace castor3d::shader
 		void doDeclareComputeLightDiffuse();
 
 	public:
-		C3D_API static const castor::String Name;
+		C3D_API static const castor::String getName();
 		sdw::Function< sdw::Void
 			, InLight
 			, InPhongLightMaterial

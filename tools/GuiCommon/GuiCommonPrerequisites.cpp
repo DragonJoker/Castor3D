@@ -331,29 +331,8 @@ namespace GuiCommon
 		if ( !arrayKept.empty() )
 		{
 			castor::PathArray arrayFailed;
-			castor::PathArray otherPlugins;
 
 			for ( auto file : arrayKept )
-			{
-				if ( file.getExtension() == CU_SharedLibExt )
-				{
-					// Since techniques depend on renderers, we load these first
-					if ( file.find( cuT( "RenderSystem" ) ) != castor::String::npos )
-					{
-						if ( !engine.getPluginCache().loadPlugin( file ) )
-						{
-							arrayFailed.push_back( file );
-						}
-					}
-					else
-					{
-						otherPlugins.push_back( file );
-					}
-				}
-			}
-
-			// Then we load other plug-ins
-			for ( auto file : otherPlugins )
 			{
 				if ( !engine.getPluginCache().loadPlugin( file ) )
 				{
