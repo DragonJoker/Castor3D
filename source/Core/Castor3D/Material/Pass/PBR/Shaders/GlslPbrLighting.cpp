@@ -392,10 +392,9 @@ namespace castor3d::shader
 		m_cookTorrance.declare();
 	}
 
-	void PbrLightingModel::doDeclareComputeDirectionalLight()
+	void PbrLightingModel::doDeclareComputeTiledDirectionalLight()
 	{
 		OutputComponents output{ m_writer };
-#if C3D_UseTiledDirectionalShadowMap
 		m_computeTiledDirectional = m_writer.implementFunction< sdw::Void >( "computeDirectionalLight"
 			, [this]( TiledDirectionalLight const & light
 				, PbrLightMaterial const & material
@@ -414,7 +413,7 @@ namespace castor3d::shader
 
 				if ( m_shadowModel->isEnabled() )
 				{
-					IF( m_writer, light.m_lightBase.m_shadowType != Int( int( ShadowType::eNone ) ) )
+					IF( m_writer, light.m_lightBase.m_shadowType != sdw::Int( int( ShadowType::eNone ) ) )
 					{
 						auto cascadeFactors = m_writer.declLocale( "cascadeFactors"
 							, vec3( 0.0_f, 1.0_f, 0.0_f ) );
@@ -423,17 +422,17 @@ namespace castor3d::shader
 						auto shadowFactor = m_writer.declLocale( "shadowFactor"
 							, 1.0_f );
 
-						IF ( m_writer, receivesShadows != 0_i )
+						IF( m_writer, receivesShadows != 0_i )
 						{
-							auto c3d_maxCascadeCount = m_writer.getVariable< UInt >( "c3d_maxCascadeCount" );
+							auto c3d_maxCascadeCount = m_writer.getVariable< sdw::UInt >( "c3d_maxCascadeCount" );
 							auto maxCount = m_writer.declLocale( "maxCount"
-								, m_writer.cast< UInt >( clamp( light.m_cascadeCount, 1_u, c3d_maxCascadeCount ) - 1_u ) );
+								, m_writer.cast< sdw::UInt >( clamp( light.m_cascadeCount, 1_u, c3d_maxCascadeCount ) - 1_u ) );
 
 							// Get cascade index for the current fragment's view position
-							FOR( m_writer, UInt, i, 0u, i < maxCount, ++i )
+							FOR( m_writer, sdw::UInt, i, 0u, i < maxCount, ++i )
 							{
 								auto factors = m_writer.declLocale( "factors"
-									, m_getTileFactors( Vec3{ surface.viewPosition }
+									, m_getTileFactors( sdw::Vec3{ surface.viewPosition }
 										, light.m_splitDepths
 										, i ) );
 
@@ -445,9 +444,9 @@ namespace castor3d::shader
 							}
 							ROF;
 
-							cascadeIndex = m_writer.cast< UInt >( cascadeFactors.x() );
+							cascadeIndex = m_writer.cast< sdw::UInt >( cascadeFactors.x() );
 							shadowFactor = cascadeFactors.y()
-								* max( 1.0_f - m_writer.cast< Float >( receivesShadows )
+								* max( 1.0_f - m_writer.cast< sdw::Float >( receivesShadows )
 									, m_shadowModel->computeDirectional( light.m_lightBase
 										, surface
 										, light.m_transforms[cascadeIndex]
@@ -458,7 +457,7 @@ namespace castor3d::shader
 							IF( m_writer, cascadeIndex > 0_u )
 							{
 								shadowFactor += cascadeFactors.z()
-									* max( 1.0_f - m_writer.cast< Float >( receivesShadows )
+									* max( 1.0_f - m_writer.cast< sdw::Float >( receivesShadows )
 										, m_shadowModel->computeDirectional( light.m_lightBase
 											, surface
 											, light.m_transforms[cascadeIndex - 1u]
@@ -476,8 +475,8 @@ namespace castor3d::shader
 								, worldEye
 								, lightDirection
 								, material.specular
-								, material.metalness
-								, material.roughness
+								, material.getMetalness()
+								, material.getRoughness()
 								, surface
 								, output );
 							output.m_diffuse *= shadowFactor;
@@ -520,7 +519,7 @@ namespace castor3d::shader
 						ELSE
 						{
 							output.m_diffuse.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
-							output.m_specular.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
+						output.m_specular.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
 						}
 						FI;
 #endif
@@ -528,11 +527,11 @@ namespace castor3d::shader
 					ELSE
 					{
 						m_cookTorrance.compute( light.m_lightBase
-							, worldEye
+						, worldEye
 							, lightDirection
 							, material.specular
-							, material.metalness
-							, material.roughness
+							, material.getMetalness()
+							, material.getRoughness()
 							, surface
 							, output );
 					}
@@ -544,8 +543,8 @@ namespace castor3d::shader
 						, worldEye
 						, lightDirection
 						, material.specular
-						, material.metalness
-						, material.roughness
+						, material.getMetalness()
+						, material.getRoughness()
 						, surface
 						, output );
 				}
@@ -554,12 +553,16 @@ namespace castor3d::shader
 				parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
 			}
 			, InTiledDirectionalLight( m_writer, "light" )
-			, InPbrLightMaterial{ m_writer, "material" }
-			, InSurface{ m_writer, "surface" }
-			, sdw::InVec3( m_writer, "worldEye" )
-			, sdw::InInt( m_writer, "receivesShadows" )
-			, output );
-#else
+				, InPbrLightMaterial{ m_writer, "material" }
+				, InSurface{ m_writer, "surface" }
+				, sdw::InVec3( m_writer, "worldEye" )
+				, sdw::InInt( m_writer, "receivesShadows" )
+				, output );
+	}
+
+	void PbrLightingModel::doDeclareComputeDirectionalLight()
+	{
+		OutputComponents output{ m_writer };
 		m_computeDirectional = m_writer.implementFunction< sdw::Void >( "computeDirectionalLight"
 			, [this]( DirectionalLight const & light
 				, PbrLightMaterial const & material
@@ -723,7 +726,6 @@ namespace castor3d::shader
 			, sdw::InVec3( m_writer, "worldEye" )
 			, sdw::InInt( m_writer, "receivesShadows" )
 			, output );
-#endif
 	}
 
 	void PbrLightingModel::doDeclareComputePointLight()
@@ -928,9 +930,8 @@ namespace castor3d::shader
 		m_cookTorrance.declareDiffuse();
 	}
 
-	void PbrLightingModel::doDeclareComputeDirectionalLightDiffuse()
+	void PbrLightingModel::doDeclareComputeTiledDirectionalLightDiffuse()
 	{
-#if C3D_UseTiledDirectionalShadowMap
 		m_computeTiledDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeDirectionalLight"
 			, [this]( TiledDirectionalLight const & light
 				, PbrLightMaterial const & material
@@ -945,7 +946,7 @@ namespace castor3d::shader
 
 				if ( m_shadowModel->isEnabled() )
 				{
-					IF( m_writer, light.m_lightBase.m_shadowType != Int( int( ShadowType::eNone ) ) )
+					IF( m_writer, light.m_lightBase.m_shadowType != sdw::Int( int( ShadowType::eNone ) ) )
 					{
 						auto cascadeFactors = m_writer.declLocale( "cascadeFactors"
 							, vec3( 0.0_f, 1.0_f, 0.0_f ) );
@@ -956,7 +957,7 @@ namespace castor3d::shader
 
 						IF ( m_writer, receivesShadows != 0_i )
 						{
-							shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
+							shadowFactor = max( 1.0_f - m_writer.cast< sdw::Float >( receivesShadows )
 								, m_shadowModel->computeDirectional( light.m_lightBase
 									, surface
 									, light.m_transforms[cascadeIndex]
@@ -972,7 +973,7 @@ namespace castor3d::shader
 								, worldEye
 								, lightDirection
 								, material.specular
-								, material.metalness
+								, material.getMetalness()
 								, surface );
 						}
 						FI;
@@ -983,7 +984,7 @@ namespace castor3d::shader
 							, worldEye
 							, lightDirection
 							, material.specular
-							, material.metalness
+							, material.getMetalness()
 							, surface );
 					}
 					FI;
@@ -994,7 +995,7 @@ namespace castor3d::shader
 						, worldEye
 						, lightDirection
 						, material.specular
-						, material.metalness
+						, material.getMetalness()
 						, surface );
 				}
 
@@ -1005,7 +1006,10 @@ namespace castor3d::shader
 			, InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
 			, sdw::InInt( m_writer, "receivesShadows" ) );
-#else
+	}
+
+	void PbrLightingModel::doDeclareComputeDirectionalLightDiffuse()
+	{
 		m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeDirectionalLight"
 			, [this]( DirectionalLight const & light
 				, PbrLightMaterial const & material
@@ -1080,7 +1084,6 @@ namespace castor3d::shader
 			, InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
 			, sdw::InInt( m_writer, "receivesShadows" ) );
-#endif
 	}
 
 	void PbrLightingModel::doDeclareComputePointLightDiffuse()

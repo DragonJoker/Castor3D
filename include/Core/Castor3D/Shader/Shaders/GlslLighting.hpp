@@ -27,6 +27,10 @@ namespace castor3d::shader
 		C3D_API virtual void create( sdw::Vec3 const & albedo
 			, sdw::Vec4 const & data3
 			, sdw::Vec4 const & data2
+			, Material const & material ) = 0;
+		C3D_API virtual void create( sdw::Vec3 const & albedo
+			, sdw::Vec4 const & data3
+			, sdw::Vec4 const & data2
 			, sdw::Float const & ambient = 0.0_f ) = 0;
 		C3D_API virtual void create( Material const & material ) = 0;
 		C3D_API virtual void output( sdw::Vec4 & outData2, sdw::Vec4 & outData3 )const = 0;
@@ -50,6 +54,7 @@ namespace castor3d::shader
 		static C3D_API sdw::Float computeRoughness( sdw::Float const & glossiness );
 		//\}
 
+		sdw::Vec4 specific;
 		sdw::Vec3 albedo;
 		sdw::Vec3 specular;
 
@@ -335,10 +340,12 @@ namespace castor3d::shader
 
 		virtual void doDeclareModel() = 0;
 		virtual void doDeclareComputeDirectionalLight() = 0;
+		virtual void doDeclareComputeTiledDirectionalLight() = 0;
 		virtual void doDeclareComputePointLight() = 0;
 		virtual void doDeclareComputeSpotLight() = 0;
 		virtual void doDeclareDiffuseModel() = 0;
 		virtual void doDeclareComputeDirectionalLightDiffuse() = 0;
+		virtual void doDeclareComputeTiledDirectionalLightDiffuse() = 0;
 		virtual void doDeclareComputePointLightDiffuse() = 0;
 		virtual void doDeclareComputeSpotLightDiffuse() = 0;
 

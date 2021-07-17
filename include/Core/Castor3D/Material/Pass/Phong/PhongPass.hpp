@@ -26,34 +26,48 @@ namespace castor3d
 		 *\remarks		A ne pas utiliser autrement que via la classe Material.
 		 *\param[in]	parent	Le matériau parent.
 		 */
-		explicit PhongPass( Material & parent );
+		C3D_API explicit PhongPass( Material & parent
+			, PassFlags initialFlags = PassFlag::eNone );
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\remarks		Used by Material, don't use it.
+		 *\param[in]	parent	The parent material.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\remarks		A ne pas utiliser autrement que via la classe Material.
+		 *\param[in]	parent	Le matériau parent.
+		 */
+		C3D_API PhongPass( Material & parent
+			, PassTypeID typeID
+			, PassFlags initialFlags = PassFlag::eNone );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		~PhongPass();
+		C3D_API ~PhongPass();
 
-		static PassSPtr create( Material & parent );
-		static castor::AttributeParsersBySection createParsers();
-		static castor::StrUInt32Map createSections();
+		C3D_API static PassSPtr create( Material & parent );
+		C3D_API static castor::AttributeParsersBySection createParsers();
+		C3D_API static castor::StrUInt32Map createSections();
 		/**
 		 *\copydoc		castor3d::Pass::accept
 		 */
-		void accept( PassBuffer & buffer )const override;
+		C3D_API void accept( PassBuffer & buffer )const override;
 		/**
 		 *\copydoc		castor3d::Pass::getPassSectionID
 		 */
-		uint32_t getPassSectionID()const override;
+		C3D_API uint32_t getPassSectionID()const override;
 		/**
 		 *\copydoc		castor3d::Pass::getTextureSectionID
 		 */
-		uint32_t getTextureSectionID()const override;
+		C3D_API uint32_t getTextureSectionID()const override;
 		/**
 		 *\copydoc		castor3d::Pass::writeText
 		 */
-		bool writeText( castor::String const & tabs
+		C3D_API bool writeText( castor::String const & tabs
 			, castor::Path const & folder
 			, castor::String const & subfolder
 			, castor::StringStream & file )const override;
@@ -180,15 +194,17 @@ namespace castor3d
 			return *m_specular;
 		}
 
-	private:
-		void doInitialise()override;
-		void doCleanup()override;
-		void doAccept( PassVisitorBase & vis )override;
-		void doAccept( TextureConfiguration & config
+	protected:
+		C3D_API void doAccept( PassVisitorBase & vis )override;
+		C3D_API void doAccept( TextureConfiguration & config
 			, PassVisitorBase & vis )override;
-		void doSetOpacity( float value )override;
-		void doPrepareTextures( TextureUnitPtrArray & result )override;
-		void doJoinSpcShn( TextureUnitPtrArray & result );
+
+	private:
+		C3D_API void doInitialise()override;
+		C3D_API void doCleanup()override;
+		C3D_API void doSetOpacity( float value )override;
+		C3D_API void doPrepareTextures( TextureUnitPtrArray & result )override;
+		C3D_API void doJoinSpcShn( TextureUnitPtrArray & result );
 
 	public:
 		static constexpr float MaxShininess = 256.0f;

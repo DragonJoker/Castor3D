@@ -147,7 +147,6 @@ namespace castor3d
 		shader::Utils utils{ writer, *getEngine() };
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
-		utils.declareLineariseDepth();
 		utils.declareComputeAccumulation();
 		utils.declareParallaxMappingFunc( flags.passFlags
 			, getTexturesMask() );

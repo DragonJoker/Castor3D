@@ -125,10 +125,12 @@ namespace castor3d::shader
 	protected:
 		void doDeclareModel()override;
 		void doDeclareComputeDirectionalLight()override;
+		void doDeclareComputeTiledDirectionalLight()override;
 		void doDeclareComputePointLight()override;
 		void doDeclareComputeSpotLight()override;
 		void doDeclareDiffuseModel()override;
 		void doDeclareComputeDirectionalLightDiffuse()override;
+		void doDeclareComputeTiledDirectionalLightDiffuse()override;
 		void doDeclareComputePointLightDiffuse()override;
 		void doDeclareComputeSpotLightDiffuse()override;
 

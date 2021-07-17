@@ -147,7 +147,7 @@ namespace castor3d
 			UBO_GPINFO( writer, uint32_t( ResolveBind::eGpInfo ), 0u );
 			UBO_HDR_CONFIG( writer, uint32_t( ResolveBind::eHdrConfig ), 0u );
 
-			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), uint32_t( ResolveBind::eDepth ), 0u );
+			auto c3d_mapDepth = writer.declSampledImage< FImg2DR32 >( getTextureName( DsTexture::eDepth ), uint32_t( ResolveBind::eDepth ), 0u );
 			auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), uint32_t( ResolveBind::eData1 ), 0u );
 			auto c3d_mapData2 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), uint32_t( ResolveBind::eData2 ), 0u );
 			auto c3d_mapData3 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), uint32_t( ResolveBind::eData3 ), 0u );
@@ -219,12 +219,13 @@ namespace castor3d
 						, lighting
 						, envMapIndex );
 					auto depth = writer.declLocale( "depth"
-						, c3d_mapDepth.lod( vtx_texture, 0.0_f ).x() );
+						, c3d_mapDepth.lod( vtx_texture, 0.0_f ) );
 					auto albedo = writer.declLocale( "albedo"
 						, data2.rgb() );
 					auto surface = writer.declLocale< shader::Surface >( "surface" );
 					surface.create( c3d_gpInfoData.projToWorld( utils, vtx_texture, depth )
 						, data1.rgb() );
+					surface.texCoord.xy() = vtx_texture;
 
 					IF( writer, lighting )
 					{
@@ -243,7 +244,7 @@ namespace castor3d
 						lightMat->create( albedo
 							, data3
 							, data2
-							, material.colourDiv.a() );
+							, material );
 
 						auto ambient = writer.declLocale( "ambient"
 							, lightMat->getAmbient( c3d_sceneData.getAmbientLight() ) );
@@ -271,6 +272,8 @@ namespace castor3d
 						reflections->computeDeferred( *lightMat
 							, surface
 							, c3d_sceneData
+							, c3d_mapDepth
+							, c3d_mapData1
 							, envMapIndex
 							, reflection
 							, refraction
