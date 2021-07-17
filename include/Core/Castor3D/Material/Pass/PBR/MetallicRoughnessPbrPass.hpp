@@ -26,7 +26,21 @@ namespace castor3d
 		 *\remarks		A ne pas utiliser autrement que via la classe Material.
 		 *\param[in]	parent	Le matériau parent.
 		 */
-		C3D_API explicit MetallicRoughnessPbrPass( Material & parent );
+		C3D_API explicit MetallicRoughnessPbrPass( Material & parent
+			, PassFlags initialFlags = PassFlag::eNone );
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\remarks		Used by Material, don't use it.
+		 *\param[in]	parent	The parent material.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\remarks		A ne pas utiliser autrement que via la classe Material.
+		 *\param[in]	parent	Le matériau parent.
+		 */
+		C3D_API MetallicRoughnessPbrPass( Material & parent
+			, PassTypeID typeID
+			, PassFlags initialFlags = PassFlag::eNone );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -142,15 +156,17 @@ namespace castor3d
 		C3D_API static castor::String const Type;
 		C3D_API static castor::String const LightingModel;
 
-	private:
-		void doInitialise()override;
-		void doCleanup()override;
-		void doAccept( PassVisitorBase & vis )override;
-		void doAccept( TextureConfiguration & config
+	protected:
+		C3D_API void doAccept( PassVisitorBase & vis )override;
+		C3D_API void doAccept( TextureConfiguration & config
 			, PassVisitorBase & vis )override;
-		void doSetOpacity( float value )override;
-		void doPrepareTextures( TextureUnitPtrArray & result )override;
-		void doJoinMtlRgh( TextureUnitPtrArray & result );
+
+	private:
+		C3D_API void doInitialise()override;
+		C3D_API void doCleanup()override;
+		C3D_API void doSetOpacity( float value )override;
+		C3D_API void doPrepareTextures( TextureUnitPtrArray & result )override;
+		C3D_API void doJoinMtlRgh( TextureUnitPtrArray & result );
 
 	private:
 		//!\~english	The albedo colour.

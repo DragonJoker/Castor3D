@@ -1,4 +1,4 @@
-#include "Castor3D/Material/Pass/Phong/PhongPass.hpp"
+#include "Castor3D/Material/Pass/Phong/BlinnPhongPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Material.hpp"
@@ -20,23 +20,23 @@
 namespace castor
 {
 	template<>
-	class TextWriter< castor3d::PhongPass >
-		: public TextWriterT< castor3d::PhongPass >
+	class TextWriter< castor3d::BlinnPhongPass >
+		: public TextWriterT< castor3d::BlinnPhongPass >
 	{
 	public:
 		TextWriter( String const & tabs
 			, Path const & folder
 			, String const & subfolder )
-			: TextWriterT< castor3d::PhongPass >{ tabs }
+			: TextWriterT< castor3d::BlinnPhongPass >{ tabs }
 			, m_folder{ folder }
 			, m_subfolder{ subfolder }
 		{
 		}
 
-		bool operator()( castor3d::PhongPass const & pass
+		bool operator()( castor3d::BlinnPhongPass const & pass
 			, StringStream & file )
 		{
-			castor3d::log::info << tabs() << cuT( "Writing PhongPass " ) << std::endl;
+			castor3d::log::info << tabs() << cuT( "Writing BlinnPhongPass " ) << std::endl;
 			return writeNamedSub( file, "diffuse", pass.getDiffuse() )
 				&& writeNamedSub( file, "specular", pass.getSpecular() )
 				&& write( file, "ambient", pass.getAmbient() )
@@ -53,17 +53,17 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace phong
+	namespace blinn_phong
 	{
 		enum class Section
 			: uint32_t
 		{
-			ePass = CU_MakeSectionName( 'P', 'H', 'O', 'N' ),
-			eTextureUnit = CU_MakeSectionName( 'P', 'H', 'T', 'U' ),
+			ePass = CU_MakeSectionName( 'B', 'L', 'P', 'N' ),
+			eTextureUnit = CU_MakeSectionName( 'B', 'L', 'P', 'T' ),
 		};
 
-		static castor::String const PassSectionName{ cuT( "phong_pass" ) };
-		static castor::String const TextureSectionName{ cuT( "phong_texture_unit" ) };
+		static castor::String const PassSectionName{ cuT( "blinn_phong_pass" ) };
+		static castor::String const TextureSectionName{ cuT( "blinn_phong_texture_unit" ) };
 
 		CU_ImplementAttributeParser( parserPassDiffuse )
 		{
@@ -75,7 +75,7 @@ namespace castor3d
 			}
 			else if ( !params.empty() )
 			{
-				auto & phongPass = static_cast< PhongPass & >( *parsingContext->pass );
+				auto & phongPass = static_cast< BlinnPhongPass & >( *parsingContext->pass );
 				castor::RgbColour value;
 				params[0]->get( value );
 				phongPass.setDiffuse( value );
@@ -93,7 +93,7 @@ namespace castor3d
 			}
 			else if ( !params.empty() )
 			{
-				auto & phongPass = static_cast< PhongPass & >( *parsingContext->pass );
+				auto & phongPass = static_cast< BlinnPhongPass & >( *parsingContext->pass );
 				castor::RgbColour value;
 				params[0]->get( value );
 				phongPass.setSpecular( value );
@@ -111,7 +111,7 @@ namespace castor3d
 			}
 			else if ( !params.empty() )
 			{
-				auto & phongPass = static_cast< PhongPass & >( *parsingContext->pass );
+				auto & phongPass = static_cast< BlinnPhongPass & >( *parsingContext->pass );
 				float value;
 				params[0]->get( value );
 				phongPass.setAmbient( value );
@@ -129,7 +129,7 @@ namespace castor3d
 			}
 			else if ( !params.empty() )
 			{
-				auto & phongPass = static_cast< PhongPass & >( *parsingContext->pass );
+				auto & phongPass = static_cast< BlinnPhongPass & >( *parsingContext->pass );
 				float value;
 				params[0]->get( value );
 				phongPass.setShininess( value );
@@ -259,36 +259,32 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const PhongPass::Type = cuT( "phong" );
-	castor::String const PhongPass::LightingModel = shader::PhongLightingModel::getName();
+	castor::String const BlinnPhongPass::Type = cuT( "blinn_phong" );
+	castor::String const BlinnPhongPass::LightingModel = shader::BlinnPhongLightingModel::getName();
 
-	PhongPass::PhongPass( Material & parent
+	BlinnPhongPass::BlinnPhongPass( Material & parent
 		, PassFlags initialFlags )
-		: PhongPass{ parent, parent.getEngine()->getPassFactory().getNameId( Type ), initialFlags }
+		: BlinnPhongPass{ parent, parent.getEngine()->getPassFactory().getNameId( Type ), initialFlags }
 	{
 	}
 
-	PhongPass::PhongPass( Material & parent
+	BlinnPhongPass::BlinnPhongPass( Material & parent
 		, PassTypeID typeID
 		, PassFlags initialFlags )
-		: Pass{ parent, typeID, initialFlags }
-		, m_diffuse{ m_dirty, castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
-		, m_specular{ m_dirty, castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
-		, m_ambient{ m_dirty, 1.0f }
-		, m_shininess{ m_dirty, { 50.0f, castor::makeRange( 0.0001f, MaxShininess ) } }
+		: PhongPass{ parent, typeID, initialFlags }
 	{
 	}
 
-	PhongPass::~PhongPass()
+	BlinnPhongPass::~BlinnPhongPass()
 	{
 	}
 
-	PassSPtr PhongPass::create( Material & parent )
+	PassSPtr BlinnPhongPass::create( Material & parent )
 	{
-		return std::make_shared< PhongPass >( parent );
+		return std::make_shared< BlinnPhongPass >( parent );
 	}
 
-	castor::AttributeParsersBySection PhongPass::createParsers()
+	castor::AttributeParsersBySection BlinnPhongPass::createParsers()
 	{
 		static UInt32StrMap const textureChannels = []()
 		{
@@ -304,116 +300,42 @@ namespace castor3d
 			result[getName( TextureFlag::eSpecular, false )] = uint32_t( TextureFlag::eSpecular );
 			result[getName( TextureFlag::eShininess, false )] = uint32_t( TextureFlag::eShininess );
 			return result;
-		}();
+		}( );
 
 		castor::AttributeParsersBySection result;
 
-		Pass::addParser( result, uint32_t( phong::Section::ePass ), cuT( "diffuse" ), phong::parserPassDiffuse, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
-		Pass::addParser( result, uint32_t( phong::Section::ePass ), cuT( "specular" ), phong::parserPassSpecular, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
-		Pass::addParser( result, uint32_t( phong::Section::ePass ), cuT( "ambient" ), phong::parserPassAmbient, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		Pass::addParser( result, uint32_t( phong::Section::ePass ), cuT( "shininess" ), phong::parserPassShininess, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		Pass::addParser( result, uint32_t( phong::Section::eTextureUnit ), cuT( "diffuse_mask" ), phong::parserUnitDiffuseMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		Pass::addParser( result, uint32_t( phong::Section::eTextureUnit ), cuT( "specular_mask" ), phong::parserUnitSpecularMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		Pass::addParser( result, uint32_t( phong::Section::eTextureUnit ), cuT( "shininess_mask" ), phong::parserUnitShininessMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		Pass::addParser( result, uint32_t( phong::Section::eTextureUnit ), cuT( "channel" ), phong::parserUnitChannel, { castor::makeParameter< castor::ParameterType::eBitwiseOred32BitsCheckedText >( textureChannels ) } );
-		Pass::addCommonParsers( uint32_t( phong::Section::ePass )
-			, uint32_t( phong::Section::eTextureUnit )
+		Pass::addParser( result, uint32_t( blinn_phong::Section::ePass ), cuT( "diffuse" ), blinn_phong::parserPassDiffuse, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
+		Pass::addParser( result, uint32_t( blinn_phong::Section::ePass ), cuT( "specular" ), blinn_phong::parserPassSpecular, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
+		Pass::addParser( result, uint32_t( blinn_phong::Section::ePass ), cuT( "ambient" ), blinn_phong::parserPassAmbient, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		Pass::addParser( result, uint32_t( blinn_phong::Section::ePass ), cuT( "shininess" ), blinn_phong::parserPassShininess, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		Pass::addParser( result, uint32_t( blinn_phong::Section::eTextureUnit ), cuT( "diffuse_mask" ), blinn_phong::parserUnitDiffuseMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		Pass::addParser( result, uint32_t( blinn_phong::Section::eTextureUnit ), cuT( "specular_mask" ), blinn_phong::parserUnitSpecularMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		Pass::addParser( result, uint32_t( blinn_phong::Section::eTextureUnit ), cuT( "shininess_mask" ), blinn_phong::parserUnitShininessMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		Pass::addParser( result, uint32_t( blinn_phong::Section::eTextureUnit ), cuT( "channel" ), blinn_phong::parserUnitChannel, { castor::makeParameter< castor::ParameterType::eBitwiseOred32BitsCheckedText >( textureChannels ) } );
+		Pass::addCommonParsers( uint32_t( blinn_phong::Section::ePass )
+			, uint32_t( blinn_phong::Section::eTextureUnit )
 			, result );
 
 		return result;
 	}
 
-	castor::StrUInt32Map PhongPass::createSections()
+	castor::StrUInt32Map BlinnPhongPass::createSections()
 	{
 		return
 		{
-			{ uint32_t( phong::Section::ePass ), phong::PassSectionName },
-			{ uint32_t( phong::Section::eTextureUnit ), phong::TextureSectionName },
+			{ uint32_t( blinn_phong::Section::ePass ), blinn_phong::PassSectionName },
+			{ uint32_t( blinn_phong::Section::eTextureUnit ), blinn_phong::TextureSectionName },
 		};
 	}
 
-	void PhongPass::accept( PassBuffer & buffer )const
+	uint32_t BlinnPhongPass::getPassSectionID()const
 	{
-		auto data = buffer.getData( getId() );
-
-		data.colourDiv->r = getDiffuse().red();
-		data.colourDiv->g = getDiffuse().green();
-		data.colourDiv->b = getDiffuse().blue();
-		data.colourDiv->a = getAmbient();
-		data.specDiv->r = getSpecular().red();
-		data.specDiv->g = getSpecular().green();
-		data.specDiv->b = getSpecular().blue();
-		data.specDiv->a = getShininess().value();
-
-		doFillData( data );
+		return uint32_t( blinn_phong::Section::ePass );
 	}
 
-	uint32_t PhongPass::getPassSectionID()const
+	uint32_t BlinnPhongPass::getTextureSectionID()const
 	{
-		return uint32_t( phong::Section::ePass );
-	}
-
-	uint32_t PhongPass::getTextureSectionID()const
-	{
-		return uint32_t( phong::Section::eTextureUnit );
-	}
-
-	bool PhongPass::writeText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
-	{
-		return castor::TextWriter< PhongPass >{ tabs, folder, subfolder }( *this, file );
-	}
-
-	void PhongPass::doInitialise()
-	{
-	}
-
-	void PhongPass::doCleanup()
-	{
-	}
-
-	void PhongPass::doAccept( PassVisitorBase & vis )
-	{
-		vis.visit( cuT( "Ambient" )
-			, m_ambient );
-		vis.visit( cuT( "Diffuse" )
-			, m_diffuse );
-		vis.visit( cuT( "Specular" )
-			, m_specular );
-		vis.visit( cuT( "Exponent" )
-			, m_shininess );
-	}
-
-	void PhongPass::doAccept( TextureConfiguration & configuration
-		, PassVisitorBase & vis )
-	{
-		vis.visit( cuT( "Diffuse" ), TextureFlag::eDiffuse, configuration.colourMask, 3u );
-		vis.visit( cuT( "Specular" ), TextureFlag::eSpecular, configuration.specularMask, 3u );
-		vis.visit( cuT( "Shininess" ), TextureFlag::eShininess, configuration.glossinessMask, 1u );
-	}
-
-	void PhongPass::doSetOpacity( float p_value )
-	{
-	}
-
-	void PhongPass::doPrepareTextures( TextureUnitPtrArray & result )
-	{
-		doJoinDifOpa( result, cuT( "DifOpa" ) );
-		doJoinSpcShn( result );
-	}
-
-	void PhongPass::doJoinSpcShn( TextureUnitPtrArray & result )
-	{
-		doMergeImages( TextureFlag::eSpecular
-			, offsetof( TextureConfiguration, specularMask )
-			, 0x00FFFFFF
-			, TextureFlag::eShininess
-			, offsetof( TextureConfiguration, glossinessMask )
-			, 0xFF000000
-			, cuT( "SpcShn" )
-			, result );
+		return uint32_t( blinn_phong::Section::eTextureUnit );
 	}
 
 	//*********************************************************************************************

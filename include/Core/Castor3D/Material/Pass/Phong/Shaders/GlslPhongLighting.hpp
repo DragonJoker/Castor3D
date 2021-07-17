@@ -18,7 +18,8 @@ namespace castor3d::shader
 		C3D_API PhongLightingModel( sdw::ShaderWriter & writer
 			, Utils & utils
 			, ShadowOptions shadowOptions
-			, bool isOpaqueProgram );
+			, bool isOpaqueProgram
+			, bool isBlinnPhong );
 		C3D_API static LightingModelPtr create( sdw::ShaderWriter & writer
 			, Utils & utils
 			, ShadowOptions shadowOptions
@@ -123,13 +124,20 @@ namespace castor3d::shader
 			, LightMaterial & lightMat )override;
 		//\}
 
+		bool isBlinnPhong()const
+		{
+			return m_isBlinnPhong;
+		}
+
 	protected:
 		void doDeclareModel()override;
 		void doDeclareComputeDirectionalLight()override;
+		void doDeclareComputeTiledDirectionalLight()override;
 		void doDeclareComputePointLight()override;
 		void doDeclareComputeSpotLight()override;
 		void doDeclareDiffuseModel()override;
 		void doDeclareComputeDirectionalLightDiffuse()override;
+		void doDeclareComputeTiledDirectionalLightDiffuse()override;
 		void doDeclareComputePointLightDiffuse()override;
 		void doDeclareComputeSpotLightDiffuse()override;
 
@@ -149,7 +157,8 @@ namespace castor3d::shader
 		void doDeclareComputeLightDiffuse();
 
 	public:
-		C3D_API static const castor::String getName();
+		C3D_API static castor::String getName();
+		bool m_isBlinnPhong{};
 		sdw::Function< sdw::Void
 			, InLight
 			, InPhongLightMaterial
@@ -215,6 +224,22 @@ namespace castor3d::shader
 			, InSurface
 			, sdw::InVec3
 			, sdw::InInt > m_computeSpotDiffuse;
+	};
+
+	class BlinnPhongLightingModel
+		: public PhongLightingModel
+	{
+	public:
+		C3D_API BlinnPhongLightingModel( sdw::ShaderWriter & writer
+			, Utils & utils
+			, ShadowOptions shadowOptions
+			, bool isOpaqueProgram );
+
+		C3D_API static LightingModelPtr create( sdw::ShaderWriter & writer
+			, Utils & utils
+			, ShadowOptions shadowOptions
+			, bool isOpaqueProgram );
+		C3D_API static castor::String getName();
 	};
 }
 

@@ -18,6 +18,17 @@ namespace castor3d::shader
 	void PbrLightMaterial::create( sdw::Vec3 const & albedo
 		, sdw::Vec4 const & data3
 		, sdw::Vec4 const & data2
+		, Material const & material )
+	{
+		create( albedo
+			, data3
+			, data2
+			, material.colourDiv.a() );
+	}
+
+	void PbrLightMaterial::create( sdw::Vec3 const & albedo
+		, sdw::Vec4 const & data3
+		, sdw::Vec4 const & data2
 		, sdw::Float const & ambient )
 	{
 		this->albedo = albedo;
@@ -28,6 +39,7 @@ namespace castor3d::shader
 
 	void PbrLightMaterial::create( Material const & material )
 	{
+		specific = material.specific;
 		albedo = material.colourDiv.rgb();
 		roughness = material.colourDiv.a();
 		specular = material.specDiv.rgb();
