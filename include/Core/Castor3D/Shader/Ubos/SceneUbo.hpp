@@ -42,6 +42,9 @@ namespace castor3d
 			C3D_API sdw::Int getDirectionalLightCount()const;
 			C3D_API sdw::Int getPointLightCount()const;
 			C3D_API sdw::Int getSpotLightCount()const;
+			C3D_API sdw::Vec2 getRenderSize()const;
+			C3D_API sdw::Float getNearPlane()const;
+			C3D_API sdw::Float getFarPlane()const;
 			C3D_API sdw::Vec4 computeAccumulation( Utils const & utils
 				, sdw::Float const & depth
 				, sdw::Vec3 const & colour

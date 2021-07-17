@@ -36,6 +36,7 @@ namespace castor3d::shader
 	public:
 		sdw::Vec4 colourDiv;
 		sdw::Vec4 specDiv;
+		sdw::Vec4 specific;
 
 	private:
 		sdw::Vec4 m_common;
