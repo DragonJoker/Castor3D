@@ -115,6 +115,21 @@ namespace castor3d
 			return getWriter()->cast< sdw::Int >( m_lightsCount.z() );
 		}
 
+		sdw::Vec2 SceneData::getRenderSize()const
+		{
+			return m_clipInfo.xy();
+		}
+
+		sdw::Float SceneData::getNearPlane()const
+		{
+			return m_clipInfo.z();
+		}
+
+		sdw::Float SceneData::getFarPlane()const
+		{
+			return m_clipInfo.w();
+		}
+
 		sdw::Vec4 SceneData::computeAccumulation( Utils const & utils
 			, sdw::Float const & depth
 			, sdw::Vec3 const & colour
@@ -166,6 +181,8 @@ namespace castor3d
 
 		if ( camera )
 		{
+			configuration.clipInfo[0] = camera->getWidth();
+			configuration.clipInfo[1] = camera->getHeight();
 			configuration.clipInfo[2] = camera->getNear();
 			configuration.clipInfo[3] = camera->getFar();
 			cpuUpdateCameraPosition( *camera );

@@ -1,6 +1,7 @@
 #include "Castor3D/Material/Pass/PassFactory.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Material/Pass/Phong/BlinnPhongPass.hpp"
 #include "Castor3D/Material/Pass/Phong/PhongPass.hpp"
 #include "Castor3D/Material/Pass/Phong/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Material/Pass/PBR/MetallicRoughnessPbrPass.hpp"
@@ -21,6 +22,14 @@ namespace castor3d
 				, PhongPass::createParsers()
 				, PhongPass::createSections()
 				, &shader::PhongLightingModel::create
+				, false } );
+		
+		registerType( BlinnPhongPass::Type
+			, { BlinnPhongPass::LightingModel
+				, BlinnPhongPass::create
+				, BlinnPhongPass::createParsers()
+				, BlinnPhongPass::createSections()
+				, &shader::BlinnPhongLightingModel::create
 				, false } );
 
 		registerType( MetallicRoughnessPbrPass::Type

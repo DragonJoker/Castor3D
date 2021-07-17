@@ -16,6 +16,8 @@
 
 namespace castor3d::shader
 {
+	//*********************************************************************************************
+
 	namespace
 	{
 		void modifyMaterial( sdw::ShaderWriter & writer
@@ -62,7 +64,9 @@ namespace castor3d::shader
 		}
 	}
 
-	const castor::String PhongLightingModel::getName()
+	//*********************************************************************************************
+
+	castor::String PhongLightingModel::getName()
 	{
 		return cuT( "c3d.phong" );
 	}
@@ -70,11 +74,13 @@ namespace castor3d::shader
 	PhongLightingModel::PhongLightingModel( sdw::ShaderWriter & m_writer
 		, Utils & utils
 		, ShadowOptions shadowOptions
-		, bool isOpaqueProgram )
+		, bool isOpaqueProgram
+		, bool isBlinnPhong )
 		: LightingModel{ m_writer
 			, utils
 			, std::move( shadowOptions )
 			, isOpaqueProgram }
+		, m_isBlinnPhong{ isBlinnPhong }
 	{
 	}
 
@@ -86,7 +92,8 @@ namespace castor3d::shader
 		return std::make_unique< PhongLightingModel >( writer
 			, utils
 			, std::move( shadowOptions )
-			, isOpaqueProgram );
+			, isOpaqueProgram
+			, false );
 	}
 
 	sdw::Vec3 PhongLightingModel::combine( sdw::Vec3 const & directDiffuse
@@ -370,10 +377,9 @@ namespace castor3d::shader
 		doDeclareComputeLight();
 	}
 
-	void PhongLightingModel::doDeclareComputeDirectionalLight()
+	void PhongLightingModel::doDeclareComputeTiledDirectionalLight()
 	{
 		OutputComponents output{ m_writer };
-#if C3D_UseTiledDirectionalShadowMap
 		m_computeTiledDirectional = m_writer.implementFunction< sdw::Void >( "computeDirectionalLight"
 			, [this]( TiledDirectionalLight const & light
 				, PhongLightMaterial const & material
@@ -392,7 +398,7 @@ namespace castor3d::shader
 
 				if ( m_shadowModel->isEnabled() )
 				{
-					IF( m_writer, light.m_lightBase.m_shadowType != Int( int( ShadowType::eNone ) ) )
+					IF( m_writer, light.m_lightBase.m_shadowType != sdw::Int( int( ShadowType::eNone ) ) )
 					{
 						auto shadowFactor = m_writer.declLocale( "shadowFactor"
 							, 1.0_f );
@@ -405,10 +411,10 @@ namespace castor3d::shader
 							, m_writer.cast< sdw::UInt >( clamp( light.m_cascadeCount, 1_u, c3d_maxCascadeCount ) - 1_u ) );
 
 						// Get cascade index for the current fragment's view position
-						FOR( m_writer, UInt, i, 0u, i < maxCount, ++i )
+						FOR( m_writer, sdw::UInt, i, 0u, i < maxCount, ++i )
 						{
 							auto factors = m_writer.declLocale( "factors"
-								, m_getTileFactors( Vec3{ surface.viewPosition }
+								, m_getTileFactors( sdw::Vec3{ surface.viewPosition }
 									, light.m_splitDepths
 									, i ) );
 
@@ -526,7 +532,11 @@ namespace castor3d::shader
 			, sdw::InVec3( m_writer, "worldEye" )
 			, sdw::InInt( m_writer, "receivesShadows" )
 			, output );
-#else
+	}
+
+	void PhongLightingModel::doDeclareComputeDirectionalLight()
+	{
+		OutputComponents output{ m_writer };
 		m_computeDirectional = m_writer.implementFunction< sdw::Void >( "computeDirectionalLight"
 			, [this]( DirectionalLight const & light
 				, PhongLightMaterial const & material
@@ -679,7 +689,6 @@ namespace castor3d::shader
 			, sdw::InVec3( m_writer, "worldEye" )
 			, sdw::InInt( m_writer, "receivesShadows" )
 			, output );
-#endif
 	}
 
 	void PhongLightingModel::doDeclareComputePointLight()
@@ -917,16 +926,23 @@ namespace castor3d::shader
 				// Specular term.
 				auto vertexToEye = m_writer.declLocale( "vertexToEye"
 					, normalize( worldEye - surface.worldPosition ) );
-				// Blinn Phong
-				auto halfwayDir = m_writer.declLocale( "halfwayDir"
-					, normalize( vertexToEye - lightDirection ) );
-				auto specularFactor = m_writer.declLocale( "specularFactor"
-					, max( dot( surface.worldNormal, halfwayDir ), 0.0_f ) );
-				// Phong
-				//auto lightReflect = m_writer.declLocale( "lightReflect"
-				//	, normalize( reflect( lightDirection, surface.worldNormal ) ) );
-				//auto specularFactor = m_writer.declLocale( "specularFactor"
-				//	, max( dot( vertexToEye, lightReflect ), 0.0_f ) );
+
+				if ( m_isBlinnPhong )
+				{
+					auto halfwayDir = m_writer.declLocale( "halfwayDir"
+						, normalize( vertexToEye - lightDirection ) );
+					m_writer.declLocale( "specularFactor"
+						, max( dot( surface.worldNormal, halfwayDir ), 0.0_f ) );
+				}
+				else
+				{
+					auto lightReflect = m_writer.declLocale( "lightReflect"
+						, normalize( reflect( lightDirection, surface.worldNormal ) ) );
+					m_writer.declLocale( "specularFactor"
+						, max( dot( vertexToEye, lightReflect ), 0.0_f ) );
+				}
+
+				auto specularFactor = m_writer.getVariable< sdw::Float >( "specularFactor" );
 				output.m_specular = isLit
 					* light.m_colour
 					* light.m_intensity.y()
@@ -960,9 +976,8 @@ namespace castor3d::shader
 		doDeclareComputeLightDiffuse();
 	}
 
-	void PhongLightingModel::doDeclareComputeDirectionalLightDiffuse()
+	void PhongLightingModel::doDeclareComputeTiledDirectionalLightDiffuse()
 	{
-#if C3D_UseTiledDirectionalShadowMap
 		m_computeTiledDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeDirectionalLight"
 			, [this]( TiledDirectionalLight const & light
 				, PhongLightMaterial const & material
@@ -977,7 +992,7 @@ namespace castor3d::shader
 
 				if ( m_shadowModel->isEnabled() )
 				{
-					IF( m_writer, light.m_lightBase.m_shadowType != Int( int( ShadowType::eNone ) ) )
+					IF( m_writer, light.m_lightBase.m_shadowType != sdw::Int( int( ShadowType::eNone ) ) )
 					{
 						auto shadowFactor = m_writer.declLocale( "shadowFactor"
 							, 1.0_f );
@@ -1027,7 +1042,10 @@ namespace castor3d::shader
 			, InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
 			, sdw::InInt( m_writer, "receivesShadows" ) );
-#else
+	}
+
+	void PhongLightingModel::doDeclareComputeDirectionalLightDiffuse()
+	{
 		m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeDirectionalLight"
 			, [this]( DirectionalLight const & light
 				, PhongLightMaterial const & material
@@ -1092,7 +1110,6 @@ namespace castor3d::shader
 			, InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
 			, sdw::InInt( m_writer, "receivesShadows" ) );
-#endif
 	}
 
 	void PhongLightingModel::doDeclareComputePointLightDiffuse()
@@ -1320,4 +1337,36 @@ namespace castor3d::shader
 			, worldEye
 			, lightDirection );
 	}
+
+	//*********************************************************************************************
+
+	BlinnPhongLightingModel::BlinnPhongLightingModel( sdw::ShaderWriter & writer
+		, Utils & utils
+		, ShadowOptions shadowOptions
+		, bool isOpaqueProgram )
+		: PhongLightingModel{ writer
+			, utils
+			, std::move( shadowOptions )
+			, isOpaqueProgram
+			, true }
+	{
+	}
+
+	LightingModelPtr BlinnPhongLightingModel::create( sdw::ShaderWriter & writer
+		, Utils & utils
+		, ShadowOptions shadowOptions
+		, bool isOpaqueProgram )
+	{
+		return std::make_unique< BlinnPhongLightingModel >( writer
+			, utils
+			, std::move( shadowOptions )
+			, isOpaqueProgram );
+	}
+
+	castor::String BlinnPhongLightingModel::getName()
+	{
+		return cuT( "c3d.blinn_phong" );
+	}
+
+	//*********************************************************************************************
 }

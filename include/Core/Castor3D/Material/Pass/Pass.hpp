@@ -515,6 +515,9 @@ namespace castor3d
 		C3D_API static void addCommonParsers( uint32_t mtlSectionID
 			, uint32_t texSectionID
 			, castor::AttributeParsersBySection & result );
+		C3D_API virtual void doAccept( TextureConfiguration & config
+			, PassVisitorBase & vis ) = 0;
+		C3D_API virtual void doAccept( PassVisitorBase & vis ) = 0;
 
 	private:
 		void onSssChanged( SubsurfaceScattering const & sss );
@@ -532,9 +535,6 @@ namespace castor3d
 		void doJoinEmsOcc( TextureUnitPtrArray & result );
 		virtual void doInitialise() = 0;
 		virtual void doCleanup() = 0;
-		virtual void doAccept( TextureConfiguration & config
-			, PassVisitorBase & vis ) = 0;
-		virtual void doAccept( PassVisitorBase & vis ) = 0;
 		virtual void doSetOpacity( float value ) = 0;
 		virtual void doPrepareTextures( TextureUnitPtrArray & result ) = 0;
 

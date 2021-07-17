@@ -42,7 +42,7 @@ namespace castor3d::shader
 			return;
 		}
 
-		m_calcTexCoord = m_writer.implementFunction< sdw::Vec2 >( "calcTexCoord"
+		m_calcTexCoord = m_writer.implementFunction< sdw::Vec2 >( "c3d_calcTexCoord"
 			, [&]( sdw::Vec2 const & renderPos
 				, sdw::Vec2 const & renderSize )
 			{
@@ -59,7 +59,7 @@ namespace castor3d::shader
 			return;
 		}
 
-		m_calcVSPosition = m_writer.implementFunction< sdw::Vec3 >( "calcVSPosition"
+		m_calcVSPosition = m_writer.implementFunction< sdw::Vec3 >( "c3d_calcVSPosition"
 			, [&]( sdw::Vec2 const & uv
 				, sdw::Float const & depth
 				, sdw::Mat4 const & invProj )
@@ -82,7 +82,7 @@ namespace castor3d::shader
 			return;
 		}
 
-		m_calcWSPosition = m_writer.implementFunction< sdw::Vec3 >( "calcWSPosition"
+		m_calcWSPosition = m_writer.implementFunction< sdw::Vec3 >( "c3d_calcWSPosition"
 			, [&]( sdw::Vec2 const & uv
 				, sdw::Float const & depth
 				, sdw::Mat4 const & invViewProj )
@@ -105,7 +105,7 @@ namespace castor3d::shader
 			return;
 		}
 
-		m_applyGamma = m_writer.implementFunction< sdw::Vec3 >( "applyGamma"
+		m_applyGamma = m_writer.implementFunction< sdw::Vec3 >( "c3d_applyGamma"
 			, [&]( sdw::Float const & gamma
 				, sdw::Vec3 const & hdr )
 			{
@@ -122,7 +122,7 @@ namespace castor3d::shader
 			return;
 		}
 
-		m_removeGamma = m_writer.implementFunction< sdw::Vec3 >( "removeGamma"
+		m_removeGamma = m_writer.implementFunction< sdw::Vec3 >( "c3d_removeGamma"
 			, [&]( sdw::Float const & gamma
 				, sdw::Vec3 const & srgb )
 			{
@@ -132,14 +132,14 @@ namespace castor3d::shader
 			, sdw::InVec3{ m_writer, "srgb" } );
 	}
 
-	void Utils::declareLineariseDepth()
+	void Utils::declareRescaleDepth()
 	{
-		if ( m_lineariseDepth )
+		if ( m_rescaleDepth )
 		{
 			return;
 		}
 
-		m_lineariseDepth = m_writer.implementFunction< sdw::Float >( "lineariseDepth"
+		m_rescaleDepth = m_writer.implementFunction< sdw::Float >( "c3d_rescaleDepth"
 			, [&]( sdw::Float const & depth
 				, sdw::Float const & nearPlane
 				, sdw::Float const & farPlane )
@@ -161,7 +161,7 @@ namespace castor3d::shader
 			return;
 		}
 
-		m_getMapNormal = m_writer.implementFunction< sdw::Vec3 >( "getMapNormal"
+		m_getMapNormal = m_writer.implementFunction< sdw::Vec3 >( "c3d_getMapNormal"
 			, [&]( sdw::Vec2 const & uv
 				, sdw::Vec3 const & normal
 				, sdw::Vec3 const & position )
@@ -203,7 +203,8 @@ namespace castor3d::shader
 			return;
 		}
 
-		m_computeAccumulation = m_writer.implementFunction< sdw::Vec4 >( "computeAccumulation"
+		declareRescaleDepth();
+		m_computeAccumulation = m_writer.implementFunction< sdw::Vec4 >( "c3d_computeAccumulation"
 			, [&]( sdw::Float const & depth
 				, sdw::Vec3 const & colour
 				, sdw::Float const & alpha
@@ -219,7 +220,7 @@ namespace castor3d::shader
 					CASE( 0 )
 					{
 						// Naive
-						weight = 1.0_f - lineariseDepth( depth
+						weight = 1.0_f - rescaleDepth( depth
 							, nearPlane
 							, farPlane );
 						m_writer.caseBreakStmt();
@@ -305,7 +306,7 @@ namespace castor3d::shader
 			return;
 		}
 
-		m_fresnelSchlick = m_writer.implementFunction< sdw::Vec3 >( "fresnelSchlick"
+		m_fresnelSchlick = m_writer.implementFunction< sdw::Vec3 >( "c3d_fresnelSchlick"
 			, [&]( sdw::Float const & product
 				, sdw::Vec3 const & f0 )
 			{
@@ -325,7 +326,7 @@ namespace castor3d::shader
 			return;
 		}
 
-		m_invertVec2Y = m_writer.implementFunction< sdw::Vec2 >( "invertVec2Y"
+		m_invertVec2Y = m_writer.implementFunction< sdw::Vec2 >( "c3d_invertVec2Y"
 			, [&]( sdw::Vec2 const & v )
 			{
 				m_writer.returnStmt( vec2( v.x(), 1.0_f - v.y() ) );
@@ -340,7 +341,7 @@ namespace castor3d::shader
 			return;
 		}
 
-		m_invertVec3Y = m_writer.implementFunction< sdw::Vec3 >( "invertVec3Y"
+		m_invertVec3Y = m_writer.implementFunction< sdw::Vec3 >( "c3d_invertVec3Y"
 			, [&]( sdw::Vec3 const & v )
 			{
 				m_writer.returnStmt( vec3( v.x(), 1.0_f - v.y(), v.z() ) );
@@ -355,7 +356,7 @@ namespace castor3d::shader
 			return;
 		}
 
-		m_invertVec4Y = m_writer.implementFunction< sdw::Vec4 >( "invertVec3Y"
+		m_invertVec4Y = m_writer.implementFunction< sdw::Vec4 >( "c3d_invertVec3Y"
 			, [&]( sdw::Vec4 const & v )
 			{
 				m_writer.returnStmt( vec3( v.x(), 1.0_f - v.y(), v.z(), v.w() ) );
@@ -370,7 +371,7 @@ namespace castor3d::shader
 			return;
 		}
 
-		m_negateVec2Y = m_writer.implementFunction< sdw::Vec2 >( "negateVec2Y"
+		m_negateVec2Y = m_writer.implementFunction< sdw::Vec2 >( "c3d_negateVec2Y"
 			, [&]( sdw::Vec2 const & v )
 			{
 				m_writer.returnStmt( vec2( v.x(), -v.y() ) );
@@ -385,7 +386,7 @@ namespace castor3d::shader
 			return;
 		}
 
-		m_negateVec3Y = m_writer.implementFunction< sdw::Vec3 >( "negateVec3Y"
+		m_negateVec3Y = m_writer.implementFunction< sdw::Vec3 >( "c3d_negateVec3Y"
 			, [&]( sdw::Vec3 const & v )
 			{
 				m_writer.returnStmt( vec3( v.x(), -v.y(), v.z() ) );
@@ -400,7 +401,7 @@ namespace castor3d::shader
 			return;
 		}
 
-		m_negateVec4Y = m_writer.implementFunction< sdw::Vec4 >( "negateVec3Y"
+		m_negateVec4Y = m_writer.implementFunction< sdw::Vec4 >( "c3d_negateVec3Y"
 			, [&]( sdw::Vec4 const & v )
 			{
 				m_writer.returnStmt( vec3( v.x(), -v.y(), v.z(), v.w() ) );
@@ -415,7 +416,7 @@ namespace castor3d::shader
 			return;
 		}
 
-		m_encodeMaterial = m_writer.implementFunction< sdw::Void >( "encodeMaterial"
+		m_encodeMaterial = m_writer.implementFunction< sdw::Void >( "c3d_encodeMaterial"
 			, [&]( sdw::Int const & receiver
 				, sdw::Int const & reflection
 				, sdw::Int const & refraction
@@ -447,7 +448,7 @@ namespace castor3d::shader
 			return;
 		}
 
-		m_decodeMaterial = m_writer.implementFunction< sdw::Void >( "decodeMaterial"
+		m_decodeMaterial = m_writer.implementFunction< sdw::Void >( "c3d_decodeMaterial"
 			, [&]( sdw::Float const & encoded
 				, sdw::Int receiver
 				, sdw::Int reflection
@@ -478,7 +479,7 @@ namespace castor3d::shader
 			return;
 		}
 
-		m_decodeReceiver = m_writer.implementFunction< sdw::Void >( "decodeReceiver"
+		m_decodeReceiver = m_writer.implementFunction< sdw::Void >( "c3d_decodeReceiver"
 			, [&]( sdw::Int const & encoded
 				, sdw::Int receiver
 				, sdw::Int lighting )
@@ -503,7 +504,7 @@ namespace castor3d::shader
 				return;
 			}
 
-			m_parallaxMapping = m_writer.implementFunction< sdw::Vec2 >( "ParallaxMapping",
+			m_parallaxMapping = m_writer.implementFunction< sdw::Vec2 >( "c3d_parallaxMapping",
 				[&]( sdw::Vec2 const & texCoords
 					, sdw::Vec3 const & viewDir
 					, sdw::SampledImage2DRgba32 const & heightMap
@@ -589,203 +590,6 @@ namespace castor3d::shader
 		}
 	}
 
-	void Utils::declareIsSaturated()
-	{
-		if ( m_isSaturated3D )
-		{
-			return;
-		}
-
-		m_isSaturated3D = m_writer.implementFunction< sdw::Boolean >( "isSaturated"
-			, [&]( sdw::Vec3 const & p )
-			{
-				m_writer.returnStmt( p.x() == clamp( p.x(), 0.0_f, 1.0_f )
-					&& p.y() == clamp( p.y(), 0.0_f, 1.0_f )
-					&& p.z() == clamp( p.z(), 0.0_f, 1.0_f ) );
-			}
-			, sdw::InVec3{ m_writer, "p" } );
-	}
-
-	void Utils::declareIsSaturatedImg()
-	{
-		if ( m_isSaturated3DImg )
-		{
-			return;
-		}
-
-		m_isSaturated3DImg = m_writer.implementFunction< sdw::Boolean >( "isSaturatedImg"
-			, [&]( sdw::IVec3 const & p
-				, sdw::Int const & imax )
-			{
-				m_writer.returnStmt( p.x() == clamp( p.x(), 0_i, imax )
-					&& p.y() == clamp( p.y(), 0_i, imax )
-					&& p.z() == clamp( p.z(), 0_i, imax ) );
-			}
-			, sdw::InIVec3{ m_writer, "p" }
-			, sdw::InInt{ m_writer, "imax" } );
-	}
-
-	void Utils::declareEncodeColor()
-	{
-		if ( m_encodeColor )
-		{
-			return;
-		}
-
-		m_encodeColor = m_writer.implementFunction<  sdw::UInt >( "encodeColor"
-			, [&]( sdw::Vec4 const & color )
-			{
-				auto hdrRange = m_writer.declConstant( "hdrRange", 10.0_f );
-
-				// normalize color to LDR
-				auto hdr = m_writer.declLocale( "hdr"
-					, length( color.rgb() ) );
-				color.rgb() /= hdr;
-
-				// encode LDR color and HDR range
-				auto iColor = m_writer.declLocale( "iColor"
-					, uvec3( color.rgb() * 255.0_f ) );
-				auto iHDR = m_writer.declLocale( "iHDR"
-					, m_writer.cast<  sdw::UInt >( clamp( hdr / hdrRange, 0.0_f, 1.0_f ) * 127.0_f ) );
-				auto colorMask = m_writer.declLocale( "colorMask"
-					, ( iHDR << 24_u ) | ( iColor.r() << 16_u ) | ( iColor.g() << 8_u ) | iColor.b() );
-
-				// encode alpha into highest bit
-				auto iAlpha = m_writer.declLocale( "iAlpha"
-					, m_writer.ternary( color.a() > 0.0_f, 1_u, 0_u ) );
-				colorMask |= ( iAlpha << 31_u );
-
-				m_writer.returnStmt( colorMask );
-			}
-			, sdw::InVec4{ m_writer, "color" } );
-	}
-
-	void Utils::declareEncodeNormal()
-	{
-		if ( m_encodeNormal )
-		{
-			return;
-		}
-
-		m_encodeNormal = m_writer.implementFunction<  sdw::UInt >( "encodeNormal"
-			, [&]( sdw::Vec3 const & normal )
-			{
-				auto iNormal = m_writer.declLocale( "iNormal"
-					, ivec3( normal * 255.0_f ) );
-				auto uNormalSigns = m_writer.declLocale< sdw::UVec3 >( "uNormalSigns"
-					, uvec3( m_writer.cast<  sdw::UInt >( ( iNormal.x() >> 5 ) & 0x04000000 )
-						, m_writer.cast<  sdw::UInt >( ( iNormal.y() >> 14 ) & 0x00020000 )
-						, m_writer.cast<  sdw::UInt >( ( iNormal.z() >> 23 ) & 0x00000100 ) ) );
-				auto uNormal = m_writer.declLocale( "uNormal"
-					, uvec3( abs( iNormal ) ) );
-				auto normalMask = m_writer.declLocale( "normalMask"
-					, ( uNormalSigns.x() | ( uNormal.x() << 18_u )
-						| uNormalSigns.y() | ( uNormal.y() << 9_u )
-						| uNormalSigns.z() | uNormal.z() ) );
-				m_writer.returnStmt( normalMask );
-			}
-			, sdw::InVec3{ m_writer, "normal" } );
-	}
-
-	void Utils::declareDecodeColor()
-	{
-		if ( m_decodeColor )
-		{
-			return;
-		}
-
-		m_decodeColor = m_writer.implementFunction< sdw::Vec4 >( "decodeColor"
-			, [&](  sdw::UInt const & colorMask )
-			{
-				auto hdrRange = m_writer.declConstant( "hdrRange", 10.0_f );
-
-				auto color = m_writer.declLocale< sdw::Vec4 >( "color" );
-				auto hdr = m_writer.declLocale( "hdr"
-					, m_writer.cast< sdw::Float >( ( colorMask >> 24u ) & 0x0000007f ) );
-				color.r() = m_writer.cast< sdw::Float >( ( colorMask >> 16u ) & 0x000000ff );
-				color.g() = m_writer.cast< sdw::Float >( ( colorMask >> 8u ) & 0x000000ff );
-				color.b() = m_writer.cast< sdw::Float >( colorMask & 0x000000ff );
-
-				hdr /= 127.0f;
-				color.rgb() /= vec3( 255.0_f );
-
-				color.rgb() *= hdr * hdrRange;
-
-				color.a() = m_writer.cast< sdw::Float >( ( colorMask >> 31u ) & 0x00000001_u );
-
-				m_writer.returnStmt( color );
-			}
-			, sdw::InUInt{ m_writer, "colorMask" } );
-	}
-
-	void Utils::declareDecodeNormal()
-	{
-		if ( m_decodeNormal )
-		{
-			return;
-		}
-
-		m_decodeNormal = m_writer.implementFunction< sdw::Vec3 >( "decodeNormal"
-			, [&](  sdw::UInt const & normalMask )
-			{
-				auto iNormal = m_writer.declLocale( "iNormal"
-					, ivec3( m_writer.cast< sdw::Int >( ( normalMask >> 18 ) & 0x000000ff )
-						, m_writer.cast< sdw::Int >( ( normalMask >> 9 ) & 0x000000ff )
-						, m_writer.cast< sdw::Int >( normalMask & 0x000000ff ) ) );
-				auto iNormalSigns = m_writer.declLocale( "iNormalSigns"
-					, ivec3( m_writer.cast< sdw::Int >( ( normalMask >> 25 ) & 0x00000002 )
-						, m_writer.cast< sdw::Int >( ( normalMask >> 16 ) & 0x00000002 )
-						, m_writer.cast< sdw::Int >( ( normalMask >> 7 ) & 0x00000002 ) ) );
-				iNormalSigns = 1_i - iNormalSigns;
-				auto normal = m_writer.declLocale( "normal"
-					, vec3( iNormal ) / 255.0f );
-				normal *= vec3( iNormalSigns );
-				m_writer.returnStmt( normal );
-			}
-			, sdw::InUInt{ m_writer, "normalMask" } );
-	}
-
-	void Utils::declareFlatten()
-	{
-		if ( m_flatten3D )
-		{
-			return;
-		}
-
-		m_flatten3D = m_writer.implementFunction<  sdw::UInt >( "flatten3D"
-			, [&]( sdw::UVec3 const & coord
-				, sdw::UVec3 const & dim )
-			{
-				m_writer.returnStmt( ( coord.z() * dim.x() * dim.y() ) + ( coord.y() * dim.x() ) + coord.x() );
-			}
-			, sdw::InUVec3{ m_writer, "coord" }
-			, sdw::InUVec3{ m_writer, "dim" } );
-	}
-
-	void Utils::declareUnflatten()
-	{
-		if ( m_unflatten3D )
-		{
-			return;
-		}
-
-		m_unflatten3D = m_writer.implementFunction< sdw::UVec3 >( "unflatten3D"
-			, [&](  sdw::UInt idx
-				, sdw::UVec3 const & dim )
-			{
-				auto z = m_writer.declLocale( "z"
-					, idx / ( dim.x() * dim.y() ) );
-				idx -= ( z * dim.x() * dim.y() );
-				auto y = m_writer.declLocale( "y"
-					, idx / dim.x() );
-				auto x = m_writer.declLocale( "x"
-					, idx % dim.x() );
-				m_writer.returnStmt( uvec3( x, y, z ) );
-			}
-			, sdw::InUInt{ m_writer, "idx" }
-			, sdw::InUVec3{ m_writer, "dim" } );
-	}
-
 	void Utils::declareParallaxShadowFunc( PassFlags const & passFlags
 		, TextureFlags const & textures )
 	{
@@ -798,7 +602,7 @@ namespace castor3d::shader
 				return;
 			}
 
-			m_parallaxShadow = m_writer.implementFunction< sdw::Float >( "ParallaxSoftShadowMultiplier"
+			m_parallaxShadow = m_writer.implementFunction< sdw::Float >( "c3d_parallaxSoftShadowMultiplier"
 				, [&]( sdw::Vec3 const & lightDir
 					, sdw::Vec2 const initialTexCoord
 					, sdw::Float initialHeight
@@ -895,6 +699,299 @@ namespace castor3d::shader
 		}
 	}
 
+	void Utils::declareIsSaturated()
+	{
+		if ( m_isSaturated3D )
+		{
+			return;
+		}
+
+		m_isSaturated3D = m_writer.implementFunction< sdw::Boolean >( "c3d_isSaturated"
+			, [&]( sdw::Vec3 const & p )
+			{
+				m_writer.returnStmt( p.x() == clamp( p.x(), 0.0_f, 1.0_f )
+					&& p.y() == clamp( p.y(), 0.0_f, 1.0_f )
+					&& p.z() == clamp( p.z(), 0.0_f, 1.0_f ) );
+			}
+			, sdw::InVec3{ m_writer, "p" } );
+	}
+
+	void Utils::declareEncodeColor()
+	{
+		if ( m_encodeColor )
+		{
+			return;
+		}
+
+		m_encodeColor = m_writer.implementFunction<  sdw::UInt >( "c3d_encodeColor"
+			, [&]( sdw::Vec4 const & color )
+			{
+				auto hdrRange = m_writer.declConstant( "hdrRange", 10.0_f );
+
+				// normalize color to LDR
+				auto hdr = m_writer.declLocale( "hdr"
+					, length( color.rgb() ) );
+				color.rgb() /= hdr;
+
+				// encode LDR color and HDR range
+				auto iColor = m_writer.declLocale( "iColor"
+					, uvec3( color.rgb() * 255.0_f ) );
+				auto iHDR = m_writer.declLocale( "iHDR"
+					, m_writer.cast<  sdw::UInt >( clamp( hdr / hdrRange, 0.0_f, 1.0_f ) * 127.0_f ) );
+				auto colorMask = m_writer.declLocale( "colorMask"
+					, ( iHDR << 24_u ) | ( iColor.r() << 16_u ) | ( iColor.g() << 8_u ) | iColor.b() );
+
+				// encode alpha into highest bit
+				auto iAlpha = m_writer.declLocale( "iAlpha"
+					, m_writer.ternary( color.a() > 0.0_f, 1_u, 0_u ) );
+				colorMask |= ( iAlpha << 31_u );
+
+				m_writer.returnStmt( colorMask );
+			}
+			, sdw::InVec4{ m_writer, "color" } );
+	}
+
+	void Utils::declareEncodeNormal()
+	{
+		if ( m_encodeNormal )
+		{
+			return;
+		}
+
+		m_encodeNormal = m_writer.implementFunction<  sdw::UInt >( "c3d_encodeNormal"
+			, [&]( sdw::Vec3 const & normal )
+			{
+				auto iNormal = m_writer.declLocale( "iNormal"
+					, ivec3( normal * 255.0_f ) );
+				auto uNormalSigns = m_writer.declLocale< sdw::UVec3 >( "uNormalSigns"
+					, uvec3( m_writer.cast<  sdw::UInt >( ( iNormal.x() >> 5 ) & 0x04000000 )
+						, m_writer.cast<  sdw::UInt >( ( iNormal.y() >> 14 ) & 0x00020000 )
+						, m_writer.cast<  sdw::UInt >( ( iNormal.z() >> 23 ) & 0x00000100 ) ) );
+				auto uNormal = m_writer.declLocale( "uNormal"
+					, uvec3( abs( iNormal ) ) );
+				auto normalMask = m_writer.declLocale( "normalMask"
+					, ( uNormalSigns.x() | ( uNormal.x() << 18_u )
+						| uNormalSigns.y() | ( uNormal.y() << 9_u )
+						| uNormalSigns.z() | uNormal.z() ) );
+				m_writer.returnStmt( normalMask );
+			}
+			, sdw::InVec3{ m_writer, "normal" } );
+	}
+
+	void Utils::declareDecodeColor()
+	{
+		if ( m_decodeColor )
+		{
+			return;
+		}
+
+		m_decodeColor = m_writer.implementFunction< sdw::Vec4 >( "c3d_decodeColor"
+			, [&](  sdw::UInt const & colorMask )
+			{
+				auto hdrRange = m_writer.declConstant( "hdrRange", 10.0_f );
+
+				auto color = m_writer.declLocale< sdw::Vec4 >( "color" );
+				auto hdr = m_writer.declLocale( "hdr"
+					, m_writer.cast< sdw::Float >( ( colorMask >> 24u ) & 0x0000007f ) );
+				color.r() = m_writer.cast< sdw::Float >( ( colorMask >> 16u ) & 0x000000ff );
+				color.g() = m_writer.cast< sdw::Float >( ( colorMask >> 8u ) & 0x000000ff );
+				color.b() = m_writer.cast< sdw::Float >( colorMask & 0x000000ff );
+
+				hdr /= 127.0f;
+				color.rgb() /= vec3( 255.0_f );
+
+				color.rgb() *= hdr * hdrRange;
+
+				color.a() = m_writer.cast< sdw::Float >( ( colorMask >> 31u ) & 0x00000001_u );
+
+				m_writer.returnStmt( color );
+			}
+			, sdw::InUInt{ m_writer, "colorMask" } );
+	}
+
+	void Utils::declareDecodeNormal()
+	{
+		if ( m_decodeNormal )
+		{
+			return;
+		}
+
+		m_decodeNormal = m_writer.implementFunction< sdw::Vec3 >( "c3d_decodeNormal"
+			, [&](  sdw::UInt const & normalMask )
+			{
+				auto iNormal = m_writer.declLocale( "iNormal"
+					, ivec3( m_writer.cast< sdw::Int >( ( normalMask >> 18 ) & 0x000000ff )
+						, m_writer.cast< sdw::Int >( ( normalMask >> 9 ) & 0x000000ff )
+						, m_writer.cast< sdw::Int >( normalMask & 0x000000ff ) ) );
+				auto iNormalSigns = m_writer.declLocale( "iNormalSigns"
+					, ivec3( m_writer.cast< sdw::Int >( ( normalMask >> 25 ) & 0x00000002 )
+						, m_writer.cast< sdw::Int >( ( normalMask >> 16 ) & 0x00000002 )
+						, m_writer.cast< sdw::Int >( ( normalMask >> 7 ) & 0x00000002 ) ) );
+				iNormalSigns = 1_i - iNormalSigns;
+				auto normal = m_writer.declLocale( "normal"
+					, vec3( iNormal ) / 255.0f );
+				normal *= vec3( iNormalSigns );
+				m_writer.returnStmt( normal );
+			}
+			, sdw::InUInt{ m_writer, "normalMask" } );
+	}
+
+	void Utils::declareFlatten()
+	{
+		if ( m_flatten3D )
+		{
+			return;
+		}
+
+		m_flatten3D = m_writer.implementFunction<  sdw::UInt >( "c3d_flatten3D"
+			, [&]( sdw::UVec3 const & coord
+				, sdw::UVec3 const & dim )
+			{
+				m_writer.returnStmt( ( coord.z() * dim.x() * dim.y() ) + ( coord.y() * dim.x() ) + coord.x() );
+			}
+			, sdw::InUVec3{ m_writer, "coord" }
+			, sdw::InUVec3{ m_writer, "dim" } );
+	}
+
+	void Utils::declareUnflatten()
+	{
+		if ( m_unflatten3D )
+		{
+			return;
+		}
+
+		m_unflatten3D = m_writer.implementFunction< sdw::UVec3 >( "c3d_unflatten3D"
+			, [&]( sdw::UInt idx
+				, sdw::UVec3 const & dim )
+			{
+				auto z = m_writer.declLocale( "z"
+					, idx / ( dim.x() * dim.y() ) );
+				idx -= ( z * dim.x() * dim.y() );
+				auto y = m_writer.declLocale( "y"
+					, idx / dim.x() );
+				auto x = m_writer.declLocale( "x"
+					, idx % dim.x() );
+				m_writer.returnStmt( uvec3( x, y, z ) );
+			}
+			, sdw::InUInt{ m_writer, "idx" }
+			, sdw::InUVec3{ m_writer, "dim" } );
+	}
+
+	void Utils::declareIsSaturatedImg()
+	{
+		if ( m_isSaturated3DImg )
+		{
+			return;
+		}
+
+		m_isSaturated3DImg = m_writer.implementFunction< sdw::Boolean >( "c3d_isSaturatedImg"
+			, [&]( sdw::IVec3 const & p
+				, sdw::Int const & imax )
+			{
+				m_writer.returnStmt( p.x() == clamp( p.x(), 0_i, imax )
+					&& p.y() == clamp( p.y(), 0_i, imax )
+					&& p.z() == clamp( p.z(), 0_i, imax ) );
+			}
+			, sdw::InIVec3{ m_writer, "p" }
+			, sdw::InInt{ m_writer, "imax" } );
+	}
+
+	void Utils::declareSobelFilterDepth()
+	{
+		if ( m_sobelFilterDepth )
+		{
+			return;
+		}
+
+		m_sobelFilterDepth = m_writer.implementFunction< sdw::Float >( "c3d_sobelFilterDepth"
+			, [&]( sdw::SampledImage2DR32 const & tex
+				, sdw::Vec2 const & texSize
+				, sdw::Vec2 const & depthRange
+				, sdw::Vec2 const & coord
+				, sdw::Float const & width )
+			{
+				auto n = m_writer.declLocale( "n"
+					, depthRange.x() );
+				auto f = m_writer.declLocale( "f"
+					, depthRange.y() );
+				auto w = m_writer.declLocale( "w"
+					, width / texSize.x() );
+				auto h = m_writer.declLocale( "h"
+					, width / texSize.y() );
+
+				auto i = m_writer.declLocaleArray< sdw::Float >( "i", 9u );
+				i[0] = tex.sample( coord + vec2( -w, -h ) );
+				i[1] = tex.sample( coord + vec2( 0.0_f, -h ) );
+				i[2] = tex.sample( coord + vec2( w, -h ) );
+				i[3] = tex.sample( coord + vec2( -w, 0.0_f ) );
+				i[4] = tex.sample( coord );
+				i[5] = tex.sample( coord + vec2( w, 0.0_f ) );
+				i[6] = tex.sample( coord + vec2( -w, h ) );
+				i[7] = tex.sample( coord + vec2( 0.0_f, h ) );
+				i[8] = tex.sample( coord + vec2( w, h ) );
+
+				auto sobelEdgeH = m_writer.declLocale( "sobelEdgeH"
+					, i[2] + ( 2.0 * i[5] ) + i[8] - ( i[0] + ( 2.0 * i[3] ) + i[6] ) );
+				auto sobelEdgeV = m_writer.declLocale( "sobelEdgeV"
+					, i[0] + ( 2.0 * i[1] ) + i[2] - ( i[6] + ( 2.0 * i[7] ) + i[8] ) );
+
+				m_writer.returnStmt( sqrt( ( sobelEdgeH * sobelEdgeH ) + ( sobelEdgeV * sobelEdgeV ) ) );
+			}
+			, sdw::InSampledImage2DR32{ m_writer, "tex" }
+			, sdw::InVec2{ m_writer, "texSize" }
+			, sdw::InVec2{ m_writer, "depthRange" }
+			, sdw::InVec2{ m_writer, "coord" }
+			, sdw::InFloat{ m_writer, "width" } );
+	}
+	
+	void Utils::declareSobelFilterNormal()
+	{
+		if ( m_sobelFilterNormal )
+		{
+			return;
+		}
+
+		m_sobelFilterNormal = m_writer.implementFunction< sdw::Float >( "m_sobelFilterNormal"
+			, [&]( sdw::SampledImage2DRgba32 const & tex
+				, sdw::Vec2 const & texSize
+				, sdw::Vec2 const & coord
+				, sdw::Float const & width )
+			{
+				auto w = m_writer.declLocale( "w"
+					, width / texSize.x() );
+				auto h = m_writer.declLocale( "h"
+					, width / texSize.y() );
+
+				auto A = m_writer.declLocale( "A", tex.sample( coord + vec2( -w, h ) ).xyz() );
+				auto B = m_writer.declLocale( "B", tex.sample( coord + vec2( 0.0_f, h ) ).xyz() );
+				auto C = m_writer.declLocale( "C", tex.sample( coord + vec2( w, h ) ).xyz() );
+				auto D = m_writer.declLocale( "D", tex.sample( coord + vec2( -w, 0.0_f ) ).xyz() );
+				auto X = m_writer.declLocale( "X", tex.sample( coord ).xyz() );
+				auto E = m_writer.declLocale( "E", tex.sample( coord + vec2( w, 0.0_f ) ).xyz() );
+				auto F = m_writer.declLocale( "F", tex.sample( coord + vec2( -w, -h ) ).xyz() );
+				auto G = m_writer.declLocale( "G", tex.sample( coord + vec2( 0.0_f, -h ) ).xyz() );
+				auto H = m_writer.declLocale( "H", tex.sample( coord + vec2( w, -h ) ).xyz() );
+
+				// compute length of gradient using Sobel/Kroon operator
+				auto k0 = m_writer.declLocale( "k0"
+					, vec3( sdw::Float{ 17.0f / 23.75f } ) );
+				auto k1 = m_writer.declLocale( "k1"
+					, vec3( sdw::Float{ 61.0f / 23.75f } ) );
+				auto grad_y = m_writer.declLocale( "grad_y"
+					, k0 * A + k1 * B + k0 * C - k0 * F - k1 * G - k0 * H );
+				auto grad_x = m_writer.declLocale( "grad_x"
+					, k0 * C + k1 * E + k0 * H - k0 * A - k1 * D - k0 * F );
+				auto g = m_writer.declLocale( "g"
+					, length( grad_x ) + length( grad_y ) );
+
+				m_writer.returnStmt( smoothStep( 2.0_f, 3.0_f, g ) );
+			}
+			, sdw::InSampledImage2DRgba32{ m_writer, "tex" }
+			, sdw::InVec2{ m_writer, "texSize" }
+			, sdw::InVec2{ m_writer, "coord" }
+			, sdw::InFloat{ m_writer, "width" } );
+	}
+
 	sdw::Vec2 Utils::topDownToBottomUp( sdw::Vec2 const & texCoord )const
 	{
 		return m_invertVec2Y( texCoord );
@@ -968,11 +1065,11 @@ namespace castor3d::shader
 		return m_getMapNormal( uv, normal, position );
 	}
 
-	sdw::Float Utils::lineariseDepth( sdw::Float const & depth
+	sdw::Float Utils::rescaleDepth( sdw::Float const & depth
 		, sdw::Float const & nearPlane
 		, sdw::Float const & farPlane )const
 	{
-		return m_lineariseDepth( depth
+		return m_rescaleDepth( depth
 			, nearPlane
 			, farPlane );
 	}
@@ -1012,12 +1109,12 @@ namespace castor3d::shader
 			{
 				auto i = textureIt.first;
 				auto name = castor::string::stringCast< char >( castor::string::toString( i ) );
-				auto config = m_writer.declLocale( "config" + name
+				auto config = m_writer.declLocale( "c3d_config" + name
 					, textureConfigs.getTextureConfiguration( sdw::UInt( textureIt.second.id ) ) );
-				auto texCoord = m_writer.declLocale( "texCoord" + name
+				auto texCoord = m_writer.declLocale( "c3d_texCoord" + name
 					, texCoords.xy() );
 				config.convertUV( m_writer, texCoord );
-				auto sampled = m_writer.declLocale< sdw::Vec4 >( "sampled" + name
+				auto sampled = m_writer.declLocale< sdw::Vec4 >( "c3d_sampled" + name
 					, maps[i].sample( texCoord ) );
 
 				if ( checkFlag( textureIt.second.flags, TextureFlag::eColour ) )
@@ -1044,12 +1141,12 @@ namespace castor3d::shader
 		if ( it != flags.end() )
 		{
 			auto i = it->first;
-			auto config = m_writer.declLocale( "opacityMapConfig"
+			auto config = m_writer.declLocale( "c3d_opacityMapConfig"
 				, textureConfigs.getTextureConfiguration(  sdw::UInt( it->second.id ) ) );
-			auto texCoord = m_writer.declLocale( "texCoordOpacity"
+			auto texCoord = m_writer.declLocale( "c3d_texCoordOpacity"
 				, texCoords.xy() );
 			config.convertUV( m_writer, texCoord );
-			auto sampledOpacity = m_writer.declLocale< sdw::Vec4 >( "sampledOpacity"
+			auto sampledOpacity = m_writer.declLocale< sdw::Vec4 >( "c3d_sampledOpacity"
 				, maps[i].sample( texCoord ) );
 			opacity = config.getOpacity( m_writer, sampledOpacity, opacity );
 		}
@@ -1073,7 +1170,7 @@ namespace castor3d::shader
 			{
 				auto i = textureIt.first;
 				auto name = castor::string::stringCast< char >( castor::string::toString( i ) );
-				auto config = m_writer.declLocale( "configGeom" + name
+				auto config = m_writer.declLocale( "c3d_configGeom" + name
 					, textureConfigs.getTextureConfiguration( m_writer.cast<  sdw::UInt >( textureIt.second.id ) ) );
 				doComputeGeometryMapContribution( textureIt.second.flags
 					, passFlags
@@ -1105,10 +1202,10 @@ namespace castor3d::shader
 		, sdw::Vec3 & tangentSpaceViewPosition
 		, sdw::Vec3 & tangentSpaceFragPosition )
 	{
-		auto texCoord = m_writer.declLocale( "texCoord" + name
+		auto texCoord = m_writer.declLocale( "c3d_texCoord" + name
 			, texCoords.xy() );
 		config.convertUV( m_writer, texCoord );
-		auto result = m_writer.declLocale( "result" + name
+		auto result = m_writer.declLocale( "c3d_result" + name
 			, map.sample( texCoord ) );
 
 		if ( checkFlag( textureFlags, TextureFlag::eEmissive ) )
@@ -1140,10 +1237,10 @@ namespace castor3d::shader
 		, sdw::Float & opacity
 		, sdw::Float & occlusion )
 	{
-		auto texCoord = m_writer.declLocale( "texCoord" + name
+		auto texCoord = m_writer.declLocale( "c3d_texCoord" + name
 			, texCoords.xy() );
 		config.convertUV( m_writer, texCoord );
-		auto result = m_writer.declLocale< sdw::Vec4 >( "result" + name
+		auto result = m_writer.declLocale< sdw::Vec4 >( "c3d_result" + name
 			, map.sample( texCoord ) );
 
 		if ( checkFlag( textureFlags, TextureFlag::eOpacity ) )
@@ -1333,6 +1430,23 @@ namespace castor3d::shader
 		return m_unflatten3D( p, dim );
 	}
 
+	sdw::Float Utils::sobelFilterDepth( sdw::SampledImage2DR32 tex
+		, sdw::Vec2 const & texSize
+		, sdw::Vec2 const & depthRange
+		, sdw::Vec2 const & coord
+		, sdw::Float const & width )const
+	{
+		return m_sobelFilterDepth( tex, texSize, depthRange, coord, width );
+	}
+
+	sdw::Float Utils::sobelFilterNormal( sdw::SampledImage2DRgba32 tex
+		, sdw::Vec2 const & texSize
+		, sdw::Vec2 const & coord
+		, sdw::Float const & width )const
+	{
+		return m_sobelFilterNormal( tex, texSize, coord, width );
+	}
+
 	sdw::Mat3 Utils::getTBN( sdw::Vec3 const & normal
 		, sdw::Vec3 const & tangent
 		, sdw::Vec3 const & bitangent )
@@ -1372,7 +1486,7 @@ namespace castor3d::shader
 		, sdw::Vec3 & tangentSpaceViewPosition
 		, sdw::Vec3 & tangentSpaceFragPosition )
 	{
-		auto texCoord = m_writer.declLocale( "texCoord" + name
+		auto texCoord = m_writer.declLocale( "c3d_texCoord" + name
 			, texCoords.xy() );
 		config.convertUV( m_writer, texCoord );
 
@@ -1400,12 +1514,12 @@ namespace castor3d::shader
 			}
 		}
 
-		auto sampled = m_writer.declLocale( "sampled" + name
+		auto sampled = m_writer.declLocale( "c3d_sampled" + name
 			, map.sample( texCoord ) );
 
 		if ( checkFlag( textureFlags, TextureFlag::eNormal ) )
 		{
-			auto tbn = m_writer.declLocale( "tbn"
+			auto tbn = m_writer.declLocale( "c3d_tbn"
 				, shader::Utils::getTBN( normal, tangent, bitangent ) );
 			normal = config.getNormal( m_writer, sampled, tbn );
 		}

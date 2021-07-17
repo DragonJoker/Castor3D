@@ -21,6 +21,7 @@ namespace castor3d
 			, viewPosition{ getMember< sdw::Vec3 >( "viewPosition" ) }
 			, worldPosition{ getMember< sdw::Vec3 >( "worldPosition" ) }
 			, worldNormal{ getMember< sdw::Vec3 >( "worldNormal" ) }
+			, texCoord{ getMember< sdw::Vec3 >( "texCoord" ) }
 		{
 		}
 
@@ -41,10 +42,27 @@ namespace castor3d
 			worldNormal = normal;
 		}
 
+		void Surface::create( sdw::Vec2 clip
+			, sdw::Vec3 view
+			, sdw::Vec3 world
+			, sdw::Vec3 normal
+			, sdw::Vec3 coord )
+		{
+			clipPosition = clip;
+			viewPosition = view;
+			worldPosition = world;
+			worldNormal = normal;
+			texCoord = coord;
+		}
+
 		void Surface::create( sdw::Vec3 world
 			, sdw::Vec3 normal )
 		{
-			create( sdw::vec2( 0.0_f ), sdw::vec3( 0.0_f ), world, normal );
+			create( sdw::vec2( 0.0_f )
+				, sdw::vec3( 0.0_f )
+				, world
+				, normal
+				, sdw::vec3( 0.0_f ) );
 		}
 
 		ast::type::StructPtr Surface::makeType( ast::type::TypesCache & cache )
@@ -58,6 +76,7 @@ namespace castor3d
 				result->declMember( "viewPosition", ast::type::Kind::eVec3F );
 				result->declMember( "worldPosition", ast::type::Kind::eVec3F );
 				result->declMember( "worldNormal", ast::type::Kind::eVec3F );
+				result->declMember( "texCoord", ast::type::Kind::eVec3F );
 			}
 
 			return result;

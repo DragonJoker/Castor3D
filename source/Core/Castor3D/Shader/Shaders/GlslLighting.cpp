@@ -32,6 +32,7 @@ namespace castor3d::shader
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
 		: sdw::StructInstance{ writer, std::move( expr ), enabled }
+		, specific{ getMember< sdw::Vec4 >( "specific" ) }
 		, albedo{ getMember< sdw::Vec3 >( "albedo" ) }
 		, specular{ getMember< sdw::Vec3 >( "specular" ) }
 		, albDiv{ getMember< sdw::Float >( "albDiv" ) }
@@ -52,6 +53,7 @@ namespace castor3d::shader
 
 		if ( result->empty() )
 		{
+			result->declMember( "specific", ast::type::Kind::eVec4F );
 			result->declMember( "albedo", ast::type::Kind::eVec3F );
 			result->declMember( "specular", ast::type::Kind::eVec3F );
 			result->declMember( "albDiv", ast::type::Kind::eFloat );
@@ -112,7 +114,11 @@ namespace castor3d::shader
 		m_writer.inlineComment( "// LIGHTING" );
 		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 		doDeclareModel();
+#if C3D_UseTiledDirectionalShadowMap
+		doDeclareComputeTiledDirectionalLight();
+#else
 		doDeclareComputeDirectionalLight();
+#endif
 		doDeclareComputePointLight();
 		doDeclareComputeSpotLight();
 	}
@@ -268,7 +274,11 @@ namespace castor3d::shader
 		m_writer.inlineComment( "// DIFFUSE LIGHTING" );
 		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 		doDeclareDiffuseModel();
+#if C3D_UseTiledDirectionalShadowMap
+		doDeclareComputeTiledDirectionalLightDiffuse();
+#else
 		doDeclareComputeDirectionalLightDiffuse();
+#endif
 		doDeclareComputePointLightDiffuse();
 		doDeclareComputeSpotLightDiffuse();
 	}
@@ -383,7 +393,11 @@ namespace castor3d::shader
 		m_writer.inlineComment( "// LIGHTING" );
 		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 		doDeclareModel();
+#if C3D_UseTiledDirectionalShadowMap
+		doDeclareComputeTiledDirectionalLight();
+#else
 		doDeclareComputeDirectionalLight();
+#endif
 	}
 
 	void LightingModel::declarePointModel( bool lightUbo
