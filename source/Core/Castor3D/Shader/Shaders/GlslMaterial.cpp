@@ -13,6 +13,7 @@ namespace castor3d::shader
 		: StructInstance{ writer, std::move( expr ), enabled }
 		, colourDiv{ getMember< sdw::Vec4 >( "colourDiv" ) }
 		, specDiv{ getMember< sdw::Vec4 >( "specDiv" ) }
+		, specific{ getMember< sdw::Vec4 >( "specific" ) }
 		, m_common{ getMember< sdw::Vec4 >( "common" ) }
 		, m_opacityTransmission{ getMember< sdw::Vec4 >( "opacity" ) }
 		, m_reflRefr{ getMember< sdw::Vec4 >( "reflRefr" ) }
@@ -63,6 +64,7 @@ namespace castor3d::shader
 		{
 			result->declMember( "colourDiv", ast::type::Kind::eVec4F );
 			result->declMember( "specDiv", ast::type::Kind::eVec4F );
+			result->declMember( "specific", ast::type::Kind::eVec4F );
 			result->declMember( "common", ast::type::Kind::eVec4F );
 			result->declMember( "opacity", ast::type::Kind::eVec4F );
 			result->declMember( "reflRefr", ast::type::Kind::eVec4F );

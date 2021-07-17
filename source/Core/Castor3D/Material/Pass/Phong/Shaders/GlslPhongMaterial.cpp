@@ -20,6 +20,17 @@ namespace castor3d::shader
 	void PhongLightMaterial::create( sdw::Vec3 const & albedo
 		, sdw::Vec4 const & data3
 		, sdw::Vec4 const & data2
+		, Material const & material )
+	{
+		create( albedo
+			, data3
+			, data2
+			, material.colourDiv.a() );
+	}
+
+	void PhongLightMaterial::create( sdw::Vec3 const & albedo
+		, sdw::Vec4 const & data3
+		, sdw::Vec4 const & data2
 		, sdw::Float const & ambient )
 	{
 		this->albedo = albedo;

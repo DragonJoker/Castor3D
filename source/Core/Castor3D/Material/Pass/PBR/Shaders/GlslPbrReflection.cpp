@@ -70,6 +70,8 @@ namespace castor3d::shader
 	void PbrReflectionModel::computeDeferred( LightMaterial & material
 		, Surface const & surface
 		, SceneData const & sceneData
+		, sdw::SampledImage2DR32 const & depth
+		, sdw::SampledImage2DRgba32 const & normal
 		, sdw::Int envMapIndex
 		, sdw::Int const & reflection
 		, sdw::Int const & refraction

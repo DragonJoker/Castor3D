@@ -22,6 +22,10 @@ namespace castor3d::shader
 		C3D_API void create( sdw::Vec3 const & albedo
 			, sdw::Vec4 const & data3
 			, sdw::Vec4 const & data2
+			, Material const & material )override;
+		C3D_API void create( sdw::Vec3 const & albedo
+			, sdw::Vec4 const & data3
+			, sdw::Vec4 const & data2
 			, sdw::Float const & ambient )override;
 		C3D_API void create( Material const & material )override;
 		C3D_API void output( sdw::Vec4 & outData2, sdw::Vec4 & outData3 )const override;

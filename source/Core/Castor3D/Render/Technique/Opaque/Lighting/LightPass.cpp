@@ -201,7 +201,8 @@ namespace castor3d
 					auto lightMat = lightingModel->declMaterial( "lightMat" );
 					lightMat->create( albedo
 						, data3
-						, data2 );
+						, data2
+						, material );
 
 					auto eye = writer.declLocale( "eye"
 						, c3d_sceneData.getCameraPosition() );

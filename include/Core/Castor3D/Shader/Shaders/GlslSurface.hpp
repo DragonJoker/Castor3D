@@ -27,6 +27,11 @@ namespace castor3d
 				, sdw::Vec3 view
 				, sdw::Vec3 world
 				, sdw::Vec3 normal );
+			C3D_API void create( sdw::Vec2 clip
+				, sdw::Vec3 view
+				, sdw::Vec3 world
+				, sdw::Vec3 normal
+				, sdw::Vec3 texCoord );
 			C3D_API void create( sdw::Vec3 world
 				, sdw::Vec3 normal );
 
@@ -37,6 +42,7 @@ namespace castor3d
 			sdw::Vec3 viewPosition;
 			sdw::Vec3 worldPosition;
 			sdw::Vec3 worldNormal;
+			sdw::Vec3 texCoord;
 
 		private:
 			using sdw::StructInstance::getMember;

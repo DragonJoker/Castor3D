@@ -243,8 +243,16 @@ namespace castor3d
 	castor::String const SpecularGlossinessPbrPass::Type = cuT( "specular_glossiness" );
 	castor::String const SpecularGlossinessPbrPass::LightingModel = shader::PbrSGLightingModel::getName();
 
-	SpecularGlossinessPbrPass::SpecularGlossinessPbrPass( Material & parent )
-		: Pass{ parent, parent.getEngine()->getPassFactory().getNameId( Type ), PassFlag::eImageBasedLighting }
+	SpecularGlossinessPbrPass::SpecularGlossinessPbrPass( Material & parent
+		, PassFlags initialFlags )
+		: SpecularGlossinessPbrPass{ parent, parent.getEngine()->getPassFactory().getNameId( Type ), initialFlags }
+	{
+	}
+
+	SpecularGlossinessPbrPass::SpecularGlossinessPbrPass( Material & parent
+		, PassTypeID typeID
+		, PassFlags initialFlags )
+		: Pass{ parent, typeID, initialFlags | PassFlag::eImageBasedLighting }
 		, m_diffuse{ m_dirty, castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
 		, m_specular{ m_dirty, castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
 		, m_glossiness{ m_dirty, 0.0f }
