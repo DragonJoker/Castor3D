@@ -270,6 +270,13 @@ namespace castor3d
 
 	castor::AttributeParsersBySection SpecularGlossinessPbrPass::createParsers()
 	{
+		return createParsers( uint32_t( pbrsg::Section::ePass )
+			, uint32_t( pbrsg::Section::eTextureUnit ) );
+	}
+
+	castor::AttributeParsersBySection SpecularGlossinessPbrPass::createParsers( uint32_t mtlSectionID
+		, uint32_t texSectionID )
+	{
 		static UInt32StrMap const textureChannels = []()
 		{
 			UInt32StrMap result;
@@ -288,17 +295,15 @@ namespace castor3d
 
 		castor::AttributeParsersBySection result;
 
-		Pass::addParser( result, uint32_t( pbrsg::Section::ePass ), cuT( "diffuse" ), pbrsg::parserPassDiffuse, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
-		Pass::addParser( result, uint32_t( pbrsg::Section::ePass ), cuT( "albedo" ), pbrsg::parserPassDiffuse, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
-		Pass::addParser( result, uint32_t( pbrsg::Section::ePass ), cuT( "specular" ), pbrsg::parserPassSpecular, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
-		Pass::addParser( result, uint32_t( pbrsg::Section::ePass ), cuT( "glossiness" ), pbrsg::parserPassGlossiness, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		Pass::addParser( result, uint32_t( pbrsg::Section::eTextureUnit ), cuT( "albedo_mask" ), pbrsg::parserUnitAlbedoMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		Pass::addParser( result, uint32_t( pbrsg::Section::eTextureUnit ), cuT( "specular_mask" ), pbrsg::parserUnitSpecularMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		Pass::addParser( result, uint32_t( pbrsg::Section::eTextureUnit ), cuT( "glossiness_mask" ), pbrsg::parserUnitGlossinessMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		Pass::addParser( result, uint32_t( pbrsg::Section::eTextureUnit ), cuT( "channel" ), pbrsg::parserUnitChannel, { castor::makeParameter< castor::ParameterType::eBitwiseOred32BitsCheckedText >( textureChannels ) } );
-		Pass::addCommonParsers( uint32_t( pbrsg::Section::ePass )
-			, uint32_t( pbrsg::Section::eTextureUnit )
-			, result );
+		Pass::addParser( result, mtlSectionID, cuT( "diffuse" ), pbrsg::parserPassDiffuse, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
+		Pass::addParser( result, mtlSectionID, cuT( "albedo" ), pbrsg::parserPassDiffuse, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
+		Pass::addParser( result, mtlSectionID, cuT( "specular" ), pbrsg::parserPassSpecular, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
+		Pass::addParser( result, mtlSectionID, cuT( "glossiness" ), pbrsg::parserPassGlossiness, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		Pass::addParser( result, texSectionID, cuT( "albedo_mask" ), pbrsg::parserUnitAlbedoMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		Pass::addParser( result, texSectionID, cuT( "specular_mask" ), pbrsg::parserUnitSpecularMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		Pass::addParser( result, texSectionID, cuT( "glossiness_mask" ), pbrsg::parserUnitGlossinessMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		Pass::addParser( result, texSectionID, cuT( "channel" ), pbrsg::parserUnitChannel, { castor::makeParameter< castor::ParameterType::eBitwiseOred32BitsCheckedText >( textureChannels ) } );
+		Pass::addCommonParsers( mtlSectionID, texSectionID, result );
 
 		return result;
 	}

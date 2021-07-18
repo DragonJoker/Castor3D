@@ -8,7 +8,7 @@
 #include "Castor3D/Material/Pass/PBR/SpecularGlossinessPbrPass.hpp"
 #include "Castor3D/Material/Pass/PBR/Shaders/GlslPbrLighting.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, PassFactory );
+CU_ImplementCUSmartPtr( castor3d, PassFactory )
 
 namespace castor3d
 {
