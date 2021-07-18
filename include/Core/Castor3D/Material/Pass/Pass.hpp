@@ -210,7 +210,7 @@ namespace castor3d
 		C3D_API virtual bool writeText( castor::String const & tabs
 			, castor::Path const & folder
 			, castor::String const & subfolder
-			, castor::StringStream & file )const = 0u;
+			, castor::StringStream & file )const = 0;
 		/**
 		*\~english
 		*name

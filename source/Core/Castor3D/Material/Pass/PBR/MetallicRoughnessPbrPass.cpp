@@ -270,6 +270,13 @@ namespace castor3d
 
 	castor::AttributeParsersBySection MetallicRoughnessPbrPass::createParsers()
 	{
+		return createParsers( uint32_t( pbrmr::Section::ePass )
+			, uint32_t( pbrmr::Section::eTextureUnit ) );
+	}
+
+	castor::AttributeParsersBySection MetallicRoughnessPbrPass::createParsers( uint32_t mtlSectionID
+		, uint32_t texSectionID )
+	{
 		static UInt32StrMap const textureChannels = []()
 		{
 			UInt32StrMap result;
@@ -287,16 +294,14 @@ namespace castor3d
 
 		castor::AttributeParsersBySection result;
 
-		Pass::addParser( result, uint32_t( pbrmr::Section::ePass ), cuT( "albedo" ), pbrmr::parserPassAlbedo, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
-		Pass::addParser( result, uint32_t( pbrmr::Section::ePass ), cuT( "metallic" ), pbrmr::parserPassMetalness, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		Pass::addParser( result, uint32_t( pbrmr::Section::ePass ), cuT( "roughness" ), pbrmr::parserPassRoughness, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		Pass::addParser( result, uint32_t( pbrmr::Section::eTextureUnit ), cuT( "albedo_mask" ), pbrmr::parserUnitAlbedoMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		Pass::addParser( result, uint32_t( pbrmr::Section::eTextureUnit ), cuT( "metalness_mask" ), pbrmr::parserUnitMetalnessMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		Pass::addParser( result, uint32_t( pbrmr::Section::eTextureUnit ), cuT( "roughness_mask" ), pbrmr::parserUnitRoughnessMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		Pass::addParser( result, uint32_t( pbrmr::Section::eTextureUnit ), cuT( "channel" ), pbrmr::parserUnitChannel, { castor::makeParameter< castor::ParameterType::eBitwiseOred32BitsCheckedText >( textureChannels ) } );
-		Pass::addCommonParsers( uint32_t( pbrmr::Section::ePass )
-			, uint32_t( pbrmr::Section::eTextureUnit )
-			, result );
+		Pass::addParser( result, mtlSectionID, cuT( "albedo" ), pbrmr::parserPassAlbedo, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
+		Pass::addParser( result, mtlSectionID, cuT( "metallic" ), pbrmr::parserPassMetalness, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		Pass::addParser( result, mtlSectionID, cuT( "roughness" ), pbrmr::parserPassRoughness, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		Pass::addParser( result, texSectionID, cuT( "albedo_mask" ), pbrmr::parserUnitAlbedoMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		Pass::addParser( result, texSectionID, cuT( "metalness_mask" ), pbrmr::parserUnitMetalnessMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		Pass::addParser( result, texSectionID, cuT( "roughness_mask" ), pbrmr::parserUnitRoughnessMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		Pass::addParser( result, texSectionID, cuT( "channel" ), pbrmr::parserUnitChannel, { castor::makeParameter< castor::ParameterType::eBitwiseOred32BitsCheckedText >( textureChannels ) } );
+		Pass::addCommonParsers( mtlSectionID, texSectionID, result );
 
 		return result;
 	}
