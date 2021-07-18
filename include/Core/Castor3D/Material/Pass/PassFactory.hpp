@@ -9,6 +9,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/Factory.hpp>
 #include <CastorUtils/Design/OwnedBy.hpp>
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 
 #include <map>
 #include <unordered_map>
