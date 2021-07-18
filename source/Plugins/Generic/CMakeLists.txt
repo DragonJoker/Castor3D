@@ -1,8 +1,21 @@
 option( CASTOR_BUILDGRP_GENERIC "Build Castor3D Generic plugins" TRUE )
 option( CASTOR_BUILD_GENERIC_CASTORGUI "Build CastorGui generic plugin" TRUE )
+option( CASTOR_BUILD_GENERIC_TOONMATERIAL "Build Toon Material generic plugin" TRUE )
 
 function( GenericInit )
 	set( Cgui "no (Not wanted)" PARENT_SCOPE )
+	set( Toon "no (Not wanted)" PARENT_SCOPE )
+
+	set( Castor3D_MATERIAL_DIRS
+		${Castor3D_MATERIAL_DIRS}
+		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/ToonMaterial
+		PARENT_SCOPE
+	)
+	set( Castor3D_MATERIAL_DEPS
+		${Castor3D_MATERIAL_DIRS}
+		castor::ToonMaterial
+		PARENT_SCOPE
+	)
 endfunction( GenericInit )
 
 function( GenericBuild )
@@ -20,12 +33,22 @@ function( GenericBuild )
 			set( Cgui ${Build} PARENT_SCOPE )
 		endif()
 
+		if( ${CASTOR_BUILD_GENERIC_TOONMATERIAL} )
+			set( Build ${Toon} )
+			add_subdirectory( Plugins/Generic/ToonMaterial )
+			set( Toon ${Build} PARENT_SCOPE )
+		endif()
+
 		set( CastorMinLibraries
 			${CastorMinLibraries}
 			PARENT_SCOPE
 		)
 		set( Castor3DBinsDependencies
 			${Castor3DBinsDependencies}
+			PARENT_SCOPE
+		)
+		set( Castor3D_MATERIAL_DIRS
+			${Castor3D_MATERIAL_DIRS}
 			PARENT_SCOPE
 		)
 		set( CASTOR_INSTEXP_LIST
@@ -40,6 +63,9 @@ function( GenericSummary msg )
 		set( msg_tmp "\n\n  Generic plugins:" )
 		if( ${CASTOR_BUILD_GENERIC_CASTORGUI} )
 			set( msg_tmp "${msg_tmp}\n    CastorGui            ${Cgui}" )
+		endif ()
+		if( ${CASTOR_BUILD_GENERIC_TOONMATERIAL} )
+			set( msg_tmp "${msg_tmp}\n    ToonMaterial         ${Toon}" )
 		endif ()
 		set( msg "${msg}${msg_tmp}" PARENT_SCOPE )
 	endif ()
@@ -60,6 +86,15 @@ function( GenericSetup )
 				DESCRIPTION "Development files for CastorGui."
 				GROUP Development
 				DEPENDS CastorGui Castor3D_dev
+				INSTALL_TYPES Developer Full
+			)
+		endif()
+		if( ${CASTOR_BUILD_GENERIC_TOONMATERIAL} )
+			cpack_add_component( ToonMaterial
+				DISPLAY_NAME "ToonMaterial"
+				DESCRIPTION "Defines a toon material in Castor3D."
+				GROUP Plugins
+				DEPENDS Castor3D
 				INSTALL_TYPES Developer Full
 			)
 		endif()
