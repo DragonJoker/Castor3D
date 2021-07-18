@@ -33,6 +33,7 @@
 #include <BlinnPhongPass.hpp>
 #include <MetallicRoughnessPbrPass.hpp>
 #include <SpecularGlossinessPbrPass.hpp>
+#include <ToonPass.hpp>
 
 using namespace castor3d;
 
@@ -640,12 +641,12 @@ namespace C3dAssimp
 			case aiShadingMode_Fresnel:
 				return factory.getNameId( castor3d::BlinnPhongPass::Type );
 			case aiShadingMode_Toon:
+				return factory.getNameId( toon::ToonBlinnPhongPass::Type );
+			case aiShadingMode::aiShadingMode_CookTorrance:
+				return factory.getNameId( castor3d::MetallicRoughnessPbrPass::Type );
 			case aiShadingMode_Flat:
 			case aiShadingMode_Gouraud:
 			case aiShadingMode_Phong:
-				return factory.getNameId( castor3d::PhongPass::Type );
-			case aiShadingMode::aiShadingMode_CookTorrance:
-				return factory.getNameId( castor3d::MetallicRoughnessPbrPass::Type );
 			default:
 				return factory.getNameId( castor3d::PhongPass::Type );
 			}
