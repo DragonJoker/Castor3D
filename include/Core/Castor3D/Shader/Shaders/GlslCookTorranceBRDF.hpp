@@ -14,13 +14,24 @@ namespace castor3d::shader
 		C3D_API explicit CookTorranceBRDF( sdw::ShaderWriter & writer
 			, Utils & utils );
 		C3D_API void declare();
+		C3D_API void declareAON();
 		C3D_API void declareDiffuse();
+		C3D_API void declareDiffuseAON();
 		C3D_API void compute( Light const & light
 			, sdw::Vec3 const & worldEye
 			, sdw::Vec3 const & direction
 			, sdw::Vec3 const & specular
 			, sdw::Float const & metalness
 			, sdw::Float const & roughness
+			, Surface surface
+			, OutputComponents & output )const;
+		C3D_API void computeAON( Light const & light
+			, sdw::Vec3 const & worldEye
+			, sdw::Vec3 const & direction
+			, sdw::Vec3 const & specular
+			, sdw::Float const & metalness
+			, sdw::Float const & roughness
+			, sdw::Float const & smoothBand
 			, Surface surface
 			, OutputComponents & output )const;
 		C3D_API sdw::Vec3 computeDiffuse( sdw::Vec3 const & colour
@@ -35,12 +46,28 @@ namespace castor3d::shader
 			, sdw::Vec3 const & specular
 			, sdw::Float const & metalness
 			, Surface surface )const;
+		C3D_API sdw::Vec3 computeDiffuseAON( sdw::Vec3 const & colour
+			, sdw::Vec3 const & worldEye
+			, sdw::Vec3 const & direction
+			, sdw::Vec3 const & specular
+			, sdw::Float const & metalness
+			, sdw::Float const & smoothBand
+			, Surface surface )const;
+		C3D_API sdw::Vec3 computeDiffuseAON( Light const & light
+			, sdw::Vec3 const & worldEye
+			, sdw::Vec3 const & direction
+			, sdw::Vec3 const & specular
+			, sdw::Float const & metalness
+			, sdw::Float const & smoothBand
+			, Surface surface )const;
 
 	protected:
 		void doDeclareDistribution();
 		void doDeclareGeometry();
 		void doDeclareComputeCookTorrance();
+		void doDeclareComputeCookTorranceAON();
 		void doDeclareComputeCookTorranceDiffuse();
+		void doDeclareComputeCookTorranceDiffuseAON();
 
 	public:
 		sdw::ShaderWriter & m_writer;
@@ -69,6 +96,16 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, InSurface
 			, OutputComponents & > m_computeCookTorrance;
+		sdw::Function< sdw::Void
+			, InLight
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
+			, InSurface
+			, OutputComponents & > m_computeCookTorranceAON;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InFloat
@@ -77,6 +114,15 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, sdw::InFloat
 			, InSurface > m_computeCookTorranceDiffuse;
+		sdw::Function< sdw::Vec3
+			, sdw::InVec3
+			, sdw::InFloat
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InFloat
+			, sdw::InFloat
+			, InSurface > m_computeCookTorranceDiffuseAON;
 	};
 }
 
