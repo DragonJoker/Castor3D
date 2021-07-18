@@ -290,6 +290,13 @@ namespace castor3d
 
 	castor::AttributeParsersBySection PhongPass::createParsers()
 	{
+		return createParsers( uint32_t( phong::Section::ePass )
+			, uint32_t( phong::Section::eTextureUnit ) );
+	}
+
+	castor::AttributeParsersBySection PhongPass::createParsers( uint32_t mtlSectionID
+		, uint32_t texSectionID )
+	{
 		static UInt32StrMap const textureChannels = []()
 		{
 			UInt32StrMap result;
@@ -308,17 +315,15 @@ namespace castor3d
 
 		castor::AttributeParsersBySection result;
 
-		Pass::addParser( result, uint32_t( phong::Section::ePass ), cuT( "diffuse" ), phong::parserPassDiffuse, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
-		Pass::addParser( result, uint32_t( phong::Section::ePass ), cuT( "specular" ), phong::parserPassSpecular, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
-		Pass::addParser( result, uint32_t( phong::Section::ePass ), cuT( "ambient" ), phong::parserPassAmbient, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		Pass::addParser( result, uint32_t( phong::Section::ePass ), cuT( "shininess" ), phong::parserPassShininess, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		Pass::addParser( result, uint32_t( phong::Section::eTextureUnit ), cuT( "diffuse_mask" ), phong::parserUnitDiffuseMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		Pass::addParser( result, uint32_t( phong::Section::eTextureUnit ), cuT( "specular_mask" ), phong::parserUnitSpecularMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		Pass::addParser( result, uint32_t( phong::Section::eTextureUnit ), cuT( "shininess_mask" ), phong::parserUnitShininessMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		Pass::addParser( result, uint32_t( phong::Section::eTextureUnit ), cuT( "channel" ), phong::parserUnitChannel, { castor::makeParameter< castor::ParameterType::eBitwiseOred32BitsCheckedText >( textureChannels ) } );
-		Pass::addCommonParsers( uint32_t( phong::Section::ePass )
-			, uint32_t( phong::Section::eTextureUnit )
-			, result );
+		Pass::addParser( result, mtlSectionID, cuT( "diffuse" ), phong::parserPassDiffuse, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
+		Pass::addParser( result, mtlSectionID, cuT( "specular" ), phong::parserPassSpecular, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
+		Pass::addParser( result, mtlSectionID, cuT( "ambient" ), phong::parserPassAmbient, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		Pass::addParser( result, mtlSectionID, cuT( "shininess" ), phong::parserPassShininess, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		Pass::addParser( result, texSectionID, cuT( "diffuse_mask" ), phong::parserUnitDiffuseMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		Pass::addParser( result, texSectionID, cuT( "specular_mask" ), phong::parserUnitSpecularMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		Pass::addParser( result, texSectionID, cuT( "shininess_mask" ), phong::parserUnitShininessMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		Pass::addParser( result, texSectionID, cuT( "channel" ), phong::parserUnitChannel, { castor::makeParameter< castor::ParameterType::eBitwiseOred32BitsCheckedText >( textureChannels ) } );
+		Pass::addCommonParsers( mtlSectionID, texSectionID, result );
 
 		return result;
 	}
