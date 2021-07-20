@@ -51,17 +51,16 @@ namespace castor3d
 			BlurSceneUboId,
 			BlurGpInfoUboId,
 			BlurSssUboId,
-			BlurDepthImgId,
+			BlurData0ImgId,
 			BlurData4ImgId,
-			BlurData5ImgId,
 			BlurLgtDiffImgId,
 		};
 
 		enum CombId : size_t
 		{
 			CombMaterialsUboId,
+			CombData0ImgId,
 			CombData4ImgId,
-			CombData5ImgId,
 			CombBlur1ImgId,
 			CombBlur2ImgId,
 			CombBlur3ImgId,
@@ -104,9 +103,8 @@ namespace castor3d
 			auto c3d_pixelSize = config.declMember< Vec2 >( SubsurfaceScatteringPass::PixelSize );
 			auto c3d_correction = config.declMember< Float >( SubsurfaceScatteringPass::Correction );
 			config.end();
-			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), BlurDepthImgId, 0u );
+			auto c3d_mapData0 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData0 ), BlurData0ImgId, 0u );
 			auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), BlurData4ImgId, 0u );
-			auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), BlurData5ImgId, 0u );
 			auto c3d_mapLightDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightDiffuse", BlurLgtDiffImgId, 0u );
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
@@ -121,12 +119,12 @@ namespace castor3d
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
+					auto data0 = writer.declLocale( "data0"
+						, c3d_mapData0.lod( vtx_texture, 0.0_f ) );
 					auto data4 = writer.declLocale( "data4"
 						, c3d_mapData4.lod( vtx_texture, 0.0_f ) );
-					auto data5 = writer.declLocale( "data5"
-						, c3d_mapData5.lod( vtx_texture, 0.0_f ) );
 					auto materialId = writer.declLocale( "materialId"
-						, writer.cast< UInt >( data5.z() ) );
+						, writer.cast< UInt >( data0.w() ) );
 					auto translucency = writer.declLocale( "translucency"
 						, data4.w() );
 					auto material = materials->getMaterial( materialId );
@@ -141,7 +139,7 @@ namespace castor3d
 					auto colorM = writer.declLocale( "colorM"
 						, c3d_mapLightDiffuse.lod( vtx_texture, 0.0_f ) );
 					auto depthM = writer.declLocale( "depthM"
-						, c3d_mapDepth.lod( vtx_texture, 0.0_f ).r() );
+						, c3d_mapData0.lod( vtx_texture, 0.0_f ).x() );
 					depthM = c3d_gpInfoData.projToView( utils, vtx_texture, depthM ).z();
 
 					// Accumulate center sample, multiplying it with its gaussian weight:
@@ -190,7 +188,7 @@ namespace castor3d
 						offset = sdw::fma( vec2( o[i] ), finalStep, vtx_texture );
 						color = c3d_mapLightDiffuse.lod( offset, 0.0_f ).rgb();
 						offset = sdw::fma( vec2( o[i] ), finalStep, vtx_texture );
-						depth = c3d_mapDepth.lod( offset, 0.0_f ).r();
+						depth = c3d_mapData0.lod( offset, 0.0_f ).x();
 						depth = c3d_gpInfoData.projToView( utils, vtx_texture, depth ).z();
 
 						// If the difference in depth is huge, we lerp color back to "colorM":
@@ -214,8 +212,8 @@ namespace castor3d
 			auto materials = shader::createMaterials( writer, PassFlag( 0u ) );
 			materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers(), CombMaterialsUboId, 0u );
 
+			auto c3d_mapData0 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData0 ), CombData0ImgId, 0u );
 			auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), CombData4ImgId, 0u );
-			auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), CombData5ImgId, 0u );
 			auto c3d_mapBlur1 = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBlur1", CombBlur1ImgId, 0u );
 			auto c3d_mapBlur2 = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBlur2", CombBlur2ImgId, 0u );
 			auto c3d_mapBlur3 = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBlur3", CombBlur3ImgId, 0u );
@@ -232,12 +230,12 @@ namespace castor3d
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					auto data5 = writer.declLocale( "data5"
-						, c3d_mapData5.lod( vtx_texture, 0.0_f ) );
+					auto data0 = writer.declLocale( "data0"
+						, c3d_mapData0.lod( vtx_texture, 0.0_f ) );
 					auto original = writer.declLocale( "original"
 						, c3d_mapLightDiffuse.lod( vtx_texture, 0.0_f ) );
 					auto materialId = writer.declLocale( "materialId"
-						, writer.cast< UInt >( data5.z() ) );
+						, writer.cast< UInt >( data0.w() ) );
 					auto material = materials->getMaterial( materialId );
 
 					IF( writer, material.subsurfaceScatteringEnabled == 0_i )
@@ -402,14 +400,11 @@ namespace castor3d
 			m_blurCfgUbo.createPassBinding( blurX
 				, "BlurCfg"
 				, BlurSssUboId );
-			blurX.addSampledView( m_gpResult[DsTexture::eDepth].sampledViewId
-				, BlurDepthImgId
+			blurX.addSampledView( m_gpResult[DsTexture::eData0].sampledViewId
+				, BlurData0ImgId
 				, VK_IMAGE_LAYOUT_UNDEFINED );
 			blurX.addSampledView( m_gpResult[DsTexture::eData4].sampledViewId
 				, BlurData4ImgId
-				, VK_IMAGE_LAYOUT_UNDEFINED );
-			blurX.addSampledView( m_gpResult[DsTexture::eData5].sampledViewId
-				, BlurData5ImgId
 				, VK_IMAGE_LAYOUT_UNDEFINED );
 			blurX.addSampledView( blurXSource->sampledViewId
 				, BlurLgtDiffImgId
@@ -441,14 +436,11 @@ namespace castor3d
 			m_blurCfgUbo.createPassBinding( blurY
 				, "BlurCfg"
 				, BlurSssUboId );
-			blurY.addSampledView( m_gpResult[DsTexture::eDepth].sampledViewId
-				, BlurDepthImgId
+			blurY.addSampledView( m_gpResult[DsTexture::eData0].sampledViewId
+				, BlurData0ImgId
 				, VK_IMAGE_LAYOUT_UNDEFINED );
 			blurY.addSampledView( m_gpResult[DsTexture::eData4].sampledViewId
 				, BlurData4ImgId
-				, VK_IMAGE_LAYOUT_UNDEFINED );
-			blurY.addSampledView( m_gpResult[DsTexture::eData5].sampledViewId
-				, BlurData5ImgId
 				, VK_IMAGE_LAYOUT_UNDEFINED );
 			blurY.addSampledView( m_intermediate.sampledViewId
 				, BlurLgtDiffImgId
@@ -525,11 +517,11 @@ namespace castor3d
 		previousPass = &pass;
 		getEngine()->getMaterialCache().getPassBuffer().createPassBinding( pass
 			, CombMaterialsUboId );
+		pass.addSampledView( m_gpResult[DsTexture::eData0].sampledViewId
+			, CombData0ImgId
+			, VK_IMAGE_LAYOUT_UNDEFINED );
 		pass.addSampledView( m_gpResult[DsTexture::eData4].sampledViewId
 			, CombData4ImgId
-			, VK_IMAGE_LAYOUT_UNDEFINED );
-		pass.addSampledView( m_gpResult[DsTexture::eData5].sampledViewId
-			, CombData5ImgId
 			, VK_IMAGE_LAYOUT_UNDEFINED );
 		pass.addSampledView( m_blurImages[0].sampledViewId
 			, CombBlur1ImgId

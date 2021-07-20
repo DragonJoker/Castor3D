@@ -227,7 +227,7 @@ namespace castor3d
 					, material.alphaRef );
 				lightMat->output( outData2, outData3 );
 				outData4 = vec4( emissive, transmittance );
-				outData5 = vec4( inSurface.getVelocity(), writer.cast< Float >( inSurface.material ), occlusion );
+				outData5 = vec4( inSurface.getVelocity(), 0.0_f, occlusion );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

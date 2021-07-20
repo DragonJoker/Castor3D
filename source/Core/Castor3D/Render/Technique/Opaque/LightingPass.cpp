@@ -831,6 +831,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, castor::Size const & size
 		, Scene & scene
+		, Texture const & depth
 		, OpaquePassResult const & gpResult
 		, ShadowMapResult const & smDirectionalResult
 		, ShadowMapResult const & smPointResult
@@ -841,6 +842,7 @@ namespace castor3d
 		: m_graph{ graph }
 		, m_previousPass{ *previousPass }
 		, m_device{ device }
+		, m_depth{ depth }
 		, m_gpResult{ gpResult }
 		, m_smDirectionalResult{ smDirectionalResult }
 		, m_smPointResult{ smPointResult }
@@ -920,7 +922,7 @@ namespace castor3d
 				return result;
 			} );
 		pass.addDependency( previousPass );
-		pass.addTransferInputView( m_gpResult[DsTexture::eDepth].wholeViewId
+		pass.addTransferInputView( m_depth.wholeViewId
 			, VK_IMAGE_LAYOUT_UNDEFINED );
 		pass.addTransferOutputView( m_lpResult[LpTexture::eDepth].wholeViewId
 			, VK_IMAGE_LAYOUT_UNDEFINED );
@@ -958,8 +960,8 @@ namespace castor3d
 			, uint32_t( LightPassIdx::eGpInfo ) );
 		m_sceneUbo.createPassBinding( pass
 			, uint32_t( LightPassIdx::eScene ) );
-		pass.addSampledView( m_gpResult[DsTexture::eDepth].sampledViewId
-			, uint32_t( LightPassIdx::eDepth )
+		pass.addSampledView( m_gpResult[DsTexture::eData0].sampledViewId
+			, uint32_t( LightPassIdx::eData0 )
 			, VK_IMAGE_LAYOUT_UNDEFINED );
 		pass.addSampledView( m_gpResult[DsTexture::eData1].sampledViewId
 			, uint32_t( LightPassIdx::eData1 )
@@ -972,9 +974,6 @@ namespace castor3d
 			, VK_IMAGE_LAYOUT_UNDEFINED );
 		pass.addSampledView( m_gpResult[DsTexture::eData4].sampledViewId
 			, uint32_t( LightPassIdx::eData4 )
-			, VK_IMAGE_LAYOUT_UNDEFINED );
-		pass.addSampledView( m_gpResult[DsTexture::eData5].sampledViewId
-			, uint32_t( LightPassIdx::eData5 )
 			, VK_IMAGE_LAYOUT_UNDEFINED );
 
 		pass.addInOutDepthStencilView( m_lpResult[LpTexture::eDepth].targetViewId );

@@ -33,6 +33,7 @@ namespace castor3d
 	public:
 		struct PoolsEntry
 		{
+			int32_t id;
 			size_t hash;
 			Geometry const & geometry;
 			Submesh const & submesh;

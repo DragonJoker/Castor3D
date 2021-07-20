@@ -71,6 +71,7 @@ namespace castor3d
 		DeferredRendering( crg::FrameGraph & graph
 			, crg::FramePass const & opaquePass
 			, RenderDevice const & device
+			, Texture const & depth
 			, OpaquePassResult const & opaquePassResult
 			, Texture const & resultTexture
 			, ShadowMapResult const & smDirectionalResult
