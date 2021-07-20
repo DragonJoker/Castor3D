@@ -14,6 +14,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/FlagCombination.hpp>
 #include <CastorUtils/Design/GroupChangeTracked.hpp>
 #include <CastorUtils/Design/Signal.hpp>
+#include <CastorUtils/Graphics/RgbColour.hpp>
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
 
@@ -211,6 +212,12 @@ namespace castor3d
 			, castor::Path const & folder
 			, castor::String const & subfolder
 			, castor::StringStream & file )const = 0;
+
+		C3D_API static void addParser( castor::AttributeParsersBySection & parsers
+			, uint32_t section
+			, castor::String const & name
+			, castor::ParserFunction function
+			, castor::ParserParameterArray && array = castor::ParserParameterArray{} );
 		/**
 		*\~english
 		*name
@@ -343,6 +350,11 @@ namespace castor3d
 			return checkFlag( m_flags, PassFlag::eRefraction );
 		}
 
+		bool hasEdges()const
+		{
+			return checkFlag( m_flags, PassFlag::eDrawEdge );
+		}
+
 		uint32_t getHeightTextureIndex()const
 		{
 			return m_heightTextureIndex;
@@ -361,6 +373,31 @@ namespace castor3d
 		PassTypeID getTypeID()const
 		{
 			return m_typeID;
+		}
+
+		float getEdgeWidth()const
+		{
+			return m_edgeWidth->value();
+		}
+
+		float getDepthFactor()const
+		{
+			return m_depthFactor->value();
+		}
+
+		float getNormalFactor()const
+		{
+			return m_normalFactor->value();
+		}
+
+		float getObjectFactor()const
+		{
+			return m_objectFactor->value();
+		}
+
+		castor::RgbColour getEdgeColour()const
+		{
+			return *m_edgeColour;
 		}
 		/**@}*/
 		/**
@@ -492,6 +529,36 @@ namespace castor3d
 		{
 			updateFlag( PassFlag::ePickable, value );
 		}
+
+		void enableEdges( bool value )
+		{
+			updateFlag( PassFlag::eDrawEdge, value );
+		}
+
+		void setEdgeWidth( float value )
+		{
+			*m_edgeWidth = value;
+		}
+
+		void setDepthFactor( float value )
+		{
+			*m_depthFactor = value;
+		}
+
+		void setNormalFactor( float value )
+		{
+			*m_normalFactor = value;
+		}
+
+		void setObjectFactor( float value )
+		{
+			*m_objectFactor = value;
+		}
+
+		void setEdgeColour( castor::RgbColour const & value )
+		{
+			m_edgeColour = value;
+		}
 		/**@}*/
 
 	protected:
@@ -507,11 +574,6 @@ namespace castor3d
 			, castor::String const & name );
 		C3D_API void doFillData( PassBuffer::PassDataPtr & data )const;
 		C3D_API static void parseError( castor::String const & error );
-		C3D_API static void addParser( castor::AttributeParsersBySection & parsers
-			, uint32_t section
-			, castor::String const & name
-			, castor::ParserFunction function
-			, castor::ParserParameterArray && array = castor::ParserParameterArray{} );
 		C3D_API static void addCommonParsers( uint32_t mtlSectionID
 			, uint32_t texSectionID
 			, castor::AttributeParsersBySection & result );
@@ -557,6 +619,8 @@ namespace castor3d
 
 	public:
 		OnPassChanged onChanged;
+		static float constexpr MinEdgeWidth = 0.001f;
+		static float constexpr MaxEdgeWidth = 1000.0f;
 
 	protected:
 		bool m_dirty{ true };
@@ -582,6 +646,11 @@ namespace castor3d
 		castor::GroupChangeTracked< VkCompareOp > m_alphaFunc;
 		castor::GroupChangeTracked< VkCompareOp > m_blendAlphaFunc;
 		castor::GroupChangeTracked< ParallaxOcclusionMode > m_parallaxOcclusionMode;
+		castor::GroupChangeTracked< castor::RgbColour > m_edgeColour;
+		castor::GroupChangeTracked< castor::RangedValue< float > > m_edgeWidth;
+		castor::GroupChangeTracked< castor::RangedValue< float > > m_depthFactor;
+		castor::GroupChangeTracked< castor::RangedValue< float > > m_normalFactor;
+		castor::GroupChangeTracked< castor::RangedValue< float > > m_objectFactor;
 		SubsurfaceScatteringUPtr m_subsurfaceScattering;
 		SubsurfaceScattering::OnChangedConnection m_sssConnection;
 		uint32_t m_heightTextureIndex{ InvalidIndex };
