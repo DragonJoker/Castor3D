@@ -56,9 +56,6 @@ namespace castor3d::shader
 		C3D_API void declareUnflatten();
 		C3D_API void declareIsSaturatedImg();
 
-		C3D_API void declareSobelFilterDepth();
-		C3D_API void declareSobelFilterNormal();
-
 		C3D_API sdw::Vec2 topDownToBottomUp( sdw::Vec2 const & texCoord )const;
 		C3D_API sdw::Vec3 topDownToBottomUp( sdw::Vec3 const & texCoord )const;
 		C3D_API sdw::Vec4 topDownToBottomUp( sdw::Vec4 const & texCoord )const;
@@ -243,25 +240,6 @@ namespace castor3d::shader
 		*/
 		C3D_API sdw::UVec3 unflatten( sdw::UInt const & p
 			, sdw::UVec3 const & dim )const;
-		/**
-		*\~english
-		*\brief
-		*	Applies a Sobel filter around given texture coordinates.
-		*/
-		C3D_API sdw::Float sobelFilterDepth( sdw::SampledImage2DR32 tex
-			, sdw::Vec2 const & texSize
-			, sdw::Vec2 const & depthRange
-			, sdw::Vec2 const & coord
-			, sdw::Float const & width )const;
-		/**
-		*\~english
-		*\brief
-		*	Applies a Sobel filter around given texture coordinates.
-		*/
-		C3D_API sdw::Float sobelFilterNormal( sdw::SampledImage2DRgba32 tex
-			, sdw::Vec2 const & texSize
-			, sdw::Vec2 const & coord
-			, sdw::Float const & width )const;
 
 		C3D_API static sdw::Mat3 getTBN( sdw::Vec3 const & normal
 			, sdw::Vec3 const & tangent
@@ -389,17 +367,6 @@ namespace castor3d::shader
 		sdw::Function< sdw::UVec3
 			, sdw::InUInt
 			, sdw::InUVec3 > m_unflatten3D;
-		sdw::Function< sdw::Float
-			, sdw::InSampledImage2DR32
-			, sdw::InVec2
-			, sdw::InVec2
-			, sdw::InVec2
-			, sdw::InFloat > m_sobelFilterDepth;
-		sdw::Function< sdw::Float
-			, sdw::InSampledImage2DRgba32
-			, sdw::InVec2
-			, sdw::InVec2
-			, sdw::InFloat > m_sobelFilterNormal;
 	};
 }
 

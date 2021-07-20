@@ -15,8 +15,6 @@ namespace toon::shader
 		, ambient{ albDiv }
 		, shininess{ spcDiv }
 		, smoothBand{ specific.r() }
-		, edgeWidth{ specific.g() }
-		, stepsCount{ specific.b() }
 	{
 	}
 
@@ -29,9 +27,14 @@ namespace toon::shader
 			, data3
 			, data2
 			, material.colourDiv.a() );
+		edgeFactors = material.edgeFactors;
+		edgeColour = material.edgeColour;
+		specific = material.specific;
+		edgeWidth = material.edgeWidth;
+		depthFactor = material.depthFactor;
+		normalFactor = material.normalFactor;
+		objectFactor = material.objectFactor;
 		smoothBand = material.specific.r();
-		edgeWidth = material.specific.g();
-		stepsCount = material.specific.b();
 	}
 
 	void ToonPhongLightMaterial::create( sdw::Vec3 const & albedo
@@ -47,13 +50,10 @@ namespace toon::shader
 
 	void ToonPhongLightMaterial::create( c3d::Material const & material )
 	{
-		albedo = pow( max( material.colourDiv.rgb(), vec3( 0.0_f, 0.0_f, 0.0_f ) ), vec3( material.gamma ) );
-		ambient = material.colourDiv.a();
-		specular = material.specDiv.rgb();
-		shininess = material.specDiv.a();
-		smoothBand = material.specific.r();
-		edgeWidth = material.specific.g();
-		stepsCount = material.specific.b();
+		create( pow( max( material.colourDiv.rgb(), vec3( 0.0_f, 0.0_f, 0.0_f ) ), vec3( material.gamma ) )
+			, material.specDiv
+			, material.specDiv
+			, material );
 	}
 
 	void ToonPhongLightMaterial::output( sdw::Vec4 & outData2, sdw::Vec4 & outData3 )const
@@ -87,18 +87,6 @@ namespace toon::shader
 		return c3d::LightMaterial::computeRoughness( ToonPhongLightMaterial::computeGlossiness( shininess ) );
 	}
 
-	sdw::Float ToonPhongLightMaterial::transform( sdw::Float const & value )const
-	{
-		return floor( value * stepsCount ) / stepsCount;
-	}
-
-	sdw::Vec3 ToonPhongLightMaterial::transform( sdw::Vec3 const & value )const
-	{
-		return vec3( transform( value.x() )
-			, transform( value.y() ) 
-			, transform( value.z() ) );
-	}
-
 	sdw::Float ToonPhongLightMaterial::computeGlossiness( sdw::Float const & shininess )
 	{
 		return shininess / ToonPhongPass::MaxShininess;
@@ -118,8 +106,6 @@ namespace toon::shader
 		, roughness{ albDiv }
 		, metalness{ spcDiv }
 		, smoothBand{ specific.r() }
-		, edgeWidth{ specific.g() }
-		, stepsCount{ specific.b() }
 	{
 	}
 
@@ -131,10 +117,15 @@ namespace toon::shader
 		create( albedo
 			, data3
 			, data2
-			, material.colourDiv.a() );
+			, 0.0_f );
+		edgeFactors = material.edgeFactors;
+		edgeColour = material.edgeColour;
+		specific = material.specific;
+		edgeWidth = material.edgeWidth;
+		depthFactor = material.depthFactor;
+		normalFactor = material.normalFactor;
+		objectFactor = material.objectFactor;
 		smoothBand = material.specific.r();
-		edgeWidth = material.specific.g();
-		stepsCount = material.specific.b();
 	}
 
 	void ToonPbrLightMaterial::create( sdw::Vec3 const & albedo
@@ -150,14 +141,10 @@ namespace toon::shader
 
 	void ToonPbrLightMaterial::create( c3d::Material const & material )
 	{
-		specific = material.specific;
-		albedo = material.colourDiv.rgb();
-		roughness = material.colourDiv.a();
-		specular = material.specDiv.rgb();
-		metalness = material.specDiv.a();
-		smoothBand = material.specific.r();
-		edgeWidth = material.specific.g();
-		stepsCount = material.specific.b();
+		create( material.colourDiv.rgb()
+			, material.specDiv
+			, material.colourDiv
+			, material );
 	}
 
 	void ToonPbrLightMaterial::output( sdw::Vec4 & outData2, sdw::Vec4 & outData3 )const
@@ -188,18 +175,6 @@ namespace toon::shader
 	sdw::Float ToonPbrLightMaterial::getRoughness()const
 	{
 		return roughness;
-	}
-
-	sdw::Float ToonPbrLightMaterial::transform( sdw::Float const & value )const
-	{
-		return floor( value * stepsCount ) / stepsCount;
-	}
-
-	sdw::Vec3 ToonPbrLightMaterial::transform( sdw::Vec3 const & value )const
-	{
-		return vec3( transform( value.x() )
-			, transform( value.y() )
-			, transform( value.z() ) );
 	}
 
 	//*********************************************************************************************
