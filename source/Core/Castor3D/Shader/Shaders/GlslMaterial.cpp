@@ -58,7 +58,7 @@ namespace castor3d::shader
 
 	ast::type::StructPtr Material::makeType( ast::type::TypesCache & cache )
 	{
-		auto result = cache.getStruct( ast::type::MemoryLayout::eStd140, "Material" );
+		auto result = cache.getStruct( ast::type::MemoryLayout::eStd140, "C3D_Material" );
 
 		if ( result->empty() )
 		{
@@ -107,7 +107,7 @@ namespace castor3d::shader
 			auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( "c3d_materials"
 				, binding
 				, set );
-			m_getMaterial = m_writer.implementFunction< Material >( "getMaterial"
+			m_getMaterial = m_writer.implementFunction< Material >( "c3d_getMaterial"
 				, [this, &c3d_materials]( sdw::UInt const & index )
 				{
 					auto result = m_writer.declLocale< Material >( "result"
