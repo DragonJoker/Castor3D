@@ -49,7 +49,7 @@ namespace castor3d::shader
 	ast::type::StructPtr LightMaterial::makeType( ast::type::TypesCache & cache )
 	{
 		auto result = cache.getStruct( ast::type::MemoryLayout::eStd430
-			, "LightMaterial" );
+			, "C3D_LightMaterial" );
 
 		if ( result->empty() )
 		{
@@ -130,9 +130,9 @@ namespace castor3d::shader
 		, sdw::Int const & receivesShadows
 		, OutputComponents & parentOutput )const
 	{
-		auto begin = m_writer.declLocale( "begin"
+		auto begin = m_writer.declLocale( "c3d_begin"
 			, 0_i );
-		auto end = m_writer.declLocale( "end"
+		auto end = m_writer.declLocale( "c3d_end"
 			, sceneData.getDirectionalLightCount() );
 
 #if C3D_UseTiledDirectionalShadowMap
@@ -289,11 +289,11 @@ namespace castor3d::shader
 		, sdw::Vec3 const & worldEye
 		, sdw::Int const & receivesShadows )const
 	{
-		auto begin = m_writer.declLocale( "begin"
+		auto begin = m_writer.declLocale( "c3d_begin"
 			, 0_i );
-		auto end = m_writer.declLocale( "end"
+		auto end = m_writer.declLocale( "c3d_end"
 			, sceneData.getDirectionalLightCount() );
-		auto result = m_writer.declLocale( "result"
+		auto result = m_writer.declLocale( "c3d_result"
 			, vec3( 0.0_f ) );
 
 #if C3D_UseTiledDirectionalShadowMap
@@ -521,7 +521,7 @@ namespace castor3d::shader
 
 	void LightingModel::doDeclareGetBaseLight()
 	{
-		m_getBaseLight = m_writer.implementFunction< Light >( "getBaseLight"
+		m_getBaseLight = m_writer.implementFunction< Light >( "c3d_getBaseLight"
 			, [this]( sdw::Int const & index )
 			{
 				auto result = m_writer.declLocale< Light >( "result" );
@@ -545,7 +545,7 @@ namespace castor3d::shader
 	void LightingModel::doDeclareGetDirectionalLight()
 	{
 #if C3D_UseTiledDirectionalShadowMap
-		m_getTiledDirectionalLight = m_writer.implementFunction< TiledDirectionalLight >( "getDirectionalLight"
+		m_getTiledDirectionalLight = m_writer.implementFunction< TiledDirectionalLight >( "c3d_getDirectionalLight"
 			, [this]( Int const & index )
 			{
 				auto result = m_writer.declLocale< TiledDirectionalLight >( "result" );
@@ -584,9 +584,9 @@ namespace castor3d::shader
 #endif
 				m_writer.returnStmt( result );
 			}
-		, InInt{ m_writer, "index" } );
+			, InInt{ m_writer, "index" } );
 #else
-		m_getDirectionalLight = m_writer.implementFunction< DirectionalLight >( "getDirectionalLight"
+		m_getDirectionalLight = m_writer.implementFunction< DirectionalLight >( "c3d_getDirectionalLight"
 			, [this]( sdw::Int const & index )
 			{
 				auto result = m_writer.declLocale< DirectionalLight >( "result" );
@@ -628,7 +628,7 @@ namespace castor3d::shader
 
 	void LightingModel::doDeclareGetPointLight()
 	{
-		m_getPointLight = m_writer.implementFunction< PointLight >( "getPointLight"
+		m_getPointLight = m_writer.implementFunction< PointLight >( "c3d_getPointLight"
 			, [this]( sdw::Int const & index )
 			{
 				auto result = m_writer.declLocale< PointLight >( "result" );
@@ -644,7 +644,7 @@ namespace castor3d::shader
 
 	void LightingModel::doDeclareGetSpotLight()
 	{
-		m_getSpotLight = m_writer.implementFunction< SpotLight >( "getSpotLight"
+		m_getSpotLight = m_writer.implementFunction< SpotLight >( "c3d_getSpotLight"
 			, [this]( sdw::Int const & index )
 			{
 				auto result = m_writer.declLocale< SpotLight >( "result" );
@@ -667,7 +667,7 @@ namespace castor3d::shader
 	void LightingModel::doDeclareGetCascadeFactors()
 	{
 #if C3D_UseTiledDirectionalShadowMap
-		m_getTileFactors = m_writer.implementFunction< sdw::Vec3 >( "getCascadeFactors"
+		m_getTileFactors = m_writer.implementFunction< sdw::Vec3 >( "c3d_getCascadeFactors"
 			, [this]( sdw::Vec3 viewVertex
 				, sdw::Array< sdw::Vec4 > splitDepths
 				, sdw::UInt index )
@@ -705,7 +705,7 @@ namespace castor3d::shader
 			, sdw::InVec4Array( m_writer, "splitDepths", 2u )
 			, sdw::InUInt( m_writer, "index" ) );
 #else
-		m_getCascadeFactors = m_writer.implementFunction< sdw::Vec3 >( "getCascadeFactors"
+		m_getCascadeFactors = m_writer.implementFunction< sdw::Vec3 >( "c3d_getCascadeFactors"
 			, [this]( sdw::Vec3 viewVertex
 				, sdw::Vec4 splitDepths
 				, sdw::UInt index )
