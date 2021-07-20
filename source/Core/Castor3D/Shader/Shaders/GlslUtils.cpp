@@ -896,102 +896,6 @@ namespace castor3d::shader
 			, sdw::InInt{ m_writer, "imax" } );
 	}
 
-	void Utils::declareSobelFilterDepth()
-	{
-		if ( m_sobelFilterDepth )
-		{
-			return;
-		}
-
-		m_sobelFilterDepth = m_writer.implementFunction< sdw::Float >( "c3d_sobelFilterDepth"
-			, [&]( sdw::SampledImage2DR32 const & tex
-				, sdw::Vec2 const & texSize
-				, sdw::Vec2 const & depthRange
-				, sdw::Vec2 const & coord
-				, sdw::Float const & width )
-			{
-				auto n = m_writer.declLocale( "n"
-					, depthRange.x() );
-				auto f = m_writer.declLocale( "f"
-					, depthRange.y() );
-				auto w = m_writer.declLocale( "w"
-					, width / texSize.x() );
-				auto h = m_writer.declLocale( "h"
-					, width / texSize.y() );
-
-				auto i = m_writer.declLocaleArray< sdw::Float >( "i", 9u );
-				i[0] = tex.sample( coord + vec2( -w, -h ) );
-				i[1] = tex.sample( coord + vec2( 0.0_f, -h ) );
-				i[2] = tex.sample( coord + vec2( w, -h ) );
-				i[3] = tex.sample( coord + vec2( -w, 0.0_f ) );
-				i[4] = tex.sample( coord );
-				i[5] = tex.sample( coord + vec2( w, 0.0_f ) );
-				i[6] = tex.sample( coord + vec2( -w, h ) );
-				i[7] = tex.sample( coord + vec2( 0.0_f, h ) );
-				i[8] = tex.sample( coord + vec2( w, h ) );
-
-				auto sobelEdgeH = m_writer.declLocale( "sobelEdgeH"
-					, i[2] + ( 2.0 * i[5] ) + i[8] - ( i[0] + ( 2.0 * i[3] ) + i[6] ) );
-				auto sobelEdgeV = m_writer.declLocale( "sobelEdgeV"
-					, i[0] + ( 2.0 * i[1] ) + i[2] - ( i[6] + ( 2.0 * i[7] ) + i[8] ) );
-
-				m_writer.returnStmt( sqrt( ( sobelEdgeH * sobelEdgeH ) + ( sobelEdgeV * sobelEdgeV ) ) );
-			}
-			, sdw::InSampledImage2DR32{ m_writer, "tex" }
-			, sdw::InVec2{ m_writer, "texSize" }
-			, sdw::InVec2{ m_writer, "depthRange" }
-			, sdw::InVec2{ m_writer, "coord" }
-			, sdw::InFloat{ m_writer, "width" } );
-	}
-	
-	void Utils::declareSobelFilterNormal()
-	{
-		if ( m_sobelFilterNormal )
-		{
-			return;
-		}
-
-		m_sobelFilterNormal = m_writer.implementFunction< sdw::Float >( "m_sobelFilterNormal"
-			, [&]( sdw::SampledImage2DRgba32 const & tex
-				, sdw::Vec2 const & texSize
-				, sdw::Vec2 const & coord
-				, sdw::Float const & width )
-			{
-				auto w = m_writer.declLocale( "w"
-					, width / texSize.x() );
-				auto h = m_writer.declLocale( "h"
-					, width / texSize.y() );
-
-				auto A = m_writer.declLocale( "A", tex.sample( coord + vec2( -w, h ) ).xyz() );
-				auto B = m_writer.declLocale( "B", tex.sample( coord + vec2( 0.0_f, h ) ).xyz() );
-				auto C = m_writer.declLocale( "C", tex.sample( coord + vec2( w, h ) ).xyz() );
-				auto D = m_writer.declLocale( "D", tex.sample( coord + vec2( -w, 0.0_f ) ).xyz() );
-				auto X = m_writer.declLocale( "X", tex.sample( coord ).xyz() );
-				auto E = m_writer.declLocale( "E", tex.sample( coord + vec2( w, 0.0_f ) ).xyz() );
-				auto F = m_writer.declLocale( "F", tex.sample( coord + vec2( -w, -h ) ).xyz() );
-				auto G = m_writer.declLocale( "G", tex.sample( coord + vec2( 0.0_f, -h ) ).xyz() );
-				auto H = m_writer.declLocale( "H", tex.sample( coord + vec2( w, -h ) ).xyz() );
-
-				// compute length of gradient using Sobel/Kroon operator
-				auto k0 = m_writer.declLocale( "k0"
-					, vec3( sdw::Float{ 17.0f / 23.75f } ) );
-				auto k1 = m_writer.declLocale( "k1"
-					, vec3( sdw::Float{ 61.0f / 23.75f } ) );
-				auto grad_y = m_writer.declLocale( "grad_y"
-					, k0 * A + k1 * B + k0 * C - k0 * F - k1 * G - k0 * H );
-				auto grad_x = m_writer.declLocale( "grad_x"
-					, k0 * C + k1 * E + k0 * H - k0 * A - k1 * D - k0 * F );
-				auto g = m_writer.declLocale( "g"
-					, length( grad_x ) + length( grad_y ) );
-
-				m_writer.returnStmt( smoothStep( 2.0_f, 3.0_f, g ) );
-			}
-			, sdw::InSampledImage2DRgba32{ m_writer, "tex" }
-			, sdw::InVec2{ m_writer, "texSize" }
-			, sdw::InVec2{ m_writer, "coord" }
-			, sdw::InFloat{ m_writer, "width" } );
-	}
-
 	sdw::Vec2 Utils::topDownToBottomUp( sdw::Vec2 const & texCoord )const
 	{
 		return m_invertVec2Y( texCoord );
@@ -1428,23 +1332,6 @@ namespace castor3d::shader
 		, sdw::UVec3 const & dim )const
 	{
 		return m_unflatten3D( p, dim );
-	}
-
-	sdw::Float Utils::sobelFilterDepth( sdw::SampledImage2DR32 tex
-		, sdw::Vec2 const & texSize
-		, sdw::Vec2 const & depthRange
-		, sdw::Vec2 const & coord
-		, sdw::Float const & width )const
-	{
-		return m_sobelFilterDepth( tex, texSize, depthRange, coord, width );
-	}
-
-	sdw::Float Utils::sobelFilterNormal( sdw::SampledImage2DRgba32 tex
-		, sdw::Vec2 const & texSize
-		, sdw::Vec2 const & coord
-		, sdw::Float const & width )const
-	{
-		return m_sobelFilterNormal( tex, texSize, coord, width );
 	}
 
 	sdw::Mat3 Utils::getTBN( sdw::Vec3 const & normal
