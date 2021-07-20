@@ -28,13 +28,13 @@ namespace castor3d
 	enum class DsTexture
 		: uint8_t
 	{
-		eDepth,
+		eData0, // R => Depth, G => Linearised Depth, G => Object ID, A => Material ID
 		eData1, // RGB => Normal, A => Object Material flags
 		eData2, // RGB => Diffuse/Albedo - SSR: A => Shininess - PBR: A => Roughness
 		eData3, // RGB => Specular - PBR: A => Metalness - SSR: A => Unused
 		eData4, // RGB => Emissive, A => Transmittance
-		eData5, // RG => Velocity, B => Material Index, A => AO
-		CU_ScopedEnumBounds( eDepth ),
+		eData5, // RG => Velocity, B => , A => AO
+		CU_ScopedEnumBounds( eData0 ),
 	};
 	castor::String getTextureName( DsTexture texture );
 	castor::String getName( DsTexture texture );

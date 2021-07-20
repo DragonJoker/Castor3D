@@ -208,6 +208,7 @@ namespace castor3d
 						{ SceneRenderPass::VertexInputs::TransformLocation + 2u, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 2u * sizeof( Point4f ) },
 						{ SceneRenderPass::VertexInputs::TransformLocation + 3u, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 3u * sizeof( Point4f ) },
 						{ SceneRenderPass::VertexInputs::MaterialLocation, BindingPoint, VK_FORMAT_R32_SINT, offsetof( InstantiationData, m_material ) },
+						{ SceneRenderPass::VertexInputs::NodeIdLocation, BindingPoint, VK_FORMAT_R32_SINT, offsetof( InstantiationData, m_nodeId ) },
 					} );
 			}
 

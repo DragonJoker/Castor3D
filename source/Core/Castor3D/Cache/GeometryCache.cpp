@@ -128,6 +128,7 @@ namespace castor3d
 					, entry.second.pass
 					, instanceMult );
 				auto it = m_entries.emplace( entry.second.hash, entry.second ).first;
+				it->second.id = m_entries.size();
 
 				if ( instanceMult )
 				{
@@ -177,6 +178,13 @@ namespace castor3d
 						}
 					}
 				}
+
+				uint32_t id = 1u;
+
+				for ( auto & entry : m_entries )
+				{
+					entry.second.id = id++;
+				}
 			}
 		}
 	}
@@ -207,6 +215,7 @@ namespace castor3d
 				&& bool( entry.modelUbo ) )
 			{
 				auto & modelData = entry.modelUbo.getData();
+				modelData.nodeId = entry.id;
 				modelData.shadowReceiver = entry.geometry.isShadowReceiver();
 				modelData.materialIndex = entry.pass.getId();
 
@@ -228,7 +237,9 @@ namespace castor3d
 		, Pass const & pass
 		, uint32_t instanceMult )const
 	{
-		return m_entries.at( hash( geometry, submesh, pass, instanceMult ) );
+		auto it = m_entries.find( hash( geometry, submesh, pass, instanceMult ) );
+		CU_Require( it != m_entries.end() );
+		return it->second;
 	}
 
 	void GeometryCache::clear( RenderDevice const & device )
@@ -290,8 +301,9 @@ namespace castor3d
 		, Pass const & pass )
 	{
 		auto baseHash = hash( geometry, submesh, pass );
-		auto iresult= m_baseEntries.emplace( baseHash
-			, GeometryCache::PoolsEntry{ baseHash
+		auto iresult = m_baseEntries.emplace( baseHash
+			, GeometryCache::PoolsEntry{ 0u
+				, baseHash
 				, geometry
 				, submesh
 				, pass } );
@@ -300,6 +312,7 @@ namespace castor3d
 		{
 			auto & uboPools = *device.uboPools;
 			auto & baseEntry = iresult.first->second;
+			baseEntry.id = m_baseEntries.size();
 			baseEntry.modelUbo = uboPools.getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 
 			for ( auto instanceMult : m_instances )

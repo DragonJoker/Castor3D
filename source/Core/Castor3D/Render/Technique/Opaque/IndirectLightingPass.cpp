@@ -85,7 +85,7 @@ namespace castor3d
 			auto lightingModel = utils.createLightingModel( shader::getLightingModelName( *renderSystem.getEngine(), passType )
 				, {}
 				, true );
-			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), uint32_t( IndirectLightingPass::eDepth ), 0u );
+			auto c3d_mapData0 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData0 ), uint32_t( IndirectLightingPass::eDepth ), 0u );
 			auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), uint32_t( IndirectLightingPass::eData1 ), 0u );
 			auto c3d_mapData2 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), uint32_t( IndirectLightingPass::eData2 ), 0u );
 			auto c3d_mapData3 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), uint32_t( IndirectLightingPass::eData3 ), 0u );
@@ -118,7 +118,7 @@ namespace castor3d
 						auto eye = writer.declLocale( "eye"
 							, c3d_sceneData.getCameraPosition() );
 						auto depth = writer.declLocale( "depth"
-							, c3d_mapDepth.lod( texCoord, 0.0_f ).x() );
+							, c3d_mapData0.lod( texCoord, 0.0_f ).x() );
 						auto vsPosition = writer.declLocale( "vsPosition"
 							, c3d_gpInfoData.projToView( utils, texCoord, depth ) );
 						auto wsPosition = writer.declLocale( "wsPosition"
@@ -354,7 +354,7 @@ namespace castor3d
 			, uint32_t( IndirectLightingPass::eLayeredLpvGridConfig ) );
 		m_vctConfigUbo.createPassBinding( pass
 			, uint32_t( IndirectLightingPass::eVoxelData ) );
-		pass.addSampledView( m_gpResult[DsTexture::eDepth].sampledViewId
+		pass.addSampledView( m_gpResult[DsTexture::eData0].sampledViewId
 			, uint32_t( IndirectLightingPass::eDepth )
 			, VK_IMAGE_LAYOUT_UNDEFINED );
 		pass.addSampledView( m_gpResult[DsTexture::eData1].sampledViewId

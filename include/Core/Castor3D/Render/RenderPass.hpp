@@ -831,6 +831,7 @@ namespace castor3d
 			// Instantiation inputs (overlaps morphing inputs)
 			static uint32_t constexpr TransformLocation = 8u; // 4 components since it is a matrix
 			static uint32_t constexpr MaterialLocation = 12u;
+			static uint32_t constexpr NodeIdLocation = 13u;
 		};
 		struct VertexOutputs
 		{
@@ -846,6 +847,7 @@ namespace castor3d
 			static uint32_t constexpr TextureLocation = 9u;
 			static uint32_t constexpr InstanceLocation = 10u;
 			static uint32_t constexpr MaterialLocation = 11u;
+			static uint32_t constexpr NodeIdLocation = 12u;
 		};
 
 	protected:

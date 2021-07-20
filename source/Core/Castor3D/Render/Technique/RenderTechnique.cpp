@@ -316,6 +316,16 @@ namespace castor3d
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_depthBuffer{ doCreateTextureUnit( m_device
 			, m_depth.imageId ) }
+		, m_depthObj{ device
+			, getOwner()->getGraphResourceHandler()
+			, "TechData0"
+			, 0u
+			, m_colour.getExtent()
+			, 1u
+			, 1u
+			, getFormat( DsTexture::eData0 )
+			, getUsageFlags( DsTexture::eData0 )
+			, getBorderColor( DsTexture::eData0 ) }
 		, m_normal{device
 			, getOwner()->getGraphResourceHandler()
 			, "TechData1"
@@ -369,13 +379,14 @@ namespace castor3d
 #if C3D_UseDeferredRendering
 		, m_opaquePassResult{ castor::makeUnique< OpaquePassResult >( getOwner()->getGraphResourceHandler()
 			, device
-			, m_depth
+			, m_depthObj
 			, m_normal
 			, m_renderTarget.getVelocity() ) }
 		, m_opaquePassDesc{ &doCreateOpaquePass() }
 		, m_deferredRendering{ castor::makeUnique< DeferredRendering >( m_renderTarget.getGraph()
 			, *m_opaquePassDesc
 			, m_device
+			, m_depth
 			, *m_opaquePassResult
 			, m_colour
 			, m_directionalShadowMap->getShadowPassResult()
@@ -683,7 +694,8 @@ namespace castor3d
 			} );
 		result.addOutputDepthStencilView( m_depth.targetViewId
 			, defaultClearDepthStencil );
-		auto & opaquePassResult = *m_opaquePassResult;
+		result.addOutputColourView( m_depthObj.targetViewId
+			, getClearValue( DsTexture::eData0 ) );
 		result.addOutputColourView( m_normal.targetViewId
 			, getClearValue( DsTexture::eData1 ) );
 		result.addOutputColourView( m_renderTarget.getVelocity().targetViewId );
@@ -820,8 +832,7 @@ namespace castor3d
 			} );
 #if C3D_UseDeferredRendering
 		result.addDependency( m_deferredRendering->getLastPass() );
-		result.addInOutDepthStencilView( m_depth.targetViewId
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		result.addInOutDepthStencilView( m_depth.targetViewId, {} );
 #else
 		result.addDependency( *m_opaquePassDesc );
 		result.addInOutDepthStencilView( m_depth.targetViewId );

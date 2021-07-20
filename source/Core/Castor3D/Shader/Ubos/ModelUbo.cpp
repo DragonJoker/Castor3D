@@ -20,6 +20,7 @@ namespace castor3d
 			, m_mtxNormal{ getMember< sdw::Mat4 >( "mtxNormal" ) }
 			, m_shadowReceiver{ getMember< sdw::Int >( "shadowReceiver" ) }
 			, m_materialIndex{ getMember< sdw::Int >( "materialIndex" ) }
+			, m_nodeId{ getMember< sdw::Int >( "nodeId" ) }
 			, m_envMapIndex{ getMember< sdw::Int >( "envMapIndex" ) }
 		{
 		}
@@ -42,6 +43,7 @@ namespace castor3d
 				result->declMember( "mtxNormal", ast::type::Kind::eMat4x4F );
 				result->declMember( "shadowReceiver", ast::type::Kind::eInt );
 				result->declMember( "materialIndex", ast::type::Kind::eInt );
+				result->declMember( "nodeId", ast::type::Kind::eInt );
 				result->declMember( "envMapIndex", ast::type::Kind::eInt );
 			}
 
@@ -113,6 +115,22 @@ namespace castor3d
 		sdw::UInt ModelData::getMaterialIndex()const
 		{
 			return getWriter()->cast< sdw::UInt >( m_materialIndex );
+		}
+
+		sdw::Int ModelData::getNodeId( ProgramFlags programFlags
+			, sdw::Int const & instanceNodeId )const
+		{
+			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
+			{
+				return instanceNodeId;
+			}
+
+			return getNodeId();
+		}
+
+		sdw::Int ModelData::getNodeId()const
+		{
+			return m_nodeId;
 		}
 
 		sdw::Vec4 ModelData::modelToWorld( sdw::Vec4 const & pos )const
