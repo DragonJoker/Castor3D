@@ -26,6 +26,13 @@ namespace castor3d::shader
 			, data3
 			, data2
 			, material.colourDiv.a() );
+		edgeFactors = material.edgeFactors;
+		edgeColour = material.edgeColour;
+		specific = material.specific;
+		edgeWidth = material.edgeWidth;
+		depthFactor = material.depthFactor;
+		normalFactor = material.normalFactor;
+		objectFactor = material.objectFactor;
 	}
 
 	void PhongLightMaterial::create( sdw::Vec3 const & albedo
@@ -41,10 +48,10 @@ namespace castor3d::shader
 
 	void PhongLightMaterial::create( Material const & material )
 	{
-		albedo = pow( max( material.colourDiv.rgb(), vec3( 0.0_f, 0.0_f, 0.0_f ) ), vec3( material.gamma ) );
-		ambient = material.colourDiv.a();
-		specular = material.specDiv.rgb();
-		shininess = material.specDiv.a();
+		create( pow( max( material.colourDiv.rgb(), vec3( 0.0_f, 0.0_f, 0.0_f ) ), vec3( material.gamma ) )
+			, material.specDiv
+			, material.specDiv
+			, material );
 	}
 
 	void PhongLightMaterial::output( sdw::Vec4 & outData2, sdw::Vec4 & outData3 )const

@@ -13,6 +13,8 @@ namespace castor3d::shader
 		: StructInstance{ writer, std::move( expr ), enabled }
 		, colourDiv{ getMember< sdw::Vec4 >( "colourDiv" ) }
 		, specDiv{ getMember< sdw::Vec4 >( "specDiv" ) }
+		, edgeFactors{ getMember< sdw::Vec4 >( "edgeFactors" ) }
+		, edgeColour{ getMember< sdw::Vec4 >( "edgeColour" ) }
 		, specific{ getMember< sdw::Vec4 >( "specific" ) }
 		, m_common{ getMember< sdw::Vec4 >( "common" ) }
 		, m_opacityTransmission{ getMember< sdw::Vec4 >( "opacity" ) }
@@ -32,6 +34,10 @@ namespace castor3d::shader
 		, gaussianWidth{ m_sssInfo.y() }
 		, subsurfaceScatteringStrength{ m_sssInfo.z() }
 		, transmittanceProfileSize{ writer.cast< sdw::Int >( m_sssInfo.w() ) }
+		, edgeWidth{ edgeFactors.x() }
+		, depthFactor{ edgeFactors.y() }
+		, normalFactor{ edgeFactors.z() }
+		, objectFactor{ edgeFactors.w() }
 	{
 	}
 
@@ -40,6 +46,9 @@ namespace castor3d::shader
 	{
 		colourDiv = materials.fetch( sdw::Int{ offset++ } );
 		specDiv = materials.fetch( sdw::Int{ offset++ } );
+		edgeFactors = materials.fetch( sdw::Int{ offset++ } );
+		edgeColour = materials.fetch( sdw::Int{ offset++ } );
+		specific = materials.fetch( sdw::Int{ offset++ } );
 		m_common = materials.fetch( sdw::Int{ offset++ } );
 		m_opacityTransmission = materials.fetch( sdw::Int{ offset++ } );
 		m_reflRefr = materials.fetch( sdw::Int{ offset++ } );
@@ -64,6 +73,8 @@ namespace castor3d::shader
 		{
 			result->declMember( "colourDiv", ast::type::Kind::eVec4F );
 			result->declMember( "specDiv", ast::type::Kind::eVec4F );
+			result->declMember( "edgeFactors", ast::type::Kind::eVec4F );
+			result->declMember( "edgeColour", ast::type::Kind::eVec4F );
 			result->declMember( "specific", ast::type::Kind::eVec4F );
 			result->declMember( "common", ast::type::Kind::eVec4F );
 			result->declMember( "opacity", ast::type::Kind::eVec4F );

@@ -61,11 +61,11 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::Pass::getPassSectionID
 		 */
-		uint32_t getPassSectionID()const override;
+		C3D_API uint32_t getPassSectionID()const override;
 		/**
 		 *\copydoc		castor3d::Pass::getTextureSectionID
 		 */
-		uint32_t getTextureSectionID()const override;
+		C3D_API uint32_t getTextureSectionID()const override;
 		/**
 		 *\copydoc		castor3d::Pass::writeText
 		 */

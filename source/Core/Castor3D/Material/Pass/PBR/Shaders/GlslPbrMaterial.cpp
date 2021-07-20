@@ -23,7 +23,14 @@ namespace castor3d::shader
 		create( albedo
 			, data3
 			, data2
-			, material.colourDiv.a() );
+			, 0.0_f );
+		edgeFactors = material.edgeFactors;
+		edgeColour = material.edgeColour;
+		specific = material.specific;
+		edgeWidth = material.edgeWidth;
+		depthFactor = material.depthFactor;
+		normalFactor = material.normalFactor;
+		objectFactor = material.objectFactor;
 	}
 
 	void PbrLightMaterial::create( sdw::Vec3 const & albedo
@@ -39,11 +46,10 @@ namespace castor3d::shader
 
 	void PbrLightMaterial::create( Material const & material )
 	{
-		specific = material.specific;
-		albedo = material.colourDiv.rgb();
-		roughness = material.colourDiv.a();
-		specular = material.specDiv.rgb();
-		metalness = material.specDiv.a();
+		create( material.colourDiv.rgb()
+			, material.specDiv
+			, material.colourDiv
+			, material );
 	}
 
 	void PbrLightMaterial::output( sdw::Vec4 & outData2, sdw::Vec4 & outData3 )const

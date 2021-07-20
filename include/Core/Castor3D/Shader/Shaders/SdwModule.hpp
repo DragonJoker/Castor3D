@@ -73,8 +73,8 @@ namespace castor3d::shader
 	static uint32_t constexpr DirectionalMaxCascadesCount = ShadowMapDirectionalTileCountX * ShadowMapDirectionalTileCountY;
 	// Pass Buffer.
 	static uint32_t constexpr MaxMaterialsCount = 2000u;
-	static int constexpr MaxMaterialComponentsCount = 16;
 	static uint32_t constexpr MaxTransmittanceProfileSize = 10u;
+	static int constexpr MaxMaterialComponentsCount = MaxTransmittanceProfileSize + 9;
 	// Texture Configuration Buffer.
 	static uint32_t constexpr MaxTextureConfigurationCount = 4000u;
 	static int constexpr MaxTextureConfigurationComponentsCount = 9;

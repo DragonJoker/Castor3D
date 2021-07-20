@@ -6,6 +6,7 @@ option( CASTOR_BUILD_POSTFX_FXAA "Build FXAA PostEffect plugin" TRUE )
 option( CASTOR_BUILD_POSTFX_SMAA "Build SMAA PostEffect plugin" TRUE )
 option( CASTOR_BUILD_POSTFX_FILMGRAIN "Build FilmGrain PostEffect plugin" TRUE )
 option( CASTOR_BUILD_POSTFX_LINEARMOTIONBLUR "Build LinearMotionBlur PostEffect plugin" TRUE )
+option( CASTOR_BUILD_POSTFX_DRAWEDGES "Build DrawEdgesPostEffect PostEffect plugin" TRUE )
 
 function( PostEffectsInit )
 	set( Bloom "no (Not wanted)" PARENT_SCOPE )
@@ -15,6 +16,7 @@ function( PostEffectsInit )
 	set( Fgrn  "no (Not wanted)" PARENT_SCOPE )
 	set( Ltsk  "no (Not wanted)" PARENT_SCOPE )
 	set( MtBr  "no (Not wanted)" PARENT_SCOPE )
+	set( DrEd  "no (Not wanted)" PARENT_SCOPE )
 endfunction( PostEffectsInit )
 
 function( PostEffectsBuild )
@@ -68,6 +70,12 @@ function( PostEffectsBuild )
 			set( MtBr ${Build} PARENT_SCOPE )
 		endif()
 
+		if( ${CASTOR_BUILD_POSTFX_DRAWEDGES} )
+			set( Build ${MtBr} )
+			add_subdirectory( Plugins/PostEffects/DrawEdgesPostEffect )
+			set( MtBr ${Build} PARENT_SCOPE )
+		endif()
+
 		set( CastorMinLibraries
 			${CastorMinLibraries}
 			PARENT_SCOPE
@@ -106,6 +114,9 @@ function( PostEffectsSummary msg )
 		endif ()
 		if( ${CASTOR_BUILD_POSTFX_LINEARMOTIONBLUR} )
 			set( msg_tmp "${msg_tmp}\n    LinearMotionBlur     ${MtBr}" )
+		endif ()
+		if( ${CASTOR_BUILD_POSTFX_DRAWEDGES} )
+			set( msg_tmp "${msg_tmp}\n    DrawEdgesPostEffect  ${DrEd}" )
 		endif ()
 		set( msg "${msg}${msg_tmp}" PARENT_SCOPE )
 	endif ()
@@ -171,6 +182,15 @@ function( PostEffectsSetup )
 			cpack_add_component( LinearMotionBlurPostEffect
 				DISPLAY_NAME "LinearMotionBlurPostEffect"
 				DESCRIPTION "Allows Linear Motion Blur post effect."
+				GROUP Plugins
+				DEPENDS Castor3D
+				INSTALL_TYPES Developer Full
+			)
+		endif()
+		if( ${CASTOR_BUILD_POSTFX_DRAWEDGES} )
+			cpack_add_component( DrawEdgesPostEffect
+				DISPLAY_NAME "DrawEdgesPostEffect"
+				DESCRIPTION "Allows edges drawing post effect."
 				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Developer Full
