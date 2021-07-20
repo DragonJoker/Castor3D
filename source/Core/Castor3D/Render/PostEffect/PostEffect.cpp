@@ -8,6 +8,10 @@
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
 
+#include <RenderGraph/FrameGraph.hpp>
+#include <RenderGraph/GraphContext.hpp>
+#include <RenderGraph/RunnableGraph.hpp>
+
 namespace castor3d
 {
 	namespace
@@ -78,23 +82,54 @@ namespace castor3d
 	{
 	}
 
-	void PostEffect::doCopyResultToTarget( ashes::ImageView const & result
-		, ashes::ImageView const & target
-		, ashes::CommandBuffer & commandBuffer )
+	void PostEffect::doCopyImage( crg::RunnableGraph & graph
+		, crg::RunnablePass const & runnable
+		, VkCommandBuffer commandBuffer
+		, uint32_t index
+		, crg::ImageViewId const & source
+		, crg::ImageViewId const & target )
 	{
-		// Put result image in transfer source layout.
-		commandBuffer.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, result.makeTransferSource( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
-		// Put target image in transfer destination layout.
-		commandBuffer.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, target.makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
-		// Copy result to target.
-		commandBuffer.copyImage( result, target );
-		// Put target image in fragment shader input layout.
-		commandBuffer.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, target.makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+		auto extent = getExtent( source );
+		auto & context = getRenderSystem()->getMainRenderDevice()->makeContext();
+		auto & srcSubresource = source.data->info.subresourceRange;
+		auto & dstSubresource = target.data->info.subresourceRange;
+		VkImageCopy region{ VkImageSubresourceLayers{ srcSubresource.aspectMask, srcSubresource.baseMipLevel, srcSubresource.baseArrayLayer, 1u }
+			, VkOffset3D{ 0u, 0u, 0u }
+			, VkImageSubresourceLayers{ dstSubresource.aspectMask, dstSubresource.baseMipLevel, dstSubresource.baseArrayLayer, 1u }
+			, VkOffset3D{ 0u, 0u, 0u }
+			, { extent.width, extent.height, 1u } };
+		auto srcTransition = runnable.getTransition( index, source );
+		auto dstTransition = runnable.getTransition( index, target );
+		graph.memoryBarrier( commandBuffer
+			, source
+			, srcTransition.to
+			, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+				, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
+				, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) } );
+		graph.memoryBarrier( commandBuffer
+			, target
+			, dstTransition.to
+			, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+				, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
+				, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) } );
+		context.vkCmdCopyImage( commandBuffer
+			, graph.createImage( source.data->image )
+			, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+			, graph.createImage( target.data->image )
+			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+			, 1u
+			, &region );
+		graph.memoryBarrier( commandBuffer
+			, target
+			, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+				, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
+				, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) }
+			, dstTransition.to );
+		graph.memoryBarrier( commandBuffer
+			, source
+			, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+				, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
+				, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) }
+			, srcTransition.to );
 	}
 }
