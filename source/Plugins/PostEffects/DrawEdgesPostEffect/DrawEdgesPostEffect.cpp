@@ -73,23 +73,32 @@ namespace draw_edges
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					auto data0 = writer.declLocale( "data0"
-						, c3d_data0.sample( vtx_texture ) );
 					auto colour = writer.declLocale( "colour"
 						, c3d_source.sample( vtx_texture ) );
 
-					IF( writer, data0.w() != 0.0_f )
+					auto data0 = writer.declLocale( "data0"
+						, c3d_data0.sample( vtx_texture ) );
+
+					IF( writer, data0.w() != 0.0_f  )
 					{
 						auto material = writer.declLocale( "material"
 							, materials.getMaterial( writer.cast< sdw::UInt >( data0.w() ) ) );
 
-						auto edgeDN = writer.declLocale( "edgeDN"
-							, c3d_edgeDN.sample( vtx_texture ) );
-						auto edgeO = writer.declLocale( "edgeO"
-							, c3d_edgeO.sample( vtx_texture ) );
+						IF( writer, material.edgeColour.a() != 0.0_f )
+						{
+							auto edgeDN = writer.declLocale( "edgeDN"
+								, c3d_edgeDN.sample( vtx_texture ) );
+							auto edgeO = writer.declLocale( "edgeO"
+								, c3d_edgeO.sample( vtx_texture ) );
 
-						colour.xyz() = mix( colour.xyz(), material.edgeColour.xyz(), vec3( edgeDN ) );
-						colour.xyz() = mix( colour.xyz(), material.edgeColour.xyz(), vec3( edgeO ) );  // outline contour over inline
+							auto edge = writer.declLocale( "edge"
+								, mix( colour.rgb(), material.edgeColour.rgb(), vec3( edgeDN ) ) );
+							// outline contour over inline
+							edge = mix( edge, material.edgeColour.rgb(), vec3( edgeO ) );
+
+							colour.rgb() = mix( colour.rgb(), edge, vec3( material.edgeColour.a() ) );
+						}
+						FI;
 					}
 					FI;
 
