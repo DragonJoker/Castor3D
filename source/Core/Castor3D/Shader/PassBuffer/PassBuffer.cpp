@@ -21,6 +21,12 @@ namespace castor3d
 			auto specDiv = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
 				, reinterpret_cast< PassBuffer::RgbaColour * >( buffer ) + count );
 			buffer += sizeof( PassBuffer::RgbaColour ) * count;
+			auto edgeFactors = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
+				, reinterpret_cast< PassBuffer::RgbaColour * >( buffer ) + count );
+			buffer += sizeof( PassBuffer::RgbaColour ) * count;
+			auto edgeColour = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
+				, reinterpret_cast< PassBuffer::RgbaColour * >( buffer ) + count );
+			buffer += sizeof( PassBuffer::RgbaColour ) * count;
 			auto specific = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
 				, reinterpret_cast< PassBuffer::RgbaColour * >( buffer ) + count );
 			buffer += sizeof( PassBuffer::RgbaColour ) * count;
@@ -42,6 +48,8 @@ namespace castor3d
 			{
 				colourDiv,
 				specDiv,
+				edgeFactors,
+				edgeColour,
 				specific,
 				common,
 				opacity,
@@ -156,6 +164,8 @@ namespace castor3d
 
 		result.colourDiv = &m_data.colourDiv[index];
 		result.specDiv = &m_data.specDiv[index];
+		result.edgeFactors = &data.edgeFactors[index];
+		result.edgeColour = &data.edgeColour[index];
 		result.specific = &data.specific[index];
 		result.common = &data.common[index];
 		result.opacity = &data.opacity[index];
@@ -169,6 +179,8 @@ namespace castor3d
 		auto & data = m_data[index];
 		result.colourDiv = &data.colourDiv;
 		result.specDiv = &data.specDiv;
+		result.edgeFactors = &data.edgeFactors;
+		result.edgeColour = &data.edgeColour;
 		result.specific = &data.specific;
 		result.common = &data.common;
 		result.opacity = &data.opacity;

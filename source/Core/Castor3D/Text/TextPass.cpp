@@ -4,6 +4,7 @@
 #include "Castor3D/Text/TextTextureUnit.hpp"
 
 #include <CastorUtils/Data/Text/TextPoint.hpp>
+#include <CastorUtils/Data/Text/TextRgbaColour.hpp>
 
 using namespace castor3d;
 
@@ -92,6 +93,15 @@ namespace castor
 				result = writeOpt( file, cuT( "reflections" ), pass.hasReflections() )
 					&& writeOpt( file, cuT( "refractions" ), pass.hasRefraction() )
 					&& writeOpt( file, cuT( "refraction_ratio" ), pass.getRefractionRatio(), 0.0f );
+			}
+
+			if ( result )
+			{
+				result = write( file, cuT( "edge_width" ), pass.getEdgeWidth() )
+					&& write( file, cuT( "edge_depth_factor" ), pass.getDepthFactor() )
+					&& write( file, cuT( "edge_normal_factor" ), pass.getNormalFactor() )
+					&& write( file, cuT( "edge_object_factor" ), pass.getObjectFactor() )
+					&& writeNamedSub( file, cuT( "edg_colour" ), pass.getEdgeColour() );
 			}
 
 			if ( result && pass.hasSubsurfaceScattering() )
