@@ -58,6 +58,8 @@ namespace castor3d
 		{
 			castor::ArrayView< RgbaColour > colourDiv;
 			castor::ArrayView< RgbaColour > specDiv;
+			castor::ArrayView< RgbaColour > edgeFactors;
+			castor::ArrayView< RgbaColour > edgeColour;
 			castor::ArrayView< RgbaColour > specific;
 			castor::ArrayView< RgbaColour > common;
 			castor::ArrayView< RgbaColour > opacity;
@@ -77,6 +79,8 @@ namespace castor3d
 		{
 			RgbaColour colourDiv;
 			RgbaColour specDiv;
+			RgbaColour edgeFactors;
+			RgbaColour edgeColour;
 			RgbaColour specific;
 			RgbaColour common;
 			RgbaColour opacity;
@@ -97,6 +101,8 @@ namespace castor3d
 		{
 			RgbaColour * colourDiv;
 			RgbaColour * specDiv;
+			RgbaColour * edgeFactors;
+			RgbaColour * edgeColour;
 			RgbaColour * specific;
 			RgbaColour * common;
 			RgbaColour * opacity;

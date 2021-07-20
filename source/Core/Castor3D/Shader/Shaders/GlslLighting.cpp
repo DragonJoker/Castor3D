@@ -32,11 +32,17 @@ namespace castor3d::shader
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
 		: sdw::StructInstance{ writer, std::move( expr ), enabled }
+		, edgeFactors{ getMember< sdw::Vec4 >( "edgeFactors" ) }
+		, edgeColour{ getMember< sdw::Vec4 >( "edgeColour" ) }
 		, specific{ getMember< sdw::Vec4 >( "specific" ) }
 		, albedo{ getMember< sdw::Vec3 >( "albedo" ) }
 		, specular{ getMember< sdw::Vec3 >( "specular" ) }
 		, albDiv{ getMember< sdw::Float >( "albDiv" ) }
 		, spcDiv{ getMember< sdw::Float >( "spcDiv" ) }
+		, edgeWidth{ edgeFactors.x() }
+		, depthFactor{ edgeFactors.y() }
+		, normalFactor{ edgeFactors.z() }
+		, objectFactor{ edgeFactors.w() }
 	{
 	}
 
@@ -53,6 +59,8 @@ namespace castor3d::shader
 
 		if ( result->empty() )
 		{
+			result->declMember( "edgeFactors", ast::type::Kind::eVec4F );
+			result->declMember( "edgeColour", ast::type::Kind::eVec4F );
 			result->declMember( "specific", ast::type::Kind::eVec4F );
 			result->declMember( "albedo", ast::type::Kind::eVec3F );
 			result->declMember( "specular", ast::type::Kind::eVec3F );

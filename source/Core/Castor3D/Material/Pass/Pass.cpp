@@ -383,6 +383,91 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
+		CU_ImplementAttributeParser( parserPassEdgeColour )
+		{
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+
+			if ( !parsingContext->pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( !params.empty() )
+			{
+				castor::RgbColour value;
+				params[0]->get( value );
+				parsingContext->pass->setEdgeColour( value );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserPassEdgeWidth )
+		{
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+
+			if ( !parsingContext->pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( !params.empty() )
+			{
+				float value;
+				params[0]->get( value );
+				parsingContext->pass->setEdgeWidth( value );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserPassDepthFactor )
+		{
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+
+			if ( !parsingContext->pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( !params.empty() )
+			{
+				float value;
+				params[0]->get( value );
+				parsingContext->pass->setDepthFactor( value );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserPassNormalFactor )
+		{
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+
+			if ( !parsingContext->pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( !params.empty() )
+			{
+				float value;
+				params[0]->get( value );
+				parsingContext->pass->setNormalFactor( value );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserPassObjectFactor )
+		{
+			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+
+			if ( !parsingContext->pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( !params.empty() )
+			{
+				float value;
+				params[0]->get( value );
+				parsingContext->pass->setObjectFactor( value );
+			}
+		}
+		CU_EndAttribute()
+
 		CU_ImplementAttributeParser( parserPassEnd )
 		{
 			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
@@ -1061,6 +1146,11 @@ namespace castor3d
 		, m_alphaFunc{ m_dirty, VK_COMPARE_OP_ALWAYS }
 		, m_blendAlphaFunc{ m_dirty, VK_COMPARE_OP_ALWAYS }
 		, m_parallaxOcclusionMode{ m_dirty, ParallaxOcclusionMode::eNone }
+		, m_edgeColour{ m_dirty, castor::RgbColour::fromComponents( 0.0f, 0.0f, 0.0f ) }
+		, m_edgeWidth{ m_dirty, { 1.0f, castor::makeRange( MinEdgeWidth, MaxEdgeWidth ) } }
+		, m_depthFactor{ m_dirty, { 1.0f, castor::makeRange( 0.0f, 1.0f ) } }
+		, m_normalFactor{ m_dirty, { 1.0f, castor::makeRange( 0.0f, 1.0f ) } }
+		, m_objectFactor{ m_dirty, { 1.0f, castor::makeRange( 0.0f, 1.0f ) } }
 	{
 	}
 
@@ -1131,6 +1221,16 @@ namespace castor3d
 			, m_bwAccumulationOperator );
 		vis.visit( cuT( "Parallax occlusion mode" )
 			, m_parallaxOcclusionMode );
+		vis.visit( cuT( "Edge colour" )
+			, m_edgeColour );
+		vis.visit( cuT( "Edge width" )
+			, m_edgeWidth );
+		vis.visit( cuT( "Depth factor" )
+			, m_depthFactor );
+		vis.visit( cuT( "Normal factor" )
+			, m_normalFactor );
+		vis.visit( cuT( "Object factor" )
+			, m_objectFactor );
 
 		if ( hasRefraction() )
 		{
@@ -1387,6 +1487,14 @@ namespace castor3d
 
 	void Pass::doFillData( PassBuffer::PassDataPtr & data )const
 	{
+		data.edgeFactors->r = getEdgeWidth();
+		data.edgeFactors->g = getDepthFactor();
+		data.edgeFactors->b = getNormalFactor();
+		data.edgeFactors->a = getObjectFactor();
+		data.edgeColour->r = getEdgeColour().red();
+		data.edgeColour->g = getEdgeColour().green();
+		data.edgeColour->b = getEdgeColour().blue();
+		data.edgeColour->a = checkFlag( m_flags, PassFlag::eDrawEdge ) ? 1.0f : 0.0f;
 		data.common->r = getOpacity();
 		data.common->g = getEmissive();
 		data.common->b = getAlphaValue();
@@ -1482,6 +1590,11 @@ namespace castor3d
 		Pass::addParser( result, mtlSectionID, cuT( "reflections" ), parserPassReflections, { makeParameter< ParameterType::eBool >() } );
 		Pass::addParser( result, mtlSectionID, cuT( "refractions" ), parserPassRefractions, { makeParameter< ParameterType::eBool >() } );
 		Pass::addParser( result, mtlSectionID, cuT( "transmission" ), parserPassTransmission, { makeParameter< ParameterType::ePoint3F >() } );
+		Pass::addParser( result, mtlSectionID, cuT( "edge_colour" ), parserPassEdgeColour, { makeParameter< ParameterType::eRgbColour >() } );
+		Pass::addParser( result, mtlSectionID, cuT( "edge_width" ), parserPassEdgeWidth, { makeParameter< ParameterType::eFloat >( makeRange( MinEdgeWidth, MaxEdgeWidth ) ) } );
+		Pass::addParser( result, mtlSectionID, cuT( "edge_depth_factor" ), parserPassDepthFactor, { makeParameter< ParameterType::eFloat >( makeRange( 0.0f, 1.0f ) ) } );
+		Pass::addParser( result, mtlSectionID, cuT( "edge_normal_factor" ), parserPassNormalFactor, { makeParameter< ParameterType::eFloat >( makeRange( 0.0f, 1.0f ) ) } );
+		Pass::addParser( result, mtlSectionID, cuT( "edge_object_factor" ), parserPassObjectFactor, { makeParameter< ParameterType::eFloat >( makeRange( 0.0f, 1.0f ) ) } );
 		Pass::addParser( result, mtlSectionID, cuT( "}" ), parserPassEnd );
 
 		Pass::addParser( result, texSectionID, cuT( "image" ), parserUnitImage, { makeParameter< ParameterType::ePath >() } );
