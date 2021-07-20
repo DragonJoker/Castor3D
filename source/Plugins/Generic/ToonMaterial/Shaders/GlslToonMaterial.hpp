@@ -36,8 +36,6 @@ namespace toon::shader
 		sdw::Vec3 getIndirectAmbient( sdw::Vec3 const & indirectAmbient )const override;
 		sdw::Float getMetalness()const override;
 		sdw::Float getRoughness()const override;
-		sdw::Float transform( sdw::Float const & value )const;
-		sdw::Vec3 transform( sdw::Vec3 const & value )const;
 
 		static sdw::Float computeGlossiness( sdw::Float const & shininess );
 		static sdw::Float computeShininess( sdw::Float const & glossiness );
@@ -45,8 +43,6 @@ namespace toon::shader
 		sdw::Float & ambient;
 		sdw::Float & shininess;
 		sdw::Float smoothBand;
-		sdw::Float edgeWidth;
-		sdw::Float stepsCount;
 	};
 
 	Writer_Parameter( ToonPhongLightMaterial );
@@ -73,8 +69,6 @@ namespace toon::shader
 		sdw::Vec3 getIndirectAmbient( sdw::Vec3 const & indirectAmbient )const override;
 		sdw::Float getMetalness()const override;
 		sdw::Float getRoughness()const override;
-		sdw::Float transform( sdw::Float const & value )const;
-		sdw::Vec3 transform( sdw::Vec3 const & value )const;
 
 		bool isSpecularGlossiness()const
 		{
@@ -84,8 +78,6 @@ namespace toon::shader
 		sdw::Float & roughness;
 		sdw::Float & metalness;
 		sdw::Float smoothBand;
-		sdw::Float edgeWidth;
-		sdw::Float stepsCount;
 
 	protected:
 		bool m_isSpecularGlossiness{};

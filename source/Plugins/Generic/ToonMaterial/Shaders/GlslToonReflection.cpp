@@ -31,7 +31,6 @@ namespace toon::shader
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			m_writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment", envMapBinding++, envMapSet );
 			m_utils.declareNegateVec3Y();
-			m_utils.declareSobelFilterDepth();
 			doDeclareComputeRefl();
 			doDeclareComputeRefr();
 			doDeclareComputeReflRefr();
@@ -50,7 +49,6 @@ namespace toon::shader
 		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 		m_writer.declSampledImage< FImgCubeArrayRgba32 >( "c3d_mapEnvironment", envMapBinding, envMapSet );
 		m_utils.declareNegateVec3Y();
-		m_utils.declareSobelFilterDepth();
 		doDeclareComputeRefls();
 		doDeclareComputeRefrs();
 		doDeclareComputeReflRefrs();
@@ -60,8 +58,6 @@ namespace toon::shader
 	void ToonPhongReflectionModel::computeDeferred( c3d::LightMaterial & material
 		, c3d::Surface const & surface
 		, c3d::SceneData const & sceneData
-		, sdw::SampledImage2DR32 const & depth
-		, sdw::SampledImage2DRgba32 const & normal
 		, sdw::Int envMapIndex
 		, sdw::Int const & reflection
 		, sdw::Int const & refraction
@@ -73,12 +69,6 @@ namespace toon::shader
 	{
 		auto & toonMaterial = static_cast< ToonPhongLightMaterial & >( material );
 		auto envMaps = m_writer.getVariable< sdw::SampledImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
-		auto sobel = m_writer.declLocale( "sobel"
-			, m_utils.sobelFilterDepth( depth
-				, sceneData.getRenderSize()
-				, vec2( sceneData.getNearPlane(), sceneData.getFarPlane() )
-				, surface.texCoord.xy()
-				, toonMaterial.edgeWidth ) );
 
 		IF( m_writer, envMapIndex > 0_i && ( reflection != 0_i || refraction != 0_i ) )
 		{
@@ -122,13 +112,6 @@ namespace toon::shader
 			FI;
 
 			toonMaterial.albedo = vec3( 0.0_f );
-			reflected -= vec3( sobel );
-			refracted -= vec3( sobel );
-		}
-		ELSE
-		{
-			ambient -= vec3( sobel );
-			toonMaterial.albedo -= vec3( sobel );
 		}
 		FI;
 	}
@@ -514,7 +497,6 @@ namespace toon::shader
 		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 		m_utils.declareNegateVec3Y();
 		m_utils.declareFresnelSchlick();
-		m_utils.declareSobelFilterDepth();
 		doDeclareComputeIBL();
 
 		if ( checkFlag( m_passFlags, castor3d::PassFlag::eReflection )
@@ -547,7 +529,6 @@ namespace toon::shader
 		writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapPrefiltered", envMapBinding++, 0u );
 		m_utils.declareNegateVec3Y();
 		m_utils.declareFresnelSchlick();
-		m_utils.declareSobelFilterDepth();
 		doDeclareComputeIBL();
 		doDeclareComputeReflEnvMaps();
 		doDeclareComputeRefrEnvMaps();
@@ -558,8 +539,6 @@ namespace toon::shader
 	void ToonPbrReflectionModel::computeDeferred( c3d::LightMaterial & material
 		, c3d::Surface const & surface
 		, c3d::SceneData const & sceneData
-		, sdw::SampledImage2DR32 const & depth
-		, sdw::SampledImage2DRgba32 const & normal
 		, sdw::Int envMapIndex
 		, sdw::Int const & reflection
 		, sdw::Int const & refraction
@@ -574,12 +553,6 @@ namespace toon::shader
 		auto irradiance = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapIrradiance" );
 		auto prefiltered = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapPrefiltered" );
 		auto envMap = m_writer.getVariable< sdw::SampledImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
-		auto sobel = m_writer.declLocale( "sobel"
-			, 1.0_f - m_utils.sobelFilterDepth( depth
-				, sceneData.getRenderSize()
-				, vec2( sceneData.getNearPlane(), sceneData.getFarPlane() )
-				, surface.texCoord.xy()
-				, toonMaterial.edgeWidth ) );
 
 		IF( m_writer, envMapIndex > 0_i )
 		{
@@ -608,7 +581,6 @@ namespace toon::shader
 						, toonMaterial
 						, reflected
 						, refracted );
-					refracted *= vec3( sobel );
 				}
 				ELSEIF( refractionRatio != 0.0_f )
 				{
@@ -621,7 +593,6 @@ namespace toon::shader
 						, toonMaterial
 						, reflected
 						, refracted );
-					refracted *= vec3( sobel );
 				}
 				FI;
 			}
@@ -647,7 +618,6 @@ namespace toon::shader
 						, toonMaterial
 						, reflected
 						, refracted );
-					refracted *= vec3( sobel );
 				}
 				ELSEIF( refractionRatio != 0.0_f )
 				{
@@ -660,13 +630,10 @@ namespace toon::shader
 						, toonMaterial
 						, reflected
 						, refracted );
-					refracted *= vec3( sobel );
 				}
 				FI;
 			}
 			FI;
-
-			reflected *= vec3( sobel );
 		}
 		ELSE
 		{
@@ -691,16 +658,10 @@ namespace toon::shader
 					, toonMaterial
 					, reflected
 					, refracted );
-				refracted *= vec3( sobel );
 			}
 			FI;
-
-			reflected *= vec3( sobel );
 		}
 		FI;
-
-		ambient *= vec3( sobel );
-		toonMaterial.albedo *= vec3( sobel );
 	}
 
 	void ToonPbrReflectionModel::computeForward( c3d::LightMaterial & material
@@ -1110,13 +1071,13 @@ namespace toon::shader
 					, vec3( fresnel ) );
 			}
 			, sdw::InVec3{ m_writer, "wsIncident" }
-				, sdw::InVec3{ m_writer, "wsNormal" }
-				, sdw::InSampledImageCubeArrayRgba32{ m_writer, "envMap" }
-				, sdw::InInt{ m_writer, "envMapIndex" }
-				, sdw::InFloat{ m_writer, "refractionRatio" }
-				, sdw::InVec3{ m_writer, "transmission" }
-				, InToonPbrLightMaterial{ m_writer, "material" }
-				, sdw::InOutVec3{ m_writer, "reflection" }
+			, sdw::InVec3{ m_writer, "wsNormal" }
+			, sdw::InSampledImageCubeArrayRgba32{ m_writer, "envMap" }
+			, sdw::InInt{ m_writer, "envMapIndex" }
+			, sdw::InFloat{ m_writer, "refractionRatio" }
+			, sdw::InVec3{ m_writer, "transmission" }
+			, InToonPbrLightMaterial{ m_writer, "material" }
+			, sdw::InOutVec3{ m_writer, "reflection" }
 			, sdw::OutVec3{ m_writer, "refraction" } );
 	}
 

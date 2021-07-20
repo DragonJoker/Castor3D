@@ -3,7 +3,6 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/PassFactory.hpp>
-#include <Castor3D/Material/Pass/PassVisitor.hpp>
 #include <Castor3D/Material/Texture/TextureConfiguration.hpp>
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
@@ -14,6 +13,7 @@
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 #include <CastorUtils/Data/Text/TextPoint.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
+#include <CastorUtils/Data/Text/TextRgbaColour.hpp>
 
 namespace castor
 {
@@ -42,7 +42,11 @@ namespace castor
 				&& write( file, "ambient", pass.getAmbient() )
 				&& write( file, "shininess", pass.getShininess() )
 				&& write( file, "smooth_band_width", pass.getSmoothBandWidth() )
-				&& write( file, "edge_width", pass.getEdgeWidth() );
+				&& write( file, cuT( "edge_width" ), pass.getEdgeWidth() )
+				&& write( file, cuT( "edge_depth_factor" ), pass.getDepthFactor() )
+				&& write( file, cuT( "edge_normal_factor" ), pass.getNormalFactor() )
+				&& write( file, cuT( "edge_object_factor" ), pass.getObjectFactor() )
+				&& writeNamedSub( file, cuT( "edge_colour" ), pass.getEdgeColour() );
 		}
 
 	private:
@@ -73,7 +77,11 @@ namespace castor
 				&& write( file, "ambient", pass.getAmbient() )
 				&& write( file, "shininess", pass.getShininess() )
 				&& write( file, "smooth_band_width", pass.getSmoothBandWidth() )
-				&& write( file, "edge_width", pass.getEdgeWidth() );
+				&& write( file, cuT( "edge_width" ), pass.getEdgeWidth() )
+				&& write( file, cuT( "edge_depth_factor" ), pass.getDepthFactor() )
+				&& write( file, cuT( "edge_normal_factor" ), pass.getNormalFactor() )
+				&& write( file, cuT( "edge_object_factor" ), pass.getObjectFactor() )
+				&& writeNamedSub( file, cuT( "edg_colour" ), pass.getEdgeColour() );
 		}
 
 	private:
@@ -103,7 +111,11 @@ namespace castor
 				&& write( file, "roughness", pass.getRoughness() )
 				&& write( file, "metallic", pass.getMetallic() )
 				&& write( file, "smooth_band_width", pass.getSmoothBandWidth() )
-				&& write( file, "edge_width", pass.getEdgeWidth() );
+				&& write( file, cuT( "edge_width" ), pass.getEdgeWidth() )
+				&& write( file, cuT( "edge_depth_factor" ), pass.getDepthFactor() )
+				&& write( file, cuT( "edge_normal_factor" ), pass.getNormalFactor() )
+				&& write( file, cuT( "edge_object_factor" ), pass.getObjectFactor() )
+				&& writeNamedSub( file, cuT( "edg_colour" ), pass.getEdgeColour() );
 		}
 
 	private:
@@ -133,7 +145,11 @@ namespace castor
 				&& writeNamedSub( file, "specular", pass.getSpecular() )
 				&& write( file, "glossiness", pass.getGlossiness() )
 				&& write( file, "smooth_band_width", pass.getSmoothBandWidth() )
-				&& write( file, "edge_width", pass.getEdgeWidth() );
+				&& write( file, cuT( "edge_width" ), pass.getEdgeWidth() )
+				&& write( file, cuT( "edge_depth_factor" ), pass.getDepthFactor() )
+				&& write( file, cuT( "edge_normal_factor" ), pass.getNormalFactor() )
+				&& write( file, cuT( "edge_object_factor" ), pass.getObjectFactor() )
+				&& writeNamedSub( file, cuT( "edg_colour" ), pass.getEdgeColour() );
 		}
 
 	private:
@@ -157,62 +173,67 @@ namespace toon
 
 		static castor::String const PassSectionName{ cuT( "toon_pass" ) };
 		static castor::String const TextureSectionName{ cuT( "toon_texture_unit" ) };
+	}
 
-		CU_ImplementAttributeParser( parserPassSmoothBandWidth )
+	//*********************************************************************************************
+
+	namespace blinn_phong
+	{
+		enum class Section
+			: uint32_t
 		{
-			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+			ePass = CU_MakeSectionName( 'T', 'N', 'B', 'P' ),
+			eTextureUnit = CU_MakeSectionName( 'T', 'B', 'T', 'U' ),
+		};
 
-			if ( !parsingContext->pass )
-			{
-				CU_ParsingError( cuT( "No Pass initialised." ) );
-			}
-			else if ( !params.empty() )
-			{
-				auto & toonPass = static_cast< ToonPhongPass & >( *parsingContext->pass );
-				float value;
-				params[0]->get( value );
-				toonPass.setSmoothBandWidth( value );
-			}
-		}
-		CU_EndAttribute()
+		static castor::String const PassSectionName{ cuT( "toon_blinn_phong_pass" ) };
+		static castor::String const TextureSectionName{ cuT( "toon_blinn_phong_texture_unit" ) };
+	}
 
-		CU_ImplementAttributeParser( parserPassEdgeWidth )
+	//*********************************************************************************************
+
+	namespace pbrmr
+	{
+		enum class Section
+			: uint32_t
 		{
-			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+			ePass = CU_MakeSectionName( 'T', 'N', 'M', 'R' ),
+			eTextureUnit = CU_MakeSectionName( 'T', 'M', 'T', 'U' ),
+		};
 
-			if ( !parsingContext->pass )
-			{
-				CU_ParsingError( cuT( "No Pass initialised." ) );
-			}
-			else if ( !params.empty() )
-			{
-				auto & toonPass = static_cast< ToonPhongPass & >( *parsingContext->pass );
-				float value;
-				params[0]->get( value );
-				toonPass.setEdgeWidth( value );
-			}
-		}
-		CU_EndAttribute()
+		static castor::String const PassSectionName{ cuT( "toon_metallic_roughness_pass" ) };
+		static castor::String const TextureSectionName{ cuT( "toon_metallic_roughness_texture_unit" ) };
+	}
+
+	//*********************************************************************************************
+
+	namespace pbrsg
+	{
+		enum class Section
+			: uint32_t
+		{
+			ePass = CU_MakeSectionName( 'T', 'N', 'S', 'G' ),
+			eTextureUnit = CU_MakeSectionName( 'T', 'S', 'T', 'U' ),
+		};
+
+		static castor::String const PassSectionName{ cuT( "toon_specular_glossiness_pass" ) };
+		static castor::String const TextureSectionName{ cuT( "toon_specular_glossiness_texture_unit" ) };
 	}
 
 	//*********************************************************************************************
 
 	castor::String const ToonPhongPass::Type = cuT( "toon_phong" );
-	castor::String const ToonPhongPass::Name = cuT( "Toon Materials" );
 
 	ToonPhongPass::ToonPhongPass( castor3d::Material & parent
 		, castor3d::PassFlags initialFlags )
-		:ToonPhongPass{ parent, parent.getEngine()->getPassFactory().getNameId( Type ), initialFlags }
+		: ToonPhongPass{ parent, parent.getEngine()->getPassFactory().getNameId( Type ), initialFlags }
 	{
 	}
 
 	ToonPhongPass::ToonPhongPass( castor3d::Material & parent
 		, castor3d::PassTypeID typeID
 		, castor3d::PassFlags initialFlags )
-		: castor3d::PhongPass{ parent, typeID, initialFlags }
-		, m_smoothBandWidth{ m_dirty, 1.0f }
-		, m_edgeWidth{ m_dirty, { 1.0f, castor::makeRange( MinEdgeWidth, MaxEdgeWidth ) } }
-		, m_stepsCount{ m_dirty, { 2u, castor::makeRange( MinStepsCount, MaxStepsCount ) } }
+		: ToonPass{ parent, typeID, initialFlags }
 	{
 	}
 
@@ -227,17 +248,8 @@ namespace toon
 
 	castor::AttributeParsersBySection ToonPhongPass::createParsers()
 	{
-		return createParsers( uint32_t( phong::Section::ePass )
+		return ToonPass::createParsers( uint32_t( phong::Section::ePass )
 			, uint32_t( phong::Section::eTextureUnit ) );
-	}
-
-	castor::AttributeParsersBySection ToonPhongPass::createParsers( uint32_t mtlSectionID
-		, uint32_t texSectionID )
-	{
-		auto result = PhongPass::createParsers( mtlSectionID, texSectionID );
-		Pass::addParser( result, mtlSectionID, cuT( "smooth_band_width" ), phong::parserPassSmoothBandWidth, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		Pass::addParser( result, mtlSectionID, cuT( "edge_width" ), phong::parserPassEdgeWidth, { castor::makeParameter< castor::ParameterType::eFloat >( castor::makeRange( MinEdgeWidth, MaxEdgeWidth ) ) } );
-		return result;
 	}
 
 	castor::StrUInt32Map ToonPhongPass::createSections()
@@ -261,10 +273,8 @@ namespace toon
 		data.specDiv->g = getSpecular().green();
 		data.specDiv->b = getSpecular().blue();
 		data.specDiv->a = getShininess().value();
-		data.specific->r = getSmoothBandWidth();
-		data.specific->g = getEdgeWidth();
-		data.specific->b = getStepsCount();
 
+		ToonPass::fillData( data );
 		doFillData( data );
 	}
 
@@ -286,38 +296,6 @@ namespace toon
 		return castor::TextWriter< ToonPhongPass >{ tabs, folder, subfolder }( *this, file );
 	}
 
-	void ToonPhongPass::doAccept( castor3d::PassVisitorBase & vis )
-	{
-		castor3d::PhongPass::doAccept( vis );
-		vis.visit( cuT( "Smooth band width" )
-			, m_smoothBandWidth );
-		vis.visit( cuT( "Edge width" )
-			, m_edgeWidth );
-		//vis.visit( cuT( "Steps count" )
-		//	, m_stepsCount );
-	}
-
-	void ToonPhongPass::doAccept( castor3d::TextureConfiguration & configuration
-		, castor3d::PassVisitorBase & vis )
-	{
-		castor3d::PhongPass::doAccept( configuration, vis );
-	}
-
-	//*********************************************************************************************
-
-	namespace blinn_phong
-	{
-		enum class Section
-			: uint32_t
-		{
-			ePass = CU_MakeSectionName( 'T', 'N', 'B', 'P' ),
-			eTextureUnit = CU_MakeSectionName( 'T', 'B', 'T', 'U' ),
-		};
-
-		static castor::String const PassSectionName{ cuT( "toon_blinn_phong_pass" ) };
-		static castor::String const TextureSectionName{ cuT( "toon_blinn_phong_texture_unit" ) };
-	}
-
 	//*********************************************************************************************
 
 	castor::String const ToonBlinnPhongPass::Type = cuT( "toon_blinn_phong" );
@@ -331,7 +309,7 @@ namespace toon
 	ToonBlinnPhongPass::ToonBlinnPhongPass( castor3d::Material & parent
 		, castor3d::PassTypeID typeID
 		, castor3d::PassFlags initialFlags )
-		: ToonPhongPass{ parent, typeID, initialFlags }
+		: ToonPass{ parent, typeID, initialFlags }
 	{
 	}
 
@@ -346,14 +324,8 @@ namespace toon
 
 	castor::AttributeParsersBySection ToonBlinnPhongPass::createParsers()
 	{
-		return createParsers( uint32_t( blinn_phong::Section::ePass )
+		return ToonPass::createParsers( uint32_t( blinn_phong::Section::ePass )
 			, uint32_t( blinn_phong::Section::eTextureUnit ) );
-	}
-
-	castor::AttributeParsersBySection ToonBlinnPhongPass::createParsers( uint32_t mtlSectionID
-		, uint32_t texSectionID )
-	{
-		return ToonPhongPass::createParsers( mtlSectionID, texSectionID );
 	}
 
 	castor::StrUInt32Map ToonBlinnPhongPass::createSections()
@@ -363,6 +335,23 @@ namespace toon
 			{ uint32_t( blinn_phong::Section::ePass ), blinn_phong::PassSectionName },
 			{ uint32_t( blinn_phong::Section::eTextureUnit ), blinn_phong::TextureSectionName },
 		};
+	}
+
+	void ToonBlinnPhongPass::accept( castor3d::PassBuffer & buffer )const
+	{
+		auto data = buffer.getData( getId() );
+
+		data.colourDiv->r = getDiffuse().red();
+		data.colourDiv->g = getDiffuse().green();
+		data.colourDiv->b = getDiffuse().blue();
+		data.colourDiv->a = getAmbient();
+		data.specDiv->r = getSpecular().red();
+		data.specDiv->g = getSpecular().green();
+		data.specDiv->b = getSpecular().blue();
+		data.specDiv->a = getShininess().value();
+
+		ToonPass::fillData( data );
+		doFillData( data );
 	}
 
 	uint32_t ToonBlinnPhongPass::getPassSectionID()const
@@ -375,55 +364,12 @@ namespace toon
 		return uint32_t( blinn_phong::Section::eTextureUnit );
 	}
 
-	//*********************************************************************************************
-
-	namespace pbrmr
+	bool ToonBlinnPhongPass::writeText( castor::String const & tabs
+		, castor::Path const & folder
+		, castor::String const & subfolder
+		, castor::StringStream & file )const
 	{
-		enum class Section
-			: uint32_t
-		{
-			ePass = CU_MakeSectionName( 'T', 'N', 'M', 'R' ),
-			eTextureUnit = CU_MakeSectionName( 'T', 'M', 'T', 'U' ),
-		};
-
-		static castor::String const PassSectionName{ cuT( "toon_metallic_roughness_pass" ) };
-		static castor::String const TextureSectionName{ cuT( "toon_metallic_roughness_texture_unit" ) };
-
-		CU_ImplementAttributeParser( parserPassSmoothBandWidth )
-		{
-			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
-
-			if ( !parsingContext->pass )
-			{
-				CU_ParsingError( cuT( "No Pass initialised." ) );
-			}
-			else if ( !params.empty() )
-			{
-				auto & toonPass = static_cast< ToonMetallicRoughnessPass & >( *parsingContext->pass );
-				float value;
-				params[0]->get( value );
-				toonPass.setSmoothBandWidth( value );
-			}
-		}
-		CU_EndAttribute()
-
-		CU_ImplementAttributeParser( parserPassEdgeWidth )
-		{
-			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
-
-			if ( !parsingContext->pass )
-			{
-				CU_ParsingError( cuT( "No Pass initialised." ) );
-			}
-			else if ( !params.empty() )
-			{
-				auto & toonPass = static_cast< ToonMetallicRoughnessPass & >( *parsingContext->pass );
-				float value;
-				params[0]->get( value );
-				toonPass.setEdgeWidth( value );
-			}
-		}
-		CU_EndAttribute()
+		return castor::TextWriter< ToonBlinnPhongPass >{ tabs, folder, subfolder }( *this, file );
 	}
 
 	//*********************************************************************************************
@@ -439,10 +385,7 @@ namespace toon
 	ToonMetallicRoughnessPass::ToonMetallicRoughnessPass( castor3d::Material & parent
 		, castor3d::PassTypeID typeID
 		, castor3d::PassFlags initialFlags )
-		: castor3d::MetallicRoughnessPbrPass{ parent, typeID, initialFlags }
-		, m_smoothBandWidth{ m_dirty, 1.0f }
-		, m_edgeWidth{ m_dirty, { 1.0f, castor::makeRange( MinEdgeWidth, MaxEdgeWidth ) } }
-		, m_stepsCount{ m_dirty, { 2u, castor::makeRange( MinStepsCount, MaxStepsCount ) } }
+		: ToonPass{ parent, typeID, initialFlags }
 	{
 	}
 
@@ -457,17 +400,8 @@ namespace toon
 
 	castor::AttributeParsersBySection ToonMetallicRoughnessPass::createParsers()
 	{
-		return createParsers( uint32_t( pbrmr::Section::ePass )
+		return ToonPass::createParsers( uint32_t( pbrmr::Section::ePass )
 			, uint32_t( pbrmr::Section::eTextureUnit ) );
-	}
-
-	castor::AttributeParsersBySection ToonMetallicRoughnessPass::createParsers( uint32_t mtlSectionID
-		, uint32_t texSectionID )
-	{
-		auto result = castor3d::MetallicRoughnessPbrPass::createParsers( mtlSectionID, texSectionID );
-		Pass::addParser( result, mtlSectionID, cuT( "smooth_band_width" ), pbrmr::parserPassSmoothBandWidth, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		Pass::addParser( result, mtlSectionID, cuT( "edge_width" ), pbrmr::parserPassEdgeWidth, { castor::makeParameter< castor::ParameterType::eFloat >( castor::makeRange( MinEdgeWidth, MaxEdgeWidth ) ) } );
-		return result;
 	}
 
 	castor::StrUInt32Map ToonMetallicRoughnessPass::createSections()
@@ -492,10 +426,8 @@ namespace toon
 		data.specDiv->g = f0.green();
 		data.specDiv->b = f0.blue();
 		data.specDiv->a = getMetallic();
-		data.specific->r = getSmoothBandWidth();
-		data.specific->g = getEdgeWidth();
-		data.specific->b = getStepsCount();
 
+		ToonPass::fillData( data );
 		doFillData( data );
 	}
 
@@ -517,74 +449,6 @@ namespace toon
 		return castor::TextWriter< ToonMetallicRoughnessPass >{ tabs, folder, subfolder }( *this, file );
 	}
 
-	void ToonMetallicRoughnessPass::doAccept( castor3d::PassVisitorBase & vis )
-	{
-		castor3d::MetallicRoughnessPbrPass::doAccept( vis );
-		vis.visit( cuT( "Smooth band width" )
-			, m_smoothBandWidth );
-		vis.visit( cuT( "Edge width" )
-			, m_edgeWidth );
-		//vis.visit( cuT( "Steps count" )
-		//	, m_stepsCount );
-	}
-
-	void ToonMetallicRoughnessPass::doAccept( castor3d::TextureConfiguration & configuration
-		, castor3d::PassVisitorBase & vis )
-	{
-		castor3d::MetallicRoughnessPbrPass::doAccept( configuration, vis );
-	}
-
-	//*********************************************************************************************
-
-	namespace pbrsg
-	{
-		enum class Section
-			: uint32_t
-		{
-			ePass = CU_MakeSectionName( 'T', 'N', 'S', 'G' ),
-			eTextureUnit = CU_MakeSectionName( 'T', 'S', 'T', 'U' ),
-		};
-
-		static castor::String const PassSectionName{ cuT( "toon_specular_glossiness_pass" ) };
-		static castor::String const TextureSectionName{ cuT( "toon_specular_glossiness_texture_unit" ) };
-
-		CU_ImplementAttributeParser( parserPassSmoothBandWidth )
-		{
-			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
-
-			if ( !parsingContext->pass )
-			{
-				CU_ParsingError( cuT( "No Pass initialised." ) );
-			}
-			else if ( !params.empty() )
-			{
-				auto & toonPass = static_cast< ToonSpecularGlossinessPass & >( *parsingContext->pass );
-				float value;
-				params[0]->get( value );
-				toonPass.setSmoothBandWidth( value );
-			}
-		}
-		CU_EndAttribute()
-
-		CU_ImplementAttributeParser( parserPassEdgeWidth )
-		{
-			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
-
-			if ( !parsingContext->pass )
-			{
-				CU_ParsingError( cuT( "No Pass initialised." ) );
-			}
-			else if ( !params.empty() )
-			{
-				auto & toonPass = static_cast< ToonSpecularGlossinessPass & >( *parsingContext->pass );
-				float value;
-				params[0]->get( value );
-				toonPass.setEdgeWidth( value );
-			}
-		}
-		CU_EndAttribute()
-	}
-
 	//*********************************************************************************************
 
 	castor::String const ToonSpecularGlossinessPass::Type = cuT( "toon_specular_glossiness" );
@@ -598,10 +462,7 @@ namespace toon
 	ToonSpecularGlossinessPass::ToonSpecularGlossinessPass( castor3d::Material & parent
 		, castor3d::PassTypeID typeID
 		, castor3d::PassFlags initialFlags )
-		: castor3d::SpecularGlossinessPbrPass{ parent, typeID, initialFlags }
-		, m_smoothBandWidth{ m_dirty, 1.0f }
-		, m_edgeWidth{ m_dirty, { 1.0f, castor::makeRange( MinEdgeWidth, MaxEdgeWidth ) } }
-		, m_stepsCount{ m_dirty, { 2u, castor::makeRange( MinStepsCount, MaxStepsCount ) } }
+		: ToonPass{ parent, typeID, initialFlags }
 	{
 	}
 
@@ -616,17 +477,8 @@ namespace toon
 
 	castor::AttributeParsersBySection ToonSpecularGlossinessPass::createParsers()
 	{
-		return createParsers( uint32_t( pbrsg::Section::ePass )
+		return ToonPass::createParsers( uint32_t( pbrsg::Section::ePass )
 			, uint32_t( pbrsg::Section::eTextureUnit ) );
-	}
-
-	castor::AttributeParsersBySection ToonSpecularGlossinessPass::createParsers( uint32_t mtlSectionID
-		, uint32_t texSectionID )
-	{
-		auto result = castor3d::SpecularGlossinessPbrPass::createParsers( mtlSectionID, texSectionID );
-		Pass::addParser( result, mtlSectionID, cuT( "smooth_band_width" ), pbrsg::parserPassSmoothBandWidth, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		Pass::addParser( result, mtlSectionID, cuT( "edge_width" ), pbrsg::parserPassEdgeWidth, { castor::makeParameter< castor::ParameterType::eFloat >( castor::makeRange( MinEdgeWidth, MaxEdgeWidth ) ) } );
-		return result;
 	}
 
 	castor::StrUInt32Map ToonSpecularGlossinessPass::createSections()
@@ -650,10 +502,8 @@ namespace toon
 		data.specDiv->g = getSpecular().green();
 		data.specDiv->b = getSpecular().blue();
 		data.specDiv->a = castor::point::length( castor::Point3f{ getSpecular().constPtr() } );
-		data.specific->r = getSmoothBandWidth();
-		data.specific->g = getEdgeWidth();
-		data.specific->b = getStepsCount();
 
+		ToonPass::fillData( data );
 		doFillData( data );
 	}
 
@@ -673,23 +523,6 @@ namespace toon
 		, castor::StringStream & file )const
 	{
 		return castor::TextWriter< ToonSpecularGlossinessPass >{ tabs, folder, subfolder }( *this, file );
-	}
-
-	void ToonSpecularGlossinessPass::doAccept( castor3d::PassVisitorBase & vis )
-	{
-		castor3d::SpecularGlossinessPbrPass::doAccept( vis );
-		vis.visit( cuT( "Smooth band width" )
-			, m_smoothBandWidth );
-		vis.visit( cuT( "Edge width" )
-			, m_edgeWidth );
-		//vis.visit( cuT( "Steps count" )
-		//	, m_stepsCount );
-	}
-
-	void ToonSpecularGlossinessPass::doAccept( castor3d::TextureConfiguration & configuration
-		, castor3d::PassVisitorBase & vis )
-	{
-		castor3d::SpecularGlossinessPbrPass::doAccept( configuration, vis );
 	}
 
 	//*********************************************************************************************
