@@ -79,6 +79,7 @@ namespace castor3d
 			sdw::Vec4 boneWeights1;
 			sdw::Mat4 transform;
 			sdw::Int material;
+			sdw::Int nodeId;
 			sdw::Vec4 position2;
 			sdw::Vec3 normal2;
 			sdw::Vec3 tangent2;
@@ -100,7 +101,8 @@ namespace castor3d
 				, sdw::Vec3 bitangent
 				, sdw::Vec3 texture
 				, sdw::UInt instance
-				, sdw::UInt material );
+				, sdw::UInt material
+				, sdw::Int nodeId );
 
 		protected:
 			sdw::ShaderWriter & m_writer;
@@ -118,6 +120,7 @@ namespace castor3d
 			sdw::Vec3 texture;
 			sdw::UInt instance;
 			sdw::UInt material;
+			sdw::Int nodeId;
 		};
 
 		struct OutFragmentSurface

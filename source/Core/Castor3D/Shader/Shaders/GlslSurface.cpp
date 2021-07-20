@@ -123,6 +123,9 @@ namespace castor3d
 			, material{ writer.declInput< sdw::Int >( "vtxMaterial"
 				, SceneRenderPass::VertexInputs::MaterialLocation
 				, checkFlag( programFlags, ProgramFlag::eInstantiation ) ) }
+			, nodeId{ writer.declInput< sdw::Int >( "vtxNodeId"
+				, SceneRenderPass::VertexInputs::NodeIdLocation
+				, checkFlag( programFlags, ProgramFlag::eInstantiation ) ) }
 			, position2{ writer.declInput< sdw::Vec4 >( "vtxPosition2"
 				, SceneRenderPass::VertexInputs::Position2Location
 				, checkFlag( programFlags, ProgramFlag::eMorphing ) ) }
@@ -184,7 +187,8 @@ namespace castor3d
 			, sdw::Vec3 bitangent
 			, sdw::Vec3 texture
 			, sdw::UInt instance
-			, sdw::UInt material )
+			, sdw::UInt material
+			, sdw::Int nodeId )
 			: m_writer{ writer }
 			, worldPosition{ std::move( worldPosition ) }
 			, viewPosition{ std::move( viewPosition ) }
@@ -198,6 +202,7 @@ namespace castor3d
 			, texture{ std::move( texture ) }
 			, instance{ std::move( instance ) }
 			, material{ std::move( material ) }
+			, nodeId{ std::move( nodeId ) }
 		{
 		}
 
@@ -239,7 +244,9 @@ namespace castor3d
 				, writer.declOutput< sdw::UInt >( "frgInstance"
 					, SceneRenderPass::VertexOutputs::InstanceLocation )
 				, writer.declOutput< sdw::UInt >( "frgMaterial"
-					, SceneRenderPass::VertexOutputs::MaterialLocation ) }
+					, SceneRenderPass::VertexOutputs::MaterialLocation )
+				, writer.declOutput< sdw::Int >( "frgNodeId"
+					, SceneRenderPass::VertexOutputs::NodeIdLocation ) }
 		{
 		}
 
@@ -343,7 +350,9 @@ namespace castor3d
 				, writer.declInput< sdw::UInt >( "frgInstance"
 					, SceneRenderPass::VertexOutputs::InstanceLocation )
 				, writer.declInput< sdw::UInt >( "frgMaterial"
-					, SceneRenderPass::VertexOutputs::MaterialLocation ) }
+					, SceneRenderPass::VertexOutputs::MaterialLocation )
+				, writer.declInput< sdw::Int >( "frgNodeId"
+					, SceneRenderPass::VertexOutputs::NodeIdLocation ) }
 		{
 		}
 

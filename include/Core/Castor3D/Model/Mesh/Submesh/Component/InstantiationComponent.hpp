@@ -16,6 +16,7 @@ namespace castor3d
 	{
 		castor::Matrix4x4f m_matrix;
 		int m_material;
+		int m_nodeId;
 	};
 
 	class InstantiationComponent

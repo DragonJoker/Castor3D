@@ -29,6 +29,7 @@ namespace castor3d
 	public:
 		struct PoolsEntry
 		{
+			int32_t id;
 			size_t hash;
 			BillboardBase const & billboard;
 			Pass const & pass;
