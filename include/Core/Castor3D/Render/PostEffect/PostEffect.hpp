@@ -175,9 +175,12 @@ namespace castor3d
 		/**@}*/
 
 	protected:
-		C3D_API void doCopyResultToTarget( ashes::ImageView const & result
-			, ashes::ImageView const & target
-			, ashes::CommandBuffer & commandBuffer );
+		C3D_API void doCopyImage( crg::RunnableGraph & graph
+			, crg::RunnablePass const & runnable
+			, VkCommandBuffer commandBuffer
+			, uint32_t index
+			, crg::ImageViewId const & source
+			, crg::ImageViewId const & target );
 
 	private:
 		/**
