@@ -250,7 +250,8 @@ namespace fxaa
 			, extent
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } );
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
+				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) } );
 		m_resultView = m_renderTarget.getGraph().createView( crg::ImageViewData{ "FxaaRes"
 			, m_resultImg
 			, 0u
@@ -272,47 +273,12 @@ namespace fxaa
 						, VkCommandBuffer commandBuffer
 						, uint32_t index )
 						{
-							auto & sceneView = *m_target;
-							auto & srcSubresource = sceneView.data->info.subresourceRange;
-							auto & dstSubresource = m_resultView.data->info.subresourceRange;
-							VkImageCopy region{ VkImageSubresourceLayers{ srcSubresource.aspectMask, srcSubresource.baseMipLevel, srcSubresource.baseArrayLayer, 1u }
-								, VkOffset3D{ 0u, 0u, 0u }
-								, VkImageSubresourceLayers{ dstSubresource.aspectMask, dstSubresource.baseMipLevel, dstSubresource.baseArrayLayer, 1u }
-								, VkOffset3D{ 0u, 0u, 0u }
-							, { extent.width, extent.height, 1u } };
-							auto srcTransition = runnable.getTransition( index, sceneView );
-							auto dstTransition = runnable.getTransition( index, m_resultView );
-							graph.memoryBarrier( commandBuffer
-								, sceneView
-								, srcTransition.to
-								, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-								, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
-								, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) } );
-							graph.memoryBarrier( commandBuffer
-								, m_resultView
-								, dstTransition.to
-								, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-								, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
-								, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) } );
-							context.vkCmdCopyImage( commandBuffer
-								, graph.createImage( sceneView.data->image )
-								, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-								, graph.createImage( m_resultView.data->image )
-								, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-								, 1u
-								, &region );
-							graph.memoryBarrier( commandBuffer
-								, m_resultView
-								, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-								, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
-								, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) }
-							, dstTransition.to );
-							graph.memoryBarrier( commandBuffer
-								, sceneView
-								, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-								, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
-								, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) }
-							, srcTransition.to );
+							doCopyImage( graph
+								, runnable
+								, commandBuffer
+								, index
+								, *m_target
+								, m_resultView );
 						} )
 					.build( pass, context, graph );
 				device.renderSystem.getEngine()->registerTimer( "FXAA"
