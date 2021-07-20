@@ -18,7 +18,7 @@ extern "C"
 
 	C3D_ToonMaterial_API void getName( char const ** p_name )
 	{
-		*p_name = toon::ToonPhongPass::Name.c_str();
+		*p_name = toon::ToonPassT< toon::ToonPhongPass >::Name.c_str();
 	}
 
 	C3D_ToonMaterial_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
