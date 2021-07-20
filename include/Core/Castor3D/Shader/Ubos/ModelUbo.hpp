@@ -35,6 +35,9 @@ namespace castor3d
 			C3D_API sdw::UInt getMaterialIndex( ProgramFlags programFlags
 				, sdw::Int const & instanceMaterial )const;
 			C3D_API sdw::UInt getMaterialIndex()const;
+			C3D_API sdw::Int getNodeId( ProgramFlags programFlags
+				, sdw::Int const & instanceNodeId )const;
+			C3D_API sdw::Int getNodeId()const;
 			C3D_API sdw::Vec4 modelToWorld( sdw::Vec4 const & pos )const;
 			C3D_API sdw::Vec4 modelToCurWorld( sdw::Vec4 const & pos )const;
 			C3D_API sdw::Vec4 modelToPrvWorld( sdw::Vec4 const & pos )const;
@@ -59,6 +62,7 @@ namespace castor3d
 			sdw::Mat4 m_mtxNormal;
 			sdw::Int m_shadowReceiver;
 			sdw::Int m_materialIndex;
+			sdw::Int m_nodeId;
 			sdw::Int m_envMapIndex;
 		};
 	}

@@ -265,6 +265,7 @@ namespace castor3d
 		castor::Matrix4x4f normal;
 		int32_t shadowReceiver;
 		int32_t materialIndex;
+		int32_t nodeId;
 		int32_t environmentIndex;
 	};
 	/**

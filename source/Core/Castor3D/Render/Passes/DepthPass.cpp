@@ -89,7 +89,7 @@ namespace castor3d
 	{
 		return SceneRenderPass::createBlendState( BlendMode::eNoBlend
 			, BlendMode::eNoBlend
-			, 2u );
+			, 3u );
 	}
 
 	ShaderPtr DepthPass::doGetVertexShaderSource( PipelineFlags const & flags )const
@@ -148,6 +148,8 @@ namespace castor3d
 					, outSurface.texture );
 				outSurface.material = c3d_modelData.getMaterialIndex( flags.programFlags
 					, inSurface.material );
+				outSurface.nodeId = c3d_modelData.getNodeId( flags.programFlags
+					, inSurface.nodeId );
 
 				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
 					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, inSurface ) );
@@ -196,7 +198,6 @@ namespace castor3d
 			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
-		auto out = writer.getOut();
 
 		auto materials = shader::createMaterials( writer, flags.passFlags );
 		materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
@@ -215,8 +216,16 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
 
-		auto data1 = writer.declOutput< Vec4 >( "data1", 0u );
-		auto velocity = writer.declOutput< Vec4 >( "velocity", 1u );
+		UBO_SCENE( writer
+			, uint32_t( PassUboIdx::eScene )
+			, RenderPipeline::eAdditional );
+		auto in = writer.getIn();
+
+		// Outputs
+		auto data0 = writer.declOutput< Vec4 >( "data0", 0u );
+		auto data1 = writer.declOutput< Vec4 >( "data1", 1u );
+		auto velocity = writer.declOutput< Vec4 >( "velocity", 2u );
+		auto out = writer.getOut();
 
 		shader::Utils utils{ writer, *renderSystem.getEngine() };
 		utils.declareEncodeMaterial();
@@ -266,6 +275,11 @@ namespace castor3d
 					, ( checkFlag( flags.passFlags, PassFlag::eLighting ) ) ? 1_i : 0_i
 					, c3d_modelData.getEnvMapIndex()
 					, matFlags );
+				data0 = vec4( in.fragCoord.z()
+					, length( inSurface.worldPosition - c3d_sceneData.getCameraPosition() )
+					//, uintBitsToFloat( c3d_modelData.getNodeId() )
+					, writer.cast< sdw::Float >( c3d_modelData.getNodeId() )
+					, writer.cast< sdw::Float >( inSurface.material ) );
 				data1 = vec4( normal, matFlags );
 				velocity = vec4( inSurface.getVelocity(), writer.cast< Float >( inSurface.material ), 0.0_f );
 			} );

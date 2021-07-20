@@ -72,24 +72,22 @@ namespace castor3d
 
 		if ( iresult.second )
 		{
-			m_engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [this, instanceMult]( RenderDevice const & device )
+			auto & device = *getScene()->getEngine()->getRenderSystem()->getMainRenderDevice();
+			auto & uboPools = *device.uboPools;
+
+			for ( auto entry : m_baseEntries )
+			{
+				entry.second.hash = hash( entry.second.billboard
+					, entry.second.pass
+					, instanceMult );
+				auto it = m_entries.emplace( entry.second.hash, entry.second ).first;
+				it->second.id = m_entries.size();
+
+				if ( instanceMult )
 				{
-					auto & uboPools = *device.uboPools;
-
-					for ( auto entry : m_baseEntries )
-					{
-						entry.second.hash = hash( entry.second.billboard
-							, entry.second.pass
-							, instanceMult );
-						auto it = m_entries.emplace( entry.second.hash, entry.second ).first;
-
-						if ( instanceMult )
-						{
-							it->second.modelInstancesUbo = uboPools.getBuffer< ModelInstancesUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
-						}
-					}
-				} ) );
+					it->second.modelInstancesUbo = uboPools.getBuffer< ModelInstancesUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+				}
+			}
 		}
 
 		iresult.first->second.insert( &renderPass );
@@ -112,29 +110,33 @@ namespace castor3d
 			if ( instIt->second.empty() )
 			{
 				m_instances.erase( instIt );
-				m_engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-					, [this, instanceMult]( RenderDevice const & device )
+				auto & device = *getScene()->getEngine()->getRenderSystem()->getMainRenderDevice();
+				auto & uboPools = *device.uboPools;
+
+				for ( auto & entry : m_baseEntries )
+				{
+					auto it = m_entries.find( hash( entry.second.billboard
+						, entry.second.pass
+						, instanceMult ) );
+
+					if ( it != m_entries.end() )
 					{
-						auto & uboPools = *device.uboPools;
+						auto entry = it->second;
+						m_entries.erase( it );
 
-						for ( auto & entry : m_baseEntries )
+						if ( entry.modelInstancesUbo )
 						{
-							auto it = m_entries.find( hash( entry.second.billboard
-								, entry.second.pass
-								, instanceMult ) );
-
-							if ( it != m_entries.end() )
-							{
-								auto entry = it->second;
-								m_entries.erase( it );
-
-								if ( entry.modelInstancesUbo )
-								{
-									uboPools.putBuffer( entry.modelInstancesUbo );
-								}
-							}
+							uboPools.putBuffer( entry.modelInstancesUbo );
 						}
-					} ) );
+					}
+				}
+
+				uint32_t id = 1u;
+
+				for ( auto & entry : m_entries )
+				{
+					entry.second.id = id++;
+				}
 			}
 		}
 	}
@@ -213,6 +215,7 @@ namespace castor3d
 		{
 			auto & entry = pair.second;
 			auto & modelData = entry.modelUbo.getData();
+			modelData.nodeId = entry.id;
 			modelData.shadowReceiver = entry.billboard.isShadowReceiver();
 			modelData.materialIndex = entry.pass.getId();
 			modelData.prvModel = modelData.curModel;
@@ -228,7 +231,9 @@ namespace castor3d
 		, Pass const & pass
 		, uint32_t instanceMult )const
 	{
-		return m_entries.at( hash( billboard, pass, instanceMult ) );
+		auto it = m_entries.find( hash( billboard, pass, instanceMult ) );
+		CU_Require( it != m_entries.end() );
+		return it->second;
 	}
 
 	BillboardListSPtr BillboardListCache::add( Key const & name
@@ -266,14 +271,16 @@ namespace castor3d
 	{
 		auto baseHash = hash( billboard, pass );
 		auto iresult = m_baseEntries.emplace( baseHash
-			, BillboardListCache::PoolsEntry{ baseHash
-			, billboard
-			, pass } );
+			, BillboardListCache::PoolsEntry{ 0u
+				, baseHash
+				, billboard
+				, pass } );
 
 		if ( iresult.second )
 		{
 			auto & uboPools = *device.uboPools;
 			auto & baseEntry = iresult.first->second;
+			baseEntry.id = m_baseEntries.size();
 			baseEntry.modelUbo = uboPools.getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 			baseEntry.billboardUbo = uboPools.getBuffer< BillboardUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 

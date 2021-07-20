@@ -20,7 +20,7 @@ namespace castor3d
 		static std::array< castor::String, size_t( DsTexture::eCount ) > Values
 		{
 			{
-				cuT( "Depth" ),
+				cuT( "Daya0" ),
 				cuT( "Data1" ),
 				cuT( "Data2" ),
 				cuT( "Data3" ),
@@ -37,7 +37,7 @@ namespace castor3d
 		static std::array< VkFormat, size_t( DsTexture::eCount ) > Values
 		{
 			{
-				VK_FORMAT_D32_SFLOAT,
+				VK_FORMAT_R32G32B32A32_SFLOAT,
 				VK_FORMAT_R16G16B16A16_SFLOAT,
 				VK_FORMAT_R16G16B16A16_SFLOAT,
 				VK_FORMAT_R16G16B16A16_SFLOAT,
@@ -55,7 +55,7 @@ namespace castor3d
 		static std::array< VkClearValue, size_t( DsTexture::eCount ) > Values
 		{
 			{
-				defaultClearDepthStencil,
+				makeClearValue( 1.0f, 0.0f, 0.0f, 0.0f ),
 				opaqueBlackClearColor,
 				opaqueBlackClearColor,
 				opaqueBlackClearColor,
@@ -71,7 +71,7 @@ namespace castor3d
 		static std::array< VkImageUsageFlags, size_t( DsTexture::eCount ) > Values
 		{
 			{
-				VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
+				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_STORAGE_BIT,
 				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
 				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
 				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,

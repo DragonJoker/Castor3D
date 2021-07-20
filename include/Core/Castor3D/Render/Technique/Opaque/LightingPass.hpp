@@ -229,6 +229,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, castor::Size const & size
 			, Scene & scene
+			, Texture const & depth
 			, OpaquePassResult const & gpResult
 			, ShadowMapResult const & smDirectionalResult
 			, ShadowMapResult const & smPointResult
@@ -263,6 +264,7 @@ namespace castor3d
 		crg::FrameGraph & m_graph;
 		crg::FramePass const & m_previousPass;
 		RenderDevice const & m_device;
+		Texture const & m_depth;
 		OpaquePassResult const & m_gpResult;
 		ShadowMapResult const & m_smDirectionalResult;
 		ShadowMapResult const & m_smPointResult;
