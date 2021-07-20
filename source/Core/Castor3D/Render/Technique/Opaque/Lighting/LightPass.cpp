@@ -134,12 +134,11 @@ namespace castor3d
 		UBO_SCENE( writer, uint32_t( LightPassIdx::eScene ), 0u );
 		uint32_t index = uint32_t( LightPassIdx::eData5 ) + 1u;
 
-		auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), uint32_t( LightPassIdx::eDepth ), 0u );
+		auto c3d_mapData0 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData0 ), uint32_t( LightPassIdx::eData0 ), 0u );
 		auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), uint32_t( LightPassIdx::eData1 ), 0u );
 		auto c3d_mapData2 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), uint32_t( LightPassIdx::eData2 ), 0u );
 		auto c3d_mapData3 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), uint32_t( LightPassIdx::eData3 ), 0u );
 		auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), uint32_t( LightPassIdx::eData4 ), 0u );
-		auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), uint32_t( LightPassIdx::eData5 ), 0u );
 		auto in = writer.getIn();
 
 		shadowType = shadows
@@ -189,11 +188,11 @@ namespace castor3d
 						, c3d_mapData3.lod( texCoord, 0.0_f ) );
 					auto data4 = writer.declLocale( "data4"
 						, c3d_mapData4.lod( texCoord, 0.0_f ) );
-					auto data5 = writer.declLocale( "data5"
-						, c3d_mapData5.lod( texCoord, 0.0_f ) );
+					auto data0 = writer.declLocale( "depth"
+						, c3d_mapData0.lod( texCoord, 0.0_f ) );
 
 					auto materialId = writer.declLocale( "materialId"
-						, writer.cast< UInt >( data5.z() ) );
+						, writer.cast< UInt >( data0.w() ) );
 					auto material = writer.declLocale( "material"
 						, materials.getMaterial( materialId ) );
 					auto translucency = writer.declLocale( "translucency"
@@ -206,12 +205,10 @@ namespace castor3d
 
 					auto eye = writer.declLocale( "eye"
 						, c3d_sceneData.getCameraPosition() );
-					auto depth = writer.declLocale( "depth"
-						, c3d_mapDepth.lod( texCoord, 0.0_f ).x() );
 					auto vsPosition = writer.declLocale( "vsPosition"
-						, c3d_gpInfoData.projToView( utils, texCoord, depth ) );
+						, c3d_gpInfoData.projToView( utils, texCoord, data0.x() ) );
 					auto wsPosition = writer.declLocale( "wsPosition"
-						, c3d_gpInfoData.projToWorld( utils, texCoord, depth ) );
+						, c3d_gpInfoData.projToWorld( utils, texCoord, data0.x() ) );
 					auto wsNormal = writer.declLocale( "wsNormal"
 						, data1.xyz() );
 

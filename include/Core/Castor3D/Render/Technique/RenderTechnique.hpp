@@ -157,9 +157,19 @@ namespace castor3d
 			return m_colour.sampledViewId;
 		}
 
+		crg::ImageViewId const & getNormalImgView()const
+		{
+			return m_normal.sampledViewId;
+		}
+
 		crg::ImageViewId const & getDepthImgView()const
 		{
 			return m_depth.sampledViewId;
+		}
+
+		crg::ImageViewId const & getDepthObjImgView()const
+		{
+			return m_depthObj.sampledViewId;
 		}
 
 		TextureLayout const & getDepth()const
@@ -170,6 +180,12 @@ namespace castor3d
 		TextureLayoutSPtr getDepthPtr()const
 		{
 			return m_depthBuffer.getTexture();
+		}
+
+		ashes::Buffer< int32_t > const & getDepthRange()const
+		{
+			CU_Require( m_depthRange );
+			return *m_depthRange;
 		}
 
 		MatrixUbo const & getMatrixUbo()const
@@ -219,6 +235,7 @@ namespace castor3d
 
 	private:
 		crg::FramePass & doCreateDepthPass();
+		crg::FramePass & doCreateComputeDepthRange();
 		crg::FramePass & doCreateBackgroundPass();
 		crg::FramePass & doCreateOpaquePass();
 		crg::FramePass & doCreateTransparentPass();
@@ -245,6 +262,7 @@ namespace castor3d
 		TextureUnit m_colourTexture;
 		Texture m_depth;
 		TextureUnit m_depthBuffer;
+		Texture m_depthObj;
 		Texture m_normal;
 		MatrixUbo m_matrixUbo;
 		SceneUbo m_sceneUbo;
@@ -254,6 +272,8 @@ namespace castor3d
 		VoxelizerUbo m_vctConfigUbo;
 		crg::FramePass * m_depthPassDecl{};
 		DepthPass * m_depthPass{};
+		ashes::BufferPtr< int32_t > m_depthRange;
+		crg::FramePass * m_computeDepthRangeDesc{};
 		SsaoPassUPtr m_ssao;
 		VoxelizerUPtr m_voxelizer;
 		LightVolumePassResultUPtr m_lpvResult;

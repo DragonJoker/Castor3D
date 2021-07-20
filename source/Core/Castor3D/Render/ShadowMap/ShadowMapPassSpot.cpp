@@ -185,6 +185,8 @@ namespace castor3d
 				, outSurface.texture );
 			outSurface.material = c3d_modelData.getMaterialIndex( flags.programFlags
 				, inSurface.material );
+			outSurface.nodeId = c3d_modelData.getNodeId( flags.programFlags
+				, inSurface.nodeId );
 			outSurface.instance = writer.cast< UInt >( in.instanceIndex );
 
 			auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
