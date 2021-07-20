@@ -393,7 +393,7 @@ namespace castor3d
 			}
 			else if ( !params.empty() )
 			{
-				castor::RgbColour value;
+				castor::RgbaColour value;
 				params[0]->get( value );
 				parsingContext->pass->setEdgeColour( value );
 			}
@@ -1146,7 +1146,7 @@ namespace castor3d
 		, m_alphaFunc{ m_dirty, VK_COMPARE_OP_ALWAYS }
 		, m_blendAlphaFunc{ m_dirty, VK_COMPARE_OP_ALWAYS }
 		, m_parallaxOcclusionMode{ m_dirty, ParallaxOcclusionMode::eNone }
-		, m_edgeColour{ m_dirty, castor::RgbColour::fromComponents( 0.0f, 0.0f, 0.0f ) }
+		, m_edgeColour{ m_dirty, castor::RgbaColour::fromComponents( 0.0f, 0.0f, 0.0f, 1.0f ) }
 		, m_edgeWidth{ m_dirty, { 1.0f, castor::makeRange( MinEdgeWidth, MaxEdgeWidth ) } }
 		, m_depthFactor{ m_dirty, { 1.0f, castor::makeRange( 0.0f, 1.0f ) } }
 		, m_normalFactor{ m_dirty, { 1.0f, castor::makeRange( 0.0f, 1.0f ) } }
@@ -1494,7 +1494,9 @@ namespace castor3d
 		data.edgeColour->r = getEdgeColour().red();
 		data.edgeColour->g = getEdgeColour().green();
 		data.edgeColour->b = getEdgeColour().blue();
-		data.edgeColour->a = checkFlag( m_flags, PassFlag::eDrawEdge ) ? 1.0f : 0.0f;
+		data.edgeColour->a = ( checkFlag( m_flags, PassFlag::eDrawEdge )
+			? getEdgeColour().alpha()
+			: 0.0f );
 		data.common->r = getOpacity();
 		data.common->g = getEmissive();
 		data.common->b = getAlphaValue();
@@ -1590,7 +1592,7 @@ namespace castor3d
 		Pass::addParser( result, mtlSectionID, cuT( "reflections" ), parserPassReflections, { makeParameter< ParameterType::eBool >() } );
 		Pass::addParser( result, mtlSectionID, cuT( "refractions" ), parserPassRefractions, { makeParameter< ParameterType::eBool >() } );
 		Pass::addParser( result, mtlSectionID, cuT( "transmission" ), parserPassTransmission, { makeParameter< ParameterType::ePoint3F >() } );
-		Pass::addParser( result, mtlSectionID, cuT( "edge_colour" ), parserPassEdgeColour, { makeParameter< ParameterType::eRgbColour >() } );
+		Pass::addParser( result, mtlSectionID, cuT( "edge_colour" ), parserPassEdgeColour, { makeParameter< ParameterType::eRgbaColour >() } );
 		Pass::addParser( result, mtlSectionID, cuT( "edge_width" ), parserPassEdgeWidth, { makeParameter< ParameterType::eFloat >( makeRange( MinEdgeWidth, MaxEdgeWidth ) ) } );
 		Pass::addParser( result, mtlSectionID, cuT( "edge_depth_factor" ), parserPassDepthFactor, { makeParameter< ParameterType::eFloat >( makeRange( 0.0f, 1.0f ) ) } );
 		Pass::addParser( result, mtlSectionID, cuT( "edge_normal_factor" ), parserPassNormalFactor, { makeParameter< ParameterType::eFloat >( makeRange( 0.0f, 1.0f ) ) } );
