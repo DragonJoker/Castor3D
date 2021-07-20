@@ -2,6 +2,7 @@
 
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
@@ -18,6 +19,7 @@
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp"
 #include "Castor3D/Render/Passes/BackgroundPass.hpp"
+#include "Castor3D/Render/Passes/ComputeDepthRange.hpp"
 #include "Castor3D/Render/Passes/DepthPass.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Render/Technique/ForwardRenderTechniquePass.hpp"
@@ -343,6 +345,12 @@ namespace castor3d
 		, m_llpvConfigUbo{ m_device }
 		, m_vctConfigUbo{ m_device }
 		, m_depthPassDecl{ &doCreateDepthPass() }
+		, m_depthRange{ makeBuffer< int32_t >( device
+			, 2u
+			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, "DepthRange" ) }
+		, m_computeDepthRangeDesc{ &doCreateComputeDepthRange() }
 		, m_ssao{ castor::makeUnique< SsaoPass >( m_renderTarget.getGraph()
 			, device
 			, *m_depthPassDecl
@@ -702,6 +710,32 @@ namespace castor3d
 		return result;
 	}
 
+	crg::FramePass & RenderTechnique::doCreateComputeDepthRange()
+	{
+		auto & result = m_renderTarget.getGraph().createPass( "ComputeDepthRange"
+			, [this]( crg::FramePass const & pass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & graph )
+			{
+				auto result = std::make_unique< ComputeDepthRange >( pass
+					, context
+					, graph
+					, m_device );
+				getEngine()->registerTimer( m_renderTarget.getGraph().getName()
+					, result->getTimer() );
+				return result;
+			} );
+		result.addDependency( *m_depthPassDecl );
+		result.addInputStorageView( m_depthObj.sampledViewId
+			, ComputeDepthRange::eInput
+			, VK_IMAGE_LAYOUT_UNDEFINED );
+		result.addOutputStorageBuffer( { m_depthRange->getBuffer(), "DepthRange" }
+			, ComputeDepthRange::eOutput
+			, 0u
+			, m_depthRange->getBuffer().getSize() );
+		return result;
+	}
+
 	crg::FramePass & RenderTechnique::doCreateBackgroundPass()
 	{
 		auto & background = *getRenderTarget().getScene()->getBackground();
@@ -723,7 +757,7 @@ namespace castor3d
 					, result->getTimer() );
 				return result;
 			} );
-		result.addDependency( *m_depthPassDecl );
+		result.addDependency( *m_computeDepthRangeDesc );
 		background.getMatrixUbo().createPassBinding( result
 			, SceneBackground::MtxUboIdx );
 		background.getModelUbo().createPassBinding( result

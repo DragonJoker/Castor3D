@@ -36,6 +36,8 @@ namespace castor3d::shader
 	public:
 		sdw::Vec4 colourDiv;
 		sdw::Vec4 specDiv;
+		sdw::Vec4 edgeFactors;
+		sdw::Vec4 edgeColour;
 		sdw::Vec4 specific;
 
 	private:
@@ -60,6 +62,10 @@ namespace castor3d::shader
 		sdw::Float gaussianWidth;
 		sdw::Float subsurfaceScatteringStrength;
 		sdw::Int transmittanceProfileSize;
+		sdw::Float edgeWidth;
+		sdw::Float depthFactor;
+		sdw::Float normalFactor;
+		sdw::Float objectFactor;
 	};
 
 	CU_DeclareSmartPtr( Material );

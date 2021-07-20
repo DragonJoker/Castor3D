@@ -113,9 +113,12 @@ namespace castor3d
 		//!\~english	The pass sets an object as pickable.
 		//!\~french		La passe rend l'objet sélectionnable.
 		ePickable = 0x0800,
+		//!\~english	The pass needs an edge to be drawn.
+		//!\~french		La passe demande qu'une bordure soit dessinée.
+		eDrawEdge = 0x1000,
 		//!\~english	All flags.
 		//\~french		Tous les indicateurs.
-		eAll = 0xFFF,
+		eAll = 0x1FFF,
 	};
 	CU_ImplementFlags( PassFlag )
 	C3D_API castor::String getName( PassFlag value );
