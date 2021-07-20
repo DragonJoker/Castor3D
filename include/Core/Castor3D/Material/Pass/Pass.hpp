@@ -14,7 +14,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/FlagCombination.hpp>
 #include <CastorUtils/Design/GroupChangeTracked.hpp>
 #include <CastorUtils/Design/Signal.hpp>
-#include <CastorUtils/Graphics/RgbColour.hpp>
+#include <CastorUtils/Graphics/RgbaColour.hpp>
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
 
@@ -395,7 +395,7 @@ namespace castor3d
 			return m_objectFactor->value();
 		}
 
-		castor::RgbColour getEdgeColour()const
+		castor::RgbaColour getEdgeColour()const
 		{
 			return *m_edgeColour;
 		}
@@ -555,7 +555,7 @@ namespace castor3d
 			*m_objectFactor = value;
 		}
 
-		void setEdgeColour( castor::RgbColour const & value )
+		void setEdgeColour( castor::RgbaColour const & value )
 		{
 			m_edgeColour = value;
 		}
@@ -646,7 +646,7 @@ namespace castor3d
 		castor::GroupChangeTracked< VkCompareOp > m_alphaFunc;
 		castor::GroupChangeTracked< VkCompareOp > m_blendAlphaFunc;
 		castor::GroupChangeTracked< ParallaxOcclusionMode > m_parallaxOcclusionMode;
-		castor::GroupChangeTracked< castor::RgbColour > m_edgeColour;
+		castor::GroupChangeTracked< castor::RgbaColour > m_edgeColour;
 		castor::GroupChangeTracked< castor::RangedValue< float > > m_edgeWidth;
 		castor::GroupChangeTracked< castor::RangedValue< float > > m_depthFactor;
 		castor::GroupChangeTracked< castor::RangedValue< float > > m_normalFactor;
