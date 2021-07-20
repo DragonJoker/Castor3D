@@ -314,9 +314,11 @@ namespace castor3d
 				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 				, getName() + "Billboard" );
+			auto mappedSize = ashes::getAlignedSize( VkDeviceSize( m_vertexStride * m_arrayPositions.size() )
+				, device.properties.limits.nonCoherentAtomSize );
 
 			if ( auto * buffer = m_vertexBuffer->getBuffer().lock( 0u
-				, uint32_t( m_vertexStride * m_arrayPositions.size() )
+				, mappedSize
 				, 0u ) )
 			{
 				for ( auto & pos : m_arrayPositions )
@@ -325,7 +327,7 @@ namespace castor3d
 					buffer += m_vertexStride;
 				}
 
-				m_vertexBuffer->getBuffer().flush( 0u, uint32_t( m_vertexStride * m_arrayPositions.size() ) );
+				m_vertexBuffer->getBuffer().flush( 0u, mappedSize );
 				m_vertexBuffer->getBuffer().unlock();
 			}
 		}
