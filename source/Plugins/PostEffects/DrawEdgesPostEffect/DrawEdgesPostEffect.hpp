@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_FxaaPostEffect_H___
 
 #include "DepthNormalEdgeDetection.hpp"
+#include "DrawEdgesUbo.hpp"
 #include "ObjectIDEdgeDetection.hpp"
 
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
@@ -62,8 +63,10 @@ namespace draw_edges
 		bool doWriteInto( castor::StringStream & file, castor::String const & tabs ) override;
 
 	public:
-		static castor::String Type;
-		static castor::String Name;
+		static const castor::String Type;
+		static const castor::String Name;
+		static const castor::String NormalDepthWidth;
+		static const castor::String ObjectWidth;
 
 	private:
 		castor3d::ShaderModule m_vertexShader;
@@ -73,6 +76,8 @@ namespace draw_edges
 		std::unique_ptr< ObjectIDEdgeDetection > m_objectID;
 		crg::ImageId m_resultImg;
 		crg::ImageViewId m_resultView;
+		DrawEdgesUbo m_ubo;
+		DrawEdgesUboConfiguration & m_data;
 		crg::FramePass const * m_pass{};
 	};
 }

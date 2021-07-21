@@ -77,10 +77,9 @@ namespace draw_edges
 					, sdw::Int const & X
 					, sdw::Float const & edgeWidth )
 				{
-					auto w = writer.declLocale( "w"
-						, writer.cast< sdw::Int >( edgeWidth ) );
-					auto h = writer.declLocale( "h"
-						, writer.cast< sdw::Int >( edgeWidth ) );
+					auto w = 1_i;
+					auto h = 1_i;
+
 					auto A = writer.declLocale( "A", writer.cast< sdw::Int >( c3d_data0.fetch( texelCoord, 0_i, ivec2(   -w,   +h ) ).z() ) );  //  +---+---+---+
 					auto B = writer.declLocale( "B", writer.cast< sdw::Int >( c3d_data0.fetch( texelCoord, 0_i, ivec2( +0_i,   +h ) ).z() ) );  //  | A | B | C |
 					auto C = writer.declLocale( "C", writer.cast< sdw::Int >( c3d_data0.fetch( texelCoord, 0_i, ivec2(   +w,   +h ) ).z() ) );  //  +---+---+---+
