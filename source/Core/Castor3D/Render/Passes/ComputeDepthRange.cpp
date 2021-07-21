@@ -22,8 +22,6 @@
 #include <RenderGraph/GraphContext.hpp>
 #include <RenderGraph/RunnableGraph.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, ComputeDepthRange )
-
 namespace castor3d
 {
 	//*********************************************************************************************
