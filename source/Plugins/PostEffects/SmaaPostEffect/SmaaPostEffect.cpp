@@ -343,6 +343,18 @@ namespace smaa
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.passIndex( &m_config.subsampleIndex )
+					.enabled( &isEnabled() )
+					.recordDisabledInto( [this, &context, &graph]( crg::RunnablePass const & runnable
+						, VkCommandBuffer commandBuffer
+						, uint32_t index )
+						{
+							doCopyImage( graph
+								, runnable
+								, commandBuffer
+								, index
+								, *m_target
+								, *m_srgbTextureView );
+						} )
 					.build( pass, context, graph, m_config.maxSubsampleIndices );
 			} );
 		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR

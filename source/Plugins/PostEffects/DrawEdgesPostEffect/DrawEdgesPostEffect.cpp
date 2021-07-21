@@ -28,6 +28,7 @@ namespace draw_edges
 			eSource,
 			eEdgeDN,
 			eEdgeO,
+			eDrawEdges,
 		};
 
 		std::unique_ptr< ast::Shader > getVertexProgram()
@@ -52,7 +53,7 @@ namespace draw_edges
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< ast::Shader > getFragmentProgram()
+		std::unique_ptr< ast::Shader > getFragmentProgram( VkExtent3D const & extent )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -64,11 +65,47 @@ namespace draw_edges
 			auto c3d_source = writer.declSampledImage< FImg2DRgba32 >( "c3d_source", eSource, 0u );
 			auto c3d_edgeDN = writer.declSampledImage< FImg2DR32 >( "c3d_edgeDN", eEdgeDN, 0u );
 			auto c3d_edgeO = writer.declSampledImage< FImg2DR32 >( "c3d_edgeO", eEdgeO, 0u );
+			UBO_DRAW_EDGES( writer, eDrawEdges, 0u );
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
 			auto fragColor = writer.declOutput< Vec4 >( "fragColor", 0 );
+
+			auto getEdge = writer.implementFunction< sdw::Float >( "getEdge"
+				, [&]( sdw::SampledImage2DR32 const & tex
+					, sdw::IVec2 const & texCoord
+					, sdw::Int const & width )
+				{
+					auto result = writer.declLocale( "result"
+						, tex.fetch( texCoord, 0_i ) );
+
+					FOR( writer, sdw::Int, x, 1_i, x < width, ++x )
+					{
+						result += tex.fetch( texCoord, 0_i, ivec2( +x, +0_i ) );
+						result += tex.fetch( texCoord, 0_i, ivec2( -x, +0_i ) );
+
+						FOR( writer, sdw::Int, y, 1_i, y < width, ++y )
+						{
+							result += tex.fetch( texCoord, 0_i, ivec2( +x, +y ) );
+							result += tex.fetch( texCoord, 0_i, ivec2( -x, -y ) );
+						}
+						ROF;
+					}
+					ROF;
+
+					FOR( writer, sdw::Int, y, 1_i, y < width, ++y )
+					{
+						result += tex.fetch( texCoord, 0_i, ivec2( +0_i, +y ) );
+						result += tex.fetch( texCoord, 0_i, ivec2( +0_i, -y ) );
+					}
+					ROF;
+
+					writer.returnStmt( clamp( result, 0.0_f, 1.0_f ) );
+				}
+				, sdw::InSampledImage2DR32{ writer, "tex" }
+				, sdw::InIVec2{ writer, "texCoord" }
+				, sdw::InInt{ writer, "width" } );
 
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
@@ -76,8 +113,13 @@ namespace draw_edges
 					auto colour = writer.declLocale( "colour"
 						, c3d_source.sample( vtx_texture ) );
 
+					auto size = writer.declLocale( "size"
+						, ivec2( sdw::Int{ int( extent.width ) }, sdw::Int{ int( extent.height ) } ) );
+					auto texelCoord = writer.declLocale( "texelCoord"
+						, ivec2( vec2( size ) * vtx_texture ) );
+
 					auto data0 = writer.declLocale( "data0"
-						, c3d_data0.sample( vtx_texture ) );
+						, c3d_data0.fetch( texelCoord, 0_i ) );
 
 					IF( writer, data0.w() != 0.0_f  )
 					{
@@ -87,9 +129,9 @@ namespace draw_edges
 						IF( writer, material.edgeColour.a() != 0.0_f )
 						{
 							auto edgeDN = writer.declLocale( "edgeDN"
-								, c3d_edgeDN.sample( vtx_texture ) );
+								, getEdge( c3d_edgeDN, texelCoord, writer.cast< sdw::Int >( c3d_normalDepthWidth ) ) );
 							auto edgeO = writer.declLocale( "edgeO"
-								, c3d_edgeO.sample( vtx_texture ) );
+								, getEdge( c3d_edgeO, texelCoord, writer.cast< sdw::Int >( c3d_objectWidth ) ) );
 
 							auto edge = writer.declLocale( "edge"
 								, mix( colour.rgb(), material.edgeColour.rgb(), vec3( edgeDN ) ) );
@@ -111,8 +153,10 @@ namespace draw_edges
 
 	//*********************************************************************************************
 
-	castor::String PostEffect::Type = cuT( "draw_edges" );
-	castor::String PostEffect::Name = cuT( "Draw Edges PostEffect" );
+	const castor::String PostEffect::Type = cuT( "draw_edges" );
+	const castor::String PostEffect::Name = cuT( "Draw Edges PostEffect" );
+	const castor::String PostEffect::NormalDepthWidth = cuT( "normalDepthWidth" );
+	const castor::String PostEffect::ObjectWidth = cuT( "objectWidth" );
 
 	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
 		, castor3d::RenderSystem & renderSystem
@@ -124,10 +168,23 @@ namespace draw_edges
 			, parameters
 			, 1u }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "DECombine", getVertexProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DECombine", getFragmentProgram() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DECombine", getFragmentProgram( castor3d::getSafeBandedExtent3D( m_renderTarget.getSize() ) ) }
 		, m_stages{ makeShaderState( *renderSystem.getMainRenderDevice(), m_vertexShader )
 			, makeShaderState( *renderSystem.getMainRenderDevice(), m_pixelShader ) }
+		, m_ubo{ *renderSystem.getMainRenderDevice() }
+		, m_data{ m_ubo.getUbo().getData() }
 	{
+		castor::String param;
+
+		if ( parameters.get( NormalDepthWidth, param ) )
+		{
+			m_data.normalDepthWidth = castor::string::toFloat( param );
+		}
+
+		if ( parameters.get( ObjectWidth, param ) )
+		{
+			m_data.objectWidth = castor::string::toFloat( param );
+		}
 	}
 
 	PostEffect::~PostEffect()
@@ -157,6 +214,16 @@ namespace draw_edges
 
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
+		visitor.visit( cuT( "DECombine" )
+			, VK_SHADER_STAGE_FRAGMENT_BIT
+			, cuT( "Draw edges combine" )
+			, cuT( "NormalDepthWidth" )
+			, m_data.normalDepthWidth );
+		visitor.visit( cuT( "DECombine" )
+			, VK_SHADER_STAGE_FRAGMENT_BIT
+			, cuT( "Draw edges combine" )
+			, cuT( "ObjectWidth" )
+			, m_data.objectWidth );
 	}
 
 	void PostEffect::update( castor3d::CpuUpdater & updater )
@@ -239,6 +306,7 @@ namespace draw_edges
 		pass.addSampledView( *m_target, eSource, {} );
 		pass.addSampledView( m_depthNormal->getResult(), eEdgeDN, {} );
 		pass.addSampledView( m_objectID->getResult(), eEdgeO, {} );
+		m_ubo.createPassBinding( pass, eDrawEdges );
 		pass.addOutputColourView( m_resultView );
 
 		m_pass = &pass;
@@ -251,7 +319,11 @@ namespace draw_edges
 
 	bool PostEffect::doWriteInto( castor::StringStream & file, castor::String const & tabs )
 	{
-		file << ( tabs + cuT( "postfx \"" ) + Type + cuT( "\"" ) );
+		file << ( cuT( "\n" ) + tabs + Type + cuT( "\n" ) );
+		file << ( tabs + cuT( "{\n" ) );
+		file << ( tabs + cuT( "\t" ) + NormalDepthWidth + cuT( " " ) + castor::string::toString( m_data.normalDepthWidth ) + cuT( "\n" ) );
+		file << ( tabs + cuT( "\t" ) + ObjectWidth + cuT( " " ) + castor::string::toString( m_data.objectWidth ) + cuT( "\n" ) );
+		file << ( tabs + cuT( "}\n" ) );
 		return true;
 	}
 }
