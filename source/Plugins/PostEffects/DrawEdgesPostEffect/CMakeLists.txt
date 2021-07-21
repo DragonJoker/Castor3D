@@ -18,12 +18,16 @@ set( PROJECT_SOVERSION "${${PROJECT_NAME}_VERSION_BUILD}" )
 set( ${PROJECT_NAME}_HDR_FILES
 	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/DepthNormalEdgeDetection.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/DrawEdgesPostEffect.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/DrawEdgesUbo.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/DrawEdges_Parsers.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/ObjectIDEdgeDetection.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/DepthNormalEdgeDetection.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/DrawEdgesPostEffect.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/DrawEdgesPostEffectPlugin.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/DrawEdgesUbo.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/DrawEdges_Parsers.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${FOLDER_NAME}/ObjectIDEdgeDetection.cpp
 )
 source_group( "Header Files"
