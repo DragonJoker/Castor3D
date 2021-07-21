@@ -129,21 +129,21 @@ namespace GuiCommon
 			{
 				addRangedValueProperty< castor::ChangeTracked >( this, grid, PROPERTY_VALUE, m_uniform );
 			}
-		//	else
-		//	{
-		//		addValueProperty< castor::ChangeTracked >( this, grid, PROPERTY_VALUE, m_uniform );
-		//	}
-		//}
-		//else
-		//{
-		//	if ( m_uniform.isRanged() )
-		//	{
-		//		addRangedValueProperty< RawValueT >( this, grid, PROPERTY_VALUE, m_uniform );
-		//	}
-		//	else
-		//	{
-		//		addValueProperty< RawValueT >( this, grid, PROPERTY_VALUE, m_uniform );
-		//	}
+			else
+			{
+				addValueProperty< castor::ChangeTracked >( this, grid, PROPERTY_VALUE, m_uniform );
+			}
+		}
+		else
+		{
+			if ( m_uniform.isRanged() )
+			{
+				addRangedValueProperty< RawValueT >( this, grid, PROPERTY_VALUE, m_uniform );
+			}
+			else
+			{
+				addValueProperty< RawValueT >( this, grid, PROPERTY_VALUE, m_uniform );
+			}
 		}
 	}
 }
