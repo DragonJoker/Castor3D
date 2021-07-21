@@ -2,8 +2,9 @@
 See LICENSE file in root folder
 */
 #include <Castor3D/Material/Pass/PassVisitor.hpp>
+#include <Castor3D/Scene/SceneFileParser.hpp>
 
-#include <CastorUtils/FileParser/FileParser.hpp>
+#include <CastorUtils/FileParser/ParserParameter.hpp>
 #include <CastorUtils/Graphics/RgbColour.hpp>
 
 namespace toon
@@ -44,7 +45,7 @@ namespace toon
 		, castor3d::PassTypeID typeID
 		, castor3d::PassFlags initialFlags )
 		: TypeT{ parent, typeID, initialFlags | castor3d::PassFlag::eDrawEdge }
-		, m_smoothBandWidth{ m_dirty, 1.0f }
+		, m_smoothBandWidth{ this->m_dirty, 1.0f }
 	{
 	}
 
