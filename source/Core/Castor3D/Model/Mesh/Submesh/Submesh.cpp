@@ -400,10 +400,18 @@ namespace castor3d
 		, MaterialSPtr newMaterial
 		, bool update )
 	{
-		if ( oldMaterial != newMaterial
-			&& !m_disableSceneUpdate )
+		if ( oldMaterial != newMaterial )
 		{
-			getOwner()->getScene()->setChanged();
+			if ( m_instantiation )
+			{
+				m_instantiation->unref( oldMaterial );
+				m_instantiation->ref( newMaterial );
+			}
+
+			if ( !m_disableSceneUpdate )
+			{
+				getOwner()->getScene()->setChanged();
+			}
 		}
 	}
 
