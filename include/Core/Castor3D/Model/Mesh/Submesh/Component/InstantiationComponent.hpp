@@ -175,7 +175,6 @@ namespace castor3d
 	private:
 		bool doInitialise( RenderDevice const & device )override;
 		void doCleanup()override;
-		void doFill( RenderDevice const & device )override;
 		void doUpload()override;
 		inline bool doCheckInstanced( uint32_t count )const
 		{

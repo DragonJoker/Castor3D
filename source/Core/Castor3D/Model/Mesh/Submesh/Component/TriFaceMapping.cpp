@@ -204,10 +204,6 @@ namespace castor3d
 		m_faces.clear();
 	}
 
-	void TriFaceMapping::doFill( RenderDevice const & device )
-	{
-	}
-
 	void TriFaceMapping::doUpload()
 	{
 		auto count = uint32_t( m_faces.size() * 3 );
