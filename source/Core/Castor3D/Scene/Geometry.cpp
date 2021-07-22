@@ -94,7 +94,7 @@ namespace castor3d
 
 			if ( itSubMat != m_submeshesMaterials.end() )
 			{
-				MaterialSPtr oldMaterial = itSubMat->second.lock();
+				oldMaterial = itSubMat->second.lock();
 
 				if ( oldMaterial != material )
 				{
@@ -104,6 +104,7 @@ namespace castor3d
 			}
 			else if ( material )
 			{
+				oldMaterial = submesh.getDefaultMaterial();
 				m_submeshesMaterials.emplace( &submesh, material );
 				changed = true;
 			}
@@ -200,6 +201,7 @@ namespace castor3d
 	void Geometry::doUpdateMesh()
 	{
 		auto mesh = m_mesh.lock();
+		m_submeshesMaterials.clear();
 		m_submeshesBoxes.clear();
 		m_submeshesSpheres.clear();
 
@@ -209,8 +211,7 @@ namespace castor3d
 
 			for ( auto submesh : *mesh )
 			{
-				submesh->getInstantiation().ref( submesh->getDefaultMaterial() );
-				m_submeshesMaterials[submesh.get()] = submesh->getDefaultMaterial();
+				m_submeshesMaterials.emplace( submesh.get(), submesh->getDefaultMaterial() );
 				m_submeshesBoxes.emplace( submesh.get(), submesh->getBoundingBox() );
 				m_submeshesSpheres.emplace( submesh.get(), submesh->getBoundingSphere() );
 			}
