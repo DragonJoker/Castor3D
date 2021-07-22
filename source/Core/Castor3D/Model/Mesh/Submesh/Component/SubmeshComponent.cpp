@@ -27,14 +27,6 @@ namespace castor3d
 		}
 	}
 
-	void SubmeshComponent::fill( RenderDevice const & device )
-	{
-		if ( m_initialised )
-		{
-			doFill( device );
-		}
-	}
-
 	void SubmeshComponent::upload()
 	{
 		if ( m_dirty )

@@ -150,7 +150,6 @@ namespace castor3d
 
 	private:
 		void doCleanup()override;
-		void doFill( RenderDevice const & device )override;
 		void doUpload()override;
 
 	public:
