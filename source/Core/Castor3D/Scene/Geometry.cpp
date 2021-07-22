@@ -200,6 +200,8 @@ namespace castor3d
 	void Geometry::doUpdateMesh()
 	{
 		auto mesh = m_mesh.lock();
+		m_submeshesBoxes.clear();
+		m_submeshesSpheres.clear();
 
 		if ( mesh )
 		{
