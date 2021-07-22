@@ -44,13 +44,13 @@ namespace castor3d
 	bool BonesInstantiationComponent::doInitialise( RenderDevice const & device )
 	{
 		bool result = true;
-		auto count = m_instantiation.getMaxRefCount();
 
-		if ( count > m_instantiation.getThreshold()
+		if ( m_instantiation.isInstanced()
 			&& getOwner()->getOwner()->getScene()->getEngine()->getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() )
 		{
 			if ( !m_instancedBonesBuffer )
 			{
+				auto count = m_instantiation.getMaxRefCount();
 				auto stride = uint32_t( sizeof( float ) * 16u * 400u );
 				auto size = count * stride * getOwner()->getOwner()->getScene()->getDirectionalShadowCascades();
 				m_instancedBonesBuffer = castor::makeUnique< ShaderBuffer >( *getOwner()->getOwner()->getScene()->getEngine()
