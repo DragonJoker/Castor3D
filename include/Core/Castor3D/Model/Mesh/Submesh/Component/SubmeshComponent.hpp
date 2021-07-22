@@ -50,13 +50,6 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		Initialises the submesh
-		 *\~french
-		 *\brief		Initialise le sous-maillage
-		 */
-		C3D_API void fill( RenderDevice const & device );
-		/**
-		 *\~english
 		 *\brief		Uploads data on VRAM.
 		 *\~french
 		 *\brief		Met les données en VRAM.
@@ -113,7 +106,6 @@ namespace castor3d
 	private:
 		C3D_API virtual bool doInitialise( RenderDevice const & device ) = 0;
 		C3D_API virtual void doCleanup() = 0;
-		C3D_API virtual void doFill( RenderDevice const & device ) = 0;
 		C3D_API virtual void doUpload() = 0;
 
 	private:

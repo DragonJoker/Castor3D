@@ -72,29 +72,6 @@ namespace castor3d
 		m_instancedBonesBuffer.reset();
 	}
 
-	void BonesInstantiationComponent::doFill( RenderDevice const & device )
-	{
-		if ( m_instancedBonesBuffer )
-		{
-			auto count = m_instantiation.getMaxRefCount();
-			auto stride = VkDeviceSize( sizeof( float ) * 16u * 400u );
-			auto size = count * stride * getOwner()->getOwner()->getScene()->getDirectionalShadowCascades();
-
-			if ( count > m_instantiation.getThreshold()
-				&& ( !m_instancedBonesBuffer || m_instancedBonesBuffer->getSize() < size ) )
-			{
-				m_instancedBonesBuffer = castor::makeUnique< ShaderBuffer >( *getOwner()->getOwner()->getScene()->getEngine()
-					, device
-					, uint32_t( size )
-					, cuT( "InstancedBonesBuffer" ) );
-			}
-			else if ( count <= m_instantiation.getThreshold() )
-			{
-				m_instancedBonesBuffer.reset();
-			}
-		}
-	}
-
 	void BonesInstantiationComponent::doUpload()
 	{
 		if ( m_instancedBonesBuffer )
