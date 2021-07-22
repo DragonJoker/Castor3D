@@ -88,10 +88,6 @@ namespace castor3d
 		m_bonesBuffer.reset();
 	}
 
-	void BonesComponent::doFill( RenderDevice const & device )
-	{
-	}
-
 	void BonesComponent::doUpload()
 	{
 		auto count = uint32_t( m_bones.size() );
