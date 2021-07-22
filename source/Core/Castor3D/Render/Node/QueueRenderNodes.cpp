@@ -209,7 +209,8 @@ namespace castor3d
 				addFlag( programFlags, ProgramFlag::eMorphing );
 			}
 
-			if ( checkFlag( submeshFlags, ProgramFlag::eInstantiation )
+			if ( !mesh
+				&& checkFlag( submeshFlags, ProgramFlag::eInstantiation )
 				&& ( !pass.hasOnlyAlphaBlending() || renderPass.isOrderIndependent() )
 				&& !pass.hasEnvironmentMapping() )
 			{
