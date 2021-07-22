@@ -108,6 +108,16 @@ namespace castor3d
 		return result;
 	}
 
+	bool InstantiationComponent::isInstanced( MaterialSPtr material )const
+	{
+		return doCheckInstanced( getRefCount( material ) );
+	}
+
+	bool InstantiationComponent::isInstanced()const
+	{
+		return doCheckInstanced( getMaxRefCount() );
+	}
+
 	uint32_t InstantiationComponent::getMaxRefCount()const
 	{
 		uint32_t count = 0;

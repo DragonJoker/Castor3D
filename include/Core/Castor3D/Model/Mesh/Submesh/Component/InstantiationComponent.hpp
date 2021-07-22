@@ -94,10 +94,14 @@ namespace castor3d
 		 *\param[in]	material	Le matériau.
 		 *\return		\p true si le nombre d'instances pour le matériau donné est plus grand que le seuil.
 		 */
-		inline bool isInstanced( MaterialSPtr material )const
-		{
-			return getRefCount( material ) >= getThreshold();
-		}
+		C3D_API bool isInstanced( MaterialSPtr material )const;
+		/**
+		 *\~english
+		 *\return		\p true if the max instance count is greater than the threshold.
+		 *\~french
+		 *\return		\p true si le nombre d'instances max est plus grand que le seuil.
+		 */
+		C3D_API bool isInstanced()const;
 		/**
 		 *\~english
 		 *\return		The maximum instances count, amongst all materials.
