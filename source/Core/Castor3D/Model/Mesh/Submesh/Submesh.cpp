@@ -173,6 +173,12 @@ namespace castor3d
 		{
 			m_initialised = true;
 
+			if ( m_instantiation )
+			{
+				// Make sure instantiation is initialised, for the components that need it.
+				m_instantiation->initialise( device );
+			}
+
 			for ( auto & component : m_components )
 			{
 				m_initialised = m_initialised && component.second->initialise( device );
