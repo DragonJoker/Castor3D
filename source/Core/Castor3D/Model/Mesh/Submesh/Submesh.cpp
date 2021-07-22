@@ -162,7 +162,6 @@ namespace castor3d
 			for ( auto & component : m_components )
 			{
 				component.second->initialise( device );
-				component.second->fill( device );
 				component.second->upload();
 			}
 

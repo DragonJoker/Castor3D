@@ -114,10 +114,6 @@ namespace castor3d
 		m_animLayouts.clear();
 	}
 
-	void MorphComponent::doFill( RenderDevice const & device )
-	{
-	}
-
 	void MorphComponent::doUpload()
 	{
 		if ( getOwner()->hasVertexBuffer() )

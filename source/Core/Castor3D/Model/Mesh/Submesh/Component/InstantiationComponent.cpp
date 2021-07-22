@@ -46,18 +46,8 @@ namespace castor3d
 		if ( doCheckInstanced( data.count ) )
 		{
 			data.data.resize( data.count );
-			getOwner()->getOwner()->getScene()->getListener().postEvent( makeGpuFunctorEvent( EventType::eQueueRender
-				, [this]( RenderDevice const & device )
-				{
-					doFill( device );
-				} ) );
 			auto & mulData = datas[5];
 			mulData.data.resize( data.count * 6u );
-			getOwner()->getOwner()->getScene()->getListener().postEvent( makeGpuFunctorEvent( EventType::eQueueRender
-				, [this]( RenderDevice const & device )
-				{
-					doFill( device );
-				} ) );
 		}
 
 		return result;
@@ -263,10 +253,6 @@ namespace castor3d
 				data.buffer.reset();
 			}
 		}
-	}
-
-	void InstantiationComponent::doFill( RenderDevice const & device )
-	{
 	}
 
 	void InstantiationComponent::doUpload()

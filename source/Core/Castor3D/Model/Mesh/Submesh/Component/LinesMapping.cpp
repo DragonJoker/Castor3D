@@ -153,10 +153,6 @@ namespace castor3d
 		m_lines.clear();
 	}
 
-	void LinesMapping::doFill( RenderDevice const & device )
-	{
-	}
-
 	void LinesMapping::doUpload()
 	{
 		auto count = uint32_t( m_lines.size() * 2 );
