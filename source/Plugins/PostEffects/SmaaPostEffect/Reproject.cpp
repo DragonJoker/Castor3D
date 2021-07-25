@@ -144,7 +144,8 @@ namespace smaa
 		, crg::ImageViewIdArray const & currentColourViews
 		, crg::ImageViewIdArray const & previousColourViews
 		, crg::ImageViewId const * velocityView
-		, SmaaConfig const & config )
+		, SmaaConfig const & config
+		, bool const * enabled )
 		: m_device{ device }
 		, m_graph{ renderTarget.getGraph() }
 		, m_currentColourViews{ currentColourViews }
@@ -167,7 +168,7 @@ namespace smaa
 				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) }
 		, m_pass{ m_graph.createPass( "SmaaReproject"
-			, [this, &device, &renderTarget, &config, &currentColourViews]( crg::FramePass const & pass
+			, [this, &device, &renderTarget, &config, &currentColourViews, enabled]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -177,6 +178,7 @@ namespace smaa
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.passIndex( &config.subsampleIndex )
+					.enabled( enabled )
 					.build( pass, context, graph, config.maxSubsampleIndices );
 				device.renderSystem.getEngine()->registerTimer( "SMAA"
 					, result->getTimer() );

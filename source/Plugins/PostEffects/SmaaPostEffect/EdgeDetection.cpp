@@ -81,7 +81,8 @@ namespace smaa
 		, castor3d::RenderTarget & renderTarget
 		, castor3d::RenderDevice const & device
 		, SmaaConfig const & config
-		, std::unique_ptr< ast::Shader > pixelShader )
+		, std::unique_ptr< ast::Shader > pixelShader
+		, bool const * enabled )
 		: m_device{ device }
 		, m_graph{ renderTarget.getGraph() }
 		, m_config{ config }
@@ -118,7 +119,7 @@ namespace smaa
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_pass{ m_graph.createPass( "SmaaEdge"
-			, [this, &device, &renderTarget]( crg::FramePass const & pass
+			, [this, &device, &renderTarget, enabled]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -133,6 +134,7 @@ namespace smaa
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.depthStencilState( dsState )
+					.enabled( enabled )
 					.build( pass, context, graph );
 				device.renderSystem.getEngine()->registerTimer( "SMAA"
 					, result->getTimer() );

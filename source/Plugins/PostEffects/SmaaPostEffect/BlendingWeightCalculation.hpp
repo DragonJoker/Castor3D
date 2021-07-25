@@ -21,7 +21,8 @@ namespace smaa
 			, castor3d::RenderDevice const & device
 			, crg::ImageViewId const & edgeDetectionView
 			, crg::ImageViewId const & stencilView
-			, SmaaConfig const & config );
+			, SmaaConfig const & config
+			, bool const * enabled );
 		~BlendingWeightCalculation();
 		void cpuUpdate( castor::Point4f const & subsampleIndices );
 		void accept( castor3d::PipelineVisitorBase & visitor );
