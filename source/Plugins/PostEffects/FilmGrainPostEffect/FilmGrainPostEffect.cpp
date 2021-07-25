@@ -236,8 +236,36 @@ namespace film_grain
 
 	void PostEffect::update( castor3d::CpuUpdater & updater )
 	{
-		m_time += updater.time.count();
-		m_configUbo.getData().m_time = ( m_time % NoiseMapCount ) / float( NoiseMapCount );
+		static auto const defaultTime = 25_ms;
+		auto time = std::chrono::duration_cast< Milliseconds >( m_timer.getElapsed() );
+
+		if ( m_firstUpdate )
+		{
+			time = 0_ms;
+			m_firstUpdate = false;
+		}
+
+		time = updater.tslf > 0_ms
+			? updater.tslf
+			: time;
+
+		if ( time > 0_ms )
+		{
+			m_time += time;
+
+			while ( m_time >= defaultTime )
+			{
+				m_time -= defaultTime;
+				++m_timeIndex;
+			}
+
+			if ( m_timeIndex >= NoiseMapCount )
+			{
+				m_timeIndex -= NoiseMapCount;
+			}
+
+			m_configUbo.getData().m_time = m_timeIndex / float( NoiseMapCount );
+		}
 	}
 
 	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
@@ -265,10 +293,11 @@ namespace film_grain
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, m_target->data->info.format
-			, castor3d::makeExtent3D( m_renderTarget.getSize() )
+			, castor3d::makeExtent3D( castor3d::getSafeBandedSize( m_renderTarget.getSize() ) )
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } );
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
+				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) } );
 		m_resultView = m_renderTarget.getGraph().createView( crg::ImageViewData{ "FGRes"
 			, m_resultImg
 			, 0u
@@ -309,9 +338,21 @@ namespace film_grain
 
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
-					.renderSize( castor3d::makeExtent2D( m_renderTarget.getSize() ) )
+					.renderSize( castor3d::makeExtent2D( castor3d::getSafeBandedSize( m_renderTarget.getSize() ) ) )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
+					.enabled( &isEnabled() )
+					.recordDisabledInto( [this, &context, &graph]( crg::RunnablePass const & runnable
+						, VkCommandBuffer commandBuffer
+						, uint32_t index )
+						{
+							doCopyImage( graph
+								, runnable
+								, commandBuffer
+								, index
+								, *m_target
+								, m_resultView );
+						} )
 					.build( pass, context, graph );
 				device.renderSystem.getEngine()->registerTimer( "FilmGrain"
 					, result->getTimer() );
