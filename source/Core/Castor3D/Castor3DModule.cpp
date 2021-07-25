@@ -5,9 +5,10 @@
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
-CU_ImplementExportedOwnedBy( castor3d::Engine, Engine )
+#include <RenderGraph/FramePassTimer.hpp>
 
-using namespace castor;
+CU_ImplementExportedOwnedBy( castor3d::Engine, Engine )
+CU_ImplementCUSmartPtr( castor3d, FramePassTimer )
 
 namespace castor3d
 {

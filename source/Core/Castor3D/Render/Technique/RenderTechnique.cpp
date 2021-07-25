@@ -11,7 +11,6 @@
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
-#include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
@@ -38,7 +37,7 @@
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 
-using namespace castor;
+#include <RenderGraph/FramePassTimer.hpp>
 
 namespace castor3d
 {
@@ -74,7 +73,7 @@ namespace castor3d
 						|| camera.isVisible( light->getBoundingBox()
 							, light->getParent()->getDerivedTransformationMatrix() ) ) )
 				{
-					lights.emplace( point::distanceSquared( camera.getParent()->getDerivedPosition()
+					lights.emplace( castor::point::distanceSquared( camera.getParent()->getDerivedPosition()
 						, light->getParent()->getDerivedPosition() )
 						, light );
 				}
@@ -271,13 +270,13 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	RenderTechnique::RenderTechnique( String const & name
+	RenderTechnique::RenderTechnique( castor::String const & name
 		, RenderTarget & renderTarget
 		, RenderDevice const & device
 		, Parameters const & parameters
 		, SsaoConfig const & ssaoConfig )
-		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
-		, Named{ name }
+		: castor::OwnedBy< Engine >{ *device.renderSystem.getEngine() }
+		, castor::Named{ name }
 		, m_renderTarget{ renderTarget }
 		, m_device{ device }
 		, m_targetSize{ m_renderTarget.getSize() }
@@ -364,7 +363,7 @@ namespace castor3d
 			, m_renderTarget.getScene()->getVoxelConeTracingConfig() ) }
 		, m_lpvResult{ castor::makeUnique< LightVolumePassResult >( getOwner()->getGraphResourceHandler()
 			, m_device
-			, cuEmptyString
+			, castor::cuEmptyString
 			, getEngine()->getLpvGridSize() ) }
 		, m_llpvResult{ doCreateLLPVResult( getOwner()->getGraphResourceHandler()
 			, m_device ) }
@@ -434,7 +433,7 @@ namespace castor3d
 		, m_signalFinished{ m_device->createSemaphore( "RenderTechnique" ) }
 		, m_clearLpvGraph{ doCreateClearLpvCommands( getOwner()->getGraphResourceHandler(), device, getName(), *m_lpvResult, m_llpvResult ) }
 		, m_clearLpvRunnable{ m_clearLpvGraph.compile( m_device.makeContext() ) }
-		, m_particleTimer{ std::make_shared< RenderPassTimer >( device, cuT( "Particles" ), cuT( "Particles" ) ) }
+		, m_particleTimer{ castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Particles" ) ) }
 	{
 		m_colour.create();
 		m_depth.create();
@@ -1080,7 +1079,7 @@ namespace castor3d
 				m_particleTimer->updateCount( count );
 			}
 
-			RenderPassTimerBlock timerBlock{ m_particleTimer->start() };
+			auto timerBlock( m_particleTimer->start() );
 			updater.index = 0u;
 			updater.timer = m_particleTimer.get();
 

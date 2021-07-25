@@ -294,7 +294,7 @@ namespace castor3d
 		ashes::SemaphorePtr m_signalFinished;
 		crg::FrameGraph m_clearLpvGraph;
 		crg::RunnableGraphPtr m_clearLpvRunnable;
-		RenderPassTimerSPtr m_particleTimer;
+		FramePassTimerUPtr m_particleTimer;
 		ShadowMapLightTypeArray m_allShadowMaps;
 		ShadowMapLightTypeArray m_activeShadowMaps;
 		LightPropagationVolumesLightType m_lightPropagationVolumes;

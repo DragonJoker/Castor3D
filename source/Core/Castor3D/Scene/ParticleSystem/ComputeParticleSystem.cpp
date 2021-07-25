@@ -6,7 +6,6 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
-#include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -18,6 +17,8 @@
 #include <ashespp/Buffer/UniformBuffer.hpp>
 
 #include <CastorUtils/Graphics/PixelBuffer.hpp>
+
+#include <RenderGraph/FramePassTimer.hpp>
 
 #include <random>
 
