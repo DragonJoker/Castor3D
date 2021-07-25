@@ -899,7 +899,8 @@ namespace smaa
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewId const & edgeDetectionView
 		, crg::ImageViewId const & stencilView
-		, SmaaConfig const & config )
+		, SmaaConfig const & config
+		, bool const * enabled )
 		: m_device{ device }
 		, m_graph{ renderTarget.getGraph() }
 		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
@@ -932,7 +933,7 @@ namespace smaa
 		, m_stages{ makeShaderState( m_device, m_vertexShader )
 			, makeShaderState( m_device, m_pixelShader ) }
 		, m_pass{ renderTarget.getGraph().createPass( "SmaaBlendingWeight"
-			, [this, &device, &renderTarget, edgeDetectionView]( crg::FramePass const & pass
+			, [this, &device, &renderTarget, enabled, edgeDetectionView]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -947,6 +948,7 @@ namespace smaa
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.depthStencilState( dsState )
+					.enabled( enabled )
 					.build( pass, context, graph );
 				device.renderSystem.getEngine()->registerTimer( "SMAA"
 					, result->getTimer() );

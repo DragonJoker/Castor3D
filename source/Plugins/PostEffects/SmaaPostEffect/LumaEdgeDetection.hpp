@@ -17,7 +17,8 @@ namespace smaa
 			, castor3d::RenderDevice const & device
 			, crg::ImageViewId const & colourView
 			, crg::ImageViewId const * predication
-			, SmaaConfig const & config );
+			, SmaaConfig const & config
+			, bool const * enabled );
 
 	private:
 		crg::ImageViewId const & m_colourView;
