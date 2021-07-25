@@ -5,7 +5,6 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
-#include "Castor3D/Render/RenderPassTimer.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 

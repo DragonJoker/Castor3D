@@ -1,7 +1,6 @@
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
 
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Render/RenderPassTimer.hpp"
 
 #include <ashespp/Buffer/StagingBuffer.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>

@@ -13,7 +13,6 @@
 #include "Castor3D/Overlay/OverlayCategory.hpp"
 #include "Castor3D/Overlay/OverlayRenderer.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
-#include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
 #include "Castor3D/Render/PostEffect/PostEffect.hpp"
@@ -27,6 +26,7 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
+#include <RenderGraph/FramePassTimer.hpp>
 #include <RenderGraph/RunnablePasses/ImageCopy.hpp>
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
@@ -324,7 +324,7 @@ namespace castor3d
 			doInitCombineProgram();
 			m_initialised = doInitialiseTechnique( device );
 
-			m_overlaysTimer = std::make_shared< RenderPassTimer >( device, cuT( "Overlays" ), cuT( "Overlays" ) );
+			m_overlaysTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Overlays" ) );
 			auto * previousPass = &m_renderTechnique->getLastPass();
 
 			if ( !m_hdrPostEffects.empty() )

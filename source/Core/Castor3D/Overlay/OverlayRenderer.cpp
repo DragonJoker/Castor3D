@@ -27,6 +27,8 @@
 #include <CastorUtils/Graphics/Rectangle.hpp>
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
+#include <RenderGraph/FramePassTimer.hpp>
+
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 
 #include <ShaderWriter/Source.hpp>
@@ -540,7 +542,7 @@ namespace castor3d
 		}
 	}
 
-	void OverlayRenderer::beginPrepare( RenderPassTimer const & timer
+	void OverlayRenderer::beginPrepare( FramePassTimer const & timer
 		, crg::SemaphoreWaitArray const & toWait )
 	{
 		m_toWait = &toWait;
@@ -557,7 +559,7 @@ namespace castor3d
 			, VK_SUBPASS_CONTENTS_INLINE );
 	}
 
-	void OverlayRenderer::endPrepare( RenderPassTimer const & timer )
+	void OverlayRenderer::endPrepare( FramePassTimer const & timer )
 	{
 		m_commandBuffer->endRenderPass();
 		timer.endPass( *m_commandBuffer );
@@ -582,10 +584,10 @@ namespace castor3d
 		m_sizeChanged = false;
 	}
 
-	crg::SemaphoreWait OverlayRenderer::render( RenderPassTimer & timer )
+	crg::SemaphoreWait OverlayRenderer::render( FramePassTimer & timer )
 	{
 		auto & queue = *m_device.graphicsQueue;
-		RenderPassTimerBlock timerBlock{ timer.start() };
+		auto timerBlock( timer.start() );
 		timerBlock->notifyPassRender();
 		std::vector< VkSemaphore > semaphores;
 		std::vector< VkPipelineStageFlags > dstStageMasks;

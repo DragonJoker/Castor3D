@@ -259,7 +259,7 @@ namespace castor3d
 			, size_t size
 			, uint32_t offset
 			, VkPipelineStageFlags flags
-			, RenderPassTimer const & timer
+			, FramePassTimer const & timer
 			, uint32_t index )const;
 		/**
 		 *\~english
@@ -291,7 +291,7 @@ namespace castor3d
 			, ashes::ByteArray const & data
 			, uint32_t offset
 			, VkPipelineStageFlags flags
-			, RenderPassTimer const & timer
+			, FramePassTimer const & timer
 			, uint32_t index )const
 		{
 			return upload( stagingBuffer
@@ -334,7 +334,7 @@ namespace castor3d
 			, size_t size
 			, uint32_t offset
 			, VkPipelineStageFlags flags
-			, RenderPassTimer const & timer
+			, FramePassTimer const & timer
 			, uint32_t index )const;
 		/**
 		 *\~english
@@ -363,7 +363,7 @@ namespace castor3d
 			, ashes::ByteArray const & data
 			, uint32_t offset
 			, VkPipelineStageFlags flags
-			, RenderPassTimer const & timer
+			, FramePassTimer const & timer
 			, uint32_t index )const
 		{
 			return upload( stagingBuffer
@@ -408,7 +408,7 @@ namespace castor3d
 			, size_t size
 			, uint32_t offset
 			, VkPipelineStageFlags flags
-			, RenderPassTimer const & timer
+			, FramePassTimer const & timer
 			, uint32_t index )const;
 		/**
 		 *\~english
@@ -440,7 +440,7 @@ namespace castor3d
 			, ashes::ByteArray & data
 			, uint32_t offset
 			, VkPipelineStageFlags flags
-			, RenderPassTimer const & timer
+			, FramePassTimer const & timer
 			, uint32_t index )const
 		{
 			data.resize( size_t( m_elemCount ) * m_elemSize );

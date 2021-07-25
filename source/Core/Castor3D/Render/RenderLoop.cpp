@@ -116,20 +116,10 @@ namespace castor3d
 			} );
 	}
 
-	uint32_t RenderLoop::registerTimer( RenderPassTimer & timer )
-	{
-		return m_debugOverlays->registerTimer( timer );
-	}
-
 	uint32_t RenderLoop::registerTimer( castor::String const & category
 		, crg::FramePassTimer & timer )
 	{
 		return m_debugOverlays->registerTimer( category, timer );
-	}
-
-	void RenderLoop::unregisterTimer( RenderPassTimer & timer )
-	{
-		m_debugOverlays->unregisterTimer( timer );
 	}
 
 	void RenderLoop::unregisterTimer( castor::String const & category

@@ -102,28 +102,8 @@ namespace castor3d
 		 *\param[in]	timer	Le timer à enregistrer.
 		 *\return		L'ID de la requête.
 		 */
-		uint32_t registerTimer( RenderPassTimer & timer );
-		/**
-		 *\~english
-		 *\brief		Registers a render pass timer.
-		 *\param[in]	timer	The timer to register.
-		 *\return		The query ID.
-		 *\~french
-		 *\brief		Enregistre un timer de passe de rendu.
-		 *\param[in]	timer	Le timer à enregistrer.
-		 *\return		L'ID de la requête.
-		 */
 		uint32_t registerTimer( castor::String const & category
-			, crg::FramePassTimer & timer );
-		/**
-		 *\~english
-		 *\brief		Unregisters a render pass timer.
-		 *\param[in]	timer	The timer to unregister.
-		 *\~french
-		 *\brief		Désenregistre un timer de passe de rendu.
-		 *\param[in]	timer	Le timer à désenregistrer.
-		 */
-		void unregisterTimer( RenderPassTimer & timer );
+			, FramePassTimer & timer );
 		/**
 		 *\~english
 		 *\brief		Unregisters a render pass timer.
@@ -133,7 +113,7 @@ namespace castor3d
 		 *\param[in]	timer	Le timer à désenregistrer.
 		 */
 		void unregisterTimer( castor::String const & category
-			, crg::FramePassTimer & timer );
+			, FramePassTimer & timer );
 		/**
 		 *\~english
 		 *\return		The debug overlays shown status.
@@ -254,10 +234,8 @@ namespace castor3d
 			~PassOverlays();
 			void retrieveGpuTime();
 			void update();
-			void addTimer( RenderPassTimer & timer );
-			void addTimer( crg::FramePassTimer & timer );
-			bool removeTimer( RenderPassTimer & timer );
-			bool removeTimer( crg::FramePassTimer & timer );
+			void addTimer( FramePassTimer & timer );
+			bool removeTimer( FramePassTimer & timer );
 
 			inline castor::Nanoseconds getGpuTime()
 			{
@@ -279,8 +257,7 @@ namespace castor3d
 			bool const & m_detailed;
 			castor::String m_name;
 			uint32_t m_index;
-			std::vector< RenderPassTimer * > m_timers;
-			std::map< crg::FramePassTimer *, crg::OnFramePassDestroyConnection > m_crgtimers;
+			std::map< FramePassTimer *, crg::OnFramePassDestroyConnection > m_timers;
 			PanelOverlaySPtr m_panel;
 			TextOverlaySPtr m_passName;
 			TimeOverlays m_cpu;
@@ -309,10 +286,8 @@ namespace castor3d
 				, bool const & detailed );
 			~CategoryOverlays();
 			void initialise( uint32_t offset );
-			void addTimer( RenderPassTimer & timer );
-			void addTimer( crg::FramePassTimer & timer );
-			bool removeTimer( RenderPassTimer & timer );
-			bool removeTimer( crg::FramePassTimer & timer );
+			void addTimer( FramePassTimer & timer );
+			bool removeTimer( FramePassTimer & timer );
 			void retrieveGpuTime();
 			void update();
 			void setVisible( bool visible );
