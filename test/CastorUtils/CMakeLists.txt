@@ -103,7 +103,7 @@ if( GLM_FOUND )
 	)
 	target_link_libraries( ${PROJECT_NAME}
 		PRIVATE
-			glm
+			glm::glm
 	)
 endif()
 if( OPENCL_FOUND )

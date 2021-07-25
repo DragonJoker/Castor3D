@@ -147,7 +147,14 @@ namespace castor3d
 		, SceneRenderPassDesc const & desc )
 		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
 		, Named{ name }
-		, crg::RenderPass{ pass, context, graph, makeExtent2D( desc.m_size ) }
+		, crg::RenderPass{ pass
+			, context
+			, graph
+			, { [this](){ doSubInitialise(); }
+				, [this]( VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( cb, i ); }
+				, crg::defaultV< crg::RunnablePass::RecordCallback >
+				, GetSubpassContentsCallback( [this](){ return VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS; } ) }
+			, makeExtent2D( desc.m_size ) }
 		, m_device{ device }
 		, m_renderSystem{ m_device.renderSystem }
 		, m_matrixUbo{ desc.m_matrixUbo }

@@ -123,9 +123,9 @@ namespace castor3d
 		C3D_API void accept( PipelineVisitorBase & visitor );
 
 	protected:
-		C3D_API void doSubInitialise()override;
+		C3D_API void doSubInitialise();
 		C3D_API void doSubRecordInto( VkCommandBuffer commandBuffer
-			, uint32_t index )override;
+			, uint32_t index );
 
 	private:
 		class PipelineHolder

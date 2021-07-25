@@ -634,7 +634,14 @@ namespace castor3d
 		, ShadowMapResult const & smDirectionalResult
 		, ShadowMapResult const & smPointResult
 		, ShadowMapResult const & smSpotResult )
-		: crg::RunnablePass{ pass, context, graph, 1u, false }
+		: crg::RunnablePass{ pass
+			, context
+			, graph
+			, { [this](){ doInitialise(); }
+				, GetSemaphoreWaitFlagsCallback( [this](){ return VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT; } )
+				, [this]( VkCommandBuffer cb, uint32_t i ){ doRecordInto( cb, i ); } }
+			, 1u
+			, false }
 		, m_device{ device }
 		, m_scene{ scene }
 		, m_lpResult{ lpResult }
