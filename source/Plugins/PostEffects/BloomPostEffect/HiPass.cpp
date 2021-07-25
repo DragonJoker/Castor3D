@@ -48,7 +48,8 @@ namespace Bloom
 							, std::nullopt
 							, std::nullopt
 							, std::nullopt
-							, enabled } }
+							, enabled
+							, [this]( VkCommandBuffer cb, uint32_t i ){ doRecordInto( cb, i ); } } }
 #if !Bloom_DebugHiPass
 				, m_viewDesc{ pass.images.back().view() }
 				, m_imageDesc{ m_viewDesc.data->image }
@@ -79,10 +80,8 @@ namespace Bloom
 
 		private:
 			void doRecordInto( VkCommandBuffer commandBuffer
-				, uint32_t index )override
+				, uint32_t index )
 			{
-				crg::RenderQuad::doRecordInto( commandBuffer, index );
-
 #if !Bloom_DebugHiPass
 				auto const width = int32_t( m_imageDesc.data->info.extent.width );
 				auto const height = int32_t( m_imageDesc.data->info.extent.height );

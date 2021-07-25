@@ -168,14 +168,9 @@ namespace castor3d
 		void resetCommandBuffer();
 
 	protected:
-		void doInitialise()override;
+		void doInitialise();
 		void doRecordInto( VkCommandBuffer commandBuffer
-			, uint32_t index )override;
-
-		VkPipelineStageFlags doGetSemaphoreWaitFlags()const override
-		{
-			return VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-		}
+			, uint32_t index );
 
 	private:
 		LightRenderPass doCreateRenderPass( bool blend

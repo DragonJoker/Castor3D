@@ -36,17 +36,18 @@ namespace castor3d
 			LpvClear( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
-				: crg::RunnablePass{ pass, context, graph }
+				: crg::RunnablePass{ pass
+					, context
+					, graph
+					, { [](){}
+						, GetSemaphoreWaitFlagsCallback( [this](){ return VK_PIPELINE_STAGE_TRANSFER_BIT; } )
+						, [this]( VkCommandBuffer cb, uint32_t i ){ doRecordInto( cb, i ); } } }
 			{
 			}
 
-		protected:
-			void doInitialise()override
-			{
-			}
-
+		private:
 			void doRecordInto( VkCommandBuffer commandBuffer
-				, uint32_t index )override
+				, uint32_t index )
 			{
 				auto clearValue = transparentBlackClearColor.color;
 
@@ -62,11 +63,6 @@ namespace castor3d
 						, 1u
 						, &view.data->info.subresourceRange );
 				}
-			}
-
-			VkPipelineStageFlags doGetSemaphoreWaitFlags()const override
-			{
-				return VK_PIPELINE_STAGE_TRANSFER_BIT;
 			}
 		};
 
