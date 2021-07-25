@@ -6,7 +6,6 @@
 #include "Castor3D/Overlay/BorderPanelOverlay.hpp"
 #include "Castor3D/Overlay/PanelOverlay.hpp"
 #include "Castor3D/Overlay/TextOverlay.hpp"
-#include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
 #include <ashespp/Core/Device.hpp>
@@ -17,8 +16,6 @@
 #include <iomanip>
 
 CU_ImplementCUSmartPtr( castor3d, DebugOverlays )
-
-using namespace castor;
 
 namespace castor3d
 {
@@ -35,8 +32,8 @@ namespace castor3d
 		, m_counts{ std::make_unique< DebugPanelsT< uint32_t > >( cuT( "Counts" ), m_panel, cache ) }
 	{
 		auto & materials = m_cache.getEngine()->getMaterialCache();
-		m_panel->setPixelPosition( Position{ 0, 0 } );
-		m_panel->setPixelSize( Size{ 320, 20 } );
+		m_panel->setPixelPosition( castor::Position{ 0, 0 } );
+		m_panel->setPixelSize( castor::Size{ 320, 20 } );
 		m_panel->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ) );
 		m_panel->setVisible( true );
 	}
@@ -71,7 +68,7 @@ namespace castor3d
 		int y = m_times->updatePosition( 0 );
 		y = m_fps->updatePosition( y );
 		y = m_counts->updatePosition( y );
-		m_panel->setPixelSize( Size{ 320, uint32_t( y ) } );
+		m_panel->setPixelSize( castor::Size{ 320, uint32_t( y ) } );
 	}
 
 	void DebugOverlays::MainDebugPanel::addTimePanel( castor::String const & name
@@ -140,24 +137,24 @@ namespace castor3d
 			, nullptr
 			, m_panel->getOverlay().shared_from_this() )->getTextOverlay();
 
-		m_panel->setPixelPosition( Position{ 0, 20 + int32_t( 20 * index ) } );
+		m_panel->setPixelPosition( castor::Position{ 0, 20 + int32_t( 20 * index ) } );
 		auto posX = 0;
-		m_passName->setPixelPosition( Position{ posX, 0 } );
-		m_passName->setPixelSize( Size{ 250, 20 } );
+		m_passName->setPixelPosition( castor::Position{ posX, 0 } );
+		m_passName->setPixelSize( castor::Size{ 250, 20 } );
 		posX += 250;
-		m_cpu.name->setPixelPosition( Position{ posX, 0 } );
-		m_cpu.name->setPixelSize( Size{ 30, 20 } );
+		m_cpu.name->setPixelPosition( castor::Position{ posX, 0 } );
+		m_cpu.name->setPixelSize( castor::Size{ 30, 20 } );
 		posX += 30;
-		m_cpu.value->setPixelPosition( Position{ posX, 0 } );
-		m_cpu.value->setPixelSize( Size{ 75, 20 } );
+		m_cpu.value->setPixelPosition( castor::Position{ posX, 0 } );
+		m_cpu.value->setPixelSize( castor::Size{ 75, 20 } );
 		posX += 75;
-		m_gpu.name->setPixelPosition( Position{ posX, 0 } );
-		m_gpu.name->setPixelSize( Size{ 30, 20 } );
+		m_gpu.name->setPixelPosition( castor::Position{ posX, 0 } );
+		m_gpu.name->setPixelSize( castor::Size{ 30, 20 } );
 		posX += 30;
-		m_gpu.value->setPixelPosition( Position{ posX, 0 } );
-		m_gpu.value->setPixelSize( Size{ 75, 20 } );
+		m_gpu.value->setPixelPosition( castor::Position{ posX, 0 } );
+		m_gpu.value->setPixelSize( castor::Size{ 75, 20 } );
 		posX += 75;
-		m_panel->setPixelSize( Size{ uint32_t( posX ), 20 } );
+		m_panel->setPixelSize( castor::Size{ uint32_t( posX ), 20 } );
 
 		m_passName->setFont( cuT( "Arial20" ) );
 		m_cpu.name->setFont( cuT( "Arial10" ) );
@@ -206,22 +203,15 @@ namespace castor3d
 		m_cpu.time = 0_ns;
 		m_gpu.time = 0_ns;
 
-		for ( auto timer : m_timers )
-		{
-			m_cpu.time += timer->getCpuTime();
-			m_gpu.time += timer->getGpuTime();
-			timer->reset();
-		}
-
-		for ( auto & timer : m_crgtimers )
+		for ( auto & timer : m_timers )
 		{
 			m_cpu.time += timer.first->getCpuTime();
 			m_gpu.time += timer.first->getGpuTime();
 			timer.first->reset();
 		}
 
-		m_cpu.value->setCaption( makeStringStream() << m_cpu.time );
-		m_gpu.value->setCaption( makeStringStream() << m_gpu.time );
+		m_cpu.value->setCaption( castor::makeStringStream() << m_cpu.time );
+		m_gpu.value->setCaption( castor::makeStringStream() << m_gpu.time );
 
 		m_panel->setVisible( m_detailed );
 		m_passName->setVisible( m_detailed );
@@ -233,39 +223,24 @@ namespace castor3d
 
 	void DebugOverlays::PassOverlays::retrieveGpuTime()
 	{
-		for ( auto timer : m_timers )
-		{
-			timer->retrieveGpuTime();
-		}
-
-		for ( auto & timer : m_crgtimers )
+		for ( auto & timer : m_timers )
 		{
 			timer.first->retrieveGpuTime();
 		}
 	}
 
-	void DebugOverlays::PassOverlays::addTimer( RenderPassTimer & timer )
+	void DebugOverlays::PassOverlays::addTimer( FramePassTimer & timer )
 	{
-		m_timers.emplace_back( &timer );
-	}
-
-	void DebugOverlays::PassOverlays::addTimer( crg::FramePassTimer & timer )
-	{
-		m_crgtimers.emplace( &timer
-			, timer.onDestroy.connect( [this]( crg::FramePassTimer & timer )
+		m_timers.emplace( &timer
+			, timer.onDestroy.connect( [this]( FramePassTimer & timer )
 				{
 					removeTimer( timer );
 				} ) );
 	}
 
-	bool DebugOverlays::PassOverlays::removeTimer( RenderPassTimer & timer )
+	bool DebugOverlays::PassOverlays::removeTimer( FramePassTimer & timer )
 	{
-		auto it = std::find_if( m_timers.begin()
-			, m_timers.end()
-			, [&timer]( auto const & lookup )
-			{
-				return lookup == &timer;
-			} );
+		auto it = m_timers.find( &timer );
 
 		if ( it != m_timers.end() )
 		{
@@ -273,18 +248,6 @@ namespace castor3d
 		}
 
 		return m_timers.empty();
-	}
-
-	bool DebugOverlays::PassOverlays::removeTimer( crg::FramePassTimer & timer )
-	{
-		auto it = m_crgtimers.find( &timer );
-
-		if ( it != m_crgtimers.end() )
-		{
-			m_crgtimers.erase( it );
-		}
-
-		return m_crgtimers.empty();
 	}
 
 	//*********************************************************************************************
@@ -326,25 +289,25 @@ namespace castor3d
 			, nullptr
 			, m_container->getOverlay().shared_from_this() )->getTextOverlay();
 
-		m_container->setPixelPosition( Position{ 330, 0 } );
-		m_firstLinePanel->setPixelPosition( Position{ m_posX, 0 } );
-		m_name->setPixelPosition( Position{ 0, 0 } );
-		m_name->setPixelSize( Size{ 250, 20 } );
+		m_container->setPixelPosition( castor::Position{ 330, 0 } );
+		m_firstLinePanel->setPixelPosition( castor::Position{ m_posX, 0 } );
+		m_name->setPixelPosition( castor::Position{ 0, 0 } );
+		m_name->setPixelSize( castor::Size{ 250, 20 } );
 		m_posX += 250;
-		m_cpu.name->setPixelPosition( Position{ m_posX, 0 } );
-		m_cpu.name->setPixelSize( Size{ 30, 20 } );
+		m_cpu.name->setPixelPosition( castor::Position{ m_posX, 0 } );
+		m_cpu.name->setPixelSize( castor::Size{ 30, 20 } );
 		m_posX += 30;
-		m_cpu.value->setPixelPosition( Position{ m_posX, 0 } );
-		m_cpu.value->setPixelSize( Size{ 75, 20 } );
+		m_cpu.value->setPixelPosition( castor::Position{ m_posX, 0 } );
+		m_cpu.value->setPixelSize( castor::Size{ 75, 20 } );
 		m_posX += 75;
-		m_gpu.name->setPixelPosition( Position{ m_posX, 0 } );
-		m_gpu.name->setPixelSize( Size{ 30, 20 } );
+		m_gpu.name->setPixelPosition( castor::Position{ m_posX, 0 } );
+		m_gpu.name->setPixelSize( castor::Size{ 30, 20 } );
 		m_posX += 30;
-		m_gpu.value->setPixelPosition( Position{ m_posX, 0 } );
-		m_gpu.value->setPixelSize( Size{ 75, 20 } );
+		m_gpu.value->setPixelPosition( castor::Position{ m_posX, 0 } );
+		m_gpu.value->setPixelSize( castor::Size{ 75, 20 } );
 		m_posX += 75;
-		m_container->setPixelSize( Size{ uint32_t( m_posX ), 20 } );
-		m_firstLinePanel->setPixelSize( Size{ uint32_t( m_posX ), 20 } );
+		m_container->setPixelSize( castor::Size{ uint32_t( m_posX ), 20 } );
+		m_firstLinePanel->setPixelSize( castor::Size{ uint32_t( m_posX ), 20 } );
 
 		m_name->setFont( cuT( "Arial20" ) );
 		m_cpu.name->setFont( cuT( "Arial10" ) );
@@ -378,8 +341,8 @@ namespace castor3d
 
 	void DebugOverlays::CategoryOverlays::initialise( uint32_t offset )
 	{
-		m_container->setPixelPosition( Position{ 330, int32_t( 20 * offset ) } );
-		m_container->setPixelSize( Size{ uint32_t( m_posX )
+		m_container->setPixelPosition( castor::Position{ 330, int32_t( 20 * offset ) } );
+		m_container->setPixelSize( castor::Size{ uint32_t( m_posX )
 			, ( m_detailed ? getPanelCount() : 1u ) * 20u } );
 	}
 
@@ -399,7 +362,7 @@ namespace castor3d
 		}
 	}
 
-	void DebugOverlays::CategoryOverlays::addTimer( RenderPassTimer & timer )
+	void DebugOverlays::CategoryOverlays::addTimer( FramePassTimer & timer )
 	{
 		auto it = std::find_if( m_passes.begin()
 			, m_passes.end()
@@ -423,48 +386,7 @@ namespace castor3d
 		( *it )->addTimer( timer );
 	}
 
-	void DebugOverlays::CategoryOverlays::addTimer( crg::FramePassTimer & timer )
-	{
-		auto it = std::find_if( m_passes.begin()
-			, m_passes.end()
-			, [&timer]( auto const & lookup )
-			{
-				return lookup->getName() == timer.getName();
-			} );
-
-		if ( it == m_passes.end() )
-		{
-			auto index = uint32_t( m_passes.size() );
-			m_passes.emplace_back( std::make_unique< PassOverlays >( m_cache
-				, m_container->getOverlay().shared_from_this()
-				, m_categoryName
-				, timer.getName()
-				, index
-				, m_detailed ) );
-			it = m_passes.begin() + m_passes.size() - 1;
-		}
-
-		( *it )->addTimer( timer );
-	}
-
-	bool DebugOverlays::CategoryOverlays::removeTimer( RenderPassTimer & timer )
-	{
-		auto it = std::find_if( m_passes.begin()
-			, m_passes.end()
-			, [&timer]( auto const & lookup )
-			{
-				return lookup->getName() == timer.getName();
-			} );
-
-		if ( it != m_passes.end() )
-		{
-			( *it )->removeTimer( timer );
-		}
-
-		return m_passes.empty();
-	}
-
-	bool DebugOverlays::CategoryOverlays::removeTimer( crg::FramePassTimer & timer )
+	bool DebugOverlays::CategoryOverlays::removeTimer( FramePassTimer & timer )
 	{
 		auto it = std::find_if( m_passes.begin()
 			, m_passes.end()
@@ -493,8 +415,8 @@ namespace castor3d
 			m_gpu.time += pass->getGpuTime();
 		}
 
-		m_cpu.value->setCaption( makeStringStream() << m_cpu.time );
-		m_gpu.value->setCaption( makeStringStream() << m_gpu.time );
+		m_cpu.value->setCaption( castor::makeStringStream() << m_cpu.time );
+		m_gpu.value->setCaption( castor::makeStringStream() << m_gpu.time );
 	}
 
 	void DebugOverlays::CategoryOverlays::retrieveGpuTime()
@@ -566,25 +488,8 @@ namespace castor3d
 		return m_renderInfo;
 	}
 
-	uint32_t DebugOverlays::registerTimer( RenderPassTimer & timer )
-	{
-		auto & cache = getEngine()->getOverlayCache();
-		auto it = m_renderPasses.find( timer.getCategory() );
-
-		if ( it == m_renderPasses.end() )
-		{
-			it = m_renderPasses.emplace( timer.getCategory()
-				, CategoryOverlays{ timer.getCategory(), cache, m_detailed } ).first;
-			it->second.setVisible( m_visible );
-		}
-
-		it->second.addTimer( timer );
-		m_dirty = true;
-		return m_queriesCount++;
-	}
-
 	uint32_t DebugOverlays::registerTimer( castor::String const & category
-		, crg::FramePassTimer & timer )
+		, FramePassTimer & timer )
 	{
 		auto & cache = getEngine()->getOverlayCache();
 		auto it = m_renderPasses.find( category );
@@ -601,22 +506,8 @@ namespace castor3d
 		return m_queriesCount++;
 	}
 
-	void DebugOverlays::unregisterTimer( RenderPassTimer & timer )
-	{
-		m_dirty = true;
-		auto it = m_renderPasses.find( timer.getCategory() );
-
-		if ( it != m_renderPasses.end() )
-		{
-			if ( it->second.removeTimer( timer ) )
-			{
-				m_renderPasses.erase( it );
-			}
-		}
-	}
-
 	void DebugOverlays::unregisterTimer( castor::String const & category
-		, crg::FramePassTimer & timer )
+		, FramePassTimer & timer )
 	{
 		m_dirty = true;
 		auto it = m_renderPasses.find( category );

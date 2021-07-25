@@ -3,7 +3,8 @@
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Overlay/PanelOverlay.hpp"
 #include "Castor3D/Overlay/TextOverlay.hpp"
-#include "Castor3D/Render/RenderPassTimer.hpp"
+
+#include <RenderGraph/FramePassTimer.hpp>
 
 #include <iomanip>
 

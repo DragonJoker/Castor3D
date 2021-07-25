@@ -629,24 +629,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Allows stopping a RenderPassTimer when an instance of this class goes out of scope.
-	*\~french
-	*\brief
-	*	Permet d'arrêter un RenderPassTimer lorsqu'une instance de cette classe sort du scope courant.
-	*/
-	class RenderPassTimerBlock;
-	/**
-	*\~english
-	*\brief
-	*	Class that holds data needed to compute a render pass times.
-	*\~french
-	*\brief
-	*	Classe englobant les données nécessaires au calcul des temps d'une passe de rendu.
-	*/
-	class RenderPassTimer;
-	/**
-	*\~english
-	*\brief
 	*	A pipeline to render specific nodes from a render pass.
 	*\~french
 	*\brief
@@ -747,7 +729,6 @@ namespace castor3d
 	CU_DeclareCUSmartPtr( castor3d, Picking, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, RenderDevice, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, RenderLoop, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, RenderPassTimer, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, RenderPipeline, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, RenderSystem, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, RenderTarget, C3D_API );
@@ -810,7 +791,7 @@ namespace castor3d
 		CameraSPtr camera;
 		uint32_t index{ 0u };
 		bool voxelConeTracing{ false };
-		RenderPassTimer * timer{ nullptr };
+		FramePassTimer * timer{ nullptr };
 		castor::Milliseconds time;
 		castor::Milliseconds total;
 	};
