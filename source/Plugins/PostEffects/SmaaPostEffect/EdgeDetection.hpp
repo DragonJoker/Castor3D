@@ -21,7 +21,8 @@ namespace smaa
 			, castor3d::RenderTarget & renderTarget
 			, castor3d::RenderDevice const & device
 			, SmaaConfig const & config
-			, std::unique_ptr< ast::Shader > pixelShader );
+			, std::unique_ptr< ast::Shader > pixelShader
+			, bool const * enabled );
 		void accept( castor3d::PipelineVisitorBase & visitor );
 
 		crg::ImageViewId const & getColourResult()const

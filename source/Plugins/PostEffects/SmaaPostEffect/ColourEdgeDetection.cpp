@@ -321,14 +321,16 @@ namespace smaa
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewId const & colourView
 		, crg::ImageViewId const * predication
-		, SmaaConfig const & config )
+		, SmaaConfig const & config
+		, bool const * enabled )
 		: EdgeDetection{ previousPass
 			, renderTarget
 			, device
 			, config
 			, ( predication
 				? doGetEdgeDetectionFPPredication( renderTarget.getSize(), config )
-				: doGetEdgeDetectionFPNoPredication( renderTarget.getSize(), config ) ) }
+				: doGetEdgeDetectionFPNoPredication( renderTarget.getSize(), config ) )
+			, enabled }
 		, m_colourView{ colourView }
 		, m_predicationView{ ( predication
 			? renderTarget.getGraph().createView( doCreatePredicationView( *predication ) )

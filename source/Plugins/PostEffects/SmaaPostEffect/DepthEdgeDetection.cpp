@@ -131,12 +131,14 @@ namespace smaa
 		, castor3d::RenderTarget & renderTarget
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewId const & depthView
-		, SmaaConfig const & config )
+		, SmaaConfig const & config
+		, bool const * enabled )
 		: EdgeDetection{ previousPass
 			, renderTarget
 			, device
 			, config
-			, doGetEdgeDetectionFP( *renderTarget.getEngine(), renderTarget.getSize(), config ) }
+			, doGetEdgeDetectionFP( *renderTarget.getEngine(), renderTarget.getSize(), config )
+			, enabled }
 		, m_depthView{ renderTarget.getGraph().createView( doCreateDepthView( depthView ) ) }
 		, m_sourceView{ depthView }
 	{
