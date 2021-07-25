@@ -51,10 +51,10 @@ namespace castor3d
 		C3D_API void update( GpuUpdater & updater );
 
 	private:
-		void doSubInitialise()override;
+		void doSubInitialise();
 		void doSubRecordInto( VkCommandBuffer commandBuffer
-			, uint32_t index )override;
-		bool doIsEnabled()const override;
+			, uint32_t index );
+		bool doIsEnabled()const;
 
 		void doInitialiseVertexBuffer();
 		ashes::PipelineShaderStageCreateInfoArray doInitialiseShader();

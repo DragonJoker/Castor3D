@@ -127,10 +127,10 @@ namespace castor3d
 			, uint32_t index
 			, uint32_t gridSize );
 
-	protected:
-		C3D_API void doSubInitialise()override;
-		C3D_API void doSubRecordInto( VkCommandBuffer commandBuffer
-			, uint32_t index )override;
+	private:
+		void doSubInitialise();
+		void doSubRecordInto( VkCommandBuffer commandBuffer
+			, uint32_t index );
 
 	private:
 		class PipelineHolder

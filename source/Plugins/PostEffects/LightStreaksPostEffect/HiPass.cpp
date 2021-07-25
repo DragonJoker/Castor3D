@@ -49,7 +49,8 @@ namespace light_streaks
 						, std::nullopt
 						, std::nullopt
 						, std::nullopt
-						, enabled } }
+						, enabled
+						, [this]( VkCommandBuffer cb, uint32_t i ){ doRecordInto( cb, i ); } } }
 				, m_viewDesc{ pass.images.back().view() }
 				, m_imageDesc{ m_viewDesc.data->image }
 				, m_image{ graph.createImage( m_imageDesc ) }
@@ -73,9 +74,8 @@ namespace light_streaks
 
 		private:
 			void doRecordInto( VkCommandBuffer commandBuffer
-				, uint32_t index )override
+				, uint32_t index )
 			{
-				crg::RenderQuad::doRecordInto( commandBuffer, index );
 				auto const imageViewType = VkImageViewType( m_imageDesc.data->info.imageType );
 				auto const aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
 				auto transition = getTransition( index, m_viewDesc );

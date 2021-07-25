@@ -26,7 +26,18 @@ namespace castor3d
 		, SceneBackground & background
 		, VkExtent2D const & size
 		, bool usesDepth )
-		: crg::RenderPass{ pass, context, graph, size, 1u, true }
+		: crg::RenderPass{ pass
+			, context
+			, graph
+			, { [this](){ doSubInitialise(); }
+				, [this]( VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( cb, i ); }
+				, crg::defaultV< crg::RenderPass::RecordCallback >
+				, crg::defaultV< crg::RenderPass::GetSubpassContentsCallback >
+				, crg::defaultV< crg::RenderPass::GetPassIndexCallback >
+				, IsEnabledCallback( [this](){ return doIsEnabled(); } ) }
+			, size
+			, 1u
+			, true }
 		, m_device{ device }
 		, m_background{ background }
 		, m_size{ size }
