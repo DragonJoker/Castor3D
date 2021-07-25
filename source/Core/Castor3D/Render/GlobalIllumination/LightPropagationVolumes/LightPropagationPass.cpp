@@ -481,6 +481,8 @@ namespace castor3d
 		, crg::RenderPass{ pass
 			, context
 			, graph
+			, { [this](){ doSubInitialise(); }
+				, [this]( VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( cb, i ); } }
 			, { gridSize, gridSize }
 			, 1u }
 		, m_device{ device }
