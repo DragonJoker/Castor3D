@@ -258,7 +258,8 @@ namespace smaa
 				, m_renderTarget
 				, device
 				, m_renderTarget.getTechnique()->getDepthImgView()
-				, m_config );
+				, m_config
+				, &m_enabled );
 			break;
 
 		case EdgeDetectionType::eColour:
@@ -267,7 +268,8 @@ namespace smaa
 				, device
 				, *m_srgbTextureView
 				, doGetPredicationTexture()
-				, m_config );
+				, m_config
+				, &m_enabled );
 			break;
 
 		case EdgeDetectionType::eLuma:
@@ -276,7 +278,8 @@ namespace smaa
 				, device
 				, *m_srgbTextureView
 				, doGetPredicationTexture()
-				, m_config );
+				, m_config
+				, &m_enabled );
 			break;
 		}
 
@@ -289,7 +292,8 @@ namespace smaa
 			, device
 			, m_edgeDetection->getColourResult()
 			, m_edgeDetection->getDepthResult()
-			, m_config );
+			, m_config
+			, &m_enabled );
 		previous = &m_blendingWeightCalculation->getPass();
 		smaaResult = { m_blendingWeightCalculation->getResult() };
 
@@ -301,7 +305,8 @@ namespace smaa
 			, *m_srgbTextureView
 			, m_blendingWeightCalculation->getResult()
 			, velocityView
-			, m_config );
+			, m_config
+			, &m_enabled );
 		previous = &m_neighbourhoodBlending->getPass();
 		smaaResult = m_neighbourhoodBlending->getResult();
 
@@ -324,7 +329,8 @@ namespace smaa
 				, currentViews
 				, previousViews
 				, velocityView
-				, m_config );
+				, m_config
+				, &m_enabled );
 			previous = &m_reproject->getPass();
 			smaaResult = { m_reproject->getResult() };
 		}
@@ -343,18 +349,8 @@ namespace smaa
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.passIndex( &m_config.subsampleIndex )
-					.enabled( &isEnabled() )
-					.recordDisabledInto( [this, &context, &graph]( crg::RunnablePass const & runnable
-						, VkCommandBuffer commandBuffer
-						, uint32_t index )
-						{
-							doCopyImage( graph
-								, runnable
-								, commandBuffer
-								, index
-								, *m_target
-								, *m_srgbTextureView );
-						} )
+					.enabled( &m_enabled )
+					.recordDisabledRenderPass( false )
 					.build( pass, context, graph, m_config.maxSubsampleIndices );
 			} );
 		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
