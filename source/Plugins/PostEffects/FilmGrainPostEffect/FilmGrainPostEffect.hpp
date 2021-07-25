@@ -80,7 +80,8 @@ namespace film_grain
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		uint64_t m_time{ 0ull };
+		castor::Milliseconds m_time{ 0ull };
+		uint32_t m_timeIndex{ 0u };
 		castor3d::UniformBufferOffsetT< Configuration > m_configUbo;
 		std::array< castor::Image, NoiseMapCount > m_noiseImages;
 		crg::ImageId m_noiseImg;
@@ -88,6 +89,7 @@ namespace film_grain
 		crg::ImageId m_resultImg;
 		crg::ImageViewId m_resultView;
 		crg::FramePass * m_pass{};
+		bool m_firstUpdate{ true };
 	};
 }
 
