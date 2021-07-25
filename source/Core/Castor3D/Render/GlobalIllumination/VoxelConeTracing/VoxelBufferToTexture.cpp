@@ -173,7 +173,17 @@ namespace castor3d
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, VoxelSceneData const & vctConfig )
-		: crg::RunnablePass{ pass, context, graph, 2u }
+		: crg::RunnablePass{ pass
+			, context
+			, graph
+			, { [this](){ doInitialise(); }
+				, GetSemaphoreWaitFlagsCallback( [this](){ return doGetSemaphoreWaitFlags(); } )
+				, [this]( VkCommandBuffer cb, uint32_t i ){ doRecordInto( cb, i ); }
+				, crg::defaultV< crg::RunnablePass::RecordCallback >
+				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
+				, crg::defaultV< crg::RunnablePass::IsEnabledCallback >
+				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
+			, 2u }
 		, m_device{ device }
 		, m_vctConfig{ vctConfig }
 		, m_descriptorSetLayout{ createDescriptorLayout( m_device ) }

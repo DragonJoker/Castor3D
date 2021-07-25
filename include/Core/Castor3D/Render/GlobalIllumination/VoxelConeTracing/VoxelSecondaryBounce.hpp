@@ -44,11 +44,11 @@ namespace castor3d
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
 
 	private:
-		void doInitialise()override;
+		void doInitialise();
 		void doRecordInto( VkCommandBuffer commandBuffer
-			, uint32_t index )override;
-		VkPipelineStageFlags doGetSemaphoreWaitFlags()const override;
-		bool doIsComputePass()const override;
+			, uint32_t index );
+		VkPipelineStageFlags doGetSemaphoreWaitFlags()const;
+		bool doIsComputePass()const;
 
 	private:
 		VoxelSceneData const & m_vctConfig;
