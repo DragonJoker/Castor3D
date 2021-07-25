@@ -7,7 +7,6 @@
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstance.hpp"
-#include "Castor3D/Render/RenderPassTimer.hpp"
 
 using namespace castor;
 

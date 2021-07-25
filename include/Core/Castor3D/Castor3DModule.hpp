@@ -15,6 +15,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Math/Point.hpp>
 
 #include <ashespp/AshesPPPrerequisites.hpp>
+#include <RenderGraph/FrameGraphPrerequisites.hpp>
 
 #include <cstdint>
 #include <memory>
@@ -45,6 +46,8 @@ namespace castor3d
 	using castor::UInt32StrMap;
 	using castor::UInt64StrMap;
 	using castor::UInt32Array;
+
+	using crg::FramePassTimer;
 	/**
 	*\~english
 	*\brief		Castor3D engine.
@@ -60,6 +63,7 @@ namespace castor3d
 	struct GpuUpdater;
 
 	CU_DeclareSmartPtr( Engine );
+	CU_DeclareCUSmartPtr( castor3d, FramePassTimer, C3D_API );
 
 	castor::LoggerInstance & getLogger( Engine & engine );
 

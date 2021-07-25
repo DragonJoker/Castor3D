@@ -109,7 +109,7 @@ namespace castor3d
 			, ashes::CommandPool const & commandPool
 			, uint32_t offset
 			, VkPipelineStageFlags flags
-			, RenderPassTimer const & timer
+			, FramePassTimer const & timer
 			, uint32_t index )const;
 		/**
 		 *\~english
@@ -135,7 +135,7 @@ namespace castor3d
 			, ashes::CommandBuffer const & commandBuffer
 			, uint32_t offset
 			, VkPipelineStageFlags flags
-			, RenderPassTimer const & timer
+			, FramePassTimer const & timer
 			, uint32_t index )const;
 		/**
 		*\~english
@@ -182,7 +182,7 @@ namespace castor3d
 			, ashes::CommandPool const & commandPool
 			, uint32_t offset
 			, VkPipelineStageFlags flags
-			, RenderPassTimer const & timer
+			, FramePassTimer const & timer
 			, uint32_t index );
 		/**
 		*\~english

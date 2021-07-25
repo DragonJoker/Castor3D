@@ -10,7 +10,6 @@ See LICENSE file in root folder
 #include "Castor3D/Buffer/GeometryBuffers.hpp"
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Render/Node/PassRenderNode.hpp"
-#include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/OverlayUbo.hpp"
 
@@ -98,7 +97,7 @@ namespace castor3d
 		 *\param[in]	timer	Le timer de la passe de rendu.
 		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
-		C3D_API void beginPrepare( RenderPassTimer const & timer
+		C3D_API void beginPrepare( FramePassTimer const & timer
 			, crg::SemaphoreWaitArray const & toWait );
 		/**
 		 *\~english
@@ -108,7 +107,7 @@ namespace castor3d
 		 *\brief		Termine la préparation des incrustations.
 		 *\param[in]	timer	Le timer de la passe de rendu.
 		 */
-		C3D_API void endPrepare( RenderPassTimer const & timer );
+		C3D_API void endPrepare( FramePassTimer const & timer );
 		/**
 		 *\~english
 		 *\brief		Ends the overlays preparation.
@@ -119,7 +118,7 @@ namespace castor3d
 		 *\param[in]	device	Le device GPU.
 		 *\param[in]	timer	Le timer de la passe de rendu.
 		 */
-		C3D_API crg::SemaphoreWait render( RenderPassTimer & timer );
+		C3D_API crg::SemaphoreWait render( FramePassTimer & timer );
 		/**
 		*\~english
 		*name
