@@ -96,25 +96,6 @@ namespace castor3d
 			return result;
 		}
 
-		ashes::VkDescriptorSetLayoutBindingArray createBindings( rq::BindingDescriptionArray const & bindings
-			, ashes::WriteDescriptorSetArray const & writes )
-		{
-			ashes::VkDescriptorSetLayoutBindingArray result;
-			uint32_t index = 0u;
-
-			for ( auto & write : writes )
-			{
-				auto & binding = bindings[index++];
-				result.push_back( { write->dstBinding
-					, binding.descriptorType
-					, write->descriptorCount
-					, binding.stageFlags
-					, nullptr } );
-			}
-
-			return result;
-		}
-
 		template< typename TypeT >
 		struct DefaultValueGetterT;
 
