@@ -281,7 +281,7 @@ namespace castor3d
 					, writer.cast< sdw::Float >( c3d_modelData.getNodeId() )
 					, writer.cast< sdw::Float >( inSurface.material ) );
 				data1 = vec4( normal, matFlags );
-				velocity = vec4( inSurface.getVelocity(), writer.cast< Float >( inSurface.material ), 0.0_f );
+				velocity = vec4( inSurface.getVelocity(), 0.0_f, 0.0_f );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
