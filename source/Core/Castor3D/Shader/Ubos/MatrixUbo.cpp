@@ -71,7 +71,7 @@ namespace castor3d
 
 		sdw::Vec4 MatrixData::worldToPrvView( sdw::Vec4 const & wsPosition )const
 		{
-			return m_curView * wsPosition;
+			return m_prvView * wsPosition;
 		}
 
 		sdw::Vec4 MatrixData::worldToCurProj( sdw::Vec4 const & wsPosition )const
@@ -81,7 +81,7 @@ namespace castor3d
 
 		sdw::Vec4 MatrixData::worldToPrvProj( sdw::Vec4 const & wsPosition )const
 		{
-			return m_curViewProj * wsPosition;
+			return m_prvViewProj * wsPosition;
 		}
 
 		sdw::Vec3 MatrixData::getCurViewRight()const
