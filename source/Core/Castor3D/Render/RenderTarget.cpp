@@ -637,7 +637,7 @@ namespace castor3d
 			, TextureFactors{}.invert( true ) );
 		result.emplace_back( "Target Velocity"
 			, m_velocity
-			, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 
 		for ( auto & postEffect : m_hdrPostEffects )
