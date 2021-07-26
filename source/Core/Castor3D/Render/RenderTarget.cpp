@@ -634,7 +634,7 @@ namespace castor3d
 		result.emplace_back( "Target Overlays"
 			, m_overlays
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, TextureFactors{}.invert( true ) );
+			, TextureFactors{ { 0.5f, 0.5f, 0.5f }, { 0.5f, 0.5f, 0.5f } }.invert( true ) );
 		result.emplace_back( "Target Velocity"
 			, m_velocity
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL

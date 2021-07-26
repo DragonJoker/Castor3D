@@ -2,6 +2,7 @@
 
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Cache/ListenerCache.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/TargetCache.hpp"
@@ -314,6 +315,7 @@ namespace castor3d
 		, m_presentQueue{ getQueueFamily( *m_surface, m_device.queueFamilies ) }
 		, m_listener{ getEngine()->getFrameListenerCache().add( getName() + castor::string::toString( m_index ) ) }
 		, m_size{ size }
+		, m_configUbo{ m_device.uboPools->getBuffer< Configuration >( 0u ) }
 	{
 		if ( !m_surface )
 		{
@@ -345,6 +347,7 @@ namespace castor3d
 		doDestroySwapchain();
 		doDestroyProgram();
 		m_commandPool.reset();
+		m_device.uboPools->putBuffer( m_configUbo );
 	}
 
 	void RenderWindow::initialise( RenderTargetSPtr target )
@@ -401,11 +404,12 @@ namespace castor3d
 		{
 			auto technique = target->getTechnique();
 			updater.combineIndex = m_debugConfig.debugIndex;
+			auto & intermediate = m_intermediates[m_debugConfig.debugIndex];
 
-			if ( m_intermediates[m_debugConfig.debugIndex].factors.grid )
+			if ( intermediate.factors.grid )
 			{
-				updater.cellSize = ( *m_intermediates[m_debugConfig.debugIndex].factors.grid )->w;
-				updater.gridCenter = castor::Point3f{ *m_intermediates[m_debugConfig.debugIndex].factors.grid };
+				updater.cellSize = ( *intermediate.factors.grid )->w;
+				updater.gridCenter = castor::Point3f{ *intermediate.factors.grid };
 			}
 			else
 			{
@@ -414,6 +418,9 @@ namespace castor3d
 			}
 
 			m_texture3Dto2D->update( updater );
+			auto & config = m_configUbo.getData();
+			config.multiply = castor::Point4f{ intermediate.factors.multiply };
+			config.add = castor::Point4f{ intermediate.factors.add };
 		}
 #endif
 	}
@@ -690,59 +697,41 @@ namespace castor3d
 
 	void RenderWindow::doCreateRenderPass()
 	{
-		ashes::VkAttachmentDescriptionArray attaches
-		{
-			{
-				0u,
-				m_swapChain->getFormat(),
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_CLEAR,
-				VK_ATTACHMENT_STORE_OP_STORE,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_UNDEFINED,
-				VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
-			}
-		};
+		ashes::VkAttachmentDescriptionArray attaches{ { 0u
+			, m_swapChain->getFormat()
+			, VK_SAMPLE_COUNT_1_BIT
+			, VK_ATTACHMENT_LOAD_OP_CLEAR
+			, VK_ATTACHMENT_STORE_OP_STORE
+			, VK_ATTACHMENT_LOAD_OP_DONT_CARE
+			, VK_ATTACHMENT_STORE_OP_DONT_CARE
+			, VK_IMAGE_LAYOUT_UNDEFINED
+			, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR } };
 		ashes::SubpassDescriptionArray subpasses;
-		subpasses.emplace_back( ashes::SubpassDescription
-			{
-				0u,
-				VK_PIPELINE_BIND_POINT_GRAPHICS,
-				{},
-				{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
-				{},
-				ashes::nullopt,
-				{},
-			} );
-		ashes::VkSubpassDependencyArray dependencies
-		{
-			{
-				VK_SUBPASS_EXTERNAL,
-				0u,
-				VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_ACCESS_MEMORY_READ_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			},
-			{
-				0u,
-				VK_SUBPASS_EXTERNAL,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_READ_BIT,
-				VK_ACCESS_MEMORY_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			}
-		};
-		ashes::RenderPassCreateInfo createInfo
-		{
-			0u,
-			std::move( attaches ),
-			std::move( subpasses ),
-			std::move( dependencies ),
-		};
+		subpasses.push_back( { 0u
+			, VK_PIPELINE_BIND_POINT_GRAPHICS
+			, {}
+			, { { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } }
+			, {}
+			, ashes::nullopt
+			, {} } );
+		ashes::VkSubpassDependencyArray dependencies{ { VK_SUBPASS_EXTERNAL
+				, 0u
+				, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT
+				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+				, VK_ACCESS_MEMORY_READ_BIT
+				, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_READ_BIT
+				, VK_DEPENDENCY_BY_REGION_BIT }
+			, { 0u
+				, VK_SUBPASS_EXTERNAL
+				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+				, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT
+				, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_READ_BIT
+				, VK_ACCESS_MEMORY_READ_BIT
+				, VK_DEPENDENCY_BY_REGION_BIT } };
+		ashes::RenderPassCreateInfo createInfo{ 0u
+			, std::move( attaches )
+			, std::move( subpasses )
+			, std::move( dependencies ) };
 		m_renderPass = getDevice()->createRenderPass( "RenderPass"
 			, std::move( createInfo ) );
 	}
@@ -783,8 +772,12 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			auto c3d_mapResult = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapResult", 0u, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
+			auto c3d_mapResult = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapResult", 0u, 0u );
+			auto c3d_config = writer.declUniformBuffer( "c3d_config", 1u, 0u );
+			auto c3d_multiply = c3d_config.declMember< sdw::Vec4 >( "c3d_multiply" );
+			auto c3d_add = c3d_config.declMember< sdw::Vec4 >( "c3d_add" );
+			c3d_config.end();
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
@@ -792,7 +785,8 @@ namespace castor3d
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					pxl_fragColor = vec4( c3d_mapResult.sample( vtx_texture ).xyz(), 1.0_f );
+					pxl_fragColor = vec4( fma( c3d_mapResult.sample( vtx_texture ).xyz(), c3d_multiply.xyz(), c3d_add.xyz() )
+						, 1.0_f );
 				} );
 			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -864,6 +858,8 @@ namespace castor3d
 	{
 		auto & target = *getRenderTarget();
 		m_renderQuad = RenderQuadBuilder{}
+			.binding( VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D )
+			.binding( VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER )
 			.texcoordConfig( rq::Texcoord{} )
 			.tex3DResult( m_tex3DTo2DIntermediate )
 			.build( m_device
@@ -878,9 +874,8 @@ namespace castor3d
 
 		for ( auto & intermediate : m_intermediateSampledViews )
 		{
-			m_renderQuad->registerPassInputs( { RenderQuad::makeDescriptorWrite( handler.createImageView( context, intermediate.viewId )
-				, m_renderQuad->getSampler().getSampler()
-					, 0u ) }
+			m_renderQuad->registerPassInputs( { RenderQuad::makeDescriptorWrite( handler.createImageView( context, intermediate.viewId ), m_renderQuad->getSampler().getSampler(), 0u )
+					, RenderQuad::makeDescriptorWrite( m_configUbo, 1u ) }
 				, intermediate.factors.invertY );
 		}
 
@@ -1170,7 +1165,7 @@ namespace castor3d
 					getDevice().graphicsQueue->submit( ashes::VkCommandBufferArray{ *m_transferCommands.commandBuffer }
 						, ashes::VkSemaphoreArray{ toWait.semaphore }
 						, { toWait.dstStageMask }
-					, ashes::VkSemaphoreArray{ *m_transferCommands.semaphore } );
+						, ashes::VkSemaphoreArray{ *m_transferCommands.semaphore } );
 					toWait.semaphore = *m_transferCommands.semaphore;
 					toWait.dstStageMask = VK_PIPELINE_STAGE_TRANSFER_BIT;
 				}
@@ -1178,7 +1173,7 @@ namespace castor3d
 				getDevice().graphicsQueue->submit( ashes::VkCommandBufferArray{}
 					, ashes::VkSemaphoreArray{ toWait.semaphore }
 					, { toWait.dstStageMask }
-				, ashes::VkSemaphoreArray{} );
+					, ashes::VkSemaphoreArray{} );
 				target->resetSemaphore();
 			}
 		}
