@@ -48,6 +48,12 @@ namespace castor3d
 		, public std::enable_shared_from_this< RenderWindow >
 	{
 	private:
+		struct Configuration
+		{
+			castor::Point4f multiply;
+			castor::Point4f add;
+		};
+
 		struct RenderingResources
 		{
 			RenderingResources( ashes::SemaphorePtr imageAvailableSemaphore
@@ -482,6 +488,7 @@ namespace castor3d
 		IntermediateViewArray m_intermediateBarrierViews;
 		IntermediateViewArray m_intermediateSampledViews;
 		DebugConfig m_debugConfig;
+		UniformBufferOffsetT< Configuration > m_configUbo;
 	};
 }
 
