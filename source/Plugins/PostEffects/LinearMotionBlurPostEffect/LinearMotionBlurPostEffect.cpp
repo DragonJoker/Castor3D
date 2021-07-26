@@ -176,10 +176,11 @@ namespace motion_blur
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, m_target->data->info.format
-			, castor3d::makeExtent3D( m_renderTarget.getSize() )
+			, castor3d::makeExtent3D( castor3d::getSafeBandedSize( m_renderTarget.getSize() ) )
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } );
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
+				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) } );
 		m_resultView = m_renderTarget.getGraph().createView( crg::ImageViewData{ "LMBRes"
 			, m_resultImg
 			, 0u
@@ -193,7 +194,7 @@ namespace motion_blur
 			{
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
-					.renderSize( castor3d::makeExtent2D( m_renderTarget.getSize() ) )
+					.renderSize( castor3d::makeExtent2D( castor3d::getSafeBandedSize( m_renderTarget.getSize() ) ) )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( &isEnabled() )
