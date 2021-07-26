@@ -20,7 +20,7 @@ namespace castor3d
 		static std::array< castor::String, size_t( DsTexture::eCount ) > Values
 		{
 			{
-				cuT( "Daya0" ),
+				cuT( "Data0" ),
 				cuT( "Data1" ),
 				cuT( "Data2" ),
 				cuT( "Data3" ),
@@ -55,12 +55,12 @@ namespace castor3d
 		static std::array< VkClearValue, size_t( DsTexture::eCount ) > Values
 		{
 			{
-				makeClearValue( 1.0f, 0.0f, 0.0f, 0.0f ),
-				opaqueBlackClearColor,
-				opaqueBlackClearColor,
-				opaqueBlackClearColor,
-				opaqueBlackClearColor,
-				opaqueBlackClearColor,
+				makeClearValue( 1.0f, std::numeric_limits< float >::max(), 0.0f, 0.0f ),
+				transparentBlackClearColor,
+				transparentBlackClearColor,
+				transparentBlackClearColor,
+				transparentBlackClearColor,
+				transparentBlackClearColor,
 			}
 		};
 		return Values[size_t( texture )];
