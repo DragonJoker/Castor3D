@@ -190,12 +190,12 @@ namespace castor3d
 		m_descriptorLayout.reset();
 	}
 
-	ashes::Semaphore const & StencilPass::render( RenderDevice const & device
+	ashes::Semaphore const & StencilPass::render( QueueData const & queueData
 		, ashes::Semaphore const & toWait )
 	{
 		auto * result = &toWait;
 
-		device.graphicsQueue->submit( *m_commandBuffer
+		queueData.queue->submit( *m_commandBuffer
 			, *result
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, *m_finished

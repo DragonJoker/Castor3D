@@ -470,7 +470,7 @@ namespace GuiCommon
 			texture->setSource( castor::Path{}, path );
 			unit->setTexture( texture );
 
-			unit->initialise( device );
+			unit->initialise( device, *device.graphicsData() );
 		}
 	}
 

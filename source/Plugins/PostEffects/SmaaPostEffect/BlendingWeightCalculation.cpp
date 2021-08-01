@@ -877,8 +877,9 @@ namespace smaa
 			ashes::ImageView view{ ashes::ImageViewCreateInfo{ *image, result.data->info }
 				, handler.createImageView( context, result )
 				, image.get() };
-			staging->uploadTextureData( *device.graphicsQueue
-				, *device.graphicsCommandPool
+			auto data = device.graphicsData();
+			staging->uploadTextureData( *data->queue
+				, *data->commandPool
 				, { result.data->info.subresourceRange.aspectMask
 					, result.data->info.subresourceRange.baseMipLevel
 					, result.data->info.subresourceRange.baseArrayLayer

@@ -66,7 +66,8 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
-		C3D_API crg::SemaphoreWait render( crg::SemaphoreWait const & semaphore );
+		C3D_API crg::SemaphoreWait render( crg::SemaphoreWait const & semaphore
+			, ashes::Queue const & queue );
 
 		Texture const & getFirstBounce()const
 		{

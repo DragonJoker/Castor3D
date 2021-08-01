@@ -45,6 +45,7 @@ namespace castor3d
 		 *\param[in]	mipLevels		Le nombre de niveausx de mipmap de la texture couleur de la surface.
 		 */
 		C3D_API bool initialise( RenderDevice const & device
+			, QueueData const & queueData
 			, ashes::RenderPass const & renderPass
 			, castor::Size const & size
 			, VkFormat format = VK_FORMAT_R32G32B32A32_SFLOAT
@@ -66,6 +67,7 @@ namespace castor3d
 		 *\param[in]	depthFormat		Le format des pixels profondeur de la surface.
 		 */
 		C3D_API bool initialise( RenderDevice const & device
+			, QueueData const & queueData
 			, ashes::RenderPass const & renderPass
 			, castor::Size const & size
 			, VkFormat colourFormat
@@ -85,6 +87,7 @@ namespace castor3d
 		 *\param[in]	colourTexture	La texture couleur de la surface.
 		 */
 		C3D_API bool initialise( RenderDevice const & device
+			, QueueData const & queueData
 			, ashes::RenderPass const & renderPass
 			, castor::Size const & size
 			, TextureLayoutSPtr colourTexture );
@@ -105,6 +108,7 @@ namespace castor3d
 		 *\param[in]	depthFormat		Le format des pixels profondeur de la surface.
 		 */
 		C3D_API bool initialise( RenderDevice const & device
+			, QueueData const & queueData
 			, ashes::RenderPass const & renderPass
 			, castor::Size const & size
 			, TextureLayoutSPtr colourTexture
@@ -126,6 +130,7 @@ namespace castor3d
 		 *\param[in]	depthTexture	La texture profondeur de la surface.
 		 */
 		C3D_API bool initialise( RenderDevice const & device
+			, QueueData const & queueData
 			, ashes::RenderPass const & renderPass
 			, castor::Size const & size
 			, VkFormat colourFormat
@@ -147,6 +152,7 @@ namespace castor3d
 		 *\param[in]	depthTexture	La texture profondeur de la surface.
 		 */
 		C3D_API bool initialise( RenderDevice const & device
+			, QueueData const & queueData
 			, ashes::RenderPass const & renderPass
 			, castor::Size const & size
 			, TextureLayoutSPtr colourTexture

@@ -215,6 +215,7 @@ namespace castor3d
 			, castor::String const &
 			, RenderTarget &
 			, RenderDevice const &
+			, QueueData const &
 			, Parameters const &
 			, SsaoConfig const & ) >;
 		using Merger = std::function< void( CacheBase< RenderTechnique, KeyType > const &

@@ -82,17 +82,18 @@ namespace castor3d
 
 	bool ColourBackground::doInitialise( RenderDevice const & device )
 	{
+		auto data = device.graphicsData();
 		auto & value = m_scene.getBackgroundColour();
 		m_colour = HdrRgbColour::fromComponents( value.red(), value.green(), value.blue() );
 		m_stagingTexture = device->createStagingTexture( "ColourBackgroundStaging"
 			, VK_FORMAT_R32G32B32A32_SFLOAT
 			, { Dim, Dim } );
-		auto result = m_texture->initialise( device );
+		auto result = m_texture->initialise( device, *data );
 		m_colour.reset();
 
 		if ( result )
 		{
-			m_cmdCopy = device.graphicsCommandPool->createCommandBuffer( "ColourBackgroundCopy"
+			m_cmdCopy = data->commandPool->createCommandBuffer( "ColourBackgroundCopy"
 				, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 			m_cmdCopy->begin();
 
@@ -156,8 +157,9 @@ namespace castor3d
 			m_stagingTexture->unlock();
 			auto & renderSystem = *getEngine()->getRenderSystem();
 
-			device.graphicsQueue->submit( *m_cmdCopy, nullptr );
-			device.graphicsQueue->waitIdle();
+			auto data = device.graphicsData();
+			data->queue->submit( *m_cmdCopy, nullptr );
+			data->queue->waitIdle();
 
 			m_colour.reset();
 		}

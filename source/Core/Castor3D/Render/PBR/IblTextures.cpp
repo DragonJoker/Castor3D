@@ -69,8 +69,9 @@ namespace castor3d
 			auto & renderSystem = *engine.getRenderSystem();
 			auto staging = device->createStagingTexture( VK_FORMAT_R8G8B8A8_UNORM
 				, makeExtent2D( buffer->getDimensions() ) );
-			staging->uploadTextureData( *device.graphicsQueue
-				, *device.graphicsCommandPool
+			auto data = device.graphicsData();;
+			staging->uploadTextureData( *data->queue
+				, *data->commandPool
 				, VK_FORMAT_R8G8B8A8_UNORM
 				, buffer->getConstPtr()
 				, result );
@@ -151,17 +152,18 @@ namespace castor3d
 	{
 	}
 
-	void IblTextures::update()
+	void IblTextures::update( QueueData const & queueData )
 	{
-		m_radianceComputer.render();
-		m_environmentPrefilter.render();
+		m_radianceComputer.render( queueData );
+		m_environmentPrefilter.render( queueData );
 	}
 
-	ashes::Semaphore const & IblTextures::update( ashes::Semaphore const & toWait )
+	ashes::Semaphore const & IblTextures::update( QueueData const & queueData
+		, ashes::Semaphore const & toWait )
 	{
 		auto result = &toWait;
-		result = &m_radianceComputer.render( *result );
-		result = &m_environmentPrefilter.render( *result );
+		result = &m_radianceComputer.render( queueData, *result );
+		result = &m_environmentPrefilter.render( queueData, *result );
 		return *result;
 	}
 }

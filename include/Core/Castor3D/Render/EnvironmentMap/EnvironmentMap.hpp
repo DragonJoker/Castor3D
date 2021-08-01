@@ -41,6 +41,7 @@ namespace castor3d
 		 */
 		C3D_API EnvironmentMap( crg::ResourceHandler & handler
 			, RenderDevice const & device
+			, QueueData const & queueData
 			, Scene const & scene );
 		/**
 		 *\~english
@@ -77,7 +78,8 @@ namespace castor3d
 		 *\param[in]	device	Le device GPU.
 		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
-		C3D_API crg::SemaphoreWait render( crg::SemaphoreWait const & toWait );
+		C3D_API crg::SemaphoreWait render( crg::SemaphoreWait const & toWait
+			, ashes::Queue const & queue );
 		/**
 		 *\~english
 		 *\return		Creates a reflection map for given node.

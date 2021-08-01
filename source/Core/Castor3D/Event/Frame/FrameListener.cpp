@@ -99,14 +99,15 @@ namespace castor3d
 	}
 
 	bool FrameListener::fireEvents( EventType type
-		, RenderDevice const & device )
+		, RenderDevice const & device
+		, QueueData const & queueData )
 	{
 		GpuFrameEventPtrArray arrayEvents;
 		{
 			auto lock( castor::makeUniqueLock( m_mutex ) );
 			std::swap( arrayEvents, m_gpuEvents[size_t( type )] );
 		}
-		return doFireEvents( arrayEvents, device );
+		return doFireEvents( arrayEvents, device, queueData );
 	}
 
 	void FrameListener::flushEvents( EventType type )

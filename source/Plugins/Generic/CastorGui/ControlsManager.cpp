@@ -68,7 +68,8 @@ namespace CastorGui
 			{
 				auto control = *it;
 				m_frameListener->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-					, [control, material]( RenderDevice const & device )
+					, [control, material]( RenderDevice const & device
+						, QueueData const & queueData )
 					{
 						control->setBackgroundMaterial( material );
 					} ) );
@@ -94,7 +95,8 @@ namespace CastorGui
 		{
 			auto control = *it;
 			m_frameListener->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [control, p_caption]( RenderDevice const & device )
+				, [control, p_caption]( RenderDevice const & device
+					, QueueData const & queueData )
 				{
 					control->setCaption( p_caption );
 				} ) );

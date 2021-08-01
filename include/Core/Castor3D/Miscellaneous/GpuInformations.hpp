@@ -8,15 +8,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/**
-	\author 	Sylvain DOREMUS
-	\date 		04/05/2016
-	\version	0.9.0
-	\~english
-	\brief		Holds GPU informations.
-	\~french
-	\brief		Contient des informations sur le GPU.
-	*/
 	class GpuInformations
 	{
 		friend class Context;

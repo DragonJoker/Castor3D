@@ -23,13 +23,14 @@ namespace castor3d
 	{
 	}
 
-	void Material::initialise( RenderDevice const & device )
+	void Material::initialise( RenderDevice const & device
+		, QueueData const & queueData )
 	{
 		log::debug << cuT( "Initialising material [" ) << getName() << cuT( "]" ) << std::endl;
 
 		for ( auto pass : m_passes )
 		{
-			pass->initialise( device );
+			pass->initialise( device, queueData );
 		}
 
 		getEngine()->getMaterialCache().registerMaterial( *this );

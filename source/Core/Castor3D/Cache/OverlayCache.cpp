@@ -5,6 +5,7 @@
 #include "Castor3D/Event/Frame/InitialiseEvent.hpp"
 #include "Castor3D/Overlay/FontTexture.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
+#include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
 #include <CastorUtils/Graphics/Font.hpp>
@@ -131,7 +132,12 @@ namespace castor3d
 		{
 			result = std::make_shared< FontTexture >( *getEngine(), font );
 			m_fontTextures.emplace( font->getName(), result );
-			getEngine()->postEvent( makeGpuInitialiseEvent( *result ) );
+			getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [result]( RenderDevice const & device
+					, QueueData const & queueData )
+				{
+					result->initialise( device, *device.graphicsData() );
+				} ) );
 		}
 
 		return result;
