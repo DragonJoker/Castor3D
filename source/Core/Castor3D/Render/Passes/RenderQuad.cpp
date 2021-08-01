@@ -194,7 +194,6 @@ namespace castor3d
 			, ( config.tex3DResult ? *config.tex3DResult : defaultV< IntermediateView > ) }
 		, m_useTexCoord{ config.texcoordConfig }
 	{
-		m_sampler->initialise( m_device );
 	}
 
 	RenderQuad::RenderQuad( RenderQuad && rhs )noexcept
@@ -218,8 +217,6 @@ namespace castor3d
 
 	RenderQuad::~RenderQuad()
 	{
-		m_sampler->cleanup();
-		m_sampler->getEngine()->getSamplerCache().remove( getName() );
 		cleanup();
 	}
 

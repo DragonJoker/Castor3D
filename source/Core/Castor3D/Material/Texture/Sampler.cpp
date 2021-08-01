@@ -5,6 +5,7 @@
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 
 namespace castor3d
@@ -55,6 +56,7 @@ namespace castor3d
 			cache.add( name, sampler );
 		}
 
+		sampler->initialise( *engine.getRenderSystem()->getMainRenderDevice() );
 		return sampler;
 	}
 
