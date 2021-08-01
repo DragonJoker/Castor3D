@@ -3,15 +3,19 @@
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
+#include "Castor3D/Cache/CacheView.hpp"
 #include "Castor3D/Cache/ListenerCache.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/TargetCache.hpp"
+#include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Event/UserInput/UserInputListener.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
+#include "Castor3D/Miscellaneous/LoadingScreen.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
+#include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Render/Picking.hpp"
 #include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -19,6 +23,7 @@
 #include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Render/Technique/RenderTechnique.hpp"
 #include "Castor3D/Render/ToTexture/Texture3DTo2D.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
 #include <CastorUtils/Graphics/PixelBufferBase.hpp>
@@ -39,6 +44,8 @@
 #include <CastorUtils/Design/BlockGuard.hpp>
 
 CU_ImplementCUSmartPtr( castor3d, RenderWindow )
+
+#define C3D_PersistLoadingScreen 1
 
 namespace castor3d
 {
@@ -294,6 +301,38 @@ namespace castor3d
 
 			return result;
 		}
+
+		OverlaySPtr getOverlay( Scene const & scene, castor::String const & name )
+		{
+			OverlaySPtr result;
+
+			if ( scene.getOverlayView().has( name ) )
+			{
+				result = scene.getOverlayView().find( name );
+			}
+
+			return result;
+		}
+
+		TextOverlaySPtr getTextOverlay( Scene const & scene, castor::String const & name )
+		{
+			TextOverlaySPtr result;
+			auto o = getOverlay( scene, name );
+
+			if ( o && o->getType() == OverlayType::eText )
+			{
+				result = o->getTextOverlay();
+			}
+
+			return result;
+		}
+
+		castor::Size getScreenSize()
+		{
+			castor::Size result;
+			castor::System::getScreenSize( 0u, result );
+			return result;
+		}
 	}
 
 	//*************************************************************************************************
@@ -315,6 +354,7 @@ namespace castor3d
 		, m_queue{ m_queues->reserveQueue() }
 		, m_listener{ getEngine()->getFrameListenerCache().add( getName() + castor::string::toString( m_index ) ) }
 		, m_size{ size }
+		, m_loading{ engine.isThreaded() }
 		, m_configUbo{ m_device.uboPools->getBuffer< Configuration >( 0u ) }
 	{
 		log::debug << "Created RenderWindow, size: " << size << std::endl;
@@ -328,6 +368,14 @@ namespace castor3d
 			, getEngine()->getPassesType() );
 		doCreateProgram();
 		doCreateSwapchain();
+
+		if ( engine.isThreaded() )
+		{
+#if C3D_PersistLoadingScreen
+			doCreateLoadingScreen();
+#endif
+			getEngine()->registerWindow( *this );
+		}
 	}
 
 	RenderWindow::~RenderWindow()
@@ -336,6 +384,14 @@ namespace castor3d
 		auto & engine = *getEngine();
 		auto listener = getListener();
 		engine.getFrameListenerCache().remove( getName() + castor::string::toString( m_index ) );
+
+#if C3D_PersistLoadingScreen
+		if ( engine.isThreaded() )
+		{
+			doDestroyLoadingScreen();
+		}
+#endif
+
 		doDestroySwapchain();
 		doDestroyProgram();
 		m_device.uboPools->putBuffer( m_configUbo );
@@ -350,16 +406,53 @@ namespace castor3d
 			CU_Exception( "No render target for render window." );
 		}
 
-		auto queueData = m_device.graphicsData();
-		target->initialise( m_device, *queueData );
-		doCreatePickingPass( *queueData );
-		doCreateIntermediateViews( *queueData );
-		doCreateRenderQuad( *queueData );
-		doCreateCommandBuffers( *queueData );
-		doCreateSaveData( *queueData );
-		m_skip = false;
-		m_initialised = true;
-		getEngine()->registerWindow( *this );
+		if ( m_loadingScreen )
+		{
+			if ( !m_loading.exchange( true ) )
+			{
+				m_loadingScreen->enable();
+			}
+
+			getEngine()->pushGpuJob( [this]( RenderDevice const & device, QueueData const & queueData )
+				{
+					auto target = m_renderTarget.lock();
+
+					if ( target )
+					{
+						target->initialise( device, queueData );
+						doCreatePickingPass( queueData );
+						doCreateIntermediateViews( queueData );
+						doCreateRenderQuad( queueData );
+						doCreateCommandBuffers( queueData );
+						doCreateSaveData( queueData );
+					}
+
+					getListener()->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+						, [this]()
+						{
+							if ( m_loadingScreen )
+							{
+								m_loadingScreen->disable();
+							}
+
+							m_loading = false;
+							m_initialised = true;
+						} ) );
+				} );
+		}
+		else
+		{
+			auto & queueData = m_device.graphicsData();
+			target->initialise( m_device, *queueData );
+			doCreatePickingPass( *queueData );
+			doCreateIntermediateViews( *queueData );
+			doCreateRenderQuad( *queueData );
+			doCreateCommandBuffers( *queueData );
+			doCreateSaveData( *queueData );
+			getEngine()->registerWindow( *this );
+			m_initialised = true;
+		}
+
 		log::debug << "Created render window " << m_index << std::endl;
 	}
 
@@ -372,6 +465,12 @@ namespace castor3d
 		getDevice()->waitIdle();
 
 		doDestroySaveData();
+
+		if ( engine.isThreaded() )
+		{
+			doDestroyLoadingScreen();
+		}
+
 		doDestroyCommandBuffers();
 		doDestroyRenderQuad();
 		doDestroyIntermediateViews();
@@ -385,36 +484,59 @@ namespace castor3d
 
 	void RenderWindow::update( CpuUpdater & updater )
 	{
-		if ( auto target = getRenderTarget() )
+		if ( m_skip )
+		{
+			return;
+		}
+
+		if ( m_loadingScreen && m_loadingScreen->isEnabled() )
+		{
+			m_loadingScreen->update( updater );
+		}
+		else if ( auto target = getRenderTarget() )
 		{
 			target->update( updater );
 #if C3D_DebugQuads
-			auto technique = target->getTechnique();
-			updater.combineIndex = m_debugConfig.debugIndex;
-			auto & intermediate = m_intermediates[m_debugConfig.debugIndex];
 
-			if ( intermediate.factors.grid )
+			if ( m_initialised )
 			{
-				updater.cellSize = ( *intermediate.factors.grid )->w;
-				updater.gridCenter = castor::Point3f{ *intermediate.factors.grid };
-			}
-			else
-			{
-				updater.cellSize = 0.0f;
-				updater.gridCenter = {};
+				auto technique = target->getTechnique();
+				updater.combineIndex = m_debugConfig.debugIndex;
+				auto & intermediate = m_intermediates[m_debugConfig.debugIndex];
+
+				if ( intermediate.factors.grid )
+				{
+					updater.cellSize = ( *intermediate.factors.grid )->w;
+					updater.gridCenter = castor::Point3f{ *intermediate.factors.grid };
+				}
+				else
+				{
+					updater.cellSize = 0.0f;
+					updater.gridCenter = {};
+				}
+
+				m_texture3Dto2D->update( updater );
+				auto & config = m_configUbo.getData();
+				config.multiply = castor::Point4f{ intermediate.factors.multiply };
+				config.add = castor::Point4f{ intermediate.factors.add };
 			}
 
-			m_texture3Dto2D->update( updater );
-			auto & config = m_configUbo.getData();
-			config.multiply = castor::Point4f{ intermediate.factors.multiply };
-			config.add = castor::Point4f{ intermediate.factors.add };
 #endif
 		}
 	}
 
 	void RenderWindow::update( GpuUpdater & updater )
 	{
-		if ( auto target = getRenderTarget() )
+		if ( m_skip )
+		{
+			return;
+		}
+
+		if ( m_loadingScreen && m_loadingScreen->isEnabled() )
+		{
+			m_loadingScreen->update( updater );
+		}
+		else if ( auto target = getRenderTarget() )
 		{
 			target->update( updater );
 		}
@@ -429,7 +551,21 @@ namespace castor3d
 			return;
 		}
 
-		if ( m_initialised )
+		if ( m_loadingScreen && m_loadingScreen->isEnabled() )
+		{
+			if ( auto resources = doGetResources() )
+			{
+				VkFence fence{};
+				auto toWait = doSubmitLoadingFrame( *resources
+					, *m_loadingScreen
+					, fence
+					, std::move( baseToWait ) );
+				doPresentLoadingFrame( fence
+					, *resources
+					, std::move( toWait ) );
+			}
+		}
+		else if ( m_initialised )
 		{
 			RenderTargetSPtr target = getRenderTarget();
 
@@ -696,6 +832,11 @@ namespace castor3d
 		return m_picking->getPickedFace();
 	}
 
+	void RenderWindow::enableLoading()
+	{
+		m_loading = getEngine()->isThreaded();
+	}
+
 	void RenderWindow::doCreateRenderPass()
 	{
 		ashes::VkAttachmentDescriptionArray attaches{ { 0u
@@ -812,10 +953,24 @@ namespace castor3d
 		doCreateRenderPass();
 		doCreateRenderingResources();
 		doCreateFrameBuffers();
+
+#if !C3D_PersistLoadingScreen
+		if ( getEngine()->isThreaded() )
+		{
+			doCreateLoadingScreen();
+		}
+#endif
 	}
 
 	void RenderWindow::doDestroySwapchain()
 	{
+#if !C3D_PersistLoadingScreen
+		if ( getEngine()->isThreaded() )
+		{
+			doDestroyLoadingScreen();
+		}
+#endif
+
 		doDestroyFrameBuffers();
 		doDestroyRenderingResources();
 		doDestroyRenderPass();
@@ -880,6 +1035,42 @@ namespace castor3d
 	void RenderWindow::doDestroyFrameBuffers()
 	{
 		m_frameBuffers.clear();
+	}
+
+	void RenderWindow::doCreateLoadingScreen()
+	{
+		auto scene = getEngine()->getLoadingScene();
+
+		if ( !scene )
+		{
+			return;
+		}
+
+		m_loadingScreen = castor::makeUnique< LoadingScreen >( m_device
+			, getEngine()->getGraphResourceHandler()
+			, scene
+			, *m_renderPass
+#if C3D_PersistLoadingScreen
+			, getScreenSize()
+#else
+			, m_size
+#endif
+			, 1u );
+
+		if ( m_loading )
+		{
+			m_loadingScreen->enable();
+		}
+	}
+
+	void RenderWindow::doDestroyLoadingScreen()
+	{
+		if ( m_loading && m_loadingScreen )
+		{
+			m_loadingScreen->disable();
+		}
+
+		m_loadingScreen.reset();
 	}
 
 	void RenderWindow::doCreatePickingPass( QueueData const & queueData )
@@ -1141,9 +1332,21 @@ namespace castor3d
 		doDestroyCommandBuffers();
 		doDestroyRenderQuad();
 		doDestroyIntermediateViews();
-		doDestroySwapchain();
 
-		doCreateSwapchain();
+#if C3D_PersistLoadingScreen
+		if ( m_loadingScreen )
+		{
+			doDestroySwapchain();
+			doCreateSwapchain();
+			m_loadingScreen->setRenderPass( *m_renderPass, m_size );
+		}
+		else
+#endif
+		{
+			doDestroySwapchain();
+			doCreateSwapchain();
+		}
+
 		doCreateIntermediateViews( *m_queue );
 		doCreateRenderQuad( *m_queue );
 		doCreateCommandBuffers( *m_queue );
@@ -1167,6 +1370,60 @@ namespace castor3d
 		}
 
 		return nullptr;
+	}
+
+	crg::SemaphoreWaitArray RenderWindow::doSubmitLoadingFrame( RenderingResources & resources
+		, LoadingScreen & loadingScreen
+		, VkFence & fence
+		, crg::SemaphoreWaitArray toWait )
+	{
+		toWait.push_back( { *resources.imageAvailableSemaphore
+			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT } );
+		return loadingScreen.render( *m_queue->queue
+			, *m_frameBuffers[resources.imageIndex]
+			, toWait
+			, fence );
+	}
+
+	void RenderWindow::doPresentLoadingFrame( VkFence fence
+		, RenderingResources & resources
+		, crg::SemaphoreWaitArray toWait )
+	{
+		try
+		{
+			ashes::VkSemaphoreArray semaphores;
+
+			for ( auto & wait : toWait )
+			{
+				if ( wait.semaphore )
+				{
+					semaphores.push_back( wait.semaphore );
+				}
+			}
+
+			auto res = m_device->vkWaitForFences( *m_device
+				, 1u
+				, &fence
+				, VK_TRUE
+				, ashes::MaxTimeout );
+			m_queue->queue->present( { *m_swapChain }
+				, { resources.imageIndex }
+				, semaphores );
+
+			if ( m_toSave )
+			{
+				std::memcpy( m_saveBuffer->getPtr(), m_stagingData.data(), m_stagingData.size() );
+				m_toSave = false;
+			}
+		}
+		catch ( ashes::Exception & exc )
+		{
+			doCheckNeedReset( exc.getResult()
+				, false
+				, "Image presentation" );
+		}
+
+		resources.imageIndex = ~0u;
 	}
 
 	void RenderWindow::doWaitFrame( crg::SemaphoreWaitArray toWait )

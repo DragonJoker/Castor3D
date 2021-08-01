@@ -153,17 +153,19 @@ namespace CastorViewer
 
 			if ( !m_filePath.empty() )
 			{
+				m_renderPanel->getRenderWindow()->enableLoading();
+				doCleanupScene();
+
 				if ( engine->isThreaded() )
 				{
-					engine->getRenderLoop().pause();
+					engine->getRenderLoop().beginRendering();
 				}
 
-				doCleanupScene();
-				RenderTargetSPtr target = GuiCommon::loadScene( *engine, m_filePath );
+				RenderTargetSPtr target = GuiCommon::loadScene( *engine
+					, m_filePath );
 
 				if ( target )
 				{
-
 					auto size = make_wxSize( target->getSize() );
 
 					if ( !IsMaximized() )
@@ -179,19 +181,11 @@ namespace CastorViewer
 					}
 
 #if wxCHECK_VERSION( 2, 9, 0 )
-
 					SetMinClientSize( size );
-
 #endif
 
 					m_renderPanel->setTarget( target );
 					m_mainScene = target->getScene();
-
-					if ( engine->isThreaded() )
-					{
-						engine->getRenderLoop().beginRendering();
-					}
-
 					auto scene = m_mainScene.lock();
 
 					if ( scene )
@@ -221,11 +215,6 @@ namespace CastorViewer
 						+ m_filePath.getFileName( true );
 					SetTitle( m_title );
 					m_fpsTimer->Start( 1000 );
-				}
-
-				if ( engine->isThreaded() )
-				{
-					engine->getRenderLoop().resume();
 				}
 			}
 			else
