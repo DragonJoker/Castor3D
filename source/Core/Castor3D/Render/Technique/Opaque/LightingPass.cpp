@@ -867,18 +867,22 @@ namespace castor3d
 
 	void LightingPass::update( CpuUpdater & updater )
 	{
-		auto & scene = *updater.camera->getScene();
-		auto & cache = scene.getLightCache();
-		m_lightPass->clear();
-
-		if ( !cache.isEmpty() )
+		if ( m_lightPass )
 		{
-			doUpdateLightPasses( updater, LightType::eDirectional );
-			doUpdateLightPasses( updater, LightType::ePoint );
-			doUpdateLightPasses( updater, LightType::eSpot );
-		}
+			auto & scene = *updater.camera->getScene();
+			auto & cache = scene.getLightCache();
 
-		m_lightPass->resetCommandBuffer();
+			m_lightPass->clear();
+
+			if ( !cache.isEmpty() )
+			{
+				doUpdateLightPasses( updater, LightType::eDirectional );
+				doUpdateLightPasses( updater, LightType::ePoint );
+				doUpdateLightPasses( updater, LightType::eSpot );
+			}
+
+			m_lightPass->resetCommandBuffer();
+		}
 	}
 
 	void LightingPass::accept( PipelineVisitorBase & visitor )
