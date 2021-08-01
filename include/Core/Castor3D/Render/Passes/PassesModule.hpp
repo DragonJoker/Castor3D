@@ -19,9 +19,18 @@ namespace castor3d
 	*	The render pass used to display the background.
 	*\~french
 	*\brief
-	*	Lapasse de rendu utilisée pour l'affichage du background.
+	*	La passe de rendu utilisée pour l'affichage du background.
 	*/
 	class BackgroundPass;
+	/**
+	*\~english
+	*\brief
+	*	Holds all necessary GPU objects to render background.
+	*\~french
+	*\brief
+	*	Contient tous les objets GPU nécessaires au reundu du background.
+	*/
+	class BackgroundRenderer;
 	/**
 	*\~english
 	*\brief
@@ -179,6 +188,7 @@ namespace castor3d
 	*/
 	class StencilPass;
 
+	CU_DeclareCUSmartPtr( castor3d, BackgroundRenderer, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, CombinePass, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, DepthPass, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, DownscalePass, C3D_API );
