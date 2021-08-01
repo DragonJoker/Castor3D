@@ -167,16 +167,6 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		UniformBufferOffsetT< ModelUboConfiguration > const & getModelUbo()const
-		{
-			return m_modelUbo;
-		}
-		
-		MatrixUbo const & getMatrixUbo()const
-		{
-			return m_matrixUbo;
-		}
-
 		Scene const & getScene()const
 		{
 			return m_scene;
@@ -253,7 +243,9 @@ namespace castor3d
 	private:
 		virtual bool doInitialise( RenderDevice const & device ) = 0;
 		virtual void doCleanup() = 0;
-		virtual void doCpuUpdate( CpuUpdater & updater ) = 0;
+		virtual void doCpuUpdate( CpuUpdater & updater
+			, castor::Matrix4x4f & mtxView
+			, castor::Matrix4x4f & mtxProj ) = 0;
 		virtual void doGpuUpdate( GpuUpdater & updater ) = 0;
 
 	public:
@@ -264,9 +256,6 @@ namespace castor3d
 		BackgroundType m_type;
 		std::atomic_bool m_initialised{ false };
 		bool m_hdr{ true };
-		MatrixUbo m_matrixUbo;
-		UniformBufferOffsetT< ModelUboConfiguration > m_modelUbo;
-		castor::Matrix4x4f m_mtxModel;
 		Texture m_textureId;
 		TextureLayoutSPtr m_texture;
 		SamplerWPtr m_sampler;

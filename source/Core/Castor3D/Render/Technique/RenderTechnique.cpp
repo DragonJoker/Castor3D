@@ -371,7 +371,14 @@ namespace castor3d
 			, getEngine()->getLpvGridSize() ) }
 		, m_llpvResult{ doCreateLLPVResult( getOwner()->getGraphResourceHandler()
 			, m_device ) }
-		, m_backgroundPassDesc{ &doCreateBackgroundPass() }
+		, m_backgroundRenderer{ castor::makeUnique< BackgroundRenderer >( m_renderTarget.getGraph()
+			, m_computeDepthRangeDesc
+			, m_device
+			, *m_renderTarget.getScene()->getBackground()
+			, m_renderTarget.getHdrConfigUbo()
+			, m_sceneUbo
+			, m_colour.targetViewId
+			, m_depth.targetViewId ) }
 #if !C3D_DebugDisableShadowMaps
 		, m_directionalShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapDirectional >( getOwner()->getGraphResourceHandler()
 			, m_device
@@ -496,7 +503,7 @@ namespace castor3d
 		updater.voxelConeTracing = m_renderTarget.getScene()->getVoxelConeTracingConfig().enabled;
 
 		m_depthPass->update( updater );
-		m_backgroundPass->update( updater );
+		m_backgroundRenderer->update( updater );
 		m_voxelizer->update( updater );
 
 		static_cast< OpaquePassType & >( *m_opaquePass ).update( updater );
@@ -505,9 +512,6 @@ namespace castor3d
 #if C3D_UseDeferredRendering
 		m_deferredRendering->update( updater );
 #endif
-
-		auto & background = *m_renderTarget.getScene()->getBackground();
-		background.update( updater );
 
 		if ( m_renderTarget.getTargetType() == TargetType::eWindow )
 		{
@@ -556,7 +560,7 @@ namespace castor3d
 		}
 
 		m_depthPass->update( updater );
-		m_backgroundPass->update( updater );
+		m_backgroundRenderer->update( updater );
 
 		if ( updater.voxelConeTracing )
 		{
@@ -566,8 +570,6 @@ namespace castor3d
 		static_cast< OpaquePassType & >( *m_opaquePass ).update( updater );
 		static_cast< TransparentPassType & >( *m_transparentPass ).update( updater );
 
-		auto & background = *m_renderTarget.getScene()->getBackground();
-		background.update( updater );
 
 		doUpdateShadowMaps( updater );
 		doUpdateLpv( updater );
@@ -736,44 +738,6 @@ namespace castor3d
 		return result;
 	}
 
-	crg::FramePass & RenderTechnique::doCreateBackgroundPass()
-	{
-		auto & background = *getRenderTarget().getScene()->getBackground();
-		background.initialise( *getEngine()->getRenderSystem()->getMainRenderDevice() );
-		auto & result = m_renderTarget.getGraph().createPass( "BackgroundPass"
-			, [this, &background]( crg::FramePass const & pass
-				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
-			{
-				auto result = std::make_unique< BackgroundPass >( pass
-					, context
-					, graph
-					, m_device
-					, background
-					, makeExtent2D( m_colour.getExtent() )
-					, true );
-				m_backgroundPass = result.get();
-				getEngine()->registerTimer( m_renderTarget.getGraph().getName()
-					, result->getTimer() );
-				return result;
-			} );
-		result.addDependency( *m_computeDepthRangeDesc );
-		background.getMatrixUbo().createPassBinding( result
-			, SceneBackground::MtxUboIdx );
-		background.getModelUbo().createPassBinding( result
-			, "Model"
-			, SceneBackground::MdlMtxUboIdx );
-		getRenderTarget().getHdrConfigUbo().createPassBinding( result
-			, SceneBackground::HdrCfgUboIdx );
-		m_sceneUbo.createPassBinding( result
-			, SceneBackground::SceneUboIdx );
-		result.addSampledView( background.getTextureId().sampledViewId
-			, SceneBackground::SkyBoxImgIdx );
-		result.addInOutDepthStencilView( m_depth.targetViewId );
-		result.addOutputColourView( m_colour.targetViewId );
-		return result;
-	}
-
 	crg::FramePass & RenderTechnique::doCreateOpaquePass()
 	{
 #if C3D_UseDeferredRendering
@@ -807,7 +771,7 @@ namespace castor3d
 					, result->getTimer() );
 				return result;
 			} );
-		result.addDependency( *m_backgroundPassDesc );
+		result.addDependency( m_backgroundRenderer->getPass() );
 		result.addDependency( m_ssao->getLastPass() );
 		result.addSampledView( m_ssao->getResult().sampledViewId, 0u, VK_IMAGE_LAYOUT_UNDEFINED );
 		result.addInOutDepthStencilView( m_depth.targetViewId );

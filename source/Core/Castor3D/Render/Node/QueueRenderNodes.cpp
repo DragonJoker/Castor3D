@@ -237,8 +237,7 @@ namespace castor3d
 		void doSortRenderNodes( SceneRenderPass & renderPass
 			, RenderMode mode
 			, SceneNode const * ignored
-			, QueueRenderNodes & nodes
-			, ShadowMapLightTypeArray const & shadowMaps )
+			, QueueRenderNodes & nodes )
 		{
 			uint32_t instanceMult = renderPass.getInstanceMult();
 			auto & scene = nodes.getOwner()->getCuller().getScene();
@@ -437,8 +436,7 @@ namespace castor3d
 		castor3d::doSortRenderNodes( *queue.getOwner()
 			, queue.getMode()
 			, queue.getIgnoredNode()
-			, *this
-			, shadowMaps );
+			, *this );
 
 		auto & renderPass = *queue.getOwner();
 		renderPass.getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender

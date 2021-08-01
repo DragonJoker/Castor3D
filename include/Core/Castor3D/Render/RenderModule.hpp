@@ -11,6 +11,8 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureModule.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
 
+#include <CastorUtils/Math/SquareMatrix.hpp>
+
 #include <ashespp/Image/ImageView.hpp>
 
 #include <RenderGraph/ImageData.hpp>
@@ -776,7 +778,7 @@ namespace castor3d
 		{
 		}
 
-		RenderQueueArray * queues{ nullptr };
+		RenderQueueArray * queues;
 		CameraSPtr camera;
 		SceneNode const * node{ nullptr };
 		LightSPtr light;
@@ -791,6 +793,9 @@ namespace castor3d
 		castor::Milliseconds total;
 		std::vector< TechniqueQueues > techniquesQueues;
 		castor::Point2f bandRatio;
+		castor::Matrix4x4f bgMtxModl;
+		castor::Matrix4x4f bgMtxView;
+		castor::Matrix4x4f bgMtxProj;
 	};
 
 	struct GpuUpdater

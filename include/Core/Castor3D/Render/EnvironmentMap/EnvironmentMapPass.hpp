@@ -78,7 +78,6 @@ namespace castor3d
 		}
 
 	private:
-		crg::FramePass & doCreateBackgroundPass();
 		crg::FramePass & doCreateOpaquePass( crg::FramePass const * previousPass );
 		crg::FramePass & doCreateTransparentPass( crg::FramePass const * previousPass );
 		void doCreateGenMipmapsPass( crg::FramePass const * previousPass );
@@ -93,15 +92,11 @@ namespace castor3d
 		CameraSPtr m_camera;
 		SceneNode const * m_currentNode{};
 		SceneCullerUPtr m_culler;
-		castor::Matrix4x4f m_mtxView;
-		castor::Matrix4x4f m_mtxModel;
 		MatrixUbo m_matrixUbo;
-		UniformBufferOffsetT< ModelUboConfiguration > m_modelUbo;
 		HdrConfigUbo m_hdrConfigUbo;
 		SceneUbo m_sceneUbo;
 		crg::ImageViewId m_colourView;
-		crg::FramePass * m_backgroundPassDesc{};
-		BackgroundPass * m_backgroundPass{};
+		BackgroundRendererUPtr m_backgroundRenderer;
 		crg::FramePass * m_opaquePassDesc{};
 		RenderTechniquePass * m_opaquePass{};
 		crg::FramePass * m_transparentPassDesc{};

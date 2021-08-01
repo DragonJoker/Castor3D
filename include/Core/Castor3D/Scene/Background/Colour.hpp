@@ -96,7 +96,9 @@ namespace castor3d
 	private:
 		bool doInitialise( RenderDevice const & device )override;
 		void doCleanup()override;
-		void doCpuUpdate( CpuUpdater & updater )override;
+		void doCpuUpdate( CpuUpdater & updater
+			, castor::Matrix4x4f & mtxView
+			, castor::Matrix4x4f & mtxProj )override;
 		void doGpuUpdate( GpuUpdater & updater )override;
 		void doUpdateColour( RenderDevice const & device );
 
