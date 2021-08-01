@@ -400,6 +400,7 @@ namespace castor3d
 #if C3D_DebugQuads
 		if ( auto target = getRenderTarget() )
 		{
+			target->update( updater );
 			auto technique = target->getTechnique();
 			updater.combineIndex = m_debugConfig.debugIndex;
 			auto & intermediate = m_intermediates[m_debugConfig.debugIndex];
@@ -431,6 +432,8 @@ namespace castor3d
 
 			if ( target && target->isInitialised() )
 			{
+				target->render( m_device, info, *m_queue->queue );
+
 				auto & engine = *getEngine();
 				auto & renderSystem = *engine.getRenderSystem();
 				auto guard = castor::makeBlockGuard(
@@ -743,7 +746,7 @@ namespace castor3d
 	void RenderWindow::doCreateProgram()
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
-		ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "RenderWindow" };
+		ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, getName() };
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -765,7 +768,7 @@ namespace castor3d
 			vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "RenderWindow" };
+		ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, getName() };
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -905,7 +908,7 @@ namespace castor3d
 			.texcoordConfig( rq::Texcoord{} )
 			.tex3DResult( m_tex3DTo2DIntermediate )
 			.build( m_device
-				, "RenderWindow" + getName()
+				, getName()
 				, VK_FILTER_LINEAR );
 		m_renderQuad->createPipeline( VkExtent2D{ m_size[0], m_size[1] }
 			, castor::Position{}
@@ -1207,7 +1210,7 @@ namespace castor3d
 					, ashes::VkSemaphoreArray{ *resources->imageAvailableSemaphore, toWait.semaphore }
 					, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, toWait.dstStageMask }
 					, ashes::VkSemaphoreArray{}
-				, *resources->fence );
+					, *resources->fence );
 				target->resetSemaphore();
 			}
 		}
