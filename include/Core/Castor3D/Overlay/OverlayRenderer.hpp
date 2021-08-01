@@ -70,7 +70,8 @@ namespace castor3d
 		 *\param[in]	target		La vue de texture cible.
 		 */
 		C3D_API OverlayRenderer( RenderDevice const & device
-			, Texture const & target );
+			, Texture const & target
+			, VkCommandBufferLevel level = VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -108,6 +109,27 @@ namespace castor3d
 		 *\param[in]	timer	Le timer de la passe de rendu.
 		 */
 		C3D_API void endPrepare( FramePassTimer const & timer );
+		/**
+		 *\~english
+		 *\brief		Begins the overlays preparation.
+		 *\param[in]	timer	The render pass timer.
+		 *\param[in]	toWait	The semaphore from the previous render pass.
+		 *\~french
+		 *\brief		Commence la préparation des incrustations.
+		 *\param[in]	timer	Le timer de la passe de rendu.
+		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
+		 */
+		C3D_API void beginPrepare( VkRenderPass renderPass
+			, VkFramebuffer framebuffer );
+		/**
+		 *\~english
+		 *\brief		Ends the overlays preparation.
+		 *\param[in]	timer	The render pass timer.
+		 *\~french
+		 *\brief		Termine la préparation des incrustations.
+		 *\param[in]	timer	Le timer de la passe de rendu.
+		 */
+		C3D_API void endPrepare();
 		/**
 		 *\~english
 		 *\brief		Ends the overlays preparation.

@@ -455,12 +455,13 @@ namespace castor3d
 	//*********************************************************************************************
 
 	OverlayRenderer::OverlayRenderer( RenderDevice const & device
-		, Texture const & target )
+		, Texture const & target
+		, VkCommandBufferLevel level )
 		: OwnedBy< RenderSystem >( device.renderSystem )
 		, m_device{ device }
 		, m_uboPools{ *device.uboPools }
 		, m_target{ target }
-		, m_commandBuffer{ device.graphicsCommandPool->createCommandBuffer( "OverlayRenderer" ) }
+		, m_commandBuffer{ device.graphicsData()->commandPool->createCommandBuffer( "OverlayRenderer", level ) }
 		, m_matrixUbo{ device }
 		, m_noTexDeclaration{ 0u
 			, ashes::VkVertexInputBindingDescriptionArray{ { 0u
@@ -481,6 +482,7 @@ namespace castor3d
 				, { 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, texture ) }
 				, { 2u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, text ) } } }
 		, m_finished{ device->createSemaphore( "OverlayRenderer" ) }
+		, m_size{ makeSize( m_target.getExtent() ) }
 	{
 		doCreateRenderPass( device );
 
@@ -504,6 +506,13 @@ namespace castor3d
 			, device
 			, m_textDeclaration
 			, MaxPanelsPerBuffer ) );
+
+		m_matrixUbo.cpuUpdate( getRenderSystem()->getOrtho( 0.0f
+			, float( m_size.getWidth() )
+			, 0.0f
+			, float( m_size.getHeight() )
+			, -1.0f
+			, 1.0f ) );
 	}
 
 	OverlayRenderer::~OverlayRenderer()
@@ -584,9 +593,45 @@ namespace castor3d
 		m_sizeChanged = false;
 	}
 
-	crg::SemaphoreWait OverlayRenderer::render( FramePassTimer & timer )
+	void OverlayRenderer::beginPrepare( VkRenderPass renderPass
+		, VkFramebuffer framebuffer )
 	{
-		auto & queue = *m_device.graphicsQueue;
+		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT | VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT
+			, VkCommandBufferInheritanceInfo{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO
+				, nullptr
+				, renderPass
+				, 0u
+				, framebuffer
+				, VK_FALSE
+				, 0u
+				, 0u } );
+	}
+
+	void OverlayRenderer::endPrepare()
+	{
+		m_commandBuffer->end();
+
+		for ( auto & pool : m_panelVertexBuffers )
+		{
+			pool->upload();
+		}
+
+		for ( auto & pool : m_borderVertexBuffers )
+		{
+			pool->upload();
+		}
+
+		for ( auto & pool : m_textVertexBuffers )
+		{
+			pool->upload();
+		}
+		
+		m_sizeChanged = false;
+	}
+
+	crg::SemaphoreWait OverlayRenderer::render( FramePassTimer & timer
+		, ashes::Queue const & queue )
+	{
 		auto timerBlock( timer.start() );
 		timerBlock->notifyPassRender();
 		std::vector< VkSemaphore > semaphores;
@@ -706,59 +751,41 @@ namespace castor3d
 
 	void OverlayRenderer::doCreateRenderPass( RenderDevice const & device )
 	{
-		ashes::VkAttachmentDescriptionArray attaches
-		{
-			{
-				0u,
-				m_target.getFormat(),
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_CLEAR,
-				VK_ATTACHMENT_STORE_OP_STORE,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_UNDEFINED,
-				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-			}
-		};
+		ashes::VkAttachmentDescriptionArray attaches{ { 0u
+			, m_target.getFormat()
+			, VK_SAMPLE_COUNT_1_BIT
+			, VK_ATTACHMENT_LOAD_OP_CLEAR
+			, VK_ATTACHMENT_STORE_OP_STORE
+			, VK_ATTACHMENT_LOAD_OP_DONT_CARE
+			, VK_ATTACHMENT_STORE_OP_DONT_CARE
+			, VK_IMAGE_LAYOUT_UNDEFINED
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } };
 		ashes::SubpassDescriptionArray subpasses;
-		subpasses.emplace_back( ashes::SubpassDescription
-			{
-				0u,
-				VK_PIPELINE_BIND_POINT_GRAPHICS,
-				{},
-				{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
-				{},
-				ashes::nullopt,
-				{},
-			} );
-		ashes::VkSubpassDependencyArray dependencies
-		{
-			{
-				VK_SUBPASS_EXTERNAL,
-				0u,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-				VK_ACCESS_SHADER_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			},
-			{
-				0u,
-				VK_SUBPASS_EXTERNAL,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-				VK_ACCESS_SHADER_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			}
-		};
-		ashes::RenderPassCreateInfo createInfo
-		{
-			0u,
-			std::move( attaches ),
-			std::move( subpasses ),
-			std::move( dependencies ),
-		};
+		subpasses.emplace_back( ashes::SubpassDescription{ 0u
+			, VK_PIPELINE_BIND_POINT_GRAPHICS
+			, {}
+			, { { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } }
+			, {}
+			, ashes::nullopt
+			, {} } );
+		ashes::VkSubpassDependencyArray dependencies{ { VK_SUBPASS_EXTERNAL
+				, 0u
+				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+				, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
+				, VK_ACCESS_SHADER_READ_BIT
+				, VK_DEPENDENCY_BY_REGION_BIT }
+			, { 0u
+				, VK_SUBPASS_EXTERNAL
+				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+				, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
+				, VK_ACCESS_SHADER_READ_BIT
+				, VK_DEPENDENCY_BY_REGION_BIT } };
+		ashes::RenderPassCreateInfo createInfo{ 0u
+			, std::move( attaches )
+			, std::move( subpasses )
+			, std::move( dependencies ) };
 		m_renderPass = device->createRenderPass( "OverlayRenderer"
 			, std::move( createInfo ) );
 
@@ -780,27 +807,18 @@ namespace castor3d
 		, ashes::PipelineShaderStageCreateInfoArray program
 		, bool text )
 	{
-		ashes::VkPipelineColorBlendAttachmentStateArray attachments
-		{
-			VkPipelineColorBlendAttachmentState
-			{
-				VK_TRUE,
-				VK_BLEND_FACTOR_SRC_ALPHA,
-				VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-				VK_BLEND_OP_ADD,
-				VK_BLEND_FACTOR_SRC_ALPHA,
-				VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-				VK_BLEND_OP_ADD,
-				defaultColorWriteMask,
-			},
-		};
-		ashes::PipelineColorBlendStateCreateInfo blState
-		{
-			0u,
-			VK_FALSE,
-			VK_LOGIC_OP_COPY,
-			std::move( attachments ),
-		};
+		ashes::VkPipelineColorBlendAttachmentStateArray attachments{ { VK_TRUE
+			, VK_BLEND_FACTOR_SRC_ALPHA
+			, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA
+			, VK_BLEND_OP_ADD
+			, VK_BLEND_FACTOR_SRC_ALPHA
+			, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA
+			, VK_BLEND_OP_ADD
+			, defaultColorWriteMask } };
+		ashes::PipelineColorBlendStateCreateInfo blState{ 0u
+			, VK_FALSE
+			, VK_LOGIC_OP_COPY
+			, std::move( attachments ) };
 		auto & materials = getRenderSystem()->getEngine()->getMaterialCache();
 		ashes::VkDescriptorSetLayoutBindingArray bindings;
 
@@ -837,29 +855,23 @@ namespace castor3d
 		auto descriptorLayout = device->createDescriptorSetLayout( std::move( bindings ) );
 		auto descriptorPool = descriptorLayout->createPool( 1000u );
 		auto pipelineLayout = device->createPipelineLayout( *descriptorLayout );
-		auto pipeline = device->createPipeline( ashes::GraphicsPipelineCreateInfo
-			{
-				0u,
-				std::move( program ),
-				*vertexLayout,
-				ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST },
-				ashes::nullopt,
-				ashes::PipelineViewportStateCreateInfo{},
-				ashes::PipelineRasterizationStateCreateInfo{},
-				ashes::PipelineMultisampleStateCreateInfo{},
-				ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE },
-				std::move( blState ),
-				ashes::PipelineDynamicStateCreateInfo{ 0u, { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR } },
-				*pipelineLayout,
-				*m_renderPass,
-			} );
-		return Pipeline
-		{
-			std::move( descriptorLayout ),
-			std::move( descriptorPool ),
-			std::move( pipelineLayout ),
-			std::move( pipeline ),
-		};
+		auto pipeline = device->createPipeline( { 0u
+			, std::move( program )
+			, *vertexLayout
+			, ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST }
+			, ashes::nullopt
+			, ashes::PipelineViewportStateCreateInfo{}
+			, ashes::PipelineRasterizationStateCreateInfo{}
+			, ashes::PipelineMultisampleStateCreateInfo{}
+			, ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE }
+			, std::move( blState )
+			, ashes::PipelineDynamicStateCreateInfo{ 0u, { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR } }
+			, *pipelineLayout
+			, *m_renderPass } );
+		return Pipeline{ std::move( descriptorLayout )
+			, std::move( descriptorPool )
+			, std::move( pipelineLayout )
+			, std::move( pipeline ) };
 	}
 
 	OverlayRenderer::Pipeline & OverlayRenderer::doGetPipeline( RenderDevice const & device

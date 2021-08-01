@@ -5,9 +5,9 @@ See LICENSE file in root folder
 #define ___C3D_RenderWindow_H___
 
 #include "RenderModule.hpp"
-#include "Castor3D/Overlay/OverlayRenderer.hpp"
 
 #include "Castor3D/Event/UserInput/UserInputListener.hpp"
+#include "Castor3D/Overlay/OverlayRenderer.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Render/ToTexture/RenderToTextureModule.hpp"
