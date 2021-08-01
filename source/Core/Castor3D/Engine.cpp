@@ -31,6 +31,7 @@
 #include "Castor3D/Render/RenderWindow.hpp"
 #include "Castor3D/Render/Technique/RenderTechnique.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Graphics/Image.hpp>
@@ -264,6 +265,7 @@ namespace castor3d
 		m_fontCache.clear();
 		m_imageCache.clear();
 		m_sceneCache->clear();
+		m_loadingScene.reset();
 		m_materialCache->clear();
 		m_listenerCache->clear();
 		m_techniqueCache->clear();
@@ -354,6 +356,12 @@ namespace castor3d
 
 			m_listenerCache->cleanup();
 			m_sceneCache->cleanup();
+
+			if ( m_loadingScene )
+			{
+				m_loadingScene->cleanup();
+			}
+
 			m_samplerCache->cleanup();
 			m_overlayCache->cleanup();
 			m_materialCache->cleanup();
@@ -444,7 +452,14 @@ namespace castor3d
 	{
 		for ( auto & window : m_renderWindows )
 		{
+			TechniqueQueues techniqueQueues;
+			updater.queues = &techniqueQueues.queues;
 			window.second->update( updater );
+
+			if ( !techniqueQueues.queues.empty() )
+			{
+				updater.techniquesQueues.push_back( techniqueQueues );
+			}
 		}
 
 		getMaterialCache().update( updater );
@@ -458,20 +473,24 @@ namespace castor3d
 				TechniqueQueues techniqueQueues;
 				updater.queues = &techniqueQueues.queues;
 				technique.update( updater );
-				techniqueQueues.shadowMaps = technique.getShadowMaps();
-				updater.techniquesQueues.push_back( techniqueQueues );
+
+				if ( !techniqueQueues.queues.empty() )
+				{
+					techniqueQueues.shadowMaps = technique.getShadowMaps();
+					updater.techniquesQueues.push_back( techniqueQueues );
+				}
 			} );
 	}
 
 	void Engine::update( GpuUpdater & updater )
 	{
+		getMaterialCache().update( updater );
+		getRenderTargetCache().update( updater );
+
 		for ( auto & window : m_renderWindows )
 		{
 			window.second->update( updater );
 		}
-
-		getMaterialCache().update( updater );
-		getRenderTargetCache().update( updater );
 	}
 
 	Path Engine::getPluginsDirectory()
@@ -679,6 +698,12 @@ namespace castor3d
 				auto data = device.graphicsData();
 				job( device, *data );
 			} );
+	}
+
+	void Engine::setLoadingScene( SceneSPtr scene )
+	{
+		m_loadingScene = std::move( scene );
+		m_loadingScene->initialise();
 	}
 
 	void Engine::doLoadCoreData()

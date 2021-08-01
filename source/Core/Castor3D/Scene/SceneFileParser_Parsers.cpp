@@ -18,6 +18,7 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
+#include "Castor3D/Miscellaneous/LoadingScreen.hpp"
 #include "Castor3D/Model/Mesh/Importer.hpp"
 #include "Castor3D/Model/Mesh/ImporterFactory.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
@@ -169,6 +170,15 @@ namespace castor3d
 			parsingContext.sceneNode = parsingContext.scene->getRootNode();
 			parsingContext.mapScenes.insert( std::make_pair( name, parsingContext.scene ) );
 		}
+	}
+	CU_EndAttributePush( CSCNSection::eScene )
+
+	CU_ImplementAttributeParser( parserRootLoadingScreen )
+	{
+		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		parsingContext.scene = std::make_shared< Scene >( LoadingScreen::SceneName
+			, *parsingContext.parser->getEngine() );
+		parsingContext.sceneNode = parsingContext.scene->getRootNode();
 	}
 	CU_EndAttributePush( CSCNSection::eScene )
 
@@ -1237,6 +1247,24 @@ namespace castor3d
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eVoxelConeTracing )
+
+	CU_ImplementAttributeParser( parserSceneEnd )
+	{
+		auto & parsingContext = static_cast< SceneFileContext & >( context );
+
+		if ( !parsingContext.scene )
+		{
+			CU_ParsingError( cuT( "No scene initialised." ) );
+		}
+		else
+		{
+			if ( parsingContext.scene->getName() == LoadingScreen::SceneName )
+			{
+				parsingContext.parser->getEngine()->setLoadingScene( std::move( parsingContext.scene ) );
+			}
+		}
+	}
+	CU_EndAttributePop()
 
 	CU_ImplementAttributeParser( parserMesh )
 	{

@@ -369,6 +369,7 @@ namespace castor3d
 		castor::String m_name;
 		Parameters m_techniqueParameters;
 		PostEffectPtrArray m_hdrPostEffects;
+		castor::String m_toneMappingName{ cuT( "linear" ) };
 		ToneMappingSPtr m_toneMapping;
 		PostEffectPtrArray m_srgbPostEffects;
 		FramePassTimerUPtr m_overlaysTimer;
