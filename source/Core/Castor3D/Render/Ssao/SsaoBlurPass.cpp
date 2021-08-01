@@ -379,10 +379,10 @@ namespace castor3d
 			, ashes::PipelineShaderStageCreateInfoArray const & stages1 )
 		{
 			crg::rq::Config result;
-			result.renderSize = renderSize;
-			result.enabled = &ssaoConfig.enabled;
-			result.baseConfig.programs = { crg::makeVkArray< VkPipelineShaderStageCreateInfo >( stages0 )
-				, crg::makeVkArray< VkPipelineShaderStageCreateInfo >( stages1 ) };
+			result.renderSize( renderSize );
+			result.enabled( &ssaoConfig.enabled );
+			result.programs( { crg::makeVkArray< VkPipelineShaderStageCreateInfo >( stages0 )
+				, crg::makeVkArray< VkPipelineShaderStageCreateInfo >( stages1 ) } );
 			return result;
 		}
 
@@ -414,13 +414,13 @@ namespace castor3d
 	SsaoBlurPass::Program::Program( RenderDevice const & device
 		, bool useNormalsBuffer )
 		: vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
-		, getName( useNormalsBuffer )
-		, getVertexProgram() }
+			, getName( useNormalsBuffer )
+			, getVertexProgram() }
 		, pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT
-		, getName( useNormalsBuffer )
-		, getPixelProgram( useNormalsBuffer ) }
+			, getName( useNormalsBuffer )
+			, getPixelProgram( useNormalsBuffer ) }
 		, stages{ makeShaderState( device, vertexShader )
-		, makeShaderState( device, pixelShader ) }
+			, makeShaderState( device, pixelShader ) }
 	{
 	}
 
