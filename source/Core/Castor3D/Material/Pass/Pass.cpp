@@ -837,7 +837,7 @@ namespace castor3d
 					}
 					else
 					{
-						if ( parsingContext->imageInfo->mipLevels == ~uint32_t( 0u ) )
+						if ( parsingContext->imageInfo->mipLevels == ashes::RemainingArrayLayers )
 						{
 							parsingContext->imageInfo->mipLevels = 20;
 						}
