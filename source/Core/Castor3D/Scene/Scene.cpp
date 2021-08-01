@@ -391,6 +391,12 @@ namespace castor3d
 		m_materialCacheView = makeCacheView< Material, EventType::ePreRender >( getName()
 			, [this]( MaterialSPtr element )
 				{
+					this->getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
+						, [element]( RenderDevice const & device
+							, QueueData const & queueData )
+						{
+							element->initialise( device, queueData );
+						} ) );
 					this->m_materialsListeners.emplace( element
 						, element->onChanged.connect( [this]( Material const & material )
 							{
