@@ -51,8 +51,13 @@ namespace castor3d
 
 	bool PoolUniformBuffer::hasAvailable( VkDeviceSize size )const
 	{
-		return m_allocated.empty()
-			|| m_buffer->getBuffer().getSize() >+ ( m_allocated.rbegin()->offset + m_allocated.rbegin()->size + getAlignedSize( uint32_t( size ) ) );
+		return !hasAllocated()
+			|| m_buffer->getBuffer().getSize() > ( m_allocated.rbegin()->offset + m_allocated.rbegin()->size + getAlignedSize( uint32_t( size ) ) );
+	}
+
+	bool PoolUniformBuffer::hasAllocated()const
+	{
+		return !m_allocated.empty();
 	}
 
 	MemChunk PoolUniformBuffer::allocate( VkDeviceSize size )

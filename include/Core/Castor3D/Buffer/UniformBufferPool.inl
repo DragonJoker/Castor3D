@@ -19,14 +19,6 @@ namespace castor3d
 		if ( itB == it->second.end() )
 		{
 			assert( m_currentUboIndex < m_maxPoolUboCount - 1u );
-			ashes::QueueShare sharingMode
-			{
-				{
-					device.getGraphicsQueueFamilyIndex(),
-					device.getComputeQueueFamilyIndex(),
-					device.getTransferQueueFamilyIndex(),
-				}
-			};
 
 			if ( !m_maxUboElemCount )
 			{
