@@ -304,10 +304,10 @@ namespace castor3d
 			, bool const * enabled )
 		{
 			crg::rq::Config result;
-			result.texcoordConfig = crg::Texcoord{};
-			result.renderSize = makeExtent2D( size );
-			result.baseConfig.programs = { crg::makeVkArray< VkPipelineShaderStageCreateInfo >( shaderStages ) };
-			result.enabled = enabled;
+			result.texcoordConfig( crg::Texcoord{} );
+			result.renderSize( makeExtent2D( size ) );
+			result.programs( { crg::makeVkArray< VkPipelineShaderStageCreateInfo >( shaderStages ) } );
+			result.enabled( enabled );
 			return result;
 		}
 	}
@@ -455,54 +455,54 @@ namespace castor3d
 				, crg::RunnableGraph & graph )
 			{
 				auto config = createConfig( m_size, m_combineShader, &m_enabled );
-				config.recordDisabledInto = [this, &graph, &context]( crg::RunnablePass const & runnable
-					, VkCommandBuffer commandBuffer
-					, uint32_t passIndex )
-				{
-					auto & srcView = m_lpResult[LpTexture::eDiffuse].wholeViewId;
-					auto & dstView = m_result.wholeViewId;
-					auto size = m_result.getExtent();
-					auto & srcSubresource = srcView.data->info.subresourceRange;
-					auto & dstSubresource = dstView.data->info.subresourceRange;
-					VkImageCopy region{ VkImageSubresourceLayers{ srcSubresource.aspectMask, srcSubresource.baseMipLevel, srcSubresource.baseArrayLayer, 1u }
-						, VkOffset3D{ 0u, 0u, 0u }
-						, VkImageSubresourceLayers{ dstSubresource.aspectMask, dstSubresource.baseMipLevel, dstSubresource.baseArrayLayer, 1u }
-						, VkOffset3D{ 0u, 0u, 0u }
-						, { size.width, size.height, 1u } };
-					auto srcTransition = runnable.getTransition( passIndex, srcView );
-					auto dstTransition = runnable.getTransition( passIndex, dstView );
-					graph.memoryBarrier( commandBuffer
-						, srcView
-						, srcTransition.to
-						, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-							, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
-							, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) } );
-					graph.memoryBarrier( commandBuffer
-						, dstView
-						, dstTransition.to
-						, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-							, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
-							, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) } );
-					context.vkCmdCopyImage( commandBuffer
-						, graph.createImage( srcView.data->image )
-						, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-						, graph.createImage( dstView.data->image )
-						, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-						, 1u
-						, &region );
-					graph.memoryBarrier( commandBuffer
-						, dstView
-						, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-							, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
-							, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) }
-						, dstTransition.to );
-					graph.memoryBarrier( commandBuffer
-						, srcView
-						, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-							, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
-							, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) }
-						, srcTransition.to );
-				};
+				config.recordDisabledInto( [this, &graph, &context]( crg::RunnablePass const & runnable
+						, VkCommandBuffer commandBuffer
+						, uint32_t passIndex )
+					{
+						auto & srcView = m_lpResult[LpTexture::eDiffuse].wholeViewId;
+						auto & dstView = m_result.wholeViewId;
+						auto size = m_result.getExtent();
+						auto & srcSubresource = srcView.data->info.subresourceRange;
+						auto & dstSubresource = dstView.data->info.subresourceRange;
+						VkImageCopy region{ VkImageSubresourceLayers{ srcSubresource.aspectMask, srcSubresource.baseMipLevel, srcSubresource.baseArrayLayer, 1u }
+							, VkOffset3D{ 0u, 0u, 0u }
+							, VkImageSubresourceLayers{ dstSubresource.aspectMask, dstSubresource.baseMipLevel, dstSubresource.baseArrayLayer, 1u }
+							, VkOffset3D{ 0u, 0u, 0u }
+							, { size.width, size.height, 1u } };
+						auto srcTransition = runnable.getTransition( passIndex, srcView );
+						auto dstTransition = runnable.getTransition( passIndex, dstView );
+						graph.memoryBarrier( commandBuffer
+							, srcView
+							, srcTransition.to
+							, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+								, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
+								, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) } );
+						graph.memoryBarrier( commandBuffer
+							, dstView
+							, dstTransition.to
+							, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+								, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
+								, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) } );
+						context.vkCmdCopyImage( commandBuffer
+							, graph.createImage( srcView.data->image )
+							, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+							, graph.createImage( dstView.data->image )
+							, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+							, 1u
+							, &region );
+						graph.memoryBarrier( commandBuffer
+							, dstView
+							, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+								, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
+								, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) }
+							, dstTransition.to );
+						graph.memoryBarrier( commandBuffer
+							, srcView
+							, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+								, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
+								, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) }
+							, srcTransition.to );
+					} );
 				auto result = std::make_unique< crg::RenderQuad >( pass
 					, context
 					, graph
