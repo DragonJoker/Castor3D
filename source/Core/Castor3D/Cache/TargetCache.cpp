@@ -83,7 +83,7 @@ namespace castor3d
 
 		for ( auto target : m_renderTargets[size_t( TargetType::eTexture )] )
 		{
-			target->render( device, info );
+			target->render( device, info, queue );
 		}
 
 		for ( auto target : m_renderTargets[size_t( TargetType::eWindow )] )
