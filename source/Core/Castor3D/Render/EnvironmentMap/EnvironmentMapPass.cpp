@@ -67,12 +67,17 @@ namespace castor3d
 		, m_camera{ doCreateCamera( *faceNode, getOwner()->getSize() ) }
 		, m_culler{ std::make_unique< FrustumCuller >( *m_camera ) }
 		, m_matrixUbo{ m_device }
-		, m_modelUbo{ m_device.uboPools->getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
 		, m_hdrConfigUbo{ m_device }
 		, m_sceneUbo{ m_device }
 		, m_colourView{ environmentMap.getColourViewId( m_index, m_face ) }
-		, m_backgroundPassDesc{ &doCreateBackgroundPass() }
-		, m_opaquePassDesc{ &doCreateOpaquePass( m_backgroundPassDesc ) }
+		, m_backgroundRenderer{ castor::makeUnique< BackgroundRenderer >( m_graph
+			, nullptr
+			, m_device
+			, m_background
+			, m_hdrConfigUbo
+			, m_sceneUbo
+			, m_colourView ) }
+		, m_opaquePassDesc{ &doCreateOpaquePass( &m_backgroundRenderer->getPass() ) }
 		, m_transparentPassDesc{ &doCreateTransparentPass( m_opaquePassDesc ) }
 	{
 		doCreateGenMipmapsPass( m_transparentPassDesc );
@@ -98,16 +103,14 @@ namespace castor3d
 		m_camera->getParent()->setPosition( position );
 		m_camera->getParent()->update();
 		m_camera->update();
-		castor::matrix::setTranslate( m_mtxModel, position );
-		castor::matrix::scale( m_mtxModel, castor::Point3f{ 1, -1, 1 } );
 		m_culler->compute();
-		static_cast< RenderTechniquePass & >( *m_opaquePass ).update( updater );
-		static_cast< RenderTechniquePass & >( *m_transparentPass ).update( updater );
+		updater.camera = m_camera;
+
+		m_backgroundRenderer->update( updater );
+		m_opaquePass->update( updater );
+		m_transparentPass->update( updater );
 		m_matrixUbo.cpuUpdate( m_camera->getView()
 			, m_camera->getProjection( false ) );
-		auto & configuration = m_modelUbo.getData();
-		configuration.prvModel = configuration.curModel;
-		configuration.curModel = m_mtxModel;
 		m_hdrConfigUbo.cpuUpdate( m_camera->getHdrConfig() );
 	}
 
@@ -118,8 +121,11 @@ namespace castor3d
 			return;
 		}
 
+		updater.camera = m_camera;
+
 		RenderInfo info;
 		m_sceneUbo.cpuUpdate( *m_camera->getScene(), m_camera.get() );
+		m_backgroundRenderer->update( updater );
 		m_opaquePass->update( updater );
 		m_transparentPass->update( updater );
 	}
@@ -137,39 +143,6 @@ namespace castor3d
 		{
 			m_transparentPass->setIgnoredNode( node );
 		}
-	}
-
-	crg::FramePass & EnvironmentMapPass::doCreateBackgroundPass()
-	{
-		auto & result = m_graph.createPass( getName() + "BackgroundPass"
-			, [this]( crg::FramePass const & pass
-				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
-			{
-				auto result = std::make_unique< BackgroundPass >( pass
-					, context
-					, graph
-					, m_device
-					, m_background
-					, makeExtent2D( getExtent( m_colourView ) )
-					, false );
-				m_node->getScene()->getEngine()->registerTimer( "EnvironmentMap" + std::to_string( m_index )
-					, result->getTimer() );
-				m_backgroundPass = result.get();
-				return result;
-			} );
-		m_matrixUbo.createPassBinding( result
-			, SceneBackground::MtxUboIdx );
-		m_modelUbo.createPassBinding( result
-			, "Model"
-			, SceneBackground::MdlMtxUboIdx );
-		m_hdrConfigUbo.createPassBinding( result
-			, SceneBackground::HdrCfgUboIdx );
-		m_sceneUbo.createPassBinding( result
-			, SceneBackground::SceneUboIdx );
-		result.addOutputColourView( m_colourView
-			, opaqueBlackClearColor );
-		return result;
 	}
 
 	crg::FramePass & EnvironmentMapPass::doCreateOpaquePass( crg::FramePass const * previousPass )
