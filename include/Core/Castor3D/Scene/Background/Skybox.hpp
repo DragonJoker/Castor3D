@@ -341,9 +341,12 @@ namespace castor3d
 		void doCpuUpdate( CpuUpdater & updater )override;
 		void doGpuUpdate( GpuUpdater & updater )override;
 		bool doInitialiseTexture( RenderDevice const & device );
-		void doInitialiseLayerTexture( RenderDevice const & device );
-		void doInitialiseEquiTexture( RenderDevice const & device );
-		void doInitialiseCrossTexture( RenderDevice const & device );
+		void doInitialiseLayerTexture( RenderDevice const & device
+			, QueueData const & queueData );
+		void doInitialiseEquiTexture( RenderDevice const & device
+			, QueueData const & queueData );
+		void doInitialiseCrossTexture( RenderDevice const & device
+			, QueueData const & queueData );
 
 	private:
 		std::array< TextureLayoutSPtr, 6u > m_layerTexture;

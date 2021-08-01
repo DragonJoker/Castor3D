@@ -105,6 +105,7 @@ namespace castor3d
 	void BackgroundPass::doInitialiseVertexBuffer()
 	{
 		using castor::Point3f;
+		auto data = m_device.graphicsData();
 		ashes::StagingBuffer stagingBuffer{ *m_device.device, 0u, sizeof( Cube ) };
 
 		// Vertex Buffer
@@ -133,8 +134,8 @@ namespace castor3d
 			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, "Background");
-		stagingBuffer.uploadVertexData( *m_device.graphicsQueue
-			, *m_device.graphicsCommandPool
+		stagingBuffer.uploadVertexData( *data->queue
+			, *data->commandPool
 			, vertexData
 			, *m_vertexBuffer );
 
@@ -159,8 +160,8 @@ namespace castor3d
 			, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, "BackgroundIndexBuffer" );
-		stagingBuffer.uploadBufferData( *m_device.graphicsQueue
-			, *m_device.graphicsCommandPool
+		stagingBuffer.uploadBufferData( *data->queue
+			, *data->commandPool
 			, indexData
 			, *m_indexBuffer );
 	}

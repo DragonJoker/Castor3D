@@ -38,7 +38,8 @@ namespace castor3d
 	std::unique_ptr< GpuFunctorEvent > makeGpuInitialiseEvent( T & object )
 	{
 		return makeGpuFunctorEvent( EventType::ePreRender
-			, [&object]( RenderDevice const & device )
+			, [&object]( RenderDevice const & device
+				, QueueData const & queueData )
 			{
 				object.initialise( device );
 			} );

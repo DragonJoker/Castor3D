@@ -47,7 +47,8 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise la texture.
 		 */
-		C3D_API void initialise( RenderDevice const & device );
+		C3D_API void initialise( RenderDevice const & device
+			, QueueData const & queueData );
 		/**
 		 *\~english
 		 *\brief		Flushes the teture.

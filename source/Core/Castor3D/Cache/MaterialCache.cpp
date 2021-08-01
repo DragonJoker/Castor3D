@@ -7,6 +7,7 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
@@ -39,7 +40,7 @@ namespace castor3d
 			else
 			{
 				m_defaultMaterial = m_elements.find( Material::DefaultMaterialName );
-				m_defaultMaterial->initialise( device );
+				m_defaultMaterial->initialise( device, *device.graphicsData() );
 			}
 
 			m_passBuffer = std::make_shared< PassBuffer >( *getEngine()
@@ -54,7 +55,8 @@ namespace castor3d
 	void MaterialCache::cleanup()
 	{
 		getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [this]( RenderDevice const & device )
+			, [this]( RenderDevice const & device
+				, QueueData const & queueData )
 			{
 				m_passBuffer.reset();
 				m_textureBuffer.reset();

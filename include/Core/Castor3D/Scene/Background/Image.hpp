@@ -74,7 +74,8 @@ namespace castor3d
 		void doCleanup()override;
 		void doCpuUpdate( CpuUpdater & updater )override;
 		void doGpuUpdate( GpuUpdater & updater )override;
-		void doInitialise2DTexture( RenderDevice const & device );
+		void doInitialise2DTexture( RenderDevice const & device
+			, QueueData const & queueData );
 
 	private:
 		TextureLayoutSPtr m_2dTexture;

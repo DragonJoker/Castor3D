@@ -187,7 +187,8 @@ namespace smaa
 	{
 		auto & handler = m_graph.getHandler();
 		auto & context = m_device.makeContext();
-		auto commandBuffer = device.graphicsCommandPool->createCommandBuffer();
+		auto data = m_device.graphicsData();
+		auto commandBuffer = data->commandPool->createCommandBuffer();
 		commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 
 		for ( auto & view : m_currentColourViews )
@@ -209,8 +210,8 @@ namespace smaa
 		}
 
 		commandBuffer->end();
-		device.graphicsQueue->submit( *commandBuffer, nullptr );
-		device.graphicsQueue->waitIdle();
+		data->queue->submit( *commandBuffer, nullptr );
+		data->queue->waitIdle();
 		commandBuffer.reset();
 
 		crg::SamplerDesc pointSampler{ VK_FILTER_NEAREST

@@ -77,7 +77,7 @@ namespace castor3d
 		 *\param[in]	device	Le device GPU.
 		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
-		ashes::Semaphore const & render( RenderDevice const & device
+		ashes::Semaphore const & render( QueueData const & queueData
 			, ashes::Semaphore const & toWait );
 		/**
 		*\~english

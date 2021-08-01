@@ -391,7 +391,6 @@ namespace castor3d
 		m_materialCacheView = makeCacheView< Material, EventType::ePreRender >( getName()
 			, [this]( MaterialSPtr element )
 				{
-					this->getListener().postEvent( makeGpuInitialiseEvent( *element ) );
 					this->m_materialsListeners.emplace( element
 						, element->onChanged.connect( [this]( Material const & material )
 							{
@@ -435,8 +434,11 @@ namespace castor3d
 		m_onGeometryChanged = m_geometryCache->onChanged.connect( setThisChanged );
 		m_onSceneNodeChanged = m_sceneNodeCache->onChanged.connect( setThisChanged );
 		m_animatedObjectGroupCache->add( cuT( "C3D_Textures" ) );
+		auto & device = *engine.getRenderSystem()->getMainRenderDevice();
+		auto data = device.graphicsData();
 		m_reflectionMap = std::make_unique< EnvironmentMap >( engine.getGraphResourceHandler()
-			, *engine.getRenderSystem()->getMainRenderDevice()
+			, device
+			, *data
 			, *this );
 	}
 
@@ -517,7 +519,8 @@ namespace castor3d
 		m_meshCache->cleanup();
 
 		getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [this]( RenderDevice const & device )
+			, [this]( RenderDevice const & device
+				, QueueData const & queueData )
 			{
 				m_background->cleanup( device );
 			} ) );

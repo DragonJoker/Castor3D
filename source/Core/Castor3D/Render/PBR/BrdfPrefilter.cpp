@@ -32,7 +32,7 @@ namespace castor3d
 		, ashes::ImageView const & dstTexture )
 		: m_renderSystem{ *engine.getRenderSystem() }
 		, m_device{ device }
-		, m_commands{ m_device, "BrdfPrefilter" }
+		, m_commands{ m_device, *m_device.graphicsData(), "BrdfPrefilter" }
 	{
 		// Initialise the vertex buffer.
 		m_vertexBuffer = makeVertexBuffer< TexturedQuad >( m_device
@@ -170,9 +170,9 @@ namespace castor3d
 		cmd.end();
 	}
 
-	void BrdfPrefilter::render()
+	void BrdfPrefilter::render( QueueData const & queueData )
 	{
-		m_commands.submit( *m_device.graphicsQueue );
+		m_commands.submit( *queueData.queue );
 	}
 
 	ashes::PipelineShaderStageCreateInfoArray BrdfPrefilter::doCreateProgram()

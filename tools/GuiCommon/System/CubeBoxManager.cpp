@@ -122,7 +122,8 @@ namespace GuiCommon
 	{
 		Engine * engine = m_scene.getEngine();
 		engine->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [this, &object, &submesh]( RenderDevice const & device )
+			, [this, &object, &submesh]( RenderDevice const & device
+				, QueueData const & queueData )
 			{
 				m_object = &object;
 				m_submesh = &submesh;
@@ -162,7 +163,8 @@ namespace GuiCommon
 		CU_Require( object.getName() == m_object->getName() );
 		Engine * engine = m_scene.getEngine();
 		engine->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [this, &object]( RenderDevice const & device )
+			, [this, &object]( RenderDevice const & device
+				, QueueData const & queueData )
 			{
 				m_sceneConnection.disconnect();
 				doRemoveBB( m_obbMesh->getName(), m_obbNode );
@@ -294,7 +296,8 @@ namespace GuiCommon
 
 			Engine * engine = m_scene.getEngine();
 			engine->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [this, aabbSubmesh]( RenderDevice const & device )
+				, [this, aabbSubmesh]( RenderDevice const & device
+					, QueueData const & queueData )
 				{
 					aabbSubmesh->update();
 				} ) );

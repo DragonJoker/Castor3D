@@ -85,7 +85,7 @@ namespace castor3d
 					, device
 					, m_textureId
 					, sampler );
-				m_ibl->update();
+				m_ibl->update( *device.graphicsData() );
 			}
 
 			onChanged( *this );

@@ -241,6 +241,7 @@ namespace castor3d
 		}
 
 		CommandsSemaphore createCommandBuffer( RenderDevice const & device
+			, QueueData const & queueData
 			, ashes::RenderPass const & renderPass
 			, ashes::FrameBuffer const & frameBuffer
 			, ashes::PipelineLayout const & pipelineLayout
@@ -250,7 +251,7 @@ namespace castor3d
 		{
 			auto & handler = device.renderSystem.getEngine()->getGraphResourceHandler();
 			auto textureSize = getExtent( view.viewId ).width;
-			CommandsSemaphore result{ device, "Texture3DTo2D" };
+			CommandsSemaphore result{ device, queueData, "Texture3DTo2D" };
 			auto & cmd = *result.commandBuffer;
 			cmd.begin();
 			cmd.beginDebugBlock( { "Texture3D To Texture2D"
@@ -426,6 +427,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	Texture3DTo2D::Texture3DToScreen::Texture3DToScreen( RenderDevice const & device
+		, QueueData const & queueData
 		, UniformBufferOffsetT< Texture3DTo2DData > const & uniformBuffer
 		, MatrixUbo const & matrixUbo
 		, IntermediateView const & texture3D
@@ -435,7 +437,7 @@ namespace castor3d
 		, ashes::PipelineLayout const & pipelineLayout
 		, ashes::GraphicsPipeline const & pipeline )
 		: descriptorSet{ createDescriptorSet( device, descriptorSetPool, uniformBuffer, matrixUbo, texture3D ) }
-		, commands{ createCommandBuffer( device, renderPass, frameBuffer, pipelineLayout, pipeline, *descriptorSet, texture3D ) }
+		, commands{ createCommandBuffer( device, queueData, renderPass, frameBuffer, pipelineLayout, pipeline, *descriptorSet, texture3D ) }
 	{
 	}
 
@@ -471,13 +473,14 @@ namespace castor3d
 		m_renderSystem.getEngine()->getSamplerCache().remove( "Texture3DToTexture2DDepth" );
 	}
 
-	void Texture3DTo2D::createPasses( IntermediateViewArray intermediates )
+	void Texture3DTo2D::createPasses( QueueData const & queueData
+		, IntermediateViewArray intermediates )
 	{
 		m_textures = std::move( intermediates );
-		initialise();
+		initialise( queueData );
 	}
 
-	void Texture3DTo2D::initialise()
+	void Texture3DTo2D::initialise( QueueData const & queueData )
 	{
 		m_descriptorSetPool = m_descriptorSetLayout->createPool( m_textures.size() );
 
@@ -486,6 +489,7 @@ namespace castor3d
 			if ( intermediate.viewId.data->image.data->info.imageType == VK_IMAGE_TYPE_3D )
 			{
 				m_texture3DToScreen.emplace_back( m_device
+					, queueData
 					, m_uniformBuffer
 					, m_matrixUbo
 					, intermediate
@@ -517,14 +521,14 @@ namespace castor3d
 		}
 	}
 
-	crg::SemaphoreWait Texture3DTo2D::render( crg::SemaphoreWait const & toWait )
+	crg::SemaphoreWait Texture3DTo2D::render( ashes::Queue const & queue
+		, crg::SemaphoreWait const & toWait )
 	{
 		auto result = toWait;
 
 		if ( m_texture3DToScreen[m_index].commands.commandBuffer )
 		{
-			result.semaphore = m_texture3DToScreen[m_index].commands.submit( *m_device.graphicsQueue
-				, result );
+			result.semaphore = m_texture3DToScreen[m_index].commands.submit( queue, result );
 		}
 
 		return result;
