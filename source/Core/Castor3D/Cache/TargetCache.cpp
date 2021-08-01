@@ -53,11 +53,6 @@ namespace castor3d
 		{
 			target->update( updater );
 		}
-
-		for ( auto target : m_renderTargets[size_t( TargetType::eWindow )] )
-		{
-			target->update( updater );
-		}
 	}
 
 	void RenderTargetCache::update( GpuUpdater & updater )
@@ -65,11 +60,6 @@ namespace castor3d
 		LockType lock{ castor::makeUniqueLock( *this ) };
 
 		for ( auto target : m_renderTargets[size_t( TargetType::eTexture )] )
-		{
-			target->update( updater );
-		}
-
-		for ( auto target : m_renderTargets[size_t( TargetType::eWindow )] )
 		{
 			target->update( updater );
 		}
@@ -82,11 +72,6 @@ namespace castor3d
 		LockType lock{ castor::makeUniqueLock( *this ) };
 
 		for ( auto target : m_renderTargets[size_t( TargetType::eTexture )] )
-		{
-			target->render( device, info, queue );
-		}
-
-		for ( auto target : m_renderTargets[size_t( TargetType::eWindow )] )
 		{
 			target->render( device, info, queue );
 		}
