@@ -1,15 +1,19 @@
 #include "Castor3D/Render/Passes/BackgroundPass.hpp"
 
 #include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
-#include <RenderGraph/RunnableGraph.hpp>
+#include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/GraphContext.hpp>
+#include <RenderGraph/RunnableGraph.hpp>
 
 #include <ashes/ashes.hpp>
 
@@ -17,8 +21,12 @@
 
 #include <ShaderWriter/Source.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, BackgroundRenderer )
+
 namespace castor3d
 {
+	//*********************************************************************************************
+
 	BackgroundPass::BackgroundPass( crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
@@ -350,4 +358,115 @@ namespace castor3d
 			record();
 		}
 	}
+	
+	//*********************************************************************************************
+	
+	BackgroundRenderer::BackgroundRenderer( crg::FrameGraph & graph
+		, crg::FramePass const * previousPass
+		, RenderDevice const & device
+		, SceneBackground & background
+		, HdrConfigUbo const & hdrConfigUbo
+		, SceneUbo const & sceneUbo
+		, crg::ImageViewId const & colour
+		, crg::ImageViewId const * depth )
+		: m_device{ device }
+		, m_background{ background }
+		, m_matrixUbo{ m_device }
+		, m_modelUbo{ m_device.uboPools->getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
+		, m_backgroundPassDesc{ &doCreatePass( graph
+			, previousPass
+			, hdrConfigUbo
+			, sceneUbo
+			, colour
+			, depth ) }
+	{
+	}
+
+	BackgroundRenderer::~BackgroundRenderer()
+	{
+		m_device.uboPools->putBuffer( m_modelUbo );
+	}
+
+	void BackgroundRenderer::update( CpuUpdater & updater )
+	{
+		if ( m_backgroundPass )
+		{
+			m_backgroundPass->update( updater );
+		}
+
+		m_matrixUbo.cpuUpdate( updater.bgMtxView
+			, updater.bgMtxProj );
+		auto & configuration = m_modelUbo.getData();
+		configuration.prvModel = configuration.curModel;
+		configuration.curModel = updater.bgMtxModl;
+	}
+
+	void BackgroundRenderer::update( GpuUpdater & updater )
+	{
+		if ( m_backgroundPass )
+		{
+			m_backgroundPass->update( updater );
+		}
+	}
+
+	crg::FramePass const & BackgroundRenderer::doCreatePass( crg::FrameGraph & graph
+		, crg::FramePass const * previousPass
+		, HdrConfigUbo const & hdrConfigUbo
+		, SceneUbo const & sceneUbo
+		, crg::ImageViewId const & colour
+		, crg::ImageViewId const * depth )
+	{
+		auto size = makeExtent2D( getExtent( colour ) );
+		auto name = graph.getName();
+		m_background.initialise( m_device );
+		auto & result = graph.createPass( "Background"
+			, [this, name, size]( crg::FramePass const & pass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & graph )
+			{
+				auto result = std::make_unique< BackgroundPass >( pass
+					, context
+					, graph
+					, m_device
+					, m_background
+					, size
+					, true );
+				m_backgroundPass = result.get();
+				m_device.renderSystem.getEngine()->registerTimer( name
+					, result->getTimer() );
+				return result;
+			} );
+
+		if ( previousPass )
+		{
+			result.addDependency( *previousPass );
+		}
+
+		m_matrixUbo.createPassBinding( result
+			, SceneBackground::MtxUboIdx );
+		m_modelUbo.createPassBinding( result
+			, "Model"
+			, SceneBackground::MdlMtxUboIdx );
+		hdrConfigUbo.createPassBinding( result
+			, SceneBackground::HdrCfgUboIdx );
+		sceneUbo.createPassBinding( result
+			, SceneBackground::SceneUboIdx );
+		result.addSampledView( m_background.getTextureId().sampledViewId
+			, SceneBackground::SkyBoxImgIdx );
+
+		if ( depth )
+		{
+			result.addInOutDepthStencilView( *depth );
+			result.addInOutColourView( colour );
+		}
+		else
+		{
+			result.addOutputColourView( colour
+				, transparentBlackClearColor );
+		}
+
+		return result;
+	}
+
+	//*********************************************************************************************
 }

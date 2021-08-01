@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "PassesModule.hpp"
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
+#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
 #include <RenderGraph/RunnablePasses/RenderPass.hpp>
 
@@ -95,6 +96,98 @@ namespace castor3d
 		ashes::GraphicsPipelinePtr m_pipeline;
 		ashes::DescriptorSetPoolPtr m_descriptorSetPool;
 		ashes::DescriptorSetPtr m_descriptorSet;
+	};
+
+	class BackgroundRenderer
+	{
+	private:
+		BackgroundRenderer( crg::FrameGraph & graph
+			, crg::FramePass const * previousPass
+			, RenderDevice const & device
+			, SceneBackground & background
+			, HdrConfigUbo const & hdrConfigUbo
+			, SceneUbo const & sceneUbo
+			, crg::ImageViewId const & colour
+			, crg::ImageViewId const * depth );
+
+	public:
+		BackgroundRenderer( crg::FrameGraph & graph
+			, crg::FramePass const * previousPass
+			, RenderDevice const & device
+			, SceneBackground & background
+			, HdrConfigUbo const & hdrConfigUbo
+			, SceneUbo const & sceneUbo
+			, crg::ImageViewId const & colour )
+			: BackgroundRenderer{ graph
+				, previousPass
+				, device
+				, background
+				, hdrConfigUbo
+				, sceneUbo
+				, colour
+				, nullptr }
+		{
+		}
+
+		BackgroundRenderer( crg::FrameGraph & graph
+			, crg::FramePass const * previousPass
+			, RenderDevice const & device
+			, SceneBackground & background
+			, HdrConfigUbo const & hdrConfigUbo
+			, SceneUbo const & sceneUbo
+			, crg::ImageViewId const & colour
+			, crg::ImageViewId const & depth )
+			: BackgroundRenderer{ graph
+				, previousPass
+				, device
+				, background
+				, hdrConfigUbo
+				, sceneUbo
+				, colour
+				, &depth }
+		{
+		}
+
+		C3D_API ~BackgroundRenderer();
+		/**
+		 *\~english
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
+		 *\~french
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
+		 */
+		C3D_API void update( CpuUpdater & updater );
+		/**
+		 *\~english
+		 *\brief			Updates the render pass, GPU wise.
+		 *\param[in, out]	updater	The update data.
+		 *\~french
+		 *\brief			Met à jour la passe de rendu, au niveau GPU.
+		 *\param[in, out]	updater	Les données d'update.
+		 */
+		C3D_API void update( GpuUpdater & updater );
+
+		crg::FramePass const & getPass()const
+		{
+			return *m_backgroundPassDesc;
+		}
+
+	private:
+		crg::FramePass const & doCreatePass( crg::FrameGraph & graph
+			, crg::FramePass const * previousPass
+			, HdrConfigUbo const & hdrConfigUbo
+			, SceneUbo const & sceneUbo
+			, crg::ImageViewId const & colour
+			, crg::ImageViewId const * depth );
+
+	private:
+		RenderDevice const & m_device;
+		SceneBackground & m_background;
+		MatrixUbo m_matrixUbo;
+		UniformBufferOffsetT< ModelUboConfiguration > m_modelUbo;
+		crg::FramePass const * m_backgroundPassDesc{};
+		BackgroundPass * m_backgroundPass{};
 	};
 }
 

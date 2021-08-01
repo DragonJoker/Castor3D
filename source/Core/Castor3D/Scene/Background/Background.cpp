@@ -2,8 +2,6 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
-#include "Castor3D/Buffer/PoolUniformBuffer.hpp"
-#include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
@@ -15,7 +13,6 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
@@ -35,14 +32,11 @@ namespace castor3d
 		, castor::Named{ scene.getName() + name }
 		, m_scene{ scene }
 		, m_type{ type }
-		, m_modelUbo{ getEngine()->getRenderSystem()->getMainRenderDevice()->uboPools->getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
-		, m_matrixUbo{ *getEngine()->getRenderSystem()->getMainRenderDevice() }
 	{
 	}
 
 	SceneBackground::~SceneBackground()
 	{
-		getEngine()->getRenderSystem()->getMainRenderDevice()->uboPools->putBuffer( m_modelUbo );
 	}
 
 	bool SceneBackground::initialise( RenderDevice const & device )
@@ -98,8 +92,6 @@ namespace castor3d
 	{
 		doCleanup();
 
-		device.uboPools->putBuffer( m_modelUbo );
-
 		if ( m_texture )
 		{
 			m_texture->cleanup();
@@ -114,16 +106,15 @@ namespace castor3d
 	{
 		if ( m_initialised )
 		{
-			auto & camera = *updater.camera;
 			static castor::Point3f const Scale{ 1, -1, 1 };
 			static castor::Matrix3x3f const Identity{ 1.0f };
+
+			auto & camera = *updater.camera;
 			auto node = camera.getParent();
-			castor::matrix::setTranslate( m_mtxModel, node->getDerivedPosition() );
-			castor::matrix::scale( m_mtxModel, Scale );
-			auto & configuration = m_modelUbo.getData();
-			configuration.prvModel = configuration.curModel;
-			configuration.curModel = m_mtxModel;
-			doCpuUpdate( updater );
+
+			castor::matrix::setTranslate( updater.bgMtxModl, node->getDerivedPosition() );
+			castor::matrix::scale( updater.bgMtxModl, Scale );
+			doCpuUpdate( updater, updater.bgMtxView, updater.bgMtxProj );
 		}
 	}
 
@@ -142,9 +133,5 @@ namespace castor3d
 			m_initialised = false;
 			onChanged( *this );
 		}
-	}
-
-	void SceneBackground::doGpuUpdate( GpuUpdater & updater )
-	{
 	}
 }
