@@ -25,39 +25,6 @@ CU_ImplementCUSmartPtr( castor3d, DeferredRendering )
 
 namespace castor3d
 {
-	//*********************************************************************************************
-
-	namespace
-	{
-		TextureLayoutSPtr createTexture( Engine & engine
-			, RenderDevice const & device
-			, castor::String const & name
-			, TextureLayout const & source )
-		{
-			auto & renderSystem = *engine.getRenderSystem();
-			ashes::ImageCreateInfo image
-			{
-				0u,
-				source.getType(),
-				source.getPixelFormat(),
-				source.getDimensions(),
-				source.getMipmapCount(),
-				source.getLayersCount(),
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_IMAGE_TILING_OPTIMAL,
-				VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
-			};
-			auto texture = std::make_shared< TextureLayout >( renderSystem
-				, std::move( image )
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, name );
-			texture->initialise( device );
-			return texture;
-		}
-	}
-
-	//*********************************************************************************************
-
 	DeferredRendering::DeferredRendering( crg::FrameGraph & graph
 		, crg::FramePass const & opaquePass
 		, RenderDevice const & device
