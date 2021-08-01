@@ -526,10 +526,10 @@ namespace castor3d
 			, ashes::PipelineShaderStageCreateInfoArray const & stages1 )
 		{
 			crg::rq::Config result;
-			result.enabled = &ssaoConfig.enabled;
-			result.renderSize = renderSize;
-			result.baseConfig.programs = { crg::makeVkArray< VkPipelineShaderStageCreateInfo >( stages0 )
-				, crg::makeVkArray< VkPipelineShaderStageCreateInfo >( stages1 ) };
+			result.enabled( &ssaoConfig.enabled );
+			result.renderSize( renderSize );
+			result.programs( { crg::makeVkArray< VkPipelineShaderStageCreateInfo >( stages0 )
+				, crg::makeVkArray< VkPipelineShaderStageCreateInfo >( stages1 ) } );
 			return result;
 		}
 	}
