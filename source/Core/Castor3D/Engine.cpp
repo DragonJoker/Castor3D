@@ -415,7 +415,9 @@ namespace castor3d
 	{
 		if ( m_renderSystem && m_renderSystem->hasCurrentRenderDevice() )
 		{
-			event->apply( m_renderSystem->getCurrentRenderDevice() );
+			auto & device = m_renderSystem->getCurrentRenderDevice();
+			auto data = device.graphicsData();
+			event->apply( device, *data );
 		}
 		else
 		{

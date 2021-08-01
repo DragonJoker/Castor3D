@@ -410,9 +410,12 @@ namespace castor3d
 
 		for ( auto & pass : m_passes )
 		{
-			pass->update();
-			m_cpu.time += pass->getCpuTime();
-			m_gpu.time += pass->getGpuTime();
+			if ( pass )
+			{
+				pass->update();
+				m_cpu.time += pass->getCpuTime();
+				m_gpu.time += pass->getGpuTime();
+			}
 		}
 
 		m_cpu.value->setCaption( castor::makeStringStream() << m_cpu.time );
@@ -423,7 +426,10 @@ namespace castor3d
 	{
 		for ( auto & pass : m_passes )
 		{
-			pass->retrieveGpuTime();
+			if ( pass )
+			{
+				pass->retrieveGpuTime();
+			}
 		}
 	}
 
