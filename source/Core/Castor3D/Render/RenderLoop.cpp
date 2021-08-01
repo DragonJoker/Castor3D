@@ -227,7 +227,7 @@ namespace castor3d
 
 		for ( auto & window : getEngine()->getRenderWindows() )
 		{
-			window.second->render( info, m_first );
+			window.second->render( m_first );
 		}
 
 		m_first = false;
