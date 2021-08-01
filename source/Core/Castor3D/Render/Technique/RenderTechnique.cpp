@@ -4,6 +4,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
+#include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
@@ -506,8 +507,15 @@ namespace castor3d
 		m_backgroundRenderer->update( updater );
 		m_voxelizer->update( updater );
 
-		static_cast< OpaquePassType & >( *m_opaquePass ).update( updater );
-		static_cast< TransparentPassType & >( *m_transparentPass ).update( updater );
+		if ( m_opaquePass )
+		{
+			static_cast< OpaquePassType & >( *m_opaquePass ).update( updater );
+		}
+
+		if ( m_transparentPass )
+		{
+			static_cast< TransparentPassType & >( *m_transparentPass ).update( updater );
+		}
 
 #if C3D_UseDeferredRendering
 		m_deferredRendering->update( updater );
@@ -567,9 +575,15 @@ namespace castor3d
 			m_voxelizer->update( updater );
 		}
 
-		static_cast< OpaquePassType & >( *m_opaquePass ).update( updater );
-		static_cast< TransparentPassType & >( *m_transparentPass ).update( updater );
+		if ( m_opaquePass )
+		{
+			static_cast< OpaquePassType & >( *m_opaquePass ).update( updater );
+		}
 
+		if ( m_transparentPass )
+		{
+			static_cast< TransparentPassType & >( *m_transparentPass ).update( updater );
+		}
 
 		doUpdateShadowMaps( updater );
 		doUpdateLpv( updater );
