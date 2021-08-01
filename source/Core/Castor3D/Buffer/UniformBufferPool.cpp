@@ -71,12 +71,15 @@ namespace castor3d
 			{
 				for ( auto & buffer : bufferIt.second )
 				{
-					details::copyBuffer( commandBuffer
-						, m_stagingBuffer->getBuffer()
-						, buffer.buffer->getBuffer().getBuffer()
-						, buffer.index * m_maxUboSize
-						, m_maxUboSize
-						, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
+					if ( buffer.buffer->hasAllocated() )
+					{
+						details::copyBuffer( commandBuffer
+							, m_stagingBuffer->getBuffer()
+							, buffer.buffer->getBuffer().getBuffer()
+							, buffer.index * m_maxUboSize
+							, m_maxUboSize
+							, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
+					}
 				}
 			}
 

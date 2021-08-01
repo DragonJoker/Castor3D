@@ -72,6 +72,13 @@ namespace castor3d
 		C3D_API bool hasAvailable( VkDeviceSize size )const;
 		/**
 		 *\~english
+		 *\return		\p true if at least one element has been allocated.
+		 *\~french
+		 *\return		\p true si au moins un élément a été alloué.
+		 */
+		C3D_API bool hasAllocated()const;
+		/**
+		 *\~english
 		 *\brief		Allocates a memory chunk for a CPU buffer.
 		 *\param		size	The size wanted.
 		 *\return		The memory chunk offset.
