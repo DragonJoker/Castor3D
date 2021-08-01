@@ -141,6 +141,13 @@ namespace castor3d
 	class GpuObjectTracker;
 	/**
 	\~english
+	\brief		Well... a loading screen implementation.
+	\~french
+	\brief		Euh... Une implémentation d'écran de chargement.
+	*/
+	class LoadingScreen;
+	/**
+	\~english
 	\brief
 	*	Configuration parameters.
 	\remarks
@@ -209,6 +216,8 @@ namespace castor3d
 	class VersionException;
 
 	using Parameters = ParametersT< castor::String >;
+
+	CU_DeclareCUSmartPtr( castor3d, LoadingScreen, C3D_API );
 
 	struct RenderDevice;
 	C3D_API ashes::DeviceMemoryPtr setupMemory( ashes::Device const & device
