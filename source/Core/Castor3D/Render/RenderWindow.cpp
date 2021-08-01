@@ -356,12 +356,13 @@ namespace castor3d
 			CU_Exception( "No render target for render window." );
 		}
 
-		target->initialise( m_device );
-		doCreatePickingPass();
-		doCreateIntermediateViews();
-		doCreateRenderQuad();
-		doCreateCommandBuffers();
-		doCreateSaveData();
+		auto queueData = m_device.graphicsData();
+		target->initialise( m_device, *queueData );
+		doCreatePickingPass( *queueData );
+		doCreateIntermediateViews( *queueData );
+		doCreateRenderQuad( *queueData );
+		doCreateCommandBuffers( *queueData );
+		doCreateSaveData( *queueData );
 		m_dirty = false;
 		getEngine()->registerWindow( *this );
 		log::debug << "Created render window " << m_index << std::endl;
