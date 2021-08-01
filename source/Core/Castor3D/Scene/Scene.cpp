@@ -770,6 +770,7 @@ namespace castor3d
 	crg::SemaphoreWaitArray Scene::getRenderTargetsSemaphores()const
 	{
 		crg::SemaphoreWaitArray result;
+		auto lock( castor::makeUniqueLock( getEngine()->getRenderTargetCache() ) );
 
 		for ( auto & target : getEngine()->getRenderTargetCache().getRenderTargets( TargetType::eTexture ) )
 		{
