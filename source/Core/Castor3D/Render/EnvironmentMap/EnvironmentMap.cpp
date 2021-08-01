@@ -159,6 +159,7 @@ namespace castor3d
 
 	EnvironmentMap::EnvironmentMap( crg::ResourceHandler & handler
 		, RenderDevice const & device
+		, QueueData const & queueData
 		, Scene const & scene )
 		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
 		, m_device{ device }
@@ -170,7 +171,7 @@ namespace castor3d
 	{
 		m_environmentMap.create();
 		m_environmentMapViews = createViews( m_environmentMap, m_image );
-		auto commandBuffer = device.graphicsCommandPool->createCommandBuffer();
+		auto commandBuffer = queueData.commandPool->createCommandBuffer();
 		commandBuffer->begin();
 
 		for ( auto & view : m_environmentMapViews )
@@ -182,7 +183,7 @@ namespace castor3d
 
 		commandBuffer->end();
 		auto fence = device->createFence();
-		device.graphicsQueue->submit( *commandBuffer, fence.get() );
+		queueData.queue->submit( *commandBuffer, fence.get() );
 		fence->wait( ashes::MaxTimeout );
 		log::trace << "Created EnvironmentMap " << scene.getName() << std::endl;
 	}
@@ -288,7 +289,8 @@ namespace castor3d
 		}
 	}
 
-	crg::SemaphoreWait EnvironmentMap::render( crg::SemaphoreWait const & toWait )
+	crg::SemaphoreWait EnvironmentMap::render( crg::SemaphoreWait const & toWait
+		, ashes::Queue const & queue )
 	{
 		if ( !m_count )
 		{
@@ -305,8 +307,7 @@ namespace castor3d
 			{
 				if ( index < m_count )
 				{
-					result = runnable->run( result
-						, *m_device.graphicsQueue );
+					result = runnable->run( result, queue );
 				}
 
 				++index;
@@ -315,8 +316,7 @@ namespace castor3d
 		else
 		{
 			// Else render only one (rolling)
-			result = m_runnables[m_render]->run( result
-				, *m_device.graphicsQueue );
+			result = m_runnables[m_render]->run( result, queue );
 			++m_render;
 
 			if ( m_render >= m_count )

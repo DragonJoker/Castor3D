@@ -120,7 +120,8 @@ namespace castor3d
 
 	bool ImageBackground::doInitialise( RenderDevice const & device )
 	{
-		doInitialise2DTexture( device );
+		auto data = device.graphicsData();
+		doInitialise2DTexture( device, *data );
 		m_hdr = m_texture->getPixelFormat() == VK_FORMAT_R32_SFLOAT
 			|| m_texture->getPixelFormat() == VK_FORMAT_R32G32_SFLOAT
 			|| m_texture->getPixelFormat() == VK_FORMAT_R32G32B32_SFLOAT
@@ -129,7 +130,7 @@ namespace castor3d
 			|| m_texture->getPixelFormat() == VK_FORMAT_R16G16_SFLOAT
 			|| m_texture->getPixelFormat() == VK_FORMAT_R16G16B16_SFLOAT
 			|| m_texture->getPixelFormat() == VK_FORMAT_R16G16B16A16_SFLOAT;
-		return m_texture->initialise( device );
+		return m_texture->initialise( device, *data );
 	}
 
 	void ImageBackground::doCleanup()
@@ -160,9 +161,10 @@ namespace castor3d
 	{
 	}
 
-	void ImageBackground::doInitialise2DTexture( RenderDevice const & device )
+	void ImageBackground::doInitialise2DTexture( RenderDevice const & device
+		, QueueData const & queueData )
 	{
-		m_2dTexture->initialise( device );
+		m_2dTexture->initialise( device, queueData );
 		VkExtent3D extent{ m_2dTexture->getWidth(), m_2dTexture->getHeight(), 1u };
 		auto dim = std::max( m_2dTexture->getWidth(), m_2dTexture->getHeight() );
 
@@ -248,7 +250,7 @@ namespace castor3d
 			copyInfos[uint32_t( CubeMapFace::eNegativeZ )].dstSubresource.baseArrayLayer = uint32_t( CubeMapFace::eNegativeZ );
 			copyInfos[uint32_t( CubeMapFace::eNegativeZ )].dstOffset = dstOffset;
 
-			auto commandBuffer = device.graphicsCommandPool->createCommandBuffer( "ImageBackground" );
+			auto commandBuffer = queueData.commandPool->createCommandBuffer( "ImageBackground" );
 			commandBuffer->begin();
 			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
@@ -273,8 +275,8 @@ namespace castor3d
 
 			commandBuffer->end();
 
-			device.graphicsQueue->submit( *commandBuffer, nullptr );
-			device.graphicsQueue->waitIdle();
+			queueData.queue->submit( *commandBuffer, nullptr );
+			queueData.queue->waitIdle();
 
 			m_2dTexture->cleanup();
 		}

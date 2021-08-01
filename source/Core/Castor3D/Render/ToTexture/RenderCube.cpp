@@ -182,14 +182,15 @@ namespace castor3d
 		, ashes::VkPushConstantRangeArray const & pushRanges
 		, ashes::PipelineDepthStencilStateCreateInfo const & dsState )
 	{
+		auto queueData = m_device.graphicsData();
 		m_sampler->initialise( m_device );
 		m_matrixUbo = doCreateMatrixUbo( m_device
-			, *m_device.graphicsQueue
-			, *m_device.graphicsCommandPool
+			, *queueData->queue
+			, *queueData->commandPool
 			, view->viewType == VK_IMAGE_VIEW_TYPE_CUBE );
 		m_vertexBuffer = doCreateVertexBuffer( m_device
-			, *m_device.graphicsQueue
-			, *m_device.graphicsCommandPool );
+			, *queueData->queue
+			, *queueData->commandPool );
 		auto vertexLayout = doCreateVertexLayout();
 
 		// Initialise the descriptor set.
@@ -266,7 +267,7 @@ namespace castor3d
 		, uint32_t subpassIndex
 		, uint32_t face )
 	{
-		m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer( "RenderCube"
+		m_commandBuffer = m_device.graphicsData()->commandPool->createCommandBuffer( "RenderCube"
 			, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
 			, VkCommandBufferInheritanceInfo

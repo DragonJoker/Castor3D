@@ -27,6 +27,7 @@ namespace castor3d
 		{
 		public:
 			MipRenderCube( RenderDevice const & device
+				, QueueData const & queueData
 				, crg::ResourceHandler & handler
 				, ashes::RenderPass const & renderPass
 				, uint32_t mipLevel
@@ -36,8 +37,9 @@ namespace castor3d
 				, Texture const & dstTexture
 				, SamplerSPtr sampler );
 			void registerFrames();
-			void render();
-			ashes::Semaphore const & render( ashes::Semaphore const & toWait );
+			void render( QueueData const & queueData );
+			ashes::Semaphore const & render( QueueData const & queueData
+				, ashes::Semaphore const & toWait );
 
 		private:
 			struct FrameBuffer
@@ -79,7 +81,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Génère les niveaux de mipmap.
 		 */
-		C3D_API void render();
+		C3D_API void render( QueueData const & queueData );
 		/**
 		 *\~english
 		 *\brief		Generates the mipmap levels.
@@ -88,7 +90,8 @@ namespace castor3d
 		 *\brief		Génère les niveaux de mipmap.
 		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
-		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait );
+		C3D_API ashes::Semaphore const & render( QueueData const & queueData
+			, ashes::Semaphore const & toWait );
 		/**
 		*\~english
 		*name

@@ -50,9 +50,10 @@ namespace castor3d
 	{
 	}
 
-	void FontTexture::initialise( RenderDevice const & device )
+	void FontTexture::initialise( RenderDevice const & device
+		, QueueData const & queueData )
 	{
-		m_texture->initialise( device );
+		m_texture->initialise( device, queueData );
 		onChanged( *this );
 	}
 

@@ -157,7 +157,8 @@ namespace castor3d
 				, AnimatedMesh const & mesh )
 				{
 					getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-						, [this, &group, &mesh]( RenderDevice const & device )
+						, [this, &group, &mesh]( RenderDevice const & device
+							, QueueData const & queueData )
 						{
 							m_meshEntries.emplace( &mesh
 								, doCreateEntry( device, group, mesh ) );
@@ -168,7 +169,8 @@ namespace castor3d
 				, AnimatedMesh const & mesh )
 				{
 					getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-						, [this, &group, &mesh]( RenderDevice const & device )
+						, [this, &group, &mesh]( RenderDevice const & device
+							, QueueData const & queueData )
 						{
 							doRemoveEntry( device, mesh );
 						} ) );
@@ -178,7 +180,8 @@ namespace castor3d
 				, AnimatedSkeleton const & skeleton )
 				{
 					getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-						, [this, &group, &skeleton]( RenderDevice const & device )
+						, [this, &group, &skeleton]( RenderDevice const & device
+							, QueueData const & queueData )
 						{
 							m_skeletonEntries.emplace( &skeleton
 								, doCreateEntry( device, group, skeleton ) );
@@ -189,7 +192,8 @@ namespace castor3d
 				, AnimatedSkeleton const & skeleton )
 				{
 					getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-						, [this, &group, &skeleton]( RenderDevice const & device )
+						, [this, &group, &skeleton]( RenderDevice const & device
+							, QueueData const & queueData )
 						{
 							doRemoveEntry( device, skeleton );
 						} ) );
@@ -199,7 +203,8 @@ namespace castor3d
 	void AnimatedObjectGroupCache::doUnregister( AnimatedObjectGroup & group )
 	{
 		getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [this, &group]( RenderDevice const & device )
+			, [this, &group]( RenderDevice const & device
+				, QueueData const & queueData )
 			{
 				m_meshAddedConnections.erase( &group );
 				m_meshRemovedConnections.erase( &group );

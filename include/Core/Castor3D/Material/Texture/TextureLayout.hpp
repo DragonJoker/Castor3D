@@ -246,7 +246,8 @@ namespace castor3d
 		 *\param[in]	device	Le device GPU.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool initialise( RenderDevice const & device );
+		C3D_API bool initialise( RenderDevice const & device
+			, QueueData const & queueData );
 		/**
 		 *\~english
 		 *\brief		Cleans up the texture and all its views.
@@ -263,6 +264,15 @@ namespace castor3d
 		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API void generateMipmaps( RenderDevice const & device )const;
+		/**
+		 *\~english
+		 *\brief		Generate texture mipmaps
+		 *\param[in]	device	The GPU device.
+		 *\~french
+		 *\brief		Génère les mipmaps de la texture
+		 *\param[in]	device	Le device GPU.
+		 */
+		C3D_API void generateMipmaps( QueueData const & queueData )const;
 		/**
 		 *\~english
 		 *\brief		Generate texture mipmaps

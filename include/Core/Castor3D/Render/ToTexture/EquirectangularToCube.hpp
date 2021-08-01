@@ -20,7 +20,7 @@ namespace castor3d
 		EquirectangularToCube( TextureLayout const & equiRectangular
 			, RenderDevice const & device
 			, TextureLayout const & target );
-		void render();
+		void render( QueueData const & queueData );
 
 	private:
 		struct FrameBuffer

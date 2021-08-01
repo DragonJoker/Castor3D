@@ -68,12 +68,14 @@ namespace castor3d
 	}
 
 	bool PostEffectSurface::initialise( RenderDevice const & device
+		, QueueData const & queueData
 		, ashes::RenderPass const & renderPass
 		, Size const & size
 		, VkFormat format
 		, uint32_t mipLevels )
 	{
 		return initialise( device
+			, queueData
 			, renderPass
 			, size
 			, doCreateTexture( *getEngine()->getRenderSystem()
@@ -86,12 +88,14 @@ namespace castor3d
 	}
 
 	bool PostEffectSurface::initialise( RenderDevice const & device
+		, QueueData const & queueData
 		, ashes::RenderPass const & renderPass
 		, Size const & size
 		, VkFormat colourFormat
 		, VkFormat depthFormat )
 	{
 		return initialise( device
+			, queueData
 			, renderPass
 			, size
 			, doCreateTexture( *getEngine()->getRenderSystem()
@@ -109,11 +113,13 @@ namespace castor3d
 	}
 
 	bool PostEffectSurface::initialise( RenderDevice const & device
+		, QueueData const & queueData
 		, ashes::RenderPass const & renderPass
 		, castor::Size const & size
 		, TextureLayoutSPtr colourTexture )
 	{
 		return initialise( device
+			, queueData
 			, renderPass
 			, size
 			, colourTexture
@@ -121,12 +127,14 @@ namespace castor3d
 	}
 
 	bool PostEffectSurface::initialise( RenderDevice const & device
+		, QueueData const & queueData
 		, ashes::RenderPass const & renderPass
 		, castor::Size const & size
 		, TextureLayoutSPtr colourTexture
 		, VkFormat depthFormat )
 	{
 		return initialise( device
+			, queueData
 			, renderPass
 			, size
 			, colourTexture
@@ -139,12 +147,14 @@ namespace castor3d
 	}
 
 	bool PostEffectSurface::initialise( RenderDevice const & device
+		, QueueData const & queueData
 		, ashes::RenderPass const & renderPass
 		, castor::Size const & size
 		, VkFormat colourFormat
 		, TextureLayoutSPtr depthTexture )
 	{
 		return initialise( device
+			, queueData
 			, renderPass
 			, size
 			, doCreateTexture( *getEngine()->getRenderSystem()
@@ -157,6 +167,7 @@ namespace castor3d
 	}
 
 	bool PostEffectSurface::initialise( RenderDevice const & device
+		, QueueData const & queueData
 		, ashes::RenderPass const & renderPass
 		, Size const & size
 		, TextureLayoutSPtr colourTexture
@@ -168,14 +179,14 @@ namespace castor3d
 		if ( colourTexture )
 		{
 			this->colourTexture = colourTexture;
-			this->colourTexture->initialise( device );
+			this->colourTexture->initialise( device, queueData );
 			attaches.emplace_back( colourTexture->getDefaultView().getTargetView() );
 		}
 
 		if ( depthTexture )
 		{
 			this->depthTexture = depthTexture;
-			this->depthTexture->initialise( device );
+			this->depthTexture->initialise( device, queueData );
 			auto & texture = this->depthTexture->getTexture();
 			auto format = texture.getFormat();
 			auto aspectMask = ashes::getAspectMask( format );

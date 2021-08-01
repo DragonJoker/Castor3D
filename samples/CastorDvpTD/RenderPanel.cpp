@@ -193,7 +193,8 @@ namespace castortd
 			}
 
 			m_listener->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [this, freeCell]( RenderDevice const & device )
+				, [this, freeCell]( RenderDevice const & device
+					, QueueData const & queueData )
 				{
 					m_marker->setVisible( freeCell );
 				} ) );
@@ -447,7 +448,8 @@ namespace castortd
 			m_oldX = m_x;
 			m_oldY = m_y;
 			m_listener->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [this]( RenderDevice const & device )
+				, [this]( RenderDevice const & device
+					, QueueData const & queueData )
 				{
 					Camera & camera = *m_renderWindow->getCamera();
 					camera.update();

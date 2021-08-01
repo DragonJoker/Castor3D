@@ -69,7 +69,8 @@ namespace castor3d
 		 *\return		\p true if all events were processed successfully.
 		 */
 		C3D_API bool fireEvents( EventType type
-			, RenderDevice const & device );
+			, RenderDevice const & device
+			, QueueData const & queueData );
 		/**
 		 *\~english
 		 *\brief		Applies all events of a given type, then discards them.

@@ -266,7 +266,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met dans la file la tâche GPU donnée.
 		 */
-		C3D_API void pushGpuJob( std::function< void( RenderDevice const & ) > job );
+		C3D_API void pushGpuJob( std::function< void( RenderDevice const &, QueueData const & ) > job );
 		/**
 		 *\~english
 		 *\brief		Retrieves a colour issued from a rainbow colours iterator.

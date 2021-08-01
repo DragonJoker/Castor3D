@@ -144,7 +144,8 @@ namespace castor3d
 	void BillboardListCache::registerElement( BillboardBase & billboard )
 	{
 		getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [this, &billboard]( RenderDevice const & device )
+			, [this, &billboard]( RenderDevice const & device
+				, QueueData const & queueData )
 			{
 				m_connections.emplace( &billboard
 					, billboard.onMaterialChanged.connect( [this, &device]( BillboardBase const & billboard
@@ -178,7 +179,8 @@ namespace castor3d
 	void BillboardListCache::unregisterElement( BillboardBase & billboard )
 	{
 		getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [this, &billboard]( RenderDevice const & device )
+			, [this, &billboard]( RenderDevice const & device
+				, QueueData const & queueData )
 			{
 				m_connections.erase( &billboard );
 

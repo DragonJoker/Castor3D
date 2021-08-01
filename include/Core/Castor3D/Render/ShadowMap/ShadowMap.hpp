@@ -104,6 +104,7 @@ namespace castor3d
 		 */
 		C3D_API virtual void update( GpuUpdater & updater ) = 0;
 		C3D_API crg::SemaphoreWait render( crg::SemaphoreWait const & toWait
+			, ashes::Queue const & queue
 			, uint32_t index );
 		/**
 		*\~english

@@ -42,7 +42,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour les textures d'environnement.
 		 */
-		C3D_API void update();
+		C3D_API void update( QueueData const & queueData );
 		/**
 		 *\~english
 		 *\brief		Updates the environment maps.
@@ -51,7 +51,8 @@ namespace castor3d
 		 *\brief		Met à jour les textures d'environnement.
 		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
-		C3D_API ashes::Semaphore const & update( ashes::Semaphore const & toWait );
+		C3D_API ashes::Semaphore const & update( QueueData const & queueData
+			, ashes::Semaphore const & toWait );
 		/**
 		*\~english
 		*name

@@ -58,6 +58,7 @@ namespace castor3d
 		C3D_API RenderTechnique( castor::String const & name
 			, RenderTarget & renderTarget
 			, RenderDevice const & device
+			, QueueData const & queueData
 			, Parameters const & parameters
 			, SsaoConfig const & ssaoConfig );
 		/**
@@ -102,7 +103,8 @@ namespace castor3d
 		 *\brief			Dessine les environment maps.
 		 *\param[in, out]	updater	Les données d'update.
 		 */
-		C3D_API crg::SemaphoreWait preRender( crg::SemaphoreWait const & toWait );
+		C3D_API crg::SemaphoreWait preRender( crg::SemaphoreWait const & toWait
+			, ashes::Queue const & queue );
 		/**
 		 *\~english
 		 *\brief		Writes the technique into a text file.
@@ -247,10 +249,14 @@ namespace castor3d
 		void doUpdateParticles( CpuUpdater & updater );
 		void doUpdateParticles( GpuUpdater & updater );
 
-		crg::SemaphoreWait doRenderShadowMaps( crg::SemaphoreWait const & semaphore )const;
-		crg::SemaphoreWait doRenderLPV( crg::SemaphoreWait const & semaphore );
-		crg::SemaphoreWait doRenderEnvironmentMaps( crg::SemaphoreWait const & semaphore )const;
-		crg::SemaphoreWait doRenderVCT( crg::SemaphoreWait const & semaphore )const;
+		crg::SemaphoreWait doRenderShadowMaps( crg::SemaphoreWait const & semaphore
+			, ashes::Queue const & queue )const;
+		crg::SemaphoreWait doRenderLPV( crg::SemaphoreWait const & semaphore
+			, ashes::Queue const & queue );
+		crg::SemaphoreWait doRenderEnvironmentMaps( crg::SemaphoreWait const & semaphore
+			, ashes::Queue const & queue )const;
+		crg::SemaphoreWait doRenderVCT( crg::SemaphoreWait const & semaphore
+			, ashes::Queue const & queue )const;
 
 	private:
 		RenderTarget & m_renderTarget;

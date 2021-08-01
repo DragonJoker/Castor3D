@@ -40,7 +40,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Calcule le BRDF circonvolu.
 		 */
-		C3D_API void render();
+		C3D_API void render( QueueData const & queueData );
 
 	private:
 		ashes::PipelineShaderStageCreateInfoArray doCreateProgram();

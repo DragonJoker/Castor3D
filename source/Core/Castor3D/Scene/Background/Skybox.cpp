@@ -249,17 +249,19 @@ namespace castor3d
 
 	bool SkyboxBackground::doInitialiseTexture( RenderDevice const & device )
 	{
+		auto data = device.graphicsData();
+
 		if ( m_equiTexture )
 		{
-			doInitialiseEquiTexture( device );
+			doInitialiseEquiTexture( device, *data );
 		}
 		else if ( m_crossTexture )
 		{
-			doInitialiseCrossTexture( device );
+			doInitialiseCrossTexture( device, *data );
 		}
 		else
 		{
-			doInitialiseLayerTexture( device );
+			doInitialiseLayerTexture( device, *data );
 		}
 
 		m_hdr = m_texture->getPixelFormat() == VK_FORMAT_R32_SFLOAT
@@ -270,16 +272,17 @@ namespace castor3d
 			|| m_texture->getPixelFormat() == VK_FORMAT_R16G16_SFLOAT
 			|| m_texture->getPixelFormat() == VK_FORMAT_R16G16B16_SFLOAT
 			|| m_texture->getPixelFormat() == VK_FORMAT_R16G16B16A16_SFLOAT;
-		return m_texture->initialise( device );
+		return m_texture->initialise( device, *data );
 	}
 
-	void SkyboxBackground::doInitialiseLayerTexture( RenderDevice const & device )
+	void SkyboxBackground::doInitialiseLayerTexture( RenderDevice const & device
+		, QueueData const & queueData )
 	{
 		uint32_t maxDim{};
 
 		for ( auto & layer : m_layerTexture )
 		{
-			layer->initialise( device );
+			layer->initialise( device, queueData );
 			auto dim = layer->getDimensions();
 			maxDim = std::max( maxDim
 				, std::max( dim.width, dim.height ) );
@@ -305,7 +308,7 @@ namespace castor3d
 			, m_textureId.image
 			, m_textureId.wholeViewId );
 
-		auto commandBuffer = device.graphicsCommandPool->createCommandBuffer( "SkyboxBackground" );
+		auto commandBuffer = queueData.commandPool->createCommandBuffer( "SkyboxBackground" );
 		commandBuffer->begin();
 		commandBuffer->beginDebugBlock(
 			{
@@ -344,8 +347,8 @@ namespace castor3d
 		commandBuffer->endDebugBlock();
 		commandBuffer->end();
 
-		device.graphicsQueue->submit( *commandBuffer, nullptr );
-		device.graphicsQueue->waitIdle();
+		queueData.queue->submit( *commandBuffer, nullptr );
+		queueData.queue->waitIdle();
 
 		for ( auto & layer : m_layerTexture )
 		{
@@ -353,9 +356,10 @@ namespace castor3d
 		}
 	}
 
-	void SkyboxBackground::doInitialiseEquiTexture( RenderDevice const & device )
+	void SkyboxBackground::doInitialiseEquiTexture( RenderDevice const & device
+		, QueueData const & queueData )
 	{
-		m_equiTexture->initialise( device );
+		m_equiTexture->initialise( device, queueData );
 
 		// create the cube texture if needed.
 		if ( m_texture->getDimensions().width != m_equiSize.getWidth()
@@ -380,22 +384,23 @@ namespace castor3d
 			EquirectangularToCube equiToCube{ *m_equiTexture
 				, device
 				, *m_texture };
-			equiToCube.render();
+			equiToCube.render( queueData );
 
 			if ( m_scene.getEngine()->getPassFactory().hasIBL( m_scene.getPassesType() ) )
 			{
-				m_texture->generateMipmaps( device );
+				m_texture->generateMipmaps( queueData );
 			}
 		}
 
 		m_equiTexture->cleanup();
 	}
 
-	void SkyboxBackground::doInitialiseCrossTexture( RenderDevice const & device )
+	void SkyboxBackground::doInitialiseCrossTexture( RenderDevice const & device
+		, QueueData const & queueData )
 	{
 		auto & engine = *getEngine();
 		auto & renderSystem = *engine.getRenderSystem();
-		m_crossTexture->initialise( device );
+		m_crossTexture->initialise( device, queueData );
 		auto width = m_crossTexture->getWidth() / 4u;
 		auto height = m_crossTexture->getHeight() / 3u;
 		CU_Require( width == height );
@@ -462,7 +467,7 @@ namespace castor3d
 			copyInfos[i].dstSubresource.baseArrayLayer = i;
 		}
 
-		auto commandBuffer = device.graphicsCommandPool->createCommandBuffer( "SkyboxBackground" );
+		auto commandBuffer = queueData.commandPool->createCommandBuffer( "SkyboxBackground" );
 		commandBuffer->begin();
 		commandBuffer->beginDebugBlock(
 			{
@@ -486,8 +491,8 @@ namespace castor3d
 		commandBuffer->endDebugBlock();
 		commandBuffer->end();
 
-		device.graphicsQueue->submit( *commandBuffer, nullptr );
-		device.graphicsQueue->waitIdle();
+		queueData.queue->submit( *commandBuffer, nullptr );
+		queueData.queue->waitIdle();
 
 		m_crossTexture->cleanup();
 	}
