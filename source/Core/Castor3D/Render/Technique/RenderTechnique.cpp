@@ -315,6 +315,7 @@ namespace castor3d
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_depthBuffer{ doCreateTextureUnit( m_device
+			, queueData
 			, m_depth.imageId ) }
 		, m_depthObj{ device
 			, getOwner()->getGraphResourceHandler()
