@@ -325,8 +325,6 @@ namespace castor3d
 			m_culler = std::make_unique< FrustumCuller >( *getScene(), *getCamera() );
 			doInitCombineProgram();
 			auto result = doInitialiseTechnique( device, queueData );
-
-			m_overlaysTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Overlays" ) );
 			auto * previousPass = &m_renderTechnique->getLastPass();
 
 			if ( !m_hdrPostEffects.empty() )
@@ -367,7 +365,7 @@ namespace castor3d
 					, *m_hdrLastPass
 					, *m_hdrConfigUbo
 					, Parameters{} );
-				m_toneMapping->initialise( cuT( "linear" ) );
+				m_toneMapping->initialise( m_toneMappingName );
 				previousPass = &m_toneMapping->getPass();
 			}
 
@@ -409,6 +407,7 @@ namespace castor3d
 				m_runnable->record();
 			}
 
+			m_overlaysTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Overlays" ) );
 			m_overlayRenderer = std::make_shared< OverlayRenderer >( device
 				, m_overlays );
 
@@ -422,12 +421,10 @@ namespace castor3d
 		if ( m_initialised )
 		{
 			m_initialised = false;
-			m_culler.reset();
-
 			m_signalReady.reset();
-			m_runnable.reset();
-
 			m_overlayRenderer.reset();
+			m_overlaysTimer.reset();
+			m_runnable.reset();
 
 			for ( auto effect : m_srgbPostEffects )
 			{
@@ -441,13 +438,12 @@ namespace castor3d
 				effect->cleanup( device );
 			}
 
-			m_hdrPostEffects.clear();
-			m_srgbPostEffects.clear();
-
-			m_overlaysTimer.reset();
-
-			m_hdrConfigUbo.reset();
 			m_renderTechnique.reset();
+			m_combineStages.clear();
+			m_combinePxl.shader.reset();
+			m_combineVtx.shader.reset();
+			m_culler.reset();
+			m_hdrConfigUbo.reset();
 			getEngine()->getRenderTechniqueCache().remove( getName() + cuT( "Technique" ) );
 		}
 	}
@@ -580,19 +576,24 @@ namespace castor3d
 	void RenderTarget::setToneMappingType( String const & name
 		, Parameters const & parameters )
 	{
-		getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [this, name, parameters]( RenderDevice const & device
-				, QueueData const & queueData )
-			{
-				if ( m_initialised )
+		m_toneMappingName = name;
+
+		if ( m_toneMapping )
+		{
+			getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [this, parameters]( RenderDevice const & device
+					, QueueData const & queueData )
 				{
-					m_toneMapping->updatePipeline( name );
-				}
-				else
-				{
-					m_toneMapping->initialise( name );
-				}
-			} ) );
+					if ( m_initialised )
+					{
+						m_toneMapping->updatePipeline( m_toneMappingName );
+					}
+					else
+					{
+						m_toneMapping->initialise( m_toneMappingName );
+					}
+				} ) );
+		}
 	}
 
 	void RenderTarget::addPostEffect( PostEffectSPtr effect )

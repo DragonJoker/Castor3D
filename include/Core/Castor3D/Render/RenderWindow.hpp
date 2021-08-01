@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_RenderWindow_H___
 
 #include "RenderModule.hpp"
+#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 
 #include "Castor3D/Event/UserInput/UserInputListener.hpp"
 #include "Castor3D/Overlay/OverlayRenderer.hpp"
@@ -178,10 +179,10 @@ namespace castor3d
 		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief			Updates the render window, CPU wise.
+		 *\brief			Updates the render window, GPU wise.
 		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief			Met à jour la render window, au niveau CPU.
+		 *\brief			Met à jour la render window, au niveau GPU.
 		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( GpuUpdater & updater );
@@ -415,6 +416,8 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
+		C3D_API void enableLoading();
+
 		void enableVSync( bool value )
 		{
 			m_vsync = value;
@@ -442,6 +445,8 @@ namespace castor3d
 		void doDestroyRenderingResources();
 		void doCreateFrameBuffers();
 		void doDestroyFrameBuffers();
+		void doCreateLoadingScreen();
+		void doDestroyLoadingScreen();
 		void doCreatePickingPass( QueueData const & queueData );
 		void doDestroyPickingPass();
 		void doCreateRenderQuad( QueueData const & queueData );
@@ -454,6 +459,13 @@ namespace castor3d
 		void doDestroySaveData();
 		void doResetSwapChain();
 		RenderingResources * doGetResources();
+		crg::SemaphoreWaitArray doSubmitLoadingFrame( RenderingResources & resources
+			, LoadingScreen & loadingScreen
+			, VkFence & fence
+			, crg::SemaphoreWaitArray toWait );
+		void doPresentLoadingFrame( VkFence fence
+			, RenderingResources & resources
+			, crg::SemaphoreWaitArray toWait );
 		void doWaitFrame( crg::SemaphoreWaitArray toWait );
 		void doSubmitFrame( RenderingResources * resources
 			, crg::SemaphoreWaitArray toWait );
@@ -479,7 +491,6 @@ namespace castor3d
 		ashes::BufferBasePtr m_stagingBuffer;
 		castor::ArrayView< uint8_t > m_stagingData;
 		CommandsSemaphore m_transferCommands;
-		ashes::ImageViewArray m_views;
 		std::vector< ashes::FrameBufferPtr > m_frameBuffers;
 		std::vector< ashes::CommandBufferPtrArray > m_commandBuffers;
 		ashes::PipelineShaderStageCreateInfoArray m_program;
@@ -492,6 +503,7 @@ namespace castor3d
 		bool m_toSave{ false };
 		mutable std::atomic_bool m_initialised{ false };
 		mutable std::atomic_bool m_skip{ false };
+		std::atomic_bool m_loading;
 		castor::PxBufferBaseSPtr m_saveBuffer;
 		PickingSPtr m_picking;
 		castor::Position m_mousePosition;
@@ -502,6 +514,7 @@ namespace castor3d
 		IntermediateViewArray m_intermediateSampledViews;
 		DebugConfig m_debugConfig;
 		UniformBufferOffsetT< Configuration > m_configUbo;
+		LoadingScreenUPtr m_loadingScreen;
 	};
 }
 

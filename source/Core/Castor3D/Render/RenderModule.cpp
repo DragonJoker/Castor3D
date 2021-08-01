@@ -352,7 +352,7 @@ namespace castor3d
 		}
 		else
 		{
-			c3dSampler = engine.getSamplerCache().add( name );
+			c3dSampler = std::make_shared< Sampler >( engine, name );
 			c3dSampler->setMinFilter( VK_FILTER_LINEAR );
 			c3dSampler->setMagFilter( VK_FILTER_LINEAR );
 			c3dSampler->setMipFilter( VK_SAMPLER_MIPMAP_MODE_LINEAR );
@@ -360,6 +360,7 @@ namespace castor3d
 			c3dSampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 			c3dSampler->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 			c3dSampler->setBorderColour( borderColor );
+			engine.getSamplerCache().add( name, c3dSampler );
 		}
 
 		c3dSampler->initialise( device );
