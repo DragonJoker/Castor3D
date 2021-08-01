@@ -42,14 +42,12 @@ namespace Bloom
 					, context
 					, graph
 					, 1u
-					, crg::rq::Config{ { std::vector< crg::VkPipelineShaderStageCreateInfoArray >{ std::move( program ) } }
-							, crg::Texcoord{}
-							, renderSize
-							, std::nullopt
-							, std::nullopt
-							, std::nullopt
-							, enabled
-							, [this]( VkCommandBuffer cb, uint32_t i ){ doRecordInto( cb, i ); } } }
+					, crg::rq::Config{}
+						.baseConfig( { std::vector< crg::VkPipelineShaderStageCreateInfoArray >{ std::move( program ) } } )
+						.texcoordConfig( crg::Texcoord{} )
+						.enabled( enabled )
+						.recordInto( [this]( VkCommandBuffer cb, uint32_t i ){ doRecordInto( cb, i ); } )
+						.renderSize( renderSize ) }
 #if !Bloom_DebugHiPass
 				, m_viewDesc{ pass.images.back().view() }
 				, m_imageDesc{ m_viewDesc.data->image }

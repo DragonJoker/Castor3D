@@ -464,13 +464,6 @@ namespace castor3d
 
 			return result;
 		}
-
-		crg::pp::Config getConfig( ashes::PipelineShaderStageCreateInfoArray const & stages )
-		{
-			crg::pp::Config result;
-			result.programs = { crg::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) };
-			return result;
-		}
 	}
 
 	//*********************************************************************************************
@@ -611,7 +604,8 @@ namespace castor3d
 		, m_holder{ pass
 			, context
 			, graph
-			, getConfig( m_stages )
+			, crg::pp::Config{}
+				.programs( { crg::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) } )
 			, gridSize }
 	{
 	}
@@ -643,7 +637,8 @@ namespace castor3d
 		, m_holder{ pass
 			, context
 			, graph
-			, getConfig( m_stages )
+			, crg::pp::Config{}
+				.programs( { crg::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) } )
 			, gridSize }
 	{
 	}
