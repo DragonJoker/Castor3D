@@ -45,7 +45,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Calcule la texture de radiance.
 		 */
-		C3D_API void render();
+		C3D_API void render( QueueData const & queueData );
 		/**
 		 *\~english
 		 *\brief		Computes the radiance map.
@@ -54,7 +54,8 @@ namespace castor3d
 		 *\brief		Calcule la texture de radiance.
 		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
-		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait );
+		C3D_API ashes::Semaphore const & render( QueueData const & queueData
+			, ashes::Semaphore const & toWait );
 		/**
 		*\~english
 		*name

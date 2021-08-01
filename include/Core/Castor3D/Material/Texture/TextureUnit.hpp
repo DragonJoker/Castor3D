@@ -97,7 +97,8 @@ namespace castor3d
 		 *\brief		Initialise la texture, id est : remplit le buffer d'image, cree la texture au niveau du renderer.
 		 *\param[in]	device	Le device GPU.
 		 */
-		C3D_API bool initialise( RenderDevice const & device );
+		C3D_API bool initialise( RenderDevice const & device
+			, QueueData const & queueData );
 		/**
 		 *\~english
 		 *\brief		Cleans up the texture.

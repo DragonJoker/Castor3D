@@ -49,7 +49,8 @@ namespace castor3d
 		 *\brief		Initialise le matériau et toutes ses passes.
 		 *\param[in]	device	Le device GPU.
 		 */
-		C3D_API void initialise( RenderDevice const & device );
+		C3D_API void initialise( RenderDevice const & device
+			, QueueData const & queueData );
 		/**
 		 *\~english
 		 *\brief		Flushes passes.

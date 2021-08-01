@@ -169,7 +169,7 @@ namespace castor3d
 		, TextureLayout const & target )
 		: RenderCube{ device, false }
 		, m_device{ device }
-		, m_commandBuffer{ device.graphicsCommandPool->createCommandBuffer( "EquirectangularToCube" ) }
+		, m_commandBuffer{ device.graphicsData()->commandPool->createCommandBuffer( "EquirectangularToCube" ) }
 		, m_view{ equiRectangular.getDefaultView().getSampledView() }
 		, m_renderPass{ doCreateRenderPass( m_device, target.getPixelFormat() ) }
 	{
@@ -202,7 +202,7 @@ namespace castor3d
 			, {} );
 	}
 
-	void EquirectangularToCube::render()
+	void EquirectangularToCube::render( QueueData const & queueData )
 	{
 		CU_Require( !m_frameBuffers.empty() );
 		uint32_t face = 0u;
@@ -232,8 +232,8 @@ namespace castor3d
 		m_commandBuffer->endDebugBlock();
 		m_commandBuffer->end();
 
-		m_device.graphicsQueue->submit( *m_commandBuffer, nullptr );
-		m_device.graphicsQueue->waitIdle();
+		queueData.queue->submit( *m_commandBuffer, nullptr );
+		queueData.queue->waitIdle();
 	}
 
 	//*********************************************************************************************

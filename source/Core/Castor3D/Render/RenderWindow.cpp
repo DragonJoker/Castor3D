@@ -44,13 +44,12 @@ namespace castor3d
 {
 	namespace
 	{
-		RenderDevice::QueueData const * getQueueFamily( ashes::Surface const & surface
-			, RenderDevice::QueueFamilies const & queues )
+		QueuesData const * getQueueFamily( ashes::Surface const & surface
+			, QueueFamilies const & queues )
 		{
-			RenderDevice::QueueData const * result{};
 			auto it = std::find_if( queues.begin()
 				, queues.end()
-				, [&surface]( RenderDevice::QueueData const & lookup )
+				, [&surface]( QueuesData const & lookup )
 				{
 					return surface.getSupport( lookup.familyIndex );
 				} );
@@ -312,7 +311,8 @@ namespace castor3d
 		, m_device{ *engine.getRenderSystem()->getMainRenderDevice() }
 		, m_surface{ m_device.renderSystem.getInstance().createSurface( m_device.renderSystem.getPhysicalDevice( 0u )
 			, std::move( handle ) ) }
-		, m_presentQueue{ getQueueFamily( *m_surface, m_device.queueFamilies ) }
+		, m_queues{ getQueueFamily( *m_surface, m_device.queueFamilies ) }
+		, m_queue{ m_queues->reserveQueue() }
 		, m_listener{ getEngine()->getFrameListenerCache().add( getName() + castor::string::toString( m_index ) ) }
 		, m_size{ size }
 		, m_configUbo{ m_device.uboPools->getBuffer< Configuration >( 0u ) }
@@ -332,8 +332,6 @@ namespace castor3d
 				m_device.renderSystem.setCurrentRenderDevice( nullptr );
 			} );
 		getEngine()->getMaterialCache().initialise( m_device, getEngine()->getPassesType() );
-		m_commandPool = getDevice()->createCommandPool( getDevice().getGraphicsQueueFamilyIndex()
-			, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT | VK_COMMAND_POOL_CREATE_TRANSIENT_BIT );
 		doCreateProgram();
 		doCreateSwapchain();
 	}
@@ -346,7 +344,6 @@ namespace castor3d
 		engine.getFrameListenerCache().remove( getName() + castor::string::toString( m_index ) );
 		doDestroySwapchain();
 		doDestroyProgram();
-		m_commandPool.reset();
 		m_device.uboPools->putBuffer( m_configUbo );
 	}
 
@@ -492,7 +489,8 @@ namespace castor3d
 		if ( !m_dirty.exchange( true ) )
 		{
 			getListener()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [this]( RenderDevice const & device )
+				, [this]( RenderDevice const & device
+					, QueueData const & queueData )
 				{
 					doResetSwapChain();
 					m_dirty = false;
@@ -829,7 +827,7 @@ namespace castor3d
 			m_renderingResources.emplace_back( std::make_unique< RenderingResources >( getDevice()->createSemaphore( getName() + castor::string::toString( i ) + "ImageAvailable" )
 				, getDevice()->createSemaphore( getName() + castor::string::toString( i ) + "FinishedRendering" )
 				, getDevice()->createFence( getName() + castor::string::toString( i ), VkFenceCreateFlags{ 0u } )
-				, getDevice().graphicsCommandPool->createCommandBuffer( getName() + castor::string::toString( i ) )
+				, m_queue->commandPool->createCommandBuffer( getName() + castor::string::toString( i ) )
 				, 0u ) );
 		}
 	}
@@ -839,11 +837,54 @@ namespace castor3d
 		m_renderingResources.clear();
 	}
 
-	void RenderWindow::doCreatePickingPass()
+	void RenderWindow::doCreateFrameBuffers()
+	{
+		auto prepareAttaches = [this]( uint32_t backBuffer )
+		{
+			ashes::ImageViewCRefArray attaches;
+			m_swapchainViews.clear();
+
+			for ( auto & attach : m_renderPass->getAttachments() )
+			{
+				m_swapchainViews.push_back( m_swapChainImages[backBuffer].createView( makeVkType< VkImageViewCreateInfo >( 0u
+					, m_swapChainImages[backBuffer]
+					, VK_IMAGE_VIEW_TYPE_2D
+					, m_swapChain->getFormat()
+					, VkComponentMapping{}
+					, VkImageSubresourceRange
+					{  ashes::getAspectMask( m_swapChain->getFormat() )
+						, 0u
+						, 1u
+						, 0u
+						, 1u } ) ) );
+				attaches.emplace_back( m_swapchainViews.back() );
+			}
+
+			return attaches;
+		};
+
+		m_frameBuffers.resize( m_swapChainImages.size() );
+
+		for ( size_t i = 0u; i < m_frameBuffers.size(); ++i )
+		{
+			auto attaches = prepareAttaches( uint32_t( i ) );
+			m_frameBuffers[i] = m_renderPass->createFrameBuffer( "RenderPass"
+				, m_swapChain->getDimensions()
+				, std::move( attaches ) );
+		}
+	}
+
+	void RenderWindow::doDestroyFrameBuffers()
+	{
+		m_frameBuffers.clear();
+	}
+
+	void RenderWindow::doCreatePickingPass( QueueData const & queueData )
 	{
 		auto & target = *getRenderTarget();
 		m_picking = std::make_shared< Picking >( getOwner()->getGraphResourceHandler()
 			, m_device
+			, queueData
 			, m_size
 			, target.getTechnique()->getMatrixUbo()
 			, target.getCuller() );
@@ -854,7 +895,7 @@ namespace castor3d
 		m_picking.reset();
 	}
 
-	void RenderWindow::doCreateRenderQuad()
+	void RenderWindow::doCreateRenderQuad( QueueData const & queueData )
 	{
 		auto & target = *getRenderTarget();
 		m_renderQuad = RenderQuadBuilder{}
@@ -887,49 +928,7 @@ namespace castor3d
 		m_renderQuad.reset();
 	}
 
-	void RenderWindow::doCreateFrameBuffers()
-	{
-		auto prepareAttaches = [this]( uint32_t backBuffer )
-		{
-			ashes::ImageViewCRefArray attaches;
-			m_views.clear();
-
-			for ( auto & attach : m_renderPass->getAttachments() )
-			{
-				m_views.push_back( m_swapChainImages[backBuffer].createView( makeVkType< VkImageViewCreateInfo >( 0u
-					, m_swapChainImages[backBuffer]
-					, VK_IMAGE_VIEW_TYPE_2D
-					, m_swapChain->getFormat()
-					, VkComponentMapping{}
-					, VkImageSubresourceRange
-					{  ashes::getAspectMask( m_swapChain->getFormat() )
-						, 0u
-						, 1u
-						, 0u
-						, 1u } ) ) );
-				attaches.emplace_back( m_views.back() );
-			}
-
-			return attaches;
-		};
-
-		m_frameBuffers.resize( m_swapChainImages.size() );
-
-		for ( size_t i = 0u; i < m_frameBuffers.size(); ++i )
-		{
-			auto attaches = prepareAttaches( uint32_t( i ) );
-			m_frameBuffers[i] = m_renderPass->createFrameBuffer( "RenderPass"
-				, m_swapChain->getDimensions()
-				, std::move( attaches ) );
-		}
-	}
-
-	void RenderWindow::doDestroyFrameBuffers()
-	{
-		m_frameBuffers.clear();
-	}
-
-	void RenderWindow::doCreateCommandBuffers()
+	void RenderWindow::doCreateCommandBuffers( QueueData const & queueData )
 	{
 		auto pass = 0u;
 		m_commandBuffers.resize( m_intermediates.size() );
@@ -947,9 +946,10 @@ namespace castor3d
 			for ( auto & commandBuffer : commandBuffers )
 			{
 				auto & frameBuffer = *m_frameBuffers[index];
-				commandBuffer = m_commandPool->createCommandBuffer( getName() + castor::string::toString( index ) );
+				auto name = getName() + castor::string::toString( index );
+				commandBuffer = queueData.commandPool->createCommandBuffer( name );
 				commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
-				commandBuffer->beginDebugBlock( { "RenderWindow Render"
+				commandBuffer->beginDebugBlock( { "RenderWindow " + name
 					, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
 
 				if ( intermediate.layout != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )
@@ -1003,14 +1003,14 @@ namespace castor3d
 		m_commandBuffers.clear();
 	}
 
-	void RenderWindow::doCreateIntermediateViews()
+	void RenderWindow::doCreateIntermediateViews( QueueData const & queueData )
 	{
 		auto target = m_renderTarget.lock();
 		CU_Require( target );
 		target->listIntermediateViews( m_intermediates );
 
 		VkExtent2D extent{ m_size.getWidth(), m_size.getHeight() };
-		m_texture3Dto2D = castor::makeUnique< Texture3DTo2D >( getDevice()
+		m_texture3Dto2D = castor::makeUnique< Texture3DTo2D >( m_device
 			, extent
 			, target->getTechnique()->getMatrixUbo() );
 		m_tex3DTo2DIntermediate = { "Texture3DTo2DResult"
@@ -1022,7 +1022,7 @@ namespace castor3d
 #else
 		IntermediateViewArray intermediates{ m_intermediates[0] };
 #endif
-		m_texture3Dto2D->createPasses( intermediates );
+		m_texture3Dto2D->createPasses( queueData, intermediates );
 
 		m_intermediateBarrierViews = doCreateBarrierViews( m_device
 			, m_tex3DTo2DIntermediate
@@ -1040,7 +1040,7 @@ namespace castor3d
 		m_intermediates.clear();
 	}
 
-	void RenderWindow::doCreateSaveData()
+	void RenderWindow::doCreateSaveData( QueueData const & queueData )
 	{
 		auto target = getRenderTarget();
 		m_saveBuffer = castor::PxBufferBase::create( target->getSize(), convert( target->getPixelFormat() ) );
@@ -1065,7 +1065,7 @@ namespace castor3d
 			} ) );
 		m_stagingData = castor::makeArrayView( m_stagingBuffer->lock( 0u, bufferSize, 0u )
 			, bufferSize );
-		m_transferCommands = { getDevice(), "Snapshot" };
+		m_transferCommands = { getDevice(), queueData, "Snapshot" };
 		auto & view = target->getTexture();
 		auto & commands = *m_transferCommands.commandBuffer;
 		commands.begin();
@@ -1124,10 +1124,10 @@ namespace castor3d
 		doDestroySwapchain();
 
 		doCreateSwapchain();
-		doCreatePickingPass();
-		doCreateIntermediateViews();
-		doCreateRenderQuad();
-		doCreateCommandBuffers();
+		doCreatePickingPass( *m_queue );
+		doCreateIntermediateViews( *m_queue );
+		doCreateRenderQuad( *m_queue );
+		doCreateCommandBuffers( *m_queue );
 	}
 
 	RenderWindow::RenderingResources * RenderWindow::doGetResources()
@@ -1162,7 +1162,7 @@ namespace castor3d
 			{
 				if ( m_toSave )
 				{
-					getDevice().graphicsQueue->submit( ashes::VkCommandBufferArray{ *m_transferCommands.commandBuffer }
+					m_queue->queue->submit( ashes::VkCommandBufferArray{ *m_transferCommands.commandBuffer }
 						, ashes::VkSemaphoreArray{ toWait.semaphore }
 						, { toWait.dstStageMask }
 						, ashes::VkSemaphoreArray{ *m_transferCommands.semaphore } );
@@ -1170,7 +1170,7 @@ namespace castor3d
 					toWait.dstStageMask = VK_PIPELINE_STAGE_TRANSFER_BIT;
 				}
 
-				getDevice().graphicsQueue->submit( ashes::VkCommandBufferArray{}
+				m_queue->queue->submit( ashes::VkCommandBufferArray{}
 					, ashes::VkSemaphoreArray{ toWait.semaphore }
 					, { toWait.dstStageMask }
 					, ashes::VkSemaphoreArray{} );
@@ -1191,16 +1191,18 @@ namespace castor3d
 			{
 				if ( m_toSave )
 				{
-					getDevice().graphicsQueue->submit( ashes::VkCommandBufferArray{ *m_transferCommands.commandBuffer }
+					m_queue->queue->submit( ashes::VkCommandBufferArray{ *m_transferCommands.commandBuffer }
 						, ashes::VkSemaphoreArray{ toWait.semaphore }
 						, { toWait.dstStageMask }
-					, ashes::VkSemaphoreArray{ *m_transferCommands.semaphore } );
+						, ashes::VkSemaphoreArray{ *m_transferCommands.semaphore } );
 					toWait.semaphore = *m_transferCommands.semaphore;
 					toWait.dstStageMask = VK_PIPELINE_STAGE_TRANSFER_BIT;
 				}
 
-				toWait = m_texture3Dto2D->render( toWait );
-				getDevice().graphicsQueue->submit( ashes::VkCommandBufferArray{ *m_commandBuffers[m_debugConfig.debugIndex][resources->imageIndex] }
+#if C3D_DebugQuads
+				toWait = m_texture3Dto2D->render( *m_queue->queue, toWait );
+#endif
+				m_queue->queue->submit( ashes::VkCommandBufferArray{ *m_commandBuffers[m_debugConfig.debugIndex][resources->imageIndex] }
 					, ashes::VkSemaphoreArray{ *resources->imageAvailableSemaphore, toWait.semaphore }
 					, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, toWait.dstStageMask }
 					, ashes::VkSemaphoreArray{}
@@ -1216,7 +1218,7 @@ namespace castor3d
 		{
 			resources->fence->wait( ashes::MaxTimeout );
 			resources->fence->reset();
-			getDevice().graphicsQueue->present( *m_swapChain
+			m_queue->queue->present( *m_swapChain
 				, resources->imageIndex );
 
 			if ( m_toSave )

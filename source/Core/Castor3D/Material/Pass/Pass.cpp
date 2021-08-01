@@ -1159,7 +1159,8 @@ namespace castor3d
 		m_textureUnits.clear();
 	}
 
-	void Pass::initialise( RenderDevice const & device )
+	void Pass::initialise( RenderDevice const & device
+		, QueueData const & queueData )
 	{
 		while ( !m_texturesReduced
 			&& !m_textureUnits.empty() )
@@ -1169,7 +1170,7 @@ namespace castor3d
 
 		for ( auto unit : m_textureUnits )
 		{
-			unit->initialise( device );
+			unit->initialise( device, queueData );
 		}
 
 		doInitialise();

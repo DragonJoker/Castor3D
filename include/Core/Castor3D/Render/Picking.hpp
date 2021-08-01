@@ -35,6 +35,7 @@ namespace castor3d
 		 */
 		C3D_API Picking( crg::ResourceHandler & handler
 			, RenderDevice const & device
+			, QueueData const & queueData
 			, castor::Size const & size
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler );

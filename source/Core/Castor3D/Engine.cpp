@@ -106,6 +106,15 @@ namespace castor3d
 		{
 			this->postEvent( makeGpuInitialiseEvent( *element ) );
 		};
+		auto gpuQueueEventInit = [this]( auto element )
+		{
+			this->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [element]( RenderDevice const & device
+					, QueueData const & queueData )
+				{
+					element->initialise( device, queueData );
+				} ) );
+		};
 		auto cpuEvtClean = [this]( auto element )
 		{
 			this->postEvent( makeCpuCleanupEvent( *element ) );
@@ -161,7 +170,7 @@ namespace castor3d
 			{
 				return std::make_shared< Material >( name, *this, type );
 			}
-			, gpuEventInit
+			, gpuQueueEventInit
 			, cpuEvtClean
 			, mergeResource );
 		m_pluginCache = std::make_unique< PluginCache >( *this
@@ -196,12 +205,14 @@ namespace castor3d
 				, String const & type
 				, RenderTarget & renderTarget
 				, RenderDevice const & device
+				, QueueData const & queueData
 				, Parameters const & parameters
 				, SsaoConfig const & ssaoConfig )
 			{
 				return std::make_shared< RenderTechnique >( name
 					, renderTarget
 					, device
+					, queueData
 					, parameters
 					, ssaoConfig );
 			}
@@ -660,11 +671,13 @@ namespace castor3d
 		m_jobs.pushJob( job );
 	}
 
-	void Engine::pushGpuJob( std::function< void( RenderDevice const & ) > job )
+	void Engine::pushGpuJob( std::function< void( RenderDevice const &, QueueData const & ) > job )
 	{
 		pushJob( [this, job]()
 			{
-				job( *m_renderSystem->getMainRenderDevice() );
+				auto & device = *m_renderSystem->getMainRenderDevice();
+				auto data = device.graphicsData();
+				job( device, *data );
 			} );
 	}
 

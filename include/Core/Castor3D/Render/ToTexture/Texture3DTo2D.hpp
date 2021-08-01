@@ -35,10 +35,12 @@ namespace castor3d
 			, MatrixUbo const & matrixUbo );
 		C3D_API ~Texture3DTo2D();
 
-		C3D_API void createPasses( IntermediateViewArray intermediates );
-		C3D_API void initialise();
+		C3D_API void createPasses( QueueData const & queueData
+			, IntermediateViewArray intermediates );
+		C3D_API void initialise( QueueData const & queueData );
 		C3D_API void update( CpuUpdater & updater );
-		C3D_API crg::SemaphoreWait render( crg::SemaphoreWait const & toWait );
+		C3D_API crg::SemaphoreWait render( ashes::Queue const & queue
+			, crg::SemaphoreWait const & toWait );
 
 		Texture const & getTarget()
 		{
@@ -66,6 +68,7 @@ namespace castor3d
 		{
 			Texture3DToScreen();
 			Texture3DToScreen( RenderDevice const & device
+				, QueueData const & queueData
 				, UniformBufferOffsetT< Texture3DTo2DData > const & uniformBuffer
 				, MatrixUbo const & matrixUbo
 				, IntermediateView const & texture3D

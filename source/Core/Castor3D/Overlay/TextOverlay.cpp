@@ -103,11 +103,12 @@ namespace castor3d
 			fontTexture->update();
 
 			getOverlay().getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [this, fontTexture]( RenderDevice const & device )
+				, [this, fontTexture]( RenderDevice const & device
+					, QueueData const & queueData )
 				{
 					m_fontChanged = true;
 					fontTexture->cleanup( device );
-					fontTexture->initialise( device );
+					fontTexture->initialise( device, queueData );
 				} ) );
 		}
 	}

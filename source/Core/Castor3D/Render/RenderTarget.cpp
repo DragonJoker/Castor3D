@@ -313,7 +313,8 @@ namespace castor3d
 	{
 	}
 
-	void RenderTarget::initialise( RenderDevice const & device )
+	void RenderTarget::initialise( RenderDevice const & device
+		, QueueData const & queueData )
 	{
 		if ( !m_initialised )
 		{
@@ -323,7 +324,7 @@ namespace castor3d
 
 			m_culler = std::make_unique< FrustumCuller >( *getScene(), *getCamera() );
 			doInitCombineProgram();
-			m_initialised = doInitialiseTechnique( device );
+			auto result = doInitialiseTechnique( device, queueData );
 
 			m_overlaysTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Overlays" ) );
 			auto * previousPass = &m_renderTechnique->getLastPass();
@@ -334,9 +335,9 @@ namespace castor3d
 
 				for ( auto effect : m_hdrPostEffects )
 				{
-					if ( m_initialised )
+					if ( result )
 					{
-						m_initialised = effect->initialise( device
+						result = effect->initialise( device
 							, *sourceView
 							, *previousPass );
 						previousPass = &effect->getPass();
@@ -344,7 +345,7 @@ namespace castor3d
 					}
 				}
 
-				if ( m_initialised )
+				if ( result )
 				{
 					previousPass = &doInitialiseCopyCommands( device
 						, "HDR"
@@ -354,7 +355,7 @@ namespace castor3d
 				}
 			}
 
-			if ( m_initialised )
+			if ( result )
 			{
 				m_hdrLastPass = previousPass;
 				m_toneMapping = std::make_shared< ToneMapping >( *getEngine()
@@ -376,9 +377,9 @@ namespace castor3d
 
 				for ( auto effect : m_srgbPostEffects )
 				{
-					if ( m_initialised )
+					if ( result )
 					{
-						m_initialised = effect->initialise( device
+						result = effect->initialise( device
 							, *sourceView
 							, *previousPass );
 						previousPass = &effect->getPass();
@@ -386,7 +387,7 @@ namespace castor3d
 					}
 				}
 
-				if ( m_initialised )
+				if ( result )
 				{
 					previousPass = &doInitialiseCopyCommands( device
 						, "SRGB"
@@ -396,7 +397,7 @@ namespace castor3d
 				}
 			}
 
-			if ( m_initialised )
+			if ( result )
 			{
 				m_combinePass.addDependency( *previousPass );
 				m_runnable = m_graph.compile( device.makeContext() );
@@ -412,6 +413,7 @@ namespace castor3d
 				, m_overlays );
 
 			m_signalReady = device->createSemaphore( getName() + "Ready" );
+			m_initialised = result;
 		}
 	}
 
@@ -506,7 +508,8 @@ namespace castor3d
 	}
 
 	void RenderTarget::render( RenderDevice const & device
-		, RenderInfo & info )
+		, RenderInfo & info
+		, ashes::Queue const & queue )
 	{
 		if ( !m_initialised )
 		{
@@ -525,7 +528,7 @@ namespace castor3d
 				{
 					getEngine()->getRenderSystem()->pushScene( scene.get() );
 					scene->getGeometryCache().fillInfo( info );
-					doRender( device, info, getCamera() );
+					doRender( device, info, queue, getCamera() );
 					getEngine()->getRenderSystem()->popScene();
 				}
 			}
@@ -572,7 +575,8 @@ namespace castor3d
 		, Parameters const & parameters )
 	{
 		getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [this, name, parameters]( RenderDevice const & device )
+			, [this, name, parameters]( RenderDevice const & device
+				, QueueData const & queueData )
 			{
 				if ( m_initialised )
 				{
@@ -686,7 +690,8 @@ namespace castor3d
 		return result;
 	}
 
-	bool RenderTarget::doInitialiseTechnique( RenderDevice const & device )
+	bool RenderTarget::doInitialiseTechnique( RenderDevice const & device
+		, QueueData const & queueData )
 	{
 		if ( !m_renderTechnique )
 		{
@@ -697,6 +702,7 @@ namespace castor3d
 					, std::make_shared< RenderTechnique >( name
 						, *this
 						, device
+						, queueData
 						, m_techniqueParameters
 						, m_ssaoConfig ) );
 			}
@@ -821,6 +827,7 @@ namespace castor3d
 
 	void RenderTarget::doRender( RenderDevice const & device
 		, RenderInfo & info
+		, ashes::Queue const & queue
 		, CameraSPtr camera )
 	{
 		SceneSPtr scene = getScene();
@@ -833,16 +840,19 @@ namespace castor3d
 
 		// Render overlays.
 		m_signalFinished = doRenderOverlays( device
+			, queue
 			, signalsToWait );
 
-		m_signalFinished = m_renderTechnique->preRender( m_signalFinished );
+		m_signalFinished = m_renderTechnique->preRender( m_signalFinished
+			, queue );
 
 		// Then run the graph
 		m_signalFinished = m_runnable->run( m_signalFinished
-			, *device.graphicsQueue );
+			, queue );
 	}
 
 	crg::SemaphoreWait RenderTarget::doRenderOverlays( RenderDevice const & device
+		, ashes::Queue const & queue
 		, crg::SemaphoreWaitArray const & toWait )
 	{
 		crg::SemaphoreWait result;
@@ -866,6 +876,6 @@ namespace castor3d
 		}
 
 		m_overlayRenderer->endPrepare( *m_overlaysTimer );
-		return m_overlayRenderer->render( *m_overlaysTimer );
+		return m_overlayRenderer->render( *m_overlaysTimer, queue );
 	}
 }

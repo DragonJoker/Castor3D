@@ -605,6 +605,7 @@ namespace castor3d
 		}
 
 		void processLevels( RenderDevice const & device
+			, QueueData const & queueData
 			, Image const & image
 			, ashes::Image const & texture
 			, ashes::ImageViewCreateInfo & viewInfo )
@@ -659,7 +660,7 @@ namespace castor3d
 				}
 			}
 
-			auto commandBuffer = device.graphicsCommandPool->createCommandBuffer( image.getName() + "ImageUpload"
+			auto commandBuffer = queueData.commandPool->createCommandBuffer( image.getName() + "ImageUpload"
 				, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 			commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 			commandBuffer->beginDebugBlock( { "Upload " + image.getName() + " Image"
@@ -674,11 +675,13 @@ namespace castor3d
 				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 				, texture.makeTransition( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-					, viewInfo->subresourceRange ) );
+					, viewInfo->subresourceRange
+					, queueData.parent->familyIndex
+					, device.getGraphicsQueueFamilyIndex() ) );
 			commandBuffer->endDebugBlock();
 			commandBuffer->end();
 			auto fence = device.device->createFence();
-			device.graphicsQueue->submit( *commandBuffer
+			device.transferQueue->submit( *commandBuffer
 				, fence.get() );
 			fence->wait( ashes::MaxTimeout );
 		}
@@ -975,7 +978,8 @@ namespace castor3d
 		m_defaultView.view.reset();
 	}
 
-	bool TextureLayout::initialise( RenderDevice const & device )
+	bool TextureLayout::initialise( RenderDevice const & device
+		, QueueData const & queueData )
 	{
 		if ( !m_initialised )
 		{
@@ -1047,7 +1051,7 @@ namespace castor3d
 					? 1u
 					: m_image.getLayout().levels;
 				viewInfo->subresourceRange.levelCount = mipLevels;
-				processLevels( device, m_image, *m_texture, viewInfo );
+				processLevels( device, queueData, m_image, *m_texture, viewInfo );
 			}
 
 			m_defaultView.forEachView( []( TextureViewUPtr const & view )
@@ -1098,22 +1102,27 @@ namespace castor3d
 		m_initialised = false;
 	}
 
-	void TextureLayout::generateMipmaps( RenderDevice const & device )const
+	void TextureLayout::generateMipmaps( QueueData const & queueData )const
 	{
 		if ( m_info->mipLevels > 1u
 			&& getDefaultView().isMipmapsGenerationNeeded() )
 		{
 			CU_Require( m_texture );
-			auto commandBuffer = device.graphicsCommandPool->createCommandBuffer( "TextureGenMipmaps" );
+			auto commandBuffer = queueData.commandPool->createCommandBuffer( "TextureGenMipmaps" );
 			commandBuffer->begin();
 			commandBuffer->beginDebugBlock( { getName() + " Mipmaps Generation"
 				, makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ) } );
 			generateMipmaps( *commandBuffer );
 			commandBuffer->endDebugBlock();
 			commandBuffer->end();
-			device.graphicsQueue->submit( *commandBuffer, nullptr );
-			device.graphicsQueue->waitIdle();
+			queueData.queue->submit( *commandBuffer, nullptr );
+			queueData.queue->waitIdle();
 		}
+	}
+
+	void TextureLayout::generateMipmaps( RenderDevice const & device )const
+	{
+		generateMipmaps( *device.graphicsData() );
 	}
 
 	void TextureLayout::generateMipmaps( ashes::CommandBuffer & cmd )const

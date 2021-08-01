@@ -613,7 +613,8 @@ namespace castor3d
 		}
 	}
 
-	crg::SemaphoreWait LightPropagationVolumesBase::render( crg::SemaphoreWait const & toWait )
+	crg::SemaphoreWait LightPropagationVolumesBase::render( crg::SemaphoreWait const & toWait
+		, ashes::Queue const & queue )
 	{
 		if ( !m_initialised
 			|| !m_scene.needsGlobalIllumination( m_lightType
@@ -625,7 +626,7 @@ namespace castor3d
 			return toWait;
 		}
 
-		return m_runnable->run( toWait, *m_device.graphicsQueue );
+		return m_runnable->run( toWait, queue );
 	}
 
 	void LightPropagationVolumesBase::accept( PipelineVisitorBase & visitor )

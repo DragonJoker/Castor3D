@@ -240,7 +240,7 @@ namespace castor3d
 		, m_srcImage{ std::make_unique< ashes::Image >( *device, m_srcView.image, m_srcView.imageId.data->info ) }
 		, m_srcImageView{ doCreateSrcView( *m_srcImage ) }
 		, m_renderPass{ doCreateRenderPass( m_device, m_result.getFormat() ) }
-		, m_commands{ m_device, "RadianceComputer" }
+		, m_commands{ m_device, *m_device.graphicsData(), "RadianceComputer" }
 	{
 		auto & handler = engine.getGraphResourceHandler();
 		auto & dstTexture = m_result;
@@ -294,14 +294,15 @@ namespace castor3d
 		cmd.end();
 	}
 
-	void RadianceComputer::render()
+	void RadianceComputer::render( QueueData const & queueData )
 	{
-		m_commands.submit( *m_device.graphicsQueue );
+		m_commands.submit( *queueData.queue );
 	}
 
-	ashes::Semaphore const & RadianceComputer::render( ashes::Semaphore const & toWait )
+	ashes::Semaphore const & RadianceComputer::render( QueueData const & queueData
+		, ashes::Semaphore const & toWait )
 	{
-		return m_commands.submit( *m_device.graphicsQueue, toWait );
+		return m_commands.submit( *queueData.queue, toWait );
 	}
 
 	ashes::Sampler const & RadianceComputer::getSampler()const

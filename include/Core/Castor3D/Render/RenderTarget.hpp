@@ -84,7 +84,8 @@ namespace castor3d
 		 *\param[out]	info	Reçoit les informations de rendu.
 		 */
 		C3D_API void render( RenderDevice const & device
-			, RenderInfo & info );
+			, RenderInfo & info
+			, ashes::Queue const & queue );
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
@@ -93,7 +94,8 @@ namespace castor3d
 		 *\brief		Fonction d'initialisation.
 		 *\param[in]	device	Le device GPU.
 		 */
-		C3D_API void initialise( RenderDevice const & device );
+		C3D_API void initialise( RenderDevice const & device
+			, QueueData const & queueData );
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
@@ -330,7 +332,8 @@ namespace castor3d
 
 	private:
 		crg::FramePass & doCreateCombinePass();
-		bool doInitialiseTechnique( RenderDevice const & device );
+		bool doInitialiseTechnique( RenderDevice const & device
+			, QueueData const & queueData );
 		crg::FramePass const & doInitialiseCopyCommands( RenderDevice const & device
 			, castor::String const & name
 			, crg::ImageViewId const & source
@@ -339,8 +342,10 @@ namespace castor3d
 		void doInitCombineProgram();
 		void doRender( RenderDevice const & device
 			, RenderInfo & info
+			, ashes::Queue const & queue
 			, CameraSPtr camera );
 		crg::SemaphoreWait doRenderOverlays( RenderDevice const & device
+			, ashes::Queue const & queue
 			, crg::SemaphoreWaitArray const & toWait );
 
 	public:

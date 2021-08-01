@@ -66,14 +66,15 @@ namespace castor3d
 					m_renderSystem.setCurrentRenderDevice( nullptr );
 				} );
 			auto & device = m_renderSystem.getCurrentRenderDevice();
-			getEngine()->getFrameListenerCache().forEach( [&device]( FrameListener & listener )
+			auto data = device.graphicsData();
+			getEngine()->getFrameListenerCache().forEach( [&device, &data]( FrameListener & listener )
 				{
-					listener.fireEvents( EventType::ePreRender, device );
+					listener.fireEvents( EventType::ePreRender, device, *data );
 					listener.fireEvents( EventType::ePreRender );
 				} );
-			getEngine()->getFrameListenerCache().forEach( [&device]( FrameListener & listener )
+			getEngine()->getFrameListenerCache().forEach( [&device, &data]( FrameListener & listener )
 				{
-					listener.fireEvents( EventType::eQueueRender, device );
+					listener.fireEvents( EventType::eQueueRender, device, *data );
 					listener.fireEvents( EventType::eQueueRender );
 				} );
 			m_uploadResources =
@@ -159,11 +160,12 @@ namespace castor3d
 	}
 
 	void RenderLoop::doProcessEvents( EventType eventType
-		, RenderDevice const & device )
+		, RenderDevice const & device
+		, QueueData const & queueData )
 	{
-		getEngine()->getFrameListenerCache().forEach( [eventType, &device]( FrameListener & listener )
+		getEngine()->getFrameListenerCache().forEach( [eventType, &device, &queueData]( FrameListener & listener )
 			{
-				listener.fireEvents( eventType, device );
+				listener.fireEvents( eventType, device, queueData );
 			} );
 	}
 
@@ -180,6 +182,7 @@ namespace castor3d
 					m_renderSystem.setCurrentRenderDevice( nullptr );
 				} );
 			auto & device = m_renderSystem.getCurrentRenderDevice();
+			auto queueData = device.graphicsData();
 
 			if ( !m_uploadResources[0].fence )
 			{
@@ -187,7 +190,7 @@ namespace castor3d
 				{
 					resources.commands =
 					{
-						device.graphicsCommandPool->createCommandBuffer( "RenderLoopUboUpload" ),
+						queueData->commandPool->createCommandBuffer( "RenderLoopUboUpload" ),
 						device->createSemaphore( "RenderLoopUboUpload" ),
 					};
 					resources.fence = device->createFence();
@@ -195,7 +198,7 @@ namespace castor3d
 			}
 
 			// Usually GPU initialisation
-			doProcessEvents( EventType::ePreRender, device );
+			doProcessEvents( EventType::ePreRender, device, *queueData );
 			doProcessEvents( EventType::ePreRender );
 
 			// GPU Update
@@ -206,7 +209,7 @@ namespace castor3d
 			uploadResources.commands.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 			device.uboPools->upload( *uploadResources.commands.commandBuffer );
 			uploadResources.commands.commandBuffer->end();
-			device.graphicsQueue->submit( { *uploadResources.commands.commandBuffer }
+			queueData->queue->submit( { *uploadResources.commands.commandBuffer }
 				, {}
 				, {}
 				, {}
@@ -215,16 +218,16 @@ namespace castor3d
 			uploadResources.fence->reset();
 
 			// Render
-			getEngine()->getRenderTargetCache().render( device, info );
+			getEngine()->getRenderTargetCache().render( device, info, *queueData->queue );
 
 			// Usually GPU cleanup
-			doProcessEvents( EventType::eQueueRender, device );
+			doProcessEvents( EventType::eQueueRender, device, *queueData );
 			doProcessEvents( EventType::eQueueRender );
 		}
 
 		for ( auto & window : getEngine()->getRenderWindows() )
 		{
-			window.second->render( m_first );
+			window.second->render( info, m_first );
 		}
 
 		m_first = false;
