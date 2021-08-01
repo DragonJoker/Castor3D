@@ -553,7 +553,9 @@ namespace castor
 					, m_buffer.data()
 					, getFormat()
 					, m_align
-					, extent
+					, ( m_layers > 1u
+						? VkExtent3D{ extent.width, extent.height, 1u }
+						: extent )
 					, m_layers
 					, m_levels );
 			}
@@ -603,7 +605,9 @@ namespace castor
 		, uint32_t levels )
 	{
 		auto extent = VkExtent3D{ m_size.getWidth(), m_size.getHeight(), 1u };
-		levels = getMinMipLevels( levels, extent );
+		levels = ashes::isCompressedFormat( VkFormat( m_format ) )
+			? m_levels
+			: getMinMipLevels( levels, extent );
 
 		if ( layers != m_layers
 			|| levels != m_levels )
