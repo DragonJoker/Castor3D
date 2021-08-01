@@ -10,6 +10,7 @@ namespace castor3d
 {
 	// Root parsers
 	CU_DeclareAttributeParser( parserRootScene )
+	CU_DeclareAttributeParser( parserRootLoadingScreen )
 	CU_DeclareAttributeParser( parserRootFont )
 	CU_DeclareAttributeParser( parserRootMaterial )
 	CU_DeclareAttributeParser( parserRootSamplerState )
@@ -79,6 +80,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserDirectionalShadowCascades )
 	CU_DeclareAttributeParser( parserLpvIndirectAttenuation )
 	CU_DeclareAttributeParser( parserVoxelConeTracing )
+	CU_DeclareAttributeParser( parserSceneEnd )
 
 	// ParticleSystem parsers
 	CU_DeclareAttributeParser( parserParticleSystemParent )

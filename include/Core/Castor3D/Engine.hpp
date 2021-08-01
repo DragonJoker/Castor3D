@@ -552,6 +552,11 @@ namespace castor3d
 		{
 			return m_lightingModelFactory;
 		}
+
+		SceneSPtr getLoadingScene()const
+		{
+			return m_loadingScene;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -562,6 +567,8 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
+		C3D_API void setLoadingScene( SceneSPtr scene );
+
 		void setUserInputListener( UserInputListenerSPtr listener )
 		{
 			m_userInputListener = listener;
@@ -626,6 +633,7 @@ namespace castor3d
 		castor::AsyncJobQueue m_jobs;
 		crg::ResourceHandler m_resourceHandler;
 		shader::LightingModelFactory m_lightingModelFactory;
+		SceneSPtr m_loadingScene;
 	};
 }
 
