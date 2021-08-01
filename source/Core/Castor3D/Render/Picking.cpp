@@ -166,6 +166,7 @@ namespace castor3d
 
 	Picking::Picking( crg::ResourceHandler & handler
 		, RenderDevice const & device
+		, QueueData const & queueData
 		, castor::Size const & size
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler )
@@ -215,7 +216,7 @@ namespace castor3d
 			, { 0, 0, 0 }
 			, { PickingWidth, PickingWidth, 1u } }
 		, m_pickDisplayRegions{ createPickDisplayRegions() }
-		, m_commandBuffer{ m_device.graphicsCommandPool->createCommandBuffer( "PickingPass" ) }
+		, m_commandBuffer{ queueData.commandPool->createCommandBuffer( "PickingPass" ) }
 		, m_transferFence{ m_device->createFence( "PickingPass" ) }
 		, m_stagingBuffer{ makeBuffer< castor::Point4f >( m_device
 			, PickingWidth * PickingWidth
@@ -309,7 +310,8 @@ namespace castor3d
 	castor::Point4f Picking::doFboPick( castor::Position const & position
 		, Camera const & camera )
 	{
-		auto toWait = m_runnable->run( crg::SemaphoreWait{}, *m_device.graphicsQueue );
+		auto queueData = m_device.graphicsData();
+		auto toWait = m_runnable->run( crg::SemaphoreWait{}, *queueData->queue );
 
 		m_copyRegion.imageOffset.x = std::clamp( position.x() - PickingOffset
 			, 0
@@ -370,7 +372,7 @@ namespace castor3d
 
 		m_commandBuffer->end();
 
-		m_device.graphicsQueue->submit( *m_commandBuffer
+		queueData->queue->submit( *m_commandBuffer
 			, toWait.semaphore
 			, toWait.dstStageMask
 			, {}

@@ -158,6 +158,7 @@ namespace castor3d
 		}
 
 		TextureUnit doCreateTextureUnit( RenderDevice const & device
+			, QueueData const & queueData
 			, crg::ImageId const & image )
 		{
 			VkImageSubresourceRange range{ 0u, 0u, 1u, 0u, 1u };
@@ -174,7 +175,7 @@ namespace castor3d
 				, image.data->name
 				, VK_FILTER_LINEAR
 				, &range ) );
-			result.initialise( device );
+			result.initialise( device, queueData );
 			return result;
 		}
 
@@ -273,6 +274,7 @@ namespace castor3d
 	RenderTechnique::RenderTechnique( castor::String const & name
 		, RenderTarget & renderTarget
 		, RenderDevice const & device
+		, QueueData const & queueData
 		, Parameters const & parameters
 		, SsaoConfig const & ssaoConfig )
 		: castor::OwnedBy< Engine >{ *device.renderSystem.getEngine() }
@@ -296,6 +298,7 @@ namespace castor3d
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_colourTexture{ doCreateTextureUnit( m_device
+			, queueData
 			, m_colour.imageId ) }
 		, m_depth{ device
 			, getOwner()->getGraphResourceHandler()
@@ -570,13 +573,14 @@ namespace castor3d
 		doUpdateParticles( updater );
 	}
 
-	crg::SemaphoreWait RenderTechnique::preRender( crg::SemaphoreWait const & toWait )
+	crg::SemaphoreWait RenderTechnique::preRender( crg::SemaphoreWait const & toWait
+		, ashes::Queue const & queue )
 	{
 		auto result = toWait;
-		result = doRenderShadowMaps( result );
-		result = doRenderLPV( result );
-		result = doRenderEnvironmentMaps( result );
-		result = doRenderVCT( result );
+		result = doRenderShadowMaps( result, queue );
+		result = doRenderLPV( result, queue );
+		result = doRenderEnvironmentMaps( result, queue );
+		result = doRenderVCT( result, queue );
 		return result;
 	}
 
@@ -1091,34 +1095,35 @@ namespace castor3d
 		}
 	}
 
-	crg::SemaphoreWait RenderTechnique::doRenderLPV( crg::SemaphoreWait const & semaphore )
+	crg::SemaphoreWait RenderTechnique::doRenderLPV( crg::SemaphoreWait const & semaphore
+		, ashes::Queue const & queue )
 	{
 		crg::SemaphoreWait result = semaphore;
 
 		if ( m_renderTarget.getScene()->needsGlobalIllumination() )
 		{
-			result = m_clearLpvRunnable->run( result, *m_device.graphicsQueue );
+			result = m_clearLpvRunnable->run( result, queue );
 
 			for ( auto i = uint32_t( LightType::eMin ); i < uint32_t( LightType::eCount ); ++i )
 			{
 				if ( m_lightPropagationVolumes[i] )
 				{
-					result = m_lightPropagationVolumes[i]->render( result );
+					result = m_lightPropagationVolumes[i]->render( result, queue );
 				}
 
 				if ( m_lightPropagationVolumesG[i] )
 				{
-					result = m_lightPropagationVolumesG[i]->render( result );
+					result = m_lightPropagationVolumesG[i]->render( result, queue );
 				}
 
 				if ( m_layeredLightPropagationVolumes[i] )
 				{
-					result = m_layeredLightPropagationVolumes[i]->render( result );
+					result = m_layeredLightPropagationVolumes[i]->render( result, queue );
 				}
 
 				if ( m_layeredLightPropagationVolumesG[i] )
 				{
-					result = m_layeredLightPropagationVolumesG[i]->render( result );
+					result = m_layeredLightPropagationVolumesG[i]->render( result, queue );
 				}
 			}
 		}
@@ -1126,7 +1131,8 @@ namespace castor3d
 		return result;
 	}
 
-	crg::SemaphoreWait RenderTechnique::doRenderShadowMaps( crg::SemaphoreWait const & semaphore )const
+	crg::SemaphoreWait RenderTechnique::doRenderShadowMaps( crg::SemaphoreWait const & semaphore
+		, ashes::Queue const & queue )const
 	{
 		crg::SemaphoreWait result = semaphore;
 		auto & scene = *m_renderTarget.getScene();
@@ -1139,7 +1145,7 @@ namespace castor3d
 				{
 					for ( auto & index : shadowMap.second )
 					{
-						result = shadowMap.first.get().render( result, index );
+						result = shadowMap.first.get().render( result, queue, index );
 					}
 				}
 			}
@@ -1148,25 +1154,27 @@ namespace castor3d
 		return result;
 	}
 
-	crg::SemaphoreWait RenderTechnique::doRenderEnvironmentMaps( crg::SemaphoreWait const & semaphore )const
+	crg::SemaphoreWait RenderTechnique::doRenderEnvironmentMaps( crg::SemaphoreWait const & semaphore
+		, ashes::Queue const & queue )const
 	{
 		crg::SemaphoreWait result = semaphore;
 
 		if ( m_renderTarget.getTargetType() == TargetType::eWindow )
 		{
-			result = m_renderTarget.getScene()->getEnvironmentMap().render( result );
+			result = m_renderTarget.getScene()->getEnvironmentMap().render( result, queue );
 		}
 
 		return result;
 	}
 
-	crg::SemaphoreWait RenderTechnique::doRenderVCT( crg::SemaphoreWait const & semaphore )const
+	crg::SemaphoreWait RenderTechnique::doRenderVCT( crg::SemaphoreWait const & semaphore
+		, ashes::Queue const & queue )const
 	{
 		crg::SemaphoreWait result = semaphore;
 
 		if ( m_renderTarget.getScene()->getVoxelConeTracingConfig().enabled )
 		{
-			result = m_voxelizer->render( result );
+			result = m_voxelizer->render( result, queue );
 		}
 
 		return result;

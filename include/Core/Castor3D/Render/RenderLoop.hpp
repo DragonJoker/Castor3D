@@ -189,7 +189,8 @@ namespace castor3d
 	private:
 		void doProcessEvents( EventType eventType );
 		void doProcessEvents( EventType eventType
-			, RenderDevice const & device );
+			, RenderDevice const & device
+			, QueueData const & queueData );
 		void doGpuStep( RenderInfo & info );
 		void doCpuStep( castor::Milliseconds tslf );
 

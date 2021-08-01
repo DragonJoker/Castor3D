@@ -42,7 +42,8 @@ namespace castor3d
 		 *\remarks		doit être implémentée dans les classes filles.
 		 *\param[in]	device	Le device GPU.
 		 */
-		C3D_API virtual void apply( RenderDevice const & device ) = 0;
+		C3D_API virtual void apply( RenderDevice const & device
+			, QueueData const & queueData ) = 0;
 		/**
 		 *\~english
 		 *\return		The event type.

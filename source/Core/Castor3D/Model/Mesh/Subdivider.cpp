@@ -150,7 +150,8 @@ namespace castor3d
 		if ( m_generateBuffers && !m_threaded )
 		{
 			m_submesh->getOwner()->getScene()->getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [this]( RenderDevice const & device )
+				, [this]( RenderDevice const & device
+					, QueueData const & queueData )
 				{
 					m_submesh->initialise( device );
 				} ) );
@@ -168,7 +169,8 @@ namespace castor3d
 		if ( m_generateBuffers )
 		{
 			m_submesh->getOwner()->getScene()->getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [this]( RenderDevice const & device )
+				, [this]( RenderDevice const & device
+					, QueueData const & queueData )
 				{
 					m_submesh->computeNormals();
 					m_submesh->initialise( device );

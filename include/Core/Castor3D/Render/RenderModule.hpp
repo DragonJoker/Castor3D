@@ -562,6 +562,24 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Queue and command pool.
+	*\~french
+	*\brief
+	*	Une queue et un command pool.
+	*/
+	struct QueueData;
+	/**
+	*\~english
+	*\brief
+	*	The queue data for all queues of a specific family index.
+	*\~french
+	*\brief
+	*	Les données de file pour toutes celles d'un family index spécifique.
+	*/
+	struct QueuesData;
+	/**
+	*\~english
+	*\brief
 	*	Ray representation
 	*\remarks
 	*	A ray is an origin and a direction in 3D.

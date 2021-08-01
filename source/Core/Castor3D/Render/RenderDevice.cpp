@@ -15,10 +15,10 @@ namespace castor3d
 {
 	namespace
 	{
-		RenderDevice::QueueFamilies initialiseQueueFamilies( ashes::Instance const & instance
+		QueueFamilies initialiseQueueFamilies( ashes::Instance const & instance
 			, ashes::PhysicalDevice const & gpu )
 		{
-			RenderDevice::QueueFamilies result;
+			QueueFamilies result;
 			auto queueProps = gpu.getQueueFamilyProperties();
 			bool hasGraphics = false;
 			uint32_t index{};
@@ -27,7 +27,7 @@ namespace castor3d
 			{
 				if ( queueProp.queueCount > 0 )
 				{
-					RenderDevice::QueueData data;
+					auto & data = result.emplace_back();
 					data.familyIndex = index++;
 
 					if ( ashes::checkFlag( queueProp.queueFlags, VK_QUEUE_GRAPHICS_BIT ) )
@@ -46,11 +46,11 @@ namespace castor3d
 						data.familySupport |= QueueFamilyFlag::eTransfer;
 					}
 
-					data.queues.resize( queueProp.queueCount );
+					data.setQueueSize( queueProp.queueCount );
 
 					if ( data.familySupport != QueueFamilyFlag::eNone )
 					{
-						result.push_back( std::move( data ) );
+						//result.emplace_back( std::move( data ) );
 					}
 				}
 			}
@@ -65,14 +65,14 @@ namespace castor3d
 			return result;
 		}
 
-		ashes::DeviceQueueCreateInfoArray getQueueCreateInfos( RenderDevice::QueueFamilies const & queues )
+		ashes::DeviceQueueCreateInfoArray getQueueCreateInfos( QueueFamilies const & queues )
 		{
 			ashes::DeviceQueueCreateInfoArray queueCreateInfos;
 
 			for ( auto & queueData : queues )
 			{
 				std::vector< float > queuePriorities;
-				queuePriorities.resize( queueData.queues.size(), 1.0f );
+				queuePriorities.resize( queueData.getQueueSize(), 1.0f );
 
 				queueCreateInfos.push_back( { 0u
 					, queueData.familyIndex
@@ -96,6 +96,134 @@ namespace castor3d
 		}
 	}
 
+	//*********************************************************************************************
+
+	QueuesData::QueuesData( QueuesData && rhs )
+		: familySupport{ rhs.familySupport }
+		, familyIndex{ rhs.familyIndex }
+		, m_allQueuesData{ std::move( rhs.m_allQueuesData ) }
+		, m_remainingQueuesData{ std::move( rhs.m_remainingQueuesData ) }
+		, m_busyQueues{ std::move( rhs.m_busyQueues ) }
+	{
+	}
+
+	QueuesData & QueuesData::operator=( QueuesData && rhs )
+	{
+		familySupport = rhs.familySupport;
+		familyIndex = rhs.familyIndex;
+		m_allQueuesData = std::move( rhs.m_allQueuesData );
+		m_remainingQueuesData = std::move( rhs.m_remainingQueuesData );
+		m_busyQueues = std::move( rhs.m_busyQueues );
+		return *this;
+	}
+
+	QueuesData::QueuesData( QueueFamilyFlags familySupport
+		, uint32_t familyIndex )
+		: familySupport{ familySupport }
+		, familyIndex{ familyIndex }
+	{
+	}
+
+	void QueuesData::initialise( ashes::Device const & device )
+	{
+		uint32_t index = 0u;
+
+		for ( auto & queue : m_allQueuesData )
+		{
+			queue = std::make_unique< QueueData >( this );
+			queue->queue = device.getQueue( familyIndex, index );
+			queue->commandPool = device.createCommandPool( familyIndex
+				, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT );
+			m_remainingQueuesData.push_back( queue.get() );
+			++index;
+		}
+	}
+
+	void QueuesData::setQueueSize( size_t count )
+	{
+		m_allQueuesData.resize( count );
+	}
+
+	QueueData const * QueuesData::reserveQueue()const
+	{
+		auto lock( castor::makeUniqueLock( m_mutex ) );
+		auto result = m_remainingQueuesData.back();
+		m_remainingQueuesData.pop_back();
+		return result;
+	}
+
+	QueueData const * QueuesData::getQueue()
+	{
+		auto lock( castor::makeUniqueLock( m_mutex ) );
+		CU_Require( !m_remainingQueuesData.empty() );
+
+		auto ires = m_busyQueues.emplace( std::this_thread::get_id()
+			, QueueThreadData{} );
+		auto & result = ires.first->second;
+
+		if ( ires.second )
+		{
+			result.data = m_remainingQueuesData.back();
+			m_remainingQueuesData.pop_back();
+		}
+
+		++result.count;
+		return result.data;
+	}
+
+	void QueuesData::putQueue( QueueData const * queue )
+	{
+		auto lock( castor::makeUniqueLock( m_mutex ) );
+		CU_Require( !m_busyQueues.empty() );
+
+		auto it = m_busyQueues.find( std::this_thread::get_id() );
+		CU_Require( it != m_busyQueues.end() );
+		CU_Require( it->second.count > 0 );
+
+		--it->second.count;
+
+		if ( !it->second.count )
+		{
+			m_remainingQueuesData.push_back( it->second.data );
+			m_busyQueues.erase( it );
+		}
+	}
+
+	//*********************************************************************************************
+
+	QueueDataWrapper::QueueDataWrapper( QueueDataWrapper && rhs )
+		: parent{ rhs.parent }
+		, data{ rhs.data }
+	{
+		rhs.parent = nullptr;
+		rhs.data = nullptr;
+	}
+
+	QueueDataWrapper & QueueDataWrapper::operator=( QueueDataWrapper && rhs )
+	{
+		parent = rhs.parent;
+		data = rhs.data;
+		rhs.parent = nullptr;
+		rhs.data = nullptr;
+		return *this;
+	}
+
+	QueueDataWrapper::QueueDataWrapper( QueuesData * parent )
+		: parent{ parent }
+		, data{ parent->getQueue() }
+	{
+	}
+
+	QueueDataWrapper::~QueueDataWrapper()
+	{
+		if ( parent && data )
+		{
+			parent->putQueue( data );
+		}
+	}
+
+	//*********************************************************************************************
+
 	RenderDevice::RenderDevice( RenderSystem & renderSystem
 		, ashes::PhysicalDevice const & gpu
 		, AshPluginDescription const & desc )
@@ -111,39 +239,33 @@ namespace castor3d
 				, gpu
 				, getQueueCreateInfos( queueFamilies ) ) ) }
 	{
-		for ( auto & queueData : queueFamilies )
+		for ( auto & queuesData : queueFamilies )
 		{
-			queueData.commandPool = device->createCommandPool( queueData.familyIndex
-				, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT );
 			uint32_t index = 0u;
+			queuesData.initialise( *device );
 
-			for ( auto & queue : queueData.queues )
-			{
-				queue = device->getQueue( queueData.familyIndex, index++ );
-			}
+			auto & queueData = queuesData.front();
 
 			if ( !m_preferredGraphicsQueue
-				&& checkFlag( queueData.familySupport, QueueFamilyFlag::eGraphics ) )
+				&& checkFlag( queuesData.familySupport, QueueFamilyFlag::eGraphics ) )
 			{
-				m_preferredGraphicsQueue = &queueData;
-				graphicsCommandPool = queueData.commandPool.get();
-				graphicsQueue = queueData.queues.front().get();
+				m_preferredGraphicsQueue = &queuesData;
 			}
 
 			if ( !m_preferredComputeQueue
-				&& checkFlag( queueData.familySupport, QueueFamilyFlag::eCompute ) )
+				&& checkFlag( queuesData.familySupport, QueueFamilyFlag::eCompute ) )
 			{
-				m_preferredComputeQueue = &queueData;
+				m_preferredComputeQueue = &queuesData;
+				computeQueue = queueData.queue.get();
 				computeCommandPool = queueData.commandPool.get();
-				computeQueue = queueData.queues.front().get();
 			}
 
 			if ( !m_preferredTransferQueue
-				&& checkFlag( queueData.familySupport, QueueFamilyFlag::eTransfer ) )
+				&& checkFlag( queuesData.familySupport, QueueFamilyFlag::eTransfer ) )
 			{
-				m_preferredTransferQueue = &queueData;
+				m_preferredTransferQueue = &queuesData;
+				transferQueue = queueData.queue.get();
 				transferCommandPool = queueData.commandPool.get();
-				transferQueue = queueData.queues.front().get();
 			}
 		}
 
@@ -218,5 +340,10 @@ namespace castor3d
 		}
 
 		return *it;
+	}
+
+	QueueDataWrapper RenderDevice::graphicsData()const
+	{
+		return QueueDataWrapper{ m_preferredGraphicsQueue };
 	}
 }

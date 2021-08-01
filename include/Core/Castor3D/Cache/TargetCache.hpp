@@ -87,7 +87,8 @@ namespace castor3d
 		 *\param[in,out]	info	Reçoit les informations de rendu.
 		 */
 		C3D_API void render( RenderDevice const & device
-			, RenderInfo & info );
+			, RenderInfo & info
+			, ashes::Queue const & queue );
 		/**
 		 *\~english
 		 *\brief		Flushes the collection.

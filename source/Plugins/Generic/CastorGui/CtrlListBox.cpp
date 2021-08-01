@@ -109,7 +109,8 @@ namespace CastorGui
 			StaticCtrlSPtr item = doCreateItemCtrl( p_value
 				, uint32_t( m_values.size() - 1u ) );
 			getEngine().postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [this, item]( RenderDevice const & device )
+				, [this, item]( RenderDevice const & device
+					, QueueData const & queueData )
 				{
 					getControlsManager()->create( item );
 				} ) );
@@ -146,7 +147,8 @@ namespace CastorGui
 				{
 					ControlSPtr control = *it;
 					getEngine().postEvent( makeGpuFunctorEvent( EventType::ePreRender
-						, [this, control]( RenderDevice const & device )
+						, [this, control]( RenderDevice const & device
+							, QueueData const & queueData )
 						{
 							getControlsManager()->destroy( control );
 						} ) );

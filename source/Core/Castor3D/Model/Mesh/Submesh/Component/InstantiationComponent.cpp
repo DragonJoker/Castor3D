@@ -74,7 +74,8 @@ namespace castor3d
 				for ( auto & data : datas )
 				{
 					getOwner()->getOwner()->getScene()->getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
-						, [&data]( RenderDevice const & device )
+						, [&data]( RenderDevice const & device
+							, QueueData const & queueData )
 						{
 							data.buffer.reset();
 						} ) );

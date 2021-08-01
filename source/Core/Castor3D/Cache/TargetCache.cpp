@@ -76,7 +76,8 @@ namespace castor3d
 	}
 
 	void RenderTargetCache::render( RenderDevice const & device
-		, RenderInfo & info )
+		, RenderInfo & info
+		, ashes::Queue const & queue )
 	{
 		LockType lock{ castor::makeUniqueLock( *this ) };
 
@@ -87,7 +88,7 @@ namespace castor3d
 
 		for ( auto target : m_renderTargets[size_t( TargetType::eWindow )] )
 		{
-			target->render( device, info );
+			target->render( device, info, queue );
 		}
 	}
 

@@ -88,7 +88,7 @@ namespace castor3d
 			TextureUnit unit{ engine };
 			unit.setTexture( layout );
 			unit.setSampler( sampler );
-			unit.initialise( device );
+			unit.initialise( device, *device.graphicsData() );
 			return unit;
 		}
 	}
@@ -259,7 +259,8 @@ namespace castor3d
 		return doGetAnimation< TextureAnimation >( "Default" );
 	}
 
-	bool TextureUnit::initialise( RenderDevice const & device )
+	bool TextureUnit::initialise( RenderDevice const & device
+		, QueueData const & queueData )
 	{
 		if ( m_initialised )
 		{
@@ -271,7 +272,7 @@ namespace castor3d
 
 		if ( target )
 		{
-			target->initialise( device );
+			target->initialise( device, queueData );
 			m_texture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
 				, target->getTexture().image
 				, target->getTexture().wholeViewId );
@@ -280,7 +281,7 @@ namespace castor3d
 		}
 		else if ( m_texture )
 		{
-			result = m_texture->initialise( device );
+			result = m_texture->initialise( device, queueData );
 			auto sampler = getSampler();
 			CU_Require( sampler );
 			sampler->initialise( device );

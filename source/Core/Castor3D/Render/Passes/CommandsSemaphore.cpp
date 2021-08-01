@@ -12,8 +12,9 @@ namespace castor3d
 	}
 
 	CommandsSemaphore::CommandsSemaphore( RenderDevice const & device
+		, QueueData const & queueData
 		, castor::String const & name )
-		: CommandsSemaphore{ device.graphicsCommandPool->createCommandBuffer( name )
+		: CommandsSemaphore{ queueData.commandPool->createCommandBuffer( name )
 			, device->createSemaphore( name ) }
 	{
 	}

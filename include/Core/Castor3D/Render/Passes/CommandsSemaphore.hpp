@@ -15,10 +15,11 @@ namespace castor3d
 {
 	struct CommandsSemaphore
 	{
-		C3D_API CommandsSemaphore( RenderDevice const & device
-			, castor::String const & name );
 		C3D_API CommandsSemaphore( ashes::CommandBufferPtr commandBuffer = nullptr
 			, ashes::SemaphorePtr semaphore = nullptr );
+		C3D_API CommandsSemaphore( RenderDevice const & device
+			, QueueData const & queueData
+			, castor::String const & name );
 
 		C3D_API void submit( ashes::Queue const & queue )const;
 		C3D_API ashes::Semaphore const & submit( ashes::Queue const & queue

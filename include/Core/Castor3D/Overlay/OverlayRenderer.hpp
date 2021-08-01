@@ -118,7 +118,8 @@ namespace castor3d
 		 *\param[in]	device	Le device GPU.
 		 *\param[in]	timer	Le timer de la passe de rendu.
 		 */
-		C3D_API crg::SemaphoreWait render( FramePassTimer & timer );
+		C3D_API crg::SemaphoreWait render( FramePassTimer & timer
+			, ashes::Queue const & queue );
 		/**
 		*\~english
 		*name

@@ -320,11 +320,12 @@ namespace film_grain
 				ashes::ImageView noiseView{ ashes::ImageViewCreateInfo{ *noiseImg, m_noiseView.data->info }
 					, graph.createImageView( m_noiseView )
 					, noiseImg.get() };
+				auto data = device.graphicsData();
 
 				for ( uint32_t i = 0u; i < NoiseMapCount; ++i )
 				{
-					staging->uploadTextureData( *device.graphicsQueue
-						, *device.graphicsCommandPool
+					staging->uploadTextureData( *data->queue
+						, *data->commandPool
 						, { m_noiseView.data->info.subresourceRange.aspectMask
 							, m_noiseView.data->info.subresourceRange.baseMipLevel
 							, m_noiseView.data->info.subresourceRange.baseArrayLayer

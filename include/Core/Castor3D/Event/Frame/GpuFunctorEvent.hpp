@@ -12,7 +12,7 @@ namespace castor3d
 		: public GpuFrameEvent
 	{
 	public:
-		using Functor = std::function< void( RenderDevice const & device ) >;
+		using Functor = std::function< void( RenderDevice const &, QueueData const & ) >;
 
 	private:
 		GpuFunctorEvent( GpuFunctorEvent const & copy ) = delete;
@@ -47,9 +47,10 @@ namespace castor3d
 		 *\remarks		Exécute la fonction.
 		 *\param[in]	device	Le device GPU.
 		 */
-		void apply( RenderDevice const & device )override
+		void apply( RenderDevice const & device
+			, QueueData const & queueData )override
 		{
-			m_functor( device );
+			m_functor( device, queueData );
 		}
 
 	private:

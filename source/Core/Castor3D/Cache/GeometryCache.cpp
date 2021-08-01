@@ -40,7 +40,8 @@ namespace castor3d
 			inline void operator()( GeometrySPtr element )
 			{
 				m_listener.postEvent( makeGpuFunctorEvent( EventType::ePreRender
-					, [element, this]( RenderDevice const & device )
+					, [element, this]( RenderDevice const & device
+						, QueueData const & queueData )
 					{
 						element->prepare( m_faceCount, m_vertexCount );
 					} ) );

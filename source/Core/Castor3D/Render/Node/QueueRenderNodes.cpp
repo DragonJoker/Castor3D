@@ -442,7 +442,8 @@ namespace castor3d
 
 		auto & renderPass = *queue.getOwner();
 		renderPass.getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [&renderPass, this, shadowMaps]( RenderDevice const & device )
+			, [&renderPass, this, shadowMaps]( RenderDevice const & device
+				, QueueData const & queueData )
 			{
 				getOwner()->getCuller().getScene().getRenderNodes().initialiseNodes( device );
 

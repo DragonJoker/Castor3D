@@ -43,7 +43,8 @@ namespace castor3d
 	{
 		m_result.create();
 		auto & context = m_device.makeContext();
-		auto commandBuffer = m_device.graphicsCommandPool->createCommandBuffer();
+		auto queueData = m_device.graphicsData();
+		auto commandBuffer = queueData->commandPool->createCommandBuffer();
 		commandBuffer->begin();
 
 		for ( auto & texture : m_result )
@@ -113,7 +114,7 @@ namespace castor3d
 
 		commandBuffer->end();
 		auto fence = m_device->createFence();
-		m_device.graphicsQueue->submit( *commandBuffer, fence.get() );
+		queueData->queue->submit( *commandBuffer, fence.get() );
 		fence->wait( ashes::MaxTimeout );
 	}
 
@@ -156,6 +157,7 @@ namespace castor3d
 	}
 
 	crg::SemaphoreWait ShadowMap::render( crg::SemaphoreWait const & toWait
+		, ashes::Queue const & queue
 		, uint32_t index )
 	{
 #if !C3D_MeasureShadowMapImpact
@@ -171,7 +173,7 @@ namespace castor3d
 			m_runnables[index]->record();
 		}
 
-		return m_runnables[index]->run( toWait, *m_device.graphicsQueue );
+		return m_runnables[index]->run( toWait, queue );
 	}
 
 	ashes::VkClearValueArray const & ShadowMap::getClearValues()const
