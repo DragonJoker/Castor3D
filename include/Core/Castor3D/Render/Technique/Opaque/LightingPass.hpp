@@ -222,6 +222,7 @@ namespace castor3d
 		LightingPass( crg::FrameGraph & graph
 			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
+			, ProgressBar * progress
 			, castor::Size const & size
 			, Scene & scene
 			, Texture const & depth
@@ -248,10 +249,12 @@ namespace castor3d
 
 	private:
 		crg::FramePass const & doCreateDepthBlitPass( crg::FrameGraph & graph
-			, crg::FramePass const & previousPass );
+			, crg::FramePass const & previousPass
+			, ProgressBar * progress );
 		crg::FramePass const & doCreateLightingPass( crg::FrameGraph & graph
 			, crg::FramePass const & previousPass
-			, Scene const & scene );
+			, Scene const & scene
+			, ProgressBar * progress );
 		void doUpdateLightPasses( CpuUpdater & updater
 			, LightType lightType );
 

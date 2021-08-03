@@ -208,14 +208,16 @@ namespace castor3d
 				, RenderDevice const & device
 				, QueueData const & queueData
 				, Parameters const & parameters
-				, SsaoConfig const & ssaoConfig )
+				, SsaoConfig const & ssaoConfig
+				, ProgressBar * progress )
 			{
 				return std::make_shared< RenderTechnique >( name
 					, renderTarget
 					, device
 					, queueData
 					, parameters
-					, ssaoConfig );
+					, ssaoConfig
+					, progress );
 			}
 			, dummy
 			, dummy
@@ -410,7 +412,6 @@ namespace castor3d
 
 	void Engine::postEvent( CpuFrameEventUPtr event )
 	{
-		auto lock( castor::makeUniqueLock( *m_listenerCache ) );
 		FrameListenerSPtr listener = m_defaultListener.lock();
 
 		if ( listener )
@@ -428,7 +429,6 @@ namespace castor3d
 
 	void Engine::postEvent( GpuFrameEventUPtr event )
 	{
-		auto lock( castor::makeUniqueLock( *m_listenerCache ) );
 		FrameListenerSPtr listener = m_defaultListener.lock();
 
 		if ( listener )

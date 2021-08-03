@@ -45,6 +45,7 @@ namespace castor3d
 		C3D_API SubsurfaceScatteringPass( crg::FrameGraph & graph
 			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
+			, ProgressBar * progress
 			, Scene const & scene
 			, GpInfoUbo const & gpInfoUbo
 			, SceneUbo const & sceneUbo

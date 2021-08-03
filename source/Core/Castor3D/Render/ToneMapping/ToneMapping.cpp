@@ -5,6 +5,7 @@
 #include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
@@ -36,13 +37,14 @@ namespace castor3d
 		, crg::ImageViewId const & target
 		, crg::FramePass const & previousPass
 		, HdrConfigUbo & hdrConfigUbo
-		, Parameters const & parameters )
+		, Parameters const & parameters
+		, ProgressBar * progress )
 		: OwnedBy< Engine >{ engine }
 		, m_name{ cuT( "linear" ) }
 		, m_hdrConfigUbo{ hdrConfigUbo }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "ToneMapping" }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "ToneMapping" }
-		, m_pass{ &doCreatePass( size, graph, source, target, previousPass ) }
+		, m_pass{ &doCreatePass( size, graph, source, target, previousPass, progress ) }
 	{
 	}
 
@@ -80,13 +82,15 @@ namespace castor3d
 		, crg::FrameGraph & graph
 		, crg::ImageViewId const & source
 		, crg::ImageViewId const & target
-		, crg::FramePass const & previousPass )
+		, crg::FramePass const & previousPass
+		, ProgressBar * progress )
 	{
 		auto & result = graph.createPass( "ToneMapping"
-			, [this, target]( crg::FramePass const & pass
+			, [this, progress, target]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
+				stepProgressBar( progress, "Initialising tone mapping pass" );
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( makeExtent2D( getExtent( target ) ) )

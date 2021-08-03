@@ -49,6 +49,7 @@ namespace castor3d
 		 */
 		SsaoBlurPass( crg::FrameGraph & graph
 			, RenderDevice const & device
+			, ProgressBar * progress
 			, crg::FramePass const & previousPass
 			, castor::String const & prefix
 			, VkExtent2D const & size

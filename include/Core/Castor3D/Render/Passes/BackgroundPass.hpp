@@ -104,9 +104,10 @@ namespace castor3d
 	class BackgroundRenderer
 	{
 	private:
-		BackgroundRenderer( crg::FrameGraph & graph
+		C3D_API BackgroundRenderer( crg::FrameGraph & graph
 			, crg::FramePass const * previousPass
 			, RenderDevice const & device
+			, ProgressBar * progress
 			, castor::String const & name
 			, SceneBackground & background
 			, HdrConfigUbo const & hdrConfigUbo
@@ -118,6 +119,7 @@ namespace castor3d
 		BackgroundRenderer( crg::FrameGraph & graph
 			, crg::FramePass const * previousPass
 			, RenderDevice const & device
+			, ProgressBar * progress
 			, castor::String const & name
 			, SceneBackground & background
 			, HdrConfigUbo const & hdrConfigUbo
@@ -126,6 +128,51 @@ namespace castor3d
 			: BackgroundRenderer{ graph
 				, previousPass
 				, device
+				, progress
+				, name
+				, background
+				, hdrConfigUbo
+				, sceneUbo
+				, colour
+				, nullptr }
+		{
+		}
+
+		BackgroundRenderer( crg::FrameGraph & graph
+			, crg::FramePass const * previousPass
+			, RenderDevice const & device
+			, ProgressBar * progress
+			, castor::String const & name
+			, SceneBackground & background
+			, HdrConfigUbo const & hdrConfigUbo
+			, SceneUbo const & sceneUbo
+			, crg::ImageViewId const & colour
+			, crg::ImageViewId const & depth )
+			: BackgroundRenderer{ graph
+				, previousPass
+				, device
+				, progress
+				, name
+				, background
+				, hdrConfigUbo
+				, sceneUbo
+				, colour
+				, &depth }
+		{
+		}
+
+		BackgroundRenderer( crg::FrameGraph & graph
+			, crg::FramePass const * previousPass
+			, RenderDevice const & device
+			, castor::String const & name
+			, SceneBackground & background
+			, HdrConfigUbo const & hdrConfigUbo
+			, SceneUbo const & sceneUbo
+			, crg::ImageViewId const & colour )
+			: BackgroundRenderer{ graph
+				, previousPass
+				, device
+				, nullptr
 				, name
 				, background
 				, hdrConfigUbo
@@ -147,6 +194,7 @@ namespace castor3d
 			: BackgroundRenderer{ graph
 				, previousPass
 				, device
+				, nullptr
 				, name
 				, background
 				, hdrConfigUbo
@@ -189,7 +237,8 @@ namespace castor3d
 			, HdrConfigUbo const & hdrConfigUbo
 			, SceneUbo const & sceneUbo
 			, crg::ImageViewId const & colour
-			, crg::ImageViewId const * depth );
+			, crg::ImageViewId const * depth
+			, ProgressBar * progress );
 
 	private:
 		RenderDevice const & m_device;

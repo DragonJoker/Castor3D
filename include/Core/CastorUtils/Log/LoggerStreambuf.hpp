@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___CU_LoggerStreambuf_H___
 
 #include "CastorUtils/Log/LoggerInstance.hpp"
+#include "CastorUtils/Config/MultiThreadConfig.hpp"
 
 #include <mutex>
 

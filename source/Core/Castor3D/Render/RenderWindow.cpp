@@ -413,18 +413,28 @@ namespace castor3d
 				m_loadingScreen->enable();
 			}
 
+			auto progress = m_progressBar.get();
+			incProgressBarRange( progress, 6u + target->countInitialisationSteps() );
 			getEngine()->pushGpuJob( [this]( RenderDevice const & device, QueueData const & queueData )
 				{
 					auto target = m_renderTarget.lock();
 
 					if ( target )
 					{
-						target->initialise( device, queueData );
+						auto progress = m_progressBar.get();
+						target->initialise( device, queueData, progress );
+						setProgressBarTitle( progress, "Render Window" );
+						stepProgressBar( progress, "Initialising picking" );
 						doCreatePickingPass( queueData );
+						stepProgressBar( progress, "Initialising intermediate views" );
 						doCreateIntermediateViews( queueData );
+						stepProgressBar( progress, "Initialising combine quad" );
 						doCreateRenderQuad( queueData );
+						stepProgressBar( progress, "Initialising command buffers" );
 						doCreateCommandBuffers( queueData );
+						stepProgressBar( progress, "Initialising save data" );
 						doCreateSaveData( queueData );
+						stepProgressBar( progress, "Finalising..." );
 					}
 
 					getListener()->postEvent( makeCpuFunctorEvent( EventType::ePostRender
@@ -442,15 +452,27 @@ namespace castor3d
 		}
 		else
 		{
-			auto & queueData = m_device.graphicsData();
-			target->initialise( m_device, *queueData );
-			doCreatePickingPass( *queueData );
-			doCreateIntermediateViews( *queueData );
-			doCreateRenderQuad( *queueData );
-			doCreateCommandBuffers( *queueData );
-			doCreateSaveData( *queueData );
-			getEngine()->registerWindow( *this );
+			auto target = m_renderTarget.lock();
+
+			if ( target )
+			{
+				auto & queueData = m_device.graphicsData();
+				target->initialise( m_device, *queueData, nullptr );
+				doCreatePickingPass( *queueData );
+				doCreateIntermediateViews( *queueData );
+				doCreateRenderQuad( *queueData );
+				doCreateCommandBuffers( *queueData );
+				doCreateSaveData( *queueData );
+			}
+
+			if ( m_loadingScreen )
+			{
+				m_loadingScreen->disable();
+			}
+
+			m_loading = false;
 			m_initialised = true;
+			getEngine()->registerWindow( *this );
 		}
 
 		log::debug << "Created render window " << m_index << std::endl;
@@ -1046,18 +1068,30 @@ namespace castor3d
 			return;
 		}
 
-		m_loadingScreen = castor::makeUnique< LoadingScreen >( m_device
+		if ( !m_progressBar )
+		{
+			m_progressBar = castor::makeUnique< ProgressBar >( *getEngine()
+				, getOverlay( *scene, cuT( "Progress" ) )
+				, getOverlay( *scene, cuT( "ProgressBar" ) )
+				, getTextOverlay( *scene, cuT( "ProgressTitle" ) )
+				, getTextOverlay( *scene, cuT( "ProgressLabel" ) )
+				, 1u );
+			m_progressBar->setTitle( "Initialising..." );
+			m_progressBar->setLabel( "" );
+		}
+
+		m_loadingScreen = castor::makeUnique< LoadingScreen >( *m_progressBar
+			, m_device
 			, getEngine()->getGraphResourceHandler()
 			, scene
 			, *m_renderPass
 #if C3D_PersistLoadingScreen
-			, getScreenSize()
+			, getScreenSize() );
 #else
-			, m_size
+			, m_size );
 #endif
-			, 1u );
 
-		if ( m_loading )
+		if ( m_loading && m_loadingScreen )
 		{
 			m_loadingScreen->enable();
 		}
@@ -1334,11 +1368,13 @@ namespace castor3d
 		doDestroyIntermediateViews();
 
 #if C3D_PersistLoadingScreen
-		if ( m_loadingScreen )
+		if ( m_progressBar && m_loadingScreen )
 		{
+			m_progressBar->lock();
 			doDestroySwapchain();
 			doCreateSwapchain();
 			m_loadingScreen->setRenderPass( *m_renderPass, m_size );
+			m_progressBar->unlock();
 		}
 		else
 #endif
