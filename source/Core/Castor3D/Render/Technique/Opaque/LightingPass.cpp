@@ -8,6 +8,7 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
@@ -835,6 +836,7 @@ namespace castor3d
 	LightingPass::LightingPass( crg::FrameGraph & graph
 		, crg::FramePass const *& previousPass
 		, RenderDevice const & device
+		, ProgressBar * progress
 		, castor::Size const & size
 		, Scene & scene
 		, Texture const & depth
@@ -859,10 +861,12 @@ namespace castor3d
 		, m_size{ size }
 	{
 		previousPass = &doCreateDepthBlitPass( graph
-			, *previousPass );
+			, *previousPass
+			, progress );
 		previousPass = &doCreateLightingPass( graph
 			, *previousPass
-			, scene );
+			, scene
+			, progress );
 	}
 
 	void LightingPass::update( CpuUpdater & updater )
@@ -915,14 +919,17 @@ namespace castor3d
 	}
 
 	crg::FramePass const & LightingPass::doCreateDepthBlitPass( crg::FrameGraph & graph
-		, crg::FramePass const & previousPass )
+		, crg::FramePass const & previousPass
+		, ProgressBar * progress )
 	{
+		stepProgressBar( progress, "Creating depth blit pass" );
 		auto & engine = *m_device.renderSystem.getEngine();
 		auto & pass = graph.createPass( "DepthBlit"
-			, [this, &engine]( crg::FramePass const & pass
+			, [this, progress, &engine]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
+				stepProgressBar( progress, "Initialising depth blit pass" );
 				auto result = std::make_unique< crg::ImageCopy >( pass
 					, context
 					, graph
@@ -941,14 +948,17 @@ namespace castor3d
 
 	crg::FramePass const & LightingPass::doCreateLightingPass( crg::FrameGraph & graph
 		, crg::FramePass const & previousPass
-		, Scene const & scene )
+		, Scene const & scene
+		, ProgressBar * progress )
 	{
+		stepProgressBar( progress, "Creating lighting pass" );
 		auto & engine = *m_device.renderSystem.getEngine();
 		auto & pass = graph.createPass( "LightPass"
-			, [this, &engine, &scene]( crg::FramePass const & pass
+			, [this, progress, &engine, &scene]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
+				stepProgressBar( progress, "Initialising lighting pass" );
 				auto result = std::make_unique< RunnableLightingPass >( pass
 					, context
 					, graph

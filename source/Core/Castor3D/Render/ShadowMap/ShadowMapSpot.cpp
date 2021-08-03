@@ -5,6 +5,7 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
@@ -108,7 +109,8 @@ namespace castor3d
 
 	ShadowMapSpot::ShadowMapSpot( crg::ResourceHandler & handler
 		, RenderDevice const & device
-		, Scene & scene )
+		, Scene & scene
+		, ProgressBar * progress )
 		: ShadowMap{ handler
 			, device
 			, scene
@@ -130,7 +132,7 @@ namespace castor3d
 			, getFormat( m_blurIntermediate )
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
 	{
-		log::trace << "Created ShadowMapSpot" << std::endl;
+		stepProgressBar( progress, "Creating ShadowMapSpot" );
 	}
 
 	ShadowMapSpot::~ShadowMapSpot()

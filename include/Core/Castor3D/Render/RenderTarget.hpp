@@ -89,6 +89,13 @@ namespace castor3d
 			, crg::SemaphoreWaitArray const & signalsToWait = {} );
 		/**
 		 *\~english
+		 *\return		The number of steps needed for initialisation, to show progression.
+		 *\~french
+		 *\return		Le nombre d'étapes nécessaires à l'initialisation, pour en montrer la progression.
+		 */
+		C3D_API uint32_t countInitialisationSteps()const;
+		/**
+		 *\~english
 		 *\brief		Initialisation function.
 		 *\param[in]	device	The GPU device.
 		 *\~french
@@ -96,7 +103,8 @@ namespace castor3d
 		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API void initialise( RenderDevice const & device
-			, QueueData const & queueData );
+			, QueueData const & queueData
+			, ProgressBar * progress = nullptr );
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
@@ -332,15 +340,17 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		crg::FramePass & doCreateCombinePass();
+		crg::FramePass & doCreateCombinePass( ProgressBar * progress );
 		bool doInitialiseTechnique( RenderDevice const & device
-			, QueueData const & queueData );
+			, QueueData const & queueData
+			, ProgressBar * progress );
 		crg::FramePass const & doInitialiseCopyCommands( RenderDevice const & device
 			, castor::String const & name
 			, crg::ImageViewId const & source
 			, crg::ImageViewId const & target
-			, crg::FramePass const & previousPass );
-		void doInitCombineProgram();
+			, crg::FramePass const & previousPass
+			, ProgressBar * progress );
+		void doInitCombineProgram( ProgressBar * progress );
 		crg::SemaphoreWait doRender( RenderDevice const & device
 			, RenderInfo & info
 			, ashes::Queue const & queue

@@ -2,6 +2,7 @@
 
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
+#include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -367,6 +368,7 @@ namespace castor3d
 	BackgroundRenderer::BackgroundRenderer( crg::FrameGraph & graph
 		, crg::FramePass const * previousPass
 		, RenderDevice const & device
+		, ProgressBar * progress
 		, castor::String const & name
 		, SceneBackground & background
 		, HdrConfigUbo const & hdrConfigUbo
@@ -383,7 +385,8 @@ namespace castor3d
 			, hdrConfigUbo
 			, sceneUbo
 			, colour
-			, depth ) }
+			, depth
+			, progress ) }
 	{
 	}
 
@@ -421,8 +424,10 @@ namespace castor3d
 		, HdrConfigUbo const & hdrConfigUbo
 		, SceneUbo const & sceneUbo
 		, crg::ImageViewId const & colour
-		, crg::ImageViewId const * depth )
+		, crg::ImageViewId const * depth
+		, ProgressBar * progress )
 	{
+		stepProgressBar( progress, "Creating background pass" );
 		auto size = makeExtent2D( getExtent( colour ) );
 		auto graphName = graph.getName();
 		auto & result = graph.createPass( name + "Background"
@@ -430,6 +435,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
+				stepProgressBar( progress, "Initialising background pass" );
 				auto result = std::make_unique< BackgroundPass >( pass
 					, context
 					, graph

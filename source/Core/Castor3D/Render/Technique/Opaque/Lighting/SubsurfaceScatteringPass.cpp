@@ -8,6 +8,7 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -324,6 +325,7 @@ namespace castor3d
 	SubsurfaceScatteringPass::SubsurfaceScatteringPass( crg::FrameGraph & graph
 		, crg::FramePass const *& previousPass
 		, RenderDevice const & device
+		, ProgressBar * progress
 		, Scene const & scene
 		, GpInfoUbo const & gpInfoUbo
 		, SceneUbo const & sceneUbo
@@ -370,6 +372,7 @@ namespace castor3d
 		weights.blurWeights[2] = castor::Point4f{ 0.46, 0.0, 0.0402, 0.25 };
 		weights.blurVariance = castor::Point4f{ 0.0516, 0.2719, 2.0062 };
 		auto blurXSource = &m_lpResult[LpTexture::eDiffuse];
+		stepProgressBar( progress, "Creating SSS Blur passes" );
 
 		for ( uint32_t i = 0u; i < PassCount; ++i )
 		{
@@ -449,11 +452,13 @@ namespace castor3d
 			blurXSource = blurYDestination;
 		}
 
+		stepProgressBar( progress, "Creating SSS combine pass" );
 		auto & pass = graph.createPass("SSSCombine"
-			, [this]( crg::FramePass const & pass
+			, [this, progress]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
+				stepProgressBar( progress, "Initialising SSS combine pass" );
 				auto config = createConfig( m_size, m_combineShader, &m_enabled );
 				config.recordDisabledInto( [this, &graph, &context]( crg::RunnablePass const & runnable
 						, VkCommandBuffer commandBuffer

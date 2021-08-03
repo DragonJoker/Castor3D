@@ -70,6 +70,7 @@ namespace castor3d
 		C3D_API OpaqueResolvePass( crg::FrameGraph & graph
 			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
+			, ProgressBar * progress
 			, Scene & scene
 			, OpaquePassResult const & gp
 			, SsaoConfig const & ssao
@@ -99,7 +100,8 @@ namespace castor3d
 
 	private:
 		crg::FramePass const & doCreatePass( crg::FrameGraph & graph
-			, crg::FramePass const & pass );
+			, crg::FramePass const & pass
+			, ProgressBar * progress );
 		std::vector< Program > doCreatePrograms();
 
 	private:

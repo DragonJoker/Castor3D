@@ -38,6 +38,7 @@ namespace castor3d
 		 */
 		C3D_API Voxelizer( crg::ResourceHandler & handler
 			, RenderDevice const & device
+			, ProgressBar * progress
 			, Scene & scene
 			, Camera & camera
 			, MatrixUbo & matrixUbo
@@ -79,13 +80,27 @@ namespace castor3d
 			return m_secondaryBounce;
 		}
 
+		static uint32_t countInitialisationSteps()
+		{
+			uint32_t result = 0u;
+			result += 2;// m_voxelizePass;
+			result += 2;// m_voxelToTexture;
+			result += 2;// m_voxelMipGen;
+			result += 2;// m_voxelSecondaryBounce;
+			result += 2;// m_voxelSecondaryMipGen;
+			return result;
+		}
+
 	private:
-		crg::FramePass & doCreateVoxelizePass();
-		crg::FramePass & doCreateVoxelToTexture( crg::FramePass const & previousPass );
+		crg::FramePass & doCreateVoxelizePass( ProgressBar * progress );
+		crg::FramePass & doCreateVoxelToTexture( crg::FramePass const & previousPass
+			, ProgressBar * progress );
 		crg::FramePass & doCreateVoxelMipGen( crg::FramePass const & previousPass
 			, std::string const & name
-			, crg::ImageViewId const & view );
-		crg::FramePass & doCreateVoxelSecondaryBounce( crg::FramePass const & previousPass );
+			, crg::ImageViewId const & view
+			, ProgressBar * progress );
+		crg::FramePass & doCreateVoxelSecondaryBounce( crg::FramePass const & previousPass
+			, ProgressBar * progress );
 
 	private:
 		Engine & m_engine;

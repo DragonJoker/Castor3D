@@ -195,6 +195,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	A progress bar, overlay based.
+	*\~french
+	*\brief
+	*	Une barre de progression, basée sur des overlays.
+	*/
+	class ProgressBar;
+	/**
+	*\~english
+	*\brief
 	*	Version management class
 	*\remark
 	*	Class used to manage versions and versions dependencies for plug-ins
@@ -218,6 +227,7 @@ namespace castor3d
 	using Parameters = ParametersT< castor::String >;
 
 	CU_DeclareCUSmartPtr( castor3d, LoadingScreen, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, ProgressBar, C3D_API );
 
 	struct RenderDevice;
 	C3D_API ashes::DeviceMemoryPtr setupMemory( ashes::Device const & device

@@ -8,6 +8,7 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -345,6 +346,7 @@ namespace castor3d
 	OpaqueResolvePass::OpaqueResolvePass( crg::FrameGraph & graph
 		, crg::FramePass const *& previousPass
 		, RenderDevice const & device
+		, ProgressBar * progress
 		, Scene & scene
 		, OpaquePassResult const & gp
 		, SsaoConfig const & ssao
@@ -375,7 +377,7 @@ namespace castor3d
 		, m_lightIndirectSpecular{ lightIndirectSpecular }
 		, m_programs{ doCreatePrograms() }
 	{
-		previousPass = &doCreatePass( graph, *previousPass );
+		previousPass = &doCreatePass( graph, *previousPass, progress );
 	}
 
 	std::vector< OpaqueResolvePass::Program > OpaqueResolvePass::doCreatePrograms()
@@ -397,15 +399,18 @@ namespace castor3d
 	}
 
 	crg::FramePass const & OpaqueResolvePass::doCreatePass( crg::FrameGraph & graph
-		, crg::FramePass const & previousPass )
+		, crg::FramePass const & previousPass
+		, ProgressBar * progress )
 	{
+		stepProgressBar( progress, "Creating opaque resolve pass" );
 		auto & engine = *getEngine();
 		auto & passBuffer = engine.getMaterialCache().getPassBuffer();
 		auto & pass = graph.createPass( "DeferredResolve"
-			, [this, &engine]( crg::FramePass const & pass
+			, [this, progress, &engine]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
+				stepProgressBar( progress, "Initialising opaque resolve pass" );
 				auto result = crg::RenderQuadBuilder{}
 					.texcoordConfig( crg::Texcoord{} )
 					.renderSize( makeExtent2D( m_result.getExtent() ) )

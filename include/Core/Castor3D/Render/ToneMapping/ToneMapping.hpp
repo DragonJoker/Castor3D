@@ -43,7 +43,8 @@ namespace castor3d
 			, crg::ImageViewId const & target
 			, crg::FramePass const & previousPass
 			, HdrConfigUbo & hdrConfigUbo
-			, Parameters const & parameters );
+			, Parameters const & parameters
+			, ProgressBar * progress );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -109,7 +110,8 @@ namespace castor3d
 			, crg::FrameGraph & graph
 			, crg::ImageViewId const & source
 			, crg::ImageViewId const & target
-			, crg::FramePass const & previousPass );
+			, crg::FramePass const & previousPass
+			, ProgressBar * progress );
 		void doCreate( castor::String const & name );
 
 	protected:

@@ -7,6 +7,7 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
@@ -211,6 +212,7 @@ namespace castor3d
 	LineariseDepthPass::LineariseDepthPass( crg::FrameGraph & graph
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
+		, ProgressBar * progress
 		, String const & prefix
 		, SsaoConfig const & ssaoConfig
 		, VkExtent2D const & size
@@ -229,13 +231,13 @@ namespace castor3d
 		, m_linearisePixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + "LineariseDepth", getLinearisePixelProgram() }
 		, m_lineariseStages{ makeShaderState( m_device, m_lineariseVertexShader )
 			, makeShaderState( m_device, m_linearisePixelShader ) }
-		, m_linearisePass{ doInitialiseLinearisePass() }
+		, m_linearisePass{ doInitialiseLinearisePass( progress ) }
 		, m_minifyVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + "MinifyDepth", getVertexProgram() }
 		, m_minifyPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + "MinifyDepth", getMinifyPixelProgram() }
 		, m_minifyStages{ makeShaderState( m_device, m_minifyVertexShader )
 			, makeShaderState( m_device, m_minifyPixelShader ) }
 	{
-		doInitialiseMinifyPass();
+		doInitialiseMinifyPass( progress );
 	}
 
 	LineariseDepthPass::~LineariseDepthPass()
@@ -290,13 +292,15 @@ namespace castor3d
 		visitor.visit( m_minifyPixelShader );
 	}
 
-	crg::FramePass const & LineariseDepthPass::doInitialiseLinearisePass()
+	crg::FramePass const & LineariseDepthPass::doInitialiseLinearisePass( ProgressBar * progress )
 	{
+		stepProgressBar( progress, "Creating depth linearise pass" );
 		auto & pass = m_graph.createPass( "LineariseDepth"
-			, [this]( crg::FramePass const & pass
+			, [this, progress]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
+				stepProgressBar( progress, "Initialising depth linearise pass" );
 				auto result = crg::RenderQuadBuilder{}
 					.program( crg::makeVkArray< VkPipelineShaderStageCreateInfo >( m_lineariseStages ) )
 					.renderSize( m_size )
@@ -317,13 +321,14 @@ namespace castor3d
 		return pass;
 	}
 
-	void LineariseDepthPass::doInitialiseMinifyPass()
+	void LineariseDepthPass::doInitialiseMinifyPass( ProgressBar * progress )
 	{
 		uint32_t index = 0u;
 		auto size = m_size;
 
 		for ( auto index = 0u; index < MaxMipLevel; ++index )
 		{
+			stepProgressBar( progress, "Creating depth minify pass " + std::to_string( index ) );
 			m_previousLevel.push_back( m_device.uboPools->getBuffer< castor::Point2i >( 0u ) );
 			auto & previousLevel = m_previousLevel.back();
 			auto & data = previousLevel.getData();
@@ -343,10 +348,11 @@ namespace castor3d
 				, m_result.getFormat()
 				, VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, index + 1u, 1u, 0u, 1u } } );
 			auto & pass = m_graph.createPass( "MinimiseDepth" + std::to_string( index )
-				, [this, size]( crg::FramePass const & pass
+				, [this, progress, size]( crg::FramePass const & pass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
+					stepProgressBar( progress, "Initialising depth minify pass" );
 					auto result = crg::RenderQuadBuilder{}
 						.program( crg::makeVkArray< VkPipelineShaderStageCreateInfo >( m_minifyStages ) )
 						.renderSize( size )

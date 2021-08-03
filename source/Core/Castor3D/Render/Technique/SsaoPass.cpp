@@ -22,6 +22,7 @@ namespace castor3d
 {
 	SsaoPass::SsaoPass( crg::FrameGraph & graph
 		, RenderDevice const & device
+		, ProgressBar * progress
 		, crg::FramePass const & previousPass
 		, castor::Size const & size
 		, SsaoConfig & ssaoConfig
@@ -39,12 +40,14 @@ namespace castor3d
 		, m_linearisePass{ castor::makeUnique< LineariseDepthPass >( graph
 			, previousPass
 			, m_device
+			, progress
 			, cuT( "Ssao" )
 			, m_ssaoConfig
 			, m_size
 			, depth.sampledViewId ) }
 		, m_rawAoPass{ castor::makeUnique< SsaoRawAOPass >( graph
 			, m_device
+			, progress
 			, m_linearisePass->getLastPass()
 			, m_size
 			, m_ssaoConfig
@@ -55,6 +58,7 @@ namespace castor3d
 #if !C3D_DebugRawPass
 		, m_horizontalBlur{ castor::makeUnique< SsaoBlurPass >( graph
 			, m_device
+			, progress
 			, m_rawAoPass->getLastPass()
 			, cuT( "Horizontal" )
 			, m_size
@@ -67,6 +71,7 @@ namespace castor3d
 			, m_normal ) }
 		, m_verticalBlur{ castor::makeUnique< SsaoBlurPass >( graph
 			, m_device
+			, progress
 			, m_horizontalBlur->getLastPass()
 			, cuT( "Vertical" )
 			, m_size
