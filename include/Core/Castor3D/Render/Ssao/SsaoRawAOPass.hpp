@@ -46,6 +46,7 @@ namespace castor3d
 		 */
 		SsaoRawAOPass( crg::FrameGraph & graph
 			, RenderDevice const & device
+			, ProgressBar * progress
 			, crg::FramePass const & previousPass
 			, VkExtent2D const & size
 			, SsaoConfig const & config

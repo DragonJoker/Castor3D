@@ -162,7 +162,8 @@ namespace CastorViewer
 				}
 
 				RenderTargetSPtr target = GuiCommon::loadScene( *engine
-					, m_filePath );
+					, m_filePath
+					, &m_renderPanel->getRenderWindow()->getProgressBar() );
 
 				if ( target )
 				{

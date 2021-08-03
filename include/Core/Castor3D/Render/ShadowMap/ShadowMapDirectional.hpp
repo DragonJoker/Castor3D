@@ -27,7 +27,8 @@ namespace castor3d
 		 */
 		C3D_API explicit ShadowMapDirectional( crg::ResourceHandler & handler
 			, RenderDevice const & device
-			, Scene & scene );
+			, Scene & scene
+			, ProgressBar * progress );
 		/**
 		 *\copydoc		castor3d::ShadowMap::update
 		 */

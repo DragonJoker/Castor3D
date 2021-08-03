@@ -1,6 +1,7 @@
 #include "Castor3D/Render/Technique/Opaque/IndirectLightingPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -277,6 +278,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	IndirectLightingPass::IndirectLightingPass( RenderDevice const & device
+		, ProgressBar * progress
 		, Scene const & scene
 		, crg::FrameGraph & graph
 		, crg::FramePass const *& previousPass
@@ -305,7 +307,7 @@ namespace castor3d
 		, m_vctConfigUbo{ vctConfigUbo }
 		, m_programs{ createPrograms( device, scene ) }
 	{
-		previousPass = &doCreateLightingPass( graph, *previousPass );
+		previousPass = &doCreateLightingPass( graph, *previousPass, progress );
 	}
 
 	void IndirectLightingPass::update( CpuUpdater & updater )
@@ -326,14 +328,17 @@ namespace castor3d
 	}
 
 	crg::FramePass const & IndirectLightingPass::doCreateLightingPass( crg::FrameGraph & graph
-		, crg::FramePass const & previousPass )
+		, crg::FramePass const & previousPass
+		, ProgressBar * progress )
 	{
+		stepProgressBar( progress, "Creating indirect light pass" );
 		auto & engine = *m_device.renderSystem.getEngine();
 		auto & pass = graph.createPass( "IndirectLightPass"
-			, [this, &engine]( crg::FramePass const & pass
+			, [this, progress, &engine]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
+				stepProgressBar( progress, "Initialising indirect light pass" );
 				auto result = crg::RenderQuadBuilder{}
 					.renderSize( makeExtent2D( m_lpResult.begin()->getExtent() ) )
 					.programs( convertPrograms( m_programs ) )

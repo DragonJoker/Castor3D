@@ -2,7 +2,12 @@
 
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Cache/CameraCache.hpp"
-#include "Castor3D/Miscellaneous/LoadingScreen.hpp"
+#include "Castor3D/Cache/OverlayCache.hpp"
+#include "Castor3D/Cache/CacheView.hpp"
+#include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
+#include "Castor3D/Miscellaneous/ProgressBar.hpp"
+#include "Castor3D/Overlay/Overlay.hpp"
+#include "Castor3D/Overlay/TextOverlay.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
 #include "Castor3D/Render/Passes/BackgroundPass.hpp"
@@ -26,7 +31,7 @@ namespace castor3d
 		Texture createTexture( RenderDevice const & device
 			, crg::ResourceHandler & handler
 			, std::string const & name
-			, VkExtent2D const & size
+			, castor::Size const & size
 			, VkFormat format
 			, VkImageUsageFlags usage )
 		{
@@ -34,7 +39,7 @@ namespace castor3d
 				, handler
 				, name
 				, 0u
-				, { size.width, size.height, 1u }
+				, makeExtent3D( size )
 				, 1u
 				, 1u
 				, format
@@ -52,7 +57,7 @@ namespace castor3d
 			return createTexture( device
 				, handler
 				, name + "Col"
-				, makeExtent2D( size )
+				, size
 				, VK_FORMAT_R8G8B8A8_UNORM
 				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 					| VK_IMAGE_USAGE_SAMPLED_BIT ) );
@@ -66,7 +71,7 @@ namespace castor3d
 			return createTexture( device
 				, handler
 				, name + "Dpt"
-				, makeExtent2D( size )
+				, size
 				, device.selectSuitableDepthFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT )
 				, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT );
 		}
@@ -86,7 +91,7 @@ namespace castor3d
 					, aspect
 					, nearZ
 					, farZ );
-				viewport.resize( { size.getWidth(), size.getHeight() } );
+				viewport.resize( size );
 				viewport.update();
 				result = std::make_shared< Camera >( LoadingScreen::SceneName
 					, scene
@@ -102,6 +107,14 @@ namespace castor3d
 			return result;
 		}
 
+		SceneUbo createSceneUbo( RenderDevice const & device
+			, castor::Size const & size )
+		{
+			SceneUbo result{ device };
+			result.setWindowSize( size );
+			return result;
+		}
+
 		ShaderPtr getVertexProgram()
 		{
 			using namespace sdw;
@@ -109,16 +122,13 @@ namespace castor3d
 
 			// Shader inputs
 			auto position = writer.declInput< Vec2 >( "position", 0u );
-			auto uv = writer.declInput< Vec2 >( "uv", 1u );
 
 			// Shader outputs
-			auto texcoord = writer.declOutput< Vec2 >( "texcoord", 0u );
 			auto out = writer.getOut();
 
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					texcoord = uv;
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -130,8 +140,8 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			auto texcoord = writer.declInput< Vec2 >( "texcoord", 0u );
 			auto c3d_source = writer.declSampledImage< FImg2DRgba32 >( "c3d_source", 0u, 0u );
+			auto in = writer.getIn();
 
 			// Shader outputs
 			auto fragColor = writer.declOutput< Vec4 >( "fragColor", 0 );
@@ -139,17 +149,9 @@ namespace castor3d
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					fragColor = c3d_source.sample( texcoord );
+					fragColor = c3d_source.fetch( ivec2( in.fragCoord.xy() ), 0_i );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		SceneUbo createSceneUbo( RenderDevice const & device
-			, castor::Size const & size )
-		{
-			SceneUbo result{ device };
-			result.setWindowSize( size );
-			return result;
 		}
 
 		crg::RunnableGraphPtr createRunnablePass( crg::FrameGraph & graph
@@ -185,7 +187,6 @@ namespace castor3d
 			, context
 			, graph
 			, crg::rq::Config{}
-				.texcoordConfig( crg::Texcoord{} )
 				.programs( { crg::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) } )
 			, 1u }
 	{
@@ -194,15 +195,17 @@ namespace castor3d
 	void LoadingScreen::WindowPass::setRenderPass( VkRenderPass renderPass
 		, VkExtent2D const & renderSize )
 	{
-		if ( m_renderQuad.isInitialised() )
-		{
-			m_renderQuad.resetRenderPass( renderSize
-				, renderPass
-				, SceneRenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u ) );
-		}
-
 		m_renderSize = renderSize;
 		m_renderPass = renderPass;
+		m_framebuffer = nullptr;
+
+		if ( m_renderQuad.isInitialised() )
+		{
+			m_renderQuad.resetRenderPass( m_renderSize
+				, m_renderPass
+				, SceneRenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u ) );
+			record();
+		}
 	}
 
 	void LoadingScreen::WindowPass::setTarget( VkFramebuffer framebuffer
@@ -245,26 +248,25 @@ namespace castor3d
 
 	castor::String const LoadingScreen::SceneName = cuT( "C3D_LoadingScreen" );
 
-	LoadingScreen::LoadingScreen( RenderDevice const & device
+	LoadingScreen::LoadingScreen( ProgressBar & progressBar
+		, RenderDevice const & device
 		, crg::ResourceHandler & handler
 		, SceneSPtr scene
 		, VkRenderPass renderPass
-		, castor::Size const & renderSize
-		, uint32_t max )
+		, castor::Size const & size )
 		: m_device{ device }
 		, m_graph{ handler }
-		, m_index{ castor::makeRangedValue( 0u, 0u, max ) }
 		, m_scene{ std::move( scene ) }
 		, m_background{ *m_scene->getBackground() }
 		, m_renderPass{ renderPass }
-		, m_renderSize{ renderSize }
-		, m_camera{ createCamera( *m_scene, renderSize ) }
+		, m_renderSize{ size }
+		, m_camera{ createCamera( *m_scene, m_renderSize ) }
 		, m_culler{ std::make_unique< FrustumCuller >( *m_camera ) }
-		, m_colour{ createColour( m_device, handler, SceneName, renderSize ) }
-		, m_depth{ createDepth( m_device, handler, SceneName, renderSize ) }
+		, m_colour{ createColour( m_device, handler, SceneName, m_renderSize ) }
+		, m_depth{ createDepth( m_device, handler, SceneName, m_renderSize ) }
 		, m_matrixUbo{ m_device }
 		, m_hdrConfigUbo{ m_device }
-		, m_sceneUbo{ createSceneUbo( m_device, renderSize ) }
+		, m_sceneUbo{ createSceneUbo( m_device, m_renderSize ) }
 		, m_backgroundRenderer{ castor::makeUnique< BackgroundRenderer >( m_graph
 			, nullptr
 			, m_device
@@ -278,11 +280,17 @@ namespace castor3d
 		, m_overlayPassDesc{ &doCreateOverlayPass( m_transparentPassDesc ) }
 		, m_windowPassDesc{ &doCreateWindowPass( m_overlayPassDesc ) }
 		, m_runnable{ createRunnablePass( m_graph, m_device ) }
+		, m_progressBar{ progressBar }
 	{
 	}
 
 	LoadingScreen::~LoadingScreen()
 	{
+		m_runnable.reset();
+		m_backgroundRenderer.reset();
+		m_culler.reset();
+		m_camera.reset();
+		m_scene.reset();
 	}
 
 	void LoadingScreen::enable()
@@ -302,8 +310,8 @@ namespace castor3d
 			updater.camera = m_camera.get();
 
 			m_scene->update( updater );
-			m_camera->getViewport().resize( m_renderSize );
 			m_camera->update();
+
 			m_culler->compute();
 			m_matrixUbo.cpuUpdate( m_camera->getView()
 				, m_camera->getProjection( false ) );
@@ -335,14 +343,15 @@ namespace castor3d
 	void LoadingScreen::setRenderPass( VkRenderPass renderPass
 		, castor::Size const & renderSize )
 	{
+		m_renderPass = renderPass;
+		m_renderSize = renderSize;
+		m_camera->getViewport().resize( m_renderSize );
+
 		if ( m_windowPass )
 		{
 			m_windowPass->setRenderPass( renderPass
-				,  makeExtent2D( renderSize ) );
+				,  makeExtent2D( m_renderSize ) );
 		}
-
-		m_renderPass = renderPass;
-		m_renderSize = renderSize;
 	}
 
 	crg::SemaphoreWaitArray LoadingScreen::render( ashes::Queue const & queue

@@ -85,6 +85,7 @@ namespace castor3d
 
 	public:
 		IndirectLightingPass( RenderDevice const & device
+			, ProgressBar * progress
 			, Scene const & scene
 			, crg::FrameGraph & graph
 			, crg::FramePass const *& previousPass
@@ -115,7 +116,8 @@ namespace castor3d
 
 	private:
 		crg::FramePass const & doCreateLightingPass( crg::FrameGraph & graph
-			, crg::FramePass const & previousPass );
+			, crg::FramePass const & previousPass
+			, ProgressBar * progress );
 
 	private:
 		RenderDevice const & m_device;

@@ -7,6 +7,7 @@
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp"
@@ -76,6 +77,7 @@ namespace castor3d
 
 	Voxelizer::Voxelizer( crg::ResourceHandler & handler
 		, RenderDevice const & device
+		, ProgressBar * progress
 		, Scene & scene
 		, Camera & camera
 		, MatrixUbo & matrixUbo
@@ -91,11 +93,11 @@ namespace castor3d
 		, m_secondaryBounce{ createTexture( device, handler, "VoxelizedSceneSecondaryBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
 		, m_voxels{ createSsbo( m_engine, device, "VoxelizedSceneBuffer", m_voxelConfig.gridSize.value() ) }
 		, m_voxelizerUbo{ voxelizerUbo }
-		, m_voxelizePassDesc{ doCreateVoxelizePass() }
-		, m_voxelToTextureDesc{ doCreateVoxelToTexture( m_voxelizePassDesc ) }
-		, m_voxelMipGen{ doCreateVoxelMipGen( m_voxelToTextureDesc, "FirstBounceMip", m_firstBounce.wholeViewId ) }
-		, m_voxelSecondaryBounceDesc{ doCreateVoxelSecondaryBounce( m_voxelMipGen ) }
-		, m_voxelSecondaryMipGen{ doCreateVoxelMipGen( m_voxelSecondaryBounceDesc, "SecondaryBounceMip", m_secondaryBounce.wholeViewId ) }
+		, m_voxelizePassDesc{ doCreateVoxelizePass( progress ) }
+		, m_voxelToTextureDesc{ doCreateVoxelToTexture( m_voxelizePassDesc, progress ) }
+		, m_voxelMipGen{ doCreateVoxelMipGen( m_voxelToTextureDesc, "FirstBounceMip", m_firstBounce.wholeViewId, progress ) }
+		, m_voxelSecondaryBounceDesc{ doCreateVoxelSecondaryBounce( m_voxelMipGen, progress ) }
+		, m_voxelSecondaryMipGen{ doCreateVoxelMipGen( m_voxelSecondaryBounceDesc, "SecondaryBounceMip", m_secondaryBounce.wholeViewId, progress ) }
 		, m_runnable{ m_graph.compile( m_device.makeContext() ) }
 	{
 		m_firstBounce.create();
@@ -105,6 +107,7 @@ namespace castor3d
 
 	Voxelizer::~Voxelizer()
 	{
+		m_runnable.reset();
 		m_voxels.reset();
 		m_engine.getSamplerCache().remove( "VoxelizedSceneSecondaryBounce" );
 		m_engine.getSamplerCache().remove( "VoxelizedSceneFirstBounce" );
@@ -159,13 +162,15 @@ namespace castor3d
 		return m_runnable->run( semaphore, queue );
 	}
 
-	crg::FramePass & Voxelizer::doCreateVoxelizePass()
+	crg::FramePass & Voxelizer::doCreateVoxelizePass( ProgressBar * progress )
 	{
+		stepProgressBar( progress, "Creating voxelize pass" );
 		auto & result = m_graph.createPass( "VoxelizePass"
-			, [this]( crg::FramePass const & pass
+			, [this, progress]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
+				stepProgressBar( progress, "Initialising voxelize pass" );
 				auto result = std::make_unique< VoxelizePass >( pass
 					, context
 					, graph
@@ -187,13 +192,16 @@ namespace castor3d
 		return result;
 	}
 
-	crg::FramePass & Voxelizer::doCreateVoxelToTexture( crg::FramePass const & previousPass )
+	crg::FramePass & Voxelizer::doCreateVoxelToTexture( crg::FramePass const & previousPass
+		, ProgressBar * progress )
 	{
+		stepProgressBar( progress, "Creating voxel buffer to texture pass" );
 		auto & result = m_graph.createPass( "VoxelBufferToTexture"
-			, [this]( crg::FramePass const & pass
+			, [this, progress]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
+				stepProgressBar( progress, "Initialising voxel buffer to texture pass" );
 				auto result = std::make_unique< VoxelBufferToTexture >( pass
 					, context
 					, graph
@@ -217,13 +225,16 @@ namespace castor3d
 
 	crg::FramePass & Voxelizer::doCreateVoxelMipGen( crg::FramePass const & previousPass
 		, std::string const & name
-		, crg::ImageViewId const & view )
+		, crg::ImageViewId const & view
+		, ProgressBar * progress )
 	{
+		stepProgressBar( progress, "Creating voxel mipmap generation pass" );
 		auto & result = m_graph.createPass( name
-			, [this]( crg::FramePass const & pass
+			, [this, progress]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
+				stepProgressBar( progress, "Initialising voxel mipmap generation pass" );
 				auto result = std::make_unique< crg::GenerateMipmaps >( pass
 					, context
 					, graph
@@ -237,13 +248,16 @@ namespace castor3d
 		return result;
 	}
 
-	crg::FramePass & Voxelizer::doCreateVoxelSecondaryBounce( crg::FramePass const & previousPass )
+	crg::FramePass & Voxelizer::doCreateVoxelSecondaryBounce( crg::FramePass const & previousPass
+		, ProgressBar * progress )
 	{
+		stepProgressBar( progress, "Creating voxel secondary bounce pass" );
 		auto & result = m_graph.createPass( "VoxelSecondaryBounce"
-			, [this]( crg::FramePass const & pass
+			, [this, progress]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
+				stepProgressBar( progress, "Initialising voxel secondary bounce pass" );
 				auto result = std::make_unique< VoxelSecondaryBounce >( pass
 					, context
 					, graph

@@ -39,6 +39,7 @@ namespace castor3d
 		 */
 		WeightedBlendRendering( crg::FrameGraph & graph
 			, RenderDevice const & device
+			, ProgressBar * progress
 			, crg::FramePass const & transparentPassDesc
 			, TransparentPassResult const & transparentPassResult
 			, crg::ImageViewId const & targetColourView
@@ -56,13 +57,21 @@ namespace castor3d
 			return m_finalCombinePassDesc;
 		}
 
+		static uint32_t countInitialisationSteps()
+		{
+			uint32_t result = 0u;
+			result += 2;// m_finalCombinePassDesc;
+			return result;
+		}
+
 	private:
 		crg::FramePass & doCreateFinalCombine( crg::FrameGraph & graph
 			, crg::FramePass const & transparentPassDesc
 			, crg::ImageViewId const & targetColourView
 			, SceneUbo & sceneUbo
 			, HdrConfigUbo const & hdrConfigUbo
-			, GpInfoUbo const & gpInfoUbo );
+			, GpInfoUbo const & gpInfoUbo
+			, ProgressBar * progress );
 
 	private:
 		RenderDevice const & m_device;
