@@ -51,6 +51,7 @@ namespace castor3d
 		C3D_API LineariseDepthPass( crg::FrameGraph & graph
 			, crg::FramePass const & previousPass
 			, RenderDevice const & device
+			, ProgressBar * progress
 			, castor::String const & prefix
 			, SsaoConfig const & ssaoConfig
 			, VkExtent2D const & size
@@ -96,8 +97,8 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		crg::FramePass const & doInitialiseLinearisePass();
-		void doInitialiseMinifyPass();
+		crg::FramePass const & doInitialiseLinearisePass( ProgressBar * progress );
+		void doInitialiseMinifyPass( ProgressBar * progress );
 
 	public:
 		static constexpr uint32_t MaxMipLevel = 5u;

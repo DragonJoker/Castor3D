@@ -92,7 +92,7 @@ namespace castor
 		{
 			return ( m_min == m_max )
 				? 0.0f
-				: float( m_min - clamp( value ) ) / float( m_min - m_max );
+				: float( clamp( value ) - m_min ) / float( m_max - m_min );
 		}
 		/**
 		 *\~english

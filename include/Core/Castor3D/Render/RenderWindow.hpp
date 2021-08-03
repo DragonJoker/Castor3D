@@ -514,6 +514,7 @@ namespace castor3d
 		IntermediateViewArray m_intermediateSampledViews;
 		DebugConfig m_debugConfig;
 		UniformBufferOffsetT< Configuration > m_configUbo;
+		ProgressBarUPtr m_progressBar;
 		LoadingScreenUPtr m_loadingScreen;
 	};
 }
