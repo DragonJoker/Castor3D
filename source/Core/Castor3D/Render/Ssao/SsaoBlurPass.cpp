@@ -7,6 +7,7 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -428,6 +429,7 @@ namespace castor3d
 
 	SsaoBlurPass::SsaoBlurPass( crg::FrameGraph & graph
 		, RenderDevice const & device
+		, ProgressBar * progress
 		, crg::FramePass const & previousPass
 		, String const & prefix
 		, VkExtent2D const & size
@@ -452,13 +454,15 @@ namespace castor3d
 		, m_configurationUbo{ m_device.uboPools->getBuffer< Configuration >( 0u ) }
 		, m_programs{ Program{ device, false }, Program{ device, true } }
 	{
+		stepProgressBar( progress, "Creating SSAO " + prefix + " blur pass" );
 		auto & configuration = m_configurationUbo.getData();
 		configuration.axis = axis;
 		auto & pass = graph.createPass( "SsaoBlur" + prefix
-			, [this, config]( crg::FramePass const & pass
+			, [this, progress, prefix, config]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
+				stepProgressBar( progress, "Initialising SSAO " + prefix + " blur pass" );
 				auto result = std::make_unique< RenderQuad >( pass
 					, context
 					, graph

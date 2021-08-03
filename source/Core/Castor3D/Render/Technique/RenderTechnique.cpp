@@ -12,6 +12,7 @@
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
@@ -200,6 +201,7 @@ namespace castor3d
 
 		crg::FrameGraph doCreateClearLpvCommands( crg::ResourceHandler & handler
 			, RenderDevice const & device
+			, ProgressBar * progress
 			, castor::String const & name
 			, LightVolumePassResult  const & lpvResult
 			, LightVolumePassResultArray const & llpvResult )
@@ -241,12 +243,14 @@ namespace castor3d
 				}
 			};
 
+			stepProgressBar( progress, "Creating clear LPV commands" );
 			crg::FrameGraph result{ handler, name + "ClearLpv" };
 			auto & pass = result.createPass( name + "LpvClear"
-				, []( crg::FramePass const & pass
+				, [progress]( crg::FramePass const & pass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
+					stepProgressBar( progress, "Initialising clear LPV commands" );
 					return std::make_unique< LpvClear >( pass
 						, context
 						, graph );
@@ -278,7 +282,8 @@ namespace castor3d
 		, RenderDevice const & device
 		, QueueData const & queueData
 		, Parameters const & parameters
-		, SsaoConfig const & ssaoConfig )
+		, SsaoConfig const & ssaoConfig
+		, ProgressBar * progress )
 		: castor::OwnedBy< Engine >{ *device.renderSystem.getEngine() }
 		, castor::Named{ name }
 		, m_renderTarget{ renderTarget }
@@ -345,15 +350,16 @@ namespace castor3d
 		, m_lpvConfigUbo{ m_device }
 		, m_llpvConfigUbo{ m_device }
 		, m_vctConfigUbo{ m_device }
-		, m_depthPassDecl{ &doCreateDepthPass() }
+		, m_depthPassDecl{ &doCreateDepthPass( progress ) }
 		, m_depthRange{ makeBuffer< int32_t >( device
 			, 2u
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, "DepthRange" ) }
-		, m_computeDepthRangeDesc{ &doCreateComputeDepthRange() }
+		, m_computeDepthRangeDesc{ &doCreateComputeDepthRange( progress ) }
 		, m_ssao{ castor::makeUnique< SsaoPass >( m_renderTarget.getGraph()
 			, device
+			, progress
 			, *m_depthPassDecl
 			, makeSize( m_colour.getExtent() )
 			, m_ssaoConfig
@@ -362,6 +368,7 @@ namespace castor3d
 			, m_gpInfoUbo ) }
 		, m_voxelizer{ castor::makeUnique< Voxelizer >( getOwner()->getGraphResourceHandler()
 			, device
+			, progress
 			, *m_renderTarget.getScene()
 			, *m_renderTarget.getCamera()
 			, m_matrixUbo
@@ -376,6 +383,7 @@ namespace castor3d
 		, m_backgroundRenderer{ castor::makeUnique< BackgroundRenderer >( m_renderTarget.getGraph()
 			, m_computeDepthRangeDesc
 			, m_device
+			, progress
 			, name
 			, *m_renderTarget.getScene()->getBackground()
 			, m_renderTarget.getHdrConfigUbo()
@@ -385,13 +393,16 @@ namespace castor3d
 #if !C3D_DebugDisableShadowMaps
 		, m_directionalShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapDirectional >( getOwner()->getGraphResourceHandler()
 			, m_device
-			, *m_renderTarget.getScene() ) }
+			, *m_renderTarget.getScene()
+			, progress ) }
 		, m_pointShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapPoint >( getOwner()->getGraphResourceHandler()
 			, m_device
-			, *m_renderTarget.getScene() ) }
+			, *m_renderTarget.getScene()
+			, progress ) }
 		, m_spotShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapSpot >( getOwner()->getGraphResourceHandler()
 			, m_device
-			, *m_renderTarget.getScene() ) }
+			, *m_renderTarget.getScene()
+			, progress ) }
 #endif
 #if C3D_UseDeferredRendering
 		, m_opaquePassResult{ castor::makeUnique< OpaquePassResult >( getOwner()->getGraphResourceHandler()
@@ -399,10 +410,11 @@ namespace castor3d
 			, m_depthObj
 			, m_normal
 			, m_renderTarget.getVelocity() ) }
-		, m_opaquePassDesc{ &doCreateOpaquePass() }
+		, m_opaquePassDesc{ &doCreateOpaquePass( progress ) }
 		, m_deferredRendering{ castor::makeUnique< DeferredRendering >( m_renderTarget.getGraph()
 			, *m_opaquePassDesc
 			, m_device
+			, progress
 			, m_depth
 			, *m_opaquePassResult
 			, m_colour
@@ -424,16 +436,17 @@ namespace castor3d
 			, m_vctConfigUbo
 			, m_ssaoConfig ) }
 #else
-		, m_opaquePassDesc{ &doCreateOpaquePass() }
+		, m_opaquePassDesc{ &doCreateOpaquePass( progress ) }
 #endif
 #if C3D_UseWeightedBlendedRendering
 		, m_transparentPassResult{ castor::makeUnique< TransparentPassResult >( getOwner()->getGraphResourceHandler()
 			, m_device
 			, m_depth
 			, m_renderTarget.getVelocity() ) }
-		, m_transparentPassDesc{ &doCreateTransparentPass() }
+		, m_transparentPassDesc{ &doCreateTransparentPass( progress ) }
 		, m_weightedBlendRendering{ castor::makeUnique< WeightedBlendRendering >( m_renderTarget.getGraph()
 			, m_device
+			, progress
 			, *m_transparentPassDesc
 			, *m_transparentPassResult
 			, m_colour.wholeViewId
@@ -442,10 +455,10 @@ namespace castor3d
 			, m_renderTarget.getHdrConfigUbo()
 			, m_gpInfoUbo )}
 #else
-		, m_transparentPassDesc{ &doCreateTransparentPass() }
+		, m_transparentPassDesc{ &doCreateTransparentPass( progress ) }
 #endif
 		, m_signalFinished{ m_device->createSemaphore( "RenderTechnique" ) }
-		, m_clearLpvGraph{ doCreateClearLpvCommands( getOwner()->getGraphResourceHandler(), device, getName(), *m_lpvResult, m_llpvResult ) }
+		, m_clearLpvGraph{ doCreateClearLpvCommands( getOwner()->getGraphResourceHandler(), device, progress, getName(), *m_lpvResult, m_llpvResult ) }
 		, m_clearLpvRunnable{ m_clearLpvGraph.compile( m_device.makeContext() ) }
 		, m_particleTimer{ castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Particles" ) ) }
 	{
@@ -491,8 +504,29 @@ namespace castor3d
 		m_directionalShadowMap.reset();
 		m_pointShadowMap.reset();
 		m_spotShadowMap.reset();
-		m_deferredRendering.reset();
-		m_weightedBlendRendering.reset();
+	}
+
+	uint32_t RenderTechnique::countInitialisationSteps()
+	{
+		uint32_t result = 0u;
+		result += 2;// m_depthPass;
+		result += 2;// m_computeDepthRange;
+		result += SsaoPass::countInitialisationSteps();
+		result += Voxelizer::countInitialisationSteps();
+		result += 2;// m_backgroundRenderer;
+		++result;// m_directionalShadowMap;
+		++result;// m_pointShadowMap;
+		++result;// m_spotShadowMap;
+		result += 2;// m_opaquePass;
+		result += DeferredRendering::countInitialisationSteps();
+		result += 2;// m_transparentPass;
+		result += WeightedBlendRendering::countInitialisationSteps();
+		result += 2;// m_clearLpv;
+		result += LightPropagationVolumes::countInitialisationSteps();
+		result += LightPropagationVolumesG::countInitialisationSteps();
+		result += LayeredLightPropagationVolumes::countInitialisationSteps();
+		result += LayeredLightPropagationVolumesG::countInitialisationSteps();
+		return result;
 	}
 
 	void RenderTechnique::update( CpuUpdater & updater )
@@ -702,13 +736,15 @@ namespace castor3d
 #endif
 	}
 
-	crg::FramePass & RenderTechnique::doCreateDepthPass()
+	crg::FramePass & RenderTechnique::doCreateDepthPass( ProgressBar * progress )
 	{
+		stepProgressBar( progress, "Creating depth pass" );
 		auto & result = m_renderTarget.getGraph().createPass( "DepthPass"
-			, [this]( crg::FramePass const & pass
+			, [this, progress]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
+				stepProgressBar( progress, "Initialising depth pass" );
 				auto result = std::make_unique< DepthPass >( pass
 					, context
 					, graph
@@ -730,13 +766,15 @@ namespace castor3d
 		return result;
 	}
 
-	crg::FramePass & RenderTechnique::doCreateComputeDepthRange()
+	crg::FramePass & RenderTechnique::doCreateComputeDepthRange( ProgressBar * progress )
 	{
+		stepProgressBar( progress, "Creating compute depth range pass" );
 		auto & result = m_renderTarget.getGraph().createPass( "ComputeDepthRange"
-			, [this]( crg::FramePass const & pass
+			, [this, progress]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
+				stepProgressBar( progress, "Initialising compute depth range pass" );
 				auto result = std::make_unique< ComputeDepthRange >( pass
 					, context
 					, graph
@@ -756,18 +794,20 @@ namespace castor3d
 		return result;
 	}
 
-	crg::FramePass & RenderTechnique::doCreateOpaquePass()
+	crg::FramePass & RenderTechnique::doCreateOpaquePass( ProgressBar * progress )
 	{
+		stepProgressBar( progress, "Creating opaque pass" );
 #if C3D_UseDeferredRendering
 		castor::String name = cuT( "Geometry" );
 #else
 		castor::String name = cuT( "Forward" );
 #endif
 		auto & result = m_renderTarget.getGraph().createPass( "OpaquePass"
-			, [this, name]( crg::FramePass const & pass
+			, [this, progress, name]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
+				stepProgressBar( progress, "Initialising opaque pass" );
 				auto result = std::make_unique< OpaquePassType >( pass
 					, context
 					, graph
@@ -809,13 +849,15 @@ namespace castor3d
 		return result;
 	}
 
-	crg::FramePass & RenderTechnique::doCreateTransparentPass()
+	crg::FramePass & RenderTechnique::doCreateTransparentPass( ProgressBar * progress )
 	{
+		stepProgressBar( progress, "Creating transparent pass" );
 		auto & result = m_renderTarget.getGraph().createPass( "TransparentPass"
-			, [this]( crg::FramePass const & pass
+			, [this, progress]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
+				stepProgressBar( progress, "Initialising transparent pass" );
 #if C3D_UseWeightedBlendedRendering
 				castor::String name = cuT( "Accumulation" );
 				bool isOit = true;

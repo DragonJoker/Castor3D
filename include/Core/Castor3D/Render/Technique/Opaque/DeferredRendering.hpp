@@ -71,6 +71,7 @@ namespace castor3d
 		DeferredRendering( crg::FrameGraph & graph
 			, crg::FramePass const & opaquePass
 			, RenderDevice const & device
+			, ProgressBar * progress
 			, Texture const & depth
 			, OpaquePassResult const & opaquePassResult
 			, Texture const & resultTexture
@@ -113,6 +114,16 @@ namespace castor3d
 		crg::FramePass const & getLastPass()const
 		{
 			return *m_lastPass;
+		}
+
+		static uint32_t countInitialisationSteps()
+		{
+			uint32_t result = 0u;
+			result += 4;// m_lightingPass;
+			result += 2;// m_indirectLightingPass;
+			result += 2;// m_subsurfaceScattering;
+			result += 2;// m_resolve;
+			return result;
 		}
 
 	private:

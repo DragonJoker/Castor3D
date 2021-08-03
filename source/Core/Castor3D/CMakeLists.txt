@@ -438,6 +438,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Miscellaneous/LoadingScreen.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Miscellaneous/Logger.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Miscellaneous/Parameter.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Miscellaneous/ProgressBar.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Miscellaneous/Version.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Miscellaneous/VersionException.cpp
 )
@@ -453,6 +454,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/Parameter.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/Pattern.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/PipelineVisitor.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/ProgressBar.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/Version.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/VersionException.hpp
 )

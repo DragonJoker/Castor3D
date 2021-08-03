@@ -28,6 +28,7 @@ namespace castor3d
 	DeferredRendering::DeferredRendering( crg::FrameGraph & graph
 		, crg::FramePass const & opaquePass
 		, RenderDevice const & device
+		, ProgressBar * progress
 		, Texture const & depth
 		, OpaquePassResult const & opaquePassResult
 		, Texture const & resultTexture
@@ -59,6 +60,7 @@ namespace castor3d
 		, m_lightingPass{ castor::makeUnique< LightingPass >( graph
 			, m_lastPass
 			, m_device
+			, progress
 			, m_size
 			, scene
 			, depth
@@ -70,6 +72,7 @@ namespace castor3d
 			, sceneUbo
 			, m_gpInfoUbo ) }
 		, m_indirectLightingPass{ castor::makeUnique< IndirectLightingPass >( m_device
+			, progress
 			, scene
 			, graph
 			, m_lastPass
@@ -87,6 +90,7 @@ namespace castor3d
 		, m_subsurfaceScattering{ castor::makeUnique< SubsurfaceScatteringPass >( graph
 			, m_lastPass
 			, m_device
+			, progress
 			, scene
 			, m_gpInfoUbo
 			, sceneUbo
@@ -96,6 +100,7 @@ namespace castor3d
 		, m_resolve{ castor::makeUnique< OpaqueResolvePass >( graph
 			, m_lastPass
 			, m_device
+			, progress
 			, scene
 			, opaquePassResult
 			, ssaoConfig

@@ -6,6 +6,7 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -186,7 +187,8 @@ namespace castor3d
 
 	ShadowMapDirectional::ShadowMapDirectional( crg::ResourceHandler & handler
 		, RenderDevice const & device
-		, Scene & scene )
+		, Scene & scene
+		, ProgressBar * progress )
 		: ShadowMap{ handler
 			, device
 			, scene
@@ -215,7 +217,7 @@ namespace castor3d
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
 		, m_cascades{ scene.getDirectionalShadowCascades() }
 	{
-		log::trace << "Created ShadowMapDirectional" << std::endl;
+		stepProgressBar( progress, "Creating ShadowMapDirectional" );
 	}
 
 	void ShadowMapDirectional::update( GpuUpdater & updater )

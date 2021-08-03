@@ -5,6 +5,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
+#include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -574,6 +575,7 @@ namespace castor3d
 
 	SsaoRawAOPass::SsaoRawAOPass( crg::FrameGraph & graph
 		, RenderDevice const & device
+		, ProgressBar * progress
 		, crg::FramePass const & previousPass
 		, VkExtent2D const & size
 		, SsaoConfig const & config
@@ -601,11 +603,13 @@ namespace castor3d
 			, m_size ) }
 		, m_programs{ Program{ device, false }, Program{ device, true } }
 	{
+		stepProgressBar( progress, "Creating SSAO raw AO pass" );
 		auto & pass = graph.createPass( "SsaoRawAO"
-			, [this]( crg::FramePass const & pass
+			, [this, progress]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
+				stepProgressBar( progress, "Initialising SSAO raw AO pass" );
 				auto result = std::make_unique< RenderQuad >( pass
 					, context
 					, graph

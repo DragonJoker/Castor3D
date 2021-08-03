@@ -31,7 +31,8 @@ namespace castor3d
 		 */
 		C3D_API explicit ShadowMapPoint( crg::ResourceHandler & handler
 			, RenderDevice const & device
-			, Scene & scene );
+			, Scene & scene
+			, ProgressBar * progress );
 		/**
 		 *\~english
 		 *\brief		Destructor.

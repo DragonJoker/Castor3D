@@ -156,6 +156,20 @@ namespace castor3d
 				, GeometryVolumesT }
 		{
 		}
+
+		static uint32_t countInitialisationSteps()
+		{
+			uint32_t result = 0u;
+			++result;// light injection;
+
+			if constexpr ( GeometryVolumesT )
+			{
+				++result;// geom injection;
+			}
+
+			result += MaxPropagationSteps;// propagation;
+			return result;
+		}
 	};
 }
 

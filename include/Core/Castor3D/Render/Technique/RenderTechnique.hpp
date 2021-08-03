@@ -60,7 +60,8 @@ namespace castor3d
 			, RenderDevice const & device
 			, QueueData const & queueData
 			, Parameters const & parameters
-			, SsaoConfig const & ssaoConfig );
+			, SsaoConfig const & ssaoConfig
+			, ProgressBar * progress );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -68,6 +69,13 @@ namespace castor3d
 		 *\brief		Destructeur
 		 */
 		C3D_API ~RenderTechnique();
+		/**
+		 *\~english
+		 *\return		The number of steps needed for initialisation, to show progression.
+		 *\~french
+		 *\return		Le nombre d'étapes nécessaires à l'initialisation, pour en montrer la progression.
+		 */
+		C3D_API static uint32_t countInitialisationSteps();
 		/**
 		 *\~english
 		 *\brief		Lists the intermediate view used by the whole technique.
@@ -236,10 +244,10 @@ namespace castor3d
 		using ShadowMapArray = std::vector< ShadowMapUPtr >;
 
 	private:
-		crg::FramePass & doCreateDepthPass();
-		crg::FramePass & doCreateComputeDepthRange();
-		crg::FramePass & doCreateOpaquePass();
-		crg::FramePass & doCreateTransparentPass();
+		crg::FramePass & doCreateDepthPass( ProgressBar * progress );
+		crg::FramePass & doCreateComputeDepthRange( ProgressBar * progress );
+		crg::FramePass & doCreateOpaquePass( ProgressBar * progress );
+		crg::FramePass & doCreateTransparentPass( ProgressBar * progress );
 		void doInitialiseLpv();
 		void doUpdateShadowMaps( CpuUpdater & updater );
 		void doUpdateShadowMaps( GpuUpdater & updater );

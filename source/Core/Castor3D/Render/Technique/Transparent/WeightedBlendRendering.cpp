@@ -1,6 +1,7 @@
 #include "Castor3D/Render/Technique/Transparent/WeightedBlendRendering.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Technique/Transparent/TransparentPassResult.hpp"
@@ -158,6 +159,7 @@ namespace castor3d
 
 	WeightedBlendRendering::WeightedBlendRendering( crg::FrameGraph & graph
 		, RenderDevice const & device
+		, ProgressBar * progress
 		, crg::FramePass const & transparentPassDesc
 		, TransparentPassResult const & transparentPassResult
 		, crg::ImageViewId const & targetColourView
@@ -179,7 +181,8 @@ namespace castor3d
 			, targetColourView
 			, sceneUbo
 			, hdrConfigUbo
-			, gpInfoUbo ) }
+			, gpInfoUbo
+			, progress ) }
 	{
 	}
 
@@ -202,13 +205,16 @@ namespace castor3d
 		, crg::ImageViewId const & targetColourView
 		, SceneUbo & sceneUbo
 		, HdrConfigUbo const & hdrConfigUbo
-		, GpInfoUbo const & gpInfoUbo )
+		, GpInfoUbo const & gpInfoUbo
+		, ProgressBar * progress )
 	{
+		stepProgressBar( progress, "Creating transparent resolve pass" );
 		auto & result = graph.createPass( "TransparentCombine"
-			, [this]( crg::FramePass const & pass
+			, [this, progress]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
+				stepProgressBar( progress, "Initialising transparent resolve pass" );
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( makeExtent2D( m_size ) )

@@ -12,6 +12,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
 
+#include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelUbo.hpp"
@@ -30,12 +31,12 @@ namespace castor3d
 	class LoadingScreen
 	{
 	public:
-		C3D_API LoadingScreen( RenderDevice const & device
+		C3D_API LoadingScreen( ProgressBar & progressBar
+			, RenderDevice const & device
 			, crg::ResourceHandler & handler
 			, SceneSPtr scene
 			, VkRenderPass renderPass
-			, castor::Size const & renderSize
-			, uint32_t max );
+			, castor::Size const & size );
 		C3D_API ~LoadingScreen();
 
 		C3D_API void enable();
@@ -60,24 +61,34 @@ namespace castor3d
 				, fence );
 		}
 
-		void setRange( uint32_t max )
+		void step( castor::String const & label )
 		{
-			m_index = castor::makeRangedValue( getIndex(), 0u, max );
+			m_progressBar.step( label );
 		}
 
-		void advance()
+		void setRange( uint32_t max )
 		{
-			m_index += 1;
+			m_progressBar.setRange( max );
+		}
+
+		void incRange( uint32_t mod )
+		{
+			m_progressBar.incRange( mod );
 		}
 
 		uint32_t getIndex()const
 		{
-			return m_index.value();
+			return m_progressBar.getIndex();
 		}
 
 		bool isEnabled()const
 		{
 			return m_enabled;
+		}
+
+		ProgressBar & getProgressBar()
+		{
+			return m_progressBar;
 		}
 
 	private:
@@ -129,8 +140,8 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
+		ProgressBar & m_progressBar;
 		crg::FrameGraph m_graph;
-		castor::RangedValue< uint32_t > m_index;
 		std::atomic_bool m_enabled{};
 		SceneSPtr m_scene;
 		SceneBackground & m_background;
