@@ -612,7 +612,7 @@ namespace castor3d
 		m_renderWindows.erase( window.getName() );
 	}
 
-	void Engine::registerParsers( castor::String const & name, castor::AttributeParsersBySection const & parsers )
+	void Engine::registerParsers( castor::String const & name, castor::AttributeParsers const & parsers )
 	{
 		auto && it = m_additionalParsers.find( name );
 

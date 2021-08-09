@@ -16,16 +16,16 @@ namespace draw_edges
 		DrawEdgesUboConfiguration data{};
 	};
 
-	ParserContext & getParserContext( castor::FileParserContextSPtr context )
+	ParserContext & getParserContext( castor::FileParserContext & context )
 	{
-		return *static_cast< ParserContext * >( context->getUserContext( PostEffect::Type ) );
+		return *static_cast< ParserContext * >( context.getUserContext( PostEffect::Type ) );
 	}
 
 	CU_ImplementAttributeParser( parserDrawEdges )
 	{
 		ParserContext * deContext = new ParserContext;
-		deContext->engine = std::static_pointer_cast< castor3d::SceneFileContext >( context )->parser->getEngine();
-		context->registerUserContext( PostEffect::Type, deContext );
+		deContext->engine = static_cast< castor3d::SceneFileContext & >( context ).parser->getEngine();
+		context.registerUserContext( PostEffect::Type, deContext );
 	}
 	CU_EndAttributePush( Section::eRoot )
 
@@ -65,18 +65,18 @@ namespace draw_edges
 
 	CU_ImplementAttributeParser( parserDrawEdgesEnd )
 	{
-		auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+		auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
 		auto & deContext = getParserContext( context );
 		auto engine = deContext.engine;
 		castor3d::Parameters parameters;
 		parameters.add( PostEffect::NormalDepthWidth, castor::string::toString( deContext.data.normalDepthWidth ) );
 		parameters.add( PostEffect::ObjectWidth, castor::string::toString( deContext.data.objectWidth ) );
 		auto effect = engine->getRenderTargetCache().getPostEffectFactory().create( PostEffect::Type
-			, *parsingContext->renderTarget
+			, *parsingContext.renderTarget
 			, *engine->getRenderSystem()
 			, parameters );
-		parsingContext->renderTarget->addPostEffect( effect );
-		delete reinterpret_cast< ParserContext * >( context->unregisterUserContext( PostEffect::Type ) );
+		parsingContext.renderTarget->addPostEffect( effect );
+		delete reinterpret_cast< ParserContext * >( context.unregisterUserContext( PostEffect::Type ) );
 	}
 	CU_EndAttributePop()
 }

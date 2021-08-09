@@ -66,24 +66,47 @@ namespace castor
 	using RegexIterator = std::regex_iterator< String::const_iterator >;
 	using MatchResults = std::match_results< String::const_iterator >;
 	//@}
-
-	struct ParserFunctionAndParams;
-
-#if defined( CU_CompilerMSVC )
+	/**@name Parsers holders */
+	//@{
 	/**
-	\~english
-	\brief		Helper class used with MSVC to avoid warning 4503.
-	\remark		It forwards few functions and typedefs of the original map.
-	\~french
-	\brief		Classe d'aide à la disparition du warning 4503 pour MSVC.
-	\remark		Elle expose quelques fonctions et types de la map originale.
+	*\~english
+	*\brief
+	*	The type for a section ID.
+	*\~french
+	*\brief
+	*	Le type d'un ID de section.
 	*/
-	class AttributeParserMap;
-#else
-	CU_DeclareMap( String, ParserFunctionAndParams, AttributeParser );
-#endif
-
-	using AttributeParsersBySection = std::map< uint32_t, AttributeParserMap >;
+	using SectionId = uint32_t;
+	/**
+	*\~english
+	*\brief
+	*	The parser function and expected parameters.
+	*\~french
+	*\brief
+	*	La fonction ainsi que les paramètres attendus pour un parser.
+	*/
+	struct ParserFunctionAndParams;
+	/**
+	*\~english
+	*\brief
+	*	The parsers sorted per section.
+	*	This will be used to store the functions associated to a unique token.
+	*\~french
+	*\brief
+	*	Les parsers triés par section.
+	*	Sera utilisé pour stocker les fonctions associées à un unique token.
+	*/
+	using SectionAttributeParsers = std::map< SectionId, ParserFunctionAndParams >;
+	/**
+	*\~english
+	*\brief
+	*	The parsers sorted per token name.
+	*\~french
+	*\brief
+	*	Les parsers triés par nom de token.
+	*/
+	using AttributeParsers = std::map< String, SectionAttributeParsers >;
+	//@}
 	/**
 	\~english
 	\brief		"Brace file" parser base class.
@@ -158,11 +181,17 @@ namespace castor
 	*/
 	template< ParameterType GivenType >
 	class ParserParameterTypeException;
+	/**
+	\~english
+	\brief		A preprocessed file.
+	\~french
+	\brief		Un fichier preprocessed.
+	*/
+	class PreprocessedFile;
+
 	CU_DeclareSmartPtr( FileParserContext );
 	CU_DeclareSmartPtr( ParserParameterBase );
 	CU_DeclareVector( ParserParameterBaseSPtr, ParserParameter );
-
-	using AttributeParsersBySection = std::map< uint32_t, AttributeParserMap >;
 	/**
 	 *\~english
 	 *\brief		Parser function definition.
@@ -175,7 +204,7 @@ namespace castor
 	 *\param[in]	params	Les paramètres contenus dans la ligne.
 	 *\return		\p true si une accolade doit être ouverte à la ligne suivante.
 	 */
-	using ParserFunction = std::function< bool( FileParser *, ParserParameterArray const & ) >;
+	using ParserFunction = std::function< bool( FileParserContext &, ParserParameterArray const & ) >;
 	//@}
 }
 

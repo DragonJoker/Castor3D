@@ -214,7 +214,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom d'enregistrement.
 		 *\param[in]	parsers	Les analyseurs.
 		 */
-		C3D_API void registerParsers( castor::String const & name, castor::AttributeParsersBySection const & parsers );
+		C3D_API void registerParsers( castor::String const & name, castor::AttributeParsers const & parsers );
 		/**
 		 *\~english
 		 *\brief		Registers additional sections for SceneFileParser.
@@ -408,7 +408,7 @@ namespace castor3d
 			return m_lightsSampler;
 		}
 
-		std::map< castor::String, castor::AttributeParsersBySection > const & getAdditionalParsers()const
+		std::map< castor::String, castor::AttributeParsers > const & getAdditionalParsers()const
 		{
 			return m_additionalParsers;
 		}
@@ -611,7 +611,7 @@ namespace castor3d
 		DECLARE_CACHE_MEMBER( technique, RenderTechnique );
 		castor::FontCache m_fontCache;
 		castor::ImageCache m_imageCache;
-		std::map< castor::String, castor::AttributeParsersBySection > m_additionalParsers;
+		std::map< castor::String, castor::AttributeParsers > m_additionalParsers;
 		std::map< castor::String, castor::StrUInt32Map > m_additionalSections;
 		MeshFactoryUPtr m_meshFactory;
 		MeshSubdividerFactoryUPtr m_subdividerFactory;

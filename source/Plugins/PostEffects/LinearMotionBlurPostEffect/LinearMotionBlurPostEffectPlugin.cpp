@@ -30,28 +30,28 @@ namespace
 		castor::Logger::logError( stream.str() );
 	}
 
-	void addParser( castor::AttributeParsersBySection & parsers
+	void addParser( castor::AttributeParsers & parsers
 		, uint32_t section
 		, castor::String const & name
 		, castor::ParserFunction function
 		, castor::ParserParameterArray && array = castor::ParserParameterArray{} )
 	{
-		auto sectionIt = parsers.find( section );
+		auto nameIt = parsers.find( name );
 
-		if ( sectionIt != parsers.end()
-			&& sectionIt->second.find( name ) != sectionIt->second.end() )
+		if ( nameIt != parsers.end()
+			&& nameIt->second.find( section ) != nameIt->second.end() )
 		{
 			parseError( cuT( "Parser " ) + name + cuT( " for section " ) + castor::string::toString( section ) + cuT( " already exists." ) );
 		}
 		else
 		{
-			parsers[section][name] = { function, array };
+			parsers[name][section] = { function, array };
 		}
 	}
 
-	castor::AttributeParsersBySection createParsers()
+	castor::AttributeParsers createParsers()
 	{
-		castor::AttributeParsersBySection result;
+		castor::AttributeParsers result;
 
 		addParser( result, uint32_t( castor3d::CSCNSection::eRenderTarget ), cuT( "linear_motion_blur" ), &motion_blur::parserMotionBlur );
 

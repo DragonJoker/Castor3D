@@ -27,6 +27,248 @@ namespace castor
 		}
 	}
 
+	//*********************************************************************************************
+
+	PreprocessedFile & PreprocessedFile::operator=( PreprocessedFile const & rhs )
+	{
+		m_actions = rhs.m_actions;
+		m_context = rhs.m_context;
+		return *this;
+	}
+	
+	PreprocessedFile & PreprocessedFile::operator=( PreprocessedFile && rhs )
+	{
+		m_actions = std::move( rhs.m_actions );
+		m_context = std::move( rhs.m_context );
+		return *this;
+	}
+
+	PreprocessedFile::PreprocessedFile( FileParser & parser )
+		: m_parser{ parser }
+	{
+	}
+
+	PreprocessedFile::PreprocessedFile( FileParser & parser
+		, FileParserContextSPtr context )
+		: m_parser{ parser }
+		, m_context{ std::move( context ) }
+	{
+		m_context->preprocessed = this;
+	}
+
+	void PreprocessedFile::addParser( Path file
+		, int line
+		, String name
+		, SectionAttributeParsers functions
+		, String params )
+	{
+		if ( name == "}" )
+		{
+			m_popAction = { file
+				, line
+				, name
+				, functions
+				, params };
+		}
+
+		m_actions.push_back( { std::move( file )
+			, line
+			, std::move( name )
+			, std::move( functions )
+			, std::move( params ) } );
+	}
+
+	bool PreprocessedFile::parse()
+	{
+		CU_Require( m_context );
+		bool result = !m_actions.empty();
+		m_context->pendingSection = 0u;
+		m_context->sections.clear();
+		m_context->sections.push_back( m_parser.getRootSectionId() );
+		bool isNextOpenBrace = false;
+		uint32_t ignoreActionSignal = 0u;
+		auto it = m_actions.begin();
+		std::vector< Action > jobs;
+		jobs.push_back( *it );
+
+		while ( !jobs.empty() )
+		{
+			auto action = *jobs.begin();
+			jobs.erase( jobs.begin() );
+
+			if ( !ignoreActionSignal )
+			{
+				onAction( action );
+			}
+			else
+			{
+				--ignoreActionSignal;
+			}
+
+			m_context->line = action.line;
+			m_context->functionName = action.name;
+
+			if ( !m_context->sections.empty() )
+			{
+				auto section = m_context->sections.back();
+				auto it = action.functions.find( section );
+
+				if ( it == action.functions.end() )
+				{
+					if ( action.name == "}" )
+					{
+						m_context->sections.pop_back();
+					}
+					else if ( action.name == "{" )
+					{
+						m_context->sections.push_back( m_context->pendingSection );
+						m_context->pendingSection = 0u;
+						isNextOpenBrace = false;
+					}
+					else
+					{
+						parseError( "Section " + m_parser.getSectionName( section ) + " not found for directive [" + action.name + "]" );
+					}
+				}
+				else if ( isNextOpenBrace && action.name != "{" )
+				{
+					// Optional block not filled, emulate block begin and block end.
+					m_context->sections.push_back( m_context->pendingSection );
+					m_context->pendingSection = 0u;
+					isNextOpenBrace = false;
+					ignoreActionSignal = 2u;
+					jobs.push_back( m_popAction );
+					jobs.push_back( action );
+				}
+				else
+				{
+					ParserParameterArray filled;
+					doCheckParams( action.params
+						, it->second.params
+						, filled );
+
+					try
+					{
+						isNextOpenBrace = it->second.function( *m_context, filled );
+					}
+					catch ( Exception & exc )
+					{
+						parseError( exc.getFullDescription() );
+					}
+				}
+			}
+			else
+			{
+				parseError( "Unexpected directive [" + action.name + "]" );
+			}
+
+			if ( jobs.empty() )
+			{
+				++it;
+
+				if ( it != m_actions.end() )
+				{
+					jobs.push_back( *it );
+				}
+			}
+		}
+
+		if ( m_context->sections.empty() || m_context->sections.back() != m_parser.getRootSectionId() )
+		{
+			if ( m_context.use_count() == 1 )
+			{
+				parseError( cuT( "Unexpected end of file" ) );
+			}
+			else
+			{
+				m_parser.validate();
+			}
+		}
+		else
+		{
+			m_parser.validate();
+		}
+
+		m_parser.cleanupParser( *this );
+		return result;
+	}
+
+	void PreprocessedFile::parseError( String const & text )
+	{
+		m_parser.parseError( doGetSectionsStack(), m_context->line, text );
+	}
+
+	void PreprocessedFile::parseWarning( String const & text )
+	{
+		m_parser.parseError( doGetSectionsStack(), m_context->line, text );
+	}
+
+	bool PreprocessedFile::doCheckParams( String params
+		, ParserParameterArray const & expected
+		, ParserParameterArray & received )
+	{
+		bool result = true;
+		string::trim( params );
+		String missingParam;
+
+		for ( auto param : expected )
+		{
+			if ( result )
+			{
+				auto filled = param->clone();
+				result = filled->parse( m_parser.getLogger(), params );
+
+				if ( !result )
+				{
+					missingParam = param->getStrType();
+				}
+				else
+				{
+					received.push_back( filled );
+				}
+			}
+		}
+
+		if ( !params.empty() )
+		{
+			auto param = std::make_shared< ParserParameter< ParameterType::eText > >();
+			param->m_value = params;
+			received.push_back( param );
+		}
+
+		if ( !result )
+		{
+			parseError( cuT( "Directive <" ) + m_context->functionName + cuT( "> needs a <" ) + missingParam + cuT( "> parameter that is currently missing" ) );
+		}
+
+		return result;
+	}
+
+	String PreprocessedFile::doGetSectionsStack()
+	{
+		StringStream sections{ makeStringStream() };
+
+		if ( m_context && m_context->sections.size() > 1 )
+		{
+			auto begin = m_context->sections.begin() + 1;
+			sections << m_parser.getSectionName( *begin );
+
+			std::for_each( begin + 1, m_context->sections.end(), [&sections, this]( uint32_t p_section )
+				{
+					sections << cuT( "::" ) << m_parser.getSectionName( p_section );
+				} );
+		}
+
+		if ( !m_context->functionName.empty() )
+		{
+			sections << cuT( "::" ) << m_context->functionName;
+		}
+
+		return sections.str();
+	}
+
+	//*********************************************************************************************
+
 	FileParser::FileParser( uint32_t rootSectionId )
 		: FileParser{ *Logger::getSingleton().getInstance(), rootSectionId }
 	{
@@ -36,9 +278,6 @@ namespace castor
 		, uint32_t rootSectionId )
 		: m_logger{ logger }
 		, m_rootSectionId( rootSectionId )
-		, m_context()
-		, m_ignoreLevel( 0 )
-		, m_ignored( false )
 	{
 	}
 
@@ -46,52 +285,40 @@ namespace castor
 	{
 	}
 
-	bool FileParser::parseFile( Path const & path )
+	void FileParser::processFile( Path const & path
+		, PreprocessedFile & preprocessed )
 	{
 		m_ignoreLevel = 0;
 		m_ignored = false;
-		String content;
-		bool result = false;
 
+		if ( TextFile file{ path, File::OpenMode::eRead } )
 		{
-			TextFile file( path, File::OpenMode::eRead );
-			result = file.isOk();
+			String content;
+			file.copyToString( content );
 
-			if ( result )
+			if ( !content.empty() )
 			{
-				file.copyToString( content );
+				m_logger.logInfo( cuT( "FileParser : Parsing file [" ) + path.getFileName( true ) + cuT( "]." ) );
+				processFile( path, content, preprocessed );
+				m_logger.logInfo( cuT( "FileParser : Finished parsing file [" ) + path.getFileName( true ) + cuT( "]." ) );
 			}
-		}
-
-		if ( result )
-		{
-			m_logger.logInfo( cuT( "FileParser : Parsing file [" ) + path.getFileName( true ) + cuT( "]." ) );
-			result = parseFile( path, content );
-			m_logger.logInfo( cuT( "FileParser : Finished parsing file [" ) + path.getFileName( true ) + cuT( "]." ) );
 		}
 		else
 		{
-			m_logger.logError( cuT( "FileParser : Couldn't parse file [" ) + path.getFileName( true ) + cuT( "], file does not exist." ) );
+			m_logger.logError( cuT( "FileParser : Couldn't open file [" ) + path.getFileName( true ) + cuT( "]." ) );
 		}
-
-		return result;
 	}
 
-	bool FileParser::parseFile( Path const & path
-		, String const & content )
+	void FileParser::processFile( Path const & path
+		, String const & content
+		, PreprocessedFile & preprocessed )
 	{
-		bool result = false;
-		bool bNextIsOpenBrace = false;
+		m_path = path.getPath();
+		m_preprocessed = &preprocessed;
+		bool isNextOpenBrace = false;
 		bool bCommented = false;
-		doInitialiseParser( path );
-		auto save = 0ull;
+		auto lineIndex = 0ull;
 
-		if ( m_context->m_sections.empty() )
-		{
-			m_context->m_sections.push_back( m_rootSectionId );
-		}
-
-		std::swap( m_context->m_line, save );
 		bool bReuse = false;
 		String strLine;
 		String strLine2;
@@ -105,7 +332,7 @@ namespace castor
 			if ( !bReuse )
 			{
 				strLine = *it++;
-				m_context->m_line++;
+				lineIndex++;
 			}
 			else
 			{
@@ -171,39 +398,39 @@ namespace castor
 								// We got a "{" at the end of the line, so we split the line in two and reuse the line
 								strLine2 = strLine.substr( 0, strLine.size() - 1 );
 								string::trim( strLine2 );
-								bNextIsOpenBrace = doParseScriptLine( strLine2 );
+								isNextOpenBrace = doParseScriptLine( preprocessed, strLine2, lineIndex );
 								strLine = cuT( "{" );
 								bReuse = true;
 							}
 							else
 							{
-								if ( bNextIsOpenBrace )
+								if ( isNextOpenBrace )
 								{
 									if ( strLine != cuT( "{" ) )
 									{
-										bNextIsOpenBrace = doParseScriptBlockEnd();
+										isNextOpenBrace = doParseScriptBlockEnd( preprocessed, lineIndex );
 										bReuse = true;
 									}
 									else
 									{
-										bNextIsOpenBrace = false;
-										doEnterBlock();
+										isNextOpenBrace = false;
+										doEnterBlock( preprocessed, lineIndex );
 									}
 								}
 								else if ( strLine == cuT( "{" ) )
 								{
-									doEnterBlock();
+									doEnterBlock( preprocessed, lineIndex );
 								}
 								else
 								{
-									bNextIsOpenBrace = doParseScriptLine( strLine );
+									isNextOpenBrace = doParseScriptLine( preprocessed, strLine, lineIndex );
 								}
 
 								if ( m_ignoreLevel > 0 )
 								{
 									if ( !strLine.empty() && strLine.find( cuT( "}" ) ) == strLine.size() - 1 )
 									{
-										doLeaveBlock();
+										doLeaveBlock( preprocessed, lineIndex );
 									}
 								}
 							}
@@ -229,262 +456,259 @@ namespace castor
 			}
 		}
 
-		if ( m_context->m_sections.empty() || m_context->m_sections.back() != m_rootSectionId )
-		{
-			if ( m_context.use_count() == 1 )
-			{
-				parseError( cuT( "Unexpected end of file" ) );
-			}
-			else
-			{
-				doValidate();
-				result = true;
-			}
-		}
-		else
-		{
-			doValidate();
-			result = true;
-		}
+		m_preprocessed = nullptr;
+	}
 
-		std::swap( m_context->m_line, save );
-		doCleanupParser();
+	PreprocessedFile FileParser::processFile( Path const & path )
+	{
+		PreprocessedFile result{ *this
+			, doInitialiseParser( path ) };
+		processFile( path, result );
 		return result;
 	}
 
-	void FileParser::parseError( String const & text )
+	PreprocessedFile FileParser::processFile( Path const & path
+		, String const & content )
+	{
+		PreprocessedFile result{ *this
+			, doInitialiseParser( path ) };
+		processFile( path, content, result );
+		return result;
+	}
+
+	bool FileParser::parseFile( Path const & path )
+	{
+		auto preprocessed = processFile( path );
+		return preprocessed.parse();
+	}
+
+	bool FileParser::parseFile( Path const & path
+		, String const & content )
+	{
+		auto preprocessed = processFile( path, content );
+		return preprocessed.parse();
+	}
+
+	void FileParser::parseError( String const & functionName
+		, int lineIndex
+		, String const & text )
 	{
 		StringStream stream{ makeStringStream() };
-		stream << cuT( "Error, line #" ) << m_context->m_line << cuT( ": Directive <" ) << doGetSectionsStack() << cuT( ">: " ) << text;
+		stream << cuT( "Error, line #" ) << lineIndex << cuT( ": Directive <" ) << functionName << cuT( ">: " ) << text;
 		m_logger.logError( stream.str() );
 	}
 
-	void FileParser::parseWarning( String const & text )
+	void FileParser::parseWarning( String const & functionName
+		, int lineIndex
+		, String const & text )
 	{
 		StringStream stream{ makeStringStream() };
-		stream << cuT( "Warning, line #" ) << m_context->m_line << cuT( ": Directive <" ) << doGetSectionsStack() << cuT( ">: " ) << text;
+		stream << cuT( "Warning, line #" ) << lineIndex << cuT( ": Directive <" ) << functionName << cuT( ">: " ) << text;
 		m_logger.logWarning( stream.str() );
 	}
 
-	bool FileParser::checkParams( String params
-		, ParserParameterArray const & expected
-		, ParserParameterArray & received )
+	void FileParser::addParser( uint32_t section
+		, String const & name
+		, ParserFunction function
+		, ParserParameterArray params )
 	{
-		bool result = true;
-		string::trim( params );
-		String missingParam;
+		auto & parsers = m_parsers.insert( { name, {} } ).first->second;
+		auto ires = parsers.insert( { section, { function, params } } );
 
-		for ( auto param : expected )
+		if ( !ires.second )
 		{
-			if ( result )
-			{
-				auto filled = param->clone();
-				result = filled->parse( m_logger, params );
-
-				if ( !result )
-				{
-					missingParam = param->getStrType();
-				}
-				else
-				{
-					received.push_back( filled );
-				}
-			}
-		}
-
-		if ( !params.empty() )
-		{
-			auto param = std::make_shared< ParserParameter< ParameterType::eText > >();
-			param->m_value = params;
-			received.push_back( param );
-		}
-
-		if ( !result )
-		{
-			parseError( cuT( "Directive <" ) + m_context->m_functionName + cuT( "> needs a <" ) + missingParam + cuT( "> parameter that is currently missing" ) );
-		}
-
-		return result;
-	}
-
-	void FileParser::addParser( uint32_t p_section, String const & p_name, ParserFunction p_function, ParserParameterArray && p_params )
-	{
-		auto sectionIt = m_parsers.find( p_section );
-
-		if ( sectionIt != m_parsers.end() && sectionIt->second.find( p_name ) != sectionIt->second.end() )
-		{
-			parseError( cuT( "Parser " ) + p_name + cuT( " for section " ) + string::toString( p_section ) + cuT( " already exists." ) );
-		}
-		else
-		{
-			m_parsers[p_section][p_name] = { p_function, p_params };
+			auto stream = makeStringStream();
+			m_logger.logError( cuT( "Parser " ) + name + cuT( " for section " ) + string::toString( section ) + cuT( " already exists." ) );
 		}
 	}
 
-	bool FileParser::doParseScriptLine( String & p_line )
+	bool FileParser::doParseScriptLine( PreprocessedFile & preprocessed
+		, String & line
+		, int lineIndex )
 	{
-		bool bContinue = true;
+		bool carryOn = true;
 		bool result = false;
-		std::size_t uiBlockEndIndex = p_line.find( cuT( "}" ) );
-		p_line = doStripComments( p_line );
+		std::size_t blockEndIndex = line.find( cuT( "}" ) );
+		line = doStripComments( line );
 
-		if ( uiBlockEndIndex != String::npos )
+		if ( blockEndIndex != String::npos )
 		{
-			m_context->m_functionName = cuT( "}" );
+			m_functionName = cuT( "}" );
 
-			if ( uiBlockEndIndex == 0 )
+			if ( blockEndIndex == 0 )
 			{
 				// Block end at the beginning of the line, we treat it then we parse the line
-				p_line = p_line.substr( 1 );
-				string::trim( p_line );
-				doLeaveBlock();
+				line = line.substr( 1 );
+				string::trim( line );
+				doLeaveBlock( preprocessed, lineIndex );
 
-				if ( !p_line.empty() )
+				if ( !line.empty() )
 				{
-					result = doParseScriptLine( p_line );
+					result = doParseScriptLine( preprocessed, line, lineIndex );
 				}
 				else
 				{
 					result = false;
 				}
 
-				bContinue = false;
+				carryOn = false;
 			}
-			else if ( uiBlockEndIndex == p_line.size() - 1 )
+			else if ( blockEndIndex == line.size() - 1 )
 			{
 				// Block end at the end of the line : we treat the line then the block end
-				p_line = p_line.substr( 0, uiBlockEndIndex );
-				string::trim( p_line );
+				line = line.substr( 0, blockEndIndex );
+				string::trim( line );
 
-				if ( !p_line.empty() )
+				if ( !line.empty() )
 				{
-					doParseScriptLine( p_line );
+					doParseScriptLine( preprocessed, line, lineIndex );
 				}
 
-				doLeaveBlock();
+				doLeaveBlock( preprocessed, lineIndex );
 				result = false;
-				bContinue = false;
+				carryOn = false;
 			}
 			else
 			{
 				// Block end in the middle of the line, we don't treat it, we parse the line
-				bContinue = true;
+				carryOn = true;
 			}
 		}
 		else
 		{
 			// No block end, we parse the line
-			bContinue = true;
+			carryOn = true;
 		}
 
-		if ( bContinue )
+		if ( carryOn )
 		{
-			if ( !m_context->m_sections.empty() )
-			{
-				result = doInvokeParser( p_line, m_parsers[m_context->m_sections.back()] );
-			}
-			else
-			{
-				result = doDelegateParser( p_line );
-			}
+			result = doInvokeParser( preprocessed, line, lineIndex );
 		}
 
 		return result;
 	}
 
-	bool FileParser::doParseScriptBlockEnd()
+	bool FileParser::doDiscardParser( PreprocessedFile & preprocessed
+		, String const & line )
+	{
+		auto & context = preprocessed.getContext();
+		Logger::logWarning( cuT( "Parser not found @ line " ) + string::toString( context.line ) + cuT( " : " ) + line );
+		return false;
+	}
+
+	void FileParser::doParseScriptBlockBegin( PreprocessedFile & preprocessed
+		, int lineIndex )
+	{
+		auto defaultPush = [this]( FileParserContext & context
+			, ParserParameterArray const & )
+		{
+			context.sections.push_back( context.pendingSection );
+			return false;
+		};
+		preprocessed.addParser( m_path
+			, lineIndex
+			, "{"
+			, { { 0u, ParserFunctionAndParams{ defaultPush, {} } } }
+			, {} );
+	}
+
+	bool FileParser::doParseScriptBlockEnd( PreprocessedFile & preprocessed
+		, int lineIndex )
 	{
 		bool result = false;
+		auto it = m_parsers.find( "}" );
 
-		if ( !m_context->m_sections.empty() )
+		if ( it != m_parsers.end() )
 		{
-			AttributeParserMap::const_iterator const & iter = m_parsers[m_context->m_sections.back()].find( cuT( "}" ) );
-
-			if ( iter == m_parsers[m_context->m_sections.back()].end() )
-			{
-				m_context->m_sections.pop_back();
-				result = false;
-			}
-			else
-			{
-				result = iter->second.m_function( this, iter->second.m_params );
-			}
+			preprocessed.addParser( m_path
+				, lineIndex
+				, "}"
+				, it->second
+				, {} );
+			result = true;
 		}
 		else
 		{
-			parseError( "Unexpected '}'" );
+			auto defaultPop = [this]( FileParserContext & context
+				, ParserParameterArray const & )
+			{
+				context.sections.pop_back();
+				return false;
+			};
+			preprocessed.addParser( m_path
+				, lineIndex
+				, "}"
+				, { { 0u, ParserFunctionAndParams{ defaultPop, {} } } }
+				, {} );
+			result = false;
 		}
 
 		return result;
 	}
 
-	bool FileParser::doInvokeParser( String & p_line, AttributeParserMap const & p_parsers )
+	bool FileParser::doInvokeParser( PreprocessedFile & preprocessed
+		, String & line
+		, int lineIndex )
 	{
 		bool result = false;
-		StringArray splitCmd = string::split( p_line, cuT( " \t" ), 1, false );
-		m_context->m_functionName = splitCmd[0];
-		AttributeParserMap::const_iterator const & iter = p_parsers.find( splitCmd[0] );
 
 		if ( !doIsInIgnoredBlock() )
 		{
-			if ( iter == p_parsers.end() )
+			StringArray splitCmd = string::split( line, cuT( " \t" ), 1, false );
+			auto functionName = splitCmd[0];
+			auto iter = m_parsers.find( functionName );
+
+			if ( iter == m_parsers.end() )
 			{
-				if ( splitCmd[0] == cuT( "define" ) && splitCmd.size() > 1 )
+				if ( functionName == cuT( "define" ) && splitCmd.size() > 1 )
 				{
-					doAddDefine( splitCmd[1] );
+					doAddDefine( lineIndex, splitCmd[1] );
 				}
-				else if ( !doDiscardParser( p_line ) )
+				else if ( functionName == cuT( "include" ) && splitCmd.size() > 1 )
+				{
+					doIncludeFile( preprocessed, lineIndex, splitCmd[1] );
+				}
+				else if ( !doDiscardParser( preprocessed, line ) )
 				{
 					ignore();
 				}
 			}
 			else
 			{
-				String strParameters;
+				String parameters;
 
-				if ( splitCmd.size() >= 2 )
+				if ( splitCmd.size() > 1u )
 				{
-					strParameters = string::trim( splitCmd[1] );
-					doCheckDefines( strParameters );
+					parameters = string::trim( splitCmd[1] );
+					doCheckDefines( parameters );
 				}
 
-				ParserParameterArray filled;
-
-				if ( !checkParams( strParameters, iter->second.m_params, filled ) )
-				{
-					bool ignored = true;
-					std::swap( ignored, m_ignored );
-
-					try
-					{
-						result = iter->second.m_function( this, filled );
-					}
-					catch ( Exception & p_exc )
-					{
-						parseError( p_exc.getFullDescription() );
-					}
-
-					std::swap( ignored, m_ignored );
-				}
-				else
-				{
-					result = iter->second.m_function( this, filled );
-				}
+				preprocessed.addParser( m_path
+					, lineIndex
+					, functionName
+					, iter->second
+					, parameters );
 			}
 		}
 
 		return result;
 	}
 
-	void FileParser::doEnterBlock()
+	void FileParser::doEnterBlock( PreprocessedFile & preprocessed
+		, int lineIndex )
 	{
 		if ( m_ignored )
 		{
 			m_ignoreLevel++;
 		}
+		else
+		{
+			doParseScriptBlockBegin( preprocessed, lineIndex );
+		}
 	}
 
-	void FileParser::doLeaveBlock()
+	void FileParser::doLeaveBlock( PreprocessedFile & preprocessed
+		, int lineIndex )
 	{
 		if ( doIsInIgnoredBlock() )
 		{
@@ -494,13 +718,12 @@ namespace castor
 			{
 				m_ignored = false;
 				m_ignoreLevel = 0;
-				m_context->m_sections.pop_back();
 			}
 		}
 		else
 		{
 			m_ignored = false;
-			doParseScriptBlockEnd();
+			doParseScriptBlockEnd( preprocessed, lineIndex );
 		}
 	}
 
@@ -509,32 +732,26 @@ namespace castor
 		return m_ignored && m_ignoreLevel > 0;
 	}
 
-	String FileParser::doGetSectionsStack()
+	void FileParser::doIncludeFile( PreprocessedFile & preprocessed
+		, int lineIndex
+		, String const & param )
 	{
-		StringStream sections{ makeStringStream() };
-
-		if ( m_context && m_context->m_sections.size() > 1 )
+		String params = param;
+		Path path;
+		if ( ValueParser< ParameterType::ePath >::parse( m_logger
+			, params
+			, path ) )
 		{
-			auto begin = m_context->m_sections.begin() + 1;
-			sections << doGetSectionName( *begin );
-
-			std::for_each( begin + 1, m_context->m_sections.end(), [&sections, this]( uint32_t p_section )
-			{
-				sections << cuT( "::" ) << doGetSectionName( p_section );
-			} );
+			auto subparser = doCreateParser();
+			subparser->doInitialiseParser( m_path / path );
+			subparser->processFile( m_path / path, preprocessed );
 		}
-
-		if ( !m_context->m_functionName.empty() )
-		{
-			sections << cuT( "::" ) << m_context->m_functionName;
-		}
-
-		return sections.str();
 	}
 
-	void FileParser::doAddDefine( String const & param )
+	void FileParser::doAddDefine( int lineIndex
+		, String const & param )
 	{
-		m_context->m_functionName = "define";
+		auto functionName = "define";
 		auto values = string::split( param, cuT( " \t" ), 1 );
 
 		if ( values.size() == 2 )
@@ -543,12 +760,16 @@ namespace castor
 
 			if ( !iresult.second )
 			{
-				parseError( cuT( "Replacing an already existing value." ) );
+				parseError( functionName
+					, lineIndex
+					, cuT( "Replacing an already existing value." ) );
 			}
 		}
 		else
 		{
-			parseWarning( cuT( "Missing parameters." ) );
+			parseWarning( functionName
+				, lineIndex
+				, cuT( "Missing parameters." ) );
 		}
 	}
 

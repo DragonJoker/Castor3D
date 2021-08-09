@@ -506,7 +506,7 @@ namespace castor
 		{
 			out << in[0];
 
-			for ( uint32_t i = 0; i < Count; i++ )
+			for ( uint32_t i = 1; i < Count; i++ )
 			{
 				out << "\t" << in[i];
 			}
