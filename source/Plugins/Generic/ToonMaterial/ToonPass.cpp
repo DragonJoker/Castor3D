@@ -246,7 +246,7 @@ namespace toon
 		return std::make_shared< ToonPhongPass >( parent );
 	}
 
-	castor::AttributeParsersBySection ToonPhongPass::createParsers()
+	castor::AttributeParsers ToonPhongPass::createParsers()
 	{
 		return ToonPass::createParsers( uint32_t( phong::Section::ePass )
 			, uint32_t( phong::Section::eTextureUnit ) );
@@ -322,7 +322,7 @@ namespace toon
 		return std::make_shared< ToonBlinnPhongPass >( parent );
 	}
 
-	castor::AttributeParsersBySection ToonBlinnPhongPass::createParsers()
+	castor::AttributeParsers ToonBlinnPhongPass::createParsers()
 	{
 		return ToonPass::createParsers( uint32_t( blinn_phong::Section::ePass )
 			, uint32_t( blinn_phong::Section::eTextureUnit ) );
@@ -398,7 +398,7 @@ namespace toon
 		return std::make_shared< ToonMetallicRoughnessPass >( parent );
 	}
 
-	castor::AttributeParsersBySection ToonMetallicRoughnessPass::createParsers()
+	castor::AttributeParsers ToonMetallicRoughnessPass::createParsers()
 	{
 		return ToonPass::createParsers( uint32_t( pbrmr::Section::ePass )
 			, uint32_t( pbrmr::Section::eTextureUnit ) );
@@ -475,7 +475,7 @@ namespace toon
 		return std::make_shared< ToonSpecularGlossinessPass >( parent );
 	}
 
-	castor::AttributeParsersBySection ToonSpecularGlossinessPass::createParsers()
+	castor::AttributeParsers ToonSpecularGlossinessPass::createParsers()
 	{
 		return ToonPass::createParsers( uint32_t( pbrsg::Section::ePass )
 			, uint32_t( pbrsg::Section::eTextureUnit ) );

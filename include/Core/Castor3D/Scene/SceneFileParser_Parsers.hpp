@@ -19,7 +19,6 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserRootDebugOverlays )
 	CU_DeclareAttributeParser( parserRootWindow )
 	CU_DeclareAttributeParser( parserRootMaterials )
-	CU_DeclareAttributeParser( parserInclude )
 	CU_DeclareAttributeParser( parserRootLpvGridSize )
 
 	//Window parsers
@@ -55,7 +54,6 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserSamplerComparisonFunc )
 
 	// Scene parsers
-	CU_DeclareAttributeParser( parserSceneInclude )
 	CU_DeclareAttributeParser( parserSceneBkColour )
 	CU_DeclareAttributeParser( parserSceneBkImage )
 	CU_DeclareAttributeParser( parserSceneFont )

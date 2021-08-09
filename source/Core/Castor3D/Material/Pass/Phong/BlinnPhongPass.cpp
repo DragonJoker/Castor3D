@@ -93,13 +93,13 @@ namespace castor3d
 		return std::make_shared< BlinnPhongPass >( parent );
 	}
 
-	castor::AttributeParsersBySection BlinnPhongPass::createParsers()
+	castor::AttributeParsers BlinnPhongPass::createParsers()
 	{
 		return createParsers( uint32_t( blinn_phong::Section::ePass )
 			, uint32_t( blinn_phong::Section::eTextureUnit ) );
 	}
 
-	castor::AttributeParsersBySection BlinnPhongPass::createParsers( uint32_t mtlSectionID
+	castor::AttributeParsers BlinnPhongPass::createParsers( uint32_t mtlSectionID
 		, uint32_t texSectionID )
 	{
 		return PhongPass::createParsers( mtlSectionID, texSectionID );

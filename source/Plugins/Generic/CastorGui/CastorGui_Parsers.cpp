@@ -96,14 +96,14 @@ namespace CastorGui
 		}
 	};
 
-	ControlsManager & getControlsManager( FileParserContextSPtr context )
+	ControlsManager & getControlsManager( FileParserContext & context )
 	{
-		return static_cast< ControlsManager & >( *std::static_pointer_cast< SceneFileContext >( context )->parser->getEngine()->getUserInputListener() );
+		return static_cast< ControlsManager & >( *static_cast< SceneFileContext & >( context ).parser->getEngine()->getUserInputListener() );
 	}
 
-	ParserContext & getParserContext( FileParserContextSPtr context )
+	ParserContext & getParserContext( FileParserContext & context )
 	{
-		return *static_cast< ParserContext * >( context->getUserContext( PLUGIN_NAME ) );
+		return *static_cast< ParserContext * >( context.getUserContext( PLUGIN_NAME ) );
 	}
 
 	template< typename T >
@@ -128,8 +128,8 @@ namespace CastorGui
 	CU_ImplementAttributeParser( parserGui )
 	{
 		ParserContext * guiContext = new ParserContext;
-		guiContext->m_engine = std::static_pointer_cast< SceneFileContext >( context )->parser->getEngine();
-		context->registerUserContext( PLUGIN_NAME, guiContext );
+		guiContext->m_engine = static_cast< SceneFileContext & >( context ).parser->getEngine();
+		context.registerUserContext( PLUGIN_NAME, guiContext );
 	}
 	CU_EndAttributePush( CastorGui::GUISection::eGUI )
 
@@ -155,7 +155,7 @@ namespace CastorGui
 
 	CU_ImplementAttributeParser( parserGuiEnd )
 	{
-		delete reinterpret_cast< ParserContext * >( context->unregisterUserContext( PLUGIN_NAME ) );
+		delete reinterpret_cast< ParserContext * >( context.unregisterUserContext( PLUGIN_NAME ) );
 	}
 	CU_EndAttributePop()
 

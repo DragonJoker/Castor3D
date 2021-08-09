@@ -21,16 +21,16 @@ namespace smaa
 		SmaaConfig::Data data{};
 	};
 
-	ParserContext & getParserContext( castor::FileParserContextSPtr context )
+	ParserContext & getParserContext( castor::FileParserContext & context )
 	{
-		return *static_cast< ParserContext * >( context->getUserContext( PostEffect::Type ) );
+		return *static_cast< ParserContext * >( context.getUserContext( PostEffect::Type ) );
 	}
 
 	CU_ImplementAttributeParser( parserSmaa )
 	{
 		ParserContext * smaaContext = new ParserContext;
-		smaaContext->engine = std::static_pointer_cast< castor3d::SceneFileContext >( context )->parser->getEngine();
-		context->registerUserContext( PostEffect::Type, smaaContext );
+		smaaContext->engine = static_cast< castor3d::SceneFileContext & >( context ).parser->getEngine();
+		context.registerUserContext( PostEffect::Type, smaaContext );
 	}
 	CU_EndAttributePush( SmaaSection::eRoot )
 
@@ -284,7 +284,7 @@ namespace smaa
 	{
 		auto & smaaContext = getParserContext( context );
 		auto engine = smaaContext.engine;
-		auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+		auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
 		castor3d::Parameters parameters;
 		parameters.add( cuT( "mode" ), getName( smaaContext.data.mode ) );
 		parameters.add( cuT( "preset" ), getName( smaaContext.preset ) );
@@ -312,12 +312,12 @@ namespace smaa
 		}
 
 		auto effect = engine->getRenderTargetCache().getPostEffectFactory().create( PostEffect::Type
-			, *parsingContext->renderTarget
+			, *parsingContext.renderTarget
 			, *engine->getRenderSystem()
 			, parameters );
-		parsingContext->renderTarget->addPostEffect( effect );
+		parsingContext.renderTarget->addPostEffect( effect );
 
-		delete reinterpret_cast< ParserContext * >( context->unregisterUserContext( PostEffect::Type ) );
+		delete reinterpret_cast< ParserContext * >( context.unregisterUserContext( PostEffect::Type ) );
 	}
 	CU_EndAttributePop()
 }

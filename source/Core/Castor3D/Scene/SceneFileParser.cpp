@@ -222,19 +222,9 @@ namespace castor3d
 		return FileParser::parseFile( path );
 	}
 
-	bool SceneFileParser::parseFile( castor::Path const & pathFile, SceneFileContextSPtr context )
+	castor::FileParserContextSPtr SceneFileParser::doInitialiseParser( Path const & path )
 	{
-		m_context = context;
-		return parseFile( pathFile );
-	}
-
-	void SceneFileParser::doInitialiseParser( Path const & path )
-	{
-		if ( !m_context )
-		{
-			SceneFileContextSPtr context = std::make_shared< SceneFileContext >( path, this );
-			m_context = context;
-		}
+		SceneFileContextSPtr context = std::make_shared< SceneFileContext >( path, this );
 
 		addParser( uint32_t( CSCNSection::eRoot ), cuT( "scene" ), parserRootScene, { makeParameter< ParameterType::eName >() } );
 		addParser( uint32_t( CSCNSection::eRoot ), cuT( "font" ), parserRootFont, { makeParameter< ParameterType::eName >() } );
@@ -246,7 +236,6 @@ namespace castor3d
 		addParser( uint32_t( CSCNSection::eRoot ), cuT( "debug_overlays" ), parserRootDebugOverlays, { makeParameter< ParameterType::eBool >() } );
 		addParser( uint32_t( CSCNSection::eRoot ), cuT( "window" ), parserRootWindow, { makeParameter< ParameterType::eName >() } );
 		addParser( uint32_t( CSCNSection::eRoot ), cuT( "materials" ), parserRootMaterials, { makeParameter< ParameterType::eCheckedText >( m_materialTypes ) } );
-		addParser( uint32_t( CSCNSection::eRoot ), cuT( "include" ), parserInclude, { makeParameter< ParameterType::ePath >() } );
 		addParser( uint32_t( CSCNSection::eRoot ), cuT( "lpv_grid_size" ), parserRootLpvGridSize, { makeParameter< ParameterType::eUInt32 >() } );
 
 		addParser( uint32_t( CSCNSection::eWindow ), cuT( "render_target" ), parserWindowRenderTarget );
@@ -278,7 +267,6 @@ namespace castor3d
 		addParser( uint32_t( CSCNSection::eSampler ), cuT( "comparison_mode" ), parserSamplerComparisonMode, { makeParameter< ParameterType::eCheckedText >( m_comparisonModes ) } );
 		addParser( uint32_t( CSCNSection::eSampler ), cuT( "comparison_func" ), parserSamplerComparisonFunc, { makeParameter< ParameterType::eCheckedText >( m_comparisonFuncs ) } );
 
-		addParser( uint32_t( CSCNSection::eScene ), cuT( "include" ), parserSceneInclude, { makeParameter< ParameterType::ePath >() } );
 		addParser( uint32_t( CSCNSection::eScene ), cuT( "background_colour" ), parserSceneBkColour, { makeParameter< ParameterType::eRgbColour >() } );
 		addParser( uint32_t( CSCNSection::eScene ), cuT( "background_image" ), parserSceneBkImage, { makeParameter< ParameterType::ePath >() } );
 		addParser( uint32_t( CSCNSection::eScene ), cuT( "font" ), parserSceneFont, { makeParameter< ParameterType::eName >() } );
@@ -559,41 +547,36 @@ namespace castor3d
 
 		for ( auto const & it : getEngine()->getAdditionalParsers() )
 		{
-			for ( auto const & itSections : it.second )
+			for ( auto const & parsers : it.second )
 			{
-				for ( auto const & itParsers : itSections.second )
+				for ( auto & parser : parsers.second )
 				{
-					auto params = itParsers.second.m_params;
-					addParser( itSections.first, itParsers.first, itParsers.second.m_function, std::move( params ) );
+					auto params = parser.second.params;
+					addParser( parser.first, parsers.first, parser.second.function, std::move( params ) );
 				}
 			}
 		}
+
+		return context;
 	}
 
-	void SceneFileParser::doCleanupParser()
+	void SceneFileParser::doCleanupParser( PreprocessedFile & preprocessed )
 	{
-		SceneFileContextSPtr context = std::static_pointer_cast< SceneFileContext >( m_context );
-		m_context.reset();
+		auto & context = static_cast< SceneFileContext & >( preprocessed.getContext() );
 
-		for ( ScenePtrStrMap::iterator it = context->mapScenes.begin(); it != context->mapScenes.end(); ++it )
+		for ( auto it = context.mapScenes.begin(); it != context.mapScenes.end(); ++it )
 		{
 			m_mapScenes.insert( std::make_pair( it->first, it->second ) );
 		}
 
-		m_renderWindow = std::move( context->window );
-	}
-
-	bool SceneFileParser::doDiscardParser( String const & line )
-	{
-		log::error << cuT( "Parser not found @ line #" ) << string::toString( m_context->m_line ) << cuT( " : " ) << line << std::endl;
-		return false;
+		m_renderWindow = std::move( context.window );
 	}
 
 	void SceneFileParser::doValidate()
 	{
 	}
 
-	String SceneFileParser::doGetSectionName( uint32_t section )
+	String SceneFileParser::doGetSectionName( castor::SectionId section )const
 	{
 		String result;
 		static const std::map< CSCNSection, String > baseSections
@@ -660,6 +643,11 @@ namespace castor3d
 
 		CU_Failure( "Section not found" );
 		return cuT( "unknown" );
+	}
+
+	std::unique_ptr< FileParser > SceneFileParser::doCreateParser()const
+	{
+		return std::make_unique< SceneFileParser >( *getEngine() );
 	}
 }
 //****************************************************************************************************

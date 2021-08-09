@@ -74,22 +74,26 @@ namespace castor
 	public:
 		//!\~english	The file currently parsed.
 		//!\~french		Le fichier en cours d'analyse.
-		Path m_file;
+		Path file;
 		//!\~english	The current line.
 		//!\~french		La ligne en cours d'analyse.
-		unsigned long long m_line;
+		unsigned long long line;
 		//!\~english	The sections stack.
 		//!\~french		La pile de sections.
-		std::deque< uint32_t > m_sections;
+		std::deque< SectionId > sections;
+		//!\~english	The sections stack.
+		//!\~french		La pile de sections.
+		SectionId pendingSection;
 		//!\~english	The current function name.
 		//!\~french		Le nom de la fonction actuelle.
-		String m_functionName;
+		String functionName;
 		//!\~english	The user context data, useful in plug-ins.
 		//!\~french		Les données de contexte utilisateur, utile dans les plug-ins.
-		std::map< String, void * > m_userContexts;
+		std::map< String, void * > userContexts;
 		//!\~english	The logger instance.
 		//!\~french		L'instance de logger.
 		LoggerInstance * logger{ nullptr };
+		PreprocessedFile * preprocessed;
 	};
 }
 

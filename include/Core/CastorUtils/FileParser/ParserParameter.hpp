@@ -234,7 +234,7 @@ namespace castor
 			, String & params )override;
 
 	public:
-		UInt32StrMap const & m_values;
+		UInt32StrMap const m_values;
 	};
 	/**
 	\~english
@@ -279,7 +279,7 @@ namespace castor
 			, String & params )override;
 
 	public:
-		UInt32StrMap const & m_values;
+		UInt32StrMap const m_values;
 	};
 	/**
 	\~english
@@ -324,7 +324,7 @@ namespace castor
 			, String & params )override;
 
 	public:
-		UInt64StrMap const & m_values;
+		UInt64StrMap const m_values;
 	};
 	/**
 	 *\~english

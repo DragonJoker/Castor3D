@@ -11,9 +11,6 @@ See LICENSE file in root folder
 namespace GuiCommon
 {
 	/**
-	\author Sylvain DOREMUS
-	\version 0.6.1.0
-	\date 19/10/2011
 	\~english
 	\brief Language file sections enumeration
 	\~french
@@ -27,9 +24,6 @@ namespace GuiCommon
 		eStyle = CU_MakeSectionName( 'S', 'T', 'Y', 'L' ),
 	};
 	/**
-	\author Sylvain DOREMUS
-	\version 0.6.1.0
-	\date 19/10/2011
 	\~english
 	\brief Language file parser
 	\~french
@@ -38,42 +32,25 @@ namespace GuiCommon
 	class LanguageFileParser
 		: public castor::FileParser
 	{
-	private:
-		StcContext * m_pStcContext;
-
 	public:
 		/**@name Construction / Destruction */
 		//@{
-		explicit LanguageFileParser( StcContext * p_pStcContext );
+		explicit LanguageFileParser( StcContext * stcContext );
 		virtual ~LanguageFileParser();
 		//@}
 
 	private:
-		virtual void doInitialiseParser( castor::Path const & path );
-		virtual void doCleanupParser();
-		virtual bool doDiscardParser( castor::String const & p_line );
-		virtual bool doDelegateParser( castor::String const & CU_UnusedParam( p_line ) )
-		{
-			return false;
-		}
-		virtual void doValidate();
-		virtual castor::String doGetSectionName( uint32_t p_section );
-	};
+		castor::FileParserContextSPtr doInitialiseParser( castor::Path const & path )override;
+		void doCleanupParser( castor::PreprocessedFile & preprocessed )override;
+		bool doDiscardParser( castor::PreprocessedFile & preprocessed
+			, castor::String const & line )override;
+		void doValidate()override;
+		castor::String doGetSectionName( castor::SectionId section )const override;
+		std::unique_ptr< castor::FileParser > doCreateParser()const override;
 
-	CU_DeclareAttributeParser( Root_Language )
-	CU_DeclareAttributeParser( Language_Pattern )
-	CU_DeclareAttributeParser( Language_Lexer )
-	CU_DeclareAttributeParser( Language_FoldFlags )
-	CU_DeclareAttributeParser( Language_Keywords )
-	CU_DeclareAttributeParser( Language_Style )
-	CU_DeclareAttributeParser( Language_FontName )
-	CU_DeclareAttributeParser( Language_FontSize )
-	CU_DeclareAttributeParser( Language_CLike )
-	CU_DeclareAttributeParser( Style_Type )
-	CU_DeclareAttributeParser( Style_FgColour )
-	CU_DeclareAttributeParser( Style_BgColour )
-	CU_DeclareAttributeParser( Style_FontStyle )
-	CU_DeclareAttributeParser( Keywords_End )
+	private:
+		StcContext * m_stcContext;
+	};
 }
 
 #endif

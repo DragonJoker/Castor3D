@@ -214,7 +214,7 @@ namespace castor3d
 			, castor::String const & subfolder
 			, castor::StringStream & file )const = 0;
 
-		C3D_API static void addParser( castor::AttributeParsersBySection & parsers
+		C3D_API static void addParser( castor::AttributeParsers & parsers
 			, uint32_t section
 			, castor::String const & name
 			, castor::ParserFunction function
@@ -577,7 +577,7 @@ namespace castor3d
 		C3D_API static void parseError( castor::String const & error );
 		C3D_API static void addCommonParsers( uint32_t mtlSectionID
 			, uint32_t texSectionID
-			, castor::AttributeParsersBySection & result );
+			, castor::AttributeParsers & result );
 		C3D_API virtual void doAccept( TextureConfiguration & config
 			, PassVisitorBase & vis ) = 0;
 		C3D_API virtual void doAccept( PassVisitorBase & vis ) = 0;

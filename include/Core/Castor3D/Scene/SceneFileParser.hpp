@@ -210,44 +210,28 @@ namespace castor3d
 		 *\return		\p false si un problème est survenu.
 		 */
 		C3D_API bool parseFile( castor::Path const & path );
-		/**
-		 *\~english
-		 *\brief		Parses the given file (expecting it to be in CSCN file format), using an external context.
-		 *\param[in]	path	The file access path.
-		 *\param[in]	context	The context.
-		 *\return		\p false if any problem occured.
-		 *\~french
-		 *\brief		Analyse le fichier donné (s'attend à recevoir un fichier CSCN), en utilisant un contexte externe.
-		 *\param[in]	path	Le chemin d'accès au fichier.
-		 *\param[in]	context	Le contexte.
-		 *\return		\p false si un problème est survenu.
-		 */
-		C3D_API bool parseFile( castor::Path const & path
-			, SceneFileContextSPtr context );
 
 		ScenePtrStrMap::iterator scenesBegin()
 		{
 			return m_mapScenes.begin();
 		}
+
 		ScenePtrStrMap::const_iterator scenesBegin()const
 		{
 			return m_mapScenes.begin();
 		}
+
 		ScenePtrStrMap::const_iterator scenesEnd()const
 		{
 			return m_mapScenes.end();
 		}
 
 	private:
-		C3D_API void doInitialiseParser( castor::Path const & path )override;
-		C3D_API void doCleanupParser()override;
-		C3D_API bool doDelegateParser( castor::String const & CU_UnusedParam( line ) )override
-		{
-			return false;
-		}
-		C3D_API bool doDiscardParser( castor::String const & line )override;
+		C3D_API castor::FileParserContextSPtr doInitialiseParser( castor::Path const & path )override;
+		C3D_API void doCleanupParser( castor::PreprocessedFile & preprocessed )override;
 		C3D_API void doValidate()override;
-		C3D_API castor::String doGetSectionName( uint32_t section )override;
+		C3D_API castor::String doGetSectionName( castor::SectionId section )const override;
+		C3D_API std::unique_ptr< FileParser > doCreateParser()const override;
 
 	private:
 		castor::String m_strSceneFilePath;

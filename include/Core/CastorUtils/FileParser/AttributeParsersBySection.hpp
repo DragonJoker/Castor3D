@@ -10,8 +10,8 @@ namespace castor
 {
 	struct ParserFunctionAndParams
 	{
-		ParserFunction m_function;
-		ParserParameterArray m_params;
+		ParserFunction function;
+		ParserParameterArray params;
 	};
 
 #if defined( CU_CompilerMSVC )
@@ -28,15 +28,8 @@ namespace castor
 
 		ParserFunctionAndParams & operator []( String const & name )
 		{
-			MapIt it = m_map.find( name );
-
-			if ( it == m_map.end() )
-			{
-				m_map.insert( std::make_pair( name, ParserFunctionAndParams() ) );
-				it = m_map.find( name );
-			}
-
-			return it->second;
+			auto ires = m_map.emplace( name, ParserFunctionAndParams{} );
+			return ires.first->second;
 		}
 
 		iterator find( String const & name )
