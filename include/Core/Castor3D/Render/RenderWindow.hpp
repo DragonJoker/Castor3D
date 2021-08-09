@@ -394,7 +394,12 @@ namespace castor3d
 		{
 			return m_debugConfig;
 		}
-		/**@}*/
+
+		ProgressBar & getProgressBar()const
+		{
+			return *m_progressBar;
+		}
+			/**@}*/
 		/**
 		*\~english
 		*name
@@ -417,6 +422,11 @@ namespace castor3d
 		void enableSaveFrame()
 		{
 			m_toSave = true;
+		}
+
+		void enableLoading()
+		{
+			m_loading = true;
 		}
 		/**@}*/
 

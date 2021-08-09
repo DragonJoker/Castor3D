@@ -4,8 +4,8 @@ namespace castor
 {
 	FileParserContext::FileParserContext( LoggerInstance & logger
 		, Path const & path )
-		: m_file{ path }
-		, m_line{ 0 }
+		: file{ path }
+		, line{ 0 }
 		, logger{ &logger }
 	{
 	}
@@ -16,33 +16,33 @@ namespace castor
 
 	void FileParserContext::registerUserContext( String const & name, void * data )
 	{
-		if ( m_userContexts.find( name ) != m_userContexts.end() )
+		if ( userContexts.find( name ) != userContexts.end() )
 		{
 			CU_Exception( "A user context with name [" + string::stringCast< char >( name ) + "] already exists." );
 		}
 
-		m_userContexts.insert( std::make_pair( name, data ) );
+		userContexts.insert( std::make_pair( name, data ) );
 	}
 
 	void * FileParserContext::unregisterUserContext( String const & name )
 	{
-		auto it = m_userContexts.find( name );
+		auto it = userContexts.find( name );
 
-		if ( it == m_userContexts.end() )
+		if ( it == userContexts.end() )
 		{
 			CU_Exception( "No user context with name [" + string::stringCast< char >( name ) + "]." );
 		}
 
 		void * result = it->second;
-		m_userContexts.erase( it );
+		userContexts.erase( it );
 		return result;
 	}
 
 	void * FileParserContext::getUserContext( String const & name )
 	{
-		auto it = m_userContexts.find( name );
+		auto it = userContexts.find( name );
 
-		if ( it == m_userContexts.end() )
+		if ( it == userContexts.end() )
 		{
 			CU_Exception( "No user context with name [" + string::stringCast< char >( name ) + "]." );
 		}

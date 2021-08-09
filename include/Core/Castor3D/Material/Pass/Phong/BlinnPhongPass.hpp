@@ -50,8 +50,8 @@ namespace castor3d
 		C3D_API ~BlinnPhongPass();
 
 		C3D_API static PassSPtr create( Material & parent );
-		C3D_API static castor::AttributeParsersBySection createParsers();
-		C3D_API static castor::AttributeParsersBySection createParsers( uint32_t mtlSectionID
+		C3D_API static castor::AttributeParsers createParsers();
+		C3D_API static castor::AttributeParsers createParsers( uint32_t mtlSectionID
 			, uint32_t texSectionID );
 		C3D_API static castor::StrUInt32Map createSections();
 		/**

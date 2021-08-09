@@ -22,16 +22,16 @@ namespace motion_blur
 		bool fpsScale;
 	};
 
-	ParserContext & getParserContext( castor::FileParserContextSPtr context )
+	ParserContext & getParserContext( castor::FileParserContext & context )
 	{
-		return *static_cast< ParserContext * >( context->getUserContext( PostEffect::Type ) );
+		return *static_cast< ParserContext * >( context.getUserContext( PostEffect::Type ) );
 	}
 
 	CU_ImplementAttributeParser( parserMotionBlur )
 	{
 		ParserContext * blurContext = new ParserContext;
-		blurContext->engine = std::static_pointer_cast< castor3d::SceneFileContext >( context )->parser->getEngine();
-		context->registerUserContext( PostEffect::Type, blurContext );
+		blurContext->engine = static_cast< castor3d::SceneFileContext & >( context ).parser->getEngine();
+		context.registerUserContext( PostEffect::Type, blurContext );
 	}
 	CU_EndAttributePush( MotionBlurSection::eRoot )
 
@@ -90,19 +90,19 @@ namespace motion_blur
 	{
 		auto & blurContext = getParserContext( context );
 		auto engine = blurContext.engine;
-		auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+		auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
 		castor3d::Parameters parameters;
 		parameters.add( cuT( "vectorDivider" ), blurContext.data.vectorDivider );
 		parameters.add( cuT( "samplesCount" ), blurContext.data.samplesCount );
 		parameters.add( cuT( "fpsScale" ), blurContext.fpsScale );
 
 		auto effect = engine->getRenderTargetCache().getPostEffectFactory().create( PostEffect::Type
-			, *parsingContext->renderTarget
+			, *parsingContext.renderTarget
 			, *engine->getRenderSystem()
 			, parameters );
-		parsingContext->renderTarget->addPostEffect( effect );
+		parsingContext.renderTarget->addPostEffect( effect );
 
-		delete reinterpret_cast< ParserContext * >( context->unregisterUserContext( PostEffect::Type ) );
+		delete reinterpret_cast< ParserContext * >( context.unregisterUserContext( PostEffect::Type ) );
 	}
 	CU_EndAttributePop()
 }

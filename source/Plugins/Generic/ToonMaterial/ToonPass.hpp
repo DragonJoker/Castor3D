@@ -33,7 +33,7 @@ namespace toon
 			, castor3d::PassTypeID typeID
 			, castor3d::PassFlags initialFlags = castor3d::PassFlag::eNone );
 
-		static castor::AttributeParsersBySection createParsers( uint32_t mtlSectionID
+		static castor::AttributeParsers createParsers( uint32_t mtlSectionID
 			, uint32_t texSectionID );
 
 		void fillData( castor3d::PassBuffer::PassDataPtr & data )const;
@@ -74,7 +74,7 @@ namespace toon
 		~ToonPhongPass();
 
 		static castor3d::PassSPtr create( castor3d::Material & parent );
-		static castor::AttributeParsersBySection createParsers();
+		static castor::AttributeParsers createParsers();
 		static castor::StrUInt32Map createSections();
 
 		void accept( castor3d::PassBuffer & buffer )const override;
@@ -103,7 +103,7 @@ namespace toon
 		~ToonBlinnPhongPass();
 
 		static castor3d::PassSPtr create( castor3d::Material & parent );
-		static castor::AttributeParsersBySection createParsers();
+		static castor::AttributeParsers createParsers();
 		static castor::StrUInt32Map createSections();
 
 		void accept( castor3d::PassBuffer & buffer )const override;
@@ -132,7 +132,7 @@ namespace toon
 		~ToonMetallicRoughnessPass();
 
 		static castor3d::PassSPtr create( castor3d::Material & parent );
-		static castor::AttributeParsersBySection createParsers();
+		static castor::AttributeParsers createParsers();
 		static castor::StrUInt32Map createSections();
 
 		void accept( castor3d::PassBuffer & buffer )const override;
@@ -161,7 +161,7 @@ namespace toon
 		~ToonSpecularGlossinessPass();
 
 		static castor3d::PassSPtr create( castor3d::Material & parent );
-		static castor::AttributeParsersBySection createParsers();
+		static castor::AttributeParsers createParsers();
 		static castor::StrUInt32Map createSections();
 
 		void accept( castor3d::PassBuffer & buffer )const override;

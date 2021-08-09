@@ -17,15 +17,15 @@ namespace toon
 
 	ImplementTemplateAttributeParser( parserPassSmoothBandWidth )
 	{
-		auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+		auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
 
-		if ( !parsingContext->pass )
+		if ( !parsingContext.pass )
 		{
 			CU_ParsingError( cuT( "No Pass initialised." ) );
 		}
 		else if ( !params.empty() )
 		{
-			auto & toonPass = static_cast< ToonPassT< TypeT > & >( *parsingContext->pass );
+			auto & toonPass = static_cast< ToonPassT< TypeT > & >( *parsingContext.pass );
 			float value;
 			params[0]->get( value );
 			toonPass.setSmoothBandWidth( value );
@@ -51,7 +51,7 @@ namespace toon
 
 
 	template< typename TypeT >
-	castor::AttributeParsersBySection ToonPassT< TypeT >::createParsers( uint32_t mtlSectionID
+	castor::AttributeParsers ToonPassT< TypeT >::createParsers( uint32_t mtlSectionID
 		, uint32_t texSectionID )
 	{
 		auto result = TypeT::createParsers( mtlSectionID, texSectionID );
