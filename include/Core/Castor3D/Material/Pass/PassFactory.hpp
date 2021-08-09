@@ -25,7 +25,7 @@ namespace castor3d
 		{
 			castor::String lightingModel;
 			PassFactoryBase::Creator passCreator;
-			castor::AttributeParsersBySection parsers;
+			castor::AttributeParsers parsers;
 			castor::StrUInt32Map sections;
 			shader::LightingModelCreator lightingModelCreator;
 			bool needsIbl;
