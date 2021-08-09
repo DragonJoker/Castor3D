@@ -66,15 +66,15 @@ namespace castor3d
 
 		CU_ImplementAttributeParser( parserPassAlbedo )
 		{
-			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+			auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
 
-			if ( !parsingContext->pass )
+			if ( !parsingContext.pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
 			else if ( !params.empty() )
 			{
-				auto & phongPass = static_cast< MetallicRoughnessPbrPass & >( *parsingContext->pass );
+				auto & phongPass = static_cast< MetallicRoughnessPbrPass & >( *parsingContext.pass );
 				castor::RgbColour value;
 				params[0]->get( value );
 				phongPass.setAlbedo( value );
@@ -84,15 +84,15 @@ namespace castor3d
 
 		CU_ImplementAttributeParser( parserPassMetalness )
 		{
-			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+			auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
 
-			if ( !parsingContext->pass )
+			if ( !parsingContext.pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
 			else if ( !params.empty() )
 			{
-				auto & phongPass = static_cast< MetallicRoughnessPbrPass & >( *parsingContext->pass );
+				auto & phongPass = static_cast< MetallicRoughnessPbrPass & >( *parsingContext.pass );
 				float value;
 				params[0]->get( value );
 				phongPass.setMetallic( value );
@@ -102,15 +102,15 @@ namespace castor3d
 
 		CU_ImplementAttributeParser( parserPassRoughness )
 		{
-			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+			auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
 
-			if ( !parsingContext->pass )
+			if ( !parsingContext.pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
 			else if ( !params.empty() )
 			{
-				auto & phongPass = static_cast< MetallicRoughnessPbrPass & >( *parsingContext->pass );
+				auto & phongPass = static_cast< MetallicRoughnessPbrPass & >( *parsingContext.pass );
 				float value;
 				params[0]->get( value );
 				phongPass.setRoughness( value );
@@ -120,9 +120,9 @@ namespace castor3d
 
 		CU_ImplementAttributeParser( parserUnitChannel )
 		{
-			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+			auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
 
-			if ( !parsingContext->textureUnit )
+			if ( !parsingContext.textureUnit )
 			{
 				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
 			}
@@ -134,47 +134,47 @@ namespace castor3d
 
 				if ( checkFlag( textures, TextureFlag::eNormal ) )
 				{
-					parsingContext->textureConfiguration.normalMask[0] = 0x00FFFFFF;
+					parsingContext.textureConfiguration.normalMask[0] = 0x00FFFFFF;
 				}
 
 				if ( checkFlag( textures, TextureFlag::eOpacity ) )
 				{
-					parsingContext->textureConfiguration.opacityMask[0] = 0xFF000000;
+					parsingContext.textureConfiguration.opacityMask[0] = 0xFF000000;
 				}
 
 				if ( checkFlag( textures, TextureFlag::eHeight ) )
 				{
-					parsingContext->textureConfiguration.heightMask[0] = 0x00FF0000;
+					parsingContext.textureConfiguration.heightMask[0] = 0x00FF0000;
 				}
 
 				if ( checkFlag( textures, TextureFlag::eEmissive ) )
 				{
-					parsingContext->textureConfiguration.emissiveMask[0] = 0x00FFFFFF;
+					parsingContext.textureConfiguration.emissiveMask[0] = 0x00FFFFFF;
 				}
 
 				if ( checkFlag( textures, TextureFlag::eOcclusion ) )
 				{
-					parsingContext->textureConfiguration.occlusionMask[0] = 0x00FF0000;
+					parsingContext.textureConfiguration.occlusionMask[0] = 0x00FF0000;
 				}
 
 				if ( checkFlag( textures, TextureFlag::eTransmittance ) )
 				{
-					parsingContext->textureConfiguration.transmittanceMask[0] = 0xFF000000;
+					parsingContext.textureConfiguration.transmittanceMask[0] = 0xFF000000;
 				}
 
 				if ( checkFlag( textures, TextureFlag::eAlbedo ) )
 				{
-					parsingContext->textureConfiguration.colourMask[0] = 0x00FFFFFF;
+					parsingContext.textureConfiguration.colourMask[0] = 0x00FFFFFF;
 				}
 
 				if ( checkFlag( textures, TextureFlag::eMetalness ) )
 				{
-					parsingContext->textureConfiguration.metalnessMask[0] = 0x00FF0000;
+					parsingContext.textureConfiguration.metalnessMask[0] = 0x00FF0000;
 				}
 
 				if ( checkFlag( textures, TextureFlag::eRoughness ) )
 				{
-					parsingContext->textureConfiguration.roughnessMask[0] = 0x00FF0000;
+					parsingContext.textureConfiguration.roughnessMask[0] = 0x00FF0000;
 				}
 			}
 		}
@@ -182,9 +182,9 @@ namespace castor3d
 
 		CU_ImplementAttributeParser( parserUnitAlbedoMask )
 		{
-			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+			auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
 
-			if ( !parsingContext->textureUnit )
+			if ( !parsingContext.textureUnit )
 			{
 				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
 			}
@@ -194,16 +194,16 @@ namespace castor3d
 			}
 			else
 			{
-				params[0]->get( parsingContext->textureConfiguration.colourMask[0] );
+				params[0]->get( parsingContext.textureConfiguration.colourMask[0] );
 			}
 		}
 		CU_EndAttribute()
 
 		CU_ImplementAttributeParser( parserUnitMetalnessMask )
 		{
-			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+			auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
 
-			if ( !parsingContext->textureUnit )
+			if ( !parsingContext.textureUnit )
 			{
 				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
 			}
@@ -213,16 +213,16 @@ namespace castor3d
 			}
 			else
 			{
-				params[0]->get( parsingContext->textureConfiguration.metalnessMask[0] );
+				params[0]->get( parsingContext.textureConfiguration.metalnessMask[0] );
 			}
 		}
 		CU_EndAttribute()
 
 		CU_ImplementAttributeParser( parserUnitRoughnessMask )
 		{
-			auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( context );
+			auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
 
-			if ( !parsingContext->textureUnit )
+			if ( !parsingContext.textureUnit )
 			{
 				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
 			}
@@ -232,7 +232,7 @@ namespace castor3d
 			}
 			else
 			{
-				params[0]->get( parsingContext->textureConfiguration.roughnessMask[0] );
+				params[0]->get( parsingContext.textureConfiguration.roughnessMask[0] );
 			}
 		}
 		CU_EndAttribute()
@@ -268,13 +268,13 @@ namespace castor3d
 		return std::make_shared< MetallicRoughnessPbrPass >( parent );
 	}
 
-	castor::AttributeParsersBySection MetallicRoughnessPbrPass::createParsers()
+	castor::AttributeParsers MetallicRoughnessPbrPass::createParsers()
 	{
 		return createParsers( uint32_t( pbrmr::Section::ePass )
 			, uint32_t( pbrmr::Section::eTextureUnit ) );
 	}
 
-	castor::AttributeParsersBySection MetallicRoughnessPbrPass::createParsers( uint32_t mtlSectionID
+	castor::AttributeParsers MetallicRoughnessPbrPass::createParsers( uint32_t mtlSectionID
 		, uint32_t texSectionID )
 	{
 		static UInt32StrMap const textureChannels = []()
@@ -292,7 +292,7 @@ namespace castor3d
 			return result;
 		}();
 
-		castor::AttributeParsersBySection result;
+		castor::AttributeParsers result;
 
 		Pass::addParser( result, mtlSectionID, cuT( "albedo" ), pbrmr::parserPassAlbedo, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
 		Pass::addParser( result, mtlSectionID, cuT( "metallic" ), pbrmr::parserPassMetalness, { castor::makeParameter< castor::ParameterType::eFloat >() } );

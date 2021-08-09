@@ -418,7 +418,7 @@ namespace castor
 		 *\brief		Récupère le chemin, nom et extension du fichier
 		 *\return		La valeur
 		*/
-		inline	Path const & getFileFullPath()const
+		Path const & getFileFullPath()const
 		{
 			return m_fileFullPath;
 		}
@@ -430,7 +430,7 @@ namespace castor
 		 *\brief		Récupère le chemin du fichier
 		 *\return		La valeur
 		*/
-		inline Path getFilePath()const
+		Path getFilePath()const
 		{
 			return m_fileFullPath.getPath();
 		}
@@ -442,9 +442,14 @@ namespace castor
 		 *\brief		Récupère le nom et l'extension du fichier
 		 *\return		La valeur
 		*/
-		inline Path getFileName()const
+		Path getFileName()const
 		{
 			return Path{ m_fileFullPath.getFullFileName() };
+		}
+
+		operator bool()const
+		{
+			return isOk();
 		}
 
 	protected:

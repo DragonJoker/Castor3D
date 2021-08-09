@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CU_FileParser_H___
 #define ___CU_FileParser_H___
 
+#include "CastorUtils/Design/Signal.hpp"
 #include "CastorUtils/FileParser/AttributeParsersBySection.hpp"
 #include "CastorUtils/FileParser/ParserParameterTypeException.hpp"
 
@@ -11,87 +12,149 @@ See LICENSE file in root folder
 
 namespace castor
 {
-#define DO_WRITE_PARSER_NAME( funcname )\
-	funcname( castor::FileParser * parser, castor::ParserParameterArray const & params )
+#define CU_DO_WRITE_PARSER_NAME( funcname )\
+	funcname( castor::FileParserContext & context\
+		, castor::ParserParameterArray const & params )
 
-#define DO_WRITE_PARSER_END( retval )\
-		result = retval;
+#define CU_DO_WRITE_PARSER_CONTENT\
+		bool result = false;
+
+#define CU_DO_WRITE_PARSER_END( retval )\
+		result = retval;\
 
 	//!\~english	Define to ease the declaration of a parser.
 	//!\~french		Un define pour faciliter la déclaration d'un analyseur.
 #define CU_DeclareAttributeParser( funcname )\
-	bool DO_WRITE_PARSER_NAME( funcname );
+	bool CU_DO_WRITE_PARSER_NAME( funcname );
 
 	//!\~english	Define to ease the implementation of a parser.
 	//!\~french		Un define pour faciliter l'implémentation d'un analyseur.
 #define CU_ImplementAttributeParser( funcname )\
-	bool DO_WRITE_PARSER_NAME( funcname )\
+	bool CU_DO_WRITE_PARSER_NAME( funcname )\
 	{\
-		bool result = false;\
-		castor::FileParserContextSPtr context = parser->getContext();
+		CU_DO_WRITE_PARSER_CONTENT
 
 	//!\~english	Define to ease the implementation of a parser.
 	//!\~french		Un define pour faciliter l'implémentation d'un analyseur.
 #define CU_ImplementAttributeParserNmspc( nmspc, funcname )\
-	bool nmspc::DO_WRITE_PARSER_NAME( funcname )\
+	bool nmspc::CU_DO_WRITE_PARSER_NAME( funcname )\
 	{\
-		bool result = false;\
-		castor::FileParserContextSPtr context = parser->getContext();
+		CU_DO_WRITE_PARSER_CONTENT
 
 	//!\~english	Define to ease the implementation of a parser.
 	//!\~french		Un define pour faciliter l'implémentation d'un analyseur.
 #define CU_EndAttributePush( section )\
-		DO_WRITE_PARSER_END( true )\
-		context->m_sections.push_back( uint32_t( section ) );\
+		CU_DO_WRITE_PARSER_END( true )\
+		context.pendingSection = castor::SectionId( section );\
 		return result;\
 	}
 
 	//!\~english	Define to ease the implementation of a parser.
 	//!\~french		Un define pour faciliter l'implémentation d'un analyseur.
 #define CU_EndAttribute()\
-		DO_WRITE_PARSER_END( false )\
+		CU_DO_WRITE_PARSER_END( false )\
 		return result;\
 	}
 
 	//!\~english	Define to ease the implementation of a parser.
 	//!\~french		Un define pour faciliter l'implémentation d'un analyseur.
 #define CU_EndAttributePop()\
-		DO_WRITE_PARSER_END( false )\
-		context->m_sections.pop_back();\
+		CU_DO_WRITE_PARSER_END( false )\
+		context.sections.pop_back();\
 		return result;\
 	}
 
 	//!\~english	Define to ease the implementation of a parser which starts a block.
 	//!\~french		Un define pour faciliter l'implémentation d'un analyseur débutant un bloc.
 #define CU_ImplementAttributeParserBlock( funcname, sectionname )\
-	bool DO_WRITE_PARSER_NAME( funcname )\
+	bool CU_DO_WRITE_PARSER_NAME( funcname )\
 	{\
-		bool result = false;\
-		castor::FileParserContextSPtr context = parser->getContext();\
-		auto sectionName = uint32_t( sectionname );
+		auto sectionName = castor::SectionId( sectionname );\
+		CU_DO_WRITE_PARSER_CONTENT
 
 	//!\~english	Define to ease the implementation of a parser which starts a block.
 	//!\~french		Un define pour faciliter l'implémentation d'un analyseur débutant un bloc.
 #define CU_EndAttributeBlock()\
-		DO_WRITE_PARSER_END( false )\
-		context->m_sections.push_back( uint32_t( sectionName ) );\
+		CU_DO_WRITE_PARSER_END( false )\
+		context.pendingSection = sectionName;\
 		return result;\
 	}
 
 	//!\~english	Define to ease the call to FileParser::parseError.
 	//!\~french		Un define pour faciliter l'appel de FileParser::parseError.
 #define CU_ParsingError( error )\
-	parser->parseError( error )
+	context.preprocessed->parseError( error )
 
 	//!\~english	Define to ease the call to FileParser::parseWarning.
 	//!\~french		Un define pour faciliter l'appel de FileParser::parseWarning.
 #define CU_ParsingWarning( warning )\
-	parser->parseWarning( warning )
+	context.preprocessed->parseWarning( warning )
 
 	//!\~english	Define to ease creation of a section name.
 	//!\~french		Un define pour faciliter la création d'un nom de section.
 #define CU_MakeSectionName( a, b, c, d )\
-	( (uint32_t( a ) << 24 ) | ( uint32_t( b ) << 16 ) | ( uint32_t( c ) << 8 ) | ( uint32_t( d ) << 0 ) )
+	( (castor::SectionId( a ) << 24 ) | ( castor::SectionId( b ) << 16 ) | ( castor::SectionId( c ) << 8 ) | ( castor::SectionId( d ) << 0 ) )
+
+	class PreprocessedFile
+	{
+	public:
+		struct Action
+		{
+			Path file;
+			int line;
+			String name;
+			SectionAttributeParsers functions;
+			String params;
+		};
+
+	public:
+		CU_API PreprocessedFile( PreprocessedFile const & rhs ) = default;
+		CU_API PreprocessedFile( PreprocessedFile && rhs ) = default;
+		CU_API PreprocessedFile & operator=( PreprocessedFile const & rhs );
+		CU_API PreprocessedFile & operator=( PreprocessedFile && rhs );
+
+		CU_API PreprocessedFile( FileParser & parser );
+		CU_API PreprocessedFile( FileParser & parser
+			, FileParserContextSPtr context );
+
+		CU_API void addParser( Path file
+			, int line
+			, String name
+			, SectionAttributeParsers functions
+			, String params );
+		CU_API bool parse();
+
+		CU_API void parseError( String const & error );
+		CU_API void parseWarning( String const & warning );
+
+		FileParserContext & getContext()const
+		{
+			return *m_context;
+		}
+
+		uint32_t getCount()const
+		{
+			return uint32_t( m_actions.size() );
+		}
+
+		using ActionFunc = std::function< void( Action const & ) >;
+		using ActionSignal = castor::Signal< ActionFunc >;
+		using ActionConnection = castor::Connection< ActionSignal >;
+
+		ActionSignal onAction;
+
+	private:
+		bool doCheckParams( String params
+			, ParserParameterArray const & expected
+			, ParserParameterArray & received );
+		String doGetSectionsStack();
+
+	private:
+		FileParser & m_parser;
+		FileParserContextSPtr m_context;
+		std::vector< Action > m_actions;
+		Action m_popAction;
+	};
 
 	class FileParser
 	{
@@ -104,7 +167,7 @@ namespace castor
 		 *\brief		Constructeur.
 		 *\param[in]	rootSectionId	L'id de la section de root.
 		 */
-		CU_API FileParser( uint32_t rootSectionId );
+		CU_API FileParser( SectionId rootSectionId );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -116,7 +179,7 @@ namespace castor
 		 *\param[in]	rootSectionId	L'id de la section de root.
 		 */
 		CU_API FileParser( LoggerInstance & logger
-			, uint32_t rootSectionId );
+			, SectionId rootSectionId );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -124,6 +187,58 @@ namespace castor
 		 *\brief		Destructeur.
 		 */
 		CU_API virtual ~FileParser();
+		/**
+		 *\~english
+		 *\brief		Parsing function.
+		 *\param[in]	path	The file access path.
+		 *\return		\p true if OK.
+		 *\~french
+		 *\brief		Fonction de traitement.
+		 *\param[in]	path	Le chemin d'accès au fichier.
+		 *\return		\p true si tout s'est bien passé.
+		 */
+		CU_API PreprocessedFile processFile( Path const & path );
+		/**
+		 *\~english
+		 *\brief		Parsing function.
+		 *\param[in]	path	The file access path.
+		 *\param[in]	content	The file content.
+		 *\return		\p true if OK.
+		 *\~french
+		 *\brief		Fonction de traitement.
+		 *\param[in]	path	Le chemin d'accès au fichier.
+		 *\param[in]	content	Le contenu du fichier.
+		 *\return		\p true si tout s'est bien passé.
+		 */
+		CU_API PreprocessedFile processFile( Path const & path
+			, String const & content );
+		/**
+		 *\~english
+		 *\brief		Parsing function.
+		 *\param[in]	path	The file access path.
+		 *\return		\p true if OK.
+		 *\~french
+		 *\brief		Fonction de traitement.
+		 *\param[in]	path	Le chemin d'accès au fichier.
+		 *\return		\p true si tout s'est bien passé.
+		 */
+		CU_API void processFile( Path const & path
+			, PreprocessedFile & preprocessed );
+		/**
+		 *\~english
+		 *\brief		Parsing function.
+		 *\param[in]	path	The file access path.
+		 *\param[in]	content	The file content.
+		 *\return		\p true if OK.
+		 *\~french
+		 *\brief		Fonction de traitement.
+		 *\param[in]	path	Le chemin d'accès au fichier.
+		 *\param[in]	content	Le contenu du fichier.
+		 *\return		\p true si tout s'est bien passé.
+		 */
+		CU_API void processFile( Path const & path
+			, String const & content
+			, PreprocessedFile & preprocessed );
 		/**
 		 *\~english
 		 *\brief		Parsing function.
@@ -147,7 +262,8 @@ namespace castor
 		 *\param[in]	content	Le contenu du fichier.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		CU_API bool parseFile( Path const & path, String const & content );
+		CU_API bool parseFile( Path const & path
+			, String const & content );
 		/**
 		 *\~english
 		 *\brief		Logs an error in the log file.
@@ -156,7 +272,9 @@ namespace castor
 		 *\brief		Log une erreur dans le fichier de log.
 		 *\param[in]	error	Le texte de l'erreur.
 		 */
-		CU_API void parseError( String const & error );
+		CU_API void parseError( String const & functionName
+			, int lineIndex
+			, String const & error );
 		/**
 		 *\~english
 		 *\brief		Logs a warning in the log file.
@@ -165,24 +283,9 @@ namespace castor
 		 *\brief		Log un avertissement dans le fichier de log.
 		 *\param[in]	warning	Le texte de l'avertissement.
 		 */
-		CU_API void parseWarning( String const & warning );
-		/**
-		 *\~english
-		 *\brief		Tests if the params given to the function will be appropriate.
-		 *\param[in]	params		The given parameters.
-		 *\param[in]	expected	The expected parameters.
-		 *\param[in]	received	The filled parameters.
-		 *\return		\p false if \p params doesn't contain all expected parameters types.
-		 *\~french
-		 *\brief		Vérifie si les paramètres donnés à la fonction correspondent à ceux qu'elle attend.
-		 *\param[in]	params		Les paramètres donnés.
-		 *\param[in]	expected	Les paramètres attendus.
-		 *\param[in]	received	Les paramètres remplis.
-		 *\return		\p false si \p params ne contient pas tous les types de paramètres attendus par la fonction.
-		 */
-		CU_API bool checkParams( String params
-			, ParserParameterArray const & expected
-			, ParserParameterArray & received );
+		CU_API void parseWarning( String const & functionName
+			, int lineIndex
+			, String const & warning );
 		/**
 		 *\~english
 		 *\brief		adds a parser function to the parsers list.
@@ -197,17 +300,17 @@ namespace castor
 		 *\param[in]	function	La fonction d'analyse.
 		 *\param[in]	params		Les paramètres attendus.
 		 */
-		CU_API void addParser( uint32_t section
+		CU_API void addParser( SectionId section
 			, String const & name
 			, ParserFunction function
-			, ParserParameterArray && params = ParserParameterArray() );
+			, ParserParameterArray params = ParserParameterArray() );
 		/**
 		 *\~english
 		 *\brief		Tells if the read lines are to be ignored.
 		 *\~french
 		 *\brief		Dit si les lignes suivantes doivent être ignorées.
 		 */
-		inline bool isIgnored()const
+		bool isIgnored()const
 		{
 			return m_ignored;
 		}
@@ -217,19 +320,40 @@ namespace castor
 		 *\~french
 		 *\brief		Incrémente le niveau d'ignorés.
 		 */
-		inline void ignore()
+		void ignore()
 		{
 			m_ignored = true;
 		}
-		/**
-		 *\~english
-		 *\return		The parser context.
-		 *\~french
-		 *\return		Le contexte d'analyse.
-		 */
-		inline FileParserContextSPtr getContext()
+
+		PreprocessedFile & getPreprocessed()const
 		{
-			return m_context;
+			CU_Require( m_preprocessed );
+			return *m_preprocessed;
+		}
+
+		LoggerInstance & getLogger()const
+		{
+			return m_logger;
+		}
+
+		SectionId getRootSectionId()const
+		{
+			return m_rootSectionId;
+		}
+
+		void validate()
+		{
+			doValidate();
+		}
+		
+		String getSectionName( SectionId section )const
+		{
+			return doGetSectionName( section );
+		}
+
+		void cleanupParser( PreprocessedFile & preprocessed )
+		{
+			doCleanupParser( preprocessed );
 		}
 
 	protected:
@@ -241,25 +365,14 @@ namespace castor
 		 *\brief		Initialisation spécifique.
 		 *\param[in]	path	Le chemin d'accès au fichier.
 		 */
-		CU_API virtual void doInitialiseParser( Path const & path ) = 0;
+		CU_API virtual FileParserContextSPtr doInitialiseParser( Path const & path ) = 0;
 		/**
 		 *\~english
 		 *\brief		Specific cleanup.
 		 *\~french
 		 *\brief		Nettoyage spécifique.
 		 */
-		CU_API virtual void doCleanupParser() = 0;
-		/**
-		 *\~english
-		 *\brief		Function called when current section is out of bounds.
-		 *\param[in]	line	The current line.
-		 *\return		\p true if a brace is opened after this line, \p false if not.
-		 *\~french
-		 *\brief		Fonction appelée lorsque la section courante est hors limites.
-		 *\param[in]	line	La ligne en cours d'analyse.
-		 *\return		\p true si une accolade doit être ouverte à la ligne suivant, \p false sinon.
-		 */
-		CU_API virtual bool doDelegateParser( String const & line ) = 0;
+		CU_API virtual void doCleanupParser( PreprocessedFile & preprocessed ) = 0;
 		/**
 		 *\~english
 		 *\brief		Function called when no parser is found for the line.
@@ -270,7 +383,8 @@ namespace castor
 		 *\param[in]	error	Le texte de l'erreur.
 		 *\return		false si la ligne doit être ignorée.
 		 */
-		CU_API virtual bool doDiscardParser( String const & error ) = 0;
+		CU_API virtual bool doDiscardParser( PreprocessedFile & preprocessed
+			, String const & line );
 		/**
 		 *\~english
 		 *\brief		Function called when file parsing is completed with no error.
@@ -288,37 +402,52 @@ namespace castor
 		 *\param[in]	section	L'ID de section
 		 *\return		Le nom.
 		 */
-		CU_API virtual String doGetSectionName( uint32_t section ) = 0;
+		CU_API virtual String doGetSectionName( SectionId section )const = 0;
+		CU_API virtual std::unique_ptr< FileParser > doCreateParser()const = 0;
 
 	private:
-		bool doParseScriptLine( String & line );
-		bool doParseScriptBlockEnd();
-		bool doInvokeParser( String & line, AttributeParserMap const & parsers );
-		void doEnterBlock();
-		void doLeaveBlock();
+		bool doParseScriptLine( PreprocessedFile & preprocessed
+			, String & line
+			, int lineIndex );
+		void doParseScriptBlockBegin( PreprocessedFile & preprocessed
+			, int lineIndex );
+		bool doParseScriptBlockEnd( PreprocessedFile & preprocessed
+			, int lineIndex );
+		bool doInvokeParser( PreprocessedFile & preprocessed
+			, String & line
+			, int lineIndex );
+		void doEnterBlock( PreprocessedFile & preprocessed
+			, int lineIndex );
+		void doLeaveBlock( PreprocessedFile & preprocessed
+			, int lineIndex );
 		bool doIsInIgnoredBlock();
-		String doGetSectionsStack();
-		void doAddDefine( String const & param );
+		void doIncludeFile( PreprocessedFile & preprocessed
+			, int lineIndex
+			, String const & param );
+		void doAddDefine( int lineIndex
+			, String const & param );
 		void doCheckDefines( String & text );
 
 	private:
-		uint32_t m_rootSectionId;
-		int m_ignoreLevel;
+		SectionId m_rootSectionId;
+		int m_ignoreLevel{ 0 };
+		Path m_path;
+		String m_functionName;
 
 	protected:
 		LoggerInstance & m_logger;
-		//!\~english	The map holding the parsers, sorted by section.
-		//!\~french		La map de parseurs, triés par section.
-		AttributeParsersBySection m_parsers;
-		//!\~english	The parser context.
-		//!\~french		Le contexte du parseur.
-		FileParserContextSPtr m_context;
+		//!\~english	The parser functions.
+		//!\~french		Les fonctions du parseur.
+		AttributeParsers m_parsers;
 		//!\~english	Tells the lines parsed are to be ignored.
 		//!\~french		Dit que les ligne slues sont ignorées.
-		bool m_ignored;
+		bool m_ignored{ false };
 		//!\~english	The defines map.
 		//!\~french		La map de defines.
 		StrStrMap m_defines;
+		//!\~english	The parser context.
+		//!\~french		Le contexte du parseur.
+		PreprocessedFile * m_preprocessed{ nullptr };
 	};
 }
 

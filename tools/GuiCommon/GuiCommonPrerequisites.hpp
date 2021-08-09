@@ -203,7 +203,9 @@ namespace GuiCommon
 	 *\param[in]	fileName	Le nom du fichier de scène.
 	 *\return		true si tout s'est bien passé.
 	 */
-	castor3d::RenderTargetSPtr loadScene( castor3d::Engine & engine, castor::Path const & fileName );
+	castor3d::RenderTargetSPtr loadScene( castor3d::Engine & engine
+		, castor::Path const & fileName
+		, castor3d::ProgressBar * progress );
 	/**
 	 *\~english
 	 *\brief		Loads the eingine plug-ins.

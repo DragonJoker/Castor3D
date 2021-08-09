@@ -317,6 +317,8 @@ namespace castor3d
 		, m_size{ size }
 		, m_configUbo{ m_device.uboPools->getBuffer< Configuration >( 0u ) }
 	{
+		log::debug << "Created RenderWindow, size: " << size << std::endl;
+
 		if ( !m_surface )
 		{
 			CU_Exception( "Could not create Vulkan surface." );
@@ -334,6 +336,7 @@ namespace castor3d
 		getEngine()->getMaterialCache().initialise( m_device, getEngine()->getPassesType() );
 		doCreateProgram();
 		doCreateSwapchain();
+		getEngine()->registerWindow( *this );
 	}
 
 	RenderWindow::~RenderWindow()
@@ -492,6 +495,7 @@ namespace castor3d
 
 		if ( !m_dirty.exchange( true ) )
 		{
+			log::debug << "Resizing RenderWindow to " << size << std::endl;
 			getListener()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
 				, [this]( RenderDevice const & device
 					, QueueData const & queueData )
@@ -885,13 +889,17 @@ namespace castor3d
 
 	void RenderWindow::doCreatePickingPass( QueueData const & queueData )
 	{
-		auto & target = *getRenderTarget();
-		m_picking = std::make_shared< Picking >( getOwner()->getGraphResourceHandler()
-			, m_device
-			, queueData
-			, m_size
-			, target.getTechnique()->getMatrixUbo()
-			, target.getCuller() );
+		auto target = getRenderTarget();
+
+		if ( target )
+		{
+			m_picking = std::make_shared< Picking >( getOwner()->getGraphResourceHandler()
+				, m_device
+				, queueData
+				, m_size
+				, target->getTechnique()->getMatrixUbo()
+				, target->getCuller() );
+		}
 	}
 
 	void RenderWindow::doDestroyPickingPass()
@@ -901,30 +909,34 @@ namespace castor3d
 
 	void RenderWindow::doCreateRenderQuad( QueueData const & queueData )
 	{
-		auto & target = *getRenderTarget();
-		m_renderQuad = RenderQuadBuilder{}
-			.binding( VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D )
-			.binding( VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER )
-			.texcoordConfig( rq::Texcoord{} )
-			.tex3DResult( m_tex3DTo2DIntermediate )
-			.build( m_device
-				, getName()
-				, VK_FILTER_LINEAR );
-		m_renderQuad->createPipeline( VkExtent2D{ m_size[0], m_size[1] }
-			, castor::Position{}
-			, m_program
-			, *m_renderPass );
-		auto & handler = m_device.renderSystem.getEngine()->getGraphResourceHandler();
-		auto & context = m_device.makeContext();
+		auto target = getRenderTarget();
 
-		for ( auto & intermediate : m_intermediateSampledViews )
+		if ( target )
 		{
-			m_renderQuad->registerPassInputs( { RenderQuad::makeDescriptorWrite( handler.createImageView( context, intermediate.viewId ), m_renderQuad->getSampler().getSampler(), 0u )
-					, RenderQuad::makeDescriptorWrite( m_configUbo, 1u ) }
-				, intermediate.factors.invertY );
-		}
+			m_renderQuad = RenderQuadBuilder{}
+				.binding( VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D )
+				.binding( VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER )
+				.texcoordConfig( rq::Texcoord{} )
+				.tex3DResult( m_tex3DTo2DIntermediate )
+				.build( m_device
+					, getName()
+					, VK_FILTER_LINEAR );
+			m_renderQuad->createPipeline( VkExtent2D{ m_size[0], m_size[1] }
+				, castor::Position{}
+				, m_program
+				, *m_renderPass );
+			auto & handler = m_device.renderSystem.getEngine()->getGraphResourceHandler();
+			auto & context = m_device.makeContext();
 
-		m_renderQuad->initialisePasses();
+			for ( auto & intermediate : m_intermediateSampledViews )
+			{
+				m_renderQuad->registerPassInputs( { RenderQuad::makeDescriptorWrite( handler.createImageView( context, intermediate.viewId ), m_renderQuad->getSampler().getSampler(), 0u )
+						, RenderQuad::makeDescriptorWrite( m_configUbo, 1u ) }
+					, intermediate.factors.invertY );
+			}
+
+			m_renderQuad->initialisePasses();
+		}
 	}
 
 	void RenderWindow::doDestroyRenderQuad()
@@ -934,6 +946,11 @@ namespace castor3d
 
 	void RenderWindow::doCreateCommandBuffers( QueueData const & queueData )
 	{
+		if ( !getRenderTarget() )
+		{
+			return;
+		}
+
 		auto pass = 0u;
 		m_commandBuffers.resize( m_intermediates.size() );
 
@@ -1010,7 +1027,12 @@ namespace castor3d
 	void RenderWindow::doCreateIntermediateViews( QueueData const & queueData )
 	{
 		auto target = m_renderTarget.lock();
-		CU_Require( target );
+
+		if ( !target )
+		{
+			return;
+		}
+
 		target->listIntermediateViews( m_intermediates );
 
 		VkExtent2D extent{ m_size.getWidth(), m_size.getHeight() };
