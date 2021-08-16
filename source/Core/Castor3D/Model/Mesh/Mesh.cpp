@@ -1,19 +1,19 @@
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Scene/Scene.hpp"
-
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
 using namespace castor;
 
 namespace castor3d
 {
 	Mesh::Mesh( String const & name, Scene & scene )
-		: Resource< Mesh >{ name }
+		: Resource{ name }
 		, Animable{ *scene.getEngine() }
 		, m_scene{ &scene }
 		, m_modified{ false }
@@ -23,18 +23,6 @@ namespace castor3d
 	Mesh::~Mesh()
 	{
 		CU_Assert( m_submeshes.empty(), "Did you forget to call Mesh::cleanup ?" );
-	}
-
-	void Mesh::cleanup()
-	{
-		Animable::cleanupAnimations();
-
-		for ( auto submesh : m_submeshes )
-		{
-			submesh->cleanup();
-		}
-
-		m_submeshes.clear();
 	}
 
 	void Mesh::updateContainers()
@@ -147,5 +135,25 @@ namespace castor3d
 		{
 			doRemoveAnimation( name );
 		}
+	}
+
+	void Mesh::doInitialise()
+	{
+		for ( auto submesh : m_submeshes )
+		{
+			submesh->initialise( *getEngine()->getRenderSystem()->getMainRenderDevice() );
+		}
+	}
+
+	void Mesh::doCleanup()
+	{
+		Animable::cleanupAnimations();
+
+		for ( auto submesh : m_submeshes )
+		{
+			submesh->cleanup();
+		}
+
+		m_submeshes.clear();
 	}
 }

@@ -250,29 +250,25 @@ namespace castor
 
 	//*********************************************************************************************
 
-	Font::Font( String const & p_name, uint32_t p_height )
-		: Resource< Font >( p_name )
-		, m_height( p_height )
-		, m_maxHeight( 0 )
-		, m_maxTop( 0 )
-		, m_maxWidth( 0 )
+	Font::Font( String const & name, uint32_t height )
+		: Named{ name }
+		, m_height{ height }
+		, m_maxHeight{ 0 }
+		, m_maxTop{ 0 }
+		, m_maxWidth{ 0 }
 	{
 	}
 
-	Font::Font( String const & p_name, uint32_t p_height, Path const & p_path )
-		: Resource< Font >( p_name )
-		, m_height( p_height )
-		, m_maxHeight( 0 )
-		, m_maxTop( 0 )
-		, m_maxWidth( 0 )
-		, m_glyphLoader( std::make_unique< ft::SFreeTypeFontImpl >( p_path, p_height ) )
-		, m_pathFile( p_path )
+	Font::Font( String const & name, uint32_t height, Path const & path )
+		: Named{ name }
+		, m_height{ height }
+		, m_maxHeight{ 0 }
+		, m_maxTop{ 0 }
+		, m_maxWidth{ 0 }
+		, m_glyphLoader{ std::make_unique< ft::SFreeTypeFontImpl >( path, height ) }
+		, m_pathFile{ path }
 	{
-		BinaryLoader()( *this, p_path, p_height );
-	}
-
-	Font::~Font()
-	{
+		BinaryLoader{}( *this, path, height );
 	}
 
 	void Font::loadGlyph( char32_t p_char )
