@@ -175,8 +175,6 @@ namespace CastorViewer
 
 				if ( target )
 				{
-					m_renderPanel->setTarget( target );
-					m_mainScene = target->getScene();
 
 					auto size = make_wxSize( target->getSize() );
 
@@ -187,11 +185,9 @@ namespace CastorViewer
 					}
 					else
 					{
-						m_renderPanel->disableWindowResize();
 						Maximize( false );
 						SetPosition( wxPoint{} );
 						SetClientSize( size );
-						m_renderPanel->enableWindowResize();
 					}
 
 #if wxCHECK_VERSION( 2, 9, 0 )
@@ -199,6 +195,9 @@ namespace CastorViewer
 					SetMinClientSize( size );
 
 #endif
+
+					m_renderPanel->setTarget( target );
+					m_mainScene = target->getScene();
 
 					if ( isCastor3DThreaded )
 					{

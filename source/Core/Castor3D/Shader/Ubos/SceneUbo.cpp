@@ -212,8 +212,9 @@ namespace castor3d
 	void SceneUbo::setWindowSize( castor::Size const & window )
 	{
 		CU_Require( m_ubo );
-		m_ubo.getData().clipInfo[0] = float( window[0] );
-		m_ubo.getData().clipInfo[1] = float( window[1] );
+		auto & data = m_ubo.getData();
+		data.clipInfo[0] = float( window[0] );
+		data.clipInfo[1] = float( window[1] );
 	}
 
 	//*********************************************************************************************

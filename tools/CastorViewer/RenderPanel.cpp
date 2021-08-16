@@ -70,6 +70,19 @@ namespace CastorViewer
 
 			return result;
 		}
+
+		std::array< wxTimer *, eTIMER_ID_COUNT > createTimers( wxWindow * window )
+		{
+			std::array< wxTimer *, eTIMER_ID_COUNT > result;
+			result[0] = nullptr;
+
+			for ( int i = 1; i < eTIMER_ID_COUNT; i++ )
+			{
+				result[i] = new wxTimer( window, i );
+			}
+
+			return result;
+		}
 	}
 
 	RenderPanel::RenderPanel( wxWindow * parent
@@ -78,19 +91,12 @@ namespace CastorViewer
 		, wxSize const & size
 		, long style )
 		: wxPanel( parent, id, pos, size, style )
+		, m_timers{ createTimers( this ) }
+		, m_cursorArrow{ new wxCursor( wxCURSOR_ARROW ) }
+		, m_cursorHand{ new wxCursor( wxCURSOR_HAND ) }
+		, m_cursorNone{ new wxCursor( wxCURSOR_BLANK ) }
 		, m_camSpeed( DEF_CAM_SPEED, Range< float >{ MIN_CAM_SPEED, MAX_CAM_SPEED } )
 	{
-		m_timers[0] = nullptr;
-
-		for ( int i = 1; i < eTIMER_ID_COUNT; i++ )
-		{
-			m_timers[i] = new wxTimer( this, i );
-		}
-
-		m_cursorArrow = new wxCursor( wxCURSOR_ARROW );
-		m_cursorHand = new wxCursor( wxCURSOR_HAND );
-		m_cursorNone = new wxCursor( wxCURSOR_BLANK );
-
 		m_renderWindow = std::make_shared< castor3d::RenderWindow >( cuT( "RenderPanel" )
 			, *wxGetApp().getCastor()
 			, GuiCommon::makeSize( GetClientSize() )
@@ -129,14 +135,6 @@ namespace CastorViewer
 
 	void RenderPanel::setTarget( castor3d::RenderTargetSPtr target )
 	{
-		auto sizeWnd = GuiCommon::makeSize( GetClientSize() );
-		castor::Size sizeScreen;
-		castor::System::getScreenSize( 0, sizeScreen );
-		GetParent()->SetClientSize( sizeWnd.getWidth(), sizeWnd.getHeight() );
-		GetParent()->SetMinClientSize( GuiCommon::make_wxSize( target->getSize() ) );
-		sizeWnd = GuiCommon::makeSize( GetParent()->GetClientSize() );
-		GetParent()->SetPosition( wxPoint( std::abs( int( sizeScreen.getWidth() ) - int( sizeWnd.getWidth() ) ) / 2
-			, std::abs( int( sizeScreen.getHeight() ) - int( sizeWnd.getHeight() ) ) / 2 ) );
 		m_listener = m_renderWindow->getListener();
 		m_renderWindow->initialise( target );
 		auto & scene = target->getScene();
