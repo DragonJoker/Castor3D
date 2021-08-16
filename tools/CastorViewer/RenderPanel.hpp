@@ -130,11 +130,8 @@ namespace CastorViewer
 		bool m_mouseMiddleDown{ false };
 		bool m_resizeWindow{ true };
 		std::atomic_bool m_movementStarted{ false };
-		wxTimer * m_timers[eTIMER_ID_COUNT];
+		std::array< wxTimer *, eTIMER_ID_COUNT > m_timers;
 		castor3d::RenderWindowSPtr m_renderWindow;
-		castor3d::CameraWPtr m_camera;
-		castor3d::SceneWPtr m_scene;
-		castor3d::FrameListenerSPtr m_listener;
 		wxCursor * m_cursorArrow;
 		wxCursor * m_cursorHand;
 		wxCursor * m_cursorNone;
@@ -149,6 +146,10 @@ namespace CastorViewer
 		GuiCommon::NodeState * m_currentState{ nullptr };
 		castor3d::GeometrySPtr m_selectedGeometry;
 		castor3d::SubmeshSPtr m_selectedSubmesh;
+
+		castor3d::CameraWPtr m_camera;
+		castor3d::SceneWPtr m_scene;
+		castor3d::FrameListenerSPtr m_listener;
 	};
 }
 

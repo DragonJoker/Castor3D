@@ -58,7 +58,8 @@ namespace castor3d
 		if ( result )
 		{
 			m_ubo = device.uboPools->getBuffer< Configuration >( 0u );
-			m_ubo.getData().maxParticleCount = uint32_t( m_parent.getMaxParticlesCount() );
+			auto & data = m_ubo.getData();
+			data.maxParticleCount = uint32_t( m_parent.getMaxParticlesCount() );
 		}
 
 		if ( result )
