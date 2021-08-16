@@ -5,6 +5,8 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 
+#include <CastorUtils/Miscellaneous/Debug.hpp>
+
 #include <ashespp/Core/Instance.hpp>
 
 #include <RenderGraph/GraphContext.hpp>
@@ -239,6 +241,12 @@ namespace castor3d
 				, gpu
 				, getQueueCreateInfos( queueFamilies ) ) ) }
 	{
+		device->setCallstackCallback( []()
+			{
+				std::stringstream callback;
+				callback << castor::Debug::Backtrace{ 20, 6 };
+				return callback.str();
+			} );
 		for ( auto & queuesData : queueFamilies )
 		{
 			uint32_t index = 0u;
@@ -271,13 +279,6 @@ namespace castor3d
 
 		bufferPool = std::make_shared< GpuBufferPool >( renderSystem, *this, cuT( "GlobalBufferPool" ) );
 		uboPools = std::make_shared< UniformBufferPools >( renderSystem, *this );
-		m_context = std::make_unique< crg::GraphContext >( *device
-			, VkPipelineCache{}
-			, device->getAllocationCallbacks()
-			, device->getMemoryProperties()
-			, device->getProperties()
-			, false
-			, device->vkGetDeviceProcAddr );
 	}
 
 	RenderDevice::~RenderDevice()
@@ -345,5 +346,32 @@ namespace castor3d
 	QueueDataWrapper RenderDevice::graphicsData()const
 	{
 		return QueueDataWrapper{ m_preferredGraphicsQueue };
+	}
+
+	crg::GraphContext & RenderDevice::makeContext()const
+	{
+		auto lock( castor::makeUniqueLock( m_mutex ) );
+		auto ires = m_contexts.emplace( std::this_thread::get_id(), nullptr );
+		auto it = ires.first;
+
+		if ( ires.second )
+		{
+			it->second = std::make_unique< crg::GraphContext >( *device
+				, VkPipelineCache{}
+				, device->getAllocationCallbacks()
+				, device->getMemoryProperties()
+				, device->getProperties()
+				, false
+				, device->vkGetDeviceProcAddr );
+			it->second->setCallstackCallback( []()
+				{
+					std::stringstream callback;
+					callback << castor::Debug::Backtrace{ 20, 6 };
+					return callback.str();
+				} );
+		}
+
+		return *it->second;
+
 	}
 }
