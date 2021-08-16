@@ -61,11 +61,26 @@ namespace Bloom
 
 	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
 	{
-		m_hiPass->accept( visitor );
+		if ( m_hiPass )
+		{
+			m_hiPass->accept( visitor );
+		}
+
 #if !Bloom_DebugHiPass
-		m_blurXPass->accept( visitor );
-		m_blurYPass->accept( visitor );
-		m_combinePass->accept( visitor );
+		if ( m_blurXPass )
+		{
+			m_blurXPass->accept( visitor );
+		}
+
+		if ( m_blurYPass )
+		{
+			m_blurYPass->accept( visitor );
+		}
+
+		if ( m_combinePass )
+		{
+			m_combinePass->accept( visitor );
+		}
 
 		for ( auto & view : m_blurViews )
 		{

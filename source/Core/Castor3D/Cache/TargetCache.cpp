@@ -65,16 +65,24 @@ namespace castor3d
 		}
 	}
 
-	void RenderTargetCache::render( RenderDevice const & device
+	crg::SemaphoreWaitArray RenderTargetCache::render( RenderDevice const & device
 		, RenderInfo & info
-		, ashes::Queue const & queue )
+		, ashes::Queue const & queue
+		, crg::SemaphoreWaitArray signalsToWait )
 	{
 		LockType lock{ castor::makeUniqueLock( *this ) };
+		crg::SemaphoreWaitArray result;
 
 		for ( auto target : m_renderTargets[size_t( TargetType::eTexture )] )
 		{
-			target->render( device, info, queue );
+			result.push_back( target->render( device, info, queue, signalsToWait ) );
+			signalsToWait.clear();
 		}
+
+		result.insert( result.end()
+			, signalsToWait.begin()
+			, signalsToWait.end() );
+		return result;
 	}
 
 	void RenderTargetCache::clear()

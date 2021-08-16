@@ -86,9 +86,10 @@ namespace castor3d
 		 *\param[in]		device	Le device GPU.
 		 *\param[in,out]	info	Reçoit les informations de rendu.
 		 */
-		C3D_API void render( RenderDevice const & device
+		C3D_API crg::SemaphoreWaitArray render( RenderDevice const & device
 			, RenderInfo & info
-			, ashes::Queue const & queue );
+			, ashes::Queue const & queue
+			, crg::SemaphoreWaitArray signalsToWait );
 		/**
 		 *\~english
 		 *\brief		Flushes the collection.

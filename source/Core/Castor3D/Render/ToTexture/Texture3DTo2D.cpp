@@ -534,5 +534,15 @@ namespace castor3d
 		return result;
 	}
 
+	void Texture3DTo2D::render( ashes::Queue const & queue
+		, ashes::VkSemaphoreArray & semaphores
+		, ashes::VkPipelineStageFlagsArray & stages )
+	{
+		if ( m_texture3DToScreen[m_index].commands.commandBuffer )
+		{
+			m_texture3DToScreen[m_index].commands.submit( queue, semaphores, stages );
+		}
+	}
+
 	//*********************************************************************************************
 }

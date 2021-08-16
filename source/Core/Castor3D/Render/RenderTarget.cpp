@@ -507,15 +507,17 @@ namespace castor3d
 		}
 	}
 
-	void RenderTarget::render( RenderDevice const & device
+	crg::SemaphoreWait RenderTarget::render( RenderDevice const & device
 		, RenderInfo & info
-		, ashes::Queue const & queue )
+		, ashes::Queue const & queue
+		, crg::SemaphoreWaitArray const & signalsToWait )
 	{
 		if ( !m_initialised )
 		{
-			return;
+			return crg::SemaphoreWait{};
 		}
 
+		crg::SemaphoreWait result;
 		SceneSPtr scene = getScene();
 
 		if ( scene )
@@ -528,11 +530,13 @@ namespace castor3d
 				{
 					getEngine()->getRenderSystem()->pushScene( scene.get() );
 					scene->getGeometryCache().fillInfo( info );
-					doRender( device, info, queue, getCamera() );
+					result = doRender( device, info, queue, getCamera(), signalsToWait );
 					getEngine()->getRenderSystem()->popScene();
 				}
 			}
 		}
+
+		return result;
 	}
 
 	ViewportType RenderTarget::getViewportType()const
@@ -825,13 +829,13 @@ namespace castor3d
 		m_combineStages.push_back( makeShaderState( *renderSystem.getMainRenderDevice(), m_combinePxl ) );
 	}
 
-	void RenderTarget::doRender( RenderDevice const & device
+	crg::SemaphoreWait RenderTarget::doRender( RenderDevice const & device
 		, RenderInfo & info
 		, ashes::Queue const & queue
-		, CameraSPtr camera )
+		, CameraSPtr camera
+		, crg::SemaphoreWaitArray signalsToWait )
 	{
 		SceneSPtr scene = getScene();
-		crg::SemaphoreWaitArray signalsToWait;
 
 		if ( m_type == TargetType::eWindow )
 		{
@@ -849,6 +853,8 @@ namespace castor3d
 		// Then run the graph
 		m_signalFinished = m_runnable->run( m_signalFinished
 			, queue );
+
+		return m_signalFinished;
 	}
 
 	crg::SemaphoreWait RenderTarget::doRenderOverlays( RenderDevice const & device

@@ -21,11 +21,16 @@ namespace castor3d
 			, QueueData const & queueData
 			, castor::String const & name );
 
-		C3D_API void submit( ashes::Queue const & queue )const;
+		C3D_API void submit( ashes::Queue const & queue
+			, VkPipelineStageFlags stage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT )const;
 		C3D_API ashes::Semaphore const & submit( ashes::Queue const & queue
-			, ashes::Semaphore const & toWait )const;
+			, ashes::Semaphore const & toWait
+			, VkPipelineStageFlags stage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT )const;
 		C3D_API ashes::Semaphore const & submit( ashes::Queue const & queue
 			, crg::SemaphoreWait const & toWait )const;
+		C3D_API void submit( ashes::Queue const & queue
+			, ashes::VkSemaphoreArray & semaphores
+			, ashes::VkPipelineStageFlagsArray & stages );
 
 		ashes::CommandBufferPtr commandBuffer;
 		ashes::SemaphorePtr semaphore;
