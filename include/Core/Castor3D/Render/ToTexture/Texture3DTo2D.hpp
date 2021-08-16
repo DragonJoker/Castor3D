@@ -41,6 +41,9 @@ namespace castor3d
 		C3D_API void update( CpuUpdater & updater );
 		C3D_API crg::SemaphoreWait render( ashes::Queue const & queue
 			, crg::SemaphoreWait const & toWait );
+		C3D_API void render( ashes::Queue const & queue
+			, ashes::VkSemaphoreArray & semaphores
+			, ashes::VkPipelineStageFlagsArray & stages );
 
 		Texture const & getTarget()
 		{

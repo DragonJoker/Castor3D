@@ -141,11 +141,7 @@ namespace castor3d
 		C3D_API VkFormat selectSuitableFormat( std::vector< VkFormat > const & formats
 			, VkFormatFeatureFlags requiredFeatures )const;
 		C3D_API QueueDataWrapper graphicsData()const;
-
-		crg::GraphContext & makeContext()const
-		{
-			return *m_context;
-		}
+		C3D_API crg::GraphContext & makeContext()const;
 
 		ashes::Device const * operator->()const
 		{
@@ -199,12 +195,16 @@ namespace castor3d
 		ashes::Queue * transferQueue{};
 		GpuBufferPoolSPtr bufferPool;
 		UniformBufferPoolsSPtr uboPools;
-		std::unique_ptr< crg::GraphContext > m_context;
 
 	private:
 		QueuesData * m_preferredGraphicsQueue{};
 		QueuesData * m_preferredComputeQueue{};
 		QueuesData * m_preferredTransferQueue{};
+
+		using GraphContextPtr = std::unique_ptr< crg::GraphContext >;
+		using ThreadGraphContexts = std::map< std::thread::id, GraphContextPtr >;
+		mutable std::mutex m_mutex;
+		mutable ThreadGraphContexts m_contexts;
 	};
 }
 

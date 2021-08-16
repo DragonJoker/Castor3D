@@ -171,6 +171,7 @@ namespace castor3d
 
 	void RenderLoop::doGpuStep( RenderInfo & info )
 	{
+		crg::SemaphoreWaitArray toWait;
 		{
 			auto guard = makeBlockGuard(
 				[this]()
@@ -209,16 +210,15 @@ namespace castor3d
 			uploadResources.commands.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 			device.uboPools->upload( *uploadResources.commands.commandBuffer );
 			uploadResources.commands.commandBuffer->end();
-			queueData->queue->submit( { *uploadResources.commands.commandBuffer }
-				, {}
-				, {}
-				, {}
-				, uploadResources.fence.get() );
-			uploadResources.fence->wait( ashes::MaxTimeout );
-			uploadResources.fence->reset();
+			uploadResources.commands.submit( *queueData->queue
+				, { VK_NULL_HANDLE, 0u } );
 
 			// Render
-			getEngine()->getRenderTargetCache().render( device, info, *queueData->queue );
+			toWait = getEngine()->getRenderTargetCache().render( device
+				, info
+				, *queueData->queue
+				, { { *uploadResources.commands.semaphore
+					, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT } } );
 
 			// Usually GPU cleanup
 			doProcessEvents( EventType::eQueueRender, device, *queueData );
@@ -227,7 +227,8 @@ namespace castor3d
 
 		for ( auto & window : getEngine()->getRenderWindows() )
 		{
-			window.second->render( m_first );
+			window.second->render( info, m_first, toWait );
+			toWait.clear();
 		}
 
 		m_first = false;
