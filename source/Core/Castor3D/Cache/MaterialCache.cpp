@@ -40,7 +40,7 @@ namespace castor3d
 			else
 			{
 				m_defaultMaterial = m_elements.find( Material::DefaultMaterialName );
-				m_defaultMaterial->initialise( device, *device.graphicsData() );
+				m_defaultMaterial->initialise();
 			}
 
 			m_passBuffer = std::make_shared< PassBuffer >( *getEngine()

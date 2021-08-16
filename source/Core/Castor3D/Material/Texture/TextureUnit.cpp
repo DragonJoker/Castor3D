@@ -293,25 +293,23 @@ namespace castor3d
 				m_texture->generateMipmaps( device );
 			}
 
-			m_descriptor = ashes::WriteDescriptorSet
-			{
-				0u,
-				0u,
-				VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-				{
-					{
-						sampler->getSampler(),
-						m_texture->getDefaultView().getSampledView(),
-						VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-					}
-				}
-			};
+			m_descriptor = { 0u
+				, 0u
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, { { sampler->getSampler()
+					, m_texture->getDefaultView().getSampledView()
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } };
 			m_name = m_texture->getImage().getName();
 		}
 
 		if ( m_texture )
 		{
 			log::info << "Loaded texture [" << toString() << "] image (" << *m_texture << ")" << std::endl;
+		}
+		else
+		{
+			CU_Failure( "Couldn't load texture" );
+			log::error << "Couldn't load texture [" << toString() << "]" << std::endl;
 		}
 
 		m_device = &device;
