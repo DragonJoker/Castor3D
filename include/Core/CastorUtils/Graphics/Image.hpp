@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Data/BinaryLoader.hpp"
 #include "CastorUtils/Data/BinaryWriter.hpp"
 #include "CastorUtils/Data/Path.hpp"
-#include "CastorUtils/Design/Resource.hpp"
+#include "CastorUtils/Design/Named.hpp"
 #include "CastorUtils/Graphics/Colour.hpp"
 #include "CastorUtils/Graphics/PixelBuffer.hpp"
 #include "CastorUtils/Graphics/ImageLayout.hpp"
@@ -15,7 +15,7 @@ See LICENSE file in root folder
 namespace castor
 {
 	class Image
-		: public Resource< Image >
+		: public Named
 	{
 	private:
 		friend class Font;
@@ -51,8 +51,8 @@ namespace castor
 			, Path const & path
 			, Size const & size
 			, uint8_t const * buffer = nullptr )
-			: Resource< Image >( std::move( name ) )
-			, m_buffer( std::make_shared< PxBuffer< PFDst > >( size, buffer, PFSrc ) )
+			: Resource{ std::move( name ) }
+			, m_buffer{ std::make_shared< PxBuffer< PFDst > >( size, buffer, PFSrc ) }
 			, m_pathFile{ std::move( path ) }
 		{
 			CU_CheckInvariants();

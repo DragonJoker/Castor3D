@@ -71,9 +71,9 @@ function( PostEffectsBuild )
 		endif()
 
 		if( ${CASTOR_BUILD_POSTFX_DRAWEDGES} )
-			set( Build ${MtBr} )
+			set( Build ${DrEd} )
 			add_subdirectory( Plugins/PostEffects/DrawEdgesPostEffect )
-			set( MtBr ${Build} PARENT_SCOPE )
+			set( DrEd ${Build} PARENT_SCOPE )
 		endif()
 
 		set( CastorMinLibraries

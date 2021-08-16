@@ -112,7 +112,7 @@ namespace castor3d
 				, [element]( RenderDevice const & device
 					, QueueData const & queueData )
 				{
-					element->initialise( device, queueData );
+					element->initialise();
 				} ) );
 		};
 		auto cpuEvtClean = [this]( auto element )

@@ -22,7 +22,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class Mesh
-		: public castor::Resource< Mesh >
+		: public castor::Resource
 		, public Animable
 	{
 	public:
@@ -73,13 +73,6 @@ namespace castor3d
 		 *\brief		Opérateur d'affectation par copie.
 		 */
 		C3D_API Mesh & operator=( Mesh const & rhs ) = delete;
-		/**
-		 *\~english
-		 *\brief		Clears all submeshes
-		 *\~french
-		 *\brief		Supprime les sous maillages
-		 */
-		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Computes the bounding box and sphere from the submeshes.
@@ -304,6 +297,10 @@ namespace castor3d
 		{
 			return m_scene;
 		}
+
+	private:
+		void doInitialise()override;
+		void doCleanup()override;
 
 	private:
 		friend class MeshGenerator;
