@@ -243,6 +243,9 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	source_group( "Source Files\\Data\\Minizip" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 	source_group( "Source Files\\Data\\Minizip" FILES ${${PROJECT_NAME}_FOLDER_SRC_C_FILES} )
 
+	set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Design/Resource.cpp
+	)
 	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/ArrayView.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/BlockGuard.hpp
@@ -260,17 +263,21 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/NonCopyable.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/OwnedBy.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/Resource.hpp
-		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/Resource.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/ScopeGuard.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/Signal.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/Templates.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/UnicityException.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/Unique.hpp
 	)
+	set( ${PROJECT_NAME}_SRC_FILES
+		${${PROJECT_NAME}_SRC_FILES}
+		${${PROJECT_NAME}_FOLDER_SRC_FILES}
+	)
 	set( ${PROJECT_NAME}_HDR_FILES
 		${${PROJECT_NAME}_HDR_FILES}
 		${${PROJECT_NAME}_FOLDER_HDR_FILES}
 	)
+	source_group( "Source Files\\Design" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 	source_group( "Header Files\\Design" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
 
 	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
@@ -821,6 +828,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 			CXX_EXTENSIONS OFF
 			FOLDER "Core"
 	)
+
 	add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
 	target_add_doc_ex( ${PROJECT_NAME} "French" "*.h *.hpp" ${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME} )
 	target_add_doc_ex( ${PROJECT_NAME} "English" "*.h *.hpp" ${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME} )

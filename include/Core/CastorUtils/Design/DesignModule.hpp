@@ -95,13 +95,12 @@ namespace castor
 	class ScopeGuard;
 	/**
 	\~english
-	\brief		External resource representation
-	\remark		A resource is a collectionnable object. You can change it's name, the Collection is noticed of the change
+	\brief		External resource representation.
+	\remarks	They are meant to be loaded asynchronously.
 	\~french
-	\brief		Représentation d'une ressource externe
-	\remark		Une ressource est un objet collectionnable. Si le nom de la ressource est changé, la Collection est notifiée du changement
+	\brief		Représentation d'une ressource externe.
+	\remarks	Elles sont faites pour être chargées de manière asynchrone.
 	*/
-	template< class ResType >
 	class Resource;
 	/**
 	\~english
@@ -302,6 +301,8 @@ namespace castor
 
 	template< typename T >
 	static inline bool constexpr isGroupChangeTrackedT = IsGroupChangeTrackedT< T >::value;
+
+	CU_DeclareCUSmartPtr( castor, Resource, CU_API );
 	//@}
 }
 

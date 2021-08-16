@@ -395,7 +395,7 @@ namespace castor3d
 						, [element]( RenderDevice const & device
 							, QueueData const & queueData )
 						{
-							element->initialise( device, queueData );
+							element->initialise();
 						} ) );
 					this->m_materialsListeners.emplace( element
 						, element->onChanged.connect( [this]( Material const & material )

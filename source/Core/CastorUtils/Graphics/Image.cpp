@@ -17,7 +17,7 @@ namespace castor
 		, PixelFormat format
 		, uint8_t const * buffer
 		, PixelFormat bufferFormat )
-		: Resource< Image >{ name }
+		: Named{ name }
 		, m_pathFile{ path }
 		, m_buffer{ PxBufferBase::create( size, format, buffer, bufferFormat ) }
 		, m_layout{ *m_buffer }
@@ -46,7 +46,7 @@ namespace castor
 		, Path const & path
 		, ImageLayout layout
 		, PxBufferBaseSPtr buffer )
-		: Resource< Image >{ std::move( name ) }
+		: Named{ name }
 		, m_pathFile{ path }
 		, m_buffer{ ( buffer
 			? buffer
@@ -60,7 +60,7 @@ namespace castor
 	}
 
 	Image::Image( Image const & image )
-		: Resource< Image >( image )
+		: Named{ image.getName() }
 		, m_pathFile{ image.m_pathFile }
 		, m_buffer{ image.m_buffer->clone() }
 		, m_layout{ image.m_layout }
@@ -70,7 +70,6 @@ namespace castor
 
 	Image & Image::operator=( Image const & image )
 	{
-		Resource< Image >::operator=( image );
 		m_pathFile = image.m_pathFile;
 		m_layout = image.m_layout;
 		m_buffer = image.m_buffer ? image.m_buffer->clone() : nullptr;

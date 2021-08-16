@@ -4,7 +4,6 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_GLYPH_H___
 #define ___CASTOR_GLYPH_H___
 
-#include "CastorUtils/Design/Resource.hpp"
 #include "CastorUtils/Graphics/Position.hpp"
 #include "CastorUtils/Graphics/Size.hpp"
 

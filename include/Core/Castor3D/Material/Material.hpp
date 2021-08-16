@@ -14,7 +14,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class Material
-		: public castor::Resource< Material >
+		: public castor::Resource
 		, public std::enable_shared_from_this< Material >
 		, public castor::OwnedBy< Engine >
 	{
@@ -41,23 +41,6 @@ namespace castor3d
 		 *\brief		Destructeur.
 		 */
 		C3D_API virtual ~Material();
-		/**
-		 *\~english
-		 *\brief		Initialises the material and all it's passes.
-		 *\param[in]	device	The GPU device.
-		 *\~french
-		 *\brief		Initialise le matériau et toutes ses passes.
-		 *\param[in]	device	Le device GPU.
-		 */
-		C3D_API void initialise( RenderDevice const & device
-			, QueueData const & queueData );
-		/**
-		 *\~english
-		 *\brief		Flushes passes.
-		 *\~french
-		 *\brief		Supprime les passes.
-		 */
-		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Creates a pass.
@@ -189,6 +172,8 @@ namespace castor3d
 
 	private:
 		void onPassChanged( Pass const & pass );
+		void doInitialise()override;
+		void doCleanup()override;
 
 	public:
 		//!\~english	The signal raised when the material has changed.
