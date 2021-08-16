@@ -19,18 +19,20 @@ namespace castor3d
 	{
 	}
 
-	void CommandsSemaphore::submit( ashes::Queue const & queue )const
+	void CommandsSemaphore::submit( ashes::Queue const & queue
+		, VkPipelineStageFlags stage )const
 	{
 		queue.submit( ashes::VkCommandBufferArray{ *commandBuffer }
 			, ashes::VkSemaphoreArray{}
-			, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT }
+			, { stage }
 			, ashes::VkSemaphoreArray{} );
 	}
 
 	ashes::Semaphore const & CommandsSemaphore::submit( ashes::Queue const & queue
-		, ashes::Semaphore const & toWait )const
+		, ashes::Semaphore const & toWait
+		, VkPipelineStageFlags stage )const
 	{
-		return submit( queue, { toWait, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT } );
+		return submit( queue, { toWait, stage } );
 	}
 
 	ashes::Semaphore const & CommandsSemaphore::submit( ashes::Queue const & queue
@@ -41,5 +43,17 @@ namespace castor3d
 			, toWait.dstStageMask
 			, *semaphore );
 		return *semaphore;
+	}
+
+	void CommandsSemaphore::submit( ashes::Queue const & queue
+		, ashes::VkSemaphoreArray & semaphores
+		, ashes::VkPipelineStageFlagsArray & stages )
+	{
+		queue.submit( *commandBuffer
+			, semaphores
+			, stages
+			, *semaphore );
+		semaphores = { *semaphore };
+		stages = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
 	}
 }
