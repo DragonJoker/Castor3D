@@ -184,7 +184,9 @@ namespace castor3d
 		 *\brief		Renders one frame.
 		 *\param[in]	signalOnly	\p true pour ne faire que signaler les semaphores.
 		 */
-		C3D_API void render( bool signalOnly );
+		C3D_API void render( RenderInfo & info
+			, bool signalOnly
+			, crg::SemaphoreWaitArray toWait );
 		/**
 		 *\~english
 		 *\brief		Resizes the window.
@@ -453,8 +455,9 @@ namespace castor3d
 		void doDestroySaveData();
 		void doResetSwapChain();
 		RenderingResources * doGetResources();
-		void doWaitFrame();
-		void doSubmitFrame( RenderingResources * resources );
+		void doWaitFrame( crg::SemaphoreWaitArray toWait );
+		void doSubmitFrame( RenderingResources * resources
+			, crg::SemaphoreWaitArray toWait );
 		void doPresentFrame( RenderingResources * resources );
 		bool doCheckNeedReset( VkResult errCode
 			, bool acquisition
