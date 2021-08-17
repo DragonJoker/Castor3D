@@ -178,6 +178,15 @@ namespace castor3d
 		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
+		 *\brief			Updates the render window, CPU wise.
+		 *\param[in, out]	updater	The update data.
+		 *\~french
+		 *\brief			Met à jour la render window, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
+		 */
+		C3D_API void update( GpuUpdater & updater );
+		/**
+		 *\~english
 		 *\brief		Renders one frame.
 		 *\param[in]	signalOnly	\p true to only signal the semaphores.
 		 *\~french
@@ -396,12 +405,7 @@ namespace castor3d
 		{
 			return m_debugConfig;
 		}
-
-		ProgressBar & getProgressBar()const
-		{
-			return *m_progressBar;
-		}
-			/**@}*/
+		/**@}*/
 		/**
 		*\~english
 		*name
@@ -424,11 +428,6 @@ namespace castor3d
 		void enableSaveFrame()
 		{
 			m_toSave = true;
-		}
-
-		void enableLoading()
-		{
-			m_loading = true;
 		}
 		/**@}*/
 

@@ -18,7 +18,6 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
-#include "Castor3D/Miscellaneous/LoadingScreen.hpp"
 #include "Castor3D/Model/Mesh/Importer.hpp"
 #include "Castor3D/Model/Mesh/ImporterFactory.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
