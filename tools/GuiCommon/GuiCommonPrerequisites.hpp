@@ -204,8 +204,7 @@ namespace GuiCommon
 	 *\return		true si tout s'est bien passé.
 	 */
 	castor3d::RenderTargetSPtr loadScene( castor3d::Engine & engine
-		, castor::Path const & fileName
-		, castor3d::ProgressBar * progress );
+		, castor::Path const & fileName );
 	/**
 	 *\~english
 	 *\brief		Loads the eingine plug-ins.
