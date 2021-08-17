@@ -22,7 +22,6 @@ using Bool = int;
 #include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
 #include <Castor3D/Event/Frame/InitialiseEvent.hpp>
 #include <Castor3D/Material/Material.hpp>
-#include <Castor3D/Miscellaneous/ProgressBar.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Plugin/Plugin.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
@@ -270,8 +269,7 @@ namespace GuiCommon
 	}
 
 	RenderTargetSPtr loadScene( Engine & engine
-		, castor::Path const & fileName
-		, castor3d::ProgressBar * progress )
+		, castor::Path const & fileName )
 	{
 		RenderTargetSPtr result;
 
@@ -285,18 +283,6 @@ namespace GuiCommon
 				{
 					SceneFileParser parser( engine );
 					auto preprocessed = parser.processFile( fileName );
-
-					if ( progress )
-					{
-						progress->setRange( preprocessed.getCount() );
-						progress->setLabel( "Loading scene" );
-						progress->setTitle( "Initialising" );
-					}
-
-					auto connection = preprocessed.onAction.connect( [progress, &fileName]( castor::PreprocessedFile::Action const & action )
-						{
-							castor3d::stepProgressBar( progress );
-						} );
 
 					if ( preprocessed.parse() )
 					{
