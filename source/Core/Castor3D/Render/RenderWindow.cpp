@@ -336,7 +336,6 @@ namespace castor3d
 		getEngine()->getMaterialCache().initialise( m_device, getEngine()->getPassesType() );
 		doCreateProgram();
 		doCreateSwapchain();
-		getEngine()->registerWindow( *this );
 	}
 
 	RenderWindow::~RenderWindow()
@@ -400,10 +399,10 @@ namespace castor3d
 
 	void RenderWindow::update( CpuUpdater & updater )
 	{
-#if C3D_DebugQuads
 		if ( auto target = getRenderTarget() )
 		{
 			target->update( updater );
+#if C3D_DebugQuads
 			auto technique = target->getTechnique();
 			updater.combineIndex = m_debugConfig.debugIndex;
 			auto & intermediate = m_intermediates[m_debugConfig.debugIndex];
@@ -423,8 +422,16 @@ namespace castor3d
 			auto & config = m_configUbo.getData();
 			config.multiply = castor::Point4f{ intermediate.factors.multiply };
 			config.add = castor::Point4f{ intermediate.factors.add };
-		}
 #endif
+		}
+	}
+
+	void RenderWindow::update( GpuUpdater & updater )
+	{
+		if ( auto target = getRenderTarget() )
+		{
+			target->update( updater );
+		}
 	}
 
 	void RenderWindow::render( RenderInfo & info
