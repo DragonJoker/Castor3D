@@ -104,17 +104,17 @@ namespace grayscale
 			, renderTarget
 			, renderSystem
 			, params }
-		, m_configUbo{ renderSystem.getMainRenderDevice()->uboPools->getBuffer< castor::Point3f >( 0u ) }
+		, m_configUbo{ renderSystem.getRenderDevice().uboPools->getBuffer< castor::Point3f >( 0u ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "GrayScale", getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "GrayScale", getFragmentProgram() }
-		, m_stages{ makeShaderState( *renderSystem.getMainRenderDevice(), m_vertexShader )
-			, makeShaderState( *renderSystem.getMainRenderDevice(), m_pixelShader ) }
+		, m_stages{ makeShaderState( renderSystem.getRenderDevice(), m_vertexShader )
+			, makeShaderState( renderSystem.getRenderDevice(), m_pixelShader ) }
 	{
 	}
 
 	PostEffect::~PostEffect()
 	{
-		getRenderSystem()->getMainRenderDevice()->uboPools->putBuffer( m_configUbo );
+		getRenderSystem()->getRenderDevice().uboPools->putBuffer( m_configUbo );
 	}
 
 	castor3d::PostEffectSPtr PostEffect::create( castor3d::RenderTarget & renderTarget

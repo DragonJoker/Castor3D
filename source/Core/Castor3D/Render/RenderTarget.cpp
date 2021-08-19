@@ -251,7 +251,7 @@ namespace castor3d
 		, m_index{ ++sm_uiCount }
 		, m_name{ cuT( "Target" ) + string::toString( m_index ) }
 		, m_graph{ getOwner()->getGraphResourceHandler(), m_name }
-		, m_velocity{ *getOwner()->getRenderSystem()->getMainRenderDevice()
+		, m_velocity{ getOwner()->getRenderSystem()->getRenderDevice()
 			, getOwner()->getGraphResourceHandler()
 			, "Velocity"
 			, 0u
@@ -262,7 +262,7 @@ namespace castor3d
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
-		, m_objects{ *getOwner()->getRenderSystem()->getMainRenderDevice()
+		, m_objects{ getOwner()->getRenderSystem()->getRenderDevice()
 			, getOwner()->getGraphResourceHandler()
 			, "Scene"
 			, 0u
@@ -275,7 +275,7 @@ namespace castor3d
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
-		, m_overlays{ *getOwner()->getRenderSystem()->getMainRenderDevice()
+		, m_overlays{ getOwner()->getRenderSystem()->getRenderDevice()
 			, getOwner()->getGraphResourceHandler()
 			, "Overlays"
 			, 0u
@@ -286,7 +286,7 @@ namespace castor3d
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
-		, m_combined{ *getOwner()->getRenderSystem()->getMainRenderDevice()
+		, m_combined{ getOwner()->getRenderSystem()->getRenderDevice()
 			, getOwner()->getGraphResourceHandler()
 			, "Target"
 			, 0u
@@ -825,8 +825,8 @@ namespace castor3d
 			m_combinePxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		m_combineStages.push_back( makeShaderState( *renderSystem.getMainRenderDevice(), m_combineVtx ) );
-		m_combineStages.push_back( makeShaderState( *renderSystem.getMainRenderDevice(), m_combinePxl ) );
+		m_combineStages.push_back( makeShaderState( renderSystem.getRenderDevice(), m_combineVtx ) );
+		m_combineStages.push_back( makeShaderState( renderSystem.getRenderDevice(), m_combinePxl ) );
 	}
 
 	crg::SemaphoreWait RenderTarget::doRender( RenderDevice const & device

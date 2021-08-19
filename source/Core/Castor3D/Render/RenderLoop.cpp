@@ -54,18 +54,9 @@ namespace castor3d
 
 	void RenderLoop::cleanup()
 	{
-		if ( m_renderSystem.hasMainDevice() )
+		if ( m_renderSystem.hasDevice() )
 		{
-			auto guard = makeBlockGuard(
-				[this]()
-				{
-					m_renderSystem.setCurrentRenderDevice( m_renderSystem.getMainRenderDevice().get() );
-				},
-				[this]()
-				{
-					m_renderSystem.setCurrentRenderDevice( nullptr );
-				} );
-			auto & device = m_renderSystem.getCurrentRenderDevice();
+			auto & device = m_renderSystem.getRenderDevice();
 			auto data = device.graphicsData();
 			getEngine()->getFrameListenerCache().forEach( [&device, &data]( FrameListener & listener )
 				{
@@ -136,7 +127,7 @@ namespace castor3d
 
 	void RenderLoop::doRenderFrame( castor::Milliseconds tslf )
 	{
-		if ( m_renderSystem.hasMainDevice() )
+		if ( m_renderSystem.hasDevice() )
 		{
 			bool first = m_first;
 			RenderInfo & info = m_debugOverlays->beginFrame();
@@ -171,80 +162,70 @@ namespace castor3d
 
 	void RenderLoop::doGpuStep( RenderInfo & info )
 	{
+		auto & windows = getEngine()->getRenderWindows();
 		crg::SemaphoreWaitArray toWait;
-		{
-			auto guard = makeBlockGuard(
-				[this]()
-				{
-					m_renderSystem.setCurrentRenderDevice( m_renderSystem.getMainRenderDevice().get() );
-				},
-				[this]()
-				{
-					m_renderSystem.setCurrentRenderDevice( nullptr );
-				} );
-			auto & device = m_renderSystem.getCurrentRenderDevice();
-			auto queueData = device.graphicsData();
+		auto & device = m_renderSystem.getRenderDevice();
+		auto queueData = device.graphicsData();
 
-			if ( !m_uploadResources[0].fence )
+		if ( !m_uploadResources[0].fence )
+		{
+			for ( auto & resources : m_uploadResources )
 			{
-				for ( auto & resources : m_uploadResources )
+				resources.commands =
 				{
-					resources.commands =
-					{
-						queueData->commandPool->createCommandBuffer( "RenderLoopUboUpload" ),
-						device->createSemaphore( "RenderLoopUboUpload" ),
-					};
-					resources.fence = device->createFence();
-				}
+					queueData->commandPool->createCommandBuffer( "RenderLoopUboUpload" ),
+					device->createSemaphore( "RenderLoopUboUpload" ),
+				};
+				resources.fence = device->createFence( VK_FENCE_CREATE_SIGNALED_BIT );
 			}
-
-			// Usually GPU initialisation
-			doProcessEvents( EventType::ePreRender, device, *queueData );
-			doProcessEvents( EventType::ePreRender );
-
-			// GPU Update
-			GpuUpdater updater{ device, info };
-			getEngine()->update( updater );
-
-			auto & uploadResources = m_uploadResources[m_currentUpdate];
-			uploadResources.commands.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-			device.uboPools->upload( *uploadResources.commands.commandBuffer );
-			uploadResources.commands.commandBuffer->end();
-			uploadResources.commands.submit( *queueData->queue
-				, { VK_NULL_HANDLE, 0u } );
-
-			// Render
-			toWait = getEngine()->getRenderTargetCache().render( device
-				, info
-				, *queueData->queue
-				, { { *uploadResources.commands.semaphore
-					, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT } } );
-
-			// Usually GPU cleanup
-			doProcessEvents( EventType::eQueueRender, device, *queueData );
-			doProcessEvents( EventType::eQueueRender );
 		}
 
-		for ( auto & window : getEngine()->getRenderWindows() )
+		auto & uploadResources = m_uploadResources[m_currentUpdate];
+
+		// Usually GPU initialisation
+		doProcessEvents( EventType::ePreRender, device, *queueData );
+		doProcessEvents( EventType::ePreRender );
+
+		// GPU Update
+		GpuUpdater updater{ device, info };
+		getEngine()->update( updater );
+
+		uploadResources.fence->wait( ashes::MaxTimeout );
+		uploadResources.fence->reset();
+		uploadResources.commands.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+		device.uboPools->upload( *uploadResources.commands.commandBuffer );
+		uploadResources.commands.commandBuffer->end();
+		queueData->queue->submit( *uploadResources.commands.commandBuffer
+			, ( uploadResources.used
+				? VkSemaphore{ VK_NULL_HANDLE }
+				: *uploadResources.commands.semaphore )
+			, ( uploadResources.used
+				? 0u
+				: VK_PIPELINE_STAGE_TRANSFER_BIT )
+			, *uploadResources.commands.semaphore
+			, *uploadResources.fence );
+
+		// Render
+		toWait = getEngine()->getRenderTargetCache().render( device
+			, info
+			, *queueData->queue
+			, { { *uploadResources.commands.semaphore
+			, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT } } );
+
+		// Usually GPU cleanup
+		doProcessEvents( EventType::eQueueRender, device, *queueData );
+		doProcessEvents( EventType::eQueueRender );
+
+		for ( auto & window : windows )
 		{
-			window.second->render( info, m_first, toWait );
-			toWait.clear();
+			window.second->render( info
+				, m_first
+				, toWait );
 		}
 
+		uploadResources.used = toWait.empty();
 		m_first = false;
-
-		{
-			auto guard = makeBlockGuard(
-				[this]()
-				{
-					m_renderSystem.setCurrentRenderDevice( m_renderSystem.getMainRenderDevice().get() );
-				},
-				[this]()
-				{
-					m_renderSystem.setCurrentRenderDevice( nullptr );
-				} );
-			m_debugOverlays->endGpuTask();
-		}
+		m_debugOverlays->endGpuTask();
 	}
 
 	void RenderLoop::doCpuStep( castor::Milliseconds tslf )

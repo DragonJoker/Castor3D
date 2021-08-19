@@ -21,10 +21,7 @@ namespace castor3d
 		, m_debugName{ std::move( debugName ) }
 		, m_data{ std::move( data ) }
 	{
-		if ( m_renderSystem.hasCurrentRenderDevice() )
-		{
-			initialise( m_renderSystem.getCurrentRenderDevice() );
-		}
+		initialise( m_renderSystem.getRenderDevice() );
 	}
 
 	uint32_t PoolUniformBuffer::initialise( RenderDevice const & device )

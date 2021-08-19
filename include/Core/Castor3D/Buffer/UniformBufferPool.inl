@@ -13,7 +13,7 @@ namespace castor3d
 		auto key = uint32_t( flags );
 		auto it = m_buffers.emplace( key, BufferArray{} ).first;
 		auto itB = doFindBuffer( it->second, ashes::getAlignedSize( sizeof( DataT ), alignment ) );
-		auto & device = *renderSystem.getMainRenderDevice();
+		auto & device = renderSystem.getRenderDevice();
 
 		if ( itB == it->second.end() )
 		{
