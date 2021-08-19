@@ -6,7 +6,6 @@ See LICENSE file in root folder
 
 #include "BackgroundModule.hpp"
 
-#include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Render/PBR/IblTextures.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
@@ -122,7 +121,7 @@ namespace castor3d
 		*\param[in] updater
 		*	Les données d'update.
 		*/
-		C3D_API void update( CpuUpdater & updater );
+		C3D_API void update( CpuUpdater & updater )const;
 		/**
 		*\~english
 		*\brief
@@ -135,7 +134,7 @@ namespace castor3d
 		*\param[in] updater
 		*	Les données d'update.
 		*/
-		C3D_API void update( GpuUpdater & updater );
+		C3D_API void update( GpuUpdater & updater )const;
 		/**
 		*\~english
 		*\return
@@ -245,8 +244,8 @@ namespace castor3d
 		virtual void doCleanup() = 0;
 		virtual void doCpuUpdate( CpuUpdater & updater
 			, castor::Matrix4x4f & mtxView
-			, castor::Matrix4x4f & mtxProj ) = 0;
-		virtual void doGpuUpdate( GpuUpdater & updater ) = 0;
+			, castor::Matrix4x4f & mtxProj )const = 0;
+		virtual void doGpuUpdate( GpuUpdater & updater )const = 0;
 
 	public:
 		OnBackgroundChanged onChanged;

@@ -8,6 +8,8 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
+#include "Castor3D/Render/Viewport.hpp"
+
 #include <RenderGraph/RunnablePasses/RenderPass.hpp>
 
 #include <ashespp/Pipeline/GraphicsPipeline.hpp>
@@ -83,9 +85,10 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
-		SceneBackground & m_background;
+		SceneBackground const * m_background;
 		VkExtent2D m_size;
 		bool m_usesDepth;
+		Viewport m_viewport;
 		OnBackgroundChangedConnection m_onBackgroundChanged;
 		ashes::VertexBufferPtr< Cube > m_vertexBuffer;
 		ashes::BufferPtr< uint16_t > m_indexBuffer;
@@ -104,6 +107,7 @@ namespace castor3d
 		BackgroundRenderer( crg::FrameGraph & graph
 			, crg::FramePass const * previousPass
 			, RenderDevice const & device
+			, castor::String const & name
 			, SceneBackground & background
 			, HdrConfigUbo const & hdrConfigUbo
 			, SceneUbo const & sceneUbo
@@ -114,6 +118,7 @@ namespace castor3d
 		BackgroundRenderer( crg::FrameGraph & graph
 			, crg::FramePass const * previousPass
 			, RenderDevice const & device
+			, castor::String const & name
 			, SceneBackground & background
 			, HdrConfigUbo const & hdrConfigUbo
 			, SceneUbo const & sceneUbo
@@ -121,6 +126,7 @@ namespace castor3d
 			: BackgroundRenderer{ graph
 				, previousPass
 				, device
+				, name
 				, background
 				, hdrConfigUbo
 				, sceneUbo
@@ -132,6 +138,7 @@ namespace castor3d
 		BackgroundRenderer( crg::FrameGraph & graph
 			, crg::FramePass const * previousPass
 			, RenderDevice const & device
+			, castor::String const & name
 			, SceneBackground & background
 			, HdrConfigUbo const & hdrConfigUbo
 			, SceneUbo const & sceneUbo
@@ -140,6 +147,7 @@ namespace castor3d
 			: BackgroundRenderer{ graph
 				, previousPass
 				, device
+				, name
 				, background
 				, hdrConfigUbo
 				, sceneUbo
@@ -176,6 +184,8 @@ namespace castor3d
 	private:
 		crg::FramePass const & doCreatePass( crg::FrameGraph & graph
 			, crg::FramePass const * previousPass
+			, castor::String const & name
+			, SceneBackground & background
 			, HdrConfigUbo const & hdrConfigUbo
 			, SceneUbo const & sceneUbo
 			, crg::ImageViewId const & colour
@@ -183,7 +193,6 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
-		SceneBackground & m_background;
 		MatrixUbo m_matrixUbo;
 		UniformBufferOffsetT< ModelUboConfiguration > m_modelUbo;
 		crg::FramePass const * m_backgroundPassDesc{};

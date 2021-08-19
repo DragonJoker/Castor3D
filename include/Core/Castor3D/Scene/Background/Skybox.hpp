@@ -340,8 +340,8 @@ namespace castor3d
 		void doCleanup()override;
 		void doCpuUpdate( CpuUpdater & updater
 			, castor::Matrix4x4f & mtxView
-			, castor::Matrix4x4f & mtxProj )override;
-		void doGpuUpdate( GpuUpdater & updater )override;
+			, castor::Matrix4x4f & mtxProj )const override;
+		void doGpuUpdate( GpuUpdater & updater )const override;
 		bool doInitialiseTexture( RenderDevice const & device );
 		void doInitialiseLayerTexture( RenderDevice const & device
 			, QueueData const & queueData );
@@ -358,7 +358,6 @@ namespace castor3d
 		castor::Size m_equiSize;
 		TextureLayoutSPtr m_crossTexture;
 		castor::Path m_crossTexturePath;
-		Viewport m_viewport;
 	};
 }
 

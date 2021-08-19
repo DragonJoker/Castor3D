@@ -73,6 +73,7 @@ namespace castor3d
 		, m_backgroundRenderer{ castor::makeUnique< BackgroundRenderer >( m_graph
 			, nullptr
 			, m_device
+			, getName()
 			, m_background
 			, m_hdrConfigUbo
 			, m_sceneUbo
