@@ -495,7 +495,7 @@ int main( int argc, char * argv[] )
 			auto & renderSystem = *engine.getRenderSystem();
 			auto surface( renderSystem.getInstance().createSurface( renderSystem.getPhysicalDevice( 0u )
 				, ashes::WindowHandle{ std::make_unique< DummyWindowHandle >() } ) );
-			auto & device = *renderSystem.getMainRenderDevice();
+			auto & device = renderSystem.getRenderDevice();
 
 			if ( extension == cuT( "cmsh" ) )
 			{

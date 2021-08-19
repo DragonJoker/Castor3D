@@ -413,16 +413,9 @@ namespace castor3d
 
 	void Engine::sendEvent( GpuFrameEventUPtr event )
 	{
-		if ( m_renderSystem && m_renderSystem->hasCurrentRenderDevice() )
-		{
-			auto & device = m_renderSystem->getCurrentRenderDevice();
-			auto data = device.graphicsData();
-			event->apply( device, *data );
-		}
-		else
-		{
-			postEvent( std::move( event ) );
-		}
+		auto & device = m_renderSystem->getRenderDevice();
+		auto data = device.graphicsData();
+		event->apply( device, *data );
 	}
 
 	void Engine::postEvent( GpuFrameEventUPtr event )
@@ -682,7 +675,7 @@ namespace castor3d
 	{
 		pushJob( [this, job]()
 			{
-				auto & device = *m_renderSystem->getMainRenderDevice();
+				auto & device = m_renderSystem->getRenderDevice();
 				auto data = device.graphicsData();
 				job( device, *data );
 			} );

@@ -118,7 +118,7 @@ namespace castor3d
 
 		if ( iresult.second )
 		{
-			auto & device = *getScene()->getEngine()->getRenderSystem()->getMainRenderDevice();
+			auto & device = getScene()->getEngine()->getRenderSystem()->getRenderDevice();
 			auto & uboPools = *device.uboPools;
 
 			for ( auto entry : m_baseEntries )
@@ -157,7 +157,7 @@ namespace castor3d
 			if ( instIt->second.empty() )
 			{
 				m_instances.erase( instIt );
-				auto & device = *getScene()->getEngine()->getRenderSystem()->getMainRenderDevice();
+				auto & device = getScene()->getEngine()->getRenderSystem()->getRenderDevice();
 				auto & uboPools = *device.uboPools;
 
 				for ( auto & entry : m_baseEntries )
@@ -366,7 +366,7 @@ namespace castor3d
 
 	void GeometryCache::doRegister( Geometry & geometry )
 	{
-		auto & device = *getScene()->getEngine()->getRenderSystem()->getMainRenderDevice();
+		auto & device = getScene()->getEngine()->getRenderSystem()->getRenderDevice();
 		m_connections.emplace( &geometry
 			, geometry.onMaterialChanged.connect( [this, &device]( Geometry const & geometry
 				, Submesh const & submesh
@@ -417,7 +417,7 @@ namespace castor3d
 			{
 				for ( auto & pass : *geometry.getMaterial( *submesh ) )
 				{
-					doRemoveEntry( *getScene()->getEngine()->getRenderSystem()->getMainRenderDevice()
+					doRemoveEntry( getScene()->getEngine()->getRenderSystem()->getRenderDevice()
 						, geometry
 						, *submesh
 						, *pass );

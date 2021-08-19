@@ -56,7 +56,7 @@ namespace castor3d
 		, m_viewport{ engine }
 	{
 		m_hdr = false;
-		m_textureId = { *engine.getRenderSystem()->getMainRenderDevice()
+		m_textureId = { engine.getRenderSystem()->getRenderDevice()
 			, engine.getGraphResourceHandler()
 			, cuT( "ColourBackground_Colour" )
 			, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT

@@ -123,7 +123,7 @@ namespace castor3d
 	void UniformBufferPool::doCreateStagingBuffer()
 	{
 		auto & renderSystem = *getRenderSystem();
-		auto & device = *renderSystem.getMainRenderDevice();
+		auto & device = renderSystem.getRenderDevice();
 		ashes::QueueShare sharingMode
 		{
 			{
@@ -151,7 +151,7 @@ namespace castor3d
 		, UniformBufferPool::BufferArray & buffers )
 	{
 		auto & renderSystem = *getRenderSystem();
-		auto & device = *renderSystem.getMainRenderDevice();
+		auto & device = renderSystem.getRenderDevice();
 		ashes::QueueShare sharingMode
 		{
 			{

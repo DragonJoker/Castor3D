@@ -218,17 +218,6 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		RenderDevice const & getCurrentRenderDevice()const
-		{
-			CU_Require( m_currentDevice );
-			return *m_currentDevice;
-		}
-
-		bool hasCurrentRenderDevice()const
-		{
-			return m_currentDevice != nullptr;
-		}
-
 		GpuInformations const & getGpuInformations()const
 		{
 			return m_gpuInformations;
@@ -239,15 +228,15 @@ namespace castor3d
 			return m_desc.name;
 		}
 
-		bool hasMainDevice()const
+		bool hasDevice()const
 		{
-			return m_mainDevice != nullptr;
+			return m_device != nullptr;
 		}
 
-		RenderDeviceSPtr getMainRenderDevice()const
+		RenderDevice const & getRenderDevice()const
 		{
-			CU_Require( hasMainDevice() );
-			return m_mainDevice;
+			CU_Require( hasDevice() );
+			return *m_device;
 		}
 
 		OverlayRendererSPtr getOverlayRenderer()const
@@ -326,11 +315,6 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		void setCurrentRenderDevice( RenderDevice const * device )
-		{
-			m_currentDevice = device;
-		}
-
 		template< class Rep, class Period >
 		void incGpuTime( std::chrono::duration< Rep, Period > const & time )
 		{
@@ -360,8 +344,7 @@ namespace castor3d
 		ashes::StringArray m_extensionNames;
 		ashes::VkExtensionPropertiesArray m_globalLayerExtensions;
 		std::map< std::string, ashes::VkExtensionPropertiesArray > m_layersExtensions;
-		RenderDeviceSPtr m_mainDevice;
-		RenderDevice const * m_currentDevice{ nullptr };
+		RenderDeviceSPtr m_device;
 		std::stack< SceneRPtr > m_stackScenes;
 		castor::Nanoseconds m_gpuTime;
 	};

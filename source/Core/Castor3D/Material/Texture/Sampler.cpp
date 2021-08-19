@@ -56,7 +56,7 @@ namespace castor3d
 			cache.add( name, sampler );
 		}
 
-		sampler->initialise( *engine.getRenderSystem()->getMainRenderDevice() );
+		sampler->initialise( engine.getRenderSystem()->getRenderDevice() );
 		return sampler;
 	}
 

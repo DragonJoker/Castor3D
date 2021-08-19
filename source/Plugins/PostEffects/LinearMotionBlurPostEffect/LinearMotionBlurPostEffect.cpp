@@ -123,11 +123,11 @@ namespace motion_blur
 			, renderSystem
 			, parameters
 			, 1u }
-		, m_ubo{ renderSystem.getMainRenderDevice()->uboPools->getBuffer< Configuration >( 0u ) }
+		, m_ubo{ renderSystem.getRenderDevice().uboPools->getBuffer< Configuration >( 0u ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "LinearMotionBlur", getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "LinearMotionBlur", getFragmentProgram() }
-		, m_stages{ makeShaderState( *renderSystem.getMainRenderDevice(), m_vertexShader )
-			, makeShaderState( *renderSystem.getMainRenderDevice(), m_pixelShader ) }
+		, m_stages{ makeShaderState( renderSystem.getRenderDevice(), m_vertexShader )
+			, makeShaderState( renderSystem.getRenderDevice(), m_pixelShader ) }
 	{
 		parameters.get( cuT( "vectorDivider" ), m_configuration.vectorDivider );
 		parameters.get( cuT( "samplesCount" ), m_configuration.samplesCount );
@@ -136,7 +136,7 @@ namespace motion_blur
 
 	PostEffect::~PostEffect()
 	{
-		getRenderSystem()->getMainRenderDevice()->uboPools->putBuffer( m_ubo );
+		getRenderSystem()->getRenderDevice().uboPools->putBuffer( m_ubo );
 	}
 
 	castor3d::PostEffectSPtr PostEffect::create( castor3d::RenderTarget & renderTarget

@@ -871,7 +871,7 @@ namespace castor3d
 					pipeline->setScissor( makeScissor( m_size ) );
 				}
 
-				auto & device = *renderSystem.getMainRenderDevice();
+				auto & device = renderSystem.getRenderDevice();
 				auto addBindings = doCreateAdditionalBindings( flags );
 				pipeline->setDescriptorSetLayout( device->createDescriptorSetLayout( getName() + "Add"
 					, std::move( addBindings ) ) );

@@ -72,7 +72,7 @@ namespace castor3d
 
 		if ( iresult.second )
 		{
-			auto & device = *getScene()->getEngine()->getRenderSystem()->getMainRenderDevice();
+			auto & device = getScene()->getEngine()->getRenderSystem()->getRenderDevice();
 			auto & uboPools = *device.uboPools;
 
 			for ( auto entry : m_baseEntries )
@@ -110,7 +110,7 @@ namespace castor3d
 			if ( instIt->second.empty() )
 			{
 				m_instances.erase( instIt );
-				auto & device = *getScene()->getEngine()->getRenderSystem()->getMainRenderDevice();
+				auto & device = getScene()->getEngine()->getRenderSystem()->getRenderDevice();
 				auto & uboPools = *device.uboPools;
 
 				for ( auto & entry : m_baseEntries )
