@@ -569,6 +569,8 @@ namespace castor3d
 	void Scene::setBackground( SceneBackgroundSPtr value )
 	{
 		m_background = std::move( value );
+		m_background->initialise( getEngine()->getRenderSystem()->getRenderDevice() );
+		onSetBackground( *m_background );
 	}
 
 	void Scene::merge( SceneSPtr scene )

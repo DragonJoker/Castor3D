@@ -5,10 +5,11 @@ See LICENSE file in root folder
 #define ___C3D_EnvironmentMap_H___
 
 #include "EnvironmentMapModule.hpp"
-#include "Castor3D/Scene/SceneModule.hpp"
+#include "Castor3D/Material/Texture/TextureModule.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/PBR/PbrModule.hpp"
-#include "Castor3D/Material/Texture/TextureModule.hpp"
+#include "Castor3D/Scene/SceneModule.hpp"
+#include "Castor3D/Scene/Background/BackgroundModule.hpp"
 
 #include <CastorUtils/Graphics/Size.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
@@ -180,6 +181,7 @@ namespace castor3d
 		std::vector< crg::RunnableGraphPtr > m_runnables;
 		ashes::ImagePtr m_image;
 		std::vector< ashes::ImageView > m_environmentMapViews;
+		OnBackgroundChangedConnection m_onSetBackground;
 	};
 }
 

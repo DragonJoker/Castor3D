@@ -782,6 +782,7 @@ namespace castor3d
 		CameraSPtr camera;
 		SceneNode const * node{ nullptr };
 		LightSPtr light;
+		Viewport * viewport{ nullptr };
 		uint32_t index{ 0u };
 		uint32_t combineIndex{ 0u };
 		castor::Point2f jitter;
