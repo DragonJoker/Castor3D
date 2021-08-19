@@ -360,9 +360,9 @@ namespace castor3d
 			c3dSampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 			c3dSampler->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 			c3dSampler->setBorderColour( borderColor );
-			c3dSampler->initialise( device );
 		}
 
+		c3dSampler->initialise( device );
 		sampler = &c3dSampler->getSampler();
 	}
 

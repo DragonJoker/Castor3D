@@ -1121,11 +1121,43 @@ namespace castor3d
 					, std::make_unique< castor::PxBufferBase >( unit->getTexture()->getImage().getPxBuffer() )
 					, unit->getTexture()->getName()
 					, unit->getConfiguration().normalMask[0] == 0 ) );
+			}
+
+			if ( !unit->isInitialised() )
+			{
 				auto & device = engine.getRenderSystem()->getRenderDevice();
 				unit->initialise( device, *device.graphicsData() );
 			}
 
 			return unit;
+		}
+
+		TextureUnitPtrArray getTextureUnits( TextureUnitPtrArray const & textureUnits
+			, TextureFlags mask )
+		{
+			TextureUnitPtrArray result;
+
+			for ( auto & unit : textureUnits )
+			{
+				auto & config = unit->getConfiguration();
+
+				if ( ( checkFlag( mask, TextureFlag::eAlbedo ) && config.colourMask[0] )
+					|| ( checkFlag( mask, TextureFlag::eSpecular ) && config.specularMask[0] )
+					|| ( checkFlag( mask, TextureFlag::eMetalness ) && config.metalnessMask[0] )
+					|| ( checkFlag( mask, TextureFlag::eGlossiness ) && config.glossinessMask[0] )
+					|| ( checkFlag( mask, TextureFlag::eRoughness ) && config.roughnessMask[0] )
+					|| ( checkFlag( mask, TextureFlag::eOpacity ) && config.opacityMask[0] )
+					|| ( checkFlag( mask, TextureFlag::eEmissive ) && config.emissiveMask[0] )
+					|| ( checkFlag( mask, TextureFlag::eNormal ) && config.normalMask[0] )
+					|| ( checkFlag( mask, TextureFlag::eHeight ) && config.heightMask[0] )
+					|| ( checkFlag( mask, TextureFlag::eOcclusion ) && config.occlusionMask[0] )
+					|| ( checkFlag( mask, TextureFlag::eTransmittance ) && config.transmittanceMask[0] ) )
+				{
+					result.push_back( unit );
+				}
+			}
+
+			return result;
 		}
 	}
 
@@ -1448,34 +1480,12 @@ namespace castor3d
 
 	TextureUnitPtrArray Pass::getTextureUnits( TextureFlags mask )const
 	{
-		TextureUnitPtrArray result;
-
-		for ( auto & unit : m_textureUnits )
-		{
-			auto & config = unit->getConfiguration();
-
-			if ( ( checkFlag( mask, TextureFlag::eAlbedo ) && config.colourMask[0] )
-				|| ( checkFlag( mask, TextureFlag::eSpecular ) && config.specularMask[0] )
-				|| ( checkFlag( mask, TextureFlag::eMetalness ) && config.metalnessMask[0] )
-				|| ( checkFlag( mask, TextureFlag::eGlossiness ) && config.glossinessMask[0] )
-				|| ( checkFlag( mask, TextureFlag::eRoughness ) && config.roughnessMask[0] )
-				|| ( checkFlag( mask, TextureFlag::eOpacity ) && config.opacityMask[0] )
-				|| ( checkFlag( mask, TextureFlag::eEmissive ) && config.emissiveMask[0] )
-				|| ( checkFlag( mask, TextureFlag::eNormal ) && config.normalMask[0] )
-				|| ( checkFlag( mask, TextureFlag::eHeight ) && config.heightMask[0] )
-				|| ( checkFlag( mask, TextureFlag::eOcclusion ) && config.occlusionMask[0] ) 
-				|| ( checkFlag( mask, TextureFlag::eTransmittance ) && config.transmittanceMask[0] ) )
-			{
-				result.push_back( unit );
-			}
-		}
-
-		return result;
+		return castor3d::getTextureUnits( m_textureUnits, mask );
 	}
 
 	TextureFlagsArray Pass::getTexturesMask( TextureFlags mask )const
 	{
-		auto units = getTextureUnits( mask );
+		auto units = castor3d::getTextureUnits( m_textureUnits, mask );
 		TextureFlagsArray result;
 
 		for ( auto & unit : units )
@@ -1488,7 +1498,7 @@ namespace castor3d
 
 	uint32_t Pass::getTextureUnitsCount( TextureFlags mask )const
 	{
-		return uint32_t( getTextureUnits( mask ).size() );
+		return uint32_t( castor3d::getTextureUnits( m_textureUnits, mask ).size() );
 	}
 
 	void Pass::doFillData( PassBuffer::PassDataPtr & data )const
@@ -1633,8 +1643,8 @@ namespace castor3d
 		, castor::String const & name
 		, TextureUnitPtrArray & result )
 	{
-		auto texturesLhs = getTextureUnits( lhsFlag );
-		auto texturesRhs = getTextureUnits( rhsFlag );
+		auto texturesLhs = castor3d::getTextureUnits( m_textureUnits, lhsFlag );
+		auto texturesRhs = castor3d::getTextureUnits( m_textureUnits, rhsFlag );
 
 		if ( !texturesLhs.empty()
 			&& !texturesRhs.empty()
@@ -1663,6 +1673,7 @@ namespace castor3d
 					, rhsUnit->getSampler()
 					, getOwner()->getName() + name ) );
 				result.push_back( newUnit );
+				CU_Require( result.back()->isInitialised() );
 			}
 			else
 			{
@@ -1670,10 +1681,12 @@ namespace castor3d
 					, getOwner()->getName()
 					, lhsUnit->getTexture()->getName()
 					, lhsUnit ) );
+				CU_Require( result.back()->isInitialised() );
 				result.push_back( getPreparedTexture( *getOwner()->getEngine()
 					, getOwner()->getName()
 					, lhsUnit->getTexture()->getName()
 					, rhsUnit ) );
+				CU_Require( result.back()->isInitialised() );
 			}
 		}
 		else
@@ -1695,6 +1708,7 @@ namespace castor3d
 					, getOwner()->getName()
 					, name
 					, unit ) );
+				CU_Require( result.back()->isInitialised() );
 			}
 		}
 	}

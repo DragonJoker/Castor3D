@@ -1074,6 +1074,11 @@ namespace castor3d
 			m_initialised = m_texture != nullptr;
 		}
 
+		if ( m_initialised )
+		{
+			CU_Require( m_texture );
+		}
+
 		return m_initialised;
 	}
 
