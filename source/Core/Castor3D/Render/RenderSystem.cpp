@@ -523,23 +523,26 @@ namespace castor3d
 		m_gpuInformations.useShaderType( VK_SHADER_STAGE_FRAGMENT_BIT, true );
 		m_gpuInformations.useShaderType( VK_SHADER_STAGE_VERTEX_BIT, true );
 
-		m_gpuInformations.setMaxValue( GpuMax::eTexture1DSize, limits.maxImageDimension1D );
-		m_gpuInformations.setMaxValue( GpuMax::eTexture2DSize, limits.maxImageDimension2D );
-		m_gpuInformations.setMaxValue( GpuMax::eTexture3DSize, limits.maxImageDimension3D );
-		m_gpuInformations.setMaxValue( GpuMax::eTextureCubeSize, limits.maxImageDimensionCube );
-		m_gpuInformations.setMaxValue( GpuMax::eTextureLayers, limits.maxImageArrayLayers );
-		m_gpuInformations.setMaxValue( GpuMax::eSamplerLodBias, int32_t( limits.maxSamplerLodBias ) );
-		m_gpuInformations.setMaxValue( GpuMax::eClipDistances, limits.maxClipDistances );
-		m_gpuInformations.setMaxValue( GpuMax::eFramebufferWidth, limits.maxFramebufferWidth );
-		m_gpuInformations.setMaxValue( GpuMax::eFramebufferHeight, limits.maxFramebufferHeight );
-		m_gpuInformations.setMaxValue( GpuMax::eFramebufferLayers, limits.maxFramebufferLayers );
-		m_gpuInformations.setMaxValue( GpuMax::eFramebufferSamples, limits.framebufferColorSampleCounts );
-		m_gpuInformations.setMaxValue( GpuMax::eTexelBufferSize, limits.maxTexelBufferElements );
-		m_gpuInformations.setMaxValue( GpuMax::eUniformBufferSize, limits.maxUniformBufferRange );
-		m_gpuInformations.setMaxValue( GpuMax::eStorageBufferSize, limits.maxStorageBufferRange );
-		m_gpuInformations.setMaxValue( GpuMax::eViewportWidth, limits.maxViewportDimensions[0] );
-		m_gpuInformations.setMaxValue( GpuMax::eViewportHeight, limits.maxViewportDimensions[1] );
-		m_gpuInformations.setMaxValue( GpuMax::eViewports, limits.maxViewports );
+		m_gpuInformations.setValue( GpuMin::eBufferMapSize, limits.nonCoherentAtomSize );
+		m_gpuInformations.setValue( GpuMin::eUniformBufferOffsetAlignment, limits.minUniformBufferOffsetAlignment );
+
+		m_gpuInformations.setValue( GpuMax::eTexture1DSize, limits.maxImageDimension1D );
+		m_gpuInformations.setValue( GpuMax::eTexture2DSize, limits.maxImageDimension2D );
+		m_gpuInformations.setValue( GpuMax::eTexture3DSize, limits.maxImageDimension3D );
+		m_gpuInformations.setValue( GpuMax::eTextureCubeSize, limits.maxImageDimensionCube );
+		m_gpuInformations.setValue( GpuMax::eTextureLayers, limits.maxImageArrayLayers );
+		m_gpuInformations.setValue( GpuMax::eSamplerLodBias, int32_t( limits.maxSamplerLodBias ) );
+		m_gpuInformations.setValue( GpuMax::eClipDistances, limits.maxClipDistances );
+		m_gpuInformations.setValue( GpuMax::eFramebufferWidth, limits.maxFramebufferWidth );
+		m_gpuInformations.setValue( GpuMax::eFramebufferHeight, limits.maxFramebufferHeight );
+		m_gpuInformations.setValue( GpuMax::eFramebufferLayers, limits.maxFramebufferLayers );
+		m_gpuInformations.setValue( GpuMax::eFramebufferSamples, limits.framebufferColorSampleCounts );
+		m_gpuInformations.setValue( GpuMax::eTexelBufferSize, limits.maxTexelBufferElements );
+		m_gpuInformations.setValue( GpuMax::eUniformBufferSize, limits.maxUniformBufferRange );
+		m_gpuInformations.setValue( GpuMax::eStorageBufferSize, limits.maxStorageBufferRange );
+		m_gpuInformations.setValue( GpuMax::eViewportWidth, limits.maxViewportDimensions[0] );
+		m_gpuInformations.setValue( GpuMax::eViewportHeight, limits.maxViewportDimensions[1] );
+		m_gpuInformations.setValue( GpuMax::eViewports, limits.maxViewports );
 
 		log::info << m_gpuInformations << std::endl;
 	}

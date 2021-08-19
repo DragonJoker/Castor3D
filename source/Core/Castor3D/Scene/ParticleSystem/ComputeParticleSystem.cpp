@@ -240,7 +240,7 @@ namespace castor3d
 		auto size = uint32_t( m_parent.getMaxParticlesCount() * m_inputs.stride() );
 		m_generatedCountBuffer = makeBuffer< uint32_t >( device
 			, ashes::getAlignedSize( 2u * sizeof( uint32_t )
-				, device.device->getProperties().limits.nonCoherentAtomSize ) / sizeof( uint32_t )
+				, device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) / sizeof( uint32_t )
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, "ComputeParticleSystemCountBuffer" );

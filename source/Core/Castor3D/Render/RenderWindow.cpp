@@ -1087,7 +1087,7 @@ namespace castor3d
 			, 0u
 			, 1u
 			, 1u )
-			, getDevice()->getProperties().limits.nonCoherentAtomSize );
+			, getDevice().renderSystem.getValue( GpuMin::eBufferMapSize ) );
 		m_stagingBuffer = getDevice()->createBuffer( "Snapshot"
 			, bufferSize
 			, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT );
