@@ -33,7 +33,7 @@ namespace castor3d
 
 	uint32_t GpuBuffer::initialise( RenderDevice const & device )
 	{
-		CU_Require( ( m_align % device.properties.limits.nonCoherentAtomSize ) == 0u );
+		CU_Require( ( m_align % device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) == 0u );
 		m_buffer = makeBuffer< uint8_t >( device
 			, uint32_t( m_allocator.getSize() )
 			, m_usage

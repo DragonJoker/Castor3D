@@ -88,7 +88,7 @@ namespace castor3d
 		doUpdate( 0u
 			, std::min( m_size
 				, ashes::getAlignedSize( size
-					, uint32_t( m_device.properties.limits.nonCoherentAtomSize ) ) ) );
+					, uint32_t( m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) ) ) );
 	}
 
 	VkDescriptorSetLayoutBinding ShaderBuffer::createLayoutBinding( uint32_t index )const

@@ -306,6 +306,16 @@ namespace castor3d
 				&& "Invalid Physical Device index." );
 			return *m_gpus[gpuIndex];
 		}
+
+		int32_t getValue( GpuMin index )const
+		{
+			return m_gpuInformations.getValue( index );
+		}
+
+		int32_t getValue( GpuMax index )const
+		{
+			return m_gpuInformations.getValue( index );
+		}
 		/**@}*/
 		/**
 		*\~english
