@@ -195,7 +195,7 @@ namespace castor3d
 		 */
 		C3D_API void render( RenderInfo & info
 			, bool signalOnly
-			, crg::SemaphoreWaitArray toWait );
+			, crg::SemaphoreWaitArray & toWait );
 		/**
 		 *\~english
 		 *\brief		Resizes the window.
@@ -461,7 +461,6 @@ namespace castor3d
 		bool doCheckNeedReset( VkResult errCode
 			, bool acquisition
 			, char const * const action );
-		void doCleanup( bool enableDevice );
 		void doProcessMouseEvent( MouseEventSPtr event )override;
 
 	private:
@@ -491,7 +490,8 @@ namespace castor3d
 		bool m_fullscreen{ false };
 		castor::Size m_size;
 		bool m_toSave{ false };
-		mutable std::atomic_bool m_dirty{ true };
+		mutable std::atomic_bool m_initialised{ false };
+		mutable std::atomic_bool m_skip{ false };
 		castor::PxBufferBaseSPtr m_saveBuffer;
 		PickingSPtr m_picking;
 		castor::Position m_mousePosition;
