@@ -168,10 +168,28 @@ namespace castor3d
 		, m_depthBuffer{ createDepthBuffer( device, handler, "Env" + scene.getName(), MapSize ) }
 		, m_extent{ getExtent( m_environmentMap.imageId ) }
 		, m_render{ 0u }
+		, m_onSetBackground{ scene.onSetBackground.connect( [this]( SceneBackground const & background )
+			{
+				for ( uint32_t index = 0; index < m_passes.size(); ++index )
+				{
+					m_graphs[index] = std::make_unique< crg::FrameGraph >( getEngine()->getGraphResourceHandler()
+						, "Env" + m_scene.getName() + std::to_string( index ) );
+					m_runnables[index].reset();
+					auto & graph = *m_graphs[index];
+					m_passes[index] = {};
+					m_passes[index] = createPass( graph
+						, m_device
+						, *this
+						, index
+						, *m_scene.getBackground() );
+					m_runnables[index] = graph.compile( m_device.makeContext() );
+					m_runnables.back()->record();
+				}
+			} ) }
 	{
 		m_environmentMap.create();
 		m_environmentMapViews = createViews( m_environmentMap, m_image );
-		auto commandBuffer = queueData.commandPool->createCommandBuffer();
+		auto commandBuffer = queueData.commandPool->createCommandBuffer( "Env" + scene.getName() + "InitialiseViews" );
 		commandBuffer->begin();
 
 		for ( auto & view : m_environmentMapViews )

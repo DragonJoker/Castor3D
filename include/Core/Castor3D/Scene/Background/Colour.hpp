@@ -98,15 +98,14 @@ namespace castor3d
 		void doCleanup()override;
 		void doCpuUpdate( CpuUpdater & updater
 			, castor::Matrix4x4f & mtxView
-			, castor::Matrix4x4f & mtxProj )override;
-		void doGpuUpdate( GpuUpdater & updater )override;
-		void doUpdateColour( RenderDevice const & device );
+			, castor::Matrix4x4f & mtxProj )const override;
+		void doGpuUpdate( GpuUpdater & updater )const override;
+		void doUpdateColour( RenderDevice const & device )const;
 
 	private:
-		castor::ChangeTracked< castor::HdrRgbColour > m_colour;
+		mutable castor::ChangeTracked< castor::HdrRgbColour > m_colour;
 		ashes::StagingTexturePtr m_stagingTexture;
 		ashes::CommandBufferPtr m_cmdCopy;
-		Viewport m_viewport;
 	};
 }
 

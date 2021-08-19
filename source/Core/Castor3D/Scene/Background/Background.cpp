@@ -102,7 +102,7 @@ namespace castor3d
 		m_ibl.reset();
 	}
 
-	void SceneBackground::update( CpuUpdater & updater )
+	void SceneBackground::update( CpuUpdater & updater )const
 	{
 		if ( m_initialised )
 		{
@@ -118,7 +118,7 @@ namespace castor3d
 		}
 	}
 
-	void SceneBackground::update( GpuUpdater & updater )
+	void SceneBackground::update( GpuUpdater & updater )const
 	{
 		if ( m_initialised )
 		{

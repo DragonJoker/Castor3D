@@ -63,7 +63,6 @@ namespace castor3d
 		, Scene & scene
 		, castor::String const & name )
 		: SceneBackground{ engine, scene, name + cuT( "Skybox" ), BackgroundType::eSkybox }
-		, m_viewport{ engine }
 	{
 		m_texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
 			, doGetImageCreate( VK_FORMAT_R8G8B8A8_UNORM, { 16u, 16u }, false )
@@ -233,19 +232,20 @@ namespace castor3d
 
 	void SkyboxBackground::doCpuUpdate( CpuUpdater & updater
 		, castor::Matrix4x4f & mtxView
-		, castor::Matrix4x4f & mtxProj )
+		, castor::Matrix4x4f & mtxProj )const
 	{
-		m_viewport.resize( updater.camera->getSize() );
-		m_viewport.setPerspective( 45.0_degrees
+		auto & viewport = *updater.viewport;
+		viewport.resize( updater.camera->getSize() );
+		viewport.setPerspective( 45.0_degrees
 			, updater.camera->getRatio()
 			, 0.1f
 			, 2.0f );
-		m_viewport.update();
+		viewport.update();
 		mtxView = updater.camera->getView();
-		mtxProj = m_viewport.getSafeBandedProjection();
+		mtxProj = viewport.getSafeBandedProjection();
 	}
 
-	void SkyboxBackground::doGpuUpdate( GpuUpdater & updater )
+	void SkyboxBackground::doGpuUpdate( GpuUpdater & updater )const
 	{
 	}
 

@@ -74,15 +74,14 @@ namespace castor3d
 		void doCleanup()override;
 		void doCpuUpdate( CpuUpdater & updater
 			, castor::Matrix4x4f & mtxView
-			, castor::Matrix4x4f & mtxProj )override;
-		void doGpuUpdate( GpuUpdater & updater )override;
+			, castor::Matrix4x4f & mtxProj )const override;
+		void doGpuUpdate( GpuUpdater & updater )const override;
 		void doInitialise2DTexture( RenderDevice const & device
 			, QueueData const & queueData );
 
 	private:
 		TextureLayoutSPtr m_2dTexture;
 		castor::Path m_2dTexturePath;
-		Viewport m_viewport;
 		float m_ratio;
 	};
 }
