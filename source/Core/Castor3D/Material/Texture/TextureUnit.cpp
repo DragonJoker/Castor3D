@@ -262,7 +262,7 @@ namespace castor3d
 	bool TextureUnit::initialise( RenderDevice const & device
 		, QueueData const & queueData )
 	{
-		if ( m_initialised )
+		if ( m_initialised && isInitialised() )
 		{
 			return m_initialised;
 		}
