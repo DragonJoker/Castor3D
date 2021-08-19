@@ -66,7 +66,7 @@ namespace light_streaks
 			, renderSystem
 			, params
 			, Count + 2u }
-		, m_kawaseUbo{ *renderSystem.getMainRenderDevice() }
+		, m_kawaseUbo{ renderSystem.getRenderDevice() }
 	{
 	}
 

@@ -105,14 +105,14 @@ namespace castor3d
 			, std::move( detach ) )
 	{
 		m_lightsBuffer.resize( 300ull * shader::getMaxLightComponentsCount() );
-		m_textureBuffer = makeBuffer< castor::Point4f >( *engine.getRenderSystem()->getMainRenderDevice()
+		m_textureBuffer = makeBuffer< castor::Point4f >( engine.getRenderSystem()->getRenderDevice()
 			, uint32_t( m_lightsBuffer.size() )
 			, ( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 				| VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT
 				| VK_BUFFER_USAGE_TRANSFER_DST_BIT )
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, "LightsBuffer" );
-		m_textureView = ( *engine.getRenderSystem()->getMainRenderDevice() )->createBufferView( "LightsBufferView"
+		m_textureView = ( engine.getRenderSystem()->getRenderDevice() )->createBufferView( "LightsBufferView"
 			, m_textureBuffer->getBuffer()
 			, VK_FORMAT_R32G32B32A32_SFLOAT
 			, 0u

@@ -176,9 +176,9 @@ namespace film_grain
 			, params }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "FilmGrain", getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "FilmGrain", getFragmentProgram() }
-		, m_stages{ makeShaderState( *renderSystem.getMainRenderDevice(), m_vertexShader )
-			, makeShaderState( *renderSystem.getMainRenderDevice(), m_pixelShader ) }
-		, m_configUbo{ renderSystem.getMainRenderDevice()->uboPools->getBuffer< Configuration >( 0u ) }
+		, m_stages{ makeShaderState( renderSystem.getRenderDevice(), m_vertexShader )
+			, makeShaderState( renderSystem.getRenderDevice(), m_pixelShader ) }
+		, m_configUbo{ renderSystem.getRenderDevice().uboPools->getBuffer< Configuration >( 0u ) }
 		, m_noiseImages{ loadImages( *renderTarget.getEngine() ) }
 	{
 		for ( auto & image : m_noiseImages )
@@ -206,7 +206,7 @@ namespace film_grain
 
 	PostEffect::~PostEffect()
 	{
-		getRenderSystem()->getMainRenderDevice()->uboPools->putBuffer( m_configUbo );
+		getRenderSystem()->getRenderDevice().uboPools->putBuffer( m_configUbo );
 	}
 
 	castor3d::PostEffectSPtr PostEffect::create( castor3d::RenderTarget & renderTarget
@@ -311,7 +311,7 @@ namespace film_grain
 			{
 				auto dim = m_noiseImages[0].getDimensions();
 				auto format = castor3d::convert( m_noiseImages[0].getPixelFormat() );
-				auto & device = *getRenderSystem()->getMainRenderDevice();
+				auto & device = getRenderSystem()->getRenderDevice();
 				auto staging = device->createStagingTexture( format
 					, VkExtent2D{ dim.getWidth(), dim.getHeight() } );
 				ashes::ImagePtr noiseImg = std::make_unique< ashes::Image >( *device

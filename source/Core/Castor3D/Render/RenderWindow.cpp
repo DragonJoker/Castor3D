@@ -308,7 +308,7 @@ namespace castor3d
 		, castor::Named{ name }
 		, MouseEventHandler{}
 		, m_index{ s_nbRenderWindows++ }
-		, m_device{ *engine.getRenderSystem()->getMainRenderDevice() }
+		, m_device{ engine.getRenderSystem()->getRenderDevice() }
 		, m_surface{ m_device.renderSystem.getInstance().createSurface( m_device.renderSystem.getPhysicalDevice( 0u )
 			, std::move( handle ) ) }
 		, m_queues{ getQueueFamily( *m_surface, m_device.queueFamilies ) }
@@ -324,16 +324,8 @@ namespace castor3d
 			CU_Exception( "Could not create Vulkan surface." );
 		}
 
-		auto guard = castor::makeBlockGuard(
-			[this]()
-			{
-				m_device.renderSystem.setCurrentRenderDevice( &m_device );
-			},
-			[this]()
-			{
-				m_device.renderSystem.setCurrentRenderDevice( nullptr );
-			} );
-		getEngine()->getMaterialCache().initialise( m_device, getEngine()->getPassesType() );
+		getEngine()->getMaterialCache().initialise( m_device
+			, getEngine()->getPassesType() );
 		doCreateProgram();
 		doCreateSwapchain();
 	}
@@ -374,26 +366,21 @@ namespace castor3d
 	{
 		auto & engine = *getEngine();
 		engine.unregisterWindow( *this );
-		bool hasCurrent = engine.getRenderSystem()->hasCurrentRenderDevice();
 
-		if ( hasCurrent
-			&& &engine.getRenderSystem()->getCurrentRenderDevice() != &m_device )
+		doWaitFrame( {} );
+		getDevice()->waitIdle();
+
+		RenderTargetSPtr target = getRenderTarget();
+
+		if ( target )
 		{
-			auto & device = engine.getRenderSystem()->getCurrentRenderDevice();
-			auto guard = castor::makeBlockGuard(
-				[this, &engine]()
-				{
-					engine.getRenderSystem()->setCurrentRenderDevice( nullptr );
-				},
-				[this, &engine, &device]()
-				{
-					engine.getRenderSystem()->setCurrentRenderDevice( &device );
-				} );
-			doCleanup( true );
-		}
-		else
-		{
-			doCleanup( !hasCurrent );
+			doDestroySaveData();
+			doDestroyLoadingScreen();
+			doDestroyCommandBuffers();
+			doDestroyRenderQuad();
+			doDestroyIntermediateViews();
+			doDestroyPickingPass();
+			target->cleanup( m_device );
 		}
 	}
 
@@ -451,15 +438,6 @@ namespace castor3d
 
 				auto & engine = *getEngine();
 				auto & renderSystem = *engine.getRenderSystem();
-				auto guard = castor::makeBlockGuard(
-					[this, &renderSystem]()
-					{
-						renderSystem.setCurrentRenderDevice( &m_device );
-					},
-					[this, &renderSystem]()
-					{
-						renderSystem.setCurrentRenderDevice( nullptr );
-					} );
 
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 				m_pickingPass->pick( *m_device

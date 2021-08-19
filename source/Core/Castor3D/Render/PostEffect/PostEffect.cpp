@@ -90,7 +90,7 @@ namespace castor3d
 		, crg::ImageViewId const & target )
 	{
 		auto extent = getExtent( source );
-		auto & context = getRenderSystem()->getMainRenderDevice()->makeContext();
+		auto & context = getRenderSystem()->getRenderDevice().makeContext();
 		auto & srcSubresource = source.data->info.subresourceRange;
 		auto & dstSubresource = target.data->info.subresourceRange;
 		VkImageCopy region{ VkImageSubresourceLayers{ srcSubresource.aspectMask, srcSubresource.baseMipLevel, srcSubresource.baseArrayLayer, 1u }

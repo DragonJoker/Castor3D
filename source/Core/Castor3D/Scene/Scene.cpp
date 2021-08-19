@@ -440,7 +440,7 @@ namespace castor3d
 		m_onGeometryChanged = m_geometryCache->onChanged.connect( setThisChanged );
 		m_onSceneNodeChanged = m_sceneNodeCache->onChanged.connect( setThisChanged );
 		m_animatedObjectGroupCache->add( cuT( "C3D_Textures" ) );
-		auto & device = *engine.getRenderSystem()->getMainRenderDevice();
+		auto & device = engine.getRenderSystem()->getRenderDevice();
 		auto data = device.graphicsData();
 		m_reflectionMap = std::make_unique< EnvironmentMap >( engine.getGraphResourceHandler()
 			, device

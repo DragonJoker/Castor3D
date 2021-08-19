@@ -168,9 +168,9 @@ namespace fxaa
 			, 1u }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "Fxaa", getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "Fxaa", getFragmentProgram() }
-		, m_stages{ makeShaderState( *renderSystem.getMainRenderDevice(), m_vertexShader )
-			, makeShaderState( *renderSystem.getMainRenderDevice(), m_pixelShader ) }
-		, m_fxaaUbo{ *renderSystem.getMainRenderDevice(), m_renderTarget.getSize() }
+		, m_stages{ makeShaderState( renderSystem.getRenderDevice(), m_vertexShader )
+			, makeShaderState( renderSystem.getRenderDevice(), m_pixelShader ) }
+		, m_fxaaUbo{ renderSystem.getRenderDevice(), m_renderTarget.getSize() }
 	{
 		String param;
 

@@ -109,8 +109,7 @@ namespace Testing
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto surface = renderSystem.getInstance().createSurface( renderSystem.getPhysicalDevice( 0u )
 			, ashes::WindowHandle{ std::make_unique< TestWindowHandle >() } );
-		auto & device = *renderSystem.getMainRenderDevice();
-		renderSystem.setCurrentRenderDevice( &device );
+		auto & device = renderSystem.getRenderDevice();
 		Scene & scene = *src->getScene();
 		String name = src->getName();
 		Path path{ name + cuT( ".cmsh" ) };
@@ -168,7 +167,6 @@ namespace Testing
 		dst->cleanup();
 		src.reset();
 		dst.reset();
-		renderSystem.setCurrentRenderDevice( nullptr );
 		doCleanupEngine();
 	}
 

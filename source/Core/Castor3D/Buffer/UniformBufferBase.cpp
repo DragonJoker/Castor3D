@@ -133,10 +133,7 @@ namespace castor3d
 			m_available.insert( i );
 		}
 
-		if ( renderSystem.hasCurrentRenderDevice() )
-		{
-			initialise( renderSystem.getCurrentRenderDevice() );
-		}
+		initialise( renderSystem.getRenderDevice() );
 	}
 
 	uint32_t UniformBufferBase::initialise( RenderDevice const & device
