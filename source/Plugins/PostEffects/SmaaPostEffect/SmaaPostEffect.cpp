@@ -186,8 +186,8 @@ namespace smaa
 			, 5u
 			, Kind::eSRGB }
 		, m_config{ parameters }
-		, m_stages{ castor3d::makeShaderState( *renderSystem.getMainRenderDevice(), { VK_SHADER_STAGE_VERTEX_BIT, "SmaaCopy", doGetCopyVertexShader() } )
-			, castor3d::makeShaderState( *renderSystem.getMainRenderDevice(), { VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaCopy", doGetCopyPixelShader( m_config ) } ) }
+		, m_stages{ castor3d::makeShaderState( renderSystem.getRenderDevice(), { VK_SHADER_STAGE_VERTEX_BIT, "SmaaCopy", doGetCopyVertexShader() } )
+			, castor3d::makeShaderState( renderSystem.getRenderDevice(), { VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaCopy", doGetCopyPixelShader( m_config ) } ) }
 	{
 		if ( m_config.data.mode == Mode::eT2X )
 		{

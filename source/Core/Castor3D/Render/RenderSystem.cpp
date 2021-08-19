@@ -493,7 +493,7 @@ namespace castor3d
 			, m_features.textureCompressionBC == VK_TRUE
 			, false } );
 
-		m_mainDevice = std::make_shared< RenderDevice >( *this
+		m_device = std::make_shared< RenderDevice >( *this
 			, gpu
 			, m_desc );
 
@@ -504,7 +504,7 @@ namespace castor3d
 			{ 0x8086, cuT( "INTEL" ) },
 			{ 0x13B5, cuT( "ARM" ) },
 		};
-		auto & device = *m_mainDevice;
+		auto & device = *m_device;
 		auto & features = device.features;
 		auto & properties = device.properties;
 		auto & limits = properties.limits;
@@ -616,7 +616,7 @@ namespace castor3d
 
 		try
 		{
-			auto glslFromSpv = compileSpvToGlsl( *getMainRenderDevice()
+			auto glslFromSpv = compileSpvToGlsl( getRenderDevice()
 				, result.spirv
 				, stage );
 			const_cast< castor3d::ShaderModule & >( module ).source += "\n" + glslFromSpv;
@@ -632,7 +632,7 @@ namespace castor3d
 					, result.spirv.size() );
 			}
 
-			auto ref = castor3d::compileGlslToSpv( *getMainRenderDevice()
+			auto ref = castor3d::compileGlslToSpv( getRenderDevice()
 				, stage
 				, glsl );
 			{
@@ -656,7 +656,7 @@ namespace castor3d
 		SpirVShader result;
 		CU_Require( !glsl.empty() );
 		result.text = glsl;
-		result.spirv = castor3d::compileGlslToSpv( *getMainRenderDevice()
+		result.spirv = castor3d::compileGlslToSpv( getRenderDevice()
 			, stage
 			, glsl );
 		return result;

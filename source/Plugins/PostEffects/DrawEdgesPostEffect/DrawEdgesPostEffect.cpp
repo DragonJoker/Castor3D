@@ -169,9 +169,9 @@ namespace draw_edges
 			, 1u }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "DECombine", getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DECombine", getFragmentProgram( castor3d::getSafeBandedExtent3D( m_renderTarget.getSize() ) ) }
-		, m_stages{ makeShaderState( *renderSystem.getMainRenderDevice(), m_vertexShader )
-			, makeShaderState( *renderSystem.getMainRenderDevice(), m_pixelShader ) }
-		, m_ubo{ *renderSystem.getMainRenderDevice() }
+		, m_stages{ makeShaderState( renderSystem.getRenderDevice(), m_vertexShader )
+			, makeShaderState( renderSystem.getRenderDevice(), m_pixelShader ) }
+		, m_ubo{ renderSystem.getRenderDevice() }
 		, m_data{ m_ubo.getUbo().getData() }
 	{
 		castor::String param;

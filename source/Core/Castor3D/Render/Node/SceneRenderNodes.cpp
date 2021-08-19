@@ -430,7 +430,7 @@ namespace castor3d
 		if ( ires.second )
 		{
 			auto & engine = *pass.getOwner()->getEngine();
-			auto & device = *engine.getRenderSystem()->getMainRenderDevice();
+			auto & device = engine.getRenderSystem()->getRenderDevice();
 			ires.first->second.ubo = device->createDescriptorSetLayout( doCreateUboBindings( engine
 				, textures.size()
 				, billboard

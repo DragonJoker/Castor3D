@@ -25,10 +25,7 @@ namespace castor3d
 		, m_debugName{ std::move( debugName ) }
 		, m_align{ minBlockSize }
 	{
-		if ( m_renderSystem.hasCurrentRenderDevice() )
-		{
-			initialise( m_renderSystem.getCurrentRenderDevice() );
-		}
+		initialise( m_renderSystem.getRenderDevice() );
 	}
 
 	uint32_t GpuBuffer::initialise( RenderDevice const & device )

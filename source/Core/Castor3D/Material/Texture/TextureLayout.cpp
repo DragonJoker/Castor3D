@@ -902,7 +902,7 @@ namespace castor3d
 		, VkImage image
 		, crg::ImageViewId imageView )
 		: TextureLayout{ renderSystem
-			, std::make_unique< ashes::Image >( *( *renderSystem.getMainRenderDevice() )
+			, std::make_unique< ashes::Image >( *renderSystem.getRenderDevice()
 				, image
 				, imageView.data->image.data->info )
 			, imageView.data->image.data->info }

@@ -141,7 +141,7 @@ namespace castor3d
 	{
 		for ( auto submesh : m_submeshes )
 		{
-			submesh->initialise( *getEngine()->getRenderSystem()->getMainRenderDevice() );
+			submesh->initialise( getEngine()->getRenderSystem()->getRenderDevice() );
 		}
 	}
 
