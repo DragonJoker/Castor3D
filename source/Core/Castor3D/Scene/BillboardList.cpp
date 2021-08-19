@@ -3,7 +3,7 @@
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
-#include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
 using namespace castor;
@@ -112,7 +112,7 @@ namespace castor3d
 		{
 			auto & device = updater.device;
 			auto mappedSize = ashes::getAlignedSize( VkDeviceSize( m_count ) * m_vertexStride
-				, device.properties.limits.nonCoherentAtomSize );
+				, device.renderSystem.getValue( GpuMin::eBufferMapSize ) );
 
 			if ( auto gpuBuffer = m_vertexBuffer->getBuffer().lock( 0
 				, mappedSize
@@ -315,7 +315,7 @@ namespace castor3d
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 				, getName() + "Billboard" );
 			auto mappedSize = ashes::getAlignedSize( VkDeviceSize( m_vertexStride * m_arrayPositions.size() )
-				, device.properties.limits.nonCoherentAtomSize );
+				, device.renderSystem.getValue( GpuMin::eBufferMapSize ) );
 
 			if ( auto * buffer = m_vertexBuffer->getBuffer().lock( 0u
 				, mappedSize

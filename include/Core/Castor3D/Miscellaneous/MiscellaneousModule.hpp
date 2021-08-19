@@ -33,10 +33,10 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	All supported GPU feature flags.
+	*	Maximum values enumerator.
 	*\~french
 	*\brief
-	*	Indicateurs de caractérisituqes du GPU.
+	*	Enumération des valeurs maximales.
 	*/
 	enum class GpuMax
 		: uint32_t
@@ -59,6 +59,21 @@ namespace castor3d
 		eViewportHeight,
 		eViewports,
 		CU_ScopedEnumBounds( eTexture1DSize )
+	};
+	/**
+	*\~english
+	*\brief
+	*	Minimum values enumerator.
+	*\~french
+	*\brief
+	*	Enumération des valeurs minimales.
+	*/
+	enum class GpuMin
+		: uint32_t
+	{
+		eBufferMapSize,
+		eUniformBufferOffsetAlignment,
+		CU_ScopedEnumBounds( eBufferMapSize )
 	};
 	/**
 	*\~english
