@@ -530,7 +530,6 @@ namespace castor3d
 		m_commandBuffer.reset();
 		m_frameBuffer.reset();
 		m_renderPass.reset();
-		m_toWait = nullptr;
 		m_finished.reset();
 	}
 
@@ -551,10 +550,8 @@ namespace castor3d
 		}
 	}
 
-	void OverlayRenderer::beginPrepare( FramePassTimer const & timer
-		, crg::SemaphoreWaitArray const & toWait )
+	void OverlayRenderer::beginPrepare( FramePassTimer const & timer )
 	{
-		m_toWait = &toWait;
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 		m_commandBuffer->beginDebugBlock(
 			{
@@ -630,17 +627,21 @@ namespace castor3d
 	}
 
 	crg::SemaphoreWait OverlayRenderer::render( FramePassTimer & timer
-		, ashes::Queue const & queue )
+		, ashes::Queue const & queue
+		, crg::SemaphoreWaitArray const & toWait )
 	{
 		auto timerBlock( timer.start() );
 		timerBlock->notifyPassRender();
 		std::vector< VkSemaphore > semaphores;
 		std::vector< VkPipelineStageFlags > dstStageMasks;
 
-		for ( auto & wait : *m_toWait )
+		for ( auto & wait : toWait )
 		{
-			semaphores.push_back( wait.semaphore );
-			dstStageMasks.push_back( wait.dstStageMask );
+			if ( wait.semaphore )
+			{
+				semaphores.push_back( wait.semaphore );
+				dstStageMasks.push_back( wait.dstStageMask );
+			}
 		}
 
 		queue.submit( *m_commandBuffer
