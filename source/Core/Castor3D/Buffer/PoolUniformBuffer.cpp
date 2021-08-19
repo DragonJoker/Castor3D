@@ -31,8 +31,8 @@ namespace castor3d
 	{
 		m_buffer.reset();
 		auto & properties = m_renderSystem.getProperties();
-		auto elemSize = properties.limits.minUniformBufferOffsetAlignment;
-		auto maxSize = std::min( 65536u, properties.limits.maxUniformBufferRange );
+		auto elemSize = m_renderSystem.getValue( GpuMin::eUniformBufferOffsetAlignment );
+		auto maxSize = std::min( 65536u, uint32_t( m_renderSystem.getValue( GpuMax::eUniformBufferSize ) ) );
 		auto elemCount = uint32_t( std::floor( float( maxSize ) / elemSize ) );
 		m_buffer = ashes::makeUniformBuffer( *device.device
 			, m_debugName + "Ubo"
@@ -63,8 +63,7 @@ namespace castor3d
 	MemChunk PoolUniformBuffer::allocate( VkDeviceSize size )
 	{
 		CU_Require( hasAvailable( size ) );
-		auto & properties = m_renderSystem.getProperties();
-		auto elemSize = properties.limits.minUniformBufferOffsetAlignment;
+		auto elemSize = m_renderSystem.getValue( GpuMin::eUniformBufferOffsetAlignment );
 		auto offset = m_allocated.empty()
 			? 0u
 			: m_allocated.rbegin()->offset + m_allocated.rbegin()->size;
@@ -75,8 +74,7 @@ namespace castor3d
 
 	void PoolUniformBuffer::deallocate( VkDeviceSize offset )
 	{
-		auto & properties = m_renderSystem.getProperties();
-		auto elemSize = properties.limits.minUniformBufferOffsetAlignment;
+		auto elemSize = m_renderSystem.getValue( GpuMin::eUniformBufferOffsetAlignment );
 		auto it = m_allocated.find( { offset * elemSize, 0u } );
 
 		if ( it != m_allocated.end() )

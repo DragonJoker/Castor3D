@@ -617,7 +617,7 @@ namespace castor3d
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 				, image.getName() + "StagingBuffer" );
 			auto mappedSize = ashes::getAlignedSize( image.getPxBuffer().getSize()
-				, device->getProperties().limits.nonCoherentAtomSize );
+				, device.renderSystem.getValue( GpuMin::eBufferMapSize ) );
 
 			if ( auto data = buffer->lock( 0u, mappedSize, 0u ) )
 			{

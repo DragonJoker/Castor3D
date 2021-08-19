@@ -1,32 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
 
-  <Type Name="ast::var::Variable">
-    <DisplayString>{{name={m_name}}}</DisplayString>
-    <Expand>
-      <Item Name="name">m_name</Item>
-      <Item Name="type">m_type</Item>
-      <Item Name="outer">m_outer</Item>
-    </Expand>
-  </Type>
+	<Type Name="ast::var::Variable">
+		<DisplayString>{{name={m_name}}}</DisplayString>
+		<Expand>
+			<Item Name="name">m_name</Item>
+			<Item Name="type">m_type</Item>
+			<Item Name="outer">m_outer</Item>
+		</Expand>
+	</Type>
 
-  <Type Name="ashes::ArrayView&lt;*&gt;">
-	<DisplayString>{{size = {m_end - m_begin}}}</DisplayString>
-	<Expand>
-		<Item Name="[size]">m_end - m_begin</Item>
-		<ArrayItems>
-			<Size>m_end - m_begin</Size>
-			<ValuePointer>m_begin</ValuePointer>
-		</ArrayItems>
-    </Expand>
-  </Type>
+	<Type Name="ashes::ArrayView&lt;*&gt;">
+		<DisplayString>{{size = {m_end - m_begin}}}</DisplayString>
+		<Expand>
+			<Item Name="[size]">m_end - m_begin</Item>
+			<ArrayItems>
+				<Size>m_end - m_begin</Size>
+				<ValuePointer>m_begin</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>
 
-  <Type Name="castor3d::Frustum">
-	<DisplayString>{m_planes}</DisplayString>
-	  <Expand>
-	  <Item Name="viewport">m_viewport</Item>
-	  <Item Name="planes">m_planes</Item>
-	  </Expand>
-  </Type>
+	<Type Name="castor3d::Frustum">
+		<DisplayString>{m_planes}</DisplayString>
+		<Expand>
+			<Item Name="viewport">m_viewport</Item>
+			<Item Name="planes">m_planes</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::Material">
+		<DisplayString>{m_name} (type={m_type}, passes={m_passes})</DisplayString>
+		<Expand>
+			<Item Name="name">m_name</Item>
+			<Item Name="type">m_type</Item>
+			<Item Name="passes">m_passes</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::Pass">
+		<DisplayString>{m_id} (material={m_owner.m_name})</DisplayString>
+		<Expand>
+			<Item Name="id">m_id</Item>
+			<Item Name="material">m_owner</Item>
+			<Item Name="flags">m_flags</Item>
+			<Item Name="implicit">m_implicit</Item>
+			<Item Name="automaticShader">m_automaticShader</Item>
+			<Item Name="twoSided">m_twoSided</Item>
+			<Item Name="texturesReduced">m_texturesReduced</Item>
+			<Item Name="textures">m_textureUnits</Item>
+			<Item Name="opacity">m_opacity</Item>
+			<Item Name="accumulationOperator">m_bwAccumulationOperator</Item>
+			<Item Name="emissive">m_emissive</Item>
+			<Item Name="refractionRatio">m_refractionRatio</Item>
+			<Item Name="alphaBlendMode">m_alphaBlendMode</Item>
+			<Item Name="colourBlendMode">m_colourBlendMode</Item>
+			<Item Name="alphaRefValue">m_alphaValue</Item>
+			<Item Name="alphaFunc">m_alphaFunc</Item>
+			<Item Name="blendAlphaFunc">m_blendAlphaFunc</Item>
+			<Item Name="transmission">m_transmission</Item>
+			<Item Name="parallaxOcclusionMode">m_parallaxOcclusionMode</Item>
+			<Item Name="edgeColour">m_edgeColour</Item>
+			<Item Name="edgeWidth">m_edgeWidth</Item>
+			<Item Name="depthFactor">m_depthFactor</Item>
+			<Item Name="normalFactor">m_normalFactor</Item>
+			<Item Name="objectFactor">m_objectFactor</Item>
+		</Expand>
+	</Type>
 
 </AutoVisualizer>

@@ -133,8 +133,8 @@ namespace castor3d
 			}
 		};
 		auto & properties = renderSystem.getProperties();
-		auto maxSize = std::min( 65536u, properties.limits.maxUniformBufferRange );
-		auto elementSize = properties.limits.minUniformBufferOffsetAlignment;
+		auto maxSize = std::min( 65536u, uint32_t( renderSystem.getValue( GpuMax::eUniformBufferSize ) ) );
+		auto elementSize = renderSystem.getValue( GpuMin::eUniformBufferOffsetAlignment );
 		m_maxUboElemCount = uint32_t( std::floor( float( maxSize ) / elementSize ) );
 		m_maxUboSize = uint32_t( m_maxUboElemCount * elementSize );
 		m_stagingBuffer = std::make_unique< ashes::StagingBuffer >( *device
