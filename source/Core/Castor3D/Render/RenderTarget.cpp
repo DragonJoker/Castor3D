@@ -839,7 +839,10 @@ namespace castor3d
 
 		if ( m_type == TargetType::eWindow )
 		{
-			signalsToWait = scene->getRenderTargetsSemaphores();
+			auto targetSemaphores = scene->getRenderTargetsSemaphores();
+			signalsToWait.insert( signalsToWait.end()
+				, targetSemaphores.begin()
+				, targetSemaphores.end() );
 		}
 
 		// Render overlays.
@@ -865,7 +868,7 @@ namespace castor3d
 		auto timerBlock = m_overlaysTimer->start();
 		using LockType = std::unique_lock< OverlayCache >;
 		LockType lock{ castor::makeUniqueLock( getEngine()->getOverlayCache() ) };
-		m_overlayRenderer->beginPrepare( *m_overlaysTimer, toWait );
+		m_overlayRenderer->beginPrepare( *m_overlaysTimer );
 		auto preparer = m_overlayRenderer->getPreparer( device );
 
 		for ( auto category : getEngine()->getOverlayCache() )
@@ -882,6 +885,8 @@ namespace castor3d
 		}
 
 		m_overlayRenderer->endPrepare( *m_overlaysTimer );
-		return m_overlayRenderer->render( *m_overlaysTimer, queue );
+		return m_overlayRenderer->render( *m_overlaysTimer
+			, queue
+			, toWait );
 	}
 }

@@ -423,18 +423,24 @@ namespace castor3d
 
 	void RenderWindow::render( RenderInfo & info
 		, bool waitOnly
-		, crg::SemaphoreWaitArray toWait )
+		, crg::SemaphoreWaitArray & baseToWait )
 	{
-		if ( !m_dirty )
+		if ( m_skip )
+		{
+			return;
+		}
+
+		if ( m_initialised )
 		{
 			RenderTargetSPtr target = getRenderTarget();
 
 			if ( target && target->isInitialised() )
 			{
-				toWait = { target->render( m_device
+				auto toWait = { target->render( m_device
 					, info
 					, *m_queue->queue
-					, toWait ) };
+					, baseToWait ) };
+				baseToWait.clear();
 
 				auto & engine = *getEngine();
 				auto & renderSystem = *engine.getRenderSystem();
@@ -462,7 +468,7 @@ namespace castor3d
 
 						if ( exc.getResult() == VK_ERROR_DEVICE_LOST )
 						{
-							m_dirty = true;
+							m_skip = true;
 						}
 					}
 				}
@@ -483,7 +489,7 @@ namespace castor3d
 	{
 		m_size = size;
 
-		if ( !m_dirty.exchange( true ) )
+		if ( !m_skip.exchange( true ) )
 		{
 			log::debug << "Resizing RenderWindow to " << size << std::endl;
 			getListener()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
@@ -491,7 +497,7 @@ namespace castor3d
 					, QueueData const & queueData )
 				{
 					doResetSwapChain();
-					m_dirty = false;
+					m_skip = false;
 				} ) );
 		}
 	}
@@ -1303,36 +1309,6 @@ namespace castor3d
 		}
 
 		return result;
-	}
-
-	void RenderWindow::doCleanup( bool enableDevice )
-	{
-		auto & engine = *getEngine();
-
-		if ( enableDevice )
-		{
-			engine.getRenderSystem()->setCurrentRenderDevice( &m_device );
-		}
-
-		doWaitFrame( {} );
-		getDevice()->waitIdle();
-
-		RenderTargetSPtr target = getRenderTarget();
-
-		if ( target )
-		{
-			doDestroySaveData();
-			doDestroyCommandBuffers();
-			doDestroyRenderQuad();
-			doDestroyIntermediateViews();
-			doDestroyPickingPass();
-			target->cleanup( m_device );
-		}
-
-		if ( enableDevice )
-		{
-			engine.getRenderSystem()->setCurrentRenderDevice( nullptr );
-		}
 	}
 
 	void RenderWindow::doProcessMouseEvent( MouseEventSPtr event )
