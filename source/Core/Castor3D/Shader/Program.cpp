@@ -82,7 +82,7 @@ namespace castor3d
 			m_compiled.emplace( target
 				, CompiledShader{ getName()
 				, renderSystem.compileShader( it->second ) } );
-			m_states.push_back( loadShader( *renderSystem.getMainRenderDevice()
+			m_states.push_back( loadShader( renderSystem.getRenderDevice()
 				, m_compiled[target]
 				, target ) );
 		}
@@ -115,7 +115,7 @@ namespace castor3d
 			m_compiled.emplace( target
 				, CompiledShader{ getName()
 					, renderSystem.compileShader( it->second ) } );
-			m_states.push_back( loadShader( *renderSystem.getMainRenderDevice()
+			m_states.push_back( loadShader( renderSystem.getRenderDevice()
 				, m_compiled[target]
 				, target ) );
 		}
@@ -134,7 +134,7 @@ namespace castor3d
 			m_compiled.emplace( target
 				, CompiledShader{ getName()
 					, renderSystem.compileShader( target, getName(), *it->second.shader ) } );
-			m_states.push_back( loadShader( *renderSystem.getMainRenderDevice()
+			m_states.push_back( loadShader( renderSystem.getRenderDevice()
 				, m_compiled[target]
 				, target ) );
 		}

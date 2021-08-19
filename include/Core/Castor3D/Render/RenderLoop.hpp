@@ -221,9 +221,13 @@ namespace castor3d
 			//!\~english	The fence and semaphore used for UBO uploads.
 			//!\~french		La fence et le semaphore utilisé pour l'upload des UBO.
 			ashes::FencePtr fence;
+			//!\~english	Tells if the smaphore has been used in previous frame.
+			//!\~french		Dit si le sémaphore a été utilisé pendant la précédente frame.
+			bool used{ true };
 		};
 		std::array< UploadResources, 2u > m_uploadResources;
 		uint32_t m_currentUpdate{ 0u };
+		crg::SemaphoreWaitArray m_toWait;
 
 	private:
 		bool m_first = true;

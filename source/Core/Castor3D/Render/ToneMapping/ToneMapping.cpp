@@ -133,7 +133,7 @@ namespace castor3d
 		}
 
 		m_pixelShader.shader = getEngine()->getRenderTargetCache().getToneMappingFactory().create( name );
-		auto & device = *getEngine()->getRenderSystem()->getMainRenderDevice();
+		auto & device = getEngine()->getRenderSystem()->getRenderDevice();
 		m_program =
 		{
 			makeShaderState( device, m_vertexShader ),

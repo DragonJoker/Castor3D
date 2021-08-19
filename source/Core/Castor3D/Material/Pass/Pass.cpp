@@ -1090,7 +1090,7 @@ namespace castor3d
 				, std::move( buffer )
 				, name
 				, resultConfig.normalMask[0] == 0 ) );
-			auto & device = *engine.getRenderSystem()->getMainRenderDevice();
+			auto & device = engine.getRenderSystem()->getRenderDevice();
 			unit->initialise( device, *device.graphicsData() );
 			return unit;
 		}
@@ -1121,7 +1121,7 @@ namespace castor3d
 					, std::make_unique< castor::PxBufferBase >( unit->getTexture()->getImage().getPxBuffer() )
 					, unit->getTexture()->getName()
 					, unit->getConfiguration().normalMask[0] == 0 ) );
-				auto & device = *engine.getRenderSystem()->getMainRenderDevice();
+				auto & device = engine.getRenderSystem()->getRenderDevice();
 				unit->initialise( device, *device.graphicsData() );
 			}
 

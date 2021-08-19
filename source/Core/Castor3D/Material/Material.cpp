@@ -110,7 +110,7 @@ namespace castor3d
 
 	void Material::doInitialise()
 	{
-		auto & device = *getEngine()->getRenderSystem()->getMainRenderDevice();
+		auto & device = getEngine()->getRenderSystem()->getRenderDevice();
 		log::debug << cuT( "Initialising material [" ) << getName() << cuT( "]" ) << std::endl;
 
 		for ( auto pass : m_passes )
