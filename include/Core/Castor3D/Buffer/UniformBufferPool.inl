@@ -9,8 +9,7 @@ namespace castor3d
 		UniformBufferOffsetT< DataT > result;
 
 		auto & renderSystem = *getRenderSystem();
-		auto & properties = renderSystem.getProperties();
-		auto alignment = properties.limits.minUniformBufferOffsetAlignment;
+		auto alignment = renderSystem.getValue( GpuMin::eUniformBufferOffsetAlignment );
 		auto key = uint32_t( flags );
 		auto it = m_buffers.emplace( key, BufferArray{} ).first;
 		auto itB = doFindBuffer( it->second, ashes::getAlignedSize( sizeof( DataT ), alignment ) );
@@ -18,7 +17,7 @@ namespace castor3d
 
 		if ( itB == it->second.end() )
 		{
-			assert( m_currentUboIndex < m_maxPoolUboCount - 1u );
+			CU_Require( m_currentUboIndex < m_maxPoolUboCount - 1u );
 
 			if ( !m_maxUboElemCount )
 			{
@@ -26,6 +25,7 @@ namespace castor3d
 			}
 
 			itB = doCreatePoolBuffer( flags, it->second );
+			CU_Require( itB != it->second.end() );
 		}
 
 		result.setPool( *itB->buffer );

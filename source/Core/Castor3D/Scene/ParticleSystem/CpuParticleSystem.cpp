@@ -1,7 +1,7 @@
 #include "Castor3D/Scene/ParticleSystem/CpuParticleSystem.hpp"
 
 #include "Castor3D/Render/RenderDevice.hpp"
-#include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleEmitter.hpp"
@@ -63,7 +63,7 @@ namespace castor3d
 		auto & vbo = m_parent.getBillboards()->getVertexBuffer();
 		VkDeviceSize stride = m_inputs.stride();
 		auto mappedSize = ashes::getAlignedSize( VkDeviceSize( m_firstUnused * stride )
-			, device.properties.limits.nonCoherentAtomSize );
+			, device.renderSystem.getValue( GpuMin::eBufferMapSize ) );
 
 		if ( auto dst = vbo.getBuffer().lock( 0u, mappedSize, 0u ) )
 		{
