@@ -11,17 +11,16 @@
 #include <CastorUtils/Exception/Exception.hpp>
 #include <CastorUtils/Miscellaneous/StringUtils.hpp>
 
-using namespace castor;
-using namespace castor3d;
-
-#if CHECK_MEMORYLEAKS && defined( VLD_AVAILABLE ) && USE_VLD
-#	include <vld.h>
-#endif
-
 wxIMPLEMENT_APP( test_launcher::CastorTestLauncher );
 
 namespace test_launcher
 {
+#if defined( NDEBUG )
+	static constexpr castor::LogType DefaultLogType = castor::LogType::eInfo;
+#else
+	static constexpr castor::LogType DefaultLogType = castor::LogType::eTrace;
+#endif
+
 	CastorTestLauncher::CastorTestLauncher()
 	{
 #if defined( __WXGTK__ )
@@ -43,6 +42,7 @@ namespace test_launcher
 		wxCmdLineParser parser( wxApp::argc, wxApp::argv );
 		parser.AddSwitch( wxT( "h" ), wxT( "help" ), _( "Displays this help." ) );
 		parser.AddSwitch( wxT( "g" ), wxT( "generate" ), _( "Generates the reference image, using Vulkan renderer." ) );
+		parser.AddOption( wxT( "l" ), wxT( "log" ), _( "Defines log level (from 0=trace to 4=error)." ), wxCMD_LINE_VAL_NUMBER );
 		parser.AddParam( _( "The initial scene file" ), wxCMD_LINE_VAL_STRING, wxCMD_LINE_OPTION_MANDATORY );
 
 		for ( auto & plugin : list )
@@ -63,9 +63,17 @@ namespace test_launcher
 			result = false;
 		}
 
+		castor::LogType logLevel = DefaultLogType;
+		long log;
+
+		if ( parser.Found( wxT( "l" ), &log ) )
+		{
+			logLevel = castor::LogType( log );
+		}
+
 		if ( result )
 		{
-			Logger::initialise( LogType::eInfo );
+			castor::Logger::initialise( logLevel );
 
 			if ( parser.Found( wxT( "generate" ) ) )
 			{
@@ -102,23 +110,23 @@ namespace test_launcher
 
 	castor3d::EngineSPtr CastorTestLauncher::doInitialiseCastor()
 	{
-		if ( !File::directoryExists( Engine::getEngineDirectory() ) )
+		if ( !castor::File::directoryExists( castor3d::Engine::getEngineDirectory() ) )
 		{
-			File::directoryCreate( Engine::getEngineDirectory() );
+			castor::File::directoryCreate( castor3d::Engine::getEngineDirectory() );
 		}
 
-		castor3d::EngineSPtr castor = std::make_shared< Engine >( cuT( "CastorTestLauncher" )
+		castor3d::EngineSPtr castor = std::make_shared< castor3d::Engine >( cuT( "CastorTestLauncher" )
 			, castor3d::Version{ CastorTestLauncher_VERSION_MAJOR, CastorTestLauncher_VERSION_MINOR, CastorTestLauncher_VERSION_BUILD }
 			, false
-			, *Logger::getSingleton().getInstance() );
-		PathArray arrayFiles;
-		File::listDirectoryFiles( Engine::getPluginsDirectory(), arrayFiles );
+			, * castor::Logger::getSingleton().getInstance() );
+		castor::PathArray arrayFiles;
+		castor::File::listDirectoryFiles( castor3d::Engine::getPluginsDirectory(), arrayFiles );
 
 		// Exclude debug plug-in in release builds, and release plug-ins in debug builds
 		if ( !arrayFiles.empty() )
 		{
-			PathArray arrayFailed;
-			PathArray otherPlugins;
+			castor::PathArray arrayFailed;
+			castor::PathArray otherPlugins;
 
 			for ( auto file : arrayFiles )
 			{
@@ -142,13 +150,13 @@ namespace test_launcher
 
 		if ( doParseCommandLine() )
 		{
-			if ( !File::directoryExists( m_fileName.getPath() / cuT( "Compare" ) ) )
+			if ( !castor::File::directoryExists( m_fileName.getPath() / cuT( "Compare" ) ) )
 			{
-				File::directoryCreate( m_fileName.getPath() / cuT( "Compare" ) );
+				castor::File::directoryCreate( m_fileName.getPath() / cuT( "Compare" ) );
 			}
 
-			Logger::setFileName( m_fileName.getPath() / cuT( "Compare" ) / ( m_fileName.getFileName() + cuT( "_" ) + m_rendererType + cuT( ".log" ) ) );
-			Logger::logInfo( cuT( "Start" ) );
+			castor::Logger::setFileName( m_fileName.getPath() / cuT( "Compare" ) / ( m_fileName.getFileName() + cuT( "_" ) + m_rendererType + cuT( ".log" ) ) );
+			castor::Logger::logInfo( cuT( "Start" ) );
 
 			try
 			{
@@ -160,15 +168,15 @@ namespace test_launcher
 					{
 						if ( mainFrame->initialise() )
 						{
-							Logger::logInfo( cuT( "Load scene" ) );
+							castor::Logger::logInfo( cuT( "Load scene" ) );
 							mainFrame->loadScene( m_fileName );
-							Logger::logInfo( cuT( "Save frame" ) );
+							castor::Logger::logInfo( cuT( "Save frame" ) );
 							mainFrame->saveFrame( m_outputFileSuffix );
-							Logger::logInfo( cuT( "Cleanup frame" ) );
+							castor::Logger::logInfo( cuT( "Cleanup frame" ) );
 							mainFrame->cleanup();
 						}
 
-						Logger::logInfo( cuT( "Close window" ) );
+						castor::Logger::logInfo( cuT( "Close window" ) );
 						mainFrame->Close();
 						delete mainFrame;
 					}
@@ -181,17 +189,17 @@ namespace test_launcher
 
 				}
 			}
-			catch ( Exception & exc )
+			catch ( castor::Exception & exc )
 			{
-				Logger::logError( std::stringstream() << "Initialisation failed : " << exc.getFullDescription() );
+				castor::Logger::logError( std::stringstream() << "Initialisation failed : " << exc.getFullDescription() );
 			}
 			catch ( std::exception & exc )
 			{
-				Logger::logError( std::stringstream() << "Initialisation failed : " << exc.what() );
+				castor::Logger::logError( std::stringstream() << "Initialisation failed : " << exc.what() );
 			}
 
-			Logger::logInfo( cuT( "Stop" ) );
-			Logger::cleanup();
+			castor::Logger::logInfo( cuT( "Stop" ) );
+			castor::Logger::cleanup();
 		}
 
 		wxImage::CleanUpHandlers();
