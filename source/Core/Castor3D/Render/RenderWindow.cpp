@@ -892,7 +892,7 @@ namespace castor3d
 			m_picking = std::make_shared< Picking >( getOwner()->getGraphResourceHandler()
 				, m_device
 				, queueData
-				, m_size
+				, target->getSize()
 				, target->getTechnique()->getMatrixUbo()
 				, target->getCuller() );
 		}
@@ -1142,11 +1142,9 @@ namespace castor3d
 		doDestroyCommandBuffers();
 		doDestroyRenderQuad();
 		doDestroyIntermediateViews();
-		doDestroyPickingPass();
 		doDestroySwapchain();
 
 		doCreateSwapchain();
-		doCreatePickingPass( *m_queue );
 		doCreateIntermediateViews( *m_queue );
 		doCreateRenderQuad( *m_queue );
 		doCreateCommandBuffers( *m_queue );
