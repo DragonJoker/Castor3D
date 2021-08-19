@@ -375,6 +375,7 @@ namespace castor3d
 		, m_backgroundRenderer{ castor::makeUnique< BackgroundRenderer >( m_renderTarget.getGraph()
 			, m_computeDepthRangeDesc
 			, m_device
+			, name
 			, *m_renderTarget.getScene()->getBackground()
 			, m_renderTarget.getHdrConfigUbo()
 			, m_sceneUbo

@@ -377,6 +377,9 @@ namespace castor3d
 		//!\~english	The signal raised when the scene is updating.
 		//!\~french		Le signal levé lorsque la scène se met à jour.
 		mutable OnSceneUpdate onUpdate;
+		//!\~english	The signal raised when the scene background has changed.
+		//!\~french		Le signal levé lorsque le fond a changé.
+		mutable OnBackgroundChanged onSetBackground;
 
 	private:
 		bool m_initialised{ false };
