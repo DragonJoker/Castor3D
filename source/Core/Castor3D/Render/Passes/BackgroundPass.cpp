@@ -4,6 +4,7 @@
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -47,10 +48,11 @@ namespace castor3d
 			, 1u
 			, true }
 		, m_device{ device }
-		, m_background{ background }
+		, m_background{ &background }
 		, m_size{ size }
 		, m_usesDepth{ usesDepth }
-		, m_onBackgroundChanged{ background.onChanged.connect( [this]( SceneBackground const & )
+		, m_viewport{ *device.renderSystem.getEngine() }
+		, m_onBackgroundChanged{ background.onChanged.connect( [this]( SceneBackground const & background )
 			{
 				doResetPipeline();
 			} ) }
@@ -64,12 +66,13 @@ namespace castor3d
 
 	void BackgroundPass::update( CpuUpdater & updater )
 	{
-		m_background.update( updater );
+		updater.viewport = &m_viewport;
+		m_background->update( updater );
 	}
 
 	void BackgroundPass::update( GpuUpdater & updater )
 	{
-		m_background.update( updater );
+		m_background->update( updater );
 	}
 
 	void BackgroundPass::doSubInitialise()
@@ -107,7 +110,7 @@ namespace castor3d
 
 	bool BackgroundPass::doIsEnabled()const
 	{
-		return m_background.isInitialised();
+		return m_background->isInitialised();
 	}
 
 	void BackgroundPass::doInitialiseVertexBuffer()
@@ -213,7 +216,7 @@ namespace castor3d
 			shader::Utils utils{ writer, *m_device.renderSystem.getEngine() };
 			utils.declareRemoveGamma();
 
-			if ( !m_background.isHdr() )
+			if ( !m_background->isHdr() )
 			{
 				utils.declareRemoveGamma();
 			}
@@ -228,7 +231,7 @@ namespace castor3d
 					auto colour = writer.declLocale( "colour"
 						, c3d_mapSkybox.sample( vtx_texture ) );
 
-					if ( !m_background.isHdr() )
+					if ( !m_background->isHdr() )
 					{
 						pxl_FragColor = vec4( c3d_hdrConfigData.removeGamma( colour.xyz() ), colour.w() );
 					}
@@ -277,8 +280,8 @@ namespace castor3d
 		m_descriptorWrites.push_back( crg::WriteDescriptorSet{ SceneBackground::SkyBoxImgIdx
 			, 0u
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VkDescriptorImageInfo{ m_background.getSampler().getSampler()
-				, m_background.getTexture().getDefaultView().getSampledView()
+			, VkDescriptorImageInfo{ m_background->getSampler().getSampler()
+				, m_background->getTexture().getDefaultView().getSampledView()
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } );
 	}
 
@@ -364,17 +367,19 @@ namespace castor3d
 	BackgroundRenderer::BackgroundRenderer( crg::FrameGraph & graph
 		, crg::FramePass const * previousPass
 		, RenderDevice const & device
+		, castor::String const & name
 		, SceneBackground & background
 		, HdrConfigUbo const & hdrConfigUbo
 		, SceneUbo const & sceneUbo
 		, crg::ImageViewId const & colour
 		, crg::ImageViewId const * depth )
 		: m_device{ device }
-		, m_background{ background }
 		, m_matrixUbo{ m_device }
 		, m_modelUbo{ m_device.uboPools->getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
 		, m_backgroundPassDesc{ &doCreatePass( graph
 			, previousPass
+			, name
+			, background
 			, hdrConfigUbo
 			, sceneUbo
 			, colour
@@ -411,16 +416,17 @@ namespace castor3d
 
 	crg::FramePass const & BackgroundRenderer::doCreatePass( crg::FrameGraph & graph
 		, crg::FramePass const * previousPass
+		, castor::String const & name
+		, SceneBackground & background
 		, HdrConfigUbo const & hdrConfigUbo
 		, SceneUbo const & sceneUbo
 		, crg::ImageViewId const & colour
 		, crg::ImageViewId const * depth )
 	{
 		auto size = makeExtent2D( getExtent( colour ) );
-		auto name = graph.getName();
-		m_background.initialise( m_device );
-		auto & result = graph.createPass( "Background"
-			, [this, name, size]( crg::FramePass const & pass
+		auto graphName = graph.getName();
+		auto & result = graph.createPass( name + "Background"
+			, [this, graphName, size]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -428,11 +434,11 @@ namespace castor3d
 					, context
 					, graph
 					, m_device
-					, m_background
+					, background
 					, size
 					, true );
 				m_backgroundPass = result.get();
-				m_device.renderSystem.getEngine()->registerTimer( name
+				m_device.renderSystem.getEngine()->registerTimer( graphName
 					, result->getTimer() );
 				return result;
 			} );
@@ -451,7 +457,7 @@ namespace castor3d
 			, SceneBackground::HdrCfgUboIdx );
 		sceneUbo.createPassBinding( result
 			, SceneBackground::SceneUboIdx );
-		result.addSampledView( m_background.getTextureId().sampledViewId
+		result.addSampledView( background.getTextureId().sampledViewId
 			, SceneBackground::SkyBoxImgIdx );
 
 		if ( depth )

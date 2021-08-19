@@ -53,7 +53,6 @@ namespace castor3d
 		, Scene & scene
 		, castor::String const & name )
 		: SceneBackground{ engine, scene, name + cuT( "Colour" ), BackgroundType::eColour }
-		, m_viewport{ engine }
 	{
 		m_hdr = false;
 		m_textureId = { engine.getRenderSystem()->getRenderDevice()
@@ -119,21 +118,22 @@ namespace castor3d
 
 	void ColourBackground::doCpuUpdate( CpuUpdater & updater
 		, castor::Matrix4x4f & mtxView
-		, castor::Matrix4x4f & mtxProj )
+		, castor::Matrix4x4f & mtxProj )const
 	{
 		auto & value = m_scene.getBackgroundColour();
 		m_colour = HdrRgbColour::fromComponents( value.red(), value.green(), value.blue() );
-		m_viewport.resize( updater.camera->getSize() );
-		m_viewport.setPerspective( 45.0_degrees
+		auto & viewport = *updater.viewport;
+		viewport.resize( updater.camera->getSize() );
+		viewport.setPerspective( 45.0_degrees
 			, updater.camera->getRatio()
 			, 0.1f
 			, 2.0f );
-		m_viewport.update();
+		viewport.update();
 		mtxView = updater.camera->getView();
-		mtxProj = m_viewport.getSafeBandedProjection();
+		mtxProj = viewport.getSafeBandedProjection();
 	}
 
-	void ColourBackground::doGpuUpdate( GpuUpdater & updater )
+	void ColourBackground::doGpuUpdate( GpuUpdater & updater )const
 	{
 		if ( m_colour.isDirty() )
 		{
@@ -141,7 +141,7 @@ namespace castor3d
 		}
 	}
 
-	void ColourBackground::doUpdateColour( RenderDevice const & device )
+	void ColourBackground::doUpdateColour( RenderDevice const & device )const
 	{
 		VkDeviceSize lockSize = Dim * Dim * sizeof( Point4f );
 
