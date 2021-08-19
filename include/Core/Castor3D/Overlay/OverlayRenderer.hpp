@@ -98,8 +98,7 @@ namespace castor3d
 		 *\param[in]	timer	Le timer de la passe de rendu.
 		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
-		C3D_API void beginPrepare( FramePassTimer const & timer
-			, crg::SemaphoreWaitArray const & toWait );
+		C3D_API void beginPrepare( FramePassTimer const & timer );
 		/**
 		 *\~english
 		 *\brief		Ends the overlays preparation.
@@ -141,7 +140,8 @@ namespace castor3d
 		 *\param[in]	timer	Le timer de la passe de rendu.
 		 */
 		C3D_API crg::SemaphoreWait render( FramePassTimer & timer
-			, ashes::Queue const & queue );
+			, ashes::Queue const & queue
+			, crg::SemaphoreWaitArray const & toWait );
 		/**
 		*\~english
 		*name
@@ -317,7 +317,6 @@ namespace castor3d
 		castor::String m_previousCaption;
 		bool m_sizeChanged{ true };
 		MatrixUbo m_matrixUbo;
-		crg::SemaphoreWaitArray const * m_toWait{ nullptr };
 		ashes::SemaphorePtr m_finished;
 	};
 }
