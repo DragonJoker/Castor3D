@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Log/LoggerInstance.hpp"
 
+#include <mutex>
+
 namespace castor
 {
 	template< typename CharT, typename TraitsT >
@@ -47,27 +49,31 @@ namespace castor
 				return c;
 			}
 
-			if ( traits_type::eq_int_type( c, traits_type::eof() ) )
+			auto lock( makeUniqueLock( *m_logger ) );
 			{
-				doSync();
-			}
-			else if ( c == '\n' )
-			{
-				doSync();
-			}
-			else if ( c == '\r' )
-			{
-				m_buffer += '\r';
-				doSyncNoLF();
-			}
-			else
-			{
-				m_buffer += traits_type::to_char_type( c );
+				if ( traits_type::eq_int_type( c, traits_type::eof() ) )
+				{
+					doSync();
+				}
+				else if ( c == '\n' )
+				{
+					doSync();
+				}
+				else if ( c == '\r' )
+				{
+					m_buffer += '\r';
+					doSyncNoLF();
+				}
+				else
+				{
+					m_buffer += traits_type::to_char_type( c );
+				}
 			}
 
 			return c;
 		}
 
+	private:
 		int doSync()
 		{
 			if ( !m_buffer.empty() )
@@ -101,7 +107,6 @@ namespace castor
 		string_type m_buffer;
 	};
 	/**
-	\version	0.11.0
 	\~english
 	\brief		Streambuf traits for trace logging.
 	\~french
@@ -111,18 +116,17 @@ namespace castor
 	struct TraceLoggerStreambufTraitsT
 	{
 		static void log( LoggerInstance & logger
-			, std::basic_string< CharType > const & p_text )
+			, std::basic_string< CharType > const & text )
 		{
-			logger.logTrace( string::stringCast< char >( p_text ) );
+			logger.lockedLogTrace( string::stringCast< char >( text ) );
 		}
 		static void logNoLF( LoggerInstance & logger
-			, std::basic_string< CharType > const & p_text )
+			, std::basic_string< CharType > const & text )
 		{
-			logger.logTraceNoLF( string::stringCast< char >( p_text ) );
+			logger.lockedLogTraceNoLF( string::stringCast< char >( text ) );
 		}
 	};
 	/**
-	\version	0.11.0
 	\~english
 	\brief		Streambuf traits for debug logging.
 	\~french
@@ -132,18 +136,17 @@ namespace castor
 	struct DebugLoggerStreambufTraitsT
 	{
 		static void log( LoggerInstance & logger
-			, std::basic_string< CharType > const & p_text )
+			, std::basic_string< CharType > const & text )
 		{
-			logger.logDebug( string::stringCast< char >( p_text ) );
+			logger.lockedLogDebug( string::stringCast< char >( text ) );
 		}
 		static void logNoLF( LoggerInstance & logger
-			, std::basic_string< CharType > const & p_text )
+			, std::basic_string< CharType > const & text )
 		{
-			logger.logDebugNoLF( string::stringCast< char >( p_text ) );
+			logger.lockedLogDebugNoLF( string::stringCast< char >( text ) );
 		}
 	};
 	/**
-	\version	0.11.0
 	\~english
 	\brief		Streambuf traits for info logging.
 	\~french
@@ -153,18 +156,17 @@ namespace castor
 	struct InfoLoggerStreambufTraitsT
 	{
 		static void log( LoggerInstance & logger
-			, std::basic_string< CharType > const & p_text )
+			, std::basic_string< CharType > const & text )
 		{
-			logger.logInfo( string::stringCast< char >( p_text ) );
+			logger.lockedLogInfo( string::stringCast< char >( text ) );
 		}
 		static void logNoLF( LoggerInstance & logger
-			, std::basic_string< CharType > const & p_text )
+			, std::basic_string< CharType > const & text )
 		{
-			logger.logInfoNoLF( string::stringCast< char >( p_text ) );
+			logger.lockedLogInfoNoLF( string::stringCast< char >( text ) );
 		}
 	};
 	/**
-	\version	0.11.0
 	\~english
 	\brief		Streambuf traits for warning logging.
 	\~french
@@ -174,18 +176,17 @@ namespace castor
 	struct WarningLoggerStreambufTraitsT
 	{
 		static void log( LoggerInstance & logger
-			, std::basic_string< CharType > const & p_text )
+			, std::basic_string< CharType > const & text )
 		{
-			logger.logWarning( string::stringCast< char >( p_text ) );
+			logger.lockedLogWarning( string::stringCast< char >( text ) );
 		}
 		static void logNoLF( LoggerInstance & logger
-			, std::basic_string< CharType > const & p_text )
+			, std::basic_string< CharType > const & text )
 		{
-			logger.logWarningNoLF( string::stringCast< char >( p_text ) );
+			logger.lockedLogWarningNoLF( string::stringCast< char >( text ) );
 		}
 	};
 	/**
-	\version	0.11.0
 	\~english
 	\brief		Streambuf traits for error logging.
 	\~french
@@ -195,14 +196,14 @@ namespace castor
 	struct ErrorLoggerStreambufTraitsT
 	{
 		static void log( LoggerInstance & logger
-			, std::basic_string< CharType > const & p_text )
+			, std::basic_string< CharType > const & text )
 		{
-			logger.logError( string::stringCast< char >( p_text ) );
+			logger.lockedLogError( string::stringCast< char >( text ) );
 		}
 		static void logNoLF( LoggerInstance & logger
-			, std::basic_string< CharType > const & p_text )
+			, std::basic_string< CharType > const & text )
 		{
-			logger.logErrorNoLF( string::stringCast< char >( p_text ) );
+			logger.lockedLogErrorNoLF( string::stringCast< char >( text ) );
 		}
 	};
 
