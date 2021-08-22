@@ -350,7 +350,7 @@ namespace castor3d
 		m_lightLpvs.clear();
 	}
 
-	void LayeredLightPropagationVolumesBase::registerLight( LightSPtr light )
+	void LayeredLightPropagationVolumesBase::registerLight( Light * light )
 	{
 		auto it = m_lightLpvs.find( light );
 

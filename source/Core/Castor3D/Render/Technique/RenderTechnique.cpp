@@ -105,9 +105,10 @@ namespace castor3d
 
 				for ( auto i = 0u; i < count; ++i )
 				{
-					lightIt->second->setShadowMap( &shadowMap, index );
+					auto & light = *lightIt->second;
+					light.setShadowMap( &shadowMap, index );
 					active.second.push_back( index );
-					updater.light = lightIt->second;
+					updater.light = &light;
 					updater.index = index;
 					shadowMap.update( updater );
 
@@ -501,8 +502,10 @@ namespace castor3d
 			return;
 		}
 
-		updater.camera = m_renderTarget.getCamera();
-		updater.voxelConeTracing = m_renderTarget.getScene()->getVoxelConeTracingConfig().enabled;
+		auto & scene = *m_renderTarget.getScene();
+		auto & camera = *m_renderTarget.getCamera();
+		updater.camera = &camera;
+		updater.voxelConeTracing = scene.getVoxelConeTracingConfig().enabled;
 
 		m_depthPass->update( updater );
 		m_backgroundRenderer->update( updater );
@@ -524,19 +527,18 @@ namespace castor3d
 
 		if ( m_renderTarget.getTargetType() == TargetType::eWindow )
 		{
-			m_renderTarget.getScene()->getEnvironmentMap().update( updater );
 		}
 
 		if ( m_ssaoConfig.enabled )
 		{
 			m_ssao->update( updater );
+			scene.getEnvironmentMap().update( updater );
 		}
 
 		doUpdateShadowMaps( updater );
 		doUpdateLpv( updater );
 		doUpdateParticles( updater );
 
-		auto & camera = *m_renderTarget.getCamera();
 		auto jitter = m_renderTarget.getJitter();
 		auto jitterProjSpace = jitter * 2.0f;
 		jitterProjSpace[0] /= camera.getWidth();
@@ -557,15 +559,16 @@ namespace castor3d
 			return;
 		}
 
-		updater.scene = m_renderTarget.getScene();
-		updater.camera = m_renderTarget.getCamera();
-		updater.voxelConeTracing = m_renderTarget.getScene()->getVoxelConeTracingConfig().enabled;
+		auto & scene = *m_renderTarget.getScene();
+		updater.scene = &scene;
+		updater.camera = m_renderTarget.getCamera().get();
+		updater.voxelConeTracing = scene.getVoxelConeTracingConfig().enabled;
 
 		doInitialiseLpv();
 
 		if ( m_renderTarget.getTargetType() == TargetType::eWindow )
 		{
-			m_renderTarget.getScene()->getEnvironmentMap().update( updater );
+			scene .getEnvironmentMap().update( updater );
 		}
 
 		m_depthPass->update( updater );
