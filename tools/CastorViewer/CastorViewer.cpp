@@ -22,6 +22,13 @@ wxIMPLEMENT_APP( CastorViewer::CastorViewerApp );
 
 namespace CastorViewer
 {
+	static const bool isCastor3DThreaded = true;
+#if defined( NDEBUG )
+	static const int wantedFPS = 1000;
+#else
+	static const int wantedFPS = 60;
+#endif
+
 	castor3d::Version getVersion()
 	{
 		return castor3d::Version
@@ -36,7 +43,9 @@ namespace CastorViewer
 		: CastorApplication{ cuT( "CastorViewer" )
 			, cuT( "Castor Viewer" )
 			, 7
-			, CastorViewer::getVersion() }
+			, CastorViewer::getVersion()
+			, wantedFPS
+			, isCastor3DThreaded }
 		, m_mainFrame( nullptr )
 	{
 		wxSetAssertHandler( &CastorApplication::assertHandler );

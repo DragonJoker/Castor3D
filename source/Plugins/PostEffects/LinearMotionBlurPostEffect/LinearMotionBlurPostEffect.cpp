@@ -156,7 +156,7 @@ namespace motion_blur
 			auto & configuration = m_ubo.getData();
 			configuration.samplesCount = m_configuration.samplesCount;
 			configuration.vectorDivider = m_configuration.vectorDivider;
-			configuration.blurScale = m_fpsScale
+			configuration.blurScale = ( m_fpsScale && ( fps != castor3d::RenderLoop::UnlimitedFPS ) )
 				? fps / getRenderSystem()->getEngine()->getRenderLoop().getWantedFps()
 				: 1.0f;
 			m_saved = current;
