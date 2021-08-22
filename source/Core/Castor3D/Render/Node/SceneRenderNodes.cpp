@@ -40,28 +40,56 @@ namespace castor3d
 			, AnimatedMesh const * mesh
 			, AnimatedSkeleton const * skeleton )
 		{
-			size_t hash = texturesCount;
+			enum BitVal : uint16_t
+			{
+				BillboadUBO = 0x0001 << 0,
+				MorphingUBO = 0x0001 << 1,
+				SkinningUBO = 0x0001 << 2,
+				InstSkinSSBO = 0x0001 << 3,
+				InstSkinTBO = 0x0001 << 4,
+			};
+
+			Engine * engine{};
+			uint16_t spec{};
 
 			if ( billboard )
 			{
-				hash |= 0x00001000;
+				engine = billboard->getParentScene().getEngine();
+				spec |= BillboadUBO; // Billboard UBO
 			}
 			else
 			{
-				hash |= 0x00002000;
+				engine = submesh->getOwner()->getEngine();
 
 				if ( mesh )
 				{
-					hash |= 0x00004000;
+					spec |= MorphingUBO; // Morphing UBO
 				}
 
 				if ( skeleton )
 				{
-					hash |= 0x00008000;
+					if ( submesh->getInstantiatedBones().hasInstancedBonesBuffer() )
+					{
+						if ( engine->getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers ) )
+						{
+							spec |= InstSkinSSBO; // Instantiated Skinning SSBO
+						}
+						else
+						{
+							spec |= InstSkinTBO; // Instantiated Skinning TBO
+						}
+					}
+					else
+					{
+						spec |= SkinningUBO; // Skinning UBO
+					}
 				}
 			}
 
-			return hash;
+			size_t result{ spec };
+			result <<= 16u;
+			result += texturesCount;
+			return result;
 		}
 
 		size_t makeLayoutHash( SubmeshRenderNode const & node )
@@ -82,7 +110,7 @@ namespace castor3d
 				, nullptr );
 		}
 
-		size_t makeHash( SceneNode & sceneNode
+		size_t makeNodeHash( SceneNode & sceneNode
 			, Submesh & data
 			, Geometry & instance )
 		{
@@ -92,7 +120,7 @@ namespace castor3d
 			return hash;
 		}
 
-		size_t makeHash( SceneNode & sceneNode
+		size_t makeNodeHash( SceneNode & sceneNode
 			, BillboardBase & instance )
 		{
 			auto hash = std::hash< SceneNode * >{}( &sceneNode );
@@ -197,11 +225,8 @@ namespace castor3d
 			, ashes::DescriptorPool const & descriptorPool
 			, NodeT & node )
 		{
-			if ( !node.uboDescriptorSet )
+			if ( node.uboDescriptorSet )
 			{
-				node.uboDescriptorSet = descriptorPool.createDescriptorSet( getName( node ) + "Ubo"
-					, layout
-					, RenderPipeline::eBuffers );
 				auto & descriptorSet = *node.uboDescriptorSet;
 				engine.getMaterialCache().getPassBuffer().createBinding( descriptorSet
 					, layout.getBinding( uint32_t( NodeUboIdx::eMaterials ) ) );
@@ -254,11 +279,8 @@ namespace castor3d
 			, ashes::DescriptorPool const & descriptorPool
 			, NodeT & node )
 		{
-			if ( !node.texDescriptorSet )
+			if ( node.texDescriptorSet )
 			{
-				node.texDescriptorSet = descriptorPool.createDescriptorSet( getName( node ) + "Tex"
-					, layout
-					, RenderPipeline::eTextures );
 				auto & descriptorSet = *node.texDescriptorSet;
 				ashes::WriteDescriptorSetArray writes;
 				auto textures = node.passNode.pass.getTexturesMask();
@@ -279,30 +301,387 @@ namespace castor3d
 
 		template< typename NodeT >
 		void doInitialiseNode( Engine & engine
-			, ashes::DescriptorPool const & descriptorPool
-			, std::unordered_map< size_t, SceneRenderNodes::DescriptorSetLayouts > const & descriptorLayouts
+			, SceneRenderNodes::DescriptorSetPools const & pools
+			, SceneRenderNodes::DescriptorSetLayouts const & descriptorLayout
 			, NodeT & node )
 		{
-			size_t hash = makeLayoutHash( node );
-			auto layouts = descriptorLayouts.find( hash );
-			CU_Require( layouts != descriptorLayouts.end() );
-
-			if ( !layouts->second.ubo->getBindings().empty() )
+			if ( !descriptorLayout.buf->getBindings().empty() )
 			{
 				doInitialiseUboDescriptor( engine
-					, *layouts->second.ubo
-					, descriptorPool
+					, *descriptorLayout.buf
+					, *pools.buf
 					, node );
 			}
 
-			if ( !layouts->second.tex->getBindings().empty() )
+			if ( !descriptorLayout.tex->getBindings().empty() )
 			{
-				doInitialiseTextureDescriptor( *layouts->second.tex
-					, descriptorPool
+				doInitialiseTextureDescriptor( *descriptorLayout.tex
+					, *pools.tex
 					, node );
 			}
-
 		}
+
+		template< typename NodeT >
+		SceneRenderNodes::DescriptorNodesT< NodeT > & getNodesPool( size_t texturesCount
+			, bool instanced
+			, BillboardBase const * billboard
+			, Submesh const * submesh
+			, AnimatedMesh const * mesh
+			, AnimatedSkeleton const * skeleton
+			, Engine & engine
+			, SceneRenderNodes::DescriptorNodesPoolsT< NodeT > & nodesPools )
+		{
+			auto iresPool = nodesPools.emplace( makeLayoutHash( texturesCount
+				, billboard
+				, submesh
+				, mesh
+				, skeleton ), nullptr );
+			auto itPool = iresPool.first;
+
+			if ( iresPool.second )
+			{
+				itPool->second = std::make_unique< SceneRenderNodes::DescriptorNodesT< NodeT > >( engine
+					, texturesCount
+					, instanced
+					, billboard
+					, submesh
+					, mesh
+					, skeleton );
+			}
+
+			return *itPool->second;
+		}
+	}
+
+	//*********************************************************************************************
+
+	static constexpr uint32_t MaxPoolSize = 50u;
+
+	SceneRenderNodes::DescriptorSetPools::DescriptorSetPools( RenderDevice const & device
+		, SceneRenderNodes::DescriptorCounts const & counts )
+	{
+		ashes::VkDescriptorPoolSizeArray bufSizes;
+		ashes::VkDescriptorPoolSizeArray texSizes;
+
+		if ( counts.uniformBuffers )
+		{
+			bufSizes.push_back( { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, counts.uniformBuffers } );
+		}
+
+		if ( counts.storageBuffers )
+		{
+			bufSizes.push_back( { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, counts.storageBuffers } );
+		}
+
+		if ( counts.texelBuffers )
+		{
+			bufSizes.push_back( { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, counts.texelBuffers } );
+		}
+
+		if ( counts.samplers )
+		{
+			texSizes.push_back( { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, counts.samplers } );
+		}
+
+		if ( !bufSizes.empty() )
+		{
+			buf = device->createDescriptorPool( VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT
+				, MaxPoolSize
+				, std::move( bufSizes ) );
+		}
+
+		if ( !texSizes.empty() )
+		{
+			tex = device->createDescriptorPool( VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT
+				, MaxPoolSize
+				, std::move( texSizes ) );
+		}
+	}
+
+	//*********************************************************************************************
+
+	SceneRenderNodes::DescriptorCounts::DescriptorCounts( bool hasSSBO
+		, size_t textureCount
+		, BillboardBase const * billboard
+		, Submesh const * submesh
+		, AnimatedMesh const * mesh
+		, AnimatedSkeleton const * skeleton )
+	{
+		update( hasSSBO
+			, textureCount
+			, billboard
+			, submesh
+			, mesh
+			, skeleton );
+	}
+
+	void SceneRenderNodes::DescriptorCounts::update( bool hasSSBO
+		, size_t textureCount
+		, BillboardBase const * billboard
+		, Submesh const * submesh
+		, AnimatedMesh const * mesh
+		, AnimatedSkeleton const * skeleton )
+	{
+		texelBuffers++; // Materials TBO
+		storageBuffers++; // Materials SSBO
+		texelBuffers++; // Textures Configs TBO
+		storageBuffers++; // Textures Configs SSBO
+		uniformBuffers++; // Model UBO
+		uniformBuffers++; // ModelInstances UBO
+
+		if ( billboard )
+		{
+			uniformBuffers++; // Billboard UBO
+		}
+		else
+		{
+			if ( mesh )
+			{
+				uniformBuffers++; // Morphing UBO
+			}
+
+			if ( skeleton )
+			{
+				if ( submesh->getInstantiatedBones().hasInstancedBonesBuffer() )
+				{
+					if ( hasSSBO )
+					{
+						storageBuffers++; // Instantiated Skinning SSBO
+					}
+					else
+					{
+						texelBuffers++; // Instantiated Skinning TBO
+					}
+				}
+				else
+				{
+					uniformBuffers++; // Skinning UBO
+				}
+			}
+		}
+
+		samplers += textureCount;
+	}
+	
+	//*********************************************************************************************
+
+	SceneRenderNodes::DescriptorPools::DescriptorPools( Engine & engine
+		, DescriptorSetLayouts * layouts
+		, DescriptorCounts * counts )
+		: m_engine{ engine }
+		, m_layouts{ layouts }
+		, m_counts{ counts }
+	{
+	}
+
+	void SceneRenderNodes::DescriptorPools::allocate( SubmeshRenderNode & node )
+	{
+		auto ires = m_allocated.emplace( intptr_t( &node ), NodeSet{} );
+		auto it = ires.first;
+
+		if ( !ires.second )
+		{
+			return;
+		}
+
+		if ( !m_available )
+		{
+			m_pools.emplace_back( m_engine.getRenderSystem()->getRenderDevice()
+				, *m_counts );
+			m_available += MaxPoolSize;
+		}
+
+		--m_available;
+		doAllocateBuf( m_pools.back(), node, it->second );
+		doAllocateTex( m_pools.back(), node, it->second );
+	}
+	
+	void SceneRenderNodes::DescriptorPools::allocate( BillboardRenderNode & node )
+	{
+		auto ires = m_allocated.emplace( intptr_t( &node ), NodeSet{} );
+		auto it = ires.first;
+
+		if ( !ires.second )
+		{
+			return;
+		}
+
+		if ( !m_available )
+		{
+			m_pools.emplace_back( m_engine.getRenderSystem()->getRenderDevice()
+				, *m_counts );
+		}
+
+		--m_available;
+		doAllocateBuf( m_pools.back(), node, it->second );
+		doAllocateTex( m_pools.back(), node, it->second );
+	}
+
+	void SceneRenderNodes::DescriptorPools::deallocate( SubmeshRenderNode & node )
+	{
+		auto it = m_allocated.find( intptr_t( &node ) );
+
+		if ( it != m_allocated.end() )
+		{
+			m_allocated.erase( it );
+			node.uboDescriptorSet = nullptr;
+			node.texDescriptorSet = nullptr;
+		}
+	}
+
+	void SceneRenderNodes::DescriptorPools::deallocate( BillboardRenderNode & node )
+	{
+		auto it = m_allocated.find( intptr_t( &node ) );
+
+		if ( it != m_allocated.end() )
+		{
+			m_allocated.erase( it );
+			node.uboDescriptorSet = nullptr;
+			node.texDescriptorSet = nullptr;
+		}
+	}
+
+	void SceneRenderNodes::DescriptorPools::doAllocateBuf( DescriptorSetPools const & pools
+		, SubmeshRenderNode & node
+		, SceneRenderNodes::DescriptorPools::NodeSet & allocated )
+	{
+		if ( !m_layouts->buf->getBindings().empty() )
+		{
+			allocated.bufPool = &( *pools.buf );
+			allocated.bufSet = pools.buf->createDescriptorSet( getName( node ) + "Ubo"
+				, *m_layouts->buf
+				, RenderPipeline::eBuffers );
+			node.uboDescriptorSet = allocated.bufSet.get();
+			doInitialiseUboDescriptor( m_engine
+				, *m_layouts->buf
+				, *pools.buf
+				, node );
+		}
+	}
+
+	void SceneRenderNodes::DescriptorPools::doAllocateBuf( DescriptorSetPools const & pools
+		, BillboardRenderNode & node
+		, SceneRenderNodes::DescriptorPools::NodeSet & allocated )
+	{
+		if ( !m_layouts->buf->getBindings().empty() )
+		{
+			allocated.bufPool = &( *pools.buf );
+			allocated.bufSet = pools.buf->createDescriptorSet( getName( node ) + "Ubo"
+				, *m_layouts->buf
+				, RenderPipeline::eBuffers );
+			node.uboDescriptorSet = allocated.bufSet.get();
+			doInitialiseUboDescriptor( m_engine
+				, *m_layouts->buf
+				, *pools.buf
+				, node );
+		}
+	}
+
+	void SceneRenderNodes::DescriptorPools::doAllocateTex( DescriptorSetPools const & pools
+		, SubmeshRenderNode & node
+		, NodeSet & allocated )
+	{
+		if ( !m_layouts->tex->getBindings().empty() )
+		{
+			allocated.texPool = &( *pools.tex );
+			allocated.texSet = pools.tex->createDescriptorSet( getName( node ) + "Tex"
+				, *m_layouts->tex
+				, RenderPipeline::eTextures );
+			node.texDescriptorSet = allocated.texSet.get();
+			doInitialiseTextureDescriptor( *m_layouts->tex
+				, *pools.tex
+				, node );
+		}
+	}
+
+	void SceneRenderNodes::DescriptorPools::doAllocateTex( DescriptorSetPools const & pools
+		, BillboardRenderNode & node
+		, NodeSet & allocated )
+	{
+		if ( !m_layouts->tex->getBindings().empty() )
+		{
+			allocated.texPool = &( *pools.tex );
+			allocated.texSet = pools.tex->createDescriptorSet( getName( node ) + "Tex"
+				, *m_layouts->tex
+				, RenderPipeline::eTextures );
+			node.texDescriptorSet = allocated.texSet.get();
+			doInitialiseTextureDescriptor( *m_layouts->tex
+				, *pools.tex
+				, node );
+		}
+	}
+
+	//*********************************************************************************************
+
+	SceneRenderNodes::DescriptorSetLayouts::DescriptorSetLayouts( Engine & engine
+		, size_t texturesCount
+		, bool instanced
+		, BillboardBase const * billboard
+		, Submesh const * submesh
+		, AnimatedMesh const * mesh
+		, AnimatedSkeleton const * skeleton )
+	{
+		auto & device = engine.getRenderSystem()->getRenderDevice();
+		buf = device->createDescriptorSetLayout( doCreateUboBindings( engine
+			, texturesCount
+			, billboard
+			, submesh
+			, instanced
+			, mesh
+			, skeleton ) );
+		tex = device->createDescriptorSetLayout( doCreateTextureBindings( texturesCount ) );
+	}
+
+	//*********************************************************************************************
+
+	template<>
+	SceneRenderNodes::DescriptorNodesT< SubmeshRenderNode  >::DescriptorNodesT( Engine & engine
+		, size_t texturesCount
+		, bool instanced
+		, BillboardBase const * billboard
+		, Submesh const * submesh
+		, AnimatedMesh const * mesh
+		, AnimatedSkeleton const * skeleton )
+		: counts{ engine.getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers )
+			, texturesCount
+			, billboard
+			, submesh
+			, mesh
+			, skeleton }
+		, layouts{ engine
+			, texturesCount
+			, instanced
+			, billboard
+			, submesh
+			, mesh
+			, skeleton }
+		, pools{ engine, &layouts, &counts }
+	{
+	}
+	
+	template<>
+	SceneRenderNodes::DescriptorNodesT< BillboardRenderNode  >::DescriptorNodesT( Engine & engine
+		, size_t texturesCount
+		, bool instanced
+		, BillboardBase const * billboard
+		, Submesh const * submesh
+		, AnimatedMesh const * mesh
+		, AnimatedSkeleton const * skeleton )
+		: counts{ engine.getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers )
+			, texturesCount
+			, billboard
+			, submesh
+			, mesh
+			, skeleton }
+		, layouts{ engine
+			, texturesCount
+			, instanced
+			, billboard
+			, submesh
+			, mesh
+			, skeleton }
+		, pools{ engine, &layouts, &counts }
+	{
 	}
 
 	//*********************************************************************************************
@@ -314,22 +693,20 @@ namespace castor3d
 
 	void SceneRenderNodes::initialiseNodes( RenderDevice const & device )
 	{
-		doInitialiseDescriptorPool( device );
-
-		for ( auto & node : m_submeshNodes )
+		for ( auto & nodes : m_submeshNodes )
 		{
-			doInitialiseNode( *getOwner()->getEngine()
-				, *m_descriptorPool
-				, m_descriptorLayouts
-				, *node.second );
+			for ( auto & node : nodes.second->nodes )
+			{
+				nodes.second->pools.allocate( *node.second );
+			}
 		}
 
-		for ( auto & node : m_billboardNodes )
+		for ( auto & nodes : m_billboardNodes )
 		{
-			doInitialiseNode( *getOwner()->getEngine() 
-				, *m_descriptorPool
-				, m_descriptorLayouts
-				, *node.second );
+			for ( auto & node : nodes.second->nodes )
+			{
+				nodes.second->pools.allocate( *node.second );
+			}
 		}
 	}
 
@@ -343,8 +720,17 @@ namespace castor3d
 		, AnimatedMesh * mesh
 		, AnimatedSkeleton * skeleton )
 	{
+		auto & pass = passNode.pass;
 		auto lock( castor::makeUniqueLock( m_nodesMutex ) );
-		auto it = m_submeshNodes.emplace( makeHash( sceneNode, data, instance ), nullptr );
+		auto & pool = getNodesPool( pass.getTexturesMask().size()
+			, data.getInstantiation().isInstanced( pass.getOwner()->shared_from_this() )
+			, nullptr
+			, &data
+			, mesh
+			, skeleton
+			, *pass.getOwner()->getEngine()
+			, m_submeshNodes );
+		auto it = pool.nodes.emplace( makeNodeHash( sceneNode, data, instance ), nullptr );
 
 		if ( it.second )
 		{
@@ -371,8 +757,17 @@ namespace castor3d
 		, BillboardBase & instance
 		, UniformBufferOffsetT< BillboardUboConfiguration > billboardBuffer )
 	{
+		auto & pass = passNode.pass;
 		auto lock( castor::makeUniqueLock( m_nodesMutex ) );
-		auto it = m_billboardNodes.emplace( makeHash( sceneNode, instance ), nullptr );
+		auto & pool = getNodesPool( pass.getTexturesMask().size()
+			, false
+			, &instance
+			, nullptr
+			, nullptr
+			, nullptr
+			, *pass.getOwner()->getEngine()
+			, m_billboardNodes );
+		auto it = pool.nodes.emplace( makeNodeHash( sceneNode, instance ), nullptr );
 
 		if ( it.second )
 		{
@@ -405,14 +800,20 @@ namespace castor3d
 
 	void SceneRenderNodes::update( GpuUpdater & updater )
 	{
-		for ( auto & node : m_submeshNodes )
+		for ( auto & nodes : m_submeshNodes )
 		{
-			doUpdateNode( *node.second );
+			for ( auto & node : nodes.second->nodes )
+			{
+				doUpdateNode( *node.second );
+			}
 		}
 
-		for ( auto & node : m_billboardNodes )
+		for ( auto & nodes : m_billboardNodes )
 		{
-			doUpdateNode( *node.second );
+			for ( auto & node : nodes.second->nodes )
+			{
+				doUpdateNode( *node.second );
+			}
 		}
 	}
 
@@ -422,30 +823,37 @@ namespace castor3d
 		, AnimatedMesh const * mesh
 		, AnimatedSkeleton const * skeleton )
 	{
-		auto lock( castor::makeUniqueLock( m_layoutsMutex ) );
-		auto textures = pass.getTexturesMask();
-		size_t hash = makeLayoutHash( textures.size(), billboard, submesh, mesh, skeleton );
-		auto ires = m_descriptorLayouts.emplace( hash, DescriptorSetLayouts{} );
+		auto lock( castor::makeUniqueLock( m_nodesMutex ) );
+		DescriptorSetLayouts * layouts;
 
-		if ( ires.second )
+		if ( billboard )
 		{
-			auto & engine = *pass.getOwner()->getEngine();
-			auto & device = engine.getRenderSystem()->getRenderDevice();
-			ires.first->second.ubo = device->createDescriptorSetLayout( doCreateUboBindings( engine
-				, textures.size()
+			auto & pool = getNodesPool( pass.getTexturesMask().size()
+				, false
 				, billboard
 				, submesh
-				, ( billboard
-					? false
-					: submesh->getInstantiation().isInstanced( pass.getOwner()->shared_from_this() ) )
 				, mesh
-				, skeleton ) );
-			ires.first->second.tex = device->createDescriptorSetLayout( doCreateTextureBindings( textures.size() ) );
+				, skeleton
+				, *pass.getOwner()->getEngine()
+				, m_billboardNodes );
+			layouts = &pool.layouts;
+		}
+		else
+		{
+			auto & pool = getNodesPool( pass.getTexturesMask().size()
+				, submesh->getInstantiation().isInstanced( pass.getOwner()->shared_from_this() )
+				, billboard
+				, submesh
+				, mesh
+				, skeleton
+				, *pass.getOwner()->getEngine()
+				, m_submeshNodes );
+			layouts = &pool.layouts;
 		}
 
 		ashes::DescriptorSetLayoutCRefArray result;
-		result.emplace_back( *ires.first->second.ubo );
-		result.emplace_back( *ires.first->second.tex );
+		result.emplace_back( *layouts->buf );
+		result.emplace_back( *layouts->tex );
 		return result;
 	}
 
@@ -455,100 +863,12 @@ namespace castor3d
 		, AnimatedMesh * mesh
 		, AnimatedSkeleton * skeleton )
 	{
-		m_descriptorCounts.texelBuffers++; // Materials TBO
-		m_descriptorCounts.storageBuffers++; // Materials SSBO
-		m_descriptorCounts.texelBuffers++; // Textures Configs TBO
-		m_descriptorCounts.storageBuffers++; // Textures Configs SSBO
-		m_descriptorCounts.uniformBuffers++; // Model UBO
-		m_descriptorCounts.uniformBuffers++; // ModelInstances UBO
-
-		if ( billboard )
-		{
-			m_descriptorCounts.uniformBuffers++; // Billboard UBO
-		}
-		else
-		{
-			if ( mesh )
-			{
-				m_descriptorCounts.uniformBuffers++; // Morphing UBO
-			}
-
-			if ( skeleton )
-			{
-				if ( submesh->getInstantiatedBones().hasInstancedBonesBuffer() )
-				{
-					if ( getOwner()->getEngine()->getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers ) )
-					{
-						m_descriptorCounts.storageBuffers++; // Instantiated Skinning SSBO
-					}
-					else
-					{
-						m_descriptorCounts.texelBuffers++; // Instantiated Skinning TBO
-					}
-				}
-				else
-				{
-					m_descriptorCounts.uniformBuffers++; // Skinning UBO
-				}
-			}
-		}
-
-		auto textures = pass.getTexturesMask();
-		m_descriptorCounts.samplers += textures.size();
-	}
-
-	void SceneRenderNodes::doInitialiseDescriptorPool( RenderDevice const & device )
-	{
-		auto newSize = uint32_t( m_submeshNodes.size() + m_billboardNodes.size() );
-
-		if ( newSize
-			&& ( m_currentPoolSize < newSize
-				|| !m_descriptorPool ) )
-		{
-			ashes::VkDescriptorPoolSizeArray sizes;
-
-			if ( m_descriptorCounts.uniformBuffers )
-			{
-				sizes.push_back( { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, m_descriptorCounts.uniformBuffers } );
-			}
-
-			if ( m_descriptorCounts.storageBuffers )
-			{
-				sizes.push_back( { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, m_descriptorCounts.storageBuffers } );
-			}
-
-			if ( m_descriptorCounts.samplers )
-			{
-				sizes.push_back( { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, m_descriptorCounts.samplers } );
-			}
-
-			if ( m_descriptorCounts.texelBuffers )
-			{
-				sizes.push_back( { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, m_descriptorCounts.texelBuffers } );
-			}
-
-			if ( m_descriptorPool )
-			{
-				for ( auto & node : m_submeshNodes )
-				{
-					node.second->uboDescriptorSet.reset();
-					node.second->texDescriptorSet.reset();
-				}
-
-				for ( auto & node : m_billboardNodes )
-				{
-					node.second->uboDescriptorSet.reset();
-					node.second->texDescriptorSet.reset();
-				}
-
-				m_descriptorPool.reset();
-			}
-
-			m_descriptorPool = device->createDescriptorPool( VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT
-				, newSize * 2
-				, std::move( sizes ) );
-			m_currentPoolSize = newSize;
-		}
+		m_allDescriptorCounts.update( getOwner()->getEngine()->getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers )
+			, pass.getTexturesMask().size()
+			, billboard
+			, submesh
+			, mesh
+			, skeleton );
 	}
 
 	void SceneRenderNodes::doUpdateNode( SubmeshRenderNode & node )
