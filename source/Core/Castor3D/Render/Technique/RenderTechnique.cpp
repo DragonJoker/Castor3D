@@ -507,6 +507,11 @@ namespace castor3d
 		updater.camera = &camera;
 		updater.voxelConeTracing = scene.getVoxelConeTracingConfig().enabled;
 
+		if ( m_ssaoConfig.enabled )
+		{
+			m_ssao->update( updater );
+		}
+
 		m_depthPass->update( updater );
 		m_backgroundRenderer->update( updater );
 		m_voxelizer->update( updater );
@@ -527,11 +532,6 @@ namespace castor3d
 
 		if ( m_renderTarget.getTargetType() == TargetType::eWindow )
 		{
-		}
-
-		if ( m_ssaoConfig.enabled )
-		{
-			m_ssao->update( updater );
 			scene.getEnvironmentMap().update( updater );
 		}
 
