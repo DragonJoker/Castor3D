@@ -19,7 +19,6 @@ namespace castortd
 	namespace
 	{
 		static const wxSize MainFrameSize{ 1024, 768 };
-		static const bool CASTOR3D_THREADED = true;
 
 		typedef enum eID
 		{
@@ -28,10 +27,12 @@ namespace castortd
 
 		void doUpdate( Game & p_game )
 		{
-			if ( !wxGetApp().getCastor()->isCleaned() )
+			auto & engine = *wxGetApp().getCastor();
+
+			if ( !engine.isCleaned() )
 			{
 				p_game.update();
-				wxGetApp().getCastor()->postEvent( makeCpuFunctorEvent( EventType::ePostRender, [&p_game]()
+				engine.postEvent( makeCpuFunctorEvent( EventType::ePostRender, [&p_game]()
 				{
 					doUpdate( p_game );
 				} ) );
@@ -47,7 +48,6 @@ namespace castortd
 
 		try
 		{
-			wxGetApp().getCastor()->initialise( 120, CASTOR3D_THREADED );
 			doLoadScene();
 			wxBoxSizer * sizer{ new wxBoxSizer{ wxHORIZONTAL } };
 			sizer->Add( m_panel.get(), wxSizerFlags( 1 ).Shaped().Centre() );
@@ -103,11 +103,12 @@ namespace castortd
 			SetMinClientSize( size );
 
 #endif
+			auto & engine = *wxGetApp().getCastor();
 
-			if ( CASTOR3D_THREADED )
+			if ( engine.isThreaded() )
 			{
-				wxGetApp().getCastor()->getRenderLoop().beginRendering();
-				wxGetApp().getCastor()->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+				engine.getRenderLoop().beginRendering();
+				engine.postEvent( makeCpuFunctorEvent( EventType::ePostRender
 					, [this]()
 					{
 						doUpdate( *m_game );
@@ -116,7 +117,7 @@ namespace castortd
 			else
 			{
 				m_timer = new wxTimer( this, eID_RENDER_TIMER );
-				m_timer->Start( 1000 / wxGetApp().getCastor()->getRenderLoop().getWantedFps(), true );
+				m_timer->Start( 1000 / engine.getRenderLoop().getWantedFps(), true );
 			}
 		}
 	}
@@ -145,24 +146,26 @@ namespace castortd
 			m_timer = nullptr;
 		}
 
+		auto & engine = *wxGetApp().getCastor();
+
 		if ( m_panel )
 		{
-			if ( wxGetApp().getCastor()->isThreaded() )
+			if ( engine.isThreaded() )
 			{
-				wxGetApp().getCastor()->getRenderLoop().pause();
+				engine.getRenderLoop().pause();
 			}
 
 			m_panel->reset();
 
-			if ( wxGetApp().getCastor()->isThreaded() )
+			if ( engine.isThreaded() )
 			{
-				wxGetApp().getCastor()->getRenderLoop().resume();
+				engine.getRenderLoop().resume();
 			}
 		}
 
 		if ( wxGetApp().getCastor() )
 		{
-			wxGetApp().getCastor()->cleanup();
+			engine.cleanup();
 		}
 
 		if ( m_panel )

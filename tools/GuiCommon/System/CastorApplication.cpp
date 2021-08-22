@@ -79,35 +79,209 @@
 #	include <X11/Xlib.h>
 #endif
 
+#include <wx/fileconf.h>
 #include <wx/propgrid/propgrid.h>
 
 namespace GuiCommon
 {
+	namespace
+	{
 #if defined( NDEBUG )
 
-	static constexpr castor::LogType DefaultLogType = castor::LogType::eInfo;
-	static constexpr bool DefaultValidation = false;
+		static constexpr castor::LogType DefaultLogType = castor::LogType::eInfo;
+		static constexpr bool DefaultValidation = false;
 
 #else
 
-	static constexpr castor::LogType DefaultLogType = castor::LogType::eTrace;
-	static constexpr bool DefaultValidation = true;
+		static constexpr castor::LogType DefaultLogType = castor::LogType::eTrace;
+		static constexpr bool DefaultValidation = true;
 
 #endif
+
+		namespace option
+		{
+			namespace lg
+			{
+				static const wxString Help{ wxT( "help" ) };
+				static const wxString Config{ wxT( "config" ) };
+				static const wxString Validate{ wxT( "validate" ) };
+				static const wxString UnlimFPS{ wxT( "unlimited" ) };
+				static const wxString LogLevel{ wxT( "log" ) };
+				static const wxString FixedFPS{ wxT( "fps" ) };
+				static const wxString SyncRender{ wxT( "sync" ) };
+			}
+
+			namespace st
+			{
+				static const wxString Help{ wxT( "h" ) };
+				static const wxString Config{ wxT( "c" ) };
+				static const wxString Validate{ wxT( "a" ) };
+				static const wxString UnlimFPS{ wxT( "u" ) };
+				static const wxString LogLevel{ wxT( "l" ) };
+				static const wxString FixedFPS{ wxT( "f" ) };
+				static const wxString SyncRender{ wxT( "s" ) };
+			}
+		}
+
+		struct Options
+		{
+			Options( Options const & ) = delete;
+			Options & operator=( Options const & ) = delete;
+			Options( Options && ) = default;
+			Options & operator=( Options && ) = default;
+
+			Options( int argc, wxCmdLineArgsArray const & argv )
+				: parser{ argc, argv }
+			{
+				parser.AddSwitch( option::st::Help, option::lg::Help, _( "Displays this help." ), wxCMD_LINE_OPTION_HELP );
+				parser.AddOption( option::st::Config, option::lg::Config, _( "Specifies the configuration file." ), wxCMD_LINE_VAL_STRING, 0 );
+				parser.AddSwitch( option::st::Validate, option::lg::Validate, _( "Enables rendering API validation." ) );
+				parser.AddSwitch( option::st::SyncRender, option::lg::SyncRender, _( "Sets the rendering to synchronous (render loop is user triggered)." ) );
+				parser.AddSwitch( option::st::UnlimFPS, option::lg::UnlimFPS, _( "Disables FPS limit (has no effect if '" ) + option::lg::SyncRender +_( "' option is specified)." ) );
+				parser.AddOption( option::st::FixedFPS, option::lg::FixedFPS, _( "Defines wanted FPS (has no effect if '" ) + option::lg::SyncRender +_( "' or '" ) + option::lg::UnlimFPS + _( "' options are specified)." ), wxCMD_LINE_VAL_NUMBER );
+				parser.AddOption( option::st::LogLevel, option::lg::LogLevel, _( "Defines log level (from 0=trace to 4=error)." ), wxCMD_LINE_VAL_NUMBER );
+				parser.AddParam( _( "The initial scene file." ), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL );
+;
+
+				for ( auto & plugin : list )
+				{
+					auto desc = make_wxString( plugin.description );
+					desc.Replace( wxT( " renderer for Ashes" ), wxEmptyString );
+					parser.AddSwitch( make_wxString( plugin.name )
+						, wxEmptyString
+						, _( "Defines the renderer to " ) + desc + wxT( "." ) );
+				}
+
+				if ( ( parser.Parse( false ) != 0 )
+					|| parser.Found( wxT( 'h' ) ) )
+				{
+					parser.Usage();
+					throw false;
+				}
+
+				configFile = new wxFileConfig{ wxEmptyString
+					, wxEmptyString
+					, findConfigFile( parser )
+					, wxEmptyString
+					, wxCONFIG_USE_LOCAL_FILE };
+			}
+
+			~Options()
+			{
+				delete configFile;
+			}
+
+			bool has( wxString const & option )
+			{
+				return parser.Found( option );
+			}
+
+			template< typename ValueT >
+			ValueT getLong( wxString const & option
+				, ValueT const & defaultValue = ValueT{} )
+			{
+				long value;
+				ValueT result;
+
+				if ( parser.Found( option, &value ) )
+				{
+					result = ValueT( value );
+				}
+				else if ( configFile->HasEntry( option ) )
+				{
+					configFile->Read( option, &value );
+					result = ValueT( value );
+				}
+				else
+				{
+					result = defaultValue;
+				}
+
+				return result;
+			}
+
+			void read( CastorApplication::Config & config )
+			{
+				config.validate = has( option::st::Validate );
+				config.log = getLong( option::st::LogLevel, DefaultLogType );
+				config.syncRender = has( option::st::SyncRender );
+
+				if ( !config.syncRender )
+				{
+					config.unlimFPS = has( option::st::UnlimFPS );
+				}
+
+				for ( auto & plugin : list )
+				{
+					if ( has( make_wxString( plugin.name ) ) )
+					{
+						config.renderer = plugin.name;
+					}
+				}
+
+				wxString strFileName;
+
+				if ( parser.GetParamCount() > 0 )
+				{
+					config.fileName = make_String( parser.GetParam( 0 ) );
+				}
+			}
+
+			void write( CastorApplication::Config const & config )
+			{
+				configFile->Write( option::lg::Validate, config.validate );
+				configFile->Write( option::lg::LogLevel, long( config.log ) );
+
+				if ( config.syncRender )
+				{
+					configFile->Write( option::lg::SyncRender, config.syncRender );
+				}
+				else
+				{
+					if ( config.unlimFPS )
+					{
+						configFile->Write( option::lg::UnlimFPS, config.unlimFPS );
+					}
+					else
+					{
+						configFile->Write( option::lg::FixedFPS, config.fixedFPS );
+					}
+				}
+			}
+
+			static wxString findConfigFile( wxCmdLineParser const & parser )
+			{
+				wxString cfg;
+				parser.Found( wxT( 'c' ), &cfg );
+				return cfg;
+			}
+
+		private:
+			wxCmdLineParser parser;
+			ashes::RendererList list;
+			wxFileConfig * configFile{ nullptr };
+		};
+	}
 
 	CastorApplication::CastorApplication( castor::String internalName
 		, castor::String displayName
 		, uint32_t steps
 		, castor3d::Version version
+		, uint32_t wantedFPS
+		, bool isCastorThreaded
 		, castor::String rendererType )
 		: m_internalName{ std::move( internalName ) }
 		, m_displayName{ std::move( displayName ) }
 		, m_castor{ nullptr }
-		, m_rendererType{ std::move( rendererType ) }
 		, m_steps{ steps + 4 }
 		, m_splashScreen{ nullptr }
 		, m_version{ std::move( version ) }
-		, m_validation{ DefaultValidation }
+		, m_config{ DefaultValidation
+			, false
+			, DefaultLogType
+			, wantedFPS
+			, !isCastorThreaded
+			, make_wxString( rendererType ) }
 	{
 		wxSetAssertHandler( assertHandler );
 #if defined( __WXGTK__ )
@@ -214,105 +388,53 @@ namespace GuiCommon
 
 	bool CastorApplication::doParseCommandLine()
 	{
-		wxCmdLineParser parser( wxApp::argc, wxApp::argv );
-		parser.AddSwitch( wxT( "h" ), wxT( "help" ), _( "Displays this help." ), wxCMD_LINE_OPTION_HELP );
-		parser.AddSwitch( wxT( "a" ), wxT( "validate" ), _( "Enables rendering API validation." ) );
-		parser.AddSwitch( wxT( "u" ), wxT( "unlimited" ), _( "Disables FPS limit." ) );
-		parser.AddOption( wxT( "l" ), wxT( "log" ), _( "Defines log level (from 0=trace to 4=error)." ), wxCMD_LINE_VAL_NUMBER );
-		parser.AddParam( _( "The initial scene file." ), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL );
+		bool result = true;
 
-		ashes::RendererList list;
-
-		for ( auto & plugin : list )
+		try
 		{
-			auto desc = make_wxString( plugin.description );
-			desc.Replace( wxT( " renderer for Ashes" ), wxEmptyString );
-			parser.AddSwitch( make_wxString( plugin.name )
-				, wxEmptyString
-				, _( "Defines the renderer to " ) + desc + wxT( "." ) );
+			Options options{ wxApp::argc, wxApp::argv };
+			options.read( m_config );
+			castor::Logger::initialise( m_config.log );
 		}
-
-		auto parseResult = parser.Parse( false );
-		bool result = parseResult == 0;
-
-		// S'il y avait des erreurs ou "-h" ou "--help", on affiche l'aide et on sort
-		if ( parseResult > 0 || parser.Found( wxT( 'h' ) ) )
+		catch ( bool )
 		{
-			parser.Usage();
 			result = false;
-		}
-
-		if ( result )
-		{
-			castor::LogType logLevel = castor::LogType::eCount;
-			long log;
-
-			if ( !parser.Found( wxT( "l" ), &log ) )
-			{
-				logLevel = DefaultLogType;
-			}
-			else
-			{
-				logLevel = castor::LogType( log );
-			}
-
-			m_validation = parser.Found( wxT( 'a' ) );
-			m_unlimitedFps = parser.Found( wxT( 'u' ) );
-
-			for ( auto & plugin : list )
-			{
-				if ( parser.Found( make_wxString( plugin.name ) ) )
-				{
-					m_rendererType = plugin.name;
-				}
-			}
-
-			wxString strFileName;
-
-			if ( parser.GetParamCount() > 0 )
-			{
-				m_fileName = make_String( parser.GetParam( 0 ) );
-			}
-
-			castor::Logger::initialise( logLevel );
 		}
 
 		return result;
 	}
 
-	bool CastorApplication::doInitialiseLocale( SplashScreen & p_splashScreen )
+	bool CastorApplication::doInitialiseLocale( SplashScreen & splashScreen )
 	{
-		//p_splashScreen.Step( _( "Loading language" ), 1 );
-		//long lLanguage = wxLANGUAGE_DEFAULT;
-		//Path pathCurrent = File::getExecutableDirectory().getPath();
+		splashScreen.Step( _( "Loading language" ), 1 );
+		long language = wxLANGUAGE_DEFAULT;
+		castor::Path pathCurrent = castor::File::getExecutableDirectory().getPath();
 
-		//// load language if possible, fall back to english otherwise
-		//if ( wxLocale::IsAvailable( lLanguage ) )
-		//{
-		//	m_locale = std::make_unique< wxLocale >( lLanguage, wxLOCALE_LOAD_DEFAULT );
-		//	// add locale search paths
-		//	m_locale->AddCatalogLookupPathPrefix( pathCurrent / cuT( "share" ) / m_internalName );
-		//	m_locale->AddCatalog( m_internalName );
+		// load language if possible, fall back to english otherwise
+		if ( wxLocale::IsAvailable( language ) )
+		{
+			m_locale = std::make_unique< wxLocale >( language, wxLOCALE_LOAD_DEFAULT );
+			// add locale search paths
+			m_locale->AddCatalogLookupPathPrefix( pathCurrent / cuT( "share" ) / m_internalName );
+			m_locale->AddCatalog( m_internalName );
 
-		//	if ( !m_locale->IsOk() )
-		//	{
-		//		std::cerr << "Selected language is wrong" << std::endl;
-		//		lLanguage = wxLANGUAGE_ENGLISH;
-		//		m_locale = std::make_unique< wxLocale >( lLanguage );
-		//	}
-		//}
-		//else
-		//{
-		//	std::cerr << "The selected language is not supported by your system."
-		//			  << "Try installing support for this language." << std::endl;
-		//	lLanguage = wxLANGUAGE_ENGLISH;
-		//	m_locale = std::make_unique< wxLocale >( lLanguage );
-		//}
+			if ( !m_locale->IsOk() )
+			{
+				std::cerr << "Selected language is wrong" << std::endl;
+				m_locale = std::make_unique< wxLocale >( wxLANGUAGE_ENGLISH );
+			}
+		}
+		else
+		{
+			std::cerr << "The selected language is not supported by your system."
+					  << "Try installing support for this language." << std::endl;
+			m_locale = std::make_unique< wxLocale >( wxLANGUAGE_ENGLISH );
+		}
 
 		return true;
 	}
 
-	bool CastorApplication::doInitialiseCastor( SplashScreen & p_splashScreen )
+	bool CastorApplication::doInitialiseCastor( SplashScreen & splashScreen )
 	{
 		bool result = true;
 
@@ -324,10 +446,12 @@ namespace GuiCommon
 		castor::Logger::setFileName( castor3d::Engine::getEngineDirectory() / ( m_internalName + cuT( ".log" ) ) );
 		castor::Logger::logInfo( m_internalName + cuT( " - Start" ) );
 
-		m_castor = std::make_shared< castor3d::Engine >( m_internalName, m_version, m_validation );
-		doloadPlugins( p_splashScreen );
+		m_castor = std::make_shared< castor3d::Engine >( m_internalName
+			, m_version
+			, m_config.validate );
+		doloadPlugins( splashScreen );
 
-		p_splashScreen.Step( _( "Initialising Castor3D" ), 1 );
+		splashScreen.Step( _( "Initialising Castor3D" ), 1 );
 		auto & renderers = m_castor->getRenderersList();
 
 		if ( renderers.empty() )
@@ -336,17 +460,17 @@ namespace GuiCommon
 		}
 		else if ( std::next( renderers.begin() ) == renderers.end() )
 		{
-			m_rendererType = renderers.begin()->name;
+			m_config.renderer = renderers.begin()->name;
 		}
 
-		if ( m_rendererType == castor3d::RenderTypeUndefined )
+		if ( m_config.renderer == castor3d::RenderTypeUndefined )
 		{
 			RendererSelector m_dialog( *m_castor, nullptr, m_displayName );
 			int iReturn = m_dialog.ShowModal();
 
 			if ( iReturn == wxID_OK )
 			{
-				m_rendererType = m_dialog.getSelectedRenderer();
+				m_config.renderer = m_dialog.getSelectedRenderer();
 			}
 			else
 			{
@@ -360,21 +484,44 @@ namespace GuiCommon
 
 		if ( result )
 		{
-			result = m_castor->loadRenderer( m_rendererType );
+			result = m_castor->loadRenderer( m_config.renderer );
 		}
 
+		try
+		{
+			if ( !isUnlimitedFps() )
+			{
+				m_castor->initialise( m_config.fixedFPS, !m_config.syncRender );
+			}
+			else
+			{
+				m_castor->initialise( 0xFFFFFFFFu, !m_config.syncRender );
+			}
+
+			std::cout << cuT( "Castor3D Initialised." );
+		}
+		catch ( std::exception & exc )
+		{
+			wxMessageBox( _( "Problem occured while initialising Castor3D." ) + wxString( wxT( "\n" ) ) + wxString( exc.what(), wxMBConvLibc() ), _( "Exception" ), wxOK | wxCENTRE | wxICON_ERROR );
+			result = false;
+		}
+		catch ( ... )
+		{
+			wxMessageBox( _( "Problem occured while initialising Castor3D.\nLook at CastorViewer.log for more details" ), _( "Exception" ), wxOK | wxCENTRE | wxICON_ERROR );
+			result = false;
+		}
 		return result;
 	}
 
-	void CastorApplication::doloadPlugins( SplashScreen & p_splashScreen )
+	void CastorApplication::doloadPlugins( SplashScreen & splashScreen )
 	{
-		p_splashScreen.Step( _( "Loading plug-ins" ), 1 );
+		splashScreen.Step( _( "Loading plug-ins" ), 1 );
 		GuiCommon::loadPlugins( *m_castor );
 	}
 
-	void CastorApplication::doLoadImages( SplashScreen & p_splashScreen )
+	void CastorApplication::doLoadImages( SplashScreen & splashScreen )
 	{
-		p_splashScreen.Step( _( "Loading images" ), 1 );
+		splashScreen.Step( _( "Loading images" ), 1 );
 		wxInitAllImageHandlers();
 		ImagesLoader::addBitmap( CV_IMG_CASTOR, castor_transparent_xpm );
 		ImagesLoader::addBitmap( eBMP_ANIMATED_OBJECTGROUP, animated_object_group_xpm );
