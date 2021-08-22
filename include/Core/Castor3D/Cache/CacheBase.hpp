@@ -183,7 +183,6 @@ namespace castor3d
 					, std::forward< Parameters >( parameters )... );
 				m_initialise( result );
 				m_elements.insert( name, result );
-				doReportCreation( name );
 			}
 			else
 			{
