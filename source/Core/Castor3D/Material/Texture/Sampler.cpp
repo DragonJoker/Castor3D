@@ -67,6 +67,7 @@ namespace castor3d
 		: castor::OwnedBy< Engine >{ engine }
 		, castor::Named{ name }
 	{
+		CU_Require( m_info.sType == VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO );
 	}
 	
 	Sampler::Sampler( Engine & engine
@@ -74,8 +75,9 @@ namespace castor3d
 		, ashes::SamplerCreateInfo createInfo )
 		: castor::OwnedBy< Engine >{ engine }
 		, castor::Named{ name }
-		, m_info{ std::move( createInfo ) }
+		, m_info{ static_cast< VkSamplerCreateInfo const & >( createInfo ) }
 	{
+		CU_Require( m_info.sType == VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO );
 	}
 
 	Sampler::~Sampler()
@@ -86,7 +88,8 @@ namespace castor3d
 	{
 		if ( !m_sampler )
 		{
-			m_info->maxAnisotropy = std::min( m_info->maxAnisotropy, device.properties.limits.maxSamplerAnisotropy );
+			CU_Require( m_info.sType == VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO );
+			m_info.maxAnisotropy = std::min( m_info.maxAnisotropy, device.properties.limits.maxSamplerAnisotropy );
 			m_sampler = device->createSampler( getName() + "Sampler"
 				, m_info );
 		}
