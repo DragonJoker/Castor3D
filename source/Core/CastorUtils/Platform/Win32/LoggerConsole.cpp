@@ -17,82 +17,26 @@
 
 namespace castor
 {
-	class ConsoleHandle
+	void printCDBConsole( String const & toLog, bool newLine )
 	{
-	public:
-		bool initialise( HANDLE screenBuffer )
+		if ( ::IsDebuggerPresent() )
 		{
-			m_screenBuffer = screenBuffer;
-			m_oldCodePage = ::GetConsoleOutputCP();
-			::EnumSystemCodePagesA( &doCodePageProc, CP_INSTALLED );
-			return true;
-		}
+			int length = MultiByteToWideChar( CP_UTF8, 0u, toLog.c_str(), -1, nullptr, 0u );
 
-		void cleanup()
-		{
-			if ( m_oldCodePage )
+			if ( length > 0 )
 			{
-				::SetConsoleOutputCP( m_oldCodePage );
-				m_oldCodePage = 0;
+				std::vector< wchar_t > buffer( size_t( length + 1 ), wchar_t{} );
+				MultiByteToWideChar( CP_UTF8, 0u, toLog.c_str(), -1, buffer.data(), length );
+				std::wstring converted{ buffer.begin(), buffer.end() };
+				::OutputDebugStringW( converted.c_str() );
 			}
-		}
-
-		void setAttributes( WORD attributes )
-		{
-			::SetConsoleTextAttribute( m_screenBuffer, attributes );
-		}
-
-		void writeText( String text, bool newLine )
-		{
-			if ( ::IsDebuggerPresent() )
-			{
-				int length = MultiByteToWideChar( CP_UTF8, 0u, text.c_str(), -1, nullptr, 0u );
-
-				if ( length > 0 )
-				{
-					std::vector< wchar_t > buffer( size_t( length + 1 ), wchar_t{} );
-					MultiByteToWideChar( CP_UTF8, 0u, text.c_str(), -1, buffer.data(), length );
-					std::wstring converted{ buffer.begin(), buffer.end() };
-					::OutputDebugStringW( converted.c_str() );
-				}
-
-				if ( newLine )
-				{
-					::OutputDebugStringW( L"\n" );
-				}
-			}
-
-			DWORD written = 0;
 
 			if ( newLine )
 			{
-				text += cuT( "\n" );
+				::OutputDebugStringW( L"\n" );
 			}
-
-			::WriteConsoleA( m_screenBuffer, text.c_str(), DWORD( text.size() ), &written, nullptr );
 		}
-
-	private:
-		static BOOL __stdcall doCodePageProc( xchar * szCodePage )
-		{
-			BOOL result = TRUE;
-			String codePage( szCodePage );
-			int cp = stoi( codePage );
-
-			if ( cp == CP_UTF8 )
-			{
-				::SetConsoleCP( cp );
-				::SetConsoleOutputCP( cp );
-				result = FALSE;
-			}
-
-			return result;
-		}
-
-	private:
-		uint32_t m_oldCodePage{ 0 };
-		HANDLE m_screenBuffer{ INVALID_HANDLE_VALUE };
-	};
+	}
 
 	class DebugConsole
 		: public ConsoleImpl
@@ -188,24 +132,7 @@ namespace castor
 
 		void print( String const & toLog, bool newLine )
 		{
-			if ( ::IsDebuggerPresent() )
-			{
-				int length = MultiByteToWideChar( CP_UTF8, 0u, toLog.c_str(), -1, nullptr, 0u );
-
-				if ( length > 0 )
-				{
-					std::vector< wchar_t > buffer( size_t( length + 1 ), wchar_t{} );
-					MultiByteToWideChar( CP_UTF8, 0u, toLog.c_str(), -1, buffer.data(), length );
-					std::wstring converted{ buffer.begin(), buffer.end() };
-					::OutputDebugStringW( converted.c_str() );
-				}
-
-				if ( newLine )
-				{
-					::OutputDebugStringW( L"\n" );
-				}
-			}
-
+			printCDBConsole( toLog, newLine );
 #if CU_UseAnsiCode
 			printf( "%s%s", m_header.c_str(), toLog.c_str() );
 #else
@@ -275,6 +202,7 @@ namespace castor
 
 		void print( String const & toLog, bool newLine )
 		{
+			printCDBConsole( toLog, newLine );
 			printf( "%s", toLog.c_str() );
 
 			if ( newLine )
