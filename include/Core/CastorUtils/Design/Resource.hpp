@@ -38,7 +38,7 @@ namespace castor
 
 		using OnInitialisedFunc = std::function< void( Resource const & ) >;
 		using OnInitialised = Signal< OnInitialisedFunc >;
-		using Connection = Connection< OnInitialised >;
+		using Connection = castor::Connection< OnInitialised >;
 
 		OnInitialised onInitialised;
 
