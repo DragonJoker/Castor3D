@@ -101,18 +101,19 @@ namespace castor3d
 		}
 
 		auto position = m_currentNode->getDerivedPosition();
-		m_camera->getParent()->setPosition( position );
-		m_camera->getParent()->update();
-		m_camera->update();
+		auto & camera = *m_camera;
+		camera.getParent()->setPosition( position );
+		camera.getParent()->update();
+		camera.update();
 		m_culler->compute();
-		updater.camera = m_camera;
+		updater.camera = &camera;
 
 		m_backgroundRenderer->update( updater );
 		m_opaquePass->update( updater );
 		m_transparentPass->update( updater );
-		m_matrixUbo.cpuUpdate( m_camera->getView()
-			, m_camera->getProjection( false ) );
-		m_hdrConfigUbo.cpuUpdate( m_camera->getHdrConfig() );
+		m_matrixUbo.cpuUpdate( camera.getView()
+			, camera.getProjection( false ) );
+		m_hdrConfigUbo.cpuUpdate( camera.getHdrConfig() );
 	}
 
 	void EnvironmentMapPass::update( GpuUpdater & updater )
@@ -122,10 +123,11 @@ namespace castor3d
 			return;
 		}
 
-		updater.camera = m_camera;
+		auto & camera = *m_camera;
+		updater.camera = &camera;
 
 		RenderInfo info;
-		m_sceneUbo.cpuUpdate( *m_camera->getScene(), m_camera.get() );
+		m_sceneUbo.cpuUpdate( *camera.getScene(), &camera );
 		m_backgroundRenderer->update( updater );
 		m_opaquePass->update( updater );
 		m_transparentPass->update( updater );

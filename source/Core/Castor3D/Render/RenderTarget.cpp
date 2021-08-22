@@ -460,7 +460,7 @@ namespace castor3d
 		}
 
 		auto & camera = *getCamera();
-		updater.camera = getCamera();
+		updater.camera = &camera;
 		camera.resize( m_size );
 		camera.update();
 
@@ -487,9 +487,11 @@ namespace castor3d
 			return;
 		}
 
+		auto & camera = *getCamera();
+		auto & scene = *getScene();
 		updater.jitter = m_jitter;
-		updater.scene = getScene();
-		updater.camera = getCamera();
+		updater.scene = &scene;
+		updater.camera = &camera;
 
 		updater.scene->update( updater );
 

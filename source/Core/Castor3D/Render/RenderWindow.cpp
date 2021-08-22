@@ -103,7 +103,7 @@ namespace castor3d
 				}
 				else
 				{
-					result = formats[0];
+					result = formats.front();
 				}
 			}
 
@@ -357,7 +357,8 @@ namespace castor3d
 		doCreateRenderQuad( *queueData );
 		doCreateCommandBuffers( *queueData );
 		doCreateSaveData( *queueData );
-		m_dirty = false;
+		m_skip = false;
+		m_initialised = true;
 		getEngine()->registerWindow( *this );
 		log::debug << "Created render window " << m_index << std::endl;
 	}

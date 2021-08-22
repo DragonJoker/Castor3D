@@ -522,7 +522,7 @@ namespace castor3d
 		m_lightPropagationPasses = {};
 	}
 
-	void LightPropagationVolumesBase::registerLight( LightSPtr light )
+	void LightPropagationVolumesBase::registerLight( Light * light )
 	{
 		auto it = m_lightLpvs.find( light );
 
