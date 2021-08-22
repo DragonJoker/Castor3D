@@ -760,7 +760,8 @@ namespace C3dAssimp
 			InterpolatorT< castor::Point3f, InterpolatorType::eLinear > pointInterpolator;
 			InterpolatorT< castor::Quaternion, InterpolatorType::eLinear > quatInterpolator;
 
-			if ( ticksPerMilliSecond / 1000 >= fps )
+			if ( fps == castor3d::RenderLoop::UnlimitedFPS
+				|| ticksPerMilliSecond / 1000 >= fps )
 			{
 				for ( auto time : times )
 				{
