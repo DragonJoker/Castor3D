@@ -3,7 +3,7 @@ See LICENSE file in root folder
 */
 #include "CastorUtils/Design/Resource.hpp"
 
-CU_ImplementCUSmartPtr( castor, Resource );
+CU_ImplementCUSmartPtr( castor, Resource )
 
 namespace castor
 {
