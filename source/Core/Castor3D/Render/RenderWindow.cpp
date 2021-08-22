@@ -371,16 +371,14 @@ namespace castor3d
 		doWaitFrame( {} );
 		getDevice()->waitIdle();
 
-		RenderTargetSPtr target = getRenderTarget();
+		doDestroySaveData();
+		doDestroyCommandBuffers();
+		doDestroyRenderQuad();
+		doDestroyIntermediateViews();
+		doDestroyPickingPass();
 
-		if ( target )
+		if ( auto target = getRenderTarget() )
 		{
-			doDestroySaveData();
-			doDestroyLoadingScreen();
-			doDestroyCommandBuffers();
-			doDestroyRenderQuad();
-			doDestroyIntermediateViews();
-			doDestroyPickingPass();
 			target->cleanup( m_device );
 		}
 	}
