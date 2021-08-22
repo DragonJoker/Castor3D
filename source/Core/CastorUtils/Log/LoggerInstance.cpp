@@ -50,6 +50,11 @@ namespace castor
 		return m_logLevel;
 	}
 
+	void LoggerInstance::lockedLogTrace( LoggerInstance::my_string const & p_msg )
+	{
+		doLockedPushMessage( LogType::eTrace, p_msg, true );
+	}
+
 	void LoggerInstance::logTrace( LoggerInstance::my_string const & p_msg )
 	{
 		pushMessage( LogType::eTrace, p_msg, true );
@@ -61,6 +66,11 @@ namespace castor
 		std::stringstream ss;
 		ss << sbuf;
 		logTrace( ss.str() );
+	}
+
+	void LoggerInstance::lockedLogTraceNoLF( LoggerInstance::my_string const & p_msg )
+	{
+		doLockedPushMessage( LogType::eTrace, p_msg, false );
 	}
 
 	void LoggerInstance::logTraceNoLF( LoggerInstance::my_string const & p_msg )
@@ -76,6 +86,11 @@ namespace castor
 		logTraceNoLF( ss.str() );
 	}
 	
+	void LoggerInstance::lockedLogDebugNoLF( LoggerInstance::my_string const & p_msg )
+	{
+		doLockedPushMessage( LogType::eDebug, p_msg, false );
+	}
+	
 	void LoggerInstance::logDebugNoLF( LoggerInstance::my_string const & p_msg )
 	{
 		pushMessage( LogType::eDebug, p_msg, false );
@@ -87,6 +102,11 @@ namespace castor
 		std::stringstream ss;
 		ss << sbuf;
 		logDebugNoLF( ss.str() );
+	}
+
+	void LoggerInstance::lockedLogDebug( LoggerInstance::my_string const & p_msg )
+	{
+		doLockedPushMessage( LogType::eDebug, p_msg, true );
 	}
 
 	void LoggerInstance::logDebug( LoggerInstance::my_string const & p_msg )
@@ -102,6 +122,11 @@ namespace castor
 		logDebug( ss.str() );
 	}
 
+	void LoggerInstance::lockedLogInfoNoLF( LoggerInstance::my_string const & p_msg )
+	{
+		doLockedPushMessage( LogType::eInfo, p_msg, false );
+	}
+
 	void LoggerInstance::logInfoNoLF( LoggerInstance::my_string const & p_msg )
 	{
 		pushMessage( LogType::eInfo, p_msg, false );
@@ -112,6 +137,11 @@ namespace castor
 		std::stringstream ss;
 		ss << p_msg.rdbuf();
 		logInfoNoLF( ss.str() );
+	}
+
+	void LoggerInstance::lockedLogInfo( LoggerInstance::my_string const & p_msg )
+	{
+		doLockedPushMessage( LogType::eInfo, p_msg, true );
 	}
 
 	void LoggerInstance::logInfo( LoggerInstance::my_string const & p_msg )
@@ -126,6 +156,11 @@ namespace castor
 		logInfo( ss.str() );
 	}
 
+	void LoggerInstance::lockedLogWarningNoLF( LoggerInstance::my_string const & p_msg )
+	{
+		doLockedPushMessage( LogType::eWarning, p_msg, false );
+	}
+
 	void LoggerInstance::logWarningNoLF( LoggerInstance::my_string const & p_msg )
 	{
 		pushMessage( LogType::eWarning, p_msg, false );
@@ -136,6 +171,11 @@ namespace castor
 		std::stringstream ss;
 		ss << p_msg.rdbuf();
 		logWarningNoLF( ss.str() );
+	}
+
+	void LoggerInstance::lockedLogWarning( LoggerInstance::my_string const & p_msg )
+	{
+		doLockedPushMessage( LogType::eWarning, p_msg, true );
 	}
 
 	void LoggerInstance::logWarning( LoggerInstance::my_string const & p_msg )
@@ -150,6 +190,11 @@ namespace castor
 		logWarning( ss.str() );
 	}
 
+	void LoggerInstance::lockedLogErrorNoLF( LoggerInstance::my_string const & p_msg )
+	{
+		doLockedPushMessage( LogType::eError, p_msg, false );
+	}
+
 	void LoggerInstance::logErrorNoLF( LoggerInstance::my_string const & p_msg )
 	{
 		pushMessage( LogType::eError, p_msg, false );
@@ -160,6 +205,11 @@ namespace castor
 		std::stringstream ss;
 		ss << p_msg.rdbuf();
 		logErrorNoLF( ss.str() );
+	}
+
+	void LoggerInstance::lockedLogError( LoggerInstance::my_string const & p_msg )
+	{
+		doLockedPushMessage( LogType::eError, p_msg );
 	}
 
 	void LoggerInstance::logError( LoggerInstance::my_string const & p_msg )
@@ -174,16 +224,10 @@ namespace castor
 		logError( ss.str() );
 	}
 
-	void LoggerInstance::pushMessage( LogType logLevel, std::string const & message, bool p_newLine )
+	void LoggerInstance::pushMessage( LogType logLevel, std::string const & message, bool newLine )
 	{
-		if ( logLevel >= m_logLevel )
-		{
-#if !defined( NDEBUG )
-			m_impl.printMessage( logLevel, message, p_newLine );
-#endif
-			auto lock( makeUniqueLock( m_mutexQueue ) );
-			m_queue.push_back( { logLevel, message, p_newLine } );
-		}
+		auto lock( makeUniqueLock( m_mutexQueue ) );
+		doLockedPushMessage( logLevel, message, newLine );
 	}
 
 	void LoggerInstance::flushQueue()
@@ -237,6 +281,17 @@ namespace castor
 			}
 
 			m_logThread.join();
+		}
+	}
+
+	void LoggerInstance::doLockedPushMessage( LogType logLevel, std::string const & message, bool newLine )
+	{
+		if ( logLevel >= m_logLevel )
+		{
+#if !defined( NDEBUG )
+			m_impl.printMessage( logLevel, message, newLine );
+#endif
+			m_queue.push_back( { logLevel, message, newLine } );
 		}
 	}
 }
