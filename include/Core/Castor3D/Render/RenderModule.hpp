@@ -778,10 +778,10 @@ namespace castor3d
 		{
 		}
 
-		RenderQueueArray * queues;
-		CameraSPtr camera;
+		RenderQueueArray * queues{ nullptr };
+		Camera * camera{ nullptr };
 		SceneNode const * node{ nullptr };
-		LightSPtr light;
+		Light * light{ nullptr };
 		Viewport * viewport{ nullptr };
 		uint32_t index{ 0u };
 		uint32_t combineIndex{ 0u };
@@ -811,8 +811,8 @@ namespace castor3d
 		RenderDevice const & device;
 		RenderInfo & info;
 		castor::Point2f jitter;
-		SceneSPtr scene;
-		CameraSPtr camera;
+		Scene * scene{ nullptr };
+		Camera * camera{ nullptr };
 		uint32_t index{ 0u };
 		bool voxelConeTracing{ false };
 		FramePassTimer * timer{ nullptr };

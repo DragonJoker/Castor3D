@@ -426,7 +426,7 @@ namespace castor3d
 		auto size = makeExtent2D( getExtent( colour ) );
 		auto graphName = graph.getName();
 		auto & result = graph.createPass( name + "Background"
-			, [this, graphName, size]( crg::FramePass const & pass
+			, [this, &background, graphName, size]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
