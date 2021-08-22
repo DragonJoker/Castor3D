@@ -58,7 +58,6 @@ namespace CastorViewer
 		void select( castor3d::GeometrySPtr geometry, castor3d::SubmeshSPtr submesh );
 
 	private:
-		bool doInitialise3D();
 		void doInitialiseTimers();
 		void doInitialiseGUI();
 		bool doInitialiseImages();
