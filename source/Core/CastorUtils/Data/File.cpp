@@ -4,6 +4,8 @@
 
 #include "CastorUtils/Log/Logger.hpp"
 
+#include <filesystem>
+
 namespace castor
 {
 	File::File( Path const & p_fileName, FlagCombination< OpenMode > const & p_mode, EncodingMode p_encoding )
@@ -248,19 +250,18 @@ namespace castor
 		return directoryFunction( folder );
 	}
 
-	bool File::fileExists( Path const & p_pathFile )
+	bool File::fileExists( Path const & fileName )
 	{
-		std::ifstream ifile( string::stringCast< char >( p_pathFile ).c_str() );
-		return ifile.is_open();
+		return std::filesystem::exists( string::stringCast< wchar_t >( fileName ) );
 	}
 
-	bool File::deleteFile( Path const & p_file )
+	bool File::deleteFile( Path const & fileName )
 	{
 		bool result = false;
 
-		if ( fileExists( p_file ) )
+		if ( fileExists( fileName ) )
 		{
-			result = std::remove( string::stringCast< char >( p_file ).c_str() ) == 0;
+			result = std::filesystem::remove( string::stringCast< wchar_t >( fileName ).c_str() ) == 0;
 		}
 		else
 		{
@@ -287,32 +288,18 @@ namespace castor
 
 		if ( fileExists( srcFileName ) )
 		{
-			if ( !fileExists( dstFileName ) || allowReplace )
+			std::filesystem::copy_options options{ ( allowReplace
+				? std::filesystem::copy_options::update_existing
+				: std::filesystem::copy_options::skip_existing ) };
+			std::error_code error{};
+			result = std::filesystem::copy_file( string::stringCast< wchar_t >( srcFileName )
+				, string::stringCast< wchar_t >( dstFileName )
+				, options
+				, error );
+			
+			if ( !result )
 			{
-				std::ifstream src( string::stringCast< char >( srcFileName ), std::ios::binary );
-
-				if ( src.is_open() )
-				{
-					std::ofstream dst( string::stringCast< char >( dstFileName ), std::ios::binary | std::ios::trunc );
-
-					if ( dst.is_open() )
-					{
-						dst << src.rdbuf();
-						result = true;
-					}
-					else
-					{
-						Logger::logWarning( cuT( "copyFile - Can't open destination file : " ) + dstFileName );
-					}
-				}
-				else
-				{
-					Logger::logWarning( cuT( "copyFile - Can't open source file : " ) + srcFileName );
-				}
-			}
-			else
-			{
-				Logger::logWarning( cuT( "copyFile - Destination file [" ) + dstFileName + cuT( "] already exists." ) );
+				Logger::logWarning( cuT( "copyFile - Can't copy [" ) + srcFileName + cuT( "] to [" ) + dstFileName + cuT( "]: " ) + error.message() );
 			}
 		}
 		else
