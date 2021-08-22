@@ -30,7 +30,6 @@ namespace castor3d
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
 			sdw::Vec4 projInfo;
-			sdw::Mat4 viewMatrix;
 			sdw::Int numSamples;
 			sdw::Int numSpiralTurns;
 			sdw::Float projScale;
@@ -73,7 +72,6 @@ namespace castor3d
 			//	where P is the projection matrix that maps camera space points
 			//	to [-1, 1] x [-1, 1].  That is, SsaoConfigUbo::getProjectUnitMatrix().
 			castor::Point4f projInfo;
-			castor::Matrix4x4f viewMatrix;
 			// Integer number of samples to take at each pixel.
 			int32_t numSamples;
 			// This is the number of turns around the circle that the spiral pattern makes.
