@@ -79,6 +79,51 @@ namespace castor
 		 *\brief		Log un message trace, à partir d'un std::string
 		 *\param[in]	msg	La ligne a logger
 		 */
+		CU_API void lockedLogTrace( my_string const & msg );
+		/**
+		 *\~english
+		 *\brief		Logs a debug message, from a std::string
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message debug, à partir d'un std::string
+		 *\param[in]	msg	La ligne a logger
+		 */
+		CU_API void lockedLogDebug( my_string const & msg );
+		/**
+		 *\~english
+		 *\brief		Logs a message, from a std::string
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message, à partir d'un std::string
+		 *\param[in]	msg	La ligne a logger
+		 */
+		CU_API void lockedLogInfo( my_string const & msg );
+		/**
+		 *\~english
+		 *\brief		Logs a warning, from a std::string
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un avertissement, à partir d'un std::string
+		 *\param[in]	msg	The line to log
+		 */
+		CU_API void lockedLogWarning( my_string const & msg );
+		/**
+		 *\~english
+		 *\brief		Logs an error, from a std::string
+		 *\param[in]	msg		The line to log
+		 *\~french
+		 *\brief		Log une erreur, à partir d'un std::string
+		 *\param[in]	msg		The line to log
+		 */
+		CU_API void lockedLogError( my_string const & msg );
+		/**
+		 *\~english
+		 *\brief		Logs a trace message, from a std::string
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message trace, à partir d'un std::string
+		 *\param[in]	msg	La ligne a logger
+		 */
 		CU_API void logTrace( my_string const & msg );
 		/**
 		 *\~english
@@ -161,6 +206,51 @@ namespace castor
 		 *\param[in]	msg	The line to log
 		 */
 		CU_API void logError( my_ostream const & msg );
+		/**
+		 *\~english
+		 *\brief		Logs a trace message, from a std::string
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message trace, à partir d'un std::string
+		 *\param[in]	msg	La ligne a logger
+		 */
+		CU_API void lockedLogTraceNoLF( my_string const & msg );
+		/**
+		 *\~english
+		 *\brief		Logs a debug message, from a std::string
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message debug, à partir d'un std::string
+		 *\param[in]	msg	La ligne a logger
+		 */
+		CU_API void lockedLogDebugNoLF( my_string const & msg );
+		/**
+		 *\~english
+		 *\brief		Logs a message, from a std::string
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message, à partir d'un std::string
+		 *\param[in]	msg	La ligne a logger
+		 */
+		CU_API void lockedLogInfoNoLF( my_string const & msg );
+		/**
+		 *\~english
+		 *\brief		Logs a warning, from a std::string
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un avertissement, à partir d'un std::string
+		 *\param[in]	msg	The line to log
+		 */
+		CU_API void lockedLogWarningNoLF( my_string const & msg );
+		/**
+		 *\~english
+		 *\brief		Logs an error, from a std::string
+		 *\param[in]	msg		The line to log
+		 *\~french
+		 *\brief		Log une erreur, à partir d'un std::string
+		 *\param[in]	msg		The line to log
+		 */
+		CU_API void lockedLogErrorNoLF( my_string const & msg );
 		/**
 		 *\~english
 		 *\brief		Logs a trace message, from a std::string
@@ -269,21 +359,34 @@ namespace castor
 
 		CU_API void flushQueue();
 
-		inline String getHeader( uint8_t index )const
+		String getHeader( uint8_t index )const
 		{
 			return m_headers[index];
 		}
 
+		void lock()const
+		{
+			m_mutexQueue.lock();
+		}
+
+		void unlock()const
+		{
+			m_mutexQueue.unlock();
+		}
+
 	private:
-		CU_API void doInitialiseThread();
-		CU_API void doCleanupThread();
+		void doInitialiseThread();
+		void doCleanupThread();
+		void doLockedPushMessage( LogType type
+			, std::string const & message
+			, bool addLF = true );
 
 	private:
 		LogType m_logLevel;
 		LoggerImpl m_impl;
 		std::array< String, size_t( LogType::eCount ) > m_headers;
 		MessageQueue m_queue;
-		std::mutex m_mutexQueue;
+		mutable std::mutex m_mutexQueue;
 		std::thread m_logThread;
 		std::atomic_bool m_initialised{ false };
 		std::atomic_bool m_stopped{ false };
