@@ -470,7 +470,6 @@ namespace castor3d
 	Texture3DTo2D::~Texture3DTo2D()
 	{
 		m_device.uboPools->putBuffer( m_uniformBuffer );
-		m_renderSystem.getEngine()->getSamplerCache().remove( "Texture3DToTexture2DDepth" );
 	}
 
 	void Texture3DTo2D::createPasses( QueueData const & queueData
