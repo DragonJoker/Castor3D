@@ -681,7 +681,7 @@ namespace castor3d
 			commandBuffer->endDebugBlock();
 			commandBuffer->end();
 			auto fence = device.device->createFence();
-			device.transferQueue->submit( *commandBuffer
+			queueData.queue->submit( *commandBuffer
 				, fence.get() );
 			fence->wait( ashes::MaxTimeout );
 		}
