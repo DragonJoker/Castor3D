@@ -24,7 +24,6 @@ namespace castor3d
 			, bool enabled )
 			: StructInstance{ writer, std::move( expr ), enabled }
 			, projInfo{ getMember< sdw::Vec4 >( "projInfo" ) }
-			, viewMatrix{ getMember< sdw::Mat4 >( "viewMatrix" ) }
 			, numSamples{ getMember< sdw::Int >( "numSamples" ) }
 			, numSpiralTurns{ getMember< sdw::Int >( "numSpiralTurns" ) }
 			, projScale{ getMember< sdw::Float >( "projScale" ) }
@@ -64,7 +63,6 @@ namespace castor3d
 			if ( result->empty() )
 			{
 				result->declMember( "projInfo", ast::type::Kind::eVec4F );
-				result->declMember( "viewMatrix", ast::type::Kind::eMat4x4F );
 				result->declMember( "numSamples", ast::type::Kind::eInt );
 				result->declMember( "numSpiralTurns", ast::type::Kind::eInt );
 				result->declMember( "projScale", ast::type::Kind::eFloat );
@@ -152,6 +150,8 @@ namespace castor3d
 		float const radius2 = radius * radius;
 		float const invRadius2 = 1.0f / radius2;
 		float const intersityDivR6 = config.intensity / std::pow( radius, 6.0f );
+
+		auto & configuration = m_ubo.getData();
 		float const projScale = viewport.getProjectionScale();
 		float const MIN_AO_SS_RADIUS = 1.0f;
 		// Second parameter of max is just solving for Z coordinate at which we hit MIN_AO_SS_RADIUS
@@ -159,8 +159,13 @@ namespace castor3d
 		// Hack because setting farZ lower results in banding artefacts on some scenes, should tune later.
 		farZ = std::min( farZ, -1000.0f );
 		auto const & proj = camera.getProjection( true );
-
-		auto & configuration = m_ubo.getData();
+		configuration.projInfo = castor::Point4f
+		{
+			-2.0f / ( viewport.getWidth() * proj[0][0] ),
+			-2.0f / ( viewport.getHeight() * proj[1][1] ),
+			( 1.0f - proj[0][2] ) / proj[0][0],
+			( 1.0f - proj[1][2] ) / proj[1][1]
+		};
 		configuration.numSamples = config.numSamples;
 		configuration.numSpiralTurns = numSpiralTurns;
 		configuration.projScale = projScale;
@@ -175,14 +180,6 @@ namespace castor3d
 		configuration.edgeSharpness = config.edgeSharpness;
 		configuration.blurStepSize = config.blurStepSize.value().value();
 		configuration.blurRadius = config.blurRadius.value().value();
-		configuration.projInfo = castor::Point4f
-		{
-			-2.0f / ( viewport.getWidth() * proj[0][0] ),
-			-2.0f / ( viewport.getHeight() * proj[1][1] ),
-			( 1.0f - proj[0][2] ) / proj[0][0],
-			( 1.0f - proj[1][2] ) / proj[1][1]
-		};
-		configuration.viewMatrix = camera.getView();
 		configuration.blurHighQuality = config.blurHighQuality ? 1u : 0u;
 		configuration.highQuality = config.highQuality ? 1u : 0u;
 		configuration.logMaxOffset = config.logMaxOffset.value();
