@@ -68,11 +68,13 @@ namespace castor3d
 					listener.fireEvents( EventType::eQueueRender, device, *data );
 					listener.fireEvents( EventType::eQueueRender );
 				} );
-			m_uploadResources =
+			for ( auto & uploadResources : m_uploadResources )
 			{
-				UploadResources{ { nullptr, nullptr }, nullptr },
-				UploadResources{ { nullptr, nullptr }, nullptr },
-			};
+				uploadResources.fence->wait( ashes::MaxTimeout );
+				uploadResources.commands = {};
+				uploadResources.fence.reset();
+				uploadResources.used = false;
+			}
 		}
 		else
 		{

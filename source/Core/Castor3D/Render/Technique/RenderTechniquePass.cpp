@@ -184,7 +184,7 @@ namespace castor3d
 	void RenderTechniquePass::doUpdateUbos( CpuUpdater & updater )
 	{
 		m_sceneUbo.cpuUpdate( *updater.camera->getScene()
-			, updater.camera.get() );
+			, updater.camera );
 	}
 
 	void RenderTechniquePass::doUpdateFlags( PipelineFlags & flags )const
