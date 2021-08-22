@@ -22,6 +22,9 @@ namespace castor3d
 		: public castor::OwnedBy< Engine >
 	{
 	public:
+		static constexpr uint32_t UnlimitedFPS = 0xFFFFFFFFu;
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.

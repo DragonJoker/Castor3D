@@ -6,11 +6,15 @@ wxIMPLEMENT_APP( castortd::CastorDvpTD );
 
 namespace castortd
 {
+	static const bool CASTOR3D_THREADED = true;
+
 	CastorDvpTD::CastorDvpTD()
 		: CastorApplication{ cuT( "CastorDvpTD" )
 			, cuT( "Castor TD" )
 			, 7
-			, castor3d::Version{ CastorDvpTD_VERSION_MAJOR, CastorDvpTD_VERSION_MINOR, CastorDvpTD_VERSION_BUILD } }
+			, castor3d::Version{ CastorDvpTD_VERSION_MAJOR, CastorDvpTD_VERSION_MINOR, CastorDvpTD_VERSION_BUILD }
+			, 120u
+			, CASTOR3D_THREADED }
 	{
 	}
 

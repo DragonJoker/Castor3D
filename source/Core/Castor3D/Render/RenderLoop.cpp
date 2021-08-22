@@ -33,7 +33,7 @@ namespace castor3d
 		, bool isAsync )
 		: OwnedBy< Engine >( engine )
 		, m_wantedFPS{ wantedFPS }
-		, m_frameTime{ 1000 / wantedFPS }
+		, m_frameTime{ 1000ull / wantedFPS }
 		, m_renderSystem{ *engine.getRenderSystem() }
 		, m_debugOverlays{ std::make_unique< DebugOverlays >( engine ) }
 		, m_queueUpdater{ std::max( 2u, engine.getCpuInformations().getCoreCount() - ( isAsync ? 2u : 1u ) ) }

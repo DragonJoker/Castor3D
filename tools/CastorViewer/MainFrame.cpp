@@ -54,13 +54,6 @@ namespace CastorViewer
 {
 	namespace
 	{
-		static const bool isCastor3DThreaded = true;
-#if defined( NDEBUG )
-		static const int wantedFPS = 1000;
-#else
-		static const int wantedFPS = 60;
-#endif
-
 		static const int recordFPS = 30;
 		static const wxString objWildcard = wxT( " (*.obj)|*.obj|" );
 
@@ -138,14 +131,9 @@ namespace CastorViewer
 			doPopulateToolBar( splashScreen );
 			wxIcon icon = wxIcon( castor_xpm );
 			SetIcon( icon );
-			result = doInitialise3D();
-
-			if ( result )
-			{
-				doInitialiseGUI();
-				doInitialiseTimers();
-				doInitialisePerspectives();
-			}
+			doInitialiseGUI();
+			doInitialiseTimers();
+			doInitialisePerspectives();
 		}
 
 		Show( result );
@@ -199,7 +187,7 @@ namespace CastorViewer
 					m_renderPanel->setTarget( target );
 					m_mainScene = target->getScene();
 
-					if ( isCastor3DThreaded )
+					if ( engine->isThreaded() )
 					{
 						engine->getRenderLoop().beginRendering();
 					}
@@ -280,44 +268,11 @@ namespace CastorViewer
 		}
 	}
 
-	bool MainFrame::doInitialise3D()
-	{
-		auto engine = wxGetApp().getCastor();
-		bool result = true;
-		Logger::logInfo( cuT( "Initialising Castor3D" ) );
-
-		try
-		{
-			if ( !wxGetApp().isUnlimitedFps() )
-			{
-				engine->initialise( wantedFPS, isCastor3DThreaded );
-			}
-			else
-			{
-				engine->initialise( 1000u, isCastor3DThreaded );
-			}
-
-			Logger::logInfo( cuT( "Castor3D Initialised" ) );
-		}
-		catch ( std::exception & exc )
-		{
-			wxMessageBox( _( "Problem occured while initialising Castor3D." ) + wxString( wxT( "\n" ) ) + wxString( exc.what(), wxMBConvLibc() ), _( "Exception" ), wxOK | wxCENTRE | wxICON_ERROR );
-			result = false;
-		}
-		catch ( ... )
-		{
-			wxMessageBox( _( "Problem occured while initialising Castor3D.\nLook at CastorViewer.log for more details" ), _( "Exception" ), wxOK | wxCENTRE | wxICON_ERROR );
-			result = false;
-		}
-
-		return result;
-	}
-
 	void MainFrame::doInitialiseTimers()
 	{
 		auto engine = wxGetApp().getCastor();
 
-		if ( !isCastor3DThreaded && !m_timer )
+		if ( !engine->isThreaded() && !m_timer )
 		{
 			m_timer = new wxTimer( this, eID_RENDER_TIMER );
 			m_timer->Start( 1000 / engine->getRenderLoop().getWantedFps() );
@@ -748,7 +703,7 @@ namespace CastorViewer
 
 		if ( m_timer )
 		{
-			if ( isCastor3DThreaded )
+			if ( engine->isThreaded() )
 			{
 				engine->getRenderLoop().resume();
 				m_timer->Stop();
@@ -883,8 +838,6 @@ namespace CastorViewer
 			m_renderPanel->disableWindowResize();
 		}
 
-		Hide();
-
 		if ( m_timer )
 		{
 			m_timer->Stop();
@@ -908,30 +861,24 @@ namespace CastorViewer
 
 		m_mainScene.reset();
 		auto castor = wxGetApp().getCastor();
+		CU_Require( castor );
 
-		if ( castor )
+		if ( m_renderPanel )
 		{
-			if ( m_renderPanel )
+			if ( castor->isThreaded() )
 			{
-				if ( castor->isThreaded() )
-				{
-					castor->getRenderLoop().pause();
-				}
-
-				m_renderPanel->reset();
-
-				if ( castor->isThreaded() )
-				{
-					castor->getRenderLoop().resume();
-				}
+				castor->getRenderLoop().pause();
 			}
 
-			castor->cleanup();
-		}
-		else if ( m_renderPanel )
-		{
 			m_renderPanel->reset();
+
+			if ( castor->isThreaded() )
+			{
+				castor->getRenderLoop().resume();
+			}
 		}
+
+		castor->cleanup();
 
 		if ( m_renderPanel )
 		{

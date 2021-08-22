@@ -16,9 +16,6 @@ See LICENSE file in root folder
 namespace GuiCommon
 {
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		16/09/2015
-	\version	0.8.0
 	\~english
 	\brief		Base class for Castor applications, initialise the locale and the logger, takes care of command line parameters.
 	\remarks	Command line options can be given with -abr, /abr, or --long.<br />
@@ -46,6 +43,18 @@ namespace GuiCommon
 		: public wxApp
 	{
 	public:
+		struct Config
+		{
+			bool validate{ false };
+			bool unlimFPS{ false };
+			castor::LogType log{ castor::LogType::eInfo };
+			uint32_t fixedFPS{ 60u };
+			bool syncRender{ false };
+			castor::String renderer;
+			castor::String fileName;
+		};
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -64,6 +73,8 @@ namespace GuiCommon
 			, castor::String displayName
 			, uint32_t steps
 			, castor3d::Version version
+			, uint32_t wantedFPS
+			, bool isCastorThreaded
 			, castor::String rendererType = castor3d::RenderTypeUndefined );
 
 		static void assertHandler( wxString const & file
@@ -77,7 +88,7 @@ namespace GuiCommon
 		 *\~french
 		 *\return		Le nom de l'application.
 		 */
-		inline castor::String const & getInternalName()const
+		castor::String const & getInternalName()const
 		{
 			return m_internalName;
 		}
@@ -87,7 +98,7 @@ namespace GuiCommon
 		 *\~french
 		 *\return		Le nom de l'application, tel qu'affiché dans les fenêtres.
 		 */
-		inline castor::String const & getDisplayName()const
+		castor::String const & getDisplayName()const
 		{
 			return m_displayName;
 		}
@@ -97,9 +108,9 @@ namespace GuiCommon
 		 *\~french
 		 *\return		Le nom du fichier donné en ligne de commande via l'option -f.
 		 */
-		inline castor::String const & getFileName()const
+		castor::String const & getFileName()const
 		{
-			return m_fileName;
+			return m_config.fileName;
 		}
 		/**
 		 *\~english
@@ -107,9 +118,9 @@ namespace GuiCommon
 		 *\~french
 		 *\return		Le type d'API de rendu donné en ligne de commande, castor3d::RenderTypeUndefined si aucun n'a été donné.
 		 */
-		inline castor::String const & getRendererType()const
+		castor::String const & getRendererType()const
 		{
-			return m_rendererType;
+			return m_config.renderer;
 		}
 		/**
 		 *\~english
@@ -117,7 +128,7 @@ namespace GuiCommon
 		 *\~french
 		 *\return		Le moteur Castor3D.
 		 */
-		inline castor3d::Engine * getCastor()const
+		castor3d::Engine * getCastor()const
 		{
 			return m_castor.get();
 		}
@@ -127,9 +138,9 @@ namespace GuiCommon
 		 *\~french
 		 *\return		Le statut de FPS non limitées.
 		 */
-		inline bool isUnlimitedFps()const
+		bool isUnlimitedFps()const
 		{
-			return m_unlimitedFps;
+			return m_config.unlimFPS;
 		}
 		/**
 		 *\~english
@@ -137,7 +148,7 @@ namespace GuiCommon
 		 *\~french
 		 *\return		Le splash screen.
 		 */
-		inline SplashScreen * getSplashScreen()const
+		SplashScreen * getSplashScreen()const
 		{
 			return m_splashScreen;
 		}
@@ -147,7 +158,7 @@ namespace GuiCommon
 		 *\~french
 		 *\return		La version de l'application.
 		 */
-		inline castor3d::Version const & getVersion()const
+		castor3d::Version const & getVersion()const
 		{
 			return m_version;
 		}
@@ -209,14 +220,11 @@ namespace GuiCommon
 		std::shared_ptr< castor3d::Engine > m_castor;
 
 	private:
-		castor::String m_fileName;
-		castor::String m_rendererType;
 		std::unique_ptr< wxLocale > m_locale;
 		uint32_t m_steps;
 		SplashScreen * m_splashScreen;
 		castor3d::Version m_version;
-		bool m_validation;
-		bool m_unlimitedFps{ false };
+		Config m_config;
 	};
 }
 
