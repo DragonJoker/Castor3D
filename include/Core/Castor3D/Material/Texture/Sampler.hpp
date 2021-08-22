@@ -87,62 +87,62 @@ namespace castor3d
 		/**@{*/
 		VkSamplerAddressMode getWrapS()const
 		{
-			return m_info->addressModeU;
+			return m_info.addressModeU;
 		}
 
 		VkSamplerAddressMode getWrapT()const
 		{
-			return m_info->addressModeV;
+			return m_info.addressModeV;
 		}
 
 		VkSamplerAddressMode getWrapR()const
 		{
-			return m_info->addressModeW;
+			return m_info.addressModeW;
 		}
 
 		VkFilter getMinFilter()const
 		{
-			return m_info->minFilter;
+			return m_info.minFilter;
 		}
 
 		VkFilter getMagFilter()const
 		{
-			return m_info->magFilter;
+			return m_info.magFilter;
 		}
 
 		VkSamplerMipmapMode getMipFilter()const
 		{
-			return m_info->mipmapMode;
+			return m_info.mipmapMode;
 		}
 
 		float getMinLod()const
 		{
-			return m_info->minLod;
+			return m_info.minLod;
 		}
 
 		float getMaxLod()const
 		{
-			return m_info->maxLod;
+			return m_info.maxLod;
 		}
 
 		float getLodBias()const
 		{
-			return m_info->mipLodBias;
+			return m_info.mipLodBias;
 		}
 
 		VkBorderColor getBorderColour()const
 		{
-			return m_info->borderColor;
+			return m_info.borderColor;
 		}
 
 		float getMaxAnisotropy()const
 		{
-			return m_info->maxAnisotropy;
+			return m_info.maxAnisotropy;
 		}
 
 		VkCompareOp getCompareOp()const
 		{
-			return m_info->compareOp;
+			return m_info.compareOp;
 		}
 
 		ashes::Sampler const & getSampler()const
@@ -153,7 +153,7 @@ namespace castor3d
 
 		bool isAnisotropicFilteringEnabled()const
 		{
-			return m_info->anisotropyEnable;
+			return m_info.anisotropyEnable;
 		}
 
 		bool isMipmapSet()const
@@ -163,7 +163,7 @@ namespace castor3d
 
 		bool isCompareEnabled()const
 		{
-			return m_info->compareEnable;
+			return m_info.compareEnable;
 		}
 		/**@}*/
 		/**
@@ -181,95 +181,95 @@ namespace castor3d
 		/**@{*/
 		void setWrapS( VkSamplerAddressMode value )
 		{
-			m_info->addressModeU = value;
+			m_info.addressModeU = value;
 		}
 
 		void setWrapT( VkSamplerAddressMode value )
 		{
-			m_info->addressModeV = value;
+			m_info.addressModeV = value;
 		}
 
 		void setWrapR( VkSamplerAddressMode value )
 		{
-			m_info->addressModeW = value;
+			m_info.addressModeW = value;
 		}
 
 		void setMinFilter( VkFilter value )
 		{
-			m_info->minFilter = value;
+			m_info.minFilter = value;
 		}
 
 		void setMagFilter( VkFilter value )
 		{
-			m_info->magFilter = value;
+			m_info.magFilter = value;
 		}
 
 		void setMipFilter( VkSamplerMipmapMode value )
 		{
 			m_mipmapIsSet = true;
-			m_info->mipmapMode = value;
+			m_info.mipmapMode = value;
 		}
 
 		void setMinLod( float value )
 		{
-			m_info->minLod = value;
+			m_info.minLod = value;
 		}
 
 		void setMaxLod( float value )
 		{
-			m_info->maxLod = value;
+			m_info.maxLod = value;
 		}
 
 		void setLodBias( float value )
 		{
-			m_info->mipLodBias = value;
+			m_info.mipLodBias = value;
 		}
 
 		void setBorderColour( VkBorderColor value )
 		{
-			m_info->borderColor = value;
+			m_info.borderColor = value;
 		}
 
 		void enableAnisotropicFiltering( bool value )
 		{
-			m_info->anisotropyEnable = value;
+			m_info.anisotropyEnable = value;
 		}
 
 		void setMaxAnisotropy( float value )
 		{
-			m_info->maxAnisotropy = value;
+			m_info.maxAnisotropy = value;
 		}
 
 		void setCompareOp( VkCompareOp value )
 		{
-			m_info->compareOp = value;
+			m_info.compareOp = value;
 		}
 
 		void enableCompare( bool value )
 		{
-			m_info->compareEnable = value;
+			m_info.compareEnable = value;
 		}
 		/**@}*/
 
 	private:
-		ashes::SamplerCreateInfo m_info
-		{
-			0u,
-			VK_FILTER_NEAREST,
-			VK_FILTER_NEAREST,
-			VK_SAMPLER_MIPMAP_MODE_NEAREST,
-			VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
-			VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
-			VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
-			0.0f,
-			VK_FALSE,
-			1.0f,
-			VK_FALSE,
-			VK_COMPARE_OP_NEVER,
-			-1000.0f,
-			1000.0f,
-			VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
-			false
+		VkSamplerCreateInfo m_info{ VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO
+			, nullptr
+			, 0u
+			, VK_FILTER_NEAREST
+			, VK_FILTER_NEAREST
+			, VK_SAMPLER_MIPMAP_MODE_NEAREST
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, 0.0f
+			, VK_FALSE
+			, 1.0f
+			, VK_FALSE
+			, VK_COMPARE_OP_NEVER
+			, -1000.0f
+			, 1000.0f
+			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK
+			, VK_FALSE
 		};
 		bool m_mipmapIsSet{ false };
 		ashes::SamplerPtr m_sampler;
