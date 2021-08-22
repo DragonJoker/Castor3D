@@ -214,10 +214,6 @@ namespace castor3d
 			, { { *uploadResources.commands.semaphore
 			, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT } } );
 
-		// Usually GPU cleanup
-		doProcessEvents( EventType::eQueueRender, device, *queueData );
-		doProcessEvents( EventType::eQueueRender );
-
 		for ( auto & window : windows )
 		{
 			window.second->render( info
@@ -225,8 +221,13 @@ namespace castor3d
 				, toWait );
 		}
 
-		uploadResources.used = toWait.empty();
 		m_first = false;
+		uploadResources.used = toWait.empty();
+
+		// Usually GPU cleanup
+		doProcessEvents( EventType::eQueueRender, device, *queueData );
+		doProcessEvents( EventType::eQueueRender );
+
 		m_debugOverlays->endGpuTask();
 	}
 
