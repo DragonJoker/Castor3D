@@ -164,9 +164,6 @@ namespace castor3d
 			, PassVisitorBase & vis )override;
 
 	private:
-		C3D_API void doInitialise()override;
-		C3D_API void doCleanup()override;
-		C3D_API void doSetOpacity( float value )override;
 		C3D_API void doPrepareTextures( TextureUnitPtrArray & result )override;
 		C3D_API void doJoinMtlRgh( TextureUnitPtrArray & result );
 
