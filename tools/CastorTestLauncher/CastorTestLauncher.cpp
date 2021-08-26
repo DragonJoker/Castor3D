@@ -15,11 +15,35 @@ wxIMPLEMENT_APP( test_launcher::CastorTestLauncher );
 
 namespace test_launcher
 {
+	namespace
+	{
 #if defined( NDEBUG )
-	static constexpr castor::LogType DefaultLogType = castor::LogType::eInfo;
+		static constexpr castor::LogType DefaultLogType = castor::LogType::eInfo;
 #else
-	static constexpr castor::LogType DefaultLogType = castor::LogType::eTrace;
+		static constexpr castor::LogType DefaultLogType = castor::LogType::eTrace;
 #endif
+
+		namespace option
+		{
+			namespace lg
+			{
+				static const wxString Help{ wxT( "help" ) };
+				static const wxString ConfigFile{ wxT( "config" ) };
+				static const wxString LogLevel{ wxT( "log" ) };
+				static const wxString Validate{ wxT( "validate" ) };
+				static const wxString Generate{ wxT( "generate" ) };
+			}
+
+			namespace st
+			{
+				static const wxString Help{ wxT( "h" ) };
+				static const wxString ConfigFile{ wxT( "c" ) };
+				static const wxString LogLevel{ wxT( "l" ) };
+				static const wxString Validate{ wxT( "a" ) };
+				static const wxString Generate{ wxT( "e" ) };
+			}
+		}
+	}
 
 	CastorTestLauncher::CastorTestLauncher()
 	{
@@ -39,11 +63,20 @@ namespace test_launcher
 			CU_Exception( "No renderer plug-ins" );
 		}
 
+		static const wxString Help{ _( "Displays this help." ) };
+		static const wxString ConfigFile{ _( "Specifies the configuration file." ) };
+		static const wxString LogLevel{ _( "Defines log level (from 0=trace to 4=error)." ) };
+		static const wxString Validate{ _( "Enables rendering API validation." ) };
+		static const wxString Generate{ _( "Generates the reference image, using Vulkan renderer." ) };
+		static const wxString SceneFile{ _( "The tested scene file." ) };
+
 		wxCmdLineParser parser( wxApp::argc, wxApp::argv );
-		parser.AddSwitch( wxT( "h" ), wxT( "help" ), _( "Displays this help." ) );
-		parser.AddSwitch( wxT( "g" ), wxT( "generate" ), _( "Generates the reference image, using Vulkan renderer." ) );
-		parser.AddOption( wxT( "l" ), wxT( "log" ), _( "Defines log level (from 0=trace to 4=error)." ), wxCMD_LINE_VAL_NUMBER );
-		parser.AddParam( _( "The initial scene file" ), wxCMD_LINE_VAL_STRING, wxCMD_LINE_OPTION_MANDATORY );
+		parser.AddSwitch( option::st::Help, option::lg::Help, Help, wxCMD_LINE_OPTION_HELP );
+		parser.AddOption( option::st::ConfigFile, option::lg::ConfigFile, ConfigFile, wxCMD_LINE_VAL_STRING, 0 );
+		parser.AddSwitch( option::st::Validate, option::lg::Validate, Validate );
+		parser.AddOption( option::st::LogLevel, option::lg::LogLevel, LogLevel, wxCMD_LINE_VAL_NUMBER );
+		parser.AddSwitch( option::st::Generate, option::lg::Generate, Generate );
+		parser.AddParam( SceneFile, wxCMD_LINE_VAL_STRING, wxCMD_LINE_OPTION_MANDATORY );
 
 		for ( auto & plugin : list )
 		{
@@ -54,30 +87,50 @@ namespace test_launcher
 				, _( "Defines the renderer to " ) + desc + wxT( "." ) );
 		}
 
-		result = parser.Parse( false ) == 0;
-
-		// S'il y avait des erreurs ou "-h" ou "--help", on affiche l'aide et on sort
-		if ( !result || parser.Found( wxT( 'h' ) ) )
+		if ( ( parser.Parse( false ) != 0 )
+			|| parser.Found( option::st::Help ) )
 		{
 			parser.Usage();
-			result = false;
+			return false;
 		}
 
-		castor::LogType logLevel = DefaultLogType;
-		long log;
+		Config config{};
 
-		if ( parser.Found( wxT( "l" ), &log ) )
+		auto has = [&parser]( wxString const & option )
 		{
-			logLevel = castor::LogType( log );
-		}
+			return parser.Found( option );
+		};
+
+		auto getLong = [&parser]( wxString const & option
+			, auto defaultValue )
+		{
+			using ValueT = decltype( defaultValue );
+			long value;
+			ValueT result;
+
+			if ( parser.Found( option, &value ) )
+			{
+				result = ValueT( value );
+			}
+			else
+			{
+				result = defaultValue;
+			}
+
+			return result;
+		};
+
+		m_config.log = getLong( option::st::LogLevel, DefaultLogType );
+		m_config.validate = has( option::st::Validate );
+		m_config.generate = has( option::st::Generate );
 
 		if ( result )
 		{
-			castor::Logger::initialise( logLevel );
+			castor::Logger::initialise( m_config.log );
 
 			if ( parser.Found( wxT( "generate" ) ) )
 			{
-				m_rendererType = cuT( "vk" );
+				m_config.renderer = cuT( "vk" );
 				m_outputFileSuffix = cuT( "ref" );
 			}
 			else
@@ -86,13 +139,13 @@ namespace test_launcher
 				{
 					if ( parser.Found( wxString{ plugin.name } ) )
 					{
-						m_rendererType = plugin.name;
-						m_outputFileSuffix = m_rendererType;
+						m_config.renderer = plugin.name;
+						m_outputFileSuffix = m_config.renderer;
 					}
 				}
 			}
 
-			if ( m_rendererType.empty() )
+			if ( m_config.renderer.empty() )
 			{
 				parser.AddUsageText( _( "Please select a renderer type." ) );
 				parser.Usage();
@@ -101,7 +154,7 @@ namespace test_launcher
 
 			if ( parser.GetParamCount() > 0 )
 			{
-				m_fileName = castor::Path( parser.GetParam( 0 ).mb_str( wxConvUTF8 ).data() );
+				m_config.fileName = castor::Path( parser.GetParam( 0 ).mb_str( wxConvUTF8 ).data() );
 			}
 		}
 
@@ -140,7 +193,7 @@ namespace test_launcher
 			}
 		}
 
-		castor->loadRenderer( m_rendererType );
+		castor->loadRenderer( m_config.renderer );
 		return castor;
 	}
 
@@ -150,12 +203,12 @@ namespace test_launcher
 
 		if ( doParseCommandLine() )
 		{
-			if ( !castor::File::directoryExists( m_fileName.getPath() / cuT( "Compare" ) ) )
+			if ( !castor::File::directoryExists( m_config.fileName.getPath() / cuT( "Compare" ) ) )
 			{
-				castor::File::directoryCreate( m_fileName.getPath() / cuT( "Compare" ) );
+				castor::File::directoryCreate( m_config.fileName.getPath() / cuT( "Compare" ) );
 			}
 
-			castor::Logger::setFileName( m_fileName.getPath() / cuT( "Compare" ) / ( m_fileName.getFileName() + cuT( "_" ) + m_rendererType + cuT( ".log" ) ) );
+			castor::Logger::setFileName( m_config.fileName.getPath() / cuT( "Compare" ) / ( m_config.fileName.getFileName() + cuT( "_" ) + m_config.renderer + cuT( ".log" ) ) );
 			castor::Logger::logInfo( cuT( "Start" ) );
 
 			try
@@ -169,7 +222,7 @@ namespace test_launcher
 						if ( mainFrame->initialise() )
 						{
 							castor::Logger::logInfo( cuT( "Load scene" ) );
-							mainFrame->loadScene( m_fileName );
+							mainFrame->loadScene( m_config.fileName );
 							castor::Logger::logInfo( cuT( "Save frame" ) );
 							mainFrame->saveFrame( m_outputFileSuffix );
 							castor::Logger::logInfo( cuT( "Cleanup frame" ) );
