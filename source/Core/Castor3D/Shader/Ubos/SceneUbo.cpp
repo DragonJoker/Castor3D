@@ -43,7 +43,7 @@ namespace castor3d
 		ast::type::StructPtr SceneData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
-				, "SceneData" );
+				, "C3D_SceneData" );
 
 			if ( result->empty() )
 			{

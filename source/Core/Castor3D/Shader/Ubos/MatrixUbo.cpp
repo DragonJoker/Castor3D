@@ -37,7 +37,7 @@ namespace castor3d
 		ast::type::StructPtr MatrixData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
-				, "MatrixData" );
+				, "C3D_MatrixData" );
 
 			if ( result->empty() )
 			{
