@@ -80,7 +80,7 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 	# RenderGraph external library
 	set( CRG_BUILD_STATIC OFF )
 	set( CRG_BUILD_TESTS OFF )
-	set( CRG_BASE_DIR "External/RenderGraph" )
+	set( CRG_BASE_DIR "Core/RenderGraph" )
 	set( VULKAN_HEADERS_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../${ASHES_DIR}/external/Vulkan-Headers/include )
 	add_subdirectory( ../${RENDERGRAPH_DIR} ${CMAKE_BINARY_DIR}/${RENDERGRAPH_DIR} )
 
@@ -96,7 +96,7 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 	set( SDW_BUILD_TESTS OFF )
 	set( SDW_BUILD_SDW OFF )
 	set( SDW_GENERATE_SOURCE OFF )
-	set( SDW_BASE_DIR "External/ShaderWriter" )
+	set( SDW_BASE_DIR "Core/ShaderWriter" )
 	add_subdirectory( ../${SHADERWRITER_DIR} ${CMAKE_BINARY_DIR}/${SHADERWRITER_DIR} )
 endif ()
 
