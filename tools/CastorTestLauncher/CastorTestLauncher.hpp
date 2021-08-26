@@ -30,10 +30,18 @@ namespace test_launcher
 		int OnRun() override;
 
 	private:
+		struct Config
+		{
+			bool validate{ false };
+			bool generate{ false };
+			castor::LogType log{ castor::LogType::eInfo };
+			castor::String renderer;
+			castor::Path fileName;
+		};
+
 		MainFrame * m_mainFrame{ nullptr };
-		castor::String m_rendererType;
+		Config m_config;
 		castor::String m_outputFileSuffix;
-		castor::Path m_fileName;
 	};
 }
 
