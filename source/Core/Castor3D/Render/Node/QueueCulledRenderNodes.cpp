@@ -456,8 +456,10 @@ namespace castor3d
 		, ashes::Optional< VkViewport > const & viewport
 		, ashes::Optional< VkRect2D > const & scissors )
 	{
-		queue.getCommandBuffer().begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
-			, makeVkType< VkCommandBufferInheritanceInfo >( VkRenderPass( queue.getOwner()->getRenderPass() )
+		ashes::CommandBuffer const & cb = queue.getCommandBuffer();
+		auto & rp = *queue.getOwner();
+		cb.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
+			, makeVkType< VkCommandBufferInheritanceInfo >( VkRenderPass( rp.getRenderPass() )
 				, 0u
 				, VkFramebuffer( VK_NULL_HANDLE )
 				, VkBool32( VK_FALSE )
@@ -465,123 +467,123 @@ namespace castor3d
 				, 0u ) );
 
 		doTraverseNodes( instancedStaticNodes.frontCulled
-			, [&queue, &viewport, &scissors]( RenderPipeline & pipeline
+			, [&cb, &rp, &viewport, &scissors]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, SubmeshRenderNodePtrArray & nodes )
 			{
-				doParseInstantiatedRenderNodesCommands( queue.getCommandBuffer()
+				doParseInstantiatedRenderNodesCommands( cb
 					, viewport
 					, scissors
 					, pipeline
-					, queue.getOwner()->getShaderFlags()
+					, rp.getShaderFlags()
 					, pass
 					, submesh
 					, nodes
-					, queue.getOwner()->getInstanceMult() );
+					, rp.getInstanceMult() );
 			} );
 		doTraverseNodes( instancedStaticNodes.backCulled
-			, [&queue, &viewport, &scissors]( RenderPipeline & pipeline
+			, [&cb, &rp, &viewport, &scissors]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, SubmeshRenderNodePtrArray & nodes )
 			{
-				doParseInstantiatedRenderNodesCommands( queue.getCommandBuffer()
+				doParseInstantiatedRenderNodesCommands( cb
 					, viewport
 					, scissors
 					, pipeline
-					, queue.getOwner()->getShaderFlags()
+					, rp.getShaderFlags()
 					, pass
 					, submesh
 					, nodes
-					, queue.getOwner()->getInstanceMult() );
+					, rp.getInstanceMult() );
 			} );
 		doTraverseNodes( instancedSkinnedNodes.frontCulled
-			, [&queue, &viewport, &scissors]( RenderPipeline & pipeline
+			, [&cb, &rp, &viewport, &scissors]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, SubmeshRenderNodePtrArray & nodes )
 			{
-				doParseInstantiatedRenderNodesCommands( queue.getCommandBuffer()
+				doParseInstantiatedRenderNodesCommands( cb
 					, viewport
 					, scissors
 					, pipeline
-					, queue.getOwner()->getShaderFlags()
+					, rp.getShaderFlags()
 					, pass
 					, submesh
 					, nodes
-					, queue.getOwner()->getInstanceMult() );
+					, rp.getInstanceMult() );
 			} );
 		doTraverseNodes( instancedSkinnedNodes.backCulled
-			, [&queue, &viewport, &scissors]( RenderPipeline & pipeline
+			, [&cb, &rp, &viewport, &scissors]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, SubmeshRenderNodePtrArray & nodes )
 			{
-				doParseInstantiatedRenderNodesCommands( queue.getCommandBuffer()
+				doParseInstantiatedRenderNodesCommands( cb
 					, viewport
 					, scissors
 					, pipeline
-					, queue.getOwner()->getShaderFlags()
+					, rp.getShaderFlags()
 					, pass
 					, submesh
 					, nodes
-					, queue.getOwner()->getInstanceMult() );
+					, rp.getInstanceMult() );
 			} );
 
 		doParseRenderNodesCommands( staticNodes.frontCulled
-			, queue.getCommandBuffer()
+			, cb
 			, viewport
 			, scissors
-			, queue.getOwner()->getShaderFlags()
-			, queue.getOwner()->getInstanceMult() );
+			, rp.getShaderFlags()
+			, rp.getInstanceMult() );
 		doParseRenderNodesCommands( staticNodes.backCulled
-			, queue.getCommandBuffer()
+			, cb
 			, viewport
 			, scissors
-			, queue.getOwner()->getShaderFlags()
-			, queue.getOwner()->getInstanceMult() );
+			, rp.getShaderFlags()
+			, rp.getInstanceMult() );
 
 		doParseRenderNodesCommands( skinnedNodes.frontCulled
-			, queue.getCommandBuffer()
+			, cb
 			, viewport
 			, scissors
-			, queue.getOwner()->getShaderFlags()
-			, queue.getOwner()->getInstanceMult() );
+			, rp.getShaderFlags()
+			, rp.getInstanceMult() );
 		doParseRenderNodesCommands( skinnedNodes.backCulled
-			, queue.getCommandBuffer()
+			, cb
 			, viewport
 			, scissors
-			, queue.getOwner()->getShaderFlags()
-			, queue.getOwner()->getInstanceMult() );
+			, rp.getShaderFlags()
+			, rp.getInstanceMult() );
 
 		doParseRenderNodesCommands( morphingNodes.frontCulled
-			, queue.getCommandBuffer()
+			, cb
 			, viewport
 			, scissors
-			, queue.getOwner()->getShaderFlags()
-			, queue.getOwner()->getInstanceMult() );
+			, rp.getShaderFlags()
+			, rp.getInstanceMult() );
 		doParseRenderNodesCommands( morphingNodes.backCulled
-			, queue.getCommandBuffer()
+			, cb
 			, viewport
 			, scissors
-			, queue.getOwner()->getShaderFlags()
-			, queue.getOwner()->getInstanceMult() );
+			, rp.getShaderFlags()
+			, rp.getInstanceMult() );
 
 		doParseRenderNodesCommands( billboardNodes.frontCulled
-			, queue.getCommandBuffer()
+			, cb
 			, viewport
 			, scissors
-			, queue.getOwner()->getShaderFlags()
-			, queue.getOwner()->getInstanceMult() );
+			, rp.getShaderFlags()
+			, rp.getInstanceMult() );
 		doParseRenderNodesCommands( billboardNodes.backCulled
-			, queue.getCommandBuffer()
+			, cb
 			, viewport
 			, scissors
-			, queue.getOwner()->getShaderFlags()
-			, queue.getOwner()->getInstanceMult() );
+			, rp.getShaderFlags()
+			, rp.getInstanceMult() );
 
-		queue.getCommandBuffer().end();
+		cb.end();
 	}
 
 	bool QueueCulledRenderNodes::hasNodes()const

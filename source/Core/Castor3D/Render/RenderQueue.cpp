@@ -36,21 +36,31 @@ namespace castor3d
 		, m_culledRenderNodes{ castor::makeUnique < QueueCulledRenderNodes >( *this ) }
 		, m_viewport{ castor::makeChangeTracked< ashes::Optional< VkViewport > >( m_culledChanged, ashes::nullopt ) }
 		, m_scissor{ castor::makeChangeTracked< ashes::Optional< VkRect2D > >( m_culledChanged, ashes::nullopt ) }
-		, m_commandBuffer{ renderPass.getEngine()->getRenderSystem()->getRenderDevice().graphicsData()->commandPool->createCommandBuffer( renderPass.getName()
-			, VK_COMMAND_BUFFER_LEVEL_SECONDARY ) }
+	{
+	}
+
+	RenderQueue::~RenderQueue()
 	{
 	}
 
 	void RenderQueue::initialise()
 	{
-		getCommandBuffer().begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
-			, makeVkType< VkCommandBufferInheritanceInfo >( VkRenderPass( getOwner()->getRenderPass() )
-				, 0u
-				, VkFramebuffer( VK_NULL_HANDLE )
-				, VkBool32( VK_FALSE )
-				, 0u
-				, 0u ) );
-		getCommandBuffer().end();
+		getOwner()->getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+			, [this]( RenderDevice const & device
+				, QueueData const & queueData )
+			{
+				CU_Require( !m_commandBuffer );
+				m_commandBuffer = queueData.commandPool->createCommandBuffer( getOwner()->getName()
+					, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
+				m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
+					, makeVkType< VkCommandBufferInheritanceInfo >( VkRenderPass( getOwner()->getRenderPass() )
+						, 0u
+						, VkFramebuffer( VK_NULL_HANDLE )
+						, VkBool32( VK_FALSE )
+						, 0u
+						, 0u ) );
+				m_commandBuffer->end();
+			} ) );
 	}
 
 	void RenderQueue::cleanup()
@@ -62,6 +72,11 @@ namespace castor3d
 
 	void RenderQueue::update( ShadowMapLightTypeArray & shadowMaps )
 	{
+		if ( !m_commandBuffer )
+		{
+			return;
+		}
+
 		if ( m_allChanged )
 		{
 			doParseAllRenderNodes( shadowMaps );
@@ -138,6 +153,7 @@ namespace castor3d
 	void RenderQueue::doPrepareCommandBuffer()
 	{
 		getOwner()->resetCommandBuffer();
+		CU_Require( m_commandBuffer );
 		m_commandBuffer->reset();
 		auto & culledNodes = getCulledRenderNodes();
 		culledNodes.prepareCommandBuffers( *this
