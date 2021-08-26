@@ -36,12 +36,12 @@ extern "C"
 
 	C3D_Bloom_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
 	{
-		engine->getRenderTargetCache().getPostEffectFactory().registerType( Bloom::PostEffect::Type
+		engine->getPostEffectFactory().registerType( Bloom::PostEffect::Type
 			, &Bloom::PostEffect::create );
 	}
 
 	C3D_Bloom_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->getRenderTargetCache().getPostEffectFactory().unregisterType( Bloom::PostEffect::Type );
+		engine->getPostEffectFactory().unregisterType( Bloom::PostEffect::Type );
 	}
 }

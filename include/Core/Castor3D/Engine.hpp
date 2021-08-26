@@ -13,8 +13,10 @@ See LICENSE file in root folder
 #include "Castor3D/Model/Mesh/MeshModule.hpp"
 #include "Castor3D/Overlay/OverlayModule.hpp"
 #include "Castor3D/Plugin/PluginModule.hpp"
-#include "Castor3D/Render/ToTexture/RenderToTextureModule.hpp"
+#include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightingModule.hpp"
+#include "Castor3D/Render/ToneMapping/ToneMappingModule.hpp"
+#include "Castor3D/Render/ToTexture/RenderToTextureModule.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleModule.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
@@ -357,6 +359,10 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API castor::String getPassesName()const;
+		C3D_API ToneMappingFactory const & getToneMappingFactory()const;
+		C3D_API ToneMappingFactory & getToneMappingFactory();
+		C3D_API PostEffectFactory const & getPostEffectFactory()const;
+		C3D_API PostEffectFactory & getPostEffectFactory();
 
 		castor::String const & getAppName()const
 		{

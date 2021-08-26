@@ -126,7 +126,7 @@ extern "C"
 
 	C3D_Smaa_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
 	{
-		engine->getRenderTargetCache().getPostEffectFactory().registerType( smaa::PostEffect::Type
+		engine->getPostEffectFactory().registerType( smaa::PostEffect::Type
 			, &smaa::PostEffect::create );
 		engine->registerParsers( smaa::PostEffect::Type, createParsers() );
 		engine->registerSections( smaa::PostEffect::Type, createSections() );
@@ -136,6 +136,6 @@ extern "C"
 	{
 		engine->unregisterSections( smaa::PostEffect::Type );
 		engine->unregisterParsers( smaa::PostEffect::Type );
-		engine->getRenderTargetCache().getPostEffectFactory().unregisterType( smaa::PostEffect::Type );
+		engine->getPostEffectFactory().unregisterType( smaa::PostEffect::Type );
 	}
 }

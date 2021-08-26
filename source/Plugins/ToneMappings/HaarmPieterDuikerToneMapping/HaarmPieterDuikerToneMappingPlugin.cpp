@@ -37,13 +37,13 @@ extern "C"
 
 	C3D_HaarmPieterDuikerToneMapping_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
 	{
-		engine->getRenderTargetCache().getToneMappingFactory().registerType( ToneMapping::Type
+		engine->getToneMappingFactory().registerType( ToneMapping::Type
 			, &ToneMapping::create );
 		engine->getRenderTargetCache().registerToneMappingName( ToneMapping::Type, ToneMapping::Name );
 	}
 
 	C3D_HaarmPieterDuikerToneMapping_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->getRenderTargetCache().getToneMappingFactory().unregisterType( ToneMapping::Type );
+		engine->getToneMappingFactory().unregisterType( ToneMapping::Type );
 	}
 }

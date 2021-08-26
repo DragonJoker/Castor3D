@@ -37,12 +37,12 @@ extern "C"
 
 	C3D_Fxaa_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
 	{
-		engine->getRenderTargetCache().getPostEffectFactory().registerType( fxaa::PostEffect::Type
+		engine->getPostEffectFactory().registerType( fxaa::PostEffect::Type
 			, &fxaa::PostEffect::create );
 	}
 
 	C3D_Fxaa_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->getRenderTargetCache().getPostEffectFactory().unregisterType( fxaa::PostEffect::Type );
+		engine->getPostEffectFactory().unregisterType( fxaa::PostEffect::Type );
 	}
 }

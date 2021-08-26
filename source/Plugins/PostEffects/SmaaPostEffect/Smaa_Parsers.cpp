@@ -311,7 +311,7 @@ namespace smaa
 			parameters.add( cuT( "reprojectionWeightScale" ), smaaContext.data.reprojectionWeightScale );
 		}
 
-		auto effect = engine->getRenderTargetCache().getPostEffectFactory().create( PostEffect::Type
+		auto effect = engine->getPostEffectFactory().create( PostEffect::Type
 			, *parsingContext.renderTarget
 			, *engine->getRenderSystem()
 			, parameters );

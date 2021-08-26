@@ -71,7 +71,7 @@ namespace draw_edges
 		castor3d::Parameters parameters;
 		parameters.add( PostEffect::NormalDepthWidth, castor::string::toString( deContext.data.normalDepthWidth ) );
 		parameters.add( PostEffect::ObjectWidth, castor::string::toString( deContext.data.objectWidth ) );
-		auto effect = engine->getRenderTargetCache().getPostEffectFactory().create( PostEffect::Type
+		auto effect = engine->getPostEffectFactory().create( PostEffect::Type
 			, *parsingContext.renderTarget
 			, *engine->getRenderSystem()
 			, parameters );
