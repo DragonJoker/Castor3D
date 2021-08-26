@@ -28,7 +28,7 @@ namespace castor3d
 		ast::type::StructPtr BillboardData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
-				, "BillboardData" );
+				, "C3D_BillboardData" );
 
 			if ( result->empty() )
 			{

@@ -97,7 +97,7 @@ namespace castor3d
 
 		ast::type::StructPtr TextureConfigData::makeType( ast::type::TypesCache & cache )
 		{
-			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140, "TextureConfigData" );
+			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140, "C3D_TextureConfigData" );
 
 			if ( result->empty() )
 			{
