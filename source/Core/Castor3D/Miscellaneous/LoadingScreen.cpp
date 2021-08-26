@@ -5,6 +5,7 @@
 #include "Castor3D/Cache/OverlayCache.hpp"
 #include "Castor3D/Cache/CacheView.hpp"
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
+#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Overlay/TextOverlay.hpp"
@@ -158,7 +159,13 @@ namespace castor3d
 			, RenderDevice const & device )
 		{
 			auto result = graph.compile( device.makeContext() );
-			result->record();
+			auto runnable = result.get();
+			device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [runnable]( RenderDevice const & device
+					, QueueData const & queueData )
+				{
+					runnable->record();
+				} ) );
 			return result;
 		}
 	}

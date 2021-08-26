@@ -37,13 +37,14 @@ namespace castor3d
 		C3D_API RenderQueue( SceneRenderPass & renderPass
 			, RenderMode mode
 			, SceneNode const * ignored );
+		C3D_API ~RenderQueue();
 		/**
 		 *\~english
 		 *\brief		Initialises the queue.
 		 *\~french
 		 *\brief		Initialise la file de rendu.
 		 */
-		void initialise();
+		C3D_API void initialise();
 		/**
 		 *\~english
 		 *\brief		Cleans the queue up.
@@ -101,6 +102,17 @@ namespace castor3d
 		C3D_API bool hasNodes()const;
 		C3D_API RenderMode getMode()const;
 
+		bool hasCommandBuffer()const
+		{
+			return m_commandBuffer != nullptr;
+		}
+		
+		ashes::CommandBuffer const & getCommandBuffer()const
+		{
+			CU_Require( hasCommandBuffer() );
+			return *m_commandBuffer;
+		}
+
 		QueueRenderNodes & getAllRenderNodes()const
 		{
 			CU_Require( m_renderNodes );
@@ -111,11 +123,6 @@ namespace castor3d
 		{
 			CU_Require( m_culledRenderNodes );
 			return *m_culledRenderNodes;
-		}
-
-		ashes::CommandBuffer const & getCommandBuffer()const
-		{
-			return *m_commandBuffer;
 		}
 
 		SceneCuller const & getCuller()const

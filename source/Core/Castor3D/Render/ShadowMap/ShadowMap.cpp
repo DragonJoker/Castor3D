@@ -2,9 +2,11 @@
 
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapPass.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
@@ -131,7 +133,13 @@ namespace castor3d
 			}
 
 			m_runnables.push_back( m_graphs.back()->compile( m_device.makeContext() ) );
-			m_runnables.back()->record();
+			auto runnable = m_runnables.back().get();
+			m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [runnable]( RenderDevice const & device
+					, QueueData const & queueData )
+				{
+					runnable->record();
+				} ) );
 		}
 
 		doUpdate( updater );
@@ -170,7 +178,13 @@ namespace castor3d
 		if ( !m_runnables[index] )
 		{
 			m_runnables[index] = m_graphs[index]->compile( m_device.makeContext() );
-			m_runnables[index]->record();
+			auto runnable = m_runnables[index].get();
+			m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [runnable]( RenderDevice const & device
+					, QueueData const & queueData )
+				{
+					runnable->record();
+				} ) );
 		}
 
 		return m_runnables[index]->run( toWait, queue );

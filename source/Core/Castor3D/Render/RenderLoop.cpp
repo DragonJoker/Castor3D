@@ -54,16 +54,17 @@ namespace castor3d
 
 	void RenderLoop::cleanup()
 	{
-		if ( m_renderSystem.hasDevice() )
+		if ( m_queueData )
 		{
 			auto & device = m_renderSystem.getRenderDevice();
-			auto data = device.graphicsData();
-			getEngine()->getFrameListenerCache().forEach( [&device, &data]( FrameListener & listener )
+			auto data = m_queueData;
+			m_queueData = nullptr;
+			getEngine()->getFrameListenerCache().forEach( [&device, data]( FrameListener & listener )
 				{
 					listener.fireEvents( EventType::ePreRender, device, *data );
 					listener.fireEvents( EventType::ePreRender );
 				} );
-			getEngine()->getFrameListenerCache().forEach( [&device, &data]( FrameListener & listener )
+			getEngine()->getFrameListenerCache().forEach( [&device, data]( FrameListener & listener )
 				{
 					listener.fireEvents( EventType::eQueueRender, device, *data );
 					listener.fireEvents( EventType::eQueueRender );
@@ -167,15 +168,17 @@ namespace castor3d
 		auto & windows = getEngine()->getRenderWindows();
 		crg::SemaphoreWaitArray toWait;
 		auto & device = m_renderSystem.getRenderDevice();
-		auto queueData = device.graphicsData();
 
-		if ( !m_uploadResources[0].fence )
+		if ( !m_queueData )
 		{
+			// Run this initialisation here, to make sure we are in the render loop thread.
+			m_queueData = device.reserveGraphicsData();
+
 			for ( auto & resources : m_uploadResources )
 			{
 				resources.commands =
 				{
-					queueData->commandPool->createCommandBuffer( "RenderLoopUboUpload" ),
+					m_queueData->commandPool->createCommandBuffer( "RenderLoopUboUpload" ),
 					device->createSemaphore( "RenderLoopUboUpload" ),
 				};
 				resources.fence = device->createFence( VK_FENCE_CREATE_SIGNALED_BIT );
@@ -185,7 +188,7 @@ namespace castor3d
 		auto & uploadResources = m_uploadResources[m_currentUpdate];
 
 		// Usually GPU initialisation
-		doProcessEvents( EventType::ePreRender, device, *queueData );
+		doProcessEvents( EventType::ePreRender, device, *m_queueData );
 		doProcessEvents( EventType::ePreRender );
 
 		// GPU Update
@@ -197,7 +200,7 @@ namespace castor3d
 		uploadResources.commands.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 		device.uboPools->upload( *uploadResources.commands.commandBuffer );
 		uploadResources.commands.commandBuffer->end();
-		queueData->queue->submit( *uploadResources.commands.commandBuffer
+		m_queueData->queue->submit( *uploadResources.commands.commandBuffer
 			, ( uploadResources.used
 				? VkSemaphore{ VK_NULL_HANDLE }
 				: *uploadResources.commands.semaphore )
@@ -210,7 +213,7 @@ namespace castor3d
 		// Render
 		toWait = getEngine()->getRenderTargetCache().render( device
 			, info
-			, *queueData->queue
+			, *m_queueData->queue
 			, { { *uploadResources.commands.semaphore
 			, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT } } );
 
@@ -225,7 +228,7 @@ namespace castor3d
 		uploadResources.used = toWait.empty();
 
 		// Usually GPU cleanup
-		doProcessEvents( EventType::eQueueRender, device, *queueData );
+		doProcessEvents( EventType::eQueueRender, device, *m_queueData );
 		doProcessEvents( EventType::eQueueRender );
 
 		m_debugOverlays->endGpuTask();

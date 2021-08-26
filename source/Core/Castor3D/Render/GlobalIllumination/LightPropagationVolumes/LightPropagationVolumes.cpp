@@ -2,6 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
+#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -510,7 +511,13 @@ namespace castor3d
 			m_aabb = m_scene.getBoundingBox();
 			m_lightPropagationPassesDesc = doCreatePropagationPasses();
 			m_runnable = m_graph.compile( m_device.makeContext() );
-			m_runnable->record();
+			auto runnable = m_runnable.get();
+			m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [runnable]( RenderDevice const & device
+					, QueueData const & queueData )
+				{
+					runnable->record();
+				} ) );
 			m_initialised = true;
 		}
 	}
@@ -561,7 +568,13 @@ namespace castor3d
 			{
 				m_runnable.reset();
 				m_runnable = m_graph.compile( m_device.makeContext() );
-				m_runnable->record();
+				auto runnable = m_runnable.get();
+				m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+					, [runnable]( RenderDevice const & device
+						, QueueData const & queueData )
+					{
+						runnable->record();
+					} ) );
 			}
 		}
 	}
