@@ -49,11 +49,6 @@ namespace castor3d
 					}
 
 					data.setQueueSize( queueProp.queueCount );
-
-					if ( data.familySupport != QueueFamilyFlag::eNone )
-					{
-						//result.emplace_back( std::move( data ) );
-					}
 				}
 			}
 
@@ -346,6 +341,11 @@ namespace castor3d
 	QueueDataWrapper RenderDevice::graphicsData()const
 	{
 		return QueueDataWrapper{ m_preferredGraphicsQueue };
+	}
+
+	QueueData const * RenderDevice::reserveGraphicsData()const
+	{
+		return m_preferredGraphicsQueue->reserveQueue();
 	}
 
 	crg::GraphContext & RenderDevice::makeContext()const

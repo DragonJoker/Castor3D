@@ -175,16 +175,16 @@ namespace castor3d
 		m_culler.getScene().getBillboardListCache().registerPass( *this );
 	}
 
-	void SceneRenderPass::setIgnoredNode( SceneNode const & node )
-	{
-		m_renderQueue.setIgnoredNode( node );
-	}
-
 	SceneRenderPass::~SceneRenderPass()
 	{
 		m_renderQueue.cleanup();
 		m_backPipelines.clear();
 		m_frontPipelines.clear();
+	}
+
+	void SceneRenderPass::setIgnoredNode( SceneNode const & node )
+	{
+		m_renderQueue.setIgnoredNode( node );
 	}
 
 	void SceneRenderPass::update( CpuUpdater & updater )
@@ -535,7 +535,7 @@ namespace castor3d
 	void SceneRenderPass::doSubRecordInto( VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
-		VkCommandBuffer secondary = getCommandBuffer();
+		VkCommandBuffer secondary = m_renderQueue.getCommandBuffer();
 		m_context.vkCmdExecuteCommands( commandBuffer
 			, 1u
 			, &secondary );

@@ -464,7 +464,13 @@ namespace castor3d
 	{
 		m_colour.create();
 		m_depth.create();
-		m_clearLpvRunnable->record();
+		auto runnable = m_clearLpvRunnable.get();
+		m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+			, [runnable]( RenderDevice const & device
+				, QueueData const & queueData )
+			{
+				runnable->record();
+			} ) );
 #if C3D_UseWeightedBlendedRendering
 		m_transparentPassResult->create();
 #endif

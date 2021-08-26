@@ -152,11 +152,16 @@ namespace castor3d
 				}
 
 				// Le rendu est en cours
-				while ( !isInterrupted() && isRendering() && !isPaused() )
+				while ( !isInterrupted() && isRendering() )
 				{
 					m_frameEnded = false;
 					timer.getElapsed();
-					doRenderFrame();
+
+					if ( !isPaused() )
+					{
+						doRenderFrame();
+					}
+
 					auto endTime = std::chrono::duration_cast< Milliseconds >( timer.getElapsed() );
 					std::this_thread::sleep_for( std::max( 0_ms, getFrameTime() - endTime ) );
 					m_frameEnded = true;
