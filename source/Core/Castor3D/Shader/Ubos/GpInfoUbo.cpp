@@ -36,7 +36,7 @@ namespace castor3d
 		ast::type::StructPtr GpInfoData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
-				, "GPInfoData" );
+				, "C3D_GPInfoData" );
 
 			if ( result->empty() )
 			{

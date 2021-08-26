@@ -36,7 +36,7 @@ namespace castor3d
 		ast::type::StructPtr RsmConfigData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
-				, "RsmConfigData" );
+				, "C3D_RsmConfigData" );
 
 			if ( result->empty() )
 			{

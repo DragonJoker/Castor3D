@@ -32,7 +32,7 @@ namespace castor3d
 		ast::type::StructPtr ModelInstancesData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
-				, "ModelInstancesData" );
+				, "C3D_ModelInstancesData" );
 
 			if ( result->empty() )
 			{

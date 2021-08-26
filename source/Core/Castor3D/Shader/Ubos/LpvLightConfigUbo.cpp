@@ -56,7 +56,7 @@ namespace castor3d
 		ast::type::StructPtr LpvLightData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
-				, "LpvLightData" );
+				, "C3D_LpvLightData" );
 
 			if ( result->empty() )
 			{

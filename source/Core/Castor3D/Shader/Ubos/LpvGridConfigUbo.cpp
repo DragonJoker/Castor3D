@@ -47,7 +47,7 @@ namespace castor3d
 		ast::type::StructPtr LpvGridData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
-				, "LpvGridData" );
+				, "C3D_LpvGridData" );
 
 			if ( result->empty() )
 			{
