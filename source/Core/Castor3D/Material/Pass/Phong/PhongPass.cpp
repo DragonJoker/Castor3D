@@ -371,14 +371,6 @@ namespace castor3d
 		return castor::TextWriter< PhongPass >{ tabs, folder, subfolder }( *this, file );
 	}
 
-	void PhongPass::doInitialise()
-	{
-	}
-
-	void PhongPass::doCleanup()
-	{
-	}
-
 	void PhongPass::doAccept( PassVisitorBase & vis )
 	{
 		vis.visit( cuT( "Ambient" )
@@ -397,10 +389,6 @@ namespace castor3d
 		vis.visit( cuT( "Diffuse" ), TextureFlag::eDiffuse, configuration.colourMask, 3u );
 		vis.visit( cuT( "Specular" ), TextureFlag::eSpecular, configuration.specularMask, 3u );
 		vis.visit( cuT( "Shininess" ), TextureFlag::eShininess, configuration.glossinessMask, 1u );
-	}
-
-	void PhongPass::doSetOpacity( float p_value )
-	{
 	}
 
 	void PhongPass::doPrepareTextures( TextureUnitPtrArray & result )

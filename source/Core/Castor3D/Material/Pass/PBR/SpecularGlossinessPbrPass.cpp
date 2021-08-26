@@ -351,14 +351,6 @@ namespace castor3d
 		return castor::TextWriter< SpecularGlossinessPbrPass >{ tabs, folder, subfolder }( *this, file );
 	}
 
-	void SpecularGlossinessPbrPass::doInitialise()
-	{
-	}
-
-	void SpecularGlossinessPbrPass::doCleanup()
-	{
-	}
-
 	void SpecularGlossinessPbrPass::doAccept( PassVisitorBase & vis )
 	{
 		vis.visit( cuT( "Diffuse" )
@@ -375,10 +367,6 @@ namespace castor3d
 		vis.visit( cuT( "Albedo" ), castor3d::TextureFlag::eAlbedo, configuration.colourMask, 3u );
 		vis.visit( cuT( "Specular" ), castor3d::TextureFlag::eSpecular, configuration.specularMask, 3u );
 		vis.visit( cuT( "Glossiness" ), castor3d::TextureFlag::eGlossiness, configuration.glossinessMask, 1u );
-	}
-
-	void SpecularGlossinessPbrPass::doSetOpacity( float value )
-	{
 	}
 
 	void SpecularGlossinessPbrPass::doPrepareTextures( TextureUnitPtrArray & result )
