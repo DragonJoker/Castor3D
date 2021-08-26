@@ -134,22 +134,51 @@ namespace castor3d
 		 *\param[in]	name	Le nom d'élément.
 		 *\param[in]	element	L'élément.
 		 */
-		ElementPtr add( Key const & name, ElementPtr element )
+		bool tryAdd( Key const & name
+			, ElementPtr element
+			, bool initialise = false )
+		{
+			bool result{ false };
+
+			if ( element )
+			{
+				result = ( element != m_elements.tryInsert( name, element ) );
+
+				if ( result && initialise )
+				{
+					m_initialise( element );
+				}
+			}
+
+			return result;
+		}
+		/**
+		 *\~english
+		 *\brief		Removes an element, given a name.
+		 *\param[in]	name	The element name.
+		 *\param[in]	element	The element.
+		 *\~french
+		 *\brief		Retire un élément à partir d'un nom.
+		 *\param[in]	name	Le nom d'élément.
+		 *\param[in]	element	L'élément.
+		 */
+		ElementPtr add( Key const & name
+			, ElementPtr element
+			, bool initialise = false )
 		{
 			ElementPtr result{ element };
 
 			if ( element )
 			{
-				LockType lock{ castor::makeUniqueLock( m_elements ) };
+				result = m_elements.tryInsert( name, element );
 
-				if ( m_elements.has( name ) )
+				if ( element != result )
 				{
-					result = m_elements.find( name );
 					doReportDuplicate( name );
 				}
-				else
+				else if ( initialise )
 				{
-					m_elements.insert( name, element );
+					m_initialise( element );
 				}
 			}
 			else
@@ -315,6 +344,20 @@ namespace castor3d
 		ElementPtr find( Key const & name )const
 		{
 			return m_elements.find( name );
+		}
+		/**
+		 *\~english
+		 *\brief		Looks for an element with given name.
+		 *\param[in]	name	The object name.
+		 *\return		The found element, nullptr if not found.
+		 *\~french
+		 *\brief		Cherche un élément par son nom.
+		 *\param[in]	name	Le nom d'élément.
+		 *\return		L'élément trouvé, nullptr si non trouvé.
+		 */
+		ElementPtr tryFind( Key const & name )const
+		{
+			return m_elements.tryFind( name );
 		}
 		/**
 		 *\~english
