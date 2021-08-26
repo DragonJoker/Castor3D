@@ -432,6 +432,7 @@ namespace castor
 		SectionId m_rootSectionId;
 		int m_ignoreLevel{ 0 };
 		Path m_path;
+		String m_fileName;
 		String m_functionName;
 
 	protected:

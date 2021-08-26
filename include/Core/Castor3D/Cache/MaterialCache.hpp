@@ -129,7 +129,22 @@ namespace castor3d
 		 *\param[in]	name	Le nom d'élément.
 		 *\param[in]	element	L'élément.
 		 */
-		C3D_API MaterialSPtr add( Key const & name, MaterialSPtr element );
+		C3D_API bool tryAdd( Key const & name
+			, MaterialSPtr element
+			, bool initialise = false );
+		/**
+		 *\~english
+		 *\brief		Removes an element, given a name.
+		 *\param[in]	name	The element name.
+		 *\param[in]	element	The element.
+		 *\~french
+		 *\brief		Retire un élément à partir d'un nom.
+		 *\param[in]	name	Le nom d'élément.
+		 *\param[in]	element	L'élément.
+		 */
+		C3D_API MaterialSPtr add( Key const & name
+			, MaterialSPtr element
+			, bool initialise = false );
 		/**
 		 *\~english
 		 *\brief		Creates an element.

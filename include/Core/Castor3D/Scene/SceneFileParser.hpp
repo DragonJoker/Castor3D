@@ -136,6 +136,7 @@ namespace castor3d
 		VkShaderStageFlagBits shaderStage{};
 		UniformBufferBaseUPtr uniformBuffer;
 		OverlaySPtr overlay;
+		std::vector< OverlaySPtr > parentOverlays;
 		BillboardListSPtr billboards;
 		int face1{};
 		int face2{};

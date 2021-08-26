@@ -18,18 +18,18 @@ namespace castor
 		: public castor::NonCopyable
 	{
 	public:
-		CU_DeclareSmartPtr( ObjectT );
-		CU_DeclareTemplateMap( KeyT, ObjectTSPtr, ObjectPtrT );
-		typedef typename ObjectPtrTMap::value_type ValueType;
-		//!\~english	Typedef over the key param type.
-		//!\~french		Typedef sur le type de la clef en paramètre de fonction
-		typedef typename CallTraits< KeyT >::ConstParamType KeyParamType;
+		using ObjectPtr = std::shared_ptr< ObjectT >;
+		using ObjectPtrMap = std::map< KeyT, ObjectPtr >;
+		using ObjectPtrMapIt = typename ObjectPtrMap::iterator;
+		using ObjectPtrMapConstIt = typename ObjectPtrMap::const_iterator;
+		using ValueType = typename ObjectPtrMap::value_type;
+		using KeyParamType= typename CallTraits< KeyT >::ConstParamType;
 
 	private:
 		struct Search
 		{
 			KeyT key;
-			ObjectPtrTMapConstIt result;
+			ObjectPtrMapConstIt result;
 		};
 
 	public:
@@ -76,7 +76,7 @@ namespace castor
 		 *\brief		Renvoie un itérateur sur le premier élément de la collection
 		 *\return		L'itérateur
 		 */
-		inline ObjectPtrTMapIt begin();
+		inline ObjectPtrMapIt begin();
 		/**
 		 *\~english
 		 *\brief		Returns an constant iterator to the first element of the collection
@@ -85,7 +85,7 @@ namespace castor
 		 *\brief		Renvoie un itérateur constant sur le premier élément de la collection
 		 *\return		L'itérateur
 		 */
-		inline ObjectPtrTMapConstIt begin()const;
+		inline ObjectPtrMapConstIt begin()const;
 		/**
 		 *\~english
 		 *\brief		Returns an iterator to the after last element of the collection
@@ -94,7 +94,7 @@ namespace castor
 		 *\brief		Renvoie un itérateur sur l'après dernier élément de la collection
 		 *\return		L'itérateur
 		 */
-		inline ObjectPtrTMapIt end();
+		inline ObjectPtrMapIt end();
 		/**
 		 *\~english
 		 *\brief		Returns an constant iterator to the after last element of the collection
@@ -103,7 +103,7 @@ namespace castor
 		 *\brief		Renvoie un itérateur constant sur l'après dernier élément de la collection
 		 *\return		L'itérateur
 		 */
-		inline ObjectPtrTMapConstIt end()const;
+		inline ObjectPtrMapConstIt end()const;
 		/**
 		 *\~english
 		 *\return		\p true if the collection is empty.
@@ -128,7 +128,18 @@ namespace castor
 		 *\param[in]	key	La clef
 		 *\return		L'objet trouvé s'il existe, \p null_ptr sinon
 		 */
-		inline ObjectTSPtr find( KeyParamType key )const;
+		inline ObjectPtr tryFind( KeyParamType key )const;
+		/**
+		 *\~english
+		 *\brief		Looks for a collected object at the given key
+		 *\param[in]	key	The key
+		 *\return		The found object if any, \p null_ptr if none
+		 *\~french
+		 *\brief		Recherche dans la collection un objet situé à la clef donnée
+		 *\param[in]	key	La clef
+		 *\return		L'objet trouvé s'il existe, \p null_ptr sinon
+		 */
+		inline ObjectPtr find( KeyParamType key )const;
 		/**
 		 *\~english
 		 *\brief		Gives the collected objects count
@@ -150,7 +161,20 @@ namespace castor
 		 *\param[in]	element	L'élément à insérer
 		 *\return		\p false si un élément est déjà associé à la clef
 		 */
-		inline bool insert( KeyParamType key, ObjectTSPtr element );
+		inline ObjectPtr tryInsert( KeyParamType key, ObjectPtr element );
+		/**
+		 *\~english
+		 *\brief		Inserts an element at the given key into the collection
+		 *\param[in]	key		The key at which element is inserted
+		 *\param[in]	element	The element to insert
+		 *\return		\p false if there is already one object at the given key
+		 *\~french
+		 *\brief		Insère un élément à la clef donnée
+		 *\param[in]	key		La clef à laquelle l'élément sera associé
+		 *\param[in]	element	L'élément à insérer
+		 *\return		\p false si un élément est déjà associé à la clef
+		 */
+		inline bool insert( KeyParamType key, ObjectPtr element );
 		/**
 		 *\~english
 		 *\brief		Tests if there is an element associated to the key
@@ -172,7 +196,7 @@ namespace castor
 		 *\param[in]	key	La clef
 		 *\return		L'élément associé, null_ptr sinon
 		 */
-		inline ObjectTSPtr erase( KeyParamType key );
+		inline ObjectPtr erase( KeyParamType key );
 		/**
 		 *\~english
 		 *\brief		Removes the element at given iterator.
@@ -183,7 +207,7 @@ namespace castor
 		 *\param[in]	it	L'itérateur
 		 *\return		L'itérateur après l'élément enlevé.
 		 */
-		inline ObjectPtrTMapIt erase( ObjectPtrTMapIt it );
+		inline ObjectPtrMapIt erase( ObjectPtrMapIt it );
 
 	protected:
 		/**
@@ -205,7 +229,7 @@ namespace castor
 
 	private:
 		LoggerInstance & m_logger;
-		ObjectPtrTMap m_objects;
+		ObjectPtrMap m_objects;
 		mutable std::recursive_mutex m_mutex;
 		mutable bool m_locked;
 		mutable Search m_last;
