@@ -232,6 +232,8 @@ namespace castor3d
 						}
 					}
 
+					m_minCullersZ = std::numeric_limits< float >::max();
+
 					if ( m_camera )
 					{
 						auto aabbMin = mesh.getBoundingBox().getMin();
@@ -248,6 +250,7 @@ namespace castor3d
 							castor::Point3f{ aabbMax[0], aabbMax[1], aabbMin[2] },
 							castor::Point3f{ aabbMax[0], aabbMax[1], aabbMax[2] },
 						};
+
 						for ( auto & corner : corners )
 						{
 							m_minCullersZ = std::min( m_minCullersZ
