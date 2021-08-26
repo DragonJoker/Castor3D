@@ -1789,7 +1789,7 @@ set_target_properties( ${PROJECT_NAME}
 	PROPERTIES
 		CXX_STANDARD 17
 		CXX_EXTENSIONS OFF
-		FOLDER "Core"
+		FOLDER "Core/${MAIN_PROJECT_NAME}"
 )
 add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
 target_add_doc_ex( ${PROJECT_NAME} "French" "*.h *.hpp" ${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME} )
