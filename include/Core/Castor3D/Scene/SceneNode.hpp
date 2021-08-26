@@ -22,14 +22,8 @@ namespace castor3d
 		//!\~english	The total number of scene nodes.
 		//!\~french		Le nombre total de noeuds de scène.
 		static uint64_t Count;
-		using SceneNodePtrStrMap = std::map< castor::String, SceneNodeWPtr >;
-		using MovableObjectArray = std::list< std::reference_wrapper< MovableObject > >;
-
-	public:
-		typedef SceneNodePtrStrMap::iterator node_iterator;
-		typedef SceneNodePtrStrMap::const_iterator node_const_iterator;
-		typedef MovableObjectArray::iterator object_iterator;
-		typedef MovableObjectArray::const_iterator object_const_iterator;
+		using SceneNodeMap = std::map< castor::String, SceneNodeWPtr >;
+		using MovableArray = std::list< std::reference_wrapper< MovableObject > >;
 
 	public:
 		/**
@@ -74,6 +68,10 @@ namespace castor3d
 		 */
 		C3D_API void update();
 		/**
+		 *\name Attached objects management.
+		**/
+		/**@{*/
+		/**
 		 *\~english
 		 *\brief		Attaches a MovableObject to the node
 		 *\param[in]	object	The object to attach
@@ -91,6 +89,11 @@ namespace castor3d
 		 *\param[in]	object	L'objet à détacher
 		 */
 		C3D_API void detachObject( MovableObject & object );
+		/**@}*/
+		/**
+		 *\name Children management.
+		**/
+		/**@{*/
 		/**
 		 *\~english
 		 *\brief		Sets the parent node
@@ -150,6 +153,11 @@ namespace castor3d
 		 *\brief		Détache tous les enfants de ce noeud
 		 */
 		C3D_API void detachChildren();
+		/**@}*/
+		/**
+		 *\name Local transformations.
+		**/
+		/**@{*/
 		/**
 		 *\~english
 		 *\brief		Rotates around Y axis
@@ -204,340 +212,86 @@ namespace castor3d
 		 *\param[in]	s	La valeur d'échelle
 		 */
 		C3D_API void scale( castor::Point3f const & s );
+		/**@}*/
 		/**
-		 *\~english
-		 *\brief		Sets the orientation
-		 *\param[in]	orientation	The new orientation
-		 *\~french
-		 *\brief		Définit l'orientation du noeud
-		 *\param[in]	orientation	La nouvelle orientation
-		 */
-		C3D_API void setOrientation( castor::Quaternion const & orientation );
-		/**
-		 *\~english
-		 *\brief		Sets the relative position from a Point3f
-		 *\param[in]	position	The new position
-		 *\~french
-		 *\brief		Définit la position relative du noeud
-		 *\param[in]	position	La nouvelle valeur
-		 */
-		C3D_API void setPosition( castor::Point3f const & position );
-		/**
-		 *\~english
-		 *\brief		Sets the relative scale from a Point3f
-		 *\param[in]	scale	The new scale
-		 *\~french
-		 *\brief		Définit l'échelle relative du noeud
-		 *\param[in]	scale	La nouvelle valeur
-		 */
-		C3D_API void setScale( castor::Point3f const & scale );
-		/**
-		 *\~english
-		 *\brief		Retrieves the absolute position
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la position absolue
-		 *\return		La valeur
-		 */
+		 *\name Absolute value getters.
+		**/
+		/**@{*/
 		C3D_API castor::Point3f getDerivedPosition()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the absolute orientation
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère l'orientation absolue
-		 *\return		La valeur
-		 */
 		C3D_API castor::Quaternion getDerivedOrientation()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the absolute scale
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère l'échelle absolue
-		 *\return		La valeur
-		 */
 		C3D_API castor::Point3f getDerivedScale()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the relative transformation matrix
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la matrice de transformation relative
-		 *\return		La valeur
-		 */
 		C3D_API castor::Matrix4x4f const & getTransformationMatrix()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the absolute transformation matrix
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la matrice de transformation absolue
-		 *\return		La valeur
-		 */
 		C3D_API castor::Matrix4x4f const & getDerivedTransformationMatrix()const;
 		/**
-		 *\~english
-		 *\brief		Sets the node visibility status
-		 *\param[in]	visible	The new value
-		 *\~french
-		 *\brief		Définit le statut de visibilité du noeud
-		 *\param[in]	visible	La nouvelle valeur
-		 */
-		C3D_API void setVisible( bool visible );
-		/**
-		 *\~english
-		 *\brief		Retrieves the visibility status
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le statut de visibilité
-		 *\return		La valeur
-		 */
-		C3D_API bool isVisible()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the relative position
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la position relative
-		 *\return		La valeur
-		 */
+		 *\name Local value getters.
+		**/
+		/**@{*/
 		castor::Point3f const & getPosition()const
 		{
 			return m_position;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the relative orientation
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère l'orientation relative
-		 *\return		La valeur
-		 */
+
 		castor::Quaternion const & getOrientation()const
 		{
 			return m_orientation;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the relative scale
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère l'échelle relative
-		 *\return		La valeur
-		 */
+
 		castor::Point3f const & getScale()const
 		{
 			return m_scale;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the orientation in axis and angle terms
-		 *\param[out]	axis	Receives the axis
-		 *\param[out]	angle	Receives the angle
-		 *\~french
-		 *\brief		Récupère l'orientation, en termes d'angle et d'axe
-		 *\param[out]	axis	Reçoit l'axe
-		 *\param[out]	angle	Reçoit l'angle
-		 */
+
 		void getAxisAngle( castor::Point3f & axis, castor::Angle & angle )const
 		{
 			m_orientation.toAxisAngle( axis, angle );
 		}
+		/**@}*/
 		/**
-		 *\~english
-		 *\brief		Retrieves the displayable status
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le statut d'affichabilité
-		 *\return		La valeur
-		 */
+		 *\name Other getters.
+		**/
+		/**@{*/
+		C3D_API bool isVisible()const;
+
 		bool isDisplayable()const
 		{
 			return m_displayable;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the parent node
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le noeud parent
-		 *\return		La valeur
-		 */
+
 		SceneNode * getParent()const
 		{
 			return m_parent;
 		}
+		/**@}*/
 		/**
-		 *\~english
-		 *\brief		Retrieves the childs map
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la map des enfants
-		 *\return		La valeur
-		 */
-		SceneNodePtrStrMap const & getChildren()const
-		{
-			return m_children;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the first child
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur le premier enfant
-		 *\return		La valeur
-		 */
-		node_iterator childrenBegin()
-		{
-			return m_children.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the first child
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur le premier enfant
-		 *\return		La valeur
-		 */
-		node_const_iterator childrenBegin()const
-		{
-			return m_children.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to after the last child
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur apèrs le dernier enfant
-		 *\return		La valeur
-		 */
-		node_iterator childrenEnd()
-		{
-			return m_children.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to after the last child
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur apèrs le dernier enfant
-		 *\return		La valeur
-		 */
-		node_const_iterator childrenEnd()const
-		{
-			return m_children.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the objects map
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la map des objets
-		 *\return		La valeur
-		 */
-		MovableObjectArray const & getObjects()const
-		{
-			return m_objects;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the first attached object
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur le premier objet attaché
-		 *\return		La valeur
-		 */
-		object_iterator objectsBegin()
-		{
-			return m_objects.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the first attached object
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur le premier objet attaché
-		 *\return		La valeur
-		 */
-		object_const_iterator objectsBegin()const
-		{
-			return m_objects.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to after the last attached object
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur après le dernier objet attaché
-		 *\return		La valeur
-		 */
-		object_iterator objectsEnd()
-		{
-			return m_objects.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to after the last attached object
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur après le dernier objet attaché
-		 *\return		La valeur
-		 */
-		object_const_iterator objectsEnd()const
-		{
-			return m_objects.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the child with given name
-		 *\param[in]	name	The child name
-		 *\return		The value, nullptr if not found
-		 *\~french
-		 *\brief		Récupère l'enfant avec le nom donné
-		 *\param[in]	name	Le nom de l'enfant
-		 *\return		La valeur, nullptr si non trouvé
-		 */
-		SceneNodeSPtr getChild( castor::String const & name )const
-		{
-			return ( m_children.find( name ) != m_children.end() ? m_children.find( name )->second.lock() : nullptr );
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the transformations matrices modify status
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le statut de modification des matrices de transformation
-		 *\return		La valeur
-		 */
+		 *\name Other getters.
+		**/
+		/**@{*/
+		C3D_API void setOrientation( castor::Quaternion const & orientation );
+		C3D_API void setPosition( castor::Point3f const & position );
+		C3D_API void setScale( castor::Point3f const & scale );
+		C3D_API void setVisible( bool visible );
+		C3D_API SceneNodeMap const & getChildren()const;
+		C3D_API SceneNodeSPtr getChild( castor::String const & name )const;
+		C3D_API MovableArray const & getObjects()const;
+
 		bool isModified()const
 		{
 			return m_mtxChanged || m_derivedMtxChanged;
 		}
-		/**
-		 *\~english
-		 *\return		The scene node ID.
-		 *\~french
-		 *\return		L'ID du noeud.
-		 */
+
 		uint64_t getId()const
 		{
 			return m_id;
 		}
+		/**@}*/
 
 	private:
 		void doComputeMatrix();
-		/**
-		 *\~english
-		 *\brief		Sets this node's children's absolute transformation matrix to be recalculated
-		 *\~french
-		 *\brief		Fait que la matrice de transfomation des enfants de ce noeud doit être recalculée
-		 */
 		void doUpdateChildsDerivedTransform();
 
 	public:
-		//!\~english	Signal used to notify attached objects that the node has changed.
-		//!\~french		Signal utilisé pour notifier aux objets attachés que le noeud a changé.
+		//!\~english	Signal used to notify that the node has changed.
+		//!\~french		Signal utilisé pour notifier que le noeud a changé.
 		OnSceneNodeChanged onChanged;
 
 	private:
@@ -553,8 +307,8 @@ namespace castor3d
 		castor::Matrix4x4f m_derivedTransform{ 1.0f };
 		bool m_derivedMtxChanged{ true };
 		SceneNode * m_parent{ nullptr };
-		SceneNodePtrStrMap m_children;
-		MovableObjectArray m_objects;
+		SceneNodeMap m_children;
+		MovableArray m_objects;
 	};
 }
 

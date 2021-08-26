@@ -396,7 +396,7 @@ namespace castor
 		}
 
 		bool writeNodes( StringStream & file
-			, SceneNode::SceneNodePtrStrMap const & nodes
+			, SceneNode::SceneNodeMap const & nodes
 			, String const & elemsName
 			, TextWriterBase const & writer )
 		{
@@ -422,7 +422,7 @@ namespace castor
 		}
 
 		bool writeIncludedNodes( StringStream & file
-			, SceneNode::SceneNodePtrStrMap const & nodes
+			, SceneNode::SceneNodeMap const & nodes
 			, String const & elemsName
 			, Path const & includePath
 			, TextWriterBase const & writer )
