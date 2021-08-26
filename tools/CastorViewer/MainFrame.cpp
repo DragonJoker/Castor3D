@@ -78,6 +78,7 @@ namespace CastorViewer
 			eID_DBGLOG_TIMER,
 #endif
 			eID_FPS_TIMER,
+			eID_LOAD_END,
 		};
 
 		void updateLog( LogContainer & log )
@@ -153,69 +154,25 @@ namespace CastorViewer
 
 			if ( !m_filePath.empty() )
 			{
-				m_renderPanel->getRenderWindow()->enableLoading();
+				auto & window = m_renderPanel->getRenderWindow();
+				window.enableLoading();
 				doCleanupScene();
 
 				if ( engine->isThreaded() )
 				{
 					engine->getRenderLoop().beginRendering();
-				}
-
-				RenderTargetSPtr target = GuiCommon::loadScene( *engine
-					, m_filePath
-					, &m_renderPanel->getRenderWindow()->getProgressBar() );
-
-				if ( target )
+					GuiCommon::loadScene( *engine
+						, m_filePath
+						, &window.getProgressBar()
+						, this
+						, eID_LOAD_END );
+				}	
+				else
 				{
-					auto size = make_wxSize( target->getSize() );
-
-					if ( !IsMaximized() )
-					{
-						SetClientSize( size );
-						SetPosition( wxPoint{} );
-					}
-					else
-					{
-						Maximize( false );
-						SetPosition( wxPoint{} );
-						SetClientSize( size );
-					}
-
-#if wxCHECK_VERSION( 2, 9, 0 )
-					SetMinClientSize( size );
-#endif
-
-					m_renderPanel->setTarget( target );
-					m_mainScene = target->getScene();
-					auto scene = m_mainScene.lock();
-
-					if ( scene )
-					{
-						m_sceneObjects->getList()->loadScene( engine, *m_renderPanel->getRenderWindow(), scene );
-						m_materials->getList()->loadMaterials( engine, *scene );
-					}
-
-#if CV_MainFrameToolbar
-					m_toolBar->EnableTool( eID_TOOL_PRINT_SCREEN, true );
-					m_toolBar->EnableTool( eID_TOOL_EXPORT_SCENE, true );
-#else
-					m_fileMenu->Enable( eID_TOOL_EXPORT_SCENE, true );
-					m_captureMenu->Enable( eID_TOOL_PRINT_SCREEN, true );
-#endif
-
-#if defined( GUICOMMON_RECORDS )
-#	if CV_MainFrameToolbar
-					m_toolBar->EnableTool( eID_TOOL_RECORD, true );
-#	else
-					m_captureMenu->Enable( eID_TOOL_RECORD, true );
-#	endif
-#endif
-					m_title = wxT( "Castor Viewer - " )
-						+ make_wxString( scene->getEngine()->getRenderSystem()->getRendererType() )
-						+ wxT( " - " )
-						+ m_filePath.getFileName( true );
-					SetTitle( m_title );
-					m_fpsTimer->Start( 1000 );
+					auto target = GuiCommon::loadScene( *engine
+						, m_filePath
+						, &window.getProgressBar() );
+					doSceneLoadEnd( target );
 				}
 			}
 			else
@@ -551,7 +508,7 @@ namespace CastorViewer
 			scene->cleanup();
 			engine->getRenderLoop().renderSyncFrame();
 
-			auto target = m_renderPanel->getRenderWindow()->getRenderTarget();
+			auto target = m_renderPanel->getRenderWindow().getRenderTarget();
 
 			if ( target )
 			{
@@ -569,7 +526,7 @@ namespace CastorViewer
 
 	void MainFrame::doSaveFrame()
 	{
-		if ( m_renderPanel && m_renderPanel->getRenderWindow() )
+		if ( m_renderPanel )
 		{
 			wxBitmap bitmap;
 			auto & castor = *wxGetApp().getCastor();
@@ -579,9 +536,10 @@ namespace CastorViewer
 				castor.getRenderLoop().pause();
 			}
 
-			m_renderPanel->getRenderWindow()->enableSaveFrame();
+			auto & window = m_renderPanel->getRenderWindow();
+			window.enableSaveFrame();
 			castor.getRenderLoop().renderSyncFrame();
-			auto buffer = m_renderPanel->getRenderWindow()->getSavedFrame();
+			auto buffer = window.getSavedFrame();
 			CreateBitmapFromBuffer( buffer
 				, false
 				, bitmap );
@@ -627,7 +585,7 @@ namespace CastorViewer
 				recordFps = std::min( m_recordFps
 					, std::max( 1
 						, int( 1000.0f / std::chrono::duration_cast< std::chrono::milliseconds >( time ).count() ) ) );
-				result = m_recorder.StartRecord( m_renderPanel->getRenderWindow()->getRenderTarget()->getSize()
+				result = m_recorder.StartRecord( m_renderPanel->getRenderWindow().getRenderTarget()->getSize()
 					, recordFps );
 			}
 			catch ( std::exception & p_exc )
@@ -659,9 +617,9 @@ namespace CastorViewer
 #if defined( GUICOMMON_RECORDS )
 
 		auto & castor = *wxGetApp().getCastor();
-		m_renderPanel->getRenderWindow()->enableSaveFrame();
+		m_renderPanel->getRenderWindow().enableSaveFrame();
 		castor.getRenderLoop().renderSyncFrame();
-		auto buffer = m_renderPanel->getRenderWindow()->getSavedFrame();
+		auto buffer = m_renderPanel->getRenderWindow().getSavedFrame();
 
 		try
 		{
@@ -710,11 +668,66 @@ namespace CastorViewer
 #endif
 	}
 
+	void MainFrame::doSceneLoadEnd( RenderTargetSPtr target )
+	{
+		auto size = make_wxSize( target->getSize() );
+
+		if ( !IsMaximized() )
+		{
+			SetClientSize( size );
+			SetPosition( wxPoint{} );
+		}
+		else
+		{
+			Maximize( false );
+			SetPosition( wxPoint{} );
+			SetClientSize( size );
+		}
+
+#if wxCHECK_VERSION( 2, 9, 0 )
+		SetMinClientSize( size );
+#endif
+
+		m_renderPanel->setTarget( target );
+		m_mainScene = target->getScene();
+		auto scene = m_mainScene.lock();
+		auto engine = wxGetApp().getCastor();
+
+		if ( scene )
+		{
+			m_sceneObjects->getList()->loadScene( engine, m_renderPanel->getRenderWindow(), scene );
+			m_materials->getList()->loadMaterials( engine, *scene );
+		}
+
+#if CV_MainFrameToolbar
+		m_toolBar->EnableTool( eID_TOOL_PRINT_SCREEN, true );
+		m_toolBar->EnableTool( eID_TOOL_EXPORT_SCENE, true );
+#else
+		m_fileMenu->Enable( eID_TOOL_EXPORT_SCENE, true );
+		m_captureMenu->Enable( eID_TOOL_PRINT_SCREEN, true );
+#endif
+
+#if defined( GUICOMMON_RECORDS )
+#	if CV_MainFrameToolbar
+		m_toolBar->EnableTool( eID_TOOL_RECORD, true );
+#	else
+		m_captureMenu->Enable( eID_TOOL_RECORD, true );
+#	endif
+#endif
+		m_title = wxT( "Castor Viewer - " )
+			+ make_wxString( scene->getEngine()->getRenderSystem()->getRendererType() )
+			+ wxT( " - " )
+			+ m_filePath.getFileName( true );
+		SetTitle( m_title );
+		m_fpsTimer->Start( 1000 );
+	}
+
 	BEGIN_EVENT_TABLE( MainFrame, wxFrame )
 		EVT_TIMER( eID_RENDER_TIMER, MainFrame::onRenderTimer )
 		EVT_TIMER( eID_MSGLOG_TIMER, MainFrame::onTimer )
 		EVT_TIMER( eID_ERRLOG_TIMER, MainFrame::onTimer )
 		EVT_TIMER( eID_FPS_TIMER, MainFrame::onFpsTimer )
+		EVT_THREAD( eID_LOAD_END, MainFrame::onSceneLoadEnd )
 		EVT_PAINT( MainFrame::onPaint )
 		EVT_INIT_DIALOG( MainFrame::onInit )
 		EVT_CLOSE( MainFrame::onClose )
@@ -810,6 +823,7 @@ namespace CastorViewer
 
 	void MainFrame::onClose( wxCloseEvent & event )
 	{
+		castor::Logger::logInfo( cuT( "Cleaning up MainFrame." ) );
 		Logger::unregisterCallback( this );
 		m_auiManager.DetachPane( m_sceneTabsContainer );
 		m_auiManager.DetachPane( m_logTabsContainer );
@@ -878,6 +892,7 @@ namespace CastorViewer
 
 		DestroyChildren();
 		event.Skip();
+		castor::Logger::logInfo( cuT( "MainFrame cleaned up." ) );
 	}
 
 	void MainFrame::onEnterWindow( wxMouseEvent & event )
@@ -1044,5 +1059,22 @@ namespace CastorViewer
 	{
 		doStopRecord();
 		event.Skip();
+	}
+
+	void MainFrame::onSceneLoadEnd( wxThreadEvent & event )
+	{
+		if ( !event.GetEventObject() )
+		{
+			return;
+		}
+
+		auto var = static_cast< wxVariant * >( event.GetEventObject() );
+		auto rawTarget = static_cast< RenderTarget * >( var->GetVoidPtr() );
+		delete var;
+
+		if ( rawTarget )
+		{
+			doSceneLoadEnd( rawTarget->shared_from_this() );
+		}
 	}
 }
