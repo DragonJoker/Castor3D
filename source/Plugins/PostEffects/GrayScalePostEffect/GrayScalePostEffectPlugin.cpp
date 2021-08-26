@@ -37,12 +37,12 @@ extern "C"
 
 	C3D_GrayScale_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
 	{
-		engine->getRenderTargetCache().getPostEffectFactory().registerType( grayscale::PostEffect::Type
+		engine->getPostEffectFactory().registerType( grayscale::PostEffect::Type
 			, &grayscale::PostEffect::create );
 	}
 
 	C3D_GrayScale_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->getRenderTargetCache().getPostEffectFactory().unregisterType( grayscale::PostEffect::Type );
+		engine->getPostEffectFactory().unregisterType( grayscale::PostEffect::Type );
 	}
 }

@@ -36,12 +36,12 @@ extern "C"
 
 	C3D_LightStreaks_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
 	{
-		engine->getRenderTargetCache().getPostEffectFactory().registerType( light_streaks::PostEffect::Type
+		engine->getPostEffectFactory().registerType( light_streaks::PostEffect::Type
 			, &light_streaks::PostEffect::create );
 	}
 
 	C3D_LightStreaks_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->getRenderTargetCache().getPostEffectFactory().unregisterType( light_streaks::PostEffect::Type );
+		engine->getPostEffectFactory().unregisterType( light_streaks::PostEffect::Type );
 	}
 }
