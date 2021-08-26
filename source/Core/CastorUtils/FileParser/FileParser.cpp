@@ -149,6 +149,7 @@ namespace castor
 
 					try
 					{
+						m_parser.getLogger().logTrace( action.file + cuT( ":" ) + string::toString( action.line ) + cuT( " (" ) + action.name + cuT( ")" ) );
 						isNextOpenBrace = it->second.function( *m_context, filled );
 					}
 					catch ( Exception & exc )
@@ -314,6 +315,7 @@ namespace castor
 		, PreprocessedFile & preprocessed )
 	{
 		m_path = path.getPath();
+		m_fileName = path.getFileName( true );
 		m_preprocessed = &preprocessed;
 		bool isNextOpenBrace = false;
 		bool bCommented = false;
@@ -605,7 +607,7 @@ namespace castor
 			context.sections.push_back( context.pendingSection );
 			return false;
 		};
-		preprocessed.addParser( m_path
+		preprocessed.addParser( m_path / m_fileName
 			, lineIndex
 			, "{"
 			, { { 0u, ParserFunctionAndParams{ defaultPush, {} } } }
@@ -620,7 +622,7 @@ namespace castor
 
 		if ( it != m_parsers.end() )
 		{
-			preprocessed.addParser( m_path
+			preprocessed.addParser( m_path / m_fileName
 				, lineIndex
 				, "}"
 				, it->second
@@ -635,7 +637,7 @@ namespace castor
 				context.sections.pop_back();
 				return false;
 			};
-			preprocessed.addParser( m_path
+			preprocessed.addParser( m_path / m_fileName
 				, lineIndex
 				, "}"
 				, { { 0u, ParserFunctionAndParams{ defaultPop, {} } } }
@@ -683,7 +685,7 @@ namespace castor
 					doCheckDefines( parameters );
 				}
 
-				preprocessed.addParser( m_path
+				preprocessed.addParser( m_path / m_fileName
 					, lineIndex
 					, functionName
 					, iter->second
