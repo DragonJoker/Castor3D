@@ -7,14 +7,11 @@
 
 #include <CastorUtils/Log/Logger.hpp>
 
-using namespace castor3d;
-using namespace castor;
-
 namespace CastorViewer
 {
-	KeyboardEvent::KeyboardEvent( RenderWindowSPtr p_window )
-		: CpuFrameEvent( EventType::ePreRender )
-		, m_window( p_window )
+	KeyboardEvent::KeyboardEvent( castor3d::RenderWindow & window )
+		: castor3d::CpuFrameEvent( castor3d::EventType::ePreRender )
+		, m_window( &window )
 	{
 	}
 
@@ -24,11 +21,6 @@ namespace CastorViewer
 
 	void KeyboardEvent::apply()
 	{
-		RenderWindowSPtr pWindow = m_window.lock();
-
-		if ( pWindow )
-		{
-			pWindow->enableFullScreen( !pWindow->isFullscreen() );
-		}
+		m_window->enableFullScreen( !m_window->isFullscreen() );
 	}
 }

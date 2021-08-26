@@ -14,13 +14,13 @@ namespace CastorViewer
 		: public castor3d::CpuFrameEvent
 	{
 	public:
-		explicit KeyboardEvent( castor3d::RenderWindowSPtr p_window );
+		explicit KeyboardEvent( castor3d::RenderWindow & window );
 		virtual ~KeyboardEvent();
 
 		void apply()override;
 
 	private:
-		castor3d::RenderWindowWPtr m_window;
+		castor3d::RenderWindow * m_window;
 	};
 }
 

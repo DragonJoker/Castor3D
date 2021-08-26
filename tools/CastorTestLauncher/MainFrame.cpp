@@ -279,7 +279,7 @@ namespace test_launcher
 		{
 			auto sizewx = GetClientSize();
 			castor::Size sizeWnd{ uint32_t( sizewx.GetWidth() ), uint32_t( sizewx.GetHeight() ) };
-			m_renderWindow = std::make_shared< RenderWindow >( "CastorTest"
+			m_renderWindow = std::make_unique< RenderWindow >( "CastorTest"
 				, m_engine
 				, sizeWnd
 				, makeWindowHandle( this ) );

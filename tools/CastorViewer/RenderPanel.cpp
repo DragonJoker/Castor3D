@@ -97,7 +97,7 @@ namespace CastorViewer
 		, m_cursorNone{ new wxCursor( wxCURSOR_BLANK ) }
 		, m_camSpeed( DEF_CAM_SPEED, Range< float >{ MIN_CAM_SPEED, MAX_CAM_SPEED } )
 	{
-		m_renderWindow = std::make_shared< castor3d::RenderWindow >( cuT( "RenderPanel" )
+		m_renderWindow = std::make_unique< castor3d::RenderWindow >( cuT( "RenderPanel" )
 			, *wxGetApp().getCastor()
 			, GuiCommon::makeSize( GetClientSize() )
 			, GuiCommon::makeWindowHandle( this ) );
@@ -114,10 +114,13 @@ namespace CastorViewer
 			delete m_timers[i];
 			m_timers[i] = nullptr;
 		}
+
+		m_renderWindow.reset();
 	}
 
 	void RenderPanel::reset()
 	{
+		castor::Logger::logInfo( cuT( "Cleaning up RenderPanel." ) );
 		doStopMovement();
 		m_selectedSubmesh.reset();
 		m_selectedGeometry.reset();
@@ -131,6 +134,7 @@ namespace CastorViewer
 		m_listener.reset();
 		m_cubeManager.reset();
 		wxGetApp().getCastor()->postEvent( makeCpuCleanupEvent( *m_renderWindow ) );
+		castor::Logger::logInfo( cuT( "RenderPanel cleaned up." ) );
 	}
 
 	void RenderPanel::setTarget( castor3d::RenderTargetSPtr target )
@@ -163,12 +167,8 @@ namespace CastorViewer
 					m_currentState = &doAddNodeState( m_currentNode, true );
 				}
 
-				m_keyboardEvent = std::make_unique< KeyboardEvent >( m_renderWindow );
-
-				{
-					m_renderWindow->addPickingScene( *scene );
-				}
-
+				m_keyboardEvent = std::make_unique< KeyboardEvent >( *m_renderWindow );
+				m_renderWindow->addPickingScene( *scene );
 				m_camera = camera;
 				doStartMovement();
 			}
