@@ -31,7 +31,7 @@ namespace castor3d
 		ast::type::StructPtr OverlayData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
-				, "OverlayData" );
+				, "C3D_OverlayData" );
 
 			if ( result->empty() )
 			{

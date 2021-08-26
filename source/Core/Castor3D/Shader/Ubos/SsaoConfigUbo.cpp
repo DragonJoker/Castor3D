@@ -58,7 +58,7 @@ namespace castor3d
 		ast::type::StructPtr SsaoConfigData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
-				, "SsaoConfigData" );
+				, "C3D_SsaoConfigData" );
 
 			if ( result->empty() )
 			{
