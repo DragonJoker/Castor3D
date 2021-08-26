@@ -671,7 +671,7 @@ namespace castor3d
 	void RunnableLightingPass::resetCommandBuffer()
 	{
 		crg::RunnablePass::resetCommandBuffer();
-		crg::RunnablePass::record();
+		crg::RunnablePass::recordCurrent();
 	}
 
 	void RunnableLightingPass::doInitialise()
