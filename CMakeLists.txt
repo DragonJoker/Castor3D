@@ -5,8 +5,6 @@ if ( VCPKG_TARGET_TRIPLET )
 	set( VCPKG_TOOLCHAIN ON )
 endif ()
 
-#--------------------------------------------------------------------------------------------------
-#--------------------------------------------------------------------------------------------------
 set( MAIN_PROJECT_NAME "Castor3D" )
 
 set( VERSION_MAJOR 0 )
@@ -112,11 +110,10 @@ if ( CASTOR_USE_DEPS_WXWIDGETS AND WIN32 )
 	set( wxWidgets_LIB_DIR ${DEPENDENCIES_DIR}/wxWidgets/vc_x64_lib CACHE PATH "wxWidgets libraries directory" FORCE )
 endif ()
 
-#--------------------------------------------------------------------------------------------------
 if ( CMAKE_COMPILER_IS_GNUCXX )
 	DumpCompilerVersion( Castor_COMPILER_VERSION )
 	msg_debug( "GCC version : ${Castor_COMPILER_VERSION}" )
-	if ( ${Castor_COMPILER_VERSION} LESS "49" )
+	if ( ${Castor_COMPILER_VERSION} LESS "100" )
 		message( FATAL_ERROR "Your compiler is too old (${Castor_COMPILER_VERSION}), consider an update." )
 	endif ()
 elseif ( ${CMAKE_CXX_COMPILER_ID} MATCHES "Clang" )
@@ -126,12 +123,6 @@ elseif ( MSVC )
 	if ( MSVC60 OR MSVC70 OR MSVC71 OR MSVC80 OR MSVC10 OR MSVC11 OR MSVC12 )
 		message( FATAL_ERROR "Your compiler is too old, consider an update." )
 	endif ()
-	set( PROJECTS_COMPILE_DEFINITIONS
-		${PROJECTS_COMPILE_DEFINITIONS}
-		_CRT_SECURE_NO_WARNINGS
-		_ENFORCE_MATCHING_ALLOCATORS=0
-		NOMINMAX
-	)
 else ()
 	message( FATAL_ERROR "Unsupported compiler." )
 endif ()
@@ -140,8 +131,13 @@ add_compile_options( $<$<CXX_COMPILER_ID:Clang>:-Wno-inconsistent-missing-overri
 add_compile_options( $<$<CXX_COMPILER_ID:MSVC>:/MP> )
 add_compile_options( $<$<CXX_COMPILER_ID:MSVC>:/wd4068> ) # Unknown pragma
 
-#--------------------------------------------------------------------------------------------------
-#--------------------------------------------------------------------------------------------------
+add_compile_definitions( C3D_VERSION_MAJOR=${VERSION_MAJOR} )
+add_compile_definitions( C3D_VERSION_MINOR=${VERSION_MINOR} )
+add_compile_definitions( C3D_VERSION_BUILD=${VERSION_BUILD} )
+add_compile_definitions( $<$<CXX_COMPILER_ID:MSVC>:_CRT_SECURE_NO_WARNINGS> )
+add_compile_definitions( $<$<CXX_COMPILER_ID:MSVC>:_ENFORCE_MATCHING_ALLOCATORS=0> )
+add_compile_definitions( $<$<CXX_COMPILER_ID:MSVC>:NOMINMAX=0> )
+
 set( ASHES_DIR external/Ashes )
 set( SHADERWRITER_DIR external/ShaderWriter )
 set( RENDERGRAPH_DIR external/RenderGraph )
@@ -156,13 +152,6 @@ set( CastorBinsDependencies
 
 set( Castor3DBinsDependencies
 	castor::CastorUtils
-)
-
-set( PROJECTS_COMPILE_DEFINITIONS
-	${PROJECTS_COMPILE_DEFINITIONS}
-	C3D_VERSION_MAJOR=${VERSION_MAJOR}
-	C3D_VERSION_MINOR=${VERSION_MINOR}
-	C3D_VERSION_BUILD=${VERSION_BUILD}
 )
 
 #--------------------------------------------------------------------------------------------------
@@ -265,7 +254,7 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 	set( EXTERNAL_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external )
 	set( EXTERNAL_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/external )
 
-	set( Ashes_BASE_DIR "External/Ashes" )
+	set( Ashes_BASE_DIR "Core/Ashes" )
 	set( Ashes_SOURCE_DIR ${EXTERNAL_SOURCE_DIR}/Ashes )
 	set( Ashes_BINARY_DIR ${EXTERNAL_BINARY_DIR}/Ashes )
 

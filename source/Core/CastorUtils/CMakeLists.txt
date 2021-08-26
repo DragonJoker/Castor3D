@@ -828,7 +828,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		PROPERTIES
 			CXX_STANDARD 17
 			CXX_EXTENSIONS OFF
-			FOLDER "Core"
+			FOLDER "Core/${MAIN_PROJECT_NAME}"
 	)
 
 	add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
