@@ -117,9 +117,9 @@ namespace castor::Debug
 			static std::mutex mutex;
 			using LockType = std::unique_lock< std::mutex >;
 
-			auto & context = *getContext();
+			auto & context = getContext();
 
-			if ( context.initialised )
+			if ( context && context->initialised )
 			{
 				LockType lock{ makeUniqueLock( mutex ) };
 				const int MaxFnNameLen( 255 );
@@ -144,14 +144,14 @@ namespace castor::Debug
 
 					for ( unsigned int i = 0; i < num; ++i )
 					{
-						if ( ::SymFromAddr( context.process, reinterpret_cast< DWORD64 >( backTrace[i] ), nullptr, symbol ) )
+						if ( ::SymFromAddr( context->process, reinterpret_cast< DWORD64 >( backTrace[i] ), nullptr, symbol ) )
 						{
-							stream << "== " << context.demangle< CharT >( string::stringCast< char >( symbol->Name, symbol->Name + symbol->NameLen ) );
+							stream << "== " << context->demangle< CharT >( string::stringCast< char >( symbol->Name, symbol->Name + symbol->NameLen ) );
 							IMAGEHLP_LINE64 line;
 							DWORD displacement;
 							line.SizeOfStruct = sizeof( IMAGEHLP_LINE64 );
 
-							if ( ::SymGetLineFromAddr64( context.process, symbol->Address, &displacement, &line ) )
+							if ( ::SymGetLineFromAddr64( context->process, symbol->Address, &displacement, &line ) )
 							{
 								stream << "(" << string::stringCast< CharT >( line.FileName ) << ":" << line.LineNumber << ")";
 							}
