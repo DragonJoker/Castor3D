@@ -180,8 +180,8 @@ namespace castor3d
 
 	void SceneNode::detachChildren()
 	{
-		SceneNodePtrStrMap flush;
-		std::swap( flush, m_children );
+		SceneNodeMap flush;
+			std::swap( flush, m_children );
 
 		for ( auto it : flush )
 		{
@@ -313,6 +313,21 @@ namespace castor3d
 	{
 		auto parent = m_parent;
 		return m_visible && ( parent ? parent->isVisible() : true );
+	}
+
+	SceneNode::SceneNodeMap const & SceneNode::getChildren()const
+	{
+		return m_children;
+	}
+
+	SceneNodeSPtr SceneNode::getChild( castor::String const & name )const
+	{
+		return ( m_children.find( name ) != m_children.end() ? m_children.find( name )->second.lock() : nullptr );
+	}
+
+	SceneNode::MovableArray const & SceneNode::getObjects()const
+	{
+		return m_objects;
 	}
 
 	void SceneNode::doComputeMatrix()
