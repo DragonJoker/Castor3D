@@ -104,22 +104,22 @@ namespace GuiCommon
 			{
 				static const wxString Help{ wxT( "help" ) };
 				static const wxString Config{ wxT( "config" ) };
-				static const wxString Validate{ wxT( "validate" ) };
-				static const wxString UnlimFPS{ wxT( "unlimited" ) };
 				static const wxString LogLevel{ wxT( "log" ) };
-				static const wxString FixedFPS{ wxT( "fps" ) };
+				static const wxString Validate{ wxT( "validate" ) };
 				static const wxString SyncRender{ wxT( "sync" ) };
+				static const wxString UnlimFPS{ wxT( "unlimited" ) };
+				static const wxString FixedFPS{ wxT( "fps" ) };
 			}
 
 			namespace st
 			{
 				static const wxString Help{ wxT( "h" ) };
 				static const wxString Config{ wxT( "c" ) };
-				static const wxString Validate{ wxT( "a" ) };
-				static const wxString UnlimFPS{ wxT( "u" ) };
 				static const wxString LogLevel{ wxT( "l" ) };
-				static const wxString FixedFPS{ wxT( "f" ) };
+				static const wxString Validate{ wxT( "a" ) };
 				static const wxString SyncRender{ wxT( "s" ) };
+				static const wxString UnlimFPS{ wxT( "u" ) };
+				static const wxString FixedFPS{ wxT( "f" ) };
 			}
 		}
 
@@ -133,15 +133,23 @@ namespace GuiCommon
 			Options( int argc, wxCmdLineArgsArray const & argv )
 				: parser{ argc, argv }
 			{
-				parser.AddSwitch( option::st::Help, option::lg::Help, _( "Displays this help." ), wxCMD_LINE_OPTION_HELP );
-				parser.AddOption( option::st::Config, option::lg::Config, _( "Specifies the configuration file." ), wxCMD_LINE_VAL_STRING, 0 );
-				parser.AddSwitch( option::st::Validate, option::lg::Validate, _( "Enables rendering API validation." ) );
-				parser.AddSwitch( option::st::SyncRender, option::lg::SyncRender, _( "Sets the rendering to synchronous (render loop is user triggered)." ) );
-				parser.AddSwitch( option::st::UnlimFPS, option::lg::UnlimFPS, _( "Disables FPS limit (has no effect if '" ) + option::lg::SyncRender +_( "' option is specified)." ) );
-				parser.AddOption( option::st::FixedFPS, option::lg::FixedFPS, _( "Defines wanted FPS (has no effect if '" ) + option::lg::SyncRender +_( "' or '" ) + option::lg::UnlimFPS + _( "' options are specified)." ), wxCMD_LINE_VAL_NUMBER );
-				parser.AddOption( option::st::LogLevel, option::lg::LogLevel, _( "Defines log level (from 0=trace to 4=error)." ), wxCMD_LINE_VAL_NUMBER );
-				parser.AddParam( _( "The initial scene file." ), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL );
-;
+				static const wxString Help{ _( "Displays this help." ) };
+				static const wxString Config{ _( "Specifies the configuration file." ) };
+				static const wxString LogLevel{ _( "Defines log level (from 0=trace to 4=error)." ) };
+				static const wxString Validate{ _( "Enables rendering API validation." ) };
+				static const wxString SyncRender{ _( "Sets the rendering to synchronous (render loop is user triggered)." ) };
+				static const wxString UnlimFPS{ _( "Disables FPS limit (has no effect if '" ) + option::lg::SyncRender + _( "' option is specified)." ) };
+				static const wxString FixedFPS{ _( "Defines wanted FPS (has no effect if '" ) + option::lg::SyncRender + _( "' or '" ) + option::lg::UnlimFPS + _( "' options are specified)." ) };
+				static const wxString SceneFile{ _( "The initial scene file." ) };
+
+				parser.AddSwitch( option::st::Help, option::lg::Help, Help, wxCMD_LINE_OPTION_HELP );
+				parser.AddOption( option::st::Config, option::lg::Config, Config, wxCMD_LINE_VAL_STRING, 0 );
+				parser.AddOption( option::st::LogLevel, option::lg::LogLevel, LogLevel, wxCMD_LINE_VAL_NUMBER );
+				parser.AddSwitch( option::st::Validate, option::lg::Validate, Validate );
+				parser.AddSwitch( option::st::SyncRender, option::lg::SyncRender, SyncRender );
+				parser.AddSwitch( option::st::UnlimFPS, option::lg::UnlimFPS, UnlimFPS );
+				parser.AddOption( option::st::FixedFPS, option::lg::FixedFPS, FixedFPS, wxCMD_LINE_VAL_NUMBER );
+				parser.AddParam( SceneFile, wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL );
 
 				for ( auto & plugin : list )
 				{
@@ -153,7 +161,7 @@ namespace GuiCommon
 				}
 
 				if ( ( parser.Parse( false ) != 0 )
-					|| parser.Found( wxT( 'h' ) ) )
+					|| parser.Found( option::st::Help ) )
 				{
 					parser.Usage();
 					throw false;
@@ -202,8 +210,8 @@ namespace GuiCommon
 
 			void read( CastorApplication::Config & config )
 			{
-				config.validate = has( option::st::Validate );
 				config.log = getLong( option::st::LogLevel, DefaultLogType );
+				config.validate = has( option::st::Validate );
 				config.syncRender = has( option::st::SyncRender );
 
 				if ( !config.syncRender )
@@ -229,8 +237,8 @@ namespace GuiCommon
 
 			void write( CastorApplication::Config const & config )
 			{
-				configFile->Write( option::lg::Validate, config.validate );
 				configFile->Write( option::lg::LogLevel, long( config.log ) );
+				configFile->Write( option::lg::Validate, config.validate );
 
 				if ( config.syncRender )
 				{
@@ -498,7 +506,7 @@ namespace GuiCommon
 				m_castor->initialise( 0xFFFFFFFFu, !m_config.syncRender );
 			}
 
-			std::cout << cuT( "Castor3D Initialised." );
+			castor::Logger::logInfo( cuT( "Castor3D Initialised." ) );
 		}
 		catch ( std::exception & exc )
 		{
