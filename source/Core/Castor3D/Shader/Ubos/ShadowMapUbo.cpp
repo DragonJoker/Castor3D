@@ -37,7 +37,7 @@ namespace castor3d
 		ast::type::StructPtr ShadowMapData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
-				, "ShadowMapData" );
+				, "C3D_ShadowMapData" );
 
 			if ( result->empty() )
 			{
