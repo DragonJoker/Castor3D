@@ -70,6 +70,7 @@ namespace CastorViewer
 		bool doStartRecord();
 		void doRecordFrame();
 		void doStopRecord();
+		void doSceneLoadEnd( castor3d::RenderTargetSPtr target );
 
 	private:
 		DECLARE_EVENT_TABLE()
@@ -91,6 +92,7 @@ namespace CastorViewer
 		void onPrintScreen( wxCommandEvent & event );
 		void onRecord( wxCommandEvent & event );
 		void onStop( wxCommandEvent & event );
+		void onSceneLoadEnd( wxThreadEvent & event );
 
 	private:
 		int m_logsHeight{ 100 };
