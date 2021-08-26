@@ -179,19 +179,6 @@ namespace castor3d
 		*/
 		C3D_API void registerFrame( ashes::CommandBuffer & commandBuffer
 			, uint32_t face )const;
-		/**
-		*\~english
-		*\return
-		*	The command buffer to render the quad.
-		*\~french
-		*\return
-		*	Le tampon de commandes de dessin du quad.
-		*/
-		inline ashes::CommandBuffer const & getCommandBuffer()const
-		{
-			CU_Require( m_commandBuffer );
-			return *m_commandBuffer;
-		}
 
 	private:
 		C3D_API virtual void doFillDescriptorLayoutBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings );

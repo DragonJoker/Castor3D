@@ -5,6 +5,7 @@
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
+#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
@@ -102,7 +103,13 @@ namespace castor3d
 	{
 		m_firstBounce.create();
 		m_secondaryBounce.create();
-		m_runnable->record();
+		auto runnable = m_runnable.get();
+		m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+			, [runnable]( RenderDevice const & device
+				, QueueData const & queueData )
+			{
+				runnable->record();
+			} ) );
 	}
 
 	Voxelizer::~Voxelizer()
