@@ -597,9 +597,6 @@ namespace castor3d
 			, TextureConfiguration resultConfig );
 		void doJoinNmlHgt( TextureUnitPtrArray & result );
 		void doJoinEmsOcc( TextureUnitPtrArray & result );
-		virtual void doInitialise() = 0;
-		virtual void doCleanup() = 0;
-		virtual void doSetOpacity( float value ) = 0;
 		virtual void doPrepareTextures( TextureUnitPtrArray & result ) = 0;
 
 		void updateFlag( PassFlag flag

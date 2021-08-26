@@ -350,14 +350,6 @@ namespace castor3d
 		return castor::TextWriter< MetallicRoughnessPbrPass >{ tabs, folder, subfolder }( *this, file );
 	}
 
-	void MetallicRoughnessPbrPass::doInitialise()
-	{
-	}
-
-	void MetallicRoughnessPbrPass::doCleanup()
-	{
-	}
-
 	void MetallicRoughnessPbrPass::doAccept( PassVisitorBase & vis )
 	{
 		vis.visit( cuT( "Albedo" )
@@ -374,10 +366,6 @@ namespace castor3d
 		vis.visit( cuT( "Albedo" ), castor3d::TextureFlag::eAlbedo, configuration.colourMask, 3u );
 		vis.visit( cuT( "Metalness" ), castor3d::TextureFlag::eMetalness, configuration.metalnessMask, 1u );
 		vis.visit( cuT( "Roughness" ), castor3d::TextureFlag::eRoughness, configuration.roughnessMask, 1u );
-	}
-
-	void MetallicRoughnessPbrPass::doSetOpacity( float value )
-	{
 	}
 
 	void MetallicRoughnessPbrPass::doPrepareTextures( TextureUnitPtrArray & result )
