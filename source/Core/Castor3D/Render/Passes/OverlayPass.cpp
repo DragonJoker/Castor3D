@@ -63,7 +63,7 @@ namespace castor3d
 		}
 
 		m_renderer->endPrepare();
-		record();
+		recordCurrent();
 	}
 
 	void OverlayPass::update( GpuUpdater & updater )
