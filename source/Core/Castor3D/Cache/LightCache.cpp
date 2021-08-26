@@ -134,7 +134,9 @@ namespace castor3d
 		MyObjectCache::cleanup();
 	}
 
-	LightCache::ElementPtr LightCache::add( Key const & name, ElementPtr element )
+	LightCache::ElementPtr LightCache::add( Key const & name
+		, ElementPtr element
+		, bool initialise )
 	{
 		ElementPtr result{ element };
 
@@ -143,11 +145,11 @@ namespace castor3d
 			if ( doCheckUniqueDirectionalLight( element->getLightType() ) )
 			{
 				auto lock( castor::makeUniqueLock( m_elements ) );
+				result = m_elements.tryInsert( name, element );
 
-				if ( m_elements.has( name ) )
+				if ( result != element )
 				{
 					doReportDuplicate( name );
-					result = m_elements.find( name );
 					m_dirtyLights.emplace_back( result.get() );
 					m_connections.emplace( result.get()
 						, result->onChanged.connect( [this]( Light & light )
@@ -157,7 +159,11 @@ namespace castor3d
 				}
 				else
 				{
-					m_elements.insert( name, element );
+					if ( initialise )
+					{
+						m_initialise( element );
+					}
+
 					onChanged();
 				}
 			}

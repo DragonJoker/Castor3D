@@ -41,27 +41,27 @@ namespace castor
 	}
 
 	template< typename ObjectT, typename KeyT >
-	inline typename Collection< ObjectT, KeyT >::ObjectPtrTMapIt Collection< ObjectT, KeyT >::begin()
+	inline typename Collection< ObjectT, KeyT >::ObjectPtrMapIt Collection< ObjectT, KeyT >::begin()
 	{
 		CU_Require( m_locked );
 		return m_objects.begin();
 	}
 
 	template< typename ObjectT, typename KeyT >
-	inline typename Collection< ObjectT, KeyT >::ObjectPtrTMapConstIt Collection< ObjectT, KeyT >::begin()const
+	inline typename Collection< ObjectT, KeyT >::ObjectPtrMapConstIt Collection< ObjectT, KeyT >::begin()const
 	{
 		CU_Require( m_locked );
 		return m_objects.begin();
 	}
 
 	template< typename ObjectT, typename KeyT >
-	inline typename Collection< ObjectT, KeyT >::ObjectPtrTMapIt Collection< ObjectT, KeyT >::end()
+	inline typename Collection< ObjectT, KeyT >::ObjectPtrMapIt Collection< ObjectT, KeyT >::end()
 	{
 		return m_objects.end();
 	}
 
 	template< typename ObjectT, typename KeyT >
-	inline typename Collection< ObjectT, KeyT >::ObjectPtrTMapConstIt Collection< ObjectT, KeyT >::end()const
+	inline typename Collection< ObjectT, KeyT >::ObjectPtrMapConstIt Collection< ObjectT, KeyT >::end()const
 	{
 		return m_objects.end();
 	}
@@ -81,17 +81,21 @@ namespace castor
 	}
 
 	template< typename ObjectT, typename KeyT >
-	inline typename Collection< ObjectT, KeyT >::ObjectTSPtr Collection< ObjectT, KeyT >::find( KeyParamType key )const
+	inline typename Collection< ObjectT, KeyT >::ObjectPtr Collection< ObjectT, KeyT >::tryFind( KeyParamType key )const
 	{
 		auto lock( makeUniqueLock( m_mutex ) );
-		ObjectTSPtr result;
 		doUpdateLast( key );
+		return m_last.result != m_objects.end()
+			? m_last.result->second
+			: nullptr;
+	}
 
-		if ( m_last.result != m_objects.end() )
-		{
-			result = m_last.result->second;
-		}
-		else
+	template< typename ObjectT, typename KeyT >
+	inline typename Collection< ObjectT, KeyT >::ObjectPtr Collection< ObjectT, KeyT >::find( KeyParamType key )const
+	{
+		auto result = tryFind( key );
+
+		if ( !result )
 		{
 			m_logger.logWarning( details::WARNING_COLLECTION_UNKNOWN_OBJECT + string::toString( key ) );
 		}
@@ -107,18 +111,21 @@ namespace castor
 	}
 
 	template< typename ObjectT, typename KeyT >
-	inline bool Collection< ObjectT, KeyT >::insert( KeyParamType key, ObjectTSPtr element )
+	inline typename Collection< ObjectT, KeyT >::ObjectPtr Collection< ObjectT, KeyT >::tryInsert( KeyParamType key, ObjectPtr element )
 	{
 		auto lock( makeUniqueLock( m_mutex ) );
 		doUpdateLast( key );
-		bool result = false;
+		auto ires = m_objects.emplace( key, element );
+		m_last.result = ires.first;
+		return m_last.result->second;
+	}
 
-		if ( m_last.result == m_objects.end() )
-		{
-			m_last.result = m_objects.emplace( key, element ).first;
-			result = true;
-		}
-		else
+	template< typename ObjectT, typename KeyT >
+	inline bool Collection< ObjectT, KeyT >::insert( KeyParamType key, ObjectPtr element )
+	{
+		auto result = ( element == tryInsert( key, element ) );
+
+		if ( !result )
 		{
 			m_logger.logWarning( details::WARNING_COLLECTION_DUPLICATE_OBJECT + string::toString( key ) );
 		}
@@ -135,11 +142,11 @@ namespace castor
 	}
 
 	template< typename ObjectT, typename KeyT >
-	inline typename Collection< ObjectT, KeyT >::ObjectTSPtr Collection< ObjectT, KeyT >::erase( KeyParamType key )
+	inline typename Collection< ObjectT, KeyT >::ObjectPtr Collection< ObjectT, KeyT >::erase( KeyParamType key )
 	{
 		auto lock( makeUniqueLock( m_mutex ) );
 		doUpdateLast( key );
-		ObjectTSPtr ret;
+		ObjectPtr ret;
 
 		if ( m_last.result != m_objects.end() )
 		{
@@ -152,7 +159,7 @@ namespace castor
 	}
 
 	template< typename ObjectT, typename KeyT >
-	typename Collection< ObjectT, KeyT >::ObjectPtrTMapIt Collection< ObjectT, KeyT >::erase( typename Collection< ObjectT, KeyT >::ObjectPtrTMapIt it )
+	typename Collection< ObjectT, KeyT >::ObjectPtrMapIt Collection< ObjectT, KeyT >::erase( typename Collection< ObjectT, KeyT >::ObjectPtrMapIt it )
 	{
 		CU_Require( m_locked );
 		return m_objects.erase( it );

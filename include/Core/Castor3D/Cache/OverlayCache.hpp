@@ -57,8 +57,8 @@ namespace castor3d
 		using Producer = typename MyCacheType::Producer;
 		using Merger = typename MyCacheType::Merger;
 
-		typedef castor::Collection< Overlay, castor::String >::ObjectPtrTMapIt iterator;
-		typedef castor::Collection< Overlay, castor::String >::ObjectPtrTMapConstIt const_iterator;
+		typedef castor::Collection< Overlay, castor::String >::ObjectPtrMapIt iterator;
+		typedef castor::Collection< Overlay, castor::String >::ObjectPtrMapConstIt const_iterator;
 		CU_DeclareMap( castor::String, FontTextureSPtr, FontTextureStr );
 
 		struct OverlayInitialiser

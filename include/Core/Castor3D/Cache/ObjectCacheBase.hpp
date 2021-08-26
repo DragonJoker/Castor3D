@@ -149,22 +149,31 @@ namespace castor3d
 		 *\return		L'objet ajouté, ou celui existant.
 		 */
 		inline ElementPtr add( Key const & name
-			, ElementPtr element )
+			, ElementPtr element
+			, bool initialise = false )
 		{
 			ElementPtr result{ element };
 
 			if ( element )
 			{
-				LockType lock{ castor::makeUniqueLock( m_elements ) };
+				result = m_elements.tryInsert( name, element );
 
-				if ( m_elements.has( name ) )
+				if ( result != element )
 				{
-					result = m_elements.find( name );
 					doReportDuplicate( name );
 				}
 				else
 				{
-					m_elements.insert( name, element );
+					if ( initialise )
+					{
+						m_initialise( element );
+						m_attach( result
+							, *result->getParent()
+							, m_rootNode.lock()
+							, m_rootCameraNode.lock()
+							, m_rootObjectNode.lock() );
+					}
+
 					onChanged();
 				}
 			}
@@ -346,6 +355,20 @@ namespace castor3d
 		inline bool has( Key const & name )const
 		{
 			return m_elements.has( name );
+		}
+		/**
+		 *\~english
+		 *\brief		Looks for an element with given name.
+		 *\param[in]	name	The object name.
+		 *\return		The found element, nullptr if not found.
+		 *\~french
+		 *\brief		Cherche un élément par son nom.
+		 *\param[in]	name	Le nom d'objet.
+		 *\return		L'élément trouvé, nullptr si non trouvé.
+		 */
+		inline ElementPtr tryFind( Key const & name )const
+		{
+			return m_elements.tryFind( name );
 		}
 		/**
 		 *\~english
