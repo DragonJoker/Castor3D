@@ -428,7 +428,15 @@ namespace castor3d
 				m_overlays.create();
 				m_velocity.create();
 				m_combined.create();
-				m_runnable->record();
+				auto runnable = m_runnable.get();
+				device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+					, [runnable, result, this]( RenderDevice const & device
+						, QueueData const & queueData )
+					{
+						runnable->record();
+						m_renderTechnique->setReady();
+						m_initialised = result;
+					} ) );
 			}
 
 			stepProgressBar( progress, "Creating overlay renderer" );
@@ -438,7 +446,6 @@ namespace castor3d
 				, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 
 			m_signalReady = device->createSemaphore( getName() + "Ready" );
-			m_initialised = result;
 		}
 	}
 

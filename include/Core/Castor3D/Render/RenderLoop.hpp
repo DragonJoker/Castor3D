@@ -235,6 +235,7 @@ namespace castor3d
 	private:
 		bool m_first = true;
 		castor::Milliseconds m_initialisationTime;
+		QueueData const * m_queueData{};
 	};
 }
 

@@ -141,6 +141,7 @@ namespace castor3d
 		C3D_API VkFormat selectSuitableFormat( std::vector< VkFormat > const & formats
 			, VkFormatFeatureFlags requiredFeatures )const;
 		C3D_API QueueDataWrapper graphicsData()const;
+		C3D_API QueueData const * reserveGraphicsData()const;
 		C3D_API crg::GraphContext & makeContext()const;
 
 		ashes::Device const * operator->()const

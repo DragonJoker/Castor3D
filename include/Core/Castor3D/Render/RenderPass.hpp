@@ -481,11 +481,6 @@ namespace castor3d
 			return m_matrixUbo;
 		}
 
-		ashes::CommandBuffer const & getCommandBuffer()const
-		{
-			return m_renderQueue.getCommandBuffer();
-		}
-
 		bool hasNodes()const
 		{
 			return m_renderQueue.hasNodes();

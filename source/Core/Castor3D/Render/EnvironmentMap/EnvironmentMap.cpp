@@ -2,6 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
+#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -183,7 +184,13 @@ namespace castor3d
 						, index
 						, *m_scene.getBackground() );
 					m_runnables[index] = graph.compile( m_device.makeContext() );
-					m_runnables.back()->record();
+					auto runnable = m_runnables[index].get();
+					m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+						, [runnable]( RenderDevice const & device
+							, QueueData const & queueData )
+						{
+							runnable->record();
+						} ) );
 				}
 			} ) }
 	{
@@ -396,6 +403,12 @@ namespace castor3d
 			, index
 			, *m_scene.getBackground() ) );
 		m_runnables.emplace_back( graph.compile( m_device.makeContext() ) );
-		m_runnables.back()->record();
+		auto runnable = m_runnables[index].get();
+		m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+			, [runnable]( RenderDevice const & device
+				, QueueData const & queueData )
+			{
+				runnable->record();
+			} ) );
 	}
 }
