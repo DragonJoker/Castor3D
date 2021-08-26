@@ -53,7 +53,7 @@ namespace castortd
 	{
 		auto & engine = *wxGetApp().getCastor();
 		castor::Size sizeWnd = GuiCommon::makeSize( GetClientSize() );
-		m_renderWindow = std::make_shared< castor3d::RenderWindow >( "CastorTD"
+		m_renderWindow = std::make_unique< castor3d::RenderWindow >( "CastorTD"
 			, engine
 			, sizeWnd
 			, GuiCommon::makeWindowHandle( this ) );
