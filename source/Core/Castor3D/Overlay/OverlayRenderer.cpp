@@ -359,7 +359,11 @@ namespace castor3d
 			auto borderOffset = castor::Size{ uint32_t( borderSize.left() ), uint32_t( borderSize.top() ) };
 			auto borderExtent = borderOffset + castor::Size{ uint32_t( borderSize.right() ), uint32_t( borderSize.bottom() ) };
 			auto position = overlay.getAbsolutePosition( m_renderer.m_size ) - borderOffset;
+			position->x = std::max( 0, position->x );
+			position->y = std::max( 0, position->y );
 			auto size = overlay.getAbsoluteSize( m_renderer.m_size ) + borderExtent;
+			size->x = std::max( 1u, size->x );
+			size->y = std::max( 1u, size->y );
 			auto & commandBuffer = *m_renderer.m_commandBuffer;
 			commandBuffer.bindPipeline( *bufferIndex.node.pipeline.pipeline );
 			commandBuffer.setViewport( makeViewport( m_renderer.m_size ) );
