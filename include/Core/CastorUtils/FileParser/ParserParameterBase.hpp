@@ -82,6 +82,23 @@ namespace castor
 		 */
 		template< typename T >
 		T const & get( T & value );
+		/**
+		 *\~english
+		 *\brief		Retrieves the parameter value.
+		 *\param[out]	value	Receives the value.
+		 *\return		The value.
+		 *\~french
+		 *\brief		Récupère la valeur du paramètre.
+		 *\param[out]	value	Reçoit la valeur.
+		 *\return		La valeur.
+		 */
+		template< typename T >
+		T get()
+		{
+			T result;
+			this->get( result );
+			return result;
+		}
 	};
 
 	CU_API void getParameterValue( ParserParameterBase const & parameter

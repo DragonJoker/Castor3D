@@ -72,8 +72,22 @@ namespace castor3d
 		 *\param[in]	name	Le nom d'élément.
 		 *\param[in]	element	L'élément.
 		 */
+		inline bool tryAdd( castor::String const & name
+			, ResourcePtr element
+			, bool initialise = false );
+		/**
+		 *\~english
+		 *\brief		adds an already created an element.
+		 *\param[in]	name	The element name.
+		 *\param[in]	element	The element.
+		 *\~french
+		 *\brief		Ajoute un élément déjà créé.
+		 *\param[in]	name	Le nom d'élément.
+		 *\param[in]	element	L'élément.
+		 */
 		inline ResourcePtr add( castor::String const & name
-			, ResourcePtr element );
+			, ResourcePtr element
+			, bool initialise = false );
 		/**
 		 *\~english
 		 *\brief		Removes from the cache the elements created through this view.
@@ -97,6 +111,17 @@ namespace castor3d
 		 *\return		\p true Si un élément avec le nom donné existe.
 		 */
 		inline bool has( castor::String const & name )const;
+		/**
+		 *\~english
+		 *\brief		Looks for an element with given name.
+		 *\param[in]	name	The object name.
+		 *\return		The found element, nullptr if not found.
+		 *\~french
+		 *\brief		Cherche un élément par son nom.
+		 *\param[in]	name	Le nom d'objet.
+		 *\return		L'élément trouvé, nullptr si non trouvé.
+		 */
+		inline ResourcePtr tryFind( castor::String const & name )const;
 		/**
 		 *\~english
 		 *\brief		Looks for an element with given name.
