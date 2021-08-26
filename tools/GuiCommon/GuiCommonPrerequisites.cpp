@@ -321,6 +321,30 @@ namespace GuiCommon
 		return result;
 	}
 
+	void loadScene( Engine & engine
+		, castor::Path const & fileName
+		, castor3d::ProgressBar * progress
+		, wxWindow * window
+		, int eventID )
+	{
+		std::thread async{ [&engine, fileName, progress, window, eventID]()
+			{
+				try
+				{
+					auto target = loadScene( engine, fileName, progress );
+					auto event = new wxThreadEvent{ wxEVT_THREAD, eventID };
+					auto var = new wxVariant{ target.get() };
+					event->SetEventObject( var );
+					window->GetEventHandler()->QueueEvent( event );
+				}
+				catch ( std::exception & exc )
+				{
+					wxMessageBox( _( "Scene file couldn't be loaded: " ) + wxString( wxT( "\n" ) ) + exc.what() );
+				}
+			} };
+		async.detach();
+	}
+
 	void loadPlugins( castor3d::Engine & engine )
 	{
 		castor::PathArray arrayKept = listPluginsFiles( Engine::getPluginsDirectory() );

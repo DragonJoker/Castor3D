@@ -111,7 +111,8 @@ namespace castor3d
 		 *\return		L'objet ajouté, ou celui existant.
 		 */
 		C3D_API ElementPtr add( Key const & name
-			, ElementPtr element );
+			, ElementPtr element
+			, bool initialise = false );
 		/**
 		 *\~english
 		 *\brief		Creates an object.

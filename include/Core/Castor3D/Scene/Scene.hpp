@@ -329,6 +329,11 @@ namespace castor3d
 		{
 			return *m_renderNodes;
 		}
+
+		LightFactory & getLightsFactory()const
+		{
+			return *m_lightFactory;
+		}
 		/**@}*/
 		/**
 		*\~english

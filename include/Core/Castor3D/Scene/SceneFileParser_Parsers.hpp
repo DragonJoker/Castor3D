@@ -53,6 +53,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserSamplerMaxAnisotropy )
 	CU_DeclareAttributeParser( parserSamplerComparisonMode )
 	CU_DeclareAttributeParser( parserSamplerComparisonFunc )
+	CU_DeclareAttributeParser( parserSamplerEnd )
 
 	// Scene parsers
 	CU_DeclareAttributeParser( parserSceneBkColour )
@@ -89,6 +90,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserParticleSystemDimensions )
 	CU_DeclareAttributeParser( parserParticleSystemParticle )
 	CU_DeclareAttributeParser( parserParticleSystemCSShader )
+	CU_DeclareAttributeParser( parserParticleSystemEnd )
 
 	// Particle parsers
 	CU_DeclareAttributeParser( parserParticleType )
@@ -104,6 +106,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserLightExponent )
 	CU_DeclareAttributeParser( parserLightShadows )
 	CU_DeclareAttributeParser( parserLightShadowProducer )
+	CU_DeclareAttributeParser( parserLightEnd )
 
 	// Shadows parsers
 	CU_DeclareAttributeParser( parserShadowsProducer )
@@ -143,6 +146,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserNodeOrientation )
 	CU_DeclareAttributeParser( parserNodeDirection )
 	CU_DeclareAttributeParser( parserNodeScale )
+	CU_DeclareAttributeParser( parserNodeEnd )
 
 	// Object Parsers
 	CU_DeclareAttributeParser( parserObjectParent )

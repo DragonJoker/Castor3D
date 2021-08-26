@@ -99,22 +99,42 @@ namespace castor3d
 		m_elements.clear();
 	}
 
-	MaterialSPtr MaterialCache::add( Key const & name, MaterialSPtr element )
+	bool MaterialCache::tryAdd( Key const & name
+		, MaterialSPtr element
+		, bool initialise )
+	{
+		bool result = false;
+
+		if ( element )
+		{
+			result = ( element == m_elements.tryInsert( name, element ) );
+
+			if ( result && initialise )
+			{
+				m_initialise( element );
+			}
+		}
+
+		return result;
+	}
+
+	MaterialSPtr MaterialCache::add( Key const & name
+		, MaterialSPtr element
+		, bool initialise )
 	{
 		MaterialSPtr result{ element };
 
 		if ( element )
 		{
-			auto lock( castor::makeUniqueLock( m_elements ) );
+			result = m_elements.tryInsert( name, element );
 
-			if ( m_elements.has( name ) )
+			if ( result != element )
 			{
-				result = m_elements.find( name );
 				doReportDuplicate( name );
 			}
-			else
+			else if ( initialise )
 			{
-				m_elements.insert( name, element );
+				m_initialise( element );
 			}
 		}
 		else
@@ -125,7 +145,8 @@ namespace castor3d
 		return result;
 	}
 
-	MaterialSPtr MaterialCache::add( Key const & name, PassTypeID type )
+	MaterialSPtr MaterialCache::add( Key const & name
+		, PassTypeID type )
 	{
 		MaterialSPtr result;
 		auto lock( castor::makeUniqueLock( m_elements ) );

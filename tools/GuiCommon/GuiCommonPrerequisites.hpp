@@ -208,6 +208,25 @@ namespace GuiCommon
 		, castor3d::ProgressBar * progress );
 	/**
 	 *\~english
+	 *\brief		Loads a scene, asynchronously, notifying an event handler on end.
+	 *\remarks		Sends a wxThreadEvent with given ID to the event handler, with the event object being a wxVariant containing the render target address.
+	 *\param[in]	engine		The engine.
+	 *\param[in]	fileName	The scene file name.
+	 *\return		true if everything is ok.
+	 *\~french
+	 *\brief		Charge une scène de manière asynchrone, en notifiant un event handler à la fin.
+	 *\remarks		Envoie un wxThreadEvent avec l'ID donné à l'event handle, avec comme event objet, un wxVariant contenant l'addresse de la render target.
+	 *\param[in]	engine		Le moteur.
+	 *\param[in]	fileName	Le nom du fichier de scène.
+	 *\return		true si tout s'est bien passé.
+	 */
+	void loadScene( castor3d::Engine & engine
+		, castor::Path const & fileName
+		, castor3d::ProgressBar * progress
+		, wxWindow * window
+		, int eventID );
+	/**
+	 *\~english
 	 *\brief		Loads the eingine plug-ins.
 	 *\param[in]	engine	The engine.
 	 *\~french
