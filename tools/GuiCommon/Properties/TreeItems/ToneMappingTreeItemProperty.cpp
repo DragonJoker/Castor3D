@@ -105,7 +105,7 @@ namespace GuiCommon
 		addProperty( grid, PROPERTY_CATEGORY_TONE_MAPPING );
 
 		m_choices.Clear();
-		auto types = m_target.getEngine()->getRenderTargetCache().getToneMappingFactory().listRegisteredTypes();
+		auto types = m_target.getEngine()->getToneMappingFactory().listRegisteredTypes();
 
 		for ( auto & toneMapping : types )
 		{

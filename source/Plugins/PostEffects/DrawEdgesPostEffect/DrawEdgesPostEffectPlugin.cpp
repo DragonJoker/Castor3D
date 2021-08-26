@@ -105,7 +105,7 @@ extern "C"
 
 	C3D_DrawEdges_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
 	{
-		engine->getRenderTargetCache().getPostEffectFactory().registerType( draw_edges::PostEffect::Type
+		engine->getPostEffectFactory().registerType( draw_edges::PostEffect::Type
 			, &draw_edges::PostEffect::create );
 		engine->registerParsers( draw_edges::PostEffect::Type, createParsers() );
 		engine->registerSections( draw_edges::PostEffect::Type, createSections() );
@@ -115,6 +115,6 @@ extern "C"
 	{
 		engine->unregisterSections( draw_edges::PostEffect::Type );
 		engine->unregisterParsers( draw_edges::PostEffect::Type );
-		engine->getRenderTargetCache().getPostEffectFactory().unregisterType( draw_edges::PostEffect::Type );
+		engine->getPostEffectFactory().unregisterType( draw_edges::PostEffect::Type );
 	}
 }

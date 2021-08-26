@@ -39,12 +39,12 @@ extern "C"
 
 	C3D_Uncharted2ToneMapping_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
 	{
-		engine->getRenderTargetCache().getToneMappingFactory().registerType( ToneMapping::Type
+		engine->getToneMappingFactory().registerType( ToneMapping::Type
 			, &ToneMapping::create );
 	}
 
 	C3D_Uncharted2ToneMapping_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->getRenderTargetCache().getToneMappingFactory().unregisterType( ToneMapping::Type );
+		engine->getToneMappingFactory().unregisterType( ToneMapping::Type );
 	}
 }

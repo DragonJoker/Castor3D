@@ -543,6 +543,26 @@ namespace castor3d
 		return m_passFactory->getIdName( m_passesType );
 	}
 
+	ToneMappingFactory const & Engine::getToneMappingFactory()const
+	{
+		return getRenderTargetCache().getToneMappingFactory();
+	}
+
+	ToneMappingFactory & Engine::getToneMappingFactory()
+	{
+		return getRenderTargetCache().getToneMappingFactory();
+	}
+
+	PostEffectFactory const & Engine::getPostEffectFactory()const
+	{
+		return getRenderTargetCache().getPostEffectFactory();
+	}
+
+	PostEffectFactory & Engine::getPostEffectFactory()
+	{
+		return getRenderTargetCache().getPostEffectFactory();
+	}
+
 	RgbaColour Engine::getNextRainbowColour()const
 	{
 		static float currentColourHue{ 0.0f };
