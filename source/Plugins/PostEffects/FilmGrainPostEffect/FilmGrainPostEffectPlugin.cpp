@@ -37,12 +37,12 @@ extern "C"
 
 	C3D_FilmGrain_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
 	{
-		engine->getRenderTargetCache().getPostEffectFactory().registerType( film_grain::PostEffect::Type
+		engine->getPostEffectFactory().registerType( film_grain::PostEffect::Type
 			, &film_grain::PostEffect::create );
 	}
 
 	C3D_FilmGrain_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->getRenderTargetCache().getPostEffectFactory().unregisterType( film_grain::PostEffect::Type );
+		engine->getPostEffectFactory().unregisterType( film_grain::PostEffect::Type );
 	}
 }

@@ -136,7 +136,7 @@ namespace castor3d
 			m_vertexShader.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		m_pixelShader.shader = getEngine()->getRenderTargetCache().getToneMappingFactory().create( name );
+		m_pixelShader.shader = getEngine()->getToneMappingFactory().create( name );
 		auto & device = getEngine()->getRenderSystem()->getRenderDevice();
 		m_program =
 		{

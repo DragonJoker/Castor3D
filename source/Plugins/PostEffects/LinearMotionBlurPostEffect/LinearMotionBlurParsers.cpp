@@ -96,7 +96,7 @@ namespace motion_blur
 		parameters.add( cuT( "samplesCount" ), blurContext.data.samplesCount );
 		parameters.add( cuT( "fpsScale" ), blurContext.fpsScale );
 
-		auto effect = engine->getRenderTargetCache().getPostEffectFactory().create( PostEffect::Type
+		auto effect = engine->getPostEffectFactory().create( PostEffect::Type
 			, *parsingContext.renderTarget
 			, *engine->getRenderSystem()
 			, parameters );
