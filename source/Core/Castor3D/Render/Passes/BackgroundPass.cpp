@@ -359,7 +359,7 @@ namespace castor3d
 			m_descriptorSetPool = m_descriptorSetLayout->createPool( 1u );
 			doCreateDescriptorSet();
 			doCreatePipeline();
-			record();
+			recordCurrent();
 		}
 	}
 	
