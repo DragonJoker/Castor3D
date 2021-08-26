@@ -54,9 +54,9 @@ namespace CastorViewer
 		void setTarget( castor3d::RenderTargetSPtr target );
 		void onKeyUp( wxKeyEvent & event );
 
-		inline castor3d::RenderWindowSPtr getRenderWindow()const
+		inline castor3d::RenderWindow & getRenderWindow()const
 		{
-			return m_renderWindow;
+			return *m_renderWindow;
 		}
 
 		inline void disableWindowResize()
@@ -131,7 +131,7 @@ namespace CastorViewer
 		bool m_resizeWindow{ true };
 		std::atomic_bool m_movementStarted{ false };
 		std::array< wxTimer *, eTIMER_ID_COUNT > m_timers;
-		castor3d::RenderWindowSPtr m_renderWindow;
+		castor3d::RenderWindowPtr m_renderWindow;
 		wxCursor * m_cursorArrow;
 		wxCursor * m_cursorHand;
 		wxCursor * m_cursorNone;

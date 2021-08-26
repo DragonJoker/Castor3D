@@ -337,6 +337,13 @@ namespace castor3d
 
 	//*************************************************************************************************
 
+	void RenderWindow::EvtHandler::doProcessMouseEvent( MouseEventSPtr event )
+	{
+		m_window->m_mousePosition = event->getPosition();
+	}
+
+	//*************************************************************************************************
+
 	uint32_t RenderWindow::s_nbRenderWindows = 0;
 
 	RenderWindow::RenderWindow( castor::String const & name
@@ -345,7 +352,7 @@ namespace castor3d
 		, ashes::WindowHandle handle )
 		: OwnedBy< Engine >{ engine }
 		, castor::Named{ name }
-		, MouseEventHandler{}
+		, m_evtHandler{ std::make_shared< EvtHandler >( *this ) }
 		, m_index{ s_nbRenderWindows++ }
 		, m_device{ engine.getRenderSystem()->getRenderDevice() }
 		, m_surface{ m_device.renderSystem.getInstance().createSurface( m_device.renderSystem.getPhysicalDevice( 0u )
@@ -376,6 +383,8 @@ namespace castor3d
 #endif
 			getEngine()->registerWindow( *this );
 		}
+
+		log::debug << "Created render window " << m_index << std::endl;
 	}
 
 	RenderWindow::~RenderWindow()
@@ -456,7 +465,7 @@ namespace castor3d
 
 			if ( target )
 			{
-				auto & queueData = m_device.graphicsData();
+				auto queueData = m_device.graphicsData();
 				target->initialise( m_device, *queueData, nullptr );
 				doCreatePickingPass( *queueData );
 				doCreateIntermediateViews( *queueData );
@@ -474,8 +483,6 @@ namespace castor3d
 			m_initialised = true;
 			getEngine()->registerWindow( *this );
 		}
-
-		log::debug << "Created render window " << m_index << std::endl;
 	}
 
 	void RenderWindow::cleanup()
@@ -1599,10 +1606,5 @@ namespace castor3d
 		}
 
 		return result;
-	}
-
-	void RenderWindow::doProcessMouseEvent( MouseEventSPtr event )
-	{
-		m_mousePosition = event->getPosition();
 	}
 }

@@ -45,8 +45,6 @@ namespace castor3d
 	class RenderWindow
 		: public castor::OwnedBy< Engine >
 		, public castor::Named
-		, public MouseEventHandler
-		, public std::enable_shared_from_this< RenderWindow >
 	{
 	private:
 		struct Configuration
@@ -88,6 +86,23 @@ namespace castor3d
 		using RenderingResourcesArray = std::vector< RenderingResourcesPtr >;
 
 	public:
+		class EvtHandler
+			: public MouseEventHandler
+		{
+		public:
+			EvtHandler( RenderWindow & window )
+				: MouseEventHandler{}
+				, m_window{ &window }
+			{
+			}
+
+		private:
+			void doProcessMouseEvent( MouseEventSPtr event )override;
+
+		private:
+			RenderWindow * m_window;
+		};
+
 		class InputListener
 			: public UserInputListener
 		{
@@ -102,7 +117,7 @@ namespace castor3d
 		private:
 			EventHandler * doGetMouseTargetableHandler( castor::Position const & position )const override
 			{
-				return m_window;
+				return m_window->getEventHandler().get();
 			}
 
 			/**@name General */
@@ -113,7 +128,7 @@ namespace castor3d
 			 */
 			bool doInitialise()override
 			{
-				doAddHandler( m_window->shared_from_this() );
+				doAddHandler( m_window->getEventHandler() );
 				return true;
 			}
 			/**
@@ -121,7 +136,7 @@ namespace castor3d
 			 */
 			void doCleanup()override
 			{
-				doRemoveHandler( *m_window );
+				doRemoveHandler( *m_window->getEventHandler() );
 			}
 
 		private:
@@ -406,6 +421,17 @@ namespace castor3d
 		{
 			return m_debugConfig;
 		}
+
+		ProgressBar & getProgressBar()
+		{
+			CU_Require( m_progressBar );
+			return *m_progressBar;
+		}
+
+		EventHandlerSPtr getEventHandler()
+		{
+			return m_evtHandler;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -473,10 +499,10 @@ namespace castor3d
 		bool doCheckNeedReset( VkResult errCode
 			, bool acquisition
 			, char const * const action );
-		void doProcessMouseEvent( MouseEventSPtr event )override;
 
 	private:
 		static uint32_t s_nbRenderWindows;
+		std::shared_ptr< EvtHandler > m_evtHandler;
 		uint32_t m_index{};
 		RenderDevice const & m_device;
 		ashes::SurfacePtr m_surface;

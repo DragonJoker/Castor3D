@@ -31,7 +31,7 @@ namespace test_launcher
 	private:
 		castor3d::Engine & m_engine;
 		castor::Path m_filePath;
-		castor3d::RenderWindowSPtr m_renderWindow;
+		castor3d::RenderWindowPtr m_renderWindow;
 	};
 }
 
