@@ -1209,13 +1209,10 @@ namespace castor3d
 		{
 			unit->initialise( device, queueData );
 		}
-
-		doInitialise();
 	}
 
 	void Pass::cleanup()
 	{
-		doCleanup();
 
 		for ( auto unit : m_textureUnits )
 		{
@@ -1259,6 +1256,13 @@ namespace castor3d
 			, m_bwAccumulationOperator );
 		vis.visit( cuT( "Parallax occlusion mode" )
 			, m_parallaxOcclusionMode );
+
+		if ( hasRefraction() )
+		{
+			vis.visit( cuT( "Refraction ratio" )
+				, m_refractionRatio );
+		}
+
 		vis.visit( cuT( "Edge colour" )
 			, m_edgeColour );
 		vis.visit( cuT( "Edge width" )
@@ -1269,12 +1273,6 @@ namespace castor3d
 			, m_normalFactor );
 		vis.visit( cuT( "Object factor" )
 			, m_objectFactor );
-
-		if ( hasRefraction() )
-		{
-			vis.visit( cuT( "Refraction ratio" )
-				, m_refractionRatio );
-		}
 	}
 
 	void Pass::accept( TextureConfiguration & configuration
@@ -1448,7 +1446,6 @@ namespace castor3d
 		updateFlag( PassFlag::eAlphaBlending, hasAlphaBlending() );
 		updateFlag( PassFlag::eAlphaTest, hasAlphaTest() );
 		updateFlag( PassFlag::eBlendAlphaTest, hasBlendAlphaTest() );
-		doSetOpacity( value );
 		m_dirty = true;
 	}
 
