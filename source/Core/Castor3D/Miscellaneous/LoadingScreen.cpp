@@ -154,7 +154,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		crg::RunnableGraphPtr createRunnablePass( crg::FrameGraph & graph
+		crg::RunnableGraphPtr createRunnableGraph( crg::FrameGraph & graph
 			, RenderDevice const & device )
 		{
 			auto result = graph.compile( device.makeContext() );
@@ -204,7 +204,7 @@ namespace castor3d
 			m_renderQuad.resetRenderPass( m_renderSize
 				, m_renderPass
 				, SceneRenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u ) );
-			record();
+			recordCurrent();
 		}
 	}
 
@@ -279,7 +279,7 @@ namespace castor3d
 		, m_transparentPassDesc{ &doCreateTransparentPass( m_opaquePassDesc ) }
 		, m_overlayPassDesc{ &doCreateOverlayPass( m_transparentPassDesc ) }
 		, m_windowPassDesc{ &doCreateWindowPass( m_overlayPassDesc ) }
-		, m_runnable{ createRunnablePass( m_graph, m_device ) }
+		, m_runnable{ createRunnableGraph( m_graph, m_device ) }
 		, m_progressBar{ progressBar }
 	{
 	}
@@ -366,7 +366,7 @@ namespace castor3d
 			m_windowPass->resetCommandBuffer();
 			m_windowPass->setTarget( framebuffer
 				, { transparentBlackClearColor } );
-			m_windowPass->record();
+			m_windowPass->recordCurrent();
 			result = { m_runnable->run( result, queue ) };
 			fence = m_windowPass->getFence();
 		}
