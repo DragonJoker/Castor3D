@@ -40,18 +40,6 @@ namespace GuiCommon
 		 *\brief		Destructeur
 		 */
 		~RenderWindowTreeItemProperty();
-		/**
-		 *\~english
-		 *\brief		Retrieves the object
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère l'objet
-		 *\return		La valeur
-		 */
-		inline castor3d::RenderWindowRPtr getRenderWindow()
-		{
-			return &m_window;
-		}
 
 	private:
 		/**
