@@ -239,7 +239,6 @@ namespace castor3d
 	Picking::~Picking()
 	{
 		m_commandBuffer.reset();
-		m_scenes.clear();
 		m_stagingBuffer.reset();
 	}
 

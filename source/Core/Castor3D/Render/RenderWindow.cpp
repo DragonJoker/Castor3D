@@ -1434,15 +1434,7 @@ namespace castor3d
 		try
 		{
 			ashes::VkSemaphoreArray semaphores;
-
-			for ( auto & wait : toWait )
-			{
-				if ( wait.semaphore )
-				{
-					semaphores.push_back( wait.semaphore );
-				}
-			}
-
+			crg::convert( toWait, semaphores );
 			auto res = m_device->vkWaitForFences( *m_device
 				, 1u
 				, &fence
@@ -1476,15 +1468,7 @@ namespace castor3d
 		{
 			ashes::VkSemaphoreArray semaphores;
 			ashes::VkPipelineStageFlagsArray stages;
-
-			for ( auto & wait : toWait )
-			{
-				if ( wait.semaphore )
-				{
-					semaphores.push_back( wait.semaphore );
-					stages.push_back( wait.dstStageMask );
-				}
-			}
+			crg::convert( toWait, semaphores, stages );
 
 			if ( m_toSave )
 			{
@@ -1512,15 +1496,7 @@ namespace castor3d
 		{
 			ashes::VkSemaphoreArray semaphores;
 			ashes::VkPipelineStageFlagsArray stages;
-
-			for ( auto & wait : toWait )
-			{
-				if ( wait.semaphore )
-				{
-					semaphores.push_back( wait.semaphore );
-					stages.push_back( wait.dstStageMask );
-				}
-			}
+			crg::convert( toWait, semaphores, stages );
 
 			if ( m_toSave )
 			{
