@@ -6,10 +6,10 @@
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
+#include "Castor3D/Cache/Cache.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
-#include "Castor3D/Cache/ParticleSystemCache.hpp"
-#include "Castor3D/Cache/SamplerCache.hpp"
+#include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
@@ -40,6 +40,8 @@
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 
 #include <RenderGraph/FramePassTimer.hpp>
+
+CU_ImplementCUSmartPtr( castor3d, RenderTechnique )
 
 namespace castor3d
 {

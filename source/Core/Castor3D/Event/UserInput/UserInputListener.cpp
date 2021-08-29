@@ -1,7 +1,7 @@
 #include "Castor3D/Event/UserInput/UserInputListener.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/ListenerCache.hpp"
+#include "Castor3D/Cache/Cache.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/OverlayCache.hpp"
 

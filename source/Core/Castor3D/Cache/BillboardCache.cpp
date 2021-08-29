@@ -34,8 +34,6 @@ namespace castor3d
 		return result;
 	}
 
-	template<> const castor::String ObjectCacheTraits< BillboardList, castor::String >::Name = cuT( "BillboardList" );
-
 	BillboardListCache::BillboardListCache( Engine & engine
 		, Scene & scene
 		, SceneNodeSPtr rootNode

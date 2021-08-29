@@ -13,6 +13,7 @@
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderQueue.hpp"
 #include "Castor3D/Render/Culling/CullingModule.hpp"
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
 #include "Castor3D/Render/Node/BillboardRenderNode.hpp"

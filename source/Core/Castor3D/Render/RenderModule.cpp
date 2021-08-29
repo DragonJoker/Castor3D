@@ -1,7 +1,7 @@
 #include "Castor3D/Render/RenderModule.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/SamplerCache.hpp"
+#include "Castor3D/Cache/Cache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"

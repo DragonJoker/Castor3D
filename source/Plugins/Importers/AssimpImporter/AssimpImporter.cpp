@@ -1,12 +1,11 @@
 #include "AssimpImporter/AssimpImporter.hpp"
 
 #include <Castor3D/Animation/Interpolator.hpp>
+#include <Castor3D/Cache/Cache.hpp>
 #include <Castor3D/Cache/GeometryCache.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
-#include <Castor3D/Cache/MeshCache.hpp>
+#include <Castor3D/Cache/ObjectCache.hpp>
 #include <Castor3D/Cache/PluginCache.hpp>
-#include <Castor3D/Cache/SceneCache.hpp>
-#include <Castor3D/Cache/SceneNodeCache.hpp>
 #include <Castor3D/Cache/CacheView.hpp>
 #include <Castor3D/Event/Frame/InitialiseEvent.hpp>
 #include <Castor3D/Material/Pass/PassFactory.hpp>

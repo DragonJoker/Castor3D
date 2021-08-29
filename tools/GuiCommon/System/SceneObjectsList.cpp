@@ -27,16 +27,16 @@
 #include <wx/artprov.h>
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Animation/Animation.hpp>
 #include <Castor3D/Cache/AnimatedObjectGroupCache.hpp>
+#include <Castor3D/Cache/Cache.hpp>
 #include <Castor3D/Cache/CacheView.hpp>
-#include <Castor3D/Cache/CameraCache.hpp>
 #include <Castor3D/Cache/GeometryCache.hpp>
 #include <Castor3D/Cache/LightCache.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
+#include <Castor3D/Cache/ObjectCache.hpp>
 #include <Castor3D/Cache/OverlayCache.hpp>
 #include <Castor3D/Cache/TargetCache.hpp>
-#include <Castor3D/Animation/Animation.hpp>
-#include <Castor3D/Cache/WindowCache.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Skeleton/Bone.hpp>

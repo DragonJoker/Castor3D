@@ -26,8 +26,6 @@ namespace castor3d
 		static String const C3D_UniqueDirectionalLight = cuT( "Only one directional light is allowed." );
 	}
 
-	template<> const String ObjectCacheTraits< Light, String >::Name = cuT( "Light" );
-
 	namespace
 	{
 		class LightInitialiser
@@ -150,18 +148,18 @@ namespace castor3d
 				if ( result != element )
 				{
 					doReportDuplicate( name );
-					m_dirtyLights.emplace_back( result.get() );
-					m_connections.emplace( result.get()
-						, result->onChanged.connect( [this]( Light & light )
-							{
-								onLightChanged( light );
-							} ) );
 				}
 				else
 				{
 					if ( initialise )
 					{
 						m_initialise( element );
+						m_dirtyLights.emplace_back( result.get() );
+						m_connections.emplace( result.get()
+							, result->onChanged.connect( [this]( Light & light )
+								{
+									onLightChanged( light );
+								} ) );
 					}
 
 					onChanged();
