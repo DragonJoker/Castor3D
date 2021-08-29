@@ -274,9 +274,11 @@ namespace castor3d
 				m_passes[0u].pass->update( updater );
 			}
 #else
-			if ( directional.updateShadow( camera ) )
+			auto shadowModified = directional.updateShadow( camera );
+
+			for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
 			{
-				for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
+				if ( shadowModified )
 				{
 					auto & culler = m_passes[cascade]->pass->getCuller();
 					auto & lightCamera = culler.getCamera();
@@ -284,10 +286,10 @@ namespace castor3d
 					lightCamera.setProjection( directional.getProjMatrix( m_cascades - 1u ) );
 					lightCamera.setView( directional.getViewMatrix( m_cascades - 1u ) );
 					lightCamera.updateFrustum();
-
-					updater.index = cascade;
-					m_passes[cascade]->pass->update( updater );
 				}
+
+				updater.index = cascade;
+				m_passes[cascade]->pass->update( updater );
 			}
 #endif
 		}
