@@ -428,6 +428,27 @@ namespace castor3d
 
 	void Engine::update( CpuUpdater & updater )
 	{
+		getMaterialCache().update( updater );
+		getSceneCache().forEach( [&updater]( Scene & scene )
+			{
+				scene.update( updater );
+			} );
+		getRenderTargetCache().forEach( [&updater]( RenderTarget & target )
+			{
+				if ( target.getTargetType() != TargetType::eWindow )
+				{
+					TechniqueQueues techniqueQueues;
+					updater.queues = &techniqueQueues.queues;
+					target.update( updater );
+
+					if ( !techniqueQueues.queues.empty() )
+					{
+						techniqueQueues.shadowMaps = target.getShadowMaps();
+						updater.techniquesQueues.push_back( techniqueQueues );
+					}
+				}
+			} );
+
 		for ( auto & window : m_renderWindows )
 		{
 			TechniqueQueues techniqueQueues;
@@ -440,25 +461,6 @@ namespace castor3d
 				updater.techniquesQueues.push_back( techniqueQueues );
 			}
 		}
-
-		getMaterialCache().update( updater );
-		getSceneCache().forEach( [&updater]( Scene & scene )
-			{
-				scene.update( updater );
-			} );
-		getRenderTargetCache().update( updater );
-		getRenderTechniqueCache().forEach( [&updater]( RenderTechnique & technique )
-			{
-				TechniqueQueues techniqueQueues;
-				updater.queues = &techniqueQueues.queues;
-				technique.update( updater );
-
-				if ( !techniqueQueues.queues.empty() )
-				{
-					techniqueQueues.shadowMaps = technique.getShadowMaps();
-					updater.techniquesQueues.push_back( techniqueQueues );
-				}
-			} );
 	}
 
 	void Engine::update( GpuUpdater & updater )
