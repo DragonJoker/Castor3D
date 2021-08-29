@@ -48,14 +48,17 @@ namespace castor3d
 	void SceneNode::update()
 	{
 		doComputeMatrix();
-
-		for ( auto it : m_children )
 		{
-			auto child = it.second.lock();
+			auto lock( castor::makeUniqueLock( m_childrenLock ) );
 
-			if ( child )
+			for ( auto it : m_children )
 			{
-				child->update();
+				auto child = it.second.lock();
+
+				if ( child )
+				{
+					child->update();
+				}
 			}
 		}
 	}
@@ -63,12 +66,16 @@ namespace castor3d
 	void SceneNode::attachObject( MovableObject & object )
 	{
 		object.detach();
-		m_objects.push_back( object );
+		{
+			auto lock( castor::makeUniqueLock( m_objectsLock ) );
+			m_objects.push_back( object );
+		}
 		object.attachTo( *this );
 	}
 
 	void SceneNode::detachObject( MovableObject & object )
 	{
+		auto lock( castor::makeUniqueLock( m_objectsLock ) );
 		auto it = std::find_if( m_objects.begin()
 			, m_objects.end()
 			, [&object]( std::reference_wrapper< MovableObject > obj )
@@ -117,6 +124,7 @@ namespace castor3d
 
 	bool SceneNode::hasChild( castor::String const & name )
 	{
+		auto lock( castor::makeUniqueLock( m_childrenLock ) );
 		bool found = false;
 
 		if ( m_children.find( name ) == m_children.end() )
@@ -134,6 +142,7 @@ namespace castor3d
 
 	void SceneNode::addChild( SceneNodeSPtr child )
 	{
+		auto lock( castor::makeUniqueLock( m_childrenLock ) );
 		auto name = child->getName();
 
 		if ( m_children.find( name ) == m_children.end() )
@@ -160,6 +169,7 @@ namespace castor3d
 
 	void SceneNode::detachChild( castor::String const & childName )
 	{
+		auto lock( castor::makeUniqueLock( m_childrenLock ) );
 		auto it = m_children.find( childName );
 
 		if ( it != m_children.end() )
@@ -181,7 +191,10 @@ namespace castor3d
 	void SceneNode::detachChildren()
 	{
 		SceneNodeMap flush;
+		{
+			auto lock( castor::makeUniqueLock( m_childrenLock ) );
 			std::swap( flush, m_children );
+		}
 
 		for ( auto it : flush )
 		{
@@ -317,16 +330,19 @@ namespace castor3d
 
 	SceneNode::SceneNodeMap const & SceneNode::getChildren()const
 	{
+		auto lock( castor::makeUniqueLock( m_childrenLock ) );
 		return m_children;
 	}
 
 	SceneNodeSPtr SceneNode::getChild( castor::String const & name )const
 	{
+		auto lock( castor::makeUniqueLock( m_childrenLock ) );
 		return ( m_children.find( name ) != m_children.end() ? m_children.find( name )->second.lock() : nullptr );
 	}
 
 	SceneNode::MovableArray const & SceneNode::getObjects()const
 	{
+		auto lock( castor::makeUniqueLock( m_objectsLock ) );
 		return m_objects;
 	}
 
@@ -359,6 +375,8 @@ namespace castor3d
 
 	void SceneNode::doUpdateChildsDerivedTransform()
 	{
+		auto lock( castor::makeUniqueLock( m_childrenLock ) );
+
 		for ( auto it : m_children )
 		{
 			SceneNodeSPtr current = it.second.lock();

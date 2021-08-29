@@ -92,7 +92,7 @@ namespace castor3d
 	{
 		if ( m_voxelConfig.enabled )
 		{
-			auto & nodes = m_renderQueue.getCulledRenderNodes();
+			auto & nodes = m_renderQueue->getCulledRenderNodes();
 
 			if ( nodes.hasNodes() )
 			{
