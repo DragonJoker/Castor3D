@@ -17,7 +17,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
-#include <CastorUtils/Multithreading/SpinLock.hpp>
+#include <CastorUtils/Multithreading/SpinMutex.hpp>
 
 #include <atomic>
 
@@ -633,7 +633,7 @@ namespace castor3d
 		bool m_implicit{ false };
 		bool m_automaticShader{ true };
 		std::atomic_bool m_texturesReduced{ false };
-		mutable castor::SpinLock m_lockTextures;
+		mutable castor::SpinMutex m_lockTextures;
 		castor::GroupChangeTracked< float > m_opacity;
 		castor::GroupChangeTracked< castor::RangedValue< uint32_t > > m_bwAccumulationOperator;
 		castor::GroupChangeTracked< float > m_emissive;

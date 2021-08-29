@@ -573,6 +573,24 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	The culled render nodes for a specific scene.
+	*\~french
+	*\brief
+	*	Les noeuds de rendu culled pour une scène spécifique.
+	*/
+	struct QueueCulledRenderNodes;
+	/**
+	*\~english
+	*\brief
+	*	The render nodes for a specific scene.
+	*\~french
+	*\brief
+	*	Les noeuds de rendu pour une scène spécifique.
+	*/
+	struct QueueRenderNodes;
+	/**
+	*\~english
+	*\brief
 	*	The queue data for all queues of a specific family index.
 	*\~french
 	*\brief
@@ -640,24 +658,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Render pass base class.
-	*\~french
-	*\brief
-	*	Classe de base d'une passe de rendu.
-	*/
-	class SceneRenderPass;
-	/**
-	*\~english
-	*\brief
-	*	A pipeline to render specific nodes from a render pass.
-	*\~french
-	*\brief
-	*	Un pipeline pour le rendu de noeuds d'une passe de rendu.
-	*/
-	class RenderPipeline;
-	/**
-	*\~english
-	*\brief
 	*	The render nodes for a specific scene.
 	*\~french
 	*\brief
@@ -668,21 +668,12 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	The render nodes for a specific scene.
+	*	A pipeline to render specific nodes from a render pass.
 	*\~french
 	*\brief
-	*	Les noeuds de rendu pour une scène spécifique.
+	*	Un pipeline pour le rendu de noeuds d'une passe de rendu.
 	*/
-	struct QueueRenderNodes;
-	/**
-	*\~english
-	*\brief
-	*	The culled render nodes for a specific scene.
-	*\~french
-	*\brief
-	*	Les noeuds de rendu culled pour une scène spécifique.
-	*/
-	struct QueueCulledRenderNodes;
+	class RenderPipeline;
 	/**
 	*\~english
 	*\brief
@@ -730,6 +721,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Render pass base class.
+	*\~french
+	*\brief
+	*	Classe de base d'une passe de rendu.
+	*/
+	class SceneRenderPass;
+	/**
+	*\~english
+	*\brief
 	*	Shadow mapping implementation.
 	*\~french
 	*\brief
@@ -750,6 +750,7 @@ namespace castor3d
 	CU_DeclareCUSmartPtr( castor3d, RenderDevice, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, RenderLoop, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, RenderPipeline, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, RenderQueue, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, RenderSystem, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, RenderTarget, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, Viewport, C3D_API );

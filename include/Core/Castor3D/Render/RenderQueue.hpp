@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 
 #include <CastorUtils/Design/GroupChangeTracked.hpp>
+#include <CastorUtils/Multithreading/SpinMutex.hpp>
 
 #include <atomic>
 
@@ -102,6 +103,7 @@ namespace castor3d
 		/**@{*/
 		C3D_API bool hasNodes()const;
 		C3D_API RenderMode getMode()const;
+		C3D_API ashes::CommandBuffer const & initCommandBuffer();
 
 		bool hasCommandBuffer()const
 		{
@@ -138,6 +140,7 @@ namespace castor3d
 		/**@}*/
 
 	private:
+		void doInitialise( QueueData const & queueData );
 		void doPrepareCommandBuffer();
 		void doParseAllRenderNodes( ShadowMapLightTypeArray & shadowMaps );
 		void doParseCulledRenderNodes();
@@ -149,18 +152,13 @@ namespace castor3d
 		SceneNode const * m_ignoredNode{ nullptr };
 		QueueRenderNodesUPtr m_renderNodes;
 		QueueCulledRenderNodesUPtr m_culledRenderNodes;
+		castor::SpinMutex m_eventMutex;
+		GpuFrameEvent * m_initEvent{};
 		ashes::CommandBufferPtr m_commandBuffer;
 		bool m_allChanged{};
 		bool m_culledChanged{};
 		castor::GroupChangeTracked< ashes::Optional< VkViewport > > m_viewport;
 		castor::GroupChangeTracked< ashes::Optional< VkRect2D > > m_scissor;
-		enum class Preparation
-		{
-			eWaiting,
-			eRunning,
-			eDone,
-		};
-		std::atomic< Preparation > m_preparation{ Preparation::eDone };
 	};
 }
 

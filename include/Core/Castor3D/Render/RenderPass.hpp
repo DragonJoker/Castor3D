@@ -7,7 +7,8 @@ See LICENSE file in root folder
 #include "RenderModule.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp"
 #include "Castor3D/Render/RenderInfo.hpp"
-#include "Castor3D/Render/RenderQueue.hpp"
+#include "Castor3D/Render/Culling/CullingModule.hpp"
+#include "Castor3D/Render/Node/RenderNodeModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
@@ -444,6 +445,7 @@ namespace castor3d
 		/**@{*/
 		C3D_API virtual TextureFlags getTexturesMask()const;
 		C3D_API bool isValidPass( Pass const & pass )const;
+		C3D_API bool hasNodes()const;
 
 		C3D_API virtual ShaderFlags getShaderFlags()const
 		{
@@ -479,11 +481,6 @@ namespace castor3d
 		MatrixUbo & getMatrixUbo()const
 		{
 			return m_matrixUbo;
-		}
-
-		bool hasNodes()const
-		{
-			return m_renderQueue.hasNodes();
 		}
 
 		uint32_t getPipelinesCount()const
@@ -846,7 +843,7 @@ namespace castor3d
 		RenderSystem & m_renderSystem;
 		MatrixUbo & m_matrixUbo;
 		SceneCuller & m_culler;
-		RenderQueue m_renderQueue;
+		RenderQueueUPtr m_renderQueue;
 		castor::String m_category;
 		castor::Size m_size;
 		RenderMode m_mode{ RenderMode::eBoth };

@@ -93,7 +93,7 @@ namespace castor3d
 	{
 		if ( m_initialised )
 		{
-			doUpdateNodes( m_renderQueue.getCulledRenderNodes() );
+			doUpdateNodes( m_renderQueue->getCulledRenderNodes() );
 		}
 	}
 

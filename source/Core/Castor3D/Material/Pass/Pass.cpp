@@ -1194,17 +1194,16 @@ namespace castor3d
 
 	Pass::~Pass()
 	{
-		m_textureUnits.clear();
+		{
+			auto lock( makeUniqueLock( m_lockTextures ) );
+			m_textureUnits.clear();
+		}
 	}
 
 	void Pass::initialise( RenderDevice const & device
 		, QueueData const & queueData )
 	{
-		while ( !m_texturesReduced
-			&& !m_textureUnits.empty() )
-		{
-			std::this_thread::sleep_for( 1_ms );
-		}
+		auto lock( makeUniqueLock( m_lockTextures ) );
 
 		for ( auto unit : m_textureUnits )
 		{
@@ -1214,11 +1213,15 @@ namespace castor3d
 
 	void Pass::cleanup()
 	{
+		auto lock( makeUniqueLock( m_lockTextures ) );
 
 		for ( auto unit : m_textureUnits )
 		{
 			unit->cleanup();
+			getOwner()->getOwner()->getMaterialCache().unregisterUnit( *unit );
 		}
+
+		getOwner()->getOwner()->getMaterialCache().unregisterPass( *this );
 	}
 
 	void Pass::update()
@@ -1295,33 +1298,36 @@ namespace castor3d
 	{
 		m_textures |= unit->getFlags();
 		auto image = unit->toString();
-		auto it = std::find_if( m_textureUnits.begin()
-			, m_textureUnits.end()
-			, [&image]( TextureUnitSPtr lookup )
-			{
-				return lookup->toString() == image;
-			} );
-
-		if ( it == m_textureUnits.end() )
 		{
-			if ( unit->getConfiguration().heightMask[0] )
+			auto lock( makeUniqueLock( m_lockTextures ) );
+			auto it = std::find_if( m_textureUnits.begin()
+				, m_textureUnits.end()
+				, [&image]( TextureUnitSPtr lookup )
+				{
+					return lookup->toString() == image;
+				} );
+
+			if ( it == m_textureUnits.end() )
 			{
-				m_heightTextureIndex = uint32_t( m_textureUnits.size() );
+				if ( unit->getConfiguration().heightMask[0] )
+				{
+					m_heightTextureIndex = uint32_t( m_textureUnits.size() );
+				}
+
+				m_textureUnits.push_back( std::move( unit ) );
 			}
-
-			m_textureUnits.push_back( std::move( unit ) );
-		}
-		else
-		{
-			auto lhsConfig = unit->getConfiguration();
-			unit = *it;
-			auto rhsConfig = unit->getConfiguration();
-			mergeConfigs( std::move( lhsConfig ), rhsConfig );
-			unit->setConfiguration( std::move( rhsConfig ) );
-
-			if ( unit->getConfiguration().heightMask[0] )
+			else
 			{
-				m_heightTextureIndex = uint32_t( std::distance( m_textureUnits.begin(), it ) );
+				auto lhsConfig = unit->getConfiguration();
+				unit = *it;
+				auto rhsConfig = unit->getConfiguration();
+				mergeConfigs( std::move( lhsConfig ), rhsConfig );
+				unit->setConfiguration( std::move( rhsConfig ) );
+
+				if ( unit->getConfiguration().heightMask[0] )
+				{
+					m_heightTextureIndex = uint32_t( std::distance( m_textureUnits.begin(), it ) );
+				}
 			}
 		}
 
@@ -1337,11 +1343,15 @@ namespace castor3d
 
 	void Pass::removeTextureUnit( uint32_t index )
 	{
-		CU_Require( index < m_textureUnits.size() );
-		log::info << cuT( "Destroying TextureUnit " ) << index << std::endl;
-		auto it = m_textureUnits.begin() + index;
-		auto config = ( *it )->getConfiguration();
-		m_textureUnits.erase( it );
+		TextureConfiguration config;
+		{
+			auto lock( makeUniqueLock( m_lockTextures ) );
+			CU_Require( index < m_textureUnits.size() );
+			log::info << cuT( "Destroying TextureUnit " ) << index << std::endl;
+			auto it = m_textureUnits.begin() + index;
+			config = ( *it )->getConfiguration();
+			m_textureUnits.erase( it );
+		}
 		remFlag( m_textures, TextureFlag( uint16_t( getFlags( config ) ) ) );
 		updateFlag( PassFlag::eAlphaBlending, hasAlphaBlending() );
 		updateFlag( PassFlag::eAlphaTest, hasAlphaTest() );
@@ -1355,6 +1365,7 @@ namespace castor3d
 
 	TextureUnitSPtr Pass::getTextureUnit( uint32_t index )const
 	{
+		auto lock( makeUniqueLock( m_lockTextures ) );
 		CU_Require( index < m_textureUnits.size() );
 		return m_textureUnits[index];
 	}
@@ -1393,6 +1404,8 @@ namespace castor3d
 	{
 		if ( !m_texturesReduced )
 		{
+			auto lock( makeUniqueLock( m_lockTextures ) );
+
 			for ( auto & unit : m_textureUnits )
 			{
 				auto configuration = unit->getConfiguration();
@@ -1424,6 +1437,12 @@ namespace castor3d
 					return lhs->getFlags() < rhs->getFlags();
 				} );
 
+			for ( auto & unit : m_textureUnits )
+			{
+				getOwner()->getOwner()->getMaterialCache().registerUnit( *unit );
+			}
+
+			getOwner()->getOwner()->getMaterialCache().registerPass( *this );
 			m_texturesReduced = true;
 		}
 	}
@@ -1468,6 +1487,7 @@ namespace castor3d
 
 	bool Pass::needsGammaCorrection()const
 	{
+		auto lock( makeUniqueLock( m_lockTextures ) );
 		return m_textureUnits.end() != std::find_if( m_textureUnits.begin()
 			, m_textureUnits.end()
 			, []( TextureUnitSPtr unit )
@@ -1478,12 +1498,17 @@ namespace castor3d
 
 	TextureUnitPtrArray Pass::getTextureUnits( TextureFlags mask )const
 	{
+		auto lock( makeUniqueLock( m_lockTextures ) );
 		return castor3d::getTextureUnits( m_textureUnits, mask );
 	}
 
 	TextureFlagsArray Pass::getTexturesMask( TextureFlags mask )const
 	{
-		auto units = castor3d::getTextureUnits( m_textureUnits, mask );
+		TextureUnitPtrArray units;
+		{
+			auto lock( makeUniqueLock( m_lockTextures ) );
+			units = castor3d::getTextureUnits( m_textureUnits, mask );
+		}
 		TextureFlagsArray result;
 
 		for ( auto & unit : units )
@@ -1496,6 +1521,7 @@ namespace castor3d
 
 	uint32_t Pass::getTextureUnitsCount( TextureFlags mask )const
 	{
+		auto lock( makeUniqueLock( m_lockTextures ) );
 		return uint32_t( castor3d::getTextureUnits( m_textureUnits, mask ).size() );
 	}
 
