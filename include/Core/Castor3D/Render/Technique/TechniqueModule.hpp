@@ -87,7 +87,7 @@ namespace castor3d
 		, ashes::WriteDescriptorSetArray & writes
 		, uint32_t & index );
 
-	CU_DeclareSmartPtr( RenderTechnique );
+	CU_DeclareCUSmartPtr( castor3d, RenderTechnique, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, RenderTechniquePass, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, SsaoPass, C3D_API );
 

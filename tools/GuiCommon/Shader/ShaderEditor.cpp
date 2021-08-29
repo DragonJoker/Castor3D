@@ -6,7 +6,6 @@
 #include "GuiCommon/Properties/PropertiesContainer.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Cache/WindowCache.hpp>
 #include <Castor3D/Cache/ShaderCache.hpp>
 #include <Castor3D/Material/Pass/Pass.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>

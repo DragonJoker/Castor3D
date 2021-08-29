@@ -7,6 +7,7 @@
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderQueue.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapSpot.hpp"
 #include "Castor3D/Render/Technique/RenderTechniquePass.hpp"

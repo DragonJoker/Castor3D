@@ -2,13 +2,11 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Event/Frame/InitialiseEvent.hpp>
+#include <Castor3D/Cache/Cache.hpp>
 #include <Castor3D/Cache/CacheView.hpp>
-#include <Castor3D/Cache/CameraCache.hpp>
 #include <Castor3D/Cache/GeometryCache.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
-#include <Castor3D/Cache/MeshCache.hpp>
-#include <Castor3D/Cache/SceneNodeCache.hpp>
-#include <Castor3D/Cache/SceneCache.hpp>
+#include <Castor3D/Cache/ObjectCache.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/Pass.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/Face.hpp>

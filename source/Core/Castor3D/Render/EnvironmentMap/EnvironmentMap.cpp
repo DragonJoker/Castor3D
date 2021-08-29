@@ -1,7 +1,7 @@
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/SamplerCache.hpp"
+#include "Castor3D/Cache/Cache.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"

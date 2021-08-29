@@ -88,10 +88,18 @@
     </Expand>
   </Type>
 
-  <Type Name="castor::Resource&lt;*&gt;">
+  <Type Name="castor::OwnedBy&lt;*&gt;">
+    <DisplayString>{{owner={m_owner}}}</DisplayString>
+    <Expand>
+      <Item Name="owner">m_owner</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::Resource">
     <DisplayString>{{name={m_name}}}</DisplayString>
     <Expand>
       <Item Name="name">m_name</Item>
+      <Item Name="initialised">m_initialised</Item>
     </Expand>
   </Type>
 

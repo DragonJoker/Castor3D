@@ -7,8 +7,9 @@
 
 #include <wx/display.h>
 
-#include <Castor3D/Cache/SceneNodeCache.hpp>
 #include <Castor3D/Event/Frame/CleanupEvent.hpp>
+#include <Castor3D/Cache/Cache.hpp>
+#include <Castor3D/Cache/ObjectCache.hpp>
 #include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
 #include <Castor3D/Event/Frame/FrameListener.hpp>
 #include <Castor3D/Event/Frame/GpuFunctorEvent.hpp>

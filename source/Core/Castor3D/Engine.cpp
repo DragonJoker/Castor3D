@@ -1,16 +1,11 @@
 #include "Castor3D/Engine.hpp"
 
-#include "Castor3D/Cache/ListenerCache.hpp"
+#include "Castor3D/Cache/Cache.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
-#include "Castor3D/Cache/PluginCache.hpp"
 #include "Castor3D/Cache/OverlayCache.hpp"
-#include "Castor3D/Cache/SamplerCache.hpp"
-#include "Castor3D/Cache/SceneCache.hpp"
+#include "Castor3D/Cache/PluginCache.hpp"
 #include "Castor3D/Cache/ShaderCache.hpp"
 #include "Castor3D/Cache/TargetCache.hpp"
-#include "Castor3D/Cache/TechniqueCache.hpp"
-#include "Castor3D/Cache/WindowCache.hpp"
-#include "Castor3D/Event/Frame/CleanupEvent.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/InitialiseEvent.hpp"
@@ -49,12 +44,10 @@
 
 #include <string_view>
 
-using namespace castor;
-
-//*************************************************************************************************
-
 namespace castor3d
 {
+	//*********************************************************************************************
+
 	namespace
 	{
 		static constexpr bool C3D_EnableAPITrace = false;
@@ -69,6 +62,8 @@ namespace castor3d
 			return result;
 		}
 	}
+
+	//*********************************************************************************************
 
 	Engine::Engine( castor::String const & appName
 		, Version const & appVersion
@@ -138,17 +133,17 @@ namespace castor3d
 		{
 		};
 		initialiseGlslang();
-		GliImageLoader::registerLoader( m_imageLoader );
-		StbImageLoader::registerLoader( m_imageLoader );
-		ExrImageLoader::registerLoader( m_imageLoader );
-		XpmImageLoader::registerLoader( m_imageLoader );
-		FreeImageLoader::registerLoader( m_imageLoader );
-		StbImageWriter::registerWriter( m_imageWriter );
-		GliImageWriter::registerWriter( m_imageWriter );
+		castor::GliImageLoader::registerLoader( m_imageLoader );
+		castor::StbImageLoader::registerLoader( m_imageLoader );
+		castor::ExrImageLoader::registerLoader( m_imageLoader );
+		castor::XpmImageLoader::registerLoader( m_imageLoader );
+		castor::FreeImageLoader::registerLoader( m_imageLoader );
+		castor::StbImageWriter::registerWriter( m_imageWriter );
+		castor::GliImageWriter::registerWriter( m_imageWriter );
 
 		// m_listenerCache *MUST* be the first created.
-		m_listenerCache = makeCache< FrameListener, String >( *this
-			, []( String const & name )
+		m_listenerCache = makeCache< FrameListener, castor::String >( *this
+			, []( castor::String const & name )
 			{
 				return std::make_shared< FrameListener >( name );
 			}
@@ -158,8 +153,8 @@ namespace castor3d
 		m_defaultListener = m_listenerCache->add( cuT( "Default" ) );
 
 		m_shaderCache = makeCache( *this );
-		m_samplerCache = makeCache< Sampler, String >( *this
-			, [this]( String const & name )
+		m_samplerCache = makeCache< Sampler, castor::String >( *this
+			, [this]( castor::String const & name )
 			{
 				return std::make_shared< Sampler >( *this, name );
 			}
@@ -167,7 +162,7 @@ namespace castor3d
 			, cpuEvtClean
 			, mergeResource );
 		m_materialCache = std::make_unique< MaterialCache >( *this
-			, [this]( String const & name, PassTypeID type )
+			, [this]( castor::String const & name, PassTypeID type )
 			{
 				return std::make_shared< Material >( name, *this, type );
 			}
@@ -175,15 +170,15 @@ namespace castor3d
 			, cpuEvtClean
 			, mergeResource );
 		m_pluginCache = std::make_unique< PluginCache >( *this
-			, []( String const & name, PluginType type, castor::DynamicLibrarySPtr library )
+			, []( castor::String const & name, PluginType type, castor::DynamicLibrarySPtr library )
 			{
 				return nullptr;
 			}
 			, dummy
 			, dummy
 			, mergeResource );
-		m_overlayCache = makeCache< Overlay, String >( *this
-			, [this]( String const & name, OverlayType type, SceneSPtr scene, OverlaySPtr parent )
+		m_overlayCache = makeCache< Overlay, castor::String >( *this
+			, [this]( castor::String const & name, OverlayType type, SceneSPtr scene, OverlaySPtr parent )
 			{
 				auto result = std::make_shared< Overlay >( *this, type, scene, parent );
 				result->setName( name );
@@ -192,7 +187,7 @@ namespace castor3d
 			, dummy
 			, dummy
 			, mergeResource );
-		m_sceneCache = makeCache< Scene, String >( *this
+		m_sceneCache = makeCache< Scene, castor::String >( *this
 			, [this]( castor::String const & name )
 			{
 				return std::make_shared< Scene >( name, *this );
@@ -201,31 +196,10 @@ namespace castor3d
 			, instantClean
 			, mergeResource );
 		m_targetCache = std::make_unique< RenderTargetCache >( *this );
-		m_techniqueCache = makeCache< RenderTechnique, String >( *this
-			, [this]( String const & name
-				, String const & type
-				, RenderTarget & renderTarget
-				, RenderDevice const & device
-				, QueueData const & queueData
-				, Parameters const & parameters
-				, SsaoConfig const & ssaoConfig
-				, ProgressBar * progress )
-			{
-				return std::make_shared< RenderTechnique >( name
-					, renderTarget
-					, device
-					, queueData
-					, parameters
-					, ssaoConfig
-					, progress );
-			}
-			, dummy
-			, dummy
-			, mergeResource );
 
-		if ( !File::directoryExists( getEngineDirectory() ) )
+		if ( !castor::File::directoryExists( getEngineDirectory() ) )
 		{
-			File::directoryCreate( getEngineDirectory() );
+			castor::File::directoryCreate( getEngineDirectory() );
 		}
 
 		log::info << cuT( "Castor3D - Core engine version : " ) << Version{} << std::endl;
@@ -270,7 +244,6 @@ namespace castor3d
 		m_loadingScene.reset();
 		m_materialCache->clear();
 		m_listenerCache->clear();
-		m_techniqueCache->clear();
 
 		// Destroy the RenderSystem.
 		if ( m_renderSystem )
@@ -280,13 +253,13 @@ namespace castor3d
 
 		// and eventually the  plug-ins.
 		m_pluginCache->clear();
-		GliImageLoader::unregisterLoader( m_imageLoader );
-		StbImageLoader::unregisterLoader( m_imageLoader );
-		ExrImageLoader::unregisterLoader( m_imageLoader );
-		XpmImageLoader::unregisterLoader( m_imageLoader );
-		FreeImageLoader::unregisterLoader( m_imageLoader );
-		StbImageWriter::unregisterWriter( m_imageWriter );
-		GliImageWriter::unregisterWriter( m_imageWriter );
+		castor::GliImageLoader::unregisterLoader( m_imageLoader );
+		castor::StbImageLoader::unregisterLoader( m_imageLoader );
+		castor::ExrImageLoader::unregisterLoader( m_imageLoader );
+		castor::XpmImageLoader::unregisterLoader( m_imageLoader );
+		castor::FreeImageLoader::unregisterLoader( m_imageLoader );
+		castor::StbImageWriter::unregisterWriter( m_imageWriter );
+		castor::GliImageWriter::unregisterWriter( m_imageWriter );
 		cleanupGlslang();
 
 		m_logger = nullptr;
@@ -295,7 +268,7 @@ namespace castor3d
 
 	void Engine::initialise( uint32_t wanted, bool threaded )
 	{
-		Debug::initialise();
+		castor::Debug::initialise();
 		m_threaded = threaded;
 
 		if ( m_renderSystem )
@@ -378,8 +351,6 @@ namespace castor3d
 				postEvent( makeCpuCleanupEvent( *m_defaultSampler ) );
 			}
 
-			m_techniqueCache->cleanup();
-
 			m_renderLoop.reset();
 
 			m_targetCache->clear();
@@ -391,13 +362,12 @@ namespace castor3d
 			m_fontCache.clear();
 			m_imageCache.clear();
 			m_shaderCache->clear();
-			m_techniqueCache->clear();
 		}
 
-		Debug::cleanup();
+		castor::Debug::cleanup();
 	}
 
-	bool Engine::loadRenderer( String const & type )
+	bool Engine::loadRenderer( castor::String const & type )
 	{
 		auto it = m_rendererList.find( type );
 
@@ -493,16 +463,16 @@ namespace castor3d
 		}
 	}
 
-	Path Engine::getPluginsDirectory()
+	castor::Path Engine::getPluginsDirectory()
 	{
-		Path binDir = File::getExecutableDirectory();
+		castor::Path binDir = castor::File::getExecutableDirectory();
 
 		while ( binDir.getFileName() != cuT( "bin" ) )
 		{
 			binDir = binDir.getPath();
 		}
 
-		Path usrDir = binDir.getPath();
+		castor::Path usrDir = binDir.getPath();
 
 #if defined( CU_PlatformWindows )
 		static std::basic_string_view< xchar > constexpr pluginsSubdir = cuT( "bin" );
@@ -514,20 +484,20 @@ namespace castor3d
 
 	castor::Path Engine::getEngineDirectory()
 	{
-		return File::getUserDirectory() / cuT( ".Castor3D" );
+		return castor::File::getUserDirectory() / cuT( ".Castor3D" );
 	}
 
-	Path Engine::getDataDirectory()
+	castor::Path Engine::getDataDirectory()
 	{
-		Path pathReturn;
-		Path pathBin = File::getExecutableDirectory();
+		castor::Path pathReturn;
+		castor::Path pathBin = castor::File::getExecutableDirectory();
 
 		while ( pathBin.getFileName() != cuT( "bin" ) )
 		{
 			pathBin = pathBin.getPath();
 		}
 
-		Path pathUsr = pathBin.getPath();
+		castor::Path pathUsr = pathBin.getPath();
 		pathReturn = pathUsr / cuT( "share" );
 		return pathReturn;
 	}
@@ -563,7 +533,7 @@ namespace castor3d
 		return getRenderTargetCache().getPostEffectFactory();
 	}
 
-	RgbaColour Engine::getNextRainbowColour()const
+	castor::RgbaColour Engine::getNextRainbowColour()const
 	{
 		static float currentColourHue{ 0.0f };
 		currentColourHue += 0.05f;
@@ -573,7 +543,7 @@ namespace castor3d
 			currentColourHue = 0.0f;
 		}
 
-		return RgbaColour::fromHSB( currentColourHue, 1.0f, 1.0f );
+		return castor::RgbaColour::fromHSB( currentColourHue, 1.0f, 1.0f );
 	}
 
 	uint32_t Engine::registerTimer( castor::String const & category
@@ -728,9 +698,9 @@ namespace castor3d
 
 	void Engine::doLoadCoreData()
 	{
-		Path path = Engine::getDataDirectory() / cuT( "Castor3D" );
+		castor::Path path = Engine::getDataDirectory() / cuT( "Castor3D" );
 
-		if ( File::fileExists( path / cuT( "Core.zip" ) ) )
+		if ( castor::File::fileExists( path / cuT( "Core.zip" ) ) )
 		{
 			SceneFileParser parser( *this );
 

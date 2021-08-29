@@ -22,8 +22,6 @@ using namespace castor;
 
 namespace castor3d
 {
-	template<> const String ObjectCacheTraits< Geometry, String >::Name = cuT( "Geometry" );
-
 	namespace
 	{
 		struct GeometryInitialiser

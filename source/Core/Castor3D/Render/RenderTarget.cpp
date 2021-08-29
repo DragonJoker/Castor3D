@@ -1,11 +1,11 @@
 #include "Castor3D/Render/RenderTarget.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Cache/Cache.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/OverlayCache.hpp"
 #include "Castor3D/Cache/TargetCache.hpp"
-#include "Castor3D/Cache/TechniqueCache.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -434,7 +434,6 @@ namespace castor3d
 						, QueueData const & queueData )
 					{
 						runnable->record();
-						m_renderTechnique->setReady();
 						m_initialised = result;
 					} ) );
 			}
@@ -477,7 +476,6 @@ namespace castor3d
 			m_combineVtx.shader.reset();
 			m_culler.reset();
 			m_hdrConfigUbo.reset();
-			getEngine()->getRenderTechniqueCache().remove( getName() + cuT( "Technique" ) );
 		}
 	}
 
@@ -495,6 +493,8 @@ namespace castor3d
 
 		CU_Require( m_culler );
 		m_culler->compute();
+
+		m_renderTechnique->update( updater );
 
 		m_hdrConfigUbo->cpuUpdate( getHdrConfig() );
 
@@ -694,9 +694,9 @@ namespace castor3d
 			IntermediatesLister::submit( *getScene(), *postEffect, result );
 		}
 
-		if ( auto technique = getTechnique() )
+		if ( m_renderTechnique )
 		{
-			IntermediatesLister::submit( *technique, result );
+			IntermediatesLister::submit( *m_renderTechnique, result );
 		}
 	}
 
@@ -741,19 +741,17 @@ namespace castor3d
 			try
 			{
 				setProgressBarTitle( progress, "Render Technique" );
-				auto name = getName() + cuT( "Technique" );
-				m_renderTechnique = getEngine()->getRenderTechniqueCache().add( name
-					, std::make_shared< RenderTechnique >( name
-						, *this
-						, device
-						, queueData
-						, m_techniqueParameters
-						, m_ssaoConfig
-						, progress ) );
+				m_renderTechnique = castor::makeUnique< RenderTechnique >( getName()
+					, *this
+					, device
+					, queueData
+					, m_techniqueParameters
+					, m_ssaoConfig
+					, progress );
 			}
-			catch ( Exception & p_exc )
+			catch ( Exception & exc )
 			{
-				log::error << cuT( "Couldn't load render technique: " ) << string::stringCast< xchar >( p_exc.getFullDescription() ) << std::endl;
+				log::error << cuT( "Couldn't load render technique: " ) << string::stringCast< xchar >( exc.getFullDescription() ) << std::endl;
 				throw;
 			}
 		}

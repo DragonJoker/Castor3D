@@ -1,11 +1,14 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
+#include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
 using namespace castor;

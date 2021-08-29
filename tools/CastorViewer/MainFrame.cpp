@@ -23,9 +23,8 @@
 
 #include <SceneExporter/CscnExporter.hpp>
 
-#include <Castor3D/Cache/SceneCache.hpp>
+#include <Castor3D/Cache/Cache.hpp>
 #include <Castor3D/Cache/TargetCache.hpp>
-#include <Castor3D/Cache/WindowCache.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
