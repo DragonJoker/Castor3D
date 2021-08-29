@@ -235,6 +235,21 @@ namespace castor3d
 		}
 		/**
 		 *\~english
+		 *\brief		Removes an element, given a name.
+		 *\param[in]	name	The element name.
+		 *\~french
+		 *\brief		Retire un élément à partir d'un nom.
+		 *\param[in]	name	Le nom d'élément.
+		 */
+		ElementPtr tryRemove( Key const & name )
+		{
+			LockType lock{ castor::makeUniqueLock( m_elements ) };
+			auto element = tryFind( name );
+			m_elements.erase( name );
+			return element;
+		}
+		/**
+		 *\~english
 		 *\return		Merges this cache's elements to the one given.
 		 *\param[out]	destination		The destination cache.
 		 *\~french

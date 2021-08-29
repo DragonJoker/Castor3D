@@ -1,7 +1,7 @@
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/SamplerCache.hpp"
+#include "Castor3D/Cache/Cache.hpp"
 #include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"

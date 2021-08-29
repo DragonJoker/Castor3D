@@ -227,11 +227,9 @@ namespace GuiCommon
 				auto & engine = *pass.getOwner()->getEngine();
 				engine.getRenderTargetCache().forEach( [&vis]( RenderTarget const & target )
 					{
-						RenderTechniqueSPtr technique = target.getTechnique();
-
-						if ( technique )
+						if ( target.isInitialised() )
 						{
-							technique->accept( vis );
+							target.getTechnique().accept( vis );
 						}
 					} );
 

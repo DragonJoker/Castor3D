@@ -2,7 +2,6 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
-#include "Castor3D/Event/Frame/InitialiseEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
@@ -21,8 +20,6 @@ namespace castor3d
 	{
 		using LockType = std::unique_lock< castor::Collection< Material, castor::String > >;
 	}
-
-	template<> const String CacheTraits< Material, String >::Name = cuT( "Material" );
 
 	void MaterialCache::initialise( RenderDevice const & device
 		, PassTypeID passType )
@@ -49,6 +46,14 @@ namespace castor3d
 			m_textureBuffer = std::make_shared< TextureConfigurationBuffer >( *getEngine()
 				, device
 				, shader::MaxTextureConfigurationCount );
+
+			for ( auto it : m_elements )
+			{
+				if ( !it.second->isInitialised() )
+				{
+					it.second->initialise();
+				}
+			}
 		}
 	}
 
@@ -223,6 +228,38 @@ namespace castor3d
 					m_passBuffer->removePass( *pass );
 				}
 			}
+		}
+	}
+
+	void MaterialCache::registerPass( Pass & pass )
+	{
+		if ( m_passBuffer )
+		{
+			m_passBuffer->addPass( pass );
+		}
+	}
+
+	void MaterialCache::unregisterPass( Pass & pass )
+	{
+		if ( m_passBuffer )
+		{
+			m_passBuffer->removePass( pass );
+		}
+	}
+
+	void MaterialCache::registerUnit( TextureUnit & unit )
+	{
+		if ( m_textureBuffer )
+		{
+			m_textureBuffer->addTextureConfiguration( unit );
+		}
+	}
+
+	void MaterialCache::unregisterUnit( TextureUnit & unit )
+	{
+		if ( m_textureBuffer )
+		{
+			m_textureBuffer->removeTextureConfiguration( unit );
 		}
 	}
 }

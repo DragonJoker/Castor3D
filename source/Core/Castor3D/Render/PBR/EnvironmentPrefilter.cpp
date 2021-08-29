@@ -1,7 +1,7 @@
 #include "Castor3D/Render/PBR/EnvironmentPrefilter.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/SamplerCache.hpp"
+#include "Castor3D/Cache/Cache.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"

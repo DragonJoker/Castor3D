@@ -638,16 +638,7 @@ namespace castor3d
 		timerBlock->notifyPassRender();
 		std::vector< VkSemaphore > semaphores;
 		std::vector< VkPipelineStageFlags > dstStageMasks;
-
-		for ( auto & wait : toWait )
-		{
-			if ( wait.semaphore )
-			{
-				semaphores.push_back( wait.semaphore );
-				dstStageMasks.push_back( wait.dstStageMask );
-			}
-		}
-
+		crg::convert( toWait, semaphores, dstStageMasks );
 		queue.submit( *m_commandBuffer
 			, semaphores
 			, dstStageMasks
