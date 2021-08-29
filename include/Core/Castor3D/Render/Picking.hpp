@@ -127,7 +127,6 @@ namespace castor3d
 		static uint32_t constexpr PickingWidth = 32u;
 
 	private:
-		using CameraQueueMap = std::map< Camera const *, RenderQueue >;
 		C3D_API static uint32_t const UboBindingPoint;
 
 	private:
@@ -148,7 +147,6 @@ namespace castor3d
 		std::vector< VkBufferImageCopy > m_pickDisplayRegions;
 		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::BufferPtr< castor::Point4f > m_stagingBuffer;
-		std::map< Scene const *, CameraQueueMap > m_scenes;
 		GeometryWPtr m_geometry;
 		BillboardBaseWPtr m_billboard;
 		SubmeshWPtr m_submesh;

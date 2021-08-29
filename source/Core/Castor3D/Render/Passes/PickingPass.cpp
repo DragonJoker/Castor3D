@@ -55,10 +55,6 @@ namespace castor3d
 
 	namespace
 	{
-		static std::string const Picking = "Picking";
-		static std::string const DrawIndex = "c3d_iDrawIndex";
-		static std::string const NodeIndex = "c3d_iNodeIndex";
-
 		static int constexpr PickingOffset = int( Picking::PickingWidth / 2 );
 		static int constexpr BufferOffset = ( PickingOffset * Picking::PickingWidth ) + PickingOffset - 1;
 
@@ -439,17 +435,19 @@ namespace castor3d
 			, [&]()
 			{
 				auto material = materials->getMaterial( inSurface.material );
-				auto alpha = writer.declLocale( "alpha"
+				auto opacity = writer.declLocale( "opacity"
 					, material.opacity );
 				utils.computeOpacityMapContribution( textures
 					, textureConfigs
 					, c3d_maps
 					, inSurface.texture
-					, alpha );
+					, opacity );
 				utils.applyAlphaFunc( flags.alphaFunc
-					, alpha
+					, opacity
 					, material.alphaRef );
-				pxl_fragColor = c3d_pickingData.getIndex( inSurface.instance );
+				pxl_fragColor = c3d_pickingData.getIndex( inSurface.instance
+					, in.primitiveID );
+
 #if C3D_DebugPicking
 				pxl_fragColor /= 255.0_f;
 #endif
