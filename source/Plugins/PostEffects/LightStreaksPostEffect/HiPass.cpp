@@ -231,7 +231,7 @@ namespace light_streaks
 					, ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages )
 					, size
 					, enabled );
-				device.renderSystem.getEngine()->registerTimer( "LightStreaks"
+				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/LightStreaks"
 					, result->getTimer() );
 				return result;
 			} );
@@ -264,7 +264,7 @@ namespace light_streaks
 						, false
 						, nullptr
 						, enabled );
-					device.renderSystem.getEngine()->registerTimer( "LightStreaks"
+					device.renderSystem.getEngine()->registerTimer( graph.getName() + "/LightStreaks"
 						, result->getTimer() );
 					return result;
 				} );

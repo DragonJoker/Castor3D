@@ -202,7 +202,7 @@ namespace draw_edges
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.build( pass, context, graph, 1u );
-				device.renderSystem.getEngine()->registerTimer( "Draw Edges"
+				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/Draw Edges"
 					, result->getTimer() );
 				return result;
 			} ) }
