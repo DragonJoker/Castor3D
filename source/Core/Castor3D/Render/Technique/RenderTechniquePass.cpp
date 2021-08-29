@@ -155,7 +155,7 @@ namespace castor3d
 
 	void RenderTechniquePass::update( GpuUpdater & updater )
 	{
-		doUpdateNodes( m_renderQueue.getCulledRenderNodes()
+		doUpdateNodes( m_renderQueue->getCulledRenderNodes()
 			, updater.jitter
 			, updater.info );
 	}

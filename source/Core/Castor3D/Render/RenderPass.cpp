@@ -160,7 +160,7 @@ namespace castor3d
 		, m_renderSystem{ m_device.renderSystem }
 		, m_matrixUbo{ desc.m_matrixUbo }
 		, m_culler{ desc.m_culler }
-		, m_renderQueue{ *this, desc.m_mode, desc.m_ignored }
+		, m_renderQueue{ castor::makeUnique< RenderQueue >( *this, desc.m_mode, desc.m_ignored ) }
 		, m_category{ category }
 		, m_size{ desc.m_size.width, desc.m_size.height }
 		, m_oit{ desc.m_oit }
@@ -178,14 +178,14 @@ namespace castor3d
 
 	SceneRenderPass::~SceneRenderPass()
 	{
-		m_renderQueue.cleanup();
+		m_renderQueue->cleanup();
 		m_backPipelines.clear();
 		m_frontPipelines.clear();
 	}
 
 	void SceneRenderPass::setIgnoredNode( SceneNode const & node )
 	{
-		m_renderQueue.setIgnoredNode( node );
+		m_renderQueue->setIgnoredNode( node );
 	}
 
 	void SceneRenderPass::update( CpuUpdater & updater )
@@ -326,7 +326,7 @@ namespace castor3d
 		it->second = billboardEntry.modelInstancesUbo;
 		m_isDirty = true;
 
-		return &m_renderQueue.getAllRenderNodes().createNode( PassRenderNode{ pass }
+		return &m_renderQueue->getAllRenderNodes().createNode( PassRenderNode{ pass }
 			, billboardEntry.modelUbo
 			, billboardEntry.modelInstancesUbo
 			, buffers
@@ -471,6 +471,11 @@ namespace castor3d
 		return doIsValidPass( pass.getPassFlags() );
 	}
 
+	bool SceneRenderPass::hasNodes()const
+	{
+		return m_renderQueue->hasNodes();
+	}
+
 	void SceneRenderPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
 		, ashes::DescriptorSetPool const & descriptorPool
 		, BillboardRenderNode & node
@@ -530,13 +535,13 @@ namespace castor3d
 
 	void SceneRenderPass::doSubInitialise()
 	{
-		m_renderQueue.initialise();
+		m_renderQueue->initialise();
 	}
 
 	void SceneRenderPass::doSubRecordInto( VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
-		VkCommandBuffer secondary = m_renderQueue.getCommandBuffer();
+		VkCommandBuffer secondary = m_renderQueue->initCommandBuffer();
 		m_context.vkCmdExecuteCommands( commandBuffer
 			, 1u
 			, &secondary );
@@ -741,7 +746,7 @@ namespace castor3d
 
 	void SceneRenderPass::doUpdate( RenderQueueArray & queues )
 	{
-		queues.emplace_back( m_renderQueue );
+		queues.emplace_back( *m_renderQueue );
 	}
 
 	void SceneRenderPass::doUpdateUbos( CpuUpdater & updater )
@@ -910,7 +915,7 @@ namespace castor3d
 		it->second = geometryEntry.modelInstancesUbo;
 		m_isDirty = true;
 
-		auto & result = m_renderQueue.getAllRenderNodes().createNode( PassRenderNode{ pass }
+		auto & result = m_renderQueue->getAllRenderNodes().createNode( PassRenderNode{ pass }
 			, geometryEntry.modelUbo
 			, geometryEntry.modelInstancesUbo
 			, buffers
