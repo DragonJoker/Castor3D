@@ -84,15 +84,18 @@ namespace castor3d
 
 	uint32_t PassBuffer::addPass( Pass & pass )
 	{
-		CU_Require( pass.getId() == 0u );
-		CU_Require( m_passes.size() < shader::MaxMaterialsCount );
-		m_passes.emplace_back( &pass );
-		pass.setId( m_passID++ );
-		m_connections.emplace_back( pass.onChanged.connect( [this]( Pass const & pass )
+		if ( pass.getId() == 0u )
 		{
+			CU_Require( m_passes.size() < shader::MaxMaterialsCount );
+			m_passes.emplace_back( &pass );
+			pass.setId( m_passID++ );
+			m_connections.emplace_back( pass.onChanged.connect( [this]( Pass const & pass )
+				{
+					m_dirty.emplace_back( &pass );
+				} ) );
 			m_dirty.emplace_back( &pass );
-		} ) );
-		m_dirty.emplace_back( &pass );
+		}
+
 		return pass.getId();
 	}
 
