@@ -10,6 +10,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/Named.hpp>
 #include <CastorUtils/Math/Quaternion.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
+#include <CastorUtils/Multithreading/SpinMutex.hpp>
 
 namespace castor3d
 {
@@ -307,6 +308,8 @@ namespace castor3d
 		castor::Matrix4x4f m_derivedTransform{ 1.0f };
 		bool m_derivedMtxChanged{ true };
 		SceneNode * m_parent{ nullptr };
+		mutable castor::SpinMutex m_childrenLock;
+		mutable castor::SpinMutex m_objectsLock;
 		SceneNodeMap m_children;
 		MovableArray m_objects;
 	};

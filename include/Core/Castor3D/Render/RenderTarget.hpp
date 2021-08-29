@@ -217,9 +217,15 @@ namespace castor3d
 			return m_size;
 		}
 
-		RenderTechniqueSPtr getTechnique()const
+		bool hasTechnique()const
 		{
-			return m_renderTechnique;
+			return ( m_renderTechnique != nullptr );
+		}
+
+		RenderTechnique & getTechnique()const
+		{
+			CU_Require( hasTechnique() );
+			return *m_renderTechnique;
 		}
 
 		SceneSPtr getScene()const
@@ -323,11 +329,6 @@ namespace castor3d
 		C3D_API void setExposure( float value );
 		C3D_API void setGamma( float value );
 
-		void setTechnique( RenderTechniqueSPtr technique )
-		{
-			m_renderTechnique = technique;
-		}
-
 		void setSsaoConfig( SsaoConfig const & config )
 		{
 			m_ssaoConfig = config;
@@ -372,7 +373,7 @@ namespace castor3d
 		VkFormat m_pixelFormat;
 		bool m_initialised;
 		std::unique_ptr< HdrConfigUbo > m_hdrConfigUbo;
-		RenderTechniqueSPtr m_renderTechnique;
+		RenderTechniqueUPtr m_renderTechnique;
 		SceneWPtr m_scene;
 		CameraWPtr m_camera;
 		uint32_t m_index;
