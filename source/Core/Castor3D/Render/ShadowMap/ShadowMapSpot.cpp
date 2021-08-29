@@ -83,7 +83,7 @@ namespace castor3d
 						, *passData.culler
 						, shadowMap );
 					passData.pass = result.get();
-					device.renderSystem.getEngine()->registerTimer( cuT( "ShadowMapSpot" )
+					device.renderSystem.getEngine()->registerTimer( graph.getName() + cuT( "/ShadowMapSpot" )
 						, result->getTimer() );
 					return result;
 				} );

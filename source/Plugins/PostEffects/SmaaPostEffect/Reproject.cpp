@@ -180,7 +180,7 @@ namespace smaa
 					.passIndex( &config.subsampleIndex )
 					.enabled( enabled )
 					.build( pass, context, graph, config.maxSubsampleIndices );
-				device.renderSystem.getEngine()->registerTimer( "SMAA"
+				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/SMAA"
 					, result->getTimer() );
 				return result;
 			} ) }
@@ -188,7 +188,7 @@ namespace smaa
 		auto & handler = m_graph.getHandler();
 		auto & context = m_device.makeContext();
 		auto data = m_device.graphicsData();
-		auto commandBuffer = data->commandPool->createCommandBuffer();
+		auto commandBuffer = data->commandPool->createCommandBuffer( "SmaaReprojectImagesClear" );
 		commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 
 		for ( auto & view : m_currentColourViews )

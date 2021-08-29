@@ -343,7 +343,7 @@ namespace smaa
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				return crg::RenderQuadBuilder{}
+				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( castor3d::makeExtent2D( castor3d::getSafeBandedSize( m_renderTarget.getSize() ) ) )
 					.texcoordConfig( {} )
@@ -352,6 +352,9 @@ namespace smaa
 					.enabled( &m_enabled )
 					.recordDisabledRenderPass( false )
 					.build( pass, context, graph, m_config.maxSubsampleIndices );
+				getOwner()->getEngine()->registerTimer( graph.getName() + "/SMAA"
+					, result->getTimer() );
+				return result;
 			} );
 		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
 			, VK_FILTER_LINEAR

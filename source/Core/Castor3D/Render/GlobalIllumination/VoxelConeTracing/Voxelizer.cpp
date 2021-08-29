@@ -188,7 +188,7 @@ namespace castor3d
 					, *m_voxels
 					, m_voxelConfig );
 				m_voxelizePass = result.get();
-				m_device.renderSystem.getEngine()->registerTimer( "Voxelizer"
+				m_device.renderSystem.getEngine()->registerTimer( graph.getName() + "/Voxelizer"
 					, result->getTimer() );
 				return result;
 			} );
@@ -215,7 +215,7 @@ namespace castor3d
 					, m_device
 					, m_voxelConfig );
 				m_voxelToTexture = result.get();
-				m_device.renderSystem.getEngine()->registerTimer( "Voxelizer"
+				m_device.renderSystem.getEngine()->registerTimer( graph.getName() + "/Voxelizer"
 					, result->getTimer() );
 				return result;
 			} );
@@ -246,7 +246,7 @@ namespace castor3d
 					, context
 					, graph
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-				m_device.renderSystem.getEngine()->registerTimer( "Voxelizer"
+				m_device.renderSystem.getEngine()->registerTimer( graph.getName() + "/Voxelizer"
 					, result->getTimer() );
 				return result;
 			} );
@@ -271,7 +271,7 @@ namespace castor3d
 					, m_device
 					, m_voxelConfig );
 				m_voxelSecondaryBounce = result.get();
-				m_device.renderSystem.getEngine()->registerTimer( "Voxelizer"
+				m_device.renderSystem.getEngine()->registerTimer( graph.getName() + "/Voxelizer"
 					, result->getTimer() );
 				return result;
 			} );

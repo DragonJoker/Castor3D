@@ -934,7 +934,7 @@ namespace castor3d
 					, context
 					, graph
 					, makeExtent3D( m_size ) );
-				engine.registerTimer( "Opaque"
+				engine.registerTimer( graph.getName() + "/Lighting"
 					, result->getTimer() );
 				return result;
 			} );
@@ -953,7 +953,7 @@ namespace castor3d
 	{
 		stepProgressBar( progress, "Creating lighting pass" );
 		auto & engine = *m_device.renderSystem.getEngine();
-		auto & pass = graph.createPass( "LightPass"
+		auto & pass = graph.createPass( "Lighting"
 			, [this, progress, &engine, &scene]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -968,7 +968,7 @@ namespace castor3d
 					, m_smDirectionalResult
 					, m_smPointResult
 					, m_smSpotResult );
-				engine.registerTimer( "Opaque"
+				engine.registerTimer( graph.getName() + "/Lighting"
 					, result->getTimer() );
 				m_lightPass = result.get();
 				return result;

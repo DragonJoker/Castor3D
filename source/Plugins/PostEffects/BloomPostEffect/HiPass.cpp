@@ -291,7 +291,7 @@ namespace Bloom
 					, ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages )
 					, VkExtent2D{ m_resultImg.data->info.extent.width, m_resultImg.data->info.extent.height }
 					, enabled );
-				device.renderSystem.getEngine()->registerTimer( "Bloom"
+				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/Bloom"
 					, result->getTimer() );
 				return result;
 			} ) }

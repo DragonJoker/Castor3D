@@ -417,7 +417,7 @@ namespace castor3d
 					.passIndex( &m_programIndex )
 					.programs( createPrograms( m_programs ) )
 					.build( pass, context, graph, uint32_t( m_programs.size() ) );
-				engine.registerTimer( "Opaque"
+				engine.registerTimer( graph.getName() + "/Opaque"
 					, result->getTimer() );
 				return result;
 			} );

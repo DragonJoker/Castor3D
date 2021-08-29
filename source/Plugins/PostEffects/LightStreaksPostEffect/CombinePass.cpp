@@ -163,7 +163,7 @@ namespace light_streaks
 								, srcTransition.to );
 						} )
 					.build( pass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( "LightStreaks"
+				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/LightStreaks"
 					, result->getTimer() );
 				return result;
 			} ) }
