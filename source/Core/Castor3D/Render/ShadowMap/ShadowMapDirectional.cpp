@@ -119,7 +119,7 @@ namespace castor3d
 				auto & passData = *result.back();
 				passData.culler = std::make_unique< FrustumCuller >( scene, *passData.camera );
 				auto & pass = graph.createPass( debugName
-					, [&passData, &device, &shadowMap, &cascade]( crg::FramePass const & pass
+					, [&passData, &device, &shadowMap, cascade]( crg::FramePass const & pass
 						, crg::GraphContext & context
 						, crg::RunnableGraph & graph )
 					{
@@ -132,7 +132,7 @@ namespace castor3d
 							, shadowMap
 							, cascade );
 						passData.pass = result.get();
-						device.renderSystem.getEngine()->registerTimer( cuT( "ShadowMapDirectional" )
+						device.renderSystem.getEngine()->registerTimer( graph.getName() + cuT( "/ShadowMapDirectional" )
 							, result->getTimer() );
 						return result;
 					} );

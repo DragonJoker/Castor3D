@@ -160,7 +160,7 @@ namespace Bloom
 								, srcTransition.to );
 						} )
 					.build( pass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( "Bloom"
+				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/Bloom"
 							, result->getTimer() );
 				return result;
 			} ) }

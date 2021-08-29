@@ -709,18 +709,21 @@ namespace castor3d
 	crg::FramePass & RenderTarget::doCreateCombinePass( ProgressBar * progress )
 	{
 		stepProgressBar( progress, "Creating combine pass" );
-		auto & result = m_graph.createPass( "CombinePass"
+		auto & result = m_graph.createPass( "Combine"
 			, [this, progress]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				stepProgressBar( progress, "Initialising combine pass" );
-				return crg::RenderQuadBuilder{}
+				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( makeExtent2D( m_combined.getExtent() ) )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_combineStages ) )
 					.build( pass, context, graph );
+				getOwner()->registerTimer( graph.getName() + "/Combine"
+					, result->getTimer() );
+				return result;
 			} );
 		result.addSampledView( m_objects.sampledViewId
 			, CombineLhsIdx
@@ -775,10 +778,13 @@ namespace castor3d
 					, crg::RunnableGraph & graph )
 				{
 					stepProgressBar( progress, "Initialising " + name + " copy commands" );
-					return std::make_unique< crg::ImageCopy >( pass
+					auto result = std::make_unique< crg::ImageCopy >( pass
 						, context
 						, graph
 						, getSafeBandedExtent3D( m_size ) );
+					getOwner()->registerTimer( graph.getName() + "/" + name + "Copy"
+						, result->getTimer() );
+					return result;
 				} );
 			pass.addDependency( previousPass );
 			pass.addTransferInputView( source );

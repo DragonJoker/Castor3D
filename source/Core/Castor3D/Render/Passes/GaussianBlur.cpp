@@ -391,7 +391,7 @@ namespace castor3d
 							.texcoordConfig( {} )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stagesX ) )
 							.build( pass, context, graph );
-						m_device.renderSystem.getEngine()->registerTimer( category
+						m_device.renderSystem.getEngine()->registerTimer( graph.getName() + "/" + category
 							, result->getTimer() );
 						return result;
 					} );
@@ -415,7 +415,7 @@ namespace castor3d
 							.texcoordConfig( {} )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stagesY ) )
 							.build( pass, context, graph );
-						m_device.renderSystem.getEngine()->registerTimer( category
+						m_device.renderSystem.getEngine()->registerTimer( graph.getName() + "/" + category
 							, result->getTimer() );
 						return result;
 					} );

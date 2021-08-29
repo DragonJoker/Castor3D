@@ -188,7 +188,7 @@ namespace grayscale
 								, m_resultView );
 						} )
 					.build( pass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( "GrayScale"
+				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/GrayScale"
 					, result->getTimer() );
 				return result;
 			} );

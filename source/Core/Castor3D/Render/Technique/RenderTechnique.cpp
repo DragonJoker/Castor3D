@@ -747,7 +747,7 @@ namespace castor3d
 	crg::FramePass & RenderTechnique::doCreateDepthPass( ProgressBar * progress )
 	{
 		stepProgressBar( progress, "Creating depth pass" );
-		auto & result = m_renderTarget.getGraph().createPass( "DepthPass"
+		auto & result = m_renderTarget.getGraph().createPass( "Depth"
 			, [this, progress]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -760,7 +760,7 @@ namespace castor3d
 					, m_ssaoConfig
 					, SceneRenderPassDesc{ m_depth.getExtent(), m_matrixUbo, m_renderTarget.getCuller() }.safeBand( true ) );
 				m_depthPass = result.get();
-				getEngine()->registerTimer( m_renderTarget.getGraph().getName()
+				getEngine()->registerTimer( graph.getName() + "/Depth"
 					, result->getTimer() );
 				return result;
 			} );
@@ -777,7 +777,7 @@ namespace castor3d
 	crg::FramePass & RenderTechnique::doCreateComputeDepthRange( ProgressBar * progress )
 	{
 		stepProgressBar( progress, "Creating compute depth range pass" );
-		auto & result = m_renderTarget.getGraph().createPass( "ComputeDepthRange"
+		auto & result = m_renderTarget.getGraph().createPass( "DepthRange"
 			, [this, progress]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -787,7 +787,7 @@ namespace castor3d
 					, context
 					, graph
 					, m_device );
-				getEngine()->registerTimer( m_renderTarget.getGraph().getName()
+				getEngine()->registerTimer( graph.getName() + "/DepthRange"
 					, result->getTimer() );
 				return result;
 			} );
@@ -810,7 +810,7 @@ namespace castor3d
 #else
 		castor::String name = cuT( "Forward" );
 #endif
-		auto & result = m_renderTarget.getGraph().createPass( "OpaquePass"
+		auto & result = m_renderTarget.getGraph().createPass( "Opaque"
 			, [this, progress, name]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -833,7 +833,7 @@ namespace castor3d
 						.vctFirstBounce( m_voxelizer->getFirstBounce() )
 						.vctSecondaryBounce( m_voxelizer->getSecondaryBounce() ) );
 				m_opaquePass = result.get();
-				getEngine()->registerTimer( m_renderTarget.getGraph().getName()
+				getEngine()->registerTimer( graph.getName() + "/Opaque"
 					, result->getTimer() );
 				return result;
 			} );
@@ -860,7 +860,7 @@ namespace castor3d
 	crg::FramePass & RenderTechnique::doCreateTransparentPass( ProgressBar * progress )
 	{
 		stepProgressBar( progress, "Creating transparent pass" );
-		auto & result = m_renderTarget.getGraph().createPass( "TransparentPass"
+		auto & result = m_renderTarget.getGraph().createPass( "Transparent"
 			, [this, progress]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -892,7 +892,7 @@ namespace castor3d
 						.vctSecondaryBounce( m_voxelizer->getSecondaryBounce() )
 						.hasVelocity( true ) );
 				m_transparentPass = result.get();
-				getEngine()->registerTimer( m_renderTarget.getGraph().getName()
+				getEngine()->registerTimer( graph.getName() + "/Transparent"
 					, result->getTimer() );
 				return result;
 			} );

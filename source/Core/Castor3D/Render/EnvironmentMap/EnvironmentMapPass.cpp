@@ -20,6 +20,7 @@
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
 #include <RenderGraph/RunnablePasses/GenerateMipmaps.hpp>
+#include <RenderGraph/RunnableGraph.hpp>
 
 using namespace castor;
 
@@ -163,7 +164,7 @@ namespace castor3d
 					, getName() + cuT( "Opaque" )
 					, SceneRenderPassDesc{ getOwner()->getSize(), m_matrixUbo, *m_culler }
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
-				m_node->getScene()->getEngine()->registerTimer( "EnvironmentMap" + std::to_string( m_index )
+				m_node->getScene()->getEngine()->registerTimer( graph.getName() + "/EnvironmentMap" + std::to_string( m_index )
 					, result->getTimer() );
 				m_opaquePass = result.get();
 				return result;
@@ -190,7 +191,7 @@ namespace castor3d
 					, getName() + cuT( "Transparent" )
 					, SceneRenderPassDesc{ getOwner()->getSize(), m_matrixUbo, *m_culler, false }
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
-				m_node->getScene()->getEngine()->registerTimer( "EnvironmentMap" + std::to_string( m_index )
+				m_node->getScene()->getEngine()->registerTimer( graph.getName() + "/EnvironmentMap" + std::to_string( m_index )
 					, result->getTimer() );
 				m_transparentPass = result.get();
 				return result;
@@ -212,7 +213,7 @@ namespace castor3d
 					, context
 					, graph
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-				m_node->getScene()->getEngine()->registerTimer( "EnvironmentMap" + std::to_string( m_index )
+				m_node->getScene()->getEngine()->registerTimer( graph.getName() + "/EnvironmentMap" + std::to_string( m_index )
 					, result->getTimer() );
 				return result;
 			} );
