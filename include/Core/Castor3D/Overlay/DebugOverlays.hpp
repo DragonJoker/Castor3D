@@ -280,7 +280,8 @@ namespace castor3d
 			CategoryOverlays( CategoryOverlays const & ) = delete;
 			CategoryOverlays & operator=( CategoryOverlays const & ) = delete;
 			CategoryOverlays( CategoryOverlays && ) = default;
-			CategoryOverlays & operator=( CategoryOverlays && ) = delete;
+			CategoryOverlays & operator=( CategoryOverlays && ) = default;
+			CategoryOverlays();
 			CategoryOverlays( castor::String const & category
 				, OverlayCache & cache
 				, bool const & detailed );
@@ -308,8 +309,8 @@ namespace castor3d
 			}
 
 		private:
-			OverlayCache & m_cache;
-			bool const & m_detailed;
+			OverlayCache * m_cache{};
+			bool const * m_detailed{};
 			castor::String m_categoryName;
 			int m_posX{ 0 };
 			std::vector< PassOverlaysPtr > m_passes;
