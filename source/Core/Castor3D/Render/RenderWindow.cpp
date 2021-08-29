@@ -860,6 +860,18 @@ namespace castor3d
 		return m_picking->getPickedFace();
 	}
 
+	ShadowMapLightTypeArray RenderWindow::getShadowMaps()const
+	{
+		auto target = getRenderTarget();
+
+		if ( target )
+		{
+			return target->getShadowMaps();
+		}
+
+		return {};
+	}
+
 	void RenderWindow::enableLoading()
 	{
 		m_loading = getEngine()->isThreaded();

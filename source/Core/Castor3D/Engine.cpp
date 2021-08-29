@@ -436,6 +436,7 @@ namespace castor3d
 
 			if ( !techniqueQueues.queues.empty() )
 			{
+				techniqueQueues.shadowMaps = window.second->getShadowMaps();
 				updater.techniquesQueues.push_back( techniqueQueues );
 			}
 		}
