@@ -31,23 +31,13 @@ namespace castor3d
 		 */
 		GpuFunctorEvent( EventType type
 			, Functor functor )
-			: GpuFrameEvent( type )
-			, m_functor( functor )
+			: GpuFrameEvent{ type }
+			, m_functor{ functor }
 		{
 		}
 
-		~GpuFunctorEvent() = default;
-		/**
-		 *\~english
-		 *\brief		Applies the event.
-		 *\remarks		Executes the function.
-		 *\param[in]	device	The GPU device.
-		 *\~french
-		 *\brief		Traite l'évènement.
-		 *\remarks		Exécute la fonction.
-		 *\param[in]	device	Le device GPU.
-		 */
-		void apply( RenderDevice const & device
+	private:
+		void doApply( RenderDevice const & device
 			, QueueData const & queueData )override
 		{
 			m_functor( device, queueData );
@@ -66,10 +56,46 @@ namespace castor3d
 	 *\param[in]	type	Le type d'évènement
 	 *\param[in]	functor	Le foncteur à exécuter
 	 */
-	inline std::unique_ptr< GpuFunctorEvent > makeGpuFunctorEvent( EventType type
+	static GpuFrameEventUPtr makeGpuFunctorEvent( EventType type
 		, GpuFunctorEvent::Functor functor )
 	{
-		return std::make_unique< GpuFunctorEvent >( type, functor );
+		return castor::makeUniqueDerived< GpuFrameEvent, GpuFunctorEvent >( type, functor );
+	}
+	/**
+	 *\~english
+	 *\brief		Helper function to create a cleanup event
+	 *\param[in]	object	The object to cleanup
+	 *\~french
+	 *\brief		Fonction d'aide pour créer un évènement de nettoyage
+	 *\param[in]	object	L'objet à nettoyer
+	 */
+	template< typename T >
+	static GpuFrameEventUPtr makeGpuCleanupEvent( T & object )
+	{
+		return makeGpuFunctorEvent( EventType::ePreRender
+			, [&object]( RenderDevice const & device
+				, QueueData const & queueData )
+			{
+				object.cleanup( device );
+			} );
+	}
+	/**
+	 *\~english
+	 *\brief		Helper function to create an initialise event.
+	 *\param[in]	object	The object to initialise.
+	 *\~french
+	 *\brief		Fonction d'aide pour créer un éveènement d'initialisation.
+	 *\param[in]	object	L'objet à initialiser.
+	 */
+	template< typename T >
+	static GpuFrameEventUPtr makeGpuInitialiseEvent( T & object )
+	{
+		return makeGpuFunctorEvent( EventType::ePreRender
+			, [&object]( RenderDevice const & device
+				, QueueData const & queueData )
+			{
+				object.initialise( device );
+			} );
 	}
 }
 

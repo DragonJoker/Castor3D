@@ -8,7 +8,6 @@ set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 set( ${PROJECT_NAME}_HDR_FILES
 	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/CastorViewer.hpp
-	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/KeyboardEvent.hpp
 	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/MainFrame.hpp
 	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/MouseNodeEvent.hpp
 	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/RenderPanel.hpp
@@ -17,7 +16,6 @@ set( ${PROJECT_NAME}_HDR_FILES
 )
 set( ${PROJECT_NAME}_SRC_FILES
 	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/CastorViewer.cpp
-	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/KeyboardEvent.cpp
 	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/MainFrame.cpp
 	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/MouseNodeEvent.cpp
 	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/RenderPanel.cpp

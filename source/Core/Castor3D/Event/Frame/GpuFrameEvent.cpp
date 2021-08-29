@@ -7,7 +7,7 @@ using namespace castor;
 namespace castor3d
 {
 	GpuFrameEvent::GpuFrameEvent( EventType type )
-		: m_type( type )
+		: m_type{ type }
 	{
 #if !defined( NDEBUG )
 

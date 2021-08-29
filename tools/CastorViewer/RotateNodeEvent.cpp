@@ -14,11 +14,7 @@ namespace CastorViewer
 	{
 	}
 
-	RotateNodeEvent::~RotateNodeEvent()
-	{
-	}
-
-	void RotateNodeEvent::apply()
+	void RotateNodeEvent::doApply()
 	{
 		SceneNodeSPtr node = m_node.lock();
 

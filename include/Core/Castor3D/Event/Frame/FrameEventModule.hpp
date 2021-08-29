@@ -106,11 +106,9 @@ namespace castor3d
 	*/
 	class GpuFunctorEvent;
 
-	CU_DeclareSmartPtr( CpuFrameEvent );
-	CU_DeclareSmartPtr( FrameListener );
-	CU_DeclareSmartPtr( GpuFrameEvent );
-	CU_DeclareSmartPtr( CpuFunctorEvent );
-	CU_DeclareSmartPtr( GpuFunctorEvent );
+	CU_DeclareCUSmartPtr( castor3d, CpuFrameEvent, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, FrameListener, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, GpuFrameEvent, C3D_API );
 
 	CU_DeclareVector( CpuFrameEventUPtr, CpuFrameEventPtr );
 	CU_DeclareVector( GpuFrameEventUPtr, GpuFrameEventPtr );

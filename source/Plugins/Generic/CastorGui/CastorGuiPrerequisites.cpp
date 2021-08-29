@@ -2,7 +2,6 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
-#include <Castor3D/Event/Frame/InitialiseEvent.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/Pass.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
