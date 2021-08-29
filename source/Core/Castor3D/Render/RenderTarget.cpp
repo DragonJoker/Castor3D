@@ -651,6 +651,16 @@ namespace castor3d
 		return getCamera()->getHdrConfig();
 	}
 
+	ShadowMapLightTypeArray RenderTarget::getShadowMaps()const
+	{
+		if ( m_renderTechnique )
+		{
+			return m_renderTechnique->getShadowMaps();
+		}
+
+		return {};
+	}
+
 	void RenderTarget::setExposure( float value )
 	{
 		getCamera()->setExposure( value );
