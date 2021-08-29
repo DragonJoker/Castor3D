@@ -294,7 +294,7 @@ namespace draw_edges
 								, m_resultView );
 						} )
 					.build( pass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( "Draw Edges"
+				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/Draw Edges"
 					, result->getTimer() );
 				return result;
 			} );

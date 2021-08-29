@@ -229,7 +229,7 @@ namespace draw_edges
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.depthStencilState( dsState )
 					.build( pass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( "Draw Edges"
+				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/Draw Edges"
 					, result->getTimer() );
 				return result;
 			} ) }

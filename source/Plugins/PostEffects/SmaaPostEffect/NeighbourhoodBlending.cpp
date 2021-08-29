@@ -276,7 +276,7 @@ namespace smaa
 					.passIndex( &config.subsampleIndex )
 					.enabled( enabled )
 					.build( pass, context, graph, config.maxSubsampleIndices );
-				device.renderSystem.getEngine()->registerTimer( "SMAA"
+				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/SMAA"
 					, result->getTimer() );
 				return result;
 			} ) }

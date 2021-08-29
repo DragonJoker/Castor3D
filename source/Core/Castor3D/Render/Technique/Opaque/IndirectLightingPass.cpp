@@ -333,7 +333,7 @@ namespace castor3d
 	{
 		stepProgressBar( progress, "Creating indirect light pass" );
 		auto & engine = *m_device.renderSystem.getEngine();
-		auto & pass = graph.createPass( "IndirectLightPass"
+		auto & pass = graph.createPass( "IndirectLighting"
 			, [this, progress, &engine]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -344,7 +344,7 @@ namespace castor3d
 					.programs( convertPrograms( m_programs ) )
 					.passIndex( &m_programIndex )
 					.build( pass, context, graph, uint32_t( m_programs.size() ) );
-				engine.registerTimer( "Opaque"
+				engine.registerTimer( graph.getName() + "/IndirectLighting"
 					, result->getTimer() );
 				return result;
 			} );
