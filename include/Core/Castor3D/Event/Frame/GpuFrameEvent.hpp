@@ -7,6 +7,8 @@ See LICENSE file in root folder
 #include "FrameEventModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 
+#include <atomic>
+
 namespace castor3d
 {
 	class GpuFrameEvent
@@ -42,23 +44,44 @@ namespace castor3d
 		 *\remarks		doit être implémentée dans les classes filles.
 		 *\param[in]	device	Le device GPU.
 		 */
-		C3D_API virtual void apply( RenderDevice const & device
-			, QueueData const & queueData ) = 0;
+		void apply( RenderDevice const & device
+			, QueueData const & queueData )
+		{
+			if ( m_skip )
+			{
+				return;
+			}
+
+			doApply( device, queueData );
+		}
 		/**
 		 *\~english
 		 *\return		The event type.
 		 *\~french
 		 *\return		Le type de l'évènement.
 		 */
-		EventType getType()
+		EventType getType()const
 		{
 			return m_type;
 		}
+		/**
+		 *\~english
+		 *\brief		Sets the event to be skipped.
+		 *\~french
+		 *\return		Définit que l'évènement doit être ignoré.
+		 */
+		void skip()
+		{
+			m_skip = true;
+		}
 
-	protected:
-		//!\~english	The event type.
-		//!\~french		Le type d'évènement.
+	private:
+		C3D_API virtual void doApply( RenderDevice const & device
+			, QueueData const & queueData ) = 0;
+
+	private:
 		EventType m_type;
+		std::atomic_bool m_skip{ false };
 
 #if !defined( NDEBUG )
 
@@ -68,6 +91,12 @@ namespace castor3d
 
 #endif
 	};
+
+	template< typename EventT, typename ... ParamsT >
+	GpuFrameEventUPtr makeGpuFrameEvent( ParamsT && ... params )
+	{
+		return castor::makeUniqueDerived< GpuFrameEvent, EventT >( std::forward< ParamsT >( params )... );
+	}
 }
 
 #endif

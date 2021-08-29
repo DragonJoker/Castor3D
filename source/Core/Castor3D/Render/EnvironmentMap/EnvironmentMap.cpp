@@ -215,8 +215,8 @@ namespace castor3d
 
 	void EnvironmentMap::cleanup()
 	{
-		m_passes.clear();
 		m_runnables.clear();
+		m_passes.clear();
 		m_graphs.clear();
 		m_sortedNodes.clear();
 		m_reflectionNodes.clear();
@@ -403,12 +403,6 @@ namespace castor3d
 			, index
 			, *m_scene.getBackground() ) );
 		m_runnables.emplace_back( graph.compile( m_device.makeContext() ) );
-		auto runnable = m_runnables[index].get();
-		m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [runnable]( RenderDevice const & device
-				, QueueData const & queueData )
-			{
-				runnable->record();
-			} ) );
+		m_runnables.back()->record();
 	}
 }

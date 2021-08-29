@@ -8,7 +8,7 @@
 #include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
-#include "Castor3D/Event/Frame/InitialiseEvent.hpp"
+#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
@@ -380,14 +380,18 @@ namespace castor3d
 		return m_renderSystem != nullptr;
 	}
 
-	void Engine::postEvent( CpuFrameEventUPtr event )
+	CpuFrameEvent * Engine::postEvent( CpuFrameEventUPtr event )
 	{
+		CpuFrameEvent * result = nullptr;
 		FrameListenerSPtr listener = m_defaultListener.lock();
 
 		if ( listener )
 		{
+			result = event.get();
 			listener->postEvent( std::move( event ) );
 		}
+
+		return result;
 	}
 
 	void Engine::sendEvent( GpuFrameEventUPtr event )
@@ -397,14 +401,18 @@ namespace castor3d
 		event->apply( device, *data );
 	}
 
-	void Engine::postEvent( GpuFrameEventUPtr event )
+	GpuFrameEvent * Engine::postEvent( GpuFrameEventUPtr event )
 	{
+		GpuFrameEvent * result = nullptr;
 		FrameListenerSPtr listener = m_defaultListener.lock();
 
 		if ( listener )
 		{
+			result = event.get();
 			listener->postEvent( std::move( event ) );
 		}
+
+		return result;
 	}
 
 	bool Engine::fireMouseMove( castor::Position const & position )

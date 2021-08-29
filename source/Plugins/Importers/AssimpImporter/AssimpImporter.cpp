@@ -7,7 +7,6 @@
 #include <Castor3D/Cache/ObjectCache.hpp>
 #include <Castor3D/Cache/PluginCache.hpp>
 #include <Castor3D/Cache/CacheView.hpp>
-#include <Castor3D/Event/Frame/InitialiseEvent.hpp>
 #include <Castor3D/Material/Pass/PassFactory.hpp>
 #include <Castor3D/Material/Pass/PassVisitor.hpp>
 #include <Castor3D/Model/Mesh/Animation/MeshAnimation.hpp>

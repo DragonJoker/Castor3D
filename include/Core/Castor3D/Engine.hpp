@@ -124,7 +124,7 @@ namespace castor3d
 		 *\brief		Ajoute un évènement de frame au frame listener par défaut
 		 *\param[in]	event	L'évènement
 		 */
-		C3D_API void postEvent( CpuFrameEventUPtr event );
+		C3D_API CpuFrameEvent * postEvent( CpuFrameEventUPtr event );
 		/**
 		 *\~english
 		 *\brief		If a device is enabled, executes the given event, if not posts it to the default frame listener.
@@ -142,7 +142,7 @@ namespace castor3d
 		 *\brief		Ajoute un évènement de frame au frame listener par défaut
 		 *\param[in]	event	L'évènement
 		 */
-		C3D_API void postEvent( GpuFrameEventUPtr event );
+		C3D_API GpuFrameEvent * postEvent( GpuFrameEventUPtr event );
 		/**
 		 *\~english
 		 *\~brief		Fires a mouse move event.
