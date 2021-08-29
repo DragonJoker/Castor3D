@@ -252,11 +252,15 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	DebugOverlays::CategoryOverlays::CategoryOverlays()
+	{
+	}
+
 	DebugOverlays::CategoryOverlays::CategoryOverlays( castor::String const & category
 		, OverlayCache & cache
 		, bool const & detailed )
-		: m_cache{ cache }
-		, m_detailed{ detailed }
+		: m_cache{ &cache }
+		, m_detailed{ &detailed }
 		, m_categoryName{ category }
 	{
 		auto baseName = cuT( "RenderPassOverlays-" ) + m_categoryName;
@@ -341,6 +345,11 @@ namespace castor3d
 
 	void DebugOverlays::CategoryOverlays::initialise( uint32_t offset )
 	{
+		if ( !m_container )
+		{
+			return;
+		}
+
 		m_container->setPixelPosition( castor::Position{ 330, int32_t( 20 * offset ) } );
 		m_container->setPixelSize( castor::Size{ uint32_t( m_posX )
 			, ( m_detailed ? getPanelCount() : 1u ) * 20u } );
@@ -352,13 +361,13 @@ namespace castor3d
 
 		if ( m_cpu.name )
 		{
-			m_cache.remove( m_cpu.name->getOverlayName() );
-			m_cache.remove( m_gpu.name->getOverlayName() );
-			m_cache.remove( m_gpu.value->getOverlayName() );
-			m_cache.remove( m_cpu.value->getOverlayName() );
-			m_cache.remove( m_name->getOverlayName() );
-			m_cache.remove( m_firstLinePanel->getOverlayName() );
-			m_cache.remove( m_container->getOverlayName() );
+			m_cache->remove( m_cpu.name->getOverlayName() );
+			m_cache->remove( m_gpu.name->getOverlayName() );
+			m_cache->remove( m_gpu.value->getOverlayName() );
+			m_cache->remove( m_cpu.value->getOverlayName() );
+			m_cache->remove( m_name->getOverlayName() );
+			m_cache->remove( m_firstLinePanel->getOverlayName() );
+			m_cache->remove( m_container->getOverlayName() );
 		}
 	}
 
@@ -374,7 +383,7 @@ namespace castor3d
 		if ( it == m_passes.end() )
 		{
 			auto index = uint32_t( m_passes.size() );
-			m_passes.emplace_back( std::make_unique< PassOverlays >( m_cache
+			m_passes.emplace_back( std::make_unique< PassOverlays >( *m_cache
 				, m_container->getOverlay().shared_from_this()
 				, m_categoryName
 				, timer.getName()
@@ -498,12 +507,12 @@ namespace castor3d
 		, FramePassTimer & timer )
 	{
 		auto & cache = getEngine()->getOverlayCache();
-		auto it = m_renderPasses.find( category );
+		auto ires = m_renderPasses.emplace( category, CategoryOverlays{} );
+		auto it = ires.first;
 
-		if ( it == m_renderPasses.end() )
+		if ( ires.second )
 		{
-			it = m_renderPasses.emplace( category
-				, CategoryOverlays{ category, cache, m_detailed } ).first;
+			it->second = CategoryOverlays{ category, cache, m_detailed };
 			it->second.setVisible( m_visible );
 		}
 
