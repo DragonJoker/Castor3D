@@ -201,6 +201,7 @@ namespace castor3d
 		/**@{*/
 		C3D_API HdrConfig const & getHdrConfig()const;
 		C3D_API HdrConfig & getHdrConfig();
+		C3D_API ShadowMapLightTypeArray getShadowMaps()const;
 
 		SsaoConfig const & getSsaoConfig()const
 		{
