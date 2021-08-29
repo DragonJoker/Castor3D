@@ -105,6 +105,7 @@ namespace castor3d
 			else if ( material )
 			{
 				oldMaterial = submesh.getDefaultMaterial();
+				CU_Require( &submesh.getParent() == mesh.get() );
 				m_submeshesMaterials.emplace( &submesh, material );
 				changed = true;
 			}
@@ -211,6 +212,7 @@ namespace castor3d
 
 			for ( auto submesh : *mesh )
 			{
+				CU_Require( &submesh->getParent() == mesh.get() );
 				m_submeshesMaterials.emplace( submesh.get(), submesh->getDefaultMaterial() );
 				m_submeshesBoxes.emplace( submesh.get(), submesh->getBoundingBox() );
 				m_submeshesSpheres.emplace( submesh.get(), submesh->getBoundingSphere() );
