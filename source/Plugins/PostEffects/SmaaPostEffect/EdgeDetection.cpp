@@ -136,7 +136,7 @@ namespace smaa
 					.depthStencilState( dsState )
 					.enabled( enabled )
 					.build( pass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( "SMAA"
+				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/SMAA"
 					, result->getTimer() );
 				return result;
 			} ) }

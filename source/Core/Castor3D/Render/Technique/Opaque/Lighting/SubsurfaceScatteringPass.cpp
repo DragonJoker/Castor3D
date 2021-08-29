@@ -387,7 +387,7 @@ namespace castor3d
 						, graph
 						, 1u
 						, createConfig( m_size, m_blurXShader, &m_enabled ) );
-					getEngine()->registerTimer( "SSS"
+					getEngine()->registerTimer( graph.getName() + "/SSS"
 						, result->getTimer() );
 					return result;
 				} );
@@ -423,7 +423,7 @@ namespace castor3d
 						, graph
 						, 1u
 						, createConfig( m_size, m_blurYShader, &m_enabled ) );
-					getEngine()->registerTimer( "SSS"
+					getEngine()->registerTimer( graph.getName() + "/SSS"
 						, result->getTimer() );
 					return result;
 				} );
@@ -513,7 +513,7 @@ namespace castor3d
 					, graph
 					, 1u
 					, config );
-				getEngine()->registerTimer( "SSS"
+				getEngine()->registerTimer( graph.getName() + "/SSS"
 					, result->getTimer() );
 				return result;
 			} );

@@ -306,7 +306,7 @@ namespace castor3d
 					.renderSize( m_size )
 					.enabled( &m_ssaoConfig.enabled )
 					.build( pass, context, graph, 1u );
-				m_device.renderSystem.getEngine()->registerTimer( "SSAO"
+				m_device.renderSystem.getEngine()->registerTimer( graph.getName() + "/SSAO"
 					, result->getTimer() );
 				return result;
 			} );
@@ -358,7 +358,7 @@ namespace castor3d
 						.renderSize( size )
 						.enabled( &m_ssaoConfig.enabled )
 						.build( pass, context, graph, 1u );
-					m_device.renderSystem.getEngine()->registerTimer( "SSAO"
+					m_device.renderSystem.getEngine()->registerTimer( graph.getName() + "/SSAO"
 						, result->getTimer() );
 					return result;
 				} );

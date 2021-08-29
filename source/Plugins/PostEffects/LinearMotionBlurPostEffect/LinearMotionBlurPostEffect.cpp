@@ -210,7 +210,7 @@ namespace motion_blur
 								, m_resultView );
 						} )
 					.build( pass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( "LinearMotionBlur"
+				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/LinearMotionBlur"
 					, result->getTimer() );
 				return result;
 			} );

@@ -179,7 +179,7 @@ namespace castor3d
 					, device.renderSystem.getEngine()->getLpvGridSize()
 					, rsmSize );
 				lightInjectionPasses.push_back( result.get() );
-				device.renderSystem.getEngine()->registerTimer( "LPV"
+				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/LPV"
 					, result->getTimer() );
 				return result;
 			} );
@@ -234,7 +234,7 @@ namespace castor3d
 					, device.renderSystem.getEngine()->getLpvGridSize()
 					, rsmSize );
 				lightInjectionPasses.push_back( result.get() );
-				device.renderSystem.getEngine()->registerTimer( "LPV"
+				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/LPV"
 					, result->getTimer() );
 				return result;
 			} );
@@ -335,7 +335,7 @@ namespace castor3d
 					, device.renderSystem.getEngine()->getLpvGridSize()
 					, rsmSize );
 				geometryInjectionPasses.push_back( result.get() );
-				device.renderSystem.getEngine()->registerTimer( "LPV"
+				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/LPV"
 					, result->getTimer() );
 				return result;
 			} );
@@ -385,7 +385,7 @@ namespace castor3d
 					, device.renderSystem.getEngine()->getLpvGridSize()
 					, rsmSize );
 				geometryInjectionPasses.push_back( result.get() );
-				device.renderSystem.getEngine()->registerTimer( "LPV"
+				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/LPV"
 					, result->getTimer() );
 				return result;
 			} );
@@ -752,7 +752,7 @@ namespace castor3d
 					, m_scene.getLpvGridSize()
 					, ( index == 0u ? BlendMode::eNoBlend : BlendMode::eAdditive ) );
 				m_lightPropagationPasses.push_back( result.get() );
-				m_device.renderSystem.getEngine()->registerTimer( "LPV"
+				m_device.renderSystem.getEngine()->registerTimer( graph.getName() + "/LPV"
 					, result->getTimer() );
 				return result;
 			} );

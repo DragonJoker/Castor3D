@@ -281,7 +281,7 @@ namespace fxaa
 								, m_resultView );
 						} )
 					.build( pass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( "FXAA"
+				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/FXAA"
 					, result->getTimer() );
 				return result;
 			} );

@@ -221,7 +221,7 @@ namespace castor3d
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.build( pass, context, graph );
-				m_device.renderSystem.getEngine()->registerTimer( m_graph.getName()
+				m_device.renderSystem.getEngine()->registerTimer( m_graph.getName() + "/Transparent"
 					, result->getTimer() );
 				return result;
 			} );

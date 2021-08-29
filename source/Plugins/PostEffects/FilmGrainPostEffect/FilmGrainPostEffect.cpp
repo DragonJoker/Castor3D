@@ -355,7 +355,7 @@ namespace film_grain
 								, m_resultView );
 						} )
 					.build( pass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( "FilmGrain"
+				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/FilmGrain"
 					, result->getTimer() );
 				return result;
 			} );

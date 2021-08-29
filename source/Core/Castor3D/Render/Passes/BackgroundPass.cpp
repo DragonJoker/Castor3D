@@ -429,9 +429,8 @@ namespace castor3d
 	{
 		stepProgressBar( progress, "Creating background pass" );
 		auto size = makeExtent2D( getExtent( colour ) );
-		auto graphName = graph.getName();
 		auto & result = graph.createPass( name + "Background"
-			, [this, &background, graphName, size]( crg::FramePass const & pass
+			, [this, &background, progress, size]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -444,7 +443,7 @@ namespace castor3d
 					, size
 					, true );
 				m_backgroundPass = result.get();
-				m_device.renderSystem.getEngine()->registerTimer( graphName
+				m_device.renderSystem.getEngine()->registerTimer( graph.getName() + "/Background"
 					, result->getTimer() );
 				return result;
 			} );
