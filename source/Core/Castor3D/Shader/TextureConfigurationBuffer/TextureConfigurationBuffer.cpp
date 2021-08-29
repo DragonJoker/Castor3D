@@ -132,27 +132,29 @@ namespace castor3d
 
 	uint32_t TextureConfigurationBuffer::addTextureConfiguration( TextureUnit & unit )
 	{
-		CU_Require( unit.getId() == 0u );
-		CU_Require( m_configurations.size() < m_configMaxCount - 1u );
-		auto & config = unit.getConfiguration();
-		auto it = unit.hasAnimation()
-			? m_configurations.end()
-			: std::find( m_configurations.begin()
-				, m_configurations.end()
-				, config );
-
-		if ( it == m_configurations.end() )
+		if ( unit.getId() == 0u )
 		{
-			m_configurations.push_back( config );
-			it = m_configurations.begin() + ( m_configurations.size() - 1u );
-		}
+			CU_Require( m_configurations.size() < m_configMaxCount - 1u );
+			auto & config = unit.getConfiguration();
+			auto it = unit.hasAnimation()
+				? m_configurations.end()
+				: std::find( m_configurations.begin()
+					, m_configurations.end()
+					, config );
 
-		unit.setId( uint32_t( std::distance( m_configurations.begin(), it ) ) + 1u );
-		m_connections.emplace_back( unit.onChanged.connect( [this]( TextureUnit const & unit )
-		{
+			if ( it == m_configurations.end() )
+			{
+				m_configurations.push_back( config );
+				it = m_configurations.begin() + ( m_configurations.size() - 1u );
+			}
+
+			unit.setId( uint32_t( std::distance( m_configurations.begin(), it ) ) + 1u );
+			m_connections.emplace_back( unit.onChanged.connect( [this]( TextureUnit const & unit )
+				{
+					m_dirty.emplace_back( &unit );
+				} ) );
 			m_dirty.emplace_back( &unit );
-		} ) );
-		m_dirty.emplace_back( &unit );
+		}
 		return unit.getId();
 	}
 

@@ -1013,6 +1013,7 @@ namespace castor3d::shader
 			{
 				auto i = textureIt.first;
 				auto name = castor::string::stringCast< char >( castor::string::toString( i ) );
+				CU_Require( textureIt.second.id > 0u );
 				auto config = m_writer.declLocale( "c3d_config" + name
 					, textureConfigs.getTextureConfiguration( sdw::UInt( textureIt.second.id ) ) );
 				auto texCoord = m_writer.declLocale( "c3d_texCoord" + name
@@ -1045,6 +1046,7 @@ namespace castor3d::shader
 		if ( it != flags.end() )
 		{
 			auto i = it->first;
+			CU_Require( it->second.id > 0u );
 			auto config = m_writer.declLocale( "c3d_opacityMapConfig"
 				, textureConfigs.getTextureConfiguration(  sdw::UInt( it->second.id ) ) );
 			auto texCoord = m_writer.declLocale( "c3d_texCoordOpacity"
@@ -1074,6 +1076,7 @@ namespace castor3d::shader
 			{
 				auto i = textureIt.first;
 				auto name = castor::string::stringCast< char >( castor::string::toString( i ) );
+				CU_Require( textureIt.second.id > 0u );
 				auto config = m_writer.declLocale( "c3d_configGeom" + name
 					, textureConfigs.getTextureConfiguration( m_writer.cast<  sdw::UInt >( textureIt.second.id ) ) );
 				doComputeGeometryMapContribution( textureIt.second.flags
