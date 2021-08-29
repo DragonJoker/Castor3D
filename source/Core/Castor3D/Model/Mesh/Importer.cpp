@@ -3,7 +3,7 @@
 #include "Castor3D/Engine.hpp"
 
 #include "Castor3D/Event/Frame/FrameListener.hpp"
-#include "Castor3D/Event/Frame/InitialiseEvent.hpp"
+#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"

@@ -11,7 +11,7 @@
 #include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Cache/ShaderCache.hpp"
 #include "Castor3D/Cache/TargetCache.hpp"
-#include "Castor3D/Event/Frame/InitialiseEvent.hpp"
+#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"

@@ -6,7 +6,7 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 
 #include "Castor3D/Event/Frame/FrameListener.hpp"
-#include "Castor3D/Event/Frame/InitialiseEvent.hpp"
+#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
 using namespace castor;

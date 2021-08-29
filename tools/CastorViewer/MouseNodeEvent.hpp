@@ -16,7 +16,6 @@ namespace CastorViewer
 	{
 	public:
 		MouseNodeEvent( castor3d::SceneNodeSPtr p_node, float p_dx, float p_dy, float p_dz );
-		virtual ~MouseNodeEvent();
 
 	protected:
 		castor3d::SceneNodeWPtr m_node;

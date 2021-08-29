@@ -1,7 +1,6 @@
 #include "PlyImporter/PlyImporter.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Event/Frame/InitialiseEvent.hpp>
 #include <Castor3D/Cache/Cache.hpp>
 #include <Castor3D/Cache/CacheView.hpp>
 #include <Castor3D/Cache/GeometryCache.hpp>

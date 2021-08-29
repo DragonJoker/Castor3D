@@ -39,22 +39,42 @@ namespace castor3d
 		 *\brief		Traite l'évènement.
 		 *\remarks		doit être implémentée dans les classes filles.
 		 */
-		C3D_API virtual void apply() = 0;
+		void apply()
+		{
+			if ( m_skip )
+			{
+				return;
+			}
+
+			doApply();
+		}
 		/**
 		 *\~english
 		 *\return		The event type.
 		 *\~french
 		 *\return		Le type de l'évènement.
 		 */
-		EventType getType()
+		EventType getType()const
 		{
 			return m_type;
 		}
+		/**
+		 *\~english
+		 *\brief		Sets the event to be skipped.
+		 *\~french
+		 *\return		Définit que l'évènement doit être ignoré.
+		 */
+		void skip()
+		{
+			m_skip = true;
+		}
 
-	protected:
-		//!\~english	The event type.
-		//!\~french		Le type d'évènement.
+	private:
+		C3D_API virtual void doApply() = 0;
+
+	private:
 		EventType m_type;
+		std::atomic_bool m_skip{ false };
 
 #if !defined( NDEBUG )
 
@@ -64,6 +84,12 @@ namespace castor3d
 
 #endif
 	};
+
+	template< typename EventT, typename ... ParamsT >
+	CpuFrameEventUPtr makeCpuFrameEvent( ParamsT && ... params )
+	{
+		return castor::makeUniqueDerived< CpuFrameEvent, EventT >( std::forward< ParamsT >( params )... );
+	}
 }
 
 #endif

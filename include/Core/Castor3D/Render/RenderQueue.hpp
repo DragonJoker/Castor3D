@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderQueue_H___
 #define ___C3D_RenderQueue_H___
 
+#include "Castor3D/Event/Frame/FrameEventModule.hpp"
 #include "Castor3D/Render/Node/RenderNodeModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 
