@@ -15,10 +15,10 @@
 
 #include <ashespp/Command/CommandBufferInheritanceInfo.hpp>
 
-using namespace castor;
-
 using ashes::operator==;
 using ashes::operator!=;
+
+CU_ImplementCUSmartPtr( castor3d, RenderQueue )
 
 namespace castor3d
 {
@@ -41,26 +41,33 @@ namespace castor3d
 
 	RenderQueue::~RenderQueue()
 	{
+		{
+			auto lock( castor::makeUniqueLock( m_eventMutex ) );
+
+			if ( m_initEvent )
+			{
+				m_initEvent->skip();
+			}
+		}
 	}
 
 	void RenderQueue::initialise()
 	{
-		getOwner()->getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+		if ( auto event = getOwner()->getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
 			, [this]( RenderDevice const & device
 				, QueueData const & queueData )
 			{
-				CU_Require( !m_commandBuffer );
-				m_commandBuffer = queueData.commandPool->createCommandBuffer( getOwner()->getName()
-					, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
-				m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
-					, makeVkType< VkCommandBufferInheritanceInfo >( VkRenderPass( getOwner()->getRenderPass() )
-						, 0u
-						, VkFramebuffer( VK_NULL_HANDLE )
-						, VkBool32( VK_FALSE )
-						, 0u
-						, 0u ) );
-				m_commandBuffer->end();
-			} ) );
+				auto lock( castor::makeUniqueLock( m_eventMutex ) );
+
+				if ( m_initEvent )
+				{
+					doInitialise( queueData );
+				}
+			} ) ) )
+		{
+			auto lock( castor::makeUniqueLock( m_eventMutex ) );
+			m_initEvent = event;
+		}
 	}
 
 	void RenderQueue::cleanup()
@@ -93,26 +100,7 @@ namespace castor3d
 
 		if ( commandBuffersChanged )
 		{
-			// Force regeneration of CommandBuffers if running.
-			m_preparation = ( m_preparation == Preparation::eWaiting )
-				? Preparation::eWaiting
-				: Preparation::eDone;
-		}
-
-		if ( commandBuffersChanged
-			&& m_preparation == Preparation::eDone )
-		{
-			m_preparation = Preparation::eWaiting;
-			getOwner()->getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [this]( RenderDevice const & device
-					, QueueData const & queueData )
-				{
-					m_preparation = Preparation::eRunning;
-					doPrepareCommandBuffer();
-					m_preparation = ( m_preparation == Preparation::eWaiting )
-						? Preparation::eWaiting
-						: Preparation::eDone;
-				} ) );
+			doPrepareCommandBuffer();
 		}
 	}
 
@@ -150,6 +138,45 @@ namespace castor3d
 		return getOwner()->getRenderMode();
 	}
 
+	ashes::CommandBuffer const & RenderQueue::initCommandBuffer()
+	{
+		if ( hasCommandBuffer() )
+		{
+			return getCommandBuffer();
+		}
+
+		{
+			auto lock( castor::makeUniqueLock( m_eventMutex ) );
+
+			if ( m_initEvent )
+			{
+				m_initEvent->skip();
+				m_initEvent = nullptr;
+
+				auto & device = getOwner()->getEngine()->getRenderSystem()->getRenderDevice();
+				auto queueData = device.graphicsData();
+				doInitialise( *queueData );
+			}
+		}
+
+		return getCommandBuffer();
+	}
+
+	void RenderQueue::doInitialise( QueueData const & queueData )
+	{
+		CU_Require( !m_commandBuffer );
+		m_commandBuffer = queueData.commandPool->createCommandBuffer( getOwner()->getName()
+			, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
+		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
+			, makeVkType< VkCommandBufferInheritanceInfo >( VkRenderPass( getOwner()->getRenderPass() )
+				, 0u
+				, VkFramebuffer( VK_NULL_HANDLE )
+				, VkBool32( VK_FALSE )
+				, 0u
+				, 0u ) );
+		m_commandBuffer->end();
+	}
+
 	void RenderQueue::doPrepareCommandBuffer()
 	{
 		getOwner()->resetCommandBuffer();
@@ -177,6 +204,6 @@ namespace castor3d
 	void RenderQueue::doOnCullerCompute( SceneCuller const & culler )
 	{
 		m_allChanged = m_allChanged || culler.areAllChanged();
-		m_culledChanged = m_allChanged || culler.areCulledChanged();
+		m_culledChanged = m_culledChanged || culler.areCulledChanged();
 	}
 }

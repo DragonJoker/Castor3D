@@ -14,6 +14,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Graphics/Size.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
+#include <CastorUtils/Multithreading/SpinMutex.hpp>
 
 #include <ashespp/Descriptor/DescriptorSetPool.hpp>
 #include <ashespp/Image/Image.hpp>

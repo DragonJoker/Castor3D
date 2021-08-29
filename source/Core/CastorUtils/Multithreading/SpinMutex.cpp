@@ -3,6 +3,10 @@ See LICENSE file in root folder
 */
 #include "CastorUtils/Multithreading/SpinMutex.hpp"
 
+#if defined( CU_CompilerMSVC )
+#	include <Windows.h>
+#endif
+
 namespace castor
 {
 	void SpinMutex::lock()noexcept

@@ -194,12 +194,12 @@ namespace castor3d
 	bool PickingPass::updateNodes( VkRect2D const & scissor )
 	{
 		ShadowMapLightTypeArray shadowMaps;
-		m_renderQueue.update( shadowMaps, scissor );
-		bool result = m_renderQueue.getCulledRenderNodes().hasNodes();
+		m_renderQueue->update( shadowMaps, scissor );
+		bool result = m_renderQueue->getCulledRenderNodes().hasNodes();
 
 		if ( result )
 		{
-			doUpdateNodes( m_renderQueue.getCulledRenderNodes() );
+			doUpdateNodes( m_renderQueue->getCulledRenderNodes() );
 		}
 
 		return result;
@@ -207,7 +207,7 @@ namespace castor3d
 
 	QueueCulledRenderNodes const & PickingPass::getCulledRenderNodes()const
 	{
-		return m_renderQueue.getCulledRenderNodes();
+		return m_renderQueue->getCulledRenderNodes();
 	}
 
 	TextureFlags PickingPass::getTexturesMask()const
