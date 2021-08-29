@@ -47,9 +47,10 @@ namespace castor3d
 				, makeType( writer.getTypesCache() ) );
 		}
 
-		sdw::Vec4 PickingData::getIndex( sdw::UInt const & instance )const
+		sdw::Vec4 PickingData::getIndex( sdw::UInt const & instance
+			, sdw::Int const & primitive )const
 		{
-			return vec4( m_drawIndex, m_nodeIndex, instance, 0.0_f );
+			return vec4( m_drawIndex, m_nodeIndex, instance, primitive );
 		}
 	}
 

@@ -26,7 +26,8 @@ namespace castor3d
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
-			C3D_API sdw::Vec4 getIndex( sdw::UInt const & instance )const;
+			C3D_API sdw::Vec4 getIndex( sdw::UInt const & instance
+				, sdw::Int const & primitive )const;
 
 		private:
 			using sdw::StructInstance::getMember;
