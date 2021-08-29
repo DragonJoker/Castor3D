@@ -295,7 +295,7 @@ namespace castor3d
 		, m_ssaoConfig{ ssaoConfig }
 		, m_colour{ device
 			, getOwner()->getGraphResourceHandler()
-			, "TechCol"
+			, getName() + "TechCol"
 			, 0u
 			, makeExtent3D( m_rawSize )
 			, 1u
@@ -311,7 +311,7 @@ namespace castor3d
 			, m_colour.imageId ) }
 		, m_depth{ device
 			, getOwner()->getGraphResourceHandler()
-			, "TechDpt"
+			, getName() + "TechDpt"
 			, 0u
 			, m_colour.getExtent()
 			, 1u
@@ -328,7 +328,7 @@ namespace castor3d
 			, m_depth.imageId ) }
 		, m_depthObj{ device
 			, getOwner()->getGraphResourceHandler()
-			, "TechData0"
+			, getName() + "TechData0"
 			, 0u
 			, m_colour.getExtent()
 			, 1u
@@ -338,7 +338,7 @@ namespace castor3d
 			, getBorderColor( DsTexture::eData0 ) }
 		, m_normal{device
 			, getOwner()->getGraphResourceHandler()
-			, "TechData1"
+			, getName() + "TechData1"
 			, 0u
 			, m_colour.getExtent()
 			, 1u
@@ -554,9 +554,23 @@ namespace castor3d
 			m_ssao->update( updater );
 		}
 
+		doUpdateShadowMaps( updater );
+		doUpdateLpv( updater );
+		doUpdateParticles( updater );
+
+		if ( m_renderTarget.getTargetType() == TargetType::eWindow )
+		{
+			scene.getEnvironmentMap().update( updater );
+		}
+
+		updater.camera = &camera;
 		m_depthPass->update( updater );
 		m_backgroundRenderer->update( updater );
-		m_voxelizer->update( updater );
+
+		if ( updater.voxelConeTracing )
+		{
+			m_voxelizer->update( updater );
+		}
 
 		if ( m_opaquePass )
 		{
@@ -571,15 +585,6 @@ namespace castor3d
 #if C3D_UseDeferredRendering
 		m_deferredRendering->update( updater );
 #endif
-
-		if ( m_renderTarget.getTargetType() == TargetType::eWindow )
-		{
-			scene.getEnvironmentMap().update( updater );
-		}
-
-		doUpdateShadowMaps( updater );
-		doUpdateLpv( updater );
-		doUpdateParticles( updater );
 
 		auto jitter = m_renderTarget.getJitter();
 		auto jitterProjSpace = jitter * 2.0f;
@@ -602,17 +607,23 @@ namespace castor3d
 		}
 
 		auto & scene = *m_renderTarget.getScene();
+		auto & camera = *m_renderTarget.getCamera();
 		updater.scene = &scene;
-		updater.camera = m_renderTarget.getCamera().get();
+		updater.camera = &camera;
 		updater.voxelConeTracing = scene.getVoxelConeTracingConfig().enabled;
 
 		doInitialiseLpv();
+		doUpdateShadowMaps( updater );
+		doUpdateLpv( updater );
+		doUpdateParticles( updater );
 
 		if ( m_renderTarget.getTargetType() == TargetType::eWindow )
 		{
-			scene .getEnvironmentMap().update( updater );
+			scene.getEnvironmentMap().update( updater );
 		}
 
+		updater.scene = &scene;
+		updater.camera = &camera;
 		m_depthPass->update( updater );
 		m_backgroundRenderer->update( updater );
 
@@ -630,10 +641,6 @@ namespace castor3d
 		{
 			static_cast< TransparentPassType & >( *m_transparentPass ).update( updater );
 		}
-
-		doUpdateShadowMaps( updater );
-		doUpdateLpv( updater );
-		doUpdateParticles( updater );
 	}
 
 	crg::SemaphoreWait RenderTechnique::preRender( crg::SemaphoreWait const & toWait
