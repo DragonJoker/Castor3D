@@ -11,13 +11,62 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
-using namespace castor;
-
-//*************************************************************************************************
-
 namespace castor3d
 {
-	String const InstantiationComponent::Name = cuT( "instantiation" );
+	//*********************************************************************************************
+
+	namespace
+	{
+		VkDeviceSize getNextCount( uint32_t count )
+		{
+			static constexpr uint32_t CountAlign = 64u;
+
+			return ashes::getAlignedSize( count, CountAlign );
+		}
+
+		ashes::VertexBufferPtr< InstantiationData > updateBuffer( RenderDevice const & device
+			, castor::String const & name
+			, uint32_t id
+			, uint32_t index
+			, uint32_t count
+			, ashes::VertexBufferPtr< InstantiationData > buffer )
+		{
+			using namespace castor::string;
+			count = ( count ? getNextCount( count ) : 0u );
+
+			if ( count
+				&& ( !buffer || count > buffer->getCount() ) )
+			{
+				buffer.reset();
+				buffer = makeVertexBuffer< InstantiationData >( device
+					, count
+					, index
+					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+					, ( name
+						+ "Submesh" + toString( id )
+						+ "InstantiationComponentBufferMult" + toString( index ) ) );
+			}
+
+			return buffer;
+		}
+	}
+
+	//*********************************************************************************************
+
+	castor::String const InstantiationComponent::Name = cuT( "instantiation" );
+
+	ashes::PipelineVertexInputStateCreateInfo const & getMatrixLayout()
+	{
+		static ashes::PipelineVertexInputStateCreateInfo const matrixLayout{ 0u
+			, { { InstantiationComponent::BindingPoint, sizeof( InstantiationData ), VK_VERTEX_INPUT_RATE_INSTANCE } }
+			, { { SceneRenderPass::VertexInputs::TransformLocation + 0u, InstantiationComponent::BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 0u * sizeof( castor::Point4f ) }
+				, { SceneRenderPass::VertexInputs::TransformLocation + 1u, InstantiationComponent::BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 1u * sizeof( castor::Point4f ) }
+				, { SceneRenderPass::VertexInputs::TransformLocation + 2u, InstantiationComponent::BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 2u * sizeof( castor::Point4f ) }
+				, { SceneRenderPass::VertexInputs::TransformLocation + 3u, InstantiationComponent::BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 3u * sizeof( castor::Point4f ) }
+				, { SceneRenderPass::VertexInputs::MaterialLocation, InstantiationComponent::BindingPoint, VK_FORMAT_R32_SINT, offsetof( InstantiationData, m_material ) }
+				, { SceneRenderPass::VertexInputs::NodeIdLocation, InstantiationComponent::BindingPoint, VK_FORMAT_R32_SINT, offsetof( InstantiationData, m_nodeId ) } } };
+		return matrixLayout;
+	}
 
 	InstantiationComponent::InstantiationComponent( Submesh & submesh
 		, uint32_t threshold )
@@ -51,6 +100,17 @@ namespace castor3d
 			data.data.resize( data.count );
 			auto & mulData = datas[5];
 			mulData.data.resize( data.count * 6u );
+			uint32_t index = 0u;
+
+			for ( auto & locData : datas )
+			{
+				locData.buffer = updateBuffer( material->getEngine()->getRenderSystem()->getRenderDevice()
+					, getOwner()->getParent().getName() + "_" + it->first->getName()
+					, getOwner()->getId()
+					, index++
+					, locData.count
+					, std::move( locData.buffer ) );
+			}
 		}
 
 		return result;
@@ -76,12 +136,7 @@ namespace castor3d
 			{
 				for ( auto & data : datas )
 				{
-					getOwner()->getOwner()->getScene()->getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
-						, [&data]( RenderDevice const & device
-							, QueueData const & queueData )
-						{
-							data.buffer.reset();
-						} ) );
+					data.buffer.reset();
 				}
 			}
 		}
@@ -142,7 +197,7 @@ namespace castor3d
 		{
 			buffers.emplace_back( it->second[index].buffer->getBuffer() );
 			offsets.emplace_back( 0u );
-			layouts.emplace_back( *m_matrixLayout );
+			layouts.emplace_back( getMatrixLayout() );
 		}
 	}
 
@@ -198,24 +253,6 @@ namespace castor3d
 
 		if ( doCheckInstanced( getMaxRefCount() ) )
 		{
-			if ( !m_matrixLayout )
-			{
-				m_matrixLayout = std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
-					, ashes::VkVertexInputBindingDescriptionArray
-					{
-						{ BindingPoint, sizeof( InstantiationData ), VK_VERTEX_INPUT_RATE_INSTANCE },
-					}
-					, ashes::VkVertexInputAttributeDescriptionArray
-					{
-						{ SceneRenderPass::VertexInputs::TransformLocation + 0u, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 0u * sizeof( Point4f ) },
-						{ SceneRenderPass::VertexInputs::TransformLocation + 1u, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 1u * sizeof( Point4f ) },
-						{ SceneRenderPass::VertexInputs::TransformLocation + 2u, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 2u * sizeof( Point4f ) },
-						{ SceneRenderPass::VertexInputs::TransformLocation + 3u, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 3u * sizeof( Point4f ) },
-						{ SceneRenderPass::VertexInputs::MaterialLocation, BindingPoint, VK_FORMAT_R32_SINT, offsetof( InstantiationData, m_material ) },
-						{ SceneRenderPass::VertexInputs::NodeIdLocation, BindingPoint, VK_FORMAT_R32_SINT, offsetof( InstantiationData, m_nodeId ) },
-					} );
-			}
-
 			for ( auto & datas : m_instances )
 			{
 				if ( doCheckInstanced( datas.second[0].count ) )
@@ -224,23 +261,15 @@ namespace castor3d
 
 					for ( auto & data : datas.second )
 					{
-						if ( data.count )
-						{
-							data.buffer = makeVertexBuffer< InstantiationData >( device
-								, data.count
-								, 0u
-								, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-								, getOwner()->getParent().getName() + "Submesh" + castor::string::toString( getOwner()->getId() ) + "InstantiationComponentBufferMult" + string::toString( index ) );
-						}
-
-						++index;
+						data.buffer = updateBuffer( device
+							, getOwner()->getParent().getName() + "_" + datas.first->getName()
+							, getOwner()->getId()
+							, index++
+							, data.count
+							, std::move( data.buffer ) );
 					}
 				}
 			}
-		}
-		else
-		{
-			doCleanup();
 		}
 
 		return result;
@@ -248,8 +277,6 @@ namespace castor3d
 
 	void InstantiationComponent::doCleanup()
 	{
-		m_matrixLayout.reset();
-
 		for ( auto & datas : m_instances )
 		{
 			for ( auto & data : datas.second )
@@ -261,26 +288,24 @@ namespace castor3d
 
 	void InstantiationComponent::doUpload()
 	{
-		for ( auto & data : m_instances )
+		for ( auto & datas : m_instances )
 		{
-			for ( auto & datas : m_instances )
+			for ( auto & data : datas.second )
 			{
-				for ( auto & data : datas.second )
+				if ( data.buffer && data.count )
 				{
-					if ( data.buffer
-						&& data.count )
+					if ( auto * buffer = reinterpret_cast< InstantiationData * >( data.buffer->lock( 0
+						, data.count
+						, 0u ) ) )
 					{
-						if ( auto * buffer = reinterpret_cast< InstantiationData * >( data.buffer->getBuffer().lock( 0
-							, ~( 0ull )
-							, 0u ) ) )
-						{
-							std::copy( data.data.begin(), data.data.end(), buffer );
-							data.buffer->getBuffer().flush( 0u, ~( 0ull ) );
-							data.buffer->getBuffer().unlock();
-						}
+						std::copy( data.data.begin(), data.data.end(), buffer );
+						data.buffer->flush( 0u, data.count );
+						data.buffer->unlock();
 					}
 				}
 			}
 		}
 	}
+
+	//*********************************************************************************************
 }
