@@ -6,8 +6,7 @@
 #include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Cache/ObjectCache.hpp>
 #include <Castor3D/Event/Frame/FrameListener.hpp>
-#include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
-#include <Castor3D/Event/Frame/InitialiseEvent.hpp>
+#include <Castor3D/Event/Frame/GpuFunctorEvent.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>

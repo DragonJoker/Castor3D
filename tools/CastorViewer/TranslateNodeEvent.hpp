@@ -13,9 +13,9 @@ namespace CastorViewer
 	{
 	public:
 		TranslateNodeEvent( castor3d::SceneNodeSPtr p_node, float p_dx, float p_dy, float p_dz );
-		virtual ~TranslateNodeEvent();
 
-		void apply()override;
+	private:
+		void doApply()override;
 	};
 }
 

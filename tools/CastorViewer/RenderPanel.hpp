@@ -33,11 +33,9 @@ namespace CastorViewer
 
 	class MouseNodeEvent;
 	class TranslateNodeEvent;
-	class KeyboardEvent;
 
-	CU_DeclareSmartPtr( MouseNodeEvent );
-	CU_DeclareSmartPtr( TranslateNodeEvent );
-	CU_DeclareSmartPtr( KeyboardEvent );
+	CU_DeclareCUSmartPtr( CastorViewer, MouseNodeEvent, );
+	CU_DeclareCUSmartPtr( CastorViewer, TranslateNodeEvent, );
 
 	class RenderPanel
 		: public wxPanel
@@ -138,7 +136,6 @@ namespace CastorViewer
 
 		castor3d::SceneNodeRPtr m_lightsNode{ nullptr };
 		castor3d::SceneNodeRPtr m_currentNode{ nullptr };
-		KeyboardEventUPtr m_keyboardEvent;
 		castor::RangedValue< float > m_camSpeed;
 		std::unique_ptr< GuiCommon::CubeBoxManager > m_cubeManager;
 
