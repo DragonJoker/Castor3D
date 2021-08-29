@@ -621,7 +621,6 @@ namespace castor3d
 		std::map< RenderWindow const *, UserInputListenerSPtr > m_windowInputListeners;
 		UserInputListenerSPtr m_userInputListener;
 		DECLARE_CACHE_MEMBER( target, RenderTarget );
-		DECLARE_CACHE_MEMBER( technique, RenderTechnique );
 		castor::FontCache m_fontCache;
 		castor::ImageCache m_imageCache;
 		std::map< castor::String, castor::AttributeParsers > m_additionalParsers;

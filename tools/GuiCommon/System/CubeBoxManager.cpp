@@ -1,10 +1,10 @@
 #include "GuiCommon/System/CubeBoxManager.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/Cache.hpp>
 #include <Castor3D/Cache/GeometryCache.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
-#include <Castor3D/Cache/MeshCache.hpp>
-#include <Castor3D/Cache/SceneNodeCache.hpp>
+#include <Castor3D/Cache/ObjectCache.hpp>
 #include <Castor3D/Event/Frame/FrameListener.hpp>
 #include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
 #include <Castor3D/Event/Frame/InitialiseEvent.hpp>

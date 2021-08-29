@@ -2,7 +2,7 @@
 
 #include "Castor3D/Cache/BillboardCache.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
-#include "Castor3D/Cache/ParticleSystemCache.hpp"
+#include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"

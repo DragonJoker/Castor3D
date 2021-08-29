@@ -1,7 +1,8 @@
 #include "Castor3D/Miscellaneous/LoadingScreen.hpp"
 
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
-#include "Castor3D/Cache/CameraCache.hpp"
+#include "Castor3D/Cache/Cache.hpp"
+#include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Cache/OverlayCache.hpp"
 #include "Castor3D/Cache/CacheView.hpp"
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"

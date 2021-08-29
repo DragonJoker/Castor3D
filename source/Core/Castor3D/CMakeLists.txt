@@ -154,22 +154,14 @@ source_group( "Source Files\\Buffer" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/AnimatedObjectGroupCache.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/BillboardCache.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/CameraCache.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/CacheModule.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/GeometryCache.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/LightCache.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/ListenerCache.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/MaterialCache.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/MeshCache.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/OverlayCache.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/ParticleSystemCache.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/PluginCache.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/SamplerCache.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/SceneCache.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/SceneNodeCache.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/ShaderCache.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/TargetCache.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/TechniqueCache.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/WindowCache.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/AnimatedObjectGroupCache.hpp
@@ -179,25 +171,16 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/CacheModule.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/CacheView.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/CacheView.inl
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/CameraCache.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/ElementProducer.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/GeometryCache.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/LightCache.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/ListenerCache.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/MaterialCache.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/MeshCache.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/ObjectCache.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/ObjectCacheBase.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/OverlayCache.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/ParticleSystemCache.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/PluginCache.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/SamplerCache.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/SceneCache.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/SceneNodeCache.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/ShaderCache.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/TargetCache.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/TechniqueCache.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/WindowCache.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
 	${${PROJECT_NAME}_SRC_FILES}

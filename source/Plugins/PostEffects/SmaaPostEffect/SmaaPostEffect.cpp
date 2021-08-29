@@ -5,7 +5,7 @@
 #include "SmaaPostEffect/LumaEdgeDetection.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Cache/SamplerCache.hpp>
+#include <Castor3D/Cache/Cache.hpp>
 #include <Castor3D/Material/Texture/Sampler.hpp>
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
@@ -247,7 +247,7 @@ namespace smaa
 		, crg::FramePass const & previousPass )
 	{
 		m_srgbTextureView = m_target;
-		m_hdrTextureView = &m_renderTarget.getTechnique()->getResultImgView();
+		m_hdrTextureView = &m_renderTarget.getTechnique().getResultImgView();
 		auto previous = &previousPass;
 		crg::ImageViewIdArray smaaResult;
 
@@ -257,7 +257,7 @@ namespace smaa
 			m_edgeDetection = std::make_unique< DepthEdgeDetection >( *previous
 				, m_renderTarget
 				, device
-				, m_renderTarget.getTechnique()->getDepthImgView()
+				, m_renderTarget.getTechnique().getDepthImgView()
 				, m_config
 				, &m_enabled );
 			break;
@@ -452,7 +452,7 @@ namespace smaa
 
 		if ( m_config.data.enablePredication )
 		{
-			predication = &m_renderTarget.getTechnique()->getDepthImgView();
+			predication = &m_renderTarget.getTechnique().getDepthImgView();
 		}
 
 		return predication;

@@ -104,7 +104,7 @@ namespace GuiCommon
 		static wxString PROPERTY_RENDER_TARGET_SSAO_BEND_STEP_SIZE = _( "Bend Step Size" );
 
 		auto & target = getRenderTarget();
-		auto & ssaoConfig = target.getTechnique()->getSsaoConfig();
+		auto & ssaoConfig = target.getTechnique().getSsaoConfig();
 		addProperty( grid, PROPERTY_RENDER_TARGET_SSAO );
 		addPropertyT( grid, PROPERTY_RENDER_TARGET_SSAO_ENABLED, &ssaoConfig.enabled );
 		addPropertyT( grid, PROPERTY_RENDER_TARGET_SSAO_HIGH_QUALITY, &ssaoConfig.highQuality );

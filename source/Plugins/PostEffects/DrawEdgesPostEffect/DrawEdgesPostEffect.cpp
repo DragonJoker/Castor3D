@@ -235,7 +235,7 @@ namespace draw_edges
 	{
 		auto extent = castor3d::getSafeBandedExtent3D( m_renderTarget.getSize() );
 		auto & engine = *device.renderSystem.getEngine();
-		auto & technique = *m_renderTarget.getTechnique();
+		auto & technique = m_renderTarget.getTechnique();
 		auto & passBuffer = engine.getMaterialCache().getPassBuffer();
 		auto & data0 = technique.getDepthObjImgView();
 		auto & data1 = technique.getNormalImgView();

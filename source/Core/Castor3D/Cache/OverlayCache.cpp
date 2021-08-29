@@ -1,8 +1,7 @@
 #include "Castor3D/Cache/OverlayCache.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Event/Frame/CleanupEvent.hpp"
-#include "Castor3D/Event/Frame/InitialiseEvent.hpp"
+#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Overlay/FontTexture.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
@@ -12,16 +11,8 @@
 
 using namespace castor;
 
-#if defined( drawText )
-#	undef drawText
-#endif
-
 namespace castor3d
 {
-	//*************************************************************************************************
-
-	template<> const String CacheTraits< Overlay, String >::Name = cuT( "Overlay" );
-
 	//*************************************************************************************************
 
 	OverlayCache::OverlayInitialiser::OverlayInitialiser( Cache< Overlay, castor::String > & cache )

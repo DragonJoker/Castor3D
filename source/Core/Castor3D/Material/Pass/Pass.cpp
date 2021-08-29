@@ -1,7 +1,8 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/SamplerCache.hpp"
+#include "Castor3D/Cache/Cache.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/ShaderCache.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/PassVisitor.hpp"

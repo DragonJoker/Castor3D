@@ -196,11 +196,9 @@ namespace castor3d
 		 */
 		inline void remove( Key const & name )
 		{
-			if ( m_elements.has( name ) )
+			if ( auto element = tryRemove( name ) )
 			{
-				auto element = m_elements.find( name );
 				m_clean( element );
-				m_elements.erase( name );
 			}
 		}
 		/**

@@ -6,6 +6,7 @@
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
+#include "Castor3D/Render/RenderQueue.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
 #include "Castor3D/Render/Node/QueueCulledRenderNodes.hpp"

@@ -38,6 +38,67 @@
 		</Expand>
 	</Type>
 
+	<Type Name="castor3d::Mesh">
+		<DisplayString>{m_name} {m_submeshes}</DisplayString>
+		<Expand>
+			<Item Name="name">m_name</Item>
+			<Item Name="initialised">m_initialised</Item>
+			<Item Name="scene">m_scene</Item>
+			<Item Name="modified">m_modified</Item>
+			<Item Name="box">m_box</Item>
+			<Item Name="sphere">m_sphere</Item>
+			<Item Name="submeshes">m_submeshes</Item>
+			<Item Name="skeleton">m_skeleton</Item>
+			<Item Name="serialisable">m_serialisable</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::SubmeshComponent">
+		<DisplayString>{m_type}</DisplayString>
+		<Expand>
+			<Item Name="type">m_type</Item>
+			<Item Name="initialised">m_initialised</Item>
+			<Item Name="dirty">m_dirty</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::InstantiationComponent">
+		<DisplayString>{m_type} instance={m_instances}</DisplayString>
+		<Expand>
+			<Item Name="initialised">m_initialised</Item>
+			<Item Name="dirty">m_dirty</Item>
+			<Item Name="instances">m_instances</Item>
+			<Item Name="threshold">m_threshold</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::Submesh">
+		<DisplayString>{m_parentMesh}({m_id})</DisplayString>
+		<Expand>
+			<Item Name="mesh">m_parentMesh</Item>
+			<Item Name="id">m_id</Item>
+			<Item Name="material">m_defaultMaterial</Item>
+			<Item Name="box">m_box</Item>
+			<Item Name="sphere">m_sphere</Item>
+			<Item Name="points">m_points</Item>
+			<Item Name="components">m_components</Item>
+			<Item Name="instantiation">m_instantiation</Item>
+			<Item Name="instantiatedBones">m_instantiatedBones</Item>
+			<Item Name="indexMapping">m_indexMapping</Item>
+			<Item Name="flags">m_programFlags</Item>
+			<Item Name="generated">m_generated</Item>
+			<Item Name="initialised">m_initialised</Item>
+			<Item Name="dirty">m_dirty</Item>
+			<Item Name="topology">m_topology</Item>
+			<Item Name="vertexBuffer">m_vertexBuffer</Item>
+			<Item Name="indexBuffer">m_indexBuffer</Item>
+			<Item Name="vertexLayouts">m_vertexLayouts</Item>
+			<Item Name="geometryBuffers">m_geometryBuffers</Item>
+			<Item Name="needsNormalsCompute">m_needsNormalsCompute</Item>
+			<Item Name="disableSceneUpdate">m_disableSceneUpdate</Item>
+		</Expand>
+	</Type>
+
 	<Type Name="castor3d::Pass">
 		<DisplayString>{m_id} (material={m_owner.m_name})</DisplayString>
 		<Expand>
