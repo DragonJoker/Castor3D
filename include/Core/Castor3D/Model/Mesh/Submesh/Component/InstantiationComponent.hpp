@@ -187,7 +187,6 @@ namespace castor3d
 
 	private:
 		InstanceDataMap m_instances;
-		ashes::PipelineVertexInputStateCreateInfoPtr m_matrixLayout;
 		uint32_t m_threshold;
 	};
 }
