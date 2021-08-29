@@ -133,7 +133,6 @@ namespace castor3d
 
 		if ( m_allChanged )
 		{
-			m_minCullersZ = std::numeric_limits< float >::max();
 			doClearAll();
 			doListGeometries();
 			doListBillboards();
@@ -179,6 +178,8 @@ namespace castor3d
 
 	void SceneCuller::doClearAll()
 	{
+		m_minCullersZ = std::numeric_limits< float >::max();
+
 		for ( size_t i = 0; i < size_t( RenderMode::eCount ); ++i )
 		{
 			m_allSubmeshes[i].clear();
@@ -231,8 +232,6 @@ namespace castor3d
 							}
 						}
 					}
-
-					m_minCullersZ = std::numeric_limits< float >::max();
 
 					if ( m_camera )
 					{
