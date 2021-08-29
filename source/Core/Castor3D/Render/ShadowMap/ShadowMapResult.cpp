@@ -57,7 +57,7 @@ namespace castor3d
 		{
 			{
 				defaultClearDepthStencil,						// Depth
-				makeClearValue( component, 0.0f, 0.0f, 0.0f ),	// NormalLinear
+				makeClearValue( 0.0f, 0.0f, 0.0f, component ),	// NormalLinear
 				rgb32fMaxColor,									// Variance
 				opaqueBlackClearColor,							// Position
 				opaqueBlackClearColor							// Flux
