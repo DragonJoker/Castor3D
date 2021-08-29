@@ -1381,29 +1381,51 @@ namespace castor3d
 		doWaitFrame( {} );
 		getDevice()->waitIdle();
 
-		doDestroyCommandBuffers();
-		doDestroyRenderQuad();
-		doDestroyIntermediateViews();
+		if ( m_initialised )
+		{
+			doDestroyCommandBuffers();
+			doDestroyRenderQuad();
+			doDestroyIntermediateViews();
 
 #if C3D_PersistLoadingScreen
-		if ( m_progressBar && m_loadingScreen )
-		{
-			m_progressBar->lock();
-			doDestroySwapchain();
-			doCreateSwapchain();
-			m_loadingScreen->setRenderPass( *m_renderPass, m_size );
-			m_progressBar->unlock();
+			if ( m_progressBar && m_loadingScreen )
+			{
+				m_progressBar->lock();
+				doDestroySwapchain();
+				doCreateSwapchain();
+				m_loadingScreen->setRenderPass( *m_renderPass, m_size );
+				m_progressBar->unlock();
+			}
+			else
+#endif
+			{
+				doDestroySwapchain();
+				doCreateSwapchain();
+			}
+
+			doCreateIntermediateViews( *m_queue );
+			doCreateRenderQuad( *m_queue );
+			doCreateCommandBuffers( *m_queue );
 		}
 		else
-#endif
 		{
-			doDestroySwapchain();
-			doCreateSwapchain();
-		}
+#if C3D_PersistLoadingScreen
+			if ( m_progressBar && m_loadingScreen )
+			{
+				m_progressBar->lock();
+				doDestroySwapchain();
+				doCreateSwapchain();
+				m_loadingScreen->setRenderPass( *m_renderPass, m_size );
+				m_progressBar->unlock();
+			}
+			else
+#endif
+			{
+				doDestroySwapchain();
+				doCreateSwapchain();
+			}
 
-		doCreateIntermediateViews( *m_queue );
-		doCreateRenderQuad( *m_queue );
-		doCreateCommandBuffers( *m_queue );
+		}
 	}
 
 	RenderWindow::RenderingResources * RenderWindow::doGetResources()
