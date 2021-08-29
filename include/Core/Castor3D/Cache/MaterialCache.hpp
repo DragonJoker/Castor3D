@@ -178,6 +178,10 @@ namespace castor3d
 		C3D_API void getNames( castor::StringArray & names );
 		C3D_API void registerMaterial( Material const & material );
 		C3D_API void unregisterMaterial( Material const & material );
+		C3D_API void registerPass( Pass & pass );
+		C3D_API void unregisterPass( Pass & pass );
+		C3D_API void registerUnit( TextureUnit & unit );
+		C3D_API void unregisterUnit( TextureUnit & unit );
 		/**
 		 *\~english
 		 *\brief		Retrieves the default material

@@ -3,8 +3,8 @@
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
+#include "Castor3D/Cache/Cache.hpp"
 #include "Castor3D/Cache/CacheView.hpp"
-#include "Castor3D/Cache/ListenerCache.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
@@ -529,7 +529,6 @@ namespace castor3d
 
 			if ( m_initialised )
 			{
-				auto technique = target->getTechnique();
 				updater.combineIndex = m_debugConfig.debugIndex;
 				auto & intermediate = m_intermediates[m_debugConfig.debugIndex];
 
@@ -1124,7 +1123,7 @@ namespace castor3d
 				, m_device
 				, queueData
 				, target->getSize()
-				, target->getTechnique()->getMatrixUbo()
+				, target->getTechnique().getMatrixUbo()
 				, target->getCuller() );
 		}
 	}
@@ -1265,7 +1264,7 @@ namespace castor3d
 		VkExtent2D extent{ m_size.getWidth(), m_size.getHeight() };
 		m_texture3Dto2D = castor::makeUnique< Texture3DTo2D >( m_device
 			, extent
-			, target->getTechnique()->getMatrixUbo() );
+			, target->getTechnique().getMatrixUbo() );
 		m_tex3DTo2DIntermediate = { "Texture3DTo2DResult"
 			, m_texture3Dto2D->getTarget().sampledViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL

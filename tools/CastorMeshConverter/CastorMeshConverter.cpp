@@ -1,9 +1,9 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Binary/BinaryMesh.hpp>
 #include <Castor3D/Binary/BinarySkeleton.hpp>
+#include <Castor3D/Cache/Cache.hpp>
 #include <Castor3D/Cache/CacheView.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
-#include <Castor3D/Cache/MeshCache.hpp>
 #include <Castor3D/Cache/PluginCache.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/PassFactory.hpp>

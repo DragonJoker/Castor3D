@@ -18,7 +18,6 @@ using namespace castor;
 
 namespace castor3d
 {
-	template<> const String CacheTraits< Plugin, String >::Name = cuT( "Plugin" );
 	static const String getTypeFunctionABIName = cuT( "getType" );
 	using MyLockType = std::unique_lock< std::recursive_mutex >;
 

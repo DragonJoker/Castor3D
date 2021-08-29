@@ -3,11 +3,11 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Animation/Animation.hpp>
 #include <Castor3D/Cache/AnimatedObjectGroupCache.hpp>
-#include <Castor3D/Cache/GeometryCache.hpp>
+#include <Castor3D/Cache/Cache.hpp>
 #include <Castor3D/Cache/CacheView.hpp>
+#include <Castor3D/Cache/GeometryCache.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
-#include <Castor3D/Cache/MeshCache.hpp>
-#include <Castor3D/Cache/SceneNodeCache.hpp>
+#include <Castor3D/Cache/ObjectCache.hpp>
 #include <Castor3D/Event/Frame/FrameListener.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
