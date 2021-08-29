@@ -545,7 +545,9 @@ namespace castor3d
 	{
 		if ( !m_initialised )
 		{
-			return crg::SemaphoreWait{};
+			return signalsToWait.empty()
+				? crg::SemaphoreWait{}
+				: signalsToWait.front();
 		}
 
 		crg::SemaphoreWait result;
