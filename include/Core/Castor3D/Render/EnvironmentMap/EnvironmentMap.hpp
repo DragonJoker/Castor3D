@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_EnvironmentMap_H___
 
 #include "EnvironmentMapModule.hpp"
+#include "Castor3D/Event/Frame/FrameEventModule.hpp"
 #include "Castor3D/Material/Texture/TextureModule.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/PBR/PbrModule.hpp"

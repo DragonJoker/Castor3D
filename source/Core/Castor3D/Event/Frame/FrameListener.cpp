@@ -11,7 +11,7 @@ namespace castor3d
 	namespace
 	{
 		template< typename EventT, typename ... ParamsT >
-		bool doFireEvents( std::vector< std::unique_ptr< EventT > > & arrayEvents
+		bool doFireEvents( std::vector< castor::UniquePtr< EventT > > & arrayEvents
 			, ParamsT & ... params )
 		{
 			bool result = true;

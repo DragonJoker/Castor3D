@@ -10,7 +10,6 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
-#include <Castor3D/Event/Frame/InitialiseEvent.hpp>
 #include <Castor3D/Event/Frame/GpuFunctorEvent.hpp>
 #include <Castor3D/Overlay/BorderPanelOverlay.hpp>
 

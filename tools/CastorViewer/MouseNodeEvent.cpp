@@ -13,8 +13,4 @@ namespace CastorViewer
 		, m_dz( p_dz )
 	{
 	}
-
-	MouseNodeEvent::~MouseNodeEvent()
-	{
-	}
 }

@@ -31,17 +31,13 @@ namespace castor3d
 		 */
 		CpuFunctorEvent( EventType type
 			, Functor functor )
-			: CpuFrameEvent( type )
-			, m_functor( functor )
+			: CpuFrameEvent{ type }
+			, m_functor{ functor }
 		{
 		}
-		/**
-		 *\~english
-		 *\brief		Applies the event
-		 *\~french
-		 *\brief		Traite l'évènement
-		 */
-		void apply()override
+
+	private:
+		void doApply()override
 		{
 			m_functor();
 		}
@@ -59,10 +55,44 @@ namespace castor3d
 	 *\param[in]	type	Le type d'évènement
 	 *\param[in]	functor	Le foncteur à exécuter
 	 */
-	inline std::unique_ptr< CpuFunctorEvent > makeCpuFunctorEvent( EventType type
+	static CpuFrameEventUPtr makeCpuFunctorEvent( EventType type
 		, CpuFunctorEvent::Functor functor )
 	{
-		return std::make_unique< CpuFunctorEvent >( type, functor );
+		return castor::makeUniqueDerived< CpuFrameEvent, CpuFunctorEvent >( type, functor );
+	}
+	/**
+	 *\~english
+	 *\brief		Helper function to create a cleanup event
+	 *\param[in]	object	The object to cleanup
+	 *\~french
+	 *\brief		Fonction d'aide pour créer un évènement de nettoyage
+	 *\param[in]	object	L'objet à nettoyer
+	 */
+	template< typename T >
+	static CpuFrameEventUPtr makeCpuCleanupEvent( T & object )
+	{
+		return makeCpuFunctorEvent( EventType::ePreRender
+			, [&object]()
+			{
+				object.cleanup();
+			} );
+	}
+	/**
+	 *\~english
+	 *\brief		Helper function to create an initialise event.
+	 *\param[in]	object	The object to initialise.
+	 *\~french
+	 *\brief		Fonction d'aide pour créer un éveènement d'initialisation.
+	 *\param[in]	object	L'objet à initialiser.
+	 */
+	template< typename T >
+	static CpuFrameEventUPtr makeCpuInitialiseEvent( T & object )
+	{
+		return makeCpuFunctorEvent( EventType::ePreRender
+			, [&object]()
+			{
+				object.initialise();
+			} );
 	}
 }
 

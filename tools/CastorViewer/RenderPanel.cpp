@@ -3,16 +3,13 @@
 #include "CastorViewer/MainFrame.hpp"
 #include "CastorViewer/RotateNodeEvent.hpp"
 #include "CastorViewer/TranslateNodeEvent.hpp"
-#include "CastorViewer/KeyboardEvent.hpp"
 
 #include <wx/display.h>
 
-#include <Castor3D/Event/Frame/CleanupEvent.hpp>
 #include <Castor3D/Cache/Cache.hpp>
 #include <Castor3D/Cache/ObjectCache.hpp>
 #include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
 #include <Castor3D/Event/Frame/FrameListener.hpp>
-#include <Castor3D/Event/Frame/GpuFunctorEvent.hpp>
 #include <Castor3D/Event/UserInput/UserInputListener.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
@@ -26,6 +23,9 @@
 
 using namespace castor3d;
 using namespace castor;
+
+CU_ImplementCUSmartPtr( CastorViewer, MouseNodeEvent )
+CU_ImplementCUSmartPtr( CastorViewer, TranslateNodeEvent )
 
 namespace CastorViewer
 {
@@ -129,7 +129,6 @@ namespace CastorViewer
 		m_nodesStates.clear();
 		m_camera.reset();
 		m_scene.reset();
-		m_keyboardEvent.reset();
 		m_currentNode = nullptr;
 		m_lightsNode = nullptr;
 		m_listener.reset();
@@ -168,7 +167,6 @@ namespace CastorViewer
 					m_currentState = &doAddNodeState( m_currentNode, true );
 				}
 
-				m_keyboardEvent = std::make_unique< KeyboardEvent >( *m_renderWindow );
 				m_renderWindow->addPickingScene( *scene );
 				m_camera = camera;
 				doStartMovement();
@@ -724,7 +722,14 @@ namespace CastorViewer
 
 		if ( m_listener )
 		{
-			m_listener->postEvent( std::make_unique< KeyboardEvent >( *m_keyboardEvent ) );
+			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePreRender
+				, [this]()
+				{
+					if ( m_renderWindow )
+					{
+						m_renderWindow->enableFullScreen( !m_renderWindow->isFullscreen() );
+					}
+				} ) );
 			wxGetApp().getMainFrame()->toggleFullScreen( !m_renderWindow->isFullscreen() );
 		}
 

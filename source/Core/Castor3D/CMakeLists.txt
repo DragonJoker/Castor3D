@@ -200,14 +200,12 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Event/Frame/GpuFrameEvent.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Event/Frame/CleanupEvent.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Event/Frame/CpuFrameEvent.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Event/Frame/CpuFunctorEvent.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Event/Frame/FrameEventModule.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Event/Frame/FrameListener.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Event/Frame/GpuFrameEvent.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Event/Frame/GpuFunctorEvent.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Event/Frame/InitialiseEvent.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
 	${${PROJECT_NAME}_SRC_FILES}

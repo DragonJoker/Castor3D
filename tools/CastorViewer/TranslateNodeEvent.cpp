@@ -12,11 +12,7 @@ namespace CastorViewer
 	{
 	}
 
-	TranslateNodeEvent::~TranslateNodeEvent()
-	{
-	}
-
-	void TranslateNodeEvent::apply()
+	void TranslateNodeEvent::doApply()
 	{
 		SceneNodeSPtr node = m_node.lock();
 
