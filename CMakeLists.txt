@@ -136,7 +136,7 @@ add_compile_definitions( C3D_VERSION_MINOR=${VERSION_MINOR} )
 add_compile_definitions( C3D_VERSION_BUILD=${VERSION_BUILD} )
 add_compile_definitions( $<$<CXX_COMPILER_ID:MSVC>:_CRT_SECURE_NO_WARNINGS> )
 add_compile_definitions( $<$<CXX_COMPILER_ID:MSVC>:_ENFORCE_MATCHING_ALLOCATORS=0> )
-add_compile_definitions( $<$<CXX_COMPILER_ID:MSVC>:NOMINMAX=0> )
+add_compile_definitions( $<$<CXX_COMPILER_ID:MSVC>:NOMINMAX=1> )
 
 set( ASHES_DIR external/Ashes )
 set( SHADERWRITER_DIR external/ShaderWriter )
