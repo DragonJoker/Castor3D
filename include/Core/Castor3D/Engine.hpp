@@ -257,11 +257,11 @@ namespace castor3d
 		C3D_API void prepareTextures( Pass & pass );
 		/**
 		 *\~english
-		 *\brief		Enqueues the given job.
+		 *\brief		Enqueues the given CPU job.
 		 *\~french
-		 *\brief		Met dans la file la tâche donnée.
+		 *\brief		Met dans la file la tâche CPU donnée.
 		 */
-		C3D_API void pushJob( castor::AsyncJobQueue::Job job );
+		C3D_API void pushCpuJob( castor::AsyncJobQueue::Job job );
 		/**
 		 *\~english
 		 *\brief		Enqueues the given GPU job.
@@ -635,7 +635,8 @@ namespace castor3d
 		bool m_enableValidation{ false };
 		bool m_enableApiTrace{ false };
 		uint32_t m_lpvGridSize{ 32u };
-		castor::AsyncJobQueue m_jobs;
+		castor::AsyncJobQueue m_cpuJobs;
+		castor::AsyncJobQueue m_gpuJobs;
 		crg::ResourceHandler m_resourceHandler;
 		shader::LightingModelFactory m_lightingModelFactory;
 		SceneSPtr m_loadingScene;
