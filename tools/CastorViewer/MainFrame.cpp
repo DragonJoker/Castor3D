@@ -498,11 +498,18 @@ namespace CastorViewer
 
 		if ( scene )
 		{
+			auto engine = wxGetApp().getCastor();
+
 			m_materials->getList()->unloadMaterials();
 			m_sceneObjects->getList()->unloadScene();
 			m_mainCamera.reset();
 			m_sceneNode.reset();
-			auto engine = wxGetApp().getCastor();
+
+			if ( engine->isThreaded() )
+			{
+				engine->getRenderLoop().pause();
+			}
+
 			m_renderPanel->reset();
 			scene->cleanup();
 			engine->getRenderLoop().renderSyncFrame();
@@ -518,6 +525,11 @@ namespace CastorViewer
 			engine->getSceneCache().remove( scene->getName() );
 			Logger::logDebug( cuT( "MainFrame::doCleanupScene - Scene related objects unloaded." ) );
 			scene.reset();
+
+			if ( engine->isThreaded() )
+			{
+				engine->getRenderLoop().resume();
+			}
 		}
 
 		m_mainScene.reset();
