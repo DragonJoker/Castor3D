@@ -83,7 +83,8 @@ namespace castor3d
 		, m_importerFactory{ castor::makeUnique< MeshImporterFactory >() }
 		, m_particleFactory{ castor::makeUnique< ParticleFactory >() }
 		, m_enableApiTrace{ C3D_EnableAPITrace }
-		, m_jobs{ castor::CpuInformations{}.getCoreCount() }
+		, m_cpuJobs{ std::min( 4u, castor::CpuInformations{}.getCoreCount() / 2u ) }
+		, m_gpuJobs{ std::min( 2u, castor::CpuInformations{}.getCoreCount() / 2u ) }
 	{
 		m_passFactory = castor::makeUnique< PassFactory >( *this );
 		m_passesType = m_passFactory->listRegisteredTypes().begin()->second;
@@ -680,20 +681,20 @@ namespace castor3d
 
 	void Engine::prepareTextures( Pass & pass )
 	{
-		pushJob( [&pass]()
+		pushCpuJob( [&pass]()
 			{
 				pass.prepareTextures();
 			} );
 	}
 
-	void Engine::pushJob( castor::AsyncJobQueue::Job job )
+	void Engine::pushCpuJob( castor::AsyncJobQueue::Job job )
 	{
-		m_jobs.pushJob( job );
+		m_cpuJobs.pushJob( job );
 	}
 
 	void Engine::pushGpuJob( std::function< void( RenderDevice const &, QueueData const & ) > job )
 	{
-		pushJob( [this, job]()
+		m_gpuJobs.pushJob( [this, job]()
 			{
 				auto & device = m_renderSystem->getRenderDevice();
 				auto data = device.graphicsData();
