@@ -84,6 +84,7 @@ namespace GuiCommon
 			: public Recorder::IRecorderImpl
 		{
 		public:
+			virtual ~RecorderImplBase() = default;
 			virtual bool UpdateTime()
 			{
 				auto now = clock::now();

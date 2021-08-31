@@ -12,24 +12,7 @@ namespace castor3d
 	class Interpolator
 	{
 	public:
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\~french
-		 *\brief		Constructeur
-		 */
-		inline Interpolator()
-		{
-		}
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		inline ~Interpolator()
-		{
-		}
+		virtual ~Interpolator() = default;
 		/**
 		 *\~english
 		 *\brief		Interpolation function.

@@ -37,6 +37,7 @@ namespace castor3d::exporter
 			: m_options{ std::move( options ) }
 		{
 		}
+		CSE_API virtual ~SceneExporter() = default;
 		/**
 		 *\~english
 		 *\brief		Export function.
