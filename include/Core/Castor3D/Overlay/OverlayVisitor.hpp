@@ -11,6 +11,7 @@ namespace castor3d
 	class OverlayVisitor
 	{
 	public:
+		C3D_API virtual ~OverlayVisitor() = default;
 		C3D_API virtual void visit( PanelOverlay const & overlay ) = 0;
 		C3D_API virtual void visit( BorderPanelOverlay const & overlay ) = 0;
 		C3D_API virtual void visit( TextOverlay const & overlay ) = 0;
