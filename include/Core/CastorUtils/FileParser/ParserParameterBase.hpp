@@ -22,9 +22,8 @@ namespace castor
 		 *\~french
 		 *\brief		Constructor.
 		 */
-		inline ParserParameterBase()
-		{
-		}
+		CU_API ParserParameterBase() = default;
+		CU_API virtual ~ParserParameterBase() = default;
 		/**
 		 *\~english
 		 *\return		The parameter type.

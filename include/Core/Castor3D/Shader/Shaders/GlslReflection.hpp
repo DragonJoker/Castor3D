@@ -17,6 +17,7 @@ namespace castor3d::shader
 			, PassFlags const & passFlags );
 		C3D_API ReflectionModel( sdw::ShaderWriter & writer
 			, Utils & utils );
+		C3D_API virtual ~ReflectionModel() = default;
 		C3D_API virtual void computeDeferred( LightMaterial & material
 			, Surface const & surface
 			, SceneData const & sceneData

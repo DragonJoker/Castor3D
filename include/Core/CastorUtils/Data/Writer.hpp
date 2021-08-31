@@ -20,6 +20,7 @@ namespace castor
 		using Type = StreamT;
 
 	public:
+		virtual ~Writer() = default;
 		/**
 		 *\~english
 		 *\brief			Writes a resource to a file.
