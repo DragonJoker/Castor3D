@@ -13,6 +13,7 @@ namespace castor3d
 	class BinaryWriterBase
 	{
 	public:
+		virtual ~BinaryWriterBase() = default;
 		/**
 		 *\~english
 		 *\brief			Writes an object to a file.

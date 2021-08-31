@@ -19,6 +19,7 @@ namespace castor3d
 		friend class BinaryParserBase;
 
 	public:
+		virtual ~BinaryParserBase() = default;
 		/**
 		 *\~english
 		 *\brief		Creates a binary parser.

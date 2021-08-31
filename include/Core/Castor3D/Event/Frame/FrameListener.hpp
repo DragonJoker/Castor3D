@@ -30,7 +30,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~FrameListener();
+		C3D_API virtual ~FrameListener();
 		/**
 		 *\~english
 		 *\brief		Empties the event lists.

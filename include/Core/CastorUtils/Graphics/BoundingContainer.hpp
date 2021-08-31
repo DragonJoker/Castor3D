@@ -14,10 +14,11 @@ namespace castor
 	class BoundingContainer
 	{
 	public:
-		BoundingContainer( BoundingContainer const & rhs ) = default;
-		BoundingContainer( BoundingContainer && rhs ) = default;
-		BoundingContainer & operator=( BoundingContainer const & rhs ) = default;
-		BoundingContainer & operator=( BoundingContainer && rhs ) = default;
+		CU_API BoundingContainer( BoundingContainer const & rhs ) = default;
+		CU_API BoundingContainer( BoundingContainer && rhs ) = default;
+		CU_API BoundingContainer & operator=( BoundingContainer const & rhs ) = default;
+		CU_API BoundingContainer & operator=( BoundingContainer && rhs ) = default;
+		CU_API virtual ~BoundingContainer() = default;
 		using MyPoint = Point< float, Dimension >;
 		/**
 		 *\~english

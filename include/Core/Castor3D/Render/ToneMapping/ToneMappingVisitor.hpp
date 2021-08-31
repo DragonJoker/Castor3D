@@ -20,9 +20,7 @@ namespace castor3d
 		}
 
 	public:
-		virtual inline ~ToneMappingVisitor()
-		{
-		}
+		C3D_API virtual ~ToneMappingVisitor() = default;
 		/**
 		*\~english
 		*name
