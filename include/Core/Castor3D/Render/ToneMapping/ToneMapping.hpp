@@ -51,7 +51,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~ToneMapping();
+		C3D_API virtual ~ToneMapping();
 		/**
 		 *\~english
 		 *\brief		Initialises tone mapping shader and pipeline.
