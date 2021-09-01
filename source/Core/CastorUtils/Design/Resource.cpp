@@ -24,7 +24,7 @@ namespace castor
 
 	void Resource::cleanup()
 	{
-		if ( !m_initialised.exchange( false ) )
+		if ( m_initialised.exchange( false ) )
 		{
 			doCleanup();
 		}

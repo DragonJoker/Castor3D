@@ -54,7 +54,7 @@ namespace castor3d
 		m_label->setVAlign( VAlign::eCenter );
 		m_value->setVAlign( VAlign::eCenter );
 
-		auto & materials = cache.getEngine()->getMaterialCache();
+		auto & materials = cache.getEngine().getMaterialCache();
 		m_label->setMaterial( materials.find( cuT( "White" ) ) );
 		m_value->setMaterial( materials.find( cuT( "White" ) ) );
 
@@ -107,7 +107,7 @@ namespace castor3d
 			, nullptr
 			, m_titlePanel->getOverlay().shared_from_this() )->getTextOverlay() }
 	{
-		auto & materials = m_cache.getEngine()->getMaterialCache();
+		auto & materials = m_cache.getEngine().getMaterialCache();
 
 		m_titlePanel->setPixelSize( castor::Size{ 320, 20 } );
 		m_titlePanel->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ) );

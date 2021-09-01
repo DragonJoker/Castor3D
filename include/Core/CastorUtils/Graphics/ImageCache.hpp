@@ -1,81 +1,116 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___CASTOR_IMAGE_CACHE_H___
-#define ___CASTOR_IMAGE_CACHE_H___
+#ifndef ___CU_ImageCache_H___
+#define ___CU_ImageCache_H___
 
 #include "CastorUtils/Graphics/GraphicsModule.hpp"
+#include "CastorUtils/Data/Path.hpp"
+#include "CastorUtils/Graphics/Size.hpp"
 
-#include "CastorUtils/Design/Collection.hpp"
+#include "CastorUtils/Design/ResourceCacheBase.hpp"
 
 namespace castor
 {
-	class ImageCache
-		: private Collection< Image, String >
+	/**
+	*\~english
+	*	castor::Image creation parameters.
+	*\~french
+	*	Paramètres de création d'une castor::Image.
+	*/
+	struct ImageCreateParams
+	{
+		ImageCreateParams( Path const & path
+			, bool allowCompression = true
+			, bool generateMips = true )
+			: mode{ false }
+			, path{ path }
+			, allowCompression{ allowCompression }
+			, generateMips{ generateMips }
+		{
+		}
+
+		ImageCreateParams( Size const & size
+			, PixelFormat format )
+			: mode{ true }
+			, size{ size }
+			, format{ format }
+		{
+		}
+
+		bool mode;
+		// mode 0
+		Path path;
+		bool allowCompression{};
+		bool generateMips{};
+		// mode 1
+		Size size{};
+		PixelFormat format{};
+	};
+	/**
+	*\~english
+	*	Helper structure to specialise a cache behaviour.
+	*\remarks
+	*	Specialisation for castor::Image.
+	*\~french
+	*	Structure permettant de spécialiser le comportement d'un cache.
+	*\remarks
+	*	Spécialisation pour castor::Image.
+	*/
+	template< typename KeyT >
+	struct ResourceCacheTraitsT< Image, KeyT >
+		: ResourceCacheTraitsBaseT< Image, KeyT >
+	{
+		using Base = ResourceCacheTraitsBaseT< Image, KeyT >;
+		using ElementT = typename Base::ElementT;
+		using ElementPtrT = typename Base::ElementPtrT;
+
+		CU_API static const String Name;
+
+		using ElementProducerT = std::function< typename ElementPtrT( KeyT const &
+			, ImageCreateParams const & ) >;
+	};
+	/**
+	*\~english
+	*	Base class for an element cache.
+	*\remarks
+	*	Specialisation for castor::Image.
+	*\~french
+	*	Classe de base pour un cache d'éléments.
+	*\remarks
+	*	Spécialisation pour castor::Image.
+	*/
+	template<>
+	class ResourceCacheT< Image, String > final
+		: public ResourceCacheBaseT< Image, String >
 	{
 	public:
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\~french
-		 *\brief		Constructeur.
-		 */
-		CU_API explicit ImageCache( LoggerInstance & logger
-			, ImageLoader const & loader );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		CU_API ~ImageCache();
-		/**
-		 *\~english
-		 *\brief		Creates an image.
-		 *\remarks		If the image already exists, it is returned.
-		 *\param[in]	name		The image name.
-		 *\param[in]	path		The full access path to the image file.
-		 *\return		The created (or retrieved) image.
-		 *\~french
-		 *\brief		Crée une image.
-		 *\remarks		Si l'image existe déjà, elle est retournée.
-		 *\param[in]	name		Le nom de l'image.
-		 *\param[in]	path		Le chemin complet d'accès au fichier de l'image.
-		 *\return		L'image créée (ou récupérée).
-		 */
-		CU_API ImageSPtr add( String const & name
-			, Path const & path
-			, bool allowCompression = true
-			, bool generateMips = true );
-		/**
-		 *\~english
-		 *\brief		Creates the image with given params.
-		 *\remarks		If the image already exists, it is returned.
-		 *\param[in]	name	The image name.
-		 *\param[in]	size	The wanted image dimensions.
-		 *\param[in]	format	The wanted image pixel format.
-		 *\~french
-		 *\brief		Crée l'image avec les paramètres donnés.
-		 *\param[in]	name	Le nom de l'image.
-		 *\param[in]	size	Les dimensions voulues pour l'image.
-		 *\param[in]	format	Le format de pixel voulu pour l'image.
-		 */
-		CU_API ImageSPtr add( String const & name
-			, Size const & size
-			, PixelFormat format );
+		using ElementT = Image;
+		using ElementKeyT = String;
+		using ElementCacheT = ResourceCacheBaseT< ElementT, ElementKeyT >;
+		using ElementCacheTraitsT = typename ElementCacheT::ElementCacheTraitsT;
+		using ElementPtrT = typename ElementCacheT::ElementPtrT;
+		using ElementContT = typename ElementCacheT::ElementContT;
+		using ElementProducerT = typename ElementCacheT::ElementProducerT;
+		using ElementInitialiserT = typename ElementCacheT::ElementInitialiserT;
+		using ElementCleanerT = typename ElementCacheT::ElementCleanerT;
+		using ElementMergerT = typename ElementCacheT::ElementMergerT;
 
 	public:
-		using Collection< Image, String >::begin;
-		using Collection< Image, String >::end;
-		using Collection< Image, String >::lock;
-		using Collection< Image, String >::unlock;
-		using Collection< Image, String >::clear;
-		using Collection< Image, String >::find;
-		using Collection< Image, String >::has;
+		CU_API explicit ResourceCacheT( LoggerInstance & logger
+			, ImageLoader const & loader );
+		CU_API ~ResourceCacheT() = default;
+
+	private:
+		ImageSPtr doProduce( String const & name
+			, ImageCreateParams const & params );
+		void doInitialise( ImageSPtr resource );
 
 	private:
 		ImageLoader const & m_loader;
 	};
+
+	using ImageCache = ResourceCacheT< Image, String >;
 }
 
 #endif

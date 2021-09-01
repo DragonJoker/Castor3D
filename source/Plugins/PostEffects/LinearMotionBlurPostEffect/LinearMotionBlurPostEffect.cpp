@@ -3,7 +3,6 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Buffer/UniformBufferPools.hpp>
 #include <Castor3D/Buffer/GpuBuffer.hpp>
-#include <Castor3D/Cache/Cache.hpp>
 #include <Castor3D/Cache/ShaderCache.hpp>
 #include <Castor3D/Material/Texture/Sampler.hpp>
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
@@ -22,6 +21,8 @@
 #include <Castor3D/Scene/ParticleSystem/ParticleDeclaration.hpp>
 #include <Castor3D/Scene/ParticleSystem/ParticleElementDeclaration.hpp>
 #include <Castor3D/Shader/Program.hpp>
+
+#include <CastorUtils/Design/ResourceCache.hpp>
 
 #include <ashespp/Pipeline/GraphicsPipeline.hpp>
 #include <ashespp/Pipeline/GraphicsPipelineCreateInfo.hpp>

@@ -1,7 +1,6 @@
 #include "Castor3D/Miscellaneous/LoadingScreen.hpp"
 
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
-#include "Castor3D/Cache/Cache.hpp"
 #include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Cache/OverlayCache.hpp"
 #include "Castor3D/Cache/CacheView.hpp"
@@ -19,6 +18,8 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Shader/Program.hpp"
+
+#include <CastorUtils/Design/ResourceCache.hpp>
 
 #include <RenderGraph/RunnableGraph.hpp>
 

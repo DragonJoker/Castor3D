@@ -8,6 +8,8 @@ See LICENSE file in root folder
 #include "CastorUtils/CastorUtils.hpp"
 
 #include <iterator>
+#include <memory>
+#include <unordered_map>
 
 namespace castor
 {
@@ -26,16 +28,6 @@ namespace castor
 	{
 		using value_type = TypeT;
 	};
-
-	template< class FlagTypeT >
-	struct FlagIteratorTraitsT
-	{
-		using difference_type = std::ptrdiff_t;
-		using value_type = FlagTypeT;
-		using pointer = value_type *;
-		using reference = value_type &;
-		using iterator_category = std::forward_iterator_tag;
-	};
 	/**
 	\~english
 	\brief		Templated class that provide std::array style buffer view.
@@ -45,106 +37,6 @@ namespace castor
 	template< typename ValueT
 		, typename IteratorTraitsT = IteratorTraits< ValueT * > >
 	class ArrayView;
-	/**
-	\~english
-	\brief		Struct used to select best way to put type in parameter : 'value' or 'const reference'
-	\~french
-	\brief		Structure utilisée pour récupéerer la meilleure façon de passer T en paramètre : valeur ou référence constante
-	*/
-	template< typename T >
-	struct CallTraits;
-	/**
-	\~english
-	\brief		Used to have the minimum value of two, at compile time.
-	\~french
-	\brief		Utilisé pour obtenir la valeur minimale entre deux, à la compilation.
-	*/
-	template< uint32_t A, uint32_t B, typename Enable = void >
-	struct MinValue;
-	/**
-	\~english
-	\brief		Used to have the maximum value of two, at compile time.
-	\~french
-	\brief		Utilisé pour obtenir la valeur maximale entre deux, à la compilation.
-	*/
-	template< uint32_t A, uint32_t B, typename Enable = void >
-	struct MaxValue;
-	/**
-	\~english
-	*\brief		Connection to a signal.
-	\~french
-	*\brief		Représente une connexion à un signal.
-	*/
-	template< typename SignalT >
-	class Connection;
-	/**
-	\~english
-	*\brief		Basic signal class
-	\~french
-	*\brief		Classe basique de signal
-	*/
-	template< typename Function >
-	class Signal;
-	/**
-	\~english
-	\brief		Class used to execute code at scope exit.
-	\~french
-	\brief		Classe utilisée pour exécuter du code à la sortie d'un scope.
-	*/
-	template< typename ScopeExitFuncType >
-	class ScopeGuard;
-	/**
-	\~english
-	\brief		External resource representation.
-	\remarks	They are meant to be loaded asynchronously.
-	\~french
-	\brief		Représentation d'une ressource externe.
-	\remarks	Elles sont faites pour être chargées de manière asynchrone.
-	*/
-	class Resource;
-	/**
-	\~english
-	\brief		Class used to have an object owned by another one.
-	\~french
-	\brief		Classe permettant d'avoir un objet controlé par un autre.
-	*/
-	template< class Owner >
-	class OwnedBy;
-	/**
-	\~english
-	\brief		The non-copyable concept implementation
-	\remark		Forbids a class which derivates from this one to be copied, either way
-	\~french
-	\brief		Implémentation du concept de non-copiable
-	\remark		Interdit la copie des classes dérivant de celle-ci, de quelque manière que ce soit
-	*/
-	class NonCopyable;
-	/**
-	\~english
-	\brief		Class for named elements
-	\remark		The name type is a template argument so anything can be a name for this class (default is castor::String)
-	\~french
-	\brief		Classe de base pour les éléments nommés
-	\remark		Le nom est un argument template, ainsi n'importe quoi peut être un nom pour cette classe (même si c'est castor::String par défaut)
-	*/
-	template< typename T = String >
-	class NamedBase;
-	/**
-	\~english
-	\brief		Templated class that provide std::array style buffer view.
-	\~french
-	\brief		Classe template qui fournit une vue sur un tampon, à la manière d'un std::array.
-	*/
-	template< typename T >
-	class GroupChangeTracked;
-	/**
-	\~english
-	\brief		Templated class that provide std::array style buffer view.
-	\~french
-	\brief		Classe template qui fournit une vue sur un tampon, à la manière d'un std::array.
-	*/
-	template< typename T >
-	class ChangeTracked;
 	/**
 	\author		Sylvain DOREMUS
 	\version	0.9.0
@@ -196,6 +88,22 @@ namespace castor
 	struct BlockGuard;
 	/**
 	\~english
+	\brief		Struct used to select best way to put type in parameter : 'value' or 'const reference'
+	\~french
+	\brief		Structure utilisée pour récupéerer la meilleure façon de passer T en paramètre : valeur ou référence constante
+	*/
+	template< typename T >
+	struct CallTraits;
+	/**
+	\~english
+	\brief		Templated class that provide std::array style buffer view.
+	\~french
+	\brief		Classe template qui fournit une vue sur un tampon, à la manière d'un std::array.
+	*/
+	template< typename T >
+	class ChangeTracked;
+	/**
+	\~english
 	\brief		Element collection class
 	\remark		A collection class, allowing you to store named objects, removing, finding or adding them as you wish.
 	\~french
@@ -206,6 +114,14 @@ namespace castor
 	class Collection;
 	/**
 	\~english
+	*\brief		Connection to a signal.
+	\~french
+	*\brief		Représente une connexion à un signal.
+	*/
+	template< typename SignalT >
+	class Connection;
+	/**
+	\~english
 	\brief		Used to delay initialisation of an object to next use of it.
 	\~french
 	\brief		Utilisé pour délayer l'initialisation d'un objet à sa prochaine utilisation.
@@ -213,12 +129,46 @@ namespace castor
 	template< typename TypeT >
 	class DelayedInitialiserT;
 	/**
-	\~english
-	\brief		Unicity exception
-	\~french
-	\brief		Exception d'unicité
+	*\~english
+	*\brief
+	*	Dynamic bitset class, with configurable block type.
+	*\~french
+	*\brief
+	*	Classe de bitset dynamique, avec un type de bloc configurable.
 	*/
-	class UnicityException;
+	template< typename BlockType >
+	class DynamicBitsetT;
+	/**
+	\~english
+	\brief		Factory concept implementation
+	\remark		The classes that can be registered must implement a function of the following form :
+				<br />static std::shared_ptr< Obj > create();
+	\~french
+	\brief		Implémentation du concept de fabrique
+	\remark		Les classes pouvant être enregistrées doivent implémenter une fonction de la forme suivante :
+				<br />static std::shared_ptr< Obj > create();
+	*/
+	template< class Obj
+		, class Key
+		, class PtrType = std::shared_ptr< Obj >
+		, typename PFNCreate = std::function< PtrType() >
+		, class Predicate = std::less< Key > >
+	class Factory;
+	/**
+	*\brief
+	*	Template iterator traits class on a binary combination of flags.
+	*\param FlagType
+	*	The scoped enum type.
+	*/
+	template< class FlagTypeT >
+	struct FlagIteratorTraitsT
+	{
+		using difference_type = std::ptrdiff_t;
+		using value_type = FlagTypeT;
+		using pointer = value_type *;
+		using reference = value_type &;
+		using iterator_category = std::forward_iterator_tag;
+	};
 	/**
 	*\brief
 	*	Template iterator class on a binary combination of flags.
@@ -248,30 +198,197 @@ namespace castor
 	class FlagCombination;
 	/**
 	\~english
-	\brief		Factory concept implementation
-	\remark		The classes that can be registered must implement a function of the following form :
-				<br />static std::shared_ptr< Obj > create();
+	\brief		Templated class that provide std::array style buffer view.
 	\~french
-	\brief		Implémentation du concept de fabrique
-	\remark		Les classes pouvant être enregistrées doivent implémenter une fonction de la forme suivante :
-				<br />static std::shared_ptr< Obj > create();
+	\brief		Classe template qui fournit une vue sur un tampon, à la manière d'un std::array.
 	*/
-	template< class Obj
-		, class Key
-		, class PtrType = std::shared_ptr< Obj >
-		, typename PFNCreate = std::function< PtrType() >
-		, class Predicate = std::less< Key > >
-	class Factory;
+	template< typename T >
+	class GroupChangeTracked;
+	/**
+	\~english
+	\brief		Used to have the minimum value of two, at compile time.
+	\~french
+	\brief		Utilisé pour obtenir la valeur minimale entre deux, à la compilation.
+	*/
+	template< uint32_t A, uint32_t B, typename Enable = void >
+	struct MinValue;
+	/**
+	\~english
+	\brief		Used to have the maximum value of two, at compile time.
+	\~french
+	\brief		Utilisé pour obtenir la valeur maximale entre deux, à la compilation.
+	*/
+	template< uint32_t A, uint32_t B, typename Enable = void >
+	struct MaxValue;
+	/**
+	\~english
+	\brief		Class for named elements
+	\remark		The name type is a template argument so anything can be a name for this class (default is castor::String)
+	\~french
+	\brief		Classe de base pour les éléments nommés
+	\remark		Le nom est un argument template, ainsi n'importe quoi peut être un nom pour cette classe (même si c'est castor::String par défaut)
+	*/
+	template< typename T = String >
+	class NamedBase;
+	/**
+	\~english
+	\brief		The non-copyable concept implementation
+	\remark		Forbids a class which derivates from this one to be copied, either way
+	\~french
+	\brief		Implémentation du concept de non-copiable
+	\remark		Interdit la copie des classes dérivant de celle-ci, de quelque manière que ce soit
+	*/
+	class NonCopyable;
+	/**
+	\~english
+	\brief		Class used to have an object owned by another one.
+	\~french
+	\brief		Classe permettant d'avoir un objet controlé par un autre.
+	*/
+	template< class Owner >
+	class OwnedBy;
+	/**
+	\~english
+	\brief		External resource representation.
+	\remarks	They are meant to be loaded asynchronously.
+	\~french
+	\brief		Représentation d'une ressource externe.
+	\remarks	Elles sont faites pour être chargées de manière asynchrone.
+	*/
+	class Resource;
+	/**
+	*\~english
+	*	Traits structure to specialise a cache behaviour.
+	*\remarks
+	*	Must hold:
+	*	<ul>
+	*	<li>Name: The element type name.</li>
+	*	<li>ElementT: The resource type.</li>
+	*	<li>ElementPtrT: The resource pointer type.</li>
+	*	<li>ElementContT: The resource container type.</li>
+	*	<li>ElementCacheT: The resource base cache type.</li>
+	*	<li>ElementProducerT: The element creation function prototype.</li>
+	*	<li>ElementInitialiserT: The prototype of the function use to initialise a resource.</li>
+	*	<li>ElementCleanerT: The prototype of the function use to cleanup a resource.</li>
+	*	<li>ElementMergerT: The prototype of the function use to merge a cache element into another cache.</li>
+	*	</ul>
+	*\~french
+	*	Structure de traits permettant de spécialiser le comportement d'un cache.
+	*\remarks
+	*	Doit contenir:
+	*	<ul>
+	*	<li>Name: Le nom du type d'élément.</li>
+	*	<li>ElementT: Le type de ressource.</li>
+	*	<li>ElementPtrT: Le type de pointeur sur une ressource.</li>
+	*	<li>ElementContT: Le type de conteneur de ressources.</li>
+	*	<li>ElementCacheT: Le type de base de cache de ressources.</li>
+	*	<li>ElementProducerT: Le prototype de la fonction de création d'un élément.</li>
+	*	<li>ElementInitialiserT: Le prototype de la fonction pour initialiser une ressource.</li>
+	*	<li>ElementCleanerT: Le prototype de la fonction pour nettoyer une ressource.</li>
+	*	<li>ElementMergerT: Le prototype de la fonction pour fusionner un élément d'un cache dans un autre cache.</li>
+	*	</ul>
+	*/
+	template< typename ResourceT, typename KeyT >
+	struct ResourceCacheTraitsT;
 	/**
 	*\~english
 	*\brief
-	*	Dynamic bitset class, with configurable block type.
+	*	Base class for an element cache.
 	*\~french
 	*\brief
-	*	Classe de bitset dynamique, avec un type de bloc configurable.
+	*	Classe de base pour un cache d'éléments.
 	*/
-	template< typename BlockType >
-	class DynamicBitsetT;
+	template< typename ResourceT
+		, typename KeyT
+		, typename TraitsT = ResourceCacheTraitsT< ResourceT, KeyT > >
+	class ResourceCacheBaseT;
+	/**
+	*\~english
+	*\brief
+	*	Base class for an element cache.
+	*\~french
+	*\brief
+	*	Classe de base pour un cache d'éléments.
+	*/
+	template< typename ResourceT
+		, typename KeyT
+		, typename TraitsT = ResourceCacheTraitsT< ResourceT, KeyT > >
+	class ResourceCacheT;
+	/**
+	*\~english
+	*	Helper structure to build a castor::ResourceCacheTraitsT.
+	*\remarks
+	*	Predefines:
+	*	<ul>
+	*	<li>ElementT: The resource type.</li>
+	*	<li>ElementPtrT: The resource pointer type.</li>
+	*	<li>ElementContT: The resource container type.</li>
+	*	<li>ElementCacheT: The resource base cache type.</li>
+	*	<li>ElementInitialiserT: The prototype of the function use to initialise a resource.</li>
+	*	<li>ElementCleanerT: The prototype of the function use to cleanup a resource.</li>
+	*	<li>ElementMergerT: The prototype of the function use to merge a cache element into another cache.</li>
+	*	</ul>
+	*	Hence, only remains to define:
+	*	<ul>
+	*	<li>Name: The element type name.</li>
+	*	<li>ElementProducerT: The element creation function prototype.</li>
+	*	</ul>
+	*\~french
+	*	Structure d'aide à la création d'un castor::ResourceCacheTraitsT.
+	*\remarks
+	*	Prédéfinit:
+	*	<ul>
+	*	<li>ElementT: Le type de ressource.</li>
+	*	<li>ElementPtrT: Le type de pointeur sur une ressource.</li>
+	*	<li>ElementContT: Le type de conteneur de ressources.</li>
+	*	<li>ElementCacheT: Le type de base de cache de ressources.</li>
+	*	<li>ElementInitialiserT: Le prototype de la fonction pour initialiser une ressource.</li>
+	*	<li>ElementCleanerT: Le prototype de la fonction pour nettoyer une ressource.</li>
+	*	<li>ElementMergerT: Le prototype de la fonction pour fusionner un élément d'un cache dans un autre cache.</li>
+	*	</ul>
+	*	Il ne reste donc ainsi qu'à définir:
+	*	<ul>
+	*	<li>Name: Le nom du type d'élément.</li>
+	*	<li>ElementProducerT: Le prototype de la fonction de création d'un élément.</li>
+	*	</ul>
+	*/
+	template< typename ResT, typename KeyT >
+	struct ResourceCacheTraitsBaseT
+	{
+		using ElementT = ResT;
+		using ElementPtrT = std::shared_ptr< ElementT >;
+		using ElementContT = std::unordered_map< KeyT, ElementPtrT >;
+		using ElementCacheT = ResourceCacheBaseT< ElementT, KeyT >;
+
+		using ElementInitialiserT = std::function< void( ElementPtrT ) >;
+		using ElementCleanerT = std::function< void( ElementPtrT ) >;
+		using ElementMergerT = std::function< void( ElementCacheT const &
+			, ElementContT &
+			, ElementPtrT ) >;
+	};
+	/**
+	\~english
+	*\brief		Basic signal class
+	\~french
+	*\brief		Classe basique de signal
+	*/
+	template< typename Function >
+	class Signal;
+	/**
+	\~english
+	\brief		Class used to execute code at scope exit.
+	\~french
+	\brief		Classe utilisée pour exécuter du code à la sortie d'un scope.
+	*/
+	template< typename ScopeExitFuncType >
+	class ScopeGuard;
+	/**
+	\~english
+	\brief		Unicity exception
+	\~french
+	\brief		Exception d'unicité
+	*/
+	class UnicityException;
 	/**
 	\~english
 	\brief		Representation of a Unique instance class
@@ -301,6 +418,26 @@ namespace castor
 
 	template< typename T >
 	static inline bool constexpr isGroupChangeTrackedT = IsGroupChangeTrackedT< T >::value;
+
+	using OnCacheChangedFunction = std::function< void() >;
+	using OnCacheChanged = castor::Signal< OnCacheChangedFunction >;
+	using OnCacheChangedConnection = castor::Connection< OnCacheChanged >;
+
+	template< typename ResourceT, typename KeyT >
+	using ResourceProducerT = typename ResourceCacheTraitsT< ResourceT, KeyT >::ElementProducerT;
+	template< typename ResourceT, typename KeyT >
+	using ResourceInitialiserT = typename ResourceCacheTraitsT< ResourceT, KeyT >::ElementInitialiserT;
+	template< typename ResourceT, typename KeyT >
+	using ResourceCleanerT = typename ResourceCacheTraitsT< ResourceT, KeyT >::ElementCleanerT;
+	template< typename ResourceT, typename KeyT >
+	using ResourceMergerT = typename ResourceCacheTraitsT< ResourceT, KeyT >::ElementMergerT;
+	template< typename ResourceT, typename KeyT >
+	using ResourcePtrT = typename ResourceCacheTraitsT< ResourceT, KeyT >::ElementPtrT;
+	template< typename ResourceT, typename KeyT >
+	using ResourceContT = typename ResourceCacheTraitsT< ResourceT, KeyT >::ElementContT;
+
+	template< typename ResourceT, typename KeyT >
+	using ResourceCachePtrT = std::shared_ptr< ResourceCacheT< ResourceT, KeyT > >;
 
 	CU_DeclareCUSmartPtr( castor, Resource, CU_API );
 	//@}

@@ -5,124 +5,56 @@
 
 namespace castor
 {
-	namespace
-	{
-		static const xchar * InfoCacheCreatedObject = cuT( "Cache::create - Created " );
-		static const xchar * WarningCacheDuplicateObject = cuT( "Cache::create - Duplicate " );
-		static const xchar * WarningCacheNullObject = cuT( "Cache::Insert - nullptr " );
+	template<>
+	const String ResourceCacheTraitsT< Image, String >::Name = cuT( "Image" );
 
-		inline void doReportCreation( LoggerInstance & logger
-			, castor::String const & name )
-		{
-			logger.logTrace( castor::makeStringStream()
-				<< InfoCacheCreatedObject
-				<< cuT( "Image: " )
-				<< name );
-		}
-
-		inline void doReportDuplicate( LoggerInstance & logger
-			, castor::String const & name )
-		{
-			logger.logWarning( castor::makeStringStream()
-				<< WarningCacheDuplicateObject
-				<< cuT( "Image: " )
-				<< name );
-		}
-
-		inline void doReportNull( LoggerInstance & logger )
-		{
-			logger.logWarning( castor::makeStringStream()
-				<< WarningCacheNullObject
-				<< cuT( "Image" ) );
-		}
-	}
-
-	//*********************************************************************************************
-
-	ImageCache::ImageCache( LoggerInstance & logger
+	ResourceCacheT< Image, String >::ResourceCacheT( LoggerInstance & logger
 		, ImageLoader const & loader )
-		: Collection< Image, String >{ logger }
+		: ResourceCacheBaseT< Image, String >{ logger
+			, [this]( String const & name, ImageCreateParams const & params )
+			{
+				return doProduce( name, params );
+			}
+			, [this]( ImageSPtr resource )
+			{
+				doInitialise( resource );
+			} }
 		, m_loader{ loader }
 	{
 	}
 
-	ImageCache::~ImageCache()
+	ImageSPtr ResourceCacheT< Image, String >::doProduce( String const & name
+		, ImageCreateParams const & params )
 	{
-	}
-
-	ImageSPtr ImageCache::add( String const & name
-		, Path const & path
-		, bool allowCompression
-		, bool generateMips )
-	{
-		using LockType = std::unique_lock< ImageCache >;
-		LockType lock{ makeUniqueLock( *this ) };
 		ImageSPtr result;
 
-		if ( Collection< Image, String >::has( name ) )
+		if ( params.mode )
 		{
-			result = Collection< Image, String >::find( name );
-
-			if ( !result->hasBuffer() )
-			{
-				*result = m_loader.load( name
-					, path
-					, allowCompression
-					, generateMips );
-			}
-			else
-			{
-				doReportDuplicate( getLogger(), name );
-			}
+			result = std::make_shared< Image >( name
+				, Path{}
+				, params.size
+				, params.format );
 		}
 		else
 		{
-			if ( File::fileExists( path ) )
-			{
-				result = std::make_shared< Image >( m_loader.load( name
-					, path
-					, allowCompression
-					, generateMips ) );
-				Collection< Image, String >::insert( name, result );
-				doReportCreation( getLogger(), name );
-			}
-			else
-			{
-				CU_Exception( "Can't create the image [" + string::stringCast< char >( name ) + "], invalid path: " + string::stringCast< char >( path ) );
-			}
+			result = std::make_shared< Image >( m_loader.load( name
+				, params.path
+				, params.allowCompression
+				, params.generateMips ) );
 		}
 
 		return result;
 	}
 
-	ImageSPtr ImageCache::add( String const & name
-		, Size const & size
-		, PixelFormat format )
+	void ResourceCacheT< Image, String >::doInitialise( ImageSPtr resource )
 	{
-		using LockType = std::unique_lock< ImageCache >;
-		LockType lock{ makeUniqueLock( *this ) };
-		ImageSPtr result;
-
-		if ( Collection< Image, String >::has( name ) )
+		if ( !resource->hasBuffer()
+			&& File::fileExists( resource->getPath() ) )
 		{
-			result = Collection< Image, String >::find( name );
-
-			if ( !result->hasBuffer() )
-			{
-				*result = std::move( Image( name, Path{}, size, format ) );
-			}
-			else
-			{
-				doReportDuplicate( getLogger(), name );
-			}
+			*resource = m_loader.load( resource->getName()
+				, resource->getPath()
+				, ashes::isCompressedFormat( VkFormat( resource->getPixelFormat() ) )
+				, resource->getLevels() > 1 );
 		}
-		else
-		{
-			result = std::make_shared< Image >( name, Path{}, size, format );
-			Collection< Image, String >::insert( name, result );
-			doReportCreation( getLogger(), name );
-		}
-
-		return result;
 	}
 }

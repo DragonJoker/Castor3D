@@ -5,7 +5,6 @@
 #include "SmaaPostEffect/LumaEdgeDetection.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Cache/Cache.hpp>
 #include <Castor3D/Material/Texture/Sampler.hpp>
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
@@ -15,6 +14,7 @@
 #include <Castor3D/Shader/GlslToSpv.hpp>
 #include <Castor3D/Shader/Program.hpp>
 
+#include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
 #include <ashespp/Buffer/UniformBuffer.hpp>

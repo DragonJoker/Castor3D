@@ -3,7 +3,6 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
 #include "Castor3D/Cache/BillboardCache.hpp"
-#include "Castor3D/Cache/Cache.hpp"
 #include "Castor3D/Cache/CacheView.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
@@ -29,6 +28,7 @@
 
 #include <CastorUtils/Data/Text/TextFont.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
+#include <CastorUtils/Design/ResourceCache.hpp>
 
 using namespace castor3d;
 
