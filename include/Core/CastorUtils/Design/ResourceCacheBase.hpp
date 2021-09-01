@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #include "DesignModule.hpp"
 #include "CastorUtils/Log/Logger.hpp"
+#include "CastorUtils/Exception/Assertion.hpp"
 
 #include <mutex>
 #include <unordered_map>
@@ -369,13 +370,13 @@ namespace castor
 		/**@{*/
 		auto begin()
 		{
-			CU_Require( m_locked );
+			CU_Require( this->m_locked );
 			return m_resources.begin();
 		}
 
 		auto begin()const
 		{
-			CU_Require( m_locked );
+			CU_Require( this->m_locked );
 			return m_resources.begin();
 		}
 

@@ -21,9 +21,13 @@ namespace castor3d
 		using ElementCacheT = CacheT;
 		using ElementT = typename ElementCacheT::ElementT;
 		using ElementKeyT = typename ElementCacheT::ElementKeyT;
+		using ElementCacheTraitsT = typename ElementCacheT::ElementCacheTraitsT;
 		using ElementPtrT = typename ElementCacheT::ElementPtrT;
+		using ElementContT = typename ElementCacheT::ElementContT;
+		using ElementProducerT = typename ElementCacheT::ElementProducerT;
 		using ElementInitialiserT = typename ElementCacheT::ElementInitialiserT;
 		using ElementCleanerT = typename ElementCacheT::ElementCleanerT;
+		using ElementMergerT = typename ElementCacheT::ElementMergerT;
 
 	public:
 		/**

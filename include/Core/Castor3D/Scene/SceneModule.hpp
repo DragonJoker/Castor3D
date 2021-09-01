@@ -387,6 +387,9 @@ namespace castor3d
 	using OnBillboardMaterialChanged = castor::Signal< OnBillboardMaterialChangedFunction >;
 	using OnBillboardMaterialChangedConnection = OnBillboardMaterialChanged::connection;
 
+	C3D_API castor::LoggerInstance & getLogger( Scene const & scene );
+	C3D_API Engine & getEngine( Scene const & scene );
+
 	//@}
 }
 

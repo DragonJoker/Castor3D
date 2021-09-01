@@ -65,7 +65,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( Engine );
 	CU_DeclareCUSmartPtr( castor3d, FramePassTimer, C3D_API );
 
-	castor::LoggerInstance & getLogger( Engine & engine );
+	C3D_API castor::LoggerInstance & getLogger( Engine & engine );
 
 	C3D_API castor::Matrix4x4f convert( std::array< float, 16 > const & value );
 	C3D_API VkClearColorValue convert( castor::RgbaColour const & value );
