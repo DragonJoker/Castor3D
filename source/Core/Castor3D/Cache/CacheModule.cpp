@@ -1,5 +1,15 @@
 #include "Castor3D/Cache/CacheModule.hpp"
 
+#include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
+#include "Castor3D/Cache/BillboardCache.hpp"
+#include "Castor3D/Cache/GeometryCache.hpp"
+#include "Castor3D/Cache/LightCache.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
+#include "Castor3D/Cache/OverlayCache.hpp"
+#include "Castor3D/Cache/PluginCache.hpp"
+#include "Castor3D/Cache/ShaderCache.hpp"
+#include "Castor3D/Cache/TargetCache.hpp"
+
 CU_ImplementCUSmartPtr( castor3d, AnimatedObjectGroupCache )
 CU_ImplementCUSmartPtr( castor3d, BillboardListCache )
 CU_ImplementCUSmartPtr( castor3d, CameraCache )

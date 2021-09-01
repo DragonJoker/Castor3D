@@ -753,6 +753,7 @@ namespace castor3d
 	CU_DeclareCUSmartPtr( castor3d, RenderQueue, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, RenderSystem, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, RenderTarget, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, RenderWindow, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, Viewport, C3D_API );
 
 	using RenderWindowPtr = std::unique_ptr< RenderWindow >;
