@@ -90,17 +90,18 @@ namespace castor3d
 		, float nearZ
 		, float farZ )
 		: m_engine{ engine }
-		, m_type{ type }
-		, m_size{}
 		, m_modified{ true }
-		, m_fovY{ m_modified, fovY }
-		, m_ratio{ m_modified, aspect }
 		, m_left{ m_modified, left }
 		, m_right{ m_modified, right }
 		, m_bottom{ m_modified, bottom }
 		, m_top{ m_modified, top }
 		, m_near{ m_modified, nearZ }
 		, m_far{ m_modified, farZ }
+		, m_fovY{ m_modified, fovY }
+		, m_ratio{ m_modified, aspect }
+		, m_type{ m_modified, type }
+		, m_size{ m_modified }
+		, m_position{ m_modified }
 		, m_viewport{ 1u, 1u, 0, 0 }
 		, m_scissor{ 0, 0, 1u, 1u }
 	{
@@ -110,12 +111,50 @@ namespace castor3d
 		}
 	}
 
-	Viewport::Viewport( Engine const & engine )
-		: Viewport{ engine, ViewportType::eOrtho, Angle{}, 1, 0, 1, 0, 1, 0, 1 }
+	Viewport::Viewport( Viewport const & rhs )
+		: m_engine{ rhs.m_engine }
+		, m_modified{ rhs.m_modified }
+		, m_left{ m_modified, rhs.m_left.value() }
+		, m_right{ m_modified, rhs.m_right.value() }
+		, m_bottom{ m_modified, rhs.m_bottom.value() }
+		, m_top{ m_modified, rhs.m_top.value() }
+		, m_near{ m_modified, rhs.m_near.value() }
+		, m_far{ m_modified, rhs.m_far.value() }
+		, m_fovY{ m_modified, rhs.m_fovY.value() }
+		, m_ratio{ m_modified, rhs.m_ratio.value() }
+		, m_type{ m_modified, rhs.m_type.value() }
+		, m_size{ m_modified, rhs.m_size.value() }
+		, m_position{ m_modified, rhs.m_position.value() }
+		, m_viewport{ rhs.m_viewport }
+		, m_scissor{ rhs.m_scissor }
+		, m_projection{ rhs.m_projection }
+		, m_safeBandedProjection{ rhs.m_safeBandedProjection }
 	{
 	}
 
-	Viewport::~Viewport()
+	Viewport::Viewport( Viewport && rhs )
+		: m_engine{ rhs.m_engine }
+		, m_modified{ rhs.m_modified }
+		, m_left{ m_modified, rhs.m_left.value() }
+		, m_right{ m_modified, rhs.m_right.value() }
+		, m_bottom{ m_modified, rhs.m_bottom.value() }
+		, m_top{ m_modified, rhs.m_top.value() }
+		, m_near{ m_modified, rhs.m_near.value() }
+		, m_far{ m_modified, rhs.m_far.value() }
+		, m_fovY{ m_modified, rhs.m_fovY.value() }
+		, m_ratio{ m_modified, rhs.m_ratio.value() }
+		, m_type{ m_modified, rhs.m_type.value() }
+		, m_size{ m_modified, rhs.m_size.value() }
+		, m_position{ m_modified, rhs.m_position.value() }
+		, m_viewport{ std::move( rhs.m_viewport ) }
+		, m_scissor{ std::move( rhs.m_scissor ) }
+		, m_projection{ std::move( rhs.m_projection ) }
+		, m_safeBandedProjection{ std::move( rhs.m_safeBandedProjection ) }
+	{
+	}
+
+	Viewport::Viewport( Engine const & engine )
+		: Viewport{ engine, ViewportType::eOrtho, Angle{}, 1, 0, 1, 0, 1, 0, 1 }
 	{
 	}
 
@@ -243,8 +282,8 @@ namespace castor3d
 	void Viewport::resize( const castor::Size & value )
 	{
 		m_size = value;
-		m_viewport = VkViewport{ 0.0f, 0.0f, float( m_size[0] ), float( m_size[1] ), 0.0f, 1.0f };
-		m_scissor = VkRect2D{ { 0, 0 }, m_size[0], m_size[1] };
+		m_viewport = VkViewport{ 0.0f, 0.0f, float( ( *m_size )[0] ), float( ( *m_size )[1] ), 0.0f, 1.0f };
+		m_scissor = VkRect2D{ { 0, 0 }, ( *m_size )[0], ( *m_size )[1] };
 	}
 
 	float Viewport::getProjectionScale()const
