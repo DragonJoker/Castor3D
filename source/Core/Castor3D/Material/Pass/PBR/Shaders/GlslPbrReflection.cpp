@@ -427,7 +427,7 @@ namespace castor3d::shader
 
 	void PbrReflectionModel::doDeclareComputeIBL()
 	{
-		m_computeIBL = m_writer.implementFunction< sdw::Vec3 >( "computeIBL"
+		m_computeIBL = m_writer.implementFunction< sdw::Vec3 >( "c3d_pbr_computeIBL"
 			, [&]( Surface const & surface
 				, PbrLightMaterial const & material
 				, sdw::Vec3 const & worldEye
@@ -480,7 +480,7 @@ namespace castor3d::shader
 
 	void PbrReflectionModel::doDeclareComputeReflEnvMap()
 	{
-		m_computeReflEnvMap = m_writer.implementFunction< sdw::Vec3 >( "computeReflEnvMap"
+		m_computeReflEnvMap = m_writer.implementFunction< sdw::Vec3 >( "c3d_pbr_computeReflEnvMap"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeRgba32 const & envMap
@@ -501,7 +501,7 @@ namespace castor3d::shader
 
 	void PbrReflectionModel::doDeclareComputeRefrEnvMap()
 	{
-		m_computeRefrEnvMap = m_writer.implementFunction< sdw::Void >( "computeRefrEnvMap"
+		m_computeRefrEnvMap = m_writer.implementFunction< sdw::Void >( "c3d_pbr_computeRefrEnvMap"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeRgba32 const & envMap
@@ -545,7 +545,7 @@ namespace castor3d::shader
 
 	void PbrReflectionModel::doDeclareComputeReflEnvMaps()
 	{
-		m_computeReflEnvMaps = m_writer.implementFunction< sdw::Vec3 >( "computeReflEnvMap"
+		m_computeReflEnvMaps = m_writer.implementFunction< sdw::Vec3 >( "c3d_pbr_computeReflEnvMap"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeArrayRgba32 const & envMap
@@ -568,7 +568,7 @@ namespace castor3d::shader
 
 	void PbrReflectionModel::doDeclareComputeRefrEnvMaps()
 	{
-		m_computeRefrEnvMaps = m_writer.implementFunction< sdw::Void >( "computeRefrEnvMap"
+		m_computeRefrEnvMaps = m_writer.implementFunction< sdw::Void >( "c3d_pbr_computeRefrEnvMap"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeArrayRgba32 const & envMap
@@ -614,7 +614,7 @@ namespace castor3d::shader
 
 	void PbrReflectionModel::doDeclareComputeRefrSkybox()
 	{
-		m_computeRefrSkybox = m_writer.implementFunction< sdw::Void >( "computeRefrSkybox"
+		m_computeRefrSkybox = m_writer.implementFunction< sdw::Void >( "c3d_pbr_computeRefrSkybox"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeRgba32 const & envMap
