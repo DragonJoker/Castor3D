@@ -159,6 +159,7 @@ namespace castor3d::shader
 	public:
 		C3D_API static castor::String getName();
 		bool m_isBlinnPhong{};
+		std::string m_prefix;
 		sdw::Function< sdw::Void
 			, InLight
 			, InPhongLightMaterial

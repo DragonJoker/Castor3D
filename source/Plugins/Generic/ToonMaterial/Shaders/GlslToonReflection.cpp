@@ -281,7 +281,7 @@ namespace toon::shader
 
 	void ToonPhongReflectionModel::doDeclareComputeRefl()
 	{
-		m_computeRefl = m_writer.implementFunction< sdw::Vec3 >( "computeRefl"
+		m_computeRefl = m_writer.implementFunction< sdw::Vec3 >( "c3d_phong_toon_computeRefl"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeRgba32 const & envMap
@@ -300,7 +300,7 @@ namespace toon::shader
 
 	void ToonPhongReflectionModel::doDeclareComputeRefr()
 	{
-		m_computeRefr = m_writer.implementFunction< sdw::Void >( "computeRefr"
+		m_computeRefr = m_writer.implementFunction< sdw::Void >( "c3d_phong_toon_computeRefr"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeRgba32 const & envMap
@@ -343,7 +343,7 @@ namespace toon::shader
 
 	void ToonPhongReflectionModel::doDeclareComputeReflRefr()
 	{
-		m_computeReflRefr = m_writer.implementFunction< sdw::Void >( "computeReflRefr"
+		m_computeReflRefr = m_writer.implementFunction< sdw::Void >( "c3d_phong_toon_computeReflRefr"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeRgba32 const & envMap
@@ -378,7 +378,7 @@ namespace toon::shader
 
 	void ToonPhongReflectionModel::doDeclareComputeRefls()
 	{
-		m_computeRefls = m_writer.implementFunction< sdw::Vec3 >( "computeRefl"
+		m_computeRefls = m_writer.implementFunction< sdw::Vec3 >( "c3d_phong_toon_computeRefl"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeArrayRgba32 const & envMap
@@ -400,7 +400,7 @@ namespace toon::shader
 
 	void ToonPhongReflectionModel::doDeclareComputeRefrs()
 	{
-		m_computeRefrs = m_writer.implementFunction< sdw::Void >( "computeRefr"
+		m_computeRefrs = m_writer.implementFunction< sdw::Void >( "c3d_phong_toon_computeRefr"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeArrayRgba32 const & envMap
@@ -446,7 +446,7 @@ namespace toon::shader
 
 	void ToonPhongReflectionModel::doDeclareComputeReflRefrs()
 	{
-		m_computeReflRefrs = m_writer.implementFunction< sdw::Void >( "computeReflRefr"
+		m_computeReflRefrs = m_writer.implementFunction< sdw::Void >( "c3d_phong_toon_computeReflRefr"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeArrayRgba32 const & envMap
@@ -896,7 +896,7 @@ namespace toon::shader
 
 	void ToonPbrReflectionModel::doDeclareComputeIBL()
 	{
-		m_computeIBL = m_writer.implementFunction< sdw::Vec3 >( "computeIBL"
+		m_computeIBL = m_writer.implementFunction< sdw::Vec3 >( "c3d_pbr_toon_computeIBL"
 			, [&]( c3d::Surface const & surface
 				, ToonPbrLightMaterial const & material
 				, sdw::Vec3 const & worldEye
@@ -949,7 +949,7 @@ namespace toon::shader
 
 	void ToonPbrReflectionModel::doDeclareComputeReflEnvMap()
 	{
-		m_computeReflEnvMap = m_writer.implementFunction< sdw::Vec3 >( "computeReflEnvMap"
+		m_computeReflEnvMap = m_writer.implementFunction< sdw::Vec3 >( "c3d_pbr_toon_computeReflEnvMap"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeRgba32 const & envMap
@@ -970,7 +970,7 @@ namespace toon::shader
 
 	void ToonPbrReflectionModel::doDeclareComputeRefrEnvMap()
 	{
-		m_computeRefrEnvMap = m_writer.implementFunction< sdw::Void >( "computeRefrEnvMap"
+		m_computeRefrEnvMap = m_writer.implementFunction< sdw::Void >( "c3d_pbr_toon_computeRefrEnvMap"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeRgba32 const & envMap
@@ -1014,7 +1014,7 @@ namespace toon::shader
 
 	void ToonPbrReflectionModel::doDeclareComputeReflEnvMaps()
 	{
-		m_computeReflEnvMaps = m_writer.implementFunction< sdw::Vec3 >( "computeReflEnvMap"
+		m_computeReflEnvMaps = m_writer.implementFunction< sdw::Vec3 >( "c3d_pbr_toon_computeReflEnvMap"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeArrayRgba32 const & envMap
@@ -1037,7 +1037,7 @@ namespace toon::shader
 
 	void ToonPbrReflectionModel::doDeclareComputeRefrEnvMaps()
 	{
-		m_computeRefrEnvMaps = m_writer.implementFunction< sdw::Void >( "computeRefrEnvMap"
+		m_computeRefrEnvMaps = m_writer.implementFunction< sdw::Void >( "c3d_pbr_toon_computeRefrEnvMap"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeArrayRgba32 const & envMap
@@ -1083,7 +1083,7 @@ namespace toon::shader
 
 	void ToonPbrReflectionModel::doDeclareComputeRefrSkybox()
 	{
-		m_computeRefrSkybox = m_writer.implementFunction< sdw::Void >( "computeRefrSkybox"
+		m_computeRefrSkybox = m_writer.implementFunction< sdw::Void >( "c3d_pbr_toon_computeRefrSkybox"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeRgba32 const & envMap

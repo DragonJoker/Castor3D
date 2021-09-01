@@ -79,7 +79,8 @@ namespace castor3d::shader
 		C3D_API LightingModel( sdw::ShaderWriter & writer
 			, Utils & utils
 			, ShadowOptions shadowOptions
-			, bool isOpaqueProgram );
+			, bool isOpaqueProgram
+			, std::string prefix );
 		C3D_API virtual sdw::Vec3 combine( sdw::Vec3 const & directDiffuse
 			, sdw::Vec3 const & indirectDiffuse
 			, sdw::Vec3 const & directSpecular
@@ -370,6 +371,7 @@ namespace castor3d::shader
 		sdw::ShaderWriter & m_writer;
 		Utils & m_utils;
 		bool m_isOpaqueProgram;
+		std::string m_prefix;
 		std::shared_ptr< Shadow > m_shadowModel;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3

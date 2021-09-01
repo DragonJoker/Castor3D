@@ -79,7 +79,8 @@ namespace castor3d::shader
 		: LightingModel{ m_writer
 			, utils
 			, std::move( shadowOptions )
-			, isOpaqueProgram }
+			, isOpaqueProgram
+			, isBlinnPhong ? std::string{ "c3d_blinnphong_" } : std::string{ "c3d_phong_" } }
 		, m_isBlinnPhong{ isBlinnPhong }
 	{
 	}
@@ -380,7 +381,7 @@ namespace castor3d::shader
 	void PhongLightingModel::doDeclareComputeTiledDirectionalLight()
 	{
 		OutputComponents output{ m_writer };
-		m_computeTiledDirectional = m_writer.implementFunction< sdw::Void >( "computeDirectionalLight"
+		m_computeTiledDirectional = m_writer.implementFunction< sdw::Void >( m_prefix + "computeDirectionalLight"
 			, [this]( TiledDirectionalLight const & light
 				, PhongLightMaterial const & material
 				, Surface const & surface
@@ -537,7 +538,7 @@ namespace castor3d::shader
 	void PhongLightingModel::doDeclareComputeDirectionalLight()
 	{
 		OutputComponents output{ m_writer };
-		m_computeDirectional = m_writer.implementFunction< sdw::Void >( "computeDirectionalLight"
+		m_computeDirectional = m_writer.implementFunction< sdw::Void >( m_prefix + "computeDirectionalLight"
 			, [this]( DirectionalLight const & light
 				, PhongLightMaterial const & material
 				, Surface const & surface
@@ -694,7 +695,7 @@ namespace castor3d::shader
 	void PhongLightingModel::doDeclareComputePointLight()
 	{
 		OutputComponents output{ m_writer };
-		m_computePoint = m_writer.implementFunction< sdw::Void >( "computePointLight"
+		m_computePoint = m_writer.implementFunction< sdw::Void >( m_prefix + "computePointLight"
 			, [this]( PointLight const & light
 				, PhongLightMaterial const & material
 				, Surface const & surface
@@ -791,7 +792,7 @@ namespace castor3d::shader
 	void PhongLightingModel::doDeclareComputeSpotLight()
 	{
 		OutputComponents output{ m_writer };
-		m_computeSpot = m_writer.implementFunction< sdw::Void >( "computeSpotLight"
+		m_computeSpot = m_writer.implementFunction< sdw::Void >( m_prefix + "computeSpotLight"
 			, [this]( SpotLight const & light
 				, PhongLightMaterial const & material
 				, Surface const & surface
@@ -905,7 +906,7 @@ namespace castor3d::shader
 	void PhongLightingModel::doDeclareComputeLight()
 	{
 		OutputComponents output{ m_writer };
-		m_computeLight = m_writer.implementFunction< sdw::Void >( "doComputeLight"
+		m_computeLight = m_writer.implementFunction< sdw::Void >( m_prefix + "doComputeLight"
 			, [this]( Light const & light
 				, PhongLightMaterial const & material
 				, Surface const & surface
@@ -978,7 +979,7 @@ namespace castor3d::shader
 
 	void PhongLightingModel::doDeclareComputeTiledDirectionalLightDiffuse()
 	{
-		m_computeTiledDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeDirectionalLight"
+		m_computeTiledDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeDirectionalLight"
 			, [this]( TiledDirectionalLight const & light
 				, PhongLightMaterial const & material
 				, Surface const & surface
@@ -1046,7 +1047,7 @@ namespace castor3d::shader
 
 	void PhongLightingModel::doDeclareComputeDirectionalLightDiffuse()
 	{
-		m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeDirectionalLight"
+		m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeDirectionalLight"
 			, [this]( DirectionalLight const & light
 				, PhongLightMaterial const & material
 				, Surface const & surface
@@ -1114,7 +1115,7 @@ namespace castor3d::shader
 
 	void PhongLightingModel::doDeclareComputePointLightDiffuse()
 	{
-		m_computePointDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computePointLight"
+		m_computePointDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computePointLight"
 			, [this]( PointLight const & light
 				, PhongLightMaterial const & material
 				, Surface const & surface
@@ -1197,7 +1198,7 @@ namespace castor3d::shader
 
 	void PhongLightingModel::doDeclareComputeSpotLightDiffuse()
 	{
-		m_computeSpotDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeSpotLight"
+		m_computeSpotDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeSpotLight"
 			, [this]( SpotLight const & light
 				, PhongLightMaterial const & material
 				, Surface const & surface
@@ -1301,7 +1302,7 @@ namespace castor3d::shader
 
 	void PhongLightingModel::doDeclareComputeLightDiffuse()
 	{
-		m_computeLightDiffuse = m_writer.implementFunction< sdw::Vec3 >( "doComputeLight"
+		m_computeLightDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "doComputeLight"
 			, [this]( Light const & light
 				, PhongLightMaterial const & material
 				, Surface const & surface
