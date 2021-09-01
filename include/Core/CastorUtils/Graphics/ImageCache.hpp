@@ -67,7 +67,7 @@ namespace castor
 
 		CU_API static const String Name;
 
-		using ElementProducerT = std::function< typename ElementPtrT( KeyT const &
+		using ElementProducerT = std::function< ElementPtrT( KeyT const &
 			, ImageCreateParams const & ) >;
 	};
 	/**

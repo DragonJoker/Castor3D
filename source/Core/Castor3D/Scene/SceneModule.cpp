@@ -109,4 +109,14 @@ namespace castor3d
 
 		return result;
 	}
+
+	castor::LoggerInstance & getLogger( Scene const & scene )
+	{
+		return getLogger( *scene.getEngine() );
+	}
+
+	Engine & getEngine( Scene const & scene )
+	{
+		return *scene.getEngine();
+	}
 }
