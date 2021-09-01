@@ -1,7 +1,6 @@
 #include "Castor3D/Render/RenderTarget.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/Cache.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/OverlayCache.hpp"
@@ -31,6 +30,7 @@
 #include <RenderGraph/RunnablePasses/ImageCopy.hpp>
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
+#include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Graphics/Image.hpp>
 #include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 

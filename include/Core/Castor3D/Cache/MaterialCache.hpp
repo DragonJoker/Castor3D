@@ -4,38 +4,37 @@ See LICENSE file in root folder
 #ifndef ___C3D_MaterialCache_H___
 #define ___C3D_MaterialCache_H___
 
-#include "Castor3D/Cache/CacheBase.hpp"
+#include "Castor3D/Cache/CacheModule.hpp"
 #include "Castor3D/Material/MaterialModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBufferModule.hpp"
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBufferModule.hpp"
 
-namespace castor3d
+#include <CastorUtils/Design/ResourceCache.hpp>
+
+namespace castor
 {
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		09/02/2010
-	\version	0.1
 	\~english
 	\brief		Material collection, with additional functions
 	\~french
 	\brief		Collection de matériaux, avec des fonctions additionnelles
 	*/
-	class MaterialCache
-		: public CacheBase< Material, castor::String >
+	template<>
+	class ResourceCacheT< castor3d::Material, String > final
+		: public ResourceCacheBaseT< castor3d::Material, String >
 	{
 	public:
-		using MyCacheType = CacheBase< Material, castor::String >;
-		using MyCacheTraits = typename MyCacheType::MyCacheTraits;
-		using Element = typename MyCacheType::Element;
-		using Key = typename MyCacheType::Key;
-		using Collection = typename MyCacheType::Collection;
-		using LockType = typename MyCacheType::LockType;
-		using ElementPtr = typename MyCacheType::ElementPtr;
-		using Producer = typename MyCacheType::Producer;
-		using Initialiser = typename MyCacheType::Initialiser;
-		using Cleaner = typename MyCacheType::Cleaner;
-		using Merger = typename MyCacheType::Merger;
+		using ElementT = typename castor3d::Material;
+		using ElementKeyT = typename String;
+		using ElementCacheT = ResourceCacheBaseT< ElementT, ElementKeyT >;
+		using ElementCacheTraitsT = typename ElementCacheT::ElementCacheTraitsT;
+		using ElementPtrT = typename ElementCacheT::ElementPtrT;
+		using ElementContT = typename ElementCacheT::ElementContT;
+		using ElementProducerT = typename ElementCacheT::ElementProducerT;
+		using ElementInitialiserT = typename ElementCacheT::ElementInitialiserT;
+		using ElementCleanerT = typename ElementCacheT::ElementCleanerT;
+		using ElementMergerT = typename ElementCacheT::ElementMergerT;
 
 	public:
 		/**
@@ -54,27 +53,14 @@ namespace castor3d
 		 *\param[in]	clean		Le nettoyeur d'objet.
 		 *\param[in]	merge		Le fusionneur de collection d'objets.
 		 */
-		MaterialCache( Engine & engine
-			, Producer && produce
-			, Initialiser && initialise
-			, Cleaner && clean
-			, Merger && merge )
-			: MyCacheType( engine
-				, std::move( produce )
-				, std::move( initialise )
-				, std::move( clean )
-				, std::move( merge ) )
-		{
-		}
+		C3D_API explicit ResourceCacheT( castor3d::Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		~MaterialCache()
-		{
-		}
+		C3D_API ~ResourceCacheT() = default;
 		/**
 		 *\~english
 		 *\brief		Intialises the default material.
@@ -85,8 +71,8 @@ namespace castor3d
 		 *\param[in]	device	Le device GPU.
 		 *\param[in]	type	Le type des matériaux.
 		 */
-		C3D_API void initialise( RenderDevice const & device
-			, PassTypeID passType );
+		C3D_API void initialise( castor3d::RenderDevice const & device
+			, castor3d::PassTypeID passType );
 		/**
 		 *\~english
 		 *\brief		Sets all the elements to be cleaned up.
@@ -109,7 +95,7 @@ namespace castor3d
 		 *\brief			Met à jour la passe de rendu, au niveau CPU.
 		 *\param[in, out]	updater	Les données d'update.
 		 */
-		C3D_API void update( CpuUpdater & updater );
+		C3D_API void update( castor3d::CpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, GPU wise.
@@ -118,55 +104,7 @@ namespace castor3d
 		 *\brief			Met à jour la passe de rendu, au niveau GPU.
 		 *\param[in, out]	updater	Les données d'update.
 		 */
-		C3D_API void update( GpuUpdater & updater );
-		/**
-		 *\~english
-		 *\brief		Removes an element, given a name.
-		 *\param[in]	name	The element name.
-		 *\param[in]	element	The element.
-		 *\~french
-		 *\brief		Retire un élément à partir d'un nom.
-		 *\param[in]	name	Le nom d'élément.
-		 *\param[in]	element	L'élément.
-		 */
-		C3D_API bool tryAdd( Key const & name
-			, MaterialSPtr element
-			, bool initialise = false );
-		/**
-		 *\~english
-		 *\brief		Removes an element, given a name.
-		 *\param[in]	name	The element name.
-		 *\param[in]	element	The element.
-		 *\~french
-		 *\brief		Retire un élément à partir d'un nom.
-		 *\param[in]	name	Le nom d'élément.
-		 *\param[in]	element	L'élément.
-		 */
-		C3D_API MaterialSPtr add( Key const & name
-			, MaterialSPtr element
-			, bool initialise = false );
-		/**
-		 *\~english
-		 *\brief		Creates an element.
-		 *\param[in]	name	The element name.
-		 *\param[in]	type	The material type.
-		 *\return		The created object.
-		 *\~french
-		 *\brief		Crée un élément.
-		 *\param[in]	name	Le nom d'élément.
-		 *\param[in]	type	Le type de matéeiau.
-		 *\return		L'élément créé.
-		 */
-		C3D_API MaterialSPtr add( Key const & name, PassTypeID type );
-		/**
-		 *\~english
-		 *\brief		Removes an element, given a name.
-		 *\param[in]	name	The element name.
-		 *\~french
-		 *\brief		Retire un élément à partir d'un nom.
-		 *\param[in]	name	Le nom d'élément.
-		 */
-		C3D_API void remove( Key const & name );
+		C3D_API void update( castor3d::GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Puts all the materials names in the given array
@@ -175,20 +113,20 @@ namespace castor3d
 		 *\brief		Remplit la liste des noms de tous les matériaux
 		 *\param[out]	names	La liste de noms
 		 */
-		C3D_API void getNames( castor::StringArray & names );
-		C3D_API void registerMaterial( Material const & material );
-		C3D_API void unregisterMaterial( Material const & material );
-		C3D_API void registerPass( Pass & pass );
-		C3D_API void unregisterPass( Pass & pass );
-		C3D_API void registerUnit( TextureUnit & unit );
-		C3D_API void unregisterUnit( TextureUnit & unit );
+		C3D_API void getNames( StringArray & names );
+		C3D_API void registerMaterial( castor3d::Material const & material );
+		C3D_API void unregisterMaterial( castor3d::Material const & material );
+		C3D_API void registerPass( castor3d::Pass & pass );
+		C3D_API void unregisterPass( castor3d::Pass & pass );
+		C3D_API void registerUnit( castor3d::TextureUnit & unit );
+		C3D_API void unregisterUnit( castor3d::TextureUnit & unit );
 		/**
 		 *\~english
 		 *\brief		Retrieves the default material
 		 *\~french
 		 *\brief		Récupère le matériau par défaut
 		 */
-		MaterialSPtr getDefaultMaterial()const
+		castor3d::MaterialSPtr getDefaultMaterial()const
 		{
 			return m_defaultMaterial;
 		}
@@ -198,7 +136,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le tampon de passes.
 		 */
-		PassBuffer const & getPassBuffer()const
+		castor3d::PassBuffer const & getPassBuffer()const
 		{
 			CU_Require( m_passBuffer );
 			return *m_passBuffer;
@@ -209,16 +147,21 @@ namespace castor3d
 		 *\~french
 		 *\return		Le tampon de configurations de textures.
 		 */
-		TextureConfigurationBuffer const & getTextureBuffer()const
+		castor3d::TextureConfigurationBuffer const & getTextureBuffer()const
 		{
 			CU_Require( m_textureBuffer );
 			return *m_textureBuffer;
 		}
 
 	private:
-		MaterialSPtr m_defaultMaterial;
-		PassBufferSPtr m_passBuffer;
-		TextureConfigurationBufferSPtr m_textureBuffer;
+		using ElementCacheT::cleanup;
+		using ElementCacheT::clear;
+
+	private:
+		castor3d::Engine & m_engine;
+		castor3d::MaterialSPtr m_defaultMaterial;
+		castor3d::PassBufferSPtr m_passBuffer;
+		castor3d::TextureConfigurationBufferSPtr m_textureBuffer;
 	};
 }
 

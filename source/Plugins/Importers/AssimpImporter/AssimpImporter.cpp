@@ -1,7 +1,6 @@
 #include "AssimpImporter/AssimpImporter.hpp"
 
 #include <Castor3D/Animation/Interpolator.hpp>
-#include <Castor3D/Cache/Cache.hpp>
 #include <Castor3D/Cache/GeometryCache.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Cache/ObjectCache.hpp>
@@ -22,6 +21,7 @@
 #include <Castor3D/Scene/Scene.hpp>
 
 #include <CastorUtils/Design/ArrayView.hpp>
+#include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Log/Logger.hpp>
 
 #include <assimp/version.h>

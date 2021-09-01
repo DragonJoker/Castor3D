@@ -2,16 +2,8 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
-#include "Castor3D/Cache/BillboardCache.hpp"
-#include "Castor3D/Cache/Cache.hpp"
-#include "Castor3D/Cache/CacheView.hpp"
-#include "Castor3D/Cache/GeometryCache.hpp"
-#include "Castor3D/Cache/LightCache.hpp"
-#include "Castor3D/Cache/MaterialCache.hpp"
-#include "Castor3D/Cache/ObjectCache.hpp"
-#include "Castor3D/Cache/OverlayCache.hpp"
-#include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
+#include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
@@ -39,10 +31,9 @@
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 
+#include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Graphics/Font.hpp>
 #include <CastorUtils/Graphics/FontCache.hpp>
-
-using namespace castor;
 
 namespace castor3d
 {
@@ -50,27 +41,11 @@ namespace castor3d
 
 	namespace
 	{
-		template< typename ResourceType
-			, EventType EventType
-			, typename CacheType
-			, typename Initialiser
-			, typename Cleaner >
-		std::unique_ptr< CacheView< ResourceType, CacheType, EventType > > makeCacheView( castor::String const & name
-			, Initialiser && initialise
-			, Cleaner && clean
-			, CacheType & cache )
-		{
-			return std::make_unique< CacheView< ResourceType, CacheType, EventType > >( name
-				, std::move( initialise )
-				, std::move( clean )
-				, cache );
-		}
-
 		template< typename ObjType, typename ViewType >
 		bool writeView( ViewType const & view
-			, String const & elemsName
-			, String const & tabs
-			, TextFile & file )
+			, castor::String const & elemsName
+			, castor::String const & tabs
+			, castor::TextFile & file )
 		{
 			bool result = true;
 
@@ -96,7 +71,7 @@ namespace castor3d
 	//*************************************************************************************************
 
 	template<>
-	inline void CacheView< Overlay, OverlayCache, EventType::ePreRender >::clear()
+	inline void CacheViewT< OverlayCache, EventType::ePreRender >::clear()
 	{
 		for ( auto name : m_createdElements )
 		{
@@ -112,7 +87,7 @@ namespace castor3d
 	//*************************************************************************************************
 
 	template<>
-	inline void CacheView< castor::Font, FontCache, EventType::ePreRender >::clear()
+	inline void CacheViewT< castor::FontCache, EventType::ePreRender >::clear()
 	{
 		for ( auto name : m_createdElements )
 		{
@@ -127,20 +102,38 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	String Scene::RootNode = cuT( "RootNode" );
-	String Scene::CameraRootNode = cuT( "CameraRootNode" );
-	String Scene::ObjectRootNode = cuT( "ObjectRootNode" );
+	castor::String Scene::RootNode = cuT( "RootNode" );
+	castor::String Scene::CameraRootNode = cuT( "CameraRootNode" );
+	castor::String Scene::ObjectRootNode = cuT( "ObjectRootNode" );
 
-	Scene::Scene( String const & name, Engine & engine )
-		: OwnedBy< Engine >{ engine }
-		, Named{ name }
-		, m_listener{ engine.getFrameListenerCache().add( cuT( "Scene_" ) + name + string::toString( (size_t)this ) ) }
+	Scene::Scene( castor::String const & name, Engine & engine )
+		: castor::OwnedBy< Engine >{ engine }
+		, castor::Named{ name }
+		, m_listener{ engine.getFrameListenerCache().add( cuT( "Scene_" ) + name + castor::string::toString( (size_t)this ) ) }
 		, m_animationUpdater{ std::max( 2u, engine.getCpuInformations().getCoreCount() - ( engine.isThreaded() ? 2u : 1u ) ) }
 		, m_background{ std::make_shared< ColourBackground >( engine, *this ) }
 		, m_lightFactory{ std::make_shared< LightFactory >() }
 		, m_renderNodes{ castor::makeUnique< SceneRenderNodes >( *this ) }
+		, m_rootNode{ std::make_shared< SceneNode >( RootNode, *this ) }
+		, m_rootCameraNode{ std::make_shared< SceneNode >( CameraRootNode, *this ) }
+		, m_rootObjectNode{ std::make_shared< SceneNode >( ObjectRootNode, *this ) }
 	{
-		auto mergeObject = [this]( auto const & source
+		auto mergeResource = [this]( auto const & source
+			, auto & destination
+			, auto element )
+		{
+			auto name = element->getName();
+			auto ires = destination.emplace( name, element );
+
+			while ( !ires.second )
+			{
+				name = getName() + cuT( "_" ) + name;
+				ires = destination.emplace( name, element );
+			}
+
+			element->setName( name );
+		};
+		auto mergeObject = [this, mergeResource]( auto const & source
 			, auto & destination
 			, auto element
 			, SceneNodeSPtr rootCameraNode
@@ -157,29 +150,7 @@ namespace castor3d
 				element->attachTo( *rootObjectNode );
 			}
 
-			String name = element->getName();
-
-			while ( destination.has( name ) )
-			{
-				name = this->getName() + cuT( "_" ) + name;
-			}
-
-			element->setName( name );
-			destination.insert( name, element );
-		};
-		auto mergeResource = [this]( auto const & source
-			, auto & destination
-			, auto element )
-		{
-			String name = element->getName();
-
-			if ( !destination.has( name ) )
-			{
-				name = this->getName() + cuT( "_" ) + name;
-			}
-
-			element->setName( name );
-			destination.insert( name, element );
+			mergeResource( source, destination, element );
 		};
 		auto gpuEvtInitialise = [this]( auto element )
 		{
@@ -205,14 +176,6 @@ namespace castor3d
 		{
 			parent.attachObject( *element );
 		};
-		auto attachCamera = []( auto element
-			, SceneNode & parent
-			, SceneNodeSPtr rootNode
-			, SceneNodeSPtr rootCameraNode
-			, SceneNodeSPtr rootObjectNode )
-		{
-			parent.attachObject( *element );
-		};
 		auto attachNode = []( auto element
 			, SceneNode & parent
 			, SceneNodeSPtr rootNode
@@ -221,41 +184,26 @@ namespace castor3d
 		{
 			element->attachTo( parent );
 		};
+		auto detach = []( auto element )
+		{
+			element->detach();
+		};
 		auto dummy = []( auto element )
 		{
 		};
 
-		m_rootNode = std::make_shared< SceneNode >( RootNode, *this );
-		m_rootCameraNode = std::make_shared< SceneNode >( CameraRootNode, *this );
-		m_rootObjectNode = std::make_shared< SceneNode >( ObjectRootNode, *this );
 		m_rootCameraNode->attachTo( *m_rootNode );
 		m_rootObjectNode->attachTo( *m_rootNode );
 
-		m_billboardCache = std::make_unique< BillboardListCache >( engine
-			, *this
+		m_billboardCache = makeObjectCache< BillboardList, castor::String >( *this
+			, m_rootNode
+			, m_rootCameraNode
+			, m_rootObjectNode );
+		m_cameraCache = makeObjectCache< Camera, castor::String >( *this
 			, m_rootNode
 			, m_rootCameraNode
 			, m_rootObjectNode
-			, [this]( String const & name, SceneNode & parent )
-				{
-					return std::make_shared< BillboardList >( name
-						, *this
-						, parent );
-				}
-			, gpuEvtInitialise
-			, gpuEvtClean
-			, mergeObject
-			, attachObject
-			, [this]( BillboardListSPtr element )
-				{
-					element->detach();
-				} );
-		m_cameraCache = makeObjectCache< Camera, String >( engine
-			, *this
-			, m_rootNode
-			, m_rootCameraNode
-			, m_rootObjectNode
-			, [this]( String const & name
+			, [this]( castor::String const & name
 				, SceneNode & parent
 				, Viewport && viewport )
 				{
@@ -267,70 +215,21 @@ namespace castor3d
 			, dummy
 			, dummy
 			, mergeObject
-			, attachCamera
-			, [this]( CameraSPtr element )
-				{
-					element->detach();
-				} );
-		m_geometryCache = std::make_unique< GeometryCache >( engine
-			, *this
-			, m_rootNode
-			, m_rootCameraNode
-			, m_rootObjectNode
-			, [this]( String const & name
-				, SceneNode & parent
-				, MeshSPtr mesh )
-				{
-					return std::make_shared< Geometry >( name
-						, *this
-						, parent
-						, mesh );
-				}
-			, dummy
-			, dummy
-			, mergeObject
 			, attachObject
-			, [this]( GeometrySPtr element )
-				{
-					element->detach();
-				} );
-		m_lightCache = std::make_unique< LightCache >( engine
-			, *this
+			, detach );
+		m_geometryCache = makeObjectCache< Geometry, castor::String >( *this
+			, m_rootNode
+			, m_rootCameraNode
+			, m_rootObjectNode );
+		m_lightCache = makeObjectCache< Light, castor::String >( *this
+			, m_rootNode
+			, m_rootCameraNode
+			, m_rootObjectNode );
+		m_particleSystemCache = makeObjectCache< ParticleSystem, castor::String >( *this
 			, m_rootNode
 			, m_rootCameraNode
 			, m_rootObjectNode
-			, [this]( String const & name
-				, SceneNode & parent
-				, LightType lightType )
-				{
-					auto result = std::make_shared< Light >( name
-						, *this
-						, parent
-						, *m_lightFactory
-						, lightType );
-					m_lightConnections.emplace( name
-						, result->onChanged.connect( [this]( Light const & light )
-						{
-							doUpdateLightDependent( light.getLightType()
-								, light.isShadowProducer()
-								, light.getExpectedGlobalIlluminationType() );
-						} ) );
-					return result;
-				}
-			, dummy
-			, dummy
-			, mergeObject
-			, attachObject
-			, [this]( LightSPtr element )
-				{
-					element->detach();
-				} );
-		m_particleSystemCache = makeObjectCache< ParticleSystem, String >( engine
-			, *this
-			, m_rootNode
-			, m_rootCameraNode
-			, m_rootObjectNode
-			, [this]( String const & name
+			, [this]( castor::String const & name
 				, SceneNode & parent
 				, uint32_t count )
 				{
@@ -343,16 +242,12 @@ namespace castor3d
 			, gpuEvtClean
 			, mergeObject
 			, attachObject
-			, [this]( ParticleSystemSPtr element )
-				{
-					element->detach();
-				} );
-		m_sceneNodeCache = makeObjectCache< SceneNode, String >( engine
-			, *this
+			, detach );
+		m_sceneNodeCache = makeObjectCache< SceneNode, castor::String >( *this
 			, m_rootNode
 			, m_rootCameraNode
 			, m_rootObjectNode
-			, [this]( String const & name
+			, [this]( castor::String const & name
 				, SceneNode & parent )
 				{
 					return std::make_shared< SceneNode >( name, *this );
@@ -361,62 +256,40 @@ namespace castor3d
 			, dummy
 			, mergeObject
 			, attachNode
-			, [this]( SceneNodeSPtr element )
-				{
-					element->detach();
-				} );
-		m_animatedObjectGroupCache = std::make_unique< AnimatedObjectGroupCache >( engine
-			, [this]( castor::String const & name )
-				{
-					return std::make_shared< AnimatedObjectGroup >( name, *this );
-				}
-			, dummy
-			, dummy
-			, mergeResource );
-		m_meshCache = makeCache< Mesh, String >( engine
+			, detach );
+		m_animatedObjectGroupCache = castor::makeCache< AnimatedObjectGroup, castor::String >( *this );
+		m_meshCache = castor::makeCache< Mesh, castor::String >( getLogger( engine )
 			, [this]( castor::String const & name )
 				{
 					return std::make_shared< Mesh >( name
 						, *this );
 				}
-			, dummy
+			, cpuEvtInitialise
 			, cpuEvtClean
 			, mergeResource );
 
-		m_materialCacheView = makeCacheView< Material, EventType::ePreRender >( getName()
+		m_materialCacheView = makeCacheView< EventType::ePreRender >( getName()
+			, getEngine()->getMaterialCache()
 			, [this]( MaterialSPtr element )
-				{
-					this->getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
-						, [element]( RenderDevice const & device
-							, QueueData const & queueData )
+			{
+				m_materialsListeners.emplace( element
+					, element->onChanged.connect( [this]( Material const & material )
 						{
-							element->initialise();
+							onMaterialChanged( material );
 						} ) );
-					this->m_materialsListeners.emplace( element
-						, element->onChanged.connect( [this]( Material const & material )
-							{
-								onMaterialChanged( material );
-							} ) );
-					m_dirtyMaterials = true;
-				}
+				m_dirtyMaterials = true;
+			}
 			, [this]( MaterialSPtr element )
-				{
-					m_dirtyMaterials = true;
-					this->m_materialsListeners.erase( element );
-					this->getListener().postEvent( makeCpuCleanupEvent( *element ) );
-				}
-			, getEngine()->getMaterialCache() );
-		m_samplerCacheView = makeCacheView< Sampler, EventType::ePreRender >( getName()
-			, gpuEvtInitialise
-			, cpuEvtClean
+			{
+				m_dirtyMaterials = true;
+				m_materialsListeners.erase( element );
+				getListener().postEvent( makeCpuCleanupEvent( *element ) );
+			} );
+		m_samplerCacheView = makeCacheView< EventType::ePreRender >( getName()
 			, getEngine()->getSamplerCache() );
-		m_overlayCacheView = makeCacheView< Overlay, EventType::ePreRender >( getName()
-			, std::bind( OverlayCache::OverlayInitialiser{ getEngine()->getOverlayCache() }, std::placeholders::_1 )
-			, std::bind( OverlayCache::OverlayCleaner{ getEngine()->getOverlayCache() }, std::placeholders::_1 )
+		m_overlayCacheView = makeCacheView< EventType::ePreRender >( getName()
 			, getEngine()->getOverlayCache() );
-		m_fontCacheView = makeCacheView< castor::Font, EventType::ePreRender >( getName()
-			, dummy
-			, dummy
+		m_fontCacheView = makeCacheView< EventType::ePreRender >( getName()
 			, getEngine()->getFontCache() );
 
 		auto notify = [this]()
@@ -495,7 +368,6 @@ namespace castor3d
 	void Scene::initialise()
 	{
 		m_background->initialise( getEngine()->getRenderSystem()->getRenderDevice() );
-		m_lightCache->initialise();
 		doUpdateLightsDependent();
 		m_initialised = true;
 	}
@@ -536,10 +408,10 @@ namespace castor3d
 			doUpdateBoundingBox();
 			doUpdateAnimations( updater );
 			doUpdateMaterials();
-			getLightCache().update( updater );
-			getGeometryCache().update( updater );
-			getBillboardListCache().update( updater );
-			getAnimatedObjectGroupCache().update( updater );
+			m_lightCache->update( updater );
+			m_geometryCache->update( updater );
+			m_billboardCache->update( updater );
+			m_animatedObjectGroupCache->update( updater );
 			onUpdate( *this );
 			m_changed = false;
 		}
@@ -547,8 +419,8 @@ namespace castor3d
 
 	void Scene::update( GpuUpdater & updater )
 	{
-		getLightCache().update( updater );
-		getMeshCache().forEach( []( Mesh & mesh )
+		m_lightCache->update( updater );
+		m_meshCache->forEach( []( Mesh & mesh )
 		{
 			for ( auto & submesh : mesh )
 			{
@@ -584,7 +456,7 @@ namespace castor3d
 		scene->cleanup();
 	}
 
-	bool Scene::importExternal( Path const & fileName, SceneImporter & importer )
+	bool Scene::importExternal( castor::Path const & fileName, SceneImporter & importer )
 	{
 		setChanged();
 		//return importer.importScene( *this, fileName, Parameters() );
@@ -739,6 +611,22 @@ namespace castor3d
 		return group->addObject( texture, pass );
 	}
 
+	void Scene::registerLight( Light & light )
+	{
+		m_lightConnections.emplace( light.getName()
+			, light.onChanged.connect( [this]( Light const & light )
+				{
+					doUpdateLightDependent( light.getLightType()
+						, light.isShadowProducer()
+						, light.getExpectedGlobalIlluminationType() );
+				} ) );
+	}
+
+	void Scene::unregisterLight( Light & light )
+	{
+		m_lightConnections.erase( light.getName() );
+	}
+
 	PassTypeID Scene::getPassesType()const
 	{
 		return getEngine()->getPassesType();
@@ -801,8 +689,8 @@ namespace castor3d
 	{
 		float fmin = std::numeric_limits< float >::max();
 		float fmax = std::numeric_limits< float >::lowest();
-		Point3f min{ fmin, fmin, fmin };
-		Point3f max{ fmax, fmax, fmax };
+		castor::Point3f min{ fmin, fmin, fmin };
+		castor::Point3f max{ fmax, fmax, fmax };
 		m_geometryCache->forEach( [&min, &max]( Geometry const & geometry )
 			{
 				auto node = geometry.getParent();
@@ -841,7 +729,7 @@ namespace castor3d
 				} );
 			}
 
-			m_animationUpdater.waitAll( Milliseconds::max() );
+			m_animationUpdater.waitAll( castor::Milliseconds::max() );
 		}
 		else
 		{

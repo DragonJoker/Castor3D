@@ -154,12 +154,12 @@ namespace castor
 		 *\brief		Inserts an element at the given key into the collection
 		 *\param[in]	key		The key at which element is inserted
 		 *\param[in]	element	The element to insert
-		 *\return		\p false if there is already one object at the given key
+		 *\return		The element at the given key.
 		 *\~french
 		 *\brief		Insère un élément à la clef donnée
 		 *\param[in]	key		La clef à laquelle l'élément sera associé
 		 *\param[in]	element	L'élément à insérer
-		 *\return		\p false si un élément est déjà associé à la clef
+		 *\return		L'élément associé à la clef.
 		 */
 		inline ObjectPtr tryInsert( KeyParamType key, ObjectPtr element );
 		/**

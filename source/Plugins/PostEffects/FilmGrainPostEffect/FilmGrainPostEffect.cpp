@@ -9,7 +9,6 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Buffer/UniformBufferPools.hpp>
-#include <Castor3D/Cache/Cache.hpp>
 #include <Castor3D/Cache/ShaderCache.hpp>
 #include <Castor3D/Material/Texture/Sampler.hpp>
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
@@ -21,6 +20,7 @@
 #include <Castor3D/Shader/Program.hpp>
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 
+#include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Graphics/PixelBufferBase.hpp>
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 

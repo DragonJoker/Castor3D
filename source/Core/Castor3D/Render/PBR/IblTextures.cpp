@@ -1,7 +1,6 @@
 #include "Castor3D/Render/PBR/IblTextures.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/Cache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
@@ -24,6 +23,7 @@
 #include <ashespp/RenderPass/RenderPass.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
+#include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Graphics/Image.hpp>
 
 #include <ShaderWriter/Source.hpp>
@@ -56,8 +56,7 @@ namespace castor3d
 			{
 				auto imagePath = Engine::getEngineDirectory() / cuT( "Core" ) / cuT( "brdf.png" );
 				auto image = engine.getImageCache().add( cuT( "BRDF" )
-					, imagePath
-					, false );
+					, castor::ImageCreateParams{ imagePath, false } );
 				buffer = image->getPixels();
 			}
 

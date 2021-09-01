@@ -1,11 +1,12 @@
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/Cache.hpp"
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Overlay/TextOverlay.hpp"
+
+#include <CastorUtils/Design/ResourceCache.hpp>
 
 CU_ImplementCUSmartPtr( castor3d, ProgressBar )
 

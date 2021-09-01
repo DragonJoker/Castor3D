@@ -6,7 +6,6 @@
 
 #include <wx/display.h>
 
-#include <Castor3D/Cache/Cache.hpp>
 #include <Castor3D/Cache/ObjectCache.hpp>
 #include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
 #include <Castor3D/Event/Frame/FrameListener.hpp>
@@ -18,6 +17,8 @@
 #include <Castor3D/Render/RenderWindow.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/SceneNode.hpp>
+
+#include <CastorUtils/Design/ResourceCache.hpp>
 
 #include <ashespp/Core/WindowHandle.hpp>
 

@@ -2,10 +2,10 @@
 #include "CastorGui/CastorGui_Parsers.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Cache/Cache.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Scene/SceneFileParser.hpp>
 
+#include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 #include <CastorUtils/Log/Logger.hpp>
 

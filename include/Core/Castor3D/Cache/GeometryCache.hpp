@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_GeometryCache_H___
 #define ___C3D_GeometryCache_H___
 
-#include "Castor3D/Cache/ObjectCacheBase.hpp"
+#include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
@@ -27,8 +27,9 @@ namespace castor3d
 	\~french
 	\brief		Cache de Geometry.
 	*/
-	class GeometryCache
-		: public ObjectCacheBase< Geometry, castor::String >
+	template<>
+	class ObjectCacheT< Geometry, castor::String >
+		: public ObjectCacheBaseT< Geometry, castor::String >
 	{
 	public:
 		struct PoolsEntry
@@ -41,19 +42,18 @@ namespace castor3d
 			UniformBufferOffsetT< ModelUboConfiguration > modelUbo;
 			UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesUbo;
 		};
-		using MyObjectCache = ObjectCacheBase< Geometry, castor::String >;
-		using MyObjectCacheTraits = typename MyObjectCacheType::MyObjectCacheTraits;
-		using Element = typename MyObjectCacheType::Element;
-		using Key = typename MyObjectCacheType::Key;
-		using Collection = typename MyObjectCacheType::Collection;
-		using LockType = typename MyObjectCacheType::LockType;
-		using ElementPtr = typename MyObjectCacheType::ElementPtr;
-		using Producer = typename MyObjectCacheType::Producer;
-		using Initialiser = typename MyObjectCacheType::Initialiser;
-		using Cleaner = typename MyObjectCacheType::Cleaner;
-		using Merger = typename MyObjectCacheType::Merger;
-		using Attacher = typename MyObjectCacheType::Attacher;
-		using Detacher = typename MyObjectCacheType::Detacher;
+		using ElementT = Geometry;
+		using ElementKeyT = castor::String;
+		using ElementObjectCacheT = ObjectCacheBaseT< ElementT, ElementKeyT >;
+		using ElementCacheTraitsT = typename ElementObjectCacheT::ElementCacheTraitsT;
+		using ElementPtrT = typename ElementObjectCacheT::ElementPtrT;
+		using ElementContT = typename ElementObjectCacheT::ElementContT;
+		using ElementProducerT = typename ElementObjectCacheT::ElementProducerT;
+		using ElementInitialiserT = typename ElementObjectCacheT::ElementInitialiserT;
+		using ElementCleanerT = typename ElementObjectCacheT::ElementCleanerT;
+		using ElementMergerT = typename ElementObjectCacheT::ElementMergerT;
+		using ElementAttacherT = typename ElementObjectCacheT::ElementAttacherT;
+		using ElementDetacherT = typename ElementObjectCacheT::ElementDetacherT;
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -82,24 +82,17 @@ namespace castor3d
 		 *\param[in]	attach			L'attacheur d'objet (à un noeud de scène).
 		 *\param[in]	detach			Le détacheur d'objet (d'un noeud de scène).
 		 */
-		C3D_API GeometryCache( Engine & engine
-			, Scene & scene
+		C3D_API ObjectCacheT( Scene & scene
 			, SceneNodeSPtr rootNode
 			, SceneNodeSPtr rootCameraNode
-			, SceneNodeSPtr rootObjectNode
-			, Producer && produce
-			, Initialiser && initialise = Initialiser{}
-			, Cleaner && clean = Cleaner{}
-			, Merger && merge = Merger{}
-			, Attacher && attach = Attacher{}
-			, Detacher && detach = Detacher{} );
+			, SceneNodeSPtr rootObjectNode );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~GeometryCache();
+		C3D_API ~ObjectCacheT() = default;
 
 		C3D_API void registerPass( SceneRenderPass const & renderPass );
 		C3D_API void unregisterPass( SceneRenderPass const * renderPass
@@ -150,33 +143,10 @@ namespace castor3d
 		 *\brief		Ajoute un objet.
 		 *\param[in]	element	L'objet.
 		 */
-		C3D_API void add( ElementPtr element );
-		/**
-		 *\~english
-		 *\brief		Creates an object.
-		 *\param[in]	name	The object name.
-		 *\param[in]	parent	The parent scene node.
-		 *\param[in]	mesh	The mesh.
-		 *\return		The created object.
-		 *\~french
-		 *\brief		Crée un objet.
-		 *\param[in]	name	Le nom d'objet.
-		 *\param[in]	parent	Le noeud de scène parent.
-		 *\param[in]	mesh	Le maillage.
-		 *\return		L'objet créé.
-		 */
-		C3D_API ElementPtr add( Key const & name
-			, SceneNode & parent
-			, MeshSPtr mesh );
-		/**
-		 *\~english
-		 *\brief		Removes an object, given a name.
-		 *\param[in]	name	The object name.
-		 *\~french
-		 *\brief		Retire un objet à partir d'un nom.
-		 *\param[in]	name	Le nom d'objet.
-		 */
-		C3D_API void remove( Key const & name );
+		C3D_API void add( ElementPtrT element );
+
+	public:
+		using ElementObjectCacheT::add;
 
 	private:
 		void doCreateEntry( RenderDevice const & device

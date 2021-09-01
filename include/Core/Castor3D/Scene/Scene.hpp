@@ -4,7 +4,6 @@ See LICENSE file in root folder
 #ifndef ___C3D_SCENE_H___
 #define ___C3D_SCENE_H___
 
-#include "Castor3D/Cache/CacheModule.hpp"
 #include "Castor3D/Overlay/OverlayModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMapModule.hpp"
@@ -16,12 +15,22 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
 
+#include "Castor3D/Cache/BillboardCache.hpp"
+#include "Castor3D/Cache/CacheView.hpp"
+#include "Castor3D/Cache/GeometryCache.hpp"
+#include "Castor3D/Cache/LightCache.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
+#include "Castor3D/Cache/ObjectCache.hpp"
+#include "Castor3D/Cache/OverlayCache.hpp"
+#include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Scene/Fog.hpp"
 #include "Castor3D/Scene/Shadow.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Design/Named.hpp>
 #include <CastorUtils/Design/Signal.hpp>
+#include <CastorUtils/Graphics/FontCache.hpp>
+#include <CastorUtils/Graphics/ImageCache.hpp>
 #include <CastorUtils/Graphics/RgbColour.hpp>
 #include <CastorUtils/Log/Logger.hpp>
 #include <CastorUtils/Multithreading/ThreadPool.hpp>
@@ -206,6 +215,8 @@ namespace castor3d
 		C3D_API uint32_t getEnvironmentMapIndex( SceneNode const & node )const;
 		C3D_API AnimatedObjectSPtr addAnimatedTexture( TextureUnit & texture
 			, Pass & pass );
+		C3D_API void registerLight( Light & light );
+		C3D_API void unregisterLight( Light & light );
 		/**
 		*\~english
 		*\name

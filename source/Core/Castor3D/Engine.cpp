@@ -1,7 +1,7 @@
 #include "Castor3D/Engine.hpp"
 
-#include "Castor3D/Cache/Cache.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
+#include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Cache/OverlayCache.hpp"
 #include "Castor3D/Cache/PluginCache.hpp"
 #include "Castor3D/Cache/ShaderCache.hpp"
@@ -28,6 +28,7 @@
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
+#include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Graphics/Image.hpp>
 #include <CastorUtils/Graphics/ExrImageLoader.hpp>
@@ -143,7 +144,7 @@ namespace castor3d
 		castor::GliImageWriter::registerWriter( m_imageWriter );
 
 		// m_listenerCache *MUST* be the first created.
-		m_listenerCache = makeCache< FrameListener, castor::String >( *this
+		m_listenerCache = castor::makeCache< FrameListener, castor::String >( getLogger()
 			, []( castor::String const & name )
 			{
 				return std::make_shared< FrameListener >( name );
@@ -154,7 +155,7 @@ namespace castor3d
 		m_defaultListener = m_listenerCache->add( cuT( "Default" ) );
 
 		m_shaderCache = makeCache( *this );
-		m_samplerCache = makeCache< Sampler, castor::String >( *this
+		m_samplerCache = castor::makeCache< Sampler, castor::String >( getLogger()
 			, [this]( castor::String const & name )
 			{
 				return std::make_shared< Sampler >( *this, name );
@@ -162,33 +163,10 @@ namespace castor3d
 			, gpuEventInit
 			, cpuEvtClean
 			, mergeResource );
-		m_materialCache = std::make_unique< MaterialCache >( *this
-			, [this]( castor::String const & name, PassTypeID type )
-			{
-				return std::make_shared< Material >( name, *this, type );
-			}
-			, gpuQueueEventInit
-			, cpuEvtClean
-			, mergeResource );
-		m_pluginCache = std::make_unique< PluginCache >( *this
-			, []( castor::String const & name, PluginType type, castor::DynamicLibrarySPtr library )
-			{
-				return nullptr;
-			}
-			, dummy
-			, dummy
-			, mergeResource );
-		m_overlayCache = makeCache< Overlay, castor::String >( *this
-			, [this]( castor::String const & name, OverlayType type, SceneSPtr scene, OverlaySPtr parent )
-			{
-				auto result = std::make_shared< Overlay >( *this, type, scene, parent );
-				result->setName( name );
-				return result;
-			}
-			, dummy
-			, dummy
-			, mergeResource );
-		m_sceneCache = makeCache< Scene, castor::String >( *this
+		m_materialCache = castor::makeCache< Material, castor::String >( *this );
+		m_pluginCache = castor::makeCache< Plugin, castor::String >( *this );
+		m_overlayCache = castor::makeCache< Overlay, castor::String >( *this );
+		m_sceneCache = castor::makeCache< Scene, castor::String >( getLogger()
 			, [this]( castor::String const & name )
 			{
 				return std::make_shared< Scene >( name, *this );

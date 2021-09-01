@@ -6,6 +6,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 
 #include <CastorUtils/Miscellaneous/BitSize.hpp>
+#include <CastorUtils/Graphics/ImageCache.hpp>
 #include <CastorUtils/Graphics/PixelBufferBase.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
 
@@ -581,18 +582,14 @@ namespace castor3d
 			, bool allowCompression
 			, bool generateMips )
 		{
-			castor::ImageSPtr image;
+			auto image = engine.getImageCache().tryFind( name );
 
-			if ( engine.getImageCache().has( name ) )
-			{
-				image = engine.getImageCache().find( name );
-			}
-			else
+			if ( !image )
 			{
 				image = engine.getImageCache().add( name
-					, folder / relative
-					, allowCompression
-					, generateMips );
+					, castor::ImageCreateParams{ folder / relative
+						, allowCompression
+						, generateMips } );
 			}
 
 			auto buffer = adaptBuffer( image->getPixels(), mipLevels );
