@@ -4,10 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_ObjectCacheBase_H___
 #define ___C3D_ObjectCacheBase_H___
 
-#pragma GCC diagnostic ignored "-Wundefined-var-template"
-
 #include "CacheModule.hpp"
-#include "Castor3D/Miscellaneous/Logger.hpp"
+#include "Castor3D/Scene/SceneModule.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Design/ResourceCacheBase.hpp>
@@ -78,7 +76,7 @@ namespace castor3d
 			, ElementAttacherT attach = ElementAttacherT{}
 			, ElementDetacherT detach = ElementDetacherT{} )
 			: castor::OwnedBy< Scene >{ scene }
-			, ElementCacheBaseT{ castor3d::getLogger( *scene.getEngine() )
+			, ElementCacheBaseT{ castor3d::getLogger( scene )
 				, std::move( produce )
 				, [this, initialise]( ElementPtrT element )
 				{
@@ -105,7 +103,7 @@ namespace castor3d
 
 					onChanged();
 				} }
-			, m_engine{ *scene.getEngine() }
+			, m_engine{ castor3d::getEngine( scene ) }
 			, m_rootNode{ rootNode }
 			, m_rootCameraNode{ rootCameraNode }
 			, m_rootObjectNode{ rootObjectNode }
@@ -150,7 +148,7 @@ namespace castor3d
 				}
 			}
 
-			clear();
+			this->doClearNoLock();
 			onChanged();
 		}
 		/**
