@@ -60,11 +60,12 @@ namespace castor3d
 			, float nearZ
 			, float farZ )
 		{
-			auto opp = size.getHeight() / 2.0;
-			auto adj = opp / fovY.tand();
+			auto opp = size.getHeight();
+			auto adj = opp / ( fovY / 2.0f ).tand();
+			auto halfOpp = opp / 2;
 			auto bandSize = double( getSafeBandSize( size ) );
-			auto halfHeight = opp + bandSize;
-			auto halfWidth = std::ceil( aspect * opp ) + bandSize;
+			auto halfHeight = halfOpp + bandSize;
+			auto halfWidth = std::ceil( aspect * halfOpp ) + bandSize;
 			return renderSystem.getPerspective( fovY + ( castor::atanf( ( bandSize * 2.85f / 4.0f ) / adj ) )
 				, halfWidth / halfHeight
 				, nearZ
