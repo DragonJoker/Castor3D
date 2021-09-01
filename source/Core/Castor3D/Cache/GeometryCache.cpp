@@ -18,38 +18,12 @@
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
+	//*********************************************************************************************
+
 	namespace
 	{
-		struct GeometryInitialiser
-		{
-			GeometryInitialiser( uint32_t & faceCount
-				, uint32_t & vertexCount
-				, FrameListener & listener )
-				: m_faceCount{ faceCount }
-				, m_vertexCount{ vertexCount }
-				, m_listener{ listener }
-			{
-			}
-
-			inline void operator()( GeometrySPtr element )
-			{
-				m_listener.postEvent( makeGpuFunctorEvent( EventType::ePreRender
-					, [element, this]( RenderDevice const & device
-						, QueueData const & queueData )
-					{
-						element->prepare( m_faceCount, m_vertexCount );
-					} ) );
-			}
-
-			uint32_t & m_faceCount;
-			uint32_t & m_vertexCount;
-			FrameListener & m_listener;
-		};
-
 		castor::String printhex( uint64_t v )
 		{
 			auto stream = castor::makeStringStream();
@@ -57,6 +31,8 @@ namespace castor3d
 			return stream.str();
 		}
 	}
+
+	//*********************************************************************************************
 
 	size_t hash( Geometry const & geometry
 		, Submesh const & submesh
@@ -80,36 +56,83 @@ namespace castor3d
 		return result;
 	}
 
-	GeometryCache::GeometryCache( Engine & engine
-		, Scene & scene
+	//*********************************************************************************************
+
+	ObjectCacheT< Geometry, castor::String >::ObjectCacheT( Scene & scene
 		, SceneNodeSPtr rootNode
 		, SceneNodeSPtr rootCameraNode
-		, SceneNodeSPtr rootObjectNode
-		, Producer && produce
-		, Initialiser && initialise
-		, Cleaner && clean
-		, Merger && merge
-		, Attacher && attach
-		, Detacher && detach )
-		: MyObjectCache( engine
-			, scene
+		, SceneNodeSPtr rootObjectNode )
+		: ElementObjectCacheT{ scene
 			, rootNode
 			, rootCameraNode
 			, rootCameraNode
-			, std::move( produce )
-			, std::bind( GeometryInitialiser{ m_faceCount, m_vertexCount, scene.getListener() }, std::placeholders::_1 )
-			, std::move( clean )
-			, std::move( merge )
-			, std::move( attach )
-			, std::move( detach ) )
+			, [this]( castor::String const & name
+				, SceneNode & parent
+				, MeshSPtr mesh )
+			{
+				return std::make_shared< Geometry >( name
+					, *getScene()
+					, parent
+					, mesh );
+			}
+			, [this]( ElementPtrT element )
+			{
+				doRegister( *element );
+				getScene()->getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
+					, [element, this]( RenderDevice const & device
+						, QueueData const & queueData )
+					{
+						element->prepare( m_faceCount, m_vertexCount );
+					} ) );
+			}
+			, [this]( ElementPtrT element )
+			{
+				doUnregister( *element );
+			}
+			, [this]( ElementObjectCacheT const & source
+				, ElementContT & destination
+				, ElementPtrT element
+				, SceneNodeSPtr rootCameraNode
+				, SceneNodeSPtr rootObjectNode )
+			{
+				if ( element->getParent()->getName() == rootCameraNode->getName() )
+				{
+					element->detach();
+					element->attachTo( *rootCameraNode );
+				}
+				else if ( element->getParent()->getName() == rootObjectNode->getName() )
+				{
+					element->detach();
+					element->attachTo( *rootObjectNode );
+				}
+
+				auto name = element->getName();
+				auto ires = destination.emplace( name, element );
+
+				while ( !ires.second )
+				{
+					name = getScene()->getName() + cuT( "_" ) + name;
+					ires = destination.emplace( name, element );
+				}
+
+				element->setName( name );
+			}
+			, []( ElementPtrT element
+				, SceneNode & parent
+				, SceneNodeSPtr rootNode
+				, SceneNodeSPtr rootCameraNode
+				, SceneNodeSPtr rootObjectNode )
+			{
+				parent.attachObject( *element );
+			}
+			, [this]( ElementPtrT element )
+			{
+				element->detach();
+			} }
 	{
 	}
 
-	GeometryCache::~GeometryCache()
-	{
-	}
-
-	void GeometryCache::registerPass( SceneRenderPass const & renderPass )
+	void ObjectCacheT< Geometry, castor::String >::registerPass( SceneRenderPass const & renderPass )
 	{
 		auto instanceMult = renderPass.getInstanceMult();
 		auto iresult = m_instances.emplace( instanceMult, RenderPassSet{} );
@@ -138,7 +161,7 @@ namespace castor3d
 		iresult.first->second.insert( &renderPass );
 	}
 
-	void GeometryCache::unregisterPass( SceneRenderPass const * renderPass
+	void ObjectCacheT< Geometry, castor::String >::unregisterPass( SceneRenderPass const * renderPass
 		, uint32_t instanceMult )
 	{
 		auto instIt = m_instances.find( instanceMult );
@@ -187,11 +210,11 @@ namespace castor3d
 		}
 	}
 
-	void GeometryCache::fillInfo( RenderInfo & info )const
+	void ObjectCacheT< Geometry, castor::String >::fillInfo( RenderInfo & info )const
 	{
-		auto lock( castor::makeUniqueLock( m_elements ) );
+		auto lock( castor::makeUniqueLock( *this ) );
 
-		for ( auto element : m_elements )
+		for ( auto element : *this )
 		{
 			if ( element.second->getMesh() )
 			{
@@ -203,7 +226,7 @@ namespace castor3d
 		}
 	}
 
-	void GeometryCache::update( CpuUpdater & updater )
+	void ObjectCacheT< Geometry, castor::String >::update( CpuUpdater & updater )
 	{
 		for ( auto & pair : m_baseEntries )
 		{
@@ -230,7 +253,7 @@ namespace castor3d
 		}
 	}
 
-	GeometryCache::PoolsEntry GeometryCache::getUbos( Geometry const & geometry
+	GeometryCache::PoolsEntry ObjectCacheT< Geometry, castor::String >::getUbos( Geometry const & geometry
 		, Submesh const & submesh
 		, Pass const & pass
 		, uint32_t instanceMult )const
@@ -242,7 +265,7 @@ namespace castor3d
 
 	void GeometryCache::clear( RenderDevice const & device )
 	{
-		MyObjectCache::clear();
+		ElementObjectCacheT::clear();
 		auto & uboPools = *device.uboPools;
 
 		for ( auto & entry : m_entries )
@@ -263,37 +286,13 @@ namespace castor3d
 		m_instances.clear();
 	}
 
-	void GeometryCache::add( ElementPtr element )
+	void ObjectCacheT< Geometry, castor::String >::add( ElementPtrT element )
 	{
-		MyObjectCache::add( element->getName(), element );
-		doRegister( *element );
+		auto lock( castor::makeUniqueLock( *this ) );
+		ElementObjectCacheT::doAddNoLock( element->getName(), element );
 	}
 
-	GeometrySPtr GeometryCache::add( Key const & name
-		, SceneNode & parent
-		, MeshSPtr mesh )
-	{
-		CU_Require( mesh );
-		auto result = MyObjectCache::add( name, parent, mesh );
-		doRegister( *result );
-		return result;
-	}
-
-	void GeometryCache::remove( Key const & name )
-	{
-		auto lock( castor::makeUniqueLock( m_elements ) );
-
-		if ( m_elements.has( name ) )
-		{
-			auto element = m_elements.find( name );
-			m_detach( element );
-			m_elements.erase( name );
-			onChanged();
-			doUnregister( *element );
-		}
-	}
-
-	void GeometryCache::doCreateEntry( RenderDevice const & device
+	void ObjectCacheT< Geometry, castor::String >::doCreateEntry( RenderDevice const & device
 		, Geometry const & geometry
 		, Submesh const & submesh
 		, Pass const & pass )
@@ -328,7 +327,7 @@ namespace castor3d
 		}
 	}
 
-	void GeometryCache::doRemoveEntry( RenderDevice const & device
+	void ObjectCacheT< Geometry, castor::String >::doRemoveEntry( RenderDevice const & device
 		, Geometry const & geometry
 		, Submesh const & submesh
 		, Pass const & pass )
@@ -362,7 +361,7 @@ namespace castor3d
 		}
 	}
 
-	void GeometryCache::doRegister( Geometry & geometry )
+	void ObjectCacheT< Geometry, castor::String >::doRegister( Geometry & geometry )
 	{
 		auto & device = getScene()->getEngine()->getRenderSystem()->getRenderDevice();
 		m_connections.emplace( &geometry
@@ -405,7 +404,7 @@ namespace castor3d
 		}
 	}
 
-	void GeometryCache::doUnregister( Geometry & geometry )
+	void ObjectCacheT< Geometry, castor::String >::doUnregister( Geometry & geometry )
 	{
 		m_connections.erase( &geometry );
 
@@ -423,4 +422,6 @@ namespace castor3d
 			}
 		}
 	}
+
+	//*********************************************************************************************
 }

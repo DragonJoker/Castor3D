@@ -4,35 +4,34 @@ See LICENSE file in root folder
 #ifndef ___C3D_PluginCache_H___
 #define ___C3D_PluginCache_H___
 
-#include "Castor3D/Cache/CacheBase.hpp"
+#include <CastorUtils/Design/ResourceCacheBase.hpp>
+
+#include "Castor3D/Cache/CacheModule.hpp"
 #include "Castor3D/Plugin/PluginModule.hpp"
 
-namespace castor3d
+namespace castor
 {
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
 	\~english
 	\brief		Plug-ins cache.
 	\~french
 	\brief		Cache de plug-ins.
 	*/
 	template<>
-	class Cache< Plugin, castor::String >
-		: public CacheBase< Plugin, castor::String >
+	class ResourceCacheT< castor3d::Plugin, String > final
+		: public ResourceCacheBaseT< castor3d::Plugin, String >
 	{
 	public:
-		using MyCacheType = CacheBase< Plugin, castor::String >;
-		using Element = typename MyCacheType::Element;
-		using Key = typename MyCacheType::Key;
-		using Collection = typename MyCacheType::Collection;
-		using LockType = typename MyCacheType::LockType;
-		using ElementPtr = typename MyCacheType::ElementPtr;
-		using Producer = typename MyCacheType::Producer;
-		using Initialiser = typename MyCacheType::Initialiser;
-		using Cleaner = typename MyCacheType::Cleaner;
-		using Merger = typename MyCacheType::Merger;
+		using ElementT = typename castor3d::Plugin;
+		using ElementKeyT = typename String;
+		using ElementCacheT = ResourceCacheBaseT< ElementT, ElementKeyT >;
+		using ElementCacheTraitsT = typename ElementCacheT::ElementCacheTraitsT;
+		using ElementPtrT = typename ElementCacheT::ElementPtrT;
+		using ElementContT = typename ElementCacheT::ElementContT;
+		using ElementProducerT = typename ElementCacheT::ElementProducerT;
+		using ElementInitialiserT = typename ElementCacheT::ElementInitialiserT;
+		using ElementCleanerT = typename ElementCacheT::ElementCleanerT;
+		using ElementMergerT = typename ElementCacheT::ElementMergerT;
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -49,18 +48,14 @@ namespace castor3d
 		 *\param[in]	clean		Le nettoyeur d'objet.
 		 *\param[in]	merge		Le fusionneur de collection d'objets.
 		 */
-		C3D_API Cache( Engine & engine
-			, Producer && produce
-			, Initialiser && initialise = Initialiser{}
-			, Cleaner && clean = Cleaner{}
-			, Merger && merge = Merger{} );
+		C3D_API ResourceCacheT( castor3d::Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~Cache();
+		C3D_API ~ResourceCacheT() = default;
 		/**
 		 *\~english
 		 *\brief		Flushes the collection.
@@ -80,8 +75,8 @@ namespace castor3d
 		 *\param[in]	pathFolder	Un chemin optionnel, pour y trouver le plug-in
 		 *\return		Le plug-in chargé, \p nullptr si non trouvé (nom incorrect ou non trouvé dans le chemin donné ou le chemin principal)
 		 */
-		C3D_API PluginSPtr loadPlugin( castor::String const & pluginName
-			, castor::Path const & pathFolder )throw();
+		C3D_API ElementPtrT loadPlugin( String const & pluginName
+			, Path const & pathFolder )throw();
 		/**
 		 *\~english
 		 *\brief		Loads a plug-in, given the plug-in file's full path
@@ -92,7 +87,7 @@ namespace castor3d
 		 *\param[in]	fileFullPath	Le chemin du plug-in
 		 *\return		Le plug-in chargé, \p nullptr si le chemin était incorrect ou s'il ne représentait pas un plug-in valide
 		 */
-		C3D_API PluginSPtr loadPlugin( castor::Path const & fileFullPath )throw();
+		C3D_API ElementPtrT loadPlugin( Path const & fileFullPath )throw();
 		/**
 		 *\~english
 		 *\brief		Retrieves the plug-ins of given type
@@ -103,7 +98,7 @@ namespace castor3d
 		 *\param[in]	type	Le type de plu-ins
 		 *\return		\p nullptr si non trouvé
 		 */
-		C3D_API PluginStrMap getPlugins( PluginType type );
+		C3D_API castor3d::PluginStrMap getPlugins( castor3d::PluginType type );
 		/**
 		 *\~english
 		 *\brief		Loads all the plug-ins located in working folder
@@ -112,27 +107,28 @@ namespace castor3d
 		 *\brief		Charge tous les plug-ins d'un dossier donné
 		 *\param[in]	folder	Le dossier
 		 */
-		C3D_API void loadAllPlugins( castor::Path const & folder );
+		C3D_API void loadAllPlugins( Path const & folder );
 
 	private:
-		PluginSPtr doloadPlugin( castor::Path const & pathFile );
+		ElementPtrT doloadPlugin( Path const & pathFile );
 
 	private:
+		castor3d::Engine & m_engine;
 		//!\~english	The loaded shared libraries map.
 		//!\~french		La map des shared libraries chargées.
-		DynamicLibraryPtrPathMapArray m_libraries;
+		castor3d::DynamicLibraryPtrPathMapArray m_libraries;
 		//!\~english	The mutex protecting the loaded shared libraries map.
 		//!\~french		Le mutex protégeant la map des shared libraries chargées.
 		std::recursive_mutex m_mutexLibraries;
 		//!\~english	The loaded plug-ins map.
 		//!\~french		La map des plug-ins chargés.
-		PluginStrMapArray m_loadedPlugins;
+		castor3d::PluginStrMapArray m_loadedPlugins;
 		//!\~english	The mutex protecting the loaded plug-ins map.
 		//!\~french		Le mutex protégeant la map des plug-ins chargés.
 		std::recursive_mutex m_mutexLoadedPlugins;
 		//!\~english	The loaded plug-ins map, sorted by plug-in type.
 		//!\~french		La map des plug-ins chargés, triés par type de plug-in.
-		PluginTypePathMap m_loadedPluginTypes;
+		castor3d::PluginTypePathMap m_loadedPluginTypes;
 		//!\~english	The mutex protecting the loaded plug-ins map sorted by type.
 		//!\~french		Le mutex protégeant la map de plug-ins chargés triés par type.
 		std::recursive_mutex m_mutexLoadedPluginTypes;

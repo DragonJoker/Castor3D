@@ -1,7 +1,6 @@
 #include "PlyImporter/PlyImporter.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Cache/Cache.hpp>
 #include <Castor3D/Cache/CacheView.hpp>
 #include <Castor3D/Cache/GeometryCache.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
@@ -18,6 +17,8 @@
 #include <Castor3D/Scene/Geometry.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
+
+#include <CastorUtils/Design/ResourceCache.hpp>
 
 using namespace castor3d;
 using namespace castor;

@@ -3,7 +3,6 @@
 #include "CastorDvpTD.hpp"
 #include "Game.hpp"
 
-#include <Castor3D/Cache/Cache.hpp>
 #include <Castor3D/Cache/ObjectCache.hpp>
 #include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
 #include <Castor3D/Event/Frame/FrameListener.hpp>
@@ -20,6 +19,8 @@
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/SceneNode.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
+
+#include <CastorUtils/Design/ResourceCache.hpp>
 
 using namespace castor;
 using namespace castor3d;

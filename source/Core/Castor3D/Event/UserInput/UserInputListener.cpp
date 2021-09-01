@@ -1,7 +1,6 @@
 #include "Castor3D/Event/UserInput/UserInputListener.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/Cache.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/OverlayCache.hpp"
 
@@ -9,6 +8,8 @@
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Overlay/TextOverlay.hpp"
+
+#include <CastorUtils/Design/ResourceCache.hpp>
 
 using namespace castor;
 

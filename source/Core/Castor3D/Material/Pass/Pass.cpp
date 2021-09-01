@@ -1,7 +1,6 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/Cache.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/ShaderCache.hpp"
 #include "Castor3D/Material/Material.hpp"
@@ -18,6 +17,7 @@
 #include "Castor3D/Scene/Animation/AnimatedObject.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
+#include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 #include <CastorUtils/Graphics/PixelFormat.hpp>
 

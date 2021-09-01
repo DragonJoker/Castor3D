@@ -3,7 +3,6 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
 #include "Castor3D/Cache/BillboardCache.hpp"
-#include "Castor3D/Cache/Cache.hpp"
 #include "Castor3D/Cache/CacheView.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
@@ -50,6 +49,7 @@
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
+#include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 
 using namespace castor;
@@ -152,6 +152,31 @@ namespace castor3d
 		}
 	}
 
+	CU_ImplementAttributeParser( parserMaterial )
+	{
+		auto & parsingContext = static_cast< SceneFileContext & >( context );
+
+		if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			params[0]->get( parsingContext.strName );
+			parsingContext.material = parsingContext.parser->getEngine()->getMaterialCache().tryFind( parsingContext.strName );
+			parsingContext.passIndex = 0u;
+			parsingContext.createMaterial = parsingContext.material == nullptr;
+
+			if ( parsingContext.createMaterial )
+			{
+				parsingContext.material = std::make_shared< Material >( parsingContext.strName
+					, *parsingContext.parser->getEngine()
+					, parsingContext.parser->getEngine()->getPassesType() );
+			}
+		}
+	}
+	CU_EndAttributePush( CSCNSection::eMaterial )
+
 	CU_ImplementAttributeParser( parserRootScene )
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
@@ -203,29 +228,6 @@ namespace castor3d
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eFont )
-
-	CU_ImplementAttributeParser( parserRootMaterial )
-	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
-
-		if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter." ) );
-		}
-		else
-		{
-			params[0]->get( parsingContext.strName );
-			parsingContext.material = parsingContext.parser->getEngine()->getMaterialCache().tryFind( parsingContext.strName );
-
-			if ( !parsingContext.material )
-			{
-				parsingContext.material = std::make_shared< Material >( parsingContext.strName
-					, *parsingContext.parser->getEngine()
-					, parsingContext.parser->getEngine()->getPassesType() );
-			}
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eMaterial )
 
 	CU_ImplementAttributeParser( parserRootMaterials )
 	{
@@ -373,11 +375,11 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.scene )
+		if ( params.empty() )
 		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
+			CU_ParsingError( cuT( "Missing parameter." ) );
 		}
-		else if ( !params.empty() )
+		else
 		{
 			params[0]->get( parsingContext.window.name );
 		}
@@ -637,6 +639,8 @@ namespace castor3d
 		{
 			parsingContext.window.renderTarget = parsingContext.renderTarget;
 		}
+
+		parsingContext.renderTarget.reset();
 	}
 	CU_EndAttributePop()
 
@@ -915,6 +919,7 @@ namespace castor3d
 			parsingContext.parser->getEngine()->getSamplerCache().add( parsingContext.sampler->getName()
 				, parsingContext.sampler
 				, true );
+			parsingContext.sampler.reset();
 		}
 	}
 	CU_EndAttributePop()
@@ -972,29 +977,6 @@ namespace castor3d
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eFont )
-
-	CU_ImplementAttributeParser( parserSceneMaterial )
-	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter." ) );
-		}
-		else
-		{
-			params[0]->get( parsingContext.strName );
-			auto & view = parsingContext.scene->getMaterialView();
-			parsingContext.createMaterial = !view.has( parsingContext.strName );
-			parsingContext.material = view.add( parsingContext.strName, parsingContext.scene->getPassesType() );
-			parsingContext.passIndex = 0u;
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eMaterial )
 
 	CU_ImplementAttributeParser( parserSceneSamplerState )
 	{
@@ -1369,6 +1351,7 @@ namespace castor3d
 				parsingContext.parser->getEngine()->getSceneCache().add( parsingContext.scene->getName()
 					, parsingContext.scene
 					, true );
+				parsingContext.scene.reset();
 			}
 		}
 	}
@@ -1602,6 +1585,7 @@ namespace castor3d
 			parsingContext.scene->getParticleSystemCache().add( parsingContext.particleSystem->getName()
 				, parsingContext.particleSystem
 				, true );
+			parsingContext.particleSystem.reset();
 		}
 	}
 	CU_EndAttributePop()
@@ -1709,6 +1693,7 @@ namespace castor3d
 			parsingContext.scene->getLightCache().add( parsingContext.light->getName()
 				, parsingContext.light
 				, true );
+			parsingContext.light.reset();
 		}
 	}
 	CU_EndAttributePop()
@@ -2345,6 +2330,7 @@ namespace castor3d
 		{
 			parsingContext.scene->getSceneNodeCache().add( parsingContext.sceneNode->getName()
 				, parsingContext.sceneNode );
+			parsingContext.sceneNode.reset();
 		}
 	}
 	CU_EndAttributePop()
@@ -2767,24 +2753,23 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.mesh )
+		if ( !parsingContext.scene )
+		{
+			CU_ParsingError( cuT( "No Scene initialised." ) );
+		}
+		else if ( !parsingContext.mesh )
 		{
 			CU_ParsingError( cuT( "No Mesh initialised." ) );
 		}
 		else
 		{
+			parsingContext.scene->getMeshCache().add( parsingContext.mesh->getName()
+				, parsingContext.mesh
+				, true );
+
 			if ( parsingContext.geometry )
 			{
-				parsingContext.scene->getMeshCache().tryAdd( parsingContext.mesh->getName()
-					, parsingContext.mesh
-					, true );
 				parsingContext.geometry->setMesh( parsingContext.mesh );
-			}
-			else
-			{
-				parsingContext.scene->getMeshCache().add( parsingContext.mesh->getName()
-					, parsingContext.mesh
-					, true );
 			}
 
 			parsingContext.mesh.reset();
@@ -3228,6 +3213,7 @@ namespace castor3d
 			parsingContext.vertexTex.clear();
 			parsingContext.faces.clear();
 			parsingContext.submesh->getParent().getScene()->getListener().postEvent( makeGpuInitialiseEvent( *parsingContext.submesh ) );
+			parsingContext.submesh.reset();
 		}
 	}
 	CU_EndAttributePop()
@@ -3272,12 +3258,22 @@ namespace castor3d
 		{
 			CU_ParsingError( cuT( "Material not initialised" ) );
 		}
+		else if ( parsingContext.scene )
+		{
+			parsingContext.scene->getMaterialView().add( parsingContext.material->getName()
+				, parsingContext.material
+				, true );
+		}
 		else
 		{
 			parsingContext.parser->getEngine()->getMaterialCache().add( parsingContext.material->getName()
 				, parsingContext.material
 				, true );
 		}
+
+		parsingContext.material.reset();
+		parsingContext.createMaterial = false;
+		parsingContext.passIndex = 0u;
 	}
 	CU_EndAttributePop()
 
@@ -4436,7 +4432,10 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserBillboardEnd )
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
-		parsingContext.scene->getBillboardListCache().add( parsingContext.billboards );
+		parsingContext.scene->getBillboardListCache().add( parsingContext.billboards->getName()
+			, parsingContext.billboards 
+			, true );
+		parsingContext.billboards.reset();
 	}
 	CU_EndAttributePop()
 
@@ -4558,14 +4557,12 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( parsingContext.animGroup )
-		{
-			parsingContext.animGroup.reset();
-		}
-		else
+		if ( !parsingContext.animGroup )
 		{
 			CU_ParsingError( cuT( "No animated object group initialised" ) );
 		}
+
+		parsingContext.animGroup.reset();
 	}
 	CU_EndAttributePop()
 

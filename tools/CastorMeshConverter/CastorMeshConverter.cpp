@@ -1,7 +1,6 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Binary/BinaryMesh.hpp>
 #include <Castor3D/Binary/BinarySkeleton.hpp>
-#include <Castor3D/Cache/Cache.hpp>
 #include <Castor3D/Cache/CacheView.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Cache/PluginCache.hpp>
@@ -17,6 +16,8 @@
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Text/TextMaterial.hpp>
 #include <Castor3D/Text/TextScene.hpp>
+
+#include <CastorUtils/Design/ResourceCache.hpp>
 
 #include <SceneExporter/CscnExporter.hpp>
 

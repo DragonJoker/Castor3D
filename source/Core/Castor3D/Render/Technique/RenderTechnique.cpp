@@ -6,7 +6,6 @@
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
-#include "Castor3D/Cache/Cache.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/ObjectCache.hpp"
@@ -38,6 +37,8 @@
 #include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
+
+#include <CastorUtils/Design/ResourceCache.hpp>
 
 #include <RenderGraph/FramePassTimer.hpp>
 

@@ -24,10 +24,7 @@ namespace castor3d
 				onNodeChanged( node );
 			} );
 		onNodeChanged( node );
-	}
-
-	Light::~Light()
-	{
+		getScene()->registerLight( *this );
 	}
 
 	void Light::update( CpuUpdater & updater )

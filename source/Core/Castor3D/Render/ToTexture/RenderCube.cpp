@@ -3,12 +3,12 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
-#include "Castor3D/Cache/Cache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 
+#include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Math/Angle.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 #include <CastorUtils/Math/TransformationMatrix.hpp>

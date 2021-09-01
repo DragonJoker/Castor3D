@@ -1,12 +1,13 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/Cache.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
+
+#include <CastorUtils/Design/ResourceCache.hpp>
 
 namespace castor3d
 {

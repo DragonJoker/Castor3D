@@ -4,7 +4,6 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
-#include "Castor3D/Cache/Cache.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -22,6 +21,7 @@
 #include "Castor3D/Shader/Shaders/GlslVoxel.hpp"
 #include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
+#include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Miscellaneous/BitSize.hpp>
 
 #include <ashespp/RenderPass/FrameBuffer.hpp>
