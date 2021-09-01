@@ -22,8 +22,8 @@ namespace castor
 		: public ResourceCacheBaseT< castor3d::Plugin, String >
 	{
 	public:
-		using ElementT = typename castor3d::Plugin;
-		using ElementKeyT = typename String;
+		using ElementT = castor3d::Plugin;
+		using ElementKeyT = String;
 		using ElementCacheT = ResourceCacheBaseT< ElementT, ElementKeyT >;
 		using ElementCacheTraitsT = typename ElementCacheT::ElementCacheTraitsT;
 		using ElementPtrT = typename ElementCacheT::ElementPtrT;
