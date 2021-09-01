@@ -135,10 +135,10 @@ namespace castor::Debug
 				// symbol->Name type is char [1] so there is space for \0 already
 				auto size = sizeof( SYMBOL_INFO ) + ( MaxFnNameLen * sizeof( char ) );
 				auto symbol( ( SYMBOL_INFO * )malloc( size ) );
-				memset( symbol, 0, size );
 
 				if ( symbol )
 				{
+					memset( symbol, 0, size );
 					symbol->MaxNameLen = MaxFnNameLen;
 					symbol->SizeOfStruct = sizeof( SYMBOL_INFO );
 
@@ -147,13 +147,13 @@ namespace castor::Debug
 						if ( ::SymFromAddr( context->process, reinterpret_cast< DWORD64 >( backTrace[i] ), nullptr, symbol ) )
 						{
 							stream << "== " << context->demangle< CharT >( string::stringCast< char >( symbol->Name, symbol->Name + symbol->NameLen ) );
-							IMAGEHLP_LINE64 line;
-							DWORD displacement;
+							IMAGEHLP_LINE64 line{};
+							DWORD displacement{};
 							line.SizeOfStruct = sizeof( IMAGEHLP_LINE64 );
 
 							if ( ::SymGetLineFromAddr64( context->process, symbol->Address, &displacement, &line ) )
 							{
-								stream << "(" << string::stringCast< CharT >( line.FileName ) << ":" << line.LineNumber << ")";
+								stream << "(" << string::stringCast< CharT >( line.FileName ) << ":" << line.LineNumber << ":" << displacement << ")";
 							}
 
 							stream << std::endl;
