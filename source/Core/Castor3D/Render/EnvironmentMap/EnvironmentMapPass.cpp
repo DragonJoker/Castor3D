@@ -126,9 +126,10 @@ namespace castor3d
 
 		auto & camera = *m_camera;
 		updater.camera = &camera;
+		updater.scene = camera.getScene();
 
 		RenderInfo info;
-		m_sceneUbo.cpuUpdate( *camera.getScene(), &camera );
+		m_sceneUbo.cpuUpdate( *updater.scene, updater.camera );
 		m_backgroundRenderer->update( updater );
 		m_opaquePass->update( updater );
 		m_transparentPass->update( updater );
