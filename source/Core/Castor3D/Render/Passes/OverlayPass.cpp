@@ -12,6 +12,56 @@
 
 namespace castor3d
 {
+	namespace
+	{
+		void doParseOverlay( Scene const & refScene
+			, Overlay const & overlay
+			, OverlayRenderer & renderer
+			, OverlayRenderer::Preparer & preparer
+			, std::set< Overlay const * > & visited )
+		{
+			auto ires = visited.insert( &overlay );
+
+			if ( ires.second )
+			{
+				SceneSPtr scene = overlay.getScene();
+
+				if ( overlay.isVisible()
+					&& scene
+					&& scene.get() == &refScene )
+				{
+					overlay.getCategory()->update( renderer );
+					overlay.getCategory()->accept( preparer );
+
+					for ( auto & child : overlay )
+					{
+						doParseOverlay( refScene
+							, *child
+							, renderer
+							, preparer
+							, visited );
+					}
+				}
+			}
+		}
+
+		void doParseOverlays( Scene const & refScene
+			, OverlayRenderer & renderer
+			, OverlayRenderer::Preparer & preparer )
+		{
+			std::set< Overlay const * > visited;
+
+			for ( auto category : refScene.getEngine()->getOverlayCache() )
+			{
+				doParseOverlay( refScene
+					, category->getOverlay()
+					, renderer
+					, preparer
+					, visited );
+			}
+		}
+	}
+
 	OverlayPass::OverlayPass( crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
@@ -48,20 +98,7 @@ namespace castor3d
 		m_renderer->beginPrepare( m_renderPass.getRenderPass()
 			, m_renderPass.getFramebuffer( 0u ) );
 		auto preparer = m_renderer->getPreparer( m_device );
-
-		for ( auto category : m_scene.getEngine()->getOverlayCache() )
-		{
-			SceneSPtr scene = category->getOverlay().getScene();
-
-			if ( category->getOverlay().isVisible()
-				&& scene
-				&& scene.get() == &m_scene )
-			{
-				category->update( *m_renderer );
-				category->accept( preparer );
-			}
-		}
-
+		doParseOverlays( m_scene, *m_renderer, preparer );
 		m_renderer->endPrepare();
 		recordCurrent();
 	}

@@ -29,7 +29,7 @@ namespace castor3d
 	class OverlayRenderer
 		: public castor::OwnedBy< RenderSystem >
 	{
-	private:
+	public:
 		class Preparer
 			: public OverlayVisitor
 		{
