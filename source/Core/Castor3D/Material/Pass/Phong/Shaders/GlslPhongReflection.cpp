@@ -278,7 +278,7 @@ namespace castor3d::shader
 
 	void PhongReflectionModel::doDeclareComputeRefl()
 	{
-		m_computeRefl = m_writer.implementFunction< sdw::Vec3 >( "computeRefl"
+		m_computeRefl = m_writer.implementFunction< sdw::Vec3 >( "c3d_phong_computeRefl"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeRgba32 const & envMap
@@ -297,7 +297,7 @@ namespace castor3d::shader
 
 	void PhongReflectionModel::doDeclareComputeRefr()
 	{
-		m_computeRefr = m_writer.implementFunction< sdw::Void >( "computeRefr"
+		m_computeRefr = m_writer.implementFunction< sdw::Void >( "c3d_phong_computeRefr"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeRgba32 const & envMap
@@ -340,7 +340,7 @@ namespace castor3d::shader
 
 	void PhongReflectionModel::doDeclareComputeReflRefr()
 	{
-		m_computeReflRefr = m_writer.implementFunction< sdw::Void >( "computeReflRefr"
+		m_computeReflRefr = m_writer.implementFunction< sdw::Void >( "c3d_phong_computeReflRefr"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeRgba32 const & envMap
@@ -375,7 +375,7 @@ namespace castor3d::shader
 
 	void PhongReflectionModel::doDeclareComputeRefls()
 	{
-		m_computeRefls = m_writer.implementFunction< sdw::Vec3 >( "computeRefl"
+		m_computeRefls = m_writer.implementFunction< sdw::Vec3 >( "c3d_phong_computeRefl"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeArrayRgba32 const & envMap
@@ -397,7 +397,7 @@ namespace castor3d::shader
 
 	void PhongReflectionModel::doDeclareComputeRefrs()
 	{
-		m_computeRefrs = m_writer.implementFunction< sdw::Void >( "computeRefr"
+		m_computeRefrs = m_writer.implementFunction< sdw::Void >( "c3d_phong_computeRefr"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeArrayRgba32 const & envMap
@@ -443,7 +443,7 @@ namespace castor3d::shader
 
 	void PhongReflectionModel::doDeclareComputeReflRefrs()
 	{
-		m_computeReflRefrs = m_writer.implementFunction< sdw::Void >( "computeReflRefr"
+		m_computeReflRefrs = m_writer.implementFunction< sdw::Void >( "c3d_phong_computeReflRefr"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeArrayRgba32 const & envMap
