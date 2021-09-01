@@ -236,7 +236,7 @@ namespace castor3d
 	{
 		auto & viewport = *updater.viewport;
 		viewport.resize( updater.camera->getSize() );
-		viewport.setPerspective( 45.0_degrees
+		viewport.setPerspective( updater.camera->getViewport().getFovY()
 			, updater.camera->getRatio()
 			, 0.1f
 			, 2.0f );
