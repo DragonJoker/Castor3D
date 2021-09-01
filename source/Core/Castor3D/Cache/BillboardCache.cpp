@@ -16,6 +16,8 @@
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
 	size_t hash( BillboardBase const & billboard
 		, Pass const & pass )
 	{
@@ -34,36 +36,77 @@ namespace castor3d
 		return result;
 	}
 
-	BillboardListCache::BillboardListCache( Engine & engine
-		, Scene & scene
+	//*********************************************************************************************
+
+	ObjectCacheT< BillboardList, castor::String >::ObjectCacheT( Scene & scene
 		, SceneNodeSPtr rootNode
 		, SceneNodeSPtr rootCameraNode
-		, SceneNodeSPtr rootObjectNode
-		, Producer && produce
-		, Initialiser && initialise
-		, Cleaner && clean
-		, Merger && merge
-		, Attacher && attach
-		, Detacher && detach )
-		: MyObjectCache( engine
-			, scene
+		, SceneNodeSPtr rootObjectNode )
+		: ElementObjectCacheT{ scene
 			, rootNode
 			, rootCameraNode
 			, rootCameraNode
-			, std::move( produce )
-			, std::move( initialise )
-			, std::move( clean )
-			, std::move( merge )
-			, std::move( attach )
-			, std::move( detach ) )
+			, [this]( castor::String const & name
+				, SceneNode & parent )
+			{
+				return std::make_shared< BillboardList >( name
+					, *getScene()
+					, parent );
+			}
+			, [this]( ElementPtrT element )
+			{
+				registerElement( *element );
+				getScene()->getListener().postEvent( makeGpuInitialiseEvent( *element ) );
+			}
+			, [this]( ElementPtrT element )
+			{
+				getScene()->getListener().postEvent( makeGpuCleanupEvent( *element ) );
+				unregisterElement( *element );
+			}
+			, [this]( ElementObjectCacheT const & source
+				, ElementContT & destination
+				, ElementPtrT element
+				, SceneNodeSPtr rootCameraNode
+				, SceneNodeSPtr rootObjectNode )
+			{
+				if ( element->getParent()->getName() == rootCameraNode->getName() )
+				{
+					element->detach();
+					element->attachTo( *rootCameraNode );
+				}
+				else if ( element->getParent()->getName() == rootObjectNode->getName() )
+				{
+					element->detach();
+					element->attachTo( *rootObjectNode );
+				}
+
+				auto name = element->getName();
+				auto ires = destination.emplace( name, element );
+
+				while ( !ires.second )
+				{
+					name = getScene()->getName() + cuT( "_" ) + name;
+					ires = destination.emplace( name, element );
+				}
+
+				element->setName( name );
+			}
+			, []( ElementPtrT element
+				, SceneNode & parent
+				, SceneNodeSPtr rootNode
+				, SceneNodeSPtr rootCameraNode
+				, SceneNodeSPtr rootObjectNode )
+			{
+				parent.attachObject( *element );
+			}
+			, [this]( ElementPtrT element )
+			{
+				element->detach();
+			} }
 	{
 	}
 
-	BillboardListCache::~BillboardListCache()
-	{
-	}
-
-	void BillboardListCache::registerPass( SceneRenderPass const & renderPass )
+	void ObjectCacheT< BillboardList, castor::String >::registerPass( SceneRenderPass const & renderPass )
 	{
 		auto instanceMult = renderPass.getInstanceMult();
 		auto iresult = m_instances.emplace( instanceMult, RenderPassSet{} );
@@ -91,7 +134,7 @@ namespace castor3d
 		iresult.first->second.insert( &renderPass );
 	}
 
-	void BillboardListCache::unregisterPass( SceneRenderPass const * renderPass
+	void ObjectCacheT< BillboardList, castor::String >::unregisterPass( SceneRenderPass const * renderPass
 		, uint32_t instanceMult )
 	{
 		auto instIt = m_instances.find( instanceMult );
@@ -139,7 +182,7 @@ namespace castor3d
 		}
 	}
 
-	void BillboardListCache::registerElement( BillboardBase & billboard )
+	void ObjectCacheT< BillboardList, castor::String >::registerElement( BillboardBase & billboard )
 	{
 		getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
 			, [this, &billboard]( RenderDevice const & device
@@ -174,7 +217,7 @@ namespace castor3d
 			} ) );
 	}
 
-	void BillboardListCache::unregisterElement( BillboardBase & billboard )
+	void ObjectCacheT< BillboardList, castor::String >::unregisterElement( BillboardBase & billboard )
 	{
 		getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
 			, [this, &billboard]( RenderDevice const & device
@@ -189,9 +232,10 @@ namespace castor3d
 			} ) );
 	}
 
-	void BillboardListCache::clear( RenderDevice const & device )
+	void ObjectCacheT< BillboardList, castor::String >::clear( RenderDevice const & device )
 	{
-		MyObjectCache::clear();
+		auto lock( castor::makeUniqueLock( *this ) );
+		ElementObjectCacheT::doClearNoLock();
 		auto & uboPools = *device.uboPools;
 
 		for ( auto & entry : m_entries )
@@ -209,8 +253,10 @@ namespace castor3d
 		}
 	}
 
-	void BillboardListCache::update( CpuUpdater & updater )
+	void ObjectCacheT< BillboardList, castor::String >::update( CpuUpdater & updater )
 	{
+		auto lock( castor::makeUniqueLock( *this ) );
+
 		for ( auto & pair : m_baseEntries )
 		{
 			auto & entry = pair.second;
@@ -227,45 +273,17 @@ namespace castor3d
 		}
 	}
 
-	BillboardListCache::PoolsEntry BillboardListCache::getUbos( BillboardBase const & billboard
+	BillboardListCache::PoolsEntry ObjectCacheT< BillboardList, castor::String >::getUbos( BillboardBase const & billboard
 		, Pass const & pass
 		, uint32_t instanceMult )const
 	{
+		auto lock( castor::makeUniqueLock( *this ) );
 		auto it = m_entries.find( hash( billboard, pass, instanceMult ) );
 		CU_Require( it != m_entries.end() );
 		return it->second;
 	}
 
-	BillboardListSPtr BillboardListCache::add( Key const & name
-		, SceneNode & parent )
-	{
-		auto result = MyObjectCache::add( name, parent );
-		registerElement( *result );
-		return result;
-	}
-
-	void BillboardListCache::add( ElementPtr element )
-	{
-		m_initialise( element );
-		MyObjectCache::add( element->getName(), element );
-		registerElement( *element );
-	}
-
-	void BillboardListCache::remove( Key const & name )
-	{
-		auto lock( castor::makeUniqueLock( m_elements ) );
-
-		if ( m_elements.has( name ) )
-		{
-			auto element = m_elements.find( name );
-			m_detach( element );
-			m_elements.erase( name );
-			onChanged();
-			unregisterElement( *element );
-		}
-	}
-
-	void BillboardListCache::doCreateEntry( RenderDevice const & device
+	void ObjectCacheT< BillboardList, castor::String >::doCreateEntry( RenderDevice const & device
 		, BillboardBase const & billboard
 		, Pass const & pass )
 	{
@@ -299,7 +317,7 @@ namespace castor3d
 		}
 	}
 
-	void BillboardListCache::doRemoveEntry( RenderDevice const & device
+	void ObjectCacheT< BillboardList, castor::String >::doRemoveEntry( RenderDevice const & device
 		, BillboardBase const & billboard
 		, Pass const & pass )
 	{
@@ -332,4 +350,6 @@ namespace castor3d
 			uboPools.putBuffer( entry.billboardUbo );
 		}
 	}
+
+	//*********************************************************************************************
 }

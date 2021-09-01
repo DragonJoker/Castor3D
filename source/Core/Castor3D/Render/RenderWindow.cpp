@@ -3,7 +3,6 @@
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
-#include "Castor3D/Cache/Cache.hpp"
 #include "Castor3D/Cache/CacheView.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/TargetCache.hpp"
@@ -26,6 +25,7 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
+#include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Graphics/PixelBufferBase.hpp>
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 

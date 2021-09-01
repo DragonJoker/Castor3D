@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_LightCache_H___
 #define ___C3D_LightCache_H___
 
-#include "Castor3D/Cache/ObjectCacheBase.hpp"
+#include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
 
 #include <ashespp/Buffer/Buffer.hpp>
@@ -13,31 +13,28 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		29/01/2016
-	\version	0.8.0
 	\~english
 	\brief		Light cache.
 	\~french
 	\brief		Cache de Light.
 	*/
-	class LightCache
-		: public ObjectCacheBase< Light, castor::String >
+	template<>
+	class ObjectCacheT< Light, castor::String >
+		: public ObjectCacheBaseT< Light, castor::String >
 	{
 	public:
-		using MyObjectCache = ObjectCacheBase< Light, castor::String >;
-		using MyObjectCacheTraits = typename MyObjectCacheType::MyObjectCacheTraits;
-		using Element = typename MyObjectCacheType::Element;
-		using Key = typename MyObjectCacheType::Key;
-		using Collection = typename MyObjectCacheType::Collection;
-		using LockType = typename MyObjectCacheType::LockType;
-		using ElementPtr = typename MyObjectCacheType::ElementPtr;
-		using Producer = typename MyObjectCacheType::Producer;
-		using Initialiser = typename MyObjectCacheType::Initialiser;
-		using Cleaner = typename MyObjectCacheType::Cleaner;
-		using Merger = typename MyObjectCacheType::Merger;
-		using Attacher = typename MyObjectCacheType::Attacher;
-		using Detacher = typename MyObjectCacheType::Detacher;
+		using ElementT = Light;
+		using ElementKeyT = castor::String;
+		using ElementObjectCacheT = ObjectCacheBaseT< ElementT, ElementKeyT >;
+		using ElementCacheTraitsT = typename ElementObjectCacheT::ElementCacheTraitsT;
+		using ElementPtrT = typename ElementObjectCacheT::ElementPtrT;
+		using ElementContT = typename ElementObjectCacheT::ElementContT;
+		using ElementProducerT = typename ElementObjectCacheT::ElementProducerT;
+		using ElementInitialiserT = typename ElementObjectCacheT::ElementInitialiserT;
+		using ElementCleanerT = typename ElementObjectCacheT::ElementCleanerT;
+		using ElementMergerT = typename ElementObjectCacheT::ElementMergerT;
+		using ElementAttacherT = typename ElementObjectCacheT::ElementAttacherT;
+		using ElementDetacherT = typename ElementObjectCacheT::ElementDetacherT;
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -66,31 +63,17 @@ namespace castor3d
 		 *\param[in]	attach			L'attacheur d'objet (à un noeud de scène).
 		 *\param[in]	detach			Le détacheur d'objet (d'un noeud de scène).
 		 */
-		C3D_API LightCache( Engine & engine
-			, Scene & scene
+		C3D_API ObjectCacheT( Scene & scene
 			, SceneNodeSPtr rootNode
 			, SceneNodeSPtr rootCameraNode
-			, SceneNodeSPtr rootObjectNode
-			, Producer && produce
-			, Initialiser && initialise = Initialiser{}
-			, Cleaner && clean = Cleaner{}
-			, Merger && merge = Merger{}
-			, Attacher && attach = Attacher{}
-			, Detacher && detach = Detacher{} );
+			, SceneNodeSPtr rootObjectNode );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~LightCache();
-		/**
-		 *\~english
-		 *\brief		Initialises the lights texture.
-		 *\~french
-		 *\brief		Initialise la texture de lumières.
-		 */
-		C3D_API void initialise();
+		C3D_API ~ObjectCacheT() = default;
 		/**
 		 *\~english
 		 *\brief		Sets all the elements to be cleaned up.
@@ -98,47 +81,6 @@ namespace castor3d
 		 *\brief		Met tous les éléments à nettoyer.
 		 */
 		C3D_API void cleanup();
-		/**
-		 *\~english
-		 *\brief		adds an object.
-		 *\param[in]	name	The object name.
-		 *\param[in]	element	The object.
-		 *\return		The added object, or the existing one.
-		 *\~french
-		 *\brief		Ajoute un objet.
-		 *\param[in]	name	Le nom d'objet.
-		 *\param[in]	element	L'objet.
-		 *\return		L'objet ajouté, ou celui existant.
-		 */
-		C3D_API ElementPtr add( Key const & name
-			, ElementPtr element
-			, bool initialise = false );
-		/**
-		 *\~english
-		 *\brief		Creates an object.
-		 *\param[in]	name	The object name.
-		 *\param[in]	parent	The parent scene node.
-		 *\param[in]	type	The light source type.
-		 *\return		The created object.
-		 *\~french
-		 *\brief		Crée un objet.
-		 *\param[in]	name	Le nom d'objet.
-		 *\param[in]	parent	Le noeud de scène parent.
-		 *\param[in]	type	Le type de source lumineuse.
-		 *\return		L'objet créé.
-		 */
-		C3D_API ElementPtr add( Key const & name
-			, SceneNode & parent
-			, LightType type );
-		/**
-		 *\~english
-		 *\brief		Removes an object, given a name.
-		 *\param[in]	name		The object name.
-		 *\~french
-		 *\brief		Retire un objet à partir d'un nom.
-		 *\param[in]	name		Le nom d'objet.
-		 */
-		C3D_API void remove( Key const & name );
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.

@@ -1,7 +1,6 @@
 #include "GuiCommon/System/CubeBoxManager.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Cache/Cache.hpp>
 #include <Castor3D/Cache/GeometryCache.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Cache/ObjectCache.hpp>
@@ -17,6 +16,8 @@
 #include <Castor3D/Scene/Geometry.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/SceneNode.hpp>
+
+#include <CastorUtils/Design/ResourceCache.hpp>
 
 #include <cstddef>
 

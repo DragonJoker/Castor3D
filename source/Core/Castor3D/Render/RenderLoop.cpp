@@ -3,7 +3,6 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
-#include "Castor3D/Cache/Cache.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/OverlayCache.hpp"
@@ -18,6 +17,7 @@
 #include "Castor3D/Scene/Scene.hpp"
 
 #include <CastorUtils/Design/BlockGuard.hpp>
+#include <CastorUtils/Design/ResourceCache.hpp>
 
 CU_ImplementCUSmartPtr( castor3d, RenderLoop )
 

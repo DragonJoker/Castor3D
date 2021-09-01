@@ -8,11 +8,13 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	// General parsers
+	CU_DeclareAttributeParser( parserMaterial )
+
 	// Root parsers
 	CU_DeclareAttributeParser( parserRootScene )
 	CU_DeclareAttributeParser( parserRootLoadingScreen )
 	CU_DeclareAttributeParser( parserRootFont )
-	CU_DeclareAttributeParser( parserRootMaterial )
 	CU_DeclareAttributeParser( parserRootSamplerState )
 	CU_DeclareAttributeParser( parserRootPanelOverlay )
 	CU_DeclareAttributeParser( parserRootBorderPanelOverlay )
@@ -59,7 +61,6 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserSceneBkColour )
 	CU_DeclareAttributeParser( parserSceneBkImage )
 	CU_DeclareAttributeParser( parserSceneFont )
-	CU_DeclareAttributeParser( parserSceneMaterial )
 	CU_DeclareAttributeParser( parserSceneSamplerState )
 	CU_DeclareAttributeParser( parserSceneCamera )
 	CU_DeclareAttributeParser( parserSceneLight )
