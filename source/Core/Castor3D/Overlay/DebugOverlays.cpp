@@ -31,7 +31,7 @@ namespace castor3d
 		, m_fps{ std::make_unique< DebugPanelsT< float > >( cuT( "FPS" ), m_panel, cache ) }
 		, m_counts{ std::make_unique< DebugPanelsT< uint32_t > >( cuT( "Counts" ), m_panel, cache ) }
 	{
-		auto & materials = m_cache.getEngine()->getMaterialCache();
+		auto & materials = m_cache.getEngine().getMaterialCache();
 		m_panel->setPixelPosition( castor::Position{ 0, 0 } );
 		m_panel->setPixelSize( castor::Size{ 320, 20 } );
 		m_panel->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ) );
@@ -166,7 +166,7 @@ namespace castor3d
 		m_cpu.name->setCaption( cuT( "CPU:" ) );
 		m_gpu.name->setCaption( cuT( "GPU:" ) );
 
-		auto & materials = cache.getEngine()->getMaterialCache();
+		auto & materials = cache.getEngine().getMaterialCache();
 		m_panel->setMaterial( materials.find( cuT( "TransparentBlack" ) ) );
 		m_passName->setMaterial( materials.find( cuT( "White" ) ) );
 		m_cpu.name->setMaterial( materials.find( cuT( "White" ) ) );
@@ -323,7 +323,7 @@ namespace castor3d
 		m_cpu.name->setCaption( cuT( "CPU:" ) );
 		m_gpu.name->setCaption( cuT( "GPU:" ) );
 
-		auto & materials = cache.getEngine()->getMaterialCache();
+		auto & materials = cache.getEngine().getMaterialCache();
 		m_container->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ) );
 		m_firstLinePanel->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ) );
 		m_name->setMaterial( materials.find( cuT( "White" ) ) );

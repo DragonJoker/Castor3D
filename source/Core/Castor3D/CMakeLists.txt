@@ -166,8 +166,6 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/AnimatedObjectGroupCache.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/BillboardCache.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/Cache.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/CacheBase.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/CacheModule.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/CacheView.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/CacheView.inl

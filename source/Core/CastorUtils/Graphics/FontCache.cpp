@@ -2,169 +2,65 @@
 
 #include "CastorUtils/Graphics/Font.hpp"
 #include "CastorUtils/Log/Logger.hpp"
+#include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
 namespace castor
 {
-	namespace
-	{
-		static const xchar * InfoCacheCreatedObject = cuT( "Cache::create - Created " );
-		static const xchar * WarningCacheDuplicateObject = cuT( "Cache::create - Duplicate " );
-		static const xchar * WarningCacheNullObject = cuT( "Cache::Insert - nullptr " );
+	template<>
+	const String ResourceCacheTraitsT< Font, String >::Name = cuT( "Font" );
 
-		inline void doReportCreation( LoggerInstance & logger
-			, castor::String const & name )
-		{
-			logger.logTrace( castor::makeStringStream()
-				<< InfoCacheCreatedObject
-				<< cuT( "Font: " )
-				<< name );
-		}
-
-		inline void doReportDuplicate( LoggerInstance & logger
-			, castor::String const & name )
-		{
-			logger.logWarning( castor::makeStringStream()
-				<< WarningCacheDuplicateObject
-				<< cuT( "Font: " )
-				<< name );
-		}
-
-		inline void doReportNull( LoggerInstance & logger )
-		{
-			logger.logWarning( castor::makeStringStream()
-				<< WarningCacheNullObject
-				<< cuT( "Font" ) );
-		}
-	}
-
-	//*********************************************************************************************
-
-	FontCache::FontCache( LoggerInstance & logger )
-		: Collection< Font, String >{ logger }
+	ResourceCacheT< Font, String >::ResourceCacheT( LoggerInstance & logger )
+		: ResourceCacheBaseT< Font, String >{ logger
+			, [this]( String const & name, uint32_t height, Path const & path )
+			{
+				return doProduce( name, height, path );
+			}
+			, [this]( FontSPtr resource )
+			{
+				doInitialise( resource );
+			} }
 	{
 	}
 
-	FontCache::~FontCache()
+	FontSPtr ResourceCacheT< Font, String >::doProduce( String const & name
+		, uint32_t height
+		, Path path )
 	{
-	}
-
-	FontSPtr FontCache::create( String const & p_name, uint32_t p_height, Path const & p_path )
-	{
-		String name = p_path.getFileName() + cuT( "." ) + p_path.getExtension();
+		auto nameExt = path.getFileName( true );
 		FontSPtr result;
+		auto realPath = path;
 
-		if ( File::fileExists( p_path ) )
+		if ( !File::fileExists( realPath ) )
 		{
-			result = std::make_shared< Font >( p_name, p_height, p_path );
-		}
-		else
-		{
-			auto it = m_paths.find( name );
+			auto it = m_paths.find( nameExt );
 
 			if ( it != m_paths.end() )
 			{
-				result = std::make_shared< Font >( p_name, p_height, it->second );
-			}
-			else
-			{
-				CU_Exception( "Can't create the font, invalid name: " + string::stringCast< char >( p_name ) + ", path: " + string::stringCast< char >( p_path ) );
+				realPath = it->second;
 			}
 		}
 
-		return result;
-	}
-
-	FontSPtr FontCache::add( String const & p_name, uint32_t p_height, Path const & p_path )
-	{
-		using LockType = std::unique_lock< FontCache >;
-		LockType lock{ makeUniqueLock( *this ) };
-		FontSPtr result;
-
-		if ( Collection< Font, String >::has( p_name ) )
+		if ( File::fileExists( realPath ) )
 		{
-			result = Collection< Font, String >::find( p_name );
-			doReportDuplicate( getLogger(), p_name );
+			result = std::make_shared< Font >( name, height, realPath );
 		}
 		else
 		{
-			String name = p_path.getFileName() + cuT( "." ) + p_path.getExtension();
-
-			if ( File::fileExists( p_path ) )
-			{
-				result = std::make_shared< Font >( p_name, p_height, p_path );
-				doReportCreation( getLogger(), p_name );
-				Collection< Font, String >::insert( p_name, result );
-
-				if ( m_paths.find( name ) == m_paths.end() )
-				{
-					m_paths.insert( std::make_pair( name, p_path ) );
-				}
-			}
-			else
-			{
-				auto it = m_paths.find( name );
-
-				if ( it != m_paths.end() )
-				{
-					result = std::make_shared< Font >( p_name, p_height, it->second );
-					Collection< Font, String >::insert( p_name, result );
-				}
-				else
-				{
-					CU_Exception( "Can't create the font, invalid name: " + string::stringCast< char >( p_name ) + ", path: " + string::stringCast< char >( p_path ) );
-				}
-			}
+			CU_Exception( "Can't create the font, invalid name: " + string::stringCast< char >( name ) + ", path: " + string::stringCast< char >( path ) );
 		}
 
 		return result;
 	}
 
-	FontSPtr FontCache::add( castor::String const & p_name, FontSPtr p_font )
+	void ResourceCacheT< Font, String >::doInitialise( FontSPtr resource )
 	{
-		using LockType = std::unique_lock< FontCache >;
-		LockType lock{ makeUniqueLock( *this ) };
-		FontSPtr result{ p_font };
+		auto path = resource->getFilePath();
+		auto nameExt = path.getFileName( true );
 
-		if ( Collection< Font, String >::has( p_name ) )
+		if ( m_paths.find( nameExt ) == m_paths.end()
+			&& File::fileExists( path ) )
 		{
-			result = Collection< Font, String >::find( p_name );
-			doReportDuplicate( getLogger(), p_name );
+			m_paths.insert( std::make_pair( nameExt, path ) );
 		}
-		else
-		{
-			auto path = p_font->getFilePath();
-			String name = path.getFileName() + cuT( "." ) + path.getExtension();
-			Collection< Font, String >::insert( p_name, result );
-
-			if ( m_paths.find( name ) == m_paths.end() )
-			{
-				m_paths.insert( std::make_pair( name, path ) );
-			}
-		}
-
-		return result;
-	}
-
-	FontSPtr FontCache::find( String const & p_name )
-	{
-		return Collection< Font, String >::find( p_name );
-	}
-
-	bool FontCache::has( String const & p_name )
-	{
-		return Collection< Font, String >::has( p_name );
-	}
-
-	void FontCache::remove( String const & p_name )
-	{
-		Collection< Font, String >::erase( p_name );
-	}
-
-	void FontCache::clear()
-	{
-		Collection< Font, String >::lock();
-		Collection< Font, String >::clear();
-		m_paths.clear();
-		Collection< Font, String >::unlock();
 	}
 }

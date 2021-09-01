@@ -9,100 +9,84 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
-using namespace castor;
-
-namespace castor3d
+namespace castor
 {
-	//*************************************************************************************************
+	using namespace castor3d;
 
-	OverlayCache::OverlayInitialiser::OverlayInitialiser( Cache< Overlay, castor::String > & cache )
-		: m_overlays{ cache.m_overlays }
-		, m_overlayCountPerLevel{ cache.m_overlayCountPerLevel }
-	{
-	}
-
-	void OverlayCache::OverlayInitialiser::operator()( OverlaySPtr element )
-	{
-		int level = 0;
-
-		if ( element->getParent() )
-		{
-			level = element->getParent()->getLevel() + 1;
-			element->getParent()->addChild( element );
-		}
-
-		while ( level >= int( m_overlayCountPerLevel.size() ) )
-		{
-			m_overlayCountPerLevel.resize( m_overlayCountPerLevel.size() * 2 );
-		}
-
-		element->setOrder( ++m_overlayCountPerLevel[level], level );
-		m_overlays.insert( element->getCategory() );
-	}
-
-	//*************************************************************************************************
-
-	OverlayCache::OverlayCleaner::OverlayCleaner( Cache< Overlay, castor::String > & cache )
-		: m_overlays{ cache.m_overlays }
-		, m_overlayCountPerLevel{ cache.m_overlayCountPerLevel }
-	{
-	}
-
-	void OverlayCache::OverlayCleaner::operator()( OverlaySPtr element )
-	{
-		if ( element->getChildrenCount() )
-		{
-			for ( auto child : *element )
+	ResourceCacheT< Overlay, String >::ResourceCacheT( Engine & engine )
+		: ElementCacheT{ engine.getLogger()
+			, [&engine]( String const & name
+				, OverlayType type
+				, SceneSPtr scene
+				, OverlaySPtr parent )
 			{
-				child->setPosition( child->getAbsolutePosition() );
-				child->setSize( child->getAbsoluteSize() );
+				auto result = std::make_shared< Overlay >( engine
+					, type
+					, scene
+					, parent );
+				result->setName( name );
+				return result;
 			}
-		}
+			, [this]( ElementPtrT resource )
+			{
+				int level = 0;
 
-		m_overlays.erase( element->getCategory() );
-	}
+				if ( resource->getParent() )
+				{
+					level = resource->getParent()->getLevel() + 1;
+					resource->getParent()->addChild( resource );
+				}
 
-	//*************************************************************************************************
+				while ( level >= int( m_overlayCountPerLevel.size() ) )
+				{
+					m_overlayCountPerLevel.resize( m_overlayCountPerLevel.size() * 2 );
+				}
 
-	Cache< Overlay, castor::String >::Cache( Engine & engine
-		 , Producer && produce
-		 , Initialiser && initialise
-		 , Cleaner && clean
-		 , Merger && merge )
-		: MyCacheType( engine
-		   , std::move( produce )
-		   , std::bind( OverlayInitialiser{ *this }, std::placeholders::_1 )
-		   , std::bind( OverlayCleaner{ *this }, std::placeholders::_1 )
-		   , std::move( merge ) )
+				resource->setOrder( ++m_overlayCountPerLevel[level], level );
+				m_overlays.insert( resource->getCategory() );
+			}
+			, [this]( ElementPtrT resource )
+			{
+				if ( resource->getChildrenCount() )
+				{
+					for ( auto child : *resource )
+					{
+						child->setPosition( child->getAbsolutePosition() );
+						child->setSize( child->getAbsoluteSize() );
+					}
+				}
+
+				m_overlays.erase( resource->getCategory() );
+			} }
+		, m_engine{ engine }
 		, m_overlayCountPerLevel{ 1000, 0 }
 		, m_viewport{ engine }
 	{
 		m_viewport.setOrtho( 0, 1, 1, 0, 0, 1000 );
 	}
 
-	Cache< Overlay, castor::String >::~Cache()
+	void ResourceCacheT< Overlay, String >::clear()
 	{
-	}
-
-	void Cache< Overlay, castor::String >::clear()
-	{
-		LockType lock{ castor::makeUniqueLock( m_elements ) };
+		auto lock( makeUniqueLock( *this ) );
+		doClearNoLock();
 		m_overlays.clear();
 		m_fontTextures.clear();
 	}
 
-	void Cache< Overlay, castor::String >::cleanup()
+	void ResourceCacheT< Overlay, String >::cleanup()
 	{
-		LockType lock{ castor::makeUniqueLock( m_elements ) };
+		auto lock( makeUniqueLock( *this ) );
+		doCleanupNoLock();
 
 		for ( auto it : m_fontTextures )
 		{
-			getEngine()->postEvent( makeGpuCleanupEvent( *it.second ) );
+			m_engine.postEvent( makeGpuCleanupEvent( *it.second ) );
 		}
 	}
 
-	FontTextureSPtr Cache< Overlay, castor::String >::getFontTexture( castor::String const & name )
+	FontTextureSPtr ResourceCacheT< Overlay, String >::getFontTexture( String const & name )
 	{
+		auto lock( makeUniqueLock( *this ) );
 		auto it = m_fontTextures.find( name );
 		FontTextureSPtr result;
 
@@ -114,20 +98,21 @@ namespace castor3d
 		return result;
 	}
 
-	FontTextureSPtr Cache< Overlay, castor::String >::createFontTexture( castor::FontSPtr font )
+	FontTextureSPtr ResourceCacheT< Overlay, String >::createFontTexture( FontSPtr font )
 	{
+		auto lock( makeUniqueLock( *this ) );
 		auto it = m_fontTextures.find( font->getName() );
 		FontTextureSPtr result;
 
 		if ( it == m_fontTextures.end() )
 		{
-			result = std::make_shared< FontTexture >( *getEngine(), font );
+			result = std::make_shared< FontTexture >( m_engine, font );
 			m_fontTextures.emplace( font->getName(), result );
-			getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+			m_engine.postEvent( makeGpuFunctorEvent( EventType::ePreRender
 				, [result]( RenderDevice const & device
 					, QueueData const & queueData )
 				{
-					result->initialise( device, *device.graphicsData() );
+					result->initialise( device, queueData );
 				} ) );
 		}
 

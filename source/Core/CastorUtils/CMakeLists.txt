@@ -263,6 +263,8 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/NonCopyable.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/OwnedBy.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/Resource.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/ResourceCache.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/ResourceCacheBase.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/ScopeGuard.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/Signal.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/Templates.hpp

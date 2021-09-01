@@ -1,140 +1,85 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___CASTOR_FONT_CACHE_H___
-#define ___CASTOR_FONT_CACHE_H___
+#ifndef ___CU_FontCache_H___
+#define ___CU_FontCache_H___
 
 #include "CastorUtils/Graphics/GraphicsModule.hpp"
 
-#include "CastorUtils/Design/Collection.hpp"
+#include "CastorUtils/Design/ResourceCacheBase.hpp"
 
-#if defined( CreateFont )
-#	undef CreateFont
-#endif
+#include <unordered_map>
 
 namespace castor
 {
-	class FontCache
-		: private Collection< Font, String >
+	/**
+	*\~english
+	*	Helper structure to specialise a cache behaviour.
+	*\remarks
+	*	Specialisation for castor::Font.
+	*\~french
+	*	Structure permettant de spécialiser le comportement d'un cache.
+	*\remarks
+	*	Spécialisation pour castor::Font.
+	*/
+	template< typename KeyT >
+	struct ResourceCacheTraitsT< Font, KeyT >
+		: ResourceCacheTraitsBaseT< Font, KeyT >
+	{
+		using Base = ResourceCacheTraitsBaseT< Font, KeyT >;
+		using ElementT = typename Base::ElementT;
+		using ElementPtrT = typename Base::ElementPtrT;
+
+		CU_API static const String Name;
+
+		using ElementProducerT = std::function< ElementPtrT( KeyT const &
+			, uint32_t
+			, Path const & ) >;
+	};
+	/**
+	*\~english
+	*	Base class for an element cache.
+	*\remarks
+	*	Specialisation for castor::Font.
+	*\~french
+	*	Classe de base pour un cache d'éléments.
+	*\remarks
+	*	Spécialisation pour castor::Font.
+	*/
+	template<>
+	class ResourceCacheT< Font, String > final
+		: public ResourceCacheBaseT< Font, String >
 	{
 	public:
-		CU_DeclareMap( castor::String, castor::Path, PathName );
+		using ElementT = Font;
+		using ElementKeyT = String;
+		using ElementCacheT = ResourceCacheBaseT< ElementT, ElementKeyT >;
+		using ElementCacheTraitsT = typename ElementCacheT::ElementCacheTraitsT;
+		using ElementPtrT = typename ElementCacheT::ElementPtrT;
+		using ElementContT = typename ElementCacheT::ElementContT;
+		using ElementProducerT = typename ElementCacheT::ElementProducerT;
+		using ElementInitialiserT = typename ElementCacheT::ElementInitialiserT;
+		using ElementCleanerT = typename ElementCacheT::ElementCleanerT;
+		using ElementMergerT = typename ElementCacheT::ElementMergerT;
 
 	public:
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\~french
-		 *\brief		Constructeur.
-		 */
-		CU_API explicit FontCache( LoggerInstance & logger );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		CU_API ~FontCache();
-		/**
-		 *\~english
-		 *\brief		Creates a font.
-		 *\remarks		If the font already exists, it is returned.
-		 *\param[in]	path	The full access path to the file.
-		 *\param[in]	name	The font name.
-		 *\param[in]	height	The font precision.
-		 *\return		The created (or retrieved) font.
-		 *\~french
-		 *\brief		Crée une police.
-		 *\remarks		Si la police existe déjà, elle est retournée.
-		 *\param[in]	path	Le chemin complet d'accès au fichier.
-		 *\param[in]	name	Le nom de la police.
-		 *\param[in]	height	La précision de la police.
-		 *\return		La police créée (ou récupérée).
-		 */
-		CU_API FontSPtr create( castor::String const & name, uint32_t height, castor::Path const & path );
-		/**
-		 *\~english
-		 *\brief		Creates a font.
-		 *\remarks		If the font already exists, it is returned.
-		 *\param[in]	path	The full access path to the file.
-		 *\param[in]	name	The font name.
-		 *\param[in]	height	The font precision.
-		 *\return		The created (or retrieved) font.
-		 *\~french
-		 *\brief		Crée une police.
-		 *\remarks		Si la police existe déjà, elle est retournée.
-		 *\param[in]	path	Le chemin complet d'accès au fichier.
-		 *\param[in]	name	Le nom de la police.
-		 *\param[in]	height	La précision de la police.
-		 *\return		La police créée (ou récupérée).
-		 */
-		CU_API FontSPtr add( castor::String const & name, uint32_t height, castor::Path const & path );
-		/**
-		 *\~english
-		 *\brief		Adds an already created font.
-		 *\param[in]	name	The font name.
-		 *\param[in]	font	The font.
-		 *\return		The font.
-		 *\~french
-		 *\brief		Ajoute une police déjà créée.
-		 *\remarks		Si la police existe déjà, elle est retournée.
-		 *\param[in]	name	Le nom de la police.
-		 *\param[in]	font	La police.
-		 *\return		La police.
-		 */
-		CU_API FontSPtr add( castor::String const & name, FontSPtr font );
-		/**
-		 *\~english
-		 *\brief		Tells if a font exists.
-		 *\param[in]	name	The font name.
-		 *\return		\p false if not found.
-		 *\~french
-		 *\brief		Dit si une police existe.
-		 *\param[in]	name	Le nom de la police.
-		 *\return		\p false si non trouvée.
-		 */
-		CU_API bool has( castor::String const & name );
-		/**
-		 *\~english
-		 *\brief		Retrieves a font.
-		 *\param[in]	name	The font name.
-		 *\return		The font, nullptr if not found.
-		 *\~french
-		 *\brief		Récupère une police.
-		 *\param[in]	name	Le nom de la police.
-		 *\return		La police, nullptr si non trouvée.
-		 */
-		CU_API FontSPtr find( castor::String const & name );
-		/**
-		 *\~english
-		 *\brief		Retrieves a font.
-		 *\param[in]	name	The font name.
-		 *\return		The font, nullptr if not found.
-		 *\~french
-		 *\brief		Récupère une police.
-		 *\param[in]	name	Le nom de la police.
-		 *\return		La police, nullptr si non trouvée.
-		 */
-		CU_API void remove( castor::String const & name );
-		/**
-		 *\~english
-		 *\brief		Clears the collection and file paths.
-		 *\~french
-		 *\brief		Nettoie la collection et les chemins d'accès aux fichiers.
-		 */
-		CU_API void clear();
+		CU_API explicit ResourceCacheT( LoggerInstance & logger );
+		CU_API ~ResourceCacheT() = default;
 
-	public:
-		using Collection< Font, String >::begin;
-		using Collection< Font, String >::end;
-		using Collection< Font, String >::lock;
-		using Collection< Font, String >::unlock;
+	private:
+		FontSPtr doProduce( String const & name
+			, uint32_t height
+			, Path path );
+		void doInitialise( FontSPtr resource );
 
-	protected:
+	private:
+		using PathNameMap = std::unordered_map< String, Path >;
 		//!\~english	The font files paths sorted by file_name.file_extension.
 		//!\~french		Les fichiers des polices, triés par file_name.file_extension.
 		PathNameMap m_paths;
 	};
+
+	using FontCache = ResourceCacheT< Font, String >;
 }
 
 #endif

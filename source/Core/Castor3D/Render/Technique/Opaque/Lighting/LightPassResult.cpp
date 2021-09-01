@@ -1,10 +1,11 @@
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPassResult.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/Cache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
+
+#include <CastorUtils/Design/ResourceCache.hpp>
 
 using namespace castor;
 

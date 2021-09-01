@@ -1,7 +1,6 @@
 #include "Castor3D/Render/ShadowMap/ShadowMapSpot.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/Cache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -26,6 +25,7 @@
 #include <ashespp/RenderPass/RenderPass.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
+#include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Graphics/Image.hpp>
 #include <CastorUtils/Miscellaneous/BlockTracker.hpp>
 

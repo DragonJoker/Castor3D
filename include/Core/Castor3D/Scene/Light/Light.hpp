@@ -46,13 +46,6 @@ namespace castor3d
 			, LightType lightType );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~Light();
-		/**
-		 *\~english
 		 *\brief			CPU Update.
 		 *\param[in, out]	updater	The update data.
 		 *\~french

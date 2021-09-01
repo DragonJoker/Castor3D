@@ -257,15 +257,6 @@ namespace castor
 	class Font;
 	/**
 	\~english
-	\brief		Font manager.
-	\remark		Holds the loaded fonts, and also the paths to font files.
-	\~french
-	\brief		Gestionnaire de polices.
-	\remark		Détient les polices, et aussi les chemins d'accès aux fichiers des polices.
-	*/
-	class FontCache;
-	/**
-	\~english
 	\brief		Font character (glyph) representation
 	\remark		Holds position, size and data of a character
 	\~french
@@ -287,15 +278,6 @@ namespace castor
 	\brief		Ressource Image
 	*/
 	class Image;
-	/**
-	\~english
-	\brief		Image manager.
-	\remark		Holds the loaded images, and helps their loading.
-	\~french
-	\brief		Gestionnaire d'images.
-	\remark		Détient les images, et simplifie leur création.
-	*/
-	class ImageCache;
 	/**
 	\~english
 	\brief		An image loader.

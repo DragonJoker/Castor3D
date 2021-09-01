@@ -3,7 +3,6 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Animation/Animation.hpp>
 #include <Castor3D/Cache/AnimatedObjectGroupCache.hpp>
-#include <Castor3D/Cache/Cache.hpp>
 #include <Castor3D/Cache/CacheView.hpp>
 #include <Castor3D/Cache/GeometryCache.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
@@ -17,6 +16,8 @@
 #include <Castor3D/Scene/Animation/AnimatedObjectGroup.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/Light/PointLight.hpp>
+
+#include <CastorUtils/Design/ResourceCache.hpp>
 
 using namespace castor;
 using namespace castor3d;
@@ -72,7 +73,7 @@ namespace castortd
 
 		void doUpdateMaterials( Geometry & p_geometry
 			, Tower::Category::Kind p_kind
-			, CacheView< Material, MaterialCache, EventType::ePreRender > const & p_materials )
+			, CacheViewT< MaterialCache, EventType::ePreRender > const & p_materials )
 		{
 			auto & mesh = *p_geometry.getMesh();
 

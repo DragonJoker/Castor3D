@@ -29,7 +29,6 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Animation/Animation.hpp>
 #include <Castor3D/Cache/AnimatedObjectGroupCache.hpp>
-#include <Castor3D/Cache/Cache.hpp>
 #include <Castor3D/Cache/CacheView.hpp>
 #include <Castor3D/Cache/GeometryCache.hpp>
 #include <Castor3D/Cache/LightCache.hpp>
@@ -55,6 +54,8 @@
 #include <Castor3D/Scene/Animation/AnimatedObject.hpp>
 #include <Castor3D/Scene/Animation/AnimatedObjectGroup.hpp>
 #include <Castor3D/Scene/Light/Light.hpp>
+
+#include <CastorUtils/Design/ResourceCache.hpp>
 
 #include "GuiCommon/xpms/material.xpm"
 #include "GuiCommon/xpms/material_sel.xpm"

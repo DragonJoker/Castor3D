@@ -12,14 +12,18 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	template< typename ResourceType, typename CacheType, EventType EventType >
-	class CacheView
+	template< typename CacheT
+		, EventType EventT >
+	class CacheViewT
 		: public castor::Named
 	{
-	private:
-		using Initialiser = ElementInitialiser< ResourceType >;
-		using Cleaner = ElementCleaner< ResourceType >;
-		using ResourcePtr = std::shared_ptr< ResourceType >;
+	public:
+		using ElementCacheT = CacheT;
+		using ElementT = typename ElementCacheT::ElementT;
+		using ElementKeyT = typename ElementCacheT::ElementKeyT;
+		using ElementPtrT = typename ElementCacheT::ElementPtrT;
+		using ElementInitialiserT = typename ElementCacheT::ElementInitialiserT;
+		using ElementCleanerT = typename ElementCacheT::ElementCleanerT;
 
 	public:
 		/**
@@ -36,17 +40,24 @@ namespace castor3d
 		 *\param[in]	clean		Le nettoyeur d'objet.
 		 *\param[in]	cache		The viewed cache.
 		 */
-		inline CacheView( castor::String const & name
-			, Initialiser && initialise
-			, Cleaner && clean
-			, CacheType & cache );
+		inline CacheViewT( castor::String const & name
+			, ElementCacheT & cache
+			, ElementInitialiserT initialise = []( ElementPtrT ){}
+			, ElementCleanerT clean = []( ElementPtrT ){} );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		inline ~CacheView();
+		inline ~CacheViewT();
+		/**
+		 *\~english
+		 *\brief		Removes from the cache the elements created through this view.
+		 *\~french
+		 *\brief		Supprime du cache les éléments créés via cette vue.
+		 */
+		inline void clear();
 		/**
 		 *\~english
 		 *\brief		Creates an element with the given informations.
@@ -59,9 +70,9 @@ namespace castor3d
 		 *\param[in]	params	Les paramètres transmis au cache vu.
 		 *\return		L'élément créé.
 		 */
-		template< typename ... Params >
-		inline ResourcePtr add( castor::String const & name
-			, Params && ... params );
+		template< typename ... ParametersT >
+		inline ElementPtrT add( ElementKeyT const & name
+			, ParametersT && ... params );
 		/**
 		 *\~english
 		 *\brief		adds an already created an element.
@@ -72,8 +83,8 @@ namespace castor3d
 		 *\param[in]	name	Le nom d'élément.
 		 *\param[in]	element	L'élément.
 		 */
-		inline bool tryAdd( castor::String const & name
-			, ResourcePtr element
+		inline bool tryAdd( ElementKeyT const & name
+			, ElementPtrT element
 			, bool initialise = false );
 		/**
 		 *\~english
@@ -85,16 +96,9 @@ namespace castor3d
 		 *\param[in]	name	Le nom d'élément.
 		 *\param[in]	element	L'élément.
 		 */
-		inline ResourcePtr add( castor::String const & name
-			, ResourcePtr element
+		inline ElementPtrT add( ElementKeyT const & name
+			, ElementPtrT element
 			, bool initialise = false );
-		/**
-		 *\~english
-		 *\brief		Removes from the cache the elements created through this view.
-		 *\~french
-		 *\brief		Supprime du cache les éléments créés via cette vue.
-		 */
-		inline void clear();
 		/**
 		 *\~english
 		 *\return		\p true if the view is empty.
@@ -110,7 +114,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom d'objet.
 		 *\return		\p true Si un élément avec le nom donné existe.
 		 */
-		inline bool has( castor::String const & name )const;
+		inline bool has( ElementKeyT const & name )const;
 		/**
 		 *\~english
 		 *\brief		Looks for an element with given name.
@@ -121,7 +125,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom d'objet.
 		 *\return		L'élément trouvé, nullptr si non trouvé.
 		 */
-		inline ResourcePtr tryFind( castor::String const & name )const;
+		inline ElementPtrT tryFind( ElementKeyT const & name )const;
 		/**
 		 *\~english
 		 *\brief		Looks for an element with given name.
@@ -132,7 +136,16 @@ namespace castor3d
 		 *\param[in]	name	Le nom d'objet.
 		 *\return		L'élément trouvé, nullptr si non trouvé.
 		 */
-		inline ResourcePtr find( castor::String const & name )const;
+		inline ElementPtrT find( ElementKeyT const & name )const;
+		/**
+		 *\~english
+		 *\brief		Removes an element, given a name.
+		 *\param[in]	name	The element name.
+		 *\~french
+		 *\brief		Retire un élément à partir d'un nom.
+		 *\param[in]	name	Le nom d'élément.
+		 */
+		inline ElementPtrT tryRemove( ElementKeyT const & name );
 		/**
 		 *\~english
 		 *\brief		Removes an object, given a name.
@@ -141,63 +154,58 @@ namespace castor3d
 		 *\brief		Retire un objet à partir d'un nom.
 		 *\param[in]	name	Le nom d'objet.
 		 */
-		inline void remove( castor::String const & name );
+		inline void remove( ElementKeyT const & name );
 		/**
-		 *\~english
-		 *\brief		Returns an iterator to the first element of the collection
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Renvoie un itérateur sur le premier élément de la collection
-		 *\return		L'itérateur
-		 */
+		*\~english
+		*\name Iteration.
+		*\~french
+		*\name Itération.
+		**/
+		/**@{*/
 		inline auto begin()
 		{
 			return m_createdElements.begin();
 		}
-		/**
-		 *\~english
-		 *\brief		Returns an constant iterator to the first element of the collection
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Renvoie un itérateur constant sur le premier élément de la collection
-		 *\return		L'itérateur
-		 */
+
 		inline auto begin()const
 		{
 			return m_createdElements.begin();
 		}
-		/**
-		 *\~english
-		 *\brief		Returns an iterator to the after last element of the collection
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Renvoie un itérateur sur l'après dernier élément de la collection
-		 *\return		L'itérateur
-		 */
+
 		inline auto end()
 		{
 			return m_createdElements.end();
 		}
-		/**
-		 *\~english
-		 *\brief		Returns an constant iterator to the after last element of the collection
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Renvoie un itérateur constant sur l'après dernier élément de la collection
-		 *\return		L'itérateur
-		 */
+
 		inline auto end()const
 		{
 			return m_createdElements.end();
 		}
+		/**@}*/
 
 	private:
-		CacheType & m_cache;
-		std::set< castor::String > m_createdElements;
-		Initialiser m_initialise;
-		Cleaner m_clean;
-		std::vector< ResourcePtr > m_cleaning;
+		ElementCacheT & m_cache;
+		std::set< ElementKeyT > m_createdElements;
+		ElementInitialiserT m_initialise;
+		ElementCleanerT m_clean;
+		std::vector< ElementPtrT > m_cleaning;
 	};
+
+	template< typename CacheT >
+	using CacheViewTraitsT = typename CacheT::ElementCacheTraitsT;
+
+	template< EventType EventT
+		, typename CacheT >
+	CacheViewPtrT< CacheT, EventT > makeCacheView( castor::String const & name
+		, CacheT & cache
+		, typename CacheViewTraitsT< CacheT >::ElementInitialiserT initialiser = {}
+		, typename CacheViewTraitsT< CacheT >::ElementCleanerT cleaner = {} )
+	{
+		return std::make_shared< CacheViewT< CacheT, EventT > >( name
+			, cache
+			, std::move( initialiser )
+			, std::move( cleaner ) );
+	}
 }
 
 #include "Castor3D/Cache/CacheView.inl"

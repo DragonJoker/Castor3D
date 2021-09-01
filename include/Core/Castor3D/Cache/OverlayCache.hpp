@@ -4,17 +4,17 @@ See LICENSE file in root folder
 #ifndef ___C3D_OverlayCache_H___
 #define ___C3D_OverlayCache_H___
 
-#include "Castor3D/Cache/CacheBase.hpp"
+#include "CacheModule.hpp"
+
 #include "Castor3D/Overlay/OverlayCategory.hpp"
 #include "Castor3D/Overlay/OverlayFactory.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 
-namespace castor3d
+#include <CastorUtils/Design/ResourceCache.hpp>
+
+namespace castor
 {
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		03/10/2015
-	\version	0.8.0
 	\~english
 	\brief		Structure used to sort overlays by order.
 	\~french
@@ -28,58 +28,38 @@ namespace castor3d
 		 *\~french
 		 *\brief		Opérateur de comparaison.
 		 */
-		inline bool operator()( OverlayCategorySPtr a, OverlayCategorySPtr b )const
+		inline bool operator()( castor3d::OverlayCategorySPtr a
+			, castor3d::OverlayCategorySPtr b )const
 		{
-			return a->getLevel() < b->getLevel() || ( a->getLevel() == b->getLevel() && a->getIndex() < b->getIndex() );
+			return a->getLevel() < b->getLevel()
+				|| ( a->getLevel() == b->getLevel() && a->getIndex() < b->getIndex() );
 		}
 	};
-	using OverlayCategorySet = std::set< OverlayCategorySPtr, OverlayCategorySort >;
+	using OverlayCategorySet = std::set< castor3d::OverlayCategorySPtr, OverlayCategorySort >;
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		09/02/2010
-	\version	0.1
 	\~english
 	\brief		Overlay collection, with additional add and remove functions to manage Z-Index
 	\~french
 	\brief		Collection d'incrustations, avec des fonctions additionnelles d'ajout et de suppression pour gérer les Z-Index
 	*/
 	template<>
-	class Cache< Overlay, castor::String >
-		: public CacheBase< Overlay, castor::String >
+	class ResourceCacheT< castor3d::Overlay, String > final
+		: public ResourceCacheBaseT< castor3d::Overlay, String >
 	{
 	public:
-		using MyCacheType = CacheBase< Overlay, castor::String >;
-		using Element = typename MyCacheType::Element;
-		using Key = typename MyCacheType::Key;
-		using Collection = typename MyCacheType::Collection;
-		using LockType = typename MyCacheType::LockType;
-		using ElementPtr = typename MyCacheType::ElementPtr;
-		using Producer = typename MyCacheType::Producer;
-		using Merger = typename MyCacheType::Merger;
-
-		typedef castor::Collection< Overlay, castor::String >::ObjectPtrMapIt iterator;
-		typedef castor::Collection< Overlay, castor::String >::ObjectPtrMapConstIt const_iterator;
-		CU_DeclareMap( castor::String, FontTextureSPtr, FontTextureStr );
-
-		struct OverlayInitialiser
-		{
-			explicit OverlayInitialiser( Cache< Overlay, castor::String > & cache );
-			void operator()( OverlaySPtr element );
-
-		private:
-			OverlayCategorySet & m_overlays;
-			std::vector< int > & m_overlayCountPerLevel;
-		};
-
-		struct OverlayCleaner
-		{
-			explicit OverlayCleaner( Cache< Overlay, castor::String > & cache );
-			void operator()( OverlaySPtr element );
-
-		private:
-			OverlayCategorySet & m_overlays;
-			std::vector< int > & m_overlayCountPerLevel;
-		};
+		using ElementT = castor3d::Overlay;
+		using ElementKeyT = String;
+		using ElementCacheT = ResourceCacheBaseT< ElementT, ElementKeyT >;
+		using ElementCacheTraitsT = typename ElementCacheT::ElementCacheTraitsT;
+		using ElementPtrT = typename ElementCacheT::ElementPtrT;
+		using ElementContT = typename ElementCacheT::ElementContT;
+		using ElementProducerT = typename ElementCacheT::ElementProducerT;
+		using ElementInitialiserT = typename ElementCacheT::ElementInitialiserT;
+		using ElementCleanerT = typename ElementCacheT::ElementCleanerT;
+		using ElementMergerT = typename ElementCacheT::ElementMergerT;
+		using iterator = std::map< ElementT, ElementKeyT >::iterator;
+		using const_iterator = std::map< ElementT, ElementKeyT >::const_iterator;
+		CU_DeclareMap( ElementKeyT, castor3d::FontTextureSPtr, FontTextureStr );
 
 	public:
 		/**
@@ -98,18 +78,14 @@ namespace castor3d
 		 *\param[in]	clean		Le nettoyeur d'objet.
 		 *\param[in]	merge		Le fusionneur de collection d'objets.
 		 */
-		C3D_API Cache( Engine & engine
-		   , Producer && produce
-		   , Initialiser && initialise = Initialiser{}
-		   , Cleaner && clean = Cleaner{}
-		   , Merger && merge = Merger{} );
+		C3D_API ResourceCacheT( castor3d::Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~Cache();
+		C3D_API ~ResourceCacheT() = default;
 		/**
 		 *\~english
 		 *\brief		Clears all overlays lists
@@ -134,7 +110,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom de la police.
 		 *\return		La FontTexture si elle exite, nullptr sinon.
 		 */
-		C3D_API FontTextureSPtr getFontTexture( castor::String const & name );
+		C3D_API castor3d::FontTextureSPtr getFontTexture( String const & name );
 		/**
 		 *\~english
 		 *\brief		Creates a FontTexture from a font.
@@ -145,141 +121,64 @@ namespace castor3d
 		 *\param[in]	font	La police.
 		 *\return		La FontTexture créée.
 		 */
-		C3D_API FontTextureSPtr createFontTexture( castor::FontSPtr font );
+		C3D_API castor3d::FontTextureSPtr createFontTexture( FontSPtr font );
 		/**
-		 *\~english
-		 *\brief		Creates an object.
-		 *\param[in]	name	The object name.
-		 *\param[in]	type	The overlay type.
-		 *\param[in]	scene	The scene.
-		 *\param[in]	parent	The parent overlay, if any.
-		 *\return		The created object.
-		 *\~french
-		 *\brief		Crée un objet.
-		 *\param[in]	name	Le nom d'objet.
-		 *\param[in]	type	Le type d'incrustation.
-		 *\param[in]	scene	La scène.
-		 *\param[in]	parent	L'incrustation parente, si elle existe.
-		 *\return		L'objet créé.
-		 */
-		inline ElementPtr add( Key const & name
-			, OverlayType type
-			, SceneSPtr scene
-			, OverlaySPtr parent )
-		{
-			return MyCacheType::add( name, type, scene, parent );
-		}
-		/**
-		 *\~english
-		 *\brief		adds an already created object.
-		 *\param[in]	name	The object name.
-		 *\param[in]	element	The object.
-		 *\return		The object.
-		 *\~french
-		 *\brief		Ajoute un objet déjà créé.
-		 *\param[in]	name	Le nom d'objet.
-		 *\param[in]	element	L'objet'.
-		 *\return		L'objet.
-		 */
-		inline ElementPtr add( Key const & name
-			, ElementPtr element )
-		{
-			return MyCacheType::add( name, element );
-		}
-		/**
-		 *\~english
-		 *\brief		Removes an element, given a name.
-		 *\param[in]	name	The element name.
-		 *\~french
-		 *\brief		Retire un élément à partir d'un nom.
-		 *\param[in]	name	Le nom d'élément.
-		 */
-		inline void remove( Key const & name )
-		{
-			if ( auto element = tryRemove( name ) )
-			{
-				m_clean( element );
-			}
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the first overlay
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur la première incrustation
-		 *\return		La valeur
-		 */
-		inline OverlayCategorySet::iterator begin()
+		*\~english
+		*\name Iteration.
+		*\~french
+		*\name Itération.
+		**/
+		/**@{*/
+		inline auto begin()
 		{
 			return m_overlays.begin();
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the first overlay
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur la première incrustation
-		 *\return		La valeur
-		 */
-		inline OverlayCategorySet::const_iterator begin()const
+
+		inline auto begin()const
 		{
 			return m_overlays.begin();
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to after the last overlay
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur après la dernière incrustation
-		 *\return		La valeur
-		 */
-		inline OverlayCategorySet::iterator end()
+
+		inline auto end()
 		{
 			return m_overlays.end();
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to after the last overlay
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur après la dernière incrustation
-		 *\return		La valeur
-		 */
-		inline OverlayCategorySet::const_iterator end()const
+
+		inline auto end()const
 		{
 			return m_overlays.end();
 		}
+		/**@}*/
 		/**
 		 *\~english
-		 *\brief		Retrieves the Overlay factory
-		 *\return		The factory
+		 *\name Getters.
 		 *\~french
-		 *\brief		Récupère la fabrique d'Overlay
-		 *\return		La fabrique
-		 */
-		inline OverlayFactory const & getOverlayFactory()const
-		{
-			return m_overlayFactory;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the Overlay factory
-		 *\return		The factory
-		 *\~french
-		 *\brief		Récupère la fabrique d'Overlay
-		 *\return		La fabrique
-		 */
-		inline OverlayFactory & getFactory()
+		 *\name Accesseurs.
+		 **/
+		/**@{*/
+		inline castor3d::OverlayFactory const & getOverlayFactory()const
 		{
 			return m_overlayFactory;
 		}
 
+		inline castor3d::OverlayFactory & getFactory()
+		{
+			return m_overlayFactory;
+		}
+
+		castor3d::Engine & getEngine()const
+		{
+			return m_engine;
+		}
+		/**@}*/
+
 	private:
-		OverlayFactory m_overlayFactory;
+		castor3d::Engine & m_engine;
+		castor3d::OverlayFactory m_overlayFactory;
 		OverlayCategorySet m_overlays;
-		Viewport m_viewport;
+		castor3d::Viewport m_viewport;
 		std::vector< int > m_overlayCountPerLevel;
-		castor::Matrix4x4f m_projection;
+		Matrix4x4f m_projection;
 		FontTextureStrMap m_fontTextures;
 	};
 }
