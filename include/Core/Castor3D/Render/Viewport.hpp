@@ -34,6 +34,10 @@ namespace castor3d
 			, float farZ );
 
 	public:
+		C3D_API Viewport & operator=( Viewport const & rhs ) = delete;
+		C3D_API Viewport & operator=( Viewport && rhs ) = delete;
+		C3D_API Viewport( Viewport const & rhs );
+		C3D_API Viewport( Viewport && rhs );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -49,7 +53,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~Viewport();
+		C3D_API ~Viewport() = default;
 		/**
 		 *\~english
 		 *\brief		Applies the perspective
@@ -150,14 +154,14 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		const castor::Size & getSize()const
+		castor::Size const & getSize()const
 		{
-			return m_size;
+			return m_size.value();
 		}
 
-		const castor::Position & getPosition()const
+		castor::Position const & getPosition()const
 		{
-			return m_position;
+			return m_position.value();
 		}
 
 		ViewportType getType()const
@@ -207,12 +211,12 @@ namespace castor3d
 
 		uint32_t getWidth()const
 		{
-			return m_size.getWidth();
+			return m_size.value().getWidth();
 		}
 
 		uint32_t getHeight()const
 		{
-			return m_size.getHeight();
+			return m_size.value().getHeight();
 		}
 
 		bool isModified()const
@@ -316,13 +320,13 @@ namespace castor3d
 		castor::GroupChangeTracked< float > m_near;
 		castor::GroupChangeTracked< castor::Angle > m_fovY;
 		castor::GroupChangeTracked< float > m_ratio;
-		ViewportType m_type;
-		castor::Size m_size;
-		castor::Position m_position;
-		castor::Matrix4x4f m_projection;
-		castor::Matrix4x4f m_safeBandedProjection;
+		castor::GroupChangeTracked< ViewportType > m_type;
+		castor::GroupChangeTracked< castor::Size > m_size;
+		castor::GroupChangeTracked< castor::Position > m_position;
 		VkViewport m_viewport;
 		VkRect2D m_scissor;
+		castor::Matrix4x4f m_projection;
+		castor::Matrix4x4f m_safeBandedProjection;
 	};
 }
 
