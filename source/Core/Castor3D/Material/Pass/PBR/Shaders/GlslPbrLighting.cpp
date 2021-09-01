@@ -113,7 +113,8 @@ namespace castor3d::shader
 		: LightingModel{ writer
 			, utils
 			, std::move( shadowOptions )
-			, isOpaqueProgram }
+			, isOpaqueProgram
+			, isSpecularGlossiness ? std::string{ "c3d_pbrsg_" } : std::string{ "c3d_pbrmr_" } }
 		, m_isSpecularGlossiness{ isSpecularGlossiness }
 		, m_cookTorrance{ writer, utils }
 	{
@@ -395,7 +396,7 @@ namespace castor3d::shader
 	void PbrLightingModel::doDeclareComputeTiledDirectionalLight()
 	{
 		OutputComponents output{ m_writer };
-		m_computeTiledDirectional = m_writer.implementFunction< sdw::Void >( "computeDirectionalLight"
+		m_computeTiledDirectional = m_writer.implementFunction< sdw::Void >( m_prefix + "computeDirectionalLight"
 			, [this]( TiledDirectionalLight const & light
 				, PbrLightMaterial const & material
 				, Surface const & surface
@@ -563,7 +564,7 @@ namespace castor3d::shader
 	void PbrLightingModel::doDeclareComputeDirectionalLight()
 	{
 		OutputComponents output{ m_writer };
-		m_computeDirectional = m_writer.implementFunction< sdw::Void >( "computeDirectionalLight"
+		m_computeDirectional = m_writer.implementFunction< sdw::Void >( m_prefix + "computeDirectionalLight"
 			, [this]( DirectionalLight const & light
 				, PbrLightMaterial const & material
 				, Surface const & surface
@@ -731,7 +732,7 @@ namespace castor3d::shader
 	void PbrLightingModel::doDeclareComputePointLight()
 	{
 		OutputComponents output{ m_writer };
-		m_computePoint = m_writer.implementFunction< sdw::Void >( "computePointLight"
+		m_computePoint = m_writer.implementFunction< sdw::Void >( m_prefix + "computePointLight"
 			, [this]( PointLight const & light
 				, PbrLightMaterial const & material
 				, Surface const & surface
@@ -829,7 +830,7 @@ namespace castor3d::shader
 	void PbrLightingModel::doDeclareComputeSpotLight()
 	{
 		OutputComponents output{ m_writer };
-		m_computeSpot = m_writer.implementFunction< sdw::Void >( "computeSpotLight"
+		m_computeSpot = m_writer.implementFunction< sdw::Void >( m_prefix + "computeSpotLight"
 			, [this]( SpotLight const & light
 				, PbrLightMaterial const & material
 				, Surface const & surface
@@ -932,7 +933,7 @@ namespace castor3d::shader
 
 	void PbrLightingModel::doDeclareComputeTiledDirectionalLightDiffuse()
 	{
-		m_computeTiledDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeDirectionalLight"
+		m_computeTiledDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeDirectionalLight"
 			, [this]( TiledDirectionalLight const & light
 				, PbrLightMaterial const & material
 				, Surface const & surface
@@ -1010,7 +1011,7 @@ namespace castor3d::shader
 
 	void PbrLightingModel::doDeclareComputeDirectionalLightDiffuse()
 	{
-		m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeDirectionalLight"
+		m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeDirectionalLight"
 			, [this]( DirectionalLight const & light
 				, PbrLightMaterial const & material
 				, Surface const & surface
@@ -1088,7 +1089,7 @@ namespace castor3d::shader
 
 	void PbrLightingModel::doDeclareComputePointLightDiffuse()
 	{
-		m_computePointDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computePointLight"
+		m_computePointDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computePointLight"
 			, [this]( PointLight const & light
 				, PbrLightMaterial const & material
 				, Surface const & surface
@@ -1169,7 +1170,7 @@ namespace castor3d::shader
 
 	void PbrLightingModel::doDeclareComputeSpotLightDiffuse()
 	{
-		m_computeSpotDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeSpotLight"
+		m_computeSpotDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeSpotLight"
 			, [this]( SpotLight const & light
 				, PbrLightMaterial const & material
 				, Surface const & surface

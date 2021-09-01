@@ -82,6 +82,7 @@ namespace toon::shader
 			, isOpaqueProgram
 			, isBlinnPhong }
 	{
+		m_prefix = m_prefix + "toon_";
 	}
 
 	c3d::LightingModelPtr ToonPhongLightingModel::create( sdw::ShaderWriter & writer
@@ -380,7 +381,7 @@ namespace toon::shader
 	void ToonPhongLightingModel::doDeclareComputeTiledDirectionalLight()
 	{
 		c3d::OutputComponents output{ m_writer };
-		m_computeTiledDirectional = m_writer.implementFunction< sdw::Void >( "computeDirectionalLight"
+		m_computeTiledDirectional = m_writer.implementFunction< sdw::Void >( m_prefix + "computeDirectionalLight"
 			, [this]( c3d::TiledDirectionalLight const & light
 				, ToonPhongLightMaterial const & material
 				, c3d::Surface const & surface
@@ -513,7 +514,7 @@ namespace toon::shader
 	void ToonPhongLightingModel::doDeclareComputeDirectionalLight()
 	{
 		c3d::OutputComponents output{ m_writer };
-		m_computeDirectional = m_writer.implementFunction< sdw::Void >( "computeDirectionalLight"
+		m_computeDirectional = m_writer.implementFunction< sdw::Void >( m_prefix + "computeDirectionalLight"
 			, [this]( c3d::DirectionalLight const & light
 				, ToonPhongLightMaterial const & material
 				, c3d::Surface const & surface
@@ -646,7 +647,7 @@ namespace toon::shader
 	void ToonPhongLightingModel::doDeclareComputePointLight()
 	{
 		c3d::OutputComponents output{ m_writer };
-		m_computePoint = m_writer.implementFunction< sdw::Void >( "computePointLight"
+		m_computePoint = m_writer.implementFunction< sdw::Void >( m_prefix + "computePointLight"
 			, [this]( c3d::PointLight const & light
 				, ToonPhongLightMaterial const & material
 				, c3d::Surface const & surface
@@ -738,7 +739,7 @@ namespace toon::shader
 	void ToonPhongLightingModel::doDeclareComputeSpotLight()
 	{
 		c3d::OutputComponents output{ m_writer };
-		m_computeSpot = m_writer.implementFunction< sdw::Void >( "computeSpotLight"
+		m_computeSpot = m_writer.implementFunction< sdw::Void >( m_prefix + "computeSpotLight"
 			, [this]( c3d::SpotLight const & light
 				, ToonPhongLightMaterial const & material
 				, c3d::Surface const & surface
@@ -836,7 +837,7 @@ namespace toon::shader
 	void ToonPhongLightingModel::doDeclareComputeLight()
 	{
 		c3d::OutputComponents output{ m_writer };
-		m_computeLight = m_writer.implementFunction< sdw::Void >( "doComputeLight"
+		m_computeLight = m_writer.implementFunction< sdw::Void >( m_prefix + "doComputeLight"
 			, [this]( c3d::Light const & light
 				, ToonPhongLightMaterial const & material
 				, c3d::Surface const & surface
@@ -910,7 +911,7 @@ namespace toon::shader
 
 	void ToonPhongLightingModel::doDeclareComputeTiledDirectionalLightDiffuse()
 	{
-		m_computeTiledDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeDirectionalLight"
+		m_computeTiledDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeDirectionalLight"
 			, [this]( c3d::TiledDirectionalLight const & light
 				, ToonPhongLightMaterial const & material
 				, c3d::Surface const & surface
@@ -978,7 +979,7 @@ namespace toon::shader
 
 	void ToonPhongLightingModel::doDeclareComputeDirectionalLightDiffuse()
 	{
-		m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeDirectionalLight"
+		m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeDirectionalLight"
 			, [this]( c3d::DirectionalLight const & light
 				, ToonPhongLightMaterial const & material
 				, c3d::Surface const & surface
@@ -1046,7 +1047,7 @@ namespace toon::shader
 
 	void ToonPhongLightingModel::doDeclareComputePointLightDiffuse()
 	{
-		m_computePointDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computePointLight"
+		m_computePointDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computePointLight"
 			, [this]( c3d::PointLight const & light
 				, ToonPhongLightMaterial const & material
 				, c3d::Surface const & surface
@@ -1124,7 +1125,7 @@ namespace toon::shader
 
 	void ToonPhongLightingModel::doDeclareComputeSpotLightDiffuse()
 	{
-		m_computeSpotDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeSpotLight"
+		m_computeSpotDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeSpotLight"
 			, [this]( c3d::SpotLight const & light
 				, ToonPhongLightMaterial const & material
 				, c3d::Surface const & surface
@@ -1208,7 +1209,7 @@ namespace toon::shader
 
 	void ToonPhongLightingModel::doDeclareComputeLightDiffuse()
 	{
-		m_computeLightDiffuse = m_writer.implementFunction< sdw::Vec3 >( "doComputeLight"
+		m_computeLightDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "doComputeLight"
 			, [this]( c3d::Light const & light
 				, ToonPhongLightMaterial const & material
 				, c3d::Surface const & surface
@@ -1374,7 +1375,8 @@ namespace toon::shader
 		: c3d::LightingModel{ writer
 			, utils
 			, std::move( shadowOptions )
-			, isOpaqueProgram }
+			, isOpaqueProgram
+			, isSpecularGlossiness ? std::string{ "c3d_pbrsg_toon_" } : std::string{ "c3d_pbrmr_toon_" } }
 		, m_isSpecularGlossiness{ isSpecularGlossiness }
 		, m_cookTorrance{ writer, utils }
 	{
@@ -1656,7 +1658,7 @@ namespace toon::shader
 	void ToonPbrLightingModel::doDeclareComputeTiledDirectionalLight()
 	{
 		c3d::OutputComponents output{ m_writer };
-		m_computeTiledDirectional = m_writer.implementFunction< sdw::Void >( "computeDirectionalLight"
+		m_computeTiledDirectional = m_writer.implementFunction< sdw::Void >( m_prefix + "computeDirectionalLight"
 			, [this]( c3d::TiledDirectionalLight const & light
 				, ToonPbrLightMaterial const & material
 				, c3d::Surface const & surface
@@ -1827,7 +1829,7 @@ namespace toon::shader
 	void ToonPbrLightingModel::doDeclareComputeDirectionalLight()
 	{
 		c3d::OutputComponents output{ m_writer };
-		m_computeDirectional = m_writer.implementFunction< sdw::Void >( "computeDirectionalLight"
+		m_computeDirectional = m_writer.implementFunction< sdw::Void >( m_prefix + "computeDirectionalLight"
 			, [this]( c3d::DirectionalLight const & light
 				, ToonPbrLightMaterial const & material
 				, c3d::Surface const & surface
@@ -1998,7 +2000,7 @@ namespace toon::shader
 	void ToonPbrLightingModel::doDeclareComputePointLight()
 	{
 		c3d::OutputComponents output{ m_writer };
-		m_computePoint = m_writer.implementFunction< sdw::Void >( "computePointLight"
+		m_computePoint = m_writer.implementFunction< sdw::Void >( m_prefix + "computePointLight"
 			, [this]( c3d::PointLight const & light
 				, ToonPbrLightMaterial const & material
 				, c3d::Surface const & surface
@@ -2099,7 +2101,7 @@ namespace toon::shader
 	void ToonPbrLightingModel::doDeclareComputeSpotLight()
 	{
 		c3d::OutputComponents output{ m_writer };
-		m_computeSpot = m_writer.implementFunction< sdw::Void >( "computeSpotLight"
+		m_computeSpot = m_writer.implementFunction< sdw::Void >( m_prefix + "computeSpotLight"
 			, [this]( c3d::SpotLight const & light
 				, ToonPbrLightMaterial const & material
 				, c3d::Surface const & surface
@@ -2205,7 +2207,7 @@ namespace toon::shader
 
 	void ToonPbrLightingModel::doDeclareComputeTiledDirectionalLightDiffuse()
 	{
-		m_computeTiledDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeDirectionalLight"
+		m_computeTiledDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeDirectionalLight"
 			, [this]( c3d::TiledDirectionalLight const & light
 				, ToonPbrLightMaterial const & material
 				, c3d::Surface const & surface
@@ -2286,7 +2288,7 @@ namespace toon::shader
 
 	void ToonPbrLightingModel::doDeclareComputeDirectionalLightDiffuse()
 	{
-		m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeDirectionalLight"
+		m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeDirectionalLight"
 			, [this]( c3d::DirectionalLight const & light
 				, ToonPbrLightMaterial const & material
 				, c3d::Surface const & surface
@@ -2367,7 +2369,7 @@ namespace toon::shader
 
 	void ToonPbrLightingModel::doDeclareComputePointLightDiffuse()
 	{
-		m_computePointDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computePointLight"
+		m_computePointDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computePointLight"
 			, [this]( c3d::PointLight const & light
 				, ToonPbrLightMaterial const & material
 				, c3d::Surface const & surface
@@ -2451,7 +2453,7 @@ namespace toon::shader
 
 	void ToonPbrLightingModel::doDeclareComputeSpotLightDiffuse()
 	{
-		m_computeSpotDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeSpotLight"
+		m_computeSpotDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeSpotLight"
 			, [this]( c3d::SpotLight const & light
 				, ToonPbrLightMaterial const & material
 				, c3d::Surface const & surface

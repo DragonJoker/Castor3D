@@ -95,11 +95,13 @@ namespace castor3d::shader
 	LightingModel::LightingModel( sdw::ShaderWriter & writer
 		, Utils & utils
 		, ShadowOptions shadowOptions
-		, bool isOpaqueProgram )
+		, bool isOpaqueProgram
+		, std::string prefix )
 		: m_writer{ writer }
 		, m_utils{ utils }
 		, m_isOpaqueProgram{ isOpaqueProgram }
 		, m_shadowModel{ std::make_shared< Shadow >( std::move( shadowOptions ), writer, utils ) }
+		, m_prefix{ std::move( prefix ) }
 	{
 	}
 
