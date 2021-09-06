@@ -107,7 +107,11 @@ namespace castor3d
 		camera.getParent()->update();
 		camera.update();
 		m_culler->compute();
+
+		auto oldCamera = updater.camera;
+		auto oldSafeBanded = updater.isSafeBanded;
 		updater.camera = &camera;
+		updater.isSafeBanded = false;
 
 		m_backgroundRenderer->update( updater );
 		m_opaquePass->update( updater );
@@ -115,6 +119,9 @@ namespace castor3d
 		m_matrixUbo.cpuUpdate( camera.getView()
 			, camera.getProjection( false ) );
 		m_hdrConfigUbo.cpuUpdate( camera.getHdrConfig() );
+
+		updater.isSafeBanded = oldSafeBanded;
+		updater.camera = oldCamera;
 	}
 
 	void EnvironmentMapPass::update( GpuUpdater & updater )
@@ -125,14 +132,15 @@ namespace castor3d
 		}
 
 		auto & camera = *m_camera;
+		auto oldCamera = updater.camera;
 		updater.camera = &camera;
-		updater.scene = camera.getScene();
 
 		RenderInfo info;
 		m_sceneUbo.cpuUpdate( *updater.scene, updater.camera );
 		m_backgroundRenderer->update( updater );
 		m_opaquePass->update( updater );
 		m_transparentPass->update( updater );
+		updater.camera = oldCamera;
 	}
 
 	void EnvironmentMapPass::attachTo( SceneNode & node )

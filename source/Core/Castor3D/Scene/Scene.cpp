@@ -295,6 +295,7 @@ namespace castor3d
 	{
 		if ( m_initialised )
 		{
+			updater.scene = this;
 			m_rootNode->update();
 			doUpdateBoundingBox();
 			doUpdateAnimations( updater );
@@ -310,6 +311,7 @@ namespace castor3d
 
 	void Scene::update( GpuUpdater & updater )
 	{
+		updater.scene = this;
 		m_lightCache->update( updater );
 		m_meshCache->forEach( []( Mesh & mesh )
 			{

@@ -116,9 +116,7 @@ namespace castor3d
 		m_cmdCopy.reset();
 	}
 
-	void ColourBackground::doCpuUpdate( CpuUpdater & updater
-		, castor::Matrix4x4f & mtxView
-		, castor::Matrix4x4f & mtxProj )const
+	void ColourBackground::doCpuUpdate( CpuUpdater & updater )const
 	{
 		auto & value = m_scene.getBackgroundColour();
 		m_colour = HdrRgbColour::fromComponents( value.red(), value.green(), value.blue() );
@@ -129,8 +127,10 @@ namespace castor3d
 			, 0.1f
 			, 2.0f );
 		viewport.update();
-		mtxView = updater.camera->getView();
-		mtxProj = viewport.getSafeBandedProjection();
+		updater.bgMtxView = updater.camera->getView();
+		updater.bgMtxProj = updater.isSafeBanded
+			? viewport.getSafeBandedProjection()
+			: viewport.getProjection();
 	}
 
 	void ColourBackground::doGpuUpdate( GpuUpdater & updater )const
