@@ -155,7 +155,7 @@ namespace castor
 		 *\param[in]	c	Le caractère.
 		 *\return		false si elle n'est pas chargée.
 		 */
-		inline bool hasGlyphAt( char32_t c )const
+		bool hasGlyphAt( char32_t c )const
 		{
 			return m_loadedGlyphs.end() != std::find_if( m_loadedGlyphs.begin()
 				, m_loadedGlyphs.end()
@@ -174,7 +174,7 @@ namespace castor
 		 *\param[in]	c	Le caractère voulu
 		 *\return		Une référence constante sur la glyphe
 		 */
-		inline Glyph const & getGlyphAt( char32_t c )const
+		Glyph const & getGlyphAt( char32_t c )const
 		{
 			auto it = std::find_if( m_loadedGlyphs.begin()
 				, m_loadedGlyphs.end()
@@ -200,7 +200,7 @@ namespace castor
 		 *\param[in]	c	Le caractère voulu
 		 *\return		Une référence sur la glyphe
 		 */
-		inline Glyph & getGlyphAt( char32_t c )
+		Glyph & getGlyphAt( char32_t c )
 		{
 			auto it = std::find_if( m_loadedGlyphs.begin()
 				, m_loadedGlyphs.end()
@@ -226,7 +226,7 @@ namespace castor
 		 *\param[in]	c	Le caractère voulu
 		 *\return		Une référence sur la glyphe
 		 */
-		inline Glyph const & operator[]( char32_t c )const
+		Glyph const & operator[]( char32_t c )const
 		{
 			CU_Ensure( hasGlyphAt( c ) );
 
@@ -247,7 +247,7 @@ namespace castor
 		 *\param[in]	c	Le caractère voulu
 		 *\return		Une référence sur la glyphe
 		 */
-		inline Glyph & operator[]( char32_t c )
+		Glyph & operator[]( char32_t c )
 		{
 			CU_Ensure( hasGlyphAt( c ) );
 
@@ -266,7 +266,7 @@ namespace castor
 		 *\brief		Récupère la hauteur de la police
 		 *\return		La hauteur de la police
 		 */
-		inline uint32_t getHeight()const
+		uint32_t getHeight()const
 		{
 			return m_height;
 		}
@@ -278,7 +278,7 @@ namespace castor
 		 *\brief		Récupère la hauteur maximale des glyphes
 		 *\return		La hauteur maximale des glyphes
 		 */
-		inline uint32_t getMaxHeight()const
+		uint32_t getMaxHeight()const
 		{
 			return m_maxHeight;
 		}
@@ -290,7 +290,7 @@ namespace castor
 		 *\brief		Récupère la largeur maximale des glyphes
 		 *\return		La largeur maximale des glyphes
 		 */
-		inline uint32_t getMaxWidth()const
+		uint32_t getMaxWidth()const
 		{
 			return m_maxWidth;
 		}
@@ -302,7 +302,7 @@ namespace castor
 		 *\brief		Définit la hauteur maximale des glyphes
 		 *\param[in]	value	La nouvelle hauteur
 		 */
-		inline void setMaxHeight( uint32_t value )
+		void setMaxHeight( uint32_t value )
 		{
 			m_maxHeight = value;
 		}
@@ -314,7 +314,7 @@ namespace castor
 		 *\brief		Définit la largeur maximale des glyphes
 		 *\param[in]	value	La nouvelle largeur
 		 */
-		inline void setMaxWidth( uint32_t value )
+		void setMaxWidth( uint32_t value )
 		{
 			m_maxWidth = value;
 		}
@@ -326,7 +326,7 @@ namespace castor
 		 *\brief		Définit le chargeur de glyphes
 		 *\param[in]	loader	La valeur
 		 */
-		inline void setGlyphLoader( std::unique_ptr< SFontImpl > && loader )
+		void setGlyphLoader( std::unique_ptr< SFontImpl > && loader )
 		{
 			m_glyphLoader = std::move( loader );
 		}
@@ -338,7 +338,7 @@ namespace castor
 		 *\brief		Dit si la police a un loader de glyphes
 		 *\return		Le statut
 		 */
-		inline bool hasGlyphLoader()
+		bool hasGlyphLoader()
 		{
 			return m_glyphLoader != nullptr;
 		}
@@ -350,7 +350,7 @@ namespace castor
 		 *\brief		Définit le loader de glyphes
 		 *\return		Le loader
 		 */
-		inline SFontImpl & getGlyphLoader()
+		SFontImpl & getGlyphLoader()
 		{
 			return *m_glyphLoader;
 		}
@@ -362,7 +362,7 @@ namespace castor
 		 *\brief		Récupère un itérateur sur la première glyphe
 		 *\return		L'itérateur
 		 */
-		inline auto begin()
+		auto begin()
 		{
 			return m_loadedGlyphs.begin();
 		}
@@ -374,7 +374,7 @@ namespace castor
 		 *\brief		Récupère un itérateur sur la première glyphe
 		 *\return		L'itérateur
 		 */
-		inline auto begin()const
+		auto begin()const
 		{
 			return m_loadedGlyphs.begin();
 		}
@@ -386,7 +386,7 @@ namespace castor
 		 *\brief		Récupère un itérateur sur la fin du tableau de glyphes
 		 *\return		L'itérateur
 		 */
-		inline auto end()
+		auto end()
 		{
 			return m_loadedGlyphs.end();
 		}
@@ -398,7 +398,7 @@ namespace castor
 		 *\brief		Récupère un itérateur sur la fin du tableau de glyphes
 		 *\return		L'itérateur
 		 */
-		inline auto end()const
+		auto end()const
 		{
 			return m_loadedGlyphs.end();
 		}
@@ -410,7 +410,7 @@ namespace castor
 		 *\brief		Définit le nom de la police
 		 *\param[in]	name	La valeur
 		 */
-		inline void setFaceName( String const & name )
+		void setFaceName( String const & name )
 		{
 			m_faceName = name;
 		}
@@ -422,7 +422,7 @@ namespace castor
 		 *\brief		Récupère le nom de la police
 		 *\return		La valeur
 		 */
-		inline String const & getFaceName()const
+		String const & getFaceName()const
 		{
 			return m_faceName;
 		}
@@ -434,9 +434,17 @@ namespace castor
 		 *\brief		Récupère le chemin du fichier de la police.
 		 *\return		La valeur.
 		 */
-		inline Path const & getFilePath()const
+		Path const & getFilePath()const
 		{
 			return m_pathFile;
+		}
+
+		void initialise()
+		{
+		}
+
+		void cleanup()
+		{
 		}
 
 	private:

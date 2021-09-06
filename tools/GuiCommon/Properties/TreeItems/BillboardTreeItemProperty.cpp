@@ -40,7 +40,7 @@ namespace GuiCommon
 			, [this]( wxVariant const & var )
 			{
 				auto & cache = m_billboard.getParentScene().getEngine()->getMaterialCache();
-				MaterialSPtr material = cache.find( variantCast< castor::String >( var ) );
+				auto material = cache.find( variantCast< castor::String >( var ) ).lock().get();
 
 				if ( material )
 				{

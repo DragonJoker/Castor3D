@@ -226,7 +226,7 @@ namespace castor3d
 			PassOverlays( PassOverlays && ) = default;
 			PassOverlays & operator=( PassOverlays && ) = default;
 			PassOverlays( OverlayCache & cache
-				, OverlaySPtr parent
+				, OverlayRPtr parent
 				, castor::String const & category
 				, castor::String const & name
 				, uint32_t index

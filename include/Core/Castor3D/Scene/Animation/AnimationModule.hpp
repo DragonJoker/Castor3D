@@ -117,9 +117,49 @@ namespace castor3d
 	using OnAnimatedMeshChangeFunction = std::function< void( AnimatedObjectGroup const &, AnimatedMesh const & ) >;
 	using OnAnimatedMeshChange = castor::Signal< OnAnimatedMeshChangeFunction >;
 	using OnAnimatedMeshChangeConnection = OnAnimatedMeshChange::connection;
+	/**
+	*\~english
+	*	Helper structure to specialise a cache behaviour.
+	*\remarks
+	*	Specialisation for AnimatedObjectGroup.
+	*\~french
+	*	Structure permettant de spécialiser le comportement d'un cache.
+	*\remarks
+	*	Spécialisation pour AnimatedObjectGroup.
+	*/
+	template<>
+	struct PtrCacheTraitsT< AnimatedObjectGroup, castor::String >
+		: PtrCacheTraitsBaseT< AnimatedObjectGroup, castor::String >
+	{
+		using ResT = AnimatedObjectGroup;
+		using KeyT = castor::String;
+		using Base = PtrCacheTraitsBaseT< ResT, KeyT >;
+		using ElementT = typename Base::ElementT;
+		using ElementPtrT = typename Base::ElementPtrT;
+
+		C3D_API static const castor::String Name;
+	};
+
+	using AnimatedObjectGroupCacheTraits = PtrCacheTraitsT< AnimatedObjectGroup, castor::String >;
+	using AnimatedObjectGroupCache = castor::ResourceCacheT< AnimatedObjectGroup
+		, castor::String
+		, AnimatedObjectGroupCacheTraits >;
+
+	using AnimatedObjectGroupRes = AnimatedObjectGroupCacheTraits::ElementPtrT;
+	using AnimatedObjectGroupResPtr = AnimatedObjectGroupCacheTraits::ElementObsT;
+
+	CU_DeclareCUSmartPtr( castor3d, AnimatedObjectGroupCache, C3D_API );
 
 	//@}
 	//@}
+}
+
+namespace castor
+{
+	template<>
+	struct ResourceCacheT< castor3d::AnimatedObjectGroup
+		, String
+		, castor3d::AnimatedObjectGroupCacheTraits >;
 }
 
 #endif

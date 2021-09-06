@@ -344,7 +344,7 @@ namespace castor3d
 		}
 
 		auto & engine = *device.renderSystem.getEngine();
-		SamplerSPtr c3dSampler;
+		SamplerResPtr c3dSampler;
 
 		if ( engine.getSamplerCache().has( name ) )
 		{
@@ -352,19 +352,19 @@ namespace castor3d
 		}
 		else
 		{
-			c3dSampler = std::make_shared< Sampler >( engine, name );
-			c3dSampler->setMinFilter( VK_FILTER_LINEAR );
-			c3dSampler->setMagFilter( VK_FILTER_LINEAR );
-			c3dSampler->setMipFilter( VK_SAMPLER_MIPMAP_MODE_LINEAR );
-			c3dSampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-			c3dSampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-			c3dSampler->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-			c3dSampler->setBorderColour( borderColor );
-			engine.getSamplerCache().add( name, c3dSampler );
+			auto created = castor::makeResource< Sampler, castor::String >( name, engine );
+			created->setMinFilter( VK_FILTER_LINEAR );
+			created->setMagFilter( VK_FILTER_LINEAR );
+			created->setMipFilter( VK_SAMPLER_MIPMAP_MODE_LINEAR );
+			created->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+			created->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+			created->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+			created->setBorderColour( borderColor );
+			c3dSampler = engine.getSamplerCache().add( name, created, false );
 		}
 
-		c3dSampler->initialise( device );
-		sampler = &c3dSampler->getSampler();
+		c3dSampler.lock()->initialise( device );
+		sampler = &c3dSampler.lock()->getSampler();
 	}
 
 	void Texture::create()

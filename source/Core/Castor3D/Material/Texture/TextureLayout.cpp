@@ -584,7 +584,7 @@ namespace castor3d
 		{
 			auto image = engine.getImageCache().tryFind( name );
 
-			if ( !image )
+			if ( !image.lock() )
 			{
 				image = engine.getImageCache().add( name
 					, castor::ImageCreateParams{ folder / relative
@@ -592,9 +592,9 @@ namespace castor3d
 						, generateMips } );
 			}
 
-			auto buffer = adaptBuffer( image->getPixels(), mipLevels );
+			auto buffer = adaptBuffer( image.lock()->getPixels(), mipLevels );
 			srcMipLevels = buffer->getLevels();
-			castor::ImageLayout layout{ image->getLayout().type, *buffer };
+			castor::ImageLayout layout{ image.lock()->getLayout().type, *buffer };
 			return castor::Image{ name
 				, folder / relative
 				, layout

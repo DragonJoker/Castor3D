@@ -17,6 +17,7 @@ namespace castor3d
 	C3D_API size_t hash( BillboardBase const & billboard
 		, Pass const & pass
 		, uint32_t instanceMult );
+	using BillboardCacheTraits = ObjectCacheTraitsT< BillboardList, castor::String >;
 	/**
 	\~english
 	\brief		BillboardList cache.
@@ -24,8 +25,8 @@ namespace castor3d
 	\brief		Cache de BillboardList.
 	*/
 	template<>
-	class ObjectCacheT< BillboardList, castor::String > final
-		: public ObjectCacheBaseT< BillboardList, castor::String >
+	class ObjectCacheT< BillboardList, castor::String, BillboardCacheTraits > final
+		: public ObjectCacheBaseT< BillboardList, castor::String, BillboardCacheTraits >
 	{
 	public:
 		struct PoolsEntry
@@ -40,11 +41,11 @@ namespace castor3d
 		};
 		using ElementT = BillboardList;
 		using ElementKeyT = castor::String;
-		using ElementObjectCacheT = ObjectCacheBaseT< ElementT, ElementKeyT >;
-		using ElementCacheTraitsT = typename ElementObjectCacheT::ElementCacheTraitsT;
+		using ElementCacheTraitsT = BillboardCacheTraits;
+		using ElementObjectCacheT = ObjectCacheBaseT< ElementT, ElementKeyT, ElementCacheTraitsT >;
 		using ElementPtrT = typename ElementObjectCacheT::ElementPtrT;
+		using ElementObsT = typename ElementObjectCacheT::ElementObsT;
 		using ElementContT = typename ElementObjectCacheT::ElementContT;
-		using ElementProducerT = typename ElementObjectCacheT::ElementProducerT;
 		using ElementInitialiserT = typename ElementObjectCacheT::ElementInitialiserT;
 		using ElementCleanerT = typename ElementObjectCacheT::ElementCleanerT;
 		using ElementMergerT = typename ElementObjectCacheT::ElementMergerT;

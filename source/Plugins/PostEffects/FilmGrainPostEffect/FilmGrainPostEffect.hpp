@@ -75,7 +75,6 @@ namespace film_grain
 		static uint32_t constexpr NoiseMapCount = 6u;
 
 	private:
-		castor3d::SamplerSPtr m_sampler;
 		castor::PreciseTimer m_timer;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;

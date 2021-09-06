@@ -27,7 +27,7 @@ namespace GuiCommon
 		void hideObject( castor3d::Geometry const & object );
 
 	private:
-		castor3d::SceneNodeSPtr doAddBB( castor3d::MeshSPtr bbMesh
+		castor3d::SceneNodeSPtr doAddBB( castor3d::MeshResPtr bbMesh
 			, castor::String const & name
 			, castor3d::SceneNode & parent
 			, castor::BoundingBox const & bb );
@@ -37,11 +37,11 @@ namespace GuiCommon
 
 	private:
 		castor3d::Scene & m_scene;
-		castor3d::MeshSPtr m_obbMesh;
-		castor3d::MeshSPtr m_obbSubmesh;
-		castor3d::MeshSPtr m_obbSelectedSubmesh;
-		castor3d::MeshSPtr m_obbBone;
-		castor3d::MeshSPtr m_aabbMesh;
+		castor3d::MeshResPtr m_obbMesh;
+		castor3d::MeshResPtr m_obbSubmesh;
+		castor3d::MeshResPtr m_obbSelectedSubmesh;
+		castor3d::MeshResPtr m_obbBone;
+		castor3d::MeshResPtr m_aabbMesh;
 		castor3d::Geometry const * m_object{ nullptr };
 		castor3d::Submesh const * m_submesh{ nullptr };
 		castor3d::SceneNodeSPtr m_obbNode;

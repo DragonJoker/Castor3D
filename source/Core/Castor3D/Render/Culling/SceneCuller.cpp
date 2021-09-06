@@ -70,7 +70,7 @@ namespace castor3d
 	{
 		return node.sceneNode.isDisplayable()
 			&& node.sceneNode.isVisible()
-			&& ( node.data.getInstantiation().isInstanced( node.pass->getOwner()->shared_from_this() )
+			&& ( node.data.getInstantiation().isInstanced( node.pass->getOwner() )
 				|| ( frustum.isVisible( node.instance.getBoundingSphere( node.data )
 					, node.sceneNode.getDerivedTransformationMatrix()
 					, node.sceneNode.getDerivedScale() )
@@ -210,15 +210,11 @@ namespace castor3d
 				auto & geometry = *primitive.second;
 				auto & node = *geometry.getParent();
 
-				if ( primitive.second->getMesh() )
+				if ( auto mesh = primitive.second->getMesh().lock() )
 				{
-					auto & mesh = *geometry.getMesh();
-
-					for ( auto submesh : mesh )
+					for ( auto submesh : *mesh )
 					{
-						auto material = geometry.getMaterial( *submesh );
-
-						if ( material )
+						if ( auto material = geometry.getMaterial( *submesh ) )
 						{
 							for ( auto & pass : *material )
 							{
@@ -235,8 +231,8 @@ namespace castor3d
 
 					if ( m_camera )
 					{
-						auto aabbMin = mesh.getBoundingBox().getMin();
-						auto aabbMax = mesh.getBoundingBox().getMax();
+						auto aabbMin = mesh->getBoundingBox().getMin();
+						auto aabbMax = mesh->getBoundingBox().getMax();
 						auto & camera = getCamera();
 						castor::Point3f corners[8]
 						{
@@ -259,7 +255,7 @@ namespace castor3d
 					else
 					{
 						m_minCullersZ = std::min( m_minCullersZ
-							, node.getDerivedPosition()[2] - mesh.getBoundingSphere().getRadius() );
+							, node.getDerivedPosition()[2] - mesh->getBoundingSphere().getRadius() );
 					}
 				}
 			}
@@ -278,9 +274,8 @@ namespace castor3d
 				&& billboard.second->getParent() )
 			{
 				auto & billboards = *billboard.second;
-				MaterialSPtr material( billboards.getMaterial() );
 
-				if ( material )
+				if ( auto material = billboards.getMaterial() )
 				{
 					auto & node = *billboards.getParent();
 
@@ -311,9 +306,7 @@ namespace castor3d
 				&& particleSystem.second->getBillboards()
 				&& particleSystem.second->getParent() )
 			{
-				MaterialSPtr material( particleSystem.second->getMaterial() );
-
-				if ( material )
+				if ( auto material = particleSystem.second->getMaterial() )
 				{
 					auto & billboards = *particleSystem.second->getBillboards();
 					auto & node = *particleSystem.second->getParent();

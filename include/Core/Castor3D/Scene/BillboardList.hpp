@@ -100,9 +100,9 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline MaterialSPtr getMaterial()const
+		inline MaterialRPtr getMaterial()const
 		{
-			return m_material.lock();
+			return m_material;
 		}
 
 		inline castor::Point2f const & getDimensions()const
@@ -196,7 +196,7 @@ namespace castor3d
 			m_billboardSize = value;
 		}
 
-		C3D_API void setMaterial( MaterialSPtr value );
+		C3D_API void setMaterial( MaterialRPtr value );
 		C3D_API void setCount( uint32_t value );
 		/**@}*/
 
@@ -218,7 +218,7 @@ namespace castor3d
 	protected:
 		Scene & m_scene;
 		SceneNode * m_node;
-		MaterialWPtr m_material;
+		MaterialRPtr m_material;
 		castor::Point2f m_dimensions;
 		castor::Point3f m_cameraPosition;
 		ashes::VertexBufferBasePtr m_vertexBuffer;

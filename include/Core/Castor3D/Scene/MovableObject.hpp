@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 
+#include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Animation/Animable.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
@@ -116,6 +117,74 @@ namespace castor3d
 		//!\~english	The node change notification index.
 		//!\~french		L'indice de notifcation des changements du noeud.
 		OnSceneNodeChangedConnection m_notifyIndex;
+	};
+
+	template< typename CacheT >
+	struct MovableMergerT
+		: public castor::Named
+	{
+		MovableMergerT( castor::String const & name )
+			: castor::Named{ name }
+		{
+		}
+
+		void operator()( typename CacheT::ElementObjectCacheT const & source
+			, typename CacheT::ElementContT & destination
+			, typename CacheT::ElementPtrT element
+			, SceneNodeSPtr rootCameraNode
+			, SceneNodeSPtr rootObjectNode )const
+		{
+			using ElementPtrT = typename CacheT::ElementPtrT;
+
+			if ( element->getParent()->getName() == rootCameraNode->getName() )
+			{
+				element->detach();
+				element->attachTo( *rootCameraNode );
+			}
+			else if ( element->getParent()->getName() == rootObjectNode->getName() )
+			{
+				element->detach();
+				element->attachTo( *rootObjectNode );
+			}
+
+			auto name = element->getName();
+			auto ires = destination.emplace( name, ElementPtrT{} );
+
+			while ( !ires.second )
+			{
+				name = getName() + cuT( "_" ) + name;
+				ires = destination.emplace( name, ElementPtrT{} );
+			}
+
+			ires.first->second = std::move( element );
+			ires.first->second->rename( name );
+		}
+	};
+
+	template< typename CacheT >
+	struct MovableAttacherT
+	{
+		using ElementT = typename CacheT::ElementT;
+
+		void operator()( ElementT & element
+			, SceneNode & parent
+			, SceneNodeSPtr rootNode
+			, SceneNodeSPtr rootCameraNode
+			, SceneNodeSPtr rootObjectNode )
+		{
+			parent.attachObject( element );
+		}
+	};
+
+	template< typename CacheT >
+	struct MovableDetacherT
+	{
+		using ElementT = typename CacheT::ElementT;
+
+		void operator()( ElementT & element )
+		{
+			element.detach();
+		}
 	};
 }
 

@@ -1,9 +1,14 @@
 #include "Castor3D/Material/Texture/TextureModule.hpp"
 
+#include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
+
+CU_ImplementCUSmartPtr( castor3d, SamplerCache )
 
 namespace castor3d
 {
+	const castor::String ResourceCacheTraitsT< castor3d::Sampler, castor::String >::Name = cuT( "Sampler" );
+
 	castor::String getName( TextureSpace value )
 	{
 		switch ( value )

@@ -71,7 +71,7 @@ namespace castor3d
 		 *\brief		Définit le matériau
 		 *\param[in]	material	La nouvelle valeur
 		 */
-		C3D_API virtual void setMaterial( MaterialSPtr material );
+		C3D_API virtual void setMaterial( MaterialRPtr material );
 		/**
 		 *\~english
 		 *\brief		Retrieves the overlay name
@@ -308,9 +308,9 @@ namespace castor3d
 		 *\brief		Récupère le matériau
 		 *\return		La valeur
 		 */
-		inline MaterialSPtr getMaterial()const
+		inline MaterialRPtr getMaterial()const
 		{
-			return m_pMaterial.lock();
+			return m_pMaterial;
 		}
 		/**
 		 *\~english
@@ -513,7 +513,7 @@ namespace castor3d
 		bool m_visible{ true };
 		//!\~english	The material used by the overlay.
 		//!\~french		Le matériau utilisé par l'incrustation.
-		MaterialWPtr m_pMaterial;
+		MaterialRPtr m_pMaterial;
 		//!\~english	The overlay index.
 		//!\~french		L'index de l'overlay.
 		int m_index{ 0 };

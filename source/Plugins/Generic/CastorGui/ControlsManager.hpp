@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include <Castor3D/Event/UserInput/UserInputListener.hpp>
 #include <Castor3D/Event/UserInput/EventHandler.hpp>
 
+#include <CastorUtils/Graphics/FontCache.hpp>
 #include <CastorUtils/Graphics/Position.hpp>
 
 namespace CastorGui
@@ -51,9 +52,9 @@ namespace CastorGui
 		*\return
 		*	The font
 		*/
-		castor::FontSPtr getDefaultFont()const
+		castor::FontResPtr getDefaultFont()const
 		{
-			return m_defaultFont.lock();
+			return m_defaultFont;
 		}
 		/**
 		*\brief
@@ -61,7 +62,7 @@ namespace CastorGui
 		*\param[in] p_font
 		*	The font
 		*/
-		void setDefaultFont( castor::FontSPtr p_font )
+		void setDefaultFont( castor::FontResPtr p_font )
 		{
 			m_defaultFont = p_font;
 		}
@@ -246,7 +247,7 @@ namespace CastorGui
 		//! Tells the controls array has changed
 		bool m_changed;
 		//! The default font used by controls
-		castor::FontWPtr m_defaultFont;
+		castor::FontResPtr m_defaultFont;
 		//! The button click event connections.
 		std::map< Control const *, OnButtonEventConnection > m_onButtonClicks;
 		//! The combo-box item selected event connections.

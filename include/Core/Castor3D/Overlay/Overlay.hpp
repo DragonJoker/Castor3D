@@ -13,9 +13,8 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class Overlay
-		: public std::enable_shared_from_this< Overlay >
-		, public castor::OwnedBy< Engine >
+	class Overlay final
+		: public castor::OwnedBy< Engine >
 	{
 	public:
 		using iterator = OverlayPtrArray::iterator;
@@ -25,15 +24,22 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	engine	The engine.
-		 *\param[in]	type	The overlay type.
+		 *\param[in]	engine	The engine
+		 *\param[in]	type	The overlay type
+		 *\param[in]	scene	The scene holding the overlay
+		 *\param[in]	parent	The parent overlay (if any)
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	engine	Le moteur.
-		 *\param[in]	type	Le type de l'incrustation.
+		 *\param[in]	engine	Le moteur
+		 *\param[in]	type	Le type de l'incrustation
+		 *\param[in]	scene	La scène parent
+		 *\param[in]	parent	L'incrustation parente
 		 */
-		C3D_API Overlay( Engine & engine
-			, OverlayType type );
+		C3D_API Overlay( castor::String const & name
+			, Engine & engine
+			, OverlayType type
+			, Scene * scene
+			, OverlayRPtr parent );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -50,15 +56,27 @@ namespace castor3d
 		 */
 		C3D_API Overlay( Engine & engine
 			, OverlayType type
-			, SceneSPtr scene
-			, OverlaySPtr parent );
+			, Scene * scene
+			, OverlayRPtr parent );
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\param[in]	engine	The engine.
+		 *\param[in]	type	The overlay type.
+		 *\~french
+		 *\brief		Constructeur
+		 *\param[in]	engine	Le moteur.
+		 *\param[in]	type	Le type de l'incrustation.
+		 */
+		C3D_API Overlay( Engine & engine
+			, OverlayType type );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~Overlay();
+		C3D_API ~Overlay() = default;
 		/**
 		 *\~english
 		 *\brief		adds a child to the overlay
@@ -69,7 +87,7 @@ namespace castor3d
 		 *\param[in]	overlay	L'incrustation enfant
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API void addChild( OverlaySPtr overlay );
+		C3D_API void addChild( OverlayRPtr overlay );
 		/**
 		 *\~english
 		 *\brief		Retrieves the childs count at given level
@@ -117,6 +135,13 @@ namespace castor3d
 		 *\return		La valeur
 		 */
 		C3D_API bool isVisible()const;
+		/**
+		 *\~english
+		 *\return		The hierarchy level for this overlay
+		 *\~french
+		 *\return		Le niveau dans la hiérarchie de cet overlay.
+		 */
+		C3D_API uint32_t computeLevel()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the overlay category.
@@ -209,7 +234,7 @@ namespace castor3d
 		 *\brief		Récupère le nom de l'incrustation
 		 *\return		La valeur
 		 */
-		inline castor::String const & getName()const
+		castor::String const & getName()const
 		{
 			return m_name;
 		}
@@ -221,7 +246,7 @@ namespace castor3d
 		 *\brief		Récupère la position de l'incrustation
 		 *\return		La valeur
 		 */
-		inline castor::Point2d const & getPosition()const
+		castor::Point2d const & getPosition()const
 		{
 			return m_category->getPosition();
 		}
@@ -233,7 +258,7 @@ namespace castor3d
 		 *\brief		Récupère la taille de l'incrustation
 		 *\return		La valeur
 		 */
-		inline castor::Point2d const & getSize()const
+		castor::Point2d const & getSize()const
 		{
 			return m_category->getSize();
 		}
@@ -245,7 +270,7 @@ namespace castor3d
 		 *\brief		Récupère la position de l'incrustation
 		 *\return		La valeur
 		 */
-		inline castor::Position const & getPixelPosition()const
+		castor::Position const & getPixelPosition()const
 		{
 			return m_category->getPixelPosition();
 		}
@@ -257,7 +282,7 @@ namespace castor3d
 		 *\brief		Récupère la taille de l'incrustation
 		 *\return		La valeur
 		 */
-		inline castor::Size const & getPixelSize()const
+		castor::Size const & getPixelSize()const
 		{
 			return m_category->getPixelSize();
 		}
@@ -269,7 +294,7 @@ namespace castor3d
 		 *\brief		Récupère le type de l'incrustation
 		 *\return		La valeur
 		 */
-		inline OverlayType getType()const
+		OverlayType getType()const
 		{
 			return m_category->getType();
 		}
@@ -281,9 +306,9 @@ namespace castor3d
 		 *\brief		Récupère l'incrustation parente
 		 *\return		La valeur
 		 */
-		inline OverlaySPtr getParent()const
+		OverlayRPtr getParent()const
 		{
-			return m_parent.lock();
+			return m_parent;
 		}
 		/**
 		 *\~english
@@ -293,7 +318,7 @@ namespace castor3d
 		 *\brief		Récupère le matériau
 		 *\return		La valeur
 		 */
-		inline MaterialSPtr getMaterial()const
+		MaterialRPtr getMaterial()const
 		{
 			return m_category->getMaterial();
 		}
@@ -305,7 +330,7 @@ namespace castor3d
 		 *\brief		Récupère la position de l'incrustation
 		 *\return		La valeur
 		 */
-		inline castor::Point2d & getPosition()
+		castor::Point2d & getPosition()
 		{
 			return m_category->getPosition();
 		}
@@ -317,7 +342,7 @@ namespace castor3d
 		 *\brief		Récupère la taille de l'incrustation
 		 *\return		La valeur
 		 */
-		inline castor::Point2d & getSize()
+		castor::Point2d & getSize()
 		{
 			return m_category->getSize();
 		}
@@ -329,7 +354,7 @@ namespace castor3d
 		 *\brief		Récupère la position de l'incrustation
 		 *\return		La valeur
 		 */
-		inline castor::Position & getPixelPosition()
+		castor::Position & getPixelPosition()
 		{
 			return m_category->getPixelPosition();
 		}
@@ -341,7 +366,7 @@ namespace castor3d
 		 *\brief		Récupère la taille de l'incrustation
 		 *\return		La valeur
 		 */
-		inline castor::Size & getPixelSize()
+		castor::Size & getPixelSize()
 		{
 			return m_category->getPixelSize();
 		}
@@ -353,9 +378,9 @@ namespace castor3d
 		 *\brief		Récupère la scène parente
 		 *\return		La valeur
 		 */
-		inline SceneSPtr getScene()const
+		SceneRPtr getScene()const
 		{
-			return m_scene.lock();
+			return m_scene;
 		}
 		/**
 		 *\~english
@@ -365,7 +390,7 @@ namespace castor3d
 		 *\brief		Récupère l'indice
 		 *\return		La valeur
 		 */
-		inline int getIndex()const
+		int getIndex()const
 		{
 			return m_category->getIndex();
 		}
@@ -377,7 +402,7 @@ namespace castor3d
 		 *\brief		Récupère le niveau
 		 *\return		La valeur
 		 */
-		inline int getLevel()const
+		int getLevel()const
 		{
 			return m_category->getLevel();
 		}
@@ -389,7 +414,7 @@ namespace castor3d
 		 *\brief		Récupère le nombre d'enfants
 		 *\return		La valeur
 		 */
-		inline uint32_t getChildrenCount()const
+		uint32_t getChildrenCount()const
 		{
 			return uint32_t( m_overlays.size() );
 		}
@@ -401,7 +426,7 @@ namespace castor3d
 		 *\brief		Récupère un itérateur sur le premier enfant
 		 *\return		La valeur
 		 */
-		inline iterator begin()
+		iterator begin()
 		{
 			return m_overlays.begin();
 		}
@@ -413,7 +438,7 @@ namespace castor3d
 		 *\brief		Récupère un itérateur sur le premier enfant
 		 *\return		La valeur
 		 */
-		inline const_iterator begin()const
+		const_iterator begin()const
 		{
 			return m_overlays.begin();
 		}
@@ -425,7 +450,7 @@ namespace castor3d
 		 *\brief		Récupère un itérateur sur après le dernier enfant
 		 *\return		La valeur
 		 */
-		inline iterator end()
+		iterator end()
 		{
 			return m_overlays.end();
 		}
@@ -437,7 +462,7 @@ namespace castor3d
 		 *\brief		Récupère un itérateur sur après le dernier enfant
 		 *\return		La valeur
 		 */
-		inline const_iterator end()const
+		const_iterator end()const
 		{
 			return m_overlays.end();
 		}
@@ -449,7 +474,7 @@ namespace castor3d
 		 *\brief		Définit le statut de visibilité
 		 *\param[in]	val	La nouvelle valeur
 		 */
-		inline void setVisible( bool val )
+		void setVisible( bool val )
 		{
 			m_category->setVisible( val );
 		}
@@ -463,7 +488,7 @@ namespace castor3d
 		 *\param[in]	index	Le nouvel indice
 		 *\param[in]	level	Le nouveau niveau
 		 */
-		inline void setOrder( int index, int level )
+		void setOrder( int index, int level )
 		{
 			m_category->setOrder( index, level );
 		}
@@ -475,7 +500,7 @@ namespace castor3d
 		 *\brief		Définit le matériau
 		 *\param[in]	material	La nouvelle valeur
 		 */
-		inline void setMaterial( MaterialSPtr material )
+		void setMaterial( MaterialRPtr material )
 		{
 			m_category->setMaterial( material );
 		}
@@ -487,7 +512,7 @@ namespace castor3d
 		 *\brief		Définit la position relative de l'incrustation
 		 *\param[in]	position	La nouvelle position
 		 */
-		inline void setPosition( castor::Point2d const & position )
+		void setPosition( castor::Point2d const & position )
 		{
 			m_category->setPosition( position );
 		}
@@ -499,7 +524,7 @@ namespace castor3d
 		 *\brief		Définit les dimensions relatives de l'incrustation
 		 *\param[in]	size	Les nouvelles dimensions
 		 */
-		inline void setSize( castor::Point2d const & size )
+		void setSize( castor::Point2d const & size )
 		{
 			m_category->setSize( size );
 		}
@@ -511,7 +536,7 @@ namespace castor3d
 		 *\brief		Définit la position relative de l'incrustation
 		 *\param[in]	position	La nouvelle position
 		 */
-		inline void setPixelPosition( castor::Position const & position )
+		void setPixelPosition( castor::Position const & position )
 		{
 			m_category->setPixelPosition( position );
 		}
@@ -523,7 +548,7 @@ namespace castor3d
 		 *\brief		Définit les dimensions relatives de l'incrustation
 		 *\param[in]	size	Les nouvelles dimensions
 		 */
-		inline void setPixelSize( castor::Size const & size )
+		void setPixelSize( castor::Size const & size )
 		{
 			m_category->setPixelSize( size );
 		}
@@ -535,7 +560,7 @@ namespace castor3d
 		 *\brief		Définit le nom de l'incrustation
 		 *\param[in]	name	Le nouveau nom
 		 */
-		inline void setName( castor::String const & name )
+		void rename( castor::String const & name )
 		{
 			m_name = name;
 		}
@@ -546,7 +571,7 @@ namespace castor3d
 		castor::String m_name;
 		//!\~english	The parent overlay, if any.
 		//!\~french		L'incrustation parente, s'il y en a.
-		OverlayWPtr m_parent;
+		OverlayRPtr m_parent{};
 		//!\~english	The children.
 		//!\~french		Les enfants.
 		OverlayPtrArray m_overlays;
@@ -555,7 +580,7 @@ namespace castor3d
 		OverlayCategorySPtr m_category;
 		//!\~english	The parent scene.
 		//!\~french		La scène parente.
-		SceneWPtr m_scene;
+		Scene * m_scene;
 		//!\~english	The render system.
 		//!\~french		Le système de rendu.
 		RenderSystem * m_renderSystem;

@@ -67,12 +67,12 @@ namespace CastorGui
 	{
 	}
 
-	void ListBoxCtrl::setTextMaterial( MaterialSPtr p_material )
+	void ListBoxCtrl::setTextMaterial( MaterialRPtr p_material )
 	{
 		m_textMaterial = p_material;
 	}
 
-	void ListBoxCtrl::setSelectedItemBackgroundMaterial( MaterialSPtr p_value )
+	void ListBoxCtrl::setSelectedItemBackgroundMaterial( MaterialRPtr p_value )
 	{
 		m_selectedItemBackgroundMaterial = p_value;
 		int i = 0;
@@ -86,7 +86,7 @@ namespace CastorGui
 		}
 	}
 
-	void ListBoxCtrl::setSelectedItemForegroundMaterial( MaterialSPtr p_value )
+	void ListBoxCtrl::setSelectedItemForegroundMaterial( MaterialRPtr p_value )
 	{
 		m_selectedItemForegroundMaterial = p_value;
 		int i = 0;
@@ -286,7 +286,7 @@ namespace CastorGui
 
 		if ( m_fontName.empty() )
 		{
-			item->setFont( getControlsManager()->getDefaultFont()->getName() );
+			item->setFont( getControlsManager()->getDefaultFont().lock()->getName() );
 		}
 		else
 		{
@@ -310,7 +310,7 @@ namespace CastorGui
 
 	void ListBoxCtrl::doCreate()
 	{
-		MaterialSPtr material = getTextMaterial();
+		auto material = getTextMaterial();
 
 		if ( !material )
 		{
@@ -321,14 +321,14 @@ namespace CastorGui
 
 		if ( !material )
 		{
-			setSelectedItemBackgroundMaterial( getEngine().getMaterialCache().find( cuT( "DarkBlue" ) ) );
+			setSelectedItemBackgroundMaterial( getEngine().getMaterialCache().find( cuT( "DarkBlue" ) ).lock().get() );
 		}
 
 		material = getSelectedItemForegroundMaterial();
 
 		if ( !material )
 		{
-			setSelectedItemForegroundMaterial( getEngine().getMaterialCache().find( cuT( "White" ) ) );
+			setSelectedItemForegroundMaterial( getEngine().getMaterialCache().find( cuT( "White" ) ).lock().get() );
 		}
 
 		material = getHighlightedItemBackgroundMaterial();
@@ -339,7 +339,7 @@ namespace CastorGui
 			colour.red() = std::min( 1.0f, float( colour.red() ) / 2.0f );
 			colour.green() = std::min( 1.0f, float( colour.green() ) / 2.0f );
 			colour.blue() = std::min( 1.0f, float( colour.blue() ) / 2.0f );
-			setHighlightedItemBackgroundMaterial( CreateMaterial( getEngine(), getBackgroundMaterial()->getName() + cuT( "_Highlight" ), colour ) );
+			setHighlightedItemBackgroundMaterial( createMaterial( getEngine(), getBackgroundMaterial()->getName() + cuT( "_Highlight" ), colour ) );
 		}
 
 		setBackgroundBorders( castor::Rectangle( 1, 1, 1, 1 ) );
@@ -388,7 +388,7 @@ namespace CastorGui
 		doUpdateItems();
 	}
 
-	void ListBoxCtrl::doSetBackgroundMaterial( MaterialSPtr p_material )
+	void ListBoxCtrl::doSetBackgroundMaterial( MaterialRPtr p_material )
 	{
 		int i = 0;
 		RgbColour colour = getMaterialColour( *p_material->getPass( 0u ) );
@@ -396,7 +396,7 @@ namespace CastorGui
 		colour.red() = std::min( 1.0f, colour.red() / 2.0f );
 		colour.green() = std::min( 1.0f, colour.green() / 2.0f );
 		colour.blue() = std::min( 1.0f, colour.blue() / 2.0f );
-		setHighlightedItemBackgroundMaterial( CreateMaterial( getEngine(), getBackgroundMaterial()->getName() + cuT( "_Highlight" ), colour ) );
+		setHighlightedItemBackgroundMaterial( createMaterial( getEngine(), getBackgroundMaterial()->getName() + cuT( "_Highlight" ), colour ) );
 
 		setMaterialColour( *p_material->getPass( 0u ), colour );
 
@@ -409,7 +409,7 @@ namespace CastorGui
 		}
 	}
 
-	void ListBoxCtrl::doSetForegroundMaterial( MaterialSPtr p_material )
+	void ListBoxCtrl::doSetForegroundMaterial( MaterialRPtr p_material )
 	{
 		int i = 0;
 

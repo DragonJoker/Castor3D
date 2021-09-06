@@ -311,7 +311,7 @@ namespace castor3d
 				, overlay.getOverlay()
 				, pass
 				, ( fontTexture
-					? m_renderer.doGetTextNode( device, pass, *fontTexture->getTexture(), *fontTexture->getSampler() )
+					? m_renderer.doGetTextNode( device, pass, *fontTexture->getTexture(), *fontTexture->getSampler().lock() )
 					: m_renderer.doGetPanelNode( device, pass ) )
 				, *pass.getOwner()->getEngine()
 				, device
@@ -339,7 +339,7 @@ namespace castor3d
 						, bufferIndex.overlayUbo
 						, bufferIndex.index
 						, *fontTexture->getTexture()
-						, *fontTexture->getSampler() );
+						, *fontTexture->getSampler().lock() );
 					bufferIndex.connection = fontTexture->onChanged.connect( [&bufferIndex]( FontTexture const & )
 						{
 							bufferIndex.descriptorSet.reset();
@@ -710,7 +710,7 @@ namespace castor3d
 			{
 				result->createBinding( pipeline.descriptorLayout->getBinding( uint32_t( OverlayBindingId::eMaps ) )
 					, unit->getTexture()->getDefaultView().getSampledView()
-					, unit->getSampler()->getSampler()
+					, unit->getSampler().lock()->getSampler()
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 					, texIndex++ );
 			}

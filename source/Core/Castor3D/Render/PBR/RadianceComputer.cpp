@@ -47,28 +47,24 @@ namespace castor3d
 			return result;
 		}
 
-		SamplerSPtr doCreateSampler( Engine & engine
+		SamplerResPtr doCreateSampler( Engine & engine
 			, RenderDevice const & device )
 		{
-			SamplerSPtr result;
 			auto name = cuT( "IblTexturesRadiance" );
+			auto result = engine.getSamplerCache().tryFind( name );
 
-			if ( engine.getSamplerCache().has( name ) )
+			if ( !result.lock() )
 			{
-				result = engine.getSamplerCache().find( name );
-			}
-			else
-			{
-				result = engine.getSamplerCache().create( name );
-				result->setMinFilter( VK_FILTER_LINEAR );
-				result->setMagFilter( VK_FILTER_LINEAR );
-				result->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				result->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				result->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				engine.getSamplerCache().add( name, result );
+				auto created = engine.getSamplerCache().create( name, engine );
+				created->setMinFilter( VK_FILTER_LINEAR );
+				created->setMagFilter( VK_FILTER_LINEAR );
+				created->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				created->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				created->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				result = engine.getSamplerCache().add( name, created, false );
 			}
 
-			result->initialise( device );
+			result.lock()->initialise( engine.getRenderSystem()->getRenderDevice() );
 			return result;
 		}
 
@@ -307,7 +303,7 @@ namespace castor3d
 
 	ashes::Sampler const & RadianceComputer::getSampler()const
 	{
-		return m_sampler->getSampler();
+		return m_sampler.lock()->getSampler();
 	}
 
 	//*********************************************************************************************

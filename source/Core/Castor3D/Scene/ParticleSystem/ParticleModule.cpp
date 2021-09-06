@@ -1,9 +1,15 @@
 #include "Castor3D/Scene/ParticleSystem/ParticleModule.hpp"
 
+#include "Castor3D/Cache/ObjectCache.hpp"
+#include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
+
 CU_ImplementCUSmartPtr( castor3d, ParticleFactory )
+CU_ImplementCUSmartPtr( castor3d, ParticleSystemCache )
 
 namespace castor3d
 {
+	const castor::String ObjectCacheTraitsT< ParticleSystem, castor::String >::Name = cuT( "ParticleSystem" );
+
 	castor::String getName( ElementUsage value )
 	{
 		switch ( value )

@@ -8,7 +8,8 @@ See LICENSE file in root folder
 #include "CastorUtils/Data/Path.hpp"
 #include "CastorUtils/Graphics/Size.hpp"
 
-#include "CastorUtils/Design/ResourceCacheBase.hpp"
+#include "CastorUtils/Design/Resource.hpp"
+#include "CastorUtils/Design/ResourceCache.hpp"
 
 namespace castor
 {
@@ -57,19 +58,22 @@ namespace castor
 	*\remarks
 	*	Spécialisation pour castor::Image.
 	*/
-	template< typename KeyT >
-	struct ResourceCacheTraitsT< Image, KeyT >
-		: ResourceCacheTraitsBaseT< Image, KeyT >
+	template<>
+	struct ResourceCacheTraitsT< Image, String >
+		: ResourceCacheTraitsBaseT< Image, String, ResourceCacheTraitsT< Image, String > >
 	{
-		using Base = ResourceCacheTraitsBaseT< Image, KeyT >;
+		using KeyT = String;
+		using Base = ResourceCacheTraitsBaseT< Image, KeyT, ResourceCacheTraitsT< Image, KeyT > >;
 		using ElementT = typename Base::ElementT;
 		using ElementPtrT = typename Base::ElementPtrT;
 
 		CU_API static const String Name;
 
-		using ElementProducerT = std::function< ElementPtrT( KeyT const &
-			, ImageCreateParams const & ) >;
+		CU_API static ElementPtrT makeElement( ResourceCacheBaseT< ElementT, KeyT, ResourceCacheTraitsT< ElementT, KeyT > > const & cache
+			, KeyT const & name
+			, ImageCreateParams const & params );
 	};
+	using ImageCacheTraits = ResourceCacheTraitsT< Image, String >;
 	/**
 	*\~english
 	*	Base class for an element cache.
@@ -81,17 +85,17 @@ namespace castor
 	*	Spécialisation pour castor::Image.
 	*/
 	template<>
-	class ResourceCacheT< Image, String > final
-		: public ResourceCacheBaseT< Image, String >
+	class ResourceCacheT< Image, String, ImageCacheTraits > final
+		: public ResourceCacheBaseT< Image, String, ImageCacheTraits >
 	{
 	public:
 		using ElementT = Image;
 		using ElementKeyT = String;
-		using ElementCacheT = ResourceCacheBaseT< ElementT, ElementKeyT >;
-		using ElementCacheTraitsT = typename ElementCacheT::ElementCacheTraitsT;
+		using ElementCacheTraitsT = ImageCacheTraits;
+		using ElementCacheT = ResourceCacheBaseT< ElementT, ElementKeyT, ElementCacheTraitsT >;
 		using ElementPtrT = typename ElementCacheT::ElementPtrT;
+		using ElementObsT = typename ElementCacheT::ElementObsT;
 		using ElementContT = typename ElementCacheT::ElementContT;
-		using ElementProducerT = typename ElementCacheT::ElementProducerT;
 		using ElementInitialiserT = typename ElementCacheT::ElementInitialiserT;
 		using ElementCleanerT = typename ElementCacheT::ElementCleanerT;
 		using ElementMergerT = typename ElementCacheT::ElementMergerT;
@@ -101,16 +105,18 @@ namespace castor
 			, ImageLoader const & loader );
 		CU_API ~ResourceCacheT() = default;
 
-	private:
-		ImageSPtr doProduce( String const & name
-			, ImageCreateParams const & params );
-		void doInitialise( ImageSPtr resource );
+		ImageLoader const & getLoader()const
+		{
+			return m_loader;
+		}
 
 	private:
 		ImageLoader const & m_loader;
 	};
 
-	using ImageCache = ResourceCacheT< Image, String >;
+	using ImageCache = ResourceCacheT< Image, String, ImageCacheTraits >;
+	using ImageRes = ImageCacheTraits::ElementPtrT;
+	using ImageResPtr = ImageCacheTraits::ElementObsT;
 }
 
 #endif

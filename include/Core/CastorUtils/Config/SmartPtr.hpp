@@ -34,10 +34,7 @@ namespace castor
 	template< typename TypeT >
 	struct Deleter
 	{
-		inline void operator()( TypeT * pointer )noexcept
-		{
-			delete pointer;
-		}
+		void operator()( TypeT * pointer )noexcept;
 	};
 
 	template< typename TypeT >
@@ -82,10 +79,28 @@ namespace castor\
 	}\
 }
 
-#define CU_DeclareCUTemplateSmartPtr( class_name )\
-	template< typename T > using class_name##SPtrT = std::shared_ptr< class_name< T > >;\
-	template< typename T > using class_name##WPtrT = std::weak_ptr< class_name< T > >;\
-	template< typename T > using class_name##UPtrT = castor::UniquePtr< class_name< T > >;\
-	template< typename T > using class_name##RPtrT = class_name< T > *
+#define CU_DeclareCUTemplateSmartPtr( nmspc, class_name_t )\
+}\
+namespace castor\
+{\
+	template< typename InstT >\
+	struct Deleter< nmspc::class_name_t< InstT > >\
+	{\
+		void operator()( nmspc::class_name_t< InstT > * pointer )noexcept\
+		{\
+			delete pointer;\
+		}\
+	};\
+}\
+namespace nmspc\
+{\
+	template< typename InstT >\
+	using class_name_t##SPtrT = std::shared_ptr< class_name_t< InstT > >;\
+	template< typename InstT >\
+	using class_name_t##WPtrT = std::weak_ptr< class_name_t< InstT > >;\
+	template< typename InstT >\
+	using class_name_t##UPtrT = castor::UniquePtr< class_name_t< InstT > >;\
+	template< typename InstT >\
+	using class_name_t##RPtrT = class_name_t< InstT > *
 
 #endif

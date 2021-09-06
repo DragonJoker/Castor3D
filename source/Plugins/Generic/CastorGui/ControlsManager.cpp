@@ -61,7 +61,7 @@ namespace CastorGui
 
 		if ( it != std::end( controls ) )
 		{
-			auto material = getEngine()->getMaterialCache().find( p_material );
+			auto material = getEngine()->getMaterialCache().find( p_material ).lock().get();
 
 			if ( material )
 			{

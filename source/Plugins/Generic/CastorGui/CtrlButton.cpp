@@ -74,9 +74,10 @@ namespace CastorGui
 		} );
 
 		TextOverlaySPtr text = getEngine().getOverlayCache().add( cuT( "T_CtrlButton_" ) + string::toString( getId() )
+			, getEngine()
 			, OverlayType::eText
 			, nullptr
-			, getBackground()->getOverlay().shared_from_this() )->getTextOverlay();
+			, &getBackground()->getOverlay() ).lock()->getTextOverlay();
 		text->setPixelSize( getSize() );
 		text->setHAlign( HAlign::eCenter );
 		text->setVAlign( VAlign::eCenter );
@@ -89,37 +90,37 @@ namespace CastorGui
 	{
 	}
 
-	void ButtonCtrl::setTextMaterial( MaterialSPtr p_material )
+	void ButtonCtrl::setTextMaterial( MaterialRPtr p_material )
 	{
 		m_textMaterial = p_material;
 	}
 
-	void ButtonCtrl::setHighlightedBackgroundMaterial( MaterialSPtr p_material )
+	void ButtonCtrl::setHighlightedBackgroundMaterial( MaterialRPtr p_material )
 	{
 		m_highlightedBackgroundMaterial = p_material;
 	}
 
-	void ButtonCtrl::setHighlightedForegroundMaterial( MaterialSPtr p_material )
+	void ButtonCtrl::setHighlightedForegroundMaterial( MaterialRPtr p_material )
 	{
 		m_highlightedForegroundMaterial = p_material;
 	}
 
-	void ButtonCtrl::setHighlightedTextMaterial( MaterialSPtr p_material )
+	void ButtonCtrl::setHighlightedTextMaterial( MaterialRPtr p_material )
 	{
 		m_highlightedTextMaterial = p_material;
 	}
 
-	void ButtonCtrl::setPushedBackgroundMaterial( MaterialSPtr p_material )
+	void ButtonCtrl::setPushedBackgroundMaterial( MaterialRPtr p_material )
 	{
 		m_pushedBackgroundMaterial = p_material;
 	}
 
-	void ButtonCtrl::setPushedForegroundMaterial( MaterialSPtr p_material )
+	void ButtonCtrl::setPushedForegroundMaterial( MaterialRPtr p_material )
 	{
 		m_pushedForegroundMaterial = p_material;
 	}
 
-	void ButtonCtrl::setPushedTextMaterial( MaterialSPtr p_material )
+	void ButtonCtrl::setPushedTextMaterial( MaterialRPtr p_material )
 	{
 		m_pushedTextMaterial = p_material;
 	}
@@ -160,55 +161,55 @@ namespace CastorGui
 
 		if ( !getBackgroundMaterial() )
 		{
-			setBackgroundMaterial( getEngine().getMaterialCache().find( cuT( "Black" ) ) );
+			setBackgroundMaterial( getEngine().getMaterialCache().find( cuT( "Black" ) ).lock().get() );
 		}
 
 		if ( !getForegroundMaterial() )
 		{
-			setForegroundMaterial( getEngine().getMaterialCache().find( cuT( "White" ) ) );
+			setForegroundMaterial( getEngine().getMaterialCache().find( cuT( "White" ) ).lock().get() );
 		}
 
-		if ( m_textMaterial.expired() )
+		if ( !m_textMaterial )
 		{
 			m_textMaterial = getForegroundMaterial();
 		}
 
-		if ( m_highlightedBackgroundMaterial.expired() )
+		if ( !m_highlightedBackgroundMaterial )
 		{
 			m_highlightedBackgroundMaterial = doCreateMaterial( getBackgroundMaterial(), 0.1f );
 		}
 
-		if ( m_highlightedForegroundMaterial.expired() )
+		if ( !m_highlightedForegroundMaterial )
 		{
 			m_highlightedForegroundMaterial = doCreateMaterial( getForegroundMaterial(), -0.1f );
 		}
 
-		if ( m_highlightedTextMaterial.expired() )
+		if ( !m_highlightedTextMaterial )
 		{
 			m_highlightedTextMaterial = doCreateMaterial( getTextMaterial(), -0.1f );
 		}
 
-		if ( m_pushedBackgroundMaterial.expired() )
+		if ( !m_pushedBackgroundMaterial )
 		{
 			m_pushedBackgroundMaterial = doCreateMaterial( getBackgroundMaterial(), 0.1f );
 		}
 
-		if ( m_pushedForegroundMaterial.expired() )
+		if ( !m_pushedForegroundMaterial )
 		{
 			m_pushedForegroundMaterial = doCreateMaterial( getForegroundMaterial(), -0.1f );
 		}
 
-		if ( m_pushedTextMaterial.expired() )
+		if ( !m_pushedTextMaterial )
 		{
 			m_pushedTextMaterial = doCreateMaterial( getTextMaterial(), -0.1f );
 		}
 
 		TextOverlaySPtr text = m_text.lock();
-		text->setMaterial( m_textMaterial.lock() );
+		text->setMaterial( m_textMaterial );
 
 		if ( !text->getFontTexture() || !text->getFontTexture()->getFont() )
 		{
-			text->setFont( getControlsManager()->getDefaultFont()->getName() );
+			text->setFont( getControlsManager()->getDefaultFont().lock()->getName() );
 		}
 
 		getControlsManager()->connectEvents( *this );
@@ -240,12 +241,12 @@ namespace CastorGui
 		}
 	}
 
-	void ButtonCtrl::doSetBackgroundMaterial( MaterialSPtr p_material )
+	void ButtonCtrl::doSetBackgroundMaterial( MaterialRPtr p_material )
 	{
 		m_highlightedBackgroundMaterial = doCreateMaterial( p_material, 0.1f );
 	}
 
-	void ButtonCtrl::doSetForegroundMaterial( MaterialSPtr p_material )
+	void ButtonCtrl::doSetForegroundMaterial( MaterialRPtr p_material )
 	{
 		m_highlightedForegroundMaterial = doCreateMaterial( p_material, -0.1f );
 	}
@@ -273,26 +274,26 @@ namespace CastorGui
 
 	void ButtonCtrl::onMouseEnter( MouseEvent const & p_event )
 	{
-		m_text.lock()->setMaterial( m_highlightedTextMaterial.lock() );
+		m_text.lock()->setMaterial( m_highlightedTextMaterial );
 		BorderPanelOverlaySPtr panel = getBackground();
 
 		if ( panel )
 		{
-			panel->setMaterial( m_highlightedBackgroundMaterial.lock() );
-			panel->setBorderMaterial( m_highlightedForegroundMaterial.lock() );
+			panel->setMaterial( m_highlightedBackgroundMaterial );
+			panel->setBorderMaterial( m_highlightedForegroundMaterial );
 			panel.reset();
 		}
 	}
 
 	void ButtonCtrl::onMouseLeave( MouseEvent const & p_event )
 	{
-		m_text.lock()->setMaterial( m_textMaterial.lock() );
+		m_text.lock()->setMaterial( m_textMaterial );
 		BorderPanelOverlaySPtr panel = getBackground();
 
 		if ( panel )
 		{
-			panel->setMaterial( m_backgroundMaterial.lock() );
-			panel->setBorderMaterial( m_foregroundMaterial.lock() );
+			panel->setMaterial( m_backgroundMaterial );
+			panel->setBorderMaterial( m_foregroundMaterial );
 			panel.reset();
 		}
 	}
@@ -301,13 +302,13 @@ namespace CastorGui
 	{
 		if ( p_event.getButton() == MouseButton::eLeft )
 		{
-			m_text.lock()->setMaterial( m_pushedTextMaterial.lock() );
+			m_text.lock()->setMaterial( m_pushedTextMaterial );
 			BorderPanelOverlaySPtr panel = getBackground();
 
 			if ( panel )
 			{
-				panel->setMaterial( m_pushedBackgroundMaterial.lock() );
-				panel->setBorderMaterial( m_pushedForegroundMaterial.lock() );
+				panel->setMaterial( m_pushedBackgroundMaterial );
+				panel->setBorderMaterial( m_pushedForegroundMaterial );
 				panel.reset();
 			}
 		}
@@ -317,13 +318,13 @@ namespace CastorGui
 	{
 		if ( p_event.getButton() == MouseButton::eLeft )
 		{
-			m_text.lock()->setMaterial( m_highlightedTextMaterial.lock() );
+			m_text.lock()->setMaterial( m_highlightedTextMaterial );
 			BorderPanelOverlaySPtr panel = getBackground();
 
 			if ( panel )
 			{
-				panel->setMaterial( m_highlightedBackgroundMaterial.lock() );
-				panel->setBorderMaterial( m_highlightedForegroundMaterial.lock() );
+				panel->setMaterial( m_highlightedBackgroundMaterial );
+				panel->setBorderMaterial( m_highlightedForegroundMaterial );
 				panel.reset();
 			}
 
@@ -331,12 +332,12 @@ namespace CastorGui
 		}
 	}
 
-	MaterialSPtr ButtonCtrl::doCreateMaterial( MaterialSPtr p_material, float p_offset )
+	MaterialRPtr ButtonCtrl::doCreateMaterial( MaterialRPtr p_material, float p_offset )
 	{
 		RgbColour colour = getMaterialColour( *p_material->getPass( 0u ) );
 		colour.red() = float( colour.red() ) + p_offset;
 		colour.green() = float( colour.green() ) + p_offset;
 		colour.blue() = float( colour.blue() ) + p_offset;
-		return CreateMaterial( getEngine(), p_material->getName() + cuT( "_MO" ), colour );
+		return createMaterial( getEngine(), p_material->getName() + cuT( "_MO" ), colour );
 	}
 }

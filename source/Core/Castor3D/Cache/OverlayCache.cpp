@@ -9,32 +9,26 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, OverlayCache )
+
+namespace castor3d
+{
+	const castor::String PtrCacheTraitsT< castor3d::Overlay, castor::String >::Name = cuT( "Overlay" );
+}
+
 namespace castor
 {
 	using namespace castor3d;
 
-	ResourceCacheT< Overlay, String >::ResourceCacheT( Engine & engine )
+	ResourceCacheT< Overlay, String, OverlayCacheTraits >::ResourceCacheT( Engine & engine )
 		: ElementCacheT{ engine.getLogger()
-			, [&engine]( String const & name
-				, OverlayType type
-				, SceneSPtr scene
-				, OverlaySPtr parent )
+			, [this]( ElementT & resource )
 			{
-				auto result = std::make_shared< Overlay >( engine
-					, type
-					, scene
-					, parent );
-				result->setName( name );
-				return result;
-			}
-			, [this]( ElementPtrT resource )
-			{
-				int level = 0;
+				auto level = resource.computeLevel();
 
-				if ( resource->getParent() )
+				if ( resource.getParent() )
 				{
-					level = resource->getParent()->getLevel() + 1;
-					resource->getParent()->addChild( resource );
+					resource.getParent()->addChild( &resource );
 				}
 
 				while ( level >= int( m_overlayCountPerLevel.size() ) )
@@ -42,22 +36,23 @@ namespace castor
 					m_overlayCountPerLevel.resize( m_overlayCountPerLevel.size() * 2 );
 				}
 
-				resource->setOrder( ++m_overlayCountPerLevel[level], level );
-				m_overlays.insert( resource->getCategory() );
+				resource.setOrder( ++m_overlayCountPerLevel[level], level );
+				m_overlays.insert( resource.getCategory() );
 			}
-			, [this]( ElementPtrT resource )
+			, [this]( ElementT & resource )
 			{
-				if ( resource->getChildrenCount() )
+				if ( resource.getChildrenCount() )
 				{
-					for ( auto child : *resource )
+					for ( auto child : resource )
 					{
 						child->setPosition( child->getAbsolutePosition() );
 						child->setSize( child->getAbsoluteSize() );
 					}
 				}
 
-				m_overlays.erase( resource->getCategory() );
-			} }
+				m_overlays.erase( resource.getCategory() );
+			}
+			, castor::ResourceMergerT< OverlayCache >{ "_" } }
 		, m_engine{ engine }
 		, m_overlayCountPerLevel{ 1000, 0 }
 		, m_viewport{ engine }
@@ -65,7 +60,7 @@ namespace castor
 		m_viewport.setOrtho( 0, 1, 1, 0, 0, 1000 );
 	}
 
-	void ResourceCacheT< Overlay, String >::clear()
+	void ResourceCacheT< Overlay, String, OverlayCacheTraits >::clear()
 	{
 		auto lock( makeUniqueLock( *this ) );
 		doClearNoLock();
@@ -73,7 +68,7 @@ namespace castor
 		m_fontTextures.clear();
 	}
 
-	void ResourceCacheT< Overlay, String >::cleanup()
+	void ResourceCacheT< Overlay, String, OverlayCacheTraits >::cleanup()
 	{
 		auto lock( makeUniqueLock( *this ) );
 		doCleanupNoLock();
@@ -84,7 +79,7 @@ namespace castor
 		}
 	}
 
-	FontTextureSPtr ResourceCacheT< Overlay, String >::getFontTexture( String const & name )
+	FontTextureSPtr ResourceCacheT< Overlay, String, OverlayCacheTraits >::getFontTexture( String const & name )
 	{
 		auto lock( makeUniqueLock( *this ) );
 		auto it = m_fontTextures.find( name );
@@ -98,24 +93,24 @@ namespace castor
 		return result;
 	}
 
-	FontTextureSPtr ResourceCacheT< Overlay, String >::createFontTexture( FontSPtr font )
+	FontTextureSPtr ResourceCacheT< Overlay, String, OverlayCacheTraits >::createFontTexture( castor::FontResPtr font )
 	{
 		auto lock( makeUniqueLock( *this ) );
-		auto it = m_fontTextures.find( font->getName() );
-		FontTextureSPtr result;
+		auto fontName = font.lock()->getName();
+		auto ires = m_fontTextures.emplace( fontName, nullptr );
 
-		if ( it == m_fontTextures.end() )
+		if ( ires.second )
 		{
-			result = std::make_shared< FontTexture >( m_engine, font );
-			m_fontTextures.emplace( font->getName(), result );
+			auto result = std::make_shared< FontTexture >( m_engine, font );
 			m_engine.postEvent( makeGpuFunctorEvent( EventType::ePreRender
 				, [result]( RenderDevice const & device
 					, QueueData const & queueData )
 				{
 					result->initialise( device, queueData );
 				} ) );
+			ires.first->second = result;
 		}
 
-		return result;
+		return ires.first->second;
 	}
 }

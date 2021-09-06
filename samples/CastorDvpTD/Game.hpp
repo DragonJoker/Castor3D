@@ -99,12 +99,12 @@ namespace castortd
 			return m_mapNode;
 		}
 
-		inline castor3d::MaterialSPtr getEnemyMaterial()const
+		inline castor3d::MaterialRPtr getEnemyMaterial()const
 		{
-			return m_enemyCubeMaterial;
+			return m_enemyCubeMaterial.lock().get();
 		}
 
-		inline castor3d::MeshSPtr getEnemyMesh()const
+		inline castor3d::MeshResPtr getEnemyMesh()const
 		{
 			return m_enemyCubeMesh;
 		}
@@ -138,7 +138,7 @@ namespace castortd
 		void doPrepareGrid();
 		void doAddMapCube( Cell & p_cell );
 		void doAddTarget( Cell & p_cell );
-		castor3d::MeshSPtr doSelectMesh( Tower::Category & p_category );
+		castor3d::MeshResPtr doSelectMesh( Tower::Category & p_category );
 		void doAddTower( Cell & p_cell, Tower::CategoryPtr && p_category );
 		void doUpdateTowers();
 		void doUpdateEnemies();
@@ -153,14 +153,14 @@ namespace castortd
 		castor::Point3f m_cellDimensions;
 		castor3d::SceneNodeSPtr m_mapNode;
 		castor3d::SceneNodeSPtr m_targetNode;
-		castor3d::MeshSPtr m_mapCubeMesh;
-		castor3d::MaterialSPtr m_mapCubeMaterial;
-		castor3d::MeshSPtr m_shortRangeTowerMesh;
-		castor3d::MeshSPtr m_longRangeTowerMesh;
-		castor3d::MeshSPtr m_enemyCubeMesh;
-		castor3d::MaterialSPtr m_enemyCubeMaterial;
-		castor3d::MeshSPtr m_bulletMesh;
-		castor3d::MaterialSPtr m_bulletMaterial;
+		castor3d::MeshResPtr m_mapCubeMesh;
+		castor3d::MaterialResPtr m_mapCubeMaterial;
+		castor3d::MeshResPtr m_shortRangeTowerMesh;
+		castor3d::MeshResPtr m_longRangeTowerMesh;
+		castor3d::MeshResPtr m_enemyCubeMesh;
+		castor3d::MaterialResPtr m_enemyCubeMaterial;
+		castor3d::MeshResPtr m_bulletMesh;
+		castor3d::MaterialResPtr m_bulletMaterial;
 		// Varying data
 		Clock::time_point m_saved;
 		castor::Milliseconds m_elapsed;

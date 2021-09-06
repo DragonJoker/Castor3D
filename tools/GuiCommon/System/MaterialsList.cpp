@@ -92,13 +92,13 @@ namespace GuiCommon
 		wxTreeItemId root = AddRoot( _( "Root" ), eBMP_SCENE, eBMP_SCENE_SEL );
 		auto lock( castor::makeUniqueLock( m_engine->getMaterialCache() ) );
 
-		for ( auto pair : m_engine->getMaterialCache() )
+		for ( auto & pair : m_engine->getMaterialCache() )
 		{
 			addMaterial( this
 				, *m_scene
 				, m_propertiesHolder->isEditable()
 				, root
-				, pair.second
+				, pair.second.get()
 				, eBMP_MATERIAL );
 		}
 	}
@@ -113,15 +113,14 @@ namespace GuiCommon
 		, castor3d::Scene & scene
 		, bool editable
 		, wxTreeItemId id
-		, castor3d::MaterialSPtr material
+		, castor3d::MaterialRPtr material
 		, uint32_t iconOffset )
 	{
 		wxTreeItemId materialId = treeCtrl->AppendItem( id
 			, material->getName()
 			, eBMP_MATERIAL - iconOffset
 			, eBMP_MATERIAL_SEL - iconOffset
-			, new MaterialTreeItemProperty( editable
-				, material ) );
+			, new MaterialTreeItemProperty( editable, *material ) );
 		uint32_t passIndex = 0;
 
 		for ( auto pass : *material )

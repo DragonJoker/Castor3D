@@ -9,13 +9,11 @@ See LICENSE file in root folder
 #include "Castor3D/Render/RenderModule.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
-#include <CastorUtils/Design/Resource.hpp>
 
 namespace castor3d
 {
 	class Material
-		: public castor::Resource
-		, public std::enable_shared_from_this< Material >
+		: public castor::Named
 		, public castor::OwnedBy< Engine >
 	{
 	public:
@@ -41,6 +39,8 @@ namespace castor3d
 		 *\brief		Destructeur.
 		 */
 		C3D_API virtual ~Material();
+		C3D_API void initialise();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Creates a pass.
@@ -172,8 +172,6 @@ namespace castor3d
 
 	private:
 		void onPassChanged( Pass const & pass );
-		void doInitialise()override;
-		void doCleanup()override;
 
 	public:
 		//!\~english	The signal raised when the material has changed.

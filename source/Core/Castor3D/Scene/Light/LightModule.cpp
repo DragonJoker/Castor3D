@@ -1,6 +1,8 @@
 #include "Castor3D/Scene/Light/LightModule.hpp"
 
+#include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
+#include "Castor3D/Scene/Light/Light.hpp"
 
 namespace castor3d
 {
