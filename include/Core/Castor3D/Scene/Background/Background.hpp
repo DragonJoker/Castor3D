@@ -242,9 +242,7 @@ namespace castor3d
 	private:
 		virtual bool doInitialise( RenderDevice const & device ) = 0;
 		virtual void doCleanup() = 0;
-		virtual void doCpuUpdate( CpuUpdater & updater
-			, castor::Matrix4x4f & mtxView
-			, castor::Matrix4x4f & mtxProj )const = 0;
+		virtual void doCpuUpdate( CpuUpdater & updater )const = 0;
 		virtual void doGpuUpdate( GpuUpdater & updater )const = 0;
 
 	public:

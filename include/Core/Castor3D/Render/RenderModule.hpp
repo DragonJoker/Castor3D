@@ -779,6 +779,7 @@ namespace castor3d
 		}
 
 		RenderQueueArray * queues{ nullptr };
+		Scene * scene{ nullptr };
 		Camera * camera{ nullptr };
 		SceneNode const * node{ nullptr };
 		Light * light{ nullptr };
@@ -797,6 +798,7 @@ namespace castor3d
 		castor::Matrix4x4f bgMtxModl;
 		castor::Matrix4x4f bgMtxView;
 		castor::Matrix4x4f bgMtxProj;
+		bool isSafeBanded{ true };
 	};
 
 	struct GpuUpdater

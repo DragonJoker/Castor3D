@@ -487,6 +487,8 @@ namespace castor3d
 		}
 
 		auto & camera = *getCamera();
+		auto & scene = *getScene();
+		updater.scene = &scene;
 		updater.camera = &camera;
 		camera.resize( m_size );
 		camera.update();
@@ -521,7 +523,8 @@ namespace castor3d
 		updater.jitter = m_jitter;
 		updater.scene = &scene;
 		updater.camera = &camera;
-
+		// Scene is GPU updated here, because of LightCache which relies on the camera...
+		// TODO: Move LightCache to RenderTarget :'(
 		updater.scene->update( updater );
 
 		m_renderTechnique->update( updater );

@@ -338,9 +338,7 @@ namespace castor3d
 	private:
 		bool doInitialise( RenderDevice const & device )override;
 		void doCleanup()override;
-		void doCpuUpdate( CpuUpdater & updater
-			, castor::Matrix4x4f & mtxView
-			, castor::Matrix4x4f & mtxProj )const override;
+		void doCpuUpdate( CpuUpdater & updater )const override;
 		void doGpuUpdate( GpuUpdater & updater )const override;
 		bool doInitialiseTexture( RenderDevice const & device );
 		void doInitialiseLayerTexture( RenderDevice const & device
