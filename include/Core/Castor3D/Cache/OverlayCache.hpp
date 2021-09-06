@@ -6,11 +6,13 @@ See LICENSE file in root folder
 
 #include "CacheModule.hpp"
 
+#include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Overlay/OverlayCategory.hpp"
 #include "Castor3D/Overlay/OverlayFactory.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
+#include <CastorUtils/Graphics/FontCache.hpp>
 
 namespace castor
 {
@@ -43,17 +45,17 @@ namespace castor
 	\brief		Collection d'incrustations, avec des fonctions additionnelles d'ajout et de suppression pour gérer les Z-Index
 	*/
 	template<>
-	class ResourceCacheT< castor3d::Overlay, String > final
-		: public ResourceCacheBaseT< castor3d::Overlay, String >
+	class ResourceCacheT< castor3d::Overlay, String, castor3d::OverlayCacheTraits > final
+		: public ResourceCacheBaseT< castor3d::Overlay, String, castor3d::OverlayCacheTraits >
 	{
 	public:
 		using ElementT = castor3d::Overlay;
 		using ElementKeyT = String;
-		using ElementCacheT = ResourceCacheBaseT< ElementT, ElementKeyT >;
-		using ElementCacheTraitsT = typename ElementCacheT::ElementCacheTraitsT;
+		using ElementCacheTraitsT = castor3d::OverlayCacheTraits;
+		using ElementCacheT = ResourceCacheBaseT< ElementT, ElementKeyT, ElementCacheTraitsT >;
 		using ElementPtrT = typename ElementCacheT::ElementPtrT;
+		using ElementObsT = typename ElementCacheT::ElementObsT;
 		using ElementContT = typename ElementCacheT::ElementContT;
-		using ElementProducerT = typename ElementCacheT::ElementProducerT;
 		using ElementInitialiserT = typename ElementCacheT::ElementInitialiserT;
 		using ElementCleanerT = typename ElementCacheT::ElementCleanerT;
 		using ElementMergerT = typename ElementCacheT::ElementMergerT;
@@ -121,7 +123,7 @@ namespace castor
 		 *\param[in]	font	La police.
 		 *\return		La FontTexture créée.
 		 */
-		C3D_API castor3d::FontTextureSPtr createFontTexture( FontSPtr font );
+		C3D_API castor3d::FontTextureSPtr createFontTexture( castor::FontResPtr font );
 		/**
 		*\~english
 		*\name Iteration.

@@ -50,16 +50,20 @@ namespace C3dPly
 		String::size_type stIndex;
 		int iNbProperties = 0;
 		SubmeshSPtr submesh = p_mesh.createSubmesh();
-		MaterialSPtr pMaterial = p_mesh.getScene()->getMaterialView().find( materialName );
+		MaterialResPtr created;
+		auto pMaterial = p_mesh.getScene()->getMaterialView().tryAdd( materialName
+			, true
+			, created
+			, *p_mesh.getEngine()
+			, p_mesh.getScene()->getPassesType() );
 
-		if ( !pMaterial )
+		if ( pMaterial.lock() == created.lock() )
 		{
-			pMaterial = p_mesh.getScene()->getMaterialView().add( materialName, p_mesh.getScene()->getPassesType() );
-			pMaterial->createPass();
+			pMaterial.lock()->createPass();
 		}
 
-		pMaterial->getPass( 0 )->setTwoSided( true );
-		submesh->setDefaultMaterial( pMaterial );
+		pMaterial.lock()->getPass( 0 )->setTwoSided( true );
+		submesh->setDefaultMaterial( pMaterial.lock().get() );
 		auto mapping = std::make_shared< TriFaceMapping >( *submesh );
 		// Parsing the ply identification line
 		std::getline( isFile, strLine );

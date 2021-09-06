@@ -248,7 +248,7 @@ namespace castor3d
 
 					if ( submeshNode.skeleton )
 					{
-						if ( submeshNode.data.getInstantiation().isInstanced( submeshNode.passNode.pass.getOwner()->shared_from_this() ) )
+						if ( submeshNode.data.getInstantiation().isInstanced( submeshNode.passNode.pass.getOwner() ) )
 						{
 							submeshNode.data.getInstantiatedBones().getInstancedBonesBuffer().createBinding( descriptorSet
 								, layout.getBinding( uint32_t( NodeUboIdx::eSkinningSsbo ) ) );
@@ -723,7 +723,7 @@ namespace castor3d
 		auto & pass = passNode.pass;
 		auto lock( castor::makeUniqueLock( m_nodesMutex ) );
 		auto & pool = getNodesPool( pass.getTexturesMask().size()
-			, data.getInstantiation().isInstanced( pass.getOwner()->shared_from_this() )
+			, data.getInstantiation().isInstanced( pass.getOwner() )
 			, nullptr
 			, &data
 			, mesh
@@ -841,7 +841,7 @@ namespace castor3d
 		else
 		{
 			auto & pool = getNodesPool( pass.getTexturesMask().size()
-				, submesh->getInstantiation().isInstanced( pass.getOwner()->shared_from_this() )
+				, submesh->getInstantiation().isInstanced( pass.getOwner() )
 				, billboard
 				, submesh
 				, mesh

@@ -279,7 +279,7 @@ namespace castor3d
 		{
 			for ( auto submesh : mesh )
 			{
-				submesh->setMaterial( nullptr, submesh->getDefaultMaterial(), false );
+				submesh->setMaterial( {}, submesh->getDefaultMaterial(), false );
 			}
 		}
 

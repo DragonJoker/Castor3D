@@ -35,7 +35,7 @@ namespace castor3d
 		static uint32_t constexpr MtxUboIdx = 0u;
 		static uint32_t constexpr InputImgIdx = 1u;
 
-		SamplerSPtr doCreateSampler( RenderSystem & renderSystem
+		SamplerResPtr doCreateSampler( RenderSystem & renderSystem
 			, bool nearest )
 		{
 			String const name = nearest
@@ -45,7 +45,7 @@ namespace castor3d
 				? VK_FILTER_NEAREST
 				: VK_FILTER_LINEAR;
 			auto & cache = renderSystem.getEngine()->getSamplerCache();
-			SamplerSPtr sampler;
+			SamplerResPtr sampler;
 
 			if ( cache.has( name ) )
 			{
@@ -53,12 +53,12 @@ namespace castor3d
 			}
 			else
 			{
-				sampler = cache.add( name );
-				sampler->setMinFilter( filter );
-				sampler->setMagFilter( filter );
-				sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				sampler->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				sampler = cache.add( name, *renderSystem.getEngine() );
+				sampler.lock()->setMinFilter( filter );
+				sampler.lock()->setMagFilter( filter );
+				sampler.lock()->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				sampler.lock()->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				sampler.lock()->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 			}
 
 			return sampler;
@@ -147,9 +147,9 @@ namespace castor3d
 
 	RenderCube::RenderCube( RenderDevice const & device
 		, bool nearest
-		, SamplerSPtr sampler )
+		, SamplerResPtr sampler )
 		: m_device{ device }
-		, m_sampler{ sampler ? std::move( sampler ) : doCreateSampler( m_device.renderSystem, nearest ) }
+		, m_sampler{ sampler.lock() ? std::move( sampler ) : doCreateSampler( m_device.renderSystem, nearest ) }
 	{
 	}
 
@@ -183,7 +183,7 @@ namespace castor3d
 		, ashes::PipelineDepthStencilStateCreateInfo const & dsState )
 	{
 		auto queueData = m_device.graphicsData();
-		m_sampler->initialise( m_device );
+		m_sampler.lock()->initialise( m_device );
 		m_matrixUbo = doCreateMatrixUbo( m_device
 			, *queueData->queue
 			, *queueData->commandPool
@@ -238,7 +238,7 @@ namespace castor3d
 				, 1u );
 			facePipeline.descriptorSet->createBinding( m_descriptorLayout->getBinding( 1u )
 				, view
-				, m_sampler->getSampler() );
+				, m_sampler.lock()->getSampler() );
 			doFillDescriptorSet( *m_descriptorLayout, *facePipeline.descriptorSet, face );
 			facePipeline.descriptorSet->update();
 			++face;

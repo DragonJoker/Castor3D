@@ -301,11 +301,11 @@ namespace castor3d
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_combinePass{ doCreateCombinePass( nullptr ) }
 	{
-		SamplerSPtr sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + getName() + cuT( "Linear" ) );
+		auto sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + getName() + cuT( "Linear" ), *getEngine() ).lock();
 		sampler->setMinFilter( VK_FILTER_LINEAR );
 		sampler->setMagFilter( VK_FILTER_LINEAR );
 
-		sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + getName() + cuT( "Nearest" ) );
+		sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + getName() + cuT( "Nearest" ), *getEngine() ).lock();
 		sampler->setMinFilter( VK_FILTER_NEAREST );
 		sampler->setMagFilter( VK_FILTER_NEAREST );
 	}
@@ -934,11 +934,11 @@ namespace castor3d
 
 		for ( auto category : getEngine()->getOverlayCache() )
 		{
-			SceneSPtr scene = category->getOverlay().getScene();
+			auto scene = category->getOverlay().getScene();
 
 			if ( category->getOverlay().isVisible()
 				&& ( ( !scene && m_type == TargetType::eWindow )
-					|| scene.get() == getScene().get() ) )
+					|| scene == getScene().get() ) )
 			{
 				category->update( *m_overlayRenderer );
 				category->accept( preparer );

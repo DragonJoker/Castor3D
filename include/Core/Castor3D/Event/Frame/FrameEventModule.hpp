@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_FrameEventModule_H___
 #define ___C3D_FrameEventModule_H___
 
-#include "Castor3D/Castor3DModule.hpp"
+#include "Castor3D/Cache/CacheModule.hpp"
 
 namespace castor3d
 {
@@ -116,6 +116,70 @@ namespace castor3d
 	CU_DeclareVector( GpuFrameEventUPtr, GpuFrameEventPtr );
 
 	CU_DeclareMap( castor::String, FrameListenerSPtr, FrameListenerPtrStr );
+	/**
+	*\~english
+	*	Helper structure to specialise a cache behaviour.
+	*\remarks
+	*	Specialisation for FrameListener.
+	*\~french
+	*	Structure permettant de spécialiser le comportement d'un cache.
+	*\remarks
+	*	Spécialisation pour FrameListener.
+	*/
+	template<>
+	struct PtrCacheTraitsT< FrameListener, castor::String >
+		: PtrCacheTraitsBaseT< FrameListener, castor::String >
+	{
+		using ResT = FrameListener;
+		using KeyT = castor::String;
+		using Base = PtrCacheTraitsBaseT< ResT, KeyT >;
+		using ElementT = typename Base::ElementT;
+		using ElementPtrT = typename Base::ElementPtrT;
+
+		C3D_API static const castor::String Name;
+	};
+
+	using FrameListenerCacheTraits = PtrCacheTraitsT< FrameListener, castor::String >;
+	using FrameListenerCache = castor::ResourceCacheT< FrameListener
+		, castor::String
+		, FrameListenerCacheTraits >;
+
+	using FrameListenerRes = FrameListenerCacheTraits::ElementPtrT;
+	using FrameListenerResPtr = FrameListenerCacheTraits::ElementObsT;
+
+	CU_DeclareCUSmartPtr( castor3d, FrameListenerCache, C3D_API );
+	/**
+	*\~english
+	*	Cached resource initialiser, through a CPU frame event.
+	*\~french
+	*	Initialiseur de ressource cachée, au travers d'un CPU frame event.
+	*/
+	template< typename CacheT >
+	struct CpuEventInitialiserT;
+	/**
+	*\~english
+	*	Cached resource cleaner, through a CPU frame event.
+	*\~french
+	*	Nettoyeur de ressource cachée, au travers d'un CPU frame event.
+	*/
+	template< typename CacheT >
+	struct CpuEventCleanerT;
+	/**
+	*\~english
+	*	Cached resource initialiser, through a GPU frame event.
+	*\~french
+	*	Initialiseur de ressource cachée, au travers d'un GPU frame event.
+	*/
+	template< typename CacheT >
+	struct GpuEventInitialiserT;
+	/**
+	*\~english
+	*	Cached resource cleaner, through a GPU frame event.
+	*\~french
+	*	Nettoyeur de ressource cachée, au travers d'un GPU frame event.
+	*/
+	template< typename CacheT >
+	struct GpuEventCleanerT;
 
 	//@}
 	//@}

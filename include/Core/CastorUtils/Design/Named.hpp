@@ -9,7 +9,7 @@ See LICENSE file in root folder
 namespace castor
 {
 	template< typename T >
-	class NamedBase
+	class NamedBaseT
 	{
 	public:
 		/**
@@ -20,7 +20,7 @@ namespace castor
 		 *\brief		Constructeur
 		 *\param[in]	name	Le nom
 		 */
-		explicit NamedBase( T const & name )
+		explicit NamedBaseT( T const & name )
 			: m_name( name )
 		{
 		}
@@ -32,7 +32,7 @@ namespace castor
 		 *\brief		Constructeur par copie
 		 *\param[in]	named	L'objet à copier
 		 */
-		NamedBase( NamedBase const & named ) = default;
+		NamedBaseT( NamedBaseT const & named ) = default;
 		/**
 		 *\~english
 		 *\brief		Move Constructor
@@ -41,14 +41,14 @@ namespace castor
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	named	L'objet à déplacer
 		 */
-		NamedBase( NamedBase && named ) = default;
+		NamedBaseT( NamedBaseT && named ) = default;
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~NamedBase() = default;
+		~NamedBaseT() = default;
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
@@ -57,7 +57,7 @@ namespace castor
 		 *\brief		Constructeur par copie
 		 *\param[in]	named	L'objet à copier
 		 */
-		NamedBase & operator=( NamedBase const & named ) = default;
+		NamedBaseT & operator=( NamedBaseT const & named ) = default;
 		/**
 		 *\~english
 		 *\brief		Move Constructor
@@ -66,7 +66,7 @@ namespace castor
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	named	L'objet à déplacer
 		 */
-		NamedBase & operator=( NamedBase && named ) = default;
+		NamedBaseT & operator=( NamedBaseT && named ) = default;
 		/**
 		 *\~english
 		 *\brief		Retrieves the name
@@ -75,19 +75,12 @@ namespace castor
 		 *\brief		Récupère le nom
 		 *\return		Le nom
 		 */
-		inline T const & getName()const
+		T const & getName()const
 		{
 			return m_name;
 		}
-		/**
-		 *\~english
-		 *\brief		sets the name
-		 *\param[in]	name	The name
-		 *\~french
-		 *\brief		Définit le nom
-		 *\param[in]	name	Le nom
-		 */
-		inline void setName( T const & name )
+
+		void rename( T const & name )
 		{
 			m_name = name;
 		}

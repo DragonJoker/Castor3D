@@ -89,7 +89,7 @@ namespace castor3d
 		 *\brief		Definit le materiau
 		 *\param[in]	value	La nouvelle valeur
 		 */
-		C3D_API void setMaterial( MaterialSPtr value );
+		C3D_API void setMaterial( MaterialRPtr value );
 		/**
 		 *\~english
 		 *\brief		Sets the particles dimensions.
@@ -114,7 +114,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le materiau.
 		 */
-		C3D_API MaterialSPtr getMaterial()const;
+		C3D_API MaterialRPtr getMaterial()const;
 		/**
 		 *\~english
 		 *\return		The billboards dimensions.
@@ -244,7 +244,7 @@ namespace castor3d
 		castor::Point2f m_dimensions;
 		//!\~english	The Material.
 		//!\~french		Le Material.
-		MaterialWPtr m_material;
+		MaterialRPtr m_material;
 		//!\~english	The particles count.
 		//!\~french		Le nombre de particules.
 		uint32_t m_particlesCount{ 0u };

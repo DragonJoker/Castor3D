@@ -28,14 +28,14 @@ namespace GuiCommon
 {
 	namespace
 	{
-		MeshSPtr doCreateCubeMesh( String const name
+		MeshResPtr doCreateCubeMesh( String const name
 			, Scene & scene
 			, RgbColour const & colour
 			, String const & colourName )
 		{
-			auto result = scene.getMeshCache().add( name );
-			result->setSerialisable( false );
-			auto submesh = result->createSubmesh();
+			auto result = scene.getMeshCache().add( name, scene );
+			result.lock()->setSerialisable( false );
+			auto submesh = result.lock()->createSubmesh();
 			static InterleavedVertexArray const vertex
 			{
 				InterleavedVertex{}.position( Point3f{ -1, -1, -1 } ),
@@ -67,13 +67,15 @@ namespace GuiCommon
 			};
 			mapping->addLineGroup( lines );
 			submesh->setIndexMapping( mapping );
-			MaterialSPtr material;
+			MaterialResPtr material;
 			String matName = cuT( "BBox_" ) + colourName;
 
 			if ( !scene.getEngine()->getMaterialCache().has( matName ) )
 			{
-				material = scene.getEngine()->getMaterialCache().add( matName, scene.getPassesType() );
-				auto pass = material->createPass();
+				material = scene.getEngine()->getMaterialCache().add( matName
+					, *scene.getEngine()
+					, scene.getPassesType() );
+				auto pass = material.lock()->createPass();
 				pass->enableLighting( false );
 				pass->enablePicking( false );
 				pass->setColour( colour );
@@ -83,8 +85,8 @@ namespace GuiCommon
 				material = scene.getEngine()->getMaterialCache().find( matName );
 			}
 
-			submesh->setDefaultMaterial( material );
-			result->computeContainers();
+			submesh->setDefaultMaterial( material.lock().get() );
+			result.lock()->computeContainers();
 			scene.getListener().postEvent( makeGpuInitialiseEvent( *submesh ) );
 			return result;
 		}
@@ -108,11 +110,11 @@ namespace GuiCommon
 			m_object = nullptr;
 		}
 
-		m_aabbMesh.reset();
-		m_obbMesh.reset();
-		m_obbBone.reset();
-		m_obbSelectedSubmesh.reset();
-		m_obbSubmesh.reset();
+		m_aabbMesh = {};
+		m_obbMesh = {};
+		m_obbBone = {};
+		m_obbSelectedSubmesh = {};
+		m_obbSubmesh = {};
 		m_aabbNode.reset();
 		m_obbNode.reset();
 	}
@@ -128,24 +130,24 @@ namespace GuiCommon
 				m_object = &object;
 				m_submesh = &submesh;
 				m_obbNode = doAddBB( m_obbMesh
-					, m_obbMesh->getName()
+					, m_obbMesh.lock()->getName()
 					, *object.getParent()
 					, m_object->getBoundingBox() );
 				m_aabbNode = doAddBB( m_aabbMesh
-					, m_aabbMesh->getName()
+					, m_aabbMesh.lock()->getName()
 					, *m_scene.getObjectRootNode()
 					, m_object->getBoundingBox() );
 				m_obbSelectedSubmeshNode = doAddBB( m_obbSelectedSubmesh
-					, m_obbMesh->getName() + string::toString( submesh.getId() )
+					, m_obbMesh.lock()->getName() + string::toString( submesh.getId() )
 					, *object.getParent()
 					, m_object->getBoundingBox( submesh ) );
 
-				for ( auto & submesh : *m_object->getMesh() )
+				for ( auto & submesh : *m_object->getMesh().lock() )
 				{
 					if ( submesh.get() != m_submesh )
 					{
 						m_obbSubmeshNodes.push_back( doAddBB( m_obbSubmesh
-							, m_obbMesh->getName() + string::toString( submesh->getId() )
+							, m_obbMesh.lock()->getName() + string::toString( submesh->getId() )
 							, *object.getParent()
 							, m_object->getBoundingBox( *submesh ) ) );
 					}
@@ -167,16 +169,16 @@ namespace GuiCommon
 				, QueueData const & queueData )
 			{
 				m_sceneConnection.disconnect();
-				doRemoveBB( m_obbMesh->getName(), m_obbNode );
-				doRemoveBB( m_aabbMesh->getName(), m_aabbNode );
-				doRemoveBB( m_obbSelectedSubmesh->getName(), m_obbSelectedSubmeshNode );
+				doRemoveBB( m_obbMesh.lock()->getName(), m_obbNode );
+				doRemoveBB( m_aabbMesh.lock()->getName(), m_aabbNode );
+				doRemoveBB( m_obbSelectedSubmesh.lock()->getName(), m_obbSelectedSubmeshNode );
 				uint32_t i = 0u;
 
-				for ( auto & submesh : *m_object->getMesh() )
+				for ( auto & submesh : *m_object->getMesh().lock() )
 				{
 					if ( submesh.get() != m_submesh )
 					{
-						doRemoveBB( m_obbMesh->getName() + string::toString( submesh->getId() )
+						doRemoveBB( m_obbMesh.lock()->getName() + string::toString( submesh->getId() )
 							, m_obbSubmeshNodes[i] );
 						i++;
 					}
@@ -186,7 +188,7 @@ namespace GuiCommon
 
 				for ( auto & node : m_obbBoneNodes )
 				{
-					doRemoveBB( m_obbMesh->getName() + cuT( "_Bone_" ) + string::toString( i++ )
+					doRemoveBB( m_obbMesh.lock()->getName() + cuT( "_Bone_" ) + string::toString( i++ )
 						, node );
 				}
 
@@ -200,7 +202,7 @@ namespace GuiCommon
 			} ) );
 	}
 
-	SceneNodeSPtr CubeBoxManager::doAddBB( MeshSPtr bbMesh
+	SceneNodeSPtr CubeBoxManager::doAddBB( MeshResPtr bbMesh
 		, String const & nameSpec
 		, SceneNode & parent
 		, BoundingBox const & bb )
@@ -210,11 +212,11 @@ namespace GuiCommon
 
 		if ( !m_scene.getSceneNodeCache().has( name ) )
 		{
-			result = m_scene.getSceneNodeCache().add( name, parent );
+			result = m_scene.getSceneNodeCache().add( name, parent, m_scene ).lock();
 		}
 		else
 		{
-			result = m_scene.getSceneNodeCache().find( name );
+			result = m_scene.getSceneNodeCache().find( name ).lock();
 			result->attachTo( parent );
 		}
 
@@ -222,11 +224,11 @@ namespace GuiCommon
 
 		if ( !m_scene.getGeometryCache().has( name ) )
 		{
-			geometry = m_scene.getGeometryCache().add( name, *result, bbMesh );
+			geometry = m_scene.getGeometryCache().add( name, m_scene, *result, bbMesh ).lock();
 		}
 		else
 		{
-			geometry = m_scene.getGeometryCache().find( name );
+			geometry = m_scene.getGeometryCache().find( name ).lock();
 		}
 
 		geometry->setShadowCaster( false );
@@ -239,7 +241,7 @@ namespace GuiCommon
 			result->setVisible( true );
 		}
 
-		for ( auto & submesh : *geometry->getMesh() )
+		for ( auto & submesh : *geometry->getMesh().lock() )
 		{
 			geometry->setMaterial( *submesh, submesh->getDefaultMaterial() );
 		}
@@ -268,7 +270,7 @@ namespace GuiCommon
 			m_obbSelectedSubmeshNode->setPosition( sobb.getCenter() );
 			m_obbSelectedSubmeshNode->update();
 
-			for ( auto & submesh : *m_object->getMesh() )
+			for ( auto & submesh : *m_object->getMesh().lock() )
 			{
 				if ( submesh.get() != m_submesh )
 				{
@@ -283,7 +285,7 @@ namespace GuiCommon
 			auto aabb = obb.getAxisAligned( m_obbNode->getParent()->getDerivedTransformationMatrix() );
 			auto aabbMin = aabb.getMin();
 			auto aabbMax = aabb.getMax();
-			auto aabbSubmesh = m_aabbMesh->getSubmesh( 0u );
+			auto aabbSubmesh = m_aabbMesh.lock()->getSubmesh( 0u );
 			aabbSubmesh->getPoint( 0u ).pos = Point3f( aabbMin[0], aabbMin[1], aabbMin[2] );
 			aabbSubmesh->getPoint( 1u ).pos = Point3f( aabbMin[0], aabbMax[1], aabbMin[2] );
 			aabbSubmesh->getPoint( 2u ).pos = Point3f( aabbMax[0], aabbMax[1], aabbMin[2] );

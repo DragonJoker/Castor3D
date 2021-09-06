@@ -78,7 +78,7 @@ namespace GuiCommon
 			using LockType = std::unique_lock< MaterialCache >;
 			LockType lock{ castor::makeUniqueLock( cache ) };
 
-			for ( auto pair : cache )
+			for ( auto & pair : cache )
 			{
 				choices.push_back( pair.first );
 			}

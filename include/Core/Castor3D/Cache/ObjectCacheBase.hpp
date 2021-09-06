@@ -24,8 +24,8 @@ namespace castor3d
 		using ElementCacheBaseT = castor::ResourceCacheBaseT< ElementT, ElementKeyT, ElementCacheTraitsT >;
 		using ElementObjectCacheT = ObjectCacheBaseT< ElementT, ElementKeyT, ElementCacheTraitsT >;
 		using ElementPtrT = ObjectPtrT< ElementT, ElementKeyT >;
+		using ElementObsT = ObjectObsT< ElementT, ElementKeyT >;
 		using ElementContT = ObjectContT< ElementT, ElementKeyT >;
-		using ElementProducerT = ObjectProducerT< ElementT, ElementKeyT >;
 		using ElementInitialiserT = ObjectInitialiserT< ElementT, ElementKeyT >;
 		using ElementCleanerT = ObjectCleanerT< ElementT, ElementKeyT >;
 		using ElementMergerT = ObjectMergerT< ElementT, ElementKeyT >;
@@ -45,7 +45,6 @@ namespace castor3d
 		 *\param[in]	rootNode		The root node.
 		 *\param[in]	rootCameraNode	The cameras root node.
 		 *\param[in]	rootObjectNode	The objects root node.
-		 *\param[in]	produce			The element producer.
 		 *\param[in]	initialise		The element initialiser.
 		 *\param[in]	clean			The element cleaner.
 		 *\param[in]	merge			The element collection merger.
@@ -58,7 +57,6 @@ namespace castor3d
 		 *\param[in]	rootNode		Le noeud racine.
 		 *\param[in]	rootCameraNode	Le noeud racine des caméras.
 		 *\param[in]	rootObjectNode	Le noeud racine des objets.
-		 *\param[in]	produce			Le créateur d'objet.
 		 *\param[in]	initialise		L'initialiseur d'objet.
 		 *\param[in]	clean			Le nettoyeur d'objet.
 		 *\param[in]	merge			Le fusionneur de collection d'objets.
@@ -69,7 +67,6 @@ namespace castor3d
 			, SceneNodeSPtr rootNode
 			, SceneNodeSPtr rootCameraNode
 			, SceneNodeSPtr rootObjectNode
-			, ElementProducerT produce
 			, ElementInitialiserT initialise = ElementInitialiserT{}
 			, ElementCleanerT clean = ElementCleanerT{}
 			, ElementMergerT merge = ElementMergerT{}
@@ -77,8 +74,7 @@ namespace castor3d
 			, ElementDetacherT detach = ElementDetacherT{} )
 			: castor::OwnedBy< Scene >{ scene }
 			, ElementCacheBaseT{ castor3d::getLogger( scene )
-				, std::move( produce )
-				, [this, initialise]( ElementPtrT element )
+				, [this, initialise]( ElementT & element )
 				{
 					if ( initialise )
 					{
@@ -86,13 +82,13 @@ namespace castor3d
 					}
 
 					m_attach( element
-						, *element->getParent()
+						, *element.getParent()
 						, m_rootNode.lock()
 						, m_rootCameraNode.lock()
 						, m_rootObjectNode.lock() );
 					onChanged();
 				}
-				, [this, clean]( ElementPtrT element )
+				, [this, clean]( ElementT & element )
 				{
 					m_detach( element );
 

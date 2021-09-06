@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Event/Frame/FrameEventModule.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/Design/ResourceCache.hpp>
 
 namespace castor3d
 {
@@ -23,8 +24,8 @@ namespace castor3d
 		using ElementKeyT = typename ElementCacheT::ElementKeyT;
 		using ElementCacheTraitsT = typename ElementCacheT::ElementCacheTraitsT;
 		using ElementPtrT = typename ElementCacheT::ElementPtrT;
+		using ElementObsT = typename ElementCacheT::ElementObsT;
 		using ElementContT = typename ElementCacheT::ElementContT;
-		using ElementProducerT = typename ElementCacheT::ElementProducerT;
 		using ElementInitialiserT = typename ElementCacheT::ElementInitialiserT;
 		using ElementCleanerT = typename ElementCacheT::ElementCleanerT;
 		using ElementMergerT = typename ElementCacheT::ElementMergerT;
@@ -46,8 +47,8 @@ namespace castor3d
 		 */
 		inline CacheViewT( castor::String const & name
 			, ElementCacheT & cache
-			, ElementInitialiserT initialise = []( ElementPtrT ){}
-			, ElementCleanerT clean = []( ElementPtrT ){} );
+			, ElementInitialiserT initialise = []( ElementObsT const & ){}
+			, ElementCleanerT clean = []( ElementObsT const & ){} );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -75,7 +76,24 @@ namespace castor3d
 		 *\return		L'élément créé.
 		 */
 		template< typename ... ParametersT >
-		inline ElementPtrT add( ElementKeyT const & name
+		inline ElementObsT add( ElementKeyT const & name
+			, ParametersT && ... params );
+		/**
+		 *\~english
+		 *\brief		Creates an element with the given informations.
+		 *\param[in]	name	The element name.
+		 *\param[in]	params	The parameters forwarded to the viewed cache.
+		 *\return		The created element.
+		 *\~french.=
+		 *\brief		Crée un élément avec les informations données.
+		 *\param[in]	name	Le nom de l'élément.
+		 *\param[in]	params	Les paramètres transmis au cache vu.
+		 *\return		L'élément créé.
+		 */
+		template< typename ... ParametersT >
+		inline ElementObsT tryAdd( ElementKeyT const & name
+			, bool initialise
+			, ElementObsT & created
 			, ParametersT && ... params );
 		/**
 		 *\~english
@@ -88,7 +106,7 @@ namespace castor3d
 		 *\param[in]	element	L'élément.
 		 */
 		inline bool tryAdd( ElementKeyT const & name
-			, ElementPtrT element
+			, ElementPtrT & element
 			, bool initialise = false );
 		/**
 		 *\~english
@@ -100,8 +118,8 @@ namespace castor3d
 		 *\param[in]	name	Le nom d'élément.
 		 *\param[in]	element	L'élément.
 		 */
-		inline ElementPtrT add( ElementKeyT const & name
-			, ElementPtrT element
+		inline ElementObsT add( ElementKeyT const & name
+			, ElementPtrT & element
 			, bool initialise = false );
 		/**
 		 *\~english
@@ -129,7 +147,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom d'objet.
 		 *\return		L'élément trouvé, nullptr si non trouvé.
 		 */
-		inline ElementPtrT tryFind( ElementKeyT const & name )const;
+		inline ElementObsT tryFind( ElementKeyT const & name )const;
 		/**
 		 *\~english
 		 *\brief		Looks for an element with given name.
@@ -140,7 +158,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom d'objet.
 		 *\return		L'élément trouvé, nullptr si non trouvé.
 		 */
-		inline ElementPtrT find( ElementKeyT const & name )const;
+		inline ElementObsT find( ElementKeyT const & name )const;
 		/**
 		 *\~english
 		 *\brief		Removes an element, given a name.
@@ -149,7 +167,7 @@ namespace castor3d
 		 *\brief		Retire un élément à partir d'un nom.
 		 *\param[in]	name	Le nom d'élément.
 		 */
-		inline ElementPtrT tryRemove( ElementKeyT const & name );
+		inline ElementObsT tryRemove( ElementKeyT const & name );
 		/**
 		 *\~english
 		 *\brief		Removes an object, given a name.

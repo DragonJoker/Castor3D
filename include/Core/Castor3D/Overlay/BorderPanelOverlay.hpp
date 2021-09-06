@@ -51,7 +51,7 @@ namespace castor3d
 		 *\brief		Définit le matériau des bords
 		 *\param[in]	material	La nouvelle valeur
 		 */
-		C3D_API void setBorderMaterial( MaterialSPtr material );
+		C3D_API void setBorderMaterial( MaterialRPtr material );
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute overlay borders size, in pixels
@@ -175,9 +175,9 @@ namespace castor3d
 		 *\brief		Récupère le matériau des bords
 		 *\return		La valeur
 		 */
-		inline MaterialSPtr getBorderMaterial()const
+		inline MaterialRPtr getBorderMaterial()const
 		{
-			return m_pBorderMaterial.lock();
+			return m_pBorderMaterial;
 		}
 		/**
 		 *\~english
@@ -488,7 +488,7 @@ namespace castor3d
 	protected:
 		//!\~english	The border material.
 		//!\~french		Le matériau des bords.
-		MaterialWPtr m_pBorderMaterial;
+		MaterialRPtr m_pBorderMaterial;
 		//!\~english	The border size.
 		//!\~french		La taille des bords.
 		castor::Point4d m_ptBorderSize;

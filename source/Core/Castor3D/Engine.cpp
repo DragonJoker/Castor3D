@@ -1,11 +1,6 @@
 #include "Castor3D/Engine.hpp"
 
-#include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/ObjectCache.hpp"
-#include "Castor3D/Cache/OverlayCache.hpp"
-#include "Castor3D/Cache/PluginCache.hpp"
-#include "Castor3D/Cache/ShaderCache.hpp"
-#include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
@@ -90,49 +85,25 @@ namespace castor3d
 		m_passFactory = castor::makeUnique< PassFactory >( *this );
 		m_passesType = m_passFactory->listRegisteredTypes().begin()->second;
 
-		auto dummy = []( auto element )
+		auto jobInit = [this]( auto & element )
 		{
-		};
-		auto jobInit = [this]( auto element )
-		{
-			this->pushGpuJob( [element]( RenderDevice const & device )
+			this->pushGpuJob( [&element]( RenderDevice const & device )
 				{
-					element->initialise( device );
+					element.initialise( device );
 				} );
 		};
-		auto gpuEventInit = [this]( auto element )
-		{
-			this->postEvent( makeGpuInitialiseEvent( *element ) );
-		};
-		auto gpuQueueEventInit = [this]( auto element )
+		auto gpuQueueEventInit = [this]( auto & element )
 		{
 			this->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [element]( RenderDevice const & device
+				, [&element]( RenderDevice const & device
 					, QueueData const & queueData )
 				{
-					element->initialise();
+					element.initialise();
 				} ) );
 		};
-		auto cpuEvtClean = [this]( auto element )
+		auto listenerClean = [this]( auto & element )
 		{
-			this->postEvent( makeCpuCleanupEvent( *element ) );
-		};
-		auto instantInit = [this]( auto element )
-		{
-			element->initialise();
-		};
-		auto instantClean = [this]( auto element )
-		{
-			element->cleanup();
-		};
-		auto listenerClean = [this]( auto element )
-		{
-			element->flush();
-		};
-		auto mergeResource = []( auto const & source
-			, auto & destination
-			, auto element )
-		{
+			element.flush();
 		};
 		initialiseGlslang();
 		castor::GliImageLoader::registerLoader( m_imageLoader );
@@ -144,36 +115,21 @@ namespace castor3d
 		castor::GliImageWriter::registerWriter( m_imageWriter );
 
 		// m_listenerCache *MUST* be the first created.
-		m_listenerCache = castor::makeCache< FrameListener, castor::String >( getLogger()
-			, []( castor::String const & name )
-			{
-				return std::make_shared< FrameListener >( name );
-			}
-			, dummy
-			, listenerClean
-			, mergeResource );
+		m_listenerCache = castor::makeCache< FrameListener, castor::String, FrameListenerCacheTraits >( getLogger()
+			, castor::DummyFunctorT< FrameListenerCache >{}
+			, listenerClean );
 		m_defaultListener = m_listenerCache->add( cuT( "Default" ) );
 
 		m_shaderCache = makeCache( *this );
-		m_samplerCache = castor::makeCache< Sampler, castor::String >( getLogger()
-			, [this]( castor::String const & name )
-			{
-				return std::make_shared< Sampler >( *this, name );
-			}
-			, gpuEventInit
-			, cpuEvtClean
-			, mergeResource );
-		m_materialCache = castor::makeCache< Material, castor::String >( *this );
-		m_pluginCache = castor::makeCache< Plugin, castor::String >( *this );
-		m_overlayCache = castor::makeCache< Overlay, castor::String >( *this );
-		m_sceneCache = castor::makeCache< Scene, castor::String >( getLogger()
-			, [this]( castor::String const & name )
-			{
-				return std::make_shared< Scene >( name, *this );
-			}
-			, instantInit
-			, instantClean
-			, mergeResource );
+		m_samplerCache = castor::makeCache< Sampler, castor::String, SamplerCacheTraits >( getLogger()
+			, GpuEventInitialiserT< SamplerCache >{ *m_defaultListener.lock() }
+			, CpuEventCleanerT< SamplerCache >{ *m_defaultListener.lock() } );
+		m_materialCache = castor::makeCache< Material, castor::String, MaterialCacheTraits >( *this );
+		m_pluginCache = castor::makeCache< Plugin, castor::String, PluginCacheTraits >( *this );
+		m_overlayCache = castor::makeCache< Overlay, castor::String, OverlayCacheTraits >( *this );
+		m_sceneCache = castor::makeCache< Scene, castor::String, SceneCacheTraits >( getLogger()
+			, castor::ResourceInitialiserT< SceneCache >{}
+			, castor::ResourceCleanerT< SceneCache >{} );
 		m_targetCache = std::make_unique< RenderTargetCache >( *this );
 
 		if ( !castor::File::directoryExists( getEngineDirectory() ) )
@@ -210,8 +166,8 @@ namespace castor3d
 
 	Engine::~Engine()
 	{
-		m_lightsSampler.reset();
-		m_defaultSampler.reset();
+		m_lightsSampler = {};
+		m_defaultSampler = {};
 
 		// To destroy before RenderSystem, since it contain elements instantiated in Renderer plug-in
 		m_samplerCache->clear();
@@ -252,19 +208,25 @@ namespace castor3d
 
 		if ( m_renderSystem )
 		{
-			m_defaultSampler = m_samplerCache->add( cuT( "Default" ) );
-			m_defaultSampler->setMinFilter( VK_FILTER_LINEAR );
-			m_defaultSampler->setMagFilter( VK_FILTER_LINEAR );
-			m_defaultSampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_REPEAT );
-			m_defaultSampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_REPEAT );
-			m_defaultSampler->setWrapR( VK_SAMPLER_ADDRESS_MODE_REPEAT );
+			if ( auto created = m_samplerCache->create( cuT( "Default" ), *this ) )
+			{
+				created->setMinFilter( VK_FILTER_LINEAR );
+				created->setMagFilter( VK_FILTER_LINEAR );
+				created->setWrapS( VK_SAMPLER_ADDRESS_MODE_REPEAT );
+				created->setWrapT( VK_SAMPLER_ADDRESS_MODE_REPEAT );
+				created->setWrapR( VK_SAMPLER_ADDRESS_MODE_REPEAT );
+				m_defaultSampler = m_samplerCache->add( created->getName(), created, true );
+			}
 
-			m_lightsSampler = m_samplerCache->add( cuT( "LightsSampler" ) );
-			m_lightsSampler->setMinFilter( VK_FILTER_NEAREST );
-			m_lightsSampler->setMagFilter( VK_FILTER_NEAREST );
-			m_lightsSampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-			m_lightsSampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-			m_lightsSampler->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+			if ( auto created = m_samplerCache->create( cuT( "LightsSampler" ), *this ) )
+			{
+				created->setMinFilter( VK_FILTER_NEAREST );
+				created->setMagFilter( VK_FILTER_NEAREST );
+				created->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				created->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				created->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				m_lightsSampler = m_samplerCache->add( created->getName(), created, true );
+			}
 
 			doLoadCoreData();
 		}
@@ -274,14 +236,14 @@ namespace castor3d
 			CU_Exception( C3D_NO_RENDERSYSTEM );
 		}
 
-		if ( m_lightsSampler )
+		if ( m_lightsSampler.lock() )
 		{
-			postEvent( makeGpuInitialiseEvent( *m_lightsSampler ) );
+			postEvent( makeGpuInitialiseEvent( **m_lightsSampler.lock() ) );
 		}
 
-		if ( m_defaultSampler )
+		if ( m_defaultSampler.lock() )
 		{
-			postEvent( makeGpuInitialiseEvent( *m_defaultSampler ) );
+			postEvent( makeGpuInitialiseEvent( **m_defaultSampler.lock() ) );
 		}
 
 		if ( threaded )
@@ -320,14 +282,14 @@ namespace castor3d
 			m_overlayCache->cleanup();
 			m_materialCache->cleanup();
 
-			if ( m_lightsSampler )
+			if ( m_lightsSampler.lock() )
 			{
-				postEvent( makeCpuCleanupEvent( *m_lightsSampler ) );
+				postEvent( makeCpuCleanupEvent( *m_lightsSampler.lock() ) );
 			}
 
-			if ( m_defaultSampler )
+			if ( m_defaultSampler.lock() )
 			{
-				postEvent( makeCpuCleanupEvent( *m_defaultSampler ) );
+				postEvent( makeCpuCleanupEvent( *m_defaultSampler.lock() ) );
 			}
 
 			m_renderLoop.reset();

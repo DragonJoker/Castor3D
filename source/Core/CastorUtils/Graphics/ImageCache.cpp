@@ -5,56 +5,39 @@
 
 namespace castor
 {
-	template<>
+	//*********************************************************************************************
+
 	const String ResourceCacheTraitsT< Image, String >::Name = cuT( "Image" );
 
-	ResourceCacheT< Image, String >::ResourceCacheT( LoggerInstance & logger
-		, ImageLoader const & loader )
-		: ResourceCacheBaseT< Image, String >{ logger
-			, [this]( String const & name, ImageCreateParams const & params )
-			{
-				return doProduce( name, params );
-			}
-			, [this]( ImageSPtr resource )
-			{
-				doInitialise( resource );
-			} }
-		, m_loader{ loader }
-	{
-	}
-
-	ImageSPtr ResourceCacheT< Image, String >::doProduce( String const & name
+	ResourceCacheTraitsT< Image, String >::ElementPtrT ResourceCacheTraitsT< Image, String >::makeElement( ResourceCacheBaseT< Image, String, ResourceCacheTraitsT< Image, String > > const & cache
+		, String const & name
 		, ImageCreateParams const & params )
 	{
 		ImageSPtr result;
 
 		if ( params.mode )
 		{
-			result = std::make_shared< Image >( name
+			return makeResource< Image, String >( name
 				, Path{}
 				, params.size
 				, params.format );
 		}
-		else
-		{
-			result = std::make_shared< Image >( m_loader.load( name
-				, params.path
-				, params.allowCompression
-				, params.generateMips ) );
-		}
 
-		return result;
+		auto & realCache = static_cast< ResourceCacheT< Image, String, ResourceCacheTraitsT< Image, String > > const & >( cache );
+		return makeResource< Image, String >( realCache.getLoader().load( name
+			, params.path
+			, params.allowCompression
+			, params.generateMips ) );
 	}
 
-	void ResourceCacheT< Image, String >::doInitialise( ImageSPtr resource )
+	//*********************************************************************************************
+
+	ResourceCacheT< Image, String, ImageCacheTraits >::ResourceCacheT( LoggerInstance & logger
+		, ImageLoader const & loader )
+		: ResourceCacheBaseT< Image, String >{ logger }
+		, m_loader{ loader }
 	{
-		if ( !resource->hasBuffer()
-			&& File::fileExists( resource->getPath() ) )
-		{
-			*resource = m_loader.load( resource->getName()
-				, resource->getPath()
-				, ashes::isCompressedFormat( VkFormat( resource->getPixelFormat() ) )
-				, resource->getLevels() > 1 );
-		}
 	}
+
+	//*********************************************************************************************
 }

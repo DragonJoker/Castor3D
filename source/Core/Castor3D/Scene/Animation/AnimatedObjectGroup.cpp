@@ -1,5 +1,6 @@
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
 
+#include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
@@ -9,12 +10,6 @@
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
 #include "Castor3D/Scene/Animation/AnimatedTexture.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
-
-using namespace castor;
-
-#ifdef getObject
-#	undef getObject
-#endif
 
 namespace castor3d
 {
@@ -52,9 +47,9 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	AnimatedObjectGroup::AnimatedObjectGroup( String const & name, Scene & scene )
-		: Named( name )
-		, OwnedBy< Scene >( scene )
+	AnimatedObjectGroup::AnimatedObjectGroup( castor::String const & name, Scene & scene )
+		: castor::Named( name )
+		, castor::OwnedBy< Scene >( scene )
 	{
 		m_timer.getElapsed();
 	}
@@ -66,14 +61,14 @@ namespace castor3d
 	}
 
 	AnimatedObjectSPtr AnimatedObjectGroup::addObject( MovableObject & object
-		, String const & name )
+		, castor::String const & name )
 	{
 		return nullptr;
 	}
 
 	AnimatedObjectSPtr AnimatedObjectGroup::addObject( Mesh & mesh
 		, Geometry & geometry
-		, String const & name )
+		, castor::String const & name )
 	{
 		auto object = std::make_shared< AnimatedMesh >( name, mesh, geometry );
 
@@ -88,7 +83,7 @@ namespace castor3d
 	AnimatedObjectSPtr AnimatedObjectGroup::addObject( Skeleton & skeleton
 		, Mesh & mesh
 		, Geometry & geometry
-		, String const & name )
+		, castor::String const & name )
 	{
 		auto object = std::make_shared< AnimatedSkeleton >( name, skeleton, mesh, geometry );
 
@@ -149,7 +144,7 @@ namespace castor3d
 		return result;
 	}
 
-	void AnimatedObjectGroup::addAnimation( String const & name )
+	void AnimatedObjectGroup::addAnimation( castor::String const & name )
 	{
 		if ( m_animations.find( name ) == m_animations.end() )
 		{
@@ -212,7 +207,7 @@ namespace castor3d
 
 		auto tslf = updater.tslf > 0_ms
 			? updater.tslf
-			: std::chrono::duration_cast< Milliseconds >( m_timer.getElapsed() );
+			: std::chrono::duration_cast< castor::Milliseconds >( m_timer.getElapsed() );
 
 #else
 
@@ -226,7 +221,7 @@ namespace castor3d
 		}
 	}
 
-	void AnimatedObjectGroup::startAnimation( String const & name )
+	void AnimatedObjectGroup::startAnimation( castor::String const & name )
 	{
 		auto itAnim = m_animations.find( name );
 
@@ -241,7 +236,7 @@ namespace castor3d
 		}
 	}
 
-	void AnimatedObjectGroup::stopAnimation( String const & name )
+	void AnimatedObjectGroup::stopAnimation( castor::String const & name )
 	{
 		auto itAnim = m_animations.find( name );
 
@@ -256,7 +251,7 @@ namespace castor3d
 		}
 	}
 
-	void AnimatedObjectGroup::pauseAnimation( String const & name )
+	void AnimatedObjectGroup::pauseAnimation( castor::String const & name )
 	{
 		auto itAnim = m_animations.find( name );
 

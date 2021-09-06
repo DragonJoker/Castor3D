@@ -7,7 +7,8 @@ See LICENSE file in root folder
 #include "CastorUtils/Graphics/GraphicsModule.hpp"
 
 #include "CastorUtils/Data/Path.hpp"
-#include "CastorUtils/Design/ResourceCacheBase.hpp"
+#include "CastorUtils/Design/Resource.hpp"
+#include "CastorUtils/Design/ResourceCache.hpp"
 
 #include <unordered_map>
 
@@ -23,20 +24,23 @@ namespace castor
 	*\remarks
 	*	Spécialisation pour castor::Font.
 	*/
-	template< typename KeyT >
-	struct ResourceCacheTraitsT< Font, KeyT >
-		: ResourceCacheTraitsBaseT< Font, KeyT >
+	template<>
+	struct ResourceCacheTraitsT< Font, String >
+		: ResourceCacheTraitsBaseT< Font, String, ResourceCacheTraitsT< Font, String > >
 	{
-		using Base = ResourceCacheTraitsBaseT< Font, KeyT >;
+		using KeyT = String;
+		using Base = ResourceCacheTraitsBaseT< Font, KeyT, ResourceCacheTraitsT< Font, KeyT > >;
 		using ElementT = typename Base::ElementT;
 		using ElementPtrT = typename Base::ElementPtrT;
 
 		CU_API static const String Name;
 
-		using ElementProducerT = std::function< ElementPtrT( KeyT const &
-			, uint32_t
-			, Path const & ) >;
+		CU_API static ElementPtrT makeElement( ResourceCacheBaseT< Font, String, ResourceCacheTraitsT< Font, String > > const & cache
+			, KeyT const & name
+			, uint32_t height
+			, Path path );
 	};
+	using FontCacheTraits = ResourceCacheTraitsT< Font, String >;
 	/**
 	*\~english
 	*	Base class for an element cache.
@@ -48,17 +52,17 @@ namespace castor
 	*	Spécialisation pour castor::Font.
 	*/
 	template<>
-	class ResourceCacheT< Font, String > final
-		: public ResourceCacheBaseT< Font, String >
+	class ResourceCacheT< Font, String, FontCacheTraits > final
+		: public ResourceCacheBaseT< Font, String, FontCacheTraits >
 	{
 	public:
 		using ElementT = Font;
 		using ElementKeyT = String;
-		using ElementCacheT = ResourceCacheBaseT< ElementT, ElementKeyT >;
-		using ElementCacheTraitsT = typename ElementCacheT::ElementCacheTraitsT;
+		using ElementCacheTraitsT = FontCacheTraits;
+		using ElementCacheT = ResourceCacheBaseT< ElementT, ElementKeyT, ElementCacheTraitsT >;
 		using ElementPtrT = typename ElementCacheT::ElementPtrT;
+		using ElementObsT = typename ElementCacheT::ElementObsT;
 		using ElementContT = typename ElementCacheT::ElementContT;
-		using ElementProducerT = typename ElementCacheT::ElementProducerT;
 		using ElementInitialiserT = typename ElementCacheT::ElementInitialiserT;
 		using ElementCleanerT = typename ElementCacheT::ElementCleanerT;
 		using ElementMergerT = typename ElementCacheT::ElementMergerT;
@@ -67,11 +71,7 @@ namespace castor
 		CU_API explicit ResourceCacheT( LoggerInstance & logger );
 		CU_API ~ResourceCacheT() = default;
 
-	private:
-		FontSPtr doProduce( String const & name
-			, uint32_t height
-			, Path path );
-		void doInitialise( FontSPtr resource );
+		CU_API Path getRealPath( Path path )const;
 
 	private:
 		using PathNameMap = std::unordered_map< String, Path >;
@@ -80,7 +80,9 @@ namespace castor
 		PathNameMap m_paths;
 	};
 
-	using FontCache = ResourceCacheT< Font, String >;
+	using FontCache = ResourceCacheT< Font, String, FontCacheTraits >;
+	using FontRes = FontCacheTraits::ElementPtrT;
+	using FontResPtr = FontCacheTraits::ElementObsT;
 }
 
 #endif

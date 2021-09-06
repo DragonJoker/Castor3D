@@ -75,7 +75,7 @@ namespace castor3d
 	{
 	}
 
-	uint32_t InstantiationComponent::ref( MaterialSPtr material )
+	uint32_t InstantiationComponent::ref( MaterialRPtr material )
 	{
 		auto it = find( material );
 
@@ -116,7 +116,7 @@ namespace castor3d
 		return result;
 	}
 
-	uint32_t InstantiationComponent::unref( MaterialSPtr material )
+	uint32_t InstantiationComponent::unref( MaterialRPtr material )
 	{
 		auto it = find( material );
 		uint32_t result{ 0u };
@@ -144,7 +144,7 @@ namespace castor3d
 		return result;
 	}
 
-	uint32_t InstantiationComponent::getRefCount( MaterialSPtr material )const
+	uint32_t InstantiationComponent::getRefCount( MaterialRPtr material )const
 	{
 		uint32_t result = 0;
 		auto it = find( material );
@@ -157,7 +157,7 @@ namespace castor3d
 		return result;
 	}
 
-	bool InstantiationComponent::isInstanced( MaterialSPtr material )const
+	bool InstantiationComponent::isInstanced( MaterialRPtr material )const
 	{
 		return doCheckInstanced( getRefCount( material ) );
 	}
@@ -180,7 +180,7 @@ namespace castor3d
 	}
 
 	void InstantiationComponent::gather( ShaderFlags const & flags
-		, MaterialSPtr material
+		, MaterialRPtr material
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
@@ -207,7 +207,7 @@ namespace castor3d
 		return result;
 	}
 
-	InstantiationComponent::InstanceDataMap::const_iterator InstantiationComponent::find( MaterialSPtr material
+	InstantiationComponent::InstanceDataMap::const_iterator InstantiationComponent::find( MaterialRPtr material
 		, uint32_t instanceMult )const
 	{
 		auto result = find( material );
@@ -223,7 +223,7 @@ namespace castor3d
 		return result;
 	}
 
-	InstantiationComponent::InstanceDataMap::iterator InstantiationComponent::find( MaterialSPtr material
+	InstantiationComponent::InstanceDataMap::iterator InstantiationComponent::find( MaterialRPtr material
 		, uint32_t instanceMult )
 	{
 		auto result = find( material );
@@ -239,7 +239,7 @@ namespace castor3d
 		return result;
 	}
 
-	ProgramFlags InstantiationComponent::getProgramFlags( MaterialSPtr material )const
+	ProgramFlags InstantiationComponent::getProgramFlags( MaterialRPtr material )const
 	{
 		auto it = find( material );
 		return ( it != end() && it->second[0].buffer )

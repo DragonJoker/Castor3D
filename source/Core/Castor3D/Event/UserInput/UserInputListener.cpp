@@ -422,19 +422,19 @@ namespace castor3d
 		if ( doHasHandlers() )
 		{
 			auto & cache = getEngine()->getOverlayCache();
-			auto overlay = cache.find( overlayName );
+			auto overlay = cache.find( overlayName ).lock();
 
 			if ( overlay )
 			{
 				auto material = getEngine()->getMaterialCache().find( materialName );
 
-				if ( material )
+				if ( material.lock() )
 				{
 					this->m_frameListener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
 					//??? this->m_frameListener->postEvent( makeCpuFunctorEvent( EventType::ePreRender
 						, [overlay, material]()
 						{
-							overlay->setMaterial( material );
+							overlay->setMaterial( material.lock().get() );
 						} ) );
 					result = true;
 				}
@@ -451,7 +451,7 @@ namespace castor3d
 		if ( doHasHandlers() )
 		{
 			auto & cache = getEngine()->getOverlayCache();
-			auto overlay = cache.find( overlayName );
+			auto overlay = cache.find( overlayName ).lock();
 
 			if ( overlay && overlay->getType() == OverlayType::eText )
 			{

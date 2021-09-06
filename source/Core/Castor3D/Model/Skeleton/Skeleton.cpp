@@ -23,7 +23,7 @@ namespace castor3d
 		, castor::Matrix4x4f const & offset )
 	{
 		auto bone = std::make_shared< Bone >( *this, offset );
-		bone->setName( name );
+		bone->rename( name );
 		m_bones.push_back( bone );
 		return bone;
 	}

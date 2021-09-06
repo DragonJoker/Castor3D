@@ -54,9 +54,10 @@ namespace CastorGui
 		setBackgroundBorders( castor::Rectangle() );
 
 		TextOverlaySPtr text = getEngine().getOverlayCache().add( cuT( "T_CtrlStatic_" ) + string::toString( getId() )
+			, getEngine()
 			, OverlayType::eText
 			, nullptr
-			, getBackground()->getOverlay().shared_from_this() )->getTextOverlay();
+			, &getBackground()->getOverlay() ).lock()->getTextOverlay();
 		text->setPixelSize( getSize() );
 		m_text = text;
 		text->setCaption( m_caption );
@@ -101,14 +102,14 @@ namespace CastorGui
 
 	void StaticCtrl::doCreate()
 	{
-		if ( m_foregroundMaterial.expired() )
+		if ( !m_foregroundMaterial )
 		{
-			m_foregroundMaterial = CreateMaterial( getEngine(), cuT( "CtrlStatic_FG_" ) + string::toString( getId() ), RgbColour::fromComponents( 1.0, 1.0, 1.0 ) );
+			m_foregroundMaterial = createMaterial( getEngine(), cuT( "CtrlStatic_FG_" ) + string::toString( getId() ), RgbColour::fromComponents( 1.0, 1.0, 1.0 ) );
 		}
 
-		if ( m_textMaterial.expired() )
+		if ( !m_textMaterial )
 		{
-			m_textMaterial = m_foregroundMaterial.lock();
+			m_textMaterial = m_foregroundMaterial;
 		}
 
 		TextOverlaySPtr text = m_text.lock();
@@ -116,7 +117,7 @@ namespace CastorGui
 
 		if ( !text->getFontTexture() || !text->getFontTexture()->getFont() )
 		{
-			text->setFont( getControlsManager()->getDefaultFont()->getName() );
+			text->setFont( getControlsManager()->getDefaultFont().lock()->getName() );
 		}
 	}
 
@@ -144,7 +145,7 @@ namespace CastorGui
 		}
 	}
 
-	void StaticCtrl::setTextMaterial( castor3d::MaterialSPtr value )
+	void StaticCtrl::setTextMaterial( castor3d::MaterialRPtr value )
 	{
 		m_textMaterial = value;
 		TextOverlaySPtr text = m_text.lock();
@@ -155,11 +156,11 @@ namespace CastorGui
 		}
 	}
 
-	void StaticCtrl::doSetBackgroundMaterial( MaterialSPtr p_material )
+	void StaticCtrl::doSetBackgroundMaterial( MaterialRPtr p_material )
 	{
 	}
 
-	void StaticCtrl::doSetForegroundMaterial( MaterialSPtr p_material )
+	void StaticCtrl::doSetForegroundMaterial( MaterialRPtr p_material )
 	{
 	}
 

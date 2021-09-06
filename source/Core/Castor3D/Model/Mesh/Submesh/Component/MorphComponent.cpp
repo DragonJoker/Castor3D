@@ -63,7 +63,7 @@ namespace castor3d
 	}
 
 	void MorphComponent::gather( ShaderFlags const & flags
-		, MaterialSPtr material
+		, MaterialRPtr material
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts

@@ -6,8 +6,6 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*************************************************************************************************
@@ -167,7 +165,7 @@ namespace castor3d
 					}
 				};
 
-				ByteArray copy{ gpuBuffer, gpuBuffer + ( size_t( m_vertexStride ) * m_count ) };
+				castor::ByteArray copy{ gpuBuffer, gpuBuffer + ( size_t( m_vertexStride ) * m_count ) };
 				std::vector< Element > elements;
 				auto buffer = copy.data();
 				elements.reserve( m_count );
@@ -185,8 +183,8 @@ namespace castor3d
 						, [this]( Element const & p_a
 						, Element const & p_b )
 						{
-							return point::lengthSquared( p_a.m_position - m_cameraPosition )
-								> point::lengthSquared( p_b.m_position - m_cameraPosition );
+							return castor::point::lengthSquared( p_a.m_position - m_cameraPosition )
+								> castor::point::lengthSquared( p_b.m_position - m_cameraPosition );
 						} );
 
 					for ( auto & element : elements )
@@ -195,7 +193,7 @@ namespace castor3d
 						gpuBuffer += m_vertexStride;
 					}
 				}
-				catch ( Exception const & p_exc )
+				catch ( castor::Exception const & p_exc )
 				{
 					log::error << "Submesh::SortFaces - Error: " << p_exc.what() << std::endl;
 				}
@@ -223,9 +221,9 @@ namespace castor3d
 		return result;
 	}
 
-	void BillboardBase::setMaterial( MaterialSPtr value )
+	void BillboardBase::setMaterial( MaterialRPtr value )
 	{
-		MaterialSPtr oldMaterial = getMaterial();
+		auto oldMaterial = getMaterial();
 
 		if ( oldMaterial != value )
 		{
@@ -261,7 +259,7 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	BillboardList::BillboardList( String const & name
+	BillboardList::BillboardList( castor::String const & name
 		, Scene & scene
 		, SceneNode & node )
 		: MovableObject( name
@@ -283,7 +281,7 @@ namespace castor3d
 	{
 	}
 	
-	BillboardList::BillboardList( String const & name
+	BillboardList::BillboardList( castor::String const & name
 		, Scene & scene )
 		: MovableObject( name
 			, scene

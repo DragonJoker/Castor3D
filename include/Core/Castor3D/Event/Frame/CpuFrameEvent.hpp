@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_CpuFrameEvent_H___
 #define ___C3D_CpuFrameEvent_H___
 
-#include "FrameEventModule.hpp"
+#include "FrameListener.hpp"
 
 namespace castor3d
 {

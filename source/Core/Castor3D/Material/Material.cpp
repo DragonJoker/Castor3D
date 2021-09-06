@@ -14,7 +14,7 @@ namespace castor3d
 	Material::Material( castor::String const & name
 		, Engine & engine
 		, PassTypeID type )
-		: castor::Resource{ name }
+		: castor::Named{ name }
 		, castor::OwnedBy< Engine >{ engine }
 		, m_type{ type }
 	{
@@ -22,6 +22,29 @@ namespace castor3d
 
 	Material::~Material()
 	{
+	}
+
+	void Material::initialise()
+	{
+		auto & device = getEngine()->getRenderSystem()->getRenderDevice();
+		log::debug << cuT( "Initialising material [" ) << getName() << cuT( "]" ) << std::endl;
+
+		for ( auto pass : m_passes )
+		{
+			pass->initialise( device, *device.graphicsData() );
+		}
+
+		getEngine()->getMaterialCache().registerMaterial( *this );
+	}
+
+	void Material::cleanup()
+	{
+		getEngine()->getMaterialCache().unregisterMaterial( *this );
+
+		for ( auto pass : m_passes )
+		{
+			pass->cleanup();
+		}
 	}
 
 	PassSPtr Material::createPass()
@@ -106,28 +129,5 @@ namespace castor3d
 	void Material::onPassChanged( Pass const & pass )
 	{
 		onChanged( *this );
-	}
-
-	void Material::doInitialise()
-	{
-		auto & device = getEngine()->getRenderSystem()->getRenderDevice();
-		log::debug << cuT( "Initialising material [" ) << getName() << cuT( "]" ) << std::endl;
-
-		for ( auto pass : m_passes )
-		{
-			pass->initialise( device, *device.graphicsData() );
-		}
-
-		getEngine()->getMaterialCache().registerMaterial( *this );
-	}
-
-	void Material::doCleanup()
-	{
-		getEngine()->getMaterialCache().unregisterMaterial( *this );
-
-		for ( auto pass : m_passes )
-		{
-			pass->cleanup();
-		}
 	}
 }

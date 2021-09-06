@@ -13,6 +13,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Graphics/BoundingBox.hpp>
 #include <CastorUtils/Graphics/BoundingSphere.hpp>
+#include <CastorUtils/Multithreading/SpinMutex.hpp>
 
 namespace castor3d
 {
@@ -38,7 +39,7 @@ namespace castor3d
 		C3D_API Geometry( castor::String const & name
 			, Scene & scene
 			, SceneNode & node
-			, MeshSPtr mesh = nullptr );
+			, MeshResPtr mesh = {} );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -53,7 +54,7 @@ namespace castor3d
 		 */
 		C3D_API Geometry( castor::String const & name
 			, Scene & scene
-			, MeshSPtr mesh = nullptr );
+			, MeshResPtr mesh = {} );
 		/**
 		 *\~english
 		 *brief			Creates the mesh buffers
@@ -73,7 +74,7 @@ namespace castor3d
 		 *\brief		Définit le maillage de la géométrie.
 		 *\param[in]	mesh	Le maillage.
 		 */
-		C3D_API void setMesh( MeshSPtr mesh );
+		C3D_API void setMesh( MeshResPtr mesh );
 		/**
 		 *\~english
 		 *\brief		Retrieves the submesh material.
@@ -84,7 +85,7 @@ namespace castor3d
 		 *\param[in]	submesh	Le sous-maillage.
 		 *\return		Le matériau.
 		 */
-		C3D_API MaterialSPtr getMaterial( Submesh const & submesh )const;
+		C3D_API MaterialRPtr getMaterial( Submesh const & submesh )const;
 		/**
 		 *\~english
 		 *\brief		Defines a submesh material.
@@ -98,7 +99,7 @@ namespace castor3d
 		 *\param[in]	updateSubmesh	Dit si les tampons du sous-maillage doivent être mis à jour.
 		 */
 		C3D_API void setMaterial( Submesh & submesh
-			, MaterialSPtr material
+			, MaterialRPtr material
 			, bool updateSubmesh = true );
 		/**
 		 *\~english
@@ -145,9 +146,9 @@ namespace castor3d
 		 *\brief		Récupère le maillage
 		 *\return		Le maillage
 		 */
-		MeshSPtr getMesh()const
+		MeshResPtr getMesh()const
 		{
-			return m_mesh.lock();
+			return m_mesh;
 		}
 		/**
 		 *\~english
@@ -181,10 +182,11 @@ namespace castor3d
 		void doUpdateContainers();
 
 	private:
-		MeshWPtr m_mesh;
+		MeshResPtr m_mesh;
 		castor::String m_meshName;
 		bool m_changed{ true };
 		bool m_listCreated{ false };
+		mutable castor::SpinMutex m_mutex;
 		SubmeshMaterialMap m_submeshesMaterials;
 		SubmeshBoundingBoxMap m_submeshesBoxes;
 		SubmeshBoundingSphereMap m_submeshesSpheres;

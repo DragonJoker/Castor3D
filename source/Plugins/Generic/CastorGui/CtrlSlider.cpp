@@ -182,12 +182,12 @@ namespace CastorGui
 		CU_Require( getControlsManager() );
 		auto & manager = *getControlsManager();
 		StaticCtrlSPtr line = m_line.lock();
-		line->setBackgroundMaterial( getEngine().getMaterialCache().find( cuT( "Gray" ) ) );
+		line->setBackgroundMaterial( getEngine().getMaterialCache().find( cuT( "Gray" ) ).lock().get() );
 		line->setForegroundMaterial( getForegroundMaterial() );
 		manager.create( line );
 
 		StaticCtrlSPtr tick = m_tick.lock();
-		tick->setBackgroundMaterial( getEngine().getMaterialCache().find( cuT( "White" ) ) );
+		tick->setBackgroundMaterial( getEngine().getMaterialCache().find( cuT( "White" ) ).lock().get() );
 		tick->setForegroundMaterial( getForegroundMaterial() );
 		manager.create( tick );
 		doUpdateLineAndTick();
@@ -227,11 +227,11 @@ namespace CastorGui
 		doUpdateLineAndTick();
 	}
 
-	void SliderCtrl::doSetBackgroundMaterial( MaterialSPtr p_material )
+	void SliderCtrl::doSetBackgroundMaterial( MaterialRPtr p_material )
 	{
 	}
 
-	void SliderCtrl::doSetForegroundMaterial( MaterialSPtr p_material )
+	void SliderCtrl::doSetForegroundMaterial( MaterialRPtr p_material )
 	{
 		StaticCtrlSPtr line = m_line.lock();
 

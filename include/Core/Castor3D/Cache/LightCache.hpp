@@ -12,6 +12,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	using LightCacheTraits = ObjectCacheTraitsT< Light, castor::String >;
 	/**
 	\~english
 	\brief		Light cache.
@@ -19,17 +20,16 @@ namespace castor3d
 	\brief		Cache de Light.
 	*/
 	template<>
-	class ObjectCacheT< Light, castor::String >
-		: public ObjectCacheBaseT< Light, castor::String >
+	class ObjectCacheT< Light, castor::String, LightCacheTraits >
+		: public ObjectCacheBaseT< Light, castor::String, LightCacheTraits >
 	{
 	public:
 		using ElementT = Light;
 		using ElementKeyT = castor::String;
-		using ElementObjectCacheT = ObjectCacheBaseT< ElementT, ElementKeyT >;
-		using ElementCacheTraitsT = typename ElementObjectCacheT::ElementCacheTraitsT;
+		using ElementCacheTraitsT = LightCacheTraits;
+		using ElementObjectCacheT = ObjectCacheBaseT< ElementT, ElementKeyT, ElementCacheTraitsT >;
 		using ElementPtrT = typename ElementObjectCacheT::ElementPtrT;
 		using ElementContT = typename ElementObjectCacheT::ElementContT;
-		using ElementProducerT = typename ElementObjectCacheT::ElementProducerT;
 		using ElementInitialiserT = typename ElementObjectCacheT::ElementInitialiserT;
 		using ElementCleanerT = typename ElementObjectCacheT::ElementCleanerT;
 		using ElementMergerT = typename ElementObjectCacheT::ElementMergerT;

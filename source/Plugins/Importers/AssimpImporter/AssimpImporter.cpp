@@ -955,16 +955,16 @@ namespace C3dAssimp
 		, Submesh & submesh )
 	{
 		bool result = false;
-		MaterialSPtr material;
+		MaterialResPtr material;
 		log::debug << cuT( "Mesh found: [" ) << aiMesh.mName.C_Str() << cuT( "]" ) << std::endl;
 
 		if ( aiMesh.mMaterialIndex < aiScene.mNumMaterials )
 		{
 			material = doProcessMaterial( scene, *aiScene.mMaterials[aiMesh.mMaterialIndex] );
-			log::debug << cuT( "  Material: [" ) << aiMesh.mMaterialIndex << cuT( " (" ) << material->getName() << cuT( ")]" ) << std::endl;
+			log::debug << cuT( "  Material: [" ) << aiMesh.mMaterialIndex << cuT( " (" ) << material.lock()->getName() << cuT( ")]" ) << std::endl;
 		}
 
-		if ( aiMesh.HasFaces() && aiMesh.HasPositions() && material )
+		if ( aiMesh.HasFaces() && aiMesh.HasPositions() && material.lock() )
 		{
 			auto faces = castor::makeArrayView( aiMesh.mFaces, aiMesh.mNumFaces );
 			auto count = uint32_t( std::count_if( faces.begin()
@@ -978,7 +978,7 @@ namespace C3dAssimp
 			if ( count > 0 )
 			{
 				m_submeshByID.emplace( aiMeshIndex, submesh.getId() );
-				submesh.setDefaultMaterial( material );
+				submesh.setDefaultMaterial( material.lock().get() );
 				submesh.addPoints( doCreateVertexBuffer( aiMesh ) );
 
 				if ( aiMesh.HasBones() )
@@ -1064,10 +1064,10 @@ namespace C3dAssimp
 		}
 	}
 
-	MaterialSPtr AssimpImporter::doProcessMaterial( Scene & scene
+	MaterialResPtr AssimpImporter::doProcessMaterial( Scene & scene
 		, aiMaterial const & aiMaterial )
 	{
-		MaterialSPtr result;
+		MaterialResPtr result;
 		auto & cache = scene.getMaterialView();
 		aiString mtlname;
 		aiMaterial.Get( AI_MATKEY_NAME, mtlname );
@@ -1084,8 +1084,10 @@ namespace C3dAssimp
 		}
 		else
 		{
-			result = cache.add( name, scene.getPassesType() );
-			auto pass = result->createPass();
+			result = cache.add( name
+				, *scene.getEngine()
+				, scene.getPassesType() );
+			auto pass = result.lock()->createPass();
 			doProcessMaterialPass( *pass
 				, aiMaterial
 				, *this );

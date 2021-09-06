@@ -116,7 +116,7 @@ namespace castor3d
 				parsingContext.textureTransform = TextureTransform{};
 
 				if ( parsingContext.createPass
-					|| parsingContext.pass->getTextureUnitsCount() < parsingContext.unitIndex )
+					|| parsingContext.pass->getTextureUnitsCount() <= parsingContext.unitIndex )
 				{
 					parsingContext.textureUnit = std::make_shared< TextureUnit >( *parsingContext.parser->getEngine() );
 					parsingContext.createUnit = true;
@@ -146,7 +146,8 @@ namespace castor3d
 
 			if ( parsingContext.pass )
 			{
-				parsingContext.shaderProgram = parsingContext.parser->getEngine()->getShaderProgramCache().getNewProgram( parsingContext.material->getName() + castor::string::toString( parsingContext.pass->getId() )
+				auto & cache = parsingContext.parser->getEngine()->getShaderProgramCache();
+				parsingContext.shaderProgram = cache.getNewProgram( parsingContext.material->getName() + castor::string::toString( parsingContext.pass->getId() )
 					, true );
 			}
 			else
@@ -742,9 +743,9 @@ namespace castor3d
 			else if ( !params.empty() )
 			{
 				castor::String name;
-				SamplerSPtr sampler = parsingContext.parser->getEngine()->getSamplerCache().find( params[0]->get( name ) );
+				auto sampler = parsingContext.parser->getEngine()->getSamplerCache().find( params[0]->get( name ) );
 
-				if ( sampler )
+				if ( sampler.lock() )
 				{
 					parsingContext.textureUnit->setSampler( sampler );
 				}
@@ -939,17 +940,15 @@ namespace castor3d
 			return ( *reinterpret_cast< castor::Point2ui const * >( reinterpret_cast< uint8_t const * >( &config ) + offset ) )[0];
 		}
 
-		SamplerSPtr mergeSamplers( SamplerSPtr lhs
-			, SamplerSPtr rhs
-			, castor::String const & name )
+		SamplerRes mergeSamplers( SamplerResPtr lhsRes
+			, SamplerResPtr rhsRes
+			, castor::String const & name
+			, SamplerCache & cache )
 		{
-			if ( lhs == rhs )
-			{
-				return lhs;
-			}
-
+			auto lhs = lhsRes.lock();
+			auto rhs = rhsRes.lock();
 			log::debug << ( name + cuT( " - Merging samplers.\n" ) );
-			auto sampler = std::make_shared< Sampler >( *lhs->getEngine(), name );
+			auto sampler = castor::makeResource< Sampler, castor::String >( name, *lhs->getEngine() );
 			sampler->setBorderColour( lhs->getBorderColour() );
 			sampler->setCompareOp( lhs->getCompareOp() );
 			sampler->setMagFilter( lhs->getMagFilter() == VkFilter::VK_FILTER_NEAREST
@@ -1437,12 +1436,6 @@ namespace castor3d
 					return lhs->getFlags() < rhs->getFlags();
 				} );
 
-			for ( auto & unit : m_textureUnits )
-			{
-				getOwner()->getOwner()->getMaterialCache().registerUnit( *unit );
-			}
-
-			getOwner()->getOwner()->getMaterialCache().registerPass( *this );
 			m_texturesReduced = true;
 		}
 	}
@@ -1693,9 +1686,19 @@ namespace castor3d
 					, rhsDstMask
 					, name
 					, resultConfig );
-				newUnit->setOwnSampler( mergeSamplers( lhsUnit->getSampler()
-					, rhsUnit->getSampler()
-					, getOwner()->getName() + name ) );
+
+				if ( lhsUnit->getSampler().lock() == rhsUnit->getSampler().lock() )
+				{
+					newUnit->setSampler( lhsUnit->getSampler() );
+				}
+				else
+				{
+					newUnit->setOwnSampler( mergeSamplers( lhsUnit->getSampler()
+						, rhsUnit->getSampler()
+						, getOwner()->getName() + name
+						, lhsUnit->getEngine()->getSamplerCache() ) );
+				}
+
 				result.push_back( newUnit );
 				CU_Require( result.back()->isInitialised() );
 			}

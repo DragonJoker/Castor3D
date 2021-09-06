@@ -179,9 +179,9 @@ namespace castor3d
 			return m_configuration;
 		}
 
-		SamplerSPtr getSampler()const
+		SamplerResPtr getSampler()const
 		{
-			return m_sampler.lock();
+			return m_sampler;
 		}
 
 		bool isTextured()const
@@ -248,15 +248,15 @@ namespace castor3d
 			m_renderTarget = value;
 		}
 
-		void setSampler( SamplerSPtr value )
+		void setSampler( SamplerResPtr value )
 		{
 			m_sampler = value;
 		}
 
-		void setOwnSampler( SamplerSPtr value )
+		void setOwnSampler( SamplerRes value )
 		{
-			m_ownSampler = value;
-			setSampler( m_ownSampler );
+			m_ownSampler = std::move( value );
+			setSampler( { m_ownSampler } );
 		}
 
 		void setId( uint32_t value )
@@ -284,8 +284,8 @@ namespace castor3d
 		castor::Matrix4x4f m_transformations;
 		TextureLayoutSPtr m_texture;
 		RenderTargetWPtr m_renderTarget;
-		SamplerWPtr m_sampler;
-		SamplerSPtr m_ownSampler;
+		SamplerResPtr m_sampler;
+		SamplerRes m_ownSampler;
 		ashes::WriteDescriptorSet m_descriptor;
 		uint32_t m_id{ 0u };
 		mutable bool m_changed;

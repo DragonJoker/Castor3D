@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_PluginModule_H___
 #define ___C3D_PluginModule_H___
 
-#include "Castor3D/Castor3DModule.hpp"
+#include "Castor3D/Cache/CacheModule.hpp"
 
 #include <CastorUtils/Data/Path.hpp>
 
@@ -159,8 +159,48 @@ namespace castor3d
 	CU_DeclareMap( castor::Path, castor::DynamicLibrarySPtr, DynamicLibraryPtrPath );
 	CU_DeclareArray( DynamicLibraryPtrPathMap, PluginType::eCount, DynamicLibraryPtrPathMap );
 	CU_DeclareMap( castor::Path, PluginType, PluginTypePath );
+	/**
+	*\~english
+	*	Helper structure to specialise a cache behaviour.
+	*\remarks
+	*	Specialisation for Plugin.
+	*\~french
+	*	Structure permettant de spécialiser le comportement d'un cache.
+	*\remarks
+	*	Spécialisation pour Plugin.
+	*/
+	template<>
+	struct PtrCacheTraitsT< Plugin, castor::String >
+		: PtrCacheTraitsBaseT< Plugin, castor::String >
+	{
+		using ResT = Plugin;
+		using KeyT = castor::String;
+		using Base = PtrCacheTraitsBaseT< ResT, KeyT >;
+		using ElementT = typename Base::ElementT;
+		using ElementPtrT = typename Base::ElementPtrT;
+
+		C3D_API static const castor::String Name;
+	};
+
+	using PluginCacheTraits = PtrCacheTraitsT< Plugin, castor::String >;
+	using PluginCache = castor::ResourceCacheT< Plugin
+		, castor::String
+		, PluginCacheTraits >;
+
+	using PluginRes = PluginCacheTraits::ElementPtrT;
+	using PluginResPtr = PluginCacheTraits::ElementObsT;
+
+	CU_DeclareCUSmartPtr( castor3d, PluginCache, C3D_API );
 
 	//@}
+}
+
+namespace castor
+{
+	template<>
+	struct ResourceCacheT< castor3d::Plugin
+		, String
+		, castor3d::PluginCacheTraits >;
 }
 
 #endif

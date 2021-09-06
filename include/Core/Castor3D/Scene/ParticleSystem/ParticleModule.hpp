@@ -200,6 +200,36 @@ namespace castor3d
 	CU_DeclareVector( ParticleUpdaterUPtr, ParticleUpdater );
 
 	using ParticleValues = ParametersT< size_t >;
+	/**
+	*\~english
+	*	Helper structure to specialise a scene objects cache behaviour.
+	*\remarks
+	*	Specialisation for ParticleSystem.
+	*\~french
+	*	Structure permettant de spécialiser le comportement d'un cache d'objets de scène.
+	*\remarks
+	*	Spécialisation pour ParticleSystem.
+	*/
+	template<>
+	struct ObjectCacheTraitsT< ParticleSystem, castor::String >
+		: ObjectCacheTraitsBaseT< ParticleSystem, castor::String >
+	{
+		using KeyT = castor::String;
+		using ElementT = ParticleSystem;
+		using BaseT = ObjectCacheTraitsBaseT< ElementT, KeyT >;
+		using ElementPtrT = typename BaseT::ElementPtrT;
+
+		C3D_API static const castor::String Name;
+	};
+
+	using ParticleSystemCacheTraits = ObjectCacheTraitsT< ParticleSystem, castor::String >;
+	using ParticleSystemCache = ObjectCacheT< ParticleSystem
+		, castor::String
+		, ParticleSystemCacheTraits >;
+	using ParticleSystemRes = CameraCacheTraits::ElementPtrT;
+	using ParticleSystemResPtr = CameraCacheTraits::ElementObsT;
+
+	CU_DeclareCUSmartPtr( castor3d, ParticleSystemCache, C3D_API );
 
 	//@}
 	//@}
