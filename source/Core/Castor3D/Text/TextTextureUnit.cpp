@@ -79,9 +79,9 @@ namespace castor
 			{
 				if ( auto block{ beginBlock( file, cuT( "texture_unit" ) ) } )
 				{
-					if ( unit.getSampler() && unit.getSampler()->getName() != cuT( "Default" ) )
+					if ( unit.getSampler().lock() && unit.getSampler().lock()->getName() != cuT( "Default" ) )
 					{
-						result = writeName( file, cuT( "sampler" ), unit.getSampler()->getName() );
+						result = writeName( file, cuT( "sampler" ), unit.getSampler().lock()->getName() );
 					}
 
 					if ( result && unit.getTexture()->getMipmapCount() > 1 )

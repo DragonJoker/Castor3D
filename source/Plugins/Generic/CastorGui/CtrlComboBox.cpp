@@ -87,9 +87,10 @@ namespace CastorGui
 			} );
 
 		TextOverlaySPtr text = getEngine().getOverlayCache().add( cuT( "T_CtrlCombo_" ) + string::toString( getId() )
+			, getEngine()
 			, OverlayType::eText
 			, nullptr
-			, getBackground()->getOverlay().shared_from_this() )->getTextOverlay();
+			, &getBackground()->getOverlay() ).lock()->getTextOverlay();
 		text->setPixelSize( Size( getSize().getWidth() - getSize().getHeight(), getSize().getHeight() ) );
 		text->setVAlign( VAlign::eCenter );
 		m_text = text;
@@ -99,48 +100,48 @@ namespace CastorGui
 	{
 	}
 
-	void ComboBoxCtrl::setTextMaterial( castor3d::MaterialSPtr p_material )
+	void ComboBoxCtrl::setTextMaterial( castor3d::MaterialRPtr p_material )
 	{
 		m_choices->setTextMaterial( p_material );
 		m_expand->setTextMaterial( p_material );
 	}
 
-	void ComboBoxCtrl::setSelectedItemBackgroundMaterial( MaterialSPtr p_material )
+	void ComboBoxCtrl::setSelectedItemBackgroundMaterial( MaterialRPtr p_material )
 	{
 		m_choices->setSelectedItemBackgroundMaterial( p_material );
 	}
 
-	void ComboBoxCtrl::setSelectedItemForegroundMaterial( MaterialSPtr p_material )
+	void ComboBoxCtrl::setSelectedItemForegroundMaterial( MaterialRPtr p_material )
 	{
 		m_choices->setSelectedItemForegroundMaterial( p_material );
 	}
 
-	void ComboBoxCtrl::setHighlightedItemBackgroundMaterial( MaterialSPtr p_material )
+	void ComboBoxCtrl::setHighlightedItemBackgroundMaterial( MaterialRPtr p_material )
 	{
 		m_choices->setHighlightedItemBackgroundMaterial( p_material );
 	}
 
-	void ComboBoxCtrl::setItemBackgroundMaterial( MaterialSPtr p_material )
+	void ComboBoxCtrl::setItemBackgroundMaterial( MaterialRPtr p_material )
 	{
 		m_choices->setItemBackgroundMaterial( p_material );
 	}
 
-	MaterialSPtr ComboBoxCtrl::getSelectedItemBackgroundMaterial()const
+	MaterialRPtr ComboBoxCtrl::getSelectedItemBackgroundMaterial()const
 	{
 		return m_choices->getSelectedItemBackgroundMaterial();
 	}
 
-	MaterialSPtr ComboBoxCtrl::getSelectedItemForegroundMaterial()const
+	MaterialRPtr ComboBoxCtrl::getSelectedItemForegroundMaterial()const
 	{
 		return m_choices->getSelectedItemForegroundMaterial();
 	}
 
-	MaterialSPtr ComboBoxCtrl::getHighlightedItemBackgroundMaterial()const
+	MaterialRPtr ComboBoxCtrl::getHighlightedItemBackgroundMaterial()const
 	{
 		return m_choices->getHighlightedItemBackgroundMaterial();
 	}
 
-	MaterialSPtr ComboBoxCtrl::getItemBackgroundMaterial()const
+	MaterialRPtr ComboBoxCtrl::getItemBackgroundMaterial()const
 	{
 		return m_choices->getItemBackgroundMaterial();
 	}
@@ -227,7 +228,7 @@ namespace CastorGui
 
 		if ( !text->getFontTexture() || !text->getFontTexture()->getFont() )
 		{
-			text->setFont(manager.getDefaultFont()->getName() );
+			text->setFont( manager.getDefaultFont().lock()->getName() );
 		}
 
 		int sel = getSelected();
@@ -289,12 +290,12 @@ namespace CastorGui
 		m_choices->setPosition( Position( 0, p_value.getHeight() ) );
 	}
 
-	void ComboBoxCtrl::doSetBackgroundMaterial( MaterialSPtr p_material )
+	void ComboBoxCtrl::doSetBackgroundMaterial( MaterialRPtr p_material )
 	{
 		m_choices->setBackgroundMaterial( getBackgroundMaterial() );
 	}
 
-	void ComboBoxCtrl::doSetForegroundMaterial( MaterialSPtr p_material )
+	void ComboBoxCtrl::doSetForegroundMaterial( MaterialRPtr p_material )
 	{
 		m_expand->setForegroundMaterial( getForegroundMaterial() );
 		m_choices->setForegroundMaterial( getForegroundMaterial() );

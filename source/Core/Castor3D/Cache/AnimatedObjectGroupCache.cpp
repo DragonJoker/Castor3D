@@ -9,30 +9,34 @@
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstance.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, AnimatedObjectGroupCache )
+
+namespace castor3d
+{
+	const castor::String PtrCacheTraitsT< castor3d::AnimatedObjectGroup, castor::String >::Name = cuT( "AnimatedObjectGroup" );
+}
+
 namespace castor
 {
 	using namespace castor3d;
 
-	ResourceCacheT< AnimatedObjectGroup, String >::ResourceCacheT( Scene & scene )
+	ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::ResourceCacheT( Scene & scene )
 		: OwnedBy< Scene >{ scene }
 		, ElementCacheT{ scene.getEngine()->getLogger()
-			, [&scene]( castor::String const & name )
+			, [this]( ElementT & resource )
 			{
-				return std::make_shared< AnimatedObjectGroup >( name, scene );
+				doRegister( resource );
 			}
-			, [this]( ElementPtrT resource )
+			, [this]( ElementT & resource )
 			{
-				doRegister( *resource );
+				doUnregister( resource );
 			}
-			, [this]( ElementPtrT resource )
-			{
-				doUnregister( *resource );
-			} }
+			, castor::ResourceMergerT< AnimatedObjectGroupCache >{ scene.getName() } }
 		, m_engine{ *scene.getEngine() }
 	{
 	}
 
-	void ResourceCacheT< AnimatedObjectGroup, String >::update( CpuUpdater & updater )
+	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::update( CpuUpdater & updater )
 	{
 		for ( auto & pair : m_skeletonEntries )
 		{
@@ -53,17 +57,17 @@ namespace castor
 		}
 	}
 
-	ResourceCacheT< AnimatedObjectGroup, String >::MeshPoolsEntry ResourceCacheT< AnimatedObjectGroup, String >::getUbos( AnimatedMesh const & mesh )const
+	ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::MeshPoolsEntry ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::getUbos( AnimatedMesh const & mesh )const
 	{
 		return m_meshEntries.at( &mesh );
 	}
 
-	ResourceCacheT< AnimatedObjectGroup, String >::SkeletonPoolsEntry ResourceCacheT< AnimatedObjectGroup, String >::getUbos( AnimatedSkeleton const & skeleton )const
+	ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::SkeletonPoolsEntry ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::getUbos( AnimatedSkeleton const & skeleton )const
 	{
 		return m_skeletonEntries.at( &skeleton );
 	}
 
-	void ResourceCacheT< AnimatedObjectGroup, String >::clear( RenderDevice const & device )
+	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::clear( RenderDevice const & device )
 	{
 		auto lock( castor::makeUniqueLock( *this ) );
 		doClearNoLock();
@@ -83,7 +87,7 @@ namespace castor
 		m_skeletonEntries.clear();
 	}
 
-	ResourceCacheT< AnimatedObjectGroup, String >::MeshPoolsEntry ResourceCacheT< AnimatedObjectGroup, String >::doCreateEntry( RenderDevice const & device
+	ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::MeshPoolsEntry ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doCreateEntry( RenderDevice const & device
 		, AnimatedObjectGroup const & group
 		, AnimatedMesh const & mesh )
 	{
@@ -96,7 +100,7 @@ namespace castor
 		};
 	}
 
-	ResourceCacheT< AnimatedObjectGroup, String >::SkeletonPoolsEntry ResourceCacheT< AnimatedObjectGroup, String >::doCreateEntry( RenderDevice const & device
+	ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::SkeletonPoolsEntry ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doCreateEntry( RenderDevice const & device
 		, AnimatedObjectGroup const & group
 		, AnimatedSkeleton const & skeleton )
 	{
@@ -109,7 +113,7 @@ namespace castor
 		};
 	}
 
-	void ResourceCacheT< AnimatedObjectGroup, String >::doRemoveEntry( RenderDevice const & device
+	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doRemoveEntry( RenderDevice const & device
 		, AnimatedMesh const & mesh )
 	{
 		auto & uboPools = *device.uboPools;
@@ -118,7 +122,7 @@ namespace castor
 		uboPools.putBuffer( entry.morphingUbo );
 	}
 
-	void ResourceCacheT< AnimatedObjectGroup, String >::doRemoveEntry( RenderDevice const & device
+	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doRemoveEntry( RenderDevice const & device
 		, AnimatedSkeleton const & skeleton )
 	{
 		auto & uboPools = *device.uboPools;
@@ -127,7 +131,7 @@ namespace castor
 		uboPools.putBuffer( entry.skinningUbo );
 	}
 
-	void ResourceCacheT< AnimatedObjectGroup, String >::doRegister( AnimatedObjectGroup & group )
+	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doRegister( AnimatedObjectGroup & group )
 	{
 		m_meshAddedConnections.emplace( &group
 			, group.onMeshAdded.connect( [this]( AnimatedObjectGroup const & group
@@ -177,7 +181,7 @@ namespace castor
 				} ) );
 	}
 
-	void ResourceCacheT< AnimatedObjectGroup, String >::doUnregister( AnimatedObjectGroup & group )
+	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doUnregister( AnimatedObjectGroup & group )
 	{
 		m_engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender
 			, [this, &group]( RenderDevice const & device

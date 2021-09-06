@@ -68,7 +68,7 @@ namespace C3dAssimp
 			, uint32_t aiMeshIndex
 			, aiScene const & aiScene
 			, castor3d::Submesh & submesh );
-		castor3d::MaterialSPtr doProcessMaterial( castor3d::Scene & p_scene
+		castor3d::MaterialResPtr doProcessMaterial( castor3d::Scene & p_scene
 			, aiMaterial const & p_aiMaterial );
 		castor3d::BoneSPtr doAddBone( castor::String const & p_name
 			, castor::Matrix4x4f const & p_offset

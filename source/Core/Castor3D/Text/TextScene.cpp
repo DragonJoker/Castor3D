@@ -79,8 +79,8 @@ namespace castor
 		template<>
 		bool writable< Geometry >( Geometry const & object )
 		{
-			return object.getMesh()
-				&& object.getMesh()->isSerialisable();
+			return object.getMesh().lock()
+				&& object.getMesh().lock()->isSerialisable();
 		}
 
 		template< typename CacheTypeT, typename FilterT >
@@ -182,9 +182,11 @@ namespace castor
 
 				for ( auto const & it : cache )
 				{
-					if ( result && filter( *it.second ) )
+					auto & elem = static_cast< typename CacheTypeT::ElementT const & >( *it.second );
+
+					if ( result && filter( elem ) )
 					{
-						result = writer.writeSub( file, *it.second, subfolder );
+						result = writer.writeSub( file, elem, subfolder );
 					}
 				}
 			}
@@ -227,11 +229,11 @@ namespace castor
 				{
 					if ( result )
 					{
-						auto elem = view.find( name );
+						auto & elem = static_cast< typename ViewTypeT::ElementT const & >( *view.find( name ).lock() );
 
-						if ( filter( *elem ) )
+						if ( filter( elem ) )
 						{
-							result = writer.writeSub( file, *elem );
+							result = writer.writeSub( file, elem );
 						}
 					}
 				}
@@ -272,11 +274,11 @@ namespace castor
 				{
 					if ( result )
 					{
-						auto elem = view.find( name );
+						auto & elem = static_cast< typename ViewTypeT::ElementT const & >( *view.find( name ).lock() );
 
-						if ( filter( *elem ) )
+						if ( filter( elem ) )
 						{
-							result = writer.writeSub( file, *elem, folder );
+							result = writer.writeSub( file, elem, folder );
 						}
 					}
 				}
@@ -334,11 +336,11 @@ namespace castor
 				{
 					if ( result )
 					{
-						auto elem = view.find( name );
+						auto & elem = static_cast< typename ViewTypeT::ElementT const & >( *view.find( name ).lock() );
 
-						if ( filter( *elem ) )
+						if ( filter( elem ) )
 						{
-							result = writer.writeSub( file, *elem, folder, subfolder );
+							result = writer.writeSub( file, elem, folder, subfolder );
 						}
 					}
 				}

@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Data/BinaryLoader.hpp"
 #include "CastorUtils/Data/BinaryWriter.hpp"
 #include "CastorUtils/Data/Path.hpp"
-#include "CastorUtils/Design/Named.hpp"
+#include "CastorUtils/Design/Resource.hpp"
 #include "CastorUtils/Graphics/Colour.hpp"
 #include "CastorUtils/Graphics/PixelBuffer.hpp"
 #include "CastorUtils/Graphics/ImageLayout.hpp"
@@ -51,7 +51,7 @@ namespace castor
 			, Path const & path
 			, Size const & size
 			, uint8_t const * buffer = nullptr )
-			: Resource{ std::move( name ) }
+			: Named{ std::move( name ) }
 			, m_buffer{ std::make_shared< PxBuffer< PFDst > >( size, buffer, PFSrc ) }
 			, m_pathFile{ std::move( path ) }
 		{
@@ -246,71 +246,71 @@ namespace castor
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline uint32_t getLevels()const
+		uint32_t getLevels()const
 		{
 			return m_layout.levels;
 		}
 		
-		inline Size getDimensions()const
+		Size getDimensions()const
 		{
 			return m_layout.dimensions();
 		}
 
-		inline std::size_t getSize( uint32_t level = 0u )const
+		std::size_t getSize( uint32_t level = 0u )const
 		{
 			return std::size_t( m_layout.layerMipSize( level ) );
 		}
 
-		inline uint32_t getWidth()const
+		uint32_t getWidth()const
 		{
 			return getDimensions().getWidth();
 		}
 
-		inline uint32_t getHeight()const
+		uint32_t getHeight()const
 		{
 			return getDimensions().getHeight();
 		}
 
-		inline Path getPath()const
+		Path getPath()const
 		{
 			return m_pathFile;
 		}
 
-		inline castor::ImageLayout::Buffer getBuffer()
+		castor::ImageLayout::Buffer getBuffer()
 		{
 			CU_Require( hasBuffer() );
 			return castor::makeArrayView( m_buffer->getPtr()
 				, m_buffer->getPtr() + m_buffer->getSize() );
 		}
 
-		inline castor::ImageLayout::ConstBuffer getBuffer()const
+		castor::ImageLayout::ConstBuffer getBuffer()const
 		{
 			CU_Require( hasBuffer() );
 			return castor::makeArrayView( m_buffer->getConstPtr()
 				, m_buffer->getConstPtr() + m_buffer->getSize() );
 		}
 
-		inline castor::ImageLayout::Buffer getBuffer( uint32_t index )
+		castor::ImageLayout::Buffer getBuffer( uint32_t index )
 		{
 			CU_Require( hasBuffer() );
 			return getLayerBuffer( m_layout, *m_buffer, index );
 		}
 
-		inline castor::ImageLayout::ConstBuffer getBuffer( uint32_t index )const
+		castor::ImageLayout::ConstBuffer getBuffer( uint32_t index )const
 		{
 			CU_Require( hasBuffer() );
 			auto const & buffer = *m_buffer;
 			return getLayerBuffer( m_layout, buffer, index );
 		}
 
-		inline castor::ImageLayout::Buffer getBuffer( uint32_t index
+		castor::ImageLayout::Buffer getBuffer( uint32_t index
 			, uint32_t level )
 		{
 			CU_Require( hasBuffer() );
 			return getLayerMipBuffer( m_layout, *m_buffer, index, level );
 		}
 
-		inline castor::ImageLayout::ConstBuffer getBuffer( uint32_t index
+		castor::ImageLayout::ConstBuffer getBuffer( uint32_t index
 			, uint32_t level )const
 		{
 			CU_Require( hasBuffer() );
@@ -318,41 +318,49 @@ namespace castor
 			return getLayerMipBuffer( m_layout, buffer, index, level );
 		}
 
-		inline bool hasBuffer()const
+		bool hasBuffer()const
 		{
 			return m_buffer != nullptr;
 		}
 
-		inline PxBufferBase const & getPxBuffer()const
+		PxBufferBase const & getPxBuffer()const
 		{
 			CU_Require( hasBuffer() );
 			return *m_buffer;
 		}
 
-		inline PxBufferBase & getPxBuffer()
+		PxBufferBase & getPxBuffer()
 		{
 			CU_Require( hasBuffer() );
 			return *m_buffer;
 		}
 
-		inline PxBufferBaseSPtr getPixels()const
+		PxBufferBaseSPtr getPixels()const
 		{
 			return m_buffer;
 		}
 
-		inline ImageLayout const & getLayout()const
+		ImageLayout const & getLayout()const
 		{
 			return m_layout;
 		}
 
-		inline ImageLayout & getLayout()
+		ImageLayout & getLayout()
 		{
 			return m_layout;
 		}
 
-		inline PixelFormat getPixelFormat()const
+		PixelFormat getPixelFormat()const
 		{
 			return m_layout.format;
+		}
+
+		void initialise()
+		{
+		}
+
+		void cleanup()
+		{
 		}
 		/**@}*/
 

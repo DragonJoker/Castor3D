@@ -14,14 +14,14 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	SamplerSPtr createSampler( Engine & engine
+	SamplerResPtr createSampler( Engine & engine
 		, castor::String const & baseName
 		, VkFilter filter
 		, VkImageSubresourceRange const * range );
 
 	class Sampler
-		: public castor::OwnedBy< Engine >
-		, public castor::Named
+		: public castor::Named
+		, public castor::OwnedBy< Engine >
 	{
 	public:
 		/**
@@ -34,8 +34,8 @@ namespace castor3d
 		 *\param[in]	engine	Le moteur
 		 *\param[in]	name	Le nom du sampler
 		 */
-		C3D_API Sampler( Engine & engine
-			, castor::String const & name );
+		C3D_API Sampler( castor::String const & name
+			, Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -48,8 +48,8 @@ namespace castor3d
 		 *\param[in]	name		Le nom du sampler.
 		 *\param[in]	createInfo	Les informations de création.
 		 */
-		C3D_API Sampler( Engine & engine
-			, castor::String const & name
+		C3D_API Sampler( castor::String const & name
+			, Engine & engine
 			, ashes::SamplerCreateInfo createInfo );
 		/**
 		 *\~english

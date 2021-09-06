@@ -6,7 +6,11 @@ See LICENSE file in root folder
 
 #include "Castor3D/Castor3DModule.hpp"
 #include "Castor3D/Buffer/BufferModule.hpp"
-#include "Castor3D/Cache/CacheModule.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
+#include "Castor3D/Cache/OverlayCache.hpp"
+#include "Castor3D/Cache/PluginCache.hpp"
+#include "Castor3D/Cache/ShaderCache.hpp"
+#include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Event/Frame/FrameEventModule.hpp"
 #include "Castor3D/Event/UserInput/UserInputEventModule.hpp"
 #include "Castor3D/Material/Pass/PassModule.hpp"
@@ -404,12 +408,12 @@ namespace castor3d
 			return m_renderSystem.get();
 		}
 
-		SamplerSPtr getDefaultSampler()const
+		auto getDefaultSampler()const
 		{
 			return m_defaultSampler;
 		}
 
-		SamplerSPtr getLightsSampler()const
+		auto getLightsSampler()const
 		{
 			return m_lightsSampler;
 		}
@@ -605,8 +609,8 @@ namespace castor3d
 		RenderSystemUPtr m_renderSystem;
 		bool m_cleaned{ true };
 		bool m_threaded{ false };
-		SamplerSPtr m_defaultSampler;
-		SamplerSPtr m_lightsSampler;
+		SamplerResPtr m_defaultSampler;
+		SamplerResPtr m_lightsSampler;
 		castor::ImageLoader m_imageLoader;
 		castor::ImageWriter m_imageWriter;
 		DECLARE_CACHE_MEMBER( shader, ShaderProgram );

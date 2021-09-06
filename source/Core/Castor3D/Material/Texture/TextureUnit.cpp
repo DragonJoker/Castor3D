@@ -5,6 +5,7 @@
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
@@ -53,7 +54,7 @@ namespace castor3d
 			, VkImageCreateFlags createFlags
 			, VkImageUsageFlags usageFlags )
 		{
-			SamplerSPtr sampler;
+			SamplerResPtr sampler;
 
 			if ( engine.getSamplerCache().has( name ) )
 			{
@@ -61,13 +62,13 @@ namespace castor3d
 			}
 			else
 			{
-				sampler = engine.getSamplerCache().add( name );
-				sampler->setMinFilter( VK_FILTER_LINEAR );
-				sampler->setMagFilter( VK_FILTER_LINEAR );
-				sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				sampler->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				sampler->setBorderColour( VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK );
+				sampler = engine.getSamplerCache().add( name, engine );
+				sampler.lock()->setMinFilter( VK_FILTER_LINEAR );
+				sampler.lock()->setMagFilter( VK_FILTER_LINEAR );
+				sampler.lock()->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				sampler.lock()->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				sampler.lock()->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				sampler.lock()->setBorderColour( VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK );
 			}
 
 			ashes::ImageCreateInfo image
@@ -283,7 +284,7 @@ namespace castor3d
 		else if ( m_texture )
 		{
 			result = m_texture->initialise( device, queueData );
-			auto sampler = getSampler();
+			auto sampler = getSampler().lock();
 			CU_Require( sampler );
 			sampler->initialise( device );
 
@@ -324,7 +325,7 @@ namespace castor3d
 		{
 			auto & device = *m_device;
 			m_device = nullptr;
-			auto sampler = getSampler();
+			auto sampler = getSampler().lock();
 
 			if ( sampler )
 			{

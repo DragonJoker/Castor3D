@@ -17,16 +17,18 @@
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 
-using namespace castor;
+CU_ImplementCUSmartPtr( castor3d, LightCache )
 
 namespace castor3d
 {
 	namespace
 	{
-		static String const C3D_UniqueDirectionalLight = cuT( "Only one directional light is allowed." );
+		static castor::String const C3D_UniqueDirectionalLight = cuT( "Only one directional light is allowed." );
 	}
 
-	ObjectCacheT< Light, castor::String >::ObjectCacheT( Scene & scene
+	const castor::String ObjectCacheTraitsT< Light, castor::String >::Name = cuT( "Light" );
+
+	ObjectCacheT< Light, castor::String, LightCacheTraits >::ObjectCacheT( Scene & scene
 		, SceneNodeSPtr rootNode
 		, SceneNodeSPtr rootCameraNode
 		, SceneNodeSPtr rootObjectNode )
@@ -34,90 +36,43 @@ namespace castor3d
 			, rootNode
 			, rootCameraNode
 			, rootObjectNode
-			, [this]( castor::String const & name
-				, SceneNode & parent
-				, LightType lightType )
+			, [this]( ElementT & element )
 			{
-				return std::make_shared< Light >( name
-					, *getScene()
-					, parent
-					, getScene()->getLightsFactory()
-					, lightType );
-			}
-			, [this]( ElementPtrT element )
-			{
-				getScene()->registerLight( *element );
-				m_dirtyLights.emplace_back( element.get() );
-				m_connections.emplace( element.get()
-					, element->onChanged.connect( [this]( Light & light )
+				getScene()->registerLight( element );
+				m_dirtyLights.emplace_back( &element );
+				m_connections.emplace( &element
+					, element.onChanged.connect( [this]( Light & light )
 						{
 							onLightChanged( light );
 						} ) );
-				auto index = size_t( element->getLightType() );
+				auto index = size_t( element.getLightType() );
 				auto it = std::find( m_typeSortedLights[index].begin()
 					, m_typeSortedLights[index].end()
-					, element );
+					, &element );
 
 				if ( it == m_typeSortedLights[index].end() )
 				{
-					m_typeSortedLights[index].push_back( element );
+					m_typeSortedLights[index].push_back( &element );
 				}
 			}
-			, [this]( ElementPtrT element )
+			, [this]( ElementT & element )
 			{
-				auto index = size_t( element->getLightType() );
+				auto index = size_t( element.getLightType() );
 				auto it = std::find( m_typeSortedLights[index].begin()
 					, m_typeSortedLights[index].end()
-					, element );
+					, &element );
 
 				if ( it != m_typeSortedLights[index].end() )
 				{
 					m_typeSortedLights[index].erase( it );
 				}
 
-				m_connections.erase( element.get() );
-				getScene()->unregisterLight( *element );
+				m_connections.erase( &element );
+				getScene()->unregisterLight( element );
 			}
-			, [this]( ElementObjectCacheT const & source
-				, ElementContT & destination
-				, ElementPtrT element
-				, SceneNodeSPtr rootCameraNode
-				, SceneNodeSPtr rootObjectNode )
-			{
-				if ( element->getParent()->getName() == rootCameraNode->getName() )
-				{
-					element->detach();
-					element->attachTo( *rootCameraNode );
-				}
-				else if ( element->getParent()->getName() == rootObjectNode->getName() )
-				{
-					element->detach();
-					element->attachTo( *rootObjectNode );
-				}
-
-				auto name = element->getName();
-				auto ires = destination.emplace( name, element );
-
-				while ( !ires.second )
-				{
-					name = getScene()->getName() + cuT( "_" ) + name;
-					ires = destination.emplace( name, element );
-				}
-
-				element->setName( name );
-			}
-			, []( ElementPtrT element
-				, SceneNode & parent
-				, SceneNodeSPtr rootNode
-				, SceneNodeSPtr rootCameraNode
-				, SceneNodeSPtr rootObjectNode )
-			{
-				parent.attachObject( *element );
-			}
-			, [this]( ElementPtrT element )
-			{
-				element->detach();
-			} }
+			, MovableMergerT< LightCache >{ scene.getName() }
+			, MovableAttacherT< LightCache >{}
+			, MovableDetacherT< LightCache >{} }
 	{
 		auto & engine = *getScene()->getEngine();
 		m_lightsBuffer.resize( 300ull * shader::getMaxLightComponentsCount() );
@@ -132,10 +87,10 @@ namespace castor3d
 			, m_textureBuffer->getBuffer()
 			, VK_FORMAT_R32G32B32A32_SFLOAT
 			, 0u
-			, uint32_t( m_lightsBuffer.size() * sizeof( Point4f ) ) );
+			, uint32_t( m_lightsBuffer.size() * sizeof( castor::Point4f ) ) );
 	}
 
-	void ObjectCacheT< Light, castor::String >::cleanup()
+	void ObjectCacheT< Light, castor::String, LightCacheTraits >::cleanup()
 	{
 		auto lock( castor::makeUniqueLock( *this ) );
 		m_dirtyLights.clear();
@@ -143,7 +98,7 @@ namespace castor3d
 		ElementObjectCacheT::doCleanupNoLock();
 	}
 
-	void ObjectCacheT< Light, castor::String >::update( CpuUpdater & updater )
+	void ObjectCacheT< Light, castor::String, LightCacheTraits >::update( CpuUpdater & updater )
 	{
 		auto lock( castor::makeUniqueLock( *this ) );
 
@@ -160,13 +115,13 @@ namespace castor3d
 		}
 	}
 
-	void ObjectCacheT< Light, castor::String >::update( GpuUpdater & updater )
+	void ObjectCacheT< Light, castor::String, LightCacheTraits >::update( GpuUpdater & updater )
 	{
 		auto lock( castor::makeUniqueLock( *this ) );
 		auto & camera = *updater.camera;
 		uint32_t index = 0;
 		uint32_t lightIndex = 0;
-		Point4f * data = m_lightsBuffer.data();
+		castor::Point4f * data = m_lightsBuffer.data();
 
 		for ( auto lights : m_typeSortedLights )
 		{
@@ -196,7 +151,7 @@ namespace castor3d
 		}
 	}
 
-	ashes::WriteDescriptorSet ObjectCacheT< Light, castor::String >::getDescriptorWrite( uint32_t binding )const
+	ashes::WriteDescriptorSet ObjectCacheT< Light, castor::String, LightCacheTraits >::getDescriptorWrite( uint32_t binding )const
 	{
 		auto & buffer = getBuffer().getBuffer();
 		auto & view = getView();
@@ -209,12 +164,12 @@ namespace castor3d
 		return write;
 	}
 
-	void ObjectCacheT< Light, castor::String >::onLightChanged( Light & light )
+	void ObjectCacheT< Light, castor::String, LightCacheTraits >::onLightChanged( Light & light )
 	{
 		m_dirtyLights.emplace_back( &light );
 	}
 
-	bool ObjectCacheT< Light, castor::String >::doCheckUniqueDirectionalLight( LightType toAdd )
+	bool ObjectCacheT< Light, castor::String, LightCacheTraits >::doCheckUniqueDirectionalLight( LightType toAdd )
 	{
 		bool result = toAdd != LightType::eDirectional
 			|| getLightsCount( LightType::eDirectional ) == 0u;

@@ -313,6 +313,32 @@ namespace castor3d
 		SceneNodeMap m_children;
 		MovableArray m_objects;
 	};
+
+	template< typename CacheT >
+	struct SceneNodeAttacherT
+	{
+		using ElementT = typename CacheT::ElementT;
+
+		void operator()( ElementT & element
+			, SceneNode & parent
+			, SceneNodeSPtr rootNode
+			, SceneNodeSPtr rootCameraNode
+			, SceneNodeSPtr rootObjectNode )
+		{
+			element.attachTo( parent );
+		}
+	};
+
+	template< typename CacheT >
+	struct SceneNodeDetacherT
+	{
+		using ElementT = typename CacheT::ElementT;
+
+		void operator()( ElementT & element )
+		{
+			element.detach();
+		}
+	};
 }
 
 #endif

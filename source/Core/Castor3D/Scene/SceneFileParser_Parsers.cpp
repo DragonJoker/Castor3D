@@ -163,15 +163,16 @@ namespace castor3d
 		else
 		{
 			params[0]->get( parsingContext.strName );
-			parsingContext.material = parsingContext.parser->getEngine()->getMaterialCache().tryFind( parsingContext.strName );
+			parsingContext.material = parsingContext.parser->getEngine()->getMaterialCache().tryFind( parsingContext.strName ).lock().get();
 			parsingContext.passIndex = 0u;
 			parsingContext.createMaterial = parsingContext.material == nullptr;
 
 			if ( parsingContext.createMaterial )
 			{
-				parsingContext.material = std::make_shared< Material >( parsingContext.strName
+				parsingContext.ownMaterial = parsingContext.parser->getEngine()->getMaterialCache().create( parsingContext.strName
 					, *parsingContext.parser->getEngine()
 					, parsingContext.parser->getEngine()->getPassesType() );
+				parsingContext.material = parsingContext.ownMaterial.get();
 			}
 		}
 	}
@@ -189,7 +190,7 @@ namespace castor3d
 		{
 			String name;
 			params[0]->get( name );
-			parsingContext.scene = parsingContext.parser->getEngine()->getSceneCache().tryFind( name );
+			parsingContext.scene = parsingContext.parser->getEngine()->getSceneCache().tryFind( name ).lock();
 
 			if ( !parsingContext.scene )
 			{
@@ -258,8 +259,8 @@ namespace castor3d
 		{
 			String name;
 			parsingContext.parentOverlays.push_back( parsingContext.overlay );
-			auto parent = parsingContext.parentOverlays.back();
-			parsingContext.overlay = parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) );
+			auto parent = parsingContext.parentOverlays.back().get();
+			parsingContext.overlay = parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
 
 			if ( !parsingContext.overlay )
 			{
@@ -267,7 +268,7 @@ namespace castor3d
 					, OverlayType::ePanel
 					, nullptr
 					, parent );
-				parsingContext.overlay->setName( name );
+				parsingContext.overlay->rename( name );
 			}
 
 			parsingContext.overlay->setVisible( false );
@@ -287,8 +288,8 @@ namespace castor3d
 		{
 			String name;
 			parsingContext.parentOverlays.push_back( parsingContext.overlay );
-			auto parent = parsingContext.parentOverlays.back();
-			parsingContext.overlay = parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) );
+			auto parent = parsingContext.parentOverlays.back().get();
+			parsingContext.overlay = parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
 
 			if ( !parsingContext.overlay )
 			{
@@ -296,7 +297,7 @@ namespace castor3d
 					, OverlayType::eBorderPanel
 					, nullptr
 					, parent );
-				parsingContext.overlay->setName( name );
+				parsingContext.overlay->rename( name );
 			}
 
 			parsingContext.overlay->setVisible( false );
@@ -316,8 +317,8 @@ namespace castor3d
 		{
 			String name;
 			parsingContext.parentOverlays.push_back( parsingContext.overlay );
-			auto parent = parsingContext.parentOverlays.back();
-			parsingContext.overlay = parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) );
+			auto parent = parsingContext.parentOverlays.back().get();
+			parsingContext.overlay = parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
 
 			if ( !parsingContext.overlay )
 			{
@@ -325,7 +326,7 @@ namespace castor3d
 					, OverlayType::eText
 					, nullptr
 					, parent );
-				parsingContext.overlay->setName( name );
+				parsingContext.overlay->rename( name );
 			}
 
 			parsingContext.overlay->setVisible( false );
@@ -346,10 +347,11 @@ namespace castor3d
 			String name;
 			parsingContext.sampler = parsingContext.parser->getEngine()->getSamplerCache().tryFind( params[0]->get( name ) );
 
-			if ( !parsingContext.sampler )
+			if ( !parsingContext.sampler.lock() )
 			{
-				parsingContext.sampler = std::make_shared< Sampler >( *parsingContext.parser->getEngine()
-					, name );
+				parsingContext.ownSampler = parsingContext.parser->getEngine()->getSamplerCache().create( name
+					, *parsingContext.parser->getEngine() );
+				parsingContext.sampler = parsingContext.ownSampler;
 			}
 		}
 	}
@@ -473,7 +475,7 @@ namespace castor3d
 		{
 			if ( parsingContext.renderTarget->getScene() )
 			{
-				parsingContext.renderTarget->setCamera( parsingContext.renderTarget->getScene()->getCameraCache().find( params[0]->get( name ) ) );
+				parsingContext.renderTarget->setCamera( parsingContext.renderTarget->getScene()->getCameraCache().find( params[0]->get( name ) ).lock() );
 			}
 			else
 			{
@@ -648,7 +650,7 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.sampler )
+		if ( !parsingContext.sampler.lock() )
 		{
 			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
@@ -656,7 +658,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			params[0]->get( uiMode );
-			parsingContext.sampler->setMinFilter( VkFilter( uiMode ) );
+			parsingContext.sampler.lock()->setMinFilter( VkFilter( uiMode ) );
 		}
 	}
 	CU_EndAttribute()
@@ -665,7 +667,7 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.sampler )
+		if ( !parsingContext.sampler.lock() )
 		{
 			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
@@ -673,7 +675,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			params[0]->get( uiMode );
-			parsingContext.sampler->setMagFilter( VkFilter( uiMode ) );
+			parsingContext.sampler.lock()->setMagFilter( VkFilter( uiMode ) );
 		}
 	}
 	CU_EndAttribute()
@@ -682,7 +684,7 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.sampler )
+		if ( !parsingContext.sampler.lock() )
 		{
 			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
@@ -690,7 +692,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			params[0]->get( uiMode );
-			parsingContext.sampler->setMipFilter( VkSamplerMipmapMode( uiMode ) );
+			parsingContext.sampler.lock()->setMipFilter( VkSamplerMipmapMode( uiMode ) );
 		}
 	}
 	CU_EndAttribute()
@@ -699,7 +701,7 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.sampler )
+		if ( !parsingContext.sampler.lock() )
 		{
 			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
@@ -710,7 +712,7 @@ namespace castor3d
 
 			if ( rValue >= -1000 && rValue <= 1000 )
 			{
-				parsingContext.sampler->setMinLod( rValue );
+				parsingContext.sampler.lock()->setMinLod( rValue );
 			}
 			else
 			{
@@ -724,7 +726,7 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.sampler )
+		if ( !parsingContext.sampler.lock() )
 		{
 			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
@@ -735,7 +737,7 @@ namespace castor3d
 
 			if ( rValue >= -1000 && rValue <= 1000 )
 			{
-				parsingContext.sampler->setMaxLod( rValue );
+				parsingContext.sampler.lock()->setMaxLod( rValue );
 			}
 			else
 			{
@@ -749,7 +751,7 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.sampler )
+		if ( !parsingContext.sampler.lock() )
 		{
 			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
@@ -760,7 +762,7 @@ namespace castor3d
 
 			if ( rValue >= -1000 && rValue <= 1000 )
 			{
-				parsingContext.sampler->setLodBias( rValue );
+				parsingContext.sampler.lock()->setLodBias( rValue );
 			}
 			else
 			{
@@ -774,7 +776,7 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.sampler )
+		if ( !parsingContext.sampler.lock() )
 		{
 			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
@@ -782,7 +784,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			params[0]->get( uiMode );
-			parsingContext.sampler->setWrapS( VkSamplerAddressMode( uiMode ) );
+			parsingContext.sampler.lock()->setWrapS( VkSamplerAddressMode( uiMode ) );
 		}
 	}
 	CU_EndAttribute()
@@ -791,7 +793,7 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.sampler )
+		if ( !parsingContext.sampler.lock() )
 		{
 			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
@@ -799,7 +801,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			params[0]->get( uiMode );
-			parsingContext.sampler->setWrapT( VkSamplerAddressMode( uiMode ) );
+			parsingContext.sampler.lock()->setWrapT( VkSamplerAddressMode( uiMode ) );
 		}
 	}
 	CU_EndAttribute()
@@ -808,7 +810,7 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.sampler )
+		if ( !parsingContext.sampler.lock() )
 		{
 			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
@@ -816,7 +818,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			params[0]->get( uiMode );
-			parsingContext.sampler->setWrapR( VkSamplerAddressMode( uiMode ) );
+			parsingContext.sampler.lock()->setWrapR( VkSamplerAddressMode( uiMode ) );
 		}
 	}
 	CU_EndAttribute()
@@ -825,7 +827,7 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.sampler )
+		if ( !parsingContext.sampler.lock() )
 		{
 			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
@@ -833,7 +835,7 @@ namespace castor3d
 		{
 			uint32_t colour;
 			params[0]->get( colour );
-			parsingContext.sampler->setBorderColour( VkBorderColor( colour ) );
+			parsingContext.sampler.lock()->setBorderColour( VkBorderColor( colour ) );
 		}
 	}
 	CU_EndAttribute()
@@ -842,7 +844,7 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.sampler )
+		if ( !parsingContext.sampler.lock() )
 		{
 			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
@@ -850,7 +852,7 @@ namespace castor3d
 		{
 			bool value;
 			params[0]->get( value );
-			parsingContext.sampler->enableAnisotropicFiltering( value );
+			parsingContext.sampler.lock()->enableAnisotropicFiltering( value );
 		}
 	}
 	CU_EndAttribute()
@@ -859,7 +861,7 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.sampler )
+		if ( !parsingContext.sampler.lock() )
 		{
 			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
@@ -867,7 +869,7 @@ namespace castor3d
 		{
 			float rValue = 1000;
 			params[0]->get( rValue );
-			parsingContext.sampler->setMaxAnisotropy( rValue );
+			parsingContext.sampler.lock()->setMaxAnisotropy( rValue );
 		}
 	}
 	CU_EndAttribute()
@@ -876,7 +878,7 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.sampler )
+		if ( !parsingContext.sampler.lock() )
 		{
 			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
@@ -884,7 +886,7 @@ namespace castor3d
 		{
 			uint32_t mode;
 			params[0]->get( mode );
-			parsingContext.sampler->enableCompare( bool( mode ) );
+			parsingContext.sampler.lock()->enableCompare( bool( mode ) );
 		}
 	}
 	CU_EndAttribute()
@@ -893,7 +895,7 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.sampler )
+		if ( !parsingContext.sampler.lock() )
 		{
 			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
@@ -901,7 +903,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			params[0]->get( uiMode );
-			parsingContext.sampler->setCompareOp( VkCompareOp( uiMode ) );
+			parsingContext.sampler.lock()->setCompareOp( VkCompareOp( uiMode ) );
 		}
 	}
 	CU_EndAttribute()
@@ -910,15 +912,20 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.sampler )
+		if ( !parsingContext.ownSampler
+			&& !parsingContext.sampler.lock() )
 		{
 			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
 		else
 		{
-			parsingContext.parser->getEngine()->getSamplerCache().add( parsingContext.sampler->getName()
-				, parsingContext.sampler
-				, true );
+			if ( parsingContext.ownSampler )
+			{
+				parsingContext.parser->getEngine()->getSamplerCache().add( parsingContext.ownSampler->getName()
+					, parsingContext.ownSampler
+					, true );
+			}
+
 			parsingContext.sampler.reset();
 		}
 	}
@@ -989,7 +996,8 @@ namespace castor3d
 		else if ( !params.empty() )
 		{
 			String name;
-			parsingContext.sampler = parsingContext.scene->getSamplerView().add( params[0]->get( name ) );
+			parsingContext.sampler = parsingContext.scene->getSamplerView().add( params[0]->get( name )
+				, *parsingContext.parser->getEngine() );
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eSampler )
@@ -1082,8 +1090,7 @@ namespace castor3d
 		{
 			params[0]->get( name );
 			parsingContext.geometry = std::make_shared< Geometry >( name
-				, *parsingContext.scene
-				, nullptr );
+				, *parsingContext.scene );
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eObject )
@@ -1155,7 +1162,7 @@ namespace castor3d
 		{
 			String name;
 			params[0]->get( name );
-			parsingContext.animGroup = parsingContext.scene->getAnimatedObjectGroupCache().add( name );
+			parsingContext.animGroup = parsingContext.scene->getAnimatedObjectGroupCache().add( name, *parsingContext.scene ).lock();
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eAnimGroup )
@@ -1172,16 +1179,16 @@ namespace castor3d
 		{
 			String name;
 			parsingContext.parentOverlays.push_back( parsingContext.overlay );
-			auto parent = parsingContext.parentOverlays.back();
-			parsingContext.overlay = parsingContext.scene->getOverlayView().tryFind( params[0]->get( name ) );
+			auto parent = parsingContext.parentOverlays.back().get();
+			parsingContext.overlay = parsingContext.scene->getOverlayView().tryFind( params[0]->get( name ) ).lock();
 
 			if ( !parsingContext.overlay )
 			{
 				parsingContext.overlay = std::make_shared< Overlay >( *parsingContext.parser->getEngine()
 					, OverlayType::ePanel
-					, parsingContext.scene
+					, parsingContext.scene.get()
 					, parent );
-				parsingContext.overlay->setName( name );
+				parsingContext.overlay->rename( name );
 			}
 
 			parsingContext.overlay->setVisible( false );
@@ -1201,16 +1208,16 @@ namespace castor3d
 		{
 			String name;
 			parsingContext.parentOverlays.push_back( parsingContext.overlay );
-			auto parent = parsingContext.parentOverlays.back();
-			parsingContext.overlay = parsingContext.scene->getOverlayView().tryFind( params[0]->get( name ) );
+			auto parent = parsingContext.parentOverlays.back().get();
+			parsingContext.overlay = parsingContext.scene->getOverlayView().tryFind( params[0]->get( name ) ).lock();
 
 			if ( !parsingContext.overlay )
 			{
 				parsingContext.overlay = std::make_shared< Overlay >( *parsingContext.parser->getEngine()
 					, OverlayType::eBorderPanel
-					, parsingContext.scene
+					, parsingContext.scene.get()
 					, parent );
-				parsingContext.overlay->setName( name );
+				parsingContext.overlay->rename( name );
 			}
 
 			parsingContext.overlay->setVisible( false );
@@ -1230,16 +1237,16 @@ namespace castor3d
 		{
 			String name;
 			parsingContext.parentOverlays.push_back( parsingContext.overlay );
-			auto parent = parsingContext.parentOverlays.back();
-			parsingContext.overlay = parsingContext.scene->getOverlayView().tryFind( params[0]->get( name ) );
+			auto parent = parsingContext.parentOverlays.back().get();
+			parsingContext.overlay = parsingContext.scene->getOverlayView().tryFind( params[0]->get( name ) ).lock();
 
 			if ( !parsingContext.overlay )
 			{
 				parsingContext.overlay = std::make_shared< Overlay >( *parsingContext.parser->getEngine()
 					, OverlayType::eText
-					, parsingContext.scene
+					, parsingContext.scene.get()
 					, parent );
-				parsingContext.overlay->setName( name );
+				parsingContext.overlay->rename( name );
 			}
 
 			parsingContext.overlay->setVisible( false );
@@ -1316,7 +1323,7 @@ namespace castor3d
 			parsingContext.strName = value;
 			parsingContext.particleCount = 0u;
 			parsingContext.sceneNode = parsingContext.scene->getObjectRootNode();
-			parsingContext.material.reset();
+			parsingContext.material = {};
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eParticleSystem )
@@ -1367,10 +1374,11 @@ namespace castor3d
 		{
 			parsingContext.mesh = parsingContext.scene->getMeshCache().tryFind( name );
 
-			if ( !parsingContext.mesh )
+			if ( !parsingContext.mesh.lock() )
 			{
-				parsingContext.mesh = std::make_shared< Mesh >( name
+				parsingContext.ownMesh = parsingContext.scene->getMeshCache().create( name
 					, *parsingContext.scene );
+				parsingContext.mesh = parsingContext.ownMesh;
 			}
 		}
 		else
@@ -1432,7 +1440,7 @@ namespace castor3d
 			String value;
 			params[0]->get( value );
 
-			if ( auto node = cache.tryFind( value ) )
+			if ( auto node = cache.tryFind( value ).lock() )
 			{
 				parsingContext.sceneNode = node;
 			}
@@ -1482,8 +1490,9 @@ namespace castor3d
 			auto & cache = parsingContext.parser->getEngine()->getMaterialCache();
 			String name;
 			params[0]->get( name );
+			auto material = cache.tryFind( name ).lock().get();
 
-			if ( auto material = cache.tryFind( name ) )
+			if ( material )
 			{
 				parsingContext.material = material;
 			}
@@ -1537,7 +1546,7 @@ namespace castor3d
 				parsingContext.material = parsingContext.parser->getEngine()->getMaterialCache().getDefaultMaterial();
 			}
 
-			parsingContext.particleSystem = parsingContext.scene->getParticleSystemCache().tryFind( parsingContext.strName );
+			parsingContext.particleSystem = parsingContext.scene->getParticleSystemCache().tryFind( parsingContext.strName ).lock();
 
 			if ( !parsingContext.particleSystem )
 			{
@@ -1662,7 +1671,7 @@ namespace castor3d
 		{
 			String name;
 
-			if ( auto parent = parsingContext.scene->getSceneNodeCache().find( params[0]->get( name ) ) )
+			if ( auto parent = parsingContext.scene->getSceneNodeCache().find( params[0]->get( name ) ).lock() )
 			{
 				parsingContext.sceneNode = parent;
 
@@ -1712,7 +1721,7 @@ namespace castor3d
 			params[0]->get( uiType );
 			parsingContext.lightType = LightType( uiType );
 			auto & cache = parsingContext.scene->getLightCache();
-			parsingContext.light = cache.tryFind( parsingContext.strName );
+			parsingContext.light = cache.tryFind( parsingContext.strName ).lock();
 
 			if ( !parsingContext.light )
 			{
@@ -2231,7 +2240,7 @@ namespace castor3d
 			}
 			else
 			{
-				parent = parsingContext.scene->getSceneNodeCache().find( name );
+				parent = parsingContext.scene->getSceneNodeCache().find( name ).lock();
 			}
 
 			if ( parent )
@@ -2363,7 +2372,7 @@ namespace castor3d
 			}
 			else
 			{
-				parent = parsingContext.scene->getSceneNodeCache().find( name );
+				parent = parsingContext.scene->getSceneNodeCache().find( name ).lock();
 			}
 
 			if ( parent )
@@ -2392,14 +2401,15 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			if ( parsingContext.geometry->getMesh() )
+			if ( parsingContext.geometry->getMesh().lock() )
 			{
 				auto & cache = parsingContext.parser->getEngine()->getMaterialCache();
 				String name;
+				auto material = cache.tryFind( params[0]->get( name ) ).lock().get();
 
-				if ( auto material = cache.tryFind( params[0]->get( name ) ) )
+				if ( material )
 				{
-					for ( auto submesh : *parsingContext.geometry->getMesh() )
+					for ( auto submesh : *parsingContext.geometry->getMesh().lock() )
 					{
 						parsingContext.geometry->setMaterial( *submesh, material );
 					}
@@ -2459,8 +2469,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserObjectEnd )
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
-		parsingContext.scene->getGeometryCache().add( parsingContext.geometry );
-		parsingContext.geometry.reset();
+		parsingContext.scene->getGeometryCache().add( std::move( parsingContext.geometry ) );
 	}
 	CU_EndAttributePop()
 
@@ -2474,17 +2483,18 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			if ( parsingContext.geometry->getMesh() )
+			if ( parsingContext.geometry->getMesh().lock() )
 			{
 				auto & cache = parsingContext.parser->getEngine()->getMaterialCache();
 				String name;
 				uint16_t index;
+				auto material = cache.tryFind( params[1]->get( name ) ).lock().get();
 
-				if ( auto material = cache.tryFind( params[1]->get( name ) ) )
+				if ( material )
 				{
-					if ( parsingContext.geometry->getMesh()->getSubmeshCount() > params[0]->get( index ) )
+					if ( parsingContext.geometry->getMesh().lock()->getSubmeshCount() > params[0]->get( index ) )
 					{
-						SubmeshSPtr submesh = parsingContext.geometry->getMesh()->getSubmesh( index );
+						SubmeshSPtr submesh = parsingContext.geometry->getMesh().lock()->getSubmesh( index );
 						parsingContext.geometry->setMaterial( *submesh, material );
 					}
 					else
@@ -2527,7 +2537,7 @@ namespace castor3d
 		if ( parsingContext.scene )
 		{
 			auto & factory = parsingContext.scene->getEngine()->getMeshFactory();
-			factory.create( type )->generate( *parsingContext.mesh, parameters );
+			factory.create( type )->generate( *parsingContext.mesh.lock(), parameters );
 		}
 		else
 		{
@@ -2543,13 +2553,13 @@ namespace castor3d
 		parsingContext.face2 = -1;
 		parsingContext.submesh.reset();
 
-		if ( !parsingContext.mesh )
+		if ( !parsingContext.mesh.lock() )
 		{
 			CU_ParsingError( cuT( "No Mesh initialised." ) );
 		}
 		else
 		{
-			parsingContext.submesh = parsingContext.mesh->createSubmesh();
+			parsingContext.submesh = parsingContext.mesh.lock()->createSubmesh();
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eSubmesh )
@@ -2586,7 +2596,7 @@ namespace castor3d
 			{
 				auto importer = engine->getImporterFactory().create( extension, *engine );
 
-				if ( !importer->import( *parsingContext.mesh, pathFile, parameters, true ) )
+				if ( !importer->import( *parsingContext.mesh.lock(), pathFile, parameters, true ) )
 				{
 					CU_ParsingError( cuT( "Mesh Import failed" ) );
 					parsingContext.mesh.reset();
@@ -2600,7 +2610,7 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.mesh )
+		if ( !parsingContext.mesh.lock() )
 		{
 			CU_ParsingError( cuT( "No mesh initialised." ) );
 		}
@@ -2636,21 +2646,21 @@ namespace castor3d
 				{
 					CU_ParsingError( cuT( "Mesh Import failed" ) );
 				}
-				else if ( mesh.getSubmeshCount() == parsingContext.mesh->getSubmeshCount() )
+				else if ( mesh.getSubmeshCount() == parsingContext.mesh.lock()->getSubmeshCount() )
 				{
 					String animName{ "Morph" };
 
-					if ( !parsingContext.mesh->hasAnimation( animName ) )
+					if ( !parsingContext.mesh.lock()->hasAnimation( animName ) )
 					{
-						auto & animation = parsingContext.mesh->createAnimation( animName );
+						auto & animation = parsingContext.mesh.lock()->createAnimation( animName );
 
-						for ( auto submesh : *parsingContext.mesh )
+						for ( auto submesh : *parsingContext.mesh.lock() )
 						{
 							animation.addChild( MeshAnimationSubmesh{ animation, *submesh } );
 						}
 					}
 
-					MeshAnimation & animation{ static_cast< MeshAnimation & >( parsingContext.mesh->getAnimation( animName ) ) };
+					MeshAnimation & animation{ static_cast< MeshAnimation & >( parsingContext.mesh.lock()->getAnimation( animName ) ) };
 					uint32_t index = 0u;
 					MeshAnimationKeyFrameUPtr keyFrame = std::make_unique< MeshAnimationKeyFrame >( animation
 						, Milliseconds{ int64_t( timeIndex * 1000ll ) } );
@@ -2686,7 +2696,7 @@ namespace castor3d
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 		Engine * engine = parsingContext.parser->getEngine();
 
-		if ( !parsingContext.mesh )
+		if ( !parsingContext.mesh.lock() )
 		{
 			CU_ParsingError( cuT( "No Mesh initialised." ) );
 		}
@@ -2704,10 +2714,10 @@ namespace castor3d
 			else
 			{
 				auto divider = engine->getSubdividerFactory().create( name );
-				parsingContext.mesh->computeContainers();
-				Point3f ptCenter = parsingContext.mesh->getBoundingBox().getCenter();
+				parsingContext.mesh.lock()->computeContainers();
+				Point3f ptCenter = parsingContext.mesh.lock()->getBoundingBox().getCenter();
 
-				for ( auto submesh : *parsingContext.mesh )
+				for ( auto submesh : *parsingContext.mesh.lock() )
 				{
 					divider->subdivide( submesh, count, false );
 				}
@@ -2720,7 +2730,7 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.mesh )
+		if ( !parsingContext.mesh.lock() )
 		{
 			CU_ParsingError( cuT( "No Mesh initialised." ) );
 		}
@@ -2728,10 +2738,11 @@ namespace castor3d
 		{
 			auto & cache = parsingContext.parser->getEngine()->getMaterialCache();
 			String name;
+			auto material = cache.find( params[0]->get( name ) ).lock().get();
 
-			if ( auto material = cache.tryFind( params[0]->get( name ) ) )
+			if ( material )
 			{
-				for ( auto submesh : *parsingContext.mesh )
+				for ( auto submesh : *parsingContext.mesh.lock() )
 				{
 					submesh->setDefaultMaterial( material );
 				}
@@ -2757,15 +2768,18 @@ namespace castor3d
 		{
 			CU_ParsingError( cuT( "No Scene initialised." ) );
 		}
-		else if ( !parsingContext.mesh )
+		else if ( !parsingContext.mesh.lock() )
 		{
 			CU_ParsingError( cuT( "No Mesh initialised." ) );
 		}
 		else
 		{
-			parsingContext.scene->getMeshCache().add( parsingContext.mesh->getName()
-				, parsingContext.mesh
-				, true );
+			if ( parsingContext.ownMesh )
+			{
+				parsingContext.scene->getMeshCache().add( parsingContext.mesh.lock()->getName()
+					, parsingContext.ownMesh
+					, true );
+			}
 
 			if ( parsingContext.geometry )
 			{
@@ -2781,7 +2795,7 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.mesh )
+		if ( !parsingContext.mesh.lock() )
 		{
 			CU_ParsingError( cuT( "No Mesh initialised." ) );
 		}
@@ -2790,12 +2804,13 @@ namespace castor3d
 			auto & cache = parsingContext.parser->getEngine()->getMaterialCache();
 			String name;
 			uint16_t index;
+			auto material = cache.find( params[1]->get( name ) ).lock().get();
 
-			if ( auto material = cache.find( params[1]->get( name ) ) )
+			if ( material )
 			{
-				if ( parsingContext.mesh->getSubmeshCount() > params[0]->get( index ) )
+				if ( parsingContext.mesh.lock()->getSubmeshCount() > params[0]->get( index ) )
 				{
-					SubmeshSPtr submesh = parsingContext.mesh->getSubmesh( index );
+					SubmeshSPtr submesh = parsingContext.mesh.lock()->getSubmesh( index );
 					submesh->setDefaultMaterial( material );
 				}
 				else
@@ -3254,24 +3269,28 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.material )
+		if ( !parsingContext.ownMaterial
+			&& !parsingContext.material )
 		{
 			CU_ParsingError( cuT( "Material not initialised" ) );
 		}
-		else if ( parsingContext.scene )
+		else if ( parsingContext.ownMaterial )
 		{
-			parsingContext.scene->getMaterialView().add( parsingContext.material->getName()
-				, parsingContext.material
-				, true );
-		}
-		else
-		{
-			parsingContext.parser->getEngine()->getMaterialCache().add( parsingContext.material->getName()
-				, parsingContext.material
-				, true );
+			if ( parsingContext.scene )
+			{
+				parsingContext.scene->getMaterialView().add( parsingContext.material->getName()
+					, parsingContext.ownMaterial
+					, true );
+			}
+			else
+			{
+				parsingContext.parser->getEngine()->getMaterialCache().add( parsingContext.material->getName()
+					, parsingContext.ownMaterial
+					, true );
+			}
 		}
 
-		parsingContext.material.reset();
+		parsingContext.material = {};
 		parsingContext.createMaterial = false;
 		parsingContext.passIndex = 0u;
 	}
@@ -3748,7 +3767,7 @@ namespace castor3d
 			String name;
 			params[0]->get( name );
 			auto & cache = parsingContext.parser->getEngine()->getMaterialCache();
-			parsingContext.overlay->setMaterial( cache.find( name ) );
+			parsingContext.overlay->setMaterial( cache.find( name ).lock().get() );
 		}
 		else
 		{
@@ -3762,16 +3781,16 @@ namespace castor3d
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 		String name;
 		parsingContext.parentOverlays.push_back( parsingContext.overlay );
-		auto parent = parsingContext.parentOverlays.back();
-		parsingContext.overlay = parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) );
+		auto parent = parsingContext.parentOverlays.back().get();
+		parsingContext.overlay = parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
 
 		if ( !parsingContext.overlay )
 		{
 			parsingContext.overlay = std::make_shared< Overlay >( *parsingContext.parser->getEngine()
 				, OverlayType::ePanel
-				, parent->getScene()
+				, parent ? parent->getScene() : parsingContext.scene.get()
 				, parent );
-			parsingContext.overlay->setName( name );
+			parsingContext.overlay->rename( name );
 		}
 
 		parsingContext.overlay->setVisible( false );
@@ -3783,16 +3802,16 @@ namespace castor3d
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 		String name;
 		parsingContext.parentOverlays.push_back( parsingContext.overlay );
-		auto parent = parsingContext.parentOverlays.back();
-		parsingContext.overlay = parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) );
+		auto parent = parsingContext.parentOverlays.back().get();
+		parsingContext.overlay = parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
 
 		if ( !parsingContext.overlay )
 		{
 			parsingContext.overlay = std::make_shared< Overlay >( *parsingContext.parser->getEngine()
 				, OverlayType::eBorderPanel
-				, parent->getScene()
+				, parent ? parent->getScene() : parsingContext.scene.get()
 				, parent );
-			parsingContext.overlay->setName( name );
+			parsingContext.overlay->rename( name );
 		}
 
 		parsingContext.overlay->setVisible( false );
@@ -3804,16 +3823,16 @@ namespace castor3d
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 		String name;
 		parsingContext.parentOverlays.push_back( parsingContext.overlay );
-		auto parent = parsingContext.parentOverlays.back();
-		parsingContext.overlay = parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) );
+		auto parent = parsingContext.parentOverlays.back().get();
+		parsingContext.overlay = parsingContext.parser->getEngine()->getOverlayCache().tryFind( params[0]->get( name ) ).lock();
 
 		if ( !parsingContext.overlay )
 		{
 			parsingContext.overlay = std::make_shared< Overlay >( *parsingContext.parser->getEngine()
 				, OverlayType::eText
-				, parent->getScene()
+				, parent ? parent->getScene() : parsingContext.scene.get()
 				, parent );
-			parsingContext.overlay->setName( name );
+			parsingContext.overlay->rename( name );
 		}
 
 		parsingContext.overlay->setVisible( false );
@@ -3865,7 +3884,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserPanelOverlayUvs )
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
-		OverlaySPtr overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::ePanel )
 		{
@@ -3883,7 +3902,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserBorderPanelOverlaySizes )
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
-		OverlaySPtr overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 		{
@@ -3901,7 +3920,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserBorderPanelOverlayPixelSizes )
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
-		OverlaySPtr overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 		{
@@ -3919,14 +3938,14 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserBorderPanelOverlayMaterial )
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
-		OverlaySPtr overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 		{
 			String name;
 			params[0]->get( name );
 			auto & cache = parsingContext.parser->getEngine()->getMaterialCache();
-			overlay->getBorderPanelOverlay()->setBorderMaterial( cache.find( name ) );
+			overlay->getBorderPanelOverlay()->setBorderMaterial( cache.find( name ).lock().get() );
 		}
 		else
 		{
@@ -3938,7 +3957,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserBorderPanelOverlayPosition )
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
-		OverlaySPtr overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 		{
@@ -3956,7 +3975,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserBorderPanelOverlayCenterUvs )
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
-		OverlaySPtr overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 		{
@@ -3974,7 +3993,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserBorderPanelOverlayOuterUvs )
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
-		OverlaySPtr overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 		{
@@ -3992,7 +4011,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserBorderPanelOverlayInnerUvs )
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
-		OverlaySPtr overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 		{
@@ -4010,7 +4029,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserTextOverlayFont )
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
-		OverlaySPtr overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eText )
 		{
@@ -4018,7 +4037,7 @@ namespace castor3d
 			String name;
 			params[0]->get( name );
 
-			if ( cache.find( name ) )
+			if ( cache.find( name ).lock() )
 			{
 				overlay->getTextOverlay()->setFont( name );
 			}
@@ -4037,7 +4056,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserTextOverlayTextWrapping )
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
-		OverlaySPtr overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eText )
 		{
@@ -4056,7 +4075,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserTextOverlayVerticalAlign )
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
-		OverlaySPtr overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eText )
 		{
@@ -4075,7 +4094,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserTextOverlayHorizontalAlign )
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
-		OverlaySPtr overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eText )
 		{
@@ -4094,7 +4113,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserTextOverlayTexturingMode )
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
-		OverlaySPtr overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eText )
 		{
@@ -4113,7 +4132,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserTextOverlayLineSpacingMode )
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
-		OverlaySPtr overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eText )
 		{
@@ -4132,7 +4151,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserTextOverlayText )
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
-		OverlaySPtr overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay;
 		String strParams;
 		params[0]->get( strParams );
 
@@ -4152,7 +4171,7 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 		String name;
-		SceneNodeSPtr parent = parsingContext.scene->getSceneNodeCache().find( params[0]->get( name ) );
+		SceneNodeSPtr parent = parsingContext.scene->getSceneNodeCache().find( params[0]->get( name ) ).lock();
 
 		if ( parent )
 		{
@@ -4214,8 +4233,9 @@ namespace castor3d
 		if ( parsingContext.sceneNode && parsingContext.viewport )
 		{
 			auto camera = parsingContext.scene->getCameraCache().add( parsingContext.strName
+				, *parsingContext.scene
 				, *parsingContext.sceneNode
-				, std::move( *parsingContext.viewport ) );
+				, std::move( *parsingContext.viewport ) ).lock();
 			camera->setGamma( parsingContext.point2f[0] );
 			camera->setExposure( parsingContext.point2f[1] );
 			parsingContext.viewport.reset();
@@ -4328,7 +4348,7 @@ namespace castor3d
 		{
 			String name;
 			params[0]->get( name );
-			SceneNodeSPtr pParent = parsingContext.scene->getSceneNodeCache().find( name );
+			SceneNodeSPtr pParent = parsingContext.scene->getSceneNodeCache().find( name ).lock();
 
 			if ( pParent )
 			{
@@ -4403,8 +4423,9 @@ namespace castor3d
 		{
 			auto & cache = parsingContext.parser->getEngine()->getMaterialCache();
 			String name;
+			auto material = cache.tryFind( params[0]->get( name ) ).lock().get();
 
-			if ( auto material = cache.tryFind( params[0]->get( name ) ) )
+			if ( material )
 			{
 				parsingContext.billboards->setMaterial( material );
 			}
@@ -4456,7 +4477,7 @@ namespace castor3d
 
 		if ( parsingContext.animGroup )
 		{
-			GeometrySPtr geometry = parsingContext.scene->getGeometryCache().find( name );
+			GeometrySPtr geometry = parsingContext.scene->getGeometryCache().find( name ).lock();
 
 			if ( geometry )
 			{
@@ -4466,10 +4487,10 @@ namespace castor3d
 						, geometry->getName() + cuT( "_Movable" ) );
 				}
 
-				if ( geometry->getMesh() )
-				{
-					auto mesh = geometry->getMesh();
+				auto mesh = geometry->getMesh().lock();
 
+				if ( mesh )
+				{
 					if ( !mesh->getAnimations().empty() )
 					{
 						parsingContext.animMesh = parsingContext.animGroup->addObject( *mesh
@@ -5157,6 +5178,7 @@ namespace castor3d
 		if ( parsingContext.renderTarget )
 		{
 			parsingContext.renderTarget->setSsaoConfig( parsingContext.ssaoConfig );
+			parsingContext.ssaoConfig = {};
 		}
 		else
 		{

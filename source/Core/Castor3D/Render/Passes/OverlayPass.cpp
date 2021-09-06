@@ -24,11 +24,11 @@ namespace castor3d
 
 			if ( ires.second )
 			{
-				SceneSPtr scene = overlay.getScene();
+				auto scene = overlay.getScene();
 
 				if ( overlay.isVisible()
 					&& scene
-					&& scene.get() == &refScene )
+					&& scene == &refScene )
 				{
 					overlay.getCategory()->update( renderer );
 					overlay.getCategory()->accept( preparer );

@@ -247,7 +247,7 @@ namespace castor3d
 				auto & submesh = culledNode.data;
 				auto pass = culledNode.pass;
 				auto & instance = culledNode.instance;
-				auto material = pass->getOwner()->shared_from_this();
+				auto material = pass->getOwner();
 
 				if ( ignored != &culledNode.sceneNode )
 				{

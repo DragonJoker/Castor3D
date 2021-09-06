@@ -173,6 +173,39 @@ namespace castor3d
 	using OnTextureUnitChangedConnection = OnTextureUnitChanged::connection;
 
 	std::ostream & operator<<( std::ostream & stream, TextureLayout const & layout );
+	/**
+	*\~english
+	*	Helper structure to specialise a cache behaviour.
+	*\remarks
+	*	Specialisation for Sampler.
+	*\~french
+	*	Structure permettant de spécialiser le comportement d'un cache.
+	*\remarks
+	*	Spécialisation pour Sampler.
+	*/
+	template<>
+	struct ResourceCacheTraitsT< Sampler, castor::String >
+		: castor::ResourceCacheTraitsBaseT< Sampler, castor::String, ResourceCacheTraitsT< Sampler, castor::String > >
+	{
+		using ResT = Sampler;
+		using KeyT = castor::String;
+		using TraitsT = ResourceCacheTraitsT< ResT, KeyT >;
+		using Base = castor::ResourceCacheTraitsBaseT< ResT, KeyT, TraitsT >;
+		using ElementT = typename Base::ElementT;
+		using ElementPtrT = typename Base::ElementPtrT;
+
+		C3D_API static const castor::String Name;
+	};
+
+	using SamplerCacheTraits = ResourceCacheTraitsT< Sampler, castor::String >;
+	using SamplerCache = castor::ResourceCacheT< Sampler
+		, castor::String
+		, SamplerCacheTraits >;
+
+	using SamplerRes = SamplerCacheTraits::ElementPtrT;
+	using SamplerResPtr = SamplerCacheTraits::ElementObsT;
+
+	CU_DeclareCUSmartPtr( castor3d, SamplerCache, C3D_API );
 
 	//@}
 	//@}

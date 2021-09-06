@@ -6,9 +6,11 @@ See LICENSE file in root folder
 
 #include "PassesModule.hpp"
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/Design/Resource.hpp>
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>
@@ -547,7 +549,7 @@ namespace castor3d
 
 		Sampler const & getSampler()const
 		{
-			return *m_sampler;
+			return *m_sampler.lock();
 		}
 		/**@}*/
 
@@ -557,7 +559,7 @@ namespace castor3d
 	protected:
 		RenderSystem & m_renderSystem;
 		RenderDevice const & m_device;
-		SamplerSPtr m_sampler;
+		SamplerResPtr m_sampler;
 		rq::ConfigData m_config;
 
 	private:

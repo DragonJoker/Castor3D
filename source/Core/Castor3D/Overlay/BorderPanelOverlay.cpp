@@ -35,7 +35,7 @@ namespace castor3d
 		visitor.visit( *this );
 	}
 
-	void BorderPanelOverlay::setBorderMaterial( MaterialSPtr material )
+	void BorderPanelOverlay::setBorderMaterial( MaterialRPtr material )
 	{
 		m_pBorderMaterial = material;
 
@@ -55,7 +55,7 @@ namespace castor3d
 
 		if ( isSizeChanged() || isChanged() || renderer.isSizeChanged() )
 		{
-			OverlaySPtr parent = getOverlay().getParent();
+			auto parent = getOverlay().getParent();
 			Size sz = renderer.getSize();
 			Point2d totalSize( sz.getWidth(), sz.getHeight() );
 
@@ -116,7 +116,7 @@ namespace castor3d
 	Point4d BorderPanelOverlay::getAbsoluteBorderSize()const
 	{
 		Point4d absoluteSize = getBorderSize();
-		OverlaySPtr parent = getOverlay().getParent();
+		auto parent = getOverlay().getParent();
 
 		if ( parent )
 		{

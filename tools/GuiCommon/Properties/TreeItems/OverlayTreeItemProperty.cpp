@@ -55,7 +55,7 @@ namespace GuiCommon
 				{
 					OverlayCategorySPtr overlay = getOverlay();
 					auto & cache = overlay->getOverlay().getEngine()->getMaterialCache();
-					MaterialSPtr material = cache.find( variantCast< castor::String >( var ) );
+					auto material = cache.find( variantCast< castor::String >( var ) ).lock().get();
 
 					if ( material )
 					{
@@ -112,7 +112,7 @@ namespace GuiCommon
 					BorderPanelOverlaySPtr overlay = std::static_pointer_cast< BorderPanelOverlay >( getOverlay() );
 					CU_Require( overlay->getType() == OverlayType::eBorderPanel );
 					auto & cache = overlay->getOverlay().getEngine()->getMaterialCache();
-					MaterialSPtr material = cache.find( variantCast< castor::String >( var ) );
+					auto material = cache.find( variantCast< castor::String >( var ) ).lock().get();
 
 					if ( material )
 					{
@@ -130,7 +130,7 @@ namespace GuiCommon
 					BorderPanelOverlaySPtr overlay = std::static_pointer_cast< BorderPanelOverlay >( getOverlay() );
 					CU_Require( overlay->getType() == OverlayType::eBorderPanel );
 					auto & cache = overlay->getOverlay().getEngine()->getMaterialCache();
-					MaterialSPtr material = cache.find( variantCast< castor::String >( var ) );
+					auto material = cache.find( variantCast< castor::String >( var ) ).lock().get();
 
 					if ( material )
 					{

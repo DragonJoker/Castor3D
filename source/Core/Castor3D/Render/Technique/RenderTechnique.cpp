@@ -61,13 +61,12 @@ namespace castor3d
 		using OpaquePassType = ForwardRenderTechniquePass;
 #endif
 
-		std::map< double, LightSPtr > doSortLights( LightCache const & cache
+		std::map< double, LightRPtr > doSortLights( LightCache const & cache
 			, LightType type
 			, Camera const & camera )
 		{
-			using LockType = std::unique_lock< LightCache const >;
-			LockType lock{ castor::makeUniqueLock( cache ) };
-			std::map< double, LightSPtr > lights;
+			auto lock( castor::makeUniqueLock( cache ) );
+			std::map< double, LightRPtr > lights;
 
 			for ( auto & light : cache.getLights( type ) )
 			{
@@ -79,7 +78,7 @@ namespace castor3d
 							, light->getParent()->getDerivedTransformationMatrix() ) ) )
 				{
 					lights.emplace( castor::point::distanceSquared( camera.getParent()->getDerivedPosition()
-						, light->getParent()->getDerivedPosition() )
+							, light->getParent()->getDerivedPosition() )
 						, light );
 				}
 			}

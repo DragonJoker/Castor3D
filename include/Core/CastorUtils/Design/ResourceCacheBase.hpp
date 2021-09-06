@@ -7,8 +7,8 @@ See LICENSE file in root folder
 #pragma GCC diagnostic ignored "-Wundefined-var-template"
 
 #include "DesignModule.hpp"
-#include "CastorUtils/Log/Logger.hpp"
 #include "CastorUtils/Exception/Assertion.hpp"
+#include "CastorUtils/Log/Logger.hpp"
 
 #include <mutex>
 #include <unordered_map>
@@ -23,51 +23,33 @@ namespace castor
 		using ElementKeyT = KeyT;
 		using ElementCacheTraitsT = TraitsT;
 		using ElementCacheBaseT = ResourceCacheBaseT< ElementT, ElementKeyT, ElementCacheTraitsT >;
+		using ElementCacheT = typename ElementCacheTraitsT::ElementCacheT;
 		using ElementPtrT = typename ElementCacheTraitsT::ElementPtrT;
+		using ElementObsT = typename ElementCacheTraitsT::ElementObsT;
 		using ElementContT = typename ElementCacheTraitsT::ElementContT;
-		using ElementProducerT = typename ElementCacheTraitsT::ElementProducerT;
 		using ElementInitialiserT = typename ElementCacheTraitsT::ElementInitialiserT;
 		using ElementCleanerT = typename ElementCacheTraitsT::ElementCleanerT;
 		using ElementMergerT = typename ElementCacheTraitsT::ElementMergerT;
 
 	protected:
 		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	produce		The element producer.
-		 *\param[in]	initialise	The element initialiser.
-		 *\param[in]	clean		The element cleaner.
-		 *\param[in]	merge		The element collection merger.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	produce		Le créateur d'objet.
-		 *\param[in]	initialise	L'initialiseur d'objet.
-		 *\param[in]	clean		Le nettoyeur d'objet.
-		 *\param[in]	merge		Le fusionneur de collection d'objets.
-		 */
+		*name
+		*	Construction/Desctruction.
+		**/
+		/**@{*/
 		ResourceCacheBaseT( LoggerInstance & logger
-			, ElementProducerT produce
 			, ElementInitialiserT initialise = ElementInitialiserT{}
 			, ElementCleanerT clean = ElementCleanerT{}
 			, ElementMergerT merge = ElementMergerT{} )
 			: m_logger{ logger }
-			, m_produce{ std::move( produce ) }
 			, m_initialise{ std::move( initialise ) }
 			, m_clean{ std::move( clean ) }
 			, m_merge{ std::move( merge ) }
 		{
 		}
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		~ResourceCacheBaseT()
-		{
-		}
+
+		~ResourceCacheBaseT() = default;
+		/**@}*/
 
 	public:
 		/**
@@ -114,58 +96,68 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief		Removes an element, given a name.
-		 *\param[in]	name	The element name.
-		 *\param[in]	element	The element.
-		 *\return		\p false if there is already one object at the given key.
+		 *\brief			Adds an element.
+		 *\param[in]		name		The element name.
+		 *\param[in,out]	element		The resource, will be emptied on add (the cache now owns it).
+		 *\param[in]		initialise	\p true to initialise the added element (no effect on duplicates).
+		 *\return			The real element (added or duplicate original ).
 		 *\~french
-		 *\brief		Retire un élément à partir d'un nom.
-		 *\param[in]	name	Le nom d'élément.
-		 *\param[in]	element	L'élément.
-		 *\return		\p false si un élément est déjà associé à la clef.
+		 *\brief			Ajoute un élément.
+		 *\param[in]		name		Le nom d'élément.
+		 *\param[in,out]	element		La ressource, vidée en cas d'ajout (le cache en prend la responsabilité).
+		 *\param[in]		initialise	\p true pour initialiser l'élément ajouté (aucun effect sur les doublons).
+		 *\return			L'élément réel (ajouté, ou original du doublon).
 		 */
-		ElementPtrT tryAdd( ElementKeyT const & name
-			, ElementPtrT element
+		ElementObsT tryAdd( ElementKeyT const & name
+			, ElementPtrT & element
 			, bool initialise = false )
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
-			return this->doTryAddNoLock( name, element, initialise );
+			return this->doTryAddNoLock( name
+				, element
+				, initialise );
 		}
 		/**
 		 *\~english
-		 *\brief		Adds a resource, given a name.
-		 *\param[in]	name		The resource name.
-		 *\param[in]	resource	The resource.
-		 *\return		The resource at the given name.
+		 *\brief			Logging version of tryAdd.
+		 *\param[in]		name		The resource name.
+		 *\param[in,out]	element		The resource, will be emptied on add (the cache now owns it).
+		 *\param[in]		initialise	\p true to initialise the added element (no effect on duplicates).
+		 *\return			The real element (added or duplicate original ).
 		 *\~french
-		 *\brief		Ajoute une ressource à partir d'un nom.
-		 *\param[in]	name		Le nom de la ressource.
-		 *\param[in]	resource	La ressource.
-		 *\return		La ressource associée au nom.
+		 *\brief			Version journalisante de tryAdd.
+		 *\param[in]		name		Le nom de la ressource.
+		 *\param[in,out]	element		La ressource, vidée en cas d'ajout (le cache en prend la responsabilité).
+		 *\param[in]		initialise	\p true pour initialiser l'élément ajouté (aucun effect sur les doublons).
+		 *\return			L'élément réel (ajouté, ou original du doublon).
 		 */
-		ElementPtrT add( ElementKeyT const & name
-			, ElementPtrT element
+		ElementObsT add( ElementKeyT const & name
+			, ElementPtrT & element
 			, bool initialise = true )
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
-			return this->doAddNoLock( name, element, initialise );
+			return this->doAddNoLock( name
+				, element
+				, initialise );
 		}
 		/**
 		 *\~english
-		 *\brief		Removes an element, given a name.
-		 *\param[in]	name	The element name.
-		 *\param[in]	element	The element.
-		 *\return		\p false if there is already one object at the given key.
+		 *\brief		Add an element, constructed in-place.
+		 *\param[in]	name		The element name.
+		 *\param[in]	initialise	\p true to initialise the added element (no effect on duplicates).
+		 *\param[out]	created		The created element.
+		 *\return		The real element (added or duplicate original ).
 		 *\~french
-		 *\brief		Retire un élément à partir d'un nom.
-		 *\param[in]	name	Le nom d'élément.
-		 *\param[in]	element	L'élément.
-		 *\return		\p false si un élément est déjà associé à la clef.
+		 *\brief		Ajoute un élément, construict sur place.
+		 *\param[in]	name		Le nom d'élément.
+		 *\param[in]	initialise	\p true pour initialiser l'élément ajouté (aucun effect sur les doublons).
+		 *\param[out]	created		L'élément créé.
+		 *\return		L'élément réel (ajouté, ou original du doublon).
 		 */
 		template< typename ... ParametersT >
-		ElementPtrT tryAdd( ElementKeyT const & name
+		ElementObsT tryAdd( ElementKeyT const & name
 			, bool initialise
-			, ElementPtrT & created
+			, ElementObsT & created
 			, ParametersT && ... parameters)
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
@@ -176,18 +168,18 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief		Creates an element.
+		 *\brief		Logging version of tryAdd.
 		 *\param[in]	name		The element name.
 		 *\param[in]	parameters	The other constructor parameters.
-		 *\return		The element at the given name.
+		 *\return		The real element (added or duplicate original ).
 		 *\~french
-		 *\brief		Crée un élément.
+		 *\brief		Version journalisante de tryAdd.
 		 *\param[in]	name		Le nom d'élément.
 		 *\param[in]	parameters	Les autres paramètres de construction.
-		 *\return		L'élément associé au nom.
+		 *\return		L'élément réel (ajouté, ou original du doublon).
 		 */
 		template< typename ... ParametersT >
-		ElementPtrT add( ElementKeyT const & name
+		ElementObsT add( ElementKeyT const & name
 			, ParametersT && ... parameters )
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
@@ -209,10 +201,10 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief		Removes an element, given a name.
+		 *\brief		Logging version of tryRemove.
 		 *\param[in]	name	The element name.
 		 *\~french
-		 *\brief		Retire un élément à partir d'un nom.
+		 *\brief		Version journalisante de tryAdd.
 		 *\param[in]	name	Le nom d'élément.
 		 */
 		void remove( ElementKeyT const & name )
@@ -235,27 +227,27 @@ namespace castor
 		 *\param[in]	name	Le nom d'élément.
 		 *\return		L'élément trouvé, nullptr si non trouvé.
 		 */
-		ElementPtrT tryFind( ElementKeyT const & name )const
+		ElementObsT tryFind( ElementKeyT const & name )const
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
 			return this->doTryFindNoLock( name );
 		}
 		/**
 		 *\~english
-		 *\brief		Looks for an element with given name.
+		 *\brief		Logging version of tryRemove.
 		 *\param[in]	name	The object name.
 		 *\return		The found element, nullptr if not found.
 		 *\~french
-		 *\brief		Cherche un élément par son nom.
+		 *\brief		Version journalisante de tryAdd.
 		 *\param[in]	name	Le nom d'élément.
 		 *\return		L'élément trouvé, nullptr si non trouvé.
 		 */
-		ElementPtrT find( ElementKeyT const & name )const
+		ElementObsT find( ElementKeyT const & name )const
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
 			auto result = this->doTryFindNoLock( name );
 
-			if ( !result )
+			if ( !result.lock() )
 			{
 				this->reportUnknown( name );
 			}
@@ -277,7 +269,7 @@ namespace castor
 
 			if ( m_merge )
 			{
-				for ( auto it : *this )
+				for ( auto & it : *this )
 				{
 					m_merge( *this, destination.m_resources, it.second );
 				}
@@ -326,14 +318,14 @@ namespace castor
 			return uint32_t( m_resources.size() );
 		}
 
-		castor::String const & getObjectTypeName()const
+		String const & getObjectTypeName()const
 		{
 			return ElementCacheTraitsT::Name;
 		}
 
 		bool has( ElementKeyT const & name )const
 		{
-			return tryFind( name ) != nullptr;
+			return tryFind( name ).lock() != ElementPtrT{};
 		}
 
 		bool isEmpty()const
@@ -394,7 +386,7 @@ namespace castor
 		*\name Logging.
 		**/
 		/**@{*/
-		void reportCreation( castor::String const & name )const
+		void reportCreation( String const & name )const
 		{
 			static const xchar * InfoCacheCreatedObject = cuT( "ResourceCache - Created " );
 			m_logger.logTrace( makeStringStream() << InfoCacheCreatedObject
@@ -403,7 +395,7 @@ namespace castor
 				<< name );
 		}
 
-		void reportAdded( castor::String const & name )const
+		void reportAdded( String const & name )const
 		{
 			static const xchar * InfoCacheAddedObject = cuT( "ResourceCache - Added " );
 			m_logger.logTrace( makeStringStream() << InfoCacheAddedObject
@@ -412,7 +404,7 @@ namespace castor
 				<< name );
 		}
 
-		void reportDuplicate( castor::String const & name )const
+		void reportDuplicate( String const & name )const
 		{
 			static const xchar * WarningCacheDuplicateObject = cuT( "ResourceCache - Duplicate " );
 			m_logger.logWarning( makeStringStream() << WarningCacheDuplicateObject
@@ -428,7 +420,7 @@ namespace castor
 				<< getObjectTypeName() );
 		}
 
-		void reportUnknown( castor::String const & name )const
+		void reportUnknown( String const & name )const
 		{
 			static const xchar * WarningCacheUnknownObject = cuT( "ResourceCache - Unknown " );
 			m_logger.logWarning( makeStringStream() << WarningCacheUnknownObject
@@ -443,9 +435,9 @@ namespace castor
 		{
 			if ( m_clean )
 			{
-				for ( auto it : m_resources )
+				for ( auto & it : m_resources )
 				{
-					m_clean( it.second );
+					m_clean( *it.second );
 				}
 			}
 		}
@@ -459,37 +451,45 @@ namespace castor
 		ElementPtrT doCreateT( ElementKeyT const & name
 			, ParametersT && ... parameters )const
 		{
-			return m_produce
-				? m_produce( name
-					, std::forward< ParametersT >( parameters )... )
-				: nullptr;
+			return ElementCacheTraitsT::makeElement( *reinterpret_cast< ElementCacheT const * >( this )
+				, name
+				, std::forward< ParametersT >( parameters )... );
 		}
 
-		ElementPtrT doTryAddNoLock( ElementKeyT const & name
-			, ElementPtrT element
+		ElementObsT doTryAddNoLock( ElementKeyT const & name
+			, ElementPtrT & element
 			, bool initialise = true )
 		{
-			auto ires = m_resources.emplace( name, element );
+			auto ires = m_resources.emplace( name, ElementPtrT{} );
 
-			if ( ires.second && initialise && element && m_initialise )
+			if ( ires.second )
 			{
-				m_initialise( element );
+				ires.first->second = std::move( element );
+				auto & elem = ires.first->second;
+
+				if ( initialise && elem && m_initialise )
+				{
+					m_initialise( *elem );
+				}
 			}
 
-			return ires.first->second;
+			return ElementObsT{ ires.first->second };
 		}
 
-		ElementPtrT doAddNoLock( ElementKeyT const & name
-			, ElementPtrT element
+		ElementObsT doAddNoLock( ElementKeyT const & name
+			, ElementPtrT & element
 			, bool initialise = true )
 		{
-			ElementPtrT result{ element };
+			ElementObsT result{ element };
 
-			if ( result )
+			if ( element )
 			{
-				result = doTryAddNoLock( name, result, initialise );
+				result = doTryAddNoLock( name
+					, element
+					, initialise );
 
-				if ( element != result )
+				if ( element != nullptr
+					&& element != result.lock() )
 				{
 					reportDuplicate( name );
 				}
@@ -507,12 +507,12 @@ namespace castor
 		}
 
 		template< typename ... ParametersT >
-		ElementPtrT doTryAddNoLockT( ElementKeyT const & name
+		ElementObsT doTryAddNoLockT( ElementKeyT const & name
 			, bool initialise
-			, ElementPtrT & created
+			, ElementObsT & created
 			, ParametersT && ... parameters )
 		{
-			auto ires = m_resources.emplace( name, nullptr );
+			auto ires = m_resources.emplace( name, ElementPtrT{} );
 
 			if ( ires.second )
 			{
@@ -520,9 +520,9 @@ namespace castor
 					, std::forward< ParametersT >( parameters )... );
 				created = ires.first->second;
 
-				if ( initialise && m_initialise )
+				if ( initialise && created.lock() && m_initialise )
 				{
-					m_initialise( ires.first->second );
+					m_initialise( *ires.first->second );
 				}
 			}
 
@@ -530,16 +530,16 @@ namespace castor
 		}
 
 		template< typename ... ParametersT >
-		ElementPtrT doAddNoLockT( ElementKeyT const & name
+		ElementObsT doAddNoLockT( ElementKeyT const & name
 			, ParametersT && ... parameters )
 		{
-			ElementPtrT created;
+			ElementObsT created;
 			auto result = doTryAddNoLockT( name
 				, true
 				, created
 				, std::forward< ParametersT >( parameters )... );
 
-			if ( result != created )
+			if ( result.lock() != created.lock() )
 			{
 				reportDuplicate( name );
 			}
@@ -553,22 +553,30 @@ namespace castor
 
 		ElementPtrT doTryRemoveNoLock( ElementKeyT const & name )
 		{
-			auto element = doTryFindNoLock( name );
+			ElementPtrT result;
+			auto it = m_resources.find( name );
 
-			if ( element )
+			if ( it != m_resources.end() )
 			{
-				m_resources.erase( name );
+				result = std::move( it->second );
+				m_resources.erase( it );
 			}
 
-			return element;
+			return result;
 		}
 
-		ElementPtrT doTryFindNoLock( ElementKeyT const & name )const
+		ElementObsT doTryFindNoLock( ElementKeyT const & name )const
 		{
+			ElementObsT result;
 			auto it = m_resources.find( name );
-			return it != m_resources.end()
-				? it->second
-				: nullptr;
+			
+			if ( it != m_resources.end() )
+			{
+				ElementPtrT & element = it->second;
+				result = ElementObsT{ element };
+			}
+
+			return result;
 		}
 
 	protected:
@@ -579,10 +587,7 @@ namespace castor
 		mutable bool m_locked;
 		//!\~english	The elements collection.
 		//!\~french		La collection d'éléments.
-		ElementContT m_resources;
-		//!\~english	The element producer.
-		//!\~french		Le créateur d'éléments.
-		ElementProducerT m_produce;
+		mutable ElementContT m_resources;
 		//!\~english	The element initialiser.
 		//!\~french		L'initaliseur d'éléments.
 		ElementInitialiserT m_initialise;

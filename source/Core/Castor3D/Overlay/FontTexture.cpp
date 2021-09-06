@@ -10,23 +10,21 @@
 
 CU_ImplementCUSmartPtr( castor3d, FontTexture )
 
-using namespace castor;
-
 namespace castor3d
 {
-	FontTexture::FontTexture( Engine & engine, FontSPtr font )
+	FontTexture::FontTexture( Engine & engine, castor::FontResPtr font )
 		: OwnedBy< Engine >( engine )
 		, m_font( font )
 	{
-		uint32_t const maxWidth = font->getMaxWidth();
-		uint32_t const maxHeight = font->getMaxHeight();
-		uint32_t const count = uint32_t( std::ceil( std::distance( font->begin(), font->end() ) / 16.0 ) );
+		uint32_t const maxWidth = font.lock()->getMaxWidth();
+		uint32_t const maxHeight = font.lock()->getMaxHeight();
+		uint32_t const count = uint32_t( std::ceil( std::distance( font.lock()->begin(), font.lock()->end() ) / 16.0 ) );
 
-		SamplerSPtr sampler = getEngine()->getSamplerCache().add( font->getName() );
-		sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-		sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-		sampler->setMinFilter( VK_FILTER_LINEAR );
-		sampler->setMagFilter( VK_FILTER_LINEAR );
+		auto sampler = getEngine()->getSamplerCache().add( font.lock()->getName(), *getEngine() );
+		sampler.lock()->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+		sampler.lock()->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+		sampler.lock()->setMinFilter( VK_FILTER_LINEAR );
+		sampler.lock()->setMagFilter( VK_FILTER_LINEAR );
 		m_sampler = sampler;
 		ashes::ImageCreateInfo image
 		{
@@ -43,7 +41,7 @@ namespace castor3d
 		m_texture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
 			, image
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, cuT( "FontTexture_" ) + font->getFaceName() );
+			, cuT( "FontTexture_" ) + font.lock()->getFaceName() );
 	}
 
 	FontTexture::~FontTexture()
@@ -59,19 +57,20 @@ namespace castor3d
 
 	void FontTexture::update()
 	{
-		FontSPtr font = getFont();
+		auto font = getFont();
 
 		if ( font )
 		{
 			uint32_t const maxWidth = font->getMaxWidth();
 			uint32_t const maxHeight = font->getMaxHeight();
 			uint32_t const count = uint32_t( std::ceil( std::distance( font->begin(), font->end() ) / 16.0 ) );
-			Size size{ maxWidth * 16, maxHeight * count };
-			m_texture->setSource( PxBufferBase::create( Size( maxWidth * 16, maxHeight * count ), PixelFormat::eR8_UNORM ), true );
+			castor::Size size{ maxWidth * 16, maxHeight * count };
+			m_texture->setSource( castor::PxBufferBase::create( castor::Size( maxWidth * 16, maxHeight * count )
+				, castor::PixelFormat::eR8_UNORM ), true );
 			auto & image = m_texture->getImage();
 
 			auto it = font->begin();
-			Size const & sizeImg = size;
+			castor::Size const & sizeImg = size;
 			uint32_t const imgLineSize = sizeImg.getWidth();
 			uint32_t offY = sizeImg.getHeight() - maxHeight;
 			auto buffer = image.getBuffer();
@@ -84,8 +83,8 @@ namespace castor3d
 
 				for ( uint32_t x = 0; x < 16 && it != font->end(); ++x )
 				{
-					Glyph const & glyph = *it;
-					Size const & glyphSize = glyph.getSize();
+					castor::Glyph const & glyph = *it;
+					castor::Size const & glyphSize = glyph.getSize();
 					auto srcGlyphBuffer = glyph.getBitmap().data();
 					uint32_t dstGlyphIndex = ( imgLineSize * offY ) + offX;
 					uint8_t * dstGlyphBuffer = &dstBuffer[dstGlyphIndex];
@@ -99,7 +98,7 @@ namespace castor3d
 						srcGlyphBuffer += glyphSize.getWidth();
 					}
 
-					m_glyphsPositions[glyph.getCharacter()] = Position( offX, offY );
+					m_glyphsPositions[glyph.getCharacter()] = castor::Position( offX, offY );
 					offX += maxWidth;
 					++it;
 				}
@@ -118,18 +117,18 @@ namespace castor3d
 		}
 	}
 
-	String const & FontTexture::getFontName()const
+	castor::String const & FontTexture::getFontName()const
 	{
 		return getFont()->getName();
 	}
 
-	Position const & FontTexture::getGlyphPosition( char32_t glyphChar )const
+	castor::Position const & FontTexture::getGlyphPosition( char32_t glyphChar )const
 	{
 		GlyphPositionMapConstIt it = m_glyphsPositions.find( glyphChar );
 
 		if ( it == m_glyphsPositions.end() )
 		{
-			CU_Exception( std::string( "No loaded glyph for character " ) + string::stringCast< char >( string::toString( glyphChar ) ) );
+			CU_Exception( std::string( "No loaded glyph for character " ) + castor::string::stringCast< char >( castor::string::toString( glyphChar ) ) );
 		}
 
 		return it->second;

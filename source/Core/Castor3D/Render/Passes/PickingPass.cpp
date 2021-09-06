@@ -263,7 +263,7 @@ namespace castor3d
 				, InstantiationComponent & component
 				, SubmeshRenderNodePtrArray & renderNodes )
 			{
-				auto it = component.find( pass.getOwner()->shared_from_this() );
+				auto it = component.find( pass.getOwner() );
 
 				if ( it != component.end()
 					&& it->second[0].buffer )

@@ -95,6 +95,13 @@
     </Expand>
   </Type>
 
+  <Type Name="castor::NamedBase$&lt;*&gt;">
+    <DisplayString>{{name={m_name}}}</DisplayString>
+    <Expand>
+      <Item Name="name">m_name</Item>
+    </Expand>
+  </Type>
+
   <Type Name="castor::Resource">
     <DisplayString>{{name={m_name}}}</DisplayString>
     <Expand>

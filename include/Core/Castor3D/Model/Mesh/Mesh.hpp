@@ -15,14 +15,14 @@ See LICENSE file in root folder
 #include "Castor3D/Animation/Animable.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
+#include <CastorUtils/Design/Named.hpp>
 #include <CastorUtils/Graphics/BoundingBox.hpp>
 #include <CastorUtils/Graphics/BoundingSphere.hpp>
-#include <CastorUtils/Design/Resource.hpp>
 
 namespace castor3d
 {
 	class Mesh
-		: public castor::Resource
+		: public castor::Named
 		, public Animable
 	{
 	public:
@@ -73,6 +73,8 @@ namespace castor3d
 		 *\brief		Opérateur d'affectation par copie.
 		 */
 		C3D_API Mesh & operator=( Mesh const & rhs ) = delete;
+		C3D_API void initialise();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Computes the bounding box and sphere from the submeshes.
@@ -297,10 +299,6 @@ namespace castor3d
 		{
 			return m_scene;
 		}
-
-	private:
-		void doInitialise()override;
-		void doCleanup()override;
 
 	private:
 		friend class MeshGenerator;

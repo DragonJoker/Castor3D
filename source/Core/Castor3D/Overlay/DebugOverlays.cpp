@@ -24,9 +24,10 @@ namespace castor3d
 	DebugOverlays::MainDebugPanel::MainDebugPanel( OverlayCache & cache )
 		: m_cache{ cache }
 		, m_panel{ m_cache.add( cuT( "MainDebugPanel" )
+			, cache.getEngine()
 			, OverlayType::ePanel
 			, nullptr
-			, nullptr )->getPanelOverlay() }
+			, nullptr ).lock()->getPanelOverlay() }
 		, m_times{ std::make_unique< DebugPanelsT< castor::Nanoseconds > >( cuT( "Times" ), m_panel, cache ) }
 		, m_fps{ std::make_unique< DebugPanelsT< float > >( cuT( "FPS" ), m_panel, cache ) }
 		, m_counts{ std::make_unique< DebugPanelsT< uint32_t > >( cuT( "Counts" ), m_panel, cache ) }
@@ -34,7 +35,7 @@ namespace castor3d
 		auto & materials = m_cache.getEngine().getMaterialCache();
 		m_panel->setPixelPosition( castor::Position{ 0, 0 } );
 		m_panel->setPixelSize( castor::Size{ 320, 20 } );
-		m_panel->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ) );
+		m_panel->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ).lock().get() );
 		m_panel->setVisible( true );
 	}
 
@@ -101,7 +102,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	DebugOverlays::PassOverlays::PassOverlays( OverlayCache & cache
-		, OverlaySPtr parent
+		, OverlayRPtr parent
 		, castor::String const & category
 		, castor::String const & name
 		, uint32_t index
@@ -113,29 +114,35 @@ namespace castor3d
 	{
 		auto baseName = cuT( "RenderPassOverlays-" ) + category + cuT( "-" ) + name;
 		m_panel = cache.add( baseName
+			, cache.getEngine()
 			, OverlayType::ePanel
 			, nullptr
-			, parent )->getPanelOverlay();
+			, parent ).lock()->getPanelOverlay();
 		m_passName = cache.add( baseName + cuT( "_PassName" )
+			, cache.getEngine()
 			, OverlayType::eText
 			, nullptr
-			, m_panel->getOverlay().shared_from_this() )->getTextOverlay();
+			, &m_panel->getOverlay() ).lock()->getTextOverlay();
 		m_cpu.name = cache.add( baseName + cuT( "_CPUName" )
+			, cache.getEngine()
 			, OverlayType::eText
 			, nullptr
-			, m_panel->getOverlay().shared_from_this() )->getTextOverlay();
+			, &m_panel->getOverlay() ).lock()->getTextOverlay();
 		m_cpu.value = cache.add( baseName + cuT( "_CPUValue" )
+			, cache.getEngine()
 			, OverlayType::eText
 			, nullptr
-			, m_panel->getOverlay().shared_from_this() )->getTextOverlay();
+			, &m_panel->getOverlay() ).lock()->getTextOverlay();
 		m_gpu.name = cache.add( baseName + cuT( "_GPUName" )
+			, cache.getEngine()
 			, OverlayType::eText
 			, nullptr
-			, m_panel->getOverlay().shared_from_this() )->getTextOverlay();
+			, &m_panel->getOverlay() ).lock()->getTextOverlay();
 		m_gpu.value = cache.add( baseName + cuT( "_GPUValue" )
+			, cache.getEngine()
 			, OverlayType::eText
 			, nullptr
-			, m_panel->getOverlay().shared_from_this() )->getTextOverlay();
+			, &m_panel->getOverlay() ).lock()->getTextOverlay();
 
 		m_panel->setPixelPosition( castor::Position{ 0, 20 + int32_t( 20 * index ) } );
 		auto posX = 0;
@@ -167,12 +174,12 @@ namespace castor3d
 		m_gpu.name->setCaption( cuT( "GPU:" ) );
 
 		auto & materials = cache.getEngine().getMaterialCache();
-		m_panel->setMaterial( materials.find( cuT( "TransparentBlack" ) ) );
-		m_passName->setMaterial( materials.find( cuT( "White" ) ) );
-		m_cpu.name->setMaterial( materials.find( cuT( "White" ) ) );
-		m_gpu.name->setMaterial( materials.find( cuT( "White" ) ) );
-		m_cpu.value->setMaterial( materials.find( cuT( "White" ) ) );
-		m_gpu.value->setMaterial( materials.find( cuT( "White" ) ) );
+		m_panel->setMaterial( materials.find( cuT( "TransparentBlack" ) ).lock().get() );
+		m_passName->setMaterial( materials.find( cuT( "White" ) ).lock().get() );
+		m_cpu.name->setMaterial( materials.find( cuT( "White" ) ).lock().get() );
+		m_gpu.name->setMaterial( materials.find( cuT( "White" ) ).lock().get() );
+		m_cpu.value->setMaterial( materials.find( cuT( "White" ) ).lock().get() );
+		m_gpu.value->setMaterial( materials.find( cuT( "White" ) ).lock().get() );
 
 		m_passName->setVAlign( VAlign::eCenter );
 		m_passName->setHAlign( HAlign::eLeft );
@@ -265,33 +272,40 @@ namespace castor3d
 	{
 		auto baseName = cuT( "RenderPassOverlays-" ) + m_categoryName;
 		m_container = cache.add( baseName
+			, cache.getEngine()
 			, OverlayType::ePanel
 			, nullptr
-			, nullptr )->getPanelOverlay();
+			, nullptr ).lock()->getPanelOverlay();
 		m_firstLinePanel = cache.add( baseName + cuT( "_TitlePanel" )
+			, cache.getEngine()
 			, OverlayType::ePanel
 			, nullptr
-			, m_container->getOverlay().shared_from_this() )->getPanelOverlay();
+			, &m_container->getOverlay() ).lock()->getPanelOverlay();
 		m_name = cache.add( baseName + cuT( "_TitleName" )
+			, cache.getEngine()
 			, OverlayType::eText
 			, nullptr
-			, m_container->getOverlay().shared_from_this() )->getTextOverlay();
+			, &m_container->getOverlay() ).lock()->getTextOverlay();
 		m_cpu.name = cache.add( baseName + cuT( "_CPUName" )
+			, cache.getEngine()
 			, OverlayType::eText
 			, nullptr
-			, m_container->getOverlay().shared_from_this() )->getTextOverlay();
+			, &m_container->getOverlay() ).lock()->getTextOverlay();
 		m_cpu.value = cache.add( baseName + cuT( "_CPUValue" )
+			, cache.getEngine()
 			, OverlayType::eText
 			, nullptr
-			, m_container->getOverlay().shared_from_this() )->getTextOverlay();
+			, &m_container->getOverlay() ).lock()->getTextOverlay();
 		m_gpu.name = cache.add( baseName + cuT( "_GPUName" )
+			, cache.getEngine()
 			, OverlayType::eText
 			, nullptr
-			, m_container->getOverlay().shared_from_this() )->getTextOverlay();
+			, &m_container->getOverlay() ).lock()->getTextOverlay();
 		m_gpu.value = cache.add( baseName + cuT( "_GPUValue" )
+			, cache.getEngine()
 			, OverlayType::eText
 			, nullptr
-			, m_container->getOverlay().shared_from_this() )->getTextOverlay();
+			, &m_container->getOverlay() ).lock()->getTextOverlay();
 
 		m_container->setPixelPosition( castor::Position{ 330, 0 } );
 		m_firstLinePanel->setPixelPosition( castor::Position{ m_posX, 0 } );
@@ -324,13 +338,13 @@ namespace castor3d
 		m_gpu.name->setCaption( cuT( "GPU:" ) );
 
 		auto & materials = cache.getEngine().getMaterialCache();
-		m_container->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ) );
-		m_firstLinePanel->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ) );
-		m_name->setMaterial( materials.find( cuT( "White" ) ) );
-		m_cpu.name->setMaterial( materials.find( cuT( "White" ) ) );
-		m_gpu.name->setMaterial( materials.find( cuT( "White" ) ) );
-		m_cpu.value->setMaterial( materials.find( cuT( "White" ) ) );
-		m_gpu.value->setMaterial( materials.find( cuT( "White" ) ) );
+		m_container->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ).lock().get() );
+		m_firstLinePanel->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ).lock().get() );
+		m_name->setMaterial( materials.find( cuT( "White" ) ).lock().get() );
+		m_cpu.name->setMaterial( materials.find( cuT( "White" ) ).lock().get() );
+		m_gpu.name->setMaterial( materials.find( cuT( "White" ) ).lock().get() );
+		m_cpu.value->setMaterial( materials.find( cuT( "White" ) ).lock().get() );
+		m_gpu.value->setMaterial( materials.find( cuT( "White" ) ).lock().get() );
 
 		m_name->setVAlign( VAlign::eCenter );
 		m_name->setHAlign( HAlign::eLeft );
@@ -384,7 +398,7 @@ namespace castor3d
 		{
 			auto index = uint32_t( m_passes.size() );
 			m_passes.emplace_back( std::make_unique< PassOverlays >( *m_cache
-				, m_container->getOverlay().shared_from_this()
+				, &m_container->getOverlay()
 				, m_categoryName
 				, timer.getName()
 				, index

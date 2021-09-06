@@ -15,16 +15,16 @@ namespace castor3d
 	//*********************************************************************************************
 
 	ProgressBar::ProgressBar( Engine & engine
-		, OverlaySPtr parent
-		, OverlaySPtr bar
+		, OverlayResPtr parent
+		, OverlayResPtr bar
 		, TextOverlaySPtr title
 		, TextOverlaySPtr label
 		, uint32_t max )
 		: m_engine{ engine }
-		, m_listener{ engine.getFrameListenerCache().add( "C3D_ProgressBar" ) }
+		, m_listener{ engine.getFrameListenerCache().add( "C3D_ProgressBar" ).lock() }
 		, m_index{ castor::makeRangedValue( 0u, 0u, max ) }
-		, m_progress{ parent }
-		, m_progressBar{ bar }
+		, m_progress{ parent.lock().get() }
+		, m_progressBar{ bar.lock().get() }
 		, m_progressTitle{ title }
 		, m_progressLabel{ label }
 	{

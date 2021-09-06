@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_SceneModule_H___
 #define ___C3D_SceneModule_H___
 
+#include "Castor3D/Event/Frame/FrameEventModule.hpp"
 #include "Castor3D/Material/MaterialModule.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
 
@@ -11,6 +12,8 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	class Viewport;
+
 	/**@name Scene */
 	//@{
 
@@ -378,17 +381,244 @@ namespace castor3d
 	using OnSceneNodeChanged = castor::Signal< OnSceneNodeChangedFunction >;
 	using OnSceneNodeChangedConnection = OnSceneNodeChanged::connection;
 
-	using SubmeshMaterialMap = std::map< Submesh const *, MaterialWPtr >;
-	using OnSubmeshMaterialChangedFunction = std::function< void( Geometry const &, Submesh const &, MaterialSPtr oldMaterial, MaterialSPtr newMaterial) >;
+	using SubmeshMaterialMap = std::map< Submesh const *, MaterialRPtr >;
+	using OnSubmeshMaterialChangedFunction = std::function< void( Geometry const &, Submesh const &, MaterialRPtr oldMaterial, MaterialRPtr newMaterial) >;
 	using OnSubmeshMaterialChanged = castor::Signal< OnSubmeshMaterialChangedFunction >;
 	using OnSubmeshMaterialChangedConnection = OnSubmeshMaterialChanged::connection;
 
-	using OnBillboardMaterialChangedFunction = std::function< void( BillboardBase const &, MaterialSPtr oldMaterial, MaterialSPtr newMaterial ) >;
+	using OnBillboardMaterialChangedFunction = std::function< void( BillboardBase const &, MaterialRPtr oldMaterial, MaterialRPtr newMaterial ) >;
 	using OnBillboardMaterialChanged = castor::Signal< OnBillboardMaterialChangedFunction >;
 	using OnBillboardMaterialChangedConnection = OnBillboardMaterialChanged::connection;
 
 	C3D_API castor::LoggerInstance & getLogger( Scene const & scene );
 	C3D_API Engine & getEngine( Scene const & scene );
+	/**
+	*\~english
+	*	Helper structure to specialise a cache behaviour.
+	*\remarks
+	*	Specialisation for Scene.
+	*\~french
+	*	Structure permettant de spécialiser le comportement d'un cache.
+	*\remarks
+	*	Spécialisation pour Scene.
+	*/
+	template<>
+	struct PtrCacheTraitsT< Scene, castor::String >
+		: PtrCacheTraitsBaseT< Scene, castor::String >
+	{
+		using ResT = Scene;
+		using KeyT = castor::String;
+		using Base = PtrCacheTraitsBaseT< ResT, KeyT >;
+		using ElementT = typename Base::ElementT;
+		using ElementPtrT = typename Base::ElementPtrT;
+
+		C3D_API static const castor::String Name;
+	};
+	/**
+	*\~english
+	*	Helper structure to build a castor3d::ObjectCacheTraitsT.
+	*\remarks
+	*	Predefines:
+	*	<ul>
+	*	<li>ElementT: The resource type.</li>
+	*	<li>ElementPtrT: The resource pointer type.</li>
+	*	<li>ElementObjT: The resource observer type.</li>
+	*	<li>ElementContT: The resource container type.</li>
+	*	<li>ElementCacheT: The resource base cache type.</li>
+	*	<li>ElementInitialiserT: The prototype of the function use to initialise a resource.</li>
+	*	<li>ElementCleanerT: The prototype of the function use to cleanup a resource.</li>
+	*	<li>ElementMergerT: The prototype of the function use to merge a cache element into another cache.</li>
+	*	<li>ElementAttacherT: The prototype of the function use to attach a cache element to a scene node.</li>
+	*	<li>ElementDetacherT: The prototype of the function use to detach a cache element from a scene node.</li>
+	*	<li>static ElementPtrT makeElement( ElementKeyT const &, ParametersT && ... ): The element creation function.</li>
+	*	</ul>
+	*	Hence, only remains to define:
+	*	<ul>
+	*	<li>Name: The element type name.</li>
+	*	</ul>
+	*\~french
+	*	Structure d'aide à la création d'un castor3d::ObjectCacheTraitsT.
+	*\remarks
+	*	Prédéfinit:
+	*	<ul>
+	*	<li>ElementT: Le type de ressource.</li>
+	*	<li>ElementPtrT: Le type de pointeur sur une ressource.</li>
+	*	<li>ElementObjT: Le type d'observateur sur une ressource.</li>
+	*	<li>ElementContT: Le type de conteneur de ressources.</li>
+	*	<li>ElementCacheT: Le type de base de cache de ressources.</li>
+	*	<li>ElementInitialiserT: Le prototype de la fonction pour initialiser une ressource.</li>
+	*	<li>ElementCleanerT: Le prototype de la fonction pour nettoyer une ressource.</li>
+	*	<li>ElementMergerT: Le prototype de la fonction pour fusionner un élément d'un cache dans un autre cache.</li>
+	*	<li>ElementAttacherT: Le prototype de la fonction pour attacher un élément d'un cache à un scene node.</li>
+	*	<li>ElementDetacherT: Le prototype de la fonction pour détacher un élément d'un cache d'un scene node.</li>
+	*	<li>static ElementPtrT makeElement( ElementKeyT const &, ParametersT && ... ): La fonction de création d'un élément.</li>
+	*	</ul>
+	*	Il ne reste donc ainsi qu'à définir:
+	*	<ul>
+	*	<li>Name: Le nom du type d'élément.</li>
+	*	</ul>
+	*/
+	template< typename ObjT, typename KeyT >
+	struct ObjectCacheTraitsBaseT
+	{
+		using ElementT = ObjT;
+		using ElementKeyT = KeyT;
+		using ElementPtrT = std::shared_ptr< ElementT >;
+		using ElementObsT = std::weak_ptr< ElementT >;
+		using ElementContT = std::unordered_map< KeyT, ElementPtrT >;
+		using ElementCacheT = ObjectCacheBaseT< ElementT, KeyT >;
+
+		using ElementInitialiserT = std::function< void( ElementT & ) >;
+		using ElementCleanerT = std::function< void( ElementT & ) >;
+		using ElementMergerT = std::function< void( ElementCacheT const &
+			, ElementContT &
+			, ElementPtrT
+			, SceneNodeSPtr
+			, SceneNodeSPtr ) >;
+		using ElementAttacherT = std::function< void( ElementT &
+			, SceneNode &
+			, SceneNodeSPtr
+			, SceneNodeSPtr
+			, SceneNodeSPtr ) >;
+		using ElementDetacherT = std::function< void( ElementT & ) >;
+
+		template< typename ... ParametersT >
+		static ElementPtrT makeElement( ElementCacheT const & cache
+			, ElementKeyT const & key
+			, ParametersT && ... params )
+		{
+			return std::make_shared< ElementT >( key
+				, std::forward< ParametersT >( params )... );
+		}
+	};
+	/**
+	*\~english
+	*	Helper structure to specialise a scene objects cache behaviour.
+	*\remarks
+	*	Specialisation for BillboardList.
+	*\~french
+	*	Structure permettant de spécialiser le comportement d'un cache d'objets de scène.
+	*\remarks
+	*	Spécialisation pour BillboardList.
+	*/
+	template<>
+	struct ObjectCacheTraitsT< BillboardList, castor::String >
+		: ObjectCacheTraitsBaseT< BillboardList, castor::String >
+	{
+		using KeyT = castor::String;
+		using ElementT = BillboardList;
+		using BaseT = ObjectCacheTraitsBaseT< ElementT, KeyT >;
+		using ElementPtrT = typename BaseT::ElementPtrT;
+
+		C3D_API static const castor::String Name;
+	};
+	/**
+	*\~english
+	*	Helper structure to specialise a scene objects cache behaviour.
+	*\remarks
+	*	Specialisation for Camera.
+	*\~french
+	*	Structure permettant de spécialiser le comportement d'un cache d'objets de scène.
+	*\remarks
+	*	Spécialisation pour Camera.
+	*/
+	template<>
+	struct ObjectCacheTraitsT< Camera, castor::String >
+		: ObjectCacheTraitsBaseT< Camera, castor::String >
+	{
+		using KeyT = castor::String;
+		using ElementT = Camera;
+		using BaseT = ObjectCacheTraitsBaseT< ElementT, KeyT >;
+		using ElementPtrT = typename BaseT::ElementPtrT;
+
+		C3D_API static const castor::String Name;
+	};
+	/**
+	*\~english
+	*	Helper structure to specialise a scene objects cache behaviour.
+	*\remarks
+	*	Specialisation for Geometry.
+	*\~french
+	*	Structure permettant de spécialiser le comportement d'un cache d'objets de scène.
+	*\remarks
+	*	Spécialisation pour Geometry.
+	*/
+	template<>
+	struct ObjectCacheTraitsT< Geometry, castor::String >
+		: ObjectCacheTraitsBaseT< Geometry, castor::String >
+	{
+		using KeyT = castor::String;
+		using ElementT = Geometry;
+		using BaseT = ObjectCacheTraitsBaseT< ElementT, KeyT >;
+		using ElementPtrT = typename BaseT::ElementPtrT;
+
+		C3D_API static const castor::String Name;
+	};
+	/**
+	*\~english
+	*	Helper structure to specialise a scene objects cache behaviour.
+	*\remarks
+	*	Specialisation for SceneNode.
+	*\~french
+	*	Structure permettant de spécialiser le comportement d'un cache d'objets de scène.
+	*\remarks
+	*	Spécialisation pour SceneNode.
+	*/
+	template<>
+	struct ObjectCacheTraitsT< SceneNode, castor::String >
+		: ObjectCacheTraitsBaseT< SceneNode, castor::String >
+	{
+		using KeyT = castor::String;
+		using ElementT = SceneNode;
+		using BaseT = ObjectCacheTraitsBaseT< ElementT, KeyT >;
+		using ElementPtrT = typename BaseT::ElementPtrT;
+
+		C3D_API static const castor::String Name;
+	};
+
+	template<>
+	class ObjectCacheT< BillboardList, castor::String >;
+	template<>
+	class ObjectCacheT< Geometry, castor::String >;
+
+	using SceneCacheTraits = PtrCacheTraitsT< Scene, castor::String >;
+	using BillboardListCacheTraits = ObjectCacheTraitsT< BillboardList, castor::String >;
+	using CameraCacheTraits = ObjectCacheTraitsT< Camera, castor::String >;
+	using GeometryCacheTraits = ObjectCacheTraitsT< Geometry, castor::String >;
+	using SceneNodeCacheTraits = ObjectCacheTraitsT< SceneNode, castor::String >;
+
+	using SceneCache = castor::ResourceCacheT< Scene
+		, castor::String
+		, SceneCacheTraits >;
+	using BillboardListCache = ObjectCacheT< BillboardList
+		, castor::String
+		, BillboardListCacheTraits >;
+	using CameraCache = ObjectCacheT< Camera
+		, castor::String
+		, CameraCacheTraits >;
+	using GeometryCache = ObjectCacheT< Geometry
+		, castor::String
+		, GeometryCacheTraits >;
+	using SceneNodeCache = ObjectCacheT< SceneNode
+		, castor::String
+		, SceneNodeCacheTraits >;
+
+	using SceneRes = SceneCacheTraits::ElementPtrT;
+	using SceneResPtr = SceneCacheTraits::ElementObsT;
+	using BillboardListRes = BillboardListCacheTraits::ElementPtrT;
+	using BillboardListResPtr = BillboardListCacheTraits::ElementObsT;
+	using CameraRes = CameraCacheTraits::ElementPtrT;
+	using CameraResPtr = CameraCacheTraits::ElementObsT;
+	using GeometryRes = CameraCacheTraits::ElementPtrT;
+	using GeometryResPtr = CameraCacheTraits::ElementObsT;
+	using SceneNodeRes = CameraCacheTraits::ElementPtrT;
+	using SceneNodeResPtr = CameraCacheTraits::ElementObsT;
+
+	CU_DeclareCUSmartPtr( castor3d, SceneCache, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, BillboardListCache, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, CameraCache, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, GeometryCache, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, SceneNodeCache, C3D_API );
 
 	//@}
 }

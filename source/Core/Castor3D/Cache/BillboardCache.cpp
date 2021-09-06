@@ -14,8 +14,12 @@
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, BillboardListCache )
+
 namespace castor3d
 {
+	const castor::String ObjectCacheTraitsT< BillboardList, castor::String >::Name = cuT( "BillboardList" );
+
 	//*********************************************************************************************
 
 	size_t hash( BillboardBase const & billboard
@@ -38,7 +42,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	ObjectCacheT< BillboardList, castor::String >::ObjectCacheT( Scene & scene
+	ObjectCacheT< BillboardList, castor::String, BillboardCacheTraits >::ObjectCacheT( Scene & scene
 		, SceneNodeSPtr rootNode
 		, SceneNodeSPtr rootCameraNode
 		, SceneNodeSPtr rootObjectNode )
@@ -46,67 +50,23 @@ namespace castor3d
 			, rootNode
 			, rootCameraNode
 			, rootCameraNode
-			, [this]( castor::String const & name
-				, SceneNode & parent )
+			, [this]( ElementT & element )
 			{
-				return std::make_shared< BillboardList >( name
-					, *getScene()
-					, parent );
+				registerElement( element );
+				getScene()->getListener().postEvent( makeGpuInitialiseEvent( element ) );
 			}
-			, [this]( ElementPtrT element )
+			, [this]( ElementT & element )
 			{
-				registerElement( *element );
-				getScene()->getListener().postEvent( makeGpuInitialiseEvent( *element ) );
+				getScene()->getListener().postEvent( makeGpuCleanupEvent( element ) );
+				unregisterElement( element );
 			}
-			, [this]( ElementPtrT element )
-			{
-				getScene()->getListener().postEvent( makeGpuCleanupEvent( *element ) );
-				unregisterElement( *element );
-			}
-			, [this]( ElementObjectCacheT const & source
-				, ElementContT & destination
-				, ElementPtrT element
-				, SceneNodeSPtr rootCameraNode
-				, SceneNodeSPtr rootObjectNode )
-			{
-				if ( element->getParent()->getName() == rootCameraNode->getName() )
-				{
-					element->detach();
-					element->attachTo( *rootCameraNode );
-				}
-				else if ( element->getParent()->getName() == rootObjectNode->getName() )
-				{
-					element->detach();
-					element->attachTo( *rootObjectNode );
-				}
-
-				auto name = element->getName();
-				auto ires = destination.emplace( name, element );
-
-				while ( !ires.second )
-				{
-					name = getScene()->getName() + cuT( "_" ) + name;
-					ires = destination.emplace( name, element );
-				}
-
-				element->setName( name );
-			}
-			, []( ElementPtrT element
-				, SceneNode & parent
-				, SceneNodeSPtr rootNode
-				, SceneNodeSPtr rootCameraNode
-				, SceneNodeSPtr rootObjectNode )
-			{
-				parent.attachObject( *element );
-			}
-			, [this]( ElementPtrT element )
-			{
-				element->detach();
-			} }
+			, MovableMergerT< BillboardListCache >{ scene.getName() }
+			, MovableAttacherT< BillboardListCache >{}
+			, MovableDetacherT< BillboardListCache >{} }
 	{
 	}
 
-	void ObjectCacheT< BillboardList, castor::String >::registerPass( SceneRenderPass const & renderPass )
+	void ObjectCacheT< BillboardList, castor::String, BillboardCacheTraits >::registerPass( SceneRenderPass const & renderPass )
 	{
 		auto instanceMult = renderPass.getInstanceMult();
 		auto iresult = m_instances.emplace( instanceMult, RenderPassSet{} );
@@ -134,7 +94,7 @@ namespace castor3d
 		iresult.first->second.insert( &renderPass );
 	}
 
-	void ObjectCacheT< BillboardList, castor::String >::unregisterPass( SceneRenderPass const * renderPass
+	void ObjectCacheT< BillboardList, castor::String, BillboardCacheTraits >::unregisterPass( SceneRenderPass const * renderPass
 		, uint32_t instanceMult )
 	{
 		auto instIt = m_instances.find( instanceMult );
@@ -182,7 +142,7 @@ namespace castor3d
 		}
 	}
 
-	void ObjectCacheT< BillboardList, castor::String >::registerElement( BillboardBase & billboard )
+	void ObjectCacheT< BillboardList, castor::String, BillboardCacheTraits >::registerElement( BillboardBase & billboard )
 	{
 		getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
 			, [this, &billboard]( RenderDevice const & device
@@ -190,8 +150,8 @@ namespace castor3d
 			{
 				m_connections.emplace( &billboard
 					, billboard.onMaterialChanged.connect( [this, &device]( BillboardBase const & billboard
-						, MaterialSPtr oldMaterial
-						, MaterialSPtr newMaterial )
+						, MaterialRPtr oldMaterial
+						, MaterialRPtr newMaterial )
 						{
 							if ( oldMaterial )
 							{
@@ -217,7 +177,7 @@ namespace castor3d
 			} ) );
 	}
 
-	void ObjectCacheT< BillboardList, castor::String >::unregisterElement( BillboardBase & billboard )
+	void ObjectCacheT< BillboardList, castor::String, BillboardCacheTraits >::unregisterElement( BillboardBase & billboard )
 	{
 		getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
 			, [this, &billboard]( RenderDevice const & device
@@ -232,7 +192,7 @@ namespace castor3d
 			} ) );
 	}
 
-	void ObjectCacheT< BillboardList, castor::String >::clear( RenderDevice const & device )
+	void ObjectCacheT< BillboardList, castor::String, BillboardCacheTraits >::clear( RenderDevice const & device )
 	{
 		auto lock( castor::makeUniqueLock( *this ) );
 		ElementObjectCacheT::doClearNoLock();
@@ -253,7 +213,7 @@ namespace castor3d
 		}
 	}
 
-	void ObjectCacheT< BillboardList, castor::String >::update( CpuUpdater & updater )
+	void ObjectCacheT< BillboardList, castor::String, BillboardCacheTraits >::update( CpuUpdater & updater )
 	{
 		auto lock( castor::makeUniqueLock( *this ) );
 
@@ -273,7 +233,7 @@ namespace castor3d
 		}
 	}
 
-	BillboardListCache::PoolsEntry ObjectCacheT< BillboardList, castor::String >::getUbos( BillboardBase const & billboard
+	BillboardListCache::PoolsEntry ObjectCacheT< BillboardList, castor::String, BillboardCacheTraits >::getUbos( BillboardBase const & billboard
 		, Pass const & pass
 		, uint32_t instanceMult )const
 	{
@@ -283,7 +243,7 @@ namespace castor3d
 		return it->second;
 	}
 
-	void ObjectCacheT< BillboardList, castor::String >::doCreateEntry( RenderDevice const & device
+	void ObjectCacheT< BillboardList, castor::String, BillboardCacheTraits >::doCreateEntry( RenderDevice const & device
 		, BillboardBase const & billboard
 		, Pass const & pass )
 	{
@@ -317,7 +277,7 @@ namespace castor3d
 		}
 	}
 
-	void ObjectCacheT< BillboardList, castor::String >::doRemoveEntry( RenderDevice const & device
+	void ObjectCacheT< BillboardList, castor::String, BillboardCacheTraits >::doRemoveEntry( RenderDevice const & device
 		, BillboardBase const & billboard
 		, Pass const & pass )
 	{

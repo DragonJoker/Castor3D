@@ -55,37 +55,37 @@ namespace CastorGui
 		/** sets the text material.
 		 *\param[in]	p_material	The new value.
 		 */
-		void setTextMaterial( castor3d::MaterialSPtr p_material );
+		void setTextMaterial( castor3d::MaterialRPtr p_material );
 
 		/** sets the highlighted button background material.
 		*\param[in]	p_material	The new value.
 		*/
-		void setHighlightedBackgroundMaterial( castor3d::MaterialSPtr p_material );
+		void setHighlightedBackgroundMaterial( castor3d::MaterialRPtr p_material );
 
 		/** sets the highlighted button foreground material.
 		*\param[in]	p_material	The new value.
 		*/
-		void setHighlightedForegroundMaterial( castor3d::MaterialSPtr p_material );
+		void setHighlightedForegroundMaterial( castor3d::MaterialRPtr p_material );
 
 		/** sets the highlighted button text material.
 		*\param[in]	p_material	The new value.
 		*/
-		void setHighlightedTextMaterial( castor3d::MaterialSPtr p_material );
+		void setHighlightedTextMaterial( castor3d::MaterialRPtr p_material );
 
 		/** sets the pushed button background material.
 		*\param[in]	p_material	The new value.
 		*/
-		void setPushedBackgroundMaterial( castor3d::MaterialSPtr p_material );
+		void setPushedBackgroundMaterial( castor3d::MaterialRPtr p_material );
 
 		/** sets the pushed button foreground material.
 		*\param[in]	p_material	The new value.
 		*/
-		void setPushedForegroundMaterial( castor3d::MaterialSPtr p_material );
+		void setPushedForegroundMaterial( castor3d::MaterialRPtr p_material );
 
 		/** sets the pushed button text material.
 		*\param[in]	p_material	The new value.
 		*/
-		void setPushedTextMaterial( castor3d::MaterialSPtr p_material );
+		void setPushedTextMaterial( castor3d::MaterialRPtr p_material );
 
 		/** sets the caption font.
 		*\param[in]	p_font	The new value.
@@ -113,9 +113,9 @@ namespace CastorGui
 		/**
 		*\return	The text material
 		*/
-		inline castor3d::MaterialSPtr getTextMaterial()const
+		inline castor3d::MaterialRPtr getTextMaterial()const
 		{
-			return m_textMaterial.lock();
+			return m_textMaterial;
 		}
 
 		/** Connects a function to a button event
@@ -147,11 +147,11 @@ namespace CastorGui
 
 		/** @copydoc CastorGui::Control::doSetBackgroundMaterial
 		*/
-		void doSetBackgroundMaterial( castor3d::MaterialSPtr p_material )override;
+		void doSetBackgroundMaterial( castor3d::MaterialRPtr p_material )override;
 
 		/** @copydoc CastorGui::Control::doSetForegroundMaterial
 		*/
-		void doSetForegroundMaterial( castor3d::MaterialSPtr p_material )override;
+		void doSetForegroundMaterial( castor3d::MaterialRPtr p_material )override;
 
 		/** @copydoc CastorGui::Control::doSetCaption
 		*/
@@ -186,7 +186,7 @@ namespace CastorGui
 		 *\param[in]	p_offset	The colour offset.
 		 *\return		The created material.
 		 */
-		castor3d::MaterialSPtr doCreateMaterial( castor3d::MaterialSPtr p_material, float p_offset );
+		castor3d::MaterialRPtr doCreateMaterial( castor3d::MaterialRPtr p_material, float p_offset );
 
 	private:
 		//! The caption
@@ -194,19 +194,19 @@ namespace CastorGui
 		//! The text overlay used to display the caption
 		castor3d::TextOverlayWPtr m_text;
 		//! The text material.
-		castor3d::MaterialWPtr m_textMaterial;
+		castor3d::MaterialRPtr m_textMaterial;
 		//! The highlighted button text material.
-		castor3d::MaterialWPtr m_highlightedTextMaterial;
+		castor3d::MaterialRPtr m_highlightedTextMaterial;
 		//! The highlighted button background material.
-		castor3d::MaterialWPtr m_highlightedBackgroundMaterial;
+		castor3d::MaterialRPtr m_highlightedBackgroundMaterial;
 		//! The highlighted button foreground material.
-		castor3d::MaterialWPtr m_highlightedForegroundMaterial;
+		castor3d::MaterialRPtr m_highlightedForegroundMaterial;
 		//! The pushed button text material.
-		castor3d::MaterialWPtr m_pushedTextMaterial;
+		castor3d::MaterialRPtr m_pushedTextMaterial;
 		//! The pushed button background material.
-		castor3d::MaterialWPtr m_pushedBackgroundMaterial;
+		castor3d::MaterialRPtr m_pushedBackgroundMaterial;
 		//! The pushed button foreground material.
-		castor3d::MaterialWPtr m_pushedForegroundMaterial;
+		castor3d::MaterialRPtr m_pushedForegroundMaterial;
 		//! The button events signals
 		OnButtonEvent m_signals[size_t( ButtonEvent::eCount )];
 	};

@@ -61,6 +61,22 @@ namespace castor3d
 	/**
 	*/
 	struct GpuUpdater;
+	/**
+	*\~english
+	*	Helper structure to specialise a cache behaviour.
+	*\~french
+	*	Structure permettant de spécialiser le comportement d'un cache.
+	*/
+	template< typename ResT, typename KeyT >
+	struct PtrCacheTraitsT;
+	/**
+	*\~english
+	*	Helper structure to specialise a cache behaviour.
+	*\~french
+	*	Structure permettant de spécialiser le comportement d'un cache.
+	*/
+	template< typename ResT, typename KeyT >
+	struct ResourceCacheTraitsT;
 
 	CU_DeclareSmartPtr( Engine );
 	CU_DeclareCUSmartPtr( castor3d, FramePassTimer, C3D_API );

@@ -285,7 +285,7 @@ namespace CastorGui
 	 *\param[in]	p_colour	The material colour.
 	 *\return		The created material.
 	*/
-	castor3d::MaterialSPtr CreateMaterial( castor3d::Engine & engine, castor::String const & p_name, castor::RgbColour const & p_colour );
+	castor3d::MaterialRPtr createMaterial( castor3d::Engine & engine, castor::String const & p_name, castor::RgbColour const & p_colour );
 
 	/** Creates a texture material.
 	 *\param[in]	engine	The engine.
@@ -293,7 +293,7 @@ namespace CastorGui
 	 *\param[in]	p_texture	The material texture.
 	 *\return		The created material.
 	*/
-	castor3d::MaterialSPtr CreateMaterial( castor3d::Engine & engine, castor::String const & p_name, castor3d::TextureLayoutSPtr p_texture );
+	castor3d::MaterialRPtr createMaterial( castor3d::Engine & engine, castor::String const & p_name, castor3d::TextureLayoutSPtr p_texture );
 }
 
 #endif

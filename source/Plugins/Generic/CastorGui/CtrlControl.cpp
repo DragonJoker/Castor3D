@@ -37,15 +37,19 @@ namespace CastorGui
 		, m_parent( p_parent )
 		, m_engine( engine )
 	{
-		OverlaySPtr parentOv;
+		OverlayRPtr parentOv{};
 		ControlRPtr parent = getParent();
 
 		if ( parent )
 		{
-			parentOv = parent->getBackground()->getOverlay().shared_from_this();
+			parentOv = &parent->getBackground()->getOverlay();
 		}
 
-		OverlaySPtr overlay = getEngine().getOverlayCache().add( p_name, OverlayType::eBorderPanel, nullptr, parentOv );
+		auto overlay = getEngine().getOverlayCache().add( p_name
+			, getEngine()
+			, OverlayType::eBorderPanel
+			, nullptr
+			, parentOv ).lock();
 		overlay->setPixelPosition( getPosition() );
 		overlay->setPixelSize( getSize() );
 		BorderPanelOverlaySPtr panel = overlay->getBorderPanelOverlay();
@@ -132,7 +136,7 @@ namespace CastorGui
 		doSetSize( m_size );
 	}
 
-	void Control::setBackgroundMaterial( MaterialSPtr p_value )
+	void Control::setBackgroundMaterial( MaterialRPtr p_value )
 	{
 		CU_Require( p_value );
 		m_backgroundMaterial = p_value;
@@ -147,7 +151,7 @@ namespace CastorGui
 		doSetBackgroundMaterial( getBackgroundMaterial() );
 	}
 
-	void Control::setForegroundMaterial( MaterialSPtr p_value )
+	void Control::setForegroundMaterial( MaterialRPtr p_value )
 	{
 		m_foregroundMaterial = p_value;
 		BorderPanelOverlaySPtr panel = getBackground();

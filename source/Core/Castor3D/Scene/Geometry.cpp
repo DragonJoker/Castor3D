@@ -13,19 +13,21 @@ namespace castor3d
 	Geometry::Geometry( String const & name
 		, Scene & scene
 		, SceneNode & node
-		, MeshSPtr mesh )
+		, MeshResPtr mesh )
 		: MovableObject{ name, scene, MovableType::eGeometry, node }
 		, m_mesh{ mesh }
 	{
+		auto lock( castor::makeUniqueLock( m_mutex ) );
 		doUpdateMesh();
 	}
 	
 	Geometry::Geometry( String const & name
 		, Scene & scene
-		, MeshSPtr mesh )
+		, MeshResPtr mesh )
 		: MovableObject{ name, scene, MovableType::eGeometry }
 		, m_mesh{ mesh }
 	{
+		auto lock( castor::makeUniqueLock( m_mutex ) );
 		doUpdateMesh();
 	}
 
@@ -34,7 +36,7 @@ namespace castor3d
 	{
 		if ( !m_listCreated )
 		{
-			MeshSPtr mesh = getMesh();
+			auto mesh = getMesh().lock();
 
 			if ( mesh )
 			{
@@ -51,14 +53,14 @@ namespace castor3d
 		}
 	}
 
-	void Geometry::setMesh( MeshSPtr mesh )
+	void Geometry::setMesh( MeshResPtr mesh )
 	{
-		m_submeshesMaterials.clear();
 		m_mesh = mesh;
+		auto lock( castor::makeUniqueLock( m_mutex ) );
 		doUpdateMesh();
 		doUpdateContainers();
-		bool hasEnvironmentMapping = std::any_of( mesh->begin()
-			, mesh->end()
+		bool hasEnvironmentMapping = std::any_of( mesh.lock()->begin()
+			, mesh.lock()->end()
 			, []( SubmeshSPtr const & submesh )
 			{
 				return submesh->getDefaultMaterial()
@@ -73,13 +75,12 @@ namespace castor3d
 	}
 
 	void Geometry::setMaterial( Submesh & submesh
-		, MaterialSPtr material
+		, MaterialRPtr material
 		, bool updateSubmesh )
 	{
-		MeshSPtr mesh = getMesh();
-
-		if ( mesh )
+		if ( auto mesh = getMesh().lock() )
 		{
+			auto lock( castor::makeUniqueLock( m_mutex ) );
 			auto it = std::find_if( mesh->begin()
 				, mesh->end()
 				, [&submesh]( SubmeshSPtr lookup )
@@ -89,12 +90,12 @@ namespace castor3d
 			CU_Require( it != mesh->end() );
 
 			bool changed = false;
-			MaterialSPtr oldMaterial;
+			MaterialRPtr oldMaterial;
 			auto itSubMat = m_submeshesMaterials.find( &submesh );
 
 			if ( itSubMat != m_submeshesMaterials.end() )
 			{
-				oldMaterial = itSubMat->second.lock();
+				oldMaterial = itSubMat->second;
 
 				if ( oldMaterial != material )
 				{
@@ -128,14 +129,15 @@ namespace castor3d
 		}
 	}
 
-	MaterialSPtr Geometry::getMaterial( Submesh const & submesh )const
+	MaterialRPtr Geometry::getMaterial( Submesh const & submesh )const
 	{
-		MaterialSPtr result;
+		auto lock( castor::makeUniqueLock( m_mutex ) );
+		MaterialRPtr result;
 		auto it = m_submeshesMaterials.find( &submesh );
 
 		if ( it != m_submeshesMaterials.end() )
 		{
-			result = it->second.lock();
+			result = it->second;
 		}
 		else
 		{
@@ -147,6 +149,7 @@ namespace castor3d
 
 	void Geometry::updateContainers( SubmeshBoundingBoxList const & boxes )
 	{
+		auto lock( castor::makeUniqueLock( m_mutex ) );
 		m_submeshesBoxes.clear();
 		m_submeshesSpheres.clear();
 
@@ -168,6 +171,7 @@ namespace castor3d
 	BoundingBox const & Geometry::getBoundingBox( Submesh const & submesh )const
 	{
 		static BoundingBox const dummy;
+		auto lock( castor::makeUniqueLock( m_mutex ) );
 		auto it = m_submeshesBoxes.find( &submesh );
 
 		if ( it != m_submeshesBoxes.end() )
@@ -181,6 +185,7 @@ namespace castor3d
 	BoundingSphere const & Geometry::getBoundingSphere( Submesh const & submesh )const
 	{
 		static BoundingSphere const dummy;
+		auto lock( castor::makeUniqueLock( m_mutex ) );
 		auto it = m_submeshesSpheres.find( &submesh );
 
 		if ( it != m_submeshesSpheres.end() )
@@ -194,6 +199,7 @@ namespace castor3d
 	void Geometry::setBoundingBox( Submesh const & submesh
 		, BoundingBox const & box )
 	{
+		auto lock( castor::makeUniqueLock( m_mutex ) );
 		m_submeshesBoxes[&submesh] = box;
 		m_submeshesSpheres[&submesh] = BoundingSphere{ box };
 		doUpdateContainers();
@@ -201,26 +207,28 @@ namespace castor3d
 
 	void Geometry::doUpdateMesh()
 	{
-		auto mesh = m_mesh.lock();
-		m_submeshesMaterials.clear();
-		m_submeshesBoxes.clear();
-		m_submeshesSpheres.clear();
-
-		if ( mesh )
+		if ( auto mesh = m_mesh.lock() )
 		{
-			m_meshName = mesh->getName();
+			m_submeshesMaterials.clear();
+			m_submeshesBoxes.clear();
+			m_submeshesSpheres.clear();
 
-			for ( auto submesh : *mesh )
+			if ( mesh )
 			{
-				CU_Require( &submesh->getParent() == mesh.get() );
-				m_submeshesMaterials.emplace( submesh.get(), submesh->getDefaultMaterial() );
-				m_submeshesBoxes.emplace( submesh.get(), submesh->getBoundingBox() );
-				m_submeshesSpheres.emplace( submesh.get(), submesh->getBoundingSphere() );
+				m_meshName = mesh->getName();
+
+				for ( auto submesh : *mesh )
+				{
+					CU_Require( &submesh->getParent() == mesh.get() );
+					m_submeshesMaterials.emplace( submesh.get(), submesh->getDefaultMaterial() );
+					m_submeshesBoxes.emplace( submesh.get(), submesh->getBoundingBox() );
+					m_submeshesSpheres.emplace( submesh.get(), submesh->getBoundingSphere() );
+				}
 			}
-		}
-		else
-		{
-			m_meshName = cuEmptyString;
+			else
+			{
+				m_meshName = cuEmptyString;
+			}
 		}
 	}
 

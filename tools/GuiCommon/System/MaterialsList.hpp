@@ -27,7 +27,7 @@ namespace GuiCommon
 			, castor3d::Scene & scene
 			, bool editable
 			, wxTreeItemId id
-			, castor3d::MaterialSPtr material
+			, castor3d::MaterialRPtr material
 			, uint32_t iconOffset = 0u );
 
 	private:

@@ -110,10 +110,10 @@ namespace castor3d
 		return getParent().getSkeleton();
 	}
 
-	inline void Submesh::setDefaultMaterial( MaterialSPtr mat )
+	inline void Submesh::setDefaultMaterial( MaterialRPtr mat )
 	{
 		m_defaultMaterial = mat;
-		setMaterial( nullptr, mat, false );
+		setMaterial( {}, mat, false );
 	}
 
 	inline InterleavedVertex const & Submesh::operator[]( uint32_t index )const
@@ -140,9 +140,9 @@ namespace castor3d
 		return m_points[index];
 	}
 
-	inline MaterialSPtr Submesh::getDefaultMaterial()const
+	inline MaterialRPtr Submesh::getDefaultMaterial()const
 	{
-		return m_defaultMaterial.lock();
+		return m_defaultMaterial;
 	}
 
 	inline castor::BoundingBox const & Submesh::getBoundingBox()const
@@ -216,12 +216,12 @@ namespace castor3d
 
 	inline Mesh const & Submesh::getParent()const
 	{
-		return m_parentMesh;
+		return *getOwner();
 	}
 
 	inline Mesh & Submesh::getParent()
 	{
-		return m_parentMesh;
+		return *getOwner();
 	}
 
 	inline uint32_t Submesh::getId()const

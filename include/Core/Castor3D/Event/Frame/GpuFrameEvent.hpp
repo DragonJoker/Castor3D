@@ -4,8 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_GpuFrameEvent_H___
 #define ___C3D_GpuFrameEvent_H___
 
-#include "FrameEventModule.hpp"
-#include "Castor3D/Render/RenderModule.hpp"
+#include "FrameListener.hpp"
 
 #include <atomic>
 

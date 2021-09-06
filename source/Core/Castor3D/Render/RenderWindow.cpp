@@ -302,22 +302,15 @@ namespace castor3d
 			return result;
 		}
 
-		OverlaySPtr getOverlay( Scene const & scene, castor::String const & name )
+		OverlayResPtr getOverlay( Scene const & scene, castor::String const & name )
 		{
-			OverlaySPtr result;
-
-			if ( scene.getOverlayView().has( name ) )
-			{
-				result = scene.getOverlayView().find( name );
-			}
-
-			return result;
+			return scene.getOverlayView().tryFind( name );
 		}
 
 		TextOverlaySPtr getTextOverlay( Scene const & scene, castor::String const & name )
 		{
 			TextOverlaySPtr result;
-			auto o = getOverlay( scene, name );
+			auto o = getOverlay( scene, name ).lock();
 
 			if ( o && o->getType() == OverlayType::eText )
 			{

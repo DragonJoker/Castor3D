@@ -229,7 +229,7 @@ namespace castor
 	\remark		Le nom est un argument template, ainsi n'importe quoi peut être un nom pour cette classe (même si c'est castor::String par défaut)
 	*/
 	template< typename T = String >
-	class NamedBase;
+	class NamedBaseT;
 	/**
 	\~english
 	\brief		The non-copyable concept implementation
@@ -255,7 +255,24 @@ namespace castor
 	\brief		Représentation d'une ressource externe.
 	\remarks	Elles sont faites pour être chargées de manière asynchrone.
 	*/
-	class Resource;
+	template< typename ResT, typename KeyT >
+	class ResourceT;
+	/**
+	\~english
+	\brief		Pointer to a resource view.
+	\~french
+	\brief		Pointeur sur une vue sur une ressource.
+	*/
+	template< typename ResT, typename KeyT >
+	using ResourceSPtrT = std::shared_ptr< ResourceT< ResT, KeyT > >;
+	/**
+	\~english
+	\brief		Pointer to a resource view.
+	\~french
+	\brief		Pointeur sur une vue sur une ressource.
+	*/
+	template< typename ResT, typename KeyT >
+	using ResourceWPtrT = std::weak_ptr< ResourceT< ResT, KeyT > >;
 	/**
 	*\~english
 	*	Traits structure to specialise a cache behaviour.
@@ -267,10 +284,10 @@ namespace castor
 	*	<li>ElementPtrT: The resource pointer type.</li>
 	*	<li>ElementContT: The resource container type.</li>
 	*	<li>ElementCacheT: The resource base cache type.</li>
-	*	<li>ElementProducerT: The element creation function prototype.</li>
 	*	<li>ElementInitialiserT: The prototype of the function use to initialise a resource.</li>
 	*	<li>ElementCleanerT: The prototype of the function use to cleanup a resource.</li>
 	*	<li>ElementMergerT: The prototype of the function use to merge a cache element into another cache.</li>
+	*	<li>static ElementPtrT makeElement( ElementKeyT const &, ParametersT && ... ): The element creation function.</li>
 	*	</ul>
 	*\~french
 	*	Structure de traits permettant de spécialiser le comportement d'un cache.
@@ -282,14 +299,54 @@ namespace castor
 	*	<li>ElementPtrT: Le type de pointeur sur une ressource.</li>
 	*	<li>ElementContT: Le type de conteneur de ressources.</li>
 	*	<li>ElementCacheT: Le type de base de cache de ressources.</li>
-	*	<li>ElementProducerT: Le prototype de la fonction de création d'un élément.</li>
 	*	<li>ElementInitialiserT: Le prototype de la fonction pour initialiser une ressource.</li>
 	*	<li>ElementCleanerT: Le prototype de la fonction pour nettoyer une ressource.</li>
 	*	<li>ElementMergerT: Le prototype de la fonction pour fusionner un élément d'un cache dans un autre cache.</li>
+	*	<li>static ElementPtrT makeElement( ElementKeyT const &, ParametersT && ... ): La fonction de création d'un élément.</li>
 	*	</ul>
 	*/
-	template< typename ResourceT, typename KeyT >
+	template< typename ResT, typename KeyT >
 	struct ResourceCacheTraitsT;
+	/**
+	*\~english
+	*\brief
+	*	Cached resource dummy functor (for initialise and clean).
+	*\~french
+	*\brief
+	*	Foncteur vide de ressource cachée (pour l'initialisation et le nettoyage).
+	*/
+	template< typename CacheT >
+	struct DummyFunctorT;
+	/**
+	*\~english
+	*\brief
+	*	Cached resources merger.
+	*\~french
+	*\brief
+	*	Fusionneur de ressources cachées.
+	*/
+	template< typename CacheT >
+	struct ResourceMergerT;
+	/**
+	*\~english
+	*\brief
+	*	Cached resource initialiser.
+	*\~french
+	*\brief
+	*	Initialiseur de ressource cachée.
+	*/
+	template< typename CacheT >
+	struct ResourceInitialiserT;
+	/**
+	*\~english
+	*\brief
+	*	Cached resource cleaner.
+	*\~french
+	*\brief
+	*	Nettoyeur de ressource cachée.
+	*/
+	template< typename CacheT >
+	struct ResourceCleanerT;
 	/**
 	*\~english
 	*\brief
@@ -298,9 +355,9 @@ namespace castor
 	*\brief
 	*	Classe de base pour un cache d'éléments.
 	*/
-	template< typename ResourceT
+	template< typename ResT
 		, typename KeyT
-		, typename TraitsT = ResourceCacheTraitsT< ResourceT, KeyT > >
+		, typename TraitsT = ResourceCacheTraitsT< ResT, KeyT > >
 	class ResourceCacheBaseT;
 	/**
 	*\~english
@@ -310,10 +367,20 @@ namespace castor
 	*\brief
 	*	Classe de base pour un cache d'éléments.
 	*/
-	template< typename ResourceT
+	template< typename ResT
 		, typename KeyT
-		, typename TraitsT = ResourceCacheTraitsT< ResourceT, KeyT > >
+		, typename TraitsT = ResourceCacheTraitsT< ResT, KeyT > >
 	class ResourceCacheT;
+	/**
+	*\~english
+	*	Resource creation helper.
+	*\~french
+	*	Fonction d'aide à la création de ressource.
+	**/
+	template< typename ResT
+		, typename KeyT
+		, typename ... ParametersT >
+	ResourceSPtrT< ResT, KeyT > makeResource( ParametersT && ... params );
 	/**
 	*\~english
 	*	Helper structure to build a castor::ResourceCacheTraitsT.
@@ -322,16 +389,17 @@ namespace castor
 	*	<ul>
 	*	<li>ElementT: The resource type.</li>
 	*	<li>ElementPtrT: The resource pointer type.</li>
+	*	<li>ElementObsT: The resource observer type.</li>
 	*	<li>ElementContT: The resource container type.</li>
 	*	<li>ElementCacheT: The resource base cache type.</li>
 	*	<li>ElementInitialiserT: The prototype of the function use to initialise a resource.</li>
 	*	<li>ElementCleanerT: The prototype of the function use to cleanup a resource.</li>
 	*	<li>ElementMergerT: The prototype of the function use to merge a cache element into another cache.</li>
+	*	<li>static ElementPtrT makeElement( ElementKeyT const &, ParametersT && ... ): The element creation function.</li>
 	*	</ul>
 	*	Hence, only remains to define:
 	*	<ul>
 	*	<li>Name: The element type name.</li>
-	*	<li>ElementProducerT: The element creation function prototype.</li>
 	*	</ul>
 	*\~french
 	*	Structure d'aide à la création d'un castor::ResourceCacheTraitsT.
@@ -340,31 +408,43 @@ namespace castor
 	*	<ul>
 	*	<li>ElementT: Le type de ressource.</li>
 	*	<li>ElementPtrT: Le type de pointeur sur une ressource.</li>
+	*	<li>ElementObsT: Le type d'observateur sur une ressource.</li>
 	*	<li>ElementContT: Le type de conteneur de ressources.</li>
 	*	<li>ElementCacheT: Le type de base de cache de ressources.</li>
 	*	<li>ElementInitialiserT: Le prototype de la fonction pour initialiser une ressource.</li>
 	*	<li>ElementCleanerT: Le prototype de la fonction pour nettoyer une ressource.</li>
 	*	<li>ElementMergerT: Le prototype de la fonction pour fusionner un élément d'un cache dans un autre cache.</li>
+	*	<li>static ElementPtrT makeElement( ElementKeyT const &, ParametersT && ... ): La fonction de création d'un élément.</li>
 	*	</ul>
 	*	Il ne reste donc ainsi qu'à définir:
 	*	<ul>
 	*	<li>Name: Le nom du type d'élément.</li>
-	*	<li>ElementProducerT: Le prototype de la fonction de création d'un élément.</li>
 	*	</ul>
 	*/
-	template< typename ResT, typename KeyT >
+	template< typename ResT, typename KeyT, typename TraitsT >
 	struct ResourceCacheTraitsBaseT
 	{
 		using ElementT = ResT;
-		using ElementPtrT = std::shared_ptr< ElementT >;
+		using ElementKeyT = KeyT;
+		using ElementPtrT = ResourceSPtrT< ElementT, ElementKeyT >;
+		using ElementObsT = ResourceWPtrT< ElementT, ElementKeyT >;
 		using ElementContT = std::unordered_map< KeyT, ElementPtrT >;
-		using ElementCacheT = ResourceCacheBaseT< ElementT, KeyT >;
+		using ElementCacheT = ResourceCacheBaseT< ElementT, KeyT, TraitsT >;
 
-		using ElementInitialiserT = std::function< void( ElementPtrT ) >;
-		using ElementCleanerT = std::function< void( ElementPtrT ) >;
+		using ElementInitialiserT = std::function< void( ElementT & ) >;
+		using ElementCleanerT = std::function< void( ElementT & ) >;
 		using ElementMergerT = std::function< void( ElementCacheT const &
 			, ElementContT &
 			, ElementPtrT ) >;
+
+		template< typename ... ParametersT >
+		static ElementPtrT makeElement( ElementCacheT const & cache
+			, ElementKeyT const & key
+			, ParametersT && ... params )
+		{
+			return makeResource< ElementT, ElementKeyT >( key
+				, std::forward< ParametersT >( params )... );
+		}
 	};
 	/**
 	\~english
@@ -400,7 +480,7 @@ namespace castor
 	template< class T >
 	class Unique;
 
-	using Named = NamedBase< String >;
+	using Named = NamedBaseT< String >;
 	using DynamicBitset = DynamicBitsetT< uint32_t >;
 
 	template< typename T >
@@ -423,23 +503,9 @@ namespace castor
 	using OnCacheChanged = castor::Signal< OnCacheChangedFunction >;
 	using OnCacheChangedConnection = castor::Connection< OnCacheChanged >;
 
-	template< typename ResourceT, typename KeyT >
-	using ResourceProducerT = typename ResourceCacheTraitsT< ResourceT, KeyT >::ElementProducerT;
-	template< typename ResourceT, typename KeyT >
-	using ResourceInitialiserT = typename ResourceCacheTraitsT< ResourceT, KeyT >::ElementInitialiserT;
-	template< typename ResourceT, typename KeyT >
-	using ResourceCleanerT = typename ResourceCacheTraitsT< ResourceT, KeyT >::ElementCleanerT;
-	template< typename ResourceT, typename KeyT >
-	using ResourceMergerT = typename ResourceCacheTraitsT< ResourceT, KeyT >::ElementMergerT;
-	template< typename ResourceT, typename KeyT >
-	using ResourcePtrT = typename ResourceCacheTraitsT< ResourceT, KeyT >::ElementPtrT;
-	template< typename ResourceT, typename KeyT >
-	using ResourceContT = typename ResourceCacheTraitsT< ResourceT, KeyT >::ElementContT;
+	template< typename ResT, typename KeyT, typename TraitsT >
+	using ResourceCachePtrT = std::shared_ptr< ResourceCacheT< ResT, KeyT, TraitsT > >;
 
-	template< typename ResourceT, typename KeyT >
-	using ResourceCachePtrT = std::shared_ptr< ResourceCacheT< ResourceT, KeyT > >;
-
-	CU_DeclareCUSmartPtr( castor, Resource, CU_API );
 	//@}
 }
 

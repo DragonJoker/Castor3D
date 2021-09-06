@@ -630,7 +630,7 @@ namespace castor3d
 				, InstantiationComponent & instantiation
 				, SubmeshRenderNodePtrArray & renderNodes )
 			{
-				auto it = instantiation.find( pass.getOwner()->shared_from_this(), m_instanceMult );
+				auto it = instantiation.find( pass.getOwner(), m_instanceMult );
 				auto index = instantiation.getIndex( m_instanceMult );
 
 				if ( !renderNodes.empty()
@@ -663,7 +663,7 @@ namespace castor3d
 				, InstantiationComponent & instantiation
 				, SubmeshRenderNodePtrArray & renderNodes )
 			{
-				auto it = instantiation.find( pass.getOwner()->shared_from_this(), m_instanceMult );
+				auto it = instantiation.find( pass.getOwner(), m_instanceMult );
 				auto index = instantiation.getIndex( m_instanceMult );
 
 				if ( !renderNodes.empty()
@@ -902,7 +902,7 @@ namespace castor3d
 		, AnimatedSkeleton * skeleton )
 	{
 		auto & buffers = submesh.getGeometryBuffers( getShaderFlags()
-			, pass.getOwner()->shared_from_this()
+			, pass.getOwner()
 			, getInstanceMult()
 			, pass.getTexturesMask() );
 		auto & scene = *primitive.getScene();

@@ -91,7 +91,7 @@ namespace castortd
 
 			if ( scene )
 			{
-				m_marker = scene->getSceneNodeCache().find( cuT( "MapMouse" ) );
+				m_marker = scene->getSceneNodeCache().find( cuT( "MapMouse" ) ).lock();
 				m_marker->setVisible( false );
 
 				m_listener = m_renderWindow->getListener();
@@ -173,7 +173,7 @@ namespace castortd
 							, [this, p_geometry]()
 							{
 								castor::Point3f position = p_geometry->getParent()->getPosition();
-								auto height = p_geometry->getMesh()->getBoundingBox().getMax()[1] - p_geometry->getMesh()->getBoundingBox().getMin()[1];
+								auto height = p_geometry->getMesh().lock()->getBoundingBox().getMax()[1] - p_geometry->getMesh().lock()->getBoundingBox().getMin()[1];
 								m_marker->setPosition( castor::Point3f{ position[0], height + 1, position[2] } );
 							} ) );
 						m_selectedTower = nullptr;

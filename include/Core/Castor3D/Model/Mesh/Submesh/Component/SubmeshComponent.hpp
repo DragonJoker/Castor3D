@@ -62,7 +62,7 @@ namespace castor3d
 		 *\brief		Récupère les tampons qui doivent aller dans un VAO.
 		 */
 		C3D_API virtual void gather( ShaderFlags const & flags
-			, MaterialSPtr material
+			, MaterialRPtr material
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
@@ -74,7 +74,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les indicateurs de shader.
 		 */
-		C3D_API virtual ProgramFlags getProgramFlags( MaterialSPtr material )const = 0;
+		C3D_API virtual ProgramFlags getProgramFlags( MaterialRPtr material )const = 0;
 		/**
 		 *\~english
 		 *\return		Clones this component.

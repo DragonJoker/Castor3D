@@ -48,7 +48,7 @@ namespace castor3d
 		}
 	}
 
-	void OverlayCategory::setMaterial( MaterialSPtr material )
+	void OverlayCategory::setMaterial( MaterialRPtr material )
 	{
 		m_pMaterial = material;
 
@@ -127,7 +127,7 @@ namespace castor3d
 	bool OverlayCategory::isSizeChanged()const
 	{
 		bool changed = m_sizeChanged;
-		OverlaySPtr parent = getOverlay().getParent();
+		auto parent = getOverlay().getParent();
 
 		if ( !changed && parent )
 		{
@@ -140,7 +140,7 @@ namespace castor3d
 	bool OverlayCategory::isPositionChanged()const
 	{
 		bool changed = m_positionChanged;
-		OverlaySPtr parent = getOverlay().getParent();
+		auto parent = getOverlay().getParent();
 
 		if ( !changed && parent )
 		{
@@ -152,7 +152,7 @@ namespace castor3d
 
 	Point2d OverlayCategory::doGetTotalSize( OverlayRenderer const & renderer )const
 	{
-		OverlaySPtr parent = getOverlay().getParent();
+		auto parent = getOverlay().getParent();
 		Size renderSize = renderer.getSize();
 		Point2d totalSize( renderSize.getWidth(), renderSize.getHeight() );
 

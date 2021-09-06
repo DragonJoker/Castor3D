@@ -14,11 +14,11 @@ namespace castor3d
 {
 	namespace
 	{
-		size_t hash( MaterialSPtr material
+		size_t hash( MaterialRPtr material
 			, ShaderFlags const & shaderFlags
 			, TextureFlagsArray const & mask )
 		{
-			auto result = std::hash< MaterialSPtr >{}( material );
+			auto result = std::hash< Material * >{}( material );
 
 			for ( auto const & flagId : mask )
 			{
@@ -136,7 +136,6 @@ namespace castor3d
 
 	Submesh::Submesh( Mesh & mesh, uint32_t id )
 		: OwnedBy< Mesh >{ mesh }
-		, m_parentMesh{ mesh }
 		, m_id{ id }
 		, m_defaultMaterial{ mesh.getScene()->getEngine()->getMaterialCache().getDefaultMaterial() }
 	{
@@ -157,7 +156,7 @@ namespace castor3d
 				, VkDeviceSize( m_indexMapping->getCount() ) * m_indexMapping->getComponentsCount()
 				, VK_BUFFER_USAGE_INDEX_BUFFER_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, m_parentMesh.getName() + "Submesh" + castor::string::toString( m_id ) + "IndexBuffer" );
+				, getParent().getName() + "Submesh" + castor::string::toString( m_id ) + "IndexBuffer" );
 
 			for ( auto & component : m_components )
 			{
@@ -383,7 +382,7 @@ namespace castor3d
 		}
 	}
 
-	ProgramFlags Submesh::getProgramFlags( MaterialSPtr material )const
+	ProgramFlags Submesh::getProgramFlags( MaterialRPtr material )const
 	{
 		auto result = m_programFlags;
 
@@ -395,8 +394,8 @@ namespace castor3d
 		return result;
 	}
 
-	void Submesh::setMaterial( MaterialSPtr oldMaterial
-		, MaterialSPtr newMaterial
+	void Submesh::setMaterial( MaterialRPtr oldMaterial
+		, MaterialRPtr newMaterial
 		, bool update )
 	{
 		if ( oldMaterial != newMaterial )
@@ -415,7 +414,7 @@ namespace castor3d
 	}
 
 	GeometryBuffers const & Submesh::getGeometryBuffers( ShaderFlags const & flags
-		, MaterialSPtr material
+		, MaterialRPtr material
 		, uint32_t instanceMult
 		, TextureFlagsArray const & mask )const
 	{
@@ -489,7 +488,7 @@ namespace castor3d
 					, size
 					, 0u
 					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-					, m_parentMesh.getName() + "Submesh" + castor::string::toString( m_id ) + "VertexBuffer" );
+					, getParent().getName() + "Submesh" + castor::string::toString( m_id ) + "VertexBuffer" );
 			}
 
 			if ( auto buffer = m_vertexBuffer->getBuffer().lock( 0u

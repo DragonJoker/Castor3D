@@ -56,7 +56,7 @@ namespace castor3d::exporter
 
 				for ( auto const & name : view )
 				{
-					auto elem = view.find( name );
+					auto elem = view.find( name ).lock();
 
 					if ( filter( *elem ) )
 					{
@@ -89,7 +89,7 @@ namespace castor3d::exporter
 
 				for ( auto const & name : view )
 				{
-					auto elem = view.find( name );
+					auto elem = view.find( name ).lock();
 
 					if ( filter( *elem ) )
 					{
@@ -198,8 +198,8 @@ namespace castor3d::exporter
 					, stream
 					, []( Geometry const & object )
 					{
-						return object.getMesh()
-							&& object.getMesh()->isSerialisable();
+						return object.getMesh().lock()
+							&& object.getMesh().lock()->isSerialisable();
 					} );
 			}
 			return result;
@@ -353,7 +353,7 @@ namespace castor3d::exporter
 
 						for ( auto & geomIt : options.geometries )
 						{
-							if ( geomIt.second->getMesh().get() == split.mesh )
+							if ( geomIt.second->getMesh().lock().get() == split.mesh )
 							{
 								hasGeometries = true;
 								auto node = geomIt.second->getParent();

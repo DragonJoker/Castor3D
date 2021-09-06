@@ -14,7 +14,9 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
+#include "Castor3D/Scene/ParticleSystem/ParticleModule.hpp"
 
+#include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
 #include "Castor3D/Cache/BillboardCache.hpp"
 #include "Castor3D/Cache/CacheView.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
@@ -426,7 +428,7 @@ namespace castor3d
 		bool m_needsSubsurfaceScattering{ false };
 		bool m_hasOpaqueObjects{ false };
 		bool m_hasTransparentObjects{ false };
-		std::map< MaterialSPtr, OnMaterialChangedConnection > m_materialsListeners;
+		std::map< Material *, OnMaterialChangedConnection > m_materialsListeners;
 		bool m_dirtyMaterials{ true };
 		uint32_t m_directionalShadowCascades{ ShadowMapDirectionalTileCountX * ShadowMapDirectionalTileCountY };
 		castor::BoundingBox m_boundingBox;

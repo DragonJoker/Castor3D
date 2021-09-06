@@ -4,10 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_OverlayModule_H___
 #define ___C3D_OverlayModule_H___
 
-#include "Castor3D/Castor3DModule.hpp"
+#include "Castor3D/Cache/CacheModule.hpp"
 
 namespace castor3d
 {
+	class Scene;
+
 	/**@name Overlay */
 	//@{
 
@@ -271,11 +273,52 @@ namespace castor3d
 	CU_DeclareCUSmartPtr( castor3d, OverlayRenderer, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, PanelOverlay, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, TextOverlay, C3D_API );
+	/**
+	*\~english
+	*	Helper structure to specialise a cache behaviour.
+	*\remarks
+	*	Specialisation for Overlay.
+	*\~french
+	*	Structure permettant de spécialiser le comportement d'un cache.
+	*\remarks
+	*	Spécialisation pour Overlay.
+	*/
+	template<>
+	struct PtrCacheTraitsT< Overlay, castor::String >
+		: PtrCacheTraitsBaseT< Overlay, castor::String >
+	{
+		using ResT = Overlay;
+		using KeyT = castor::String;
+		using Base = PtrCacheTraitsBaseT< ResT, KeyT >;
+		using ElementT = typename Base::ElementT;
+		using ElementPtrT = typename Base::ElementPtrT;
+		using ElementObsT = typename Base::ElementObsT;
 
-	CU_DeclareVector( OverlaySPtr, OverlayPtr );
-	CU_DeclareMap( castor::String, OverlaySPtr, OverlayPtrStr ); 
+		C3D_API static const castor::String Name;
+	};
+
+	using OverlayCacheTraits = PtrCacheTraitsT< Overlay, castor::String >;
+	using OverlayCache = castor::ResourceCacheT< Overlay
+		, castor::String
+		, OverlayCacheTraits >;
+
+	using OverlayRes = OverlayCacheTraits::ElementPtrT;
+	using OverlayResPtr = OverlayCacheTraits::ElementObsT;
+
+	CU_DeclareCUSmartPtr( castor3d, OverlayCache, C3D_API );
+
+	CU_DeclareVector( OverlayRPtr, OverlayPtr );
+	CU_DeclareMap( castor::String, OverlayResPtr, OverlayPtrStr );
 
 	//@}
+}
+
+namespace castor
+{
+	template<>
+	struct ResourceCacheT< castor3d::Overlay
+		, String
+		, castor3d::OverlayCacheTraits >;
 }
 
 #endif

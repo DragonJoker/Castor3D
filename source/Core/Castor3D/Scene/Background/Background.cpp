@@ -45,30 +45,27 @@ namespace castor3d
 		{
 			m_initialised = doInitialise( device );
 			castor::String const name = cuT( "Skybox" );
-			SamplerSPtr sampler;
+			auto sampler = getEngine()->getSamplerCache().tryFind( name );
 
-			if ( getEngine()->getSamplerCache().has( name ) )
+			if ( !sampler.lock() )
 			{
-				sampler = getEngine()->getSamplerCache().find( name );
-			}
-			else
-			{
-				sampler = getEngine()->getSamplerCache().add( name );
-				sampler->setMinFilter( VK_FILTER_LINEAR );
-				sampler->setMagFilter( VK_FILTER_LINEAR );
-				sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				sampler->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				sampler->setMinLod( 0.0f );
-				sampler->setMaxLod( float( m_texture->getMipmapCount() - 1u ) );
+				auto created = getEngine()->getSamplerCache().create( name, *getEngine() );
+				created->setMinFilter( VK_FILTER_LINEAR );
+				created->setMagFilter( VK_FILTER_LINEAR );
+				created->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				created->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				created->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				created->setMinLod( 0.0f );
+				created->setMaxLod( float( m_texture->getMipmapCount() - 1u ) );
+				sampler = getEngine()->getSamplerCache().add( name, created, false );
 
 				if ( m_texture->getMipmapCount() > 1u )
 				{
-					sampler->setMipFilter( VK_SAMPLER_MIPMAP_MODE_LINEAR );
+					sampler.lock()->setMipFilter( VK_SAMPLER_MIPMAP_MODE_LINEAR );
 				}
 			}
 
-			sampler->initialise( device );
+			sampler.lock()->initialise( device );
 			m_sampler = sampler;
 
 			if ( m_initialised
@@ -98,7 +95,6 @@ namespace castor3d
 			m_texture.reset();
 		}
 
-		getEngine()->getSamplerCache().remove( cuT( "Skybox" ) );
 		m_ibl.reset();
 	}
 

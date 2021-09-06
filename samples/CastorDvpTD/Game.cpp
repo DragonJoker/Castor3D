@@ -75,20 +75,20 @@ namespace castortd
 			, Tower::Category::Kind p_kind
 			, CacheViewT< MaterialCache, EventType::ePreRender > const & p_materials )
 		{
-			auto & mesh = *p_geometry.getMesh();
+			auto & mesh = *p_geometry.getMesh().lock();
 
 			switch ( p_kind )
 			{
 			case Tower::Category::Kind::eLongRange:
-				p_geometry.setMaterial( *mesh.getSubmesh( 0u ), p_materials.find( cuT( "splash_accessories" ) ) );
-				p_geometry.setMaterial( *mesh.getSubmesh( 1u ), p_materials.find( cuT( "splash_accessories" ) ) );
-				p_geometry.setMaterial( *mesh.getSubmesh( 2u ), p_materials.find( cuT( "splash_body" ) ) );
+				p_geometry.setMaterial( *mesh.getSubmesh( 0u ), p_materials.find( cuT( "splash_accessories" ) ).lock().get() );
+				p_geometry.setMaterial( *mesh.getSubmesh( 1u ), p_materials.find( cuT( "splash_accessories" ) ).lock().get() );
+				p_geometry.setMaterial( *mesh.getSubmesh( 2u ), p_materials.find( cuT( "splash_body" ) ).lock().get() );
 				break;
 
 			case Tower::Category::Kind::eShortRange:
-				p_geometry.setMaterial( *mesh.getSubmesh( 0u ), p_materials.find( cuT( "short_range_accessories" ) ) );
-				p_geometry.setMaterial( *mesh.getSubmesh( 1u ), p_materials.find( cuT( "short_range_accessories" ) ) );
-				p_geometry.setMaterial( *mesh.getSubmesh( 2u ), p_materials.find( cuT( "short_range_body" ) ) );
+				p_geometry.setMaterial( *mesh.getSubmesh( 0u ), p_materials.find( cuT( "short_range_accessories" ) ).lock().get() );
+				p_geometry.setMaterial( *mesh.getSubmesh( 1u ), p_materials.find( cuT( "short_range_accessories" ) ).lock().get() );
+				p_geometry.setMaterial( *mesh.getSubmesh( 2u ), p_materials.find( cuT( "short_range_body" ) ).lock().get() );
 				break;
 			}
 		}
@@ -115,7 +115,7 @@ namespace castortd
 			{ 17, 27 },
 		}
 	{
-		m_mapNode = m_scene.getSceneNodeCache().find( cuT( "MapBase" ) );
+		m_mapNode = m_scene.getSceneNodeCache().find( cuT( "MapBase" ) ).lock();
 		m_mapCubeMesh = m_scene.getMeshCache().find( cuT( "MapCube" ) );
 		m_mapCubeMaterial = m_scene.getMaterialView().find( cuT( "MapCube" ) );
 		m_shortRangeTowerMesh = m_scene.getMeshCache().find( cuT( "ShortRange" ) );
@@ -124,10 +124,10 @@ namespace castortd
 		m_enemyCubeMaterial = m_scene.getMaterialView().find( cuT( "EnemyCube" ) );
 		m_bulletMesh = m_scene.getMeshCache().find( cuT( "Bullet" ) );
 		m_bulletMaterial = m_scene.getMaterialView().find( cuT( "Bullet" ) );
-		m_targetNode = m_scene.getSceneNodeCache().find( cuT( "Target" ) );
-		m_cellDimensions[0] = m_mapCubeMesh->getBoundingBox().getMax()[0] - m_mapCubeMesh->getBoundingBox().getMin()[0];
-		m_cellDimensions[1] = m_mapCubeMesh->getBoundingBox().getMax()[1] - m_mapCubeMesh->getBoundingBox().getMin()[1];
-		m_cellDimensions[2] = m_mapCubeMesh->getBoundingBox().getMax()[2] - m_mapCubeMesh->getBoundingBox().getMin()[2];
+		m_targetNode = m_scene.getSceneNodeCache().find( cuT( "Target" ) ).lock();
+		m_cellDimensions[0] = m_mapCubeMesh.lock()->getBoundingBox().getMax()[0] - m_mapCubeMesh.lock()->getBoundingBox().getMin()[0];
+		m_cellDimensions[1] = m_mapCubeMesh.lock()->getBoundingBox().getMax()[1] - m_mapCubeMesh.lock()->getBoundingBox().getMin()[1];
+		m_cellDimensions[2] = m_mapCubeMesh.lock()->getBoundingBox().getMax()[2] - m_mapCubeMesh.lock()->getBoundingBox().getMin()[2];
 
 		m_hud.initialise();
 		Reset();
@@ -322,14 +322,19 @@ namespace castortd
 		if ( m_bulletsCache.empty() )
 		{
 			String name = cuT( "Bullet_" ) + std::to_string( ++m_totalBullets );
-			auto node = m_scene.getSceneNodeCache().add( name, *m_scene.getObjectRootNode() );
-			auto geometry = m_scene.getGeometryCache().add( name, *node, m_bulletMesh );
+			auto node = m_scene.getSceneNodeCache().add( name
+				, *m_scene.getObjectRootNode()
+				, m_scene ).lock();
+			auto geometry = m_scene.getGeometryCache().add( name
+				, m_scene
+				, *node
+				, m_bulletMesh ).lock();
 			node->setPosition( p_origin );
 			node->attachTo( *m_mapNode );
 
-			for ( auto submesh : *geometry->getMesh() )
+			for ( auto submesh : *geometry->getMesh().lock() )
 			{
-				geometry->setMaterial( *submesh, m_bulletMaterial );
+				geometry->setMaterial( *submesh, m_bulletMaterial.lock().get() );
 			}
 
 			m_bullets.emplace_back( p_speed, p_damage, *node, p_target );
@@ -549,14 +554,18 @@ namespace castortd
 	void Game::doAddMapCube( Cell & p_cell )
 	{
 		String name = cuT( "MapCube_" ) + std::to_string( p_cell.m_x ) + cuT( "x" ) + std::to_string( p_cell.m_y );
-		auto node = m_scene.getSceneNodeCache().add( name, *m_scene.getObjectRootNode() );
-		auto geometry = m_scene.getGeometryCache().add( name, *node, m_mapCubeMesh );
+		auto node = m_scene.getSceneNodeCache().add( name
+			, *m_scene.getObjectRootNode()
+			, m_scene ).lock();
+		auto geometry = m_scene.getGeometryCache().add( name
+			, m_scene
+			, *node, m_mapCubeMesh ).lock();
 		node->setPosition( convert( Point2i{ p_cell.m_x, p_cell.m_y } ) + castor::Point3f{ 0, m_cellDimensions[1] / 2, 0 } );
 		node->attachTo( *m_mapNode );
 
-		for ( auto submesh : *geometry->getMesh() )
+		for ( auto submesh : *geometry->getMesh().lock() )
 		{
-			geometry->setMaterial( *submesh, m_mapCubeMaterial, false );
+			geometry->setMaterial( *submesh, m_mapCubeMaterial.lock().get(), false );
 		}
 
 		m_lastMapCube = geometry;
@@ -569,9 +578,9 @@ namespace castortd
 		p_cell.m_state = Cell::State::Target;
 	}
 
-	MeshSPtr Game::doSelectMesh( Tower::Category & p_category )
+	MeshResPtr Game::doSelectMesh( Tower::Category & p_category )
 	{
-		MeshSPtr result;
+		MeshResPtr result;
 
 		switch ( p_category.getKind() )
 		{
@@ -590,12 +599,17 @@ namespace castortd
 	void Game::doAddTower( Cell & p_cell, Tower::CategoryPtr && p_category )
 	{
 		String name = cuT( "Tower_" ) + std::to_string( p_cell.m_x ) + cuT( "x" ) + std::to_string( p_cell.m_y );
-		auto node = m_scene.getSceneNodeCache().add( name, *m_scene.getObjectRootNode() );
+		auto node = m_scene.getSceneNodeCache().add( name
+			, *m_scene.getObjectRootNode()
+			, m_scene ).lock();
 		node->setPosition( convert( Point2i{ p_cell.m_x, p_cell.m_y } ) + castor::Point3f{ 0, m_cellDimensions[1], 0 } );
 		node->attachTo( *m_mapNode );
-		MeshSPtr mesh = doSelectMesh( *p_category );
-		auto tower = m_scene.getGeometryCache().add( name, *node, mesh );
-		auto animGroup = m_scene.getAnimatedObjectGroupCache().add( name );
+		auto mesh = doSelectMesh( *p_category );
+		auto tower = m_scene.getGeometryCache().add( name
+			, m_scene
+			, *node, mesh ).lock();
+		auto animGroup = m_scene.getAnimatedObjectGroupCache().add( name
+			, m_scene ).lock();
 		Milliseconds time{ 0 };
 
 		if ( !tower->getAnimations().empty() )
@@ -603,9 +617,9 @@ namespace castortd
 			animGroup->addObject( *tower, tower->getName() + cuT( "_Movable" ) );
 		}
 
-		if ( tower->getMesh() )
+		if ( tower->getMesh().lock() )
 		{
-			auto mesh = tower->getMesh();
+			auto mesh = tower->getMesh().lock();
 
 			if ( !mesh->getAnimations().empty() )
 			{

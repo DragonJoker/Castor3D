@@ -47,7 +47,7 @@ namespace castor3d
 		*/
 		C3D_API explicit RenderCube( RenderDevice const & device
 			, bool nearest
-			, SamplerSPtr sampler = nullptr );
+			, SamplerResPtr sampler = {} );
 		/**
 		*\~english
 		*\brief
@@ -190,7 +190,7 @@ namespace castor3d
 
 	protected:
 		RenderDevice const & m_device;
-		SamplerSPtr m_sampler;
+		SamplerResPtr m_sampler;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
 
 	private:
