@@ -49,7 +49,7 @@ namespace castor3d
 
 				if ( result )
 				{
-					obj.setName( name );
+					obj.rename( name );
 				}
 
 				break;

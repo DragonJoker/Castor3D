@@ -23,7 +23,7 @@ namespace castor3d
 		{
 			descriptorSet.createBinding( layout.getBinding( index )
 				, texture.getTexture()->getDefaultView().getSampledView()
-				, texture.getSampler()->getSampler()
+				, texture.getSampler().lock()->getSampler()
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, texIndex++ );
 		}
@@ -34,7 +34,7 @@ namespace castor3d
 		{
 			write.imageInfo.push_back( 
 				{
-					texture.getSampler()->getSampler(),
+					texture.getSampler().lock()->getSampler(),
 					texture.getTexture()->getDefaultView().getSampledView(),
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				} );

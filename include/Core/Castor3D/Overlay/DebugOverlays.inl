@@ -34,13 +34,15 @@ namespace castor3d
 	{
 		auto baseName = cuT( "DebugPanel-" ) + name;
 		m_label = cache.add( baseName + cuT( "-Label" )
+			, cache.getEngine()
 			, OverlayType::eText
 			, nullptr
-			, panel->getOverlay().shared_from_this() )->getTextOverlay();
+			, &panel->getOverlay() ).lock()->getTextOverlay();
 		m_value = cache.add( baseName + cuT( "-Value" )
+			, cache.getEngine()
 			, OverlayType::eText
 			, nullptr
-			, panel->getOverlay().shared_from_this() )->getTextOverlay();
+			, &panel->getOverlay() ).lock()->getTextOverlay();
 
 		m_label->setPixelPosition( castor::Position{ 10, 0 } );
 		m_value->setPixelPosition( castor::Position{ 200, 0 } );
@@ -55,8 +57,8 @@ namespace castor3d
 		m_value->setVAlign( VAlign::eCenter );
 
 		auto & materials = cache.getEngine().getMaterialCache();
-		m_label->setMaterial( materials.find( cuT( "White" ) ) );
-		m_value->setMaterial( materials.find( cuT( "White" ) ) );
+		m_label->setMaterial( materials.find( cuT( "White" ) ).lock().get() );
+		m_value->setMaterial( materials.find( cuT( "White" ) ).lock().get() );
 
 		m_label->setCaption( label );
 	}
@@ -99,23 +101,25 @@ namespace castor3d
 		: m_cache{ cache }
 		, m_panel{ panel }
 		, m_titlePanel{ m_cache.add( cuT( "DebugPanels-" ) + title + cuT( "-TitlePanel" )
+			, cache.getEngine()
 			, OverlayType::ePanel
 			, nullptr
-			, m_panel->getOverlay().shared_from_this() )->getPanelOverlay() }
+			, &m_panel->getOverlay() ).lock()->getPanelOverlay() }
 		, m_titleText{ m_cache.add( cuT( "DebugPanels-" ) + title + cuT( "-TitleText" )
+			, cache.getEngine()
 			, OverlayType::eText
 			, nullptr
-			, m_titlePanel->getOverlay().shared_from_this() )->getTextOverlay() }
+			, &m_titlePanel->getOverlay() ).lock()->getTextOverlay() }
 	{
 		auto & materials = m_cache.getEngine().getMaterialCache();
 
 		m_titlePanel->setPixelSize( castor::Size{ 320, 20 } );
-		m_titlePanel->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ) );
+		m_titlePanel->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ).lock().get() );
 
 		m_titleText->setPixelSize( castor::Size{ 300, 20 } );
 		m_titleText->setVAlign( VAlign::eCenter );
 		m_titleText->setHAlign( HAlign::eCenter );
-		m_titleText->setMaterial( materials.find( cuT( "White" ) ) );
+		m_titleText->setMaterial( materials.find( cuT( "White" ) ).lock().get() );
 		m_titleText->setFont( cuT( "Arial20" ) );
 		m_titleText->setCaption( title );
 	}

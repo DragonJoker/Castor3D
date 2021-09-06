@@ -35,7 +35,7 @@ namespace castor3d
 		C3D_API explicit IblTextures( Scene & scene
 			, RenderDevice const & device
 			, Texture const & source
-			, SamplerSPtr sampler );
+			, SamplerResPtr sampler );
 		/**
 		 *\~english
 		 *\brief		Updates the environment maps.
@@ -89,13 +89,13 @@ namespace castor3d
 
 		inline ashes::Sampler const & getPrefilteredBrdfSampler()const
 		{
-			return m_sampler->getSampler();
+			return m_sampler.lock()->getSampler();
 		}
 		/**@}*/
 
 	private:
 		Texture m_prefilteredBrdf;
-		SamplerSPtr m_sampler;
+		SamplerResPtr m_sampler;
 		RadianceComputer m_radianceComputer;
 		EnvironmentPrefilter m_environmentPrefilter;
 	};

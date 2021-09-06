@@ -166,7 +166,7 @@ namespace castor3d
 				, "ParticleSystemBillboards" ) );
 		m_particlesBillboard->setBillboardType( BillboardType::eSpherical );
 		m_particlesBillboard->setDimensions( m_dimensions );
-		m_particlesBillboard->setMaterial( m_material.lock() );
+		m_particlesBillboard->setMaterial( m_material );
 		bool result = m_particlesBillboard->initialise( device, m_particlesCount );
 		getScene()->getBillboardListCache().registerElement( *m_particlesBillboard );
 
@@ -241,7 +241,7 @@ namespace castor3d
 		m_firstUpdate = false;
 	}
 
-	void ParticleSystem::setMaterial( MaterialSPtr material )
+	void ParticleSystem::setMaterial( MaterialRPtr material )
 	{
 		m_material = material;
 
@@ -276,9 +276,9 @@ namespace castor3d
 		}
 	}
 
-	MaterialSPtr ParticleSystem::getMaterial()const
+	MaterialRPtr ParticleSystem::getMaterial()const
 	{
-		return m_material.lock();
+		return m_material;
 	}
 
 	Point2f const & ParticleSystem::getDimensions()const

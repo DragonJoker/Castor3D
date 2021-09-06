@@ -39,20 +39,20 @@ namespace castor3d
 		visitor.visit( *this );
 	}
 
-	void TextOverlay::setFont( castor::String const & p_strFont )
+	void TextOverlay::setFont( castor::String const & name )
 	{
 		// Récupération / Création de la police
 		Engine * engine = m_pOverlay->getEngine();
 		auto & fontCache = engine->getFontCache();
-		castor::FontSPtr pFont = fontCache.find( p_strFont );
+		auto font = fontCache.find( name );
 
-		if ( pFont )
+		if ( font.lock() )
 		{
-			FontTextureSPtr fontTexture = engine->getOverlayCache().getFontTexture( pFont->getName() );
+			FontTextureSPtr fontTexture = engine->getOverlayCache().getFontTexture( font.lock()->getName() );
 
 			if ( !fontTexture )
 			{
-				fontTexture = engine->getOverlayCache().createFontTexture( pFont );
+				fontTexture = engine->getOverlayCache().createFontTexture( font );
 				fontTexture->update();
 			}
 
@@ -65,7 +65,7 @@ namespace castor3d
 		}
 		else
 		{
-			CU_Exception( "Font " + castor::string::stringCast< char >( p_strFont ) + "not found" );
+			CU_Exception( "Font " + castor::string::stringCast< char >( name ) + "not found" );
 		}
 
 		m_textChanged = true;
@@ -82,7 +82,7 @@ namespace castor3d
 			CU_Exception( cuT( "The TextOverlay [" ) + getOverlayName() + cuT( "] has no FontTexture. Did you set its font?" ) );
 		}
 
-		castor::FontSPtr font = fontTexture->getFont();
+		auto font = fontTexture->getFont();
 		std::vector< char32_t > newCaption;
 
 		for ( castor::string::utf8::iterator it{ m_currentCaption.begin() }; it != m_currentCaption.end(); ++it )
@@ -126,7 +126,7 @@ namespace castor3d
 
 		if ( fontTexture )
 		{
-			castor::FontSPtr font = fontTexture->getFont();
+			auto font = fontTexture->getFont();
 
 			if ( !m_currentCaption.empty() && font )
 			{
@@ -269,7 +269,7 @@ namespace castor3d
 	TextOverlay::DisplayableLineArray TextOverlay::doPrepareText( castor::Size const & p_renderSize, castor::Point2d const & p_size )
 	{
 		FontTextureSPtr fontTexture = getFontTexture();
-		castor::FontSPtr font = fontTexture->getFont();
+		auto font = fontTexture->getFont();
 		castor::StringArray lines = castor::string::split( m_previousCaption
 			, cuT( "\n" )
 			, uint32_t( std::count( m_previousCaption.begin(), m_previousCaption.end(), cuT( '\n' ) ) + 1 )

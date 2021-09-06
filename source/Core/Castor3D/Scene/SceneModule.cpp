@@ -1,11 +1,22 @@
 #include "Castor3D/Scene/SceneModule.hpp"
 
+#include "Castor3D/Scene/BillboardList.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
 
 CU_ImplementExportedOwnedBy( castor3d::Scene, Scene )
+CU_ImplementCUSmartPtr( castor3d, CameraCache )
+CU_ImplementCUSmartPtr( castor3d, SceneCache )
+CU_ImplementCUSmartPtr( castor3d, SceneNodeCache )
 
 namespace castor3d
 {
+	const castor::String PtrCacheTraitsT< castor3d::Scene, castor::String >::Name = cuT( "Scene" );
+	const castor::String ObjectCacheTraitsT< Camera, castor::String >::Name = cuT( "Camera" );
+	const castor::String ObjectCacheTraitsT< SceneNode, castor::String >::Name = cuT( "SceneNode" );
+
 	castor::String getName( MovableType value )
 	{
 		switch ( value )

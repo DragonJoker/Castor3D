@@ -75,12 +75,12 @@ namespace CastorGui
 		/** sets the background material.
 		 *\param[in]	p_material		The new value.
 		 */
-		void setBackgroundMaterial( castor3d::MaterialSPtr p_material );
+		void setBackgroundMaterial( castor3d::MaterialRPtr p_material );
 
 		/** sets the foreground material.
 		 *\param[in]	p_material		The new value.
 		 */
-		void setForegroundMaterial( castor3d::MaterialSPtr p_material );
+		void setForegroundMaterial( castor3d::MaterialRPtr p_material );
 
 		/** sets the caption.
 		 *\param[in]	p_caption	The new value
@@ -155,17 +155,17 @@ namespace CastorGui
 		/** Retrieves the background material
 		 *\return		The value
 		*/
-		inline castor3d::MaterialSPtr getBackgroundMaterial()const
+		inline castor3d::MaterialRPtr getBackgroundMaterial()const
 		{
-			return m_backgroundMaterial.lock();
+			return m_backgroundMaterial;
 		}
 
 		/** Retrieves the foreground material
 		 *\return		The value
 		*/
-		inline castor3d::MaterialSPtr getForegroundMaterial()const
+		inline castor3d::MaterialRPtr getForegroundMaterial()const
 		{
-			return m_foregroundMaterial.lock();
+			return m_foregroundMaterial;
 		}
 
 		/** Shows the control
@@ -267,12 +267,12 @@ namespace CastorGui
 		/** sets the background material
 		*\param[in]	p_material		The new value
 		*/
-		virtual void doSetBackgroundMaterial( castor3d::MaterialSPtr p_material ) = 0;
+		virtual void doSetBackgroundMaterial( castor3d::MaterialRPtr p_material ) = 0;
 
 		/** sets the foreground material
 		*\param[in]	p_material		The new value
 		*/
-		virtual void doSetForegroundMaterial( castor3d::MaterialSPtr p_material ) = 0;
+		virtual void doSetForegroundMaterial( castor3d::MaterialRPtr p_material ) = 0;
 
 		/** sets the caption.
 		 *\param[in]	p_caption	The new value
@@ -326,9 +326,9 @@ namespace CastorGui
 		//! The cursor when mouse is over this control
 		MouseCursor m_cursor;
 		//! The background material
-		castor3d::MaterialWPtr m_backgroundMaterial;
+		castor3d::MaterialRPtr m_backgroundMaterial;
 		//! The foreground material
-		castor3d::MaterialWPtr m_foregroundMaterial;
+		castor3d::MaterialRPtr m_foregroundMaterial;
 
 	private:
 		//! The ID

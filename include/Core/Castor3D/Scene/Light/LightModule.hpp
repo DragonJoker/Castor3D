@@ -122,7 +122,7 @@ namespace castor3d
 	//! Array of lights
 	CU_DeclareVector( LightSPtr, LightPtr );
 	//! Array of lights
-	CU_DeclareVector( LightSPtr, Lights );
+	CU_DeclareVector( LightRPtr, Lights );
 	//! Array to non owning light pointers
 	CU_DeclareVector( LightRPtr, LightsRef );
 	//! Map of lights, sorted by name
@@ -147,6 +147,39 @@ namespace castor3d
 		castor::ChangeTracked< float > maxRadius;
 		castor::ChangeTracked< castor::RangedValue< uint32_t > > sampleCount{ castor::makeRangedValue( 100u, 20u, MaxRange ) };
 	};
+	/**
+	*\~english
+	*	Helper structure to specialise a scene objects cache behaviour.
+	*\remarks
+	*	Specialisation for Light.
+	*\~french
+	*	Structure permettant de spécialiser le comportement d'un cache d'objets de scène.
+	*\remarks
+	*	Spécialisation pour Light.
+	*/
+	template<>
+	struct ObjectCacheTraitsT< Light, castor::String >
+		: ObjectCacheTraitsBaseT< Light, castor::String >
+	{
+		using KeyT = castor::String;
+		using ElementT = Light;
+		using BaseT = ObjectCacheTraitsBaseT< ElementT, KeyT >;
+		using ElementPtrT = typename BaseT::ElementPtrT;
+
+		C3D_API static const castor::String Name;
+	};
+
+	template<>
+	class ObjectCacheT< Light, castor::String >;
+
+	using LightCacheTraits = ObjectCacheTraitsT< Light, castor::String >;
+	using LightCache = ObjectCacheT< Light
+		, castor::String
+		, LightCacheTraits >;
+	using LightRes = CameraCacheTraits::ElementPtrT;
+	using LightResPtr = CameraCacheTraits::ElementObsT;
+
+	CU_DeclareCUSmartPtr( castor3d, LightCache, C3D_API );
 
 	//@}
 	//@}

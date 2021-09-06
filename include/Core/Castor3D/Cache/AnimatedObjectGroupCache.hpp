@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationModule.hpp"
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
+#include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
@@ -23,9 +24,9 @@ namespace castor
 	\brief		Cache de AnimatedObjectGroup.
 	*/
 	template<>
-	class ResourceCacheT< castor3d::AnimatedObjectGroup, String >
+	class ResourceCacheT< castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits >
 		: public OwnedBy< castor3d::Scene >
-		, public ResourceCacheBaseT< castor3d::AnimatedObjectGroup, String >
+		, public ResourceCacheBaseT< castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits >
 	{
 	public:
 		struct SkeletonPoolsEntry
@@ -40,13 +41,14 @@ namespace castor
 			castor3d::AnimatedMesh const & mesh;
 			castor3d::UniformBufferOffsetT< castor3d::MorphingUboConfiguration > morphingUbo;
 		};
+
 		using ElementT = castor3d::AnimatedObjectGroup;
 		using ElementKeyT = String;
-		using ElementCacheT = ResourceCacheBaseT< ElementT, ElementKeyT >;
-		using ElementCacheTraitsT = typename ElementCacheT::ElementCacheTraitsT;
+		using ElementCacheTraitsT = castor3d::AnimatedObjectGroupCacheTraits;
+		using ElementCacheT = ResourceCacheBaseT< ElementT, ElementKeyT, ElementCacheTraitsT >;
 		using ElementPtrT = typename ElementCacheT::ElementPtrT;
+		using ElementObsT = typename ElementCacheT::ElementObsT;
 		using ElementContT = typename ElementCacheT::ElementContT;
-		using ElementProducerT = typename ElementCacheT::ElementProducerT;
 		using ElementInitialiserT = typename ElementCacheT::ElementInitialiserT;
 		using ElementCleanerT = typename ElementCacheT::ElementCleanerT;
 		using ElementMergerT = typename ElementCacheT::ElementMergerT;

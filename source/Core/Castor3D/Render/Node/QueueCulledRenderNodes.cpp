@@ -114,7 +114,7 @@ namespace castor3d
 			, uint32_t instanceCount )
 		{
 			return submesh.getGeometryBuffers( flags
-				, pass.getOwner()->shared_from_this()
+				, pass.getOwner()
 				, instanceCount
 				, pass.getTexturesMask() );
 		}
@@ -207,7 +207,7 @@ namespace castor3d
 			if ( instanceCount )
 			{
 				GeometryBuffers const & geometryBuffers = object.getGeometryBuffers( shaderFlags
-					, pass.getOwner()->shared_from_this()
+					, pass.getOwner()
 					, instanceCount
 					, pass.getTexturesMask() );
 

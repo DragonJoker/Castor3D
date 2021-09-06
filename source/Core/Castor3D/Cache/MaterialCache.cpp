@@ -13,53 +13,62 @@
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, MaterialCache )
+
+namespace castor3d
+{
+	const castor::String ResourceCacheTraitsT< castor3d::Material, castor::String >::Name = cuT( "Material" );
+}
+
 namespace castor
 {
 	using namespace castor3d;
 
-	ResourceCacheT< Material, String >::ResourceCacheT( Engine & engine )
+	ResourceCacheT< Material, String, MaterialCacheTraits >::ResourceCacheT( Engine & engine )
 		: ElementCacheT{ engine.getLogger()
-			, [&engine]( String const & name, PassTypeID type )
-			{
-				return std::make_shared< Material >( name, engine, type );
-			}
-			, [this]( ElementPtrT resource )
+			, [this]( ElementT & resource )
 			{
 				m_engine.postEvent( makeCpuFunctorEvent( EventType::ePreRender
-					, [this, resource]()
+					, [this, &resource]()
 					{
-						resource->initialise();
-						registerMaterial( *resource );
+						resource.initialise();
+						registerMaterial( resource );
 					} ) );
 			}
-			, [this]( ElementPtrT resource )
+			, [this]( ElementT & resource )
 			{
 				m_engine.postEvent( makeCpuFunctorEvent( EventType::ePreRender
-					, [this, resource]()
+					, [this, &resource]()
 					{
-						unregisterMaterial( *resource );
-						resource->cleanup();
+						unregisterMaterial( resource );
+						resource.cleanup();
 					} ) );
-			} }
+			}
+			, castor::ResourceMergerT< MaterialCache >{ "_" } }
 		, m_engine{ engine }
 	{
 	}
 
-	void ResourceCacheT< Material, String >::initialise( RenderDevice const & device
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::initialise( RenderDevice const & device
 		, PassTypeID passType )
 	{
 		if ( !m_passBuffer )
 		{
 			auto lock( makeUniqueLock( *this ) );
-			m_defaultMaterial = doTryFindNoLock( Material::DefaultMaterialName );
+			MaterialResPtr created;
+			auto defaultMaterial = doTryAddNoLockT( Material::DefaultMaterialName
+				, false
+				, created
+				, m_engine, passType );
+			auto material = defaultMaterial.lock();
 
-			if ( !m_defaultMaterial )
+			if ( created.lock() == material )
 			{
-				m_defaultMaterial = m_produce( Material::DefaultMaterialName, passType );
-				m_defaultMaterial->createPass();
-				m_defaultMaterial->getPass( 0 )->setTwoSided( true );
+				material->createPass();
+				material->getPass( 0 )->setTwoSided( true );
 			}
 
+			m_defaultMaterial = material.get();
 			m_passBuffer = std::make_shared< PassBuffer >( m_engine
 				, device
 				, shader::MaxMaterialsCount );
@@ -67,7 +76,7 @@ namespace castor
 				, device
 				, shader::MaxTextureConfigurationCount );
 
-			for ( auto it : *this )
+			for ( auto & it : *this )
 			{
 				if ( !it.second->isInitialised() )
 				{
@@ -77,7 +86,7 @@ namespace castor
 		}
 	}
 
-	void ResourceCacheT< Material, String >::cleanup()
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::cleanup()
 	{
 		auto lock( makeUniqueLock( *this ) );
 		doCleanupNoLock();
@@ -90,18 +99,18 @@ namespace castor
 			} ) );
 	}
 
-	void ResourceCacheT< Material, String >::clear()
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::clear()
 	{
 		auto lock( makeUniqueLock( *this ) );
-		m_defaultMaterial.reset();
+		m_defaultMaterial = {};
 		doClearNoLock();
 	}
 
-	void ResourceCacheT< Material, String >::update( CpuUpdater & updater )
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::update( CpuUpdater & updater )
 	{
 		auto lock( makeUniqueLock( *this ) );
 
-		for ( auto it : *this )
+		for ( auto & it : *this )
 		{
 			for ( auto & pass : *it.second )
 			{
@@ -111,7 +120,7 @@ namespace castor
 
 	}
 
-	void ResourceCacheT< Material, String >::update( GpuUpdater & updater )
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::update( GpuUpdater & updater )
 	{
 		auto lock( makeUniqueLock( *this ) );
 
@@ -122,7 +131,7 @@ namespace castor
 		}
 	}
 
-	void ResourceCacheT< Material, String >::getNames( StringArray & names )
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::getNames( StringArray & names )
 	{
 		auto lock( makeUniqueLock( *this ) );
 		names.clear();
@@ -135,7 +144,7 @@ namespace castor
 		}
 	}
 
-	void ResourceCacheT< Material, String >::registerMaterial( Material const & material )
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::registerMaterial( Material const & material )
 	{
 		auto lock( makeUniqueLock( *this ) );
 
@@ -156,7 +165,7 @@ namespace castor
 		}
 	}
 
-	void ResourceCacheT< Material, String >::unregisterMaterial( Material const & material )
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::unregisterMaterial( Material const & material )
 	{
 		auto lock( makeUniqueLock( *this ) );
 
@@ -180,7 +189,7 @@ namespace castor
 		}
 	}
 
-	void ResourceCacheT< Material, String >::registerPass( Pass & pass )
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::registerPass( Pass & pass )
 	{
 		auto lock( makeUniqueLock( *this ) );
 
@@ -190,17 +199,18 @@ namespace castor
 		}
 	}
 
-	void ResourceCacheT< Material, String >::unregisterPass( Pass & pass )
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::unregisterPass( Pass & pass )
 	{
 		auto lock( makeUniqueLock( *this ) );
 
-		if ( m_passBuffer )
+		if ( m_passBuffer
+			&& pass.getId() )
 		{
 			m_passBuffer->removePass( pass );
 		}
 	}
 
-	void ResourceCacheT< Material, String >::registerUnit( TextureUnit & unit )
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::registerUnit( TextureUnit & unit )
 	{
 		auto lock( makeUniqueLock( *this ) );
 
@@ -210,7 +220,7 @@ namespace castor
 		}
 	}
 
-	void ResourceCacheT< Material, String >::unregisterUnit( TextureUnit & unit )
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::unregisterUnit( TextureUnit & unit )
 	{
 		auto lock( makeUniqueLock( *this ) );
 

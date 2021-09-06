@@ -18,42 +18,52 @@ namespace castor
 	public:
 		using ElementT = ResT;
 		using ElementKeyT = KeyT;
-		using ElementCacheT = ResourceCacheBaseT< ElementT, ElementKeyT, TraitsT >;
-		using ElementCacheTraitsT = typename ElementCacheT::ElementCacheTraitsT;
+		using ElementCacheTraitsT = TraitsT;
+		using ElementCacheT = ResourceCacheBaseT< ElementT, ElementKeyT, ElementCacheTraitsT >;
 		using ElementPtrT = typename ElementCacheT::ElementPtrT;
+		using ElementObsT = typename ElementCacheT::ElementObsT;
 		using ElementContT = typename ElementCacheT::ElementContT;
-		using ElementProducerT = typename ElementCacheT::ElementProducerT;
 		using ElementInitialiserT = typename ElementCacheT::ElementInitialiserT;
 		using ElementCleanerT = typename ElementCacheT::ElementCleanerT;
 		using ElementMergerT = typename ElementCacheT::ElementMergerT;
 		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	clean		Le nettoyeur d'objet.
-		 *\param[in]	merge		Le fusionneur de collection d'objets.
-		 */
+		*name
+		*	Construction/Desctruction.
+		**/
+		/**@{*/
 		ResourceCacheT( LoggerInstance & logger
-			, ElementProducerT produce
 			, ElementInitialiserT initialise = ElementInitialiserT{}
 			, ElementCleanerT clean = ElementCleanerT{}
 			, ElementMergerT merge = ElementMergerT{} )
 			: ElementCacheT{ logger
-				, std::move( produce )
 				, std::move( initialise )
 				, std::move( clean )
 				, std::move( merge ) }
 		{
 		}
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		~ResourceCacheT()
+
+		~ResourceCacheT() = default;
+		/**@}*/
+	};
+	/**
+	*\~english
+	*name
+	*	Cache functors.
+	*\~french
+	*name
+	*	Foncteurs de cache.
+	**/
+	/**@{*/
+	template< typename CacheT >
+	struct DummyFunctorT
+	{
+		using ElementT = typename CacheT::ElementT;
+
+		void operator()( ElementT & res )const
 		{
 		}
 	};
+	/**@}*/
 	/**
 	 *\~english
 	 *\brief		Creates a cache.
@@ -62,10 +72,13 @@ namespace castor
 	 *\brief		Crée un cache.
 	 *\param[in]	parameters	Les paramètres de construction du cache.
 	 */
-	template< typename ResT, typename KeyT, typename ... ParametersT >
-	ResourceCachePtrT< ResT, KeyT > makeCache( ParametersT && ... parameters )
+	template< typename ResT
+		, typename KeyT
+		, typename TraitsT
+		, typename ... ParametersT >
+	ResourceCachePtrT< ResT, KeyT, TraitsT > makeCache( ParametersT && ... parameters )
 	{
-		return std::make_shared< ResourceCacheT< ResT, KeyT > >( std::forward< ParametersT >( parameters )... );
+		return std::make_shared< ResourceCacheT< ResT, KeyT, TraitsT > >( std::forward< ParametersT >( parameters )... );
 	}
 }
 

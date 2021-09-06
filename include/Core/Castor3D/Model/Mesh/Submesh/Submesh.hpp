@@ -202,7 +202,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les indicateurs de shader.
 		 */
-		C3D_API ProgramFlags getProgramFlags( MaterialSPtr material )const;
+		C3D_API ProgramFlags getProgramFlags( MaterialRPtr material )const;
 		/**
 		 *\~english
 		 *\brief		Sets the material.
@@ -217,8 +217,8 @@ namespace castor3d
 		 *\param[in]	update		Dit si les tampons doivent être mis à jour.
 		 *\return		\p true if the material is changed.
 		 */
-		C3D_API void setMaterial( MaterialSPtr oldMaterial
-			, MaterialSPtr newMaterial
+		C3D_API void setMaterial( MaterialRPtr oldMaterial
+			, MaterialRPtr newMaterial
 			, bool update );
 		/**
 		*\~english
@@ -227,7 +227,7 @@ namespace castor3d
 		*\return		Les tampons de géométrie associés au materiau donné.
 		*/
 		C3D_API GeometryBuffers const & getGeometryBuffers( ShaderFlags const & flags
-			, MaterialSPtr material
+			, MaterialRPtr material
 			, uint32_t instanceMult
 			, TextureFlagsArray const & mask )const;
 		/**
@@ -257,7 +257,7 @@ namespace castor3d
 		 *\brief		Définit le material
 		 *\param[in]	material	La nouvelle valeur
 		 */
-		inline void setDefaultMaterial( MaterialSPtr material );
+		inline void setDefaultMaterial( MaterialRPtr material );
 		/**
 		 *\~english
 		 *\brief		Sets the submesh to be updated.
@@ -342,7 +342,7 @@ namespace castor3d
 		inline InterleavedVertex & operator[]( uint32_t index );
 		inline InterleavedVertex const & getPoint( uint32_t index )const;
 		inline InterleavedVertex & getPoint( uint32_t index );
-		inline MaterialSPtr getDefaultMaterial()const;
+		inline MaterialRPtr getDefaultMaterial()const;
 		inline castor::BoundingBox const & getBoundingBox()const;
 		inline castor::BoundingBox & getBoundingBox();
 		inline castor::BoundingSphere const & getBoundingSphere()const;
@@ -381,9 +381,8 @@ namespace castor3d
 		static uint32_t constexpr Texture = 4u;
 
 	private:
-		Mesh & m_parentMesh;
 		uint32_t m_id;
-		MaterialWPtr m_defaultMaterial;
+		MaterialRPtr m_defaultMaterial;
 		castor::BoundingBox m_box;
 		castor::BoundingSphere m_sphere;
 		InterleavedVertexArray m_points;

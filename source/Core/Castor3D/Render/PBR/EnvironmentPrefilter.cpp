@@ -45,11 +45,11 @@ namespace castor3d
 			return result;
 		}
 
-		SamplerSPtr doCreateSampler( Engine & engine
+		SamplerResPtr doCreateSampler( Engine & engine
 			, RenderDevice const & device
 			, uint32_t maxLod )
 		{
-			SamplerSPtr result;
+			SamplerResPtr result;
 			StringStream stream = makeStringStream();
 			stream << cuT( "IblTexturesPrefiltered_" ) << maxLod;
 			auto name = stream.str();
@@ -60,19 +60,19 @@ namespace castor3d
 			}
 			else
 			{
-				result = engine.getSamplerCache().create( name );
-				result->setMinFilter( VK_FILTER_LINEAR );
-				result->setMagFilter( VK_FILTER_LINEAR );
-				result->setMipFilter( VK_SAMPLER_MIPMAP_MODE_LINEAR );
-				result->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				result->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				result->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				result->setMinLod( 0.0f );
-				result->setMaxLod( float( maxLod ) );
-				engine.getSamplerCache().add( name, result );
+				auto created = engine.getSamplerCache().create( name, engine );
+				created->setMinFilter( VK_FILTER_LINEAR );
+				created->setMagFilter( VK_FILTER_LINEAR );
+				created->setMipFilter( VK_SAMPLER_MIPMAP_MODE_LINEAR );
+				created->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				created->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				created->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				created->setMinLod( 0.0f );
+				created->setMaxLod( float( maxLod ) );
+				result = engine.getSamplerCache().add( name, created, false );
 			}
 
-			result->initialise( device );
+			result.lock()->initialise( device );
 			return result;
 		}
 
@@ -350,7 +350,7 @@ namespace castor3d
 		, VkExtent2D const & size
 		, ashes::ImageView const & srcView
 		, Texture const & dstTexture
-		, SamplerSPtr sampler )
+		, SamplerResPtr sampler )
 		: RenderCube{ device, false, std::move( sampler ) }
 		, m_renderPass{ renderPass }
 		, m_commands{ m_device, queueData, "EnvironmentPrefilter" }
@@ -430,7 +430,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, castor::Size const & size
 		, Texture const & srcTexture
-		, SamplerSPtr sampler )
+		, SamplerResPtr sampler )
 		: m_device{ device }
 		, m_srcView{ srcTexture }
 		, m_srcImage{ std::make_unique< ashes::Image >( *device, m_srcView.image, m_srcView.imageId.data->info ) }

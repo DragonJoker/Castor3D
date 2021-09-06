@@ -77,7 +77,7 @@ namespace castor3d
 		submesh.reset();
 		light.reset();
 		camera.reset();
-		material.reset();
+		material = {};
 		textureUnit.reset();
 		shaderProgram.reset();
 		sampler.reset();

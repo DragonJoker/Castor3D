@@ -513,13 +513,13 @@ namespace castor3d
 			writes.emplace_back( uint32_t( LightPassLgtIdx::eSmNormalLinear )
 				, 0u
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, ashes::VkDescriptorImageInfoArray{ { m_device.renderSystem.getEngine()->getDefaultSampler()->getSampler()
+				, ashes::VkDescriptorImageInfoArray{ { m_device.renderSystem.getEngine()->getDefaultSampler().lock()->getSampler()
 					, m_smResult[SmTexture::eNormalLinear].wholeView
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } );
 			writes.emplace_back( uint32_t( LightPassLgtIdx::eSmVariance )
 				, 0u
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, ashes::VkDescriptorImageInfoArray{ { m_device.renderSystem.getEngine()->getDefaultSampler()->getSampler()
+				, ashes::VkDescriptorImageInfoArray{ { m_device.renderSystem.getEngine()->getDefaultSampler().lock()->getSampler()
 					, m_smResult[SmTexture::eVariance].wholeView
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } );
 

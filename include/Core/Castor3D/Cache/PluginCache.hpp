@@ -4,10 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_PluginCache_H___
 #define ___C3D_PluginCache_H___
 
-#include <CastorUtils/Design/ResourceCacheBase.hpp>
+#include <CastorUtils/Design/ResourceCache.hpp>
 
 #include "Castor3D/Cache/CacheModule.hpp"
 #include "Castor3D/Plugin/PluginModule.hpp"
+
+#include "Castor3D/Plugin/Plugin.hpp"
 
 namespace castor
 {
@@ -18,17 +20,16 @@ namespace castor
 	\brief		Cache de plug-ins.
 	*/
 	template<>
-	class ResourceCacheT< castor3d::Plugin, String > final
-		: public ResourceCacheBaseT< castor3d::Plugin, String >
+	class ResourceCacheT< castor3d::Plugin, String, castor3d::PluginCacheTraits > final
+		: public ResourceCacheBaseT< castor3d::Plugin, String, castor3d::PluginCacheTraits >
 	{
 	public:
 		using ElementT = castor3d::Plugin;
 		using ElementKeyT = String;
-		using ElementCacheT = ResourceCacheBaseT< ElementT, ElementKeyT >;
-		using ElementCacheTraitsT = typename ElementCacheT::ElementCacheTraitsT;
+		using ElementCacheTraitsT = castor3d::PluginCacheTraits;
+		using ElementCacheT = ResourceCacheBaseT< ElementT, ElementKeyT, ElementCacheTraitsT >;
 		using ElementPtrT = typename ElementCacheT::ElementPtrT;
 		using ElementContT = typename ElementCacheT::ElementContT;
-		using ElementProducerT = typename ElementCacheT::ElementProducerT;
 		using ElementInitialiserT = typename ElementCacheT::ElementInitialiserT;
 		using ElementCleanerT = typename ElementCacheT::ElementCleanerT;
 		using ElementMergerT = typename ElementCacheT::ElementMergerT;

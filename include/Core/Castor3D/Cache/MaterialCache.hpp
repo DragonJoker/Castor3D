@@ -10,6 +10,8 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/PassBuffer/PassBufferModule.hpp"
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBufferModule.hpp"
 
+#include "Castor3D/Material/Material.hpp"
+
 #include <CastorUtils/Design/ResourceCache.hpp>
 
 namespace castor
@@ -21,17 +23,16 @@ namespace castor
 	\brief		Collection de matériaux, avec des fonctions additionnelles
 	*/
 	template<>
-	class ResourceCacheT< castor3d::Material, String > final
-		: public ResourceCacheBaseT< castor3d::Material, String >
+	class ResourceCacheT< castor3d::Material, String, castor3d::MaterialCacheTraits > final
+		: public ResourceCacheBaseT< castor3d::Material, String, castor3d::MaterialCacheTraits >
 	{
 	public:
 		using ElementT = castor3d::Material;
 		using ElementKeyT = String;
-		using ElementCacheT = ResourceCacheBaseT< ElementT, ElementKeyT >;
-		using ElementCacheTraitsT = typename ElementCacheT::ElementCacheTraitsT;
+		using ElementCacheTraitsT = castor3d::MaterialCacheTraits;
+		using ElementCacheT = ResourceCacheBaseT< ElementT, ElementKeyT, ElementCacheTraitsT >;
 		using ElementPtrT = typename ElementCacheT::ElementPtrT;
 		using ElementContT = typename ElementCacheT::ElementContT;
-		using ElementProducerT = typename ElementCacheT::ElementProducerT;
 		using ElementInitialiserT = typename ElementCacheT::ElementInitialiserT;
 		using ElementCleanerT = typename ElementCacheT::ElementCleanerT;
 		using ElementMergerT = typename ElementCacheT::ElementMergerT;
@@ -126,7 +127,7 @@ namespace castor
 		 *\~french
 		 *\brief		Récupère le matériau par défaut
 		 */
-		castor3d::MaterialSPtr getDefaultMaterial()const
+		castor3d::MaterialRPtr getDefaultMaterial()const
 		{
 			return m_defaultMaterial;
 		}
@@ -159,7 +160,7 @@ namespace castor
 
 	private:
 		castor3d::Engine & m_engine;
-		castor3d::MaterialSPtr m_defaultMaterial;
+		castor3d::MaterialRPtr m_defaultMaterial;
 		castor3d::PassBufferSPtr m_passBuffer;
 		castor3d::TextureConfigurationBufferSPtr m_textureBuffer;
 	};

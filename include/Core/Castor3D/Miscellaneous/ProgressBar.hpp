@@ -16,8 +16,8 @@ namespace castor3d
 	{
 	public:
 		C3D_API ProgressBar( Engine & engine
-			, OverlaySPtr parent
-			, OverlaySPtr bar
+			, OverlayResPtr parent
+			, OverlayResPtr bar
 			, TextOverlaySPtr title
 			, TextOverlaySPtr label
 			, uint32_t max );
@@ -54,11 +54,11 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		FrameListenerSPtr m_listener;
+		FrameListenerRes m_listener;
 		castor::RangedValue< uint32_t > m_index;
 		castor::String m_title;
-		OverlaySPtr m_progress;
-		OverlaySPtr m_progressBar;
+		OverlayRPtr m_progress;
+		OverlayRPtr m_progressBar;
 		TextOverlaySPtr m_progressTitle;
 		TextOverlaySPtr m_progressLabel;
 		std::mutex m_mutex;

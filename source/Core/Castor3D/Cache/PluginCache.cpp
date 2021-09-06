@@ -14,23 +14,26 @@
 
 #include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, PluginCache )
+
+namespace castor3d
+{
+	const castor::String PtrCacheTraitsT< castor3d::Plugin, castor::String >::Name = cuT( "Plugin" );
+}
+
 namespace castor
 {
 	using namespace castor3d;
 
 	static const String getTypeFunctionABIName = cuT( "getType" );
 
-	ResourceCacheT< Plugin, String >::ResourceCacheT( Engine & engine )
-		: ElementCacheT{ engine.getLogger()
-			, []( String const & name, PluginType type, DynamicLibrarySPtr library )
-				{
-					return nullptr;
-				} }
+	ResourceCacheT< Plugin, String, PluginCacheTraits >::ResourceCacheT( Engine & engine )
+		: ElementCacheT{ engine.getLogger() }
 		, m_engine{ engine }
 	{
 	}
 
-	void ResourceCacheT< Plugin, String >::clear()
+	void ResourceCacheT< Plugin, String, PluginCacheTraits >::clear()
 	{
 		{
 			auto lock( makeUniqueLock( m_mutexLoadedPluginTypes ) );
@@ -56,7 +59,7 @@ namespace castor
 		}
 	}
 
-	PluginSPtr ResourceCacheT< Plugin, String >::loadPlugin( String const & pluginName, Path const & pathFolder )throw( )
+	PluginSPtr ResourceCacheT< Plugin, String, PluginCacheTraits >::loadPlugin( String const & pluginName, Path const & pathFolder )throw( )
 	{
 		Path strFilePath{ CU_SharedLibPrefix + pluginName + cuT( "." ) + CU_SharedLibExt };
 		PluginSPtr result;
@@ -92,7 +95,7 @@ namespace castor
 		return result;
 	}
 
-	PluginSPtr ResourceCacheT< Plugin, String >::loadPlugin( Path const & fileFullPath )throw( )
+	PluginSPtr ResourceCacheT< Plugin, String, PluginCacheTraits >::loadPlugin( Path const & fileFullPath )throw( )
 	{
 		PluginSPtr result;
 
@@ -120,13 +123,13 @@ namespace castor
 		return result;
 	}
 
-	PluginStrMap ResourceCacheT< Plugin, String >::getPlugins( PluginType type )
+	PluginStrMap ResourceCacheT< Plugin, String, PluginCacheTraits >::getPlugins( PluginType type )
 	{
 		auto lock( makeUniqueLock( m_mutexLoadedPlugins ) );
 		return m_loadedPlugins[size_t( type )];
 	}
 
-	void ResourceCacheT< Plugin, String >::loadAllPlugins( Path const & folder )
+	void ResourceCacheT< Plugin, String, PluginCacheTraits >::loadAllPlugins( Path const & folder )
 	{
 		PathArray files;
 		File::listDirectoryFiles( folder, files );
@@ -150,7 +153,7 @@ namespace castor
 		}
 	}
 
-	PluginSPtr ResourceCacheT< Plugin, String >::doloadPlugin( Path const & pathFile )
+	PluginSPtr ResourceCacheT< Plugin, String, PluginCacheTraits >::doloadPlugin( Path const & pathFile )
 	{
 		PluginSPtr result;
 		auto lock( makeUniqueLock( m_mutexLoadedPluginTypes ) );
