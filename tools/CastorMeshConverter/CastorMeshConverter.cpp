@@ -253,7 +253,7 @@ int main( int argc, char * argv[] )
 			castor3d::Scene scene{ cuT( "DummyScene" ), engine };
 			auto name = path.getFileName();
 			auto extension = castor::string::lowerCase( path.getExtension() );
-			castor3d::MeshSPtr mesh;
+			castor3d::MeshRPtr mesh{};
 
 			if ( !engine.getImporterFactory().isTypeRegistered( extension ) )
 			{
@@ -262,14 +262,15 @@ int main( int argc, char * argv[] )
 			else
 			{
 				scene.setPassesType( scene.getEngine()->getPassFactory().getNameId( options.passType ) );
-				mesh = scene.getMeshCache().add( name );
+				mesh = scene.getMeshCache().add( name
+					, scene ).lock().get();
 				auto importer = engine.getImporterFactory().create( extension, engine );
 
 				if ( !importer->import( *mesh, path, castor3d::Parameters{}, true ) )
 				{
 					std::cerr << "Mesh Import failed" << std::endl;
 					scene.getMeshCache().remove( name );
-					mesh.reset();
+					mesh = nullptr;
 				}
 			}
 

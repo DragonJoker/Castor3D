@@ -12,14 +12,14 @@ namespace castor3d
 	class ObjectCacheT final
 		: public ObjectCacheBaseT< ObjT, KeyT, TraitsT >
 	{
-	protected:
+	public:
 		using ElementT = ObjT;
 		using ElementKeyT = KeyT;
-		using ElementObjectCacheT = ObjectCacheBaseT< ElementT, ElementKeyT, TraitsT >;
-		using ElementCacheTraitsT = typename ElementObjectCacheT::ElementCacheTraitsT;
+		using ElementCacheTraitsT = TraitsT;
+		using ElementObjectCacheT = ObjectCacheBaseT< ElementT, ElementKeyT, ElementCacheTraitsT >;
 		using ElementPtrT = typename ElementObjectCacheT::ElementPtrT;
+		using ElementObsT = typename ElementObjectCacheT::ElementObsT;
 		using ElementContT = typename ElementObjectCacheT::ElementContT;
-		using ElementProducerT = typename ElementObjectCacheT::ElementProducerT;
 		using ElementInitialiserT = typename ElementObjectCacheT::ElementInitialiserT;
 		using ElementCleanerT = typename ElementObjectCacheT::ElementCleanerT;
 		using ElementMergerT = typename ElementObjectCacheT::ElementMergerT;
@@ -59,7 +59,6 @@ namespace castor3d
 			, SceneNodeSPtr rootNode
 			, SceneNodeSPtr rootCameraNode
 			, SceneNodeSPtr rootObjectNode
-			, ElementProducerT produce
 			, ElementInitialiserT initialise = ElementInitialiserT{}
 			, ElementCleanerT clean = ElementCleanerT{}
 			, ElementMergerT merge = ElementMergerT{}
@@ -69,7 +68,6 @@ namespace castor3d
 				, rootNode
 				, rootCameraNode
 				, rootObjectNode
-				, std::move( produce )
 				, std::move( initialise )
 				, std::move( clean )
 				, std::move( merge )
@@ -86,10 +84,13 @@ namespace castor3d
 	 *\brief		Crée un cache d'objets.
 	 *\param[in]	parameters	Les paramètres de construction du cache.
 	 */
-	template< typename ObjT, typename KeyT, typename ... ParametersT >
-	ObjectCachePtrT< ObjT, KeyT > makeObjectCache( ParametersT && ... parameters )
+	template< typename ObjT
+		, typename KeyT
+		, typename TraitsT
+		, typename ... ParametersT >
+	ObjectCachePtrT< ObjT, KeyT, TraitsT > makeObjectCache( ParametersT && ... parameters )
 	{
-		return std::make_shared< ObjectCacheT< ObjT, KeyT > >( std::forward< ParametersT >( parameters )... );
+		return std::make_shared< ObjectCacheT< ObjT, KeyT, TraitsT > >( std::forward< ParametersT >( parameters )... );
 	}
 }
 

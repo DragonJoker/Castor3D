@@ -18,7 +18,7 @@ namespace castortd
 		TextOverlaySPtr getTextOverlay( OverlayCache & cache, String const & p_name )
 		{
 			TextOverlaySPtr result;
-			OverlaySPtr overlay = cache.find( p_name );
+			auto overlay = cache.find( p_name ).lock();
 
 			if ( overlay )
 			{
@@ -50,74 +50,74 @@ namespace castortd
 	void Hud::initialise()
 	{
 		auto & cache = m_game.getScene().getEngine()->getOverlayCache();
-		cache.find( cuT( "TitlePanel" ) )->setVisible( true );
-		cache.find( cuT( "HUDResources" ) )->setVisible( false );
-		cache.find( cuT( "HUDScore" ) )->setVisible( false );
-		cache.find( cuT( "HUDDetails" ) )->setVisible( false );
-		cache.find( cuT( "HUDPause" ) )->setVisible( false );
-		cache.find( cuT( "GameEndPanel" ) )->setVisible( false );
-		cache.find( cuT( "HelpPanel" ) )->setVisible( false );
+		cache.find( cuT( "TitlePanel" ) ).lock()->setVisible( true );
+		cache.find( cuT( "HUDResources" ) ).lock()->setVisible( false );
+		cache.find( cuT( "HUDScore" ) ).lock()->setVisible( false );
+		cache.find( cuT( "HUDDetails" ) ).lock()->setVisible( false );
+		cache.find( cuT( "HUDPause" ) ).lock()->setVisible( false );
+		cache.find( cuT( "GameEndPanel" ) ).lock()->setVisible( false );
+		cache.find( cuT( "HelpPanel" ) ).lock()->setVisible( false );
 	}
 
 	void Hud::start()
 	{
 		auto & cache = m_game.getScene().getEngine()->getOverlayCache();
-		cache.find( cuT( "TitlePanel" ) )->setVisible( false );
-		cache.find( cuT( "HUDResources" ) )->setVisible( true );
-		cache.find( cuT( "HUDScore" ) )->setVisible( true );
-		cache.find( cuT( "HUDDetails" ) )->setVisible( true );
-		cache.find( cuT( "HUDPause" ) )->setVisible( false );
-		cache.find( cuT( "GameEndPanel" ) )->setVisible( false );
-		cache.find( cuT( "HelpPanel" ) )->setVisible( false );
+		cache.find( cuT( "TitlePanel" ) ).lock()->setVisible( false );
+		cache.find( cuT( "HUDResources" ) ).lock()->setVisible( true );
+		cache.find( cuT( "HUDScore" ) ).lock()->setVisible( true );
+		cache.find( cuT( "HUDDetails" ) ).lock()->setVisible( true );
+		cache.find( cuT( "HUDPause" ) ).lock()->setVisible( false );
+		cache.find( cuT( "GameEndPanel" ) ).lock()->setVisible( false );
+		cache.find( cuT( "HelpPanel" ) ).lock()->setVisible( false );
 		update();
 	}
 
 	void Hud::pause()
 	{
 		auto & cache = m_game.getScene().getEngine()->getOverlayCache();
-		cache.find( cuT( "TitlePanel" ) )->setVisible( false );
-		cache.find( cuT( "HUDResources" ) )->setVisible( false );
-		cache.find( cuT( "HUDScore" ) )->setVisible( false );
-		cache.find( cuT( "HUDDetails" ) )->setVisible( false );
-		cache.find( cuT( "HUDPause" ) )->setVisible( true );
-		cache.find( cuT( "GameEndPanel" ) )->setVisible( false );
-		cache.find( cuT( "HelpPanel" ) )->setVisible( false );
+		cache.find( cuT( "TitlePanel" ) ).lock()->setVisible( false );
+		cache.find( cuT( "HUDResources" ) ).lock()->setVisible( false );
+		cache.find( cuT( "HUDScore" ) ).lock()->setVisible( false );
+		cache.find( cuT( "HUDDetails" ) ).lock()->setVisible( false );
+		cache.find( cuT( "HUDPause" ) ).lock()->setVisible( true );
+		cache.find( cuT( "GameEndPanel" ) ).lock()->setVisible( false );
+		cache.find( cuT( "HelpPanel" ) ).lock()->setVisible( false );
 	}
 
 	void Hud::resume()
 	{
 		auto & cache = m_game.getScene().getEngine()->getOverlayCache();
-		cache.find( cuT( "TitlePanel" ) )->setVisible( false );
-		cache.find( cuT( "HUDResources" ) )->setVisible( true );
-		cache.find( cuT( "HUDScore" ) )->setVisible( true );
-		cache.find( cuT( "HUDDetails" ) )->setVisible( true );
-		cache.find( cuT( "HUDPause" ) )->setVisible( false );
-		cache.find( cuT( "GameEndPanel" ) )->setVisible( false );
-		cache.find( cuT( "HelpPanel" ) )->setVisible( false );
+		cache.find( cuT( "TitlePanel" ) ).lock()->setVisible( false );
+		cache.find( cuT( "HUDResources" ) ).lock()->setVisible( true );
+		cache.find( cuT( "HUDScore" ) ).lock()->setVisible( true );
+		cache.find( cuT( "HUDDetails" ) ).lock()->setVisible( true );
+		cache.find( cuT( "HUDPause" ) ).lock()->setVisible( false );
+		cache.find( cuT( "GameEndPanel" ) ).lock()->setVisible( false );
+		cache.find( cuT( "HelpPanel" ) ).lock()->setVisible( false );
 	}
 
 	void Hud::Help()
 	{
 		auto & cache = m_game.getScene().getEngine()->getOverlayCache();
-		cache.find( cuT( "TitlePanel" ) )->setVisible( false );
-		cache.find( cuT( "HUDResources" ) )->setVisible( false );
-		cache.find( cuT( "HUDScore" ) )->setVisible( false );
-		cache.find( cuT( "HUDDetails" ) )->setVisible( false );
-		cache.find( cuT( "HUDPause" ) )->setVisible( false );
-		cache.find( cuT( "GameEndPanel" ) )->setVisible( false );
-		cache.find( cuT( "HelpPanel" ) )->setVisible( true );
+		cache.find( cuT( "TitlePanel" ) ).lock()->setVisible( false );
+		cache.find( cuT( "HUDResources" ) ).lock()->setVisible( false );
+		cache.find( cuT( "HUDScore" ) ).lock()->setVisible( false );
+		cache.find( cuT( "HUDDetails" ) ).lock()->setVisible( false );
+		cache.find( cuT( "HUDPause" ) ).lock()->setVisible( false );
+		cache.find( cuT( "GameEndPanel" ) ).lock()->setVisible( false );
+		cache.find( cuT( "HelpPanel" ) ).lock()->setVisible( true );
 	}
 
 	void Hud::GameOver()
 	{
 		auto & cache = m_game.getScene().getEngine()->getOverlayCache();
-		cache.find( cuT( "TitlePanel" ) )->setVisible( false );
-		cache.find( cuT( "HUDResources" ) )->setVisible( false );
-		cache.find( cuT( "HUDScore" ) )->setVisible( false );
-		cache.find( cuT( "HUDDetails" ) )->setVisible( false );
-		cache.find( cuT( "HUDPause" ) )->setVisible( false );
-		cache.find( cuT( "GameEndPanel" ) )->setVisible( true );
-		cache.find( cuT( "HelpPanel" ) )->setVisible( false );
+		cache.find( cuT( "TitlePanel" ) ).lock()->setVisible( false );
+		cache.find( cuT( "HUDResources" ) ).lock()->setVisible( false );
+		cache.find( cuT( "HUDScore" ) ).lock()->setVisible( false );
+		cache.find( cuT( "HUDDetails" ) ).lock()->setVisible( false );
+		cache.find( cuT( "HUDPause" ) ).lock()->setVisible( false );
+		cache.find( cuT( "GameEndPanel" ) ).lock()->setVisible( true );
+		cache.find( cuT( "HelpPanel" ) ).lock()->setVisible( false );
 
 		getTextOverlay( m_game.getScene().getEngine()->getOverlayCache(), cuT( "ResultLevelValue" ) )->setCaption( StringStream() << m_game.getWave() );
 		getTextOverlay( m_game.getScene().getEngine()->getOverlayCache(), cuT( "ResultKillsValue" ) )->setCaption( StringStream() << m_game.getKills() );

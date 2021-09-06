@@ -8,7 +8,10 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 
+#include <CastorUtils/Design/Resource.hpp>
 #include <CastorUtils/Design/Signal.hpp>
+#include <CastorUtils/Graphics/Font.hpp>
+#include <CastorUtils/Graphics/FontCache.hpp>
 #include <CastorUtils/Graphics/Position.hpp>
 
 namespace castor3d
@@ -33,7 +36,7 @@ namespace castor3d
 		 *\param[in]	font	La police.
 		 */
 		C3D_API FontTexture( Engine & engine
-			, castor::FontSPtr font );
+			, castor::FontResPtr font );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -91,9 +94,9 @@ namespace castor3d
 		 *\brief		Récupère la police.
 		 *\return		La valeur.
 		 */
-		castor::FontSPtr getFont()const
+		castor::FontRPtr getFont()const
 		{
-			return m_font.lock();
+			return &static_cast< castor::Font & >( *m_font.lock() );
 		}
 		/**
 		 *\~english
@@ -115,9 +118,9 @@ namespace castor3d
 		 *\brief		Récupère la texture.
 		 *\return		La texture.
 		 */
-		inline SamplerSPtr getSampler()const
+		inline SamplerResPtr getSampler()const
 		{
-			return m_sampler.lock();
+			return m_sampler;
 		}
 
 	public:
@@ -126,8 +129,8 @@ namespace castor3d
 		OnChanged onChanged;
 
 	private:
-		castor::FontWPtr m_font;
-		SamplerWPtr m_sampler;
+		castor::FontResPtr m_font;
+		SamplerResPtr m_sampler;
 		TextureLayoutSPtr m_texture;
 		GlyphPositionMap m_glyphsPositions;
 	};

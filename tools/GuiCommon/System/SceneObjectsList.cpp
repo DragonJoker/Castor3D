@@ -239,7 +239,7 @@ namespace GuiCommon
 				, eBMP_MATERIAL_SEL );
 			for ( auto materialName : scene->getMaterialView() )
 			{
-				auto material = engine->getMaterialCache().find( materialName );
+				auto material = engine->getMaterialCache().find( materialName ).lock().get();
 				MaterialsList::addMaterial( this
 					, *scene
 					, m_propertiesHolder->isEditable()
@@ -348,7 +348,7 @@ namespace GuiCommon
 			, eBMP_GEOMETRY
 			, eBMP_GEOMETRY_SEL
 			, new GeometryTreeItemProperty( m_propertiesHolder->isEditable(), geometry ) );
-		auto mesh = geometry.getMesh();
+		auto mesh = geometry.getMesh().lock();
 
 		if ( mesh )
 		{

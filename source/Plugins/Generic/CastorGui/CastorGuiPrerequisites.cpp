@@ -27,45 +27,45 @@ namespace CastorGui
 		return pass.getColour();
 	}
 
-	MaterialSPtr CreateMaterial( Engine & engine, String const & p_name, RgbColour const & p_colour )
+	MaterialRPtr createMaterial( Engine & engine
+		, String const & name
+		, RgbColour const & colour )
 	{
 		auto & cache = engine.getMaterialCache();
-		MaterialSPtr result;
+		MaterialResPtr created;
+		auto result = cache.tryAdd( name
+			, true
+			, created
+			, engine
+			, engine.getPassesType() );
 
-		if ( cache.has( p_name ) )
+		if ( created.lock() == result.lock() )
 		{
-			result = cache.find( p_name );
+			result.lock()->createPass();
 		}
 
-		if ( !result )
-		{
-			result = cache.add( p_name, engine.getPassesType() );
-			result->createPass();
-		}
-
-		setMaterialColour( *result->getPass( 0u ), p_colour );
-		return result;
+		setMaterialColour( *result.lock()->getPass( 0u ), colour );
+		return result.lock().get();
 	}
 
-	MaterialSPtr CreateMaterial( Engine & engine
+	MaterialRPtr createMaterial( Engine & engine
 		, String const & name
 		, TextureLayoutSPtr texture )
 	{
 		auto & cache = engine.getMaterialCache();
-		MaterialSPtr result;
+		MaterialResPtr created;
+		auto result = cache.tryAdd( name
+			, true
+			, created
+			, engine
+			, engine.getPassesType() );
 
-		if ( cache.has( name ) )
+		if ( created.lock() == result.lock() )
 		{
-			result = cache.find( name );
+			result.lock()->createPass();
 		}
 
-		if ( !result )
-		{
-			result = cache.add( name, engine.getPassesType() );
-			result->createPass();
-		}
-
-		auto pass = result->getPass( 0u );
+		auto pass = result.lock()->getPass( 0u );
 
 		if ( pass->getTextureUnitsCount() == 0 )
 		{
@@ -76,6 +76,6 @@ namespace CastorGui
 
 		TextureUnitSPtr unit = pass->getTextureUnit( 0 );
 		unit->setTexture( texture );
-		return result;
+		return result.lock().get();
 	}
 }

@@ -12,6 +12,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Culling/CullingModule.hpp"
 #include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
+#include "Castor3D/Render/Technique/TechniqueModule.hpp"
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
 #include "Castor3D/Render/ToTexture/RenderToTextureModule.hpp"
 #include "Castor3D/Render/Passes/RenderQuad.hpp"

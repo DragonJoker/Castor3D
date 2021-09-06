@@ -113,11 +113,11 @@ namespace CastorGui
 
 		/** @copydoc CastorGui::Control::doSetBackgroundMaterial
 		*/
-		virtual void doSetBackgroundMaterial( castor3d::MaterialSPtr p_material );
+		virtual void doSetBackgroundMaterial( castor3d::MaterialRPtr p_material );
 
 		/** @copydoc CastorGui::Control::doSetForegroundMaterial
 		*/
-		virtual void doSetForegroundMaterial( castor3d::MaterialSPtr p_material );
+		virtual void doSetForegroundMaterial( castor3d::MaterialRPtr p_material );
 
 		/** sets the visibility
 		 *\remarks		Used for derived control specific behaviou

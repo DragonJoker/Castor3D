@@ -12,31 +12,43 @@ using namespace castor;
 
 namespace castor3d
 {
-	Overlay::Overlay( Engine & engine, OverlayType type )
-		: OwnedBy< Engine >( engine )
-		, m_parent()
-		, m_scene()
-		, m_renderSystem( engine.getRenderSystem() )
-		, m_category( engine.getOverlayCache().getFactory().create( type ) )
+	Overlay::Overlay( castor::String const & name
+		, Engine & engine
+		, OverlayType type
+		, SceneRPtr scene
+		, OverlayRPtr parent )
+		: OwnedBy< Engine >{ engine }
+		, m_name{ name }
+		, m_parent{ parent }
+		, m_scene{ scene }
+		, m_renderSystem{ engine.getRenderSystem() }
+		, m_category{ engine.getOverlayCache().getFactory().create( type ) }
 	{
 		m_category->setOverlay( this );
 	}
 
-	Overlay::Overlay( Engine & engine, OverlayType type, SceneSPtr scene, OverlaySPtr parent )
-		: OwnedBy< Engine >( engine )
-		, m_parent( parent )
-		, m_scene( scene )
-		, m_renderSystem( engine.getRenderSystem() )
-		, m_category( engine.getOverlayCache().getFactory().create( type ) )
-	{
-		m_category->setOverlay( this );
-	}
-
-	Overlay::~Overlay()
+	Overlay::Overlay( Engine & engine
+		, OverlayType type
+		, SceneRPtr scene
+		, OverlayRPtr parent )
+		: Overlay{ String{}
+			, engine
+			, type
+			, scene
+			, parent }
 	{
 	}
 
-	void Overlay::addChild( OverlaySPtr overlay )
+	Overlay::Overlay( Engine & engine
+		, OverlayType type )
+		: Overlay{ engine
+			, type
+			, nullptr
+			, nullptr }
+	{
+	}
+
+	void Overlay::addChild( OverlayRPtr overlay )
 	{
 		int index = 1;
 
@@ -108,5 +120,15 @@ namespace castor3d
 		}
 
 		return result;
+	}
+
+	uint32_t Overlay::computeLevel()const
+	{
+		if ( !m_parent )
+		{
+			return 0u;
+		}
+
+		return 1u + m_parent->computeLevel();
 	}
 }

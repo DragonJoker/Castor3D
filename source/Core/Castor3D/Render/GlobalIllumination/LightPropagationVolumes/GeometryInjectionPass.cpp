@@ -490,28 +490,6 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		SamplerSPtr createSampler( Engine & engine
-			, String const & name
-			, VkSamplerAddressMode mode )
-		{
-			SamplerSPtr sampler;
-
-			if ( engine.getSamplerCache().has( name ) )
-			{
-				sampler = engine.getSamplerCache().find( name );
-			}
-			else
-			{
-				sampler = engine.getSamplerCache().add( name );
-				sampler->setMinFilter( VK_FILTER_LINEAR );
-				sampler->setMagFilter( VK_FILTER_LINEAR );
-				sampler->setWrapS( mode );
-				sampler->setWrapT( mode );
-			}
-
-			return sampler;
-		}
-
 		ashes::VertexBufferPtr< NonTexturedQuad::Vertex > createVertexBuffer( castor::String const & name
 			, RenderDevice const & device
 			, uint32_t rsmSize )

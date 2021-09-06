@@ -94,6 +94,51 @@ namespace castor3d
 				object.initialise();
 			} );
 	}
+	/**
+	*\~english
+	*name
+	*	Cache functors.
+	*\~french
+	*name
+	*	Foncteurs de cache.
+	**/
+	/**@{*/
+	template< typename CacheT >
+	struct CpuEventInitialiserT
+	{
+		using ElementT = typename CacheT::ElementT;
+
+		CpuEventInitialiserT( FrameListener & listener )
+			: listener{ &listener }
+		{
+		}
+
+		void operator()( ElementT & res )const
+		{
+			listener->postEvent( makeCpuInitialiseEvent( res ) );
+		}
+
+		FrameListener * listener;
+	};
+
+	template< typename CacheT >
+	struct CpuEventCleanerT
+	{
+		using ElementT = typename CacheT::ElementT;
+
+		CpuEventCleanerT( FrameListener & listener )
+			: listener{ &listener }
+		{
+		}
+
+		void operator()( ElementT & res )const
+		{
+			listener->postEvent( makeCpuCleanupEvent( res ) );
+		}
+
+		FrameListener * listener;
+	};
+	/**@}*/
 }
 
 #endif

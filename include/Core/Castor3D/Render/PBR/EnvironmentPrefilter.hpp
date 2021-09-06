@@ -35,7 +35,7 @@ namespace castor3d
 				, VkExtent2D const & size
 				, ashes::ImageView const & srcView
 				, Texture const & dstTexture
-				, SamplerSPtr sampler );
+				, SamplerResPtr sampler );
 			void registerFrames();
 			void render( QueueData const & queueData );
 			ashes::Semaphore const & render( QueueData const & queueData
@@ -49,7 +49,7 @@ namespace castor3d
 			};
 			ashes::RenderPass const & m_renderPass;
 			CommandsSemaphore m_commands;
-			SamplerSPtr m_sampler;
+			SamplerResPtr m_sampler;
 			std::array< FrameBuffer, 6u > m_frameBuffers;
 		};
 
@@ -74,7 +74,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, castor::Size const & size
 			, Texture const & srcTexture
-			, SamplerSPtr sampler );
+			, SamplerResPtr sampler );
 		/**
 		 *\~english
 		 *\brief		Generates the mipmap levels.
@@ -108,7 +108,7 @@ namespace castor3d
 
 		inline ashes::Sampler const & getSampler()const
 		{
-			return m_sampler->getSampler();
+			return m_sampler.lock()->getSampler();
 		}
 		/**@}*/
 
@@ -121,7 +121,7 @@ namespace castor3d
 		ashes::ImagePtr m_srcImage;
 		ashes::ImageView m_srcImageView;
 		Texture m_result;
-		SamplerSPtr m_sampler;
+		SamplerResPtr m_sampler;
 		ashes::RenderPassPtr m_renderPass;
 		std::vector< std::unique_ptr< MipRenderCube > > m_renderPasses;
 	};

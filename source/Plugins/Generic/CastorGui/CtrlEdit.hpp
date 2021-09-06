@@ -60,7 +60,7 @@ namespace CastorGui
 		/** Sets the text material.
 		*\param[in]	value	The new value.
 		*/
-		void setTextMaterial( castor3d::MaterialSPtr value );
+		void setTextMaterial( castor3d::MaterialRPtr value );
 
 		/** Retrieves the caption
 		 *\return		The value
@@ -99,9 +99,9 @@ namespace CastorGui
 		/**
 		*\return	The text material
 		*/
-		inline castor3d::MaterialSPtr getTextMaterial()const
+		inline castor3d::MaterialRPtr getTextMaterial()const
 		{
-			return m_textMaterial.lock();
+			return m_textMaterial;
 		}
 
 	private:
@@ -123,11 +123,11 @@ namespace CastorGui
 
 		/** @copydoc CastorGui::Control::doSetBackgroundMaterial
 		*/
-		void doSetBackgroundMaterial( castor3d::MaterialSPtr p_material )override;
+		void doSetBackgroundMaterial( castor3d::MaterialRPtr p_material )override;
 
 		/** @copydoc CastorGui::Control::doSetForegroundMaterial
 		*/
-		void doSetForegroundMaterial( castor3d::MaterialSPtr p_material )override;
+		void doSetForegroundMaterial( castor3d::MaterialRPtr p_material )override;
 
 		/** @copydoc CastorGui::Control::doSetCaption
 		*/
@@ -201,7 +201,7 @@ namespace CastorGui
 		//! The caption
 		castor::String m_caption;
 		//! The font material
-		castor3d::MaterialWPtr m_textMaterial;
+		castor3d::MaterialRPtr m_textMaterial;
 		//! The caret index in the caption
 		castor::string::utf8::const_iterator m_caretIt;
 		//! The activation status

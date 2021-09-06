@@ -38,7 +38,7 @@ namespace castor3d
 			std::vector< InstantiationData > data;
 		};
 		using DataArray = std::vector< Data >;
-		using InstanceDataMap = std::map< MaterialSPtr, DataArray >;
+		using InstanceDataMap = std::map< MaterialRPtr, DataArray >;
 
 	public:
 		/**
@@ -63,7 +63,7 @@ namespace castor3d
 		 *\param[in]	material	Le matériau pour lequel le compte est incrémenté.
 		 *\return		Le compte précédent.
 		 */
-		C3D_API uint32_t ref( MaterialSPtr material );
+		C3D_API uint32_t ref( MaterialRPtr material );
 		/**
 		 *\~english
 		 *\brief		Decrements instance count.
@@ -74,7 +74,7 @@ namespace castor3d
 		 *\param[in]	material	Le matériau pour lequel le compte est décrémenté.
 		 *\return		Le compte précédent.
 		 */
-		C3D_API uint32_t unref( MaterialSPtr material );
+		C3D_API uint32_t unref( MaterialRPtr material );
 		/**
 		 *\~english
 		 *\brief		Retrieves the instances count
@@ -85,7 +85,7 @@ namespace castor3d
 		 *\param[in]	material	Le matériau pour lequel le compte est récupéré
 		 *\return		La valeur
 		 */
-		C3D_API uint32_t getRefCount( MaterialSPtr material )const;
+		C3D_API uint32_t getRefCount( MaterialRPtr material )const;
 		/**
 		 *\~english
 		 *\param[in]	material	The material.
@@ -94,7 +94,7 @@ namespace castor3d
 		 *\param[in]	material	Le matériau.
 		 *\return		\p true si le nombre d'instances pour le matériau donné est plus grand que le seuil.
 		 */
-		C3D_API bool isInstanced( MaterialSPtr material )const;
+		C3D_API bool isInstanced( MaterialRPtr material )const;
 		/**
 		 *\~english
 		 *\return		\p true if the max instance count is greater than the threshold.
@@ -113,7 +113,7 @@ namespace castor3d
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
 		C3D_API void gather( ShaderFlags const & flags
-			, MaterialSPtr material
+			, MaterialRPtr material
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
@@ -132,11 +132,11 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API InstanceDataMap::const_iterator find( MaterialSPtr material
+		C3D_API InstanceDataMap::const_iterator find( MaterialRPtr material
 			, uint32_t instanceMult )const;
-		C3D_API InstanceDataMap::iterator find( MaterialSPtr material
+		C3D_API InstanceDataMap::iterator find( MaterialRPtr material
 			, uint32_t instanceMult );
-		C3D_API ProgramFlags getProgramFlags( MaterialSPtr material )const override;
+		C3D_API ProgramFlags getProgramFlags( MaterialRPtr material )const override;
 
 		inline uint32_t getThreshold()const
 		{
@@ -153,12 +153,12 @@ namespace castor3d
 			return m_instances.end();
 		}
 
-		inline InstanceDataMap::const_iterator find( MaterialSPtr material )const
+		inline InstanceDataMap::const_iterator find( MaterialRPtr material )const
 		{
 			return m_instances.find( material );
 		}
 
-		inline InstanceDataMap::iterator find( MaterialSPtr material )
+		inline InstanceDataMap::iterator find( MaterialRPtr material )
 		{
 			needsUpdate();
 			return m_instances.find( material );

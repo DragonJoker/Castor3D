@@ -8,12 +8,15 @@
 
 CU_ImplementCUSmartPtr( castor3d, CpuFrameEvent )
 CU_ImplementCUSmartPtr( castor3d, FrameListener )
+CU_ImplementCUSmartPtr( castor3d, FrameListenerCache )
 CU_ImplementCUSmartPtr( castor3d, GpuFrameEvent )
 CU_ImplementCUSmartPtr( castor3d, CpuFunctorEvent )
 CU_ImplementCUSmartPtr( castor3d, GpuFunctorEvent )
 
 namespace castor3d
 {
+	const castor::String PtrCacheTraitsT< castor3d::FrameListener, castor::String >::Name = cuT( "FrameListener" );
+
 	castor::String getName( EventType value )
 	{
 		switch ( value )

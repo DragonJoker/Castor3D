@@ -14,6 +14,8 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	using GeometryCacheTraits = ObjectCacheTraitsT< Geometry, castor::String >;
+
 	C3D_API size_t hash( Geometry const & geometry
 		, Submesh const & submesh
 		, Pass const & pass );
@@ -28,8 +30,8 @@ namespace castor3d
 	\brief		Cache de Geometry.
 	*/
 	template<>
-	class ObjectCacheT< Geometry, castor::String >
-		: public ObjectCacheBaseT< Geometry, castor::String >
+	class ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >
+		: public ObjectCacheBaseT< Geometry, castor::String, GeometryCacheTraits >
 	{
 	public:
 		struct PoolsEntry
@@ -44,11 +46,10 @@ namespace castor3d
 		};
 		using ElementT = Geometry;
 		using ElementKeyT = castor::String;
-		using ElementObjectCacheT = ObjectCacheBaseT< ElementT, ElementKeyT >;
-		using ElementCacheTraitsT = typename ElementObjectCacheT::ElementCacheTraitsT;
+		using ElementCacheTraitsT = GeometryCacheTraits;
+		using ElementObjectCacheT = ObjectCacheBaseT< ElementT, ElementKeyT, ElementCacheTraitsT >;
 		using ElementPtrT = typename ElementObjectCacheT::ElementPtrT;
 		using ElementContT = typename ElementObjectCacheT::ElementContT;
-		using ElementProducerT = typename ElementObjectCacheT::ElementProducerT;
 		using ElementInitialiserT = typename ElementObjectCacheT::ElementInitialiserT;
 		using ElementCleanerT = typename ElementObjectCacheT::ElementCleanerT;
 		using ElementMergerT = typename ElementObjectCacheT::ElementMergerT;

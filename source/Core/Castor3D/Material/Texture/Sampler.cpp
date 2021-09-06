@@ -11,7 +11,7 @@
 
 namespace castor3d
 {
-	SamplerSPtr createSampler( Engine & engine
+	SamplerResPtr createSampler( Engine & engine
 		, castor::String const & baseName
 		, VkFilter filter
 		, VkImageSubresourceRange const * range )
@@ -22,7 +22,7 @@ namespace castor3d
 				? cuT( "_" ) + castor::string::toString( range->baseMipLevel ) + cuT( "_" ) + castor::string::toString( range->levelCount )
 				: castor::String{} );
 		auto & cache = engine.getSamplerCache();
-		SamplerSPtr sampler;
+		SamplerResPtr sampler;
 
 		if ( cache.has( name ) )
 		{
@@ -51,31 +51,33 @@ namespace castor3d
 					? float( range->baseMipLevel + range->levelCount )
 					: 1000.0f ), // maxLod
 			};
-			sampler = std::make_shared< Sampler >( engine
-				, name
+			auto resource = castor::makeResource< Sampler, castor::String >( name
+				, engine
 				, std::move( createInfo ) );
-			cache.add( name, sampler );
+			sampler = cache.add( name
+				, resource
+				, false );
 		}
 
-		sampler->initialise( engine.getRenderSystem()->getRenderDevice() );
+		sampler.lock()->initialise( engine.getRenderSystem()->getRenderDevice() );
 		return sampler;
 	}
 
 	//*********************************************************************************************
 
-	Sampler::Sampler( Engine & engine
-		, castor::String const & name )
-		: castor::OwnedBy< Engine >{ engine }
-		, castor::Named{ name }
+	Sampler::Sampler( castor::String const & name
+		, Engine & engine )
+		: castor::Named{ name }
+		, castor::OwnedBy< Engine >{ engine }
 	{
 		CU_Require( m_info.sType == VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO );
 	}
 	
-	Sampler::Sampler( Engine & engine
-		, castor::String const & name
+	Sampler::Sampler( castor::String const & name
+		, Engine & engine
 		, ashes::SamplerCreateInfo createInfo )
-		: castor::OwnedBy< Engine >{ engine }
-		, castor::Named{ name }
+		: castor::Named{ name }
+		, castor::OwnedBy< Engine >{ engine }
 		, m_info{ static_cast< VkSamplerCreateInfo const & >( createInfo ) }
 	{
 		CU_Require( m_info.sType == VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO );

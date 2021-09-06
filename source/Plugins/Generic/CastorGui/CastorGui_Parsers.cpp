@@ -140,9 +140,9 @@ namespace CastorGui
 		auto & cache = guiContext.m_engine->getFontCache();
 		String name;
 		params[0]->get( name );
-		FontSPtr font = cache.find( name );
+		auto font = cache.find( name );
 
-		if ( font )
+		if ( font.lock() )
 		{
 			ctrlsManager.setDefaultFont( font );
 		}
@@ -213,7 +213,7 @@ namespace CastorGui
 		{
 			String name;
 			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name );
+			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
 
 			if ( material )
 			{
@@ -240,7 +240,7 @@ namespace CastorGui
 		{
 			String name;
 			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name );
+			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
 
 			if ( material )
 			{
@@ -267,7 +267,7 @@ namespace CastorGui
 		{
 			String name;
 			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name );
+			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
 
 			if ( material )
 			{
@@ -294,7 +294,7 @@ namespace CastorGui
 		{
 			String name;
 			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name );
+			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
 
 			if ( material )
 			{
@@ -321,7 +321,7 @@ namespace CastorGui
 		{
 			String name;
 			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name );
+			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
 
 			if ( material )
 			{
@@ -348,7 +348,7 @@ namespace CastorGui
 		{
 			String name;
 			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name );
+			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
 
 			if ( material )
 			{
@@ -375,7 +375,7 @@ namespace CastorGui
 		{
 			String name;
 			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name );
+			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
 
 			if ( material )
 			{
@@ -491,7 +491,7 @@ namespace CastorGui
 		{
 			String name;
 			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name );
+			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
 
 			if ( material )
 			{
@@ -518,7 +518,7 @@ namespace CastorGui
 		{
 			String name;
 			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name );
+			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
 
 			if ( material )
 			{
@@ -545,7 +545,7 @@ namespace CastorGui
 		{
 			String name;
 			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name );
+			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
 
 			if ( material )
 			{
@@ -572,7 +572,7 @@ namespace CastorGui
 		{
 			String name;
 			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name );
+			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
 
 			if ( material )
 			{
@@ -634,7 +634,7 @@ namespace CastorGui
 		{
 			String name;
 			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name );
+			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
 
 			if ( material )
 			{
@@ -752,7 +752,7 @@ namespace CastorGui
 		{
 			String name;
 			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name );
+			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
 
 			if ( material )
 			{
@@ -779,7 +779,7 @@ namespace CastorGui
 		{
 			String name;
 			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name );
+			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
 
 			if ( material )
 			{
@@ -806,7 +806,7 @@ namespace CastorGui
 		{
 			String name;
 			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name );
+			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
 
 			if ( material )
 			{
@@ -833,7 +833,7 @@ namespace CastorGui
 		{
 			String name;
 			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name );
+			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
 
 			if ( material )
 			{
@@ -974,7 +974,7 @@ namespace CastorGui
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name );
+			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
 
 			if ( material )
 			{
@@ -1059,7 +1059,7 @@ namespace CastorGui
 		{
 			String name;
 			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name );
+			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
 
 			if ( material )
 			{
@@ -1086,7 +1086,7 @@ namespace CastorGui
 		{
 			String name;
 			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name );
+			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
 
 			if ( material )
 			{
@@ -1113,7 +1113,7 @@ namespace CastorGui
 		{
 			String name;
 			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name );
+			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
 
 			if ( material )
 			{

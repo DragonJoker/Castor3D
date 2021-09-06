@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_ShaderProgramCache_H___
 
 #include "CacheModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
 
 namespace castor3d

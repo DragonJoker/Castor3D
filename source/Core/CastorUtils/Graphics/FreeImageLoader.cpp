@@ -3,6 +3,7 @@
 #include "CastorUtils/Data/BinaryFile.hpp"
 #include "CastorUtils/Data/LoaderException.hpp"
 #include "CastorUtils/Data/Path.hpp"
+#include "CastorUtils/Graphics/Image.hpp"
 #include "CastorUtils/Graphics/PixelBuffer.hpp"
 #include "CastorUtils/Miscellaneous/BitSize.hpp"
 

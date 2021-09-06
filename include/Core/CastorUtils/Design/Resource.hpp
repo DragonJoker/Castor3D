@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Design/DesignModule.hpp"
 
+#include "CastorUtils/Config/SmartPtr.hpp"
 #include "CastorUtils/Design/Named.hpp"
 #include "CastorUtils/Design/Signal.hpp"
 
@@ -14,41 +15,162 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	class Resource
-		: public Named
+	template< typename ResT, typename KeyT >
+	class ResourceT final
+		: public ResT
 	{
-	protected:
-		CU_API explicit Resource( String const & name );
+	public:
+		using ElementT = ResT;
+		using ElementKeyT = KeyT;
 
 	public:
-		CU_API Resource( Resource const & other ) = default;
-		CU_API Resource( Resource && other ) = default;
-		CU_API Resource & operator=( Resource const & other ) = delete;
-		CU_API Resource & operator=( Resource && other ) = delete;
-		CU_API virtual ~Resource() = default;
+		/**
+		*name
+		*	Construction/Desctruction.
+		**/
+		/**@{*/
+		ResourceT( ResourceT && rhs ) = default;
+		ResourceT( ResourceT const & ) = delete;
+		ResourceT & operator=( ResourceT && rhs ) = default;
+		ResourceT & operator=( ResourceT const & ) = delete;
+		~ResourceT() = default;
 
-		CU_API void initialise();
-		CU_API void cleanup();
-		CU_API void reinitialise();
-
-		bool isInitialised()const
+		template< typename ... ParametersT >
+		explicit ResourceT( ParametersT && ... params );
+		explicit ResourceT( ElementT && rhs );
+		ResourceT & operator=( ElementT && rhs );
+		/**@}*/
+		/**
+		*\~english
+		*name
+		*	Initialisation/Cleanup.
+		*\~french
+		*name
+		*	Initialisation/Nettoyage.
+		**/
+		/**@{*/
+		template< typename ... ParametersT >
+		void initialise( ParametersT && ... params );
+		template< typename ... ParametersT >
+		void cleanup( ParametersT && ... params );
+		template< typename ... ParametersT, typename ... ParametersU >
+		void reinitialise( ParametersT && ... paramsT
+			, ParametersU && ... paramsU );
+		/**@}*/
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		**/
+		/**@{*/
+		bool isInitialised()const noexcept
 		{
 			return m_initialised;
 		}
 
-		using OnInitialisedFunc = std::function< void( Resource const & ) >;
-		using OnInitialised = Signal< OnInitialisedFunc >;
-		using Connection = castor::Connection< OnInitialised >;
+		ElementT & operator*()
+		{
+			return *this;
+		}
+		/**@}*/
+		/**
+		*name
+		*	Signal.
+		**/
+		/**@{*/
+		using OnResourceFunc = std::function< void( ElementT const & ) >;
+		using OnResourceEvent = Signal< OnResourceFunc >;
+		using Connection = castor::Connection< OnResourceEvent >;
 
-		OnInitialised onInitialised;
-
-	private:
-		virtual void doInitialise() = 0;
-		virtual void doCleanup() = 0;
+		OnResourceEvent onInitialising;
+		OnResourceEvent onInitialised;
+		OnResourceEvent onCleaning;
+		OnResourceEvent onCleaned;
+		/**@}*/
 
 	private:
 		std::atomic_bool m_initialised;
 	};
+	/**
+	*\~english
+	*name
+	*	Cache functors.
+	*\~french
+	*name
+	*	Foncteurs de cache.
+	**/
+	/**@{*/
+	template< typename CacheT >
+	struct ResourceInitialiserT
+	{
+		using ElementT = typename CacheT::ElementT;
+
+		void operator()( ElementT & res )const
+		{
+			res.initialise();
+		}
+	};
+
+	template< typename CacheT >
+	struct ResourceCleanerT
+	{
+		using ElementT = typename CacheT::ElementT;
+
+		void operator()( ElementT & res )const
+		{
+			res.cleanup();
+		}
+	};
+
+	template< typename CacheT >
+	struct ResourceMergerT
+		: public castor::Named
+	{
+		using ElementCacheT = typename CacheT::ElementCacheT;
+		using ElementContT = typename CacheT::ElementContT;
+		using ElementPtrT = typename CacheT::ElementPtrT;
+
+		ResourceMergerT( castor::String const & name )
+			: castor::Named{ name }
+		{
+		}
+
+		void operator()( ElementCacheT const & source
+			, ElementContT & destination
+			, ElementPtrT element )const
+		{
+			auto name = element->getName();
+			auto ires = destination.emplace( name, ElementPtrT{} );
+
+			while ( !ires.second )
+			{
+				name = getName() + cuT( "_" ) + name;
+				ires = destination.emplace( name, ElementPtrT{} );
+			}
+
+			ires.first->second = std::move( element );
+			ires.first->second->rename( name );
+		}
+	};
+	/**@}*/
+	/**
+	*\~english
+	*	Resource creation helper.
+	*\~french
+	*	Fonction d'aide à la création de ressource.
+	**/
+	template< typename ResT
+		, typename KeyT
+		, typename ... ParametersT >
+	inline ResourceSPtrT< ResT, KeyT > makeResource( ParametersT && ... params )
+	{
+		return std::make_shared< ResourceT< ResT, KeyT > >( std::forward< ParametersT >( params )... );
+	}
 }
+
+#include "CastorUtils/Design/Resource.inl"
 
 #endif

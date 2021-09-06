@@ -84,47 +84,47 @@ namespace CastorGui
 		/** sets the text material.
 		 *\param[in]	p_material	The new value.
 		 */
-		void setTextMaterial( castor3d::MaterialSPtr p_material );
+		void setTextMaterial( castor3d::MaterialRPtr p_material );
 
 		/** sets the background material for selected item
 		 *\param[in]	material		The new value
 		 */
-		void setSelectedItemBackgroundMaterial( castor3d::MaterialSPtr material );
+		void setSelectedItemBackgroundMaterial( castor3d::MaterialRPtr material );
 
 		/** sets the foreground material for selected item
 		 *\param[in]	material		The new value
 		 */
-		void setSelectedItemForegroundMaterial( castor3d::MaterialSPtr material );
+		void setSelectedItemForegroundMaterial( castor3d::MaterialRPtr material );
 
 		/** sets the background material for an highlighted item
 		 *\param[in]	material	The new value
 		 */
-		void setHighlightedItemBackgroundMaterial( castor3d::MaterialSPtr material );
+		void setHighlightedItemBackgroundMaterial( castor3d::MaterialRPtr material );
 
 		/** sets the background material for an unselected item
 		 *\param[in]	material	The new value
 		 */
-		void setItemBackgroundMaterial( castor3d::MaterialSPtr material );
+		void setItemBackgroundMaterial( castor3d::MaterialRPtr material );
 
 		/** Retrieves the background material for selected item
 		 *\return		The value
 		 */
-		castor3d::MaterialSPtr getSelectedItemBackgroundMaterial()const;
+		castor3d::MaterialRPtr getSelectedItemBackgroundMaterial()const;
 
 		/** Retrieves the foreground material for selected item
 		 *\return		The value
 		 */
-		castor3d::MaterialSPtr getSelectedItemForegroundMaterial()const;
+		castor3d::MaterialRPtr getSelectedItemForegroundMaterial()const;
 
 		/** Retrieves the background material for an highlighted item
 		 *\return		The value
 		 */
-		castor3d::MaterialSPtr getHighlightedItemBackgroundMaterial()const;
+		castor3d::MaterialRPtr getHighlightedItemBackgroundMaterial()const;
 
 		/** Retrieves the background material for an unselected item
 		 *\return		The value
 		 */
-		castor3d::MaterialSPtr getItemBackgroundMaterial()const;
+		castor3d::MaterialRPtr getItemBackgroundMaterial()const;
 
 		/** Appends a new item
 		*\param[in]	value		The item
@@ -174,7 +174,7 @@ namespace CastorGui
 		/**
 		*\return	The text material
 		*/
-		inline castor3d::MaterialSPtr getTextMaterial()const
+		inline castor3d::MaterialRPtr getTextMaterial()const
 		{
 			return m_expand->getTextMaterial();
 		}
@@ -208,11 +208,11 @@ namespace CastorGui
 
 		/** @copydoc CastorGui::Control::doSetBackgroundMaterial
 		*/
-		virtual void doSetBackgroundMaterial( castor3d::MaterialSPtr material );
+		virtual void doSetBackgroundMaterial( castor3d::MaterialRPtr material );
 
 		/** @copydoc CastorGui::Control::doSetForegroundMaterial
 		*/
-		virtual void doSetForegroundMaterial( castor3d::MaterialSPtr material );
+		virtual void doSetForegroundMaterial( castor3d::MaterialRPtr material );
 
 		/** @copydoc CastorGui::Control::doCatchesMouseEvents
 		*/

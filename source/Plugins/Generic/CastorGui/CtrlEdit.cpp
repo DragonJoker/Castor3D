@@ -89,9 +89,10 @@ namespace CastorGui
 		} );
 
 		TextOverlaySPtr text = getEngine().getOverlayCache().add( cuT( "T_CtrlEdit_" ) + string::toString( getId() )
+			, getEngine()
 			, OverlayType::eText
 			, nullptr
-			, getBackground()->getOverlay().shared_from_this() )->getTextOverlay();
+			, &getBackground()->getOverlay() ).lock()->getTextOverlay();
 		text->setPixelSize( getSize() );
 		text->setVAlign( VAlign::eCenter );
 		text->setVisible( visible );
@@ -114,7 +115,7 @@ namespace CastorGui
 		}
 	}
 
-	void EditCtrl::setTextMaterial( MaterialSPtr p_material )
+	void EditCtrl::setTextMaterial( MaterialRPtr p_material )
 	{
 		TextOverlaySPtr text = m_text.lock();
 		m_textMaterial = p_material;
@@ -128,14 +129,14 @@ namespace CastorGui
 
 	void EditCtrl::doCreate()
 	{
-		if ( m_foregroundMaterial.expired() )
+		if ( !m_foregroundMaterial )
 		{
-			m_foregroundMaterial = CreateMaterial( getEngine(), cuT( "CtrlStatic_FG_" ) + string::toString( getId() ), RgbColour::fromComponents( 1.0, 1.0, 1.0 ) );
+			m_foregroundMaterial = createMaterial( getEngine(), cuT( "CtrlStatic_FG_" ) + string::toString( getId() ), RgbColour::fromComponents( 1.0, 1.0, 1.0 ) );
 		}
 
-		if ( m_textMaterial.expired() )
+		if ( !m_textMaterial )
 		{
-			m_textMaterial = m_foregroundMaterial.lock();
+			m_textMaterial = m_foregroundMaterial;
 		}
 
 		TextOverlaySPtr text = m_text.lock();
@@ -143,7 +144,7 @@ namespace CastorGui
 
 		if ( !text->getFontTexture() || !text->getFontTexture()->getFont() )
 		{
-			text->setFont( getControlsManager()->getDefaultFont()->getName() );
+			text->setFont( getControlsManager()->getDefaultFont().lock()->getName() );
 		}
 
 		doUpdateCaption();
@@ -177,11 +178,11 @@ namespace CastorGui
 		}
 	}
 
-	void EditCtrl::doSetBackgroundMaterial( MaterialSPtr p_material )
+	void EditCtrl::doSetBackgroundMaterial( MaterialRPtr p_material )
 	{
 	}
 
-	void EditCtrl::doSetForegroundMaterial( MaterialSPtr p_material )
+	void EditCtrl::doSetForegroundMaterial( MaterialRPtr p_material )
 	{
 	}
 

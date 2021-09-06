@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_ModelMeshModule_H___
 #define ___C3D_ModelMeshModule_H___
 
+#include "Castor3D/Cache/CacheModule.hpp"
 #include "Castor3D/Model/ModelModule.hpp"
 
 #include <CastorUtils/Design/Factory.hpp>
@@ -95,9 +96,42 @@ namespace castor3d
 	CU_DeclareCUSmartPtr( castor3d, MeshFactory, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, MeshImporterFactory, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, MeshSubdividerFactory, C3D_API );
+	/**
+	*\~english
+	*	Helper structure to specialise a cache behaviour.
+	*\remarks
+	*	Specialisation for Mesh.
+	*\~french
+	*	Structure permettant de spécialiser le comportement d'un cache.
+	*\remarks
+	*	Spécialisation pour Mesh.
+	*/
+	template<>
+	struct ResourceCacheTraitsT< Mesh, castor::String >
+		: castor::ResourceCacheTraitsBaseT< Mesh, castor::String, ResourceCacheTraitsT< Mesh, castor::String > >
+	{
+		using ResT = Mesh;
+		using KeyT = castor::String;
+		using TraitsT = ResourceCacheTraitsT< ResT, KeyT >;
+		using Base = castor::ResourceCacheTraitsBaseT< ResT, KeyT, TraitsT >;
+		using ElementT = typename Base::ElementT;
+		using ElementPtrT = typename Base::ElementPtrT;
+
+		C3D_API static const castor::String Name;
+	};
+
+	using MeshCacheTraits = ResourceCacheTraitsT< Mesh, castor::String >;
+	using MeshCache = castor::ResourceCacheT< Mesh
+		, castor::String
+		, MeshCacheTraits >;
+
+	using MeshRes = MeshCacheTraits::ElementPtrT;
+	using MeshResPtr = MeshCacheTraits::ElementObsT;
+
+	CU_DeclareCUSmartPtr( castor3d, MeshCache, C3D_API );
 
 	//! Mesh pointer array
-	CU_DeclareMap( castor::String, MeshSPtr, MeshPtrStr );
+	CU_DeclareMap( castor::String, MeshResPtr, MeshPtrStr );
 
 	//@}
 	//@}

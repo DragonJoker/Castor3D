@@ -50,7 +50,7 @@ namespace castor3d
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
 		C3D_API void gather( ShaderFlags const & flags
-			, MaterialSPtr material
+			, MaterialRPtr material
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
@@ -125,7 +125,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
 		 */
-		ProgramFlags getProgramFlags( MaterialSPtr material )const override
+		ProgramFlags getProgramFlags( MaterialRPtr material )const override
 		{
 			return hasBoneData()
 				? ProgramFlag::eSkinning

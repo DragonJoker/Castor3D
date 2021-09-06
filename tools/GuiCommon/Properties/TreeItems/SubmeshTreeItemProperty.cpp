@@ -71,7 +71,7 @@ namespace GuiCommon
 			{
 				auto name = make_String( var.GetString() );
 				auto & cache = m_submesh.getOwner()->getScene()->getEngine()->getMaterialCache();
-				MaterialSPtr material = cache.find( name );
+				auto material = cache.find( name ).lock().get();
 
 				if ( material )
 				{

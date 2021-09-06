@@ -83,17 +83,17 @@ namespace CastorGui
 		/** sets the text material.
 		 *\param[in]	p_material	The new value.
 		 */
-		void setTextMaterial( castor3d::MaterialSPtr p_material );
+		void setTextMaterial( castor3d::MaterialRPtr p_material );
 
 		/** sets the background colour for selected item
 		 *\param[in]	colour		The new value
 		 */
-		void setSelectedItemBackgroundMaterial( castor3d::MaterialSPtr colour );
+		void setSelectedItemBackgroundMaterial( castor3d::MaterialRPtr colour );
 
 		/** sets the foreground colour for selected item
 		 *\param[in]	colour		The new value
 		 */
-		void setSelectedItemForegroundMaterial( castor3d::MaterialSPtr colour );
+		void setSelectedItemForegroundMaterial( castor3d::MaterialRPtr colour );
 
 		/** Appends a new item
 		 *\param[in]	value		The item
@@ -158,47 +158,47 @@ namespace CastorGui
 		/**
 		*\return	The text material
 		*/
-		inline castor3d::MaterialSPtr getTextMaterial()const
+		inline castor3d::MaterialRPtr getTextMaterial()const
 		{
-			return m_textMaterial.lock();
+			return m_textMaterial;
 		}
 
 		/** Retrieves the background colour for selected item
 		 *\return		The value
 		 */
-		inline castor3d::MaterialSPtr getSelectedItemBackgroundMaterial()const
+		inline castor3d::MaterialRPtr getSelectedItemBackgroundMaterial()const
 		{
-			return m_selectedItemBackgroundMaterial.lock();
+			return m_selectedItemBackgroundMaterial;
 		}
 
 		/** Retrieves the foreground colour for selected item
 		 *\return		The value
 		 */
-		inline castor3d::MaterialSPtr getSelectedItemForegroundMaterial()const
+		inline castor3d::MaterialRPtr getSelectedItemForegroundMaterial()const
 		{
-			return m_selectedItemForegroundMaterial.lock();
+			return m_selectedItemForegroundMaterial;
 		}
 
 		/** Retrieves the background colour for an highlighted item
 		 *\return		The value
 		 */
-		inline castor3d::MaterialSPtr getHighlightedItemBackgroundMaterial()const
+		inline castor3d::MaterialRPtr getHighlightedItemBackgroundMaterial()const
 		{
-			return m_highlightedItemBackgroundMaterial.lock();
+			return m_highlightedItemBackgroundMaterial;
 		}
 
 		/** Retrieves the background colour for an unselected item
 		 *\return		The value
 		 */
-		inline castor3d::MaterialSPtr getItemBackgroundMaterial()const
+		inline castor3d::MaterialRPtr getItemBackgroundMaterial()const
 		{
-			return m_itemBackgroundMaterial.lock();
+			return m_itemBackgroundMaterial;
 		}
 
 		/** sets the background colour for an highlighted item
 		 *\param[in]	material	The new value
 		 */
-		inline void setHighlightedItemBackgroundMaterial( castor3d::MaterialSPtr material )
+		inline void setHighlightedItemBackgroundMaterial( castor3d::MaterialRPtr material )
 		{
 			m_highlightedItemBackgroundMaterial = material;
 		}
@@ -206,7 +206,7 @@ namespace CastorGui
 		/** sets the background colour for an unselected item
 		 *\param[in]	material	The new value
 		 */
-		inline void setItemBackgroundMaterial( castor3d::MaterialSPtr material )
+		inline void setItemBackgroundMaterial( castor3d::MaterialRPtr material )
 		{
 			m_itemBackgroundMaterial = material;
 		}
@@ -257,11 +257,11 @@ namespace CastorGui
 
 		/** @copydoc CastorGui::Control::doSetBackgroundMaterial
 		 */
-		virtual void doSetBackgroundMaterial( castor3d::MaterialSPtr material );
+		virtual void doSetBackgroundMaterial( castor3d::MaterialRPtr material );
 
 		/** @copydoc CastorGui::Control::doSetForegroundMaterial
 		 */
-		virtual void doSetForegroundMaterial( castor3d::MaterialSPtr material );
+		virtual void doSetForegroundMaterial( castor3d::MaterialRPtr material );
 
 		/** @copydoc CastorGui::Control::doSetVisible
 		 */
@@ -311,15 +311,15 @@ namespace CastorGui
 		//! All the items.
 		std::vector< StaticCtrlSPtr > m_items;
 		//! The text material.
-		castor3d::MaterialWPtr m_textMaterial;
+		castor3d::MaterialRPtr m_textMaterial;
 		//! The background colour, for normal item
-		castor3d::MaterialWPtr m_itemBackgroundMaterial;
+		castor3d::MaterialRPtr m_itemBackgroundMaterial;
 		//! The background colour, for highlighted item
-		castor3d::MaterialWPtr m_highlightedItemBackgroundMaterial;
+		castor3d::MaterialRPtr m_highlightedItemBackgroundMaterial;
 		//! The background colour
-		castor3d::MaterialWPtr m_selectedItemBackgroundMaterial;
+		castor3d::MaterialRPtr m_selectedItemBackgroundMaterial;
 		//! The foreground colour
-		castor3d::MaterialWPtr m_selectedItemForegroundMaterial;
+		castor3d::MaterialRPtr m_selectedItemForegroundMaterial;
 		//! The listbox events signals
 		OnListEvent m_signals[size_t( ListBoxEvent::eCount )];
 		//! The items font name.

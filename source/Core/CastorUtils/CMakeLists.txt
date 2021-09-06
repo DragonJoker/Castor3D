@@ -243,9 +243,6 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	source_group( "Source Files\\Data\\Minizip" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 	source_group( "Source Files\\Data\\Minizip" FILES ${${PROJECT_NAME}_FOLDER_SRC_C_FILES} )
 
-	set( ${PROJECT_NAME}_FOLDER_SRC_FILES
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Design/Resource.cpp
-	)
 	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/ArrayView.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/BlockGuard.hpp
@@ -263,6 +260,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/NonCopyable.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/OwnedBy.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/Resource.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/Resource.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/ResourceCache.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/ResourceCacheBase.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/ScopeGuard.hpp
@@ -270,10 +268,6 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/Templates.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/UnicityException.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/Unique.hpp
-	)
-	set( ${PROJECT_NAME}_SRC_FILES
-		${${PROJECT_NAME}_SRC_FILES}
-		${${PROJECT_NAME}_FOLDER_SRC_FILES}
 	)
 	set( ${PROJECT_NAME}_HDR_FILES
 		${${PROJECT_NAME}_HDR_FILES}
