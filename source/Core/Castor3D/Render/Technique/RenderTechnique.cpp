@@ -546,6 +546,7 @@ namespace castor3d
 
 		auto & scene = *m_renderTarget.getScene();
 		auto & camera = *m_renderTarget.getCamera();
+		updater.scene = &scene;
 		updater.camera = &camera;
 		updater.voxelConeTracing = scene.getVoxelConeTracingConfig().enabled;
 
@@ -563,7 +564,6 @@ namespace castor3d
 			scene.getEnvironmentMap().update( updater );
 		}
 
-		updater.camera = &camera;
 		m_depthPass->update( updater );
 		m_backgroundRenderer->update( updater );
 
@@ -608,8 +608,6 @@ namespace castor3d
 
 		auto & scene = *m_renderTarget.getScene();
 		auto & camera = *m_renderTarget.getCamera();
-		updater.scene = &scene;
-		updater.camera = &camera;
 		updater.voxelConeTracing = scene.getVoxelConeTracingConfig().enabled;
 
 		doInitialiseLpv();
@@ -622,8 +620,6 @@ namespace castor3d
 			scene.getEnvironmentMap().update( updater );
 		}
 
-		updater.scene = &scene;
-		updater.camera = &camera;
 		m_depthPass->update( updater );
 		m_backgroundRenderer->update( updater );
 

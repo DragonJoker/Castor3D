@@ -136,9 +136,7 @@ namespace castor3d
 	{
 	}
 
-	void ImageBackground::doCpuUpdate( CpuUpdater & updater
-		, castor::Matrix4x4f & mtxView
-		, castor::Matrix4x4f & mtxProj )const
+	void ImageBackground::doCpuUpdate( CpuUpdater & updater )const
 	{
 		auto & viewport = *updater.viewport;
 		viewport.resize( updater.camera->getSize() );
@@ -155,8 +153,10 @@ namespace castor3d
 			, node->getDerivedPosition()
 			, node->getDerivedPosition() + Point3f{ 0.0f, 0.0f, 1.0f }
 			, Point3f{ 0.0f, 1.0f, 0.0f } );
-		mtxView = view;
-		mtxProj = viewport.getSafeBandedProjection();
+		updater.bgMtxView = view;
+		updater.bgMtxProj = updater.isSafeBanded
+			? viewport.getSafeBandedProjection()
+			: viewport.getProjection();
 	}
 
 	void ImageBackground::doGpuUpdate( GpuUpdater & updater )const
