@@ -230,9 +230,7 @@ namespace castor3d
 	{
 	}
 
-	void SkyboxBackground::doCpuUpdate( CpuUpdater & updater
-		, castor::Matrix4x4f & mtxView
-		, castor::Matrix4x4f & mtxProj )const
+	void SkyboxBackground::doCpuUpdate( CpuUpdater & updater )const
 	{
 		auto & viewport = *updater.viewport;
 		viewport.resize( updater.camera->getSize() );
@@ -241,8 +239,10 @@ namespace castor3d
 			, 0.1f
 			, 2.0f );
 		viewport.update();
-		mtxView = updater.camera->getView();
-		mtxProj = viewport.getSafeBandedProjection();
+		updater.bgMtxView = updater.camera->getView();
+		updater.bgMtxProj = updater.isSafeBanded
+			? viewport.getSafeBandedProjection()
+			: viewport.getProjection();
 	}
 
 	void SkyboxBackground::doGpuUpdate( GpuUpdater & updater )const
