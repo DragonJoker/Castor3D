@@ -110,7 +110,7 @@ namespace castor3d
 
 			castor::matrix::setTranslate( updater.bgMtxModl, node->getDerivedPosition() );
 			castor::matrix::scale( updater.bgMtxModl, Scale );
-			doCpuUpdate( updater, updater.bgMtxView, updater.bgMtxProj );
+			doCpuUpdate( updater );
 		}
 	}
 

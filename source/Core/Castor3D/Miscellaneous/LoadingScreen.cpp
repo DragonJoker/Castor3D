@@ -316,7 +316,12 @@ namespace castor3d
 	{
 		if ( m_enabled )
 		{
+			auto oldCamera = updater.camera;
+			auto oldScene = updater.scene;
+			auto oldSafeBanded = updater.isSafeBanded;
 			updater.camera = m_camera.get();
+			updater.scene = m_scene.get();
+			updater.isSafeBanded = false;
 
 			m_scene->update( updater );
 			m_camera->update();
@@ -331,6 +336,10 @@ namespace castor3d
 			m_opaquePass->update( updater );
 			m_transparentPass->update( updater );
 			m_overlayPass->update( updater );
+
+			updater.isSafeBanded = oldSafeBanded;
+			updater.camera = oldCamera;
+			updater.scene = oldScene;
 		}
 	}
 
@@ -338,6 +347,8 @@ namespace castor3d
 	{
 		if ( m_enabled )
 		{
+			auto oldCamera = updater.camera;
+			auto oldScene = updater.scene;
 			updater.camera = m_camera.get();
 			updater.scene = m_scene.get();
 
@@ -346,6 +357,9 @@ namespace castor3d
 			m_opaquePass->update( updater );
 			m_transparentPass->update( updater );
 			m_overlayPass->update( updater );
+
+			updater.camera = oldCamera;
+			updater.scene = oldScene;
 		}
 	}
 
