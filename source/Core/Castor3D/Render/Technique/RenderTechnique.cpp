@@ -391,6 +391,7 @@ namespace castor3d
 			, m_renderTarget.getHdrConfigUbo()
 			, m_sceneUbo
 			, m_colour.targetViewId
+			, true
 			, m_depth.targetViewId ) }
 #if !C3D_DebugDisableShadowMaps
 		, m_directionalShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapDirectional >( getOwner()->getGraphResourceHandler()

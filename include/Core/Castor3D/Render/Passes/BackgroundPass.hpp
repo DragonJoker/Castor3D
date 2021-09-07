@@ -26,7 +26,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, SceneBackground & background
 			, VkExtent2D const & size
-			, bool usesDepth = true );
+			, bool usesDepth );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -113,6 +113,7 @@ namespace castor3d
 			, HdrConfigUbo const & hdrConfigUbo
 			, SceneUbo const & sceneUbo
 			, crg::ImageViewId const & colour
+			, bool clearColour
 			, crg::ImageViewId const * depth );
 
 	public:
@@ -124,7 +125,8 @@ namespace castor3d
 			, SceneBackground & background
 			, HdrConfigUbo const & hdrConfigUbo
 			, SceneUbo const & sceneUbo
-			, crg::ImageViewId const & colour )
+			, crg::ImageViewId const & colour
+			, bool clearColour = true )
 			: BackgroundRenderer{ graph
 				, previousPass
 				, device
@@ -134,6 +136,7 @@ namespace castor3d
 				, hdrConfigUbo
 				, sceneUbo
 				, colour
+				, clearColour
 				, nullptr }
 		{
 		}
@@ -147,6 +150,7 @@ namespace castor3d
 			, HdrConfigUbo const & hdrConfigUbo
 			, SceneUbo const & sceneUbo
 			, crg::ImageViewId const & colour
+			, bool clearColour
 			, crg::ImageViewId const & depth )
 			: BackgroundRenderer{ graph
 				, previousPass
@@ -157,6 +161,7 @@ namespace castor3d
 				, hdrConfigUbo
 				, sceneUbo
 				, colour
+				, clearColour
 				, &depth }
 		{
 		}
@@ -168,7 +173,8 @@ namespace castor3d
 			, SceneBackground & background
 			, HdrConfigUbo const & hdrConfigUbo
 			, SceneUbo const & sceneUbo
-			, crg::ImageViewId const & colour )
+			, crg::ImageViewId const & colour
+			, bool clearColour = true )
 			: BackgroundRenderer{ graph
 				, previousPass
 				, device
@@ -178,6 +184,7 @@ namespace castor3d
 				, hdrConfigUbo
 				, sceneUbo
 				, colour
+				, clearColour
 				, nullptr }
 		{
 		}
@@ -190,6 +197,7 @@ namespace castor3d
 			, HdrConfigUbo const & hdrConfigUbo
 			, SceneUbo const & sceneUbo
 			, crg::ImageViewId const & colour
+			, bool clearColour
 			, crg::ImageViewId const & depth )
 			: BackgroundRenderer{ graph
 				, previousPass
@@ -200,6 +208,7 @@ namespace castor3d
 				, hdrConfigUbo
 				, sceneUbo
 				, colour
+				, clearColour
 				, &depth }
 		{
 		}
@@ -237,6 +246,7 @@ namespace castor3d
 			, HdrConfigUbo const & hdrConfigUbo
 			, SceneUbo const & sceneUbo
 			, crg::ImageViewId const & colour
+			, bool clearColour
 			, crg::ImageViewId const * depth
 			, ProgressBar * progress );
 
