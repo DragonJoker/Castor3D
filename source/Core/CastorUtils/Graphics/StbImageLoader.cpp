@@ -99,6 +99,7 @@ namespace castor
 					break;
 
 				case 4:
+				default:
 					format = PixelFormat::eR8G8B8A8_UNORM;
 					break;
 				}
@@ -151,6 +152,7 @@ namespace castor
 					break;
 
 				case 4:
+				default:
 					format = PixelFormat::eR32G32B32A32_SFLOAT;
 					break;
 				}

@@ -128,12 +128,12 @@ namespace castor
 			return result;
 		}
 
-		void * allocETC2( void * context, size_t size )
+		void * allocETC2( void * CU_UnusedParam( context ), size_t size )
 		{
 			return alignedAlloc( 16u, size );
 		}
 
-		void freeETC2( void * context, void * ptr, size_t size )
+		void freeETC2( void * CU_UnusedParam( context ), void * ptr, size_t CU_UnusedParam( size ) )
 		{
 			alignedFree( ptr );
 		}
@@ -276,8 +276,8 @@ namespace castor
 					break;
 				}
 
-			written += cvtt::NumParallelBlocks * pixelSize;
-			dstBuffer += cvtt::NumParallelBlocks * pixelSize;
+			written += uint32_t( cvtt::NumParallelBlocks * pixelSize );
+			dstBuffer += uint32_t( cvtt::NumParallelBlocks * pixelSize );
 			blocks += cvtt::NumParallelBlocks;
 		}
 
@@ -309,8 +309,8 @@ namespace castor
 				break;
 			}
 
-			written += cvtt::NumParallelBlocks * pixelSize;
-			dstBuffer += cvtt::NumParallelBlocks * pixelSize;
+			written += uint32_t( cvtt::NumParallelBlocks * pixelSize );
+			dstBuffer += uint32_t( cvtt::NumParallelBlocks * pixelSize );
 			blocks += cvtt::NumParallelBlocks;
 		}
 
@@ -342,8 +342,8 @@ namespace castor
 				break;
 			}
 
-			written += cvtt::NumParallelBlocks * pixelSize;
-			dstBuffer += cvtt::NumParallelBlocks * pixelSize;
+			written += uint32_t( cvtt::NumParallelBlocks * pixelSize );
+			dstBuffer += uint32_t( cvtt::NumParallelBlocks * pixelSize );
 			blocks += cvtt::NumParallelBlocks;
 		}
 

@@ -207,28 +207,25 @@ namespace castor3d
 
 	void Geometry::doUpdateMesh()
 	{
+		m_submeshesMaterials.clear();
+		m_submeshesBoxes.clear();
+		m_submeshesSpheres.clear();
+
 		if ( auto mesh = m_mesh.lock() )
 		{
-			m_submeshesMaterials.clear();
-			m_submeshesBoxes.clear();
-			m_submeshesSpheres.clear();
+			m_meshName = mesh->getName();
 
-			if ( mesh )
+			for ( auto submesh : *mesh )
 			{
-				m_meshName = mesh->getName();
-
-				for ( auto submesh : *mesh )
-				{
-					CU_Require( &submesh->getParent() == mesh.get() );
-					m_submeshesMaterials.emplace( submesh.get(), submesh->getDefaultMaterial() );
-					m_submeshesBoxes.emplace( submesh.get(), submesh->getBoundingBox() );
-					m_submeshesSpheres.emplace( submesh.get(), submesh->getBoundingSphere() );
-				}
+				CU_Require( &submesh->getParent() == mesh.get() );
+				m_submeshesMaterials.emplace( submesh.get(), submesh->getDefaultMaterial() );
+				m_submeshesBoxes.emplace( submesh.get(), submesh->getBoundingBox() );
+				m_submeshesSpheres.emplace( submesh.get(), submesh->getBoundingSphere() );
 			}
-			else
-			{
-				m_meshName = cuEmptyString;
-			}
+		}
+		else
+		{
+			m_meshName = cuEmptyString;
 		}
 	}
 

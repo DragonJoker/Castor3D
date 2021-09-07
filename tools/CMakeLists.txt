@@ -34,17 +34,17 @@ function( ToolsBuild )
 			OR CASTOR_BUILD_TOOL_GUICOMMON
 			OR CASTOR_BUILD_TOOL_CASTOR_VIEWER )
 			if( APPLE )
-				set( GTK2_FOUND TRUE )
+				set( GTK3_FOUND TRUE )
 				set( GTK2_LIBRARIES
 					"-framework AppKit"
 					"-framework QuartzCore"
 					"-framework Metal"
 				)
 			elseif ( WIN32 )
-				set( GTK2_FOUND TRUE )
+				set( GTK3_FOUND TRUE )
 			else()
-				find_package( GTK2 )
-				find_package( X11 )
+				find_package( GTK3 QUIET )
+				find_package( X11 QUIET )
 			endif()
 
 			#we look for wxWidgets
@@ -60,7 +60,7 @@ function( ToolsBuild )
 				find_package( wxWidgets COMPONENTS core base stc aui adv propgrid )
 			endif ()
 
-			if( wxWidgets_FOUND AND GTK2_FOUND )
+			if( wxWidgets_FOUND AND GTK3_FOUND )
 				unset( CastorToolsDefinitions )
 				if ( APPLE )
 					set( CastorToolsDefinitions
@@ -139,10 +139,10 @@ function( ToolsBuild )
 					set( ImgConv "no (wxWidgets libraries not found)" PARENT_SCOPE )
 					set( TestLcr "no (wxWidgets libraries not found)" PARENT_SCOPE )
 				else()
-					set( GuiCmn "no (GTK2 libraries not found)" PARENT_SCOPE )
-					set( CViewer "no (GTK2 libraries not found)" PARENT_SCOPE )
-					set( ImgConv "no (GTK2 libraries not found)" PARENT_SCOPE )
-					set( TestLcr "no (GTK2 libraries not found)" PARENT_SCOPE )
+					set( GuiCmn "no (GTK3 libraries not found)" PARENT_SCOPE )
+					set( CViewer "no (GTK3 libraries not found)" PARENT_SCOPE )
+					set( ImgConv "no (GTK3 libraries not found)" PARENT_SCOPE )
+					set( TestLcr "no (GTK3 libraries not found)" PARENT_SCOPE )
 				endif()
 			endif()
 		endif()

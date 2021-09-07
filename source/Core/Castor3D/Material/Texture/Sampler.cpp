@@ -9,7 +9,7 @@
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, Sampler );
+CU_ImplementCUSmartPtr( castor3d, Sampler )
 
 namespace castor3d
 {

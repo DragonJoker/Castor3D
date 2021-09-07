@@ -659,7 +659,7 @@ namespace castor
 				case PixelFormat::eBC7_SRGB_BLOCK:
 					{
 						CVTTCompressorU< PFSrc > compressor{ options
-							, getBytesPerPixel( PFSrc ) };
+							, uint32_t( getBytesPerPixel( PFSrc ) ) };
 						compressor.compress( dstFormat
 							, srcDimensions
 							, dstDimensions
@@ -673,7 +673,7 @@ namespace castor
 				case PixelFormat::eBC5_SNORM_BLOCK:
 					{
 						CVTTCompressorS< PFSrc > compressor{ options
-							, getBytesPerPixel( PFSrc ) };
+							, uint32_t( getBytesPerPixel( PFSrc ) ) };
 						compressor.compress( dstFormat
 							, srcDimensions
 							, dstDimensions
@@ -687,7 +687,7 @@ namespace castor
 				case PixelFormat::eBC6H_SFLOAT_BLOCK:
 					{
 						CVTTCompressorF< PFSrc > compressor{ options
-							, getBytesPerPixel( PFSrc ) };
+							, uint32_t( getBytesPerPixel( PFSrc ) ) };
 						compressor.compress( dstFormat
 							, srcDimensions
 							, dstDimensions
@@ -793,7 +793,7 @@ namespace castor
 			uint8_t * pixelBuffer = result->getPtr();
 			uint8_t blockBuffer[16 * 4u];
 			uint8_t const * data = src->getConstPtr();
-			uint32_t pixelSize = getBytesPerPixel( result->getFormat() );
+			uint32_t pixelSize = uint32_t( getBytesPerPixel( result->getFormat() ) );
 			uint32_t height = src->getHeight();
 			uint32_t width = src->getWidth();
 			uint32_t heightInBlocks = height / 4u;

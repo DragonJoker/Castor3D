@@ -102,7 +102,7 @@ namespace castor
 		void swapComponents( uint8_t * pixels, PixelFormat format, uint32_t width, uint32_t height )
 		{
 			uint32_t count{ width * height };
-			uint32_t bpp( getBytesPerPixel( format ) );
+			auto bpp( uint32_t( getBytesPerPixel( format ) ) );
 			uint32_t bpc{ 0u };
 
 			if ( hasAlpha( format ) )
@@ -153,7 +153,7 @@ namespace castor
 		reg.unregisterLoader( listExtensions() );
 	}
 
-	ImageLayout FreeImageLoader::load( String const & imageFormat
+	ImageLayout FreeImageLoader::load( String const & CU_UnusedParam( imageFormat )
 		, uint8_t const * data
 		, uint32_t size
 		, PxBufferBaseSPtr & buffer )const

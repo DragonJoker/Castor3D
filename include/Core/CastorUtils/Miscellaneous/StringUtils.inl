@@ -59,7 +59,7 @@ namespace castor
 			{
 				static void convert( std::basic_string< InChar > const & strIn
 					, std::basic_string< InChar > & strOut
-					, std::locale const & locale = std::locale() )
+					, std::locale const & CU_UnusedParam( locale ) = std::locale() )
 				{
 					strOut = strIn;
 				}

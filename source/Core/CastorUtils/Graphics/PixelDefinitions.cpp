@@ -531,7 +531,7 @@ namespace castor
 		{
 			return uint32_t( uint8_t( r ) << 0 )
 				| uint32_t( uint8_t( g ) << 8 )
-				| uint32_t( uint8_t( g ) << 16 )
+				| uint32_t( uint8_t( b ) << 16 )
 				| uint32_t( uint8_t( a ) << 24 );
 		}
 
@@ -567,7 +567,7 @@ namespace castor
 			for ( int i = 0; i < 16; i++ )
 			{
 				int control_code = bits & 0x7;
-				int32_t result;
+				int32_t result{};
 
 				if ( lum0 > lum1 )
 				{
@@ -685,7 +685,7 @@ namespace castor
 		{
 			int pixel = ( pixels >> ( i * 2 ) ) & 0x3;
 			int code = ( alpha_bits >> ( i * 3 ) ) & 0x7;
-			int alpha;
+			int alpha{};
 			if ( alpha0 > alpha1 )
 			{
 				switch ( code )

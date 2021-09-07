@@ -101,7 +101,7 @@ namespace castor
 		struct Action
 		{
 			Path file;
-			int line;
+			uint64_t line;
 			String name;
 			SectionAttributeParsers functions;
 			String params;
@@ -113,12 +113,12 @@ namespace castor
 		CU_API PreprocessedFile & operator=( PreprocessedFile const & rhs );
 		CU_API PreprocessedFile & operator=( PreprocessedFile && rhs );
 
-		CU_API PreprocessedFile( FileParser & parser );
+		CU_API explicit PreprocessedFile( FileParser & parser );
 		CU_API PreprocessedFile( FileParser & parser
 			, FileParserContextSPtr context );
 
 		CU_API void addParser( Path file
-			, int line
+			, uint64_t line
 			, String name
 			, SectionAttributeParsers functions
 			, String params );
@@ -273,7 +273,7 @@ namespace castor
 		 *\param[in]	error	Le texte de l'erreur.
 		 */
 		CU_API void parseError( String const & functionName
-			, int lineIndex
+			, uint64_t lineIndex
 			, String const & error );
 		/**
 		 *\~english
@@ -284,7 +284,7 @@ namespace castor
 		 *\param[in]	warning	Le texte de l'avertissement.
 		 */
 		CU_API void parseWarning( String const & functionName
-			, int lineIndex
+			, uint64_t lineIndex
 			, String const & warning );
 		/**
 		 *\~english
@@ -408,23 +408,23 @@ namespace castor
 	private:
 		bool doParseScriptLine( PreprocessedFile & preprocessed
 			, String & line
-			, int lineIndex );
+			, uint64_t lineIndex );
 		void doParseScriptBlockBegin( PreprocessedFile & preprocessed
-			, int lineIndex );
+			, uint64_t lineIndex );
 		bool doParseScriptBlockEnd( PreprocessedFile & preprocessed
-			, int lineIndex );
+			, uint64_t lineIndex );
 		bool doInvokeParser( PreprocessedFile & preprocessed
 			, String & line
-			, int lineIndex );
+			, uint64_t lineIndex );
 		void doEnterBlock( PreprocessedFile & preprocessed
-			, int lineIndex );
+			, uint64_t lineIndex );
 		void doLeaveBlock( PreprocessedFile & preprocessed
-			, int lineIndex );
+			, uint64_t lineIndex );
 		bool doIsInIgnoredBlock();
 		void doIncludeFile( PreprocessedFile & preprocessed
-			, int lineIndex
+			, uint64_t lineIndex
 			, String const & param );
-		void doAddDefine( int lineIndex
+		void doAddDefine( uint64_t lineIndex
 			, String const & param );
 		void doCheckDefines( String & text );
 

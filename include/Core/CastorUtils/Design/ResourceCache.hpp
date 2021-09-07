@@ -31,7 +31,7 @@ namespace castor
 		*	Construction/Desctruction.
 		**/
 		/**@{*/
-		ResourceCacheT( LoggerInstance & logger
+		explicit ResourceCacheT( LoggerInstance & logger
 			, ElementInitialiserT initialise = ElementInitialiserT{}
 			, ElementCleanerT clean = ElementCleanerT{}
 			, ElementMergerT merge = ElementMergerT{} )
