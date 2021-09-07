@@ -78,7 +78,8 @@ namespace castor3d
 			, m_background
 			, m_hdrConfigUbo
 			, m_sceneUbo
-			, m_colourView ) }
+			, m_colourView
+			, true ) }
 		, m_opaquePassDesc{ &doCreateOpaquePass( &m_backgroundRenderer->getPass() ) }
 		, m_transparentPassDesc{ &doCreateTransparentPass( m_opaquePassDesc ) }
 	{
