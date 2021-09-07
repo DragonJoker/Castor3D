@@ -292,7 +292,6 @@ namespace castor3d
 		, m_device{ device }
 		, m_targetSize{ m_renderTarget.getSize() }
 		, m_rawSize{ getSafeBandedSize( m_targetSize ) }
-		, m_ssaoConfig{ ssaoConfig }
 		, m_colour{ device
 			, getOwner()->getGraphResourceHandler()
 			, getName() + "TechCol"
@@ -364,7 +363,7 @@ namespace castor3d
 			, progress
 			, *m_depthPassDecl
 			, makeSize( m_colour.getExtent() )
-			, m_ssaoConfig
+			, getSsaoConfig()
 			, m_depth
 			, m_normal
 			, m_gpInfoUbo ) }
@@ -437,7 +436,7 @@ namespace castor3d
 			, m_lpvConfigUbo
 			, m_llpvConfigUbo
 			, m_vctConfigUbo
-			, m_ssaoConfig ) }
+			, getSsaoConfig() ) }
 #else
 		, m_opaquePassDesc{ &doCreateOpaquePass( progress ) }
 #endif
@@ -551,7 +550,7 @@ namespace castor3d
 		updater.camera = &camera;
 		updater.voxelConeTracing = scene.getVoxelConeTracingConfig().enabled;
 
-		if ( m_ssaoConfig.enabled )
+		if ( getSsaoConfig().enabled )
 		{
 			m_ssao->update( updater );
 		}
@@ -748,6 +747,16 @@ namespace castor3d
 #endif
 	}
 
+	SsaoConfig const & RenderTechnique::getSsaoConfig()const
+	{
+		return m_renderTarget.getSsaoConfig();
+	}
+
+	SsaoConfig & RenderTechnique::getSsaoConfig()
+	{
+		return m_renderTarget.getSsaoConfig();
+	}
+
 	crg::FramePass & RenderTechnique::doCreateDepthPass( ProgressBar * progress )
 	{
 		stepProgressBar( progress, "Creating depth pass" );
@@ -761,7 +770,7 @@ namespace castor3d
 					, context
 					, graph
 					, m_device
-					, m_ssaoConfig
+					, getSsaoConfig()
 					, SceneRenderPassDesc{ m_depth.getExtent(), m_matrixUbo, m_renderTarget.getCuller() }.safeBand( true ) );
 				m_depthPass = result.get();
 				getEngine()->registerTimer( graph.getName() + "/Depth"
@@ -827,7 +836,7 @@ namespace castor3d
 					, cuT( "Opaque" )
 					, name
 					, SceneRenderPassDesc{ m_colour.getExtent(), m_matrixUbo, m_renderTarget.getCuller() }.safeBand( true )
-					, RenderTechniquePassDesc{ false, m_ssaoConfig }
+					, RenderTechniquePassDesc{ false, getSsaoConfig() }
 						.ssao( m_ssao->getResult() )
 						.lpvConfigUbo( m_lpvConfigUbo )
 						.llpvConfigUbo( m_llpvConfigUbo )
@@ -884,7 +893,7 @@ namespace castor3d
 					, cuT( "Transparent" )
 					, name
 					, SceneRenderPassDesc{ m_colour.getExtent(), m_matrixUbo, m_renderTarget.getCuller(), isOit }.safeBand( true )
-					, RenderTechniquePassDesc{ false, m_ssaoConfig }
+					, RenderTechniquePassDesc{ false, getSsaoConfig() }
 						.ssao( m_ssao->getResult() )
 						.lpvConfigUbo( m_lpvConfigUbo )
 						.lpvConfigUbo( m_lpvConfigUbo )
