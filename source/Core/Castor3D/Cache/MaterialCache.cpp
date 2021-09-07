@@ -28,21 +28,11 @@ namespace castor
 		: ElementCacheT{ engine.getLogger()
 			, [this]( ElementT & resource )
 			{
-				m_engine.postEvent( makeCpuFunctorEvent( EventType::ePreRender
-					, [this, &resource]()
-					{
-						resource.initialise();
-						registerMaterial( resource );
-					} ) );
+				m_engine.postEvent( makeCpuInitialiseEvent( resource ) );
 			}
 			, [this]( ElementT & resource )
 			{
-				m_engine.postEvent( makeCpuFunctorEvent( EventType::ePreRender
-					, [this, &resource]()
-					{
-						unregisterMaterial( resource );
-						resource.cleanup();
-					} ) );
+				m_engine.postEvent( makeCpuCleanupEvent( resource ) );
 			}
 			, castor::ResourceMergerT< MaterialCache >{ "_" } }
 		, m_engine{ engine }
@@ -88,11 +78,12 @@ namespace castor
 
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::cleanup()
 	{
-		auto lock( makeUniqueLock( *this ) );
-		doCleanupNoLock();
-		m_engine.postEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [this]( RenderDevice const & device
-				, QueueData const & queueData )
+		{
+			auto lock( makeUniqueLock( *this ) );
+			doCleanupNoLock();
+		}
+		m_engine.postEvent( makeCpuFunctorEvent( EventType::ePreRender
+			, [this]()
 			{
 				m_passBuffer.reset();
 				m_textureBuffer.reset();
@@ -122,8 +113,6 @@ namespace castor
 
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::update( GpuUpdater & updater )
 	{
-		auto lock( makeUniqueLock( *this ) );
-
 		if ( m_passBuffer )
 		{
 			m_passBuffer->update();
@@ -144,55 +133,8 @@ namespace castor
 		}
 	}
 
-	void ResourceCacheT< Material, String, MaterialCacheTraits >::registerMaterial( Material const & material )
-	{
-		auto lock( makeUniqueLock( *this ) );
-
-		for ( auto & pass : material )
-		{
-			if ( pass->getId() == 0 )
-			{
-				m_passBuffer->addPass( *pass );
-
-				for ( auto & unit : *pass )
-				{
-					if ( unit->getId() == 0u )
-					{
-						m_textureBuffer->addTextureConfiguration( *unit );
-					}
-				}
-			}
-		}
-	}
-
-	void ResourceCacheT< Material, String, MaterialCacheTraits >::unregisterMaterial( Material const & material )
-	{
-		auto lock( makeUniqueLock( *this ) );
-
-		if ( m_passBuffer )
-		{
-			for ( auto & pass : material )
-			{
-				if ( pass->getId() != 0 )
-				{
-					for ( auto & unit : *pass )
-					{
-						if ( unit->getId() != 0u )
-						{
-							m_textureBuffer->removeTextureConfiguration( *unit );
-						}
-					}
-
-					m_passBuffer->removePass( *pass );
-				}
-			}
-		}
-	}
-
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::registerPass( Pass & pass )
 	{
-		auto lock( makeUniqueLock( *this ) );
-
 		if ( m_passBuffer )
 		{
 			m_passBuffer->addPass( pass );
@@ -201,8 +143,6 @@ namespace castor
 
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::unregisterPass( Pass & pass )
 	{
-		auto lock( makeUniqueLock( *this ) );
-
 		if ( m_passBuffer
 			&& pass.getId() )
 		{
@@ -212,8 +152,6 @@ namespace castor
 
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::registerUnit( TextureUnit & unit )
 	{
-		auto lock( makeUniqueLock( *this ) );
-
 		if ( m_textureBuffer )
 		{
 			m_textureBuffer->addTextureConfiguration( unit );
@@ -222,9 +160,8 @@ namespace castor
 
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::unregisterUnit( TextureUnit & unit )
 	{
-		auto lock( makeUniqueLock( *this ) );
-
-		if ( m_textureBuffer )
+		if ( m_textureBuffer
+			&& unit.getId() )
 		{
 			m_textureBuffer->removeTextureConfiguration( unit );
 		}

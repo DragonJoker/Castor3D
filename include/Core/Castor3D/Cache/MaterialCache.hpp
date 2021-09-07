@@ -115,8 +115,6 @@ namespace castor
 		 *\param[out]	names	La liste de noms
 		 */
 		C3D_API void getNames( StringArray & names );
-		C3D_API void registerMaterial( castor3d::Material const & material );
-		C3D_API void unregisterMaterial( castor3d::Material const & material );
 		C3D_API void registerPass( castor3d::Pass & pass );
 		C3D_API void unregisterPass( castor3d::Pass & pass );
 		C3D_API void registerUnit( castor3d::TextureUnit & unit );

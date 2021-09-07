@@ -13,6 +13,8 @@ See LICENSE file in root folder
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 
+#include <mutex>
+
 #define C3D_MaterialsStructOfArrays 0
 
 namespace castor3d
@@ -224,6 +226,7 @@ namespace castor3d
 		uint32_t m_passCount;
 		uint32_t m_passID{ 1u };
 		PassesData m_data;
+		std::mutex m_mutex;
 	};
 }
 

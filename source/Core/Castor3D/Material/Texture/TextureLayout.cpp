@@ -16,7 +16,8 @@
 #include <ashespp/Image/ImageView.hpp>
 #include <ashespp/Sync/Fence.hpp>
 
-using namespace castor;
+CU_ImplementCUSmartPtr( castor3d, TextureLayout );
+CU_ImplementCUSmartPtr( castor3d, TextureSource );
 
 namespace castor3d
 {
@@ -42,7 +43,7 @@ namespace castor3d
 			case VK_IMAGE_TYPE_2D:
 				if ( arrayLayers > 1 )
 				{
-					if ( checkFlag( flags, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT ) )
+					if ( castor::checkFlag( flags, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT ) )
 					{
 						CU_Require( ( arrayLayers % 6 ) == 0 );
 						return arrayLayers == 6u
@@ -97,7 +98,7 @@ namespace castor3d
 			, uint32_t baseArrayLayer
 			, uint32_t arrayLayers )
 		{
-			return std::make_unique< TextureView >( layout
+			return castor::makeUnique< TextureView >( layout
 				, getSubviewCreateInfos( info
 					, VK_NULL_HANDLE
 					, baseMipLevel
@@ -124,7 +125,7 @@ namespace castor3d
 			}
 
 			auto blockSize = ashes::getBlockSize( format );
-			auto bitSize = getBitSize( blockSize.extent.width );
+			auto bitSize = castor::getBitSize( blockSize.extent.width );
 			return mipLevels / bitSize;
 		}
 
@@ -603,7 +604,7 @@ namespace castor3d
 
 		void processLevels( RenderDevice const & device
 			, QueueData const & queueData
-			, Image const & image
+			, castor::Image const & image
 			, ashes::Image const & texture
 			, ashes::ImageViewCreateInfo & viewInfo )
 		{
@@ -716,8 +717,8 @@ namespace castor3d
 	//************************************************************************************************
 
 	TextureLayoutSPtr createTextureLayout( Engine const & engine
-		, Path const & relative
-		, Path const & folder
+		, castor::Path const & relative
+		, castor::Path const & folder
 		, bool allowCompression )
 	{
 		ashes::ImageCreateInfo createInfo
@@ -744,8 +745,8 @@ namespace castor3d
 	}
 
 	TextureLayoutSPtr createTextureLayout( Engine const & engine
-		, String const & name
-		, PxBufferBaseUPtr buffer
+		, castor::String const & name
+		, castor::PxBufferBaseUPtr buffer
 		, bool isStatic )
 	{
 		ashes::ImageCreateInfo createInfo
@@ -791,7 +792,7 @@ namespace castor3d
 
 		if ( extent.height > 1u || extent.width <= 1u )
 		{
-			if ( checkFlag( flags, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT ) )
+			if ( castor::checkFlag( flags, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT ) )
 			{
 				if ( arrayLayers == 6u )
 				{
@@ -865,7 +866,7 @@ namespace castor3d
 		, m_static{ isStatic }
 		, m_info{ std::move( info ) }
 		, m_properties{ memoryProperties }
-		, m_image{ debugName, Path{}, convert( m_info ) }
+		, m_image{ debugName, castor::Path{}, convert( m_info ) }
 		, m_defaultView{ createViews( m_info, *this, m_image.getName() ) }
 		, m_cubeView{ &m_defaultView }
 		, m_arrayView{ &m_defaultView }
@@ -877,7 +878,7 @@ namespace castor3d
 		{
 			if ( m_info->arrayLayers >= 6u
 				&& ( m_info->arrayLayers % 6u ) == 0u
-				&& checkFlag( m_info->flags, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT ) )
+				&& castor::checkFlag( m_info->flags, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT ) )
 			{
 				m_cubeView.layers.resize( m_info->arrayLayers / 6u );
 				createViews( m_info, *this, m_image.getName(), m_cubeView );
@@ -930,7 +931,7 @@ namespace castor3d
 		{
 			if ( m_info->arrayLayers >= 6u
 				&& ( m_info->arrayLayers % 6u ) == 0u
-				&& checkFlag( m_info->flags, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT ) )
+				&& castor::checkFlag( m_info->flags, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT ) )
 			{
 				m_cubeView.layers.resize( m_info->arrayLayers / 6u );
 				createViews( m_info, *this, m_image.getName(), m_cubeView );
@@ -995,7 +996,7 @@ namespace castor3d
 				CU_Exception( "Unsupported image format properties" );
 			}
 
-			if ( checkFlag( props.optimalTilingFeatures, VK_FORMAT_FEATURE_TRANSFER_DST_BIT ) )
+			if ( castor::checkFlag( props.optimalTilingFeatures, VK_FORMAT_FEATURE_TRANSFER_DST_BIT ) )
 			{
 				res = device->getPhysicalDevice().getImageFormatProperties( m_info->format
 					, m_info->imageType
@@ -1012,7 +1013,7 @@ namespace castor3d
 
 			if ( m_info->mipLevels > 1u )
 			{
-				CU_Require( checkFlag( props.optimalTilingFeatures, VK_FORMAT_FEATURE_TRANSFER_SRC_BIT ) );
+				CU_Require( castor::checkFlag( props.optimalTilingFeatures, VK_FORMAT_FEATURE_TRANSFER_SRC_BIT ) );
 			}
 			else if ( m_info->mipLevels == 0 )
 			{
@@ -1029,7 +1030,7 @@ namespace castor3d
 
 			m_texture = m_ownTexture.get();
 			CU_Require( m_info->mipLevels <= 1u
-				|| ( checkFlag( props.optimalTilingFeatures, VK_FORMAT_FEATURE_BLIT_DST_BIT )
+				|| ( castor::checkFlag( props.optimalTilingFeatures, VK_FORMAT_FEATURE_BLIT_DST_BIT )
 					|| !m_defaultView.view->isMipmapsGenerationNeeded() ) );
 
 			if ( isStatic() )
@@ -1038,7 +1039,7 @@ namespace castor3d
 				{
 					0u,
 					*m_texture,
-					( ( m_info->extent.height > 1u || m_image.getLayout().type == ImageLayout::e2D )
+					( ( m_info->extent.height > 1u || m_image.getLayout().type == castor::ImageLayout::e2D )
 						? VK_IMAGE_VIEW_TYPE_2D
 						: VK_IMAGE_VIEW_TYPE_1D ),
 					m_info->format,
@@ -1135,8 +1136,8 @@ namespace castor3d
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 	}
 
-	void TextureLayout::setSource( Path const & folder
-		, Path const & relative
+	void TextureLayout::setSource( castor::Path const & folder
+		, castor::Path const & relative
 		, bool allowCompression
 		, bool generateMips )
 	{
@@ -1164,18 +1165,18 @@ namespace castor3d
 		m_static = true;
 	}
 
-	void TextureLayout::setSource( PxBufferBaseSPtr buffer
+	void TextureLayout::setSource( castor::PxBufferBaseSPtr buffer
 		, uint32_t bufferOrigLevels
 		, bool isStatic )
 	{
 		buffer = adaptBuffer( buffer, buffer->getLevels() );
-		m_image = { m_image.getName(), ImageLayout{ *buffer }, buffer };
+		m_image = { m_image.getName(), castor::ImageLayout{ *buffer }, buffer };
 		doUpdateCreateInfo( m_image.getLayout() );
 		doUpdateMips( false, bufferOrigLevels );
 		m_static = isStatic;
 	}
 
-	void TextureLayout::setSource( PxBufferBaseSPtr buffer
+	void TextureLayout::setSource( castor::PxBufferBaseSPtr buffer
 		, bool isStatic )
 	{
 		setSource( buffer
@@ -1188,7 +1189,7 @@ namespace castor3d
 		, uint32_t bufferOrigLevels )
 	{
 		buffer = adaptBuffer( buffer, buffer->getLevels() );
-		castor::Image srcImage{ getBufferName( *buffer ), ImageLayout{ *buffer }, buffer };
+		castor::Image srcImage{ getBufferName( *buffer ), castor::ImageLayout{ *buffer }, buffer };
 		auto & srcLayout = srcImage.getLayout();
 		doUpdateFromFirstImage( 0u, srcLayout );
 		auto & dstLayout = m_image.getLayout();
@@ -1217,7 +1218,7 @@ namespace castor3d
 	{
 		uint32_t srcMips = 1u;
 		auto image = getFileImage( *getRenderSystem()->getEngine()
-			, m_image.getName() + string::toString( index )
+			, m_image.getName() + castor::string::toString( index )
 			, folder
 			, relative
 			, m_image.getLevels()
@@ -1246,7 +1247,7 @@ namespace castor3d
 		, castor::PxBufferBaseSPtr buffer )
 	{
 		buffer = adaptBuffer( buffer, 1u );
-		castor::Image srcImage{ getBufferName( *buffer ), ImageLayout{ *buffer }, buffer };
+		castor::Image srcImage{ getBufferName( *buffer ), castor::ImageLayout{ *buffer }, buffer };
 		auto & srcLayout = srcImage.getLayout();
 		auto & dstLayout = m_image.getLayout();
 		doUpdateFromFirstImage( level, srcLayout );
@@ -1267,7 +1268,7 @@ namespace castor3d
 	{
 		uint32_t srcMips = 1u;
 		auto image = getFileImage( *getRenderSystem()->getEngine()
-			, m_image.getName() + string::toString( index ) + "_" + string::toString( level )
+			, m_image.getName() + castor::string::toString( index ) + "_" + castor::string::toString( level )
 			, folder
 			, relative
 			, 1u

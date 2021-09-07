@@ -153,8 +153,8 @@ namespace castor3d
 
 		TextureLayout const & getResult()const
 		{
-			CU_Require( m_colourTexture.isTextured() );
-			return *m_colourTexture.getTexture();
+			CU_Require( m_colourTexture->isTextured() );
+			return *m_colourTexture->getTexture();
 		}
 
 		crg::ImageId const & getResultImg()const
@@ -184,12 +184,12 @@ namespace castor3d
 
 		TextureLayout const & getDepth()const
 		{
-			return *m_depthBuffer.getTexture();
+			return *m_depthBuffer->getTexture();
 		}
 
 		TextureLayoutSPtr getDepthPtr()const
 		{
-			return m_depthBuffer.getTexture();
+			return m_depthBuffer->getTexture();
 		}
 
 		ashes::Buffer< int32_t > const & getDepthRange()const
@@ -272,9 +272,9 @@ namespace castor3d
 		castor::Size m_rawSize;
 		SsaoConfig m_ssaoConfig;
 		Texture m_colour;
-		TextureUnit m_colourTexture;
+		TextureUnitUPtr m_colourTexture;
 		Texture m_depth;
-		TextureUnit m_depthBuffer;
+		TextureUnitUPtr m_depthBuffer;
 		Texture m_depthObj;
 		Texture m_normal;
 		MatrixUbo m_matrixUbo;
