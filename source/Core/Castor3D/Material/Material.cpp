@@ -9,7 +9,7 @@
 
 namespace castor3d
 {
-	const castor::String Material::DefaultMaterialName = cuT( "DefaultMaterial" );
+	const castor::String Material::DefaultMaterialName = cuT( "C3D_DefaultMaterial" );
 
 	Material::Material( castor::String const & name
 		, Engine & engine
