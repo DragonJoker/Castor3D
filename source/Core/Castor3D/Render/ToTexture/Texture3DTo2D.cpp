@@ -482,7 +482,7 @@ namespace castor3d
 
 	void Texture3DTo2D::initialise( QueueData const & queueData )
 	{
-		m_descriptorSetPool = m_descriptorSetLayout->createPool( m_textures.size() );
+		m_descriptorSetPool = m_descriptorSetLayout->createPool( uint32_t( m_textures.size() ) );
 
 		for ( auto & intermediate : m_textures )
 		{

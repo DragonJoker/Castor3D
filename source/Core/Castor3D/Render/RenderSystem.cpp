@@ -523,15 +523,15 @@ namespace castor3d
 		m_gpuInformations.useShaderType( VK_SHADER_STAGE_FRAGMENT_BIT, true );
 		m_gpuInformations.useShaderType( VK_SHADER_STAGE_VERTEX_BIT, true );
 
-		m_gpuInformations.setValue( GpuMin::eBufferMapSize, limits.nonCoherentAtomSize );
-		m_gpuInformations.setValue( GpuMin::eUniformBufferOffsetAlignment, limits.minUniformBufferOffsetAlignment );
+		m_gpuInformations.setValue( GpuMin::eBufferMapSize, uint32_t( limits.nonCoherentAtomSize ) );
+		m_gpuInformations.setValue( GpuMin::eUniformBufferOffsetAlignment, uint32_t( limits.minUniformBufferOffsetAlignment ) );
 
 		m_gpuInformations.setValue( GpuMax::eTexture1DSize, limits.maxImageDimension1D );
 		m_gpuInformations.setValue( GpuMax::eTexture2DSize, limits.maxImageDimension2D );
 		m_gpuInformations.setValue( GpuMax::eTexture3DSize, limits.maxImageDimension3D );
 		m_gpuInformations.setValue( GpuMax::eTextureCubeSize, limits.maxImageDimensionCube );
 		m_gpuInformations.setValue( GpuMax::eTextureLayers, limits.maxImageArrayLayers );
-		m_gpuInformations.setValue( GpuMax::eSamplerLodBias, int32_t( limits.maxSamplerLodBias ) );
+		m_gpuInformations.setValue( GpuMax::eSamplerLodBias, uint32_t( limits.maxSamplerLodBias ) );
 		m_gpuInformations.setValue( GpuMax::eClipDistances, limits.maxClipDistances );
 		m_gpuInformations.setValue( GpuMax::eFramebufferWidth, limits.maxFramebufferWidth );
 		m_gpuInformations.setValue( GpuMax::eFramebufferHeight, limits.maxFramebufferHeight );

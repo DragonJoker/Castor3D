@@ -82,7 +82,7 @@ namespace castor
 
 		void compress( PixelFormat dstFormat
 			, Size const & srcDimensions
-			, Size const & dstDimensions
+			, Size const & CU_UnusedParam( dstDimensions )
 			, uint8_t const * srcBuffer
 			, uint32_t srcSize
 			, uint8_t * dstBuffer
@@ -120,7 +120,7 @@ namespace castor
 
 		void compress( PixelFormat dstFormat
 			, Size const & srcDimensions
-			, Size const & dstDimensions
+			, Size const & CU_UnusedParam( dstDimensions )
 			, uint8_t const * srcBuffer
 			, uint32_t srcSize
 			, uint8_t * dstBuffer
@@ -158,7 +158,7 @@ namespace castor
 
 		void compress( PixelFormat dstFormat
 			, Size const & srcDimensions
-			, Size const & dstDimensions
+			, Size const & CU_UnusedParam( dstDimensions )
 			, uint8_t const * srcBuffer
 			, uint32_t srcSize
 			, uint8_t * dstBuffer

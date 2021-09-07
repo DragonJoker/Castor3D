@@ -158,7 +158,7 @@ namespace castor
 		template< PixelFormat PFSrc, PixelFormat PFDst, typename EnableT = void >
 		struct BufferConverter
 		{
-			void operator()( PxBufferConvertOptions const * options
+			void operator()( PxBufferConvertOptions const * CU_UnusedParam( options )
 				, Size const & srcDimensions
 				, Size const & dstDimensions
 				, uint8_t const * srcBuffer
@@ -168,7 +168,7 @@ namespace castor
 			{
 				uint8_t const * src = &srcBuffer[0];
 				uint8_t * dst = &dstBuffer[0];
-				uint32_t count = srcSize / getBytesPerPixel( PFSrc );
+				uint32_t count = uint32_t( srcSize / getBytesPerPixel( PFSrc ) );
 				CU_Require( srcSize / getBytesPerPixel( PFSrc ) == dstSize / getBytesPerPixel( PFDst ) );
 
 				if ( srcDimensions == dstDimensions
@@ -578,7 +578,7 @@ namespace castor
 	struct PixelDefinitionsT
 	{
 		static constexpr VkDeviceSize Size = ashes::getMinimalSize( VkFormat( PFT ) );
-		static constexpr uint8_t Count = ashes::getCount( VkFormat( PFT ) );
+		static constexpr uint8_t Count = uint8_t( ashes::getCount( VkFormat( PFT ) ) );
 		static constexpr bool Alpha = hasAlphaV< PFT >;
 		static constexpr bool Colour = isColourFormatV< PFT >;
 		static constexpr bool Depth = isDepthFormatV< PFT > || isDepthStencilFormatV< PFT >;

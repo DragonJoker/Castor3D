@@ -328,7 +328,7 @@ namespace castor3d
 		data.specDiv->r = getSpecular().red();
 		data.specDiv->g = getSpecular().green();
 		data.specDiv->b = getSpecular().blue();
-		data.specDiv->a = castor::point::length( castor::Point3f{ getSpecular().constPtr() } );
+		data.specDiv->a = float( castor::point::length( castor::Point3f{ getSpecular().constPtr() } ) );
 
 		doFillData( data );
 	}

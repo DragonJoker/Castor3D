@@ -21,7 +21,7 @@ namespace castor
 	*/
 	struct ImageCreateParams
 	{
-		ImageCreateParams( Path const & path
+		explicit ImageCreateParams( Path const & path
 			, bool allowCompression = true
 			, bool generateMips = true )
 			: mode{ false }

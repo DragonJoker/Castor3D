@@ -196,7 +196,7 @@ namespace castor
 			}
 		}
 
-		void beginLog( LogType logLevel )
+		void beginLog( LogType CU_UnusedParam( logLevel ) )
 		{
 		}
 
@@ -212,7 +212,7 @@ namespace castor
 		}
 
 	private:
-		void doInitialiseConsole( HANDLE handle )
+		void doInitialiseConsole( HANDLE CU_UnusedParam( handle ) )
 		{
 			FILE * dump;
 			( void )freopen_s( &dump, "conout$", "w", stdout );
@@ -225,7 +225,7 @@ namespace castor
 
 	//************************************************************************************************
 
-	ProgramConsole::ProgramConsole( bool showConsole )
+	ProgramConsole::ProgramConsole( bool CU_UnusedParam( showConsole ) )
 	{
 #if defined( NDEBUG )
 		m_console = std::make_unique< ReleaseConsole >( showConsole );

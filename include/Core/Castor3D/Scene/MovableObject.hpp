@@ -123,7 +123,7 @@ namespace castor3d
 	struct MovableMergerT
 		: public castor::Named
 	{
-		MovableMergerT( castor::String const & name )
+		explicit MovableMergerT( castor::String const & name )
 			: castor::Named{ name }
 		{
 		}

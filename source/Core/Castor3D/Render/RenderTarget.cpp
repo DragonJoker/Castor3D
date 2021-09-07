@@ -319,10 +319,10 @@ namespace castor3d
 		uint32_t result = 0u;
 		result += 1; // combine program
 		result += RenderTechnique::countInitialisationSteps();
-		result += m_hdrPostEffects.size();
+		result += uint32_t( m_hdrPostEffects.size() );
 		result += 2; // HDR copy commands
 		result += 2; // tone mapping
-		result += m_srgbPostEffects.size();
+		result += uint32_t( m_srgbPostEffects.size() );
 		result += 2; // SRGB copy commands
 		result += 1; // compiling render graph
 		result += 1; // overlay renderer
@@ -928,7 +928,6 @@ namespace castor3d
 		, ashes::Queue const & queue
 		, crg::SemaphoreWaitArray const & toWait )
 	{
-		crg::SemaphoreWait result;
 		auto timerBlock = m_overlaysTimer->start();
 		using LockType = std::unique_lock< OverlayCache >;
 		LockType lock{ castor::makeUniqueLock( getEngine()->getOverlayCache() ) };

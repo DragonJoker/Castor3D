@@ -111,7 +111,7 @@ namespace castor3d
 	{
 		using ElementT = typename CacheT::ElementT;
 
-		GpuEventInitialiserT( FrameListener & listener )
+		explicit GpuEventInitialiserT( FrameListener & listener )
 			: listener{ &listener }
 		{
 		}
@@ -129,7 +129,7 @@ namespace castor3d
 	{
 		using ElementT = typename CacheT::ElementT;
 
-		GpuEventCleanerT( FrameListener & listener )
+		explicit GpuEventCleanerT( FrameListener & listener )
 			: listener{ &listener }
 		{
 		}
