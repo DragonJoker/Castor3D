@@ -86,6 +86,8 @@ namespace castor3d
 	{
 		if ( pass.getId() == 0u )
 		{
+			auto lock( castor::makeUniqueLock( m_mutex ) );
+
 			CU_Require( m_passes.size() < shader::MaxMaterialsCount );
 			m_passes.emplace_back( &pass );
 			pass.setId( m_passID++ );
@@ -101,6 +103,8 @@ namespace castor3d
 
 	void PassBuffer::removePass( Pass & pass )
 	{
+		auto lock( castor::makeUniqueLock( m_mutex ) );
+
 		auto id = pass.getId() - 1u;
 		CU_Require( id < m_passes.size() );
 		CU_Require( &pass == m_passes[id] );
@@ -121,6 +125,8 @@ namespace castor3d
 
 	void PassBuffer::update()
 	{
+		auto lock( castor::makeUniqueLock( m_mutex ) );
+
 		if ( !m_dirty.empty() )
 		{
 			std::vector< Pass const * > dirty;

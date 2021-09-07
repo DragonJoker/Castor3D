@@ -155,11 +155,11 @@ namespace castor3d
 	*/
 	class TextureView;
 
-	CU_DeclareSmartPtr( Sampler );
-	CU_DeclareSmartPtr( TextureLayout );
-	CU_DeclareSmartPtr( TextureSource );
-	CU_DeclareSmartPtr( TextureUnit );
-	CU_DeclareSmartPtr( TextureView );
+	CU_DeclareCUSmartPtr( castor3d, Sampler, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, TextureLayout, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, TextureSource, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, TextureUnit, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, TextureView, C3D_API );
 
 	//! TextureUnit array
 	CU_DeclareVector( TextureUnit, TextureUnit );

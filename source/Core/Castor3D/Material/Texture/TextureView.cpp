@@ -12,7 +12,7 @@
 
 #include <CastorUtils/Graphics/Image.hpp>
 
-using namespace castor;
+CU_ImplementCUSmartPtr( castor3d, TextureView );
 
 namespace castor3d
 {
@@ -150,8 +150,8 @@ namespace castor3d
 			CU_Require( m_info->format != VK_FORMAT_UNDEFINED );
 			auto & image = getOwner()->getTexture();
 			auto debugName = m_debugName
-				+ "L(" + string::toString( m_info->subresourceRange.baseArrayLayer ) + "x" + string::toString( m_info->subresourceRange.layerCount ) + ")"
-				+ "M(" + string::toString( m_info->subresourceRange.baseMipLevel ) + "x" + string::toString( m_info->subresourceRange.levelCount ) + ")";
+				+ "L(" + castor::string::toString( m_info->subresourceRange.baseArrayLayer ) + "x" + castor::string::toString( m_info->subresourceRange.layerCount ) + ")"
+				+ "M(" + castor::string::toString( m_info->subresourceRange.baseMipLevel ) + "x" + castor::string::toString( m_info->subresourceRange.levelCount ) + ")";
 			auto createInfo = convertToSampledView( m_info );
 			m_sampledView = image.createView( debugName
 				, createInfo );
@@ -168,8 +168,8 @@ namespace castor3d
 			CU_Require( m_info->format != VK_FORMAT_UNDEFINED );
 			auto & image = getOwner()->getTexture();
 			auto debugName = m_debugName
-				+ "L(" + string::toString( m_info->subresourceRange.baseArrayLayer ) + "x" + string::toString( m_info->subresourceRange.layerCount ) + ")"
-				+ "M(" + string::toString( m_info->subresourceRange.baseMipLevel ) + "x" + string::toString( m_info->subresourceRange.levelCount ) + ")";
+				+ "L(" + castor::string::toString( m_info->subresourceRange.baseArrayLayer ) + "x" + castor::string::toString( m_info->subresourceRange.layerCount ) + ")"
+				+ "M(" + castor::string::toString( m_info->subresourceRange.baseMipLevel ) + "x" + castor::string::toString( m_info->subresourceRange.levelCount ) + ")";
 			auto createInfo = convertToTargetView( m_info, image.getDimensions().depth );
 			m_targetView = image.createView( debugName
 				, createInfo );
