@@ -160,7 +160,7 @@ namespace castor
 
 	private:
 		castor3d::Engine & m_engine;
-		castor3d::MaterialRPtr m_defaultMaterial;
+		castor3d::MaterialRPtr m_defaultMaterial{};
 		castor3d::PassBufferSPtr m_passBuffer;
 		castor3d::TextureConfigurationBufferSPtr m_textureBuffer;
 	};

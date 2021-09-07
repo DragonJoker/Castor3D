@@ -8,12 +8,12 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	template< typename AnimableHanlerT >
+	template< typename AnimableHandlerT >
 	class AnimableT
-		: public castor::OwnedBy< AnimableHanlerT >
+		: public castor::OwnedBy< AnimableHandlerT >
 	{
 	protected:
-		using Animation = AnimationT< AnimableHanlerT >;
+		using Animation = AnimationT< AnimableHandlerT >;
 		using AnimationPtr = std::unique_ptr< Animation >;
 		using AnimationPtrStrMap = std::map< castor::String, AnimationPtr >;
 		/**
@@ -23,8 +23,7 @@ namespace castor3d
 		 *\name Construction / Destruction.
 		 **/
 		/**@{*/
-		inline explicit AnimableT( AnimableHanlerT & owner );
-		C3D_API virtual ~AnimableT() = default;
+		inline explicit AnimableT( AnimableHandlerT & owner );
 		C3D_API AnimableT( AnimableT && rhs ) = default;
 		C3D_API AnimableT & operator=( AnimableT && rhs ) = delete;
 		C3D_API AnimableT( AnimableT const & rhs ) = delete;
@@ -32,6 +31,7 @@ namespace castor3d
 		/**@}*/
 
 	public:
+		C3D_API virtual ~AnimableT() = default;
 		/**
 		 *\~english
 		 *\brief		Empties the animations map.
