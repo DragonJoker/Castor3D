@@ -201,7 +201,7 @@ namespace CastorGui
 		//! The caption
 		castor::String m_caption;
 		//! The font material
-		castor3d::MaterialRPtr m_textMaterial;
+		castor3d::MaterialRPtr m_textMaterial{};
 		//! The caret index in the caption
 		castor::string::utf8::const_iterator m_caretIt;
 		//! The activation status

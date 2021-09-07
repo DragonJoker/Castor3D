@@ -16,17 +16,18 @@ Features
 - Deferred rendering.
 - Normal mapping.
 - Parallax Occlusion mapping.
-- Screen Space Ambient Occlusion (using Scalable Ambiant Obscurance implementation).
+- Screen Space Ambient Occlusion (using [Scalable Ambiant Obscurance](https://casual-effects.com/research/McGuire2012SAO/index.html)).
 - Shadow Mapping (allowing to choose between Raw, PCF or Variance Shadow Maps).
 - Reflection/Refraction Mapping.
-- PBR rendering (Metallic and Specular workflows), and Blinn-Phong rendering.
+- PBR rendering (Metallic and Specular workflows), and Phong/Blinn-Phong rendering.
 - HDR rendering with various tone mapping operators.
 - Screen Space Subsurface Scattering (without backlit transmittance yet).
 - Volumetric Light Scattering for directional light source projecting shadows.
 - Cascaded Shadow Maps for directional light sources.
-- Global Illumination through Ligh Propagation Volumes (layered or non layered, with or without geometry injection).
+- Global Illumination through Ligh Propagation Volumes (layered or non layered, with or without geometry injection), or through Voxel Cone Tracing.
 - Frustum culling.
 - Scene graph.
+- Render graph.
 - Modular architecture through plug-ins.
 - Shaders are generated automatically from material and pass configuration.
 - Shaders are writable directly from C++ code.
@@ -37,7 +38,6 @@ Implemented Plug-ins
 **Importers**
 - ASSIMP: Multiple format mesh importer.
 - PLY: Stanford Polygon library mesh importer.
-- OBJ: Wavefront OBJ mesh importer.
 
 **Dividers**
 - Loop subdivision surfaces.
@@ -46,6 +46,7 @@ Implemented Plug-ins
 
 **PostEffects**
 - Bloom: HDR Bloom implementation.
+- DrawEdges: Detects and renders edges, based on normal, depth, and or object ID.
 - FilmGrain: To display some grain on the render.
 - GrayScale.
 - LightStreaks (using Kawase Light Streaks).
@@ -54,10 +55,11 @@ Implemented Plug-ins
 - Linear Motion Blur.
 
 **Generators**
-- DiamondSquareTerrain: to generate terrains inside Castor3D scenes, using diamond-quare algorithm.
+- DiamondSquareTerrain: To generate terrains inside Castor3D scenes, using diamond-quare algorithm.
 
 **Generic**
-- CastorGUI: to build GUIs inside Castor3D scenes.
+- CastorGUI: To build GUIs inside Castor3D scene files.
+- ToonMaterial: A toon material (to be combined with DrawEdges plugin).
 
 **ToneMappings**
 - LinearToneMapping: Default tone mapping.
@@ -73,6 +75,13 @@ Other applications
 - CastorMeshUpgrader: Upgrades from earlier versions of Castor3D mesh format to the latest one.
 - ImgConverter: Allows you to convert any image file type to XPM or ICO.
 
+Links
+-----
+
+- [Building Castor3D](http://dragonjoker.github.io/Castor3D/pages/build)
+- [API Documentation](http://dragonjoker.github.io/Castor3D/doc/)
+- [Playlist on YouTube](https://www.youtube.com/playlist?list=PLKA1SVXuAbMNaFbSJyAN_4yD2bzNlgES3)
+
 
 ![Sponza](http://dragonjoker.github.io/Castor3D/img/Sponza-PBR-Bloom-Small.png)
 ![Cerberus](http://dragonjoker.github.io/Castor3D/img/Cerberus-PBR-Small.png)
@@ -80,13 +89,6 @@ Other applications
 ![Park, PBR](http://dragonjoker.github.io/Castor3D/img/Park-PBR-Small.png)
 ![Nyra, PBR](http://dragonjoker.github.io/Castor3D/img/Nyra-PBR-MR-Small.png)
 ![SanMiguel, PBR](http://dragonjoker.github.io/Castor3D/img/SanMiguel-PBR-SG-Small.png)
-
-Links
------
-
-- [Building Castor3D](http://dragonjoker.github.io/Castor3D/pages/build)
-- [API Documentation](http://dragonjoker.github.io/Castor3D/doc/)
-- [Playlist on YouTube](https://www.youtube.com/playlist?list=PLKA1SVXuAbMNaFbSJyAN_4yD2bzNlgES3)
 
 Contact
 -------
