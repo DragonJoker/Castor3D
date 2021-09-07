@@ -17,20 +17,13 @@ namespace castor3d
 	}
 
 	template< typename CacheT, EventType EventT >
-	inline CacheViewT< CacheT, EventT >::~CacheViewT()
-	{
-	}
-
-	template< typename CacheT, EventType EventT >
 	inline void CacheViewT< CacheT, EventT >::clear()
 	{
 		auto lock( castor::makeUniqueLock( m_cache ) );
 
 		for ( auto name : m_createdElements )
 		{
-			auto resource = m_cache.tryRemove( name );
-
-			if ( resource )
+			if ( auto resource = m_cache.tryRemove( name, false ) )
 			{
 				if ( m_clean )
 				{
@@ -51,7 +44,7 @@ namespace castor3d
 	{
 		auto lock( castor::makeUniqueLock( m_cache ) );
 		auto result = m_cache.tryAdd( name
-			, initialise
+			, false
 			, created
 			, std::forward< ParametersT >( params )... );
 
@@ -88,7 +81,7 @@ namespace castor3d
 		auto lock( castor::makeUniqueLock( m_cache ) );
 		auto result = m_cache.tryAdd( name
 			, element
-			, initialise );
+			, false );
 
 		if ( !element )
 		{
@@ -111,7 +104,7 @@ namespace castor3d
 		auto lock( castor::makeUniqueLock( m_cache ) );
 		auto result = m_cache.add( name
 			, element
-			, initialise );
+			, false );
 
 		if ( !element )
 		{
@@ -172,7 +165,7 @@ namespace castor3d
 
 		if ( it != m_createdElements.end() )
 		{
-			result = m_cache.tryRemove( name );
+			result = m_cache.tryRemove( name, false );
 			m_createdElements.erase( it );
 		}
 
