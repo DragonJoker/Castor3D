@@ -194,19 +194,19 @@ namespace CastorGui
 		//! The text overlay used to display the caption
 		castor3d::TextOverlayWPtr m_text;
 		//! The text material.
-		castor3d::MaterialRPtr m_textMaterial;
+		castor3d::MaterialRPtr m_textMaterial{};
 		//! The highlighted button text material.
-		castor3d::MaterialRPtr m_highlightedTextMaterial;
+		castor3d::MaterialRPtr m_highlightedTextMaterial{};
 		//! The highlighted button background material.
-		castor3d::MaterialRPtr m_highlightedBackgroundMaterial;
+		castor3d::MaterialRPtr m_highlightedBackgroundMaterial{};
 		//! The highlighted button foreground material.
-		castor3d::MaterialRPtr m_highlightedForegroundMaterial;
+		castor3d::MaterialRPtr m_highlightedForegroundMaterial{};
 		//! The pushed button text material.
-		castor3d::MaterialRPtr m_pushedTextMaterial;
+		castor3d::MaterialRPtr m_pushedTextMaterial{};
 		//! The pushed button background material.
-		castor3d::MaterialRPtr m_pushedBackgroundMaterial;
+		castor3d::MaterialRPtr m_pushedBackgroundMaterial{};
 		//! The pushed button foreground material.
-		castor3d::MaterialRPtr m_pushedForegroundMaterial;
+		castor3d::MaterialRPtr m_pushedForegroundMaterial{};
 		//! The button events signals
 		OnButtonEvent m_signals[size_t( ButtonEvent::eCount )];
 	};

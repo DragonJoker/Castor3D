@@ -59,7 +59,7 @@ namespace GuiCommon
 		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
 
 	private:
-		castor3d::MaterialRPtr m_material;
+		castor3d::MaterialRPtr m_material{};
 	};
 }
 
