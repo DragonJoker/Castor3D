@@ -131,6 +131,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	Properties/TreeItems/SceneTreeItemProperty.cpp
 	Properties/TreeItems/SkeletonAnimationTreeItemProperty.cpp
 	Properties/TreeItems/SkeletonTreeItemProperty.cpp
+	Properties/TreeItems/SsaoConfigTreeItemProperty.cpp
 	Properties/TreeItems/SubmeshTreeItemProperty.cpp
 	Properties/TreeItems/TextureTreeItemProperty.cpp
 	Properties/TreeItems/ToneMappingTreeItemProperty.cpp
@@ -161,6 +162,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	Properties/TreeItems/SceneTreeItemProperty.hpp
 	Properties/TreeItems/SkeletonAnimationTreeItemProperty.hpp
 	Properties/TreeItems/SkeletonTreeItemProperty.hpp
+	Properties/TreeItems/SsaoConfigTreeItemProperty.hpp
 	Properties/TreeItems/SubmeshTreeItemProperty.hpp
 	Properties/TreeItems/TextureTreeItemProperty.hpp
 	Properties/TreeItems/ToneMappingTreeItemProperty.hpp
@@ -262,6 +264,13 @@ set( ${PROJECT_NAME}_HDR_FILES
 )
 source_group( "Header Files\\System" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
 source_group( "Source Files\\System" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+
+file( GLOB ${PROJECT_NAME}_XPM_FILES xpms/*.xpm )
+source_group( "XPM Files\\" FILES ${${PROJECT_NAME}_XPM_FILES} )
+set( ${PROJECT_NAME}_SRC_FILES
+	${${PROJECT_NAME}_SRC_FILES}
+	${${PROJECT_NAME}_XPM_FILES}
+)
 
 add_target_min(
 	${PROJECT_NAME}
