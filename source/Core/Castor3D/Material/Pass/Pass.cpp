@@ -1197,6 +1197,7 @@ namespace castor3d
 			auto lock( makeUniqueLock( m_lockTextures ) );
 			m_textureUnits.clear();
 		}
+		CU_Assert( getId() == 0u, "Did you forget to call Pass::cleanup ?" );
 	}
 
 	void Pass::initialise( RenderDevice const & device
@@ -1208,19 +1209,20 @@ namespace castor3d
 		{
 			unit->initialise( device, queueData );
 		}
+
+		getOwner()->getOwner()->getMaterialCache().registerPass( *this );
 	}
 
 	void Pass::cleanup()
 	{
 		auto lock( makeUniqueLock( m_lockTextures ) );
+		getOwner()->getOwner()->getMaterialCache().unregisterPass( *this );
 
 		for ( auto unit : m_textureUnits )
 		{
 			unit->cleanup();
-			getOwner()->getOwner()->getMaterialCache().unregisterUnit( *unit );
 		}
 
-		getOwner()->getOwner()->getMaterialCache().unregisterPass( *this );
 	}
 
 	void Pass::update()
@@ -1436,6 +1438,11 @@ namespace castor3d
 					return lhs->getFlags() < rhs->getFlags();
 				} );
 
+			for ( auto & unit : m_textureUnits )
+			{
+				getOwner()->getOwner()->getMaterialCache().registerUnit( *unit );
+			}
+
 			m_texturesReduced = true;
 		}
 	}
@@ -1497,6 +1504,11 @@ namespace castor3d
 
 	TextureFlagsArray Pass::getTexturesMask( TextureFlags mask )const
 	{
+		if ( !m_texturesReduced )
+		{
+			return {};
+		}
+
 		TextureUnitPtrArray units;
 		{
 			auto lock( makeUniqueLock( m_lockTextures ) );
