@@ -311,15 +311,15 @@ namespace CastorGui
 		//! All the items.
 		std::vector< StaticCtrlSPtr > m_items;
 		//! The text material.
-		castor3d::MaterialRPtr m_textMaterial;
+		castor3d::MaterialRPtr m_textMaterial{};
 		//! The background colour, for normal item
-		castor3d::MaterialRPtr m_itemBackgroundMaterial;
+		castor3d::MaterialRPtr m_itemBackgroundMaterial{};
 		//! The background colour, for highlighted item
-		castor3d::MaterialRPtr m_highlightedItemBackgroundMaterial;
+		castor3d::MaterialRPtr m_highlightedItemBackgroundMaterial{};
 		//! The background colour
-		castor3d::MaterialRPtr m_selectedItemBackgroundMaterial;
+		castor3d::MaterialRPtr m_selectedItemBackgroundMaterial{};
 		//! The foreground colour
-		castor3d::MaterialRPtr m_selectedItemForegroundMaterial;
+		castor3d::MaterialRPtr m_selectedItemForegroundMaterial{};
 		//! The listbox events signals
 		OnListEvent m_signals[size_t( ListBoxEvent::eCount )];
 		//! The items font name.

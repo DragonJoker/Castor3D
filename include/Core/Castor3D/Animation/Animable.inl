@@ -4,26 +4,26 @@ namespace castor3d
 {
 	//*************************************************************************************************
 
-	template< typename AnimableHanlerT >
-	inline AnimableT< AnimableHanlerT >::AnimableT( AnimableHanlerT & owner )
-		: castor::OwnedBy< AnimableHanlerT >{ owner }
+	template< typename AnimableHandlerT >
+	inline AnimableT< AnimableHandlerT >::AnimableT( AnimableHandlerT & owner )
+		: castor::OwnedBy< AnimableHandlerT >{ owner }
 	{
 	}
 
-	template< typename AnimableHanlerT >
-	inline void AnimableT< AnimableHanlerT >::cleanupAnimations()
+	template< typename AnimableHandlerT >
+	inline void AnimableT< AnimableHandlerT >::cleanupAnimations()
 	{
 		m_animations.clear();
 	}
 
-	template< typename AnimableHanlerT >
-	inline bool AnimableT< AnimableHanlerT >::hasAnimation( castor::String const & name )const
+	template< typename AnimableHandlerT >
+	inline bool AnimableT< AnimableHandlerT >::hasAnimation( castor::String const & name )const
 	{
 		return m_animations.find( name ) != m_animations.end();
 	}
 
-	template< typename AnimableHanlerT >
-	inline AnimationT< AnimableHanlerT > const & AnimableT< AnimableHanlerT >::getAnimation( castor::String const & name )const
+	template< typename AnimableHandlerT >
+	inline AnimationT< AnimableHandlerT > const & AnimableT< AnimableHandlerT >::getAnimation( castor::String const & name )const
 	{
 		auto it = m_animations.find( name );
 
@@ -35,8 +35,8 @@ namespace castor3d
 		return *it->second;
 	}
 
-	template< typename AnimableHanlerT >
-	inline AnimationT< AnimableHanlerT > & AnimableT< AnimableHanlerT >::getAnimation( castor::String const & name )
+	template< typename AnimableHandlerT >
+	inline AnimationT< AnimableHandlerT > & AnimableT< AnimableHandlerT >::getAnimation( castor::String const & name )
 	{
 		auto it = m_animations.find( name );
 
@@ -48,8 +48,8 @@ namespace castor3d
 		return *it->second;
 	}
 
-	template< typename AnimableHanlerT >
-	inline void AnimableT< AnimableHanlerT >::addAnimation( AnimationPtr animation )
+	template< typename AnimableHandlerT >
+	inline void AnimableT< AnimableHandlerT >::addAnimation( AnimationPtr animation )
 	{
 		CU_Require( animation != nullptr );
 		auto it = m_animations.emplace( animation->getName(), nullptr ).first;
@@ -62,8 +62,8 @@ namespace castor3d
 		it->second = std::move( animation );
 	}
 
-	template< typename AnimableHanlerT >
-	inline void AnimableT< AnimableHanlerT >::doRemoveAnimation( castor::String const & name )
+	template< typename AnimableHandlerT >
+	inline void AnimableT< AnimableHandlerT >::doRemoveAnimation( castor::String const & name )
 	{
 		auto it = m_animations.find( name );
 
@@ -75,16 +75,16 @@ namespace castor3d
 		m_animations.erase( it );
 	}
 
-	template< typename AnimableHanlerT >
+	template< typename AnimableHandlerT >
 	template< typename AnimationType >
-	inline AnimationType & AnimableT< AnimableHanlerT >::doGetAnimation( castor::String const & name )
+	inline AnimationType & AnimableT< AnimableHandlerT >::doGetAnimation( castor::String const & name )
 	{
 		return static_cast< AnimationType & >( getAnimation( name ) );
 	}
 
-	template< typename AnimableHanlerT >
+	template< typename AnimableHandlerT >
 	template< typename AnimationType >
-	inline AnimationType const & AnimableT< AnimableHanlerT >::doGetAnimation( castor::String const & name )const
+	inline AnimationType const & AnimableT< AnimableHandlerT >::doGetAnimation( castor::String const & name )const
 	{
 		return static_cast< AnimationType const & >( getAnimation( name ) );
 	}
