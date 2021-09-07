@@ -194,10 +194,11 @@ namespace castor
 		 *\brief		Retire un élément à partir d'un nom.
 		 *\param[in]	name	Le nom d'élément.
 		 */
-		ElementPtrT tryRemove( ElementKeyT const & name )
+		ElementPtrT tryRemove( ElementKeyT const & name
+			, bool cleanup = false )
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
-			return this->doTryRemoveNoLock( name );
+			return this->doTryRemoveNoLock( name, cleanup );
 		}
 		/**
 		 *\~english
@@ -207,10 +208,11 @@ namespace castor
 		 *\brief		Version journalisante de tryAdd.
 		 *\param[in]	name	Le nom d'élément.
 		 */
-		void remove( ElementKeyT const & name )
+		void remove( ElementKeyT const & name
+			, bool cleanup = false )
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
-			auto result = this->doTryRemoveNoLock( name );
+			auto result = this->doTryRemoveNoLock( name, cleanup );
 
 			if ( !result )
 			{
@@ -551,7 +553,8 @@ namespace castor
 			return result;
 		}
 
-		ElementPtrT doTryRemoveNoLock( ElementKeyT const & name )
+		ElementPtrT doTryRemoveNoLock( ElementKeyT const & name
+			, bool cleanup = false )
 		{
 			ElementPtrT result;
 			auto it = m_resources.find( name );
@@ -559,6 +562,12 @@ namespace castor
 			if ( it != m_resources.end() )
 			{
 				result = std::move( it->second );
+
+				if ( cleanup && m_clean )
+				{
+					m_clean( *result );
+				}
+
 				m_resources.erase( it );
 			}
 

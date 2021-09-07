@@ -55,7 +55,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		inline ~CacheViewT();
+		~CacheViewT() = default;
 		/**
 		 *\~english
 		 *\brief		Removes from the cache the elements created through this view.

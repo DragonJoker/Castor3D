@@ -50,6 +50,9 @@ namespace castor3d
 		static const char * C3D_NO_RENDERSYSTEM = "No RenderSystem loaded, call castor3d::Engine::loadRenderer before castor3d::Engine::Initialise";
 		static const char * C3D_MAIN_LOOP_EXISTS = "Render loop is already started";
 
+		static castor::String const defaultName = cuT( "C3D_Default" );
+		static castor::String const samplerName = cuT( "C3D_Lights" );
+
 		castor::LoggerInstancePtr createLogger( castor::LogType type
 			, castor::Path const & filePath )
 		{
@@ -118,7 +121,7 @@ namespace castor3d
 		m_listenerCache = castor::makeCache< FrameListener, castor::String, FrameListenerCacheTraits >( getLogger()
 			, castor::DummyFunctorT< FrameListenerCache >{}
 			, listenerClean );
-		m_defaultListener = m_listenerCache->add( cuT( "Default" ) );
+		m_defaultListener = m_listenerCache->add( defaultName );
 
 		m_shaderCache = makeCache( *this );
 		m_samplerCache = castor::makeCache< Sampler, castor::String, SamplerCacheTraits >( getLogger()
@@ -218,7 +221,7 @@ namespace castor3d
 				m_defaultSampler = m_samplerCache->add( created->getName(), created, true );
 			}
 
-			if ( auto created = m_samplerCache->create( cuT( "LightsSampler" ), *this ) )
+			if ( auto created = m_samplerCache->create( samplerName, *this ) )
 			{
 				created->setMinFilter( VK_FILTER_NEAREST );
 				created->setMagFilter( VK_FILTER_NEAREST );
