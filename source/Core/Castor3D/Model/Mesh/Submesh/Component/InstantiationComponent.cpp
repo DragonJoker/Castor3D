@@ -32,7 +32,7 @@ namespace castor3d
 			, ashes::VertexBufferPtr< InstantiationData > buffer )
 		{
 			using namespace castor::string;
-			count = ( count ? getNextCount( count ) : 0u );
+			count = uint32_t( count ? getNextCount( count ) : 0u );
 
 			if ( count
 				&& ( !buffer || count > buffer->getCount() ) )

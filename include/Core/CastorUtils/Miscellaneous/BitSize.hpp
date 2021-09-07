@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	static int getBitSize( uint64_t value )
+	static inline int getBitSize( uint64_t value )
 	{
 		static constexpr int bitPatternToLog2[128]
 		{
@@ -32,12 +32,12 @@ namespace castor
 		return bitPatternToLog2[(value * multiplicator) >> 57];
 	}
 
-	static int getBitSize( uint32_t value )
+	static inline int getBitSize( uint32_t value )
 	{
 		return getBitSize( uint64_t( value ) );
 	}
 
-	static uint32_t getNextPowerOfTwo( uint32_t value )
+	static inline uint32_t getNextPowerOfTwo( uint32_t value )
 	{
 		auto bitSize = getBitSize( value );
 
@@ -49,7 +49,7 @@ namespace castor
 		return uint32_t( 0x00000001u << bitSize );
 	}
 
-	static bool isPowerOfTwo( uint32_t value )
+	static inline bool isPowerOfTwo( uint32_t value )
 	{
 		return value != 0
 			&& ( value & ( value - 1 ) ) == 0;

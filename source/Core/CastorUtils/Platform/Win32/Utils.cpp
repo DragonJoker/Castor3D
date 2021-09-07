@@ -21,7 +21,10 @@ namespace castor
 				castor::Size & m_size;
 			};
 
-			BOOL CALLBACK MonitorEnum( HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData )
+			BOOL CALLBACK MonitorEnum( HMONITOR CU_UnusedParam( hMonitor )
+				, HDC CU_UnusedParam( hdcMonitor )
+				, LPRECT lprcMonitor
+				, LPARAM dwData )
 			{
 				stSCREEN * screen = reinterpret_cast< stSCREEN * >( dwData );
 

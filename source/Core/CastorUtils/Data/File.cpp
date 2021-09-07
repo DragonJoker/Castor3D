@@ -313,8 +313,8 @@ namespace castor
 	bool File::listDirectoryFiles( Path const & folderPath, PathArray & files, bool recursive )
 	{
 		files = filterDirectoryFiles( folderPath
-			, []( Path const & folder
-				, String const & name )
+			, []( Path const & CU_UnusedParam( folder )
+				, String const & CU_UnusedParam( name ) )
 			{
 				return true;
 			}
@@ -350,7 +350,7 @@ namespace castor
 		}
 		else
 		{
-			directoryFunction = []( Path const & path )
+			directoryFunction = []( Path const & CU_UnusedParam( path ) )
 			{
 				return true;
 			};

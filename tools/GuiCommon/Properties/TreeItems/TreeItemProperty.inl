@@ -288,7 +288,8 @@ namespace GuiCommon
 		}
 		else
 		{
-			static_assert( false, "TreeItemProperty::createProperty - Unsupported ValueT" );
+			//static_assert( false, "TreeItemProperty::createProperty - Unsupported ValueT" );
+			return appendProp( parent, new wxStringProperty( name, name, value ) );
 		}
 	}
 

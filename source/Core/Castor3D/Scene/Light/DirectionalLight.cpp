@@ -106,7 +106,7 @@ namespace castor3d
 				{
 					frustumCenter += frustumCorner;
 				}
-				frustumCenter /= cascadeFrustum.size();
+				frustumCenter /= float( cascadeFrustum.size() );
 
 				// Get cascade bounding sphere radius
 				float radius = 0.0f;

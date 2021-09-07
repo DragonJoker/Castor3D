@@ -151,7 +151,7 @@ namespace castor
 	{
 		CU_CheckInvariants();
 		setPixel( 0, 0, colour );
-		uint32_t uiBpp = getBytesPerPixel( getPixelFormat() );
+		uint32_t uiBpp = uint32_t( getBytesPerPixel( getPixelFormat() ) );
 		auto src = m_buffer->getPtr();
 		auto buffer = m_buffer->getPtr() + uiBpp;
 		auto end = m_buffer->getPtr() + m_buffer->getSize();
@@ -170,7 +170,7 @@ namespace castor
 	{
 		CU_CheckInvariants();
 		setPixel( 0, 0, colour );
-		uint32_t uiBpp = getBytesPerPixel( getPixelFormat() );
+		uint32_t uiBpp = uint32_t( getBytesPerPixel( getPixelFormat() ) );
 		auto src = m_buffer->getPtr();
 		auto buffer = m_buffer->getPtr() + uiBpp;
 		auto end = m_buffer->getPtr() + m_buffer->getSize();

@@ -24,10 +24,10 @@ namespace castor3d
 			auto width = size.getWidth() + bandsSize;
 			auto height = size.getHeight() + bandsSize;
 			castor::Point2d bandRatio{ width / size.getWidth(), height / size.getHeight() };
-			return renderSystem.getOrtho( left * bandRatio->x
-				, right * bandRatio->x
-				, bottom * bandRatio->y
-				, top * bandRatio->y
+			return renderSystem.getOrtho( float( left * bandRatio->x )
+				, float( right * bandRatio->x )
+				, float( bottom * bandRatio->y )
+				, float( top * bandRatio->y )
 				, nearZ
 				, farZ );
 		}
@@ -45,10 +45,10 @@ namespace castor3d
 			auto width = size.getWidth() + bandsSize;
 			auto height = size.getHeight() + bandsSize;
 			castor::Point2d bandRatio{ width / size.getWidth(), height / size.getHeight() };
-			return renderSystem.getFrustum( left * bandRatio->x
-				, right * bandRatio->x
-				, bottom * bandRatio->y
-				, top * bandRatio->y
+			return renderSystem.getFrustum( float( left * bandRatio->x )
+				, float( right * bandRatio->x )
+				, float( bottom * bandRatio->y )
+				, float( top * bandRatio->y )
 				, nearZ
 				, farZ );
 		}
@@ -67,7 +67,7 @@ namespace castor3d
 			auto halfHeight = halfOpp + bandSize;
 			auto halfWidth = std::ceil( aspect * halfOpp ) + bandSize;
 			return renderSystem.getPerspective( fovY + ( castor::atanf( ( bandSize * 2.85f / 4.0f ) / adj ) )
-				, halfWidth / halfHeight
+				, float( halfWidth / halfHeight )
 				, nearZ
 				, farZ );
 		}

@@ -90,7 +90,7 @@ namespace castor3d
 			: public MouseEventHandler
 		{
 		public:
-			EvtHandler( RenderWindow & window )
+			explicit EvtHandler( RenderWindow & window )
 				: MouseEventHandler{}
 				, m_window{ &window }
 			{

@@ -403,13 +403,14 @@ namespace GuiCommon
 
 #elif defined( CU_PlatformLinux )
 
-		GtkWidget * gtkWidget = static_cast< GtkWidget * >( window->GetHandle() );
+		auto gtkWidget = static_cast< GtkWidget * >( window->GetHandle() );
+		auto gdkWindow = gtk_widget_get_window( gtkWidget );
 		GLXDrawable drawable = 0;
 		Display * display = nullptr;
 
-		if ( gtkWidget && gtkWidget->window )
+		if ( gtkWidget && gdkWindow )
 		{
-			drawable = GDK_WINDOW_XID( gtkWidget->window );
+			drawable = GDK_WINDOW_XID( gdkWindow );
 			GdkDisplay * gtkDisplay = gtk_widget_get_display( gtkWidget );
 
 			if ( gtkDisplay )

@@ -37,7 +37,7 @@ namespace castor
 		*	Construction/Desctruction.
 		**/
 		/**@{*/
-		ResourceCacheBaseT( LoggerInstance & logger
+		explicit ResourceCacheBaseT( LoggerInstance & logger
 			, ElementInitialiserT initialise = ElementInitialiserT{}
 			, ElementCleanerT clean = ElementCleanerT{}
 			, ElementMergerT merge = ElementMergerT{} )
@@ -593,7 +593,7 @@ namespace castor
 
 		LoggerInstance & m_logger;
 		mutable MutexT m_mutex;
-		mutable bool m_locked;
+		mutable bool m_locked{ false };
 		//!\~english	The elements collection.
 		//!\~french		La collection d'éléments.
 		mutable ElementContT m_resources;
