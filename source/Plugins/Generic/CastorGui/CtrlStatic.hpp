@@ -126,7 +126,7 @@ namespace CastorGui
 		//! The static caption
 		castor::String m_caption;
 		//! The font material
-		castor3d::MaterialRPtr m_textMaterial;
+		castor3d::MaterialRPtr m_textMaterial{};
 
 	protected:
 		//! The text overlay used to display the caption

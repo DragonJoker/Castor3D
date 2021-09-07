@@ -326,9 +326,9 @@ namespace CastorGui
 		//! The cursor when mouse is over this control
 		MouseCursor m_cursor;
 		//! The background material
-		castor3d::MaterialRPtr m_backgroundMaterial;
+		castor3d::MaterialRPtr m_backgroundMaterial{};
 		//! The foreground material
-		castor3d::MaterialRPtr m_foregroundMaterial;
+		castor3d::MaterialRPtr m_foregroundMaterial{};
 
 	private:
 		//! The ID
