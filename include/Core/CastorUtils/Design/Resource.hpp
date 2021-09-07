@@ -133,7 +133,7 @@ namespace castor
 		using ElementContT = typename CacheT::ElementContT;
 		using ElementPtrT = typename CacheT::ElementPtrT;
 
-		ResourceMergerT( castor::String const & name )
+		explicit ResourceMergerT( castor::String const & name )
 			: castor::Named{ name }
 		{
 		}

@@ -49,17 +49,15 @@ namespace castor3d
 				InstSkinTBO = 0x0001 << 4,
 			};
 
-			Engine * engine{};
 			uint16_t spec{};
 
 			if ( billboard )
 			{
-				engine = billboard->getParentScene().getEngine();
 				spec |= BillboadUBO; // Billboard UBO
 			}
 			else
 			{
-				engine = submesh->getOwner()->getEngine();
+				CU_Require( submesh );
 
 				if ( mesh )
 				{
@@ -70,6 +68,8 @@ namespace castor3d
 				{
 					if ( submesh->getInstantiatedBones().hasInstancedBonesBuffer() )
 					{
+						auto engine = submesh->getOwner()->getEngine();
+
 						if ( engine->getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers ) )
 						{
 							spec |= InstSkinSSBO; // Instantiated Skinning SSBO
@@ -460,7 +460,7 @@ namespace castor3d
 			}
 		}
 
-		samplers += textureCount;
+		samplers += uint32_t( textureCount );
 	}
 	
 	//*********************************************************************************************

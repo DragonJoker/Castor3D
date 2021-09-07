@@ -113,14 +113,14 @@ namespace castor3d
 		voxelData.gridConv->z = float( voxelGridSize );
 		voxelData.gridConv->w = 1.0f / voxelGridSize;
 		voxelData.radiance->x = voxelConfig.maxDistance;
-		voxelData.radiance->y = uint32_t( castor::getBitSize( voxelGridSize ) );
-		voxelData.radiance->z = voxelConfig.numCones.value();
+		voxelData.radiance->y = float( castor::getBitSize( voxelGridSize ) );
+		voxelData.radiance->z = float( voxelConfig.numCones.value() );
 		voxelData.radiance->w = 1.0f / voxelData.radiance->z;
 		voxelData.other->w = voxelConfig.rayStepSize;
-		voxelData.status->x = voxelConfig.enabled;
-		voxelData.status->y = voxelConfig.enableConservativeRasterization;
-		voxelData.status->z = voxelConfig.enableOcclusion;
-		voxelData.status->w = voxelConfig.enableSecondaryBounce;
+		voxelData.status->x = voxelConfig.enabled ? 1u : 0u;
+		voxelData.status->y = voxelConfig.enableConservativeRasterization ? 1u : 0u;
+		voxelData.status->z = voxelConfig.enableOcclusion ? 1u : 0u;
+		voxelData.status->w = voxelConfig.enableSecondaryBounce ? 1u : 0u;
 	}
 
 	//*********************************************************************************************

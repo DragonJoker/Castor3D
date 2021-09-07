@@ -107,7 +107,7 @@ namespace castor3d
 					, entry.second.pass
 					, instanceMult );
 				auto it = m_entries.emplace( entry.second.hash, entry.second ).first;
-				it->second.id = m_entries.size();
+				it->second.id = int32_t( m_entries.size() );
 
 				if ( instanceMult )
 				{
@@ -266,7 +266,7 @@ namespace castor3d
 		{
 			auto & uboPools = *device.uboPools;
 			auto & baseEntry = iresult.first->second;
-			baseEntry.id = m_baseEntries.size();
+			baseEntry.id = int32_t( m_baseEntries.size( ));
 			baseEntry.modelUbo = uboPools.getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 
 			for ( auto instanceMult : m_instances )

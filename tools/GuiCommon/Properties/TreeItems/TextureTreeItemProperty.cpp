@@ -3,6 +3,7 @@
 #include "GuiCommon/Properties/AdditionalProperties.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Material/Pass/Pass.hpp>
 #include <Castor3D/Material/Pass/PassVisitor.hpp>
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>

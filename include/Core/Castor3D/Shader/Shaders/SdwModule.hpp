@@ -83,6 +83,9 @@ namespace castor3d::shader
 	struct InFragmentSurface;
 	struct Light;
 	struct LightMaterial;
+	struct LayeredLpvGridData;
+	struct LpvGridData;
+	struct LpvLightData;
 	struct Material;
 	struct OutputComponents;
 	struct OutFragmentSurface;
@@ -92,18 +95,15 @@ namespace castor3d::shader
 	struct TextureConfigData;
 	struct TiledDirectionalLight;
 	struct VertexSurface;
+	struct VoxelData;
 
 	class Fog;
 	class Materials;
-	class LayeredLpvGridData;
 	class LightingModel;
-	class LpvGridData;
-	class LpvLightData;
 	class ReflectionModel;
 	class Shadow;
 	class TextureConfigurations;
 	class Utils;
-	class VoxelData;
 
 	struct PhongLightMaterial;
 	class PhongLightingModel;

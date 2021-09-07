@@ -131,7 +131,7 @@ namespace castor3d
 		 *\param[in]	index	L'index.
 		 *\return		La valeur minimale pour l'index défini.
 		 */
-		int32_t getValue( GpuMin index )const
+		uint32_t getValue( GpuMin index )const
 		{
 			return m_minValues.find( index )->second;
 		}
@@ -143,7 +143,7 @@ namespace castor3d
 		 *\param[in]	index	L'index.
 		 *\param[in]	value	La valeur minimale pour l'index défini.
 		 */
-		void setValue( GpuMin index, int32_t value )
+		void setValue( GpuMin index, uint32_t value )
 		{
 			m_minValues[index] = value;
 		}
@@ -155,7 +155,7 @@ namespace castor3d
 		 *\param[in]	index	L'index.
 		 *\return		La valeur maximale pour l'index défini.
 		 */
-		int32_t getValue( GpuMax index )const
+		uint32_t getValue( GpuMax index )const
 		{
 			return m_maxValues.find( index )->second;
 		}
@@ -167,7 +167,7 @@ namespace castor3d
 		 *\param[in]	index	L'index.
 		 *\param[in]	value	La valeur maximale pour l'index défini.
 		 */
-		void setValue( GpuMax index, int32_t value )
+		void setValue( GpuMax index, uint32_t value )
 		{
 			m_maxValues[index] = value;
 		}
@@ -255,8 +255,8 @@ namespace castor3d
 	private:
 		GpuFeatures m_features{ 0u };
 		std::map< VkShaderStageFlagBits, bool > m_useShader;
-		std::map< GpuMin, int32_t > m_minValues;
-		std::map< GpuMax, int32_t > m_maxValues;
+		std::map< GpuMin, uint32_t > m_minValues;
+		std::map< GpuMax, uint32_t > m_maxValues;
 		uint32_t m_totalMemorySize{};
 		castor::String m_vendor;
 		castor::String m_renderer;

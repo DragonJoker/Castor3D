@@ -57,7 +57,7 @@ namespace castor
 	}
 
 	void PreprocessedFile::addParser( Path file
-		, int line
+		, uint64_t line
 		, String name
 		, SectionAttributeParsers functions
 		, String params )
@@ -111,9 +111,9 @@ namespace castor
 			if ( !m_context->sections.empty() )
 			{
 				auto section = m_context->sections.back();
-				auto it = action.functions.find( section );
+				auto funcsIt = action.functions.find( section );
 
-				if ( it == action.functions.end() )
+				if ( funcsIt == action.functions.end() )
 				{
 					if ( action.name == "}" )
 					{
@@ -144,13 +144,13 @@ namespace castor
 				{
 					ParserParameterArray filled;
 					doCheckParams( action.params
-						, it->second.params
+						, funcsIt->second.params
 						, filled );
 
 					try
 					{
 						m_parser.getLogger().logTrace( action.file + cuT( ":" ) + string::toString( action.line ) + cuT( " (" ) + action.name + cuT( ")" ) );
-						isNextOpenBrace = it->second.function( *m_context, filled );
+						isNextOpenBrace = funcsIt->second.function( *m_context, filled );
 					}
 					catch ( Exception & exc )
 					{
@@ -270,13 +270,13 @@ namespace castor
 
 	//*********************************************************************************************
 
-	FileParser::FileParser( uint32_t rootSectionId )
+	FileParser::FileParser( SectionId rootSectionId )
 		: FileParser{ *Logger::getSingleton().getInstance(), rootSectionId }
 	{
 	}
 
 	FileParser::FileParser( LoggerInstance & logger
-		, uint32_t rootSectionId )
+		, SectionId rootSectionId )
 		: m_logger{ logger }
 		, m_rootSectionId( rootSectionId )
 	{
@@ -492,24 +492,26 @@ namespace castor
 	}
 
 	void FileParser::parseError( String const & functionName
-		, int lineIndex
+		, uint64_t lineIndex
 		, String const & text )
 	{
-		StringStream stream{ makeStringStream() };
-		stream << cuT( "Error, line #" ) << lineIndex << cuT( ": Directive <" ) << functionName << cuT( ">: " ) << text;
-		m_logger.logError( stream.str() );
+		m_logger.logError( makeStringStream()
+			<< cuT( "Error, line #" ) << lineIndex
+			<< cuT( ": Directive <" ) << functionName
+			<< cuT( ">: " ) << text );
 	}
 
 	void FileParser::parseWarning( String const & functionName
-		, int lineIndex
+		, uint64_t lineIndex
 		, String const & text )
 	{
-		StringStream stream{ makeStringStream() };
-		stream << cuT( "Warning, line #" ) << lineIndex << cuT( ": Directive <" ) << functionName << cuT( ">: " ) << text;
-		m_logger.logWarning( stream.str() );
+		m_logger.logWarning( makeStringStream()
+			<< cuT( "Warning, line #" ) << lineIndex
+			<< cuT( ": Directive <" ) << functionName
+			<< cuT( ">: " ) << text );
 	}
 
-	void FileParser::addParser( uint32_t section
+	void FileParser::addParser( SectionId section
 		, String const & name
 		, ParserFunction function
 		, ParserParameterArray params )
@@ -519,14 +521,17 @@ namespace castor
 
 		if ( !ires.second )
 		{
-			auto stream = makeStringStream();
-			m_logger.logError( cuT( "Parser " ) + name + cuT( " for section " ) + string::toString( section ) + cuT( " already exists." ) );
+			m_logger.logError( makeStringStream()
+				<< cuT( "Parser " ) << name
+				<< cuT( " for section " ) << doGetSectionName( section )
+				<< cuT( " (" ) << section
+				<< cuT( ") already exists." ) );
 		}
 	}
 
 	bool FileParser::doParseScriptLine( PreprocessedFile & preprocessed
 		, String & line
-		, int lineIndex )
+		, uint64_t lineIndex )
 	{
 		bool carryOn = true;
 		bool result = false;
@@ -591,15 +596,17 @@ namespace castor
 	}
 
 	bool FileParser::doDiscardParser( PreprocessedFile & preprocessed
-		, String const & line )
+		, String const & value )
 	{
 		auto & context = preprocessed.getContext();
-		Logger::logWarning( cuT( "Parser not found @ line " ) + string::toString( context.line ) + cuT( " : " ) + line );
+		Logger::logWarning( makeStringStream()
+			<< cuT( "Parser not found @ line " ) << context.line
+			<< cuT( " : " ) + value );
 		return false;
 	}
 
 	void FileParser::doParseScriptBlockBegin( PreprocessedFile & preprocessed
-		, int lineIndex )
+		, uint64_t lineIndex )
 	{
 		auto defaultPush = [this]( FileParserContext & context
 			, ParserParameterArray const & )
@@ -615,7 +622,7 @@ namespace castor
 	}
 
 	bool FileParser::doParseScriptBlockEnd( PreprocessedFile & preprocessed
-		, int lineIndex )
+		, uint64_t lineIndex )
 	{
 		bool result = false;
 		auto it = m_parsers.find( "}" );
@@ -650,7 +657,7 @@ namespace castor
 
 	bool FileParser::doInvokeParser( PreprocessedFile & preprocessed
 		, String & line
-		, int lineIndex )
+		, uint64_t lineIndex )
 	{
 		bool result = false;
 
@@ -697,7 +704,7 @@ namespace castor
 	}
 
 	void FileParser::doEnterBlock( PreprocessedFile & preprocessed
-		, int lineIndex )
+		, uint64_t lineIndex )
 	{
 		if ( m_ignored )
 		{
@@ -710,7 +717,7 @@ namespace castor
 	}
 
 	void FileParser::doLeaveBlock( PreprocessedFile & preprocessed
-		, int lineIndex )
+		, uint64_t lineIndex )
 	{
 		if ( doIsInIgnoredBlock() )
 		{
@@ -735,7 +742,7 @@ namespace castor
 	}
 
 	void FileParser::doIncludeFile( PreprocessedFile & preprocessed
-		, int lineIndex
+		, uint64_t CU_UnusedParam( lineIndex )
 		, String const & param )
 	{
 		String params = param;
@@ -750,7 +757,7 @@ namespace castor
 		}
 	}
 
-	void FileParser::doAddDefine( int lineIndex
+	void FileParser::doAddDefine( uint64_t lineIndex
 		, String const & param )
 	{
 		auto functionName = "define";

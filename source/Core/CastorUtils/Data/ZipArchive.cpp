@@ -120,7 +120,7 @@ namespace castor
 				}
 			}
 
-			virtual bool findFolder( String const & infolder )
+			virtual bool findFolder( String const & CU_UnusedParam( infolder ) )
 			{
 				bool result = false;
 				//std::string folder = string::stringCast< char >( infolder );
@@ -143,7 +143,7 @@ namespace castor
 				return result;
 			}
 
-			virtual bool findFile( String const & infile )
+			virtual bool findFile( String const & CU_UnusedParam( infile ) )
 			{
 				bool result = false;
 				//std::string file = string::stringCast< char >( infile );
@@ -176,7 +176,7 @@ namespace castor
 				doDeflateFiles( cuT( "" ), infolder.files );
 			}
 
-			virtual StringArray inflate( Path const & outFolder, ZipArchive::Folder & folder )
+			virtual StringArray inflate( Path const & outFolder, ZipArchive::Folder & CU_UnusedParam( folder ) )
 			{
 				if ( !File::directoryExists( outFolder ) )
 				{
@@ -322,9 +322,9 @@ namespace castor
 					filePath = path + cuT( "/" ) + folder.name;
 				}
 
-				for ( auto folder : folder.folders )
+				for ( auto deffolder : folder.folders )
 				{
-					doDeflate( filePath, folder );
+					doDeflate( filePath, deffolder );
 				}
 
 				doDeflateFiles( filePath, folder.files );

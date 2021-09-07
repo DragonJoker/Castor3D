@@ -41,7 +41,7 @@ namespace castor
 			{
 				std::copy( src, src + MinCount, dst );
 
-				if ( DstCount > MinCount )
+				if constexpr ( DstCount > MinCount )
 				{
 					for ( uint32_t i = MinCount; i < DstCount; ++i )
 					{

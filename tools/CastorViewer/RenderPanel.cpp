@@ -142,7 +142,7 @@ namespace CastorViewer
 	{
 		m_listener = m_renderWindow->getListener();
 		m_renderWindow->initialise( target );
-		auto & scene = target->getScene();
+		auto scene = target->getScene();
 
 		if ( scene )
 		{

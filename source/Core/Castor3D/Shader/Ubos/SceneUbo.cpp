@@ -181,8 +181,8 @@ namespace castor3d
 
 		if ( camera )
 		{
-			configuration.clipInfo[0] = camera->getWidth();
-			configuration.clipInfo[1] = camera->getHeight();
+			configuration.clipInfo[0] = float( camera->getWidth() );
+			configuration.clipInfo[1] = float( camera->getHeight() );
 			configuration.clipInfo[2] = camera->getNear();
 			configuration.clipInfo[3] = camera->getFar();
 			cpuUpdateCameraPosition( *camera );

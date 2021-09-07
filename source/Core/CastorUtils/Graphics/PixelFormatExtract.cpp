@@ -185,10 +185,10 @@ namespace castor
 				, PixelDefinitionsT< PixelFormat::e##name >::Size\
 				, srcComponent\
 				, dst.getPtr()\
-				, getBytesPerPixel( dst.getFormat() )\
+				, uint32_t( getBytesPerPixel( dst.getFormat() ) )\
 				, dstComponent\
 				, dst.getFormat()\
-				, getBytesPerPixel( singleComponentV< PixelFormat::e##name > )\
+				, uint32_t( getBytesPerPixel( singleComponentV< PixelFormat::e##name > ) )\
 				, dst.getCount() );\
 			break;
 #include "CastorUtils/Graphics/PixelFormat.enum"

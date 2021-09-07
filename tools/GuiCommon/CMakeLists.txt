@@ -287,7 +287,7 @@ target_include_directories( ${PROJECT_NAME}
 		${CASTOR_SOURCE_DIR}/tools
 		${CASTOR_BINARY_DIR}/tools
 		${wxWidgets_INCLUDE_DIRS}
-		${GTK2_INCLUDE_DIRS}
+		${GTK3_INCLUDE_DIRS}
 	PRIVATE
 		${Castor3DIncludeDirs}
 		${FFMPEG_INCLUDE_DIR}
@@ -297,7 +297,7 @@ target_link_libraries( ${PROJECT_NAME}
 		castor::Castor3D
 		castor::SceneExporter
 		${wxWidgets_LIBRARIES}
-		${GTK2_LIBRARIES}
+		${GTK3_LIBRARIES}
 		${X11_LIBRARIES}
 		sdw::CompilerSpirV
 	PRIVATE

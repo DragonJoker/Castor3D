@@ -41,7 +41,7 @@ namespace castor::Debug
 				::SymCleanup( process );
 			}
 
-			void loadModule( DynamicLibrary const & library )
+			void loadModule( DynamicLibrary const & CU_UnusedParam( library ) )
 			{
 				//auto result = ::SymLoadModuleEx( doGetProcess()    // target process 
 				//	, nullptr                                      // handle to image - not used
@@ -62,7 +62,7 @@ namespace castor::Debug
 				//}
 			}
 
-			void unloadModule( DynamicLibrary const & library )
+			void unloadModule( DynamicLibrary const & CU_UnusedParam( library ) )
 			{
 				//auto address = libraryBaseAddress[&library];
 
