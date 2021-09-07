@@ -145,6 +145,8 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API crg::FramePass const & getLastPass()const;
+		C3D_API SsaoConfig const & getSsaoConfig()const;
+		C3D_API SsaoConfig & getSsaoConfig();
 
 		castor::Size const & getSize()const
 		{
@@ -228,16 +230,6 @@ namespace castor3d
 		{
 			return false;
 		}
-
-		SsaoConfig const & getSsaoConfig()const
-		{
-			return m_ssaoConfig;
-		}
-
-		SsaoConfig & getSsaoConfig()
-		{
-			return m_ssaoConfig;
-		}
 		/**@}*/
 
 	public:
@@ -270,7 +262,6 @@ namespace castor3d
 		RenderDevice const & m_device;
 		castor::Size m_targetSize;
 		castor::Size m_rawSize;
-		SsaoConfig m_ssaoConfig;
 		Texture m_colour;
 		TextureUnitUPtr m_colourTexture;
 		Texture m_depth;

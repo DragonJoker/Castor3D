@@ -208,6 +208,11 @@ namespace castor3d
 		{
 			return m_ssaoConfig;
 		}
+		
+		SsaoConfig & getSsaoConfig()
+		{
+			return m_ssaoConfig;
+		}
 
 		bool isInitialised()const
 		{
