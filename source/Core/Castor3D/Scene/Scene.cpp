@@ -159,6 +159,7 @@ namespace castor3d
 			, getEngine()->getMaterialCache()
 			, [this]( MaterialCache::ElementT & element )
 			{
+				getListener().postEvent( makeCpuInitialiseEvent( element ) );
 				m_materialsListeners.emplace( &element
 					, element.onChanged.connect( [this]( Material const & material )
 						{
@@ -170,14 +171,38 @@ namespace castor3d
 			{
 				m_dirtyMaterials = true;
 				m_materialsListeners.erase( &element );
-				getListener().postEvent( makeCpuCleanupEvent( element ) );
+				element.cleanup();
 			} );
 		m_samplerCacheView = makeCacheView< EventType::ePreRender >( getName()
-			, getEngine()->getSamplerCache() );
+			, getEngine()->getSamplerCache()
+			, [this]( SamplerCache::ElementT & element )
+			{
+				element.initialise( getOwner()->getRenderSystem()->getRenderDevice() );
+			}
+			, [this]( SamplerCache::ElementT & element )
+			{
+				element.cleanup();
+			} );
 		m_overlayCacheView = makeCacheView< EventType::ePreRender >( getName()
-			, getEngine()->getOverlayCache() );
+			, getEngine()->getOverlayCache()
+			, [this]( OverlayCache::ElementT & element )
+			{
+				getEngine()->getOverlayCache().initialise( element );
+			}
+			, [this]( OverlayCache::ElementT & element )
+			{
+				getEngine()->getOverlayCache().cleanup( element );
+			} );
 		m_fontCacheView = makeCacheView< EventType::ePreRender >( getName()
-			, getEngine()->getFontCache() );
+			, getEngine()->getFontCache()
+			, [this]( castor::FontCache::ElementT & element )
+			{
+				element.initialise();
+			}
+			, [this]( castor::FontCache::ElementT & element )
+			{
+				element.cleanup();
+			} );
 
 		auto notify = [this]()
 		{

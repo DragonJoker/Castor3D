@@ -20,37 +20,47 @@ namespace castor
 {
 	using namespace castor3d;
 
+	void ResourceCacheT< Overlay, String, OverlayCacheTraits >::initialise( Overlay & overlay )
+	{
+		auto level = overlay.computeLevel();
+
+		if ( overlay.getParent() )
+		{
+			overlay.getParent()->addChild( &overlay );
+		}
+
+		while ( level >= int( m_overlayCountPerLevel.size() ) )
+		{
+			m_overlayCountPerLevel.resize( m_overlayCountPerLevel.size() * 2 );
+		}
+
+		overlay.setOrder( ++m_overlayCountPerLevel[level], level );
+		m_overlays.insert( overlay.getCategory() );
+	}
+
+	void ResourceCacheT< Overlay, String, OverlayCacheTraits >::cleanup( Overlay & overlay )
+	{
+		if ( overlay.getChildrenCount() )
+		{
+			for ( auto child : overlay )
+			{
+				child->setPosition( child->getAbsolutePosition() );
+				child->setSize( child->getAbsoluteSize() );
+			}
+		}
+
+		m_overlays.erase( overlay.getCategory() );
+	}
+
 	ResourceCacheT< Overlay, String, OverlayCacheTraits >::ResourceCacheT( Engine & engine )
 		: ElementCacheT{ engine.getLogger()
 			, [this]( ElementT & resource )
 			{
-				auto level = resource.computeLevel();
-
-				if ( resource.getParent() )
-				{
-					resource.getParent()->addChild( &resource );
-				}
-
-				while ( level >= int( m_overlayCountPerLevel.size() ) )
-				{
-					m_overlayCountPerLevel.resize( m_overlayCountPerLevel.size() * 2 );
-				}
-
-				resource.setOrder( ++m_overlayCountPerLevel[level], level );
-				m_overlays.insert( resource.getCategory() );
+				initialise( resource );
 			}
 			, [this]( ElementT & resource )
 			{
-				if ( resource.getChildrenCount() )
-				{
-					for ( auto child : resource )
-					{
-						child->setPosition( child->getAbsolutePosition() );
-						child->setSize( child->getAbsoluteSize() );
-					}
-				}
-
-				m_overlays.erase( resource.getCategory() );
+				cleanup( resource );
 			}
 			, castor::ResourceMergerT< OverlayCache >{ "_" } }
 		, m_engine{ engine }
