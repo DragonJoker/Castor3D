@@ -1,6 +1,7 @@
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
@@ -9,6 +10,8 @@
 #include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
+
+CU_ImplementCUSmartPtr( castor3d, TextureUnit );
 
 namespace castor3d
 {
@@ -97,6 +100,36 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	TextureUnit::TextureUnit( TextureUnit && rhs )
+		: AnimableT< Engine >{ std::move( rhs ) }
+		, m_device{ std::move( rhs.m_device ) }
+		, m_configuration{ std::move( rhs.m_configuration ) }
+		, m_transform{ std::move( rhs.m_transform ) }
+		, m_transformations{ std::move( rhs.m_transformations ) }
+		, m_texture{ std::move( rhs.m_texture ) }
+		, m_renderTarget{ std::move( rhs.m_renderTarget ) }
+		, m_sampler{ std::move( rhs.m_sampler ) }
+		, m_ownSampler{ std::move( rhs.m_ownSampler ) }
+		, m_descriptor{ std::move( rhs.m_descriptor ) }
+		, m_id{ std::move( rhs.m_id ) }
+		, m_changed{ std::move( rhs.m_changed ) }
+		, m_name{ std::move( rhs.m_name ) }
+		, m_initialised{ std::move( rhs.m_initialised ) }
+		, m_animated{ std::move( rhs.m_animated ) }
+	{
+		getOwner()->getMaterialCache().unregisterUnit( rhs );
+		rhs.m_id = 0u;
+		rhs.m_changed = false;
+		rhs.m_initialised = false;
+		rhs.m_animated = false;
+
+		if ( m_id )
+		{
+			m_id = 0u;
+			getOwner()->getMaterialCache().registerUnit( *this );
+		}
+	}
+
 	TextureUnit::TextureUnit( Engine & engine )
 		: AnimableT< Engine >{ engine }
 		, m_changed{ false }
@@ -120,6 +153,8 @@ namespace castor3d
 		{
 			getEngine()->getRenderTargetCache().remove( std::move( renderTarget ) );
 		}
+
+		CU_Assert( getId() == 0u, "Did you forget to call TextureUnit::cleanup ?" );
 	}
 
 	TextureUnit TextureUnit::create( Engine & engine
@@ -266,6 +301,7 @@ namespace castor3d
 	{
 		if ( m_initialised && isInitialised() )
 		{
+			getOwner()->getMaterialCache().registerUnit( *this );
 			return m_initialised;
 		}
 
@@ -316,11 +352,15 @@ namespace castor3d
 
 		m_device = &device;
 		m_initialised = result;
+		getOwner()->getMaterialCache().registerUnit( *this );
 		return result;
 	}
 
 	void TextureUnit::cleanup()
 	{
+		getOwner()->getMaterialCache().unregisterUnit( *this );
+		m_id = 0u;
+
 		if ( m_device )
 		{
 			auto & device = *m_device;

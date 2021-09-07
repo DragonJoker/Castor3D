@@ -177,6 +177,29 @@ namespace castor3d
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eMaterial )
+		
+	CU_ImplementAttributeParser( parserSamplerState )
+	{
+		auto & parsingContext = static_cast< SceneFileContext & >( context );
+
+		if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			String name;
+			parsingContext.sampler = parsingContext.parser->getEngine()->getSamplerCache().tryFind( params[0]->get( name ) );
+
+			if ( !parsingContext.sampler.lock() )
+			{
+				parsingContext.ownSampler = parsingContext.parser->getEngine()->getSamplerCache().create( name
+					, *parsingContext.parser->getEngine() );
+				parsingContext.sampler = parsingContext.ownSampler;
+			}
+		}
+	}
+	CU_EndAttributePush( CSCNSection::eSampler )
 
 	CU_ImplementAttributeParser( parserRootScene )
 	{
@@ -333,29 +356,6 @@ namespace castor3d
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eTextOverlay )
-
-	CU_ImplementAttributeParser( parserRootSamplerState )
-	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
-
-		if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter." ) );
-		}
-		else
-		{
-			String name;
-			parsingContext.sampler = parsingContext.parser->getEngine()->getSamplerCache().tryFind( params[0]->get( name ) );
-
-			if ( !parsingContext.sampler.lock() )
-			{
-				parsingContext.ownSampler = parsingContext.parser->getEngine()->getSamplerCache().create( name
-					, *parsingContext.parser->getEngine() );
-				parsingContext.sampler = parsingContext.ownSampler;
-			}
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eSampler )
 
 	CU_ImplementAttributeParser( parserRootDebugOverlays )
 	{
@@ -984,23 +984,6 @@ namespace castor3d
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eFont )
-
-	CU_ImplementAttributeParser( parserSceneSamplerState )
-	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			String name;
-			parsingContext.sampler = parsingContext.scene->getSamplerView().add( params[0]->get( name )
-				, *parsingContext.parser->getEngine() );
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eSampler )
 
 	CU_ImplementAttributeParser( parserSceneCamera )
 	{

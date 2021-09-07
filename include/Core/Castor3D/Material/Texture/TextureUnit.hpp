@@ -23,9 +23,9 @@ namespace castor3d
 	{
 	public:
 		TextureUnit( TextureUnit const & ) = delete;
-		TextureUnit( TextureUnit && ) = default;
 		TextureUnit & operator=( TextureUnit const & ) = delete;
-		TextureUnit & operator=( TextureUnit && ) = delete;
+		C3D_API TextureUnit( TextureUnit && rhs );
+		C3D_API TextureUnit & operator=( TextureUnit && rhs ) = delete;
 		/**
 		*\~english
 		*name

@@ -17,7 +17,7 @@ namespace castor
 	{
 		bool result = true;
 
-		if ( sampler.getName() != cuT( "LightsSampler" ) && sampler.getName() != RenderTarget::DefaultSamplerName )
+		if ( sampler.getName() != cuT( "C3D_Lights" ) && sampler.getName() != RenderTarget::DefaultSamplerName )
 		{
 			result = false;
 			log::info << tabs() << cuT( "Writing Sampler " ) << sampler.getName() << std::endl;
