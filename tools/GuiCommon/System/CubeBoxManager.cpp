@@ -7,6 +7,7 @@
 #include <Castor3D/Event/Frame/FrameListener.hpp>
 #include <Castor3D/Event/Frame/GpuFunctorEvent.hpp>
 #include <Castor3D/Material/Material.hpp>
+#include <Castor3D/Material/Pass/Pass.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp>

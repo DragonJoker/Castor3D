@@ -74,12 +74,12 @@ namespace castor
 				, buffer.getLevels()
 				, 1u );
 
-			for ( auto layer = 0; layer < buffer.getLayers(); ++layer )
+			for ( auto layer = 0u; layer < buffer.getLayers(); ++layer )
 			{
 				auto srcLevel = srcLayer;
 				auto dstLevel = dstLayer;
 
-				for ( auto level = 0; level < buffer.getLevels(); ++level )
+				for ( auto level = 0u; level < buffer.getLevels(); ++level )
 				{
 					auto srcLevelSize = ashes::getSize( { buffer.getWidth(), buffer.getHeight(), 1u }
 						, VkFormat( buffer.getFormat() )

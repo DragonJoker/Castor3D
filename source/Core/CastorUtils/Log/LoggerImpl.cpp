@@ -12,7 +12,7 @@ namespace castor
 	class LoggerImpl;
 
 	LoggerImpl::LoggerImpl( ProgramConsole & console
-		, LogType level
+		, LogType CU_UnusedParam( level )
 		, LoggerInstance & parent )
 		: m_parent{ parent }
 		, m_console{ &console }

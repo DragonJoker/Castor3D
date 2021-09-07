@@ -31,7 +31,7 @@ namespace castor
 		reg.unregisterLoader( listExtensions() );
 	}
 
-	ImageLayout XpmImageLoader::load( String const & imageFormat
+	ImageLayout XpmImageLoader::load( String const & CU_UnusedParam( imageFormat )
 		, uint8_t const * input
 		, uint32_t size
 		, PxBufferBaseSPtr & outbuffer )const

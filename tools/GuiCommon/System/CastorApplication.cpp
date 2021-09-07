@@ -291,7 +291,7 @@ namespace GuiCommon
 			, DefaultLogType
 			, wantedFPS
 			, !isCastorThreaded
-			, make_wxString( rendererType ) }
+			, rendererType }
 	{
 		wxSetAssertHandler( assertHandler );
 #if defined( __WXGTK__ )

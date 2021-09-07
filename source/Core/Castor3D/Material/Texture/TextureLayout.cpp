@@ -16,8 +16,8 @@
 #include <ashespp/Image/ImageView.hpp>
 #include <ashespp/Sync/Fence.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, TextureLayout );
-CU_ImplementCUSmartPtr( castor3d, TextureSource );
+CU_ImplementCUSmartPtr( castor3d, TextureLayout )
+CU_ImplementCUSmartPtr( castor3d, TextureSource )
 
 namespace castor3d
 {

@@ -77,7 +77,7 @@ namespace castor
 						, srcLevel
 						, dstLevel
 						, i
-						, levelSize );
+						, uint32_t( levelSize ) );
 				}
 
 				srcLayer += srcLayerSize;
@@ -190,7 +190,7 @@ namespace castor
 			return result;
 		}
 
-		void copyBuffer( PxBufferConvertOptions const * options
+		void copyBuffer( PxBufferConvertOptions const * CU_UnusedParam( options )
 			, Size const & dimensions
 			, uint8_t const * srcBuffer
 			, PixelFormat srcFormat
@@ -411,7 +411,7 @@ namespace castor
 		case castor::PixelFormat::eETC2_R8G8B8A1_SRGB_BLOCK:
 		case castor::PixelFormat::eETC2_R8G8B8A8_UNORM_BLOCK:
 		case castor::PixelFormat::eETC2_R8G8B8A8_SRGB_BLOCK:
-			return cvtt::NumParallelBlocks * getBytesPerPixel( format );
+			return uint32_t( cvtt::NumParallelBlocks * getBytesPerPixel( format ) );
 #endif
 		default:
 			return 1u;
@@ -506,9 +506,9 @@ namespace castor
 				, m_levels );
 			m_size = { extent.width, extent.height };
 			buffer = mips.empty() ? buffer : mips.data();
-			m_align = ( mips.empty() || !options )
+			m_align = uint32_t( ( mips.empty() || !options )
 				? getBytesPerPixel( getFormat() )
-				: std::max( VkDeviceSize( options->getAdditionalAlign( getFormat() ) ), getBytesPerPixel( getFormat() ) );
+				: std::max( VkDeviceSize( options->getAdditionalAlign( getFormat() ) ), getBytesPerPixel( getFormat() ) ) );
 			VkDeviceSize newSize = ashes::getLevelsSize( extent
 				, VkFormat( getFormat() )
 				, 0u
@@ -529,9 +529,9 @@ namespace castor
 		}
 		else
 		{
-			m_align = isCompressed( bufferFormat )
+			m_align = uint32_t( isCompressed( bufferFormat )
 				? bufferAlign
-				: getBytesPerPixel( getFormat() );
+				: getBytesPerPixel( getFormat() ) );
 			VkDeviceSize newSize = ashes::getLevelsSize( extent
 				, VkFormat( getFormat() )
 				, 0u

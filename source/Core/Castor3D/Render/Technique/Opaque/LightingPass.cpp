@@ -605,7 +605,7 @@ namespace castor3d
 				data = SpotLight::generateVertices();
 			}
 
-			m_count = data.size();
+			m_count = uint32_t( data.size() );
 			result = makeVertexBuffer< float >( m_device
 				, uint32_t( data.size() * 3u )
 				, 0u

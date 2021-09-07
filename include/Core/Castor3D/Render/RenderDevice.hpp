@@ -37,7 +37,7 @@ namespace castor3d
 		C3D_API QueueData( QueueData && ) = default;
 		C3D_API QueueData & operator=( QueueData && ) = default;
 
-		QueueData( QueuesData const * parent )
+		explicit QueueData( QueuesData const * parent )
 			: parent{ parent }
 		{
 		}

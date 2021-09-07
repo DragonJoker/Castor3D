@@ -240,7 +240,7 @@ namespace castor
 	 *\param[in]	dstBuffer	Le buffer destination
 	 *\param[in]	dstSize		La taille de la destination
 	 */
-	static void convertBuffer( Size const & dimensions
+	static inline void convertBuffer( Size const & dimensions
 		, PixelFormat srcFormat
 		, uint8_t const * srcBuffer
 		, uint32_t srcSize

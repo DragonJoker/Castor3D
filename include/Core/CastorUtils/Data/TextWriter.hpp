@@ -53,7 +53,7 @@ namespace castor
 			bool m_result;
 		};
 
-		friend struct WriterBlock;
+		friend class WriterBlock;
 
 	public:
 		/**

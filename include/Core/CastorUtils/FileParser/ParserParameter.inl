@@ -343,7 +343,7 @@ namespace castor
 		 *\param[in]	params	La ligne contenant la valeur.
 		 *\param[out]	value		Reçoit le résultat.
 		 */
-		static inline bool parse( LoggerInstance & logger
+		static inline bool parse( LoggerInstance & CU_UnusedParam( logger )
 			, String & params
 			, ValueType & value )
 		{
@@ -392,7 +392,7 @@ namespace castor
 		 *\param[in]	params	La ligne contenant la valeur.
 		 *\param[out]	value		Reçoit le résultat.
 		 */
-		static inline bool parse( LoggerInstance & logger
+		static inline bool parse( LoggerInstance & CU_UnusedParam( logger )
 			, String & params
 			, ValueType & value )
 		{
@@ -449,7 +449,7 @@ namespace castor
 		 *\param[in]	params	La ligne contenant la valeur.
 		 *\param[out]	value		Reçoit le résultat.
 		 */
-		static inline bool parse( LoggerInstance & logger
+		static inline bool parse( LoggerInstance & CU_UnusedParam( logger )
 			, String & params
 			, ValueType & value )
 		{
@@ -494,7 +494,7 @@ namespace castor
 		 *\param[in]	params	La ligne contenant la valeur.
 		 *\param[out]	value		Reçoit le résultat.
 		 */
-		static inline bool parse( LoggerInstance & logger
+		static inline bool parse( LoggerInstance & CU_UnusedParam( logger )
 			, String & params
 			, ValueType & value )
 		{
@@ -640,12 +640,12 @@ namespace castor
 					}
 					else
 					{
-						Logger::logWarning( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params );
+						logger.logWarning( makeStringStream() << cuT( "Couldn't parse from " ) << params );
 					}
 				}
 				catch ( std::exception & p_exc )
 				{
-					Logger::logError( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
+					logger.logError( makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
 				}
 
 				return result;
@@ -752,12 +752,12 @@ namespace castor
 					}
 					else
 					{
-						logger.logWarning( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params );
+						logger.logWarning( makeStringStream() << cuT( "Couldn't parse from " ) << params );
 					}
 				}
 				catch ( std::exception & p_exc )
 				{
-					logger.logError( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
+					logger.logError( makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
 				}
 
 				return result;
@@ -849,12 +849,12 @@ namespace castor
 					}
 					else
 					{
-						logger.logWarning( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params );
+						logger.logWarning( makeStringStream() << cuT( "Couldn't parse from " ) << params );
 					}
 				}
 				catch ( std::exception & p_exc )
 				{
-					logger.logError( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
+					logger.logError( makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
 				}
 
 				return result;
@@ -961,12 +961,12 @@ namespace castor
 					}
 					else
 					{
-						logger.logWarning( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params );
+						logger.logWarning( makeStringStream() << cuT( "Couldn't parse from " ) << params );
 					}
 				}
 				catch ( std::exception & p_exc )
 				{
-					logger.logError( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
+					logger.logError( makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
 				}
 
 				return result;
@@ -1003,7 +1003,7 @@ namespace castor
 		return std::make_shared< ParserParameter< ParameterType::eName > >( *this );
 	}
 
-	inline bool ParserParameter< ParameterType::eName >::parse( LoggerInstance & logger
+	inline bool ParserParameter< ParameterType::eName >::parse( LoggerInstance & CU_UnusedParam( logger )
 		, String & params )
 	{
 		Regex regex{ cuT( "[^\"]*\"([^\"]*)\"" ) + String{ details::IGNORED_END } };
@@ -1049,7 +1049,7 @@ namespace castor
 		return std::make_shared< ParserParameter< ParameterType::eCheckedText > >( *this );
 	}
 
-	inline bool ParserParameter< ParameterType::eCheckedText >::parse( LoggerInstance & logger
+	inline bool ParserParameter< ParameterType::eCheckedText >::parse( LoggerInstance & CU_UnusedParam( logger )
 		, String & params )
 	{
 		bool result = false;
@@ -1103,7 +1103,7 @@ namespace castor
 		return std::make_shared< ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText > >( *this );
 	}
 
-	inline bool ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::parse( LoggerInstance & logger
+	inline bool ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::parse( LoggerInstance & CU_UnusedParam( logger )
 		, String & params )
 	{
 		static uint32_t constexpr Infinite = ~( 0u );
@@ -1181,7 +1181,7 @@ namespace castor
 		return std::make_shared< ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText > >( *this );
 	}
 
-	inline bool ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::parse( LoggerInstance & logger
+	inline bool ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::parse( LoggerInstance & CU_UnusedParam( logger )
 		, String & params )
 	{
 		static uint32_t constexpr Infinite = ~( 0u );
