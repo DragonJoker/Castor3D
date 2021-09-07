@@ -162,7 +162,7 @@ namespace castor3d
 			return result;
 		}
 
-		TextureUnit doCreateTextureUnit( RenderDevice const & device
+		TextureUnitUPtr doCreateTextureUnit( RenderDevice const & device
 			, QueueData const & queueData
 			, crg::ImageId const & image )
 		{
@@ -174,13 +174,13 @@ namespace castor3d
 				, image.data->info.format
 				, image.data->info.usage
 				, image.data->name );
-			TextureUnit result{ engine };
-			result.setTexture( colourTexture );
-			result.setSampler( createSampler( engine
+			auto result = castor::makeUnique< TextureUnit >( engine );
+			result->setTexture( colourTexture );
+			result->setSampler( createSampler( engine
 				, image.data->name
 				, VK_FILTER_LINEAR
 				, &range ) );
-			result.initialise( device, queueData );
+			result->initialise( device, queueData );
 			return result;
 		}
 
@@ -498,8 +498,8 @@ namespace castor3d
 		m_llpvResult.clear();
 		m_lpvResult.reset();
 		m_voxelizer.reset();
-		m_depthBuffer.cleanup();
-		m_colourTexture.cleanup();
+		m_depthBuffer->cleanup();
+		m_colourTexture->cleanup();
 		getEngine()->getSamplerCache().remove( cuT( "RenderTechnique_Colour" ) );
 		getEngine()->getSamplerCache().remove( cuT( "RenderTechnique_Depth" ) );
 		m_signalFinished.reset();

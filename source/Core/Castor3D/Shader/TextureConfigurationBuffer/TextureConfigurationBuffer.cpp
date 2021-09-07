@@ -134,6 +134,8 @@ namespace castor3d
 	{
 		if ( unit.getId() == 0u )
 		{
+			auto lock( castor::makeUniqueLock( m_mutex ) );
+
 			CU_Require( m_configurations.size() < m_configMaxCount - 1u );
 			auto & config = unit.getConfiguration();
 			auto it = unit.hasAnimation()
@@ -160,11 +162,15 @@ namespace castor3d
 
 	void TextureConfigurationBuffer::removeTextureConfiguration( TextureUnit & unit )
 	{
+		auto lock( castor::makeUniqueLock( m_mutex ) );
+
 		unit.setId( 0u );
 	}
 
 	void TextureConfigurationBuffer::update()
 	{
+		auto lock( castor::makeUniqueLock( m_mutex ) );
+
 		if ( !m_dirty.empty() )
 		{
 			std::vector< TextureUnit const * > dirty;

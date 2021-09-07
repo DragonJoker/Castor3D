@@ -33,14 +33,10 @@ namespace castor3d
 		{
 			pass->initialise( device, *device.graphicsData() );
 		}
-
-		getEngine()->getMaterialCache().registerMaterial( *this );
 	}
 
 	void Material::cleanup()
 	{
-		getEngine()->getMaterialCache().unregisterMaterial( *this );
-
 		for ( auto pass : m_passes )
 		{
 			pass->cleanup();
