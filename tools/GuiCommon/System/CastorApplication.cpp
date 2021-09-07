@@ -66,6 +66,8 @@
 #include "GuiCommon/xpms/spot_sel.xpm"
 #include "GuiCommon/xpms/submesh.xpm"
 #include "GuiCommon/xpms/submesh_sel.xpm"
+#include "GuiCommon/xpms/ssao_config.xpm"
+#include "GuiCommon/xpms/ssao_config_sel.xpm"
 #include "GuiCommon/xpms/text.xpm"
 #include "GuiCommon/xpms/text_sel.xpm"
 #include "GuiCommon/xpms/texture.xpm"
@@ -586,6 +588,8 @@ namespace GuiCommon
 		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE_SEL, frame_variable_sel_xpm );
 		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE_BUFFER, frame_variable_buffer_xpm );
 		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE_BUFFER_SEL, frame_variable_buffer_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_SSAO_CONFIG, ssao_config_xpm );
+		ImagesLoader::addBitmap( eBMP_SSAO_CONFIG_SEL, ssao_config_sel_xpm );
 		ImagesLoader::addBitmap( eBMP_BACKGROUND, background_xpm );
 		ImagesLoader::addBitmap( eBMP_BACKGROUND_SEL, background_sel_xpm );
 		ImagesLoader::addBitmap( eBMP_COLLAPSE_ALL, collapse_all_xpm );
