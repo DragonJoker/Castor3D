@@ -374,6 +374,7 @@ namespace castor3d
 		, HdrConfigUbo const & hdrConfigUbo
 		, SceneUbo const & sceneUbo
 		, crg::ImageViewId const & colour
+		, bool clearColour
 		, crg::ImageViewId const * depth )
 		: m_device{ device }
 		, m_matrixUbo{ m_device }
@@ -385,6 +386,7 @@ namespace castor3d
 			, hdrConfigUbo
 			, sceneUbo
 			, colour
+			, clearColour
 			, depth
 			, progress ) }
 	{
@@ -424,13 +426,14 @@ namespace castor3d
 		, HdrConfigUbo const & hdrConfigUbo
 		, SceneUbo const & sceneUbo
 		, crg::ImageViewId const & colour
+		, bool clearColour
 		, crg::ImageViewId const * depth
 		, ProgressBar * progress )
 	{
 		stepProgressBar( progress, "Creating background pass" );
 		auto size = makeExtent2D( getExtent( colour ) );
 		auto & result = graph.createPass( name + "Background"
-			, [this, &background, progress, size]( crg::FramePass const & pass
+			, [this, &background, progress, size, clearColour, depth]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -441,7 +444,7 @@ namespace castor3d
 					, m_device
 					, background
 					, size
-					, true );
+					, depth != nullptr );
 				m_backgroundPass = result.get();
 				m_device.renderSystem.getEngine()->registerTimer( graph.getName() + "/Background"
 					, result->getTimer() );
@@ -468,12 +471,16 @@ namespace castor3d
 		if ( depth )
 		{
 			result.addInOutDepthStencilView( *depth );
-			result.addInOutColourView( colour );
 		}
-		else
+
+		if ( clearColour )
 		{
 			result.addOutputColourView( colour
 				, transparentBlackClearColor );
+		}
+		else
+		{
+			result.addInOutColourView( colour );
 		}
 
 		return result;
