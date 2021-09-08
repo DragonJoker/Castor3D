@@ -10,7 +10,7 @@
 #include <ashes/common/Format.hpp>
 
 #if C3D_UseFreeImage
-#include <FreeImage.h>
+#	include <FreeImage.h>
 #endif
 
 namespace castor
@@ -28,8 +28,8 @@ namespace castor
 				uint8_t b;
 				uint8_t a;
 			};
-			int width = pixelBuffer->getWidth();
-			int height = pixelBuffer->getHeight();
+			auto width = int( pixelBuffer->getWidth() );
+			auto height = int( pixelBuffer->getHeight() );
 			auto buffer = reinterpret_cast< Pixel * >( pixelBuffer->getPtr() );
 
 			for ( int y = 0; y < height; ++y )

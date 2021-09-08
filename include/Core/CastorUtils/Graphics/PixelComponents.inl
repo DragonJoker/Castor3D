@@ -57,11 +57,11 @@ namespace castor
 		}
 		static void R( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).r = value >> 4;
+			getDst( buffer ).r = uint8_t( value >> 4 );
 		}
 		static void G( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).g = value >> 4;
+			getDst( buffer ).g = uint8_t( value >> 4 );
 		}
 		static void B( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
 		{
@@ -109,19 +109,19 @@ namespace castor
 		}
 		static void R( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).r = value >> 4;
+			getDst( buffer ).r = uint16_t( value >> 4 );
 		}
 		static void G( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).g = value >> 4;
+			getDst( buffer ).g = uint16_t( value >> 4 );
 		}
 		static void B( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).b = value >> 4;
+			getDst( buffer ).b = uint16_t( value >> 4 );
 		}
 		static void A( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).a = value >> 4;
+			getDst( buffer ).a = uint16_t( value >> 4 );
 		}
 	};
 	//!\~english	Specialisation for PixelFormat::eB4G4R4A4_UNORM
@@ -163,19 +163,19 @@ namespace castor
 		}
 		static void R( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).r = value >> 4;
+			getDst( buffer ).r = uint16_t( value >> 4 );
 		}
 		static void G( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).g = value >> 4;
+			getDst( buffer ).g = uint16_t( value >> 4 );
 		}
 		static void B( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).b = value >> 4;
+			getDst( buffer ).b = uint16_t( value >> 4 );
 		}
 		static void A( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).a = value >> 4;
+			getDst( buffer ).a = uint16_t( value >> 4 );
 		}
 	};
 	//!\~english	Specialisation for PixelFormat::eR5G6B5_UNORM
@@ -216,15 +216,15 @@ namespace castor
 		}
 		static void R( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).r = value >> 3;
+			getDst( buffer ).r = uint16_t( value >> 3 );
 		}
 		static void G( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).g = value >> 2;
+			getDst( buffer ).g = uint16_t( value >> 2 );
 		}
 		static void B( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).b = value >> 3;
+			getDst( buffer ).b = uint16_t( value >> 3 );
 		}
 		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
 		{
@@ -268,15 +268,15 @@ namespace castor
 		}
 		static void R( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).r = value >> 3;
+			getDst( buffer ).r = uint16_t( value >> 3 );
 		}
 		static void G( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).g = value >> 2;
+			getDst( buffer ).g = uint16_t( value >> 2 );
 		}
 		static void B( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).b = value >> 3;
+			getDst( buffer ).b = uint16_t( value >> 3 );
 		}
 		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
 		{
@@ -321,19 +321,19 @@ namespace castor
 		}
 		static void R( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).r = value >> 3;
+			getDst( buffer ).r = uint16_t( value >> 3 );
 		}
 		static void G( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).g = value >> 3;
+			getDst( buffer ).g = uint16_t( value >> 3 );
 		}
 		static void B( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).b = value >> 3;
+			getDst( buffer ).b = uint16_t( value >> 3 );
 		}
 		static void A( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).a = ( value != 0 ) ? 0x01 : 0x00;
+			getDst( buffer ).a = uint16_t( ( value != 0 ) ? 0x01 : 0x00 );
 		}
 	};
 	//!\~english	Specialisation for PixelFormat::eB5G5R5A1_UNORM
@@ -375,19 +375,19 @@ namespace castor
 		}
 		static void R( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).r = value >> 3;
+			getDst( buffer ).r = uint16_t( value >> 3 );
 		}
 		static void G( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).g = value >> 3;
+			getDst( buffer ).g = uint16_t( value >> 3 );
 		}
 		static void B( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).b = value >> 3;
+			getDst( buffer ).b = uint16_t( value >> 3 );
 		}
 		static void A( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).a = ( value != 0 ) ? 0x01 : 0x00;
+			getDst( buffer ).a = uint16_t( ( value != 0 ) ? 0x01 : 0x00 );
 		}
 	};
 	//!\~english	Specialisation for PixelFormat::eA1R5G5B5_UNORM
@@ -429,19 +429,19 @@ namespace castor
 		}
 		static void R( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).r = value >> 3;
+			getDst( buffer ).r = uint16_t( value >> 3 );
 		}
 		static void G( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).g = value >> 3;
+			getDst( buffer ).g = uint16_t( value >> 3 );
 		}
 		static void B( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).b = value >> 3;
+			getDst( buffer ).b = uint16_t( value >> 3 );
 		}
 		static void A( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).a = ( value != 0 ) ? 0x01 : 0x00;
+			getDst( buffer ).a = uint16_t( ( value != 0 ) ? 0x01 : 0x00 );
 		}
 	};
 	//!\~english	Specialisation for PixelFormat::eR8_UNORM
@@ -464,7 +464,7 @@ namespace castor
 		}
 		static Type R( uint8_t const * buffer )
 		{
-			return getSrc( buffer ).r;
+			return Type( getSrc( buffer ).r );
 		}
 		static Type G( uint8_t const * CU_UnusedParam( buffer ) )
 		{
@@ -480,7 +480,7 @@ namespace castor
 		}
 		static void R( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).r = value;
+			getDst( buffer ).r = int8_t( value );
 		}
 		static void G( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
 		{
@@ -1456,19 +1456,19 @@ namespace castor
 		}
 		static void R( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).r = value >> 6;
+			getDst( buffer ).r = uint32_t( value >> 6 );
 		}
 		static void G( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).g = value >> 6;
+			getDst( buffer ).g = uint32_t( value >> 6 );
 		}
 		static void B( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).b = value >> 6;
+			getDst( buffer ).b = uint32_t( value >> 6 );
 		}
 		static void A( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).a = value >> 14;
+			getDst( buffer ).a = uint32_t( value >> 14 );
 		}
 	};
 	//!\~english	Specialisation for PixelFormat::eA2R10G10B10_SNORM
@@ -1592,19 +1592,19 @@ namespace castor
 		}
 		static void R( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).r = value >> 6;
+			getDst( buffer ).r = uint32_t( value >> 6 );
 		}
 		static void G( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).g = value >> 6;
+			getDst( buffer ).g = uint32_t( value >> 6 );
 		}
 		static void B( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).b = value >> 6;
+			getDst( buffer ).b = uint32_t( value >> 6 );
 		}
 		static void A( uint8_t * buffer, Type value )
 		{
-			getDst( buffer ).a = value >> 14;
+			getDst( buffer ).a = uint32_t( value >> 14 );
 		}
 	};
 	//!\~english	Specialisation for PixelFormat::eA2B10G10R10_SNORM
@@ -3919,11 +3919,11 @@ namespace castor
 
 			static Type cast( uint8_t value )
 			{
-				return Type( value ) << 8;
+				return Type( Type( value ) << 8 );
 			}
 			static Type cast( int8_t value )
 			{
-				return Type( value ) << 8;
+				return Type( Type( value ) << 8 );
 			}
 			static Type cast( uint16_t value )
 			{

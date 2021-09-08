@@ -19,6 +19,12 @@ namespace castor
 	public:
 		using my_string = std::string;
 		using my_ostream = std::ostream;
+
+		LoggerInstance( LoggerInstance const & ) = delete;
+		LoggerInstance & operator=( LoggerInstance const & ) = delete;
+		CU_API LoggerInstance( LoggerInstance && rhs );
+		CU_API LoggerInstance & operator=( LoggerInstance && rhs );
+
 		CU_API ~LoggerInstance();
 		/**
 		 *\~english

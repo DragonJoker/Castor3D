@@ -42,7 +42,7 @@ namespace castor
 		: public ConsoleImpl
 	{
 	public:
-		DebugConsole()
+		DebugConsole( bool CU_UnusedParam( showConsole ) )
 		{
 			if ( ::AllocConsole() )
 			{
@@ -230,7 +230,7 @@ namespace castor
 #if defined( NDEBUG )
 		m_console = std::make_unique< ReleaseConsole >( showConsole );
 #else
-		m_console = std::make_unique< DebugConsole >();
+		m_console = std::make_unique< DebugConsole >( showConsole );
 #endif
 	}
 

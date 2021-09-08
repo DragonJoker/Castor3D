@@ -9,7 +9,23 @@
 
 namespace castor
 {
-	class LoggerImpl;
+	LoggerImpl::LoggerImpl( LoggerImpl && rhs )
+		: m_parent{ rhs.m_parent }
+		, m_console{ std::move( rhs.m_console ) }
+		, m_logFilePath{ std::move( rhs.m_logFilePath ) }
+		, m_mapCallbacks{ std::move( rhs.m_mapCallbacks ) }
+	{
+		rhs.m_console = nullptr;
+	}
+
+	LoggerImpl & LoggerImpl::operator=( LoggerImpl && rhs )
+	{
+		m_console = std::move( rhs.m_console );
+		m_logFilePath = std::move( rhs.m_logFilePath );
+		m_mapCallbacks = std::move( rhs.m_mapCallbacks );
+		rhs.m_console = nullptr;
+		return *this;
+	}
 
 	LoggerImpl::LoggerImpl( ProgramConsole & console
 		, LogType CU_UnusedParam( level )

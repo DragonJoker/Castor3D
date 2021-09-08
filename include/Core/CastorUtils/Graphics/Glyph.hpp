@@ -33,10 +33,10 @@ namespace castor
 			, Position const & bearing
 			, uint32_t advance
 			, ByteArray const & bitmap )
-			: m_size{ size }
-			, m_bearing{ bearing }
-			, m_bitmap{ bitmap }
+			: m_bearing{ bearing }
+			, m_size{ size }
 			, m_advance{ advance }
+			, m_bitmap{ bitmap }
 			, m_character{ c }
 		{
 		}

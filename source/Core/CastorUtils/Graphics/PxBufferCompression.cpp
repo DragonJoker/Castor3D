@@ -433,7 +433,6 @@ namespace castor
 		static uint8_t constexpr maskC565_6 = 0xFC;    // 0xFF minus last two bits
 
 		uint8_t colors[4][4];
-		uint32_t indices[16];
 		uint32_t result = 0u;
 		colors[0][0] = ( maxColor[0] & maskC565_5 ) | ( maxColor[0] >> 5 );
 		colors[0][1] = ( maxColor[1] & maskC565_6 ) | ( maxColor[1] >> 6 );

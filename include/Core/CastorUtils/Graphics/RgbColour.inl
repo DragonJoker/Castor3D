@@ -71,8 +71,8 @@ namespace castor
 
 	template< typename ComponentType >
 	RgbColourT< ComponentType >::RgbColourT()
-		: m_values()
-		, m_components()
+		: m_components()
+		, m_values()
 	{
 		for ( uint8_t i = 0; i < uint8_t( RgbComponent::eCount ); i++ )
 		{
@@ -82,8 +82,8 @@ namespace castor
 
 	template< typename ComponentType >
 	RgbColourT< ComponentType >::RgbColourT( float r, float g, float b )
-		: m_values()
-		, m_components()
+		: m_components()
+		, m_values()
 	{
 		for ( uint8_t i = 0; i < uint8_t( RgbComponent::eCount ); i++ )
 		{
@@ -107,8 +107,8 @@ namespace castor
 
 	template< typename ComponentType >
 	RgbColourT< ComponentType >::RgbColourT( RgbColourT< ComponentType > && colour )
-		:	m_values( std::move( colour.m_values ) )
-		,	m_components()
+		: m_components()
+		, m_values( std::move( colour.m_values ) )
 	{
 		for ( uint8_t i = 0; i < uint8_t( RgbComponent::eCount ); i++ )
 		{
