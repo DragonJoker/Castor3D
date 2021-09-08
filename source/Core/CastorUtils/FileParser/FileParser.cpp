@@ -277,8 +277,8 @@ namespace castor
 
 	FileParser::FileParser( LoggerInstance & logger
 		, SectionId rootSectionId )
-		: m_logger{ logger }
-		, m_rootSectionId( rootSectionId )
+		: m_rootSectionId( rootSectionId )
+		, m_logger{ logger }
 	{
 	}
 

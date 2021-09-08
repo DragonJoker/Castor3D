@@ -887,7 +887,7 @@ namespace castor
 	template< typename T, uint32_t TCount, typename CharType >
 	inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & out, Point< T, TCount > const & in )
 	{
-		if ( TCount )
+		if constexpr ( TCount != 0u )
 		{
 			out << in[0];
 

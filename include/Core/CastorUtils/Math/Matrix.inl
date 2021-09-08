@@ -2,6 +2,9 @@
 
 #include "CastorUtils/Miscellaneous/Utils.hpp"
 
+#pragma warning( push )
+#pragma warning( disable: 4582 )
+
 namespace castor
 {
 //*************************************************************************************************
@@ -27,6 +30,7 @@ namespace castor
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix< T, Columns, Rows >::Matrix( T * rhs )
+		: Matrix{ noInit }
 	{
 		std::copy( rhs, rhs + Columns * Rows, m_data.begin() );
 	}
@@ -58,7 +62,7 @@ namespace castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	template< typename Type >
 	inline Matrix< T, Columns, Rows >::Matrix( Matrix< Type, Columns, Rows > const & rhs )
-		: Matrix( noInit )
+		: Matrix{ noInit }
 	{
 		for ( size_t i = 0; i < count; i++ )
 		{
@@ -657,3 +661,5 @@ namespace castor
 		return stream;
 	}
 }
+
+#pragma warning( pop )

@@ -9,7 +9,11 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_FAILURE_USERMSG
+#pragma warning( push )
+#pragma warning( disable: 4100 )
+#pragma warning( disable: 5219 )
 #include "stb_image.h"
+#pragma warning( pop )
 
 namespace castor
 {

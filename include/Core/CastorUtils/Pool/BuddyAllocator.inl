@@ -172,9 +172,9 @@ namespace castor
 			freeList.erase( it );
 			// add lhs to lower level list.
 			auto offset = this->getOffset( lhs.data );
-			auto index = uint32_t( offset / doGetLevelSize( level - 1u ) );
+			auto newIndex = uint32_t( offset / doGetLevelSize( level - 1u ) );
 			// merge lower level.
-			doMergeLevel( lhs, index, level - 1u );
+			doMergeLevel( lhs, newIndex, level - 1u );
 		}
 		else
 		{

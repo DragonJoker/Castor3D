@@ -74,6 +74,9 @@ namespace castor
 		float m_maxCellSize{};
 		Point3f m_min;
 		Point3f m_max;
+		float m_scale{};
+		uint32_t m_level{};
+
 		Point3f m_center;
 		Point3f m_offset;
 		Point3f m_centerToMin;
@@ -81,9 +84,7 @@ namespace castor
 		Point3f m_origMin;
 		Point3f m_origMax;
 		Point3ui m_dimensions;
-		float m_scale{};
 		float m_cellSize{};
-		uint32_t m_level{};
 		Matrix4x4f m_matrix;
 	};
 }
