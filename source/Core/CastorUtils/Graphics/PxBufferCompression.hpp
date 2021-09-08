@@ -8,7 +8,12 @@ See LICENSE file in root folder
 #include "CastorUtils/Graphics/PixelComponents.hpp"
 
 #if CU_UseCVTT
+#	pragma warning( push )
+#	pragma warning( disable: 4100 )
+#	pragma warning( disable: 4242 )
+#	pragma warning( disable: 4244 )
 #	include <ConvectionKernels.h>
+#	pragma warning( pop )
 #endif
 
 namespace castor

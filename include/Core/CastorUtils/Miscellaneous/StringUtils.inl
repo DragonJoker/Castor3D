@@ -156,33 +156,33 @@ namespace castor
 					{
 						if ( firstByte & details::FourthBitMask ) // This means that the first byte has a value greater than 224, and so it must be a four-octet code point.
 						{
-							result = ( firstByte & 0x07 ) << 18;
+							result = char32_t( ( firstByte & 0x07 ) << 18 );
 							char secondByte = *( value + 1 );
-							result += ( secondByte & 0x3f ) << 12;
+							result += char32_t( ( secondByte & 0x3f ) << 12 );
 							char thirdByte = *( value + 2 );
-							result += ( thirdByte & 0x3f ) << 6;;
+							result += char32_t( ( thirdByte & 0x3f ) << 6 );
 							char fourthByte = *( value + 3 );
-							result += ( fourthByte & 0x3f );
+							result += char32_t( fourthByte & 0x3f );
 						}
 						else
 						{
-							result = ( firstByte & 0x0f ) << 12;
+							result = char32_t( ( firstByte & 0x0f ) << 12 );
 							char secondByte = *( value + 1 );
-							result += ( secondByte & 0x3f ) << 6;
+							result += char32_t( ( secondByte & 0x3f ) << 6 );
 							char thirdByte = *( value + 2 );
-							result += ( thirdByte & 0x3f );
+							result += char32_t( thirdByte & 0x3f );
 						}
 					}
 					else
 					{
-						result = ( firstByte & 0x1f ) << 6;
+						result = char32_t( ( firstByte & 0x1f ) << 6 );
 						char secondByte = *( value + 1 );
-						result += ( secondByte & 0x3f );
+						result += char32_t( secondByte & 0x3f );
 					}
 				}
 				else
 				{
-					result = firstByte;
+					result = char32_t( firstByte );
 				}
 
 				return result;

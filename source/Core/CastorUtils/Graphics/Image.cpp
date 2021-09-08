@@ -7,7 +7,10 @@
 #include "CastorUtils/Log/Logger.hpp"
 
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
+#pragma warning( push )
+#pragma warning( disable: 5219 )
 #include "stb_image_resize.h"
+#pragma warning( pop )
 
 namespace castor
 {

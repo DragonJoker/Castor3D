@@ -527,8 +527,6 @@ namespace castor
 	template< typename T, uint32_t Count >
 	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::transpose()
 	{
-		T const * buffer = my_matrix_type::constPtr();
-
 		for ( uint32_t i = 0; i < Count; i++ )
 		{
 			for ( uint32_t j = 0; j < i; j++ )

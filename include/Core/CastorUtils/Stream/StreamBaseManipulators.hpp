@@ -144,6 +144,12 @@ namespace castor
 		struct BaseNumPut
 			: std::num_put< CharType >
 		{
+			BaseNumPut() = default;
+			BaseNumPut( BaseNumPut const & ) = delete;
+			BaseNumPut & operator=( BaseNumPut const & ) = delete;
+			BaseNumPut( BaseNumPut && ) = default;
+			BaseNumPut & operator=( BaseNumPut && ) = default;
+
 			typedef typename std::num_put< CharType >::iter_type iter_type;
 			// These absVal functions are needed as std::abs doesnt support
 			// unsigned types, but the templated doPutHelper works on signed and
@@ -198,7 +204,7 @@ namespace castor
 
 				while ( tempVal != 0 )
 				{
-					digits[i++] = tempVal % base;
+					digits[i++] = int( tempVal % base );
 					tempVal /= base;
 				}
 

@@ -16,8 +16,8 @@ namespace castor
 	{
 		struct Backtrace
 		{
-			int const m_toCapture;
-			int const m_toSkip;
+			int m_toCapture;
+			int m_toSkip;
 
 			inline Backtrace( int toCapture = 20, int toSkip = 2 )
 				: m_toCapture{ toCapture }

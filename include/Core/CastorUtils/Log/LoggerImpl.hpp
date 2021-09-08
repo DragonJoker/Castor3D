@@ -18,13 +18,17 @@ namespace castor
 		CU_DeclareMap( void *, LogCallback, LoggerCallback );
 
 	public:
+		LoggerImpl( LoggerImpl const & ) = delete;
+		LoggerImpl & operator=( LoggerImpl const & ) = delete;
+		CU_API LoggerImpl( LoggerImpl && rhs );
+		CU_API LoggerImpl & operator=( LoggerImpl && rhs );
 		/**
 		 *\~english
 		 *\brief		Constructor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		explicit LoggerImpl( ProgramConsole & console
+		CU_API explicit LoggerImpl( ProgramConsole & console
 			, LogType level
 			, LoggerInstance & parent );
 		/**
@@ -37,7 +41,7 @@ namespace castor
 		 *\param[in]	callback	Le callback
 		 *\param[in]	caller		L'appelant
 		 */
-		void registerCallback( LogCallback callback, void * caller );
+		CU_API void registerCallback( LogCallback callback, void * caller );
 		/**
 		 *\~english
 		 *\brief		Unregisters a callback
@@ -46,7 +50,7 @@ namespace castor
 		 *\brief		Désenregistre un callback
 		 *\param[in]	caller	L'appelant
 		 */
-		void unregisterCallback( void * caller );
+		CU_API void unregisterCallback( void * caller );
 		/**
 		 *\~english
 		 *\brief		sets the file for given log level
@@ -57,7 +61,7 @@ namespace castor
 		 *\param[in]	logFilePath	Le chemin du fichier
 		 *\param[in]	logLevel	Le niveau de log. Si LogType::eCount, définit le fichier pour tous les niveaux
 		 */
-		void setFileName( String const & logFilePath, LogType logLevel );
+		CU_API void setFileName( String const & logFilePath, LogType logLevel );
 		/**
 		 *\~english
 		 *\brief		Prints a message to the console
@@ -70,7 +74,7 @@ namespace castor
 		 *\param[in]	message		Le message
 		 *\param[in]	newLine		Dit si le caractère de nouvelle ligne doit être ajouté
 		 */
-		void printMessage( LogType logLevel, std::string const & message, bool newLine );
+		CU_API void printMessage( LogType logLevel, std::string const & message, bool newLine );
 		/**
 		 *\~english
 		 *\brief		Prints a message to the console
@@ -83,7 +87,7 @@ namespace castor
 		 *\param[in]	message		Le message
 		 *\param[in]	newLine		Dit si le caractère de nouvelle ligne doit être ajouté
 		 */
-		void printMessage( LogType logLevel, std::wstring const & message, bool newLine );
+		CU_API void printMessage( LogType logLevel, std::wstring const & message, bool newLine );
 		/**
 		 *\~english
 		 *\brief		Logs a message queue
@@ -92,7 +96,7 @@ namespace castor
 		 *\brief		Logge une file de messages
 		 *\param[in]	queue	La file de messages
 		 */
-		void logMessageQueue( MessageQueue const & queue );
+		CU_API void logMessageQueue( MessageQueue const & queue );
 
 	private:
 		/**
