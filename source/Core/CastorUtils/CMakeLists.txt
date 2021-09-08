@@ -1,3 +1,83 @@
+if( EXISTS ${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels.h )
+	project( cvtt )
+	set( ${PROJECT_NAME}_SRC_FILES
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_API.cpp
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BC6H_IO.cpp
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BC7_PrioData.cpp
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BC67.cpp
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BCCommon.cpp
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_ETC.cpp
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_IndexSelector.cpp
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_S3TC.cpp
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_Util.cpp
+	)
+	set( ${PROJECT_NAME}_HDR_FILES
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels.h
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_AggregatedError.h
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BC6H_IO.h
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BC7_Prio.h
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BC7_SingleColor.h
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BC67.h
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BCCommon.h
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_EndpointRefiner.h
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_EndpointSelector.h
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_ETC.h
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_ETC1.h
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_ETC2.h
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_ETC2_Rounding.h
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_FakeBT709_Rounding.h
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_IndexSelector.h
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_IndexSelectorHDR.h
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_PackedCovarianceMatrix.h
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_ParallelMath.h
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_S3TC.h
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_S3TC_SingleColor.h
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_UnfinishedEndpoints.h
+		${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_Util.h
+	)
+	source_group( "Header Files" FILES ${${PROJECT_NAME}_HDR_FILES} )
+	source_group( "Source Files" FILES ${${PROJECT_NAME}_SRC_FILES} )
+	add_target_min(
+		${PROJECT_NAME}
+		lib
+	)
+	add_library( castor::${PROJECT_NAME}
+		ALIAS
+		${PROJECT_NAME}
+	)
+	target_compile_definitions( ${PROJECT_NAME}
+		PUBLIC
+			CU_UseCVTT
+		PRIVATE
+			${${PROJECT_NAME}_DEFINITIONS}
+	)
+	if ( MSVC )
+		target_compile_options( ${PROJECT_NAME}
+			PRIVATE
+				/wd4189
+				/wd4242
+				/wd4244
+				/wd4365
+				/wd4456
+		)
+	endif ()
+	target_include_directories( ${PROJECT_NAME}
+		PUBLIC
+			${EXTERNAL_SOURCE_DIR}/cvtt
+	)
+	install_target_ex( ${PROJECT_NAME}
+		Castor3D
+		lib
+		${CASTOR_SOURCE_DIR}/include/Core/CastorUtils/${PROJECT_NAME}
+	)
+	set_target_properties( ${PROJECT_NAME}
+		PROPERTIES
+			CXX_STANDARD 17
+			CXX_EXTENSIONS OFF
+			FOLDER "Core/${MAIN_PROJECT_NAME}"
+	)
+endif ()
+
 project( CastorUtils )
 
 include( Doxygen )
@@ -421,58 +501,6 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	source_group( "Source Files\\Graphics" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 	source_group( "Source Files\\Enum" FILES ${${PROJECT_NAME}_FOLDER_ENM_FILES} )
 
-	if( EXISTS ${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels.h )
-		set( ${PROJECT_NAME}_DEFINITIONS
-			${${PROJECT_NAME}_DEFINITIONS}
-			CU_UseCVTT
-		)
-		set( ${PROJECT_NAME}_FOLDER_SRC_FILES
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_API.cpp
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BC6H_IO.cpp
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BC7_PrioData.cpp
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BC67.cpp
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BCCommon.cpp
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_ETC.cpp
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_IndexSelector.cpp
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_S3TC.cpp
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_Util.cpp
-		)
-		set( ${PROJECT_NAME}_FOLDER_HDR_FILES
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels.h
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_AggregatedError.h
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BC6H_IO.h
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BC7_Prio.h
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BC7_SingleColor.h
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BC67.h
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_BCCommon.h
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_EndpointRefiner.h
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_EndpointSelector.h
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_ETC.h
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_ETC1.h
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_ETC2.h
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_ETC2_Rounding.h
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_FakeBT709_Rounding.h
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_IndexSelector.h
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_IndexSelectorHDR.h
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_PackedCovarianceMatrix.h
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_ParallelMath.h
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_S3TC.h
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_S3TC_SingleColor.h
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_UnfinishedEndpoints.h
-			${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels_Util.h
-		)
-		set( ${PROJECT_NAME}_SRC_FILES
-			${${PROJECT_NAME}_SRC_FILES}
-			${${PROJECT_NAME}_FOLDER_SRC_FILES}
-		)
-		set( ${PROJECT_NAME}_HDR_FILES
-			${${PROJECT_NAME}_HDR_FILES}
-			${${PROJECT_NAME}_FOLDER_HDR_FILES}
-		)
-		source_group( "Header Files\\Graphics\\CVTT" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
-		source_group( "Source Files\\Graphics\\CVTT" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
-	endif ()
-
 	set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Log/Logger.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Log/LoggerConsole.cpp
@@ -744,7 +772,12 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 			${Freetype_LIBRARIES}
 			ZLIB::ZLIB
 	)
-
+	if( EXISTS ${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels.h )
+		target_link_libraries( ${PROJECT_NAME}
+			PRIVATE
+				castor::cvtt
+		)
+	endif ()
 	if ( WIN32 )
 		target_link_libraries( ${PROJECT_NAME}
 			PUBLIC

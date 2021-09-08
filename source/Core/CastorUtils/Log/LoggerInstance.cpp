@@ -7,6 +7,37 @@
 
 namespace castor
 {
+	LoggerInstance::LoggerInstance( LoggerInstance && rhs )
+		: m_logLevel{ std::move( rhs.m_logLevel ) }
+		, m_impl{ std::move( rhs.m_impl ) }
+		, m_headers{ std::move( rhs.m_headers ) }
+		, m_queue{ std::move( rhs.m_queue ) }
+		, m_logThread{ std::move( rhs.m_logThread ) }
+		, m_initialised{ rhs.m_initialised.load() }
+		, m_stopped{ rhs.m_stopped.load() }
+		, m_threadEnded{ rhs.m_threadEnded.load() }
+	{
+		rhs.m_initialised = false;
+		rhs.m_stopped = false;
+		rhs.m_threadEnded = false;
+	}
+
+	LoggerInstance & LoggerInstance::operator=( LoggerInstance && rhs )
+	{
+		m_logLevel = std::move( rhs.m_logLevel );
+		m_impl = std::move( rhs.m_impl );
+		m_headers = std::move( rhs.m_headers );
+		m_queue = std::move( rhs.m_queue );
+		m_logThread = std::move( rhs.m_logThread );
+		m_initialised = rhs.m_initialised.load();
+		m_stopped = rhs.m_stopped.load();
+		m_threadEnded = rhs.m_threadEnded.load();
+		rhs.m_initialised = false;
+		rhs.m_stopped = false;
+		rhs.m_threadEnded = false;
+		return *this;
+	}
+
 	LoggerInstance::~LoggerInstance()
 	{
 		doCleanupThread();

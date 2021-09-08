@@ -159,8 +159,8 @@ namespace castor
 
 	template< typename ComponentType >
 	RgbaColourT< ComponentType >::RgbaColourT()
-		: m_arrayValues()
-		, m_arrayComponents()
+		: m_arrayComponents()
+		, m_arrayValues()
 	{
 		for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
 		{
@@ -170,8 +170,8 @@ namespace castor
 
 	template< typename ComponentType >
 	RgbaColourT< ComponentType >::RgbaColourT( float r, float g, float b, float a )
-		: m_arrayValues()
-		, m_arrayComponents()
+		: m_arrayComponents()
+		, m_arrayValues()
 	{
 		for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
 		{
@@ -196,8 +196,8 @@ namespace castor
 
 	template< typename ComponentType >
 	RgbaColourT< ComponentType >::RgbaColourT( RgbaColourT< ComponentType > && colour )
-		:	m_arrayValues( std::move( colour.m_arrayValues ) )
-		,	m_arrayComponents()
+		: m_arrayComponents()
+		, m_arrayValues( std::move( colour.m_arrayValues ) )
 	{
 		for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
 		{
@@ -440,7 +440,7 @@ namespace castor
 	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromHSB( float hue, float saturation, float brightness )
 	{
 		float h = hue == 1.0f ? 0 : hue * 6.0f;
-		float f = h - ( int )h;
+		float f = h - std::floor( h );
 		float p = brightness * ( 1.0f - saturation );
 		float q = brightness * ( 1.0f - saturation * f );
 		float t = brightness * ( 1.0f - ( saturation * ( 1.0f - f ) ) );

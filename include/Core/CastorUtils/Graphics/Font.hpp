@@ -54,7 +54,8 @@ namespace castor
 			CU_API bool operator()( Font & font, Path const & path, uint32_t height );
 
 		private:
-			CU_API bool operator()( Font & font, Path const & path );
+			using castor::BinaryLoader< Font >::operator();
+			bool doLoad( Font & font, Path const & path );
 
 		private:
 			//!\~english	Font wanted height.
@@ -280,7 +281,7 @@ namespace castor
 		 */
 		uint32_t getMaxHeight()const
 		{
-			return m_maxHeight;
+			return uint32_t( m_maxHeight );
 		}
 		/**
 		 *\~english
@@ -292,7 +293,7 @@ namespace castor
 		 */
 		uint32_t getMaxWidth()const
 		{
-			return m_maxWidth;
+			return uint32_t( m_maxWidth );
 		}
 		/**
 		 *\~english
@@ -304,7 +305,7 @@ namespace castor
 		 */
 		void setMaxHeight( uint32_t value )
 		{
-			m_maxHeight = value;
+			m_maxHeight = int( value );
 		}
 		/**
 		 *\~english
@@ -316,7 +317,7 @@ namespace castor
 		 */
 		void setMaxWidth( uint32_t value )
 		{
-			m_maxWidth = value;
+			m_maxWidth = int( value );
 		}
 		/**
 		 *\~english

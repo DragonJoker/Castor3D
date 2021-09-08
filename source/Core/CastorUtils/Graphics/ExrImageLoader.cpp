@@ -5,7 +5,10 @@
 #include "CastorUtils/Graphics/PixelBuffer.hpp"
 
 #define TINYEXR_IMPLEMENTATION
+#pragma warning( push )
+#pragma warning( disable: 4242 )
 #include "tinyexr.h"
+#pragma warning( pop )
 
 namespace castor
 {
@@ -22,8 +25,8 @@ namespace castor
 				uint8_t b;
 				uint8_t a;
 			};
-			int width = pixelBuffer->getWidth();
-			int height = pixelBuffer->getHeight();
+			auto width = int( pixelBuffer->getWidth() );
+			auto height = int( pixelBuffer->getHeight() );
 			auto buffer = reinterpret_cast< Pixel * >( pixelBuffer->getPtr() );
 
 			for ( int y = 0; y < height; ++y )
@@ -85,7 +88,7 @@ namespace castor
 
 			PixelFormat format;
 			format = PixelFormat::eR32G32B32A32_SFLOAT;
-			result = PxBufferBase::create( Size( w, h )
+			result = PxBufferBase::create( Size{ uint32_t( w ), uint32_t( h ) }
 				, format
 				, reinterpret_cast< uint8_t * >( data )
 				, format );
