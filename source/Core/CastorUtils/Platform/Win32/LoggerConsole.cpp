@@ -225,7 +225,7 @@ namespace castor
 
 	//************************************************************************************************
 
-	ProgramConsole::ProgramConsole( bool CU_UnusedParam( showConsole ) )
+	ProgramConsole::ProgramConsole( bool showConsole )
 	{
 #if defined( NDEBUG )
 		m_console = std::make_unique< ReleaseConsole >( showConsole );
