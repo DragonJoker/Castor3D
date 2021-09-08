@@ -7,7 +7,10 @@
 
 #include <ashes/common/Format.hpp>
 
+#pragma warning( push )
+#pragma warning( disable: 5219 )
 #include "stb_image_resize.h"
+#pragma warning( pop )
 
 namespace castor
 {
@@ -386,9 +389,9 @@ namespace castor
 
 	uint32_t PxBufferConvertOptions::getAdditionalAlign( PixelFormat format )const
 	{
+#if CU_UseCVTT
 		switch ( format )
 		{
-#if CU_UseCVTT
 		case castor::PixelFormat::eBC1_RGB_UNORM_BLOCK:
 		case castor::PixelFormat::eBC1_RGB_SRGB_BLOCK:
 		case castor::PixelFormat::eBC1_RGBA_UNORM_BLOCK:
@@ -412,10 +415,12 @@ namespace castor
 		case castor::PixelFormat::eETC2_R8G8B8A8_UNORM_BLOCK:
 		case castor::PixelFormat::eETC2_R8G8B8A8_SRGB_BLOCK:
 			return uint32_t( cvtt::NumParallelBlocks * getBytesPerPixel( format ) );
-#endif
 		default:
 			return 1u;
 		}
+#else
+		return 1u;
+#endif
 	}
 
 	//*********************************************************************************************
@@ -457,11 +462,11 @@ namespace castor
 
 	PxBufferBase::PxBufferBase( PxBufferBase const & rhs )
 		: m_format{ rhs.m_format }
+		, m_flipped{ rhs.m_flipped }
 		, m_size{ rhs.m_size }
 		, m_layers{ rhs.m_layers }
 		, m_levels{ rhs.m_levels }
 		, m_buffer{ 0 }
-		, m_flipped{ rhs.m_flipped }
 	{
 		initialise( rhs.getConstPtr(), rhs.getFormat(), rhs.getAlign() );
 	}

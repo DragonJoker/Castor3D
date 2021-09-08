@@ -11,6 +11,11 @@ namespace castor
 	class Logger
 	{
 	private:
+		Logger( Logger const & ) = delete;
+		Logger & operator=( Logger const & ) = delete;
+		Logger( Logger && rhs ) = delete;
+		Logger & operator=( Logger && rhs ) = delete;
+
 		/**
 		 *\~english
 		 *\brief		Constructor

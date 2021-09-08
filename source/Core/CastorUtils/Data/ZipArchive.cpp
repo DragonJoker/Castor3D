@@ -289,7 +289,7 @@ namespace castor
 
 							if ( error > 0 )
 							{
-								file.writeArray( buffer.data(), error );
+								file.writeArray( buffer.data(), uint64_t( error ) );
 							}
 						}
 						while ( error > 0 );
@@ -349,18 +349,18 @@ namespace castor
 					}
 
 					file.seekg( 0, std::ios::end );
-					long size = long( file.tellg() );
+					auto size = size_t( file.tellg() );
 					file.seekg( 0, std::ios::beg );
 
 					std::vector< char > buffer( size );
 
-					if ( size == 0 || file.read( buffer.data(), size ) )
+					if ( size == 0 || file.read( buffer.data(), std::streamsize( size ) ) )
 					{
 						zip_fileinfo zfi{ 0 };
 
 						if ( UNZ_OK == zipOpenNewFileInZip( m_zip, filePath.c_str(), &zfi, NULL, 0, NULL, 0, NULL, Z_DEFLATED, Z_DEFAULT_COMPRESSION ) )
 						{
-							zipWriteInFileInZip( m_zip, size == 0 ? "" : buffer.data(), size );
+							zipWriteInFileInZip( m_zip, size == 0 ? "" : buffer.data(), unsigned( size ) );
 							zipCloseFileInZip( m_zip );
 						}
 					}

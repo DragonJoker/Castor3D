@@ -305,12 +305,12 @@ namespace castor
 
 		PixelData getAt( Position const & position )
 		{
-			return getAt( position.x(), position.y() );
+			return getAt( uint32_t( position.x() ), uint32_t( position.y() ) );
 		}
 
 		ConstPixelData getAt( Position const & position )const
 		{
-			return getAt( position.x(), position.y() );
+			return getAt( uint32_t( position.x() ), uint32_t( position.y() ) );
 		}
 		/**@}*/
 		/**

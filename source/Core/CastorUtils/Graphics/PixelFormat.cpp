@@ -701,7 +701,7 @@ namespace castor
 				case PixelFormat::eBC1_RGB_UNORM_BLOCK:
 				case PixelFormat::eBC1_RGB_SRGB_BLOCK:
 					{
-						BC1Compressor compressor{ getBytesPerPixel( PFSrc )
+						BC1Compressor compressor{ uint32_t( getBytesPerPixel( PFSrc ) )
 							, getR8U< PFSrc >
 							, getG8U< PFSrc >
 							, getB8U< PFSrc >
@@ -717,7 +717,7 @@ namespace castor
 				case PixelFormat::eBC3_UNORM_BLOCK:
 				case PixelFormat::eBC3_SRGB_BLOCK:
 					{
-						BC3Compressor compressor{ getBytesPerPixel( PFSrc )
+						BC3Compressor compressor{ uint32_t( getBytesPerPixel( PFSrc ) )
 							, getR8U< PFSrc >
 							, getG8U< PFSrc >
 							, getB8U< PFSrc >

@@ -16,9 +16,18 @@ namespace castor
 		{
 			struct stSCREEN
 			{
-				uint32_t m_wanted;
-				uint32_t m_current;
-				castor::Size & m_size;
+				stSCREEN( uint32_t wanted
+					, uint32_t current
+					, castor::Size & size )
+					: wanted{ wanted }
+					, current{ current }
+					, size{ size }
+				{
+				}
+
+				uint32_t wanted;
+				uint32_t current;
+				castor::Size & size;
 			};
 
 			BOOL CALLBACK MonitorEnum( HMONITOR CU_UnusedParam( hMonitor )
@@ -28,9 +37,9 @@ namespace castor
 			{
 				stSCREEN * screen = reinterpret_cast< stSCREEN * >( dwData );
 
-				if ( screen && screen->m_current++ == screen->m_wanted )
+				if ( screen && screen->current++ == screen->wanted )
 				{
-					screen->m_size.set( lprcMonitor->right - lprcMonitor->left, lprcMonitor->bottom - lprcMonitor->top );
+					screen->size.set( lprcMonitor->right - lprcMonitor->left, lprcMonitor->bottom - lprcMonitor->top );
 				}
 
 				return FALSE;
@@ -39,7 +48,7 @@ namespace castor
 
 		bool getScreenSize( uint32_t index, Size & size )
 		{
-			stSCREEN screen = { index, 0, size };
+			stSCREEN screen{ index, 0, size };
 			BOOL bRet = ::EnumDisplayMonitors( nullptr, nullptr, MonitorEnum, WPARAM( &screen ) );
 			return bRet != FALSE;
 		}

@@ -10,6 +10,16 @@
 
 #if defined( _WIN32 )
 
+#pragma warning( disable: 4100 )
+#pragma warning( disable: 4131 )
+#pragma warning( disable: 4189 )
+#pragma warning( disable: 4242 )
+#pragma warning( disable: 4244 )
+#pragma warning( disable: 4245 )
+#pragma warning( disable: 4255 )
+#pragma warning( disable: 4456 )
+#pragma warning( disable: 4701 )
+
 #include "zlib.h"
 #include "ioapi.h"
 #include "iowin32.h"

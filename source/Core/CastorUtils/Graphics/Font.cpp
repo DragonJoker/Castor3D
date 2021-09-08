@@ -85,9 +85,9 @@ namespace castor
 				{ 0x0B01, "Invalid post table" },
 			};
 
-			bool result = true;
+			bool result = p_error == 0;
 
-			if ( p_error != 0 )
+			if ( !result )
 			{
 				std::map< FT_Error, std::string >::const_iterator it = MapErrors.find( p_error );
 				std::string error = "ERROR : " + std::string( p_name ) + " failed - " + string::stringCast< char >( string::toString( p_error ) );
@@ -98,7 +98,6 @@ namespace castor
 				}
 
 				CU_LoaderError( error );
-				result = false;
 			}
 
 			return result;
@@ -108,8 +107,8 @@ namespace castor
 			: public Font::SFontImpl
 		{
 			SFreeTypeFontImpl( Path const & p_pathFile, uint32_t p_height )
-				: m_height{ p_height }
-				, m_path{ p_pathFile }
+				: m_path{ p_pathFile }
+				, m_height{ p_height }
 			{
 			}
 
@@ -143,7 +142,7 @@ namespace castor
 				CHECK_FT_ERR( FT_Glyph_To_Bitmap, &glyph, FT_RENDER_MODE_NORMAL, 0, 1 );
 				FT_BitmapGlyph const bmpGlyph = FT_BitmapGlyph( glyph );
 				FT_Bitmap const & bitmap = bmpGlyph->bitmap;
-				uint32_t const pitch( std::abs( bitmap.pitch ) );
+				auto const pitch( uint32_t( std::abs( bitmap.pitch ) ) );
 				Size const size{ pitch, uint32_t( bitmap.rows ) };
 				Position const bearing{ bmpGlyph->left, bmpGlyph->top };
 				ByteArray buffer( size.getWidth() * size.getHeight() );
@@ -200,10 +199,10 @@ namespace castor
 	bool Font::BinaryLoader::operator()( Font & p_font, Path const & p_pathFile, uint32_t p_height )
 	{
 		m_height = p_height;
-		return operator()( p_font, p_pathFile );
+		return doLoad( p_font, p_pathFile );
 	}
 
-	bool Font::BinaryLoader::operator()( Font & p_font, Path const & p_pathFile )
+	bool Font::BinaryLoader::doLoad( Font & p_font, Path const & p_pathFile )
 	{
 		bool result = false;
 
@@ -230,8 +229,8 @@ namespace castor
 				{
 					char tmp[] { char( c ), 0, 0, 0 };
 					Glyph const & glyph = p_font.doLoadGlyph( string::utf8::toUtf8( tmp ) );
-					maxHeight = std::max< int >( maxHeight, glyph.getSize().getHeight() );
-					maxWidth = std::max< int >( maxWidth, glyph.getAdvance() );
+					maxHeight = std::max( maxHeight, glyph.getSize().getHeight() );
+					maxWidth = std::max( maxWidth, glyph.getAdvance() );
 				}
 
 				p_font.getGlyphLoader().cleanup();
@@ -262,11 +261,11 @@ namespace castor
 	Font::Font( String const & name, uint32_t height, Path const & path )
 		: Named{ name }
 		, m_height{ height }
+		, m_pathFile{ path }
 		, m_maxHeight{ 0 }
 		, m_maxTop{ 0 }
 		, m_maxWidth{ 0 }
 		, m_glyphLoader{ std::make_unique< ft::SFreeTypeFontImpl >( path, height ) }
-		, m_pathFile{ path }
 	{
 		BinaryLoader{}( *this, path, height );
 	}
