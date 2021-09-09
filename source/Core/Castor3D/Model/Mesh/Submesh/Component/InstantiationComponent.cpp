@@ -134,9 +134,9 @@ namespace castor3d
 
 			if ( !doCheckInstanced( data.count ) )
 			{
-				for ( auto & data : datas )
+				for ( auto & resdata : datas )
 				{
-					data.buffer.reset();
+					resdata.buffer.reset();
 				}
 			}
 		}

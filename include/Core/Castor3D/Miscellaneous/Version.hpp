@@ -83,15 +83,9 @@ namespace castor3d
 		}
 
 	private:
-		//!~english		The major version number.
-		//!~french		Le numéro majeur.
-		int m_major;
-		//!~english		The minor version number.
-		//!~french		Le numéro mineur.
-		int m_minor;
-		//!~english		The build version number.
-		//!~french		Le numéro de build.
-		int m_build;
+		uint16_t m_major;
+		uint16_t m_minor;
+		uint16_t m_build;
 	};
 	/**
 	 *\~english

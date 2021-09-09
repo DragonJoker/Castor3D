@@ -25,8 +25,8 @@ namespace castor
 			{
 				result = write( file, "looped", group.looped )
 					&& writeOpt( file, "scale", group.scale, 1.0f )
-					&& writeOpt( file, "start_at", group.startingPoint.count() / 1000.0, 0.0 )
-					&& writeOpt( file, "stop_at", group.stoppingPoint.count() / 1000.0, 0.0 );
+					&& writeOpt( file, "start_at", double( group.startingPoint.count() ) / 1000.0, 0.0 )
+					&& writeOpt( file, "stop_at", double( group.stoppingPoint.count() ) / 1000.0, 0.0 );
 			}
 
 			return result;

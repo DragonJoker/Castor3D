@@ -17,9 +17,9 @@ namespace castor
 		bool result = false;
 		bool hasFile = false;
 
-		for ( auto file : shaderProgram.m_files )
+		for ( auto shaderFile : shaderProgram.m_files )
 		{
-			hasFile |= !file.second.empty();
+			hasFile |= !shaderFile.second.empty();
 		}
 
 		if ( hasFile )

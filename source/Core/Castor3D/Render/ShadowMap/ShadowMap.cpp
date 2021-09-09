@@ -185,14 +185,14 @@ namespace castor3d
 		{
 			[]()
 			{
-				ashes::VkClearValueArray result;
+				ashes::VkClearValueArray tmp;
 
 				for ( uint32_t i = 0u; i < uint32_t( SmTexture::eCount ); ++i )
 				{
-					result.push_back( getClearValue( SmTexture( i ) ) );
+					tmp.push_back( getClearValue( SmTexture( i ) ) );
 				}
 
-				return result;
+				return tmp;
 			}()
 		};
 		return result;

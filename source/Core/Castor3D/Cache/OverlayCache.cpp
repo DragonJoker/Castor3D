@@ -64,8 +64,8 @@ namespace castor
 			}
 			, castor::ResourceMergerT< OverlayCache >{ "_" } }
 		, m_engine{ engine }
-		, m_overlayCountPerLevel{ 1000, 0 }
 		, m_viewport{ engine }
+		, m_overlayCountPerLevel{ 1000, 0 }
 	{
 		m_viewport.setOrtho( 0, 1, 1, 0, 0, 1000 );
 	}

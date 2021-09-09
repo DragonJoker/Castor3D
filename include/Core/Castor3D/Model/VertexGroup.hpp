@@ -11,27 +11,27 @@ namespace castor3d
 	template< typename T >
 	struct InterleavedVertexT
 	{
-		InterleavedVertexT & position( castor::Point3< T > const & pos )
+		InterleavedVertexT & position( castor::Point3< T > const & val )
 		{
-			this->pos = pos;
+			pos = val;
 			return *this;
 		}
 
-		InterleavedVertexT & normal( castor::Point3< T > const & nml )
+		InterleavedVertexT & normal( castor::Point3< T > const & val )
 		{
-			this->nml = nml;
+			nml = val;
 			return *this;
 		}
 
-		InterleavedVertexT & texcoord( castor::Point2< T > const & tex )
+		InterleavedVertexT & texcoord( castor::Point2< T > const & val )
 		{
-			this->tex = castor::Point3< T >{ tex };
+			tex = castor::Point3< T >{ val };
 			return *this;
 		}
 
-		InterleavedVertexT & texcoord( castor::Point3< T > const & tex )
+		InterleavedVertexT & texcoord( castor::Point3< T > const & val )
 		{
-			this->tex = tex;
+			tex = val;
 			return *this;
 		}
 

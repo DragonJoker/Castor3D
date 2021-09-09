@@ -163,13 +163,13 @@ namespace castor3d
 		, m_renderQueue{ castor::makeUnique< RenderQueue >( *this, desc.m_mode, desc.m_ignored ) }
 		, m_category{ category }
 		, m_size{ desc.m_size.width, desc.m_size.height }
+		, m_mode{ desc.m_mode }
 		, m_oit{ desc.m_oit }
 		, m_forceTwoSided{ desc.m_forceTwoSided }
-		, m_mode{ desc.m_mode }
+		, m_safeBand{ desc.m_safeBand }
 		, m_sceneUbo{ m_device }
 		, m_index{ desc.m_index }
 		, m_instanceMult{ desc.m_instanceMult }
-		, m_safeBand{ desc.m_safeBand }
 	{
 		m_sceneUbo.setWindowSize( m_size );
 		m_culler.getScene().getGeometryCache().registerPass( *this );
@@ -481,7 +481,6 @@ namespace castor3d
 		, BillboardRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		auto & layout = descriptorPool.getLayout();
 		auto descriptorSet = descriptorPool.createDescriptorSet( getName() + "_BillboardAdd"
 			, RenderPipeline::eAdditional );
 		ashes::WriteDescriptorSetArray descriptorWrites;
@@ -501,7 +500,6 @@ namespace castor3d
 		, SubmeshRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		auto & layout = descriptorPool.getLayout();
 		auto descriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Add"
 			, RenderPipeline::eAdditional );
 		ashes::WriteDescriptorSetArray descriptorWrites;
@@ -753,8 +751,8 @@ namespace castor3d
 	{
 		auto & camera = *updater.camera;
 		auto jitterProjSpace = updater.jitter * 2.0f;
-		jitterProjSpace[0] /= camera.getWidth();
-		jitterProjSpace[1] /= camera.getHeight();
+		jitterProjSpace[0] /= float( camera.getWidth() );
+		jitterProjSpace[1] /= float( camera.getHeight() );
 		m_matrixUbo.cpuUpdate( camera.getView()
 			, camera.getProjection( m_safeBand != 0u )
 			, jitterProjSpace );

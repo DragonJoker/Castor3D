@@ -142,8 +142,6 @@ namespace castor3d
 		: lastLightPass{ &previousPass }
 		, lastGeomPass{ &previousPass }
 	{
-		auto & engine = *device.renderSystem.getEngine();
-
 		for ( uint32_t cascade = 0u; cascade < CascadeCount; ++cascade )
 		{
 			lpvLightConfigUbos.emplace_back( device );
@@ -313,10 +311,10 @@ namespace castor3d
 		, m_device{ device }
 		, m_smResult{ smResult }
 		, m_lpvResult{ lpvResult }
-		, m_lightType{ lightType }
 		, m_lpvGridConfigUbo{ lpvGridConfigUbo }
 		, m_geometryVolumes{ geometryVolumes }
 		, m_graph{ handler, getName() }
+		, m_lightType{ lightType }
 		, m_injection{ createInjection( handler, m_device, getName(), m_scene.getLpvGridSize(), CascadeCount ) }
 		, m_geometry{ createGeometry( handler, m_device, getName(), m_scene.getLpvGridSize(), CascadeCount, m_geometryVolumes ) }
 		, m_propagate{ createPropagation( handler, m_device, getName(), m_scene.getLpvGridSize(), CascadeCount ) }
@@ -440,7 +438,7 @@ namespace castor3d
 			m_cameraDir = camDir;
 			auto cellSize = std::max( std::max( m_aabb.getDimensions()->x
 				, m_aabb.getDimensions()->y )
-				, m_aabb.getDimensions()->z ) / m_scene.getLpvGridSize();
+				, m_aabb.getDimensions()->z ) / float( m_scene.getLpvGridSize() );
 			castor::Grid grid{ m_scene.getLpvGridSize(), cellSize, m_aabb.getMax(), m_aabb.getMin(), 1.0f, 0 };
 			std::array< float, CascadeCount > const scales{ 1.0f, 0.65f, 0.4f };
 

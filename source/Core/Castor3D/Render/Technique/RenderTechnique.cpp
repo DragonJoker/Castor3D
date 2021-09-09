@@ -588,8 +588,8 @@ namespace castor3d
 
 		auto jitter = m_renderTarget.getJitter();
 		auto jitterProjSpace = jitter * 2.0f;
-		jitterProjSpace[0] /= camera.getWidth();
-		jitterProjSpace[1] /= camera.getHeight();
+		jitterProjSpace[0] /= float( camera.getWidth() );
+		jitterProjSpace[1] /= float( camera.getHeight() );
 		m_matrixUbo.cpuUpdate( camera.getView()
 			, camera.getProjection( true )
 			, jitterProjSpace );
@@ -607,7 +607,6 @@ namespace castor3d
 		}
 
 		auto & scene = *m_renderTarget.getScene();
-		auto & camera = *m_renderTarget.getCamera();
 		updater.voxelConeTracing = scene.getVoxelConeTracingConfig().enabled;
 
 		doInitialiseLpv();
@@ -933,7 +932,6 @@ namespace castor3d
 
 	void RenderTechnique::doInitialiseLpv()
 	{
-		auto & graph = m_renderTarget.getGraph();
 		auto & scene = *m_renderTarget.getScene();
 
 		for ( auto i = uint32_t( LightType::eMin ); i < uint32_t( LightType::eCount ); ++i )

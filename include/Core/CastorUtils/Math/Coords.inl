@@ -502,7 +502,7 @@ namespace castor
 	template< typename T, uint32_t Count, typename CharType >
 	inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & out, Coords< T, Count > const & in )
 	{
-		if ( Count )
+		if constexpr ( Count != 0 )
 		{
 			out << in[0];
 

@@ -20,9 +20,9 @@ namespace castor3d
 		: OwnedBy< Engine >{ engine }
 		, m_name{ name }
 		, m_parent{ parent }
+		, m_category{ engine.getOverlayCache().getFactory().create( type ) }
 		, m_scene{ scene }
 		, m_renderSystem{ engine.getRenderSystem() }
-		, m_category{ engine.getOverlayCache().getFactory().create( type ) }
 	{
 		m_category->setOverlay( this );
 	}

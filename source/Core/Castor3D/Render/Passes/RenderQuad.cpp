@@ -137,11 +137,11 @@ namespace castor3d
 			{
 				static rq::BindingDescriptionArray const result = rq::BindingDescriptionArray{ []()
 					{
-						rq::BindingDescriptionArray result
+						rq::BindingDescriptionArray tmp
 						{
 							{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
 						};
-						return result;
+						return tmp;
 				}( ) };
 				return result;
 			}
@@ -154,8 +154,8 @@ namespace castor3d
 			{
 				static IntermediateView const result = IntermediateView{ []()
 					{
-						IntermediateView result{};
-						return result;
+						IntermediateView tmp{};
+						return tmp;
 				}( ) };
 				return result;
 			}
@@ -209,8 +209,8 @@ namespace castor3d
 		, m_pipeline{ std::move( rhs.m_pipeline ) }
 		, m_descriptorSetPool{ std::move( rhs.m_descriptorSetPool ) }
 		, m_passes{ std::move( rhs.m_passes ) }
-		, m_invertY{ std::move( rhs.m_invertY ) }
 		, m_descriptorSets{ std::move( rhs.m_descriptorSets ) }
+		, m_invertY{ std::move( rhs.m_invertY ) }
 		, m_vertexBuffer{ std::move( rhs.m_vertexBuffer ) }
 		, m_uvInvVertexBuffer{ std::move( rhs.m_uvInvVertexBuffer ) }
 	{

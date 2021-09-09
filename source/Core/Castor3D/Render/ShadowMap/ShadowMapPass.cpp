@@ -31,7 +31,6 @@ namespace castor3d
 			, ShadowMapUbo const & shadowMapUbo )
 		{
 			auto index = uint32_t( PassUboIdx::eCount );
-			auto & flags = pipeline.getFlags();
 			descriptorWrites.push_back( scene.getLightCache().getDescriptorWrite( index++ ) );
 			descriptorWrites.push_back( shadowMapUbo.getDescriptorWrite( index++ ) );
 		}

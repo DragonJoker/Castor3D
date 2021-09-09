@@ -101,11 +101,11 @@ namespace castor3d
 
 		if ( instIt != m_instances.end() )
 		{
-			auto it = instIt->second.find( renderPass );
+			auto rendIt = instIt->second.find( renderPass );
 
-			if ( it != instIt->second.end() )
+			if ( rendIt != instIt->second.end() )
 			{
-				instIt->second.erase( it );
+				instIt->second.erase( rendIt );
 			}
 
 			if ( instIt->second.empty() )
@@ -122,12 +122,12 @@ namespace castor3d
 
 					if ( it != m_entries.end() )
 					{
-						auto entry = it->second;
+						auto entrySave = it->second;
 						m_entries.erase( it );
 
-						if ( entry.modelInstancesUbo )
+						if ( entrySave.modelInstancesUbo )
 						{
-							uboPools.putBuffer( entry.modelInstancesUbo );
+							uboPools.putBuffer( entrySave.modelInstancesUbo );
 						}
 					}
 				}

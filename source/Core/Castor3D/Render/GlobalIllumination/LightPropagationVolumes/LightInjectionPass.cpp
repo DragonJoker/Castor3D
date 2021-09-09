@@ -52,7 +52,7 @@ namespace castor3d
 			using namespace sdw;
 			VertexWriter writer;
 
-			if ( shader::DirectionalMaxCascadesCount > 1u )
+			if constexpr ( shader::DirectionalMaxCascadesCount > 1u )
 			{
 				auto inPosition = writer.declInput< Vec2 >( "inPosition", 0u );
 #if C3D_UseTiledDirectionalShadowMap
@@ -473,8 +473,8 @@ namespace castor3d
 		, crg::RunnableGraph & graph
 		, crg::pp::Config config
 		, uint32_t lpvSize )
-		: m_holder{ pass, context, graph, std::move( config ), VK_PIPELINE_BIND_POINT_GRAPHICS, 1u }
-		, m_lpvSize{ lpvSize }
+		: m_lpvSize{ lpvSize }
+		, m_holder{ pass, context, graph, std::move( config ), VK_PIPELINE_BIND_POINT_GRAPHICS, 1u }
 	{
 	}
 
