@@ -65,31 +65,13 @@ jobs:
       shell: bash
       run: $VCPKG_ROOT/vcpkg install assimp:${{ matrix.os[1] }}
 
-    - name: Checkout submodules (Linux)
-      if: runner.os == 'Linux'
+    - name: Checkout submodules
       run: |
         git submodule update --init -- "CMake"
         git submodule update --init --recursive -- "external/Ashes"
         git submodule update --init -- "external/ShaderWriter"
         git submodule update --init -- "external/RenderGraph"
         git submodule update --init -- "external/cvtt"
-
-    - name: Checkout submodules (Windows)
-      if: runner.os == 'Windows'
-      run: |
-        git submodule update --init -- "CMake"
-        git submodule update --init --recursive -- "external/Ashes"
-        git submodule update --init -- "external/ShaderWriter"
-        git submodule update --init -- "external/RenderGraph"
-        git submodule update --init -- "external/cvtt"
-
-    - name: Checkout submodules (MacOS)
-      if: runner.os == 'macOS'
-      run: |
-        git submodule update --init -- "CMake"
-        git submodule update --init --recursive -- "external/Ashes"
-        git submodule update --init -- "external/ShaderWriter"
-        git submodule update --init -- "external/RenderGraph"
 
     - name: Checkout dependencies submodule (Windows)
       if: runner.os == 'Windows'
