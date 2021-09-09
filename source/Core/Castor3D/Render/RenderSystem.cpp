@@ -33,6 +33,8 @@
 
 CU_ImplementCUSmartPtr( castor3d, RenderSystem )
 
+#pragma warning( disable: 4191 ) // Unsafe conversion from 'PFN_vkVoidFunction' to 'PFN_vkAnyOtherFunction'
+
 namespace castor3d
 {
 	//*************************************************************************
@@ -513,13 +515,13 @@ namespace castor3d
 		m_gpuInformations.setVendor( vendors[properties.vendorID] );
 		m_gpuInformations.setRenderer( properties.deviceName );
 		m_gpuInformations.setVersion( stream.str() );
-		m_gpuInformations.updateFeature( castor3d::GpuFeature::eShaderStorageBuffers, m_desc.features.hasStorageBuffers );
+		m_gpuInformations.updateFeature( castor3d::GpuFeature::eShaderStorageBuffers, m_desc.features.hasStorageBuffers != 0 );
 		m_gpuInformations.updateFeature( castor3d::GpuFeature::eStereoRendering, limits.maxViewports > 1u );
 
-		m_gpuInformations.useShaderType( VK_SHADER_STAGE_COMPUTE_BIT, device.device->getInstance().getFeatures().hasComputeShaders );
-		m_gpuInformations.useShaderType( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT, features.tessellationShader );
-		m_gpuInformations.useShaderType( VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT, features.tessellationShader );
-		m_gpuInformations.useShaderType( VK_SHADER_STAGE_GEOMETRY_BIT, features.geometryShader );
+		m_gpuInformations.useShaderType( VK_SHADER_STAGE_COMPUTE_BIT, device.device->getInstance().getFeatures().hasComputeShaders != 0 );
+		m_gpuInformations.useShaderType( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT, features.tessellationShader != 0 );
+		m_gpuInformations.useShaderType( VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT, features.tessellationShader != 0 );
+		m_gpuInformations.useShaderType( VK_SHADER_STAGE_GEOMETRY_BIT, features.geometryShader != 0 );
 		m_gpuInformations.useShaderType( VK_SHADER_STAGE_FRAGMENT_BIT, true );
 		m_gpuInformations.useShaderType( VK_SHADER_STAGE_VERTEX_BIT, true );
 

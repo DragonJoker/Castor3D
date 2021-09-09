@@ -12,9 +12,9 @@ namespace castor3d
 	Bone::Bone( Skeleton & skeleton
 		, castor::Matrix4x4f const & offset )
 		: Named{ cuEmptyString }
-		, m_skeleton{ skeleton }
 		, m_offset{ offset }
 		, m_absoluteOffset{ skeleton.getGlobalInverseTransform() }
+		, m_skeleton{ skeleton }
 	{
 	}
 

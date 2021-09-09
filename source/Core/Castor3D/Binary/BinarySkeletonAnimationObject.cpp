@@ -83,8 +83,6 @@ namespace castor3d
 		SkeletonAnimationObjectSPtr object;
 		SkeletonAnimationBoneSPtr bone;
 		BinaryChunk chunk;
-		uint32_t count{ 0 };
-		float length{ 0.0f };
 
 		while ( result && doGetSubChunk( chunk ) )
 		{

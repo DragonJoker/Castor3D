@@ -108,76 +108,84 @@ namespace castor3d
 		C3D_API void initialise();
 
 	public:
-		SceneSPtr scene;
-		RenderWindowDesc window;
-		SceneNodeSPtr sceneNode;
-		GeometrySPtr geometry;
-		MeshResPtr mesh;
-		MeshRes ownMesh;
-		SubmeshSPtr submesh;
-		LightSPtr light;
-		CameraSPtr camera;
-		castor::PixelFormat pixelFormat;
-		MaterialRPtr material;
-		MaterialRes ownMaterial;
-		bool createMaterial{};
+		SceneSPtr scene{};
+		RenderWindowDesc window{};
+		SceneNodeSPtr sceneNode{};
+		GeometrySPtr geometry{};
+		MeshResPtr mesh{};
+		MeshRes ownMesh{};
+		SubmeshSPtr submesh{};
+		LightSPtr light{};
+		CameraSPtr camera{};
+		castor::PixelFormat pixelFormat{};
+		MaterialRPtr material{};
+		MaterialRes ownMaterial{};
+		bool createMaterial{ true };
 		uint32_t passIndex{};
-		SamplerResPtr sampler;
-		SamplerRes ownSampler;
-		TargetType targetType;
-		RenderTargetSPtr renderTarget;
-		PassSPtr pass;
-		bool createPass{};
+		SamplerResPtr sampler{};
+		SamplerRes ownSampler{};
+		TargetType targetType{};
+		RenderTargetSPtr renderTarget{};
+		PassSPtr pass{};
+		bool createPass{ true };
 		uint32_t unitIndex{};
-		ashes::ImageCreateInfo imageInfo;
-		TextureUnitSPtr textureUnit;
-		bool createUnit{};
-		ShaderProgramSPtr shaderProgram;
-		castor::PxBufferBaseSPtr buffer;
-		castor::Path folder;
-		castor::Path relative;
+		ashes::ImageCreateInfo imageInfo{ 0u
+			, VK_IMAGE_TYPE_2D
+			, VK_FORMAT_UNDEFINED
+			, { 1u, 1u, 1u }
+			, 0u
+			, 1u
+			, VK_SAMPLE_COUNT_1_BIT
+			, VK_IMAGE_TILING_OPTIMAL
+			, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT };
+		TextureUnitSPtr textureUnit{};
+		bool createUnit{ true };
+		ShaderProgramSPtr shaderProgram{};
+		castor::PxBufferBaseSPtr buffer{};
+		castor::Path folder{};
+		castor::Path relative{};
 		VkShaderStageFlagBits shaderStage{};
-		UniformBufferBaseUPtr uniformBuffer;
-		OverlayRes overlay;
-		std::vector< OverlayRes > parentOverlays;
-		BillboardListSPtr billboards;
-		int face1{};
-		int face2{};
-		LightType lightType{};
-		VkPrimitiveTopology primitiveType{};
-		ViewportSPtr viewport;
-		castor::String strName;
-		castor::String strName2;
-		castor::Path path;
-		castor::Size size;
-		castor::Point2f point2f;
+		UniformBufferBaseUPtr uniformBuffer{};
+		OverlayRes overlay{};
+		std::vector< OverlayRes > parentOverlays{};
+		BillboardListSPtr billboards{};
+		int face1{ -1 };
+		int face2{ -1 };
+		LightType lightType{ LightType::eCount };
+		VkPrimitiveTopology primitiveType{ VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST };
+		ViewportSPtr viewport{};
+		castor::String strName{};
+		castor::String strName2{};
+		castor::Path path{};
+		castor::Size size{};
+		castor::Point2f point2f{};
 		uint32_t particleCount{};
 		int16_t fontHeight{};
-		ScenePtrStrMap mapScenes;
+		ScenePtrStrMap mapScenes{};
 		SceneFileParser * parser{};
-		FloatArray vertexPos;
-		FloatArray vertexNml;
-		FloatArray vertexTan;
-		FloatArray vertexTex;
-		UInt32Array faces;
-		AnimatedObjectGroupSPtr animGroup;
-		AnimatedObjectSPtr animSkeleton;
-		AnimatedObjectSPtr animMesh;
-		AnimatedObjectSPtr animMovable;
-		AnimatedObjectSPtr animTexture;
+		FloatArray vertexPos{};
+		FloatArray vertexNml{};
+		FloatArray vertexTan{};
+		FloatArray vertexTex{};
+		UInt32Array faces{};
+		AnimatedObjectGroupSPtr animGroup{};
+		AnimatedObjectSPtr animSkeleton{};
+		AnimatedObjectSPtr animMesh{};
+		AnimatedObjectSPtr animMovable{};
+		AnimatedObjectSPtr animTexture{};
 		TextureAnimation * textureAnimation{};
-		SceneBackgroundSPtr background;
-		ParticleSystemSPtr particleSystem;
+		SceneBackgroundSPtr background{};
+		ParticleSystemSPtr particleSystem{};
 		SsaoConfig ssaoConfig{};
-		SubsurfaceScatteringUPtr subsurfaceScattering;
-		std::shared_ptr< SkyboxBackground > skybox;
-		TextureConfiguration textureConfiguration;
-		TextureTransform textureTransform;
+		SubsurfaceScatteringUPtr subsurfaceScattering{};
+		std::shared_ptr< SkyboxBackground > skybox{};
+		TextureConfiguration textureConfiguration{};
+		TextureTransform textureTransform{};
 	};
 
 	class SceneFileParser
-		: public castor::FileParser
-		, public castor::OwnedBy< Engine >
+		: public castor::OwnedBy< Engine >
+		, public castor::FileParser
 	{
 	public:
 		/**

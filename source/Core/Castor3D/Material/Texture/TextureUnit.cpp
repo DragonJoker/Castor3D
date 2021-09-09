@@ -132,7 +132,6 @@ namespace castor3d
 
 	TextureUnit::TextureUnit( Engine & engine )
 		: AnimableT< Engine >{ engine }
-		, m_changed{ false }
 		, m_sampler{ engine.getDefaultSampler() }
 		, m_descriptor
 		{
@@ -141,6 +140,7 @@ namespace castor3d
 			1u,
 			VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 		}
+		, m_changed{ false }
 	{
 		m_transformations.setIdentity();
 	}

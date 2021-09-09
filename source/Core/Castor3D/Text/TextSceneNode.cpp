@@ -72,11 +72,11 @@ namespace castor
 		{
 			if ( result )
 			{
-				SceneNodeSPtr node = it.second.lock();
+				SceneNodeSPtr childNode = it.second.lock();
 
-				if ( node )
+				if ( childNode )
 				{
-					result = ( *this )( *node, file );
+					result = ( *this )( *childNode, file );
 				}
 			}
 		}

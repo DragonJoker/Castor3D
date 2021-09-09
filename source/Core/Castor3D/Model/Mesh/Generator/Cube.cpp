@@ -8,8 +8,8 @@ namespace castor3d
 {
 	Cube::Cube()
 		: MeshGenerator( cuT( "cube" ) )
-		, m_width( 0 )
 		, m_height( 0 )
+		, m_width( 0 )
 		, m_depth( 0 )
 	{
 	}

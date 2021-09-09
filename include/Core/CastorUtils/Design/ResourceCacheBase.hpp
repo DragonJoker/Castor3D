@@ -453,7 +453,7 @@ namespace castor
 		ElementPtrT doCreateT( ElementKeyT const & name
 			, ParametersT && ... parameters )const
 		{
-			return ElementCacheTraitsT::makeElement( *reinterpret_cast< ElementCacheT const * >( this )
+			return ElementCacheTraitsT::makeElement( *static_cast< ElementCacheT const * >( this )
 				, name
 				, std::forward< ParametersT >( parameters )... );
 		}

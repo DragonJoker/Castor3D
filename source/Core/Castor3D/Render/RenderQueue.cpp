@@ -26,12 +26,12 @@ namespace castor3d
 		, RenderMode mode
 		, SceneNode const * ignored )
 		: OwnedBy< SceneRenderPass >{ renderPass }
-		, m_ignoredNode{ ignored }
 		, m_culler{ getOwner()->getCuller() }
 		, m_onCullerCompute( m_culler.onCompute.connect( [this]( SceneCuller const & culler )
 			{
 				doOnCullerCompute( culler );
 			} ) )
+		, m_ignoredNode{ ignored }
 		, m_renderNodes{ castor::makeUnique< QueueRenderNodes >( *this ) }
 		, m_culledRenderNodes{ castor::makeUnique < QueueCulledRenderNodes >( *this ) }
 		, m_viewport{ castor::makeChangeTracked< ashes::Optional< VkViewport > >( m_culledChanged, ashes::nullopt ) }

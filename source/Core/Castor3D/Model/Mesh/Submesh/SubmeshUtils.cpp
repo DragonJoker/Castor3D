@@ -15,21 +15,21 @@ namespace castor3d
 
 		if ( !points.empty() )
 		{
-			auto & v1 = points[0];
-			auto & v2 = points[1];
-			auto & v3 = points[2];
+			auto * v1 = &points[0];
+			auto * v2 = &points[1];
+			auto * v3 = &points[2];
 			triFace.addFace( 0, 1, 2 );
-			v1.tex = castor::Point3f{ 0.0, 0.0, 0.0 };
-			v2.tex = castor::Point3f{ 0.0, 0.0, 0.0 };
-			v3.tex = castor::Point3f{ 0.0, 0.0, 0.0 };
+			v1->tex = castor::Point3f{ 0.0, 0.0, 0.0 };
+			v2->tex = castor::Point3f{ 0.0, 0.0, 0.0 };
+			v3->tex = castor::Point3f{ 0.0, 0.0, 0.0 };
 
 			for ( uint32_t i = 2; i < uint32_t( points.size() - 1 ); i++ )
 			{
-				auto & v2 = points[i];
-				auto & v3 = points[i + 1];
+				v2 = &points[i];
+				v3 = &points[i + 1];
 				triFace.addFace( 0, i, i + 1 );
-				v2.tex = castor::Point3f{ 0.0, 0.0, 0.0 };
-				v3.tex = castor::Point3f{ 0.0, 0.0, 0.0 };
+				v2->tex = castor::Point3f{ 0.0, 0.0, 0.0 };
+				v3->tex = castor::Point3f{ 0.0, 0.0, 0.0 };
 			}
 		}
 	}

@@ -335,8 +335,6 @@ namespace castor3d
 	{
 		if ( !m_initialised )
 		{
-			auto & renderSystem = device.renderSystem;
-
 			m_hdrConfigUbo = std::make_unique< HdrConfigUbo >( device );
 			m_culler = std::make_unique< FrustumCuller >( *getScene(), *getCamera() );
 			doInitCombineProgram( progress );
@@ -553,7 +551,7 @@ namespace castor3d
 				: signalsToWait.front();
 		}
 
-		crg::SemaphoreWait result;
+		crg::SemaphoreWait result{};
 		SceneSPtr scene = getScene();
 
 		if ( scene )

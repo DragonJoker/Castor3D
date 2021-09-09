@@ -364,7 +364,7 @@ namespace castor3d
 	{
 		auto & configuration = m_blurCfgUbo.getData();
 		configuration.blurCorrection = 1.0f;
-		configuration.blurPixelSize = castor::Point2f{ 1.0f / m_size.getWidth(), 1.0f / m_size.getHeight() };
+		configuration.blurPixelSize = castor::Point2f{ 1.0f / float( m_size.getWidth() ), 1.0f / float( m_size.getHeight() ) };
 
 		auto & weights = m_blurWgtUbo.getData();
 		weights.originalWeight = castor::Point4f{ 0.2406f, 0.4475f, 0.6159f, 0.25f };

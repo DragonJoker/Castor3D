@@ -54,9 +54,9 @@ namespace castor3d
 		, m_opaquePass{ opaquePass }
 		, m_lastPass{ &m_opaquePass }
 		, m_opaquePassResult{ opaquePassResult }
+		, m_gpInfoUbo{ gpInfoUbo }
 		, m_size{ size }
 		, m_lightPassResult{ scene.getOwner()->getGraphResourceHandler(), device, size }
-		, m_gpInfoUbo{ gpInfoUbo }
 		, m_lightingPass{ castor::makeUnique< LightingPass >( graph
 			, m_lastPass
 			, m_device

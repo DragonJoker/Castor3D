@@ -357,51 +357,54 @@ namespace castor3d
 		{
 			VkBuffer vertexBuffer = m_vertexBuffer->getBuffer();
 			VkDeviceSize offset{};
+			VkDescriptorSet baseDS{};
 			auto & renderPass = m_renderPasses[index];
-			VkRenderPassBeginInfo beginRenderPass{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO
-				, nullptr
-				, *renderPass.renderPass
-				, *renderPass.framebuffer
-				, { {}, renderPass.framebuffer->getDimensions() }
-				, uint32_t( renderPass.clearValues.size() )
-				, renderPass.clearValues.data() };
-			m_context.vkCmdBeginRenderPass( commandBuffer
-				, &beginRenderPass
-				, VK_SUBPASS_CONTENTS_INLINE );
-			auto pipeline = m_pipeline.getPipeline( index );
-			m_context.vkCmdBindPipeline( commandBuffer
-				, VK_PIPELINE_BIND_POINT_GRAPHICS
-				, pipeline );
-			auto baseDS = m_pipeline.getDescriptorSet();
-			m_context.vkCmdBindDescriptorSets( commandBuffer
-				, VK_PIPELINE_BIND_POINT_GRAPHICS
-				, m_pipeline.getPipelineLayout()
-				, 0u
-				, 1u
-				, &baseDS
-				, 0u
-				, nullptr );
-			auto & descriptors = m_enabledLights[0];
-			VkDescriptorSet specDS = *descriptors->descriptorSet;
-			m_context.vkCmdBindDescriptorSets( commandBuffer
-				, VK_PIPELINE_BIND_POINT_GRAPHICS
-				, m_pipeline.getPipelineLayout()
-				, 1u
-				, 1u
-				, &specDS
-				, 0u
-				, nullptr );
-			m_context.vkCmdBindVertexBuffers( commandBuffer
-				, 0u
-				, 1u
-				, &vertexBuffer
-				, &offset );
-			m_context.vkCmdDraw( commandBuffer
-				, m_count
-				, 1u
-				, 0u
-				, 0u );
-			m_context.vkCmdEndRenderPass( commandBuffer );
+			{
+				VkRenderPassBeginInfo beginRenderPass{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO
+					, nullptr
+					, *renderPass.renderPass
+					, *renderPass.framebuffer
+					, { {}, renderPass.framebuffer->getDimensions() }
+					, uint32_t( renderPass.clearValues.size() )
+					, renderPass.clearValues.data() };
+				m_context.vkCmdBeginRenderPass( commandBuffer
+					, &beginRenderPass
+					, VK_SUBPASS_CONTENTS_INLINE );
+				auto pipeline = m_pipeline.getPipeline( index );
+				m_context.vkCmdBindPipeline( commandBuffer
+					, VK_PIPELINE_BIND_POINT_GRAPHICS
+					, pipeline );
+				baseDS = m_pipeline.getDescriptorSet();
+				m_context.vkCmdBindDescriptorSets( commandBuffer
+					, VK_PIPELINE_BIND_POINT_GRAPHICS
+					, m_pipeline.getPipelineLayout()
+					, 0u
+					, 1u
+					, &baseDS
+					, 0u
+					, nullptr );
+				auto & descriptors = m_enabledLights[0];
+				VkDescriptorSet specDS = *descriptors->descriptorSet;
+				m_context.vkCmdBindDescriptorSets( commandBuffer
+					, VK_PIPELINE_BIND_POINT_GRAPHICS
+					, m_pipeline.getPipelineLayout()
+					, 1u
+					, 1u
+					, &specDS
+					, 0u
+					, nullptr );
+				m_context.vkCmdBindVertexBuffers( commandBuffer
+					, 0u
+					, 1u
+					, &vertexBuffer
+					, &offset );
+				m_context.vkCmdDraw( commandBuffer
+					, m_count
+					, 1u
+					, 0u
+					, 0u );
+				m_context.vkCmdEndRenderPass( commandBuffer );
+			}
 			index = 1u;
 
 			if ( m_enabledLights.size() > 1u )
@@ -418,11 +421,11 @@ namespace castor3d
 				for ( size_t i = 1u; i < m_enabledLights.size(); ++i )
 				{
 					auto & descriptors = m_enabledLights[i];
-					specDS = *descriptors->descriptorSet;
+					VkDescriptorSet specDS = *descriptors->descriptorSet;
 					m_context.vkCmdBeginRenderPass( commandBuffer
 						, &beginRenderPass
 						, VK_SUBPASS_CONTENTS_INLINE );
-					pipeline = m_pipeline.getPipeline( index );
+					auto pipeline = m_pipeline.getPipeline( index );
 					m_context.vkCmdBindPipeline( commandBuffer
 						, VK_PIPELINE_BIND_POINT_GRAPHICS
 						, pipeline );

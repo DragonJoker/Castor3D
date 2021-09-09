@@ -174,7 +174,7 @@ namespace castor3d
 		if ( m_texture->getDimensions().width != dim
 			|| m_texture->getDimensions().height != dim )
 		{
-			m_ratio = float( m_2dTexture->getHeight() ) / m_2dTexture->getWidth();
+			m_ratio = float( m_2dTexture->getHeight() ) / float( m_2dTexture->getWidth() );
 			auto xOffset = ( dim - extent.width ) / 2u;
 			auto yOffset = ( dim - extent.height ) / 2u;
 			VkOffset3D const srcOffset{ 0, 0, 0 };

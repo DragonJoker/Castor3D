@@ -291,11 +291,10 @@ namespace castor3d
 		}
 
 		auto & engine = *getEngine();
-		auto & renderSystem = *engine.getRenderSystem();
 
 		// create the cube texture if needed.
 		m_textureId = { device
-			, getEngine()->getGraphResourceHandler()
+			, engine.getGraphResourceHandler()
 			, cuT( "SkyboxBackgroundLayerCube" )
 			, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
 			, { maxDim, maxDim, 1u }
@@ -315,7 +314,7 @@ namespace castor3d
 		commandBuffer->beginDebugBlock(
 			{
 				"Layer to Skybox",
-				makeFloatArray( getScene().getEngine()->getNextRainbowColour() ),
+				makeFloatArray( engine.getNextRainbowColour() ),
 			} );
 		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
@@ -401,7 +400,6 @@ namespace castor3d
 		, QueueData const & queueData )
 	{
 		auto & engine = *getEngine();
-		auto & renderSystem = *engine.getRenderSystem();
 		m_crossTexture->initialise( device, queueData );
 		auto width = m_crossTexture->getWidth() / 4u;
 		auto height = m_crossTexture->getHeight() / 3u;
@@ -409,7 +407,7 @@ namespace castor3d
 
 		// create the cube texture if needed.
 		m_textureId = { device
-			, getEngine()->getGraphResourceHandler()
+			, engine.getGraphResourceHandler()
 			, cuT( "SkyboxBackgroundCrossCube" )
 			, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
 			, { width, width, 1u }

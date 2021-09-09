@@ -323,7 +323,6 @@ namespace castor3d
 
 	void LineariseDepthPass::doInitialiseMinifyPass( ProgressBar * progress )
 	{
-		uint32_t index = 0u;
 		auto size = m_size;
 
 		for ( auto index = 0u; index < MaxMipLevel; ++index )

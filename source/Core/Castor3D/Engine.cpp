@@ -74,13 +74,13 @@ namespace castor3d
 		, m_logger{ log::initialise( *( logger ? logger : m_ownedLogger.get() ) ) }
 		, m_appName{ appName }
 		, m_appVersion{ appVersion }
-		, m_enableValidation{ enableValidation }
 		, m_fontCache{ *m_logger }
 		, m_imageCache{ *m_logger, m_imageLoader }
 		, m_meshFactory{ castor::makeUnique< MeshFactory >() }
 		, m_subdividerFactory{ castor::makeUnique< MeshSubdividerFactory >() }
 		, m_importerFactory{ castor::makeUnique< MeshImporterFactory >() }
 		, m_particleFactory{ castor::makeUnique< ParticleFactory >() }
+		, m_enableValidation{ enableValidation }
 		, m_enableApiTrace{ C3D_EnableAPITrace }
 		, m_cpuJobs{ std::min( 4u, castor::CpuInformations{}.getCoreCount() / 2u ) }
 		, m_gpuJobs{ std::min( 2u, castor::CpuInformations{}.getCoreCount() / 2u ) }

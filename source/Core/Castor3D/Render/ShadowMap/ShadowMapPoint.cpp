@@ -49,7 +49,6 @@ namespace castor3d
 			, Scene & scene
 			, ShadowMap & shadowMap )
 		{
-			auto & engine = *scene.getEngine();
 			std::vector< ShadowMap::PassDataPtr > result;
 			auto & smResult = shadowMap.getShadowPassResult();
 			auto & depth = smResult[SmTexture::eDepth];

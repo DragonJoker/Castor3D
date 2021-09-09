@@ -98,14 +98,14 @@ namespace castor3d
 	Scene::Scene( castor::String const & name, Engine & engine )
 		: castor::OwnedBy< Engine >{ engine }
 		, castor::Named{ name }
-		, m_listener{ engine.getFrameListenerCache().add( cuT( "Scene_" ) + name + castor::string::toString( (size_t)this ) ) }
-		, m_animationUpdater{ std::max( 2u, engine.getCpuInformations().getCoreCount() - ( engine.isThreaded() ? 2u : 1u ) ) }
-		, m_background{ std::make_shared< ColourBackground >( engine, *this ) }
-		, m_lightFactory{ std::make_shared< LightFactory >() }
-		, m_renderNodes{ castor::makeUnique< SceneRenderNodes >( *this ) }
 		, m_rootNode{ std::make_shared< SceneNode >( RootNode, *this ) }
 		, m_rootCameraNode{ std::make_shared< SceneNode >( CameraRootNode, *this ) }
 		, m_rootObjectNode{ std::make_shared< SceneNode >( ObjectRootNode, *this ) }
+		, m_background{ std::make_shared< ColourBackground >( engine, *this ) }
+		, m_lightFactory{ std::make_shared< LightFactory >() }
+		, m_listener{ engine.getFrameListenerCache().add( cuT( "Scene_" ) + name + castor::string::toString( (size_t)this ) ) }
+		, m_animationUpdater{ std::max( 2u, engine.getCpuInformations().getCoreCount() - ( engine.isThreaded() ? 2u : 1u ) ) }
+		, m_renderNodes{ castor::makeUnique< SceneRenderNodes >( *this ) }
 	{
 		m_rootCameraNode->attachTo( *m_rootNode );
 		m_rootObjectNode->attachTo( *m_rootNode );

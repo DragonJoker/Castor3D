@@ -50,7 +50,7 @@ namespace castor3d
 			Submesh & submeshBase = *mesh.createSubmesh();
 			Submesh & submeshSide = *mesh.createSubmesh();
 			//CALCUL DE LA POSITION DES POINTS
-			float const dalpha = castor::PiMult2< float > / m_nbFaces;
+			float const dalpha = castor::PiMult2< float > / float( m_nbFaces );
 			uint32_t i = 0;
 			InterleavedVertexArray baseVertex;
 			InterleavedVertexArray sideVertex;
@@ -69,10 +69,10 @@ namespace castor3d
 
 				sideVertex.push_back( InterleavedVertex{}
 					.position( castor::Point3f{ m_radius * rCos, 0.0, m_radius * rSin } )
-					.texcoord( castor::Point2f{ float( i ) / m_nbFaces, float( 1.0 ) } ) );
+					.texcoord( castor::Point2f{ float( i ) / float( m_nbFaces ), float( 1.0 ) } ) );
 				sideVertex.push_back( InterleavedVertex{}
 					.position( castor::Point3f{ float( 0 ), m_height, float( 0 ) } )
-					.texcoord( castor::Point2f{ float( i ) / m_nbFaces, float( 0.0 ) } ) );
+					.texcoord( castor::Point2f{ float( i ) / float( m_nbFaces ), float( 0.0 ) } ) );
 				i++;
 			}
 			

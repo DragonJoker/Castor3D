@@ -224,7 +224,6 @@ namespace castor3d
 	void PickingPass::doUpdateNodes( QueueCulledRenderNodes & nodes )
 	{
 		auto & myCamera = getCuller().getCamera();
-		auto & myScene = getCuller().getScene();
 		m_matrixUbo.cpuUpdate( myCamera.getView()
 			, myCamera.getProjection( false ) );
 		doUpdate( nodes.instancedStaticNodes.backCulled );

@@ -17,12 +17,12 @@ namespace castor3d::shader
 	{
 	}
 
-	void PhongLightMaterial::create( sdw::Vec3 const & albedo
+	void PhongLightMaterial::create( sdw::Vec3 const & newAlbedo
 		, sdw::Vec4 const & data3
 		, sdw::Vec4 const & data2
 		, Material const & material )
 	{
-		create( albedo
+		create( newAlbedo
 			, data3
 			, data2
 			, material.colourDiv.a() );
@@ -35,15 +35,15 @@ namespace castor3d::shader
 		objectFactor = material.objectFactor;
 	}
 
-	void PhongLightMaterial::create( sdw::Vec3 const & albedo
+	void PhongLightMaterial::create( sdw::Vec3 const & newAlbedo
 		, sdw::Vec4 const & data3
 		, sdw::Vec4 const & data2
-		, sdw::Float const & ambient )
+		, sdw::Float const & newAmbient )
 	{
-		this->albedo = albedo;
-		this->specular = data3.rgb();
-		this->ambient = ambient;
-		this->shininess = data2.a();
+		albedo = newAlbedo;
+		specular = data3.rgb();
+		ambient = newAmbient;
+		shininess = data2.a();
 	}
 
 	void PhongLightMaterial::create( Material const & material )

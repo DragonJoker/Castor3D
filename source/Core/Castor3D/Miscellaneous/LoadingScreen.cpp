@@ -86,7 +86,7 @@ namespace castor3d
 
 			if ( scene.getCameraCache().isEmpty() )
 			{
-				float const aspect = float( size.getWidth() ) / size.getHeight();
+				float const aspect = float( size.getWidth() ) / float( size.getHeight() );
 				float const nearZ = 0.1f;
 				float const farZ = 1000.0f;
 				Viewport viewport{ *scene.getEngine() };
@@ -264,6 +264,7 @@ namespace castor3d
 		, VkRenderPass renderPass
 		, castor::Size const & size )
 		: m_device{ device }
+		, m_progressBar{ progressBar }
 		, m_graph{ handler }
 		, m_scene{ std::move( scene ) }
 		, m_background{ *m_scene->getBackground() }
@@ -290,7 +291,6 @@ namespace castor3d
 		, m_overlayPassDesc{ &doCreateOverlayPass( m_transparentPassDesc ) }
 		, m_windowPassDesc{ &doCreateWindowPass( m_overlayPassDesc ) }
 		, m_runnable{ createRunnableGraph( m_graph, m_device ) }
-		, m_progressBar{ progressBar }
 	{
 	}
 

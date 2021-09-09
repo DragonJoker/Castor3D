@@ -28,7 +28,7 @@ namespace castor3d
 		{
 			if ( m_state == AnimationState::ePlaying )
 			{
-				m_currentTime += Milliseconds( int64_t( elapsed.count() * scale ) );
+				m_currentTime += Milliseconds( int64_t( double( elapsed.count() ) * scale ) );
 
 				if ( m_currentTime >= length )
 				{

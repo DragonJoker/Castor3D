@@ -355,11 +355,11 @@ namespace castor3d
 		*	Source de shader.
 		**/
 		/**@{*/
-		void visit( ShaderModule const & shader )override
+		void visit( ShaderModule const & value )override
 		{
 		}
 
-		void visit( DebugConfig const & config )override
+		void visit( DebugConfig const & value )override
 		{
 		}
 		/**@}*/

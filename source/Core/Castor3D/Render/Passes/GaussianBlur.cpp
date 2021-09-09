@@ -157,7 +157,7 @@ namespace castor3d
 					result[index] = x;
 				}
 
-				x = x * ( ( height + 1 ) * 2 - i ) / ( i + 1 );
+				x = x * float( ( height + 1 ) * 2 - i ) / float( i + 1 );
 			}
 
 			// Normalize kernel coefficients

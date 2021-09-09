@@ -218,7 +218,6 @@ namespace castor3d
 			, { PickingWidth, PickingWidth, 1u } }
 		, m_pickDisplayRegions{ createPickDisplayRegions() }
 		, m_commandBuffer{ queueData.commandPool->createCommandBuffer( "PickingPass" ) }
-		, m_transferFence{ m_device->createFence( "PickingPass" ) }
 		, m_stagingBuffer{ makeBuffer< castor::Point4f >( m_device
 			, PickingWidth * PickingWidth
 			, ( VK_BUFFER_USAGE_TRANSFER_DST_BIT
@@ -226,6 +225,7 @@ namespace castor3d
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, "PickingPassStagingBuffer" ) }
 		, m_buffer{ PickingWidth * PickingWidth }
+		, m_transferFence{ m_device->createFence( "PickingPass" ) }
 	{
 		m_runnable = m_graph.compile( device.makeContext() );
 		m_colourTexture = std::make_unique< ashes::Image >( *m_device
