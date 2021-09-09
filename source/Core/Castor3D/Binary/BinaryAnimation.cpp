@@ -18,7 +18,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = doWriteChunk( obj.getLength().count() / 1000.0f, ChunkType::eAnimLength, m_chunk );
+			result = doWriteChunk( float( obj.getLength().count() ) / 1000.0f, ChunkType::eAnimLength, m_chunk );
 		}
 
 		if ( result )

@@ -129,8 +129,8 @@ namespace castor3d
 				, -1.0f * sceneBoundingBox.getMin()->z
 				, -1.0f * sceneBoundingBox.getMax()->z );
 			auto jitterProjSpace = updater.jitter * 2.0f;
-			jitterProjSpace[0] /= m_camera.getWidth();
-			jitterProjSpace[1] /= m_camera.getHeight();
+			jitterProjSpace[0] /= float( m_camera.getWidth() );
+			jitterProjSpace[1] /= float( m_camera.getHeight() );
 			m_matrixUbo.cpuUpdate( identity
 				, ortho
 				, jitterProjSpace );

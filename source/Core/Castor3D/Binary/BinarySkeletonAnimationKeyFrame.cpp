@@ -99,7 +99,7 @@ namespace castor3d
 		{
 			castor::SquareMatrix< double, 4 > matrix;
 			castor::String name;
-			uint8_t type;
+			uint8_t type{};
 			BinaryChunk chunk;
 
 			while ( result && doGetSubChunk( chunk ) )

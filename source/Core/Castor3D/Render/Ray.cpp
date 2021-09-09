@@ -18,8 +18,8 @@ namespace castor3d
 		auto invProjectionView = ( projection * view ).getInverse();
 		castor::Point4f screen
 		{
-			( 2.0f * float( point[0] ) / camera.getWidth() ) - 1.0f,
-			1.0f - ( 2.0f * float( point[1] ) / camera.getHeight() ),
+			( 2.0f * float( point[0] ) / float( camera.getWidth() ) ) - 1.0f,
+			1.0f - ( 2.0f * float( point[1] ) / float( camera.getHeight() ) ),
 			-1.0f,
 			1.0f
 		};

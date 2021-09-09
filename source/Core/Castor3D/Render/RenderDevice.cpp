@@ -228,8 +228,8 @@ namespace castor3d
 		, gpu{ gpu }
 		, desc{ desc }
 		, memoryProperties{ gpu.getMemoryProperties() }
-		, properties{ gpu.getProperties() }
 		, features{ gpu.getFeatures() }
+		, properties{ gpu.getProperties() }
 		, queueFamilies{ initialiseQueueFamilies( renderSystem.getInstance(), gpu ) }
 		, device{ renderSystem.getInstance().createDevice( gpu
 			, getDeviceCreateInfo( renderSystem.getInstance()
@@ -244,7 +244,6 @@ namespace castor3d
 			} );
 		for ( auto & queuesData : queueFamilies )
 		{
-			uint32_t index = 0u;
 			queuesData.initialise( *device );
 
 			auto & queueData = queuesData.front();

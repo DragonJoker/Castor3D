@@ -17,91 +17,13 @@ namespace castor3d
 
 	SceneFileContext::SceneFileContext( Path const & path, SceneFileParser * parser )
 		: FileParserContext{ parser->getEngine()->getLogger(), path }
-		, window()
-		, sceneNode()
-		, geometry()
-		, mesh()
-		, submesh()
-		, light()
-		, camera()
-		, material()
-		, pass()
-		, imageInfo
-		{
-			0u,
-			VK_IMAGE_TYPE_2D,
-			VK_FORMAT_UNDEFINED,
-			{ 1u, 1u, 1u },
-			0u,
-			1u,
-			VK_SAMPLE_COUNT_1_BIT,
-			VK_IMAGE_TILING_OPTIMAL,
-			VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT
-		}
-		, textureUnit()
-		, shaderProgram()
-		, shaderStage( VkShaderStageFlagBits( 0u ) )
-		, overlay( nullptr )
-		, face1( -1 )
-		, face2( -1 )
-		, lightType( LightType::eCount )
-		, primitiveType( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST )
-		, viewport( nullptr )
-		, strName()
-		, strName2()
-		, mapScenes()
-		, parser( parser )
-		, createMaterial{ true }
-		, passIndex{ 0u }
-		, createPass{ true }
-		, unitIndex{ 0u }
-		, createUnit{ true }
+		, parser{ parser }
 	{
 	}
 
 	void SceneFileContext::initialise()
 	{
-		scene.reset();
-		pass.reset();
-		overlay = nullptr;
-		face1 = -1;
-		face2 = -1;
-		lightType = LightType::eCount;
-		primitiveType = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-		viewport = nullptr;
-		shaderStage = VkShaderStageFlagBits( 0u );
-		window = RenderWindowDesc{};
-		sceneNode.reset();
-		geometry.reset();
-		mesh.reset();
-		submesh.reset();
-		light.reset();
-		camera.reset();
-		material = {};
-		textureUnit.reset();
-		shaderProgram.reset();
-		sampler.reset();
-		strName.clear();
-		strName2.clear();
-		mapScenes.clear();
-		subsurfaceScattering.reset();
-		imageInfo =
-		{
-			0u,
-			VK_IMAGE_TYPE_2D,
-			VK_FORMAT_UNDEFINED,
-			{ 1u, 1u, 1u },
-			0u,
-			1u,
-			VK_SAMPLE_COUNT_1_BIT,
-			VK_IMAGE_TILING_OPTIMAL,
-			VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT
-		};
-		createMaterial = true;
-		passIndex = 0u;
-		createPass = true;
-		unitIndex = 0u;
-		createUnit = true;
+		*this = SceneFileContext{ file, parser };
 	}
 
 	//****************************************************************************************************
@@ -205,14 +127,16 @@ namespace castor3d
 					}
 					else
 					{
-						auto it = std::find_if( files.begin(), files.end(), []( Path const & p_path )
+						auto fileIt = std::find_if( files.begin()
+							, files.end()
+							, []( Path const & p_path )
 							{
 								return p_path.getExtension() == cuT( "cscn" );
 							} );
 
-						if ( it != files.end() )
+						if ( fileIt != files.end() )
 						{
-							path = *it;
+							path = *fileIt;
 						}
 					}
 				}
@@ -639,11 +563,11 @@ namespace castor3d
 
 		for ( auto const & sections : getEngine()->getAdditionalSections() )
 		{
-			auto it = sections.second.find( section );
+			auto sectionIt = sections.second.find( section );
 
-			if ( it != sections.second.end() )
+			if ( sectionIt != sections.second.end() )
 			{
-				return it->second;
+				return sectionIt->second;
 			}
 		}
 

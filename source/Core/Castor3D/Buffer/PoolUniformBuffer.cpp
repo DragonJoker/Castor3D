@@ -27,10 +27,9 @@ namespace castor3d
 	uint32_t PoolUniformBuffer::initialise( RenderDevice const & device )
 	{
 		m_buffer.reset();
-		auto & properties = m_renderSystem.getProperties();
 		auto elemSize = m_renderSystem.getValue( GpuMin::eUniformBufferOffsetAlignment );
 		auto maxSize = std::min( 65536u, uint32_t( m_renderSystem.getValue( GpuMax::eUniformBufferSize ) ) );
-		auto elemCount = uint32_t( std::floor( float( maxSize ) / elemSize ) );
+		auto elemCount = uint32_t( std::floor( float( maxSize ) / float( elemSize ) ) );
 		m_buffer = ashes::makeUniformBuffer( *device.device
 			, m_debugName + "Ubo"
 			, elemCount

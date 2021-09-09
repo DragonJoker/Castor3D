@@ -70,7 +70,7 @@ namespace castor3d
 					, set
 					, directionalEnabled );
 #else
-				if ( DirectionalMaxCascadesCount > 1u )
+				if constexpr ( DirectionalMaxCascadesCount > 1u )
 				{
 					m_writer.declSampledImage< FImg2DArrayRgba32 >( MapNormalDepthDirectional
 						, ( directionalEnabled ? index++ : index )
@@ -116,7 +116,7 @@ namespace castor3d
 				doDeclareTextureProj();
 				doDeclareFilterPCF();
 
-				if ( DirectionalMaxCascadesCount > 1u )
+				if constexpr ( DirectionalMaxCascadesCount > 1u )
 				{
 					doDeclareTextureProjCascade();
 					doDeclareFilterPCFCascade();
@@ -163,7 +163,7 @@ namespace castor3d
 					, index++
 					, set );
 #else
-				if ( DirectionalMaxCascadesCount > 1u )
+				if constexpr ( DirectionalMaxCascadesCount > 1u )
 				{
 					m_writer.declSampledImage< FImg2DArrayRgba32 >( MapNormalDepthDirectional
 						, index++
@@ -187,7 +187,7 @@ namespace castor3d
 				doDeclareGetRandom();
 				doDeclareGetShadowOffset();
 
-				if ( DirectionalMaxCascadesCount > 1u )
+				if constexpr ( DirectionalMaxCascadesCount > 1u )
 				{
 					doDeclareTextureProjCascade();
 					doDeclareFilterPCFCascade();
@@ -728,7 +728,7 @@ namespace castor3d
 						auto result = m_writer.declLocale( "result"
 							, 1.0_f );
 
-						if ( DirectionalMaxCascadesCount > 1u )
+						if constexpr ( DirectionalMaxCascadesCount > 1u )
 						{
 #if C3D_UseTiledDirectionalShadowMap
 							auto c3d_mapNormalDepthDirectional = m_writer.getVariable< SampledImage2DRgba32 >( Shadow::MapNormalDepthDirectional );

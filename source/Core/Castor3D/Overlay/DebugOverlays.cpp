@@ -109,8 +109,8 @@ namespace castor3d
 		, bool const & detailed )
 		: m_cache{ cache }
 		, m_detailed{ detailed }
-		, m_index{ index }
 		, m_name{ name }
+		, m_index{ index }
 	{
 		auto baseName = cuT( "RenderPassOverlays-" ) + category + cuT( "-" ) + name;
 		m_panel = cache.add( baseName
@@ -402,7 +402,7 @@ namespace castor3d
 				, m_categoryName
 				, timer.getName()
 				, index
-				, m_detailed ) );
+				, *m_detailed ) );
 			it = m_passes.begin() + m_passes.size() - 1;
 		}
 
@@ -482,7 +482,7 @@ namespace castor3d
 		if ( m_totalTime > 0_ns )
 		{
 			log::info << "Counts:\n"
-				<< "  Average Frame Time: " << ( std::chrono::duration_cast< castor::Microseconds >( m_averageTime ).count() / 1000.0f ) << " ms\n"
+				<< "  Average Frame Time: " << ( float( std::chrono::duration_cast< castor::Microseconds >( m_averageTime ).count() ) / 1000.0f ) << " ms\n"
 				<< "  Average Frames per second: " <<  m_averageFps << std::endl;
 		}
 
@@ -555,9 +555,9 @@ namespace castor3d
 		m_totalTime = m_frameTimer.getElapsed() + m_externalTime;
 		m_framesTimes[m_frameIndex] = m_totalTime;
 		m_averageTime = std::accumulate( m_framesTimes.begin(), m_framesTimes.end(), 0_ns ) / m_framesTimes.size();
-		m_averageFps = 1000000.0f / std::chrono::duration_cast< castor::Microseconds >( m_averageTime ).count();
+		m_averageFps = 1000000.0f / float( std::chrono::duration_cast< castor::Microseconds >( m_averageTime ).count() );
 		auto total = std::chrono::duration_cast< castor::Microseconds >( m_totalTime );
-		m_fps = 1000000.0f / total.count();
+		m_fps = 1000000.0f / float( total.count() );
 
 		if ( m_visible )
 		{
@@ -578,7 +578,7 @@ namespace castor3d
 
 		fprintf( stdout
 			, "\r%0.2f ms, %0.2f fps                           "
-			, total.count() / 1000.0f
+			, float( total.count() ) / 1000.0f
 			, m_fps );
 		m_frameIndex = ++m_frameIndex % FRAME_SAMPLES_COUNT;
 		m_frameTimer.getElapsed();

@@ -5,7 +5,6 @@ namespace castor
 	FileParserContext::FileParserContext( LoggerInstance & logger
 		, Path const & path )
 		: file{ path }
-		, line{ 0 }
 		, logger{ &logger }
 	{
 	}

@@ -49,15 +49,15 @@ namespace castor3d
 
 			if ( engine.getImageCache().has( cuT( "BRDF" ) ) )
 			{
-				auto image = engine.getImageCache().find( cuT( "BRDF" ) );
-				buffer = image.lock()->getPixels();
+				auto img = engine.getImageCache().find( cuT( "BRDF" ) );
+				buffer = img.lock()->getPixels();
 			}
 			else
 			{
 				auto imagePath = Engine::getEngineDirectory() / cuT( "Core" ) / cuT( "brdf.png" );
-				auto image = engine.getImageCache().add( cuT( "BRDF" )
+				auto img = engine.getImageCache().add( cuT( "BRDF" )
 					, castor::ImageCreateParams{ imagePath, false } );
-				buffer = image.lock()->getPixels();
+				buffer = img.lock()->getPixels();
 			}
 
 			buffer = PxBufferBase::create( buffer->getDimensions()
@@ -65,7 +65,6 @@ namespace castor3d
 				, buffer->getConstPtr()
 				, buffer->getFormat() );
 			auto result = image->createView( VK_IMAGE_VIEW_TYPE_2D, texture.getFormat() );
-			auto & renderSystem = *engine.getRenderSystem();
 			auto staging = device->createStagingTexture( VK_FORMAT_R8G8B8A8_UNORM
 				, makeExtent2D( buffer->getDimensions() ) );
 			auto data = device.graphicsData();;

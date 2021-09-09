@@ -90,7 +90,7 @@ namespace castor3d
 			CU_Require( it != mesh->end() );
 
 			bool changed = false;
-			MaterialRPtr oldMaterial;
+			MaterialRPtr oldMaterial{};
 			auto itSubMat = m_submeshesMaterials.find( &submesh );
 
 			if ( itSubMat != m_submeshesMaterials.end() )
@@ -132,7 +132,7 @@ namespace castor3d
 	MaterialRPtr Geometry::getMaterial( Submesh const & submesh )const
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
-		MaterialRPtr result;
+		MaterialRPtr result{};
 		auto it = m_submeshesMaterials.find( &submesh );
 
 		if ( it != m_submeshesMaterials.end() )

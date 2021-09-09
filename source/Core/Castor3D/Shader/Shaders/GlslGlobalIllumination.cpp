@@ -357,6 +357,9 @@ namespace castor3d
 									, voxelData );
 							}
 							break;
+						default:
+							CU_Failure( "Unsupported LightType" );
+							break;
 						}
 					}
 					ELSE
@@ -389,6 +392,9 @@ namespace castor3d
 									, c3d_light.m_position - surface.worldPosition
 									, voxelData );
 							}
+							break;
+						default:
+							CU_Failure( "Unsupported LightType" );
 							break;
 						}
 					}

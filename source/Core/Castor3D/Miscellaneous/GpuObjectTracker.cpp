@@ -60,7 +60,6 @@ namespace castor3d
 			} );
 
 		bool result = false;
-		char szName[1024] = { 0 };
 		std::stringstream ptrStream;
 		ptrStream.width( 16 );
 		ptrStream.fill( '0' );

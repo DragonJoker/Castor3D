@@ -868,8 +868,8 @@ namespace castor3d
 		, m_properties{ memoryProperties }
 		, m_image{ debugName, castor::Path{}, convert( m_info ) }
 		, m_defaultView{ createViews( m_info, *this, m_image.getName() ) }
-		, m_cubeView{ &m_defaultView }
 		, m_arrayView{ &m_defaultView }
+		, m_cubeView{ &m_defaultView }
 		, m_sliceView{ &m_defaultView }
 	{
 		m_info->mipLevels = std::max( 1u, m_info->mipLevels );
@@ -919,8 +919,8 @@ namespace castor3d
 			, makeSize( m_info->extent )
 			, castor::PixelFormat( m_info->format ) }
 		, m_defaultView{ createViews( m_info, *this, m_image.getName() ) }
-		, m_cubeView{ &m_defaultView }
 		, m_arrayView{ &m_defaultView }
+		, m_cubeView{ &m_defaultView }
 		, m_sliceView{ &m_defaultView }
 		, m_ownTexture{ std::move( image ) }
 		, m_texture{ m_ownTexture.get() }
