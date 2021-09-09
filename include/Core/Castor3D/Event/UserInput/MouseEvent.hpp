@@ -31,8 +31,8 @@ namespace castor3d
 			, MouseButton button = MouseButton::eCount )
 			: UserInputEvent{ UserInputEventType::eMouse }
 			, m_mouseEventType{ type }
-			, m_position{ position }
 			, m_button{ button }
+			, m_position{ position }
 		{
 		}
 		/**

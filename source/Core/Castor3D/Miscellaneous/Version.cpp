@@ -7,16 +7,16 @@ using namespace castor;
 namespace castor3d
 {
 	Version::Version( int major, int minor, int build )
-		: m_major( major )
-		, m_minor( minor )
-		, m_build( build )
+		: m_major{ uint16_t( major ) }
+		, m_minor{ uint16_t( minor ) }
+		, m_build{ uint16_t( build ) }
 	{
 	}
 	
 	Version::Version( uint32_t vk )
-		: m_major( ashes::getMajor( vk ) )
-		, m_minor( ashes::getMinor( vk ) )
-		, m_build( ashes::getPatch( vk ) )
+		: m_major{ uint16_t( ashes::getMajor( vk ) ) }
+		, m_minor{ uint16_t( ashes::getMinor( vk ) ) }
+		, m_build{ uint16_t( ashes::getPatch( vk ) ) }
 	{
 	}
 
@@ -32,29 +32,29 @@ namespace castor3d
 	bool operator==( Version const & p_a, Version const & p_b )
 	{
 		return p_a.getMajor() == p_b.getMajor()
-			   && p_a.getMinor() == p_b.getMinor()
-			   && p_a.getBuild() == p_b.getBuild();
+			&& p_a.getMinor() == p_b.getMinor()
+			&& p_a.getBuild() == p_b.getBuild();
 	}
 
 	bool operator!=( Version const & p_a, Version const & p_b )
 	{
 		return p_a.getMajor() != p_b.getMajor()
-			   || p_a.getMinor() != p_b.getMinor()
-			   || p_a.getBuild() != p_b.getBuild();
+			|| p_a.getMinor() != p_b.getMinor()
+			|| p_a.getBuild() != p_b.getBuild();
 	}
 
 	bool operator<( Version const & p_a, Version const & p_b )
 	{
-		return	p_a.getMajor()  < p_b.getMajor()
-				|| ( p_a.getMajor() == p_b.getMajor() && p_a.getMinor()  < p_b.getMinor() )
-				|| ( p_a.getMajor() == p_b.getMajor() && p_a.getMinor() == p_b.getMinor() && p_a.getBuild()  < p_b.getBuild() );
+		return	p_a.getMajor() < p_b.getMajor()
+			|| ( p_a.getMajor() == p_b.getMajor() && p_a.getMinor() < p_b.getMinor() )
+			|| ( p_a.getMajor() == p_b.getMajor() && p_a.getMinor() == p_b.getMinor() && p_a.getBuild() < p_b.getBuild() );
 	}
 
 	bool operator>( Version const & p_a, Version const & p_b )
 	{
-		return	p_a.getMajor()  > p_b.getMajor()
-				|| ( p_a.getMajor() == p_b.getMajor() && p_a.getMinor()  > p_b.getMinor() )
-				|| ( p_a.getMajor() == p_b.getMajor() && p_a.getMinor() == p_b.getMinor() && p_a.getBuild()  < p_b.getBuild() );
+		return	p_a.getMajor() > p_b.getMajor()
+			|| ( p_a.getMajor() == p_b.getMajor() && p_a.getMinor() > p_b.getMinor() )
+			|| ( p_a.getMajor() == p_b.getMajor() && p_a.getMinor() == p_b.getMinor() && p_a.getBuild() < p_b.getBuild() );
 	}
 
 	bool operator<=( Version const & p_a, Version const & p_b )

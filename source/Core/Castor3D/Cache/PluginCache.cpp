@@ -156,7 +156,7 @@ namespace castor
 	PluginSPtr ResourceCacheT< Plugin, String, PluginCacheTraits >::doloadPlugin( Path const & pathFile )
 	{
 		PluginSPtr result;
-		auto lock( makeUniqueLock( m_mutexLoadedPluginTypes ) );
+		auto lockTypes( makeUniqueLock( m_mutexLoadedPluginTypes ) );
 		auto it = m_loadedPluginTypes.find( pathFile );
 
 		if ( it == m_loadedPluginTypes.end() )
@@ -225,11 +225,11 @@ namespace castor
 			{
 				m_loadedPluginTypes.insert( std::make_pair( pathFile, type ) );
 				{
-					auto lock( makeUniqueLock( m_mutexLoadedPlugins ) );
+					auto lockPlugins( makeUniqueLock( m_mutexLoadedPlugins ) );
 					m_loadedPlugins[size_t( type )].insert( std::make_pair( pathFile, result ) );
 				}
 				{
-					auto lock( makeUniqueLock( m_mutexLibraries ) );
+					auto lockLibraries( makeUniqueLock( m_mutexLibraries ) );
 					m_libraries[size_t( type )].insert( std::make_pair( pathFile, library ) );
 				}
 				log::info << cuT( "Plug-in [" ) << result->getName() << cuT( "] - Required engine version : " ) << toCheck << cuT( ", loaded" ) << std::endl;
@@ -242,7 +242,7 @@ namespace castor
 		else
 		{
 			PluginType type = it->second;
-			auto lock( makeUniqueLock( m_mutexLoadedPlugins ) );
+			auto lockPlugins( makeUniqueLock( m_mutexLoadedPlugins ) );
 			result = m_loadedPlugins[size_t( type )].find( pathFile )->second;
 		}
 

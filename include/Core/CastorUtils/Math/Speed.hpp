@@ -102,7 +102,7 @@ namespace castor
 		template< typename DurationU >
 		ValueT getDistance( DurationU const & duration )const
 		{
-			return m_value * TraitsT::convert( getDurationRatioTo< DurationU >() * duration.count() );
+			return m_value * TraitsT::convert( getDurationRatioTo< DurationU >() * double( duration.count() ) );
 		}
 
 		ValueT const & getValue()const
@@ -146,7 +146,7 @@ namespace castor
 			if constexpr ( tUnit == tZero )
 			{
 				// Given duration is more precise than my duration.
-				return 1.0 / uUnit.count();
+				return 1.0 / double( uUnit.count() );
 			}
 			else if constexpr ( uUnit == uZero )
 			{

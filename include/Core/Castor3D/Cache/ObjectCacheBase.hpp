@@ -21,7 +21,8 @@ namespace castor3d
 		using ElementT = ObjT;
 		using ElementKeyT = KeyT;
 		using ElementCacheTraitsT = TraitsT;
-		using ElementCacheBaseT = castor::ResourceCacheBaseT< ElementT, ElementKeyT, ElementCacheTraitsT >;
+		using ElementCacheT = castor::ResourceCacheBaseT< ElementT, ElementKeyT, ElementCacheTraitsT >;
+		using ElementCacheBaseT = ElementCacheT;
 		using ElementObjectCacheT = ObjectCacheBaseT< ElementT, ElementKeyT, ElementCacheTraitsT >;
 		using ElementPtrT = ObjectPtrT< ElementT, ElementKeyT >;
 		using ElementObsT = ObjectObsT< ElementT, ElementKeyT >;

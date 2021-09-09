@@ -111,7 +111,7 @@ namespace castor3d
 		voxelData.gridConv->x = worldToGrid;
 		voxelData.gridConv->y = 1.0f / worldToGrid;
 		voxelData.gridConv->z = float( voxelGridSize );
-		voxelData.gridConv->w = 1.0f / voxelGridSize;
+		voxelData.gridConv->w = 1.0f / float( voxelGridSize );
 		voxelData.radiance->x = voxelConfig.maxDistance;
 		voxelData.radiance->y = float( castor::getBitSize( voxelGridSize ) );
 		voxelData.radiance->z = float( voxelConfig.numCones.value() );

@@ -28,10 +28,10 @@ namespace castor3d
 			, gridSizeAtt{ getMember< sdw::Vec4 >( "gridSizeAtt" ) }
 			, cameraPos4{ getMember< sdw::Vec4 >( "cameraPosition" ) }
 			, minVolumeCorner{ minVolumeCornerSize.xyz() }
-			, gridSize{ gridSizeAtt.xyz() }
 			, gridWidth{ gridSizeAtt.x() }
 			, gridHeight{ gridSizeAtt.y() }
 			, gridDepth{ gridSizeAtt.z() }
+			, gridSize{ gridSizeAtt.xyz() }
 			, cameraPos{ cameraPos4.xyz() }
 			, m_cellSize{ minVolumeCornerSize.w() }
 			, m_indirectAttenuation{ gridSizeAtt.w() }
@@ -119,7 +119,7 @@ namespace castor3d
 		auto & configuration = m_ubo.getData();
 		auto cellSize = std::max( std::max( aabb.getDimensions()->x
 			, aabb.getDimensions()->y )
-			, aabb.getDimensions()->z ) / gridDim;
+			, aabb.getDimensions()->z ) / float( gridDim );
 		m_grid = { gridDim, cellSize, aabb.getMax(), aabb.getMin(), 1.0f, 0 };
 		//m_grid.transform( cameraPos, cameraDir );
 

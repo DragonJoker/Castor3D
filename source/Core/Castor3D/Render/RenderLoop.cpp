@@ -29,9 +29,9 @@ namespace castor3d
 		, uint32_t wantedFPS
 		, bool isAsync )
 		: OwnedBy< Engine >( engine )
+		, m_renderSystem{ *engine.getRenderSystem() }
 		, m_wantedFPS{ wantedFPS }
 		, m_frameTime{ 1000ull / wantedFPS }
-		, m_renderSystem{ *engine.getRenderSystem() }
 		, m_debugOverlays{ std::make_unique< DebugOverlays >( engine ) }
 		, m_queueUpdater{ std::max( 2u, engine.getCpuInformations().getCoreCount() - ( isAsync ? 2u : 1u ) ) }
 		, m_uploadResources
@@ -137,7 +137,7 @@ namespace castor3d
 
 			if ( first )
 			{
-				log::info << "Initialisation time: " << ( m_lastFrameTime.load().count() / 1000.0f ) << " ms." << std::endl;
+				log::info << "Initialisation time: " << ( float( m_lastFrameTime.load().count() ) / 1000.0f ) << " ms." << std::endl;
 			}
 		}
 	}

@@ -40,7 +40,7 @@ namespace castor3d
 		if ( m_nbFaces >= 3 )
 		{
 			Submesh & submesh = *mesh.createSubmesh();
-			float rAngle = castor::PiMult2< float > / m_nbFaces;
+			float rAngle = castor::PiMult2< float > / float( m_nbFaces );
 			std::vector< castor::Point2f > arc( m_nbFaces + 1u );
 			float rAlpha = 0;
 			uint32_t iCur = 0;
@@ -75,7 +75,7 @@ namespace castor3d
 						submesh.addPoint( InterleavedVertex{}
 							.position( pos )
 							.normal( castor::point::getNormalised( pos ) )
-							.texcoord( castor::Point2f{ float( i ) / m_nbFaces, float( 1.0 + ptT[1] / m_radius ) / 2 } ) );
+							.texcoord( castor::Point2f{ float( i ) / float( m_nbFaces ), float( 1.0 + ptT[1] / m_radius ) / 2 } ) );
 						iCur++;
 					}
 				}
@@ -91,7 +91,7 @@ namespace castor3d
 					submesh.addPoint( InterleavedVertex{}
 						.position( pos )
 						.normal( castor::point::getNormalised( pos ) )
-						.texcoord( castor::Point2f{ float( i ) / m_nbFaces, float( 1.0 + ptB[1] / m_radius ) / 2 } ) );
+						.texcoord( castor::Point2f{ float( i ) / float( m_nbFaces ), float( 1.0 + ptB[1] / m_radius ) / 2 } ) );
 				}
 
 				// Reconstition des faces

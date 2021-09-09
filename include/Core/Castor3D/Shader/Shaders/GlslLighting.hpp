@@ -81,6 +81,7 @@ namespace castor3d::shader
 			, ShadowOptions shadowOptions
 			, bool isOpaqueProgram
 			, std::string prefix );
+		C3D_API virtual ~LightingModel() = default;
 		C3D_API virtual sdw::Vec3 combine( sdw::Vec3 const & directDiffuse
 			, sdw::Vec3 const & indirectDiffuse
 			, sdw::Vec3 const & directSpecular

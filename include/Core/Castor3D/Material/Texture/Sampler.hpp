@@ -153,7 +153,7 @@ namespace castor3d
 
 		bool isAnisotropicFilteringEnabled()const
 		{
-			return m_info.anisotropyEnable;
+			return m_info.anisotropyEnable == VK_TRUE;
 		}
 
 		bool isMipmapSet()const
@@ -163,7 +163,7 @@ namespace castor3d
 
 		bool isCompareEnabled()const
 		{
-			return m_info.compareEnable;
+			return m_info.compareEnable == VK_TRUE;
 		}
 		/**@}*/
 		/**

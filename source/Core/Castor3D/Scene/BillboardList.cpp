@@ -15,11 +15,11 @@ namespace castor3d
 		, ashes::PipelineVertexInputStateCreateInfoPtr vertexLayout
 		, uint32_t vertexStride
 		, ashes::VertexBufferBasePtr vertexBuffer )
-		: m_vertexLayout{ std::move( vertexLayout ) }
-		, m_vertexStride{ vertexStride }
-		, m_vertexBuffer{ vertexBuffer ? std::move( vertexBuffer ) : nullptr }
-		, m_scene{ scene }
+		: m_scene{ scene }
 		, m_node{ node }
+		, m_vertexBuffer{ vertexBuffer ? std::move( vertexBuffer ) : nullptr }
+		, m_vertexLayout{ std::move( vertexLayout ) }
+		, m_vertexStride{ vertexStride }
 	{
 	}
 

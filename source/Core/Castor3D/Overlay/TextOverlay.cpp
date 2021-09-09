@@ -197,13 +197,15 @@ namespace castor3d
 										castor::Point4f{ fontUvLeft, fontUvTop, fontUvRight, fontUvBottom },
 										texUvLeft, texUvTop, texUvRight, texUvBottom );
 
+									auto w( float( p_size.getWidth() ) );
+									auto h( float( p_size.getHeight() ) );
 									//
 									// Fill buffer
 									//
-									TextOverlay::Vertex const vertexTR = { { float( right ) / p_size.getWidth(), float( top ) / p_size.getHeight() },    { fontUvRight, fontUvTop },    { texUvRight, texUvTop } };
-									TextOverlay::Vertex const vertexTL = { { float( left ) / p_size.getWidth(),  float( top ) / p_size.getHeight() },    { fontUvLeft,  fontUvTop },    { texUvLeft,  texUvTop } };
-									TextOverlay::Vertex const vertexBL = { { float( left ) / p_size.getWidth(),  float( bottom ) / p_size.getHeight() }, { fontUvLeft,  fontUvBottom }, { texUvLeft,  texUvBottom } };
-									TextOverlay::Vertex const vertexBR = { { float( right ) / p_size.getWidth(), float( bottom ) / p_size.getHeight() }, { fontUvRight, fontUvBottom }, { texUvRight, texUvBottom } };
+									TextOverlay::Vertex const vertexTR = { { float( right ) / w, float( top ) / h },    { fontUvRight, fontUvTop },    { texUvRight, texUvTop } };
+									TextOverlay::Vertex const vertexTL = { { float( left ) / w,  float( top ) / h },    { fontUvLeft,  fontUvTop },    { texUvLeft,  texUvTop } };
+									TextOverlay::Vertex const vertexBL = { { float( left ) / w,  float( bottom ) / h }, { fontUvLeft,  fontUvBottom }, { texUvLeft,  texUvBottom } };
+									TextOverlay::Vertex const vertexBR = { { float( right ) / w, float( bottom ) / h }, { fontUvRight, fontUvBottom }, { texUvRight, texUvBottom } };
 
 									m_arrayVtx.push_back( vertexBL );
 									m_arrayVtx.push_back( vertexBR );

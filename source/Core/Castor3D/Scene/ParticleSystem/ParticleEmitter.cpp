@@ -64,6 +64,8 @@ namespace castor3d
 			case ParticleFormat::eMat4f:
 				particle.setValue< ParticleFormat::eMat4f >( index, value.get< castor::Matrix4x4f >( index ) );
 				break;
+			default:
+				break;
 			}
 
 			++index;

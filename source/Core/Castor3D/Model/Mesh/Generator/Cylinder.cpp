@@ -54,8 +54,7 @@ namespace castor3d
 			auto indexMappingSide = std::make_shared< TriFaceMapping >( submeshSide );
 
 			//CALCUL DE LA POSITION DES POINTS
-			float angleRotation = PiMult2< float > / m_nbFaces;
-			uint32_t i = 0;
+			float angleRotation = PiMult2< float > / float( m_nbFaces );
 			float rCosRot = cos( angleRotation );
 			float rSinRot = sin( angleRotation );
 			float rCos = 1.0f;
@@ -82,11 +81,11 @@ namespace castor3d
 				sideVertex.push_back( InterleavedVertex{}
 					.position( Point3f{ m_radius * rCos, -m_height / 2, m_radius * rSin } )
 					.normal( Point3f{ -rCos, -rSin, 0.0 } )
-					.texcoord( Point2f{ float( 1.0 ) - float( i ) / m_nbFaces, float( 0.0 ) } ) );
+					.texcoord( Point2f{ float( 1.0 ) - float( i ) / float( m_nbFaces ), float( 0.0 ) } ) );
 				sideVertex.push_back( InterleavedVertex{}
 					.position( Point3f{ m_radius * rCos, m_height / 2, m_radius * rSin } )
 					.normal( Point3f{ -rCos, -rSin, 0.0 } )
-					.texcoord( Point2f{ float( 1.0 ) - float( i ) / m_nbFaces, float( 1.0 ) } ) );
+					.texcoord( Point2f{ float( 1.0 ) - float( i ) / float( m_nbFaces ), float( 1.0 ) } ) );
 
 				const float newCos = rCosRot * rCos - rSinRot * rSin;
 				const float newSin = rSinRot * rCos + rCosRot * rSin;
@@ -118,7 +117,7 @@ namespace castor3d
 			}
 
 			//Composition des extràmitàs
-			for ( i = 0; i < m_nbFaces - 1; i++ )
+			for ( uint32_t i = 0; i < m_nbFaces - 1; i++ )
 			{
 				//Composition du bas
 				indexMappingBase->addFace( i + 1, i, bottomCenterIndex );
@@ -132,7 +131,7 @@ namespace castor3d
 			indexMappingTop->addFace( m_nbFaces - 1, topCenterIndex, 0 );
 
 			//Composition des côtés
-			for ( i = 0; i < 2 * m_nbFaces; i += 2 )
+			for ( uint32_t i = 0; i < 2 * m_nbFaces; i += 2 )
 			{
 				indexMappingSide->addFace( i + 1, i + 0, i + 2 );
 				indexMappingSide->addFace( i + 3, i + 1, i + 2 );

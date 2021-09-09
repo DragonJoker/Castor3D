@@ -196,7 +196,7 @@ namespace castor3d
 			m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 			updater.timer->beginPass( *m_commandBuffer, updater.index + 1u );
 			// Copy output storage to billboard's vertex buffer
-			auto flags = m_parent.getBillboards()->getVertexBuffer().getBuffer().getCompatibleStageFlags();
+			flags = m_parent.getBillboards()->getVertexBuffer().getBuffer().getCompatibleStageFlags();
 			m_commandBuffer->memoryBarrier( flags
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
 				, m_parent.getBillboards()->getVertexBuffer().getBuffer().makeTransferDestination() );

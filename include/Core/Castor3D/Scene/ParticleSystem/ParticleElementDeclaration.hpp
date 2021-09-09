@@ -32,10 +32,10 @@ namespace castor3d
 			, ParticleFormat type
 			, uint32_t offset = 0u
 			, uint32_t divisor = 0u )
-			: m_dataType( type )
-			, m_offset( offset )
-			, m_name( name )
+			: m_name( name )
 			, m_usages( usages )
+			, m_dataType( type )
+			, m_offset( offset )
 			, m_divisor( divisor )
 		{
 		}

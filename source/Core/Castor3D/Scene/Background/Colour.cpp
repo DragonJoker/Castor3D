@@ -157,7 +157,6 @@ namespace castor3d
 
 			m_stagingTexture->flush( 0u, lockSize );
 			m_stagingTexture->unlock();
-			auto & renderSystem = *getEngine()->getRenderSystem();
 
 			auto data = device.graphicsData();
 			data->queue->submit( *m_cmdCopy, nullptr );

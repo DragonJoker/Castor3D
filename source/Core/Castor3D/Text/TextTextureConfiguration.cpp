@@ -111,7 +111,7 @@ namespace castor
 
 		if ( result )
 		{
-			result = writeOpt( file, cuT( "invert_y" ), configuration.needsYInversion );
+			result = writeOpt( file, cuT( "invert_y" ), configuration.needsYInversion != 0 );
 		}
 
 		return result;

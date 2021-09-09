@@ -58,10 +58,10 @@ namespace castor3d
 		File::listDirectoryFiles( m_fileName.getPath(), files );
 		auto meshName = m_fileName.getFileName();
 
-		for ( auto & file : files )
+		for ( auto & fileName : files )
 		{
-			if ( file.getExtension() == "cskl"
-				&& file.getFileName() == meshName )
+			if ( fileName.getExtension() == "cskl"
+				&& fileName.getFileName() == meshName )
 			{
 				auto skeleton = std::make_shared< Skeleton >( *mesh.getScene() );
 				BinaryFile skelFile{ m_fileName.getPath() / ( meshName + cuT( ".cskl" ) )
@@ -73,14 +73,14 @@ namespace castor3d
 					mesh.setSkeleton( skeleton );
 				}
 
-				for ( auto & file : files )
+				for ( auto & animFileName : files )
 				{
-					if ( file.getExtension() == "cska"
-						&& file.getFileName().find( meshName ) == 0u )
+					if ( animFileName.getExtension() == "cska"
+						&& animFileName.getFileName().find( meshName ) == 0u )
 					{
-						auto animName = cleanName( file.getFileName().substr( meshName.size() ) );
+						auto animName = cleanName( animFileName.getFileName().substr( meshName.size() ) );
 						auto animation = std::make_unique< SkeletonAnimation >( *skeleton, animName );
-						BinaryFile animFile{ file, File::OpenMode::eRead };
+						BinaryFile animFile{ animFileName, File::OpenMode::eRead };
 						result = BinaryParser< SkeletonAnimation >{}.parse( *animation, animFile );
 
 						if ( result )
@@ -91,12 +91,12 @@ namespace castor3d
 				}
 			}
 
-			if ( file.getExtension() == "cmsa"
-				&& file.getFileName().find( meshName ) == 0u )
+			if ( fileName.getExtension() == "cmsa"
+				&& fileName.getFileName().find( meshName ) == 0u )
 			{
-				auto animName = cleanName( file.getFileName().substr( meshName.size() ) );
+				auto animName = cleanName( fileName.getFileName().substr( meshName.size() ) );
 				auto animation = std::make_unique< MeshAnimation >( mesh, animName );
-				BinaryFile animFile{ file, File::OpenMode::eRead };
+				BinaryFile animFile{ fileName, File::OpenMode::eRead };
 				result = BinaryParser< MeshAnimation >{}.parse( *animation, animFile );
 
 				if ( result )
