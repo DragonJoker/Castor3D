@@ -12,6 +12,8 @@ See LICENSE file in root folder
 
 #include <ashespp/Buffer/StagingBuffer.hpp>
 
+#include <mutex>
+
 namespace castor3d
 {
 	class UniformBufferPool
@@ -111,6 +113,7 @@ namespace castor3d
 		uint8_t * m_stagingData;
 		std::map< uint32_t, BufferArray > m_buffers;
 		castor::String m_debugName;
+		std::mutex m_mutex;
 	};
 }
 

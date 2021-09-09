@@ -6,6 +6,7 @@ namespace castor3d
 	template< typename DataT >
 	UniformBufferOffsetT< DataT > UniformBufferPool::getBuffer( VkMemoryPropertyFlags flags )
 	{
+		auto lock( castor::makeUniqueLock( m_mutex ) );
 		UniformBufferOffsetT< DataT > result;
 
 		auto & renderSystem = *getRenderSystem();
@@ -40,6 +41,7 @@ namespace castor3d
 	{
 		if ( bufferOffset )
 		{
+			auto lock( castor::makeUniqueLock( m_mutex ) );
 			auto key = uint32_t( bufferOffset.flags );
 			auto it = m_buffers.find( key );
 			CU_Require( it != m_buffers.end() );
