@@ -29,7 +29,6 @@ namespace castor3d
 			, uint32_t cascades )
 		{
 			auto & scene = *light.getLight().getScene();
-			auto & node = *light.getLight().getParent();
 			auto & renderSystem = *scene.getEngine()->getRenderSystem();
 			std::vector< DirectionalLight::Cascade > result( cascades );
 			Point3f lightDirection = light.getDirection();
@@ -57,7 +56,7 @@ namespace castor3d
 
 			for ( uint32_t i = 0; i < cascades; i++ )
 			{
-				float p = ( i + 1 ) / float( cascades );
+				float p = float( i + 1 ) / float( cascades );
 				float log = minZ * std::pow( ratio, p );
 				float uniform = minZ + range * p;
 				float d = lambda * ( log - uniform ) + uniform;

@@ -978,7 +978,6 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			auto & parsingContext = static_cast< SceneFileContext & >( context );
 			parsingContext.path.clear();
 			params[0]->get( parsingContext.strName );
 		}
@@ -1097,12 +1096,12 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSceneImport )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
-		Path path;
-		Path pathFile = context.file.getPath() / params[0]->get( path );
+		//auto & parsingContext = static_cast< SceneFileContext & >( context );
+		//Path path;
+		//Path pathFile = context.file.getPath() / params[0]->get( path );
 
-		Engine * engine = parsingContext.parser->getEngine();
-		auto extension = string::lowerCase( pathFile.getExtension() );
+		//Engine * engine = parsingContext.parser->getEngine();
+		//auto extension = string::lowerCase( pathFile.getExtension() );
 
 		//if ( !engine->getImporterFactory().isTypeRegistered( extension ) )
 		//{
@@ -3538,8 +3537,6 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserShaderUboShaders )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
-
 		if ( !params.empty() )
 		{
 			uint32_t value;
@@ -3547,6 +3544,7 @@ namespace castor3d
 
 			if ( value )
 			{
+				//auto & parsingContext = static_cast< SceneFileContext & >( context );
 				//parsingContext.uniformBuffer = std::make_unique< UniformBuffer >( parsingContext.strName
 				//	, *parsingContext.shaderProgram->getRenderSystem()
 				//	, 1u );
@@ -3622,9 +3620,9 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserShaderVariableValue )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
-		String strParams;
-		params[0]->get( strParams );
+		//auto & parsingContext = static_cast< SceneFileContext & >( context );
+		//String strParams;
+		//params[0]->get( strParams );
 
 		//if ( parsingContext.uniform )
 		//{
@@ -5324,9 +5322,9 @@ namespace castor3d
 		else
 		{
 			auto & vctConfig = parsingContext.scene->getVoxelConeTracingConfig();
-			uint32_t result;
-			params[0]->get( result );
-			vctConfig.gridSize = result;
+			uint32_t value;
+			params[0]->get( value );
+			vctConfig.gridSize = value;
 		}
 	}
 	CU_EndAttribute()
@@ -5346,9 +5344,9 @@ namespace castor3d
 		else
 		{
 			auto & vctConfig = parsingContext.scene->getVoxelConeTracingConfig();
-			uint32_t result;
-			params[0]->get( result );
-			vctConfig.numCones = result;
+			uint32_t value;
+			params[0]->get( value );
+			vctConfig.numCones = value;
 		}
 	}
 	CU_EndAttribute()

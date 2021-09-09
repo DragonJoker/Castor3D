@@ -18,7 +18,7 @@ namespace castor3d
 	{
 		uint32_t const maxWidth = font.lock()->getMaxWidth();
 		uint32_t const maxHeight = font.lock()->getMaxHeight();
-		uint32_t const count = uint32_t( std::ceil( std::distance( font.lock()->begin(), font.lock()->end() ) / 16.0 ) );
+		uint32_t const count = uint32_t( std::ceil( double( std::distance( font.lock()->begin(), font.lock()->end() ) ) / 16.0 ) );
 
 		auto sampler = getEngine()->getSamplerCache().add( font.lock()->getName(), *getEngine() );
 		sampler.lock()->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
@@ -63,7 +63,7 @@ namespace castor3d
 		{
 			uint32_t const maxWidth = font->getMaxWidth();
 			uint32_t const maxHeight = font->getMaxHeight();
-			uint32_t const count = uint32_t( std::ceil( std::distance( font->begin(), font->end() ) / 16.0 ) );
+			uint32_t const count = uint32_t( std::ceil( float( std::distance( font->begin(), font->end() ) ) / 16.0 ) );
 			castor::Size size{ maxWidth * 16, maxHeight * count };
 			m_texture->setSource( castor::PxBufferBase::create( castor::Size( maxWidth * 16, maxHeight * count )
 				, castor::PixelFormat::eR8_UNORM ), true );

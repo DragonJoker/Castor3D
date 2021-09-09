@@ -53,7 +53,7 @@ namespace castor3d
 			using namespace sdw;
 			VertexWriter writer;
 
-			if ( shader::DirectionalMaxCascadesCount > 1u )
+			if constexpr ( shader::DirectionalMaxCascadesCount > 1u )
 			{
 				auto inPosition = writer.declInput< Vec2 >( "inPosition", 0u );
 #if C3D_UseTiledDirectionalShadowMap

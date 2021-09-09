@@ -88,12 +88,12 @@ namespace castor3d
 
 		if ( m_computeSize.getWidth() != 0 )
 		{
-			result[0] = m_computeSize.getWidth() / float( size.getWidth() );
+			result[0] = float( m_computeSize.getWidth() ) / float( size.getWidth() );
 		}
 
 		if ( m_computeSize.getHeight() != 0 )
 		{
-			result[1] = m_computeSize.getHeight() / float( size.getHeight() );
+			result[1] = float( m_computeSize.getHeight() ) / float( size.getHeight() );
 		}
 
 		return result;

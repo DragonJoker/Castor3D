@@ -454,18 +454,13 @@ namespace castor3d
 		}
 		else
 		{
-			auto target = m_renderTarget.lock();
-
-			if ( target )
-			{
-				auto queueData = m_device.graphicsData();
-				target->initialise( m_device, *queueData, nullptr );
-				doCreatePickingPass( *queueData );
-				doCreateIntermediateViews( *queueData );
-				doCreateRenderQuad( *queueData );
-				doCreateCommandBuffers( *queueData );
-				doCreateSaveData( *queueData );
-			}
+			auto queueData = m_device.graphicsData();
+			target->initialise( m_device, *queueData, nullptr );
+			doCreatePickingPass( *queueData );
+			doCreateIntermediateViews( *queueData );
+			doCreateRenderQuad( *queueData );
+			doCreateCommandBuffers( *queueData );
+			doCreateSaveData( *queueData );
 
 			if ( m_loadingScreen )
 			{
@@ -597,9 +592,6 @@ namespace castor3d
 					, *m_queue->queue
 					, baseToWait ) };
 				baseToWait.clear();
-
-				auto & engine = *getEngine();
-				auto & renderSystem = *engine.getRenderSystem();
 
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 				m_pickingPass->pick( *m_device
@@ -918,7 +910,6 @@ namespace castor3d
 
 	void RenderWindow::doCreateProgram()
 	{
-		auto & renderSystem = *getEngine()->getRenderSystem();
 		ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, getName() };
 		{
 			using namespace sdw;
@@ -1035,7 +1026,7 @@ namespace castor3d
 			ashes::ImageViewCRefArray attaches;
 			m_swapchainViews.clear();
 
-			for ( auto & attach : m_renderPass->getAttachments() )
+			for ( size_t i = 0u; i < m_renderPass->getAttachments().size(); ++i )
 			{
 				m_swapchainViews.push_back( m_swapChainImages[backBuffer].createView( makeVkType< VkImageViewCreateInfo >( 0u
 					, m_swapChainImages[backBuffer]
@@ -1190,7 +1181,6 @@ namespace castor3d
 			commandBuffers.resize( m_swapChainImages.size() );
 			auto & intermediate = m_intermediates[pass];
 			auto & intermediateBarrierView = m_intermediateBarrierViews[pass];
-			auto & intermediateSampledView = m_intermediateSampledViews[pass];
 			auto & handler = m_device.renderSystem.getEngine()->getGraphResourceHandler();
 			auto & context = m_device.makeContext();
 			uint32_t index = 0u;
@@ -1467,6 +1457,7 @@ namespace castor3d
 				, &fence
 				, VK_TRUE
 				, ashes::MaxTimeout );
+			ashes::checkError( res, "Wait between swapchain images presentation." );
 			m_queue->queue->present( { *m_swapChain }
 				, { resources.imageIndex }
 				, semaphores );

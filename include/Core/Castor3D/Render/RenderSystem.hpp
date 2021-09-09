@@ -251,7 +251,7 @@ namespace castor3d
 
 		bool hasSsbo()const
 		{
-			return m_desc.features.hasStorageBuffers;
+			return m_desc.features.hasStorageBuffers == VK_TRUE;
 		}
 
 		ashes::Instance const & getInstance()const

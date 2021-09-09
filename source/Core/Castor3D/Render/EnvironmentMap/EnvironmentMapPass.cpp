@@ -31,7 +31,7 @@ namespace castor3d
 		CameraSPtr doCreateCamera( SceneNode & node
 			, VkExtent3D const & size )
 		{
-			float const aspect = float( size.width ) / size.height;
+			float const aspect = float( size.width ) / float( size.height );
 			float const nearZ = 0.1f;
 			float const farZ = 1000.0f;
 			Viewport viewport{ *node.getScene()->getEngine() };

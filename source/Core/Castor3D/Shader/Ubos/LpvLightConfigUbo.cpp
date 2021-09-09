@@ -135,6 +135,10 @@ namespace castor3d
 				configuration.tanFovYHalf = ( lightFov * 0.5 ).tan();
 			}
 			break;
+
+		default:
+			CU_Failure( "Unsupported LightType" );
+			break;
 		}
 	}
 

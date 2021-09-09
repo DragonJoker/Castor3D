@@ -142,10 +142,10 @@ void Icosahedron::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 		submesh->getPoint( face[2] ).tex = Point3f{ u, v, 0 };
 	}
 
-	for ( auto & vertex : submesh->getPoints() )
+	for ( auto & curVertex : submesh->getPoints() )
 	{
-		SphericalVertex vsVertex1( vertex.nml );
-		vertex.tex = Point3f{ vsVertex1.m_phi, vsVertex1.m_theta, 0 };
+		SphericalVertex vsVertex1( curVertex.nml );
+		curVertex.tex = Point3f{ vsVertex1.m_phi, vsVertex1.m_theta, 0 };
 	}
 
 	indexMapping->computeTangentsFromNormals();

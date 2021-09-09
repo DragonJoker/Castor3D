@@ -322,7 +322,7 @@ namespace castor3d
 			{
 				CU_Require( m_llpvResult );
 
-				for ( auto & lpv : *m_llpvResult )
+				for ( size_t i = 0u; i < m_llpvResult->size(); ++i )
 				{
 					bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 						, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER

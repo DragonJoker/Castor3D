@@ -231,7 +231,6 @@ namespace castor3d
 					renderPass,
 				} );
 			facePipeline.descriptorSet = m_descriptorPool->createDescriptorSet( "RenderCubeFace" + castor::string::toString( face ) );
-			auto size = uint32_t( m_matrixUbo->getBuffer().getAlignedSize() );
 			facePipeline.descriptorSet->createSizedBinding( m_descriptorLayout->getBinding( 0u )
 				, m_matrixUbo->getBuffer()
 				, face

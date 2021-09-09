@@ -473,10 +473,10 @@ namespace castor3d
 		, m_device{ device }
 		, m_smResult{ smResult }
 		, m_lpvResult{ lpvResult }
-		, m_lightType{ lightType }
 		, m_lpvGridConfigUbo{ lpvGridConfigUbo }
 		, m_geometryVolumes{ geometryVolumes }
 		, m_graph{ handler, getName() }
+		, m_lightType{ lightType }
 		, m_injection{ handler
 			, m_device
 			, getName() + "LightInjection0"
@@ -605,7 +605,7 @@ namespace castor3d
 			changed = lightLpv.second->update( updater
 				, std::max( std::max( aabb.getDimensions()->x
 					, aabb.getDimensions()->y )
-					, aabb.getDimensions()->z ) / m_scene.getLpvGridSize() )
+					, aabb.getDimensions()->z ) / float( m_scene.getLpvGridSize() ) )
 				|| changed;
 		}
 

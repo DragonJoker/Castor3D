@@ -127,7 +127,7 @@ namespace castor3d
 			auto & camera = *updater.camera;
 			auto & aabb = camera.getScene()->getBoundingBox();
 			auto max = std::max( aabb.getDimensions()->x, std::max( aabb.getDimensions()->y, aabb.getDimensions()->z ) );
-			auto cellSize = m_voxelConfig.gridSize.value() / max;
+			auto cellSize = float( m_voxelConfig.gridSize.value() ) / max;
 			auto voxelSize = ( cellSize * m_voxelConfig.voxelSizeFactor );
 			m_grid = castor::Point4f{ 0.0f
 				, 0.0f

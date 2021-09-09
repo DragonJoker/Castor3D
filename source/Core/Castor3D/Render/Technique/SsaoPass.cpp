@@ -36,7 +36,6 @@ namespace castor3d
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_size{ makeExtent2D( size ) }
 		, m_matrixUbo{ m_device }
-		, m_ssaoConfigUbo{ m_device }
 		, m_linearisePass{ castor::makeUnique< LineariseDepthPass >( graph
 			, previousPass
 			, m_device
@@ -45,6 +44,7 @@ namespace castor3d
 			, m_ssaoConfig
 			, m_size
 			, depth.sampledViewId ) }
+		, m_ssaoConfigUbo{ m_device }
 		, m_rawAoPass{ castor::makeUnique< SsaoRawAOPass >( graph
 			, m_device
 			, progress

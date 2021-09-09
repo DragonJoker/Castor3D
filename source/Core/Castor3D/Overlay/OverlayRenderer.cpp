@@ -466,7 +466,6 @@ namespace castor3d
 		, m_uboPools{ *device.uboPools }
 		, m_target{ target }
 		, m_commandBuffer{ device.graphicsData()->commandPool->createCommandBuffer( "OverlayRenderer", level ) }
-		, m_matrixUbo{ device }
 		, m_noTexDeclaration{ 0u
 			, ashes::VkVertexInputBindingDescriptionArray{ { 0u
 				, sizeof( OverlayCategory::Vertex )
@@ -485,8 +484,9 @@ namespace castor3d
 			, ashes::VkVertexInputAttributeDescriptionArray{ { 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, coords ) }
 				, { 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, texture ) }
 				, { 2u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, text ) } } }
-		, m_finished{ device->createSemaphore( "OverlayRenderer" ) }
 		, m_size{ makeSize( m_target.getExtent() ) }
+		, m_matrixUbo{ device }
+		, m_finished{ device->createSemaphore( "OverlayRenderer" ) }
 	{
 		doCreateRenderPass( device );
 
@@ -875,15 +875,6 @@ namespace castor3d
 		, std::map< uint32_t, Pipeline > & pipelines
 		, bool text )
 	{
-		// Count wanted textures
-		auto count = uint32_t( std::count_if( pass.begin()
-			, pass.end()
-			, []( TextureUnitSPtr unit )
-			{
-				auto & config = unit->getConfiguration();
-				return config.colourMask[0] || config.opacityMask[0];
-			}
-		) );
 		// Remove unwanted flags
 		auto textures = filterTexturesFlags( pass.getTexturesMask(), TextureFlag::eColour | TextureFlag::eOpacity );
 		auto key = makeKey( textures, text );
@@ -924,7 +915,6 @@ namespace castor3d
 				, 0u );
 
 			// Shader inputs
-			uint32_t index = 0u;
 			auto position = writer.declInput< Vec2 >( "position", 0u );
 			auto uv = writer.declInput< Vec2 >( "uv", 1u, hasTexture );
 			auto text = writer.declInput< Vec2 >( "text", 2u, textOverlay );

@@ -65,7 +65,7 @@ namespace castor3d
 			auto halfOpp = opp / 2;
 			auto bandSize = double( getSafeBandSize( size ) );
 			auto halfHeight = halfOpp + bandSize;
-			auto halfWidth = std::ceil( aspect * halfOpp ) + bandSize;
+			auto halfWidth = std::ceil( aspect * float( halfOpp ) ) + bandSize;
 			return renderSystem.getPerspective( fovY + ( castor::atanf( ( bandSize * 2.85f / 4.0f ) / adj ) )
 				, float( halfWidth / halfHeight )
 				, nearZ
@@ -94,10 +94,10 @@ namespace castor3d
 		, m_modified{ true }
 		, m_left{ m_modified, left }
 		, m_right{ m_modified, right }
-		, m_bottom{ m_modified, bottom }
 		, m_top{ m_modified, top }
-		, m_near{ m_modified, nearZ }
+		, m_bottom{ m_modified, bottom }
 		, m_far{ m_modified, farZ }
+		, m_near{ m_modified, nearZ }
 		, m_fovY{ m_modified, fovY }
 		, m_ratio{ m_modified, aspect }
 		, m_type{ m_modified, type }
@@ -117,10 +117,10 @@ namespace castor3d
 		, m_modified{ rhs.m_modified }
 		, m_left{ m_modified, rhs.m_left.value() }
 		, m_right{ m_modified, rhs.m_right.value() }
-		, m_bottom{ m_modified, rhs.m_bottom.value() }
 		, m_top{ m_modified, rhs.m_top.value() }
-		, m_near{ m_modified, rhs.m_near.value() }
+		, m_bottom{ m_modified, rhs.m_bottom.value() }
 		, m_far{ m_modified, rhs.m_far.value() }
+		, m_near{ m_modified, rhs.m_near.value() }
 		, m_fovY{ m_modified, rhs.m_fovY.value() }
 		, m_ratio{ m_modified, rhs.m_ratio.value() }
 		, m_type{ m_modified, rhs.m_type.value() }
@@ -138,10 +138,10 @@ namespace castor3d
 		, m_modified{ rhs.m_modified }
 		, m_left{ m_modified, rhs.m_left.value() }
 		, m_right{ m_modified, rhs.m_right.value() }
-		, m_bottom{ m_modified, rhs.m_bottom.value() }
 		, m_top{ m_modified, rhs.m_top.value() }
-		, m_near{ m_modified, rhs.m_near.value() }
+		, m_bottom{ m_modified, rhs.m_bottom.value() }
 		, m_far{ m_modified, rhs.m_far.value() }
+		, m_near{ m_modified, rhs.m_near.value() }
 		, m_fovY{ m_modified, rhs.m_fovY.value() }
 		, m_ratio{ m_modified, rhs.m_ratio.value() }
 		, m_type{ m_modified, rhs.m_type.value() }
@@ -290,6 +290,6 @@ namespace castor3d
 	float Viewport::getProjectionScale()const
 	{
 		float const scale = std::abs( 2.0f * ( getFovY() * 0.5f ).tan() );
-		return std::abs( getHeight() / scale );
+		return std::abs( float( getHeight() ) / scale );
 	}
 }

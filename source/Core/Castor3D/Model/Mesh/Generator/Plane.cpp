@@ -52,8 +52,8 @@ namespace castor3d
 		uint32_t nbVertexH = m_subDivisionsD + 2;
 		float offsetW = -m_width / 2;
 		float offsetH = -m_depth / 2;
-		float gapW = m_width / ( m_subDivisionsW + 1 );
-		float gapH = m_depth / ( m_subDivisionsD + 1 );
+		float gapW = m_width / float( m_subDivisionsW + 1 );
+		float gapH = m_depth / float( m_subDivisionsD + 1 );
 		castor::Point3f ptCurrentUV;
 		castor::Point3f ptPreviousUV;
 		castor::Point3f ptNormal( 0.0, 1.0, 0.0 );
@@ -66,9 +66,9 @@ namespace castor3d
 			for ( uint32_t j = 0; j < nbVertexH; j++ )
 			{
 				submesh->addPoint( InterleavedVertex{}
-					.position( castor::Point3f{ offsetW + ( i * gapW ), offsetH + ( j * gapH ), 0.0 } )
+					.position( castor::Point3f{ offsetW + ( float( i ) * gapW ), offsetH + ( float( j ) * gapH ), 0.0 } )
 					.normal( castor::Point3f{ 0.0, 0.0, 1.0 } )
-					.texcoord( castor::Point2f{ i * gapW / m_width, j * gapH / m_depth } ) );
+					.texcoord( castor::Point2f{ float( i ) * gapW / m_width, float( j ) * gapH / m_depth } ) );
 			}
 		}
 

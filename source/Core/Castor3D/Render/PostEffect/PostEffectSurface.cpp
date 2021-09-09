@@ -70,16 +70,16 @@ namespace castor3d
 	bool PostEffectSurface::initialise( RenderDevice const & device
 		, QueueData const & queueData
 		, ashes::RenderPass const & renderPass
-		, Size const & size
+		, Size const & newSize
 		, VkFormat format
 		, uint32_t mipLevels )
 	{
 		return initialise( device
 			, queueData
 			, renderPass
-			, size
+			, newSize
 			, doCreateTexture( *getEngine()->getRenderSystem()
-				, size
+				, newSize
 				, format
 				, mipLevels
 				, false
@@ -90,22 +90,22 @@ namespace castor3d
 	bool PostEffectSurface::initialise( RenderDevice const & device
 		, QueueData const & queueData
 		, ashes::RenderPass const & renderPass
-		, Size const & size
+		, Size const & newSize
 		, VkFormat colourFormat
 		, VkFormat depthFormat )
 	{
 		return initialise( device
 			, queueData
 			, renderPass
-			, size
+			, newSize
 			, doCreateTexture( *getEngine()->getRenderSystem()
-				, size
+				, newSize
 				, colourFormat
 				, 1u
 				, false
 				, m_debugName + cuT( "_Colour" ) )
 			, doCreateTexture( *getEngine()->getRenderSystem()
-				, size
+				, newSize
 				, depthFormat
 				, 1u
 				, true
@@ -115,31 +115,31 @@ namespace castor3d
 	bool PostEffectSurface::initialise( RenderDevice const & device
 		, QueueData const & queueData
 		, ashes::RenderPass const & renderPass
-		, castor::Size const & size
-		, TextureLayoutSPtr colourTexture )
+		, castor::Size const & newSize
+		, TextureLayoutSPtr newColourTexture )
 	{
 		return initialise( device
 			, queueData
 			, renderPass
-			, size
-			, colourTexture
+			, newSize
+			, newColourTexture
 			, nullptr );
 	}
 
 	bool PostEffectSurface::initialise( RenderDevice const & device
 		, QueueData const & queueData
 		, ashes::RenderPass const & renderPass
-		, castor::Size const & size
-		, TextureLayoutSPtr colourTexture
+		, castor::Size const & newSize
+		, TextureLayoutSPtr newColourTexture
 		, VkFormat depthFormat )
 	{
 		return initialise( device
 			, queueData
 			, renderPass
-			, size
-			, colourTexture
+			, newSize
+			, newColourTexture
 			, doCreateTexture( *getEngine()->getRenderSystem()
-				, size
+				, newSize
 				, depthFormat
 				, 1u
 				, true
@@ -149,45 +149,45 @@ namespace castor3d
 	bool PostEffectSurface::initialise( RenderDevice const & device
 		, QueueData const & queueData
 		, ashes::RenderPass const & renderPass
-		, castor::Size const & size
+		, castor::Size const & newSize
 		, VkFormat colourFormat
-		, TextureLayoutSPtr depthTexture )
+		, TextureLayoutSPtr newDepthTexture )
 	{
 		return initialise( device
 			, queueData
 			, renderPass
-			, size
+			, newSize
 			, doCreateTexture( *getEngine()->getRenderSystem()
-				, size
+				, newSize
 				, colourFormat
 				, 1u
 				, false
 				, m_debugName + cuT( "_Colour" ) )
-			, depthTexture );
+			, newDepthTexture );
 	}
 
 	bool PostEffectSurface::initialise( RenderDevice const & device
 		, QueueData const & queueData
 		, ashes::RenderPass const & renderPass
-		, Size const & size
-		, TextureLayoutSPtr colourTexture
-		, TextureLayoutSPtr depthTexture )
+		, Size const & newSize
+		, TextureLayoutSPtr newColourTexture
+		, TextureLayoutSPtr newDepthTexture )
 	{
-		this->size = size;
+		size = newSize;
 		ashes::ImageViewCRefArray attaches;
 
-		if ( colourTexture )
+		if ( newColourTexture )
 		{
-			this->colourTexture = colourTexture;
-			this->colourTexture->initialise( device, queueData );
+			colourTexture = newColourTexture;
+			colourTexture->initialise( device, queueData );
 			attaches.emplace_back( colourTexture->getDefaultView().getTargetView() );
 		}
 
-		if ( depthTexture )
+		if ( newDepthTexture )
 		{
-			this->depthTexture = depthTexture;
-			this->depthTexture->initialise( device, queueData );
-			auto & texture = this->depthTexture->getTexture();
+			depthTexture = newDepthTexture;
+			depthTexture->initialise( device, queueData );
+			auto & texture = depthTexture->getTexture();
 			auto format = texture.getFormat();
 			auto aspectMask = ashes::getAspectMask( format );
 			ashes::ImageViewCreateInfo view

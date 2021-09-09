@@ -161,8 +161,8 @@ namespace castor3d
 		auto const & proj = camera.getProjection( true );
 		configuration.projInfo = castor::Point4f
 		{
-			-2.0f / ( viewport.getWidth() * proj[0][0] ),
-			-2.0f / ( viewport.getHeight() * proj[1][1] ),
+			-2.0f / ( float( viewport.getWidth() ) * proj[0][0] ),
+			-2.0f / ( float( viewport.getHeight() ) * proj[1][1] ),
 			( 1.0f - proj[0][2] ) / proj[0][0],
 			( 1.0f - proj[1][2] ) / proj[1][1]
 		};

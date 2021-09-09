@@ -31,20 +31,20 @@ namespace castor
 			result = writeName( file, cuT( "material" ), overlay.getMaterial()->getName() );
 		}
 
-		for ( auto overlay : overlay.getOverlay() )
+		for ( auto child : overlay.getOverlay() )
 		{
-			switch ( overlay->getType() )
+			switch ( child->getType() )
 			{
 			case OverlayType::ePanel:
-				result = result && writeSub( file, *overlay->getPanelOverlay() );
+				result = result && writeSub( file, *child->getPanelOverlay() );
 				break;
 
 			case OverlayType::eBorderPanel:
-				result = result && writeSub( file, *overlay->getBorderPanelOverlay() );
+				result = result && writeSub( file, *child->getBorderPanelOverlay() );
 				break;
 
 			case OverlayType::eText:
-				result = result && writeSub( file, *overlay->getTextOverlay() );
+				result = result && writeSub( file, *child->getTextOverlay() );
 				break;
 
 			default:

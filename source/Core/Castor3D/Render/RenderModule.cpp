@@ -642,7 +642,7 @@ namespace castor3d
 		, castor::Size const & size )
 	{
 		auto bandsSize = double( getSafeBandsSize( size ) );
-		return float( ( aspect * size.getHeight() + bandsSize ) / ( size.getHeight() + bandsSize ) );
+		return float( ( aspect * float( size.getHeight() ) + bandsSize ) / ( float( size.getHeight() ) + bandsSize ) );
 	}
 
 	//*********************************************************************************************

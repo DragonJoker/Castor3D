@@ -37,12 +37,12 @@ namespace castor3d::shader
 		, specific{ getMember< sdw::Vec4 >( "specific" ) }
 		, albedo{ getMember< sdw::Vec3 >( "albedo" ) }
 		, specular{ getMember< sdw::Vec3 >( "specular" ) }
-		, albDiv{ getMember< sdw::Float >( "albDiv" ) }
-		, spcDiv{ getMember< sdw::Float >( "spcDiv" ) }
 		, edgeWidth{ edgeFactors.x() }
 		, depthFactor{ edgeFactors.y() }
 		, normalFactor{ edgeFactors.z() }
 		, objectFactor{ edgeFactors.w() }
+		, albDiv{ getMember< sdw::Float >( "albDiv" ) }
+		, spcDiv{ getMember< sdw::Float >( "spcDiv" ) }
 	{
 	}
 
@@ -100,8 +100,8 @@ namespace castor3d::shader
 		: m_writer{ writer }
 		, m_utils{ utils }
 		, m_isOpaqueProgram{ isOpaqueProgram }
-		, m_shadowModel{ std::make_shared< Shadow >( std::move( shadowOptions ), writer, utils ) }
 		, m_prefix{ std::move( prefix ) }
+		, m_shadowModel{ std::make_shared< Shadow >( std::move( shadowOptions ), writer, utils ) }
 	{
 	}
 

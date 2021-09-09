@@ -22,9 +22,9 @@ namespace castor3d
 	RenderLoopAsync::RenderLoopAsync( Engine & engine, uint32_t wantedFPS )
 		: RenderLoop{ engine, wantedFPS, true }
 		, m_mainLoopThread{ nullptr }
-		, m_paused{ false }
 		, m_ended{ false }
 		, m_rendering{ false }
+		, m_paused{ false }
 		, m_interrupted{ false }
 	{
 		m_mainLoopThread = std::make_unique< std::thread >( [this]()

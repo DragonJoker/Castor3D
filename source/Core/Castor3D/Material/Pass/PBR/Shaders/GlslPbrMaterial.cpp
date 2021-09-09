@@ -15,12 +15,12 @@ namespace castor3d::shader
 	{
 	}
 
-	void PbrLightMaterial::create( sdw::Vec3 const & albedo
+	void PbrLightMaterial::create( sdw::Vec3 const & newAlbedo
 		, sdw::Vec4 const & data3
 		, sdw::Vec4 const & data2
 		, Material const & material )
 	{
-		create( albedo
+		create( newAlbedo
 			, data3
 			, data2
 			, 0.0_f );
@@ -33,15 +33,15 @@ namespace castor3d::shader
 		objectFactor = material.objectFactor;
 	}
 
-	void PbrLightMaterial::create( sdw::Vec3 const & albedo
+	void PbrLightMaterial::create( sdw::Vec3 const & newAlbedo
 		, sdw::Vec4 const & data3
 		, sdw::Vec4 const & data2
 		, sdw::Float const & ambient )
 	{
-		this->albedo = albedo;
-		this->specular = data3.rgb();
-		this->metalness = data3.a();
-		this->roughness = data2.a();
+		albedo = newAlbedo;
+		specular = data3.rgb();
+		metalness = data3.a();
+		roughness = data2.a();
 	}
 
 	void PbrLightMaterial::create( Material const & material )
