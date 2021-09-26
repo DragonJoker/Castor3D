@@ -36,13 +36,6 @@ namespace GuiCommon
 		NodeTreeItemProperty( bool p_editable, castor3d::Engine * engine, castor3d::SceneNodeSPtr p_node );
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		~NodeTreeItemProperty();
-		/**
-		 *\~english
 		 *\brief		Retrieves the object
 		 *\return		The value
 		 *\~french
@@ -58,10 +51,9 @@ namespace GuiCommon
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )override;
 
 	private:
-		castor3d::Engine * m_engine;
 		castor3d::SceneNodeWPtr m_node;
 	};
 }

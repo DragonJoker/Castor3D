@@ -44,21 +44,21 @@ namespace castor3d
 				, uint32_t set );
 			C3D_API void declareSpot( uint32_t & index
 				, uint32_t set );
-			C3D_API sdw::Float computeDirectional( shader::Light light
-				, Surface surface
+			C3D_API sdw::Float computeDirectional( shader::Light const & light
+				, Surface const & surface
 				, sdw::Mat4 const & lightMatrix
 				, sdw::Vec3 const & lightDirection
 				, sdw::UInt const & cascadeIndex
 				, sdw::UInt const & maxCascade )const;
-			C3D_API sdw::Float computeSpot( shader::Light light
-				, Surface surface
+			C3D_API sdw::Float computeSpot( shader::Light const & light
+				, Surface const & surface
 				, sdw::Mat4 const & lightMatrix
 				, sdw::Vec3 const & lightDirection )const;
-			C3D_API sdw::Float computePoint( shader::Light light
-				, Surface surface
+			C3D_API sdw::Float computePoint( shader::Light const & light
+				, Surface const & surface
 				, sdw::Vec3 const & lightDirection )const;
-			C3D_API void computeVolumetric( shader::Light light
-				, Surface surface
+			C3D_API void computeVolumetric( shader::Light const & light
+				, Surface const & surface
 				, sdw::Vec3 const & eyePosition
 				, sdw::Mat4 const & lightMatrix
 				, sdw::Vec3 const & lightDirection

@@ -144,7 +144,13 @@ namespace castor3d
 		{
 			switch ( chunk.getChunkType() )
 			{
+#pragma warning( push )
+#pragma warning( disable: 4996 )
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 			case ChunkType::eKeyframeCount:
+#pragma GCC diagnostic pop
+#pragma warning( pop )
 				result = doParseChunk( count, chunk );
 				checkError( result, "Couldn't parse keyframes count." );
 
@@ -155,7 +161,13 @@ namespace castor3d
 
 				break;
 
+#pragma warning( push )
+#pragma warning( disable: 4996 )
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 			case ChunkType::eKeyframes:
+#pragma GCC diagnostic pop
+#pragma warning( pop )
 				result = doParseChunk( keyframesd, chunk );
 				checkError( result, "Couldn't parse keyframes." );
 

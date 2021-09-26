@@ -27,10 +27,6 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	SubmeshTreeItemProperty::~SubmeshTreeItemProperty()
-	{
-	}
-
 	void SubmeshTreeItemProperty::doCreateProperties( wxPGEditor * editor
 		, wxPropertyGrid * grid )
 	{

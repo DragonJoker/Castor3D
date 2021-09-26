@@ -428,8 +428,8 @@ namespace castor3d
 				m_combined.create();
 				auto runnable = m_runnable.get();
 				device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-					, [runnable, result, this]( RenderDevice const & device
-						, QueueData const & queueData )
+					, [runnable, result, this]( RenderDevice const &
+						, QueueData const & )
 					{
 						runnable->record();
 						m_initialised = result;
@@ -786,7 +786,7 @@ namespace castor3d
 		{
 			stepProgressBar( progress, "Creating " + name + " copy commands" );
 			auto & pass = m_graph.createPass( getName() + name + "Copy"
-				, [this, progress, name, &source, &target]( crg::FramePass const & pass
+				, [this, progress, name]( crg::FramePass const & pass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{

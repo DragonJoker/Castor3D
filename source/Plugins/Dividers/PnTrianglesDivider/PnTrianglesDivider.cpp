@@ -139,12 +139,12 @@ namespace PnTriangles
 		}
 		else
 		{
-			auto & a = doComputePoint( double( u0 ), double( v0 ), patch );
-			auto & b = doComputePoint( double( u2 ), double( v0 ), patch );
-			auto & c = doComputePoint( double( u0 ), double( v2 ), patch );
-			auto & d = doComputePoint( double( u1 ), double( v0 ), patch );
-			auto & e = doComputePoint( double( u1 ), double( v1 ), patch );
-			auto & f = doComputePoint( double( u0 ), double( v1 ), patch );
+			auto & a = doComputePoint( u0, v0, patch );
+			auto & b = doComputePoint( u2, v0, patch );
+			auto & c = doComputePoint( u0, v2, patch );
+			auto & d = doComputePoint( u1, v0, patch );
+			auto & e = doComputePoint( u1, v1, patch );
+			auto & f = doComputePoint( u0, v1, patch );
 			doSetTextCoords( a, b, c, d, e, f );
 		}
 	}
@@ -152,14 +152,14 @@ namespace PnTriangles
 	castor3d::SubmeshVertex & Subdivider::doComputePoint( double u, double v, Patch const & patch )
 	{
 		double w = 1.0 - u - v;
-		double u2 = double( u * u );
-		double v2 = double( v * v );
-		double w2 = double( w * w );
-		double u3 = double( u2 * u );
-		double v3 = double( v2 * v );
-		double w3 = double( w2 * w );
+		double u2 = u * u;
+		double v2 = v * v;
+		double w2 = w * w;
+		double u3 = u2 * u;
+		double v3 = v2 * v;
+		double w3 = w2 * w;
 
-		castor::Point3f point = castor::Point3f( patch.b300 * float( w3 )
+		castor::Point3f point = patch.b300 * float( w3 )
 			+ patch.b030 * float( u3 )
 			+ patch.b003 * float( v3 )
 			+ patch.b210 * float( 3.0 * w2 * u )
@@ -168,7 +168,7 @@ namespace PnTriangles
 			+ patch.b021 * float( 3.0 * u2 * v )
 			+ patch.b102 * float( 3.0 * w * v2 )
 			+ patch.b012 * float( 3.0 * u * v2 )
-			+ patch.b111 * float( 6.0 * w * u * v ) );
+			+ patch.b111 * float( 6.0 * w * u * v );
 
 		return doTryAddPoint( point );
 	}

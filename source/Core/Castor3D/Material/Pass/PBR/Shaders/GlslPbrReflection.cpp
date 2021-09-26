@@ -89,7 +89,7 @@ namespace castor3d::shader
 		{
 			envMapIndex = envMapIndex - 1_i;
 			auto incident = m_writer.declLocale( "incident"
-				, computeIncident( surface.worldPosition, sceneData.getCameraPosition() ) );
+				, computeIncident( surface.worldPosition, sceneData.cameraPosition ) );
 
 			IF( m_writer, reflection != 0_i )
 			{
@@ -132,7 +132,7 @@ namespace castor3d::shader
 				// Reflection from background skybox.
 				reflected = computeIBL( surface
 					, pbrMaterial
-					, sceneData.getCameraPosition()
+					, sceneData.cameraPosition
 					, irradiance
 					, prefiltered
 					, brdf );
@@ -171,7 +171,7 @@ namespace castor3d::shader
 			// Reflection from background skybox.
 			reflected = computeIBL( surface
 				, pbrMaterial
-				, sceneData.getCameraPosition()
+				, sceneData.cameraPosition
 				, irradiance
 				, prefiltered
 				, brdf );
@@ -214,7 +214,7 @@ namespace castor3d::shader
 		{
 			auto envMap = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapEnvironment" );
 			auto incident = m_writer.declLocale( "incident"
-				, computeIncident( surface.worldPosition, sceneData.getCameraPosition() ) );
+				, computeIncident( surface.worldPosition, sceneData.cameraPosition ) );
 
 			if ( checkFlag( m_passFlags, PassFlag::eReflection ) )
 			{
@@ -258,7 +258,7 @@ namespace castor3d::shader
 				// Reflection from background skybox.
 				reflected = computeIBL( surface
 					, pbrMaterial
-					, sceneData.getCameraPosition()
+					, sceneData.cameraPosition
 					, irradiance
 					, prefiltered
 					, brdf );
@@ -298,7 +298,7 @@ namespace castor3d::shader
 			// Reflection from background skybox.
 			reflected = computeIBL( surface
 				, pbrMaterial
-				, sceneData.getCameraPosition()
+				, sceneData.cameraPosition
 				, irradiance
 				, prefiltered
 				, brdf );
@@ -307,7 +307,7 @@ namespace castor3d::shader
 			{
 				// Refraction from background skybox.
 				auto incident = m_writer.declLocale( "incident"
-					, computeIncident( surface.worldPosition, sceneData.getCameraPosition() ) );
+					, computeIncident( surface.worldPosition, sceneData.cameraPosition ) );
 				computeRefrSkybox( incident
 					, surface.worldNormal
 					, prefiltered

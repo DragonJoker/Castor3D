@@ -117,8 +117,8 @@ namespace castor3d
 								, in.vertexIndex / rsmTexSize ) );
 #else
 						auto rsmCoords = writer.declLocale( "rsmCoords"
-							, ivec3( in.vertexIndex % rsmTexSize
-								, in.vertexIndex / rsmTexSize
+							, ivec3( in.vertexIndex % int32_t( rsmTexSize )
+								, in.vertexIndex / int32_t( rsmTexSize )
 								, cascadeIndex ) );
 #endif
 
@@ -185,8 +185,8 @@ namespace castor3d
 						auto light = writer.declLocale( "light"
 							, lightingModel->getDirectionalLight( c3d_lpvLightData.lightIndex ) );
 						auto rsmCoords = writer.declLocale( "rsmCoords"
-							, ivec2( in.vertexIndex % rsmTexSize
-								, in.vertexIndex / rsmTexSize ) );
+							, ivec2( in.vertexIndex % int32_t( rsmTexSize )
+								, in.vertexIndex / int32_t( rsmTexSize ) ) );
 
 						outRsmPos = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
 						outRsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
@@ -259,8 +259,8 @@ namespace castor3d
 					auto light = writer.declLocale( "light"
 						, lightingModel->getSpotLight( c3d_lpvLightData.lightIndex ) );
 					auto rsmCoords = writer.declLocale( "rsmCoords"
-						, ivec3( in.vertexIndex % rsmTexSize
-							, in.vertexIndex / rsmTexSize
+						, ivec3( in.vertexIndex % int32_t( rsmTexSize )
+							, in.vertexIndex / int32_t( rsmTexSize )
 							, light.m_lightBase.m_index ) );
 
 					outLightPos = light.m_position;
@@ -333,8 +333,8 @@ namespace castor3d
 					auto light = writer.declLocale( "light"
 						, lightingModel->getPointLight( c3d_lpvLightData.lightIndex ) );
 					auto rsmCoords = writer.declLocale( "rsmCoords"
-						, ivec3( in.vertexIndex % rsmTexSize
-							, in.vertexIndex / rsmTexSize
+						, ivec3( in.vertexIndex % int32_t( rsmTexSize )
+							, in.vertexIndex / int32_t( rsmTexSize )
 							, light.m_lightBase.m_index * 6_i + int32_t( face ) ) );
 
 					outLightPos = light.m_position;
@@ -554,7 +554,7 @@ namespace castor3d
 				, 0u
 				, VK_FORMAT_R32G32_SFLOAT
 				, offsetof( NonTexturedQuad::Vertex, position ) } } };
-		VkViewport viewport{ 0.0f, 0.0f, float( m_lpvSize ), float( m_lpvSize ) };
+		VkViewport viewport{ 0.0f, 0.0f, float( m_lpvSize ), float( m_lpvSize ), 0.0f, 1.0f };
 		VkRect2D scissor{ 0, 0, m_lpvSize, m_lpvSize };
 		ashes::PipelineViewportStateCreateInfo viewportState{ 0u
 			, 1u
@@ -593,7 +593,14 @@ namespace castor3d
 			, nullptr
 			, 0u
 			, VK_FALSE
-			, VK_FALSE };
+			, VK_FALSE
+			, {}
+			, {}
+			, {}
+			, {}
+			, {}
+			, {}
+			, {} };
 		VkPipelineViewportStateCreateInfo vpState = viewportState;
 		VkPipelineVertexInputStateCreateInfo viState = vertexState;
 		VkPipelineColorBlendStateCreateInfo cbState = blendState;

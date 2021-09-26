@@ -19,7 +19,10 @@ See LICENSE file in root folder
 #include <CastorUtils/Math/RangedValue.hpp>
 #include <CastorUtils/Multithreading/SpinMutex.hpp>
 
+#pragma warning( push )
+#pragma warning( disable:4365 )
 #include <atomic>
+#pragma warning( pop )
 
 namespace castor3d
 {
@@ -153,15 +156,6 @@ namespace castor3d
 		 */
 		C3D_API void setSubsurfaceScattering( SubsurfaceScatteringUPtr value );
 		/**
-		 *\~english
-		 *\brief			Fills the pass buffer with this pass data.
-		 *\param[in,out]	buffer	The pass buffer.
-		 *\~french
-		 *\brief			Remplit le pass buffer aves les données de cette passe.
-		 *\param[in,out]	buffer	Le pass buffer.
-		 */
-		C3D_API virtual void accept( PassBuffer & buffer )const = 0;
-		/**
 		*\~english
 		*\brief
 		*	PassVisitor acceptance function.
@@ -174,6 +168,15 @@ namespace castor3d
 		*	Le ... visiteur.
 		*/
 		C3D_API virtual void accept( PassVisitorBase & vis );
+		/**
+		 *\~english
+		 *\brief			Fills the pass buffer with this pass data.
+		 *\param[in,out]	buffer	The pass buffer.
+		 *\~french
+		 *\brief			Remplit le pass buffer aves les données de cette passe.
+		 *\param[in,out]	buffer	Le pass buffer.
+		 */
+		C3D_API virtual void fillBuffer( PassBuffer & buffer )const = 0;
 		/**
 		*\~english
 		*\brief
@@ -190,7 +193,7 @@ namespace castor3d
 		*\param visitor
 		*	Le ... visiteur.
 		*/
-		C3D_API virtual void accept( TextureConfiguration & config
+		C3D_API virtual void fillConfig( TextureConfiguration & config
 			, PassVisitorBase & vis );
 		/**
 		*\~english

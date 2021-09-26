@@ -14,20 +14,15 @@ namespace castor
 	class Grid
 	{
 	public:
-		inline Grid()
-		{
-		}
-
+		CU_API Grid() = default;
 		CU_API Grid( uint32_t gridSize
 			, float cellSize
 			, Point3f max
 			, Point3f min
-			, float scale
-			, uint32_t level );
+			, float scale );
 		CU_API Grid( Grid const & old
-			, float scale
-			, uint32_t level );
-		CU_API ~Grid();
+			, float scale );
+		CU_API ~Grid() = default;
 
 		CU_API void transform( Point3f pos, Point3f dir );
 
@@ -75,7 +70,6 @@ namespace castor
 		Point3f m_min;
 		Point3f m_max;
 		float m_scale{};
-		uint32_t m_level{};
 
 		Point3f m_center;
 		Point3f m_offset;

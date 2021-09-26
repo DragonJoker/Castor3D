@@ -302,7 +302,7 @@ namespace castor
 		T const y = quat.y;
 		T const z = quat.z;
 		T const w = quat.w;
-		T s = sqrt( T{ 1.0 } - ( w * w ) );
+		auto s = T( sqrt( T{ 1.0 } - ( w * w ) ) );
 
 		if ( std::abs( s ) < std::numeric_limits< T >::epsilon() )
 		{
@@ -331,7 +331,7 @@ namespace castor
 		T const y = quat.y;
 		T const z = quat.z;
 		T const w = quat.w;
-		T s = sqrt( T{ 1.0 } - ( w * w ) );
+		auto s = T( sqrt( T{ 1.0 } - ( w * w ) ) );
 
 		if ( std::abs( s ) < std::numeric_limits< T >::epsilon() )
 		{
@@ -575,9 +575,8 @@ namespace castor
 		if ( ( T( 1.0 ) - cosTheta ) > 0.0001 ) // 0.0001 -> some epsillon
 		{
 			// Standard case (slerp)
-			T omega, sinom;
-			omega = acos( cosTheta ); // extract theta from dot product's cos theta
-			sinom = sin( omega );
+			auto omega = T( acos( cosTheta ) ); // extract theta from dot product's cos theta
+			auto sinom = T( sin( omega ) );
 			sclp = T( sin( ( 1.0 - p_factor ) * omega ) / sinom );
 			sclq = T( sin( p_factor * omega ) / sinom );
 		}

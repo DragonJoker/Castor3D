@@ -41,13 +41,6 @@ namespace castor3d
 		C3D_API AnimatedTexture( TextureUnit & texture
 			, Pass & pass );
 		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~AnimatedTexture();
-		/**
 		 *\copydoc		castor3d::AnimatedObject::update
 		 */
 		C3D_API void update( castor::Milliseconds const & elapsed )override;

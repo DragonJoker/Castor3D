@@ -179,71 +179,6 @@ namespace castor3d
 			return result;
 		}
 
-		VkImageViewType getNonArrayType( VkImageViewType in )
-		{
-			switch ( in )
-			{
-			case VK_IMAGE_VIEW_TYPE_CUBE:
-				return VK_IMAGE_VIEW_TYPE_2D;
-			case VK_IMAGE_VIEW_TYPE_1D_ARRAY:
-				return VK_IMAGE_VIEW_TYPE_1D;
-			case VK_IMAGE_VIEW_TYPE_2D_ARRAY:
-				return VK_IMAGE_VIEW_TYPE_2D;
-			case VK_IMAGE_VIEW_TYPE_CUBE_ARRAY:
-				return VK_IMAGE_VIEW_TYPE_2D;
-			default:
-				return in;
-			}
-		}
-
-		crg::ImageViewData createImageView( castor::String const & name
-			, crg::ImageViewId const & view
-			, VkImageSubresourceRange const & range
-			, VkImageAspectFlags aspectMask )
-		{
-			auto result = *view.data;
-			result.info.subresourceRange.aspectMask = aspectMask;
-			result.info.subresourceRange.baseMipLevel = range.baseMipLevel;
-			result.info.subresourceRange.levelCount = range.levelCount;
-			return result;
-		}
-
-		crg::ImageViewData createImageView( castor::String const & name
-			, crg::ImageViewId const & view
-			, VkImageSubresourceRange const & range )
-		{
-			return createImageView( name
-				, view
-				, range
-				, view.data->info.subresourceRange.aspectMask );
-		}
-
-		crg::ImageViewData createSampledView( castor::String const & prefix
-			, crg::ImageViewId const & view )
-		{
-			return createImageView( prefix + "Sampled"
-				, view
-				, view.data->info.subresourceRange
-				, VkImageAspectFlags( ( ashes::isDepthFormat( getFormat( view ) ) || ashes::isDepthOrStencilFormat( getFormat( view ) ) )
-					? VK_IMAGE_ASPECT_DEPTH_BIT
-					: ( ashes::isStencilFormat( getFormat( view ) )
-						? VK_IMAGE_ASPECT_STENCIL_BIT
-						: VK_IMAGE_ASPECT_COLOR_BIT ) ) );
-		}
-
-		crg::ImageViewData createTargetView( castor::String const & prefix
-			, crg::ImageViewId const & view )
-		{
-			return createImageView( prefix + "Target"
-				, view
-				, view.data->info.subresourceRange
-				, VkImageAspectFlags( ( ashes::isDepthFormat( getFormat( view ) ) || ashes::isDepthOrStencilFormat( getFormat( view ) ) )
-					? VK_IMAGE_ASPECT_DEPTH_BIT
-					: ( ashes::isStencilFormat( getFormat( view ) )
-						? VK_IMAGE_ASPECT_STENCIL_BIT
-						: VK_IMAGE_ASPECT_COLOR_BIT ) ) );
-		}
-
 		crg::ImageViewData createMipView( crg::ImageViewId const & source
 			, uint32_t layer
 			, uint32_t level )
@@ -269,22 +204,6 @@ namespace castor3d
 			result.name += "L" + string::toString( layer );
 			result.name += "M" + string::toString( level );
 			return result;
-		}
-
-		uint32_t getDescriptorSetIndex( uint32_t descriptorBaseIndex
-			, uint32_t level
-			, uint32_t levelCount )
-		{
-			return ( descriptorBaseIndex * levelCount ) + level;
-		}
-
-		rq::BindingDescriptionArray createBindings()
-		{
-			return
-			{
-				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, std::nullopt },
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, std::nullopt },
-			};
 		}
 
 		crg::ImageViewId createIntermediate( crg::FrameGraph & graph

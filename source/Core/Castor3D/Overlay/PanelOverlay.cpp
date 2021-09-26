@@ -16,10 +16,6 @@ namespace castor3d
 		m_arrayVtx.resize( 6 );
 	}
 
-	PanelOverlay::~PanelOverlay()
-	{
-	}
-
 	OverlayCategorySPtr PanelOverlay::create()
 	{
 		return std::make_shared< PanelOverlay >();
@@ -36,8 +32,8 @@ namespace castor3d
 
 		int32_t l = 0;
 		int32_t t = 0;
-		int32_t r = absoluteSize.getWidth();
-		int32_t b = absoluteSize.getHeight();
+		auto r = int32_t( absoluteSize.getWidth() );
+		auto b = int32_t( absoluteSize.getHeight() );
 
 		OverlayCategory::Vertex lt = { Point2f{ float( l ) / float( size.getWidth() ), float( t ) / float( size.getHeight() ) }, Point2f{ float( m_uv[0] ), float( m_uv[3] ) } };
 		OverlayCategory::Vertex lb = { Point2f{ float( l ) / float( size.getWidth() ), float( b ) / float( size.getHeight() ) }, Point2f{ float( m_uv[0] ), float( m_uv[1] ) } };

@@ -39,7 +39,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~GenericPlugin();
+		C3D_API ~GenericPlugin()override;
 
 	private:
 		PAddOptionalParsersFunction m_pfnAddOptionalParsers{};

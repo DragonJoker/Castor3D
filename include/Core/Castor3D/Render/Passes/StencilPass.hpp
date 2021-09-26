@@ -98,7 +98,7 @@ namespace castor3d
 	private:
 		Engine const & m_engine;
 		castor::String m_prefix;
-		crg::ImageViewId const & m_depthView;
+		crg::ImageViewId m_depthView;
 		MatrixUbo & m_matrixUbo;
 		UniformBufferT< ModelUboConfiguration > const & m_modelUbo;
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;

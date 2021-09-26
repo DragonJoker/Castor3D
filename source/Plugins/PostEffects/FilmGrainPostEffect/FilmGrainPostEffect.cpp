@@ -234,45 +234,9 @@ namespace film_grain
 			, m_configUbo.getData().m_noiseIntensity );
 	}
 
-	void PostEffect::update( castor3d::CpuUpdater & updater )
-	{
-		static auto const defaultTime = 25_ms;
-		auto time = std::chrono::duration_cast< Milliseconds >( m_timer.getElapsed() );
-
-		if ( m_firstUpdate )
-		{
-			time = 0_ms;
-			m_firstUpdate = false;
-		}
-
-		time = updater.tslf > 0_ms
-			? updater.tslf
-			: time;
-
-		if ( time > 0_ms )
-		{
-			m_time += time;
-
-			while ( m_time >= defaultTime )
-			{
-				m_time -= defaultTime;
-				++m_timeIndex;
-			}
-
-			if ( m_timeIndex >= NoiseMapCount )
-			{
-				m_timeIndex -= NoiseMapCount;
-			}
-
-			m_configUbo.getData().m_time = m_timeIndex / float( NoiseMapCount );
-		}
-	}
-
 	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
 		, crg::FramePass const & previousPass )
 	{
-		VkExtent2D size{ m_target->data->image.data->info.extent.width
-			, m_target->data->image.data->info.extent.height };
 		auto & graph = m_renderTarget.getGraph();
 		auto dim = m_noiseImages[0].getDimensions();
 		auto format = castor3d::convert( m_noiseImages[0].getPixelFormat() );
@@ -343,7 +307,7 @@ namespace film_grain
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( &isEnabled() )
-					.recordDisabledInto( [this, &context, &graph]( crg::RunnablePass const & runnable
+					.recordDisabledInto( [this, &graph]( crg::RunnablePass const & runnable
 						, VkCommandBuffer commandBuffer
 						, uint32_t index )
 						{
@@ -382,6 +346,40 @@ namespace film_grain
 	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
 	{
 		device.uboPools->putBuffer( m_configUbo );
+	}
+
+	void PostEffect::doCpuUpdate( castor3d::CpuUpdater & updater )
+	{
+		static auto const defaultTime = 25_ms;
+		auto time = std::chrono::duration_cast< Milliseconds >( m_timer.getElapsed() );
+
+		if ( m_firstUpdate )
+		{
+			time = 0_ms;
+			m_firstUpdate = false;
+		}
+
+		time = updater.tslf > 0_ms
+			? updater.tslf
+			: time;
+
+		if ( time > 0_ms )
+		{
+			m_time += time;
+
+			while ( m_time >= defaultTime )
+			{
+				m_time -= defaultTime;
+				++m_timeIndex;
+			}
+
+			if ( m_timeIndex >= NoiseMapCount )
+			{
+				m_timeIndex -= NoiseMapCount;
+			}
+
+			m_configUbo.getData().m_time = float( m_timeIndex ) / float( NoiseMapCount );
+		}
 	}
 
 	bool PostEffect::doWriteInto( StringStream & file, String const & tabs )

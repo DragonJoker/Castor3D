@@ -31,13 +31,15 @@ namespace castor3d
 			, m_clipInfo{ getMember< sdw::Vec4 >( "clipInfo" ) }
 			, m_fogInfo{ getMember< sdw::Vec4 >( "fogInfo" ) }
 			, fogType{ writer.cast< sdw::UInt >( m_fogInfo.x() ) }
+			, ambientLight{ m_ambientLight.xyz() }
+			, cameraPosition{ m_cameraPosition.xyz() }
+			, renderSize{ m_clipInfo.xy() }
+			, nearPlane{ m_clipInfo.z() }
+			, farPlane{ m_clipInfo.w() }
+			, directionalLightCount{ writer.cast< sdw::Int >( m_lightsCount.x() ) }
+			, pointLightCount{ writer.cast< sdw::Int >( m_lightsCount.y() ) }
+			, spotLightCount{ writer.cast< sdw::Int >( m_lightsCount.z() ) }
 		{
-		}
-
-		SceneData & SceneData::operator=( SceneData const & rhs )
-		{
-			StructInstance::operator=( rhs );
-			return *this;
 		}
 
 		ast::type::StructPtr SceneData::makeType( ast::type::TypesCache & cache )
@@ -66,27 +68,17 @@ namespace castor3d
 
 		sdw::Vec3 SceneData::transformCamera( sdw::Mat3 const & transform )const
 		{
-			return transform * getCameraPosition();
+			return transform * cameraPosition;
 		}
 
 		sdw::Vec3 SceneData::getPosToCamera( sdw::Vec3 const & position )const
 		{
-			return getCameraPosition() - position;
+			return cameraPosition - position;
 		}
 
 		sdw::Vec3 SceneData::getCameraToPos( sdw::Vec3 const & position )const
 		{
-			return position - getCameraPosition();
-		}
-
-		sdw::Vec3 SceneData::getAmbientLight()const
-		{
-			return m_ambientLight.xyz();
-		}
-
-		sdw::Vec3 SceneData::getCameraPosition()const
-		{
-			return m_cameraPosition.xyz();
+			return position - cameraPosition;
 		}
 
 		sdw::Vec4 SceneData::getBackgroundColour( Utils const & utils
@@ -100,36 +92,6 @@ namespace castor3d
 			return vec4( hdrConfigData.removeGamma( m_backgroundColour.rgb() ), m_backgroundColour.a() );
 		}
 
-		sdw::Int SceneData::getDirectionalLightCount()const
-		{
-			return getWriter()->cast< sdw::Int >( m_lightsCount.x() );
-		}
-
-		sdw::Int SceneData::getPointLightCount()const
-		{
-			return getWriter()->cast< sdw::Int >( m_lightsCount.y() );
-		}
-
-		sdw::Int SceneData::getSpotLightCount()const
-		{
-			return getWriter()->cast< sdw::Int >( m_lightsCount.z() );
-		}
-
-		sdw::Vec2 SceneData::getRenderSize()const
-		{
-			return m_clipInfo.xy();
-		}
-
-		sdw::Float SceneData::getNearPlane()const
-		{
-			return m_clipInfo.z();
-		}
-
-		sdw::Float SceneData::getFarPlane()const
-		{
-			return m_clipInfo.w();
-		}
-
 		sdw::Vec4 SceneData::computeAccumulation( Utils const & utils
 			, sdw::Float const & depth
 			, sdw::Vec3 const & colour
@@ -139,8 +101,8 @@ namespace castor3d
 			return utils.computeAccumulation( depth
 				, colour
 				, alpha
-				, m_clipInfo.z()
-				, m_clipInfo.w()
+				, nearPlane
+				, farPlane
 				, accumulationOperator );
 		}
 	}

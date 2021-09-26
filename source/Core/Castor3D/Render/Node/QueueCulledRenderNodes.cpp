@@ -32,8 +32,6 @@
 
 #include <ShaderWriter/Source.hpp>
 
-#include <ashespp/Command/CommandBufferInheritanceInfo.hpp>
-
 CU_ImplementCUSmartPtr( castor3d, QueueCulledRenderNodes )
 
 using ashes::operator==;
@@ -460,10 +458,10 @@ namespace castor3d
 		ashes::CommandBuffer const & cb = queue.getCommandBuffer();
 		auto & rp = *queue.getOwner();
 		cb.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
-			, makeVkType< VkCommandBufferInheritanceInfo >( VkRenderPass( rp.getRenderPass() )
+			, makeVkType< VkCommandBufferInheritanceInfo >( rp.getRenderPass()
 				, 0u
-				, VkFramebuffer( VK_NULL_HANDLE )
-				, VkBool32( VK_FALSE )
+				, VkFramebuffer( nullptr )
+				, VK_FALSE
 				, 0u
 				, 0u ) );
 

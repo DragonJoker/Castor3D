@@ -30,15 +30,15 @@ namespace GuiCommon
 			case UniformType::eInt:
 				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< castor::RangedValue< int32_t > > > & >( uniform ).getValue() );
 				break;
-			//case UniformType::eUInt:
-			//	property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< castor::RangedValue< uint32_t > > > & >( uniform ).getValue() );
-			//	break;
-			//case UniformType::eFloat:
-			//	property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< castor::RangedValue< float > > > & >( uniform ).getValue() );
-			//	break;
-			//default:
-			//	CU_Failure( "Unsupported UniformType" );
-			//	break;
+			case UniformType::eUInt:
+				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< castor::RangedValue< uint32_t > > > & >( uniform ).getValue() );
+				break;
+			case UniformType::eFloat:
+				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< castor::RangedValue< float > > > & >( uniform ).getValue() );
+				break;
+			default:
+				CU_Failure( "Unsupported UniformType" );
+				break;
 			}
 		}
 
@@ -103,10 +103,6 @@ namespace GuiCommon
 		, m_uniform{ uniform }
 	{
 		CreateTreeItemMenu();
-	}
-
-	FrameVariableTreeItemProperty::~FrameVariableTreeItemProperty()
-	{
 	}
 
 	void FrameVariableTreeItemProperty::doCreateProperties( wxPGEditor * editor

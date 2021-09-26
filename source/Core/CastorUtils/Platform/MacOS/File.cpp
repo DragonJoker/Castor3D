@@ -179,7 +179,7 @@ namespace castor
 
 	bool File::directoryExists( Path const & p_path )
 	{
-		struct stat status = { 0 };
+		struct stat status{};
 		stat( string::stringCast< char >( p_path ).c_str(), &status );
 		return ( status.st_mode & S_IFDIR ) == S_IFDIR;
 	}

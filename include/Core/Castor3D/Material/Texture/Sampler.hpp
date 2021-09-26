@@ -57,7 +57,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~Sampler();
+		C3D_API virtual ~Sampler();
 		/**
 		 *\~english
 		 *\brief		Initialises the GPU sampler.

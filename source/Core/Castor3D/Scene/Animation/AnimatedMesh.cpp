@@ -19,10 +19,6 @@ namespace castor3d
 	{
 	}
 
-	AnimatedMesh::~AnimatedMesh()
-	{
-	}
-
 	void AnimatedMesh::update( Milliseconds const & elpased )
 	{
 		if ( m_playingAnimation )

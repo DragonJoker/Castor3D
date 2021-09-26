@@ -25,13 +25,6 @@ namespace castor3d
 		C3D_API BorderPanelOverlay();
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~BorderPanelOverlay();
-		/**
-		 *\~english
 		 *\brief		Creation function, used by the factory
 		 *\return		An overlay
 		 *\~french

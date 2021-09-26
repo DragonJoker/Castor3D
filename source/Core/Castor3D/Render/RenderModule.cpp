@@ -132,6 +132,8 @@ namespace castor3d
 	{
 		switch ( value )
 		{
+		case ViewportType::eUndefined:
+			return cuT( "undefined" );
 		case ViewportType::eOrtho:
 			return cuT( "ortho" );
 		case ViewportType::ePerspective:
@@ -267,7 +269,7 @@ namespace castor3d
 			, ( createFlags
 				| ( size.depth > 1u
 					? VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT
-					: 0u ) )
+					: VkImageCreateFlagBits{} ) )
 			, ( size.depth > 1u
 				? VK_IMAGE_TYPE_3D
 				: VK_IMAGE_TYPE_2D )
@@ -276,7 +278,7 @@ namespace castor3d
 			, ( usageFlags
 				| ( mipLevels > 1u
 					? ( VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT )
-					: 0u ) )
+					: VkImageUsageFlags{} ) )
 			, mipLevels
 			, layerCount } );
 		wholeViewId = handler.createViewId( crg::ImageViewData{ name + "Whole"
@@ -301,6 +303,8 @@ namespace castor3d
 			createInfo.name = name + "Target";
 			createInfo.info.subresourceRange.baseArrayLayer = 0u;
 			createInfo.info.subresourceRange.layerCount = createInfo.image.data->info.extent.depth;
+			createInfo.info.subresourceRange.baseMipLevel = 0u;
+			createInfo.info.subresourceRange.levelCount = 1u;
 			targetViewId = handler.createViewId( createInfo );
 		}
 		else if ( wholeViewId.data->info.subresourceRange.levelCount == wholeViewId.data->image.data->info.mipLevels )

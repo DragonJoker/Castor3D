@@ -127,15 +127,6 @@ namespace grayscale
 			, params );
 	}
 
-	void PostEffect::update( castor3d::CpuUpdater & updater )
-	{
-		if ( m_factors.isDirty() )
-		{
-			m_configUbo.getData() = m_factors.value();
-			m_factors.reset();
-		}
-	}
-
 	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
 	{
 		visitor.visit( m_vertexShader );
@@ -177,7 +168,7 @@ namespace grayscale
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( &isEnabled() )
-					.recordDisabledInto( [this, &context, &graph, extent]( crg::RunnablePass const & runnable
+					.recordDisabledInto( [this, &graph]( crg::RunnablePass const & runnable
 						, VkCommandBuffer commandBuffer
 						, uint32_t index )
 						{
@@ -207,6 +198,15 @@ namespace grayscale
 	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
 	{
 		device.uboPools->putBuffer( m_configUbo );
+	}
+
+	void PostEffect::doCpuUpdate( castor3d::CpuUpdater & updater )
+	{
+		if ( m_factors.isDirty() )
+		{
+			m_configUbo.getData() = m_factors.value();
+			m_factors.reset();
+		}
 	}
 
 	bool PostEffect::doWriteInto( castor::StringStream & file, castor::String const & tabs )

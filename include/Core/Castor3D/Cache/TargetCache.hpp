@@ -9,7 +9,10 @@ See LICENSE file in root folder
 #include "Castor3D/Render/ToneMapping/ToneMappingModule.hpp"
 #include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
 
+#pragma warning( push )
+#pragma warning( disable:4365 )
 #include <atomic>
+#pragma warning( pop )
 
 namespace castor3d
 {

@@ -23,7 +23,6 @@ namespace GuiCommon
 			, wxWindow * parent
 			, wxPoint const & ptPos = wxDefaultPosition
 			, wxSize const & size = wxDefaultSize );
-		~SceneObjectsList();
 
 		void loadScene( castor3d::Engine * engine
 			, castor3d::RenderWindow & window

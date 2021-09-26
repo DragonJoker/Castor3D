@@ -110,7 +110,6 @@ namespace castor3d
 		: m_cache{ cache }
 		, m_detailed{ detailed }
 		, m_name{ name }
-		, m_index{ index }
 	{
 		auto baseName = cuT( "RenderPassOverlays-" ) + category + cuT( "-" ) + name;
 		m_panel = cache.add( baseName
@@ -217,8 +216,8 @@ namespace castor3d
 			timer.first->reset();
 		}
 
-		m_cpu.value->setCaption( castor::makeStringStream() << m_cpu.time );
-		m_gpu.value->setCaption( castor::makeStringStream() << m_gpu.time );
+		m_cpu.value->setCaption( castor::string::toString( m_cpu.time ) );
+		m_gpu.value->setCaption( castor::string::toString( m_gpu.time ) );
 
 		m_panel->setVisible( m_detailed );
 		m_passName->setVisible( m_detailed );
@@ -239,9 +238,9 @@ namespace castor3d
 	void DebugOverlays::PassOverlays::addTimer( FramePassTimer & timer )
 	{
 		m_timers.emplace( &timer
-			, timer.onDestroy.connect( [this]( FramePassTimer & timer )
+			, timer.onDestroy.connect( [this]( FramePassTimer & obj )
 				{
-					removeTimer( timer );
+					removeTimer( obj );
 				} ) );
 	}
 
@@ -403,7 +402,8 @@ namespace castor3d
 				, timer.getName()
 				, index
 				, *m_detailed ) );
-			it = m_passes.begin() + m_passes.size() - 1;
+			it = std::next( m_passes.begin()
+				, ptrdiff_t( m_passes.size() - 1 ) );
 		}
 
 		( *it )->addTimer( timer );
@@ -441,8 +441,8 @@ namespace castor3d
 			}
 		}
 
-		m_cpu.value->setCaption( castor::makeStringStream() << m_cpu.time );
-		m_gpu.value->setCaption( castor::makeStringStream() << m_gpu.time );
+		m_cpu.value->setCaption( castor::string::toString( m_cpu.time ) );
+		m_gpu.value->setCaption( castor::string::toString( m_gpu.time ) );
 	}
 
 	void DebugOverlays::CategoryOverlays::retrieveGpuTime()
@@ -580,7 +580,8 @@ namespace castor3d
 			, "\r%0.2f ms, %0.2f fps                           "
 			, float( total.count() ) / 1000.0f
 			, m_fps );
-		m_frameIndex = ++m_frameIndex % FRAME_SAMPLES_COUNT;
+		auto v = ( ++m_frameIndex ) % FRAME_SAMPLES_COUNT;
+		m_frameIndex = v;
 		m_frameTimer.getElapsed();
 
 		return total;

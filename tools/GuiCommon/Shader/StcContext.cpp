@@ -13,11 +13,6 @@ namespace GuiCommon
 		m_languages.push_back( std::make_shared< LanguageInfo >() );
 	}
 
-	StcContext::~StcContext()
-	{
-		m_languages.clear();
-	}
-
 	void StcContext::parseFile( wxString const & fileName )
 	{
 		LanguageFileParser parser( this );

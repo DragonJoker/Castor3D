@@ -112,7 +112,7 @@ namespace castor
 			{
 			}
 
-			virtual ~SFreeTypeFontImpl()
+			~SFreeTypeFontImpl()override
 			{
 			}
 
@@ -139,18 +139,18 @@ namespace castor
 				FT_UInt const index{ FT_Get_Char_Index( m_face, cl ) };
 				CHECK_FT_ERR( FT_Load_Glyph, m_face, index, FT_LOAD_DEFAULT );
 				CHECK_FT_ERR( FT_Get_Glyph, m_face->glyph, &glyph );
-				CHECK_FT_ERR( FT_Glyph_To_Bitmap, &glyph, FT_RENDER_MODE_NORMAL, 0, 1 );
+				CHECK_FT_ERR( FT_Glyph_To_Bitmap, &glyph, FT_RENDER_MODE_NORMAL, nullptr, 1 );
 				FT_BitmapGlyph const bmpGlyph = FT_BitmapGlyph( glyph );
 				FT_Bitmap const & bitmap = bmpGlyph->bitmap;
 				auto const pitch( uint32_t( std::abs( bitmap.pitch ) ) );
 				Size const size{ pitch, uint32_t( bitmap.rows ) };
 				Position const bearing{ bmpGlyph->left, bmpGlyph->top };
 				ByteArray buffer( size.getWidth() * size.getHeight() );
-				uint32_t advance{ uint32_t( std::abs( glyph->advance.x ) / 65536.0 ) };
+				int32_t advance{ int32_t( float( glyph->advance.x ) / 65536.0 ) };
 
-				if ( advance < size[0] )
+				if ( std::abs( advance ) < int32_t( size[0] ) )
 				{
-					advance = size[0] + bearing[0];
+					advance = int32_t( size[0] ) + bearing[0];
 				}
 
 				if ( bitmap.pitch < 0 )
@@ -230,7 +230,7 @@ namespace castor
 					char tmp[] { char( c ), 0, 0, 0 };
 					Glyph const & glyph = p_font.doLoadGlyph( string::utf8::toUtf8( tmp ) );
 					maxHeight = std::max( maxHeight, glyph.getSize().getHeight() );
-					maxWidth = std::max( maxWidth, glyph.getAdvance() );
+					maxWidth = uint32_t( std::max( int32_t( maxWidth ), glyph.getAdvance() ) );
 				}
 
 				p_font.getGlyphLoader().cleanup();
@@ -253,7 +253,6 @@ namespace castor
 		: Named{ name }
 		, m_height{ height }
 		, m_maxHeight{ 0 }
-		, m_maxTop{ 0 }
 		, m_maxWidth{ 0 }
 	{
 	}
@@ -263,7 +262,6 @@ namespace castor
 		, m_height{ height }
 		, m_pathFile{ path }
 		, m_maxHeight{ 0 }
-		, m_maxTop{ 0 }
 		, m_maxWidth{ 0 }
 		, m_glyphLoader{ std::make_unique< ft::SFreeTypeFontImpl >( path, height ) }
 	{
@@ -277,21 +275,20 @@ namespace castor
 		m_glyphLoader->cleanup();
 	}
 
-	Glyph const & Font::doLoadGlyph( char32_t p_char )
+	Glyph const & Font::doLoadGlyph( char32_t c )
 	{
-		auto it = std::find_if( m_loadedGlyphs.begin(), m_loadedGlyphs.end(), [p_char]( Glyph const & p_glyph )
+		auto it = std::find_if( m_loadedGlyphs.begin()
+			, m_loadedGlyphs.end()
+			, [c]( Glyph const & lookup )
 		{
-			return p_glyph.getCharacter() == p_char;
+			return lookup.getCharacter() == c;
 		} );
 
 		if ( it == m_loadedGlyphs.end() )
 		{
-			m_loadedGlyphs.push_back( m_glyphLoader->loadGlyph( p_char ) );
-
-			it = std::find_if( m_loadedGlyphs.begin(), m_loadedGlyphs.end(), [p_char]( Glyph const & p_glyph )
-			{
-				return p_glyph.getCharacter() == p_char;
-			} );
+			m_loadedGlyphs.push_back( m_glyphLoader->loadGlyph( c ) );
+			it = std::next( m_loadedGlyphs.begin()
+				, ptrdiff_t( m_loadedGlyphs.size() - 1u ) );
 		}
 
 		return *it;

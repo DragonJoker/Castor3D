@@ -14,10 +14,6 @@ namespace castor3d
 	{
 	}
 
-	Cone::~Cone()
-	{
-	}
-
 	MeshGeneratorSPtr Cone::create()
 	{
 		return std::make_shared< Cone >();

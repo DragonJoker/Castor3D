@@ -3,10 +3,6 @@
 #include "CastorViewer/MainFrame.hpp"
 #include "CastorViewer/CastorViewer.hpp"
 
-#include <wx/display.h>
-#include <wx/mstream.h>
-#include <wx/renderer.h>
-
 #include <GuiCommon/Aui/AuiDockArt.hpp>
 #include <GuiCommon/Aui/AuiTabArt.hpp>
 #include <GuiCommon/Aui/AuiToolBarArt.hpp>
@@ -35,8 +31,15 @@
 #include <CastorUtils/Graphics/PixelBufferBase.hpp>
 #include <CastorUtils/Miscellaneous/BlockTimer.hpp>
 
+#pragma warning( push )
+#pragma warning( disable: 4365 )
+#pragma warning( disable: 4371 )
+#include <wx/display.h>
+#include <wx/mstream.h>
+#include <wx/renderer.h>
+#pragma warning( pop )
+
 #include <GuiCommon/xpms/castor.xpm>
-#include <GuiCommon/xpms/print_screen.xpm>
 
 #if defined( GUICOMMON_RECORDS )
 #	include <GuiCommon/xpms/record.xpm>
@@ -148,7 +151,7 @@ namespace CastorViewer
 		{
 			if ( !fileName.empty() )
 			{
-				m_filePath = Path{ ( wxChar const * )fileName.c_str() };
+				m_filePath = Path{ make_String( fileName ) };
 			}
 
 			if ( !m_filePath.empty() )
@@ -221,7 +224,7 @@ namespace CastorViewer
 		if ( !engine->isThreaded() && !m_timer )
 		{
 			m_timer = new wxTimer( this, eID_RENDER_TIMER );
-			m_timer->Start( 1000 / engine->getRenderLoop().getWantedFps() );
+			m_timer->Start( 1000 / int( engine->getRenderLoop().getWantedFps() ) );
 		}
 
 		if ( !m_timerMsg )
@@ -308,7 +311,7 @@ namespace CastorViewer
 				.Layer( 2 )
 				.PaneBorder( false ) );
 
-		auto createLog = [this, &size]( wxString const & name
+		auto createLog = [this]( wxString const & name
 			, LogContainer & log )
 		{
 			log.listBox = new wxListBox( m_logTabsContainer, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxBORDER_NONE );
@@ -356,17 +359,17 @@ namespace CastorViewer
 		m_toolBar->SetArtProvider( new AuiToolBarArt );
 		m_toolBar->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		m_toolBar->SetToolBitmapSize( wxSize( 32, 32 ) );
-		m_toolBar->AddTool( eID_TOOL_LOAD_SCENE, _( "Load Scene" ), wxImage( *ImagesLoader::getBitmap( eBMP_SCENES ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Open a new scene" ) );
+		m_toolBar->AddTool( eID_TOOL_LOAD_SCENE, _( "Load Scene" ), ImagesLoader::getBitmap( eBMP_SCENES )->Scale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Open a new scene" ) );
 		splashScreen.Step( 1 );
-		m_toolBar->AddTool( eID_TOOL_EXPORT_SCENE, _( "Export Scene" ), wxImage( *ImagesLoader::getBitmap( eBMP_EXPORT ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Export the current scene" ) );
+		m_toolBar->AddTool( eID_TOOL_EXPORT_SCENE, _( "Export Scene" ), ImagesLoader::getBitmap( eBMP_EXPORT )->Scale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Export the current scene" ) );
 		m_toolBar->EnableTool( eID_TOOL_EXPORT_SCENE, false );
 		splashScreen.Step( 1 );
 		m_toolBar->AddSeparator();
-		m_toolBar->AddTool( eID_TOOL_SHOW_LOGS, _( "Logs" ), wxImage( *ImagesLoader::getBitmap( eBMP_LOGS ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display logs" ) );
+		m_toolBar->AddTool( eID_TOOL_SHOW_LOGS, _( "Logs" ), ImagesLoader::getBitmap( eBMP_LOGS )->Scale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display logs" ) );
 		splashScreen.Step( 1 );
-		m_toolBar->AddTool( eID_TOOL_SHOW_LISTS, _( "Lists" ), wxImage( *ImagesLoader::getBitmap( eBMP_MATERIALS ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display lists" ) );
+		m_toolBar->AddTool( eID_TOOL_SHOW_LISTS, _( "Lists" ), ImagesLoader::getBitmap( eBMP_MATERIALS )->Scale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display lists" ) );
 		splashScreen.Step( 1 );
-		m_toolBar->AddTool( eID_TOOL_PRINT_SCREEN, _( "Snapshot" ), wxImage( *ImagesLoader::getBitmap( eBMP_PRINTSCREEN ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Take a snapshot" ) );
+		m_toolBar->AddTool( eID_TOOL_PRINT_SCREEN, _( "Snapshot" ), ImagesLoader::getBitmap( eBMP_PRINTSCREEN )->Scale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Take a snapshot" ) );
 		m_toolBar->EnableTool( eID_TOOL_PRINT_SCREEN, false );
 		splashScreen.Step( 1 );
 
@@ -378,10 +381,10 @@ namespace CastorViewer
 		imgStop.Create( stop_xpm );
 		wxImage imgRecordDis = imgRecord.ConvertToGreyscale();
 		wxImage imgStopDis = imgStop.ConvertToGreyscale();
-		auto tool = m_toolBar->AddTool( eID_TOOL_RECORD, _( "Record" ), imgRecord.Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Record a video" ) );
-		tool->SetDisabledBitmap( imgRecordDis.Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ) );
-		tool = m_toolBar->AddTool( eID_TOOL_STOP, _( "Stop" ), imgStop.Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Stop recording" ) );
-		tool->SetDisabledBitmap( imgStopDis.Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ) );
+		auto tool = m_toolBar->AddTool( eID_TOOL_RECORD, _( "Record" ), imgRecord.Scale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Record a video" ) );
+		tool->SetDisabledBitmap( imgRecordDis.Scale( 32, 32, wxIMAGE_QUALITY_HIGH ) );
+		tool = m_toolBar->AddTool( eID_TOOL_STOP, _( "Stop" ), imgStop.Scale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Stop recording" ) );
+		tool->SetDisabledBitmap( imgStopDis.Scale( 32, 32, wxIMAGE_QUALITY_HIGH ) );
 		m_toolBar->EnableTool( eID_TOOL_RECORD, false );
 		m_toolBar->EnableTool( eID_TOOL_STOP, false );
 
@@ -733,6 +736,8 @@ namespace CastorViewer
 		m_fpsTimer->Start( 1000 );
 	}
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 	BEGIN_EVENT_TABLE( MainFrame, wxFrame )
 		EVT_TIMER( eID_RENDER_TIMER, MainFrame::onRenderTimer )
 		EVT_TIMER( eID_MSGLOG_TIMER, MainFrame::onTimer )
@@ -764,6 +769,7 @@ namespace CastorViewer
 		EVT_MENU( eID_TOOL_STOP, MainFrame::onStop )
 #endif
 	END_EVENT_TABLE()
+#pragma GCC diagnostic pop
 
 	void MainFrame::onPaint( wxPaintEvent & event )
 	{
@@ -822,8 +828,8 @@ namespace CastorViewer
 			{
 				SetTitle( wxString::Format( "%s - ~%.2f FPS (%.2f ms)"
 					, m_title
-					, 1000000.0f / time.count()
-					, time.count() / 1000.0f ) );
+					, 1000000.0f / float( time.count() )
+					, float( time.count() ) / 1000.0f ) );
 			}
 		}
 	}
@@ -947,7 +953,7 @@ namespace CastorViewer
 
 		if ( fileDialog.ShowModal() == wxID_OK )
 		{
-			loadScene( ( wxChar const * )fileDialog.GetPath().c_str() );
+			loadScene( fileDialog.GetPath() );
 		}
 
 		event.Skip();
@@ -978,7 +984,7 @@ namespace CastorViewer
 			{
 				try
 				{
-					Path pathFile( ( wxChar const * )fileDialog.GetPath().c_str() );
+					Path pathFile( make_String( fileDialog.GetPath() ) );
 					exporter::CscnSceneExporter exporter{ options };
 					auto result = exporter.exportScene( *scene, pathFile );
 

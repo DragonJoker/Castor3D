@@ -35,19 +35,12 @@ namespace GuiCommon
 		BackgroundTreeItemProperty( wxWindow * parent
 			, bool editable
 			, castor3d::SceneBackground & background );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		~BackgroundTreeItemProperty();
 
 	private:
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid );
+		void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )override;
 
 	private:
 		wxPGProperty * doCreateTextureImageProperty( wxString const & name

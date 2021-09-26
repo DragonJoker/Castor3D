@@ -32,22 +32,12 @@ namespace GuiCommon
 		 *\param[in]	skeleton	La cible.
 		 */
 		SkeletonTreeItemProperty( bool editable, castor3d::Skeleton & skeleton );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		~SkeletonTreeItemProperty();
 
 	private:
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
-
-	private:
-		castor3d::Skeleton & m_skeleton;
+		void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )override;
 	};
 }
 

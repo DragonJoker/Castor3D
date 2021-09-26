@@ -6,10 +6,13 @@ See LICENSE file in root folder
 
 #include "GuiCommon/GuiCommonPrerequisites.hpp"
 
+#pragma warning( push )
+#pragma warning( disable: 4365 )
 #include <wx/panel.h>
 #include <wx/propgrid/propgrid.h>
 #include <wx/aui/framemanager.h>
 #include <wx/aui/auibar.h>
+#pragma warning( pop )
 
 namespace GuiCommon
 {
@@ -20,7 +23,7 @@ namespace GuiCommon
 		explicit PropertiesHolder( wxWindow * parent
 			, wxPoint const & position = wxDefaultPosition
 			, wxSize const & size = wxDefaultSize );
-		~PropertiesHolder();
+		~PropertiesHolder()override;
 
 		void setGrid( wxPropertyGrid * grid );
 

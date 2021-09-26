@@ -32,13 +32,6 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~SpotLight();
-		/**
-		 *\~english
 		 *\brief		Creation function, used by Factory.
 		 *\param[in]	light	The parent Light.
 		 *\return		A light source.

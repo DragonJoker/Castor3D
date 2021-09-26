@@ -13,8 +13,6 @@
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
 #include "Castor3D/Render/Node/QueueCulledRenderNodes.hpp"
 
-#include <ashespp/Command/CommandBufferInheritanceInfo.hpp>
-
 using ashes::operator==;
 using ashes::operator!=;
 
@@ -168,10 +166,10 @@ namespace castor3d
 		m_commandBuffer = queueData.commandPool->createCommandBuffer( getOwner()->getName()
 			, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
-			, makeVkType< VkCommandBufferInheritanceInfo >( VkRenderPass( getOwner()->getRenderPass() )
+			, makeVkType< VkCommandBufferInheritanceInfo >( getOwner()->getRenderPass()
 				, 0u
-				, VkFramebuffer( VK_NULL_HANDLE )
-				, VkBool32( VK_FALSE )
+				, VkFramebuffer( nullptr )
+				, VK_FALSE
 				, 0u
 				, 0u ) );
 		m_commandBuffer->end();

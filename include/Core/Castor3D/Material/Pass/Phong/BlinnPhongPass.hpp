@@ -41,13 +41,6 @@ namespace castor3d
 		C3D_API BlinnPhongPass( Material & parent
 			, PassTypeID typeID
 			, PassFlags initialFlags = PassFlag::eNone );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~BlinnPhongPass();
 
 		C3D_API static PassSPtr create( Material & parent );
 		C3D_API static castor::AttributeParsers createParsers();

@@ -32,19 +32,12 @@ namespace GuiCommon
 		 *\param[in]	material	La cible.
 		 */
 		BoneTreeItemProperty( bool editable, castor3d::Bone & bone );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		~BoneTreeItemProperty();
 
 	private:
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )override;
 
 	private:
 		castor3d::Bone & m_bone;

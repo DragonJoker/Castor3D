@@ -225,21 +225,6 @@ namespace fxaa
 			, m_reduceMul );
 	}
 
-	void PostEffect::update( castor3d::CpuUpdater & updater )
-	{
-		if ( m_subpixShift.isDirty()
-			|| m_spanMax.isDirty()
-			|| m_reduceMul.isDirty() )
-		{
-			m_fxaaUbo.cpuUpdate( m_subpixShift
-				, m_spanMax
-				, m_reduceMul );
-			m_subpixShift.reset();
-			m_spanMax.reset();
-			m_reduceMul.reset();
-		}
-	}
-
 	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
 		, crg::FramePass const & previousPass )
 	{
@@ -270,7 +255,7 @@ namespace fxaa
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( &isEnabled() )
-					.recordDisabledInto( [this, &context, &graph, extent]( crg::RunnablePass const & runnable
+					.recordDisabledInto( [this, &graph]( crg::RunnablePass const & runnable
 						, VkCommandBuffer commandBuffer
 						, uint32_t index )
 						{
@@ -298,6 +283,21 @@ namespace fxaa
 
 	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
 	{
+	}
+
+	void PostEffect::doCpuUpdate( castor3d::CpuUpdater & updater )
+	{
+		if ( m_subpixShift.isDirty()
+			|| m_spanMax.isDirty()
+			|| m_reduceMul.isDirty() )
+		{
+			m_fxaaUbo.cpuUpdate( m_subpixShift
+				, m_spanMax
+				, m_reduceMul );
+			m_subpixShift.reset();
+			m_spanMax.reset();
+			m_reduceMul.reset();
+		}
 	}
 
 	bool PostEffect::doWriteInto( StringStream & file, String const & tabs )

@@ -14,10 +14,6 @@ namespace castor3d
 	{
 	}
 
-	Sphere::~Sphere()
-	{
-	}
-
 	MeshGeneratorSPtr Sphere::create()
 	{
 		return std::make_shared< Sphere >();
@@ -50,8 +46,8 @@ namespace castor3d
 
 			for ( uint32_t i = 0; i <= m_nbFaces; i++ )
 			{
-				float x = m_radius * sin( rAlpha );
-				float y = -m_radius * cos( rAlpha );
+				auto x = float( m_radius * sin( rAlpha ) );
+				auto y = float( -m_radius * cos( rAlpha ) );
 				arc[i][0] = x;
 				arc[i][1] = y;
 				rAlpha += rAngle / 2;
@@ -69,8 +65,8 @@ namespace castor3d
 					// Calcul de la position des points du haut
 					for ( uint32_t i = 0; i <= m_nbFaces; rAlphaI += rAngle, i++ )
 					{
-						float rCos = cos( rAlphaI );
-						float rSin = sin( rAlphaI );
+						auto rCos = float( cos( rAlphaI ) );
+						auto rSin = float( sin( rAlphaI ) );
 						auto pos = castor::Point3f{ ptT[0] * rCos, ptT[1], ptT[0] * rSin };
 						submesh.addPoint( InterleavedVertex{}
 							.position( pos )
@@ -85,8 +81,8 @@ namespace castor3d
 
 				for ( uint32_t i = 0; i <= m_nbFaces; rAlphaI += rAngle, i++ )
 				{
-					float rCos = cos( rAlphaI );
-					float rSin = sin( rAlphaI );
+					auto rCos = float( cos( rAlphaI ) );
+					auto rSin = float( sin( rAlphaI ) );
 					auto pos = castor::Point3f{ ptB[0] * rCos, ptB[1], ptB[0] * rSin };
 					submesh.addPoint( InterleavedVertex{}
 						.position( pos )

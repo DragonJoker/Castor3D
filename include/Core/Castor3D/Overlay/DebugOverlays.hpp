@@ -136,7 +136,7 @@ namespace castor3d
 			DebugPanelT( DebugPanelT const & ) = delete;
 			DebugPanelT & operator=( DebugPanelT const & ) = delete;
 			DebugPanelT( DebugPanelT && ) = default;
-			DebugPanelT & operator=( DebugPanelT && ) = default;
+			DebugPanelT & operator=( DebugPanelT && ) = delete;
 			DebugPanelT( castor::String const & name
 				, castor::String const & label
 				, PanelOverlaySPtr panel
@@ -162,7 +162,7 @@ namespace castor3d
 			DebugPanelsT( DebugPanelsT const & ) = delete;
 			DebugPanelsT & operator=( DebugPanelsT const & ) = delete;
 			DebugPanelsT( DebugPanelsT && ) = default;
-			DebugPanelsT & operator=( DebugPanelsT && ) = default;
+			DebugPanelsT & operator=( DebugPanelsT && ) = delete;
 			DebugPanelsT( castor::String const & title
 				, PanelOverlaySPtr panel
 				, OverlayCache & cache );
@@ -224,7 +224,7 @@ namespace castor3d
 			PassOverlays( PassOverlays const & ) = delete;
 			PassOverlays & operator=( PassOverlays const & ) = delete;
 			PassOverlays( PassOverlays && ) = default;
-			PassOverlays & operator=( PassOverlays && ) = default;
+			PassOverlays & operator=( PassOverlays && ) = delete;
 			PassOverlays( OverlayCache & cache
 				, OverlayRPtr parent
 				, castor::String const & category
@@ -256,7 +256,6 @@ namespace castor3d
 			OverlayCache & m_cache;
 			bool const & m_detailed;
 			castor::String m_name;
-			uint32_t m_index;
 			std::map< FramePassTimer *, crg::OnFramePassDestroyConnection > m_timers;
 			PanelOverlaySPtr m_panel;
 			TextOverlaySPtr m_passName;

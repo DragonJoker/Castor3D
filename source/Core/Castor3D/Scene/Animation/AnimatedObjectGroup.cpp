@@ -77,7 +77,7 @@ namespace castor3d
 			object.reset();
 		}
 
-		return object;
+		return std::static_pointer_cast< AnimatedObject >( object );
 	}
 
 	AnimatedObjectSPtr AnimatedObjectGroup::addObject( Skeleton & skeleton
@@ -92,7 +92,7 @@ namespace castor3d
 			object.reset();
 		}
 
-		return object;
+		return std::static_pointer_cast< AnimatedObject >( object );
 	}
 
 	AnimatedObjectSPtr AnimatedObjectGroup::addObject( TextureUnit & texture
@@ -105,7 +105,7 @@ namespace castor3d
 			object.reset();
 		}
 
-		return object;
+		return std::static_pointer_cast< AnimatedObject >( object );
 	}
 
 	bool AnimatedObjectGroup::addObject( AnimatedObjectSPtr object )

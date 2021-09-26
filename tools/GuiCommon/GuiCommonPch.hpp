@@ -23,6 +23,9 @@ See LICENSE file in root folder
 
 #	include <string>
 
+#	pragma warning( push )
+#	pragma warning( disable: 4365 )
+#	pragma warning( disable: 4371 )
 #	include <wx/app.h>
 #	include <wx/button.h>
 #	include <wx/bmpbuttn.h>
@@ -60,6 +63,7 @@ See LICENSE file in root folder
 #	include <wx/timer.h>
 #	include <wx/treectrl.h>
 #	include <wx/aui/framemanager.h>
+#	pragma warning( pop )
 
 #	include <CastorUtils/CastorUtils.hpp>
 #	include <CastorUtils/Miscellaneous/StringUtils.hpp>

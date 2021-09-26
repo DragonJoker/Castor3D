@@ -11,7 +11,6 @@ namespace Testing
 	{
 	public:
 		CastorUtilsPixelFormatTest();
-		virtual ~CastorUtilsPixelFormatTest();
 
 	private:
 		void doRegisterTests() override;

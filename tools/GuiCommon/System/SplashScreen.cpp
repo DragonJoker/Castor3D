@@ -38,10 +38,6 @@ SplashScreen::SplashScreen( wxString const & title
 	Update();
 }
 
-SplashScreen::~SplashScreen()
-{
-}
-
 void SplashScreen::Step( wxString const & p_strText, int p_iIncrement )
 {
 	Logger::logDebug( String( cuT( "SplashScreen::Step - " ) ) + make_String( p_strText ) );
@@ -100,10 +96,13 @@ void SplashScreen::doDraw( wxDC * p_pDC )
 	}
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 BEGIN_EVENT_TABLE( SplashScreen, wxFrame )
 	EVT_PAINT( SplashScreen::OnPaint )
 	EVT_ERASE_BACKGROUND( SplashScreen::OnEraseBackground )
 END_EVENT_TABLE()
+#pragma GCC diagnostic pop
 
 void SplashScreen::OnPaint( wxPaintEvent & p_event )
 {

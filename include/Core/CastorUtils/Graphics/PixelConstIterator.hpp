@@ -69,14 +69,14 @@ namespace castor
 
 		inline ConstPixelIterator & operator+=( size_t offset )
 		{
-			m_current += offset * ConstPixelIterator::size;
+			m_current += ptrdiff_t( offset * ConstPixelIterator::size );
 			doLink();
 			return *this;
 		}
 
 		inline ConstPixelIterator & operator-=( size_t offset )
 		{
-			m_current -= offset * ConstPixelIterator::size;
+			m_current -= ptrdiff_t( offset * ConstPixelIterator::size );
 			doLink();
 			return *this;
 		}

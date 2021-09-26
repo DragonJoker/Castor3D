@@ -66,12 +66,16 @@ namespace castor3d
 			else
 			{
 				sampler = engine.getSamplerCache().add( name, engine );
-				sampler.lock()->setMinFilter( VK_FILTER_LINEAR );
-				sampler.lock()->setMagFilter( VK_FILTER_LINEAR );
-				sampler.lock()->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				sampler.lock()->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				sampler.lock()->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				sampler.lock()->setBorderColour( VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK );
+
+				if ( auto obj = sampler.lock() )
+				{
+					obj->setMinFilter( VK_FILTER_LINEAR );
+					obj->setMagFilter( VK_FILTER_LINEAR );
+					obj->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+					obj->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+					obj->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+					obj->setBorderColour( VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK );
+				}
 			}
 
 			ashes::ImageCreateInfo image

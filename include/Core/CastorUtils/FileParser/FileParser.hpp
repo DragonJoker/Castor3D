@@ -108,9 +108,9 @@ namespace castor
 		};
 
 	public:
-		CU_API PreprocessedFile( PreprocessedFile const & rhs ) = default;
+		CU_API PreprocessedFile( PreprocessedFile const & rhs ) = delete;
+		CU_API PreprocessedFile & operator=( PreprocessedFile const & rhs ) = delete;
 		CU_API PreprocessedFile( PreprocessedFile && rhs ) = default;
-		CU_API PreprocessedFile & operator=( PreprocessedFile const & rhs );
 		CU_API PreprocessedFile & operator=( PreprocessedFile && rhs );
 
 		CU_API explicit PreprocessedFile( FileParser & parser );

@@ -88,7 +88,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~TextureUnit();
+		C3D_API ~TextureUnit()override;
 		/**
 		 *\~english
 		 *\brief		Initialises the texture, id est : fills the image buffer, creates the texture in the render system.

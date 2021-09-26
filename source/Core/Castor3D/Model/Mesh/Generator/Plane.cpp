@@ -15,10 +15,6 @@ namespace castor3d
 	{
 	}
 
-	Plane::~Plane()
-	{
-	}
-
 	MeshGeneratorSPtr Plane::create()
 	{
 		return std::make_shared< Plane >();

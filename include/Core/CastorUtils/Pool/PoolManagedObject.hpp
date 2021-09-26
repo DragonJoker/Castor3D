@@ -70,15 +70,6 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		~PoolManagedObject()noexcept
-		{
-		}
-		/**
-		 *\~english
 		 *\brief		New operator overload.
 		 *\remarks		Uses the objects pool to allocate memory.
 		 *\param[in]	size	The allocation size.
@@ -89,7 +80,14 @@ namespace castor
 		 */
 		static void * operator new( std::size_t size )
 		{
-			return MyUniqueObjectPool::get().allocate();
+			auto result = MyUniqueObjectPool::get().allocate();
+
+			if ( !result )
+			{
+				throw std::bad_alloc{};
+			}
+
+			return result;
 		}
 		/**
 		 *\~english

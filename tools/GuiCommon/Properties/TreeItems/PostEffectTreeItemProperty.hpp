@@ -37,20 +37,13 @@ namespace GuiCommon
 		PostEffectTreeItemProperty( bool editable
 			, castor3d::PostEffect & effect
 			, wxWindow * parent );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		~PostEffectTreeItemProperty();
 
 	private:
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void doCreateProperties( wxPGEditor * editor
-			, wxPropertyGrid * grid );
+		void doCreateProperties( wxPGEditor * editor
+			, wxPropertyGrid * grid )override;
 
 	private:
 		castor3d::PostEffect & m_effect;

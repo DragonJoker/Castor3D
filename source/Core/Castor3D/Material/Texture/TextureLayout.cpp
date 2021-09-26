@@ -593,9 +593,22 @@ namespace castor3d
 						, generateMips } );
 			}
 
-			auto buffer = adaptBuffer( image.lock()->getPixels(), mipLevels );
+			auto img = image.lock();
+
+			if ( !img )
+			{
+				CU_LoaderError( "Couldn't load image." );
+			}
+
+			auto buffer = adaptBuffer( img->getPixels(), mipLevels );
+
+			if ( !buffer )
+			{
+				CU_LoaderError( "Couldn't adapt image buffer." );
+			}
+
 			srcMipLevels = buffer->getLevels();
-			castor::ImageLayout layout{ image.lock()->getLayout().type, *buffer };
+			castor::ImageLayout layout{ img->getLayout().type, *buffer };
 			return castor::Image{ name
 				, folder / relative
 				, layout
@@ -712,6 +725,81 @@ namespace castor3d
 				, mipView.view->getLevelCount()
 				, mipView );
 		}
+
+		castor::ImageLayout::Type convert( VkImageCreateFlags flags
+			, VkImageType imageType
+			, VkExtent3D const & extent
+			, uint32_t arrayLayers )
+		{
+			if ( extent.depth > 1u )
+			{
+				return castor::ImageLayout::e3D;
+			}
+
+			if ( extent.height > 1u || extent.width <= 1u )
+			{
+				if ( castor::checkFlag( flags, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT ) )
+				{
+					if ( arrayLayers == 6u )
+					{
+						return castor::ImageLayout::eCube;
+					}
+
+					if ( arrayLayers > 6u && ( arrayLayers % 6u == 0u ) )
+					{
+						return castor::ImageLayout::eCubeArray;
+					}
+				}
+
+				if ( arrayLayers > 1u )
+				{
+					return castor::ImageLayout::e2DArray;
+				}
+
+				return castor::ImageLayout::e2D;
+			}
+
+			if ( arrayLayers > 1u )
+			{
+				return castor::ImageLayout::e1DArray;
+			}
+
+			return castor::ImageLayout::e1D;
+		}
+
+		castor::ImageLayout convert( ashes::ImageCreateInfo const & value )
+		{
+			return castor::ImageLayout
+			{
+				convert( value->flags, value->imageType, value->extent, value->arrayLayers ),
+				castor::PixelFormat( value->format ),
+				castor::Point3ui{ value->extent.width, value->extent.height, value->extent.depth },
+				0u,
+				value->arrayLayers,
+				0u,
+				value->mipLevels,
+			};
+		}
+
+		VkImageType convert( castor::ImageLayout::Type type )
+		{
+			switch ( type )
+			{
+			case castor::ImageLayout::e1D:
+			case castor::ImageLayout::e1DArray:
+				return VK_IMAGE_TYPE_1D;
+			case castor::ImageLayout::e2D:
+			case castor::ImageLayout::eCube:
+			case castor::ImageLayout::e2DArray:
+			case castor::ImageLayout::eCubeArray:
+				return VK_IMAGE_TYPE_2D;
+			case castor::ImageLayout::e3D:
+				return VK_IMAGE_TYPE_3D;
+			default:
+				CU_Failure( "Unexpected castor::ImageLayout::Type" );
+				return VK_IMAGE_TYPE_2D;
+			}
+		}
 	}
 
 	//************************************************************************************************
@@ -778,81 +866,6 @@ namespace castor3d
 		auto blockSize = ashes::getBlockSize( format );
 		auto min = std::min( extent.width / blockSize.extent.width, extent.height / blockSize.extent.height );
 		return uint32_t( castor::getBitSize( min ) );
-	}
-
-	castor::ImageLayout::Type convert( VkImageCreateFlags flags
-		, VkImageType imageType
-		, VkExtent3D const & extent
-		, uint32_t arrayLayers )
-	{
-		if ( extent.depth > 1u )
-		{
-			return castor::ImageLayout::e3D;
-		}
-
-		if ( extent.height > 1u || extent.width <= 1u )
-		{
-			if ( castor::checkFlag( flags, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT ) )
-			{
-				if ( arrayLayers == 6u )
-				{
-					return castor::ImageLayout::eCube;
-				}
-
-				if ( arrayLayers > 6u && ( arrayLayers % 6u == 0u ) )
-				{
-					return castor::ImageLayout::eCubeArray;
-				}
-			}
-
-			if ( arrayLayers > 1u )
-			{
-				return castor::ImageLayout::e2DArray;
-			}
-
-			return castor::ImageLayout::e2D;
-		}
-
-		if ( arrayLayers > 1u )
-		{
-			return castor::ImageLayout::e1DArray;
-		}
-
-		return castor::ImageLayout::e1D;
-	}
-
-	castor::ImageLayout convert( ashes::ImageCreateInfo const & value )
-	{
-		return castor::ImageLayout
-		{
-			convert( value->flags, value->imageType, value->extent, value->arrayLayers ),
-			castor::PixelFormat( value->format ),
-			castor::Point3ui{ value->extent.width, value->extent.height, value->extent.depth },
-			0u,
-			value->arrayLayers,
-			0u,
-			value->mipLevels,
-		};
-	}
-
-	VkImageType convert( castor::ImageLayout::Type type )
-	{
-		switch ( type )
-		{
-		case castor::ImageLayout::e1D:
-		case castor::ImageLayout::e1DArray:
-			return VK_IMAGE_TYPE_1D;
-		case castor::ImageLayout::e2D:
-		case castor::ImageLayout::eCube:
-		case castor::ImageLayout::e2DArray:
-		case castor::ImageLayout::eCubeArray:
-			return VK_IMAGE_TYPE_2D;
-		case castor::ImageLayout::e3D:
-			return VK_IMAGE_TYPE_3D;
-		default:
-			CU_Failure( "Unexpected castor::ImageLayout::Type" );
-			return VK_IMAGE_TYPE_2D;
-		}
 	}
 
 	//************************************************************************************************

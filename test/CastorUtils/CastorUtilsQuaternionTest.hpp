@@ -16,7 +16,6 @@ namespace Testing
 	{
 	public:
 		CastorUtilsQuaternionTest();
-		virtual ~CastorUtilsQuaternionTest();
 
 	private:
 		void doRegisterTests() override;

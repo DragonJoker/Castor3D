@@ -34,10 +34,6 @@ namespace Testing
 	{
 	}
 
-	CastorUtilsQuaternionTest::~CastorUtilsQuaternionTest()
-	{
-	}
-
 	void CastorUtilsQuaternionTest::doRegisterTests()
 	{
 #if defined( CASTOR_USE_GLM )

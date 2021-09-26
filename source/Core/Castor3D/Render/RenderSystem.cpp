@@ -29,7 +29,10 @@
 #include <atomic>
 
 #define C3D_UseAllocationCallbacks 0
-#define C3D_DebugSpirV 0
+
+#if !defined( NDEBUG )
+#	define C3D_DebugSpirV 0
+#endif
 
 CU_ImplementCUSmartPtr( castor3d, RenderSystem )
 
@@ -399,8 +402,7 @@ namespace castor3d
 			return result;
 		}
 
-		ashes::ApplicationInfo createApplicationInfo( Engine & engine
-			, AshPluginDescription desc )
+		ashes::ApplicationInfo createApplicationInfo( Engine & engine )
 		{
 			return ashes::ApplicationInfo
 			{
@@ -410,6 +412,30 @@ namespace castor3d
 				Version{}.getVkVersion(),
 				ashes::makeVersion( 1, 2, 0 ),
 			};
+		}
+
+		uint32_t getSpirVVersion( uint32_t vkApiVersion )
+		{
+			uint32_t constexpr version1_0 = ashes::makeVersion( 1, 0, 0 );
+			uint32_t constexpr version1_1 = ashes::makeVersion( 1, 1, 0 );
+			uint32_t constexpr version1_2 = ashes::makeVersion( 1, 2, 0 );
+
+			uint32_t result{ 0x00010300 };
+
+			if ( vkApiVersion >= version1_2 )
+			{
+				result = spirv::SpirVConfig::v1_3;
+			}
+			else if ( vkApiVersion >= version1_1 )
+			{
+				result = spirv::SpirVConfig::v1_3;
+			}
+			else if ( vkApiVersion >= version1_0 )
+			{
+				result = spirv::SpirVConfig::v1_0;
+			}
+
+			return result;
 		}
 	}
 
@@ -424,11 +450,11 @@ namespace castor3d
 		auto & rendererList = engine.getRenderersList();
 		auto plugin = rendererList.selectPlugin( desc.name );
 		PFN_vkEnumerateInstanceLayerProperties enumLayerProperties;
-		enumLayerProperties = ( PFN_vkEnumerateInstanceLayerProperties )plugin.getInstanceProcAddr( VK_NULL_HANDLE,
-			"vkEnumerateInstanceLayerProperties" );
+		enumLayerProperties = reinterpret_cast< PFN_vkEnumerateInstanceLayerProperties >( plugin.getInstanceProcAddr( VK_NULL_HANDLE,
+			"vkEnumerateInstanceLayerProperties" ) );
 		PFN_vkEnumerateInstanceExtensionProperties enumInstanceExtensionProperties;
-		enumInstanceExtensionProperties = ( PFN_vkEnumerateInstanceExtensionProperties )plugin.getInstanceProcAddr( VK_NULL_HANDLE,
-			"vkEnumerateInstanceExtensionProperties" );
+		enumInstanceExtensionProperties = reinterpret_cast< PFN_vkEnumerateInstanceExtensionProperties >( plugin.getInstanceProcAddr( VK_NULL_HANDLE,
+			"vkEnumerateInstanceExtensionProperties" ) );
 
 		m_layers = enumerateLayerProperties( enumLayerProperties );
 		m_globalLayerExtensions = enumerateExtensionProperties( enumInstanceExtensionProperties
@@ -457,7 +483,7 @@ namespace castor3d
 		ashes::InstanceCreateInfo createInfo
 		{
 			0u,
-			createApplicationInfo( engine, desc ),
+			createApplicationInfo( engine ),
 			m_layerNames,
 			m_extensionNames,
 		};
@@ -590,7 +616,8 @@ namespace castor3d
 		, ast::Shader const & shader )const
 	{
 		SpirVShader result;
-		result.spirv = spirv::serialiseSpirv( shader );
+		result.spirv = spirv::serialiseSpirv( shader
+			, { getSpirVVersion( m_properties.apiVersion ) } );
 
 #if !defined( NDEBUG )
 #	if C3D_HasGLSL
@@ -611,7 +638,8 @@ namespace castor3d
 		std::string glsl;
 #	endif
 
-		result.text = glsl + "\n" + spirv::writeSpirv( shader );
+		result.text = glsl + "\n" + spirv::writeSpirv( shader
+			, { getSpirVVersion( m_properties.apiVersion ) } );
 
 #	if C3D_HasSPIRVCross && C3D_DebugSpirV && C3D_HasGlslang
 		std::string name = name + "_" + ashes::getName( stage );

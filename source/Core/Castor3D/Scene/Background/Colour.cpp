@@ -29,22 +29,6 @@ namespace castor3d
 	namespace
 	{
 		static uint32_t constexpr Dim = 16u;
-
-		ashes::ImageCreateInfo doGetImageCreate()
-		{
-			return ashes::ImageCreateInfo
-			{
-				VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT,
-				VK_IMAGE_TYPE_2D,
-				VK_FORMAT_R32G32B32A32_SFLOAT,
-				{ Dim, Dim, 1u },
-				1u,
-				6u,
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_IMAGE_TILING_OPTIMAL,
-				VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
-			};
-		}
 	}
 
 	//************************************************************************************************
@@ -68,10 +52,6 @@ namespace castor3d
 		m_texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
 			, m_textureId.image
 			, m_textureId.wholeViewId );
-	}
-
-	ColourBackground::~ColourBackground()
-	{
 	}
 
 	void ColourBackground::accept( BackgroundVisitor & visitor )

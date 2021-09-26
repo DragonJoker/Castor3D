@@ -37,7 +37,6 @@ namespace light_streaks
 		static castor::String const CombineMapKawase;
 
 	private:
-		castor3d::RenderDevice const & m_device;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;

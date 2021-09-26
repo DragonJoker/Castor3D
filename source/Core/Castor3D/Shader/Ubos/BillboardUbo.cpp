@@ -19,12 +19,6 @@ namespace castor3d
 		{
 		}
 
-		BillboardData & BillboardData::operator=( BillboardData const & rhs )
-		{
-			StructInstance::operator=( rhs );
-			return *this;
-		}
-
 		ast::type::StructPtr BillboardData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140

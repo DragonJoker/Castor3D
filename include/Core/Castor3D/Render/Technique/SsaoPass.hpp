@@ -100,8 +100,6 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		SsaoConfig & m_ssaoConfig;
-		Texture const & m_depth;
-		Texture const & m_normal;
 		GpInfoUbo const & m_gpInfoUbo;
 		VkExtent2D m_size;
 		MatrixUbo m_matrixUbo;

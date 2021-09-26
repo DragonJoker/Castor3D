@@ -169,7 +169,7 @@ namespace castor
 
 		if ( !m_blocks.empty() )
 		{
-			auto end = m_blocks.begin() + m_blocks.size() - 1u;
+			auto end = std::next( m_blocks.begin(), ptrdiff_t( m_blocks.size() - 1u ) );
 			result = end == std::find_if( m_blocks.begin()
 				, end
 				, []( BlockType const lookup )
@@ -201,7 +201,7 @@ namespace castor
 	{
 		if ( value )
 		{
-			if ( value >= m_bitCount )
+			if ( size_t( value ) >= m_bitCount )
 			{
 				reset();
 			}
@@ -221,7 +221,7 @@ namespace castor
 					}
 
 					m_blocks[lastIndex - blockShift] = m_blocks[lastIndex] >> remainder;
-					std::fill_n( m_blocks.begin() + ( m_blocks.size() - blockShift )
+					std::fill_n( std::next( m_blocks.begin(), ptrdiff_t( m_blocks.size() - blockShift ) )
 						, blockShift
 						, BlockType{} );
 				}
@@ -254,7 +254,7 @@ namespace castor
 	{
 		if ( value )
 		{
-			if ( value >= m_bitCount )
+			if ( size_t( value ) >= m_bitCount )
 			{
 				reset();
 			}

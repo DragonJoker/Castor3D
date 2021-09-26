@@ -44,13 +44,6 @@ namespace castor3d
 			, castor::String const & name = castor::cuEmptyString );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~MeshAnimation();
-		/**
-		 *\~english
 		 *\brief		adds a child to this object.
 		 *\remarks		The child's transformations are affected by this object's ones.
 		 *\param[in]	object	The child.
@@ -68,7 +61,7 @@ namespace castor3d
 		 *\param[in]	index	L'indice.
 		 *\return		Le sous-maillage animé à l'indice donné.
 		 */
-		inline MeshAnimationSubmesh & getSubmesh( uint32_t index )
+		MeshAnimationSubmesh & getSubmesh( uint32_t index )
 		{
 			CU_Require( index < m_submeshes.size() );
 			return m_submeshes[index];

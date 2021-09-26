@@ -380,7 +380,7 @@ namespace castor3d::shader
 
 	void PhongLightingModel::doDeclareComputeTiledDirectionalLight()
 	{
-		OutputComponents output{ m_writer };
+		OutputComponents outputs{ m_writer };
 		m_computeTiledDirectional = m_writer.implementFunction< sdw::Void >( m_prefix + "computeDirectionalLight"
 			, [this]( TiledDirectionalLight const & light
 				, PhongLightMaterial const & material
@@ -532,12 +532,12 @@ namespace castor3d::shader
 			, InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
 			, sdw::InInt( m_writer, "receivesShadows" )
-			, output );
+			, outputs );
 	}
 
 	void PhongLightingModel::doDeclareComputeDirectionalLight()
 	{
-		OutputComponents output{ m_writer };
+		OutputComponents outputs{ m_writer };
 		m_computeDirectional = m_writer.implementFunction< sdw::Void >( m_prefix + "computeDirectionalLight"
 			, [this]( DirectionalLight const & light
 				, PhongLightMaterial const & material
@@ -689,12 +689,12 @@ namespace castor3d::shader
 			, InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
 			, sdw::InInt( m_writer, "receivesShadows" )
-			, output );
+			, outputs );
 	}
 
 	void PhongLightingModel::doDeclareComputePointLight()
 	{
-		OutputComponents output{ m_writer };
+		OutputComponents outputs{ m_writer };
 		m_computePoint = m_writer.implementFunction< sdw::Void >( m_prefix + "computePointLight"
 			, [this]( PointLight const & light
 				, PhongLightMaterial const & material
@@ -786,12 +786,12 @@ namespace castor3d::shader
 			, InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
 			, sdw::InInt( m_writer, "receivesShadows" )
-			, output );
+			, outputs );
 	}
 
 	void PhongLightingModel::doDeclareComputeSpotLight()
 	{
-		OutputComponents output{ m_writer };
+		OutputComponents outputs{ m_writer };
 		m_computeSpot = m_writer.implementFunction< sdw::Void >( m_prefix + "computeSpotLight"
 			, [this]( SpotLight const & light
 				, PhongLightMaterial const & material
@@ -900,12 +900,12 @@ namespace castor3d::shader
 			, InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
 			, sdw::InInt( m_writer, "receivesShadows" )
-			, output );
+			, outputs );
 	}
 
 	void PhongLightingModel::doDeclareComputeLight()
 	{
-		OutputComponents output{ m_writer };
+		OutputComponents outputs{ m_writer };
 		m_computeLight = m_writer.implementFunction< sdw::Void >( m_prefix + "doComputeLight"
 			, [this]( Light const & light
 				, PhongLightMaterial const & material
@@ -954,7 +954,7 @@ namespace castor3d::shader
 			, InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
 			, sdw::InVec3( m_writer, "lightDirection" )
-			, output );
+			, outputs );
 	}
 
 	void PhongLightingModel::doComputeLight( Light const & light

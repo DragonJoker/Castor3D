@@ -10,14 +10,14 @@ namespace Loop
 		, castor3d::Face face
 		, VertexPtrUIntMap & vertices )
 		: m_divider( divider )
-		, m_face( face )
 		, m_vertex0( vertices[face[0]] )
 		, m_vertex1( vertices[face[1]] )
 		, m_vertex2( vertices[face[2]] )
+		, m_face( face )
+		, m_edgeAB( doAddEdge( m_vertex0.lock(), m_vertex1.lock(), true ) )
+		, m_edgeBC( doAddEdge( m_vertex1.lock(), m_vertex2.lock(), true ) )
+		, m_edgeCA( doAddEdge( m_vertex2.lock(), m_vertex0.lock(), true ) )
 	{
-		m_edgeAB = doAddEdge( m_vertex0.lock(), m_vertex1.lock(), true );
-		m_edgeBC = doAddEdge( m_vertex1.lock(), m_vertex2.lock(), true );
-		m_edgeCA = doAddEdge( m_vertex2.lock(), m_vertex0.lock(), true );
 	}
 
 	FaceEdges::FaceEdges( Subdivider * divider
@@ -26,13 +26,13 @@ namespace Loop
 		, EdgeSPtr bc
 		, EdgeSPtr ca )
 		: m_divider( divider )
+		, m_vertex0( ab->getVertex1() )
+		, m_vertex1( bc->getVertex1() )
+		, m_vertex2( ca->getVertex1() )
 		, m_face( face )
 		, m_edgeAB( ab )
 		, m_edgeBC( bc )
 		, m_edgeCA( ca )
-		, m_vertex0( ab->getVertex1() )
-		, m_vertex1( bc->getVertex1() )
-		, m_vertex2( ca->getVertex1() )
 	{
 	}
 

@@ -13,7 +13,6 @@ namespace Testing
 	{
 	public:
 		explicit BinaryExportTest( castor3d::Engine & engine );
-		virtual ~BinaryExportTest();
 
 	private:
 		void doRegisterTests() override;
@@ -23,7 +22,7 @@ namespace Testing
 		void ImportExport();
 		void AnimatedMesh();
 		void doTestMeshFile( castor::String const & name );
-		void doTestMesh( castor3d::MeshSPtr & src );
+		void doTestMesh( castor3d::Mesh & src );
 	};
 }
 

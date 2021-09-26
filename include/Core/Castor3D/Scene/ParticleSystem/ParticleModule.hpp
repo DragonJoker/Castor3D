@@ -179,20 +179,19 @@ namespace castor3d
 	*/
 	using ParticleFactory = castor::Factory< CpuParticleSystem
 		, castor::String
-		, std::unique_ptr< CpuParticleSystem >
-		, std::function< std::unique_ptr< CpuParticleSystem >( ParticleSystem & ) > >;
+		, castor::UniquePtr< CpuParticleSystem >
+		, std::function< castor::UniquePtr< CpuParticleSystem >( ParticleSystem & ) > >;
 
 	template< ParticleFormat Type >
 	struct ElementTyper;
 	
-	CU_DeclareSmartPtr( ComputeParticleSystem );
-	CU_DeclareSmartPtr( CpuParticleSystem );
-	CU_DeclareSmartPtr( ParticleElementDeclaration );
-	CU_DeclareSmartPtr( ParticleEmitter );
-	CU_DeclareSmartPtr( ParticleSystem );
-	CU_DeclareSmartPtr( ParticleSystemImpl );
-	CU_DeclareSmartPtr( ParticleUpdater );
-
+	CU_DeclareCUSmartPtr( castor3d, ComputeParticleSystem, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, CpuParticleSystem, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, ParticleElementDeclaration, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, ParticleEmitter, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, ParticleSystem, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, ParticleSystemImpl, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, ParticleUpdater, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, ParticleFactory, C3D_API );
 
 	CU_DeclareVector( Particle, Particle );

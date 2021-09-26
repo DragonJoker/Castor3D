@@ -14,13 +14,11 @@ namespace Testing
 			if ( !p_strIn.empty() )
 			{
 				typedef typename std::codecvt< OutChar, InChar, std::mbstate_t > facet_type;
-				typedef typename facet_type::result result_type;
 				std::mbstate_t state = std::mbstate_t();
-				result_type result;
 				std::vector< OutChar > buffer( p_strIn.size() );
-				InChar const * pEndIn = NULL;
-				OutChar * pEndOut = NULL;
-				result = std::use_facet< facet_type >( p_locale ).in( state,
+				InChar const * pEndIn = nullptr;
+				OutChar * pEndOut = nullptr;
+				std::use_facet< facet_type >( p_locale ).in( state,
 						   p_strIn.data(),		p_strIn.data() + p_strIn.length(),		pEndIn,
 						   &buffer.front(),	&buffer.front() + buffer.size(),	pEndOut
 																	  );
@@ -31,40 +29,12 @@ namespace Testing
 				p_strOut.clear();
 			}
 		}
-
-		inline void narrow( std::wstring const & p_wstrIn, std::string & p_strOut )
-		{
-			p_strOut.resize( p_wstrIn.size() + 1, '\0' );
-			std::ostringstream stream;
-			std::ctype< wchar_t > const & ctfacet = std::use_facet< std::ctype< wchar_t > >( stream.getloc() );
-
-			if ( p_wstrIn.size() > 0 )
-			{
-				ctfacet.narrow( p_wstrIn.data(), p_wstrIn.data() + p_wstrIn.size(), '?', &p_strOut[0] );
-			}
-		}
-
-		inline void widen( std::string const & p_strIn, std::wstring & p_wstrOut )
-		{
-			p_wstrOut.resize( p_strIn.size() + 1, L'\0' );
-			std::wostringstream wstream;
-			std::ctype< wchar_t > const & ctfacet = std::use_facet< std::ctype< wchar_t > >( wstream.getloc() );
-
-			if ( p_strIn.size() > 0 )
-			{
-				ctfacet.widen( p_strIn.data(), p_strIn.data() + p_strIn.size(), &p_wstrOut[0] );
-			}
-		}
 	}
 
 	//*********************************************************************************************
 
 	CastorUtilsStringTest::CastorUtilsStringTest()
 		:	TestCase( "CastorUtilsStringTest" )
-	{
-	}
-
-	CastorUtilsStringTest::~CastorUtilsStringTest()
 	{
 	}
 

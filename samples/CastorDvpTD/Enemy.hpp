@@ -35,7 +35,6 @@ namespace castortd
 
 	public:
 		Enemy( castor3d::SceneNode & p_node, Game const & p_game, Path const & p_path, Category const & p_category );
-		~Enemy();
 
 		void load( Game const & p_game );
 

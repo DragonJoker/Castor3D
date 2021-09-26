@@ -36,13 +36,6 @@ namespace GuiCommon
 		ViewportTreeItemProperty( bool p_editable, castor3d::Engine & engine, castor3d::Viewport & p_viewport );
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		~ViewportTreeItemProperty();
-		/**
-		 *\~english
 		 *\brief		Retrieves the viewport
 		 *\return		The value
 		 *\~french
@@ -70,7 +63,7 @@ namespace GuiCommon
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )override;
 
 	private:
 		castor3d::Viewport & m_viewport;

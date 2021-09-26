@@ -27,7 +27,7 @@ namespace Testing
 
 #define BENCHLOOP( p_iMax, p_return )\
 		p_return = ::Testing::BenchManager::ExecuteTests();\
-		for( int i = 0; i < p_iMax; ++i )\
+		for( uint32_t i = 0u; i < p_iMax; ++i )\
 		{\
 			::Testing::BenchManager::ExecuteBenchs();\
 		}\

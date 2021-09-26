@@ -41,8 +41,8 @@ namespace smaa
 		std::unique_ptr< ast::Shader > doGetReprojectVP( VkExtent3D const & size
 			, SmaaConfig const & config )
 		{
-			Point4f renderTargetMetrics{ 1.0f / size.width
-				, 1.0f / size.height
+			Point4f renderTargetMetrics{ 1.0f / float( size.width )
+				, 1.0f / float( size.height )
 				, float( size.width )
 				, float( size.height ) };
 
@@ -168,7 +168,7 @@ namespace smaa
 				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) }
 		, m_pass{ m_graph.createPass( "SmaaReproject"
-			, [this, &device, &renderTarget, &config, &currentColourViews, enabled]( crg::FramePass const & pass
+			, [this, &device, &config, enabled]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{

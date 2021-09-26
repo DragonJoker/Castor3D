@@ -51,7 +51,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le début des tampons des sous-maillages.
 		 */
-		inline SubmeshAnimationBufferMap::const_iterator begin()const
+		SubmeshAnimationBufferMap::const_iterator begin()const
 		{
 			return m_submeshesBuffers.begin();
 		}
@@ -61,7 +61,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La fin des tampons des sous-maillages.
 		 */
-		inline SubmeshAnimationBufferMap::const_iterator end()const
+		SubmeshAnimationBufferMap::const_iterator end()const
 		{
 			return m_submeshesBuffers.end();
 		}

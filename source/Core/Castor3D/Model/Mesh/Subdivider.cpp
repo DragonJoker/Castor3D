@@ -30,7 +30,7 @@ namespace castor3d
 	{
 		for ( int i = 0; i < occurences; ++i )
 		{
-			doSubdivide( submesh, generateBuffers, threaded );
+			doSubdivideOnce( submesh, generateBuffers, threaded );
 		}
 	}
 
@@ -104,7 +104,7 @@ namespace castor3d
 			return addPoint( point );
 		}
 
-		auto & result = getPoint( index );
+		auto & result = getPoint( uint32_t( index ) );
 		auto position = result.m_vertex.pos;
 
 		if ( position != point )
@@ -115,7 +115,7 @@ namespace castor3d
 		return result;
 	}
 
-	void MeshSubdivider::doSubdivide( SubmeshSPtr submesh, bool generateBuffers, bool threaded )
+	void MeshSubdivider::doSubdivideOnce( SubmeshSPtr submesh, bool generateBuffers, bool threaded )
 	{
 		m_submesh = submesh;
 		m_generateBuffers = generateBuffers;
@@ -164,6 +164,7 @@ namespace castor3d
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 		doSubdivide();
+		doAddGeneratedFaces();
 		doSwapBuffers();
 
 		if ( m_generateBuffers )

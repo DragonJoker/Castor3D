@@ -16,7 +16,6 @@ namespace Testing
 	{
 	public:
 		CastorUtilsSignalTest();
-		virtual ~CastorUtilsSignalTest();
 
 	private:
 		void doRegisterTests() override;

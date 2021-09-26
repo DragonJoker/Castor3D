@@ -63,13 +63,6 @@ namespace castor3d
 			, bool ownProjMtx = false );
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~Camera();
-		/**
-		 *\~english
 		 *\brief		Attaches this light to a Material
 		 *\param[in]	node	The new light's parent node
 		 *\~french

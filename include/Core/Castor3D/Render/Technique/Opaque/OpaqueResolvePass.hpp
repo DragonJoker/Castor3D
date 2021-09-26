@@ -112,11 +112,9 @@ namespace castor3d
 		GpInfoUbo const & m_gpInfoUbo;
 		HdrConfigUbo const & m_hdrConfigUbo;
 		SsaoConfig const & m_ssao;
-		VkExtent2D m_size;
 		OpaquePassResult const & m_opaquePassResult;
 		Texture const & m_ssaoResult;
 		Texture const & m_subsurfaceScattering;
-		Texture const & m_lightDiffuse;
 		Texture const & m_lightSpecular;
 		Texture const & m_lightIndirectDiffuse;
 		Texture const & m_lightIndirectSpecular;

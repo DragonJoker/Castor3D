@@ -44,13 +44,6 @@ namespace castor3d
 		 */
 		C3D_API explicit TextureAnimation( TextureUnit & texture
 			, castor::String const & name = castor::cuEmptyString );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~TextureAnimation();
 
 		C3D_API castor::Point3f getTranslate( castor::Milliseconds const & time )const;
 		C3D_API castor::Angle getRotate( castor::Milliseconds const & time )const;

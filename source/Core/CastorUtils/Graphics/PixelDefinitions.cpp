@@ -12,10 +12,10 @@ namespace castor
 	{
 		inline int8_t doSignInt32( int v )
 		{
-			return ( int8_t )( ( v >> 31 ) | -( -v >> 31 ) );
+			return int8_t( ( v >> 31 ) | -( -v >> 31 ) );
 		}
 
-		inline uint32_t doDivide0To767By3( uint32_t value )
+		inline uint8_t doDivide0To767By3( uint32_t value )
 		{
 			static uint8_t const divisionTable[768]
 			{
@@ -119,7 +119,7 @@ namespace castor
 			return divisionTable[value];
 		}
 
-		inline uint32_t doDivide0To1791By7( uint32_t value )
+		inline uint8_t doDivide0To1791By7( uint32_t value )
 		{
 			static uint8_t const divisionTable[1792] = {
 				0, 0, 0, 0, 0, 0, 0, 1,
@@ -350,12 +350,12 @@ namespace castor
 			return divisionTable[value];
 		}
 
-		inline int doDivideMinus895To895By7( int value )
+		inline int8_t doDivideMinus895To895By7( int value )
 		{
-			return ( int8_t )doDivide0To1791By7( abs( value ) ) * doSignInt32( value );
+			return int8_t( doDivide0To1791By7( uint32_t( abs( value ) ) ) * doSignInt32( value ) );
 		}
 
-		inline uint32_t doDivide0To1279By5( uint32_t value )
+		inline uint8_t doDivide0To1279By5( uint32_t value )
 		{
 			static uint8_t const divisionTable[1280] = {
 				0, 0, 0, 0, 0, 1, 1, 1,
@@ -522,9 +522,9 @@ namespace castor
 			return divisionTable[value];
 		}
 
-		inline int doDivideMinus639To639By5( int value )
+		inline int8_t doDivideMinus639To639By5( int value )
 		{
-			return ( int8_t )doDivide0To1279By5( abs( value ) ) * doSignInt32( value );
+			return int8_t( doDivide0To1279By5( uint32_t( abs( value ) ) ) * doSignInt32( value ) );
 		}
 
 		uint32_t doPack32( uint32_t r, uint32_t g, uint32_t b, uint32_t a )
@@ -535,15 +535,15 @@ namespace castor
 				| uint32_t( uint8_t( a ) << 24 );
 		}
 
-		inline bool doDecodeBC5Block( const uint8_t * bitstring
+		inline bool doDecodeBC5Block( uint8_t const * bitstring
 			, int shift
 			, int offset
 			, uint8_t * pixelBuffer )
 		{
 			// LSBFirst byte order only.
-			uint64_t bits = ( *( uint64_t * )&bitstring[0] ) >> 16;
-			int lum0 = ( int8_t )bitstring[0];
-			int lum1 = ( int8_t )bitstring[1];
+			uint64_t bits = ( *reinterpret_cast< uint64_t const * >( &bitstring[0] ) ) >> 16;
+			int lum0 = int8_t( bitstring[0] );
+			int lum1 = int8_t( bitstring[1] );
 
 			if ( lum0 == -127 && lum1 == -128 )
 			{
@@ -562,11 +562,11 @@ namespace castor
 			}
 
 			// Note: values are mapped to a red value of -127 to 127.
-			uint16_t *pixel16_buffer = ( uint16_t * )pixelBuffer;
+			uint16_t * pixel16_buffer = reinterpret_cast< uint16_t * >( pixelBuffer );
 
 			for ( int i = 0; i < 16; i++ )
 			{
-				int control_code = bits & 0x7;
+				auto control_code = int( bits & 0x7 );
 				int32_t result{};
 
 				if ( lum0 > lum1 )
@@ -599,8 +599,7 @@ namespace castor
 				}
 
 				// Map from [-127, 127] to [-32768, 32767].
-				pixel16_buffer[( i << shift ) + offset] = ( uint16_t )( int16_t )
-					( ( result + 127 ) * 65535 / 254 - 32768 );
+				pixel16_buffer[( i << shift ) + offset] = uint16_t( int16_t( ( result + 127 ) * 65535 / 254 - 32768 ) );
 				bits >>= 3;
 			}
 
@@ -613,25 +612,25 @@ namespace castor
 	bool decompressBC1Block( uint8_t const * bitstring
 		, uint8_t * pixelBuffer )
 	{
-		uint32_t colors = *( uint32_t * )&bitstring[0];
+		uint32_t colors = *reinterpret_cast< uint32_t const * >( &bitstring[0] );
 
 		// Decode the two 5-6-5 RGB colors.
 		int color_r[4], color_g[4], color_b[4];
-		color_b[0] = ( colors & 0x0000001F ) << 3;
-		color_g[0] = ( colors & 0x000007E0 ) >> ( 5 - 2 );
-		color_r[0] = ( colors & 0x0000F800 ) >> ( 11 - 3 );
-		color_b[1] = ( colors & 0x001F0000 ) >> ( 16 - 3 );
-		color_g[1] = ( colors & 0x07E00000 ) >> ( 21 - 2 );
-		color_r[1] = ( colors & 0xF8000000 ) >> ( 27 - 3 );
+		color_b[0] = int( ( colors & 0x0000001F ) << 3 );
+		color_g[0] = int( ( colors & 0x000007E0 ) >> ( 5 - 2 ) );
+		color_r[0] = int( ( colors & 0x0000F800 ) >> ( 11 - 3 ) );
+		color_b[1] = int( ( colors & 0x001F0000 ) >> ( 16 - 3 ) );
+		color_g[1] = int( ( colors & 0x07E00000 ) >> ( 21 - 2 ) );
+		color_r[1] = int( ( colors & 0xF8000000 ) >> ( 27 - 3 ) );
 
 		if ( ( colors & 0xFFFF ) > ( ( colors & 0xFFFF0000 ) >> 16 ) )
 		{
-			color_r[2] = doDivide0To767By3( 2 * color_r[0] + color_r[1] );
-			color_g[2] = doDivide0To767By3( 2 * color_g[0] + color_g[1] );
-			color_b[2] = doDivide0To767By3( 2 * color_b[0] + color_b[1] );
-			color_r[3] = doDivide0To767By3( color_r[0] + 2 * color_r[1] );
-			color_g[3] = doDivide0To767By3( color_g[0] + 2 * color_g[1] );
-			color_b[3] = doDivide0To767By3( color_b[0] + 2 * color_b[1] );
+			color_r[2] = doDivide0To767By3( uint32_t( 2 * color_r[0] + color_r[1] ) );
+			color_g[2] = doDivide0To767By3( uint32_t( 2 * color_g[0] + color_g[1] ) );
+			color_b[2] = doDivide0To767By3( uint32_t( 2 * color_b[0] + color_b[1] ) );
+			color_r[3] = doDivide0To767By3( uint32_t( color_r[0] + 2 * color_r[1] ) );
+			color_g[3] = doDivide0To767By3( uint32_t( color_g[0] + 2 * color_g[1] ) );
+			color_b[3] = doDivide0To767By3( uint32_t( color_b[0] + 2 * color_b[1] ) );
 		}
 		else
 		{
@@ -641,15 +640,15 @@ namespace castor
 			color_r[3] = color_g[3] = color_b[3] = 0;
 		}
 
-		uint32_t pixels = *( uint32_t * )&bitstring[4];
+		uint32_t pixels = *reinterpret_cast< uint32_t const * >( &bitstring[4] );
 
 		for ( int i = 0; i < 16; i++ )
 		{
-			int pixel = ( pixels >> ( i * 2 ) ) & 0x3;
-			*( uint32_t * )( pixelBuffer + i * 4u ) = doPack32( color_r[pixel]
-				, color_g[pixel]
-				, color_b[pixel]
-				, 0xFF );
+			auto pixel = int( ( pixels >> ( i * 2 ) ) & 0x3 );
+			*reinterpret_cast< uint32_t * >( pixelBuffer + i * 4u ) = doPack32( uint32_t( color_r[pixel] )
+				, uint32_t( color_g[pixel] )
+				, uint32_t( color_b[pixel] )
+				, 0x000000FFu );
 		}
 
 		return true;
@@ -660,31 +659,31 @@ namespace castor
 	{
 		int alpha0 = bitstring[0];
 		int alpha1 = bitstring[1];
-		uint32_t colors = *( uint32_t * )&bitstring[8];
+		uint32_t colors = *reinterpret_cast< uint32_t const * >( &bitstring[8] );
 
 		int color_r[4], color_g[4], color_b[4];
 		// color_x[] has a value between 0 and 248 with the lower three bits zero.
-		color_b[0] = ( colors & 0x0000001F ) << 3;
-		color_g[0] = ( colors & 0x000007E0 ) >> ( 5 - 2 );
-		color_r[0] = ( colors & 0x0000F800 ) >> ( 11 - 3 );
-		color_b[1] = ( colors & 0x001F0000 ) >> ( 16 - 3 );
-		color_g[1] = ( colors & 0x07E00000 ) >> ( 21 - 2 );
-		color_r[1] = ( colors & 0xF8000000 ) >> ( 27 - 3 );
-		color_r[2] = doDivide0To767By3( 2 * color_r[0] + color_r[1] );
-		color_g[2] = doDivide0To767By3( 2 * color_g[0] + color_g[1] );
-		color_b[2] = doDivide0To767By3( 2 * color_b[0] + color_b[1] );
-		color_r[3] = doDivide0To767By3( color_r[0] + 2 * color_r[1] );
-		color_g[3] = doDivide0To767By3( color_g[0] + 2 * color_g[1] );
-		color_b[3] = doDivide0To767By3( color_b[0] + 2 * color_b[1] );
-		uint32_t pixels = *( uint32_t * )&bitstring[12];
-		uint64_t alpha_bits = ( uint32_t )bitstring[2] |
-			( ( uint32_t )bitstring[3] << 8 ) |
-			( ( uint64_t ) * ( uint32_t * )&bitstring[4] << 16 );
+		color_b[0] = int( ( colors & 0x0000001F ) << 3 );
+		color_g[0] = int( ( colors & 0x000007E0 ) >> ( 5 - 2 ) );
+		color_r[0] = int( ( colors & 0x0000F800 ) >> ( 11 - 3 ) );
+		color_b[1] = int( ( colors & 0x001F0000 ) >> ( 16 - 3 ) );
+		color_g[1] = int( ( colors & 0x07E00000 ) >> ( 21 - 2 ) );
+		color_r[1] = int( ( colors & 0xF8000000 ) >> ( 27 - 3 ) );
+		color_r[2] = int( doDivide0To767By3( uint32_t( 2 * color_r[0] + color_r[1] ) ) );
+		color_g[2] = int( doDivide0To767By3( uint32_t( 2 * color_g[0] + color_g[1] ) ) );
+		color_b[2] = int( doDivide0To767By3( uint32_t( 2 * color_b[0] + color_b[1] ) ) );
+		color_r[3] = int( doDivide0To767By3( uint32_t( color_r[0] + 2 * color_r[1] ) ) );
+		color_g[3] = int( doDivide0To767By3( uint32_t( color_g[0] + 2 * color_g[1] ) ) );
+		color_b[3] = int( doDivide0To767By3( uint32_t( color_b[0] + 2 * color_b[1] ) ) );
+		uint32_t pixels = *reinterpret_cast< uint32_t const * >( &bitstring[12] );
+		uint64_t alpha_bits = uint32_t( bitstring[2] )
+			| ( uint32_t( bitstring[3] ) << 8 )
+			| ( ( *reinterpret_cast< uint32_t const * >( &bitstring[4] ) ) << 16 );
 
 		for ( int i = 0; i < 16; i++ )
 		{
-			int pixel = ( pixels >> ( i * 2 ) ) & 0x3;
-			int code = ( alpha_bits >> ( i * 3 ) ) & 0x7;
+			auto pixel = int( ( pixels >> ( i * 2 ) ) & 0x3 );
+			auto code = int( ( alpha_bits >> ( i * 3 ) ) & 0x7 );
 			int alpha{};
 			if ( alpha0 > alpha1 )
 			{
@@ -692,12 +691,12 @@ namespace castor
 				{
 				case 0: alpha = alpha0; break;
 				case 1: alpha = alpha1; break;
-				case 2: alpha = doDivide0To1791By7( 6 * alpha0 + 1 * alpha1 ); break;
-				case 3: alpha = doDivide0To1791By7( 5 * alpha0 + 2 * alpha1 ); break;
-				case 4: alpha = doDivide0To1791By7( 4 * alpha0 + 3 * alpha1 ); break;
-				case 5: alpha = doDivide0To1791By7( 3 * alpha0 + 4 * alpha1 ); break;
-				case 6: alpha = doDivide0To1791By7( 2 * alpha0 + 5 * alpha1 ); break;
-				case 7: alpha = doDivide0To1791By7( 1 * alpha0 + 6 * alpha1 ); break;
+				case 2: alpha = int( doDivide0To1791By7( uint32_t( 6 * alpha0 + 1 * alpha1 ) ) ); break;
+				case 3: alpha = int( doDivide0To1791By7( uint32_t( 5 * alpha0 + 2 * alpha1 ) ) ); break;
+				case 4: alpha = int( doDivide0To1791By7( uint32_t( 4 * alpha0 + 3 * alpha1 ) ) ); break;
+				case 5: alpha = int( doDivide0To1791By7( uint32_t( 3 * alpha0 + 4 * alpha1 ) ) ); break;
+				case 6: alpha = int( doDivide0To1791By7( uint32_t( 2 * alpha0 + 5 * alpha1 ) ) ); break;
+				case 7: alpha = int( doDivide0To1791By7( uint32_t( 1 * alpha0 + 6 * alpha1 ) ) ); break;
 				}
 			}
 			else
@@ -706,19 +705,19 @@ namespace castor
 				{
 				case 0: alpha = alpha0; break;
 				case 1: alpha = alpha1; break;
-				case 2: alpha = doDivide0To1279By5( 4 * alpha0 + 1 * alpha1 ); break;
-				case 3: alpha = doDivide0To1279By5( 3 * alpha0 + 2 * alpha1 ); break;
-				case 4: alpha = doDivide0To1279By5( 2 * alpha0 + 3 * alpha1 ); break;
-				case 5: alpha = doDivide0To1279By5( 1 * alpha0 + 4 * alpha1 ); break;
+				case 2: alpha = int( doDivide0To1279By5( uint32_t( 4 * alpha0 + 1 * alpha1 ) ) ); break;
+				case 3: alpha = int( doDivide0To1279By5( uint32_t( 3 * alpha0 + 2 * alpha1 ) ) ); break;
+				case 4: alpha = int( doDivide0To1279By5( uint32_t( 2 * alpha0 + 3 * alpha1 ) ) ); break;
+				case 5: alpha = int( doDivide0To1279By5( uint32_t( 1 * alpha0 + 4 * alpha1 ) ) ); break;
 				case 6: alpha = 0; break;
 				case 7: alpha = 0xFF; break;
 				}
 			}
 
-			*( uint32_t * )( pixelBuffer + i * 4 ) = doPack32( color_r[pixel]
-				, color_g[pixel]
-				, color_b[pixel]
-				, alpha );
+			*reinterpret_cast< uint32_t * >( pixelBuffer + i * 4 ) = doPack32( uint32_t( color_r[pixel] )
+				, uint32_t( color_g[pixel] )
+				, uint32_t( color_b[pixel] )
+				, uint32_t( alpha ) );
 		}
 
 		return true;

@@ -47,10 +47,6 @@
 
 CU_ImplementCUSmartPtr( castor3d, SsaoRawAOPass )
 
-using namespace castor3d;
-
-#define C3D_BentNormalsAggregateAll 0
-
 namespace castor3d
 {
 	namespace
@@ -588,8 +584,6 @@ namespace castor3d
 		, m_ssaoConfig{ config }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
-		, m_linearisedDepthBuffer{ linearisedDepthBuffer }
-		, m_normals{ normals }
 		, m_size{ size }
 		, m_result{ doCreateTexture( graph.getHandler()
 			, m_device

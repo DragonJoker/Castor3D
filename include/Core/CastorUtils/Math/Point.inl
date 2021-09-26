@@ -2,6 +2,9 @@
 
 #include <cstring>
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wextra-semi-stmt"
+
 namespace castor
 {
 	//*************************************************************************************************
@@ -97,7 +100,6 @@ namespace castor
 	template< typename U, uint32_t UCount >
 	Point< T, TCount >::Point( Point< U, UCount > const & rhs )
 	{
-		static uint32_t constexpr MinCount = MinValue< TCount, UCount >::value;
 		details::DataCopier< U, T, UCount, TCount > copier;
 		copier( rhs.constPtr(), ptr() );
 	}
@@ -106,7 +108,6 @@ namespace castor
 	template< typename U, uint32_t UCount >
 	Point< T, TCount >::Point( Coords< U, UCount > const & rhs )
 	{
-		static uint32_t constexpr MinCount = MinValue< TCount, UCount >::value;
 		details::DataCopier< U, T, UCount, TCount > copier;
 		copier( rhs.constPtr(), ptr() );
 	}
@@ -912,3 +913,5 @@ namespace castor
 
 	//*************************************************************************************************
 }
+
+#pragma clang diagnostic pop

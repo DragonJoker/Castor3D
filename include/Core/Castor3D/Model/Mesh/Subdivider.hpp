@@ -189,7 +189,7 @@ namespace castor3d
 		 *\param[in]	generateBuffers	Dit si les tampons doivent être générés
 		 *\param[in]	threaded		Dit si la subdivision doit être threadée
 		 */
-		C3D_API virtual void doSubdivide( SubmeshSPtr submesh, bool generateBuffers, bool threaded );
+		C3D_API virtual void doSubdivideOnce( SubmeshSPtr submesh, bool generateBuffers, bool threaded );
 		/**
 		 *\~english
 		 *\brief		Initialisation function

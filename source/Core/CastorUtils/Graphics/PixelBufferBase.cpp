@@ -8,8 +8,14 @@
 #include <ashes/common/Format.hpp>
 
 #pragma warning( push )
+#pragma warning( disable: 4365 )
 #pragma warning( disable: 5219 )
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wconversion"
+#pragma GCC diagnostic ignored "-Wcast-qual"
+#pragma GCC diagnostic ignored "-Wuseless-cast"
 #include "stb_image_resize.h"
+#pragma GCC diagnostic pop
 #pragma warning( pop )
 
 namespace castor
@@ -27,9 +33,9 @@ namespace castor
 			, uint32_t align
 			, PxBufferBase const & buffer )
 		{
-			return VkDeviceSize( ( index * ashes::getLevelsSize( VkExtent2D{ x, y }, format, 0u, levels, align ) )
-				+ ashes::getLevelsSize( VkExtent2D{ x, y }, format, 0u, level, 1u ) )
-				+ ( size_t( ( y * buffer.getWidth() + x ) * ashes::getMinimalSize( format ) ) );
+			return ( index * ashes::getLevelsSize( VkExtent2D{ x, y }, format, 0u, levels, align ) )
+				+ ashes::getLevelsSize( VkExtent2D{ x, y }, format, 0u, level, 1u )
+				+ ( ( y * buffer.getWidth() + x ) * ashes::getMinimalSize( format ) );
 		}
 
 		template< PixelFormat PFT, template< PixelFormat > typename FilterT >
@@ -325,6 +331,17 @@ namespace castor
 				dstLayerStart = dstLevelStart;
 			}
 		}
+
+		uint32_t getMipLevels( VkExtent3D const & extent )
+		{
+			return ashes::getMaxMipCount( extent );
+		}
+
+		uint32_t getMinMipLevels( uint32_t mipLevels
+			, VkExtent3D const & extent )
+		{
+			return std::min( getMipLevels( extent ), mipLevels );
+		}
 	}
 
 	//*********************************************************************************************
@@ -583,17 +600,6 @@ namespace castor
 		std::swap( m_buffer, pixelBuffer.m_buffer );
 	}
 
-	uint32_t getMipLevels( VkExtent3D const & extent )
-	{
-		return uint32_t( ashes::getMaxMipCount( extent ) );
-	}
-
-	uint32_t getMinMipLevels( uint32_t mipLevels
-		, VkExtent3D const & extent )
-	{
-		return std::min( getMipLevels( extent ), mipLevels );
-	}
-
 	void PxBufferBase::generateMips()
 	{
 		auto levels = getMipLevels( { m_size.getWidth(), m_size.getHeight(), 1u } );
@@ -663,7 +669,7 @@ namespace castor
 	{
 		CU_Require( x < getWidth() && y < getHeight() );
 		return m_buffer.begin()
-			+ getDataAt( VkFormat( m_format ), x, y, index, level, m_levels, m_align, *this );
+			+ ptrdiff_t( getDataAt( VkFormat( m_format ), x, y, index, level, m_levels, m_align, *this ) );
 	}
 
 	PxBufferBase::ConstPixelData PxBufferBase::getAt( uint32_t x
@@ -673,7 +679,7 @@ namespace castor
 	{
 		CU_Require( x < getWidth() && y < getHeight() );
 		return m_buffer.begin()
-			+ getDataAt( VkFormat( m_format ), x, y, index, level, m_levels, m_align, *this );
+			+ ptrdiff_t( getDataAt( VkFormat( m_format ), x, y, index, level, m_levels, m_align, *this ) );
 	}
 
 	PxBufferBaseSPtr PxBufferBase::create( PxBufferConvertOptions const * options

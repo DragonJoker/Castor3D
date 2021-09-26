@@ -14,10 +14,6 @@ namespace castor3d
 	{
 	}
 
-	Cube::~Cube()
-	{
-	}
-
 	MeshGeneratorSPtr Cube::create()
 	{
 		return std::make_shared< Cube >();

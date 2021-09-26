@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "GuiCommon/GuiCommonPrerequisites.hpp"
 
+#pragma warning( push )
+#pragma warning( disable: 4365 )
 #include "GuiCommon/Properties/Math/MatrixProperties.hpp"
 #include "GuiCommon/Properties/Math/PointProperties.hpp"
 #include "GuiCommon/Properties/Math/PositionProperties.hpp"
@@ -21,6 +23,7 @@ See LICENSE file in root folder
 #include <wx/treectrl.h>
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/advprops.h>
+#pragma warning( pop )
 
 namespace GuiCommon
 {
@@ -46,7 +49,7 @@ namespace GuiCommon
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~TreeItemProperty();
+		~TreeItemProperty()override;
 		/**
 		 *\brief		Displays the wxTree item menu, at given coordinates
 		 *\param[in]	window	The wxWindow that displays the menu
@@ -99,10 +102,10 @@ namespace GuiCommon
 		static PropertyChangeHandler const EmptyHandler;
 
 		template< typename ObjectT, typename ValueT >
-		using ValueRefSetterT = void ( ObjectT:: * )( ValueT const & );
+		using ValueRefSetterT = void ( ObjectT::* )( ValueT const & );
 
 		template< typename ObjectT, typename ValueT >
-		using ValueSetterT = void ( ObjectT:: * )( ValueT );
+		using ValueSetterT = void ( ObjectT::* )( ValueT );
 		wxPGProperty * addProperty( wxPropertyGrid * parent
 			, wxString const & name );
 		wxPGProperty * addProperty( wxPGProperty * parent

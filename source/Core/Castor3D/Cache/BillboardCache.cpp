@@ -136,7 +136,7 @@ namespace castor3d
 
 				for ( auto & entry : m_entries )
 				{
-					entry.second.id = id++;
+					entry.second.id = int( id++ );
 				}
 			}
 		}
@@ -149,7 +149,7 @@ namespace castor3d
 				, QueueData const & queueData )
 			{
 				m_connections.emplace( &billboard
-					, billboard.onMaterialChanged.connect( [this, &device]( BillboardBase const & billboard
+					, billboard.onMaterialChanged.connect( [this, &device]( BillboardBase const & pbillboard
 						, MaterialRPtr oldMaterial
 						, MaterialRPtr newMaterial )
 						{
@@ -157,7 +157,7 @@ namespace castor3d
 							{
 								for ( auto & pass : *oldMaterial )
 								{
-									doRemoveEntry( device, billboard, *pass );
+									doRemoveEntry( device, pbillboard, *pass );
 								}
 							}
 
@@ -165,7 +165,7 @@ namespace castor3d
 							{
 								for ( auto & pass : *newMaterial )
 								{
-									doCreateEntry( device, billboard, *pass );
+									doCreateEntry( device, pbillboard, *pass );
 								}
 							}
 						} ) );
@@ -223,7 +223,7 @@ namespace castor3d
 			auto & modelData = entry.modelUbo.getData();
 			modelData.nodeId = entry.id;
 			modelData.shadowReceiver = entry.billboard.isShadowReceiver();
-			modelData.materialIndex = entry.pass.getId();
+			modelData.materialIndex = int( entry.pass.getId() );
 			modelData.prvModel = modelData.curModel;
 			modelData.curModel = entry.billboard.getNode()->getDerivedTransformationMatrix();
 			auto normal = castor::Matrix3x3f{ modelData.curModel };

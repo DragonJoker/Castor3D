@@ -24,7 +24,7 @@ namespace castor3d
 			C3D_API GpInfoData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled );
-			C3D_API GpInfoData & operator=( GpInfoData const & rhs );
+			SDW_DeclStructInstance( C3D_API, GpInfoData );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
@@ -65,6 +65,10 @@ namespace castor3d
 		using Configuration = GpInfoUboConfiguration;
 
 	public:
+		C3D_API GpInfoUbo( GpInfoUbo const & rhs ) = delete;
+		C3D_API GpInfoUbo & operator=( GpInfoUbo const & rhs ) = delete;
+		C3D_API GpInfoUbo( GpInfoUbo && rhs ) = default;
+		C3D_API GpInfoUbo & operator=( GpInfoUbo && rhs ) = delete;
 		C3D_API explicit GpInfoUbo( RenderDevice const & device );
 		C3D_API ~GpInfoUbo();
 

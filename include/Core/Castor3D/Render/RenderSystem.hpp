@@ -296,12 +296,12 @@ namespace castor3d
 			return *m_gpus[gpuIndex];
 		}
 
-		int32_t getValue( GpuMin index )const
+		uint32_t getValue( GpuMin index )const
 		{
 			return m_gpuInformations.getValue( index );
 		}
 
-		int32_t getValue( GpuMax index )const
+		uint32_t getValue( GpuMax index )const
 		{
 			return m_gpuInformations.getValue( index );
 		}

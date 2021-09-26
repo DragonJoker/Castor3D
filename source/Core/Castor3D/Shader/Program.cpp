@@ -35,7 +35,7 @@ namespace castor3d
 
 			if ( modules.find( stage ) == modules.end() )
 			{
-				modules.emplace( stage, ShaderModule{ stage, name } ).first;
+				modules.emplace( stage, ShaderModule{ stage, name } );
 				added = true;
 			}
 

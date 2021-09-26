@@ -22,10 +22,6 @@ namespace castor3d
 	{
 	}
 
-	AnimatedSkeleton::~AnimatedSkeleton()
-	{
-	}
-
 	void AnimatedSkeleton::update( Milliseconds const & elapsed )
 	{
 		for ( auto & animation : m_playingAnimations )

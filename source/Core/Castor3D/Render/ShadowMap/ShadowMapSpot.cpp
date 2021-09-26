@@ -70,22 +70,22 @@ namespace castor3d
 			auto & passData = *result.back();
 			passData.culler = std::make_unique< FrustumCuller >( scene, *passData.camera );
 			auto & pass = graph.createPass( debugName
-				, [shadowMapIndex, &passData, &device, &shadowMap, &scene]( crg::FramePass const & pass
+				, [shadowMapIndex, &passData, &device, &shadowMap]( crg::FramePass const & framePass
 					, crg::GraphContext & context
-					, crg::RunnableGraph & graph )
+					, crg::RunnableGraph & runnableGraph )
 				{
-					auto result = std::make_unique< ShadowMapPassSpot >( pass
+					auto res = std::make_unique< ShadowMapPassSpot >( framePass
 						, context
-						, graph
+						, runnableGraph
 						, device
 						, shadowMapIndex
 						, *passData.matrixUbo
 						, *passData.culler
 						, shadowMap );
-					passData.pass = result.get();
-					device.renderSystem.getEngine()->registerTimer( graph.getName() + cuT( "/ShadowMapSpot" )
-						, result->getTimer() );
-					return result;
+					passData.pass = res.get();
+					device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + cuT( "/ShadowMapSpot" )
+						, res->getTimer() );
+					return res;
 				} );
 			auto previousPass = &pass;
 			pass.addOutputDepthView( depth.subViewsId[shadowMapIndex], getClearValue( SmTexture::eDepth ) );
@@ -133,10 +133,6 @@ namespace castor3d
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
 	{
 		stepProgressBar( progress, "Creating ShadowMapSpot" );
-	}
-
-	ShadowMapSpot::~ShadowMapSpot()
-	{
 	}
 
 	void ShadowMapSpot::update( GpuUpdater & updater )

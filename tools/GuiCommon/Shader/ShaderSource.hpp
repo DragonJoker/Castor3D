@@ -9,7 +9,10 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/ChangeTracked.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
 
+#pragma warning( push )
+#pragma warning( disable: 4365 )
 #include <wx/propgrid/propgrid.h>
+#pragma warning( pop )
 
 namespace GuiCommon
 {
@@ -133,9 +136,7 @@ namespace GuiCommon
 		}
 
 	public:
-		virtual ~UniformValueBase()
-		{
-		}
+		virtual ~UniformValueBase() = default;
 
 		inline wxString const & getName()const
 		{
@@ -351,6 +352,15 @@ namespace GuiCommon
 
 	struct UniformBufferValues
 	{
+		explicit UniformBufferValues( castor::String pname
+			, VkShaderStageFlags pstages = {}
+			, std::vector< std::unique_ptr< UniformValueBase > > puniforms = {} )
+			: name{ std::move( pname ) }
+			, stages{ std::move( pstages ) }
+			, uniforms{ std::move( puniforms ) }
+		{
+		}
+
 		UniformBufferValues( UniformBufferValues const & ) = delete;
 		UniformBufferValues( UniformBufferValues && ) = default;
 		UniformBufferValues & operator=( UniformBufferValues const & ) = delete;
@@ -363,6 +373,15 @@ namespace GuiCommon
 
 	struct ShaderSource
 	{
+		explicit ShaderSource( castor::String pname
+			, std::map< VkShaderStageFlagBits, castor3d::ShaderModule const * > psources = {}
+			, std::vector< UniformBufferValues > pubos = {} )
+			: name{ std::move( pname ) }
+			, sources{ std::move( psources ) }
+			, ubos{ std::move( pubos ) }
+		{
+		}
+
 		ShaderSource( ShaderSource const & ) = delete;
 		ShaderSource( ShaderSource && ) = default;
 		ShaderSource & operator=( ShaderSource const & ) = delete;

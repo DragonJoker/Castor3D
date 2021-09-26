@@ -42,7 +42,6 @@ namespace castor3d
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device );
-		C3D_API ~ComputeDepthRange();
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */

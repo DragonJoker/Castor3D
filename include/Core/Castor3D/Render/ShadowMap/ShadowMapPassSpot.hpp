@@ -44,7 +44,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~ShadowMapPassSpot();
+		C3D_API ~ShadowMapPassSpot()override;
 		/**
 		 *\copydoc		castor3d::ShadowMapPass::update
 		 */

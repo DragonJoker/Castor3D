@@ -312,7 +312,7 @@ namespace castor3d
 				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 				, getName() + "Billboard" );
-			auto mappedSize = ashes::getAlignedSize( VkDeviceSize( m_vertexStride * m_arrayPositions.size() )
+			auto mappedSize = ashes::getAlignedSize( m_vertexStride * m_arrayPositions.size()
 				, device.renderSystem.getValue( GpuMin::eBufferMapSize ) );
 
 			if ( auto * buffer = m_vertexBuffer->getBuffer().lock( 0u

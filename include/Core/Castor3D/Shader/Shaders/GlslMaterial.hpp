@@ -20,6 +20,7 @@ namespace castor3d::shader
 		C3D_API Material( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled );
+		SDW_DeclStructInstance( C3D_API, Material );
 
 		C3D_API void create( sdw::SampledImageT< FImgBufferRgba32 > & materials
 			, sdw::Int & offset );

@@ -32,10 +32,6 @@ namespace castor3d
 	{
 	}
 
-	SkeletonAnimation::~SkeletonAnimation()
-	{
-	}
-
 	SkeletonAnimationObjectSPtr SkeletonAnimation::addObject( castor::String const & name
 		, SkeletonAnimationObjectSPtr parent )
 	{

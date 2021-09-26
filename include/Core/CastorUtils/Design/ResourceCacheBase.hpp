@@ -10,7 +10,11 @@ See LICENSE file in root folder
 #include "CastorUtils/Exception/Assertion.hpp"
 #include "CastorUtils/Log/Logger.hpp"
 
+#pragma warning( push )
+#pragma warning( disable:4365 )
 #include <mutex>
+#pragma warning( pop )
+
 #include <unordered_map>
 
 namespace castor

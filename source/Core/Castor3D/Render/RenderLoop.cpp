@@ -202,7 +202,7 @@ namespace castor3d
 				? VkSemaphore{ VK_NULL_HANDLE }
 				: *uploadResources.commands.semaphore )
 			, ( uploadResources.used
-				? 0u
+				? VkPipelineStageFlagBits{}
 				: VK_PIPELINE_STAGE_TRANSFER_BIT )
 			, *uploadResources.commands.semaphore
 			, *uploadResources.fence );

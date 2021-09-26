@@ -21,10 +21,6 @@ namespace castor3d
 		m_arrayVtxBorder.resize( 48 );
 	}
 
-	BorderPanelOverlay::~BorderPanelOverlay()
-	{
-	}
-
 	OverlayCategorySPtr BorderPanelOverlay::create()
 	{
 		return std::make_shared< BorderPanelOverlay >();
@@ -137,8 +133,8 @@ namespace castor3d
 
 		int32_t centerL = 0;
 		int32_t centerT = 0;
-		int32_t centerR = absoluteSize.getWidth();
-		int32_t centerB = absoluteSize.getHeight();
+		auto centerR = int32_t( absoluteSize.getWidth() );
+		auto centerB = int32_t( absoluteSize.getHeight() );
 
 		if ( m_borderPosition == BorderPosition::eInternal )
 		{

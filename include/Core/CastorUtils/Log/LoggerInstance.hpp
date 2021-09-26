@@ -8,9 +8,12 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Data/DataModule.hpp"
 
-#include <mutex>
+#pragma warning( push )
+#pragma warning( disable:4365 )
 #include <atomic>
+#include <mutex>
 #include <thread>
+#pragma warning( pop )
 
 namespace castor
 {

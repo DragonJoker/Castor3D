@@ -100,8 +100,8 @@ namespace draw_edges
 					// Normal Gradient
 					auto Ngrad = writer.declLocale( "Ngrad", 0.0_f );
 					// compute length of gradient using Sobel/Kroon operator
-					const float k0 = 17. / 23.75;
-					const float k1 = 61. / 23.75;
+					const float k0 = float( 17. / 23.75 );
+					const float k1 = float( 61. / 23.75 );
 					auto grad_y = writer.declLocale( "grad_y"
 						, k0 * An + k1 * Bn + k0 * Cn - k0 * Fn - k1 * Gn - k0 * Hn );
 					auto grad_x = writer.declLocale( "grad_x"
@@ -213,7 +213,7 @@ namespace draw_edges
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_pass{ m_graph.createPass( "DNEdgesDetection"
-			, [this, &device, &renderTarget]( crg::FramePass const & pass
+			, [this, &device]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{

@@ -7,7 +7,10 @@
 #pragma warning( push )
 #pragma warning( disable: 4100 )
 #pragma warning( disable: 4201 )
+#pragma warning( disable: 4242 )
+#pragma warning( disable: 4244 )
 #pragma warning( disable: 4296 )
+#pragma warning( disable: 4365 )
 #pragma warning( disable: 4458 )
 #pragma warning( disable: 4464 )
 #pragma warning( disable: 5219 )
@@ -32,20 +35,15 @@ namespace castor
 			case gli::FORMAT_L8_UNORM_PACK8:
 			case gli::FORMAT_A8_UNORM_PACK8:
 				return PixelFormat::eR8_UNORM;
-				break;
 			case gli::FORMAT_L16_UNORM_PACK16:
 			case gli::FORMAT_A16_UNORM_PACK16:
 				return PixelFormat::eR16_UNORM;
-				break;
 			case gli::FORMAT_LA16_UNORM_PACK16:
 				return PixelFormat::eR8G8_UNORM;
-				break;
 			case gli::FORMAT_BGR8_UNORM_PACK32:
 				return PixelFormat::eB8G8R8A8_UNORM;
-				break;
 			case gli::FORMAT_BGR8_SRGB_PACK32:
 				return PixelFormat::eB8G8R8A8_SRGB;
-				break;
 			case gli::FORMAT_RGB_PVRTC1_8X8_UNORM_BLOCK32:
 			case gli::FORMAT_RGB_PVRTC1_8X8_SRGB_BLOCK32:
 			case gli::FORMAT_RGB_PVRTC1_16X8_UNORM_BLOCK32:
@@ -66,7 +64,6 @@ namespace castor
 			case gli::FORMAT_RG3B2_UNORM_PACK8:
 			default:
 				CU_Exception( "Unsupported gli::format" );
-				break;
 			}
 		}
 

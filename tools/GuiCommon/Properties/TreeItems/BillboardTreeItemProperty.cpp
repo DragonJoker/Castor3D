@@ -23,10 +23,6 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	BillboardTreeItemProperty::~BillboardTreeItemProperty()
-	{
-	}
-
 	void BillboardTreeItemProperty::doCreateProperties( wxPGEditor * editor
 		, wxPropertyGrid * grid )
 	{

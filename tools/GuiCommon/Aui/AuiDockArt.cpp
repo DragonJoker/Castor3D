@@ -19,20 +19,23 @@ namespace GuiCommon
 		wxAuiDefaultDockArt::SetColour( wxAuiPaneDockArtSetting::wxAUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR, ACTIVE_TEXT_COLOUR );
 	}
 
-	void AuiDockArt::DrawBackground( wxDC & p_dc, wxWindow * p_window, wxRect const & p_rect )
+	void AuiDockArt::DrawBackground( wxDC & dc
+		, wxWindow * window
+		, int orientation
+		, const wxRect & rect )
 	{
 #if wxCHECK_VERSION( 2, 9, 0 )
 
-		p_dc.SetPen( wxPen( PANEL_BACKGROUND_COLOUR, 1, wxPENSTYLE_SOLID ) );
-		p_dc.SetBrush( wxBrush( PANEL_BACKGROUND_COLOUR, wxBRUSHSTYLE_SOLID ) );
+		dc.SetPen( wxPen( PANEL_BACKGROUND_COLOUR, 1, wxPENSTYLE_SOLID ) );
+		dc.SetBrush( wxBrush( PANEL_BACKGROUND_COLOUR, wxBRUSHSTYLE_SOLID ) );
 
 #else
 
-		p_dc.SetPen( wxPen( PANEL_BACKGROUND_COLOUR, 1, wxSOLID ) );
-		p_dc.SetBrush( wxBrush( PANEL_BACKGROUND_COLOUR, wxSOLID ) );
+		dc.SetPen( wxPen( PANEL_BACKGROUND_COLOUR, 1, wxSOLID ) );
+		dc.SetBrush( wxBrush( PANEL_BACKGROUND_COLOUR, wxSOLID ) );
 
 #endif
 
-		p_dc.DrawRectangle( p_rect );
+		dc.DrawRectangle( rect );
 	}
 }

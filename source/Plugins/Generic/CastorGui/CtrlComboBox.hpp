@@ -53,11 +53,11 @@ namespace CastorGui
 		/** Constructor
 		*\param[in]	parent		The parent control, if an
 		*\param[in]	values		The list value
-		*\param[in]	selected		The selected valu
-		*\param[in]	id		The I
-		*\param[in]	position		The positio
-		*\param[in]	size		The siz
-		*\param[in]	style		The styl
+		*\param[in]	selected	The selected valu
+		*\param[in]	id			The control ID
+		*\param[in]	position	The positio
+		*\param[in]	size		The size
+		*\param[in]	style		The style
 		*\param[in]	visible		Initial visibility statu
 		*/
 		template< size_t N >
@@ -76,10 +76,6 @@ namespace CastorGui
 			, m_selected( selected )
 		{
 		}
-
-		/** Destructor
-		*/
-		virtual ~ComboBoxCtrl();
 
 		/** sets the text material.
 		 *\param[in]	p_material	The new value.
@@ -192,35 +188,35 @@ namespace CastorGui
 	private:
 		/** @copydoc CastorGui::Control::doCreate
 		*/
-		virtual void doCreate();
+		void doCreate()override;
 
 		/** @copydoc CastorGui::Control::doDestroy
 		*/
-		virtual void doDestroy();
+		void doDestroy()override;
 
 		/** @copydoc CastorGui::Control::doSetPosition
 		*/
-		virtual void doSetPosition( castor::Position const & value );
+		void doSetPosition( castor::Position const & p_value )override;
 
 		/** @copydoc CastorGui::Control::doSetSize
 		*/
-		virtual void doSetSize( castor::Size const & value );
+		void doSetSize( castor::Size const & p_value )override;
 
 		/** @copydoc CastorGui::Control::doSetBackgroundMaterial
 		*/
-		virtual void doSetBackgroundMaterial( castor3d::MaterialRPtr material );
+		void doSetBackgroundMaterial( castor3d::MaterialRPtr p_material )override;
 
 		/** @copydoc CastorGui::Control::doSetForegroundMaterial
 		*/
-		virtual void doSetForegroundMaterial( castor3d::MaterialRPtr material );
+		void doSetForegroundMaterial( castor3d::MaterialRPtr p_material )override;
 
 		/** @copydoc CastorGui::Control::doCatchesMouseEvents
 		*/
-		virtual bool doCatchesMouseEvents()const;
+		bool doCatchesMouseEvents()const override;
 
 		/** @copydoc CastorGui::Control::doSetVisible
 		*/
-		virtual void doSetVisible( bool visible );
+		void doSetVisible( bool visible )override;
 
 		/** Event raised when an item is selected in the choices listbox
 		*\param[in]	selected		The item index

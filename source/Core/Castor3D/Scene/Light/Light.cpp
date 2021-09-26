@@ -19,9 +19,9 @@ namespace castor3d
 		: MovableObject{ name, scene, MovableType::eLight, node }
 	{
 		m_category = factory.create( lightType, std::ref( *this ) );
-		m_notifyIndex = node.onChanged.connect( [this]( SceneNode const & node )
+		m_notifyIndex = node.onChanged.connect( [this]( SceneNode const & pnode )
 			{
-				onNodeChanged( node );
+				onNodeChanged( pnode );
 			} );
 		onNodeChanged( node );
 		getScene()->registerLight( *this );
@@ -47,9 +47,9 @@ namespace castor3d
 
 		if ( parent )
 		{
-			m_notifyIndex = node.onChanged.connect( [this]( SceneNode const & node )
+			m_notifyIndex = node.onChanged.connect( [this]( SceneNode const & pnode )
 				{
-					onNodeChanged( node );
+					onNodeChanged( pnode );
 				} );
 			onNodeChanged( *parent );
 			m_dirty = true;

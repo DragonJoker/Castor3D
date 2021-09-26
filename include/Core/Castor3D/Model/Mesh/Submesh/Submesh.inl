@@ -73,6 +73,7 @@ namespace castor3d
 	template<>
 	struct SubmeshComponentAdder< IndexMapping >
 	{
+		[[noreturn]]
 		static inline void add( std::shared_ptr< IndexMapping > component
 			, Submesh & submesh )
 		{
@@ -85,6 +86,7 @@ namespace castor3d
 	template<>
 	struct SubmeshComponentAdder< TriFaceMapping >
 	{
+		[[noreturn]]
 		static inline void add( std::shared_ptr< TriFaceMapping > component
 			, Submesh & submesh )
 		{

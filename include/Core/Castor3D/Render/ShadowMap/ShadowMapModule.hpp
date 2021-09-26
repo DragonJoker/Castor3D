@@ -38,14 +38,14 @@ namespace castor3d
 		eFlux, // R16G16B16A16F, RGB => Light flux, used by RSM.
 		CU_ScopedEnumBounds( eDepth ),
 	};
-	castor::String getTextureName( LightType light
+	C3D_API castor::String getTextureName( LightType light
 		, SmTexture texture );
-	castor::String getName( SmTexture texture );
-	VkFormat getFormat( SmTexture texture );
-	VkClearValue getClearValue( SmTexture texture );
-	VkImageUsageFlags getUsageFlags( SmTexture texture );
-	VkBorderColor getBorderColor( SmTexture texture );
-	uint32_t getMipLevels( SmTexture texture, castor::Size const & size );
+	C3D_API castor::String getName( SmTexture texture );
+	C3D_API VkFormat getFormat( SmTexture texture );
+	C3D_API VkClearValue getClearValue( SmTexture texture );
+	C3D_API VkImageUsageFlags getUsageFlags( SmTexture texture );
+	C3D_API VkBorderColor getBorderColor( SmTexture texture );
+	C3D_API uint32_t getMipLevels( SmTexture texture, castor::Size const & size );
 	inline uint32_t getMipLevels( SmTexture texture
 		, VkExtent3D const & size )
 	{

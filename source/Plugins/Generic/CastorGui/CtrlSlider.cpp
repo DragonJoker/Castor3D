@@ -112,10 +112,6 @@ namespace CastorGui
 		m_tick = tick;
 	}
 
-	SliderCtrl::~SliderCtrl()
-	{
-	}
-
 	void SliderCtrl::setRange( Range< int32_t > const & p_value )
 	{
 		m_value.updateRange( p_value );
@@ -139,23 +135,23 @@ namespace CastorGui
 		{
 			lineSize.getWidth() = 3;
 			lineSize.getHeight() -= 4;
-			linePosition.x() = ( getSize().getWidth() - 3 ) / 2;
+			linePosition.x() = int32_t( ( getSize().getWidth() - 3 ) / 2 );
 			linePosition.y() += 2;
 			tickSize.getWidth() = ( getSize().getWidth() / 2 ) + ( getSize().getWidth() % 2 );
 			tickSize.getHeight() = 5;
-			tickPosition.x() = tickSize.getWidth() / 2;
-			tickPosition.y() = int32_t( lineSize.getHeight() * m_value.percent() );
+			tickPosition.x() = int32_t( tickSize.getWidth() / 2 );
+			tickPosition.y() = int32_t( float( lineSize.getHeight() ) * m_value.percent() );
 		}
 		else
 		{
 			lineSize.getWidth() -= 4;
 			lineSize.getHeight() = 3;
 			linePosition.x() += 2;
-			linePosition.y() = ( getSize().getHeight() - 3 ) / 2;
+			linePosition.y() = int32_t( ( getSize().getHeight() - 3 ) / 2 );
 			tickSize.getWidth() = 5;
 			tickSize.getHeight() = ( getSize().getHeight() / 2 ) + ( getSize().getHeight() % 2 );
-			tickPosition.x() = int32_t( lineSize.getWidth() * m_value.percent() );
-			tickPosition.y() = tickSize.getHeight() / 2;
+			tickPosition.x() = int32_t( float( lineSize.getWidth() ) * m_value.percent() );
+			tickPosition.y() = int32_t( tickSize.getHeight() / 2 );
 		}
 
 		StaticCtrlSPtr line = m_line.lock();
@@ -280,10 +276,19 @@ namespace CastorGui
 
 	void SliderCtrl::onMouseLeave( MouseEvent const & p_event )
 	{
+		auto controls = getControlsManager();
+
+		if ( !controls )
+		{
+			return;
+		}
+
+		auto focusedControl = controls->getFocusedControl();
+
 		if ( m_scrolling
-				&& getControlsManager()->getFocusedControl() != this
-				&& getControlsManager()->getFocusedControl() != m_tick.lock().get()
-				&& getControlsManager()->getFocusedControl() != m_line.lock().get()
+				&& focusedControl != this
+				&& focusedControl != m_tick.lock().get()
+				&& focusedControl != m_line.lock().get()
 		   )
 		{
 			doMoveMouse( p_event.getPosition() );

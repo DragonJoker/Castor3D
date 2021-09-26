@@ -77,20 +77,22 @@ namespace castor3d
 				, *passData.camera
 				, scene.getDirectionalShadowCascades() );
 			auto & pass = graph.createPass( passData.camera->getName()
-				, [&passData, &matrixUbo, &culler, &previousPass, &device, &shadowMap, &scene]( crg::FramePass const & pass
+				, [&passData, &matrixUbo, &culler, &device, &shadowMap, &scene]( crg::FramePass const & framePass
 					, crg::GraphContext & context
-					, crg::RunnableGraph & graph )
+					, crg::RunnableGraph & runnableGraph )
 				{
-					auto result = std::make_unique< ShadowMapPassDirectional >( pass
+					auto res = std::make_unique< ShadowMapPassDirectional >( framePass
 						, context
-						, graph
+						, runnableGraph
 						, device
 						, *passData.matrixUbo
 						, *passData.culler
 						, shadowMap
 						, scene.getDirectionalShadowCascades() );
-					passData.pass = result.get();
-					return result;
+					passData.pass = res.get();
+					device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + cuT( "/ShadowMapDirectional" )
+						, res->getTimer() );
+					return res;
 				} );
 			pass.addDependency( *previousPass );
 			previousPass = &pass;
@@ -119,22 +121,22 @@ namespace castor3d
 				auto & passData = *result.back();
 				passData.culler = std::make_unique< FrustumCuller >( scene, *passData.camera );
 				auto & pass = graph.createPass( debugName
-					, [&passData, &device, &shadowMap, cascade]( crg::FramePass const & pass
+					, [&passData, &device, &shadowMap, cascade]( crg::FramePass const & framePass
 						, crg::GraphContext & context
-						, crg::RunnableGraph & graph )
+						, crg::RunnableGraph & runnableGraph )
 					{
-						auto result = std::make_unique< ShadowMapPassDirectional >( pass
+						auto res = std::make_unique< ShadowMapPassDirectional >( framePass
 							, context
-							, graph
+							, runnableGraph
 							, device
 							, *passData.matrixUbo
 							, *passData.culler
 							, shadowMap
 							, cascade );
-						passData.pass = result.get();
-						device.renderSystem.getEngine()->registerTimer( graph.getName() + cuT( "/ShadowMapDirectional" )
-							, result->getTimer() );
-						return result;
+						passData.pass = res.get();
+						device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + cuT( "/ShadowMapDirectional" )
+							, res->getTimer() );
+						return res;
 					} );
 
 				if ( previousPass )

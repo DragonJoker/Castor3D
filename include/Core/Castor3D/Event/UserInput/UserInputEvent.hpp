@@ -40,16 +40,14 @@ namespace castor3d
 		 *\~french
 		 *\~brief		Destructeur.
 		 */
-		virtual ~UserInputEvent()
-		{
-		}
+		virtual ~UserInputEvent() = default;
 		/**
 		 *\~english
 		 *\return		The user input event type.
 		 *\~french
 		 *\return		Le type d'évènement entrée utilisateur.
 		 */
-		inline UserInputEventType getEventType()const
+		UserInputEventType getEventType()const
 		{
 			return m_eventType;
 		}

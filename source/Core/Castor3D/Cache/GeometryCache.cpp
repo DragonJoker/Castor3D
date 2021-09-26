@@ -26,18 +26,6 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	namespace
-	{
-		castor::String printhex( uint64_t v )
-		{
-			auto stream = castor::makeStringStream();
-			stream << "0x" << std::hex << std::setw( 16u ) << std::setfill( '0' ) << v;
-			return stream.str();
-		}
-	}
-
-	//*********************************************************************************************
-
 	size_t hash( Geometry const & geometry
 		, Submesh const & submesh
 		, Pass const & pass )
@@ -162,7 +150,7 @@ namespace castor3d
 
 				for ( auto & entry : m_entries )
 				{
-					entry.second.id = id++;
+					entry.second.id = int( id++ );
 				}
 			}
 		}
@@ -195,11 +183,11 @@ namespace castor3d
 				auto & modelData = entry.modelUbo.getData();
 				modelData.nodeId = entry.id;
 				modelData.shadowReceiver = entry.geometry.isShadowReceiver();
-				modelData.materialIndex = entry.pass.getId();
+				modelData.materialIndex = int( entry.pass.getId() );
 
 				if ( entry.pass.hasEnvironmentMapping() )
 				{
-					modelData.environmentIndex = getScene()->getEnvironmentMapIndex( *entry.geometry.getParent() ) + 1u;
+					modelData.environmentIndex = int( getScene()->getEnvironmentMapIndex( *entry.geometry.getParent() ) + 1u );
 				}
 
 				modelData.prvModel = modelData.curModel;
@@ -322,7 +310,7 @@ namespace castor3d
 	{
 		auto & device = getScene()->getEngine()->getRenderSystem()->getRenderDevice();
 		m_connections.emplace( &geometry
-			, geometry.onMaterialChanged.connect( [this, &device]( Geometry const & geometry
+			, geometry.onMaterialChanged.connect( [this, &device]( Geometry const & pgeometry
 					, Submesh const & submesh
 					, MaterialRPtr oldMaterial
 					, MaterialRPtr newMaterial )
@@ -331,7 +319,7 @@ namespace castor3d
 					{
 						for ( auto & pass : *oldMaterial )
 						{
-							doRemoveEntry( device, geometry, submesh, *pass );
+							doRemoveEntry( device, pgeometry, submesh, *pass );
 						}
 					}
 
@@ -339,7 +327,7 @@ namespace castor3d
 					{
 						for ( auto & pass : *newMaterial )
 						{
-							doCreateEntry( device, geometry, submesh, *pass );
+							doCreateEntry( device, pgeometry, submesh, *pass );
 						}
 					}
 				} ) );

@@ -72,7 +72,7 @@ namespace castor3d
 		auto result = std::make_shared< LinesMapping >( submesh );
 		result->m_lines = m_lines;
 		result->m_cameraPosition = m_cameraPosition;
-		return result;
+		return std::static_pointer_cast< SubmeshComponent >( result );
 	}
 
 	uint32_t LinesMapping::getCount()const

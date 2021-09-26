@@ -1,3 +1,5 @@
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+
 #include "GuiCommon/Properties/TreeItems/ToneMappingTreeItemProperty.hpp"
 
 #include "GuiCommon/Shader/ShaderDialog.hpp"
@@ -48,7 +50,7 @@ namespace GuiCommon
 				, HdrConfig & value )override
 			{
 				auto & source = doGetSource( name );
-				UniformBufferValues ubo{ wxT( "HdrConfig" ), VK_SHADER_STAGE_FRAGMENT_BIT };
+				UniformBufferValues ubo{ make_String( wxT( "HdrConfig" ) ), VK_SHADER_STAGE_FRAGMENT_BIT };
 				ubo.uniforms.emplace_back( makeUniformValue( wxT( "Exposure" ), value.exposure ) );
 				ubo.uniforms.emplace_back( makeUniformValue( wxT( "Gamma" ), value.gamma ) );
 				source.ubos.emplace_back( std::move( ubo ) );
@@ -89,10 +91,6 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	ToneMappingTreeItemProperty::~ToneMappingTreeItemProperty()
-	{
-	}
-
 	void ToneMappingTreeItemProperty::doCreateProperties( wxPGEditor * editor
 		, wxPropertyGrid * grid )
 	{
@@ -110,7 +108,7 @@ namespace GuiCommon
 		for ( auto & toneMapping : types )
 		{
 			auto name = make_wxString( toneMapping );
-			m_nameToChoice[toneMapping] = m_choices.size();
+			m_nameToChoice[toneMapping] = uint32_t( m_choices.size() );
 			name.Replace( wxT( " Tone Mapping" ), wxEmptyString );
 			m_choices.Add( name );
 		}
@@ -120,7 +118,7 @@ namespace GuiCommon
 			, m_choices
 			, [this]( wxVariant const & var )
 			{
-				auto selected = uint32_t( variantCast< uint32_t >( var ) );
+				auto selected = variantCast< uint32_t >( var );
 				m_target.setToneMappingType( make_String( m_choices[selected] ), {} );
 
 			} );

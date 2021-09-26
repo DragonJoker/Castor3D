@@ -22,12 +22,6 @@ namespace castor3d
 		{
 		}
 
-		HdrConfigData & HdrConfigData::operator=( HdrConfigData const & rhs )
-		{
-			StructInstance::operator=( rhs );
-			return *this;
-		}
-
 		ast::type::StructPtr HdrConfigData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140

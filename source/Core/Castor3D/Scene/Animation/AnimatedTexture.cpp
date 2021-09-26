@@ -60,10 +60,6 @@ namespace castor3d
 	{
 	}
 
-	AnimatedTexture::~AnimatedTexture()
-	{
-	}
-
 	void AnimatedTexture::update( Milliseconds const & elpased )
 	{
 		if ( m_playingAnimation )
