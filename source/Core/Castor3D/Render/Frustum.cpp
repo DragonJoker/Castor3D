@@ -102,7 +102,7 @@ namespace castor3d
 		else
 		{
 			auto ratio = m_viewport.getRatio();
-			float const tan = float( m_viewport.getFovY().tan() );
+			float const tan = m_viewport.getFovY().tan();
 			nearH = nearZ * tan;
 			nearW = nearH * ratio;
 			farH = farZ * tan;

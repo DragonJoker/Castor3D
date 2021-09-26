@@ -49,7 +49,7 @@ namespace castor
 		 *\~french
 		 *\brief		Destructeur, ferme le fichier
 		 */
-		CU_API virtual ~BinaryFile();
+		CU_API ~BinaryFile()override;
 		/**
 		 *\~english
 		 *\brief		Writes a string into the file (binary, so writes size then content, without '\0')

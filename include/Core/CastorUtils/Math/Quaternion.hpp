@@ -504,6 +504,10 @@ namespace castor
 		inline static QuaternionT< T > null();
 
 	public:
+#pragma warning( push )
+#pragma warning( disable: 4068 )
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnested-anon-types"
 		union
 		{
 			struct
@@ -515,6 +519,8 @@ namespace castor
 			} quat;
 			T buffer[4];
 		};
+#pragma clang diagnostic pop
+#pragma warning( pop )
 	};
 	/**
 	 *\~english

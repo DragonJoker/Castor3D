@@ -21,12 +21,6 @@ namespace castor3d
 
 	namespace
 	{
-		std::ostream & operator<<( std::ostream & stream, castor::Point3f const & point )
-		{
-			stream << "[" << point[0] << ", " << point[1] << ", " << point[2] << "]";
-			return stream;
-		}
-
 		inline BoundingBox doInterpolateBB( BoundingBox const & prv
 			, BoundingBox const & cur
 			, float const factor )
@@ -48,10 +42,6 @@ namespace castor3d
 	{
 	}
 
-	MeshAnimationInstanceSubmesh::~MeshAnimationInstanceSubmesh()
-	{
-	}
-
 	void MeshAnimationInstanceSubmesh::update( float factor
 		, SubmeshAnimationBuffer const & prv
 		, SubmeshAnimationBuffer const & cur )
@@ -67,14 +57,18 @@ namespace castor3d
 
 					if ( auto * buffer = vertexBuffer.lock( 0u, vertexBuffer.getCount(), 0u ) )
 					{
-						std::memcpy( buffer, prv.m_buffer.data(), vertexBuffer.getSize() );
+						std::copy( prv.m_buffer.begin()
+							, prv.m_buffer.end()
+							, buffer );
 						vertexBuffer.flush( 0u, vertexBuffer.getCount() );
 						vertexBuffer.unlock();
 					}
 
 					if ( auto * buffer = animBuffer.lock( 0u, animBuffer.getCount(), 0u ) )
 					{
-						std::memcpy( buffer, prv.m_buffer.data(), animBuffer.getSize() );
+						std::copy( prv.m_buffer.begin()
+							, prv.m_buffer.end()
+							, buffer );
 						animBuffer.flush( 0u, animBuffer.getCount() );
 						animBuffer.unlock();
 					}

@@ -28,10 +28,6 @@ namespace castor3d
 		}
 	}
 
-	MeshAnimationInstance::~MeshAnimationInstance()
-	{
-	}
-
 	MeshAnimationInstanceSubmesh const * MeshAnimationInstance::getAnimationSubmesh( uint32_t index )const
 	{
 		auto it = m_submeshes.find( index );

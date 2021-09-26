@@ -16,10 +16,10 @@ namespace Loop
 		: m_firstVertex( v1 )
 		, m_secondVertex( v2 )
 		, m_firstFace( &f1 )
+		, m_secondFace( nullptr )
 		, m_divided( false )
 		, m_toDivide( toDivide )
 		, m_toDelete( false )
-		, m_secondFace( nullptr )
 	{
 	}
 

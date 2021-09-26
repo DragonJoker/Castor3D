@@ -102,22 +102,18 @@ namespace castor3d
 		C3D_API void cleanup( castor3d::RenderDevice const & device );
 		/**
 		 *\~english
-		 *\brief			Updates the render pass, CPU wise.
 		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief			Met à jour la passe de rendu, au niveau CPU.
 		 *\param[in, out]	updater	Les données d'update.
 		 */
-		C3D_API virtual void update( CpuUpdater & updater );
+		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief			Updates the render pass, GPU wise.
 		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief			Met à jour la passe de rendu, au niveau GPU.
 		 *\param[in, out]	updater	Les données d'update.
 		 */
-		C3D_API virtual void update( GpuUpdater & updater );
+		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Visitor acceptance function.
@@ -206,6 +202,24 @@ namespace castor3d
 		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API virtual void doCleanup( castor3d::RenderDevice const & device ) = 0;
+		/**
+		 *\~english
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
+		 *\~french
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
+		 */
+		C3D_API virtual void doCpuUpdate( CpuUpdater & updater );
+		/**
+		 *\~english
+		 *\brief			Updates the render pass, GPU wise.
+		 *\param[in, out]	updater	The update data.
+		 *\~french
+		 *\brief			Met à jour la passe de rendu, au niveau GPU.
+		 *\param[in, out]	updater	Les données d'update.
+		 */
+		C3D_API virtual void doGpuUpdate( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Writes the effect into a text file.

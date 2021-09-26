@@ -220,7 +220,7 @@ namespace castor3d
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 				{
 					auto worldEye = writer.declLocale( "worldEye"
-						, c3d_sceneData.getCameraPosition() );
+						, c3d_sceneData.cameraPosition );
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
 						, vec3( 0.0_f ) );
 					auto lightSpecular = writer.declLocale( "lightSpecular"
@@ -236,7 +236,7 @@ namespace castor3d
 						, output );
 
 					auto ambient = writer.declLocale( "ambient"
-						, lightMat->getAmbient( c3d_sceneData.getAmbientLight() ) );
+						, lightMat->getAmbient( c3d_sceneData.ambientLight ) );
 					auto reflected = writer.declLocale( "reflected"
 						, vec3( 0.0_f ) );
 					auto refracted = writer.declLocale( "refracted"
@@ -269,7 +269,7 @@ namespace castor3d
 					auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
 						, ( hasDiffuseGI
 							? cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
-								, c3d_sceneData.getCameraPosition()
+								, c3d_sceneData.cameraPosition
 								, surface.worldNormal
 								, lightMat->specular
 								, lightMat->getMetalness()

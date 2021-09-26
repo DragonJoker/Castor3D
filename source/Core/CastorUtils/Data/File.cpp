@@ -84,7 +84,7 @@ namespace castor
 		{
 			m_length = 0;
 			castor::fileSeek( m_file, 0, SEEK_END );
-			m_length = castor::fileTell( m_file );
+			m_length = uint64_t( castor::fileTell( m_file ) );
 			castor::fileSeek( m_file, 0, SEEK_SET );
 		}
 		else
@@ -114,7 +114,7 @@ namespace castor
 			{
 			case OffsetMode::eBeginning:
 				iReturn = castor::fileSeek( m_file, p_offset, SEEK_SET );
-				m_cursor = p_offset;
+				m_cursor = uint64_t( p_offset );
 				break;
 
 			case OffsetMode::eCurrent:
@@ -124,7 +124,7 @@ namespace castor
 
 			case OffsetMode::eEnd:
 				iReturn = castor::fileSeek( m_file, p_offset, SEEK_END );
-				m_cursor = getLength() - p_offset;
+				m_cursor = uint64_t( getLength() - p_offset );
 				break;
 
 			default:
@@ -143,10 +143,10 @@ namespace castor
 		m_length = 0;
 		long long llPosition = castor::fileTell( m_file );
 		castor::fileSeek( m_file, 0, SEEK_END );
-		m_length = castor::fileTell( m_file );
+		m_length = uint64_t( castor::fileTell( m_file ) );
 		castor::fileSeek( m_file, llPosition, SEEK_SET );
 		CU_CheckInvariants();
-		return m_length;
+		return int64_t( m_length );
 	}
 
 	bool File::isOk()const
@@ -193,7 +193,7 @@ namespace castor
 
 		if ( isOk() )
 		{
-			uiReturn = fwrite( p_buffer, 1, std::size_t( p_uiSize ), m_file );
+			uiReturn = fwrite( p_buffer, 1, p_uiSize, m_file );
 			m_cursor += uiReturn;
 			CU_Ensure( uiReturn <= p_uiSize );
 		}
@@ -215,7 +215,7 @@ namespace castor
 			while ( uiReturn < p_uiSize && uiPrev != uiReturn )
 			{
 				uiPrev = uiReturn;
-				uiReturn += fread( p_buffer, 1, std::size_t( p_uiSize - uiReturn ), m_file );
+				uiReturn += fread( p_buffer, 1, p_uiSize - uiReturn, m_file );
 			}
 
 			m_cursor += uiReturn;
@@ -228,21 +228,21 @@ namespace castor
 
 	bool File::directoryDelete( Path const & folder )
 	{
-		HitFileFunction fileFunction = []( Path const & folder
-			, String const & name )
+		HitFileFunction fileFunction = []( Path const & pfolder
+			, String const & pname )
 		{
-			File::deleteFile( folder / name );
+			File::deleteFile( pfolder / pname );
 		};
 		TraverseDirFunction directoryFunction;
-		directoryFunction = [&fileFunction, &directoryFunction]( Path const & folder )
+		directoryFunction = [&fileFunction, &directoryFunction]( Path const & pfolder )
 		{
-			bool result = traverseDirectory( folder
+			bool result = traverseDirectory( pfolder
 				, directoryFunction
 				, fileFunction );
 
 			if ( result )
 			{
-				result = deleteEmptyDirectory( folder );
+				result = deleteEmptyDirectory( pfolder );
 			}
 
 			return result;

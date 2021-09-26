@@ -4,10 +4,14 @@ See LICENSE file in root folder
 #ifndef ___GUICOMMON_STC_TEXT_EDITOR_H___
 #define ___GUICOMMON_STC_TEXT_EDITOR_H___
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wold-style-cast"
+
 #include <wx/stc/stc.h>
 #if wxMAJOR_VERSION >= 3 || ( wxMAJOR_VERSION == 2 && wxMINOR_VERSION >= 9 )
 #	include <wx/textcompleter.h>
 #endif
+
 #include <set>
 
 #include "GuiCommon/Shader/StcContext.hpp"
@@ -88,7 +92,6 @@ namespace GuiCommon
 			, wxPoint const & pos = wxDefaultPosition
 			, wxSize const & size = wxDefaultSize
 			, long style = wxVSCROLL );
-		virtual ~StcTextEditor();
 
 		bool loadFile();
 		bool loadFile( wxString const & filename );
@@ -170,5 +173,7 @@ namespace GuiCommon
 		bool m_backspaceUnindents;
 	};
 }
+
+#pragma clang diagnostic pop
 
 #endif

@@ -62,10 +62,6 @@ namespace castor3d
 	{
 	}
 
-	OpaquePass::~OpaquePass()
-	{
-	}
-
 	void OpaquePass::accept( RenderTechniqueVisitor & visitor )
 	{
 		auto flags = visitor.getFlags();

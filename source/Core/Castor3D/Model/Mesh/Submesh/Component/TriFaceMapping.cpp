@@ -104,7 +104,7 @@ namespace castor3d
 		result->m_faces = m_faces;
 		result->m_hasNormals = m_hasNormals;
 		result->m_cameraPosition = m_cameraPosition;
-		return result;
+		return std::static_pointer_cast< SubmeshComponent >( result );
 	}
 
 	void TriFaceMapping::computeNormals( Face const & face )

@@ -83,7 +83,9 @@ namespace castor
 			, TypeT( *getB )( uint8_t const * )
 			, TypeT( *getA )( uint8_t const * ) )
 		{
+#if !defined( NDEBUG )
 			auto origin = srcBuffer;
+#endif
 			auto w = srcDimensions.getWidth();
 			auto h = srcDimensions.getHeight();
 			std::vector< BlockTypeT< TypeT > > result;
@@ -137,18 +139,18 @@ namespace castor
 		{
 			alignedFree( ptr );
 		}
+
+		cvtt::Options initialiseOptions()
+		{
+			cvtt::Options result;
+			uint32_t flags = cvtt::Flags::Fastest;
+			flags |= cvtt::Flags::BC7_RespectPunchThrough;
+			result.flags = flags;
+			return result;
+		}
 	}
 
 	//*****************************************************************************************
-
-	cvtt::Options initialiseOptions()
-	{
-		cvtt::Options result;
-		uint32_t flags = cvtt::Flags::Fastest;
-		flags |= cvtt::Flags::BC7_RespectPunchThrough;
-		result.flags = flags;
-		return result;
-	}
 
 	CVTTOptions::CVTTOptions()
 		: options{ initialiseOptions() }

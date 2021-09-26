@@ -46,7 +46,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~SkeletonAnimationObject();
+		C3D_API virtual ~SkeletonAnimationObject() = default;
 		/**
 		 *\~english
 		 *\brief		adds a child to this object.
@@ -73,7 +73,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le mode d'interpolation des key frames de mise à l'échelle.
 		 */
-		inline InterpolatorType getInterpolationMode()const
+		InterpolatorType getInterpolationMode()const
 		{
 			return m_mode;
 		}
@@ -83,7 +83,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le type d'objet mouvant.
 		 */
-		inline SkeletonAnimationObjectType getType()const
+		SkeletonAnimationObjectType getType()const
 		{
 			return m_type;
 		}
@@ -95,7 +95,7 @@ namespace castor3d
 		 *\brief		Récupère les animations du noeud de transformation.
 		 *\return		La valeur.
 		 */
-		inline castor::Matrix4x4f const & getNodeTransform()const
+		castor::Matrix4x4f const & getNodeTransform()const
 		{
 			return m_nodeTransform;
 		}
@@ -107,7 +107,7 @@ namespace castor3d
 		 *\brief		Définit les animations du noeud de transformation.
 		 *\param[in]	transform	La nouvelle valeur.
 		 */
-		inline void setNodeTransform( castor::Matrix4x4f const & transform )
+		void setNodeTransform( castor::Matrix4x4f const & transform )
 		{
 			m_nodeTransform = transform;
 		}
@@ -117,7 +117,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le tableau d'enfants.
 		 */
-		inline SkeletonAnimationObjectPtrArray const & getChildren()const
+		SkeletonAnimationObjectPtrArray const & getChildren()const
 		{
 			return m_children;
 		}
@@ -127,7 +127,7 @@ namespace castor3d
 		 *\~french
 		 *\return		L'objet parent.
 		 */
-		inline SkeletonAnimationObjectSPtr getParent()const
+		SkeletonAnimationObjectSPtr getParent()const
 		{
 			return m_parent.lock();
 		}

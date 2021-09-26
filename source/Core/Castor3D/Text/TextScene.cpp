@@ -79,8 +79,8 @@ namespace castor
 		template<>
 		bool writable< Geometry >( Geometry const & object )
 		{
-			return object.getMesh().lock()
-				&& object.getMesh().lock()->isSerialisable();
+			auto mesh = object.getMesh().lock();
+			return mesh && mesh->isSerialisable();
 		}
 
 		template< typename CacheTypeT, typename FilterT >
@@ -106,7 +106,7 @@ namespace castor
 
 				for ( auto const & it : cache )
 				{
-					if ( result && filter( *it.second ) )
+					if ( result && it.second && filter( *it.second ) )
 					{
 						result = writer.writeSub( file, *it.second );
 					}
@@ -132,7 +132,7 @@ namespace castor
 
 				for ( auto const & it : cache )
 				{
-					if ( result && filter( *it.second ) )
+					if ( result && it.second && filter( *it.second ) )
 					{
 						result = writer.writeSub( file, *it.second );
 					}
@@ -182,11 +182,14 @@ namespace castor
 
 				for ( auto const & it : cache )
 				{
-					auto & elem = static_cast< typename CacheTypeT::ElementT const & >( *it.second );
-
-					if ( result && filter( elem ) )
+					if ( it.second )
 					{
-						result = writer.writeSub( file, elem, subfolder );
+						auto & elem = static_cast< typename CacheTypeT::ElementT const & >( *it.second );
+
+						if ( result && filter( elem ) )
+						{
+							result = writer.writeSub( file, elem, subfolder );
+						}
 					}
 				}
 			}
@@ -229,11 +232,14 @@ namespace castor
 				{
 					if ( result )
 					{
-						auto & elem = static_cast< typename ViewTypeT::ElementT const & >( *view.find( name ).lock() );
-
-						if ( filter( elem ) )
+						if ( auto pelem = view.find( name ).lock() )
 						{
-							result = writer.writeSub( file, elem );
+							auto & elem = static_cast< typename ViewTypeT::ElementT const & >( *pelem );
+
+							if ( filter( elem ) )
+							{
+								result = writer.writeSub( file, elem );
+							}
 						}
 					}
 				}
@@ -274,11 +280,14 @@ namespace castor
 				{
 					if ( result )
 					{
-						auto & elem = static_cast< typename ViewTypeT::ElementT const & >( *view.find( name ).lock() );
-
-						if ( filter( elem ) )
+						if ( auto pelem = view.find( name ).lock() )
 						{
-							result = writer.writeSub( file, elem, folder );
+							auto & elem = static_cast< typename ViewTypeT::ElementT const & >( *pelem );
+
+							if ( filter( elem ) )
+							{
+								result = writer.writeSub( file, elem, folder );
+							}
 						}
 					}
 				}
@@ -336,11 +345,14 @@ namespace castor
 				{
 					if ( result )
 					{
-						auto & elem = static_cast< typename ViewTypeT::ElementT const & >( *view.find( name ).lock() );
-
-						if ( filter( elem ) )
+						if ( auto pelem = view.find( name ).lock() )
 						{
-							result = writer.writeSub( file, elem, folder, subfolder );
+							auto & elem = static_cast< typename ViewTypeT::ElementT const & >( *pelem );
+
+							if ( filter( elem ) )
+							{
+								result = writer.writeSub( file, elem, folder, subfolder );
+							}
 						}
 					}
 				}
@@ -409,7 +421,7 @@ namespace castor
 				{
 					auto node = it.second.lock();
 
-					if ( result && writable( *node ) )
+					if ( result && node && writable( *node ) )
 					{
 						result = writer.writeSub( file, *node );
 					}
@@ -501,7 +513,21 @@ namespace castor
 
 					bool operator()( RenderWindow const & window )
 					{
-						return window.getRenderTarget()->getScene()->getName() == scene.getName();
+						auto target = window.getRenderTarget();
+
+						if ( !target )
+						{
+							return false;
+						}
+
+						auto scn = target->getScene();
+
+						if ( !scn )
+						{
+							return false;
+						}
+
+						return scn->getName() == scene.getName();
 					}
 				};
 

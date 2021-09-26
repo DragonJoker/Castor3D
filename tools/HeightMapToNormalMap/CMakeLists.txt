@@ -21,6 +21,7 @@ source_group( "Source Files"
 if ( WIN32 )
 	find_rsc_file( ${PROJECT_NAME} bin_dos )
 endif ()
+
 add_target_min(
 	${PROJECT_NAME}
 	bin_dos

@@ -16,32 +16,42 @@ namespace castor3d
 		: OwnedBy< Engine >( engine )
 		, m_font( font )
 	{
-		uint32_t const maxWidth = font.lock()->getMaxWidth();
-		uint32_t const maxHeight = font.lock()->getMaxHeight();
-		uint32_t const count = uint32_t( std::ceil( double( std::distance( font.lock()->begin(), font.lock()->end() ) ) / 16.0 ) );
-
-		auto sampler = getEngine()->getSamplerCache().add( font.lock()->getName(), *getEngine() );
-		sampler.lock()->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-		sampler.lock()->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-		sampler.lock()->setMinFilter( VK_FILTER_LINEAR );
-		sampler.lock()->setMagFilter( VK_FILTER_LINEAR );
-		m_sampler = sampler;
-		ashes::ImageCreateInfo image
+		if ( auto fnt = m_font.lock() )
 		{
-			0u,
-			VK_IMAGE_TYPE_2D,
-			VK_FORMAT_R8_UNORM,
-			{ maxWidth * 16, maxHeight * count, 1u },
-			1u,
-			1u,
-			VK_SAMPLE_COUNT_1_BIT,
-			VK_IMAGE_TILING_OPTIMAL,
-			VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
-		};
-		m_texture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
-			, image
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, cuT( "FontTexture_" ) + font.lock()->getFaceName() );
+			if ( auto sampler = getEngine()->getSamplerCache().add( fnt->getName(), *getEngine() ).lock() )
+			{
+				sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				sampler->setMinFilter( VK_FILTER_LINEAR );
+				sampler->setMagFilter( VK_FILTER_LINEAR );
+				m_sampler = sampler;
+			}
+
+			uint32_t const maxWidth = fnt->getMaxWidth();
+			uint32_t const maxHeight = fnt->getMaxHeight();
+			uint32_t const count = uint32_t( std::ceil( double( std::distance( fnt->begin(), fnt->end() ) ) / 16.0 ) );
+
+			ashes::ImageCreateInfo image
+			{
+				0u,
+				VK_IMAGE_TYPE_2D,
+				VK_FORMAT_R8_UNORM,
+				{ maxWidth * 16, maxHeight * count, 1u },
+				1u,
+				1u,
+				VK_SAMPLE_COUNT_1_BIT,
+				VK_IMAGE_TILING_OPTIMAL,
+				VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
+			};
+			m_texture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
+				, image
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+				, cuT( "FontTexture_" ) + fnt->getFaceName() );
+		}
+		else
+		{
+			CU_Exception( "No Font given to FontTexture" );
+		}
 	}
 
 	FontTexture::~FontTexture()
@@ -75,7 +85,6 @@ namespace castor3d
 			uint32_t offY = sizeImg.getHeight() - maxHeight;
 			auto buffer = image.getBuffer();
 			uint8_t * dstBuffer = buffer.data();
-			size_t const bufsize = buffer.size();
 
 			for ( uint32_t y = 0; y < count && it != font->end(); ++y )
 			{
@@ -91,14 +100,14 @@ namespace castor3d
 
 					for ( uint32_t i = 0; i < glyphSize.getHeight(); ++i )
 					{
-						CU_Ensure( size_t( dstGlyphIndex ) + glyphSize.getWidth() <= bufsize );
+						CU_Ensure( size_t( dstGlyphIndex ) + glyphSize.getWidth() <= buffer.size() );
 						std::memcpy( dstGlyphBuffer, srcGlyphBuffer, glyphSize.getWidth() );
 						dstGlyphBuffer += imgLineSize;
 						dstGlyphIndex += imgLineSize;
 						srcGlyphBuffer += glyphSize.getWidth();
 					}
 
-					m_glyphsPositions[glyph.getCharacter()] = castor::Position( offX, offY );
+					m_glyphsPositions[glyph.getCharacter()] = castor::Position( int32_t( offX ), int32_t( offY ) );
 					offX += maxWidth;
 					++it;
 				}

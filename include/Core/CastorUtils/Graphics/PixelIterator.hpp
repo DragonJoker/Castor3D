@@ -70,14 +70,14 @@ namespace castor
 
 		inline PixelIterator & operator+=( size_t offset )
 		{
-			m_current += offset * PixelIterator::size;
+			m_current += ptrdiff_t( offset * PixelIterator::size );
 			doLink();
 			return *this;
 		}
 
 		inline PixelIterator & operator-=( size_t offset )
 		{
-			m_current -= offset * PixelIterator::size;
+			m_current -= ptrdiff_t( offset * PixelIterator::size );
 			doLink();
 			return *this;
 		}

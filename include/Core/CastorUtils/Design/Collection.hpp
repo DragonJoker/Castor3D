@@ -117,7 +117,7 @@ namespace castor
 		 *\~french
 		 *\brief		Vide la collection
 		 */
-		inline void clear()throw();
+		inline void clear()noexcept;
 		/**
 		 *\~english
 		 *\brief		Looks for a collected object at the given key

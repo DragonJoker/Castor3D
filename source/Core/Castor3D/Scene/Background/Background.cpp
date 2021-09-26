@@ -17,7 +17,6 @@
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
 #include <ashespp/Buffer/StagingBuffer.hpp>
-#include <ashespp/Command/CommandBufferInheritanceInfo.hpp>
 #include <ashespp/Core/Device.hpp>
 
 #include <ShaderWriter/Source.hpp>
@@ -32,10 +31,6 @@ namespace castor3d
 		, castor::Named{ scene.getName() + name }
 		, m_scene{ scene }
 		, m_type{ type }
-	{
-	}
-
-	SceneBackground::~SceneBackground()
 	{
 	}
 

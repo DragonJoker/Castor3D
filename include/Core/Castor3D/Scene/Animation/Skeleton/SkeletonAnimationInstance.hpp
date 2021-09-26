@@ -40,13 +40,6 @@ namespace castor3d
 		C3D_API SkeletonAnimationInstance( AnimatedSkeleton & object, SkeletonAnimation & animation );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~SkeletonAnimationInstance();
-		/**
-		 *\~english
 		 *\brief		Retrieves an animated bone.
 		 *\param[in]	bone	The bone.
 		 *\~french

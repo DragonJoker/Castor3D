@@ -46,7 +46,7 @@ namespace castor
 			return value;
 		}
 
-		return uint32_t( 0x00000001u << bitSize );
+		return 0x00000001u << bitSize;
 	}
 
 	static inline bool isPowerOfTwo( uint32_t value )

@@ -14,13 +14,12 @@ namespace castor3d
 		: public PipelineVisitor
 	{
 	protected:
-		inline ToneMappingVisitor()
+		ToneMappingVisitor()
 			: PipelineVisitor{ { false, true } }
 		{
 		}
 
 	public:
-		C3D_API virtual ~ToneMappingVisitor() = default;
 		/**
 		*\~english
 		*name

@@ -11,7 +11,6 @@ namespace Testing
 	{
 	public:
 		CastorUtilsArrayViewTest();
-		virtual ~CastorUtilsArrayViewTest();
 
 	private:
 		void doRegisterTests()override;

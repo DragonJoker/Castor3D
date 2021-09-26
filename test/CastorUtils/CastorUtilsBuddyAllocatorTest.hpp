@@ -11,7 +11,6 @@ namespace Testing
 	{
 	public:
 		CastorUtilsBuddyAllocatorTest();
-		virtual ~CastorUtilsBuddyAllocatorTest();
 
 	private:
 		void doRegisterTests()override;

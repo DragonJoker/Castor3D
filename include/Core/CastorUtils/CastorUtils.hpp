@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Config/ConfigModule.hpp"
 
+#pragma warning( push )
+#pragma warning( disable:4365 )
 #include <array>
 #include <cassert>
 #include <chrono>
@@ -25,6 +27,7 @@ See LICENSE file in root folder
 #include <deque>
 #include <sstream>
 #include <vector>
+#pragma warning( pop )
 
 namespace castor
 {

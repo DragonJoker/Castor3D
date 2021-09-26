@@ -44,7 +44,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~Mesh();
+		C3D_API ~Mesh()override;
 		/**
 		 *\~english
 		 *\brief		Move constructor.

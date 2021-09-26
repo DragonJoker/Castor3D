@@ -132,8 +132,6 @@ namespace castor
 
 	private:
 		castor3d::Engine & m_engine;
-		uint32_t m_faceCount{ 0 };
-		uint32_t m_vertexCount{ 0 };
 		std::map< castor3d::AnimatedSkeleton const *, SkeletonPoolsEntry > m_skeletonEntries;
 		std::map< castor3d::AnimatedMesh const *, MeshPoolsEntry > m_meshEntries;
 		std::map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedSkeletonChangeConnection > m_skeletonAddedConnections;

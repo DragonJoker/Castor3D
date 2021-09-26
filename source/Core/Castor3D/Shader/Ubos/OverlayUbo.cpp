@@ -22,12 +22,6 @@ namespace castor3d
 		{
 		}
 
-		OverlayData & OverlayData::operator=( OverlayData const & rhs )
-		{
-			StructInstance::operator=( rhs );
-			return *this;
-		}
-
 		ast::type::StructPtr OverlayData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140

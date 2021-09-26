@@ -35,13 +35,13 @@ namespace castor3d
 		eB,
 		CU_ScopedEnumBounds( eR ),
 	};
-	castor::String getTextureName( LpvTexture texture
+	C3D_API castor::String getTextureName( LpvTexture texture
 		, std::string const & infix );
-	castor::String getName( LpvTexture texture );
-	VkFormat getFormat( LpvTexture texture );
-	VkClearValue getClearValue( LpvTexture texture );
-	VkImageUsageFlags getUsageFlags( LpvTexture texture );
-	VkBorderColor getBorderColor( LpvTexture texture );
+	C3D_API castor::String getName( LpvTexture texture );
+	C3D_API VkFormat getFormat( LpvTexture texture );
+	C3D_API VkClearValue getClearValue( LpvTexture texture );
+	C3D_API VkImageUsageFlags getUsageFlags( LpvTexture texture );
+	C3D_API VkBorderColor getBorderColor( LpvTexture texture );
 	inline uint32_t getMipLevels( LpvTexture texture
 		, castor::Size const & size )
 	{

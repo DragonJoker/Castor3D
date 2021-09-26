@@ -21,7 +21,7 @@ namespace castor3d
 			C3D_API PickingData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled );
-			C3D_API PickingData & operator=( PickingData const & rhs );
+			SDW_DeclStructInstance( C3D_API, PickingData );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
@@ -43,6 +43,10 @@ namespace castor3d
 	{
 	public:
 		using Configuration = PickingUboConfiguration;
+		C3D_API PickingUbo( PickingUbo const & rhs ) = delete;
+		C3D_API PickingUbo & operator=( PickingUbo const & rhs ) = delete;
+		C3D_API PickingUbo( PickingUbo && rhs ) = default;
+		C3D_API PickingUbo & operator=( PickingUbo && rhs ) = delete;
 		C3D_API explicit PickingUbo( RenderDevice const & device );
 		C3D_API ~PickingUbo();
 		/**

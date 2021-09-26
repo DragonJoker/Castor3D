@@ -332,7 +332,6 @@ namespace castor3d
 	DebugCallbacks::DebugCallbacks( ashes::Instance const & instance
 		, void * userData )
 		: m_instance{ instance }
-		, m_userData{ userData }
 	{
 #if VK_EXT_debug_utils
 

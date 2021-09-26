@@ -20,10 +20,6 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	SkeletonAnimationTreeItemProperty::~SkeletonAnimationTreeItemProperty()
-	{
-	}
-
 	void SkeletonAnimationTreeItemProperty::doCreateProperties( wxPGEditor * editor
 		, wxPropertyGrid * grid )
 	{

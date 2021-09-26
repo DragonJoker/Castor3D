@@ -199,13 +199,6 @@ namespace castor3d
 		C3D_API explicit SceneFileParser( Engine & engine );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~SceneFileParser();
-		/**
-		 *\~english
 		 *\return		The render window defined by the scene.
 		 *\~french
 		 *\return		La fenêtre de rendu définie par la scène.

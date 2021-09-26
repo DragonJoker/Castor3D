@@ -68,12 +68,12 @@ StcTextEditor::StcTextEditor( StcContext & context
 	, wxSize const & size
 	, long style )
 	: wxStyledTextCtrl( parent, id, pos, size, style )
-	, m_context( context )
 	, m_filename( wxEmptyString )
-	, m_lineNrID( 0 )
-	, m_dividerID( 1 )
-	, m_foldingID( 2 )
 	, m_language()
+	, m_context( context )
+	, m_lineNrID( 0 )
+	, m_foldingID( 2 )
+	, m_dividerID( 1 )
 	, m_tabSpaces( 4 )
 	, m_useTabs( true )
 	, m_tabIndents( true )
@@ -101,10 +101,6 @@ StcTextEditor::StcTextEditor( StcContext & context
 	SetLayoutCache( wxSTC_CACHE_PAGE );
 
 	initializePrefs( DEFAULT_LANGUAGE );
-}
-
-StcTextEditor::~StcTextEditor()
-{
 }
 
 bool StcTextEditor::loadFile()
@@ -330,12 +326,12 @@ bool StcTextEditor::initializePrefs( wxString const & name )
 
 			for ( auto index = 0; index < 9; ++index )
 			{
-				castor::String words = m_language->getKeywords( index );
+				castor::String words = m_language->getKeywords( uint32_t( index ) );
 
 				if ( !words.empty() )
 				{
 					SetKeyWords( index, words.c_str() );
-					castor::StringArray array = castor::string::split( words, cuT( " \t\n\r" ), -1, false );
+					castor::StringArray array = castor::string::split( words, cuT( " \t\n\r" ), ~( 0u ), false );
 
 					for ( auto keyword : array )
 					{
@@ -459,6 +455,8 @@ void StcTextEditor::doInitialiseBaseColours( wxColour const & bgColour
 #endif
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 BEGIN_EVENT_TABLE( StcTextEditor, wxStyledTextCtrl )
 	EVT_SIZE( StcTextEditor::onSize )
 	EVT_MENU( wxID_CLEAR, StcTextEditor::onEditClear )
@@ -497,7 +495,7 @@ BEGIN_EVENT_TABLE( StcTextEditor, wxStyledTextCtrl )
 	EVT_STC_MARGINCLICK( wxID_ANY, StcTextEditor::onMarginClick )
 	EVT_STC_CHARADDED( wxID_ANY, StcTextEditor::onCharAdded )
 END_EVENT_TABLE()
-
+#pragma GCC diagnostic pop
 
 void StcTextEditor::onSize( wxSizeEvent & event )
 {
@@ -750,8 +748,8 @@ void StcTextEditor::onMarginClick( wxStyledTextEvent & event )
 
 void StcTextEditor::onCharAdded( wxStyledTextEvent & event )
 {
-	char chr = ( char )event.GetKey();
-	int currentLine = GetCurrentLine();
+	auto chr = char( event.GetKey() );
+	auto currentLine = GetCurrentLine();
 
 	if ( chr == '\n' )
 	{

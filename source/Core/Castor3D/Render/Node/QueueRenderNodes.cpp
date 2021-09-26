@@ -553,7 +553,7 @@ namespace castor3d
 		, AnimatedMesh * mesh
 		, AnimatedSkeleton * skeleton )
 	{
-		return getOwner()->getCuller().getScene().getRenderNodes().createNode( passNode
+		return getOwner()->getCuller().getScene().getRenderNodes().createNode( std::move( passNode )
 			, std::move( modelBuffer )
 			, std::move( modelInstancesBuffer )
 			, buffers
@@ -572,7 +572,7 @@ namespace castor3d
 		, BillboardBase & instance
 		, UniformBufferOffsetT< BillboardUboConfiguration > billboardBuffer )
 	{
-		return getOwner()->getCuller().getScene().getRenderNodes().createNode( passNode
+		return getOwner()->getCuller().getScene().getRenderNodes().createNode( std::move( passNode )
 			, std::move( modelBuffer )
 			, std::move( modelInstancesBuffer )
 			, buffers

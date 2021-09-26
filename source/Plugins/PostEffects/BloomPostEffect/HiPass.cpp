@@ -43,7 +43,7 @@ namespace Bloom
 					, graph
 					, 1u
 					, crg::rq::Config{}
-						.baseConfig( { std::vector< crg::VkPipelineShaderStageCreateInfoArray >{ std::move( program ) } } )
+						.baseConfig( { std::vector< crg::VkPipelineShaderStageCreateInfoArray >{ std::move( program ) }, {} } )
 						.texcoordConfig( crg::Texcoord{} )
 						.enabled( enabled )
 						.recordInto( [this]( VkCommandBuffer cb, uint32_t i ){ doRecordInto( cb, i ); } )
@@ -84,7 +84,6 @@ namespace Bloom
 				auto const width = int32_t( m_imageDesc.data->info.extent.width );
 				auto const height = int32_t( m_imageDesc.data->info.extent.height );
 				auto const depth = int32_t( m_imageDesc.data->info.extent.depth );
-				auto const imageViewType = VkImageViewType( m_imageDesc.data->info.imageType );
 				auto const aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
 				auto transition = getTransition( index, m_viewDesc );
 
@@ -281,7 +280,7 @@ namespace Bloom
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } ) }
 #endif
 		, m_pass{ graph.createPass( "BloomHiPass"
-			, [this, &device, size, enabled]( crg::FramePass const & pass
+			, [this, &device, enabled]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{

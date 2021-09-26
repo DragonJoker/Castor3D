@@ -38,12 +38,6 @@ namespace castor3d
 		{
 		}
 
-		LpvGridData & LpvGridData::operator=( LpvGridData const & rhs )
-		{
-			StructInstance::operator=( rhs );
-			return *this;
-		}
-
 		ast::type::StructPtr LpvGridData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
@@ -120,7 +114,7 @@ namespace castor3d
 		auto cellSize = std::max( std::max( aabb.getDimensions()->x
 			, aabb.getDimensions()->y )
 			, aabb.getDimensions()->z ) / float( gridDim );
-		m_grid = { gridDim, cellSize, aabb.getMax(), aabb.getMin(), 1.0f, 0 };
+		m_grid = { gridDim, cellSize, aabb.getMax(), aabb.getMin(), 1.0f };
 		//m_grid.transform( cameraPos, cameraDir );
 
 		auto minVolumeCorner = m_grid.getMin();
@@ -143,7 +137,7 @@ namespace castor3d
 		, float indirectAttenuation )
 	{
 		auto & configuration = m_ubo.getData();
-		m_grid = { grid, gridLevelScale, gridLevel };
+		m_grid = { grid, gridLevelScale };
 		m_grid.transform( cameraPos, cameraDir );
 
 		auto minVolumeCorner = m_grid.getMin();

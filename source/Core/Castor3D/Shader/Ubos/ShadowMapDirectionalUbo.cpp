@@ -31,12 +31,6 @@ namespace castor3d
 		{
 		}
 
-		ShadowMapDirectionalData & ShadowMapDirectionalData::operator=( ShadowMapDirectionalData const & rhs )
-		{
-			StructInstance::operator=( rhs );
-			return *this;
-		}
-
 		ast::type::StructPtr ShadowMapDirectionalData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140

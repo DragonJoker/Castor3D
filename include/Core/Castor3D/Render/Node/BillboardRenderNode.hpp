@@ -18,7 +18,7 @@ namespace castor3d
 		C3D_API BillboardRenderNode( BillboardRenderNode const & ) = delete;
 		C3D_API BillboardRenderNode( BillboardRenderNode && ) = default;
 		C3D_API BillboardRenderNode & operator=( BillboardRenderNode const & ) = delete;
-		C3D_API BillboardRenderNode & operator=( BillboardRenderNode && ) = default;
+		C3D_API BillboardRenderNode & operator=( BillboardRenderNode && ) = delete;
 
 		C3D_API BillboardRenderNode( PassRenderNode passNode
 			, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer

@@ -9,6 +9,8 @@
 #include "CastorUtils/Log/Logger.hpp"
 #include "CastorUtils/Miscellaneous/Utils.hpp"
 
+#pragma warning( disable: 4191 )
+
 namespace castor
 {
 	void DynamicLibrary::doOpen()noexcept
@@ -51,15 +53,15 @@ namespace castor
 		}
 	}
 
-	void * DynamicLibrary::doGetFunction( String const & name )noexcept
+	VoidFnType DynamicLibrary::doGetFunction( String const & name )noexcept
 	{
-		void * result = nullptr;
+		VoidFnType result = nullptr;
 
 		if ( m_library )
 		{
 			std::string stdname( string::stringCast< char >( name ) );
 			UINT oldMode = ::SetErrorMode( SEM_FAILCRITICALERRORS );
-			result = reinterpret_cast< void * >( ::GetProcAddress( static_cast< HMODULE >( m_library ), stdname.c_str() ) );
+			result = reinterpret_cast< VoidFnType >( ::GetProcAddress( static_cast< HMODULE >( m_library ), stdname.c_str() ) );
 			::SetErrorMode( oldMode );
 		}
 		else

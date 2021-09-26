@@ -71,13 +71,12 @@ namespace toon
 		ToonPhongPass( castor3d::Material & parent
 			, castor3d::PassTypeID typeID
 			, castor3d::PassFlags initialFlags = castor3d::PassFlag::eNone );
-		~ToonPhongPass();
 
 		static castor3d::PassSPtr create( castor3d::Material & parent );
 		static castor::AttributeParsers createParsers();
 		static castor::StrUInt32Map createSections();
 
-		void accept( castor3d::PassBuffer & buffer )const override;
+		void fillBuffer( castor3d::PassBuffer & buffer )const override;
 		uint32_t getPassSectionID()const override;
 		uint32_t getTextureSectionID()const override;
 		bool writeText( castor::String const & tabs
@@ -100,13 +99,12 @@ namespace toon
 		ToonBlinnPhongPass( castor3d::Material & parent
 			, castor3d::PassTypeID typeID
 			, castor3d::PassFlags initialFlags = castor3d::PassFlag::eNone );
-		~ToonBlinnPhongPass();
 
 		static castor3d::PassSPtr create( castor3d::Material & parent );
 		static castor::AttributeParsers createParsers();
 		static castor::StrUInt32Map createSections();
 
-		void accept( castor3d::PassBuffer & buffer )const override;
+		void fillBuffer( castor3d::PassBuffer & buffer )const override;
 		uint32_t getPassSectionID()const override;
 		uint32_t getTextureSectionID()const override;
 		bool writeText( castor::String const & tabs
@@ -129,13 +127,12 @@ namespace toon
 		ToonMetallicRoughnessPass( castor3d::Material & parent
 			, castor3d::PassTypeID typeID
 			, castor3d::PassFlags initialFlags = castor3d::PassFlag::eNone );
-		~ToonMetallicRoughnessPass();
 
 		static castor3d::PassSPtr create( castor3d::Material & parent );
 		static castor::AttributeParsers createParsers();
 		static castor::StrUInt32Map createSections();
 
-		void accept( castor3d::PassBuffer & buffer )const override;
+		void fillBuffer( castor3d::PassBuffer & buffer )const override;
 		uint32_t getPassSectionID()const override;
 		uint32_t getTextureSectionID()const override;
 		bool writeText( castor::String const & tabs
@@ -158,13 +155,12 @@ namespace toon
 		ToonSpecularGlossinessPass( castor3d::Material & parent
 			, castor3d::PassTypeID typeID
 			, castor3d::PassFlags initialFlags = castor3d::PassFlag::eNone );
-		~ToonSpecularGlossinessPass();
 
 		static castor3d::PassSPtr create( castor3d::Material & parent );
 		static castor::AttributeParsers createParsers();
 		static castor::StrUInt32Map createSections();
 
-		void accept( castor3d::PassBuffer & buffer )const override;
+		void fillBuffer( castor3d::PassBuffer & buffer )const override;
 		uint32_t getPassSectionID()const override;
 		uint32_t getTextureSectionID()const override;
 		bool writeText( castor::String const & tabs

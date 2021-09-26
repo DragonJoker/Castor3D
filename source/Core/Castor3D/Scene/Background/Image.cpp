@@ -70,10 +70,6 @@ namespace castor3d
 			, cuT( "ImageBackground_Dummy" ) );
 	}
 
-	ImageBackground::~ImageBackground()
-	{
-	}
-
 	bool ImageBackground::loadImage( Path const & folder, Path const & relative )
 	{
 		bool result = false;

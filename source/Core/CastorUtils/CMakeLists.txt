@@ -37,9 +37,11 @@ if( EXISTS ${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels.h )
 	)
 	source_group( "Header Files" FILES ${${PROJECT_NAME}_HDR_FILES} )
 	source_group( "Source Files" FILES ${${PROJECT_NAME}_SRC_FILES} )
-	add_target_min(
+	add_library(
 		${PROJECT_NAME}
-		lib
+		STATIC
+		${${PROJECT_NAME}_HDR_FILES}
+		${${PROJECT_NAME}_SRC_FILES}
 	)
 	add_library( castor::${PROJECT_NAME}
 		ALIAS
@@ -51,16 +53,6 @@ if( EXISTS ${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels.h )
 		PRIVATE
 			${${PROJECT_NAME}_DEFINITIONS}
 	)
-	if ( MSVC )
-		target_compile_options( ${PROJECT_NAME}
-			PRIVATE
-				/wd4189
-				/wd4242
-				/wd4244
-				/wd4365
-				/wd4456
-		)
-	endif ()
 	target_include_directories( ${PROJECT_NAME}
 		PUBLIC
 			${EXTERNAL_SOURCE_DIR}/cvtt
@@ -74,7 +66,7 @@ if( EXISTS ${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels.h )
 		PROPERTIES
 			CXX_STANDARD 17
 			CXX_EXTENSIONS OFF
-			FOLDER "Core/${MAIN_PROJECT_NAME}"
+			FOLDER "Core"
 	)
 endif ()
 
@@ -106,6 +98,51 @@ else ()
 endif ()
 
 if ( ZLIB_FOUND AND FreeType_FOUND )
+	if ( NOT TARGET MiniZip )
+		set( MiniZip_SOURCE_DIR
+			${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Data/MiniZip
+		)
+		set( MiniZip_SRC_FILES
+			${MiniZip_SOURCE_DIR}/ioapi.c
+			${MiniZip_SOURCE_DIR}/iowin32.c
+			${MiniZip_SOURCE_DIR}/mztools.c
+			${MiniZip_SOURCE_DIR}/unzip.c
+			${MiniZip_SOURCE_DIR}/zip.c
+		)
+		set( MiniZip_HDR_FILES
+			${MiniZip_SOURCE_DIR}/crypt.h
+			${MiniZip_SOURCE_DIR}/ioapi.h
+			${MiniZip_SOURCE_DIR}/iowin32.h
+			${MiniZip_SOURCE_DIR}/mztools.h
+			${MiniZip_SOURCE_DIR}/unzip.h
+			${MiniZip_SOURCE_DIR}/zip.h
+		)
+		source_group( "Header Files" FILES ${MiniZip_HDR_FILES} )
+		source_group( "Source Files" FILES ${MiniZip_SRC_FILES} )
+		add_library(
+			MiniZip
+			STATIC
+			${MiniZip_HDR_FILES}
+			${MiniZip_SRC_FILES}
+		)
+		target_include_directories( MiniZip
+			PUBLIC
+				${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Data
+		)
+		target_link_libraries( MiniZip
+			PUBLIC
+				ZLIB::ZLIB
+		)
+		set_target_properties( MiniZip
+			PROPERTIES
+				FOLDER "Core"
+		)
+	endif ()
+	add_library( castor::MiniZip
+		ALIAS
+		MiniZip
+	)
+
 	if ( ANDROID )
 		include_directories( ${ANDROID_NDK}/sources )
 		android_ndk_import_module_cpufeatures()
@@ -295,33 +332,6 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	)
 	source_group( "Header Files\\Data\\Text" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
 	source_group( "Source Files\\Data\\Text" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
-
-	set( ${PROJECT_NAME}_FOLDER_SRC_C_FILES
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Data/MiniZip/ioapi.c
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Data/MiniZip/iowin32.c
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Data/MiniZip/mztools.c
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Data/MiniZip/unzip.c
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Data/MiniZip/zip.c
-	)
-	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Data/MiniZip/crypt.h
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Data/MiniZip/ioapi.h
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Data/MiniZip/iowin32.h
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Data/MiniZip/mztools.h
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Data/MiniZip/unzip.h
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Data/MiniZip/zip.h
-	)
-	set( ${PROJECT_NAME}_SRC_FILES
-		${${PROJECT_NAME}_SRC_FILES}
-		${${PROJECT_NAME}_FOLDER_SRC_FILES}
-	)
-	set( ${PROJECT_NAME}_HDR_FILES
-		${${PROJECT_NAME}_HDR_FILES}
-		${${PROJECT_NAME}_FOLDER_HDR_FILES}
-	)
-	source_group( "Header Files\\Data\\Minizip" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
-	source_group( "Source Files\\Data\\Minizip" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
-	source_group( "Source Files\\Data\\Minizip" FILES ${${PROJECT_NAME}_FOLDER_SRC_C_FILES} )
 
 	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/ArrayView.hpp
@@ -758,6 +768,9 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 			${CASTOR_BINARY_DIR}/include/Core
 			${CASTOR_SOURCE_DIR}/source/Core
 			${CASTOR_BINARY_DIR}/source/Core
+	)
+	target_include_directories( ${PROJECT_NAME} SYSTEM
+		PRIVATE
 			${FREETYPE_INCLUDE_DIR_ft2build}
 			${FREETYPE_INCLUDE_DIR_freetype2}
 			${EXTERNAL_SOURCE_DIR}/gli
@@ -769,7 +782,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		PRIVATE
 			${PLATFORM_LIBRARIES}
 			${Freetype_LIBRARIES}
-			ZLIB::ZLIB
+			castor::MiniZip
 	)
 	if( EXISTS ${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels.h )
 		target_link_libraries( ${PROJECT_NAME}
@@ -786,6 +799,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		target_link_libraries( ${PROJECT_NAME}
 			PUBLIC
 				${CMAKE_DL_LIBRARY}
+				pthread
 		)
 	endif ()
 

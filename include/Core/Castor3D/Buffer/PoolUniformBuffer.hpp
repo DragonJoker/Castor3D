@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/RenderDevice.hpp"
 
 #include <CastorUtils/Design/ArrayView.hpp>
+#include <CastorUtils/Design/Signal.hpp>
 
 #include <ashespp/Buffer/UniformBuffer.hpp>
 

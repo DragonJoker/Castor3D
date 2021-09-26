@@ -54,7 +54,7 @@ namespace castor
 
 		size_t size()const noexcept
 		{
-			return m_end - m_begin;
+			return size_t( m_end - m_begin );
 		}
 
 		pointer data()noexcept

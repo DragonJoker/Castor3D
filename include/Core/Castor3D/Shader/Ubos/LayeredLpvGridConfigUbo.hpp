@@ -24,7 +24,7 @@ namespace castor3d
 			C3D_API LayeredLpvGridData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled );
-			C3D_API LayeredLpvGridData & operator=( LayeredLpvGridData const & rhs );
+			SDW_DeclStructInstance( C3D_API, LayeredLpvGridData );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
@@ -49,6 +49,10 @@ namespace castor3d
 		using Configuration = LayeredLpvGridConfigUboConfiguration;
 
 	public:
+		C3D_API LayeredLpvGridConfigUbo( LayeredLpvGridConfigUbo const & rhs ) = delete;
+		C3D_API LayeredLpvGridConfigUbo & operator=( LayeredLpvGridConfigUbo const & rhs ) = delete;
+		C3D_API LayeredLpvGridConfigUbo( LayeredLpvGridConfigUbo && rhs ) = default;
+		C3D_API LayeredLpvGridConfigUbo & operator=( LayeredLpvGridConfigUbo && rhs ) = delete;
 		C3D_API explicit LayeredLpvGridConfigUbo( RenderDevice const & device );
 		C3D_API ~LayeredLpvGridConfigUbo();
 

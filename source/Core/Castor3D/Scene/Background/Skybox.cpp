@@ -71,10 +71,6 @@ namespace castor3d
 			, true /* isStatic */ );
 	}
 
-	SkyboxBackground::~SkyboxBackground()
-	{
-	}
-
 	void SkyboxBackground::accept( BackgroundVisitor & visitor )
 	{
 		visitor.visit( *this );
@@ -143,7 +139,7 @@ namespace castor3d
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SkyboxBackground" ) + castor3d::getName( face ) );
 		texture->setSource( folder, relative, false, false );
-		m_layerTexturePath[size_t( face )] = castor::Path( texture->getImage().getPath() );
+		m_layerTexturePath[size_t( face )] = texture->getImage().getPath();
 		m_layerTexture[size_t( face )] = texture;
 		notifyChanged();
 	}
@@ -176,7 +172,7 @@ namespace castor3d
 	void SkyboxBackground::setEquiTexture( TextureLayoutSPtr texture
 		, uint32_t size )
 	{
-		m_equiTexturePath = castor::Path( texture->getImage().getPath() );
+		m_equiTexturePath = texture->getImage().getPath();
 		m_equiTexture = texture;
 		m_equiSize.set( size, size );
 		notifyChanged();
@@ -215,7 +211,7 @@ namespace castor3d
 
 	void SkyboxBackground::setCrossTexture( TextureLayoutSPtr texture )
 	{
-		m_crossTexturePath = castor::Path( texture->getImage().getPath() );
+		m_crossTexturePath = texture->getImage().getPath();
 		m_crossTexture = texture;
 		notifyChanged();
 	}

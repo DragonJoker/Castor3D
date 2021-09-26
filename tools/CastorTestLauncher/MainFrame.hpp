@@ -5,14 +5,18 @@ See LICENSE file in root folder
 #define ___CTL_MainFrame_HPP___
 
 #include <Castor3D/Castor3DPrerequisites.hpp>
-#include <Castor3D/Render/RenderModule.hpp>
-
-#include <wx/frame.h>
-#include <wx/listctrl.h>
-#include <wx/windowptr.h>
+#include <Castor3D/Render/RenderWindow.hpp>
 
 #include <CastorUtils/Log/Logger.hpp>
 #include <CastorUtils/Data/Path.hpp>
+
+#pragma warning( push )
+#pragma warning( disable: 4365 )
+#pragma warning( disable: 4371 )
+#include <wx/frame.h>
+#include <wx/listctrl.h>
+#include <wx/windowptr.h>
+#pragma warning( pop )
 
 namespace test_launcher
 {
@@ -21,7 +25,6 @@ namespace test_launcher
 	{
 	public:
 		explicit MainFrame( castor3d::Engine & engine );
-		~MainFrame();
 
 		bool initialise();
 		bool loadScene( wxString const & fileName );

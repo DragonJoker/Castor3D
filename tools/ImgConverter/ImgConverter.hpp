@@ -2,8 +2,13 @@
 #ifndef ___ImgToIcoApp___
 #define ___ImgToIcoApp___
 
-#include <wx/app.h>
 #include "MainFrame.hpp"
+
+#pragma warning( push )
+#pragma warning( disable: 4365 )
+#pragma warning( disable: 4371 )
+#include <wx/app.h>
+#pragma warning( pop )
 
 namespace ImgToIco
 {
@@ -17,11 +22,11 @@ namespace ImgToIco
 		wxLocale * m_pLocale;
 
 	public:
-		ImgToIcoApp() {}
-		virtual ~ImgToIcoApp() {}
-		virtual bool OnInit();
-		virtual int OnExit();
+		bool OnInit()override;
+		int OnExit()override;
 	};
 }
+
+DECLARE_APP( ImgToIco::ImgToIcoApp )
 
 #endif

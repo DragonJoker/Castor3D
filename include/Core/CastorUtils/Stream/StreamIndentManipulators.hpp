@@ -70,7 +70,7 @@ namespace castor
 		 */
 		inline void setIndent( std::ios_base & ios, unsigned int val )
 		{
-			indentValue( ios ) = val;
+			indentValue( ios ) = long( val );
 		}
 		/**
 		 *\~english

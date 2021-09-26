@@ -13,7 +13,6 @@ namespace diamond_square_terrain
 	{
 	public:
 		Generator();
-		virtual ~Generator();
 		/**
 		*\copydoc		castor3d::MeshGenerator::create
 		*/
@@ -24,13 +23,11 @@ namespace diamond_square_terrain
 		 *\copydoc		castor3d::MeshGenerator::doGenerate
 		 */
 		virtual void doGenerate( castor3d::Mesh & p_mesh
-			, castor3d::Parameters const & p_parameters );
+			, castor3d::Parameters const & p_parameters )override;
 
 	public:
 		static castor::String const Type;
 		static castor::String const Name;
-
-	private:
 	};
 }
 

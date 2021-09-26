@@ -15,10 +15,6 @@ namespace castor3d
 	{
 	}
 
-	SkeletonAnimationInstanceBone :: ~SkeletonAnimationInstanceBone()
-	{
-	}
-
 	void SkeletonAnimationInstanceBone::doApply()
 	{
 		BoneSPtr bone = m_animationBone.getBone();

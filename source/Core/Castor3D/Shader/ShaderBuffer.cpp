@@ -30,7 +30,7 @@ namespace castor3d
 					: VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT;
 			result = makeBufferBase( device
 				, size
-				, target | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+				, VkBufferUsageFlags( target | VK_BUFFER_USAGE_TRANSFER_DST_BIT )
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 				, std::move( name ) );
 			return result;
@@ -67,7 +67,7 @@ namespace castor3d
 		, m_buffer{ doCreateBuffer( engine, device, m_size, name ) }
 		, m_bufferView{ doCreateView( engine, device, tboFormat, *m_buffer ) }
 		, m_type{ m_bufferView ? VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER : VK_DESCRIPTOR_TYPE_STORAGE_BUFFER }
-		, m_data( size_t( m_size ), uint8_t( 0 ) )
+		, m_data( m_size, uint8_t( 0 ) )
 	{
 	}
 
@@ -88,7 +88,7 @@ namespace castor3d
 		doUpdate( 0u
 			, std::min( m_size
 				, ashes::getAlignedSize( size
-					, uint32_t( m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) ) ) );
+					, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) ) );
 	}
 
 	VkDescriptorSetLayoutBinding ShaderBuffer::createLayoutBinding( uint32_t index )const

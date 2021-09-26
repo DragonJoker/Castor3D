@@ -39,13 +39,6 @@ namespace castor3d
 		 */
 		C3D_API MeshAnimationInstance( AnimatedMesh & object, MeshAnimation & animation );
 		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~MeshAnimationInstance();
-		/**
 		*\~english
 		*\return		The animation submesh at given ID, nullptr if not found.
 		*\~french

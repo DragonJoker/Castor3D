@@ -88,7 +88,7 @@ namespace castor
 		initialise();
 		T * buffer = m_data.data();
 
-		for ( int i = 0; i < minCount; i++ )
+		for ( size_t i = 0; i < minCount; i++ )
 		{
 			*buffer = value;
 			buffer += Rows + 1;
@@ -222,14 +222,11 @@ namespace castor
 	{
 		Matrix< T, Columns, Rows > result;
 		result.setIdentity();
-		uint32_t i = 0, j = 0;
 
 		for ( uint32_t i = 0; i < cols; i++ )
 		{
 			if ( i != x )
 			{
-				j = 0;
-
 				for ( uint32_t j = 0; j < rows; j++ )
 				{
 					if ( j != y )
@@ -251,7 +248,7 @@ namespace castor
 		T sum = T();
 		T * buffer = m_data.data();
 
-		for ( int i = 0; i < MinValue< Columns, Rows >::value; i++ )
+		for ( uint32_t i = 0; i < MinValue< Columns, Rows >::value; i++ )
 		{
 			sum += *buffer;
 			buffer += Rows + 1;
@@ -299,7 +296,7 @@ namespace castor
 		Type const * buffer = rhs.constPtr();
 		T * mine = m_data.data();
 
-		for ( int i = 0; i < count; i++ )
+		for ( uint32_t i = 0; i < count; i++ )
 		{
 			*mine++ = T( *buffer++ );
 		}
@@ -328,7 +325,7 @@ namespace castor
 		Type const * buffer = rhs.constPtr();
 		T * mine = m_data.data();
 
-		for ( int i = 0; i < count; i++ )
+		for ( uint32_t i = 0; i < count; i++ )
 		{
 			*mine++ += T( *buffer++ );
 		}
@@ -343,7 +340,7 @@ namespace castor
 		Type const * buffer = rhs.constPtr();
 		T * mine = m_data.data();
 
-		for ( int i = 0; i < count; i++ )
+		for ( uint32_t i = 0; i < count; i++ )
 		{
 			*mine++ -= T( *buffer++ );
 		}
@@ -356,7 +353,7 @@ namespace castor
 	{
 		T * mine = m_data.data();
 
-		for ( int i = 0; i < count; i++ )
+		for ( uint32_t i = 0; i < count; i++ )
 		{
 			*mine++ += rhs;
 		}
@@ -369,7 +366,7 @@ namespace castor
 	{
 		T * mine = m_data.data();
 
-		for ( int i = 0; i < count; i++ )
+		for ( uint32_t i = 0; i < count; i++ )
 		{
 			*mine++ -= rhs;
 		}
@@ -382,7 +379,7 @@ namespace castor
 	{
 		T * mine = m_data.data();
 
-		for ( int i = 0; i < count; i++ )
+		for ( uint32_t i = 0; i < count; i++ )
 		{
 			*mine++ *= rhs;
 		}
@@ -395,7 +392,7 @@ namespace castor
 	{
 		T * mine = m_data.data();
 
-		for ( int i = 0; i < count; i++ )
+		for ( uint32_t i = 0; i < count; i++ )
 		{
 			*mine++ /= rhs;
 		}

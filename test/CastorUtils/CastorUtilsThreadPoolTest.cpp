@@ -13,10 +13,6 @@ namespace Testing
 	{
 	}
 
-	CastorUtilsThreadPoolTest::~CastorUtilsThreadPoolTest()
-	{
-	}
-
 	void CastorUtilsThreadPoolTest::doRegisterTests()
 	{
 		doRegisterTest( "CastorUtilsWorkerThreadTest::Underload", std::bind( &CastorUtilsThreadPoolTest::Underload, this ) );
@@ -26,10 +22,10 @@ namespace Testing
 
 	void CastorUtilsThreadPoolTest::Underload()
 	{
-		constexpr size_t count = 1000000u;
+		static constexpr size_t count = 1000000u;
 		ThreadPool pool( 5u );
 		std::vector< size_t > data;
-		pool.pushJob( [&data, count]()
+		pool.pushJob( [&data]()
 		{
 			while ( data.size() < count )
 			{
@@ -45,11 +41,11 @@ namespace Testing
 
 	void CastorUtilsThreadPoolTest::Exactload()
 	{
-		constexpr size_t count = 1000000u;
+		static constexpr size_t count = 1000000u;
 		ThreadPool pool( 5u );
 		std::atomic_int value{ 0 };
 
-		auto job = [&value, count]()
+		auto job = [&value]()
 		{
 			size_t i = 0;
 
@@ -74,11 +70,11 @@ namespace Testing
 
 	void CastorUtilsThreadPoolTest::Overload()
 	{
-		constexpr size_t count = 1000000u;
+		static constexpr size_t count = 1000000u;
 		ThreadPool pool( 5u );
 		std::atomic_int value{ 0 };
 
-		auto job = [&value, count]()
+		auto job = [&value]()
 		{
 			size_t i = 0;
 

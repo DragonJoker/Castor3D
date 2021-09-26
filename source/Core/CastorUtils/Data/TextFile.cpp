@@ -152,13 +152,13 @@ namespace castor
 		CU_CheckInvariants();
 		CU_Require( checkFlag( m_mode, OpenMode::eWrite ) || checkFlag( m_mode, OpenMode::eAppend ) );
 		uint64_t uiReturn = 0;
-		xchar * text = new xchar[std::size_t( p_uiMaxSize )];
+		xchar * text = new xchar[p_uiMaxSize];
 
 		if ( p_pFormat )
 		{
 			va_list vaList;
 			va_start( vaList, p_pFormat );
-			vsnprintf( text, std::size_t( p_uiMaxSize ), p_pFormat, vaList );
+			vsnprintf( text, p_uiMaxSize, p_pFormat, vaList );
 			va_end( vaList );
 			uiReturn = writeText( text );
 		}

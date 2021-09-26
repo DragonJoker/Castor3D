@@ -64,10 +64,6 @@ namespace castor3d
 	{
 	}
 
-	TransparentPass::~TransparentPass()
-	{
-	}
-
 	TextureFlags TransparentPass::getTexturesMask()const
 	{
 		return TextureFlags{ TextureFlag::eAll };
@@ -237,7 +233,7 @@ namespace castor3d
 				auto emissive = writer.declLocale( "emissive"
 					, lightMat->albedo * material.emissive );
 				auto worldEye = writer.declLocale( "worldEye"
-					, c3d_sceneData.getCameraPosition() );
+					, c3d_sceneData.cameraPosition );
 				auto texCoord = writer.declLocale( "texCoord"
 					, inSurface.texture );
 				auto occlusion = writer.declLocale( "occlusion"
@@ -289,7 +285,7 @@ namespace castor3d
 					lightMat->adjustDirectSpecular( lightSpecular );
 
 					auto ambient = writer.declLocale( "ambient"
-						, lightMat->getAmbient( c3d_sceneData.getAmbientLight() ) );
+						, lightMat->getAmbient( c3d_sceneData.ambientLight ) );
 					auto reflected = writer.declLocale( "reflected"
 						, vec3( 0.0_f ) );
 					auto refracted = writer.declLocale( "refracted"
@@ -321,7 +317,7 @@ namespace castor3d
 					auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
 						, ( hasDiffuseGI
 							? cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
-								, c3d_sceneData.getCameraPosition()
+								, c3d_sceneData.cameraPosition
 								, surface.worldNormal
 								, lightMat->specular
 								, lightMat->getMetalness()

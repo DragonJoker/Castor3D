@@ -25,7 +25,7 @@ namespace castor3d
 			C3D_API ModelInstancesData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled );
-			C3D_API ModelInstancesData & operator=( ModelInstancesData const & rhs );
+			SDW_DeclStructInstance( C3D_API, ModelInstancesData );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
@@ -44,6 +44,10 @@ namespace castor3d
 	{
 	public:
 		using Configuration = ModelInstancesUboConfiguration;
+		C3D_API ModelInstancesUbo( ModelInstancesUbo const & rhs ) = delete;
+		C3D_API ModelInstancesUbo & operator=( ModelInstancesUbo const & rhs ) = delete;
+		C3D_API ModelInstancesUbo( ModelInstancesUbo && rhs ) = default;
+		C3D_API ModelInstancesUbo & operator=( ModelInstancesUbo && rhs ) = delete;
 		C3D_API explicit ModelInstancesUbo( RenderDevice const & device );
 		C3D_API ~ModelInstancesUbo();
 		/**

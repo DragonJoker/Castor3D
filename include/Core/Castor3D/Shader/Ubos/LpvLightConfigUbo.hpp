@@ -24,7 +24,7 @@ namespace castor3d
 			C3D_API LpvLightData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled );
-			C3D_API LpvLightData & operator=( LpvLightData const & rhs );
+			SDW_DeclStructInstance( C3D_API, LpvLightData );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
@@ -50,6 +50,10 @@ namespace castor3d
 		using Configuration = LpvLightConfigUboConfiguration;
 
 	public:
+		C3D_API LpvLightConfigUbo( LpvLightConfigUbo const & rhs ) = delete;
+		C3D_API LpvLightConfigUbo & operator=( LpvLightConfigUbo const & rhs ) = delete;
+		C3D_API LpvLightConfigUbo( LpvLightConfigUbo && rhs ) = default;
+		C3D_API LpvLightConfigUbo & operator=( LpvLightConfigUbo && rhs ) = delete;
 		C3D_API explicit LpvLightConfigUbo( RenderDevice const & device );
 		C3D_API ~LpvLightConfigUbo();
 

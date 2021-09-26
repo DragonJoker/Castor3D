@@ -16,12 +16,6 @@ namespace castor3d
 		{
 		}
 
-		MorphingData & MorphingData::operator=( MorphingData const & rhs )
-		{
-			StructInstance::operator=( rhs );
-			return *this;
-		}
-
 		ast::type::StructPtr MorphingData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140

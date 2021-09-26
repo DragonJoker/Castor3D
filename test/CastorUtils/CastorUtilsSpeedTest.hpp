@@ -11,7 +11,6 @@ namespace Testing
 	{
 	public:
 		CastorUtilsSpeedTest();
-		virtual ~CastorUtilsSpeedTest();
 
 	private:
 		void doRegisterTests()override;

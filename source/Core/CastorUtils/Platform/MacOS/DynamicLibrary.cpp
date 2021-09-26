@@ -29,9 +29,9 @@ namespace castor
 		}
 	}
 
-	void * DynamicLibrary::doGetFunction( String const & name )noexcept
+	VoidFnType DynamicLibrary::doGetFunction( String const & name )noexcept
 	{
-		void * result = nullptr;
+		VoidFnType result = nullptr;
 
 		if ( m_library )
 		{
@@ -40,7 +40,7 @@ namespace castor
 			try
 			{
 				dlerror();
-				result = dlsym( m_library, stdname.c_str() );
+				result = reinterpret_cast< VoidFnType >( dlsym( m_library, stdname.c_str() ) );
 				auto error = dlerror();
 
 				if ( error != NULL )

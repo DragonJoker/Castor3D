@@ -47,7 +47,7 @@ namespace castor3d
 		auto result = std::make_shared< BonesComponent >( submesh );
 		result->m_bones = m_bones;
 		result->m_bonesLayout = std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( *m_bonesLayout );
-		return result;
+		return std::static_pointer_cast< SubmeshComponent >( result );
 	}
 
 	void BonesComponent::addBoneDatas( std::vector< VertexBoneData > const & boneData )

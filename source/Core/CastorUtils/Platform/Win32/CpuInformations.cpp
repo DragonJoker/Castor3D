@@ -16,7 +16,7 @@ namespace castor
 
 		void callCpuid( uint32_t func, std::array< int32_t, 4 > & p_data )
 		{
-			__cpuid( p_data.data(), func );
+			__cpuid( p_data.data(), int( func ) );
 		}
 
 #else

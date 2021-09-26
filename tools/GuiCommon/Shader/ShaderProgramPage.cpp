@@ -108,9 +108,12 @@ namespace GuiCommon
 		m_editors->DeleteAllPages();
 	}
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 	BEGIN_EVENT_TABLE( ShaderProgramPage, wxPanel )
 		EVT_CLOSE( ShaderProgramPage::onClose )
 	END_EVENT_TABLE()
+#pragma GCC diagnostic pop
 
 	void ShaderProgramPage::onClose( wxCloseEvent & p_event )
 	{

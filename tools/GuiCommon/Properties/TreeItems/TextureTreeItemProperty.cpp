@@ -84,25 +84,22 @@ namespace GuiCommon
 		public:
 			static std::map< castor3d::TextureFlag, TextureTreeItemProperty::PropertyPair > submit( castor3d::Pass & pass
 				, TextureTreeItemProperty * properties
-				, wxPGEditor * editor
 				, wxPropertyGrid * grid
 				, onMaskChange onChange )
 			{
 				std::map< castor3d::TextureFlag, TextureTreeItemProperty::PropertyPair > result;
-				UnitTreeGatherer vis{ properties, editor, grid, onChange, result };
+				UnitTreeGatherer vis{ properties, grid, onChange, result };
 				pass.accept( vis );
 				return result;
 			}
 
 		private:
 			UnitTreeGatherer( TextureTreeItemProperty * properties
-				, wxPGEditor * editor
 				, wxPropertyGrid * grid
 				, onMaskChange onChange
 				, std::map< castor3d::TextureFlag, TextureTreeItemProperty::PropertyPair > & result )
 				: castor3d::PassVisitor{ {} }
 				, m_properties{ properties }
-				, m_editor{ editor }
 				, m_grid{ grid }
 				, m_result{ result }
 			{
@@ -316,7 +313,6 @@ namespace GuiCommon
 
 		private:
 			TextureTreeItemProperty * m_properties;
-			wxPGEditor * m_editor;
 			wxPropertyGrid * m_grid;
 			onMaskChange m_onChange;
 			std::map< castor3d::TextureFlag, TextureTreeItemProperty::PropertyPair > & m_result;
@@ -334,10 +330,6 @@ namespace GuiCommon
 		, m_configuration{ texture->getConfiguration() }
 	{
 		CreateTreeItemMenu();
-	}
-
-	TextureTreeItemProperty::~TextureTreeItemProperty()
-	{
 	}
 
 	void TextureTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )
@@ -404,7 +396,7 @@ namespace GuiCommon
 					} );
 			}
 
-			m_properties = UnitTreeGatherer::submit( m_pass, this, editor, grid
+			m_properties = UnitTreeGatherer::submit( m_pass, this, grid
 				, [this]( wxVariant const & var
 					, castor3d::TextureFlag flag
 					, uint32_t componentsCount )

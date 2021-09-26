@@ -25,13 +25,6 @@ namespace castor3d
 			, Texture const & output );
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~OverlayPass();
-		/**
-		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
 		 *\param[in, out]	updater	The update data.
 		 *\~french
@@ -58,7 +51,6 @@ namespace castor3d
 		RenderDevice const & m_device;
 		Scene const & m_scene;
 		crg::RenderPassHolder m_renderPass;
-		VkExtent2D m_size;
 		OverlayRendererUPtr m_renderer;
 	};
 }

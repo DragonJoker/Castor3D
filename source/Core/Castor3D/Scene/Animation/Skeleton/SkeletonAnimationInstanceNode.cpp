@@ -13,10 +13,6 @@ namespace castor3d
 	{
 	}
 
-	SkeletonAnimationInstanceNode :: ~SkeletonAnimationInstanceNode()
-	{
-	}
-
 	void SkeletonAnimationInstanceNode::doApply()
 	{
 		m_finalTransform = m_cumulativeTransform;

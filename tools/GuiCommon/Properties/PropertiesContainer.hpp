@@ -6,7 +6,10 @@ See LICENSE file in root folder
 
 #include "GuiCommon/Properties/TreeItems/TreeItemProperty.hpp"
 
+#pragma warning( push )
+#pragma warning( disable: 4365 )
 #include <wx/propgrid/propgrid.h>
+#pragma warning( pop )
 
 namespace GuiCommon
 {
@@ -18,7 +21,6 @@ namespace GuiCommon
 			, wxWindow * parent
 			, wxPoint const & pos = wxDefaultPosition
 			, wxSize const & size = wxDefaultSize );
-		~PropertiesContainer();
 
 		void setPropertyData( TreeItemProperty * data );
 		/**

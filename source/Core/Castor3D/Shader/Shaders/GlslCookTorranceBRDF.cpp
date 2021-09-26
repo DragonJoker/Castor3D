@@ -233,7 +233,7 @@ namespace castor3d::shader
 
 	void CookTorranceBRDF::doDeclareComputeCookTorrance()
 	{
-		OutputComponents output{ m_writer };
+		OutputComponents outputs{ m_writer };
 		m_computeCookTorrance = m_writer.implementFunction< sdw::Void >( "c3d_computeCookTorrance"
 			, [this]( Light const & light
 				, sdw::Vec3 const & worldEye
@@ -241,7 +241,7 @@ namespace castor3d::shader
 				, sdw::Vec3 const & specular
 				, sdw::Float const & metalness
 				, sdw::Float const & roughness
-				, Surface surface
+				, Surface const & surface
 				, OutputComponents & output )
 			{
 				// From https://learnopengl.com/#!PBR/Lighting
@@ -299,12 +299,12 @@ namespace castor3d::shader
 			, sdw::InFloat{ m_writer, "metalness" }
 			, sdw::InFloat{ m_writer, "roughness" }
 			, InSurface{ m_writer, "surface" }
-			, output );
+			, outputs );
 	}
 
 	void CookTorranceBRDF::doDeclareComputeCookTorranceAON()
 	{
-		OutputComponents output{ m_writer };
+		OutputComponents outputs{ m_writer };
 		m_computeCookTorranceAON = m_writer.implementFunction< sdw::Void >( "c3d_computeCookTorranceAON"
 			, [this]( Light const & light
 				, sdw::Vec3 const & worldEye
@@ -313,7 +313,7 @@ namespace castor3d::shader
 				, sdw::Float const & metalness
 				, sdw::Float const & roughness
 				, sdw::Float const & smoothBand
-				, Surface surface
+				, Surface const & surface
 				, OutputComponents & output )
 			{
 				// From https://learnopengl.com/#!PBR/Lighting
@@ -379,7 +379,7 @@ namespace castor3d::shader
 			, sdw::InFloat{ m_writer, "roughness" }
 			, sdw::InFloat{ m_writer, "smoothBand" }
 			, InSurface{ m_writer, "surface" }
-			, output );
+			, outputs );
 	}
 
 	void CookTorranceBRDF::doDeclareComputeCookTorranceDiffuse()
@@ -391,7 +391,7 @@ namespace castor3d::shader
 				, sdw::Vec3 const & direction
 				, sdw::Vec3 const & specular
 				, sdw::Float const & metalness
-				, Surface surface )
+				, Surface const & surface )
 			{
 				// From https://learnopengl.com/#!PBR/Lighting
 				auto L = m_writer.declLocale( "L"
@@ -440,7 +440,7 @@ namespace castor3d::shader
 				, sdw::Vec3 const & specular
 				, sdw::Float const & metalness
 				, sdw::Float const & smoothBand
-				, Surface surface )
+				, Surface const & surface )
 			{
 				// From https://learnopengl.com/#!PBR/Lighting
 				auto L = m_writer.declLocale( "L"

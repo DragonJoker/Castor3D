@@ -14,10 +14,6 @@ namespace castor3d
 	{
 	}
 
-	MeshAnimation::~MeshAnimation()
-	{
-	}
-
 	void MeshAnimation::addChild( MeshAnimationSubmesh object )
 	{
 		m_submeshes.push_back( std::move( object ) );

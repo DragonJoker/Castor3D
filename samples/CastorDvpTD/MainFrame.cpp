@@ -60,10 +60,6 @@ namespace castortd
 		}
 	}
 
-	MainFrame::~MainFrame()
-	{
-	}
-
 	void MainFrame::doLoadScene()
 	{
 		auto & engine = *wxGetApp().getCastor();
@@ -85,14 +81,14 @@ namespace castortd
 
 			if ( !IsMaximized() )
 			{
-				SetClientSize( window.getSize().getWidth()
-					, window.getSize().getHeight() );
+				SetClientSize( int( window.getSize().getWidth() )
+					, int( window.getSize().getHeight() ) );
 			}
 			else
 			{
 				Maximize( false );
-				SetClientSize( window.getSize().getWidth()
-					, window.getSize().getHeight() );
+				SetClientSize( int( window.getSize().getWidth() )
+					, int( window.getSize().getHeight() ) );
 				Maximize();
 			}
 
@@ -104,7 +100,6 @@ namespace castortd
 			SetMinClientSize( size );
 
 #endif
-			auto & engine = *wxGetApp().getCastor();
 
 			if ( engine.isThreaded() )
 			{
@@ -118,17 +113,20 @@ namespace castortd
 			else
 			{
 				m_timer = new wxTimer( this, eID_RENDER_TIMER );
-				m_timer->Start( 1000 / engine.getRenderLoop().getWantedFps(), true );
+				m_timer->Start( 1000 / int( engine.getRenderLoop().getWantedFps() ), true );
 			}
 		}
 	}
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 	BEGIN_EVENT_TABLE( MainFrame, wxFrame )
 		EVT_PAINT( MainFrame::OnPaint )
 		EVT_CLOSE( MainFrame::OnClose )
 		EVT_ERASE_BACKGROUND( MainFrame::OnEraseBackground )
 		EVT_TIMER( eID_RENDER_TIMER, MainFrame::OnRenderTimer )
 	END_EVENT_TABLE()
+#pragma GCC diagnostic pop
 
 	void MainFrame::OnPaint( wxPaintEvent & p_event )
 	{
@@ -196,7 +194,7 @@ namespace castortd
 				{
 					castor.getRenderLoop().renderSyncFrame();
 					m_game->update();
-					m_timer->Start( 1000 / castor.getRenderLoop().getWantedFps(), true );
+					m_timer->Start( 1000 / int( castor.getRenderLoop().getWantedFps() ), true );
 				}
 			}
 		}

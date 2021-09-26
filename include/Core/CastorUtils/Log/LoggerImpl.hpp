@@ -8,7 +8,10 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
+#pragma warning( push )
+#pragma warning( disable:4365 )
 #include <mutex>
+#pragma warning( pop )
 
 namespace castor
 {

@@ -22,7 +22,7 @@ namespace castor3d::shader
 		C3D_API LightMaterial( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled );
-		C3D_API LightMaterial & operator=( LightMaterial const & rhs );
+		SDW_DeclStructInstance( C3D_API, LightMaterial );
 
 		C3D_API virtual void create( sdw::Vec3 const & albedo
 			, sdw::Vec4 const & data3

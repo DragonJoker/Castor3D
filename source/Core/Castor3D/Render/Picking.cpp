@@ -144,9 +144,9 @@ namespace castor3d
 		{
 			std::vector< VkBufferImageCopy > result;
 
-			for ( int i = 0; i < Picking::PickingWidth; ++i )
+			for ( int i = 0; i < int( Picking::PickingWidth ); ++i )
 			{
-				for ( int j = 0; j < Picking::PickingWidth; ++j )
+				for ( int j = 0; j < int( Picking::PickingWidth ); ++j )
 				{
 					result.push_back( { BufferOffset * ashes::getMinimalSize( VK_FORMAT_R32G32B32A32_SFLOAT )
 						, 0u
@@ -205,12 +205,6 @@ namespace castor3d
 			, { VK_IMAGE_ASPECT_DEPTH_BIT, 0u, 1u, 0u, 1u } } ) }
 		, m_pickingPassDesc{ doCreatePickingPass( matrixUbo, culler ) }
 		, m_copyRegion{ 0u
-			, 0u
-			, 0u
-			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 0u, 1u }
-			, { 0, 0, 0 }
-			, { PickingWidth, PickingWidth, 1u } }
-		, m_transferDisplayRegion{ 0u
 			, 0u
 			, 0u
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 0u, 1u }
@@ -290,15 +284,15 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< PickingPass >( pass
+				auto res = std::make_unique< PickingPass >( pass
 					, context
 					, graph
 					, m_device
 					, m_size
 					, matrixUbo
 					, culler );
-				m_pickingPass = result.get();
-				return result;
+				m_pickingPass = res.get();
+				return res;
 			} );
 		result.addOutputDepthView( m_depthImageView
 			, defaultClearDepthStencil );
@@ -404,7 +398,7 @@ namespace castor3d
 	{
 		PickNodeType result{ PickNodeType::eNone };
 
-		if ( castor::point::lengthSquared( castor::Point3f{ pixel } ) )
+		if ( castor::point::lengthSquared( castor::Point3f{ pixel } ) > 0.0f )
 		{
 			result = PickNodeType( uint32_t( pixel[0] ) & 0xFF );
 

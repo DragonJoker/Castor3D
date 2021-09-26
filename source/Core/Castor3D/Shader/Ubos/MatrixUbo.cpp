@@ -28,12 +28,6 @@ namespace castor3d
 		{
 		}
 
-		MatrixData & MatrixData::operator=( MatrixData const & rhs )
-		{
-			StructInstance::operator=( rhs );
-			return *this;
-		}
-
 		ast::type::StructPtr MatrixData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140

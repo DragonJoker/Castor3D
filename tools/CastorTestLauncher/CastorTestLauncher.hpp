@@ -5,7 +5,12 @@ See LICENSE file in root folder
 #define ___CTL_CastorTestLauncher_HPP___
 
 #include <Castor3D/Castor3DModule.hpp>
+
+#pragma warning( push )
+#pragma warning( disable: 4365 )
+#pragma warning( disable: 4371 )
 #include <wx/app.h>
+#pragma warning( pop )
 
 namespace test_launcher
 {

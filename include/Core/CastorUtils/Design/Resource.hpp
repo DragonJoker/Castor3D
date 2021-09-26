@@ -10,8 +10,12 @@ See LICENSE file in root folder
 #include "CastorUtils/Design/Named.hpp"
 #include "CastorUtils/Design/Signal.hpp"
 
-#include <atomic>
 #include <functional>
+
+#pragma warning( push )
+#pragma warning( disable:4365 )
+#include <atomic>
+#pragma warning( pop )
 
 namespace castor
 {
@@ -33,7 +37,7 @@ namespace castor
 		ResourceT( ResourceT const & ) = delete;
 		ResourceT & operator=( ResourceT && rhs ) = default;
 		ResourceT & operator=( ResourceT const & ) = delete;
-		~ResourceT() = default;
+		~ResourceT()override = default;
 
 		template< typename ... ParametersT >
 		explicit ResourceT( ParametersT && ... params );

@@ -10,8 +10,12 @@ See LICENSE file in root folder
 
 #include <memory>
 
+#pragma warning( push )
+#pragma warning( disable: 4365 )
+#pragma warning( disable: 4371 )
 #include <wx/app.h>
 #include <wx/intl.h>
+#pragma warning( pop )
 
 namespace GuiCommon
 {

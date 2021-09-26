@@ -20,20 +20,13 @@ namespace castor3d
 		 */
 		C3D_API Cone();
 		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~Cone();
-		/**
 		 *\copydoc		castor3d::MeshGenerator::create
 		 */
 		C3D_API static MeshGeneratorSPtr create();
 
 	private:
 		C3D_API virtual void doGenerate( Mesh & mesh
-			, Parameters const & parameters );
+			, Parameters const & parameters )override;
 
 	private:
 		//!\~english The number of faces	\~french Nombre de faces

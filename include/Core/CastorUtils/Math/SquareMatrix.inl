@@ -380,7 +380,7 @@ namespace castor
 			}
 		}
 
-		for ( int i = minCount; i < Count; i++ )
+		for ( auto i = minCount; i < Count; i++ )
 		{
 			this->operator[]( i )[i] = T{ 1 };
 		}
@@ -423,7 +423,6 @@ namespace castor
 	template< typename T, uint32_t Count >
 	inline bool SquareMatrix< T, Count >::isOrthogonal()const
 	{
-		bool result = false;
 		my_matrix_type mTmp( *this );
 		SquareMatrix< T, Count > mId1;
 		SquareMatrix< T, Count > mId2;

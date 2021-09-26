@@ -27,12 +27,6 @@ namespace castor3d
 		{
 		}
 
-		GpInfoData & GpInfoData::operator=( GpInfoData const & rhs )
-		{
-			StructInstance::operator=( rhs );
-			return *this;
-		}
-
 		ast::type::StructPtr GpInfoData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140

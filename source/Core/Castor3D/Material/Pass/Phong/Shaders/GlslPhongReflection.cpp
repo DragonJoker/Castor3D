@@ -71,7 +71,7 @@ namespace castor3d::shader
 		{
 			envMapIndex = envMapIndex - 1_i;
 			auto incident = m_writer.declLocale( "incident"
-				, computeIncident( surface.worldPosition, sceneData.getCameraPosition() ) );
+				, computeIncident( surface.worldPosition, sceneData.cameraPosition ) );
 			ambient = vec3( 0.0_f );
 
 			IF( m_writer, reflection != 0_i && refraction != 0_i )
@@ -128,7 +128,7 @@ namespace castor3d::shader
 			auto & phongMaterial = static_cast< PhongLightMaterial & >( material );
 			auto envMap = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapEnvironment" );
 			auto incident = m_writer.declLocale( "incident"
-				, computeIncident( surface.worldPosition, sceneData.getCameraPosition() ) );
+				, computeIncident( surface.worldPosition, sceneData.cameraPosition ) );
 			ambient = vec3( 0.0_f );
 
 			if ( checkFlag( m_passFlags, PassFlag::eReflection )

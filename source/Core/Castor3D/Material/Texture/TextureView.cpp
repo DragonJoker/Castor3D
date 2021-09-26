@@ -180,10 +180,12 @@ namespace castor3d
 
 	VkImageViewCreateInfo TextureView::convertToSampledView( VkImageViewCreateInfo createInfo )
 	{
+		VkImageAspectFlags constexpr depth = VK_IMAGE_ASPECT_DEPTH_BIT;
+		VkImageAspectFlags constexpr stencil = VK_IMAGE_ASPECT_STENCIL_BIT;
 		createInfo.subresourceRange.aspectMask = ( ( ashes::isDepthStencilFormat( createInfo.format ) || ashes::isDepthFormat( createInfo.format ) )
-			? VK_IMAGE_ASPECT_DEPTH_BIT
+			? depth
 			: ( ashes::isStencilFormat( createInfo.format )
-				? VK_IMAGE_ASPECT_STENCIL_BIT
+				? stencil
 				: createInfo.subresourceRange.aspectMask ) );
 		return createInfo;
 	}

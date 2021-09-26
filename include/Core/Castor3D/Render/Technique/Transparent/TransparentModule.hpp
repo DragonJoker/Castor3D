@@ -32,10 +32,12 @@ namespace castor3d
 		eVelocity,
 		CU_ScopedEnumBounds( eDepth ),
 	};
-	castor::String getTextureName( WbTexture texture );
-	castor::String getName( WbTexture texture );
-	VkFormat getFormat( WbTexture texture );
-	VkClearValue getClearValue( WbTexture texture );
+	C3D_API castor::String getTextureName( WbTexture texture );
+	C3D_API castor::String getName( WbTexture texture );
+	C3D_API VkFormat getFormat( WbTexture texture );
+	C3D_API VkClearValue getClearValue( WbTexture texture );
+	C3D_API VkImageUsageFlags getUsageFlags( WbTexture texture );
+	C3D_API VkBorderColor getBorderColor( WbTexture texture );
 	inline uint32_t getMipLevels( WbTexture texture
 		, castor::Size const & size )
 	{

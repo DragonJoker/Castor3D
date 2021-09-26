@@ -11,10 +11,10 @@ namespace castor3d
 	class CpuFrameEvent
 	{
 	public:
-		C3D_API CpuFrameEvent( CpuFrameEvent const & object ) = default;
-		C3D_API CpuFrameEvent( CpuFrameEvent && object ) = default;
-		C3D_API CpuFrameEvent & operator=( CpuFrameEvent const & object ) = default;
-		C3D_API CpuFrameEvent & operator=( CpuFrameEvent && object ) = default;
+		C3D_API CpuFrameEvent( CpuFrameEvent const & rhs );
+		C3D_API CpuFrameEvent( CpuFrameEvent && rhs );
+		C3D_API CpuFrameEvent & operator=( CpuFrameEvent const & rhs );
+		C3D_API CpuFrameEvent & operator=( CpuFrameEvent && rhs );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -86,7 +86,7 @@ namespace castor3d
 	};
 
 	template< typename EventT, typename ... ParamsT >
-	CpuFrameEventUPtr makeCpuFrameEvent( ParamsT && ... params )
+	inline CpuFrameEventUPtr makeCpuFrameEvent( ParamsT && ... params )
 	{
 		return castor::makeUniqueDerived< CpuFrameEvent, EventT >( std::forward< ParamsT >( params )... );
 	}

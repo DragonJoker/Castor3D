@@ -641,7 +641,7 @@ namespace castor3d
 			, context
 			, graph
 			, { [this](){ doInitialise(); }
-				, GetSemaphoreWaitFlagsCallback( [this](){ return VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT; } )
+				, GetSemaphoreWaitFlagsCallback( [](){ return VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT; } )
 				, [this]( VkCommandBuffer cb, uint32_t i ){ doRecordInto( cb, i ); } }
 			, 1u
 			, false }
@@ -790,7 +790,7 @@ namespace castor3d
 		std::vector< VkImageView > viewAttaches{ lpResult[LpTexture::eDepth].targetView
 			, lpResult[LpTexture::eDiffuse].targetView
 			, lpResult[LpTexture::eSpecular].targetView };
-		VkFramebufferCreateInfo fbCreateInfo{ VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO, nullptr, 0u };
+		VkFramebufferCreateInfo fbCreateInfo{ VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO, nullptr, 0u, {}, {}, {}, {}, {}, {} };
 		fbCreateInfo.renderPass = *result.renderPass;
 		fbCreateInfo.attachmentCount = uint32_t( viewAttaches.size() );
 		fbCreateInfo.pAttachments = viewAttaches.data();
@@ -850,9 +850,7 @@ namespace castor3d
 		, LightPassResult const & lpResult
 		, SceneUbo const & sceneUbo
 		, GpInfoUbo const & gpInfoUbo )
-		: m_graph{ graph }
-		, m_previousPass{ *previousPass }
-		, m_device{ device }
+		: m_device{ device }
 		, m_depth{ depth }
 		, m_gpResult{ gpResult }
 		, m_smDirectionalResult{ smDirectionalResult }
@@ -957,21 +955,21 @@ namespace castor3d
 		stepProgressBar( progress, "Creating lighting pass" );
 		auto & engine = *m_device.renderSystem.getEngine();
 		auto & pass = graph.createPass( "Lighting"
-			, [this, progress, &engine, &scene]( crg::FramePass const & pass
+			, [this, progress, &engine, &scene]( crg::FramePass const & framePass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBar( progress, "Initialising lighting pass" );
-				auto result = std::make_unique< RunnableLightingPass >( pass
+				auto result = std::make_unique< RunnableLightingPass >( framePass
 					, context
-					, graph
+					, runnableGraph
 					, m_device
 					, scene
 					, m_lpResult
 					, m_smDirectionalResult
 					, m_smPointResult
 					, m_smSpotResult );
-				engine.registerTimer( graph.getName() + "/Lighting"
+				engine.registerTimer( runnableGraph.getName() + "/Lighting"
 					, result->getTimer() );
 				m_lightPass = result.get();
 				return result;

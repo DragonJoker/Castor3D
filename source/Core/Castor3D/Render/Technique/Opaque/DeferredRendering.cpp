@@ -49,8 +49,7 @@ namespace castor3d
 		, LayeredLpvGridConfigUbo const & llpvConfigUbo
 		, VoxelizerUbo const & vctConfigUbo
 		, SsaoConfig & ssaoConfig )
-		: m_scene{ scene }
-		, m_device{ device }
+		: m_device{ device }
 		, m_opaquePass{ opaquePass }
 		, m_lastPass{ &m_opaquePass }
 		, m_opaquePassResult{ opaquePassResult }

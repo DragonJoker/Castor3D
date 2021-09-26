@@ -38,7 +38,7 @@ namespace castor3d
 		auto result = std::make_shared< BonesInstantiationComponent >( submesh
 			, *submesh.getComponent< InstantiationComponent >()
 			, *submesh.getComponent< BonesComponent >() );
-		return result;
+		return std::static_pointer_cast< SubmeshComponent >( result );
 	}
 
 	bool BonesInstantiationComponent::doInitialise( RenderDevice const & device )
@@ -55,7 +55,7 @@ namespace castor3d
 				auto size = count * stride * getOwner()->getOwner()->getScene()->getDirectionalShadowCascades();
 				m_instancedBonesBuffer = castor::makeUnique< ShaderBuffer >( *getOwner()->getOwner()->getScene()->getEngine()
 					, device
-					, uint32_t( size )
+					, size
 					, cuT( "InstancedBonesBuffer" ) );
 			}
 		}

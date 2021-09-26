@@ -6,17 +6,20 @@ See LICENSE file in root folder
 
 #include "FrameListener.hpp"
 
+#pragma warning( push )
+#pragma warning( disable:4365 )
 #include <atomic>
+#pragma warning( pop )
 
 namespace castor3d
 {
 	class GpuFrameEvent
 	{
 	public:
-		C3D_API GpuFrameEvent( GpuFrameEvent const & object ) = default;
-		C3D_API GpuFrameEvent( GpuFrameEvent && object ) = default;
-		C3D_API GpuFrameEvent & operator=( GpuFrameEvent const & object ) = default;
-		C3D_API GpuFrameEvent & operator=( GpuFrameEvent && object ) = default;
+		C3D_API GpuFrameEvent( GpuFrameEvent const & rhs );
+		C3D_API GpuFrameEvent( GpuFrameEvent && rhs );
+		C3D_API GpuFrameEvent & operator=( GpuFrameEvent const & rhs );
+		C3D_API GpuFrameEvent & operator=( GpuFrameEvent && rhs );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -92,7 +95,7 @@ namespace castor3d
 	};
 
 	template< typename EventT, typename ... ParamsT >
-	GpuFrameEventUPtr makeGpuFrameEvent( ParamsT && ... params )
+	inline GpuFrameEventUPtr makeGpuFrameEvent( ParamsT && ... params )
 	{
 		return castor::makeUniqueDerived< GpuFrameEvent, EventT >( std::forward< ParamsT >( params )... );
 	}

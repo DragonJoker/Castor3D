@@ -3,6 +3,8 @@
 #include "CastorUtils/Math/Math.hpp"
 #include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
+#include <cmath>
+
 namespace castor
 {
 	//*************************************************************************************************
@@ -345,7 +347,7 @@ namespace castor
 	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromHSB( float hue, float saturation, float brightness )
 	{
 		float h = hue == 1.0f ? 0 : hue * 6.0f;
-		float f = h - ( int )h;
+		float f = h - std::floor( h );
 		float p = brightness * ( 1.0f - saturation );
 		float q = brightness * ( 1.0f - saturation * f );
 		float t = brightness * ( 1.0f - ( saturation * ( 1.0f - f ) ) );

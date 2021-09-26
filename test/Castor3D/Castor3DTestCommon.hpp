@@ -2,436 +2,668 @@
 #ifndef ___C3DT_COMMON_H___
 #define ___C3DT_COMMON_H___
 
-#include <UnitTest.hpp>
-
+#include <Castor3D/Animation/Animable.hpp>
 #include <Castor3D/Animation/Animation.hpp>
+#include <Castor3D/Cache/AnimatedObjectGroupCache.hpp>
+#include <Castor3D/Cache/GeometryCache.hpp>
+#include <Castor3D/Cache/LightCache.hpp>
+#include <Castor3D/Engine.hpp>
 #include <Castor3D/Material/Material.hpp>
+#include <Castor3D/Model/Mesh/Animation/MeshAnimationKeyFrame.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp>
-#include <Castor3D/Model/Skeleton/Bone.hpp>
-#include <Castor3D/Model/Skeleton/VertexBoneData.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp>
+#include <Castor3D/Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp>
 #include <Castor3D/Model/Skeleton/Animation/SkeletonAnimationObject.hpp>
+#include <Castor3D/Model/Skeleton/Bone.hpp>
+#include <Castor3D/Model/Skeleton/Skeleton.hpp>
+#include <Castor3D/Model/Skeleton/VertexBoneData.hpp>
+#include <Castor3D/Render/Viewport.hpp>
 #include <Castor3D/Scene/Animation/AnimatedObject.hpp>
 #include <Castor3D/Scene/Animation/AnimatedObjectGroup.hpp>
+#include <Castor3D/Scene/Animation/AnimatedSkeleton.hpp>
 #include <Castor3D/Scene/Animation/AnimationInstance.hpp>
+#include <Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp>
+#include <Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceObject.hpp>
 #include <Castor3D/Scene/Animation/Skeleton/SkeletonAnimationModule.hpp>
 #include <Castor3D/Scene/Camera.hpp>
 #include <Castor3D/Scene/Geometry.hpp>
+#include <Castor3D/Scene/Light/DirectionalLight.hpp>
+#include <Castor3D/Scene/Light/Light.hpp>
+#include <Castor3D/Scene/Light/PointLight.hpp>
+#include <Castor3D/Scene/Light/SpotLight.hpp>
 #include <Castor3D/Scene/MovableObject.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/SceneNode.hpp>
-#include <Castor3D/Scene/Light/Light.hpp>
+
+#include <CastorUtils/Design/ArrayView.hpp>
+#include <CastorUtils/Design/ChangeTracked.hpp>
+#include <CastorUtils/Math/Point.hpp>
+
+#include <UnitTest.hpp>
 
 namespace Testing
 {
 	//*********************************************************************************************
 
-	namespace
+	using castor::operator<<;
+	using castor3d::operator<<;
+
+	template<>
+	struct Stringifier< castor3d::Scene >
 	{
-		template< typename FlagType >
-		struct FlagCombinationWriter
+		static std::string get( castor3d::Scene const & value )
 		{
-			static inline std::string toString( castor::FlagCombination< FlagType > const & p_value )
+			std::stringstream stream;
+			stream << value.getName();
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::SceneNode >
+	{
+		static std::string get( castor3d::SceneNode const & value )
+		{
+			std::stringstream stream;
+			stream << value.getName();
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::MovableObject >
+	{
+		static std::string get( castor3d::MovableObject const & value )
+		{
+			std::stringstream stream;
+			stream << value.getName();
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::Geometry >
+	{
+		static std::string get( castor3d::Geometry const & value )
+		{
+			std::stringstream stream;
+			stream << value.getName();
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::Light >
+	{
+		static std::string get( castor3d::Light const & value )
+		{
+			std::stringstream stream;
+			stream << value.getName();
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::Camera >
+	{
+		static std::string get( castor3d::Camera const & value )
+		{
+			std::stringstream stream;
+			stream << value.getName();
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::Material >
+	{
+		static std::string get( castor3d::Material const & value )
+		{
+			std::stringstream stream;
+			stream << value.getName();
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::Mesh >
+	{
+		static std::string get( castor3d::Mesh const & value )
+		{
+			std::stringstream stream;
+			stream << value.getName();
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::Bone >
+	{
+		static std::string get( castor3d::Bone const & value )
+		{
+			std::stringstream stream;
+			stream << value.getName();
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::Animation >
+	{
+		static std::string get( castor3d::Animation const & value )
+		{
+			std::stringstream stream;
+			stream << value.getName();
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::SkeletonAnimation >
+	{
+		static std::string get( castor3d::SkeletonAnimation const & value )
+		{
+			std::stringstream stream;
+			stream << value.getName();
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::SkeletonAnimationObject >
+	{
+		static std::string get( castor3d::SkeletonAnimationObject const & value )
+		{
+			std::stringstream stream;
+			stream << value.getName();
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::AnimatedObjectGroup >
+	{
+		static std::string get( castor3d::AnimatedObjectGroup const & value )
+		{
+			std::stringstream stream;
+			stream << value.getName();
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::AnimatedObject >
+	{
+		static std::string get( castor3d::AnimatedObject const & value )
+		{
+			std::stringstream stream;
+			stream << value.getName();
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::AnimationInstance >
+	{
+		static std::string get( castor3d::AnimationInstance const & value )
+		{
+			std::stringstream stream;
+			stream << value.getAnimation().getName();
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::InterpolatorType >
+	{
+		static std::string get( castor3d::InterpolatorType const & value )
+		{
+			static std::map< castor3d::InterpolatorType, std::string > Names
 			{
-				int i = ( sizeof( FlagType ) * 8 ) - 1;
-				std::string sep;
-				std::string result;
+				{ castor3d::InterpolatorType::eNearest, "Nearest" },
+				{ castor3d::InterpolatorType::eLinear, "Linear" },
+			};
+			return Names[value];
+		}
+	};
 
-				while ( i >= 0 )
-				{
-					auto value = FlagType( 0x0000000000000001 << i );
+	template<>
+	struct Stringifier< castor3d::AnimationType >
+	{
+		static std::string get( castor3d::AnimationType const & value )
+		{
+			static std::map< castor3d::AnimationType, std::string > Names
+			{
+				{ castor3d::AnimationType::eMovable, "Movable" },
+				{ castor3d::AnimationType::eMesh, "Mesh" },
+				{ castor3d::AnimationType::eSkeleton, "Skeleton" },
+			};
+			return Names[value];
+		}
+	};
 
-					if ( castor::checkFlag( p_value, value ) )
-					{
-						result += sep + Testing::toString( value );
-						sep = " | ";
-					}
+	template<>
+	struct Stringifier< castor3d::SkeletonAnimationObjectType >
+	{
+		static std::string get( castor3d::SkeletonAnimationObjectType const & value )
+		{
+			static std::map< castor3d::SkeletonAnimationObjectType, std::string > Names
+			{
+				{ castor3d::SkeletonAnimationObjectType::eBone, "Bone" },
+				{ castor3d::SkeletonAnimationObjectType::eNode, "Node" },
+			};
+			return Names[value];
+		}
+	};
 
-					--i;
-				}
+	template<>
+	struct Stringifier< castor3d::AnimationState >
+	{
+		static std::string get( castor3d::AnimationState const & value )
+		{
+			static std::map< castor3d::AnimationState, std::string > Names
+			{
+				{ castor3d::AnimationState::ePlaying, "Playing" },
+				{ castor3d::AnimationState::eStopped, "Stopped" },
+				{ castor3d::AnimationState::ePaused, "Paused" },
+			};
+			return Names[value];
+		}
+	};
 
-				if ( result.empty() )
-				{
-					result = "0";
-				}
+	template<>
+	struct Stringifier< castor3d::ViewportType >
+	{
+		static std::string get( castor3d::ViewportType const & value )
+		{
+			static std::map< castor3d::ViewportType, std::string > Names
+			{
+				{ castor3d::ViewportType::eOrtho, "Ortho" },
+				{ castor3d::ViewportType::ePerspective, "Perspective" },
+				{ castor3d::ViewportType::eFrustum, "Frustum" },
+			};
+			return Names[value];
+		}
+	};
 
-				return result;
+	template<>
+	struct Stringifier< castor3d::ProgramFlag >
+	{
+		static std::string get( castor3d::ProgramFlag const & value )
+		{
+			static std::map< castor3d::ProgramFlag, std::string > Names
+			{
+				{ castor3d::ProgramFlag::eBillboards, "eBillboards" },
+				{ castor3d::ProgramFlag::eEnvironmentMapping, "eEnvironmentMapping" },
+				{ castor3d::ProgramFlag::eFixedSize, "eFixedSize" },
+				{ castor3d::ProgramFlag::eInstantiation, "eInstantiation" },
+				{ castor3d::ProgramFlag::eLighting, "eLighting" },
+				{ castor3d::ProgramFlag::eMorphing, "eMorphing" },
+				{ castor3d::ProgramFlag::eDepthPass, "eDepthPass" },
+				{ castor3d::ProgramFlag::ePicking, "ePicking" },
+				{ castor3d::ProgramFlag::eShadowMapDirectional, "eShadowMapDirectional" },
+				{ castor3d::ProgramFlag::eShadowMapPoint, "eShadowMapPoint" },
+				{ castor3d::ProgramFlag::eShadowMapSpot, "eShadowMapSpot" },
+				{ castor3d::ProgramFlag::eSkinning, "eSkinning" },
+				{ castor3d::ProgramFlag::eSpherical, "eSpherical" },
+			};
+			return Names[value];
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::SubmeshComponent >
+	{
+		static std::string get( castor3d::SubmeshComponent const & value )
+		{
+			std::string result = castor::string::stringCast< char >( value.getType() );
+			//result += ", " + toString( p_value.getProgramFlags() );
+			return result;
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::VertexBoneData::Ids >
+	{
+		static std::string get( castor3d::VertexBoneData::Ids const & value )
+		{
+			std::string result;
+			std::string sep;
+
+			for ( auto & v : value )
+			{
+				result += sep + toString( v );
+				sep = ", ";
 			}
-		};
-	}
 
-	//*********************************************************************************************
-
-	template<>
-	inline std::string toString< castor::Angle >( castor::Angle const & p_value )
-	{
-		return castor::string::toString( p_value.degrees() );
-	}
-
-	template<>
-	inline std::string toString< castor3d::Scene >( castor3d::Scene const & p_value )
-	{
-		return castor::string::stringCast< char >( p_value.getName() );
-	}
-
-	template<>
-	inline std::string toString< castor3d::SceneNode >( castor3d::SceneNode const & p_value )
-	{
-		return castor::string::stringCast< char >( p_value.getName() );
-	}
-
-	template<>
-	inline std::string toString< castor3d::Animable >( castor3d::Animable const & p_value )
-	{
-		return std::string{ "castor3d::Animable" };
-	}
-
-	template<>
-	inline std::string toString< castor3d::MovableObject >( castor3d::MovableObject const & p_value )
-	{
-		return castor::string::stringCast< char >( p_value.getName() );
-	}
-
-	template<>
-	inline std::string toString< castor3d::Geometry >( castor3d::Geometry const & p_value )
-	{
-		return castor::string::stringCast< char >( p_value.getName() );
-	}
-
-	template<>
-	inline std::string toString< castor3d::Light >( castor3d::Light const & p_value )
-	{
-		return castor::string::stringCast< char >( p_value.getName() );
-	}
-
-	template<>
-	inline std::string toString< castor3d::Camera >( castor3d::Camera const & p_value )
-	{
-		return castor::string::stringCast< char >( p_value.getName() );
-	}
-
-	template<>
-	inline std::string toString< castor3d::LightCategory >( castor3d::LightCategory const & p_value )
-	{
-		return std::string{ "castor3d::LightCategory" };
-	}
-
-	template<>
-	inline std::string toString< castor3d::DirectionalLight >( castor3d::DirectionalLight const & p_value )
-	{
-		return std::string{ "castor3d::DirectionalLight" };
-	}
-
-	template<>
-	inline std::string toString< castor3d::PointLight >( castor3d::PointLight const & p_value )
-	{
-		return std::string{ "castor3d::PointLight" };
-	}
-
-	template<>
-	inline std::string toString< castor3d::SpotLight >( castor3d::SpotLight const & p_value )
-	{
-		return std::string{ "castor3d::SpotLight" };
-	}
-
-	template<>
-	inline std::string toString< castor3d::Viewport >( castor3d::Viewport const & p_value )
-	{
-		return std::string{ "castor3d::Viewport" };
-	}
-
-	template<>
-	inline std::string toString< castor3d::Material >( castor3d::Material const & p_value )
-	{
-		return castor::string::stringCast< char >( p_value.getName() );
-	}
-
-	template<>
-	inline std::string toString< castor3d::Pass >( castor3d::Pass const & p_value )
-	{
-		return std::string{ "castor3d::Pass" };
-	}
-
-	template<>
-	inline std::string toString< castor3d::Mesh >( castor3d::Mesh const & p_value )
-	{
-		return castor::string::stringCast< char >( p_value.getName() );
-	}
-
-	template<>
-	inline std::string toString< castor3d::Submesh >( castor3d::Submesh const & p_value )
-	{
-		return std::string{ "castor3d::Submesh" };
-	}
-
-	template<>
-	inline std::string toString< castor3d::Skeleton >( castor3d::Skeleton const & p_value )
-	{
-		return std::string{ "castor3d::Skeleton" };
-	}
-
-	template<>
-	inline std::string toString< castor3d::Bone >( castor3d::Bone const & p_value )
-	{
-		return castor::string::stringCast< char >( p_value.getName() );
-	}
-
-	template<>
-	inline std::string toString< castor3d::Animation >( castor3d::Animation const & p_value )
-	{
-		return castor::string::stringCast< char >( p_value.getName() );
-	}
-
-	template<>
-	inline std::string toString< castor3d::SkeletonAnimation >( castor3d::SkeletonAnimation const & p_value )
-	{
-		return castor::string::stringCast< char >( p_value.getName() );
-	}
-
-	template<>
-	inline std::string toString< castor3d::SkeletonAnimationObject >( castor3d::SkeletonAnimationObject const & p_value )
-	{
-		return castor::string::stringCast< char >( p_value.getName() );
-	}
-
-	template<>
-	inline std::string toString< castor3d::AnimationKeyFrame >( castor3d::AnimationKeyFrame  const & p_value )
-	{
-		return std::string{ "castor3d::AnimationKeyFrame " };
-	}
-
-	template<>
-	inline std::string toString< castor3d::MeshAnimationKeyFrame >( castor3d::MeshAnimationKeyFrame  const & p_value )
-	{
-		return std::string{ "castor3d::MeshAnimationKeyFrame " };
-	}
-
-	template<>
-	inline std::string toString< castor3d::SkeletonAnimationKeyFrame >( castor3d::SkeletonAnimationKeyFrame  const & p_value )
-	{
-		return std::string{ "castor3d::SkeletonAnimationKeyFrame " };
-	}
-
-	template<>
-	inline std::string toString< castor3d::AnimatedObjectGroup >( castor3d::AnimatedObjectGroup const & p_value )
-	{
-		return castor::string::stringCast< char >( p_value.getName() );
-	}
-
-	template<>
-	inline std::string toString< castor3d::AnimatedObject >( castor3d::AnimatedObject const & p_value )
-	{
-		return castor::string::stringCast< char >( p_value.getName() );
-	}
-
-	template<>
-	inline std::string toString< castor3d::AnimationInstance >( castor3d::AnimationInstance const & p_value )
-	{
-		return castor::string::stringCast< char >( p_value.getAnimation().getName() );
-	}
-
-	template<>
-	inline std::string toString< castor3d::SkeletonAnimationInstance >( castor3d::SkeletonAnimationInstance const & p_value )
-	{
-		return std::string{ "castor3d::SkeletonAnimationInstance" };
-	}
-
-	template<>
-	inline std::string toString< castor3d::SkeletonAnimationInstanceObject >( castor3d::SkeletonAnimationInstanceObject const & p_value )
-	{
-		return std::string{ "castor3d::SkeletonAnimationInstanceObject" };
-	}
-
-	template<>
-	inline std::string toString< castor3d::SkeletonAnimationInstanceKeyFrame >( castor3d::SkeletonAnimationInstanceKeyFrame const & p_value )
-	{
-		return std::string{ "castor3d::SkeletonAnimationInstanceObject" };
-	}
-
-	template<>
-	inline std::string toString< castor3d::InterpolatorType >( castor3d::InterpolatorType const & p_value )
-	{
-		static std::map< castor3d::InterpolatorType, std::string > Names
-		{
-			{ castor3d::InterpolatorType::eNearest, "Nearest" },
-			{ castor3d::InterpolatorType::eLinear, "Linear" },
-		};
-		return Names[p_value];
-	}
-
-	template<>
-	inline std::string toString< castor3d::AnimationType >( castor3d::AnimationType const & p_value )
-	{
-		static std::map< castor3d::AnimationType, std::string > Names
-		{
-			{ castor3d::AnimationType::eMovable, "Movable" },
-			{ castor3d::AnimationType::eMesh, "Mesh" },
-			{ castor3d::AnimationType::eSkeleton, "Skeleton" },
-		};
-		return Names[p_value];
-	}
-
-	template<>
-	inline std::string toString< castor3d::SkeletonAnimationObjectType >( castor3d::SkeletonAnimationObjectType const & p_value )
-	{
-		static std::map< castor3d::SkeletonAnimationObjectType, std::string > Names
-		{
-			{ castor3d::SkeletonAnimationObjectType::eBone, "Bone" },
-			{ castor3d::SkeletonAnimationObjectType::eNode, "Node" },
-		};
-		return Names[p_value];
-	}
-
-	template<>
-	inline std::string toString< castor3d::AnimationState >( castor3d::AnimationState const & p_value )
-	{
-		static std::map< castor3d::AnimationState, std::string > Names
-		{
-			{ castor3d::AnimationState::ePlaying, "Playing" },
-			{ castor3d::AnimationState::eStopped, "Stopped" },
-			{ castor3d::AnimationState::ePaused, "Paused" },
-		};
-		return Names[p_value];
-	}
-
-	template<>
-	inline std::string toString< castor3d::ViewportType >( castor3d::ViewportType const & p_value )
-	{
-		static std::map< castor3d::ViewportType, std::string > Names
-		{
-			{ castor3d::ViewportType::eOrtho, "Ortho" },
-			{ castor3d::ViewportType::ePerspective, "Perspective" },
-			{ castor3d::ViewportType::eFrustum, "Frustum" },
-		};
-		return Names[p_value];
-	}
-
-	template<>
-	inline std::string toString< castor3d::ProgramFlag >( castor3d::ProgramFlag const & p_value )
-	{
-		static std::map< castor3d::ProgramFlag, std::string > Names
-		{
-			{ castor3d::ProgramFlag::eBillboards, "eBillboards" },
-			{ castor3d::ProgramFlag::eEnvironmentMapping, "eEnvironmentMapping" },
-			{ castor3d::ProgramFlag::eFixedSize, "eFixedSize" },
-			{ castor3d::ProgramFlag::eInstantiation, "eInstantiation" },
-			{ castor3d::ProgramFlag::eLighting, "eLighting" },
-			{ castor3d::ProgramFlag::eMorphing, "eMorphing" },
-			{ castor3d::ProgramFlag::eDepthPass, "eDepthPass" },
-			{ castor3d::ProgramFlag::ePicking, "ePicking" },
-			{ castor3d::ProgramFlag::eShadowMapDirectional, "eShadowMapDirectional" },
-			{ castor3d::ProgramFlag::eShadowMapPoint, "eShadowMapPoint" },
-			{ castor3d::ProgramFlag::eShadowMapSpot, "eShadowMapSpot" },
-			{ castor3d::ProgramFlag::eSkinning, "eSkinning" },
-			{ castor3d::ProgramFlag::eSpherical, "eSpherical" },
-		};
-		return Names[p_value];
-	}
-
-	template<>
-	inline std::string toString< castor3d::ProgramFlags >( castor3d::ProgramFlags const & p_value )
-	{
-		return FlagCombinationWriter< castor3d::ProgramFlag >::toString( p_value );
-	}
-
-	template<>
-	inline std::string toString< castor3d::SubmeshComponent >( castor3d::SubmeshComponent const & p_value )
-	{
-		std::string result = castor::string::stringCast< char >( p_value.getType() );
-		//result += ", " + toString( p_value.getProgramFlags() );
-		return result;
-	}
-
-	template<>
-	inline std::string toString< castor3d::BonesComponent >( castor3d::BonesComponent const & p_value )
-	{
-		return std::string{ "castor3d::BonesComponent" };
-	}
-
-	template<>
-	inline std::string toString< castor3d::VertexBoneData >( castor3d::VertexBoneData const & p_value )
-	{
-		return std::string{ "castor3d::VertexBoneData" };
-	}
-
-	template<>
-	inline std::string toString< castor3d::VertexBoneData::Ids >( castor3d::VertexBoneData::Ids const & p_value )
-	{
-		std::string result;
-		std::string sep;
-
-		for ( auto & v : p_value )
-		{
-			result += sep + toString( v );
-			sep = ", ";
+			return result;
 		}
-
-		return result;
-	}
+	};
 
 	template<>
-	inline std::string toString< castor3d::VertexBoneData::Weights >( castor3d::VertexBoneData::Weights const & p_value )
+	struct Stringifier< castor3d::VertexBoneData::Weights >
 	{
-		std::string result;
-		std::string sep;
-
-		for ( auto & v : p_value )
+		static std::string get( castor3d::VertexBoneData::Weights const & value )
 		{
-			result += sep + toString( v );
-			sep = ", ";
-		}
+			std::string result;
+			std::string sep;
 
-		return result;
-	}
+			for ( auto & v : value )
+			{
+				result += sep + toString( v );
+				sep = ", ";
+			}
+
+			return result;
+		}
+	};
 
 	template<>
-	inline std::string toString< castor3d::InterleavedVertex >( castor3d::InterleavedVertex const & p_value )
+	struct Stringifier< castor3d::Animable >
 	{
-		return std::string{ "castor3d::InterleavedVertex" };
-	}
-
-	template< typename Value >
-	inline std::string toString( castor::ArrayView< Value > const & values )
-	{
-		std::stringstream stream;
-		stream << values.size() << ": ";
-
-		for ( auto & value : values )
+		static std::string get( castor3d::Animable const & value )
 		{
-			stream << " " << toString( value );
+			return std::string{ "castor3d::Animable" };
 		}
+	};
 
-		return stream.str();
-	}
-
-	template< typename Value, size_t N >
-	inline std::string toString( std::array< Value, N > const & values )
+	template<>
+	struct Stringifier< castor3d::LightCategory >
 	{
-		std::stringstream stream;
-		stream << values.size() << ": ";
-
-		for ( auto & value : values )
+		static std::string get( castor3d::LightCategory const & value )
 		{
-			stream << " " << toString( value );
+			return std::string{ "castor3d::LightCategory" };
 		}
+	};
 
-		return stream.str();
-	}
-
-	template< typename Value >
-	inline std::string toString( std::vector< Value > const & values )
+	template<>
+	struct Stringifier< castor3d::DirectionalLight >
 	{
-		std::stringstream stream;
-		stream << values.size() << ": ";
-
-		for ( auto & value : values )
+		static std::string get( castor3d::DirectionalLight const & value )
 		{
-			stream << " " << toString( value );
+			return std::string{ "castor3d::DirectionalLight" };
 		}
+	};
 
-		return stream.str();
-	}
+	template<>
+	struct Stringifier< castor3d::PointLight >
+	{
+		static std::string get( castor3d::PointLight const & value )
+		{
+			return std::string{ "castor3d::PointLight" };
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::SpotLight >
+	{
+		static std::string get( castor3d::SpotLight const & value )
+		{
+			return std::string{ "castor3d::SpotLight" };
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::Viewport >
+	{
+		static std::string get( castor3d::Viewport const & value )
+		{
+			return std::string{ "castor3d::Viewport" };
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::Pass >
+	{
+		static std::string get( castor3d::Pass const & value )
+		{
+			return std::string{ "castor3d::Pass" };
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::Submesh >
+	{
+		static std::string get( castor3d::Submesh const & value )
+		{
+			return std::string{ "castor3d::Submesh" };
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::Skeleton >
+	{
+		static std::string get( castor3d::Skeleton const & value )
+		{
+			return std::string{ "castor3d::Skeleton" };
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::AnimationKeyFrame >
+	{
+		static std::string get( castor3d::AnimationKeyFrame const & value )
+		{
+			return std::string{ "castor3d::AnimationKeyFrame" };
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::MeshAnimationKeyFrame >
+	{
+		static std::string get( castor3d::MeshAnimationKeyFrame const & value )
+		{
+			return std::string{ "castor3d::MeshAnimationKeyFrame" };
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::SkeletonAnimationKeyFrame >
+	{
+		static std::string get( castor3d::SkeletonAnimationKeyFrame const & value )
+		{
+			return std::string{ "castor3d::SkeletonAnimationKeyFrame" };
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::SkeletonAnimationInstance >
+	{
+		static std::string get( castor3d::SkeletonAnimationInstance const & value )
+		{
+			return std::string{ "castor3d::SkeletonAnimationInstance" };
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::SkeletonAnimationInstanceObject >
+	{
+		static std::string get( castor3d::SkeletonAnimationInstanceObject const & value )
+		{
+			return std::string{ "castor3d::SkeletonAnimationInstanceObject" };
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::SkeletonAnimationInstanceKeyFrame >
+	{
+		static std::string get( castor3d::SkeletonAnimationInstanceKeyFrame const & value )
+		{
+			return std::string{ "castor3d::SkeletonAnimationInstanceKeyFrame" };
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::BonesComponent >
+	{
+		static std::string get( castor3d::BonesComponent const & value )
+		{
+			return std::string{ "castor3d::BonesComponent" };
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::VertexBoneData >
+	{
+		static std::string get( castor3d::VertexBoneData const & value )
+		{
+			return std::string{ "castor3d::VertexBoneData" };
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::InterleavedVertex >
+	{
+		static std::string get( castor3d::InterleavedVertex const & value )
+		{
+			return std::string{ "castor3d::InterleavedVertex" };
+		}
+	};
+
+	template< typename FlagT >
+	struct Stringifier< castor::FlagCombination< FlagT > >
+	{
+		static inline std::string toString( castor::FlagCombination< FlagT > const & values )
+		{
+			int i = ( sizeof( FlagT ) * 8 ) - 1;
+			std::string sep;
+			std::string result;
+
+			while ( i >= 0 )
+			{
+				auto value = FlagT( 0x0000000000000001 << i );
+
+				if ( castor::checkFlag( values, value ) )
+				{
+					result += sep + toString( value );
+					sep = " | ";
+				}
+
+				--i;
+			}
+
+			if ( result.empty() )
+			{
+				result = "0";
+			}
+
+			return result;
+		}
+	};
+
+	template< typename ValueT, uint32_t ColumnsT, uint32_t RowsT >
+	struct Stringifier< castor::Matrix< ValueT, ColumnsT, RowsT > >
+	{
+		static std::string get( castor::Matrix< ValueT, ColumnsT, RowsT > const & value )
+		{
+			std::stringstream stream;
+			stream.precision( 10 );
+
+			for ( uint32_t i = 0; i < ColumnsT; i++ )
+			{
+				for ( uint32_t j = 0; j < RowsT; j++ )
+				{
+					stream << std::setw( 15 ) << std::right << value[i][j];
+				}
+
+				stream << std::endl;
+			}
+
+			return stream.str();
+		}
+	};
+
+	template< typename ValueT, uint32_t CountT >
+	struct Stringifier< castor::SquareMatrix< ValueT, CountT > >
+	{
+		static std::string get( castor::SquareMatrix< ValueT, CountT > const & value )
+		{
+			std::stringstream stream;
+			stream.precision( 10 );
+
+			for ( uint32_t i = 0; i < CountT; i++ )
+			{
+				for ( uint32_t j = 0; j < CountT; j++ )
+				{
+					stream << std::setw( 15 ) << std::right << value[i][j];
+				}
+
+				stream << std::endl;
+			}
+
+			return stream.str();
+		}
+	};
+
+	template< typename ValueT, uint32_t CountT >
+	struct Stringifier< castor::Point< ValueT, CountT > >
+	{
+		static std::string get( castor::Point< ValueT, CountT > const & value )
+		{
+			std::stringstream stream;
+			stream.precision( 10 );
+
+			for ( uint32_t i = 0; i < CountT; i++ )
+			{
+				stream << std::setw( 15 ) << std::right << value[i];
+			}
+
+			return stream.str();
+		}
+	};
+
+	template< typename ValueT >
+	struct Stringifier< castor::AngleT< ValueT > >
+	{
+		static std::string get( castor::AngleT< ValueT > const & value )
+		{
+			std::stringstream stream;
+			stream << value.degrees();
+			return stream.str();
+		}
+	};
+
+	template< typename ValueT >
+	struct Stringifier< castor::QuaternionT< ValueT > >
+	{
+		static std::string get( castor::QuaternionT< ValueT > const & value )
+		{
+			std::stringstream stream;
+			stream << value;
+			return stream.str();
+		}
+	};
+
+	template< typename ValueT >
+	struct Stringifier< castor::ChangeTracked< ValueT > >
+	{
+		static std::string get( castor::ChangeTracked< ValueT > const & value )
+		{
+			std::stringstream stream;
+			stream << toString( *value );
+			return stream.str();
+		}
+	};
+
+	template< typename ValueT >
+	struct Stringifier< castor::ArrayView< ValueT > >
+	{
+		static std::string get( castor::ArrayView< ValueT > const & values )
+		{
+			std::stringstream stream;
+			stream << values.size() << ":";
+
+			for ( auto & value : values )
+			{
+				stream << " " << toString( value );
+			}
+
+			return stream.str();
+		}
+	};
 
 	//*********************************************************************************************
 

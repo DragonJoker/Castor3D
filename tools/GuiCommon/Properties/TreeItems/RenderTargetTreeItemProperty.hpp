@@ -35,13 +35,6 @@ namespace GuiCommon
 			, castor3d::RenderTarget & target );
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		~RenderTargetTreeItemProperty();
-		/**
-		 *\~english
 		 *\brief		Retrieves the object
 		 *\return		The value
 		 *\~french

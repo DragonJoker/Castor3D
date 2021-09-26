@@ -33,12 +33,6 @@ namespace castor3d
 		{
 		}
 
-		Light & Light::operator=( Light const & rhs )
-		{
-			StructInstance::operator=( rhs );
-			return *this;
-		}
-
 		ast::type::StructPtr Light::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140

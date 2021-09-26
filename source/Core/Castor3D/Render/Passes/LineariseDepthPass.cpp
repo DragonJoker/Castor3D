@@ -161,50 +161,6 @@ namespace castor3d
 					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) };
 		}
-
-		ashes::VertexBufferPtr< NonTexturedQuad > doCreateVertexBuffer( RenderDevice const & device )
-		{
-			auto result = makeVertexBuffer< NonTexturedQuad >( device
-				, 1u
-				, 0u
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, "LineariseDepthPass" );
-
-			if ( auto buffer = reinterpret_cast< NonTexturedQuad * >( result->getBuffer().lock( 0u
-				, ~( 0ull )
-				, 0u ) ) )
-			{
-				*buffer = NonTexturedQuad
-				{
-					{
-						{ Point2f{ -1.0, -1.0 } },
-						{ Point2f{ -1.0, +1.0 } },
-						{ Point2f{ +1.0, -1.0 } },
-						{ Point2f{ +1.0, -1.0 } },
-						{ Point2f{ -1.0, +1.0 } },
-						{ Point2f{ +1.0, +1.0 } },
-					}
-				};
-				result->getBuffer().flush( 0u, ~( 0ull ) );
-				result->getBuffer().unlock();
-			}
-
-			return result;
-		}
-
-		ashes::PipelineVertexInputStateCreateInfoPtr doCreateVertexLayout()
-		{
-			ashes::PipelineVertexInputStateCreateInfo inputState{ 0u
-				, ashes::VkVertexInputBindingDescriptionArray
-				{
-					{ 0u, sizeof( castor3d::NonTexturedQuad::Vertex ), VK_VERTEX_INPUT_RATE_VERTEX },
-				}
-				, ashes::VkVertexInputAttributeDescriptionArray
-				{
-					{ 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( castor3d::NonTexturedQuad::Vertex, position ) },
-				} };
-			return std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( inputState );
-		}
 	}
 
 	//*********************************************************************************************

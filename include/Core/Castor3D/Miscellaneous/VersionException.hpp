@@ -35,13 +35,6 @@ namespace castor3d
 			, char const * file
 			, char const * function
 			, uint32_t line );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API virtual ~VersionException() throw() {}
 	};
 }
 

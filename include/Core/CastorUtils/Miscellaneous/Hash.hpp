@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Miscellaneous/MiscellaneousModule.hpp"
 
 #include <ctime>
+#include <type_traits>
 
 namespace castor
 {
@@ -24,7 +25,15 @@ namespace castor
 		uint64_t b = ( seed ^ a ) * kMul;
 		b ^= ( b >> 47 );
 
-		hash = static_cast< std::size_t >( b * kMul );
+		if constexpr ( sizeof( std::size_t ) == sizeof( uint32_t ) )
+		{
+			hash = std::size_t( b * kMul );
+		}
+		else
+		{
+			hash = b * kMul;
+		}
+
 		return hash;
 	}
 
@@ -42,7 +51,15 @@ namespace castor
 		uint64_t b = ( seed ^ a ) * kMul;
 		b ^= ( b >> 47 );
 
-		hash = static_cast< std::size_t >( b * kMul );
+		if constexpr ( sizeof( std::size_t ) == sizeof( uint32_t ) )
+		{
+			hash = std::size_t( b * kMul );
+		}
+		else
+		{
+			hash = b * kMul;
+		}
+
 		return hash;
 	}
 }

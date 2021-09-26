@@ -81,7 +81,7 @@ namespace castor3d
 		*\~french
 		*\~return		Le type d'évènement clavier.
 		 */
-		inline KeyboardEventType getKeyboardEventType()const
+		KeyboardEventType getKeyboardEventType()const
 		{
 			return m_keyboardEventType;
 		}
@@ -91,7 +91,7 @@ namespace castor3d
 		*\~french
 		*\~return		Le code de la touche.
 		 */
-		inline KeyboardKey getKey()const
+		KeyboardKey getKey()const
 		{
 			return m_key;
 		}
@@ -101,7 +101,7 @@ namespace castor3d
 		*\~french
 		*\~return		Le caractère correspondant à la touche.
 		 */
-		inline castor::String const & getChar()const
+		castor::String const & getChar()const
 		{
 			return m_char;
 		}
@@ -111,7 +111,7 @@ namespace castor3d
 		*\~french
 		*\~return		L'état de la touche Ctrl.
 		 */
-		inline bool isCtrlDown()const
+		bool isCtrlDown()const
 		{
 			return m_ctrl;
 		}
@@ -121,7 +121,7 @@ namespace castor3d
 		*\~french
 		*\~return		L'état de la touche Alt.
 		 */
-		inline bool isAltDown()const
+		bool isAltDown()const
 		{
 			return m_alt;
 		}
@@ -131,7 +131,7 @@ namespace castor3d
 		*\~french
 		*\~return		L'état de la touche Shift.
 		 */
-		inline bool isShiftDown()const
+		bool isShiftDown()const
 		{
 			return m_shift;
 		}

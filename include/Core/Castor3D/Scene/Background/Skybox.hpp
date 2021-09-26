@@ -47,15 +47,6 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
-		*	Destructor.
-		*\~french
-		*\brief
-		*	Destructeur.
-		*/
-		C3D_API virtual ~SkyboxBackground();
-		/**
-		*\~english
-		*\brief
 		*	Sets the skybox's left face texture.
 		*\param[in] folder
 		*	The image folder.

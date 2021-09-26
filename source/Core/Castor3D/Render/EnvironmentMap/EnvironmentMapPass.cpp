@@ -136,7 +136,6 @@ namespace castor3d
 		auto oldCamera = updater.camera;
 		updater.camera = &camera;
 
-		RenderInfo info;
 		m_sceneUbo.cpuUpdate( *updater.scene, updater.camera );
 		m_backgroundRenderer->update( updater );
 		m_opaquePass->update( updater );
@@ -166,7 +165,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< ForwardRenderTechniquePass >( pass
+				auto res = std::make_unique< ForwardRenderTechniquePass >( pass
 					, context
 					, graph
 					, m_device
@@ -175,9 +174,9 @@ namespace castor3d
 					, SceneRenderPassDesc{ getOwner()->getSize(), m_matrixUbo, *m_culler }
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
 				m_node->getScene()->getEngine()->registerTimer( graph.getName() + "/EnvironmentMap" + std::to_string( m_index )
-					, result->getTimer() );
-				m_opaquePass = result.get();
-				return result;
+					, res->getTimer() );
+				m_opaquePass = res.get();
+				return res;
 			} );
 		result.addDependency( *previousPass );
 		result.addOutputDepthView( getOwner()->getDepthViewId( m_index, m_face )
@@ -193,7 +192,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< ForwardRenderTechniquePass >( pass
+				auto res = std::make_unique< ForwardRenderTechniquePass >( pass
 					, context
 					, graph
 					, m_device
@@ -202,9 +201,9 @@ namespace castor3d
 					, SceneRenderPassDesc{ getOwner()->getSize(), m_matrixUbo, *m_culler, false }
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
 				m_node->getScene()->getEngine()->registerTimer( graph.getName() + "/EnvironmentMap" + std::to_string( m_index )
-					, result->getTimer() );
-				m_transparentPass = result.get();
-				return result;
+					, res->getTimer() );
+				m_transparentPass = res.get();
+				return res;
 			} );
 		result.addDependency( *previousPass );
 		result.addInputDepthView( getOwner()->getDepthViewId( m_index, m_face ) );

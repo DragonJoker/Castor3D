@@ -36,13 +36,6 @@ namespace GuiCommon
 		SubmeshTreeItemProperty( bool editable, castor3d::Geometry & geometry, castor3d::Submesh & submesh );
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		~SubmeshTreeItemProperty();
-		/**
-		 *\~english
 		 *\brief		Retrieves the submesh
 		 *\return		The value
 		 *\~french
@@ -70,7 +63,7 @@ namespace GuiCommon
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid );
+		void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )override;
 
 	private:
 		void onMaterialChange( wxVariant const & var );

@@ -9,10 +9,6 @@ namespace castor
 	{
 	}
 
-	FileParserContext::~FileParserContext()
-	{
-	}
-
 	void FileParserContext::registerUserContext( String const & name, void * data )
 	{
 		if ( userContexts.find( name ) != userContexts.end() )

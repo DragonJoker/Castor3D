@@ -15,7 +15,7 @@ using namespace castor3d;
 
 namespace CastorGui
 {
-	int StaticCtrl::m_count = 0xFF000000;
+	uint32_t StaticCtrl::m_count = 0xFF000000u;
 
 	StaticCtrl::StaticCtrl( String const & p_name
 		, Engine & engine
@@ -64,10 +64,6 @@ namespace CastorGui
 		text->setVisible( p_visible );
 		text->setVAlign( VAlign::eCenter );
 		doUpdateStyle();
-	}
-
-	StaticCtrl::~StaticCtrl()
-	{
 	}
 
 	void StaticCtrl::setFont( String const & p_font )

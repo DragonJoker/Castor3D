@@ -38,13 +38,6 @@ namespace castor3d
 			, RenderDevice const & device
 			, SsaoConfig const & ssaoConfig
 			, SceneRenderPassDesc const & renderPassDesc );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~DepthPass();
 
 		C3D_API TextureFlags getTexturesMask()const override;
 

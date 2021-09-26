@@ -18,16 +18,10 @@ namespace castor3d
 		{
 		}
 
-		Voxel & Voxel::operator=( Voxel const & rhs )
-		{
-			StructInstance::operator=( rhs );
-			return *this;
-		}
-
 		ast::type::StructPtr Voxel::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd430
-				, "Voxel" );
+				, "C3D_Voxel" );
 
 			if ( result->empty() )
 			{

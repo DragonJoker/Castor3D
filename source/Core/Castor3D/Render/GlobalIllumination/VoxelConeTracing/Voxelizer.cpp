@@ -105,8 +105,8 @@ namespace castor3d
 		m_secondaryBounce.create();
 		auto runnable = m_runnable.get();
 		m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [runnable]( RenderDevice const & device
-				, QueueData const & queueData )
+			, [runnable]( RenderDevice const &
+				, QueueData const & )
 			{
 				runnable->record();
 			} ) );
@@ -173,24 +173,24 @@ namespace castor3d
 	{
 		stepProgressBar( progress, "Creating voxelize pass" );
 		auto & result = m_graph.createPass( "VoxelizePass"
-			, [this, progress]( crg::FramePass const & pass
+			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBar( progress, "Initialising voxelize pass" );
-				auto result = std::make_unique< VoxelizePass >( pass
+				auto res = std::make_unique< VoxelizePass >( framePass
 					, context
-					, graph
+					, runnableGraph
 					, m_device
 					, m_matrixUbo
 					, m_culler
 					, m_voxelizerUbo
 					, *m_voxels
 					, m_voxelConfig );
-				m_voxelizePass = result.get();
-				m_device.renderSystem.getEngine()->registerTimer( graph.getName() + "/Voxelizer"
-					, result->getTimer() );
-				return result;
+				m_voxelizePass = res.get();
+				m_device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/Voxelizer"
+					, res->getTimer() );
+				return res;
 			} );
 		result.addOutputStorageBuffer( { m_voxels->getBuffer(), "Voxels" }
 			, 0u
@@ -204,20 +204,20 @@ namespace castor3d
 	{
 		stepProgressBar( progress, "Creating voxel buffer to texture pass" );
 		auto & result = m_graph.createPass( "VoxelBufferToTexture"
-			, [this, progress]( crg::FramePass const & pass
+			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBar( progress, "Initialising voxel buffer to texture pass" );
-				auto result = std::make_unique< VoxelBufferToTexture >( pass
+				auto res = std::make_unique< VoxelBufferToTexture >( framePass
 					, context
-					, graph
+					, runnableGraph
 					, m_device
 					, m_voxelConfig );
-				m_voxelToTexture = result.get();
-				m_device.renderSystem.getEngine()->registerTimer( graph.getName() + "/Voxelizer"
-					, result->getTimer() );
-				return result;
+				m_voxelToTexture = res.get();
+				m_device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/Voxelizer"
+					, res->getTimer() );
+				return res;
 			} );
 		result.addDependency( previousPass );
 		result.addInputStorageBuffer( { m_voxels->getBuffer(), "Voxels" }
@@ -237,18 +237,18 @@ namespace castor3d
 	{
 		stepProgressBar( progress, "Creating voxel mipmap generation pass" );
 		auto & result = m_graph.createPass( name
-			, [this, progress]( crg::FramePass const & pass
+			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBar( progress, "Initialising voxel mipmap generation pass" );
-				auto result = std::make_unique< crg::GenerateMipmaps >( pass
+				auto res = std::make_unique< crg::GenerateMipmaps >( framePass
 					, context
-					, graph
+					, runnableGraph
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-				m_device.renderSystem.getEngine()->registerTimer( graph.getName() + "/Voxelizer"
-					, result->getTimer() );
-				return result;
+				m_device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/Voxelizer"
+					, res->getTimer() );
+				return res;
 			} );
 		result.addDependency( previousPass );
 		result.addTransferInOutView( view );
@@ -260,20 +260,20 @@ namespace castor3d
 	{
 		stepProgressBar( progress, "Creating voxel secondary bounce pass" );
 		auto & result = m_graph.createPass( "VoxelSecondaryBounce"
-			, [this, progress]( crg::FramePass const & pass
+			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBar( progress, "Initialising voxel secondary bounce pass" );
-				auto result = std::make_unique< VoxelSecondaryBounce >( pass
+				auto res = std::make_unique< VoxelSecondaryBounce >( framePass
 					, context
-					, graph
+					, runnableGraph
 					, m_device
 					, m_voxelConfig );
-				m_voxelSecondaryBounce = result.get();
-				m_device.renderSystem.getEngine()->registerTimer( graph.getName() + "/Voxelizer"
-					, result->getTimer() );
-				return result;
+				m_voxelSecondaryBounce = res.get();
+				m_device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/Voxelizer"
+					, res->getTimer() );
+				return res;
 			} );
 		result.addDependency( previousPass );
 		result.addInOutStorageBuffer( { m_voxels->getBuffer(), "Voxels" }

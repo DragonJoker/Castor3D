@@ -1,3 +1,5 @@
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+
 #include "GuiCommon/Properties/TreeItems/PostEffectTreeItemProperty.hpp"
 
 #include "GuiCommon/Shader/ShaderDialog.hpp"
@@ -322,10 +324,6 @@ namespace GuiCommon
 		, m_parent{ parent }
 	{
 		CreateTreeItemMenu();
-	}
-
-	PostEffectTreeItemProperty::~PostEffectTreeItemProperty()
-	{
 	}
 
 	void PostEffectTreeItemProperty::doCreateProperties( wxPGEditor * editor

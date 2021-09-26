@@ -39,13 +39,6 @@ namespace castor3d
 		C3D_API explicit Version( uint32_t vk );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~Version();
-		/**
-		 *\~english
 		 *\return		The Vulkan compatible version number.
 		 *\~french
 		 *\return		Le numéro de version pour Vulkan.
@@ -57,7 +50,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le numéro majeur de version.
 		 */
-		inline uint16_t getMajor()const
+		uint16_t getMajor()const
 		{
 			return m_major;
 		}
@@ -67,7 +60,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le numéro mineur de version.
 		 */
-		inline uint16_t getMinor()const
+		uint16_t getMinor()const
 		{
 			return m_minor;
 		}
@@ -77,7 +70,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le numéro build de version.
 		 */
-		inline uint16_t getBuild()const
+		uint16_t getBuild()const
 		{
 			return m_build;
 		}

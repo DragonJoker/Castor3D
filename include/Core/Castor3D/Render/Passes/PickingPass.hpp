@@ -10,7 +10,10 @@ See LICENSE file in root folder
 
 #include <ashespp/Image/ImageView.hpp>
 
+#pragma warning( push )
+#pragma warning( disable:4365 )
 #include <atomic>
+#pragma warning( pop )
 
 namespace castor3d
 {
@@ -43,7 +46,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~PickingPass();
+		C3D_API ~PickingPass()override;
 		/**
 		 *\~english
 		 *\brief		Adds a scene rendered through this technique.

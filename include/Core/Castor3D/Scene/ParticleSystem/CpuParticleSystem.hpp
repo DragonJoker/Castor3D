@@ -24,13 +24,6 @@ namespace castor3d
 		 */
 		C3D_API explicit CpuParticleSystem( ParticleSystem & parent );
 		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API virtual ~CpuParticleSystem();
-		/**
 		 *\copydoc		castor3d::ParticleSystemImpl::initialise
 		 */
 		C3D_API bool initialise( RenderDevice const & device )override;

@@ -19,10 +19,6 @@ namespace GuiCommon
 		AddPrivateChild( addAttributes( new wxIntProperty( wxT( "Y" ), wxPG_LABEL, value.y() ) ) );
 	}
 
-	PositionProperty::~PositionProperty()
-	{
-	}
-
 	void PositionProperty::RefreshChildren()
 	{
 		if ( GetChildCount() )
@@ -36,7 +32,7 @@ namespace GuiCommon
 	wxVariant PositionProperty::ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const
 	{
 		Position & point = PositionRefFromVariant( thisValue );
-		int val = childValue.GetLong();
+		auto val = int( childValue.GetLong() );
 
 		switch ( childIndex )
 		{

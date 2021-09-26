@@ -136,7 +136,7 @@ namespace castor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		CU_API ~Font() = default;
+		CU_API virtual ~Font() = default;
 		/**
 		 *\~english
 		 *\brief		Loads wanted glyph.
@@ -474,9 +474,6 @@ namespace castor
 		//!\~english	The max height of the glyphs.
 		//!\~french		La hauteur maximale des glyphes.
 		int m_maxHeight;
-		//!\~english	The max top of the glyphs.
-		//!\~french		La position haute maximale des glyphes.
-		int m_maxTop;
 		//!\~english	The max width of the glyphs.
 		//!\~french		La largeur maximale des glyphes.
 		int m_maxWidth;

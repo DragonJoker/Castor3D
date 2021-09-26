@@ -424,10 +424,11 @@ namespace castor3d
 	enum class ViewportType
 		: uint8_t
 	{
+		eUndefined,
 		eOrtho,
 		ePerspective,
 		eFrustum,
-		CU_ScopedEnumBounds( eOrtho )
+		CU_ScopedEnumBounds( eUndefined )
 	};
 	C3D_API castor::String getName( ViewportType value );
 	/**

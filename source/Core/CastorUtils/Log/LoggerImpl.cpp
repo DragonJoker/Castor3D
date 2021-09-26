@@ -140,7 +140,7 @@ namespace castor
 					{
 						try
 						{
-							TextFile file{ Path{ m_logFilePath[i++] }, File::OpenMode::eAppend };
+							TextFile file{ Path{ m_logFilePath[size_t( i++ )] }, File::OpenMode::eAppend };
 							file.writeText( text );
 						}
 						catch ( Exception & exc )

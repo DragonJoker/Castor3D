@@ -14,10 +14,6 @@ namespace Testing
 	{
 	}
 
-	CastorUtilsTextWriterTest::~CastorUtilsTextWriterTest()
-	{
-	}
-
 	void CastorUtilsTextWriterTest::doRegisterTests()
 	{
 		doRegisterTest( "BaseTypesTextWriterTest", std::bind( &CastorUtilsTextWriterTest::BaseTypes, this ) );
@@ -37,8 +33,8 @@ namespace Testing
 		CT_CHECK( writer.write( file, "bool", true ) );
 		CT_CHECK( writer.write( file, "int16_t", int16_t( 1 ) ) );
 		CT_CHECK( writer.write( file, "uint16_t", uint16_t( 2u ) ) );
-		CT_CHECK( writer.write( file, "int32_t", int32_t( 3 ) ) );
-		CT_CHECK( writer.write( file, "uint32_t", uint32_t( 4u ) ) );
+		CT_CHECK( writer.write( file, "int32_t", 3 ) );
+		CT_CHECK( writer.write( file, "uint32_t", 4u ) );
 		CT_CHECK( writer.write( file, "int64_t", int64_t( 5 ) ) );
 		CT_CHECK( writer.write( file, "uint64_t", uint64_t( 6u ) ) );
 		CT_CHECK( writer.write( file, "float", 7.0f ) );

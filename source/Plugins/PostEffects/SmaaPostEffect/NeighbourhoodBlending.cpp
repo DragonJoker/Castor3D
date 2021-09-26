@@ -38,8 +38,8 @@ namespace smaa
 		std::unique_ptr< ast::Shader > doGetNeighbourhoodBlendingVP( VkExtent3D const & size
 			, SmaaConfig const & config )
 		{
-			Point4f renderTargetMetrics{ 1.0f / size.width
-				, 1.0f / size.height
+			Point4f renderTargetMetrics{ 1.0f / float( size.width )
+				, 1.0f / float( size.height )
 				, float( size.width )
 				, float( size.height ) };
 
@@ -85,8 +85,8 @@ namespace smaa
 			, SmaaConfig const & config
 			, bool reprojection )
 		{
-			Point4f renderTargetMetrics{ 1.0f / size.width
-				, 1.0f / size.height
+			Point4f renderTargetMetrics{ 1.0f / float( size.width )
+				, 1.0f / float( size.height )
 				, float( size.width )
 				, float( size.height ) };
 
@@ -225,22 +225,6 @@ namespace smaa
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
-
-		castor3d::rq::BindingDescriptionArray createBindings( bool reprojection )
-		{
-			castor3d::rq::BindingDescriptionArray result
-			{
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
-			};
-
-			if ( reprojection )
-			{
-				result.push_back( { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D } );
-			}
-
-			return result;
-		}
 	}
 
 	//*********************************************************************************************
@@ -264,7 +248,7 @@ namespace smaa
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_pass{ m_graph.createPass( "SmaaNeighbourhood"
-			, [this, &device, &renderTarget, &config, enabled]( crg::FramePass const & pass
+			, [this, &device, &config, enabled]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
