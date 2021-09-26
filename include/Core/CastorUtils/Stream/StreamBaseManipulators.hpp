@@ -184,7 +184,7 @@ namespace castor
 			iter_type doPutHelper( iter_type out, std::ios_base & str, CharType fill, NumType val )const
 			{
 				// read the value stored in our xalloc location.
-				const int base = str.iword( BasicBaseManip< CharType >::getIWord() );
+				const auto base = str.iword( BasicBaseManip< CharType >::getIWord() );
 
 				// we only want this manipulator to affect the next numeric value, so
 				// reset its value.
@@ -253,12 +253,12 @@ namespace castor
 			}
 
 			// Overrides for the virtual do_put member functions.
-			iter_type do_put( iter_type out, std::ios_base & str, CharType fill, long val )const
+			iter_type do_put( iter_type out, std::ios_base & str, CharType fill, long val )const override
 			{
 				return doPutHelper( out, str, fill, val );
 			}
 
-			iter_type do_put( iter_type out, std::ios_base & str, CharType fill, unsigned long val )const
+			iter_type do_put( iter_type out, std::ios_base & str, CharType fill, unsigned long val )const override
 			{
 				return doPutHelper( out, str, fill, val );
 			}

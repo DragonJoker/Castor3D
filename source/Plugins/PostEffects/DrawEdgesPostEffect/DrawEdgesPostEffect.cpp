@@ -226,10 +226,6 @@ namespace draw_edges
 			, m_data.objectWidth );
 	}
 
-	void PostEffect::update( castor3d::CpuUpdater & updater )
-	{
-	}
-
 	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
 		, crg::FramePass const & previousPass )
 	{
@@ -282,7 +278,7 @@ namespace draw_edges
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( &isEnabled() )
-					.recordDisabledInto( [this, &context, &graph, extent]( crg::RunnablePass const & runnable
+					.recordDisabledInto( [this, &graph]( crg::RunnablePass const & runnable
 						, VkCommandBuffer commandBuffer
 						, uint32_t index )
 						{

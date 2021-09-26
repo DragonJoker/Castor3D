@@ -43,21 +43,24 @@ add_target_min(
 	""
 	""
 )
-target_include_directories( ${PROJECT_NAME} PRIVATE
-	${CASTOR_SOURCE_DIR}/tools/GuiCommon/xpms
-	${Castor3DIncludeDirs}
-	${CASTOR_SOURCE_DIR}/tools
-	${CASTOR_BINARY_DIR}/tools
-	${wxWidgets_INCLUDE_DIRS}
-	${GTK2_INCLUDE_DIRS}
-	${X11_LIBRARIES}
+target_include_directories( ${PROJECT_NAME}
+	PRIVATE
+		${CASTOR_SOURCE_DIR}/tools/GuiCommon/xpms
+		${Castor3DIncludeDirs}
+		${CASTOR_SOURCE_DIR}/tools
+		${CASTOR_BINARY_DIR}/tools
+)
+target_include_directories( ${PROJECT_NAME} SYSTEM
+	PRIVATE
+		${wxWidgets_INCLUDE_DIRS}
+		${GTK_INCLUDE_DIRS}
 )
 target_link_libraries( ${PROJECT_NAME} PRIVATE
 	${CastorMinLibraries}
 	${Castor3DBinsDependencies}
 	castor::Castor3D
 	${wxWidgets_LIBRARIES}
-	${GTK2_LIBRARIES}
+	${GTK_LIBRARIES}
 	${X11_LIBRARIES}
 )
 target_compile_definitions( ${PROJECT_NAME} PRIVATE

@@ -55,9 +55,6 @@ namespace castor3d
 
 	namespace
 	{
-		static int constexpr PickingOffset = int( Picking::PickingWidth / 2 );
-		static int constexpr BufferOffset = ( PickingOffset * Picking::PickingWidth ) + PickingOffset - 1;
-
 		template< typename NodeT, typename FuncT >
 		inline void traverseNodes( PickingPass & pass
 			, std::unordered_map< SubmeshRenderNode const *, UniformBufferOffsetT< PickingUboConfiguration > > & ubos
@@ -123,26 +120,6 @@ namespace castor3d
 
 				count++;
 			}
-		}
-
-		std::vector< VkBufferImageCopy > createPickDisplayRegions()
-		{
-			std::vector< VkBufferImageCopy > result;
-
-			for ( int i = 0; i < PickingPass::PickingWidth; ++i )
-			{
-				for ( int j = 0; j < PickingPass::PickingWidth; ++j )
-				{
-					result.push_back( { BufferOffset * ashes::getMinimalSize( VK_FORMAT_R32G32B32A32_SFLOAT )
-						, 0u
-						, 0u
-						, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 0u, 1u }
-						, { int( PickingPass::PickingWidth ) * 2 + i, j, 0 }
-						, { 1u, 1u, 1u } } );
-				}
-			}
-
-			return result;
 		}
 	}
 

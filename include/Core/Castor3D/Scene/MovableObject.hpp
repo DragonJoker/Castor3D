@@ -58,7 +58,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~MovableObject();
+		C3D_API ~MovableObject()override;
 		/**
 		 *\~english
 		 *\brief		Detaches the movable object from it's parent

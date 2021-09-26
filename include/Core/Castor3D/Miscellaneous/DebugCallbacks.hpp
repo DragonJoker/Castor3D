@@ -19,12 +19,11 @@ namespace castor3d
 
 	private:
 		ashes::Instance const & m_instance;
-		void * m_userData;
 #if VK_EXT_debug_utils
-		VkDebugUtilsMessengerEXT m_messenger{ VK_NULL_HANDLE };
+		VkDebugUtilsMessengerEXT m_messenger{ nullptr };
 #endif
 #if VK_EXT_debug_report
-		VkDebugReportCallbackEXT m_callback{ VK_NULL_HANDLE };
+		VkDebugReportCallbackEXT m_callback{ nullptr };
 #endif
 	};
 	using DebugCallbacksPtr = std::unique_ptr< DebugCallbacks >;

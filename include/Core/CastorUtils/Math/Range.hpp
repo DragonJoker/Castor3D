@@ -131,7 +131,7 @@ namespace castor
 		 */
 		T value( float const & percent )const noexcept
 		{
-			return T( m_min + percent * float( m_max - m_min ) );
+			return T( float( m_min ) + percent * float( m_max - m_min ) );
 		}
 		/**
 		 *\~english
@@ -150,7 +150,7 @@ namespace castor
 		 */
 		T invValue( float const & percent )const noexcept
 		{
-			return T{ m_min + ( 1.0f - percent ) * float( m_max - m_min ) };
+			return T{ float( m_min ) + ( 1.0f - percent ) * float( m_max - m_min ) };
 		}
 		/**
 		 *\~english

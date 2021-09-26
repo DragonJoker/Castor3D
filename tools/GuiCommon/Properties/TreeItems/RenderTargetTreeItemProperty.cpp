@@ -72,10 +72,6 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	RenderTargetTreeItemProperty::~RenderTargetTreeItemProperty()
-	{
-	}
-
 	void RenderTargetTreeItemProperty::doCreateProperties( wxPGEditor * editor
 		, wxPropertyGrid * grid )
 	{

@@ -31,20 +31,11 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\~brief		Destructor.
-		 *\~french
-		 *\~brief		Destructeur.
-		 */
-		virtual ~HandlerEvent()
-		{
-		}
-		/**
-		 *\~english
 		 *\return		The handler event type.
 		 *\~french
 		 *\return		Le type d'évènement de gestionnaire.
 		 */
-		inline HandlerEventType getHandlerEventType()const
+		HandlerEventType getHandlerEventType()const
 		{
 			return m_handlerEventType;
 		}
@@ -54,7 +45,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le gestionnaire.
 		 */
-		inline EventHandler * getHandler()const
+		EventHandler * getHandler()const
 		{
 			return m_handler;
 		}

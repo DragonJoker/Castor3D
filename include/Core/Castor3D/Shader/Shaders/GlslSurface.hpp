@@ -21,7 +21,7 @@ namespace castor3d
 			C3D_API Surface( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled );
-			C3D_API Surface & operator=( Surface const & rhs );
+			SDW_DeclStructInstance( C3D_API, Surface );
 
 			C3D_API void create( sdw::Vec2 clip
 				, sdw::Vec3 view

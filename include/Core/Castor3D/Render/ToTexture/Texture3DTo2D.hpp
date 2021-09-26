@@ -51,7 +51,6 @@ namespace castor3d
 		}
 
 	private:
-		RenderSystem & m_renderSystem;
 		RenderDevice const & m_device;
 		MatrixUbo const & m_matrixUbo;
 		Texture m_target;

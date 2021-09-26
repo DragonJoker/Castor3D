@@ -11,7 +11,6 @@ namespace Testing
 	{
 	public:
 		CastorUtilsTextWriterTest();
-		virtual ~CastorUtilsTextWriterTest();
 
 	private:
 		void doRegisterTests()override;

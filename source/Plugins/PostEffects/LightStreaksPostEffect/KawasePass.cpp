@@ -86,6 +86,60 @@ namespace light_streaks
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
+
+		std::vector< KawasePass::Subpass > doCreateSubpasses( crg::FrameGraph & graph
+			, crg::FramePass const *& previousPass
+			, castor3d::RenderDevice const & device
+			, crg::ImageViewIdArray const & srcImages
+			, crg::ImageViewIdArray const & dstImages
+			, VkExtent2D dimensions
+			, ashes::PipelineShaderStageCreateInfoArray const & stages
+			, KawaseUbo const & kawaseUbo
+			, bool const * enabled )
+		{
+			std::vector< KawasePass::Subpass > result;
+			assert( srcImages.size() == dstImages.size() + 1u
+				&& dstImages.size() == PostEffect::Count );
+			uint32_t index = 0u;
+
+			for ( auto i = 0u; i < PostEffect::Count; ++i )
+			{
+				auto * source = &srcImages[0u];
+				auto * destination = &dstImages[i];
+				result.emplace_back( graph
+					, *previousPass
+					, device
+					, *source
+					, *destination
+					, dimensions
+					, stages
+					, kawaseUbo
+					, index
+					, enabled );
+				previousPass = &result.back().pass;
+				++index;
+				source = &srcImages[1u];
+
+				for ( auto j = 1u; j < 3u; ++j )
+				{
+					std::swap( source, destination );
+					result.emplace_back( graph
+						, *previousPass
+						, device
+						, *source
+						, *destination
+						, dimensions
+						, stages
+						, kawaseUbo
+						, index
+						, enabled );
+					previousPass = &result.back().pass;
+					++index;
+				}
+			}
+
+			return result;
+		}
 	}
 
 	//*********************************************************************************************
@@ -101,7 +155,7 @@ namespace light_streaks
 		, uint32_t index
 		, bool const * enabled )
 		: pass{ graph.createPass( "LightStreaksKawasePass" + std::to_string( index )
-			, [this, &device, &stages, &srcView, dimensions, index, enabled]( crg::FramePass const & pass
+			, [&device, &stages, dimensions, enabled]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -132,60 +186,6 @@ namespace light_streaks
 			, VK_IMAGE_LAYOUT_UNDEFINED
 			, linearSampler );
 		pass.addOutputColourView( dstView );
-	}
-
-	std::vector< KawasePass::Subpass > doCreateSubpasses( crg::FrameGraph & graph
-		, crg::FramePass const *& previousPass
-		, castor3d::RenderDevice const & device
-		, crg::ImageViewIdArray const & srcImages
-		, crg::ImageViewIdArray const & dstImages
-		, VkExtent2D dimensions
-		, ashes::PipelineShaderStageCreateInfoArray const & stages
-		, KawaseUbo const & kawaseUbo
-		, bool const * enabled )
-	{
-		std::vector< KawasePass::Subpass > result;
-		assert( srcImages.size() == dstImages.size() + 1u
-			&& dstImages.size() == PostEffect::Count );
-		uint32_t index = 0u;
-
-		for ( auto i = 0u; i < PostEffect::Count; ++i )
-		{
-			auto * source = &srcImages[0u];
-			auto * destination = &dstImages[i];
-			result.emplace_back( graph
-				, *previousPass
-				, device
-				, *source
-				, *destination
-				, dimensions
-				, stages
-				, kawaseUbo
-				, index
-				, enabled );
-			previousPass = &result.back().pass;
-			++index;
-			source = &srcImages[1u];
-
-			for ( auto j = 1u; j < 3u; ++j )
-			{
-				std::swap( source, destination );
-				result.emplace_back( graph
-					, *previousPass
-					, device
-					, *source
-					, *destination
-					, dimensions
-					, stages
-					, kawaseUbo
-					, index
-					, enabled );
-				previousPass = &result.back().pass;
-				++index;
-			}
-		}
-
-		return result;
 	}
 
 	//*********************************************************************************************

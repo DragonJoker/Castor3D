@@ -43,11 +43,6 @@ namespace CastorGui
 		C3D_CGui_API explicit ControlsManager( castor3d::Engine & engine );
 		/**
 		*\brief
-		*	Destructor
-		*/
-		C3D_CGui_API virtual ~ControlsManager();
-		/**
-		*\brief
 		*	Retrieves the default font used by controls
 		*\return
 		*	The font

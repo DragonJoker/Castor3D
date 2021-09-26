@@ -21,7 +21,6 @@ namespace GuiCommon
 		BoundingSphereProperty( wxString const & label = wxPG_LABEL
 			, wxString const & name = wxPG_LABEL
 			, castor::BoundingSphere const & value = castor::BoundingSphere{} );
-		virtual ~BoundingSphereProperty();
 
 		void RefreshChildren()override;
 

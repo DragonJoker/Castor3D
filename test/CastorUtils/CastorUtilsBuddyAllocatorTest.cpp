@@ -1,4 +1,4 @@
-﻿#include "CastorUtilsBuddyAllocatorTest.hpp"
+#include "CastorUtilsBuddyAllocatorTest.hpp"
 
 #include <CastorUtils/Pool/BuddyAllocator.hpp>
 
@@ -8,10 +8,6 @@ namespace Testing
 {
 	CastorUtilsBuddyAllocatorTest::CastorUtilsBuddyAllocatorTest()
 		: TestCase{ "CastorUtilsBuddyAllocatorTest" }
-	{
-	}
-
-	CastorUtilsBuddyAllocatorTest::~CastorUtilsBuddyAllocatorTest()
 	{
 	}
 
@@ -26,7 +22,7 @@ namespace Testing
 	{
 		{
 			BuddyAllocator allocator{ 4, 1 };
-			CT_EQUAL( allocator.getSize(), 16 );
+			CT_EQUAL( allocator.getSize(), 16u );
 			for ( auto i = 1u; i < allocator.getSize(); ++i )
 			{
 				CT_CHECK( allocator.hasAvailable( i ) );
@@ -34,7 +30,7 @@ namespace Testing
 		}
 		{
 			BuddyAllocator allocator{ 4, 2 };
-			CT_EQUAL( allocator.getSize(), 32 );
+			CT_EQUAL( allocator.getSize(), 32u );
 			for ( auto i = 1u; i < allocator.getSize(); ++i )
 			{
 				CT_CHECK( allocator.hasAvailable( i ) );
@@ -42,7 +38,7 @@ namespace Testing
 		}
 		{
 			BuddyAllocator allocator{ 5, 2 };
-			CT_EQUAL( allocator.getSize(), 64 );
+			CT_EQUAL( allocator.getSize(), 64u );
 			for ( auto i = 1u; i < allocator.getSize(); ++i )
 			{
 				CT_CHECK( allocator.hasAvailable( i ) );
@@ -50,7 +46,7 @@ namespace Testing
 		}
 		{
 			BuddyAllocator allocator{ 5, 3 };
-			CT_EQUAL( allocator.getSize(), 96 );
+			CT_EQUAL( allocator.getSize(), 96u );
 			for ( auto i = 1u; i < allocator.getSize(); ++i )
 			{
 				CT_CHECK( allocator.hasAvailable( i ) );

@@ -19,7 +19,7 @@ namespace GuiCommon
 			, wxWindow * parent
 			, wxPoint const & ptPos = wxDefaultPosition
 			, wxSize const & size = wxDefaultSize );
-		~FrameVariablesList();
+		~FrameVariablesList()override;
 
 		void loadVariables( VkShaderStageFlagBits stage
 			, std::vector< UniformBufferValues > & ubos );

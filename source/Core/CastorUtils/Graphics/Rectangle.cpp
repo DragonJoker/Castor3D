@@ -80,6 +80,7 @@ namespace castor
 
 	void Rectangle::size( Size & p_result )const
 	{
-		p_result.set( getWidth(), getHeight() );
+		p_result.set( uint32_t( abs( getWidth() ) )
+			, uint32_t( abs( getHeight() ) ) );
 	}
 }

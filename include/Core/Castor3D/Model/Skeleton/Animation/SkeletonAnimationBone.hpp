@@ -25,13 +25,6 @@ namespace castor3d
 		C3D_API explicit SkeletonAnimationBone( SkeletonAnimation & animation );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~SkeletonAnimationBone();
-		/**
-		 *\~english
 		 *\brief		Move constructor.
 		 *\~french
 		 *\brief		Constructeur par déplacement.
@@ -64,7 +57,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le nom de l'objet.
 		 */
-		virtual castor::String const & getName()const;
+		castor::String const & getName()const override;
 		/**
 		 *\~english
 		 *\brief		Sets the moving object.
@@ -73,7 +66,7 @@ namespace castor3d
 		 *\brief		Définit l'objet mouvant.
 		 *\param[in]	bone		L'os.
 		 */
-		inline void setBone( BoneSPtr bone )
+		void setBone( BoneSPtr bone )
 		{
 			m_bone = bone;
 		}
@@ -83,7 +76,7 @@ namespace castor3d
 		 *\~french
 		 *\return		L'objet mouvant.
 		 */
-		inline BoneSPtr getBone()const
+		BoneSPtr getBone()const
 		{
 			return m_bone.lock();
 		}

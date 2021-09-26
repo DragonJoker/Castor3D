@@ -46,7 +46,7 @@ namespace castor
 		/**
 		 *\copydoc		castor::ParserParameterBase::getStrType
 		 */
-		xchar const * const getStrType()const override
+		xchar const * getStrType()const override
 		{
 			return ParserParameterHelper< Type >::StringType;
 		}
@@ -122,7 +122,7 @@ namespace castor
 		/**
 		 *\copydoc		castor::ParserParameterBase::getStrType
 		 */
-		xchar const * const getStrType()const override
+		xchar const * getStrType()const override
 		{
 			return ParserParameterHelper< Type >::StringType;
 		}
@@ -180,7 +180,7 @@ namespace castor
 		/**
 		 *\copydoc		castor::ParserParameterBase::getStrType
 		 */
-		xchar const * const getStrType()const override;
+		xchar const * getStrType()const override;
 		/**
 		 *\copydoc		castor::ParserParameterBase::clone
 		 */
@@ -222,7 +222,7 @@ namespace castor
 		/**
 		 *\copydoc		castor::ParserParameterBase::getStrType
 		 */
-		xchar const * const getStrType()const override;
+		xchar const * getStrType()const override;
 		/**
 		 *\copydoc		castor::ParserParameterBase::clone
 		 */
@@ -267,7 +267,7 @@ namespace castor
 		/**
 		 *\copydoc		castor::ParserParameterBase::getStrType
 		 */
-		xchar const * const getStrType()const override;
+		xchar const * getStrType()const override;
 		/**
 		 *\copydoc		castor::ParserParameterBase::clone
 		 */
@@ -312,7 +312,7 @@ namespace castor
 		/**
 		 *\copydoc		castor::ParserParameterBase::getStrType
 		 */
-		xchar const * const getStrType()const override;
+		xchar const * getStrType()const override;
 		/**
 		 *\copydoc		castor::ParserParameterBase::clone
 		 */

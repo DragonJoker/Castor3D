@@ -21,7 +21,7 @@ namespace castor
 		 */
 		static uint8_t * allocate( size_t size )
 		{
-			return new uint8_t[size];;
+			return new uint8_t[size];
 		}
 		/**
 		 *\~english

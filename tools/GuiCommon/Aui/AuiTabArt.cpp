@@ -65,7 +65,7 @@ namespace GuiCommon
 		wxBitmap AuiBitmapFromBits( const unsigned char bits[], int w, int h,
 			const wxColour& color )
 		{
-			wxImage img = wxBitmap( ( const char* )bits, w, h ).ConvertToImage();
+			wxImage img = wxBitmap( reinterpret_cast< const char * >( bits ), w, h ).ConvertToImage();
 			img.Replace( 0, 0, 0, 123, 123, 123 );
 			img.Replace( 255, 255, 255, color.Red(), color.Green(), color.Blue() );
 			img.SetMaskColour( 123, 123, 123 );

@@ -125,7 +125,6 @@ namespace castor3d
 		, RenderDevice const & device
 		, uint32_t count )
 		: m_buffer{ engine, device, count * DataSize, cuT( "TextureConfigurationBuffer" ) }
-		, m_configMaxCount{ count }
 		, m_data{ doBindData( m_buffer.getPtr(), m_buffer.getSize(), count ) }
 	{
 	}
@@ -136,7 +135,6 @@ namespace castor3d
 		{
 			auto lock( castor::makeUniqueLock( m_mutex ) );
 
-			CU_Require( m_configurations.size() < m_configMaxCount - 1u );
 			auto & config = unit.getConfiguration();
 			auto it = unit.hasAnimation()
 				? m_configurations.end()
@@ -147,13 +145,14 @@ namespace castor3d
 			if ( it == m_configurations.end() )
 			{
 				m_configurations.push_back( config );
-				it = m_configurations.begin() + ( m_configurations.size() - 1u );
+				it = std::next( m_configurations.begin()
+					, ptrdiff_t( m_configurations.size() - 1u ) );
 			}
 
 			unit.setId( uint32_t( std::distance( m_configurations.begin(), it ) ) + 1u );
-			m_connections.emplace_back( unit.onChanged.connect( [this]( TextureUnit const & unit )
+			m_connections.emplace_back( unit.onChanged.connect( [this]( TextureUnit const & punit )
 				{
-					m_dirty.emplace_back( &unit );
+					m_dirty.emplace_back( &punit );
 				} ) );
 			m_dirty.emplace_back( &unit );
 		}

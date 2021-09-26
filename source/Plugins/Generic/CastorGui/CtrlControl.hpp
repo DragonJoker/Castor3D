@@ -47,12 +47,7 @@ namespace CastorGui
 			, castor::Size const & p_size
 			, uint32_t p_style = 0
 			, bool p_visible = true );
-
-		/** Destructor.
-		 */
-		virtual ~Control();
-
-		/** sets the position.
+		/** Sets the position.
 		 *\param[in]	p_value		The new value.
 		 */
 		void setPosition( castor::Position const & p_value );
@@ -283,7 +278,7 @@ namespace CastorGui
 		 *\remarks		A control catches mouse events when it is visible, enabled, and when it explicitly catches it (enables by default, except for static controls
 		 *\return		false if the mouse events don't affect the contro
 		*/
-		virtual bool doCatchesMouseEvents()const
+		bool doCatchesMouseEvents()const override
 		{
 			return isVisible();
 		}
@@ -292,7 +287,7 @@ namespace CastorGui
 		 *\remarks		A control catches 'tab' key when it is visible, enabled, and when it explicitly catches it (disabled by default
 		 *\return		false if the 'tab' key doesn't affect the control
 		 */
-		virtual bool doCatchesTabKey()const
+		bool doCatchesTabKey()const override
 		{
 			return isVisible();
 		}
@@ -301,7 +296,7 @@ namespace CastorGui
 		 *\remarks		A control catches 'return' key when it is visible, enabled, and when it explicitly catches it (disabled by default
 		 *\return		false if the 'return' key doesn't affect the control
 		 */
-		virtual bool doCatchesReturnKey()const
+		bool doCatchesReturnKey()const override
 		{
 			return isVisible();
 		}
@@ -310,7 +305,7 @@ namespace CastorGui
 		 *\remarks		Used for derived control specific behavious
 		 *\param[in]	p_value		The new value
 		 */
-		virtual void doSetVisible( bool p_visible )
+		virtual void doSetVisible( bool p_visible  )
 		{
 		}
 

@@ -25,7 +25,7 @@ namespace castor3d
 			C3D_API MatrixData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled );
-			C3D_API MatrixData & operator=( MatrixData const & rhs );
+			SDW_DeclStructInstance( C3D_API, MatrixData );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
@@ -62,6 +62,10 @@ namespace castor3d
 	{
 	public:
 		using Configuration = MatrixUboConfiguration;
+		C3D_API MatrixUbo( MatrixUbo const & rhs ) = delete;
+		C3D_API MatrixUbo & operator=( MatrixUbo const & rhs ) = delete;
+		C3D_API MatrixUbo( MatrixUbo && rhs ) = default;
+		C3D_API MatrixUbo & operator=( MatrixUbo && rhs ) = delete;
 		C3D_API explicit MatrixUbo( RenderDevice const & device );
 		C3D_API ~MatrixUbo();
 		/**

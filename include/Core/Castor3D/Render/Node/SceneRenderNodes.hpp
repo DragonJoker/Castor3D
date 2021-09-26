@@ -15,7 +15,10 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 
+#pragma warning( push )
+#pragma warning( disable:4365 )
 #include <mutex>
+#pragma warning( pop )
 
 namespace castor3d
 {
@@ -107,7 +110,7 @@ namespace castor3d
 			DescriptorPools( DescriptorPools const & ) = delete;
 			DescriptorPools & operator=( DescriptorPools const & ) = delete;
 			DescriptorPools( DescriptorPools && ) = default;
-			DescriptorPools & operator=( DescriptorPools && ) = default;
+			DescriptorPools & operator=( DescriptorPools && ) = delete;
 			DescriptorPools( Engine & engine
 				, DescriptorSetLayouts * layouts
 				, DescriptorCounts * counts );

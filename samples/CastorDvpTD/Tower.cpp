@@ -11,25 +11,28 @@ using namespace castor3d;
 namespace castortd
 {
 	//*********************************************************************************************
-	
-	//// Nearest enemy
-	//EnemyArray doSortNearest( EnemyArray const & p_enemies, castor::Point3f const & p_position )
-	//{
-	//	EnemyArray result{ p_enemies };
-	//	std::sort( std::begin( result )
-	//		, std::end( result )
-	//		, [&p_position]( EnemyPtr a, EnemyPtr b )
-	//		{
-	//			return point::distanceSquared( a->getNode().getPosition(), p_position )
-	//				< point::distanceSquared( b->getNode().getPosition(), p_position );
-	//		} );
-	//	return result;
-	//}
 
-	// First enemy
-	EnemyArray doSortFirst( EnemyArray const & p_enemies, castor::Point3f const & p_position )
+	namespace
 	{
-		return p_enemies;
+		//// Nearest enemy
+		//EnemyArray doSortNearest( EnemyArray const & p_enemies, castor::Point3f const & p_position )
+		//{
+		//	EnemyArray result{ p_enemies };
+		//	std::sort( std::begin( result )
+		//		, std::end( result )
+		//		, [&p_position]( EnemyPtr a, EnemyPtr b )
+		//		{
+		//			return point::distanceSquared( a->getNode().getPosition(), p_position )
+		//				< point::distanceSquared( b->getNode().getPosition(), p_position );
+		//		} );
+		//	return result;
+		//}
+
+		// First enemy
+		EnemyArray doSortFirst( EnemyArray const & p_enemies, castor::Point3f const & p_position )
+		{
+			return p_enemies;
+		}
 	}
 
 	//*********************************************************************************************
@@ -42,10 +45,6 @@ namespace castortd
 		, m_anim{ p_anim }
 		, m_cell{ p_cell }
 		, m_category( std::move( p_category ) )
-	{
-	}
-
-	Tower::~Tower()
 	{
 	}
 

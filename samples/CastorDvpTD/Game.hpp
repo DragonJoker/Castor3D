@@ -5,13 +5,14 @@
 #include "Hud.hpp"
 #include "Tower.hpp"
 
+#include <Castor3D/Material/Material.hpp>
+
 namespace castortd
 {
 	class Game
 	{
 	public:
 		explicit Game( castor3d::Scene & p_scene );
-		~Game();
 
 		void Reset();
 		void start();

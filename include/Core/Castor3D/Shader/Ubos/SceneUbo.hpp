@@ -19,6 +19,8 @@ namespace castor3d
 		struct SceneData
 			: public sdw::StructInstance
 		{
+			SDW_DeclStructInstance( C3D_API, SceneData );
+
 			friend struct BillboardData;
 			friend class Fog;
 			friend class CommonFog;
@@ -26,7 +28,6 @@ namespace castor3d
 			C3D_API SceneData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled );
-			C3D_API SceneData & operator=( SceneData const & rhs );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
@@ -34,17 +35,9 @@ namespace castor3d
 			C3D_API sdw::Vec3 transformCamera( sdw::Mat3 const & transform )const;
 			C3D_API sdw::Vec3 getPosToCamera( sdw::Vec3 const & position )const;
 			C3D_API sdw::Vec3 getCameraToPos( sdw::Vec3 const & position )const;
-			C3D_API sdw::Vec3 getAmbientLight()const;
-			C3D_API sdw::Vec3 getCameraPosition()const;
 			C3D_API sdw::Vec4 getBackgroundColour( Utils const & utils
 				, sdw::Float const & gamma )const;
 			C3D_API sdw::Vec4 getBackgroundColour( HdrConfigData const & hdrConfigData )const;
-			C3D_API sdw::Int getDirectionalLightCount()const;
-			C3D_API sdw::Int getPointLightCount()const;
-			C3D_API sdw::Int getSpotLightCount()const;
-			C3D_API sdw::Vec2 getRenderSize()const;
-			C3D_API sdw::Float getNearPlane()const;
-			C3D_API sdw::Float getFarPlane()const;
 			C3D_API sdw::Vec4 computeAccumulation( Utils const & utils
 				, sdw::Float const & depth
 				, sdw::Vec3 const & colour
@@ -65,6 +58,14 @@ namespace castor3d
 
 		public:
 			sdw::UInt fogType;
+			sdw::Vec3 ambientLight;
+			sdw::Vec3 cameraPosition;
+			sdw::Vec2 renderSize;
+			sdw::Float nearPlane;
+			sdw::Float farPlane;
+			sdw::Int directionalLightCount;
+			sdw::Int pointLightCount;
+			sdw::Int spotLightCount;
 		};
 	}
 
@@ -74,6 +75,10 @@ namespace castor3d
 		using Configuration = SceneUboConfiguration;
 
 	public:
+		C3D_API SceneUbo( SceneUbo const & rhs ) = delete;
+		C3D_API SceneUbo & operator=( SceneUbo const & rhs ) = delete;
+		C3D_API SceneUbo( SceneUbo && rhs ) = default;
+		C3D_API SceneUbo & operator=( SceneUbo && rhs ) = delete;
 		C3D_API explicit SceneUbo( RenderDevice const & device );
 		C3D_API ~SceneUbo();
 		/**

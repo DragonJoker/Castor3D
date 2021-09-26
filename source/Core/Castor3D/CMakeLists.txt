@@ -416,7 +416,6 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Miscellaneous/GpuObjectTracker.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Miscellaneous/LoadingScreen.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Miscellaneous/Logger.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Miscellaneous/Parameter.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Miscellaneous/ProgressBar.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Miscellaneous/Version.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Miscellaneous/VersionException.cpp
@@ -1718,13 +1717,16 @@ add_library( castor::${PROJECT_NAME}
 target_include_directories( ${PROJECT_NAME}
 	PUBLIC
 		$<BUILD_INTERFACE:${ASHES_SOURCE_DIR}/include>
-		$<BUILD_INTERFACE:${ASHES_CONFIG_DIR}/include>
+		$<BUILD_INTERFACE:${ASHES_CONFIG_DIR}>
 		$<INSTALL_INTERFACE:include>
 	PRIVATE
 		${CASTOR_SOURCE_DIR}/include/Core
 		${CASTOR_BINARY_DIR}/include/Core
 		${CASTOR_SOURCE_DIR}/source/Core
 		${CASTOR_BINARY_DIR}/source/Core
+)
+target_include_directories( ${PROJECT_NAME} SYSTEM
+	PRIVATE
 		${glslang_INCLUDE_DIR}
 		${ExternalIncludes}
 )

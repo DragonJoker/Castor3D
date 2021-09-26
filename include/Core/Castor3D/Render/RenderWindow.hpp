@@ -25,7 +25,11 @@ See LICENSE file in root folder
 #include <ashespp/Sync/Semaphore.hpp>
 
 #include <array>
+
+#pragma warning( push )
+#pragma warning( disable:4365 )
 #include <atomic>
+#pragma warning( pop )
 
 namespace castor3d
 {
@@ -407,6 +411,11 @@ namespace castor3d
 			return m_fullscreen;
 		}
 
+		bool isSkipped()const
+		{
+			return m_skip;
+		}
+
 		castor::PxBufferBaseSPtr getSavedFrame()const
 		{
 			return m_saveBuffer;
@@ -488,9 +497,9 @@ namespace castor3d
 		RenderingResources * doGetResources();
 		crg::SemaphoreWaitArray doSubmitLoadingFrame( RenderingResources & resources
 			, LoadingScreen & loadingScreen
-			, VkFence & fence
+			, crg::Fence *& fence
 			, crg::SemaphoreWaitArray toWait );
-		void doPresentLoadingFrame( VkFence fence
+		void doPresentLoadingFrame( crg::Fence * fence
 			, RenderingResources & resources
 			, crg::SemaphoreWaitArray toWait );
 		void doWaitFrame( crg::SemaphoreWaitArray toWait );

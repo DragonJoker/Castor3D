@@ -18,10 +18,6 @@ namespace Testing
 				: Unique< TestUnique >( this )
 			{
 			}
-
-			~TestUnique()
-			{
-			}
 		};
 
 		struct IntVal
@@ -44,10 +40,6 @@ namespace Testing
 				: Unique< TestUniqueFirst >( this )
 			{
 			}
-
-			~TestUniqueFirst()
-			{
-			}
 		};
 
 		class TestUniqueMiddle
@@ -58,10 +50,6 @@ namespace Testing
 		public:
 			TestUniqueMiddle()
 				: Unique< TestUniqueMiddle >( this )
-			{
-			}
-
-			~TestUniqueMiddle()
 			{
 			}
 		};
@@ -76,10 +64,6 @@ namespace Testing
 				: Unique< TestUniqueLast >( this )
 			{
 			}
-
-			~TestUniqueLast()
-			{
-			}
 		};
 	}
 
@@ -87,10 +71,6 @@ namespace Testing
 
 	CastorUtilsUniqueTest::CastorUtilsUniqueTest()
 		:	TestCase( "CastorUtilsUniqueTest" )
-	{
-	}
-
-	CastorUtilsUniqueTest::~CastorUtilsUniqueTest()
 	{
 	}
 

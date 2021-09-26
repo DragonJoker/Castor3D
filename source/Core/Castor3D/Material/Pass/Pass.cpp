@@ -1280,7 +1280,7 @@ namespace castor3d
 			, m_objectFactor );
 	}
 
-	void Pass::accept( TextureConfiguration & configuration
+	void Pass::fillConfig( TextureConfiguration & configuration
 		, PassVisitorBase & vis )
 	{
 		doAccept( configuration, vis );
@@ -1542,7 +1542,7 @@ namespace castor3d
 		data.edgeColour->a = ( checkFlag( m_flags, PassFlag::eDrawEdge )
 			? getEdgeColour().alpha()
 			: 0.0f );
-		data.common->r = getOpacity();
+		data.common->r = 0.0f;
 		data.common->g = getEmissive();
 		data.common->b = getAlphaValue();
 		data.common->a = needsGammaCorrection() ? 2.2f : 1.0f;

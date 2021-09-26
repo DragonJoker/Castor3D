@@ -20,8 +20,4 @@ namespace castortd
 			++x;
 		}
 	}
-
-	Grid::~Grid()
-	{
-	}
 }

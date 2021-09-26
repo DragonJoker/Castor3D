@@ -25,12 +25,6 @@ namespace castor3d
 		{
 		}
 
-		ModelData & ModelData::operator=( ModelData const & rhs )
-		{
-			StructInstance::operator=( rhs );
-			return *this;
-		}
-
 		ast::type::StructPtr ModelData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140

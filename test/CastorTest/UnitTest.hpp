@@ -4,135 +4,495 @@
 
 #include "CastorTestPrerequisites.hpp"
 
-#include <CastorUtils/Design/ArrayView.hpp>
-
+#include <array>
+#include <list>
 #include <map>
+#include <set>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
 
 namespace Testing
 {
-	template< typename T >
-	inline std::string toString( T const & p_value )
-	{
-		std::stringstream stream;
-		stream << p_value;
-		return stream.str();
-	}
+	template< typename ValueT >
+	struct Stringifier;
 
 	inline std::string toString( std::nullptr_t const & )
 	{
 		return "nullptr";
 	}
 
-	template<>
-	inline std::string toString< std::chrono::seconds >( std::chrono::seconds const & p_value )
+	template< typename ValueT >
+	inline std::string toString( ValueT const & value )
 	{
-		std::stringstream stream;
-		stream << p_value.count() << "s";
-		return stream.str();
+		return Stringifier< ValueT >::get( value );
 	}
 
 	template<>
-	inline std::string toString< std::chrono::milliseconds >( std::chrono::milliseconds const & p_value )
+	struct Stringifier< bool >
 	{
-		std::stringstream stream;
-		stream << p_value.count() << "ms";
-		return stream.str();
-	}
-
-	template<>
-	inline std::string toString< std::chrono::microseconds >( std::chrono::microseconds const & p_value )
-	{
-		std::stringstream stream;
-		stream << p_value.count() << "us";
-		return stream.str();
-	}
-
-	template<>
-	inline std::string toString< std::chrono::nanoseconds >( std::chrono::nanoseconds const & p_value )
-	{
-		std::stringstream stream;
-		stream << p_value.count() << "ns";
-		return stream.str();
-	}
-
-	template<>
-	inline std::string toString< std::wstring >( std::wstring const & p_value )
-	{
-		std::stringstream stream;
-		stream << p_value.c_str();
-		return stream.str();
-	}
-
-	template< typename T >
-	inline std::string toString( std::pair< T const *, uint32_t > const & p_value )
-	{
-		std::stringstream stream;
-		stream << p_value.second << ": ";
-
-		std::for_each( p_value.first, p_value.first + p_value.second, [&stream]( T const & p_val )
+		static std::string get( bool const & value )
 		{
-			stream << " " << toString( p_val );
-		} );
-
-		return stream.str();
-	}
-
-	template< typename T >
-	inline std::string toString( std::pair< T *, uint32_t > const & p_value )
-	{
-		std::stringstream stream;
-		stream << p_value.second << ": ";
-
-		std::for_each( p_value.first, p_value.first + p_value.second, [&stream]( T const & p_val )
-		{
-			stream << " " << toString( p_val );
-		} );
-
-		return stream.str();
-	}
-
-	inline std::string toString( std::pair< uint8_t const *, uint32_t > const & p_value )
-	{
-		std::stringstream stream;
-		stream << p_value.second << ": ";
-
-		std::for_each( p_value.first, p_value.first + p_value.second, [&stream]( uint8_t const & p_val )
-		{
-			stream << " " << std::hex << uint16_t( p_val );
-		} );
-
-		return stream.str();
-	}
-
-	template< typename Key, typename Value >
-	inline std::string toString( std::map< Key, Value > const & p_value )
-	{
-		std::stringstream stream;
-		stream << std::endl << "[" << std::endl;
-
-		for ( auto & pair : p_value )
-		{
-			stream << "  [" << toString( pair.first ) << ": " << toString( pair.second ) << "]" << std::endl;
+			std::stringstream stream;
+			stream << ( value ? std::string{ "true" } : std::string{ "false" } );
+			return stream.str();
 		}
+	};
 
-		stream << "]" << std::endl;
-		return stream.str();
-	}
-
-	template< typename Key, typename Value >
-	inline std::string toString( std::map< Key, std::shared_ptr< Value > > const & p_value )
+	template<>
+	struct Stringifier< char >
 	{
-		std::stringstream stream;
-		stream << std::endl << "[" << std::endl;
-
-		for ( auto & pair : p_value )
+		static std::string get( char const & value )
 		{
-			stream << "  [" << toString( pair.first ) << ": " << toString( *pair.second ) << "]" << std::endl;
+			std::stringstream stream;
+			stream << value;
+			return stream.str();
 		}
+	};
 
-		stream << "]" << std::endl;
-		return stream.str();
-	}
+	template<>
+	struct Stringifier< int8_t >
+	{
+		static std::string get( int8_t const & value )
+		{
+			std::stringstream stream;
+			stream << int16_t( value );
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< uint8_t >
+	{
+		static std::string get( uint8_t const & value )
+		{
+			std::stringstream stream;
+			stream << uint16_t( value );
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< int16_t >
+	{
+		static std::string get( int16_t const & value )
+		{
+			std::stringstream stream;
+			stream << value;
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< uint16_t >
+	{
+		static std::string get( uint16_t const & value )
+		{
+			std::stringstream stream;
+			stream << value;
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< int32_t >
+	{
+		static std::string get( int32_t const & value )
+		{
+			std::stringstream stream;
+			stream << value;
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< uint32_t >
+	{
+		static std::string get( uint32_t const & value )
+		{
+			std::stringstream stream;
+			stream << value;
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< int64_t >
+	{
+		static std::string get( int64_t const & value )
+		{
+			std::stringstream stream;
+			stream << value;
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< uint64_t >
+	{
+		static std::string get( uint64_t const & value )
+		{
+			std::stringstream stream;
+			stream << value;
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< float >
+	{
+		static std::string get( float const & value )
+		{
+			std::stringstream stream;
+			stream << value;
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< double >
+	{
+		static std::string get( double const & value )
+		{
+			std::stringstream stream;
+			stream << value;
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< std::chrono::seconds >
+	{
+		static std::string get( std::chrono::seconds const & value )
+		{
+			std::stringstream stream;
+			stream << toString( value.count() ) << " s";
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< std::chrono::milliseconds >
+	{
+		static std::string get( std::chrono::milliseconds const & value )
+		{
+			std::stringstream stream;
+			stream << toString( value.count() ) << " ms";
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< std::chrono::microseconds >
+	{
+		static std::string get( std::chrono::microseconds const & value )
+		{
+			std::stringstream stream;
+			stream << toString( value.count() ) << " us";
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< std::chrono::nanoseconds >
+	{
+		static std::string get( std::chrono::nanoseconds const & value )
+		{
+			std::stringstream stream;
+			stream << toString( value.count() ) << " ns";
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< std::string >
+	{
+		static std::string get( std::string const & value )
+		{
+			return value;
+		}
+	};
+
+	template<>
+	struct Stringifier< std::wstring >
+	{
+		static std::string get( std::wstring const & value )
+		{
+			std::stringstream stream;
+			stream << value.c_str();
+			return stream.str();
+		}
+	};
+
+	template< typename ValueT >
+	struct Stringifier< ValueT * >
+	{
+		static std::string get( ValueT * value )
+		{
+			std::stringstream stream;
+			stream << ( value ? toString( *value ) : std::string{ "null_rptr" } );
+			return stream.str();
+		}
+	};
+
+	template< typename ValueT >
+	struct Stringifier< ValueT const * >
+	{
+		static std::string get( ValueT const * value )
+		{
+			std::stringstream stream;
+			stream << ( value ? toString( *value ) : std::string{ "null_rptr" } );
+			return stream.str();
+		}
+	};
+
+	template< typename ValueT >
+	struct Stringifier< std::shared_ptr< ValueT > >
+	{
+		static std::string get( std::shared_ptr< ValueT > const & value )
+		{
+			std::stringstream stream;
+			stream << ( value ? toString( *value ) : std::string{ "null_sptr" } );
+			return stream.str();
+		}
+	};
+
+	template< typename ValueT >
+	struct Stringifier< std::unique_ptr< ValueT > >
+	{
+		static std::string get( std::unique_ptr< ValueT > const & value )
+		{
+			std::stringstream stream;
+			stream << ( value ? toString( *value ) : std::string{ "null_sptr" } );
+			return stream.str();
+		}
+	};
+
+	template< typename ValueT >
+	struct Stringifier< std::weak_ptr< ValueT > >
+	{
+		static std::string get( std::weak_ptr< ValueT > const & value )
+		{
+			std::stringstream stream;
+			stream << ( value.expired() ? std::string{ "null_wptr" } : toString( value.lock() ) );
+			return stream.str();
+		}
+	};
+
+	template< typename ValueT >
+	struct Stringifier< std::pair< ValueT const *, uint32_t > >
+	{
+		static std::string get( std::pair< ValueT const *, uint32_t > const & value )
+		{
+			std::stringstream stream;
+			stream << value.second << ":";
+
+			std::for_each( value.first
+				, value.first + value.second
+				, [&stream]( ValueT const & val )
+				{
+					stream << " " << toString( val );
+				} );
+
+			return stream.str();
+		}
+	};
+
+	template< typename ValueT >
+	struct Stringifier< std::pair< ValueT *, uint32_t > >
+	{
+		static std::string get( std::pair< ValueT *, uint32_t > const & value )
+		{
+			std::stringstream stream;
+			stream << value.second << ":";
+
+			std::for_each( value.first
+				, value.first + value.second
+				, [&stream]( ValueT const & val )
+				{
+					stream << " " << toString( val );
+				} );
+
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< std::pair< uint8_t const *, uint32_t > >
+	{
+		static std::string get( std::pair< uint8_t const *, uint32_t > const & value )
+		{
+			std::stringstream stream;
+			stream << value.second << ":";
+
+			std::for_each( value.first
+				, value.first + value.second
+				, [&stream]( uint8_t const & val )
+				{
+					stream << " " << std::hex << uint16_t( val );
+				} );
+
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< std::pair< uint8_t *, uint32_t > >
+	{
+		static std::string get( std::pair< uint8_t *, uint32_t > const & value )
+		{
+			std::stringstream stream;
+			stream << value.second << ":";
+
+			std::for_each( value.first
+				, value.first + value.second
+				, [&stream]( uint8_t const & val )
+				{
+					stream << " " << std::hex << uint16_t( val );
+				} );
+
+			return stream.str();
+		}
+	};
+
+	template< typename ValueT, size_t CountT >
+	struct Stringifier< std::array< ValueT, CountT > >
+	{
+		static std::string get( std::array< ValueT, CountT > const & values )
+		{
+			std::stringstream stream;
+			stream << values.size() << ":";
+
+			for ( auto & value : values )
+			{
+				stream << " " << toString( value );
+			}
+
+			return stream.str();
+		}
+	};
+
+	template< typename ValueT, size_t CountT >
+	using CArrayType = ValueT[CountT];
+
+	template< typename ValueT, size_t CountT >
+	struct Stringifier< CArrayType< ValueT, CountT > >
+	{
+		static std::string get( CArrayType< ValueT, CountT > const & values )
+		{
+			std::stringstream stream;
+			stream << CountT << ":";
+
+			for ( auto & value : values )
+			{
+				stream << " " << toString( value );
+			}
+
+			return stream.str();
+		}
+	};
+
+	template< typename ValueT >
+	struct Stringifier< std::vector< ValueT > >
+	{
+		static std::string get( std::vector< ValueT > const & values )
+		{
+			std::stringstream stream;
+			stream << values.size() << ":";
+
+			for ( auto & value : values )
+			{
+				stream << " " << toString( value );
+			}
+
+			return stream.str();
+		}
+	};
+
+	template< typename ValueT >
+	struct Stringifier< std::set< ValueT > >
+	{
+		static std::string get( std::set< ValueT > const & values )
+		{
+			std::stringstream stream;
+			stream << values.size() << ":";
+
+			for ( auto & value : values )
+			{
+				stream << " " << toString( value );
+			}
+
+			return stream.str();
+		}
+	};
+
+	template< typename ValueT >
+	struct Stringifier< std::unordered_set< ValueT > >
+	{
+		static std::string get( std::unordered_set< ValueT > const & values )
+		{
+			std::stringstream stream;
+			stream << values.size() << ":";
+
+			for ( auto & value : values )
+			{
+				stream << " " << toString( value );
+			}
+
+			return stream.str();
+		}
+	};
+
+	template< typename ValueT >
+	struct Stringifier< std::list< ValueT > >
+	{
+		static std::string get( std::list< ValueT > const & values )
+		{
+			std::stringstream stream;
+			stream << values.size() << ":";
+
+			for ( auto & value : values )
+			{
+				stream << " " << toString( value );
+			}
+
+			return stream.str();
+		}
+	};
+
+	template< typename KeyT, typename ValueT >
+	struct Stringifier< std::map< KeyT, ValueT > >
+	{
+		static std::string get( std::map< KeyT, ValueT > const & values )
+		{
+			std::stringstream stream;
+			stream << values.size() << ":";
+
+			for ( auto & value : values )
+			{
+				stream << "  [" << toString( value.first ) << ": " << toString( value.second ) << "]" << std::endl;
+			}
+
+			return stream.str();
+		}
+	};
+
+	template< typename KeyT, typename ValueT >
+	struct Stringifier< std::unordered_map< KeyT, ValueT > >
+	{
+		static std::string get( std::unordered_map< KeyT, ValueT > const & values )
+		{
+			std::stringstream stream;
+			stream << values.size() << ":";
+
+			for ( auto & value : values )
+			{
+				stream << "  [" << toString( value.first ) << ": " << toString( value.second ) << "]" << std::endl;
+			}
+
+			return stream.str();
+		}
+	};
 
 	template< class Value >
 	class Lazy
@@ -264,9 +624,9 @@ namespace Testing
 		TestFailed( std::string const & p_what
 			, std::string const & p_file
 			, std::string const & p_function
-			, int p_line );
-		virtual ~TestFailed() throw( );
-		const char * what()
+			, uint32_t p_line );
+
+		const char * what()const noexcept override
 		{
 			return m_what.c_str();
 		}
@@ -661,29 +1021,29 @@ namespace Testing
 
 		bool compare( float const & p_a, float const & p_b )
 		{
-			float epsilon = float ( 0.0001 );
-			return std::abs( float ( p_a - p_b ) ) < epsilon
+			float epsilon = 0.0001f;
+			return std::abs( p_a - p_b ) < epsilon
 				   || ( std::isnan( p_a ) && std::isnan( p_b ) );
 		}
 
 		bool compare( float const & p_a, double const & p_b )
 		{
-			float epsilon = float ( 0.0001 );
-			return std::abs( float ( p_a - p_b ) ) < epsilon
+			float epsilon = 0.0001f;
+			return std::abs( p_a - p_b ) < epsilon
 				   || ( std::isnan( p_a ) && std::isnan( p_b ) );
 		}
 
 		bool compare( double const & p_a, double const & p_b )
 		{
-			double epsilon = double ( 0.0001 );
-			return std::abs( double ( p_a - p_b ) ) < epsilon
+			double epsilon = 0.0001;
+			return std::abs( p_a - p_b ) < epsilon
 				   || ( std::isnan( p_a ) && std::isnan( p_b ) );
 		}
 
 		bool compare( double const & p_a, float const & p_b )
 		{
-			double epsilon = double( 0.0001 );
-			return std::abs( double( p_a - p_b ) ) < epsilon
+			double epsilon = 0.0001;
+			return std::abs( p_a - p_b ) < epsilon
 				|| ( std::isnan( p_a ) && std::isnan( p_b ) );
 		}
 
@@ -717,16 +1077,16 @@ namespace Testing
 #	define CT_NAME_CONCAT( X, Y ) CT_NAME_CONCAT_( X, Y )
 
 #	define CT_FAILURE_EX( test, x )\
-	( test ).fail( __FILE__, __FUNCTION__, __LINE__, x )
+	( test ).fail( __FILE__, __FUNCTION__, uint32_t( __LINE__ ), x )
 
 #	define CT_CHECK_EX( test, x )\
 	( test ).check( LAZY( ( x ) ), __FILE__, __FUNCTION__, uint32_t( __LINE__ ), #x )
 
 #	define CT_EQUAL_EX( test, x, y )\
-	( test ).checkEqual( [&]( auto const & lhs, auto const & rhs ){ return ( test ).compare( lhs, rhs ); }, LAZY( ( x ) ), LAZY( ( y ) ), __FILE__, __FUNCTION__, uint32_t( __LINE__ ), #x, #y )
+	( test ).checkEqual( [&]( auto const & plhs, auto const & prhs ){ return ( test ).compare( plhs, prhs ); }, LAZY( ( x ) ), LAZY( ( y ) ), __FILE__, __FUNCTION__, uint32_t( __LINE__ ), #x, #y )
 
 #	define CT_NEQUAL_EX( test, x, y )\
-	( test ).checkNotEqual( [&]( auto const & lhs, auto const & rhs ){ return ( test ).compare( lhs, rhs ); }, LAZY( ( x ) ), LAZY( ( y ) ), __FILE__, __FUNCTION__, uint32_t( __LINE__ ), #x, #y )
+	( test ).checkNotEqual( [&]( auto const & plhs, auto const & prhs ){ return ( test ).compare( plhs, prhs ); }, LAZY( ( x ) ), LAZY( ( y ) ), __FILE__, __FUNCTION__, uint32_t( __LINE__ ), #x, #y )
 
 #	define CT_CHECK_THROW_EX( test, x )\
 	( test ).checkThrow( LAZY( ( x ) ), __FILE__, __FUNCTION__, uint32_t( __LINE__ ), #x )

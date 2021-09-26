@@ -41,8 +41,8 @@ namespace GuiCommon
 		, bool camera )
 		: m_listener{ listener }
 		, m_node{ node }
-		, m_originalOrientation{ node->getOrientation() }
 		, m_originalPosition{ node->getPosition() }
+		, m_originalOrientation{ node->getOrientation() }
 		, m_originalAngles
 		{
 			m_originalOrientation.getPitch(),

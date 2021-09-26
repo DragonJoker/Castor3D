@@ -92,7 +92,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le début de la map des transformations cumulatives.
 		 */
-		inline TransformArray::const_iterator begin()const
+		TransformArray::const_iterator begin()const
 		{
 			return m_cumulative.begin();
 		}
@@ -102,7 +102,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le début de la map des transformations cumulatives.
 		 */
-		inline TransformArray::iterator begin()
+		TransformArray::iterator begin()
 		{
 			return m_cumulative.begin();
 		}
@@ -112,7 +112,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La fin de la map des transformations cumulatives.
 		 */
-		inline TransformArray::const_iterator end()const
+		TransformArray::const_iterator end()const
 		{
 			return m_cumulative.end();
 		}
@@ -122,7 +122,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La fin de la map des transformations cumulatives.
 		 */
-		inline TransformArray::iterator end()
+		TransformArray::iterator end()
 		{
 			return m_cumulative.end();
 		}

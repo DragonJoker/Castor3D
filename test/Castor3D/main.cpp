@@ -78,7 +78,7 @@ namespace
 
 				for ( auto file : arrayFailed )
 				{
-					Logger::logWarning( Path( file ).getFileName() );
+					Logger::logWarning( file.getFileName() );
 				}
 
 				arrayFailed.clear();
@@ -122,12 +122,12 @@ namespace
 
 int main( int argc, char const * argv[] )
 {
-	int result = EXIT_SUCCESS;
-	int count = 1;
+	uint32_t result = EXIT_SUCCESS;
+	uint32_t count = 1;
 
 	if ( argc == 2 )
 	{
-		count = std::max< int >( 1, atoi( argv[2] ) );
+		count = uint32_t( std::max< int >( 1, atoi( argv[2] ) ) );
 	}
 
 #if defined( NDEBUG )
@@ -150,5 +150,5 @@ int main( int argc, char const * argv[] )
 		engine->cleanup();
 	}
 	Logger::cleanup();
-	return result;
+	return int( result );
 }

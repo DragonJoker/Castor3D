@@ -14,8 +14,4 @@ namespace castor3d
 	{
 		m_submesh.addComponent( MorphComponent::Name, m_component );
 	}
-
-	MeshAnimationSubmesh::~MeshAnimationSubmesh()
-	{
-	}
 }

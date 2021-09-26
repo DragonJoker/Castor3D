@@ -23,10 +23,6 @@ namespace GuiCommon
 		AddPrivateChild( addAttributes( new wxFloatProperty( wxT( "Radius" ), wxPG_LABEL, value.getRadius() ) ) );
 	}
 
-	BoundingSphereProperty::~BoundingSphereProperty()
-	{
-	}
-
 	void BoundingSphereProperty::RefreshChildren()
 	{
 		if ( GetChildCount() )

@@ -31,13 +31,6 @@ namespace castor3d
 			, Scene & scene
 			, ProgressBar * progress );
 		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~ShadowMapSpot();
-		/**
 		 *\copydoc		castor3d::ShadowMap::update
 		 */
 		C3D_API void update( GpuUpdater & updater )override;

@@ -22,10 +22,6 @@ namespace GuiCommon
 		AddPrivateChild( addAttributes( new wxFloatProperty( wxT( "Angle" ), wxPG_LABEL, m_angle.degrees() ) ) );
 	}
 
-	QuaternionProperty::~QuaternionProperty()
-	{
-	}
-
 	void QuaternionProperty::RefreshChildren()
 	{
 		if ( GetChildCount() )

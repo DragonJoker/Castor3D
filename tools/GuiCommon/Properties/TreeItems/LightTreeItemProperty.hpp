@@ -37,13 +37,6 @@ namespace GuiCommon
 		LightTreeItemProperty( bool editable, castor3d::Light & light );
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		~LightTreeItemProperty();
-		/**
-		 *\~english
 		 *\brief		Retrieves the light source
 		 *\return		The value
 		 *\~french
@@ -59,7 +52,7 @@ namespace GuiCommon
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid );
+		void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )override;
 
 	private:
 		void doCreateDirectionalLightProperties( wxPropertyGrid * grid, castor3d::DirectionalLight & light );

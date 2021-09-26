@@ -20,8 +20,7 @@ namespace castor3d
 		, TextOverlaySPtr title
 		, TextOverlaySPtr label
 		, uint32_t max )
-		: m_engine{ engine }
-		, m_listener{ engine.getFrameListenerCache().add( "C3D_ProgressBar" ).lock() }
+		: m_listener{ engine.getFrameListenerCache().add( "C3D_ProgressBar" ).lock() }
 		, m_index{ castor::makeRangedValue( 0u, 0u, max ) }
 		, m_progress{ parent.lock().get() }
 		, m_progressBar{ bar.lock().get() }

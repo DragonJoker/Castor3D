@@ -43,10 +43,6 @@ namespace castortd
 	{
 	}
 
-	Hud::~Hud()
-	{
-	}
-
 	void Hud::initialise()
 	{
 		auto & cache = m_game.getScene().getEngine()->getOverlayCache();
@@ -119,8 +115,8 @@ namespace castortd
 		cache.find( cuT( "GameEndPanel" ) ).lock()->setVisible( true );
 		cache.find( cuT( "HelpPanel" ) ).lock()->setVisible( false );
 
-		getTextOverlay( m_game.getScene().getEngine()->getOverlayCache(), cuT( "ResultLevelValue" ) )->setCaption( StringStream() << m_game.getWave() );
-		getTextOverlay( m_game.getScene().getEngine()->getOverlayCache(), cuT( "ResultKillsValue" ) )->setCaption( StringStream() << m_game.getKills() );
+		getTextOverlay( m_game.getScene().getEngine()->getOverlayCache(), cuT( "ResultLevelValue" ) )->setCaption( castor::string::toString( m_game.getWave() ) );
+		getTextOverlay( m_game.getScene().getEngine()->getOverlayCache(), cuT( "ResultKillsValue" ) )->setCaption( castor::string::toString( m_game.getKills() ) );
 	}
 
 	void Hud::update()
@@ -129,42 +125,42 @@ namespace castortd
 
 		if ( text )
 		{
-			text->setCaption( StringStream() << m_game.getLives() );
+			text->setCaption( castor::string::toString( m_game.getLives() ) );
 		}
 
 		text = m_ore.lock();
 
 		if ( text )
 		{
-			text->setCaption( StringStream() << m_game.getOre() );
+			text->setCaption( castor::string::toString( m_game.getOre() ) );
 		}
 
 		text = m_level.lock();
 
 		if ( text )
 		{
-			text->setCaption( StringStream() << m_game.getWave() );
+			text->setCaption( castor::string::toString( m_game.getWave() ) );
 		}
 
 		text = m_kills.lock();
 
 		if ( text )
 		{
-			text->setCaption( StringStream() << m_game.getKills() );
+			text->setCaption( castor::string::toString( m_game.getKills() ) );
 		}
 
 		text = m_enemyLife.lock();
 
 		if ( text )
 		{
-			text->setCaption( StringStream() << m_game.getEnemiesLife() );
+			text->setCaption( castor::string::toString( m_game.getEnemiesLife() ) );
 		}
 
 		text = m_enemyBounty.lock();
 
 		if ( text )
 		{
-			text->setCaption( StringStream() << m_game.getEnemiesBounty() );
+			text->setCaption( castor::string::toString( m_game.getEnemiesBounty() ) );
 		}
 
 		TowerPtr tower = m_game.getSelectedTower();
@@ -176,7 +172,7 @@ namespace castortd
 			if ( text )
 			{
 				text->setVisible( true );
-				text->setCaption( StringStream() << tower->getDamage() );
+				text->setCaption( castor::string::toString( tower->getDamage() ) );
 			}
 
 			text = m_towerSpeed.lock();
@@ -184,7 +180,7 @@ namespace castortd
 			if ( text )
 			{
 				text->setVisible( true );
-				text->setCaption( StringStream() << tower->getSpeed() );
+				text->setCaption( castor::string::toString( tower->getSpeed() ) );
 			}
 
 			text = m_towerRange.lock();
@@ -192,7 +188,7 @@ namespace castortd
 			if ( text )
 			{
 				text->setVisible( true );
-				text->setCaption( StringStream() << tower->getRange() );
+				text->setCaption( castor::string::toString( tower->getRange() ) );
 			}
 		}
 		else

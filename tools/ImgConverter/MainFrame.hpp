@@ -2,9 +2,13 @@
 #ifndef ___IX_MainFrame___
 #define ___IX_MainFrame___
 
+#pragma warning( push )
+#pragma warning( disable: 4365 )
+#pragma warning( disable: 4371 )
 #include <wx/frame.h>
 #include <wx/listbox.h>
 #include <wx/button.h>
+#pragma warning( pop )
 
 namespace ImgToIco
 {
@@ -26,7 +30,6 @@ namespace ImgToIco
 
 	public:
 		MainFrame();
-		~MainFrame();
 
 	protected:
 		DECLARE_EVENT_TABLE()

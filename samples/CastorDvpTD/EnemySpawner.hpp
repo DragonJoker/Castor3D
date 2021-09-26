@@ -8,7 +8,6 @@ namespace castortd
 	{
 	public:
 		EnemySpawner();
-		~EnemySpawner();
 
 		void Reset();
 		void StartWave( uint32_t m_count );

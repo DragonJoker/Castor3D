@@ -43,13 +43,6 @@ namespace castor3d
 		C3D_API TextOverlay();
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~TextOverlay();
-		/**
-		 *\~english
 		 *\brief		Creation function, used by the factory
 		 *\return		An overlay
 		 *\~french
@@ -148,20 +141,6 @@ namespace castor3d
 		{
 			m_currentCaption = value;
 			m_textChanged = true;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the overlay text
-		 *\param[in]	value	The new value
-		 *\~french
-		 *\brief		Définit le texte de l'incrustation
-		 *\param[in]	value	La nouvelle valeur
-		 */
-		inline void setCaption( castor::OutputStream const & value )
-		{
-			castor::StringStream ss;
-			ss << value.rdbuf();
-			setCaption( ss.str() );
 		}
 		/**
 		 *\~english
@@ -362,7 +341,7 @@ namespace castor3d
 			double m_height;
 			//!\~english	The displayable characters.
 			//!\~french		Les caractères affichables.
-			std::vector< DisplayableChar > m_characters;
+			std::vector< DisplayableChar > m_characters{};
 		};
 		using DisplayableLineArray = std::vector< DisplayableLine >;
 		using TextureCoordinates = std::array< float, 2 >;
@@ -493,7 +472,6 @@ namespace castor3d
 		HAlign m_hAlign{ HAlign::eLeft };
 		VAlign m_vAlign{ VAlign::eCenter };
 		bool m_textChanged{ true };
-		uint32_t m_tabSize{ 4 };
 		FontTexture::OnChanged::connection m_connection;
 		TextTexturingMode m_texturingMode{ TextTexturingMode::eText };
 		TextureCoordsArray m_arrayTextTexture;

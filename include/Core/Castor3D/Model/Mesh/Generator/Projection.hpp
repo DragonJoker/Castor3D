@@ -21,13 +21,6 @@ namespace castor3d
 		 */
 		C3D_API Projection();
 		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~Projection();
-		/**
 		 *\copydoc		castor3d::MeshGenerator::create
 		 */
 		C3D_API static MeshGeneratorSPtr create();

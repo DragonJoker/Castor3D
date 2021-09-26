@@ -22,6 +22,7 @@ See LICENSE file in root folder
 #		define sscanf sscanf_s
 #	endif
 #elif defined( CU_CompilerCLANG )
+#	pragma clang diagnostic ignored "-Wduplicate-enum"
 #	if !defined( CU_PlatformWindows )
 #		define _FILE_OFFSET_BITS 64
 #		define cvsnprintf( buf, sz, cnt, fmt, arg ) vsnprintf( buf, cnt, fmt, arg )
@@ -47,7 +48,10 @@ See LICENSE file in root folder
 #	endif
 #endif
 
+#pragma warning( push )
+#pragma warning( disable:4365 )
 #include <memory>
+#pragma warning( pop )
 
 #define CU_DeclareSmartPtr( class_name )\
 	using class_name##SPtr = std::shared_ptr< class_name >;\

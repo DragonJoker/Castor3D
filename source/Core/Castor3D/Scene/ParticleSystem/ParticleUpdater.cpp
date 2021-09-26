@@ -1,5 +1,7 @@
 #include "Castor3D/Scene/ParticleSystem/ParticleUpdater.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, ParticleUpdater )
+
 namespace castor3d
 {
 	ParticleUpdater::ParticleUpdater( ParticleSystem const & system

@@ -70,20 +70,6 @@ namespace castor3d
 			return result;
 		}
 
-		bool fixTan( castor::Point3f & value )
-		{
-			static castor::Point3f const defaultValue{ 1.0f, 0.0f, 0.0f };
-			auto result = fix( value, defaultValue );
-
-			if ( castor::point::length( value ) < std::numeric_limits< float >::epsilon() )
-			{
-				value = defaultValue;
-				result = true;
-			}
-
-			return result;
-		}
-
 		bool fixPos( castor::Point3f & value )
 		{
 			static castor::Point3f const defaultValue{ 0.0f, 0.0f, 0.0f };
@@ -318,7 +304,7 @@ namespace castor3d
 		{
 			if ( castor::point::distanceSquared( vertex, it->pos ) < precision )
 			{
-				result = int( index );
+				result = index;
 			}
 
 			index++;
@@ -357,7 +343,7 @@ namespace castor3d
 	void Submesh::addPoints( InterleavedVertex const * const begin
 		, InterleavedVertex const * const end )
 	{
-		m_points.reserve( m_points.size() + end - begin );
+		m_points.reserve( size_t( m_points.size() + end - begin ) );
 
 		for ( auto & point : castor::makeArrayView( begin, end ) )
 		{

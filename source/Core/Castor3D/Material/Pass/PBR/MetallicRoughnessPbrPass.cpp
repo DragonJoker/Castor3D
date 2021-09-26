@@ -34,7 +34,7 @@ namespace castor
 		}
 
 		bool operator()( castor3d::MetallicRoughnessPbrPass const & pass
-			, StringStream & file )
+			, StringStream & file )override
 		{
 			castor3d::log::info << tabs() << cuT( "Writing MetallicRoughnessPbrPass " ) << std::endl;
 			return writeNamedSub( file, "albedo", pass.getAlbedo() )
@@ -54,188 +54,191 @@ namespace castor3d
 
 	namespace pbrmr
 	{
-		enum class Section
-			: uint32_t
+		namespace
 		{
-			ePass = CU_MakeSectionName( 'M', 'T', 'R', 'G' ),
-			eTextureUnit = CU_MakeSectionName( 'M', 'R', 'T', 'U' ),
-		};
-
-		static castor::String const PassSectionName{ cuT( "pbrmr_pass" ) };
-		static castor::String const TextureSectionName{ cuT( "pbrmr_texture_unit" ) };
-
-		CU_ImplementAttributeParser( parserPassAlbedo )
-		{
-			auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
-
-			if ( !parsingContext.pass )
+			enum class Section
+				: uint32_t
 			{
-				CU_ParsingError( cuT( "No Pass initialised." ) );
-			}
-			else if ( !params.empty() )
+				ePass = CU_MakeSectionName( 'M', 'T', 'R', 'G' ),
+				eTextureUnit = CU_MakeSectionName( 'M', 'R', 'T', 'U' ),
+			};
+
+			static castor::String const PassSectionName{ cuT( "pbrmr_pass" ) };
+			static castor::String const TextureSectionName{ cuT( "pbrmr_texture_unit" ) };
+
+			CU_ImplementAttributeParser( parserPassAlbedo )
 			{
-				auto & phongPass = static_cast< MetallicRoughnessPbrPass & >( *parsingContext.pass );
-				castor::RgbColour value;
-				params[0]->get( value );
-				phongPass.setAlbedo( value );
+				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+
+				if ( !parsingContext.pass )
+				{
+					CU_ParsingError( cuT( "No Pass initialised." ) );
+				}
+				else if ( !params.empty() )
+				{
+					auto & phongPass = static_cast< MetallicRoughnessPbrPass & >( *parsingContext.pass );
+					castor::RgbColour value;
+					params[0]->get( value );
+					phongPass.setAlbedo( value );
+				}
 			}
+			CU_EndAttribute()
+
+			CU_ImplementAttributeParser( parserPassMetalness )
+			{
+				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+
+				if ( !parsingContext.pass )
+				{
+					CU_ParsingError( cuT( "No Pass initialised." ) );
+				}
+				else if ( !params.empty() )
+				{
+					auto & phongPass = static_cast< MetallicRoughnessPbrPass & >( *parsingContext.pass );
+					float value;
+					params[0]->get( value );
+					phongPass.setMetallic( value );
+				}
+			}
+			CU_EndAttribute()
+
+			CU_ImplementAttributeParser( parserPassRoughness )
+			{
+				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+
+				if ( !parsingContext.pass )
+				{
+					CU_ParsingError( cuT( "No Pass initialised." ) );
+				}
+				else if ( !params.empty() )
+				{
+					auto & phongPass = static_cast< MetallicRoughnessPbrPass & >( *parsingContext.pass );
+					float value;
+					params[0]->get( value );
+					phongPass.setRoughness( value );
+				}
+			}
+			CU_EndAttribute()
+
+			CU_ImplementAttributeParser( parserUnitChannel )
+			{
+				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+
+				if ( !parsingContext.textureUnit )
+				{
+					CU_ParsingError( cuT( "No TextureUnit initialised." ) );
+				}
+				else if ( !params.empty() )
+				{
+					uint32_t flags;
+					params[0]->get( flags );
+					auto textures = TextureFlags( uint16_t( flags ) );
+
+					if ( checkFlag( textures, TextureFlag::eNormal ) )
+					{
+						parsingContext.textureConfiguration.normalMask[0] = 0x00FFFFFF;
+					}
+
+					if ( checkFlag( textures, TextureFlag::eOpacity ) )
+					{
+						parsingContext.textureConfiguration.opacityMask[0] = 0xFF000000;
+					}
+
+					if ( checkFlag( textures, TextureFlag::eHeight ) )
+					{
+						parsingContext.textureConfiguration.heightMask[0] = 0x00FF0000;
+					}
+
+					if ( checkFlag( textures, TextureFlag::eEmissive ) )
+					{
+						parsingContext.textureConfiguration.emissiveMask[0] = 0x00FFFFFF;
+					}
+
+					if ( checkFlag( textures, TextureFlag::eOcclusion ) )
+					{
+						parsingContext.textureConfiguration.occlusionMask[0] = 0x00FF0000;
+					}
+
+					if ( checkFlag( textures, TextureFlag::eTransmittance ) )
+					{
+						parsingContext.textureConfiguration.transmittanceMask[0] = 0xFF000000;
+					}
+
+					if ( checkFlag( textures, TextureFlag::eAlbedo ) )
+					{
+						parsingContext.textureConfiguration.colourMask[0] = 0x00FFFFFF;
+					}
+
+					if ( checkFlag( textures, TextureFlag::eMetalness ) )
+					{
+						parsingContext.textureConfiguration.metalnessMask[0] = 0x00FF0000;
+					}
+
+					if ( checkFlag( textures, TextureFlag::eRoughness ) )
+					{
+						parsingContext.textureConfiguration.roughnessMask[0] = 0x00FF0000;
+					}
+				}
+			}
+			CU_EndAttribute()
+
+			CU_ImplementAttributeParser( parserUnitAlbedoMask )
+			{
+				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+
+				if ( !parsingContext.textureUnit )
+				{
+					CU_ParsingError( cuT( "No TextureUnit initialised." ) );
+				}
+				else if ( params.empty() )
+				{
+					CU_ParsingError( cuT( "Missing parameter." ) );
+				}
+				else
+				{
+					params[0]->get( parsingContext.textureConfiguration.colourMask[0] );
+				}
+			}
+			CU_EndAttribute()
+
+			CU_ImplementAttributeParser( parserUnitMetalnessMask )
+			{
+				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+
+				if ( !parsingContext.textureUnit )
+				{
+					CU_ParsingError( cuT( "No TextureUnit initialised." ) );
+				}
+				else if ( params.empty() )
+				{
+					CU_ParsingError( cuT( "Missing parameter." ) );
+				}
+				else
+				{
+					params[0]->get( parsingContext.textureConfiguration.metalnessMask[0] );
+				}
+			}
+			CU_EndAttribute()
+
+			CU_ImplementAttributeParser( parserUnitRoughnessMask )
+			{
+				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+
+				if ( !parsingContext.textureUnit )
+				{
+					CU_ParsingError( cuT( "No TextureUnit initialised." ) );
+				}
+				else if ( params.empty() )
+				{
+					CU_ParsingError( cuT( "Missing parameter." ) );
+				}
+				else
+				{
+					params[0]->get( parsingContext.textureConfiguration.roughnessMask[0] );
+				}
+			}
+			CU_EndAttribute()
 		}
-		CU_EndAttribute()
-
-		CU_ImplementAttributeParser( parserPassMetalness )
-		{
-			auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
-
-			if ( !parsingContext.pass )
-			{
-				CU_ParsingError( cuT( "No Pass initialised." ) );
-			}
-			else if ( !params.empty() )
-			{
-				auto & phongPass = static_cast< MetallicRoughnessPbrPass & >( *parsingContext.pass );
-				float value;
-				params[0]->get( value );
-				phongPass.setMetallic( value );
-			}
-		}
-		CU_EndAttribute()
-
-		CU_ImplementAttributeParser( parserPassRoughness )
-		{
-			auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
-
-			if ( !parsingContext.pass )
-			{
-				CU_ParsingError( cuT( "No Pass initialised." ) );
-			}
-			else if ( !params.empty() )
-			{
-				auto & phongPass = static_cast< MetallicRoughnessPbrPass & >( *parsingContext.pass );
-				float value;
-				params[0]->get( value );
-				phongPass.setRoughness( value );
-			}
-		}
-		CU_EndAttribute()
-
-		CU_ImplementAttributeParser( parserUnitChannel )
-		{
-			auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
-
-			if ( !parsingContext.textureUnit )
-			{
-				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
-			}
-			else if ( !params.empty() )
-			{
-				uint32_t flags;
-				params[0]->get( flags );
-				auto textures = TextureFlags( uint16_t( flags ) );
-
-				if ( checkFlag( textures, TextureFlag::eNormal ) )
-				{
-					parsingContext.textureConfiguration.normalMask[0] = 0x00FFFFFF;
-				}
-
-				if ( checkFlag( textures, TextureFlag::eOpacity ) )
-				{
-					parsingContext.textureConfiguration.opacityMask[0] = 0xFF000000;
-				}
-
-				if ( checkFlag( textures, TextureFlag::eHeight ) )
-				{
-					parsingContext.textureConfiguration.heightMask[0] = 0x00FF0000;
-				}
-
-				if ( checkFlag( textures, TextureFlag::eEmissive ) )
-				{
-					parsingContext.textureConfiguration.emissiveMask[0] = 0x00FFFFFF;
-				}
-
-				if ( checkFlag( textures, TextureFlag::eOcclusion ) )
-				{
-					parsingContext.textureConfiguration.occlusionMask[0] = 0x00FF0000;
-				}
-
-				if ( checkFlag( textures, TextureFlag::eTransmittance ) )
-				{
-					parsingContext.textureConfiguration.transmittanceMask[0] = 0xFF000000;
-				}
-
-				if ( checkFlag( textures, TextureFlag::eAlbedo ) )
-				{
-					parsingContext.textureConfiguration.colourMask[0] = 0x00FFFFFF;
-				}
-
-				if ( checkFlag( textures, TextureFlag::eMetalness ) )
-				{
-					parsingContext.textureConfiguration.metalnessMask[0] = 0x00FF0000;
-				}
-
-				if ( checkFlag( textures, TextureFlag::eRoughness ) )
-				{
-					parsingContext.textureConfiguration.roughnessMask[0] = 0x00FF0000;
-				}
-			}
-		}
-		CU_EndAttribute()
-
-		CU_ImplementAttributeParser( parserUnitAlbedoMask )
-		{
-			auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
-
-			if ( !parsingContext.textureUnit )
-			{
-				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
-			}
-			else if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else
-			{
-				params[0]->get( parsingContext.textureConfiguration.colourMask[0] );
-			}
-		}
-		CU_EndAttribute()
-
-		CU_ImplementAttributeParser( parserUnitMetalnessMask )
-		{
-			auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
-
-			if ( !parsingContext.textureUnit )
-			{
-				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
-			}
-			else if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else
-			{
-				params[0]->get( parsingContext.textureConfiguration.metalnessMask[0] );
-			}
-		}
-		CU_EndAttribute()
-
-		CU_ImplementAttributeParser( parserUnitRoughnessMask )
-		{
-			auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
-
-			if ( !parsingContext.textureUnit )
-			{
-				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
-			}
-			else if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else
-			{
-				params[0]->get( parsingContext.textureConfiguration.roughnessMask[0] );
-			}
-		}
-		CU_EndAttribute()
 	}
 
 	//*********************************************************************************************
@@ -256,10 +259,6 @@ namespace castor3d
 		, m_albedo{ m_dirty, castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
 		, m_roughness{ m_dirty, 1.0f }
 		, m_metalness{ m_dirty, 0.0f }
-	{
-	}
-
-	MetallicRoughnessPbrPass::~MetallicRoughnessPbrPass()
 	{
 	}
 
@@ -315,7 +314,7 @@ namespace castor3d
 		};
 	}
 
-	void MetallicRoughnessPbrPass::accept( PassBuffer & buffer )const
+	void MetallicRoughnessPbrPass::fillBuffer( PassBuffer & buffer )const
 	{
 		auto f0 = castor::RgbColour{ 0.04f, 0.04f, 0.04f } *( 1.0f - getMetallic() ) + getAlbedo() * getMetallic();
 		auto data = buffer.getData( getId() );

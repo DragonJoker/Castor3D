@@ -41,13 +41,6 @@ namespace castor3d
 		C3D_API SkeletonAnimationInstanceNode( SkeletonAnimationInstance & animationInstance
 			, SkeletonAnimationNode & animationObject
 			, SkeletonAnimationInstanceObjectPtrArray & allObjects );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~SkeletonAnimationInstanceNode();
 
 	private:
 		void doApply()override;

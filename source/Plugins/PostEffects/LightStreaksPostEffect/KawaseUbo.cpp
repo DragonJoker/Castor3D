@@ -39,7 +39,8 @@ namespace light_streaks
 		, castor::Point2f const & direction
 		, uint32_t pass )
 	{
-		Point2f pixelSize{ 1.0f / size.width, 1.0f / size.height };
+		Point2f pixelSize{ 1.0f / float( size.width )
+			, 1.0f / float( size.height ) };
 		auto & data = m_ubo[index].getData();
 		data.samples = 4;
 		data.attenuation = 0.9f;

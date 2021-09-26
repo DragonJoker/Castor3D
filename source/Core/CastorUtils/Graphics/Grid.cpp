@@ -6,33 +6,25 @@ namespace castor
 		, float cellSize
 		, Point3f max
 		, Point3f min
-		, float scale
-		, uint32_t level )
+		, float scale )
 		: m_maxGridSize{ gridSize }
 		, m_maxCellSize{ cellSize }
 		, m_min{ min }
 		, m_max{ max }
 		, m_scale{ scale }
-		, m_level{ level }
 	{
 		setUp();
 	}
 
 	Grid::Grid( Grid const & old
-		, float scale
-		, uint32_t level )
+		, float scale )
 		: m_maxGridSize{ old.m_maxGridSize }
 		, m_maxCellSize{ old.m_maxCellSize }
 		, m_min{ old.m_min }
 		, m_max{ old.m_max }
 		, m_scale{ scale }
-		, m_level{ level }
 	{
 		setUp();
-	}
-
-	Grid::~Grid()
-	{
 	}
 
 	void Grid::transform( Point3f pos, Point3f dir )
@@ -51,7 +43,7 @@ namespace castor
 		Point3f newMin{ offset + m_centerToMin };
 		Point3f newMax{ offset + m_centerToMax };
 
-		auto halfDisplacement = 0.8f * float( m_maxGridSize ) * 0.5f * float( m_cellSize );
+		auto halfDisplacement = 0.8f * float( m_maxGridSize ) * 0.5f * m_cellSize;
 		auto displacement = dir * Point3f{ halfDisplacement, halfDisplacement, halfDisplacement };
 		auto snapXDisp = int( displacement->x / m_cellSize + 0.5 );
 		auto snapYDisp = int( displacement->y / m_cellSize + 0.5 );

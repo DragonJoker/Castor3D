@@ -16,6 +16,12 @@
 #	undef min
 #endif
 
+#pragma warning( push )
+#pragma warning( disable: 4756 )
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wconversion"
+
 namespace castor
 {
 	//*************************************************************************************************
@@ -3825,7 +3831,7 @@ namespace castor
 
 			static Type cast( uint8_t value )
 			{
-				return Type( value );
+				return value;
 			}
 			static Type cast( int8_t value )
 			{
@@ -3876,7 +3882,7 @@ namespace castor
 			}
 			static Type cast( int8_t value )
 			{
-				return Type( value );
+				return value;
 			}
 			static Type cast( uint16_t value )
 			{
@@ -3927,7 +3933,7 @@ namespace castor
 			}
 			static Type cast( uint16_t value )
 			{
-				return Type( value );
+				return value;
 			}
 			static Type cast( int16_t value )
 			{
@@ -3978,7 +3984,7 @@ namespace castor
 			}
 			static Type cast( int16_t value )
 			{
-				return Type( value );
+				return value;
 			}
 			static Type cast( uint32_t value )
 			{
@@ -4029,7 +4035,7 @@ namespace castor
 			}
 			static Type cast( uint32_t value )
 			{
-				return Type( value );
+				return value;
 			}
 			static Type cast( int32_t value )
 			{
@@ -4080,7 +4086,7 @@ namespace castor
 			}
 			static Type cast( int32_t value )
 			{
-				return Type( value );
+				return value;
 			}
 			static Type cast( uint64_t value )
 			{
@@ -4131,7 +4137,7 @@ namespace castor
 			}
 			static Type cast( uint64_t value )
 			{
-				return Type( value );
+				return value;
 			}
 			static Type cast( int64_t value )
 			{
@@ -4182,7 +4188,7 @@ namespace castor
 			}
 			static Type cast( int64_t value )
 			{
-				return Type( value );
+				return value;
 			}
 			static Type cast( float value )
 			{
@@ -4233,7 +4239,7 @@ namespace castor
 			}
 			static Type cast( float value )
 			{
-				return Type( value );
+				return value;
 			}
 			static Type cast( double value )
 			{
@@ -4284,7 +4290,7 @@ namespace castor
 			}
 			static Type cast( double value )
 			{
-				return Type( value );
+				return value;
 			}
 		};
 
@@ -5462,3 +5468,7 @@ namespace castor
 
 	//*************************************************************************************************
 }
+
+#pragma GCC diagnostic pop
+
+#pragma warning( pop )

@@ -39,11 +39,31 @@ namespace GuiCommon
 	static const wxString GC_POINT_RECTANGLE[4] = { _( "Left" ), _( "Top" ), _( "Right" ), _( "Bottom" ) };
 	static const wxString GC_HDR_COLOUR[4] = { _( "R" ), _( "G" ), _( "B" ), _( "A" ) };
 
-	template< typename T, size_t Count >
+	template< typename T, uint32_t Count >
 	class PointProperty
 		: public wxPGProperty
 	{
-		WX_PG_DECLARE_PROPERTY_CLASS( PointProperty )
+	public:
+		static wxObject * wxCreateObject()
+		{
+			return new PointProperty;
+		}
+
+		wxClassInfo * GetClassInfo() const override
+		{
+			static wxString s_name{ wxString{} << wxT( "Point" ) << Count << getTypeNameSuffix< T >() << wxT( "Property" ) };
+			static wxClassInfo s_classInfo = { s_name
+				, &wxPGProperty::ms_classInfo
+				, nullptr
+				, int( sizeof( PointProperty ) )
+				, PointProperty::wxCreateObject };
+			return &s_classInfo;
+		}
+
+		const wxPGEditor * DoGetEditorClass()const override
+		{
+			return wxPGEditor_TextCtrl;
+		}
 
 	public:
 		PointProperty( wxString const & label = wxPG_LABEL
@@ -60,7 +80,6 @@ namespace GuiCommon
 			, wxString const & label
 			, wxString const & name
 			, castor::Coords< T, Count > const & value );
-		virtual ~PointProperty();
 
 		wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue )const override;
 		void RefreshChildren()override;
@@ -70,15 +89,15 @@ namespace GuiCommon
 		inline void setValueI( castor::Point< T, Count > const & value );
 	};
 
-	template< typename Type, size_t Count > castor::Point< Type, Count > const & PointRefFromVariant( wxVariant const & p_variant );
-	template< typename Type, size_t Count > castor::Point< Type, Count > & PointRefFromVariant( wxVariant & p_variant );
-	template< typename Type, size_t Count > void setVariantFromPoint( wxVariant & p_variant, castor::Point< Type, Count > const & p_value );
+	template< typename Type, uint32_t Count > castor::Point< Type, Count > const & PointRefFromVariant( wxVariant const & p_variant );
+	template< typename Type, uint32_t Count > castor::Point< Type, Count > & PointRefFromVariant( wxVariant & p_variant );
+	template< typename Type, uint32_t Count > void setVariantFromPoint( wxVariant & p_variant, castor::Point< Type, Count > const & p_value );
 
-	template< size_t Count > using BoolPointProperty = PointProperty< bool, Count >;
-	template< size_t Count > using IntPointProperty = PointProperty< int, Count >;
-	template< size_t Count > using UIntPointProperty = PointProperty< uint32_t, Count >;
-	template< size_t Count > using FloatPointProperty = PointProperty< float, Count >;
-	template< size_t Count > using DoublePointProperty = PointProperty< double, Count >;
+	template< uint32_t Count > using BoolPointProperty = PointProperty< bool, Count >;
+	template< uint32_t Count > using IntPointProperty = PointProperty< int, Count >;
+	template< uint32_t Count > using UIntPointProperty = PointProperty< uint32_t, Count >;
+	template< uint32_t Count > using FloatPointProperty = PointProperty< float, Count >;
+	template< uint32_t Count > using DoublePointProperty = PointProperty< double, Count >;
 
 	typedef BoolPointProperty< 2 > Point2bProperty;
 	typedef BoolPointProperty< 3 > Point3bProperty;

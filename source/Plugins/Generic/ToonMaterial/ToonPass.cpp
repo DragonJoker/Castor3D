@@ -34,7 +34,7 @@ namespace castor
 		}
 
 		bool operator()( toon::ToonPhongPass const & pass
-			, StringStream & file )
+			, StringStream & file )override
 		{
 			castor3d::log::info << tabs() << cuT( "Writing ToonPass " ) << std::endl;
 			return writeNamedSub( file, "diffuse", pass.getDiffuse() )
@@ -69,7 +69,7 @@ namespace castor
 		}
 
 		bool operator()( toon::ToonBlinnPhongPass const & pass
-			, StringStream & file )
+			, StringStream & file )override
 		{
 			castor3d::log::info << tabs() << cuT( "Writing ToonBlinnPhongPass " ) << std::endl;
 			return writeNamedSub( file, "diffuse", pass.getDiffuse() )
@@ -104,7 +104,7 @@ namespace castor
 		}
 
 		bool operator()( toon::ToonMetallicRoughnessPass const & pass
-			, StringStream & file )
+			, StringStream & file )override
 		{
 			castor3d::log::info << tabs() << cuT( "Writing ToonMetallicRoughnessPass " ) << std::endl;
 			return writeNamedSub( file, "albedo", pass.getAlbedo() )
@@ -138,7 +138,7 @@ namespace castor
 		}
 
 		bool operator()( toon::ToonSpecularGlossinessPass const & pass
-			, StringStream & file )
+			, StringStream & file )override
 		{
 			castor3d::log::info << tabs() << cuT( "Writing ToonSpecularGlossinessPass " ) << std::endl;
 			return writeNamedSub( file, "albedo", pass.getDiffuse() )
@@ -237,10 +237,6 @@ namespace toon
 	{
 	}
 
-	ToonPhongPass::~ToonPhongPass()
-	{
-	}
-
 	castor3d::PassSPtr ToonPhongPass::create( castor3d::Material & parent )
 	{
 		return std::make_shared< ToonPhongPass >( parent );
@@ -261,7 +257,7 @@ namespace toon
 		};
 	}
 
-	void ToonPhongPass::accept( castor3d::PassBuffer & buffer )const
+	void ToonPhongPass::fillBuffer( castor3d::PassBuffer & buffer )const
 	{
 		auto data = buffer.getData( getId() );
 
@@ -313,10 +309,6 @@ namespace toon
 	{
 	}
 
-	ToonBlinnPhongPass::~ToonBlinnPhongPass()
-	{
-	}
-
 	castor3d::PassSPtr ToonBlinnPhongPass::create( castor3d::Material & parent )
 	{
 		return std::make_shared< ToonBlinnPhongPass >( parent );
@@ -337,7 +329,7 @@ namespace toon
 		};
 	}
 
-	void ToonBlinnPhongPass::accept( castor3d::PassBuffer & buffer )const
+	void ToonBlinnPhongPass::fillBuffer( castor3d::PassBuffer & buffer )const
 	{
 		auto data = buffer.getData( getId() );
 
@@ -389,10 +381,6 @@ namespace toon
 	{
 	}
 
-	ToonMetallicRoughnessPass::~ToonMetallicRoughnessPass()
-	{
-	}
-
 	castor3d::PassSPtr ToonMetallicRoughnessPass::create( castor3d::Material & parent )
 	{
 		return std::make_shared< ToonMetallicRoughnessPass >( parent );
@@ -413,7 +401,7 @@ namespace toon
 		};
 	}
 
-	void ToonMetallicRoughnessPass::accept( castor3d::PassBuffer & buffer )const
+	void ToonMetallicRoughnessPass::fillBuffer( castor3d::PassBuffer & buffer )const
 	{
 		auto f0 = castor::RgbColour{ 0.04f, 0.04f, 0.04f } *( 1.0f - getMetallic() ) + getAlbedo() * getMetallic();
 		auto data = buffer.getData( getId() );
@@ -466,10 +454,6 @@ namespace toon
 	{
 	}
 
-	ToonSpecularGlossinessPass::~ToonSpecularGlossinessPass()
-	{
-	}
-
 	castor3d::PassSPtr ToonSpecularGlossinessPass::create( castor3d::Material & parent )
 	{
 		return std::make_shared< ToonSpecularGlossinessPass >( parent );
@@ -490,7 +474,7 @@ namespace toon
 		};
 	}
 
-	void ToonSpecularGlossinessPass::accept( castor3d::PassBuffer & buffer )const
+	void ToonSpecularGlossinessPass::fillBuffer( castor3d::PassBuffer & buffer )const
 	{
 		auto data = buffer.getData( getId() );
 
@@ -501,7 +485,7 @@ namespace toon
 		data.specDiv->r = getSpecular().red();
 		data.specDiv->g = getSpecular().green();
 		data.specDiv->b = getSpecular().blue();
-		data.specDiv->a = castor::point::length( castor::Point3f{ getSpecular().constPtr() } );
+		data.specDiv->a = float( castor::point::length( castor::Point3f{ getSpecular().constPtr() } ) );
 
 		ToonPass::fillData( data );
 		doFillData( data );

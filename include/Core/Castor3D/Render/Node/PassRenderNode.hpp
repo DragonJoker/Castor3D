@@ -11,6 +11,11 @@ namespace castor3d
 {
 	struct PassRenderNode
 	{
+		C3D_API PassRenderNode( PassRenderNode const & ) = delete;
+		C3D_API PassRenderNode( PassRenderNode && ) = default;
+		C3D_API PassRenderNode & operator=( PassRenderNode const & ) = delete;
+		C3D_API PassRenderNode & operator=( PassRenderNode && ) = delete;
+
 		C3D_API explicit PassRenderNode( Pass & pass );
 
 		C3D_API void fillDescriptor( ashes::DescriptorSetLayout const & layout

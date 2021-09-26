@@ -17,7 +17,7 @@ namespace castor3d::shader
 		, edgeColour{ getMember< sdw::Vec4 >( "edgeColour" ) }
 		, specific{ getMember< sdw::Vec4 >( "specific" ) }
 		, m_common{ getMember< sdw::Vec4 >( "common" ) }
-		, m_opacityTransmission{ getMember< sdw::Vec4 >( "opacity" ) }
+		, m_opacityTransmission{ getMember< sdw::Vec4 >( "opacityTransmission" ) }
 		, m_reflRefr{ getMember< sdw::Vec4 >( "reflRefr" ) }
 		, m_sssInfo{ getMember< sdw::Vec4 >( "sssInfo" ) }
 		, transmittanceProfile{ getMemberArray< sdw::Vec4 >( "transmittanceProfile" ) }
@@ -77,7 +77,7 @@ namespace castor3d::shader
 			result->declMember( "edgeColour", ast::type::Kind::eVec4F );
 			result->declMember( "specific", ast::type::Kind::eVec4F );
 			result->declMember( "common", ast::type::Kind::eVec4F );
-			result->declMember( "opacity", ast::type::Kind::eVec4F );
+			result->declMember( "opacityTransmission", ast::type::Kind::eVec4F );
 			result->declMember( "reflRefr", ast::type::Kind::eVec4F );
 			result->declMember( "sssInfo", ast::type::Kind::eVec4F );
 			result->declMember( "transmittanceProfile", ast::type::Kind::eVec4F, MaxTransmittanceProfileSize );

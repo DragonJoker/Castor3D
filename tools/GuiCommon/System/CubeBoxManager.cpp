@@ -143,14 +143,14 @@ namespace GuiCommon
 					, *object.getParent()
 					, m_object->getBoundingBox( submesh ) );
 
-				for ( auto & submesh : *m_object->getMesh().lock() )
+				for ( auto & psubmesh : *m_object->getMesh().lock() )
 				{
-					if ( submesh.get() != m_submesh )
+					if ( psubmesh.get() != m_submesh )
 					{
 						m_obbSubmeshNodes.push_back( doAddBB( m_obbSubmesh
-							, m_obbMesh.lock()->getName() + string::toString( submesh->getId() )
+							, m_obbMesh.lock()->getName() + string::toString( psubmesh->getId() )
 							, *object.getParent()
-							, m_object->getBoundingBox( *submesh ) ) );
+							, m_object->getBoundingBox( *psubmesh ) ) );
 					}
 				}
 
@@ -166,7 +166,7 @@ namespace GuiCommon
 		CU_Require( object.getName() == m_object->getName() );
 		Engine * engine = m_scene.getEngine();
 		engine->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [this, &object]( RenderDevice const & device
+			, [this]( RenderDevice const & device
 				, QueueData const & queueData )
 			{
 				m_sceneConnection.disconnect();
@@ -275,9 +275,9 @@ namespace GuiCommon
 			{
 				if ( submesh.get() != m_submesh )
 				{
-					auto & sobb = m_object->getBoundingBox( *submesh );
-					m_obbSubmeshNodes[i]->setScale( sobb.getDimensions() / 2.0f );
-					m_obbSubmeshNodes[i]->setPosition( sobb.getCenter() );
+					auto & ssobb = m_object->getBoundingBox( *submesh );
+					m_obbSubmeshNodes[i]->setScale( ssobb.getDimensions() / 2.0f );
+					m_obbSubmeshNodes[i]->setPosition( ssobb.getCenter() );
 					m_obbSubmeshNodes[i]->update();
 					++i;
 				}
@@ -299,7 +299,7 @@ namespace GuiCommon
 
 			Engine * engine = m_scene.getEngine();
 			engine->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [this, aabbSubmesh]( RenderDevice const & device
+				, [aabbSubmesh]( RenderDevice const & device
 					, QueueData const & queueData )
 				{
 					aabbSubmesh->update();

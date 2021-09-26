@@ -245,10 +245,10 @@ namespace castor3d
 			VertexBufferPool< VertexT, CountT > & pool;
 			OverlayRenderNode & node;
 			uint32_t index;
-			UniformBufferOffsetT< Configuration > overlayUbo;
-			OverlayGeometryBuffers geometryBuffers;
-			ashes::DescriptorSetPtr descriptorSet;
-			FontTexture::OnChanged::connection connection;
+			UniformBufferOffsetT< Configuration > overlayUbo{};
+			OverlayGeometryBuffers geometryBuffers{};
+			ashes::DescriptorSetPtr descriptorSet{};
+			FontTexture::OnChanged::connection connection{};
 		};
 
 		using PanelVertexBufferPool = VertexBufferPool< OverlayCategory::Vertex, 6u >;
@@ -291,7 +291,6 @@ namespace castor3d
 		void doCreateRenderPass( RenderDevice const & device );
 
 	private:
-		RenderDevice const & m_device;
 		UniformBufferPools & m_uboPools;
 		Texture const & m_target;
 		ashes::CommandBufferPtr m_commandBuffer;
@@ -311,9 +310,6 @@ namespace castor3d
 		ashes::FrameBufferPtr m_frameBuffer;
 		std::map< uint32_t, Pipeline > m_panelPipelines;
 		std::map< uint32_t, Pipeline > m_textPipelines;
-		int m_previousBorderZIndex{ 0 };
-		int m_previousPanelZIndex{ 0 };
-		int m_previousTextZIndex{ 0 };
 		castor::String m_previousCaption;
 		bool m_sizeChanged{ true };
 		MatrixUbo m_matrixUbo;

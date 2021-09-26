@@ -20,10 +20,6 @@ namespace castor3d
 	{
 	}
 
-	Version::~Version()
-	{
-	}
-
 	uint32_t Version::getVkVersion()const
 	{
 		return ashes::makeVersion( m_major, m_minor, m_build );

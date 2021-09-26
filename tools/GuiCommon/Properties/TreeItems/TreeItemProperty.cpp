@@ -19,9 +19,9 @@ namespace GuiCommon
 	TreeItemProperty::TreeItemProperty( castor3d::Engine * engine
 		, bool editable )
 		: wxTreeItemData()
+		, m_menu( nullptr )
 		, m_editable( editable )
 		, m_engine( engine )
-		, m_menu( nullptr )
 	{
 	}
 

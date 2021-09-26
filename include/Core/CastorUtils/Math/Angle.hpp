@@ -101,13 +101,6 @@ namespace castor
 		inline AngleT()noexcept;
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		inline ~AngleT()noexcept;
-		/**
-		 *\~english
 		 *\brief		Conversion to degrees
 		 *\return		Angle value, in degrees
 		 *\~french

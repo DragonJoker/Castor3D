@@ -24,10 +24,6 @@ namespace GuiCommon
 		AddPrivateChild( addAttributes( new wxIntProperty( _( "Bottom" ), wxPG_LABEL, value.bottom() ) ) );
 	}
 
-	RectangleProperty::~RectangleProperty()
-	{
-	}
-
 	void RectangleProperty::RefreshChildren()
 	{
 		if ( GetChildCount() )
@@ -43,7 +39,7 @@ namespace GuiCommon
 	wxVariant RectangleProperty::ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const
 	{
 		castor::Point4i & point = Point4iRefFromVariant( thisValue );
-		int val = childValue.GetLong();
+		auto val = int( childValue.GetLong() );
 
 		switch ( childIndex )
 		{

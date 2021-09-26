@@ -40,11 +40,11 @@ namespace GuiCommon
 		m_toolBar->SetToolBitmapSize( wxSize( 16, 16 ) );
 		m_toolBar->AddTool( eCollapseAll
 			, _( "Collapse all" )
-			, wxImage( *ImagesLoader::getBitmap( eBMP_COLLAPSE_ALL ) ).Rescale( 16, 16, wxIMAGE_QUALITY_HIGH )
+			, ImagesLoader::getBitmap( eBMP_COLLAPSE_ALL )->Scale( 16, 16, wxIMAGE_QUALITY_HIGH )
 			, _( "Collapse all the nodes of the tree" ) );
 		m_toolBar->AddTool( eExpandAll
 			, _( "Expand all" )
-			, wxImage( *ImagesLoader::getBitmap( eBMP_EXPAND_ALL ) ).Rescale( 16, 16, wxIMAGE_QUALITY_HIGH )
+			, ImagesLoader::getBitmap( eBMP_EXPAND_ALL )->Scale( 16, 16, wxIMAGE_QUALITY_HIGH )
 			, _( "Expands all the nodes of the tree" ) );
 		m_toolBar->Realize();
 
@@ -79,10 +79,13 @@ namespace GuiCommon
 		m_auiManager.Update();
 	}
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 	BEGIN_EVENT_TABLE( TreeHolder, wxPanel )
 		EVT_TOOL( eCollapseAll, TreeHolder::onCollapseAll )
 		EVT_TOOL( eExpandAll, TreeHolder::onExpandAll )
 	END_EVENT_TABLE()
+#pragma GCC diagnostic pop
 
 	void TreeHolder::onCollapseAll( wxCommandEvent & event )
 	{

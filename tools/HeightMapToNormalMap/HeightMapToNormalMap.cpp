@@ -11,124 +11,127 @@
 #include <vector>
 #include <string>
 
-void printUsage()
+namespace
 {
-	std::cout << "HeightMapToNormalMap is a tool used to convert a height map to a normal map." << std::endl;
-	std::cout << "Usage:" << std::endl;
-	std::cout << "HeightMapToNormalMap -s strength FILE" << std::endl;
-	std::cout << "  FILE must be an image file." << std::endl;
-	std::cout << "  strength is a floating point value defining the normals strength (default is 8.0)." << std::endl;
-}
-
-struct Options
-{
-	float normalStrength{ 3.0f };
-	castor::PathArray paths;
-};
-
-bool parseArgs( int argc
-	, char * argv[]
-	, Options & options )
-{
-	castor::StringArray args{ argv + 1, argv + argc };
-
-	if ( args.empty() )
+	void printUsage()
 	{
-		std::cerr << "Missing parameters." << std::endl << std::endl;
-		printUsage();
-		return false;
+		std::cout << "HeightMapToNormalMap is a tool used to convert a height map to a normal map." << std::endl;
+		std::cout << "Usage:" << std::endl;
+		std::cout << "HeightMapToNormalMap -s strength FILE" << std::endl;
+		std::cout << "  FILE must be an image file." << std::endl;
+		std::cout << "  strength is a floating point value defining the normals strength (default is 8.0)." << std::endl;
 	}
 
-	auto it = std::find( args.begin(), args.end(), "-h" );
-
-	if ( it == args.end() )
+	struct Options
 	{
-		it = std::find( args.begin(), args.end(), "--help" );
-	}
+		float normalStrength{ 3.0f };
+		castor::PathArray paths;
+	};
 
-	if ( it != args.end() )
+	bool parseArgs( int argc
+		, char * argv[]
+		, Options & options )
 	{
-		args.erase( it );
-		printUsage();
-		return false;
-	}
+		castor::StringArray args{ argv + 1, argv + argc };
 
-	it = std::find( args.begin(), args.end(), "-s" );
-
-	if ( it == args.end() )
-	{
-		it = std::find( args.begin(), args.end(), "--strength" );
-	}
-
-	if ( it != args.end()
-		&& std::distance( args.begin(), it ) == args.size() - 1 )
-	{
-		std::cerr << "-s option is missing strength parameter" << std::endl << std::endl;
-		printUsage();
-		return false;
-	}
-
-	if ( it != args.end() )
-	{
-		args.erase( it );
-		++it;
-		options.normalStrength = castor::string::toFloat( *it );
-		args.erase( it );
-	}
-
-	if ( args.empty() )
-	{
-		std::cerr << "Missing file parameter" << std::endl << std::endl;
-		printUsage();
-		return false;
-	}
-
-	it = args.begin() + args.size() - 1u;
-
-	if ( std::distance( args.begin(), it ) == 0
-		&& args.size() > 1 )
-	{
-		std::cerr << "Missing file parameter" << std::endl << std::endl;
-		printUsage();
-		return false;
-	}
-
-	for ( auto & param : args )
-	{
-		options.paths.emplace_back( param );
-	}
-
-	return true;
-}
-
-void convertToNormalMap( float strength
-	, castor::Path path
-	, castor::ImageLoader const & loader
-	, castor::ImageWriter const & writer )
-{
-	try
-	{
-		std::cout << "Converting " << path << std::endl;
-		auto image = loader.load( path.getFileName(), path, false, false );
-
-		if ( castor::convertToNormalMap( strength, image ) )
+		if ( args.empty() )
 		{
-			path = image.getPath();
-			path = path.getPath() / ( "N_" + path.getFileName() + ".png" );
-			writer.write( path, image.getPxBuffer() );
+			std::cerr << "Missing parameters." << std::endl << std::endl;
+			printUsage();
+			return false;
 		}
+
+		auto it = std::find( args.begin(), args.end(), "-h" );
+
+		if ( it == args.end() )
+		{
+			it = std::find( args.begin(), args.end(), "--help" );
+		}
+
+		if ( it != args.end() )
+		{
+			args.erase( it );
+			printUsage();
+			return false;
+		}
+
+		it = std::find( args.begin(), args.end(), "-s" );
+
+		if ( it == args.end() )
+		{
+			it = std::find( args.begin(), args.end(), "--strength" );
+		}
+
+		if ( it != args.end()
+			&& std::distance( args.begin(), it ) == ptrdiff_t( args.size() - 1 ) )
+		{
+			std::cerr << "-s option is missing strength parameter" << std::endl << std::endl;
+			printUsage();
+			return false;
+		}
+
+		if ( it != args.end() )
+		{
+			args.erase( it );
+			++it;
+			options.normalStrength = castor::string::toFloat( *it );
+			args.erase( it );
+		}
+
+		if ( args.empty() )
+		{
+			std::cerr << "Missing file parameter" << std::endl << std::endl;
+			printUsage();
+			return false;
+		}
+
+		it = std::next( args.begin(), ptrdiff_t( args.size() - 1u ) );
+
+		if ( std::distance( args.begin(), it ) == 0
+			&& args.size() > 1 )
+		{
+			std::cerr << "Missing file parameter" << std::endl << std::endl;
+			printUsage();
+			return false;
+		}
+
+		for ( auto & param : args )
+		{
+			options.paths.emplace_back( param );
+		}
+
+		return true;
 	}
-	catch ( castor::Exception & exc )
+
+	void convertToNormalMap( float strength
+		, castor::Path path
+		, castor::ImageLoader const & loader
+		, castor::ImageWriter const & writer )
 	{
-		std::cerr << cuT( "Error encountered while loading image file [" ) << path << cuT( "]: " ) << exc.what() << std::endl;
-	}
-	catch ( std::exception & exc )
-	{
-		std::cerr << cuT( "Error encountered while loading image file [" ) << path << cuT( "]: " ) << exc.what() << std::endl;
-	}
-	catch ( ... )
-	{
-		std::cerr << cuT( "Error encountered while loading image file [" ) << path << cuT( "]: Unknown error" ) << std::endl;
+		try
+		{
+			std::cout << "Converting " << path << std::endl;
+			auto image = loader.load( path.getFileName(), path, false, false );
+
+			if ( castor::convertToNormalMap( strength, image ) )
+			{
+				path = image.getPath();
+				path = path.getPath() / ( "N_" + path.getFileName() + ".png" );
+				writer.write( path, image.getPxBuffer() );
+			}
+		}
+		catch ( castor::Exception & exc )
+		{
+			std::cerr << cuT( "Error encountered while loading image file [" ) << path << cuT( "]: " ) << exc.what() << std::endl;
+		}
+		catch ( std::exception & exc )
+		{
+			std::cerr << cuT( "Error encountered while loading image file [" ) << path << cuT( "]: " ) << exc.what() << std::endl;
+		}
+		catch ( ... )
+		{
+			std::cerr << cuT( "Error encountered while loading image file [" ) << path << cuT( "]: Unknown error" ) << std::endl;
+		}
 	}
 }
 

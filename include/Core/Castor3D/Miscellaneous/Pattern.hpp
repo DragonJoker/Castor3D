@@ -26,19 +26,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		Pattern()
-		{
-		}
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		~Pattern()
-		{
-			m_elements.clear();
-		}
+		Pattern() = default;
 		/**
 		 *\~english
 		 *\brief		Builds the mirror pattern
@@ -201,8 +189,6 @@ namespace castor3d
 		}
 
 	private:
-		//!\~english	The elements.
-		//!\~french		Les éléments.
 		TObjList m_elements;
 	};
 }

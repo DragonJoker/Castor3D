@@ -28,14 +28,10 @@ namespace draw_edges
 		PostEffect( castor3d::RenderTarget & renderTarget
 			, castor3d::RenderSystem & renderSystem
 			, castor3d::Parameters const & params );
-		~PostEffect();
+		~PostEffect()override;
 		static castor3d::PostEffectSPtr create( castor3d::RenderTarget & renderTarget
 			, castor3d::RenderSystem & renderSystem
 			, castor3d::Parameters const & params );
-		/**
-		 *\copydoc		castor3d::PostEffect::update
-		 */
-		void update( castor3d::CpuUpdater & updater )override;
 		/**
 		 *\copydoc		castor3d::PostEffect::accept
 		 */

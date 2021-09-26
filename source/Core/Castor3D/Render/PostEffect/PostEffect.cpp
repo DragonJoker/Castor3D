@@ -14,25 +14,6 @@
 
 namespace castor3d
 {
-	namespace
-	{
-		castor::String getKindName( PostEffect::Kind kind )
-		{
-			switch ( kind )
-			{
-			case castor3d::PostEffect::Kind::eHDR:
-				return cuT( "HDR" );
-			case castor3d::PostEffect::Kind::eSRGB:
-				return cuT( "sRGB" );
-			case castor3d::PostEffect::Kind::eOverlay:
-				return cuT( "Overlay" );
-			default:
-				CU_Failure( "Unexpected PostEffect::Kind." );
-				return cuT( "Unknown" );
-			}
-		}
-	}
-
 	PostEffect::PostEffect( castor::String const & name
 		, castor::String const & fullName
 		, RenderTarget & renderTarget
@@ -76,9 +57,19 @@ namespace castor3d
 
 	void PostEffect::update( CpuUpdater & updater )
 	{
+		doCpuUpdate( updater );
 	}
 
 	void PostEffect::update( GpuUpdater & updater )
+	{
+		doGpuUpdate( updater );
+	}
+
+	void PostEffect::doCpuUpdate( CpuUpdater & updater )
+	{
+	}
+
+	void PostEffect::doGpuUpdate( GpuUpdater & updater )
 	{
 	}
 

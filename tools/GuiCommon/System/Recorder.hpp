@@ -14,8 +14,7 @@ namespace GuiCommon
 		class IRecorderImpl
 		{
 		public:
-			IRecorderImpl() {}
-			virtual ~IRecorderImpl() {}
+			virtual ~IRecorderImpl() = default;
 			virtual bool StartRecord( castor::Size const & p_size, int p_wantedFPS ) = 0;
 			virtual bool IsRecording() = 0;
 			virtual bool UpdateTime() = 0;
@@ -25,7 +24,6 @@ namespace GuiCommon
 
 	public:
 		Recorder();
-		~Recorder();
 
 		inline bool StartRecord( castor::Size const & p_size, int p_wantedFPS )
 		{

@@ -18,7 +18,7 @@ namespace GuiCommon
 			, wxWindow * parent
 			, wxPoint const & pos = wxDefaultPosition
 			, wxSize const & size = wxDefaultSize );
-		~MaterialsList();
+		~MaterialsList()override;
 
 		void loadMaterials( castor3d::Engine * engine
 			, castor3d::Scene & scene );

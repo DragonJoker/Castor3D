@@ -19,7 +19,6 @@ namespace GuiCommon
 
 	public:
 		SizeProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, castor::Size const & value = castor::Size() );
-		virtual ~SizeProperty();
 
 		wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue )const override;
 		void RefreshChildren()override;

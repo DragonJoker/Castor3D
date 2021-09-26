@@ -26,10 +26,6 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	AnimatedObjectGroupTreeItemProperty::~AnimatedObjectGroupTreeItemProperty()
-	{
-	}
-
 	void AnimatedObjectGroupTreeItemProperty::doCreateProperties( wxPGEditor * editor
 		, wxPropertyGrid * grid )
 	{

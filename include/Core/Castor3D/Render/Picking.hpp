@@ -13,7 +13,10 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 
+#pragma warning( push )
+#pragma warning( disable:4365 )
 #include <atomic>
+#pragma warning( pop )
 
 namespace castor3d
 {
@@ -143,7 +146,6 @@ namespace castor3d
 		ashes::ImagePtr m_colourTexture;
 		ashes::ImageView m_colourView;
 		VkBufferImageCopy m_copyRegion;
-		VkBufferImageCopy m_transferDisplayRegion;
 		std::vector< VkBufferImageCopy > m_pickDisplayRegions;
 		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::BufferPtr< castor::Point4f > m_stagingBuffer;

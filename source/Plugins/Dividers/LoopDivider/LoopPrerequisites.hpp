@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #pragma warning( disable:4312 )
 
 #include <Castor3D/Event/Frame/FrameListener.hpp>
+
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Vertex.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/Face.hpp>

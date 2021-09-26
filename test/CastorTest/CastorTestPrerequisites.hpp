@@ -2,6 +2,8 @@
 #ifndef ___CastorTest_TestPrerequisites___
 #define ___CastorTest_TestPrerequisites___
 
+#pragma warning( push )
+#pragma warning( disable: 4365 )
 #if defined( _WIN32 )
 #	include <process.h>
 #else
@@ -21,6 +23,7 @@
 #include <string>
 #include <memory>
 #include <vector>
+#pragma warning( pop )
 
 namespace Testing
 {

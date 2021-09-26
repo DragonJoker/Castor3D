@@ -40,7 +40,7 @@ namespace castortd
 			inline float UpgradeSpeed()
 			{
 				m_cooldown.Upgrade();
-				return m_initialCooldown.count() / float( m_cooldown.getValue().count() );
+				return float( m_initialCooldown.count() ) / float( m_cooldown.getValue().count() );
 			}
 
 			inline bool CanUpgradeDamage()
@@ -156,7 +156,6 @@ namespace castortd
 			, castor3d::SceneNode & p_node
 			, castor3d::AnimatedObjectGroup & p_anim
 			, Cell const & p_cell );
-		~Tower();
 
 		void accept( Game & p_game );
 

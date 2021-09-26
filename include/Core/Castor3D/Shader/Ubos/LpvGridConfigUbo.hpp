@@ -25,7 +25,7 @@ namespace castor3d
 			C3D_API LpvGridData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled );
-			C3D_API LpvGridData & operator=( LpvGridData const & rhs );
+			SDW_DeclStructInstance( C3D_API, LpvGridData );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
@@ -53,6 +53,8 @@ namespace castor3d
 			sdw::Vec4 minVolumeCornerSize;
 			sdw::Vec4 gridSizeAtt;
 			sdw::Vec4 cameraPos4;
+
+		public:
 			// Specific values
 			sdw::Vec3 minVolumeCorner;
 			sdw::Float gridWidth;
@@ -76,6 +78,10 @@ namespace castor3d
 		using Configuration = LpvGridConfigUboConfiguration;
 
 	public:
+		C3D_API LpvGridConfigUbo( LpvGridConfigUbo const & rhs ) = delete;
+		C3D_API LpvGridConfigUbo & operator=( LpvGridConfigUbo const & rhs ) = delete;
+		C3D_API LpvGridConfigUbo( LpvGridConfigUbo && rhs ) = default;
+		C3D_API LpvGridConfigUbo & operator=( LpvGridConfigUbo && rhs ) = delete;
 		C3D_API explicit LpvGridConfigUbo( RenderDevice const & device );
 		C3D_API ~LpvGridConfigUbo();
 

@@ -49,7 +49,8 @@ namespace castor
 		{
 			if ( m_freeIndex != m_freeEnd )
 			{
-				reportError< PoolErrorType::eCommonMemoryLeaksDetected >( Namer::Name, size_t( ( m_freeEnd - m_freeIndex ) * sizeof( Object ) ) );
+				reportError< PoolErrorType::eCommonMemoryLeaksDetected >( Namer::Name
+					, size_t( ( m_freeEnd - m_freeIndex ) * sizeof( Object ) ) );
 				size_t size = sizeof( Object ) + 1;
 
 				for ( auto buffer = m_buffers; buffer != m_buffersEnd; ++buffer )
@@ -60,7 +61,8 @@ namespace castor
 					{
 						if ( *data == ALLOCATED )
 						{
-							reportError< PoolErrorType::eMarkedLeakAddress >( Namer::Name, ( void * )( data + 1 ) );
+							reportError< PoolErrorType::eMarkedLeakAddress >( Namer::Name
+								, reinterpret_cast< void * >( data + 1 ) );
 						}
 
 						data += size;
@@ -120,7 +122,8 @@ namespace castor
 			{
 				if ( m_freeIndex == m_freeEnd )
 				{
-					reportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name, ( void * )space );
+					reportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name
+						, reinterpret_cast< void * >( space ) );
 					return false;
 				}
 
@@ -131,21 +134,26 @@ namespace castor
 				{
 					if ( *marked == FREED )
 					{
-						reportError< PoolErrorType::eMarkedDoubleDelete >( Namer::Name, ( void * )space );
+						reportError< PoolErrorType::eMarkedDoubleDelete >( Namer::Name
+							, reinterpret_cast< void * >( space ) );
 						return false;
 					}
 
-					reportError< PoolErrorType::eMarkedNotFromPool >( Namer::Name, ( void * )space );
+					reportError< PoolErrorType::eMarkedNotFromPool >( Namer::Name
+						, reinterpret_cast< void * >( space ) );
 					return false;
 				}
 
-				if ( m_buffersEnd == std::find_if(	m_buffers, m_buffersEnd,
-													[&marked]( buffer const & buffer )
-													{
-														return ptrdiff_t( marked ) >= ptrdiff_t( buffer.m_data ) && ptrdiff_t( marked ) < ptrdiff_t( buffer.m_end );
-													} ) )
+				if ( m_buffersEnd == std::find_if( m_buffers
+					, m_buffersEnd
+					, [&marked]( buffer const & buffer )
+					{
+						return ptrdiff_t( marked ) >= ptrdiff_t( buffer.m_data )
+							&& ptrdiff_t( marked ) < ptrdiff_t( buffer.m_end );
+					} ) )
 				{
-					reportError< PoolErrorType::eGrowingNotFromRanges >( Namer::Name, ( void * )space );
+					reportError< PoolErrorType::eGrowingNotFromRanges >( Namer::Name
+						, reinterpret_cast< void * >( space ) );
 					return false;
 				}
 

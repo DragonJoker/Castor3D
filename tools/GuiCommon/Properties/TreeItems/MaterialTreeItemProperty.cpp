@@ -18,10 +18,6 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	MaterialTreeItemProperty::~MaterialTreeItemProperty()
-	{
-	}
-
 	void MaterialTreeItemProperty::doCreateProperties( wxPGEditor * editor
 		, wxPropertyGrid * grid )
 	{

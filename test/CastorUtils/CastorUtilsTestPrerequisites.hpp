@@ -5,6 +5,9 @@
 #include <CastorTest/UnitTest.hpp>
 #include <CastorTest/Benchmark.hpp>
 
+#include <CastorUtils/Design/ArrayView.hpp>
+#include <CastorUtils/Design/ChangeTracked.hpp>
+#include <CastorUtils/Math/Angle.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
 #include <random>
@@ -19,34 +22,6 @@
 namespace Testing
 {
 	//*********************************************************************************************
-
-	template< typename StreamT, typename T, uint32_t Columns, uint32_t Rows >
-	inline StreamT & operator<<( StreamT & p_streamOut, castor::Matrix< T, Columns, Rows > const & p_matrix )
-	{
-		auto precision = p_streamOut.precision( 10 );
-
-		for ( uint32_t i = 0; i < Columns; i++ )
-		{
-			for ( uint32_t j = 0; j < Rows; j++ )
-			{
-				p_streamOut.getWidth( 15 );
-				p_streamOut << std::right << p_matrix[i][j];
-			}
-
-			p_streamOut << std::endl;
-		}
-
-		p_streamOut.precision( precision );
-		return p_streamOut;
-	}
-
-	template< typename T, size_t Rows >
-	castor::String PrintMatrix( castor::SquareMatrix< T, Rows > const & p_matrix )
-	{
-		castor::StringStream stream;
-		stream << p_matrix;
-		return stream.str();
-	}
 
 	template< typename T >
 	inline void randomInit( T * p_pData1, T * p_pData2, uint32_t size )
@@ -110,7 +85,111 @@ namespace Testing
 			&& std::abs( a[2][2] - b[2][2] ) < epsilon;
 	}
 
+	//*********************************************************************************************
+
+	template< typename ValueT, uint32_t ColumnsT, uint32_t RowsT >
+	struct Stringifier< castor::Matrix< ValueT, ColumnsT, RowsT > >
+	{
+		static std::string get( castor::Matrix< ValueT, ColumnsT, RowsT > const & value )
+		{
+			std::stringstream stream;
+			stream.precision( 10 );
+
+			for ( uint32_t i = 0; i < ColumnsT; i++ )
+			{
+				for ( uint32_t j = 0; j < RowsT; j++ )
+				{
+					stream << std::setw( 15 ) << std::right << value[i][j];
+				}
+
+				stream << std::endl;
+			}
+
+			return stream.str();
+		}
+	};
+
+	template< typename ValueT, uint32_t CountT >
+	struct Stringifier< castor::SquareMatrix< ValueT, CountT > >
+	{
+		static std::string get( castor::SquareMatrix< ValueT, CountT > const & value )
+		{
+			std::stringstream stream;
+			stream.precision( 10 );
+
+			for ( uint32_t i = 0; i < CountT; i++ )
+			{
+				for ( uint32_t j = 0; j < CountT; j++ )
+				{
+					stream << std::setw( 15 ) << std::right << value[i][j];
+				}
+
+				stream << std::endl;
+			}
+
+			return stream.str();
+		}
+	};
+	
+	template< typename ValueT, uint32_t CountT >
+	struct Stringifier< castor::Point< ValueT, CountT > >
+	{
+		static std::string get( castor::Point< ValueT, CountT > const & value )
+		{
+			std::stringstream stream;
+			stream.precision( 10 );
+
+			for ( uint32_t i = 0; i < CountT; i++ )
+			{
+				stream << std::setw( 15 ) << std::right << value[i];
+			}
+
+			return stream.str();
+		}
+	};
+
+	template< typename ValueT >
+	struct Stringifier< castor::AngleT< ValueT > >
+	{
+		static std::string get( castor::AngleT< ValueT > const & value )
+		{
+			std::stringstream stream;
+			stream << value.degrees();
+			return stream.str();
+		}
+	};
+
+	template< typename ValueT >
+	struct Stringifier< castor::ChangeTracked< ValueT > >
+	{
+		static std::string get( castor::ChangeTracked< ValueT > const & value )
+		{
+			std::stringstream stream;
+			stream << toString( *value );
+			return stream.str();
+		}
+	};
+
+	template< typename ValueT >
+	struct Stringifier< castor::ArrayView< ValueT > >
+	{
+		static std::string get( castor::ArrayView< ValueT > const & values )
+		{
+			std::stringstream stream;
+			stream << values.size() << ":";
+
+			for ( auto & value : values )
+			{
+				stream << " " << toString( value );
+			}
+
+			return stream.str();
+		}
+	};
+
 #if defined( CASTOR_USE_GLM )
+
+	//*********************************************************************************************
 
 	template< typename T >
 	inline bool compare( castor::SquareMatrix< T, 4 > const & a, glm::mat4x4 const & b )
@@ -159,173 +238,73 @@ namespace Testing
 			&& std::abs( a[1][1] - b[1][1] ) < epsilon;
 	}
 
-	template< typename CharType >
-	inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & p_stream, glm::mat4 const & p_mtx )
-	{
-		auto precision = p_stream.precision( 10 );
-
-		for ( int i = 0; i < 4; ++i )
-		{
-			for ( int j = 0; j < 4; ++j )
-			{
-				p_stream.width( 15 );
-				p_stream << std::right << p_mtx[i][j];
-			}
-
-			p_stream << std::endl;
-		}
-
-		p_stream.precision( precision );
-		return p_stream;
-	}
-
-	template< typename CharType >
-	inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & p_stream, glm::mat3 const & p_mtx )
-	{
-		auto precision = p_stream.precision( 10 );
-
-		for ( int i = 0; i < 3; ++i )
-		{
-			for ( int j = 0; j < 3; ++j )
-			{
-				p_stream.width( 15 );
-				p_stream << std::right << p_mtx[i][j];
-			}
-
-			p_stream << std::endl;
-		}
-
-		p_stream.precision( precision );
-		return p_stream;
-	}
-
-	template< typename CharType >
-	inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & p_stream, glm::mat2 const & p_mtx )
-	{
-		auto precision = p_stream.precision( 10 );
-
-		for ( int i = 0; i < 2; ++i )
-		{
-			for ( int j = 0; j < 2; ++j )
-			{
-				p_stream.width( 15 );
-				p_stream << std::right << p_mtx[i][j];
-			}
-
-			p_stream << std::endl;
-		}
-
-		p_stream.precision( precision );
-		return p_stream;
-	}
-
-	inline castor::String PrintMatrix( glm::mat4 const & p_matrix )
-	{
-		castor::StringStream stream;
-		stream << p_matrix;
-		return stream.str();
-	}
-
-	inline castor::String PrintMatrix( glm::mat3 const & p_matrix )
-	{
-		castor::StringStream stream;
-		stream << p_matrix;
-		return stream.str();
-	}
-
-	inline castor::String PrintMatrix( glm::mat2 const & p_matrix )
-	{
-		castor::StringStream stream;
-		stream << p_matrix;
-		return stream.str();
-	}
-
-#endif
-
 	//*********************************************************************************************
 
 	template<>
-	inline std::string toString< castor::Matrix4x4f >( castor::Matrix4x4f const & p_value )
+	struct Stringifier< glm::mat4 >
 	{
-		std::stringstream stream;
-		stream << std::endl;
-		castor::operator<<( stream, p_value );
-		return stream.str();
-	}
+		static std::string get( glm::mat4 const & value )
+		{
+			std::stringstream stream;
+			stream.precision( 10 );
+
+			for ( int i = 0; i < 4; ++i )
+			{
+				for ( int j = 0; j < 4; ++j )
+				{
+					stream << std::setw( 15 ) << std::right << value[i][j];
+				}
+
+				stream << std::endl;
+			}
+
+			return stream.str();
+		}
+	};
 
 	template<>
-	inline std::string toString< castor::Matrix4x4d >( castor::Matrix4x4d const & p_value )
+	struct Stringifier< glm::mat3 >
 	{
-		std::stringstream stream;
-		stream << std::endl;
-		castor::operator<<( stream, p_value );
-		return stream.str();
-	}
+		static std::string get( glm::mat3 const & value )
+		{
+			std::stringstream stream;
+			stream.precision( 10 );
+
+			for ( int i = 0; i < 3; ++i )
+			{
+				for ( int j = 0; j < 3; ++j )
+				{
+					stream << std::setw( 15 ) << std::right << value[i][j];
+				}
+
+				stream << std::endl;
+			}
+
+			return stream.str();
+		}
+	};
 
 	template<>
-	inline std::string toString< castor::Matrix3x3f >( castor::Matrix3x3f const & p_value )
+	struct Stringifier< glm::mat2 >
 	{
-		std::stringstream stream;
-		stream << std::endl;
-		castor::operator<<( stream, p_value );
-		return stream.str();
-	}
+		static std::string get( glm::mat2 const & value )
+		{
+			std::stringstream stream;
+			stream.precision( 10 );
 
-	template<>
-	inline std::string toString< castor::Matrix3x3d >( castor::Matrix3x3d const & p_value )
-	{
-		std::stringstream stream;
-		stream << std::endl;
-		castor::operator<<( stream, p_value );
-		return stream.str();
-	}
+			for ( int i = 0; i < 2; ++i )
+			{
+				for ( int j = 0; j < 2; ++j )
+				{
+					stream << std::setw( 15 ) << std::right << value[i][j];
+				}
 
-	template<>
-	inline std::string toString< castor::Matrix2x2f >( castor::Matrix2x2f const & p_value )
-	{
-		std::stringstream stream;
-		stream << std::endl;
-		castor::operator<<( stream, p_value );
-		return stream.str();
-	}
+				stream << std::endl;
+			}
 
-	template<>
-	inline std::string toString< castor::Matrix2x2d >( castor::Matrix2x2d const & p_value )
-	{
-		std::stringstream stream;
-		stream << std::endl;
-		castor::operator<<( stream, p_value );
-		return stream.str();
-	}
-
-#if defined( CASTOR_USE_GLM )
-
-	template<>
-	inline std::string toString< glm::mat4x4 >( glm::mat4x4 const & p_value )
-	{
-		std::stringstream stream;
-		stream << std::endl;
-		stream << p_value;
-		return stream.str();
-	}
-
-	template<>
-	inline std::string toString< glm::mat3x3 >( glm::mat3x3 const & p_value )
-	{
-		std::stringstream stream;
-		stream << std::endl;
-		stream << p_value;
-		return stream.str();
-	}
-
-	template<>
-	inline std::string toString< glm::mat2x2 >( glm::mat2x2 const & p_value )
-	{
-		std::stringstream stream;
-		stream << std::endl;
-		stream << p_value;
-		return stream.str();
-	}
+			return stream.str();
+		}
+	};
 
 #endif
 

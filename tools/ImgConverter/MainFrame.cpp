@@ -1,18 +1,20 @@
 #include "ImgConverter/MainFrame.hpp"
 #include "ImgConverter/ImgConverter.hpp"
 
+#pragma warning( push )
+#pragma warning( disable: 4365 )
+#pragma warning( disable: 4371 )
 #include <wx/choicdlg.h>
 #include <wx/filedlg.h>
 #include <wx/filename.h>
 #include <wx/sizer.h>
 #include <wx/stdpaths.h>
+#pragma warning( pop )
 
 using namespace ImgToIco;
 
-DECLARE_APP( ImgToIcoApp )
-
 MainFrame::MainFrame()
-	:	wxFrame( NULL, wxID_ANY, _( "Image To ICO/XPM Converter" ), wxPoint( 0, 0 ), wxSize( 400, 300 ), wxSYSTEM_MENU | wxCLOSE_BOX | wxCAPTION )
+	:	wxFrame( nullptr, wxID_ANY, _( "Image To ICO/XPM Converter" ), wxPoint( 0, 0 ), wxSize( 400, 300 ), wxSYSTEM_MENU | wxCLOSE_BOX | wxCAPTION )
 {
 	CreateStatusBar();
 	wxSize l_size = GetClientSize();
@@ -34,19 +36,23 @@ MainFrame::MainFrame()
 	l_pSizer->SetSizeHints( this );
 }
 
-MainFrame::~MainFrame()
-{
-}
-
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 BEGIN_EVENT_TABLE( MainFrame, wxFrame )
 	EVT_BUTTON( eBrowse,	MainFrame::_onBrowse )
 	EVT_BUTTON( eProcess,	MainFrame::_onProcess )
 	EVT_BUTTON( eExit,		MainFrame::_onExit )
 END_EVENT_TABLE()
+#pragma GCC diagnostic pop
 
 void MainFrame::_onBrowse( wxCommandEvent & p_event )
 {
-	wxFileDialog l_dialog( this, _( "Choose an image" ), wxEmptyString, wxEmptyString, _( "BITMAP Images (*.bmp)|*.bmp|GIF Images (*.gif)|*.gif|JPEG Images (*.jpg)|*.jpg|PNG Images (*.png)|*.png|TARGA Images (*.tga)|*.tga|All Images (*.bmp;*.gif;*.png;*.jpg;*.tga)|*.bmp;*.gif;*.png;*.jpg" ), wxFD_DEFAULT_STYLE | wxFD_MULTIPLE );
+	wxFileDialog l_dialog( this
+		, _( "Choose an image" )
+		, wxEmptyString
+		, wxEmptyString
+		, _( "BITMAP Images (*.bmp)|*.bmp|GIF Images (*.gif)|*.gif|JPEG Images (*.jpg)|*.jpg|PNG Images (*.png)|*.png|TARGA Images (*.tga)|*.tga|All Images (*.bmp;*.gif;*.png;*.jpg;*.tga)|*.bmp;*.gif;*.png;*.jpg" )
+		, wxFD_DEFAULT_STYLE | wxFD_MULTIPLE );
 
 	if ( l_dialog.ShowModal() == wxID_OK )
 	{

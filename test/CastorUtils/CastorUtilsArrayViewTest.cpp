@@ -13,10 +13,6 @@ namespace Testing
 	{
 	}
 
-	CastorUtilsArrayViewTest::~CastorUtilsArrayViewTest()
-	{
-	}
-
 	void CastorUtilsArrayViewTest::doRegisterTests()
 	{
 		doRegisterTest( "BasicArrayViewTest", std::bind( &CastorUtilsArrayViewTest::BasicTest, this ) );

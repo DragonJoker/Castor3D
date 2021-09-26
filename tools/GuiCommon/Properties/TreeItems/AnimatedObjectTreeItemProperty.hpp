@@ -36,13 +36,6 @@ namespace GuiCommon
 		AnimatedObjectTreeItemProperty( castor3d::Engine * engine, bool p_editable, castor3d::AnimatedObjectSPtr p_light );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		~AnimatedObjectTreeItemProperty();
-		/**
-		 *\~english
 		 *\brief		Retrieves the AnimatedObject.
 		 *\return		The value.
 		 *\~french
@@ -58,7 +51,7 @@ namespace GuiCommon
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )override;
 
 	private:
 		castor3d::AnimatedObjectWPtr m_object;

@@ -12,8 +12,17 @@ See LICENSE file in root folder
 #		define __WXMSW__
 #	endif
 
+#	pragma warning( push )
+#	pragma warning( disable: 4365 )
+#	include <iostream>
+#	include <memory>
+#	pragma warning( pop )
+
 #	include <string>
 
+#	pragma warning( push )
+#	pragma warning( disable: 4365 )
+#	pragma warning( disable: 4371 )
 #	include <wx/app.h>
 #	include <wx/button.h>
 #	include <wx/bmpbuttn.h>
@@ -50,6 +59,7 @@ See LICENSE file in root folder
 #	include <wx/toolbar.h>
 #	include <wx/treectrl.h>
 #	include <wx/aui/framemanager.h>
+#	pragma warning( pop )
 
 #	include <CastorUtils/CastorUtils.hpp>
 #	include <CastorUtils/Miscellaneous/StringUtils.hpp>
@@ -94,8 +104,6 @@ See LICENSE file in root folder
 #	include <Castor3D/Material/Texture/Sampler.hpp>
 #	include <Castor3D/Material/Texture/TextureUnit.hpp>
 
-#	include <iostream>
-#	include <string>
 #	include <vector>
 #	include <cmath>
 

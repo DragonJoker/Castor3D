@@ -55,7 +55,7 @@ namespace castor3d
 	 *\param[in]	type	Le type d'évènement
 	 *\param[in]	functor	Le foncteur à exécuter
 	 */
-	static CpuFrameEventUPtr makeCpuFunctorEvent( EventType type
+	inline CpuFrameEventUPtr makeCpuFunctorEvent( EventType type
 		, CpuFunctorEvent::Functor functor )
 	{
 		return castor::makeUniqueDerived< CpuFrameEvent, CpuFunctorEvent >( type, functor );
@@ -69,7 +69,7 @@ namespace castor3d
 	 *\param[in]	object	L'objet à nettoyer
 	 */
 	template< typename T >
-	static CpuFrameEventUPtr makeCpuCleanupEvent( T & object )
+	inline CpuFrameEventUPtr makeCpuCleanupEvent( T & object )
 	{
 		return makeCpuFunctorEvent( EventType::ePreRender
 			, [&object]()
@@ -86,7 +86,7 @@ namespace castor3d
 	 *\param[in]	object	L'objet à initialiser.
 	 */
 	template< typename T >
-	static CpuFrameEventUPtr makeCpuInitialiseEvent( T & object )
+	inline CpuFrameEventUPtr makeCpuInitialiseEvent( T & object )
 	{
 		return makeCpuFunctorEvent( EventType::ePreRender
 			, [&object]()

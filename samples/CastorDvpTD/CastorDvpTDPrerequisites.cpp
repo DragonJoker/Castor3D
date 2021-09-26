@@ -10,7 +10,3 @@
 #endif
 
 #include <Castor3D/Engine.hpp>
-
-namespace castortd
-{
-}

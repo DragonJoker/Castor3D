@@ -14,13 +14,8 @@ namespace GuiCommon
 {
 	SkeletonTreeItemProperty::SkeletonTreeItemProperty( bool editable, Skeleton & skeleton )
 		: TreeItemProperty( skeleton.getScene()->getEngine(), editable )
-		, m_skeleton( skeleton )
 	{
 		CreateTreeItemMenu();
-	}
-
-	SkeletonTreeItemProperty::~SkeletonTreeItemProperty()
-	{
 	}
 
 	void SkeletonTreeItemProperty::doCreateProperties( wxPGEditor * editor

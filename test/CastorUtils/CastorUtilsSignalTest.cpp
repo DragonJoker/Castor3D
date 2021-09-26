@@ -14,10 +14,6 @@ namespace Testing
 	{
 	}
 
-	CastorUtilsSignalTest::~CastorUtilsSignalTest()
-	{
-	}
-
 	void CastorUtilsSignalTest::doRegisterTests()
 	{
 		doRegisterTest( "Creation", std::bind( &CastorUtilsSignalTest::Creation, this ) );

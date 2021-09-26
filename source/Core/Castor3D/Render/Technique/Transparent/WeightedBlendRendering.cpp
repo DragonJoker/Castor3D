@@ -140,19 +140,6 @@ namespace castor3d
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
-
-		crg::ImageViewId createDepthOnlyView( crg::FrameGraph & graph
-			, crg::ImageViewId depthStencilView )
-		{
-			auto subresourceRange = depthStencilView.data->info.subresourceRange;
-			subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
-			return graph.createView( crg::ImageViewData{ depthStencilView.data->image.data->name + "DptOnly"
-				, depthStencilView.data->image
-				, depthStencilView.data->info.flags
-				, depthStencilView.data->info.viewType
-				, depthStencilView.data->info.format
-				, subresourceRange } );
-		}
 	}
 
 	//*********************************************************************************************

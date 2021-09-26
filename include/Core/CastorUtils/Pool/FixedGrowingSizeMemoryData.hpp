@@ -45,7 +45,8 @@ namespace castor
 		{
 			if ( m_freeIndex != m_freeEnd )
 			{
-				reportError< PoolErrorType::eCommonMemoryLeaksDetected >( Namer::Name, size_t( ( m_freeEnd - m_freeIndex ) * sizeof( Object ) ) );
+				reportError< PoolErrorType::eCommonMemoryLeaksDetected >( Namer::Name
+					, size_t( ( m_freeEnd - m_freeIndex ) * sizeof( Object ) ) );
 			}
 
 			delete [] m_free;
@@ -101,7 +102,8 @@ namespace castor
 			{
 				if ( m_freeIndex == m_freeEnd )
 				{
-					reportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name, ( void * )space );
+					reportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name
+						, reinterpret_cast< void * >( space ) );
 					return false;
 				}
 
@@ -109,10 +111,12 @@ namespace castor
 					, m_buffersEnd
 					, [&space]( buffer const & buffer )
 					{
-						return ptrdiff_t( space ) >= ptrdiff_t( buffer.m_data ) && ptrdiff_t( space ) < ptrdiff_t( buffer.m_end );
+						return ptrdiff_t( space ) >= ptrdiff_t( buffer.m_data )
+							&& ptrdiff_t( space ) < ptrdiff_t( buffer.m_end );
 					} ) )
 				{
-					reportError< PoolErrorType::eGrowingNotFromRanges >( Namer::Name, ( void * )space );
+					reportError< PoolErrorType::eGrowingNotFromRanges >( Namer::Name
+						, reinterpret_cast< void * >( space ) );
 					return false;
 				}
 
@@ -134,7 +138,8 @@ namespace castor
 		{
 			m_total += m_step;
 			ptrdiff_t count = m_buffersEnd - m_buffers;
-			auto buffers = reinterpret_cast< buffer * >( realloc( m_buffers, ( count + 1 ) * sizeof( buffer ) ) );
+			auto buffers = reinterpret_cast< buffer * >( realloc( m_buffers
+				, ( count + 1 ) * sizeof( buffer ) ) );
 
 			if ( buffers )
 			{
@@ -145,7 +150,8 @@ namespace castor
 			m_buffersEnd->m_data = MemoryAllocator::allocate( m_step * sizeof( Object ) );
 			m_buffersEnd->m_end = nullptr;
 			auto buffer = m_buffersEnd->m_data;
-			auto freeChunks = reinterpret_cast< Object ** >( realloc( m_free, m_total * sizeof( Object * ) ) );
+			auto freeChunks = reinterpret_cast< Object ** >( realloc( m_free
+				, m_total * sizeof( Object * ) ) );
 
 			if ( freeChunks )
 			{

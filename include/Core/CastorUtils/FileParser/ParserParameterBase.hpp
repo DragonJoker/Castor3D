@@ -47,7 +47,7 @@ namespace castor
 		 *\~french
 		 *\return		Le type du chaîne paramètre.
 		 */
-		CU_API virtual xchar const * const getStrType()const = 0;
+		CU_API virtual xchar const * getStrType()const = 0;
 		/**
 		 *\~english
 		 *\return		A copy of this parameter.

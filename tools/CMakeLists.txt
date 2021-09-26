@@ -34,22 +34,29 @@ function( ToolsBuild )
 			OR CASTOR_BUILD_TOOL_GUICOMMON
 			OR CASTOR_BUILD_TOOL_CASTOR_VIEWER )
 			if( APPLE )
-				set( GTK3_FOUND TRUE )
-				set( GTK2_LIBRARIES
+				set( GTK_FOUND TRUE )
+				set( GTK_LIBRARIES
 					"-framework AppKit"
 					"-framework QuartzCore"
 					"-framework Metal"
 				)
 			elseif ( WIN32 )
-				set( GTK3_FOUND TRUE )
+				set( GTK_FOUND TRUE )
 			else()
 				find_package( GTK3 QUIET )
 				find_package( X11 QUIET )
+				if ( GTK3_FOUND )
+					set( GTK_FOUND ${GTK3_FOUND} )
+					set( GTK_INCLUDE_DIRS ${GTK3_INCLUDE_DIRS} )
+					set( GTK_LIBRARIES ${GTK3_LIBRARIES} )
+				else ()
+					set( GTK_FOUND FALSE )
+				endif ()
 			endif()
 
 			#we look for wxWidgets
 			if ( WIN32 )
-			set( wxWidgets_IGNORE_VCPKG ON )
+				set( wxWidgets_IGNORE_VCPKG ON )
 				find_package( wxWidgets COMPONENTS core base adv aui scintilla stc propgrid regex )
 
 				if ( CASTOR_USE_DEPS_WXWIDGETS AND NOT wxWidgets_FOUND )
@@ -60,7 +67,7 @@ function( ToolsBuild )
 				find_package( wxWidgets COMPONENTS core base stc aui adv propgrid )
 			endif ()
 
-			if( wxWidgets_FOUND AND GTK3_FOUND )
+			if( wxWidgets_FOUND AND GTK_FOUND )
 				unset( CastorToolsDefinitions )
 				if ( APPLE )
 					set( CastorToolsDefinitions
@@ -139,10 +146,10 @@ function( ToolsBuild )
 					set( ImgConv "no (wxWidgets libraries not found)" PARENT_SCOPE )
 					set( TestLcr "no (wxWidgets libraries not found)" PARENT_SCOPE )
 				else()
-					set( GuiCmn "no (GTK3 libraries not found)" PARENT_SCOPE )
-					set( CViewer "no (GTK3 libraries not found)" PARENT_SCOPE )
-					set( ImgConv "no (GTK3 libraries not found)" PARENT_SCOPE )
-					set( TestLcr "no (GTK3 libraries not found)" PARENT_SCOPE )
+					set( GuiCmn "no (GTK libraries not found)" PARENT_SCOPE )
+					set( CViewer "no (GTK libraries not found)" PARENT_SCOPE )
+					set( ImgConv "no (GTK libraries not found)" PARENT_SCOPE )
+					set( TestLcr "no (GTK libraries not found)" PARENT_SCOPE )
 				endif()
 			endif()
 		endif()

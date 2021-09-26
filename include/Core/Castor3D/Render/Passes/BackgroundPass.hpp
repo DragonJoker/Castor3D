@@ -29,13 +29,6 @@ namespace castor3d
 			, bool usesDepth );
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~BackgroundPass();
-		/**
-		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
 		 *\param[in, out]	updater	The update data.
 		 *\~french

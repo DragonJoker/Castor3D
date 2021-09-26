@@ -184,7 +184,6 @@ namespace castor3d
 	private:
 		MeshResPtr m_mesh;
 		castor::String m_meshName;
-		bool m_changed{ true };
 		bool m_listCreated{ false };
 		mutable castor::SpinMutex m_mutex;
 		SubmeshMaterialMap m_submeshesMaterials;

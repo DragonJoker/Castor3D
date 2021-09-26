@@ -114,7 +114,6 @@ namespace castor3d
 		};
 
 	private:
-		RenderDevice const & m_device;
 		uint32_t m_gridSize;
 		ashes::VertexBufferPtr< castor::Point3f > m_vertexBuffer;
 		ShaderModule m_vertexShader;

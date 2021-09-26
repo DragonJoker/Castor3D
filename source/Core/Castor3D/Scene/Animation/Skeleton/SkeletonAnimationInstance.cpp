@@ -75,10 +75,6 @@ namespace castor3d
 			: m_keyFrames.begin();
 	}
 
-	SkeletonAnimationInstance::~SkeletonAnimationInstance()
-	{
-	}
-
 	SkeletonAnimationInstanceObjectSPtr SkeletonAnimationInstance::getObject( Bone const & bone )const
 	{
 		return getObject( SkeletonAnimationObjectType::eBone, bone.getName() );

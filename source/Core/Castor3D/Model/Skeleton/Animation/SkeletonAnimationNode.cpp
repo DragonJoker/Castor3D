@@ -10,8 +10,4 @@ namespace castor3d
 		, m_name{ name }
 	{
 	}
-
-	SkeletonAnimationNode :: ~SkeletonAnimationNode()
-	{
-	}
 }

@@ -12,11 +12,14 @@ See LICENSE file in root folder
 #include "CastorUtils/Config/PlatformConfig.hpp"
 #include "CastorUtils/Config/SmartPtr.hpp"
 
+#pragma warning( push )
+#pragma warning( disable:4365 )
 #include <chrono>
 #include <string>
 #include <string_view>
 #include <iostream>
 #include <sstream>
+#pragma warning( pop )
 
 /**@name Configuration */
 //@{

@@ -49,24 +49,24 @@ namespace castor3d
 
 			return buffer;
 		}
+
+		ashes::PipelineVertexInputStateCreateInfo const & getMatrixLayout()
+		{
+			static ashes::PipelineVertexInputStateCreateInfo const matrixLayout{ 0u
+				, { { InstantiationComponent::BindingPoint, sizeof( InstantiationData ), VK_VERTEX_INPUT_RATE_INSTANCE } }
+				, { { SceneRenderPass::VertexInputs::TransformLocation + 0u, InstantiationComponent::BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 0u * sizeof( castor::Point4f ) }
+					, { SceneRenderPass::VertexInputs::TransformLocation + 1u, InstantiationComponent::BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 1u * sizeof( castor::Point4f ) }
+					, { SceneRenderPass::VertexInputs::TransformLocation + 2u, InstantiationComponent::BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 2u * sizeof( castor::Point4f ) }
+					, { SceneRenderPass::VertexInputs::TransformLocation + 3u, InstantiationComponent::BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 3u * sizeof( castor::Point4f ) }
+					, { SceneRenderPass::VertexInputs::MaterialLocation, InstantiationComponent::BindingPoint, VK_FORMAT_R32_SINT, offsetof( InstantiationData, m_material ) }
+					, { SceneRenderPass::VertexInputs::NodeIdLocation, InstantiationComponent::BindingPoint, VK_FORMAT_R32_SINT, offsetof( InstantiationData, m_nodeId ) } } };
+			return matrixLayout;
+		}
 	}
 
 	//*********************************************************************************************
 
 	castor::String const InstantiationComponent::Name = cuT( "instantiation" );
-
-	ashes::PipelineVertexInputStateCreateInfo const & getMatrixLayout()
-	{
-		static ashes::PipelineVertexInputStateCreateInfo const matrixLayout{ 0u
-			, { { InstantiationComponent::BindingPoint, sizeof( InstantiationData ), VK_VERTEX_INPUT_RATE_INSTANCE } }
-			, { { SceneRenderPass::VertexInputs::TransformLocation + 0u, InstantiationComponent::BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 0u * sizeof( castor::Point4f ) }
-				, { SceneRenderPass::VertexInputs::TransformLocation + 1u, InstantiationComponent::BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 1u * sizeof( castor::Point4f ) }
-				, { SceneRenderPass::VertexInputs::TransformLocation + 2u, InstantiationComponent::BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 2u * sizeof( castor::Point4f ) }
-				, { SceneRenderPass::VertexInputs::TransformLocation + 3u, InstantiationComponent::BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 3u * sizeof( castor::Point4f ) }
-				, { SceneRenderPass::VertexInputs::MaterialLocation, InstantiationComponent::BindingPoint, VK_FORMAT_R32_SINT, offsetof( InstantiationData, m_material ) }
-				, { SceneRenderPass::VertexInputs::NodeIdLocation, InstantiationComponent::BindingPoint, VK_FORMAT_R32_SINT, offsetof( InstantiationData, m_nodeId ) } } };
-		return matrixLayout;
-	}
 
 	InstantiationComponent::InstantiationComponent( Submesh & submesh
 		, uint32_t threshold )
@@ -204,7 +204,7 @@ namespace castor3d
 	SubmeshComponentSPtr InstantiationComponent::clone( Submesh & submesh )const
 	{
 		auto result = std::make_shared< InstantiationComponent >( submesh, m_threshold );
-		return result;
+		return std::static_pointer_cast< SubmeshComponent >( result );
 	}
 
 	InstantiationComponent::InstanceDataMap::const_iterator InstantiationComponent::find( MaterialRPtr material
@@ -294,9 +294,9 @@ namespace castor3d
 			{
 				if ( data.buffer && data.count )
 				{
-					if ( auto * buffer = reinterpret_cast< InstantiationData * >( data.buffer->lock( 0
+					if ( auto * buffer = data.buffer->lock( 0
 						, data.count
-						, 0u ) ) )
+						, 0u ) )
 					{
 						std::copy( data.data.begin(), data.data.end(), buffer );
 						data.buffer->flush( 0u, data.count );

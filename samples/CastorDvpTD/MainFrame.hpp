@@ -1,9 +1,9 @@
 #pragma once
 
+#include "CastorDvpTDPrerequisites.hpp"
+
 #include <wx/frame.h>
 #include <wx/windowptr.h>
-
-#include "CastorDvpTDPrerequisites.hpp"
 
 namespace castortd
 {
@@ -12,7 +12,6 @@ namespace castortd
 	{
 	public:
 		MainFrame();
-		~MainFrame();
 
 	private:
 		void doLoadScene();

@@ -46,12 +46,6 @@ namespace castor3d::shader
 	{
 	}
 
-	LightMaterial & LightMaterial::operator=( LightMaterial const & rhs )
-	{
-		sdw::StructInstance::operator=( rhs );
-		return *this;
-	}
-
 	ast::type::StructPtr LightMaterial::makeType( ast::type::TypesCache & cache )
 	{
 		auto result = cache.getStruct( ast::type::MemoryLayout::eStd430
@@ -143,7 +137,7 @@ namespace castor3d::shader
 		auto begin = m_writer.declLocale( "c3d_begin"
 			, 0_i );
 		auto end = m_writer.declLocale( "c3d_end"
-			, sceneData.getDirectionalLightCount() );
+			, sceneData.directionalLightCount );
 
 #if C3D_UseTiledDirectionalShadowMap
 		FOR( m_writer, Int, dir, begin, dir < end, ++dir )
@@ -170,7 +164,7 @@ namespace castor3d::shader
 #endif
 
 		begin = end;
-		end += sceneData.getPointLightCount();
+		end += sceneData.pointLightCount;
 
 		FOR( m_writer, sdw::Int, point, begin, point < end, ++point )
 		{
@@ -184,7 +178,7 @@ namespace castor3d::shader
 		ROF;
 
 		begin = end;
-		end += sceneData.getSpotLightCount();
+		end += sceneData.spotLightCount;
 
 		FOR( m_writer, sdw::Int, spot, begin, spot < end, ++spot )
 		{
@@ -302,7 +296,7 @@ namespace castor3d::shader
 		auto begin = m_writer.declLocale( "c3d_begin"
 			, 0_i );
 		auto end = m_writer.declLocale( "c3d_end"
-			, sceneData.getDirectionalLightCount() );
+			, sceneData.directionalLightCount );
 		auto result = m_writer.declLocale( "c3d_result"
 			, vec3( 0.0_f ) );
 
@@ -329,7 +323,7 @@ namespace castor3d::shader
 #endif
 
 		begin = end;
-		end += sceneData.getPointLightCount();
+		end += sceneData.pointLightCount;
 
 		FOR( m_writer, sdw::Int, point, begin, point < end, ++point )
 		{
@@ -342,7 +336,7 @@ namespace castor3d::shader
 		ROF;
 
 		begin = end;
-		end += sceneData.getSpotLightCount();
+		end += sceneData.spotLightCount;
 
 		FOR( m_writer, sdw::Int, spot, begin, spot < end, ++spot )
 		{
@@ -540,7 +534,7 @@ namespace castor3d::shader
 				result.m_intensityFarPlane = vec4( 0.8_f, 1.0f, 1.0f, 0.0f );
 #else
 				auto c3d_lights = m_writer.getVariable< sdw::SampledImageBufferRgba32 >( "c3d_lights" );
-				auto offset = m_writer.declLocale( "offset", index * sdw::Int( getMaxLightComponentsCount() ) );
+				auto offset = m_writer.declLocale( "offset", index * sdw::Int( int( getMaxLightComponentsCount() ) ) );
 				result.m_colourIndex = c3d_lights.fetch( sdw::Int{ offset++ } );
 				result.m_intensityFarPlane = c3d_lights.fetch( sdw::Int{ offset++ } );
 				result.m_volumetric = c3d_lights.fetch( sdw::Int{ offset++ } );
@@ -644,7 +638,7 @@ namespace castor3d::shader
 				auto result = m_writer.declLocale< PointLight >( "result" );
 				result.m_lightBase = getBaseLight( index );
 				auto c3d_lights = m_writer.getVariable< sdw::SampledImageBufferRgba32 >( "c3d_lights" );
-				auto offset = m_writer.declLocale( "offset", index * sdw::Int( getMaxLightComponentsCount() ) + sdw::Int( getBaseLightComponentsCount() ) );
+				auto offset = m_writer.declLocale( "offset", index * sdw::Int( int( getMaxLightComponentsCount() ) ) + sdw::Int( int( getBaseLightComponentsCount() ) ) );
 				result.m_position4 = c3d_lights.fetch( sdw::Int{ offset++ } );
 				result.m_attenuation4 = c3d_lights.fetch( sdw::Int{ offset++ } );
 				m_writer.returnStmt( result );
@@ -660,7 +654,7 @@ namespace castor3d::shader
 				auto result = m_writer.declLocale< SpotLight >( "result" );
 				result.m_lightBase = getBaseLight( index );
 				auto c3d_lights = m_writer.getVariable< sdw::SampledImageBufferRgba32 >( "c3d_lights" );
-				auto offset = m_writer.declLocale( "offset", index * sdw::Int( getMaxLightComponentsCount() ) + sdw::Int( getBaseLightComponentsCount() ) );
+				auto offset = m_writer.declLocale( "offset", index * sdw::Int( int( getMaxLightComponentsCount() ) ) + sdw::Int( int( getBaseLightComponentsCount() ) ) );
 				result.m_position4 = c3d_lights.fetch( sdw::Int{ offset++ } );
 				result.m_attenuation4 = c3d_lights.fetch( sdw::Int{ offset++ } );
 				result.m_direction4 = normalize( c3d_lights.fetch( sdw::Int{ offset++ } ) );

@@ -36,7 +36,7 @@ namespace castor
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		CU_API virtual ~FileParserContext();
+		CU_API virtual ~FileParserContext() = default;
 		/**
 		 *\~english
 		 *\brief		Registers a user context.

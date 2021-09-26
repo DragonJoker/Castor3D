@@ -73,6 +73,9 @@ if( assimp_FOUND )
 	target_include_directories( ${PROJECT_NAME}
 		PRIVATE
 			${ImporterIncludes}
+	)
+	target_include_directories( ${PROJECT_NAME} SYSTEM
+		PRIVATE
 			${assimp_INCLUDE_DIR}
 	)
 	target_link_libraries( ${PROJECT_NAME}

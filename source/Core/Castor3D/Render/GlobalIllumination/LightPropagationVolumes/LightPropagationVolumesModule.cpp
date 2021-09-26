@@ -45,8 +45,6 @@ namespace castor3d
 
 	VkClearValue getClearValue( LpvTexture texture )
 	{
-		static float constexpr component = std::numeric_limits< float >::max();
-		static auto const rgb32fMaxColor{ ashes::makeClearValue( VkClearColorValue{ component, component, component, component } ) };
 		static std::array< VkClearValue, size_t( LpvTexture::eCount ) > Values
 		{
 			{

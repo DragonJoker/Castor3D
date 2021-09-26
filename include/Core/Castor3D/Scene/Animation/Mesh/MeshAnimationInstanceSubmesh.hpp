@@ -44,7 +44,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~MeshAnimationInstanceSubmesh();
+		C3D_API virtual ~MeshAnimationInstanceSubmesh() = default;
 		/**
 		 *\~english
 		 *\brief		Updates the object, given to animation buffers.

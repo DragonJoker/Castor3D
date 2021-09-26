@@ -151,9 +151,7 @@ namespace castor3d
 		crg::FrameGraph & m_graph;
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		GpInfoUbo const & m_gpInfoUbo;
-		Texture const & m_input;
 		Texture const & m_bentInput;
-		Texture const & m_normals;
 		SsaoConfig const & m_config;
 		VkExtent2D m_size;
 		Texture m_result;

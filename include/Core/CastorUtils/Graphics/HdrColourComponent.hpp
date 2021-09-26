@@ -47,6 +47,7 @@ namespace castor
 		 *\param[in]	rhs	La composante
 		 *\return		Référence sur cet objet
 		 */
+		HdrColourComponent( HdrColourComponent const & rhs ) = default;
 		HdrColourComponent & operator=( HdrColourComponent const & rhs )
 		{
 			*m_component = *rhs.m_component;

@@ -35,20 +35,13 @@ namespace GuiCommon
 		ToneMappingTreeItemProperty( bool editable
 			, castor3d::RenderTarget & target
 			, wxWindow * parent );
-		/**
-		*\~english
-		*\brief		Destructor
-		*\~french
-		*\brief		Destructeur
-		*/
-		~ToneMappingTreeItemProperty();
 
 	private:
 		/**
 		*\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		*/
-		virtual void doCreateProperties( wxPGEditor * editor
-			, wxPropertyGrid * grid );
+		void doCreateProperties( wxPGEditor * editor
+			, wxPropertyGrid * grid )override;
 
 		void onEditShader( wxVariant const & var );
 

@@ -69,7 +69,7 @@ namespace GuiCommon
 				image->Rescale( GC_IMG_SIZE, GC_IMG_SIZE, wxIMAGE_QUALITY_HIGHEST );
 			}
 
-			imageList->Add( wxImage( *image ) );
+			imageList->Add( *image );
 		}
 
 		AssignImageList( imageList );
@@ -127,11 +127,14 @@ namespace GuiCommon
 				, uniform ) );
 	}
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 	BEGIN_EVENT_TABLE( FrameVariablesList, wxTreeCtrl )
 		EVT_CLOSE( FrameVariablesList::onClose )
 		EVT_TREE_SEL_CHANGED( wxID_ANY, FrameVariablesList::onSelectItem )
 		EVT_TREE_ITEM_RIGHT_CLICK( wxID_ANY, FrameVariablesList::onMouseRButtonUp )
 	END_EVENT_TABLE()
+#pragma GCC diagnostic pop
 
 	void FrameVariablesList::onClose( wxCloseEvent & p_event )
 	{
@@ -141,7 +144,7 @@ namespace GuiCommon
 
 	void FrameVariablesList::onSelectItem( wxTreeEvent & p_event )
 	{
-		TreeItemProperty * data = reinterpret_cast< TreeItemProperty * >( p_event.GetClientObject() );
+		TreeItemProperty * data = static_cast< TreeItemProperty * >( p_event.GetClientObject() );
 		m_propertiesHolder->setPropertyData( data );
 		p_event.Skip();
 	}

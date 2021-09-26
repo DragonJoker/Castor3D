@@ -10,7 +10,7 @@ namespace castor
 		: public ConsoleImpl
 	{
 	public:
-		void beginLog( LogType logLevel )
+		void beginLog( LogType logLevel )override
 		{
 			switch ( logLevel )
 			{
@@ -39,7 +39,7 @@ namespace castor
 			}
 		}
 
-		void print( String const & toLog, bool newLine )
+		void print( String const & toLog, bool newLine )override
 		{
 			printf( "%s%s\033[0m", m_header.c_str(), toLog.c_str() );
 
@@ -63,11 +63,11 @@ namespace castor
 		{
 		}
 
-		void beginLog( LogType logLevel )
+		void beginLog( LogType logLevel )override
 		{
 		}
 
-		void print( String const & toLog, bool newLine )
+		void print( String const & toLog, bool newLine )override
 		{
 			printf( "%s", toLog.c_str() );
 

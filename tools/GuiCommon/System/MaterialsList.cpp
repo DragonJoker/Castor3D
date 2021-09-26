@@ -73,7 +73,7 @@ namespace GuiCommon
 				image->Rescale( GC_IMG_SIZE, GC_IMG_SIZE, wxIMAGE_QUALITY_HIGHEST );
 			}
 
-			imageList->Add( wxImage( *image ) );
+			imageList->Add( *image );
 		}
 
 		AssignImageList( imageList );
@@ -118,8 +118,8 @@ namespace GuiCommon
 	{
 		wxTreeItemId materialId = treeCtrl->AppendItem( id
 			, material->getName()
-			, eBMP_MATERIAL - iconOffset
-			, eBMP_MATERIAL_SEL - iconOffset
+			, int( eBMP_MATERIAL - iconOffset )
+			, int( eBMP_MATERIAL_SEL - iconOffset )
 			, new MaterialTreeItemProperty( editable, *material ) );
 		uint32_t passIndex = 0;
 
@@ -145,8 +145,8 @@ namespace GuiCommon
 	{
 		wxTreeItemId passId = treeCtrl->AppendItem( id
 			, wxString( _( "Pass " ) ) << index
-			, eBMP_PASS - iconOffset
-			, eBMP_PASS_SEL - iconOffset
+			, int( eBMP_PASS - iconOffset )
+			, int( eBMP_PASS_SEL - iconOffset )
 			, new PassTreeItemProperty( editable
 				, pass
 				, scene
@@ -175,8 +175,8 @@ namespace GuiCommon
 	{
 		wxTreeItemId unitId = treeCtrl->AppendItem( id
 			, wxString( _( "Texture Unit " ) ) << index
-			, eBMP_TEXTURE - iconOffset
-			, eBMP_TEXTURE_SEL - iconOffset
+			, int( eBMP_TEXTURE - iconOffset )
+			, int( eBMP_TEXTURE_SEL - iconOffset )
 			, new TextureTreeItemProperty{ editable
 				, pass
 				, texture } );
@@ -191,11 +191,14 @@ namespace GuiCommon
 		}
 	}
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 	BEGIN_EVENT_TABLE( MaterialsList, wxTreeCtrl )
 		EVT_CLOSE( MaterialsList::onClose )
 		EVT_TREE_SEL_CHANGED( wxID_ANY, MaterialsList::onSelectItem )
 		EVT_TREE_ITEM_RIGHT_CLICK( wxID_ANY, MaterialsList::onMouseRButtonUp )
 	END_EVENT_TABLE()
+#pragma GCC diagnostic pop
 
 	void MaterialsList::onClose( wxCloseEvent & event )
 	{
@@ -205,14 +208,14 @@ namespace GuiCommon
 
 	void MaterialsList::onSelectItem( wxTreeEvent & event )
 	{
-		TreeItemProperty * data = reinterpret_cast< TreeItemProperty * >( event.GetClientObject() );
+		TreeItemProperty * data = static_cast< TreeItemProperty * >( event.GetClientObject() );
 		m_propertiesHolder->setPropertyData( data );
 		event.Skip();
 	}
 
 	void MaterialsList::onMouseRButtonUp( wxTreeEvent & event )
 	{
-		TreeItemProperty * data = reinterpret_cast< TreeItemProperty * >( event.GetClientObject() );
+		TreeItemProperty * data = static_cast< TreeItemProperty * >( event.GetClientObject() );
 		wxPoint position = wxGetMousePosition();
 		data->DisplayTreeItemMenu( this, position.x, position.y );
 	}

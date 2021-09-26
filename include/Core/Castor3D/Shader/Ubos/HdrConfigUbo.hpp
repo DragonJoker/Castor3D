@@ -23,7 +23,7 @@ namespace castor3d
 			C3D_API HdrConfigData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled );
-			C3D_API HdrConfigData & operator=( HdrConfigData const & rhs );
+			SDW_DeclStructInstance( C3D_API, HdrConfigData );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
@@ -57,6 +57,10 @@ namespace castor3d
 		using Configuration = HdrConfig;
 
 	public:
+		C3D_API HdrConfigUbo( HdrConfigUbo const & rhs ) = delete;
+		C3D_API HdrConfigUbo & operator=( HdrConfigUbo const & rhs ) = delete;
+		C3D_API HdrConfigUbo( HdrConfigUbo && rhs ) = default;
+		C3D_API HdrConfigUbo & operator=( HdrConfigUbo && rhs ) = delete;
 		C3D_API explicit HdrConfigUbo( RenderDevice const & device );
 		C3D_API ~HdrConfigUbo();
 		/**

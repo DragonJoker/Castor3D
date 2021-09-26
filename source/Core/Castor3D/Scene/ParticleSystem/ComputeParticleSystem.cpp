@@ -22,6 +22,8 @@
 
 #include <random>
 
+CU_ImplementCUSmartPtr( castor3d, ComputeParticleSystem )
+
 using namespace castor;
 
 namespace castor3d
@@ -36,18 +38,14 @@ namespace castor3d
 
 		Point3ui doDispatch( uint32_t count, Point3i const & sizes )
 		{
-			uint32_t blockSize = sizes[0] * sizes[1] * sizes[2];
-			uint32_t numBlocks = ( count + blockSize - 1 ) / blockSize;
+			auto blockSize = uint32_t( sizes[0] * sizes[1] * sizes[2] );
+			auto numBlocks = ( count + blockSize - 1 ) / blockSize;
 			return Point3ui{ numBlocks, sizes[1] > 1 ? numBlocks : 1, sizes[2] > 1 ? numBlocks : 1 };
 		}
 	}
 
 	ComputeParticleSystem::ComputeParticleSystem( ParticleSystem & parent )
 		: ParticleSystemImpl{ ParticleSystemImpl::Type::eComputeShader, parent }
-	{
-	}
-
-	ComputeParticleSystem::~ComputeParticleSystem()
 	{
 	}
 
@@ -59,7 +57,7 @@ namespace castor3d
 		{
 			m_ubo = device.uboPools->getBuffer< Configuration >( 0u );
 			auto & data = m_ubo.getData();
-			data.maxParticleCount = uint32_t( m_parent.getMaxParticlesCount() );
+			data.maxParticleCount = m_parent.getMaxParticlesCount();
 		}
 
 		if ( result )
@@ -188,7 +186,7 @@ namespace castor3d
 		{
 			particlesCount = buffer[0];
 			m_generatedCountBuffer->unlock();
-			m_particlesCount = std::min( particlesCount, uint32_t( m_parent.getMaxParticlesCount() ) );
+			m_particlesCount = std::min( particlesCount, m_parent.getMaxParticlesCount() );
 		}
 
 		if ( m_particlesCount )
@@ -202,7 +200,7 @@ namespace castor3d
 				, m_parent.getBillboards()->getVertexBuffer().getBuffer().makeTransferDestination() );
 			m_commandBuffer->copyBuffer( m_particlesStorages[m_out]->getBuffer()
 				, m_parent.getBillboards()->getVertexBuffer().getBuffer()
-				, uint32_t( m_particlesCount * m_inputs.stride() ) );
+				, m_particlesCount * m_inputs.stride() );
 			flags = m_parent.getBillboards()->getVertexBuffer().getBuffer().getCompatibleStageFlags();
 			m_commandBuffer->memoryBarrier( flags
 				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT
@@ -237,7 +235,7 @@ namespace castor3d
 
 	bool ComputeParticleSystem::doInitialiseParticleStorage( RenderDevice const & device )
 	{
-		auto size = uint32_t( m_parent.getMaxParticlesCount() * m_inputs.stride() );
+		auto size = m_parent.getMaxParticlesCount() * m_inputs.stride();
 		m_generatedCountBuffer = makeBuffer< uint32_t >( device
 			, ashes::getAlignedSize( 2u * sizeof( uint32_t )
 				, device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) / sizeof( uint32_t )

@@ -146,6 +146,11 @@ namespace castor
 			return result;
 		}
 
+		operator bool()const
+		{
+			return ( m_signal && m_connection );
+		}
+
 	private:
 		/**
 		 *\~english
@@ -196,6 +201,11 @@ namespace castor
 		using connection = my_connection;
 
 	public:
+		Signal( Signal const & ) = delete;
+		Signal & operator=( Signal const & ) = delete;
+		Signal( Signal && ) = default;
+		Signal & operator=( Signal && ) = default;
+		Signal() = default;
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -214,8 +224,12 @@ namespace castor
 
 			while ( it != m_connections.end() )
 			{
+#if !defined( NDEBUG )
 				auto disco = ( *it )->disconnect();
 				CU_Require( disco );
+#else
+				( *it )->disconnect();
+#endif
 				it = m_connections.begin();
 			}
 		}

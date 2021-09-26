@@ -12,10 +12,6 @@ namespace castor3d
 	{
 	}
 
-	AnimationInstance::~AnimationInstance()
-	{
-	}
-
 	void AnimationInstance::update( Milliseconds const & elapsed )
 	{
 		auto length = m_stoppingPoint == 0_ms

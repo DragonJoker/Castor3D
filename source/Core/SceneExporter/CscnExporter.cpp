@@ -165,44 +165,47 @@ namespace castor3d::exporter
 
 	namespace unsplitted
 	{
-		bool writeMeshes( castor::Path const & folder
-			, castor::Path const & filePath
-			, Scene const & scene
-			, castor::TextWriter< Scene >::Options & options
-			, castor::StringStream & stream )
+		namespace
 		{
-			bool result = false;
+			bool writeMeshes( castor::Path const & folder
+				, castor::Path const & filePath
+				, Scene const & scene
+				, castor::TextWriter< Scene >::Options & options
+				, castor::StringStream & stream )
 			{
-				result = writeCache< Mesh >( scene.getMeshCache()
-					, cuT( "Meshes" )
-					, options.subfolder
-					, stream
-					, []( Mesh const & object )
-					{
-						return object.isSerialisable();
-					} );
+				bool result = false;
+				{
+					result = writeCache< Mesh >( scene.getMeshCache()
+						, cuT( "Meshes" )
+						, options.subfolder
+						, stream
+						, []( Mesh const & object )
+						{
+							return object.isSerialisable();
+						} );
+				}
+				return result;
 			}
-			return result;
-		}
 
-		bool writeObjects( castor::Path const & folder
-			, castor::Path const & filePath
-			, Scene const & scene
-			, castor::TextWriter< Scene >::Options & options
-			, castor::StringStream & stream )
-		{
-			bool result = false;
+			bool writeObjects( castor::Path const & folder
+				, castor::Path const & filePath
+				, Scene const & scene
+				, castor::TextWriter< Scene >::Options & options
+				, castor::StringStream & stream )
 			{
-				result = writeCache< Geometry >( scene.getGeometryCache()
-					, cuT( "Objects" )
-					, stream
-					, []( Geometry const & object )
-					{
-						return object.getMesh().lock()
-							&& object.getMesh().lock()->isSerialisable();
-					} );
+				bool result = false;
+				{
+					result = writeCache< Geometry >( scene.getGeometryCache()
+						, cuT( "Objects" )
+						, stream
+						, []( Geometry const & object )
+						{
+							auto mesh = object.getMesh().lock();
+							return mesh && mesh->isSerialisable();
+						} );
+				}
+				return result;
 			}
-			return result;
 		}
 	}
 
@@ -369,11 +372,11 @@ namespace castor3d::exporter
 								options.objects << ( cuT( "{\n" ) );
 								options.objects << ( cuT( "\tparent \"" ) + nodeName + cuT( "\"\n" ) );
 								options.objects << ( cuT( "\tmesh \"Mesh_" ) + options.name + cuT( "\"\n" ) );
-								auto material = geomIt.second->getMaterial( *split.submesh );
+								auto subMaterial = geomIt.second->getMaterial( *split.submesh );
 
-								if ( material )
+								if ( subMaterial )
 								{
-									options.objects << ( cuT( "\tmaterial \"" ) + material->getName() + cuT( "\"\n" ) );
+									options.objects << ( cuT( "\tmaterial \"" ) + subMaterial->getName() + cuT( "\"\n" ) );
 								}
 
 								options.objects << ( cuT( "}\n" ) );
@@ -748,22 +751,22 @@ namespace castor3d::exporter
 			, castor::Path const & folder
 			, castor::Path const & filePath )
 		{
-			castor::TextFile file{ folder / options.meshesFile
+			castor::TextFile mshFile{ folder / options.meshesFile
 				, castor::File::OpenMode::eWrite };
-			auto result = file.writeText( meshes.str() ) > 0;
+			auto result = mshFile.writeText( meshes.str() ) > 0;
 
 			if ( result )
 			{
-				castor::TextFile file{ folder / options.objectsFile
+				castor::TextFile objFile{ folder / options.objectsFile
 					, castor::File::OpenMode::eWrite };
-				result = file.writeText( objects.str() ) > 0;
+				result = objFile.writeText( objects.str() ) > 0;
 			}
 
 			if ( result )
 			{
-				castor::TextFile file{ folder / options.nodesFile
+				castor::TextFile nodFile{ folder / options.nodesFile
 					, castor::File::OpenMode::eWrite };
-				result = file.writeText( nodes.str() ) > 0;
+				result = nodFile.writeText( nodes.str() ) > 0;
 			}
 
 			if ( result )

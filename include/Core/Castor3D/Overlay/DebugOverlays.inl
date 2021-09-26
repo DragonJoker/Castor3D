@@ -8,6 +8,9 @@
 
 #include <iomanip>
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdtor-name"
+
 //*********************************************************************************************
 
 namespace std
@@ -89,7 +92,7 @@ namespace castor3d
 	template< typename T >
 	void DebugOverlays::DebugPanelT< T >::update()
 	{
-		m_value->setCaption( castor::makeStringStream() << std::setprecision( 4 ) << m_v );
+		m_value->setCaption( castor::string::toString( m_v ) );
 	}
 
 	//*********************************************************************************************
@@ -181,3 +184,5 @@ namespace castor3d
 
 	//*********************************************************************************************
 }
+
+#pragma clang diagnostic pop

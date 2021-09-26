@@ -108,19 +108,8 @@ namespace Testing
 
 	//*************************************************************************************************
 
-	std::string toString( int p_value )
-	{
-		std::stringstream stream;
-		stream << p_value;
-		return stream.str();
-	}
-
-	TestFailed::TestFailed( std::string const & p_what, std::string const & p_file, std::string const & p_function, int p_line )
+	TestFailed::TestFailed( std::string const & p_what, std::string const & p_file, std::string const & p_function, uint32_t p_line )
 		: m_what( p_file + " - " + p_function + ", line " + toString( p_line ) + " : " + p_what )
-	{
-	}
-
-	TestFailed::~TestFailed() throw()
 	{
 	}
 

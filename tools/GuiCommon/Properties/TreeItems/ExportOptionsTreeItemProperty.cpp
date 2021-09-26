@@ -17,10 +17,6 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	ExportOptionsTreeItemProperty::~ExportOptionsTreeItemProperty()
-	{
-	}
-
 	void ExportOptionsTreeItemProperty::doCreateProperties( wxPGEditor * editor
 		, wxPropertyGrid * grid )
 	{

@@ -45,7 +45,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~Skeleton();
+		C3D_API ~Skeleton()override;
 		/**
 		 *\~english
 		 *\brief		Creates a bone.

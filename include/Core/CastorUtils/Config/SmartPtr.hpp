@@ -26,7 +26,7 @@ namespace castor
 		template< typename T >
 		inline void operator()( T *& pointer )noexcept
 		{
-			pointer = 0;
+			pointer = nullptr;
 		}
 	};
 	CU_API extern DummyDtor g_dummyDtor;

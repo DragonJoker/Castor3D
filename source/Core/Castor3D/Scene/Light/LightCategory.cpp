@@ -17,10 +17,6 @@ namespace castor3d
 	{
 	}
 
-	LightCategory::~LightCategory()
-	{
-	}
-
 	void LightCategory::bind( Point4f * buffer )const
 	{
 		doCopyComponent( getColour(), float( m_shadowMapIndex ), buffer );

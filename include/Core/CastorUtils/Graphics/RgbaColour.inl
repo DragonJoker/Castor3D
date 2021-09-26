@@ -3,6 +3,8 @@
 #include "CastorUtils/Math/Math.hpp"
 #include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
+#include <cmath>
+
 namespace castor
 {
 	//*************************************************************************************************

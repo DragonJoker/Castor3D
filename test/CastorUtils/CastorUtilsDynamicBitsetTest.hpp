@@ -11,7 +11,6 @@ namespace Testing
 	{
 	public:
 		CastorUtilsDynamicBitsetTest();
-		~CastorUtilsDynamicBitsetTest();
 
 	private:
 		void doRegisterTests()override;

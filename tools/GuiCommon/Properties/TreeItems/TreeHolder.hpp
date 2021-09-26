@@ -20,7 +20,7 @@ namespace GuiCommon
 		TreeHolder( wxWindow * parent
 			, wxPoint const & position = wxDefaultPosition
 			, wxSize const & size = wxDefaultSize );
-		~TreeHolder();
+		~TreeHolder()override;
 
 		void setTree( wxTreeCtrl * tree );
 

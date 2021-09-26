@@ -150,7 +150,9 @@ namespace castor3d
 			, uint32_t voxelGridSize )
 		{
 			auto temporalSmoothing = ( ( index >> 0 ) % 2 ) == 1u;
-			VoxelBufferToTexture::Pipeline result{ { VK_SHADER_STAGE_COMPUTE_BIT, "VoxelBufferToTexture", createShader( temporalSmoothing, voxelGridSize, device.renderSystem ) } };
+			VoxelBufferToTexture::Pipeline result{ { VK_SHADER_STAGE_COMPUTE_BIT
+				, "VoxelBufferToTexture"
+				, createShader( temporalSmoothing, voxelGridSize, device.renderSystem ) } };
 			result.pipeline = createPipeline( device, pipelineLayout, result.shader );
 			return result;
 		}
@@ -191,10 +193,6 @@ namespace castor3d
 		, m_pipelines{ createPipelines( device, *m_pipelineLayout, m_vctConfig.gridSize.value() ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
 		, m_descriptorSet{ createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass ) }
-	{
-	}
-
-	VoxelBufferToTexture::~VoxelBufferToTexture()
 	{
 	}
 

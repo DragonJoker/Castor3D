@@ -11,29 +11,32 @@ namespace toon
 {
 	//*********************************************************************************************
 
-#define ImplementTemplateAttributeParser( funcname )\
-	template< typename TypeT >\
-	CU_ImplementAttributeParser( funcname )
-
-	ImplementTemplateAttributeParser( parserPassSmoothBandWidth )
+	namespace
 	{
-		auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+#define ImplementTemplateAttributeParser( funcname )\
+		template< typename TypeT >\
+		CU_ImplementAttributeParser( funcname )
 
-		if ( !parsingContext.pass )
+		ImplementTemplateAttributeParser( parserPassSmoothBandWidth )
 		{
-			CU_ParsingError( cuT( "No Pass initialised." ) );
+			auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+
+			if ( !parsingContext.pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( !params.empty() )
+			{
+				auto & toonPass = static_cast< ToonPassT< TypeT > & >( *parsingContext.pass );
+				float value;
+				params[0]->get( value );
+				toonPass.setSmoothBandWidth( value );
+			}
 		}
-		else if ( !params.empty() )
-		{
-			auto & toonPass = static_cast< ToonPassT< TypeT > & >( *parsingContext.pass );
-			float value;
-			params[0]->get( value );
-			toonPass.setSmoothBandWidth( value );
-		}
-	}
-	CU_EndAttribute()
+		CU_EndAttribute()
 
 #undef ImplementTemplateAttributeParser
+	}
 
 	//*********************************************************************************************
 

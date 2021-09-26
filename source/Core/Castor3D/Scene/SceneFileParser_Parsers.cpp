@@ -46,11 +46,15 @@
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
+#include "Castor3D/Scene/ParticleSystem/ComputeParticleSystem.hpp"
+#include "Castor3D/Scene/ParticleSystem/CpuParticleSystem.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/FileParser/ParserParameter.hpp>
+
+#pragma GCC diagnostic ignored "-Wnull-dereference"
 
 using namespace castor;
 
@@ -650,15 +654,15 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.sampler.lock() )
-		{
-			CU_ParsingError( cuT( "No sampler initialised." ) );
-		}
-		else if ( !params.empty() )
+		if ( auto sampler = parsingContext.sampler.lock() )
 		{
 			uint32_t uiMode;
 			params[0]->get( uiMode );
-			parsingContext.sampler.lock()->setMinFilter( VkFilter( uiMode ) );
+			sampler->setMinFilter( VkFilter( uiMode ) );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -667,15 +671,15 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.sampler.lock() )
-		{
-			CU_ParsingError( cuT( "No sampler initialised." ) );
-		}
-		else if ( !params.empty() )
+		if ( auto sampler = parsingContext.sampler.lock() )
 		{
 			uint32_t uiMode;
 			params[0]->get( uiMode );
-			parsingContext.sampler.lock()->setMagFilter( VkFilter( uiMode ) );
+			sampler->setMagFilter( VkFilter( uiMode ) );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -684,15 +688,15 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.sampler.lock() )
-		{
-			CU_ParsingError( cuT( "No sampler initialised." ) );
-		}
-		else if ( !params.empty() )
+		if ( auto sampler = parsingContext.sampler.lock() )
 		{
 			uint32_t uiMode;
 			params[0]->get( uiMode );
-			parsingContext.sampler.lock()->setMipFilter( VkSamplerMipmapMode( uiMode ) );
+			sampler->setMipFilter( VkSamplerMipmapMode( uiMode ) );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -701,23 +705,23 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.sampler.lock() )
-		{
-			CU_ParsingError( cuT( "No sampler initialised." ) );
-		}
-		else if ( !params.empty() )
+		if ( auto sampler = parsingContext.sampler.lock() )
 		{
 			float rValue = -1000;
 			params[0]->get( rValue );
 
 			if ( rValue >= -1000 && rValue <= 1000 )
 			{
-				parsingContext.sampler.lock()->setMinLod( rValue );
+				sampler->setMinLod( rValue );
 			}
 			else
 			{
 				CU_ParsingError( cuT( "LOD out of bounds [-1000,1000] : " ) + string::toString( rValue ) );
 			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -726,23 +730,23 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.sampler.lock() )
-		{
-			CU_ParsingError( cuT( "No sampler initialised." ) );
-		}
-		else if ( !params.empty() )
+		if ( auto sampler = parsingContext.sampler.lock() )
 		{
 			float rValue = 1000;
 			params[0]->get( rValue );
 
 			if ( rValue >= -1000 && rValue <= 1000 )
 			{
-				parsingContext.sampler.lock()->setMaxLod( rValue );
+				sampler->setMaxLod( rValue );
 			}
 			else
 			{
 				CU_ParsingError( cuT( "LOD out of bounds [-1000,1000] : " ) + string::toString( rValue ) );
 			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -751,23 +755,23 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.sampler.lock() )
-		{
-			CU_ParsingError( cuT( "No sampler initialised." ) );
-		}
-		else if ( !params.empty() )
+		if ( auto sampler = parsingContext.sampler.lock() )
 		{
 			float rValue = 1000;
 			params[0]->get( rValue );
 
 			if ( rValue >= -1000 && rValue <= 1000 )
 			{
-				parsingContext.sampler.lock()->setLodBias( rValue );
+				sampler->setLodBias( rValue );
 			}
 			else
 			{
 				CU_ParsingError( cuT( "LOD out of bounds [-1000,1000] : " ) + string::toString( rValue ) );
 			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -776,15 +780,15 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.sampler.lock() )
-		{
-			CU_ParsingError( cuT( "No sampler initialised." ) );
-		}
-		else if ( !params.empty() )
+		if ( auto sampler = parsingContext.sampler.lock() )
 		{
 			uint32_t uiMode;
 			params[0]->get( uiMode );
-			parsingContext.sampler.lock()->setWrapS( VkSamplerAddressMode( uiMode ) );
+			sampler->setWrapS( VkSamplerAddressMode( uiMode ) );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -793,15 +797,15 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.sampler.lock() )
-		{
-			CU_ParsingError( cuT( "No sampler initialised." ) );
-		}
-		else if ( !params.empty() )
+		if ( auto sampler = parsingContext.sampler.lock() )
 		{
 			uint32_t uiMode;
 			params[0]->get( uiMode );
-			parsingContext.sampler.lock()->setWrapT( VkSamplerAddressMode( uiMode ) );
+			sampler->setWrapT( VkSamplerAddressMode( uiMode ) );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -810,15 +814,15 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.sampler.lock() )
-		{
-			CU_ParsingError( cuT( "No sampler initialised." ) );
-		}
-		else if ( !params.empty() )
+		if ( auto sampler = parsingContext.sampler.lock() )
 		{
 			uint32_t uiMode;
 			params[0]->get( uiMode );
-			parsingContext.sampler.lock()->setWrapR( VkSamplerAddressMode( uiMode ) );
+			sampler->setWrapR( VkSamplerAddressMode( uiMode ) );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -827,15 +831,15 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.sampler.lock() )
-		{
-			CU_ParsingError( cuT( "No sampler initialised." ) );
-		}
-		else if ( !params.empty() )
+		if ( auto sampler = parsingContext.sampler.lock() )
 		{
 			uint32_t colour;
 			params[0]->get( colour );
-			parsingContext.sampler.lock()->setBorderColour( VkBorderColor( colour ) );
+			sampler->setBorderColour( VkBorderColor( colour ) );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -844,15 +848,15 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.sampler.lock() )
-		{
-			CU_ParsingError( cuT( "No sampler initialised." ) );
-		}
-		else if ( !params.empty() )
+		if ( auto sampler = parsingContext.sampler.lock() )
 		{
 			bool value;
 			params[0]->get( value );
-			parsingContext.sampler.lock()->enableAnisotropicFiltering( value );
+			sampler->enableAnisotropicFiltering( value );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -861,15 +865,15 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.sampler.lock() )
-		{
-			CU_ParsingError( cuT( "No sampler initialised." ) );
-		}
-		else if ( !params.empty() )
+		if ( auto sampler = parsingContext.sampler.lock() )
 		{
 			float rValue = 1000;
 			params[0]->get( rValue );
-			parsingContext.sampler.lock()->setMaxAnisotropy( rValue );
+			sampler->setMaxAnisotropy( rValue );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -878,15 +882,15 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.sampler.lock() )
-		{
-			CU_ParsingError( cuT( "No sampler initialised." ) );
-		}
-		else if ( !params.empty() )
+		if ( auto sampler = parsingContext.sampler.lock() )
 		{
 			uint32_t mode;
 			params[0]->get( mode );
-			parsingContext.sampler.lock()->enableCompare( bool( mode ) );
+			sampler->enableCompare( bool( mode ) );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -895,15 +899,15 @@ namespace castor3d
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
 
-		if ( !parsingContext.sampler.lock() )
-		{
-			CU_ParsingError( cuT( "No sampler initialised." ) );
-		}
-		else if ( !params.empty() )
+		if ( auto sampler = parsingContext.sampler.lock() )
 		{
 			uint32_t uiMode;
 			params[0]->get( uiMode );
-			parsingContext.sampler.lock()->setCompareOp( VkCompareOp( uiMode ) );
+			sampler->setCompareOp( VkCompareOp( uiMode ) );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -911,9 +915,10 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserSamplerEnd )
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto sampler = parsingContext.sampler.lock();
 
 		if ( !parsingContext.ownSampler
-			&& !parsingContext.sampler.lock() )
+			&& !sampler )
 		{
 			CU_ParsingError( cuT( "No sampler initialised." ) );
 		}
@@ -2693,13 +2698,12 @@ namespace castor3d
 			{
 				CU_ParsingError( cuT( "Subdivider [" ) + name + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
 			}
-			else
+			else if ( auto mesh = parsingContext.mesh.lock() )
 			{
 				auto divider = engine->getSubdividerFactory().create( name );
-				parsingContext.mesh.lock()->computeContainers();
-				Point3f ptCenter = parsingContext.mesh.lock()->getBoundingBox().getCenter();
+				mesh->computeContainers();
 
-				for ( auto submesh : *parsingContext.mesh.lock() )
+				for ( auto submesh : *mesh )
 				{
 					divider->subdivide( submesh, count, false );
 				}
@@ -2932,21 +2936,21 @@ namespace castor3d
 				if ( castor::parseValues( *parsingContext.logger, strParams, pt4Indices ) )
 				{
 					parsingContext.face1 = int( parsingContext.faces.size() );
-					parsingContext.faces.push_back( pt4Indices[0] );
-					parsingContext.faces.push_back( pt4Indices[1] );
-					parsingContext.faces.push_back( pt4Indices[2] );
+					parsingContext.faces.push_back( uint32_t( pt4Indices[0] ) );
+					parsingContext.faces.push_back( uint32_t( pt4Indices[1] ) );
+					parsingContext.faces.push_back( uint32_t( pt4Indices[2] ) );
 					parsingContext.face2 = int( parsingContext.faces.size() );
-					parsingContext.faces.push_back( pt4Indices[0] );
-					parsingContext.faces.push_back( pt4Indices[2] );
-					parsingContext.faces.push_back( pt4Indices[3] );
+					parsingContext.faces.push_back( uint32_t( pt4Indices[0] ) );
+					parsingContext.faces.push_back( uint32_t( pt4Indices[2] ) );
+					parsingContext.faces.push_back( uint32_t( pt4Indices[3] ) );
 				}
 			}
 			else if ( castor::parseValues( *parsingContext.logger, strParams, pt3Indices ) )
 			{
 				parsingContext.face1 = int( parsingContext.faces.size() );
-				parsingContext.faces.push_back( pt3Indices[0] );
-				parsingContext.faces.push_back( pt3Indices[1] );
-				parsingContext.faces.push_back( pt3Indices[2] );
+				parsingContext.faces.push_back( uint32_t( pt3Indices[0] ) );
+				parsingContext.faces.push_back( uint32_t( pt3Indices[1] ) );
+				parsingContext.faces.push_back( uint32_t( pt3Indices[2] ) );
 			}
 		}
 	}
@@ -2976,22 +2980,22 @@ namespace castor3d
 
 			if ( arrayValues.size() >= 6 && parsingContext.face1 != -1 )
 			{
-				parsingContext.vertexTex[0 + parsingContext.faces[parsingContext.face1 + 0] * 3] = string::toFloat( arrayValues[0] );
-				parsingContext.vertexTex[1 + parsingContext.faces[parsingContext.face1 + 0] * 3] = string::toFloat( arrayValues[1] );
-				parsingContext.vertexTex[0 + parsingContext.faces[parsingContext.face1 + 1] * 3] = string::toFloat( arrayValues[2] );
-				parsingContext.vertexTex[1 + parsingContext.faces[parsingContext.face1 + 1] * 3] = string::toFloat( arrayValues[3] );
-				parsingContext.vertexTex[0 + parsingContext.faces[parsingContext.face1 + 2] * 3] = string::toFloat( arrayValues[4] );
-				parsingContext.vertexTex[1 + parsingContext.faces[parsingContext.face1 + 2] * 3] = string::toFloat( arrayValues[5] );
+				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = string::toFloat( arrayValues[0] );
+				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = string::toFloat( arrayValues[1] );
+				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = string::toFloat( arrayValues[2] );
+				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = string::toFloat( arrayValues[3] );
+				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = string::toFloat( arrayValues[4] );
+				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = string::toFloat( arrayValues[5] );
 			}
 
 			if ( arrayValues.size() >= 8 && parsingContext.face2 != -1 )
 			{
-				parsingContext.vertexTex[0 + parsingContext.faces[parsingContext.face2 + 0] * 3] = string::toFloat( arrayValues[0] );
-				parsingContext.vertexTex[1 + parsingContext.faces[parsingContext.face2 + 0] * 3] = string::toFloat( arrayValues[1] );
-				parsingContext.vertexTex[0 + parsingContext.faces[parsingContext.face2 + 1] * 3] = string::toFloat( arrayValues[4] );
-				parsingContext.vertexTex[1 + parsingContext.faces[parsingContext.face2 + 1] * 3] = string::toFloat( arrayValues[5] );
-				parsingContext.vertexTex[0 + parsingContext.faces[parsingContext.face2 + 2] * 3] = string::toFloat( arrayValues[6] );
-				parsingContext.vertexTex[1 + parsingContext.faces[parsingContext.face2 + 2] * 3] = string::toFloat( arrayValues[7] );
+				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = string::toFloat( arrayValues[0] );
+				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = string::toFloat( arrayValues[1] );
+				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = string::toFloat( arrayValues[4] );
+				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = string::toFloat( arrayValues[5] );
+				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = string::toFloat( arrayValues[6] );
+				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = string::toFloat( arrayValues[7] );
 			}
 		}
 	}
@@ -3021,28 +3025,28 @@ namespace castor3d
 
 			if ( arrayValues.size() >= 9 && parsingContext.face1 != -1 )
 			{
-				parsingContext.vertexTex[0 + parsingContext.faces[parsingContext.face1 + 0] * 3] = string::toFloat( arrayValues[0] );
-				parsingContext.vertexTex[1 + parsingContext.faces[parsingContext.face1 + 0] * 3] = string::toFloat( arrayValues[1] );
-				parsingContext.vertexTex[2 + parsingContext.faces[parsingContext.face1 + 0] * 3] = string::toFloat( arrayValues[2] );
-				parsingContext.vertexTex[0 + parsingContext.faces[parsingContext.face1 + 1] * 3] = string::toFloat( arrayValues[3] );
-				parsingContext.vertexTex[1 + parsingContext.faces[parsingContext.face1 + 1] * 3] = string::toFloat( arrayValues[4] );
-				parsingContext.vertexTex[2 + parsingContext.faces[parsingContext.face1 + 1] * 3] = string::toFloat( arrayValues[5] );
-				parsingContext.vertexTex[0 + parsingContext.faces[parsingContext.face1 + 2] * 3] = string::toFloat( arrayValues[6] );
-				parsingContext.vertexTex[1 + parsingContext.faces[parsingContext.face1 + 2] * 3] = string::toFloat( arrayValues[7] );
-				parsingContext.vertexTex[2 + parsingContext.faces[parsingContext.face1 + 2] * 3] = string::toFloat( arrayValues[8] );
+				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = string::toFloat( arrayValues[0] );
+				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = string::toFloat( arrayValues[1] );
+				parsingContext.vertexTex[2 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = string::toFloat( arrayValues[2] );
+				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = string::toFloat( arrayValues[3] );
+				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = string::toFloat( arrayValues[4] );
+				parsingContext.vertexTex[2 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = string::toFloat( arrayValues[5] );
+				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = string::toFloat( arrayValues[6] );
+				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = string::toFloat( arrayValues[7] );
+				parsingContext.vertexTex[2 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = string::toFloat( arrayValues[8] );
 			}
 
 			if ( arrayValues.size() >= 12 && parsingContext.face2 != -1 )
 			{
-				parsingContext.vertexTex[0 + parsingContext.faces[parsingContext.face2 + 0] * 3] = string::toFloat( arrayValues[0] );
-				parsingContext.vertexTex[1 + parsingContext.faces[parsingContext.face2 + 0] * 3] = string::toFloat( arrayValues[1] );
-				parsingContext.vertexTex[2 + parsingContext.faces[parsingContext.face2 + 0] * 3] = string::toFloat( arrayValues[2] );
-				parsingContext.vertexTex[0 + parsingContext.faces[parsingContext.face2 + 2] * 3] = string::toFloat( arrayValues[6] );
-				parsingContext.vertexTex[1 + parsingContext.faces[parsingContext.face2 + 2] * 3] = string::toFloat( arrayValues[7] );
-				parsingContext.vertexTex[2 + parsingContext.faces[parsingContext.face2 + 2] * 3] = string::toFloat( arrayValues[8] );
-				parsingContext.vertexTex[0 + parsingContext.faces[parsingContext.face2 + 2] * 3] = string::toFloat( arrayValues[ 9] );
-				parsingContext.vertexTex[1 + parsingContext.faces[parsingContext.face2 + 2] * 3] = string::toFloat( arrayValues[10] );
-				parsingContext.vertexTex[2 + parsingContext.faces[parsingContext.face2 + 2] * 3] = string::toFloat( arrayValues[11] );
+				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = string::toFloat( arrayValues[0] );
+				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = string::toFloat( arrayValues[1] );
+				parsingContext.vertexTex[2 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = string::toFloat( arrayValues[2] );
+				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = string::toFloat( arrayValues[6] );
+				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = string::toFloat( arrayValues[7] );
+				parsingContext.vertexTex[2 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = string::toFloat( arrayValues[8] );
+				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = string::toFloat( arrayValues[ 9] );
+				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = string::toFloat( arrayValues[10] );
+				parsingContext.vertexTex[2 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = string::toFloat( arrayValues[11] );
 			}
 		}
 	}
@@ -3072,28 +3076,28 @@ namespace castor3d
 
 			if ( arrayValues.size() >= 9 && parsingContext.face1 != -1 )
 			{
-				parsingContext.vertexNml[0 + parsingContext.faces[parsingContext.face1 + 0] * 3] = string::toFloat( arrayValues[0] );
-				parsingContext.vertexNml[1 + parsingContext.faces[parsingContext.face1 + 0] * 3] = string::toFloat( arrayValues[1] );
-				parsingContext.vertexNml[2 + parsingContext.faces[parsingContext.face1 + 0] * 3] = string::toFloat( arrayValues[2] );
-				parsingContext.vertexNml[0 + parsingContext.faces[parsingContext.face1 + 1] * 3] = string::toFloat( arrayValues[3] );
-				parsingContext.vertexNml[1 + parsingContext.faces[parsingContext.face1 + 1] * 3] = string::toFloat( arrayValues[4] );
-				parsingContext.vertexNml[2 + parsingContext.faces[parsingContext.face1 + 1] * 3] = string::toFloat( arrayValues[5] );
-				parsingContext.vertexNml[0 + parsingContext.faces[parsingContext.face1 + 2] * 3] = string::toFloat( arrayValues[6] );
-				parsingContext.vertexNml[1 + parsingContext.faces[parsingContext.face1 + 2] * 3] = string::toFloat( arrayValues[7] );
-				parsingContext.vertexNml[2 + parsingContext.faces[parsingContext.face1 + 2] * 3] = string::toFloat( arrayValues[8] );
+				parsingContext.vertexNml[0 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = string::toFloat( arrayValues[0] );
+				parsingContext.vertexNml[1 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = string::toFloat( arrayValues[1] );
+				parsingContext.vertexNml[2 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = string::toFloat( arrayValues[2] );
+				parsingContext.vertexNml[0 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = string::toFloat( arrayValues[3] );
+				parsingContext.vertexNml[1 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = string::toFloat( arrayValues[4] );
+				parsingContext.vertexNml[2 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = string::toFloat( arrayValues[5] );
+				parsingContext.vertexNml[0 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = string::toFloat( arrayValues[6] );
+				parsingContext.vertexNml[1 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = string::toFloat( arrayValues[7] );
+				parsingContext.vertexNml[2 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = string::toFloat( arrayValues[8] );
 			}
 
 			if ( arrayValues.size() >= 12 && parsingContext.face2 != -1 )
 			{
-				parsingContext.vertexNml[0 + parsingContext.faces[parsingContext.face2 + 0] * 3] = string::toFloat( arrayValues[ 0] );
-				parsingContext.vertexNml[1 + parsingContext.faces[parsingContext.face2 + 0] * 3] = string::toFloat( arrayValues[ 1] );
-				parsingContext.vertexNml[2 + parsingContext.faces[parsingContext.face2 + 0] * 3] = string::toFloat( arrayValues[ 2] );
-				parsingContext.vertexNml[0 + parsingContext.faces[parsingContext.face2 + 1] * 3] = string::toFloat( arrayValues[ 6] );
-				parsingContext.vertexNml[1 + parsingContext.faces[parsingContext.face2 + 1] * 3] = string::toFloat( arrayValues[ 7] );
-				parsingContext.vertexNml[2 + parsingContext.faces[parsingContext.face2 + 1] * 3] = string::toFloat( arrayValues[ 8] );
-				parsingContext.vertexNml[0 + parsingContext.faces[parsingContext.face2 + 2] * 3] = string::toFloat( arrayValues[ 9] );
-				parsingContext.vertexNml[1 + parsingContext.faces[parsingContext.face2 + 2] * 3] = string::toFloat( arrayValues[10] );
-				parsingContext.vertexNml[2 + parsingContext.faces[parsingContext.face2 + 2] * 3] = string::toFloat( arrayValues[11] );
+				parsingContext.vertexNml[0 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = string::toFloat( arrayValues[ 0] );
+				parsingContext.vertexNml[1 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = string::toFloat( arrayValues[ 1] );
+				parsingContext.vertexNml[2 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = string::toFloat( arrayValues[ 2] );
+				parsingContext.vertexNml[0 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = string::toFloat( arrayValues[ 6] );
+				parsingContext.vertexNml[1 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = string::toFloat( arrayValues[ 7] );
+				parsingContext.vertexNml[2 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = string::toFloat( arrayValues[ 8] );
+				parsingContext.vertexNml[0 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = string::toFloat( arrayValues[ 9] );
+				parsingContext.vertexNml[1 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = string::toFloat( arrayValues[10] );
+				parsingContext.vertexNml[2 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = string::toFloat( arrayValues[11] );
 			}
 		}
 	}
@@ -3123,28 +3127,28 @@ namespace castor3d
 
 			if ( arrayValues.size() >= 9 && parsingContext.face1 != -1 )
 			{
-				parsingContext.vertexTan[0 + parsingContext.faces[parsingContext.face1 + 0] * 3] = string::toFloat( arrayValues[0] );
-				parsingContext.vertexTan[1 + parsingContext.faces[parsingContext.face1 + 0] * 3] = string::toFloat( arrayValues[1] );
-				parsingContext.vertexTan[2 + parsingContext.faces[parsingContext.face1 + 0] * 3] = string::toFloat( arrayValues[2] );
-				parsingContext.vertexTan[0 + parsingContext.faces[parsingContext.face1 + 1] * 3] = string::toFloat( arrayValues[3] );
-				parsingContext.vertexTan[1 + parsingContext.faces[parsingContext.face1 + 1] * 3] = string::toFloat( arrayValues[4] );
-				parsingContext.vertexTan[2 + parsingContext.faces[parsingContext.face1 + 1] * 3] = string::toFloat( arrayValues[5] );
-				parsingContext.vertexTan[0 + parsingContext.faces[parsingContext.face1 + 2] * 3] = string::toFloat( arrayValues[6] );
-				parsingContext.vertexTan[1 + parsingContext.faces[parsingContext.face1 + 2] * 3] = string::toFloat( arrayValues[7] );
-				parsingContext.vertexTan[2 + parsingContext.faces[parsingContext.face1 + 2] * 3] = string::toFloat( arrayValues[8] );
+				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = string::toFloat( arrayValues[0] );
+				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = string::toFloat( arrayValues[1] );
+				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = string::toFloat( arrayValues[2] );
+				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = string::toFloat( arrayValues[3] );
+				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = string::toFloat( arrayValues[4] );
+				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = string::toFloat( arrayValues[5] );
+				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = string::toFloat( arrayValues[6] );
+				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = string::toFloat( arrayValues[7] );
+				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = string::toFloat( arrayValues[8] );
 			}
 
 			if ( arrayValues.size() >= 12 && parsingContext.face2 != -1 )
 			{
-				parsingContext.vertexTan[0 + parsingContext.faces[parsingContext.face2 + 0] * 3] = string::toFloat( arrayValues[ 0] );
-				parsingContext.vertexTan[1 + parsingContext.faces[parsingContext.face2 + 0] * 3] = string::toFloat( arrayValues[ 1] );
-				parsingContext.vertexTan[2 + parsingContext.faces[parsingContext.face2 + 0] * 3] = string::toFloat( arrayValues[ 2] );
-				parsingContext.vertexTan[0 + parsingContext.faces[parsingContext.face2 + 1] * 3] = string::toFloat( arrayValues[ 6] );
-				parsingContext.vertexTan[1 + parsingContext.faces[parsingContext.face2 + 1] * 3] = string::toFloat( arrayValues[ 7] );
-				parsingContext.vertexTan[2 + parsingContext.faces[parsingContext.face2 + 1] * 3] = string::toFloat( arrayValues[ 8] );
-				parsingContext.vertexTan[0 + parsingContext.faces[parsingContext.face2 + 2] * 3] = string::toFloat( arrayValues[ 9] );
-				parsingContext.vertexTan[1 + parsingContext.faces[parsingContext.face2 + 2] * 3] = string::toFloat( arrayValues[10] );
-				parsingContext.vertexTan[2 + parsingContext.faces[parsingContext.face2 + 2] * 3] = string::toFloat( arrayValues[11] );
+				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = string::toFloat( arrayValues[ 0] );
+				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = string::toFloat( arrayValues[ 1] );
+				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = string::toFloat( arrayValues[ 2] );
+				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = string::toFloat( arrayValues[ 6] );
+				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = string::toFloat( arrayValues[ 7] );
+				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = string::toFloat( arrayValues[ 8] );
+				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = string::toFloat( arrayValues[ 9] );
+				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = string::toFloat( arrayValues[10] );
+				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = string::toFloat( arrayValues[11] );
 			}
 		}
 	}
@@ -3658,13 +3662,13 @@ namespace castor3d
 			if ( parsingContext.scene )
 			{
 				parsingContext.scene->getFontView().add( parsingContext.strName
-					, parsingContext.fontHeight
+					, uint32_t( parsingContext.fontHeight )
 					, context.file.getPath() / parsingContext.path );
 			}
 			else
 			{
 				parsingContext.parser->getEngine()->getFontCache().add( parsingContext.strName
-					, parsingContext.fontHeight
+					, uint32_t( parsingContext.fontHeight )
 					, context.file.getPath() / parsingContext.path );
 			}
 		}
@@ -5118,7 +5122,7 @@ namespace castor3d
 			{
 				uint32_t value;
 				params[0]->get( value );
-				parsingContext.ssaoConfig.bendStepCount = value;
+				parsingContext.ssaoConfig.bendStepCount = int32_t( value );
 			}
 		}
 		else

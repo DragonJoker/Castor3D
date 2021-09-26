@@ -8,15 +8,6 @@
 
 namespace castor3d
 {
-	namespace
-	{
-		std::ostream & operator<<( std::ostream & stream, castor::BoundingBox const & obj )
-		{
-			stream << "min: " << obj.getMin() << ", max: " << obj.getMax();
-			return stream;
-		}
-	}
-
 	//*************************************************************************************************
 
 	bool BinaryWriter< Mesh >::doWrite( Mesh const & obj )

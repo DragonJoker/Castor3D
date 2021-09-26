@@ -1,12 +1,16 @@
 #include "ImgConverter/ImgConverter.hpp"
 #include "ImgConverter/MainFrame.hpp"
 
+#pragma warning( push )
+#pragma warning( disable: 4365 )
+#pragma warning( disable: 4371 )
 #include <wx/filedlg.h>
 #include <wx/filename.h>
 #include <wx/sizer.h>
 #include <wx/stdpaths.h>
 
 #include <iostream>
+#pragma warning( pop )
 
 using namespace ImgToIco;
 
@@ -14,17 +18,17 @@ IMPLEMENT_APP( ImgToIcoApp )
 
 bool ImgToIcoApp::OnInit()
 {
-	long 					l_lLanguage		= wxLANGUAGE_DEFAULT;
-	wxStandardPathsBase &	l_stdPaths		= wxStandardPaths::Get();
-	wxFileName				l_strCurrent	= wxFileName( l_stdPaths.GetExecutablePath() ).GetPath();
-	wxString				l_strSeparator	= wxFileName::GetPathSeparator();
-	wxString				l_strShare;
-	wxString				l_strPlugins;
+	int language = wxLANGUAGE_DEFAULT;
+	wxStandardPathsBase & l_stdPaths = wxStandardPaths::Get();
+	wxFileName l_strCurrent = wxFileName( l_stdPaths.GetExecutablePath() ).GetPath();
+	wxString l_strSeparator = wxFileName::GetPathSeparator();
+	wxString l_strShare;
+	wxString l_strPlugins;
 
 	// load language if possible, fall back to english otherwise
-	if ( wxLocale::IsAvailable( l_lLanguage ) )
+	if ( wxLocale::IsAvailable( language ) )
 	{
-		m_pLocale = new wxLocale( l_lLanguage, wxLOCALE_LOAD_DEFAULT );
+		m_pLocale = new wxLocale( language, wxLOCALE_LOAD_DEFAULT );
 		// add locale search paths
 		l_strShare = l_strCurrent.GetPath() + l_strSeparator + wxT( "share" ) + l_strSeparator + wxT( "ImgConverter" );
 		m_pLocale->AddCatalogLookupPathPrefix( l_strShare );
@@ -42,15 +46,15 @@ bool ImgToIcoApp::OnInit()
 		{
 			std::cerr << "Selected language is wrong" << std::endl;
 			delete m_pLocale;
-			l_lLanguage = wxLANGUAGE_ENGLISH;
-			m_pLocale = new wxLocale( l_lLanguage );
+			language = wxLANGUAGE_ENGLISH;
+			m_pLocale = new wxLocale( language );
 		}
 	}
 	else
 	{
 		std::cout << "The selected language is not supported by your system. Try installing support for this language." << std::endl;
-		l_lLanguage = wxLANGUAGE_ENGLISH;
-		m_pLocale = new wxLocale( l_lLanguage );
+		language = wxLANGUAGE_ENGLISH;
+		m_pLocale = new wxLocale( language );
 	}
 
 	m_mainFrame = new MainFrame();

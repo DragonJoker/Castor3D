@@ -44,7 +44,7 @@ namespace light_streaks
 					, graph
 					, 1u
 					, crg::rq::Config{}
-						.baseConfig( { std::vector< crg::VkPipelineShaderStageCreateInfoArray >{ std::move( program ) } } )
+						.baseConfig( { std::vector< crg::VkPipelineShaderStageCreateInfoArray >{ std::move( program ) }, {} } )
 						.texcoordConfig( crg::Texcoord{} )
 						.enabled( enabled )
 						.recordInto( [this]( VkCommandBuffer cb, uint32_t i ){ doRecordInto( cb, i ); } )
@@ -74,7 +74,6 @@ namespace light_streaks
 			void doRecordInto( VkCommandBuffer commandBuffer
 				, uint32_t index )
 			{
-				auto const imageViewType = VkImageViewType( m_imageDesc.data->info.imageType );
 				auto const aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
 				auto transition = getTransition( index, m_viewDesc );
 
@@ -219,7 +218,6 @@ namespace light_streaks
 			, makeShaderState( device, m_pixelShader ) }
 		, m_lastPass{ &previousPass }
 	{
-		auto previous = &previousPass;
 		auto & hiPass = graph.createPass( "LightStreaksHiPass"
 			, [this, &device, size, enabled]( crg::FramePass const & pass
 				, crg::GraphContext & context

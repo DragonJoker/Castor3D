@@ -15,10 +15,6 @@ namespace Testing
 	{
 	}
 
-	CastorUtilsZipTest::~CastorUtilsZipTest()
-	{
-	}
-
 	void CastorUtilsZipTest::doRegisterTests()
 	{
 		doRegisterTest( "ZipFile", std::bind( &CastorUtilsZipTest::ZipFile, this ) );

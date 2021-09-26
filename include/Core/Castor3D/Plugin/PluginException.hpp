@@ -33,20 +33,13 @@ namespace castor3d
 		C3D_API PluginException( bool critical, std::string const & description, char const * file, char const * function, uint32_t line );
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~PluginException()throw();
-		/**
-		 *\~english
 		 *\brief		Tells if the exception is critical
 		 *\return		The status
 		 *\~french
 		 *\brief		Dit si l'exception est critique
 		 *\return		Le statut
 		 */
-		inline bool isCritical()const
+		bool isCritical()const
 		{
 			return m_critical;
 		}

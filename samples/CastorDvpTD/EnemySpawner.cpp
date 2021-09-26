@@ -22,10 +22,6 @@ namespace castortd
 		Reset();
 	}
 
-	EnemySpawner::~EnemySpawner()
-	{
-	}
-
 	void EnemySpawner::Reset()
 	{
 		m_category = BaseEnemy{};

@@ -81,7 +81,7 @@ namespace castor3d
 		 *\brief		Récupère le type du plug-in
 		 *\return		Le type
 		 */
-		inline PluginType getType()const
+		PluginType getType()const
 		{
 			return m_type;
 		}

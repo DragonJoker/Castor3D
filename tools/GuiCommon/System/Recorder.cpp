@@ -84,8 +84,7 @@ namespace GuiCommon
 			: public Recorder::IRecorderImpl
 		{
 		public:
-			virtual ~RecorderImplBase() = default;
-			virtual bool UpdateTime()
+			bool UpdateTime()override
 			{
 				auto now = clock::now();
 				uint64_t timeDiff = std::chrono::duration_cast< Milliseconds >( now - m_saved ).count();
@@ -98,7 +97,7 @@ namespace GuiCommon
 				return doUpdateTime( timeDiff );
 			}
 
-			virtual bool StartRecord( Size const & p_size, int p_wantedFPS )
+			bool StartRecord( Size const & p_size, int p_wantedFPS )override
 			{
 				bool result = false;
 				m_wantedFPS = p_wantedFPS;
@@ -135,7 +134,7 @@ namespace GuiCommon
 				return result;
 			}
 
-			virtual bool RecordFrame( PxBufferBaseSPtr p_buffer )
+			bool RecordFrame( PxBufferBaseSPtr p_buffer )override
 			{
 				doRecordFrame( p_buffer );
 				m_saved = clock::now();
@@ -307,7 +306,7 @@ namespace GuiCommon
 				libffmpeg::av_register_all();
 			}
 
-			virtual ~RecorderImpl()
+			~RecorderImpl()override
 			{
 			}
 
@@ -315,12 +314,12 @@ namespace GuiCommon
 			{
 			}
 
-			virtual bool IsRecording()
+			bool IsRecording()override
 			{
 				return IsValid() && m_frame;
 			}
 
-			virtual void StopRecord()
+			void StopRecord()override
 			{
 				if ( IsRecording() )
 				{
@@ -364,12 +363,12 @@ namespace GuiCommon
 			}
 
 		private:
-			virtual bool doUpdateTime( uint64_t ptimeDiff )
+			bool doUpdateTime( uint64_t ptimeDiff )override
 			{
 				return ptimeDiff >= 1000 / m_wantedFPS;
 			}
 
-			virtual bool doStartRecord( Size const & p_size, wxString const & p_name )
+			bool doStartRecord( Size const & p_size, wxString const & p_name )override
 			{
 				wxSize size( p_size.getWidth(), p_size.getHeight() );
 				getFormat( p_name );
@@ -426,7 +425,7 @@ namespace GuiCommon
 				return true;
 			}
 
-			virtual void doRecordFrame( PxBufferBaseSPtr p_buffer )
+			void doRecordFrame( PxBufferBaseSPtr p_buffer )override
 			{
 				if ( IsRecording() )
 				{
@@ -479,35 +478,27 @@ namespace GuiCommon
 			: public Recorder::IRecorderImpl
 		{
 		public:
-			RecorderImpl()
-			{
-			}
-
-			virtual ~RecorderImpl()
-			{
-			}
-
-			virtual bool StartRecord( Size const & p_size, int p_wantedFPS )
+			bool StartRecord( Size const & p_size, int p_wantedFPS )override
 			{
 				return true;
 			}
 
-			virtual bool IsRecording()
+			bool IsRecording()override
 			{
 				return false;
 			}
 
-			virtual bool UpdateTime()
+			bool UpdateTime()override
 			{
 				return false;
 			}
 
-			virtual bool RecordFrame( PxBufferBaseSPtr )
+			bool RecordFrame( PxBufferBaseSPtr )override
 			{
 				return true;
 			}
 
-			virtual void StopRecord()
+			void StopRecord()override
 			{
 			}
 		};
@@ -520,10 +511,5 @@ namespace GuiCommon
 	Recorder::Recorder()
 		: m_impl( std::make_unique< RecorderImpl >() )
 	{
-	}
-
-	Recorder::~Recorder()
-	{
-		m_impl.reset();
 	}
 }

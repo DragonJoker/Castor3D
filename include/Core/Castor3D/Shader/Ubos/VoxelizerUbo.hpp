@@ -22,7 +22,7 @@ namespace castor3d
 			C3D_API VoxelData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled );
-			C3D_API VoxelData & operator=( VoxelData const & rhs );
+			SDW_DeclStructInstance( C3D_API, VoxelData );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
@@ -94,6 +94,10 @@ namespace castor3d
 		using Configuration = VoxelizerUboConfiguration;
 
 	public:
+		C3D_API VoxelizerUbo( VoxelizerUbo const & rhs ) = delete;
+		C3D_API VoxelizerUbo & operator=( VoxelizerUbo const & rhs ) = delete;
+		C3D_API VoxelizerUbo( VoxelizerUbo && rhs ) = default;
+		C3D_API VoxelizerUbo & operator=( VoxelizerUbo && rhs ) = delete;
 		C3D_API explicit VoxelizerUbo( RenderDevice const & device );
 		C3D_API ~VoxelizerUbo();
 

@@ -444,8 +444,8 @@ namespace castor3d
 
 		for ( auto mipLevel = 0u; mipLevel < EnvironmentPrefilter::MaxIblReflectionLod + 1u; ++mipLevel )
 		{
-			VkExtent2D mipSize{ uint32_t( originalSize.width >> mipLevel )
-				, uint32_t( originalSize.height >> mipLevel ) };
+			VkExtent2D mipSize{ originalSize.width >> mipLevel
+				, originalSize.height >> mipLevel };
 			m_renderPasses.emplace_back( std::make_unique< MipRenderCube >( m_device
 				, *data
 				, engine.getGraphResourceHandler()

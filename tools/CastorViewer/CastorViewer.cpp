@@ -22,21 +22,24 @@ wxIMPLEMENT_APP( CastorViewer::CastorViewerApp );
 
 namespace CastorViewer
 {
-	static const bool isCastor3DThreaded = true;
+	namespace
+	{
+		static const bool isCastor3DThreaded = true;
 #if defined( NDEBUG )
-	static const int wantedFPS = 1000;
+		static const int wantedFPS = 1000;
 #else
-	static const int wantedFPS = 60;
+		static const int wantedFPS = 60;
 #endif
 
-	castor3d::Version getVersion()
-	{
-		return castor3d::Version
+		castor3d::Version getVersion()
 		{
-			CastorViewer_VERSION_MAJOR,
-			CastorViewer_VERSION_MINOR,
-			CastorViewer_VERSION_BUILD
-		};
+			return castor3d::Version
+			{
+				CastorViewer_VERSION_MAJOR,
+				CastorViewer_VERSION_MINOR,
+				CastorViewer_VERSION_BUILD
+			};
+		}
 	}
 
 	CastorViewerApp::CastorViewerApp()

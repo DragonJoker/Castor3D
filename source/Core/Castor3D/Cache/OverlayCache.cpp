@@ -29,12 +29,12 @@ namespace castor
 			overlay.getParent()->addChild( &overlay );
 		}
 
-		while ( level >= int( m_overlayCountPerLevel.size() ) )
+		while ( level >= m_overlayCountPerLevel.size() )
 		{
 			m_overlayCountPerLevel.resize( m_overlayCountPerLevel.size() * 2 );
 		}
 
-		overlay.setOrder( ++m_overlayCountPerLevel[level], level );
+		overlay.setOrder( ++m_overlayCountPerLevel[level], int( level ) );
 		m_overlays.insert( overlay.getCategory() );
 	}
 

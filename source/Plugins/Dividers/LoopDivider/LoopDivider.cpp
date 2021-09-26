@@ -134,7 +134,7 @@ namespace Loop
 				position += positions[itI.first];
 			}
 
-			position /= alpha + nbEdges;
+			position /= alpha + float( nbEdges );
 		}
 
 		for ( auto & face : m_arrayFaces )

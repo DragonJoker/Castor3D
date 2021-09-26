@@ -154,7 +154,7 @@ namespace castor3d
 			, { [this](){ doSubInitialise(); }
 				, [this]( VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( cb, i ); }
 				, crg::defaultV< crg::RunnablePass::RecordCallback >
-				, GetSubpassContentsCallback( [this](){ return VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS; } ) }
+				, GetSubpassContentsCallback( [](){ return VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS; } ) }
 			, makeExtent2D( desc.m_size ) }
 		, m_device{ device }
 		, m_renderSystem{ m_device.renderSystem }
@@ -561,7 +561,7 @@ namespace castor3d
 			for ( auto inst = 0u; inst < m_instanceMult; ++inst )
 			{
 				buffer->m_matrix = node->sceneNode.getDerivedTransformationMatrix();
-				buffer->m_material = node->passNode.pass.getId();
+				buffer->m_material = int32_t( node->passNode.pass.getId() );
 				++buffer;
 			}
 
@@ -680,8 +680,12 @@ namespace castor3d
 
 						if ( instantiatedBones.hasInstancedBonesBuffer() )
 						{
+#if !defined( NDEBUG )
 							uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
 							CU_Require( count1 == count2 );
+#else
+							doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
+#endif
 						}
 					}
 				}
@@ -800,14 +804,14 @@ namespace castor3d
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, ( VK_SHADER_STAGE_FRAGMENT_BIT
 				| ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
-					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
-					: VK_SHADER_STAGE_VERTEX_BIT ) ) ) );
+					? VkShaderStageFlags( VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT )
+					: VkShaderStageFlags( VK_SHADER_STAGE_VERTEX_BIT ) ) ) ) );
 		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( PassUboIdx::eScene )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, ( VK_SHADER_STAGE_FRAGMENT_BIT
 				| ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
-					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
-					: VK_SHADER_STAGE_VERTEX_BIT ) ) ) );
+					? VkShaderStageFlags( VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT )
+					: VkShaderStageFlags( VK_SHADER_STAGE_VERTEX_BIT ) ) ) ) );
 		doFillAdditionalBindings( flags, addBindings );
 		return addBindings;
 	}
@@ -883,7 +887,8 @@ namespace castor3d
 					, getRenderPass()
 					, std::move( descriptorLayouts ) );
 				pipelines.emplace_back( std::move( pipeline ) );
-				it = pipelines.begin() + ( pipelines.size() - 1u );
+				it = std::next( pipelines.begin()
+					, ptrdiff_t( pipelines.size() - 1u ) );
 			}
 
 			result = it->get();
@@ -1016,7 +1021,7 @@ namespace castor3d
 				auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
 					, c3d_modelData.getNormalMtx( flags.programFlags, curMtxModel ) );
 				outSurface.computeTangentSpace( flags.programFlags
-					, c3d_sceneData.getCameraPosition()
+					, c3d_sceneData.cameraPosition
 					, mtxNormal
 					, v4Normal
 					, v4Tangent );
@@ -1099,7 +1104,7 @@ namespace castor3d
 					, prvPosition );
 				out.vtx.position = curPosition;
 
-				outSurface.computeTangentSpace( c3d_sceneData.getCameraPosition()
+				outSurface.computeTangentSpace( c3d_sceneData.cameraPosition
 					, curToCamera
 					, up
 					, right );

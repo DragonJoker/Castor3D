@@ -29,82 +29,6 @@ namespace CastorGui
 	{
 	}
 
-	ControlsManager::~ControlsManager()
-	{
-	}
-
-	bool ControlsManager::doInitialise()
-	{
-		return true;
-	}
-
-	void ControlsManager::doCleanup()
-	{
-		LockType lock{ castor::makeUniqueLock( m_mutexHandlers ) };
-
-		for ( auto handler : m_handlers )
-		{
-			std::static_pointer_cast< Control >( handler )->destroy();
-		}
-	}
-
-	bool ControlsManager::fireMaterialEvent( castor::String const & p_overlay, castor::String const & p_material )
-	{
-		auto controls = doGetControlsByZIndex();
-		auto it = std::find_if( std::begin( controls )
-			, std::end( controls )
-			, [&p_overlay]( Control * p_control )
-		{
-			return p_control->getName() == p_overlay;
-		} );
-		bool result = false;
-
-		if ( it != std::end( controls ) )
-		{
-			auto material = getEngine()->getMaterialCache().find( p_material ).lock().get();
-
-			if ( material )
-			{
-				auto control = *it;
-				m_frameListener->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-					, [control, material]( RenderDevice const & device
-						, QueueData const & queueData )
-					{
-						control->setBackgroundMaterial( material );
-					} ) );
-				result = true;
-			}
-		}
-
-		return result;
-	}
-
-	bool ControlsManager::fireTextEvent( castor::String const & p_overlay, castor::String const & p_caption )
-	{
-		auto controls = doGetControlsByZIndex();
-		auto it = std::find_if( std::begin( controls )
-			, std::end( controls )
-			, [&p_overlay]( Control * p_control )
-		{
-			return p_control->getName() == p_overlay;
-		} );
-		bool result = false;
-
-		if ( it != std::end( controls ) )
-		{
-			auto control = *it;
-			m_frameListener->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [control, p_caption]( RenderDevice const & device
-					, QueueData const & queueData )
-				{
-					control->setCaption( p_caption );
-				} ) );
-			result = true;
-		}
-
-		return result;
-	}
-
 	void ControlsManager::create( ControlSPtr p_control )
 	{
 		addControl( p_control );
@@ -256,6 +180,78 @@ namespace CastorGui
 		}
 	}
 
+	bool ControlsManager::doInitialise()
+	{
+		return true;
+	}
+
+	void ControlsManager::doCleanup()
+	{
+		LockType lock{ castor::makeUniqueLock( m_mutexHandlers ) };
+
+		for ( auto handler : m_handlers )
+		{
+			std::static_pointer_cast< Control >( handler )->destroy();
+		}
+	}
+
+	bool ControlsManager::fireMaterialEvent( castor::String const & p_overlay, castor::String const & p_material )
+	{
+		auto controls = doGetControlsByZIndex();
+		auto it = std::find_if( std::begin( controls )
+			, std::end( controls )
+			, [&p_overlay]( Control * p_control )
+		{
+			return p_control->getName() == p_overlay;
+		} );
+		bool result = false;
+
+		if ( it != std::end( controls ) )
+		{
+			auto material = getEngine()->getMaterialCache().find( p_material ).lock().get();
+
+			if ( material )
+			{
+				auto control = *it;
+				m_frameListener->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+					, [control, material]( RenderDevice const & device
+						, QueueData const & queueData )
+					{
+						control->setBackgroundMaterial( material );
+					} ) );
+				result = true;
+			}
+		}
+
+		return result;
+	}
+
+	bool ControlsManager::fireTextEvent( castor::String const & p_overlay, castor::String const & p_caption )
+	{
+		auto controls = doGetControlsByZIndex();
+		auto it = std::find_if( std::begin( controls )
+			, std::end( controls )
+			, [&p_overlay]( Control * p_control )
+		{
+			return p_control->getName() == p_overlay;
+		} );
+		bool result = false;
+
+		if ( it != std::end( controls ) )
+		{
+			auto control = *it;
+			m_frameListener->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [control, p_caption]( RenderDevice const & device
+					, QueueData const & queueData )
+				{
+					control->setCaption( p_caption );
+				} ) );
+			result = true;
+		}
+
+		return result;
+	}
+
 	castor3d::EventHandler * ControlsManager::doGetMouseTargetableHandler( Position const & p_position )const
 	{
 		if ( m_changed )
@@ -271,12 +267,12 @@ namespace CastorGui
 		{
 			Control * control = *it;
 
-			if ( control->catchesMouseEvents()
-					&& control->getAbsolutePosition().x() <= p_position.x()
-					&& control->getAbsolutePosition().x() + int32_t( control->getSize().getWidth() ) > p_position.x()
-					&& control->getAbsolutePosition().y() <= p_position.y()
-					&& control->getAbsolutePosition().y() + int32_t( control->getSize().getHeight() ) > p_position.y()
-			   )
+			if ( control
+				&& control->catchesMouseEvents()
+				&& control->getAbsolutePosition().x() <= p_position.x()
+				&& control->getAbsolutePosition().x() + int32_t( control->getSize().getWidth() ) > p_position.x()
+				&& control->getAbsolutePosition().y() <= p_position.y()
+				&& control->getAbsolutePosition().y() + int32_t( control->getSize().getHeight() ) > p_position.y() )
 			{
 				result = control;
 			}
@@ -302,12 +298,29 @@ namespace CastorGui
 
 		std::sort( m_controlsByZIndex.begin()
 			, m_controlsByZIndex.end()
-			, []( Control * p_a, Control * p_b )
-		{
-			uint64_t a = p_a->getBackground()->getIndex() + p_a->getBackground()->getLevel() * 1000ull;
-			uint64_t b = p_b->getBackground()->getIndex() + p_b->getBackground()->getLevel() * 1000ull;
-			return a < b;
-		} );
+			, []( Control * lhs, Control * rhs )
+			{
+				bool result = false;
+				auto lhsBg = lhs ? lhs->getBackground() : nullptr;
+				auto rhsBg = rhs ? rhs->getBackground() : nullptr;
+
+				if ( !lhs || !lhsBg )
+				{
+					result = true;
+				}
+				else if ( !rhs || !rhsBg )
+				{
+					result = true;
+				}
+				else
+				{
+					uint64_t a = lhsBg->getIndex() + lhsBg->getLevel() * 1000ull;
+					uint64_t b = rhsBg->getIndex() + rhsBg->getLevel() * 1000ull;
+					result = a < b;
+				}
+
+				return result;
+			} );
 	}
 
 	void ControlsManager::doFlush()

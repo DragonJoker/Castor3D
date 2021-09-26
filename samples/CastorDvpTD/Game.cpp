@@ -133,10 +133,6 @@ namespace castortd
 		Reset();
 	}
 
-	Game::~Game()
-	{
-	}
-
 	void Game::Reset()
 	{
 		Grid grid;
@@ -190,7 +186,7 @@ namespace castortd
 		m_scene.setChanged();
 
 		auto & node = *m_path.rbegin();
-		doAddTarget( getCell( node.m_x, node.m_y ) );
+		doAddTarget( getCell( int( node.m_x ), int( node.m_y ) ) );
 
 		m_started = true;
 		m_hud.start();
@@ -235,7 +231,7 @@ namespace castortd
 
 	Cell & Game::getCell( int p_x, int p_y )
 	{
-		return m_grid( p_y, p_x );
+		return m_grid( uint32_t( p_y ), uint32_t( p_x ) );
 	}
 
 	Cell & Game::getCell( castor::Point2i const & p_position )
@@ -260,7 +256,8 @@ namespace castortd
 
 	Cell const & Game::getCell( int p_x, int p_y )const
 	{
-		return m_grid( p_y, p_x );
+		return m_grid( uint32_t( p_y )
+			, uint32_t( p_x ) );
 	}
 
 	Cell const & Game::getCell( castor::Point2i const & p_position )const
@@ -306,15 +303,15 @@ namespace castortd
 
 	castor::Point3f Game::convert( castor::Point2i const & p_position )const
 	{
-		return castor::Point3f( ( p_position[0] - int( m_grid.getWidth() ) / 2 ) * m_cellDimensions[0]
+		return castor::Point3f( ( float( p_position[0] ) - float( m_grid.getWidth() ) / 2 ) * m_cellDimensions[0]
 			, 0
-			, ( p_position[1] - int( m_grid.getHeight() ) / 2 ) * m_cellDimensions[2] );
+			, ( float( p_position[1] ) - float( m_grid.getHeight() ) / 2 ) * m_cellDimensions[2] );
 	}
 
 	Point2i Game::convert( castor::Point3f const & p_position )const
 	{
-		return Point2i( p_position[0] / m_cellDimensions[0] + m_grid.getWidth() / 2
-			, p_position[2] / m_cellDimensions[2] + m_grid.getHeight() / 2 );
+		return Point2i( int( p_position[0] / m_cellDimensions[0] + float( m_grid.getWidth() / 2 ) )
+			, int( p_position[2] / m_cellDimensions[2] + float( m_grid.getHeight() / 2 ) ) );
 	}
 
 	void Game::EmitBullet( float p_speed, uint32_t p_damage, castor::Point3f const & p_origin, Enemy & p_target )
@@ -462,7 +459,7 @@ namespace castortd
 			m_enemies.push_back( m_spawner.Spawn( *this, m_path ) );
 		}
 
-		Angle const angle{ Angle::fromDegrees( -m_elapsed.count() * 120 / 1000.0f ) };
+		Angle const angle{ Angle::fromDegrees( float( -m_elapsed.count() ) * 120 / 1000.0f ) };
 		auto it = m_enemies.begin();
 
 		while ( it != m_enemies.end() )
@@ -540,7 +537,7 @@ namespace castortd
 
 				if ( prv == m_path.begin() )
 				{
-					getCell( prv->m_x, prv->m_y ).m_state = Cell::State::Start;
+					getCell( int( prv->m_x ), int( prv->m_y ) ).m_state = Cell::State::Start;
 				}
 
 				++prv;
@@ -619,22 +616,22 @@ namespace castortd
 
 		if ( tower->getMesh().lock() )
 		{
-			auto mesh = tower->getMesh().lock();
+			auto tmesh = tower->getMesh().lock();
 
-			if ( !mesh->getAnimations().empty() )
+			if ( !tmesh->getAnimations().empty() )
 			{
-			  animGroup->addObject( *mesh, *tower, tower->getName() + cuT( "_Mesh" ) );
+			  animGroup->addObject( *tmesh, *tower, tower->getName() + cuT( "_Mesh" ) );
 				time = std::max( time
-					, mesh->getAnimation( p_category->getAttackAnimationName() ).getLength() );
+					, tmesh->getAnimation( p_category->getAttackAnimationName() ).getLength() );
 			}
 
-			auto skeleton = mesh->getSkeleton();
+			auto skeleton = tmesh->getSkeleton();
 
 			if ( skeleton )
 			{
 				if ( !skeleton->getAnimations().empty() )
 				{
-					animGroup->addObject( *skeleton, *mesh, *tower, tower->getName() + cuT( "_Skeleton" ) );
+					animGroup->addObject( *skeleton, *tmesh, *tower, tower->getName() + cuT( "_Skeleton" ) );
 					time = std::max( time
 						, skeleton->getAnimation( p_category->getAttackAnimationName() ).getLength() );
 				}

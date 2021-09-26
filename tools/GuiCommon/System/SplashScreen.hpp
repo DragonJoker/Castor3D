@@ -22,7 +22,6 @@ namespace GuiCommon
 			, int range
 			, castor3d::Version const & appVersion
 			, castor3d::Version const & engineVersion );
-		~SplashScreen();
 
 		void Step( wxString const & p_strText, int p_iIncrement );
 		void Step( int p_iIncrement );

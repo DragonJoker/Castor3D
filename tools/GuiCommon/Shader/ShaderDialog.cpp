@@ -39,9 +39,9 @@ namespace GuiCommon
 		, const wxSize size )
 		: wxFrame( parent, wxID_ANY, title + wxT( " - " ) + _( "Shaders" ), position, size, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMAXIMIZE_BOX )
 		, m_engine{ engine }
-		, m_sources( std::move( sources ) )
-		, m_stcContext( std::make_unique< StcContext >() )
 		, m_auiManager( this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE )
+		, m_stcContext( std::make_unique< StcContext >() )
+		, m_sources( std::move( sources ) )
 	{
 		doInitialiseShaderLanguage();
 		doInitialiseLayout();
@@ -154,6 +154,8 @@ namespace GuiCommon
 		m_programs->DeleteAllPages();
 	}
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 	BEGIN_EVENT_TABLE( ShaderDialog, wxFrame )
 		EVT_CLOSE( ShaderDialog::onClose )
 		EVT_MENU( eID_MENU_QUIT, ShaderDialog::onMenuClose )
@@ -166,6 +168,7 @@ namespace GuiCommon
 		EVT_MENU( eID_MENU_LANG_SPIRV, ShaderDialog::onMenuLanguageSPIRV )
 		EVT_MENU( eID_MENU_PREFS, ShaderDialog::onMenuPreferences )
 	END_EVENT_TABLE()
+#pragma GCC diagnostic pop
 
 	void ShaderDialog::onClose( wxCloseEvent & event )
 	{

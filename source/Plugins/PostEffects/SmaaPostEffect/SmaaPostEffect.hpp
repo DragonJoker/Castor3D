@@ -28,10 +28,6 @@ namespace smaa
 			, castor3d::RenderSystem & renderSystem
 			, castor3d::Parameters const & parameters );
 		/**
-		*\copydoc		castor3d::PostEffect::update
-		*/
-		void update( castor3d::CpuUpdater & updater )override;
-		/**
 		 *\copydoc		castor3d::PostEffect::accept
 		 */
 		void accept( castor3d::PipelineVisitorBase & visitor )override;
@@ -52,6 +48,10 @@ namespace smaa
 		*\copydoc		castor3d::PostEffect::doCleanup
 		*/
 		void doCleanup( castor3d::RenderDevice const & device )override;
+		/**
+		 *\copydoc		castor3d::PostEffect::doCpuUpdate
+		 */
+		void doCpuUpdate( castor3d::CpuUpdater & updater )override;
 		/**
 		 *\copydoc		castor3d::PostEffect::doWriteInto
 		 */
@@ -77,7 +77,6 @@ namespace smaa
 		crg::ImageViewId const * m_srgbTextureView{ nullptr };
 		// Gamma view.
 		crg::ImageViewId const * m_hdrTextureView{ nullptr };
-		crg::ImageViewId * m_smaaResult{ nullptr };
 
 		crg::FramePass const * m_pass{};
 	};

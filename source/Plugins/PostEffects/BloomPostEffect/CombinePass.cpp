@@ -83,12 +83,10 @@ namespace Bloom
 		, VkExtent2D const & size
 		, uint32_t blurPassesCount
 		, bool const * enabled )
-		: m_device{ device }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "BloomCombine", getVertexProgram() }
+		: m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "BloomCombine", getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "BloomCombine", getPixelProgram( blurPassesCount ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
-		, m_blurPassesCount{ blurPassesCount }
 		, m_resultImg{ graph.createImage( crg::ImageData{ "BLComb"
 			, 0u
 			, VK_IMAGE_TYPE_2D

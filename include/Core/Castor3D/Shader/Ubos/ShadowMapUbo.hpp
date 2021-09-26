@@ -22,7 +22,7 @@ namespace castor3d
 			C3D_API ShadowMapData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled );
-			C3D_API ShadowMapData & operator=( ShadowMapData const & rhs );
+			SDW_DeclStructInstance( C3D_API, ShadowMapData );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
@@ -53,6 +53,10 @@ namespace castor3d
 
 	public:
 		C3D_API explicit ShadowMapUbo( RenderDevice const & device );
+		C3D_API ShadowMapUbo( ShadowMapUbo const & rhs ) = delete;
+		C3D_API ShadowMapUbo & operator=( ShadowMapUbo const & rhs ) = delete;
+		C3D_API ShadowMapUbo( ShadowMapUbo && rhs ) = default;
+		C3D_API ShadowMapUbo & operator=( ShadowMapUbo && rhs ) = delete;
 		C3D_API ~ShadowMapUbo();
 		/**
 		 *\~english

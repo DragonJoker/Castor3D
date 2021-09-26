@@ -103,7 +103,7 @@ namespace castor3d
 		, m_rootObjectNode{ std::make_shared< SceneNode >( ObjectRootNode, *this ) }
 		, m_background{ std::make_shared< ColourBackground >( engine, *this ) }
 		, m_lightFactory{ std::make_shared< LightFactory >() }
-		, m_listener{ engine.getFrameListenerCache().add( cuT( "Scene_" ) + name + castor::string::toString( (size_t)this ) ) }
+		, m_listener{ engine.getFrameListenerCache().add( cuT( "Scene_" ) + name + castor::string::toString( intptr_t( this ) ) ) }
 		, m_animationUpdater{ std::max( 2u, engine.getCpuInformations().getCoreCount() - ( engine.isThreaded() ? 2u : 1u ) ) }
 		, m_renderNodes{ castor::makeUnique< SceneRenderNodes >( *this ) }
 	{
@@ -179,7 +179,7 @@ namespace castor3d
 			{
 				element.initialise( getOwner()->getRenderSystem()->getRenderDevice() );
 			}
-			, [this]( SamplerCache::ElementT & element )
+			, []( SamplerCache::ElementT & element )
 			{
 				element.cleanup();
 			} );
@@ -195,19 +195,14 @@ namespace castor3d
 			} );
 		m_fontCacheView = makeCacheView< EventType::ePreRender >( getName()
 			, getEngine()->getFontCache()
-			, [this]( castor::FontCache::ElementT & element )
+			, []( castor::FontCache::ElementT & element )
 			{
 				element.initialise();
 			}
-			, [this]( castor::FontCache::ElementT & element )
+			, []( castor::FontCache::ElementT & element )
 			{
 				element.cleanup();
 			} );
-
-		auto notify = [this]()
-		{
-			setChanged();
-		};
 
 		auto node = m_rootNode;
 		m_sceneNodeCache->add( cuT( "RootNode" ), node );
@@ -532,11 +527,11 @@ namespace castor3d
 	void Scene::registerLight( Light & light )
 	{
 		m_lightConnections.emplace( light.getName()
-			, light.onChanged.connect( [this]( Light const & light )
+			, light.onChanged.connect( [this]( Light const & lgt )
 				{
-					doUpdateLightDependent( light.getLightType()
-						, light.isShadowProducer()
-						, light.getExpectedGlobalIlluminationType() );
+					doUpdateLightDependent( lgt.getLightType()
+						, lgt.isShadowProducer()
+						, lgt.getExpectedGlobalIlluminationType() );
 				} ) );
 	}
 

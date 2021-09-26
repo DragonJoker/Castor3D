@@ -29,9 +29,12 @@ namespace GuiCommon
 		SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 	}
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 	BEGIN_EVENT_TABLE( GradientButton, wxButton )
 		EVT_PAINT( GradientButton::OnPaint )
 	END_EVENT_TABLE()
+#pragma GCC diagnostic pop
 
 	void GradientButton::OnPaint( wxPaintEvent & p_event )
 	{

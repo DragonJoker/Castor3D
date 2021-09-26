@@ -42,10 +42,6 @@ namespace castor3d
 	{
 	}
 
-	UniformBufferPool::~UniformBufferPool()
-	{
-	}
-
 	void UniformBufferPool::cleanup()
 	{
 		m_buffers.clear();
@@ -132,17 +128,17 @@ namespace castor3d
 				device.getTransferQueueFamilyIndex(),
 			}
 		};
-		auto maxSize = std::min( 65536u, uint32_t( renderSystem.getValue( GpuMax::eUniformBufferSize ) ) );
+		auto maxSize = std::min( 65536u, renderSystem.getValue( GpuMax::eUniformBufferSize ) );
 		auto elementSize = renderSystem.getValue( GpuMin::eUniformBufferOffsetAlignment );
 		m_maxUboElemCount = uint32_t( std::floor( float( maxSize ) / float( elementSize ) ) );
-		m_maxUboSize = uint32_t( m_maxUboElemCount * elementSize );
+		m_maxUboSize = m_maxUboElemCount * elementSize;
 		m_stagingBuffer = std::make_unique< ashes::StagingBuffer >( *device
 			, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 			, m_maxUboSize * m_maxPoolUboCount
 			, sharingMode );
-		m_stagingData = reinterpret_cast< uint8_t * >( m_stagingBuffer->getBuffer().lock( 0u
+		m_stagingData = m_stagingBuffer->getBuffer().lock( 0u
 			, m_maxUboSize * m_maxPoolUboCount
-			, 0u ) );
+			, 0u );
 		assert( m_stagingData );
 	}
 
@@ -169,7 +165,8 @@ namespace castor3d
 			, sharingMode );
 		buffers.push_back( { m_currentUboIndex, std::move( buffer ) } );
 		++m_currentUboIndex;
-		auto itB = std::next( buffers.begin(), buffers.size() - 1 );
+		auto itB = std::next( buffers.begin()
+			, ptrdiff_t( buffers.size() - 1 ) );
 		m_maxUboSize = itB->buffer->initialise( m_device );
 		return itB;
 	}

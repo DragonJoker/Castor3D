@@ -25,7 +25,7 @@ namespace GuiCommon
 		m_renderers->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		m_renderers->Bind( wxEVT_KEY_UP, [this]( wxKeyEvent & event ){ OnKeyUp( event ); } );
 
-		int count = 0;
+		unsigned int count = 0;
 
 		for ( auto & renderer : m_engine.getRenderersList() )
 		{
@@ -80,14 +80,10 @@ namespace GuiCommon
 		doDraw( & clientDC );
 	}
 
-	RendererSelector::~RendererSelector()
-	{
-	}
-
 	castor::String RendererSelector::getSelectedRenderer()const
 	{
 		castor::String result = castor3d::RenderTypeUndefined;
-		uint32_t selected = m_renderers->GetSelection();
+		auto selected = uint32_t( m_renderers->GetSelection() );
 
 		if ( selected < m_renderers->GetCount() )
 		{
@@ -114,6 +110,8 @@ namespace GuiCommon
 		}
 	}
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 	BEGIN_EVENT_TABLE( RendererSelector, wxDialog )
 		EVT_PAINT(	RendererSelector::OnPaint )
 		EVT_KEY_UP(	RendererSelector::OnKeyUp )
@@ -121,6 +119,7 @@ namespace GuiCommon
 		EVT_BUTTON(	wxID_CANCEL, RendererSelector::OnButtonCancel )
 		EVT_LISTBOX_DCLICK( ID_LIST_RENDERERS,	RendererSelector::OnButtonOk )
 	END_EVENT_TABLE()
+#pragma GCC diagnostic pop
 
 	void RendererSelector::OnPaint( wxPaintEvent & event )
 	{

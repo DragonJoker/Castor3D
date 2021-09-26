@@ -14,11 +14,31 @@ GC_PG_NS_DECLARE_VARIANT_DATA( castor, Matrix4x4f )
 
 namespace GuiCommon
 {
-	template< typename T, size_t Count >
+	template< typename T, uint32_t Count >
 	class MatrixProperty
 		: public wxPGProperty
 	{
-		WX_PG_DECLARE_PROPERTY_CLASS( MatrixProperty )
+	public:
+		static wxObject * wxCreateObject()
+		{
+			return new MatrixProperty;
+		}
+
+		wxClassInfo * GetClassInfo() const override
+		{
+			static wxString s_name{ wxString{} << wxT( "Matrix" ) << Count << wxT( "x" ) << Count << getTypeNameSuffix< T >() << wxT( "Property" ) };
+			static wxClassInfo s_classInfo = { s_name
+				, &wxPGProperty::ms_classInfo
+				, nullptr
+				, int( sizeof( MatrixProperty ) )
+				, MatrixProperty::wxCreateObject };
+			return &s_classInfo;
+		}
+
+		const wxPGEditor * DoGetEditorClass()const override
+		{
+			return wxPGEditor_TextCtrl;
+		}
 
 	public:
 		MatrixProperty( wxString const & label = wxPG_LABEL
@@ -29,7 +49,6 @@ namespace GuiCommon
 			, wxString const & label = wxPG_LABEL
 			, wxString const & name = wxPG_LABEL
 			, castor::SquareMatrix< T, Count > const & value = castor::SquareMatrix< T, Count >() );
-		virtual ~MatrixProperty();
 
 		wxVariant ChildChanged( wxVariant & thisValue
 			, int childIndex
@@ -41,12 +60,12 @@ namespace GuiCommon
 		inline void setValueI( castor::SquareMatrix< T, Count > const & value );
 	};
 
-	template< typename Type, size_t Count > castor::SquareMatrix< Type, Count > const & matrixRefFromVariant( wxVariant const & variant );
-	template< typename Type, size_t Count > castor::SquareMatrix< Type, Count > & matrixRefFromVariant( wxVariant & variant );
-	template< typename Type, size_t Count > void setVariantFromMatrix( wxVariant & variant
+	template< typename Type, uint32_t Count > castor::SquareMatrix< Type, Count > const & matrixRefFromVariant( wxVariant const & variant );
+	template< typename Type, uint32_t Count > castor::SquareMatrix< Type, Count > & matrixRefFromVariant( wxVariant & variant );
+	template< typename Type, uint32_t Count > void setVariantFromMatrix( wxVariant & variant
 		, castor::SquareMatrix< Type, Count > const & value );
 
-	template< size_t Count > using FloatMatrixProperty = MatrixProperty< float, Count >;
+	template< uint32_t Count > using FloatMatrixProperty = MatrixProperty< float, Count >;
 
 	typedef FloatMatrixProperty< 2 > Matrix2fProperty;
 	typedef FloatMatrixProperty< 3 > Matrix3fProperty;

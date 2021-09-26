@@ -29,7 +29,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~AnimationInstance();
+		C3D_API virtual ~AnimationInstance() = default;
 		/**
 		 *\~english
 		 *\brief		Updates the animation, updates the key frame at the good time index.

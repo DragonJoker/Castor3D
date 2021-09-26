@@ -134,7 +134,7 @@ namespace castor
 		 */
 		static RgbColourT fromPredefined( PredefinedRgbColour predefined )
 		{
-			return fromRGBA( ( uint32_t )predefined );
+			return fromRGBA( uint32_t( predefined ) );
 		}
 		/**
 		 *\~english

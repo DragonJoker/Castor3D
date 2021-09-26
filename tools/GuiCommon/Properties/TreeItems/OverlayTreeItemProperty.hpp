@@ -34,13 +34,6 @@ namespace GuiCommon
 		OverlayTreeItemProperty( bool p_editable, castor3d::OverlayCategorySPtr p_overlay );
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		virtual ~OverlayTreeItemProperty();
-		/**
-		 *\~english
 		 *\brief		Retrieves the overlay
 		 *\return		The value
 		 *\~french
@@ -56,7 +49,7 @@ namespace GuiCommon
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid );
+		void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )override;
 
 	private:
 		void doCreatePanelOverlayProperties( wxPropertyGrid * grid, castor3d::PanelOverlaySPtr overlay );

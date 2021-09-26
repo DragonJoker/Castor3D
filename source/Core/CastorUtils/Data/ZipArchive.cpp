@@ -19,9 +19,6 @@
 #if defined( CU_PlatformWindows )
 #	include <fcntl.h>
 #	include <io.h>
-#	define SET_BINARY_MODE( file ) setmode( fileno( file ), O_BINARY )
-#else
-#	define SET_BINARY_MODE(file)
 #endif
 
 namespace castor
@@ -32,7 +29,7 @@ namespace castor
 
 	namespace zlib
 	{
-		std::string getError( int error )
+		static std::string getError( int error )
 		{
 			//std::string error( zError( p_error ) );
 			return "(code " + string::toString( error ) + ")";
@@ -47,11 +44,11 @@ namespace castor
 			{
 			}
 
-			virtual ~ZipImpl()
+			~ZipImpl()override
 			{
 			}
 
-			virtual void open( Path const & path, File::OpenMode mode )
+			void open( Path const & path, File::OpenMode mode )override
 			{
 				if ( mode == File::OpenMode::eWrite )
 				{
@@ -93,7 +90,7 @@ namespace castor
 				}
 			}
 
-			virtual void close()
+			void close()override
 			{
 				if ( m_zip )
 				{
@@ -120,7 +117,7 @@ namespace castor
 				}
 			}
 
-			virtual bool findFolder( String const & CU_UnusedParam( infolder ) )
+			bool findFolder( String const & CU_UnusedParam( infolder ) )override
 			{
 				bool result = false;
 				//std::string folder = string::stringCast< char >( infolder );
@@ -143,7 +140,7 @@ namespace castor
 				return result;
 			}
 
-			virtual bool findFile( String const & CU_UnusedParam( infile ) )
+			bool findFile( String const & CU_UnusedParam( infile ) )override
 			{
 				bool result = false;
 				//std::string file = string::stringCast< char >( infile );
@@ -166,7 +163,7 @@ namespace castor
 				return result;
 			}
 
-			virtual void deflate( ZipArchive::Folder const & infolder )
+			void deflate( ZipArchive::Folder const & infolder )override
 			{
 				for ( auto folder : infolder.folders )
 				{
@@ -176,7 +173,7 @@ namespace castor
 				doDeflateFiles( cuT( "" ), infolder.files );
 			}
 
-			virtual StringArray inflate( Path const & outFolder, ZipArchive::Folder & CU_UnusedParam( folder ) )
+			StringArray inflate( Path const & outFolder, ZipArchive::Folder & CU_UnusedParam( folder ) )override
 			{
 				if ( !File::directoryExists( outFolder ) )
 				{
@@ -219,7 +216,7 @@ namespace castor
 			}
 
 		private:
-			virtual void doInflateCurrentFile( Path const & outFolder, StringArray & result )
+			void doInflateCurrentFile( Path const & outFolder, StringArray & result )
 			{
 				std::array< char, 256 > fileNameInZip;
 				unz_file_info fileInfo;
@@ -227,9 +224,9 @@ namespace castor
 					, &fileInfo
 					, fileNameInZip.data()
 					, sizeof( fileNameInZip )
-					, NULL
+					, nullptr
 					, 0
-					, NULL
+					, nullptr
 					, 0 );
 
 				if ( error != UNZ_OK )
@@ -356,9 +353,9 @@ namespace castor
 
 					if ( size == 0 || file.read( buffer.data(), std::streamsize( size ) ) )
 					{
-						zip_fileinfo zfi{ 0 };
+						zip_fileinfo zfi{};
 
-						if ( UNZ_OK == zipOpenNewFileInZip( m_zip, filePath.c_str(), &zfi, NULL, 0, NULL, 0, NULL, Z_DEFLATED, Z_DEFAULT_COMPRESSION ) )
+						if ( UNZ_OK == zipOpenNewFileInZip( m_zip, filePath.c_str(), &zfi, nullptr, 0, nullptr, 0, nullptr, Z_DEFLATED, Z_DEFAULT_COMPRESSION ) )
 						{
 							zipWriteInFileInZip( m_zip, size == 0 ? "" : buffer.data(), unsigned( size ) );
 							zipCloseFileInZip( m_zip );
