@@ -61,7 +61,7 @@ namespace CastorGui
 			, this
 			, getId() << 12
 			, cuT( "+" )
-			, Position( p_size.getWidth() - p_size.getHeight(), 0 )
+			, Position( int32_t( p_size.getWidth() - p_size.getHeight() ), 0 )
 			, Size( p_size.getHeight(), p_size.getHeight() ) );
 		m_expand->setVisible( p_visible );
 		m_expandClickedConnection = m_expand->connect( ButtonEvent::eClicked
@@ -76,8 +76,8 @@ namespace CastorGui
 			, ( getId() << 12 ) + 1
 			, m_values
 			, m_selected
-			, Position( 0, p_size.getHeight() )
-			, Size( p_size.getWidth() - p_size.getHeight(), -1 )
+			, Position( 0, int32_t( p_size.getHeight() ) )
+			, Size( p_size.getWidth() - p_size.getHeight(), ~( 0u ) )
 			, 0
 			, false );
 		m_choicesSelectedConnection = m_choices->connect( ListBoxEvent::eSelected
@@ -94,10 +94,6 @@ namespace CastorGui
 		text->setPixelSize( Size( getSize().getWidth() - getSize().getHeight(), getSize().getHeight() ) );
 		text->setVAlign( VAlign::eCenter );
 		m_text = text;
-	}
-
-	ComboBoxCtrl::~ComboBoxCtrl()
-	{
 	}
 
 	void ComboBoxCtrl::setTextMaterial( castor3d::MaterialRPtr p_material )
@@ -205,13 +201,13 @@ namespace CastorGui
 		setBackgroundBorders( castor::Rectangle( 1, 1, 1, 1 ) );
 
 		m_expand->setForegroundMaterial( getForegroundMaterial() );
-		m_expand->setPosition( Position( getSize().getWidth() - getSize().getHeight(), 0 ) );
+		m_expand->setPosition( Position( int32_t( getSize().getWidth() - getSize().getHeight() ), 0 ) );
 		m_expand->setSize( Size( getSize().getHeight(), getSize().getHeight() ) );
 
 		m_choices->setBackgroundMaterial( getBackgroundMaterial() );
 		m_choices->setForegroundMaterial( getForegroundMaterial() );
-		m_choices->setPosition( Position( 0, getSize().getHeight() ) );
-		m_choices->setSize( Size( getSize().getWidth() - getSize().getHeight(), -1 ) );
+		m_choices->setPosition( Position( 0, int32_t( getSize().getHeight() ) ) );
+		m_choices->setSize( Size( getSize().getWidth() - getSize().getHeight(), ~( 0u ) ) );
 
 		EventHandler::connect( KeyboardEventType::ePushed, [this]( KeyboardEvent const & p_event )
 		{
@@ -235,7 +231,7 @@ namespace CastorGui
 
 		if ( sel >= 0 && uint32_t( sel ) < getItemCount() )
 		{
-			text->setCaption( getItems()[sel] );
+			text->setCaption( getItems()[uint32_t( sel )] );
 		}
 
 		manager.create( m_expand );
@@ -270,8 +266,8 @@ namespace CastorGui
 			text.reset();
 		}
 
-		m_expand->setPosition( Position( getSize().getWidth() - getSize().getHeight(), 0 ) );
-		m_choices->setPosition( Position( 0, getSize().getHeight() ) );
+		m_expand->setPosition( Position( int32_t( getSize().getWidth() - getSize().getHeight() ), 0 ) );
+		m_choices->setPosition( Position( 0, int32_t( getSize().getHeight() ) ) );
 	}
 
 	void ComboBoxCtrl::doSetSize( Size const & p_value )
@@ -285,9 +281,9 @@ namespace CastorGui
 		}
 
 		m_expand->setSize( Size( p_value.getHeight(), p_value.getHeight() ) );
-		m_choices->setSize( Size( p_value.getWidth() - p_value.getHeight(), -1 ) );
-		m_expand->setPosition( Position( p_value.getWidth() - p_value.getHeight(), 0 ) );
-		m_choices->setPosition( Position( 0, p_value.getHeight() ) );
+		m_choices->setSize( Size( p_value.getWidth() - p_value.getHeight(), ~( 0u ) ) );
+		m_expand->setPosition( Position( int32_t( p_value.getWidth() - p_value.getHeight() ), 0 ) );
+		m_choices->setPosition( Position( 0, int32_t( p_value.getHeight() ) ) );
 	}
 
 	void ComboBoxCtrl::doSetBackgroundMaterial( MaterialRPtr p_material )

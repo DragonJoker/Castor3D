@@ -19,14 +19,9 @@ namespace GuiCommon
 		, bool editable
 		, Scene & scene )
 		: TreeItemProperty{ scene.getEngine(), editable }
-		, m_parent{ parent }
 		, m_scene( scene )
 	{
 		CreateTreeItemMenu();
-	}
-
-	SceneTreeItemProperty::~SceneTreeItemProperty()
-	{
 	}
 
 	void SceneTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )

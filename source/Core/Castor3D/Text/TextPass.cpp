@@ -52,7 +52,7 @@ namespace castor
 			if ( pass.getOpacity() < 1 )
 			{
 				result = write( file, cuT( "alpha" ), pass.getOpacity() )
-					&& write( file, cuT( "bw_accumulation" ), uint32_t( pass.getBWAccumulationOperator() ) );
+					&& write( file, cuT( "bw_accumulation" ), pass.getBWAccumulationOperator() );
 			}
 
 			if ( result )

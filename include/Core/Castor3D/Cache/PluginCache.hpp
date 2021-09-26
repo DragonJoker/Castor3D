@@ -77,7 +77,7 @@ namespace castor
 		 *\return		Le plug-in chargé, \p nullptr si non trouvé (nom incorrect ou non trouvé dans le chemin donné ou le chemin principal)
 		 */
 		C3D_API ElementPtrT loadPlugin( String const & pluginName
-			, Path const & pathFolder )throw();
+			, Path const & pathFolder )noexcept;
 		/**
 		 *\~english
 		 *\brief		Loads a plug-in, given the plug-in file's full path
@@ -88,7 +88,7 @@ namespace castor
 		 *\param[in]	fileFullPath	Le chemin du plug-in
 		 *\return		Le plug-in chargé, \p nullptr si le chemin était incorrect ou s'il ne représentait pas un plug-in valide
 		 */
-		C3D_API ElementPtrT loadPlugin( Path const & fileFullPath )throw();
+		C3D_API ElementPtrT loadPlugin( Path const & fileFullPath )noexcept;
 		/**
 		 *\~english
 		 *\brief		Retrieves the plug-ins of given type

@@ -51,7 +51,7 @@ namespace castor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~Exception() throw()
+		~Exception()noexcept override
 		{
 		}
 		/**
@@ -62,7 +62,7 @@ namespace castor
 		 *\brief		Récupère la description de l'exception
 		 *\return		La description de l'exception
 		 */
-		virtual char const * what()const throw()
+		char const * what()const noexcept override
 		{
 			return m_description.c_str();
 		}
@@ -74,7 +74,7 @@ namespace castor
 		 *\brief		Récupère le nom du fichier
 		 *\return		Le nom du fichier
 		 */
-		inline std::string const & getFileName()const throw()
+		std::string const & getFileName()const noexcept
 		{
 			return m_filename;
 		}
@@ -86,7 +86,7 @@ namespace castor
 		 *\brief		Récupère le nom de la fonction
 		 *\return		Le nom de la fonction
 		 */
-		inline std::string const & getFunction()const throw()
+		std::string const & getFunction()const noexcept
 		{
 			return m_functionName;
 		}
@@ -98,7 +98,7 @@ namespace castor
 		 *\brief		Récupère le numéro de ligne
 		 *\return		Le numéro de ligne
 		 */
-		inline uint32_t getLine()const throw()
+		uint32_t getLine()const noexcept
 		{
 			return m_line;
 		}
@@ -110,7 +110,7 @@ namespace castor
 		 *\brief		Récupère la description de l'exception
 		 *\return		La description de l'exception
 		 */
-		inline std::string const & getDescription()const throw()
+		std::string const & getDescription()const noexcept
 		{
 			return m_description;
 		}
@@ -122,7 +122,7 @@ namespace castor
 		 *\brief		Récupère le texte complet de l'exception (description, ligne, fichier et fonction)
 		 *\return		La texte complet de l'exception
 		 */
-		inline std::string getFullDescription()const throw()
+		std::string getFullDescription()const noexcept
 		{
 			static std::locale const loc{ "C" };
 			std::string result;

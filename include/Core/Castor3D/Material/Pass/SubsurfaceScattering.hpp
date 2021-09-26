@@ -21,113 +21,89 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
-		 *\return		The Gaussian filter width.
+		 *name Getters.
 		 *\~french
-		 *\return		La largeur du filtre Gaussien.
-		 */
+		 *name Accesseurs.
+		**/
+		/**@{*/
 		float getGaussianWidth()const
 		{
 			return m_gaussianWidth;
 		}
+
+		float getStrength()const
+		{
+			return m_strength;
+		}
+
+		float getSubsurfaceRadius()const
+		{
+			return m_subsurfaceRadius;
+		}
+
+		uint32_t getProfileSize()const
+		{
+			return uint32_t( m_profileFactors.size() );
+		}
+		/**@}*/
 		/**
 		 *\~english
-		 *\brief		Sets the Gaussian filter width.
-		 *\param[in]	value	The new value.
+		 *name Mutators.
 		 *\~french
-		 *\brief		Définit la largeur du filtre Gaussien.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
+		 *name Mutateurs.
+		**/
+		/**@{*/
 		void setGaussianWidth( float value )
 		{
 			m_gaussianWidth = value;
 			onChanged( *this );
 		}
-		/**
-		 *\~english
-		 *\return		The scattering strength.
-		 *\~french
-		 *\return		La force du scattering.
-		 */
-		float getStrength()const
-		{
-			return m_strength;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the scattering strength.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit la force du scattering.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
+
 		void setStrength( float value )
 		{
 			m_strength = value;
 			onChanged( *this );
 		}
-		/**
-		 *\~english
-		 *\brief		Adds a factor to the transmittance profile.
-		 *\param[in]	value	The value to add.
-		 *\~french
-		 *\brief		Ajoute un facteur au profil de transmission.
-		 *\param[in]	value	La valeur à ajouter.
-		 */
+		
+		void setSubsurfaceRadius( float value )
+		{
+			m_subsurfaceRadius = value;
+			onChanged( *this );
+		}
+
 		void addProfileFactor( castor::Point4f const & value )
 		{
 			m_profileFactors.push_back( value );
 			onChanged( *this );
 		}
+		/**@}*/
 		/**
 		 *\~english
-		 *\return		The transmmittance profile factors count.
+		 *name Iteration.
 		 *\~french
-		 *\return		Le nombre de facteurs du profil de transmission.
-		 */
-		uint32_t getProfileSize()const
-		{
-			return uint32_t( m_profileFactors.size() );
-		}
-		/**
-		 *\~english
-		 *\return		The iterator to the beginning of the transmittance profile.
-		 *\~french
-		 *\return		L'itérateur sur le début du profil de transmission.
-		 */
+		 *name Itération.
+		**/
+		/**@{*/
 		auto begin()
 		{
 			return m_profileFactors.begin();
 		}
-		/**
-		 *\~english
-		 *\return		The iterator to the beginning of the transmittance profile.
-		 *\~french
-		 *\return		L'itérateur sur le début du profil de transmission.
-		 */
+
 		auto begin()const
 		{
 			return m_profileFactors.begin();
 		}
-		/**
-		 *\~english
-		 *\return		The iterator to the end of the transmittance profile.
-		 *\~french
-		 *\return		L'itérateur sur la fin du profil de transmission.
-		 */
+
 		auto end()
 		{
 			return m_profileFactors.end();
 		}
-		/**
-		 *\~english
-		 *\return		The iterator to the end of the transmittance profile.
-		 *\~french
-		 *\return		L'itérateur sur la fin du profil de transmission.
-		 */
+
 		auto end()const
 		{
 			return m_profileFactors.end();
 		}
+		/**@}*/
 
 	public:
 		OnChanged onChanged;

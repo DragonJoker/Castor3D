@@ -13,7 +13,6 @@ namespace Testing
 	{
 	public:
 		explicit SceneExportTest( castor3d::Engine & engine );
-		virtual ~SceneExportTest();
 
 	private:
 		void doRegisterTests()override;

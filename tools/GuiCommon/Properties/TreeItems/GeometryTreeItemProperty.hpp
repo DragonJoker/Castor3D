@@ -34,13 +34,6 @@ namespace GuiCommon
 		GeometryTreeItemProperty( bool p_editable, castor3d::Geometry & p_geometry );
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		~GeometryTreeItemProperty();
-		/**
-		 *\~english
 		 *\brief		Retrieves the geometry
 		 *\return		The value
 		 *\~french
@@ -56,7 +49,7 @@ namespace GuiCommon
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )override;
 
 	private:
 		castor3d::Geometry & m_geometry;

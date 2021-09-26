@@ -45,7 +45,7 @@ namespace GuiCommon
 
 	//************************************************************************************************
 
-	template< typename Type, size_t Count > void setVariantFromMatrix( wxVariant & variant
+	template< typename Type, uint32_t Count > void setVariantFromMatrix( wxVariant & variant
 		, castor::SquareMatrix< Type, Count > const & value )
 	{
 		matrixRefFromVariant< Type, Count >( variant ) = value;
@@ -53,18 +53,18 @@ namespace GuiCommon
 
 	//************************************************************************************************
 
-	template< typename T, size_t Count > struct MatrixPropertyHelper
+	template< typename T, uint32_t Count > struct MatrixPropertyHelper
 	{
 		static void addChildren( MatrixProperty< T, Count > * prop
 			, wxString const * rowNames
 			, wxString const * colNames
 			, castor::SquareMatrix< T, Count > const & value )
 		{
-			for ( size_t i = 0; i < Count; ++i )
+			for ( uint32_t i = 0; i < Count; ++i )
 			{
 				wxString names[Count];
 
-				for ( size_t j = 0; j < Count; ++j )
+				for ( uint32_t j = 0; j < Count; ++j )
 				{
 					names[j] << colNames[i] << wxT( "." ) << rowNames[j];
 				}
@@ -82,7 +82,7 @@ namespace GuiCommon
 		{
 			castor::SquareMatrix< T, Count > const & matrix = matrixRefFromVariant< T, Count >( prop->GetValue() );
 
-			for ( size_t i = 0; i < Count; ++i )
+			for ( uint32_t i = 0; i < Count; ++i )
 			{
 				wxVariant value = prop->Item( i )->GetValue();
 				setVariantFromPoint< T, Count >( value, castor::Point< T, Count >( matrix[i].constPtr() ) );
@@ -95,7 +95,7 @@ namespace GuiCommon
 		{
 			castor::SquareMatrix< T, Count > & matrix = matrixRefFromVariant< T, Count >( thisValue );
 			castor::Point< T, Count > const & row = PointRefFromVariant< T, Count >( newValue );
-			matrix.setRow( index, row );
+			matrix.setRow( uint32_t( index ), row );
 			wxVariant result;
 			result << matrix;
 			return result;
@@ -104,7 +104,7 @@ namespace GuiCommon
 
 	//************************************************************************************************
 
-	template< size_t Count > wxString const * getMatrixRowDefaultNames();
+	template< uint32_t Count > wxString const * getMatrixRowDefaultNames();
 
 	template<>
 	inline wxString const * getMatrixRowDefaultNames< 2 >()
@@ -126,7 +126,7 @@ namespace GuiCommon
 
 	//************************************************************************************************
 
-	template< size_t Count > wxString const * getMatrixColDefaultNames();
+	template< uint32_t Count > wxString const * getMatrixColDefaultNames();
 
 	template<>
 	inline wxString const * getMatrixColDefaultNames< 2 >()
@@ -148,7 +148,7 @@ namespace GuiCommon
 
 	//************************************************************************************************
 
-	template< typename T, size_t Count >
+	template< typename T, uint32_t Count >
 	MatrixProperty< T, Count >::MatrixProperty( wxString const & label
 		, wxString const & name
 		, castor::SquareMatrix< T, Count > const & value )
@@ -161,7 +161,7 @@ namespace GuiCommon
 			, value );
 	}
 
-	template< typename T, size_t Count >
+	template< typename T, uint32_t Count >
 	MatrixProperty< T, Count >::MatrixProperty( wxString const( & rowNames )[Count]
 		, wxString const( & colNames )[Count]
 		, wxString const & label
@@ -176,12 +176,7 @@ namespace GuiCommon
 			, value );
 	}
 
-	template< typename T, size_t Count >
-	MatrixProperty< T, Count >::~MatrixProperty()
-	{
-	}
-
-	template< typename T, size_t Count >
+	template< typename T, uint32_t Count >
 	void MatrixProperty< T, Count >::RefreshChildren()
 	{
 		if ( GetChildCount() )
@@ -190,7 +185,7 @@ namespace GuiCommon
 		}
 	}
 
-	template< typename T, size_t Count >
+	template< typename T, uint32_t Count >
 	wxVariant MatrixProperty< T, Count >::ChildChanged( wxVariant & thisValue
 		, int childIndex
 		, wxVariant & childValue ) const
@@ -200,7 +195,7 @@ namespace GuiCommon
 			, childValue );
 	}
 
-	template< typename T, size_t Count >
+	template< typename T, uint32_t Count >
 	inline void MatrixProperty< T, Count >::setValueI( castor::SquareMatrix< T, Count > const & value )
 	{
 		m_value = WXVARIANT( value );

@@ -544,7 +544,6 @@ namespace castor3d
 		}
 
 	private:
-		RenderSystem const & m_renderSystem;
 		VkBufferUsageFlags m_usage;
 		VkMemoryPropertyFlags m_flags;
 		uint32_t m_elemCount;

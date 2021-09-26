@@ -23,6 +23,7 @@ See LICENSE file in root folder
 #	define CU_SharedLibExt cuT( "dll" )
 #   define CU_LibPrefix cuT( "" )
 #	define dlerror() ::getLastError()
+#	define CU_stdcall __stdcall
 #	ifndef NOMINMAX
 #		define NOMINMAX
 #	endif
@@ -30,10 +31,12 @@ See LICENSE file in root folder
 #	define CU_SharedLibExt cuT( "dylib" )
 #   define CU_LibPrefix cuT( "lib" )
 #	define CU_API
+#	define CU_stdcall
 #else
 #	define CU_SharedLibExt cuT( "so" )
 #   define CU_LibPrefix cuT( "lib" )
 #	define CU_API
+#	define CU_stdcall
 #endif
 
 #if !defined( CU_PlatformAndroid ) && !defined( CU_PlatformLinux ) && !defined( CU_PlatformWindows ) && !defined( CU_PlatformApple )

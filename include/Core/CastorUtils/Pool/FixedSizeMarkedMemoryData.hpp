@@ -57,7 +57,8 @@ namespace castor
 		{
 			if ( m_freeIndex != m_freeEnd )
 			{
-				reportError< PoolErrorType::eCommonMemoryLeaksDetected >( Namer::Name, size_t( ( m_freeEnd - m_freeIndex ) * sizeof( Object ) ) );
+				reportError< PoolErrorType::eCommonMemoryLeaksDetected >( Namer::Name
+					, size_t( ( m_freeEnd - m_freeIndex ) * sizeof( Object ) ) );
 				uint8_t * buffer = m_buffer;
 				size_t size = sizeof( Object ) + 1;
 
@@ -65,7 +66,8 @@ namespace castor
 				{
 					if ( *buffer == ALLOCATED )
 					{
-						reportError< PoolErrorType::eMarkedLeakAddress >( Namer::Name, ( void * )( buffer + 1 ) );
+						reportError< PoolErrorType::eMarkedLeakAddress >( Namer::Name
+							, reinterpret_cast< void * >( buffer + 1 ) );
 					}
 
 					buffer += size;
@@ -121,13 +123,15 @@ namespace castor
 			{
 				if ( m_freeIndex == m_freeEnd )
 				{
-					reportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name, ( void * )space );
+					reportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name
+						, reinterpret_cast< void * >( space ) );
 					return false;
 				}
 
 				if ( ptrdiff_t( space ) < ptrdiff_t( m_buffer ) || ptrdiff_t( space ) >= ptrdiff_t( m_bufferEnd ) )
 				{
-					reportError< PoolErrorType::eCommonNotFromRange >( Namer::Name, ( void * )space );
+					reportError< PoolErrorType::eCommonNotFromRange >( Namer::Name
+						, reinterpret_cast< void * >( space ) );
 					return false;
 				}
 
@@ -138,11 +142,13 @@ namespace castor
 				{
 					if ( *marked == FREED )
 					{
-						reportError< PoolErrorType::eMarkedDoubleDelete >( Namer::Name, ( void * )space );
+						reportError< PoolErrorType::eMarkedDoubleDelete >( Namer::Name
+							, reinterpret_cast< void * >( space ) );
 						return false;
 					}
 
-					reportError< PoolErrorType::eMarkedNotFromPool >( Namer::Name, ( void * )space );
+					reportError< PoolErrorType::eMarkedNotFromPool >( Namer::Name
+						, reinterpret_cast< void * >( space ) );
 					return false;
 				}
 

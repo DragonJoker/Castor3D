@@ -46,13 +46,6 @@ namespace GuiCommon
 			, castor3d::TextureUnitSPtr texture );
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		~TextureTreeItemProperty();
-		/**
-		 *\~english
 		 *\brief		Retrieves the texture
 		 *\return		The value
 		 *\~french
@@ -68,7 +61,7 @@ namespace GuiCommon
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid );
+		void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )override;
 
 	private:
 		void onChange( wxVariant const & var

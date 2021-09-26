@@ -8,10 +8,14 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Design/Signal.hpp"
 
-#include <thread>
-#include <functional>
+#pragma warning( push )
+#pragma warning( disable:4365 )
 #include <atomic>
 #include <mutex>
+#include <thread>
+#pragma warning( pop )
+
+#include <functional>
 
 namespace castor
 {

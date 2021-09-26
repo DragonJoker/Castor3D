@@ -26,8 +26,8 @@ namespace smaa
 		std::unique_ptr< ast::Shader > doGetEdgeDetectionVP( VkExtent3D const & size
 			, SmaaConfig const & config )
 		{
-			Point4f renderTargetMetrics{ 1.0f / size.width
-				, 1.0f / size.height
+			Point4f renderTargetMetrics{ 1.0f / float( size.width )
+				, 1.0f / float( size.height )
 				, float( size.width )
 				, float( size.height ) };
 
@@ -119,7 +119,7 @@ namespace smaa
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_pass{ m_graph.createPass( "SmaaEdge"
-			, [this, &device, &renderTarget, enabled]( crg::FramePass const & pass
+			, [this, &device, enabled]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{

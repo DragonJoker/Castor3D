@@ -1,3 +1,6 @@
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#pragma GCC diagnostic ignored "-Werror=overloaded-virtual"
+
 #include "AssimpImporter/AssimpImporter.hpp"
 
 #include <Castor3D/Animation/Interpolator.hpp>
@@ -41,7 +44,7 @@ namespace C3dAssimp
 
 	namespace
 	{
-		aiNodeAnim const * const doFindNodeAnim( const aiAnimation & animation
+		aiNodeAnim const * doFindNodeAnim( const aiAnimation & animation
 			, const castor::String & nodeName )
 		{
 			aiNodeAnim const * result = nullptr;
@@ -53,25 +56,6 @@ namespace C3dAssimp
 			} );
 
 			if ( it != animation.mChannels + animation.mNumChannels )
-			{
-				result = *it;
-			}
-
-			return result;
-		}
-
-		aiMeshAnim const * const FindMeshAnim( const aiAnimation & animation
-			, const castor::String & meshName )
-		{
-			aiMeshAnim const * result = nullptr;
-			auto it = std::find_if( animation.mMeshChannels
-				, animation.mMeshChannels + animation.mNumMeshChannels
-				, [&meshName]( aiMeshAnim const * const p_meshAnim )
-				{
-					return castor::string::stringCast< xchar >( p_meshAnim->mName.data ) == meshName;
-				} );
-
-			if ( it != animation.mMeshChannels + animation.mNumMeshChannels )
 			{
 				result = *it;
 			}
@@ -188,7 +172,7 @@ namespace C3dAssimp
 				if ( prv != cur )
 				{
 					auto dt = cur->first - prv->first;
-					float factor = ( from - prv->first ).count() / float( dt.count() );
+					float factor = float( ( from - prv->first ).count() ) / float( dt.count() );
 					result = interpolator.interpolate( prv->second, cur->second, factor );
 				}
 				else
@@ -290,9 +274,9 @@ namespace C3dAssimp
 				}
 				else
 				{
-					auto config = TextureConfiguration::NormalTexture;
-					convertToNormalMap( m_texInfos.hgtTex, config );
-					loadTexture( m_texInfos.hgtTex, config );
+					auto texConfig = TextureConfiguration::NormalTexture;
+					convertToNormalMap( m_texInfos.hgtTex, texConfig );
+					loadTexture( m_texInfos.hgtTex, texConfig );
 				}
 
 				if ( m_mtlInfos.ambient.IsBlack()
@@ -375,7 +359,7 @@ namespace C3dAssimp
 
 					if ( name == "Shininess" )
 					{
-						shininess = 1.0 - shininess;
+						shininess = 1.0f - shininess;
 					}
 
 					if ( shininess > 0 )
@@ -492,21 +476,21 @@ namespace C3dAssimp
 				, uint32_t componentsCount
 				, bool * control )override
 			{
-				castor3d::TextureConfiguration config;
+				castor3d::TextureConfiguration lconfig;
 				auto info = getTextureInfo( name
 					, textureFlag
-					, config );
-				loadTexture( info, config );
+					, lconfig );
+				loadTexture( info, lconfig );
 			}
 
 		private:
 			void loadTexture( TextureInfo const & info
-				, castor3d::TextureConfiguration const & config )
+				, castor3d::TextureConfiguration const & pconfig )
 			{
 				if ( !info.name.empty() )
 				{
 					auto texture = m_importer.loadTexture( castor::Path{ info.name }
-						, config
+						, pconfig
 						, m_result );
 
 					if ( texture )
@@ -536,7 +520,7 @@ namespace C3dAssimp
 
 			TextureInfo getTextureInfo( castor::String const & name
 				, castor3d::TextureFlag flag
-				, castor3d::TextureConfiguration & config )
+				, castor3d::TextureConfiguration & pconfig )
 			{
 				TextureInfo result{};
 
@@ -547,7 +531,7 @@ namespace C3dAssimp
 					break;
 				case castor3d::TextureFlag::eOpacity:
 					m_texInfos.opaTex = getTextureInfo( aiTextureType_OPACITY );
-					config = castor3d::TextureConfiguration::OpacityTexture;
+					pconfig = castor3d::TextureConfiguration::OpacityTexture;
 					break;
 				case castor3d::TextureFlag::eNormal:
 					m_texInfos.nmlTex = getTextureInfo( aiTextureType_NORMALS );
@@ -569,36 +553,36 @@ namespace C3dAssimp
 					break;
 				case castor3d::TextureFlag::eSpecular:
 					m_texInfos.spcTex = getTextureInfo( aiTextureType_SPECULAR );
-					config = TextureConfiguration::SpecularTexture;
+					pconfig = TextureConfiguration::SpecularTexture;
 					break;
 				case castor3d::TextureFlag::eMetalness:
 					if ( aiGetVersionMajor() >= 4u )
 					{
 						static auto constexpr TextureType_METALNESS = aiTextureType( 15 );
 						result = getTextureInfo( TextureType_METALNESS );
-						config = TextureConfiguration::MetalnessTexture;
+						pconfig = TextureConfiguration::MetalnessTexture;
 					}
 					else
 					{
 						result = getTextureInfo( aiTextureType_SPECULAR );
-						config = TextureConfiguration::SpecularTexture;
+						pconfig = TextureConfiguration::SpecularTexture;
 					}
 					break;
 				case castor3d::TextureFlag::eGlossiness:
 					result = getTextureInfo( aiTextureType_SHININESS );
-					config = TextureConfiguration::ShininessTexture;
+					pconfig = TextureConfiguration::ShininessTexture;
 					break;
 				case castor3d::TextureFlag::eRoughness:
 					if ( aiGetVersionMajor() >= 4u )
 					{
 						static auto constexpr TextureType_DIFFUSE_ROUGHNESS = aiTextureType( 16 );
 						result = getTextureInfo( TextureType_DIFFUSE_ROUGHNESS );
-						config = TextureConfiguration::RoughnessTexture;
+						pconfig = TextureConfiguration::RoughnessTexture;
 					}
 					else
 					{
 						result = getTextureInfo( aiTextureType_SHININESS );
-						config = TextureConfiguration::RoughnessTexture;
+						pconfig = TextureConfiguration::RoughnessTexture;
 					}
 					break;
 				default:
@@ -609,11 +593,11 @@ namespace C3dAssimp
 			}
 
 			void convertToNormalMap( TextureInfo & info
-				, castor3d::TextureConfiguration & config )
+				, castor3d::TextureConfiguration & pconfig )
 			{
 				auto path = castor::Path{ info.name };
 
-				if ( m_importer.convertToNormalMap( path, config ) )
+				if ( m_importer.convertToNormalMap( path, pconfig ) )
 				{
 					info.name = path;
 				}
@@ -650,11 +634,30 @@ namespace C3dAssimp
 			}
 		}
 
+		castor::Matrix4x4f makeMatrix4x4f( aiMatrix4x4 const & aiMatrix )
+		{
+			std::array< float, 16u > data
+			{ aiMatrix.a1, aiMatrix.a2, aiMatrix.a3, aiMatrix.a4
+				, aiMatrix.b1, aiMatrix.b2, aiMatrix.b3, aiMatrix.b4
+				, aiMatrix.c1, aiMatrix.c2, aiMatrix.c3, aiMatrix.c4
+				, aiMatrix.d1, aiMatrix.d2, aiMatrix.d3, aiMatrix.d4 };
+			return castor::Matrix4x4f{ data.data() };
+		}
+
+		castor::Matrix4x4f makeMatrix4x4f( aiMatrix3x3 const & aiMatrix )
+		{
+			std::array< float, 9u > data
+			{ aiMatrix.a1, aiMatrix.a2, aiMatrix.a3
+				, aiMatrix.b1, aiMatrix.b2, aiMatrix.b3
+				, aiMatrix.c1, aiMatrix.c2, aiMatrix.c3 };
+			return castor::Matrix4x4f{ castor::Matrix3x3f{ data.data() } };
+		}
+
 		void doProcessMaterialPass( Pass & pass
 			, aiMaterial const & aiMaterial
 			, AssimpImporter & importer )
 		{
-			aiShadingMode shadingMode;
+			aiShadingMode shadingMode{};
 			aiMaterial.Get( AI_MATKEY_SHADING_MODEL, shadingMode );
 			auto & passFactory = importer.getEngine()->getPassFactory();
 			auto srcType = convert( passFactory, shadingMode );
@@ -716,13 +719,13 @@ namespace C3dAssimp
 				if ( key.mTime > 0 )
 				{
 					auto time = castor::Milliseconds{ int64_t( key.mTime * 1000 ) } / ticksPerMilliSecond;
-					result[time] = castor::Quaternion::fromMatrix( castor::Matrix4x4f{ castor::Matrix3x3f{ &key.mValue.GetMatrix().Transpose().a1 } } );
+					result[time] = castor::Quaternion::fromMatrix( makeMatrix4x4f( key.mValue.GetMatrix().Transpose() ) );
 				}
 				else
 				{
 					for ( auto & time : times )
 					{
-						result[time] = castor::Quaternion::fromMatrix( castor::Matrix4x4f{ castor::Matrix3x3f{ &key.mValue.GetMatrix().Transpose().a1 } } );
+						result[time] = castor::Quaternion::fromMatrix( makeMatrix4x4f( key.mValue.GetMatrix().Transpose() ) );
 					}
 				}
 			}
@@ -802,10 +805,6 @@ namespace C3dAssimp
 	{
 	}
 
-	AssimpImporter::~AssimpImporter()
-	{
-	}
-
 	MeshImporterUPtr AssimpImporter::create( Engine & engine )
 	{
 		return std::make_unique< AssimpImporter >( engine );
@@ -855,7 +854,7 @@ namespace C3dAssimp
 		if ( aiScene )
 		{
 			SkeletonSPtr skeleton = std::make_shared< Skeleton >( *mesh.getScene() );
-			skeleton->setGlobalInverseTransform( castor::Matrix4x4f( &aiScene->mRootNode->mTransformation.Transpose().Inverse().a1 ) );
+			skeleton->setGlobalInverseTransform( makeMatrix4x4f( aiScene->mRootNode->mTransformation.Transpose().Inverse() ) );
 
 			if ( aiScene->HasMeshes() )
 			{
@@ -1022,9 +1021,9 @@ namespace C3dAssimp
 					{
 						auto it = std::find_if( aiAnimation->mMeshChannels
 							, aiAnimation->mMeshChannels + aiAnimation->mNumMeshChannels
-							, [this, &aiMesh, &submesh]( aiMeshAnim const * p_aiMeshAnim )
+							, [&aiMesh]( aiMeshAnim const * lookup )
 							{
-								return p_aiMeshAnim->mName == aiMesh.mName;
+								return lookup->mName == aiMesh.mName;
 							} );
 
 						if ( it != aiAnimation->mMeshChannels + aiAnimation->mNumMeshChannels )
@@ -1123,18 +1122,17 @@ namespace C3dAssimp
 			if ( m_mapBoneByID.find( name ) == m_mapBoneByID.end() )
 			{
 				auto mtx = aiBone.mOffsetMatrix;
-				doAddBone( name, castor::Matrix4x4f{ &mtx.Transpose().a1 }, skeleton, index );
+				doAddBone( name, makeMatrix4x4f( mtx.Transpose() ), skeleton, index );
 			}
 			else
 			{
 				index = m_mapBoneByID[name];
-				aiMatrix4x4 mtx{ aiBone.mOffsetMatrix };
-				CU_Ensure( m_arrayBones[index]->getOffsetMatrix() == castor::Matrix4x4f( &mtx.Transpose().a1 ) );
+				CU_Ensure( m_arrayBones[index]->getOffsetMatrix() == makeMatrix4x4f( aiMatrix4x4{ aiBone.mOffsetMatrix }.Transpose() ) );
 			}
 
 			for ( auto weight : castor::makeArrayView( aiBone.mWeights, aiBone.mNumWeights ) )
 			{
-				arrayVertices[weight.mVertexId].addBoneData( index, float( weight.mWeight ) );
+				arrayVertices[weight.mVertexId].addBoneData( index, weight.mWeight );
 			}
 		}
 	}
@@ -1154,7 +1152,9 @@ namespace C3dAssimp
 		}
 
 		auto & animation = skeleton.createAnimation( name );
-		int64_t ticksPerMilliSecond = int64_t( aiAnimation.mTicksPerSecond ? aiAnimation.mTicksPerSecond : 25 );
+		int64_t ticksPerMilliSecond = aiAnimation.mTicksPerSecond != 0.0
+			? int64_t( aiAnimation.mTicksPerSecond )
+			: 25ll;
 		SkeletonAnimationKeyFrameMap keyframes;
 		SkeletonAnimationObjectSet notAnimated;
 		doProcessAnimationNodes( mesh
@@ -1253,7 +1253,7 @@ namespace C3dAssimp
 			else
 			{
 				object = animation.getObject( SkeletonAnimationObjectType::eBone, aiNode.mName.C_Str() );
-				CU_Ensure( object->getNodeTransform() == castor::Matrix4x4f( &aiNode.mTransformation.a1 ).getTransposed() );
+				CU_Ensure( object->getNodeTransform() == makeMatrix4x4f( aiNode.mTransformation ).getTransposed() );
 				CU_Ensure( object->getParent() == parent || object == parent );
 				added = false;
 			}
@@ -1266,7 +1266,7 @@ namespace C3dAssimp
 		else
 		{
 			object = animation.getObject( SkeletonAnimationObjectType::eNode, aiNode.mName.C_Str() );
-			CU_Ensure( object->getNodeTransform() == castor::Matrix4x4f( &aiNode.mTransformation.a1 ).getTransposed() );
+			CU_Ensure( object->getNodeTransform() == makeMatrix4x4f( aiNode.mTransformation ).getTransposed() );
 			CU_Ensure( object->getParent() == parent || object == parent );
 			added = false;
 		}
@@ -1278,7 +1278,7 @@ namespace C3dAssimp
 				parent->addChild( object );
 			}
 
-			object->setNodeTransform( castor::Matrix4x4f( &aiNode.mTransformation.a1 ).getTransposed() );
+			object->setNodeTransform( makeMatrix4x4f( aiNode.mTransformation ).getTransposed() );
 		}
 
 		if ( aiNodeAnim )

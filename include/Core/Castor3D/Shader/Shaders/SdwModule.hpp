@@ -160,4 +160,13 @@ namespace castor3d::shader
 	//@}
 }
 
+namespace sdw
+{
+	template<>
+	struct ParamTranslater< castor3d::shader::OutputComponents >
+	{
+		using Type = castor3d::shader::OutputComponents &;
+	};
+}
+
 #endif

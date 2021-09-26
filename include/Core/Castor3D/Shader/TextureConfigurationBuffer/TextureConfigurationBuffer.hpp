@@ -9,7 +9,10 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
+#pragma warning( push )
+#pragma warning( disable:4365 )
 #include <mutex>
+#pragma warning( pop )
 
 #define C3D_TextureConfigStructOfArrays 0
 
@@ -133,7 +136,6 @@ namespace castor3d
 		std::vector< TextureConfiguration > m_configurations;
 		std::vector< TextureUnit const * > m_dirty;
 		std::vector< OnTextureUnitChangedConnection > m_connections;
-		uint32_t m_configMaxCount;
 		TextureConfigurationsData m_data;
 		std::mutex m_mutex;
 	};

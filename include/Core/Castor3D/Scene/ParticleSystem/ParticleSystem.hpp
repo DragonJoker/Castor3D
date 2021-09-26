@@ -38,13 +38,6 @@ namespace castor3d
 			, uint32_t count );
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~ParticleSystem();
-		/**
-		 *\~english
 		 *\brief		Initialises GPU side elements.
 		 *\param[in]	device	The GPU device.
 		 *\return		\p true if all is OK.

@@ -103,10 +103,10 @@ namespace castor3d
 		, m_type{ m_modified, type }
 		, m_size{ m_modified }
 		, m_position{ m_modified }
-		, m_viewport{ 1u, 1u, 0, 0 }
-		, m_scissor{ 0, 0, 1u, 1u }
+		, m_viewport{ 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f }
+		, m_scissor{ { 0, 0 }, { 1u, 1u } }
 	{
-		if ( m_type != ViewportType::eOrtho && !m_near )
+		if ( m_type != ViewportType::eOrtho && m_near == 0.0f )
 		{
 			m_near = float( 0.1 ); // not zero or we have a Z fight (due to depth buffer precision)
 		}

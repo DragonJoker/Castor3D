@@ -51,17 +51,20 @@ namespace castor3d
 {
 	//*************************************************************************************************
 
-	void bindTexture( VkImageView view
-		, VkSampler sampler
-		, ashes::WriteDescriptorSetArray & writes
-		, uint32_t & index )
+	namespace
 	{
-		writes.push_back( { index++
-			, 0u
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, { { sampler
+		void bindTexture( VkImageView view
+			, VkSampler sampler
+			, ashes::WriteDescriptorSetArray & writes
+			, uint32_t & index )
+		{
+			writes.push_back( { index++
+				, 0u
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, { { sampler
 				, view
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
+		}
 	}
 	
 	void bindTexture( ashes::ImageView const & view
@@ -624,7 +627,7 @@ namespace castor3d
 				auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
 					, c3d_modelData.getNormalMtx( flags.programFlags, curMtxModel ) );
 				outSurface.computeTangentSpace( flags.programFlags
-					, c3d_sceneData.getCameraPosition()
+					, c3d_sceneData.cameraPosition
 					, mtxNormal
 					, v4Normal
 					, v4Tangent );

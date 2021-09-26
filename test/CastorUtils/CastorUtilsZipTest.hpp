@@ -11,7 +11,6 @@ namespace Testing
 	{
 	public:
 		CastorUtilsZipTest();
-		virtual ~CastorUtilsZipTest();
 
 	private:
 		void doRegisterTests() override;

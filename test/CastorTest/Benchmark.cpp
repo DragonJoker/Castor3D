@@ -36,13 +36,13 @@ namespace Testing
 			stream.precision( 4 );
 			stream << "*	" << p_name << " global results :" << std::endl;
 			stream << "*		- Executed " << p_ui64Calls << " times" << std::endl;
-			stream << "*		- Total time : " << std::chrono::duration_cast< std::chrono::milliseconds >( m_cumulativeTimes ).count() / 1000.0 << "s" << std::endl;
+			stream << "*		- Total time : " << float( std::chrono::duration_cast< std::chrono::milliseconds >( m_cumulativeTimes ).count() ) / 1000.0 << "s" << std::endl;
 			stream << "*		- Average time : " << std::chrono::duration_cast< std::chrono::milliseconds >( m_cumulativeTimes / m_totalExecutions ).count() << "ms" << std::endl;
 			stream << benchSep.rdbuf() << std::endl;
 			m_summary += stream.str();
 			std::cout << "*	Bench ended for: " << p_name.c_str() << std::endl;
 			std::cout << "*		- Executed " << p_ui64Calls << " times" << std::endl;
-			std::cout << "*		- Total time : " << std::chrono::duration_cast< std::chrono::milliseconds >( m_cumulativeTimes ).count() / 1000.0 << "s" << std::endl;
+			std::cout << "*		- Total time : " << float( std::chrono::duration_cast< std::chrono::milliseconds >( m_cumulativeTimes ).count() ) / 1000.0 << "s" << std::endl;
 			std::cout << "*		- Average time : " << std::chrono::duration_cast< std::chrono::milliseconds >( m_cumulativeTimes / m_totalExecutions ).count() << "ms" << std::endl;
 			std::cout << benchSep.str() << std::endl;
 		}

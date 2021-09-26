@@ -13,10 +13,6 @@ namespace Testing
 	{
 	}
 
-	CastorUtilsChangeTrackedTest::~CastorUtilsChangeTrackedTest()
-	{
-	}
-
 	void CastorUtilsChangeTrackedTest::doRegisterTests()
 	{
 		doRegisterTest( "BasicChangeTrackedTest", std::bind( &CastorUtilsChangeTrackedTest::BasicTest, this ) );

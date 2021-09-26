@@ -259,8 +259,8 @@ namespace castor3d
 			doDeclareComputeSpotShadow();
 		}
 
-		Float Shadow::computeDirectional( shader::Light light
-			, Surface surface
+		Float Shadow::computeDirectional( shader::Light const & light
+			, Surface const & surface
 			, Mat4 const & lightMatrix
 			, Vec3 const & lightDirection
 			, UInt const & cascadeIndex
@@ -274,8 +274,8 @@ namespace castor3d
 				, maxCascade );
 		}
 
-		Float Shadow::computeSpot( shader::Light light
-			, Surface surface
+		Float Shadow::computeSpot( shader::Light const & light
+			, Surface const & surface
 			, Mat4 const & lightMatrix
 			, Vec3 const & lightDirection )const
 		{
@@ -285,8 +285,8 @@ namespace castor3d
 				, lightDirection );
 		}
 
-		Float Shadow::computePoint( shader::Light light
-			, Surface surface
+		Float Shadow::computePoint( shader::Light const & light
+			, Surface const & surface
 			, Vec3 const & lightDirection )const
 		{
 			return m_computePoint( light
@@ -294,8 +294,8 @@ namespace castor3d
 				, lightDirection );
 		}
 
-		void Shadow::computeVolumetric( shader::Light light
-			, Surface surface
+		void Shadow::computeVolumetric( shader::Light const & light
+			, Surface const & surface
 			, Vec3 const & eyePosition
 			, Mat4 const & lightMatrix
 			, Vec3 const & lightDirection
@@ -322,7 +322,7 @@ namespace castor3d
 
 		void Shadow::doDeclareGetRandom()
 		{
-			m_getRandom = m_writer.implementFunction< Float >( "getRandom"
+			m_getRandom = m_writer.implementFunction< Float >( "c3d_getRandom"
 				, [this]( Vec4 const & seed )
 				{
 					auto p = m_writer.declLocale( "p"
@@ -334,7 +334,7 @@ namespace castor3d
 
 		void Shadow::doDeclareGetShadowOffset()
 		{
-			m_getShadowOffset = m_writer.implementFunction< Float >( "getShadowOffset"
+			m_getShadowOffset = m_writer.implementFunction< Float >( "c3d_getShadowOffset"
 				, [this]( Vec3 const & normal
 					, Vec3 const & lightDirection
 					, Float const & minOffset
@@ -354,7 +354,7 @@ namespace castor3d
 
 		void Shadow::doDeclareChebyshevUpperBound()
 		{
-			m_chebyshevUpperBound = m_writer.implementFunction< Float >( "chebyshevUpperBound"
+			m_chebyshevUpperBound = m_writer.implementFunction< Float >( "c3d_chebyshevUpperBound"
 				, [this]( Vec2 const & moments
 					, Float const & depth
 					, Float const & minVariance
@@ -382,7 +382,7 @@ namespace castor3d
 
 		void Shadow::doDeclareTextureProj()
 		{
-			m_textureProj = m_writer.implementFunction< Float >( "textureProj"
+			m_textureProj = m_writer.implementFunction< Float >( "c3d_textureProj"
 				, [this]( Vec4 const & lightSpacePosition
 					, Vec2 const & offset
 					, SampledImage2DArrayRgba32 const & shadowMap
@@ -420,7 +420,7 @@ namespace castor3d
 
 		void Shadow::doDeclareFilterPCF()
 		{
-			m_filterPCF = m_writer.implementFunction< Float >( "filterPCF"
+			m_filterPCF = m_writer.implementFunction< Float >( "c3d_filterPCF"
 				, [this]( Vec4 const & lightSpacePosition
 					, SampledImage2DArrayRgba32 const & shadowMap
 					, Int const & index
@@ -463,7 +463,7 @@ namespace castor3d
 
 		void Shadow::doDeclareTextureProjNoCascade()
 		{
-			m_textureProjNoCascade = m_writer.implementFunction< Float >( "textureProjCascade"
+			m_textureProjNoCascade = m_writer.implementFunction< Float >( "c3d_textureProjCascade"
 				, [this]( Vec4 const & lightSpacePosition
 					, Vec2 const & offset
 					, SampledImage2DRgba32 const & shadowMap
@@ -499,7 +499,7 @@ namespace castor3d
 
 		void Shadow::doDeclareFilterPCFNoCascade()
 		{
-			m_filterPCFNoCascade = m_writer.implementFunction< Float >( "filterPCFCascade"
+			m_filterPCFNoCascade = m_writer.implementFunction< Float >( "c3d_filterPCFCascade"
 				, [this]( Vec4 const & lightSpacePosition
 					, SampledImage2DRgba32 const & shadowMap
 					, Vec2 const & invTexDim
@@ -540,7 +540,7 @@ namespace castor3d
 		void Shadow::doDeclareTextureProjCascade()
 		{
 #if C3D_UseTiledDirectionalShadowMap
-			m_textureProjTile = m_writer.implementFunction< Float >( "textureProjCascade"
+			m_textureProjTile = m_writer.implementFunction< Float >( "c3d_textureProjCascade"
 				, [this]( Vec4 const & lightSpacePosition
 					, Vec2 const & offset
 					, SampledImage2DRgba32 const & shadowMap
@@ -575,7 +575,7 @@ namespace castor3d
 				, InUInt{ m_writer, "cascadeIndex" }
 				, InFloat{ m_writer, "bias" } );
 #else
-			m_textureProjCascade = m_writer.implementFunction< Float >( "textureProjCascade"
+			m_textureProjCascade = m_writer.implementFunction< Float >( "c3d_textureProjCascade"
 				, [this]( Vec4 const & lightSpacePosition
 					, Vec2 const & offset
 					, SampledImage2DArrayRgba32 const & shadowMap
@@ -615,7 +615,7 @@ namespace castor3d
 		void Shadow::doDeclareFilterPCFCascade()
 		{
 #if C3D_UseTiledDirectionalShadowMap
-			m_filterPCFTile = m_writer.implementFunction< Float >( "filterPCFCascade"
+			m_filterPCFTile = m_writer.implementFunction< Float >( "c3d_filterPCFCascade"
 				, [this]( Vec4 const & lightSpacePosition
 					, SampledImage2DRgba32 const & shadowMap
 					, Vec2 const & invTexDim
@@ -655,7 +655,7 @@ namespace castor3d
 				, InUInt{ m_writer, "cascadeIndex" }
 				, InFloat{ m_writer, "bias" } );
 #else
-			m_filterPCFCascade = m_writer.implementFunction< Float >( "filterPCFCascade"
+			m_filterPCFCascade = m_writer.implementFunction< Float >( "c3d_filterPCFCascade"
 				, [this]( Vec4 const & lightSpacePosition
 					, SampledImage2DArrayRgba32 const & shadowMap
 					, Vec2 const & invTexDim
@@ -699,7 +699,7 @@ namespace castor3d
 
 		void Shadow::doDeclareGetLightSpacePosition()
 		{
-			m_getLightSpacePosition = m_writer.implementFunction< Vec4 >( "getLightSpacePosition"
+			m_getLightSpacePosition = m_writer.implementFunction< Vec4 >( "c3d_getLightSpacePosition"
 				, [this]( Mat4 const & lightMatrix
 					, Vec3 const & worldSpacePosition )
 				{
@@ -715,7 +715,7 @@ namespace castor3d
 
 		void Shadow::doDeclareComputeDirectionalShadow()
 		{
-			m_computeDirectional = m_writer.implementFunction< Float >( "computeDirectionalShadow"
+			m_computeDirectional = m_writer.implementFunction< Float >( "c3d_computeDirectionalShadow"
 				, [this]( shader::Light const & light
 					, Surface const & surface
 					, Mat4 const & lightMatrix
@@ -871,7 +871,7 @@ namespace castor3d
 
 		void Shadow::doDeclareComputeSpotShadow()
 		{
-			m_computeSpot = m_writer.implementFunction< Float >( "computeSpotShadow"
+			m_computeSpot = m_writer.implementFunction< Float >( "c3d_computeSpotShadow"
 				, [this]( shader::Light const & light
 					, Surface const & surface
 					, Mat4 const & lightMatrix
@@ -954,7 +954,7 @@ namespace castor3d
 
 		void Shadow::doDeclareComputePointShadow()
 		{
-			m_computePoint = m_writer.implementFunction< Float >( "computePointShadow"
+			m_computePoint = m_writer.implementFunction< Float >( "c3d_computePointShadow"
 				, [this]( shader::Light const & light
 					, Surface const & surface
 					, Vec3 const & lightPosition )
@@ -1097,7 +1097,7 @@ namespace castor3d
 		void Shadow::doDeclareVolumetric()
 		{
 			OutputComponents output{ m_writer };
-			m_computeVolumetric = m_writer.implementFunction< sdw::Void >( "computeVolumetric"
+			m_computeVolumetric = m_writer.implementFunction< sdw::Void >( "c3d_computeVolumetric"
 				, [this]( shader::Light const & light
 					, Surface surface
 					, Vec3 const & eyePosition

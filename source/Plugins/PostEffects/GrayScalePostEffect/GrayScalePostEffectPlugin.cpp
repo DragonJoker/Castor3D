@@ -20,6 +20,12 @@
 
 extern "C"
 {
+	C3D_GrayScale_API void getRequiredVersion( castor3d::Version * p_version );
+	C3D_GrayScale_API void getType( castor3d::PluginType * p_type );
+	C3D_GrayScale_API void getName( char const ** p_name );
+	C3D_GrayScale_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin );
+	C3D_GrayScale_API void OnUnload( castor3d::Engine * engine );
+
 	C3D_GrayScale_API void getRequiredVersion( castor3d::Version * p_version )
 	{
 		*p_version = castor3d::Version();

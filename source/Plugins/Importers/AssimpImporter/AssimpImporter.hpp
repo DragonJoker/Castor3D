@@ -30,9 +30,12 @@ See LICENSE file in root folder
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
 
+#pragma warning( push )
+#pragma warning( disable: 4365 )
 #include <assimp/Importer.hpp> // C++ importer interface
 #include <assimp/scene.h> // Output data structure
 #include <assimp/postprocess.h> // Post processing flags
+#pragma warning( pop )
 
 namespace C3dAssimp
 {
@@ -51,7 +54,6 @@ namespace C3dAssimp
 	{
 	public:
 		explicit AssimpImporter( castor3d::Engine & engine );
-		~AssimpImporter();
 
 		static castor3d::MeshImporterUPtr create( castor3d::Engine & engine );
 

@@ -15,7 +15,7 @@ namespace castor
 				return 1.0;
 			}
 
-			return sin( Pi< float > *fX ) / ( Pi< float > *fX );
+			return float( sin( Pi< float > *fX ) / ( Pi< float > *fX ) );
 		}
 
 		inline float weight( float fN, float fDistance )
@@ -49,31 +49,29 @@ namespace castor
 			using MyPixelComponentsT = PixelComponentsT< PFT >;
 			using MyTypeT = typename MyPixelComponentsT::Type;
 			using MyLargerTypeT = LargerTypeT< MyTypeT >;
-			static size_t constexpr pixelSize = getBytesPerPixel( PFT );
 			static float constexpr coeffN = 5.0f;
 
 			float sampleCount = 0;
 			std::array< MyLargerTypeT, 4u > totalBlock{};
-			int32_t radius = coeffN;
+			auto radius = int32_t( coeffN );
 
 			for ( int32_t j = -radius + 1; j <= radius; j++ )
 			{
 				for ( int32_t i = -radius + 1; i <= radius; i++ )
 				{
-					int32_t curX = int32_t( x + i );
-					int32_t curY = int32_t( y + j );
+					auto curX = int32_t( x + i );
+					auto curY = int32_t( y + j );
 
 					if ( curX >= 0
 						&& curY >= 0
-						&& curX <= width - 1
-						&& curY <= height - 1 )
+						&& uint32_t( curX ) <= width - 1
+						&& uint32_t( curY ) <= height - 1 )
 					{
 						auto * srcPixel = getPixel< PFT >( srcBuffer, curX, curY, width, height );
-						float deltaX = float( x - curX );
-						float deltaY = float( y - curY );
-						float distance = sqrtf( deltaX * deltaX + deltaY * deltaY );
-						float curWeight = lanczos::weight( coeffN, fabs( deltaX ) )
-							* lanczos::weight( coeffN, fabs( deltaY ) );
+						auto deltaX = float( x - curX );
+						auto deltaY = float( y - curY );
+						auto curWeight = lanczos::weight( coeffN, float( fabs( deltaX ) ) )
+							* lanczos::weight( coeffN, float( fabs( deltaY ) ) );
 
 						totalBlock[0] += MyLargerTypeT( curWeight * MyPixelComponentsT::R( srcPixel ) );
 
@@ -97,7 +95,7 @@ namespace castor
 				}
 			}
 
-			float scaleFactor = 1.0 / sampleCount;
+			auto scaleFactor = float( 1.0 / sampleCount );
 
 			MyPixelComponentsT::R( dstPixel
 				, MyTypeT( scaleFactor * totalBlock[0] ) );

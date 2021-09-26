@@ -7,7 +7,12 @@ See LICENSE file in root folder
 #include <Castor3D/Castor3DPrerequisites.hpp>
 #include <SceneExporter/SceneExporter.hpp>
 #include <ashespp/Core/WindowHandle.hpp>
+
+#pragma warning( push )
+#pragma warning( disable: 4365 )
+#pragma warning( disable: 4371 )
 #include <wx/wx.h>
+#pragma warning( pop )
 
 namespace GuiCommon
 {

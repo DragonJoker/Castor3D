@@ -48,10 +48,6 @@ namespace CastorGui
 			, uint32_t p_style = 0
 			, bool p_visible = true );
 
-		/** Destructor
-		*/
-		virtual ~ButtonCtrl();
-
 		/** sets the text material.
 		 *\param[in]	p_material	The new value.
 		 */

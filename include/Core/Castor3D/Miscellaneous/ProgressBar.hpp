@@ -53,7 +53,6 @@ namespace castor3d
 		}
 
 	private:
-		Engine & m_engine;
 		FrameListenerRes m_listener;
 		castor::RangedValue< uint32_t > m_index;
 		castor::String m_title;

@@ -11,7 +11,6 @@ namespace Testing
 	{
 	public:
 		CastorUtilsChangeTrackedTest();
-		virtual ~CastorUtilsChangeTrackedTest();
 
 	private:
 		void doRegisterTests()override;

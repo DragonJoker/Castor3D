@@ -19,7 +19,6 @@ namespace GuiCommon
 	public:
 
 		QuaternionProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, castor::Quaternion const & value = castor::Quaternion() );
-		virtual ~QuaternionProperty();
 
 		wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue )const override;
 		void RefreshChildren()override;

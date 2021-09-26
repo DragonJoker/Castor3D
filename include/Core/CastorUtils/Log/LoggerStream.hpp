@@ -22,10 +22,6 @@ namespace castor
 		{
 		}
 
-		~LoggerStreamT()
-		{
-		}
-
 		void set( LoggerInstance & logger )
 		{
 			m_streambuf.reset();

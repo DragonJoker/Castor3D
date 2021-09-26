@@ -43,7 +43,6 @@ namespace castortd
 
 	RenderPanel::RenderPanel( wxWindow * parent, wxSize const & size, Game & game )
 		: wxPanel{ parent, wxID_ANY, wxDefaultPosition, size }
-		, m_game{ game }
 		, m_timers
 		{
 			new wxTimer( this, int( TimerID::eUp ) ),
@@ -52,6 +51,7 @@ namespace castortd
 			new wxTimer( this, int( TimerID::eRight ) ),
 			new wxTimer( this, int( TimerID::eMouse ) ),
 		}
+		, m_game{ game }
 	{
 		auto & engine = *wxGetApp().getCastor();
 		castor::Size sizeWnd = GuiCommon::makeSize( GetClientSize() );
@@ -83,7 +83,7 @@ namespace castortd
 			castor::Size sizeWnd = GuiCommon::makeSize( GetClientSize() );
 			castor::Size sizeScreen;
 			castor::System::getScreenSize( 0, sizeScreen );
-			GetParent()->SetClientSize( sizeWnd.getWidth(), sizeWnd.getHeight() );
+			GetParent()->SetClientSize( int( sizeWnd.getWidth() ), int( sizeWnd.getHeight() ) );
 			sizeWnd = GuiCommon::makeSize( GetParent()->GetClientSize() );
 			GetParent()->SetPosition( wxPoint( std::abs( int( sizeScreen.getWidth() ) - int( sizeWnd.getWidth() ) ) / 2
 				, std::abs( int( sizeScreen.getHeight() ) - int( sizeWnd.getHeight() ) ) / 2 ) );
@@ -113,28 +113,28 @@ namespace castortd
 	float RenderPanel::doTransformX( int x )
 	{
 		float result = float( x );
-		result *= float( m_renderWindow->getCamera()->getWidth() ) / GetClientSize().x;
+		result *= float( m_renderWindow->getCamera()->getWidth() ) / float( GetClientSize().x );
 		return result;
 	}
 
 	float RenderPanel::doTransformY( int y )
 	{
 		float result = float( y );
-		result *= float( m_renderWindow->getCamera()->getHeight() ) / GetClientSize().y;
+		result *= float( m_renderWindow->getCamera()->getHeight() ) / float( GetClientSize().y );
 		return result;
 	}
 
 	int RenderPanel::doTransformX( float x )
 	{
 		int result = int( x );
-		result = int( x * GetClientSize().x / float( m_renderWindow->getCamera()->getWidth() ) );
+		result = int( x * float( GetClientSize().x ) / float( m_renderWindow->getCamera()->getWidth() ) );
 		return result;
 	}
 
 	int RenderPanel::doTransformY( float y )
 	{
 		int result = int( y );
-		result = int( y * GetClientSize().y / float( m_renderWindow->getCamera()->getHeight() ) );
+		result = int( y * float( GetClientSize().y ) / float( m_renderWindow->getCamera()->getHeight() ) );
 		return result;
 	}
 
@@ -259,6 +259,8 @@ namespace castortd
 		}
 	}
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 	BEGIN_EVENT_TABLE( RenderPanel, wxPanel )
 		EVT_SIZE( RenderPanel::OnSize )
 		EVT_MOVE( RenderPanel::OnMove )
@@ -281,10 +283,12 @@ namespace castortd
 		EVT_MENU( int( MenuID::eUpgradeRange ), RenderPanel::OnUpgradeTowerRange )
 		EVT_MENU( int( MenuID::eUpgradeDamage ), RenderPanel::OnUpgradeTowerDamage )
 	END_EVENT_TABLE()
+#pragma GCC diagnostic pop
 
 	void RenderPanel::OnSize( wxSizeEvent & p_event )
 	{
-		m_renderWindow->resize( p_event.GetSize().x, p_event.GetSize().y );
+		m_renderWindow->resize( uint32_t( p_event.GetSize().x )
+			, uint32_t( p_event.GetSize().y ) );
 		p_event.Skip();
 	}
 

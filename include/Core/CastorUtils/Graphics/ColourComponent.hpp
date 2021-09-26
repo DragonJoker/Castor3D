@@ -50,6 +50,7 @@ namespace castor
 		 *\param[in]	rhs	La composante
 		 *\return		Référence sur cet objet
 		 */
+		ColourComponent( ColourComponent const & rhs ) = default;
 		ColourComponent & operator=( ColourComponent const & rhs )
 		{
 			*m_component = *rhs.m_component;

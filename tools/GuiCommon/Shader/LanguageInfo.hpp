@@ -27,14 +27,16 @@ namespace GuiCommon
 
 	public:
 		LanguageInfo();
-		virtual ~LanguageInfo();
 
 		void setKeywords( uint32_t index
 			, castor::StringArray const & keywords );
 
 		inline castor::String const & getKeywords( uint32_t index )const
 		{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wextra-semi-stmt"
 			CU_Require( index < 9 );
+#pragma clang diagnostic pop
 			return m_keywords[index];
 		}
 

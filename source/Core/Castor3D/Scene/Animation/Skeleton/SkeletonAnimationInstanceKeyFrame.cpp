@@ -115,14 +115,6 @@ namespace castor3d
 				, ( it != keyFrame.end()
 					? it->second
 					: Matrix4x4f{ Matrix4x4f::getIdentity() } ) );
-
-			if ( object->getObject().getType() == SkeletonAnimationObjectType::eBone )
-			{
-				auto bone = static_cast< SkeletonAnimationBone const & >( object->getObject() ).getBone();
-				auto itb = std::find( skeleton.getSkeleton().begin()
-					, skeleton.getSkeleton().end()
-					, bone );
-			}
 		}
 
 		for ( auto & submesh : skeleton.getMesh() )

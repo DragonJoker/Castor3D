@@ -11,8 +11,26 @@
 #define STBI_FAILURE_USERMSG
 #pragma warning( push )
 #pragma warning( disable: 4100 )
+#pragma warning( disable: 4365 )
 #pragma warning( disable: 5219 )
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-align"
+#pragma clang diagnostic ignored "-Wcomma"
+#pragma clang diagnostic ignored "-Wimplicit-fallthrough"
+#pragma clang diagnostic ignored "-Wdisabled-macro-expansion"
+#pragma clang diagnostic ignored "-Wold-style-cast"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Walloc-zero"
+#pragma GCC diagnostic ignored "-Wcast-qual"
+#pragma GCC diagnostic ignored "-Wconversion"
+#pragma GCC diagnostic ignored "-Wimplicit-fallthrough="
+#pragma GCC diagnostic ignored "-Wshift-negative-value"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#pragma GCC diagnostic ignored "-Wuseless-cast"
+#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 #include "stb_image.h"
+#pragma GCC diagnostic pop
+#pragma clang diagnostic pop
 #pragma warning( pop )
 
 namespace castor
@@ -21,54 +39,6 @@ namespace castor
 
 	namespace
 	{
-		bool preMultiplyWithAlpha( PxBufferBaseSPtr pixelBuffer )
-		{
-			struct Pixel
-			{
-				uint8_t r;
-				uint8_t g;
-				uint8_t b;
-				uint8_t a;
-			};
-			int width = pixelBuffer->getWidth();
-			int height = pixelBuffer->getHeight();
-			auto buffer = reinterpret_cast< Pixel * >( pixelBuffer->getPtr() );
-
-			for ( int y = 0; y < height; ++y )
-			{
-				for ( int x = 0; x < width; ++x )
-				{
-					const uint8_t alpha = buffer->a;
-
-					// slightly faster: care for two special cases
-					if ( alpha == 0x00 )
-					{
-						// special case for alpha == 0x00
-						// color * 0x00 / 0xFF = 0x00
-						buffer->r = 0x00;
-						buffer->g = 0x00;
-						buffer->b = 0x00;
-					}
-					else if ( alpha == 0xFF )
-					{
-						// nothing to do for alpha == 0xFF
-						// color * 0xFF / 0xFF = color
-						continue;
-					}
-					else
-					{
-						buffer->r = uint8_t( ( alpha * uint16_t( buffer->r ) + 127 ) / 255 );
-						buffer->g = uint8_t( ( alpha * uint16_t( buffer->g ) + 127 ) / 255 );
-						buffer->b = uint8_t( ( alpha * uint16_t( buffer->b ) + 127 ) / 255 );
-					}
-
-					++buffer;
-				}
-			}
-
-			return true;
-		}
-
 		PxBufferBaseSPtr doLoad8BitsPerChannel( uint8_t const * input
 			, uint32_t size )
 		{
@@ -78,7 +48,7 @@ namespace castor
 			int channels = 0;
 			stbi_set_flip_vertically_on_load( 1u );
 			uint8_t * data = stbi_load_from_memory( input
-				, size
+				, int( size )
 				, &width
 				, &height
 				, &channels
@@ -108,7 +78,7 @@ namespace castor
 					break;
 				}
 
-				result = PxBufferBase::create( Size( width, height )
+				result = PxBufferBase::create( Size{ uint32_t( width ), uint32_t( height ) }
 					, format
 					, data
 					, format );
@@ -131,7 +101,7 @@ namespace castor
 			int channels = 0;
 			stbi_set_flip_vertically_on_load( 1u );
 			float * data = stbi_loadf_from_memory( input
-				, size
+				, int( size )
 				, &width
 				, &height
 				, &channels
@@ -161,7 +131,7 @@ namespace castor
 					break;
 				}
 
-				result = PxBufferBase::create( Size( width, height )
+				result = PxBufferBase::create( Size{ uint32_t( width ), uint32_t( height ) }
 					, format
 					, reinterpret_cast< uint8_t * >( data )
 					, format );

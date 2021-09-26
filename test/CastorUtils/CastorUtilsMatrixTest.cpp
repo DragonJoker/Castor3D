@@ -39,10 +39,6 @@ namespace Testing
 	{
 	}
 
-	CastorUtilsMatrixTest::~CastorUtilsMatrixTest()
-	{
-	}
-
 	void CastorUtilsMatrixTest::doRegisterTests()
 	{
 		doRegisterTest( "MatrixInversion", std::bind( &CastorUtilsMatrixTest::MatrixInversion, this ) );
@@ -324,10 +320,6 @@ namespace Testing
 		m_mtx1glm[3][3] = 1.0f;
 		randomInit( m_mtx2.ptr(), &m_mtx2glm[0][0], 16 );
 #endif
-	}
-
-	CastorUtilsMatrixBench::~CastorUtilsMatrixBench()
-	{
 	}
 
 	void CastorUtilsMatrixBench::Execute()

@@ -19,15 +19,11 @@ namespace GuiCommon
 		, castor::String const & name
 		, GroupAnimation const & anim )
 		: TreeItemProperty( engine, editable )
-		, m_name( name )
 		, m_group( group )
+		, m_name( name )
 		, m_groupAnim( anim )
 	{
 		CreateTreeItemMenu();
-	}
-
-	AnimationTreeItemProperty::~AnimationTreeItemProperty()
-	{
 	}
 
 	void AnimationTreeItemProperty::doCreateProperties( wxPGEditor * editor

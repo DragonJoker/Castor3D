@@ -59,7 +59,7 @@ namespace castor
 		}
 	}
 
-	PluginSPtr ResourceCacheT< Plugin, String, PluginCacheTraits >::loadPlugin( String const & pluginName, Path const & pathFolder )throw( )
+	PluginSPtr ResourceCacheT< Plugin, String, PluginCacheTraits >::loadPlugin( String const & pluginName, Path const & pathFolder )noexcept
 	{
 		Path strFilePath{ CU_SharedLibPrefix + pluginName + cuT( "." ) + CU_SharedLibExt };
 		PluginSPtr result;
@@ -95,7 +95,7 @@ namespace castor
 		return result;
 	}
 
-	PluginSPtr ResourceCacheT< Plugin, String, PluginCacheTraits >::loadPlugin( Path const & fileFullPath )throw( )
+	PluginSPtr ResourceCacheT< Plugin, String, PluginCacheTraits >::loadPlugin( Path const & fileFullPath )noexcept
 	{
 		PluginSPtr result;
 
@@ -214,7 +214,6 @@ namespace castor
 					String strError = cuT( "Error encountered while loading plug-in [" ) + pathFile.getFileName() + cuT( "] Unknown plug-in type" );
 					CASTOR_PLUGIN_EXCEPTION( string::stringCast< char >( strError ), true );
 				}
-				break;
 			}
 
 			Version toCheck( 0, 0 );

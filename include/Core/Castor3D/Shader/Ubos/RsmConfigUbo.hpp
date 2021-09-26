@@ -25,7 +25,7 @@ namespace castor3d
 			C3D_API RsmConfigData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled );
-			C3D_API RsmConfigData & operator=( RsmConfigData const & rhs );
+			SDW_DeclStructInstance( C3D_API, RsmConfigData );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
@@ -48,6 +48,10 @@ namespace castor3d
 
 	public:
 		C3D_API explicit RsmConfigUbo( RenderDevice const & device );
+		C3D_API RsmConfigUbo( RsmConfigUbo const & rhs ) = delete;
+		C3D_API RsmConfigUbo & operator=( RsmConfigUbo const & rhs ) = delete;
+		C3D_API RsmConfigUbo( RsmConfigUbo && rhs ) = default;
+		C3D_API RsmConfigUbo & operator=( RsmConfigUbo && rhs ) = delete;
 		C3D_API ~RsmConfigUbo();
 		/**
 		 *\~english

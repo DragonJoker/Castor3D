@@ -15,7 +15,6 @@
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Buffer/BufferView.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>
-#include <ashespp/Command/CommandBufferInheritanceInfo.hpp>
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
@@ -61,6 +60,8 @@ namespace castor3d
 				, doGetColourAttachmentCount( pass ) );
 		}
 
+#if !defined( NDEBUG )
+
 		bool checkWrites( ashes::WriteDescriptorSetArray const & writes
 			, rq::BindingDescriptionArray const & bindings )
 		{
@@ -79,6 +80,8 @@ namespace castor3d
 
 			return true;
 		}
+
+#endif
 
 		ashes::VkDescriptorSetLayoutBindingArray createBindings( rq::BindingDescriptionArray const & bindings )
 		{
@@ -341,7 +344,7 @@ namespace castor3d
 			, { *m_descriptorSetLayout }, pushRanges );
 
 		// Initialise the pipeline.
-		VkViewport viewport{ float( position.x() ), float( position.y() ), float( size.width ), float( size.height ) };
+		VkViewport viewport{ float( position.x() ), float( position.y() ), float( size.width ), float( size.height ), 0.0f, 1.0f };
 		VkRect2D scissor{ position.x(), position.y(), size.width, size.height };
 		ashes::PipelineViewportStateCreateInfo vpState
 		{
@@ -383,7 +386,7 @@ namespace castor3d
 	{
 		log::debug << "Initialising passes for " << getName() << std::endl;
 		CU_Require( m_descriptorSetLayout );
-		auto descriptorSetCount = uint32_t( uint32_t( m_passes.size() ) );
+		auto descriptorSetCount = uint32_t( m_passes.size() );
 		m_descriptorSetPool = m_descriptorSetLayout->createPool( getName()
 			, descriptorSetCount );
 		m_descriptorSets.reserve( descriptorSetCount );

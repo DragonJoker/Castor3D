@@ -190,8 +190,9 @@ namespace C3dPly
 				submesh->addPoints( vertices );
 				// Parsing triangles
 				FaceSPtr pFace;
-				std::vector< FaceIndices > faces( iNbFaces );
-				FaceIndices * face = &faces[0];
+				std::vector< FaceIndices > facesIndices;
+				facesIndices.resize( size_t( iNbFaces ) );
+				FaceIndices * face = &facesIndices[0];
 
 				for ( int i = 0; i < iNbFaces; i++ )
 				{
@@ -208,7 +209,7 @@ namespace C3dPly
 					ssToken.clear( std::istringstream::goodbit );
 				}
 
-				mapping->addFaceGroup( faces.data(), face );
+				mapping->addFaceGroup( facesIndices.data(), face );
 			}
 
 			result = true;

@@ -37,13 +37,6 @@ namespace GuiCommon
 			, castor3d::Scene & scene );
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		~SceneTreeItemProperty();
-		/**
-		 *\~english
 		 *\brief		Retrieves the object
 		 *\return		The value
 		 *\~french
@@ -59,7 +52,7 @@ namespace GuiCommon
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid );
+		void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )override;
 		void doCreateVctProperties( wxPGEditor * editor
 			, wxPropertyGrid * grid );
 
@@ -69,7 +62,6 @@ namespace GuiCommon
 
 	private:
 		castor3d::Scene & m_scene;
-		wxWindow * m_parent;
 	};
 }
 

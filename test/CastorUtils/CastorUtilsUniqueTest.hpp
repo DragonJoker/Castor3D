@@ -11,7 +11,6 @@ namespace Testing
 	{
 	public:
 		CastorUtilsUniqueTest();
-		virtual ~CastorUtilsUniqueTest();
 
 	private:
 		void doRegisterTests() override;

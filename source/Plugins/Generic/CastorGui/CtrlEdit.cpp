@@ -101,10 +101,6 @@ namespace CastorGui
 		doUpdateStyle();
 	}
 
-	EditCtrl::~EditCtrl()
-	{
-	}
-
 	void EditCtrl::setFont( castor::String const & p_font )
 	{
 		TextOverlaySPtr text = m_text.lock();
@@ -314,7 +310,7 @@ namespace CastorGui
 
 	void EditCtrl::doAddCharAtCaret( String const & p_char )
 	{
-		size_t diff = std::distance( string::utf8::const_iterator( m_caption.begin() ), m_caretIt );
+		size_t diff = size_t( std::distance( string::utf8::const_iterator( m_caption.begin() ), m_caretIt ) );
 		m_caption = String( m_caption.cbegin(), m_caretIt.internal() ) + p_char + String( m_caretIt.internal(), m_caption.cend() );
 		m_caretIt = string::utf8::const_iterator( m_caption.begin() ) + diff + 1;
 		doUpdateCaption();
@@ -324,7 +320,7 @@ namespace CastorGui
 	{
 		if ( m_caretIt != m_caption.end() )
 		{
-			size_t diff = std::distance( string::utf8::const_iterator( m_caption.begin() ), m_caretIt );
+			size_t diff = size_t( std::distance( string::utf8::const_iterator( m_caption.begin() ), m_caretIt ) );
 			String caption( m_caption.cbegin(), m_caretIt.internal() );
 			string::utf8::const_iterator it = m_caretIt;
 
@@ -344,7 +340,7 @@ namespace CastorGui
 		if ( m_caretIt != m_caption.begin() )
 		{
 			--m_caretIt;
-			size_t diff = std::distance( string::utf8::const_iterator( m_caption.begin() ), m_caretIt );
+			size_t diff = size_t( std::distance( string::utf8::const_iterator( m_caption.begin() ), m_caretIt ) );
 			String caption( m_caption.cbegin(), m_caretIt.internal() );
 			string::utf8::const_iterator it = m_caretIt;
 

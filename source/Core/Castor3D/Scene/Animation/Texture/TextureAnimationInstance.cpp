@@ -20,10 +20,6 @@ namespace castor3d
 	{
 	}
 
-	TextureAnimationInstance::~TextureAnimationInstance()
-	{
-	}
-
 	void TextureAnimationInstance::doUpdate()
 	{
 		m_animatedTexture.getTexture().setAnimationTransform( m_textureAnimation.getTranslate( m_currentTime )

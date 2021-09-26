@@ -6,7 +6,10 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/RenderLoop.hpp"
 
+#pragma warning( push )
+#pragma warning( disable:4365 )
 #include <atomic>
+#pragma warning( pop )
 
 namespace castor3d
 {
@@ -32,7 +35,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~RenderLoopAsync();
+		C3D_API ~RenderLoopAsync()override;
 		/**
 		 *\~english
 		 *\brief		Retrieves the render start status.

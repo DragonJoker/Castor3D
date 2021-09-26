@@ -38,7 +38,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~ImporterPlugin();
+		C3D_API ~ImporterPlugin()override;
 		/**
 		 *\~english
 		 *\brief		Retrieves the supported file extensions array

@@ -20,46 +20,49 @@ namespace toon::shader
 
 	namespace phong
 	{
-		void modifyMaterial( sdw::ShaderWriter & writer
-			, castor::String const & configName
-			, castor3d::PassFlags const & passFlags
-			, castor3d::TextureFlags const & flags
-			, sdw::Vec4 const & sampled
-			, sdw::Float const & gamma
-			, c3d::TextureConfigData const & config
-			, bool & hasEmissive
-			, ToonPhongLightMaterial & phongLightMat )
+		namespace
 		{
-			if ( checkFlag( flags, castor3d::TextureFlag::eDiffuse ) )
+			void modifyMaterial( sdw::ShaderWriter & writer
+				, castor::String const & configName
+				, castor3d::PassFlags const & passFlags
+				, castor3d::TextureFlags const & flags
+				, sdw::Vec4 const & sampled
+				, sdw::Float const & gamma
+				, c3d::TextureConfigData const & config
+				, bool & hasEmissive
+				, ToonPhongLightMaterial & phongLightMat )
 			{
-				phongLightMat.albedo = config.getDiffuse( writer, sampled, phongLightMat.albedo, gamma );
+				if ( checkFlag( flags, castor3d::TextureFlag::eDiffuse ) )
+				{
+					phongLightMat.albedo = config.getDiffuse( writer, sampled, phongLightMat.albedo, gamma );
+				}
+
+				if ( checkFlag( flags, castor3d::TextureFlag::eSpecular ) )
+				{
+					phongLightMat.specular = config.getSpecular( writer, sampled, phongLightMat.specular );
+				}
+
+				if ( checkFlag( flags, castor3d::TextureFlag::eShininess ) )
+				{
+					phongLightMat.shininess = config.getShininess( writer, sampled, phongLightMat.shininess );
+				}
+
+				if ( checkFlag( flags, castor3d::TextureFlag::eEmissive ) )
+				{
+					hasEmissive = true;
+				}
 			}
 
-			if ( checkFlag( flags, castor3d::TextureFlag::eSpecular ) )
+			void updateMaterial( castor3d::PassFlags const & passFlags
+				, bool hasEmissive
+				, ToonPhongLightMaterial & phongLightMat
+				, sdw::Vec3 & emissive )
 			{
-				phongLightMat.specular = config.getSpecular( writer, sampled, phongLightMat.specular );
-			}
-
-			if ( checkFlag( flags, castor3d::TextureFlag::eShininess ) )
-			{
-				phongLightMat.shininess = config.getShininess( writer, sampled, phongLightMat.shininess );
-			}
-
-			if ( checkFlag( flags, castor3d::TextureFlag::eEmissive ) )
-			{
-				hasEmissive = true;
-			}
-		}
-
-		void updateMaterial( castor3d::PassFlags const & passFlags
-			, bool hasEmissive
-			, ToonPhongLightMaterial & phongLightMat
-			, sdw::Vec3 & emissive )
-		{
-			if ( checkFlag( passFlags, castor3d::PassFlag::eLighting )
-				&& !hasEmissive )
-			{
-				emissive *= phongLightMat.albedo;
+				if ( checkFlag( passFlags, castor3d::PassFlag::eLighting )
+					&& !hasEmissive )
+				{
+					emissive *= phongLightMat.albedo;
+				}
 			}
 		}
 	}
@@ -380,7 +383,7 @@ namespace toon::shader
 
 	void ToonPhongLightingModel::doDeclareComputeTiledDirectionalLight()
 	{
-		c3d::OutputComponents output{ m_writer };
+		c3d::OutputComponents outputs{ m_writer };
 		m_computeTiledDirectional = m_writer.implementFunction< sdw::Void >( m_prefix + "computeDirectionalLight"
 			, [this]( c3d::TiledDirectionalLight const & light
 				, ToonPhongLightMaterial const & material
@@ -508,12 +511,12 @@ namespace toon::shader
 			, c3d::InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
 			, sdw::InInt( m_writer, "receivesShadows" )
-			, output );
+			, outputs );
 	}
 
 	void ToonPhongLightingModel::doDeclareComputeDirectionalLight()
 	{
-		c3d::OutputComponents output{ m_writer };
+		c3d::OutputComponents outputs{ m_writer };
 		m_computeDirectional = m_writer.implementFunction< sdw::Void >( m_prefix + "computeDirectionalLight"
 			, [this]( c3d::DirectionalLight const & light
 				, ToonPhongLightMaterial const & material
@@ -641,12 +644,12 @@ namespace toon::shader
 			, c3d::InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
 			, sdw::InInt( m_writer, "receivesShadows" )
-			, output );
+			, outputs );
 	}
 
 	void ToonPhongLightingModel::doDeclareComputePointLight()
 	{
-		c3d::OutputComponents output{ m_writer };
+		c3d::OutputComponents outputs{ m_writer };
 		m_computePoint = m_writer.implementFunction< sdw::Void >( m_prefix + "computePointLight"
 			, [this]( c3d::PointLight const & light
 				, ToonPhongLightMaterial const & material
@@ -733,12 +736,12 @@ namespace toon::shader
 			, c3d::InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
 			, sdw::InInt( m_writer, "receivesShadows" )
-			, output );
+			, outputs );
 	}
 
 	void ToonPhongLightingModel::doDeclareComputeSpotLight()
 	{
-		c3d::OutputComponents output{ m_writer };
+		c3d::OutputComponents outputs{ m_writer };
 		m_computeSpot = m_writer.implementFunction< sdw::Void >( m_prefix + "computeSpotLight"
 			, [this]( c3d::SpotLight const & light
 				, ToonPhongLightMaterial const & material
@@ -831,12 +834,12 @@ namespace toon::shader
 			, c3d::InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
 			, sdw::InInt( m_writer, "receivesShadows" )
-			, output );
+			, outputs );
 	}
 
 	void ToonPhongLightingModel::doDeclareComputeLight()
 	{
-		c3d::OutputComponents output{ m_writer };
+		c3d::OutputComponents outputs{ m_writer };
 		m_computeLight = m_writer.implementFunction< sdw::Void >( m_prefix + "doComputeLight"
 			, [this]( c3d::Light const & light
 				, ToonPhongLightMaterial const & material
@@ -886,7 +889,7 @@ namespace toon::shader
 			, c3d::InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
 			, sdw::InVec3( m_writer, "lightDirection" )
-			, output );
+			, outputs );
 	}
 
 	void ToonPhongLightingModel::doComputeLight( c3d::Light const & light
@@ -1280,89 +1283,92 @@ namespace toon::shader
 
 	namespace pbr
 	{
-		struct MaterialTextureMods
+		namespace
 		{
-			bool hasAlbedo;
-			bool hasMetalness;
-			bool hasSpecular;
-			bool hasEmissive;
-		};
-
-		void modifyMaterial( sdw::ShaderWriter & writer
-			, castor::String const & configName
-			, castor3d::PassFlags const & passFlags
-			, castor3d::TextureFlags const & flags
-			, sdw::Vec4 const & sampled
-			, sdw::Float const & gamma
-			, c3d::TextureConfigData const & config
-			, MaterialTextureMods & mods
-			, ToonPbrLightMaterial & pbrLightMat )
-		{
-			if ( checkFlag( flags, castor3d::TextureFlag::eAlbedo ) )
+			struct MaterialTextureMods
 			{
-				pbrLightMat.albedo = config.getAlbedo( writer, sampled, pbrLightMat.albedo, gamma );
-				mods.hasAlbedo = true;
-			}
+				bool hasAlbedo;
+				bool hasMetalness;
+				bool hasSpecular;
+				bool hasEmissive;
+			};
 
-			if ( checkFlag( flags, castor3d::TextureFlag::eSpecular ) )
+			void modifyMaterial( sdw::ShaderWriter & writer
+				, castor::String const & configName
+				, castor3d::PassFlags const & passFlags
+				, castor3d::TextureFlags const & flags
+				, sdw::Vec4 const & sampled
+				, sdw::Float const & gamma
+				, c3d::TextureConfigData const & config
+				, MaterialTextureMods & mods
+				, ToonPbrLightMaterial & pbrLightMat )
 			{
-				pbrLightMat.specular = config.getSpecular( writer, sampled, pbrLightMat.specular );
-				mods.hasSpecular = true;
-			}
-
-			if ( checkFlag( flags, castor3d::TextureFlag::eGlossiness ) )
-			{
-				auto gloss = writer.declLocale( "gloss" + configName
-					, c3d::LightMaterial::computeRoughness( pbrLightMat.roughness ) );
-				gloss = config.getGlossiness( writer
-					, sampled
-					, gloss );
-				pbrLightMat.roughness = c3d::LightMaterial::computeRoughness( gloss );
-			}
-
-			if ( checkFlag( flags, castor3d::TextureFlag::eMetalness ) )
-			{
-				pbrLightMat.metalness = config.getMetalness( writer, sampled, pbrLightMat.metalness );
-				mods.hasMetalness = true;
-			}
-
-			if ( checkFlag( flags, castor3d::TextureFlag::eRoughness ) )
-			{
-				pbrLightMat.roughness = config.getRoughness( writer
-					, sampled
-					, pbrLightMat.roughness );
-			}
-
-			if ( checkFlag( flags, castor3d::TextureFlag::eEmissive ) )
-			{
-				mods.hasEmissive = true;
-			}
-		}
-
-		void updateMaterial( castor3d::PassFlags const & passFlags
-			, MaterialTextureMods const & mods
-			, ToonPbrLightMaterial & pbrLightMat
-			, sdw::Vec3 & emissive )
-		{
-			if ( pbrLightMat.isSpecularGlossiness() )
-			{
-				if ( !mods.hasMetalness && ( mods.hasSpecular || mods.hasAlbedo ) )
+				if ( checkFlag( flags, castor3d::TextureFlag::eAlbedo ) )
 				{
-					pbrLightMat.metalness = c3d::LightMaterial::computeMetalness( pbrLightMat.albedo, pbrLightMat.specular );
+					pbrLightMat.albedo = config.getAlbedo( writer, sampled, pbrLightMat.albedo, gamma );
+					mods.hasAlbedo = true;
 				}
-			}
-			else
-			{
-				if ( !mods.hasSpecular && ( mods.hasMetalness || mods.hasAlbedo ) )
+
+				if ( checkFlag( flags, castor3d::TextureFlag::eSpecular ) )
 				{
-					pbrLightMat.specular = c3d::LightMaterial::computeF0( pbrLightMat.albedo, pbrLightMat.metalness );
+					pbrLightMat.specular = config.getSpecular( writer, sampled, pbrLightMat.specular );
+					mods.hasSpecular = true;
+				}
+
+				if ( checkFlag( flags, castor3d::TextureFlag::eGlossiness ) )
+				{
+					auto gloss = writer.declLocale( "gloss" + configName
+						, c3d::LightMaterial::computeRoughness( pbrLightMat.roughness ) );
+					gloss = config.getGlossiness( writer
+						, sampled
+						, gloss );
+					pbrLightMat.roughness = c3d::LightMaterial::computeRoughness( gloss );
+				}
+
+				if ( checkFlag( flags, castor3d::TextureFlag::eMetalness ) )
+				{
+					pbrLightMat.metalness = config.getMetalness( writer, sampled, pbrLightMat.metalness );
+					mods.hasMetalness = true;
+				}
+
+				if ( checkFlag( flags, castor3d::TextureFlag::eRoughness ) )
+				{
+					pbrLightMat.roughness = config.getRoughness( writer
+						, sampled
+						, pbrLightMat.roughness );
+				}
+
+				if ( checkFlag( flags, castor3d::TextureFlag::eEmissive ) )
+				{
+					mods.hasEmissive = true;
 				}
 			}
 
-			if ( checkFlag( passFlags, castor3d::PassFlag::eLighting )
-				&& !mods.hasEmissive )
+			void updateMaterial( castor3d::PassFlags const & passFlags
+				, MaterialTextureMods const & mods
+				, ToonPbrLightMaterial & pbrLightMat
+				, sdw::Vec3 & emissive )
 			{
-				emissive *= pbrLightMat.albedo;
+				if ( pbrLightMat.isSpecularGlossiness() )
+				{
+					if ( !mods.hasMetalness && ( mods.hasSpecular || mods.hasAlbedo ) )
+					{
+						pbrLightMat.metalness = c3d::LightMaterial::computeMetalness( pbrLightMat.albedo, pbrLightMat.specular );
+					}
+				}
+				else
+				{
+					if ( !mods.hasSpecular && ( mods.hasMetalness || mods.hasAlbedo ) )
+					{
+						pbrLightMat.specular = c3d::LightMaterial::computeF0( pbrLightMat.albedo, pbrLightMat.metalness );
+					}
+				}
+
+				if ( checkFlag( passFlags, castor3d::PassFlag::eLighting )
+					&& !mods.hasEmissive )
+				{
+					emissive *= pbrLightMat.albedo;
+				}
 			}
 		}
 	}
@@ -1657,7 +1663,7 @@ namespace toon::shader
 
 	void ToonPbrLightingModel::doDeclareComputeTiledDirectionalLight()
 	{
-		c3d::OutputComponents output{ m_writer };
+		c3d::OutputComponents outputs{ m_writer };
 		m_computeTiledDirectional = m_writer.implementFunction< sdw::Void >( m_prefix + "computeDirectionalLight"
 			, [this]( c3d::TiledDirectionalLight const & light
 				, ToonPbrLightMaterial const & material
@@ -1823,12 +1829,12 @@ namespace toon::shader
 			, c3d::InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
 			, sdw::InInt( m_writer, "receivesShadows" )
-			, output );
+			, outputs );
 	}
 
 	void ToonPbrLightingModel::doDeclareComputeDirectionalLight()
 	{
-		c3d::OutputComponents output{ m_writer };
+		c3d::OutputComponents outputs{ m_writer };
 		m_computeDirectional = m_writer.implementFunction< sdw::Void >( m_prefix + "computeDirectionalLight"
 			, [this]( c3d::DirectionalLight const & light
 				, ToonPbrLightMaterial const & material
@@ -1994,12 +2000,12 @@ namespace toon::shader
 			, c3d::InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
 			, sdw::InInt( m_writer, "receivesShadows" )
-			, output );
+			, outputs );
 	}
 
 	void ToonPbrLightingModel::doDeclareComputePointLight()
 	{
-		c3d::OutputComponents output{ m_writer };
+		c3d::OutputComponents outputs{ m_writer };
 		m_computePoint = m_writer.implementFunction< sdw::Void >( m_prefix + "computePointLight"
 			, [this]( c3d::PointLight const & light
 				, ToonPbrLightMaterial const & material
@@ -2095,12 +2101,12 @@ namespace toon::shader
 			, c3d::InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
 			, sdw::InInt( m_writer, "receivesShadows" )
-			, output );
+			, outputs );
 	}
 
 	void ToonPbrLightingModel::doDeclareComputeSpotLight()
 	{
-		c3d::OutputComponents output{ m_writer };
+		c3d::OutputComponents outputs{ m_writer };
 		m_computeSpot = m_writer.implementFunction< sdw::Void >( m_prefix + "computeSpotLight"
 			, [this]( c3d::SpotLight const & light
 				, ToonPbrLightMaterial const & material
@@ -2197,7 +2203,7 @@ namespace toon::shader
 			, c3d::InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
 			, sdw::InInt( m_writer, "receivesShadows" )
-			, output );
+			, outputs );
 	}
 
 	void ToonPbrLightingModel::doDeclareDiffuseModel()

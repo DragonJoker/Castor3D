@@ -160,10 +160,6 @@ namespace castor3d
 	{
 	}
 
-	ComputeDepthRange::~ComputeDepthRange()
-	{
-	}
-
 	void ComputeDepthRange::accept( RenderTechniqueVisitor & visitor )
 	{
 		visitor.visit( m_shader );

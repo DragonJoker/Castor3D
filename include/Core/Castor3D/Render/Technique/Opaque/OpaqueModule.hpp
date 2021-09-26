@@ -36,12 +36,12 @@ namespace castor3d
 		eData5, // RG => Velocity, B => , A => AO
 		CU_ScopedEnumBounds( eData0 ),
 	};
-	castor::String getTextureName( DsTexture texture );
-	castor::String getName( DsTexture texture );
-	VkFormat getFormat( DsTexture texture );
-	VkClearValue getClearValue( DsTexture texture );
-	VkImageUsageFlags getUsageFlags( DsTexture texture );
-	VkBorderColor getBorderColor( DsTexture texture );
+	C3D_API castor::String getTextureName( DsTexture texture );
+	C3D_API castor::String getName( DsTexture texture );
+	C3D_API VkFormat getFormat( DsTexture texture );
+	C3D_API VkClearValue getClearValue( DsTexture texture );
+	C3D_API VkImageUsageFlags getUsageFlags( DsTexture texture );
+	C3D_API VkBorderColor getBorderColor( DsTexture texture );
 	inline uint32_t getMipLevels( DsTexture texture, castor::Size const & size )
 	{
 		return 1u;

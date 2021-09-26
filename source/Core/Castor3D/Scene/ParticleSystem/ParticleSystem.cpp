@@ -16,6 +16,8 @@
 
 #include <ashespp/Core/Device.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, ParticleSystem )
+
 using namespace castor;
 
 namespace castor3d
@@ -101,11 +103,6 @@ namespace castor3d
 			}
 		}
 
-		VkFormat getVkComponentFormat( ParticleFormat format )
-		{
-			return getVkFormat( getComponent( format ) );
-		}
-
 		VkDeviceSize getComponentSize( ParticleFormat format )
 		{
 			return getSize( getComponent( format ) );
@@ -120,11 +117,7 @@ namespace castor3d
 		, uint32_t count )
 		: MovableObject{ name, scene, MovableType::eParticleEmitter, node }
 		, m_particlesCount{ count }
-		, m_csImpl{ std::make_unique< ComputeParticleSystem >( *this ) }
-	{
-	}
-
-	ParticleSystem::~ParticleSystem()
+		, m_csImpl{ castor::makeUnique< ComputeParticleSystem >( *this ) }
 	{
 	}
 

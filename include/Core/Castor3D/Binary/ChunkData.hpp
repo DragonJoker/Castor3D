@@ -102,7 +102,7 @@ namespace castor3d
 	 */
 	static inline uint8_t const * getBuffer( uint8_t const & value )
 	{
-		return reinterpret_cast< uint8_t const * >( &value );
+		return &value;
 	}
 	/**
 	 *\~english
@@ -116,7 +116,7 @@ namespace castor3d
 	 */
 	static inline uint8_t * getBuffer( uint8_t & value )
 	{
-		return reinterpret_cast< uint8_t * >( &value );
+		return &value;
 	}
 	/**
 	 *\~english

@@ -444,9 +444,7 @@ namespace castor3d
 		, m_graph{ graph }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
-		, m_input{ input }
 		, m_bentInput{ bentInput }
-		, m_normals{ normals }
 		, m_config{ config }
 		, m_size{ size }
 		, m_result{ doCreateTexture( m_device, graph.getHandler(), "SsaoBlur" + prefix, SsaoBlurPass::ResultFormat, m_size ) }

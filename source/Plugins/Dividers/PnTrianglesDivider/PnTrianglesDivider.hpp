@@ -57,7 +57,7 @@ namespace PnTriangles
 	{
 	public:
 		Subdivider();
-		virtual ~Subdivider();
+		~Subdivider()override;
 
 		static castor3d::MeshSubdividerUPtr create();
 		/**

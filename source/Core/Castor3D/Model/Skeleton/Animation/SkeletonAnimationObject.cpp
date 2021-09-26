@@ -11,10 +11,6 @@ namespace castor3d
 	{
 	}
 
-	SkeletonAnimationObject::~SkeletonAnimationObject()
-	{
-	}
-
 	void SkeletonAnimationObject::addChild( SkeletonAnimationObjectSPtr object )
 	{
 		CU_Require( object.get() != this );

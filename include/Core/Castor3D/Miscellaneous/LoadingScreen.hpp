@@ -24,7 +24,10 @@ See LICENSE file in root folder
 #include <RenderGraph/RunnablePass.hpp>
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
+#pragma warning( push )
+#pragma warning( disable:4365 )
 #include <atomic>
+#pragma warning( pop )
 
 namespace castor3d
 {
@@ -48,12 +51,12 @@ namespace castor3d
 		C3D_API crg::SemaphoreWaitArray render( ashes::Queue const & queue
 			, ashes::FrameBuffer const & framebuffer
 			, crg::SemaphoreWaitArray const & toWait
-			, VkFence & fence );
+			, crg::Fence *& fence );
 
 		crg::SemaphoreWaitArray render( ashes::Queue const & queue
 			, ashes::FrameBuffer const & framebuffer
 			, crg::SemaphoreWait const & toWait
-			, VkFence & fence )
+			, crg::Fence *& fence )
 		{
 			return render( queue
 				, framebuffer
@@ -117,7 +120,7 @@ namespace castor3d
 			void setTarget( VkFramebuffer framebuffer
 				, std::vector< VkClearValue > clearValues );
 
-			VkFence getFence()const
+			crg::Fence & getFence()
 			{
 				return m_fence;
 			}

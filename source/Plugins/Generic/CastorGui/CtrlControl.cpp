@@ -27,14 +27,14 @@ namespace CastorGui
 		, bool p_visible )
 		: NonClientEventHandler< Control >( p_type != ControlType::eStatic )
 		, Named( p_name )
-		, m_type( p_type )
+		, m_parent( p_parent )
+		, m_cursor( MouseCursor::eHand )
 		, m_id( p_id )
+		, m_type( p_type )
+		, m_style( p_style )
 		, m_position( p_position )
 		, m_size( p_size )
-		, m_style( p_style )
 		, m_borders( 0, 0, 0, 0 )
-		, m_cursor( MouseCursor::eHand )
-		, m_parent( p_parent )
 		, m_engine( engine )
 	{
 		OverlayRPtr parentOv{};
@@ -42,7 +42,14 @@ namespace CastorGui
 
 		if ( parent )
 		{
-			parentOv = &parent->getBackground()->getOverlay();
+			auto bg = parent->getBackground();
+
+			if ( !bg )
+			{
+				CU_Exception( "No background set" );
+			}
+
+			parentOv = &bg->getOverlay();
 		}
 
 		auto overlay = getEngine().getOverlayCache().add( p_name
@@ -50,16 +57,18 @@ namespace CastorGui
 			, OverlayType::eBorderPanel
 			, nullptr
 			, parentOv ).lock();
+
+		if ( !overlay )
+		{
+			CU_Exception( "No background set" );
+		}
+
 		overlay->setPixelPosition( getPosition() );
 		overlay->setPixelSize( getSize() );
 		BorderPanelOverlaySPtr panel = overlay->getBorderPanelOverlay();
 		panel->setBorderPosition( BorderPosition::eInternal );
 		panel->setVisible( p_visible );
 		m_background = panel;
-	}
-
-	Control::~Control()
-	{
 	}
 
 	void Control::create( ControlsManagerSPtr p_ctrlManager )
@@ -173,7 +182,12 @@ namespace CastorGui
 	void Control::setVisible( bool p_value )
 	{
 		BorderPanelOverlaySPtr panel = getBackground();
-		CU_Require( panel );
+
+		if ( !panel )
+		{
+			CU_Exception( "No background set" );
+		}
+
 		panel->setVisible( p_value );
 		panel.reset();
 		doSetVisible( p_value );
@@ -182,7 +196,12 @@ namespace CastorGui
 	bool Control::isVisible()const
 	{
 		BorderPanelOverlaySPtr panel = getBackground();
-		CU_Require( panel );
+
+		if ( !panel )
+		{
+			CU_Exception( "No background set" );
+		}
+
 		bool visible = panel->isVisible();
 		ControlRPtr parent = getParent();
 
@@ -196,10 +215,15 @@ namespace CastorGui
 
 	ControlSPtr Control::getChildControl( uint32_t p_id )
 	{
-		auto it = std::find_if( std::begin( m_children ), std::end( m_children ), [&p_id]( ControlWPtr p_ctrl )
-		{
-			return p_ctrl.expired() ? false : p_ctrl.lock()->getId() == p_id;
-		} );
+		auto it = std::find_if( std::begin( m_children )
+			, std::end( m_children )
+			, [&p_id]( ControlWPtr p_ctrl )
+			{
+				auto ctrl = p_ctrl.lock();
+				return ctrl
+					? ( ctrl->getId() == p_id )
+					: false;
+			} );
 
 		if ( it == m_children.end() )
 		{
@@ -224,7 +248,12 @@ namespace CastorGui
 	bool Control::doIsVisible()const
 	{
 		auto panel = getBackground();
-		CU_Require( panel );
+
+		if ( !panel )
+		{
+			CU_Exception( "No background set" );
+		}
+
 		return panel->isVisible();
 	}
 }

@@ -21,12 +21,6 @@ namespace castor3d
 		{
 		}
 
-		PickingData & PickingData::operator=( PickingData const & rhs )
-		{
-			StructInstance::operator=( rhs );
-			return *this;
-		}
-
 		ast::type::StructPtr PickingData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140

@@ -41,8 +41,8 @@ namespace castor3d
 			Geometry const & geometry;
 			Submesh const & submesh;
 			Pass const & pass;
-			UniformBufferOffsetT< ModelUboConfiguration > modelUbo;
-			UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesUbo;
+			UniformBufferOffsetT< ModelUboConfiguration > modelUbo{};
+			UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesUbo{};
 		};
 		using ElementT = Geometry;
 		using ElementKeyT = castor::String;

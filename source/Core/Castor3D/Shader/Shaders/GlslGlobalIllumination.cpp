@@ -167,9 +167,9 @@ namespace castor3d
 
 			/*Spherical harmonics coefficients - precomputed*/
 			auto SH_C0 = m_writer.declConstant( "SH_C0"
-				, Float{ 1.0f / ( 2.0f * sqrt( castor::Pi< float > ) ) } );
+				, Float{ 1.0f / float( 2.0f * sqrt( castor::Pi< float > ) ) } );
 			auto SH_C1 = m_writer.declConstant( "SH_C1"
-				, Float{ sqrt( 3.0f / castor::Pi< float > ) / 2.0f } );
+				, Float{ float( sqrt( 3.0f / castor::Pi< float > ) / 2.0f ) } );
 
 			// no normalization
 			m_evalSH = m_writer.implementFunction< Vec4 >( "evalSH"
@@ -232,9 +232,9 @@ namespace castor3d
 
 			/*Spherical harmonics coefficients - precomputed*/
 			auto SH_C0 = m_writer.declConstant( "SH_C0"
-				, Float{ 1.0f / ( 2.0f * sqrt( castor::Pi< float > ) ) } );
+				, Float{ 1.0f / float( 2.0f * sqrt( castor::Pi< float > ) ) } );
 			auto SH_C1 = m_writer.declConstant( "SH_C1"
-				, Float{ sqrt( 3.0f / castor::Pi< float > ) / 2.0f } );
+				, Float{ float( sqrt( 3.0f / castor::Pi< float > ) / 2.0f ) } );
 
 			// no normalization
 			if ( !m_evalSH )
@@ -600,7 +600,7 @@ namespace castor3d
 					auto wsDist = m_writer.declLocale( "wsDist"
 						, voxelData.gridToWorld ); // offset by cone dir so that first sample of all cones are not the same
 					auto wsStartPos = m_writer.declLocale( "wsStartPos"
-						, surface.worldPosition + surface.worldNormal * vec3( voxelData.gridToWorld * 2.0f * sqrt( 2.0f ) ) ); // sqrt2 is diagonal voxel half-extent
+						, surface.worldPosition + surface.worldNormal * vec3( voxelData.gridToWorld * 2.0f * float( sqrt( 2.0f ) ) ) ); // sqrt2 is diagonal voxel half-extent
 
 					// We will break off the loop if the sampling distance is too far for performance reasons:
 					WHILE( m_writer, wsDist < voxelData.radianceMaxDistance && occlusion < 1.0_f )
@@ -691,7 +691,7 @@ namespace castor3d
 					auto wsDist = m_writer.declLocale( "wsDist"
 						, voxelData.gridToWorld ); // offset by cone dir so that first sample of all cones are not the same
 					auto wsStartPos = m_writer.declLocale( "wsStartPos"
-						, surface.worldPosition + surface.worldNormal * vec3( voxelData.gridToWorld * 2.0f * sqrt( 2.0f ) ) ); // sqrt2 is diagonal voxel half-extent
+						, surface.worldPosition + surface.worldNormal * vec3( voxelData.gridToWorld * 2.0f * float( sqrt( 2.0f ) ) ) ); // sqrt2 is diagonal voxel half-extent
 
 					// We will break off the loop if the sampling distance is too far for performance reasons:
 					WHILE( m_writer, wsDist < voxelData.radianceMaxDistance && occlusion < 1.0_f )

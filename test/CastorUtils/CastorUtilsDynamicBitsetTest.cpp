@@ -13,10 +13,6 @@ namespace Testing
 	{
 	}
 
-	CastorUtilsDynamicBitsetTest::~CastorUtilsDynamicBitsetTest()
-	{
-	}
-
 	void CastorUtilsDynamicBitsetTest::doRegisterTests()
 	{
 		doRegisterTest( "DynamicBitsetSizeTest", std::bind( &CastorUtilsDynamicBitsetTest::sizeTest, this ) );

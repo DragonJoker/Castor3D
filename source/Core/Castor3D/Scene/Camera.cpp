@@ -23,9 +23,9 @@ namespace castor3d
 		, m_frustum{ m_viewport }
 		, m_ownProjection{ ownProjMtx }
 	{
-		m_notifyIndex = node.onChanged.connect( [this]( SceneNode const & node )
+		m_notifyIndex = node.onChanged.connect( [this]( SceneNode const & pnode )
 			{
-				onNodeChanged( node );
+				onNodeChanged( pnode );
 			} );
 		onNodeChanged( node );
 	}
@@ -42,19 +42,14 @@ namespace castor3d
 	{
 	}
 
-	Camera::~Camera()
-	{
-		m_notifyIndex.disconnect();
-	}
-
 	void Camera::attachTo( SceneNode & node )
 	{
 		if ( &node != getParent() )
 		{
 			MovableObject::attachTo( node );
-			m_notifyIndex = node.onChanged.connect( [this]( SceneNode const & node )
+			m_notifyIndex = node.onChanged.connect( [this]( SceneNode const & pnode )
 				{
-					onNodeChanged( node );
+					onNodeChanged( pnode );
 				} );
 			onNodeChanged( node );
 		}

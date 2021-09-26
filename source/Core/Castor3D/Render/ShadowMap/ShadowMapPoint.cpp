@@ -71,22 +71,22 @@ namespace castor3d
 				auto faceIndex = shadowMapIndex * 6u + face;
 				auto name = debugName + "F" + std::to_string( face );
 				auto & pass = graph.createPass( name
-					, [faceIndex, &passData, &device, &shadowMap, &scene]( crg::FramePass const & pass
+					, [faceIndex, &passData, &device, &shadowMap]( crg::FramePass const & framePass
 						, crg::GraphContext & context
-						, crg::RunnableGraph & graph )
+						, crg::RunnableGraph & runnableGraph )
 					{
-						auto result = std::make_unique< ShadowMapPassPoint >( pass
+						auto res = std::make_unique< ShadowMapPassPoint >( framePass
 							, context
-							, graph
+							, runnableGraph
 							, device
 							, faceIndex
 							, *passData.matrixUbo
 							, *passData.culler
 							, shadowMap );
-						passData.pass = result.get();
-						device.renderSystem.getEngine()->registerTimer( graph.getName() + cuT( "/ShadowMapPoint" )
-							, result->getTimer() );
-						return result;
+						passData.pass = res.get();
+						device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + cuT( "/ShadowMapPoint" )
+							, res->getTimer() );
+						return res;
 					} );
 
 				if ( previousPass )
@@ -143,10 +143,6 @@ namespace castor3d
 		stepProgressBar( progress, "Creating ShadowMapPoint" );
 	}
 
-	ShadowMapPoint::~ShadowMapPoint()
-	{
-	}
-
 	void ShadowMapPoint::update( GpuUpdater & updater )
 	{
 		if ( m_runnables.size() > updater.index
@@ -197,7 +193,7 @@ namespace castor3d
 			&& m_runnables[updater.index] )
 		{
 			uint32_t offset = updater.index * 6u;
-			updater.light->getPointLight()->updateShadow( updater.index );
+			updater.light->getPointLight()->updateShadow( int32_t( updater.index ) );
 
 			for ( uint32_t face = offset; face < offset + 6u; ++face )
 			{

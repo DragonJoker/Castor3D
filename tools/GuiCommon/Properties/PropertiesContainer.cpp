@@ -32,6 +32,8 @@
 
 #include <wx/propgrid/advprops.h>
 
+#pragma clang diagnostic ignored "-Wold-style-cast"
+
 using namespace castor3d;
 using namespace castor;
 
@@ -63,10 +65,6 @@ namespace GuiCommon
 		SetCellTextColour( INACTIVE_TEXT_COLOUR );
 		SetLineColour( BORDER_COLOUR );
 		SetMarginColour( BORDER_COLOUR );
-	}
-
-	PropertiesContainer::~PropertiesContainer()
-	{
 	}
 
 	void PropertiesContainer::setPropertyData( TreeItemProperty * data )

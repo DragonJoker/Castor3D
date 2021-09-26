@@ -80,13 +80,13 @@ namespace castor3d
 	void SkeletonAnimationKeyFrame::addAnimationObject( SkeletonAnimationObject & object
 		, castor::Matrix4x4f const & transform )
 	{
-		auto findTransform = [this]( SkeletonAnimationObject & object )
+		auto findTransform = [this]( SkeletonAnimationObject & obj )
 		{
 			return std::find_if( m_transforms.begin()
 				, m_transforms.end()
-				, [&object]( auto const & lookup )
+				, [&obj]( auto const & lookup )
 				{
-					return lookup.first == &object;
+					return lookup.first == &obj;
 				} );
 		};
 		auto it = findTransform( object );

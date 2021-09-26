@@ -42,12 +42,6 @@ namespace castor3d
 		{
 		}
 
-		VoxelData & VoxelData::operator=( VoxelData const & rhs )
-		{
-			StructInstance::operator=( rhs );
-			return *this;
-		}
-
 		ast::type::StructPtr VoxelData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140

@@ -18,7 +18,7 @@ namespace castor
 		C3D_API explicit TextWriter( String const & tabs
 			, castor::Path const & folder );
 		C3D_API bool operator()( castor3d::ImageBackground const & overlay
-			, castor::StringStream & file );
+			, castor::StringStream & file )override;
 
 	private:
 		castor::Path const & m_folder;

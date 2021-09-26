@@ -168,7 +168,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~SceneRenderPass();
+		C3D_API ~SceneRenderPass()override;
 
 	public:
 		/**

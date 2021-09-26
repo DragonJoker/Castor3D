@@ -77,7 +77,6 @@ namespace castor3d
 		, RenderDevice const & device
 		, uint32_t count )
 		: m_buffer{ engine, device, count * DataSize, cuT( "PassBuffer" ) }
-		, m_passCount{ count }
 		, m_data{ doBindData( m_buffer.getPtr(), count ) }
 	{
 	}
@@ -91,9 +90,9 @@ namespace castor3d
 			CU_Require( m_passes.size() < shader::MaxMaterialsCount );
 			m_passes.emplace_back( &pass );
 			pass.setId( m_passID++ );
-			m_connections.emplace_back( pass.onChanged.connect( [this]( Pass const & pass )
+			m_connections.emplace_back( pass.onChanged.connect( [this]( Pass const & ppass )
 				{
-					m_dirty.emplace_back( &pass );
+					m_dirty.emplace_back( &ppass );
 				} ) );
 			m_dirty.emplace_back( &pass );
 		}
@@ -135,7 +134,7 @@ namespace castor3d
 
 			std::for_each( dirty.begin(), end, [this]( Pass const * p_pass )
 			{
-				p_pass->accept( *this );
+				p_pass->fillBuffer( *this );
 			} );
 
 			m_buffer.update();

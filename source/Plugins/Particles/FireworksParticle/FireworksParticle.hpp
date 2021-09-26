@@ -15,7 +15,7 @@ namespace fireworks
 	{
 	public:
 		explicit ParticleSystem( castor3d::ParticleSystem & parent );
-		virtual ~ParticleSystem();
+
 		static castor3d::CpuParticleSystemUPtr create( castor3d::ParticleSystem & parent );
 
 	private:

@@ -48,7 +48,6 @@ namespace castor3d
 	{
 		static constexpr bool C3D_EnableAPITrace = false;
 		static const char * C3D_NO_RENDERSYSTEM = "No RenderSystem loaded, call castor3d::Engine::loadRenderer before castor3d::Engine::Initialise";
-		static const char * C3D_MAIN_LOOP_EXISTS = "Render loop is already started";
 
 		static castor::String const defaultName = cuT( "C3D_Default" );
 		static castor::String const samplerName = cuT( "C3D_Lights" );
@@ -88,23 +87,7 @@ namespace castor3d
 		m_passFactory = castor::makeUnique< PassFactory >( *this );
 		m_passesType = m_passFactory->listRegisteredTypes().begin()->second;
 
-		auto jobInit = [this]( auto & element )
-		{
-			this->pushGpuJob( [&element]( RenderDevice const & device )
-				{
-					element.initialise( device );
-				} );
-		};
-		auto gpuQueueEventInit = [this]( auto & element )
-		{
-			this->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [&element]( RenderDevice const & device
-					, QueueData const & queueData )
-				{
-					element.initialise();
-				} ) );
-		};
-		auto listenerClean = [this]( auto & element )
+		auto listenerClean = []( auto & element )
 		{
 			element.flush();
 		};
@@ -544,8 +527,12 @@ namespace castor3d
 
 	void Engine::registerWindow( RenderWindow & window )
 	{
+#if !defined( NDEBUG )
 		auto result = m_renderWindows.emplace( window.getName(), &window ).second;
 		CU_Assert( result, "Duplicate window." );
+#else
+		m_renderWindows.emplace( window.getName(), &window );
+#endif
 		m_windowInputListeners.emplace( &window
 			, std::make_shared< RenderWindow::InputListener >( *this, window ) );
 		auto listener = m_windowInputListeners.find( &window )->second;

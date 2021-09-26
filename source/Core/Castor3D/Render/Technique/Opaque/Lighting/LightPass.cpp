@@ -25,8 +25,6 @@
 using namespace castor;
 using namespace castor3d;
 
-#define C3D_UseLightPassFence 1
-
 namespace castor3d
 {
 	//************************************************************************************************
@@ -204,7 +202,7 @@ namespace castor3d
 						, material );
 
 					auto eye = writer.declLocale( "eye"
-						, c3d_sceneData.getCameraPosition() );
+						, c3d_sceneData.cameraPosition );
 					auto vsPosition = writer.declLocale( "vsPosition"
 						, c3d_gpInfoData.projToView( utils, texCoord, data0.x() ) );
 					auto wsPosition = writer.declLocale( "wsPosition"

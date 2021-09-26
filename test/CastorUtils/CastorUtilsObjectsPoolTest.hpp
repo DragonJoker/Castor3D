@@ -11,7 +11,6 @@ namespace Testing
 	{
 	public:
 		CastorUtilsObjectsPoolTest();
-		virtual ~CastorUtilsObjectsPoolTest();
 
 	private:
 		void doRegisterTests() override;

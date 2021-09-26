@@ -127,8 +127,6 @@ namespace castor3d
 		SsaoConfig const & m_ssaoConfig;
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		GpInfoUbo const & m_gpInfoUbo;
-		Texture const & m_linearisedDepthBuffer;
-		Texture const & m_normals;
 		VkExtent2D m_size;
 		Texture m_result;
 		Texture m_bentNormals;

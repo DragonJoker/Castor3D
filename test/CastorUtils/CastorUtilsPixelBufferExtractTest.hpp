@@ -11,7 +11,6 @@ namespace Testing
 	{
 	public:
 		CastorUtilsPixelBufferExtractTest();
-		virtual ~CastorUtilsPixelBufferExtractTest();
 
 	private:
 		void doRegisterTests() override;

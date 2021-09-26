@@ -19,7 +19,6 @@ namespace GuiCommon
 
 	public:
 		PositionProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, castor::Position const & value = castor::Position() );
-		virtual ~PositionProperty();
 
 		wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue )const override;
 		void RefreshChildren()override;

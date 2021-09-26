@@ -12,7 +12,10 @@ See LICENSE file in root folder
 
 #include <ashespp/Buffer/StagingBuffer.hpp>
 
+#pragma warning( push )
+#pragma warning( disable:4365 )
 #include <mutex>
+#pragma warning( pop )
 
 namespace castor3d
 {
@@ -43,13 +46,6 @@ namespace castor3d
 		C3D_API UniformBufferPool( RenderSystem & renderSystem
 			, RenderDevice const & device
 			, castor::String debugName );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~UniformBufferPool();
 		/**
 		 *\~english
 		 *\brief		Cleans up all GPU buffers.

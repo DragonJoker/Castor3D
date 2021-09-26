@@ -16,10 +16,6 @@ namespace castor3d
 	{
 	}
 
-	Cylinder::~Cylinder()
-	{
-	}
-
 	MeshGeneratorSPtr Cylinder::create()
 	{
 		return std::make_shared< Cylinder >();
@@ -55,8 +51,8 @@ namespace castor3d
 
 			//CALCUL DE LA POSITION DES POINTS
 			float angleRotation = PiMult2< float > / float( m_nbFaces );
-			float rCosRot = cos( angleRotation );
-			float rSinRot = sin( angleRotation );
+			auto rCosRot = float( cos( angleRotation ) );
+			auto rSinRot = float( sin( angleRotation ) );
 			float rCos = 1.0f;
 			float rSin = 0.0f;
 			float rSinT = 0.0f;

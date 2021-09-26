@@ -35,8 +35,8 @@ namespace smaa
 		std::unique_ptr< ast::Shader > doBlendingWeightCalculationVP( VkExtent3D const & size
 			, SmaaConfig const & config )
 		{
-			Point4f renderTargetMetrics{ 1.0f / size.width
-				, 1.0f / size.height
+			Point4f renderTargetMetrics{ 1.0f / float( size.width )
+				, 1.0f / float( size.height )
 				, float( size.width )
 				, float( size.height ) };
 			using namespace sdw;
@@ -105,8 +105,8 @@ namespace smaa
 		std::unique_ptr< ast::Shader > doBlendingWeightCalculationFP( VkExtent3D const & size
 			, SmaaConfig const & config )
 		{
-			Point4f renderTargetMetrics{ 1.0f / size.width
-				, 1.0f / size.height
+			Point4f renderTargetMetrics{ 1.0f / float( size.width )
+				, 1.0f / float( size.height )
 				, float( size.width )
 				, float( size.height ) };
 
@@ -934,7 +934,7 @@ namespace smaa
 		, m_stages{ makeShaderState( m_device, m_vertexShader )
 			, makeShaderState( m_device, m_pixelShader ) }
 		, m_pass{ renderTarget.getGraph().createPass( "SmaaBlendingWeight"
-			, [this, &device, &renderTarget, enabled, edgeDetectionView]( crg::FramePass const & pass
+			, [this, &device, enabled]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{

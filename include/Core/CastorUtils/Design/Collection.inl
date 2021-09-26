@@ -73,7 +73,7 @@ namespace castor
 	}
 
 	template< typename ObjectT, typename KeyT >
-	inline void Collection< ObjectT, KeyT >::clear() throw( )
+	inline void Collection< ObjectT, KeyT >::clear()noexcept
 	{
 		auto lock( makeUniqueLock( m_mutex ) );
 		m_objects.clear();

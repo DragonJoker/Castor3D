@@ -34,7 +34,7 @@ namespace castor
 		}
 
 		bool operator()( castor3d::BlinnPhongPass const & pass
-			, StringStream & file )
+			, StringStream & file )override
 		{
 			castor3d::log::info << tabs() << cuT( "Writing BlinnPhongPass " ) << std::endl;
 			return writeNamedSub( file, "diffuse", pass.getDiffuse() )
@@ -81,10 +81,6 @@ namespace castor3d
 		, PassTypeID typeID
 		, PassFlags initialFlags )
 		: PhongPass{ parent, typeID, initialFlags }
-	{
-	}
-
-	BlinnPhongPass::~BlinnPhongPass()
 	{
 	}
 

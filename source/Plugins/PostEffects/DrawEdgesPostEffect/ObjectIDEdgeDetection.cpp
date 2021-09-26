@@ -116,11 +116,11 @@ namespace draw_edges
 						writer.returnStmt( writer.cast< sdw::Float >( writer.cast< sdw::Int >( X != A )
 								+ writer.cast< sdw::Int >( X != C )
 								+ writer.cast< sdw::Int >( X != F )
-								+ writer.cast< sdw::Int >( X != H ) ) * sdw::Float{ 1.0 / 6.0 }
+								+ writer.cast< sdw::Int >( X != H ) ) * sdw::Float{ 1.0f / 6.0f }
 							+ writer.cast< sdw::Float >( writer.cast< sdw::Int >( X != B )
 								+ writer.cast< sdw::Int >( X != D )
 								+ writer.cast< sdw::Int >( X != E )
-								+ writer.cast< sdw::Int >( X != G ) ) * sdw::Float{ 1.0 / 3.0 } );
+								+ writer.cast< sdw::Int >( X != G ) ) * sdw::Float{ 1.0f / 3.0f } );
 
 						break;
 					}
@@ -192,7 +192,7 @@ namespace draw_edges
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) }
 		, m_pass{ m_graph.createPass( "DEObjDetection"
-			, [this, &device, &renderTarget]( crg::FramePass const & pass
+			, [this, &device]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{

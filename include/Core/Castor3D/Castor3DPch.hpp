@@ -130,7 +130,6 @@ See LICENSE file in root folder
 #include <ashespp/Buffer/UniformBuffer.hpp>
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>
-#include <ashespp/Command/CommandBufferInheritanceInfo.hpp>
 #include <ashespp/Command/CommandPool.hpp>
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Core/Instance.hpp>
@@ -172,9 +171,15 @@ See LICENSE file in root folder
 #include <ashespp/Sync/Queue.hpp>
 #include <ashespp/Sync/Semaphore.hpp>
 
+#pragma warning( push )
+#pragma warning( disable:4365 )
+#include <atomic>
+#include <memory>
+#include <mutex>
+#pragma warning( pop )
+
 #include <algorithm>
 #include <array>
-#include <atomic>
 #include <chrono>
 #include <cstddef>
 #include <cstdint>
@@ -184,8 +189,6 @@ See LICENSE file in root folder
 #include <list>
 #include <locale>
 #include <map>
-#include <memory>
-#include <mutex>
 #include <numeric>
 #include <random>
 #include <regex>
@@ -197,6 +200,5 @@ See LICENSE file in root folder
 #include <unordered_set>
 #include <utility>
 #include <vector>
-
 
 #endif

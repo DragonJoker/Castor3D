@@ -23,7 +23,6 @@ namespace castor
 			, StringStream & file )override;
 
 	private:
-		castor3d::PassTypeID m_type;
 		bool m_isPbr;
 	};
 }

@@ -8,8 +8,19 @@
 
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
 #pragma warning( push )
+#pragma warning( disable: 4365 )
 #pragma warning( disable: 5219 )
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-align"
+#pragma clang diagnostic ignored "-Wold-style-cast"
+#pragma clang diagnostic ignored "-Wzero-as-null-pointer-constant"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wconversion"
+#pragma GCC diagnostic ignored "-Wcast-qual"
+#pragma GCC diagnostic ignored "-Wuseless-cast"
 #include "stb_image_resize.h"
+#pragma GCC diagnostic pop
+#pragma clang diagnostic pop
 #pragma warning( pop )
 
 namespace castor

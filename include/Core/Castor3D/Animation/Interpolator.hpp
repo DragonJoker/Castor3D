@@ -11,8 +11,10 @@ namespace castor3d
 	template< class DataT >
 	class Interpolator
 	{
-	public:
+	protected:
 		virtual ~Interpolator() = default;
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Interpolation function.
@@ -45,31 +47,13 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\~french
-		 *\brief		Constructeur
-		 */
-		inline InterpolatorT()
-		{
-		}
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		inline ~InterpolatorT()
-		{
-		}
-		/**
-		 *\~english
 		 *\brief		Interpolation function.
 		 *\param[in]	src	The start.
 		 *\~french
 		 *\brief		Fonction d'interpolation.
 		 *\param[in]	src	Le départ.
 		 */
-		inline DataT interpolate( DataT const & src
+		DataT interpolate( DataT const & src
 			, DataT const &
 			, float )const override
 		{
@@ -92,24 +76,6 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\~french
-		 *\brief		Constructeur
-		 */
-		inline InterpolatorT()
-		{
-		}
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		inline ~InterpolatorT()
-		{
-		}
-		/**
-		 *\~english
 		 *\brief		Interpolation function.
 		 *\param[in]	src		The start.
 		 *\param[in]	dst		The end.
@@ -120,7 +86,7 @@ namespace castor3d
 		 *\param[in]	dst		L'arrivée.
 		 *\param[in]	percent	Le pourcentage.
 		 */
-		inline DataT interpolate( DataT const & src
+		DataT interpolate( DataT const & src
 			, DataT const & dst
 			, float percent )const override
 		{
@@ -158,24 +124,6 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor.
-		 *\~french
-		 *\brief		Constructeur.
-		 */
-		inline InterpolatorT()
-		{
-		}
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		inline ~InterpolatorT()
-		{
-		}
-		/**
-		 *\~english
 		 *\brief		Interpolation function.
 		 *\param[in]	src		The start.
 		 *\param[in]	dst		The end.
@@ -186,7 +134,7 @@ namespace castor3d
 		 *\param[in]	dst		L'arrivée.
 		 *\param[in]	percent	Le pourcentage.
 		 */
-		inline castor::Quaternion interpolate( castor::Quaternion const & src
+		castor::Quaternion interpolate( castor::Quaternion const & src
 			, castor::Quaternion const & dst
 			, float percent )const override
 		{

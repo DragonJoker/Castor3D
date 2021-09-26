@@ -41,13 +41,6 @@ namespace castor3d
 		 */
 		C3D_API TextureAnimationInstance( AnimatedTexture & object, TextureAnimation & animation );
 		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~TextureAnimationInstance();
-		/**
 		 *name Getters.
 		**/
 		/**@{*/

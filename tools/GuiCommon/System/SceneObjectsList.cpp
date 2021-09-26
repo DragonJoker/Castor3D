@@ -57,13 +57,6 @@
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
-#include "GuiCommon/xpms/material.xpm"
-#include "GuiCommon/xpms/material_sel.xpm"
-#include "GuiCommon/xpms/pass.xpm"
-#include "GuiCommon/xpms/pass_sel.xpm"
-#include "GuiCommon/xpms/texture.xpm"
-#include "GuiCommon/xpms/texture_sel.xpm"
-
 using namespace castor3d;
 using namespace castor;
 
@@ -148,14 +141,10 @@ namespace GuiCommon
 				image->Rescale( GC_IMG_SIZE, GC_IMG_SIZE, wxIMAGE_QUALITY_HIGHEST );
 			}
 
-			imageList->Add( wxImage( *image ) );
+			imageList->Add( *image );
 		}
 
 		AssignImageList( imageList );
-	}
-
-	SceneObjectsList::~SceneObjectsList()
-	{
 	}
 
 	void SceneObjectsList::loadScene( Engine * engine
@@ -282,7 +271,6 @@ namespace GuiCommon
 								, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), overlay ) )
 							, *overlay );
 						break;
-
 					case OverlayType::eBorderPanel:
 						doAddOverlay( AppendItem( catId
 								, overlay->getOverlayName()
@@ -291,7 +279,6 @@ namespace GuiCommon
 								, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), overlay ) )
 							, *overlay );
 						break;
-
 					case OverlayType::eText:
 						doAddOverlay( AppendItem( catId
 								, overlay->getOverlayName()
@@ -299,6 +286,9 @@ namespace GuiCommon
 								, eBMP_TEXT_OVERLAY_SEL
 								, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), overlay ) )
 							, *overlay );
+						break;
+					default:
+						CU_Failure( "Unsupported OverlayType" );
 						break;
 					}
 				}
@@ -387,7 +377,7 @@ namespace GuiCommon
 	{
 		for ( auto bone : skeleton )
 		{
-			wxTreeItemId idBone = AppendItem( idSkeleton
+			AppendItem( idSkeleton
 				, bone->getName()
 				, eBMP_SKELETON
 				, eBMP_SKELETON_SEL
@@ -396,7 +386,7 @@ namespace GuiCommon
 
 		for ( auto & anim : skeleton.getAnimations() )
 		{
-			wxTreeItemId idAnimation = AppendItem( idSkeleton
+			AppendItem( idSkeleton
 				, anim.first
 				, eBMP_ANIMATION
 				, eBMP_ANIMATION_SEL
@@ -425,7 +415,7 @@ namespace GuiCommon
 	void SceneObjectsList::doAddBillboard( wxTreeItemId id
 		, BillboardList & billboard )
 	{
-		wxTreeItemId billboardId = AppendItem( id
+		AppendItem( id
 			, billboard.getName()
 			, eBMP_BILLBOARD
 			, eBMP_BILLBOARD_SEL
@@ -460,6 +450,9 @@ namespace GuiCommon
 				, eBMP_SPOT_LIGHT_SEL
 				, new LightTreeItemProperty( m_propertiesHolder->isEditable(), light ) );
 			break;
+		default:
+			CU_Failure( "Unsupported LightType" );
+			break;
 		}
 	}
 
@@ -473,17 +466,17 @@ namespace GuiCommon
 			case MovableType::eGeometry:
 				doAddGeometry( id, static_cast< Geometry & >( object.get() ) );
 				break;
-
 			case MovableType::eCamera:
 				doAddCamera( id, static_cast< Camera & >( object.get() ) );
 				break;
-
 			case MovableType::eLight:
 				doAddLight( id, static_cast< Light & >( object.get() ) );
 				break;
-
 			case MovableType::eBillboard:
 				doAddBillboard( id, static_cast< BillboardList & >( object.get() ) );
+				break;
+			default:
+				CU_Failure( "Unsupported MovableType" );
 				break;
 			}
 		}
@@ -520,9 +513,9 @@ namespace GuiCommon
 	}
 
 	void SceneObjectsList::doAddOverlay( wxTreeItemId id
-		, castor3d::OverlayCategory & overlay )
+		, castor3d::OverlayCategory & category )
 	{
-		for ( auto overlay : overlay.getOverlay() )
+		for ( auto overlay : category.getOverlay() )
 		{
 			switch ( overlay->getType() )
 			{
@@ -534,7 +527,6 @@ namespace GuiCommon
 						, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), overlay->getCategory() ) )
 					, *overlay->getCategory() );
 				break;
-
 			case OverlayType::eBorderPanel:
 				doAddOverlay( AppendItem( id
 						, overlay->getName()
@@ -543,7 +535,6 @@ namespace GuiCommon
 						, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), overlay->getCategory() ) )
 					, *overlay->getCategory() );
 				break;
-
 			case OverlayType::eText:
 				doAddOverlay( AppendItem( id
 						, overlay->getName()
@@ -552,15 +543,21 @@ namespace GuiCommon
 						, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), overlay->getCategory() ) )
 					, *overlay->getCategory() );
 				break;
+			default:
+				CU_Failure( "Unsupported OverlayType" );
+				break;
 			}
 		}
 	}
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 	BEGIN_EVENT_TABLE( SceneObjectsList, wxTreeCtrl )
 		EVT_CLOSE( SceneObjectsList::onClose )
 		EVT_TREE_SEL_CHANGED( wxID_ANY, SceneObjectsList::onSelectItem )
 		EVT_TREE_ITEM_RIGHT_CLICK( wxID_ANY, SceneObjectsList::onMouseRButtonUp )
 	END_EVENT_TABLE()
+#pragma GCC diagnostic pop
 
 	void SceneObjectsList::onClose( wxCloseEvent & p_event )
 	{
@@ -570,7 +567,7 @@ namespace GuiCommon
 
 	void SceneObjectsList::onSelectItem( wxTreeEvent & p_event )
 	{
-		TreeItemProperty * data = reinterpret_cast< TreeItemProperty * >( p_event.GetClientObject() );
+		TreeItemProperty * data = static_cast< TreeItemProperty * >( p_event.GetClientObject() );
 		m_propertiesHolder->setPropertyData( data );
 		p_event.Skip();
 	}

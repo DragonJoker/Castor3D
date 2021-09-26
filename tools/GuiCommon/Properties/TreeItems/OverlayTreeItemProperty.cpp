@@ -29,10 +29,6 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	OverlayTreeItemProperty::~OverlayTreeItemProperty()
-	{
-	}
-
 	void OverlayTreeItemProperty::doCreateProperties( wxPGEditor * editor
 		, wxPropertyGrid * grid )
 	{
@@ -53,13 +49,13 @@ namespace GuiCommon
 			addProperty( grid, PROPERTY_OVERLAY_MATERIAL, getMaterialsList(), overlay->getMaterial()->getName()
 				, [this]( wxVariant const & var )
 				{
-					OverlayCategorySPtr overlay = getOverlay();
-					auto & cache = overlay->getOverlay().getEngine()->getMaterialCache();
+					OverlayCategorySPtr ov = getOverlay();
+					auto & cache = ov->getOverlay().getEngine()->getMaterialCache();
 					auto material = cache.find( variantCast< castor::String >( var ) ).lock().get();
 
 					if ( material )
 					{
-						overlay->setMaterial( material );
+						ov->setMaterial( material );
 					}
 				} );
 
@@ -68,13 +64,14 @@ namespace GuiCommon
 			case OverlayType::ePanel:
 				doCreatePanelOverlayProperties( grid, std::static_pointer_cast< PanelOverlay >( getOverlay() ) );
 				break;
-
 			case OverlayType::eBorderPanel:
 				doCreateBorderPanelOverlayProperties( grid, std::static_pointer_cast< BorderPanelOverlay >( getOverlay() ) );
 				break;
-
 			case OverlayType::eText:
 				doCreateTextOverlayProperties( grid, std::static_pointer_cast< TextOverlay >( getOverlay() ) );
+				break;
+			default:
+				CU_Failure( "Unsupported OverlayType" );
 				break;
 			}
 		}
@@ -109,14 +106,14 @@ namespace GuiCommon
 			addProperty( grid, PROPERTY_OVERLAY_BORDER_MATERIAL, getMaterialsList(), overlay->getBorderMaterial()->getName()
 			, [this]( wxVariant const & var )
 				{
-					BorderPanelOverlaySPtr overlay = std::static_pointer_cast< BorderPanelOverlay >( getOverlay() );
-					CU_Require( overlay->getType() == OverlayType::eBorderPanel );
-					auto & cache = overlay->getOverlay().getEngine()->getMaterialCache();
+					BorderPanelOverlaySPtr ov = std::static_pointer_cast< BorderPanelOverlay >( getOverlay() );
+					CU_Require( ov->getType() == OverlayType::eBorderPanel );
+					auto & cache = ov->getOverlay().getEngine()->getMaterialCache();
 					auto material = cache.find( variantCast< castor::String >( var ) ).lock().get();
 
 					if ( material )
 					{
-						overlay->setBorderMaterial( material );
+						ov->setBorderMaterial( material );
 					}
 				} );
 		}
@@ -127,14 +124,14 @@ namespace GuiCommon
 				, getMaterialsList()
 				, [this]( wxVariant const & var )
 				{
-					BorderPanelOverlaySPtr overlay = std::static_pointer_cast< BorderPanelOverlay >( getOverlay() );
-					CU_Require( overlay->getType() == OverlayType::eBorderPanel );
-					auto & cache = overlay->getOverlay().getEngine()->getMaterialCache();
+					BorderPanelOverlaySPtr ov = std::static_pointer_cast< BorderPanelOverlay >( getOverlay() );
+					CU_Require( ov->getType() == OverlayType::eBorderPanel );
+					auto & cache = ov->getOverlay().getEngine()->getMaterialCache();
 					auto material = cache.find( variantCast< castor::String >( var ) ).lock().get();
 
 					if ( material )
 					{
-						overlay->setBorderMaterial( material );
+						ov->setBorderMaterial( material );
 					}
 				} );
 		}
@@ -176,11 +173,11 @@ namespace GuiCommon
 		addProperty( grid, PROPERTY_OVERLAY_FONT, *overlay->getFontTexture()->getFont()
 			, [this]( wxVariant const & var )
 			{
-				TextOverlaySPtr overlay = std::static_pointer_cast< TextOverlay >( getOverlay() );
-				CU_Require( overlay->getType() == OverlayType::eText );
-				overlay->setFont( variantCast< castor::FontSPtr >( var )->getName() );
+				TextOverlaySPtr ov = std::static_pointer_cast< TextOverlay >( getOverlay() );
+				CU_Require( ov->getType() == OverlayType::eText );
+				ov->setFont( variantCast< castor::FontSPtr >( var )->getName() );
 			} );
-		addPropertyT( grid, PROPERTY_OVERLAY_CAPTION, overlay->getCaption(), overlay.get(), &TextOverlay::setCaption );
+		addPropertyT( grid, PROPERTY_OVERLAY_CAPTION, overlay->getCaption(), overlay.get(), &TextOverlay::setCaption, nullptr );
 		addPropertyET( grid, PROPERTY_OVERLAY_HALIGN, haligns, overlay->getHAlign(), overlay.get(), &TextOverlay::setHAlign );
 		addPropertyET( grid, PROPERTY_OVERLAY_VALIGN, haligns, overlay->getVAlign(), overlay.get(), &TextOverlay::setVAlign );
 		addPropertyET( grid, PROPERTY_OVERLAY_WRAPPING, wrappings, overlay->getTextWrappingMode(), overlay.get(), &TextOverlay::setTextWrappingMode );

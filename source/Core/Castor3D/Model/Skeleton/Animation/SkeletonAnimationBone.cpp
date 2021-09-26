@@ -11,10 +11,6 @@ namespace castor3d
 	{
 	}
 
-	SkeletonAnimationBone :: ~SkeletonAnimationBone()
-	{
-	}
-
 	String const & SkeletonAnimationBone::getName()const
 	{
 		return getBone()->getName();

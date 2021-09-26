@@ -993,7 +993,7 @@ namespace castor
 		return ParserParameterHelper< ParameterType::eName >::ParameterBaseType;
 	}
 
-	inline xchar const * const ParserParameter< ParameterType::eName >::getStrType()const
+	inline xchar const * ParserParameter< ParameterType::eName >::getStrType()const
 	{
 		return ParserParameterHelper< ParameterType::eName >::StringType;
 	}
@@ -1039,7 +1039,7 @@ namespace castor
 		return ParserParameterHelper< ParameterType::eCheckedText >::ParameterBaseType;
 	}
 
-	inline xchar const * const ParserParameter< ParameterType::eCheckedText >::getStrType()const
+	inline xchar const * ParserParameter< ParameterType::eCheckedText >::getStrType()const
 	{
 		return ParserParameterHelper< ParameterType::eCheckedText >::StringType;
 	}
@@ -1093,7 +1093,7 @@ namespace castor
 		return ParserParameterHelper< ParameterType::eBitwiseOred32BitsCheckedText >::ParameterBaseType;
 	}
 
-	inline xchar const * const ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::getStrType()const
+	inline xchar const * ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::getStrType()const
 	{
 		return ParserParameterHelper< ParameterType::eBitwiseOred32BitsCheckedText >::StringType;
 	}
@@ -1171,7 +1171,7 @@ namespace castor
 		return ParserParameterHelper< ParameterType::eBitwiseOred64BitsCheckedText >::ParameterBaseType;
 	}
 
-	inline xchar const * const ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::getStrType()const
+	inline xchar const * ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::getStrType()const
 	{
 		return ParserParameterHelper< ParameterType::eBitwiseOred64BitsCheckedText >::StringType;
 	}

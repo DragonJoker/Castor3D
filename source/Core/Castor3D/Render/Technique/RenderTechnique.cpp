@@ -219,7 +219,7 @@ namespace castor3d
 						, context
 						, graph
 						, { [](){}
-							, GetSemaphoreWaitFlagsCallback( [this](){ return VK_PIPELINE_STAGE_TRANSFER_BIT; } )
+							, GetSemaphoreWaitFlagsCallback( [](){ return VK_PIPELINE_STAGE_TRANSFER_BIT; } )
 							, [this]( VkCommandBuffer cb, uint32_t i ){ doRecordInto( cb, i ); } } }
 				{
 				}
@@ -248,14 +248,14 @@ namespace castor3d
 			stepProgressBar( progress, "Creating clear LPV commands" );
 			crg::FrameGraph result{ handler, name + "ClearLpv" };
 			auto & pass = result.createPass( name + "LpvClear"
-				, [progress]( crg::FramePass const & pass
+				, [progress]( crg::FramePass const & framePass
 					, crg::GraphContext & context
-					, crg::RunnableGraph & graph )
+					, crg::RunnableGraph & runnableGraph )
 				{
 					stepProgressBar( progress, "Initialising clear LPV commands" );
-					return std::make_unique< LpvClear >( pass
+					return std::make_unique< LpvClear >( framePass
 						, context
-						, graph );
+						, runnableGraph );
 				} );
 
 			for ( auto & texture : lpvResult )
@@ -468,8 +468,8 @@ namespace castor3d
 		m_depth.create();
 		auto runnable = m_clearLpvRunnable.get();
 		m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [runnable]( RenderDevice const & device
-				, QueueData const & queueData )
+			, [runnable]( RenderDevice const &
+				, QueueData const & )
 			{
 				runnable->record();
 			} ) );
@@ -606,7 +606,14 @@ namespace castor3d
 			return;
 		}
 
-		auto & scene = *m_renderTarget.getScene();
+		auto pscene = m_renderTarget.getScene();
+
+		if ( !pscene )
+		{
+			CU_Exception( "No scene set for RenderTarget." );
+		}
+
+		auto & scene = *pscene;
 		updater.voxelConeTracing = scene.getVoxelConeTracingConfig().enabled;
 
 		doInitialiseLpv();
@@ -760,21 +767,21 @@ namespace castor3d
 	{
 		stepProgressBar( progress, "Creating depth pass" );
 		auto & result = m_renderTarget.getGraph().createPass( "Depth"
-			, [this, progress]( crg::FramePass const & pass
+			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBar( progress, "Initialising depth pass" );
-				auto result = std::make_unique< DepthPass >( pass
+				auto res = std::make_unique< DepthPass >( framePass
 					, context
-					, graph
+					, runnableGraph
 					, m_device
 					, getSsaoConfig()
 					, SceneRenderPassDesc{ m_depth.getExtent(), m_matrixUbo, m_renderTarget.getCuller() }.safeBand( true ) );
-				m_depthPass = result.get();
-				getEngine()->registerTimer( graph.getName() + "/Depth"
-					, result->getTimer() );
-				return result;
+				m_depthPass = res.get();
+				getEngine()->registerTimer( runnableGraph.getName() + "/Depth"
+					, res->getTimer() );
+				return res;
 			} );
 		result.addOutputDepthStencilView( m_depth.targetViewId
 			, defaultClearDepthStencil );
@@ -790,18 +797,18 @@ namespace castor3d
 	{
 		stepProgressBar( progress, "Creating compute depth range pass" );
 		auto & result = m_renderTarget.getGraph().createPass( "DepthRange"
-			, [this, progress]( crg::FramePass const & pass
+			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBar( progress, "Initialising compute depth range pass" );
-				auto result = std::make_unique< ComputeDepthRange >( pass
+				auto res = std::make_unique< ComputeDepthRange >( framePass
 					, context
-					, graph
+					, runnableGraph
 					, m_device );
-				getEngine()->registerTimer( graph.getName() + "/DepthRange"
-					, result->getTimer() );
-				return result;
+				getEngine()->registerTimer( runnableGraph.getName() + "/DepthRange"
+					, res->getTimer() );
+				return res;
 			} );
 		result.addDependency( *m_depthPassDecl );
 		result.addInputStorageView( m_depthObj.sampledViewId
@@ -823,14 +830,14 @@ namespace castor3d
 		castor::String name = cuT( "Forward" );
 #endif
 		auto & result = m_renderTarget.getGraph().createPass( "Opaque"
-			, [this, progress, name]( crg::FramePass const & pass
+			, [this, progress, name]( crg::FramePass const & framePass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBar( progress, "Initialising opaque pass" );
-				auto result = std::make_unique< OpaquePassType >( pass
+				auto res = std::make_unique< OpaquePassType >( framePass
 					, context
-					, graph
+					, runnableGraph
 					, m_device
 					, cuT( "Opaque" )
 					, name
@@ -844,10 +851,10 @@ namespace castor3d
 						.llpvResult( m_llpvResult )
 						.vctFirstBounce( m_voxelizer->getFirstBounce() )
 						.vctSecondaryBounce( m_voxelizer->getSecondaryBounce() ) );
-				m_opaquePass = result.get();
-				getEngine()->registerTimer( graph.getName() + "/Opaque"
-					, result->getTimer() );
-				return result;
+				m_opaquePass = res.get();
+				getEngine()->registerTimer( runnableGraph.getName() + "/Opaque"
+					, res->getTimer() );
+				return res;
 			} );
 		result.addDependency( m_backgroundRenderer->getPass() );
 		result.addDependency( m_ssao->getLastPass() );
@@ -873,21 +880,23 @@ namespace castor3d
 	{
 		stepProgressBar( progress, "Creating transparent pass" );
 		auto & result = m_renderTarget.getGraph().createPass( "Transparent"
-			, [this, progress]( crg::FramePass const & pass
+			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBar( progress, "Initialising transparent pass" );
 #if C3D_UseWeightedBlendedRendering
 				castor::String name = cuT( "Accumulation" );
-				bool isOit = true;
+				static constexpr bool isOit = true;
+				static constexpr bool hasVelocity = true;
 #else
 				castor::String name = cuT( "Forward" );
-				bool isOit = false;
+				static constexpr bool isOit = false;
+				static constexpr bool hasVelocity = false;
 #endif
-				auto result = std::make_unique< TransparentPassType >( pass
+				auto res = std::make_unique< TransparentPassType >( framePass
 					, context
-					, graph
+					, runnableGraph
 					, m_device
 					, cuT( "Transparent" )
 					, name
@@ -902,11 +911,11 @@ namespace castor3d
 						.llpvResult( m_llpvResult )
 						.vctFirstBounce( m_voxelizer->getFirstBounce() )
 						.vctSecondaryBounce( m_voxelizer->getSecondaryBounce() )
-						.hasVelocity( true ) );
-				m_transparentPass = result.get();
-				getEngine()->registerTimer( graph.getName() + "/Transparent"
-					, result->getTimer() );
-				return result;
+						.hasVelocity( hasVelocity ) );
+				m_transparentPass = res.get();
+				getEngine()->registerTimer( runnableGraph.getName() + "/Transparent"
+					, res->getTimer() );
+				return res;
 			} );
 #if C3D_UseDeferredRendering
 		result.addDependency( m_deferredRendering->getLastPass() );
@@ -924,7 +933,7 @@ namespace castor3d
 			, getClearValue( WbTexture::eRevealage ) );
 		result.addInOutColourView( transparentPassResult[WbTexture::eVelocity].targetViewId );
 #else
-		result.addInOutColourView( m_colourView );
+		result.addInOutColourView( m_colour.targetViewId );
 #endif
 
 		return result;
@@ -1205,7 +1214,12 @@ namespace castor3d
 
 		if ( m_renderTarget.getTargetType() == TargetType::eWindow )
 		{
-			result = m_renderTarget.getScene()->getEnvironmentMap().render( result, queue );
+			auto scene = m_renderTarget.getScene();
+
+			if ( scene )
+			{
+				result = scene->getEnvironmentMap().render( result, queue );
+			}
 		}
 
 		return result;
@@ -1215,8 +1229,10 @@ namespace castor3d
 		, ashes::Queue const & queue )const
 	{
 		crg::SemaphoreWait result = semaphore;
+		auto scene = m_renderTarget.getScene();
 
-		if ( m_renderTarget.getScene()->getVoxelConeTracingConfig().enabled )
+		if ( scene
+			&& scene->getVoxelConeTracingConfig().enabled )
 		{
 			result = m_voxelizer->render( result, queue );
 		}

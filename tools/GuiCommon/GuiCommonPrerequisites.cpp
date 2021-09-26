@@ -1,5 +1,6 @@
 #include "GuiCommon/GuiCommonPrerequisites.hpp"
 
+
 #if defined( CU_PlatformWindows ) && !defined( NDEBUG ) && !defined( VLD_AVAILABLE )
 #	define _CRTDBG_MAP_ALLOC
 #	include <cstdlib>
@@ -53,64 +54,17 @@ namespace GuiCommon
 			{
 			}
 
-			virtual ~wxWidgetsFontImpl()
+			void initialise()override
 			{
 			}
 
-			virtual void initialise()
+			void cleanup()override
 			{
 			}
 
-			virtual void cleanup()
+			castor::Glyph loadGlyph( char32_t glyph )override
 			{
-			}
-
-			virtual void loadGlyph( castor::Glyph & p_glyph )
-			{
-				//FT_Glyph ftGlyph;
-				//CHECK_FT_ERR( FT_Load_Glyph, m_face, FT_get_Char_Index( m_face, p_glyph.getCharacter() ), FT_LOAD_DEFAULT );
-				//CHECK_FT_ERR( FT_get_Glyph, m_face->glyph, &ftGlyph );
-				//CHECK_FT_ERR( FT_Glyph_To_Bitmap, &ftGlyph, FT_RENDER_MODE_NORMAL, 0, 1 );
-				//FT_BitmapGlyph ftBmpGlyph = FT_BitmapGlyph( ftGlyph );
-				//FT_Bitmap & ftBitmap = ftBmpGlyph->bitmap;
-				//Size advance( uint32_t( std::abs( ftGlyph->advance.x ) / 65536.0 ), uint32_t( ftGlyph->advance.y  / 65536.0 ) );
-				//uint32_t pitch = std::abs( ftBitmap.pitch );
-				//Size size( pitch, ftBitmap.rows );
-				//Position ptPosition( ftBmpGlyph->left, ftBmpGlyph->top );
-				//uint32_t uiSize = size.getWidth() * size.getHeight();
-				//ByteArray bitmap( uiSize, 0 );
-				//uint32_t index = 0;
-
-				//if ( ftBitmap.pitch < 0 )
-				//{
-				//	uint8_t * dst = bitmap.data();
-				//	uint8_t const * src = ftBitmap.buffer;
-
-				//	for ( uint32_t i = 0; i < uint32_t( ftBitmap.rows ); i++ )
-				//	{
-				//		memcpy( dst, src, ftBitmap.width );
-				//		src += pitch;
-				//		dst += pitch;
-				//	}
-				//}
-				//else
-				//{
-				//	uint8_t * dst = bitmap.data() + uiSize - pitch;
-				//	uint8_t const * src = ftBitmap.buffer;
-
-				//	for ( uint32_t i = 0; i < uint32_t( ftBitmap.rows ); i++ )
-				//	{
-				//		memcpy( dst, src, ftBitmap.width );
-				//		src += pitch;
-				//		dst -= pitch;
-				//	}
-				//}
-
-				//p_glyph.setSize( size );
-				//p_glyph.setPosition( ptPosition );
-				//p_glyph.setAdvance( advance );
-				//p_glyph.setBitmap( bitmap );
-				//return ftBmpGlyph->top;
+				return { glyph, {}, {}, {}, {} };
 			}
 
 			wxFont m_font;
@@ -141,7 +95,7 @@ namespace GuiCommon
 
 	void CreateBitmapFromBuffer( uint8_t const * p_buffer, uint32_t p_width, uint32_t p_height, bool p_flip, wxBitmap & p_bitmap )
 	{
-		p_bitmap.Create( p_width, p_height, 24 );
+		p_bitmap.Create( int( p_width ), int( p_height ), 24 );
 		wxNativePixelData data( p_bitmap );
 
 		if ( p_bitmap.IsOk() && uint32_t( data.GetWidth() ) == p_width && uint32_t( data.GetHeight() ) == p_height )
@@ -384,7 +338,7 @@ namespace GuiCommon
 
 				for ( auto file : arrayFailed )
 				{
-					castor::Logger::logWarning( castor::Path( file ).getFileName() );
+					castor::Logger::logWarning( file.getFileName() );
 				}
 
 				arrayFailed.clear();
@@ -403,7 +357,7 @@ namespace GuiCommon
 
 #elif defined( CU_PlatformLinux )
 
-		auto gtkWidget = static_cast< GtkWidget * >( window->GetHandle() );
+		auto gtkWidget = window->GetHandle();
 		auto gdkWindow = gtk_widget_get_window( gtkWidget );
 		GLXDrawable drawable = 0;
 		Display * display = nullptr;
@@ -440,12 +394,12 @@ namespace GuiCommon
 
 		if ( wxfont.IsOk() )
 		{
-			//castor::String name = make_String( wxfont.GetFaceName() ) + castor::string::toString( wxfont.GetPointSize() );
-			//font = std::make_shared< castor::Font >( name, wxfont.GetPointSize() );
-			//font->setGlyphLoader( std::make_unique< wxWidgetsFontImpl >( wxfont ) );
-			//castor::Font::BinaryLoader()( *font
-			//	, castor::String( wxfont.GetFaceName() )
-			//	, uint32_t( std::abs( wxfont.GetPointSize() ) ) );
+			castor::String name = make_String( wxfont.GetFaceName() ) + castor::string::toString( wxfont.GetPointSize() );
+			font = std::make_shared< castor::Font >( name, wxfont.GetPointSize() );
+			font->setGlyphLoader( std::make_unique< wxWidgetsFontImpl >( wxfont ) );
+			castor::Font::BinaryLoader{}( *font
+				, castor::Path{ castor::String{ wxfont.GetFaceName() } }
+				, uint32_t( std::abs( wxfont.GetPointSize() ) ) );
 		}
 
 		return font;
@@ -468,12 +422,14 @@ namespace GuiCommon
 
 	castor::Size makeSize( wxSize const & value )
 	{
-		return castor::Size( value.x, value.y );
+		return castor::Size( uint32_t( value.x )
+			, uint32_t( value.y ) );
 	}
 
 	wxSize make_wxSize( castor::Size const & value )
 	{
-		return wxSize( value.getWidth(), value.getHeight() );
+		return wxSize( int( value.getWidth() )
+			, int( value.getHeight() ) );
 	}
 
 	ast::ShaderStage convert( VkShaderStageFlagBits stage )

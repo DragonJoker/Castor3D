@@ -72,7 +72,6 @@ namespace Bloom
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::FramePassArray m_passes;
 		std::vector< Subpass > m_subpasses;
-		bool m_isVertical;
 	};
 }
 

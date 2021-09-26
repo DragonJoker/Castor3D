@@ -4,7 +4,10 @@
 
 #include <Castor3D/Event/Frame/GpuFunctorEvent.hpp>
 
+#pragma warning( push )
+#pragma warning( disable: 4365 )
 #include <wx/propgrid/advprops.h>
+#pragma warning( pop )
 
 using namespace castor;
 

@@ -23,105 +23,108 @@ using namespace castor;
 
 namespace CastorGui
 {
-	struct ParserContext
+	namespace
 	{
-		std::stack< ControlSPtr > m_parents;
-		Engine * m_engine{};
-		ButtonCtrlSPtr m_button;
-		ComboBoxCtrlSPtr m_combo;
-		EditCtrlSPtr m_edit;
-		ListBoxCtrlSPtr m_listbox;
-		SliderCtrlSPtr m_slider;
-		StaticCtrlSPtr m_static;
-		uint32_t m_flags{};
-		uint32_t m_ctrlId{};
-
-		ControlRPtr getTop()const
+		struct ParserContext
 		{
-			ControlRPtr result{};
+			std::stack< ControlSPtr > m_parents;
+			Engine * m_engine{};
+			ButtonCtrlSPtr m_button;
+			ComboBoxCtrlSPtr m_combo;
+			EditCtrlSPtr m_edit;
+			ListBoxCtrlSPtr m_listbox;
+			SliderCtrlSPtr m_slider;
+			StaticCtrlSPtr m_static;
+			uint32_t m_flags{};
+			uint32_t m_ctrlId{};
 
-			if ( !m_parents.empty() )
+			ControlRPtr getTop()const
 			{
-				result = m_parents.top().get();
+				ControlRPtr result{};
+
+				if ( !m_parents.empty() )
+				{
+					result = m_parents.top().get();
+				}
+
+				return result;
 			}
 
-			return result;
-		}
-
-		void Pop()
-		{
-			m_button.reset();
-			m_edit.reset();
-			m_listbox.reset();
-			m_slider.reset();
-			m_static.reset();
-			m_combo.reset();
-
-			if ( !m_parents.empty() )
+			void Pop()
 			{
-				ControlSPtr top;
-				top = m_parents.top();
+				m_button.reset();
+				m_edit.reset();
+				m_listbox.reset();
+				m_slider.reset();
+				m_static.reset();
+				m_combo.reset();
 
-				switch ( top->getType() )
+				if ( !m_parents.empty() )
 				{
-				case ControlType::eStatic:
-					m_static = std::static_pointer_cast< StaticCtrl >( top );
-					break;
+					ControlSPtr top;
+					top = m_parents.top();
 
-				case ControlType::eEdit:
-					m_edit = std::static_pointer_cast< EditCtrl >( top );
-					break;
+					switch ( top->getType() )
+					{
+					case ControlType::eStatic:
+						m_static = std::static_pointer_cast< StaticCtrl >( top );
+						break;
 
-				case ControlType::eSlider:
-					m_slider = std::static_pointer_cast< SliderCtrl >( top );
-					break;
+					case ControlType::eEdit:
+						m_edit = std::static_pointer_cast< EditCtrl >( top );
+						break;
 
-				case ControlType::eComboBox:
-					m_combo = std::static_pointer_cast< ComboBoxCtrl >( top );
-					break;
+					case ControlType::eSlider:
+						m_slider = std::static_pointer_cast< SliderCtrl >( top );
+						break;
 
-				case ControlType::eListBox:
-					m_listbox = std::static_pointer_cast< ListBoxCtrl >( top );
-					break;
+					case ControlType::eComboBox:
+						m_combo = std::static_pointer_cast< ComboBoxCtrl >( top );
+						break;
 
-				case ControlType::eButton:
-					m_button = std::static_pointer_cast< ButtonCtrl >( top );
-					break;
+					case ControlType::eListBox:
+						m_listbox = std::static_pointer_cast< ListBoxCtrl >( top );
+						break;
 
-				default:
-					CU_Failure( "Unsupported Control Type" );
-					break;
+					case ControlType::eButton:
+						m_button = std::static_pointer_cast< ButtonCtrl >( top );
+						break;
+
+					default:
+						CU_Failure( "Unsupported Control Type" );
+						break;
+					}
 				}
 			}
-		}
-	};
+		};
 
-	ControlsManager & getControlsManager( FileParserContext & context )
-	{
-		return static_cast< ControlsManager & >( *static_cast< SceneFileContext & >( context ).parser->getEngine()->getUserInputListener() );
-	}
-
-	ParserContext & getParserContext( FileParserContext & context )
-	{
-		return *static_cast< ParserContext * >( context.getUserContext( PLUGIN_NAME ) );
-	}
-
-	template< typename T >
-	std::shared_ptr< T > CreateControl( ParserContext & context, String const & p_name, std::shared_ptr< T > & p_control )
-	{
-		p_control = std::make_shared< T >( p_name, *context.m_engine, context.getTop(), context.m_ctrlId++ );
-		p_control->addStyle( context.m_flags );
-		context.m_parents.push( p_control );
-		context.m_flags = 0;
-		return p_control;
-	}
-
-	template< typename T > void FinishControl( ControlsManager & p_manager, ParserContext & context, std::shared_ptr< T > p_control )
-	{
-		if ( p_control )
+		ControlsManager & getControlsManager( FileParserContext & context )
 		{
-			p_manager.create( p_control );
-			context.m_parents.pop();
+			return static_cast< ControlsManager & >( *static_cast< SceneFileContext & >( context ).parser->getEngine()->getUserInputListener() );
+		}
+
+		ParserContext & getParserContext( FileParserContext & context )
+		{
+			return *static_cast< ParserContext * >( context.getUserContext( PLUGIN_NAME ) );
+		}
+
+		template< typename T >
+		std::shared_ptr< T > CreateControl( ParserContext & context, String const & p_name, std::shared_ptr< T > & p_control )
+		{
+			p_control = std::make_shared< T >( p_name, *context.m_engine, context.getTop(), context.m_ctrlId++ );
+			p_control->addStyle( context.m_flags );
+			context.m_parents.push( p_control );
+			context.m_flags = 0;
+			return p_control;
+		}
+
+		template< typename T > void FinishControl( ControlsManager & p_manager, ParserContext & context, std::shared_ptr< T > p_control )
+		{
+			if ( p_control )
+			{
+				p_manager.create( p_control );
+				context.m_parents.pop();
+			}
 		}
 	}
 

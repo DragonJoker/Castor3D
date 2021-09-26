@@ -17,6 +17,7 @@ namespace toon::shader
 	struct ToonPhongLightMaterial
 		: public c3d::LightMaterial
 	{
+		SDW_DeclStructInstance( , ToonPhongLightMaterial );
 		ToonPhongLightMaterial( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled );
@@ -50,6 +51,7 @@ namespace toon::shader
 	struct ToonPbrLightMaterial
 		: public c3d::LightMaterial
 	{
+		SDW_DeclStructInstance( , ToonPbrLightMaterial );
 		ToonPbrLightMaterial( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled );
@@ -88,6 +90,7 @@ namespace toon::shader
 	struct ToonPbrMRLightMaterial
 		: public ToonPbrLightMaterial
 	{
+		SDW_DeclStructInstance( , ToonPbrMRLightMaterial );
 		ToonPbrMRLightMaterial( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled )
@@ -100,6 +103,7 @@ namespace toon::shader
 	struct ToonPbrSGLightMaterial
 		: public ToonPbrLightMaterial
 	{
+		SDW_DeclStructInstance( , ToonPbrSGLightMaterial );
 		ToonPbrSGLightMaterial( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled )

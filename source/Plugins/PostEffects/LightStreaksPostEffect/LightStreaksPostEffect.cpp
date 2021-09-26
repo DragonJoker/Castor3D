@@ -28,32 +28,6 @@
 
 namespace light_streaks
 {
-	namespace
-	{
-		std::unique_ptr< ast::Shader > getVertexProgram()
-		{
-			using namespace sdw;
-			VertexWriter writer;
-
-			// Shader inputs
-			Vec2 position = writer.declInput< Vec2 >( "position", 0u );
-
-			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
-			auto out = writer.getOut();
-
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
-				{
-					vtx_texture = ( position + 1.0_f ) / 2.0_f;
-					out.vtx.position = vec4( position.xy(), 0.0_f, 1.0_f );
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-	}
-
-	//*********************************************************************************************
-
 	castor::String const PostEffect::Type = cuT( "light_streaks" );
 	castor::String const PostEffect::Name = cuT( "LightStreaks PostEffect" );
 

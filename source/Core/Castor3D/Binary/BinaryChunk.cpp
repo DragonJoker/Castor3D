@@ -24,10 +24,13 @@ namespace castor3d
 
 	void BinaryChunk::finalise()
 	{
-		uint32_t size = std::accumulate( m_addedData.begin(), m_addedData.end(), 0, [&]( uint32_t p_value, ByteArray const & p_array )
-		{
-			return p_value + uint32_t( p_array.size() );
-		} );
+		uint32_t size = std::accumulate( m_addedData.begin()
+			, m_addedData.end()
+			, uint32_t{}
+			, [&]( uint32_t p_value, ByteArray const & p_array )
+			{
+				return p_value + uint32_t( p_array.size() );
+			} );
 		m_data.resize( size );
 		size_t index = 0;
 

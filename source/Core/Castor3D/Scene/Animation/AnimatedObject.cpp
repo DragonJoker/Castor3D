@@ -14,10 +14,6 @@ namespace castor3d
 	{
 	}
 
-	AnimatedObject :: ~AnimatedObject()
-	{
-	}
-
 	void AnimatedObject::addAnimation( String const & name )
 	{
 		doAddAnimation( name );

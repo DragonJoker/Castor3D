@@ -24,12 +24,12 @@
 
 int main( int argc, char const * argv[] )
 {
-	int iReturn = EXIT_SUCCESS;
-	int iCount = 1;
+	uint32_t iReturn = EXIT_SUCCESS;
+	uint32_t iCount = 1;
 
 	if ( argc == 2 )
 	{
-		iCount = std::max< int >( 1, atoi( argv[2] ) );
+		iCount = uint32_t( std::max< int >( 1, atoi( argv[2] ) ) );
 	}
 
 #if defined( NDEBUG )
@@ -61,5 +61,5 @@ int main( int argc, char const * argv[] )
 	Testing::registerType( std::make_unique< Testing::CastorUtilsPixelBufferExtractTest >() );
 	BENCHLOOP( iCount, iReturn );
 	castor::Logger::cleanup();
-	return iReturn;
+	return int( iReturn );
 }

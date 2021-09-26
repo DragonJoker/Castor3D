@@ -100,7 +100,6 @@ namespace castor3d
 		crg::PipelineHolder m_holder;
 		LightPipelineConfig const & m_config;
 		std::vector< LightRenderPass > const & m_renderPasses;
-		VkDescriptorSetLayout m_descriptorSetLayout;
 	};
 
 	struct LightsPipeline
@@ -259,8 +258,6 @@ namespace castor3d
 			, LightType lightType );
 
 	private:
-		crg::FrameGraph & m_graph;
-		crg::FramePass const & m_previousPass;
 		RenderDevice const & m_device;
 		Texture const & m_depth;
 		OpaquePassResult const & m_gpResult;

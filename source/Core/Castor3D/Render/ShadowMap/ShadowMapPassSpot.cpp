@@ -105,8 +105,9 @@ namespace castor3d
 			, farPlane );
 		m_shadowType = light.getShadowType();
 		light.getSpotLight()->updateShadow( myCamera
+			, int32_t( updater.index ) );
+		m_shadowMapUbo.update( light
 			, updater.index );
-		m_shadowMapUbo.update( light, updater.index );
 		m_matrixUbo.cpuUpdate( myCamera.getView()
 			, myCamera.getProjection( false ) );
 	}

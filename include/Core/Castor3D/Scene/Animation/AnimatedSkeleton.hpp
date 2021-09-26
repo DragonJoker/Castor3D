@@ -47,13 +47,6 @@ namespace castor3d
 			, Geometry & geometry );
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~AnimatedSkeleton();
-		/**
-		 *\~english
 		 *\brief		Fills a shader variable with this object's skeleton transforms.
 		 *\param[out]	variable	Receives the transforms.
 		 *\~french

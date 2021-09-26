@@ -45,10 +45,6 @@ namespace castor3d
 		}
 	}
 
-	SkeletonAnimationInstanceObject::~SkeletonAnimationInstanceObject()
-	{
-	}
-
 	void SkeletonAnimationInstanceObject::addChild( SkeletonAnimationInstanceObjectSPtr object )
 	{
 		m_children.push_back( object );
