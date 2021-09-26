@@ -89,8 +89,8 @@ target_include_directories( ${PROJECT_NAME}
 		${CMAKE_BINARY_DIR}/include/Core
 		${CMAKE_SOURCE_DIR}/test
 		${CMAKE_BINARY_DIR}/test
-		${CMAKE_SOURCE_DIR}/test/CastorUtilsTest
-		${CMAKE_BINARY_DIR}/test/CastorUtilsTest
+		${CMAKE_SOURCE_DIR}/test/CastorUtils
+		${CMAKE_BINARY_DIR}/test/CastorUtils
 )
 target_link_libraries( ${PROJECT_NAME}
 	PRIVATE

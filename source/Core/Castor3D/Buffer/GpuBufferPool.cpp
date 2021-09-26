@@ -14,27 +14,6 @@ namespace castor3d
 	namespace
 	{
 		static uint32_t constexpr minBlockSize = 96u;
-
-		inline void copyBuffer( ashes::CommandBuffer const & commandBuffer
-			, ashes::BufferBase const & src
-			, ashes::BufferBase const & dst
-			, VkDeviceSize offset
-			, VkDeviceSize size
-			, VkPipelineStageFlags flags )
-		{
-			auto dstSrcStage = dst.getCompatibleStageFlags();
-			commandBuffer.memoryBarrier( dstSrcStage
-				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, dst.makeTransferDestination() );
-			commandBuffer.copyBuffer( src
-				, dst
-				, uint32_t( size )
-				, uint32_t( offset ) );
-			dstSrcStage = dst.getCompatibleStageFlags();
-			commandBuffer.memoryBarrier( dstSrcStage
-				, flags
-				, dst.makeUniformBufferInput() );
-		}
 	}
 
 	GpuBufferPool::GpuBufferPool( RenderSystem & renderSystem
@@ -43,10 +22,6 @@ namespace castor3d
 		: OwnedBy< RenderSystem >{ renderSystem }
 		, m_device{ device }
 		, m_debugName{ std::move( debugName ) }
-	{
-	}
-
-	GpuBufferPool::~GpuBufferPool()
 	{
 	}
 
@@ -93,7 +68,8 @@ namespace castor3d
 				, minBlockSize );
 			buffer->initialise( m_device );
 			it->second.emplace_back( std::move( buffer ) );
-			itB = std::next( it->second.begin(), it->second.size() - 1u );
+			itB = std::next( it->second.begin()
+				, ptrdiff_t( it->second.size() - 1u ) );
 		}
 
 		chunk = ( *itB )->allocate( size );
@@ -135,6 +111,6 @@ namespace castor3d
 		, VkMemoryPropertyFlags flags )
 	{
 		return ( uint32_t( target ) << 0u )
-			| ( uint32_t( flags ) << 16u );
+			| ( flags << 16u );
 	}
 }

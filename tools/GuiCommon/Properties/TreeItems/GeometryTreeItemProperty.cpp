@@ -26,10 +26,6 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	GeometryTreeItemProperty::~GeometryTreeItemProperty()
-	{
-	}
-
 	void GeometryTreeItemProperty::doCreateProperties( wxPGEditor * editor
 		, wxPropertyGrid * grid )
 	{

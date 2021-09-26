@@ -190,14 +190,14 @@ namespace GuiCommon
 
 	//************************************************************************************************
 
-	template< typename Type, size_t Count > void setVariantFromPoint( wxVariant & p_variant, castor::Point< Type, Count > const & p_value )
+	template< typename Type, uint32_t Count > void setVariantFromPoint( wxVariant & p_variant, castor::Point< Type, Count > const & p_value )
 	{
 		PointRefFromVariant< Type, Count >( p_variant ) = p_value;
 	}
 
 	//************************************************************************************************
 
-	template< size_t Count > wxString const * getPointDefaultNames();
+	template< uint32_t Count > wxString const * getPointDefaultNames();
 
 	template<>
 	inline wxString const * getPointDefaultNames< 2 >()
@@ -219,11 +219,11 @@ namespace GuiCommon
 
 	//************************************************************************************************
 
-	template< typename T, size_t Count > struct PointPropertyHelper
+	template< typename T, uint32_t Count > struct PointPropertyHelper
 	{
 		static void addChildren( PointProperty< T, Count > * p_prop, wxString const * p_names, castor::Point< T, Count > const & p_value )
 		{
-			for ( size_t i = 0; i < Count; ++i )
+			for ( uint32_t i = 0; i < Count; ++i )
 			{
 				wxPGProperty * prop = CreateProperty( p_names[i], p_value[i] );
 				prop->SetEditor( wxPGEditor_SpinCtrl );
@@ -238,7 +238,7 @@ namespace GuiCommon
 		{
 			castor::Point< T, Count > const & point = PointRefFromVariant< T, Count >( p_prop->GetValue() );
 
-			for ( size_t i = 0; i < Count; ++i )
+			for ( uint32_t i = 0; i < Count; ++i )
 			{
 				p_prop->Item( i )->SetValue( getVariant< T >( point[i] ) );
 			}
@@ -275,7 +275,7 @@ namespace GuiCommon
 
 	//************************************************************************************************
 
-	template< typename T, size_t Count >
+	template< typename T, uint32_t Count >
 	PointProperty< T, Count >::PointProperty( wxString const & label, wxString const & name, castor::Point< T, Count > const & value )
 		: wxPGProperty( label, name )
 	{
@@ -283,7 +283,7 @@ namespace GuiCommon
 		PointPropertyHelper< T, Count >::addChildren( this, getPointDefaultNames< Count >(), value );
 	}
 
-	template< typename T, size_t Count >
+	template< typename T, uint32_t Count >
 	PointProperty< T, Count >::PointProperty( wxString const & label, wxString const & name, castor::Coords< T, Count > const & value )
 		: wxPGProperty( label, name )
 	{
@@ -292,7 +292,7 @@ namespace GuiCommon
 		PointPropertyHelper< T, Count >::addChildren( this, getPointDefaultNames< Count >(), point );
 	}
 
-	template< typename T, size_t Count >
+	template< typename T, uint32_t Count >
 	PointProperty< T, Count >::PointProperty( wxString const( &p_names )[Count], wxString const & label, wxString const & name, castor::Point< T, Count > const & value )
 		: wxPGProperty( label, name )
 	{
@@ -300,7 +300,7 @@ namespace GuiCommon
 		PointPropertyHelper< T, Count >::addChildren( this, p_names, value );
 	}
 
-	template< typename T, size_t Count >
+	template< typename T, uint32_t Count >
 	PointProperty< T, Count >::PointProperty( wxString const( &p_names )[Count], wxString const & label, wxString const & name, castor::Coords< T, Count > const & value )
 		: wxPGProperty( label, name )
 	{
@@ -309,12 +309,7 @@ namespace GuiCommon
 		PointPropertyHelper< T, Count >::addChildren( this, p_names, point );
 	}
 
-	template< typename T, size_t Count >
-	PointProperty< T, Count >::~PointProperty()
-	{
-	}
-
-	template< typename T, size_t Count >
+	template< typename T, uint32_t Count >
 	void PointProperty< T, Count >::RefreshChildren()
 	{
 		if ( GetChildCount() )
@@ -323,13 +318,13 @@ namespace GuiCommon
 		}
 	}
 
-	template< typename T, size_t Count >
+	template< typename T, uint32_t Count >
 	wxVariant PointProperty< T, Count >::ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const
 	{
 		return PointPropertyHelper< T, Count >::childChanged( thisValue, childIndex, childValue );
 	}
 
-	template< typename T, size_t Count >
+	template< typename T, uint32_t Count >
 	inline void PointProperty< T, Count >::setValueI( castor::Point< T, Count > const & value )
 	{
 		m_value = WXVARIANT( value );

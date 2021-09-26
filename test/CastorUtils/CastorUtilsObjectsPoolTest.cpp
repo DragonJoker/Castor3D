@@ -7,6 +7,8 @@
 
 #include <algorithm>
 
+#pragma clang diagnostic ignored "-Wundefined-var-template"
+
 namespace Testing
 {
 	namespace Memory
@@ -41,8 +43,7 @@ namespace Testing
 			}
 			{
 				MyObjectPool< MemDataType > pool( 1 );
-				Obj * bigObj;
-				bigObj = pool.allocate();
+				pool.allocate();
 			}
 			{
 				MyObjectPool< MemDataType > pool( 1 );
@@ -78,8 +79,7 @@ namespace Testing
 			}
 			{
 				MyAlignedObjectPool< MemDataType > pool( 1 );
-				Obj * bigObj;
-				bigObj = pool.allocate();
+				pool.allocate();
 			}
 			{
 				MyAlignedObjectPool< MemDataType > pool( 1 );
@@ -96,10 +96,6 @@ namespace Testing
 
 	CastorUtilsObjectsPoolTest::CastorUtilsObjectsPoolTest()
 		: TestCase( "CastorUtilsObjectsPoolTest" )
-	{
-	}
-
-	CastorUtilsObjectsPoolTest::~CastorUtilsObjectsPoolTest()
 	{
 	}
 

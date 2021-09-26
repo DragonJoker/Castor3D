@@ -51,7 +51,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~SkeletonAnimationInstanceObject();
+		C3D_API virtual ~SkeletonAnimationInstanceObject() = default;
 		/**
 		 *\~english
 		 *\brief		Adds a child to this object.

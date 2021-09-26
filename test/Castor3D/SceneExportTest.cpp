@@ -6,10 +6,7 @@
 #include <Castor3D/Binary/BinaryMesh.hpp>
 #include <Castor3D/Binary/BinarySkeleton.hpp>
 #include <Castor3D/Cache/CacheView.hpp>
-#include <Castor3D/Cache/MeshCache.hpp>
 #include <Castor3D/Cache/PluginCache.hpp>
-#include <Castor3D/Cache/SceneCache.hpp>
-#include <Castor3D/Cache/WindowCache.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 #include <Castor3D/Model/Mesh/Importer.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
@@ -70,15 +67,17 @@ namespace Testing
 				{
 					auto mesh = it.second;
 					Path path{ folder / subfolder / it.second->getName() + cuT( ".cmsh" ) };
-					BinaryFile file{ path, File::OpenMode::eWrite };
-					result &= castor3d::BinaryWriter< Mesh >{}.write( *mesh, file );
+					{
+						BinaryFile mshfile{ path, File::OpenMode::eWrite };
+						result &= castor3d::BinaryWriter< Mesh >{}.write( *mesh, mshfile );
+					}
 
 					auto skeleton = mesh->getSkeleton();
 
 					if ( result && skeleton )
 					{
-						BinaryFile file{ folder / subfolder / ( it.second->getName() + cuT( ".cskl" ) ), File::OpenMode::eWrite };
-						result = castor3d::BinaryWriter< Skeleton >{}.write( *skeleton, file );
+						BinaryFile sklfile{ folder / subfolder / ( it.second->getName() + cuT( ".cskl" ) ), File::OpenMode::eWrite };
+						result = castor3d::BinaryWriter< Skeleton >{}.write( *skeleton, sklfile );
 					}
 				}
 			}
@@ -96,7 +95,7 @@ namespace Testing
 		void RenameObject( ObjT p_object, CacheT & p_cache )
 		{
 			auto name = p_object->getName();
-			p_object->setName( name + cuT( "_ren" ) );
+			p_object->rename( name + cuT( "_ren" ) );
 			p_cache.remove( name );
 			p_cache.add( p_object->getName(), p_object );
 		}
@@ -113,10 +112,6 @@ namespace Testing
 
 	SceneExportTest::SceneExportTest( Engine & engine )
 		: C3DTestCase{ "SceneExportTest", engine }
-	{
-	}
-
-	SceneExportTest::~SceneExportTest()
 	{
 	}
 

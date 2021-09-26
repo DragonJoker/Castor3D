@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_Castor3DModule_H___
 
 #undef RGB
+
 #include <CastorUtils/Multithreading/MultithreadingModule.hpp>
 #include <CastorUtils/Design/FlagCombination.hpp>
 #include <CastorUtils/Design/OwnedBy.hpp>

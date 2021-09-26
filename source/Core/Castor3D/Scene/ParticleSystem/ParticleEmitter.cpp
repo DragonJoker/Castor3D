@@ -2,6 +2,8 @@
 
 #include "Castor3D/Scene/ParticleSystem/Particle.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, ParticleEmitter )
+
 namespace castor3d
 {
 	ParticleEmitter::ParticleEmitter( ParticleDeclaration const & decl )

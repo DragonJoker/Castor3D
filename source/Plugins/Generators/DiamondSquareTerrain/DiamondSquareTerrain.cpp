@@ -17,7 +17,6 @@ namespace diamond_square_terrain
 		{
 			inline explicit Matrix( uint32_t p_size )
 				: m_size{ p_size }
-				, m_max{ m_size - 1 }
 			{
 				m_map.resize( size_t( m_size ) * m_size );
 			}
@@ -45,24 +44,9 @@ namespace diamond_square_terrain
 				return m_map[getIndex( x, y )];
 			}
 
-			inline float const & operator()( uint32_t x, uint32_t y )const
-			{
-				auto index = getIndex( x, y );
-
-				if ( index >= m_map.size() )
-				{
-					static float dummy = -1;
-					return dummy;
-				}
-
-				return m_map[getIndex( x, y )];
-			}
-
-
 		private:
 			std::vector< float > m_map;
 			uint32_t m_size;
-			uint32_t m_max;
 		};
 	}
 
@@ -71,10 +55,6 @@ namespace diamond_square_terrain
 
 	Generator::Generator()
 		: MeshGenerator{ cuT( "diamond_square_terrain" ) }
-	{
-	}
-
-	Generator::~Generator()
 	{
 	}
 
@@ -160,7 +140,7 @@ namespace diamond_square_terrain
 				, float p_roughness )
 			{
 				uint32_t half = p_size / 2;
-				auto scale = p_roughness * p_size;
+				auto scale = p_roughness * float( p_size );
 				std::uniform_real_distribution< float > distribution;
 
 				if ( half < 1 ) return;

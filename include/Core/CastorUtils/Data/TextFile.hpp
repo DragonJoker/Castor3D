@@ -60,7 +60,7 @@ namespace castor
 		 *\~french
 		 *\brief		Destructeur, ferme le fichier
 		 */
-		CU_API virtual ~TextFile();
+		CU_API ~TextFile()override;
 		/**
 		 *\~english
 		 *\brief		Reads one line from the file (stops at first separator met or when size is read)

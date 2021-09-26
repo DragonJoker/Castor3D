@@ -16,8 +16,8 @@ namespace castor3d
 
 	Plugin::Plugin( PluginType type, castor::DynamicLibrarySPtr library, Engine & engine )
 		: OwnedBy< Engine >( engine )
-		, m_pfnGetRequiredVersion( 0 )
-		, m_pfnGetName( 0 )
+		, m_pfnGetRequiredVersion( nullptr )
+		, m_pfnGetName( nullptr )
 		, m_type( type )
 		, m_library( library )
 	{

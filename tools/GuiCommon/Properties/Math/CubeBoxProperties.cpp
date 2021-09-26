@@ -2,8 +2,11 @@
 
 #include "GuiCommon/Properties/Math/PointProperties.hpp"
 
+#pragma warning( push )
+#pragma warning( disable: 4365 )
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/advprops.h>
+#pragma warning( pop )
 
 using namespace castor;
 
@@ -22,10 +25,6 @@ namespace GuiCommon
 		AddPrivateChild( addAttributes( new Point3fProperty( wxT( "Center" ), wxPG_LABEL, value.getCenter() ) ) );
 		AddPrivateChild( addAttributes( new Point3fProperty( wxT( "Min" ), wxPG_LABEL, value.getMin() ) ) );
 		AddPrivateChild( addAttributes( new Point3fProperty( wxT( "Max" ), wxPG_LABEL, value.getMax() ) ) );
-	}
-
-	BoundingBoxProperty::~BoundingBoxProperty()
-	{
 	}
 
 	void BoundingBoxProperty::RefreshChildren()

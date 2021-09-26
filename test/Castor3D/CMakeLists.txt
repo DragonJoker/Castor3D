@@ -1,26 +1,37 @@
 project( Castor3DTest )
 
-include_directories(
-	${Castor3DIncludeDirs}
-	${CMAKE_CURRENT_BINARY_DIR}
-	${CASTOR_SOURCE_DIR}/test/CastorTest
-	${CASTOR_BINARY_DIR}/test/CastorTest
-	${CASTOR_SOURCE_DIR}/include/Plugins/Renderers
-	${CASTOR_BINARY_DIR}/include/Plugins/Renderers
-)
-
 set( ${PROJECT_NAME}_DESCRIPTION "${PROJECT_NAME} application" )
 set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 3 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
-add_target(
+set( ${PROJECT_NAME}_HDR_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/BinaryExportTest.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Castor3DTestCommon.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Castor3DTestPrerequisites.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/SceneExportTest.hpp
+)
+set( ${PROJECT_NAME}_SRC_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/BinaryExportTest.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Castor3DTestCommon.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/SceneExportTest.cpp
+)
+add_target_min(
 	${PROJECT_NAME}
 	bin_dos
-	${CASTOR_SOURCE_DIR}/test/Castor3D
-	${CASTOR_SOURCE_DIR}/test/Castor3D
-	"CastorUtils;Castor3D;CastorTest"
-	"CastorUtils;Castor3D;CastorTest;${CastorMinLibraries};${CastorBinsDependencies}"
+	""
+	""
+)
+target_include_directories( ${PROJECT_NAME}
+	PRIVATE
+		${Castor3DIncludeDirs}
+		${CMAKE_CURRENT_SOURCE_DIR}
+		${CMAKE_CURRENT_BINARY_DIR}
+)
+target_link_libraries( ${PROJECT_NAME} PRIVATE
+	castor::Castor3D
+	castor::CastorTest
 )
 
 if ( MSVC )

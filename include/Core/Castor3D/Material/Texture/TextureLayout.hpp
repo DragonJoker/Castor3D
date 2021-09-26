@@ -101,7 +101,7 @@ namespace castor3d
 	struct ArrayView
 	{
 		MipView * view;
-		std::vector< ViewT > layers;
+		std::vector< ViewT > layers{};
 
 		template< typename FuncT >
 		void forEachView( FuncT function )const
@@ -135,7 +135,7 @@ namespace castor3d
 	struct SliceView
 	{
 		MipView * view;
-		std::vector< ViewT > slices;
+		std::vector< ViewT > slices{};
 
 		template< typename FuncT >
 		void forEachView( FuncT function )const

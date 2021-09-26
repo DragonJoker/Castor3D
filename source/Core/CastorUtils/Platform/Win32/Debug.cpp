@@ -124,9 +124,9 @@ namespace castor::Debug
 				LockType lock{ makeUniqueLock( mutex ) };
 				const int MaxFnNameLen( 255 );
 
-				std::vector< void * > backTrace( toCapture - toSkip );
-				auto num( ::RtlCaptureStackBackTrace( toSkip
-					, toCapture - toSkip
+				std::vector< void * > backTrace( size_t( toCapture - toSkip ) );
+				auto num( ::RtlCaptureStackBackTrace( DWORD( toSkip )
+					, DWORD( toCapture - toSkip )
 					, backTrace.data()
 					, nullptr ) );
 

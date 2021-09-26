@@ -41,7 +41,6 @@ namespace castortd
 	{
 	public:
 		Grid();
-		~Grid();
 
 		inline auto begin()const
 		{

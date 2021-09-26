@@ -10,7 +10,8 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/HdrColourComponent.hpp>
 #include <CastorUtils/Graphics/RgbColour.hpp>
 
-#include <ashespp/Buffer/Buffer.hpp>
+#include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/Image/StagingTexture.hpp>
 
 namespace castor3d
 {
@@ -41,15 +42,6 @@ namespace castor3d
 		C3D_API ColourBackground( Engine & engine
 			, Scene & scene
 			, castor::String const & name = castor::String{} );
-		/**
-		*\~english
-		*\brief
-		*	Destructor.
-		*\~french
-		*\brief
-		*	Destructeur.
-		*/
-		C3D_API ~ColourBackground();
 		/**
 		*\copydoc	castor3d::SceneBackground::accept
 		*/

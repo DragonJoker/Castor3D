@@ -7,8 +7,9 @@ See LICENSE file in root folder
 #pragma warning( push )
 #pragma warning( disable:4311 )
 #pragma warning( disable:4312 )
-
+#pragma warning( disable:4365 )
 #include <Castor3D/Event/Frame/FrameListener.hpp>
+
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/Face.hpp>
 #include <Castor3D/Model/Vertex.hpp>
@@ -50,7 +51,7 @@ namespace Phong
 	{
 	public:
 		Subdivider();
-		virtual ~Subdivider();
+		~Subdivider()override;
 
 		static castor3d::MeshSubdividerUPtr create();
 		/**

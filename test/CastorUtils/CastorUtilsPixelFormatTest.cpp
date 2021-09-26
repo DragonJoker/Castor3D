@@ -441,10 +441,6 @@ namespace Testing
 	{
 	}
 
-	CastorUtilsPixelFormatTest::~CastorUtilsPixelFormatTest()
-	{
-	}
-
 	void CastorUtilsPixelFormatTest::doRegisterTests()
 	{
 		doRegisterTest( "TestPixelConversions", std::bind( &CastorUtilsPixelFormatTest::TestPixelConversions, this ) );

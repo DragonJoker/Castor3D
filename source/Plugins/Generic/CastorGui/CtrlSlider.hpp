@@ -50,10 +50,6 @@ namespace CastorGui
 			, uint32_t p_style = 0
 			, bool p_visible = true );
 
-		/** Destructor
-		*/
-		virtual ~SliderCtrl();
-
 		/** sets the range
 		*\param[in]	p_value		The new value
 		*/
@@ -97,37 +93,37 @@ namespace CastorGui
 
 		/** @copydoc CastorGui::Control::doCreate
 		*/
-		virtual void doCreate();
+		void doCreate()override;
 
 		/** @copydoc CastorGui::Control::doDestroy
 		*/
-		virtual void doDestroy();
+		void doDestroy()override;
 
 		/** @copydoc CastorGui::Control::doSetPosition
 		*/
-		virtual void doSetPosition( castor::Position const & p_value );
+		void doSetPosition( castor::Position const & p_value )override;
 
 		/** @copydoc CastorGui::Control::doSetSize
 		*/
-		virtual void doSetSize( castor::Size const & p_value );
+		void doSetSize( castor::Size const & p_value )override;
 
 		/** @copydoc CastorGui::Control::doSetBackgroundMaterial
 		*/
-		virtual void doSetBackgroundMaterial( castor3d::MaterialRPtr p_material );
+		void doSetBackgroundMaterial( castor3d::MaterialRPtr p_material )override;
 
 		/** @copydoc CastorGui::Control::doSetForegroundMaterial
 		*/
-		virtual void doSetForegroundMaterial( castor3d::MaterialRPtr p_material );
+		void doSetForegroundMaterial( castor3d::MaterialRPtr p_material )override;
 
 		/** sets the visibility
 		 *\remarks		Used for derived control specific behaviou
 		 *\param[in]	p_value		The new value
 		 */
-		virtual void doSetVisible( bool p_visible );
+		void doSetVisible( bool p_visible )override;
 
 		/** @copydoc CastorGui::Control::doUpdateStyle
 		*/
-		virtual void doUpdateStyle();
+		void doUpdateStyle()override;
 
 		/** Event when mouse moves over the control
 		 *\param[in]	p_event		The mouse event

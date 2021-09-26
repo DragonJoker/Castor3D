@@ -11,8 +11,6 @@
 #include <dirent.h>
 #include <pwd.h>
 
-#define getCurrentDir getcwd
-
 namespace castor
 {
 	namespace
@@ -70,19 +68,6 @@ namespace castor
 				Logger::logWarning( cuT( "Can't open " ) + type + cuT( "[" ) + path + cuT( "]: Unknown error." ) );
 				break;
 			}
-		}
-
-		bool isLink( Path const & filePath )
-		{
-			auto cfilePath = string::stringCast< char >( filePath );
-			struct stat buf;
-
-			if ( lstat( cfilePath.c_str(), &buf ) )
-			{
-				printErrnoName( cuT( "file" ), filePath );
-			}
-
-			return S_ISLNK( buf.st_mode );
 		}
 	}
 
@@ -155,7 +140,7 @@ namespace castor
 		char path[FILENAME_MAX];
 		char buffer[32];
 		sprintf( buffer, "/proc/%d/exe", getpid() );
-		int bytes = std::min< std::size_t >( readlink( buffer, path, sizeof( path ) ), sizeof( path ) - 1 );
+		int bytes = std::min( int( readlink( buffer, path, sizeof( path ) ) ), int( sizeof( path ) ) - 1 );
 
 		if ( bytes > 0 )
 		{
@@ -178,7 +163,7 @@ namespace castor
 
 	bool File::directoryExists( Path const & p_path )
 	{
-		struct stat status = { 0 };
+		struct stat status{};
 		stat( string::stringCast< char >( p_path ).c_str(), &status );
 		return ( status.st_mode & S_IFDIR ) == S_IFDIR;
 	}

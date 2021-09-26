@@ -23,7 +23,6 @@ namespace GuiCommon
 	{
 	public:
 		StcContext();
-		virtual ~StcContext();
 
 		void parseFile( wxString const & fileName );
 

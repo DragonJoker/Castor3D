@@ -4,9 +4,6 @@
 #include "GuiCommon/System/RendererSelector.hpp"
 #include "GuiCommon/System/SplashScreen.hpp"
 
-#include <wx/cmdline.h>
-#include <wx/display.h>
-
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/PluginCache.hpp>
 
@@ -81,8 +78,13 @@
 #	include <X11/Xlib.h>
 #endif
 
+#pragma warning( push )
+#pragma warning( disable: 4365 )
+#include <wx/cmdline.h>
+#include <wx/display.h>
 #include <wx/fileconf.h>
 #include <wx/propgrid/propgrid.h>
+#pragma warning( pop )
 
 namespace GuiCommon
 {
@@ -129,8 +131,8 @@ namespace GuiCommon
 		{
 			Options( Options const & ) = delete;
 			Options & operator=( Options const & ) = delete;
-			Options( Options && ) = default;
-			Options & operator=( Options && ) = default;
+			Options( Options && ) = delete;
+			Options & operator=( Options && ) = delete;
 
 			Options( int argc, wxCmdLineArgsArray const & argv )
 				: parser{ argc, argv }
@@ -237,28 +239,6 @@ namespace GuiCommon
 				}
 			}
 
-			void write( CastorApplication::Config const & config )
-			{
-				configFile->Write( option::lg::LogLevel, long( config.log ) );
-				configFile->Write( option::lg::Validate, config.validate );
-
-				if ( config.syncRender )
-				{
-					configFile->Write( option::lg::SyncRender, config.syncRender );
-				}
-				else
-				{
-					if ( config.unlimFPS )
-					{
-						configFile->Write( option::lg::UnlimFPS, config.unlimFPS );
-					}
-					else
-					{
-						configFile->Write( option::lg::FixedFPS, config.fixedFPS );
-					}
-				}
-			}
-
 			static wxString findConfigFile( wxCmdLineParser const & parser )
 			{
 				wxString cfg;
@@ -291,7 +271,8 @@ namespace GuiCommon
 			, DefaultLogType
 			, wantedFPS
 			, !isCastorThreaded
-			, rendererType }
+			, rendererType
+			, {} }
 	{
 		wxSetAssertHandler( assertHandler );
 #if defined( __WXGTK__ )
@@ -417,7 +398,7 @@ namespace GuiCommon
 	bool CastorApplication::doInitialiseLocale( SplashScreen & splashScreen )
 	{
 		splashScreen.Step( _( "Loading language" ), 1 );
-		long language = wxLANGUAGE_DEFAULT;
+		int language = wxLANGUAGE_DEFAULT;
 		castor::Path pathCurrent = castor::File::getExecutableDirectory().getPath();
 
 		// load language if possible, fall back to english otherwise

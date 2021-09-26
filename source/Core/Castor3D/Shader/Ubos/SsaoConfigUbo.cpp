@@ -49,12 +49,6 @@ namespace castor3d
 		{
 		}
 
-		SsaoConfigData & SsaoConfigData::operator=( SsaoConfigData const & rhs )
-		{
-			StructInstance::operator=( rhs );
-			return *this;
-		}
-
 		ast::type::StructPtr SsaoConfigData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
@@ -166,7 +160,7 @@ namespace castor3d
 			( 1.0f - proj[0][2] ) / proj[0][0],
 			( 1.0f - proj[1][2] ) / proj[1][1]
 		};
-		configuration.numSamples = config.numSamples;
+		configuration.numSamples = int32_t( config.numSamples );
 		configuration.numSpiralTurns = numSpiralTurns;
 		configuration.projScale = projScale;
 		configuration.radius = radius;
@@ -178,10 +172,10 @@ namespace castor3d
 		configuration.intensityDivR6 = intersityDivR6;
 		configuration.farPlaneZ = farZ;
 		configuration.edgeSharpness = config.edgeSharpness;
-		configuration.blurStepSize = config.blurStepSize.value().value();
+		configuration.blurStepSize = int32_t( config.blurStepSize.value().value() );
 		configuration.blurRadius = config.blurRadius.value().value();
-		configuration.blurHighQuality = config.blurHighQuality ? 1u : 0u;
-		configuration.highQuality = config.highQuality ? 1u : 0u;
+		configuration.blurHighQuality = int32_t( config.blurHighQuality ? 1u : 0u );
+		configuration.highQuality = int32_t( config.highQuality ? 1u : 0u );
 		configuration.logMaxOffset = config.logMaxOffset.value();
 		configuration.maxMipLevel = config.maxMipLevel;
 		configuration.minRadius = config.minRadius;

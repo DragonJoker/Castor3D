@@ -80,10 +80,6 @@ namespace castor3d
 		}
 	}
 
-	SceneFileParser::~SceneFileParser()
-	{
-	}
-
 	RenderWindowDesc SceneFileParser::getRenderWindow()
 	{
 		return m_renderWindow;
@@ -487,7 +483,7 @@ namespace castor3d
 			}
 		}
 
-		return context;
+		return std::static_pointer_cast< FileParserContext >( context );
 	}
 
 	void SceneFileParser::doCleanupParser( PreprocessedFile & preprocessed )

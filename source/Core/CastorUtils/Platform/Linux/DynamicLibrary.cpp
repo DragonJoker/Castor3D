@@ -8,6 +8,9 @@
 #include "CastorUtils/Exception/Exception.hpp"
 #include "CastorUtils/Log/Logger.hpp"
 
+#pragma clang diagnostic ignored "-Wunknown-warning-option" //clang 10 doesn't support the next GCC one...
+#pragma GCC diagnostic ignored "-Wconditionally-supported"
+
 namespace castor
 {
 	void DynamicLibrary::doOpen()noexcept
@@ -29,9 +32,9 @@ namespace castor
 		}
 	}
 
-	void * DynamicLibrary::doGetFunction( String const & name )noexcept
+	VoidFnType DynamicLibrary::doGetFunction( String const & name )noexcept
 	{
-		void * result = nullptr;
+		VoidFnType result = nullptr;
 
 		if ( m_library )
 		{
@@ -40,10 +43,10 @@ namespace castor
 			try
 			{
 				dlerror();
-				result = dlsym( m_library, stdname.c_str() );
+				result = reinterpret_cast< VoidFnType >( dlsym( m_library, stdname.c_str() ) );
 				auto error = dlerror();
 
-				if ( error != NULL )
+				if ( error != nullptr )
 				{
 					throw std::runtime_error( std::string( error ) );
 				}

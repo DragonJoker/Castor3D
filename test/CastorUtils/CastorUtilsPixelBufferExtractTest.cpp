@@ -341,10 +341,6 @@ namespace Testing
 	{
 	}
 
-	CastorUtilsPixelBufferExtractTest::~CastorUtilsPixelBufferExtractTest()
-	{
-	}
-
 	void CastorUtilsPixelBufferExtractTest::doRegisterTests()
 	{
 		doRegisterTest( "TestExtract1Component", std::bind( &CastorUtilsPixelBufferExtractTest::TestExtract1Component, this ) );

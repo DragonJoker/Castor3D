@@ -25,7 +25,6 @@ namespace GuiCommon
 		RendererSelector( castor3d::Engine & engine
 			, wxWindow * parent
 			, wxString const & title );
-		virtual ~RendererSelector();
 
 		castor::String getSelectedRenderer()const;
 

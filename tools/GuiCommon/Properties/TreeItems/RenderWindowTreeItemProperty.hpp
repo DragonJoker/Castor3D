@@ -33,19 +33,12 @@ namespace GuiCommon
 		 */
 		RenderWindowTreeItemProperty( bool editable
 			, castor3d::RenderWindow & target );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		~RenderWindowTreeItemProperty();
 
 	private:
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )override;
 
 	private:
 		castor3d::RenderWindow & m_window;

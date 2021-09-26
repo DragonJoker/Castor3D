@@ -38,11 +38,9 @@ namespace Bloom
 		static castor::String const CombineMapScene;
 
 	private:
-		castor3d::RenderDevice const & m_device;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		uint32_t m_blurPassesCount;
 		crg::ImageId m_resultImg;
 		crg::ImageViewId m_resultView;
 		crg::FramePass & m_pass;

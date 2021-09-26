@@ -16,11 +16,15 @@
 
 #include <GuiCommon/System/CastorApplication.hpp>
 
+#pragma warning( push )
+#pragma warning( disable: 4365 )
+#pragma warning( disable: 4371 )
 #include <wx/frame.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
 #include <wx/windowptr.h>
 #include <wx/wx.h>
+#pragma warning( pop )
 
 #include <chrono>
 #include <cstdlib>

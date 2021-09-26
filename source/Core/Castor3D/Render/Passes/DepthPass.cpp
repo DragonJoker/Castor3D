@@ -52,10 +52,6 @@ namespace castor3d
 	{
 	}
 
-	DepthPass::~DepthPass()
-	{
-	}
-
 	TextureFlags DepthPass::getTexturesMask()const
 	{
 		return TextureFlags{ TextureFlag::eOpacity
@@ -167,7 +163,7 @@ namespace castor3d
 				auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
 					, c3d_modelData.getNormalMtx( flags.programFlags, curMtxModel ) );
 				outSurface.computeTangentSpace( flags.programFlags
-					, c3d_sceneData.getCameraPosition()
+					, c3d_sceneData.cameraPosition
 					, mtxNormal
 					, v4Normal
 					, v4Tangent );
@@ -276,7 +272,7 @@ namespace castor3d
 					, c3d_modelData.getEnvMapIndex()
 					, matFlags );
 				data0 = vec4( in.fragCoord.z()
-					, length( inSurface.worldPosition - c3d_sceneData.getCameraPosition() )
+					, length( inSurface.worldPosition - c3d_sceneData.cameraPosition )
 					//, uintBitsToFloat( c3d_modelData.getNodeId() )
 					, writer.cast< sdw::Float >( c3d_modelData.getNodeId() )
 					, writer.cast< sdw::Float >( inSurface.material ) );

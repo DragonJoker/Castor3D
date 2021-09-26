@@ -33,20 +33,13 @@ namespace GuiCommon
 		*/
 		ExportOptionsTreeItemProperty( bool editable
 			, castor3d::exporter::ExportOptions & options );
-		/**
-		*\~english
-		*\brief		Destructor
-		*\~french
-		*\brief		Destructeur
-		*/
-		~ExportOptionsTreeItemProperty();
 
 	private:
 		/**
 		*\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		*/
-		virtual void doCreateProperties( wxPGEditor * editor
-			, wxPropertyGrid * grid );
+		void doCreateProperties( wxPGEditor * editor
+			, wxPropertyGrid * grid )override;
 
 	private:
 		castor3d::exporter::ExportOptions & m_options;

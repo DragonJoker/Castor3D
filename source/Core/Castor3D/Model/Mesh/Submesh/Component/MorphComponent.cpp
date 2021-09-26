@@ -88,7 +88,7 @@ namespace castor3d
 	{
 		auto result = std::make_shared< MorphComponent >( submesh );
 		result->m_data = m_data;
-		return result;
+		return std::static_pointer_cast< SubmeshComponent >( result );
 	}
 
 	bool MorphComponent::doInitialise( RenderDevice const & device )

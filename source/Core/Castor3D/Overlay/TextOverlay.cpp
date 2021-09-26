@@ -20,12 +20,30 @@ CU_ImplementCUSmartPtr( castor3d, TextOverlay )
 
 namespace castor3d
 {
-	TextOverlay::TextOverlay()
-		: OverlayCategory{ OverlayType::eText }
+	namespace
 	{
+		castor::Font & getFont( TextOverlay const & overlay )
+		{
+			FontTextureSPtr fontTexture = overlay.getFontTexture();
+
+			if ( !fontTexture )
+			{
+				CU_Exception( cuT( "The TextOverlay [" ) + overlay.getOverlayName() + cuT( "] has no FontTexture. Did you set its font?" ) );
+			}
+
+			auto pfont = fontTexture->getFont();
+
+			if ( !pfont )
+			{
+				CU_Exception( cuT( "The TextOverlay [" ) + overlay.getOverlayName() + cuT( "] has no Font. Did you set its font?" ) );
+			}
+
+			return *pfont;
+		}
 	}
 
-	TextOverlay::~TextOverlay()
+	TextOverlay::TextOverlay()
+		: OverlayCategory{ OverlayType::eText }
 	{
 	}
 
@@ -44,11 +62,10 @@ namespace castor3d
 		// Récupération / Création de la police
 		Engine * engine = m_pOverlay->getEngine();
 		auto & fontCache = engine->getFontCache();
-		auto font = fontCache.find( name );
 
-		if ( font.lock() )
+		if ( auto font = fontCache.find( name ).lock() )
 		{
-			FontTextureSPtr fontTexture = engine->getOverlayCache().getFontTexture( font.lock()->getName() );
+			FontTextureSPtr fontTexture = engine->getOverlayCache().getFontTexture( font->getName() );
 
 			if ( !fontTexture )
 			{
@@ -78,11 +95,17 @@ namespace castor3d
 
 		if ( !fontTexture )
 		{
-			setVisible( false );
 			CU_Exception( cuT( "The TextOverlay [" ) + getOverlayName() + cuT( "] has no FontTexture. Did you set its font?" ) );
 		}
 
 		auto font = fontTexture->getFont();
+
+		if ( !font )
+		{
+			setVisible( false );
+			CU_Exception( cuT( "The TextOverlay [" ) + getOverlayName() + cuT( "] has no Font. Did you set its font?" ) );
+		}
+
 		std::vector< char32_t > newCaption;
 
 		for ( castor::string::utf8::iterator it{ m_currentCaption.begin() }; it != m_currentCaption.end(); ++it )
@@ -231,7 +254,7 @@ namespace castor3d
 		{
 		case TextTexturingMode::eLetter:
 			doUpdateBuffer( size
-				, [this]( castor::Point2d const & size
+				, []( castor::Point2d const &
 					, castor::Rectangle const & absolute
 					, castor::Point4f const & fontUV
 					, float & uvLeft
@@ -248,7 +271,7 @@ namespace castor3d
 
 		case TextTexturingMode::eText:
 			doUpdateBuffer( size
-				, [this]( castor::Point2d const & size
+				, []( castor::Point2d const & sz
 					, castor::Rectangle const & absolute
 					, castor::Point4f const & fontUV
 					, float & uvLeft
@@ -256,10 +279,10 @@ namespace castor3d
 					, float & uvRight
 					, float & uvBottom )
 			{
-				uvLeft = float( absolute[0] / size[0] );
-				uvTop = float( absolute[1] / size[1] );
-				uvRight = float( absolute[2] / size[0] );
-				uvBottom = float( absolute[3] / size[1] );
+				uvLeft = float( absolute[0] / sz[0] );
+				uvTop = float( absolute[1] / sz[1] );
+				uvRight = float( absolute[2] / sz[0] );
+				uvBottom = float( absolute[3] / sz[1] );
 			} );
 			break;
 
@@ -270,8 +293,7 @@ namespace castor3d
 
 	TextOverlay::DisplayableLineArray TextOverlay::doPrepareText( castor::Size const & p_renderSize, castor::Point2d const & p_size )
 	{
-		FontTextureSPtr fontTexture = getFontTexture();
-		auto font = fontTexture->getFont();
+		auto & font = getFont( *this );
 		castor::StringArray lines = castor::string::split( m_previousCaption
 			, cuT( "\n" )
 			, uint32_t( std::count( m_previousCaption.begin(), m_previousCaption.end(), cuT( '\n' ) ) + 1 )
@@ -287,7 +309,7 @@ namespace castor3d
 
 			for ( castor::string::utf8::const_iterator itLine{ lineText.begin() }; itLine != lineText.end(); ++itLine )
 			{
-				castor::Glyph const & glyph{ font->getGlyphAt( *itLine ) };
+				castor::Glyph const & glyph{ font.getGlyphAt( *itLine ) };
 				DisplayableChar character{ castor::Point2d{}, castor::Point2d{ glyph.getAdvance(), glyph.getSize().getHeight() }, glyph };
 
 				if ( glyph.getCharacter() == cuT( ' ' )
@@ -320,8 +342,7 @@ namespace castor3d
 
 	void TextOverlay::doPrepareWord( castor::Size const & p_renderSize, std::u32string const & p_word, double p_wordWidth, castor::Point2d const & p_size, double & p_left, DisplayableLine & p_line, DisplayableLineArray & p_lines )
 	{
-		auto fontTexture = getFontTexture();
-		auto const & font = *fontTexture->getFont();
+		auto & font = getFont( *this );
 
 		if ( p_left + p_wordWidth > p_size[0] && m_wrappingMode == TextWrappingMode::eBreakWords )
 		{
@@ -450,7 +471,7 @@ namespace castor3d
 			}
 			else if ( m_lineSpacingMode == TextLineSpacingMode::eMaxFontHeight )
 			{
-				height = double( getFontTexture()->getFont()->getMaxHeight() );
+				height = double( getFont( *this ).getMaxHeight() );
 			}
 
 			double offset{ 0.0 };

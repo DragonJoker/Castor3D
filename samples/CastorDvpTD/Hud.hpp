@@ -8,7 +8,6 @@ namespace castortd
 	{
 	public:
 		Hud( Game const & p_game, castor3d::Scene const & p_scene );
-		~Hud();
 
 		void initialise();
 		void start();

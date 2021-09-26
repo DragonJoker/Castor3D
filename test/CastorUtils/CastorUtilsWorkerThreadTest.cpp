@@ -13,10 +13,6 @@ namespace Testing
 	{
 	}
 
-	CastorUtilsWorkerThreadTest::~CastorUtilsWorkerThreadTest()
-	{
-	}
-
 	void CastorUtilsWorkerThreadTest::doRegisterTests()
 	{
 		doRegisterTest( "CastorUtilsWorkerThreadTest::SingleThread", std::bind( &CastorUtilsWorkerThreadTest::SingleThread, this ) );
@@ -26,12 +22,12 @@ namespace Testing
 
 	void CastorUtilsWorkerThreadTest::SingleThread()
 	{
-		constexpr size_t count = 1000000u;
+		static constexpr size_t count = 1000000u;
 		WorkerThread worker;
 		CT_CHECK( worker.isEnded() );
 		std::vector< size_t > data;
 
-		worker.feed( [&data, count]()
+		worker.feed( [&data]()
 		{
 			while ( data.size() < count )
 			{
@@ -50,12 +46,12 @@ namespace Testing
 
 	void CastorUtilsWorkerThreadTest::ProducerConsumer()
 	{
-		constexpr size_t count = 1000000u;
+		static constexpr size_t count = 1000000u;
 		WorkerThread producer;
 		WorkerThread consumer;
 		std::atomic_int value{ 0 };
 
-		producer.feed( [&value, &count]()
+		producer.feed( [&value]()
 		{
 			size_t i = 0;
 
@@ -65,7 +61,7 @@ namespace Testing
 			}
 		} );
 
-		consumer.feed( [&value, &count]()
+		consumer.feed( [&value]()
 		{
 			size_t i = 0;
 
@@ -86,12 +82,12 @@ namespace Testing
 
 	void CastorUtilsWorkerThreadTest::MultipleSameTask()
 	{
-		constexpr size_t count = 1000000u;
+		static constexpr size_t count = 1000000u;
 		WorkerThread worker1;
 		WorkerThread worker2;
 		std::atomic_int value{ 0 };
 
-		auto job = [&value, &count]()
+		auto job = [&value]()
 		{
 			size_t i = 0;
 

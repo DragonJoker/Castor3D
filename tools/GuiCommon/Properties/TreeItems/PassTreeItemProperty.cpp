@@ -1,3 +1,5 @@
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+
 #include "GuiCommon/Properties/TreeItems/PassTreeItemProperty.hpp"
 
 #include "GuiCommon/Properties/AdditionalProperties.hpp"
@@ -30,20 +32,17 @@ namespace GuiCommon
 		public:
 			static void submit( Pass & pass
 				, TreeItemProperty * properties
-				, wxPGEditor * editor
 				, wxPropertyGrid * grid )
 			{
-				PassTreeGatherer vis{ properties, editor, grid };
+				PassTreeGatherer vis{ properties, grid };
 				pass.accept( vis );
 			}
 
 		private:
 			PassTreeGatherer( TreeItemProperty * properties
-				, wxPGEditor * editor
 				, wxPropertyGrid * grid )
 				: castor3d::PassVisitor{ {} }
 				, m_properties{ properties }
-				, m_editor{ editor }
 				, m_grid{ grid }
 			{
 			}
@@ -187,7 +186,6 @@ namespace GuiCommon
 
 		private:
 			TreeItemProperty * m_properties;
-			wxPGEditor * m_editor;
 			wxPropertyGrid * m_grid;
 		};
 
@@ -526,10 +524,6 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	PassTreeItemProperty::~PassTreeItemProperty()
-	{
-	}
-
 	void PassTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_PASS = _( "Pass: " );
@@ -541,15 +535,15 @@ namespace GuiCommon
 		if ( pass )
 		{
 			addProperty( grid, PROPERTY_CATEGORY_PASS + wxString( pass->getOwner()->getName() ) );
-			PassTreeGatherer::submit( *pass, this, editor, grid );
+			PassTreeGatherer::submit( *pass, this, grid );
 			addProperty( grid, PROPERTY_PASS_SHADER, editor
 				, [this]( wxVariant const & var )
 				{
-					PassSPtr pass = getPass();
-					ShaderSources sources = PassShaderGatherer::submit( *pass, m_scene );
-					ShaderDialog * editor = new ShaderDialog{ pass->getOwner()->getEngine()
+					PassSPtr lpass = getPass();
+					ShaderSources sources = PassShaderGatherer::submit( *lpass, m_scene );
+					ShaderDialog * editor = new ShaderDialog{ lpass->getOwner()->getEngine()
 						, std::move( sources )
-						, pass->getOwner()->getName() + string::toString( pass->getId(), 10, std::locale{ "C" } )
+						, lpass->getOwner()->getName() + string::toString( lpass->getId(), 10, std::locale{ "C" } )
 						, m_parent };
 					editor->Show();
 				} );

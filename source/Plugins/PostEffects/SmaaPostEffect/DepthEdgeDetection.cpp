@@ -37,8 +37,8 @@ namespace smaa
 			, castor::Size const & size
 			, SmaaConfig const & config )
 		{
-			auto renderTargetMetrics = Point4f{ 1.0f / size.getWidth()
-				, 1.0f / size.getHeight()
+			auto renderTargetMetrics = Point4f{ 1.0f / float( size.getWidth() )
+				, 1.0f / float( size.getHeight() )
 				, float( size.getWidth() )
 				, float( size.getHeight() ) };
 
@@ -140,7 +140,6 @@ namespace smaa
 			, doGetEdgeDetectionFP( *renderTarget.getEngine(), renderTarget.getSize(), config )
 			, enabled }
 		, m_depthView{ renderTarget.getGraph().createView( doCreateDepthView( depthView ) ) }
-		, m_sourceView{ depthView }
 	{
 		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
 			, VK_FILTER_LINEAR

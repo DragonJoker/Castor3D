@@ -66,10 +66,6 @@ namespace castor3d
 	{
 	}
 
-	VoxelizePass::~VoxelizePass()
-	{
-	}
-
 	void VoxelizePass::accept( RenderTechniqueVisitor & visitor )
 	{
 		auto flags = visitor.getFlags();
@@ -609,32 +605,34 @@ namespace castor3d
 							, *lightMat );
 					}
 
+					auto color = writer.declLocale( "color"
+						, emissive );
+
 					if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 					{
 						auto worldEye = writer.declLocale( "worldEye"
-							, c3d_sceneData.getCameraPosition() );
+							, c3d_sceneData.cameraPosition );
 						auto surface = writer.declLocale< shader::Surface >( "surface" );
 						surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
-						auto color = writer.declLocale( "color"
-							, lightingModel->computeCombinedDiffuse( *lightMat
+						color += occlusion
+							* lightMat->albedo
+							* lightingModel->computeCombinedDiffuse( *lightMat
 								, c3d_sceneData
 								, surface
 								, worldEye
-								, c3d_modelData.isShadowReceiver() ) );
-						color *= lightMat->albedo * occlusion;
-						color += emissive;
-
-						auto encodedColor = writer.declLocale( "encodedColor"
-							, utils.encodeColor( vec4( color, alpha ) ) );
-						auto encodedNormal = writer.declLocale( "encodedNormal"
-							, utils.encodeNormal( normal ) );
-						auto writecoord = writer.declLocale( "writecoord"
-							, uvec3( floor( uvw * c3d_voxelData.clipToGrid ) ) );
-						auto id = writer.declLocale( "id"
-							, utils.flatten( writecoord, uvec3( sdw::UInt{ m_voxelConfig.gridSize.value() } ) ) );
-						atomicMax( output[id].colorMask, encodedColor );
-						atomicMax( output[id].normalMask, encodedNormal );
+								, c3d_modelData.isShadowReceiver() );
 					}
+
+					auto encodedColor = writer.declLocale( "encodedColor"
+						, utils.encodeColor( vec4( color, alpha ) ) );
+					auto encodedNormal = writer.declLocale( "encodedNormal"
+						, utils.encodeNormal( normal ) );
+					auto writecoord = writer.declLocale( "writecoord"
+						, uvec3( floor( uvw * c3d_voxelData.clipToGrid ) ) );
+					auto id = writer.declLocale( "id"
+						, utils.flatten( writecoord, uvec3( sdw::UInt{ m_voxelConfig.gridSize.value() } ) ) );
+					atomicMax( output[id].colorMask, encodedColor );
+					atomicMax( output[id].normalMask, encodedNormal );
 				}
 				FI;
 			} );

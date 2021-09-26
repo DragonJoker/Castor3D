@@ -29,7 +29,7 @@ namespace castor
 
 		for ( int32_t i = 0; i < ids; ++i )
 		{
-			Platform::callCpuid( i, data );
+			Platform::callCpuid( uint32_t( i ), data );
 			datas.push_back( data );
 		}
 
@@ -49,15 +49,15 @@ namespace castor
 		// load bitset with flags for function 0x00000001
 		if ( ids >= 1 )
 		{
-			m_f_1_ECX = datas[1][2];
-			m_f_1_EDX = datas[1][3];
+			m_f_1_ECX = uint64_t( datas[1][2] );
+			m_f_1_EDX = uint64_t( datas[1][3] );
 		}
 
 		// load bitset with flags for function 0x00000007
 		if ( ids >= 7 )
 		{
-			m_f_7_EBX = datas[7][1];
-			m_f_7_ECX = datas[7][2];
+			m_f_7_EBX = uint64_t( datas[7][1] );
+			m_f_7_ECX = uint64_t( datas[7][2] );
 		}
 
 		m_coreCount = Platform::getCoreCount();

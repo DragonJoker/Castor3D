@@ -28,13 +28,6 @@ namespace castor3d
 			, castor::String const & name = castor::cuEmptyString );
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~SkeletonAnimationNode();
-		/**
-		 *\~english
 		 *\brief		Move constructor.
 		 *\~french
 		 *\brief		Constructeur par déplacement.
@@ -69,7 +62,7 @@ namespace castor3d
 		 *\brief		Récupère le nom de l'objet
 		 *\return		Le nom
 		 */
-		C3D_API virtual castor::String const & getName()const
+		C3D_API castor::String const & getName()const override
 		{
 			return m_name;
 		}

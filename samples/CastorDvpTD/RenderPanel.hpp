@@ -1,13 +1,13 @@
 #pragma once
 
-#include <wx/panel.h>
-#include <wx/timer.h>
+#include "TowerCategory.hpp"
 
 #include <GuiCommon/System/NodeState.hpp>
 
 #include <Castor3D/Engine.hpp>
 
-#include "TowerCategory.hpp"
+#include <wx/panel.h>
+#include <wx/timer.h>
 
 namespace castortd
 {
@@ -26,7 +26,8 @@ namespace castortd
 	{
 	public:
 		RenderPanel( wxWindow * parent, wxSize const & size, Game & game );
-		~RenderPanel();
+		~RenderPanel()override;
+
 		void reset();
 		void setRenderTarget( castor3d::RenderTargetSPtr target );
 

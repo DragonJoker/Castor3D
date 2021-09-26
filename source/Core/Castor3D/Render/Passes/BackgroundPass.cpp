@@ -60,11 +60,6 @@ namespace castor3d
 	{
 	}
 
-	BackgroundPass::~BackgroundPass()
-	{
-		m_onBackgroundChanged.disconnect();
-	}
-
 	void BackgroundPass::update( CpuUpdater & updater )
 	{
 		updater.viewport = &m_viewport;
@@ -323,10 +318,12 @@ namespace castor3d
 	ashes::PipelineViewportStateCreateInfo BackgroundPass::doCreateViewportState()
 	{
 		ashes::VkViewportArray viewports( 1u
-			, { float( 0.0f )
-				, float( 0.0f )
+			, { 0.0f
+				, 0.0f
 				, float( m_size.width )
-				, float( m_size.height ) } );
+				, float( m_size.height )
+				, 0.0f
+				, 1.0f } );
 		ashes::VkScissorArray scissors( 1u
 			, { 0
 				, 0
@@ -433,22 +430,22 @@ namespace castor3d
 		stepProgressBar( progress, "Creating background pass" );
 		auto size = makeExtent2D( getExtent( colour ) );
 		auto & result = graph.createPass( name + "Background"
-			, [this, &background, progress, size, clearColour, depth]( crg::FramePass const & pass
+			, [this, &background, progress, size, depth]( crg::FramePass const & framePass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBar( progress, "Initialising background pass" );
-				auto result = std::make_unique< BackgroundPass >( pass
+				auto res = std::make_unique< BackgroundPass >( framePass
 					, context
-					, graph
+					, runnableGraph
 					, m_device
 					, background
 					, size
 					, depth != nullptr );
-				m_backgroundPass = result.get();
-				m_device.renderSystem.getEngine()->registerTimer( graph.getName() + "/Background"
-					, result->getTimer() );
-				return result;
+				m_backgroundPass = res.get();
+				m_device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/Background"
+					, res->getTimer() );
+				return res;
 			} );
 
 		if ( previousPass )

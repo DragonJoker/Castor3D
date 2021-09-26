@@ -12,16 +12,16 @@ namespace castor
 	SphericalVertex::SphericalVertex( Point3f const & vertex )
 	{
 		m_radius = float( point::length( vertex ) );
-		m_phi = acos( vertex[2] / m_radius );
+		m_phi = float( acos( vertex[2] / m_radius ) );
 		auto tmp = m_radius * sin( m_phi );
 
 		if ( tmp == 0.0 || vertex[0] - tmp < 0.001 )
 		{
-			m_theta = asin( vertex[1] / tmp );
+			m_theta = float( asin( vertex[1] / tmp ) );
 		}
 		else
 		{
-			m_theta = acos( vertex[0] / tmp );
+			m_theta = float( acos( vertex[0] / tmp ) );
 		}
 	}
 

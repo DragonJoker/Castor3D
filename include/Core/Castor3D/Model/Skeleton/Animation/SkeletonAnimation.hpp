@@ -31,13 +31,6 @@ namespace castor3d
 			, castor::String const & name = castor::cuEmptyString );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~SkeletonAnimation();
-		/**
-		 *\~english
 		 *\brief		Move constructor.
 		 *\~french
 		 *\brief		Constructeur par déplacement.
@@ -148,7 +141,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les objets mouvants.
 		 */
-		inline SkeletonAnimationObjectPtrStrMap const & getObjects()const
+		SkeletonAnimationObjectPtrStrMap const & getObjects()const
 		{
 			return m_toMove;
 		}
@@ -159,7 +152,7 @@ namespace castor3d
 		 *\brief		Récupère le nombre d'objets mouvants
 		 *\return		Les objets mouvants racines.
 		 */
-		inline SkeletonAnimationObjectPtrArray const & getRootObjects()const
+		SkeletonAnimationObjectPtrArray const & getRootObjects()const
 		{
 			return m_arrayMoving;
 		}

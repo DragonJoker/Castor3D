@@ -17,10 +17,6 @@ namespace castor3d
 	{
 	}
 
-	Torus::~Torus()
-	{
-	}
-
 	MeshGeneratorSPtr Torus::create()
 	{
 		return std::make_shared< Torus >();
@@ -92,7 +88,7 @@ namespace castor3d
 					auto vertex = submesh[j];
 					vertex.pos = castor::Point3f{ vertex.pos[0] * cos( rAngleEx ), vertex.pos[1], vertex.pos[0] * sin( rAngleEx ) };
 					vertex.tex = castor::Point3f{ float( i ) / float( m_externalNbFaces ), float( j ) / float( m_internalNbFaces ) };
-					vertex.nml = point::getNormalised( castor::Point3f( float( vertex.nml[0] * cos( rAngleEx ) ), float( vertex.nml[1] ), float( vertex.nml[0] * sin( rAngleEx ) ) ) );
+					vertex.nml = point::getNormalised( castor::Point3f( float( vertex.nml[0] * cos( rAngleEx ) ), vertex.nml[1], float( vertex.nml[0] * sin( rAngleEx ) ) ) );
 					submesh.addPoint( vertex );
 				}
 

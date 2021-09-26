@@ -14,16 +14,19 @@
 
 namespace smaa
 {
-	struct ParserContext
+	namespace
 	{
-		castor3d::Engine * engine{ nullptr };
-		Preset preset{};
-		SmaaConfig::Data data{};
-	};
+		struct ParserContext
+		{
+			castor3d::Engine * engine{ nullptr };
+			Preset preset{};
+			SmaaConfig::Data data{};
+		};
 
-	ParserContext & getParserContext( castor::FileParserContext & context )
-	{
-		return *static_cast< ParserContext * >( context.getUserContext( PostEffect::Type ) );
+		ParserContext & getParserContext( castor::FileParserContext & context )
+		{
+			return *static_cast< ParserContext * >( context.getUserContext( PostEffect::Type ) );
+		}
 	}
 
 	CU_ImplementAttributeParser( parserSmaa )

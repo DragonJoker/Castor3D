@@ -37,22 +37,12 @@ namespace GuiCommon
 		FrameVariableBufferTreeItemProperty( castor3d::Engine * engine
 			, bool editable
 			, UniformBufferValues & buffer );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		~FrameVariableBufferTreeItemProperty();
 
 	private:
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid );
-
-	private:
-		UniformBufferValues & m_buffer;
+		void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )override;
 	};
 }
 

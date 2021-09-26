@@ -21,197 +21,200 @@
 
 #include <SceneExporter/CscnExporter.hpp>
 
-using StringArray = std::vector< std::string >;
-
-struct Options
+namespace
 {
-	castor::Path input;
-	castor::String output;
-	castor::String passType{ castor3d::SpecularGlossinessPbrPass::Type };
-	castor3d::exporter::ExportOptions options;
-};
+	using StringArray = std::vector< std::string >;
 
-void printUsage()
-{
-	std::cout << "Castor Mesh Converter is a tool that allows you to convert any mesh file to the CMSH file format." << std::endl;
-	std::cout << "Usage:" << std::endl;
-	std::cout << "CastorMeshConverter FILE [-o NAME] [-s] [-r]" << std::endl;
-	std::cout << "Options:" << std::endl;
-	std::cout << "  -o NAME     Allows you to specify the output file name." << std::endl;
-	std::cout << "              NAME can omit the extension." << std::endl << std::endl;
-	std::cout << "  -s          Splits the mesh per material." << std::endl;
-	std::cout << "  -r          Recenters the submesh in its bounding box." << std::endl;
-	std::cout << "              Only useful whe -s is specified" << std::endl;
-}
-
-bool doParseArgs( int argc
-	, char * argv[]
-	, Options & options )
-{
-	StringArray args{ argv + 1, argv + argc };
-
-	if ( args.empty() )
+	struct Options
 	{
-		std::cerr << "Missing mesh file parameter." << std::endl << std::endl;
-		printUsage();
-		return false;
+		castor::Path input;
+		castor::String output;
+		castor::String passType{ castor3d::SpecularGlossinessPbrPass::Type };
+		castor3d::exporter::ExportOptions options;
+	};
+
+	void printUsage()
+	{
+		std::cout << "Castor Mesh Converter is a tool that allows you to convert any mesh file to the CMSH file format." << std::endl;
+		std::cout << "Usage:" << std::endl;
+		std::cout << "CastorMeshConverter FILE [-o NAME] [-s] [-r]" << std::endl;
+		std::cout << "Options:" << std::endl;
+		std::cout << "  -o NAME     Allows you to specify the output file name." << std::endl;
+		std::cout << "              NAME can omit the extension." << std::endl << std::endl;
+		std::cout << "  -s          Splits the mesh per material." << std::endl;
+		std::cout << "  -r          Recenters the submesh in its bounding box." << std::endl;
+		std::cout << "              Only useful whe -s is specified" << std::endl;
 	}
 
-	auto it = std::find( args.begin(), args.end(), "-h" );
-
-	if ( it == args.end() )
+	bool doParseArgs( int argc
+		, char * argv[]
+		, Options & options )
 	{
-		it = std::find( args.begin(), args.end(), "--help" );
-	}
+		StringArray args{ argv + 1, argv + argc };
 
-	if ( it != args.end() )
-	{
-		args.erase( it );
-		printUsage();
-		return false;
-	}
-
-	options.input = castor::Path{ castor::string::stringCast< castor::xchar >( args[0] ) };
-	it = std::find( args.begin(), args.end(), "-o" );
-
-	if ( it == args.end() )
-	{
-		options.output = options.input.getFileName();
-	}
-	else if ( ++it == args.end() )
-	{
-		std::cerr << "Missing NAME parameter for -o option." << std::endl << std::endl;
-		printUsage();
-		return false;
-	}
-	else
-	{
-		options.output = castor::Path{ *it }.getFileName();
-	}
-
-	it = std::find( args.begin(), args.end(), "-s" );
-	options.options.splitPerMaterial = it != args.end();
-	it = std::find( args.begin(), args.end(), "-r" );
-	options.options.recenter = it != args.end();
-
-	return true;
-}
-
-castor::PathArray listPluginsFiles( castor::Path const & folder )
-{
-	castor::PathArray files;
-	castor::File::listDirectoryFiles( folder, files );
-	castor::PathArray result;
-
-	// Exclude debug plug-in in release builds, and release plug-ins in debug builds
-	for ( auto file : files )
-	{
-		if ( file.find( CU_SharedLibExt ) != castor::String::npos
-			&& file.getFileName().find( cuT( "castor3d" ) ) == 0u )
+		if ( args.empty() )
 		{
-			result.push_back( file );
+			std::cerr << "Missing mesh file parameter." << std::endl << std::endl;
+			printUsage();
+			return false;
 		}
+
+		auto it = std::find( args.begin(), args.end(), "-h" );
+
+		if ( it == args.end() )
+		{
+			it = std::find( args.begin(), args.end(), "--help" );
+		}
+
+		if ( it != args.end() )
+		{
+			args.erase( it );
+			printUsage();
+			return false;
+		}
+
+		options.input = castor::Path{ castor::string::stringCast< castor::xchar >( args[0] ) };
+		it = std::find( args.begin(), args.end(), "-o" );
+
+		if ( it == args.end() )
+		{
+			options.output = options.input.getFileName();
+		}
+		else if ( ++it == args.end() )
+		{
+			std::cerr << "Missing NAME parameter for -o option." << std::endl << std::endl;
+			printUsage();
+			return false;
+		}
+		else
+		{
+			options.output = castor::Path{ *it }.getFileName();
+		}
+
+		it = std::find( args.begin(), args.end(), "-s" );
+		options.options.splitPerMaterial = it != args.end();
+		it = std::find( args.begin(), args.end(), "-r" );
+		options.options.recenter = it != args.end();
+
+		return true;
 	}
 
-	return result;
-}
+	castor::PathArray listPluginsFiles( castor::Path const & folder )
+	{
+		castor::PathArray files;
+		castor::File::listDirectoryFiles( folder, files );
+		castor::PathArray result;
 
-void loadPlugins( castor3d::Engine & engine )
-{
-	castor::PathArray arrayKept = listPluginsFiles( castor3d::Engine::getPluginsDirectory() );
+		// Exclude debug plug-in in release builds, and release plug-ins in debug builds
+		for ( auto file : files )
+		{
+			if ( file.find( CU_SharedLibExt ) != castor::String::npos
+				&& file.getFileName().find( cuT( "castor3d" ) ) == 0u )
+			{
+				result.push_back( file );
+			}
+		}
+
+		return result;
+	}
+
+	void loadPlugins( castor3d::Engine & engine )
+	{
+		castor::PathArray arrayKept = listPluginsFiles( castor3d::Engine::getPluginsDirectory() );
 
 #if !defined( NDEBUG )
 
 		// When debug is installed, plugins are installed in lib/Debug/Castor3D
-	if ( arrayKept.empty() )
-	{
-		castor::Path pathBin = castor::File::getExecutableDirectory();
-
-		while ( pathBin.getFileName() != cuT( "bin" ) )
+		if ( arrayKept.empty() )
 		{
-			pathBin = pathBin.getPath();
-		}
+			castor::Path pathBin = castor::File::getExecutableDirectory();
 
-		castor::Path pathUsr = pathBin.getPath();
-		arrayKept = listPluginsFiles( pathUsr / cuT( "lib" ) / cuT( "Debug" ) / cuT( "Castor3D" ) );
-	}
+			while ( pathBin.getFileName() != cuT( "bin" ) )
+			{
+				pathBin = pathBin.getPath();
+			}
+
+			castor::Path pathUsr = pathBin.getPath();
+			arrayKept = listPluginsFiles( pathUsr / cuT( "lib" ) / cuT( "Debug" ) / cuT( "Castor3D" ) );
+		}
 
 #endif
 
-	if ( !arrayKept.empty() )
-	{
-		castor::PathArray arrayFailed;
-		castor::PathArray otherPlugins;
-
-		for ( auto file : arrayKept )
+		if ( !arrayKept.empty() )
 		{
-			if ( file.getExtension() == CU_SharedLibExt )
+			castor::PathArray arrayFailed;
+			castor::PathArray otherPlugins;
+
+			for ( auto file : arrayKept )
 			{
-				// Only load importer plugins.
-				if ( file.find( cuT( "Importer" ) ) != castor::String::npos )
+				if ( file.getExtension() == CU_SharedLibExt )
 				{
-					if ( !engine.getPluginCache().loadPlugin( file ) )
+					// Only load importer plugins.
+					if ( file.find( cuT( "Importer" ) ) != castor::String::npos )
 					{
-						arrayFailed.push_back( file );
+						if ( !engine.getPluginCache().loadPlugin( file ) )
+						{
+							arrayFailed.push_back( file );
+						}
 					}
 				}
 			}
+
+			if ( !arrayFailed.empty() )
+			{
+				castor::Logger::logWarning( cuT( "Some plug-ins couldn't be loaded :" ) );
+
+				for ( auto file : arrayFailed )
+				{
+					castor::Logger::logWarning( file.getFileName() );
+				}
+
+				arrayFailed.clear();
+			}
 		}
 
-		if ( !arrayFailed.empty() )
+		castor::Logger::logInfo( cuT( "Plugins loaded" ) );
+	}
+
+	bool doInitialiseEngine( castor3d::Engine & engine )
+	{
+		if ( !castor::File::directoryExists( castor3d::Engine::getEngineDirectory() ) )
 		{
-			castor::Logger::logWarning( cuT( "Some plug-ins couldn't be loaded :" ) );
-
-			for ( auto file : arrayFailed )
-			{
-				castor::Logger::logWarning( castor::Path( file ).getFileName() );
-			}
-
-			arrayFailed.clear();
+			castor::File::directoryCreate( castor3d::Engine::getEngineDirectory() );
 		}
-	}
 
-	castor::Logger::logInfo( cuT( "Plugins loaded" ) );
-}
+		auto & renderers = engine.getRenderersList();
+		bool result = false;
 
-bool doInitialiseEngine( castor3d::Engine & engine )
-{
-	if ( !castor::File::directoryExists( castor3d::Engine::getEngineDirectory() ) )
-	{
-		castor::File::directoryCreate( castor3d::Engine::getEngineDirectory() );
-	}
-
-	auto & renderers = engine.getRenderersList();
-	bool result = false;
-
-	if ( renderers.empty() )
-	{
-		std::cerr << "No renderer plug-ins" << std::endl;
-	}
-	else
-	{
-		auto renderer = renderers.find( "vk" );
-
-		if ( renderer != renderers.end() )
+		if ( renderers.empty() )
 		{
-			if ( engine.loadRenderer( renderer->name ) )
-			{
-				engine.initialise( 1, false );
-				loadPlugins( engine );
-				result = true;
-			}
-			else
-			{
-				std::cerr << "Couldn't load renderer." << std::endl;
-			}
+			std::cerr << "No renderer plug-ins" << std::endl;
 		}
 		else
 		{
-			std::cerr << "Couldn't load test renderer." << std::endl;
-		}
-	}
+			auto renderer = renderers.find( "vk" );
 
-	return result;
+			if ( renderer != renderers.end() )
+			{
+				if ( engine.loadRenderer( renderer->name ) )
+				{
+					engine.initialise( 1, false );
+					loadPlugins( engine );
+					result = true;
+				}
+				else
+				{
+					std::cerr << "Couldn't load renderer." << std::endl;
+				}
+			}
+			else
+			{
+				std::cerr << "Couldn't load test renderer." << std::endl;
+			}
+		}
+
+		return result;
+	}
 }
 
 int main( int argc, char * argv[] )

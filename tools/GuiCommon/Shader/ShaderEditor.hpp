@@ -24,7 +24,7 @@ namespace GuiCommon
 			, wxWindow * parent
 			, wxPoint const & position = wxDefaultPosition
 			, const wxSize size = wxSize( 800, 600 ) );
-		~ShaderEditor();
+		~ShaderEditor()override;
 
 		void loadLanguage( ShaderLanguage language );
 

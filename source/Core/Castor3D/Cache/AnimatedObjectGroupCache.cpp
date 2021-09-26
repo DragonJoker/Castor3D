@@ -134,46 +134,46 @@ namespace castor
 	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doRegister( AnimatedObjectGroup & group )
 	{
 		m_meshAddedConnections.emplace( &group
-			, group.onMeshAdded.connect( [this]( AnimatedObjectGroup const & group
+			, group.onMeshAdded.connect( [this]( AnimatedObjectGroup const & pgroup
 				, AnimatedMesh const & mesh )
 				{
 					m_engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-						, [this, &group, &mesh]( RenderDevice const & device
+						, [this, &pgroup, &mesh]( RenderDevice const & device
 							, QueueData const & queueData )
 						{
 							m_meshEntries.emplace( &mesh
-								, doCreateEntry( device, group, mesh ) );
+								, doCreateEntry( device, pgroup, mesh ) );
 						} ) );
 				} ) );
 		m_meshRemovedConnections.emplace( &group
-			, group.onMeshRemoved.connect( [this]( AnimatedObjectGroup const & group
+			, group.onMeshRemoved.connect( [this]( AnimatedObjectGroup const & pgroup
 				, AnimatedMesh const & mesh )
 				{
 					m_engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-						, [this, &group, &mesh]( RenderDevice const & device
+						, [this, &mesh]( RenderDevice const & device
 							, QueueData const & queueData )
 						{
 							doRemoveEntry( device, mesh );
 						} ) );
 				} ) );
 		m_skeletonAddedConnections.emplace( &group
-			, group.onSkeletonAdded.connect( [this]( AnimatedObjectGroup const & group
+			, group.onSkeletonAdded.connect( [this]( AnimatedObjectGroup const & pgroup
 				, AnimatedSkeleton const & skeleton )
 				{
 					m_engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-						, [this, &group, &skeleton]( RenderDevice const & device
+						, [this, &pgroup, &skeleton]( RenderDevice const & device
 							, QueueData const & queueData )
 						{
 							m_skeletonEntries.emplace( &skeleton
-								, doCreateEntry( device, group, skeleton ) );
+								, doCreateEntry( device, pgroup, skeleton ) );
 						} ) );
 				} ) );
 		m_skeletonRemovedConnections.emplace( &group
-			, group.onSkeletonRemoved.connect( [this]( AnimatedObjectGroup const & group
+			, group.onSkeletonRemoved.connect( [this]( AnimatedObjectGroup const & pgroup
 				, AnimatedSkeleton const & skeleton )
 				{
 					m_engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-						, [this, &group, &skeleton]( RenderDevice const & device
+						, [this, &skeleton]( RenderDevice const & device
 							, QueueData const & queueData )
 						{
 							doRemoveEntry( device, skeleton );

@@ -46,7 +46,7 @@ namespace castor3d
 	{
 		bool done = false;
 
-		for ( int i = 0; i < MaxBonesPerVertex && !done; i++ )
+		for ( uint32_t i = 0; i < MaxBonesPerVertex && !done; i++ )
 		{
 			if ( m_weights.data[i] == 0.0f )
 			{

@@ -128,15 +128,11 @@ else ()
 endif ()
 
 add_compile_options( $<$<CXX_COMPILER_ID:Clang>:-Wno-inconsistent-missing-override> ) # for wxWidgets
-add_compile_options( $<$<CXX_COMPILER_ID:MSVC>:/MP> )
-add_compile_options( $<$<CXX_COMPILER_ID:MSVC>:/wd4068> ) # Unknown pragma
 
 add_compile_definitions( C3D_VERSION_MAJOR=${VERSION_MAJOR} )
 add_compile_definitions( C3D_VERSION_MINOR=${VERSION_MINOR} )
 add_compile_definitions( C3D_VERSION_BUILD=${VERSION_BUILD} )
-add_compile_definitions( $<$<CXX_COMPILER_ID:MSVC>:_CRT_SECURE_NO_WARNINGS> )
 add_compile_definitions( $<$<CXX_COMPILER_ID:MSVC>:_ENFORCE_MATCHING_ALLOCATORS=0> )
-add_compile_definitions( $<$<CXX_COMPILER_ID:MSVC>:NOMINMAX=1> )
 
 set( ASHES_DIR external/Ashes )
 set( SHADERWRITER_DIR external/ShaderWriter )
@@ -158,15 +154,8 @@ set( Castor3DBinsDependencies
 #	MSVC specifics
 #--------------------------------------------------------------------------------------------------
 if( MSVC )
-	# We remove the existing /Zm flag to replace it by /Zm300
-	string( REGEX REPLACE ".*(/Zm[0-9]+).*" "\\1" ZmFlag ${CMAKE_CXX_FLAGS} )
-	if( (NOT "${ZmFlag}" STREQUAL "") AND (NOT "${CMAKE_CXX_FLAGS}" STREQUAL "${ZmFlag}") )
-		string( REPLACE ${ZmFlag} "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
-	endif()
-	set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zm300" )
 	# Copy Rebracer.xml file so we can use Rebracer extension to uniformise code formatting
 	file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/data/VS/Rebracer.xml DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
-	string( REGEX REPLACE "/Z[iI7]" "/ZI" CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}" )
 endif()
 
 option( CASTOR_BUILDGRP_TEST "Build test projects" OFF )

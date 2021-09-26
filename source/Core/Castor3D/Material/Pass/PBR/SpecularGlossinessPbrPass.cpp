@@ -54,188 +54,191 @@ namespace castor3d
 
 	namespace pbrsg
 	{
-		enum class Section
-			: uint32_t
+		namespace
 		{
-			ePass = CU_MakeSectionName( 'S', 'P', 'G', 'L' ),
-			eTextureUnit = CU_MakeSectionName( 'S', 'G', 'T', 'U' ),
-		};
-
-		static castor::String const PassSectionName{ cuT( "pbrsg_pass" ) };
-		static castor::String const TextureSectionName{ cuT( "pbrsg_texture_unit" ) };
-
-		CU_ImplementAttributeParser( parserPassDiffuse )
-		{
-			auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
-
-			if ( !parsingContext.pass )
+			enum class Section
+				: uint32_t
 			{
-				CU_ParsingError( cuT( "No Pass initialised." ) );
-			}
-			else if ( !params.empty() )
+				ePass = CU_MakeSectionName( 'S', 'P', 'G', 'L' ),
+				eTextureUnit = CU_MakeSectionName( 'S', 'G', 'T', 'U' ),
+			};
+
+			static castor::String const PassSectionName{ cuT( "pbrsg_pass" ) };
+			static castor::String const TextureSectionName{ cuT( "pbrsg_texture_unit" ) };
+
+			CU_ImplementAttributeParser( parserPassDiffuse )
 			{
-				auto & phongPass = static_cast< SpecularGlossinessPbrPass & >( *parsingContext.pass );
-				castor::RgbColour value;
-				params[0]->get( value );
-				phongPass.setDiffuse( value );
-			}
-		}
-		CU_EndAttribute()
+				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
 
-		CU_ImplementAttributeParser( parserPassSpecular )
-		{
-			auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
-
-			if ( !parsingContext.pass )
-			{
-				CU_ParsingError( cuT( "No Pass initialised." ) );
-			}
-			else if ( !params.empty() )
-			{
-				auto & phongPass = static_cast< SpecularGlossinessPbrPass & >( *parsingContext.pass );
-				castor::RgbColour value;
-				params[0]->get( value );
-				phongPass.setSpecular( value );
-			}
-		}
-		CU_EndAttribute()
-
-		CU_ImplementAttributeParser( parserPassGlossiness )
-		{
-			auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
-
-			if ( !parsingContext.pass )
-			{
-				CU_ParsingError( cuT( "No Pass initialised." ) );
-			}
-			else if ( !params.empty() )
-			{
-				auto & phongPass = static_cast< SpecularGlossinessPbrPass & >( *parsingContext.pass );
-				float value;
-				params[0]->get( value );
-				phongPass.setGlossiness( value );
-			}
-		}
-		CU_EndAttribute()
-
-		CU_ImplementAttributeParser( parserUnitChannel )
-		{
-			auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
-
-			if ( !parsingContext.textureUnit )
-			{
-				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
-			}
-			else if ( !params.empty() )
-			{
-				uint32_t flags;
-				params[0]->get( flags );
-				auto textures = TextureFlags( uint16_t( flags ) );
-
-				if ( checkFlag( textures, TextureFlag::eNormal ) )
+				if ( !parsingContext.pass )
 				{
-					parsingContext.textureConfiguration.normalMask[0] = 0x00FFFFFF;
+					CU_ParsingError( cuT( "No Pass initialised." ) );
 				}
-
-				if ( checkFlag( textures, TextureFlag::eOpacity ) )
+				else if ( !params.empty() )
 				{
-					parsingContext.textureConfiguration.opacityMask[0] = 0xFF000000;
-				}
-
-				if ( checkFlag( textures, TextureFlag::eHeight ) )
-				{
-					parsingContext.textureConfiguration.heightMask[0] = 0x00FF0000;
-				}
-
-				if ( checkFlag( textures, TextureFlag::eEmissive ) )
-				{
-					parsingContext.textureConfiguration.emissiveMask[0] = 0x00FFFFFF;
-				}
-
-				if ( checkFlag( textures, TextureFlag::eOcclusion ) )
-				{
-					parsingContext.textureConfiguration.occlusionMask[0] = 0x00FF0000;
-				}
-
-				if ( checkFlag( textures, TextureFlag::eTransmittance ) )
-				{
-					parsingContext.textureConfiguration.transmittanceMask[0] = 0xFF000000;
-				}
-
-				if ( checkFlag( textures, TextureFlag::eAlbedo ) )
-				{
-					parsingContext.textureConfiguration.colourMask[0] = 0x00FFFFFF;
-				}
-
-				if ( checkFlag( textures, TextureFlag::eSpecular ) )
-				{
-					parsingContext.textureConfiguration.specularMask[0] = 0x00FFFFFF;
-				}
-
-				if ( checkFlag( textures, TextureFlag::eGlossiness ) )
-				{
-					parsingContext.textureConfiguration.glossinessMask[0] = 0x00FF0000;
+					auto & phongPass = static_cast< SpecularGlossinessPbrPass & >( *parsingContext.pass );
+					castor::RgbColour value;
+					params[0]->get( value );
+					phongPass.setDiffuse( value );
 				}
 			}
-		}
-		CU_EndAttribute()
+			CU_EndAttribute()
+
+			CU_ImplementAttributeParser( parserPassSpecular )
+			{
+				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+
+				if ( !parsingContext.pass )
+				{
+					CU_ParsingError( cuT( "No Pass initialised." ) );
+				}
+				else if ( !params.empty() )
+				{
+					auto & phongPass = static_cast< SpecularGlossinessPbrPass & >( *parsingContext.pass );
+					castor::RgbColour value;
+					params[0]->get( value );
+					phongPass.setSpecular( value );
+				}
+			}
+			CU_EndAttribute()
+
+			CU_ImplementAttributeParser( parserPassGlossiness )
+			{
+				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+
+				if ( !parsingContext.pass )
+				{
+					CU_ParsingError( cuT( "No Pass initialised." ) );
+				}
+				else if ( !params.empty() )
+				{
+					auto & phongPass = static_cast< SpecularGlossinessPbrPass & >( *parsingContext.pass );
+					float value;
+					params[0]->get( value );
+					phongPass.setGlossiness( value );
+				}
+			}
+			CU_EndAttribute()
+
+			CU_ImplementAttributeParser( parserUnitChannel )
+			{
+				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+
+				if ( !parsingContext.textureUnit )
+				{
+					CU_ParsingError( cuT( "No TextureUnit initialised." ) );
+				}
+				else if ( !params.empty() )
+				{
+					uint32_t flags;
+					params[0]->get( flags );
+					auto textures = TextureFlags( uint16_t( flags ) );
+
+					if ( checkFlag( textures, TextureFlag::eNormal ) )
+					{
+						parsingContext.textureConfiguration.normalMask[0] = 0x00FFFFFF;
+					}
+
+					if ( checkFlag( textures, TextureFlag::eOpacity ) )
+					{
+						parsingContext.textureConfiguration.opacityMask[0] = 0xFF000000;
+					}
+
+					if ( checkFlag( textures, TextureFlag::eHeight ) )
+					{
+						parsingContext.textureConfiguration.heightMask[0] = 0x00FF0000;
+					}
+
+					if ( checkFlag( textures, TextureFlag::eEmissive ) )
+					{
+						parsingContext.textureConfiguration.emissiveMask[0] = 0x00FFFFFF;
+					}
+
+					if ( checkFlag( textures, TextureFlag::eOcclusion ) )
+					{
+						parsingContext.textureConfiguration.occlusionMask[0] = 0x00FF0000;
+					}
+
+					if ( checkFlag( textures, TextureFlag::eTransmittance ) )
+					{
+						parsingContext.textureConfiguration.transmittanceMask[0] = 0xFF000000;
+					}
+
+					if ( checkFlag( textures, TextureFlag::eAlbedo ) )
+					{
+						parsingContext.textureConfiguration.colourMask[0] = 0x00FFFFFF;
+					}
+
+					if ( checkFlag( textures, TextureFlag::eSpecular ) )
+					{
+						parsingContext.textureConfiguration.specularMask[0] = 0x00FFFFFF;
+					}
+
+					if ( checkFlag( textures, TextureFlag::eGlossiness ) )
+					{
+						parsingContext.textureConfiguration.glossinessMask[0] = 0x00FF0000;
+					}
+				}
+			}
+			CU_EndAttribute()
 			
-		CU_ImplementAttributeParser( parserUnitAlbedoMask )
-		{
-			auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+			CU_ImplementAttributeParser( parserUnitAlbedoMask )
+			{
+				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
 
-			if ( !parsingContext.textureUnit )
-			{
-				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
+				if ( !parsingContext.textureUnit )
+				{
+					CU_ParsingError( cuT( "No TextureUnit initialised." ) );
+				}
+				else if ( params.empty() )
+				{
+					CU_ParsingError( cuT( "Missing parameter." ) );
+				}
+				else
+				{
+					params[0]->get( parsingContext.textureConfiguration.colourMask[0] );
+				}
 			}
-			else if ( params.empty() )
+			CU_EndAttribute()
+
+			CU_ImplementAttributeParser( parserUnitSpecularMask )
 			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
+				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+
+				if ( !parsingContext.textureUnit )
+				{
+					CU_ParsingError( cuT( "No TextureUnit initialised." ) );
+				}
+				else if ( params.empty() )
+				{
+					CU_ParsingError( cuT( "Missing parameter." ) );
+				}
+				else
+				{
+					params[0]->get( parsingContext.textureConfiguration.specularMask[0] );
+				}
 			}
-			else
+			CU_EndAttribute()
+
+			CU_ImplementAttributeParser( parserUnitGlossinessMask )
 			{
-				params[0]->get( parsingContext.textureConfiguration.colourMask[0] );
+				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+
+				if ( !parsingContext.textureUnit )
+				{
+					CU_ParsingError( cuT( "No TextureUnit initialised." ) );
+				}
+				else if ( params.empty() )
+				{
+					CU_ParsingError( cuT( "Missing parameter." ) );
+				}
+				else
+				{
+					params[0]->get( parsingContext.textureConfiguration.glossinessMask[0] );
+				}
 			}
+			CU_EndAttribute()
 		}
-		CU_EndAttribute()
-
-		CU_ImplementAttributeParser( parserUnitSpecularMask )
-		{
-			auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
-
-			if ( !parsingContext.textureUnit )
-			{
-				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
-			}
-			else if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else
-			{
-				params[0]->get( parsingContext.textureConfiguration.specularMask[0] );
-			}
-		}
-		CU_EndAttribute()
-
-		CU_ImplementAttributeParser( parserUnitGlossinessMask )
-		{
-			auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
-
-			if ( !parsingContext.textureUnit )
-			{
-				CU_ParsingError( cuT( "No TextureUnit initialised." ) );
-			}
-			else if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else
-			{
-				params[0]->get( parsingContext.textureConfiguration.glossinessMask[0] );
-			}
-		}
-		CU_EndAttribute()
 	}
 
 	//*********************************************************************************************
@@ -256,10 +259,6 @@ namespace castor3d
 		, m_diffuse{ m_dirty, castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
 		, m_specular{ m_dirty, castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
 		, m_glossiness{ m_dirty, 0.0f }
-	{
-	}
-
-	SpecularGlossinessPbrPass::~SpecularGlossinessPbrPass()
 	{
 	}
 
@@ -317,7 +316,7 @@ namespace castor3d
 		};
 	}
 
-	void SpecularGlossinessPbrPass::accept( PassBuffer & buffer )const
+	void SpecularGlossinessPbrPass::fillBuffer( PassBuffer & buffer )const
 	{
 		auto data = buffer.getData( getId() );
 

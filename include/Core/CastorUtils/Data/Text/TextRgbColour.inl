@@ -14,7 +14,7 @@ namespace castor
 		stream.setf( std::ios::boolalpha );
 		stream.setf( std::ios::showpoint );
 
-		for ( auto component : colour )
+		for ( auto & component : colour )
 		{
 			if ( !stream.str().empty() )
 			{

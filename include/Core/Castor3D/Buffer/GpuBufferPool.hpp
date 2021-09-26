@@ -36,13 +36,6 @@ namespace castor3d
 			, castor::String debugName );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~GpuBufferPool();
-		/**
-		 *\~english
 		 *\brief		Cleans up all GPU buffers.
 		 *\~french
 		 *\brief		Nettoie tous les tampons GPU.

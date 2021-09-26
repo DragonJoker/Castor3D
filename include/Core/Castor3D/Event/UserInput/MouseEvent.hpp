@@ -41,7 +41,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le type d'évènement de souris.
 		 */
-		inline MouseEventType getMouseEventType()const
+		MouseEventType getMouseEventType()const
 		{
 			return m_mouseEventType;
 		}
@@ -51,7 +51,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le bouton de la souris.
 		 */
-		inline MouseButton getButton()const
+		MouseButton getButton()const
 		{
 			return m_button;
 		}
@@ -61,7 +61,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La position, de la souris ou de la molette, selon le type d'évènement.
 		 */
-		inline castor::Position const & getPosition()const
+		castor::Position const & getPosition()const
 		{
 			return m_position;
 		}

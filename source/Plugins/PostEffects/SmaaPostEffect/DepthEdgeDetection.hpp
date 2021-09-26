@@ -21,7 +21,6 @@ namespace smaa
 
 	private:
 		crg::ImageViewId m_depthView;
-		crg::ImageViewId const & m_sourceView;
 	};
 }
 

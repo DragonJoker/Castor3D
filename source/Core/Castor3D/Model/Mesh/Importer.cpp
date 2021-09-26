@@ -22,8 +22,6 @@ namespace castor3d
 {
 	namespace
 	{
-		static float constexpr normalStrength = 8.0f;
-
 		std::ostream & operator<<( std::ostream & stream, castor::Point3f const & obj )
 		{
 			stream << std::setprecision( 4 ) << obj->x
@@ -86,95 +84,6 @@ namespace castor3d
 			}
 
 			return true;
-		}
-
-		int clamp( int value, int max )
-		{
-			if ( value >= max )
-			{
-				value %= max;
-			}
-
-			while ( value < 0 )
-			{
-				value += max;
-			}
-
-			return value;
-		}
-
-		size_t getIndex( int x, int y, int width, int height )
-		{
-			return size_t( y * width + x );
-		}
-
-		float getHeight( castor::ArrayView< uint8_t const > const & data
-			, int width
-			, int height
-			, int x
-			, int y )
-		{
-			x = clamp( x, width );
-			y = clamp( y, height );
-			return float( 0xFF - data[getIndex( x, y, width, height )] ) / 255.0f;
-		}
-
-		uint8_t textureCoordinateToRgb( float value )
-		{
-			return uint8_t( ( value * 0.5 + 0.5 ) * 255.0 );
-		}
-
-		castor::Point4f calculateNormal( castor::ArrayView< uint8_t const > const & data
-			, int width
-			, int height
-			, int x
-			, int y )
-		{
-			// surrounding pixels
-			float tl = getHeight( data, width, height, x - 1, y - 1 ); // top left
-			float  l = getHeight( data, width, height, x - 1, y );   // left
-			float bl = getHeight( data, width, height, x - 1, y + 1 ); // bottom left
-			float  t = getHeight( data, width, height, x, y - 1 );   // top
-			float  c = getHeight( data, width, height, x, y );   // center
-			float  b = getHeight( data, width, height, x, y + 1 );   // bottom
-			float tr = getHeight( data, width, height, x + 1, y - 1 ); // top right
-			float  r = getHeight( data, width, height, x + 1, y );   // right
-			float br = getHeight( data, width, height, x + 1, y + 1 ); // bottom right
-
-			// sobel filter
-			const float dX = float( ( tr + 2.0 * r + br ) - ( tl + 2.0 * l + bl ) );
-			const float dY = float( ( bl + 2.0 * b + br ) - ( tl + 2.0 * t + tr ) );
-			const float dZ = float( 1.0 / normalStrength );
-
-			castor::Point3f n{ dX, dY, dZ };
-			castor::point::normalise( n );
-			return { n->x, n->y, n->z, 1.0f - c };
-		}
-
-		castor::ByteArray calculateNormals( castor::ArrayView< uint8_t const > const & data
-			, castor::Size const & size )
-		{
-			castor::ByteArray result;
-			result.resize( data.size() * 4u );
-			auto width = int( size.getWidth() );
-			auto height = int( size.getHeight() );
-
-			for ( int x = 0; x < width; ++x )
-			{
-				for ( int y = 0; y < height; ++y )
-				{
-					auto n = calculateNormal( data, width, height, x, y );
-
-					 // convert to rgb
-					auto coord = getIndex( x, y, width, height ) * 4;
-					result[coord + 0] = textureCoordinateToRgb( n->x );
-					result[coord + 1] = textureCoordinateToRgb( n->y );
-					result[coord + 2] = textureCoordinateToRgb( n->z );
-					result[coord + 3] = uint8_t( n->w * 255.0f );
-				}
-			}
-
-			return result;
 		}
 	}
 

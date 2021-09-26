@@ -74,7 +74,7 @@ namespace toon::shader
 		{
 			envMapIndex = envMapIndex - 1_i;
 			auto incident = m_writer.declLocale( "incident"
-				, computeIncident( surface.worldPosition, sceneData.getCameraPosition() ) );
+				, computeIncident( surface.worldPosition, sceneData.cameraPosition ) );
 			ambient = vec3( 0.0_f );
 
 			IF( m_writer, reflection != 0_i && refraction != 0_i )
@@ -131,7 +131,7 @@ namespace toon::shader
 			auto & toonMaterial = static_cast< ToonPhongLightMaterial & >( material );
 			auto envMap = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapEnvironment" );
 			auto incident = m_writer.declLocale( "incident"
-				, computeIncident( surface.worldPosition, sceneData.getCameraPosition() ) );
+				, computeIncident( surface.worldPosition, sceneData.cameraPosition ) );
 			ambient = vec3( 0.0_f );
 
 			if ( checkFlag( m_passFlags, castor3d::PassFlag::eReflection )
@@ -558,7 +558,7 @@ namespace toon::shader
 		{
 			envMapIndex = envMapIndex - 1_i;
 			auto incident = m_writer.declLocale( "incident"
-				, computeIncident( surface.worldPosition, sceneData.getCameraPosition() ) );
+				, computeIncident( surface.worldPosition, sceneData.cameraPosition ) );
 
 			IF( m_writer, reflection != 0_i )
 			{
@@ -601,7 +601,7 @@ namespace toon::shader
 				// Reflection from background skybox.
 				reflected = computeIBL( surface
 				, toonMaterial
-					, sceneData.getCameraPosition()
+					, sceneData.cameraPosition
 					, irradiance
 					, prefiltered
 					, brdf );
@@ -640,7 +640,7 @@ namespace toon::shader
 			// Reflection from background skybox.
 			reflected = computeIBL( surface
 				, toonMaterial
-				, sceneData.getCameraPosition()
+				, sceneData.cameraPosition
 				, irradiance
 				, prefiltered
 				, brdf );
@@ -683,7 +683,7 @@ namespace toon::shader
 		{
 			auto envMap = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapEnvironment" );
 			auto incident = m_writer.declLocale( "incident"
-				, computeIncident( surface.worldPosition, sceneData.getCameraPosition() ) );
+				, computeIncident( surface.worldPosition, sceneData.cameraPosition ) );
 
 			if ( checkFlag( m_passFlags, castor3d::PassFlag::eReflection ) )
 			{
@@ -727,7 +727,7 @@ namespace toon::shader
 				// Reflection from background skybox.
 				reflected = computeIBL( surface
 					, toonMaterial
-					, sceneData.getCameraPosition()
+					, sceneData.cameraPosition
 					, irradiance
 					, prefiltered
 					, brdf );
@@ -767,7 +767,7 @@ namespace toon::shader
 			// Reflection from background skybox.
 			reflected = computeIBL( surface
 				, toonMaterial
-				, sceneData.getCameraPosition()
+				, sceneData.cameraPosition
 				, irradiance
 				, prefiltered
 				, brdf );
@@ -776,7 +776,7 @@ namespace toon::shader
 			{
 				// Refraction from background skybox.
 				auto incident = m_writer.declLocale( "incident"
-					, computeIncident( surface.worldPosition, sceneData.getCameraPosition() ) );
+					, computeIncident( surface.worldPosition, sceneData.cameraPosition ) );
 				computeRefrSkybox( incident
 					, surface.worldNormal
 					, prefiltered

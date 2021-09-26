@@ -23,10 +23,6 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	LightTreeItemProperty::~LightTreeItemProperty()
-	{
-	}
-
 	void LightTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_LIGHT = _( "Light:" );
@@ -34,7 +30,13 @@ namespace GuiCommon
 		static wxString PROPERTY_LIGHT_INTENSITY = _( "Intensities" );
 
 		addProperty( grid, PROPERTY_CATEGORY_LIGHT + wxString( m_light.getName() ) );
-		addPropertyT( grid, PROPERTY_LIGHT_COLOUR, m_light.getColour(), &m_light, ( void ( Light:: * )( castor::Point3f const & ) ) & Light::setColour );
+		addProperty( grid
+			, PROPERTY_LIGHT_COLOUR
+			, m_light.getColour()
+			, [this]( wxVariant const & value )
+			{
+				m_light.setColour( variantCast< castor::Point3f >( value ) );
+			} );
 		addPropertyT( grid, PROPERTY_LIGHT_INTENSITY, m_light.getIntensity(), &m_light, &Light::setIntensity );
 
 		switch ( m_light.getLightType() )
@@ -42,13 +44,14 @@ namespace GuiCommon
 		case LightType::eDirectional:
 			doCreateDirectionalLightProperties( grid, *m_light.getDirectionalLight() );
 			break;
-
 		case LightType::ePoint:
 			doCreatePointLightProperties( grid, *m_light.getPointLight() );
 			break;
-
 		case LightType::eSpot:
 			doCreateSpotLightProperties( grid, *m_light.getSpotLight() );
+			break;
+		default:
+			CU_Failure( "Unsupported LightType" );
 			break;
 		}
 
@@ -204,6 +207,9 @@ namespace GuiCommon
 			{
 				m_lpvProperties->Enable( true );
 			}
+			break;
+		default:
+			CU_Failure( "Unsupported GlobalIlluminationType" );
 			break;
 		}
 	}

@@ -16,10 +16,6 @@ namespace castor3d
 		m_length = castor::Milliseconds{ std::numeric_limits< int64_t >::max() };
 	}
 
-	TextureAnimation::~TextureAnimation()
-	{
-	}
-
 	castor::Point3f TextureAnimation::getTranslate( castor::Milliseconds const & time )const
 	{
 		return castor::Point3f{ m_translate.getDistance( time ) };

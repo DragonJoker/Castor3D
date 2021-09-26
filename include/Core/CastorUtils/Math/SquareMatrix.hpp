@@ -228,7 +228,7 @@ namespace castor
 	SquareMatrix< T, Count > operator-( SquareMatrix< T, Count > const & lhs, SquareMatrix< U, Count > const & rhs );
 	template< typename T, uint32_t Count, typename U >
 	SquareMatrix< T, Count > operator*( SquareMatrix< T, Count > const & lhs, SquareMatrix< U, Count > const & rhs );
-	template< typename T, uint32_t Count, typename U, size_t Columns >
+	template< typename T, uint32_t Count, typename U, uint32_t Columns >
 	SquareMatrix< T, Count > operator*( SquareMatrix< T, Count > const & lhs, Matrix< U, Columns, Count > const & rhs );
 	template< typename T, uint32_t Count, typename U >
 	SquareMatrix< T, Count > operator+( SquareMatrix< T, Count > const & lhs, U const * rhs );
@@ -244,7 +244,7 @@ namespace castor
 	SquareMatrix< T, Count > operator*( SquareMatrix< T, Count > const & lhs, T const & rhs );
 	template< typename T, uint32_t Count, typename U >
 	SquareMatrix< T, Count > operator/( SquareMatrix< T, Count > const & lhs, T const & rhs );
-	template< typename T, uint32_t Count, typename U, size_t Rows >
+	template< typename T, uint32_t Count, typename U, uint32_t Rows >
 	Matrix< T, Count, Rows > operator*( Matrix< U, Count, Rows > const & lhs, SquareMatrix< T, Count > const & rhs );
 	template< typename T, uint32_t Count >
 	SquareMatrix< T, Count > operator+( T const & lhs, SquareMatrix< T, Count > const & rhs );

@@ -17,13 +17,8 @@ namespace GuiCommon
 	NodeTreeItemProperty::NodeTreeItemProperty( bool p_editable, Engine * engine, SceneNodeSPtr p_node )
 		: TreeItemProperty( p_node->getScene()->getEngine(), p_editable )
 		, m_node( p_node )
-		, m_engine( engine )
 	{
 		CreateTreeItemMenu();
-	}
-
-	NodeTreeItemProperty::~NodeTreeItemProperty()
-	{
 	}
 
 	void NodeTreeItemProperty::doCreateProperties( wxPGEditor * editor

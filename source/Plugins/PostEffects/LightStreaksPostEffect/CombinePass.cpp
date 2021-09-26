@@ -86,8 +86,7 @@ namespace light_streaks
 		, crg::ImageViewIdArray const & kawaseViews
 		, VkExtent2D const & size
 		, bool const * enabled )
-		: m_device{ device }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "LightStreaksCombine", getVertexProgram() }
+		: m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "LightStreaksCombine", getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "LightStreaksCombine", getPixelProgram() }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }

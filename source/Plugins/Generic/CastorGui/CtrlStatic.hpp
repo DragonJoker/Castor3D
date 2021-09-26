@@ -45,10 +45,6 @@ namespace CastorGui
 			, uint32_t p_style = 0
 			, bool p_visible = true );
 
-		/** Destructor
-		*/
-		virtual ~StaticCtrl();
-
 		/** Sets the caption font.
 		*\param[in]	p_font	The new value.
 		*/
@@ -132,7 +128,7 @@ namespace CastorGui
 		//! The text overlay used to display the caption
 		castor3d::TextOverlayWPtr m_text;
 		// The statics count
-		static int m_count;
+		static uint32_t m_count;
 	};
 }
 

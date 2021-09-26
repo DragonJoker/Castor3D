@@ -19,54 +19,6 @@ namespace castor
 
 	namespace
 	{
-		bool preMultiplyWithAlpha( PxBufferBaseSPtr pixelBuffer )
-		{
-			struct Pixel
-			{
-				uint8_t r;
-				uint8_t g;
-				uint8_t b;
-				uint8_t a;
-			};
-			auto width = int( pixelBuffer->getWidth() );
-			auto height = int( pixelBuffer->getHeight() );
-			auto buffer = reinterpret_cast< Pixel * >( pixelBuffer->getPtr() );
-
-			for ( int y = 0; y < height; ++y )
-			{
-				for ( int x = 0; x < width; ++x )
-				{
-					const uint8_t alpha = buffer->a;
-
-					// slightly faster: care for two special cases
-					if ( alpha == 0x00 )
-					{
-						// special case for alpha == 0x00
-						// color * 0x00 / 0xFF = 0x00
-						buffer->r = 0x00;
-						buffer->g = 0x00;
-						buffer->b = 0x00;
-					}
-					else if ( alpha == 0xFF )
-					{
-						// nothing to do for alpha == 0xFF
-						// color * 0xFF / 0xFF = color
-						continue;
-					}
-					else
-					{
-						buffer->r = uint8_t( ( alpha * uint16_t( buffer->r ) + 127 ) / 255 );
-						buffer->g = uint8_t( ( alpha * uint16_t( buffer->g ) + 127 ) / 255 );
-						buffer->b = uint8_t( ( alpha * uint16_t( buffer->b ) + 127 ) / 255 );
-					}
-
-					++buffer;
-				}
-			}
-
-			return true;
-		}
-
 #if C3D_UseFreeImage
 
 		uint32_t DLL_CALLCONV readProc( void * buffer, uint32_t size, uint32_t count, fi_handle fiHandle )

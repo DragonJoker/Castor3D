@@ -13,11 +13,6 @@ namespace castor3d
 	{
 	}
 
-	Projection::~Projection()
-	{
-		//m_pPattern.reset();
-	}
-
 	MeshGeneratorSPtr Projection::create()
 	{
 		return std::make_shared< Projection >();

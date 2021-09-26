@@ -120,8 +120,7 @@ namespace castor3d
 		, VkMemoryPropertyFlags flags
 		, castor::String debugName
 		, ashes::QueueShare sharingMode )
-		: m_renderSystem{ renderSystem }
-		, m_usage{ usage }
+		: m_usage{ usage }
 		, m_flags{ flags }
 		, m_elemCount{ uint32_t( elemCount ) }
 		, m_elemSize{ uint32_t( elemSize ) }

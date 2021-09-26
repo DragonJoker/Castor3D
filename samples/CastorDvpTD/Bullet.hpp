@@ -8,7 +8,6 @@ namespace castortd
 	{
 	public:
 		Bullet( float p_speed, uint32_t p_damage, castor3d::SceneNode & p_node, Enemy & p_enemy );
-		~Bullet();
 
 		bool accept( Game & p_game );
 

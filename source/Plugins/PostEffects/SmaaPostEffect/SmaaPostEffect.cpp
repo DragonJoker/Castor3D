@@ -227,22 +227,6 @@ namespace smaa
 		}
 	}
 
-	void PostEffect::update( castor3d::CpuUpdater & updater )
-	{
-		if ( m_config.maxSubsampleIndices > 1u )
-		{
-			m_frameIndex = ( m_config.subsampleIndex + 1 ) % m_config.maxSubsampleIndices;
-		}
-
-		if ( m_blendingWeightCalculation )
-		{
-			m_blendingWeightCalculation->cpuUpdate( m_config.subsampleIndices[m_config.subsampleIndex] );
-			m_renderTarget.setJitter( m_config.jitters[m_frameIndex] );
-		}
-
-		m_config.subsampleIndex = m_frameIndex;
-	}
-
 	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
 		, crg::FramePass const & previousPass )
 	{
@@ -316,11 +300,11 @@ namespace smaa
 			crg::ImageViewIdArray currentViews = m_neighbourhoodBlending->getResult();
 			crg::ImageViewIdArray previousViews;
 
-			for ( auto i = 0; i < currentViews.size(); ++i )
+			for ( size_t i = 0; i < currentViews.size(); ++i )
 			{
 				previousViews.push_back( i == 0u
-					? currentViews[m_config.maxSubsampleIndices - 1]
-					: currentViews[i - 1] );
+					? currentViews[m_config.maxSubsampleIndices - 1u]
+					: currentViews[i - 1u] );
 			}
 
 			m_reproject = std::make_unique< Reproject >( *previous
@@ -380,6 +364,22 @@ namespace smaa
 		m_neighbourhoodBlending.reset();
 		m_blendingWeightCalculation.reset();
 		m_edgeDetection.reset();
+	}
+
+	void PostEffect::doCpuUpdate( castor3d::CpuUpdater & updater )
+	{
+		if ( m_config.maxSubsampleIndices > 1u )
+		{
+			m_frameIndex = ( m_config.subsampleIndex + 1 ) % m_config.maxSubsampleIndices;
+		}
+
+		if ( m_blendingWeightCalculation )
+		{
+			m_blendingWeightCalculation->cpuUpdate( m_config.subsampleIndices[m_config.subsampleIndex] );
+			m_renderTarget.setJitter( m_config.jitters[m_frameIndex] );
+		}
+
+		m_config.subsampleIndex = m_frameIndex;
 	}
 
 	bool PostEffect::doWriteInto( StringStream & p_file, String const & tabs )

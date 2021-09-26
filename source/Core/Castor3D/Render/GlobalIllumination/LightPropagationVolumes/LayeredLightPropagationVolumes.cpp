@@ -41,7 +41,7 @@ namespace castor3d
 					, context
 					, graph
 					, { [](){}
-						, GetSemaphoreWaitFlagsCallback( [this](){ return VK_PIPELINE_STAGE_TRANSFER_BIT; } )
+						, GetSemaphoreWaitFlagsCallback( [](){ return VK_PIPELINE_STAGE_TRANSFER_BIT; } )
 						, [this]( VkCommandBuffer cb, uint32_t i ){ doRecordInto( cb, i ); } } }
 			{
 			}
@@ -203,21 +203,21 @@ namespace castor3d
 	{
 		auto rsmSize = smResult[SmTexture::eDepth].getExtent().width;
 		auto & result = graph.createPass( name + "LightInjection" + std::to_string( cascade )
-			, [this, &device, name, lightType, rsmSize]( crg::FramePass const & pass
+			, [this, &device, name, lightType, rsmSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & runnableGraph )
 			{
-				auto result = std::make_unique< LightInjectionPass >( pass
+				auto res = std::make_unique< LightInjectionPass >( framePass
 					, context
-					, graph
+					, runnableGraph
 					, device
 					, lightType
 					, device.renderSystem.getEngine()->getLpvGridSize()
 					, rsmSize );
-				lightInjectionPasses.push_back( result.get() );
-				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/LLPV"
-					, result->getTimer() );
-				return result;
+				lightInjectionPasses.push_back( res.get() );
+				device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/LLPV"
+					, res->getTimer() );
+				return res;
 			} );
 		result.addDependency( *lastLightPass );
 		result.addUniformBufferView( { lightCache.getBuffer().getBuffer(), "LightCache" }
@@ -258,21 +258,21 @@ namespace castor3d
 	{
 		auto rsmSize = smResult[SmTexture::eDepth].getExtent().width;
 		auto & result = graph.createPass( name + "GeomInjection" + std::to_string( cascade )
-			, [this, &device, name, lightType, rsmSize, cascade]( crg::FramePass const & pass
+			, [this, &device, name, lightType, rsmSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & runnableGraph )
 			{
-				auto result = std::make_unique< GeometryInjectionPass >( pass
+				auto res = std::make_unique< GeometryInjectionPass >( framePass
 					, context
-					, graph
+					, runnableGraph
 					, device
 					, lightType
 					, device.renderSystem.getEngine()->getLpvGridSize()
 					, rsmSize );
-				geometryInjectionPasses.push_back( result.get() );
-				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/LLPV"
-					, result->getTimer() );
-				return result;
+				geometryInjectionPasses.push_back( res.get() );
+				device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/LLPV"
+					, res->getTimer() );
+				return res;
 			} );
 		result.addDependency( *lastGeomPass );
 		result.addUniformBufferView( { lightCache.getBuffer().getBuffer(), "LightCache" }
@@ -439,7 +439,7 @@ namespace castor3d
 			auto cellSize = std::max( std::max( m_aabb.getDimensions()->x
 				, m_aabb.getDimensions()->y )
 				, m_aabb.getDimensions()->z ) / float( m_scene.getLpvGridSize() );
-			castor::Grid grid{ m_scene.getLpvGridSize(), cellSize, m_aabb.getMax(), m_aabb.getMin(), 1.0f, 0 };
+			castor::Grid grid{ m_scene.getLpvGridSize(), cellSize, m_aabb.getMax(), m_aabb.getMin(), 1.0f };
 			std::array< float, CascadeCount > const scales{ 1.0f, 0.65f, 0.4f };
 
 			for ( auto i = 0u; i < CascadeCount; ++i )
@@ -567,7 +567,7 @@ namespace castor3d
 	crg::FramePass & LayeredLightPropagationVolumesBase::doCreateClearInjectionPass()
 	{
 		auto & result = m_graph.createPass( "LLpvClearInjection"
-			, [this]( crg::FramePass const & pass
+			, []( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -606,21 +606,21 @@ namespace castor3d
 		, uint32_t index )
 	{
 		auto & result = m_graph.createPass( getName() + name + std::to_string( cascade )
-			, [this, index]( crg::FramePass const & pass
+			, [this, index]( crg::FramePass const & framePass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & runnableGraph )
 			{
-				auto result = std::make_unique< LightPropagationPass >( pass
+				auto res = std::make_unique< LightPropagationPass >( framePass
 					, context
-					, graph
+					, runnableGraph
 					, m_device
 					, m_geometryVolumes && index > 0u
 					, m_scene.getLpvGridSize()
 					, ( index == 0u ? BlendMode::eNoBlend : BlendMode::eAdditive ) );
-				m_lightPropagationPasses.push_back( result.get() );
-				m_device.renderSystem.getEngine()->registerTimer( graph.getName() + "/LLPV"
-					, result->getTimer() );
-				return result;
+				m_lightPropagationPasses.push_back( res.get() );
+				m_device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/LLPV"
+					, res->getTimer() );
+				return res;
 			} );
 
 		for ( auto & previousPass : previousPasses )
@@ -632,19 +632,31 @@ namespace castor3d
 			, LightPropagationPass::LpvGridUboIdx );
 		result.addSampledView( injection[LpvTexture::eR].sampledViewId
 			, LightPropagationPass::RLpvGridIdx
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, VK_IMAGE_LAYOUT_UNDEFINED
+			, crg::SamplerDesc{ VK_FILTER_LINEAR
+				, VK_FILTER_LINEAR
+				, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
 		result.addSampledView( injection[LpvTexture::eG].sampledViewId
 			, LightPropagationPass::GLpvGridIdx
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, VK_IMAGE_LAYOUT_UNDEFINED
+			, crg::SamplerDesc{ VK_FILTER_LINEAR
+				, VK_FILTER_LINEAR
+				, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
 		result.addSampledView( injection[LpvTexture::eB].sampledViewId
 			, LightPropagationPass::BLpvGridIdx
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, VK_IMAGE_LAYOUT_UNDEFINED
+			, crg::SamplerDesc{ VK_FILTER_LINEAR
+				, VK_FILTER_LINEAR
+				, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
 
 		if ( index > 0u && m_geometryVolumes )
 		{
 			result.addSampledView( m_geometry[cascade].sampledViewId
 				, LightPropagationPass::GpGridIdx
-				, VK_IMAGE_LAYOUT_UNDEFINED );
+				, VK_IMAGE_LAYOUT_UNDEFINED
+				, crg::SamplerDesc{ VK_FILTER_LINEAR
+					, VK_FILTER_LINEAR
+					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
 		}
 
 		if ( index == 0u )

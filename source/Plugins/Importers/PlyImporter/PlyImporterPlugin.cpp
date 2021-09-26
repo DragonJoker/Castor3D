@@ -17,15 +17,24 @@ using namespace castor;
 #	endif
 #endif
 
-castor3d::ImporterPlugin::ExtensionArray getExtensions( Engine * engine )
+namespace
 {
-	ImporterPlugin::ExtensionArray arrayReturn;
-	arrayReturn.push_back( ImporterPlugin::Extension( cuT( "PLY" ), cuT( "Stanford Polygon Library" ) ) );
-	return arrayReturn;
+	castor3d::ImporterPlugin::ExtensionArray getExtensions( Engine * engine )
+	{
+		ImporterPlugin::ExtensionArray arrayReturn;
+		arrayReturn.push_back( ImporterPlugin::Extension( cuT( "PLY" ), cuT( "Stanford Polygon Library" ) ) );
+		return arrayReturn;
+	}
 }
 
 extern "C"
 {
+	C3D_Ply_API void getRequiredVersion( castor3d::Version * p_version );
+	C3D_Ply_API void getType( castor3d::PluginType * p_type );
+	C3D_Ply_API void getName( char const ** p_name );
+	C3D_Ply_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin );
+	C3D_Ply_API void OnUnload( castor3d::Engine * engine );
+
 	C3D_Ply_API void getRequiredVersion( castor3d::Version * p_version )
 	{
 		*p_version = castor3d::Version();

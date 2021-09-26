@@ -128,7 +128,7 @@ namespace castor3d
 				maxExtents = castor::point::getFloored( maxExtents / texelSize ) * texelSize;
 
 				// Extrude bounds to avoid early shadow clipping:
-				float ext = abs( frustumCenter->z - minExtents->z );
+				auto ext = float( fabs( frustumCenter->z - minExtents->z ) );
 				ext = std::max( ext, farClip * 0.5f );
 				minExtents->z =frustumCenter->z - ext;
 				maxExtents->z =frustumCenter->z + ext;
@@ -166,10 +166,6 @@ namespace castor3d
 		: LightCategory{ LightType::eDirectional, light }
 		, m_cascades( light.getScene()->getDirectionalShadowCascades() )
 		, m_prvCascades( light.getScene()->getDirectionalShadowCascades() )
-	{
-	}
-
-	DirectionalLight::~DirectionalLight()
 	{
 	}
 

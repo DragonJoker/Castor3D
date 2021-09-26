@@ -8,16 +8,14 @@
 #include "Castor3D/Scene/ParticleSystem/ParticleUpdater.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, CpuParticleSystem )
+
 using namespace castor;
 
 namespace castor3d
 {
 	CpuParticleSystem::CpuParticleSystem( ParticleSystem & parent )
 		: ParticleSystemImpl{ ParticleSystemImpl::Type::eCpu, parent }
-	{
-	}
-
-	CpuParticleSystem::~CpuParticleSystem()
 	{
 	}
 
@@ -62,7 +60,7 @@ namespace castor3d
 		auto & device = updater.device;
 		auto & vbo = m_parent.getBillboards()->getVertexBuffer();
 		VkDeviceSize stride = m_inputs.stride();
-		auto mappedSize = ashes::getAlignedSize( VkDeviceSize( m_firstUnused * stride )
+		auto mappedSize = ashes::getAlignedSize( m_firstUnused * stride
 			, device.renderSystem.getValue( GpuMin::eBufferMapSize ) );
 
 		if ( auto dst = vbo.getBuffer().lock( 0u, mappedSize, 0u ) )

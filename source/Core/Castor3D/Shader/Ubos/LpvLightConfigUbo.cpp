@@ -23,9 +23,9 @@ namespace castor3d
 		castor::Matrix4x4f snapMatrix( float lpvCellSize
 			, castor::Matrix4x4f mtx )
 		{
-			mtx[0][3] = mtx[0][3] - fmod( mtx[0][3], lpvCellSize );
-			mtx[1][3] = mtx[1][3] - fmod( mtx[1][3], lpvCellSize );
-			mtx[2][3] = mtx[2][3] - fmod( mtx[2][3], lpvCellSize );
+			mtx[0][3] = float( mtx[0][3] - fmod( mtx[0][3], lpvCellSize ) );
+			mtx[1][3] = float( mtx[1][3] - fmod( mtx[1][3], lpvCellSize ) );
+			mtx[2][3] = float( mtx[2][3] - fmod( mtx[2][3], lpvCellSize ) );
 			return mtx;
 		}
 	}
@@ -45,12 +45,6 @@ namespace castor3d
 			, tanFovYHalf{ lightConfig.z() }
 			, lightIndex{ writer.cast< sdw::Int >( lightConfig.w() ) }
 		{
-		}
-
-		LpvLightData & LpvLightData::operator=( LpvLightData const & rhs )
-		{
-			StructInstance::operator=( rhs );
-			return *this;
 		}
 
 		ast::type::StructPtr LpvLightData::makeType( ast::type::TypesCache & cache )

@@ -12,7 +12,11 @@ See LICENSE file in root folder
 #	pragma warning( disable: 4100 )
 #	pragma warning( disable: 4242 )
 #	pragma warning( disable: 4244 )
+#	pragma warning( disable: 4365 )
+#	pragma GCC diagnostic push
+#	pragma GCC diagnostic ignored "-Wconversion"
 #	include <ConvectionKernels.h>
+#	pragma GCC diagnostic pop
 #	pragma warning( pop )
 #endif
 

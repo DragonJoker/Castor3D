@@ -46,7 +46,7 @@ namespace CastorViewer
 			, wxPoint const & pos = wxDefaultPosition
 			, wxSize const & size = wxDefaultSize
 			, long style = wxDEFAULT_FRAME_STYLE );
-		~RenderPanel();
+		~RenderPanel()override;
 
 		void reset();
 		void setTarget( castor3d::RenderTargetSPtr target );

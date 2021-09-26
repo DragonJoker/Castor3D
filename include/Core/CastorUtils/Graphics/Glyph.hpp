@@ -28,10 +28,10 @@ namespace castor
 		 *\param[in]	advance	Nombre de pixels pour placer le caractère suivant
 		 *\param[in]	bitmap	L'image de la glyphe
 		 */
-		inline Glyph( char32_t c
+		Glyph( char32_t c
 			, Size const & size
 			, Position const & bearing
-			, uint32_t advance
+			, int32_t advance
 			, ByteArray const & bitmap )
 			: m_bearing{ bearing }
 			, m_size{ size }
@@ -42,22 +42,13 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		inline ~Glyph()
-		{
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the glyph character
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère le caractère de la glyphe
 		 *\return		La valeur
 		 */
-		inline char32_t getCharacter()const
+		char32_t getCharacter()const
 		{
 			return m_character;
 		}
@@ -69,7 +60,7 @@ namespace castor
 		 *\brief		Récupère les dimensions de la glyphe
 		 *\return		Les dimensions de la glyphe
 		 */
-		inline Size const & getSize()const
+		Size const & getSize()const
 		{
 			return m_size;
 		}
@@ -79,7 +70,7 @@ namespace castor
 		 *\~french
 		 *\return		La position de la glyphe par rapport au curseur.
 		 */
-		inline Position const & getBearing()const
+		Position const & getBearing()const
 		{
 			return m_bearing;
 		}
@@ -91,7 +82,7 @@ namespace castor
 		 *\brief		Récupère le nombre de pixels pour place la prchaine glyphe
 		 *\return		La valeur
 		 */
-		inline uint32_t getAdvance()const
+		int32_t getAdvance()const
 		{
 			return m_advance;
 		}
@@ -103,7 +94,7 @@ namespace castor
 		 *\brief		Récupère l'image de la glyphe
 		 *\return		Une référence constante sur l'image de la glyphe
 		 */
-		inline ByteArray const & getBitmap()const
+		ByteArray const & getBitmap()const
 		{
 			return m_bitmap;
 		}
@@ -117,7 +108,7 @@ namespace castor
 		Size const m_size;
 		//!\~english	Pixels to advance in order to go next character.
 		//!\~french		Nombre de pixels pour placer le caractère suivant.
-		uint32_t m_advance;
+		int32_t m_advance;
 		//!\~english	Glyph image.
 		//!\~french		Image de la glyphe.
 		ByteArray const m_bitmap;

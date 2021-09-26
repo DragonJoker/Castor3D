@@ -117,7 +117,7 @@ namespace castor3d
 						auto lightMat = lightingModel->declMaterial( "lightMat" );
 						lightMat->create( data2.rgb(), data3, data2 );
 						auto eye = writer.declLocale( "eye"
-							, c3d_sceneData.getCameraPosition() );
+							, c3d_sceneData.cameraPosition );
 						auto depth = writer.declLocale( "depth"
 							, c3d_mapData0.lod( texCoord, 0.0_f ).x() );
 						auto vsPosition = writer.declLocale( "vsPosition"

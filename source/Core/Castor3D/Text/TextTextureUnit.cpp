@@ -15,31 +15,6 @@ using namespace castor3d;
 
 namespace castor
 {
-	namespace
-	{
-		String writeMask( uint32_t mask )
-		{
-			auto stream = castor::makeStringStream();
-			stream << cuT( "0x" ) << std::hex << std::setw( 8u ) << std::setfill( cuT( '0' ) ) << mask;
-			return stream.str();
-		}
-
-		void doUpdateShift( castor::Point2ui & mask )
-		{
-			if ( mask[0] )
-			{
-				for ( uint32_t i = 0u; i < 4u; ++i )
-				{
-					if ( mask[0] & ( 0x000000FFu << ( i * 8u ) ) )
-					{
-						mask[1] = i;
-						i = 4u;
-					}
-				}
-			}
-		}
-	}
-
 	TextWriter< TextureUnit >::TextWriter( String const & tabs
 		, PassTypeID type
 		, bool isPbr

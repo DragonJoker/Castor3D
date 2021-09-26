@@ -29,6 +29,11 @@ namespace castor3d
 		{
 			castor::Point2f coords;
 			castor::Point2f texture;
+
+			Vertex * data()
+			{
+				return this;
+			}
 		};
 		CU_DeclareVector( Vertex, Vertex );
 

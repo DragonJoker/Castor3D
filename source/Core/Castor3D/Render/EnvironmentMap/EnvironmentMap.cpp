@@ -186,8 +186,8 @@ namespace castor3d
 					m_runnables[index] = graph.compile( m_device.makeContext() );
 					auto runnable = m_runnables[index].get();
 					m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-						, [runnable]( RenderDevice const & device
-							, QueueData const & queueData )
+						, [runnable]( RenderDevice const &
+							, QueueData const & )
 						{
 							runnable->record();
 						} ) );

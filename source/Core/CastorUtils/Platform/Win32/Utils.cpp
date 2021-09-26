@@ -39,7 +39,8 @@ namespace castor
 
 				if ( screen && screen->current++ == screen->wanted )
 				{
-					screen->size.set( lprcMonitor->right - lprcMonitor->left, lprcMonitor->bottom - lprcMonitor->top );
+					screen->size.set( uint32_t( lprcMonitor->right - lprcMonitor->left )
+						, uint32_t( lprcMonitor->bottom - lprcMonitor->top ) );
 				}
 
 				return FALSE;
@@ -49,7 +50,7 @@ namespace castor
 		bool getScreenSize( uint32_t index, Size & size )
 		{
 			stSCREEN screen{ index, 0, size };
-			BOOL bRet = ::EnumDisplayMonitors( nullptr, nullptr, MonitorEnum, WPARAM( &screen ) );
+			BOOL bRet = ::EnumDisplayMonitors( nullptr, nullptr, MonitorEnum, LPARAM( &screen ) );
 			return bRet != FALSE;
 		}
 

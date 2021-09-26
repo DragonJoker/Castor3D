@@ -20,10 +20,6 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	BoneTreeItemProperty::~BoneTreeItemProperty()
-	{
-	}
-
 	void BoneTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_BONE = _( "Bone: " );

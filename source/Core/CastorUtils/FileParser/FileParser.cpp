@@ -29,13 +29,6 @@ namespace castor
 
 	//*********************************************************************************************
 
-	PreprocessedFile & PreprocessedFile::operator=( PreprocessedFile const & rhs )
-	{
-		m_actions = rhs.m_actions;
-		m_context = rhs.m_context;
-		return *this;
-	}
-	
 	PreprocessedFile & PreprocessedFile::operator=( PreprocessedFile && rhs )
 	{
 		m_actions = std::move( rhs.m_actions );
@@ -608,7 +601,7 @@ namespace castor
 	void FileParser::doParseScriptBlockBegin( PreprocessedFile & preprocessed
 		, uint64_t lineIndex )
 	{
-		auto defaultPush = [this]( FileParserContext & context
+		auto defaultPush = []( FileParserContext & context
 			, ParserParameterArray const & )
 		{
 			context.sections.push_back( context.pendingSection );
@@ -638,7 +631,7 @@ namespace castor
 		}
 		else
 		{
-			auto defaultPop = [this]( FileParserContext & context
+			auto defaultPop = []( FileParserContext & context
 				, ParserParameterArray const & )
 			{
 				context.sections.pop_back();

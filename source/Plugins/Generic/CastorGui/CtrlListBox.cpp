@@ -57,13 +57,9 @@ namespace CastorGui
 			, p_size
 			, p_style
 			, p_visible )
-		, m_values( p_values )
 		, m_initialValues( p_values )
+		, m_values( p_values )
 		, m_selected( p_selected )
-	{
-	}
-
-	ListBoxCtrl::~ListBoxCtrl()
 	{
 	}
 
@@ -162,13 +158,15 @@ namespace CastorGui
 
 	void ListBoxCtrl::setItemText( int p_index, String const & p_text )
 	{
-		if ( uint32_t( p_index ) < m_values.size() && p_index >= 0 )
-		{
-			m_values[p_index] = p_text;
+		auto index = uint32_t( p_index );
 
-			if ( uint32_t( p_index ) < m_items.size() )
+		if ( index < m_values.size() && p_index >= 0 )
+		{
+			m_values[index] = p_text;
+
+			if ( index < m_items.size() )
 			{
-				StaticCtrlSPtr item = m_items[p_index];
+				StaticCtrlSPtr item = m_items[index];
 
 				if ( item )
 				{
@@ -180,11 +178,12 @@ namespace CastorGui
 
 	String ListBoxCtrl::getItemText( int p_index )
 	{
+		auto index = uint32_t( p_index );
 		String result;
 
-		if ( uint32_t( p_index ) < m_values.size() && p_index >= 0 )
+		if ( index < m_values.size() )
 		{
-			result = m_values[p_index];
+			result = m_values[index];
 		}
 
 		return result;
@@ -200,9 +199,11 @@ namespace CastorGui
 
 	void ListBoxCtrl::setSelected( int p_value )
 	{
-		if ( m_selected >= 0 && uint32_t( m_selected ) < m_items.size() )
+		auto selected = uint32_t( m_selected );
+
+		if ( m_selected >= 0 && selected < m_items.size() )
 		{
-			StaticCtrlSPtr item = m_items[m_selected];
+			StaticCtrlSPtr item = m_items[selected];
 
 			if ( item )
 			{
@@ -214,9 +215,9 @@ namespace CastorGui
 
 		m_selected = p_value;
 
-		if ( m_selected >= 0 && uint32_t( m_selected ) < m_items.size() )
+		if ( m_selected >= 0 && selected < m_items.size() )
 		{
-			StaticCtrlSPtr item = m_items[m_selected];
+			StaticCtrlSPtr item = m_items[selected];
 
 			if ( item )
 			{

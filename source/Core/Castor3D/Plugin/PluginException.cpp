@@ -16,8 +16,4 @@ namespace castor3d
 	{
 		log::debug << description << std::endl;
 	}
-
-	PluginException::~PluginException()throw()
-	{
-	}
 }

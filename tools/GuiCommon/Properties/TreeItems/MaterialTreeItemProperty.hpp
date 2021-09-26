@@ -34,13 +34,6 @@ namespace GuiCommon
 		MaterialTreeItemProperty( bool p_editable, castor3d::Material & p_material );
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		~MaterialTreeItemProperty();
-		/**
-		 *\~english
 		 *\brief		Retrieves the material
 		 *\return		The value
 		 *\~french
@@ -56,7 +49,7 @@ namespace GuiCommon
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )override;
 
 	private:
 		castor3d::MaterialRPtr m_material{};

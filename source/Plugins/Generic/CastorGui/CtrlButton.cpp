@@ -86,10 +86,6 @@ namespace CastorGui
 		m_text = text;
 	}
 
-	ButtonCtrl::~ButtonCtrl()
-	{
-	}
-
 	void ButtonCtrl::setTextMaterial( MaterialRPtr p_material )
 	{
 		m_textMaterial = p_material;
@@ -157,7 +153,14 @@ namespace CastorGui
 
 	void ButtonCtrl::doCreate()
 	{
-		getBackground()->setBorderPosition( BorderPosition::eInternal );
+		auto bg = getBackground();
+
+		if ( !bg )
+		{
+			CU_Exception( "No background set" );
+		}
+
+		bg->setBorderPosition( BorderPosition::eInternal );
 
 		if ( !getBackgroundMaterial() )
 		{

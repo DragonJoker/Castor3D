@@ -42,13 +42,6 @@ namespace castor3d
 			, Mesh & mesh
 			, Geometry & geometry );
 		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~AnimatedMesh();
-		/**
 		 *\copydoc		castor3d::AnimatedObject::update
 		 */
 		C3D_API void update( castor::Milliseconds const & elapsed )override;

@@ -330,7 +330,7 @@ namespace castor3d
 	bool Ray::projectVertex( castor::Point3f const & point, castor::Point3f & result )const
 	{
 		bool isProjected = false;
-		result = ( m_direction * float( point::dot( m_direction, point ) ) );
+		result = ( m_direction * point::dot( m_direction, point ) );
 
 		if ( point::dot( m_direction, point ) >= 0.0 )
 		{

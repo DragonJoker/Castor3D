@@ -45,13 +45,6 @@ namespace GuiCommon
 			, castor3d::GroupAnimation const & anim );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		~AnimationTreeItemProperty();
-		/**
-		 *\~english
 		 *\brief		Retrieves the AnimatedObjectGroup.
 		 *\return		The value.
 		 *\~french
@@ -115,13 +108,13 @@ namespace GuiCommon
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )override;
 
 	private:
 		castor3d::AnimatedObjectGroup & m_group;
 		castor::String m_name;
 		castor3d::GroupAnimation m_groupAnim;
-		wxPGProperty * m_stateProperty;
+		wxPGProperty * m_stateProperty{};
 	};
 }
 

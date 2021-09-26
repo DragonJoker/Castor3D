@@ -36,7 +36,8 @@ namespace castor3d
 	void RenderTargetCache::remove( RenderTargetSPtr target )
 	{
 		LockType lock{ castor::makeUniqueLock( *this ) };
-		auto v = m_renderTargets.begin() + size_t( target->getTargetType() );
+		auto v = std::next( m_renderTargets.begin()
+			, ptrdiff_t( target->getTargetType() ) );
 		auto it = std::find( v->begin(), v->end(), target );
 
 		if ( it != v->end() )

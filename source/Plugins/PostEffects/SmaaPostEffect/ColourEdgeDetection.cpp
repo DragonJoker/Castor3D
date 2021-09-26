@@ -37,8 +37,8 @@ namespace smaa
 		std::unique_ptr< ast::Shader > doGetEdgeDetectionFPPredication( castor::Size const & size
 			, SmaaConfig const & config )
 		{
-			auto renderTargetMetrics = Point4f{ 1.0f / size.getWidth()
-				, 1.0f / size.getHeight()
+			auto renderTargetMetrics = Point4f{ 1.0f / float( size.getWidth() )
+				, 1.0f / float( size.getHeight() )
 				, float( size.getWidth() )
 				, float( size.getHeight() ) };
 			using namespace sdw;
@@ -192,8 +192,8 @@ namespace smaa
 		std::unique_ptr< ast::Shader > doGetEdgeDetectionFPNoPredication( castor::Size const & size
 			, SmaaConfig const & config )
 		{
-			auto renderTargetMetrics = Point4f{ 1.0f / size.getWidth()
-				, 1.0f / size.getHeight()
+			auto renderTargetMetrics = Point4f{ 1.0f / float( size.getWidth() )
+				, 1.0f / float( size.getHeight() )
 				, float( size.getWidth() )
 				, float( size.getHeight() ) };
 			using namespace sdw;

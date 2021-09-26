@@ -34,19 +34,12 @@ namespace GuiCommon
 		 *\param[in]	animation	La cible.
 		 */
 		SkeletonAnimationTreeItemProperty( bool editable, castor3d::SkeletonAnimation & animation );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		~SkeletonAnimationTreeItemProperty();
 
 	private:
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid );
+		void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )override;
 
 	private:
 		castor3d::SkeletonAnimation & m_animation;

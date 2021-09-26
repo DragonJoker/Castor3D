@@ -35,19 +35,12 @@ namespace GuiCommon
 		FrameVariableTreeItemProperty( castor3d::Engine * engine
 			, bool editable
 			, UniformValueBase & uniform );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		~FrameVariableTreeItemProperty();
 
 	private:
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid );
+		void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )override;
 
 	private:
 		wxPGProperty * doBuildTrackedRangedValueProperty( wxPropertyGrid * grid

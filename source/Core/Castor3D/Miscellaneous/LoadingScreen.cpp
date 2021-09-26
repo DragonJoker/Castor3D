@@ -163,8 +163,8 @@ namespace castor3d
 			auto result = graph.compile( device.makeContext() );
 			auto runnable = result.get();
 			device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [runnable]( RenderDevice const & device
-					, QueueData const & queueData )
+				, [runnable]( RenderDevice const &
+					, QueueData const & )
 				{
 					runnable->record();
 				} ) );
@@ -381,7 +381,7 @@ namespace castor3d
 	crg::SemaphoreWaitArray LoadingScreen::render( ashes::Queue const & queue
 		, ashes::FrameBuffer const & framebuffer
 		, crg::SemaphoreWaitArray const & toWait
-		, VkFence & fence )
+		, crg::Fence *& fence )
 	{
 		auto result = toWait;
 
@@ -392,7 +392,7 @@ namespace castor3d
 				, { transparentBlackClearColor } );
 			m_windowPass->recordCurrent();
 			result = { m_runnable->run( result, queue ) };
-			fence = m_windowPass->getFence();
+			fence = &m_windowPass->getFence();
 		}
 
 		return result;

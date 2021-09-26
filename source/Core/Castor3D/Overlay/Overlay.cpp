@@ -67,7 +67,7 @@ namespace castor3d
 
 		if ( level == getLevel() + 1 )
 		{
-			result = int( m_overlays.size() );
+			result = uint32_t( m_overlays.size() );
 		}
 		else if ( level > getLevel() )
 		{

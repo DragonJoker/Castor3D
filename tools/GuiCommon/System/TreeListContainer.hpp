@@ -63,7 +63,7 @@ namespace GuiCommon
 			this->m_auiManager.Update();
 		}
 
-		~TreeListContainerT()
+		~TreeListContainerT()override
 		{
 			m_auiManager.UnInit();
 		}

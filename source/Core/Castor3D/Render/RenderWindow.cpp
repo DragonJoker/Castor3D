@@ -571,7 +571,7 @@ namespace castor3d
 		{
 			if ( auto resources = doGetResources() )
 			{
-				VkFence fence{};
+				crg::Fence * fence{};
 				auto toWait = doSubmitLoadingFrame( *resources
 					, *m_loadingScreen
 					, fence
@@ -618,6 +618,8 @@ namespace castor3d
 						{
 							m_skip = true;
 						}
+
+						throw;
 					}
 				}
 				else
@@ -693,7 +695,7 @@ namespace castor3d
 
 	ViewportType RenderWindow::getViewportType()const
 	{
-		ViewportType result = ViewportType( -1 );
+		ViewportType result{};
 		RenderTargetSPtr target = getRenderTarget();
 
 		if ( target )
@@ -1419,7 +1421,7 @@ namespace castor3d
 			, *resources.imageAvailableSemaphore
 			, imageIndex );
 
-		if ( doCheckNeedReset( VkResult( res )
+		if ( doCheckNeedReset( res
 			, true
 			, "Swap chain image acquisition" ) )
 		{
@@ -1433,7 +1435,7 @@ namespace castor3d
 
 	crg::SemaphoreWaitArray RenderWindow::doSubmitLoadingFrame( RenderingResources & resources
 		, LoadingScreen & loadingScreen
-		, VkFence & fence
+		, crg::Fence *& fence
 		, crg::SemaphoreWaitArray toWait )
 	{
 		toWait.push_back( { *resources.imageAvailableSemaphore
@@ -1444,7 +1446,7 @@ namespace castor3d
 			, fence );
 	}
 
-	void RenderWindow::doPresentLoadingFrame( VkFence fence
+	void RenderWindow::doPresentLoadingFrame( crg::Fence * fence
 		, RenderingResources & resources
 		, crg::SemaphoreWaitArray toWait )
 	{
@@ -1452,12 +1454,13 @@ namespace castor3d
 		{
 			ashes::VkSemaphoreArray semaphores;
 			crg::convert( toWait, semaphores );
-			auto res = m_device->vkWaitForFences( *m_device
-				, 1u
-				, &fence
-				, VK_TRUE
-				, ashes::MaxTimeout );
-			ashes::checkError( res, "Wait between swapchain images presentation." );
+
+			if ( fence )
+			{
+				auto res = fence->wait( ashes::MaxTimeout );
+				ashes::checkError( res, "Wait between swapchain images presentation." );
+			}
+
 			m_queue->queue->present( { *m_swapChain }
 				, { resources.imageIndex }
 				, semaphores );
@@ -1508,37 +1511,32 @@ namespace castor3d
 	void RenderWindow::doSubmitFrame( RenderingResources * resources
 		, crg::SemaphoreWaitArray toWait )
 	{
-		auto target = getRenderTarget();
+		ashes::VkSemaphoreArray semaphores;
+		ashes::VkPipelineStageFlagsArray stages;
+		crg::convert( toWait, semaphores, stages );
 
-		if ( target )
+		if ( m_toSave )
 		{
-			ashes::VkSemaphoreArray semaphores;
-			ashes::VkPipelineStageFlagsArray stages;
-			crg::convert( toWait, semaphores, stages );
-
-			if ( m_toSave )
-			{
-				m_queue->queue->submit( ashes::VkCommandBufferArray{ *m_transferCommands.commandBuffer }
-					, semaphores
-					, stages
-					, ashes::VkSemaphoreArray{ *m_transferCommands.semaphore } );
-				semaphores = { *m_transferCommands.semaphore };
-				stages = { VK_PIPELINE_STAGE_TRANSFER_BIT };
-			}
-
-#if C3D_DebugQuads
-			m_texture3Dto2D->render( *m_queue->queue
-				, semaphores
-				, stages );
-#endif
-			semaphores.push_back( *resources->imageAvailableSemaphore );
-			stages.push_back( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT );
-			m_queue->queue->submit( ashes::VkCommandBufferArray{ *m_commandBuffers[m_debugConfig.debugIndex][resources->imageIndex] }
+			m_queue->queue->submit( ashes::VkCommandBufferArray{ *m_transferCommands.commandBuffer }
 				, semaphores
 				, stages
-				, ashes::VkSemaphoreArray{}
-				, *resources->fence );
+				, ashes::VkSemaphoreArray{ *m_transferCommands.semaphore } );
+			semaphores = { *m_transferCommands.semaphore };
+			stages = { VK_PIPELINE_STAGE_TRANSFER_BIT };
 		}
+
+#if C3D_DebugQuads
+		m_texture3Dto2D->render( *m_queue->queue
+			, semaphores
+			, stages );
+#endif
+		semaphores.push_back( *resources->imageAvailableSemaphore );
+		stages.push_back( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT );
+		m_queue->queue->submit( ashes::VkCommandBufferArray{ *m_commandBuffers[m_debugConfig.debugIndex][resources->imageIndex] }
+			, semaphores
+			, stages
+			, ashes::VkSemaphoreArray{}
+			, *resources->fence );
 	}
 
 	void RenderWindow::doPresentFrame( RenderingResources * resources )
@@ -1595,7 +1593,6 @@ namespace castor3d
 
 		default:
 			throw ashes::Exception{ errCode, action };
-			break;
 		}
 
 		return result;

@@ -24,7 +24,7 @@ namespace castor3d
 			C3D_API SsaoConfigData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled );
-			C3D_API SsaoConfigData & operator=( SsaoConfigData const & rhs );
+			SDW_DeclStructInstance( C3D_API, SsaoConfigData );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
@@ -130,6 +130,10 @@ namespace castor3d
 		};
 
 	public:
+		C3D_API SsaoConfigUbo( SsaoConfigUbo const & rhs ) = delete;
+		C3D_API SsaoConfigUbo & operator=( SsaoConfigUbo const & rhs ) = delete;
+		C3D_API SsaoConfigUbo( SsaoConfigUbo && rhs ) = default;
+		C3D_API SsaoConfigUbo & operator=( SsaoConfigUbo && rhs ) = delete;
 		C3D_API explicit SsaoConfigUbo( RenderDevice const & device );
 		C3D_API ~SsaoConfigUbo();
 		/**

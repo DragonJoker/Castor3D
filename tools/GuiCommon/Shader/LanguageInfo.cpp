@@ -51,10 +51,6 @@ namespace GuiCommon
 	{
 	}
 
-	LanguageInfo::~LanguageInfo()
-	{
-	}
-
 	void LanguageInfo::setKeywords( uint32_t index
 		, castor::StringArray const & keywords )
 	{

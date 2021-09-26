@@ -36,10 +36,6 @@ namespace castor3d
 	{
 	}
 
-	PointLight::~PointLight()
-	{
-	}
-
 	LightCategoryUPtr PointLight::create( Light & p_light )
 	{
 		return std::unique_ptr< PointLight >( new PointLight{ p_light } );

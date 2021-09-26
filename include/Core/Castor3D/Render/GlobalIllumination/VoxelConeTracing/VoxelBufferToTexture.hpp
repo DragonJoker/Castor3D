@@ -25,7 +25,7 @@ namespace castor3d
 		struct Pipeline
 		{
 			ShaderModule shader;
-			ashes::ComputePipelinePtr pipeline;
+			ashes::ComputePipelinePtr pipeline{};
 		};
 
 	public:
@@ -46,7 +46,6 @@ namespace castor3d
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, VoxelSceneData const & vctConfig );
-		C3D_API ~VoxelBufferToTexture();
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */

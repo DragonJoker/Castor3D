@@ -25,12 +25,6 @@ namespace castor3d
 		{
 		}
 
-		Surface & Surface::operator=( Surface const & rhs )
-		{
-			StructInstance::operator=( rhs );
-			return *this;
-		}
-
 		void Surface::create( sdw::Vec2 clip
 			, sdw::Vec3 view
 			, sdw::Vec3 world

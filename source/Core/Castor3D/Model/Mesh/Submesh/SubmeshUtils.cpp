@@ -158,7 +158,7 @@ namespace castor3d
 			float dirCorrection = tex2m1[0] * tex3m1[1] - tex2m1[1] * tex3m1[0];
 			castor::Point3f faceTangent;
 
-			if ( dirCorrection )
+			if ( std::abs( dirCorrection ) > std::numeric_limits< float >::epsilon() )
 			{
 				dirCorrection = 1 / dirCorrection;
 				// Calculates the face tangent to the current triangle.

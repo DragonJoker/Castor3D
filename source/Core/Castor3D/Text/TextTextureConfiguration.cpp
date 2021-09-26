@@ -12,7 +12,6 @@ namespace castor
 		, PassTypeID type
 		, bool isPbr )
 		: TextWriterT< TextureConfiguration >{ tabs, cuT( "TextureConfiguration" ) }
-		, m_type{ type }
 		, m_isPbr{ isPbr }
 	{
 	}

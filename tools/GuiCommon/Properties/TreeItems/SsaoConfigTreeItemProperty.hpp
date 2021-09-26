@@ -23,7 +23,6 @@ namespace GuiCommon
 		SsaoConfigTreeItemProperty( bool editable
 			, castor3d::Engine * engine
 			, castor3d::SsaoConfig & config );
-		~SsaoConfigTreeItemProperty();
 
 	private:
 		void doCreateProperties( wxPGEditor * editor

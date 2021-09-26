@@ -33,7 +33,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~ParticlePlugin();
+		C3D_API ~ParticlePlugin()override;
 	};
 }
 

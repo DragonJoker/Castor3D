@@ -98,20 +98,20 @@ namespace castor3d
 
 			/*Spherical harmonics coefficients - precomputed*/
 			auto SH_C0 = writer.declConstant( "SH_C0"
-				, Float{ 1.0f / ( 2.0f * sqrt( castor::Pi< float > ) ) } );
+				, Float{ 1.0f / float( 2.0f * sqrt( castor::Pi< float > ) ) } );
 			auto SH_C1 = writer.declConstant( "SH_C1"
-				, Float{ sqrt( 3.0f / castor::Pi< float > ) / 2.0f } );
+				, Float{ float( sqrt( 3.0f / castor::Pi< float > ) / 2.0f ) } );
 
 			/*Cosine lobe coeff*/
 			auto SH_cosLobe_C0 = writer.declConstant( "SH_cosLobe_C0"
-				, Float{ sqrt( castor::Pi< float > ) / 2.0f } );
+				, Float{ float( sqrt( castor::Pi< float > ) / 2.0f ) } );
 			auto SH_cosLobe_C1 = writer.declConstant( "SH_cosLobe_C1"
-				, Float{ sqrt( castor::Pi< float > ) / 3.0f } );
+				, Float{ float( sqrt( castor::Pi< float > ) / 3.0f ) } );
 
 			auto directFaceSubtendedSolidAngle = writer.declConstant( "directFaceSubtendedSolidAngle"
-				, 0.12753712_f ); // 0.4006696846f / Pi
+				, Float{ 0.4006696846f / castor::Pi< float > } );
 			auto sideFaceSubtendedSolidAngle = writer.declConstant( "sideFaceSubtendedSolidAngle"
-				, 0.13478556_f ); // 0.4234413544f / Pi
+				, Float{ 0.4234413544f / castor::Pi< float > } );
 			auto propDirections = writer.declConstantArray( "propDirections"
 				, std::vector< IVec3 >
 				{
@@ -182,8 +182,8 @@ namespace castor3d
 				, [&]( Int index
 					, IVec3 orientation )
 				{
-					const float smallComponent = 1.0f / sqrt( 5.0f );
-					const float bigComponent = 2.0f / sqrt( 5.0f );
+					const float smallComponent = float( 1.0f / sqrt( 5.0f ) );
+					const float bigComponent = float( 2.0f / sqrt( 5.0f ) );
 
 					auto tmp = writer.declLocale( "tmp"
 						, vec3( writer.cast< Float >( cellSides[index].x() ) * smallComponent
@@ -388,7 +388,7 @@ namespace castor3d
 				, 0u
 				, VK_FORMAT_R32G32B32_SFLOAT
 				, 0u } } };
-		VkViewport viewport{ 0.0f, 0.0f, float( m_gridSize ), float( m_gridSize ) };
+		VkViewport viewport{ 0.0f, 0.0f, float( m_gridSize ), float( m_gridSize ), 0.0f, 1.0f };
 		VkRect2D scissor{ 0, 0, m_gridSize, m_gridSize };
 		ashes::PipelineViewportStateCreateInfo viewportState{ 0u
 			, 1u
@@ -427,7 +427,14 @@ namespace castor3d
 			, nullptr
 			, 0u
 			, VK_FALSE
-			, VK_FALSE };
+			, VK_FALSE
+			, {}
+			, {}
+			, {}
+			, {}
+			, {}
+			, {}
+			, {} };
 		VkPipelineViewportStateCreateInfo vpState = viewportState;
 		VkPipelineVertexInputStateCreateInfo viState = vertexState;
 		VkPipelineColorBlendStateCreateInfo cbState = blendState;
@@ -479,7 +486,6 @@ namespace castor3d
 				, [this]( VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( cb, i ); } }
 			, { gridSize, gridSize }
 			, 1u }
-		, m_device{ device }
 		, m_gridSize{ gridSize }
 		, m_vertexBuffer{ createVertexBuffer( device, getName(), m_gridSize ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT

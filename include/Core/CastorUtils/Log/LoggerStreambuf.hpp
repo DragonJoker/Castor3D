@@ -7,7 +7,10 @@ See LICENSE file in root folder
 #include "CastorUtils/Log/LoggerInstance.hpp"
 #include "CastorUtils/Config/MultiThreadConfig.hpp"
 
+#pragma warning( push )
+#pragma warning( disable:4365 )
 #include <mutex>
+#pragma warning( pop )
 
 namespace castor
 {
@@ -37,7 +40,7 @@ namespace castor
 			m_old = m_stream.rdbuf( this );
 		}
 
-		~LoggerStreambufT()noexcept
+		~LoggerStreambufT()noexcept override
 		{
 			doSync();
 			m_stream.rdbuf( m_old );

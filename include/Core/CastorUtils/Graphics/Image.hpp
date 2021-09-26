@@ -52,8 +52,8 @@ namespace castor
 			, Size const & size
 			, uint8_t const * buffer = nullptr )
 			: Named{ std::move( name ) }
-			, m_buffer{ std::make_shared< PxBuffer< PFDst > >( size, buffer, PFSrc ) }
 			, m_pathFile{ std::move( path ) }
+			, m_buffer{ std::make_shared< PxBuffer< PFDst > >( size, buffer, PFSrc ) }
 		{
 			CU_CheckInvariants();
 		}
@@ -89,7 +89,7 @@ namespace castor
 		{
 		}
 
-		CU_API ~Image() = default;
+		CU_API virtual ~Image() = default;
 		//@}
 		/**
 		 *\name		Copy/Move.
@@ -258,7 +258,7 @@ namespace castor
 
 		std::size_t getSize( uint32_t level = 0u )const
 		{
-			return std::size_t( m_layout.layerMipSize( level ) );
+			return m_layout.layerMipSize( level );
 		}
 
 		uint32_t getWidth()const

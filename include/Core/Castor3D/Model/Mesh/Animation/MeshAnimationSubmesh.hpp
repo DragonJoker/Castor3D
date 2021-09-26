@@ -56,18 +56,11 @@ namespace castor3d
 		C3D_API MeshAnimationSubmesh & operator=( MeshAnimationSubmesh const & rhs ) = delete;
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API virtual ~MeshAnimationSubmesh();
-		/**
-		 *\~english
 		 *\return		The submesh.
 		 *\~french
 		 *\return		Le sous-maillage.
 		 */
-		inline Submesh & getSubmesh()
+		Submesh & getSubmesh()
 		{
 			return m_submesh;
 		}
@@ -77,7 +70,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le sous-maillage.
 		 */
-		inline Submesh const & getSubmesh()const
+		Submesh const & getSubmesh()const
 		{
 			return m_submesh;
 		}
@@ -87,7 +80,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le composant des os.
 		 */
-		inline MorphComponent const & getComponent()const
+		MorphComponent const & getComponent()const
 		{
 			return *m_component;
 		}
@@ -97,7 +90,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le composant des os.
 		 */
-		inline MorphComponent & getComponent()
+		MorphComponent & getComponent()
 		{
 			return *m_component;
 		}

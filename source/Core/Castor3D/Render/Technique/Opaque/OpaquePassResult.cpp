@@ -51,11 +51,10 @@ namespace castor3d
 	VkClearValue getClearValue( DsTexture texture )
 	{
 		static float constexpr component = std::numeric_limits< float >::max();
-		static auto const rgb32fMaxColor{ ashes::makeClearValue( VkClearColorValue{ component, component, component, component } ) };
 		static std::array< VkClearValue, size_t( DsTexture::eCount ) > Values
 		{
 			{
-				makeClearValue( 1.0f, std::numeric_limits< float >::max(), 0.0f, 0.0f ),
+				makeClearValue( 1.0f, component, 0.0f, 0.0f ),
 				transparentBlackClearColor,
 				transparentBlackClearColor,
 				transparentBlackClearColor,

@@ -74,7 +74,7 @@ namespace castor3d
 		*\brief
 		*	Destructeur.
 		*/
-		C3D_API virtual ~SceneBackground();
+		C3D_API virtual ~SceneBackground() = default;
 		/**
 		*\~english
 		*\brief

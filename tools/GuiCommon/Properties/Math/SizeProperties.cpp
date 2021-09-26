@@ -15,12 +15,8 @@ namespace GuiCommon
 		: wxPGProperty( label, name )
 	{
 		setValueI( value );
-		AddPrivateChild( addAttributes( new wxIntProperty( _( "Width" ), wxPG_LABEL, value.getWidth() ) ) );
-		AddPrivateChild( addAttributes( new wxIntProperty( _( "Height" ), wxPG_LABEL, value.getHeight() ) ) );
-	}
-
-	SizeProperty::~SizeProperty()
-	{
+		AddPrivateChild( addAttributes( new wxIntProperty( _( "Width" ), wxPG_LABEL, long( value.getWidth() ) ) ) );
+		AddPrivateChild( addAttributes( new wxIntProperty( _( "Height" ), wxPG_LABEL, long( value.getHeight() ) ) ) );
 	}
 
 	void SizeProperty::RefreshChildren()
@@ -36,16 +32,16 @@ namespace GuiCommon
 	wxVariant SizeProperty::ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue )const
 	{
 		Size & size = SizeRefFromVariant( thisValue );
-		int val = childValue.GetLong();
+		auto val = int( childValue.GetLong() );
 
 		switch ( childIndex )
 		{
 		case 0:
-			size.getWidth() = val;
+			size.getWidth() = uint32_t( val );
 			break;
 
 		case 1:
-			size.getHeight() = val;
+			size.getHeight() = uint32_t( val );
 			break;
 		}
 

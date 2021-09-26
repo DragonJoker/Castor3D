@@ -324,7 +324,13 @@ namespace castor3d
 
 					break;
 
+#pragma warning( push )
+#pragma warning( disable: 4996 )
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 				case ChunkType::eSubmeshFaceCount:
+#pragma GCC diagnostic pop
+#pragma warning( pop )
 					result = doParseChunk( count, chunk );
 					checkError( result, "Couldn't parse faces count." );
 
@@ -336,7 +342,13 @@ namespace castor3d
 
 					break;
 
+#pragma warning( push )
+#pragma warning( disable: 4996 )
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 				case ChunkType::eSubmeshFaces:
+#pragma GCC diagnostic pop
+#pragma warning( pop )
 					result = doParseChunk( faces, chunk );
 					checkError( result, "Couldn't parse faces data." );
 

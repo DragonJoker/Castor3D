@@ -249,7 +249,7 @@ namespace castor3d
 							, material );
 
 						auto ambient = writer.declLocale( "ambient"
-							, lightMat->getAmbient( c3d_sceneData.getAmbientLight() ) );
+							, lightMat->getAmbient( c3d_sceneData.ambientLight ) );
 						auto lightDiffuse = writer.declLocale( "lightDiffuse"
 							, c3d_mapLightDiffuse.lod( vtx_texture, 0.0_f ).xyz() );
 						auto lightSpecular = writer.declLocale( "lightSpecular"
@@ -287,7 +287,7 @@ namespace castor3d
 						auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
 							, ( config.hasDiffuseGi
 								? cookTorrance.computeDiffuse( lightIndirectDiffuse
-									, c3d_sceneData.getCameraPosition()
+									, c3d_sceneData.cameraPosition
 									, surface.worldNormal
 									, lightMat->specular
 									, lightMat->getMetalness()
@@ -371,7 +371,6 @@ namespace castor3d
 		, m_opaquePassResult{ gp }
 		, m_ssaoResult{ ssaoResult }
 		, m_subsurfaceScattering{ subsurfaceScattering }
-		, m_lightDiffuse{ lightDiffuse }
 		, m_lightSpecular{ lightSpecular }
 		, m_lightIndirectDiffuse{ lightIndirectDiffuse }
 		, m_lightIndirectSpecular{ lightIndirectSpecular }
@@ -406,9 +405,9 @@ namespace castor3d
 		auto & engine = *getEngine();
 		auto & passBuffer = engine.getMaterialCache().getPassBuffer();
 		auto & pass = graph.createPass( "DeferredResolve"
-			, [this, progress, &engine]( crg::FramePass const & pass
+			, [this, progress, &engine]( crg::FramePass const & framePass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBar( progress, "Initialising opaque resolve pass" );
 				auto result = crg::RenderQuadBuilder{}
@@ -416,8 +415,8 @@ namespace castor3d
 					.renderSize( makeExtent2D( m_result.getExtent() ) )
 					.passIndex( &m_programIndex )
 					.programs( createPrograms( m_programs ) )
-					.build( pass, context, graph, uint32_t( m_programs.size() ) );
-				engine.registerTimer( graph.getName() + "/Opaque"
+					.build( framePass, context, runnableGraph, uint32_t( m_programs.size() ) );
+				engine.registerTimer( runnableGraph.getName() + "/Opaque"
 					, result->getTimer() );
 				return result;
 			} );

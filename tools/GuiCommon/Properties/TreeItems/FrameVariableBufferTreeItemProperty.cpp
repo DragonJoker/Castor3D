@@ -11,15 +11,10 @@ namespace GuiCommon
 {
 	FrameVariableBufferTreeItemProperty::FrameVariableBufferTreeItemProperty( Engine * engine
 		, bool editable
-		, UniformBufferValues & buffer )
+		, UniformBufferValues & /*buffer*/ )
 		: TreeItemProperty{ engine, editable }
-		, m_buffer{ buffer }
 	{
 		CreateTreeItemMenu();
-	}
-
-	FrameVariableBufferTreeItemProperty::~FrameVariableBufferTreeItemProperty()
-	{
 	}
 
 	void FrameVariableBufferTreeItemProperty::doCreateProperties( wxPGEditor * p_editor

@@ -113,16 +113,16 @@ namespace castor3d
 		, m_camera{ camera }
 		, m_instancesCount{ instancesCount }
 	{
-		m_sceneChanged = m_scene.onChanged.connect( [this]( Scene const & scene )
+		m_sceneChanged = m_scene.onChanged.connect( [this]( Scene const & )
 			{
 				onSceneChanged( m_scene );
 			} );
 
 		if ( m_camera )
 		{
-			m_cameraChanged = m_camera->onChanged.connect( [this]( Camera const & camera )
+			m_cameraChanged = m_camera->onChanged.connect( [this]( Camera const & cam )
 				{
-					onCameraChanged( camera );
+					onCameraChanged( cam );
 				} );
 		}
 	}

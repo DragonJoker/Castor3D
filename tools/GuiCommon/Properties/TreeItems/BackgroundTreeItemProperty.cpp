@@ -40,7 +40,7 @@ namespace GuiCommon
 			{
 			}
 
-			void visit( ColourBackground & background )
+			void visit( ColourBackground & background )override
 			{
 				static wxString PROPERTY_BACKGROUND_COLOUR_COLOUR = _( "Colour" );
 
@@ -48,7 +48,7 @@ namespace GuiCommon
 					, &background.getScene(), &Scene::setBackgroundColour );
 			}
 
-			void visit( SkyboxBackground & background )
+			void visit( SkyboxBackground & background )override
 			{
 				if ( !background.getEquiTexturePath().empty() )
 				{
@@ -120,7 +120,7 @@ namespace GuiCommon
 
 			}
 
-			void visit( ImageBackground & background )
+			void visit( ImageBackground & background )override
 			{
 				static wxString PROPERTY_BACKGROUND_IMAGE_IMAGE = _( "Image" );
 
@@ -176,14 +176,10 @@ namespace GuiCommon
 		, bool editable
 		, SceneBackground & background )
 		: TreeItemProperty{ background.getScene().getEngine(), editable }
-		, m_parent{ parent }
 		, m_background{ background }
+		, m_parent{ parent }
 	{
 		CreateTreeItemMenu();
-	}
-
-	BackgroundTreeItemProperty::~BackgroundTreeItemProperty()
-	{
 	}
 
 	void BackgroundTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )

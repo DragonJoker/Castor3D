@@ -19,7 +19,8 @@ namespace fxaa
 		, m_ubo{ device.uboPools->getBuffer< Configuration >( 0u ) }
 	{
 		auto & data = m_ubo.getData();
-		data.pixelSize = castor::Point2f{ 1.0f / size.getWidth(), 1.0f / size.getHeight() };
+		data.pixelSize = castor::Point2f{ 1.0f / float( size.getWidth() )
+			, 1.0f / float( size.getHeight() ) };
 	}
 
 	FxaaUbo::~FxaaUbo()

@@ -39,15 +39,6 @@ namespace castor3d
 			, castor::String const & name = castor::String{} );
 		/**
 		*\~english
-		*\brief
-		*	Destructor.
-		*\~french
-		*\brief
-		*	Destructeur.
-		*/
-		C3D_API virtual ~ImageBackground();
-		/**
-		*\~english
 		*\return
 		*	Sets the texture image.
 		*\param[in] folder

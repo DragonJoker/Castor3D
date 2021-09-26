@@ -1,15 +1,19 @@
 #include "CastorTestLauncher/CastorTestLauncher.hpp"
 #include "CastorTestLauncher/MainFrame.hpp"
 
-#include <wx/cmdline.h>
-#include <wx/image.h>
-
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/PluginCache.hpp>
 
 #include <CastorUtils/Data/File.hpp>
 #include <CastorUtils/Exception/Exception.hpp>
 #include <CastorUtils/Miscellaneous/StringUtils.hpp>
+
+#pragma warning( push )
+#pragma warning( disable: 4365 )
+#pragma warning( disable: 4371 )
+#include <wx/cmdline.h>
+#include <wx/image.h>
+#pragma warning( pop )
 
 wxIMPLEMENT_APP( test_launcher::CastorTestLauncher );
 
@@ -170,7 +174,7 @@ namespace test_launcher
 
 		castor3d::EngineSPtr castor = std::make_shared< castor3d::Engine >( cuT( "CastorTestLauncher" )
 			, castor3d::Version{ CastorTestLauncher_VERSION_MAJOR, CastorTestLauncher_VERSION_MINOR, CastorTestLauncher_VERSION_BUILD }
-			, false
+			, m_config.validate
 			, * castor::Logger::getSingleton().getInstance() );
 		castor::PathArray arrayFiles;
 		castor::File::listDirectoryFiles( castor3d::Engine::getPluginsDirectory(), arrayFiles );

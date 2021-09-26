@@ -18,12 +18,12 @@ namespace toon::shader
 	{
 	}
 
-	void ToonPhongLightMaterial::create( sdw::Vec3 const & albedo
+	void ToonPhongLightMaterial::create( sdw::Vec3 const & palbedo
 		, sdw::Vec4 const & data3
 		, sdw::Vec4 const & data2
 		, c3d::Material const & material )
 	{
-		create( albedo
+		create( palbedo
 			, data3
 			, data2
 			, material.colourDiv.a() );
@@ -37,15 +37,15 @@ namespace toon::shader
 		smoothBand = material.specific.r();
 	}
 
-	void ToonPhongLightMaterial::create( sdw::Vec3 const & albedo
+	void ToonPhongLightMaterial::create( sdw::Vec3 const & palbedo
 		, sdw::Vec4 const & data3
 		, sdw::Vec4 const & data2
-		, sdw::Float const & ambient )
+		, sdw::Float const & pambient )
 	{
-		this->albedo = albedo;
-		this->specular = data3.rgb();
-		this->ambient = ambient;
-		this->shininess = data2.a();
+		albedo = palbedo;
+		specular = data3.rgb();
+		ambient = pambient;
+		shininess = data2.a();
 	}
 
 	void ToonPhongLightMaterial::create( c3d::Material const & material )
@@ -109,12 +109,12 @@ namespace toon::shader
 	{
 	}
 
-	void ToonPbrLightMaterial::create( sdw::Vec3 const & albedo
+	void ToonPbrLightMaterial::create( sdw::Vec3 const & palbedo
 		, sdw::Vec4 const & data3
 		, sdw::Vec4 const & data2
 		, c3d::Material const & material )
 	{
-		create( albedo
+		create( palbedo
 			, data3
 			, data2
 			, 0.0_f );
@@ -128,15 +128,15 @@ namespace toon::shader
 		smoothBand = material.specific.r();
 	}
 
-	void ToonPbrLightMaterial::create( sdw::Vec3 const & albedo
+	void ToonPbrLightMaterial::create( sdw::Vec3 const & palbedo
 		, sdw::Vec4 const & data3
 		, sdw::Vec4 const & data2
 		, sdw::Float const & ambient )
 	{
-		this->albedo = albedo;
-		this->specular = data3.rgb();
-		this->metalness = data3.a();
-		this->roughness = data2.a();
+		albedo = palbedo;
+		specular = data3.rgb();
+		metalness = data3.a();
+		roughness = data2.a();
 	}
 
 	void ToonPbrLightMaterial::create( c3d::Material const & material )

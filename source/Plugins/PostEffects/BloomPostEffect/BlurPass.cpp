@@ -99,7 +99,7 @@ namespace Bloom
 					result[index] = x;
 				}
 
-				x = x * ( ( height + 1 ) * 2 - i ) / ( i + 1 );
+				x = x * float( ( height + 1 ) * 2 - i ) / float( i + 1 );
 			}
 
 			// Normalize kernel coefficients
@@ -157,6 +157,41 @@ namespace Bloom
 
 			return result;
 		}
+
+		std::vector< BlurPass::Subpass > doCreateSubpasses( crg::FrameGraph & graph
+			, crg::FramePassArray & previousPasses
+			, castor3d::RenderDevice const & device
+			, crg::ImageViewIdArray const & srcImages
+			, crg::ImageViewIdArray const & dstImages
+			, VkExtent2D dimensions
+			, ashes::PipelineShaderStageCreateInfoArray const & stages
+			, UboOffsetArray const & blurUbo
+			, uint32_t blurPassesCount
+			, bool isVertical
+			, bool const * enabled )
+		{
+			std::vector< BlurPass::Subpass > result;
+			assert( srcImages.size() == dstImages.size()
+				&& srcImages.size() == blurPassesCount );
+
+			for ( auto i = 0u; i < blurPassesCount; ++i )
+			{
+				result.emplace_back( graph
+					, *previousPasses[i]
+					, device
+					, srcImages[i]
+					, dstImages[i]
+					, dimensions
+					, stages
+					, blurUbo[i]
+					, i
+					, isVertical
+					, enabled );
+				previousPasses[i] = &result.back().pass;
+			}
+
+			return result;
+		}
 	}
 
 	//*********************************************************************************************
@@ -173,7 +208,7 @@ namespace Bloom
 		, bool isVertical
 		, bool const * enabled )
 		: pass{ graph.createPass( "BloomBlurPass" + std::to_string( index ) + ( isVertical ? "Y" : "X" )
-			, [this, &device, &stages, dimensions, index, enabled]( crg::FramePass const & pass
+			, [&device, &stages, dimensions, index, enabled]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -204,41 +239,6 @@ namespace Bloom
 				, float( index )
 				, float( index + 1u ) } );
 		pass.addOutputColourView( dstView );
-	}
-
-	std::vector< BlurPass::Subpass > doCreateSubpasses( crg::FrameGraph & graph
-		, crg::FramePassArray & previousPasses
-		, castor3d::RenderDevice const & device
-		, crg::ImageViewIdArray const & srcImages
-		, crg::ImageViewIdArray const & dstImages
-		, VkExtent2D dimensions
-		, ashes::PipelineShaderStageCreateInfoArray const & stages
-		, UboOffsetArray const & blurUbo
-		, uint32_t blurPassesCount
-		, bool isVertical
-		, bool const * enabled )
-	{
-		std::vector< BlurPass::Subpass > result;
-		assert( srcImages.size() == dstImages.size()
-			&& srcImages.size() == blurPassesCount );
-
-		for ( auto i = 0u; i < blurPassesCount; ++i )
-		{
-			result.emplace_back( graph
-				, *previousPasses[i]
-				, device
-				, srcImages[i]
-				, dstImages[i]
-				, dimensions
-				, stages
-				, blurUbo[i]
-				, i
-				, isVertical
-				, enabled );
-			previousPasses[i] = &result.back().pass;
-		}
-
-		return result;
 	}
 
 	//*********************************************************************************************
@@ -273,7 +273,6 @@ namespace Bloom
 			, m_blurPassesCount
 			, isVertical
 			, enabled ) }
-		, m_isVertical{ isVertical }
 	{
 	}
 

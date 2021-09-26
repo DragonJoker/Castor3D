@@ -1,4 +1,4 @@
-﻿#include <CastorUtils/Data/Path.hpp>
+#include <CastorUtils/Data/Path.hpp>
 #include <CastorUtils/Design/ChangeTracked.hpp>
 #include <CastorUtils/Graphics/Font.hpp>
 #include <CastorUtils/Graphics/RgbColour.hpp>
@@ -36,6 +36,8 @@ namespace GuiCommon
 
 	//************************************************************************************************
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wuseless-cast"
 #define IntValueTraitsT( IntTypeT )\
 	template<>\
 	struct ValueTraitsT< IntTypeT >\
@@ -67,9 +69,12 @@ namespace GuiCommon
 	IntValueTraitsT( uint64_t );
 
 #undef IntValueTraitsT
+#pragma GCC diagnostic pop
 
 	//************************************************************************************************
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wuseless-cast"
 #define FloatValueTraitsT( FloatTypeT )\
 	template<>\
 	struct ValueTraitsT< FloatTypeT >\
@@ -95,6 +100,7 @@ namespace GuiCommon
 	FloatValueTraitsT( double );
 
 #undef FloatValueTraitsT
+#pragma GCC diagnostic pop
 
 	//************************************************************************************************
 

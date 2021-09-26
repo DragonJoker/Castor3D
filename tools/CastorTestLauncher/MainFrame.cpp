@@ -15,12 +15,15 @@
 #include <ashespp/Core/PlatformWindowHandle.hpp>
 #include <ashespp/Core/WindowHandle.hpp>
 
+#pragma warning( push )
+#pragma warning( disable: 4127 )
+#pragma warning( disable: 4365 )
+#pragma warning( disable: 4371 )
 #include <wx/display.h>
 #include <wx/mstream.h>
 #include <wx/renderer.h>
 #include <wx/rawbmp.h>
-
-#include <castor.xpm>
+#pragma warning( pop )
 
 #if defined( CU_PlatformApple )
 #	include "MetalLayer.h"
@@ -33,6 +36,8 @@
 #	undef Always
 using Bool = int;
 #endif
+
+#include <castor.xpm>
 
 using namespace castor3d;
 using namespace castor;
@@ -89,7 +94,7 @@ namespace test_launcher
 			, bool flip
 			, wxBitmap & output )
 		{
-			output.Create( width, height, 24 );
+			output.Create( int( width ), int( height ), 24 );
 			wxNativePixelData data( output );
 
 			if ( output.IsOk()
@@ -210,7 +215,7 @@ namespace test_launcher
 
 #elif defined( CU_PlatformLinux )
 
-			GtkWidget * gtkWidget = static_cast< GtkWidget * >( window->GetHandle() );
+			GtkWidget * gtkWidget = window->GetHandle();
 			auto gdkWindow = gtk_widget_get_window( gtkWidget );
 			GLXDrawable drawable = 0;
 			Display * display = nullptr;
@@ -237,10 +242,6 @@ namespace test_launcher
 		, m_engine{ engine }
 	{
 		SetClientSize( 800, 600 );
-	}
-
-	MainFrame::~MainFrame()
-	{
 	}
 
 	bool MainFrame::initialise()
@@ -273,7 +274,7 @@ namespace test_launcher
 	{
 		if ( !fileName.empty() )
 		{
-			m_filePath = Path{ ( wxChar const * )fileName.c_str() };
+			m_filePath = Path{ static_cast< wxChar const * >( fileName.c_str() ) };
 		}
 
 		if ( !m_filePath.empty() )
@@ -336,7 +337,14 @@ namespace test_launcher
 
 	void MainFrame::cleanup()
 	{
-		m_renderWindow->cleanup();
+		try
+		{
+			m_renderWindow->cleanup();
+		}
+		catch ( ... )
+		{
+		}
+
 		m_renderWindow.reset();
 		m_engine.cleanup();
 	}

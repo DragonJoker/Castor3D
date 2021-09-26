@@ -4,8 +4,6 @@
 #include "CastorViewer/RotateNodeEvent.hpp"
 #include "CastorViewer/TranslateNodeEvent.hpp"
 
-#include <wx/display.h>
-
 #include <Castor3D/Cache/ObjectCache.hpp>
 #include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
 #include <Castor3D/Event/Frame/FrameListener.hpp>
@@ -22,6 +20,8 @@
 
 #include <ashespp/Core/WindowHandle.hpp>
 
+#include <wx/display.h>
+
 using namespace castor3d;
 using namespace castor;
 
@@ -36,10 +36,7 @@ namespace CastorViewer
 		static const float DEF_CAM_SPEED = 0.5f;
 		static const float MIN_CAM_SPEED = 0.05f;
 		static const float CAM_SPEED_INC = 0.9f;
-	}
 
-	namespace
-	{
 		KeyboardKey doConvertKeyCode( int code )
 		{
 			KeyboardKey result = KeyboardKey::eNone;
@@ -80,7 +77,7 @@ namespace CastorViewer
 
 			for ( int i = 1; i < eTIMER_ID_COUNT; i++ )
 			{
-				result[i] = new wxTimer( window, i );
+				result[size_t( i )] = new wxTimer( window, i );
 			}
 
 			return result;
@@ -111,7 +108,7 @@ namespace CastorViewer
 		delete m_cursorHand;
 		delete m_cursorNone;
 
-		for ( int i = 1; i <= eTIMER_ID_MOVEMENT; i++ )
+		for ( size_t i = 1; i <= size_t( eTIMER_ID_MOVEMENT ); i++ )
 		{
 			delete m_timers[i];
 			m_timers[i] = nullptr;
@@ -207,18 +204,18 @@ namespace CastorViewer
 
 	void RenderPanel::doStartTimer( int p_id )
 	{
-		m_timers[p_id]->Start( 10 );
+		m_timers[size_t( p_id )]->Start( 10 );
 	}
 
 	void RenderPanel::doStopTimer( int p_id )
 	{
 		if ( p_id != eTIMER_ID_COUNT )
 		{
-			m_timers[p_id]->Stop();
+			m_timers[size_t( p_id )]->Stop();
 		}
 		else
 		{
-			for ( int i = 1; i < eTIMER_ID_MOVEMENT; i++ )
+			for ( size_t i = 1; i < size_t( eTIMER_ID_MOVEMENT ); i++ )
 			{
 				m_timers[i]->Stop();
 			}
@@ -254,7 +251,7 @@ namespace CastorViewer
 		{
 			auto cameraNode = camera->getParent();
 			camera->getScene()->getListener().postEvent( makeCpuFunctorEvent( EventType::ePostRender
-				, [this, cameraNode]()
+				, [cameraNode]()
 				{
 					Quaternion orientation{ cameraNode->getOrientation() };
 					orientation *= Quaternion::fromAxisAngle( castor::Point3f{ 1.0f, 0.0f, 0.0f }, 90.0_degrees );
@@ -293,7 +290,7 @@ namespace CastorViewer
 
 		if ( camera )
 		{
-			result *= float( camera->getWidth() ) / GetClientSize().x;
+			result *= float( camera->getWidth() ) / float( GetClientSize().x );
 		}
 
 		return result;
@@ -306,7 +303,7 @@ namespace CastorViewer
 
 		if ( camera )
 		{
-			result *= float( camera->getHeight() ) / GetClientSize().y;
+			result *= float( camera->getHeight() ) / float( GetClientSize().y );
 		}
 
 		return result;
@@ -319,7 +316,7 @@ namespace CastorViewer
 
 		if ( camera )
 		{
-			result = int( x * GetClientSize().x / float( camera->getWidth() ) );
+			result = int( x * float( GetClientSize().x ) / float( camera->getWidth() ) );
 		}
 
 		return result;
@@ -332,7 +329,7 @@ namespace CastorViewer
 
 		if ( camera )
 		{
-			result = int( y * GetClientSize().y / float( camera->getHeight() ) );
+			result = int( y * float( GetClientSize().y ) / float( camera->getHeight() ) );
 		}
 
 		return result;
@@ -412,6 +409,8 @@ namespace CastorViewer
 		return *it->second;
 	}
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 	BEGIN_EVENT_TABLE( RenderPanel, wxPanel )
 		EVT_TIMER( eTIMER_ID_FORWARD, RenderPanel::onTimerFwd )
 		EVT_TIMER( eTIMER_ID_BACK, RenderPanel::onTimerBck )
@@ -443,6 +442,7 @@ namespace CastorViewer
 		EVT_MOUSEWHEEL( RenderPanel::onMouseWheel )
 		EVT_MENU( wxID_EXIT, RenderPanel::onMenuClose )
 	END_EVENT_TABLE()
+#pragma GCC diagnostic pop
 
 	void RenderPanel::onTimerFwd( wxTimerEvent & p_event )
 	{
@@ -523,7 +523,8 @@ namespace CastorViewer
 	{
 		if ( m_resizeWindow )
 		{
-			m_renderWindow->resize( p_event.GetSize().x, p_event.GetSize().y );
+			m_renderWindow->resize( uint32_t( p_event.GetSize().x )
+				, uint32_t( p_event.GetSize().y ) );
 		}
 
 		p_event.Skip();

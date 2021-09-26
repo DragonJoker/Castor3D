@@ -16,7 +16,6 @@ namespace Testing
 	{
 	public:
 		CastorUtilsMatrixTest();
-		virtual ~CastorUtilsMatrixTest();
 
 	private:
 		void doRegisterTests() override;
@@ -62,8 +61,7 @@ namespace Testing
 	{
 	public:
 		CastorUtilsMatrixBench();
-		virtual ~CastorUtilsMatrixBench();
-		virtual void Execute();
+		void Execute()override;
 
 	private:
 		void MatrixMultiplicationsCastor();

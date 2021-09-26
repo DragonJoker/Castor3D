@@ -11,7 +11,11 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/Signal.hpp>
 
 #include <deque>
+
+#pragma warning( push )
+#pragma warning( disable:4365 )
 #include <mutex>
+#pragma warning( pop )
 
 namespace castor3d
 {
@@ -511,17 +515,17 @@ namespace castor3d
 		//@}
 
 	private:
-		void doProcessMouseEvent( MouseEventSPtr event )
+		void doProcessMouseEvent( MouseEventSPtr event )override
 		{
 			m_ncMouseSlots[size_t( event->getMouseEventType() )]( this->shared_from_this(), *event );
 		}
 
-		void doProcessKeyboardEvent( KeyboardEventSPtr event )
+		void doProcessKeyboardEvent( KeyboardEventSPtr event )override
 		{
 			m_ncKeyboardSlots[size_t( event->getKeyboardEventType() )]( this->shared_from_this(), *event );
 		}
 
-		void doProcessHandlerEvent( HandlerEventSPtr event )
+		void doProcessHandlerEvent( HandlerEventSPtr event )override
 		{
 			m_ncHandlerSlots[size_t( event->getHandlerEventType() )]( this->shared_from_this(), *event );
 		}

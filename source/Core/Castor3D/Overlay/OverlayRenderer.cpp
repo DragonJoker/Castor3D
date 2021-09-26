@@ -35,17 +35,18 @@
 
 CU_ImplementCUSmartPtr( castor3d, OverlayRenderer )
 
+#pragma GCC diagnostic ignored "-Wclass-memaccess"
+
 using namespace castor;
 
 namespace castor3d
 {
 	//*********************************************************************************************
 
-	static int32_t constexpr MaxCharsPerBuffer = 6000;
-	static uint32_t constexpr MaxPanelsPerBuffer = 100u;
-
 	namespace
 	{
+		static uint32_t constexpr MaxPanelsPerBuffer = 100u;
+
 		enum class OverlayBindingId : uint32_t
 		{
 			eMaterials,
@@ -134,21 +135,20 @@ namespace castor3d
 			eColour = 0x02,
 			eOpacity = 0x04,
 		};
-		CU_ImplementFlags( OverlayTexture )
 
 		uint32_t makeKey( FilteredTextureFlags const & textures
 			, bool text )
 		{
-			OverlayTextures tex{ text ? OverlayTexture::eText : OverlayTexture::eNone };
+			auto tex{ uint32_t( text ? OverlayTexture::eText : OverlayTexture::eNone ) };
 
 			if ( checkFlags( textures, TextureFlag::eColour ) != textures.end() )
 			{
-				tex |= OverlayTexture::eColour;
+				tex |= uint32_t( OverlayTexture::eColour );
 			}
 
 			if ( checkFlags( textures, TextureFlag::eOpacity ) != textures.end() )
 			{
-				tex |= OverlayTexture::eOpacity;
+				tex |= uint32_t( OverlayTexture::eOpacity );
 			}
 
 			uint32_t result{ tex << 24 };
@@ -462,7 +462,6 @@ namespace castor3d
 		, Texture const & target
 		, VkCommandBufferLevel level )
 		: OwnedBy< RenderSystem >( device.renderSystem )
-		, m_device{ device }
 		, m_uboPools{ *device.uboPools }
 		, m_target{ target }
 		, m_commandBuffer{ device.graphicsData()->commandPool->createCommandBuffer( "OverlayRenderer", level ) }

@@ -36,7 +36,6 @@ namespace GuiCommon
 		/**@name Construction / Destruction */
 		//@{
 		explicit LanguageFileParser( StcContext * stcContext );
-		virtual ~LanguageFileParser();
 		//@}
 
 	private:

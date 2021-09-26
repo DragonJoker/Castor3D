@@ -1,6 +1,9 @@
 #include "GuiCommon/Properties/Math/CubeBoxProperties.hpp"
 #include "GuiCommon/Properties/Math/SphereBoxProperties.hpp"
 
+#pragma warning( push )
+#pragma warning( disable: 4371 )
+
 namespace GuiCommon
 {
 	inline wxPGProperty * appendProp( wxPropertyGrid * parent
@@ -92,7 +95,7 @@ namespace GuiCommon
 		}
 		else if constexpr ( std::is_same_v< ValueT, int64_t > )
 		{
-			wxPGProperty * prop = appendProp( parent, new wxIntProperty( name, name, value ) );
+			wxPGProperty * prop = appendProp( parent, new wxIntProperty( name, name, wxLongLong( value ) ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
 #if wxCHECK_VERSION( 3, 1, 0 )
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
@@ -101,7 +104,7 @@ namespace GuiCommon
 		}
 		else if constexpr ( std::is_same_v< ValueT, uint64_t > )
 		{
-			wxPGProperty * prop = appendProp( parent, new wxUIntProperty( name, name, value ) );
+			wxPGProperty * prop = appendProp( parent, new wxUIntProperty( name, name, wxULongLong( value ) ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
 #if wxCHECK_VERSION( 3, 1, 0 )
@@ -216,7 +219,7 @@ namespace GuiCommon
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Milliseconds > )
 		{
-			wxPGProperty * prop = appendProp( parent, new wxFloatProperty( name, name, value.count() / 1000.0 ) );
+			wxPGProperty * prop = appendProp( parent, new wxFloatProperty( name, name, double( value.count() ) / 1000.0 ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_STEP, WXVARIANT( 0.1 ) );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
@@ -303,7 +306,7 @@ namespace GuiCommon
 		wxPGProperty * prop = createProperty( parent
 			, name
 			, choices
-			, [choices, func, this]( wxVariant const & var )
+			, [choices, func]( wxVariant const & var )
 			{
 				func( EnumT( variantCast< uint32_t >( var ) ) );
 			}
@@ -581,3 +584,5 @@ namespace GuiCommon
 			, control );
 	}
 }
+
+#pragma warning( pop )

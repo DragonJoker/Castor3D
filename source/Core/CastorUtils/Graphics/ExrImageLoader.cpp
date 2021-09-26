@@ -7,7 +7,15 @@
 #define TINYEXR_IMPLEMENTATION
 #pragma warning( push )
 #pragma warning( disable: 4242 )
+#pragma warning( disable: 4365 )
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Walloc-zero"
+#pragma GCC diagnostic ignored "-Wcast-qual"
+#pragma GCC diagnostic ignored "-Wconversion"
+#pragma GCC diagnostic ignored "-Wuseless-cast"
+#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 #include "tinyexr.h"
+#pragma GCC diagnostic pop
 #pragma warning( pop )
 
 namespace castor
@@ -16,54 +24,6 @@ namespace castor
 
 	namespace
 	{
-		bool preMultiplyWithAlpha( PxBufferBaseSPtr pixelBuffer )
-		{
-			struct Pixel
-			{
-				uint8_t r;
-				uint8_t g;
-				uint8_t b;
-				uint8_t a;
-			};
-			auto width = int( pixelBuffer->getWidth() );
-			auto height = int( pixelBuffer->getHeight() );
-			auto buffer = reinterpret_cast< Pixel * >( pixelBuffer->getPtr() );
-
-			for ( int y = 0; y < height; ++y )
-			{
-				for ( int x = 0; x < width; ++x )
-				{
-					const uint8_t alpha = buffer->a;
-
-					// slightly faster: care for two special cases
-					if ( alpha == 0x00 )
-					{
-						// special case for alpha == 0x00
-						// color * 0x00 / 0xFF = 0x00
-						buffer->r = 0x00;
-						buffer->g = 0x00;
-						buffer->b = 0x00;
-					}
-					else if ( alpha == 0xFF )
-					{
-						// nothing to do for alpha == 0xFF
-						// color * 0xFF / 0xFF = color
-						continue;
-					}
-					else
-					{
-						buffer->r = uint8_t( ( alpha * uint16_t( buffer->r ) + 127 ) / 255 );
-						buffer->g = uint8_t( ( alpha * uint16_t( buffer->g ) + 127 ) / 255 );
-						buffer->b = uint8_t( ( alpha * uint16_t( buffer->b ) + 127 ) / 255 );
-					}
-
-					++buffer;
-				}
-			}
-
-			return true;
-		}
-
 		PxBufferBaseSPtr doLoad32BitsPerChannel( uint8_t const * input
 			, uint32_t size )
 		{
@@ -79,9 +39,9 @@ namespace castor
 
 			if ( error )
 			{
-				String err{ error };
-				free( (void*)error );
-				CU_LoaderError( String( cuT( "Can't load image:\n" ) ) + err );
+				auto msg = string::stringCast< xchar >( error );
+				FreeEXRErrorMessage( error );
+				CU_LoaderError( String( cuT( "Can't load image:\n" ) ) + msg );
 			}
 
 			PxBufferBaseSPtr result;

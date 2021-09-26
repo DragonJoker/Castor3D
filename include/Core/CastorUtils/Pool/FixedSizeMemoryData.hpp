@@ -50,7 +50,8 @@ namespace castor
 		{
 			if ( m_freeIndex != m_freeEnd )
 			{
-				reportError< PoolErrorType::eCommonMemoryLeaksDetected >( Namer::Name, size_t( ( m_freeEnd - m_freeIndex ) * sizeof( Object ) ) );
+				reportError< PoolErrorType::eCommonMemoryLeaksDetected >( Namer::Name
+					, size_t( ( m_freeEnd - m_freeIndex ) * sizeof( Object ) ) );
 			}
 
 			delete [] m_free;
@@ -96,13 +97,15 @@ namespace castor
 			{
 				if ( m_freeIndex == m_freeEnd )
 				{
-					reportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name, ( void * )space );
+					reportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name
+						, reinterpret_cast< void * >( space ) );
 					return false;
 				}
 
 				if ( ptrdiff_t( space ) < ptrdiff_t( m_buffer ) || ptrdiff_t( space ) >= ptrdiff_t( m_bufferEnd ) )
 				{
-					reportError< PoolErrorType::eCommonNotFromRange >( Namer::Name, ( void * )space );
+					reportError< PoolErrorType::eCommonNotFromRange >( Namer::Name
+						, reinterpret_cast< void * >( space ) );
 					return false;
 				}
 

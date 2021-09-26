@@ -13,7 +13,10 @@ See LICENSE file in root folder
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 
+#pragma warning( push )
+#pragma warning( disable:4365 )
 #include <mutex>
+#pragma warning( pop )
 
 #define C3D_MaterialsStructOfArrays 0
 
@@ -223,7 +226,6 @@ namespace castor3d
 		std::vector< Pass * > m_passes;
 		std::vector< Pass const * > m_dirty;
 		std::vector< OnPassChangedConnection > m_connections;
-		uint32_t m_passCount;
 		uint32_t m_passID{ 1u };
 		PassesData m_data;
 		std::mutex m_mutex;

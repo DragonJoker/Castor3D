@@ -8,19 +8,8 @@ using namespace castor;
 
 namespace Testing
 {
-	inline std::string toString( Angle const & value )
-	{
-		std::stringstream stream;
-		stream << value.degrees();
-		return stream.str();
-	}
-
 	CastorUtilsSpeedTest::CastorUtilsSpeedTest()
 		: TestCase{ "CastorUtilsSpeedTest" }
-	{
-	}
-
-	CastorUtilsSpeedTest::~CastorUtilsSpeedTest()
 	{
 	}
 
@@ -76,7 +65,7 @@ namespace Testing
 	void CastorUtilsSpeedTest::AngleTest()
 	{
 		{
-			Angle value{ Angle::fromDegrees( 8 ) };
+			Angle value{ Angle::fromDegrees( 8.0 ) };
 			Angle valueMul{ Angle::fromDegrees( 8000.0 ) };
 			Angle valueDiv{ Angle::fromDegrees( 0.008 ) };
 			SpeedT< Angle, Milliseconds > speed1 = makeSpeed< Milliseconds >( value );

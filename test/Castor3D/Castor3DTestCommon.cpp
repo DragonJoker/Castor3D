@@ -1,38 +1,9 @@
 #include "Castor3DTestCommon.hpp"
 
-#include <Castor3D/Engine.hpp>
-#include <Castor3D/Animation/Animable.hpp>
-#include <Castor3D/Animation/Animation.hpp>
-#include <Castor3D/Cache/AnimatedObjectGroupCache.hpp>
-#include <Castor3D/Cache/CameraCache.hpp>
-#include <Castor3D/Cache/GeometryCache.hpp>
-#include <Castor3D/Cache/LightCache.hpp>
-#include <Castor3D/Cache/SceneNodeCache.hpp>
-#include <Castor3D/Model/Mesh/Animation/MeshAnimationKeyFrame.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp>
-#include <Castor3D/Model/Skeleton/Skeleton.hpp>
-#include <Castor3D/Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp>
-#include <Castor3D/Render/Viewport.hpp>
-#include <Castor3D/Scene/Animation/AnimatedObject.hpp>
-#include <Castor3D/Scene/Animation/AnimatedObjectGroup.hpp>
-#include <Castor3D/Scene/Animation/AnimatedSkeleton.hpp>
-#include <Castor3D/Scene/Animation/AnimationInstance.hpp>
-#include <Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp>
-#include <Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceObject.hpp>
-#include <Castor3D/Scene/Light/DirectionalLight.hpp>
-#include <Castor3D/Scene/Light/PointLight.hpp>
-#include <Castor3D/Scene/Light/SpotLight.hpp>
-
-#include <CastorUtils/Design/ArrayView.hpp>
-
 #include <cmath>
 
 using namespace castor;
 using namespace castor3d;
-
-using castor::operator<<;
-using castor3d::operator<<;
 
 namespace Testing
 {
@@ -69,26 +40,28 @@ namespace Testing
 
 	bool C3DTestCase::compare( Scene const & lhs, Scene const & rhs )
 	{
-		auto lockA = castor::makeUniqueLock( lhs.getSceneNodeCache() );
-		auto lockB = castor::makeUniqueLock( rhs.getSceneNodeCache() );
-		auto itA = lhs.getSceneNodeCache().begin();
-		auto endItA =  lhs.getSceneNodeCache().end();
-		auto itB = rhs.getSceneNodeCache().begin();
-		auto endItB = rhs.getSceneNodeCache().end();
 		bool result = true;
-
-		while ( result && itA != endItA && itB != endItB )
 		{
-			if ( result
+			auto lockA = castor::makeUniqueLock( lhs.getSceneNodeCache() );
+			auto lockB = castor::makeUniqueLock( rhs.getSceneNodeCache() );
+			auto itA = lhs.getSceneNodeCache().begin();
+			auto endItA = lhs.getSceneNodeCache().end();
+			auto itB = rhs.getSceneNodeCache().begin();
+			auto endItB = rhs.getSceneNodeCache().end();
+
+			while ( result && itA != endItA && itB != endItB )
+			{
+				if ( result
 					&& itA->first.find( cuT( "_REye" ) ) == String::npos
 					&& itA->first.find( cuT( "_LEye" ) ) == String::npos )
-			{
-				result = CT_EQUAL( itA->first, itB->first );
-				result = result && CT_EQUAL( *itA->second, *itB->second );
-			}
+				{
+					result = CT_EQUAL( itA->first, itB->first );
+					result = result && CT_EQUAL( *itA->second, *itB->second );
+				}
 
-			++itA;
-			++itB;
+				++itA;
+				++itB;
+			}
 		}
 
 		if ( result )
@@ -229,7 +202,8 @@ namespace Testing
 	bool C3DTestCase::compare( Geometry const & lhs, Geometry const & rhs )
 	{
 		bool result{ CT_EQUAL( static_cast< MovableObject const & >( lhs ), static_cast< MovableObject const & >( rhs ) ) };
-		result = result && CT_EQUAL( *lhs.getMesh(), *rhs.getMesh() );
+		result = result && CT_EQUAL( static_cast< Mesh const & >( *lhs.getMesh().lock() )
+			, static_cast< Mesh const & >( *rhs.getMesh().lock() ) );
 		return result;
 	}
 
@@ -258,6 +232,10 @@ namespace Testing
 
 		case LightType::eSpot:
 			result = result && CT_EQUAL( static_cast< SpotLight const & >( lhs ), static_cast< SpotLight const & >( rhs ) );
+			break;
+
+		default:
+			CT_FAILURE( "Unsupported LightType" );
 			break;
 		}
 
@@ -669,6 +647,10 @@ namespace Testing
 		{
 		case AnimationType::eSkeleton:
 			result = result && CT_EQUAL( static_cast< SkeletonAnimationInstance const & >( lhs ), static_cast< SkeletonAnimationInstance const & >( rhs ) );
+			break;
+
+		default:
+			CT_FAILURE( "Unsupported AnimationType" );
 			break;
 		}
 

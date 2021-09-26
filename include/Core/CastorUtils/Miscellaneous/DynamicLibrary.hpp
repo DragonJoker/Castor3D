@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
+	using VoidFnType = void( CU_stdcall * )( );
 	class DynamicLibrary
 	{
 	public:
@@ -208,7 +209,7 @@ namespace castor
 	private:
 		CU_API void doOpen()noexcept;
 		CU_API void doClose()noexcept;
-		CU_API void * doGetFunction( String const & name )noexcept;
+		CU_API VoidFnType doGetFunction( String const & name )noexcept;
 
 	private:
 		void * m_library;

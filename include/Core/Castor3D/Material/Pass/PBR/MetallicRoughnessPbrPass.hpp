@@ -41,13 +41,6 @@ namespace castor3d
 		C3D_API MetallicRoughnessPbrPass( Material & parent
 			, PassTypeID typeID
 			, PassFlags initialFlags = PassFlag::eNone );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~MetallicRoughnessPbrPass();
 
 		C3D_API static PassSPtr create( Material & parent );
 		C3D_API static castor::AttributeParsers createParsers();
@@ -57,7 +50,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::Pass::accept
 		 */
-		C3D_API void accept( PassBuffer & buffer )const override;
+		C3D_API void fillBuffer( PassBuffer & buffer )const override;
 		/**
 		 *\copydoc		castor3d::Pass::getPassSectionID
 		 */

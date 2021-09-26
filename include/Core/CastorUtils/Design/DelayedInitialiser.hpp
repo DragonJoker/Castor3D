@@ -6,8 +6,11 @@ See LICENSE file in root folder
 
 #include "DesignModule.hpp"
 
+#pragma warning( push )
+#pragma warning( disable:4365 )
 #include <atomic>
 #include <memory>
+#pragma warning( pop )
 
 namespace castor
 {

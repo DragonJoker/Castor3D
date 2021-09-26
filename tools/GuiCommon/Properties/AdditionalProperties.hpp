@@ -6,8 +6,12 @@ See LICENSE file in root folder
 
 #include "GuiCommon/GuiCommonPrerequisites.hpp"
 
+#pragma warning( push )
+#pragma warning( disable: 4365 )
 #include <wx/propgrid/propgrid.h>
+#include <wx/propgrid/advprops.h>
 #include <wx/propgrid/editors.h>
+#pragma warning( pop )
 
 #include <functional>
 
@@ -102,9 +106,9 @@ See LICENSE file in root folder
 		classname##VariantData( const namspace::classname & value ) { m_value = value; } \
 		namspace::classname &GetValue() { return m_value; } \
 		const namspace::classname &GetValue() const { return m_value; } \
-		virtual bool Eq( wxVariantData & data ) const; \
-		virtual wxString GetType() const; \
-		virtual wxVariantData* Clone() const { return new classname##VariantData( m_value ); } \
+		bool Eq( wxVariantData & data ) const override; \
+		wxString GetType() const override; \
+		wxVariantData* Clone() const override { return new classname##VariantData( m_value ); } \
 	protected:\
 		namspace::classname m_value; \
 	};\
@@ -116,39 +120,37 @@ See LICENSE file in root folder
 	\
 	expdecl wxVariant & operator<<( wxVariant & variant, const namspace::classname & value )\
 	{\
-		classname##VariantData * data = new classname##VariantData( value );\
+		auto data = new classname##VariantData( value );\
 		variant.SetData( data );\
 		return variant;\
 	} \
 	expdecl namspace::classname & classname##RefFromVariant( wxVariant & variant ) \
 	{ \
-		wxASSERT_MSG( variant.GetType() == wxS( #classname ), \
-					  wxString::Format( "Variant type should have been '%s'" \
+		CU_Assert( variant.GetType() == wxS( #classname ), \
+			castor::String{ wxString::Format( "Variant type should have been '%s'" \
 									   "instead of '%s'", \
 									   wxS( #classname ), \
-									   variant.GetType().c_str() ) ); \
-		classname##VariantData *data = \
-			( classname##VariantData * ) variant.GetData(); \
+									   variant.GetType().c_str() ) }.c_str() ); \
+		auto data = static_cast< classname##VariantData * >( variant.GetData() ); \
 		return data->GetValue();\
 	} \
 	expdecl const namspace::classname& classname##RefFromVariant( const wxVariant& variant ) \
 	{ \
-		wxASSERT_MSG( variant.GetType() == wxS( #classname ), \
-					  wxString::Format( "Variant type should have been '%s'" \
+		CU_Assert( variant.GetType() == wxS( #classname ), \
+			castor::String{ wxString::Format( "Variant type should have been '%s'" \
 									   "instead of '%s'", \
 									   wxS( #classname ), \
-									   variant.GetType().c_str() ) ); \
-		classname##VariantData * data = \
-			( classname##VariantData * ) variant.GetData(); \
+									   variant.GetType().c_str() ) }.c_str() ); \
+		auto data = static_cast< classname##VariantData * >( variant.GetData() ); \
 		return data->GetValue();\
 	}
 
 #define GC_PG_IMPLEMENT_VARIANT_DATA_GETTER( namspace, classname, expdecl ) \
 	expdecl namspace::classname & operator<<( namspace::classname &value, const wxVariant & variant )\
 	{\
-		wxASSERT( variant.GetType() == #classname );\
+		CU_Require( variant.GetType() == #classname );\
 		\
-		classname##VariantData * data = ( classname##VariantData * ) variant.GetData();\
+		auto data = static_cast< classname##VariantData * >( variant.GetData() ); \
 		value = data->GetValue();\
 		return value;\
 	}
@@ -206,9 +208,9 @@ namespace GuiCommon
 		: public wxPGEditor
 	{
 	protected:
-		virtual wxPGWindowList CreateControls( wxPropertyGrid * p_propgrid, wxPGProperty * p_property, wxPoint const & p_pos, wxSize const & p_size )const;
-		virtual void UpdateControl( wxPGProperty * property, wxWindow * ctrl ) const;
-		virtual bool OnEvent( wxPropertyGrid * p_propgrid, wxPGProperty * p_property, wxWindow * p_wnd_primary, wxEvent & p_event )const;
+		wxPGWindowList CreateControls( wxPropertyGrid * p_propgrid, wxPGProperty * p_property, wxPoint const & p_pos, wxSize const & p_size )const override;
+		void UpdateControl( wxPGProperty * property, wxWindow * ctrl )const override;
+		bool OnEvent( wxPropertyGrid * p_propgrid, wxPGProperty * p_property, wxWindow * p_wnd_primary, wxEvent & p_event )const override;
 	};
 
 	wxFloatProperty * CreateProperty( wxString const & p_name, double const & p_value );
@@ -227,6 +229,105 @@ namespace GuiCommon
 		result->SetValue( p_value );
 		result->SetHelpString( p_help );
 		return result;
+	}
+
+	template< typename T >
+	struct TypeNameSuffixGetterT;
+
+	template<>
+	struct TypeNameSuffixGetterT< int8_t >
+	{
+		static wxString getValue()
+		{
+			return wxT( "i8" );
+		}
+	};
+
+	template<>
+	struct TypeNameSuffixGetterT< uint8_t >
+	{
+		static wxString getValue()
+		{
+			return wxT( "u8" );
+		}
+	};
+
+	template<>
+	struct TypeNameSuffixGetterT< int16_t >
+	{
+		static wxString getValue()
+		{
+			return wxT( "i16" );
+		}
+	};
+
+	template<>
+	struct TypeNameSuffixGetterT< uint16_t >
+	{
+		static wxString getValue()
+		{
+			return wxT( "u16" );
+		}
+	};
+
+	template<>
+	struct TypeNameSuffixGetterT< int32_t >
+	{
+		static wxString getValue()
+		{
+			return wxT( "i32" );
+		}
+	};
+
+	template<>
+	struct TypeNameSuffixGetterT< uint32_t >
+	{
+		static wxString getValue()
+		{
+			return wxT( "u32" );
+		}
+	};
+
+	template<>
+	struct TypeNameSuffixGetterT< int64_t >
+	{
+		static wxString getValue()
+		{
+			return wxT( "i64" );
+		}
+	};
+
+	template<>
+	struct TypeNameSuffixGetterT< uint64_t >
+	{
+		static wxString getValue()
+		{
+			return wxT( "u64" );
+		}
+	};
+
+	template<>
+	struct TypeNameSuffixGetterT< float >
+	{
+		static wxString getValue()
+		{
+			return wxT( "f32" );
+		}
+	};
+
+	template<>
+	struct TypeNameSuffixGetterT< double >
+	{
+		static wxString getValue()
+		{
+			return wxT( "f64" );
+		}
+	};
+
+	template< typename TypeT >
+	wxString getTypeNameSuffix()
+	{
+		return TypeNameSuffixGetterT< TypeT >::getValue();
 	}
 }
 

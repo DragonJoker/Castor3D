@@ -147,23 +147,6 @@ namespace motion_blur
 		return std::make_shared< PostEffect >( renderTarget, renderSystem, params );
 	}
 
-	void PostEffect::update( castor3d::CpuUpdater & updater )
-	{
-		if ( m_fpsScale )
-		{
-			auto current = Clock::now();
-			auto duration = std::chrono::duration_cast< std::chrono::milliseconds >( current - m_saved );
-			auto fps = 1000.0f / duration.count();
-			auto & configuration = m_ubo.getData();
-			configuration.samplesCount = m_configuration.samplesCount;
-			configuration.vectorDivider = m_configuration.vectorDivider;
-			configuration.blurScale = ( m_fpsScale && ( fps != castor3d::RenderLoop::UnlimitedFPS ) )
-				? fps / getRenderSystem()->getEngine()->getRenderLoop().getWantedFps()
-				: 1.0f;
-			m_saved = current;
-		}
-	}
-
 	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
 	{
 		visitor.visit( m_vertexShader );
@@ -199,7 +182,7 @@ namespace motion_blur
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( &isEnabled() )
-					.recordDisabledInto( [this, &context, &graph]( crg::RunnablePass const & runnable
+					.recordDisabledInto( [this, &graph]( crg::RunnablePass const & runnable
 						, VkCommandBuffer commandBuffer
 						, uint32_t index )
 						{
@@ -232,6 +215,23 @@ namespace motion_blur
 
 	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
 	{
+	}
+
+	void PostEffect::doCpuUpdate( castor3d::CpuUpdater & updater )
+	{
+		if ( m_fpsScale )
+		{
+			auto current = Clock::now();
+			auto duration = std::chrono::duration_cast< std::chrono::milliseconds >( current - m_saved );
+			auto fps = 1000.0f / float( duration.count() );
+			auto & configuration = m_ubo.getData();
+			configuration.samplesCount = m_configuration.samplesCount;
+			configuration.vectorDivider = m_configuration.vectorDivider;
+			configuration.blurScale = ( m_fpsScale && ( fps != float( castor3d::RenderLoop::UnlimitedFPS ) ) )
+				? fps / float( getRenderSystem()->getEngine()->getRenderLoop().getWantedFps() )
+				: 1.0f;
+			m_saved = current;
+		}
 	}
 
 	bool PostEffect::doWriteInto( castor::StringStream & file, castor::String const & tabs )

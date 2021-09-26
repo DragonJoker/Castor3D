@@ -92,24 +92,6 @@ namespace castor3d
 			return result;
 		}
 
-		size_t makeLayoutHash( SubmeshRenderNode const & node )
-		{
-			return makeLayoutHash( node.passNode.pass.getTexturesMask().size()
-				, nullptr
-				, &node.data
-				, node.mesh
-				, node.skeleton );
-		}
-
-		size_t makeLayoutHash( BillboardRenderNode const & node )
-		{
-			return makeLayoutHash( node.passNode.pass.getTexturesMask().size()
-				, &node.data
-				, nullptr
-				, nullptr
-				, nullptr );
-		}
-
 		size_t makeNodeHash( SceneNode & sceneNode
 			, Submesh & data
 			, Geometry & instance )

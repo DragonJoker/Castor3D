@@ -34,13 +34,6 @@ namespace GuiCommon
 		BillboardTreeItemProperty( bool p_editable, castor3d::BillboardList & p_billboard );
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		~BillboardTreeItemProperty();
-		/**
-		 *\~english
 		 *\brief		Retrieves the billboard
 		 *\return		The value
 		 *\~french
@@ -56,7 +49,7 @@ namespace GuiCommon
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )override;
 
 	private:
 		castor3d::BillboardList & m_billboard;

@@ -4,12 +4,7 @@ namespace castor
 {
 	template< typename Type >
 	AngleT< Type >::AngleT()noexcept
-		: AngleT< Type >( 0 )
-	{
-	}
-
-	template< typename Type >
-	AngleT< Type >::~AngleT()noexcept
+		: AngleT< Type >{ Type{} }
 	{
 	}
 

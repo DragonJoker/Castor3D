@@ -35,9 +35,9 @@ namespace castor3d
 			size_t hash;
 			BillboardBase const & billboard;
 			Pass const & pass;
-			UniformBufferOffsetT< ModelUboConfiguration > modelUbo;
-			UniformBufferOffsetT< BillboardUboConfiguration > billboardUbo;
-			UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesUbo;
+			UniformBufferOffsetT< ModelUboConfiguration > modelUbo{};
+			UniformBufferOffsetT< BillboardUboConfiguration > billboardUbo{};
+			UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesUbo{};
 		};
 		using ElementT = BillboardList;
 		using ElementKeyT = castor::String;

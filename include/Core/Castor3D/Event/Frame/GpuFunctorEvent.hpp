@@ -56,7 +56,7 @@ namespace castor3d
 	 *\param[in]	type	Le type d'évènement
 	 *\param[in]	functor	Le foncteur à exécuter
 	 */
-	static GpuFrameEventUPtr makeGpuFunctorEvent( EventType type
+	inline GpuFrameEventUPtr makeGpuFunctorEvent( EventType type
 		, GpuFunctorEvent::Functor functor )
 	{
 		return castor::makeUniqueDerived< GpuFrameEvent, GpuFunctorEvent >( type, functor );
@@ -70,7 +70,7 @@ namespace castor3d
 	 *\param[in]	object	L'objet à nettoyer
 	 */
 	template< typename T >
-	static GpuFrameEventUPtr makeGpuCleanupEvent( T & object )
+	inline GpuFrameEventUPtr makeGpuCleanupEvent( T & object )
 	{
 		return makeGpuFunctorEvent( EventType::ePreRender
 			, [&object]( RenderDevice const & device
@@ -88,7 +88,7 @@ namespace castor3d
 	 *\param[in]	object	L'objet à initialiser.
 	 */
 	template< typename T >
-	static GpuFrameEventUPtr makeGpuInitialiseEvent( T & object )
+	inline GpuFrameEventUPtr makeGpuInitialiseEvent( T & object )
 	{
 		return makeGpuFunctorEvent( EventType::ePreRender
 			, [&object]( RenderDevice const & device

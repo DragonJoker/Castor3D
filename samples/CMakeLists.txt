@@ -24,17 +24,24 @@ function( SamplesBuild )
 		if( CASTOR_BUILD_SAMPLE_OCEAN_LIGHTING
 			OR CASTOR_BUILD_SAMPLE_CASTOR_TD )
 			if( APPLE )
-				set( GTK2_FOUND TRUE )
-				set( GTK2_LIBRARIES
+				set( GTK_FOUND TRUE )
+				set( GTK_LIBRARIES
 					"-framework AppKit"
 					"-framework QuartzCore"
 					"-framework Metal"
 				)
 			elseif ( WIN32 )
-				set( GTK2_FOUND TRUE )
+				set( GTK_FOUND TRUE )
 			else()
-				find_package( GTK2 )
+				find_package( GTK3 )
 				find_package( X11 )
+				if ( GTK3_FOUND )
+					set( GTK_FOUND ${GTK3_FOUND} )
+					set( GTK_INCLUDE_DIRS ${GTK3_INCLUDE_DIRS} )
+					set( GTK_LIBRARIES ${GTK3_LIBRARIES} )
+				else ()
+					set( GTK_FOUND FALSE )
+				endif ()
 			endif()
 
 			#we look for wxWidgets
@@ -49,7 +56,7 @@ function( SamplesBuild )
 			else ()
 				find_package( wxWidgets COMPONENTS core base stc aui adv propgrid )
 			endif ()
-			if( wxWidgets_FOUND AND GTK2_FOUND )
+			if( wxWidgets_FOUND AND GTK_FOUND )
 				set( Castor3DIncludeDirs
 					${CASTOR_BINARY_DIR}/include/Core
 					${CASTOR_SOURCE_DIR}/include/Core
@@ -83,9 +90,9 @@ function( SamplesBuild )
 					set( Ocean "no (wxWidgets libraries not found)" PARENT_SCOPE )
 					set( CTd "no (wxWidgets libraries not found)" PARENT_SCOPE )
 				else()
-					set( CTestLcr "no (GTK2 libraries not found)" PARENT_SCOPE )
-					set( Ocean "no (GTK2 libraries not found)" PARENT_SCOPE )
-					set( CTd "no (GTK2 libraries not found)" PARENT_SCOPE )
+					set( CTestLcr "no (GTK libraries not found)" PARENT_SCOPE )
+					set( Ocean "no (GTK libraries not found)" PARENT_SCOPE )
+					set( CTd "no (GTK libraries not found)" PARENT_SCOPE )
 				endif()
 			endif()
 		endif()

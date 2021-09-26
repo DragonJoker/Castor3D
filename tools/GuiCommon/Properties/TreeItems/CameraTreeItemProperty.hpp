@@ -34,13 +34,6 @@ namespace GuiCommon
 		CameraTreeItemProperty( bool p_editable, castor3d::Camera & p_camera );
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		~CameraTreeItemProperty();
-		/**
-		 *\~english
 		 *\brief		Retrieves the camera
 		 *\return		The value
 		 *\~french
@@ -56,7 +49,7 @@ namespace GuiCommon
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )override;
 
 	private:
 		castor3d::Camera & m_camera;

@@ -39,10 +39,10 @@ namespace GuiCommon
 		, wxPoint const & position
 		, const wxSize size )
 		: wxPanel( parent, wxID_ANY, position, size )
+		, m_auiManager( this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE )
+		, m_stcContext( stcContext )
 		, m_module( module )
 		, m_ubos( ubos )
-		, m_stcContext( stcContext )
-		, m_auiManager( this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE )
 		, m_canEdit( canEdit )
 	{
 		doInitialiseLayout( engine );
@@ -142,6 +142,7 @@ namespace GuiCommon
 		case GuiCommon::ShaderLanguage::SPIRV:
 			extension = wxT( ".spirv" );
 			source = make_wxString( spirv::writeSpirv( *m_module.shader
+				, spirv::SpirVConfig{ spirv::SpirVConfig::v1_3 }
 				, true ) );
 			break;
 #if C3D_HasGLSL
@@ -185,9 +186,12 @@ namespace GuiCommon
 		m_auiManager.DetachPane( m_editor );
 	}
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 	BEGIN_EVENT_TABLE( ShaderEditor, wxPanel )
 		EVT_CLOSE( ShaderEditor::onClose )
 	END_EVENT_TABLE()
+#pragma GCC diagnostic pop
 
 	void ShaderEditor::onClose( wxCloseEvent & p_event )
 	{

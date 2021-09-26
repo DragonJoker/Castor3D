@@ -34,7 +34,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~GeneratorPlugin();
+		C3D_API ~GeneratorPlugin()override;
 	};
 }
 

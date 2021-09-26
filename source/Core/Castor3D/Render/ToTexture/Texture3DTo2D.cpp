@@ -451,8 +451,7 @@ namespace castor3d
 	Texture3DTo2D::Texture3DTo2D( RenderDevice const & device
 		, VkExtent2D const & size
 		, MatrixUbo const & matrixUbo )
-		: m_renderSystem{ device.renderSystem }
-		, m_device{ device }
+		: m_device{ device }
 		, m_matrixUbo{ matrixUbo }
 		, m_target{ createTarget( device, size ) }
 		, m_depthBuffer{ createDepthBuffer( device, m_target ) }

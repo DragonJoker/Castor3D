@@ -12,7 +12,7 @@ namespace Phong
 			, castor::Point3f const & p2
 			, castor::Point3f const & p3 )
 		{
-			float w = float( 1 - u - v );
+			float w = 1 - u - v;
 			CU_Ensure( std::abs( u + v + w - 1.0 ) < 0.0001 );
 			return castor::Point3f{ p1 * u + p2 * v + p3 * w };
 		}
