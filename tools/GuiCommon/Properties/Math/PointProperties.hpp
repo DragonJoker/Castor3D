@@ -52,7 +52,7 @@ namespace GuiCommon
 		wxClassInfo * GetClassInfo() const override
 		{
 			static wxString s_name{ wxString{} << wxT( "Point" ) << Count << getTypeNameSuffix< T >() << wxT( "Property" ) };
-			static wxClassInfo s_classInfo = { s_name
+			static wxClassInfo s_classInfo = { s_name.c_str()
 				, &wxPGProperty::ms_classInfo
 				, nullptr
 				, int( sizeof( PointProperty ) )

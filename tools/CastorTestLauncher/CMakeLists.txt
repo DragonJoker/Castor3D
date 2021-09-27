@@ -25,6 +25,7 @@ if ( APPLE )
 		${${PROJECT_NAME}_HDR_FILES}
 		MetalLayer.h
 	)
+	set( PROJECTS_USE_PRECOMPILED_HEADERS OFF )
 endif ()
 source_group( "Header Files"
 	FILES

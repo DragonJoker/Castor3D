@@ -43,7 +43,7 @@ namespace castor
 				result = reinterpret_cast< VoidFnType >( dlsym( m_library, stdname.c_str() ) );
 				auto error = dlerror();
 
-				if ( error != NULL )
+				if ( error != nullptr )
 				{
 					throw std::runtime_error( std::string( error ) );
 				}

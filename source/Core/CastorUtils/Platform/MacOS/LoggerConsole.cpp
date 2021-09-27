@@ -10,7 +10,7 @@ namespace castor
 		: public ConsoleImpl
 	{
 	public:
-		void beginLog( LogType logLevel )
+		void beginLog( LogType logLevel )override
 		{
 			switch ( logLevel )
 			{
@@ -39,7 +39,7 @@ namespace castor
 			}
 		}
 
-		void print( String const & toLog, bool newLine )
+		void print( String const & toLog, bool newLine )override
 		{
 			printf( "%s%s\033[0m", m_header.c_str(), toLog.c_str() );
 
@@ -59,15 +59,15 @@ namespace castor
 		: public ConsoleImpl
 	{
 	public:
-		explicit ReleaseConsole( bool p_showConsole )
+		explicit ReleaseConsole( bool /*showConsole*/ )
 		{
 		}
 
-		void beginLog( LogType logLevel )
+		void beginLog( LogType logLevel )override
 		{
 		}
 
-		void print( String const & toLog, bool newLine )
+		void print( String const & toLog, bool newLine )override
 		{
 			printf( "%s", toLog.c_str() );
 
@@ -80,10 +80,10 @@ namespace castor
 
 	//************************************************************************************************
 
-	ProgramConsole::ProgramConsole( bool p_showConsole )
+	ProgramConsole::ProgramConsole( bool showConsole )
 	{
 #if defined( NDEBUG )
-		m_console = std::make_unique< ReleaseConsole >( p_showConsole );
+		m_console = std::make_unique< ReleaseConsole >( showConsole );
 #else
 		m_console = std::make_unique< DebugConsole >();
 #endif

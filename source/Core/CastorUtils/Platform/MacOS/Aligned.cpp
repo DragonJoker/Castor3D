@@ -7,6 +7,7 @@
 #include "CastorUtils/Log/Logger.hpp"
 
 #ifndef _ISOC11_SOURCE
+#	pragma clang diagnostic ignored "-Wunused-macros"
 #	define _ISOC11_SOURCE
 #endif
 #include <cstdlib>
