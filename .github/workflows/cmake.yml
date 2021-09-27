@@ -45,13 +45,13 @@ jobs:
       run: cmake -E make_directory ${{runner.workspace}}/build-${{ matrix.buildType }}
 
     - name: Configure Warnings as errors (OFF)
-      if: github.event_name == 'push'
+      if: github.event_name == 'push' || runner.os == 'macOS'
       shell: bash
       working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
       run: echo "PROJ_WAE=OFF" >> $GITHUB_ENV
 
     - name: Configure Warnings as errors (ON)
-      if: github.event_name == 'pull_request'
+      if: github.event_name == 'pull_request' && runner.os != 'macOS'
       shell: bash
       working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
       run: echo "PROJ_WAE=ON" >> $GITHUB_ENV

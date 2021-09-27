@@ -21,36 +21,6 @@ namespace castor
 	{
 #if C3D_UseFreeImage
 
-		uint32_t DLL_CALLCONV readProc( void * buffer, uint32_t size, uint32_t count, fi_handle fiHandle )
-		{
-			BinaryFile * file = reinterpret_cast< BinaryFile * >( fiHandle );
-			return uint32_t( file->readArray( reinterpret_cast< uint8_t * >( buffer ), size * count ) );
-		}
-
-		int DLL_CALLCONV seekProc( fi_handle fiHandle, long offset, int origin )
-		{
-			BinaryFile * pFile = reinterpret_cast< BinaryFile * >( fiHandle );
-			return pFile->seek( offset, File::OffsetMode( origin ) );
-		}
-
-		long DLL_CALLCONV tellProc( fi_handle fiHandle )
-		{
-			BinaryFile * file = reinterpret_cast< BinaryFile * >( fiHandle );
-			return long( file->tell() );
-		}
-
-		void errorHandler( FREE_IMAGE_FORMAT fif, const char * message )
-		{
-			if ( fif != FIF_UNKNOWN )
-			{
-				Logger::logWarning( std::stringstream() << "FreeImage - " << FreeImage_GetFormatFromFIF( fif ) << " Format - " << message );
-			}
-			else
-			{
-				Logger::logWarning( std::stringstream() << "FreeImage - Unknown Format - " << message );
-			}
-		}
-
 		void swapComponents( uint8_t * pixels, PixelFormat format, uint32_t width, uint32_t height )
 		{
 			uint32_t count{ width * height };

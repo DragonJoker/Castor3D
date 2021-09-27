@@ -30,7 +30,7 @@ namespace castor
 			}
 
 			int status;
-			auto real = abi::__cxa_demangle( ret.c_str(), 0, 0, &status );
+			auto real = abi::__cxa_demangle( ret.c_str(), nullptr, nullptr, &status );
 
 			if ( !status )
 			{

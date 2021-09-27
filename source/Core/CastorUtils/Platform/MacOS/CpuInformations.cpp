@@ -12,6 +12,11 @@ namespace castor
 {
 	namespace Platform
 	{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-prototypes"
+#pragma clang diagnostic ignored "-Wzero-as-null-pointer-constant"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmissing-declarations"
 		void callCpuid( uint32_t func, std::array< int32_t, 4 > & p_data )
 		{
 			uint32_t a{};
@@ -51,6 +56,8 @@ namespace castor
 
 			return uint32_t( numCPU );
 		}
+#pragma GCC diagnostic pop
+#pragma clang diagnostic pop
 	}
 }
 
