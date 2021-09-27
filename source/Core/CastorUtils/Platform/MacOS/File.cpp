@@ -13,8 +13,6 @@
 
 #include <mach-o/dyld.h>
 
-#define getCurrentDir getcwd
-
 namespace castor
 {
 	namespace
