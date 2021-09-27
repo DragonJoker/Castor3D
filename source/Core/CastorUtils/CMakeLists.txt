@@ -77,6 +77,9 @@ include( AndroidNdkModules )
 
 if ( CASTOR_USE_SYSTEM_LIBS OR APPLE )
 	if ( VCPKG_TOOLCHAIN )
+		if ( APPLE )
+			find_package( ZLIB CONFIG QUIET )
+		endif ()
 		find_package( freetype CONFIG QUIET REQUIRED )
 		set( Freetype_LIBRARIES freetype )
 		set( FreeType_FOUND ( freetype_FOUND OR FREETYPE_FOUND ) )
@@ -155,6 +158,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		set( PLATFORM_LIBRARIES
 			"-framework CoreGraphics"
 		)
+		set( PROJECTS_USE_PRECOMPILED_HEADERS OFF )
 	elseif( WIN32 )
 	else ()
 		find_package( X11 )
@@ -813,6 +817,16 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	endif ()
 
 	if ( freeimage_FOUND )
+		if ( VCPKG_TOOLCHAIN AND APPLE )
+			find_package( OpenJPEG CONFIG QUIET )
+			find_package( TIFF CONFIG QUIET )
+			find_package( JPEG CONFIG QUIET )
+			find_package( WebP CONFIG QUIET )
+			target_link_libraries( ${PROJECT_NAME}
+				PRIVATE
+					WebP::libwebpmux
+			)
+		endif ()
 		target_compile_definitions( ${PROJECT_NAME}
 			PRIVATE
 				C3D_UseFreeImage
