@@ -1,5 +1,8 @@
 #import <CoreGraphics/CGDisplayConfiguration.h>
 
+#pragma clang diagnostic ignored "-Wmissing-prototypes"
+#pragma GCC diagnostic ignored "-Wmissing-declarations"
+
 void getDisplaySize( uint32_t * ww, uint32_t * hh )
 {
 	uint32_t id = CGMainDisplayID();
