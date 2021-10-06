@@ -125,6 +125,11 @@ namespace castor3d
 		return VkExtent2D{ size.width, size.height };
 	}
 
+	inline VkExtent3D makeExtent3D( VkExtent2D const & size )
+	{
+		return VkExtent3D{ size.width, size.height, 1u };
+	}
+
 	inline VkExtent2D makeExtent2D( castor::Coords2ui const & size )
 	{
 		return VkExtent2D
