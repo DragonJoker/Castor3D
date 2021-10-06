@@ -261,7 +261,8 @@ namespace castor3d
 			, 1u
 			, VK_FORMAT_R16G16B16A16_SFLOAT
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT )
+				| VK_IMAGE_USAGE_SAMPLED_BIT
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_objects{ getOwner()->getRenderSystem()->getRenderDevice()
 			, getOwner()->getGraphResourceHandler()
@@ -285,7 +286,8 @@ namespace castor3d
 			, 1u
 			, VK_FORMAT_R8G8B8A8_UNORM
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT )
+				| VK_IMAGE_USAGE_SAMPLED_BIT
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_combined{ getOwner()->getRenderSystem()->getRenderDevice()
 			, getOwner()->getGraphResourceHandler()

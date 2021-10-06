@@ -514,7 +514,8 @@ namespace castor3d
 				, 1u
 				, format
 				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_SAMPLED_BIT ) };
+					| VK_IMAGE_USAGE_SAMPLED_BIT
+					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) };
 		}
 
 		crg::rq::Config getConfig( VkExtent2D const & renderSize
