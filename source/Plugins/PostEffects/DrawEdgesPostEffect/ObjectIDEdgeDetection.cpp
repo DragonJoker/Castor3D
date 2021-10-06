@@ -80,14 +80,14 @@ namespace draw_edges
 					auto w = 1_i;
 					auto h = 1_i;
 
-					auto A = writer.declLocale( "A", writer.cast< sdw::Int >( c3d_data0.fetch( texelCoord, 0_i, ivec2(   -w,   +h ) ).z() ) );  //  +---+---+---+
-					auto B = writer.declLocale( "B", writer.cast< sdw::Int >( c3d_data0.fetch( texelCoord, 0_i, ivec2( +0_i,   +h ) ).z() ) );  //  | A | B | C |
-					auto C = writer.declLocale( "C", writer.cast< sdw::Int >( c3d_data0.fetch( texelCoord, 0_i, ivec2(   +w,   +h ) ).z() ) );  //  +---+---+---+
-					auto D = writer.declLocale( "D", writer.cast< sdw::Int >( c3d_data0.fetch( texelCoord, 0_i, ivec2(   -w, +0_i ) ).z() ) );  //  | D | X | E |
-					auto E = writer.declLocale( "E", writer.cast< sdw::Int >( c3d_data0.fetch( texelCoord, 0_i, ivec2(   +w, +0_i ) ).z() ) );  //  +---+---+---+
-					auto F = writer.declLocale( "F", writer.cast< sdw::Int >( c3d_data0.fetch( texelCoord, 0_i, ivec2(   -w,   -h ) ).z() ) );  //  | F | G | H |
-					auto G = writer.declLocale( "G", writer.cast< sdw::Int >( c3d_data0.fetch( texelCoord, 0_i, ivec2( +0_i,   -h ) ).z() ) );  //  +---+---+---+
-					auto H = writer.declLocale( "H", writer.cast< sdw::Int >( c3d_data0.fetch( texelCoord, 0_i, ivec2(   +w,   -h ) ).z() ) );
+					auto A = writer.declLocale( "A", writer.cast< sdw::Int >( c3d_data0.fetch( texelCoord + ivec2(   -w,   +h ), 0_i ).z() ) );  //  +---+---+---+
+					auto B = writer.declLocale( "B", writer.cast< sdw::Int >( c3d_data0.fetch( texelCoord + ivec2( +0_i,   +h ), 0_i ).z() ) );  //  | A | B | C |
+					auto C = writer.declLocale( "C", writer.cast< sdw::Int >( c3d_data0.fetch( texelCoord + ivec2(   +w,   +h ), 0_i ).z() ) );  //  +---+---+---+
+					auto D = writer.declLocale( "D", writer.cast< sdw::Int >( c3d_data0.fetch( texelCoord + ivec2(   -w, +0_i ), 0_i ).z() ) );  //  | D | X | E |
+					auto E = writer.declLocale( "E", writer.cast< sdw::Int >( c3d_data0.fetch( texelCoord + ivec2(   +w, +0_i ), 0_i ).z() ) );  //  +---+---+---+
+					auto F = writer.declLocale( "F", writer.cast< sdw::Int >( c3d_data0.fetch( texelCoord + ivec2(   -w,   -h ), 0_i ).z() ) );  //  | F | G | H |
+					auto G = writer.declLocale( "G", writer.cast< sdw::Int >( c3d_data0.fetch( texelCoord + ivec2( +0_i,   -h ), 0_i ).z() ) );  //  +---+---+---+
+					auto H = writer.declLocale( "H", writer.cast< sdw::Int >( c3d_data0.fetch( texelCoord + ivec2(   +w,   -h ), 0_i ).z() ) );
 
 					switch ( contourMethod )
 					{
