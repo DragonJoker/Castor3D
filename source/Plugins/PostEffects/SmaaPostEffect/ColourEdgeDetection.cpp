@@ -74,7 +74,7 @@ namespace smaa
 					, Array< Vec4 > const & offset
 					, SampledImage2DRgba32 const & predicationTex )
 				{
-					writer.returnStmt( predicationTex.gather( texcoord + c3d_rtMetrics.xy() * vec2( -0.5_f, -0.5_f ) ).grb() );
+					writer.returnStmt( predicationTex.gather( texcoord + c3d_rtMetrics.xy() * vec2( -0.5_f, -0.5_f ), 0_i ).grb() );
 				}
 				, InVec2{ writer, "texcoord" }
 				, InVec4Array{ writer, "offset", 3u }
@@ -204,8 +204,6 @@ namespace smaa
 				, Float( config.data.threshold ) );
 			auto c3d_localContrastAdaptationFactor = writer.declConstant( constants::LocalContrastAdaptationFactor
 				, Float( config.data.localContrastAdaptationFactor ) );
-			auto c3d_rtMetrics = writer.declConstant( constants::RenderTargetMetrics
-				, vec4( Float( renderTargetMetrics[0] ), renderTargetMetrics[1], renderTargetMetrics[2], renderTargetMetrics[3] ) );
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 			auto vtx_offset = writer.declInputArray< Vec4 >( "vtx_offset", 1u, 3u );
