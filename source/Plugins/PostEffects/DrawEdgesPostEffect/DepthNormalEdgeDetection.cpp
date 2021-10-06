@@ -88,14 +88,14 @@ namespace draw_edges
 					auto w = 1_i;
 					auto h = 1_i;
 
-					auto An = writer.declLocale( "An", data1.fetch( texCoord, 0_i, ivec2(   -w,   +h ) ).xyz() );  //  +---+---+---+
-					auto Bn = writer.declLocale( "Bn", data1.fetch( texCoord, 0_i, ivec2( +0_i,   +h ) ).xyz() );  //  | A | B | C |
-					auto Cn = writer.declLocale( "Cn", data1.fetch( texCoord, 0_i, ivec2(   +w,   +h ) ).xyz() );  //  +---+---+---+
-					auto Dn = writer.declLocale( "Dn", data1.fetch( texCoord, 0_i, ivec2(   -w, +0_i ) ).xyz() );  //  | D | X | E |
-					auto En = writer.declLocale( "En", data1.fetch( texCoord, 0_i, ivec2(   +w, +0_i ) ).xyz() );  //  +---+---+---+
-					auto Fn = writer.declLocale( "Fn", data1.fetch( texCoord, 0_i, ivec2(   -w,   -h ) ).xyz() );  //  | F | G | H |
-					auto Gn = writer.declLocale( "Gn", data1.fetch( texCoord, 0_i, ivec2( +0_i,   -h ) ).xyz() );  //  +---+---+---+
-					auto Hn = writer.declLocale( "Hn", data1.fetch( texCoord, 0_i, ivec2(   +w,   -h ) ).xyz() );
+					auto An = writer.declLocale( "An", data1.fetch( texCoord + ivec2(   -w,   +h ), 0_i ).xyz() );  //  +---+---+---+
+					auto Bn = writer.declLocale( "Bn", data1.fetch( texCoord + ivec2( +0_i,   +h ), 0_i ).xyz() );  //  | A | B | C |
+					auto Cn = writer.declLocale( "Cn", data1.fetch( texCoord + ivec2(   +w,   +h ), 0_i ).xyz() );  //  +---+---+---+
+					auto Dn = writer.declLocale( "Dn", data1.fetch( texCoord + ivec2(   -w, +0_i ), 0_i ).xyz() );  //  | D | X | E |
+					auto En = writer.declLocale( "En", data1.fetch( texCoord + ivec2(   +w, +0_i ), 0_i ).xyz() );  //  +---+---+---+
+					auto Fn = writer.declLocale( "Fn", data1.fetch( texCoord + ivec2(   -w,   -h ), 0_i ).xyz() );  //  | F | G | H |
+					auto Gn = writer.declLocale( "Gn", data1.fetch( texCoord + ivec2( +0_i,   -h ), 0_i ).xyz() );  //  +---+---+---+
+					auto Hn = writer.declLocale( "Hn", data1.fetch( texCoord + ivec2(   +w,   -h ), 0_i ).xyz() );
 
 					// Normal Gradient
 					auto Ngrad = writer.declLocale( "Ngrad", 0.0_f );
@@ -115,15 +115,15 @@ namespace draw_edges
 					auto Dgrad = writer.declLocale( "Dgrad", 0.0_f );
 					auto zNear = writer.declLocale( "zNear", depthRange.x() );
 					auto zFar = writer.declLocale( "zFar", depthRange.y() );
-					auto Ad = writer.declLocale( "Ad", Fdepth( data0.fetch( texCoord, 0_i, ivec2(   -w,   +h ) ).y(), zNear, zFar ) );  //  +---+---+---+
-					auto Bd = writer.declLocale( "Bd", Fdepth( data0.fetch( texCoord, 0_i, ivec2( +0_i,   +h ) ).y(), zNear, zFar ) );  //  | A | B | C |
-					auto Cd = writer.declLocale( "Cd", Fdepth( data0.fetch( texCoord, 0_i, ivec2(   +w,   +h ) ).y(), zNear, zFar ) );  //  +---+---+---+
-					auto Dd = writer.declLocale( "Dd", Fdepth( data0.fetch( texCoord, 0_i, ivec2(   -w, +0_i ) ).y(), zNear, zFar ) );  //  | D | X | E |
-					auto Xd = writer.declLocale( "Xd", Fdepth( X.y(), zNear, zFar ) );                                                  //  +---+---+---+
-					auto Ed = writer.declLocale( "Ed", Fdepth( data0.fetch( texCoord, 0_i, ivec2(   +w, +0_i ) ).y(), zNear, zFar ) );  //  | F | G | H |
-					auto Fd = writer.declLocale( "Fd", Fdepth( data0.fetch( texCoord, 0_i, ivec2(   -w,   -h ) ).y(), zNear, zFar ) );  //  +---+---+---+
-					auto Gd = writer.declLocale( "Gd", Fdepth( data0.fetch( texCoord, 0_i, ivec2( +0_i,   -h ) ).y(), zNear, zFar ) );
-					auto Hd = writer.declLocale( "Hd", Fdepth( data0.fetch( texCoord, 0_i, ivec2(   +w,   -h ) ).y(), zNear, zFar ) );
+					auto Ad = writer.declLocale( "Ad", Fdepth( data0.fetch( texCoord + ivec2(   -w,   +h ), 0_i ).y(), zNear, zFar ) );  //  +---+---+---+
+					auto Bd = writer.declLocale( "Bd", Fdepth( data0.fetch( texCoord + ivec2( +0_i,   +h ), 0_i ).y(), zNear, zFar ) );  //  | A | B | C |
+					auto Cd = writer.declLocale( "Cd", Fdepth( data0.fetch( texCoord + ivec2(   +w,   +h ), 0_i ).y(), zNear, zFar ) );  //  +---+---+---+
+					auto Dd = writer.declLocale( "Dd", Fdepth( data0.fetch( texCoord + ivec2(   -w, +0_i ), 0_i ).y(), zNear, zFar ) );  //  | D | X | E |
+					auto Xd = writer.declLocale( "Xd", Fdepth( X.y(), zNear, zFar ) );                             //  +---+---+---+
+					auto Ed = writer.declLocale( "Ed", Fdepth( data0.fetch( texCoord + ivec2(   +w, +0_i ), 0_i ).y(), zNear, zFar ) );  //  | F | G | H |
+					auto Fd = writer.declLocale( "Fd", Fdepth( data0.fetch( texCoord + ivec2(   -w,   -h ), 0_i ).y(), zNear, zFar ) );  //  +---+---+---+
+					auto Gd = writer.declLocale( "Gd", Fdepth( data0.fetch( texCoord + ivec2( +0_i,   -h ), 0_i ).y(), zNear, zFar ) );
+					auto Hd = writer.declLocale( "Hd", Fdepth( data0.fetch( texCoord + ivec2(   +w,   -h ), 0_i ).y(), zNear, zFar ) );
 
 					g = ( abs( Ad + 2 * Bd + Cd - Fd - 2 * Gd - Hd ) + abs( Cd + 2 * Ed + Hd - Ad - 2 * Dd - Fd ) ) / 8.0;
 					auto l = writer.declLocale( "l"
