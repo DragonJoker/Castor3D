@@ -304,8 +304,10 @@ namespace test_launcher
 		return m_renderWindow != nullptr;
 	}
 
-	void MainFrame::saveFrame( castor::String const & suffix )
+	FrameTimes MainFrame::saveFrame( castor::String const & suffix )
 	{
+		FrameTimes result;
+
 		if ( m_renderWindow )
 		{
 			wxBitmap bitmap;
@@ -318,6 +320,8 @@ namespace test_launcher
 
 			m_renderWindow->enableSaveFrame();
 			m_engine.getRenderLoop().renderSyncFrame( 25_ms );
+			result.avg = std::chrono::duration_cast< castor::Microseconds >( m_engine.getRenderLoop().getAvgFrameTime() );
+			result.last = m_engine.getRenderLoop().getLastFrameTime();
 			auto buffer = m_renderWindow->getSavedFrame();
 			doCreateBitmapFromBuffer( buffer
 				, false
@@ -333,6 +337,8 @@ namespace test_launcher
 			Path outputPath = folder / ( m_filePath.getFileName() + cuT( "_" ) + suffix + cuT( ".png" ) );
 			image.SaveFile( wxString( outputPath ) );
 		}
+
+		return result;
 	}
 
 	void MainFrame::cleanup()
