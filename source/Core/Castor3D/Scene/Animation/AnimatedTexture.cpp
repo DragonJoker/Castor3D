@@ -38,13 +38,15 @@ namespace castor3d
 			result += writeMask( cuT( "_r" ), configuration.roughnessMask[0] );
 			result += writeMask( cuT( "_a" ), configuration.opacityMask[0] );
 			result += writeMask( cuT( "_e" ), configuration.emissiveMask[0] );
-			result += writeMask( cuT( "_e" ), configuration.emissiveMask[0] );
 			result += writeMask( cuT( "_o" ), configuration.occlusionMask[0] );
 			result += writeMask( cuT( "_t" ), configuration.transmittanceMask[0] );
+			result += writeMask( cuT( "_n" ), configuration.normalMask[0] );
 			result += write( cuT( "_nf" ), configuration.normalFactor );
 			result += write( cuT( "_ng" ), configuration.normalGMultiplier );
 			result += writeMask( cuT( "_h" ), configuration.heightMask[0] );
 			result += write( cuT( "_hf" ), configuration.heightFactor );
+			result += writeMask( cuT( "_gc" ), configuration.needsGammaCorrection );
+			result += writeMask( cuT( "_yv" ), configuration.needsYInversion );
 			return result;
 		}
 	}
