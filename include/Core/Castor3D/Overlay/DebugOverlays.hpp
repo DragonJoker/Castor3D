@@ -125,6 +125,11 @@ namespace castor3d
 			return m_visible;
 		}
 
+		castor::Nanoseconds getAvgFrameTime()const
+		{
+			return m_averageTime;
+		}
+
 	private:
 		void doCreateDebugPanel( OverlayCache & cache );
 
@@ -237,17 +242,17 @@ namespace castor3d
 			void addTimer( FramePassTimer & timer );
 			bool removeTimer( FramePassTimer & timer );
 
-			inline castor::Nanoseconds getGpuTime()
+			castor::Nanoseconds getGpuTime()
 			{
 				return m_gpu.time;
 			}
 
-			inline castor::Nanoseconds getCpuTime()
+			castor::Nanoseconds getCpuTime()
 			{
 				return m_cpu.time;
 			}
 
-			inline castor::String const & getName()
+			castor::String const & getName()
 			{
 				return m_name;
 			}
@@ -297,12 +302,12 @@ namespace castor3d
 				return uint32_t( 1u + m_passes.size() );
 			}
 
-			inline castor::Nanoseconds getGpuTime()
+			castor::Nanoseconds getGpuTime()
 			{
 				return m_gpu.time;
 			}
 
-			inline castor::Nanoseconds getCpuTime()
+			castor::Nanoseconds getCpuTime()
 			{
 				return m_cpu.time;
 			}

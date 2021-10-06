@@ -125,6 +125,11 @@ namespace castor3d
 		return m_debugOverlays->isShown();
 	}
 
+	castor::Nanoseconds RenderLoop::getAvgFrameTime()const
+	{
+		return m_debugOverlays->getAvgFrameTime();
+	}
+
 	void RenderLoop::doRenderFrame( castor::Milliseconds tslf )
 	{
 		if ( m_renderSystem.hasDevice() )
