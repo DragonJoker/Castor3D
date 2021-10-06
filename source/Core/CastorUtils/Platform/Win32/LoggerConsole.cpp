@@ -64,7 +64,7 @@ namespace castor
 			}
 		}
 
-		virtual ~DebugConsole()
+		~DebugConsole()override
 		{
 			if ( m_allocated )
 			{
@@ -72,7 +72,7 @@ namespace castor
 			}
 		}
 
-		void beginLog( LogType logLevel )
+		void beginLog( LogType logLevel )override
 		{
 #if CU_UseAnsiCode
 			switch ( logLevel )
@@ -130,7 +130,7 @@ namespace castor
 #endif
 		}
 
-		void print( String const & toLog, bool newLine )
+		void print( String const & toLog, bool newLine )override
 		{
 			printCDBConsole( toLog, newLine );
 #if CU_UseAnsiCode
@@ -188,7 +188,7 @@ namespace castor
 			}
 		}
 
-		virtual ~ReleaseConsole()
+		~ReleaseConsole()override
 		{
 			if ( m_allocated )
 			{
@@ -196,11 +196,11 @@ namespace castor
 			}
 		}
 
-		void beginLog( LogType CU_UnusedParam( logLevel ) )
+		void beginLog( LogType CU_UnusedParam( logLevel ) )override
 		{
 		}
 
-		void print( String const & toLog, bool newLine )
+		void print( String const & toLog, bool newLine )override
 		{
 			printCDBConsole( toLog, newLine );
 			printf( "%s", toLog.c_str() );
