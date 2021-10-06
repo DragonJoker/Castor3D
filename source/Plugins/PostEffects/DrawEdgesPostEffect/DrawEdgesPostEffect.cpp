@@ -82,13 +82,13 @@ namespace draw_edges
 
 					FOR( writer, sdw::Int, x, 1_i, x < width, ++x )
 					{
-						result += tex.fetch( texCoord, 0_i, ivec2( +x, +0_i ) );
-						result += tex.fetch( texCoord, 0_i, ivec2( -x, +0_i ) );
+						result += tex.fetch( texCoord + ivec2( +x, +0_i ), 0_i );
+						result += tex.fetch( texCoord + ivec2( -x, +0_i ), 0_i );
 
 						FOR( writer, sdw::Int, y, 1_i, y < width, ++y )
 						{
-							result += tex.fetch( texCoord, 0_i, ivec2( +x, +y ) );
-							result += tex.fetch( texCoord, 0_i, ivec2( -x, -y ) );
+							result += tex.fetch( texCoord + ivec2( +x, +y ), 0_i );
+							result += tex.fetch( texCoord + ivec2( -x, -y ), 0_i );
 						}
 						ROF;
 					}
@@ -96,8 +96,8 @@ namespace draw_edges
 
 					FOR( writer, sdw::Int, y, 1_i, y < width, ++y )
 					{
-						result += tex.fetch( texCoord, 0_i, ivec2( +0_i, +y ) );
-						result += tex.fetch( texCoord, 0_i, ivec2( +0_i, -y ) );
+						result += tex.fetch( texCoord + ivec2( +0_i, +y ), 0_i );
+						result += tex.fetch( texCoord + ivec2( +0_i, -y ), 0_i );
 					}
 					ROF;
 
