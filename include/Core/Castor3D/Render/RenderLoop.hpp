@@ -110,6 +110,13 @@ namespace castor3d
 		C3D_API bool hasDebugOverlays()const;
 		/**
 		 *\~english
+		 *\return		The average frame time, in nanoseconds.
+		 *\~french
+		 *\return		Le temps moyen pour une frame, en nanosecondes.
+		 */
+		C3D_API castor::Nanoseconds getAvgFrameTime()const;
+		/**
+		 *\~english
 		 *\brief		Starts threaded render loop.
 		 *\~french
 		 *\brief		Commence le rendu threadé.
@@ -153,7 +160,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le temps voulu pour une frame, en millisecondes.
 		 */
-		castor::Milliseconds getFrameTime()
+		castor::Milliseconds getFrameTime()const
 		{
 			return m_frameTime;
 		}
@@ -163,7 +170,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La vitesse de rafraichissement.
 		 */
-		uint32_t getWantedFps()
+		uint32_t getWantedFps()const
 		{
 			return m_wantedFPS;
 		}
@@ -173,7 +180,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le temps écoulé pour la dernière frame, en millisecondes.
 		 */
-		castor::Microseconds getLastFrameTime()
+		castor::Microseconds getLastFrameTime()const
 		{
 			return m_lastFrameTime;
 		}
