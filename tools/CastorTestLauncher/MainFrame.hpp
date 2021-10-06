@@ -20,6 +20,12 @@ See LICENSE file in root folder
 
 namespace test_launcher
 {
+	struct FrameTimes
+	{
+		castor::Microseconds avg{};
+		castor::Microseconds last{};
+	};
+
 	class MainFrame
 		: public wxFrame
 	{
@@ -28,7 +34,7 @@ namespace test_launcher
 
 		bool initialise();
 		bool loadScene( wxString const & fileName );
-		void saveFrame( castor::String const & suffix );
+		FrameTimes saveFrame( castor::String const & suffix );
 		void cleanup();
 
 	private:
