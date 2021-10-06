@@ -526,7 +526,7 @@ namespace castor3d
 		ashes::RenderPassPtr m_renderPass;
 		ashes::BufferBasePtr m_stagingBuffer;
 		castor::ArrayView< uint8_t > m_stagingData;
-		CommandsSemaphore m_transferCommands;
+		std::vector< CommandsSemaphore > m_transferCommands;
 		std::vector< ashes::FrameBufferPtr > m_frameBuffers;
 		std::vector< ashes::CommandBufferPtrArray > m_commandBuffers;
 		ashes::PipelineShaderStageCreateInfoArray m_program;
@@ -537,6 +537,7 @@ namespace castor3d
 		bool m_fullscreen{ false };
 		castor::Size m_size;
 		bool m_toSave{ false };
+		VkFormat m_savedFormat{};
 		mutable std::atomic_bool m_initialised{ false };
 		mutable std::atomic_bool m_skip{ false };
 		std::atomic_bool m_loading;
