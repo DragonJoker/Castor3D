@@ -132,7 +132,9 @@ namespace castor3d
 			, VK_IMAGE_TYPE_2D
 			, getFormat( SmTexture::eVariance )
 			, m_result.begin()->getExtent()
-			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT ) } ) }
+			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+				| VK_IMAGE_USAGE_SAMPLED_BIT
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } ) }
 		, m_blurIntermediateView{ handler.createViewId( crg::ImageViewData{ m_blurIntermediate.data->name
 			, m_blurIntermediate
 			, 0u
