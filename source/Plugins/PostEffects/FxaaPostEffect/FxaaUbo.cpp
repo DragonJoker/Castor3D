@@ -7,11 +7,39 @@
 
 namespace fxaa
 {
-	const castor::String FxaaUbo::Name = cuT( "FxaaUbo" );
-	const castor::String FxaaUbo::SubpixShift = cuT( "c3d_subpixShift" );
-	const castor::String FxaaUbo::SpanMax = cuT( "c3d_spanMax" );
-	const castor::String FxaaUbo::ReduceMul = cuT( "c3d_reduceMul" );
-	const castor::String FxaaUbo::PixelSize = cuT( "c3d_pixelSize" );
+	//*********************************************************************************************
+
+	FxaaData::FxaaData( sdw::ShaderWriter & writer
+		, ast::expr::ExprPtr expr
+		, bool enabled )
+		: sdw::StructInstance{ writer, std::move( expr ), enabled }
+		, pixelSize{ getMember< sdw::Vec2 >( "pixelSize" ) }
+		, subpixShift{ getMember< sdw::Float >( "subpixShift" ) }
+		, spanMax{ getMember< sdw::Float >( "spanMax" ) }
+		, reduceMul{ getMember< sdw::Float >( "reduceMul" ) }
+	{
+	}
+
+	ast::type::StructPtr FxaaData::makeType( ast::type::TypesCache & cache )
+	{
+		auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
+			, "C3D_FxaaData" );
+
+		if ( result->empty() )
+		{
+			result->declMember( "pixelSize", ast::type::Kind::eVec2F );
+			result->declMember( "subpixShift", ast::type::Kind::eFloat );
+			result->declMember( "spanMax", ast::type::Kind::eFloat );
+			result->declMember( "reduceMul", ast::type::Kind::eFloat );
+		}
+
+		return result;
+	}
+
+	//*********************************************************************************************
+
+	castor::String const FxaaUbo::Buffer = cuT( "Fxaa" );
+	castor::String const FxaaUbo::Data = cuT( "c3d_fxaaData" );
 
 	FxaaUbo::FxaaUbo( castor3d::RenderDevice const & device
 		, castor::Size const & size )
