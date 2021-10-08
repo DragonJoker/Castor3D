@@ -7,9 +7,35 @@
 
 namespace draw_edges
 {
-	const castor::String DrawEdgesUbo::Name = cuT( "DrawEdgesUbo" );
-	const castor::String DrawEdgesUbo::NormalDepthWidth = cuT( "c3d_normalDepthWidth" );
-	const castor::String DrawEdgesUbo::ObjectWidth = cuT( "c3d_objectWidth" );
+	//*********************************************************************************************
+
+	DrawEdgesData::DrawEdgesData( sdw::ShaderWriter & writer
+		, ast::expr::ExprPtr expr
+		, bool enabled )
+		: sdw::StructInstance{ writer, std::move( expr ), enabled }
+		, normalDepthWidth{ getMember< sdw::Float >( "normalDepthWidth" ) }
+		, objectWidth{ getMember< sdw::Float >( "objectWidth" ) }
+	{
+	}
+
+	ast::type::StructPtr DrawEdgesData::makeType( ast::type::TypesCache & cache )
+	{
+		auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
+			, "C3D_DrawEdgesData" );
+
+		if ( result->empty() )
+		{
+			result->declMember( "normalDepthWidth", ast::type::Kind::eFloat );
+			result->declMember( "objectWidth", ast::type::Kind::eFloat );
+		}
+
+		return result;
+	}
+
+	//*********************************************************************************************
+
+	castor::String const DrawEdgesUbo::Buffer = cuT( "DrawEdges" );
+	castor::String const DrawEdgesUbo::Data = cuT( "c3d_drawEdgesData" );
 
 	DrawEdgesUbo::DrawEdgesUbo( castor3d::RenderDevice const & device )
 		: m_device{ device }

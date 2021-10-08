@@ -129,9 +129,9 @@ namespace draw_edges
 						IF( writer, material.edgeColour.a() != 0.0_f )
 						{
 							auto edgeDN = writer.declLocale( "edgeDN"
-								, getEdge( c3d_edgeDN, texelCoord, writer.cast< sdw::Int >( c3d_normalDepthWidth ) ) );
+								, getEdge( c3d_edgeDN, texelCoord, writer.cast< sdw::Int >( c3d_drawEdgesData.normalDepthWidth ) ) );
 							auto edgeO = writer.declLocale( "edgeO"
-								, getEdge( c3d_edgeO, texelCoord, writer.cast< sdw::Int >( c3d_objectWidth ) ) );
+								, getEdge( c3d_edgeO, texelCoord, writer.cast< sdw::Int >( c3d_drawEdgesData.objectWidth ) ) );
 
 							auto edge = writer.declLocale( "edge"
 								, mix( colour.rgb(), material.edgeColour.rgb(), vec3( edgeDN ) ) );
@@ -214,15 +214,9 @@ namespace draw_edges
 
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
-		visitor.visit( cuT( "DECombine" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, cuT( "Draw edges combine" )
-			, cuT( "NormalDepthWidth" )
+		visitor.visit( cuT( "NormalDepthWidth" )
 			, m_data.normalDepthWidth );
-		visitor.visit( cuT( "DECombine" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, cuT( "Draw edges combine" )
-			, cuT( "ObjectWidth" )
+		visitor.visit( cuT( "ObjectWidth" )
 			, m_data.objectWidth );
 	}
 
