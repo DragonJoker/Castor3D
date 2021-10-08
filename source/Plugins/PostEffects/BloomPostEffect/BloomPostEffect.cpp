@@ -179,6 +179,19 @@ namespace Bloom
 		m_hiPass.reset();
 	}
 
+	void PostEffect::doCpuUpdate( castor3d::CpuUpdater & updater )
+	{
+		if ( m_blurXPass )
+		{
+			m_blurXPass->update( m_blurKernelSize );
+		}
+
+		if ( m_blurYPass )
+		{
+			m_blurYPass->update( m_blurKernelSize );
+		}
+	}
+
 	bool PostEffect::doWriteInto( castor::StringStream & file, castor::String const & tabs )
 	{
 		file << ( tabs + cuT( "postfx \"" ) + Type + cuT( "\" -Size=" ) + castor::string::toString( m_blurKernelSize )
