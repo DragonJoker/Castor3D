@@ -10,12 +10,41 @@ using namespace castor3d;
 
 namespace light_streaks
 {
-	String const KawaseUbo::Name = cuT( "Kawase" );
-	String const KawaseUbo::PixelSize = cuT( "c3d_pixelSize" );
-	String const KawaseUbo::Direction = cuT( "c3d_direction" );
-	String const KawaseUbo::Samples = cuT( "c3d_samples" );
-	String const KawaseUbo::Attenuation = cuT( "c3d_attenuation" );
-	String const KawaseUbo::Pass = cuT( "c3d_passCount" );
+	//*********************************************************************************************
+
+	KawaseData::KawaseData( sdw::ShaderWriter & writer
+		, ast::expr::ExprPtr expr
+		, bool enabled )
+		: sdw::StructInstance{ writer, std::move( expr ), enabled }
+		, pixelSize{ getMember< sdw::Vec2 >( "pixelSize" ) }
+		, direction{ getMember< sdw::Vec2 >( "direction" ) }
+		, samples{ getMember< sdw::Int >( "samples" ) }
+		, attenuation{ getMember< sdw::Float >( "attenuation" ) }
+		, pass{ getMember< sdw::Int >( "pass" ) }
+	{
+	}
+
+	ast::type::StructPtr KawaseData::makeType( ast::type::TypesCache & cache )
+	{
+		auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
+			, "C3D_KawaseData" );
+
+		if ( result->empty() )
+		{
+			result->declMember( "pixelSize", ast::type::Kind::eVec2F );
+			result->declMember( "direction", ast::type::Kind::eVec2F );
+			result->declMember( "samples", ast::type::Kind::eInt );
+			result->declMember( "attenuation", ast::type::Kind::eFloat );
+			result->declMember( "pass", ast::type::Kind::eInt );
+		}
+
+		return result;
+	}
+
+	//*********************************************************************************************
+
+	String const KawaseUbo::Buffer = cuT( "Kawase" );
+	String const KawaseUbo::Data = cuT( "c3d_kawaseData" );
 
 	KawaseUbo::KawaseUbo( castor3d::RenderDevice const & device )
 		: m_device{ device }
@@ -42,11 +71,19 @@ namespace light_streaks
 		Point2f pixelSize{ 1.0f / float( size.width )
 			, 1.0f / float( size.height ) };
 		auto & data = m_ubo[index].getData();
-		data.samples = 4;
-		data.attenuation = 0.9f;
 		data.pixelSize = pixelSize;
 		data.direction = direction;
 		data.pass = int( pass );
+	}
+
+	void KawaseUbo::update( KawaseConfig const & config )
+	{
+		for ( auto & ubo : m_ubo )
+		{
+			auto & data = ubo.getData();
+			data.samples = config.samples;
+			data.attenuation = config.attenuation;
+		}
 	}
 
 	//************************************************************************************************

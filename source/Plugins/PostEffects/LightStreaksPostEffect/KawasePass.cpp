@@ -65,18 +65,18 @@ namespace light_streaks
 					auto colour = writer.declLocale( "colour"
 						, vec3( 0.0_f ) );
 					auto b = writer.declLocale( "b"
-						, pow( writer.cast< Float >( c3d_samples ), writer.cast< Float >( c3d_pass ) ) );
+						, pow( writer.cast< Float >( c3d_kawaseData.samples ), writer.cast< Float >( c3d_kawaseData.pass ) ) );
 					auto texcoords = writer.declLocale( "texcoords"
 						, vtx_texture );
 
-					FOR( writer, Int, s, 0, s < c3d_samples, ++s )
+					FOR( writer, Int, s, 0, s < c3d_kawaseData.samples, ++s )
 					{
 						// Weight = a^(b*s)
 						auto weight = writer.declLocale( "weight"
-							, pow( c3d_attenuation, b * writer.cast< Float >( s ) ) );
+							, pow( c3d_kawaseData.attenuation, b * writer.cast< Float >( s ) ) );
 						// Streak direction is a 2D vector in image space
 						auto sampleCoord = writer.declLocale( "sampleCoord"
-							, texcoords + ( c3d_direction * b * vec2( s, s ) * c3d_pixelSize ) );
+							, texcoords + ( c3d_kawaseData.direction * b * vec2( s, s ) * c3d_kawaseData.pixelSize ) );
 						// Scale and accumulate
 						colour += c3d_mapHiPass.sample( sampleCoord ).rgb() * clamp( weight, 0.0_f, 1.0_f );
 					}
@@ -221,16 +221,5 @@ namespace light_streaks
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
-
-		visitor.visit( m_pixelShader.name
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, cuT( "Kawase" )
-			, cuT( "Attenuation" )
-			, m_kawaseUbo.getUbo( 0u ).getData().attenuation );
-		visitor.visit( m_pixelShader.name
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, cuT( "Kawase" )
-			, cuT( "Samples" )
-			, m_kawaseUbo.getUbo( 0u ).getData().samples );
 	}
 }

@@ -82,8 +82,6 @@ namespace smaa
 	private:
 		using sdw::StructInstance::getMember;
 		using sdw::StructInstance::getMemberArray;
-
-	private:
 	};
 
 	class SmaaUbo

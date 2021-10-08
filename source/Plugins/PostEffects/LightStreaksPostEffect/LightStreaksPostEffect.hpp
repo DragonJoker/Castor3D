@@ -44,6 +44,10 @@ namespace light_streaks
 		*/
 		void doCleanup( castor3d::RenderDevice const & device )override;
 		/**
+		 *\copydoc		castor3d::PostEffect::doCpuUpdate
+		 */
+		void doCpuUpdate( castor3d::CpuUpdater & updater )override;
+		/**
 		 *\copydoc		castor3d::PostEffect::doWriteInto
 		 */
 		bool doWriteInto( castor::StringStream & file, castor::String const & tabs )override;
@@ -56,6 +60,7 @@ namespace light_streaks
 	private:
 		castor3d::Texture m_hiImage;
 		castor3d::Texture m_kawaseImage;
+		KawaseConfig m_kawaseCfg;
 		KawaseUbo m_kawaseUbo;
 		crg::FramePass const * m_pass{};
 		std::unique_ptr< HiPass > m_hiPass;

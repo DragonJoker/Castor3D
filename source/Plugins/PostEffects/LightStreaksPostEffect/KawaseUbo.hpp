@@ -5,20 +5,53 @@ See LICENSE file in root folder
 #define ___LightStreaks_KawaseUbo_H___
 
 #include <Castor3D/Castor3DModule.hpp>
-
 #include <Castor3D/Buffer/UniformBufferOffset.hpp>
+
+#include <ShaderWriter/BaseTypes/Float.hpp>
+#include <ShaderWriter/BaseTypes/Int.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/VecTypes/Vec2.hpp>
 
 namespace light_streaks
 {
+	struct KawaseConfig
+	{
+		int samples{ 4 };
+		float attenuation{ 0.9f };
+	};
+
 	struct KawaseUboConfiguration
 	{
-		castor::Point2f pixelSize;
-		castor::Point2f direction;
-		int samples;
-		float attenuation;
-		int pass;
+		castor::Point2f pixelSize{};
+		castor::Point2f direction{};
+		int samples{ 4 };
+		float attenuation{ 0.9f };
+		int pass{};
 	};
-		
+
+	struct KawaseData
+		: public sdw::StructInstance
+	{
+	public:
+		KawaseData( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled );
+		SDW_DeclStructInstance( , KawaseData );
+
+		static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+
+	public:
+		sdw::Vec2 pixelSize;
+		sdw::Vec2 direction;
+		sdw::Int samples;
+		sdw::Float attenuation;
+		sdw::Int pass;
+
+	private:
+		using sdw::StructInstance::getMember;
+		using sdw::StructInstance::getMemberArray;
+	};
+
 	class KawaseUbo
 	{
 	public:
@@ -31,6 +64,7 @@ namespace light_streaks
 			, VkExtent2D const & size
 			, castor::Point2f const & direction
 			, uint32_t pass );
+		void update( KawaseConfig const & config );
 
 		castor3d::UniformBufferOffsetT< Configuration > const & getUbo( uint32_t index )const
 		{
@@ -53,16 +87,12 @@ namespace light_streaks
 			, uint32_t binding
 			, uint32_t index )const
 		{
-			return m_ubo[index].createPassBinding( pass, "KawaseCfg", binding );
+			return m_ubo[index].createPassBinding( pass, "KawaseCfg" + std::to_string( index ), binding );
 		}
 
 	public:
-		static castor::String const Name;
-		static castor::String const PixelSize;
-		static castor::String const Direction;
-		static castor::String const Samples;
-		static castor::String const Attenuation;
-		static castor::String const Pass;
+		static castor::String const Buffer;
+		static castor::String const Data;
 
 	private:
 		castor3d::RenderDevice const & m_device;
@@ -71,12 +101,8 @@ namespace light_streaks
 }
 
 #define UBO_KAWASE( writer, binding, set )\
-	sdw::Ubo kawase{ writer, KawaseUbo::Name, binding, set };\
-	auto c3d_pixelSize = kawase.declMember< Vec2 >( KawaseUbo::PixelSize );\
-	auto c3d_direction = kawase.declMember< Vec2 >( KawaseUbo::Direction );\
-	auto c3d_samples = kawase.declMember< Int >( KawaseUbo::Samples );\
-	auto c3d_attenuation = kawase.declMember< Float >( KawaseUbo::Attenuation );\
-	auto c3d_pass = kawase.declMember< Int >( KawaseUbo::Pass );\
+	sdw::Ubo kawase{ writer, KawaseUbo::Buffer, binding, set };\
+	auto c3d_kawaseData = kawase.declStructMember< KawaseData >( KawaseUbo::Data );\
 	kawase.end()
 
 #endif
