@@ -30,28 +30,15 @@ namespace smaa
 	{
 		enum Idx : uint32_t
 		{
-			DepthTexIdx,
+			DepthTexIdx = SmaaUboIdx + 1,
 		};
 
-		std::unique_ptr< ast::Shader > doGetEdgeDetectionFP( castor3d::Engine const & engine
-			, castor::Size const & size
-			, SmaaConfig const & config )
+		std::unique_ptr< ast::Shader > doGetEdgeDetectionFP( castor3d::Engine const & engine )
 		{
-			auto renderTargetMetrics = Point4f{ 1.0f / float( size.getWidth() )
-				, 1.0f / float( size.getHeight() )
-				, float( size.getWidth() )
-				, float( size.getHeight() ) };
-
 			using namespace sdw;
 			FragmentWriter writer;
 
 			// Shader constants
-			auto c3d_threshold = writer.declConstant( constants::Threshold
-				, Float( config.data.threshold ) );
-			auto c3d_depthThreshold = writer.declConstant( constants::DepthThreshold
-				, c3d_threshold * 0.1_f );
-			auto c3d_rtMetrics = writer.declConstant( constants::RenderTargetMetrics
-				, vec4( Float( renderTargetMetrics[0] ), renderTargetMetrics[1], renderTargetMetrics[2], renderTargetMetrics[3] ) );
 
 			castor3d::shader::Utils utils{ writer, engine };
 			utils.declareInvertVec2Y();
@@ -59,6 +46,7 @@ namespace smaa
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 			auto vtx_offset = writer.declInputArray< Vec4 >( "vtx_offset", 1u, 3u );
+			UBO_SMAA( writer, SmaaUboIdx, 0u );
 			auto c3d_depthTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_depthTex", DepthTexIdx, 0u );
 
 			// Shader outputs
@@ -72,7 +60,7 @@ namespace smaa
 					, Array< Vec4 > const & offset
 					, SampledImage2DRgba32 const & tex )
 				{
-					writer.returnStmt( tex.gather( texcoord + c3d_rtMetrics.xy() * vec2( -0.5_f, -0.5_f ), 0_i ).grb() );
+					writer.returnStmt( tex.gather( texcoord + c3d_smaaData.rtMetrics.xy() * vec2( -0.5_f, -0.5_f ), 0_i ).grb() );
 				}
 				, InVec2{ writer, "texcoord" }
 				, InVec4Array{ writer, "offset", 3u }
@@ -91,7 +79,7 @@ namespace smaa
 					auto delta = writer.declLocale( "delta"
 						, abs( neighbours.xx() - neighbours.yz() ) );
 					auto edges = writer.declLocale( "edges"
-						, step( vec2( c3d_depthThreshold ), delta ) );
+						, step( vec2( c3d_smaaData.depthThreshold ), delta ) );
 
 					IF( writer, dot( edges, vec2( 1.0_f, 1.0_f ) ) == 0.0_f )
 					{
@@ -130,14 +118,16 @@ namespace smaa
 	DepthEdgeDetection::DepthEdgeDetection( crg::FramePass const & previousPass
 		, castor3d::RenderTarget & renderTarget
 		, castor3d::RenderDevice const & device
+		, SmaaUbo const & ubo
 		, crg::ImageViewId const & depthView
 		, SmaaConfig const & config
 		, bool const * enabled )
 		: EdgeDetection{ previousPass
 			, renderTarget
 			, device
+			, ubo
 			, config
-			, doGetEdgeDetectionFP( *renderTarget.getEngine(), renderTarget.getSize(), config )
+			, doGetEdgeDetectionFP( *renderTarget.getEngine() )
 			, enabled }
 		, m_depthView{ renderTarget.getGraph().createView( doCreateDepthView( depthView ) ) }
 	{

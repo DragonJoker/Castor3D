@@ -32,25 +32,15 @@ namespace smaa
 {
 	namespace
 	{
-		std::unique_ptr< ast::Shader > doBlendingWeightCalculationVP( VkExtent3D const & size
-			, SmaaConfig const & config )
+		std::unique_ptr< ast::Shader > doBlendingWeightCalculationVP()
 		{
-			Point4f renderTargetMetrics{ 1.0f / float( size.width )
-				, 1.0f / float( size.height )
-				, float( size.width )
-				, float( size.height ) };
 			using namespace sdw;
 			VertexWriter writer;
-
-			// Shader constants
-			auto c3d_rtMetrics = writer.declConstant( constants::RenderTargetMetrics
-				, vec4( Float( renderTargetMetrics[0] ), renderTargetMetrics[1], renderTargetMetrics[2], renderTargetMetrics[3] ) );
-			auto c3d_maxSearchSteps = writer.declConstant( constants::MaxSearchSteps
-				, Int( config.data.maxSearchSteps ) );
 
 			// Shader inputs
 			auto position = writer.declInput< Vec2 >( "position", 0u );
 			auto uv = writer.declInput< Vec2 >( "uv", 1u );
+			UBO_SMAA( writer, SmaaUboIdx, 0u );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
@@ -66,15 +56,15 @@ namespace smaa
 					, Vec2 pixcoord
 					, Array< Vec4 > offset )
 				{
-					pixcoord = texCoord * c3d_rtMetrics.zw();
+					pixcoord = texCoord * c3d_smaaData.rtMetrics.zw();
 
 					// We will use these offsets for the searches later on (see @PSEUDO_GATHER4):
-					offset[0] = fma( c3d_rtMetrics.xyxy(), vec4( -0.25_f, -0.125f, 1.25f, -0.125f ), vec4( texCoord.xy(), texCoord.xy() ) );
-					offset[1] = fma( c3d_rtMetrics.xyxy(), vec4( -0.125_f, -0.25f, -0.125f, 1.25f ), vec4( texCoord.xy(), texCoord.xy() ) );
+					offset[0] = fma( c3d_smaaData.rtMetrics.xyxy(), vec4( -0.25_f, -0.125f, 1.25f, -0.125f ), vec4( texCoord.xy(), texCoord.xy() ) );
+					offset[1] = fma( c3d_smaaData.rtMetrics.xyxy(), vec4( -0.125_f, -0.25f, -0.125f, 1.25f ), vec4( texCoord.xy(), texCoord.xy() ) );
 
 					// And these for the searches, they indicate the ends of the loops:
-					offset[2] = fma( c3d_rtMetrics.xxyy()
-						, vec4( -2.0_f, 2.0_f, -2.0_f, 2.0_f ) * writer.cast< Float >( c3d_maxSearchSteps )
+					offset[2] = fma( c3d_smaaData.rtMetrics.xxyy()
+						, vec4( -2.0_f, 2.0_f, -2.0_f, 2.0_f ) * writer.cast< Float >( c3d_smaaData.maxSearchSteps )
 						, vec4( offset[0].xz(), offset[1].yw() ) );
 				}
 				, InVec2{ writer, "texCoord" }
@@ -96,49 +86,18 @@ namespace smaa
 
 		enum Idx : uint32_t
 		{
-			SubsampleCfgIdx,
-			AreaTexIdx,
+			AreaTexIdx = SmaaUboIdx + 1,
 			SearchTexIdx,
 			EdgesTexIdx,
 		};
 
-		std::unique_ptr< ast::Shader > doBlendingWeightCalculationFP( VkExtent3D const & size
-			, SmaaConfig const & config )
+		std::unique_ptr< ast::Shader > doBlendingWeightCalculationFP()
 		{
-			Point4f renderTargetMetrics{ 1.0f / float( size.width )
-				, 1.0f / float( size.height )
-				, float( size.width )
-				, float( size.height ) };
-
 			using namespace sdw;
 			FragmentWriter writer;
 
-			// Shader constants
-			auto c3d_rtMetrics = writer.declConstant( constants::RenderTargetMetrics
-				, vec4( Float( renderTargetMetrics[0] ), renderTargetMetrics[1], renderTargetMetrics[2], renderTargetMetrics[3] ) );
-			auto c3d_areaTexMaxDistance = writer.declConstant( constants::AreaTexMaxDistance
-				, Float( 16.0f ) );
-			auto c3d_areaTexMaxDistanceDiag = writer.declConstant( constants::AreaTexMaxDistanceDiag
-				, Float( 20.0f ) );
-			auto c3d_areaTexPixelSize = writer.declConstant( constants::AreaTexPixelSize
-				, vec2( 1.0_f ) / vec2( 160.0_f, 560.0_f ) );
-			auto c3d_areaTexSubtexSize = writer.declConstant( constants::AreaTexSubtexSize
-				, 1.0_f / 7.0_f );
-			auto c3d_searchTexSize = writer.declConstant( constants::SearchTexSize
-				, vec2( 66.0_f, 33.0_f ) );
-			auto c3d_searchTexPackedSize = writer.declConstant( constants::SearchTexPackedSize
-				, vec2( 64.0_f, 16.0_f ) );
-			auto c3d_maxSearchStepsDiag = writer.declConstant( constants::MaxSearchStepsDiag
-				, Int( config.data.maxSearchStepsDiag ) );
-			auto c3d_cornerRounding = writer.declConstant( constants::CornerRounding
-				, Int( config.data.cornerRounding ) );
-			auto c3d_cornerRoundingNorm = writer.declConstant( constants::CornerRoundingNorm
-				, writer.cast< Float >( c3d_cornerRounding ) / 100.0_f );
-
 			// Shader inputs
-			Ubo ubo{ writer, cuT( "Subsample" ), SubsampleCfgIdx, 0u };
-			auto c3d_subsampleIndices = ubo.declMember< Vec4 >( constants::SubsampleIndices );
-			ubo.end();
+			UBO_SMAA( writer, SmaaUboIdx, 0u );
 			auto c3d_areaTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_areaTex", AreaTexIdx, 0u );
 			auto c3d_searchTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_searchTex", SearchTexIdx, 0u );
 			auto c3d_edgesTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_edgesTex", EdgesTexIdx, 0u );
@@ -217,9 +176,9 @@ namespace smaa
 					auto coord = writer.declLocale( "coord"
 						, vec4( texcoord, -1.0_f, 1.0_f ) );
 					auto t = writer.declLocale( "t"
-						, vec3( c3d_rtMetrics.xy(), 1.0_f ) );
+						, vec3( c3d_smaaData.rtMetrics.xy(), 1.0_f ) );
 
-					WHILE( writer, coord.z() < writer.cast< Float >( c3d_maxSearchStepsDiag - 1 )
+					WHILE( writer, coord.z() < writer.cast< Float >( c3d_smaaData.maxSearchStepsDiag - 1 )
 						&& coord.w() > 0.9_f )
 					{
 						coord.xyz() = fma( t, vec3( dir, 1.0_f ), coord.xyz() );
@@ -243,11 +202,11 @@ namespace smaa
 				{
 					auto coord = writer.declLocale( "coord"
 						, vec4( texcoord, -1.0_f, 1.0_f ) );
-					coord.x() += 0.25_f * c3d_rtMetrics.x(); // See @SearchDiag2Optimization
+					coord.x() += 0.25_f * c3d_smaaData.rtMetrics.x(); // See @SearchDiag2Optimization
 					auto t = writer.declLocale( "t"
-						, vec3( c3d_rtMetrics.xy(), 1.0_f ) );
+						, vec3( c3d_smaaData.rtMetrics.xy(), 1.0_f ) );
 
-					WHILE( writer, coord.z() < writer.cast< Float >( c3d_maxSearchStepsDiag - 1 )
+					WHILE( writer, coord.z() < writer.cast< Float >( c3d_smaaData.maxSearchStepsDiag - 1 )
 						&& coord.w() > 0.9_f )
 					{
 						coord.xyz() = fma( t, vec3( dir, 1.0_f ), coord.xyz() );
@@ -283,16 +242,16 @@ namespace smaa
 					, Float const & offset )
 				{
 					auto texcoord = writer.declLocale( "texcoord"
-						, fma( vec2( c3d_areaTexMaxDistanceDiag, c3d_areaTexMaxDistanceDiag ), e, dist ) );
+						, fma( vec2( c3d_smaaData.areaTexMaxDistanceDiag, c3d_smaaData.areaTexMaxDistanceDiag ), e, dist ) );
 
 					// We do a scale and bias for mapping to texel space:
-					texcoord = fma( c3d_areaTexPixelSize, texcoord, 0.5_f * c3d_areaTexPixelSize );
+					texcoord = fma( c3d_smaaData.areaTexPixelSize, texcoord, 0.5_f * c3d_smaaData.areaTexPixelSize );
 
 					// Diagonal areas are on the second half of the texture:
 					texcoord.x() += 0.5_f;
 
 					// Move to proper place, according to the subpixel offset:
-					texcoord.y() += c3d_areaTexSubtexSize * offset;
+					texcoord.y() += c3d_smaaData.areaTexSubtexSize * offset;
 
 					// Do it!
 					writer.returnStmt( areaTex.lod( texcoord, 0.0_f ).rg() );
@@ -340,7 +299,7 @@ namespace smaa
 						// Fetch the crossing edges:
 						auto coords = writer.declLocale( "coords"
 							, fma( vec4( -d.x() + 0.25_f, d.x(), d.y(), -d.y() - 0.25_f )
-								, c3d_rtMetrics.xyxy()
+								, c3d_smaaData.rtMetrics.xyxy()
 								, vec4( texcoord.xy(), texcoord.xy() ) ) );
 						auto c = writer.declLocale< Vec4 >( "c" );
 						c.xy() = edgesTex.lod( coords.xy(), 0.0_f, ivec2( -1_i, 0_i ) ).rg();
@@ -387,7 +346,7 @@ namespace smaa
 						// Fetch the crossing edges:
 						auto coords = writer.declLocale( "coords"
 							, fma( vec4( -d.x(), -d.x(), d.y(), d.y() )
-								, c3d_rtMetrics.xyxy()
+								, c3d_smaaData.rtMetrics.xyxy()
 								, vec4( texcoord.xy(), texcoord.xy() ) ) );
 						auto c = writer.declLocale< Vec4 >( "c" );
 						c.x() = edgesTex.lod( coords.xy(), 0.0_f, ivec2( -1_i, 0_i ) ).g();
@@ -429,9 +388,9 @@ namespace smaa
 					// The texture is flipped vertically, with left and right cases taking half
 					// of the space horizontally:
 					auto scale = writer.declLocale( "scale"
-						, c3d_searchTexSize * vec2( 0.5_f, -1.0_f ) );
+						, c3d_smaaData.searchTexSize * vec2( 0.5_f, -1.0_f ) );
 					auto bias = writer.declLocale( "bias"
-						, c3d_searchTexSize * vec2( offset, 1.0_f ) );
+						, c3d_smaaData.searchTexSize * vec2( offset, 1.0_f ) );
 
 					// Scale and bias to access texel centers:
 					scale += vec2( -1.0_f, 1.0_f );
@@ -439,8 +398,8 @@ namespace smaa
 
 					// Convert from pixel coordinates to texcoords:
 					// (We use SMAA_SEARCHTEX_PACKED_SIZE because the texture is cropped)
-					scale *= vec2( 1.0_f ) / c3d_searchTexPackedSize;
-					bias *= vec2( 1.0_f ) / c3d_searchTexPackedSize;
+					scale *= vec2( 1.0_f ) / c3d_smaaData.searchTexPackedSize;
+					bias *= vec2( 1.0_f ) / c3d_smaaData.searchTexPackedSize;
 
 					// Lookup the search texture:
 					writer.returnStmt( searchTex.lod( fma( scale, e, bias ), 0.0_f ).r() );
@@ -473,13 +432,13 @@ namespace smaa
 						&& e.r() == 0.0_f )
 					{ // Or is there a crossing edge that breaks the line?
 						e = edgesTex.lod( texcoord, 0.0_f ).rg();
-						texcoord = fma( -vec2( 2.0_f, 0.0_f ), c3d_rtMetrics.xy(), texcoord );
+						texcoord = fma( -vec2( 2.0_f, 0.0_f ), c3d_smaaData.rtMetrics.xy(), texcoord );
 					}
 					ELIHW;
 
 					auto offset = writer.declLocale( "offset"
 						, fma( -( 255.0_f / 127.0_f ), SMAASearchLength( searchTex, e, 0.0_f ), 3.25_f ) );
-					writer.returnStmt( fma( c3d_rtMetrics.x(), offset, texcoord.x() ) );
+					writer.returnStmt( fma( c3d_smaaData.rtMetrics.x(), offset, texcoord.x() ) );
 
 					// Non-optimized version:
 					// We correct the previous (-0.25, -0.125) offset we applied:
@@ -511,13 +470,13 @@ namespace smaa
 						 && e.r() == 0.0_f )
 					 { // Or is there a crossing edge that breaks the line?
 						 e = edgesTex.lod( texcoord, 0.0_f ).rg();
-						 texcoord = fma( vec2( 2.0_f, 0.0_f ), c3d_rtMetrics.xy(), texcoord );
+						 texcoord = fma( vec2( 2.0_f, 0.0_f ), c3d_smaaData.rtMetrics.xy(), texcoord );
 					 }
 					 ELIHW;
 
 					 auto offset = writer.declLocale( "offset"
 						 , fma( -( 255.0_f / 127.0_f ), SMAASearchLength( searchTex, e, 0.5_f ), 3.25_f ) );
-					 writer.returnStmt( fma( -c3d_rtMetrics.x(), offset, texcoord.x() ) );
+					 writer.returnStmt( fma( -c3d_smaaData.rtMetrics.x(), offset, texcoord.x() ) );
 				 }
 				, InSampledImage2DRgba32{ writer, "edgesTex" }
 				, InSampledImage2DRgba32{ writer, "searchTex" }
@@ -537,13 +496,13 @@ namespace smaa
 						&& e.g() == 0.0_f )
 					{ // Or is there a crossing edge that breaks the line?
 						e = edgesTex.lod( texcoord, 0.0_f ).rg();
-						texcoord = fma( -vec2( 0.0_f, 2.0_f ), c3d_rtMetrics.xy(), texcoord );
+						texcoord = fma( -vec2( 0.0_f, 2.0_f ), c3d_smaaData.rtMetrics.xy(), texcoord );
 					}
 					ELIHW;
 
 					auto offset = writer.declLocale( "offset"
 						, fma( -( 255.0_f / 127.0_f ), SMAASearchLength( searchTex, e.gr(), 0.0_f ), 3.25_f ) );
-					writer.returnStmt( fma( c3d_rtMetrics.y(), offset, texcoord.y() ) );
+					writer.returnStmt( fma( c3d_smaaData.rtMetrics.y(), offset, texcoord.y() ) );
 				}
 				, InSampledImage2DRgba32{ writer, "edgesTex" }
 				, InSampledImage2DRgba32{ writer, "searchTex" }
@@ -563,13 +522,13 @@ namespace smaa
 						&& e.g() == 0.0_f )
 					{ // Or is there a crossing edge that breaks the line?
 						e = edgesTex.lod( texcoord, 0.0_f ).rg();
-						texcoord = fma( vec2( 0.0_f, 2.0_f ), c3d_rtMetrics.xy(), texcoord );
+						texcoord = fma( vec2( 0.0_f, 2.0_f ), c3d_smaaData.rtMetrics.xy(), texcoord );
 					}
 					ELIHW;
 
 					auto offset = writer.declLocale( "offset"
 						, fma( -( 255.0_f / 127.0_f ), SMAASearchLength( searchTex, e.gr(), 0.5_f ), 3.25_f ) );
-					writer.returnStmt( fma( -c3d_rtMetrics.y(), offset, texcoord.y() ) );
+					writer.returnStmt( fma( -c3d_smaaData.rtMetrics.y(), offset, texcoord.y() ) );
 				}
 				, InSampledImage2DRgba32{ writer, "edgesTex" }
 				, InSampledImage2DRgba32{ writer, "searchTex" }
@@ -589,13 +548,13 @@ namespace smaa
 				{
 					// Rounding prevents precision errors of bilinear filtering:
 					auto texcoord = writer.declLocale( "texcoord"
-						, fma( vec2( c3d_areaTexMaxDistance, c3d_areaTexMaxDistance ), round( 4.0_f * vec2( e1, e2 ) ), dist ) );
+						, fma( vec2( c3d_smaaData.areaTexMaxDistance, c3d_smaaData.areaTexMaxDistance ), round( 4.0_f * vec2( e1, e2 ) ), dist ) );
 
 					// We do a scale and bias for mapping to texel space:
-					texcoord = fma( c3d_areaTexPixelSize, texcoord, 0.5_f * c3d_areaTexPixelSize );
+					texcoord = fma( c3d_smaaData.areaTexPixelSize, texcoord, 0.5_f * c3d_smaaData.areaTexPixelSize );
 
 					// Move to proper place, according to the subpixel offset:
-					texcoord.y() = fma( c3d_areaTexSubtexSize, offset, texcoord.y() );
+					texcoord.y() = fma( c3d_smaaData.areaTexSubtexSize, offset, texcoord.y() );
 
 					// Do it!
 					writer.returnStmt( areaTex.lod( texcoord, 0.0_f ).rg() );
@@ -615,12 +574,12 @@ namespace smaa
 					, Vec4 const & texcoord
 					, Vec2 const & d )
 				{
-					if ( !config.data.disableCornerDetection )
+					IF( writer, c3d_smaaData.disableCornerDetection == 0 )
 					{
 						auto leftRight = writer.declLocale( "leftRight"
 							, step( d.xy(), d.yx() ) );
 						auto rounding = writer.declLocale( "rounding"
-							, ( 1.0_f - c3d_cornerRoundingNorm ) * leftRight );
+							, ( 1.0_f - c3d_smaaData.cornerRoundingNorm ) * leftRight );
 
 						rounding /= leftRight.x() + leftRight.y(); // Reduce blending for pixels in the center of a line.
 
@@ -633,6 +592,7 @@ namespace smaa
 
 						weights *= clamp( factor, vec2( 0.0_f ), vec2( 1.0_f ) );
 					}
+					FI;
 				}
 				, InSampledImage2DRgba32{ writer, "edgesTex" }
 				, InOutVec2{ writer, "weights" }
@@ -645,12 +605,12 @@ namespace smaa
 					, Vec4 const & texcoord
 					, Vec2 const & d )
 				{
-					if ( !config.data.disableCornerDetection )
+					IF( writer, c3d_smaaData.disableCornerDetection == 0 )
 					{
 						auto leftRight = writer.declLocale( "leftRight"
 							, step( d.xy(), d.yx() ) );
 						auto rounding = writer.declLocale( "rounding"
-							, ( 1.0_f - c3d_cornerRoundingNorm ) * leftRight );
+							, ( 1.0_f - c3d_smaaData.cornerRoundingNorm ) * leftRight );
 
 						rounding /= leftRight.x() + leftRight.y();
 
@@ -663,6 +623,7 @@ namespace smaa
 
 						weights *= clamp( factor, vec2( 0.0_f ), vec2( 1.0_f ) );
 					}
+					FI;
 				}
 				, InSampledImage2DRgba32{ writer, "edgesTex" }
 				, InOutVec2{ writer, "weights" }
@@ -686,7 +647,7 @@ namespace smaa
 
 					IF( writer, e.g() > 0.0_f )
 					{ // Edge at north
-						if ( !config.data.disableDiagonalDetection )
+						IF( writer, c3d_smaaData.disableDiagonalDetection == 0 )
 						{
 							// Diagonals have both north and west edges, so searching for them in
 							// one of the boundaries is enough.
@@ -700,7 +661,7 @@ namespace smaa
 								// Find the distance to the left:
 								auto coords = writer.declLocale< Vec3 >( "coords" );
 								coords.x() = SMAASearchXLeft( edgesTex, searchTex, offset[0].xy(), offset[2].x() );
-								coords.y() = offset[1].y(); // offset[1].y() = texcoord.y() - 0.25 * c3d_rtMetrics.y() (@CROSSING_OFFSET)
+								coords.y() = offset[1].y(); // offset[1].y() = texcoord.y() - 0.25 * c3d_smaaData.rtMetrics.y() (@CROSSING_OFFSET)
 								d.x() = coords.x();
 
 								// Now fetch the left crossing edges, two at a time using bilinear
@@ -715,7 +676,7 @@ namespace smaa
 
 								// We want the distances to be in pixel units (doing this here allow to
 								// better interleave arithmetic and memory accesses):
-								d = abs( round( fma( c3d_rtMetrics.zz(), d, -pixcoord.xx() ) ) );
+								d = abs( round( fma( c3d_smaaData.rtMetrics.zz(), d, -pixcoord.xx() ) ) );
 
 								// SMAAArea below needs a sqrt, as the areas texture is compressed
 								// quadratically:
@@ -740,14 +701,14 @@ namespace smaa
 							}
 							FI;
 						}
-						else
+						ELSE
 						{
 							auto d = writer.declLocale< Vec2 >( "d" );
 
 							// Find the distance to the left:
 							auto coords = writer.declLocale< Vec3 >( "coords" );
 							coords.x() = SMAASearchXLeft( edgesTex, searchTex, offset[0].xy(), offset[2].x() );
-							coords.y() = offset[1].y(); // offset[1].y() = texcoord.y() - 0.25 * c3d_rtMetrics.y() (@CROSSING_OFFSET)
+							coords.y() = offset[1].y(); // offset[1].y() = texcoord.y() - 0.25 * c3d_smaaData.rtMetrics.y() (@CROSSING_OFFSET)
 							d.x() = coords.x();
 
 							// Now fetch the left crossing edges, two at a time using bilinear
@@ -762,7 +723,7 @@ namespace smaa
 
 							// We want the distances to be in pixel units (doing this here allow to
 							// better interleave arithmetic and memory accesses):
-							d = abs( round( fma( c3d_rtMetrics.zz(), d, -pixcoord.xx() ) ) );
+							d = abs( round( fma( c3d_smaaData.rtMetrics.zz(), d, -pixcoord.xx() ) ) );
 
 							// SMAAArea below needs a sqrt, as the areas texture is compressed
 							// quadratically:
@@ -781,6 +742,7 @@ namespace smaa
 							coords.y() = texcoord.y();
 							SMAADetectHorizontalCornerPattern( edgesTex, weights.rg(), vec4( coords.xy(), coords.zy() ), d );
 						}
+						FI;
 					}
 					FI;
 
@@ -791,7 +753,7 @@ namespace smaa
 						// Find the distance to the top:
 						auto coords = writer.declLocale< Vec3 >( "coords" );
 						coords.y() = SMAASearchYUp( edgesTex, searchTex, offset[1].xy(), offset[2].z() );
-						coords.x() = offset[0].x(); // offset[1].x() = texcoord.x() - 0.25 * c3d_rtMetrics.x();
+						coords.x() = offset[0].x(); // offset[1].x() = texcoord.x() - 0.25 * c3d_smaaData.rtMetrics.x();
 						d.x() = coords.y();
 
 						// Fetch the top crossing edges:
@@ -803,7 +765,7 @@ namespace smaa
 						d.y() = coords.z();
 
 						// We want the distances to be in pixel units:
-						d = abs( round( fma( c3d_rtMetrics.ww(), d, -pixcoord.yy() ) ) );
+						d = abs( round( fma( c3d_smaaData.rtMetrics.ww(), d, -pixcoord.yy() ) ) );
 
 						// SMAAArea below needs a sqrt, as the areas texture is compressed 
 						// quadratically:
@@ -842,7 +804,7 @@ namespace smaa
 						, c3d_edgesTex
 						, c3d_areaTex
 						, c3d_searchTex
-						, c3d_subsampleIndices );
+						, c3d_smaaData.subsampleIndices );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -898,6 +860,7 @@ namespace smaa
 	BlendingWeightCalculation::BlendingWeightCalculation( crg::FramePass const & previousPass
 		, castor3d::RenderTarget & renderTarget
 		, castor3d::RenderDevice const & device
+		, SmaaUbo const & ubo
 		, crg::ImageViewId const & edgeDetectionView
 		, crg::ImageViewId const & stencilView
 		, SmaaConfig const & config
@@ -905,7 +868,6 @@ namespace smaa
 		: m_device{ device }
 		, m_graph{ renderTarget.getGraph() }
 		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
-		, m_ubo{ m_device.uboPools->getBuffer< castor::Point4f >( 0u ) }
 		, m_areaView{ createImage( m_graph
 			, m_device
 			, "SMBWArea"
@@ -929,8 +891,8 @@ namespace smaa
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaBlendingWeight", doBlendingWeightCalculationVP( m_extent, config ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaBlendingWeight", doBlendingWeightCalculationFP( m_extent, config ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaBlendingWeight", doBlendingWeightCalculationVP() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaBlendingWeight", doBlendingWeightCalculationFP() }
 		, m_stages{ makeShaderState( m_device, m_vertexShader )
 			, makeShaderState( m_device, m_pixelShader ) }
 		, m_pass{ renderTarget.getGraph().createPass( "SmaaBlendingWeight"
@@ -963,9 +925,8 @@ namespace smaa
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE };
 		m_pass.addDependency( previousPass );
-		m_ubo.createPassBinding( m_pass
-			, "SubsampleCfg"
-			, SubsampleCfgIdx );
+		ubo.createPassBinding( m_pass
+			, SmaaUboIdx );
 		m_pass.addSampledView( m_areaView
 			, AreaTexIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
@@ -990,7 +951,6 @@ namespace smaa
 		m_graph.getHandler().destroyImage( context, m_areaView.data->image );
 		m_graph.getHandler().destroyImageView( context, m_searchView );
 		m_graph.getHandler().destroyImage( context, m_searchView.data->image );
-		m_device.uboPools->putBuffer( m_ubo );
 	}
 
 	void BlendingWeightCalculation::accept( castor3d::PipelineVisitorBase & visitor )
@@ -1001,12 +961,6 @@ namespace smaa
 			, m_result
 			, m_graph.getFinalLayout( m_result.sampledViewId ).layout
 			, castor3d::TextureFactors{}.invert( true ) );
-	}
-
-	void BlendingWeightCalculation::cpuUpdate( castor::Point4f const & subsampleIndices )
-	{
-		auto & data = m_ubo.getData();
-		data = subsampleIndices;
 	}
 
 	//*********************************************************************************************

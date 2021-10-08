@@ -14,12 +14,15 @@ See LICENSE file in root folder
 
 namespace smaa
 {
+	class SmaaUbo;
+
 	class EdgeDetection
 	{
 	public:
 		EdgeDetection( crg::FramePass const & previousPass
 			, castor3d::RenderTarget & renderTarget
 			, castor3d::RenderDevice const & device
+			, SmaaUbo const & ubo
 			, SmaaConfig const & config
 			, std::unique_ptr< ast::Shader > pixelShader
 			, bool const * enabled );

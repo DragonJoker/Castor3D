@@ -13,18 +13,20 @@ See LICENSE file in root folder
 
 namespace smaa
 {
+	class SmaaUbo;
+
 	class BlendingWeightCalculation
 	{
 	public:
 		BlendingWeightCalculation( crg::FramePass const & previousPass
 			, castor3d::RenderTarget & renderTarget
 			, castor3d::RenderDevice const & device
+			, SmaaUbo const & ubo
 			, crg::ImageViewId const & edgeDetectionView
 			, crg::ImageViewId const & stencilView
 			, SmaaConfig const & config
 			, bool const * enabled );
 		~BlendingWeightCalculation();
-		void cpuUpdate( castor::Point4f const & subsampleIndices );
 		void accept( castor3d::PipelineVisitorBase & visitor );
 
 		crg::ImageViewId const & getResult()const
@@ -41,7 +43,6 @@ namespace smaa
 		castor3d::RenderDevice const & m_device;
 		crg::FrameGraph & m_graph;
 		VkExtent3D m_extent;
-		castor3d::UniformBufferOffsetT< castor::Point4f > m_ubo;
 		crg::ImageViewId m_areaView;
 		crg::ImageViewId m_searchView;
 		castor3d::Texture m_result;
