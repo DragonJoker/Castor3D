@@ -30,29 +30,21 @@ namespace smaa
 	{
 		enum Idx : uint32_t
 		{
-			ColorTexIdx,
+			ColorTexIdx = SmaaUboIdx + 1,
 			BlendTexIdx,
 			VelocityTexIdx,
 		};
 
-		std::unique_ptr< ast::Shader > doGetNeighbourhoodBlendingVP( VkExtent3D const & size
-			, SmaaConfig const & config )
+		std::unique_ptr< ast::Shader > doGetNeighbourhoodBlendingVP()
 		{
-			Point4f renderTargetMetrics{ 1.0f / float( size.width )
-				, 1.0f / float( size.height )
-				, float( size.width )
-				, float( size.height ) };
-
 			using namespace sdw;
 			VertexWriter writer;
 
 			// Shader constants
-			auto c3d_rtMetrics = writer.declConstant( constants::RenderTargetMetrics
-				, vec4( Float( renderTargetMetrics[0] ), renderTargetMetrics[1], renderTargetMetrics[2], renderTargetMetrics[3] ) );
-
 			// Shader inputs
 			auto position = writer.declInput< Vec2 >( "position", 0u );
 			auto uv = writer.declInput< Vec2 >( "uv", 1u );
+			UBO_SMAA( writer, SmaaUboIdx, 0u );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
@@ -63,7 +55,7 @@ namespace smaa
 				, [&]( Vec2 const & texcoord
 					, Vec4 offset )
 				{
-					offset = fma( c3d_rtMetrics.xyxy()
+					offset = fma( c3d_smaaData.rtMetrics.xyxy()
 						, vec4( 1.0_f, 0.0_f, 0.0_f, 1.0_f )
 						, vec4( texcoord.xy(), texcoord.xy() ) );
 				}
@@ -81,25 +73,15 @@ namespace smaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< ast::Shader > doGetNeighbourhoodBlendingFP( VkExtent3D const & size
-			, SmaaConfig const & config
-			, bool reprojection )
+		std::unique_ptr< ast::Shader > doGetNeighbourhoodBlendingFP( bool reprojection )
 		{
-			Point4f renderTargetMetrics{ 1.0f / float( size.width )
-				, 1.0f / float( size.height )
-				, float( size.width )
-				, float( size.height ) };
-
 			using namespace sdw;
 			FragmentWriter writer;
-
-			// Shader constants
-			auto c3d_rtMetrics = writer.declConstant( constants::RenderTargetMetrics
-				, vec4( Float( renderTargetMetrics[0] ), renderTargetMetrics[1], renderTargetMetrics[2], renderTargetMetrics[3] ) );
 
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 			auto vtx_offset = writer.declInput< Vec4 >( "vtx_offset", 1u );
+			UBO_SMAA( writer, SmaaUboIdx, 0u );
 			auto c3d_colourTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_colourTex", ColorTexIdx, 0u );
 			auto c3d_blendTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_blendTex", BlendTexIdx, 0u );
 			auto c3d_velocityTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_velocityTex", VelocityTexIdx, 0u, reprojection );
@@ -186,7 +168,7 @@ namespace smaa
 						// Calculate the texture coordinates:
 						auto blendingCoord = writer.declLocale( "blendingCoord"
 							, fma( blendingOffset
-								, vec4( c3d_rtMetrics.xy(), -c3d_rtMetrics.xy() )
+								, vec4( c3d_smaaData.rtMetrics.xy(), -c3d_smaaData.rtMetrics.xy() )
 								, vec4( texcoord.xy(), texcoord.xy() ) ) );
 
 						// We exploit bilinear filtering to mix current pixel with the chosen
@@ -232,6 +214,7 @@ namespace smaa
 	NeighbourhoodBlending::NeighbourhoodBlending( crg::FramePass const & previousPass
 		, castor3d::RenderTarget & renderTarget
 		, castor3d::RenderDevice const & device
+		, SmaaUbo const & ubo
 		, crg::ImageViewId const & sourceView
 		, crg::ImageViewId const & blendView
 		, crg::ImageViewId const * velocityView
@@ -243,8 +226,8 @@ namespace smaa
 		, m_blendView{ blendView }
 		, m_velocityView{ velocityView }
 		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaNeighbourhood", doGetNeighbourhoodBlendingVP( m_extent, config ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaNeighbourhood", doGetNeighbourhoodBlendingFP( m_extent, config, velocityView != nullptr ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaNeighbourhood", doGetNeighbourhoodBlendingVP() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaNeighbourhood", doGetNeighbourhoodBlendingFP( velocityView != nullptr ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_pass{ m_graph.createPass( "SmaaNeighbourhood"
@@ -272,6 +255,8 @@ namespace smaa
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE };
 		m_pass.addDependency( previousPass );
+		ubo.createPassBinding( m_pass
+			, SmaaUboIdx );
 		m_pass.addSampledView( m_sourceView
 			, ColorTexIdx
 			, {}

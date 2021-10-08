@@ -200,7 +200,15 @@ namespace smaa
 			float predicationScale{ 2.0f };
 			float predicationStrength{ 0.4f };
 			float localContrastAdaptationFactor{ 2.0f };
+
+			float areaTexMaxDistance{ 16.0f };
+			float areaTexMaxDistanceDiag{ 20.0f };
+			castor::Point2f areaTexPixelSize{ 1.0f / 160.0f, 1.0f / 560.0f };
+			float areaTexSubtexSize{ 1.0f / 7.0f };
+			castor::Point2f searchTexSize{ 66.0f, 33.0f };
+			castor::Point2f searchTexPackedSize{ 64.0f, 16.0f };
 		};
+
 		Data data;
 		uint32_t subsampleIndex{ 0u };
 		std::array< castor::Point4f, 4u > subsampleIndices;
