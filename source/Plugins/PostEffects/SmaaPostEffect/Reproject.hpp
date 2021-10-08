@@ -12,12 +12,15 @@ See LICENSE file in root folder
 
 namespace smaa
 {
+	class SmaaUbo;
+
 	class Reproject
 	{
 	public:
 		Reproject( crg::FramePass const & previousPass
 			, castor3d::RenderTarget & renderTarget
 			, castor3d::RenderDevice const & device
+			, SmaaUbo const & ubo
 			, crg::ImageViewIdArray const & currentColourViews
 			, crg::ImageViewIdArray const & previousColourViews
 			, crg::ImageViewId const * velocityView

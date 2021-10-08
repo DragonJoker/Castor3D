@@ -14,12 +14,15 @@ See LICENSE file in root folder
 
 namespace smaa
 {
+	class SmaaUbo;
+
 	class NeighbourhoodBlending
 	{
 	public:
 		NeighbourhoodBlending( crg::FramePass const & previousPass
 			, castor3d::RenderTarget & renderTarget
 			, castor3d::RenderDevice const & device
+			, SmaaUbo const & ubo
 			, crg::ImageViewId const & sourceView
 			, crg::ImageViewId const & blendView
 			, crg::ImageViewId const * velocityView
