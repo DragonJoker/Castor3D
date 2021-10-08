@@ -7,6 +7,10 @@ See LICENSE file in root folder
 #include <Castor3D/Castor3DModule.hpp>
 #include <Castor3D/Buffer/UniformBufferOffset.hpp>
 
+#include <ShaderWriter/BaseTypes/Float.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/VecTypes/Vec2.hpp>
+
 namespace fxaa
 {
 	struct FxaaUboConfiguration
@@ -15,6 +19,28 @@ namespace fxaa
 		float subpixShift;
 		float spanMax;
 		float reduceMul;
+	};
+
+	struct FxaaData
+		: public sdw::StructInstance
+	{
+	public:
+		FxaaData( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled );
+		SDW_DeclStructInstance( , FxaaData );
+
+		static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+
+	public:
+		sdw::Vec2 pixelSize;
+		sdw::Float subpixShift;
+		sdw::Float spanMax;
+		sdw::Float reduceMul;
+
+	private:
+		using sdw::StructInstance::getMember;
+		using sdw::StructInstance::getMemberArray;
 	};
 
 	class FxaaUbo
@@ -48,11 +74,8 @@ namespace fxaa
 		}
 
 	public:
-		static const castor::String Name;
-		static const castor::String SubpixShift;
-		static const castor::String SpanMax;
-		static const castor::String ReduceMul;
-		static const castor::String PixelSize;
+		static const castor::String Buffer;
+		static const castor::String Data;
 
 	private:
 		castor3d::RenderDevice const & m_device;
@@ -61,11 +84,8 @@ namespace fxaa
 }
 
 #define UBO_FXAA( writer, binding, set )\
-	sdw::Ubo fxaa{ writer, FxaaUbo::Name, binding, set };\
-	auto c3d_pixelSize = fxaa.declMember< Vec2 >( FxaaUbo::PixelSize );\
-	auto c3d_subpixShift = fxaa.declMember< Float >( FxaaUbo::SubpixShift );\
-	auto c3d_spanMax = fxaa.declMember< Float >( FxaaUbo::SpanMax );\
-	auto c3d_reduceMul = fxaa.declMember< Float >( FxaaUbo::ReduceMul );\
+	sdw::Ubo fxaa{ writer, FxaaUbo::Buffer, binding, set };\
+	auto c3d_fxaaData = fxaa.declStructMember< FxaaData >( FxaaUbo::Data );\
 	fxaa.end()
 
 #endif
