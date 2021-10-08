@@ -198,10 +198,12 @@ namespace film_grain
 			}
 		}
 
-		m_configUbo.getData().m_pixelSize = Point2f{ m_renderTarget.getSize().getWidth()
+		auto & data = m_configUbo.getData();
+		data.pixelSize = Point2f{ m_renderTarget.getSize().getWidth()
 			, m_renderTarget.getSize().getHeight() };
-		m_configUbo.getData().m_noiseIntensity = 1.0f;
-		m_configUbo.getData().m_exposure = 1.0f;
+		data.noiseIntensity = 1.0f;
+		data.exposure = 1.0f;
+		data.time = 0.0f;
 	}
 
 	PostEffect::~PostEffect()
@@ -222,16 +224,10 @@ namespace film_grain
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
-		visitor.visit( m_pixelShader.name
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, cuT( "FilmGrain" )
-			, cuT( "Exposure" )
-			, m_configUbo.getData().m_exposure );
-		visitor.visit( m_pixelShader.name
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, cuT( "FilmGrain" )
-			, cuT( "NoiseIntensity" )
-			, m_configUbo.getData().m_noiseIntensity );
+		visitor.visit( cuT( "Exposure" )
+			, m_config.exposure );
+		visitor.visit( cuT( "NoiseIntensity" )
+			, m_config.noiseIntensity );
 	}
 
 	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
@@ -359,6 +355,9 @@ namespace film_grain
 			m_firstUpdate = false;
 		}
 
+		auto & data = m_configUbo.getData();
+		data.exposure = m_config.exposure;
+		data.noiseIntensity = m_config.noiseIntensity;
 		time = updater.tslf > 0_ms
 			? updater.tslf
 			: time;
@@ -378,7 +377,7 @@ namespace film_grain
 				m_timeIndex -= NoiseMapCount;
 			}
 
-			m_configUbo.getData().m_time = float( m_timeIndex ) / float( NoiseMapCount );
+			data.time = float( m_timeIndex ) / float( NoiseMapCount );
 		}
 	}
 
