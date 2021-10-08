@@ -74,6 +74,11 @@ namespace light_streaks
 				, m_renderTarget.getGraph().getFinalLayout( view ).layout
 				, castor3d::TextureFactors{}.invert( true ) );
 		}
+
+		visitor.visit( cuT( "Attenuation" )
+			, m_kawaseCfg.attenuation );
+		visitor.visit( cuT( "Samples" )
+			, m_kawaseCfg.samples );
 	}
 
 	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
@@ -167,6 +172,11 @@ namespace light_streaks
 		m_combinePass.reset();
 		m_kawasePass.reset();
 		m_hiPass.reset();
+	}
+
+	void PostEffect::doCpuUpdate( castor3d::CpuUpdater & updater )
+	{
+		m_kawaseUbo.update( m_kawaseCfg );
 	}
 
 	bool PostEffect::doWriteInto( castor::StringStream & file, castor::String const & tabs )
