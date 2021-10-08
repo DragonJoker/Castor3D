@@ -314,6 +314,149 @@ namespace GuiCommon
 		private:
 			ShaderSources & m_sources;
 		};
+
+		struct PostEffectConfigurationBuilder
+			: public castor3d::PipelineVisitor
+		{
+		private:
+			explicit PostEffectConfigurationBuilder( wxPropertyGrid * grid
+				, TreeItemProperty & prop )
+				: castor3d::PipelineVisitor{ { false, false } }
+				, m_grid{ grid }
+				, m_prop{ prop }
+			{
+			}
+
+		public:
+			static void submit( wxPropertyGrid * grid
+				, TreeItemProperty & prop
+				, PostEffect & postEffect )
+			{
+				PostEffectConfigurationBuilder vis{ grid, prop };
+				postEffect.accept( vis );
+			}
+
+			void visit( castor3d::ShaderModule const & module )override
+			{
+			}
+
+		private:
+			void visit( castor::String const & name
+				, float & value
+				, bool * control )override
+			{
+				m_prop.addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, int32_t & value
+				, bool * control )override
+			{
+				m_prop.addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, uint32_t & value
+				, bool * control )override
+			{
+				m_prop.addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::Point2f & value
+				, bool * control )override
+			{
+				m_prop.addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::Point2i & value
+				, bool * control )override
+			{
+				m_prop.addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::Point2ui & value
+				, bool * control )override
+			{
+				m_prop.addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::Point3f & value
+				, bool * control )override
+			{
+				m_prop.addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::Point3i & value
+				, bool * control )override
+			{
+				m_prop.addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::Point3ui & value
+				, bool * control )override
+			{
+				m_prop.addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::Point4f & value
+				, bool * control )override
+			{
+				m_prop.addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::Point4i & value
+				, bool * control )override
+			{
+				m_prop.addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::Point4ui & value
+				, bool * control )override
+			{
+				m_prop.addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::Matrix4x4f & value
+				, bool * control )override
+			{
+				m_prop.addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::RangedValue< float > & value
+				, bool * control )override
+			{
+				m_prop.addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::RangedValue< int32_t > & value
+				, bool * control )override
+			{
+				m_prop.addPropertyT( m_grid, name, &value, control );
+			}
+
+			void visit( castor::String const & name
+				, castor::RangedValue< uint32_t > & value
+				, bool * control )override
+			{
+				m_prop.addPropertyT( m_grid, name, &value, control );
+			}
+
+		private:
+			wxPropertyGrid * m_grid;
+			TreeItemProperty & m_prop;
+		};
 	}
 
 	PostEffectTreeItemProperty::PostEffectTreeItemProperty( bool editable
@@ -346,5 +489,6 @@ namespace GuiCommon
 					, m_parent };
 				editor->Show();
 			} );
+		PostEffectConfigurationBuilder::submit( grid, *this, m_effect );
 	}
 }
