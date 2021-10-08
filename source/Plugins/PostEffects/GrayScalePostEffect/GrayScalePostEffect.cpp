@@ -131,10 +131,7 @@ namespace grayscale
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
-		visitor.visit( cuT( "GrayScale" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, cuT( "Configuration" )
-			, cuT( "Factors" )
+		visitor.visit( cuT( "Factors" )
 			, m_factors );
 	}
 
