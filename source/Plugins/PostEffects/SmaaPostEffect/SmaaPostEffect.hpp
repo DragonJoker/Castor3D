@@ -8,6 +8,7 @@ See LICENSE file in root folder
 #include "SmaaPostEffect/BlendingWeightCalculation.hpp"
 #include "SmaaPostEffect/NeighbourhoodBlending.hpp"
 #include "SmaaPostEffect/Reproject.hpp"
+#include "SmaaPostEffect/SmaaUbo.hpp"
 
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
 
@@ -67,6 +68,7 @@ namespace smaa
 	private:
 		SmaaConfig m_config;
 		uint32_t m_frameIndex{ 0u };
+		SmaaUbo m_ubo;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 
 		std::unique_ptr< EdgeDetection > m_edgeDetection;

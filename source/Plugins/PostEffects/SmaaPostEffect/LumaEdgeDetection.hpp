@@ -15,6 +15,7 @@ namespace smaa
 		LumaEdgeDetection( crg::FramePass const & previousPass
 			, castor3d::RenderTarget & renderTarget
 			, castor3d::RenderDevice const & device
+			, SmaaUbo const & ubo
 			, crg::ImageViewId const & colourView
 			, crg::ImageViewId const * predication
 			, SmaaConfig const & config

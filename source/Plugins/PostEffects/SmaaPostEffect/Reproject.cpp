@@ -33,19 +33,13 @@ namespace smaa
 	{
 		enum Idx : uint32_t
 		{
-			CurColTexIdx,
+			CurColTexIdx = SmaaUboIdx + 1,
 			PrvColTexIdx,
 			VelocityTexIdx,
 		};
 
-		std::unique_ptr< ast::Shader > doGetReprojectVP( VkExtent3D const & size
-			, SmaaConfig const & config )
+		std::unique_ptr< ast::Shader > doGetReprojectVP()
 		{
-			Point4f renderTargetMetrics{ 1.0f / float( size.width )
-				, 1.0f / float( size.height )
-				, float( size.width )
-				, float( size.height ) };
-
 			using namespace sdw;
 			VertexWriter writer;
 
@@ -66,17 +60,14 @@ namespace smaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< ast::Shader > doGetReprojectFP( VkExtent3D const & size
-			, SmaaConfig const & config
-			, bool reprojection )
+		std::unique_ptr< ast::Shader > doGetReprojectFP( bool reprojection )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
-			auto c3d_reprojectionWeightScale = writer.declConstant( constants::ReprojectionWeightScale
-				, Float( config.data.reprojectionWeightScale ) );
 
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
+			UBO_SMAA( writer, SmaaUboIdx, 0u );
 			auto c3d_currentColourTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_currentColourTex", CurColTexIdx, 0u );
 			auto c3d_previousColourTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_previousColourTex", PrvColTexIdx, 0u );
 			auto c3d_velocityTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_velocityTex", VelocityTexIdx, 0u, reprojection );
@@ -89,7 +80,7 @@ namespace smaa
 					, SampledImage2DRgba32 const & currentColorTex
 					, SampledImage2DRgba32 const & previousColorTex )
 				{
-					if ( config.data.enableReprojection )
+					IF( writer, c3d_smaaData.enableReprojection != 0 )
 					{
 						// Velocity is assumed to be calculated for motion blur, so we need to
 						// inverse it for reprojection:
@@ -108,12 +99,12 @@ namespace smaa
 						auto delta = writer.declLocale( "delta"
 							, abs( current.a() * current.a() - previous.a() * previous.a() ) / 5.0_f );
 						auto weight = writer.declLocale( "weight"
-							, 0.5_f * clamp( 1.0_f - sqrt( delta ) * c3d_reprojectionWeightScale, 0.0_f, 1.0_f ) );
+							, 0.5_f * clamp( 1.0_f - sqrt( delta ) * c3d_smaaData.reprojectionWeightScale, 0.0_f, 1.0_f ) );
 
 						// Blend the pixels according to the calculated weight:
 						writer.returnStmt( mix( current, previous, vec4( weight ) ) );
 					}
-					else
+					ELSE
 					{
 						// Just blend the pixels:
 						auto current = writer.declLocale( "current"
@@ -122,6 +113,7 @@ namespace smaa
 							, previousColorTex.sample( texcoord ) );
 						writer.returnStmt( mix( current, previous, vec4( 0.5_f ) ) );
 					}
+					FI;
 				}
 				, InVec2{ writer, "texcoord" }
 				, InSampledImage2DRgba32{ writer, "currentColorTex" }
@@ -141,6 +133,7 @@ namespace smaa
 	Reproject::Reproject( crg::FramePass const & previousPass
 		, castor3d::RenderTarget & renderTarget
 		, castor3d::RenderDevice const & device
+		, SmaaUbo const & ubo
 		, crg::ImageViewIdArray const & currentColourViews
 		, crg::ImageViewIdArray const & previousColourViews
 		, crg::ImageViewId const * velocityView
@@ -152,8 +145,8 @@ namespace smaa
 		, m_previousColourViews{ previousColourViews }
 		, m_velocityView{ velocityView }
 		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaReproject", doGetReprojectVP( m_extent, config ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaReproject", doGetReprojectFP( m_extent, config, velocityView != nullptr ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaReproject", doGetReprojectVP() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaReproject", doGetReprojectFP( velocityView != nullptr ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_result{ m_device
@@ -222,6 +215,8 @@ namespace smaa
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE };
 		m_pass.addDependency( previousPass );
 		m_pass.addOutputColourView( m_result.targetViewId );
+		ubo.createPassBinding( m_pass
+			, SmaaUboIdx );
 		m_pass.addSampledView( m_currentColourViews
 			, CurColTexIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL

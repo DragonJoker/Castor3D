@@ -3,6 +3,7 @@
 #include "SmaaPostEffect/ColourEdgeDetection.hpp"
 #include "SmaaPostEffect/DepthEdgeDetection.hpp"
 #include "SmaaPostEffect/LumaEdgeDetection.hpp"
+#include "SmaaPostEffect/SmaaUbo.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Material/Texture/Sampler.hpp>
@@ -67,7 +68,8 @@ namespace smaa
 
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
-			auto c3d_map = writer.declSampledImage< FImg2DRgba32 >( "c3d_map", 0u, 0u );
+			UBO_SMAA( writer, SmaaUboIdx, 0u );
+			auto c3d_map = writer.declSampledImage< FImg2DRgba32 >( "c3d_map", SmaaUboIdx + 1, 0u );
 
 			// Shader outputs
 			auto pxl_fragColour = writer.declOutput< Vec4 >( "pxl_fragColour", 0u );
@@ -76,10 +78,17 @@ namespace smaa
 				, [&]()
 				{
 					if ( config.data.mode == Mode::eT2X
-						&& config.data.enableReprojection
 						&& C3D_DebugVelocity )
 					{
-						pxl_fragColour = vec4( c3d_map.sample( vtx_texture ).xy(), 0.0_f, 1.0_f );
+						IF( writer, c3d_smaaData.enableReprojection != 0 )
+						{
+							pxl_fragColour = vec4( c3d_map.sample( vtx_texture ).xy(), 0.0_f, 1.0_f );
+						}
+						ELSE
+						{
+							pxl_fragColour = c3d_map.sample( vtx_texture );
+						}
+						FI;
 					}
 					else
 					{
@@ -186,6 +195,7 @@ namespace smaa
 			, 5u
 			, Kind::eSRGB }
 		, m_config{ parameters }
+		, m_ubo{ renderSystem.getRenderDevice() }
 		, m_stages{ castor3d::makeShaderState( renderSystem.getRenderDevice(), { VK_SHADER_STAGE_VERTEX_BIT, "SmaaCopy", doGetCopyVertexShader() } )
 			, castor3d::makeShaderState( renderSystem.getRenderDevice(), { VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaCopy", doGetCopyPixelShader( m_config ) } ) }
 	{
@@ -225,6 +235,29 @@ namespace smaa
 		{
 			m_reproject->accept( visitor );
 		}
+
+		visitor.visit( cuT( "Threshold" )
+			, m_config.data.threshold );
+		visitor.visit( cuT( "Max. search steps" )
+			, m_config.data.maxSearchSteps );
+		visitor.visit( cuT( "Max. diag. search steps" )
+			, m_config.data.maxSearchStepsDiag );
+		visitor.visit( cuT( "Corner rounding" )
+			, m_config.data.cornerRounding );
+		visitor.visit( cuT( "Disable diagonal detection" )
+			, m_config.data.disableDiagonalDetection );
+		visitor.visit( cuT( "Disable corner detection" )
+			, m_config.data.disableCornerDetection );
+		visitor.visit( cuT( "Local contrast adaptation factor" )
+			, m_config.data.localContrastAdaptationFactor );
+		visitor.visit( cuT( "Enable predication" )
+			, m_config.data.enablePredication );
+		visitor.visit( cuT( "Predication scale" )
+			, m_config.data.predicationScale );
+		visitor.visit( cuT( "Predication strength" )
+			, m_config.data.predicationStrength );
+		visitor.visit( cuT( "Predication threshold" )
+			, m_config.data.predicationThreshold );
 	}
 
 	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
@@ -241,6 +274,7 @@ namespace smaa
 			m_edgeDetection = std::make_unique< DepthEdgeDetection >( *previous
 				, m_renderTarget
 				, device
+				, m_ubo
 				, m_renderTarget.getTechnique().getDepthImgView()
 				, m_config
 				, &m_enabled );
@@ -250,6 +284,7 @@ namespace smaa
 			m_edgeDetection = std::make_unique< ColourEdgeDetection >( *previous
 				, m_renderTarget
 				, device
+				, m_ubo
 				, *m_srgbTextureView
 				, doGetPredicationTexture()
 				, m_config
@@ -260,6 +295,7 @@ namespace smaa
 			m_edgeDetection = std::make_unique< LumaEdgeDetection >( *previous
 				, m_renderTarget
 				, device
+				, m_ubo
 				, *m_srgbTextureView
 				, doGetPredicationTexture()
 				, m_config
@@ -274,6 +310,7 @@ namespace smaa
 		m_blendingWeightCalculation = std::make_unique< BlendingWeightCalculation >( *previous
 			, m_renderTarget
 			, device
+			, m_ubo
 			, m_edgeDetection->getColourResult()
 			, m_edgeDetection->getDepthResult()
 			, m_config
@@ -286,6 +323,7 @@ namespace smaa
 		m_neighbourhoodBlending = std::make_unique< NeighbourhoodBlending >( *previous
 			, m_renderTarget
 			, device
+			, m_ubo
 			, *m_srgbTextureView
 			, m_blendingWeightCalculation->getResult()
 			, velocityView
@@ -310,6 +348,7 @@ namespace smaa
 			m_reproject = std::make_unique< Reproject >( *previous
 				, m_renderTarget
 				, device
+				, m_ubo
 				, currentViews
 				, previousViews
 				, velocityView
@@ -347,8 +386,10 @@ namespace smaa
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE };
 		pass.addDependency( *previous );
+		m_ubo.createPassBinding( pass
+			, SmaaUboIdx );
 		pass.addSampledView( smaaResult
-			, 0u
+			, SmaaUboIdx + 1
 			, {}
 			, linearSampler );
 		pass.addOutputColourView( *m_target );
@@ -375,10 +416,11 @@ namespace smaa
 
 		if ( m_blendingWeightCalculation )
 		{
-			m_blendingWeightCalculation->cpuUpdate( m_config.subsampleIndices[m_config.subsampleIndex] );
 			m_renderTarget.setJitter( m_config.jitters[m_frameIndex] );
 		}
-
+		
+		m_ubo.cpuUpdate( castor3d::getSafeBandedSize( m_renderTarget.getSize() )
+			, m_config );
 		m_config.subsampleIndex = m_frameIndex;
 	}
 
