@@ -7,12 +7,36 @@ See LICENSE file in root folder
 #include <Castor3D/Castor3DModule.hpp>
 #include <Castor3D/Buffer/UniformBufferOffset.hpp>
 
+#include <ShaderWriter/BaseTypes/Float.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/VecTypes/Vec2.hpp>
+
 namespace draw_edges
 {
 	struct DrawEdgesUboConfiguration
 	{
 		float normalDepthWidth;
 		float objectWidth;
+	};
+
+	struct DrawEdgesData
+		: public sdw::StructInstance
+	{
+	public:
+		DrawEdgesData( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled );
+		SDW_DeclStructInstance( , DrawEdgesData );
+
+		static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+
+	public:
+		sdw::Float normalDepthWidth;
+		sdw::Float objectWidth;
+
+	private:
+		using sdw::StructInstance::getMember;
+		using sdw::StructInstance::getMemberArray;
 	};
 
 	class DrawEdgesUbo
@@ -49,9 +73,8 @@ namespace draw_edges
 		}
 
 	public:
-		static const castor::String Name;
-		static const castor::String NormalDepthWidth;
-		static const castor::String ObjectWidth;
+		static const castor::String Buffer;
+		static const castor::String Data;
 
 	private:
 		castor3d::RenderDevice const & m_device;
@@ -60,9 +83,8 @@ namespace draw_edges
 }
 
 #define UBO_DRAW_EDGES( writer, binding, set )\
-	sdw::Ubo drawEdges{ writer, draw_edges::DrawEdgesUbo::Name, binding, set };\
-	auto c3d_normalDepthWidth = drawEdges.declMember< sdw::Float >( draw_edges::DrawEdgesUbo::NormalDepthWidth );\
-	auto c3d_objectWidth = drawEdges.declMember< sdw::Float >( draw_edges::DrawEdgesUbo::ObjectWidth );\
+	sdw::Ubo drawEdges{ writer, draw_edges::DrawEdgesUbo::Buffer, binding, set };\
+	auto c3d_drawEdgesData = drawEdges.declStructMember< draw_edges::DrawEdgesData >( draw_edges::DrawEdgesUbo::Data );\
 	drawEdges.end()
 
 #endif
