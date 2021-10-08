@@ -44,6 +44,10 @@ namespace Bloom
 		*/
 		void doCleanup( castor3d::RenderDevice const & device )override;
 		/**
+		 *\copydoc		castor3d::PostEffect::doCpuUpdate
+		 */
+		void doCpuUpdate( castor3d::CpuUpdater & updater )override;
+		/**
 		 *\copydoc		castor3d::PostEffect::doWriteInto
 		 */
 		bool doWriteInto( castor::StringStream & file, castor::String const & tabs )override;

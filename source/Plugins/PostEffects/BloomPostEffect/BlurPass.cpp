@@ -254,9 +254,8 @@ namespace Bloom
 		, bool isVertical
 		, bool const * enabled )
 		: m_device{ device }
-		, m_blurKernelSize{ blurKernelSize }
 		, m_blurPassesCount{ blurPassesCount }
-		, m_blurUbo{ doCreateUbo( m_device, dimensions, m_blurKernelSize, m_blurPassesCount, isVertical ) }
+		, m_blurUbo{ doCreateUbo( m_device, dimensions, blurKernelSize, m_blurPassesCount, isVertical ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "BloomBlurPass", getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "BloomBlurPass", getPixelProgram() }
 		, m_stages{ makeShaderState( device, m_vertexShader )
@@ -297,6 +296,18 @@ namespace Bloom
 			, isVertical
 			, enabled }
 	{
+	}
+
+	void BlurPass::update( uint32_t kernelSize )
+	{
+		auto kernel = doCreateKernel( kernelSize );
+
+		for ( auto & ubo : m_blurUbo )
+		{
+			auto & data = ubo.getData();
+			data.blurCoeffsCount = kernelSize;
+			data.blurCoeffs = kernel;
+		}
 	}
 
 	void BlurPass::accept( castor3d::PipelineVisitorBase & visitor )
