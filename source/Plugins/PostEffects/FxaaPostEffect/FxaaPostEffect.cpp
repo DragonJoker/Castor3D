@@ -59,7 +59,7 @@ namespace fxaa
 					vtx_texture = uv;
 					out.vtx.position = vec4( position.xy(), 0.0_f, 1.0_f );
 					vtx_posPos.xy() = position.xy();
-					vtx_posPos.zw() = position.xy() - ( c3d_pixelSize * ( 0.5_f + c3d_subpixShift ) );
+					vtx_posPos.zw() = position.xy() - ( c3d_fxaaData.pixelSize * ( 0.5_f + c3d_fxaaData.subpixShift ) );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -117,12 +117,12 @@ namespace fxaa
 							, ( ( lumaNW + lumaSW ) - ( lumaNE + lumaSE ) ) ) );
 
 					auto dirReduce = writer.declLocale( "dirReduce"
-						, max( ( lumaNW + lumaNE + lumaSW + lumaSE ) * ( 0.25_f * c3d_reduceMul ), FXAA_REDUCE_MIN ) );
+						, max( ( lumaNW + lumaNE + lumaSW + lumaSE ) * ( 0.25_f * c3d_fxaaData.reduceMul ), FXAA_REDUCE_MIN ) );
 					auto rcpDirMin = writer.declLocale( "rcpDirMin"
 						, 1.0_f / ( min( abs( dir.x() ), abs( dir.y() ) ) + dirReduce ) );
-					dir = min( vec2( c3d_spanMax, c3d_spanMax )
-						, max( vec2( -c3d_spanMax, -c3d_spanMax )
-							, dir * rcpDirMin ) ) * c3d_pixelSize;
+					dir = min( vec2( c3d_fxaaData.spanMax, c3d_fxaaData.spanMax )
+						, max( vec2( -c3d_fxaaData.spanMax, -c3d_fxaaData.spanMax )
+							, dir * rcpDirMin ) ) * c3d_fxaaData.pixelSize;
 
 					auto texcoord0 = writer.declLocale( "texcoord0"
 						, vtx_texture + dir * ( 1.0_f / 3.0_f - 0.5_f ) );
@@ -208,20 +208,11 @@ namespace fxaa
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
-		visitor.visit( cuT( "Fxaa" )
-			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
-			, cuT( "Fxaa" )
-			, cuT( "SubPixShift" )
+		visitor.visit( cuT( "Sub-pixel shift" )
 			, m_subpixShift );
-		visitor.visit( cuT( "Fxaa" )
-			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
-			, cuT( "Fxaa" )
-			, cuT( "SpanMax" )
+		visitor.visit( cuT( "Span max." )
 			, m_spanMax );
-		visitor.visit( cuT( "Fxaa" )
-			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
-			, cuT( "Fxaa" )
-			, cuT( "ReduceMul" )
+		visitor.visit( cuT( "Reduce mul." )
 			, m_reduceMul );
 	}
 
