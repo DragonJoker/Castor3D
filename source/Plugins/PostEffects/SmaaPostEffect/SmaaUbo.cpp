@@ -1,44 +1,120 @@
 #include "SmaaPostEffect/SmaaUbo.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Buffer/UniformBufferPools.hpp>
+#include <Castor3D/Render/RenderDevice.hpp>
 
-using namespace castor;
-using namespace castor3d;
+#include <ShaderWriter/Writer.hpp>
 
 namespace smaa
 {
-	namespace constants
+	//*********************************************************************************************
+
+	SmaaData::SmaaData( sdw::ShaderWriter & writer
+		, ast::expr::ExprPtr expr
+		, bool enabled )
+		: sdw::StructInstance{ writer, std::move( expr ), enabled }
+		, rtMetrics{ getMember< sdw::Vec4 >( "rtMetrics" ) }
+		, predication{ getMember< sdw::Vec4 >( "predication" ) }
+		, subsampleIndices{ getMember< sdw::Vec4 >( "subsampleIndices" ) }
+		, searchSizes{ getMember< sdw::Vec4 >( "searchSizes" ) }
+		, areaTexPixelSizeAndLocalContrast{ getMember< sdw::Vec4 >( "areaTexPixelSizeAndLocalContrast" ) }
+		, areaTexSizesReprojWS{ getMember< sdw::Vec4 >( "areaTexSizesReprojWS" ) }
+		, maxsSearchSteps{ getMember< sdw::IVec4 >( "maxsSearchSteps" ) }
+		, tweaks{ getMember< sdw::IVec4 >( "tweaks" ) }
+		, threshold{ predication.x() }
+		, predicationThreshold{ predication.y() }
+		, predicationScale{ predication.z() }
+		, predicationStrength{ predication.w() }
+		, searchTexSize{ searchSizes.xy() }
+		, searchTexPackedSize{ searchSizes.zw() }
+		, areaTexPixelSize{ areaTexPixelSizeAndLocalContrast.xy() }
+		, localContrastAdaptationFactor{ areaTexPixelSizeAndLocalContrast.z() }
+		, cornerRounding{ writer.cast< sdw::Int >( areaTexPixelSizeAndLocalContrast.w() ) }
+		, areaTexMaxDistance{ areaTexSizesReprojWS.x() }
+		, areaTexMaxDistanceDiag{ areaTexSizesReprojWS.y() }
+		, areaTexSubtexSize{ areaTexSizesReprojWS.z() }
+		, reprojectionWeightScale{ areaTexSizesReprojWS.w() }
+		, maxSearchSteps{ maxsSearchSteps.x() }
+		, maxSearchStepsDiag{ maxsSearchSteps.y() }
+		, disableCornerDetection{ tweaks.x() }
+		, disableDiagonalDetection{ tweaks.y() }
+		, enableReprojection{ tweaks.z() }
+		, cornerRoundingNorm{ writer.cast< sdw::Float >( cornerRounding ) / 100.0_f }
+		, depthThreshold{ threshold * 0.1_f }
 	{
-		// General
-		const String RenderTargetMetrics = cuT( "SMAA_RT_METRICS" );
-
-		// Edge detection
-		const String Predication = cuT( "SMAA_PREDICATION" );
-		const String Threshold = cuT( "SMAA_THRESHOLD" );
-		const String LocalContrastAdaptationFactor = cuT( "SMAA_LOCAL_CONTRAST_ADAPTATION_FACTOR" );
-		const String DepthThreshold = cuT( "SMAA_DEPTH_THRESHOLD" );
-		const String PredicationScale = cuT( "SMAA_PREDICATION_SCALE" );
-		const String PredicationThreshold = cuT( "SMAA_PREDICATION_THRESHOLD" );
-		const String PredicationStrength = cuT( "SMAA_PREDICATION_STRENGTH" );
-
-		// Blending weights calculation
-		const String MaxSearchSteps = cuT( "SMAA_MAX_SEARCH_STEPS" );
-		const String DisableDiagDetection = cuT( "SMAA_DISABLE_DIAG_DETECTION" );
-		const String MaxSearchStepsDiag = cuT( "SMAA_MAX_SEARCH_STEPS_DIAG" );
-		const String AreaTexMaxDistanceDiag = cuT( "SMAA_AREATEX_MAX_DISTANCE_DIAG" );
-		const String AreaTexPixelSize = cuT( "SMAA_AREATEX_PIXEL_SIZE" );
-		const String AreaTexSubtexSize = cuT( "SMAA_AREATEX_SUBTEX_SIZE" );
-		const String AreaTexMaxDistance = cuT( "SMAA_AREATEX_MAX_DISTANCE" );
-		const String SearchTexSize = cuT( "SMAA_SEARCHTEX_SIZE" );
-		const String SearchTexPackedSize = cuT( "SMAA_SEARCHTEX_PACKED_SIZE" );
-		const String DisableCornerDetection = cuT( "SMAA_DISABLE_CORNER_DETECTION" );
-		const String CornerRoundingNorm = cuT( "SMAA_CORNER_ROUNDING_NORM" );
-		const String CornerRounding = cuT( "SMAA_CORNER_ROUNDING" );
-
-		// Reprojection
-		const String Reprojection = cuT( "SMAA_REPROJECTION" );
-		const String ReprojectionWeightScale = cuT( "SMAA_REPROJECTION_WEIGHT_SCALE" );
-
-		const String SubsampleIndices = cuT( "c3d_subsampleIndices" );
 	}
+
+	ast::type::StructPtr SmaaData::makeType( ast::type::TypesCache & cache )
+	{
+		auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
+			, "C3D_SmaaData" );
+
+		if ( result->empty() )
+		{
+			result->declMember( "rtMetrics", ast::type::Kind::eVec4F );
+			result->declMember( "predication", ast::type::Kind::eVec4F );
+			result->declMember( "subsampleIndices", ast::type::Kind::eVec4F );
+			result->declMember( "searchSizes", ast::type::Kind::eVec4F );
+			result->declMember( "areaTexPixelSizeAndLocalContrast", ast::type::Kind::eVec4F );
+			result->declMember( "areaTexSizesReprojWS", ast::type::Kind::eVec4F );
+			result->declMember( "maxsSearchSteps", ast::type::Kind::eVec4I );
+			result->declMember( "tweaks", ast::type::Kind::eVec4I );
+		}
+
+		return result;
+	}
+
+	//*********************************************************************************************
+
+	castor::String const SmaaUbo::Buffer = cuT( "SmaaBuffer" );
+	castor::String const SmaaUbo::Data = cuT( "c3d_smaaData" );
+
+	SmaaUbo::SmaaUbo( castor3d::RenderDevice const & device )
+		: m_device{ device }
+		, m_ubo{ m_device.uboPools->getBuffer< SmaaUboConfiguration >( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ) }
+	{
+	}
+
+	SmaaUbo::~SmaaUbo()
+	{
+		m_device.uboPools->putBuffer< SmaaUboConfiguration >( m_ubo );
+	}
+
+	void SmaaUbo::cpuUpdate( castor::Size const & renderSize
+		, SmaaConfig const & config )
+	{
+		auto & data = m_ubo.getData();
+		data.rtMetrics = { 1.0f / float( renderSize.getWidth() )
+			, 1.0f / float( renderSize.getHeight() )
+			, float( renderSize.getWidth() )
+			, float( renderSize.getHeight() ) };
+		data.predication = { config.data.threshold
+			, config.data.predicationThreshold
+			, config.data.predicationScale
+			, config.data.predicationStrength };
+		data.subsampleIndices = config.subsampleIndices[config.subsampleIndex];
+		data.searchSizes = { config.data.searchTexSize->x
+			, config.data.searchTexSize->y
+			, config.data.searchTexPackedSize->x
+			, config.data.searchTexPackedSize->y };
+		data.areaTexPixelSizeAndLocalContrast = { config.data.areaTexPixelSize->x
+			, config.data.areaTexPixelSize->y
+			, config.data.localContrastAdaptationFactor
+			, config.data.cornerRounding };
+		data.areaTexSizesReprojWS = { config.data.areaTexMaxDistance
+			, config.data.areaTexMaxDistanceDiag
+			, config.data.areaTexSubtexSize
+			, config.data.reprojectionWeightScale };
+		data.maxsSearchSteps = { config.data.maxSearchSteps
+			, config.data.maxSearchStepsDiag
+			, 0
+			, 0 };
+		data.tweaks = { config.data.disableCornerDetection ? 1 : 0
+			, config.data.disableDiagonalDetection ? 1 : 0
+			, config.data.enableReprojection ? 1 : 0
+			, 0 };
+	}
+
+	//*********************************************************************************************
 }

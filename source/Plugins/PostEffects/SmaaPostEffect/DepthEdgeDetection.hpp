@@ -15,6 +15,7 @@ namespace smaa
 		DepthEdgeDetection( crg::FramePass const & previousPass
 			, castor3d::RenderTarget & renderTarget
 			, castor3d::RenderDevice const & device
+			, SmaaUbo const & ubo
 			, crg::ImageViewId const & depthView
 			, SmaaConfig const & config
 			, bool const * enabled );
