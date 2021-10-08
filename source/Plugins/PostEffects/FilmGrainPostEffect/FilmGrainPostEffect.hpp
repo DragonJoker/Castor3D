@@ -25,10 +25,10 @@ namespace film_grain
 	private:
 		struct Configuration
 		{
-			castor::Point2f m_pixelSize;
-			float m_noiseIntensity;
-			float m_exposure;
-			float m_time;
+			castor::Point2f pixelSize;
+			float noiseIntensity{ 1.0f };
+			float exposure{ 1.0f };
+			float time{ 0.0f };
 		};
 
 	public:
@@ -81,6 +81,7 @@ namespace film_grain
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		castor::Milliseconds m_time{ 0ull };
 		uint32_t m_timeIndex{ 0u };
+		Configuration m_config;
 		castor3d::UniformBufferOffsetT< Configuration > m_configUbo;
 		std::array< castor::Image, NoiseMapCount > m_noiseImages;
 		crg::ImageId m_noiseImg;
