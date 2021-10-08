@@ -37,6 +37,8 @@ namespace Bloom
 			, bool const * enabled );
 		void accept( castor3d::PipelineVisitorBase & visitor );
 
+		void update( uint32_t kernelSize );
+
 		crg::FramePassArray const & getPasses()const
 		{
 			return m_passes;
@@ -64,7 +66,6 @@ namespace Bloom
 
 	private:
 		castor3d::RenderDevice const & m_device;
-		uint32_t m_blurKernelSize;
 		uint32_t m_blurPassesCount;
 		UboOffsetArray m_blurUbo;
 		castor3d::ShaderModule m_vertexShader;
