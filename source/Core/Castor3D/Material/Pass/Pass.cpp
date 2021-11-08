@@ -1429,6 +1429,19 @@ namespace castor3d
 			doJoinNmlHgt( newUnits );
 			doJoinEmsOcc( newUnits );
 			doPrepareTextures( newUnits );
+
+			for ( auto & unit : m_textureUnits )
+			{
+				auto count = unit.use_count();
+
+				if ( count == 1u
+					&& unit->isInitialised()
+					&& newUnits.end() != std::find( newUnits.begin(), newUnits.end(), unit ) )
+				{
+					unit->cleanup();
+				}
+			}
+
 			m_textureUnits = newUnits;
 
 			std::sort( m_textureUnits.begin()

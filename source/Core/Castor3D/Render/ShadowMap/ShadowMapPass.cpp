@@ -83,7 +83,7 @@ namespace castor3d
 	{
 		auto index = uint32_t( PassUboIdx::eCount );
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-			, VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER
+			, VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER

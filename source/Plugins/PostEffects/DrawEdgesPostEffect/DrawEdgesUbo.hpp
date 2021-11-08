@@ -6,8 +6,9 @@ See LICENSE file in root folder
 
 #include <Castor3D/Castor3DModule.hpp>
 #include <Castor3D/Buffer/UniformBufferOffset.hpp>
+#include <CastorUtils/Math/RangedValue.hpp>
 
-#include <ShaderWriter/BaseTypes/Float.hpp>
+#include <ShaderWriter/BaseTypes/Int.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 #include <ShaderWriter/VecTypes/Vec2.hpp>
 
@@ -15,8 +16,8 @@ namespace draw_edges
 {
 	struct DrawEdgesUboConfiguration
 	{
-		float normalDepthWidth;
-		float objectWidth;
+		int normalDepthWidth{ 1 };
+		int objectWidth{ 1 };
 	};
 
 	struct DrawEdgesData
@@ -31,8 +32,8 @@ namespace draw_edges
 		static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 
 	public:
-		sdw::Float normalDepthWidth;
-		sdw::Float objectWidth;
+		sdw::Int normalDepthWidth;
+		sdw::Int objectWidth;
 
 	private:
 		using sdw::StructInstance::getMember;
@@ -47,8 +48,8 @@ namespace draw_edges
 	public:
 		explicit DrawEdgesUbo( castor3d::RenderDevice const & device );
 		~DrawEdgesUbo();
-		void cpuUpdate( float normalDepthWidth
-			, float objectWidth );
+		void cpuUpdate( int normalDepthWidth
+			, int objectWidth );
 
 		void createPassBinding( crg::FramePass & pass
 			, uint32_t binding )const
