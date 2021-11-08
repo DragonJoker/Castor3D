@@ -79,7 +79,7 @@ namespace castor3d
 		m_textureBuffer = makeBuffer< castor::Point4f >( engine.getRenderSystem()->getRenderDevice()
 			, uint32_t( m_lightsBuffer.size() )
 			, ( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-				| VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT
+				| VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT
 				| VK_BUFFER_USAGE_TRANSFER_DST_BIT )
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, "LightsBuffer" );
@@ -158,7 +158,7 @@ namespace castor3d
 		ashes::WriteDescriptorSet write{ binding
 			, 0u
 			, 1u
-			, VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER };
+			, VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER };
 		write.bufferInfo.push_back( { buffer, view.getOffset(), view.getRange() } );
 		write.texelBufferView.push_back( view );
 		return write;

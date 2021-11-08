@@ -8,6 +8,8 @@ See LICENSE file in root folder
 
 #include "GuiCommon/GuiCommonPrerequisites.hpp"
 
+#include <Castor3D/Render/RenderSystem.hpp>
+
 #include <wx/dialog.h>
 
 namespace GuiCommon
@@ -15,35 +17,38 @@ namespace GuiCommon
 	class RendererSelector
 		:	public wxDialog
 	{
-	private:
-		enum ID
-		{
-			ID_LIST_RENDERERS,
-		};
-
 	public:
 		RendererSelector( castor3d::Engine & engine
 			, wxWindow * parent
 			, wxString const & title );
 
-		castor::String getSelectedRenderer()const;
+		castor3d::Renderer getSelected();
 
 	private:
+		wxListBox * doFillRenderers();
+		wxListBox * doInitialiseDevices();
+		void doFillDevices( castor3d::Renderer const & renderer );
 		void doDraw( wxDC * dc );
-		void doSelect();
+		void doSelectRenderer( bool next );
+		void doSelectDevice( bool next);
 
-	protected:
 		DECLARE_EVENT_TABLE()
-		void OnPaint( wxPaintEvent & event );
-		void OnKeyUp( wxKeyEvent & event );
-		void OnButtonOk( wxCommandEvent & event );
-		void OnButtonCancel( wxCommandEvent & event );
+		void onPaint( wxPaintEvent & event );
+		void onDevicesKeyUp( wxKeyEvent & event );
+		void onRenderersKeyUp( wxKeyEvent & event );
+		void onKeyUp( wxKeyEvent & event );
+		void onButtonOk( wxCommandEvent & event );
+		void onButtonCancel( wxCommandEvent & event );
+		void onSelectRenderer( wxCommandEvent & event );
+		void onSelectDevice( wxCommandEvent & event );
 
 	private:
 		wxImage * m_castorImg;
-		wxListBox * m_renderers;
+		wxListBox * m_renderersList;
+		wxListBox * m_devicesList;
 		castor3d::Engine & m_engine;
-		std::vector< castor::String > m_names;
+		std::vector< castor3d::Renderer > m_renderers;
+		castor3d::Renderer * m_currentRenderer{};
 	};
 }
 

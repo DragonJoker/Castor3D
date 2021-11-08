@@ -18,6 +18,23 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	struct Renderer
+	{
+		Renderer() = default;
+		Renderer( Renderer && ) = default;
+		Renderer & operator=( Renderer && ) = default;
+		Renderer( Renderer const & ) = delete;
+		Renderer & operator=( Renderer const & ) = delete;
+		C3D_API Renderer( Engine & engine
+			, AshPluginDescription desc
+			, uint32_t gpuIndex = 0u );
+
+		AshPluginDescription desc;
+		ashes::InstancePtr instance;
+		ashes::PhysicalDevicePtrArray gpus;
+		ashes::PhysicalDevice * gpu{};
+	};
+
 	class RenderSystem
 		: public castor::OwnedBy< Engine >
 	{
@@ -34,6 +51,51 @@ namespace castor3d
 		 */
 		C3D_API RenderSystem( Engine & engine
 			, AshPluginDescription desc );
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	engine	The engine.
+		 *\param[in]	desc	The Ashes plugin description.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	engine	Le moteur.
+		 *\param[in]	desc	The Ashes plugin description.
+		 */
+		C3D_API RenderSystem( Engine & engine
+			, Renderer renderer );
+		/**
+		*\~english
+		*\brief
+		*	Creates a Vulkan instance usable with Castor3D.
+		*\param[in] engine
+		*	The engine.
+		*\param[in] desc
+		*	The Ashes plugin description.
+		*\~french
+		*\brief
+		*	Crée une instance Vulkan compatible avec Castor3D.
+		*\param[in] engine
+		*	Le moteur.
+		*\param[in] desc
+		*	The Ashes plugin description.
+		*/
+		C3D_API static ashes::InstancePtr createInstance( Engine & engine
+			, AshPluginDescription const & desc );
+		/**
+		*\~english
+		*\brief
+		*	Adds the instance layers names to the given names.
+		*\param[in,out] names
+		*	The liste to fill.
+		*\~french
+		*\brief
+		*	Ajoute les couches de l'instance aux noms déjà présents dans la liste donnée.
+		*\param[in,out] names
+		*	La liste à compléter.
+		*/
+		C3D_API static void completeLayerNames( Engine const & engine
+			, ashes::VkLayerPropertiesArray const & layers
+			, ashes::StringArray & names );
 		/**
 		 *\~english
 		 *\brief		Pushes a scene on the stack
@@ -198,19 +260,6 @@ namespace castor3d
 			, float zNear )const;
 		/**
 		*\~english
-		*\brief
-		*	Adds the instance layers names to the given names.
-		*\param[in,out] names
-		*	The liste to fill.
-		*\~french
-		*\brief
-		*	Ajoute les couches de l'instance aux noms déjà présents dans la liste donnée.
-		*\param[in,out] names
-		*	La liste à compléter.
-		*/
-		void completeLayerNames( ashes::StringArray & names )const;
-		/**
-		*\~english
 		*name
 		*	Getters.
 		*\~french
@@ -218,6 +267,11 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
+		AshPluginDescription const & getDescription()const
+		{
+			return m_renderer.desc;
+		}
+
 		GpuInformations const & getGpuInformations()const
 		{
 			return m_gpuInformations;
@@ -225,7 +279,7 @@ namespace castor3d
 
 		castor::String getRendererType()const
 		{
-			return m_desc.name;
+			return getDescription().name;
 		}
 
 		bool hasDevice()const
@@ -251,22 +305,12 @@ namespace castor3d
 
 		bool hasSsbo()const
 		{
-			return m_desc.features.hasStorageBuffers == VK_TRUE;
+			return getDescription().features.hasStorageBuffers == VK_TRUE;
 		}
 
 		ashes::Instance const & getInstance()const
 		{
-			return *m_instance;
-		}
-
-		ashes::StringArray const & getLayerNames()const
-		{
-			return m_layerNames;
-		}
-
-		ashes::StringArray const & getExtensionNames()const
-		{
-			return m_extensionNames;
+			return *m_renderer.instance;
 		}
 
 		VkPhysicalDeviceProperties const & getProperties()const
@@ -284,16 +328,9 @@ namespace castor3d
 			return m_features;
 		}
 
-		AshPluginDescription const & getDescription()const
+		ashes::PhysicalDevice const & getPhysicalDevice()const
 		{
-			return m_desc;
-		}
-
-		ashes::PhysicalDevice const & getPhysicalDevice( uint32_t gpuIndex )const
-		{
-			CU_Require( gpuIndex < m_gpus.size()
-				&& "Invalid Physical Device index." );
-			return *m_gpus[gpuIndex];
+			return *m_renderer.gpu;
 		}
 
 		uint32_t getValue( GpuMin index )const
@@ -304,6 +341,11 @@ namespace castor3d
 		uint32_t getValue( GpuMax index )const
 		{
 			return m_gpuInformations.getValue( index );
+		}
+
+		bool hasLLPV()const
+		{
+			return m_properties.limits.maxDescriptorSetSampledImages > 16u;
 		}
 		/**@}*/
 		/**
@@ -329,21 +371,13 @@ namespace castor3d
 
 	private:
 		std::recursive_mutex m_mutex;
-		AshPluginDescription const m_desc;
+		Renderer m_renderer;
 		GpuInformations m_gpuInformations;
 		OverlayRendererSPtr m_overlayRenderer;
-		ashes::InstancePtr m_instance;
 		DebugCallbacksPtr m_debug;
-		ashes::PhysicalDevicePtrArray m_gpus;
 		VkPhysicalDeviceMemoryProperties m_memoryProperties;
 		VkPhysicalDeviceProperties m_properties;
 		VkPhysicalDeviceFeatures m_features;
-		VkLayerProperties m_globalLayer{};
-		ashes::VkLayerPropertiesArray m_layers;
-		ashes::StringArray m_layerNames;
-		ashes::StringArray m_extensionNames;
-		ashes::VkExtensionPropertiesArray m_globalLayerExtensions;
-		std::map< std::string, ashes::VkExtensionPropertiesArray > m_layersExtensions;
 		RenderDeviceSPtr m_device;
 		std::stack< SceneRPtr > m_stackScenes;
 		castor::Nanoseconds m_gpuTime;

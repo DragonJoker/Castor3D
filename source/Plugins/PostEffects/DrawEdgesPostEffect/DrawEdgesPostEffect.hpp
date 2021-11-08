@@ -54,6 +54,10 @@ namespace draw_edges
 		*/
 		void doCleanup( castor3d::RenderDevice const & device ) override;
 		/**
+		 *\copydoc		castor3d::PostEffect::doCpuUpdate
+		 */
+		void doCpuUpdate( castor3d::CpuUpdater & updater )override;
+		/**
 		 *\copydoc		castor3d::PostEffect::doWriteInto
 		 */
 		bool doWriteInto( castor::StringStream & file, castor::String const & tabs ) override;
@@ -73,7 +77,7 @@ namespace draw_edges
 		crg::ImageId m_resultImg;
 		crg::ImageViewId m_resultView;
 		DrawEdgesUbo m_ubo;
-		DrawEdgesUboConfiguration & m_data;
+		DrawEdgesUboConfiguration m_config;
 		crg::FramePass const * m_pass{};
 	};
 }

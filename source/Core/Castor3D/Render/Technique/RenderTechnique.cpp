@@ -124,10 +124,24 @@ namespace castor3d
 						lightPropagationVolumesG[size_t( type )]->registerLight( updater.light );
 						break;
 					case GlobalIlluminationType::eLayeredLpv:
-						layeredLightPropagationVolumes[size_t( type )]->registerLight( updater.light );
+						if ( shadowMap.getEngine()->getRenderSystem()->hasLLPV() )
+						{
+							layeredLightPropagationVolumes[size_t( type )]->registerLight( updater.light );
+						}
+						else
+						{
+							lightPropagationVolumes[size_t( type )]->registerLight( updater.light );
+						}
 						break;
 					case GlobalIlluminationType::eLayeredLpvG:
-						layeredLightPropagationVolumesG[size_t( type )]->registerLight( updater.light );
+						if ( shadowMap.getEngine()->getRenderSystem()->hasLLPV() )
+						{
+							layeredLightPropagationVolumesG[size_t( type )]->registerLight( updater.light );
+						}
+						else
+						{
+							lightPropagationVolumesG[size_t( type )]->registerLight( updater.light );
+						}
 						break;
 					default:
 						break;

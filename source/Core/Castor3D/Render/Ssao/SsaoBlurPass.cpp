@@ -158,6 +158,7 @@ namespace castor3d
 						temp = vec3( 0.0_f );
 					}
 
+					bent = vec3( 0.0_f );
 					writer.returnStmt( temp );
 				}
 				, InIVec2{ writer, "tapLoc" }
@@ -318,7 +319,8 @@ namespace castor3d
 
 							auto tapKey = writer.declLocale< Float >( "tapKey" );
 							auto value = writer.declLocale< Float >( "value" );
-							auto bent = writer.declLocale< Vec3 >( "bent" );
+							auto bent = writer.declLocale( "bent"
+								, vec3( 0.0_f ) );
 							auto tapNormal = writer.declLocale( "tapNormal"
 								, getTapInformation( tapLoc, tapKey, value, bent ) );
 

@@ -441,76 +441,44 @@ namespace castor3d
 
 	//*************************************************************************
 
-	RenderSystem::RenderSystem( Engine & engine
-		, AshPluginDescription desc )
-		: OwnedBy< Engine >{ engine }
-		, m_desc{ std::move( desc ) }
-		, m_gpuInformations{}
+	Renderer::Renderer( Engine & engine
+		, AshPluginDescription pdesc
+		, uint32_t gpuIndex )
+		: desc{ std::move( pdesc ) }
+		, instance{ RenderSystem::createInstance( engine, desc ) }
+		, gpus{ instance->enumeratePhysicalDevices() }
 	{
-		auto & rendererList = engine.getRenderersList();
-		auto plugin = rendererList.selectPlugin( desc.name );
-		PFN_vkEnumerateInstanceLayerProperties enumLayerProperties;
-		enumLayerProperties = reinterpret_cast< PFN_vkEnumerateInstanceLayerProperties >( plugin.getInstanceProcAddr( VK_NULL_HANDLE,
-			"vkEnumerateInstanceLayerProperties" ) );
-		PFN_vkEnumerateInstanceExtensionProperties enumInstanceExtensionProperties;
-		enumInstanceExtensionProperties = reinterpret_cast< PFN_vkEnumerateInstanceExtensionProperties >( plugin.getInstanceProcAddr( VK_NULL_HANDLE,
-			"vkEnumerateInstanceExtensionProperties" ) );
-
-		m_layers = enumerateLayerProperties( enumLayerProperties );
-		m_globalLayerExtensions = enumerateExtensionProperties( enumInstanceExtensionProperties
-			, m_globalLayer.layerName );
-
-		// On récupère la liste d'extensions pour chaque couche de l'instance.
-		for ( auto layerProperties : m_layers )
+		if ( gpus.empty() )
 		{
-			m_layersExtensions.emplace( layerProperties.layerName
-				, enumerateExtensionProperties( enumInstanceExtensionProperties
-					, layerProperties.layerName ) );
-		}
-
-		completeLayerNames( m_layerNames );
-
-		m_extensionNames.push_back( VK_KHR_SURFACE_EXTENSION_NAME );
-		m_extensionNames.push_back( ashes::KHR_PLATFORM_SURFACE_EXTENSION_NAME );
-
-		if ( getEngine()->isValidationEnabled() )
-		{
-			addOptionalDebugLayers( m_globalLayerExtensions, m_extensionNames );
-		}
-
-		checkExtensionsAvailability( m_globalLayerExtensions, m_extensionNames );
-
-		ashes::InstanceCreateInfo createInfo
-		{
-			0u,
-			createApplicationInfo( engine ),
-			m_layerNames,
-			m_extensionNames,
-		};
-		log::debug << "Enabled layers count: " << uint32_t( m_layerNames.size() ) << std::endl;
-		log::debug << "Enabled extensions count: " << uint32_t( m_extensionNames.size() ) << std::endl;
-		m_instance = std::make_unique< ashes::Instance >( std::move( plugin )
-#if C3D_UseAllocationCallbacks
-			, ashes::makeAllocator< AlignedBuddyAllocatorTraits >()
-#else
-			, nullptr
-#endif
-			, std::move( createInfo ) );
-
-		if ( getEngine()->isValidationEnabled() )
-		{
-			m_debug = std::make_unique< DebugCallbacks >( *m_instance
-				, this );
-		}
-
-		m_gpus = m_instance->enumeratePhysicalDevices();
-
-		if ( m_gpus.empty() )
-		{
+			instance.reset();
 			CU_Exception( "No Physical device found." );
 		}
 
-		auto & gpu = *m_gpus[0];
+		gpu = gpus[gpuIndex].get();
+	}
+
+	//*************************************************************************
+
+	RenderSystem::RenderSystem( Engine & engine
+		, Renderer renderer )
+		: OwnedBy< Engine >{ engine }
+		, m_renderer{ std::move( renderer ) }
+		, m_gpuInformations{}
+	{
+		if ( !m_renderer.gpu )
+		{
+			m_renderer.gpus.clear();
+			m_renderer.instance.reset();
+			CU_Exception( "No GPU selected." );
+		}
+
+		if ( getEngine()->isValidationEnabled() )
+		{
+			m_debug = std::make_unique< DebugCallbacks >( *m_renderer.instance
+				, this );
+		}
+
+		auto & gpu = *m_renderer.gpu;
 		m_memoryProperties = gpu.getMemoryProperties();
 		m_properties = gpu.getProperties();
 		m_features = gpu.getFeatures();
@@ -523,7 +491,7 @@ namespace castor3d
 
 		m_device = std::make_shared< RenderDevice >( *this
 			, gpu
-			, m_desc );
+			, m_renderer.desc );
 
 		static std::map< uint32_t, castor::String > vendors
 		{
@@ -541,7 +509,7 @@ namespace castor3d
 		m_gpuInformations.setVendor( vendors[properties.vendorID] );
 		m_gpuInformations.setRenderer( properties.deviceName );
 		m_gpuInformations.setVersion( stream.str() );
-		m_gpuInformations.updateFeature( castor3d::GpuFeature::eShaderStorageBuffers, m_desc.features.hasStorageBuffers != 0 );
+		m_gpuInformations.updateFeature( castor3d::GpuFeature::eShaderStorageBuffers, m_renderer.desc.features.hasStorageBuffers != 0 );
 		m_gpuInformations.updateFeature( castor3d::GpuFeature::eStereoRendering, limits.maxViewports > 1u );
 
 		m_gpuInformations.useShaderType( VK_SHADER_STAGE_COMPUTE_BIT, device.device->getInstance().getFeatures().hasComputeShaders != 0 );
@@ -573,6 +541,85 @@ namespace castor3d
 		m_gpuInformations.setValue( GpuMax::eViewports, limits.maxViewports );
 
 		log::info << m_gpuInformations << std::endl;
+	}
+
+	RenderSystem::RenderSystem( Engine & engine
+		, AshPluginDescription desc )
+		: RenderSystem{ engine, Renderer{ engine, std::move( desc ), 0u } }
+	{
+	}
+
+	ashes::InstancePtr RenderSystem::createInstance( Engine & engine
+		, AshPluginDescription const & desc )
+	{
+		auto & rendererList = engine.getRenderersList();
+		auto plugin = rendererList.selectPlugin( desc.name );
+		PFN_vkEnumerateInstanceLayerProperties enumLayerProperties;
+		enumLayerProperties = reinterpret_cast< PFN_vkEnumerateInstanceLayerProperties >( plugin.getInstanceProcAddr( VK_NULL_HANDLE,
+			"vkEnumerateInstanceLayerProperties" ) );
+		PFN_vkEnumerateInstanceExtensionProperties enumInstanceExtensionProperties;
+		enumInstanceExtensionProperties = reinterpret_cast< PFN_vkEnumerateInstanceExtensionProperties >( plugin.getInstanceProcAddr( VK_NULL_HANDLE,
+			"vkEnumerateInstanceExtensionProperties" ) );
+
+		auto layers = enumerateLayerProperties( enumLayerProperties );
+		VkLayerProperties globalLayer{};
+		auto globalLayerExtensions = enumerateExtensionProperties( enumInstanceExtensionProperties
+			, globalLayer.layerName );
+
+		// On récupère la liste d'extensions pour chaque couche de l'instance.
+		std::map< std::string, ashes::VkExtensionPropertiesArray > layersExtensions;
+		for ( auto layerProperties : layers )
+		{
+			layersExtensions.emplace( layerProperties.layerName
+				, enumerateExtensionProperties( enumInstanceExtensionProperties
+					, layerProperties.layerName ) );
+		}
+
+		ashes::StringArray layerNames;
+		completeLayerNames( engine, layers, layerNames );
+
+		ashes::StringArray extensionNames{ VK_KHR_SURFACE_EXTENSION_NAME
+			, ashes::KHR_PLATFORM_SURFACE_EXTENSION_NAME };
+
+		if ( engine.isValidationEnabled() )
+		{
+			addOptionalDebugLayers( globalLayerExtensions, extensionNames );
+		}
+
+		checkExtensionsAvailability( globalLayerExtensions, extensionNames );
+
+		ashes::InstanceCreateInfo createInfo
+		{
+			0u,
+			createApplicationInfo( engine ),
+			layerNames,
+			extensionNames,
+		};
+		log::debug << "Enabled layers count: " << uint32_t( layerNames.size() ) << std::endl;
+		log::debug << "Enabled extensions count: " << uint32_t( extensionNames.size() ) << std::endl;
+		return std::make_unique< ashes::Instance >( std::move( plugin )
+#if C3D_UseAllocationCallbacks
+			, ashes::makeAllocator< AlignedBuddyAllocatorTraits >()
+#else
+			, nullptr
+#endif
+			, std::move( createInfo ) );
+	}
+
+	void RenderSystem::completeLayerNames( Engine const & engine
+		, ashes::VkLayerPropertiesArray const & layers
+		, ashes::StringArray & names )
+	{
+		for ( auto const & props : layers )
+		{
+			if ( ( engine.isValidationEnabled()
+				&& isValidationLayer( props.layerName, props.description ) )
+				|| ( engine.isApiTraceEnabled()
+					&& isApiTraceLayer( props.layerName, props.description ) ) )
+			{
+				names.push_back( props.layerName );
+			}
+		}
 	}
 
 	void RenderSystem::pushScene( Scene * p_scene )
@@ -699,7 +746,7 @@ namespace castor3d
 		, float zNear
 		, float zFar )const
 	{
-		return convert( m_instance->frustum( left, right, bottom, top, zNear, zFar ) );
+		return convert( m_renderer.instance->frustum( left, right, bottom, top, zNear, zFar ) );
 	}
 
 	castor::Matrix4x4f RenderSystem::getPerspective( castor::Angle const & fovy
@@ -707,7 +754,7 @@ namespace castor3d
 		, float zNear
 		, float zFar )const
 	{
-		return convert( m_instance->perspective( fovy.radians(), aspect, zNear, zFar ) );
+		return convert( m_renderer.instance->perspective( fovy.radians(), aspect, zNear, zFar ) );
 	}
 
 	castor::Matrix4x4f RenderSystem::getOrtho( float left
@@ -717,28 +764,14 @@ namespace castor3d
 		, float zNear
 		, float zFar )const
 	{
-		return convert( m_instance->ortho( left, right, bottom, top, zNear, zFar ) );
+		return convert( m_renderer.instance->ortho( left, right, bottom, top, zNear, zFar ) );
 	}
 
 	castor::Matrix4x4f RenderSystem::getInfinitePerspective( float radiansFovY
 		, float aspect
 		, float zNear )const
 	{
-		return convert( m_instance->infinitePerspective( radiansFovY, aspect, zNear ) );
-	}
-
-	void RenderSystem::completeLayerNames( ashes::StringArray & names )const
-	{
-		for ( auto const & props : m_layers )
-		{
-			if ( ( getEngine()->isValidationEnabled()
-					&& isValidationLayer( props.layerName, props.description ) )
-				|| ( getEngine()->isApiTraceEnabled()
-					&& isApiTraceLayer( props.layerName, props.description ) ) )
-			{
-				names.push_back( props.layerName );
-			}
-		}
+		return convert( m_renderer.instance->infinitePerspective( radiansFovY, aspect, zNear ) );
 	}
 
 	//*************************************************************************

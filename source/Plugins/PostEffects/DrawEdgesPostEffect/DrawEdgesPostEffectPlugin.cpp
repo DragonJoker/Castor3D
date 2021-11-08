@@ -64,12 +64,12 @@ namespace
 			, uint32_t( Section::eRoot )
 			, PostEffect::NormalDepthWidth
 			, &parserNormalDepthWidth
-			, { castor::makeParameter< castor::ParameterType::eFloat >( castor::makeRange( 1.0f, 1000.0f ) ) } );
+			, { castor::makeParameter< castor::ParameterType::eInt32 >( castor::makeRange( 0, 1000 ) ) } );
 		addParser( result
 			, uint32_t( Section::eRoot )
 			, PostEffect::ObjectWidth
 			, &parserObjectWidth
-			, { castor::makeParameter< castor::ParameterType::eFloat >( castor::makeRange( 1.0f, 1000.0f ) ) } );
+			, { castor::makeParameter< castor::ParameterType::eInt32 >( castor::makeRange( 0, 1000 ) ) } );
 		addParser( result
 			, uint32_t( Section::eRoot )
 			, cuT( "}" )

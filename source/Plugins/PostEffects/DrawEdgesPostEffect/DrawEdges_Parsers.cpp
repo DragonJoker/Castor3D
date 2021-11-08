@@ -42,7 +42,7 @@ namespace draw_edges
 		}
 		else
 		{
-			float value{};
+			int value{};
 			params[0]->get( value );
 			deContext.data.normalDepthWidth = value;
 		}
@@ -59,7 +59,7 @@ namespace draw_edges
 		}
 		else
 		{
-			float value{};
+			int value{};
 			params[0]->get( value );
 			deContext.data.objectWidth = value;
 		}

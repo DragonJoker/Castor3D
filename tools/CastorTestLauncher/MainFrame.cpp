@@ -318,10 +318,10 @@ namespace test_launcher
 				m_engine.getRenderLoop().renderSyncFrame( 25_ms );
 			}
 
-			m_renderWindow->enableSaveFrame();
-			m_engine.getRenderLoop().renderSyncFrame( 25_ms );
 			result.avg = std::chrono::duration_cast< castor::Microseconds >( m_engine.getRenderLoop().getAvgFrameTime() );
 			result.last = m_engine.getRenderLoop().getLastFrameTime();
+			m_renderWindow->enableSaveFrame();
+			m_engine.getRenderLoop().renderSyncFrame( 25_ms );
 			auto buffer = m_renderWindow->getSavedFrame();
 			doCreateBitmapFromBuffer( buffer
 				, false
