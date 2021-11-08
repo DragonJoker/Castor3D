@@ -68,7 +68,7 @@ namespace castor3d
 		 *\brief		Met à jour les textes des incrustations de débogage.
 		 *\return		Le temps écoulé pour cette frame.
 		 */
-		castor::Microseconds endFrame();
+		castor::Microseconds endFrame( bool first );
 		/**
 		 *\~english
 		 *\brief		Used to add to the GPU time, the time elapsed between now and the last call of either endGpuTask or endCpuTask
@@ -340,6 +340,7 @@ namespace castor3d
 		CategoryOverlaysArray m_renderPasses;
 		std::array< castor::Nanoseconds, FRAME_SAMPLES_COUNT > m_framesTimes{};
 		uint32_t m_frameIndex{ 0 };
+		uint64_t m_frameCount{ 0 };
 		bool m_visible{ false };
 		bool m_detailed{ false };
 		castor::Nanoseconds m_cpuTime{ 0 };

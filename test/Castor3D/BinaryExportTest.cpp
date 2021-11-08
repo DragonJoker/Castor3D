@@ -103,7 +103,7 @@ namespace Testing
 	void BinaryExportTest::doTestMesh( Mesh & src )
 	{
 		auto & renderSystem = *m_engine.getRenderSystem();
-		auto surface = renderSystem.getInstance().createSurface( renderSystem.getPhysicalDevice( 0u )
+		auto surface = renderSystem.getInstance().createSurface( renderSystem.getPhysicalDevice()
 			, ashes::WindowHandle{ std::make_unique< TestWindowHandle >() } );
 		auto & device = renderSystem.getRenderDevice();
 		Scene & scene = *src.getScene();

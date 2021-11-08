@@ -550,12 +550,23 @@ namespace castor3d
 		}
 	}
 
-	castor::Microseconds DebugOverlays::endFrame()
+	castor::Microseconds DebugOverlays::endFrame( bool first )
 	{
 		m_totalTime = m_frameTimer.getElapsed() + m_externalTime;
-		m_framesTimes[m_frameIndex] = m_totalTime;
-		m_averageTime = std::accumulate( m_framesTimes.begin(), m_framesTimes.end(), 0_ns ) / m_framesTimes.size();
-		m_averageFps = 1000000.0f / float( std::chrono::duration_cast< castor::Microseconds >( m_averageTime ).count() );
+
+		if ( !first )
+		{
+			 // Prevent initialisation frame from being counted in average time.
+			++m_frameCount;
+			m_framesTimes[m_frameIndex] = m_totalTime;
+			m_averageTime = std::accumulate( m_framesTimes.begin()
+				, m_framesTimes.begin() + ptrdiff_t( std::min( m_frameCount, uint64_t( m_framesTimes.size() ) ) )
+				, 0_ns ) / m_framesTimes.size();
+			m_averageFps = 1000000.0f / float( std::chrono::duration_cast< castor::Microseconds >( m_averageTime ).count() );
+			auto v = ( ++m_frameIndex ) % FRAME_SAMPLES_COUNT;
+			m_frameIndex = v;
+		}
+
 		auto total = std::chrono::duration_cast< castor::Microseconds >( m_totalTime );
 		m_fps = 1000000.0f / float( total.count() );
 
@@ -571,7 +582,6 @@ namespace castor3d
 				m_gpuClientTime += pass.second.getCpuTime();
 			}
 
-			//m_gpuClientTime = m_gpuTime - m_gpuTotalTime;
 			m_debugPanel->update();
 			getEngine()->getRenderSystem()->resetGpuTime();
 		}
@@ -580,8 +590,6 @@ namespace castor3d
 			, "\r%0.2f ms, %0.2f fps                           "
 			, float( total.count() ) / 1000.0f
 			, m_fps );
-		auto v = ( ++m_frameIndex ) % FRAME_SAMPLES_COUNT;
-		m_frameIndex = v;
 		m_frameTimer.getElapsed();
 
 		return total;

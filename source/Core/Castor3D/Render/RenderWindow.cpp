@@ -348,7 +348,7 @@ namespace castor3d
 		, m_evtHandler{ std::make_shared< EvtHandler >( *this ) }
 		, m_index{ s_nbRenderWindows++ }
 		, m_device{ engine.getRenderSystem()->getRenderDevice() }
-		, m_surface{ m_device.renderSystem.getInstance().createSurface( m_device.renderSystem.getPhysicalDevice( 0u )
+		, m_surface{ m_device.renderSystem.getInstance().createSurface( m_device.renderSystem.getPhysicalDevice()
 			, std::move( handle ) ) }
 		, m_queues{ getQueueFamily( *m_surface, m_device.queueFamilies ) }
 		, m_queue{ m_queues->reserveQueue() }
