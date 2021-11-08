@@ -614,6 +614,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Holds instance and physical devices.
+	*\~french
+	*\brief
+	*	Contient l'instance et les physical devices.
+	*/
+	struct Renderer;
+	/**
+	*\~english
+	*\brief
 	*	Holds data for device rendering.
 	*\~french
 	*\brief

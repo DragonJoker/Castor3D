@@ -122,6 +122,17 @@ namespace castor3d
 		C3D_API bool loadRenderer( castor::String const & type );
 		/**
 		 *\~english
+		 *\brief		Loads a renderer plug-in, given the renderer type
+		 *\param[in]	type	The renderer type
+		 *\return		\p true if ok
+		 *\~french
+		 *\brief		Charge un plug-in de rendu, selon le type de rendu
+		 *\param[in]	type	Le type de rendu
+		 *\return		\p true si tout s'est bien passé
+		 */
+		C3D_API void loadRenderer( Renderer renderer );
+		/**
+		 *\~english
 		 *\brief		Posts a frame event to the default frame listener
 		 *\param[in]	event	The event to add
 		 *\~french

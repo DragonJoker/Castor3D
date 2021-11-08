@@ -303,7 +303,7 @@ int main( int argc, char * argv[] )
 			castor3d::Scene scene{ cuT( "DummyScene" ), engine };
 			auto name = inputPath.getFileName();
 			auto & renderSystem = *engine.getRenderSystem();
-			auto surface( renderSystem.getInstance().createSurface( renderSystem.getPhysicalDevice( 0u )
+			auto surface( renderSystem.getInstance().createSurface( renderSystem.getPhysicalDevice()
 				, ashes::WindowHandle{ std::make_unique< DummyWindowHandle >() } ) );
 			auto & device = renderSystem.getRenderDevice();
 

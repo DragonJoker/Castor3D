@@ -474,7 +474,14 @@ namespace castor3d
 				|| needsGlobalIllumination( LightType::eSpot, GlobalIlluminationType::eLayeredLpv )
 				|| needsGlobalIllumination( LightType::eSpot, GlobalIlluminationType::eLayeredLpvG ) )
 			{
-				result |= SceneFlag::eLayeredLpvGI;
+				if ( getEngine()->getRenderSystem()->hasLLPV() )
+				{
+					result |= SceneFlag::eLayeredLpvGI;
+				}
+				else
+				{
+					result |= SceneFlag::eLpvGI;
+				}
 			}
 		}
 

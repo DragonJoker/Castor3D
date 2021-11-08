@@ -129,9 +129,13 @@ namespace draw_edges
 						IF( writer, material.edgeColour.a() != 0.0_f )
 						{
 							auto edgeDN = writer.declLocale( "edgeDN"
-								, getEdge( c3d_edgeDN, texelCoord, writer.cast< sdw::Int >( c3d_drawEdgesData.normalDepthWidth ) ) );
+								, writer.ternary( c3d_drawEdgesData.normalDepthWidth > 0_i
+									, getEdge( c3d_edgeDN, texelCoord, c3d_drawEdgesData.normalDepthWidth )
+									, 0.0_f ) );
 							auto edgeO = writer.declLocale( "edgeO"
-								, getEdge( c3d_edgeO, texelCoord, writer.cast< sdw::Int >( c3d_drawEdgesData.objectWidth ) ) );
+								, writer.ternary( c3d_drawEdgesData.objectWidth > 0_i
+									, getEdge( c3d_edgeO, texelCoord, c3d_drawEdgesData.objectWidth )
+									, 0.0_f ) );
 
 							auto edge = writer.declLocale( "edge"
 								, mix( colour.rgb(), material.edgeColour.rgb(), vec3( edgeDN ) ) );
@@ -172,18 +176,17 @@ namespace draw_edges
 		, m_stages{ makeShaderState( renderSystem.getRenderDevice(), m_vertexShader )
 			, makeShaderState( renderSystem.getRenderDevice(), m_pixelShader ) }
 		, m_ubo{ renderSystem.getRenderDevice() }
-		, m_data{ m_ubo.getUbo().getData() }
 	{
 		castor::String param;
 
 		if ( parameters.get( NormalDepthWidth, param ) )
 		{
-			m_data.normalDepthWidth = castor::string::toFloat( param );
+			m_config.normalDepthWidth = castor::string::toInt( param );
 		}
 
 		if ( parameters.get( ObjectWidth, param ) )
 		{
-			m_data.objectWidth = castor::string::toFloat( param );
+			m_config.objectWidth = castor::string::toInt( param );
 		}
 	}
 
@@ -215,9 +218,9 @@ namespace draw_edges
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
 		visitor.visit( cuT( "NormalDepthWidth" )
-			, m_data.normalDepthWidth );
+			, m_config.normalDepthWidth );
 		visitor.visit( cuT( "ObjectWidth" )
-			, m_data.objectWidth );
+			, m_config.objectWidth );
 	}
 
 	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
@@ -307,12 +310,18 @@ namespace draw_edges
 	{
 	}
 
+	void PostEffect::doCpuUpdate( castor3d::CpuUpdater & updater )
+	{
+		m_ubo.cpuUpdate( m_config.normalDepthWidth
+			, m_config.objectWidth );
+	}
+
 	bool PostEffect::doWriteInto( castor::StringStream & file, castor::String const & tabs )
 	{
 		file << ( cuT( "\n" ) + tabs + Type + cuT( "\n" ) );
 		file << ( tabs + cuT( "{\n" ) );
-		file << ( tabs + cuT( "\t" ) + NormalDepthWidth + cuT( " " ) + castor::string::toString( m_data.normalDepthWidth ) + cuT( "\n" ) );
-		file << ( tabs + cuT( "\t" ) + ObjectWidth + cuT( " " ) + castor::string::toString( m_data.objectWidth ) + cuT( "\n" ) );
+		file << ( tabs + cuT( "\t" ) + NormalDepthWidth + cuT( " " ) + castor::string::toString( m_config.normalDepthWidth ) + cuT( "\n" ) );
+		file << ( tabs + cuT( "\t" ) + ObjectWidth + cuT( " " ) + castor::string::toString( m_config.objectWidth ) + cuT( "\n" ) );
 		file << ( tabs + cuT( "}\n" ) );
 		return true;
 	}

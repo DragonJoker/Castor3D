@@ -1,25 +1,41 @@
 #include "GuiCommon/System/ImagesLoader.hpp"
 
-using namespace castor;
-
 namespace GuiCommon
 {
-	ImageIdMap		ImagesLoader::m_mapImages;
-	std::mutex		ImagesLoader::m_mutex;
-	ThreadPtrArray	ImagesLoader::m_arrayCurrentLoads;
-
 	ImagesLoader::ImagesLoader()
+		: ImagesLoader{ this }
 	{
 	}
 
 	ImagesLoader::~ImagesLoader()
 	{
-		cleanup();
+		doCleanup();
+		doGetInstance() = nullptr;
 	}
 
 	void ImagesLoader::cleanup()
 	{
-		waitAsyncLoads();
+		doGetInstance()->doCleanup();
+	}
+
+	wxImage * ImagesLoader::getBitmap( uint32_t id )
+	{
+		return doGetInstance()->doGetBitmap( id );
+	}
+
+	void ImagesLoader::addBitmap( uint32_t id, char const * const * bits )
+	{
+		doGetInstance()->doAddBitmap( id, bits );
+	}
+
+	void ImagesLoader::waitAsyncLoads()
+	{
+		doGetInstance()->doWaitAsyncLoads();
+	}
+
+	void ImagesLoader::doCleanup()
+	{
+		doWaitAsyncLoads();
 		m_mutex.lock();
 
 		for ( auto pair : m_mapImages )
@@ -31,11 +47,11 @@ namespace GuiCommon
 		m_mutex.unlock();
 	}
 
-	wxImage * ImagesLoader::getBitmap( uint32_t p_id )
+	wxImage * ImagesLoader::doGetBitmap( uint32_t id )
 	{
 		wxImage * result = nullptr;
 		m_mutex.lock();
-		ImageIdMapIt it = m_mapImages.find( p_id );
+		ImageIdMapIt it = m_mapImages.find( id );
 		ImageIdMapConstIt itEnd = m_mapImages.end();
 		m_mutex.unlock();
 
@@ -47,33 +63,31 @@ namespace GuiCommon
 		return result;
 	}
 
-	void ImagesLoader::addBitmap( uint32_t p_id, char const * const * p_pBits )
+	void ImagesLoader::doAddBitmap( uint32_t id, char const * const * bits )
 	{
 		m_mutex.lock();
-		ImageIdMapIt it = m_mapImages.find( p_id );
-		ImageIdMapConstIt itEnd = m_mapImages.end();
-		m_mutex.unlock();
+		auto ires = m_mapImages.insert( { id, nullptr } );
 
-		if ( it == itEnd )
+		if ( ires.second )
 		{
-			thread_sptr threadLoad = std::make_shared< std::thread >( [p_pBits, p_id]()
-			{
-				wxImage * pImage = new wxImage;
-				pImage->Create( p_pBits );
-				m_mutex.lock();
-				m_mapImages.insert( std::make_pair( p_id, pImage ) );
-				m_mutex.unlock();
-			} );
-			m_arrayCurrentLoads.push_back( threadLoad );
+			m_arrayCurrentLoads.emplace_back( std::thread{ [this, bits, id]()
+				{
+					wxImage * image = new wxImage;
+					image->Create( bits );
+					m_mutex.lock();
+					m_mapImages[id] = image;
+					m_mutex.unlock();
+				} } );
 		}
+
+		m_mutex.unlock();
 	}
 
-	void ImagesLoader::waitAsyncLoads()
+	void ImagesLoader::doWaitAsyncLoads()
 	{
-		for ( auto thread : m_arrayCurrentLoads )
+		for ( auto & thread : m_arrayCurrentLoads )
 		{
-			thread->join();
-			thread.reset();
+			thread.join();
 		}
 
 		m_arrayCurrentLoads.clear();

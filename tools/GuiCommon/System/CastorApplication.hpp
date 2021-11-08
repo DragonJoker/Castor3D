@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___GC_CASTOR_APPLICATION_H___
 
 #include "GuiCommon/GuiCommonPrerequisites.hpp"
+#include "GuiCommon/System/ImagesLoader.hpp"
 
 #include <Castor3D/Miscellaneous/Version.hpp>
 
@@ -54,7 +55,8 @@ namespace GuiCommon
 			castor::LogType log{ castor::LogType::eInfo };
 			uint32_t fixedFPS{ 60u };
 			bool syncRender{ false };
-			castor::String renderer;
+			castor::String rendererName;
+			uint32_t gpuIndex{ 0u };
 			castor::String fileName;
 		};
 
@@ -115,16 +117,6 @@ namespace GuiCommon
 		castor::String const & getFileName()const
 		{
 			return m_config.fileName;
-		}
-		/**
-		 *\~english
-		 *\return		The renderer type given in command line, castor3d::RenderTypeUndefined if none was given.
-		 *\~french
-		 *\return		Le type d'API de rendu donné en ligne de commande, castor3d::RenderTypeUndefined si aucun n'a été donné.
-		 */
-		castor::String const & getRendererType()const
-		{
-			return m_config.renderer;
 		}
 		/**
 		 *\~english
@@ -219,6 +211,7 @@ namespace GuiCommon
 		void doCleanupCastor();
 
 	protected:
+		ImagesLoader m_imagesLoader;
 		castor::String m_internalName;
 		castor::String m_displayName;
 		std::shared_ptr< castor3d::Engine > m_castor;

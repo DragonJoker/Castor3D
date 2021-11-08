@@ -138,7 +138,7 @@ namespace castor3d
 			RenderInfo & info = m_debugOverlays->beginFrame();
 			doGpuStep( info );
 			doCpuStep( tslf );
-			m_lastFrameTime = m_debugOverlays->endFrame();
+			m_lastFrameTime = m_debugOverlays->endFrame( first );
 
 			if ( first )
 			{

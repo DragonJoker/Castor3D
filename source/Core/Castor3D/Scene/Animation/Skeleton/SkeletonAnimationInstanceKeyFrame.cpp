@@ -55,7 +55,7 @@ namespace castor3d
 						}
 						else
 						{
-							log::warn << "Bone for Keyframe not found" << std::endl;
+							transform = castor::Matrix4x4f{ bone->getOffsetMatrix() * boneData.m_weights[0] };
 						}
 					}
 
@@ -72,7 +72,7 @@ namespace castor3d
 							}
 							else
 							{
-								log::warn << "Bone for Keyframe not found" << std::endl;
+								transform += castor::Matrix4x4f{ bone->getOffsetMatrix() * boneData.m_weights[0] };
 							}
 						}
 					}
