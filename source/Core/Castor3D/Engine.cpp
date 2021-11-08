@@ -300,11 +300,16 @@ namespace castor3d
 
 		if ( it != m_rendererList.end() )
 		{
-			m_renderSystem = castor::makeUnique< RenderSystem >( *this
-				, *it );
+			m_renderSystem = castor::makeUnique< RenderSystem >( *this, *it );
 		}
 
 		return m_renderSystem != nullptr;
+	}
+
+	void Engine::loadRenderer( Renderer renderer )
+	{
+		m_renderSystem = castor::makeUnique< RenderSystem >( *this
+			, std::move( renderer ) );
 	}
 
 	CpuFrameEvent * Engine::postEvent( CpuFrameEventUPtr event )

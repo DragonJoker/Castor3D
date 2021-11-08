@@ -842,6 +842,11 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		DESTINATION include/${PROJECT_NAME}
 		COMPONENT Castor3D_dev
 	)
+	install(
+		FILES ${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/PixelFormat.enum
+		DESTINATION include/${PROJECT_NAME}/Graphics
+		COMPONENT Castor3D_dev
+	)
 
 	if ( WIN32 )
 		set( CMAKE_INSTALL_DEBUG_LIBRARIES TRUE )

@@ -13,8 +13,8 @@ namespace draw_edges
 		, ast::expr::ExprPtr expr
 		, bool enabled )
 		: sdw::StructInstance{ writer, std::move( expr ), enabled }
-		, normalDepthWidth{ getMember< sdw::Float >( "normalDepthWidth" ) }
-		, objectWidth{ getMember< sdw::Float >( "objectWidth" ) }
+		, normalDepthWidth{ getMember< sdw::Int >( "normalDepthWidth" ) }
+		, objectWidth{ getMember< sdw::Int >( "objectWidth" ) }
 	{
 	}
 
@@ -25,8 +25,8 @@ namespace draw_edges
 
 		if ( result->empty() )
 		{
-			result->declMember( "normalDepthWidth", ast::type::Kind::eFloat );
-			result->declMember( "objectWidth", ast::type::Kind::eFloat );
+			result->declMember( "normalDepthWidth", ast::type::Kind::eInt );
+			result->declMember( "objectWidth", ast::type::Kind::eInt );
 		}
 
 		return result;
@@ -42,8 +42,8 @@ namespace draw_edges
 		, m_ubo{ device.uboPools->getBuffer< Configuration >( 0u ) }
 	{
 		auto & data = m_ubo.getData();
-		data.normalDepthWidth = 1.0f;
-		data.objectWidth = 1.0f;
+		data.normalDepthWidth = 1;
+		data.objectWidth = 1;
 	}
 
 	DrawEdgesUbo::~DrawEdgesUbo()
@@ -51,8 +51,8 @@ namespace draw_edges
 		m_device.uboPools->putBuffer( m_ubo );
 	}
 
-	void DrawEdgesUbo::cpuUpdate( float normalDepthWidth
-		, float objectWidth )
+	void DrawEdgesUbo::cpuUpdate( int normalDepthWidth
+		, int objectWidth )
 	{
 		auto & data = m_ubo.getData();
 		data.normalDepthWidth = normalDepthWidth;

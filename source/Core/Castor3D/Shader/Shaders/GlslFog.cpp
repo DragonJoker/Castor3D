@@ -107,11 +107,12 @@ namespace castor3d
 					auto z = writer.declLocale( "z", dist / 100.0_f );
 					auto density = writer.declLocale( "density", sceneData.m_fogInfo.y() );
 					auto result = writer.declLocale( "result", colour );
+					auto fogFactor = writer.declLocale( "fogFactor", 0.0_f );
 
 					IF( writer, sceneData.fogType == UInt( uint32_t( FogType::eLinear ) ) )
 					{
 						// Linear
-						auto fogFactor = writer.declLocale( "fogFactor"
+						fogFactor = writer.declLocale( "fogFactor"
 							, ( 80.0_f - z ) / ( 80.0_f - 20.0_f ) );
 						fogFactor = clamp( fogFactor, 0.0_f, 1.0_f );
 						result = vec4( mix( bgColour, colour, vec4( fogFactor ) ).rgb(), colour.a() );
@@ -119,7 +120,7 @@ namespace castor3d
 					ELSEIF( sceneData.fogType == UInt( uint32_t( FogType::eExponential ) ) )
 					{
 						// Exponential
-						auto fogFactor = writer.declLocale( "fogFactor"
+						fogFactor = writer.declLocale( "fogFactor"
 							, exp( -density * z / 100.0_f ) );
 						fogFactor = clamp( fogFactor, 0.0_f, 1.0_f );
 						result = vec4( mix( bgColour, colour, vec4( fogFactor ) ).rgb(), colour.a() );
@@ -127,7 +128,7 @@ namespace castor3d
 					ELSEIF( sceneData.fogType == UInt( uint32_t( FogType::eSquaredExponential ) ) )
 					{
 						//Squared exponential
-						auto fogFactor = writer.declLocale( "fogFactor"
+						fogFactor = writer.declLocale( "fogFactor"
 							, exp( -density * density * z * z / 100.0_f ) );
 						fogFactor = clamp( fogFactor, 0.0_f, 1.0_f );
 						result = vec4( mix( bgColour, colour, vec4( fogFactor ) ).rgb(), colour.a() );
@@ -135,7 +136,7 @@ namespace castor3d
 					ELSEIF( sceneData.fogType == UInt( 4u ) )
 					{
 						// Coloured
-						auto fogFactor = writer.declLocale( "fogFactor"
+						fogFactor = writer.declLocale( "fogFactor"
 							, 0.0_f );
 						fogFactor = clamp( fogFactor, 0.0_f, 1.0_f );
 						result = vec4( mix( bgColour, colour, vec4( fogFactor ) ).rgb(), colour.a() );

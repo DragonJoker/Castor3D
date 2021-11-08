@@ -204,7 +204,12 @@ namespace castor3d
 			for ( uint32_t i = 0u; i < uint32_t( IndirectLightingPass::ProgramType::eCount ); ++i )
 			{
 				IndirectLightingPass::Config config{ i };
-				result.emplace_back( device, scene, config );
+
+				if ( !config.llpv
+					|| device.renderSystem.hasLLPV() )
+				{
+					result.emplace_back( device, scene, config );
+				}
 			}
 
 			return result;
@@ -355,8 +360,13 @@ namespace castor3d
 			, uint32_t( IndirectLightingPass::eScene ) );
 		m_lpvConfigUbo.createPassBinding( pass
 			, uint32_t( IndirectLightingPass::eLpvGridConfig ) );
-		m_llpvConfigUbo.createPassBinding( pass
-			, uint32_t( IndirectLightingPass::eLayeredLpvGridConfig ) );
+
+		if ( m_device.renderSystem.hasLLPV() )
+		{
+			m_llpvConfigUbo.createPassBinding( pass
+				, uint32_t( IndirectLightingPass::eLayeredLpvGridConfig ) );
+		}
+
 		m_vctConfigUbo.createPassBinding( pass
 			, uint32_t( IndirectLightingPass::eVoxelData ) );
 		pass.addSampledView( m_gpResult[DsTexture::eData0].sampledViewId
@@ -394,45 +404,49 @@ namespace castor3d
 			, uint32_t( IndirectLightingPass::eLpvB )
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, linearSampler );
-		auto & lpvResult0 = *m_llpvResult[0];
-		pass.addSampledView( lpvResult0[LpvTexture::eR].sampledViewId
-			, uint32_t( IndirectLightingPass::eLayeredLpv1R )
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, linearSampler );
-		pass.addSampledView( lpvResult0[LpvTexture::eG].sampledViewId
-			, uint32_t( IndirectLightingPass::eLayeredLpv1G )
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, linearSampler );
-		pass.addSampledView( lpvResult0[LpvTexture::eB].sampledViewId
-			, uint32_t( IndirectLightingPass::eLayeredLpv1B )
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, linearSampler );
-		auto & lpvResult1 = *m_llpvResult[1];
-		pass.addSampledView( lpvResult1[LpvTexture::eR].sampledViewId
-			, uint32_t( IndirectLightingPass::eLayeredLpv2R )
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, linearSampler );
-		pass.addSampledView( lpvResult1[LpvTexture::eG].sampledViewId
-			, uint32_t( IndirectLightingPass::eLayeredLpv2G )
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, linearSampler );
-		pass.addSampledView( lpvResult1[LpvTexture::eB].sampledViewId
-			, uint32_t( IndirectLightingPass::eLayeredLpv2B )
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, linearSampler );
-		auto & lpvResult2 = *m_llpvResult[2];
-		pass.addSampledView( lpvResult2[LpvTexture::eR].sampledViewId
-			, uint32_t( IndirectLightingPass::eLayeredLpv3R )
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, linearSampler );
-		pass.addSampledView( lpvResult2[LpvTexture::eG].sampledViewId
-			, uint32_t( IndirectLightingPass::eLayeredLpv3G )
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, linearSampler );
-		pass.addSampledView( lpvResult2[LpvTexture::eB].sampledViewId
-			, uint32_t( IndirectLightingPass::eLayeredLpv3B )
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, linearSampler );
+
+		if ( m_device.renderSystem.hasLLPV() )
+		{
+			auto & lpvResult0 = *m_llpvResult[0];
+			pass.addSampledView( lpvResult0[LpvTexture::eR].sampledViewId
+				, uint32_t( IndirectLightingPass::eLayeredLpv1R )
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, linearSampler );
+			pass.addSampledView( lpvResult0[LpvTexture::eG].sampledViewId
+				, uint32_t( IndirectLightingPass::eLayeredLpv1G )
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, linearSampler );
+			pass.addSampledView( lpvResult0[LpvTexture::eB].sampledViewId
+				, uint32_t( IndirectLightingPass::eLayeredLpv1B )
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, linearSampler );
+			auto & lpvResult1 = *m_llpvResult[1];
+			pass.addSampledView( lpvResult1[LpvTexture::eR].sampledViewId
+				, uint32_t( IndirectLightingPass::eLayeredLpv2R )
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, linearSampler );
+			pass.addSampledView( lpvResult1[LpvTexture::eG].sampledViewId
+				, uint32_t( IndirectLightingPass::eLayeredLpv2G )
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, linearSampler );
+			pass.addSampledView( lpvResult1[LpvTexture::eB].sampledViewId
+				, uint32_t( IndirectLightingPass::eLayeredLpv2B )
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, linearSampler );
+			auto & lpvResult2 = *m_llpvResult[2];
+			pass.addSampledView( lpvResult2[LpvTexture::eR].sampledViewId
+				, uint32_t( IndirectLightingPass::eLayeredLpv3R )
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, linearSampler );
+			pass.addSampledView( lpvResult2[LpvTexture::eG].sampledViewId
+				, uint32_t( IndirectLightingPass::eLayeredLpv3G )
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, linearSampler );
+			pass.addSampledView( lpvResult2[LpvTexture::eB].sampledViewId
+				, uint32_t( IndirectLightingPass::eLayeredLpv3B )
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, linearSampler );
+		}
 
 		pass.addOutputColourView( m_lpResult[LpTexture::eIndirectDiffuse].targetViewId );
 		pass.addOutputColourView( m_lpResult[LpTexture::eIndirectSpecular].targetViewId );
