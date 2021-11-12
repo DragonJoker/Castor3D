@@ -52,10 +52,10 @@ namespace Uncharted2
 							+ ToeStrength * ToeDenominator ) )
 					- ToeNumerator / ToeDenominator );
 			}
-		, InVec3{ writer, "x" } );
+			, InVec3{ writer, "x" } );
 
-		writer.implementFunction< sdw::Void >( "main"
-			, [&]()
+		writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+			, FragmentOut out )
 			{
 				auto hdrColor = writer.declLocale( "hdrColor"
 					, c3d_mapHdr.sample( vtx_texture ).rgb() );

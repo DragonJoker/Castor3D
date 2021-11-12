@@ -65,7 +65,7 @@ namespace castor3d::shader
 		return colourDiv.rgb();
 	}
 
-	ast::type::StructPtr Material::makeType( ast::type::TypesCache & cache )
+	ast::type::BaseStructPtr Material::makeType( ast::type::TypesCache & cache )
 	{
 		auto result = cache.getStruct( ast::type::MemoryLayout::eStd140, "C3D_Material" );
 

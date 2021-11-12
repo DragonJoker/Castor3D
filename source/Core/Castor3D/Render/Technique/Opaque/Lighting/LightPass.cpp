@@ -137,7 +137,6 @@ namespace castor3d
 		auto c3d_mapData2 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), uint32_t( LightPassIdx::eData2 ), 0u );
 		auto c3d_mapData3 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), uint32_t( LightPassIdx::eData3 ), 0u );
 		auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), uint32_t( LightPassIdx::eData4 ), 0u );
-		auto in = writer.getIn();
 
 		shadowType = shadows
 			? shadowType
@@ -160,8 +159,8 @@ namespace castor3d
 			, shadows && shadowType != ShadowType::eNone };
 		sss.declare( lightType );
 
-		writer.implementFunction< sdw::Void >( "main"
-			, [&]()
+		writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+			, FragmentOut out )
 			{
 				auto texCoord = writer.declLocale( "texCoord"
 					, c3d_gpInfoData.calcTexCoord( utils

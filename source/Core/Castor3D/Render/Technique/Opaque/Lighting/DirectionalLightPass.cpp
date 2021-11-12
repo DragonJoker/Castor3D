@@ -15,11 +15,8 @@ namespace castor3d
 		UBO_MATRIX( writer, uint32_t( LightPassLgtIdx::eMatrix ), 1u );
 		auto position = writer.declInput< Vec2 >( "position", 0u );
 
-		// Shader outputs
-		auto out = writer.getOut();
-
-		writer.implementFunction< sdw::Void >( "main"
-			, [&]()
+		writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+			, VertexOut out )
 			{
 				out.vtx.position = c3d_matrixData.viewToProj( vec4( position, 0.0_f, 1.0_f ) );
 			} );

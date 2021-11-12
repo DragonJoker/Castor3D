@@ -188,15 +188,14 @@ namespace castor3d
 
 			// Outputs
 			auto vtx_texture = writer.declOutput< Vec3 >( "vtx_texture", 0u );
-			auto out = writer.getOut();
 
-			std::function< void() > main = [&]()
-			{
-				out.vtx.position = c3d_matrixData.worldToCurProj( c3d_modelData.modelToWorld( vec4( position, 1.0_f ) ) ).xyww();
-				vtx_texture = position;
-			};
+			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+				, VertexOut out )
+				{
+					out.vtx.position = c3d_matrixData.worldToCurProj( c3d_modelData.modelToWorld( vec4( position, 1.0_f ) ) ).xyww();
+					vtx_texture = position;
+				} );
 
-			writer.implementFunction< sdw::Void >( "main", main );
 			vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
@@ -220,30 +219,29 @@ namespace castor3d
 			// Outputs
 			auto pxl_FragColor = writer.declOutput< Vec4 >( "pxl_FragColor", 0u );
 
-			std::function< void() > main = [&]()
-			{
-				IF( writer, c3d_sceneData.fogType == UInt( uint32_t( FogType::eDisabled ) ) )
+			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+				, FragmentOut out )
 				{
-					auto colour = writer.declLocale( "colour"
-						, c3d_mapSkybox.sample( vtx_texture ) );
-
-					if ( !m_background->isHdr() )
+					IF( writer, c3d_sceneData.fogType == UInt( uint32_t( FogType::eDisabled ) ) )
 					{
-						pxl_FragColor = vec4( c3d_hdrConfigData.removeGamma( colour.xyz() ), colour.w() );
-					}
-					else
-					{
-						pxl_FragColor = vec4( colour.xyz(), colour.w() );
-					}
-				}
-				ELSE
-				{
-					pxl_FragColor = vec4( c3d_sceneData.getBackgroundColour( utils, c3d_hdrConfigData.getGamma() ).xyz(), 1.0_f );
-				}
-				FI;
-			};
+						auto colour = writer.declLocale( "colour"
+							, c3d_mapSkybox.sample( vtx_texture ) );
 
-			writer.implementFunction< sdw::Void >( "main", main );
+						if ( !m_background->isHdr() )
+						{
+							pxl_FragColor = vec4( c3d_hdrConfigData.removeGamma( colour.xyz() ), colour.w() );
+						}
+						else
+						{
+							pxl_FragColor = vec4( colour.xyz(), colour.w() );
+						}
+					}
+					ELSE
+					{
+						pxl_FragColor = vec4( c3d_sceneData.getBackgroundColour( utils, c3d_hdrConfigData.getGamma() ).xyz(), 1.0_f );
+					}
+					FI;
+				} );
 			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 

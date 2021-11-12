@@ -18,7 +18,7 @@ namespace castor3d
 		{
 		}
 
-		ast::type::StructPtr Voxel::makeType( ast::type::TypesCache & cache )
+		ast::type::BaseStructPtr Voxel::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd430
 				, "C3D_Voxel" );

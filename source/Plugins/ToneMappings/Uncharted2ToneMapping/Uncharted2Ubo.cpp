@@ -26,7 +26,7 @@ namespace Uncharted2
 	{
 	}
 
-	ast::type::StructPtr Uncharted2Data::makeType( ast::type::TypesCache & cache )
+	ast::type::BaseStructPtr Uncharted2Data::makeType( ast::type::TypesCache & cache )
 	{
 		auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
 			, "C3D_Uncharted2Data" );

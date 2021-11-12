@@ -98,13 +98,10 @@ namespace castor3d
 			using namespace sdw;
 			ComputeWriter writer;
 
-			writer.inputLayout( 256u, 1u, 1u );
-
 			// Inputs
 			auto voxels( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
 				, eVoxels
 				, 0u ) );
-			auto in = writer.getIn();
 
 			// Outputs
 			auto output( writer.declImage< RWFImg3DRgba32 >( "output"
@@ -115,7 +112,8 @@ namespace castor3d
 			utils.declareDecodeColor();
 			utils.declareUnflatten();
 
-			writer.implementMain( [&]()
+			writer.implementMainT< VoidT >( 256u
+				, [&]( ComputeIn in )
 				{
 					auto color = writer.declLocale( "color"
 						, utils.decodeColor( voxels[in.globalInvocationID.x()].colorMask ) );

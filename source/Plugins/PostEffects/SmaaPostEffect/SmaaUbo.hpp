@@ -44,7 +44,7 @@ namespace smaa
 			, bool enabled );
 		SDW_DeclStructInstance( , SmaaData );
 
-		static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 
 	public:
 		// Struct members

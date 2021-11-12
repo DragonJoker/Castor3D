@@ -16,7 +16,7 @@ namespace castor3d
 		{
 		}
 
-		ast::type::StructPtr MorphingData::makeType( ast::type::TypesCache & cache )
+		ast::type::BaseStructPtr MorphingData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
 				, "C3D_MorphingData" );

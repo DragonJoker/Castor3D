@@ -44,11 +44,8 @@ namespace castor3d
 			UBO_MODEL( writer, 1u, 0u );
 			auto vertex = writer.declInput< Vec3 >( "position", 0u );
 
-			// Shader outputs
-			auto out = writer.getOut();
-
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+				, VertexOut out )
 				{
 					out.vtx.position = c3d_matrixData.worldToCurProj( c3d_modelData.modelToWorld( vec4( vertex, 1.0_f ) ) );
 				} );
