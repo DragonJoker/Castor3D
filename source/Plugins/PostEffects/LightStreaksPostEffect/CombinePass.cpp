@@ -39,10 +39,9 @@ namespace light_streaks
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
-			auto out = writer.getOut();
 
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+				, VertexOut out )
 				{
 					vtx_texture = uv;
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
@@ -61,8 +60,8 @@ namespace light_streaks
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+				, FragmentOut out )
 				{
 					pxl_fragColor = c3d_mapScene.sample( vtx_texture );
 					pxl_fragColor += c3d_mapKawase.sample( vec3( vtx_texture, 0.0f ) );

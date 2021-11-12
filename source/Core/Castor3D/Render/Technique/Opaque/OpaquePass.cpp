@@ -163,7 +163,6 @@ namespace castor3d
 		auto outData3 = writer.declOutput< Vec4 >( Output3, index++ );
 		auto outData4 = writer.declOutput< Vec4 >( Output4, index++ );
 		auto outData5 = writer.declOutput< Vec4 >( Output5, index++ );
-		auto out = writer.getOut();
 
 		shader::Utils utils{ writer, *renderSystem.getEngine() };
 		utils.declareRemoveGamma();
@@ -175,8 +174,8 @@ namespace castor3d
 			, {}
 			, true );
 
-		writer.implementFunction< sdw::Void >( "main"
-			, [&]()
+		writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+			, FragmentOut out )
 			{
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( inSurface.material ) );

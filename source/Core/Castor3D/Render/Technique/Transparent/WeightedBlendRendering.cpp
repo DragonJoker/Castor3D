@@ -49,10 +49,9 @@ namespace castor3d
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
-			auto out = writer.getOut();
 
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+				, VertexOut out )
 				{
 					vtx_texture = uv;
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
@@ -73,7 +72,6 @@ namespace castor3d
 			auto c3d_mapAccumulation = writer.declSampledImage< FImg2DRgba32 >( getTextureName( WbTexture::eAccumulation ), uint32_t( AccumTexIndex ), 0u );
 			auto c3d_mapRevealage = writer.declSampledImage< FImg2DRgba32 >( getTextureName( WbTexture::eRevealage ), uint32_t( RevealTexIndex ), 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
-			auto in = writer.getIn();
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0u );
@@ -83,17 +81,17 @@ namespace castor3d
 			utils.declareRemoveGamma();
 			utils.declareCalcVSPosition();
 
-			shader::CommonFog fog{ writer };
+			shader::Fog fog{ writer };
 
 			auto maxComponent = writer.implementFunction< Float >( "maxComponent"
 				, [&]( Vec3 const & v )
 				{
 					writer.returnStmt( max( max( v.x(), v.y() ), v.z() ) );
 				}
-			, InVec3{ writer, "v" } );
+				, InVec3{ writer, "v" } );
 
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+				, FragmentOut out )
 				{
 					auto coord = writer.declLocale( "coord"
 						, ivec2( in.fragCoord.xy() ) );

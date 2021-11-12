@@ -39,6 +39,43 @@ namespace castor3d
 {
 	namespace
 	{
+		template< sdw::var::Flag FlagT >
+		struct SurfaceT
+			: sdw::StructInstance
+		{
+			SurfaceT( sdw::ShaderWriter & writer
+				, sdw::expr::ExprPtr expr
+				, bool enabled = true )
+				: sdw::StructInstance{ writer, std::move( expr ), enabled }
+				, cellIndex{ getMember< sdw::IVec3 >( "cellIndex" ) }
+			{
+			}
+
+			SDW_DeclStructInstance( , SurfaceT );
+
+			static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache )
+			{
+				auto result = cache.getIOStruct( sdw::type::MemoryLayout::eStd430
+					, ( FlagT == sdw::var::Flag::eShaderOutput
+						? std::string{ "Output" }
+						: std::string{ "Input" } ) + "Surface"
+					, FlagT );
+
+				if ( result->empty() )
+				{
+					uint32_t index = 0u;
+					result->declMember( "cellIndex"
+						, sdw::type::Kind::eVec3I
+						, sdw::type::NotArray
+						, index++ );
+				}
+
+				return result;
+			}
+
+			sdw::IVec3 cellIndex;
+		};
+
 		std::unique_ptr< ast::Shader > getVertexProgram()
 		{
 			using namespace sdw;
@@ -46,17 +83,14 @@ namespace castor3d
 
 			auto inPosition = writer.declInput< Vec3 >( "inPosition", 0u );
 
-			auto outCellIndex = writer.declOutput< IVec3 >( "outCellIndex", 0u );
-			auto out = writer.getOut();
-
 			UBO_LPVGRIDCONFIG( writer, LightPropagationPass::LpvGridUboIdx, 0u, true );
 
-			writer.implementFunction< Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, SurfaceT >( [&]( VertexIn in
+				, VertexOutT< SurfaceT > out )
 				{
-					outCellIndex = ivec3( inPosition );
+					out.cellIndex = ivec3( inPosition );
 					auto screenPos = writer.declLocale( "screenPos"
-						, c3d_lpvGridData.gridToScreen( outCellIndex.xy() ) );
+						, c3d_lpvGridData.gridToScreen( out.cellIndex.xy() ) );
 					out.vtx.position = vec4( screenPos, 0.0, 1.0 );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -66,26 +100,19 @@ namespace castor3d
 		{
 			using namespace sdw;
 			GeometryWriter writer;
-			writer.inputLayout( ast::stmt::InputLayout::ePointList );
-			writer.outputLayout( ast::stmt::OutputLayout::ePointList, 1u );
 
-			auto inCellIndex = writer.declInputArray< IVec3 >( "inCellIndex", 0u, 1u );
-			auto in = writer.getIn();
-
-			auto outCellIndex = writer.declOutput< IVec3 >( "outCellIndex", 0u );
-			auto out = writer.getOut();
-
-			writer.implementFunction< Void >( "main"
-				, [&]()
+			writer.implementMainT< 1u, PointListT< SurfaceT >, PointStreamT< SurfaceT > >( [&]( GeometryIn in
+				, PointListT< SurfaceT > list
+				, PointStreamT< SurfaceT > out )
 				{
-					out.vtx.position = in.vtx[0].position;
+					out.vtx.position = list[0].vtx.position;
 					out.vtx.pointSize = 1.0f;
-					out.layer = inCellIndex[0].z();
+					out.layer = list[0].cellIndex.z();
 
-					outCellIndex = inCellIndex[0];
+					out.cellIndex = list[0].cellIndex;
 
-					EmitVertex( writer );
-					EndPrimitive( writer );
+					out.append();
+					out.restartStrip();
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -152,9 +179,6 @@ namespace castor3d
 			auto outLpvNextStepG = writer.declOutput< Vec4 >( "outLpvNextStepG", LightPropagationPass::GLpvNextStepIdx );
 			auto outLpvNextStepB = writer.declOutput< Vec4 >( "outLpvNextStepB", LightPropagationPass::BLpvNextStepIdx );
 
-			auto inCellIndex = writer.declInput< IVec3 >( "inCellIndex", 0u );
-			auto in = writer.getIn();
-
 			// no normalization
 			auto evalSH_direct = writer.implementFunction< Vec4 >( "evalSH_direct"
 				, [&]( Vec3 direction )
@@ -208,7 +232,8 @@ namespace castor3d
 			float occlusionAmplifier = 1.0f;
 
 			auto propagate = writer.implementFunction< Void >( "propagate"
-				, [&]( Vec4 shR
+				, [&]( IVec3 cellIndex
+					, Vec4 shR
 					, Vec4 shG
 					, Vec4 shB )
 				{
@@ -225,7 +250,7 @@ namespace castor3d
 							, propDirections[neighbour] );
 						//get neighbour cell indexindex
 						auto neighbourGScellIndex = writer.declLocale( "neighbourGScellIndex"
-							, inCellIndex - mainDirection );
+							, cellIndex - mainDirection );
 						//Load sh coeffs
 						RSHcoeffsNeighbour = c3d_lpvGridR.fetch( neighbourGScellIndex, 0_i );
 						GSHcoeffsNeighbour = c3d_lpvGridG.fetch( neighbourGScellIndex, 0_i );
@@ -291,11 +316,13 @@ namespace castor3d
 					}
 					ROF;
 				}
+				, InIVec3{ writer, "cellIndex" }
 				, OutVec4{ writer, "shR" }
 				, OutVec4{ writer, "shG" }
 				, OutVec4{ writer, "shB" } );
 
-			writer.implementMain( [&]()
+			writer.implementMainT< SurfaceT, VoidT >( [&]( FragmentInT< SurfaceT > in
+				, FragmentOut out )
 				{
 					auto shR = writer.declLocale( "shR"
 						, vec4( 0.0_f ) );
@@ -304,7 +331,7 @@ namespace castor3d
 					auto shB = writer.declLocale( "shB"
 						, vec4( 0.0_f ) );
 
-					propagate( shR, shG, shB );
+					propagate( in.cellIndex, shR, shG, shB );
 
 					outLpvAccumulatorR = shR;
 					outLpvAccumulatorG = shG;

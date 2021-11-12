@@ -33,7 +33,7 @@ namespace castor3d
 		{
 		}
 
-		ast::type::StructPtr Light::makeType( ast::type::TypesCache & cache )
+		ast::type::BaseStructPtr Light::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
 				, "C3D_Light" );
@@ -72,7 +72,7 @@ namespace castor3d
 		{
 		}
 
-		ast::type::StructPtr DirectionalLight::makeType( ast::type::TypesCache & cache )
+		ast::type::BaseStructPtr DirectionalLight::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
 				, "C3D_DirectionalLight" );
@@ -112,7 +112,7 @@ namespace castor3d
 		{
 		}
 
-		ast::type::StructPtr TiledDirectionalLight::makeType( ast::type::TypesCache & cache )
+		ast::type::BaseStructPtr TiledDirectionalLight::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
 				, "C3D_TiledDirectionalLight" );
@@ -150,7 +150,7 @@ namespace castor3d
 		{
 		}
 
-		ast::type::StructPtr PointLight::makeType( ast::type::TypesCache & cache )
+		ast::type::BaseStructPtr PointLight::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
 				, "C3D_PointLight" );
@@ -191,7 +191,7 @@ namespace castor3d
 		{
 		}
 
-		ast::type::StructPtr SpotLight::makeType( ast::type::TypesCache & cache )
+		ast::type::BaseStructPtr SpotLight::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
 				, "C3D_SpotLight" );

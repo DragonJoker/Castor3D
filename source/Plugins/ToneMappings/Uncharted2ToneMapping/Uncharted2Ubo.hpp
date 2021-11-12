@@ -20,7 +20,7 @@ namespace Uncharted2
 			, ast::expr::ExprPtr expr
 			, bool enabled );
 
-		static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 		static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
 	private:

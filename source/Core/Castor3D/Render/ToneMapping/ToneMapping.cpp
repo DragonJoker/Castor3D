@@ -124,10 +124,9 @@ namespace castor3d
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
-			auto out = writer.getOut();
 
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+				, VertexOut out )
 				{
 					vtx_texture = uv;
 					out.vtx.position = vec4( position.x(), position.y(), 0.0_f, 1.0_f );

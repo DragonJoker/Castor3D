@@ -834,7 +834,6 @@ namespace castor3d
 			// Shader outputs
 			auto vtx_textureLhs = writer.declOutput< Vec2 >( "vtx_textureLhs", CombineLhsIdx );
 			auto vtx_textureRhs = writer.declOutput< Vec2 >( "vtx_textureRhs", CombineRhsIdx );
-			auto out = writer.getOut();
 
 			shader::Utils utils{ writer, *getEngine() };
 			utils.declareInvertVec2Y();
@@ -845,8 +844,8 @@ namespace castor3d
 					, texcoord.y() * velocityMetrics->w + velocityMetrics->y );
 			};
 
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+				, VertexOut out )
 				{
 					vtx_textureLhs = utils.topDownToBottomUp( uv );
 					vtx_textureRhs = uv;
@@ -876,8 +875,8 @@ namespace castor3d
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+				, FragmentOut out )
 				{
 					auto lhsColor = writer.declLocale( "lhsColor"
 						, c3d_mapLhs.sample( vtx_textureLhs ) );

@@ -30,8 +30,8 @@ namespace Reinhard
 		// Shader outputs
 		auto pxl_rgb = writer.declOutput< Vec4 >( "pxl_rgb", 0 );
 
-		writer.implementFunction< sdw::Void >( "main"
-			, [&]()
+		writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+			, FragmentOut out )
 			{
 				auto hdrColor = writer.declLocale( "hdrColor"
 					, c3d_mapHdr.sample( vtx_texture ).rgb() );

@@ -47,6 +47,67 @@ namespace castor3d
 {
 	namespace
 	{
+		template< sdw::var::Flag FlagT >
+		struct SurfaceT
+			: sdw::StructInstance
+		{
+			SurfaceT( sdw::ShaderWriter & writer
+				, sdw::expr::ExprPtr expr
+				, bool enabled = true )
+				: sdw::StructInstance{ writer, std::move( expr ), enabled }
+				, volumeCellIndex{ getMember< sdw::IVec3 >( "volumeCellIndex" ) }
+				, rsmPosition{ getMember< sdw::Vec3 >( "rsmPosition" ) }
+				, rsmNormal{ getMember< sdw::Vec3 >( "rsmNormal" ) }
+				, surfelArea{ getMember< sdw::Vec3 >( "surfelArea" ) }
+				, lightPosition{ getMember< sdw::Vec3 >( "lightPosition" ) }
+			{
+			}
+
+			SDW_DeclStructInstance( , SurfaceT );
+
+			static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache )
+			{
+				auto result = cache.getIOStruct( sdw::type::MemoryLayout::eStd430
+					, ( FlagT == sdw::var::Flag::eShaderOutput
+						? std::string{ "Output" }
+						: std::string{ "Input" } ) + "Surface"
+					, FlagT );
+
+				if ( result->empty() )
+				{
+					uint32_t index = 0u;
+					result->declMember( "volumeCellIndex"
+						, sdw::type::Kind::eVec3I
+						, sdw::type::NotArray
+						, index++ );
+					result->declMember( "rsmPosition"
+						, sdw::type::Kind::eVec3F
+						, sdw::type::NotArray
+						, index++ );
+					result->declMember( "rsmNormal"
+						, sdw::type::Kind::eVec3F
+						, sdw::type::NotArray
+						, index++ );
+					result->declMember( "surfelArea"
+						, sdw::type::Kind::eFloat
+						, sdw::type::NotArray
+						, index++ );
+					result->declMember( "lightPosition"
+						, sdw::type::Kind::eVec3F
+						, sdw::type::NotArray
+						, index++ );
+				}
+
+				return result;
+			}
+
+			sdw::IVec3 volumeCellIndex;
+			sdw::Vec3 rsmPosition;
+			sdw::Vec3 rsmNormal;
+			sdw::Float surfelArea;
+			sdw::Vec3 lightPosition;
+		};
+
 		std::unique_ptr< ast::Shader > getDirectionalVertexProgram( uint32_t rsmTexSize
 			, RenderSystem const & renderSystem )
 		{
@@ -73,19 +134,10 @@ namespace castor3d
 #endif
 				UBO_LPVGRIDCONFIG( writer, GeometryInjectionPass::LpvGridUboIdx, 0u, true );
 				UBO_LPVLIGHTCONFIG( writer, GeometryInjectionPass::LpvLightUboIdx, 0u );
-				auto in = writer.getIn();
-
-				uint32_t index = 0u;
-				auto outVolumeCellIndex = writer.declOutput< IVec3 >( "outVolumeCellIndex", index++ );
-				auto outRsmPos = writer.declOutput< Vec3 >( "outRsmPos", index++ );
-				auto outRsmNormal = writer.declOutput< Vec3 >( "outRsmNormal", index++ );
-				auto outSurfelArea = writer.declOutput< Float >( "outSurfelArea", index++ );
-				auto outLightPos = writer.declOutput< Vec3 >( "outLightPos", index++ );
-				auto out = writer.getOut();
 
 				// Utility functions
 				shader::Utils utils{ writer, *renderSystem.getEngine() };
-				index = 0;
+				uint32_t index = 0;
 				auto lightingModel = shader::LightingModel::createModel( utils
 					, renderSystem.getEngine()->getPassFactory().getLightingModelName( 1u )
 					, LightType::eDirectional
@@ -104,8 +156,8 @@ namespace castor3d
 					}
 					, InVec3{ writer, "viewPos" } );
 
-				writer.implementFunction< Void >( "main"
-					, [&]()
+				writer.implementMainT< VoidT, SurfaceT >( [&]( VertexIn in
+					, VertexOutT< SurfaceT > out )
 					{
 						auto light = writer.declLocale( "light"
 							, lightingModel->getDirectionalLight( c3d_lpvLightData.lightIndex ) );
@@ -122,17 +174,17 @@ namespace castor3d
 								, cascadeIndex ) );
 #endif
 
-						outRsmPos = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
-						outRsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
+						out.rsmPosition = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
+						out.rsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
 						auto viewPos = writer.declLocale( "viewPos"
-							, c3d_lpvLightData.lightView * vec4( outRsmPos, 1.0 ) );
-						outSurfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvLightData.texelAreaModifier;
-						outLightPos = outRsmPos - light.m_direction;
+							, c3d_lpvLightData.lightView * vec4( out.rsmPosition, 1.0 ) );
+						out.surfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvLightData.texelAreaModifier;
+						out.lightPosition = out.rsmPosition - light.m_direction;
 
-						outVolumeCellIndex = c3d_lpvGridData.worldToGrid( outRsmPos );
+						out.volumeCellIndex = c3d_lpvGridData.worldToGrid( out.rsmPosition );
 
 						auto screenPos = writer.declLocale( "screenPos"
-							, c3d_lpvGridData.gridToScreen( outVolumeCellIndex.xy() ) );
+							, c3d_lpvGridData.gridToScreen( out.volumeCellIndex.xy() ) );
 
 						out.vtx.position = vec4( screenPos, 0.0, 1.0 );
 					} );
@@ -148,19 +200,10 @@ namespace castor3d
 					, 0u );
 				UBO_LPVGRIDCONFIG( writer, GeometryInjectionPass::LpvGridUboIdx, 0u, true );
 				UBO_LPVLIGHTCONFIG( writer, GeometryInjectionPass::LpvLightUboIdx, 0u );
-				auto in = writer.getIn();
-
-				uint32_t index = 0u;
-				auto outVolumeCellIndex = writer.declOutput< IVec3 >( "outVolumeCellIndex", index++ );
-				auto outRsmPos = writer.declOutput< Vec3 >( "outRsmPos", index++ );
-				auto outRsmNormal = writer.declOutput< Vec3 >( "outRsmNormal", index++ );
-				auto outSurfelArea = writer.declOutput< Float >( "outSurfelArea", index++ );
-				auto outLightPos = writer.declOutput< Vec3 >( "outLightPos", index++ );
-				auto out = writer.getOut();
 
 				// Utility functions
 				shader::Utils utils{ writer, *renderSystem.getEngine() };
-				index = 0;
+				uint32_t index = 0u;
 				auto lightingModel = shader::LightingModel::createModel( utils
 					, renderSystem.getEngine()->getPassFactory().getLightingModelName( 1u )
 					, LightType::eDirectional
@@ -179,8 +222,8 @@ namespace castor3d
 					}
 					, InVec3{ writer, "viewPos" } );
 
-				writer.implementFunction< Void >( "main"
-					, [&]()
+				writer.implementMainT< VoidT, SurfaceT >( [&]( VertexIn in
+					, VertexOutT< SurfaceT > out )
 					{
 						auto light = writer.declLocale( "light"
 							, lightingModel->getDirectionalLight( c3d_lpvLightData.lightIndex ) );
@@ -188,17 +231,17 @@ namespace castor3d
 							, ivec2( in.vertexIndex % int32_t( rsmTexSize )
 								, in.vertexIndex / int32_t( rsmTexSize ) ) );
 
-						outRsmPos = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
-						outRsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
+						out.rsmPosition = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
+						out.rsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
 						auto viewPos = writer.declLocale( "viewPos"
-							, c3d_lpvLightData.lightView * vec4( outRsmPos, 1.0 ) );
-						outSurfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvLightData.texelAreaModifier;
-						outLightPos = outRsmPos - light.m_direction;
+							, c3d_lpvLightData.lightView * vec4( out.rsmPosition, 1.0 ) );
+						out.surfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvLightData.texelAreaModifier;
+						out.lightPosition = out.rsmPosition - light.m_direction;
 
-						outVolumeCellIndex = c3d_lpvGridData.worldToGrid( outRsmPos );
+						out.volumeCellIndex = c3d_lpvGridData.worldToGrid( out.rsmPosition );
 
 						auto screenPos = writer.declLocale( "screenPos"
-							, c3d_lpvGridData.gridToScreen( outVolumeCellIndex.xy() ) );
+							, c3d_lpvGridData.gridToScreen( out.volumeCellIndex.xy() ) );
 
 						out.vtx.position = vec4( screenPos, 0.0, 1.0 );
 					} );
@@ -222,19 +265,10 @@ namespace castor3d
 				, 0u );
 			UBO_LPVGRIDCONFIG( writer, GeometryInjectionPass::LpvGridUboIdx, 0u, true );
 			UBO_LPVLIGHTCONFIG( writer, GeometryInjectionPass::LpvLightUboIdx, 0u );
-			auto in = writer.getIn();
-
-			uint32_t index = 0u;
-			auto outVolumeCellIndex = writer.declOutput< IVec3 >( "outVolumeCellIndex", index++ );
-			auto outRsmPos = writer.declOutput< Vec3 >( "outRsmPos", index++ );
-			auto outRsmNormal = writer.declOutput< Vec3 >( "outRsmNormal", index++ );
-			auto outSurfelArea = writer.declOutput< Float >( "outSurfelArea", index++ );
-			auto outLightPos = writer.declOutput< Vec3 >( "outLightPos", index++ );
-			auto out = writer.getOut();
 
 			// Utility functions
 			shader::Utils utils{ writer, *renderSystem.getEngine() };
-			index = 0;
+			uint32_t index = 0u;
 			auto lightingModel = shader::LightingModel::createModel( utils
 				, renderSystem.getEngine()->getPassFactory().getLightingModelName( 1u )
 				, LightType::eSpot
@@ -253,8 +287,8 @@ namespace castor3d
 				}
 				, InVec3{ writer, "viewPos" } );
 
-			writer.implementFunction< Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, SurfaceT >( [&]( VertexIn in
+				, VertexOutT< SurfaceT > out )
 				{
 					auto light = writer.declLocale( "light"
 						, lightingModel->getSpotLight( c3d_lpvLightData.lightIndex ) );
@@ -263,17 +297,17 @@ namespace castor3d
 							, in.vertexIndex / int32_t( rsmTexSize )
 							, light.m_lightBase.m_index ) );
 
-					outLightPos = light.m_position;
-					outRsmPos = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
-					outRsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
+					out.rsmPosition = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
+					out.rsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
 					auto viewPos = writer.declLocale( "viewPos"
-						, c3d_lpvLightData.lightView * vec4( outRsmPos, 1.0 ) );
-					outSurfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvLightData.texelAreaModifier;
+						, c3d_lpvLightData.lightView * vec4( out.rsmPosition, 1.0 ) );
+					out.surfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvLightData.texelAreaModifier;
+					out.lightPosition = light.m_position;
 
-					outVolumeCellIndex = c3d_lpvGridData.worldToGrid( outRsmPos );
+					out.volumeCellIndex = c3d_lpvGridData.worldToGrid( out.rsmPosition );
 
 					auto screenPos = writer.declLocale( "screenPos"
-						, c3d_lpvGridData.gridToScreen( outVolumeCellIndex.xy() ) );
+						, c3d_lpvGridData.gridToScreen( out.volumeCellIndex.xy() ) );
 
 					out.vtx.position = vec4( screenPos, 0.0, 1.0 );
 				} );
@@ -296,19 +330,10 @@ namespace castor3d
 				, 0u );
 			UBO_LPVGRIDCONFIG( writer, GeometryInjectionPass::LpvGridUboIdx, 0u, true );
 			UBO_LPVLIGHTCONFIG( writer, GeometryInjectionPass::LpvLightUboIdx, 0u );
-			auto in = writer.getIn();
-
-			uint32_t index = 0u;
-			auto outVolumeCellIndex = writer.declOutput< IVec3 >( "outVolumeCellIndex", index++ );
-			auto outRsmPos = writer.declOutput< Vec3 >( "outRsmPos", index++ );
-			auto outRsmNormal = writer.declOutput< Vec3 >( "outRsmNormal", index++ );
-			auto outSurfelArea = writer.declOutput< Float >( "outSurfelArea", index++ );
-			auto outLightPos = writer.declOutput< Vec3 >( "outLightPos", index++ );
-			auto out = writer.getOut();
 
 			// Utility functions
 			shader::Utils utils{ writer, *renderSystem.getEngine() };
-			index = 0;
+			uint32_t index = 0u;
 			auto lightingModel = shader::LightingModel::createModel( utils
 				, renderSystem.getEngine()->getPassFactory().getLightingModelName( 1u )
 				, LightType::ePoint
@@ -327,8 +352,8 @@ namespace castor3d
 				}
 				, InVec3{ writer, "viewPos" } );
 
-			writer.implementFunction< Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, SurfaceT >( [&]( VertexIn in
+				, VertexOutT< SurfaceT > out )
 				{
 					auto light = writer.declLocale( "light"
 						, lightingModel->getPointLight( c3d_lpvLightData.lightIndex ) );
@@ -337,17 +362,17 @@ namespace castor3d
 							, in.vertexIndex / int32_t( rsmTexSize )
 							, light.m_lightBase.m_index * 6_i + int32_t( face ) ) );
 
-					outLightPos = light.m_position;
-					outRsmPos = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
-					outRsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
+					out.rsmPosition = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
+					out.rsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
 					auto viewPos = writer.declLocale( "viewPos"
-						, c3d_lpvLightData.lightView * vec4( outRsmPos, 1.0 ) );
-					outSurfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvLightData.texelAreaModifier;
+						, c3d_lpvLightData.lightView * vec4( out.rsmPosition, 1.0 ) );
+					out.surfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvLightData.texelAreaModifier;
+					out.lightPosition = light.m_position;
 
-					outVolumeCellIndex = c3d_lpvGridData.worldToGrid( outRsmPos );
+					out.volumeCellIndex = c3d_lpvGridData.worldToGrid( out.rsmPosition );
 
 					auto screenPos = writer.declLocale( "screenPos"
-						, c3d_lpvGridData.gridToScreen( outVolumeCellIndex.xy() ) );
+						, c3d_lpvGridData.gridToScreen( out.volumeCellIndex.xy() ) );
 
 					out.vtx.position = vec4( screenPos, 0.0, 1.0 );
 				} );
@@ -374,40 +399,23 @@ namespace castor3d
 		{
 			using namespace sdw;
 			GeometryWriter writer;
-			writer.inputLayout( ast::stmt::InputLayout::ePointList );
-			writer.outputLayout( ast::stmt::OutputLayout::ePointList, 1u );
 
-			uint32_t index = 0u;
-			auto inVolumeCellIndex = writer.declInputArray< IVec3 >( "inVolumeCellIndex", index++, 1u );
-			auto inRsmPos = writer.declInputArray< Vec3 >( "inRsmPos", index++, 1u );
-			auto inRsmNormal = writer.declInputArray< Vec3 >( "inRsmNormal", index++, 1u );
-			auto inSurfelArea = writer.declInputArray< Float >( "inSurfelArea", index++, 1u );
-			auto inLightPos = writer.declInputArray< Vec3 >( "inLightPos", index++, 1u );
-			auto in = writer.getIn();
-
-			index = 0u;
-			auto outVolumeCellIndex = writer.declOutput< IVec3 >( "outVolumeCellIndex", index++ );
-			auto outRsmPos = writer.declOutput< Vec3 >( "outRsmPos", index++ );
-			auto outRsmNormal = writer.declOutput< Vec3 >( "outRsmNormal", index++ );
-			auto outSurfelArea = writer.declOutput< Float >( "outSurfelArea", index++ );
-			auto outLightPos = writer.declOutput< Vec3 >( "outLightPos", index++ );
-			auto out = writer.getOut();
-
-			writer.implementFunction< Void >( "main"
-				, [&]()
+			writer.implementMainT< 1u, PointListT< SurfaceT >, PointStreamT< SurfaceT > >( [&]( GeometryIn in
+				, PointListT< SurfaceT > list
+				, PointStreamT< SurfaceT > out )
 				{
-					out.vtx.position = in.vtx[0].position;
-					out.layer = inVolumeCellIndex[0].z();
+					out.vtx.position = list[0].vtx.position;
+					out.layer = list[0].volumeCellIndex.z();
 					out.vtx.pointSize = 1.0f;
 
-					outVolumeCellIndex = inVolumeCellIndex[0];
-					outRsmPos = inRsmPos[0];
-					outRsmNormal = inRsmNormal[0];
-					outSurfelArea = inSurfelArea[0];
-					outLightPos = inLightPos[0];
+					out.volumeCellIndex = list[0].volumeCellIndex;
+					out.rsmPosition = list[0].rsmPosition;
+					out.rsmNormal = list[0].rsmNormal;
+					out.surfelArea = list[0].surfelArea;
+					out.lightPosition = list[0].lightPosition;
 
-					EmitVertex( writer );
-					EndPrimitive( writer );
+					out.append();
+					out.restartStrip();
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -424,20 +432,9 @@ namespace castor3d
 			auto SH_cosLobe_C1 = writer.declConstant( "SH_cosLobe_C1"
 				, 1.02332671_f ); // sqrt(pi / 3)
 
-			// SH_C0 * SH_cosLobe_C0 = 0.25000000007f
-			// SH_C1 * SH_cosLobe_C1 = 0.5000000011f
-
 			//layout( early_fragment_tests )in;//turn on early depth tests
 
 			UBO_LPVGRIDCONFIG( writer, GeometryInjectionPass::LpvGridUboIdx, 0u, true );
-
-			uint32_t index = 0u;
-			auto inVolumeCellIndex = writer.declInput< IVec3 >( "inVolumeCellIndex", index++ );
-			auto inRsmPos = writer.declInput< Vec3 >( "inRsmPos", index++ );
-			auto inRsmNormal = writer.declInput< Vec3 >( "inRsmNormal", index++ );
-			auto inSurfelArea = writer.declInput< Float >( "inSurfelArea", index++ );
-			auto inLightPos = writer.declInput< Vec3 >( "inLightPos", index++ );
-			auto in = writer.getIn();
 
 			auto outGeometryVolume = writer.declOutput< Vec4 >( "outGeometryVolume", 0u );
 
@@ -457,32 +454,34 @@ namespace castor3d
 			//(As * clamp(dot(ns,w),0.0,1.0))/(cellsize * cellsize)
 			auto calculateBlockingPotential = writer.implementFunction< Float >( "calculateBlockingPotential"
 				, [&]( Vec3 dir
-					, Vec3 normal )
+					, Vec3 normal
+					, Float surfelArea )
 				{
-					writer.returnStmt( clamp( ( inSurfelArea * clamp( dot( normal, dir ), 0.0_f, 1.0_f ) ) / ( c3d_lpvGridData.cellSize() * c3d_lpvGridData.cellSize() )
+					writer.returnStmt( clamp( ( surfelArea * clamp( dot( normal, dir ), 0.0_f, 1.0_f ) ) / ( c3d_lpvGridData.cellSize() * c3d_lpvGridData.cellSize() )
 						, 0.0_f
 						, 1.0_f ) ); //It is probability so 0.0 - 1.0
 				}
 				, InVec3{ writer, "dir" }
-				, InVec3{ writer, "normal" } );
-			
-			writer.implementFunction< Void >( "main"
-				, [&]()
+				, InVec3{ writer, "normal" }
+				, InFloat{ writer, "surfelArea" } );
+
+			writer.implementMainT< SurfaceT, VoidT >( [&]( FragmentInT< SurfaceT > in
+				, FragmentOut out )
 				{
 					//Discard pixels with really small normal
-					IF( writer, length( inRsmNormal ) < 0.01_f )
+					IF( writer, length( in.rsmNormal ) < 0.01_f )
 					{
 						writer.discard();
 					}
 					FI;
 
 					auto lightDir = writer.declLocale( "lightDir"
-						, normalize( inLightPos - inRsmPos ) );
+						, normalize( in.lightPosition - in.rsmPosition ) );
 					auto blockingPotential = writer.declLocale( "blockingPotential"
-						, calculateBlockingPotential( lightDir, inRsmNormal ) );
+						, calculateBlockingPotential( lightDir, in.rsmNormal, in.surfelArea ) );
 
 					auto SHCoeffGV = writer.declLocale( "SHCoeffGV"
-						, evalCosineLobeToDir( inRsmNormal ) * blockingPotential );
+						, evalCosineLobeToDir( in.rsmNormal ) * blockingPotential );
 
 					outGeometryVolume = SHCoeffGV;
 				} );

@@ -24,7 +24,7 @@ namespace castor3d
 				, bool enabled );
 			SDW_DeclStructInstance( C3D_API, ShadowMapData );
 
-			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
 			C3D_API sdw::Vec4 worldToView( sdw::Vec4 const & pos )const;

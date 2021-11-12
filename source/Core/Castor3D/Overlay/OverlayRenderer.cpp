@@ -921,10 +921,9 @@ namespace castor3d
 			// Shader outputs
 			auto vtx_text = writer.declOutput< Vec2 >( "vtx_text", 0u, textOverlay );
 			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 1u, hasTexture );
-			auto out = writer.getOut();
 
-			writer.implementFunction< void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+				, VertexOut out )
 				{
 					vtx_text = text;
 					vtx_texture = uv;
@@ -983,8 +982,8 @@ namespace castor3d
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+				, FragmentOut out )
 				{
 					auto material = materials->getMaterial( c3d_overlayData.getMaterialIndex() );
 					auto diffuse = writer.declLocale( "diffuse"
