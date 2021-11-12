@@ -26,7 +26,7 @@ namespace castor3d
 				, bool enabled );
 			SDW_DeclStructInstance( C3D_API, LayeredLpvGridData );
 
-			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
 			// Raw values

@@ -206,15 +206,13 @@ namespace castor3d
 			, RenderPipeline::eAdditional
 			, flags.sceneFlags );
 
-		auto in = writer.getIn();
-
 		// Fragment Outputs
 		auto pxl_accumulation( writer.declOutput< Vec4 >( getTextureName( WbTexture::eAccumulation ), 0 ) );
 		auto pxl_revealage( writer.declOutput< Float >( getTextureName( WbTexture::eRevealage ), 1 ) );
 		auto pxl_velocity( writer.declOutput< Vec4 >( "pxl_velocity", 2 ) );
 
-		writer.implementFunction< sdw::Void >( "main"
-			, [&]()
+		writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+			, FragmentOut out )
 			{
 				auto normal = writer.declLocale( "normal"
 					, normalize( inSurface.normal ) );

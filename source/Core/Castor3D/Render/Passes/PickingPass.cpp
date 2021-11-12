@@ -313,7 +313,6 @@ namespace castor3d
 			, flags.programFlags
 			, getShaderFlags()
 			, hasTextures };
-		auto in = writer.getIn();
 
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
@@ -336,10 +335,9 @@ namespace castor3d
 		shader::OutFragmentSurface outSurface{ writer
 			, getShaderFlags()
 			, hasTextures };
-		auto out = writer.getOut();
 
-		writer.implementFunction< sdw::Void >( "main"
-			,[&] ()
+		writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+			, VertexOut out )
 			{
 				auto curPosition = writer.declLocale( "curPosition"
 					, inSurface.position );
@@ -396,7 +394,6 @@ namespace castor3d
 		shader::InFragmentSurface inSurface{ writer
 			, getShaderFlags()
 			, hasTextures };
-		auto in = writer.getIn();
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
 			, RenderPipeline::eTextures
@@ -407,8 +404,8 @@ namespace castor3d
 		auto pxl_fragColor( writer.declOutput< Vec4 >( "pxl_fragColor", 0 ) );
 		shader::Utils utils{ writer, *renderSystem.getEngine() };
 
-		writer.implementFunction< sdw::Void >( "main"
-			, [&]()
+		writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+			, FragmentOut out )
 			{
 				auto material = materials->getMaterial( inSurface.material );
 				auto opacity = writer.declLocale( "opacity"

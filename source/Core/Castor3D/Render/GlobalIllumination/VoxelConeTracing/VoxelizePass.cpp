@@ -42,6 +42,70 @@ CU_ImplementCUSmartPtr( castor3d, VoxelizePass )
 
 namespace castor3d
 {
+	namespace
+	{
+		template< sdw::var::Flag FlagT >
+		struct SurfaceT
+			: sdw::StructInstance
+		{
+			SurfaceT( sdw::ShaderWriter & writer
+				, sdw::expr::ExprPtr expr
+				, bool enabled = true )
+				: sdw::StructInstance{ writer, std::move( expr ), enabled }
+				, worldPosition{ getMember< sdw::Vec3 >( "worldPosition" ) }
+				, viewPosition{ getMember< sdw::Vec3 >( "viewPosition" ) }
+				, normal{ getMember< sdw::Vec3 >( "normal" ) }
+				, texture{ getMember< sdw::Vec3 >( "texcoord" ) }
+				, material{ getMember< sdw::UInt >( "material" ) }
+			{
+			}
+
+			SDW_DeclStructInstance( , SurfaceT );
+
+			static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache )
+			{
+				auto result = cache.getIOStruct( sdw::type::MemoryLayout::eStd430
+					, ( FlagT == sdw::var::Flag::eShaderOutput
+						? std::string{ "Output" }
+						: std::string{ "Input" } ) + "Surface"
+					, FlagT );
+
+				if ( result->empty() )
+				{
+					uint32_t index = 0u;
+					result->declMember( "worldPosition"
+						, sdw::type::Kind::eVec3F
+						, sdw::type::NotArray
+						, index++ );
+					result->declMember( "viewPosition"
+						, sdw::type::Kind::eVec3F
+						, sdw::type::NotArray
+						, index++ );
+					result->declMember( "normal"
+						, sdw::type::Kind::eVec3F
+						, sdw::type::NotArray
+						, index++ );
+					result->declMember( "texcoord"
+						, sdw::type::Kind::eVec3F
+						, sdw::type::NotArray
+						, index++ );
+					result->declMember( "material"
+						, sdw::type::Kind::eUInt
+						, sdw::type::NotArray
+						, index++ );
+				}
+
+				return result;
+			}
+
+			sdw::Vec3 worldPosition;
+			sdw::Vec3 viewPosition;
+			sdw::Vec3 normal;
+			sdw::Vec3 texture;
+			sdw::UInt material;
+		};
+	}
+
 	VoxelizePass::VoxelizePass( crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
@@ -298,37 +362,29 @@ namespace castor3d
 			, flags.programFlags
 			, getShaderFlags()
 			, hasTextures };
-		auto in = writer.getIn();
 
-		// Outputs
-		uint32_t index = 0u;
-		auto outViewPosition = writer.declOutput< Vec3 >( "outViewPosition", index++ );
-		auto outNormal = writer.declOutput< Vec3 >( "outNormal", index++ );
-		auto outTexture = writer.declOutput< Vec3 >( "outTexture", index++, hasTextures );
-		auto outMaterial = writer.declOutput< UInt >( "outMaterial", index++ );
-		auto out = writer.getOut();
-
-		writer.implementFunction< sdw::Void >( "main"
-			, [&]()
+		writer.implementMainT< VoidT, SurfaceT >( [&]( VertexIn in
+			, VertexOutT< SurfaceT > out )
 			{
 				auto curPosition = writer.declLocale( "curPosition"
 					, inSurface.position );
 				auto v4Normal = writer.declLocale( "v4Normal"
 					, vec4( inSurface.normal, 0.0_f ) );
-				outTexture = inSurface.texture;
+				out.texture = inSurface.texture;
 				inSurface.morph( c3d_morphingData
 					, curPosition
 					, v4Normal
-					, outTexture );
+					, out.texture );
 
 				auto modelMtx = writer.declLocale< Mat4 >( "modelMtx"
 					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, inSurface ) );
-				outMaterial = c3d_modelData.getMaterialIndex( flags.programFlags
+				out.material = c3d_modelData.getMaterialIndex( flags.programFlags
 					, inSurface.material );
 
 				out.vtx.position = ( modelMtx * curPosition );
-				outViewPosition = c3d_matrixData.worldToCurView( out.vtx.position ).xyz();
-				outNormal = normalize( mat3( transpose( inverse( modelMtx ) ) ) * v4Normal.xyz() );
+				out.viewPosition = c3d_matrixData.worldToCurView( out.vtx.position ).xyz();
+				out.worldPosition = out.viewPosition;
+				out.normal = normalize( mat3( transpose( inverse( modelMtx ) ) ) * v4Normal.xyz() );
 			} );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
@@ -337,7 +393,6 @@ namespace castor3d
 	{
 		using namespace sdw;
 		VertexWriter writer;
-		bool hasTextures = !flags.textures.empty();
 
 		// Shader inputs
 		auto inPosition = writer.declInput< Vec4 >( "inPosition", 0u );
@@ -357,18 +412,8 @@ namespace castor3d
 			, uint32_t( PassUboIdx::eScene )
 			, RenderPipeline::eAdditional );
 
-		auto in = writer.getIn();
-
-		// Outputs
-		uint32_t index = 0u;
-		auto outViewPosition = writer.declOutput< Vec3 >( "outViewPosition", index++ );
-		auto outNormal = writer.declOutput< Vec3 >( "outNormal", index++ );
-		auto outTexture = writer.declOutput< Vec3 >( "outTexture", index++, hasTextures );
-		auto outMaterial = writer.declOutput< UInt >( "outMaterial", index++ );
-		auto out = writer.getOut();
-
-		writer.implementFunction< Void >( "main"
-			, [&]()
+		writer.implementMainT< VoidT, SurfaceT >( [&]( VertexIn in
+			, VertexOutT< SurfaceT > out )
 			{
 				auto curBbcenter = writer.declLocale( "curBbcenter"
 					, c3d_modelData.modelToCurWorld( vec4( center, 1.0_f ) ).xyz() );
@@ -392,9 +437,10 @@ namespace castor3d
 					, 1.0_f );
 				auto viewPosition = writer.declLocale( "viewPosition"
 					, c3d_matrixData.worldToCurView( out.vtx.position ) );
-				outViewPosition = viewPosition.xyz();
-				outNormal = normalize( c3d_sceneData.getPosToCamera( curBbcenter ) );
-				outMaterial = c3d_modelData.getMaterialIndex();
+				out.viewPosition = viewPosition.xyz();
+				out.worldPosition = out.viewPosition;
+				out.normal = normalize( c3d_sceneData.getPosToCamera( curBbcenter ) );
+				out.material = c3d_modelData.getMaterialIndex();
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -404,38 +450,18 @@ namespace castor3d
 	{
 		using namespace sdw;
 		GeometryWriter writer;
-		bool hasTextures = !flags.textures.empty();
-
-		writer.inputLayout( ast::stmt::InputLayout::eTriangleList );
-		writer.outputLayout( ast::stmt::OutputLayout::eTriangleStrip, 3u );
 
 		UBO_VOXELIZER( writer
 			, uint32_t( PassUboIdx::eCount ) + 1u
 			, RenderPipeline::eAdditional
 			, true );
 
-		// Shader inputs
-		uint32_t index = 0u;
-		auto inViewPosition = writer.declInputArray< Vec3 >( "inViewPosition", index++, 3u );
-		auto inNormal = writer.declInputArray< Vec3 >( "inNormal", index++, 3u );
-		auto inTexture = writer.declInputArray< Vec3 >( "inTexture", index++, 3u, hasTextures );
-		auto inMaterial = writer.declInputArray< UInt >( "inMaterial", index++, 3u );
-		auto in = writer.getIn();
-
-		// Outputs
-		index = 0u;
-		auto outWorldPosition = writer.declOutput< Vec3 >( "outWorldPosition", index++ );
-		auto outViewPosition = writer.declOutput< Vec3 >( "outViewPosition", index++ );
-		auto outNormal = writer.declOutput< Vec3 >( "outNormal", index++ );
-		auto outTexture = writer.declOutput< Vec3 >( "outTexture", index++, hasTextures );
-		auto outMaterial = writer.declOutput< UInt >( "outMaterial", index++ );
-		auto out = writer.getOut();
-
-		writer.implementFunction< sdw::Void >( "main"
-			, [&]()
+		writer.implementMainT< 3u, TriangleListT< SurfaceT >, TriangleStreamT< SurfaceT > >( [&]( GeometryIn in
+			, TriangleListT< SurfaceT > list
+			, TriangleStreamT< SurfaceT > out )
 			{
 				auto facenormal = writer.declLocale( "facenormal"
-					, abs( inNormal[0] + inNormal[1] + inNormal[2] ) );
+					, abs( list[0].normal + list[1].normal + list[2].normal ) );
 				auto maxi = writer.declLocale( "maxi"
 					, writer.ternary( facenormal[1] > facenormal[0], 1_u, 0_u ) );
 				maxi = writer.ternary( facenormal[2] > facenormal[maxi], 2_u, maxi );
@@ -443,7 +469,7 @@ namespace castor3d
 
 				FOR( writer, UInt, i, 0_u, i < 3_u, ++i )
 				{
-					positions[i] = in.vtx[i].position.xyz() * c3d_voxelData.worldToGrid;
+					positions[i] = list[i].vtx.position.xyz() * c3d_voxelData.worldToGrid;
 
 					// Project onto dominant axis:
 					IF( writer, maxi == 0_u )
@@ -478,18 +504,18 @@ namespace castor3d
 				// Output
 				FOR( writer, UInt, i, 0_u, i < 3_u, ++i )
 				{
-					outWorldPosition = in.vtx[i].position.xyz();
-					outViewPosition = inViewPosition[i];
-					outNormal = inNormal[i];
-					outMaterial = inMaterial[i];
-					outTexture = inTexture[i];
+					out.worldPosition = list[i].vtx.position.xyz();
+					out.viewPosition = list[i].viewPosition;
+					out.normal = list[i].normal;
+					out.material = list[i].material;
+					out.texture = list[i].texture;
 					out.vtx.position = vec4( positions[i], 1.0f );
 
-					EmitVertex( writer );
+					out.append();
 				}
 				ROF;
 
-				EndPrimitive( writer );
+				out.restartStrip();
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -512,14 +538,6 @@ namespace castor3d
 		utils.declareFlatten();
 
 		// Shader inputs
-		auto index = 0u;
-		auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition", index++ );
-		auto inViewPosition = writer.declInput< Vec3 >( "inViewPosition", index++ );
-		auto inNormal = writer.declInput< Vec3 >( "inNormal", index++ );
-		auto inTexture = writer.declInput< Vec3 >( "inTexture", index++, hasTextures );
-		auto inMaterial = writer.declInput< UInt >( "inMaterial", index++ );
-		auto in = writer.getIn();
-
 		shader::Materials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 			, uint32_t( NodeUboIdx::eMaterials )
@@ -564,22 +582,22 @@ namespace castor3d
 			, RenderPipeline::eAdditional
 			, m_mode != RenderMode::eTransparentOnly );
 
-		writer.implementFunction< sdw::Void >( "main"
-			, [&]()
+		writer.implementMainT< SurfaceT, VoidT >( [&]( FragmentInT< SurfaceT > in
+			, FragmentOut out )
 			{
 				auto diff = writer.declLocale( "diff"
-					, c3d_voxelData.worldToClip( inWorldPosition ) );
+					, c3d_voxelData.worldToClip( in.worldPosition ) );
 				auto uvw = writer.declLocale( "uvw"
 					, diff * vec3( 0.5_f, -0.5f, 0.5f ) + 0.5f );
 
 				IF( writer, utils.isSaturated( uvw ) )
 				{
 					auto material = writer.declLocale( "material"
-						, materials.getMaterial( inMaterial ) );
+						, materials.getMaterial( in.material ) );
 					auto gamma = writer.declLocale( "gamma"
 						, material.gamma );
 					auto normal = writer.declLocale( "normal"
-						, normalize( inNormal ) );
+						, normalize( in.normal ) );
 					auto lightMat = lightingModel->declMaterial( "lightMat" );
 					lightMat->create( material );
 					auto emissive = writer.declLocale( "emissive"
@@ -592,7 +610,7 @@ namespace castor3d
 					if ( hasTextures )
 					{
 						auto texCoord = writer.declLocale( "texCoord"
-							, inTexture );
+							, in.texture );
 						lightingModel->computeMapDiffuseContributions( flags.passFlags
 							, filterTexturesFlags( flags.textures )
 							, gamma
@@ -613,7 +631,7 @@ namespace castor3d
 						auto worldEye = writer.declLocale( "worldEye"
 							, c3d_sceneData.cameraPosition );
 						auto surface = writer.declLocale< shader::Surface >( "surface" );
-						surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
+						surface.create( in.fragCoord.xy(), in.viewPosition, in.worldPosition, normal );
 						color += occlusion
 							* lightMat->albedo
 							* lightingModel->computeCombinedDiffuse( *lightMat

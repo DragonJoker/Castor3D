@@ -95,7 +95,7 @@ namespace castor3d
 			return std::make_unique< sdw::Struct >( writer, makeType( writer.getTypesCache() ) );
 		}
 
-		ast::type::StructPtr TextureConfigData::makeType( ast::type::TypesCache & cache )
+		ast::type::BaseStructPtr TextureConfigData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140, "C3D_TextureConfigData" );
 

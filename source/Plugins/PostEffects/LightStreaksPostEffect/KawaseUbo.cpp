@@ -24,7 +24,7 @@ namespace light_streaks
 	{
 	}
 
-	ast::type::StructPtr KawaseData::makeType( ast::type::TypesCache & cache )
+	ast::type::BaseStructPtr KawaseData::makeType( ast::type::TypesCache & cache )
 	{
 		auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
 			, "C3D_KawaseData" );

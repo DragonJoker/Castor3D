@@ -31,7 +31,7 @@ namespace castor3d
 		{
 		}
 
-		ast::type::StructPtr ShadowMapDirectionalData::makeType( ast::type::TypesCache & cache )
+		ast::type::BaseStructPtr ShadowMapDirectionalData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
 				, "C3D_ShadowMapData" );
@@ -54,10 +54,10 @@ namespace castor3d
 		}
 
 		sdw::UInt ShadowMapDirectionalData::getTileIndex( ModelInstancesData const & modelInstances
-			, sdw::InVertex const & in )const
+			, sdw::Int const & instanceIndex )const
 		{
 			return min( modelInstances.instanceCount - 1_u
-				, modelInstances.instances[in.instanceIndex / 4][in.instanceIndex % 4] );
+				, modelInstances.instances[instanceIndex / 4][instanceIndex % 4] );
 		}
 
 		sdw::Vec2 ShadowMapDirectionalData::getTileMin( sdw::UInt const & tileIndex )const

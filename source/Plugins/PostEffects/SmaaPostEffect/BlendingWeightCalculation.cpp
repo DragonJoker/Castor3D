@@ -46,7 +46,6 @@ namespace smaa
 			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
 			auto vtx_pixcoord = writer.declOutput< Vec2 >( "vtx_pixcoord", 1u );
 			auto vtx_offset = writer.declOutputArray< Vec4 >( "vtx_offset", 2u, 3u );
-			auto out = writer.getOut();
 
 			/**
 			 * Blend Weight Calculation Vertex Shader
@@ -71,8 +70,8 @@ namespace smaa
 				, OutVec2{ writer, "pixcoord" }
 				, OutVec4Array{ writer, "offset", 3u } );
 
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+				, VertexOut out )
 				{
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 					vtx_texture = uv;
@@ -795,8 +794,8 @@ namespace smaa
 				, InSampledImage2DRgba32{ writer, "searchTex" }
 				, InVec4{ writer, "subsampleIndices" } );
 
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+				, FragmentOut out )
 				{
 					pxl_fragColour = SMAABlendingWeightCalculationPS( vtx_texture
 						, vtx_pixcoord

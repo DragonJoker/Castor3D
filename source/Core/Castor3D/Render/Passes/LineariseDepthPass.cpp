@@ -70,11 +70,8 @@ namespace castor3d
 			// Shader inputs
 			auto position = writer.declInput< Vec2 >( "position", 0u );
 
-			// Shader outputs
-			auto out = writer.getOut();
-
-			writer.implementFunction< void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+				, VertexOut out )
 				{
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
@@ -91,7 +88,6 @@ namespace castor3d
 			auto c3d_clipInfo = clipInfo.declMember< Vec3 >( "c3d_clipInfo" );
 			clipInfo.end();
 			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDepth", DepthImgIdx, 0u );
-			auto in = writer.getIn();
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Float >( "pxl_fragColor", 0u );
@@ -105,8 +101,8 @@ namespace castor3d
 				, InFloat{ writer, "d" }
 				, InVec3{ writer, "clipInfo" } );
 
-			writer.implementFunction< Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+				, FragmentOut out )
 				{
 					pxl_fragColor = reconstructCSZ( c3d_mapDepth.fetch( ivec2( in.fragCoord.xy() ), 0_i ).r()
 						, c3d_clipInfo );
@@ -124,13 +120,12 @@ namespace castor3d
 			auto c3d_textureSize = previousLevel.declMember< IVec2 >( "c3d_textureSize" );
 			previousLevel.end();
 			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDepth", DepthImgIdx, 0u );
-			auto in = writer.getIn();
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Float >( "pxl_fragColor", 0u );
 
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+				, FragmentOut out )
 				{
 					auto ssPosition = writer.declLocale( "ssPosition"
 						, ivec2( in.fragCoord.xy() ) );

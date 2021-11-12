@@ -21,7 +21,7 @@ namespace castor3d
 		{
 		}
 
-		ast::type::StructPtr PickingData::makeType( ast::type::TypesCache & cache )
+		ast::type::BaseStructPtr PickingData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
 				, "C3D_PickingData" );

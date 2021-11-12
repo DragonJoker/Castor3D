@@ -42,10 +42,9 @@ namespace draw_edges
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
-			auto out = writer.getOut();
 
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+				, VertexOut out )
 				{
 					vtx_texture = uv;
 					out.vtx.position = vec4( position.xy(), 0.0_f, 1.0_f );
@@ -107,8 +106,8 @@ namespace draw_edges
 				, sdw::InIVec2{ writer, "texCoord" }
 				, sdw::InInt{ writer, "width" } );
 
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+				, FragmentOut out )
 				{
 					auto colour = writer.declLocale( "colour"
 						, c3d_source.sample( vtx_texture ) );

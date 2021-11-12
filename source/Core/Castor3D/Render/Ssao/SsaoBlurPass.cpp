@@ -55,11 +55,8 @@ namespace castor3d
 			// Shader inputs
 			auto position = writer.declInput< Vec2 >( "position", 0u );
 
-			// Shader outputs
-			auto out = writer.getOut();
-
-			writer.implementFunction< Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+				, VertexOut out )
 				{
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
@@ -86,8 +83,6 @@ namespace castor3d
 			/** Same size as result buffer, do not offset by guard band when reading from it */
 			auto c3d_readMultiplyFirst = writer.declConstant( "c3d_readMultiplyFirst", vec3( 2.0_f ) );
 			auto c3d_readAddSecond = writer.declConstant( "c3d_readAddSecond", vec3( 1.0_f ) );
-
-			auto in = writer.getIn();
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec3 >( "pxl_fragColor", 0u );
@@ -257,8 +252,8 @@ namespace castor3d
 				, InVec3{ writer, "tapNormal" }
 				, InVec3{ writer, "position" } );
 
-			writer.implementFunction< Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+				, FragmentOut out )
 				{
 					auto ssCenter = writer.declLocale( "ssCenter"
 						, ivec2( in.fragCoord.xy() ) );

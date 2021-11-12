@@ -99,7 +99,6 @@ namespace castor3d
 			, flags.programFlags
 			, getShaderFlags()
 			, hasTextures };
-		auto in = writer.getIn();
 
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
@@ -125,10 +124,9 @@ namespace castor3d
 		shader::OutFragmentSurface outSurface{ writer
 			, getShaderFlags()
 			, hasTextures };
-		auto out = writer.getOut();
 
-		writer.implementFunction< sdw::Void >( "main"
-			, [&]()
+		writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+			, VertexOut out )
 			{
 				auto curPosition = writer.declLocale( "curPosition"
 					, inSurface.position );
@@ -215,21 +213,19 @@ namespace castor3d
 		UBO_SCENE( writer
 			, uint32_t( PassUboIdx::eScene )
 			, RenderPipeline::eAdditional );
-		auto in = writer.getIn();
 
 		// Outputs
 		auto data0 = writer.declOutput< Vec4 >( "data0", 0u );
 		auto data1 = writer.declOutput< Vec4 >( "data1", 1u );
 		auto velocity = writer.declOutput< Vec4 >( "velocity", 2u );
-		auto out = writer.getOut();
 
 		shader::Utils utils{ writer, *renderSystem.getEngine() };
 		utils.declareEncodeMaterial();
 		utils.declareParallaxMappingFunc( flags.passFlags
 			, getTexturesMask() );
 
-		writer.implementFunction< sdw::Void >( "main"
-			, [&]()
+		writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+			, FragmentOut out )
 			{
 				auto material = materials->getMaterial( inSurface.material );
 				auto opacity = writer.declLocale( "opacity"

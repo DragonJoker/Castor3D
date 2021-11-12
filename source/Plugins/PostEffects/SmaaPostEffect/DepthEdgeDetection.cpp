@@ -93,8 +93,8 @@ namespace smaa
 				, InVec4Array{ writer, "offset", 3u }
 				, InSampledImage2DRgba32{ writer, "depthTex" } );
 
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+				, FragmentOut out )
 				{
 					pxl_fragColour = vec4( 0.0_f );
 					pxl_fragColour.xy() = SMAADepthEdgeDetectionPS( utils.topDownToBottomUp( vtx_texture ), vtx_offset, c3d_depthTex );

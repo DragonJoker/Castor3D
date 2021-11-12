@@ -29,7 +29,7 @@ namespace draw_edges
 			, bool enabled );
 		SDW_DeclStructInstance( , DrawEdgesData );
 
-		static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 
 	public:
 		sdw::Int normalDepthWidth;

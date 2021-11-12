@@ -30,7 +30,7 @@ namespace fxaa
 			, bool enabled );
 		SDW_DeclStructInstance( , FxaaData );
 
-		static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 
 	public:
 		sdw::Vec2 pixelSize;

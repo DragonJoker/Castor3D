@@ -48,10 +48,9 @@ namespace castor3d
 
 				// Outputs
 				auto vtx_position = writer.declOutput< Vec3 >( "vtx_position", 0u );
-				auto out = writer.getOut();
 
-				writer.implementFunction< sdw::Void >( "main"
-					, [&]()
+				writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+					, VertexOut out )
 					{
 						vtx_position = position.xyz();
 						out.vtx.position = mtxViewProjection * position;
@@ -84,8 +83,8 @@ namespace castor3d
 					}
 					, InVec3{ writer, "v" } );
 
-				writer.implementFunction< sdw::Void >( "main"
-					, [&]()
+				writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+					, FragmentOut out )
 					{
 						auto uv = writer.declLocale( "uv"
 							, sampleSphericalMap( normalize( vtx_position ) ) );

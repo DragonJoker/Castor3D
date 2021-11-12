@@ -88,13 +88,10 @@ namespace castor3d
 			using namespace sdw;
 			ComputeWriter writer;
 
-			writer.inputLayout( 32u, 32u, 1u );
-
 			// Inputs
 			auto input( writer.declImage< RFImg2DRgba32 >( "input"
 				, ComputeDepthRange::eInput
 				, 0u ) );
-			auto in = writer.getIn();
 
 			// Outputs
 			auto output( writer.declShaderStorageBuffer( "c3d_output"
@@ -107,7 +104,7 @@ namespace castor3d
 			utils.declareDecodeColor();
 			utils.declareUnflatten();
 
-			writer.implementMain( [&]()
+			writer.implementMainT< VoidT >( 32u, 32u, [&]( ComputeIn in )
 				{
 					auto size = writer.declLocale( "size"
 						, uvec2( input.getSize() ) );

@@ -97,10 +97,9 @@ namespace castor3d
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
-			auto out = writer.getOut();
 
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+				, VertexOut out )
 			{
 				vtx_texture = uv;
 				out.vtx.position = vec4( position.x(), position.y(), 0.0_f, 1.0_f );
@@ -176,13 +175,13 @@ namespace castor3d
 				, true );
 			auto reflections = lightingModel->getReflectionModel( uint32_t( ResolveBind::eEnvironment )
 				, 0u );
-			shader::CommonFog fog{ writer };
+			shader::Fog fog{ writer };
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0u );
 
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+				, FragmentOut out )
 				{
 					auto data0 = writer.declLocale( "data0"
 						, c3d_mapData0.lod( vtx_texture, 0.0_f ) );

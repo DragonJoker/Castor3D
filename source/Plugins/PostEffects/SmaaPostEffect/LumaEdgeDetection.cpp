@@ -152,8 +152,8 @@ namespace smaa
 				, InVec2{ writer, "texcoord" }
 				, InVec4Array{ writer, "offset", 3u } );
 
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+				, FragmentOut out )
 				{
 					pxl_fragColour = vec4( 0.0_f );
 					pxl_fragColour.xy() = SMAALumaEdgeDetectionPS( vtx_texture, vtx_offset );
@@ -258,8 +258,8 @@ namespace smaa
 				, InVec2{ writer, "texcoord" }
 				, InVec4Array{ writer, "offset", 3u } );
 
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+				, FragmentOut out )
 				{
 					pxl_fragColour = vec4( 0.0_f );
 					pxl_fragColour.xy() = SMAALumaEdgeDetectionPS( vtx_texture, vtx_offset );
