@@ -33,7 +33,6 @@ namespace castor3d
 		, m_wantedFPS{ wantedFPS }
 		, m_frameTime{ 1000ull / wantedFPS }
 		, m_debugOverlays{ std::make_unique< DebugOverlays >( engine ) }
-		, m_queueUpdater{ std::max( 2u, engine.getCpuInformations().getCoreCount() - ( isAsync ? 2u : 1u ) ) }
 		, m_uploadResources
 		{
 			UploadResources{ { nullptr, nullptr }, nullptr },
