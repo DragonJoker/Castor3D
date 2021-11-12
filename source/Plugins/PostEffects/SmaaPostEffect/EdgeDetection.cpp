@@ -36,7 +36,6 @@ namespace smaa
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
 			auto vtx_offset = writer.declOutputArray< Vec4 >( "vtx_offset", 1u, 3u );
-			auto out = writer.getOut();
 
 			/**
 			 * Edge Detection Vertex Shader
@@ -52,8 +51,8 @@ namespace smaa
 				, InVec2{ writer, "texCoord" }
 				, OutVec4Array{ writer, "offset", 3u } );
 
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+				, VertexOut out )
 				{
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 					vtx_texture = uv;

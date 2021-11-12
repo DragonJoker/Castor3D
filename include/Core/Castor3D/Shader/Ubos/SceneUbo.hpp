@@ -29,7 +29,7 @@ namespace castor3d
 				, ast::expr::ExprPtr expr
 				, bool enabled );
 
-			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
 			C3D_API sdw::Vec3 transformCamera( sdw::Mat3 const & transform )const;

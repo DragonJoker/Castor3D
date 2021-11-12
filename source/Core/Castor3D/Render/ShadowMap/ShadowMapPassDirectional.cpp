@@ -236,7 +236,6 @@ namespace castor3d
 			, flags.programFlags
 			, getShaderFlags()
 			, hasTextures };
-		auto in = writer.getIn();
 
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
@@ -270,64 +269,62 @@ namespace castor3d
 		shader::OutFragmentSurface outSurface{ writer
 			, getShaderFlags()
 			, hasTextures };
-		auto out = writer.getOut();
 
-		std::function< void() > main = [&]()
-		{
-			auto curPosition = writer.declLocale( "curPosition"
-				, inSurface.position );
-			auto v4Normal = writer.declLocale( "v4Normal"
-				, vec4( inSurface.normal, 0.0_f ) );
-			auto v4Tangent = writer.declLocale( "v4Tangent"
-				, vec4( inSurface.tangent, 0.0_f ) );
-			outSurface.texture = inSurface.texture;
-			inSurface.morph( c3d_morphingData
-				, curPosition
-				, v4Normal
-				, v4Tangent
-				, outSurface.texture );
-			outSurface.material = c3d_modelData.getMaterialIndex( flags.programFlags
-				, inSurface.material );
-			outSurface.nodeId = c3d_modelData.getNodeId( flags.programFlags
-				, inSurface.nodeId );
-			outSurface.instance = writer.cast< UInt >( in.instanceIndex );
+		writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+			, VertexOut out )
+			{
+				auto curPosition = writer.declLocale( "curPosition"
+					, inSurface.position );
+				auto v4Normal = writer.declLocale( "v4Normal"
+					, vec4( inSurface.normal, 0.0_f ) );
+				auto v4Tangent = writer.declLocale( "v4Tangent"
+					, vec4( inSurface.tangent, 0.0_f ) );
+				outSurface.texture = inSurface.texture;
+				inSurface.morph( c3d_morphingData
+					, curPosition
+					, v4Normal
+					, v4Tangent
+					, outSurface.texture );
+				outSurface.material = c3d_modelData.getMaterialIndex( flags.programFlags
+					, inSurface.material );
+				outSurface.nodeId = c3d_modelData.getNodeId( flags.programFlags
+					, inSurface.nodeId );
+				outSurface.instance = writer.cast< UInt >( in.instanceIndex );
 
-			auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
-				, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, inSurface ) );
-			curPosition = mtxModel * curPosition;
-			outSurface.worldPosition = curPosition.xyz();
+				auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
+					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, inSurface ) );
+				curPosition = mtxModel * curPosition;
+				outSurface.worldPosition = curPosition.xyz();
 
 #if C3D_UseTiledDirectionalShadowMap
-			auto ti = writer.declLocale( "tileIndex"
-				, c3d_shadowMapDirectionalData.getTileIndex( c3d_modelInstancesData, in ) );
-			auto tileMin = writer.declLocale( "tileMin"
-				, c3d_shadowMapDirectionalData.getTileMin( ti ) );
-			auto tileMax = writer.declLocale( "tileMax"
-				, c3d_shadowMapDirectionalData.getTileMax( tileMin ) );
+				auto ti = writer.declLocale( "tileIndex"
+					, c3d_shadowMapDirectionalData.getTileIndex( c3d_modelInstancesData, in ) );
+				auto tileMin = writer.declLocale( "tileMin"
+					, c3d_shadowMapDirectionalData.getTileMin( ti ) );
+				auto tileMax = writer.declLocale( "tileMax"
+					, c3d_shadowMapDirectionalData.getTileMax( tileMin ) );
 
-			curPosition = c3d_shadowMapDirectionalData.worldToView( ti, curPosition );
-			curPosition = c3d_shadowMapDirectionalData.viewToProj( ti, curPosition );
-			out.vtx.position = curPosition;
+				curPosition = c3d_shadowMapDirectionalData.worldToView( ti, curPosition );
+				curPosition = c3d_shadowMapDirectionalData.viewToProj( ti, curPosition );
+				out.vtx.position = curPosition;
 
-			out.vtx.clipDistance[0] = dot( vec4( 1.0_f, 0.0_f, 0.0_f, -tileMin.x() ), curPosition );
-			out.vtx.clipDistance[1] = dot( vec4( -1.0_f, 0.0_f, 0.0_f, tileMax.x() ), curPosition );
-			out.vtx.clipDistance[2] = dot( vec4( 0.0_f, -1.0_f, 0.0_f, -tileMin.y() ), curPosition );
-			out.vtx.clipDistance[3] = dot( vec4( 0.0_f, 1.0_f, 0.0_f, tileMax.y() ), curPosition );
+				out.vtx.clipDistance[0] = dot( vec4( 1.0_f, 0.0_f, 0.0_f, -tileMin.x() ), curPosition );
+				out.vtx.clipDistance[1] = dot( vec4( -1.0_f, 0.0_f, 0.0_f, tileMax.x() ), curPosition );
+				out.vtx.clipDistance[2] = dot( vec4( 0.0_f, -1.0_f, 0.0_f, -tileMin.y() ), curPosition );
+				out.vtx.clipDistance[3] = dot( vec4( 0.0_f, 1.0_f, 0.0_f, tileMax.y() ), curPosition );
 #else
-			curPosition = c3d_shadowMapData.worldToView( curPosition );
-			out.vtx.position = c3d_shadowMapData.viewToProj( curPosition );
+				curPosition = c3d_shadowMapData.worldToView( curPosition );
+				out.vtx.position = c3d_shadowMapData.viewToProj( curPosition );
 #endif
 
-			auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
-				, c3d_modelData.getNormalMtx( flags.programFlags, mtxModel ) );
-			outSurface.computeTangentSpace( flags.programFlags
-				, vec3( 0.0_f )
-				, mtxNormal
-				, v4Normal
-				, v4Tangent );
-		};
-
-		writer.implementFunction< sdw::Void >( "main", main );
+				auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
+					, c3d_modelData.getNormalMtx( flags.programFlags, mtxModel ) );
+				outSurface.computeTangentSpace( flags.programFlags
+					, vec3( 0.0_f )
+					, mtxNormal
+					, v4Normal
+					, v4Tangent );
+			} );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
@@ -346,7 +343,6 @@ namespace castor3d
 		shader::InFragmentSurface inSurface{ writer
 			, getShaderFlags()
 			, hasTextures };
-		auto in = writer.getIn();
 
 		shader::Materials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
@@ -394,8 +390,8 @@ namespace castor3d
 		auto pxl_position( writer.declOutput< Vec4 >( "pxl_position", 2u ) );
 		auto pxl_flux( writer.declOutput< Vec4 >( "pxl_flux", 3u ) );
 
-		writer.implementFunction< sdw::Void >( "main"
-			, [&]()
+		writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+			, FragmentOut out )
 			{
 				pxl_normalLinear = vec4( 0.0_f );
 				pxl_variance = vec2( 0.0_f );

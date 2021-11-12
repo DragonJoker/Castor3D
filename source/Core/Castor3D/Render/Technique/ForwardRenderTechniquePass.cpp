@@ -148,15 +148,14 @@ namespace castor3d
 			, RenderPipeline::eAdditional
 			, flags.sceneFlags );
 
-		auto in = writer.getIn();
-		shader::Fog fog{ getFogType( flags.sceneFlags ), writer };
+		shader::Fog fog{ writer };
 
 		// Fragment Outputs
 		auto pxl_fragColor( writer.declOutput< Vec4 >( "pxl_fragColor", 0 ) );
 		auto pxl_velocity( writer.declOutput< Vec4 >( "pxl_velocity", 1, m_hasVelocity ) );
 
-		writer.implementFunction< sdw::Void >( "main"
-			, [&]()
+		writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+			, FragmentOut out )
 			{
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( inSurface.material ) );

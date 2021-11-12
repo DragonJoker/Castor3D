@@ -59,10 +59,10 @@ namespace castor3d
 				, sdw::vec3( 0.0_f ) );
 		}
 
-		ast::type::StructPtr Surface::makeType( ast::type::TypesCache & cache )
+		ast::type::BaseStructPtr Surface::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd430
-				, "Surface" );
+				, "C3D_Surface" );
 
 			if ( result->empty() )
 			{

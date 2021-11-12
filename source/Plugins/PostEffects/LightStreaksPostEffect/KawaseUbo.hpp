@@ -38,7 +38,7 @@ namespace light_streaks
 			, bool enabled );
 		SDW_DeclStructInstance( , KawaseData );
 
-		static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 
 	public:
 		sdw::Vec2 pixelSize;

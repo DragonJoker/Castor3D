@@ -34,10 +34,9 @@ namespace draw_edges
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
-			auto out = writer.getOut();
 
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+				, VertexOut out )
 				{
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 					vtx_texture = uv;
@@ -60,7 +59,6 @@ namespace draw_edges
 			auto depthRangeBuffer( writer.declShaderStorageBuffer( "DepthRangeBuffer", DepthNormalEdgeDetection::eDepthRange, 0u ) );
 			auto minmax = depthRangeBuffer.declMember< sdw::Int >( "minmax", 2u );
 			depthRangeBuffer.end();
-			auto in = writer.getIn();
 
 			// Outputs
 			auto output( writer.declOutput< sdw::Float >( "output", 0u ) );
@@ -142,7 +140,8 @@ namespace draw_edges
 				, sdw::InFloat{ writer, "depthFactor" }
 				, sdw::InFloat{ writer, "normalFactor" } );
 
-			writer.implementMain( [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+				, FragmentOut out )
 				{
 					auto size = writer.declLocale( "size"
 						, ivec2( sdw::Int{ int( extent.width ) }, sdw::Int{ int( extent.height ) } ) );

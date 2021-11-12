@@ -39,11 +39,8 @@ namespace castor3d
 			// Shader inputs
 			auto position = writer.declInput< Vec2 >( "position", 0u );
 
-			// Shader outputs
-			auto out = writer.getOut();
-
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+				, VertexOut out )
 				{
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
@@ -90,10 +87,9 @@ namespace castor3d
 			auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), uint32_t( IndirectLightingPass::eData1 ), 0u );
 			auto c3d_mapData2 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), uint32_t( IndirectLightingPass::eData2 ), 0u );
 			auto c3d_mapData3 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), uint32_t( IndirectLightingPass::eData3 ), 0u );
-			auto in = writer.getIn();
 
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+				, FragmentOut out )
 				{
 					auto texCoord = writer.declLocale( "texCoord"
 						, c3d_gpInfoData.calcTexCoord( utils

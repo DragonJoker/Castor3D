@@ -40,7 +40,7 @@ namespace castor3d::shader
 		C3D_API virtual sdw::Float getMetalness()const = 0;
 		C3D_API virtual sdw::Float getRoughness()const = 0;
 
-		C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+		C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 
 		/**
 		*\name

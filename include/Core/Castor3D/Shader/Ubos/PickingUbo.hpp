@@ -23,7 +23,7 @@ namespace castor3d
 				, bool enabled );
 			SDW_DeclStructInstance( C3D_API, PickingData );
 
-			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
 			C3D_API sdw::Vec4 getIndex( sdw::UInt const & instance

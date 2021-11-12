@@ -35,7 +35,7 @@ namespace castor3d
 			C3D_API void create( sdw::Vec3 world
 				, sdw::Vec3 normal );
 
-			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
 			sdw::Vec2 clipPosition;

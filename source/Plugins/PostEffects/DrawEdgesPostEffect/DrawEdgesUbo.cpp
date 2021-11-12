@@ -18,7 +18,7 @@ namespace draw_edges
 	{
 	}
 
-	ast::type::StructPtr DrawEdgesData::makeType( ast::type::TypesCache & cache )
+	ast::type::BaseStructPtr DrawEdgesData::makeType( ast::type::TypesCache & cache )
 	{
 		auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
 			, "C3D_DrawEdgesData" );

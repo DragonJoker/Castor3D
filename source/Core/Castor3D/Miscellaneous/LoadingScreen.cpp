@@ -126,11 +126,8 @@ namespace castor3d
 			// Shader inputs
 			auto position = writer.declInput< Vec2 >( "position", 0u );
 
-			// Shader outputs
-			auto out = writer.getOut();
-
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+					, VertexOut out )
 				{
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
@@ -144,13 +141,12 @@ namespace castor3d
 
 			// Shader inputs
 			auto c3d_source = writer.declSampledImage< FImg2DRgba32 >( "c3d_source", 0u, 0u );
-			auto in = writer.getIn();
 
 			// Shader outputs
 			auto fragColor = writer.declOutput< Vec4 >( "fragColor", 0 );
 
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+				, FragmentOut out )
 				{
 					fragColor = c3d_source.fetch( ivec2( in.fragCoord.xy() ), 0_i );
 				} );

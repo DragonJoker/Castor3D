@@ -46,7 +46,7 @@ namespace castor3d::shader
 	{
 	}
 
-	ast::type::StructPtr LightMaterial::makeType( ast::type::TypesCache & cache )
+	ast::type::BaseStructPtr LightMaterial::makeType( ast::type::TypesCache & cache )
 	{
 		auto result = cache.getStruct( ast::type::MemoryLayout::eStd430
 			, "C3D_LightMaterial" );

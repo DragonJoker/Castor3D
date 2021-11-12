@@ -158,7 +158,6 @@ namespace castor3d
 			, flags.programFlags
 			, getShaderFlags()
 			, hasTextures };
-		auto in = writer.getIn();
 
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
@@ -181,44 +180,42 @@ namespace castor3d
 		shader::OutFragmentSurface outSurface{ writer
 			, getShaderFlags()
 			, hasTextures };
-		auto out = writer.getOut();
 
-		std::function< void() > main = [&]()
-		{
-			auto curPosition = writer.declLocale( "curPosition"
-				, inSurface.position );
-			auto v4Normal = writer.declLocale( "v4Normal"
-				, vec4( inSurface.normal, 0.0_f ) );
-			auto v4Tangent = writer.declLocale( "v4Tangent"
-				, vec4( inSurface.tangent, 0.0_f ) );
-			outSurface.texture = inSurface.texture;
-			inSurface.morph( c3d_morphingData
-				, curPosition
-				, v4Normal
-				, v4Tangent
-				, outSurface.texture );
-			outSurface.material = c3d_modelData.getMaterialIndex( flags.programFlags
-				, inSurface.material );
-			outSurface.nodeId = c3d_modelData.getNodeId( flags.programFlags
-				, inSurface.nodeId );
-			outSurface.instance = writer.cast< UInt >( in.instanceIndex );
+		writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+			, VertexOut out )
+			{
+				auto curPosition = writer.declLocale( "curPosition"
+					, inSurface.position );
+				auto v4Normal = writer.declLocale( "v4Normal"
+					, vec4( inSurface.normal, 0.0_f ) );
+				auto v4Tangent = writer.declLocale( "v4Tangent"
+					, vec4( inSurface.tangent, 0.0_f ) );
+				outSurface.texture = inSurface.texture;
+				inSurface.morph( c3d_morphingData
+					, curPosition
+					, v4Normal
+					, v4Tangent
+					, outSurface.texture );
+				outSurface.material = c3d_modelData.getMaterialIndex( flags.programFlags
+					, inSurface.material );
+				outSurface.nodeId = c3d_modelData.getNodeId( flags.programFlags
+					, inSurface.nodeId );
+				outSurface.instance = writer.cast< UInt >( in.instanceIndex );
 
-			auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
-				, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, inSurface ) );
-			curPosition = mtxModel * curPosition;
-			outSurface.worldPosition = curPosition.xyz();
-			out.vtx.position = c3d_matrixData.worldToCurProj( curPosition );
+				auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
+					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, inSurface ) );
+				curPosition = mtxModel * curPosition;
+				outSurface.worldPosition = curPosition.xyz();
+				out.vtx.position = c3d_matrixData.worldToCurProj( curPosition );
 
-			auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
-				, c3d_modelData.getNormalMtx( flags.programFlags, mtxModel ) );
-			outSurface.computeTangentSpace( flags.programFlags
-				, c3d_matrixData.getCurViewCenter()
-				, mtxNormal
-				, v4Normal
-				, v4Tangent );
-		};
-
-		writer.implementFunction< sdw::Void >( "main", main );
+				auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
+					, c3d_modelData.getNormalMtx( flags.programFlags, mtxModel ) );
+				outSurface.computeTangentSpace( flags.programFlags
+					, c3d_matrixData.getCurViewCenter()
+					, mtxNormal
+					, v4Normal
+					, v4Tangent );
+			} );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
@@ -237,7 +234,6 @@ namespace castor3d
 		shader::InFragmentSurface inSurface{ writer
 			, getShaderFlags()
 			, hasTextures };
-		auto in = writer.getIn();
 
 		shader::Materials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
@@ -279,100 +275,99 @@ namespace castor3d
 		auto pxl_position( writer.declOutput< Vec4 >( "pxl_position", 2u ) );
 		auto pxl_flux( writer.declOutput< Vec4 >( "pxl_flux", 3u ) );
 
-		auto main = [&]()
-		{
-			pxl_normalLinear = vec4( 0.0_f );
-			pxl_variance = vec2( 0.0_f );
-			pxl_position = vec4( 0.0_f );
-			pxl_flux = vec4( 0.0_f );
-			auto texCoord = writer.declLocale( "texCoord"
-				, inSurface.texture );
-			auto normal = writer.declLocale( "normal"
-				, normalize( inSurface.normal ) );
-			auto tangent = writer.declLocale( "tangent"
-				, normalize( inSurface.tangent ) );
-			auto bitangent = writer.declLocale( "bitangent"
-				, normalize( inSurface.bitangent ) );
-			auto material = materials.getMaterial( inSurface.material );
-			auto gamma = writer.declLocale( "gamma"
-				, material.gamma );
-			auto emissive = writer.declLocale( "emissive"
-				, vec3( material.emissive ) );
-			auto alpha = writer.declLocale( "alpha"
-				, material.opacity );
-			auto alphaRef = writer.declLocale( "alphaRef"
-				, material.alphaRef );
-			auto lightMat = lightingModel->declMaterial( "lightMat" );
-			lightMat->create( material );
-			auto occlusion = writer.declLocale( "occlusion"
-				, 1.0_f );
-			auto transmittance = writer.declLocale( "transmittance"
-				, 0.0_f );
-
-			if ( hasTextures )
+		writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+			, FragmentOut out )
 			{
-				lightingModel->computeMapContributions( flags.passFlags
-					, filterTexturesFlags( flags.textures )
-					, gamma
-					, textureConfigs
-					, c3d_maps
-					, texCoord
-					, normal
-					, tangent
-					, bitangent
-					, emissive
+				pxl_normalLinear = vec4( 0.0_f );
+				pxl_variance = vec2( 0.0_f );
+				pxl_position = vec4( 0.0_f );
+				pxl_flux = vec4( 0.0_f );
+				auto texCoord = writer.declLocale( "texCoord"
+					, inSurface.texture );
+				auto normal = writer.declLocale( "normal"
+					, normalize( inSurface.normal ) );
+				auto tangent = writer.declLocale( "tangent"
+					, normalize( inSurface.tangent ) );
+				auto bitangent = writer.declLocale( "bitangent"
+					, normalize( inSurface.bitangent ) );
+				auto material = materials.getMaterial( inSurface.material );
+				auto gamma = writer.declLocale( "gamma"
+					, material.gamma );
+				auto emissive = writer.declLocale( "emissive"
+					, vec3( material.emissive ) );
+				auto alpha = writer.declLocale( "alpha"
+					, material.opacity );
+				auto alphaRef = writer.declLocale( "alphaRef"
+					, material.alphaRef );
+				auto lightMat = lightingModel->declMaterial( "lightMat" );
+				lightMat->create( material );
+				auto occlusion = writer.declLocale( "occlusion"
+					, 1.0_f );
+				auto transmittance = writer.declLocale( "transmittance"
+					, 0.0_f );
+
+				if ( hasTextures )
+				{
+					lightingModel->computeMapContributions( flags.passFlags
+						, filterTexturesFlags( flags.textures )
+						, gamma
+						, textureConfigs
+						, c3d_maps
+						, texCoord
+						, normal
+						, tangent
+						, bitangent
+						, emissive
+						, alpha
+						, occlusion
+						, transmittance
+						, *lightMat
+						, inSurface.tangentSpaceViewPosition
+						, inSurface.tangentSpaceFragPosition );
+				}
+
+				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
-					, occlusion
-					, transmittance
-					, *lightMat
-					, inSurface.tangentSpaceViewPosition
-					, inSurface.tangentSpaceFragPosition );
-			}
+					, alphaRef );
 
-			utils.applyAlphaFunc( flags.alphaFunc
-				, alpha
-				, alphaRef );
+				auto lightDiffuse = writer.declLocale( "lightDiffuse"
+					, vec3( 0.0_f ) );
+				auto lightSpecular = writer.declLocale( "lightSpecular"
+					, vec3( 0.0_f ) );
+				shader::OutputComponents output{ lightDiffuse, lightSpecular };
+				auto light = writer.declLocale( "light"
+					, c3d_shadowMapData.getPointLight( *lightingModel ) );
+				auto lightToVertex = writer.declLocale( "lightToVertex"
+					, light.m_position.xyz() - inSurface.worldPosition );
+				auto distance = writer.declLocale( "distance"
+					, length( lightToVertex ) );
+				auto attenuation = writer.declLocale( "attenuation"
+					, sdw::fma( light.m_attenuation.z()
+						, distance * distance
+						, sdw::fma( light.m_attenuation.y()
+							, distance
+							, light.m_attenuation.x() ) ) );
+				pxl_flux.rgb() = ( lightMat->albedo
+						* light.m_lightBase.m_colour
+						* light.m_lightBase.m_intensity.x()
+						* clamp( dot( lightToVertex / distance, normal ), 0.0_f, 1.0_f ) )
+					/ attenuation;
 
-			auto lightDiffuse = writer.declLocale( "lightDiffuse"
-				, vec3( 0.0_f ) );
-			auto lightSpecular = writer.declLocale( "lightSpecular"
-				, vec3( 0.0_f ) );
-			shader::OutputComponents output{ lightDiffuse, lightSpecular };
-			auto light = writer.declLocale( "light"
-				, c3d_shadowMapData.getPointLight( *lightingModel ) );
-			auto lightToVertex = writer.declLocale( "lightToVertex"
-				, light.m_position.xyz() - inSurface.worldPosition );
-			auto distance = writer.declLocale( "distance"
-				, length( lightToVertex ) );
-			auto attenuation = writer.declLocale( "attenuation"
-				, sdw::fma( light.m_attenuation.z()
-					, distance * distance
-					, sdw::fma( light.m_attenuation.y()
-						, distance
-						, light.m_attenuation.x() ) ) );
-			pxl_flux.rgb() = ( lightMat->albedo
-					* light.m_lightBase.m_colour
-					* light.m_lightBase.m_intensity.x()
-					* clamp( dot( lightToVertex / distance, normal ), 0.0_f, 1.0_f ) )
-				/ attenuation;
+				auto depth = writer.declLocale( "depth"
+					, c3d_shadowMapData.getLinearisedDepth( inSurface.worldPosition ) );
+				pxl_normalLinear.w() = depth;
+				pxl_normalLinear.xyz() = normal;
+				pxl_position.xyz() = inSurface.worldPosition;
 
-			auto depth = writer.declLocale( "depth"
-				, c3d_shadowMapData.getLinearisedDepth( inSurface.worldPosition ) );
-			pxl_normalLinear.w() = depth;
-			pxl_normalLinear.xyz() = normal;
-			pxl_position.xyz() = inSurface.worldPosition;
+				pxl_variance.x() = depth;
+				pxl_variance.y() = depth * depth;
 
-			pxl_variance.x() = depth;
-			pxl_variance.y() = depth * depth;
-
-			auto dx = writer.declLocale( "dx"
-				, dFdx( depth ) );
-			auto dy = writer.declLocale( "dy"
-				, dFdy( depth ) );
-			pxl_variance.y() += 0.25_f * ( dx * dx + dy * dy );
-		};
-
-		writer.implementFunction< sdw::Void >( "main", main );
+				auto dx = writer.declLocale( "dx"
+					, dFdx( depth ) );
+				auto dy = writer.declLocale( "dy"
+					, dFdy( depth ) );
+				pxl_variance.y() += 0.25_f * ( dx * dx + dy * dy );
+			} );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 }

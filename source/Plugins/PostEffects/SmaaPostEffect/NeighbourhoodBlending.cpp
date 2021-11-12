@@ -49,7 +49,6 @@ namespace smaa
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
 			auto vtx_offset = writer.declOutput< Vec4 >( "vtx_offset", 1u );
-			auto out = writer.getOut();
 
 			auto SMAANeighborhoodBlendingVS = writer.implementFunction< sdw::Void >( "SMAANeighborhoodBlendingVS"
 				, [&]( Vec2 const & texcoord
@@ -62,8 +61,8 @@ namespace smaa
 				, InVec2{ writer, "texcoord" }
 				, OutVec4{ writer, "offset" } );
 
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+				, VertexOut out )
 				{
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 					vtx_texture = uv;
@@ -200,8 +199,8 @@ namespace smaa
 			// Shader outputs
 			auto pxl_fragColour = writer.declOutput< Vec4 >( "pxl_fragColour", 0u );
 
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+				, FragmentOut out )
 				{
 					pxl_fragColour = SMAANeighborhoodBlendingPS( vtx_texture, vtx_offset, c3d_colourTex, c3d_blendTex );
 				} );

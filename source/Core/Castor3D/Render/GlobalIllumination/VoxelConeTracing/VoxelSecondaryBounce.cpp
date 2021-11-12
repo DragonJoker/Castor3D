@@ -128,8 +128,6 @@ namespace castor3d
 			using namespace sdw;
 			ComputeWriter writer;
 
-			writer.inputLayout( 64u, 1u, 1u );
-
 			// Inputs
 			auto voxels( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
 				, eVoxelBuffer
@@ -138,7 +136,6 @@ namespace castor3d
 			auto firstBounce( writer.declSampledImage< FImg3DRgba32 >( "firstBounce"
 				, eFirstBounce
 				, 0u ) );
-			auto in = writer.getIn();
 
 			// Outputs
 			auto output( writer.declImage< RWFImg3DRgba32 >( "output"
@@ -152,7 +149,7 @@ namespace castor3d
 			shader::GlobalIllumination indirect{ writer, utils };
 			indirect.declareTraceConeRadiance();
 
-			writer.implementMain( [&]()
+			writer.implementMainT< VoidT >( 64u, [&]( ComputeIn in )
 				{
 					auto coord = writer.declLocale( "coord"
 						, ivec3( utils.unflatten( in.globalInvocationID.x()
