@@ -51,10 +51,9 @@ namespace fxaa
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
 			auto vtx_posPos = writer.declOutput< Vec4 >( PosPos, 1u );
-			auto out = writer.getOut();
 
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+				, VertexOut out )
 				{
 					vtx_texture = uv;
 					out.vtx.position = vec4( position.xy(), 0.0_f, 1.0_f );
@@ -80,8 +79,8 @@ namespace fxaa
 
 #define FXAA_REDUCE_MIN	Float{ 1.0 / 128.0 }
 
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+				, FragmentOut out )
 				{
 					auto rgbNW = writer.declLocale( "rgbNW"
 						, c3d_mapColor.lod( vtx_texture, 0.0_f, ivec2( -1_i, -1_i ) ).rgb() );

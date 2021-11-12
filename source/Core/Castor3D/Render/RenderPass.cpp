@@ -956,7 +956,6 @@ namespace castor3d
 			, flags.programFlags
 			, getShaderFlags()
 			, hasTextures };
-		auto in = writer.getIn();
 
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
@@ -982,10 +981,9 @@ namespace castor3d
 		shader::OutFragmentSurface outSurface{ writer
 			, getShaderFlags()
 			, hasTextures };
-		auto out = writer.getOut();
 
-		writer.implementFunction< sdw::Void >( "main"
-			, [&]()
+		writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+			, VertexOut out )
 			{
 				auto curPosition = writer.declLocale( "curPosition"
 					, inSurface.position );
@@ -1040,7 +1038,6 @@ namespace castor3d
 		auto position = writer.declInput< Vec4 >( "position", 0u );
 		auto uv = writer.declInput< Vec2 >( "uv", 1u, hasTextures );
 		auto center = writer.declInput< Vec3 >( "center", 2u );
-		auto in = writer.getIn();
 
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
@@ -1060,10 +1057,9 @@ namespace castor3d
 		shader::OutFragmentSurface outSurface{ writer
 			, getShaderFlags()
 			, hasTextures };
-		auto out = writer.getOut();
 
-		writer.implementFunction< Void >( "main"
-			, [&]()
+		writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+			, VertexOut out )
 			{
 				auto curBbcenter = writer.declLocale( "curBbcenter"
 					, c3d_modelData.modelToCurWorld( vec4( center, 1.0_f ) ).xyz() );

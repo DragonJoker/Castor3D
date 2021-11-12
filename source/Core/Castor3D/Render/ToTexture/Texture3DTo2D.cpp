@@ -300,6 +300,43 @@ namespace castor3d
 			return result;
 		}
 
+		template< sdw::var::Flag FlagT >
+		struct SurfaceT
+			: sdw::StructInstance
+		{
+			SurfaceT( sdw::ShaderWriter & writer
+				, sdw::expr::ExprPtr expr
+				, bool enabled = true )
+				: sdw::StructInstance{ writer, std::move( expr ), enabled }
+				, voxelColour{ getMember< sdw::Vec4 >( "voxelColour" ) }
+			{
+			}
+
+			SDW_DeclStructInstance( , SurfaceT );
+
+			static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache )
+			{
+				auto result = cache.getIOStruct( sdw::type::MemoryLayout::eStd430
+					, ( FlagT == sdw::var::Flag::eShaderOutput
+						? std::string{ "Output" }
+						: std::string{ "Input" } ) + "Surface"
+					, FlagT );
+
+				if ( result->empty() )
+				{
+					uint32_t index = 0u;
+					result->declMember( "voxelColour"
+						, sdw::type::Kind::eVec4F
+						, sdw::type::NotArray
+						, index++ );
+				}
+
+				return result;
+			}
+
+			sdw::Vec4 voxelColour;
+		};
+
 		ShaderPtr getVertexProgram( RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
@@ -310,24 +347,19 @@ namespace castor3d
 			auto inSource( writer.declImage< RWFImg3DRgba32 >( "inSource"
 				, eSource
 				, 0u ) );
-			auto in = writer.getIn();
-
-			// Shader outputs
-			auto outVoxelColor = writer.declOutput< Vec4 >( "outVoxelColor", 0u );
-			auto out = writer.getOut();
 
 			shader::Utils utils{ writer, *renderSystem.getEngine() };
 			utils.declareUnflatten();
 
-			writer.implementFunction< void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, SurfaceT >( [&]( VertexIn in
+				, VertexOutT< SurfaceT > out )
 				{
 					auto coord = writer.declLocale( "coord"
 						, utils.unflatten( writer.cast< UInt >( in.vertexIndex )
 							, uvec3( gridSize ) ) );
 					out.vtx.position = vec4( vec3( coord ), 1.0f );
 
-					outVoxelColor = inSource.load( ivec3( coord ) );
+					out.voxelColour = inSource.load( ivec3( coord ) );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -337,18 +369,9 @@ namespace castor3d
 			using namespace sdw;
 			GeometryWriter writer;
 
-			writer.inputLayout( stmt::InputLayout::ePointList );
-			writer.outputLayout( stmt::OutputLayout::eTriangleStrip, 14u );
-
 			// Shader inputs
 			UBO_GRID( writer, eGridUbo );
 			UBO_MATRIX( writer, eMatrixUbo, 0u );
-			auto inVoxelColor = writer.declInputArray< Vec4 >( "inVoxelColor", 0u, 1u );
-			auto in = writer.getIn();
-
-			// Shader outputs
-			auto outVoxelColor = writer.declOutput< Vec4 >( "outVoxelColor", 0u );
-			auto out = writer.getOut();
 
 			// Creates a unit cube triangle strip from just vertex ID (14 vertices)
 			auto createCube = writer.implementFunction< Vec3 >( "createCube"
@@ -362,10 +385,11 @@ namespace castor3d
 				}
 				, InUInt{ writer, "vertexID" } );
 
-			writer.implementFunction< void >( "main"
-				, [&]()
+			writer.implementMainT< 14u, PointListT< SurfaceT >, TriangleStreamT< SurfaceT > >( [&]( GeometryIn in
+				, PointListT< SurfaceT > list
+				, TriangleStreamT< SurfaceT > out )
 				{
-					IF( writer, inVoxelColor[0].a() > 0 )
+					IF( writer, list[0].voxelColour.a() > 0 )
 					{
 						FOR( writer, UInt, i, 0_u, i < 14_u, ++i )
 						{
@@ -375,7 +399,7 @@ namespace castor3d
 
 							// [0, gridSize]
 							auto pos = writer.declLocale( "pos"
-								, in.vtx[0].position.xyz() );
+								, list[0].vtx.position.xyz() );
 							// [0, gridSize] => [0, 1] => [-1, 1]
 							pos = pos / writer.cast< Float >( gridSize ) * 2 - 1;
 							pos.y() = -pos.y();
@@ -385,14 +409,14 @@ namespace castor3d
 							pos += cubeVtxPos;
 							pos *= ( writer.cast< Float >( gridSize ) * ( 1.0_f / cellSize ) ) / writer.cast< Float >( gridSize );
 
-							outVoxelColor = inVoxelColor[0];
+							out.voxelColour = list[0].voxelColour;
 							out.vtx.position = c3d_matrixData.worldToCurProj( vec4( pos, 1.0f ) );
 
-							EmitVertex( writer );
+							out.append();
 						}
 						ROF;
 
-						EndPrimitive( writer );
+						out.restartStrip();
 					}
 					FI;
 				} );
@@ -404,18 +428,15 @@ namespace castor3d
 			using namespace sdw;
 			FragmentWriter writer;
 
-			// Shader inputs
-			auto inVoxelColor = writer.declInput< Vec4 >( "inVoxelColor", 0u );
-
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0u );
 
-			writer.implementFunction< Void >( "main"
-				, [&]()
+			writer.implementMainT< SurfaceT, VoidT >( [&]( FragmentInT< SurfaceT > in
+				, FragmentOut out )
 				{
-					IF( writer, inVoxelColor.a() > 0.0_f )
+					IF( writer, in.voxelColour.a() > 0.0_f )
 					{
-						pxl_fragColor = inVoxelColor;
+						pxl_fragColor = in.voxelColour;
 					}
 					ELSE
 					{

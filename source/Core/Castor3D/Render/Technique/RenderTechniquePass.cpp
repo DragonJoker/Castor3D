@@ -562,7 +562,6 @@ namespace castor3d
 			, flags.programFlags
 			, getShaderFlags()
 			, hasTextures };
-		auto in = writer.getIn();
 
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
@@ -588,9 +587,9 @@ namespace castor3d
 		shader::OutFragmentSurface outSurface{ writer
 			, getShaderFlags()
 			, hasTextures };
-		auto out = writer.getOut();
 
-		writer.implementMain( [&]()
+		writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+			, VertexOut out )
 			{
 				auto curPosition = writer.declLocale( "curPosition"
 					, inSurface.position );

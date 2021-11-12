@@ -67,11 +67,8 @@ namespace castor3d
 			// Shader inputs
 			auto position = writer.declInput< Vec2 >( "position", 0u );
 
-			// Shader outputs
-			auto out = writer.getOut();
-
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+				, VertexOut out )
 				{
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
@@ -94,8 +91,6 @@ namespace castor3d
 			auto c3d_mapNormal = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapNormal", NormalMapIdx, 0u, useNormalsBuffer );
 			auto c3d_readMultiplyFirst = writer.declConstant( "c3d_readMultiplyFirst", vec3( 2.0_f ) );
 			auto c3d_readAddSecond = writer.declConstant( "c3d_readAddSecond", vec3( 1.0_f ) );
-
-			auto in = writer.getIn();
 
 			auto pxl_fragColor = writer.declOutput< Vec3 >( "pxl_fragColor", 0u );
 			auto pxl_bentNormal = writer.declOutput< Vec4 >( "pxl_bentNormal", 1u );
@@ -372,7 +367,8 @@ namespace castor3d
 				}
 				, InFloat{ writer, "x" } );
 
-			writer.implementMain( [&]()
+			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+				, FragmentOut out )
 				{
 					// Pixel being shaded
 					auto ssCenter = writer.declLocale( "ssCenter"

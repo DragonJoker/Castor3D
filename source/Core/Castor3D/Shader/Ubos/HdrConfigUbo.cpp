@@ -22,7 +22,7 @@ namespace castor3d
 		{
 		}
 
-		ast::type::StructPtr HdrConfigData::makeType( ast::type::TypesCache & cache )
+		ast::type::BaseStructPtr HdrConfigData::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
 				, "C3D_HdrConfigData" );

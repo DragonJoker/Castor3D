@@ -45,7 +45,7 @@ namespace smaa
 	{
 	}
 
-	ast::type::StructPtr SmaaData::makeType( ast::type::TypesCache & cache )
+	ast::type::BaseStructPtr SmaaData::makeType( ast::type::TypesCache & cache )
 	{
 		auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
 			, "C3D_SmaaData" );

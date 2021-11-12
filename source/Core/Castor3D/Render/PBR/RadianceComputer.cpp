@@ -93,10 +93,9 @@ namespace castor3d
 
 				// Outputs
 				auto vtx_worldPosition = writer.declOutput< Vec3 >( "vtx_worldPosition", 0u );
-				auto out = writer.getOut();
 
-				writer.implementFunction< Void >( "main"
-					, [&]()
+				writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
+					, VertexOut out )
 					{
 						vtx_worldPosition = position;
 						out.vtx.position = ( c3d_viewProjection * vec4( position, 1.0_f ) ).xyww();
@@ -116,8 +115,8 @@ namespace castor3d
 				// Outputs
 				auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_FragColor", 0u );
 
-				writer.implementFunction< Void >( "main"
-					, [&]()
+				writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+					, FragmentOut out )
 					{
 						// From https://learnopengl.com/#!PBR/Lighting
 						// the sample direction equals the hemisphere's orientation 
