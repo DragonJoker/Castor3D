@@ -81,8 +81,8 @@ namespace castor3d
 		, m_particleFactory{ castor::makeUnique< ParticleFactory >() }
 		, m_enableValidation{ enableValidation }
 		, m_enableApiTrace{ C3D_EnableAPITrace }
-		, m_cpuJobs{ std::min( 4u, castor::CpuInformations{}.getCoreCount() / 2u ) }
-		, m_gpuJobs{ std::min( 2u, castor::CpuInformations{}.getCoreCount() / 2u ) }
+		, m_cpuJobs{ std::max( 8u, std::min( 4u, castor::CpuInformations{}.getCoreCount() / 2u ) ) }
+		, m_gpuJobs{ std::max( 4u, std::min( 2u, castor::CpuInformations{}.getCoreCount() / 2u ) ) }
 	{
 		m_passFactory = castor::makeUnique< PassFactory >( *this );
 		m_passesType = m_passFactory->listRegisteredTypes().begin()->second;
