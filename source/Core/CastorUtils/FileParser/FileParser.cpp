@@ -29,13 +29,6 @@ namespace castor
 
 	//*********************************************************************************************
 
-	PreprocessedFile & PreprocessedFile::operator=( PreprocessedFile && rhs )
-	{
-		m_actions = std::move( rhs.m_actions );
-		m_context = std::move( rhs.m_context );
-		return *this;
-	}
-
 	PreprocessedFile::PreprocessedFile( FileParser & parser )
 		: m_parser{ parser }
 	{
@@ -175,12 +168,12 @@ namespace castor
 			}
 			else
 			{
-				m_parser.validate();
+				m_parser.validate( *this );
 			}
 		}
 		else
 		{
-			m_parser.validate();
+			m_parser.validate( *this );
 		}
 
 		m_parser.cleanupParser( *this );
