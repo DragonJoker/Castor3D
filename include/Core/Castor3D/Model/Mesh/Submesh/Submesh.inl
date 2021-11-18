@@ -12,7 +12,7 @@ namespace castor3d
 	inline void SubmeshComponentAdder< T >::add( std::shared_ptr< T > component
 		, Submesh & submesh )
 	{
-		submesh.m_components.emplace( T::Name, component );
+		submesh.m_components.emplace( component->getID(), component );
 	}
 
 	//*********************************************************************************************
@@ -23,7 +23,7 @@ namespace castor3d
 		static inline void add( std::shared_ptr< BonesInstantiationComponent > component
 			, Submesh & submesh )
 		{
-			submesh.m_components.emplace( BonesInstantiationComponent::Name, component );
+			submesh.m_components.emplace( component->getID(), component);
 
 			if ( submesh.m_instantiatedBones != component )
 			{
@@ -40,7 +40,7 @@ namespace castor3d
 		static inline void add( std::shared_ptr< InstantiationComponent > component
 			, Submesh & submesh )
 		{
-			submesh.m_components.emplace( InstantiationComponent::Name, component );
+			submesh.m_components.emplace( component->getID(), component );
 
 			if ( submesh.m_instantiation != component )
 			{
@@ -57,7 +57,7 @@ namespace castor3d
 		static inline void add( std::shared_ptr< BonesComponent > component
 			, Submesh & submesh )
 		{
-			submesh.m_components.emplace( BonesComponent::Name, component );
+			submesh.m_components.emplace( component->getID(), component );
 
 			if ( !submesh.m_instantiatedBones )
 			{
@@ -241,11 +241,11 @@ namespace castor3d
 		if ( m_indexMapping
 			&& m_indexMapping != mapping )
 		{
-			m_components.erase( m_indexMapping->getType() );
+			m_components.erase( m_indexMapping->getID() );
 		}
 
 		m_indexMapping = mapping;
-		m_components.emplace( mapping->getType(), mapping );
+		m_components.emplace( mapping->getID(), mapping );
 	}
 
 	inline IndexMappingSPtr Submesh::getIndexMapping()const
@@ -255,13 +255,19 @@ namespace castor3d
 
 	inline bool Submesh::hasComponent( castor::String const & name )const
 	{
-		return m_components.find( name ) != m_components.end();
+		auto it = std::find_if( m_components.begin()
+			, m_components.end()
+			, [&name]( SubmeshComponentIDMap::value_type const & lookup )
+			{
+				return lookup.second->getType() == name;
+			} );
+		return it != m_components.end();
 	}
 
 	inline void Submesh::addComponent( castor::String const & name
 		, SubmeshComponentSPtr component )
 	{
-		m_components.emplace( name, component );
+		m_components.emplace( component->getID(), component);
 	}
 
 	template< typename T >
@@ -273,7 +279,12 @@ namespace castor3d
 	inline SubmeshComponentSPtr Submesh::getComponent( castor::String const & name )const
 	{
 		SubmeshComponentSPtr result;
-		auto it = m_components.find( name );
+		auto it = std::find_if( m_components.begin()
+			, m_components.end()
+			, [&name]( SubmeshComponentIDMap::value_type const & lookup )
+			{
+				return lookup.second->getType() == name;
+			} );
 
 		if ( it != m_components.end() )
 		{
@@ -313,7 +324,7 @@ namespace castor3d
 		return *m_instantiatedBones;
 	}
 
-	inline SubmeshComponentStrMap const & Submesh::getComponents()const
+	inline SubmeshComponentIDMap const & Submesh::getComponents()const
 	{
 		return m_components;
 	}

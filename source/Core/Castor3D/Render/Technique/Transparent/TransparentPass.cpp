@@ -135,6 +135,7 @@ namespace castor3d
 
 		using namespace sdw;
 		FragmentWriter writer;
+		auto textureFlags = filterTexturesFlags( flags.textures );
 		bool hasTextures = !flags.textures.empty();
 		bool hasDiffuseGI = checkFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing )
 			|| checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
@@ -149,11 +150,6 @@ namespace castor3d
 
 		shader::CookTorranceBRDF cookTorrance{ writer, utils };
 		cookTorrance.declareDiffuse();
-
-		// Fragment Intputs
-		shader::InFragmentSurface inSurface{ writer
-			, getShaderFlags()
-			, hasTextures };
 
 		shader::Materials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
@@ -211,17 +207,24 @@ namespace castor3d
 		auto pxl_revealage( writer.declOutput< Float >( getTextureName( WbTexture::eRevealage ), 1 ) );
 		auto pxl_velocity( writer.declOutput< Vec4 >( "pxl_velocity", 2 ) );
 
-		writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
+				, flags.programFlags
+				, getShaderFlags()
+				, textureFlags
+				, flags.passFlags
+				, hasTextures }
+			, FragmentOut{ writer }
+			, [&]( FragmentInT< shader::FragmentSurfaceT > in
 			, FragmentOut out )
 			{
 				auto normal = writer.declLocale( "normal"
-					, normalize( inSurface.normal ) );
+					, normalize( in.normal ) );
 				auto tangent = writer.declLocale( "tangent"
-					, normalize( inSurface.tangent ) );
+					, normalize( in.tangent ) );
 				auto bitangent = writer.declLocale( "bitangent"
-					, normalize( inSurface.bitangent ) );
+					, normalize( in.bitangent ) );
 				auto material = writer.declLocale( "material"
-					, materials.getMaterial( inSurface.material ) );
+					, materials.getMaterial( in.material ) );
 				auto gamma = writer.declLocale( "gamma"
 					, material.gamma );
 				auto opacity = writer.declLocale( "opacity"
@@ -233,7 +236,7 @@ namespace castor3d
 				auto worldEye = writer.declLocale( "worldEye"
 					, c3d_sceneData.cameraPosition );
 				auto texCoord = writer.declLocale( "texCoord"
-					, inSurface.texture );
+					, in.texture );
 				auto occlusion = writer.declLocale( "occlusion"
 					, 1.0_f );
 				auto transmittance = writer.declLocale( "transmittance"
@@ -258,8 +261,8 @@ namespace castor3d
 					, occlusion
 					, transmittance
 					, *lightMat
-					, inSurface.tangentSpaceViewPosition
-					, inSurface.tangentSpaceFragPosition );
+					, in.tangentSpaceViewPosition
+					, in.tangentSpaceFragPosition );
 				utils.applyAlphaFunc( flags.blendAlphaFunc
 					, opacity
 					, material.alphaRef
@@ -273,7 +276,7 @@ namespace castor3d
 						, vec3( 0.0_f ) );
 					shader::OutputComponents output{ lightDiffuse, lightSpecular };
 					auto surface = writer.declLocale< shader::Surface >( "surface" );
-					surface.create( in.fragCoord.xy(), inSurface.viewPosition, inSurface.worldPosition, normal );
+					surface.create( in.fragCoord.xy(), in.viewPosition, in.worldPosition, normal );
 					lightingModel->computeCombined( *lightMat
 						, c3d_sceneData
 						, surface
@@ -348,7 +351,7 @@ namespace castor3d
 					, opacity
 					, material.bwAccumulationOperator );
 				pxl_revealage = opacity;
-				pxl_velocity.xy() = inSurface.getVelocity();
+				pxl_velocity.xy() = in.getVelocity();
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

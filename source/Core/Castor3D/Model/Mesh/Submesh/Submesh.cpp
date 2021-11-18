@@ -83,18 +83,20 @@ namespace castor3d
 		}
 
 		ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout( ShaderFlags const & flags
-			, bool hasTextures )
+			, bool hasTextures
+			, uint32_t & currentLocation )
 		{
 			ashes::VkVertexInputBindingDescriptionArray bindings{ { 0u
 				, sizeof( InterleavedVertex ), VK_VERTEX_INPUT_RATE_VERTEX } };
-			ashes::VkVertexInputAttributeDescriptionArray attributes{ 1u, { SceneRenderPass::VertexInputs::PositionLocation
+
+			ashes::VkVertexInputAttributeDescriptionArray attributes{ 1u, { currentLocation++
 				, 0u
 				, VK_FORMAT_R32G32B32_SFLOAT
 				, offsetof( InterleavedVertex, pos ) } };
 
 			if ( checkFlag( flags, ShaderFlag::eNormal ) )
 			{
-				attributes.push_back( { SceneRenderPass::VertexInputs::NormalLocation
+				attributes.push_back( { currentLocation++
 					, 0u
 					, VK_FORMAT_R32G32B32_SFLOAT
 					, offsetof( InterleavedVertex, nml ) } );
@@ -102,7 +104,7 @@ namespace castor3d
 
 			if ( checkFlag( flags, ShaderFlag::eTangentSpace ) )
 			{
-				attributes.push_back( { SceneRenderPass::VertexInputs::TangentLocation
+				attributes.push_back( { currentLocation++
 					, 0u
 					, VK_FORMAT_R32G32B32_SFLOAT
 					, offsetof( InterleavedVertex, tan ) } );
@@ -110,7 +112,7 @@ namespace castor3d
 
 			if ( hasTextures )
 			{
-				attributes.push_back( { SceneRenderPass::VertexInputs::TextureLocation
+				attributes.push_back( { currentLocation++
 					, 0u
 					, VK_FORMAT_R32G32B32_SFLOAT
 					, offsetof( InterleavedVertex, tex ) } );
@@ -418,10 +420,11 @@ namespace castor3d
 			hash = castor::hashCombine( hash, mask.empty() );
 
 			auto layoutIt = m_vertexLayouts.find( hash );
+			uint32_t currentLocation = 0u;
 
 			if ( layoutIt == m_vertexLayouts.end() )
 			{
-				layoutIt = m_vertexLayouts.emplace( hash, doCreateVertexLayout( flags, !mask.empty() ) ).first;
+				layoutIt = m_vertexLayouts.emplace( hash, doCreateVertexLayout( flags, !mask.empty(), currentLocation ) ).first;
 			}
 
 			layouts.push_back( layoutIt->second );
@@ -434,7 +437,8 @@ namespace castor3d
 					, offsets
 					, layouts
 					, instanceMult
-					, mask );
+					, mask
+					, currentLocation );
 			}
 
 			GeometryBuffers result;

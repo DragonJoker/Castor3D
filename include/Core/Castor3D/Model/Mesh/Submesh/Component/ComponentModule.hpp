@@ -130,7 +130,7 @@ namespace castor3d
 	CU_DeclareVector( Face, Face );
 	//! Face pointer array
 	CU_DeclareVector( FaceSPtr, FacePtr );
-	CU_DeclareMap( castor::String, SubmeshComponentSPtr, SubmeshComponentStr );
+	CU_DeclareMap( uint32_t, SubmeshComponentSPtr, SubmeshComponentID );
 
 	//@}
 	//@}

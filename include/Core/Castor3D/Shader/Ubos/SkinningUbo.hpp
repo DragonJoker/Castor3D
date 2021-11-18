@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "UbosModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
+#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 
@@ -65,11 +66,49 @@ namespace castor3d
 		 *\param[in]	flags	Les indicateurs du programme.
 		 *\return		La matrice résultat.
 		 */
+		template< ast::var::Flag FlagT >
 		C3D_API static sdw::Mat4 computeTransform( shader::SkinningData const & data
-			, shader::VertexSurface const & surface
+			, shader::VertexSurfaceT< FlagT > const & surface
 			, sdw::ShaderWriter & writer
 			, ProgramFlags const & flags
-			, sdw::Mat4 const & curMtxModel );
+			, sdw::Mat4 const & curMtxModel )
+		{
+			using namespace sdw;
+			auto mtxBoneTransform = writer.declLocale< Mat4 >( cuT( "mtxBoneTransform" ) );
+
+			if ( checkFlag( flags, ProgramFlag::eInstantiation ) )
+			{
+				auto gl_InstanceID = writer.getVariable< Int >( cuT( "gl_InstanceIndex" ) );
+				auto mtxInstanceOffset = writer.declLocale( cuT( "mtxInstanceOffset" )
+					, gl_InstanceID * 400_i );
+
+				auto & ssbo = *data.ssbo;
+				mtxBoneTransform = ssbo[writer.cast< UInt >( mtxInstanceOffset + surface.boneIds0[0_i] )] * surface.boneWeights0[0_i];
+				mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + surface.boneIds0[1_i] )] * surface.boneWeights0[1_i];
+				mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + surface.boneIds0[2_i] )] * surface.boneWeights0[2_i];
+				mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + surface.boneIds0[3_i] )] * surface.boneWeights0[3_i];
+				mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + surface.boneIds1[0_i] )] * surface.boneWeights1[0_i];
+				mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + surface.boneIds1[1_i] )] * surface.boneWeights1[1_i];
+				mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + surface.boneIds1[2_i] )] * surface.boneWeights1[2_i];
+				mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + surface.boneIds1[3_i] )] * surface.boneWeights1[3_i];
+				mtxBoneTransform = surface.transform * mtxBoneTransform;
+			}
+			else
+			{
+				auto bones = data.ubo->getMemberArray< Mat4 >( SkinningUbo::Bones );
+				mtxBoneTransform = bones[surface.boneIds0[0]] * surface.boneWeights0[0];
+				mtxBoneTransform += bones[surface.boneIds0[1]] * surface.boneWeights0[1];
+				mtxBoneTransform += bones[surface.boneIds0[2]] * surface.boneWeights0[2];
+				mtxBoneTransform += bones[surface.boneIds0[3]] * surface.boneWeights0[3];
+				mtxBoneTransform += bones[surface.boneIds1[0]] * surface.boneWeights1[0];
+				mtxBoneTransform += bones[surface.boneIds1[1]] * surface.boneWeights1[1];
+				mtxBoneTransform += bones[surface.boneIds1[2]] * surface.boneWeights1[2];
+				mtxBoneTransform += bones[surface.boneIds1[3]] * surface.boneWeights1[3];
+				mtxBoneTransform = curMtxModel * mtxBoneTransform;
+			}
+
+			return mtxBoneTransform;
+		}
 		/**@}*/
 
 	public:

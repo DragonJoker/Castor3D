@@ -80,7 +80,6 @@ namespace castor3d::shader
 	static int constexpr MaxTextureConfigurationComponentsCount = 9;
 
 	struct DirectionalLight;
-	struct InFragmentSurface;
 	struct Light;
 	struct LightMaterial;
 	struct LayeredLpvGridData;
@@ -88,14 +87,20 @@ namespace castor3d::shader
 	struct LpvLightData;
 	struct Material;
 	struct OutputComponents;
-	struct OutFragmentSurface;
 	struct PointLight;
 	struct SpotLight;
-	struct Surface;
 	struct TextureConfigData;
 	struct TiledDirectionalLight;
-	struct VertexSurface;
 	struct VoxelData;
+
+	template< ast::var::Flag FlagT >
+	struct SurfaceT;
+	template< ast::var::Flag FlagT >
+	struct FragmentSurfaceT;
+	template< ast::var::Flag FlagT >
+	struct VertexSurfaceT;
+
+	using Surface = SurfaceT< ast::var::Flag::eNone >;
 
 	class Fog;
 	class Materials;

@@ -136,13 +136,14 @@ namespace GuiCommon
 	{
 		wxString extension;
 		wxString source;
+		spirv::SpirVConfig spvConfig{ spirv::v1_5 };
 
 		switch ( language )
 		{
 		case GuiCommon::ShaderLanguage::SPIRV:
 			extension = wxT( ".spirv" );
 			source = make_wxString( spirv::writeSpirv( *m_module.shader
-				, spirv::SpirVConfig{ spirv::SpirVConfig::v1_3 }
+				, spvConfig
 				, true ) );
 			break;
 #if C3D_HasGLSL

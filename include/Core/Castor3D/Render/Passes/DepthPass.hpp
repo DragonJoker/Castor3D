@@ -45,7 +45,8 @@ namespace castor3d
 		{
 			return ShaderFlag::eWorldSpace
 				| ShaderFlag::eTangentSpace
-				| ShaderFlag::eVelocity;
+				| ShaderFlag::eVelocity
+				| ShaderFlag::eNodeId;
 		}
 
 	public:
@@ -72,7 +73,6 @@ namespace castor3d
 		}
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
-		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
 	};
