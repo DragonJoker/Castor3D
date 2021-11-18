@@ -341,7 +341,7 @@ namespace castor3d
 			m_culler = std::make_unique< FrustumCuller >( *getScene(), *getCamera() );
 			doInitCombineProgram( progress );
 			auto result = doInitialiseTechnique( device, queueData, progress );
-			setProgressBarTitle( progress, "Render Target" );
+			setProgressBarTitle( progress, "Initialising: Render Target" );
 			auto * previousPass = &m_renderTechnique->getLastPass();
 
 			if ( !m_hdrPostEffects.empty() )
@@ -758,7 +758,7 @@ namespace castor3d
 		{
 			try
 			{
-				setProgressBarTitle( progress, "Render Technique" );
+				setProgressBarTitle( progress, "Initialising: Render Technique" );
 				m_renderTechnique = castor::makeUnique< RenderTechnique >( getName()
 					, *this
 					, device
