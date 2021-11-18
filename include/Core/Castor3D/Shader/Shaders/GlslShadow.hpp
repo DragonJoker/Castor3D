@@ -49,14 +49,14 @@ namespace castor3d
 				, sdw::Mat4 const & lightMatrix
 				, sdw::Vec3 const & lightDirection
 				, sdw::UInt const & cascadeIndex
-				, sdw::UInt const & maxCascade )const;
+				, sdw::UInt const & maxCascade );
 			C3D_API sdw::Float computeSpot( shader::Light const & light
 				, Surface const & surface
 				, sdw::Mat4 const & lightMatrix
-				, sdw::Vec3 const & lightDirection )const;
+				, sdw::Vec3 const & lightDirection );
 			C3D_API sdw::Float computePoint( shader::Light const & light
 				, Surface const & surface
-				, sdw::Vec3 const & lightDirection )const;
+				, sdw::Vec3 const & lightDirection );
 			C3D_API void computeVolumetric( shader::Light const & light
 				, Surface const & surface
 				, sdw::Vec3 const & eyePosition
@@ -64,9 +64,9 @@ namespace castor3d
 				, sdw::Vec3 const & lightDirection
 				, sdw::UInt const & cascadeIndex
 				, sdw::UInt const & maxCascade
-				, OutputComponents & parentOutput )const;
+				, OutputComponents & parentOutput );
 			C3D_API sdw::Vec4 getLightSpacePosition( sdw::Mat4 const & lightMatrix
-				, sdw::Vec3 const & worldSpacePosition )const;
+				, sdw::Vec3 const & worldSpacePosition );
 
 			bool isEnabled()const
 			{
@@ -87,7 +87,7 @@ namespace castor3d
 			void doDeclareComputeDirectionalShadow();
 			void doDeclareComputeSpotShadow();
 			void doDeclareComputePointShadow();
-			void doDeclareVolumetric();
+			void doDeclareComputeVolumetric();
 
 		private:
 			sdw::ShaderWriter & m_writer;

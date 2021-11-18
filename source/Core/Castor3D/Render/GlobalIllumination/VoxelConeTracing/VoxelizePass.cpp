@@ -531,14 +531,7 @@ namespace castor3d
 		using namespace sdw;
 		FragmentWriter writer;
 		bool hasTextures = !flags.textures.empty();
-
 		shader::Utils utils{ writer, *getEngine() };
-		utils.declareApplyGamma();
-		utils.declareRemoveGamma();
-		utils.declareIsSaturated();
-		utils.declareEncodeColor();
-		utils.declareEncodeNormal();
-		utils.declareFlatten();
 
 		// Shader inputs
 		shader::Materials materials{ writer };

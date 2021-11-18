@@ -70,7 +70,6 @@ namespace castor3d
 				auto pxl_colour = writer.declOutput< Vec4 >( "pxl_colour", 0u );
 
 				shader::Utils utils{ writer, *device.renderSystem.getEngine() };
-				utils.declareInvertVec2Y();
 				
 				auto sampleSphericalMap = writer.implementFunction< Vec2 >( "sampleSphericalMap"
 					, [&]( Vec3 const & v )

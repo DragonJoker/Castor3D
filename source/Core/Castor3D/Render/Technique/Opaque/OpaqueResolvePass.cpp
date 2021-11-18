@@ -161,14 +161,7 @@ namespace castor3d
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			shader::Utils utils{ writer, *renderSystem.getEngine() };
-			utils.declareRemoveGamma();
-			utils.declareCalcWSPosition();
-			utils.declareCalcVSPosition();
-			utils.declareDecodeMaterial();
-			utils.declareInvertVec2Y();
-
 			shader::CookTorranceBRDF cookTorrance{ writer, utils };
-			cookTorrance.declareDiffuse();
 
 			auto lightingModel = utils.createLightingModel( shader::getLightingModelName( *renderSystem.getEngine(), passType )
 				, {}
