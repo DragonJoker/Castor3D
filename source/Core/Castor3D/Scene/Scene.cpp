@@ -104,7 +104,7 @@ namespace castor3d
 		, m_background{ std::make_shared< ColourBackground >( engine, *this ) }
 		, m_lightFactory{ std::make_shared< LightFactory >() }
 		, m_listener{ engine.getFrameListenerCache().add( cuT( "Scene_" ) + name + castor::string::toString( intptr_t( this ) ) ) }
-		, m_animationUpdater{ std::max( 2u, engine.getCpuInformations().getCoreCount() - ( engine.isThreaded() ? 2u : 1u ) ) }
+		, m_animationUpdater{ std::min( 4u, std::max( 2u, engine.getCpuInformations().getCoreCount() / 2u ) ) }
 		, m_renderNodes{ castor::makeUnique< SceneRenderNodes >( *this ) }
 	{
 		m_rootCameraNode->attachTo( *m_rootNode );
