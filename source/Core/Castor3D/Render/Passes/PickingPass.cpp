@@ -306,13 +306,8 @@ namespace castor3d
 	{
 		using namespace sdw;
 		VertexWriter writer;
+		auto textureFlags = filterTexturesFlags( flags.textures );
 		bool hasTextures = !flags.textures.empty();
-
-		// Vertex inputs
-		shader::VertexSurface inSurface{ writer
-			, flags.programFlags
-			, getShaderFlags()
-			, hasTextures };
 
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
@@ -331,28 +326,33 @@ namespace castor3d
 			, uint32_t( PassUboIdx::eMatrix )
 			, RenderPipeline::eAdditional );
 
-		// Outputs
-		shader::OutFragmentSurface outSurface{ writer
-			, getShaderFlags()
-			, hasTextures };
-
-		writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-			, VertexOut out )
+		writer.implementMainT< shader::VertexSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
+				, flags.programFlags
+				, getShaderFlags()
+				, textureFlags
+				, flags.passFlags
+				, hasTextures }
+			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer
+				, flags.programFlags
+				, getShaderFlags()
+				, textureFlags
+				, flags.passFlags
+				, hasTextures }
+			, [&]( VertexInT< shader::VertexSurfaceT > in
+			, VertexOutT< shader::FragmentSurfaceT > out )
 			{
 				auto curPosition = writer.declLocale( "curPosition"
-					, inSurface.position );
-				outSurface.texture = inSurface.texture;
-				inSurface.morph( c3d_morphingData
+					, in.position );
+				out.texture = in.texture;
+				in.morph( c3d_morphingData
 					, curPosition
-					, outSurface.texture );
-				outSurface.material = c3d_modelData.getMaterialIndex( flags.programFlags
-					, inSurface.material );
-				outSurface.nodeId = c3d_modelData.getNodeId( flags.programFlags
-					, inSurface.nodeId );
-				outSurface.instance = writer.cast< UInt >( in.instanceIndex );
+					, out.texture );
+				out.material = c3d_modelData.getMaterialIndex( flags.programFlags
+					, in.material );
+				out.instance = writer.cast< UInt >( in.instanceIndex );
 
 				auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
-					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, inSurface ) );
+					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, in ) );
 				curPosition = mtxModel * curPosition;
 				out.vtx.position = c3d_matrixData.worldToCurProj( curPosition );
 			} );
@@ -368,7 +368,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
-		auto textures = filterTexturesFlags( flags.textures );
+		auto textureFlags = filterTexturesFlags( flags.textures );
 
 		// UBOs
 		auto & renderSystem = *getEngine()->getRenderSystem();
@@ -390,10 +390,6 @@ namespace castor3d
 			, uint32_t( PassUboIdx::eCount )
 			, RenderPipeline::eAdditional );
 
-		// Fragment Intputs
-		shader::InFragmentSurface inSurface{ writer
-			, getShaderFlags()
-			, hasTextures };
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
 			, RenderPipeline::eTextures
@@ -404,21 +400,28 @@ namespace castor3d
 		auto pxl_fragColor( writer.declOutput< Vec4 >( "pxl_fragColor", 0 ) );
 		shader::Utils utils{ writer, *renderSystem.getEngine() };
 
-		writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
+				, flags.programFlags
+				, getShaderFlags()
+				, textureFlags
+				, flags.passFlags
+				, hasTextures }
+			, FragmentOut{ writer }
+			, [&]( FragmentInT< shader::FragmentSurfaceT > in
 			, FragmentOut out )
 			{
-				auto material = materials->getMaterial( inSurface.material );
+				auto material = materials->getMaterial( in.material );
 				auto opacity = writer.declLocale( "opacity"
 					, material.opacity );
-				utils.computeOpacityMapContribution( textures
+				utils.computeOpacityMapContribution( textureFlags
 					, textureConfigs
 					, c3d_maps
-					, inSurface.texture
+					, in.texture
 					, opacity );
 				utils.applyAlphaFunc( flags.alphaFunc
 					, opacity
 					, material.alphaRef );
-				pxl_fragColor = c3d_pickingData.getIndex( inSurface.instance
+				pxl_fragColor = c3d_pickingData.getIndex( in.instance
 					, in.primitiveID );
 
 #if C3D_DebugPicking

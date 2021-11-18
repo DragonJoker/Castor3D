@@ -947,15 +947,14 @@ namespace castor3d
 
 	ShaderPtr SceneRenderPass::doGetVertexShaderSource( PipelineFlags const & flags )const
 	{
+		// Since their vertex attribute locations overlap, we must not have both set at the same time.
+		CU_Require( ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) ? 1 : 0 )
+			+ ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) ? 1 : 0 ) < 2
+			&& "Can't have both instantiation and morphing yet." );
 		using namespace sdw;
 		VertexWriter writer;
+		auto textureFlags = filterTexturesFlags( flags.textures );
 		bool hasTextures = !flags.textures.empty();
-
-		// Vertex inputs
-		shader::VertexSurface inSurface{ writer
-			, flags.programFlags
-			, getShaderFlags()
-			, hasTextures };
 
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
@@ -977,49 +976,60 @@ namespace castor3d
 			, uint32_t( PassUboIdx::eScene )
 			, RenderPipeline::eAdditional );
 
-		// Outputs
-		shader::OutFragmentSurface outSurface{ writer
-			, getShaderFlags()
-			, hasTextures };
-
-		writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-			, VertexOut out )
+		writer.implementMainT< shader::VertexSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
+				, flags.programFlags
+				, getShaderFlags()
+				, textureFlags
+				, flags.passFlags
+				, hasTextures }
+			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer
+				, flags.programFlags
+				, getShaderFlags()
+				, textureFlags
+				, flags.passFlags
+				, hasTextures }
+			, [&]( VertexInT< shader::VertexSurfaceT > in
+				, VertexOutT< shader::FragmentSurfaceT > out )
 			{
 				auto curPosition = writer.declLocale( "curPosition"
-					, inSurface.position );
+					, in.position );
 				auto v4Normal = writer.declLocale( "v4Normal"
-					, vec4( inSurface.normal, 0.0_f ) );
+					, vec4( in.normal, 0.0_f ) );
 				auto v4Tangent = writer.declLocale( "v4Tangent"
-					, vec4( inSurface.tangent, 0.0_f ) );
-				outSurface.texture = inSurface.texture;
-				inSurface.morph( c3d_morphingData
+					, vec4( in.tangent, 0.0_f ) );
+				out.texture = in.texture;
+				in.morph( c3d_morphingData
 					, curPosition
 					, v4Normal
 					, v4Tangent
-					, outSurface.texture );
-				outSurface.material = c3d_modelData.getMaterialIndex( flags.programFlags
-					, inSurface.material );
-				outSurface.nodeId = c3d_modelData.getNodeId( flags.programFlags
-					, inSurface.nodeId );
-				outSurface.instance = writer.cast< UInt >( in.instanceIndex );
+					, out.texture );
+				out.material = c3d_modelData.getMaterialIndex( flags.programFlags
+					, in.material );
+				out.nodeId = c3d_modelData.getNodeId( flags.programFlags
+					, in.nodeId );
+				out.instance = writer.cast< UInt >( in.instanceIndex );
 
 				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
-					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, inSurface ) );
+					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, in ) );
 				auto prvMtxModel = writer.declLocale< Mat4 >( "prvMtxModel"
 					, c3d_modelData.getPrvModelMtx( flags.programFlags, curMtxModel ) );
 				auto prvPosition = writer.declLocale( "prvPosition"
-					, prvMtxModel * curPosition );
-				curPosition = curMtxModel * curPosition;
-				outSurface.worldPosition = curPosition.xyz();
-				outSurface.computeVelocity( c3d_matrixData
+					, c3d_matrixData.worldToPrvProj( prvMtxModel * curPosition ) );
+				auto worldPos = writer.declLocale( "worldPos"
+					, curMtxModel * curPosition );
+				out.worldPosition = worldPos.xyz();
+				out.viewPosition = c3d_matrixData.worldToCurView( worldPos ).xyz();
+				curPosition = c3d_matrixData.worldToCurProj( worldPos );
+				out.computeVelocity( c3d_matrixData
 					, curPosition
 					, prvPosition );
 				out.vtx.position = curPosition;
 
 				auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
 					, c3d_modelData.getNormalMtx( flags.programFlags, curMtxModel ) );
-				outSurface.computeTangentSpace( flags.programFlags
+				out.computeTangentSpace( flags.programFlags
 					, c3d_sceneData.cameraPosition
+					, worldPos.xyz()
 					, mtxNormal
 					, v4Normal
 					, v4Tangent );
@@ -1032,6 +1042,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		VertexWriter writer;
+		auto textureFlags = filterTexturesFlags( flags.textures );
 		bool hasTextures = !flags.textures.empty();
 
 		// Shader inputs
@@ -1053,17 +1064,19 @@ namespace castor3d
 			, uint32_t( PassUboIdx::eScene )
 			, RenderPipeline::eAdditional );
 
-		// Shader outputs
-		shader::OutFragmentSurface outSurface{ writer
-			, getShaderFlags()
-			, hasTextures };
-
-		writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-			, VertexOut out )
+		writer.implementMainT< VoidT, shader::FragmentSurfaceT >( sdw::VertexInT< sdw::VoidT >{ writer }
+			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer
+				, flags.programFlags
+				, getShaderFlags()
+				, textureFlags
+				, flags.passFlags
+				, hasTextures }
+			, [&]( VertexInT< VoidT > in
+				, VertexOutT< shader::FragmentSurfaceT > out )
 			{
 				auto curBbcenter = writer.declLocale( "curBbcenter"
 					, c3d_modelData.modelToCurWorld( vec4( center, 1.0_f ) ).xyz() );
-				auto prvBbcenter = writer.declLocale( "prvBbcenter" 
+				auto prvBbcenter = writer.declLocale( "prvBbcenter"
 					, c3d_modelData.modelToPrvWorld( vec4( center, 1.0_f ) ).xyz() );
 				auto curToCamera = writer.declLocale( "curToCamera"
 					, c3d_sceneData.getPosToCamera( curBbcenter ) );
@@ -1078,29 +1091,35 @@ namespace castor3d
 					, c3d_billboardData.getWidth( flags.programFlags, c3d_sceneData ) );
 				auto height = writer.declLocale( "height"
 					, c3d_billboardData.getHeight( flags.programFlags, c3d_sceneData ) );
-				outSurface.worldPosition = curBbcenter
-					+ right * position.x() * width
-					+ up * position.y() * height;
+				auto scaledRight = writer.declLocale( "scaledRight"
+					, right * position.x() * width );
+				auto scaledUp = writer.declLocale( "scaledUp"
+					, up * position.y() * height );
+				auto worldPos = writer.declLocale( "worldPos"
+					, ( curBbcenter + scaledRight + scaledUp ) );
+				out.worldPosition = worldPos;
 
 				if ( hasTextures )
 				{
-					outSurface.texture = vec3( uv, 0.0_f );
+					out.texture = vec3( uv, 0.0_f );
 				}
 
-				outSurface.material = c3d_modelData.getMaterialIndex();
-				outSurface.nodeId = c3d_modelData.getNodeId();
-				outSurface.instance = writer.cast< UInt >( in.instanceIndex );
+				out.material = c3d_modelData.getMaterialIndex();
+				out.nodeId = c3d_modelData.getNodeId();
+				out.instance = writer.cast< UInt >( in.instanceIndex );
 
 				auto prvPosition = writer.declLocale( "prvPosition"
-					, vec4( prvBbcenter + right * position.x() * width + up * position.y() * height, 1.0_f ) );
+					, c3d_matrixData.worldToPrvProj( vec4( prvBbcenter + scaledRight + scaledUp, 1.0_f ) ) );
 				auto curPosition = writer.declLocale( "curPosition"
-					, vec4( outSurface.worldPosition, 1.0_f ) );
-				outSurface.computeVelocity( c3d_matrixData
+					, c3d_matrixData.worldToCurProj( vec4( worldPos, 1.0_f ) ) );
+				out.viewPosition = c3d_matrixData.worldToCurView( vec4( worldPos, 1.0_f ) ).xyz();
+				out.computeVelocity( c3d_matrixData
 					, curPosition
 					, prvPosition );
 				out.vtx.position = curPosition;
 
-				outSurface.computeTangentSpace( c3d_sceneData.cameraPosition
+				out.computeTangentSpace( c3d_sceneData.cameraPosition
+					, worldPos
 					, curToCamera
 					, up
 					, right );

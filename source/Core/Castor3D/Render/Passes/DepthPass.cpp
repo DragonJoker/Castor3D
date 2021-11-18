@@ -15,6 +15,7 @@
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
+#include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelUbo.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
@@ -88,88 +89,6 @@ namespace castor3d
 			, 3u );
 	}
 
-	ShaderPtr DepthPass::doGetVertexShaderSource( PipelineFlags const & flags )const
-	{
-		using namespace sdw;
-		VertexWriter writer;
-		bool hasTextures = !flags.textures.empty();
-
-		// Vertex inputs
-		shader::VertexSurface inSurface{ writer
-			, flags.programFlags
-			, getShaderFlags()
-			, hasTextures };
-
-		UBO_MODEL( writer
-			, uint32_t( NodeUboIdx::eModel )
-			, RenderPipeline::eBuffers );
-		auto skinningData = SkinningUbo::declare( writer
-			, uint32_t( NodeUboIdx::eSkinningUbo )
-			, uint32_t( NodeUboIdx::eSkinningSsbo )
-			, RenderPipeline::eBuffers
-			, flags.programFlags );
-		UBO_MORPHING( writer
-			, uint32_t( NodeUboIdx::eMorphing )
-			, RenderPipeline::eBuffers
-			, flags.programFlags );
-
-		UBO_MATRIX( writer
-			, uint32_t( PassUboIdx::eMatrix )
-			, RenderPipeline::eAdditional );
-		UBO_SCENE( writer
-			, uint32_t( PassUboIdx::eScene )
-			, RenderPipeline::eAdditional );
-
-		// Outputs
-		shader::OutFragmentSurface outSurface{ writer
-			, getShaderFlags()
-			, hasTextures };
-
-		writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-			, VertexOut out )
-			{
-				auto curPosition = writer.declLocale( "curPosition"
-					, inSurface.position );
-				auto v4Normal = writer.declLocale( "v4Normal"
-					, vec4( inSurface.normal, 0.0_f ) );
-				auto v4Tangent = writer.declLocale( "v4Tangent"
-					, vec4( inSurface.tangent, 0.0_f ) );
-				outSurface.texture = inSurface.texture;
-				inSurface.morph( c3d_morphingData
-					, curPosition
-					, v4Normal
-					, v4Tangent
-					, outSurface.texture );
-				outSurface.material = c3d_modelData.getMaterialIndex( flags.programFlags
-					, inSurface.material );
-				outSurface.nodeId = c3d_modelData.getNodeId( flags.programFlags
-					, inSurface.nodeId );
-
-				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
-					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, inSurface ) );
-				auto prvMtxModel = writer.declLocale< Mat4 >( "prvMtxModel"
-					, c3d_modelData.getPrvModelMtx( flags.programFlags, curMtxModel ) );
-				auto prvPosition = writer.declLocale( "prvPosition"
-					, prvMtxModel * curPosition );
-				curPosition = curMtxModel * curPosition;
-				outSurface.worldPosition = curPosition.xyz();
-				outSurface.computeVelocity( c3d_matrixData
-					, curPosition
-					, prvPosition );
-				out.vtx.position = curPosition;
-
-				auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
-					, c3d_modelData.getNormalMtx( flags.programFlags, curMtxModel ) );
-				outSurface.computeTangentSpace( flags.programFlags
-					, c3d_sceneData.cameraPosition
-					, mtxNormal
-					, v4Normal
-					, v4Tangent );
-			} );
-
-		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-	}
-
 	ShaderPtr DepthPass::doGetGeometryShaderSource( PipelineFlags const & flags )const
 	{
 		return ShaderPtr{};
@@ -179,14 +98,10 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
-		auto textures = filterTexturesFlags( flags.textures );
+		auto textureFlags = filterTexturesFlags( flags.textures );
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		bool hasTextures = !flags.textures.empty();
 
-		// Intputs
-		shader::InFragmentSurface inSurface{ writer
-			, getShaderFlags()
-			, hasTextures };
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
 			, RenderPipeline::eTextures
@@ -224,26 +139,33 @@ namespace castor3d
 		utils.declareParallaxMappingFunc( flags.passFlags
 			, getTexturesMask() );
 
-		writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-			, FragmentOut out )
+		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
+				, flags.programFlags
+				, getShaderFlags()
+				, textureFlags
+				, flags.passFlags
+				, hasTextures }
+			, FragmentOut{ writer }
+			, [&]( FragmentInT< shader::FragmentSurfaceT > in
+				, FragmentOut out )
 			{
-				auto material = materials->getMaterial( inSurface.material );
+				auto material = materials->getMaterial( in.material );
 				auto opacity = writer.declLocale( "opacity"
 					, material.opacity );
 				auto alphaRef = writer.declLocale( "alphaRef"
 					, material.alphaRef );
 				auto normal = writer.declLocale( "normal"
-					, normalize( inSurface.normal ) );
+					, normalize( in.normal ) );
 				auto tangent = writer.declLocale( "tangent"
-					, normalize( inSurface.tangent ) );
+					, normalize( in.tangent ) );
 				auto bitangent = writer.declLocale( "bitangent"
-					, normalize( inSurface.bitangent ) );
+					, normalize( in.bitangent ) );
 
 				if ( hasTextures )
 				{
 					auto texCoord = writer.declLocale( "texCoord"
-						, inSurface.texture );
-					utils.computeGeometryMapsContributions( textures
+						, in.texture );
+					utils.computeGeometryMapsContributions( textureFlags
 						, flags.passFlags
 						, textureConfigs
 						, c3d_maps
@@ -252,8 +174,8 @@ namespace castor3d
 						, normal
 						, tangent
 						, bitangent
-						, inSurface.tangentSpaceViewPosition
-						, inSurface.tangentSpaceFragPosition );
+						, in.tangentSpaceViewPosition
+						, in.tangentSpaceFragPosition );
 				}
 
 				utils.applyAlphaFunc( flags.alphaFunc
@@ -268,12 +190,11 @@ namespace castor3d
 					, c3d_modelData.getEnvMapIndex()
 					, matFlags );
 				data0 = vec4( in.fragCoord.z()
-					, length( inSurface.worldPosition - c3d_sceneData.cameraPosition )
-					//, uintBitsToFloat( c3d_modelData.getNodeId() )
-					, writer.cast< sdw::Float >( c3d_modelData.getNodeId() )
-					, writer.cast< sdw::Float >( inSurface.material ) );
+					, length( in.worldPosition - c3d_sceneData.cameraPosition )
+					, writer.cast< sdw::Float >( in.nodeId )
+					, writer.cast< sdw::Float >( in.material ) );
 				data1 = vec4( normal, matFlags );
-				velocity = vec4( inSurface.getVelocity(), 0.0_f, 0.0_f );
+				velocity = vec4( in.getVelocity(), 0.0_f, 0.0_f );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

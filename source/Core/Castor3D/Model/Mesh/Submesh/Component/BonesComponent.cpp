@@ -11,10 +11,41 @@ using namespace castor;
 
 namespace castor3d
 {
+	namespace
+	{
+		ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout( ShaderFlags const & flags
+			, bool hasTextures
+			, uint32_t & currentLocation )
+		{
+			ashes::VkVertexInputBindingDescriptionArray bindings{ { BonesComponent::BindingPoint
+				, sizeof( VertexBoneData ), VK_VERTEX_INPUT_RATE_VERTEX } };
+
+			ashes::VkVertexInputAttributeDescriptionArray attributes;
+			attributes.push_back( { currentLocation++
+				, BonesComponent::BindingPoint
+				, VK_FORMAT_R32G32B32A32_SINT
+				, offsetof( VertexBoneData::Ids::ids, id0 ) } );
+			attributes.push_back( { currentLocation++
+				, BonesComponent::BindingPoint
+				, VK_FORMAT_R32G32B32A32_SINT
+				, offsetof( VertexBoneData::Ids::ids, id1 ) } );
+			attributes.push_back( { currentLocation++
+				, BonesComponent::BindingPoint
+				, VK_FORMAT_R32G32B32A32_SFLOAT
+				, sizeof( VertexBoneData::Ids ) + offsetof( VertexBoneData::Weights::weights, weight0 ) } );
+			attributes.push_back( { currentLocation++
+				, BonesComponent::BindingPoint
+				, VK_FORMAT_R32G32B32A32_SFLOAT
+				, sizeof( VertexBoneData::Ids ) + offsetof( VertexBoneData::Weights::weights, weight1 ) } );
+
+			return ashes::PipelineVertexInputStateCreateInfo{ 0u, bindings, attributes };
+		}
+	}
+
 	String const BonesComponent::Name = cuT( "bones" );
 
 	BonesComponent::BonesComponent( Submesh & submesh )
-		: SubmeshComponent{ submesh, Name }
+		: SubmeshComponent{ submesh, Name, BindingPoint }
 	{
 	}
 
@@ -35,18 +66,27 @@ namespace castor3d
 		, std::vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 		, uint32_t instanceMult
-		, TextureFlagsArray const & mask )
+		, TextureFlagsArray const & mask
+		, uint32_t & currentLocation )
 	{
+		auto hash = std::hash< ShaderFlags::BaseType >{}( flags );
+		hash = castor::hashCombine( hash, mask.empty() );
+		auto layoutIt = m_bonesLayouts.find( hash );
+
+		if ( layoutIt == m_bonesLayouts.end() )
+		{
+			layoutIt = m_bonesLayouts.emplace( hash, doCreateVertexLayout( flags, !mask.empty(), currentLocation ) ).first;
+		}
+
 		buffers.emplace_back( m_bonesBuffer->getBuffer() );
 		offsets.emplace_back( 0u );
-		layouts.emplace_back( *m_bonesLayout );
+		layouts.emplace_back( layoutIt->second );
 	}
 
 	SubmeshComponentSPtr BonesComponent::clone( Submesh & submesh )const
 	{
 		auto result = std::make_shared< BonesComponent >( submesh );
 		result->m_bones = m_bones;
-		result->m_bonesLayout = std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( *m_bonesLayout );
 		return std::static_pointer_cast< SubmeshComponent >( result );
 	}
 
@@ -64,19 +104,6 @@ namespace castor3d
 				, 0u
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 				, getOwner()->getParent().getName() + "Submesh" + castor::string::toString( getOwner()->getId() ) + "BonesComponentBuffer" );
-			
-			m_bonesLayout = std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
-				, ashes::VkVertexInputBindingDescriptionArray
-				{
-					{ BindingPoint, sizeof( VertexBoneData ), VK_VERTEX_INPUT_RATE_VERTEX },
-				}
-				, ashes::VkVertexInputAttributeDescriptionArray
-				{
-					{ SceneRenderPass::VertexInputs::BoneIds0Location, BindingPoint, VK_FORMAT_R32G32B32A32_SINT, offsetof( VertexBoneData::Ids::ids, id0 ) },
-					{ SceneRenderPass::VertexInputs::BoneIds1Location, BindingPoint, VK_FORMAT_R32G32B32A32_SINT, offsetof( VertexBoneData::Ids::ids, id1 ) },
-					{ SceneRenderPass::VertexInputs::Weights0Location, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, sizeof( VertexBoneData::Ids ) + offsetof( VertexBoneData::Weights::weights, weight0 ) },
-					{ SceneRenderPass::VertexInputs::Weights1Location, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, sizeof( VertexBoneData::Ids ) + offsetof( VertexBoneData::Weights::weights, weight1 ) },
-				} );
 		}
 
 		return m_bonesBuffer != nullptr;
@@ -84,7 +111,6 @@ namespace castor3d
 
 	void BonesComponent::doCleanup()
 	{
-		m_bonesLayout.reset();
 		m_bonesBuffer.reset();
 	}
 

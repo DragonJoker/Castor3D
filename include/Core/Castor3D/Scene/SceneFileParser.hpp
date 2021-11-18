@@ -234,7 +234,7 @@ namespace castor3d
 	private:
 		C3D_API castor::FileParserContextSPtr doInitialiseParser( castor::Path const & path )override;
 		C3D_API void doCleanupParser( castor::PreprocessedFile & preprocessed )override;
-		C3D_API void doValidate()override;
+		C3D_API void doValidate( castor::PreprocessedFile & preprocessed )override;
 		C3D_API castor::String doGetSectionName( castor::SectionId section )const override;
 		C3D_API std::unique_ptr< FileParser > doCreateParser()const override;
 

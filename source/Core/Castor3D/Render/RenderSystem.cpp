@@ -263,6 +263,10 @@ namespace castor3d
 
 #endif
 
+		uint32_t constexpr vk1_0 = ashes::makeVersion( 1, 0, 0 );
+		uint32_t constexpr vk1_1 = ashes::makeVersion( 1, 1, 0 );
+		uint32_t constexpr vk1_2 = ashes::makeVersion( 1, 2, 0 );
+
 		//*************************************************************************
 
 		bool isValidationLayer( std::string const & name
@@ -402,7 +406,8 @@ namespace castor3d
 			return result;
 		}
 
-		ashes::ApplicationInfo createApplicationInfo( Engine & engine )
+		ashes::ApplicationInfo createApplicationInfo( Engine & engine
+			, uint32_t vkApiVersion )
 		{
 			return ashes::ApplicationInfo
 			{
@@ -410,29 +415,25 @@ namespace castor3d
 				engine.getAppVersion().getVkVersion(),
 				"Castor3D",
 				Version{}.getVkVersion(),
-				ashes::makeVersion( 1, 2, 0 ),
+				vkApiVersion,
 			};
 		}
 
 		uint32_t getSpirVVersion( uint32_t vkApiVersion )
 		{
-			uint32_t constexpr version1_0 = ashes::makeVersion( 1, 0, 0 );
-			uint32_t constexpr version1_1 = ashes::makeVersion( 1, 1, 0 );
-			uint32_t constexpr version1_2 = ashes::makeVersion( 1, 2, 0 );
+			uint32_t result{ spirv::v1_0 };
 
-			uint32_t result{ 0x00010300 };
-
-			if ( vkApiVersion >= version1_2 )
+			if ( vkApiVersion >= vk1_2 )
 			{
-				result = spirv::SpirVConfig::v1_3;
+				result = spirv::v1_5;
 			}
-			else if ( vkApiVersion >= version1_1 )
+			else if ( vkApiVersion >= vk1_1 )
 			{
-				result = spirv::SpirVConfig::v1_3;
+				result = spirv::v1_3;
 			}
-			else if ( vkApiVersion >= version1_0 )
+			else if ( vkApiVersion >= vk1_0 )
 			{
-				result = spirv::SpirVConfig::v1_0;
+				result = spirv::v1_0;
 			}
 
 			return result;
@@ -575,6 +576,16 @@ namespace castor3d
 					, layerProperties.layerName ) );
 		}
 
+		uint32_t apiVersion{ vk1_0 };
+		PFN_vkEnumerateInstanceVersion enumerateInstanceVersion;
+		enumerateInstanceVersion = reinterpret_cast< PFN_vkEnumerateInstanceVersion >( plugin.getInstanceProcAddr( VK_NULL_HANDLE,
+			"vkEnumerateInstanceVersion" ) );
+
+		if ( enumerateInstanceVersion )
+		{
+			enumerateInstanceVersion( &apiVersion );
+		}
+
 		ashes::StringArray layerNames;
 		completeLayerNames( engine, layers, layerNames );
 
@@ -591,7 +602,7 @@ namespace castor3d
 		ashes::InstanceCreateInfo createInfo
 		{
 			0u,
-			createApplicationInfo( engine ),
+			createApplicationInfo( engine, apiVersion ),
 			layerNames,
 			extensionNames,
 		};
@@ -663,8 +674,8 @@ namespace castor3d
 		, ast::Shader const & shader )const
 	{
 		SpirVShader result;
-		result.spirv = spirv::serialiseSpirv( shader
-			, { getSpirVVersion( m_properties.apiVersion ) } );
+		spirv::SpirVConfig spirvConfig{ getSpirVVersion( m_properties.apiVersion ) };
+		result.spirv = spirv::serialiseSpirv( shader, spirvConfig );
 
 #if !defined( NDEBUG )
 #	if C3D_HasGLSL
@@ -685,8 +696,7 @@ namespace castor3d
 		std::string glsl;
 #	endif
 
-		result.text = glsl + "\n" + spirv::writeSpirv( shader
-			, { getSpirVVersion( m_properties.apiVersion ) } );
+		result.text = glsl + "\n" + spirv::writeSpirv( shader, spirvConfig );
 
 #	if C3D_HasSPIRVCross && C3D_DebugSpirV && C3D_HasGlslang
 		std::string name = name + "_" + ashes::getName( stage );

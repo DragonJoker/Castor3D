@@ -26,7 +26,8 @@ namespace castor3d
 		 *\param[in]	type	Le type de composant.
 		 */
 		C3D_API SubmeshComponent( Submesh & submesh
-			, castor::String const & type );
+			, castor::String const & type
+			, uint32_t id );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -67,7 +68,8 @@ namespace castor3d
 			, std::vector< uint64_t > & offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 			, uint32_t instanceMult
-			, TextureFlagsArray const & mask ) = 0;
+			, TextureFlagsArray const & mask
+			, uint32_t & currentLocation ) = 0;
 		/**
 		 *\~english
 		 *\return		The shader program flags.
@@ -102,6 +104,16 @@ namespace castor3d
 		{
 			m_dirty = true;
 		}
+		/**
+		 *\~english
+		 *\brief		The component binding ID.
+		 *\~french
+		 *\return		L'ID de binding du composant.
+		 */
+		uint32_t getID()
+		{
+			return m_id;
+		}
 
 	private:
 		C3D_API virtual bool doInitialise( RenderDevice const & device ) = 0;
@@ -110,6 +122,7 @@ namespace castor3d
 
 	private:
 		castor::String m_type;
+		uint32_t m_id;
 		bool m_initialised{ false };
 		bool m_dirty{ true };
 	};

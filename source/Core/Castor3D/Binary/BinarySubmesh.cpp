@@ -115,7 +115,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			auto it = obj.m_components.find( BonesComponent::Name );
+			auto it = obj.m_components.find( BonesComponent::BindingPoint );
 
 			if ( it != obj.m_components.end() )
 			{

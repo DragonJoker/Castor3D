@@ -448,6 +448,7 @@ namespace castor3d
 		eVelocity = 0x04,
 		eWorldSpace = 0x08,
 		eViewSpace = 0x10,
+		eNodeId = 0x20,
 	};
 	CU_ImplementFlags( ShaderFlag )
 	/**

@@ -41,12 +41,7 @@ namespace castor3d
 
 		C3D_API TextureFlags getTexturesMask()const override;
 
-		C3D_API ShaderFlags getShaderFlags()const override
-		{
-			return ShaderFlag::eWorldSpace
-				| ShaderFlag::eTangentSpace
-				| ShaderFlag::eVelocity;
-		}
+		C3D_API ShaderFlags getShaderFlags()const override;
 
 	private:
 		void doUpdateFlags( PipelineFlags & flags )const override;

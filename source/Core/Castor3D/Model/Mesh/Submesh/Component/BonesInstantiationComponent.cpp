@@ -17,7 +17,7 @@ namespace castor3d
 	BonesInstantiationComponent::BonesInstantiationComponent( Submesh & submesh
 		, InstantiationComponent const & instantiation
 		, BonesComponent const & bones )
-		: SubmeshComponent{ submesh, Name }
+		: SubmeshComponent{ submesh, Name, uint32_t( std::hash< std::string >{}( Name ) ) }
 		, m_instantiation{ instantiation }
 		, m_bones{ bones }
 	{
@@ -29,7 +29,8 @@ namespace castor3d
 		, std::vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 		, uint32_t instanceMult
-		, TextureFlagsArray const & mask )
+		, TextureFlagsArray const & mask
+		, uint32_t & currentLocation )
 	{
 	}
 

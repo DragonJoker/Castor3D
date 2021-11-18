@@ -14,9 +14,13 @@
 
 #if defined( CASTOR_USE_GLM )
 #	define GLM_FORCE_RADIANS
+#	pragma warning( push )
+#	pragma warning( disable:4201 )
+#	pragma warning( disable:4464 )
 #	include <glm/glm.hpp>
 #	include <glm/gtc/quaternion.hpp>
 #	include <glm/gtc/matrix_transform.hpp>
+#	pragma warning( pop )
 #endif
 
 namespace Testing
