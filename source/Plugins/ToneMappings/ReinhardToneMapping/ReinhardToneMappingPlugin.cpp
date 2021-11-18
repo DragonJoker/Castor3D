@@ -45,6 +45,7 @@ extern "C"
 	{
 		engine->getToneMappingFactory().registerType( ToneMapping::Type
 			, &ToneMapping::create );
+		engine->getRenderTargetCache().registerToneMappingName( ToneMapping::Type, ToneMapping::Name );
 	}
 
 	C3D_ReinhardToneMapping_API void OnUnload( castor3d::Engine * engine )
