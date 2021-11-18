@@ -340,8 +340,6 @@ namespace castor3d
 		bool hasTextures = !flags.textures.empty();
 
 		shader::Utils utils{ writer, *renderSystem.getEngine() };
-		utils.declareRemoveGamma();
-
 		shader::Materials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
 			, uint32_t( NodeUboIdx::eMaterials )

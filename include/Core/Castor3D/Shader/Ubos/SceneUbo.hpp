@@ -35,10 +35,10 @@ namespace castor3d
 			C3D_API sdw::Vec3 transformCamera( sdw::Mat3 const & transform )const;
 			C3D_API sdw::Vec3 getPosToCamera( sdw::Vec3 const & position )const;
 			C3D_API sdw::Vec3 getCameraToPos( sdw::Vec3 const & position )const;
-			C3D_API sdw::Vec4 getBackgroundColour( Utils const & utils
+			C3D_API sdw::Vec4 getBackgroundColour( Utils & utils
 				, sdw::Float const & gamma )const;
 			C3D_API sdw::Vec4 getBackgroundColour( HdrConfigData const & hdrConfigData )const;
-			C3D_API sdw::Vec4 computeAccumulation( Utils const & utils
+			C3D_API sdw::Vec4 computeAccumulation( Utils & utils
 				, sdw::Float const & depth
 				, sdw::Vec3 const & colour
 				, sdw::Float const & alpha

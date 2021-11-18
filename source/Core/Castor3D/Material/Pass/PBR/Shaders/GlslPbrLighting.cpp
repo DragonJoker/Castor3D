@@ -390,7 +390,6 @@ namespace castor3d::shader
 
 	void PbrLightingModel::doDeclareModel()
 	{
-		m_cookTorrance.declare();
 	}
 
 	void PbrLightingModel::doDeclareComputeTiledDirectionalLight()
@@ -928,7 +927,6 @@ namespace castor3d::shader
 
 	void PbrLightingModel::doDeclareDiffuseModel()
 	{
-		m_cookTorrance.declareDiffuse();
 	}
 
 	void PbrLightingModel::doDeclareComputeTiledDirectionalLightDiffuse()

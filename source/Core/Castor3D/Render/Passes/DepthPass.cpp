@@ -135,9 +135,6 @@ namespace castor3d
 		auto velocity = writer.declOutput< Vec4 >( "velocity", 2u );
 
 		shader::Utils utils{ writer, *renderSystem.getEngine() };
-		utils.declareEncodeMaterial();
-		utils.declareParallaxMappingFunc( flags.passFlags
-			, getTexturesMask() );
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
 				, flags.programFlags

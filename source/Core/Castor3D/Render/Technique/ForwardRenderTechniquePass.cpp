@@ -85,13 +85,7 @@ namespace castor3d
 			|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI );
 
 		shader::Utils utils{ writer, *renderSystem.getEngine() };
-		utils.declareApplyGamma();
-		utils.declareRemoveGamma();
-		utils.declareParallaxMappingFunc( flags.passFlags
-			, getTexturesMask() );
-
 		shader::CookTorranceBRDF cookTorrance{ writer, utils };
-		cookTorrance.declareDiffuse();
 
 		shader::Materials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()

@@ -26,15 +26,7 @@ namespace toon::shader
 		if ( checkFlag( m_passFlags, castor3d::PassFlag::eReflection )
 			|| checkFlag( m_passFlags, castor3d::PassFlag::eRefraction ) )
 		{
-			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-			m_writer.inlineComment( "// REFLECTIONS" );
-			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			m_writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment", envMapBinding++, envMapSet );
-			m_utils.declareNegateVec3Y();
-			doDeclareComputeRefl();
-			doDeclareComputeRefr();
-			doDeclareComputeReflRefr();
-			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 		}
 	}
 
@@ -44,15 +36,7 @@ namespace toon::shader
 		, uint32_t envMapSet )
 		: c3d::ReflectionModel{ writer, utils }
 	{
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-		m_writer.inlineComment( "// REFLECTIONS" );
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 		m_writer.declSampledImage< FImgCubeArrayRgba32 >( "c3d_mapEnvironment", envMapBinding, envMapSet );
-		m_utils.declareNegateVec3Y();
-		doDeclareComputeRefls();
-		doDeclareComputeRefrs();
-		doDeclareComputeReflRefrs();
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 	}
 
 	void ToonPhongReflectionModel::computeDeferred( c3d::LightMaterial & material
@@ -65,7 +49,7 @@ namespace toon::shader
 		, sdw::Vec3 const & transmission
 		, sdw::Vec3 & ambient
 		, sdw::Vec3 & reflected
-		, sdw::Vec3 & refracted )const
+		, sdw::Vec3 & refracted )
 	{
 		auto & toonMaterial = static_cast< ToonPhongLightMaterial & >( material );
 		auto envMaps = m_writer.getVariable< sdw::SampledImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
@@ -123,7 +107,7 @@ namespace toon::shader
 		, sdw::Vec3 const & transmission
 		, sdw::Vec3 & ambient
 		, sdw::Vec3 & reflected
-		, sdw::Vec3 & refracted )const
+		, sdw::Vec3 & refracted )
 	{
 		if ( checkFlag( m_passFlags, castor3d::PassFlag::eReflection )
 			|| checkFlag( m_passFlags, castor3d::PassFlag::eRefraction ) )
@@ -178,8 +162,9 @@ namespace toon::shader
 	sdw::Vec3 ToonPhongReflectionModel::computeRefl( sdw::Vec3 const & wsIncident
 		, sdw::Vec3 const & wsNormal
 		, sdw::SampledImageCubeRgba32 const & envMap
-		, ToonPhongLightMaterial const & material )const
+		, ToonPhongLightMaterial const & material )
 	{
+		doDeclareComputeRefl();
 		return m_computeRefl( wsIncident
 			, wsNormal
 			, envMap
@@ -193,8 +178,9 @@ namespace toon::shader
 		, sdw::Vec3 const & transmission
 		, ToonPhongLightMaterial const & material
 		, sdw::Vec3 & reflection
-		, sdw::Vec3 & refraction )const
+		, sdw::Vec3 & refraction )
 	{
+		doDeclareComputeRefr();
 		m_computeRefr( wsIncident
 			, wsNormal
 			, envMap
@@ -212,8 +198,9 @@ namespace toon::shader
 		, sdw::Vec3 const & transmission
 		, ToonPhongLightMaterial const & material
 		, sdw::Vec3 & reflection
-		, sdw::Vec3 & refraction )const
+		, sdw::Vec3 & refraction )
 	{
+		doDeclareComputeReflRefr();
 		m_computeReflRefr( wsIncident
 			, wsNormal
 			, envMap
@@ -228,8 +215,9 @@ namespace toon::shader
 		, sdw::Vec3 const & wsNormal
 		, sdw::SampledImageCubeArrayRgba32 const & envMap
 		, sdw::Int const & envMapIndex
-		, ToonPhongLightMaterial const & material )const
+		, ToonPhongLightMaterial const & material )
 	{
+		doDeclareComputeRefls();
 		return m_computeRefls( wsIncident
 			, wsNormal
 			, envMap
@@ -245,8 +233,9 @@ namespace toon::shader
 		, sdw::Vec3 const & transmission
 		, ToonPhongLightMaterial const & material
 		, sdw::Vec3 & reflection
-		, sdw::Vec3 & refraction )const
+		, sdw::Vec3 & refraction )
 	{
+		doDeclareComputeRefrs();
 		m_computeRefrs( wsIncident
 			, wsNormal
 			, envMap
@@ -266,8 +255,9 @@ namespace toon::shader
 		, sdw::Vec3 const & transmission
 		, ToonPhongLightMaterial const & material
 		, sdw::Vec3 & reflection
-		, sdw::Vec3 & refraction )const
+		, sdw::Vec3 & refraction )
 	{
+		doDeclareComputeReflRefrs();
 		m_computeReflRefrs( wsIncident
 			, wsNormal
 			, envMap
@@ -281,6 +271,11 @@ namespace toon::shader
 
 	void ToonPhongReflectionModel::doDeclareComputeRefl()
 	{
+		if ( m_computeRefl )
+		{
+			return;
+		}
+
 		m_computeRefl = m_writer.implementFunction< sdw::Vec3 >( "c3d_phong_toon_computeRefl"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
@@ -300,6 +295,11 @@ namespace toon::shader
 
 	void ToonPhongReflectionModel::doDeclareComputeRefr()
 	{
+		if ( m_computeRefr )
+		{
+			return;
+		}
+
 		m_computeRefr = m_writer.implementFunction< sdw::Void >( "c3d_phong_toon_computeRefr"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
@@ -343,6 +343,11 @@ namespace toon::shader
 
 	void ToonPhongReflectionModel::doDeclareComputeReflRefr()
 	{
+		if ( m_computeReflRefr )
+		{
+			return;
+		}
+
 		m_computeReflRefr = m_writer.implementFunction< sdw::Void >( "c3d_phong_toon_computeReflRefr"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
@@ -378,6 +383,11 @@ namespace toon::shader
 
 	void ToonPhongReflectionModel::doDeclareComputeRefls()
 	{
+		if ( m_computeRefls )
+		{
+			return;
+		}
+
 		m_computeRefls = m_writer.implementFunction< sdw::Vec3 >( "c3d_phong_toon_computeRefl"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
@@ -400,6 +410,11 @@ namespace toon::shader
 
 	void ToonPhongReflectionModel::doDeclareComputeRefrs()
 	{
+		if ( m_computeRefrs )
+		{
+			return;
+		}
+
 		m_computeRefrs = m_writer.implementFunction< sdw::Void >( "c3d_phong_toon_computeRefr"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
@@ -446,6 +461,11 @@ namespace toon::shader
 
 	void ToonPhongReflectionModel::doDeclareComputeReflRefrs()
 	{
+		if ( m_computeReflRefrs )
+		{
+			return;
+		}
+
 		m_computeReflRefrs = m_writer.implementFunction< sdw::Void >( "c3d_phong_toon_computeReflRefr"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
@@ -492,26 +512,15 @@ namespace toon::shader
 		, uint32_t envMapSet )
 		: ReflectionModel{ writer, utils, passFlags }
 	{
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-		m_writer.inlineComment( "// REFLECTIONS" );
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-		m_utils.declareNegateVec3Y();
-		m_utils.declareFresnelSchlick();
-		doDeclareComputeIBL();
-
 		if ( checkFlag( m_passFlags, castor3d::PassFlag::eReflection )
 			|| checkFlag( m_passFlags, castor3d::PassFlag::eRefraction ) )
 		{
 			m_writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment", envMapBinding++, envMapSet );
-			doDeclareComputeReflEnvMap();
-			doDeclareComputeRefrEnvMap();
 		}
 
 		writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf", envMapBinding++, envMapSet );
 		writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapIrradiance", envMapBinding++, envMapSet );
 		writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapPrefiltered", envMapBinding++, envMapSet );
-		doDeclareComputeRefrSkybox();
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 	}
 
 	ToonPbrReflectionModel::ToonPbrReflectionModel( sdw::ShaderWriter & writer
@@ -520,20 +529,10 @@ namespace toon::shader
 		, uint32_t envMapSet )
 		: ReflectionModel{ writer, utils }
 	{
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-		m_writer.inlineComment( "// REFLECTIONS" );
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 		m_writer.declSampledImage< FImgCubeArrayRgba32 >( "c3d_mapEnvironment", envMapBinding++, envMapSet );
 		writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf", envMapBinding++, 0u );
 		writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapIrradiance", envMapBinding++, 0u );
 		writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapPrefiltered", envMapBinding++, 0u );
-		m_utils.declareNegateVec3Y();
-		m_utils.declareFresnelSchlick();
-		doDeclareComputeIBL();
-		doDeclareComputeReflEnvMaps();
-		doDeclareComputeRefrEnvMaps();
-		doDeclareComputeRefrSkybox();
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 	}
 
 	void ToonPbrReflectionModel::computeDeferred( c3d::LightMaterial & material
@@ -546,7 +545,7 @@ namespace toon::shader
 		, sdw::Vec3 const & transmission
 		, sdw::Vec3 & ambient
 		, sdw::Vec3 & reflected
-		, sdw::Vec3 & refracted )const
+		, sdw::Vec3 & refracted )
 	{
 		auto & toonMaterial = static_cast< ToonPbrLightMaterial & >( material );
 		auto brdf = m_writer.getVariable< sdw::SampledImage2DRgba32 >( "c3d_mapBrdf" );
@@ -671,7 +670,7 @@ namespace toon::shader
 		, sdw::Vec3 const & transmission
 		, sdw::Vec3 & ambient
 		, sdw::Vec3 & reflected
-		, sdw::Vec3 & refracted )const
+		, sdw::Vec3 & refracted )
 	{
 		auto & toonMaterial = static_cast< ToonPbrLightMaterial const & >( material );
 		auto brdf = m_writer.getVariable< sdw::SampledImage2DRgba32 >( "c3d_mapBrdf" );
@@ -795,8 +794,9 @@ namespace toon::shader
 		, sdw::Vec3 const & worldEye
 		, sdw::SampledImageCubeRgba32 const & irradianceMap
 		, sdw::SampledImageCubeRgba32 const & prefilteredEnvMap
-		, sdw::SampledImage2DRgba32 const & brdfMap )const
+		, sdw::SampledImage2DRgba32 const & brdfMap )
 	{
+		doDeclareComputeIBL();
 		return m_computeIBL( surface
 			, material
 			, worldEye
@@ -814,8 +814,9 @@ namespace toon::shader
 	sdw::Vec3 ToonPbrReflectionModel::computeReflEnvMap( sdw::Vec3 const & wsIncident
 		, sdw::Vec3 const & wsNormal
 		, sdw::SampledImageCubeRgba32 const & envMap
-		, ToonPbrLightMaterial const & material )const
+		, ToonPbrLightMaterial const & material )
 	{
+		doDeclareComputeReflEnvMap();
 		return m_computeReflEnvMap( wsIncident
 			, wsNormal
 			, envMap
@@ -829,8 +830,9 @@ namespace toon::shader
 		, sdw::Vec3 const & transmission
 		, ToonPbrLightMaterial const & material
 		, sdw::Vec3 & reflection
-		, sdw::Vec3 & refraction )const
+		, sdw::Vec3 & refraction )
 	{
+		doDeclareComputeRefrEnvMap();
 		return m_computeRefrEnvMap( wsIncident
 			, wsNormal
 			, envMap
@@ -845,8 +847,9 @@ namespace toon::shader
 		, sdw::Vec3 const & wsNormal
 		, sdw::SampledImageCubeArrayRgba32 const & envMap
 		, sdw::Int const & envMapIndex
-		, ToonPbrLightMaterial const & material )const
+		, ToonPbrLightMaterial const & material )
 	{
+		doDeclareComputeReflEnvMaps();
 		return m_computeReflEnvMaps( wsIncident
 			, wsNormal
 			, envMap
@@ -862,8 +865,9 @@ namespace toon::shader
 		, sdw::Vec3 const & transmission
 		, ToonPbrLightMaterial const & material
 		, sdw::Vec3 & reflection
-		, sdw::Vec3 & refraction )const
+		, sdw::Vec3 & refraction )
 	{
+		doDeclareComputeRefrEnvMaps();
 		return m_computeRefrEnvMaps( wsIncident
 			, wsNormal
 			, envMap
@@ -882,8 +886,9 @@ namespace toon::shader
 		, sdw::Vec3 const & transmission
 		, ToonPbrLightMaterial const & material
 		, sdw::Vec3 & reflection
-		, sdw::Vec3 & refraction )const
+		, sdw::Vec3 & refraction )
 	{
+		doDeclareComputeRefrSkybox();
 		return m_computeRefrSkybox( wsIncident
 			, wsNormal
 			, envMap
@@ -896,6 +901,11 @@ namespace toon::shader
 
 	void ToonPbrReflectionModel::doDeclareComputeIBL()
 	{
+		if ( m_computeIBL )
+		{
+			return;
+		}
+
 		m_computeIBL = m_writer.implementFunction< sdw::Vec3 >( "c3d_pbr_toon_computeIBL"
 			, [&]( c3d::Surface const & surface
 				, ToonPbrLightMaterial const & material
@@ -949,6 +959,11 @@ namespace toon::shader
 
 	void ToonPbrReflectionModel::doDeclareComputeReflEnvMap()
 	{
+		if ( m_computeReflEnvMap )
+		{
+			return;
+		}
+
 		m_computeReflEnvMap = m_writer.implementFunction< sdw::Vec3 >( "c3d_pbr_toon_computeReflEnvMap"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
@@ -970,6 +985,11 @@ namespace toon::shader
 
 	void ToonPbrReflectionModel::doDeclareComputeRefrEnvMap()
 	{
+		if ( m_computeRefrEnvMap )
+		{
+			return;
+		}
+
 		m_computeRefrEnvMap = m_writer.implementFunction< sdw::Void >( "c3d_pbr_toon_computeRefrEnvMap"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
@@ -1014,6 +1034,11 @@ namespace toon::shader
 
 	void ToonPbrReflectionModel::doDeclareComputeReflEnvMaps()
 	{
+		if ( m_computeReflEnvMaps )
+		{
+			return;
+		}
+
 		m_computeReflEnvMaps = m_writer.implementFunction< sdw::Vec3 >( "c3d_pbr_toon_computeReflEnvMap"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
@@ -1037,6 +1062,11 @@ namespace toon::shader
 
 	void ToonPbrReflectionModel::doDeclareComputeRefrEnvMaps()
 	{
+		if ( m_computeRefrEnvMaps )
+		{
+			return;
+		}
+
 		m_computeRefrEnvMaps = m_writer.implementFunction< sdw::Void >( "c3d_pbr_toon_computeRefrEnvMap"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
@@ -1083,6 +1113,11 @@ namespace toon::shader
 
 	void ToonPbrReflectionModel::doDeclareComputeRefrSkybox()
 	{
+		if ( m_computeRefrSkybox )
+		{
+			return;
+		}
+
 		m_computeRefrSkybox = m_writer.implementFunction< sdw::Void >( "c3d_pbr_toon_computeRefrSkybox"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal

@@ -13,10 +13,6 @@ namespace castor3d::shader
 	public:
 		C3D_API explicit CookTorranceBRDF( sdw::ShaderWriter & writer
 			, Utils & utils );
-		C3D_API void declare();
-		C3D_API void declareAON();
-		C3D_API void declareDiffuse();
-		C3D_API void declareDiffuseAON();
 		C3D_API void compute( Light const & light
 			, sdw::Vec3 const & worldEye
 			, sdw::Vec3 const & direction
@@ -24,7 +20,7 @@ namespace castor3d::shader
 			, sdw::Float const & metalness
 			, sdw::Float const & roughness
 			, Surface surface
-			, OutputComponents & output )const;
+			, OutputComponents & output );
 		C3D_API void computeAON( Light const & light
 			, sdw::Vec3 const & worldEye
 			, sdw::Vec3 const & direction
@@ -33,43 +29,43 @@ namespace castor3d::shader
 			, sdw::Float const & roughness
 			, sdw::Float const & smoothBand
 			, Surface surface
-			, OutputComponents & output )const;
+			, OutputComponents & output );
 		C3D_API sdw::Vec3 computeDiffuse( sdw::Vec3 const & colour
 			, sdw::Vec3 const & worldEye
 			, sdw::Vec3 const & direction
 			, sdw::Vec3 const & specular
 			, sdw::Float const & metalness
-			, Surface surface )const;
+			, Surface surface );
 		C3D_API sdw::Vec3 computeDiffuse( Light const & light
 			, sdw::Vec3 const & worldEye
 			, sdw::Vec3 const & direction
 			, sdw::Vec3 const & specular
 			, sdw::Float const & metalness
-			, Surface surface )const;
+			, Surface surface );
 		C3D_API sdw::Vec3 computeDiffuseAON( sdw::Vec3 const & colour
 			, sdw::Vec3 const & worldEye
 			, sdw::Vec3 const & direction
 			, sdw::Vec3 const & specular
 			, sdw::Float const & metalness
 			, sdw::Float const & smoothBand
-			, Surface surface )const;
+			, Surface surface );
 		C3D_API sdw::Vec3 computeDiffuseAON( Light const & light
 			, sdw::Vec3 const & worldEye
 			, sdw::Vec3 const & direction
 			, sdw::Vec3 const & specular
 			, sdw::Float const & metalness
 			, sdw::Float const & smoothBand
-			, Surface surface )const;
+			, Surface surface );
 
-	protected:
-		void doDeclareDistribution();
-		void doDeclareGeometry();
-		void doDeclareComputeCookTorrance();
-		void doDeclareComputeCookTorranceAON();
-		void doDeclareComputeCookTorranceDiffuse();
-		void doDeclareComputeCookTorranceDiffuseAON();
+	private:
+		void declareDistribution();
+		void declareGeometry();
+		void declareComputeCookTorrance();
+		void declareComputeCookTorranceAON();
+		void declareComputeCookTorranceDiffuse();
+		void declareComputeCookTorranceDiffuseAON();
 
-	public:
+	private:
 		sdw::ShaderWriter & m_writer;
 		Utils & m_utils;
 		sdw::Function< sdw::Float

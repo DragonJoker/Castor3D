@@ -28,7 +28,7 @@ namespace castor3d::shader
 			, sdw::Vec3 const & transmission
 			, sdw::Vec3 & ambient
 			, sdw::Vec3 & reflected
-			, sdw::Vec3 & refracted )const = 0;
+			, sdw::Vec3 & refracted ) = 0;
 		C3D_API virtual void computeForward( LightMaterial & material
 			, Surface const & surface
 			, SceneData const & sceneData
@@ -36,7 +36,7 @@ namespace castor3d::shader
 			, sdw::Vec3 const & transmission
 			, sdw::Vec3 & ambient
 			, sdw::Vec3 & reflected
-			, sdw::Vec3 & refracted )const = 0;
+			, sdw::Vec3 & refracted ) = 0;
 
 	protected:
 		sdw::ShaderWriter & m_writer;

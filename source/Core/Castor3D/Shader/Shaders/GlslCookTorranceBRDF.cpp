@@ -23,34 +23,6 @@ namespace castor3d::shader
 	{
 	}
 
-	void CookTorranceBRDF::declare()
-	{
-		doDeclareDistribution();
-		doDeclareGeometry();
-		m_utils.declareFresnelSchlick();
-		doDeclareComputeCookTorrance();
-	}
-
-	void CookTorranceBRDF::declareAON()
-	{
-		doDeclareDistribution();
-		doDeclareGeometry();
-		m_utils.declareFresnelSchlick();
-		doDeclareComputeCookTorranceAON();
-	}
-
-	void CookTorranceBRDF::declareDiffuse()
-	{
-		m_utils.declareFresnelSchlick();
-		doDeclareComputeCookTorranceDiffuse();
-	}
-
-	void CookTorranceBRDF::declareDiffuseAON()
-	{
-		m_utils.declareFresnelSchlick();
-		doDeclareComputeCookTorranceDiffuseAON();
-	}
-
 	void CookTorranceBRDF::compute( Light const & light
 		, sdw::Vec3 const & worldEye
 		, sdw::Vec3 const & direction
@@ -58,8 +30,9 @@ namespace castor3d::shader
 		, sdw::Float const & metalness
 		, sdw::Float const & roughness
 		, Surface surface
-		, OutputComponents & output )const
+		, OutputComponents & output )
 	{
+		declareComputeCookTorrance();
 		m_computeCookTorrance( light
 			, worldEye
 			, direction
@@ -78,8 +51,9 @@ namespace castor3d::shader
 		, sdw::Float const & roughness
 		, sdw::Float const & smoothBand
 		, Surface surface
-		, OutputComponents & output )const
+		, OutputComponents & output )
 	{
+		declareComputeCookTorranceAON();
 		m_computeCookTorranceAON( light
 			, worldEye
 			, direction
@@ -96,8 +70,9 @@ namespace castor3d::shader
 		, sdw::Vec3 const & direction
 		, sdw::Vec3 const & specular
 		, sdw::Float const & metalness
-		, Surface surface )const
+		, Surface surface )
 	{
+		declareComputeCookTorranceDiffuse();
 		return m_computeCookTorranceDiffuse( normalize( colour )
 			, length( colour )
 			, worldEye
@@ -112,8 +87,9 @@ namespace castor3d::shader
 		, sdw::Vec3 const & direction
 		, sdw::Vec3 const & specular
 		, sdw::Float const & metalness
-		, Surface surface )const
+		, Surface surface )
 	{
+		declareComputeCookTorranceDiffuse();
 		return m_computeCookTorranceDiffuse( light.m_colour
 			, light.m_intensity.r()
 			, worldEye
@@ -129,8 +105,9 @@ namespace castor3d::shader
 		, sdw::Vec3 const & specular
 		, sdw::Float const & metalness
 		, sdw::Float const & smoothBand
-		, Surface surface )const
+		, Surface surface )
 	{
+		declareComputeCookTorranceDiffuseAON();
 		return m_computeCookTorranceDiffuseAON( normalize( colour )
 			, length( colour )
 			, worldEye
@@ -147,8 +124,9 @@ namespace castor3d::shader
 		, sdw::Vec3 const & specular
 		, sdw::Float const & metalness
 		, sdw::Float const & smoothBand
-		, Surface surface )const
+		, Surface surface )
 	{
+		declareComputeCookTorranceDiffuseAON();
 		return m_computeCookTorranceDiffuseAON( light.m_colour
 			, light.m_intensity.r()
 			, worldEye
@@ -159,8 +137,13 @@ namespace castor3d::shader
 			, surface );
 	}
 
-	void CookTorranceBRDF::doDeclareDistribution()
+	void CookTorranceBRDF::declareDistribution()
 	{
+		if ( m_distributionGGX )
+		{
+			return;
+		}
+
 		// Distribution Function
 		m_distributionGGX = m_writer.implementFunction< sdw::Float >( "c3d_distribution"
 			, [this]( sdw::Float const & product
@@ -188,8 +171,13 @@ namespace castor3d::shader
 			, sdw::InFloat( m_writer, "roughness" ) );
 	}
 	
-	void CookTorranceBRDF::doDeclareGeometry()
+	void CookTorranceBRDF::declareGeometry()
 	{
+		if ( m_geometrySchlickGGX )
+		{
+			return;
+		}
+
 		// Geometry Functions
 		m_geometrySchlickGGX = m_writer.implementFunction< sdw::Float >( "c3d_geometrySchlickGGX"
 			, [this]( sdw::Float const & product
@@ -231,8 +219,15 @@ namespace castor3d::shader
 			, sdw::InFloat( m_writer, "roughness" ) );
 	}
 
-	void CookTorranceBRDF::doDeclareComputeCookTorrance()
+	void CookTorranceBRDF::declareComputeCookTorrance()
 	{
+		if ( m_computeCookTorrance )
+		{
+			return;
+		}
+
+		declareDistribution();
+		declareGeometry();
 		OutputComponents outputs{ m_writer };
 		m_computeCookTorrance = m_writer.implementFunction< sdw::Void >( "c3d_computeCookTorrance"
 			, [this]( Light const & light
@@ -302,8 +297,15 @@ namespace castor3d::shader
 			, outputs );
 	}
 
-	void CookTorranceBRDF::doDeclareComputeCookTorranceAON()
+	void CookTorranceBRDF::declareComputeCookTorranceAON()
 	{
+		if ( m_computeCookTorranceAON )
+		{
+			return;
+		}
+
+		declareDistribution();
+		declareGeometry();
 		OutputComponents outputs{ m_writer };
 		m_computeCookTorranceAON = m_writer.implementFunction< sdw::Void >( "c3d_computeCookTorranceAON"
 			, [this]( Light const & light
@@ -382,8 +384,13 @@ namespace castor3d::shader
 			, outputs );
 	}
 
-	void CookTorranceBRDF::doDeclareComputeCookTorranceDiffuse()
+	void CookTorranceBRDF::declareComputeCookTorranceDiffuse()
 	{
+		if ( m_computeCookTorranceDiffuse )
+		{
+			return;
+		}
+
 		m_computeCookTorranceDiffuse = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeCookTorranceDiffuse"
 			, [this]( sdw::Vec3 const & colour
 				, sdw::Float const intensity
@@ -430,8 +437,13 @@ namespace castor3d::shader
 			, InSurface{ m_writer, "surface" } );
 	}
 
-	void CookTorranceBRDF::doDeclareComputeCookTorranceDiffuseAON()
+	void CookTorranceBRDF::declareComputeCookTorranceDiffuseAON()
 	{
+		if ( m_computeCookTorranceDiffuseAON )
+		{
+			return;
+		}
+
 		m_computeCookTorranceDiffuseAON = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeCookTorranceDiffuseAON"
 			, [this]( sdw::Vec3 const & colour
 				, sdw::Float const intensity

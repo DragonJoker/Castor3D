@@ -21,73 +21,38 @@ namespace castor3d::shader
 			, ShadowOptions shadowsOptions
 			, bool isOpaqueProgram );
 
-		C3D_API void declareCalcTexCoord();
-		C3D_API void declareCalcVSPosition();
-		C3D_API void declareCalcWSPosition();
-		C3D_API void declareApplyGamma();
-		C3D_API void declareRemoveGamma();
-		C3D_API void declareRescaleDepth();
-		C3D_API void declareGetMapNormal();
-		C3D_API void declareComputeAccumulation();
-		C3D_API void declareFresnelSchlick();
-		// 1.0 - y
-		C3D_API void declareInvertVec2Y();
-		C3D_API void declareInvertVec3Y();
-		C3D_API void declareInvertVec4Y();
-		// -y
-		C3D_API void declareNegateVec2Y();
-		C3D_API void declareNegateVec3Y();
-		C3D_API void declareNegateVec4Y();
-
-		C3D_API void declareEncodeMaterial();
-		C3D_API void declareDecodeMaterial();
-		C3D_API void declareDecodeReceiver();
-		C3D_API void declareParallaxMappingFunc( PassFlags const & passFlags
-			, TextureFlags const & textures );
-		C3D_API void declareParallaxShadowFunc( PassFlags const & passFlags
-			, TextureFlags const & textures );
-
-		C3D_API void declareIsSaturated();
-		C3D_API void declareEncodeColor();
-		C3D_API void declareEncodeNormal();
-		C3D_API void declareDecodeColor();
-		C3D_API void declareDecodeNormal();
-		C3D_API void declareFlatten();
-		C3D_API void declareUnflatten();
-		C3D_API void declareIsSaturatedImg();
-
-		C3D_API sdw::Vec2 topDownToBottomUp( sdw::Vec2 const & texCoord )const;
-		C3D_API sdw::Vec3 topDownToBottomUp( sdw::Vec3 const & texCoord )const;
-		C3D_API sdw::Vec4 topDownToBottomUp( sdw::Vec4 const & texCoord )const;
-		C3D_API sdw::Vec2 negateTopDownToBottomUp( sdw::Vec2 const & texCoord )const;
-		C3D_API sdw::Vec3 negateTopDownToBottomUp( sdw::Vec3 const & texCoord )const;
-		C3D_API sdw::Vec4 negateTopDownToBottomUp( sdw::Vec4 const & texCoord )const;
+		C3D_API sdw::Vec2 topDownToBottomUp( sdw::Vec2 const & texCoord );
+		C3D_API sdw::Vec3 topDownToBottomUp( sdw::Vec3 const & texCoord );
+		C3D_API sdw::Vec4 topDownToBottomUp( sdw::Vec4 const & texCoord );
+		C3D_API sdw::Vec2 negateTopDownToBottomUp( sdw::Vec2 const & texCoord );
+		C3D_API sdw::Vec3 negateTopDownToBottomUp( sdw::Vec3 const & texCoord );
+		C3D_API sdw::Vec4 negateTopDownToBottomUp( sdw::Vec4 const & texCoord );
 		C3D_API sdw::Vec2 calcTexCoord( sdw::Vec2 const & renderPos
-			, sdw::Vec2 const & renderSize )const;
+			, sdw::Vec2 const & renderSize );
 		C3D_API sdw::Vec3 calcVSPosition( sdw::Vec2 const & uv
 			, sdw::Float const & depth
-			, sdw::Mat4 const & invProj )const;
+			, sdw::Mat4 const & invProj );
 		C3D_API sdw::Vec3 calcWSPosition( sdw::Vec2 const & uv
 			, sdw::Float const & depth
-			, sdw::Mat4 const & invViewProj )const;
+			, sdw::Mat4 const & invViewProj );
 		C3D_API sdw::Vec3 applyGamma( sdw::Float const & gamma
-			, sdw::Vec3 const & HDR )const;
+			, sdw::Vec3 const & HDR );
 		C3D_API sdw::Vec3 removeGamma( sdw::Float const & gamma
-			, sdw::Vec3 const & sRGB )const;
+			, sdw::Vec3 const & sRGB );
 		C3D_API sdw::Vec3 getMapNormal( sdw::Vec2 const & uv
 			, sdw::Vec3 const & normal
-			, sdw::Vec3 const & position )const;
+			, sdw::Vec3 const & position );
 		C3D_API sdw::Float rescaleDepth( sdw::Float const & depth
 			, sdw::Float const & nearPlane
-			, sdw::Float const & farPlane )const;
+			, sdw::Float const & farPlane );
 		C3D_API sdw::Vec4 computeAccumulation( sdw::Float const & depth
 			, sdw::Vec3 const & colour
 			, sdw::Float const & alpha
 			, sdw::Float const & nearPlane
 			, sdw::Float const & farPlane
-			, sdw::Float const & accumulationOperator )const;
+			, sdw::Float const & accumulationOperator );
 		C3D_API sdw::Vec3 fresnelSchlick( sdw::Float const & product
-			, sdw::Vec3 const & f0 )const;
+			, sdw::Vec3 const & f0 );
 		C3D_API void compute2DMapsContributions( FilteredTextureFlags const & flags
 			, TextureConfigurations const & textureConfigs
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
@@ -154,7 +119,7 @@ namespace castor3d::shader
 			, sdw::Int const & refraction
 			, sdw::Int const & lighting
 			, sdw::Int const & envMapIndex
-			, sdw::Float const & encoded )const;
+			, sdw::Float const & encoded );
 		/**
 		 *\~english
 		 *\brief		Calls the GLSL function used to dencode the material specifics from a vec4.
@@ -176,7 +141,7 @@ namespace castor3d::shader
 			, sdw::Int const & reflection
 			, sdw::Int const & refraction
 			, sdw::Int const & lighting
-			, sdw::Int const & envMapIndex )const;
+			, sdw::Int const & envMapIndex );
 		/**
 		 *\~english
 		 *\brief		Calls the GLSL function used to decode the shadow receiver status from a vec4.
@@ -189,7 +154,7 @@ namespace castor3d::shader
 		 */
 		C3D_API void decodeReceiver( sdw::Int & encoded
 			, sdw::Int const & receiver
-			, sdw::Int const & lighting )const;
+			, sdw::Int const & lighting );
 		/**
 		 *\~english
 		 *\brief		Writes the alpha function in GLSL.
@@ -205,41 +170,41 @@ namespace castor3d::shader
 		C3D_API void applyAlphaFunc( VkCompareOp alphaFunc
 			, sdw::Float & alpha
 			, sdw::Float const & alphaRef
-			, bool opaque = true )const;
+			, bool opaque = true );
 
-		C3D_API sdw::Boolean isSaturated( sdw::Vec3 const & p )const;
+		C3D_API sdw::Boolean isSaturated( sdw::Vec3 const & p );
 		C3D_API sdw::Boolean isSaturated( sdw::IVec3 const & p
-			, sdw::Int const & imax )const;
+			, sdw::Int const & imax );
 		/**
 		*\~english
 		*\brief
 		*	Encode HDR color to a 32 bit uint.
 		*	Alpha is 1 bit + 7 bit HDR remapping.
 		*/
-		C3D_API sdw::UInt encodeColor( sdw::Vec4 const & color )const;
+		C3D_API sdw::UInt encodeColor( sdw::Vec4 const & color );
 		/**
 		*\~english
 		*\brief
 		*	Encode specified normal (normalized) into 32 bits uint.
 		*	Each axis of the normal is encoded into 9 bits (1 for the sign/ 8 for the value).
 		*/
-		C3D_API sdw::UInt encodeNormal( sdw::Vec3 const & normal )const;
-		C3D_API sdw::Vec4 decodeColor( sdw::UInt const & colorMask )const;
-		C3D_API sdw::Vec3 decodeNormal( sdw::UInt const & normalMask )const;
+		C3D_API sdw::UInt encodeNormal( sdw::Vec3 const & normal );
+		C3D_API sdw::Vec4 decodeColor( sdw::UInt const & colorMask );
+		C3D_API sdw::Vec3 decodeNormal( sdw::UInt const & normalMask );
 		/**
 		*\~english
 		*\brief
 		*	3D array index to flattened 1D array index
 		*/
 		C3D_API sdw::UInt flatten( sdw::UVec3 const & p
-			, sdw::UVec3 const & dim )const;
+			, sdw::UVec3 const & dim );
 		/**
 		*\~english
 		*\brief
 		*	Flattened array index to 3D array index
 		*/
 		C3D_API sdw::UVec3 unflatten( sdw::UInt const & p
-			, sdw::UVec3 const & dim )const;
+			, sdw::UVec3 const & dim );
 
 		C3D_API static sdw::Mat3 getTBN( sdw::Vec3 const & normal
 			, sdw::Vec3 const & tangent
@@ -248,6 +213,40 @@ namespace castor3d::shader
 			, PassFlags const & passFlags );
 		C3D_API static bool isGeometryOnlyMap( TextureFlags const & flags
 			, PassFlags const & passFlags );
+
+	private:
+		C3D_API void declareCalcTexCoord();
+		C3D_API void declareCalcVSPosition();
+		C3D_API void declareCalcWSPosition();
+		C3D_API void declareApplyGamma();
+		C3D_API void declareRemoveGamma();
+		C3D_API void declareRescaleDepth();
+		C3D_API void declareGetMapNormal();
+		C3D_API void declareComputeAccumulation();
+		C3D_API void declareFresnelSchlick();
+		// 1.0 - y
+		C3D_API void declareInvertVec2Y();
+		C3D_API void declareInvertVec3Y();
+		C3D_API void declareInvertVec4Y();
+		// -y
+		C3D_API void declareNegateVec2Y();
+		C3D_API void declareNegateVec3Y();
+		C3D_API void declareNegateVec4Y();
+
+		C3D_API void declareEncodeMaterial();
+		C3D_API void declareDecodeMaterial();
+		C3D_API void declareDecodeReceiver();
+		C3D_API void declareParallaxMappingFunc();
+		C3D_API void declareParallaxShadowFunc();
+
+		C3D_API void declareIsSaturated();
+		C3D_API void declareEncodeColor();
+		C3D_API void declareEncodeNormal();
+		C3D_API void declareDecodeColor();
+		C3D_API void declareDecodeNormal();
+		C3D_API void declareFlatten();
+		C3D_API void declareUnflatten();
+		C3D_API void declareIsSaturatedImg();
 
 	private:
 		void doComputeGeometryMapContribution( TextureFlags const & textureFlags
