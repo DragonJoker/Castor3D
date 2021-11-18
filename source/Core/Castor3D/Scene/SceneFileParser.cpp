@@ -498,7 +498,7 @@ namespace castor3d
 		m_renderWindow = std::move( context.window );
 	}
 
-	void SceneFileParser::doValidate()
+	void SceneFileParser::doValidate( castor::PreprocessedFile & preprocessed )
 	{
 	}
 
