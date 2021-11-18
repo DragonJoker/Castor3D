@@ -341,9 +341,9 @@ namespace castor
 			return m_rootSectionId;
 		}
 
-		void validate()
+		void validate( PreprocessedFile & preprocessed )
 		{
-			doValidate();
+			doValidate( preprocessed );
 		}
 		
 		String getSectionName( SectionId section )const
@@ -391,7 +391,7 @@ namespace castor
 		 *\~french
 		 *\brief		Fonction appelée si l'analyse est complétée sans erreurs.
 		 */
-		CU_API virtual void doValidate() = 0;
+		CU_API virtual void doValidate( PreprocessedFile & preprocessed ) = 0;
 		/**
 		 *\~english
 		 *\brief		Gives the name associated to section ID.
