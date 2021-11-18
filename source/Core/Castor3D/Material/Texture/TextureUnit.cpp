@@ -151,14 +151,17 @@ namespace castor3d
 
 	TextureUnit::~TextureUnit()
 	{
+		if ( getId() != 0u )
+		{
+			cleanup();
+		}
+
 		auto renderTarget = m_renderTarget.lock();
 
 		if ( renderTarget )
 		{
 			getEngine()->getRenderTargetCache().remove( std::move( renderTarget ) );
 		}
-
-		CU_Assert( getId() == 0u, "Did you forget to call TextureUnit::cleanup ?" );
 	}
 
 	TextureUnit TextureUnit::create( Engine & engine
