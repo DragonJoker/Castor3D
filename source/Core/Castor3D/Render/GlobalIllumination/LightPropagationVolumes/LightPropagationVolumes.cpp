@@ -184,7 +184,7 @@ namespace castor3d
 				return result;
 			} );
 		pass.addDependency( *lastPass );
-		pass.addUniformBufferView( { lightCache.getBuffer().getBuffer(), "LightCache" }
+		pass.addStorageBufferView( { lightCache.getBuffer().getBuffer(), "LightCache" }
 			, lightCache.getView()
 			, LightInjectionPass::LightsIdx
 			, lightCache.getView().getOffset()
@@ -239,7 +239,7 @@ namespace castor3d
 				return result;
 			} );
 		pass.addDependency( *lastPass );
-		pass.addUniformBufferView( { lightCache.getBuffer().getBuffer(), "LightCache" }
+		pass.addStorageBufferView( { lightCache.getBuffer().getBuffer(), "LightCache" }
 			, lightCache.getView()
 			, LightInjectionPass::LightsIdx
 			, lightCache.getView().getOffset()
@@ -340,7 +340,7 @@ namespace castor3d
 				return result;
 			} );
 		pass.addDependency( *lastPass );
-		pass.addUniformBufferView( { lightCache.getBuffer().getBuffer(), "LightCache" }
+		pass.addStorageBufferView( { lightCache.getBuffer().getBuffer(), "LightCache" }
 			, lightCache.getView()
 			, GeometryInjectionPass::LightsIdx
 			, lightCache.getView().getOffset()
@@ -390,7 +390,7 @@ namespace castor3d
 				return result;
 			} );
 		pass.addDependency( *lastPass );
-		pass.addUniformBufferView( { lightCache.getBuffer().getBuffer(), "LightCache" }
+		pass.addStorageBufferView( { lightCache.getBuffer().getBuffer(), "LightCache" }
 			, lightCache.getView()
 			, GeometryInjectionPass::LightsIdx
 			, lightCache.getView().getOffset()
