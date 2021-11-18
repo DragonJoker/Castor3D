@@ -219,7 +219,8 @@ namespace castor3d
 			VertexBufferPool( Engine & engine
 				, UniformBufferPools & uboPools
 				, RenderDevice const & device
-				, ashes::PipelineVertexInputStateCreateInfo const & declaration
+				, ashes::PipelineVertexInputStateCreateInfo const & noTexDecl
+				, ashes::PipelineVertexInputStateCreateInfo const & texDecl
 				, uint32_t count );
 			VertexBufferIndex< VertexT, CountT > allocate( OverlayRenderNode & node );
 			void deallocate( VertexBufferIndex< VertexT, CountT > const & index );
@@ -229,7 +230,8 @@ namespace castor3d
 			UniformBufferPools & uboPools;
 			uint32_t const maxCount;
 			std::vector< Quad > data;
-			ashes::PipelineVertexInputStateCreateInfo const & declaration;
+			ashes::PipelineVertexInputStateCreateInfo const & noTexDeclaration;
+			ashes::PipelineVertexInputStateCreateInfo const & texDeclaration;
 			ashes::VertexBufferPtr< Quad > buffer;
 			std::set< uint32_t > free;
 		};
@@ -267,6 +269,7 @@ namespace castor3d
 		Pipeline doCreatePipeline( RenderDevice const & device
 			, Pass const & pass
 			, ashes::PipelineShaderStageCreateInfoArray program
+			, FilteredTextureFlags const & texturesFlags
 			, bool text );
 		Pipeline & doGetPipeline( RenderDevice const & device
 			, Pass const & pass
@@ -302,7 +305,8 @@ namespace castor3d
 		std::map< size_t, TextVertexBufferIndex > m_textOverlays;
 		ashes::PipelineVertexInputStateCreateInfo m_noTexDeclaration;
 		ashes::PipelineVertexInputStateCreateInfo m_texDeclaration;
-		ashes::PipelineVertexInputStateCreateInfo m_textDeclaration;
+		ashes::PipelineVertexInputStateCreateInfo m_noTexTextDeclaration;
+		ashes::PipelineVertexInputStateCreateInfo m_texTextDeclaration;
 		castor::Size m_size;
 		std::map< Pass const *, OverlayRenderNode > m_mapPanelNodes;
 		std::map< Pass const *, OverlayRenderNode > m_mapTextNodes;

@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_ModelUbo_H___
 
 #include "UbosModule.hpp"
-#include "Castor3D/Shader/Shaders/SdwModule.hpp"
+#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 #include <ShaderWriter/MatTypes/Mat4.hpp>
@@ -25,9 +25,6 @@ namespace castor3d
 			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
-			C3D_API sdw::Mat4 getCurModelMtx( ProgramFlags programFlags
-				, SkinningData const & skinning
-				, VertexSurface const & surface )const;
 			C3D_API sdw::Mat4 getPrvModelMtx( ProgramFlags programFlags
 				, sdw::Mat4 const & curModelMatrix )const;
 			C3D_API sdw::Mat3 getNormalMtx( ProgramFlags programFlags
@@ -50,6 +47,28 @@ namespace castor3d
 			sdw::Int const & getEnvMapIndex()const
 			{
 				return m_envMapIndex;
+			}
+
+			template< ast::var::Flag FlagT >
+			sdw::Mat4 getCurModelMtx( ProgramFlags programFlags
+				, SkinningData const & skinning
+				, VertexSurfaceT< FlagT > const & surface )const
+			{
+				if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
+				{
+					return SkinningUbo::computeTransform( skinning
+						, surface
+						, *getWriter()
+						, programFlags
+						, m_curMtxModel );
+				}
+
+				if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
+				{
+					return surface.transform;
+				}
+
+				return m_curMtxModel;
 			}
 
 		private:

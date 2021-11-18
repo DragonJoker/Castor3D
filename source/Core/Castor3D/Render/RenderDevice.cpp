@@ -81,15 +81,19 @@ namespace castor3d
 
 		ashes::DeviceCreateInfo getDeviceCreateInfo( ashes::Instance const & instance
 			, ashes::PhysicalDevice const & gpu
-			, ashes::DeviceQueueCreateInfoArray queueCreateInfos )
+			, ashes::DeviceQueueCreateInfoArray queueCreateInfos
+			, ashes::StringArray & enabledExtensions
+			, VkPhysicalDeviceFeatures2 & features2 )
 		{
 			log::debug << "Instance enabled layers count: " << uint32_t( instance.getEnabledLayerNames().size() ) << std::endl;
-			ashes::StringArray extensions = { std::string{ VK_KHR_SWAPCHAIN_EXTENSION_NAME } };
-			return ashes::DeviceCreateInfo{ 0u
+			enabledExtensions.emplace_back( VK_KHR_SWAPCHAIN_EXTENSION_NAME );
+			auto result = ashes::DeviceCreateInfo{ 0u
 				, std::move( queueCreateInfos )
 				, instance.getEnabledLayerNames()
-				, extensions
+				, enabledExtensions
 				, gpu.getFeatures() };
+			result->pNext = &features2;
+			return result;
 		}
 	}
 
@@ -219,6 +223,17 @@ namespace castor3d
 		}
 	}
 
+	bool isExtensionSupported( std::string const & name
+		, ashes::VkExtensionPropertiesArray const & cont )
+	{
+		return ( cont.end() != std::find_if( cont.begin()
+			, cont.end()
+			, [&name]( VkExtensionProperties const & lookup )
+			{
+				return lookup.extensionName == name;
+			} ) );
+	}
+
 	//*********************************************************************************************
 
 	RenderDevice::RenderDevice( RenderSystem & renderSystem
@@ -229,13 +244,56 @@ namespace castor3d
 		, desc{ desc }
 		, memoryProperties{ gpu.getMemoryProperties() }
 		, features{ gpu.getFeatures() }
+		, features12{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES
+			, nullptr
+			, {} }
+		, features11{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES
+			, &features12
+			, {} }
+		, drawParamsFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETERS_FEATURES
+			, nullptr }
+		, features2{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2
+			, nullptr
+			, {} }
 		, properties{ gpu.getProperties() }
 		, queueFamilies{ initialiseQueueFamilies( renderSystem.getInstance(), gpu ) }
-		, device{ renderSystem.getInstance().createDevice( gpu
+	{
+		auto apiVersion = gpu.getProperties().apiVersion;
+		auto deviceExtensions = gpu.enumerateExtensionProperties( std::string{} );
+		ashes::StringArray enabledExtensions;
+
+		if ( apiVersion >= ashes::makeVersion( 1, 2, 0 ) )
+		{
+			features2.pNext = &features11;
+		}
+		else if ( apiVersion >= ashes::makeVersion( 1, 1, 0 ) )
+		{
+			features2.pNext = &drawParamsFeatures;
+		}
+		else if ( isExtensionSupported( "VK_KHR_shader_draw_parameters"
+			, deviceExtensions ) )
+		{
+			enabledExtensions.push_back( "VK_KHR_shader_draw_parameters" );
+		}
+
+		if ( apiVersion >= ashes::makeVersion( 1, 1, 0 ) )
+		{
+			gpu.getFeatures( features2 );
+			features = features2.features;
+
+			if ( isExtensionSupported( "VK_EXT_shader_atomic_float"
+				, deviceExtensions ) )
+			{
+				enabledExtensions.push_back( "VK_EXT_shader_atomic_float" );
+			}
+		}
+
+		device = renderSystem.getInstance().createDevice( gpu
 			, getDeviceCreateInfo( renderSystem.getInstance()
 				, gpu
-				, getQueueCreateInfos( queueFamilies ) ) ) }
-	{
+				, getQueueCreateInfos( queueFamilies )
+				, enabledExtensions
+				, features2 ) );
 		device->setCallstackCallback( []()
 			{
 				std::stringstream callback;

@@ -55,7 +55,8 @@ namespace castor3d
 			, std::vector< uint64_t > & offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 			, uint32_t instanceMult
-			, TextureFlagsArray const & mask )override;
+			, TextureFlagsArray const & mask
+			, uint32_t & currentLocation )override;
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::clone
 		 */
@@ -143,7 +144,7 @@ namespace castor3d
 
 	private:
 		ashes::VertexBufferPtr< VertexBoneData > m_bonesBuffer;
-		ashes::PipelineVertexInputStateCreateInfoPtr m_bonesLayout;
+		std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_bonesLayouts;
 		VertexBoneDataArray m_bones;
 
 		friend class BinaryWriter< BonesComponent >;

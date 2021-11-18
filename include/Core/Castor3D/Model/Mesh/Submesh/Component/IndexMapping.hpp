@@ -65,7 +65,8 @@ namespace castor3d
 			, std::vector< uint64_t > & offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 			, uint32_t instanceMult
-			, TextureFlagsArray const & mask )override
+			, TextureFlagsArray const & mask
+			, uint32_t & currentLocation )override
 		{
 		}
 		/**
