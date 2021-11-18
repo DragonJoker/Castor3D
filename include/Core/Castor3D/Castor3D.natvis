@@ -129,4 +129,24 @@
 		</Expand>
 	</Type>
 
+	<Type Name="castor3d::ShaderProgram::CompiledShader">
+		<DisplayString>{name}</DisplayString>
+		<Expand>
+			<Item Name="name">name</Item>
+			<Item Name="shader">shader</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::ShaderProgram">
+		<DisplayString>{m_name}</DisplayString>
+		<Expand>
+			<Item Name="name">m_name</Item>
+			<Item Name="owner">m_owner</Item>
+			<Item Name="files">m_files</Item>
+			<Item Name="modules">m_modules</Item>
+			<Item Name="compiled">m_compiled</Item>
+			<Item Name="states">m_states</Item>
+		</Expand>
+	</Type>
+
 </AutoVisualizer>

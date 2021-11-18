@@ -187,6 +187,10 @@ namespace castor3d
 		AshPluginDescription const & desc;
 		VkPhysicalDeviceMemoryProperties memoryProperties{};
 		VkPhysicalDeviceFeatures features{};
+		VkPhysicalDeviceVulkan12Features features12;
+		VkPhysicalDeviceVulkan11Features features11;
+		VkPhysicalDeviceShaderDrawParametersFeatures drawParamsFeatures;
+		VkPhysicalDeviceFeatures2 features2;
 		VkPhysicalDeviceProperties properties{};
 		QueueFamilies queueFamilies;
 		ashes::DevicePtr device;
