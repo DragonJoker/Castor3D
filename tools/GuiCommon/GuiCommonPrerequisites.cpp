@@ -241,7 +241,7 @@ namespace GuiCommon
 
 					if ( progress )
 					{
-						progress->setTitle( "Initialising" );
+						progress->setTitle( "Initialising: Scene" );
 						progress->setLabel( "Loading scene..." );
 						progress->setRange( preprocessed.getCount() );
 					}
