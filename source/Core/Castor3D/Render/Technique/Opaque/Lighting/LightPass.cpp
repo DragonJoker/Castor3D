@@ -111,13 +111,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
-
 		shader::Utils utils{ writer, *renderSystem.getEngine() };
-		utils.declareCalcTexCoord();
-		utils.declareCalcVSPosition();
-		utils.declareCalcWSPosition();
-		utils.declareDecodeReceiver();
-		utils.declareInvertVec2Y();
 
 		// Shader outputs
 		auto pxl_diffuse = writer.declOutput< Vec3 >( "pxl_diffuse", 0 );

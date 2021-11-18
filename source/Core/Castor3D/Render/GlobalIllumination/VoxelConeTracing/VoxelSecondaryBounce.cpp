@@ -143,8 +143,6 @@ namespace castor3d
 				, 0u ) );
 
 			shader::Utils utils{ writer, *renderSystem.getEngine() };
-			utils.declareDecodeNormal();
-			utils.declareUnflatten();
 
 			shader::GlobalIllumination indirect{ writer, utils };
 			indirect.declareTraceConeRadiance();

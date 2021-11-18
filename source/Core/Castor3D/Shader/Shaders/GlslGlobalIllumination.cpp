@@ -30,8 +30,6 @@ namespace castor3d
 			, uint32_t setIndex
 			, SceneFlags sceneFlags )
 		{
-			m_utils.declareFresnelSchlick();
-
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
 				declareVct( bindingIndex, bindingIndex, setIndex, setIndex );
@@ -60,7 +58,6 @@ namespace castor3d
 			, SceneFlags sceneFlags )
 		{
 			using namespace sdw;
-			m_utils.declareFresnelSchlick();
 
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
@@ -574,13 +571,6 @@ namespace castor3d
 			if ( m_traceCone )
 			{
 				return;
-			}
-
-			m_utils.declareIsSaturated();
-
-			if ( !m_deferred )
-			{
-				m_utils.declareFresnelSchlick();
 			}
 
 			m_traceCone = m_writer.implementFunction< sdw::Vec4 >( "traceCone"

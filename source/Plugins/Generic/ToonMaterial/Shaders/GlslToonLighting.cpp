@@ -1658,7 +1658,6 @@ namespace toon::shader
 
 	void ToonPbrLightingModel::doDeclareModel()
 	{
-		m_cookTorrance.declareAON();
 	}
 
 	void ToonPbrLightingModel::doDeclareComputeTiledDirectionalLight()
@@ -2208,7 +2207,6 @@ namespace toon::shader
 
 	void ToonPbrLightingModel::doDeclareDiffuseModel()
 	{
-		m_cookTorrance.declareDiffuseAON();
 	}
 
 	void ToonPbrLightingModel::doDeclareComputeTiledDirectionalLightDiffuse()

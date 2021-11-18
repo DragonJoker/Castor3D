@@ -18,18 +18,18 @@ namespace castor3d
 {
 	namespace shader
 	{
-		castor::String const Shadow::MapVarianceDirectional = "c3d_mapVarianceDirectional";
-		castor::String const Shadow::MapVarianceSpot = "c3d_mapVarianceSpot";
-		castor::String const Shadow::MapVariancePoint = "c3d_mapVariancePoint";
-		castor::String const Shadow::MapNormalDepthDirectional = "c3d_mapNormalDepthDirectional";
-		castor::String const Shadow::MapNormalDepthSpot = "c3d_mapNormalDepthSpot";
-		castor::String const Shadow::MapNormalDepthPoint = "c3d_mapNormalDepthPoint";
-		castor::String const Shadow::MapPositionDirectional = "c3d_mapPositionDirectional";
-		castor::String const Shadow::MapPositionSpot = "c3d_mapPositionSpot";
-		castor::String const Shadow::MapPositionPoint = "c3d_mapPositionPoint";
-		castor::String const Shadow::MapFluxDirectional = "c3d_mapFluxDirectional";
-		castor::String const Shadow::MapFluxSpot = "c3d_mapFluxSpot";
-		castor::String const Shadow::MapFluxPoint = "c3d_mapFluxPoint";
+		castor::String const Shadow::MapVarianceDirectional = "c3d_shdMapVarianceDirectional";
+		castor::String const Shadow::MapVarianceSpot = "c3d_shdMapVarianceSpot";
+		castor::String const Shadow::MapVariancePoint = "c3d_shdMapVariancePoint";
+		castor::String const Shadow::MapNormalDepthDirectional = "c3d_shdMapNormalDepthDirectional";
+		castor::String const Shadow::MapNormalDepthSpot = "c3d_shdMapNormalDepthSpot";
+		castor::String const Shadow::MapNormalDepthPoint = "c3d_shdMapNormalDepthPoint";
+		castor::String const Shadow::MapPositionDirectional = "c3d_shdMapPositionDirectional";
+		castor::String const Shadow::MapPositionSpot = "c3d_shdMapPositionSpot";
+		castor::String const Shadow::MapPositionPoint = "c3d_shdMapPositionPoint";
+		castor::String const Shadow::MapFluxDirectional = "c3d_shdMapFluxDirectional";
+		castor::String const Shadow::MapFluxSpot = "c3d_shdMapFluxSpot";
+		castor::String const Shadow::MapFluxPoint = "c3d_shdMapFluxPoint";
 
 		Shadow::Shadow( ShadowOptions shadowOptions
 			, ShaderWriter & writer
@@ -43,9 +43,6 @@ namespace castor3d
 		void Shadow::declare( uint32_t & index
 			, uint32_t set )
 		{
-			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-			m_writer.inlineComment( "// SHADOWS" );
-			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			auto directionalEnabled = checkFlag( m_shadowOptions.type, SceneFlag::eShadowDirectional );
 			auto pointEnabled = checkFlag( m_shadowOptions.type, SceneFlag::eShadowPoint );
 			auto spotEnabled = checkFlag( m_shadowOptions.type, SceneFlag::eShadowSpot );
@@ -110,41 +107,12 @@ namespace castor3d
 					, ( spotEnabled ? index++ : index )
 					, set
 					, spotEnabled );
-
-				m_utils.declareInvertVec2Y();
-				doDeclareGetRandom();
-				doDeclareTextureProj();
-				doDeclareFilterPCF();
-
-				if constexpr ( DirectionalMaxCascadesCount > 1u )
-				{
-					doDeclareTextureProjCascade();
-					doDeclareFilterPCFCascade();
-				}
-				else
-				{
-					doDeclareTextureProjNoCascade();
-					doDeclareFilterPCFNoCascade();
-				}
-
-				doDeclareGetShadowOffset();
-				doDeclareChebyshevUpperBound();
-				doDeclareGetLightSpacePosition();
 			}
-
-			doDeclareComputeDirectionalShadow();
-			doDeclareComputeSpotShadow();
-			doDeclareComputePointShadow();
-			doDeclareVolumetric();
 		}
 
 		void Shadow::declareDirectional( uint32_t & index
 			, uint32_t set )
 		{
-			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-			m_writer.inlineComment( "// SHADOWS" );
-			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-
 			if ( checkFlag( m_shadowOptions.type, SceneFlag::eShadowDirectional ) )
 			{
 				m_writer.declConstant( "c3d_maxCascadeCount"
@@ -182,37 +150,12 @@ namespace castor3d
 						, set );
 				}
 #endif
-
-				m_utils.declareInvertVec2Y();
-				doDeclareGetRandom();
-				doDeclareGetShadowOffset();
-
-				if constexpr ( DirectionalMaxCascadesCount > 1u )
-				{
-					doDeclareTextureProjCascade();
-					doDeclareFilterPCFCascade();
-				}
-				else
-				{
-					doDeclareTextureProjNoCascade();
-					doDeclareFilterPCFNoCascade();
-				}
-
-				doDeclareChebyshevUpperBound();
-				doDeclareGetLightSpacePosition();
 			}
-
-			doDeclareComputeDirectionalShadow();
-			doDeclareVolumetric();
 		}
 
 		void Shadow::declarePoint( uint32_t & index
 			, uint32_t set )
 		{
-			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-			m_writer.inlineComment( "// SHADOWS" );
-			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-
 			if ( checkFlag( m_shadowOptions.type, SceneFlag::eShadowPoint ) )
 			{
 				m_writer.declSampledImage< FImgCubeArrayRgba32 >( MapNormalDepthPoint
@@ -221,24 +164,12 @@ namespace castor3d
 				m_writer.declSampledImage< FImgCubeArrayRg32 >( MapVariancePoint
 					, index++
 					, set );
-
-				doDeclareGetRandom();
-				doDeclareGetShadowOffset();
-				doDeclareTextureProj();
-				doDeclareFilterPCF();
-				doDeclareChebyshevUpperBound();
 			}
-
-			doDeclareComputePointShadow();
 		}
 
 		void Shadow::declareSpot( uint32_t & index
 			, uint32_t set )
 		{
-			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-			m_writer.inlineComment( "// SHADOWS" );
-			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-
 			if ( checkFlag( m_shadowOptions.type, SceneFlag::eShadowSpot ) )
 			{
 				m_writer.declSampledImage< FImg2DArrayRgba32 >( MapNormalDepthSpot
@@ -247,16 +178,7 @@ namespace castor3d
 				m_writer.declSampledImage< FImg2DArrayRg32 >( MapVarianceSpot
 					, index++
 					, set );
-
-				doDeclareGetRandom();
-				doDeclareGetShadowOffset();
-				doDeclareTextureProj();
-				doDeclareFilterPCF();
-				doDeclareChebyshevUpperBound();
-				doDeclareGetLightSpacePosition();
 			}
-
-			doDeclareComputeSpotShadow();
 		}
 
 		Float Shadow::computeDirectional( shader::Light const & light
@@ -264,8 +186,9 @@ namespace castor3d
 			, Mat4 const & lightMatrix
 			, Vec3 const & lightDirection
 			, UInt const & cascadeIndex
-			, UInt const & maxCascade )const
+			, UInt const & maxCascade )
 		{
+			doDeclareComputeDirectionalShadow();
 			return m_computeDirectional( light
 				, surface
 				, lightMatrix
@@ -277,8 +200,9 @@ namespace castor3d
 		Float Shadow::computeSpot( shader::Light const & light
 			, Surface const & surface
 			, Mat4 const & lightMatrix
-			, Vec3 const & lightDirection )const
+			, Vec3 const & lightDirection )
 		{
+			doDeclareComputeSpotShadow();
 			return m_computeSpot( light
 				, surface
 				, lightMatrix
@@ -287,8 +211,9 @@ namespace castor3d
 
 		Float Shadow::computePoint( shader::Light const & light
 			, Surface const & surface
-			, Vec3 const & lightDirection )const
+			, Vec3 const & lightDirection )
 		{
+			doDeclareComputePointShadow();
 			return m_computePoint( light
 				, surface
 				, lightDirection );
@@ -301,8 +226,9 @@ namespace castor3d
 			, Vec3 const & lightDirection
 			, UInt const & cascadeIndex
 			, UInt const & maxCascade
-			, OutputComponents & parentOutput )const
+			, OutputComponents & parentOutput )
 		{
+			doDeclareComputeVolumetric();
 			m_computeVolumetric( light
 				, surface
 				, eyePosition
@@ -314,15 +240,21 @@ namespace castor3d
 		}
 
 		Vec4 Shadow::getLightSpacePosition( Mat4 const & lightMatrix
-			, Vec3 const & worldSpacePosition )const
+			, Vec3 const & worldSpacePosition )
 		{
+			doDeclareGetLightSpacePosition();
 			return m_getLightSpacePosition( lightMatrix
 				, worldSpacePosition );
 		}
 
 		void Shadow::doDeclareGetRandom()
 		{
-			m_getRandom = m_writer.implementFunction< Float >( "c3d_getRandom"
+			if ( m_getRandom )
+			{
+				return;
+			}
+
+			m_getRandom = m_writer.implementFunction< Float >( "c3d_shdGetRandom"
 				, [this]( Vec4 const & seed )
 				{
 					auto p = m_writer.declLocale( "p"
@@ -334,7 +266,12 @@ namespace castor3d
 
 		void Shadow::doDeclareGetShadowOffset()
 		{
-			m_getShadowOffset = m_writer.implementFunction< Float >( "c3d_getShadowOffset"
+			if ( m_getShadowOffset )
+			{
+				return;
+			}
+
+			m_getShadowOffset = m_writer.implementFunction< Float >( "c3d_shdGetShadowOffset"
 				, [this]( Vec3 const & normal
 					, Vec3 const & lightDirection
 					, Float const & minOffset
@@ -354,7 +291,12 @@ namespace castor3d
 
 		void Shadow::doDeclareChebyshevUpperBound()
 		{
-			m_chebyshevUpperBound = m_writer.implementFunction< Float >( "c3d_chebyshevUpperBound"
+			if ( m_chebyshevUpperBound )
+			{
+				return;
+			}
+
+			m_chebyshevUpperBound = m_writer.implementFunction< Float >( "c3d_shdChebyshevUpperBound"
 				, [this]( Vec2 const & moments
 					, Float const & depth
 					, Float const & minVariance
@@ -382,7 +324,12 @@ namespace castor3d
 
 		void Shadow::doDeclareTextureProj()
 		{
-			m_textureProj = m_writer.implementFunction< Float >( "c3d_textureProj"
+			if ( m_textureProj )
+			{
+				return;
+			}
+
+			m_textureProj = m_writer.implementFunction< Float >( "c3d_shdTextureProj"
 				, [this]( Vec4 const & lightSpacePosition
 					, Vec2 const & offset
 					, SampledImage2DArrayRgba32 const & shadowMap
@@ -420,7 +367,13 @@ namespace castor3d
 
 		void Shadow::doDeclareFilterPCF()
 		{
-			m_filterPCF = m_writer.implementFunction< Float >( "c3d_filterPCF"
+			if ( m_filterPCF )
+			{
+				return;
+			}
+
+			doDeclareTextureProj();
+			m_filterPCF = m_writer.implementFunction< Float >( "c3d_shdFilterPCF"
 				, [this]( Vec4 const & lightSpacePosition
 					, SampledImage2DArrayRgba32 const & shadowMap
 					, Int const & index
@@ -463,7 +416,12 @@ namespace castor3d
 
 		void Shadow::doDeclareTextureProjNoCascade()
 		{
-			m_textureProjNoCascade = m_writer.implementFunction< Float >( "c3d_textureProjCascade"
+			if ( m_textureProjNoCascade )
+			{
+				return;
+			}
+
+			m_textureProjNoCascade = m_writer.implementFunction< Float >( "c3d_shdTextureProjNoCascade"
 				, [this]( Vec4 const & lightSpacePosition
 					, Vec2 const & offset
 					, SampledImage2DRgba32 const & shadowMap
@@ -499,7 +457,13 @@ namespace castor3d
 
 		void Shadow::doDeclareFilterPCFNoCascade()
 		{
-			m_filterPCFNoCascade = m_writer.implementFunction< Float >( "c3d_filterPCFCascade"
+			if ( m_filterPCFNoCascade )
+			{
+				return;
+			}
+
+			doDeclareTextureProjNoCascade();
+			m_filterPCFNoCascade = m_writer.implementFunction< Float >( "c3d_shdFilterPCFNoCascade"
 				, [this]( Vec4 const & lightSpacePosition
 					, SampledImage2DRgba32 const & shadowMap
 					, Vec2 const & invTexDim
@@ -540,7 +504,12 @@ namespace castor3d
 		void Shadow::doDeclareTextureProjCascade()
 		{
 #if C3D_UseTiledDirectionalShadowMap
-			m_textureProjTile = m_writer.implementFunction< Float >( "c3d_textureProjCascade"
+			if ( m_textureProjTile )
+			{
+				return;
+			}
+
+			m_textureProjTile = m_writer.implementFunction< Float >( "c3d_shdTextureProjTile"
 				, [this]( Vec4 const & lightSpacePosition
 					, Vec2 const & offset
 					, SampledImage2DRgba32 const & shadowMap
@@ -575,7 +544,12 @@ namespace castor3d
 				, InUInt{ m_writer, "cascadeIndex" }
 				, InFloat{ m_writer, "bias" } );
 #else
-			m_textureProjCascade = m_writer.implementFunction< Float >( "c3d_textureProjCascade"
+			if ( m_textureProjCascade )
+			{
+				return;
+			}
+
+			m_textureProjCascade = m_writer.implementFunction< Float >( "c3d_shdTextureProjCascade"
 				, [this]( Vec4 const & lightSpacePosition
 					, Vec2 const & offset
 					, SampledImage2DArrayRgba32 const & shadowMap
@@ -615,7 +589,13 @@ namespace castor3d
 		void Shadow::doDeclareFilterPCFCascade()
 		{
 #if C3D_UseTiledDirectionalShadowMap
-			m_filterPCFTile = m_writer.implementFunction< Float >( "c3d_filterPCFCascade"
+			if ( m_textureProjTile )
+			{
+				return;
+			}
+
+			doDeclareTextureProjCascade();
+			m_filterPCFTile = m_writer.implementFunction< Float >( "c3d_shdFilterPCFTile"
 				, [this]( Vec4 const & lightSpacePosition
 					, SampledImage2DRgba32 const & shadowMap
 					, Vec2 const & invTexDim
@@ -655,7 +635,13 @@ namespace castor3d
 				, InUInt{ m_writer, "cascadeIndex" }
 				, InFloat{ m_writer, "bias" } );
 #else
-			m_filterPCFCascade = m_writer.implementFunction< Float >( "c3d_filterPCFCascade"
+			if ( m_filterPCFCascade )
+			{
+				return;
+			}
+
+			doDeclareTextureProjCascade();
+			m_filterPCFCascade = m_writer.implementFunction< Float >( "c3d_shdFilterPCFCascade"
 				, [this]( Vec4 const & lightSpacePosition
 					, SampledImage2DArrayRgba32 const & shadowMap
 					, Vec2 const & invTexDim
@@ -699,7 +685,7 @@ namespace castor3d
 
 		void Shadow::doDeclareGetLightSpacePosition()
 		{
-			m_getLightSpacePosition = m_writer.implementFunction< Vec4 >( "c3d_getLightSpacePosition"
+			m_getLightSpacePosition = m_writer.implementFunction< Vec4 >( "c3d_shdGetLightSpacePosition"
 				, [this]( Mat4 const & lightMatrix
 					, Vec3 const & worldSpacePosition )
 				{
@@ -715,7 +701,13 @@ namespace castor3d
 
 		void Shadow::doDeclareComputeDirectionalShadow()
 		{
-			m_computeDirectional = m_writer.implementFunction< Float >( "c3d_computeDirectionalShadow"
+			doDeclareTextureProjNoCascade();
+			doDeclareFilterPCFNoCascade();
+			doDeclareTextureProjCascade();
+			doDeclareFilterPCFCascade();
+			doDeclareGetShadowOffset();
+			doDeclareChebyshevUpperBound();
+			m_computeDirectional = m_writer.implementFunction< Float >( "c3d_shdComputeDirectional"
 				, [this]( shader::Light const & light
 					, Surface const & surface
 					, Mat4 const & lightMatrix
@@ -871,7 +863,11 @@ namespace castor3d
 
 		void Shadow::doDeclareComputeSpotShadow()
 		{
-			m_computeSpot = m_writer.implementFunction< Float >( "c3d_computeSpotShadow"
+			doDeclareTextureProj();
+			doDeclareFilterPCF();
+			doDeclareGetShadowOffset();
+			doDeclareChebyshevUpperBound();
+			m_computeSpot = m_writer.implementFunction< Float >( "c3d_shdComputeSpot"
 				, [this]( shader::Light const & light
 					, Surface const & surface
 					, Mat4 const & lightMatrix
@@ -954,7 +950,9 @@ namespace castor3d
 
 		void Shadow::doDeclareComputePointShadow()
 		{
-			m_computePoint = m_writer.implementFunction< Float >( "c3d_computePointShadow"
+			doDeclareGetShadowOffset();
+			doDeclareChebyshevUpperBound();
+			m_computePoint = m_writer.implementFunction< Float >( "c3d_shdComputePoint"
 				, [this]( shader::Light const & light
 					, Surface const & surface
 					, Vec3 const & lightPosition )
@@ -1094,10 +1092,15 @@ namespace castor3d
 				, InVec3( m_writer, "lightPosition" ) );
 		}
 
-		void Shadow::doDeclareVolumetric()
+		void Shadow::doDeclareComputeVolumetric()
 		{
+			if ( m_computeVolumetric )
+			{
+				return;
+			}
+
 			OutputComponents output{ m_writer };
-			m_computeVolumetric = m_writer.implementFunction< sdw::Void >( "c3d_computeVolumetric"
+			m_computeVolumetric = m_writer.implementFunction< sdw::Void >( "c3d_shdComputeVolumetric"
 				, [this]( shader::Light const & light
 					, Surface surface
 					, Vec3 const & eyePosition

@@ -31,13 +31,13 @@ namespace castor3d
 
 			C3D_API sdw::Vec3 readNormal( sdw::Vec3 const & input )const;
 			C3D_API sdw::Vec3 writeNormal( sdw::Vec3 const & input )const;
-			C3D_API sdw::Vec3 projToWorld( Utils const & utils
+			C3D_API sdw::Vec3 projToWorld( Utils & utils
 				, sdw::Vec2 const & texCoord
 				, sdw::Float const & depth )const;
-			C3D_API sdw::Vec3 projToView( Utils const & utils
+			C3D_API sdw::Vec3 projToView( Utils & utils
 				, sdw::Vec2 const & texCoord
 				, sdw::Float const & depth )const;
-			C3D_API sdw::Vec2 calcTexCoord( Utils const & utils
+			C3D_API sdw::Vec2 calcTexCoord( Utils & utils
 				, sdw::Vec2 const & fragCoord )const;
 
 			sdw::Mat4 const & getInvViewProj()const

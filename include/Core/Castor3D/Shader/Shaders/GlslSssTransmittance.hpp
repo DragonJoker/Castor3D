@@ -16,8 +16,8 @@ namespace castor3d
 		{
 		public:
 			C3D_API SssTransmittance( sdw::ShaderWriter & writer
-				, Shadow const & shadow
-				, Utils const & utils
+				, Shadow & shadow
+				, Utils & utils
 				, bool shadowMap );
 			C3D_API void declare( LightType type );
 
@@ -25,22 +25,22 @@ namespace castor3d
 				, shader::DirectionalLight const & light
 				, sdw::Vec2 const & uv
 				, Surface surface
-				, sdw::Float const & translucency )const;
+				, sdw::Float const & translucency );
 			C3D_API sdw::Vec3 compute( shader::Material const & material
 				, shader::PointLight const & light
 				, sdw::Vec2 const & uv
 				, Surface surface
-				, sdw::Float const & translucency )const;
+				, sdw::Float const & translucency );
 			C3D_API sdw::Vec3 compute( shader::Material const & material
 				, shader::SpotLight const & light
 				, sdw::Vec2 const & uv
 				, Surface surface
-				, sdw::Float const & translucency )const;
+				, sdw::Float const & translucency );
 
 		private:
 			sdw::ShaderWriter & m_writer;
-			Shadow const & m_shadow;
-			Utils const & m_utils;
+			Shadow & m_shadow;
+			Utils & m_utils;
 
 			bool m_shadowMap;
 
