@@ -367,7 +367,7 @@ namespace castor3d
 		inline InstantiationComponent const & getInstantiation()const;
 		inline BonesInstantiationComponent & getInstantiatedBones();
 		inline BonesInstantiationComponent const & getInstantiatedBones()const;
-		inline SubmeshComponentStrMap const & getComponents()const;
+		inline SubmeshComponentIDMap const & getComponents()const;
 		inline VkPrimitiveTopology getTopology()const;
 
 	private:
@@ -386,7 +386,7 @@ namespace castor3d
 		castor::BoundingBox m_box;
 		castor::BoundingSphere m_sphere;
 		InterleavedVertexArray m_points;
-		SubmeshComponentStrMap m_components;
+		SubmeshComponentIDMap m_components;
 		InstantiationComponentSPtr m_instantiation;
 		BonesInstantiationComponentSPtr m_instantiatedBones;
 		IndexMappingSPtr m_indexMapping;

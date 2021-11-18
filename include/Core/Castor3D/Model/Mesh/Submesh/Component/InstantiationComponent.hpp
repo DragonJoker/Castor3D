@@ -118,7 +118,8 @@ namespace castor3d
 			, std::vector< uint64_t > & offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 			, uint32_t instanceMult
-			, TextureFlagsArray const & mask )override;
+			, TextureFlagsArray const & mask
+			, uint32_t & currentLocation )override;
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::clone
 		 */
@@ -187,6 +188,7 @@ namespace castor3d
 
 	private:
 		InstanceDataMap m_instances;
+		std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_mtxLayouts;
 		uint32_t m_threshold;
 	};
 }

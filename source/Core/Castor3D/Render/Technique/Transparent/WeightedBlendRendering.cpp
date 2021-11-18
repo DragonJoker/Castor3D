@@ -47,13 +47,9 @@ namespace castor3d
 			auto position = writer.declInput< Vec2 >( "position", 0u );
 			auto uv = writer.declInput< Vec2 >( "uv", 1u );
 
-			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
-
 			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
 				, VertexOut out )
 				{
-					vtx_texture = uv;
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -71,7 +67,6 @@ namespace castor3d
 			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( WbTexture::eDepth ), uint32_t( DepthTexIndex ), 0u );
 			auto c3d_mapAccumulation = writer.declSampledImage< FImg2DRgba32 >( getTextureName( WbTexture::eAccumulation ), uint32_t( AccumTexIndex ), 0u );
 			auto c3d_mapRevealage = writer.declSampledImage< FImg2DRgba32 >( getTextureName( WbTexture::eRevealage ), uint32_t( RevealTexIndex ), 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0u );
@@ -203,7 +198,6 @@ namespace castor3d
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( makeExtent2D( m_size ) )
-					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.build( pass, context, graph );
 				m_device.renderSystem.getEngine()->registerTimer( m_graph.getName() + "/Transparent"

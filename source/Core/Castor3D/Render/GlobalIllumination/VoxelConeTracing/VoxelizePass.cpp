@@ -338,6 +338,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		VertexWriter writer;
+		auto textureFlags = filterTexturesFlags( flags.textures );
 		bool hasTextures = !flags.textures.empty();
 
 		// Inputs
@@ -358,28 +359,30 @@ namespace castor3d
 			, uint32_t( PassUboIdx::eMatrix )
 			, RenderPipeline::eAdditional );
 
-		shader::VertexSurface inSurface{ writer
-			, flags.programFlags
-			, getShaderFlags()
-			, hasTextures };
-
-		writer.implementMainT< VoidT, SurfaceT >( [&]( VertexIn in
+		writer.implementMainT< shader::VertexSurfaceT, SurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
+				, flags.programFlags
+				, getShaderFlags()
+				, textureFlags
+				, flags.passFlags
+				, hasTextures }
+			, sdw::VertexOutT< SurfaceT >{ writer }
+			, [&]( VertexInT< shader::VertexSurfaceT > in
 			, VertexOutT< SurfaceT > out )
 			{
 				auto curPosition = writer.declLocale( "curPosition"
-					, inSurface.position );
+					, in.position );
 				auto v4Normal = writer.declLocale( "v4Normal"
-					, vec4( inSurface.normal, 0.0_f ) );
-				out.texture = inSurface.texture;
-				inSurface.morph( c3d_morphingData
+					, vec4( in.normal, 0.0_f ) );
+				out.texture = in.texture;
+				in.morph( c3d_morphingData
 					, curPosition
 					, v4Normal
 					, out.texture );
 
 				auto modelMtx = writer.declLocale< Mat4 >( "modelMtx"
-					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, inSurface ) );
+					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, in ) );
 				out.material = c3d_modelData.getMaterialIndex( flags.programFlags
-					, inSurface.material );
+					, in.material );
 
 				out.vtx.position = ( modelMtx * curPosition );
 				out.viewPosition = c3d_matrixData.worldToCurView( out.vtx.position ).xyz();

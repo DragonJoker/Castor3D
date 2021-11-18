@@ -229,13 +229,8 @@ namespace castor3d
 			+ ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) ? 1 : 0 ) < 2 );
 		using namespace sdw;
 		VertexWriter writer;
+		auto textureFlags = filterTexturesFlags( flags.textures );
 		bool hasTextures = !flags.textures.empty();
-
-		// Vertex inputs
-		shader::VertexSurface inSurface{ writer
-			, flags.programFlags
-			, getShaderFlags()
-			, hasTextures };
 
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
@@ -265,36 +260,42 @@ namespace castor3d
 			, RenderPipeline::eAdditional );
 #endif
 
-		// Outputs
-		shader::OutFragmentSurface outSurface{ writer
-			, getShaderFlags()
-			, hasTextures };
-
-		writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-			, VertexOut out )
+		writer.implementMainT< shader::VertexSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
+				, flags.programFlags
+				, getShaderFlags()
+				, textureFlags
+				, flags.passFlags
+				, hasTextures }
+			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer
+				, flags.programFlags
+				, getShaderFlags()
+				, textureFlags
+				, flags.passFlags
+				, hasTextures }
+			, [&]( VertexInT< shader::VertexSurfaceT > in
+			, VertexOutT< shader::FragmentSurfaceT > out )
 			{
 				auto curPosition = writer.declLocale( "curPosition"
-					, inSurface.position );
+					, in.position );
 				auto v4Normal = writer.declLocale( "v4Normal"
-					, vec4( inSurface.normal, 0.0_f ) );
+					, vec4( in.normal, 0.0_f ) );
 				auto v4Tangent = writer.declLocale( "v4Tangent"
-					, vec4( inSurface.tangent, 0.0_f ) );
-				outSurface.texture = inSurface.texture;
-				inSurface.morph( c3d_morphingData
+					, vec4( in.tangent, 0.0_f ) );
+				out.texture = in.texture;
+				in.morph( c3d_morphingData
 					, curPosition
 					, v4Normal
 					, v4Tangent
-					, outSurface.texture );
-				outSurface.material = c3d_modelData.getMaterialIndex( flags.programFlags
-					, inSurface.material );
-				outSurface.nodeId = c3d_modelData.getNodeId( flags.programFlags
-					, inSurface.nodeId );
-				outSurface.instance = writer.cast< UInt >( in.instanceIndex );
+					, out.texture );
+				out.material = c3d_modelData.getMaterialIndex( flags.programFlags
+					, in.material );
+				out.instance = writer.cast< UInt >( in.instanceIndex );
 
 				auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
-					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, inSurface ) );
-				curPosition = mtxModel * curPosition;
-				outSurface.worldPosition = curPosition.xyz();
+					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, in ) );
+				auto worldPos = writer.declLocale( "worldPos"
+					, mtxModel * curPosition );
+				out.worldPosition = worldPos.xyz();
 
 #if C3D_UseTiledDirectionalShadowMap
 				auto ti = writer.declLocale( "tileIndex"
@@ -304,7 +305,7 @@ namespace castor3d
 				auto tileMax = writer.declLocale( "tileMax"
 					, c3d_shadowMapDirectionalData.getTileMax( tileMin ) );
 
-				curPosition = c3d_shadowMapDirectionalData.worldToView( ti, curPosition );
+				curPosition = c3d_shadowMapDirectionalData.worldToView( ti, worldPos );
 				curPosition = c3d_shadowMapDirectionalData.viewToProj( ti, curPosition );
 				out.vtx.position = curPosition;
 
@@ -313,14 +314,15 @@ namespace castor3d
 				out.vtx.clipDistance[2] = dot( vec4( 0.0_f, -1.0_f, 0.0_f, -tileMin.y() ), curPosition );
 				out.vtx.clipDistance[3] = dot( vec4( 0.0_f, 1.0_f, 0.0_f, tileMax.y() ), curPosition );
 #else
-				curPosition = c3d_shadowMapData.worldToView( curPosition );
+				curPosition = c3d_shadowMapData.worldToView( worldPos );
 				out.vtx.position = c3d_shadowMapData.viewToProj( curPosition );
 #endif
 
 				auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
 					, c3d_modelData.getNormalMtx( flags.programFlags, mtxModel ) );
-				outSurface.computeTangentSpace( flags.programFlags
+				out.computeTangentSpace( flags.programFlags
 					, vec3( 0.0_f )
+					, worldPos.xyz()
 					, mtxNormal
 					, v4Normal
 					, v4Tangent );
@@ -334,15 +336,11 @@ namespace castor3d
 
 		using namespace sdw;
 		FragmentWriter writer;
+		auto textureFlags = filterTexturesFlags( flags.textures );
 		bool hasTextures = !flags.textures.empty();
 
 		shader::Utils utils{ writer, *renderSystem.getEngine() };
 		utils.declareRemoveGamma();
-
-		// Fragment Intputs
-		shader::InFragmentSurface inSurface{ writer
-			, getShaderFlags()
-			, hasTextures };
 
 		shader::Materials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
@@ -390,22 +388,29 @@ namespace castor3d
 		auto pxl_position( writer.declOutput< Vec4 >( "pxl_position", 2u ) );
 		auto pxl_flux( writer.declOutput< Vec4 >( "pxl_flux", 3u ) );
 
-		writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-			, FragmentOut out )
+		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
+				, flags.programFlags
+				, getShaderFlags()
+				, textureFlags
+				, flags.passFlags
+				, hasTextures }
+			, FragmentOut{ writer }
+			, [&]( FragmentInT< shader::FragmentSurfaceT > in
+				, FragmentOut out )
 			{
 				pxl_normalLinear = vec4( 0.0_f );
 				pxl_variance = vec2( 0.0_f );
 				pxl_position = vec4( 0.0_f );
 				pxl_flux = vec4( 0.0_f );
 				auto texCoord = writer.declLocale( "texCoord"
-					, inSurface.texture );
+					, in.texture );
 				auto normal = writer.declLocale( "normal"
-					, normalize( inSurface.normal ) );
+					, normalize( in.normal ) );
 				auto tangent = writer.declLocale( "tangent"
-					, normalize( inSurface.tangent ) );
+					, normalize( in.tangent ) );
 				auto bitangent = writer.declLocale( "bitangent"
-					, normalize( inSurface.bitangent ) );
-				auto material = materials.getMaterial( inSurface.material );
+					, normalize( in.bitangent ) );
+				auto material = materials.getMaterial( in.material );
 				auto gamma = writer.declLocale( "gamma"
 					, material.gamma );
 				auto emissive = writer.declLocale( "emissive"
@@ -437,8 +442,8 @@ namespace castor3d
 						, occlusion
 						, transmittance
 						, *lightMat
-						, inSurface.tangentSpaceViewPosition
-						, inSurface.tangentSpaceFragPosition );
+						, in.tangentSpaceViewPosition
+						, in.tangentSpaceFragPosition );
 				}
 
 				utils.applyAlphaFunc( flags.alphaFunc
@@ -466,7 +471,7 @@ namespace castor3d
 					, in.fragCoord.z() );
 				pxl_normalLinear.w() = depth;
 				pxl_normalLinear.xyz() = normal;
-				pxl_position.xyz() = inSurface.worldPosition;
+				pxl_position.xyz() = in.worldPosition;
 
 				pxl_variance.x() = depth;
 				pxl_variance.y() = depth * depth;

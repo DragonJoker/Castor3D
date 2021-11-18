@@ -50,17 +50,43 @@ namespace castor3d
 			return buffer;
 		}
 
-		ashes::PipelineVertexInputStateCreateInfo const & getMatrixLayout()
+		ashes::PipelineVertexInputStateCreateInfo getMatrixLayout( ShaderFlags shaderFlags
+			, uint32_t & currentLocation )
 		{
-			static ashes::PipelineVertexInputStateCreateInfo const matrixLayout{ 0u
-				, { { InstantiationComponent::BindingPoint, sizeof( InstantiationData ), VK_VERTEX_INPUT_RATE_INSTANCE } }
-				, { { SceneRenderPass::VertexInputs::TransformLocation + 0u, InstantiationComponent::BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 0u * sizeof( castor::Point4f ) }
-					, { SceneRenderPass::VertexInputs::TransformLocation + 1u, InstantiationComponent::BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 1u * sizeof( castor::Point4f ) }
-					, { SceneRenderPass::VertexInputs::TransformLocation + 2u, InstantiationComponent::BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 2u * sizeof( castor::Point4f ) }
-					, { SceneRenderPass::VertexInputs::TransformLocation + 3u, InstantiationComponent::BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 3u * sizeof( castor::Point4f ) }
-					, { SceneRenderPass::VertexInputs::MaterialLocation, InstantiationComponent::BindingPoint, VK_FORMAT_R32_SINT, offsetof( InstantiationData, m_material ) }
-					, { SceneRenderPass::VertexInputs::NodeIdLocation, InstantiationComponent::BindingPoint, VK_FORMAT_R32_SINT, offsetof( InstantiationData, m_nodeId ) } } };
-			return matrixLayout;
+			ashes::VkVertexInputBindingDescriptionArray bindings{ { InstantiationComponent::BindingPoint
+				, sizeof( InstantiationData ), VK_VERTEX_INPUT_RATE_INSTANCE } };
+
+			ashes::VkVertexInputAttributeDescriptionArray attributes;
+			attributes.push_back( { currentLocation++
+				, InstantiationComponent::BindingPoint
+				, VK_FORMAT_R32G32B32A32_SFLOAT
+				, offsetof( InstantiationData, m_matrix ) + 0u * sizeof( castor::Point4f ) } );
+			attributes.push_back( { currentLocation++
+				, InstantiationComponent::BindingPoint
+				, VK_FORMAT_R32G32B32A32_SFLOAT
+				, offsetof( InstantiationData, m_matrix ) + 1u * sizeof( castor::Point4f ) } );
+			attributes.push_back( { currentLocation++
+				, InstantiationComponent::BindingPoint
+				, VK_FORMAT_R32G32B32A32_SFLOAT
+				, offsetof( InstantiationData, m_matrix ) + 2u * sizeof( castor::Point4f ) } );
+			attributes.push_back( { currentLocation++
+				, InstantiationComponent::BindingPoint
+				, VK_FORMAT_R32G32B32A32_SFLOAT
+				, offsetof( InstantiationData, m_matrix ) + 3u * sizeof( castor::Point4f ) } );
+			attributes.push_back( { currentLocation++
+				, InstantiationComponent::BindingPoint
+				, VK_FORMAT_R32_SINT
+				, offsetof( InstantiationData, m_material ) } );
+
+			if ( checkFlag( shaderFlags, ShaderFlag::eNodeId ) )
+			{
+				attributes.push_back( { currentLocation++
+					, InstantiationComponent::BindingPoint
+					, VK_FORMAT_R32_SINT
+					, offsetof( InstantiationData, m_nodeId ) } );
+			}
+
+			return ashes::PipelineVertexInputStateCreateInfo{ 0u, bindings, attributes };
 		}
 	}
 
@@ -70,7 +96,7 @@ namespace castor3d
 
 	InstantiationComponent::InstantiationComponent( Submesh & submesh
 		, uint32_t threshold )
-		: SubmeshComponent{ submesh, Name }
+		: SubmeshComponent{ submesh, Name, BindingPoint }
 		, m_threshold{ threshold }
 	{
 	}
@@ -185,7 +211,8 @@ namespace castor3d
 		, std::vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 		, uint32_t instanceMult
-		, TextureFlagsArray const & mask )
+		, TextureFlagsArray const & mask
+		, uint32_t & currentLocation )
 	{
 		auto it = m_instances.find( material );
 		auto index = ( instanceMult <= 1u
@@ -195,9 +222,18 @@ namespace castor3d
 		if ( it != m_instances.end()
 			&& it->second[index].buffer )
 		{
+			auto hash = std::hash< ShaderFlags::BaseType >{}( flags );
+			hash = castor::hashCombine( hash, mask.empty() );
+			auto layoutIt = m_mtxLayouts.find( hash );
+
+			if ( layoutIt == m_mtxLayouts.end() )
+			{
+				layoutIt = m_mtxLayouts.emplace( hash, getMatrixLayout( flags, currentLocation ) ).first;
+			}
+
 			buffers.emplace_back( it->second[index].buffer->getBuffer() );
 			offsets.emplace_back( 0u );
-			layouts.emplace_back( getMatrixLayout() );
+			layouts.emplace_back( layoutIt->second );
 		}
 	}
 

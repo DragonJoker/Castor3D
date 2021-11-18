@@ -18,35 +18,36 @@ namespace castor3d
 	namespace
 	{
 		ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout( ShaderFlags const & flags
-			, bool hasTextures )
+			, bool hasTextures
+			, uint32_t & currentLocation )
 		{
 			ashes::VkVertexInputBindingDescriptionArray bindings{ { MorphComponent::BindingPoint
 				, sizeof( InterleavedVertex ), VK_VERTEX_INPUT_RATE_VERTEX } };
-			ashes::VkVertexInputAttributeDescriptionArray attributes{ 1u, { SceneRenderPass::VertexInputs::Position2Location
-				, 0u
+			ashes::VkVertexInputAttributeDescriptionArray attributes{ 1u, { currentLocation++
+				, MorphComponent::BindingPoint
 				, VK_FORMAT_R32G32B32A32_SFLOAT
 				, offsetof( InterleavedVertex, pos ) } };
 
 			if ( checkFlag( flags, ShaderFlag::eNormal ) )
 			{
-				attributes.push_back( { SceneRenderPass::VertexInputs::Normal2Location
-					, 0u
+				attributes.push_back( { currentLocation++
+					, MorphComponent::BindingPoint
 					, VK_FORMAT_R32G32B32A32_SFLOAT
 					, offsetof( InterleavedVertex, nml ) } );
 			}
 
 			if ( checkFlag( flags, ShaderFlag::eTangentSpace ) )
 			{
-				attributes.push_back( { SceneRenderPass::VertexInputs::Tangent2Location
-					, 0u
+				attributes.push_back( { currentLocation++
+					, MorphComponent::BindingPoint
 					, VK_FORMAT_R32G32B32A32_SFLOAT
 					, offsetof( InterleavedVertex, tan ) } );
 			}
 
 			if ( hasTextures )
 			{
-				attributes.push_back( { SceneRenderPass::VertexInputs::Texture2Location
-					, 0u
+				attributes.push_back( { currentLocation++
+					, MorphComponent::BindingPoint
 					, VK_FORMAT_R32G32B32A32_SFLOAT
 					, offsetof( InterleavedVertex, tex ) } );
 			}
@@ -58,7 +59,7 @@ namespace castor3d
 	String const MorphComponent::Name = cuT( "morph" );
 
 	MorphComponent::MorphComponent( Submesh & submesh )
-		: SubmeshComponent{ submesh, Name }
+		: SubmeshComponent{ submesh, Name, BindingPoint }
 	{
 	}
 
@@ -68,7 +69,8 @@ namespace castor3d
 		, std::vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 		, uint32_t instanceMult
-		, TextureFlagsArray const & mask )
+		, TextureFlagsArray const & mask
+		, uint32_t & currentLocation )
 	{
 		auto hash = std::hash< ShaderFlags::BaseType >{}( flags );
 		hash = castor::hashCombine( hash, mask.empty() );
@@ -76,7 +78,7 @@ namespace castor3d
 
 		if ( layoutIt == m_animLayouts.end() )
 		{
-			layoutIt = m_animLayouts.emplace( hash, doCreateVertexLayout( flags, !mask.empty() ) ).first;
+			layoutIt = m_animLayouts.emplace( hash, doCreateVertexLayout( flags, !mask.empty(), currentLocation ) ).first;
 		}
 
 		buffers.emplace_back( m_animBuffer->getBuffer() );

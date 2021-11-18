@@ -75,6 +75,12 @@ namespace castor3d
 		return TextureFlags{ TextureFlag::eAll };
 	}
 
+	ShaderFlags OpaquePass::getShaderFlags()const
+	{
+		return ShaderFlag::eTangentSpace
+			| ShaderFlag::eVelocity;
+	}
+
 	void OpaquePass::doUpdateFlags( PipelineFlags & flags )const
 	{
 		remFlag( flags.programFlags, ProgramFlag::eLighting );
@@ -122,6 +128,7 @@ namespace castor3d
 
 		using namespace sdw;
 		FragmentWriter writer;
+		auto textureFlags = filterTexturesFlags( flags.textures );
 
 		shader::Materials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
@@ -152,11 +159,6 @@ namespace castor3d
 			, uint32_t( PassUboIdx::eScene )
 			, RenderPipeline::eAdditional );
 
-		// Fragment Inputs
-		shader::InFragmentSurface inSurface{ writer
-			, getShaderFlags()
-			, hasTextures };
-
 		// Fragment Outputs
 		auto index = 0u;
 		auto outData2 = writer.declOutput< Vec4 >( Output2, index++ );
@@ -174,13 +176,20 @@ namespace castor3d
 			, {}
 			, true );
 
-		writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
+		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
+				, flags.programFlags
+				, getShaderFlags()
+				, textureFlags
+				, flags.passFlags
+				, hasTextures }
+			, FragmentOut{ writer }
+			, [&]( FragmentInT< shader::FragmentSurfaceT > in
 			, FragmentOut out )
 			{
 				auto material = writer.declLocale( "material"
-					, materials.getMaterial( inSurface.material ) );
+					, materials.getMaterial( in.material ) );
 				auto texCoord = writer.declLocale( "texCoord"
-					, inSurface.texture );
+					, in.texture );
 				auto alpha = writer.declLocale( "alpha"
 					, material.opacity );
 				auto gamma = writer.declLocale( "gamma"
@@ -190,11 +199,11 @@ namespace castor3d
 				auto lightMat = lightingModel->declMaterial( "lightMat" );
 				lightMat->create( material );
 				auto normal = writer.declLocale( "normal"
-					, normalize( inSurface.normal ) );
+					, normalize( in.normal ) );
 				auto tangent = writer.declLocale( "tangent"
-					, normalize( inSurface.tangent ) );
+					, normalize( in.tangent ) );
 				auto bitangent = writer.declLocale( "bitangent"
-					, normalize( inSurface.bitangent ) );
+					, normalize( in.bitangent ) );
 				auto occlusion = writer.declLocale( "occlusion"
 					, 1.0_f );
 				auto transmittance = writer.declLocale( "transmittance"
@@ -214,14 +223,14 @@ namespace castor3d
 					, occlusion
 					, transmittance
 					, *lightMat
-					, inSurface.tangentSpaceViewPosition
-					, inSurface.tangentSpaceFragPosition );
+					, in.tangentSpaceViewPosition
+					, in.tangentSpaceFragPosition );
 				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
 					, material.alphaRef );
 				lightMat->output( outData2, outData3 );
 				outData4 = vec4( emissive, transmittance );
-				outData5 = vec4( inSurface.getVelocity(), 0.0_f, occlusion );
+				outData5 = vec4( in.getVelocity(), 0.0_f, occlusion );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

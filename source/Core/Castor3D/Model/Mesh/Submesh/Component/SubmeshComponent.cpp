@@ -3,9 +3,11 @@
 namespace castor3d
 {
 	SubmeshComponent::SubmeshComponent( Submesh & submesh
-		, castor::String const & type )
+		, castor::String const & type
+		, uint32_t id )
 		: castor::OwnedBy< Submesh >{ submesh }
 		, m_type{ type }
+		, m_id{ id }
 	{
 	}
 

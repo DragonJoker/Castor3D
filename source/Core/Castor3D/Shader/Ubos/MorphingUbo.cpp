@@ -42,6 +42,10 @@ namespace castor3d
 		{
 			if ( isEnabled() )
 			{
+				CU_Require( !pos.getExpr()->isDummy() );
+				CU_Require( !pos2.getExpr()->isDummy() );
+				CU_Require( !uvw.getExpr()->isDummy() );
+				CU_Require( !uvw2.getExpr()->isDummy() );
 				pos = vec4( sdw::mix( pos.xyz(), pos2.xyz(), vec3( m_time ) ), 1.0f );
 				uvw = sdw::mix( uvw, uvw2, vec3( m_time ) );
 			}
@@ -58,6 +62,8 @@ namespace castor3d
 
 			if ( isEnabled() )
 			{
+				CU_Require( !nml.getExpr()->isDummy() );
+				CU_Require( !nml2.getExpr()->isDummy() );
 				nml = vec4( sdw::mix( nml.xyz(), nml2, vec3( m_time ) ), 0.0f );
 			}
 		}
@@ -75,6 +81,8 @@ namespace castor3d
 
 			if ( isEnabled() )
 			{
+				CU_Require( !tan.getExpr()->isDummy() );
+				CU_Require( !tan2.getExpr()->isDummy() );
 				tan = vec4( sdw::mix( tan.xyz(), tan2, vec3( m_time ) ), 0.0f );
 			}
 		}
@@ -83,6 +91,8 @@ namespace castor3d
 		{
 			if ( isEnabled() )
 			{
+				CU_Require( !lhs.getExpr()->isDummy() );
+				CU_Require( !rhs.getExpr()->isDummy() );
 				lhs = sdw::mix( lhs, rhs, m_time );
 			}
 
@@ -93,6 +103,8 @@ namespace castor3d
 		{
 			if ( isEnabled() )
 			{
+				CU_Require( !lhs.getExpr()->isDummy() );
+				CU_Require( !rhs.getExpr()->isDummy() );
 				lhs = sdw::mix( lhs, rhs, vec2( m_time ) );
 			}
 
@@ -103,6 +115,8 @@ namespace castor3d
 		{
 			if ( isEnabled() )
 			{
+				CU_Require( !lhs.getExpr()->isDummy() );
+				CU_Require( !rhs.getExpr()->isDummy() );
 				lhs = sdw::mix( lhs, rhs, vec3( m_time ) );
 			}
 
@@ -113,6 +127,8 @@ namespace castor3d
 		{
 			if ( isEnabled() )
 			{
+				CU_Require( !lhs.getExpr()->isDummy() );
+				CU_Require( !rhs.getExpr()->isDummy() );
 				lhs = vec4( sdw::mix( lhs.xyz(), rhs.xyz(), vec3( m_time ) ), 1.0_f );
 			}
 
@@ -123,6 +139,8 @@ namespace castor3d
 		{
 			if ( isEnabled() )
 			{
+				CU_Require( !lhs.getExpr()->isDummy() );
+				CU_Require( !rhs.getExpr()->isDummy() );
 				lhs = vec4( sdw::mix( lhs.xyz(), rhs, vec3( m_time ) ), 1.0_f );
 			}
 

@@ -233,17 +233,6 @@ namespace castor3d
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 
 	protected:
-		/**
-		 *\~english
-		 *\brief		Retrieves the vertex shader source matching the given flags.
-		 *\param[in]	flags	The pipeline flags.
-		 *\~french
-		 *\brief		Récupère le source du vertex shader qui correspond aux indicateurs donnés.
-		 *\param[in]	flags	Les indicateurs de pipeline.
-		 */
-		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
-
-	protected:
 		Scene const & m_scene;
 		Camera * m_camera{ nullptr };
 		bool m_environment{ false };
