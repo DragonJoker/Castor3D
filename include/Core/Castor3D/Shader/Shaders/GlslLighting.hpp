@@ -325,7 +325,7 @@ namespace castor3d::shader
 		C3D_API SpotLight getSpotLight( sdw::Int const & index )const;
 		//\}
 
-		inline Shadow const & getShadowModel()const
+		inline Shadow & getShadowModel()const
 		{
 			return *m_shadowModel;
 		}

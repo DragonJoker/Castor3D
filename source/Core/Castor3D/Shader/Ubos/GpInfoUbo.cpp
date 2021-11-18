@@ -61,21 +61,21 @@ namespace castor3d
 			return ( transpose( inverse( m_mtxInvView ) ) * vec4( -input, 1.0 ) ).xyz();
 		}
 
-		sdw::Vec3 GpInfoData::projToWorld( Utils const & utils
+		sdw::Vec3 GpInfoData::projToWorld( Utils & utils
 			, sdw::Vec2 const & texCoord
 			, sdw::Float const & depth )const
 		{
 			return utils.calcWSPosition( texCoord, depth, m_mtxInvViewProj );
 		}
 
-		sdw::Vec3 GpInfoData::projToView( Utils const & utils
+		sdw::Vec3 GpInfoData::projToView( Utils & utils
 			, sdw::Vec2 const & texCoord
 			, sdw::Float const & depth )const
 		{
 			return utils.calcVSPosition( texCoord, depth, m_mtxInvProj );
 		}
 
-		sdw::Vec2 GpInfoData::calcTexCoord( Utils const & utils
+		sdw::Vec2 GpInfoData::calcTexCoord( Utils & utils
 			, sdw::Vec2 const & fragCoord )const
 		{
 			return utils.calcTexCoord( fragCoord, m_renderSize );

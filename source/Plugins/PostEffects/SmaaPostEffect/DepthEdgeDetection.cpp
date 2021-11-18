@@ -37,11 +37,7 @@ namespace smaa
 		{
 			using namespace sdw;
 			FragmentWriter writer;
-
-			// Shader constants
-
 			castor3d::shader::Utils utils{ writer, engine };
-			utils.declareInvertVec2Y();
 
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );

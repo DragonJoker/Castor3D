@@ -16,8 +16,8 @@ namespace castor3d
 	namespace shader
 	{
 		SssTransmittance::SssTransmittance( ShaderWriter & writer
-			, Shadow const & shadow
-			, Utils const & utils
+			, Shadow & shadow
+			, Utils & utils
 			, bool shadowMap )
 			: m_writer{ writer }
 			, m_shadow{ shadow }
@@ -128,13 +128,15 @@ namespace castor3d
 			, DirectionalLight const & light
 			, Vec2 const & uv
 			, Surface surface
-			, Float const & translucency )const
+			, Float const & translucency )
 		{
 			auto ssstResult = m_writer.declLocale( "ssstResult"
 				, vec3( 0.0_f ) );
 
 			if ( m_shadowMap )
 			{
+				declare( LightType::eDirectional );
+
 				IF( m_writer, material.subsurfaceScatteringEnabled != 0_i )
 				{
 					auto c3d_mapDepthDirectional = m_writer.getVariable< SampledImage2DRgba32 >( Shadow::MapNormalDepthDirectional );
@@ -170,13 +172,15 @@ namespace castor3d
 			, PointLight const & light
 			, Vec2 const & uv
 			, Surface surface
-			, Float const & translucency )const
+			, Float const & translucency )
 		{
 			auto ssstResult = m_writer.declLocale( "ssstResult"
 				, vec3( 0.0_f ) );
 
 			if ( m_shadowMap )
 			{
+				declare( LightType::ePoint );
+
 				IF( m_writer, material.subsurfaceScatteringEnabled != 0_i )
 				{
 					auto c3d_mtxInvViewProj = m_writer.getVariable< Mat4 >( "c3d_mtxInvViewProj" );
@@ -219,13 +223,15 @@ namespace castor3d
 			, SpotLight const & light
 			, Vec2 const & uv
 			, Surface surface
-			, Float const & translucency )const
+			, Float const & translucency )
 		{
 			auto ssstResult = m_writer.declLocale( "ssstResult"
 				, vec3( 0.0_f ) );
 
 			if ( m_shadowMap )
 			{
+				declare( LightType::eSpot );
+
 				IF( m_writer, material.subsurfaceScatteringEnabled != 0_i )
 				{
 					auto c3d_mapDepthSpot = m_writer.getVariable< SampledImage2DRgba32 >( Shadow::MapNormalDepthSpot );

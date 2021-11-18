@@ -162,8 +162,14 @@ namespace castor3d
 	void TextureConfigurationBuffer::removeTextureConfiguration( TextureUnit & unit )
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
-
 		unit.setId( 0u );
+		auto it = std::remove_if( m_dirty.begin()
+			, m_dirty.end()
+			, [&unit]( TextureUnit const * lookup )
+			{
+				return lookup == &unit;
+			} );
+		m_dirty.erase( it, m_dirty.end() );
 	}
 
 	void TextureConfigurationBuffer::update()

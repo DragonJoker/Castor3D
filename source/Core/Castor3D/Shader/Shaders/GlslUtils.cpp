@@ -492,211 +492,199 @@ namespace castor3d::shader
 			, sdw::OutInt{ m_writer, "lighting" } );
 	}
 
-	void Utils::declareParallaxMappingFunc( PassFlags const & passFlags
-		, TextureFlags const & textures )
+	void Utils::declareParallaxMappingFunc()
 	{
-		if ( checkFlag( textures, TextureFlag::eHeight )
-			&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
-				|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) )
+		if ( m_parallaxMapping )
 		{
-			if ( m_parallaxMapping )
+			return;
+		}
+
+		m_parallaxMapping = m_writer.implementFunction< sdw::Vec2 >( "c3d_parallaxMapping",
+			[&]( sdw::Vec2 const & texCoords
+				, sdw::Vec3 const & viewDir
+				, sdw::SampledImage2DRgba32 const & heightMap
+				, TextureConfigData const & textureConfig )
 			{
-				return;
-			}
-
-			m_parallaxMapping = m_writer.implementFunction< sdw::Vec2 >( "c3d_parallaxMapping",
-				[&]( sdw::Vec2 const & texCoords
-					, sdw::Vec3 const & viewDir
-					, sdw::SampledImage2DRgba32 const & heightMap
-					, TextureConfigData const & textureConfig )
+				IF( m_writer, textureConfig.hgtEnbl == 0.0_f )
 				{
-					IF( m_writer, textureConfig.hgtEnbl == 0.0_f )
-					{
-						m_writer.returnStmt( texCoords );
-					}
-					FI;
+					m_writer.returnStmt( texCoords );
+				}
+				FI;
 
-					// number of depth layers
-					auto minLayers = m_writer.declLocale( "minLayers"
-						, 32.0_f );
-					auto maxLayers = m_writer.declLocale( "maxLayers"
-						, 64.0_f );
+				// number of depth layers
+				auto minLayers = m_writer.declLocale( "minLayers"
+					, 32.0_f );
+				auto maxLayers = m_writer.declLocale( "maxLayers"
+					, 64.0_f );
+				auto numLayers = m_writer.declLocale( "numLayers"
+					, mix( maxLayers
+						, minLayers
+						, sdw::abs( dot( vec3( 0.0_f, 0.0_f, 1.0_f ), viewDir ) ) ) );
+				// calculate the size of each layer
+				auto layerDepth = m_writer.declLocale( "layerDepth"
+					, 1.0_f / numLayers );
+				// depth of current layer
+				auto currentLayerDepth = m_writer.declLocale( "currentLayerDepth"
+					, 0.0_f );
+				// the amount to shift the texture coordinates per layer (from vector P)
+				auto p = m_writer.declLocale( "p"
+					, viewDir.xy() / viewDir.z() * textureConfig.hgtFact );
+				auto deltaTexCoords = m_writer.declLocale( "deltaTexCoords"
+					, p / numLayers );
+
+				auto currentTexCoords = m_writer.declLocale( "currentTexCoords"
+					, texCoords );
+				auto dx = m_writer.declLocale( "dx"
+					, dFdxCoarse( currentTexCoords ) );
+				auto dy = m_writer.declLocale( "dy"
+					, dFdxCoarse( currentTexCoords ) );
+				auto heightIndex = m_writer.declLocale( "heightIndex"
+					, m_writer.cast< sdw::UInt >( textureConfig.hgtMask ) );
+				auto sampled = m_writer.declLocale( "sampled"
+					, heightMap.grad( currentTexCoords, dx, dy ) );
+				auto currentDepthMapValue = m_writer.declLocale( "currentDepthMapValue"
+					, sampled[heightIndex] );
+
+				WHILE( m_writer, currentLayerDepth < currentDepthMapValue )
+				{
+					// shift texture coordinates along direction of P
+					currentTexCoords -= deltaTexCoords;
+					// get depthmap value at current texture coordinates
+					sampled = heightMap.grad( currentTexCoords, dx, dy );
+					currentDepthMapValue = sampled[heightIndex];
+					// get depth of next layer
+					currentLayerDepth += layerDepth;
+				}
+				ELIHW;
+
+				// get texture coordinates before collision (reverse operations)
+				auto prevTexCoords = m_writer.declLocale( "prevTexCoords"
+					, currentTexCoords + deltaTexCoords );
+
+				// get depth after and before collision for linear interpolation
+				auto afterDepth = m_writer.declLocale( "afterDepth"
+					, currentDepthMapValue - currentLayerDepth );
+				sampled = heightMap.grad( prevTexCoords, dx, dy );
+				auto beforeDepth = m_writer.declLocale( "beforeDepth"
+					, sampled[heightIndex] - currentLayerDepth + layerDepth );
+
+				// interpolation of texture coordinates
+				auto weight = m_writer.declLocale( "weight"
+					, vec2( afterDepth / ( afterDepth - beforeDepth ) ) );
+				auto finalTexCoords = m_writer.declLocale( "finalTexCoords"
+					, sdw::fma( prevTexCoords
+						, weight
+						, currentTexCoords * ( vec2( 1.0_f ) - weight ) ) );
+
+				m_writer.returnStmt( finalTexCoords );
+			}
+			, sdw::InVec2{ m_writer, "texCoords" }
+			, sdw::InVec3{ m_writer, "viewDir" }
+			, sdw::InSampledImage2DRgba32{ m_writer, "heightMap" }
+			, InTextureConfigData{ m_writer, "textureConfig" } );
+	}
+
+	void Utils::declareParallaxShadowFunc()
+	{
+		if ( m_parallaxShadow )
+		{
+			return;
+		}
+
+		m_parallaxShadow = m_writer.implementFunction< sdw::Float >( "c3d_parallaxSoftShadowMultiplier"
+			, [&]( sdw::Vec3 const & lightDir
+				, sdw::Vec2 const initialTexCoord
+				, sdw::Float initialHeight
+				, sdw::SampledImage2DRgba32 const & heightMap
+				, TextureConfigData const & textureConfig )
+			{
+				IF( m_writer, textureConfig.hgtEnbl == 0.0_f )
+				{
+					m_writer.returnStmt( 1.0_f );
+				}
+				FI;
+
+				auto shadowMultiplier = m_writer.declLocale( "shadowMultiplier"
+					, 1.0_f );
+				auto minLayers = m_writer.declLocale( "minLayers"
+					, 10.0_f );
+				auto maxLayers = m_writer.declLocale( "maxLayers"
+					, 20.0_f );
+
+				// calculate lighting only for surface oriented to the light source
+				IF( m_writer, dot( vec3( 0.0_f, 0.0_f, 1.0_f ), lightDir ) > 0.0_f )
+				{
+					// calculate initial parameters
+					auto numSamplesUnderSurface = m_writer.declLocale( "numSamplesUnderSurface"
+						, 0.0_f );
+					shadowMultiplier = 0.0_f;
 					auto numLayers = m_writer.declLocale( "numLayers"
 						, mix( maxLayers
 							, minLayers
-							, sdw::abs( dot( vec3( 0.0_f, 0.0_f, 1.0_f ), viewDir ) ) ) );
-					// calculate the size of each layer
-					auto layerDepth = m_writer.declLocale( "layerDepth"
-						, 1.0_f / numLayers );
-					// depth of current layer
-					auto currentLayerDepth = m_writer.declLocale( "currentLayerDepth"
-						, 0.0_f );
-					// the amount to shift the texture coordinates per layer (from vector P)
-					auto p = m_writer.declLocale( "p"
-						, viewDir.xy() / viewDir.z() * textureConfig.hgtFact );
-					auto deltaTexCoords = m_writer.declLocale( "deltaTexCoords"
-						, p / numLayers );
+							, sdw::abs( dot( vec3( 0.0_f, 0.0_f, 1.0_f ), lightDir ) ) ) );
+					auto layerHeight = m_writer.declLocale( "layerHeight"
+						, initialHeight / numLayers );
+					auto texStep = m_writer.declLocale( "deltaTexCoords"
+						, ( lightDir.xy() * textureConfig.hgtFact ) / lightDir.z() / numLayers );
 
-					auto currentTexCoords = m_writer.declLocale( "currentTexCoords"
-						, texCoords );
-					auto dx = m_writer.declLocale( "dx"
-						, dFdxCoarse( currentTexCoords ) );
-					auto dy = m_writer.declLocale( "dy"
-						, dFdxCoarse( currentTexCoords ) );
+					// current parameters
+					auto currentLayerHeight = m_writer.declLocale( "currentLayerHeight"
+						, initialHeight - layerHeight );
+					auto currentTextureCoords = m_writer.declLocale( "currentTextureCoords"
+						, initialTexCoord + texStep );
 					auto heightIndex = m_writer.declLocale( "heightIndex"
 						, m_writer.cast< sdw::UInt >( textureConfig.hgtMask ) );
 					auto sampled = m_writer.declLocale( "sampled"
-						, heightMap.grad( currentTexCoords, dx, dy ) );
-					auto currentDepthMapValue = m_writer.declLocale( "currentDepthMapValue"
+						, heightMap.sample( currentTextureCoords ) );
+					auto heightFromTexture = m_writer.declLocale( "heightFromTexture"
 						, sampled[heightIndex] );
+					auto stepIndex = m_writer.declLocale( "stepIndex"
+						, 1_i );
 
-					WHILE( m_writer, currentLayerDepth < currentDepthMapValue )
+					// while point is below depth 0.0 )
+					WHILE( m_writer, currentLayerHeight > 0.0_f )
 					{
-						// shift texture coordinates along direction of P
-						currentTexCoords -= deltaTexCoords;
-						// get depthmap value at current texture coordinates
-						sampled = heightMap.grad( currentTexCoords, dx, dy );
-						currentDepthMapValue = sampled[heightIndex];
-						// get depth of next layer
-						currentLayerDepth += layerDepth;
+						// if point is under the surface
+						IF( m_writer, heightFromTexture < currentLayerHeight )
+						{
+							// calculate partial shadowing factor
+							numSamplesUnderSurface += 1.0_f;
+							auto newShadowMultiplier = m_writer.declLocale( "newShadowMultiplier"
+								, ( currentLayerHeight - heightFromTexture )
+								* ( 1.0_f - m_writer.cast< sdw::Float >( stepIndex ) / numLayers ) );
+							shadowMultiplier = max( shadowMultiplier, newShadowMultiplier );
+						}
+						FI;
+
+						// offset to the next layer
+						stepIndex += 1_i;
+						currentLayerHeight -= layerHeight;
+						currentTextureCoords += texStep;
+						sampled = heightMap.sample( currentTextureCoords );
+						heightFromTexture = sampled[heightIndex];
 					}
 					ELIHW;
 
-					// get texture coordinates before collision (reverse operations)
-					auto prevTexCoords = m_writer.declLocale( "prevTexCoords"
-						, currentTexCoords + deltaTexCoords );
-
-					// get depth after and before collision for linear interpolation
-					auto afterDepth = m_writer.declLocale( "afterDepth"
-						, currentDepthMapValue - currentLayerDepth );
-					sampled = heightMap.grad( prevTexCoords, dx, dy );
-					auto beforeDepth = m_writer.declLocale( "beforeDepth"
-						, sampled[heightIndex] - currentLayerDepth + layerDepth );
-
-					// interpolation of texture coordinates
-					auto weight = m_writer.declLocale( "weight"
-						, vec2( afterDepth / ( afterDepth - beforeDepth ) ) );
-					auto finalTexCoords = m_writer.declLocale( "finalTexCoords"
-						, sdw::fma( prevTexCoords
-							, weight
-							, currentTexCoords * ( vec2( 1.0_f ) - weight ) ) );
-
-					m_writer.returnStmt( finalTexCoords );
+					// Shadowing factor should be 1 if there were no points under the surface
+					IF( m_writer, numSamplesUnderSurface < 1.0_f )
+					{
+						shadowMultiplier = 1.0_f;
+					}
+					ELSE
+					{
+						shadowMultiplier = 1.0_f - shadowMultiplier;
+					}
+					FI;
 				}
-				, sdw::InVec2{ m_writer, "texCoords" }
-				, sdw::InVec3{ m_writer, "viewDir" }
-				, sdw::InSampledImage2DRgba32{ m_writer, "heightMap" }
-				, InTextureConfigData{ m_writer, "textureConfig" } );
-		}
-	}
+				FI;
 
-	void Utils::declareParallaxShadowFunc( PassFlags const & passFlags
-		, TextureFlags const & textures )
-	{
-		if ( checkFlag( textures, TextureFlag::eHeight )
-			&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
-				|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) )
-		{
-			if ( m_parallaxShadow )
-			{
-				return;
+				m_writer.returnStmt( shadowMultiplier );
 			}
-
-			m_parallaxShadow = m_writer.implementFunction< sdw::Float >( "c3d_parallaxSoftShadowMultiplier"
-				, [&]( sdw::Vec3 const & lightDir
-					, sdw::Vec2 const initialTexCoord
-					, sdw::Float initialHeight
-					, sdw::SampledImage2DRgba32 const & heightMap
-					, TextureConfigData const & textureConfig )
-				{
-					IF( m_writer, textureConfig.hgtEnbl == 0.0_f )
-					{
-						m_writer.returnStmt( 1.0_f );
-					}
-					FI;
-
-					auto shadowMultiplier = m_writer.declLocale( "shadowMultiplier"
-						, 1.0_f );
-					auto minLayers = m_writer.declLocale( "minLayers"
-						, 10.0_f );
-					auto maxLayers = m_writer.declLocale( "maxLayers"
-						, 20.0_f );
-
-					// calculate lighting only for surface oriented to the light source
-					IF( m_writer, dot( vec3( 0.0_f, 0.0_f, 1.0_f ), lightDir ) > 0.0_f )
-					{
-						// calculate initial parameters
-						auto numSamplesUnderSurface = m_writer.declLocale( "numSamplesUnderSurface"
-							, 0.0_f );
-						shadowMultiplier = 0.0_f;
-						auto numLayers = m_writer.declLocale( "numLayers"
-							, mix( maxLayers
-								, minLayers
-								, sdw::abs( dot( vec3( 0.0_f, 0.0_f, 1.0_f ), lightDir ) ) ) );
-						auto layerHeight = m_writer.declLocale( "layerHeight"
-							, initialHeight / numLayers );
-						auto texStep = m_writer.declLocale( "deltaTexCoords"
-							, ( lightDir.xy() * textureConfig.hgtFact ) / lightDir.z() / numLayers );
-
-						// current parameters
-						auto currentLayerHeight = m_writer.declLocale( "currentLayerHeight"
-							, initialHeight - layerHeight );
-						auto currentTextureCoords = m_writer.declLocale( "currentTextureCoords"
-							, initialTexCoord + texStep );
-						auto heightIndex = m_writer.declLocale( "heightIndex"
-							, m_writer.cast< sdw::UInt >( textureConfig.hgtMask ) );
-						auto sampled = m_writer.declLocale( "sampled"
-							, heightMap.sample( currentTextureCoords ) );
-						auto heightFromTexture = m_writer.declLocale( "heightFromTexture"
-							, sampled[heightIndex] );
-						auto stepIndex = m_writer.declLocale( "stepIndex"
-							, 1_i );
-
-						// while point is below depth 0.0 )
-						WHILE( m_writer, currentLayerHeight > 0.0_f )
-						{
-							// if point is under the surface
-							IF( m_writer, heightFromTexture < currentLayerHeight )
-							{
-								// calculate partial shadowing factor
-								numSamplesUnderSurface += 1.0_f;
-								auto newShadowMultiplier = m_writer.declLocale( "newShadowMultiplier"
-									, ( currentLayerHeight - heightFromTexture )
-									* ( 1.0_f - m_writer.cast< sdw::Float >( stepIndex ) / numLayers ) );
-								shadowMultiplier = max( shadowMultiplier, newShadowMultiplier );
-							}
-							FI;
-
-							// offset to the next layer
-							stepIndex += 1_i;
-							currentLayerHeight -= layerHeight;
-							currentTextureCoords += texStep;
-							sampled = heightMap.sample( currentTextureCoords );
-							heightFromTexture = sampled[heightIndex];
-						}
-						ELIHW;
-
-						// Shadowing factor should be 1 if there were no points under the surface
-						IF( m_writer, numSamplesUnderSurface < 1.0_f )
-						{
-							shadowMultiplier = 1.0_f;
-						}
-						ELSE
-						{
-							shadowMultiplier = 1.0_f - shadowMultiplier;
-						}
-						FI;
-					}
-					FI;
-
-					m_writer.returnStmt( shadowMultiplier );
-				}
-				, sdw::InVec3{ m_writer, "lightDir" }
-				, sdw::InVec2{ m_writer, "initialTexCoord" }
-				, sdw::InFloat{ m_writer, "initialHeight" }
-				, sdw::InSampledImage2DRgba32{ m_writer, "heightMap" }
-				, InTextureConfigData{ m_writer, "textureConfig" } );
-		}
+			, sdw::InVec3{ m_writer, "lightDir" }
+			, sdw::InVec2{ m_writer, "initialTexCoord" }
+			, sdw::InFloat{ m_writer, "initialHeight" }
+			, sdw::InSampledImage2DRgba32{ m_writer, "heightMap" }
+			, InTextureConfigData{ m_writer, "textureConfig" } );
 	}
 
 	void Utils::declareIsSaturated()
@@ -896,46 +884,54 @@ namespace castor3d::shader
 			, sdw::InInt{ m_writer, "imax" } );
 	}
 
-	sdw::Vec2 Utils::topDownToBottomUp( sdw::Vec2 const & texCoord )const
+	sdw::Vec2 Utils::topDownToBottomUp( sdw::Vec2 const & texCoord )
 	{
+		declareInvertVec2Y();
 		return m_invertVec2Y( texCoord );
 	}
 
-	sdw::Vec3 Utils::topDownToBottomUp( sdw::Vec3 const & texCoord )const
+	sdw::Vec3 Utils::topDownToBottomUp( sdw::Vec3 const & texCoord )
 	{
+		declareInvertVec3Y();
 		return m_invertVec3Y( texCoord );
 	}
 
-	sdw::Vec4 Utils::topDownToBottomUp( sdw::Vec4 const & texCoord )const
+	sdw::Vec4 Utils::topDownToBottomUp( sdw::Vec4 const & texCoord )
 	{
+		declareInvertVec4Y();
 		return m_invertVec4Y( texCoord );
 	}
 
-	sdw::Vec2 Utils::negateTopDownToBottomUp( sdw::Vec2 const & texCoord )const
+	sdw::Vec2 Utils::negateTopDownToBottomUp( sdw::Vec2 const & texCoord )
 	{
+		declareNegateVec2Y();
 		return m_negateVec2Y( texCoord );
 	}
 
-	sdw::Vec3 Utils::negateTopDownToBottomUp( sdw::Vec3 const & texCoord )const
+	sdw::Vec3 Utils::negateTopDownToBottomUp( sdw::Vec3 const & texCoord )
 	{
+		declareNegateVec3Y();
 		return m_negateVec3Y( texCoord );
 	}
 
-	sdw::Vec4 Utils::negateTopDownToBottomUp( sdw::Vec4 const & texCoord )const
+	sdw::Vec4 Utils::negateTopDownToBottomUp( sdw::Vec4 const & texCoord )
 	{
+		declareNegateVec4Y();
 		return m_negateVec4Y( texCoord );
 	}
 
 	sdw::Vec2 Utils::calcTexCoord( sdw::Vec2 const & renderPos
-			, sdw::Vec2 const & renderSize )const
+			, sdw::Vec2 const & renderSize )
 	{
+		declareCalcTexCoord();
 		return m_calcTexCoord( renderPos, renderSize );
 	}
 
 	sdw::Vec3 Utils::calcVSPosition( sdw::Vec2 const & uv
 		, sdw::Float const & depth
-		, sdw::Mat4 const & invProj )const
+		, sdw::Mat4 const & invProj )
 	{
+		declareCalcVSPosition();
 		return m_calcVSPosition( uv
 			, depth
 			, invProj );
@@ -943,36 +939,41 @@ namespace castor3d::shader
 
 	sdw::Vec3 Utils::calcWSPosition( sdw::Vec2 const & uv
 		, sdw::Float const & depth
-		, sdw::Mat4 const & invViewProj )const
+		, sdw::Mat4 const & invViewProj )
 	{
+		declareCalcWSPosition();
 		return m_calcWSPosition( uv
 			, depth
 			, invViewProj );
 	}
 
 	sdw::Vec3 Utils::applyGamma( sdw::Float const & gamma
-		, sdw::Vec3 const & hdr )const
+		, sdw::Vec3 const & hdr )
 	{
+		declareApplyGamma();
 		return m_applyGamma( gamma, hdr );
 	}
 
 	sdw::Vec3 Utils::removeGamma( sdw::Float const & gamma
-		, sdw::Vec3 const & srgb )const
+		, sdw::Vec3 const & srgb )
 	{
+		declareRemoveGamma();
 		return m_removeGamma( gamma, srgb );
 	}
 
 	sdw::Vec3 Utils::getMapNormal( sdw::Vec2 const & uv
 		, sdw::Vec3 const & normal
-		, sdw::Vec3 const & position )const
+		, sdw::Vec3 const & position )
 	{
+		declareGetMapNormal();
 		return m_getMapNormal( uv, normal, position );
 	}
 
 	sdw::Float Utils::rescaleDepth( sdw::Float const & depth
 		, sdw::Float const & nearPlane
-		, sdw::Float const & farPlane )const
+		, sdw::Float const & farPlane )
 	{
+		declareRescaleDepth();
 		return m_rescaleDepth( depth
 			, nearPlane
 			, farPlane );
@@ -983,8 +984,9 @@ namespace castor3d::shader
 		, sdw::Float const & alpha
 		, sdw::Float const & nearPlane
 		, sdw::Float const & farPlane
-		, sdw::Float const & accumulationOperator )const
+		, sdw::Float const & accumulationOperator )
 	{
+		declareComputeAccumulation();
 		return m_computeAccumulation( depth
 			, colour
 			, alpha
@@ -994,8 +996,9 @@ namespace castor3d::shader
 	}
 
 	sdw::Vec3 Utils::fresnelSchlick( sdw::Float const & product
-		, sdw::Vec3 const & f0 )const
+		, sdw::Vec3 const & f0 )
 	{
+		declareFresnelSchlick();
 		return m_fresnelSchlick( product, f0 );
 	}
 
@@ -1173,8 +1176,9 @@ namespace castor3d::shader
 		, sdw::Int const & refraction
 		, sdw::Int const & lighting
 		, sdw::Int const & envMapIndex
-		, sdw::Float const & encoded )const
+		, sdw::Float const & encoded )
 	{
+		declareEncodeMaterial();
 		m_encodeMaterial( receiver
 			, reflection
 			, refraction
@@ -1188,8 +1192,9 @@ namespace castor3d::shader
 		, sdw::Int const & reflection
 		, sdw::Int const & refraction
 		, sdw::Int const & lighting
-		, sdw::Int const & envMapIndex )const
+		, sdw::Int const & envMapIndex )
 	{
+		declareDecodeMaterial();
 		m_decodeMaterial( encoded
 			, receiver
 			, reflection
@@ -1200,8 +1205,9 @@ namespace castor3d::shader
 
 	void Utils::decodeReceiver( sdw::Int & encoded
 		, sdw::Int const & receiver
-		, sdw::Int const & lighting )const
+		, sdw::Int const & lighting )
 	{
+		declareDecodeReceiver();
 		m_decodeReceiver( encoded
 			, receiver
 			, lighting );
@@ -1210,7 +1216,7 @@ namespace castor3d::shader
 	void Utils::applyAlphaFunc( VkCompareOp alphaFunc
 		, sdw::Float & alpha
 		, sdw::Float const & alphaRef
-		, bool opaque )const
+		, bool opaque )
 	{
 		if ( alphaFunc != VK_COMPARE_OP_ALWAYS )
 		{
@@ -1294,46 +1300,54 @@ namespace castor3d::shader
 		}
 	}
 
-	sdw::Boolean Utils::isSaturated( sdw::Vec3 const & p )const
+	sdw::Boolean Utils::isSaturated( sdw::Vec3 const & p )
 	{
+		declareIsSaturated();
 		return m_isSaturated3D( p );
 	}
 
 	sdw::Boolean Utils::isSaturated( sdw::IVec3 const & p
-		, sdw::Int const & imax )const
+		, sdw::Int const & imax )
 	{
+		declareIsSaturatedImg();
 		return m_isSaturated3DImg( p, imax );
 	}
 
-	sdw::UInt Utils::encodeColor( sdw::Vec4 const & color )const
+	sdw::UInt Utils::encodeColor( sdw::Vec4 const & color )
 	{
+		declareEncodeColor();
 		return m_encodeColor( color );
 	}
 
-	sdw::UInt Utils::encodeNormal( sdw::Vec3 const & normal )const
+	sdw::UInt Utils::encodeNormal( sdw::Vec3 const & normal )
 	{
+		declareEncodeNormal();
 		return m_encodeNormal( normal );
 	}
 
-	sdw::Vec4 Utils::decodeColor( sdw::UInt const & colorMask )const
+	sdw::Vec4 Utils::decodeColor( sdw::UInt const & colorMask )
 	{
+		declareDecodeColor();
 		return m_decodeColor( colorMask );
 	}
 
-	sdw::Vec3 Utils::decodeNormal( sdw::UInt const & normalMask )const
+	sdw::Vec3 Utils::decodeNormal( sdw::UInt const & normalMask )
 	{
+		declareDecodeNormal();
 		return m_decodeNormal( normalMask );
 	}
 
 	sdw::UInt Utils::flatten( sdw::UVec3 const & p
-		, sdw::UVec3 const & dim )const
+		, sdw::UVec3 const & dim )
 	{
+		declareFlatten();
 		return m_flatten3D( p, dim );
 	}
 
 	sdw::UVec3 Utils::unflatten( sdw::UInt const & p
-		, sdw::UVec3 const & dim )const
+		, sdw::UVec3 const & dim )
 	{
+		declareUnflatten();
 		return m_unflatten3D( p, dim );
 	}
 
@@ -1382,9 +1396,9 @@ namespace castor3d::shader
 
 		if ( checkFlag( textureFlags, TextureFlag::eHeight )
 			&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
-				|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) )
-			&& m_parallaxMapping )
+				|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) )
 		{
+			declareParallaxMappingFunc();
 			texCoord = doParallaxMapping( texCoord
 				, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
 				, map
@@ -1425,6 +1439,7 @@ namespace castor3d::shader
 		, sdw::SampledImage2DRgba32 const & heightMap
 		, TextureConfigData const & textureConfig )
 	{
+		declareParallaxMappingFunc();
 		return m_parallaxMapping( texCoords.xy()
 			, viewDir
 			, heightMap

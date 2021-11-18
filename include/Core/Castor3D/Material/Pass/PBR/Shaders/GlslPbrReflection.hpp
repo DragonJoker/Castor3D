@@ -34,7 +34,7 @@ namespace castor3d::shader
 			, sdw::Vec3 const & transmission
 			, sdw::Vec3 & ambient
 			, sdw::Vec3 & reflected
-			, sdw::Vec3 & refracted )const override;
+			, sdw::Vec3 & refracted )override;
 		C3D_API void computeForward( LightMaterial & material
 			, Surface const & surface
 			, SceneData const & sceneData
@@ -42,7 +42,7 @@ namespace castor3d::shader
 			, sdw::Vec3 const & transmission
 			, sdw::Vec3 & ambient
 			, sdw::Vec3 & reflected
-			, sdw::Vec3 & refracted )const override;
+			, sdw::Vec3 & refracted )override;
 
 	private:
 		sdw::Vec3 computeIBL( Surface surface
@@ -50,13 +50,13 @@ namespace castor3d::shader
 			, sdw::Vec3 const & worldEye
 			, sdw::SampledImageCubeRgba32 const & irradiance
 			, sdw::SampledImageCubeRgba32 const & prefiltered
-			, sdw::SampledImage2DRgba32 const & brdf )const;
+			, sdw::SampledImage2DRgba32 const & brdf );
 		sdw::Vec3 computeIncident( sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & wsCamera )const;
 		sdw::Vec3 computeReflEnvMap( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::SampledImageCubeRgba32 const & envMap
-			, PbrLightMaterial const & material )const;
+			, PbrLightMaterial const & material );
 		sdw::Void computeRefrEnvMap( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::SampledImageCubeRgba32 const & envMap
@@ -64,12 +64,12 @@ namespace castor3d::shader
 			, sdw::Vec3 const & transmission
 			, PbrLightMaterial const & material
 			, sdw::Vec3 & reflection
-			, sdw::Vec3 & refraction )const;
+			, sdw::Vec3 & refraction );
 		sdw::Vec3 computeReflEnvMaps( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::SampledImageCubeArrayRgba32 const & envMap
 			, sdw::Int const & envMapIndex
-			, PbrLightMaterial const & material )const;
+			, PbrLightMaterial const & material );
 		sdw::Void computeRefrEnvMaps( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::SampledImageCubeArrayRgba32 const & envMap
@@ -78,7 +78,7 @@ namespace castor3d::shader
 			, sdw::Vec3 const & transmission
 			, PbrLightMaterial const & material
 			, sdw::Vec3 & reflection
-			, sdw::Vec3 & refraction )const;
+			, sdw::Vec3 & refraction );
 		sdw::Void computeRefrSkybox( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::SampledImageCubeRgba32 const & envMap
@@ -86,7 +86,7 @@ namespace castor3d::shader
 			, sdw::Vec3 const & transmission
 			, PbrLightMaterial const & material
 			, sdw::Vec3 & reflection
-			, sdw::Vec3 & refraction )const;
+			, sdw::Vec3 & refraction );
 		void doDeclareComputeIBL();
 		void doDeclareComputeReflEnvMap();
 		void doDeclareComputeRefrEnvMap();

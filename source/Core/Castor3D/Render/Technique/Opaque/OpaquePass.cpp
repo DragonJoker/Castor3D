@@ -167,11 +167,6 @@ namespace castor3d
 		auto outData5 = writer.declOutput< Vec4 >( Output5, index++ );
 
 		shader::Utils utils{ writer, *renderSystem.getEngine() };
-		utils.declareRemoveGamma();
-		utils.declareEncodeMaterial();
-		utils.declareParallaxMappingFunc( flags.passFlags
-			, getTexturesMask() );
-
 		auto lightingModel = utils.createLightingModel( shader::getLightingModelName( *getEngine(), flags.passType )
 			, {}
 			, true );

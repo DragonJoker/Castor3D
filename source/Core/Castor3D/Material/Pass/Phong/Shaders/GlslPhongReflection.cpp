@@ -23,15 +23,7 @@ namespace castor3d::shader
 		if ( checkFlag( m_passFlags, PassFlag::eReflection )
 			|| checkFlag( m_passFlags, PassFlag::eRefraction ) )
 		{
-			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-			m_writer.inlineComment( "// REFLECTIONS" );
-			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			m_writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment", envMapBinding++, envMapSet );
-			m_utils.declareNegateVec3Y();
-			doDeclareComputeRefl();
-			doDeclareComputeRefr();
-			doDeclareComputeReflRefr();
-			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 		}
 	}
 
@@ -41,15 +33,7 @@ namespace castor3d::shader
 		, uint32_t envMapSet )
 		: ReflectionModel{ writer, utils }
 	{
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-		m_writer.inlineComment( "// REFLECTIONS" );
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 		m_writer.declSampledImage< FImgCubeArrayRgba32 >( "c3d_mapEnvironment", envMapBinding, envMapSet );
-		m_utils.declareNegateVec3Y();
-		doDeclareComputeRefls();
-		doDeclareComputeRefrs();
-		doDeclareComputeReflRefrs();
-		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 	}
 
 	void PhongReflectionModel::computeDeferred( LightMaterial & material
@@ -62,7 +46,7 @@ namespace castor3d::shader
 		, sdw::Vec3 const & transmission
 		, sdw::Vec3 & ambient
 		, sdw::Vec3 & reflected
-		, sdw::Vec3 & refracted )const
+		, sdw::Vec3 & refracted )
 	{
 		auto & phongMaterial = static_cast< PhongLightMaterial & >( material );
 		auto envMaps = m_writer.getVariable< sdw::SampledImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
@@ -120,7 +104,7 @@ namespace castor3d::shader
 		, sdw::Vec3 const & transmission
 		, sdw::Vec3 & ambient
 		, sdw::Vec3 & reflected
-		, sdw::Vec3 & refracted )const
+		, sdw::Vec3 & refracted )
 	{
 		if ( checkFlag( m_passFlags, PassFlag::eReflection )
 			|| checkFlag( m_passFlags, PassFlag::eRefraction ) )
@@ -175,8 +159,9 @@ namespace castor3d::shader
 	sdw::Vec3 PhongReflectionModel::computeRefl( sdw::Vec3 const & wsIncident
 		, sdw::Vec3 const & wsNormal
 		, sdw::SampledImageCubeRgba32 const & envMap
-		, PhongLightMaterial const & material )const
+		, PhongLightMaterial const & material )
 	{
+		doDeclareComputeRefl();
 		return m_computeRefl( wsIncident
 			, wsNormal
 			, envMap
@@ -190,8 +175,9 @@ namespace castor3d::shader
 		, sdw::Vec3 const & transmission
 		, PhongLightMaterial const & material
 		, sdw::Vec3 & reflection
-		, sdw::Vec3 & refraction )const
+		, sdw::Vec3 & refraction )
 	{
+		doDeclareComputeRefr();
 		m_computeRefr( wsIncident
 			, wsNormal
 			, envMap
@@ -209,8 +195,9 @@ namespace castor3d::shader
 		, sdw::Vec3 const & transmission
 		, PhongLightMaterial const & material
 		, sdw::Vec3 & reflection
-		, sdw::Vec3 & refraction )const
+		, sdw::Vec3 & refraction )
 	{
+		doDeclareComputeReflRefr();
 		m_computeReflRefr( wsIncident
 			, wsNormal
 			, envMap
@@ -225,8 +212,9 @@ namespace castor3d::shader
 		, sdw::Vec3 const & wsNormal
 		, sdw::SampledImageCubeArrayRgba32 const & envMap
 		, sdw::Int const & envMapIndex
-		, PhongLightMaterial const & material )const
+		, PhongLightMaterial const & material )
 	{
+		doDeclareComputeRefls();
 		return m_computeRefls( wsIncident
 			, wsNormal
 			, envMap
@@ -242,8 +230,9 @@ namespace castor3d::shader
 		, sdw::Vec3 const & transmission
 		, PhongLightMaterial const & material
 		, sdw::Vec3 & reflection
-		, sdw::Vec3 & refraction )const
+		, sdw::Vec3 & refraction )
 	{
+		doDeclareComputeRefrs();
 		m_computeRefrs( wsIncident
 			, wsNormal
 			, envMap
@@ -263,8 +252,9 @@ namespace castor3d::shader
 		, sdw::Vec3 const & transmission
 		, PhongLightMaterial const & material
 		, sdw::Vec3 & reflection
-		, sdw::Vec3 & refraction )const
+		, sdw::Vec3 & refraction )
 	{
+		doDeclareComputeReflRefrs();
 		m_computeReflRefrs( wsIncident
 			, wsNormal
 			, envMap
@@ -278,6 +268,11 @@ namespace castor3d::shader
 
 	void PhongReflectionModel::doDeclareComputeRefl()
 	{
+		if ( m_computeRefl )
+		{
+			return;
+		}
+
 		m_computeRefl = m_writer.implementFunction< sdw::Vec3 >( "c3d_phong_computeRefl"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
@@ -297,6 +292,11 @@ namespace castor3d::shader
 
 	void PhongReflectionModel::doDeclareComputeRefr()
 	{
+		if ( m_computeRefr )
+		{
+			return;
+		}
+
 		m_computeRefr = m_writer.implementFunction< sdw::Void >( "c3d_phong_computeRefr"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
@@ -340,6 +340,11 @@ namespace castor3d::shader
 
 	void PhongReflectionModel::doDeclareComputeReflRefr()
 	{
+		if ( m_computeReflRefr )
+		{
+			return;
+		}
+
 		m_computeReflRefr = m_writer.implementFunction< sdw::Void >( "c3d_phong_computeReflRefr"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
@@ -375,6 +380,11 @@ namespace castor3d::shader
 
 	void PhongReflectionModel::doDeclareComputeRefls()
 	{
+		if ( m_computeRefls )
+		{
+			return;
+		}
+
 		m_computeRefls = m_writer.implementFunction< sdw::Vec3 >( "c3d_phong_computeRefl"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
@@ -397,6 +407,11 @@ namespace castor3d::shader
 
 	void PhongReflectionModel::doDeclareComputeRefrs()
 	{
+		if ( m_computeRefrs )
+		{
+			return;
+		}
+
 		m_computeRefrs = m_writer.implementFunction< sdw::Void >( "c3d_phong_computeRefr"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
@@ -443,6 +458,11 @@ namespace castor3d::shader
 
 	void PhongReflectionModel::doDeclareComputeReflRefrs()
 	{
+		if ( m_computeReflRefrs )
+		{
+			return;
+		}
+
 		m_computeReflRefrs = m_writer.implementFunction< sdw::Void >( "c3d_phong_computeReflRefr"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal

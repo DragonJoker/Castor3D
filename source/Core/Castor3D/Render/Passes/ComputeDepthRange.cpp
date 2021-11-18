@@ -101,8 +101,6 @@ namespace castor3d
 			output.end();
 
 			shader::Utils utils{ writer, *renderSystem.getEngine() };
-			utils.declareDecodeColor();
-			utils.declareUnflatten();
 
 			writer.implementMainT< VoidT >( 32u, 32u, [&]( ComputeIn in )
 				{

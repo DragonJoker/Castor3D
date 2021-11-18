@@ -209,12 +209,6 @@ namespace castor3d
 			auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture", 0u );
 			auto c3d_mapSkybox = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapSkybox", SceneBackground::SkyBoxImgIdx, 0u );
 			shader::Utils utils{ writer, *m_device.renderSystem.getEngine() };
-			utils.declareRemoveGamma();
-
-			if ( !m_background->isHdr() )
-			{
-				utils.declareRemoveGamma();
-			}
 
 			// Outputs
 			auto pxl_FragColor = writer.declOutput< Vec4 >( "pxl_FragColor", 0u );
