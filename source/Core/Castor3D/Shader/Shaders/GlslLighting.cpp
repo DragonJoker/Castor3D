@@ -490,7 +490,7 @@ namespace castor3d::shader
 	void LightingModel::doDeclareLightsBuffer( uint32_t binding
 		, uint32_t set )
 	{
-		m_writer.declSampledImage< FImgBufferRgba32 >( "c3d_lights"
+		m_writer.declImage< RFImgBufferRgba32 >( "c3d_lights"
 			, binding
 			, set );
 	}
@@ -533,13 +533,13 @@ namespace castor3d::shader
 				result.m_colourIndex = vec4( 1.0_f, 1.0f, 1.0f, -1.0f );
 				result.m_intensityFarPlane = vec4( 0.8_f, 1.0f, 1.0f, 0.0f );
 #else
-				auto c3d_lights = m_writer.getVariable< sdw::SampledImageBufferRgba32 >( "c3d_lights" );
+				auto c3d_lights = m_writer.getVariable< sdw::RImageBufferRgba32 >( "c3d_lights" );
 				auto offset = m_writer.declLocale( "offset", index * sdw::Int( int( getMaxLightComponentsCount() ) ) );
-				result.m_colourIndex = c3d_lights.fetch( sdw::Int{ offset++ } );
-				result.m_intensityFarPlane = c3d_lights.fetch( sdw::Int{ offset++ } );
-				result.m_volumetric = c3d_lights.fetch( sdw::Int{ offset++ } );
-				result.m_shadowsOffsets = c3d_lights.fetch( sdw::Int{ offset++ } );
-				result.m_shadowsVariances = c3d_lights.fetch( sdw::Int{ offset++ } );
+				result.m_colourIndex = c3d_lights.load( sdw::Int{ offset++ } );
+				result.m_intensityFarPlane = c3d_lights.load( sdw::Int{ offset++ } );
+				result.m_volumetric = c3d_lights.load( sdw::Int{ offset++ } );
+				result.m_shadowsOffsets = c3d_lights.load( sdw::Int{ offset++ } );
+				result.m_shadowsVariances = c3d_lights.load( sdw::Int{ offset++ } );
 #endif
 				m_writer.returnStmt( result );
 			}
@@ -563,15 +563,15 @@ namespace castor3d::shader
 					, vec4( 0.0_f, 0.0_f, 0.0_f, 1.0_f ) );
 #else
 
-				auto c3d_lights = m_writer.getVariable< SampledImageBufferRgba32 >( "c3d_lights" );
+				auto c3d_lights = m_writer.getVariable< RImageBufferRgba32 >( "c3d_lights" );
 				auto offset = m_writer.declLocale( "offset", index * Int( int( getMaxLightComponentsCount() ) ) + Int( int( getBaseLightComponentsCount() ) ) );
-				result.m_directionCount = c3d_lights.fetch( Int{ offset++ } );
+				result.m_directionCount = c3d_lights.load( Int{ offset++ } );
 				result.m_direction = normalize( result.m_direction );
-				result.m_tiles = c3d_lights.fetch( Int{ offset++ } );
-				result.m_splitDepths[0] = c3d_lights.fetch( Int{ offset++ } );
-				result.m_splitDepths[1] = c3d_lights.fetch( Int{ offset++ } );
-				result.m_splitScales[0] = c3d_lights.fetch( Int{ offset++ } );
-				result.m_splitScales[1] = c3d_lights.fetch( Int{ offset++ } );
+				result.m_tiles = c3d_lights.load( Int{ offset++ } );
+				result.m_splitDepths[0] = c3d_lights.load( Int{ offset++ } );
+				result.m_splitDepths[1] = c3d_lights.load( Int{ offset++ } );
+				result.m_splitScales[0] = c3d_lights.load( Int{ offset++ } );
+				result.m_splitScales[1] = c3d_lights.load( Int{ offset++ } );
 				auto col0 = m_writer.declLocale< Vec4 >( "col0" );
 				auto col1 = m_writer.declLocale< Vec4 >( "col1" );
 				auto col2 = m_writer.declLocale< Vec4 >( "col2" );
@@ -579,10 +579,10 @@ namespace castor3d::shader
 
 				for ( uint32_t i = 0u; i < DirectionalMaxCascadesCount; ++i )
 				{
-					col0 = c3d_lights.fetch( Int{ offset++ } );
-					col1 = c3d_lights.fetch( Int{ offset++ } );
-					col2 = c3d_lights.fetch( Int{ offset++ } );
-					col3 = c3d_lights.fetch( Int{ offset++ } );
+					col0 = c3d_lights.load( Int{ offset++ } );
+					col1 = c3d_lights.load( Int{ offset++ } );
+					col2 = c3d_lights.load( Int{ offset++ } );
+					col3 = c3d_lights.load( Int{ offset++ } );
 					result.m_transforms[i] = mat4( col0, col1, col2, col3 );
 				}
 #endif
@@ -604,12 +604,12 @@ namespace castor3d::shader
 					, vec4( 0.0_f, 0.0_f, 0.0_f, 1.0_f ) );
 #else
 
-				auto c3d_lights = m_writer.getVariable< sdw::SampledImageBufferRgba32 >( "c3d_lights" );
+				auto c3d_lights = m_writer.getVariable< sdw::RImageBufferRgba32 >( "c3d_lights" );
 				auto offset = m_writer.declLocale( "offset", index * sdw::Int( int( getMaxLightComponentsCount() ) ) + sdw::Int( int( getBaseLightComponentsCount() ) ) );
-				result.m_directionCount = c3d_lights.fetch( sdw::Int{ offset++ } );
+				result.m_directionCount = c3d_lights.load( sdw::Int{ offset++ } );
 				result.m_direction = normalize( result.m_direction );
-				result.m_splitDepths = c3d_lights.fetch( sdw::Int{ offset++ } );
-				result.m_splitScales = c3d_lights.fetch( sdw::Int{ offset++ } );
+				result.m_splitDepths = c3d_lights.load( sdw::Int{ offset++ } );
+				result.m_splitScales = c3d_lights.load( sdw::Int{ offset++ } );
 				auto col0 = m_writer.declLocale< sdw::Vec4 >( "col0" );
 				auto col1 = m_writer.declLocale< sdw::Vec4 >( "col1" );
 				auto col2 = m_writer.declLocale< sdw::Vec4 >( "col2" );
@@ -617,10 +617,10 @@ namespace castor3d::shader
 
 				for ( uint32_t i = 0u; i < DirectionalMaxCascadesCount; ++i )
 				{
-					col0 = c3d_lights.fetch( sdw::Int{ offset++ } );
-					col1 = c3d_lights.fetch( sdw::Int{ offset++ } );
-					col2 = c3d_lights.fetch( sdw::Int{ offset++ } );
-					col3 = c3d_lights.fetch( sdw::Int{ offset++ } );
+					col0 = c3d_lights.load( sdw::Int{ offset++ } );
+					col1 = c3d_lights.load( sdw::Int{ offset++ } );
+					col2 = c3d_lights.load( sdw::Int{ offset++ } );
+					col3 = c3d_lights.load( sdw::Int{ offset++ } );
 					result.m_transforms[i] = mat4( col0, col1, col2, col3 );
 				}
 #endif
@@ -637,10 +637,10 @@ namespace castor3d::shader
 			{
 				auto result = m_writer.declLocale< PointLight >( "result" );
 				result.m_lightBase = getBaseLight( index );
-				auto c3d_lights = m_writer.getVariable< sdw::SampledImageBufferRgba32 >( "c3d_lights" );
+				auto c3d_lights = m_writer.getVariable< sdw::RImageBufferRgba32 >( "c3d_lights" );
 				auto offset = m_writer.declLocale( "offset", index * sdw::Int( int( getMaxLightComponentsCount() ) ) + sdw::Int( int( getBaseLightComponentsCount() ) ) );
-				result.m_position4 = c3d_lights.fetch( sdw::Int{ offset++ } );
-				result.m_attenuation4 = c3d_lights.fetch( sdw::Int{ offset++ } );
+				result.m_position4 = c3d_lights.load( sdw::Int{ offset++ } );
+				result.m_attenuation4 = c3d_lights.load( sdw::Int{ offset++ } );
 				m_writer.returnStmt( result );
 			}
 			, sdw::InInt{ m_writer, "index" } );
@@ -653,16 +653,16 @@ namespace castor3d::shader
 			{
 				auto result = m_writer.declLocale< SpotLight >( "result" );
 				result.m_lightBase = getBaseLight( index );
-				auto c3d_lights = m_writer.getVariable< sdw::SampledImageBufferRgba32 >( "c3d_lights" );
+				auto c3d_lights = m_writer.getVariable< sdw::RImageBufferRgba32 >( "c3d_lights" );
 				auto offset = m_writer.declLocale( "offset", index * sdw::Int( int( getMaxLightComponentsCount() ) ) + sdw::Int( int( getBaseLightComponentsCount() ) ) );
-				result.m_position4 = c3d_lights.fetch( sdw::Int{ offset++ } );
-				result.m_attenuation4 = c3d_lights.fetch( sdw::Int{ offset++ } );
-				result.m_direction4 = normalize( c3d_lights.fetch( sdw::Int{ offset++ } ) );
-				result.m_exponentCutOff = c3d_lights.fetch( sdw::Int{ offset++ } );
-				result.m_transform = mat4( c3d_lights.fetch( offset + 0_i )
-					, c3d_lights.fetch( offset + 1_i )
-					, c3d_lights.fetch( offset + 2_i )
-					, c3d_lights.fetch( offset + 3_i ) );
+				result.m_position4 = c3d_lights.load( sdw::Int{ offset++ } );
+				result.m_attenuation4 = c3d_lights.load( sdw::Int{ offset++ } );
+				result.m_direction4 = normalize( c3d_lights.load( sdw::Int{ offset++ } ) );
+				result.m_exponentCutOff = c3d_lights.load( sdw::Int{ offset++ } );
+				result.m_transform = mat4( c3d_lights.load( offset + 0_i )
+					, c3d_lights.load( offset + 1_i )
+					, c3d_lights.load( offset + 2_i )
+					, c3d_lights.load( offset + 3_i ) );
 				m_writer.returnStmt( result );
 			}
 			, sdw::InInt{ m_writer, "index" } );
