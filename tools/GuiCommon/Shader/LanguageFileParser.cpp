@@ -300,7 +300,8 @@ namespace GuiCommon
 	{
 		auto & context = preprocessed.getContext();
 
-		if ( context.sections.back() != uint32_t( LANGSection::eKeywords ) )
+		if ( context.sections.empty()
+			|| context.sections.back() != uint32_t( LANGSection::eKeywords ) )
 		{
 			return castor::FileParser::doDiscardParser( preprocessed, line );
 		}
@@ -313,9 +314,9 @@ namespace GuiCommon
 		return true;
 	}
 
-	void LanguageFileParser::doValidate()
+	void LanguageFileParser::doValidate( castor::PreprocessedFile & preprocessed )
 	{
-		auto & context = static_cast< LanguageFileContext & >( getPreprocessed().getContext() );
+		auto & context = static_cast< LanguageFileContext & >( preprocessed.getContext() );
 		m_stcContext->push_back( context.currentLanguage );
 	}
 
