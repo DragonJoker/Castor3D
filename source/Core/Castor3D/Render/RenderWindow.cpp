@@ -425,16 +425,16 @@ namespace castor3d
 					{
 						auto progress = m_progressBar.get();
 						target->initialise( device, queueData, progress );
-						setProgressBarTitle( progress, "Render Window" );
-						stepProgressBar( progress, "Initialising picking" );
+						setProgressBarTitle( progress, "Initialising: Render Window" );
+						stepProgressBar( progress, "Loading picking" );
 						doCreatePickingPass( queueData );
-						stepProgressBar( progress, "Initialising intermediate views" );
+						stepProgressBar( progress, "Loading intermediate views" );
 						doCreateIntermediateViews( queueData );
-						stepProgressBar( progress, "Initialising combine quad" );
+						stepProgressBar( progress, "Loading combine quad" );
 						doCreateRenderQuad( queueData );
-						stepProgressBar( progress, "Initialising command buffers" );
+						stepProgressBar( progress, "Loading command buffers" );
 						doCreateCommandBuffers( queueData );
-						stepProgressBar( progress, "Initialising save data" );
+						stepProgressBar( progress, "Loading save data" );
 						doCreateSaveData( queueData );
 						stepProgressBar( progress, "Finalising..." );
 					}
