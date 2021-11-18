@@ -37,7 +37,7 @@ namespace toon::shader
 			, sdw::Vec3 const & transmission
 			, sdw::Vec3 & ambient
 			, sdw::Vec3 & reflected
-			, sdw::Vec3 & refracted )const override;
+			, sdw::Vec3 & refracted )override;
 		void computeForward( c3d::LightMaterial & material
 			, c3d::Surface const & surface
 			, c3d::SceneData const & sceneData
@@ -45,7 +45,7 @@ namespace toon::shader
 			, sdw::Vec3 const & transmission
 			, sdw::Vec3 & ambient
 			, sdw::Vec3 & reflected
-			, sdw::Vec3 & refracted )const override;
+			, sdw::Vec3 & refracted )override;
 
 	private:
 		sdw::Vec3 computeIncident( sdw::Vec3 const & wsPosition
@@ -53,7 +53,7 @@ namespace toon::shader
 		sdw::Vec3 computeRefl( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::SampledImageCubeRgba32 const & envMap
-			, ToonPhongLightMaterial const & material )const;
+			, ToonPhongLightMaterial const & material );
 		void computeRefr( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::SampledImageCubeRgba32 const & envMap
@@ -61,7 +61,7 @@ namespace toon::shader
 			, sdw::Vec3 const & transmission
 			, ToonPhongLightMaterial const & material
 			, sdw::Vec3 & reflection
-			, sdw::Vec3 & refraction )const;
+			, sdw::Vec3 & refraction );
 		void computeReflRefr( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::SampledImageCubeRgba32 const & envMap
@@ -69,12 +69,12 @@ namespace toon::shader
 			, sdw::Vec3 const & transmission
 			, ToonPhongLightMaterial const & material
 			, sdw::Vec3 & reflection
-			, sdw::Vec3 & refraction )const;
+			, sdw::Vec3 & refraction );
 		sdw::Vec3 computeRefls( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::SampledImageCubeArrayRgba32 const & envMap
 			, sdw::Int const & envMapIndex
-			, ToonPhongLightMaterial const & material )const;
+			, ToonPhongLightMaterial const & material );
 		void computeRefrs( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::SampledImageCubeArrayRgba32 const & envMap
@@ -83,7 +83,7 @@ namespace toon::shader
 			, sdw::Vec3 const & transmission
 			, ToonPhongLightMaterial const & material
 			, sdw::Vec3 & reflection
-			, sdw::Vec3 & refraction )const;
+			, sdw::Vec3 & refraction );
 		void computeReflRefrs( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::SampledImageCubeArrayRgba32 const & envMap
@@ -92,7 +92,7 @@ namespace toon::shader
 			, sdw::Vec3 const & transmission
 			, ToonPhongLightMaterial const & material
 			, sdw::Vec3 & reflection
-			, sdw::Vec3 & refraction )const;
+			, sdw::Vec3 & refraction );
 		void doDeclareComputeRefl();
 		void doDeclareComputeRefr();
 		void doDeclareComputeReflRefr();
@@ -175,7 +175,7 @@ namespace toon::shader
 			, sdw::Vec3 const & transmission
 			, sdw::Vec3 & ambient
 			, sdw::Vec3 & reflected
-			, sdw::Vec3 & refracted )const override;
+			, sdw::Vec3 & refracted )override;
 		void computeForward( c3d::LightMaterial & material
 			, c3d::Surface const & surface
 			, c3d::SceneData const & sceneData
@@ -183,7 +183,7 @@ namespace toon::shader
 			, sdw::Vec3 const & transmission
 			, sdw::Vec3 & ambient
 			, sdw::Vec3 & reflected
-			, sdw::Vec3 & refracted )const override;
+			, sdw::Vec3 & refracted )override;
 
 	private:
 		sdw::Vec3 computeIBL( c3d::Surface surface
@@ -191,13 +191,13 @@ namespace toon::shader
 			, sdw::Vec3 const & worldEye
 			, sdw::SampledImageCubeRgba32 const & irradiance
 			, sdw::SampledImageCubeRgba32 const & prefiltered
-			, sdw::SampledImage2DRgba32 const & brdf )const;
+			, sdw::SampledImage2DRgba32 const & brdf );
 		sdw::Vec3 computeIncident( sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & wsCamera )const;
 		sdw::Vec3 computeReflEnvMap( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::SampledImageCubeRgba32 const & envMap
-			, ToonPbrLightMaterial const & material )const;
+			, ToonPbrLightMaterial const & material );
 		sdw::Void computeRefrEnvMap( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::SampledImageCubeRgba32 const & envMap
@@ -205,12 +205,12 @@ namespace toon::shader
 			, sdw::Vec3 const & transmission
 			, ToonPbrLightMaterial const & material
 			, sdw::Vec3 & reflection
-			, sdw::Vec3 & refraction )const;
+			, sdw::Vec3 & refraction );
 		sdw::Vec3 computeReflEnvMaps( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::SampledImageCubeArrayRgba32 const & envMap
 			, sdw::Int const & envMapIndex
-			, ToonPbrLightMaterial const & material )const;
+			, ToonPbrLightMaterial const & material );
 		sdw::Void computeRefrEnvMaps( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::SampledImageCubeArrayRgba32 const & envMap
@@ -219,7 +219,7 @@ namespace toon::shader
 			, sdw::Vec3 const & transmission
 			, ToonPbrLightMaterial const & material
 			, sdw::Vec3 & reflection
-			, sdw::Vec3 & refraction )const;
+			, sdw::Vec3 & refraction );
 		sdw::Void computeRefrSkybox( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::SampledImageCubeRgba32 const & envMap
@@ -227,7 +227,7 @@ namespace toon::shader
 			, sdw::Vec3 const & transmission
 			, ToonPbrLightMaterial const & material
 			, sdw::Vec3 & reflection
-			, sdw::Vec3 & refraction )const;
+			, sdw::Vec3 & refraction );
 		void doDeclareComputeIBL();
 		void doDeclareComputeReflEnvMap();
 		void doDeclareComputeRefrEnvMap();

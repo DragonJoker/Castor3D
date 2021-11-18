@@ -349,7 +349,6 @@ namespace castor3d
 				, 0u ) );
 
 			shader::Utils utils{ writer, *renderSystem.getEngine() };
-			utils.declareUnflatten();
 
 			writer.implementMainT< VoidT, SurfaceT >( [&]( VertexIn in
 				, VertexOutT< SurfaceT > out )

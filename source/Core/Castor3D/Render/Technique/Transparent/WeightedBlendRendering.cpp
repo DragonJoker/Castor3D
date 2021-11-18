@@ -72,10 +72,6 @@ namespace castor3d
 			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0u );
 
 			shader::Utils utils{ writer, *renderSystem.getEngine() };
-			utils.declareInvertVec2Y();
-			utils.declareRemoveGamma();
-			utils.declareCalcVSPosition();
-
 			shader::Fog fog{ writer };
 
 			auto maxComponent = writer.implementFunction< Float >( "maxComponent"

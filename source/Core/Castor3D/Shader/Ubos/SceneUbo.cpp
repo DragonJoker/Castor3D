@@ -81,7 +81,7 @@ namespace castor3d
 			return position - cameraPosition;
 		}
 
-		sdw::Vec4 SceneData::getBackgroundColour( Utils const & utils
+		sdw::Vec4 SceneData::getBackgroundColour( Utils & utils
 			, sdw::Float const & gamma )const
 		{
 			return vec4( utils.removeGamma( gamma, m_backgroundColour.rgb() ), m_backgroundColour.a() );
@@ -92,7 +92,7 @@ namespace castor3d
 			return vec4( hdrConfigData.removeGamma( m_backgroundColour.rgb() ), m_backgroundColour.a() );
 		}
 
-		sdw::Vec4 SceneData::computeAccumulation( Utils const & utils
+		sdw::Vec4 SceneData::computeAccumulation( Utils & utils
 			, sdw::Float const & depth
 			, sdw::Vec3 const & colour
 			, sdw::Float const & alpha
