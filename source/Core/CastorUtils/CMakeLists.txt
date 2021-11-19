@@ -360,6 +360,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/ScopeGuard.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/Signal.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/Templates.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/ThreadSafeSignal.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/UnicityException.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/Unique.hpp
 	)

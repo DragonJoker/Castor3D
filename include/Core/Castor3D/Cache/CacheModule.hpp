@@ -174,7 +174,7 @@ namespace castor3d
 			return *m_##memberName##Cache;\
 		}\
 	private:\
-		castor::Connection< castor::OnCacheChanged > m_on##className##Changed;\
+		castor::ConnectionT< castor::OnCacheChanged > m_on##className##Changed;\
 		className##Cache##SPtr m_##memberName##Cache
 
 #define DECLARE_CACHE_VIEW_MEMBER( memberName, className, eventType )\

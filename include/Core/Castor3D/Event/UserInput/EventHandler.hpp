@@ -37,13 +37,13 @@ namespace castor3d
 		using ClientHandlerFunction = std::function< void( HandlerEvent const & ) >;
 		//!\~english	Mouse event signal definition.
 		//!\~french		Définition d'un signal d'évènement de souris.
-		using OnClientMouseEvent = castor::Signal< ClientMouseFunction >;
+		using OnClientMouseEvent = castor::SignalT< ClientMouseFunction >;
 		//!\~english	Keyboard event signal definition.
 		//!\~french		Définition d'un signal d'évènement de clavier.
-		using OnClientKeyboardEvent = castor::Signal< ClientKeyboardFunction >;
+		using OnClientKeyboardEvent = castor::SignalT< ClientKeyboardFunction >;
 		//!\~english	Handler event signal definition.
 		//!\~french		Définition d'un signal d'évènement de gestionnaire.
-		using OnClientHandlerEvent = castor::Signal< ClientHandlerFunction >;
+		using OnClientHandlerEvent = castor::SignalT< ClientHandlerFunction >;
 		//!\~english	Mouse event signal connection definition.
 		//!\~french		Définition d'une connexion au signal d'évènement de souris.
 		using OnClientMouseEventConnection = OnClientMouseEvent::connection;
@@ -436,13 +436,13 @@ namespace castor3d
 		using NonClientHandlerFunction = std::function< void( DerivedSPtr, HandlerEvent const & ) >;
 		//!\~english	Non client mouse event signal definition.
 		//!\~french		Définition d'un signal d'évènement non client de souris.
-		using OnNonClientMouseEvent = castor::Signal< NonClientMouseFunction >;
+		using OnNonClientMouseEvent = castor::SignalT< NonClientMouseFunction >;
 		//!\~english	Non client keyboard event signal definition.
 		//!\~french		Définition d'un signal d'évènement non client de clavier.
-		using OnNonClientKeyboardEvent = castor::Signal< NonClientKeyboardFunction >;
+		using OnNonClientKeyboardEvent = castor::SignalT< NonClientKeyboardFunction >;
 		//!\~english	Non client handler event signal definition.
 		//!\~french		Définition d'un signal d'évènement non client de gestionnaire.
-		using OnNonClientHandlerEvent = castor::Signal< NonClientHandlerFunction >;
+		using OnNonClientHandlerEvent = castor::SignalT< NonClientHandlerFunction >;
 		//!\~english	Non client mouse event signal connection definition.
 		//!\~french		Définition d'une connexion au signal d'évènement non client de souris.
 		using OnNonClientMouseEventConnection = typename OnNonClientMouseEvent::connection;
