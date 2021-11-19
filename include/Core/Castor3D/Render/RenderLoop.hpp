@@ -220,6 +220,7 @@ namespace castor3d
 		//!\~english	The debug overlays.
 		//!\~french		Les incrustations de débogage.
 		std::unique_ptr< DebugOverlays > m_debugOverlays;
+		std::mutex m_debugOverlaysMtx;
 		struct UploadResources
 		{
 			//!\~english	The command buffer and semaphore used for UBO uploads.
