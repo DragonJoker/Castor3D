@@ -39,11 +39,13 @@ namespace castor3d
 			UploadResources{ { nullptr, nullptr }, nullptr },
 		}
 	{
+		auto lock( makeUniqueLock( m_debugOverlaysMtx ) );
 		m_debugOverlays->initialise( getEngine()->getOverlayCache() );
 	}
 
 	RenderLoop::~RenderLoop()
 	{
+		auto lock( makeUniqueLock( m_debugOverlaysMtx ) );
 		m_debugOverlays->cleanup();
 		m_debugOverlays.reset();
 	}
@@ -110,12 +112,14 @@ namespace castor3d
 	uint32_t RenderLoop::registerTimer( castor::String const & category
 		, crg::FramePassTimer & timer )
 	{
+		auto lock( makeUniqueLock( m_debugOverlaysMtx ) );
 		return m_debugOverlays->registerTimer( category, timer );
 	}
 
 	void RenderLoop::unregisterTimer( castor::String const & category
 		, crg::FramePassTimer & timer )
 	{
+		auto lock( makeUniqueLock( m_debugOverlaysMtx ) );
 		m_debugOverlays->unregisterTimer( category, timer );
 	}
 
