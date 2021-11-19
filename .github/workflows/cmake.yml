@@ -34,12 +34,18 @@ jobs:
     - name: Install necessary G++ version (Linux)
       if: runner.os == 'Linux' && matrix.os[2] == 'gcc'
       shell: bash
-      run: sudo apt-get install -y --no-install-recommends ccache gcc-10 g++-10
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y --no-install-recommends ccache gcc-10 g++-10
+        sudo apt-get install libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libxrandr-dev libxxf86vm-dev libxaw7-dev
 
     - name: Install necessary Clang++ version (Linux)
       if: runner.os == 'Linux' && matrix.os[2] == 'clang'
       shell: bash
-      run: sudo apt-get install -y --no-install-recommends ccache clang-12 clang++-12
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y --no-install-recommends ccache clang-12 clang++-12
+        sudo apt-get install libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libxrandr-dev libxxf86vm-dev libxaw7-dev
 
     - name: Create Build Environment
       run: cmake -E make_directory ${{runner.workspace}}/build-${{ matrix.buildType }}
@@ -83,11 +89,6 @@ jobs:
     - name: Install necessary packages
       shell: bash
       run: $VCPKG_ROOT/vcpkg install spirv-cross:${{ matrix.os[1] }} freetype:${{ matrix.os[1] }} zlib:${{ matrix.os[1] }}
-  
-    - name: Install necessary packages (Linux)
-      if: runner.os == 'Linux'
-      shell: bash
-      run: sudo apt-get install libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libxrandr-dev libxxf86vm-dev libxaw7-dev
 
     - name: Install necessary packages (Windows)
       if: runner.os == 'Windows'
