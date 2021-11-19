@@ -366,28 +366,28 @@ namespace castor3d
 	CU_DeclareMap( castor::String, BillboardListSPtr, BillboardListStr );
 
 	using OnSceneChangedFunction = std::function< void( Scene const & ) >;
-	using OnSceneChanged = castor::Signal< OnSceneChangedFunction >;
+	using OnSceneChanged = castor::SignalT< OnSceneChangedFunction >;
 	using OnSceneChangedConnection = OnSceneChanged::connection;
 
 	using OnSceneUpdateFunction = std::function< void( Scene const & ) >;
-	using OnSceneUpdate = castor::Signal< OnSceneUpdateFunction >;
+	using OnSceneUpdate = castor::SignalT< OnSceneUpdateFunction >;
 	using OnSceneUpdateConnection = OnSceneUpdate::connection;
 
 	using OnCameraChangedFunction = std::function< void( Camera const & ) >;
-	using OnCameraChanged = castor::Signal< OnCameraChangedFunction >;
+	using OnCameraChanged = castor::SignalT< OnCameraChangedFunction >;
 	using OnCameraChangedConnection = OnCameraChanged::connection;
 
 	using OnSceneNodeChangedFunction = std::function< void( SceneNode const & ) >;
-	using OnSceneNodeChanged = castor::Signal< OnSceneNodeChangedFunction >;
+	using OnSceneNodeChanged = castor::SignalT< OnSceneNodeChangedFunction >;
 	using OnSceneNodeChangedConnection = OnSceneNodeChanged::connection;
 
 	using SubmeshMaterialMap = std::map< Submesh const *, MaterialRPtr >;
 	using OnSubmeshMaterialChangedFunction = std::function< void( Geometry const &, Submesh const &, MaterialRPtr oldMaterial, MaterialRPtr newMaterial) >;
-	using OnSubmeshMaterialChanged = castor::Signal< OnSubmeshMaterialChangedFunction >;
+	using OnSubmeshMaterialChanged = castor::SignalT< OnSubmeshMaterialChangedFunction >;
 	using OnSubmeshMaterialChangedConnection = OnSubmeshMaterialChanged::connection;
 
 	using OnBillboardMaterialChangedFunction = std::function< void( BillboardBase const &, MaterialRPtr oldMaterial, MaterialRPtr newMaterial ) >;
-	using OnBillboardMaterialChanged = castor::Signal< OnBillboardMaterialChangedFunction >;
+	using OnBillboardMaterialChanged = castor::SignalT< OnBillboardMaterialChangedFunction >;
 	using OnBillboardMaterialChangedConnection = OnBillboardMaterialChanged::connection;
 
 	C3D_API castor::LoggerInstance & getLogger( Scene const & scene );

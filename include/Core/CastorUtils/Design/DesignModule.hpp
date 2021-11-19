@@ -119,7 +119,7 @@ namespace castor
 	*\brief		Représente une connexion à un signal.
 	*/
 	template< typename SignalT >
-	class Connection;
+	class ConnectionT;
 	/**
 	\~english
 	\brief		Used to delay initialisation of an object to next use of it.
@@ -453,7 +453,7 @@ namespace castor
 	*\brief		Classe basique de signal
 	*/
 	template< typename Function >
-	class Signal;
+	class SignalT;
 	/**
 	\~english
 	\brief		Class used to execute code at scope exit.
@@ -462,6 +462,22 @@ namespace castor
 	*/
 	template< typename ScopeExitFuncType >
 	class ScopeGuard;
+	/**
+	\~english
+	*\brief		Connection to a thread safe signal.
+	\~french
+	*\brief		Représente une connexion à un signal thread safe.
+	*/
+	template< typename SignalT >
+	class TSConnectionT;
+	/**
+	\~english
+	*\brief		Thread safe signal class.
+	\~french
+	*\brief		Classe thread safe de signal.
+	*/
+	template< typename Function >
+	class TSSignalT;
 	/**
 	\~english
 	\brief		Unicity exception
@@ -500,8 +516,8 @@ namespace castor
 	static inline bool constexpr isGroupChangeTrackedT = IsGroupChangeTrackedT< T >::value;
 
 	using OnCacheChangedFunction = std::function< void() >;
-	using OnCacheChanged = castor::Signal< OnCacheChangedFunction >;
-	using OnCacheChangedConnection = castor::Connection< OnCacheChanged >;
+	using OnCacheChanged = castor::SignalT< OnCacheChangedFunction >;
+	using OnCacheChangedConnection = castor::ConnectionT< OnCacheChanged >;
 
 	template< typename ResT, typename KeyT, typename TraitsT >
 	using ResourceCachePtrT = std::shared_ptr< ResourceCacheT< ResT, KeyT, TraitsT > >;

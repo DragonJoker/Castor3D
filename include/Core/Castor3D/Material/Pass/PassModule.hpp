@@ -170,7 +170,7 @@ namespace castor3d
 	CU_DeclareVector( PassSPtr, PassPtr );
 
 	using OnPassChangedFunction = std::function< void( Pass const & ) >;
-	using OnPassChanged = castor::Signal< OnPassChangedFunction >;
+	using OnPassChanged = castor::SignalT< OnPassChangedFunction >;
 	using OnPassChangedConnection = OnPassChanged::connection;
 
 	using PassFactoryBase = castor::Factory< Pass, PassTypeID, PassSPtr, std::function< PassSPtr( Material & ) > >;

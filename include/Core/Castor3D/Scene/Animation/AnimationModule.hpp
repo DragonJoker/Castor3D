@@ -111,11 +111,11 @@ namespace castor3d
 
 
 	using OnAnimatedSkeletonChangeFunction = std::function< void( AnimatedObjectGroup const &, AnimatedSkeleton const & ) >;
-	using OnAnimatedSkeletonChange = castor::Signal< OnAnimatedSkeletonChangeFunction >;
+	using OnAnimatedSkeletonChange = castor::SignalT< OnAnimatedSkeletonChangeFunction >;
 	using OnAnimatedSkeletonChangeConnection = OnAnimatedSkeletonChange::connection;
 
 	using OnAnimatedMeshChangeFunction = std::function< void( AnimatedObjectGroup const &, AnimatedMesh const & ) >;
-	using OnAnimatedMeshChange = castor::Signal< OnAnimatedMeshChangeFunction >;
+	using OnAnimatedMeshChange = castor::SignalT< OnAnimatedMeshChangeFunction >;
 	using OnAnimatedMeshChangeConnection = OnAnimatedMeshChange::connection;
 	/**
 	*\~english

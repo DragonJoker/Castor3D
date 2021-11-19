@@ -138,8 +138,8 @@ namespace castor
 		}
 
 		using ActionFunc = std::function< void( Action const & ) >;
-		using ActionSignal = castor::Signal< ActionFunc >;
-		using ActionConnection = castor::Connection< ActionSignal >;
+		using ActionSignal = SignalT< ActionFunc >;
+		using ActionConnection = ConnectionT< ActionSignal >;
 
 		ActionSignal onAction;
 

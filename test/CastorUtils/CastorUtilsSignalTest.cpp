@@ -5,10 +5,10 @@
 
 #include <random>
 
-using castor::Signal;
-
 namespace Testing
 {
+	using castor::SignalT;
+
 	CastorUtilsSignalTest::CastorUtilsSignalTest()
 		: TestCase( "CastorUtilsSignalTest" )
 	{
@@ -23,14 +23,14 @@ namespace Testing
 
 	void CastorUtilsSignalTest::Creation()
 	{
-		Signal < std::function< void() > > signal;
+		SignalT< std::function< void() > > signal;
 		auto connection( signal.connect( [](){ CU_Exception( "coucou" ); } ) );
 		CT_CHECK_THROW( signal() );
 	}
 
 	void CastorUtilsSignalTest::Assignment()
 	{
-		Signal < std::function< void() > > signal;
+		SignalT< std::function< void() > > signal;
 		auto connection = signal.connect( [](){ CU_Exception( "coucou" ); } );
 		connection = signal.connect( [](){ CU_Exception( "coin" ); } );
 		try
@@ -47,8 +47,8 @@ namespace Testing
 
 	void CastorUtilsSignalTest::MultipleSignalConnectionAssignment()
 	{
-		Signal < std::function< void() > > signal1;
-		Signal < std::function< void() > > signal2;
+		SignalT< std::function< void() > > signal1;
+		SignalT< std::function< void() > > signal2;
 		auto conn1 = signal1.connect( [](){ CU_Exception( "coucou" ); } );
 		auto conn2 = signal2.connect( [](){ CU_Exception( "coin" ); } );
 		CT_CHECK_THROW( signal1() );

@@ -133,7 +133,7 @@ namespace castor3d
 	using LightsMap = std::array< LightsArray, size_t( LightType::eCount ) >;
 
 	using OnLightChangedFunction = std::function< void( Light & ) >;
-	using OnLightChanged = castor::Signal< OnLightChangedFunction >;
+	using OnLightChanged = castor::SignalT< OnLightChangedFunction >;
 	using OnLightChangedConnection = OnLightChanged::connection;
 
 	struct RsmConfig
