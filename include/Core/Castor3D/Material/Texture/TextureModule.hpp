@@ -169,7 +169,7 @@ namespace castor3d
 	CU_DeclareVector( std::reference_wrapper< TextureUnit >, DepthMap );
 
 	using OnTextureUnitChangedFunction = std::function< void( TextureUnit const & ) >;
-	using OnTextureUnitChanged = castor::Signal< OnTextureUnitChangedFunction >;
+	using OnTextureUnitChanged = castor::SignalT< OnTextureUnitChangedFunction >;
 	using OnTextureUnitChangedConnection = OnTextureUnitChanged::connection;
 
 	std::ostream & operator<<( std::ostream & stream, TextureLayout const & layout );

@@ -86,8 +86,8 @@ namespace castor
 		**/
 		/**@{*/
 		using OnResourceFunc = std::function< void( ElementT const & ) >;
-		using OnResourceEvent = Signal< OnResourceFunc >;
-		using Connection = castor::Connection< OnResourceEvent >;
+		using OnResourceEvent = SignalT< OnResourceFunc >;
+		using Connection = ConnectionT< OnResourceEvent >;
 
 		OnResourceEvent onInitialising;
 		OnResourceEvent onInitialised;
@@ -131,14 +131,14 @@ namespace castor
 
 	template< typename CacheT >
 	struct ResourceMergerT
-		: public castor::Named
+		: public Named
 	{
 		using ElementCacheT = typename CacheT::ElementCacheT;
 		using ElementContT = typename CacheT::ElementContT;
 		using ElementPtrT = typename CacheT::ElementPtrT;
 
-		explicit ResourceMergerT( castor::String const & name )
-			: castor::Named{ name }
+		explicit ResourceMergerT( String const & name )
+			: Named{ name }
 		{
 		}
 
