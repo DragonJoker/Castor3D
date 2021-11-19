@@ -349,14 +349,20 @@ namespace castor3d
 
 		auto & engine = *device.renderSystem.getEngine();
 		SamplerResPtr c3dSampler;
+		auto splName = getSamplerName( VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR
+			, VK_SAMPLER_MIPMAP_MODE_LINEAR
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 
-		if ( engine.getSamplerCache().has( name ) )
+		if ( engine.getSamplerCache().has( splName ) )
 		{
-			c3dSampler = engine.getSamplerCache().find( name );
+			c3dSampler = engine.getSamplerCache().find( splName );
 		}
 		else
 		{
-			auto created = castor::makeResource< Sampler, castor::String >( name, engine );
+			auto created = castor::makeResource< Sampler, castor::String >( splName, engine );
 			created->setMinFilter( VK_FILTER_LINEAR );
 			created->setMagFilter( VK_FILTER_LINEAR );
 			created->setMipFilter( VK_SAMPLER_MIPMAP_MODE_LINEAR );
@@ -364,10 +370,10 @@ namespace castor3d
 			created->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 			created->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 			created->setBorderColour( borderColor );
-			c3dSampler = engine.getSamplerCache().add( name, created, false );
+			created->initialise( device );
+			c3dSampler = engine.getSamplerCache().add( splName, created, false );
 		}
 
-		c3dSampler.lock()->initialise( device );
 		sampler = &c3dSampler.lock()->getSampler();
 	}
 
