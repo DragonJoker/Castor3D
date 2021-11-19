@@ -22,7 +22,7 @@ namespace castor3d
 	public:
 		CU_DeclareMap( char32_t, castor::Position, GlyphPosition );
 		using OnChangedFunction = std::function< void( FontTexture const & ) >;
-		using OnChanged = castor::Signal< OnChangedFunction >;
+		using OnChanged = castor::SignalT< OnChangedFunction >;
 
 	public:
 		/**

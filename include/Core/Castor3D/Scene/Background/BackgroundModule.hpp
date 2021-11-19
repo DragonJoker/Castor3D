@@ -98,7 +98,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( SceneBackground );
 
 	using BackgroundChangedFunc = std::function< void( SceneBackground const & ) >;
-	using OnBackgroundChanged = castor::Signal< BackgroundChangedFunc >;
+	using OnBackgroundChanged = castor::SignalT< BackgroundChangedFunc >;
 	using OnBackgroundChangedConnection = OnBackgroundChanged::connection;
 
 	//@}

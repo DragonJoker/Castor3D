@@ -23,7 +23,7 @@ namespace castor
 	{
 	public:
 		using Job = std::function< void() >;
-		using OnEnded = Signal< std::function< void( WorkerThread & ) > >;
+		using OnEnded = SignalT< std::function< void( WorkerThread & ) > >;
 
 	public:
 		/**

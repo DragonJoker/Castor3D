@@ -113,7 +113,7 @@ namespace castor3d
 	using PassTypeID = uint16_t;
 
 	using OnMaterialChangedFunction = std::function< void( Material const & ) >;
-	using OnMaterialChanged = castor::Signal< OnMaterialChangedFunction >;
+	using OnMaterialChanged = castor::SignalT< OnMaterialChangedFunction >;
 	using OnMaterialChangedConnection = OnMaterialChanged::connection;
 
 	C3D_API VkFormat convert( castor::PixelFormat format );

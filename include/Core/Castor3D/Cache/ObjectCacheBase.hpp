@@ -35,7 +35,7 @@ namespace castor3d
 
 	public:
 		using OnChangedFunction = std::function< void() >;
-		using OnChanged = castor::Signal < OnChangedFunction >;
+		using OnChanged = castor::SignalT< OnChangedFunction >;
 
 	protected:
 		/**
