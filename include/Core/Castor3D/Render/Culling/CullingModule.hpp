@@ -75,8 +75,8 @@ namespace castor3d
 	CU_DeclareSmartPtr( SceneCuller );
 
 	using SceneCullerSignalFunction = std::function< void( SceneCuller const & ) >;
-	using SceneCullerSignal = castor::Signal< SceneCullerSignalFunction >;
-	using SceneCullerSignalConnection = castor::Connection< SceneCullerSignal >;
+	using SceneCullerSignal = castor::SignalT< SceneCullerSignalFunction >;
+	using SceneCullerSignalConnection = castor::ConnectionT< SceneCullerSignal >;
 
 	//@}
 	//@}

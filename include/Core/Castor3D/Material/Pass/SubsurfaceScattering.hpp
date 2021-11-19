@@ -15,7 +15,7 @@ namespace castor3d
 	{
 	public:
 		using Changed = std::function< void( SubsurfaceScattering const & ) >;
-		using OnChanged = castor::Signal< Changed >;
+		using OnChanged = castor::SignalT< Changed >;
 		using OnChangedConnection = OnChanged::connection;
 
 	public:

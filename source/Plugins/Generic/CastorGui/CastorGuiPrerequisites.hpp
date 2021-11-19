@@ -239,23 +239,23 @@ namespace CastorGui
 	class StaticCtrl;
 
 	using OnButtonEventFunction = std::function< void() >;
-	using OnButtonEvent = castor::Signal< OnButtonEventFunction >;
+	using OnButtonEvent = castor::SignalT< OnButtonEventFunction >;
 	using OnButtonEventConnection = OnButtonEvent::connection;
 
 	using OnComboEventFunction = std::function< void( int ) >;
-	using OnComboEvent = castor::Signal< OnComboEventFunction >;
+	using OnComboEvent = castor::SignalT< OnComboEventFunction >;
 	using OnComboEventConnection = OnComboEvent::connection;
 
 	using OnEditEventFunction = std::function< void( castor::String const & ) >;
-	using OnEditEvent = castor::Signal< OnEditEventFunction >;
+	using OnEditEvent = castor::SignalT< OnEditEventFunction >;
 	using OnEditEventConnection = OnEditEvent::connection;
 
 	using OnListEventFunction = std::function< void( int ) >;
-	using OnListEvent = castor::Signal< OnListEventFunction >;
+	using OnListEvent = castor::SignalT< OnListEventFunction >;
 	using OnListEventConnection = OnListEvent::connection;
 
 	using OnSliderEventFunction = std::function< void( int ) >;
-	using OnSliderEvent = castor::Signal< OnSliderEventFunction >;
+	using OnSliderEvent = castor::SignalT< OnSliderEventFunction >;
 	using OnSliderEventConnection = OnSliderEvent::connection;
 
 	CU_DeclareSmartPtr( ControlsManager );
