@@ -11,6 +11,7 @@ See LICENSE file in root folder
 #include <ashespp/Image/Sampler.hpp>
 
 #include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/Multithreading/SpinMutex.hpp>
 
 namespace castor3d
 {
@@ -18,6 +19,12 @@ namespace castor3d
 		, castor::String const & baseName
 		, VkFilter filter
 		, VkImageSubresourceRange const * range );
+	castor::String getSamplerName( VkFilter minFilter
+		, VkFilter magFilter
+		, VkSamplerMipmapMode mipFilter
+		, VkSamplerAddressMode U
+		, VkSamplerAddressMode V
+		, VkSamplerAddressMode W );
 
 	class Sampler
 		: public castor::Named
