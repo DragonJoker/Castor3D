@@ -78,7 +78,7 @@ namespace castor
 		{
 			if ( m_signal )
 			{
-				auto lock = makeUniqueLock( m_signal->m_mutex );
+				auto lock( makeUniqueLock( m_signal->m_mutex ) );
 				m_signal->replaceConnection( rhs, *this );
 			}
 
