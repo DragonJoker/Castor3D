@@ -167,9 +167,6 @@ namespace castor
 		uint32_t width = FreeImage_GetWidth( fiImage );
 		uint32_t height = FreeImage_GetHeight( fiImage );
 		Size dimensions( width, height );
-		auto memorySize = FreeImage_GetMemorySize( fiImage );
-		auto levelSize = ashes::getSize( VkExtent2D{ dimensions.getWidth(), dimensions.getHeight() }
-			, VkFormat( sourceFmt ) );
 		CU_Require( memorySize >= levelSize );
 		uint8_t * pixels = FreeImage_GetBits( fiImage );
 #if FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_BGR
