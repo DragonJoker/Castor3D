@@ -11,6 +11,8 @@
 
 #include <RenderGraph/GraphContext.hpp>
 
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+
 CU_ImplementCUSmartPtr( castor3d, RenderDevice )
 
 namespace castor3d
@@ -94,6 +96,17 @@ namespace castor3d
 				, gpu.getFeatures() };
 			result->pNext = &features2;
 			return result;
+		}
+
+		bool isExtensionSupported( std::string const & name
+			, ashes::VkExtensionPropertiesArray const & cont )
+		{
+			return ( cont.end() != std::find_if( cont.begin()
+				, cont.end()
+				, [&name]( VkExtensionProperties const & lookup )
+				{
+					return lookup.extensionName == name;
+				} ) );
 		}
 	}
 
@@ -221,17 +234,6 @@ namespace castor3d
 		{
 			parent->putQueue( data );
 		}
-	}
-
-	bool isExtensionSupported( std::string const & name
-		, ashes::VkExtensionPropertiesArray const & cont )
-	{
-		return ( cont.end() != std::find_if( cont.begin()
-			, cont.end()
-			, [&name]( VkExtensionProperties const & lookup )
-			{
-				return lookup.extensionName == name;
-			} ) );
 	}
 
 	//*********************************************************************************************
