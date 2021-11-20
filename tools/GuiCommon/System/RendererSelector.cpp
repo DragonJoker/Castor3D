@@ -142,7 +142,6 @@ namespace GuiCommon
 
 		for ( auto & gpu : renderer.gpus )
 		{
-			gpu->getProperties().deviceName;
 			m_devicesList->Insert( gpu->getProperties().deviceName, count++ );
 		}
 
