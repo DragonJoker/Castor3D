@@ -95,7 +95,7 @@ namespace castor3d::shader
 		, m_utils{ utils }
 		, m_isOpaqueProgram{ isOpaqueProgram }
 		, m_prefix{ std::move( prefix ) }
-		, m_shadowModel{ std::make_shared< Shadow >( std::move( shadowOptions ), writer, utils ) }
+		, m_shadowModel{ std::make_shared< Shadow >( std::move( shadowOptions ), writer ) }
 	{
 	}
 
