@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_ModelUbo_H___
 #define ___C3D_ModelUbo_H___
 
-#include "UbosModule.hpp"
+#include "SkinningUbo.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
