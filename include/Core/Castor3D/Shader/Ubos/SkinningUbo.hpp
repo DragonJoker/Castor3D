@@ -67,7 +67,7 @@ namespace castor3d
 		 *\return		La matrice résultat.
 		 */
 		template< ast::var::Flag FlagT >
-		C3D_API static sdw::Mat4 computeTransform( shader::SkinningData const & data
+		static sdw::Mat4 computeTransform( shader::SkinningData const & data
 			, shader::VertexSurfaceT< FlagT > const & surface
 			, sdw::ShaderWriter & writer
 			, ProgramFlags const & flags
