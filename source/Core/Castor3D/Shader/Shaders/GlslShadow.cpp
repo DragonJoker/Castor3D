@@ -32,10 +32,8 @@ namespace castor3d
 		castor::String const Shadow::MapFluxPoint = "c3d_shdMapFluxPoint";
 
 		Shadow::Shadow( ShadowOptions shadowOptions
-			, ShaderWriter & writer
-			, Utils & utils )
+			, ShaderWriter & writer )
 			: m_writer{ writer }
-			, m_utils{ utils }
 			, m_shadowOptions{ std::move( shadowOptions ) }
 		{
 		}
