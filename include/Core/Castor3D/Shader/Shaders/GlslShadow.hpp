@@ -34,8 +34,7 @@ namespace castor3d
 
 		public:
 			C3D_API Shadow( ShadowOptions shadowOptions
-				, sdw::ShaderWriter & writer
-				, Utils & utils );
+				, sdw::ShaderWriter & writer );
 			C3D_API void declare( uint32_t & index
 				, uint32_t set );
 			C3D_API void declareDirectional( uint32_t & index
@@ -91,7 +90,6 @@ namespace castor3d
 
 		private:
 			sdw::ShaderWriter & m_writer;
-			Utils & m_utils;
 			ShadowOptions m_shadowOptions;
 			sdw::Function< sdw::Float
 				, sdw::InVec4 > m_getRandom;

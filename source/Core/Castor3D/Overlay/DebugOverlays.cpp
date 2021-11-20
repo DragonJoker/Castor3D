@@ -15,6 +15,8 @@
 
 #include <iomanip>
 
+#pragma GCC diagnostic ignored "-Wuseless-cast"
+
 CU_ImplementCUSmartPtr( castor3d, DebugOverlays )
 
 namespace castor3d
@@ -560,7 +562,7 @@ namespace castor3d
 			++m_frameCount;
 			m_framesTimes[m_frameIndex] = m_totalTime;
 			m_averageTime = std::accumulate( m_framesTimes.begin()
-				, m_framesTimes.begin() + ptrdiff_t( std::min( m_frameCount, m_framesTimes.size() ) )
+				, m_framesTimes.begin() + ptrdiff_t( std::min( m_frameCount, uint64_t( m_framesTimes.size() ) ) )
 				, 0_ns ) / m_framesTimes.size();
 			m_averageFps = 1000000.0f / float( std::chrono::duration_cast< castor::Microseconds >( m_averageTime ).count() );
 			auto v = ( ++m_frameIndex ) % FRAME_SAMPLES_COUNT;
