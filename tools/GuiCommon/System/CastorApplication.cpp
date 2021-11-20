@@ -274,6 +274,7 @@ namespace GuiCommon
 			, wantedFPS
 			, !isCastorThreaded
 			, rendererType
+			, {}
 			, {} }
 	{
 		wxSetAssertHandler( assertHandler );
