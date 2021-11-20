@@ -167,7 +167,6 @@ namespace castor
 		uint32_t width = FreeImage_GetWidth( fiImage );
 		uint32_t height = FreeImage_GetHeight( fiImage );
 		Size dimensions( width, height );
-		CU_Require( memorySize >= levelSize );
 		uint8_t * pixels = FreeImage_GetBits( fiImage );
 #if FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_BGR
 		swapComponents( pixels, sourceFmt, width, height );
