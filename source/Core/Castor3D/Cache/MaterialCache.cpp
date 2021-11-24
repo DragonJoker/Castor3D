@@ -73,6 +73,19 @@ namespace castor
 					it.second->initialise();
 				}
 			}
+
+			for ( auto pass : m_pendingPasses )
+			{
+				registerPass( *pass );
+			}
+
+			for ( auto unit : m_pendingUnits )
+			{
+				registerUnit( *unit );
+			}
+
+			m_pendingPasses.clear();
+			m_pendingUnits.clear();
 		}
 	}
 
@@ -133,12 +146,16 @@ namespace castor
 		}
 	}
 
-	void ResourceCacheT< Material, String, MaterialCacheTraits >::registerPass( Pass & pass )
+	bool ResourceCacheT< Material, String, MaterialCacheTraits >::registerPass( Pass & pass )
 	{
 		if ( m_passBuffer )
 		{
 			m_passBuffer->addPass( pass );
+			return true;
 		}
+
+		m_pendingPasses.push_back( &pass );
+		return false;
 	}
 
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::unregisterPass( Pass & pass )
@@ -150,12 +167,16 @@ namespace castor
 		}
 	}
 
-	void ResourceCacheT< Material, String, MaterialCacheTraits >::registerUnit( TextureUnit & unit )
+	bool ResourceCacheT< Material, String, MaterialCacheTraits >::registerUnit( TextureUnit & unit )
 	{
 		if ( m_textureBuffer )
 		{
 			m_textureBuffer->addTextureConfiguration( unit );
+			return true;
 		}
+
+		m_pendingUnits.push_back( &unit );
+		return false;
 	}
 
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::unregisterUnit( TextureUnit & unit )

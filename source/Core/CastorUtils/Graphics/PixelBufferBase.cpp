@@ -370,18 +370,6 @@ namespace castor
 		{
 		case PixelFormat::eR8G8B8_UNORM:
 		case PixelFormat::eB8G8R8_UNORM:
-			if ( support.supportBC1 )
-			{
-				result = PixelFormat::eBC1_RGB_UNORM_BLOCK;
-			}
-			break;
-		case PixelFormat::eR8G8B8_SRGB:
-		case PixelFormat::eB8G8R8_SRGB:
-			if ( support.supportBC1 )
-			{
-				result = PixelFormat::eBC1_RGB_SRGB_BLOCK;
-			}
-			break;
 		case PixelFormat::eB8G8R8A8_UNORM:
 		case PixelFormat::eR8G8B8A8_UNORM:
 		case PixelFormat::eA8B8G8R8_UNORM:
@@ -390,6 +378,8 @@ namespace castor
 				result = PixelFormat::eBC3_UNORM_BLOCK;
 			}
 			break;
+		case PixelFormat::eR8G8B8_SRGB:
+		case PixelFormat::eB8G8R8_SRGB:
 		case PixelFormat::eR8G8B8A8_SRGB:
 		case PixelFormat::eA8B8G8R8_SRGB:
 			if ( support.supportBC3 )

@@ -12,6 +12,8 @@ See LICENSE file in root folder
 #include <CastorUtils/Math/Angle.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
+#include <ashespp/Image/ImageCreateInfo.hpp>
+
 namespace castor3d
 {
 	struct TextureTransform
@@ -20,6 +22,8 @@ namespace castor3d
 		castor::Angle rotate;
 		castor::Point4f scale{ 1, 1, 1, 0 };
 	};
+	C3D_API bool operator==( TextureTransform const & lhs
+		, TextureTransform const & rhs )noexcept;
 	/**
 	*\~english
 	*\brief
@@ -135,6 +139,18 @@ namespace castor3d
 	/**@}*/
 	C3D_API TextureFlags getFlags( TextureConfiguration const & config );
 	C3D_API castor::PixelComponents getPixelComponents( uint32_t mask );
+
+	struct PassTextureConfig
+	{
+		ashes::ImageCreateInfo imageInfo{ {} };
+		TextureConfiguration config{};
+		TextureTransform transform{};
+	};
+
+	using TextureSourceMap = std::unordered_map< TextureSourceInfo
+		, PassTextureConfig
+		, TextureSourceInfoHasher >;
+	using TextureSourceMapVT = TextureSourceMap::value_type;
 }
 
 #endif

@@ -71,7 +71,7 @@ namespace CastorGui
 		{
 			auto unit = std::make_shared< TextureUnit >( engine );
 			unit->setConfiguration( TextureConfiguration::DiffuseTexture );
-			pass->addTextureUnit( unit );
+			//pass->addTextureUnit( unit );
 		}
 
 		TextureUnitSPtr unit = pass->getTextureUnit( 0 );

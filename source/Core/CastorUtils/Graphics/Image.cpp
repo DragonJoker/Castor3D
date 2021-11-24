@@ -113,9 +113,12 @@ namespace castor
 		return result;
 	}
 
-	Image & Image::resample( Size const & size )
+	PxBufferBaseSPtr Image::resample( Size const & size
+		, PxBufferBaseSPtr & buffer
+		, ImageLayout & layout )
 	{
-		auto srcBuffer = getPixels();
+		auto srcBuffer = buffer;
+		auto format = srcBuffer->getFormat();
 		int channels = int( getComponentsCount( srcBuffer->getFormat() ) );
 		int alpha{ hasAlpha( srcBuffer->getFormat() )
 			? 1
@@ -126,14 +129,30 @@ namespace castor
 		stbir_colorspace colorSpace{ isSRGBFormat( srcBuffer->getFormat() )
 			? STBIR_COLORSPACE_SRGB
 			: STBIR_COLORSPACE_LINEAR };
-		auto srcLayerSize = m_layout.layerSize();
+		auto srcLayerSize = layout.layerSize();
 		auto src = srcBuffer->getPtr();
-		updateLayerLayout( size, srcBuffer->getFormat() );
-		auto dstBuffer = getPixels();
-		auto dstLayerSize = m_layout.layerSize();
+		auto layoutChanged = ( layout.extent->x != size.getWidth()
+			|| layout.extent->y != size.getHeight()
+			|| format != layout.format )
+			? buffer
+			: nullptr;
+
+		if ( layoutChanged )
+		{
+			layout.extent->x = size.getWidth();
+			layout.extent->y = size.getHeight();
+			layout.format = format;
+			buffer = PxBufferBase::create( { layout.extent->x, layout.extent->y }
+				, layout.depthLayers()
+				, layout.levels
+				, layout.format );
+		}
+
+		auto dstBuffer = buffer;
+		auto dstLayerSize = layout.layerSize();
 		auto dst = dstBuffer->getPtr();
 
-		for ( uint32_t layer = 0u; layer < m_layout.depthLayers(); ++layer )
+		for ( uint32_t layer = 0u; layer < layout.depthLayers(); ++layer )
 		{
 			auto result = stbir_resize( src, int( srcBuffer->getWidth() ), int( srcBuffer->getHeight() ), 0
 				, dst, int( dstBuffer->getWidth() ), int( dstBuffer->getHeight() ), 0
@@ -152,6 +171,66 @@ namespace castor
 			src += srcLayerSize;
 		}
 
+		return dstBuffer;
+	}
+
+	PxBufferBaseUPtr Image::resample( Size const & size
+		, PxBufferBaseUPtr buffer )
+	{
+		if ( buffer->getDimensions() == size )
+		{
+			return std::move( buffer );
+		}
+
+		ImageLayout layout{ *buffer };
+		auto format = buffer->getFormat();
+		int channels = int( getComponentsCount( buffer->getFormat() ) );
+		int alpha{ hasAlpha( buffer->getFormat() )
+			? 1
+			: STBIR_ALPHA_CHANNEL_NONE };
+		stbir_datatype dataType{ isFloatingPoint( buffer->getFormat() )
+			? STBIR_TYPE_FLOAT
+			: STBIR_TYPE_UINT8 };
+		stbir_colorspace colorSpace{ isSRGBFormat( buffer->getFormat() )
+			? STBIR_COLORSPACE_SRGB
+			: STBIR_COLORSPACE_LINEAR };
+		auto srcLayerSize = layout.layerSize();
+		auto src = buffer->getPtr();
+		layout.extent->x = size.getWidth();
+		layout.extent->y = size.getHeight();
+		layout.format = format;
+		auto result = PxBufferBase::createUnique( { layout.extent->x, layout.extent->y }
+			, layout.depthLayers()
+			, layout.levels
+			, layout.format );
+		auto dstLayerSize = layout.layerSize();
+		auto dst = result->getPtr();
+
+		for ( uint32_t layer = 0u; layer < layout.depthLayers(); ++layer )
+		{
+			auto resized = stbir_resize( src, int( buffer->getWidth() ), int( buffer->getHeight() ), 0
+				, dst, int( result->getWidth() ), int( result->getHeight() ), 0
+				, dataType
+				, channels, alpha, 0
+				, STBIR_EDGE_CLAMP, STBIR_EDGE_CLAMP
+				, STBIR_FILTER_CATMULLROM, STBIR_FILTER_CATMULLROM
+				, colorSpace, nullptr );
+
+			if ( !resized )
+			{
+				CU_LoaderError( "Image couldn't be resized" );
+			}
+
+			dst += dstLayerSize;
+			src += srcLayerSize;
+		}
+
+		return result;
+	}
+
+	Image & Image::resample( Size const & size )
+	{
+		resample( size, m_buffer, m_layout );
 		CU_CheckInvariants();
 		return *this;
 	}

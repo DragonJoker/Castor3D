@@ -48,9 +48,9 @@ namespace castor3d
 				ashes::FrameBufferPtr frameBuffer;
 			};
 			ashes::RenderPass const & m_renderPass;
-			CommandsSemaphore m_commands;
 			SamplerResPtr m_sampler;
 			std::array< FrameBuffer, 6u > m_frameBuffers;
+			CommandsSemaphore m_commands;
 		};
 
 	public:
