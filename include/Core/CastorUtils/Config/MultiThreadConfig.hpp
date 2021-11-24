@@ -8,6 +8,8 @@ See LICENSE file in root folder
 
 #pragma warning( push )
 #pragma warning( disable:4365 )
+#include <cassert>
+#include <atomic>
 #include <thread>
 #include <mutex>
 #include <condition_variable>
@@ -15,6 +17,28 @@ See LICENSE file in root folder
 
 namespace castor
 {
+	template< typename MutexT >
+	struct CheckedMutexT
+	{
+		void lock()const
+		{
+			assert( !m_locked.exchange( true ) );
+			m_mutex.lock();
+		}
+
+		void unlock()const
+		{
+			assert( m_locked.exchange( false ) );
+			m_mutex.unlock();
+		}
+
+	private:
+		mutable std::atomic_bool m_locked;
+		mutable MutexT m_mutex;
+	};
+
+	using CheckedMutex = CheckedMutexT< std::mutex >;
+
 	template< typename Lockable >
 	std::unique_lock< Lockable > makeUniqueLock( Lockable & lockable )
 	{

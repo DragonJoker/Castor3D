@@ -6,6 +6,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 
 #include <CastorUtils/Miscellaneous/BitSize.hpp>
+#include <CastorUtils/Miscellaneous/Hash.hpp>
 #include <CastorUtils/Graphics/ImageCache.hpp>
 #include <CastorUtils/Graphics/PixelBufferBase.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
@@ -837,20 +838,17 @@ namespace castor3d
 		, castor::PxBufferBaseUPtr buffer
 		, bool isStatic )
 	{
-		ashes::ImageCreateInfo createInfo
-		{
-			0u,
-			( buffer->getHeight() <= 1u && buffer->getWidth() > 1u
+		ashes::ImageCreateInfo createInfo{ 0u
+			, ( buffer->getHeight() <= 1u && buffer->getWidth() > 1u
 				? VK_IMAGE_TYPE_1D
-				: VK_IMAGE_TYPE_2D ),
-			VK_FORMAT_UNDEFINED,
-			{ buffer->getWidth(), buffer->getHeight(), 1u },
-			uint32_t( castor::getBitSize( std::min( buffer->getWidth(), buffer->getHeight() ) ) ),
-			1u,
-			VK_SAMPLE_COUNT_1_BIT,
-			VK_IMAGE_TILING_OPTIMAL,
-			VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT,
-		};
+				: VK_IMAGE_TYPE_2D )
+			, VK_FORMAT_UNDEFINED
+			, { buffer->getWidth(), buffer->getHeight(), 1u }
+			, uint32_t( castor::getBitSize( std::min( buffer->getWidth(), buffer->getHeight() ) ) )
+			, 1u// TODO: Support array layers: buffer->getLayers()
+			, VK_SAMPLE_COUNT_1_BIT
+			, VK_IMAGE_TILING_OPTIMAL
+			, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT };
 		log::debug << ( cuT( "Creating " ) + name + cuT( " texture layout.\n" ) );
 		auto texture = std::make_shared < TextureLayout >( *engine.getRenderSystem()
 			, createInfo
@@ -1404,16 +1402,12 @@ namespace castor3d
 			, ( getDefaultView().getLevelCount() > 1u
 				? getDefaultView().getLevelCount()
 				: m_info->mipLevels ) );
+		eraseViews( m_info->mipLevels, m_arrayView );
+		eraseViews( m_info->mipLevels, m_cubeView );
+		eraseViews( m_info->mipLevels, m_sliceView );
 
 		if ( mipLevels > 1u )
 		{
-			if ( m_info->mipLevels != mipLevels )
-			{
-				eraseViews( m_info->mipLevels, m_arrayView );
-				eraseViews( m_info->mipLevels, m_cubeView );
-				eraseViews( m_info->mipLevels, m_sliceView );
-			}
-
 			m_info->usage |= VK_IMAGE_USAGE_TRANSFER_DST_BIT;
 			m_info->usage |= VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
 		}

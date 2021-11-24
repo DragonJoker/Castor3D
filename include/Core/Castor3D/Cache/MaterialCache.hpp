@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/Cache/CacheModule.hpp"
 #include "Castor3D/Material/MaterialModule.hpp"
+#include "Castor3D/Material/Pass/PassModule.hpp"
+#include "Castor3D/Material/Texture/TextureModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBufferModule.hpp"
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBufferModule.hpp"
@@ -115,9 +117,9 @@ namespace castor
 		 *\param[out]	names	La liste de noms
 		 */
 		C3D_API void getNames( StringArray & names );
-		C3D_API void registerPass( castor3d::Pass & pass );
+		C3D_API bool registerPass( castor3d::Pass & pass );
 		C3D_API void unregisterPass( castor3d::Pass & pass );
-		C3D_API void registerUnit( castor3d::TextureUnit & unit );
+		C3D_API bool registerUnit( castor3d::TextureUnit & unit );
 		C3D_API void unregisterUnit( castor3d::TextureUnit & unit );
 		/**
 		 *\~english
@@ -161,6 +163,8 @@ namespace castor
 		castor3d::MaterialRPtr m_defaultMaterial{};
 		castor3d::PassBufferSPtr m_passBuffer;
 		castor3d::TextureConfigurationBufferSPtr m_textureBuffer;
+		std::vector< castor3d::Pass * > m_pendingPasses;
+		std::vector< castor3d::TextureUnit * > m_pendingUnits;
 	};
 }
 

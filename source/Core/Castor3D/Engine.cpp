@@ -117,6 +117,7 @@ namespace castor3d
 			, castor::ResourceInitialiserT< SceneCache >{}
 			, castor::ResourceCleanerT< SceneCache >{} );
 		m_targetCache = std::make_unique< RenderTargetCache >( *this );
+		m_textureCache = std::make_unique< TextureUnitCache >( *this );
 
 		if ( !castor::File::directoryExists( getEngineDirectory() ) )
 		{
@@ -277,6 +278,12 @@ namespace castor3d
 			{
 				postEvent( makeCpuCleanupEvent( *m_defaultSampler.lock() ) );
 			}
+
+			postEvent( makeCpuFunctorEvent( EventType::ePostRender
+				, [this]()
+				{
+					m_textureCache->clear();
+				} ) );
 
 			m_renderLoop.reset();
 
@@ -612,14 +619,6 @@ namespace castor3d
 		}
 
 		m_additionalSections.erase( it );
-	}
-
-	void Engine::prepareTextures( Pass & pass )
-	{
-		pushCpuJob( [&pass]()
-			{
-				pass.prepareTextures();
-			} );
 	}
 
 	void Engine::pushCpuJob( castor::AsyncJobQueue::Job job )
