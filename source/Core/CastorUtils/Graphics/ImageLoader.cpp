@@ -48,7 +48,8 @@ namespace castor
 					buffer->flip();
 				}
 			}
-			else if ( generateMips )
+			else if ( generateMips
+				&& !isCompressed( image.getPixelFormat() ) )
 			{
 				buffer->generateMips();
 			}

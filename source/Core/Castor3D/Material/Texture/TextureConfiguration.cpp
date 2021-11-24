@@ -16,6 +16,16 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	bool operator==( TextureTransform const & lhs
+		, TextureTransform const & rhs )noexcept
+	{
+		return lhs.translate == rhs.translate
+			&& lhs.rotate == rhs.rotate
+			&& lhs.scale == rhs.scale;
+	}
+
+	//*********************************************************************************************
+
 	TextureConfiguration const TextureConfiguration::DiffuseTexture = []()
 	{
 		TextureConfiguration result;

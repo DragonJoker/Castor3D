@@ -318,7 +318,7 @@ namespace castor3d
 		if ( target )
 		{
 			target->initialise( device, queueData );
-			m_texture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
+			m_texture = std::make_shared< TextureLayout >( device.renderSystem
 				, target->getTexture().image
 				, target->getTexture().wholeViewId );
 			result = true;

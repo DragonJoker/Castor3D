@@ -113,12 +113,39 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Specifies the transformations for a texture.
+	*\~french
+	*\brief
+	*	Définit les transformations pour une texture.
+	*/
+	struct TextureTransform;
+	/**
+	*\~english
+	*\brief
+	*	The configuration of a texture in a pass.
+	*\~french
+	*\brief
+	*	La configuration d'une texture de passe.
+	*/
+	struct PassTextureConfig;
+	/**
+	*\~english
+	*\brief
 	*	Texture base class
 	*\~french
 	*\brief
 	*	Class de base d'une texture
 	*/
 	class TextureLayout;
+	/**
+	*\~english
+	*\brief
+	*	Texture source base data.
+	*\~french
+	*\brief
+	*	Données de base d'une source de texture.
+	*/
+	class TextureSourceInfo;
 	/**
 	*\~english
 	*\brief
@@ -206,6 +233,19 @@ namespace castor3d
 	using SamplerResPtr = SamplerCacheTraits::ElementObsT;
 
 	CU_DeclareCUSmartPtr( castor3d, SamplerCache, C3D_API );
+
+	struct TextureSourceInfoHasher
+	{
+		C3D_API size_t operator()( TextureSourceInfo const & value )const noexcept;
+	};
+
+	C3D_API bool operator==( TextureSourceInfo const & lhs
+		, TextureSourceInfo const & rhs )noexcept;
+	inline bool operator!=( TextureSourceInfo const & lhs
+		, TextureSourceInfo const & rhs )noexcept
+	{
+		return !( lhs == rhs );
+	}
 
 	//@}
 	//@}

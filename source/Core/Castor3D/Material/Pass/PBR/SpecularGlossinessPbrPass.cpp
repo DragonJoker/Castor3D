@@ -124,11 +124,7 @@ namespace castor3d
 			{
 				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
 
-				if ( !parsingContext.textureUnit )
-				{
-					CU_ParsingError( cuT( "No TextureUnit initialised." ) );
-				}
-				else if ( !params.empty() )
+				if ( !params.empty() )
 				{
 					uint32_t flags;
 					params[0]->get( flags );
@@ -186,11 +182,7 @@ namespace castor3d
 			{
 				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
 
-				if ( !parsingContext.textureUnit )
-				{
-					CU_ParsingError( cuT( "No TextureUnit initialised." ) );
-				}
-				else if ( params.empty() )
+				if ( params.empty() )
 				{
 					CU_ParsingError( cuT( "Missing parameter." ) );
 				}
@@ -205,11 +197,7 @@ namespace castor3d
 			{
 				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
 
-				if ( !parsingContext.textureUnit )
-				{
-					CU_ParsingError( cuT( "No TextureUnit initialised." ) );
-				}
-				else if ( params.empty() )
+				if ( params.empty() )
 				{
 					CU_ParsingError( cuT( "Missing parameter." ) );
 				}
@@ -224,11 +212,7 @@ namespace castor3d
 			{
 				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
 
-				if ( !parsingContext.textureUnit )
-				{
-					CU_ParsingError( cuT( "No TextureUnit initialised." ) );
-				}
-				else if ( params.empty() )
+				if ( params.empty() )
 				{
 					CU_ParsingError( cuT( "Missing parameter." ) );
 				}

@@ -135,6 +135,11 @@ namespace castor
 			result.resample( size );
 			return result;
 		}
+		CU_API static PxBufferBaseSPtr resample( Size const & size
+			, PxBufferBaseSPtr & buffer
+			, ImageLayout & layout );
+		CU_API static PxBufferBaseUPtr resample( Size const & size
+			, PxBufferBaseUPtr buffer );
 		/**
 		 *\~english
 		 *\brief		Fills all image pixels with the given colour

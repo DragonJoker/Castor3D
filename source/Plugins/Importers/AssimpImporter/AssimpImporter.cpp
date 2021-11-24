@@ -195,10 +195,11 @@ namespace C3dAssimp
 		{
 		public:
 			static void submit( aiMaterial const & material
+				, castor3d::SamplerRes sampler
 				, castor3d::MeshImporter const & importer
 				, castor3d::Pass & pass )
 			{
-				PassFiller vis{ material, importer, pass };
+				PassFiller vis{ material, sampler, importer, pass };
 				pass.accept( vis );
 				vis.finish();
 			}
@@ -224,10 +225,12 @@ namespace C3dAssimp
 			};
 
 			PassFiller( aiMaterial const & material
+				, castor3d::SamplerRes sampler
 				, castor3d::MeshImporter const & importer
 				, castor3d::Pass & result )
 				: castor3d::PassVisitor{ {} }
 				, m_material{ material }
+				, m_sampler{ sampler }
 				, m_importer{ importer }
 				, m_result{ result }
 			{
@@ -489,17 +492,14 @@ namespace C3dAssimp
 			{
 				if ( !info.name.empty() )
 				{
-					auto texture = m_importer.loadTexture( castor::Path{ info.name }
-						, pconfig
+					m_importer.loadTexture( m_sampler
+						, castor::Path{ info.name }
+						, { { {} }
+							, pconfig
+							, castor3d::TextureTransform{ { info.transform.mTranslation.x, info.transform.mTranslation.y, 0.0f }
+								, castor::Angle::fromRadians( info.transform.mRotation )
+								, { info.transform.mScaling.x, info.transform.mScaling.y, 1.0f } } }
 						, m_result );
-
-					if ( texture )
-					{
-						log::debug << cuT( "  Texture: [" ) << texture->toString() << cuT( "]" ) << std::endl;
-						texture->setTransform( { info.transform.mTranslation.x, info.transform.mTranslation.y, 0.0f }
-							, castor::Angle::fromRadians( info.transform.mRotation )
-							, { info.transform.mScaling.x, info.transform.mScaling.y, 1.0f } );
-					}
 				}
 			}
 
@@ -605,6 +605,7 @@ namespace C3dAssimp
 
 		private:
 			aiMaterial const & m_material;
+			castor3d::SamplerRes m_sampler;
 			castor3d::MeshImporter const & m_importer;
 			castor3d::Pass & m_result;
 			CommonTextureInfos m_texInfos{};
@@ -653,7 +654,8 @@ namespace C3dAssimp
 			return castor::Matrix4x4f{ castor::Matrix3x3f{ data.data() } };
 		}
 
-		void doProcessMaterialPass( Pass & pass
+		void doProcessMaterialPass( SamplerRes sampler
+			, Pass & pass
 			, aiMaterial const & aiMaterial
 			, AssimpImporter & importer )
 		{
@@ -668,7 +670,7 @@ namespace C3dAssimp
 				log::warn << "Switching from " << passFactory.getIdName( srcType ) << " to " << passFactory.getIdName( dstType ) << " pass type." << std::endl;
 			}
 
-			PassFiller::submit( aiMaterial, importer, pass );
+			PassFiller::submit( aiMaterial, sampler, importer, pass );
 
 			if ( !pass.getTextureUnits( TextureFlag::eOpacity ).empty()
 				&& pass.getAlphaFunc() == VkCompareOp::VK_COMPARE_OP_ALWAYS )
@@ -1087,7 +1089,8 @@ namespace C3dAssimp
 				, *scene.getEngine()
 				, scene.getPassesType() );
 			auto pass = result.lock()->createPass();
-			doProcessMaterialPass( *pass
+			doProcessMaterialPass( getEngine()->getDefaultSampler().lock()
+				, *pass
 				, aiMaterial
 				, *this );
 		}
