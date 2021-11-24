@@ -72,7 +72,8 @@ namespace castor3d
 		 *\param[in]	config	La configuration de la texture.
 		 *\return		L'unité de texture.
 		 */
-		C3D_API TextureUnitSPtr loadTexture( castor::Path const & path
+		C3D_API TextureSourceInfo loadTexture( castor3d::SamplerRes sampler
+			, castor::Path const & path
 			, TextureConfiguration const & config )const;
 		/**
 		 *\~english
@@ -88,8 +89,9 @@ namespace castor3d
 		 *\param[in]	pass	La passe.
 		 *\return		\p false en cas d'erreur.
 		 */
-		C3D_API TextureUnitSPtr loadTexture( castor::Path const & path
-			, TextureConfiguration const & config
+		C3D_API void loadTexture( castor3d::SamplerRes sampler
+			, castor::Path const & path
+			, PassTextureConfig const & config
 			, Pass & pass )const;
 		/**
 		 *\~english

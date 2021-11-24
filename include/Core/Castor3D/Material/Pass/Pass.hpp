@@ -6,7 +6,8 @@ See LICENSE file in root folder
 
 #include "PassModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
-#include "Castor3D/Material/Texture/TextureModule.hpp"
+#include "Castor3D/Material/Texture/TextureConfiguration.hpp"
+#include "Castor3D/Material/Texture/TextureSourceInfo.hpp"
 
 #include "Castor3D/Material/Pass/SubsurfaceScattering.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
@@ -22,6 +23,7 @@ See LICENSE file in root folder
 #pragma warning( push )
 #pragma warning( disable:4365 )
 #include <atomic>
+#include <unordered_map>
 #pragma warning( pop )
 
 namespace castor3d
@@ -86,16 +88,17 @@ namespace castor3d
 		 *\brief		Ajoute une unité de texture.
 		 *\param[in]	unit	L'unité de texture.
 		 */
-		C3D_API void addTextureUnit( TextureUnitSPtr unit );
+		C3D_API void registerTexture( TextureSourceInfo sourceInfo
+			, PassTextureConfig configuration );
 		/**
 		 *\~english
-		 *\brief		Removes the TextureUnit at the given index.
-		 *\param[in]	index	the index of the TextureUnit to remove.
+		 *\brief		adds a texture unit.
+		 *\param[in]	unit	The texture unit.
 		 *\~french
-		 *\brief		Retire la TextureUnit à l'index donné.
-		 *\param[in]	index	L'index de la TextureUnit à retirer.
+		 *\brief		Ajoute une unité de texture.
+		 *\param[in]	unit	L'unité de texture.
 		 */
-		C3D_API void removeTextureUnit( uint32_t index );
+		C3D_API void unregisterTexture( TextureSourceInfo sourceInfo );
 		/**
 		 *\~english
 		 *\brief		Retrieves the TextureUnit at the given index.
@@ -241,6 +244,11 @@ namespace castor3d
 		C3D_API TextureUnitPtrArray getTextureUnits( TextureFlags mask = TextureFlag::eAll )const;
 		C3D_API uint32_t getTextureUnitsCount( TextureFlags mask = TextureFlag::eAll )const;
 		C3D_API TextureFlagsArray getTexturesMask( TextureFlags mask = TextureFlag::eAll )const;
+
+		TextureSourceMap & getSources()
+		{
+			return m_sources;
+		}
 
 		TextureFlags const & getTextures()const
 		{
@@ -588,16 +596,6 @@ namespace castor3d
 
 	private:
 		void onSssChanged( SubsurfaceScattering const & sss );
-		TextureUnitSPtr doMergeImages( castor::Image const & lhs
-			, TextureConfiguration const & lhsConfig
-			, uint32_t lhsSrcMask
-			, uint32_t lhsDstMask
-			, castor::Image const & rhs
-			, TextureConfiguration const & rhsConfig
-			, uint32_t rhsSrcMask
-			, uint32_t rhsDstMask
-			, castor::String const & name
-			, TextureConfiguration resultConfig );
 		void doJoinNmlHgt( TextureUnitPtrArray & result );
 		void doJoinEmsOcc( TextureUnitPtrArray & result );
 		virtual void doPrepareTextures( TextureUnitPtrArray & result ) = 0;
@@ -636,7 +634,7 @@ namespace castor3d
 		bool m_implicit{ false };
 		bool m_automaticShader{ true };
 		std::atomic_bool m_texturesReduced{ false };
-		mutable castor::SpinMutex m_lockTextures;
+		TextureSourceMap m_sources;
 		castor::GroupChangeTracked< float > m_opacity;
 		castor::GroupChangeTracked< castor::RangedValue< uint32_t > > m_bwAccumulationOperator;
 		castor::GroupChangeTracked< float > m_emissive;

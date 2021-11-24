@@ -58,6 +58,10 @@ namespace castor
 	 *\return		\p true si le format donné est un format en nombres flottants.
 	 */
 	inline constexpr bool isFloatingPoint( PixelFormat format );
+	inline constexpr bool isFloatingPoint( VkFormat format )
+	{
+		return isFloatingPoint( PixelFormat( format ) );
+	};
 	/**
 	 *\~english
 	 *\return		\p true if the given pixel format is a compressed one.

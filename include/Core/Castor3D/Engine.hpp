@@ -11,6 +11,7 @@ See LICENSE file in root folder
 #include "Castor3D/Cache/PluginCache.hpp"
 #include "Castor3D/Cache/ShaderCache.hpp"
 #include "Castor3D/Cache/TargetCache.hpp"
+#include "Castor3D/Cache/TextureCache.hpp"
 #include "Castor3D/Event/Frame/FrameEventModule.hpp"
 #include "Castor3D/Event/UserInput/UserInputEventModule.hpp"
 #include "Castor3D/Material/Pass/PassModule.hpp"
@@ -261,15 +262,6 @@ namespace castor3d
 		 *\param[in]	name		Le nom d'enregistrement.
 		 */
 		C3D_API void unregisterSections( castor::String const & name );
-		/**
-		 *\~english
-		 *\brief		Enqueues the given pass textures preparation.
-		 *\param[in]	pass	The pass for which textures need to be prepared.
-		 *\~french
-		 *\brief		Met dans la file la préparation des textures de la passe donnée.
-		 *\param[in]	pass	La passe dont les textures doivent être préparées.
-		 */
-		C3D_API void prepareTextures( Pass & pass );
 		/**
 		 *\~english
 		 *\brief		Enqueues the given CPU job.
@@ -636,6 +628,7 @@ namespace castor3d
 		std::map< RenderWindow const *, UserInputListenerSPtr > m_windowInputListeners;
 		UserInputListenerSPtr m_userInputListener;
 		DECLARE_CACHE_MEMBER( target, RenderTarget );
+		DECLARE_CACHE_MEMBER( texture, TextureUnit );
 		castor::FontCache m_fontCache;
 		castor::ImageCache m_imageCache;
 		std::map< castor::String, castor::AttributeParsers > m_additionalParsers;

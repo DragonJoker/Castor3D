@@ -230,59 +230,56 @@ namespace castor3d
 		return result;
 	}
 
-	TextureUnitSPtr MeshImporter::loadTexture( castor::Path const & path
+	ashes::ImageCreateInfo getImageCreateInfo( Engine const & engine
+		, castor::Path const & relative
+		, castor::Path const & folder
+		, bool allowCompression )
+	{
+		ashes::ImageCreateInfo createInfo
+		{
+			0u,
+			VK_IMAGE_TYPE_2D,
+			VK_FORMAT_UNDEFINED,
+			{ 1u, 1u, 1u },
+			20u,
+			1u,
+			VK_SAMPLE_COUNT_1_BIT,
+			VK_IMAGE_TILING_OPTIMAL,
+			VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT,
+		};
+		return createInfo;
+	}
+
+	TextureSourceInfo MeshImporter::loadTexture( castor3d::SamplerRes sampler
+		, castor::Path const & path
 		, TextureConfiguration const & config )const
 	{
-		TextureUnitSPtr result;
 		castor::Path relative;
 		castor::Path folder;
 
-		if ( findImage( path, m_filePath, folder, relative ) )
+		if ( !findImage( path, m_filePath, folder, relative ) )
 		{
-			try
-			{
-				result = std::make_shared< TextureUnit >( *getEngine() );
-				result->setTexture( createTextureLayout( *getEngine()
-					, relative
-					, folder
-					, config.normalMask[0] == 0 ) );
-				result->setConfiguration( config );
-				return result;
-			}
-			catch ( castor::Exception & exc )
-			{
-				log::error << cuT( "Error encountered while loading texture file [" ) << path << cuT( "]: " ) << exc.what() << std::endl;
-			}
-			catch ( std::exception & exc )
-			{
-				log::error << cuT( "Error encountered while loading texture file [" ) << path << cuT( "]: " ) << exc.what() << std::endl;
-			}
-			catch ( ... )
-			{
-				log::error << cuT( "Error encountered while loading texture file [" ) << path << cuT( "]: Unknown error" ) << std::endl;
-			}
+			CU_Exception( "Couldn't find image at path [" + path + "]" );
 		}
 
-		return nullptr;
+		bool allowCompression = config.normalMask[0] == 0;
+		return TextureSourceInfo{ sampler
+			, folder
+			, relative
+			, allowCompression };
 	}
 
-	TextureUnitSPtr MeshImporter::loadTexture( castor::Path const & path
-		, TextureConfiguration const & config
+	void MeshImporter::loadTexture( castor3d::SamplerRes sampler
+		, castor::Path const & path
+		, PassTextureConfig const & config
 		, Pass & pass )const
 	{
-		auto result = loadTexture( path
+		pass.registerTexture( loadTexture( sampler, path, config.config )
 			, config );
-
-		if ( result )
-		{
-			pass.addTextureUnit( result );
-		}
-
-		return result;
 	}
 
 	bool MeshImporter::convertToNormalMap( castor::Path & path
-		, castor3d::TextureConfiguration & config )const
+		, TextureConfiguration & config )const
 	{
 		auto result = false;
 
