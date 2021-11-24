@@ -145,6 +145,15 @@ namespace GuiCommon
 			m_devicesList->Insert( gpu->getProperties().deviceName, count++ );
 		}
 
+		if ( renderer.gpus.size() > 1u )
+		{
+			m_devicesList->Show();
+		}
+		else
+		{
+			m_devicesList->Hide();
+		}
+
 		m_devicesList->Update();
 	}
 
@@ -166,15 +175,15 @@ namespace GuiCommon
 
 			doFillDevices( *m_currentRenderer );
 
-			if ( m_devicesList->GetCount() > 0 )
-			{
-				m_devicesList->Select( 0 );
-				doSelectDevice( false );
-			}
-
 			if ( next )
 			{
 				m_devicesList->SetFocus();
+			}
+
+			if ( m_devicesList->GetCount() > 0 )
+			{
+				m_devicesList->Select( 0 );
+				doSelectDevice( next && ( m_devicesList->GetCount() == 1 ) );
 			}
 		}
 		else if ( next )
