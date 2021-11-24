@@ -110,6 +110,7 @@ namespace castor3d
 	public:
 		SceneSPtr scene{};
 		RenderWindowDesc window{};
+		bool inWindow{};
 		SceneNodeSPtr sceneNode{};
 		GeometrySPtr geometry{};
 		MeshResPtr mesh{};
@@ -126,6 +127,7 @@ namespace castor3d
 		SamplerRes ownSampler{};
 		TargetType targetType{};
 		RenderTargetSPtr renderTarget{};
+		RenderTargetSPtr textureRenderTarget{};
 		PassSPtr pass{};
 		bool createPass{ true };
 		uint32_t unitIndex{};
@@ -138,8 +140,6 @@ namespace castor3d
 			, VK_SAMPLE_COUNT_1_BIT
 			, VK_IMAGE_TILING_OPTIMAL
 			, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT };
-		TextureUnitSPtr textureUnit{};
-		bool createUnit{ true };
 		ShaderProgramSPtr shaderProgram{};
 		castor::PxBufferBaseSPtr buffer{};
 		castor::Path folder{};
