@@ -387,16 +387,6 @@ namespace castor3d
 		m_dirty = true;
 	}
 
-	bool Pass::needsGammaCorrection()const
-	{
-		return m_textureUnits.end() != std::find_if( m_textureUnits.begin()
-			, m_textureUnits.end()
-			, []( TextureUnitSPtr unit )
-			{
-				return unit->getConfiguration().needsGammaCorrection != 0u;
-			} );
-	}
-
 	TextureUnitPtrArray Pass::getTextureUnits( TextureFlags mask )const
 	{
 		return castor3d::getTextureUnits( m_textureUnits, mask );
@@ -431,19 +421,18 @@ namespace castor3d
 		data.edgeFactors->g = getDepthFactor();
 		data.edgeFactors->b = getNormalFactor();
 		data.edgeFactors->a = getObjectFactor();
-		data.edgeColour->r = getEdgeColour().red();
-		data.edgeColour->g = getEdgeColour().green();
-		data.edgeColour->b = getEdgeColour().blue();
+		data.edgeColour->r = powf( getEdgeColour().red(), 2.2f );
+		data.edgeColour->g = powf( getEdgeColour().green(), 2.2f );
+		data.edgeColour->b = powf( getEdgeColour().blue(), 2.2f );
 		data.edgeColour->a = ( checkFlag( m_flags, PassFlag::eDrawEdge )
 			? getEdgeColour().alpha()
 			: 0.0f );
 		data.common->r = 0.0f;
 		data.common->g = getEmissive();
 		data.common->b = getAlphaValue();
-		data.common->a = needsGammaCorrection() ? 2.2f : 1.0f;
-		data.opacity->r = getTransmission()->x;
-		data.opacity->g = getTransmission()->y;
-		data.opacity->b = getTransmission()->z;
+		data.opacity->r = powf( getTransmission()->x, 2.2f );
+		data.opacity->g = powf( getTransmission()->y, 2.2f );
+		data.opacity->b = powf( getTransmission()->z, 2.2f );
 		data.opacity->a = getOpacity();
 		data.reflRefr->r = getRefractionRatio();
 		data.reflRefr->g = hasRefraction() ? 1.0f : 0.0f;

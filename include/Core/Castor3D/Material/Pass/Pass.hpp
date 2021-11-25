@@ -29,6 +29,11 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	using TextureSourceMap = std::unordered_map< TextureSourceInfo
+		, PassTextureConfig
+		, TextureSourceInfoHasher >;
+	using TextureSourceMapVT = TextureSourceMap::value_type;
+
 	class Pass
 		: public castor::OwnedBy< Material >
 	{
@@ -252,7 +257,6 @@ namespace castor3d
 		C3D_API bool hasOnlyAlphaBlending()const;
 		C3D_API bool hasAlphaTest()const;
 		C3D_API bool hasBlendAlphaTest()const;
-		C3D_API bool needsGammaCorrection()const;
 		C3D_API TextureUnitPtrArray getTextureUnits( TextureFlags mask = TextureFlag::eAll )const;
 		C3D_API uint32_t getTextureUnitsCount( TextureFlags mask = TextureFlag::eAll )const;
 		C3D_API TextureFlagsArray getTexturesMask( TextureFlags mask = TextureFlag::eAll )const;

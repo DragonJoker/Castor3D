@@ -96,7 +96,7 @@ namespace castor
 		/**@}*/
 
 	private:
-		std::atomic_bool m_initialised;
+		std::atomic_bool m_initialised{ false };
 	};
 	/**
 	*\~english

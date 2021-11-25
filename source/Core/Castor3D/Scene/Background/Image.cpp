@@ -125,6 +125,7 @@ namespace castor3d
 			|| m_texture->getPixelFormat() == VK_FORMAT_R16G16_SFLOAT
 			|| m_texture->getPixelFormat() == VK_FORMAT_R16G16B16_SFLOAT
 			|| m_texture->getPixelFormat() == VK_FORMAT_R16G16B16A16_SFLOAT;
+		m_srgb = isSRGBFormat( convert( m_texture->getPixelFormat() ) );
 		return m_texture->initialise( device, *data );
 	}
 

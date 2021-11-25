@@ -31,16 +31,13 @@ namespace castor3d
 
 			C3D_API sdw::Vec3 getDiffuse( sdw::ShaderWriter & writer
 				, sdw::Vec4 const & sampled
-				, sdw::Vec3 const & diffuse
-				, sdw::Float gamma )const;
+				, sdw::Vec3 const & diffuse )const;
 			C3D_API sdw::Vec3 getAlbedo( sdw::ShaderWriter & writer
 				, sdw::Vec4 const & sampled
-				, sdw::Vec3 const & diffuse
-				, sdw::Float gamma )const;
+				, sdw::Vec3 const & diffuse )const;
 			C3D_API sdw::Vec3 getEmissive( sdw::ShaderWriter & writer
 				, sdw::Vec4 const & sampled
-				, sdw::Vec3 const & emissive
-				, sdw::Float gamma )const;
+				, sdw::Vec3 const & emissive )const;
 			C3D_API sdw::Vec3 getSpecular( sdw::ShaderWriter & writer
 				, sdw::Vec4 const & sampled
 				, sdw::Vec3 const & specular )const;
@@ -87,9 +84,6 @@ namespace castor3d
 			sdw::Vec3 getVec3( sdw::ShaderWriter & writer
 				, sdw::Vec4 const & sampled
 				, sdw::Float const & mask )const;
-			sdw::Vec3 removeGamma( sdw::ShaderWriter & writer
-				, sdw::Vec3 const & srgb
-				, sdw::Float const & gamma )const;
 
 		private:
 			using sdw::StructInstance::getMember;
@@ -134,7 +128,6 @@ namespace castor3d
 			sdw::Float hgtEnbl;
 			sdw::Float hgtMask;
 			sdw::Float hgtFact;
-			sdw::UInt needsGC;
 			sdw::Float fneedYI;
 			sdw::UInt needsYI;
 		};

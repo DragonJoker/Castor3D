@@ -84,9 +84,8 @@ namespace castor3d
 			, hgtEnbl{ hgtFcr.x() }
 			, hgtMask{ hgtFcr.y() }
 			, hgtFact{ hgtFcr.z() }
-			, needsGC{ writer.cast< sdw::UInt >( mscVls.x() ) }
-			, fneedYI{ mscVls.y() }
-			, needsYI{ writer.cast< sdw::UInt >( mscVls.y() ) }
+			, fneedYI{ mscVls.x() }
+			, needsYI{ writer.cast< sdw::UInt >( mscVls.x() ) }
 		{
 		}
 
@@ -119,32 +118,23 @@ namespace castor3d
 
 		sdw::Vec3 TextureConfigData::getDiffuse( sdw::ShaderWriter & writer
 			, sdw::Vec4 const & sampled
-			, sdw::Vec3 const & diffuse
-			, sdw::Float gamma )const
+			, sdw::Vec3 const & diffuse )const
 		{
-			return diffuse * removeGamma( writer
-				, getVec3( writer, sampled, colMask )
-				, gamma );
+			return diffuse * getVec3( writer, sampled, colMask );
 		}
 
 		sdw::Vec3 TextureConfigData::getAlbedo( sdw::ShaderWriter & writer
 			, sdw::Vec4 const & sampled
-			, sdw::Vec3 const & albedo
-			, sdw::Float gamma )const
+			, sdw::Vec3 const & albedo )const
 		{
-			return albedo * removeGamma( writer
-				, getVec3( writer, sampled, colMask )
-				, gamma );
+			return albedo * getVec3( writer, sampled, colMask );
 		}
 
 		sdw::Vec3 TextureConfigData::getEmissive( sdw::ShaderWriter & writer
 			, sdw::Vec4 const & sampled
-			, sdw::Vec3 const & emissive
-			, sdw::Float gamma )const
+			, sdw::Vec3 const & emissive )const
 		{
-			return emissive * removeGamma( writer
-				, getVec3( writer, sampled, emsMask )
-				, gamma );
+			return emissive * getVec3( writer, sampled, emsMask );
 		}
 
 		sdw::Vec3 TextureConfigData::getSpecular( sdw::ShaderWriter & writer
@@ -247,15 +237,6 @@ namespace castor3d
 			return writer.ternary( mask == 0.0_f
 				, sampled.rgb()
 				, sampled.gba() );
-		}
-
-		sdw::Vec3 TextureConfigData::removeGamma( sdw::ShaderWriter & writer
-			, sdw::Vec3 const & srgb
-			, sdw::Float const & gamma )const
-		{
-			return mix( srgb
-				, pow( max( srgb, vec3( 0.0_f, 0.0_f, 0.0_f ) ), vec3( gamma ) )
-				, vec3( writer.cast< sdw::Float >( needsGC ) ) );
 		}
 
 		void TextureConfigData::convertUV( sdw::ShaderWriter & writer

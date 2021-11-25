@@ -590,8 +590,6 @@ namespace castor3d
 				{
 					auto material = writer.declLocale( "material"
 						, materials.getMaterial( in.material ) );
-					auto gamma = writer.declLocale( "gamma"
-						, material.gamma );
 					auto normal = writer.declLocale( "normal"
 						, normalize( in.normal ) );
 					auto lightMat = lightingModel->declMaterial( "lightMat" );
@@ -609,7 +607,6 @@ namespace castor3d
 							, in.texture );
 						lightingModel->computeMapDiffuseContributions( flags.passFlags
 							, filterTexturesFlags( flags.textures )
-							, gamma
 							, textureConfigs
 							, c3d_maps
 							, texCoord

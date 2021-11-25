@@ -33,7 +33,7 @@ namespace castor
 		}
 
 	private:
-		mutable std::atomic_bool m_locked;
+		mutable std::atomic_bool m_locked{ false };
 		mutable MutexT m_mutex;
 	};
 

@@ -54,7 +54,6 @@ namespace castor3d::shader
 		sdw::Vec3 transmission;
 		sdw::Float emissive;
 		sdw::Float alphaRef;
-		sdw::Float gamma;
 		sdw::Float refractionRatio;
 		sdw::Int hasRefraction;
 		sdw::Int hasReflection;
