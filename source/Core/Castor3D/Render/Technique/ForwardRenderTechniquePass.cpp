@@ -158,8 +158,6 @@ namespace castor3d
 					, materials.getMaterial( in.material ) );
 				auto opacity = writer.declLocale( "opacity"
 					, material.opacity );
-				auto gamma = writer.declLocale( "gamma"
-					, material.gamma );
 				auto emissive = writer.declLocale( "emissive"
 					, vec3( material.emissive ) );
 				auto lightMat = lightingModel->declMaterial( "lightMat" );
@@ -184,7 +182,6 @@ namespace castor3d
 					, in.texture );
 				lightingModel->computeMapContributions( flags.passFlags
 					, filterTexturesFlags( flags.textures )
-					, gamma
 					, textureConfigs
 					, c3d_maps
 					, texCoord
@@ -292,7 +289,7 @@ namespace castor3d
 
 				if ( getFogType( flags.sceneFlags ) != FogType::eDisabled )
 				{
-					pxl_fragColor = fog.apply( c3d_sceneData.getBackgroundColour( utils, gamma )
+					pxl_fragColor = fog.apply( c3d_sceneData.getBackgroundColour( utils )
 						, pxl_fragColor
 						, length( in.viewPosition )
 						, in.viewPosition.y()

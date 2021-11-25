@@ -187,8 +187,6 @@ namespace castor3d
 					, in.texture );
 				auto alpha = writer.declLocale( "alpha"
 					, material.opacity );
-				auto gamma = writer.declLocale( "gamma"
-					, material.gamma );
 				auto emissive = writer.declLocale( "emissive"
 					, vec3( material.emissive ) );
 				auto lightMat = lightingModel->declMaterial( "lightMat" );
@@ -206,7 +204,6 @@ namespace castor3d
 
 				lightingModel->computeMapContributions( flags.passFlags
 					, filterTexturesFlags( flags.textures )
-					, gamma
 					, textureConfigs
 					, c3d_maps
 					, texCoord

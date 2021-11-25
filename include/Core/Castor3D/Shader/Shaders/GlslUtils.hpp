@@ -80,7 +80,6 @@ namespace castor3d::shader
 			, std::string const & name
 			, shader::TextureConfigData const & config
 			, sdw::SampledImage2DRgba32 const & map
-			, sdw::Float const & gamma
 			, sdw::Vec3 const & texCoords
 			, sdw::Vec3 & emissive
 			, sdw::Float & opacity
@@ -93,7 +92,6 @@ namespace castor3d::shader
 			, std::string const & name
 			, shader::TextureConfigData const & config
 			, sdw::SampledImage2DRgba32 const & map
-			, sdw::Float const & gamma
 			, sdw::Vec3 const & texCoords
 			, sdw::Vec3 & emissive
 			, sdw::Float & opacity

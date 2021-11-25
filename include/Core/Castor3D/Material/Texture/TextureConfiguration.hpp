@@ -83,7 +83,6 @@ namespace castor3d
 		*/
 		/**@{*/
 		float normalGMultiplier{ 1.0f };
-		uint32_t needsGammaCorrection{ 0u };
 		uint32_t needsYInversion{ 0u };
 		TextureTransform transform;
 		TextureSpace textureSpace{ TextureSpace::eColour };
@@ -150,11 +149,6 @@ namespace castor3d
 		ashes::ImageCreateInfo imageInfo{ {} };
 		TextureConfiguration config{};
 	};
-
-	using TextureSourceMap = std::unordered_map< TextureSourceInfo
-		, PassTextureConfig
-		, TextureSourceInfoHasher >;
-	using TextureSourceMapVT = TextureSourceMap::value_type;
 }
 
 #endif

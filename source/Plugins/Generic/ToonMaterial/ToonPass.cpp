@@ -261,9 +261,9 @@ namespace toon
 	{
 		auto data = buffer.getData( getId() );
 
-		data.colourDiv->r = getDiffuse().red();
-		data.colourDiv->g = getDiffuse().green();
-		data.colourDiv->b = getDiffuse().blue();
+		data.colourDiv->r = powf( getDiffuse().red(), 2.2f );
+		data.colourDiv->g = powf( getDiffuse().green(), 2.2f );
+		data.colourDiv->b = powf( getDiffuse().blue(), 2.2f );
 		data.colourDiv->a = getAmbient();
 		data.specDiv->r = getSpecular().red();
 		data.specDiv->g = getSpecular().green();
@@ -333,9 +333,9 @@ namespace toon
 	{
 		auto data = buffer.getData( getId() );
 
-		data.colourDiv->r = getDiffuse().red();
-		data.colourDiv->g = getDiffuse().green();
-		data.colourDiv->b = getDiffuse().blue();
+		data.colourDiv->r = powf( getDiffuse().red(), 2.2f );
+		data.colourDiv->g = powf( getDiffuse().green(), 2.2f );
+		data.colourDiv->b = powf( getDiffuse().blue(), 2.2f );
 		data.colourDiv->a = getAmbient();
 		data.specDiv->r = getSpecular().red();
 		data.specDiv->g = getSpecular().green();

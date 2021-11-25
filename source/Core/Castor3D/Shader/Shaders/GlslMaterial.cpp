@@ -25,7 +25,6 @@ namespace castor3d::shader
 		, transmission{ m_opacityTransmission.xyz() }
 		, emissive{ m_common.y() }
 		, alphaRef{ m_common.z() }
-		, gamma{ m_common.w() }
 		, refractionRatio{ m_reflRefr.x() }
 		, hasRefraction{ writer.cast< sdw::Int >( m_reflRefr.y() ) }
 		, hasReflection{ writer.cast< sdw::Int >( m_reflRefr.z() ) }

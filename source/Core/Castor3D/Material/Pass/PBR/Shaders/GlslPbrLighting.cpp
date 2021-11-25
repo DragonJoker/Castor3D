@@ -31,14 +31,13 @@ namespace castor3d::shader
 			, PassFlags const & passFlags
 			, TextureFlags const & flags
 			, sdw::Vec4 const & sampled
-			, sdw::Float const & gamma
 			, TextureConfigData const & config
 			, MaterialTextureMods & mods
 			, PbrLightMaterial & pbrLightMat )
 		{
 			if ( checkFlag( flags, TextureFlag::eAlbedo ) )
 			{
-				pbrLightMat.albedo = config.getAlbedo( writer, sampled, pbrLightMat.albedo, gamma );
+				pbrLightMat.albedo = config.getAlbedo( writer, sampled, pbrLightMat.albedo );
 				mods.hasAlbedo = true;
 			}
 
@@ -221,7 +220,6 @@ namespace castor3d::shader
 
 	void PbrLightingModel::computeMapContributions( PassFlags const & passFlags
 		, FilteredTextureFlags const & textures
-		, sdw::Float const & gamma
 		, TextureConfigurations const & textureConfigs
 		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 		, sdw::Vec3 & texCoords
@@ -263,7 +261,6 @@ namespace castor3d::shader
 						, name
 						, config
 						, maps[textureIt.first]
-						, gamma
 						, texCoords
 						, emissive
 						, opacity
@@ -276,7 +273,6 @@ namespace castor3d::shader
 					, passFlags
 					, textureIt.second.flags
 					, sampled
-					, gamma
 					, config
 					, mods
 					, pbrLightMat );
@@ -343,7 +339,6 @@ namespace castor3d::shader
 
 	void PbrLightingModel::computeMapDiffuseContributions( PassFlags const & passFlags
 		, FilteredTextureFlags const & textures
-		, sdw::Float const & gamma
 		, TextureConfigurations const & textureConfigs
 		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 		, sdw::Vec3 const & texCoords
@@ -366,7 +361,6 @@ namespace castor3d::shader
 					, name
 					, config
 					, maps[textureIt.first]
-					, gamma
 					, texCoords
 					, emissive
 					, opacity
@@ -376,7 +370,6 @@ namespace castor3d::shader
 				, passFlags
 				, textureIt.second.flags
 				, sampled
-				, gamma
 				, config
 				, mods
 				, pbrLightMat );
