@@ -6,10 +6,11 @@ See LICENSE file in root folder
 
 #include "PassModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
-#include "Castor3D/Material/Texture/TextureConfiguration.hpp"
-#include "Castor3D/Material/Texture/TextureSourceInfo.hpp"
+#include "Castor3D/Scene/Animation/AnimationModule.hpp"
 
 #include "Castor3D/Material/Pass/SubsurfaceScattering.hpp"
+#include "Castor3D/Material/Texture/TextureConfiguration.hpp"
+#include "Castor3D/Material/Texture/TextureSourceInfo.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 
 #include <CastorUtils/Design/FlagCombination.hpp>
@@ -90,6 +91,17 @@ namespace castor3d
 		 */
 		C3D_API void registerTexture( TextureSourceInfo sourceInfo
 			, PassTextureConfig configuration );
+		/**
+		 *\~english
+		 *\brief		adds a texture unit.
+		 *\param[in]	unit	The texture unit.
+		 *\~french
+		 *\brief		Ajoute une unité de texture.
+		 *\param[in]	unit	L'unité de texture.
+		 */
+		C3D_API void registerTexture( TextureSourceInfo sourceInfo
+			, PassTextureConfig configuration
+			, AnimationUPtr animation );
 		/**
 		 *\~english
 		 *\brief		adds a texture unit.
@@ -598,6 +610,10 @@ namespace castor3d
 		void onSssChanged( SubsurfaceScattering const & sss );
 		void doJoinNmlHgt( TextureUnitPtrArray & result );
 		void doJoinEmsOcc( TextureUnitPtrArray & result );
+		void doAddUnit( TextureConfiguration const & config
+			, AnimationUPtr animation
+			, TextureUnitSPtr unit
+			, TextureUnitPtrArray & result );
 		virtual void doPrepareTextures( TextureUnitPtrArray & result ) = 0;
 
 		void updateFlag( PassFlag flag
@@ -635,6 +651,7 @@ namespace castor3d
 		bool m_automaticShader{ true };
 		std::atomic_bool m_texturesReduced{ false };
 		TextureSourceMap m_sources;
+		std::unordered_map< TextureSourceInfo, AnimationUPtr, TextureSourceInfoHasher > m_animations;
 		castor::GroupChangeTracked< float > m_opacity;
 		castor::GroupChangeTracked< castor::RangedValue< uint32_t > > m_bwAccumulationOperator;
 		castor::GroupChangeTracked< float > m_emissive;

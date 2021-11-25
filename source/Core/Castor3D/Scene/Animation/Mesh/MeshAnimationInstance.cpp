@@ -57,7 +57,7 @@ namespace castor3d
 					, static_cast< MeshAnimationKeyFrame const & >( *( *m_curr ) ).find( submesh.second.getSubmesh() )->second );
 			}
 
-			static_cast< Mesh & >( *m_meshAnimation.getOwner() ).updateContainers();
+			static_cast< Mesh & >( *m_meshAnimation.getAnimable() ).updateContainers();
 		}
 	}
 

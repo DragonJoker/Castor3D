@@ -132,6 +132,12 @@ namespace castor3d
 		//!\~french		Toutes les animations.
 		AnimationPtrStrMap m_animations;
 	};
+
+	template< typename AnimableHandlerT >
+	Engine & getEngine( AnimableT< AnimableHandlerT > const & animable )
+	{
+		return *animable.getOwner();
+	}
 }
 
 #include "Animable.inl"

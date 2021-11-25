@@ -2,6 +2,8 @@
 
 #include "CastorUtils/Design/ArrayView.hpp"
 
+CU_ImplementCUSmartPtr( castor, BoundingBox )
+
 namespace castor
 {
 	BoundingBox::BoundingBox()

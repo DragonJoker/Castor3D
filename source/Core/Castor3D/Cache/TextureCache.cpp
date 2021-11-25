@@ -43,16 +43,6 @@ namespace castor3d
 			mergeFactors( lhs.normalGMultiplier, rhs.normalGMultiplier, 1.0f );
 		}
 
-		TextureSourceInfo mergeSourceInfos( TextureSourceInfo const & lhs
-			, TextureSourceInfo const & rhs )
-		{
-			return TextureSourceInfo{ lhs.sampler()
-				, lhs.folder()
-				, castor::Path{ lhs.relative() + rhs.relative() }
-				, lhs.allowCompression()
-				, lhs.generateMips() };
-		}
-
 		castor::PxBufferBaseUPtr mergeBuffers( castor::PxBufferBaseUPtr lhsBuffer
 			, uint32_t const & lhsSrcMask
 			, uint32_t const & lhsDstMask
@@ -371,17 +361,17 @@ namespace castor3d
 		, uint32_t rhsSrcMask
 		, uint32_t rhsDstMask
 		, castor::String const & name
+		, TextureSourceInfo resultSourceInfo
 		, TextureConfiguration resultConfig )
 	{
 		// Prepare the resulting texture configuration.
-		auto resultInfo = mergeSourceInfos( lhsSourceInfo, rhsSourceInfo );
 		mergeConfigsBase( lhsConfig, resultConfig );
 		mergeConfigsBase( rhsConfig, resultConfig );
 
-		PassTextureConfig passConfig{ { {} }, resultConfig, {} };
+		PassTextureConfig passConfig{ { {} }, resultConfig };
 		TextureUnitSPtr result{};
 
-		if ( findUnit( *getEngine(), m_loadMtx, m_loaded, resultInfo, passConfig, result ) )
+		if ( findUnit( *getEngine(), m_loadMtx, m_loaded, resultSourceInfo, passConfig, result ) )
 		{
 			doMergeSources( lhsSourceInfo
 				, lhsConfig
@@ -391,7 +381,7 @@ namespace castor3d
 				, rhsConfig
 				, rhsSrcMask
 				, rhsDstMask
-				, resultInfo
+				, resultSourceInfo
 				, passConfig
 				, name
 				, *result );

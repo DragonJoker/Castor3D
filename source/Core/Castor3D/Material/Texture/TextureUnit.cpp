@@ -276,7 +276,7 @@ namespace castor3d
 	{
 		if ( !hasAnimation() )
 		{
-			addAnimation( std::make_unique< TextureAnimation >( *this, "Default" ) );
+			addAnimation( std::make_unique< TextureAnimation >( *getEngine(), "Default" ) );
 			m_animated = true;
 		}
 
@@ -293,13 +293,13 @@ namespace castor3d
 
 	TextureAnimation & TextureUnit::getAnimation()
 	{
-		CU_Require( m_animated );
+		CU_Require( hasAnimation() );
 		return doGetAnimation< TextureAnimation >( "Default" );
 	}
 
 	TextureAnimation const & TextureUnit::getAnimation()const
 	{
-		CU_Require( m_animated );
+		CU_Require( hasAnimation() );
 		return doGetAnimation< TextureAnimation >( "Default" );
 	}
 
