@@ -10,6 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Overlay/OverlayModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
+#include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleModule.hpp"
@@ -173,7 +174,7 @@ namespace castor3d
 		AnimatedObjectSPtr animMesh{};
 		AnimatedObjectSPtr animMovable{};
 		AnimatedObjectSPtr animTexture{};
-		TextureAnimation * textureAnimation{};
+		TextureAnimationUPtr textureAnimation{};
 		SceneBackgroundSPtr background{};
 		ParticleSystemSPtr particleSystem{};
 		SsaoConfig ssaoConfig{};

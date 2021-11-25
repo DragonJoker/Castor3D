@@ -63,6 +63,7 @@ namespace castor3d
 			, uint32_t rhsSrcMask
 			, uint32_t rhsDstMask
 			, castor::String const & name
+			, TextureSourceInfo resultSourceInfo
 			, TextureConfiguration resultConfig );
 
 	private:

@@ -1,19 +1,27 @@
 #include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
 
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
-
-using namespace castor;
+#include "Castor3D/Scene/Animation/AnimatedTexture.hpp"
 
 namespace castor3d
 {
-	TextureAnimation::TextureAnimation( TextureUnit & texture
-		, String const & name )
+	TextureAnimation::TextureAnimation( Engine & engine
+		, castor::String const & name )
 		: AnimationT< Engine >{ AnimationType::eTexture
-			, texture
+			, engine
 			, name }
 		, m_translate{}
 	{
 		m_length = castor::Milliseconds{ std::numeric_limits< int64_t >::max() };
+	}
+
+	void TextureAnimation::setAnimable( TextureUnit & unit )
+	{
+		for ( auto pending : m_pending )
+		{
+			static_cast< AnimatedTexture & >( *pending ).setTexture( unit );
+			pending->addAnimation( unit.getAnimation().getName() );
+		}
 	}
 
 	castor::Point3f TextureAnimation::getTranslate( castor::Milliseconds const & time )const

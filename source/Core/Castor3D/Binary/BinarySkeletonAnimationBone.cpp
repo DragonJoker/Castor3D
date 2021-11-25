@@ -44,7 +44,7 @@ namespace castor3d
 
 				if ( result )
 				{
-					auto bone = static_cast< Skeleton * >( obj.getOwner()->getOwner() )->findBone( name );
+					auto bone = static_cast< Skeleton * >( obj.getOwner()->getAnimable() )->findBone( name );
 
 					if ( bone )
 					{

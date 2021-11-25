@@ -95,10 +95,11 @@ namespace castor3d
 		return std::static_pointer_cast< AnimatedObject >( object );
 	}
 
-	AnimatedObjectSPtr AnimatedObjectGroup::addObject( TextureUnit & texture
+	AnimatedObjectSPtr AnimatedObjectGroup::addObject( TextureSourceInfo const & sourceInfo
+		, TextureConfiguration const & config
 		, Pass & pass )
 	{
-		auto object = std::make_shared< AnimatedTexture >( texture, pass );
+		auto object = std::make_shared< AnimatedTexture >( sourceInfo, config , pass );
 
 		if ( !addObject( object ) )
 		{

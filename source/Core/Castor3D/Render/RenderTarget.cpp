@@ -335,7 +335,8 @@ namespace castor3d
 		, QueueData const & queueData
 		, ProgressBar * progress )
 	{
-		if ( !m_initialised )
+		if ( !m_initialised
+			&& !m_initialising.exchange( true ) )
 		{
 			m_hdrConfigUbo = std::make_unique< HdrConfigUbo >( device );
 			m_culler = std::make_unique< FrustumCuller >( *getScene(), *getCamera() );
@@ -445,14 +446,19 @@ namespace castor3d
 				, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 
 			m_signalReady = device->createSemaphore( getName() + "Ready" );
+			m_initialising = false;
+		}
+
+		while ( m_initialising )
+		{
+			std::this_thread::sleep_for( 1_ms );
 		}
 	}
 
 	void RenderTarget::cleanup( RenderDevice const & device )
 	{
-		if ( m_initialised )
+		if ( m_initialised.exchange( false ) )
 		{
-			m_initialised = false;
 			m_signalReady.reset();
 			m_overlayRenderer.reset();
 			m_overlaysTimer.reset();

@@ -94,10 +94,11 @@ namespace castor3d
 		}
 
 		bool isMergeable( TextureSourceInfo const & source
-			, PassTextureConfig const & config )
+			, PassTextureConfig const & config
+			, AnimationUPtr const & animation )
 		{
 			return isPreparable( source, config )
-				&& config.transform == TextureTransform{};
+				&& !animation;
 		}
 
 		uint32_t & getMask( TextureConfiguration & config
@@ -106,17 +107,14 @@ namespace castor3d
 			return ( *reinterpret_cast< castor::Point2ui * >( reinterpret_cast< uint8_t * >( &config ) + offset ) )[0];
 		}
 
-		void addResult( TextureConfiguration const & config
-			, TextureUnitSPtr unit
-			, uint32_t & heightTextureIndex
-			, TextureUnitPtrArray & result )
+		TextureSourceInfo mergeSourceInfos( TextureSourceInfo const & lhs
+			, TextureSourceInfo const & rhs )
 		{
-			if ( config.heightMask[0] )
-			{
-				heightTextureIndex = uint32_t( result.size() );
-			}
-
-			result.push_back( unit );
+			return TextureSourceInfo{ lhs.sampler()
+				, lhs.folder()
+				, castor::Path{ lhs.relative() + rhs.relative() }
+				, lhs.allowCompression()
+				, lhs.generateMips() };
 		}
 	}
 
@@ -270,6 +268,16 @@ namespace castor3d
 		}
 
 		m_dirty = true;
+	}
+
+	void Pass::registerTexture( TextureSourceInfo sourceInfo
+		, PassTextureConfig configuration
+		, AnimationUPtr animation )
+	{
+		m_animations.emplace( sourceInfo
+			, std::move( animation ) );
+		registerTexture( std::move( sourceInfo )
+			, std::move( configuration ) );
 	}
 
 	void Pass::unregisterTexture( TextureSourceInfo sourceInfo )
@@ -490,19 +498,30 @@ namespace castor3d
 			auto & lhsIt = *sourcesLhs.begin();
 			auto & rhsIt = *sourcesRhs.begin();
 
+			auto lhsAnimIt = m_animations.find( lhsIt.first );
+			auto rhsAnimIt = m_animations.find( rhsIt.first );
+
+			auto lhsAnim = ( lhsAnimIt != m_animations.end()
+				? std::move( lhsAnimIt->second )
+				: nullptr );
+			auto rhsAnim = ( rhsAnimIt != m_animations.end()
+				? std::move( rhsAnimIt->second )
+				: nullptr );
+
 			if ( lhsIt.first == rhsIt.first )
 			{
-				addResult( lhsIt.second.config
+				doAddUnit( lhsIt.second.config
+					, std::move( lhsAnim )
 					, textureCache.getTexture( lhsIt.first, lhsIt.second )
-					, m_heightTextureIndex
 					, result );
 			}
 			else
 			{
-				if ( isMergeable( lhsIt.first, lhsIt.second )
-					&& isMergeable( rhsIt.first, rhsIt.second ) )
+				if ( isMergeable( lhsIt.first, lhsIt.second, lhsAnim )
+					&& isMergeable( rhsIt.first, rhsIt.second, rhsAnim ) )
 				{
 					log::debug << getOwner()->getName() << name << cuT( " - Merging textures." ) << std::endl;
+					auto resultSourceInfo = mergeSourceInfos( lhsIt.first, rhsIt.first );
 					TextureConfiguration resultConfig;
 					resultConfig.heightMask[0] = ( lhsIt.second.config.heightMask[0]
 						| rhsIt.second.config.heightMask[0] );
@@ -512,7 +531,8 @@ namespace castor3d
 						, rhsIt.second.config.heightFactor );
 					getMask( resultConfig, lhsMaskOffset ) = lhsDstMask;
 					getMask( resultConfig, rhsMaskOffset ) = rhsDstMask;
-					addResult( resultConfig
+					doAddUnit( resultConfig
+						, nullptr
 						, textureCache.mergeImages( lhsIt.first
 							, lhsIt.second.config
 							, getMask( lhsIt.second.config, lhsMaskOffset )
@@ -522,41 +542,47 @@ namespace castor3d
 							, getMask( rhsIt.second.config, rhsMaskOffset )
 							, rhsDstMask
 							, getOwner()->getName() + name
+							, resultSourceInfo
 							, resultConfig )
-						, m_heightTextureIndex
 						, result );
 				}
 				else
 				{
-					addResult( lhsIt.second.config
+					doAddUnit( lhsIt.second.config
+						, std::move( lhsAnim )
 						, textureCache.getTexture( lhsIt.first, lhsIt.second )
-						, m_heightTextureIndex
 						, result );
-					addResult( rhsIt.second.config
+					doAddUnit( rhsIt.second.config
+						, std::move( rhsAnim )
 						, textureCache.getTexture( rhsIt.first, rhsIt.second )
-						, m_heightTextureIndex
 						, result );
 				}
 			}
 		}
 		else
 		{
-			TextureUnitSPtr unit;
-
 			if ( !sourcesLhs.empty() )
 			{
 				auto & it = *sourcesLhs.begin();
-				addResult( it.second.config
+				auto animIt = m_animations.find( it.first );
+				auto anim = ( animIt != m_animations.end()
+					? std::move( animIt->second )
+					: nullptr );
+				doAddUnit( it.second.config
+					, std::move( anim )
 					, textureCache.getTexture( it.first, it.second )
-					, m_heightTextureIndex
 					, result );
 			}
 			else if ( !sourcesRhs.empty() )
 			{
 				auto & it = *sourcesRhs.begin();
-				addResult( it.second.config
+				auto animIt = m_animations.find( it.first );
+				auto anim = ( animIt != m_animations.end()
+					? std::move( animIt->second )
+					: nullptr );
+				doAddUnit( it.second.config
+					, std::move( anim )
 					, textureCache.getTexture( it.first, it.second )
-					, m_heightTextureIndex
 					, result );
 			}
 		}
@@ -602,5 +628,26 @@ namespace castor3d
 			, 0xFF000000
 			, cuT( "EmsOcc" )
 			, result );
+	}
+
+	void Pass::doAddUnit( TextureConfiguration const & config
+		, AnimationUPtr animation
+		, TextureUnitSPtr unit
+		, TextureUnitPtrArray & result )
+	{
+		if ( config.heightMask[0] )
+		{
+			m_heightTextureIndex = uint32_t( result.size() );
+		}
+
+		if ( animation && !unit->hasAnimation() )
+		{
+			auto anim = animation.get();
+			
+			unit->addAnimation( std::move( animation ) );
+			static_cast< TextureAnimation & >( *anim ).setAnimable( *unit );
+		}
+
+		result.push_back( unit );
 	}
 }

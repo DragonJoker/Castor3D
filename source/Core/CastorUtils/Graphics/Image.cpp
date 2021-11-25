@@ -23,6 +23,8 @@
 #pragma clang diagnostic pop
 #pragma warning( pop )
 
+CU_ImplementCUSmartPtr( castor, Image )
+
 namespace castor
 {
 	Image::Image( String const & name
