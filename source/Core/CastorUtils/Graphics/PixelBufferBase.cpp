@@ -18,6 +18,8 @@
 #pragma GCC diagnostic pop
 #pragma warning( pop )
 
+CU_ImplementCUSmartPtr( castor, PxBufferBase )
+
 namespace castor
 {
 	//*********************************************************************************************
@@ -700,7 +702,7 @@ namespace castor
 		, PixelFormat bufferFormat
 		, uint32_t bufferAlign )
 	{
-		return std::make_unique< PxBufferBase >( options
+		return castor::makeUnique< PxBufferBase >( options
 			, size
 			, wantedFormat
 			, layers

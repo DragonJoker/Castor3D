@@ -217,7 +217,7 @@ namespace castor3d
 
 		bool hasAnimation()const
 		{
-			return m_animated;
+			return m_animated || hasAnimation( "Default" );
 		}
 
 		TextureTransform const & getTransform()const

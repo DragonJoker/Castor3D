@@ -95,7 +95,8 @@ namespace castor3d
 		 *\param[in]	texture		La TextureUnit à partir duquel l'AnimatedObject est créé.
 		 *\param[in]	pass		La passe instanciant la texture.
 		 */
-		C3D_API AnimatedObjectSPtr addObject( TextureUnit & texture
+		C3D_API AnimatedObjectSPtr addObject( TextureSourceInfo const & sourceInfo
+			, TextureConfiguration const & config
 			, Pass & pass );
 		/**
 		 *\~english

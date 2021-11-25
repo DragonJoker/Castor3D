@@ -101,7 +101,7 @@ namespace castor3d
 
 				if ( result )
 				{
-					submesh = static_cast< Mesh const & >( *obj.getOwner()->getOwner() ).getSubmesh( id );
+					submesh = static_cast< Mesh const & >( *obj.getOwner()->getAnimable() ).getSubmesh( id );
 				}
 
 				break;

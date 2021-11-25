@@ -2,23 +2,29 @@
 
 namespace castor3d
 {
-	template< typename AnimableHanlerT >
-	AnimationT< AnimableHanlerT >::AnimationT( AnimationType type
-		, AnimableT< AnimableHanlerT > & animable
+	template< typename AnimableHandlerT >
+	AnimationT< AnimableHandlerT >::AnimationT( AnimationType type
+		, AnimableT< AnimableHandlerT > & animable
 		, castor::String const & name )
 		: castor::Named{ name }
-		, castor::OwnedBy< AnimableT< AnimableHanlerT > >{ animable }
+		, castor::OwnedBy< AnimableHandlerT >{ castor3d::getEngine( animable ) }
+		, m_animable{ &animable }
 		, m_type{ type }
 	{
 	}
-		
-	template< typename AnimableHanlerT >
-	AnimationT< AnimableHanlerT >::~AnimationT()
+
+	template< typename AnimableHandlerT >
+	AnimationT< AnimableHandlerT >::AnimationT( AnimationType type
+		, AnimableHandlerT & handler
+		, castor::String const & name )
+		: castor::Named{ name }
+		, castor::OwnedBy< AnimableHandlerT >{ handler }
+		, m_type{ type }
 	{
 	}
 	
-	template< typename AnimableHanlerT >
-	void AnimationT< AnimableHanlerT >::addKeyFrame( AnimationKeyFrameUPtr keyFrame )
+	template< typename AnimableHandlerT >
+	void AnimationT< AnimableHandlerT >::addKeyFrame( AnimationKeyFrameUPtr keyFrame )
 	{
 		auto it = std::lower_bound( m_keyframes.begin()
 			, m_keyframes.end()
@@ -32,8 +38,8 @@ namespace castor3d
 		updateLength();
 	}
 
-	template< typename AnimableHanlerT >
-	AnimationKeyFrameArray::iterator AnimationT< AnimableHanlerT >::find( castor::Milliseconds const & time )
+	template< typename AnimableHandlerT >
+	AnimationKeyFrameArray::iterator AnimationT< AnimableHandlerT >::find( castor::Milliseconds const & time )
 	{
 		return std::find_if( m_keyframes.begin()
 			, m_keyframes.end()
@@ -43,8 +49,8 @@ namespace castor3d
 			} );
 	}
 
-	template< typename AnimableHanlerT >
-	void AnimationT< AnimableHanlerT >::findKeyFrame( castor::Milliseconds const & time
+	template< typename AnimableHandlerT >
+	void AnimationT< AnimableHandlerT >::findKeyFrame( castor::Milliseconds const & time
 		, AnimationKeyFrameArray::iterator & prv
 		, AnimationKeyFrameArray::iterator & cur )const
 	{
@@ -67,8 +73,8 @@ namespace castor3d
 		CU_Ensure( prv != cur );
 	}
 
-	template< typename AnimableHanlerT >
-	void AnimationT< AnimableHanlerT >::updateLength()
+	template< typename AnimableHandlerT >
+	void AnimationT< AnimableHandlerT >::updateLength()
 	{
 		for ( auto const & keyFrame : m_keyframes )
 		{
