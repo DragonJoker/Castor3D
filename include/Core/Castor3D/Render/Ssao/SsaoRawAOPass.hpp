@@ -114,7 +114,8 @@ namespace castor3d
 		struct Program
 		{
 			Program( RenderDevice const & device
-				, bool useNormalsBuffer );
+				, bool useNormalsBuffer
+				, castor::String const & prefix );
 
 			ShaderModule vertexShader;
 			ShaderModule pixelShader;
