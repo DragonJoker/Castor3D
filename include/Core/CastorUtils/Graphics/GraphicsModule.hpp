@@ -765,11 +765,11 @@ namespace castor
 	using ImageWriterPtr = std::unique_ptr< ImageWriterImpl >;
 	using PixelBuffer = PxBuffer< PixelFormat::eR8G8B8A8_UNORM >;
 
-	CU_DeclareSmartPtr( BoundingBox );
-	CU_DeclareSmartPtr( BoundingSphere );
-	CU_DeclareSmartPtr( Image );
-	CU_DeclareSmartPtr( Font );
-	CU_DeclareSmartPtr( PxBufferBase );
+	CU_DeclareCUSmartPtr( castor, BoundingBox, CU_API );
+	CU_DeclareCUSmartPtr( castor, BoundingSphere, CU_API );
+	CU_DeclareCUSmartPtr( castor, Image, CU_API );
+	CU_DeclareCUSmartPtr( castor, Font, CU_API );
+	CU_DeclareCUSmartPtr( castor, PxBufferBase, CU_API );
 
 	using RgbColour = RgbColourT< ColourComponent >;
 	using RgbaColour = RgbaColourT< ColourComponent >;

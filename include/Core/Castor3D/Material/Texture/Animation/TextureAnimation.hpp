@@ -42,12 +42,19 @@ namespace castor3d
 		 *\param[in]	texture	La texture parente.
 		 *\param[in]	name	Le nom de l'animation.
 		 */
-		C3D_API explicit TextureAnimation( TextureUnit & texture
+		C3D_API explicit TextureAnimation( Engine & engine
 			, castor::String const & name = castor::cuEmptyString );
+
+		C3D_API void setAnimable( TextureUnit & unit );
 
 		C3D_API castor::Point3f getTranslate( castor::Milliseconds const & time )const;
 		C3D_API castor::Angle getRotate( castor::Milliseconds const & time )const;
 		C3D_API castor::Point3f getScale( castor::Milliseconds const & time )const;
+
+		void addPendingAnimated( AnimatedObject & object )
+		{
+			m_pending.insert( &object );
+		}
 
 		TextureTranslateSpeed const & getTranslateSpeed()const
 		{
@@ -92,6 +99,7 @@ namespace castor3d
 		TextureTranslateSpeed m_translate;
 		TextureRotateSpeed m_rotate;
 		TextureScaleSpeed m_scale;
+		std::set< AnimatedObject * > m_pending;
 
 		friend class BinaryWriter< TextureAnimation >;
 		friend class BinaryParser< TextureAnimation >;

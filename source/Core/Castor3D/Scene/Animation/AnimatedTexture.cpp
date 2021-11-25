@@ -27,10 +27,10 @@ namespace castor3d
 			return stream.str();
 		}
 
-		castor::String getTexName( TextureUnit const & texture )
+		castor::String getTexName( TextureSourceInfo const & sourceInfo
+			, TextureConfiguration const & configuration )
 		{
-			auto & configuration = texture.getConfiguration();
-			castor::String result;
+			castor::String result{ sourceInfo.relative() };
 			result += writeMask( cuT( "_c" ), configuration.colourMask[0] );
 			result += writeMask( cuT( "_s" ), configuration.specularMask[0] );
 			result += writeMask( cuT( "_m" ), configuration.metalnessMask[0] );
@@ -51,13 +51,13 @@ namespace castor3d
 		}
 	}
 
-	AnimatedTexture::AnimatedTexture( TextureUnit & texture
+	AnimatedTexture::AnimatedTexture( TextureSourceInfo const & sourceInfo
+		, TextureConfiguration const & config
 		, Pass & pass )
 		: AnimatedObject{ AnimationType::eTexture
 			, pass.getOwner()->getName()
 				+ cuT( "_" ) + castor::string::toString( pass.getId() )
-				+ cuT( "_" ) + getTexName( texture ) }
-		, m_texture{ texture }
+				+ cuT( "_" ) + getTexName( sourceInfo, config ) }
 		, m_pass{ pass }
 	{
 	}
@@ -76,9 +76,10 @@ namespace castor3d
 
 		if ( it == m_animations.end() )
 		{
-			if ( m_texture.hasAnimation() )
+			if ( m_texture
+				&& m_texture->hasAnimation() )
 			{
-				auto & animation = m_texture.getAnimation();
+				auto & animation = m_texture->getAnimation();
 				auto instance = std::make_unique< TextureAnimationInstance >( *this, animation );
 				m_animations.emplace( name, std::move( instance ) );
 				startAnimation( animation.getName() );

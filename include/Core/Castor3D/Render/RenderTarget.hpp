@@ -378,7 +378,8 @@ namespace castor3d
 		castor::Size m_size;
 		castor::Size m_safeBandedSize;
 		VkFormat m_pixelFormat;
-		bool m_initialised;
+		std::atomic_bool m_initialised;
+		std::atomic_bool m_initialising;
 		std::unique_ptr< HdrConfigUbo > m_hdrConfigUbo;
 		RenderTechniqueUPtr m_renderTechnique;
 		SceneWPtr m_scene;

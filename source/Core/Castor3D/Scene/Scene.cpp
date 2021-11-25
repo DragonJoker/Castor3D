@@ -523,12 +523,13 @@ namespace castor3d
 		return m_reflectionMap->getIndex( node );
 	}
 
-	AnimatedObjectSPtr Scene::addAnimatedTexture( TextureUnit & texture
+	AnimatedObjectSPtr Scene::addAnimatedTexture( TextureSourceInfo const & sourceInfo
+		, TextureConfiguration const & config
 		, Pass & pass )
 	{
 		auto & cache = getAnimatedObjectGroupCache();
 		auto group = cache.find( cuT( "C3D_Textures" ) ).lock();
-		return group->addObject( texture, pass );
+		return group->addObject( sourceInfo, config, pass );
 	}
 
 	void Scene::registerLight( Light & light )

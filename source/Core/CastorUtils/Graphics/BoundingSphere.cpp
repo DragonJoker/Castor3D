@@ -1,6 +1,8 @@
 #include "CastorUtils/Graphics/BoundingSphere.hpp"
 #include "CastorUtils/Graphics/BoundingBox.hpp"
 
+CU_ImplementCUSmartPtr( castor, BoundingSphere )
+
 namespace castor
 {
 	BoundingSphere::BoundingSphere()

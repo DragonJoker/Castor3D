@@ -738,10 +738,8 @@ namespace castor3d
 
 			if ( parsingContext.pass )
 			{
-				//parsingContext.textureAnimation = &parsingContext.textureUnit->createAnimation();
-				//auto animated = parsingContext.scene->addAnimatedTexture( *parsingContext.textureUnit
-				//	, *parsingContext.pass );
-				//animated->addAnimation( parsingContext.textureAnimation->getName() );
+				parsingContext.textureAnimation = std::make_unique< TextureAnimation >( *parsingContext.parser->getEngine()
+					, "Default" );
 			}
 		}
 		CU_EndAttributePush( CSCNSection::eTextureAnimation )
@@ -757,13 +755,28 @@ namespace castor3d
 					parsingContext.sampler = parsingContext.parser->getEngine()->getDefaultSampler();
 				}
 
+				TextureSourceInfo sourceInfo = ( parsingContext.textureRenderTarget
+					? TextureSourceInfo{ parsingContext.sampler.lock()
+						, parsingContext.textureRenderTarget }
+					: TextureSourceInfo{ parsingContext.sampler.lock()
+						, parsingContext.folder
+						, parsingContext.relative } );
+
+				if ( parsingContext.textureAnimation && parsingContext.scene )
+				{
+					auto animated = parsingContext.scene->addAnimatedTexture( sourceInfo
+						, parsingContext.textureConfiguration
+						, *parsingContext.pass );
+					parsingContext.textureAnimation->addPendingAnimated( *animated );
+				}
+
 				if ( parsingContext.textureRenderTarget )
 				{
-					parsingContext.pass->registerTexture( TextureSourceInfo{ parsingContext.sampler.lock()
-							, std::move( parsingContext.textureRenderTarget ) }
+					parsingContext.pass->registerTexture( std::move( sourceInfo )
 						, { { {} }
-							, std::move( parsingContext.textureConfiguration )
-							, std::move( parsingContext.textureTransform ) } );
+							, std::move( parsingContext.textureConfiguration ) }
+						, std::move( parsingContext.textureAnimation ) );
+					parsingContext.textureRenderTarget.reset();
 				}
 				else if ( parsingContext.folder.empty() && parsingContext.relative.empty() )
 				{
@@ -776,24 +789,10 @@ namespace castor3d
 						parsingContext.imageInfo->mipLevels = 20;
 					}
 
-					//if ( getUsedImageComponents( parsingContext.textureConfiguration ) != TextureFlag::eNone )
-					//{
-					//	auto texture = std::make_shared< TextureLayout >( *parsingContext.parser->getEngine()->getRenderSystem()
-					//		, parsingContext.imageInfo
-					//		, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-					//		, parsingContext.relative );
-					//	texture->setSource( parsingContext.folder
-					//		, parsingContext.relative
-					//		, false
-					//		, false );
-					//	parsingContext.textureUnit->setTexture( texture );
-					//}
-					parsingContext.pass->registerTexture( TextureSourceInfo{ parsingContext.sampler.lock()
-							, std::move( parsingContext.folder )
-							, std::move( parsingContext.relative ) }
+					parsingContext.pass->registerTexture( std::move( sourceInfo )
 						, { std::move( parsingContext.imageInfo )
-							, std::move( parsingContext.textureConfiguration )
-							, std::move( parsingContext.textureTransform ) } );
+							, std::move( parsingContext.textureConfiguration ) }
+						, std::move( parsingContext.textureAnimation ) );
 				}
 
 				parsingContext.imageInfo =
