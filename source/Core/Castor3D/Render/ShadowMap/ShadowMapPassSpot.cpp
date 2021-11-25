@@ -282,8 +282,6 @@ namespace castor3d
 				auto bitangent = writer.declLocale( "bitangent"
 					, normalize( in.bitangent ) );
 				auto material = materials.getMaterial( in.material );
-				auto gamma = writer.declLocale( "gamma"
-					, material.gamma );
 				auto emissive = writer.declLocale( "emissive"
 					, vec3( material.emissive ) );
 				auto alpha = writer.declLocale( "alpha"
@@ -301,7 +299,6 @@ namespace castor3d
 				{
 					lightingModel->computeMapContributions( flags.passFlags
 						, filterTexturesFlags( flags.textures )
-						, gamma
 						, textureConfigs
 						, c3d_maps
 						, texCoord

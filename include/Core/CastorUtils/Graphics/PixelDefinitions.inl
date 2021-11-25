@@ -47,6 +47,13 @@ namespace castor
 					{
 						std::memcpy( dstBuffer, srcBuffer, getBytesPerPixel( PFSrc ) );
 					}
+					else if constexpr ( is8SRGBComponentsV< PFDst > )
+					{
+						PixelComponentsT< PFDst >::R( dstBuffer, getR8U< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::G( dstBuffer, getG8U< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::B( dstBuffer, getB8U< PFSrc >( srcBuffer ) );
+						PixelComponentsT< PFDst >::A( dstBuffer, getA8U< PFSrc >( srcBuffer ) );
+					}
 					else if constexpr ( is8UComponentsV< PFDst > )
 					{
 						PixelComponentsT< PFDst >::R( dstBuffer, getR8U< PFSrc >( srcBuffer ) );

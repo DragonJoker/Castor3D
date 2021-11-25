@@ -181,7 +181,7 @@ namespace castor
 	{
 		if ( buffer->getDimensions() == size )
 		{
-			return std::move( buffer );
+			return buffer;
 		}
 
 		ImageLayout layout{ *buffer };

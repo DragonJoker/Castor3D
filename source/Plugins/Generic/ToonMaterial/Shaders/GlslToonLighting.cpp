@@ -27,14 +27,13 @@ namespace toon::shader
 				, castor3d::PassFlags const & passFlags
 				, castor3d::TextureFlags const & flags
 				, sdw::Vec4 const & sampled
-				, sdw::Float const & gamma
 				, c3d::TextureConfigData const & config
 				, bool & hasEmissive
 				, ToonPhongLightMaterial & phongLightMat )
 			{
 				if ( checkFlag( flags, castor3d::TextureFlag::eDiffuse ) )
 				{
-					phongLightMat.albedo = config.getDiffuse( writer, sampled, phongLightMat.albedo, gamma );
+					phongLightMat.albedo = config.getDiffuse( writer, sampled, phongLightMat.albedo );
 				}
 
 				if ( checkFlag( flags, castor3d::TextureFlag::eSpecular ) )
@@ -207,7 +206,6 @@ namespace toon::shader
 
 	void ToonPhongLightingModel::computeMapContributions( castor3d::PassFlags const & passFlags
 		, castor3d::FilteredTextureFlags const & textures
-		, sdw::Float const & gamma
 		, c3d::TextureConfigurations const & textureConfigs
 		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 		, sdw::Vec3 & texCoords
@@ -250,7 +248,6 @@ namespace toon::shader
 						, name
 						, config
 						, maps[i]
-						, gamma
 						, texCoords
 						, emissive
 						, opacity
@@ -263,7 +260,6 @@ namespace toon::shader
 					, passFlags
 					, textureIt.second.flags
 					, sampled
-					, gamma
 					, config
 					, hasEmissive
 					, phongLightMat );
@@ -330,7 +326,6 @@ namespace toon::shader
 
 	void ToonPhongLightingModel::computeMapDiffuseContributions( castor3d::PassFlags const & passFlags
 		, castor3d::FilteredTextureFlags const & textures
-		, sdw::Float const & gamma
 		, c3d::TextureConfigurations const & textureConfigs
 		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 		, sdw::Vec3 const & texCoords
@@ -354,7 +349,6 @@ namespace toon::shader
 					, name
 					, config
 					, maps[i]
-					, gamma
 					, texCoords
 					, emissive
 					, opacity
@@ -364,7 +358,6 @@ namespace toon::shader
 				, passFlags
 				, textureIt.second.flags
 				, sampled
-				, gamma
 				, config
 				, hasEmissive
 				, phongLightMat );
@@ -1298,14 +1291,13 @@ namespace toon::shader
 				, castor3d::PassFlags const & passFlags
 				, castor3d::TextureFlags const & flags
 				, sdw::Vec4 const & sampled
-				, sdw::Float const & gamma
 				, c3d::TextureConfigData const & config
 				, MaterialTextureMods & mods
 				, ToonPbrLightMaterial & pbrLightMat )
 			{
 				if ( checkFlag( flags, castor3d::TextureFlag::eAlbedo ) )
 				{
-					pbrLightMat.albedo = config.getAlbedo( writer, sampled, pbrLightMat.albedo, gamma );
+					pbrLightMat.albedo = config.getAlbedo( writer, sampled, pbrLightMat.albedo );
 					mods.hasAlbedo = true;
 				}
 
@@ -1489,7 +1481,6 @@ namespace toon::shader
 
 	void ToonPbrLightingModel::computeMapContributions( castor3d::PassFlags const & passFlags
 		, castor3d::FilteredTextureFlags const & textures
-		, sdw::Float const & gamma
 		, c3d::TextureConfigurations const & textureConfigs
 		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 		, sdw::Vec3 & texCoords
@@ -1531,7 +1522,6 @@ namespace toon::shader
 						, name
 						, config
 						, maps[textureIt.first]
-						, gamma
 						, texCoords
 						, emissive
 						, opacity
@@ -1544,7 +1534,6 @@ namespace toon::shader
 					, passFlags
 					, textureIt.second.flags
 					, sampled
-					, gamma
 					, config
 					, mods
 					, pbrLightMat );
@@ -1611,7 +1600,6 @@ namespace toon::shader
 
 	void ToonPbrLightingModel::computeMapDiffuseContributions( castor3d::PassFlags const & passFlags
 		, castor3d::FilteredTextureFlags const & textures
-		, sdw::Float const & gamma
 		, c3d::TextureConfigurations const & textureConfigs
 		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 		, sdw::Vec3 const & texCoords
@@ -1634,7 +1622,6 @@ namespace toon::shader
 					, name
 					, config
 					, maps[textureIt.first]
-					, gamma
 					, texCoords
 					, emissive
 					, opacity
@@ -1644,7 +1631,6 @@ namespace toon::shader
 				, passFlags
 				, textureIt.second.flags
 				, sampled
-				, gamma
 				, config
 				, mods
 				, pbrLightMat );

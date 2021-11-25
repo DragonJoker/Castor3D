@@ -75,6 +75,20 @@ namespace castor
 			default:
 				return PixelFormat::eUNDEFINED;
 			}
+		case PixelFormat::eR8_SRGB:
+			switch ( count )
+			{
+			case 1:
+				return PixelFormat::eR8_SRGB;
+			case 2:
+				return PixelFormat::eR8G8_SRGB;
+			case 3:
+				return PixelFormat::eR8G8B8_SRGB;
+			case 4:
+				return PixelFormat::eR8G8B8A8_SRGB;
+			default:
+				return PixelFormat::eUNDEFINED;
+			}
 		case PixelFormat::eR16_UNORM:
 			switch ( count )
 			{

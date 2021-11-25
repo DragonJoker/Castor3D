@@ -82,6 +82,9 @@ namespace castor3d
 		//!\~english	Mask for all the texture channels except for opacity and normal.
 		//!\~french		Masque pour les canaux de texture sauf l'opacité et la normale.
 		eAllButNormalAndOpacity = eAllButOpacity & ~( eNormal ),
+		//!\~english	Mask for all the texture channels affecting geometry.
+		//!\~french		Masque pour les canaux de texture affectant la géométrie.
+		eGeometry = eNormal | eOpacity | eHeight,
 	};
 	CU_ImplementFlags( TextureFlag )
 	C3D_API castor::String getName( TextureFlag value

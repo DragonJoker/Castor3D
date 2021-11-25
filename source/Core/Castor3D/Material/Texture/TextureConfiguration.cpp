@@ -133,7 +133,6 @@ namespace castor3d
 			&& lhs.normalFactor == rhs.normalFactor
 			&& lhs.heightFactor == rhs.heightFactor
 			&& lhs.normalGMultiplier == rhs.normalGMultiplier
-			&& lhs.needsGammaCorrection == rhs.needsGammaCorrection
 			&& lhs.needsYInversion == rhs.needsYInversion
 			&& lhs.transform.translate == rhs.transform.translate
 			&& lhs.transform.rotate == rhs.transform.rotate

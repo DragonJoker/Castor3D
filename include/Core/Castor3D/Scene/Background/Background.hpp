@@ -215,6 +215,11 @@ namespace castor3d
 			return m_hdr;
 		}
 
+		bool isSRGB()const
+		{
+			return m_srgb;
+		}
+
 		bool hasIbl()const
 		{
 			return m_ibl != nullptr;
@@ -253,6 +258,7 @@ namespace castor3d
 		BackgroundType m_type;
 		std::atomic_bool m_initialised{ false };
 		bool m_hdr{ true };
+		bool m_srgb{ false };
 		Texture m_textureId;
 		TextureLayoutSPtr m_texture;
 		SamplerResPtr m_sampler;

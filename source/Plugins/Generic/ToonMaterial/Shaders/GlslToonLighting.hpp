@@ -78,7 +78,6 @@ namespace toon::shader
 			, c3d::OutputComponents & output )const override;
 		void computeMapContributions( castor3d::PassFlags const & passFlags
 			, castor3d::FilteredTextureFlags const & textures
-			, sdw::Float const & gamma
 			, c3d::TextureConfigurations const & textureConfigs
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 			, sdw::Vec3 & texCoords
@@ -120,7 +119,6 @@ namespace toon::shader
 			, sdw::Int const & receivesShadows )const override;
 		void computeMapDiffuseContributions( castor3d::PassFlags const & passFlags
 			, castor3d::FilteredTextureFlags const & textures
-			, sdw::Float const & gamma
 			, c3d::TextureConfigurations const & textureConfigs
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 			, sdw::Vec3 const & texCoords
@@ -301,7 +299,6 @@ namespace toon::shader
 			, c3d::OutputComponents & output )const override;
 		void computeMapContributions( castor3d::PassFlags const & passFlags
 			, castor3d::FilteredTextureFlags const & textures
-			, sdw::Float const & gamma
 			, c3d::TextureConfigurations const & textureConfigs
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 			, sdw::Vec3 & texCoords
@@ -343,7 +340,6 @@ namespace toon::shader
 			, sdw::Int const & receivesShadows )const override;
 		void computeMapDiffuseContributions( castor3d::PassFlags const & passFlags
 			, castor3d::FilteredTextureFlags const & textures
-			, sdw::Float const & gamma
 			, c3d::TextureConfigurations const & textureConfigs
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 			, sdw::Vec3 const & texCoords
