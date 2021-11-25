@@ -199,7 +199,8 @@ namespace castor3d
 		}
 
 		LightVolumePassResultArray doCreateLLPVResult( crg::ResourceHandler & handler
-			, RenderDevice const & device )
+			, RenderDevice const & device
+			, castor::String const & prefix )
 		{
 			LightVolumePassResultArray result;
 			auto & engine = *device.renderSystem.getEngine();
@@ -208,7 +209,7 @@ namespace castor3d
 			{
 				result.emplace_back( castor::makeUnique< LightVolumePassResult >( handler
 					, device
-					, castor::string::toString( i )
+					, prefix + castor::string::toString( i )
 					, engine.getLpvGridSize() ) );
 			}
 
@@ -349,7 +350,7 @@ namespace castor3d
 			, getFormat( DsTexture::eData0 )
 			, getUsageFlags( DsTexture::eData0 )
 			, getBorderColor( DsTexture::eData0 ) }
-		, m_normal{device
+		, m_normal{ device
 			, getOwner()->getGraphResourceHandler()
 			, getName() + "TechData1"
 			, 0u
@@ -370,7 +371,7 @@ namespace castor3d
 			, 2u
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, "DepthRange" ) }
+			, getName() + "DepthRange" ) }
 		, m_computeDepthRangeDesc{ &doCreateComputeDepthRange( progress ) }
 		, m_ssao{ castor::makeUnique< SsaoPass >( m_renderTarget.getGraph()
 			, device
@@ -391,10 +392,11 @@ namespace castor3d
 			, m_renderTarget.getScene()->getVoxelConeTracingConfig() ) }
 		, m_lpvResult{ castor::makeUnique< LightVolumePassResult >( getOwner()->getGraphResourceHandler()
 			, m_device
-			, castor::cuEmptyString
+			, getName()
 			, getEngine()->getLpvGridSize() ) }
 		, m_llpvResult{ doCreateLLPVResult( getOwner()->getGraphResourceHandler()
-			, m_device ) }
+			, m_device
+			, getName() ) }
 		, m_backgroundRenderer{ castor::makeUnique< BackgroundRenderer >( m_renderTarget.getGraph()
 			, m_computeDepthRangeDesc
 			, m_device
