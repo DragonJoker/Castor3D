@@ -221,7 +221,7 @@ namespace castor3d
 						auto colour = writer.declLocale( "colour"
 							, c3d_mapSkybox.sample( vtx_texture ) );
 
-						if ( !m_background->isHdr() )
+						if ( !m_background->isHdr() && !m_background->isSRGB() )
 						{
 							pxl_FragColor = vec4( c3d_hdrConfigData.removeGamma( colour.xyz() ), colour.w() );
 						}
@@ -232,7 +232,7 @@ namespace castor3d
 					}
 					ELSE
 					{
-						pxl_FragColor = vec4( c3d_sceneData.getBackgroundColour( utils, c3d_hdrConfigData.getGamma() ).xyz(), 1.0_f );
+						pxl_FragColor = vec4( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData ).xyz(), 1.0_f );
 					}
 					FI;
 				} );

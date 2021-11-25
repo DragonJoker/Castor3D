@@ -504,6 +504,19 @@ namespace castor
 	 *\brief		Structure d'aide permettant de dire si un format de pixels utilise des composantes en 8 bits unsigned.
 	 */
 	template< PixelFormat PixelFormatT >
+	struct Is8SRGBComponents
+		: public std::false_type
+	{
+	};
+	template< PixelFormat PixelFormatT >
+	static bool constexpr is8SRGBComponentsV = Is8SRGBComponents< PixelFormatT >::value;
+	/**
+	 *\~english
+	 *\brief		Helper struct to tell if a pixel format uses unsigned 8 bits components.
+	 *\~french
+	 *\brief		Structure d'aide permettant de dire si un format de pixels utilise des composantes en 8 bits unsigned.
+	 */
+	template< PixelFormat PixelFormatT >
 	struct Is8UComponents
 		: public std::false_type
 	{

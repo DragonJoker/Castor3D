@@ -48,7 +48,7 @@ namespace castor3d::shader
 
 	void PhongLightMaterial::create( Material const & material )
 	{
-		create( pow( max( material.colourDiv.rgb(), vec3( 0.0_f, 0.0_f, 0.0_f ) ), vec3( material.gamma ) )
+		create( material.colourDiv.rgb()
 			, material.specDiv
 			, material.specDiv
 			, material );

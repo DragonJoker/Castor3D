@@ -199,8 +199,7 @@ namespace castor3d
 					m_data.trsDum[index] = writeFlags( config.transmittanceMask, {} );
 					m_data.nmlFcr[index] = writeFlags( config.normalMask, config.normalFactor, config.normalGMultiplier );
 					m_data.hgtFcr[index] = writeFlags( config.heightMask, config.heightFactor );
-					m_data.mscVls[index] = writeFlags( float( config.needsGammaCorrection )
-						, float( config.needsYInversion ) );
+					m_data.mscVls[index] = writeFlags( float( config.needsYInversion ), 0.0f );
 					m_data.data.translate[index] = config.translate;
 					m_data.data.rotate[index] = config.rotate;
 					m_data.data.scale[index] = config.scale;
@@ -215,8 +214,7 @@ namespace castor3d
 					data.trsDum = writeFlags( config.transmittanceMask, {} );
 					data.nmlFcr = writeFlags( config.normalMask, config.normalFactor, config.normalGMultiplier );
 					data.hgtFcr = writeFlags( config.heightMask, config.heightFactor );
-					data.mscVls = writeFlags( float( config.needsGammaCorrection )
-						, float( config.needsYInversion ) );
+					data.mscVls = writeFlags( float( config.needsYInversion ), 0.0f );
 					data.translate = config.transform.translate;
 					data.rotate = { config.transform.rotate.cos(), config.transform.rotate.sin(), 0.0f, 0.0f };
 					data.scale = config.transform.scale;

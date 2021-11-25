@@ -25,14 +25,13 @@ namespace castor3d::shader
 			, PassFlags const & passFlags
 			, TextureFlags const & flags
 			, sdw::Vec4 const & sampled
-			, sdw::Float const & gamma
 			, TextureConfigData const & config
 			, bool & hasEmissive
 			, PhongLightMaterial & phongLightMat )
 		{
 			if ( checkFlag( flags, TextureFlag::eDiffuse ) )
 			{
-				phongLightMat.albedo = config.getDiffuse( writer, sampled, phongLightMat.albedo, gamma );
+				phongLightMat.albedo = config.getDiffuse( writer, sampled, phongLightMat.albedo );
 			}
 
 			if ( checkFlag( flags, TextureFlag::eSpecular ) )
@@ -204,7 +203,6 @@ namespace castor3d::shader
 
 	void PhongLightingModel::computeMapContributions( PassFlags const & passFlags
 		, FilteredTextureFlags const & textures
-		, sdw::Float const & gamma
 		, TextureConfigurations const & textureConfigs
 		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 		, sdw::Vec3 & texCoords
@@ -247,7 +245,6 @@ namespace castor3d::shader
 						, name
 						, config
 						, maps[i]
-						, gamma
 						, texCoords
 						, emissive
 						, opacity
@@ -260,7 +257,6 @@ namespace castor3d::shader
 					, passFlags
 					, textureIt.second.flags
 					, sampled
-					, gamma
 					, config
 					, hasEmissive
 					, phongLightMat );
@@ -327,7 +323,6 @@ namespace castor3d::shader
 
 	void PhongLightingModel::computeMapDiffuseContributions( PassFlags const & passFlags
 		, FilteredTextureFlags const & textures
-		, sdw::Float const & gamma
 		, TextureConfigurations const & textureConfigs
 		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 		, sdw::Vec3 const & texCoords
@@ -351,7 +346,6 @@ namespace castor3d::shader
 					, name
 					, config
 					, maps[i]
-					, gamma
 					, texCoords
 					, emissive
 					, opacity
@@ -361,7 +355,6 @@ namespace castor3d::shader
 				, passFlags
 				, textureIt.second.flags
 				, sampled
-				, gamma
 				, config
 				, hasEmissive
 				, phongLightMat );

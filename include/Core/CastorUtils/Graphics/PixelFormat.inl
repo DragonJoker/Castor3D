@@ -189,31 +189,32 @@ namespace castor
 	template<> struct Is8UComponents< PixelFormat::eR8_UNORM > : public std::true_type {};
 	template<> struct Is8UComponents< PixelFormat::eR8_USCALED > : public std::true_type {};
 	template<> struct Is8UComponents< PixelFormat::eR8_UINT > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eR8_SRGB > : public std::true_type {};
 	template<> struct Is8UComponents< PixelFormat::eR8G8_UNORM > : public std::true_type {};
 	template<> struct Is8UComponents< PixelFormat::eR8G8_USCALED > : public std::true_type {};
 	template<> struct Is8UComponents< PixelFormat::eR8G8_UINT > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eR8G8_SRGB > : public std::true_type {};
 	template<> struct Is8UComponents< PixelFormat::eR8G8B8_UNORM > : public std::true_type {};
 	template<> struct Is8UComponents< PixelFormat::eR8G8B8_USCALED > : public std::true_type {};
 	template<> struct Is8UComponents< PixelFormat::eR8G8B8_UINT > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eR8G8B8_SRGB > : public std::true_type {};
 	template<> struct Is8UComponents< PixelFormat::eB8G8R8_UNORM > : public std::true_type {};
 	template<> struct Is8UComponents< PixelFormat::eB8G8R8_USCALED > : public std::true_type {};
 	template<> struct Is8UComponents< PixelFormat::eB8G8R8_UINT > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eB8G8R8_SRGB > : public std::true_type {};
 	template<> struct Is8UComponents< PixelFormat::eR8G8B8A8_UNORM > : public std::true_type {};
 	template<> struct Is8UComponents< PixelFormat::eR8G8B8A8_USCALED > : public std::true_type {};
 	template<> struct Is8UComponents< PixelFormat::eR8G8B8A8_UINT > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eR8G8B8A8_SRGB > : public std::true_type {};
 	template<> struct Is8UComponents< PixelFormat::eB8G8R8A8_UNORM > : public std::true_type {};
 	template<> struct Is8UComponents< PixelFormat::eB8G8R8A8_USCALED > : public std::true_type {};
 	template<> struct Is8UComponents< PixelFormat::eB8G8R8A8_UINT > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eB8G8R8A8_SRGB > : public std::true_type {};
 	template<> struct Is8UComponents< PixelFormat::eA8B8G8R8_UNORM > : public std::true_type {};
 	template<> struct Is8UComponents< PixelFormat::eA8B8G8R8_USCALED > : public std::true_type {};
 	template<> struct Is8UComponents< PixelFormat::eA8B8G8R8_UINT > : public std::true_type {};
-	template<> struct Is8UComponents< PixelFormat::eA8B8G8R8_SRGB > : public std::true_type {};
+	
+	template<> struct Is8SRGBComponents< PixelFormat::eR8_SRGB > : public std::true_type {};
+	template<> struct Is8SRGBComponents< PixelFormat::eR8G8_SRGB > : public std::true_type {};
+	template<> struct Is8SRGBComponents< PixelFormat::eR8G8B8_SRGB > : public std::true_type {};
+	template<> struct Is8SRGBComponents< PixelFormat::eB8G8R8_SRGB > : public std::true_type {};
+	template<> struct Is8SRGBComponents< PixelFormat::eR8G8B8A8_SRGB > : public std::true_type {};
+	template<> struct Is8SRGBComponents< PixelFormat::eB8G8R8A8_SRGB > : public std::true_type {};
+	template<> struct Is8SRGBComponents< PixelFormat::eA8B8G8R8_SRGB > : public std::true_type {};
 
 	template<> struct Is8SComponents< PixelFormat::eR8_SNORM > : public std::true_type {};
 	template<> struct Is8SComponents< PixelFormat::eR8_SSCALED > : public std::true_type {};
@@ -322,6 +323,12 @@ namespace castor
 	template<> struct IsD32FComponent< PixelFormat::eD32_SFLOAT_S8_UINT > : public std::true_type {};
 
 	template<> struct IsS8UComponent< PixelFormat::eS8_UINT > : public std::true_type {};
+
+	template< PixelFormat PFT >
+	struct SingleComponentT< PFT, std::enable_if_t< is8SRGBComponentsV< PFT > > >
+	{
+		static PixelFormat constexpr value = PixelFormat::eR8_SRGB;
+	};
 
 	template< PixelFormat PFT >
 	struct SingleComponentT< PFT, std::enable_if_t< is8UComponentsV< PFT > > >
