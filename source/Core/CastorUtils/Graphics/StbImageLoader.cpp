@@ -61,20 +61,20 @@ namespace castor
 				switch ( channels )
 				{
 				case 1:
-					format = PixelFormat::eR8_UNORM;
+					format = PixelFormat::eR8_SRGB;
 					break;
 
 				case 2:
-					format = PixelFormat::eR8G8_UNORM;
+					format = PixelFormat::eR8G8_SRGB;
 					break;
 
 				case 3:
-					format = PixelFormat::eR8G8B8_UNORM;
+					format = PixelFormat::eR8G8B8_SRGB;
 					break;
 
 				case 4:
 				default:
-					format = PixelFormat::eR8G8B8A8_UNORM;
+					format = PixelFormat::eR8G8B8A8_SRGB;
 					break;
 				}
 

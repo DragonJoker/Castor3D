@@ -262,7 +262,6 @@ namespace castor3d::shader
 			, OutputComponents & output )const = 0;
 		C3D_API virtual void computeMapContributions( PassFlags const & passFlags
 			, FilteredTextureFlags const & textures
-			, sdw::Float const & gamma
 			, TextureConfigurations const & textureConfigs
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 			, sdw::Vec3 & texCoords
@@ -304,7 +303,6 @@ namespace castor3d::shader
 			, sdw::Int const & receivesShadows )const = 0;
 		C3D_API virtual void computeMapDiffuseContributions( PassFlags const & passFlags
 			, FilteredTextureFlags const & textures
-			, sdw::Float const & gamma
 			, TextureConfigurations const & textureConfigs
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 			, sdw::Vec3 const & texCoords

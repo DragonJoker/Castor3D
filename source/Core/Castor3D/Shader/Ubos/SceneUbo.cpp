@@ -39,6 +39,7 @@ namespace castor3d
 			, directionalLightCount{ writer.cast< sdw::Int >( m_lightsCount.x() ) }
 			, pointLightCount{ writer.cast< sdw::Int >( m_lightsCount.y() ) }
 			, spotLightCount{ writer.cast< sdw::Int >( m_lightsCount.z() ) }
+			, gamma{ m_ambientLight.a() }
 		{
 		}
 
@@ -81,8 +82,7 @@ namespace castor3d
 			return position - cameraPosition;
 		}
 
-		sdw::Vec4 SceneData::getBackgroundColour( Utils & utils
-			, sdw::Float const & gamma )const
+		sdw::Vec4 SceneData::getBackgroundColour( Utils & utils )const
 		{
 			return vec4( utils.removeGamma( gamma, m_backgroundColour.rgb() ), m_backgroundColour.a() );
 		}
@@ -130,6 +130,7 @@ namespace castor3d
 		auto position = camera.getParent()->getDerivedPosition();
 		configuration.cameraPos = castor::Point4f{ position[0], position[1], position[2], 0.0 };
 		configuration.ambientLight = toRGBAFloat( camera.getScene()->getAmbientLight() );
+		configuration.ambientLight->w = camera.getHdrConfig().gamma;
 		configuration.backgroundColour = toRGBAFloat( camera.getScene()->getBackgroundColour() );
 	}
 

@@ -1027,7 +1027,7 @@ namespace castor3d::shader
 
 				if ( checkFlag( textureIt.second.flags, TextureFlag::eColour ) )
 				{
-					colour = config.getDiffuse( m_writer, sampled, colour, 1.0_f );
+					colour = config.getDiffuse( m_writer, sampled, colour );
 				}
 
 				if ( checkFlag( textureIt.second.flags, TextureFlag::eOpacity ) )
@@ -1103,7 +1103,6 @@ namespace castor3d::shader
 		, std::string const & name
 		, shader::TextureConfigData const & config
 		, sdw::SampledImage2DRgba32 const & map
-		, sdw::Float const & gamma
 		, sdw::Vec3 const & texCoords
 		, sdw::Vec3 & emissive
 		, sdw::Float & opacity
@@ -1120,7 +1119,7 @@ namespace castor3d::shader
 
 		if ( checkFlag( textureFlags, TextureFlag::eEmissive ) )
 		{
-			emissive = config.getEmissive( m_writer, result, emissive, gamma );
+			emissive = config.getEmissive( m_writer, result, emissive );
 		}
 
 		if ( checkFlag( textureFlags, TextureFlag::eOcclusion ) )
@@ -1141,7 +1140,6 @@ namespace castor3d::shader
 		, std::string const & name
 		, shader::TextureConfigData const & config
 		, sdw::SampledImage2DRgba32 const & map
-		, sdw::Float const & gamma
 		, sdw::Vec3 const & texCoords
 		, sdw::Vec3 & emissive
 		, sdw::Float & opacity
@@ -1160,7 +1158,7 @@ namespace castor3d::shader
 
 		if ( checkFlag( textureFlags, TextureFlag::eEmissive ) )
 		{
-			emissive = config.getEmissive( m_writer, result, emissive, gamma );
+			emissive = config.getEmissive( m_writer, result, emissive );
 		}
 
 		if ( checkFlag( textureFlags, TextureFlag::eOcclusion ) )

@@ -1007,7 +1007,7 @@ namespace castor3d
 				CU_Exception( "Unsupported image format properties" );
 			}
 
-			if ( castor::checkFlag( props.optimalTilingFeatures, VK_FORMAT_FEATURE_TRANSFER_DST_BIT ) )
+			if ( castor::checkFlag( props.optimalTilingFeatures, VK_FORMAT_FEATURE_BLIT_DST_BIT ) )
 			{
 				res = device->getPhysicalDevice().getImageFormatProperties( m_info->format
 					, m_info->imageType
@@ -1022,11 +1022,30 @@ namespace castor3d
 				}
 			}
 
-			if ( m_info->mipLevels > 1u )
+			if ( castor::checkFlag( props.optimalTilingFeatures, VK_FORMAT_FEATURE_BLIT_SRC_BIT ) )
 			{
-				CU_Require( castor::checkFlag( props.optimalTilingFeatures, VK_FORMAT_FEATURE_TRANSFER_SRC_BIT ) );
+				res = device->getPhysicalDevice().getImageFormatProperties( m_info->format
+					, m_info->imageType
+					, m_info->tiling
+					, m_info->usage | VK_IMAGE_USAGE_TRANSFER_SRC_BIT
+					, m_info->flags
+					, imageProps );
+
+				if ( res == VK_SUCCESS )
+				{
+					m_info->usage |= VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
+				}
+				else if ( m_defaultView.view->isMipmapsGenerationNeeded() )
+				{
+					m_info->mipLevels = 1u;
+				}
 			}
-			else if ( m_info->mipLevels == 0 )
+			else if ( m_defaultView.view->isMipmapsGenerationNeeded() )
+			{
+				m_info->mipLevels = 1u;
+			}
+
+			if ( m_info->mipLevels == 0 )
 			{
 				m_info->mipLevels = 1u;
 			}
@@ -1405,13 +1424,6 @@ namespace castor3d
 		eraseViews( m_info->mipLevels, m_arrayView );
 		eraseViews( m_info->mipLevels, m_cubeView );
 		eraseViews( m_info->mipLevels, m_sliceView );
-
-		if ( mipLevels > 1u )
-		{
-			m_info->usage |= VK_IMAGE_USAGE_TRANSFER_DST_BIT;
-			m_info->usage |= VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
-		}
-
 		m_image.getLayout().levels = m_info->mipLevels;
 		return mipLevels;
 	}

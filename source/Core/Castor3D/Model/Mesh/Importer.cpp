@@ -230,26 +230,6 @@ namespace castor3d
 		return result;
 	}
 
-	ashes::ImageCreateInfo getImageCreateInfo( Engine const & engine
-		, castor::Path const & relative
-		, castor::Path const & folder
-		, bool allowCompression )
-	{
-		ashes::ImageCreateInfo createInfo
-		{
-			0u,
-			VK_IMAGE_TYPE_2D,
-			VK_FORMAT_UNDEFINED,
-			{ 1u, 1u, 1u },
-			20u,
-			1u,
-			VK_SAMPLE_COUNT_1_BIT,
-			VK_IMAGE_TILING_OPTIMAL,
-			VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT,
-		};
-		return createInfo;
-	}
-
 	TextureSourceInfo MeshImporter::loadTexture( castor3d::SamplerRes sampler
 		, castor::Path const & path
 		, TextureConfiguration const & config )const
