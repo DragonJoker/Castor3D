@@ -552,12 +552,13 @@ namespace castor3d
 	//*********************************************************************************************
 
 	SsaoRawAOPass::Program::Program( RenderDevice const & device
-		, bool useNormalsBuffer )
+		, bool useNormalsBuffer
+		, castor::String const & prefix )
 		: vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
-			, "SsaoRawAO" + ( useNormalsBuffer ? std::string{ "Normals" } : std::string{} )
+			, prefix + "SsaoRawAO" + ( useNormalsBuffer ? std::string{ "Normals" } : std::string{} )
 			, getVertexProgram() }
 		, pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT
-			, "SsaoRawAO" + ( useNormalsBuffer ? std::string{ "Normals" } : std::string{} )
+			, prefix + "SsaoRawAO" + ( useNormalsBuffer ? std::string{ "Normals" } : std::string{} )
 			, getPixelProgram( useNormalsBuffer ) }
 		, stages{ makeShaderState( device, vertexShader )
 			, makeShaderState( device, pixelShader ) }
@@ -584,15 +585,16 @@ namespace castor3d
 		, m_size{ size }
 		, m_result{ doCreateTexture( graph.getHandler()
 			, m_device
-			, "SsaoRawAOResult"
+			, graph.getName() + "SsaoRawAOResult"
 			, SsaoRawAOPass::ResultFormat
 			, m_size ) }
 		, m_bentNormals{ doCreateTexture( graph.getHandler()
 			, m_device
-			, "BentNormals"
+			, graph.getName() + "BentNormals"
 			, VK_FORMAT_R32G32B32A32_SFLOAT
 			, m_size ) }
-		, m_programs{ Program{ device, false }, Program{ device, true } }
+		, m_programs{ Program{ device, false, graph.getName() }
+			, Program{ device, true, graph.getName() } }
 	{
 		stepProgressBar( progress, "Creating SSAO raw AO pass" );
 		auto & pass = graph.createPass( "SsaoRawAO"
