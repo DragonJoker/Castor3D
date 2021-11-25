@@ -218,7 +218,8 @@ namespace castor3d
 		 *\param[in]	node	Le noeud de scène.
 		 */
 		C3D_API uint32_t getEnvironmentMapIndex( SceneNode const & node )const;
-		C3D_API AnimatedObjectSPtr addAnimatedTexture( TextureUnit & texture
+		C3D_API AnimatedObjectSPtr addAnimatedTexture( TextureSourceInfo const & sourceInfo
+			, TextureConfiguration const & config
 			, Pass & pass );
 		C3D_API void registerLight( Light & light );
 		C3D_API void unregisterLight( Light & light );

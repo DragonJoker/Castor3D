@@ -12,10 +12,10 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	template< typename AnimableHanlerT >
+	template< typename AnimableHandlerT >
 	class AnimationT
 		: public castor::Named
-		, public castor::OwnedBy< AnimableT< AnimableHanlerT > >
+		, public castor::OwnedBy< AnimableHandlerT >
 	{
 	public:
 		/**
@@ -29,6 +29,7 @@ namespace castor3d
 		C3D_API AnimationT & operator=( AnimationT && rhs ) = delete;
 		C3D_API AnimationT( AnimationT const & rhs ) = delete;
 		C3D_API AnimationT & operator=( AnimationT const & rhs ) = delete;
+		C3D_API virtual ~AnimationT() = default;
 		/**@}*/
 		/**
 		 *\~english
@@ -43,15 +44,23 @@ namespace castor3d
 		 *\param[in]	name		Le nom de l'animation.
 		 */
 		inline AnimationT( AnimationType type
-			, AnimableT< AnimableHanlerT > & animable
+			, AnimableT< AnimableHandlerT > & animable
 			, castor::String const & name = castor::cuEmptyString );
 		/**
 		 *\~english
-		 *\brief		Destructor.
+		 *\brief		Constructor.
+		 *\param[in]	type		The type of the animation.
+		 *\param[in]	animable	The parent animable object.
+		 *\param[in]	name		The name of the animation.
 		 *\~french
-		 *\brief		Destructeur.
+		 *\brief		Constructeur.
+		 *\param[in]	type		Le type d'animation.
+		 *\param[in]	animable	L'objet animable parent.
+		 *\param[in]	name		Le nom de l'animation.
 		 */
-		inline ~AnimationT();
+		inline AnimationT( AnimationType type
+			, AnimableHandlerT & handler
+			, castor::String const & name = castor::cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Adds a keyframe to the animation.
@@ -163,7 +172,13 @@ namespace castor3d
 			return m_length;
 		}
 
+		inline AnimableT< AnimableHandlerT > * getAnimable()const
+		{
+			return m_animable;
+		}
+
 	protected:
+		AnimableT< AnimableHandlerT > * m_animable{};
 		//!\~english	The animation type.
 		//!\~french		Le type d'animation.
 		AnimationType m_type{ AnimationType::eCount };

@@ -141,11 +141,12 @@ namespace castor3d
 
 		Texture doCreateTexture( RenderDevice const & device
 			, crg::ResourceHandler & handler
-			, VkExtent2D const & size )
+			, VkExtent2D const & size
+			, castor::String const & prefix )
 		{
 			return Texture{ device
 				, handler
-				, cuT( "LinearisedDepth" )
+				, prefix + cuT( "LinearisedDepth" )
 				, 0u
 				, { size.width, size.height, 1u }
 				, 1u
@@ -173,9 +174,9 @@ namespace castor3d
 		, m_engine{ *m_device.renderSystem.getEngine() }
 		, m_ssaoConfig{ ssaoConfig }
 		, m_srcDepthBuffer{ depthBuffer }
-		, m_prefix{ prefix }
+		, m_prefix{ graph.getName() + prefix }
 		, m_size{ size }
-		, m_result{ doCreateTexture( m_device, m_graph.getHandler(), m_size ) }
+		, m_result{ doCreateTexture( m_device, m_graph.getHandler(), m_size, m_prefix ) }
 		, m_clipInfo{ m_device.uboPools->getBuffer< Point3f >( 0u ) }
 		, m_lastPass{ &previousPass }
 		, m_lineariseVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + "LineariseDepth", getVertexProgram() }

@@ -24,6 +24,11 @@ namespace castor3d
 	};
 	C3D_API bool operator==( TextureTransform const & lhs
 		, TextureTransform const & rhs )noexcept;
+	inline bool operator!=( TextureTransform const & lhs
+		, TextureTransform const & rhs )noexcept
+	{
+		return !( lhs == rhs );
+	}
 	/**
 	*\~english
 	*\brief
@@ -144,7 +149,6 @@ namespace castor3d
 	{
 		ashes::ImageCreateInfo imageInfo{ {} };
 		TextureConfiguration config{};
-		TextureTransform transform{};
 	};
 
 	using TextureSourceMap = std::unordered_map< TextureSourceInfo

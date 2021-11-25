@@ -14,7 +14,7 @@ using namespace castor;
 namespace GuiCommon
 {
 	SkeletonAnimationTreeItemProperty::SkeletonAnimationTreeItemProperty( bool editable, SkeletonAnimation & animation )
-		: TreeItemProperty( animation.getOwner()->getEngine(), editable )
+		: TreeItemProperty( animation.getEngine(), editable )
 		, m_animation( animation )
 	{
 		CreateTreeItemMenu();

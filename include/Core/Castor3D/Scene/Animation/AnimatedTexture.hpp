@@ -38,7 +38,8 @@ namespace castor3d
 		 *\param[in]	texture		La texture.
 		 *\param[in]	pass		La passe utilisant la texture.
 		 */
-		C3D_API AnimatedTexture( TextureUnit & texture
+		C3D_API AnimatedTexture( TextureSourceInfo const & sourceInfo
+			, TextureConfiguration const & config
 			, Pass & pass );
 		/**
 		 *\copydoc		castor3d::AnimatedObject::update
@@ -57,12 +58,14 @@ namespace castor3d
 		/**@{*/
 		TextureUnit const & getTexture()const
 		{
-			return m_texture;
+			CU_Require( m_texture );
+			return *m_texture;
 		}
 
 		TextureUnit & getTexture()
 		{
-			return m_texture;
+			CU_Require( m_texture );
+			return *m_texture;
 		}
 
 		Pass const & getPass()const
@@ -80,6 +83,16 @@ namespace castor3d
 			return *m_playingAnimation;
 		}
 		/**@}*/
+		/**
+		 *name Setters.
+		**/
+		/**@{*/
+		void setTexture( TextureUnit & texture )
+		{
+			CU_Require( !m_texture );
+			m_texture = &texture;
+		}
+		/**@}*/
 
 	private:
 		void doAddAnimation( castor::String const & name )override;
@@ -88,7 +101,7 @@ namespace castor3d
 		void doClearAnimations()override;
 
 	private:
-		TextureUnit & m_texture;
+		TextureUnit * m_texture{};
 		Pass & m_pass;
 		TextureAnimationInstanceRPtr m_playingAnimation{ nullptr };
 	};

@@ -209,7 +209,7 @@ namespace castor3d
 					, folder / relative
 					, false
 					, true );
-				result = std::make_unique< castor::Image >( relative.getFileName()
+				result = castor::makeUnique< castor::Image >( relative.getFileName()
 					, folder / relative
 					, *image.getPixels() );
 			}
