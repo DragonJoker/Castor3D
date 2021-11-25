@@ -411,12 +411,13 @@ namespace castor3d
 	//*********************************************************************************************
 
 	SsaoBlurPass::Program::Program( RenderDevice const & device
-		, bool useNormalsBuffer )
+		, bool useNormalsBuffer
+		, castor::String const & prefix )
 		: vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
-			, getName( useNormalsBuffer )
+			, prefix + getName( useNormalsBuffer )
 			, getVertexProgram() }
 		, pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT
-			, getName( useNormalsBuffer )
+			, prefix + getName( useNormalsBuffer )
 			, getPixelProgram( useNormalsBuffer ) }
 		, stages{ makeShaderState( device, vertexShader )
 			, makeShaderState( device, pixelShader ) }
@@ -445,12 +446,12 @@ namespace castor3d
 		, m_bentInput{ bentInput }
 		, m_config{ config }
 		, m_size{ size }
-		, m_result{ doCreateTexture( m_device, graph.getHandler(), "SsaoBlur" + prefix, SsaoBlurPass::ResultFormat, m_size ) }
-		, m_bentResult{ doCreateTexture( m_device, graph.getHandler(), "SsaoBentNormals" + prefix, m_bentInput.getFormat(), m_size ) }
+		, m_result{ doCreateTexture( m_device, graph.getHandler(), graph.getName() + "SsaoBlur" + prefix, SsaoBlurPass::ResultFormat, m_size)}
+		, m_bentResult{ doCreateTexture( m_device, graph.getHandler(), graph.getName() + "SsaoBentNormals" + prefix, m_bentInput.getFormat(), m_size ) }
 		, m_configurationUbo{ m_device.uboPools->getBuffer< Configuration >( 0u ) }
-		, m_programs{ Program{ device, false }, Program{ device, true } }
+		, m_programs{ Program{ device, false, graph.getName() }, Program{ device, true, graph.getName() } }
 	{
-		stepProgressBar( progress, "Creating SSAO " + prefix + " blur pass" );
+		stepProgressBar( progress, "Creating " + graph.getName() + " SSAO " + prefix + " blur pass" );
 		auto & configuration = m_configurationUbo.getData();
 		configuration.axis = axis;
 		auto & pass = graph.createPass( "SsaoBlur" + prefix
