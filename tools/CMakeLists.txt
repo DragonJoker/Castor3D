@@ -68,29 +68,6 @@ function( ToolsBuild )
 			endif ()
 
 			if( wxWidgets_FOUND AND GTK_FOUND )
-				unset( CastorToolsDefinitions )
-				if ( APPLE )
-					set( CastorToolsDefinitions
-						${CastorToolsDefinitions}
-						VK_USE_PLATFORM_MACOS_MVK
-					)
-				elseif ( WIN32 )
-					set( CastorToolsDefinitions
-						${CastorToolsDefinitions}
-						VK_USE_PLATFORM_WIN32_KHR
-					)
-				elseif ( ANDROID )
-					set( CastorToolsDefinitions
-						${CastorToolsDefinitions}
-						VK_USE_PLATFORM_ANDROID_KHR
-					)
-				else ()
-					set( CastorToolsDefinitions
-						${CastorToolsDefinitions}
-						VK_USE_PLATFORM_XLIB_KHR
-					)
-				endif ()
-
 				if( CASTOR_BUILD_TOOL_IMG_CONVERTER )
 					set( Build ${ImgConv} )
 					add_subdirectory( ImgConverter )

@@ -19,20 +19,26 @@ namespace Testing
 	{
 	public:
 		TestWindowHandle()
-			: ashes::IWindowHandle{ ashes::KHR_PLATFORM_SURFACE_EXTENSION_NAME }
 #if defined( VK_USE_PLATFORM_WIN32_KHR )
+			: ashes::IWindowHandle{ VK_KHR_WIN32_SURFACE_EXTENSION_NAME }
 			, m_mswHandle{ {}, {} }
 #elif defined( VK_USE_PLATFORM_ANDROID_KHR )
+			: ashes::IWindowHandle{ VK_KHR_ANDROID_SURFACE_EXTENSION_NAME }
 			, m_androidHandle{ {} }
 #elif defined( VK_USE_PLATFORM_XCB_KHR )
+			: ashes::IWindowHandle{ VK_KHR_XCB_SURFACE_EXTENSION_NAME }
 			, m_xcbHandle{ {}, {} }
 #elif defined( VK_USE_PLATFORM_MIR_KHR )
+			: ashes::IWindowHandle{ VK_KHR_MIR_SURFACE_EXTENSION_NAME }
 			, m_mirHandle{ {}, {} }
 #elif defined( VK_USE_PLATFORM_WAYLAND_KHR )
+			: ashes::IWindowHandle{ VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME }
 			, m_waylandHandle{ {}, {} }
 #elif defined( VK_USE_PLATFORM_XLIB_KHR )
+			: ashes::IWindowHandle{ VK_KHR_XLIB_SURFACE_EXTENSION_NAME }
 			, m_xlibHandle{ {}, {} }
 #elif defined( VK_USE_PLATFORM_MACOS_MVK )
+			: ashes::IWindowHandle{ VK_KHR_MACOS_SURFACE_EXTENSION_NAME }
 			, m_macosHandle{ {} }
 #endif
 		{

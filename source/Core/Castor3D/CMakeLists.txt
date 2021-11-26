@@ -1739,6 +1739,30 @@ target_compile_definitions( ${PROJECT_NAME}
 	PUBLIC
 		${Castor3DDefinitions}
 )
+if ( APPLE )
+	target_compile_definitions( ${PROJECT_NAME}
+		PUBLIC
+			VK_USE_PLATFORM_MACOS_MVK
+	)
+elseif ( WIN32 )
+	target_compile_definitions( ${PROJECT_NAME}
+		PUBLIC
+			VK_USE_PLATFORM_WIN32_KHR
+	)
+elseif ( ANDROID )
+	target_compile_definitions( ${PROJECT_NAME}
+		PUBLIC
+			VK_USE_PLATFORM_ANDROID_KHR
+	)
+else ()
+	target_compile_definitions( ${PROJECT_NAME}
+		PUBLIC
+			VK_USE_PLATFORM_XLIB_KHR
+			VK_USE_PLATFORM_XCB_KHR
+			VK_USE_PLATFORM_WAYLAND_KHR
+	)
+endif ()
+
 target_link_libraries( ${PROJECT_NAME}
 	PUBLIC
 		castor::CastorUtils
