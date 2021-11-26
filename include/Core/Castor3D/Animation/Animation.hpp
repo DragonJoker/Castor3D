@@ -43,7 +43,8 @@ namespace castor3d
 		 *\param[in]	animable	L'objet animable parent.
 		 *\param[in]	name		Le nom de l'animation.
 		 */
-		inline AnimationT( AnimationType type
+		inline AnimationT( AnimableHandlerT & handler
+			, AnimationType type
 			, AnimableT< AnimableHandlerT > & animable
 			, castor::String const & name = castor::cuEmptyString );
 		/**
@@ -58,8 +59,8 @@ namespace castor3d
 		 *\param[in]	animable	L'objet animable parent.
 		 *\param[in]	name		Le nom de l'animation.
 		 */
-		inline AnimationT( AnimationType type
-			, AnimableHandlerT & handler
+		inline AnimationT( AnimableHandlerT & handler
+			, AnimationType type
 			, castor::String const & name = castor::cuEmptyString );
 		/**
 		 *\~english

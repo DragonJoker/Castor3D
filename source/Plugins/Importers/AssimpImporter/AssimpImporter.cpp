@@ -195,12 +195,11 @@ namespace C3dAssimp
 		{
 		public:
 			static void submit( aiMaterial const & material
-				, castor3d::Scene & scene
 				, castor3d::SamplerRes sampler
 				, castor3d::MeshImporter const & importer
 				, castor3d::Pass & pass )
 			{
-				PassFiller vis{ material, scene, sampler, importer, pass };
+				PassFiller vis{ material, sampler, importer, pass };
 				pass.accept( vis );
 				vis.finish();
 			}
@@ -226,13 +225,11 @@ namespace C3dAssimp
 			};
 
 			PassFiller( aiMaterial const & material
-				, castor3d::Scene & scene
 				, castor3d::SamplerRes sampler
 				, castor3d::MeshImporter const & importer
 				, castor3d::Pass & result )
 				: castor3d::PassVisitor{ {} }
 				, m_material{ material }
-				, m_scene{ scene }
 				, m_sampler{ sampler }
 				, m_importer{ importer }
 				, m_result{ result }
@@ -608,7 +605,6 @@ namespace C3dAssimp
 
 		private:
 			aiMaterial const & m_material;
-			castor3d::Scene & m_scene;
 			castor3d::SamplerRes m_sampler;
 			castor3d::MeshImporter const & m_importer;
 			castor3d::Pass & m_result;
@@ -675,7 +671,7 @@ namespace C3dAssimp
 				log::warn << "Switching from " << passFactory.getIdName( srcType ) << " to " << passFactory.getIdName( dstType ) << " pass type." << std::endl;
 			}
 
-			PassFiller::submit( aiMaterial, scene, sampler, importer, pass );
+			PassFiller::submit( aiMaterial, sampler, importer, pass );
 
 			if ( !pass.getTextureUnits( TextureFlag::eOpacity ).empty()
 				&& pass.getAlphaFunc() == VkCompareOp::VK_COMPARE_OP_ALWAYS )

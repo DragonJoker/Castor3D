@@ -8,7 +8,8 @@ namespace castor3d
 {
 	MeshAnimation::MeshAnimation( Mesh & mesh
 		, String const & name )
-		: Animation{ AnimationType::eMesh
+		: Animation{ *mesh.getEngine()
+			, AnimationType::eMesh
 			, mesh
 			, name }
 	{
