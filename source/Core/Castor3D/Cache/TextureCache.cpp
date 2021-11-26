@@ -371,9 +371,6 @@ namespace castor3d
 			, castor::String const & name
 			, bool allowCompression )
 		{
-#if !defined( NDEBUG )
-			allowCompression = false;
-#endif
 			// Finish buffer initialisation.
 			auto & loader = engine.getImageLoader();
 			auto compressedFormat = loader.getOptions().getCompressed( buffer->getFormat() );
