@@ -616,8 +616,36 @@ namespace castor3d
 		ashes::StringArray layerNames;
 		completeLayerNames( engine, layers, layerNames );
 		instanceExtensions.addExtension( VK_KHR_SURFACE_EXTENSION_NAME );
-		instanceExtensions.addExtension( ashes::KHR_PLATFORM_SURFACE_EXTENSION_NAME );
-
+#if defined( VK_USE_PLATFORM_ANDROID_KHR )
+		instanceExtensions.addExtension( VK_KHR_ANDROID_SURFACE_EXTENSION_NAME );
+#endif
+#if defined( VK_USE_PLATFORM_MIR_KHR )
+		m_extensionNames.push_back( VK_KHR_MIR_SURFACE_EXTENSION_NAME );
+#endif
+#if defined( VK_USE_PLATFORM_FUCHSIA )
+		instanceExtensions.addExtension( VK_FUCHSIA_IMAGEPIPE_SURFACE_EXTENSION_NAME );
+#endif
+#if defined( VK_USE_PLATFORM_IOS_MVK )
+		instanceExtensions.addExtension( VK_MVK_IOS_SURFACE_EXTENSION_NAME );
+#endif
+#if defined( VK_USE_PLATFORM_MACOS_MVK )
+		instanceExtensions.addExtension( VK_MVK_MACOS_SURFACE_EXTENSION_NAME );
+#endif
+#if defined( VK_USE_PLATFORM_VI_NN )
+		instanceExtensions.addExtension( VK_NN_VI_SURFACE_EXTENSION_NAME );
+#endif
+#if defined( VK_USE_PLATFORM_XCB_KHR )
+		instanceExtensions.addExtension( VK_KHR_XCB_SURFACE_EXTENSION_NAME );
+#endif
+#if defined( VK_USE_PLATFORM_XLIB_KHR )
+		instanceExtensions.addExtension( VK_KHR_XLIB_SURFACE_EXTENSION_NAME );
+#endif
+#if defined( VK_USE_PLATFORM_WAYLAND_KHR )
+		instanceExtensions.addExtension( VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME );
+#endif
+#if defined( VK_USE_PLATFORM_WIN32_KHR )
+		instanceExtensions.addExtension( VK_KHR_WIN32_SURFACE_EXTENSION_NAME );
+#endif
 		if ( engine.isValidationEnabled() )
 		{
 			addOptionalDebugLayers( globalLayerExtensions, instanceExtensions );
