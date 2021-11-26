@@ -4,6 +4,7 @@
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationBone.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationNode.hpp"
 #include "Castor3D/Model/Skeleton/Bone.hpp"
+#include "Castor3D/Animation/Animable.hpp"
 
 using namespace castor;
 
@@ -28,7 +29,7 @@ namespace castor3d
 
 	SkeletonAnimation::SkeletonAnimation( Animable & animable
 		, String const & name )
-		: Animation{ AnimationType::eSkeleton, animable, name }
+		: Animation{ *animable.getOwner(), AnimationType::eSkeleton, animable, name }
 	{
 	}
 

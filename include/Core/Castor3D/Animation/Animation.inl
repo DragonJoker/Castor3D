@@ -3,19 +3,20 @@
 namespace castor3d
 {
 	template< typename AnimableHandlerT >
-	AnimationT< AnimableHandlerT >::AnimationT( AnimationType type
+	AnimationT< AnimableHandlerT >::AnimationT( AnimableHandlerT & handler
+		, AnimationType type
 		, AnimableT< AnimableHandlerT > & animable
 		, castor::String const & name )
 		: castor::Named{ name }
-		, castor::OwnedBy< AnimableHandlerT >{ castor3d::getEngine( animable ) }
+		, castor::OwnedBy< AnimableHandlerT >{ handler}
 		, m_animable{ &animable }
 		, m_type{ type }
 	{
 	}
 
 	template< typename AnimableHandlerT >
-	AnimationT< AnimableHandlerT >::AnimationT( AnimationType type
-		, AnimableHandlerT & handler
+	AnimationT< AnimableHandlerT >::AnimationT( AnimableHandlerT & handler
+		, AnimationType type
 		, castor::String const & name )
 		: castor::Named{ name }
 		, castor::OwnedBy< AnimableHandlerT >{ handler }
