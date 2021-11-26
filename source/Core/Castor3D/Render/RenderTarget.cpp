@@ -918,6 +918,7 @@ namespace castor3d
 			, queue
 			, signalsToWait );
 
+		// Compute all that is needed for the rendering of the scene.
 		m_signalFinished = m_renderTechnique->preRender( m_signalFinished
 			, queue );
 

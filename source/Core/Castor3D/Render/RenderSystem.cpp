@@ -301,27 +301,27 @@ namespace castor3d
 		}
 
 		void addOptionalDebugLayers( std::vector< VkExtensionProperties > const & available
-			, ashes::StringArray & names )
+			, Extensions & extensions )
 		{
 #if VK_EXT_debug_utils
 			log::debug << "Adding debug_utils layer" << std::endl;
 			if ( isExtensionAvailable( available, VK_EXT_DEBUG_UTILS_EXTENSION_NAME ) )
 			{
-				names.push_back( VK_EXT_DEBUG_UTILS_EXTENSION_NAME );
+				extensions.addExtension( VK_EXT_DEBUG_UTILS_EXTENSION_NAME );
 			}
 #else
 #	if VK_EXT_debug_report
 			log::debug << "Adding debug_report layer" << std::endl;
 			if ( isExtensionAvailable( available, VK_EXT_DEBUG_REPORT_EXTENSION_NAME ) )
 			{
-				names.push_back( VK_EXT_DEBUG_REPORT_EXTENSION_NAME );
+				extensions.addExtension( VK_EXT_DEBUG_REPORT_EXTENSION_NAME );
 			}
 #	endif
 #	if VK_EXT_debug_marker
 			log::debug << "Adding debug_marker layer" << std::endl;
 			if ( isExtensionAvailable( available, VK_EXT_DEBUG_MARKER_EXTENSION_NAME ) )
 			{
-				names.push_back( VK_EXT_DEBUG_MARKER_EXTENSION_NAME );
+				extensions.addExtension( VK_EXT_DEBUG_MARKER_EXTENSION_NAME );
 			}
 #	endif
 #endif
@@ -442,11 +442,31 @@ namespace castor3d
 
 	//*************************************************************************
 
+	void Extensions::addExtension( std::string const & extName )
+	{
+		m_extensionsNames.push_back( extName );
+	}
+
+	void Extensions::addExtension( std::string const & extName
+		, VkStructure * featureStruct )
+	{
+		addExtension( extName );
+
+		if ( featureStruct )
+		{
+			m_extensions.push_back( { extName, featureStruct } );
+		}
+	}
+
+	//*************************************************************************
+
 	Renderer::Renderer( Engine & engine
 		, AshPluginDescription pdesc
+		, Extensions pinstanceExtensions
 		, uint32_t gpuIndex )
 		: desc{ std::move( pdesc ) }
-		, instance{ RenderSystem::createInstance( engine, desc ) }
+		, instanceExtensions{ std::move( pinstanceExtensions ) }
+		, instance{ RenderSystem::createInstance( engine, desc, instanceExtensions ) }
 		, gpus{ instance->enumeratePhysicalDevices() }
 	{
 		if ( gpus.empty() )
@@ -461,7 +481,8 @@ namespace castor3d
 	//*************************************************************************
 
 	RenderSystem::RenderSystem( Engine & engine
-		, Renderer renderer )
+		, Renderer renderer
+		, Extensions pdeviceExtensions )
 		: OwnedBy< Engine >{ engine }
 		, m_renderer{ std::move( renderer ) }
 		, m_gpuInformations{}
@@ -492,7 +513,8 @@ namespace castor3d
 
 		m_device = std::make_shared< RenderDevice >( *this
 			, gpu
-			, m_renderer.desc );
+			, m_renderer.desc
+			, std::move( pdeviceExtensions ) );
 
 		static std::map< uint32_t, castor::String > vendors
 		{
@@ -545,13 +567,18 @@ namespace castor3d
 	}
 
 	RenderSystem::RenderSystem( Engine & engine
-		, AshPluginDescription desc )
-		: RenderSystem{ engine, Renderer{ engine, std::move( desc ), 0u } }
+		, AshPluginDescription desc
+		, Extensions instanceExtensions
+		, Extensions deviceExtensions )
+		: RenderSystem{ engine
+			, Renderer{ engine, std::move( desc ), std::move( instanceExtensions ), 0u }
+			, std::move( deviceExtensions ) }
 	{
 	}
 
 	ashes::InstancePtr RenderSystem::createInstance( Engine & engine
-		, AshPluginDescription const & desc )
+		, AshPluginDescription const & desc
+		, Extensions & instanceExtensions )
 	{
 		auto & rendererList = engine.getRenderersList();
 		auto plugin = rendererList.selectPlugin( desc.name );
@@ -588,17 +615,16 @@ namespace castor3d
 
 		ashes::StringArray layerNames;
 		completeLayerNames( engine, layers, layerNames );
-
-		ashes::StringArray extensionNames{ VK_KHR_SURFACE_EXTENSION_NAME
-			, ashes::KHR_PLATFORM_SURFACE_EXTENSION_NAME };
+		instanceExtensions.addExtension( VK_KHR_SURFACE_EXTENSION_NAME );
+		instanceExtensions.addExtension( ashes::KHR_PLATFORM_SURFACE_EXTENSION_NAME );
 
 		if ( engine.isValidationEnabled() )
 		{
-			addOptionalDebugLayers( globalLayerExtensions, extensionNames );
+			addOptionalDebugLayers( globalLayerExtensions, instanceExtensions );
 		}
 
+		auto & extensionNames = instanceExtensions.getExtensionsNames();
 		checkExtensionsAvailability( globalLayerExtensions, extensionNames );
-
 		ashes::InstanceCreateInfo createInfo
 		{
 			0u,
