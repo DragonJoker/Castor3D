@@ -152,9 +152,6 @@ namespace castor3d
 	CU_DeclareSmartPtr( AnimationKeyFrame );
 
 	CU_DeclareVector( AnimationKeyFrameUPtr, AnimationKeyFrame );
-
-	template< typename AnimableHandlerT >
-	Engine & getEngine( AnimableT< AnimableHandlerT > const & animable );
 	//@}
 }
 
