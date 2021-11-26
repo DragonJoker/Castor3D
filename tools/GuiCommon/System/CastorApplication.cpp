@@ -480,6 +480,7 @@ namespace GuiCommon
 		{
 			m_castor->loadRenderer( castor3d::Renderer{ *m_castor
 				, *it
+				, {}
 				, m_config.gpuIndex } );
 		}
 		else

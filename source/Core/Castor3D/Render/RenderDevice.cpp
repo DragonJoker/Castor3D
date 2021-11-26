@@ -84,11 +84,10 @@ namespace castor3d
 		ashes::DeviceCreateInfo getDeviceCreateInfo( ashes::Instance const & instance
 			, ashes::PhysicalDevice const & gpu
 			, ashes::DeviceQueueCreateInfoArray queueCreateInfos
-			, ashes::StringArray & enabledExtensions
+			, ashes::StringArray const & enabledExtensions
 			, VkPhysicalDeviceFeatures2 & features2 )
 		{
 			log::debug << "Instance enabled layers count: " << uint32_t( instance.getEnabledLayerNames().size() ) << std::endl;
-			enabledExtensions.emplace_back( VK_KHR_SWAPCHAIN_EXTENSION_NAME );
 			auto result = ashes::DeviceCreateInfo{ 0u
 				, std::move( queueCreateInfos )
 				, instance.getEnabledLayerNames()
@@ -240,7 +239,8 @@ namespace castor3d
 
 	RenderDevice::RenderDevice( RenderSystem & renderSystem
 		, ashes::PhysicalDevice const & gpu
-		, AshPluginDescription const & desc )
+		, AshPluginDescription const & desc
+		, Extensions pdeviceExtensions )
 		: renderSystem{ renderSystem }
 		, gpu{ gpu }
 		, desc{ desc }
@@ -250,51 +250,68 @@ namespace castor3d
 			, nullptr
 			, {} }
 		, features11{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES
-			, &features12
+			, nullptr
 			, {} }
 		, drawParamsFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETERS_FEATURES
-			, nullptr }
+			, nullptr
+		, {} }
 		, features2{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2
 			, nullptr
 			, {} }
 		, properties{ gpu.getProperties() }
 		, queueFamilies{ initialiseQueueFamilies( renderSystem.getInstance(), gpu ) }
+		, m_deviceExtensions{ std::move( pdeviceExtensions ) }
 	{
 		auto apiVersion = gpu.getProperties().apiVersion;
 		auto deviceExtensions = gpu.enumerateExtensionProperties( std::string{} );
-		ashes::StringArray enabledExtensions;
 
 		if ( apiVersion >= ashes::makeVersion( 1, 2, 0 ) )
 		{
-			features2.pNext = &features11;
+			m_deviceExtensions.addFeature( &features11 );
+			m_deviceExtensions.addFeature( &features12 );
 		}
 		else if ( apiVersion >= ashes::makeVersion( 1, 1, 0 ) )
 		{
-			features2.pNext = &drawParamsFeatures;
+			m_deviceExtensions.addFeature( &drawParamsFeatures );
 		}
 		else if ( isExtensionSupported( "VK_KHR_shader_draw_parameters"
 			, deviceExtensions ) )
 		{
-			enabledExtensions.push_back( "VK_KHR_shader_draw_parameters" );
+			m_deviceExtensions.addExtension( "VK_KHR_shader_draw_parameters" );
 		}
 
 		if ( apiVersion >= ashes::makeVersion( 1, 1, 0 ) )
 		{
+			// use the features2 chain to append extensions
+			VkStructure * current = reinterpret_cast< VkStructure * >( &features2 );
+
+			// build up chain of all used extension features
+			for ( size_t i = 0; i < m_deviceExtensions.getSize(); i++ )
+			{
+				current->pNext = m_deviceExtensions[i].featureStruct;
+
+				while ( current->pNext )
+				{
+					current = current->pNext;
+				}
+			}
+
 			gpu.getFeatures( features2 );
 			features = features2.features;
 
 			if ( isExtensionSupported( "VK_EXT_shader_atomic_float"
 				, deviceExtensions ) )
 			{
-				enabledExtensions.push_back( "VK_EXT_shader_atomic_float" );
+				m_deviceExtensions.addExtension( "VK_EXT_shader_atomic_float" );
 			}
 		}
 
+		m_deviceExtensions.addExtension( VK_KHR_SWAPCHAIN_EXTENSION_NAME );
 		device = renderSystem.getInstance().createDevice( gpu
 			, getDeviceCreateInfo( renderSystem.getInstance()
 				, gpu
 				, getQueueCreateInfos( queueFamilies )
-				, enabledExtensions
+				, m_deviceExtensions.getExtensionsNames()
 				, features2 ) );
 		device->setCallstackCallback( []()
 			{

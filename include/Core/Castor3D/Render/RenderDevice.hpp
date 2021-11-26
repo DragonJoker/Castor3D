@@ -20,6 +20,89 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	struct VkStructure
+	{
+	private:
+		VkStructure();
+
+	public:
+		VkStructureType sType;
+		VkStructure * pNext;
+	};
+
+	struct Feature
+	{
+		std::string extName;
+		VkStructure * featureStruct;
+	};
+	using FeatureArray = std::vector< Feature >;
+
+	struct Extensions
+	{
+	public:
+		/**
+		*\~english
+		*\brief
+		*	Adds an extension.
+		*\~french
+		*\brief
+		*	Ajoute une extension.
+		*/
+		C3D_API void addExtension( std::string const & extName );
+		/**
+		*\~english
+		*\brief
+		*	Adds an extension, and it's optional feature structure, that will be queried on physical device.
+		*\~french
+		*\brief
+		*	Ajoute une extension, et sa feature structure optionnelle, qui sera remplie via le physical device.
+		*/
+		C3D_API void addExtension( std::string const & extName
+			, VkStructure * featureStruct );
+		/**
+		*\~english
+		*\brief
+		*	Adds a feature structure, that will be queried on physical device.
+		*\~french
+		*\brief
+		*	Ajoute une feature structure, qui sera remplie via le physical device.
+		*/
+		template< typename StructT >
+		void addFeature( StructT * featureStruct )
+		{
+			if ( featureStruct )
+			{
+				m_extensions.push_back( { ""
+					, reinterpret_cast< VkStructure * >( featureStruct ) } );
+			}
+		}
+
+
+		ashes::StringArray const & getExtensionsNames()const
+		{
+			return m_extensionsNames;
+		}
+
+		bool isEmpty()const
+		{
+			return m_extensions.empty();
+		}
+
+		size_t getSize()const
+		{
+			return m_extensions.size();
+		}
+
+		Feature const & operator[]( size_t index )const
+		{
+			return m_extensions[index];
+		}
+
+	private:
+		ashes::StringArray m_extensionsNames;
+		FeatureArray m_extensions;
+	};
+
 	enum class QueueFamilyFlag
 	{
 		eNone = 0x00,
@@ -132,7 +215,8 @@ namespace castor3d
 	{
 		C3D_API RenderDevice( RenderSystem & renderSystem
 			, ashes::PhysicalDevice const & gpu
-			, AshPluginDescription const & desc );
+			, AshPluginDescription const & desc
+			, Extensions deviceExtensions );
 		C3D_API ~RenderDevice();
 
 		C3D_API VkFormat selectSuitableDepthFormat( VkFormatFeatureFlags requiredFeatures )const;
@@ -202,6 +286,7 @@ namespace castor3d
 		UniformBufferPoolsSPtr uboPools;
 
 	private:
+		Extensions m_deviceExtensions;
 		QueuesData * m_preferredGraphicsQueue{};
 		QueuesData * m_preferredComputeQueue{};
 		QueuesData * m_preferredTransferQueue{};
