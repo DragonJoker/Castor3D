@@ -27,9 +27,11 @@ namespace castor3d
 		Renderer & operator=( Renderer const & ) = delete;
 		C3D_API Renderer( Engine & engine
 			, AshPluginDescription desc
+			, Extensions pinstanceExtensions = {}
 			, uint32_t gpuIndex = 0u );
 
 		AshPluginDescription desc;
+		Extensions instanceExtensions;
 		ashes::InstancePtr instance;
 		ashes::PhysicalDevicePtrArray gpus;
 		ashes::PhysicalDevice * gpu{};
@@ -38,6 +40,7 @@ namespace castor3d
 	class RenderSystem
 		: public castor::OwnedBy< Engine >
 	{
+	public:
 	public:
 		/**
 		 *\~english
@@ -50,7 +53,9 @@ namespace castor3d
 		 *\param[in]	desc	The Ashes plugin description.
 		 */
 		C3D_API RenderSystem( Engine & engine
-			, AshPluginDescription desc );
+			, AshPluginDescription desc
+			, Extensions instanceExtensions = {}
+			, Extensions deviceExtensions = {} );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -62,7 +67,8 @@ namespace castor3d
 		 *\param[in]	desc	The Ashes plugin description.
 		 */
 		C3D_API RenderSystem( Engine & engine
-			, Renderer renderer );
+			, Renderer renderer
+			, Extensions deviceExtensions = {} );
 		/**
 		*\~english
 		*\brief
@@ -80,7 +86,8 @@ namespace castor3d
 		*	The Ashes plugin description.
 		*/
 		C3D_API static ashes::InstancePtr createInstance( Engine & engine
-			, AshPluginDescription const & desc );
+			, AshPluginDescription const & desc
+			, Extensions & instanceExtensions );
 		/**
 		*\~english
 		*\brief
@@ -258,8 +265,7 @@ namespace castor3d
 		C3D_API castor::Matrix4x4f getInfinitePerspective( float radiansFovY
 			, float aspect
 			, float zNear )const;
-		/**
-		*\~english
+		/*
 		*name
 		*	Getters.
 		*\~french
