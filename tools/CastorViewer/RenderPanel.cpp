@@ -521,7 +521,7 @@ namespace CastorViewer
 
 	void RenderPanel::onSize( wxSizeEvent & p_event )
 	{
-		if ( m_resizeWindow )
+		if ( m_resizeWindow && m_renderWindow )
 		{
 			m_renderWindow->resize( uint32_t( p_event.GetSize().x )
 				, uint32_t( p_event.GetSize().y ) );

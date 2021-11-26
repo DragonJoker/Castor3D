@@ -12,12 +12,31 @@
 
 namespace
 {
+#if defined( VK_USE_PLATFORM_ANDROID_KHR )
+		std::string const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_KHR_android_surface";
+#elif defined( VK_USE_PLATFORM_FUCHSIA )
+		std::string const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_FUCHSIA_imagepipe_surface";
+#elif defined( VK_USE_PLATFORM_IOS_MVK )
+		std::string const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_MVK_ios_surface";
+#elif defined( VK_USE_PLATFORM_MACOS_MVK )
+		std::string const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_MVK_macos_surface";
+#elif defined( VK_USE_PLATFORM_VI_NN )
+		std::string const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_NN_vi_surface";
+#elif defined( VK_USE_PLATFORM_XLIB_KHR )
+		std::string const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_KHR_xlib_surface";
+#elif defined( VK_USE_PLATFORM_XCB_KHR )
+		std::string const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_KHR_xcb_surface";
+#elif defined( VK_USE_PLATFORM_WAYLAND_KHR )
+		std::string const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_KHR_wayland_surface";
+#elif defined( VK_USE_PLATFORM_WIN32_KHR )
+		std::string const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_KHR_win32_surface";
+#endif
 	class DummyWindowHandle
 		: public ashes::IWindowHandle
 	{
 	public:
 		DummyWindowHandle()
-			: ashes::IWindowHandle{ ashes::KHR_PLATFORM_SURFACE_EXTENSION_NAME }
+			: ashes::IWindowHandle{ KHR_PLATFORM_SURFACE_EXTENSION_NAME }
 		{
 		}
 

@@ -242,21 +242,21 @@ namespace castor3d
 				lineEnd = "\n";
 				lineBegin = "    ";
 				stream << "Error:" << lineEnd << lineBegin;
-			};
+			}
 			// Warnings may hint at unexpected / non-spec API usage
 			if ( ashes::checkFlag( flags, VK_DEBUG_REPORT_WARNING_BIT_EXT ) )
 			{
 				lineEnd = "\n";
 				lineBegin = "    ";
 				stream << "Warning:" << lineEnd << lineBegin;
-			};
+			}
 			// May indicate sub-optimal usage of the API
 			if ( ashes::checkFlag( flags, VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT ) )
 			{
 				lineEnd = "\n";
 				lineBegin = "    ";
 				stream << "Performance:" << lineEnd << lineBegin;
-			};
+			}
 			// Informal messages that may become handy during debugging
 			if ( ashes::checkFlag( flags, VK_DEBUG_REPORT_INFORMATION_BIT_EXT ) )
 			{

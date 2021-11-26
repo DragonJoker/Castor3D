@@ -7,6 +7,7 @@
 #	include <crtdbg.h>
 #elif defined( CU_PlatformLinux )
 #	include <gdk/gdkx.h>
+#	include <gdk/gdkwayland.h>
 #	include <gtk/gtk.h>
 #	include <GL/glx.h>
 #	undef None
@@ -372,22 +373,45 @@ namespace GuiCommon
 #elif defined( CU_PlatformLinux )
 
 		auto gtkWidget = window->GetHandle();
-		auto gdkWindow = gtk_widget_get_window( gtkWidget );
-		GLXDrawable drawable = 0;
-		Display * display = nullptr;
 
-		if ( gtkWidget && gdkWindow )
+		if ( gtkWidget )
 		{
-			drawable = GDK_WINDOW_XID( gdkWindow );
-			GdkDisplay * gtkDisplay = gtk_widget_get_display( gtkWidget );
+			gtk_widget_realize( gtkWidget );
+			auto gdkDisplay = gtk_widget_get_display( gtkWidget );
+			auto gdkWindow = gtk_widget_get_window( gtkWidget );
 
-			if ( gtkDisplay )
+			if ( gdkDisplay )
 			{
-				display = gdk_x11_display_get_xdisplay( gtkDisplay );
+#if defined( VK_USE_PLATFORM_WAYLAND_KHR )
+#	ifdef GDK_WINDOWING_WAYLAND
+				if ( GDK_IS_WAYLAND_DISPLAY( gdkDisplay ) )
+				{
+					auto display = gdk_wayland_display_get_wl_display( gdkDisplay );
+					auto surface = gdkWindow
+						? gdk_wayland_window_get_wl_surface( gdkWindow )
+						: nullptr;
+					return ashes::WindowHandle( std::make_unique< ashes::IWaylandWindowHandle >( display, surface ) );
+				}
+#	endif
+#endif
+#if defined( VK_USE_PLATFORM_XLIB_KHR )
+#	ifdef GDK_WINDOWING_X11
+				if ( GDK_IS_X11_DISPLAY( gdkDisplay ) )
+				{
+					auto display = gdk_x11_display_get_xdisplay( gdkDisplay );
+					GLXDrawable drawable = gdkWindow
+						? gdk_x11_window_get_xid( gdkWindow )
+						: 0;
+					return ashes::WindowHandle( std::make_unique< ashes::IXWindowHandle >( drawable, display ) );
+				}
+#	endif
+#endif
+				CU_Exception( "Unsupported GTK surface type." );
 			}
 		}
 
-		return ashes::WindowHandle( std::make_unique< ashes::IXWindowHandle >( drawable, display ) );
+		return ashes::WindowHandle{ nullptr };
+
 
 #elif defined( CU_PlatformApple )
 
