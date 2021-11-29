@@ -263,6 +263,7 @@ namespace castor3d::shader
 		C3D_API virtual void computeMapContributions( PassFlags const & passFlags
 			, FilteredTextureFlags const & textures
 			, TextureConfigurations const & textureConfigs
+			, TextureAnimations const & textureAnims
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 			, sdw::Vec3 & texCoords
 			, sdw::Vec3 & normal
@@ -304,6 +305,7 @@ namespace castor3d::shader
 		C3D_API virtual void computeMapDiffuseContributions( PassFlags const & passFlags
 			, FilteredTextureFlags const & textures
 			, TextureConfigurations const & textureConfigs
+			, TextureAnimations const & textureAnims
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 			, sdw::Vec3 const & texCoords
 			, sdw::Vec3 & emissive

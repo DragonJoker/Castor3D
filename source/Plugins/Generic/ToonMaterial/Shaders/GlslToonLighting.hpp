@@ -79,6 +79,7 @@ namespace toon::shader
 		void computeMapContributions( castor3d::PassFlags const & passFlags
 			, castor3d::FilteredTextureFlags const & textures
 			, c3d::TextureConfigurations const & textureConfigs
+			, c3d::TextureAnimations const & textureAnims
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 			, sdw::Vec3 & texCoords
 			, sdw::Vec3 & normal
@@ -120,6 +121,7 @@ namespace toon::shader
 		void computeMapDiffuseContributions( castor3d::PassFlags const & passFlags
 			, castor3d::FilteredTextureFlags const & textures
 			, c3d::TextureConfigurations const & textureConfigs
+			, c3d::TextureAnimations const & textureAnims
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 			, sdw::Vec3 const & texCoords
 			, sdw::Vec3 & emissive
@@ -300,6 +302,7 @@ namespace toon::shader
 		void computeMapContributions( castor3d::PassFlags const & passFlags
 			, castor3d::FilteredTextureFlags const & textures
 			, c3d::TextureConfigurations const & textureConfigs
+			, c3d::TextureAnimations const & textureAnims
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 			, sdw::Vec3 & texCoords
 			, sdw::Vec3 & normal
@@ -341,6 +344,7 @@ namespace toon::shader
 		void computeMapDiffuseContributions( castor3d::PassFlags const & passFlags
 			, castor3d::FilteredTextureFlags const & textures
 			, c3d::TextureConfigurations const & textureConfigs
+			, c3d::TextureAnimations const & textureAnims
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 			, sdw::Vec3 const & texCoords
 			, sdw::Vec3 & emissive

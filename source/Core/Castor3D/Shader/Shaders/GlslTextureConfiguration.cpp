@@ -11,37 +11,6 @@ namespace castor3d
 {
 	namespace shader
 	{
-		namespace
-		{
-			template< typename LhsT, typename RhsT >
-			LhsT translateUV( LhsT const & translate
-				, RhsT const & uv )
-			{
-				return translate + uv;
-			}
-
-			sdw::Vec2 rotateUV( sdw::Vec2 const & rotate
-				, sdw::Vec2 const & uv )
-			{
-				auto mid = 0.5_f;
-				return vec2( rotate.x() * ( uv.x() - mid ) + rotate.y() * ( uv.y() - mid ) + mid
-					, rotate.x() * ( uv.y() - mid ) - rotate.y() * ( uv.x() - mid ) + mid );
-			}
-
-			sdw::Vec3 rotateUV( sdw::Vec3 const & rotate
-				, sdw::Vec3 const & uv )
-			{
-				return ( ( uv - vec3( 0.5_f, 0.5f, 0.5f ) ) * rotate ) + vec3( 0.5_f, 0.5f, 0.5f );
-			}
-
-			template< typename LhsT, typename RhsT >
-			LhsT scaleUV( LhsT const & scale
-				, RhsT const & uv )
-			{
-				return scale * uv;
-			}
-		}
-
 		//*****************************************************************************************
 
 		TextureConfigData::TextureConfigData( sdw::ShaderWriter & writer
@@ -85,7 +54,8 @@ namespace castor3d
 			, hgtMask{ hgtFcr.y() }
 			, hgtFact{ hgtFcr.z() }
 			, fneedYI{ mscVls.x() }
-			, needsYI{ writer.cast< sdw::UInt >( mscVls.x() ) }
+			, needsYI{ m_writer->cast< sdw::UInt >( mscVls.x() ) }
+			, isAnim{ mscVls.y() != 0.0_f }
 		{
 		}
 
@@ -116,131 +86,113 @@ namespace castor3d
 			return result;
 		}
 
-		sdw::Vec3 TextureConfigData::getDiffuse( sdw::ShaderWriter & writer
-			, sdw::Vec4 const & sampled
+		sdw::Vec3 TextureConfigData::getDiffuse( sdw::Vec4 const & sampled
 			, sdw::Vec3 const & diffuse )const
 		{
-			return diffuse * getVec3( writer, sampled, colMask );
+			return diffuse * getVec3( sampled, colMask );
 		}
 
-		sdw::Vec3 TextureConfigData::getAlbedo( sdw::ShaderWriter & writer
-			, sdw::Vec4 const & sampled
+		sdw::Vec3 TextureConfigData::getAlbedo( sdw::Vec4 const & sampled
 			, sdw::Vec3 const & albedo )const
 		{
-			return albedo * getVec3( writer, sampled, colMask );
+			return albedo * getVec3( sampled, colMask );
 		}
 
-		sdw::Vec3 TextureConfigData::getEmissive( sdw::ShaderWriter & writer
-			, sdw::Vec4 const & sampled
+		sdw::Vec3 TextureConfigData::getEmissive( sdw::Vec4 const & sampled
 			, sdw::Vec3 const & emissive )const
 		{
-			return emissive * getVec3( writer, sampled, emsMask );
+			return emissive * getVec3( sampled, emsMask );
 		}
 
-		sdw::Vec3 TextureConfigData::getSpecular( sdw::ShaderWriter & writer
-			, sdw::Vec4 const & sampled
+		sdw::Vec3 TextureConfigData::getSpecular( sdw::Vec4 const & sampled
 			, sdw::Vec3 const & specular )const
 		{
-			return specular * getVec3( writer, sampled, spcMask );
+			return specular * getVec3( sampled, spcMask );
 		}
 
-		sdw::Float TextureConfigData::getMetalness( sdw::ShaderWriter & writer
-			, sdw::Vec4 const & sampled
+		sdw::Float TextureConfigData::getMetalness( sdw::Vec4 const & sampled
 			, sdw::Float const & metalness )const
 		{
-			return metalness * getFloat( writer, sampled, metMask );
+			return metalness * getFloat( sampled, metMask );
 		}
 
-		sdw::Float TextureConfigData::getShininess( sdw::ShaderWriter & writer
-			, sdw::Vec4 const & sampled
+		sdw::Float TextureConfigData::getShininess( sdw::Vec4 const & sampled
 			, sdw::Float const & shininess )const
 		{
 			return shininess
-				* clamp( getFloat( writer, sampled, shnMask )
+				* clamp( getFloat( sampled, shnMask )
 					, 0.00390625_f // 1 / 256
 					, 1.0_f );
 		}
 
-		sdw::Float TextureConfigData::getGlossiness( sdw::ShaderWriter & writer
-			, sdw::Vec4 const & sampled
+		sdw::Float TextureConfigData::getGlossiness( sdw::Vec4 const & sampled
 			, sdw::Float const & glossiness )const
 		{
-			return glossiness * getFloat( writer, sampled, shnMask );
+			return glossiness * getFloat( sampled, shnMask );
 		}
 
-		sdw::Float TextureConfigData::getRoughness( sdw::ShaderWriter & writer
-			, sdw::Vec4 const & sampled
+		sdw::Float TextureConfigData::getRoughness( sdw::Vec4 const & sampled
 			, sdw::Float const & roughness )const
 		{
-			return roughness * getFloat( writer, sampled, rghMask );
+			return roughness * getFloat( sampled, rghMask );
 		}
 
-		sdw::Float TextureConfigData::getOpacity( sdw::ShaderWriter & writer
-			, sdw::Vec4 const & sampled
+		sdw::Float TextureConfigData::getOpacity( sdw::Vec4 const & sampled
 			, sdw::Float const & opacity )const
 		{
-			return opacity * getFloat( writer, sampled, opaMask );
+			return opacity * getFloat( sampled, opaMask );
 		}
 
-		sdw::Vec3 TextureConfigData::getNormal( sdw::ShaderWriter & writer
-			, sdw::Vec4 const & sampled
+		sdw::Vec3 TextureConfigData::getNormal( sdw::Vec4 const & sampled
 			, sdw::Mat3 const & tbn )const
 		{
 			return normalize( tbn
-				* fma( getVec3( writer, sampled, nmlMask )
+				* fma( getVec3( sampled, nmlMask )
 					, vec3( 2.0_f )
 					, -vec3( 1.0_f ) ) );
 		}
 
-		sdw::Vec3 TextureConfigData::getNormal( sdw::ShaderWriter & writer
-			, sdw::Vec4 const & sampled
+		sdw::Vec3 TextureConfigData::getNormal( sdw::Vec4 const & sampled
 			, sdw::Vec3 const & normal
 			, sdw::Vec3 const & tangent
 			, sdw::Vec3 const & bitangent )const
 		{
-			return getNormal( writer
-				, sampled
+			return getNormal( sampled
 				, shader::Utils::getTBN( normal, tangent, bitangent ) );
 		}
 
-		sdw::Float TextureConfigData::getHeight( sdw::ShaderWriter & writer
-			, sdw::Vec4 const & sampled )const
+		sdw::Float TextureConfigData::getHeight( sdw::Vec4 const & sampled )const
 		{
-			return hgtFact * getFloat( writer, sampled, hgtMask );
+			return hgtFact * getFloat( sampled, hgtMask );
 		}
 
-		sdw::Float TextureConfigData::getOcclusion( sdw::ShaderWriter & writer
-			, sdw::Vec4 const & sampled
+		sdw::Float TextureConfigData::getOcclusion( sdw::Vec4 const & sampled
 			, sdw::Float const & occlusion )const
 		{
-			return getFloat( writer, sampled, occMask );
+			return getFloat( sampled, occMask );
 		}
 
-		sdw::Float TextureConfigData::getTransmittance( sdw::ShaderWriter & writer
-			, sdw::Vec4 const & sampled
+		sdw::Float TextureConfigData::getTransmittance( sdw::Vec4 const & sampled
 			, sdw::Float const & transmittance )const
 		{
-			return getFloat( writer, sampled, trsMask );
+			return getFloat( sampled, trsMask );
 		}
 
-		sdw::Float TextureConfigData::getFloat( sdw::ShaderWriter & writer
-			, sdw::Vec4 const & sampled
+		sdw::Float TextureConfigData::getFloat( sdw::Vec4 const & sampled
 			, sdw::Float const & mask )const
 		{
-			return sampled[writer.cast< sdw::UInt >( mask )];
+			return sampled[m_writer->cast< sdw::UInt >( mask )];
 		}
 
-		sdw::Vec3 TextureConfigData::getVec3( sdw::ShaderWriter & writer
-			, sdw::Vec4 const & sampled
+		sdw::Vec3 TextureConfigData::getVec3( sdw::Vec4 const & sampled
 			, sdw::Float const & mask )const
 		{
-			return writer.ternary( mask == 0.0_f
+			return m_writer->ternary( mask == 0.0_f
 				, sampled.rgb()
 				, sampled.gba() );
 		}
 
-		void TextureConfigData::convertUV( sdw::ShaderWriter & writer
-			, sdw::Vec2 & uv )const
+		void TextureConfigData::convertUV( sdw::Vec2 & uv )const
 		{
 			uv = vec2( uv.x()
 				, mix( uv.y(), 1.0_f - uv.y(), fneedYI ) );
@@ -249,8 +201,7 @@ namespace castor3d
 			uv = translateUV( texTrn.xy(), uv );
 		}
 
-		void TextureConfigData::convertUVW( sdw::ShaderWriter & writer
-			, sdw::Vec3 & uvw )const
+		void TextureConfigData::convertUVW( sdw::Vec3 & uvw )const
 		{
 			uvw = vec3( uvw.x()
 				, mix( uvw.y(), 1.0_f - uvw.y(), fneedYI )

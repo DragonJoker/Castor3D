@@ -283,7 +283,8 @@ namespace castor3d
 		: uint32_t
 	{
 		eMaterials,
-		eTextures,
+		eTexConfigs,
+		eTexAnims,
 		eModel,
 		eBillboard,
 		eSkinningUbo,

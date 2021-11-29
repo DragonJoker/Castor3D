@@ -488,6 +488,7 @@ namespace castor3d
 		, castor::Angle const & rotate
 		, castor::Point3f const & scale )
 	{
+		CU_Require( hasAnimation() );
 		doUpdateTransform( castor::Point3f{ m_transform.translate } + translate
 			, m_transform.rotate + rotate
 			, castor::Point3f{ m_transform.scale } * scale );
