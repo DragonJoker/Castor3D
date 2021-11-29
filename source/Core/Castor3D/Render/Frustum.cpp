@@ -2,6 +2,8 @@
 
 #include "Castor3D/Render/Viewport.hpp"
 
+#pragma GCC diagnostic ignored "-Wuseless-cast"
+
 using namespace castor;
 
 #define C3D_DisableFrustumCulling 0

@@ -15,7 +15,10 @@ namespace castor
 				return 1.0;
 			}
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wuseless-cast"
 			return float( sin( Pi< float > *fX ) / ( Pi< float > *fX ) );
+#pragma GCC diagnostic pop
 		}
 
 		inline float weight( float fN, float fDistance )
