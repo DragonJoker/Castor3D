@@ -39,6 +39,8 @@
 
 #include <ShaderWriter/Source.hpp>
 
+#pragma GCC diagnostic ignored "-Wuseless-cast"
+
 CU_ImplementCUSmartPtr( castor3d, VoxelizePass )
 
 namespace castor3d

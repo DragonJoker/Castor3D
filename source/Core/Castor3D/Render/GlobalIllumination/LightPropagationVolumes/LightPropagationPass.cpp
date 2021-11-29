@@ -31,6 +31,8 @@
 #include <numeric>
 #include <random>
 
+#pragma GCC diagnostic ignored "-Wuseless-cast"
+
 CU_ImplementCUSmartPtr( castor3d, LightPropagationPass )
 
 using namespace castor;
