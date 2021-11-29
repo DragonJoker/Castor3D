@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Pass/PassModule.hpp"
 #include "Castor3D/Material/Texture/TextureModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Scene/Animation/AnimationModule.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBufferModule.hpp"
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBufferModule.hpp"
 
@@ -121,6 +122,8 @@ namespace castor
 		C3D_API void unregisterPass( castor3d::Pass & pass );
 		C3D_API bool registerUnit( castor3d::TextureUnit & unit );
 		C3D_API void unregisterUnit( castor3d::TextureUnit & unit );
+		C3D_API bool registerTexture( castor3d::AnimatedTexture & texture );
+		C3D_API void unregisterTexture( castor3d::AnimatedTexture & texture );
 		/**
 		 *\~english
 		 *\brief		Retrieves the default material
@@ -148,10 +151,21 @@ namespace castor
 		 *\~french
 		 *\return		Le tampon de configurations de textures.
 		 */
-		castor3d::TextureConfigurationBuffer const & getTextureBuffer()const
+		castor3d::TextureConfigurationBuffer const & getTexConfigBuffer()const
 		{
-			CU_Require( m_textureBuffer );
-			return *m_textureBuffer;
+			CU_Require( m_texConfigBuffer );
+			return *m_texConfigBuffer;
+		}
+		/**
+		 *\~english
+		 *\return		The textures animations buffer.
+		 *\~french
+		 *\return		Le tampon d'animations de textures.
+		 */
+		castor3d::TextureAnimationBuffer const & getTexAnimBuffer()const
+		{
+			CU_Require( m_texAnimBuffer );
+			return *m_texAnimBuffer;
 		}
 
 	private:
@@ -162,9 +176,11 @@ namespace castor
 		castor3d::Engine & m_engine;
 		castor3d::MaterialRPtr m_defaultMaterial{};
 		castor3d::PassBufferSPtr m_passBuffer;
-		castor3d::TextureConfigurationBufferSPtr m_textureBuffer;
+		castor3d::TextureConfigurationBufferSPtr m_texConfigBuffer;
+		castor3d::TextureAnimationBufferSPtr m_texAnimBuffer;
 		std::vector< castor3d::Pass * > m_pendingPasses;
 		std::vector< castor3d::TextureUnit * > m_pendingUnits;
+		std::vector< castor3d::AnimatedTexture * > m_pendingTextures;
 	};
 }
 

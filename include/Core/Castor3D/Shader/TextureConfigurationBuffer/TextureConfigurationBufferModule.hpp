@@ -16,14 +16,24 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	ShaderBuffer holding the TextureConfigurationes data.
+	*	ShaderBuffer holding the TextureConfigurations data.
 	*\~french
 	*\brief
 	*	ShaderBuffer contenant les données des TextureConfiguration.
 	*/
 	class TextureConfigurationBuffer;
+	/**
+	*\~english
+	*\brief
+	*	ShaderBuffer holding the TextureAnimations data.
+	*\~french
+	*\brief
+	*	ShaderBuffer contenant les données des TextureAnimation.
+	*/
+	class TextureAnimationBuffer;
 
 	CU_DeclareSmartPtr( TextureConfigurationBuffer );
+	CU_DeclareSmartPtr( TextureAnimationBuffer );
 
 	//@}
 	//@}
