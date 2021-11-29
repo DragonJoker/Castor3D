@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Scene/Animation/Texture/TextureAnimationModule.hpp"
 #include "Castor3D/Material/Texture/TextureModule.hpp"
+#include "Castor3D/Material/Texture/Animation/TextureAnimationModule.hpp"
 #include "Castor3D/Material/Pass/PassModule.hpp"
 
 namespace castor3d
@@ -41,10 +42,12 @@ namespace castor3d
 		C3D_API AnimatedTexture( TextureSourceInfo const & sourceInfo
 			, TextureConfiguration const & config
 			, Pass & pass );
+		C3D_API ~AnimatedTexture()override;
 		/**
 		 *\copydoc		castor3d::AnimatedObject::update
 		 */
 		C3D_API void update( castor::Milliseconds const & elapsed )override;
+		C3D_API void fillBuffer( TextureAnimationData * buffer )const;
 		/**
 		 *\copydoc		castor3d::AnimatedObject::isPlayingAnimation
 		 */

@@ -20,9 +20,11 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
+#include "Castor3D/Shader/TextureConfigurationBuffer/TextureAnimationBuffer.hpp"
 
 #include <CastorUtils/Graphics/Rectangle.hpp>
 #include <CastorUtils/Miscellaneous/Hash.hpp>
@@ -50,7 +52,8 @@ namespace castor3d
 		enum class OverlayBindingId : uint32_t
 		{
 			eMaterials,
-			eTextures,
+			eTexConfigs,
+			eTexAnims,
 			eMatrix,
 			eOverlay,
 			eTextMap,
@@ -699,9 +702,11 @@ namespace castor3d
 		// Pass buffer
 		getRenderSystem()->getEngine()->getMaterialCache().getPassBuffer().createBinding( *result
 			, pipeline.descriptorLayout->getBinding( uint32_t( OverlayBindingId::eMaterials ) ) );
-		// Textures buffer
-		getRenderSystem()->getEngine()->getMaterialCache().getTextureBuffer().createBinding( *result
-			, pipeline.descriptorLayout->getBinding( uint32_t( OverlayBindingId::eTextures ) ) );
+		// Textures buffers
+		getRenderSystem()->getEngine()->getMaterialCache().getTexConfigBuffer().createBinding( *result
+			, pipeline.descriptorLayout->getBinding( uint32_t( OverlayBindingId::eTexConfigs ) ) );
+		getRenderSystem()->getEngine()->getMaterialCache().getTexAnimBuffer().createBinding( *result
+			, pipeline.descriptorLayout->getBinding( uint32_t( OverlayBindingId::eTexAnims ) ) );
 		// Matrix UBO
 		m_matrixUbo.createSizedBinding( *result
 			, pipeline.descriptorLayout->getBinding( uint32_t( OverlayBindingId::eMatrix ) ) );
@@ -829,7 +834,8 @@ namespace castor3d
 		ashes::VkDescriptorSetLayoutBindingArray bindings;
 
 		bindings.emplace_back( materials.getPassBuffer().createLayoutBinding( uint32_t( OverlayBindingId::eMaterials ) ) );
-		bindings.emplace_back( materials.getTextureBuffer().createLayoutBinding( uint32_t( OverlayBindingId::eTextures ) ) );
+		bindings.emplace_back( materials.getTexConfigBuffer().createLayoutBinding( uint32_t( OverlayBindingId::eTexConfigs ) ) );
+		bindings.emplace_back( materials.getTexAnimBuffer().createLayoutBinding( uint32_t( OverlayBindingId::eTexAnims ) ) );
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eMatrix )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_VERTEX_BIT ) );
@@ -996,11 +1002,15 @@ namespace castor3d
 				, uint32_t( OverlayBindingId::eMaterials )
 				, 0u );
 			shader::TextureConfigurations textureConfigs{ writer };
+			shader::TextureAnimations textureAnims{ writer };
 
 			if ( hasTexture )
 			{
 				textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-					, uint32_t( OverlayBindingId::eTextures )
+					, uint32_t( OverlayBindingId::eTexConfigs )
+					, 0u );
+				textureAnims.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+					, uint32_t( OverlayBindingId::eTexAnims )
 					, 0u );
 			}
 
@@ -1043,6 +1053,7 @@ namespace castor3d
 					{
 						utils.compute2DMapsContributions( texturesFlags
 							, textureConfigs
+							, textureAnims
 							, c3d_maps
 							, vec3( in.texture, 0.0 )
 							, diffuse

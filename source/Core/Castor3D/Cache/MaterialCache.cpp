@@ -8,7 +8,9 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
+#include "Castor3D/Scene/Animation/AnimatedTexture.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
+#include "Castor3D/Shader/TextureConfigurationBuffer/TextureAnimationBuffer.hpp"
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
@@ -62,9 +64,12 @@ namespace castor
 			m_passBuffer = std::make_shared< PassBuffer >( m_engine
 				, device
 				, shader::MaxMaterialsCount );
-			m_textureBuffer = std::make_shared< TextureConfigurationBuffer >( m_engine
+			m_texConfigBuffer = std::make_shared< TextureConfigurationBuffer >( m_engine
 				, device
 				, shader::MaxTextureConfigurationCount );
+			m_texAnimBuffer = std::make_shared< TextureAnimationBuffer >( m_engine
+				, device
+				, shader::MaxTextureAnimationCount );
 
 			for ( auto & it : *this )
 			{
@@ -84,8 +89,14 @@ namespace castor
 				registerUnit( *unit );
 			}
 
+			for ( auto texture : m_pendingTextures )
+			{
+				registerTexture( *texture );
+			}
+
 			m_pendingPasses.clear();
 			m_pendingUnits.clear();
+			m_pendingTextures.clear();
 		}
 	}
 
@@ -99,7 +110,8 @@ namespace castor
 			, [this]()
 			{
 				m_passBuffer.reset();
-				m_textureBuffer.reset();
+				m_texConfigBuffer.reset();
+				m_texAnimBuffer.reset();
 			} ) );
 	}
 
@@ -129,7 +141,8 @@ namespace castor
 		if ( m_passBuffer )
 		{
 			m_passBuffer->update();
-			m_textureBuffer->update();
+			m_texConfigBuffer->update();
+			m_texAnimBuffer->update();
 		}
 	}
 
@@ -169,9 +182,11 @@ namespace castor
 
 	bool ResourceCacheT< Material, String, MaterialCacheTraits >::registerUnit( TextureUnit & unit )
 	{
-		if ( m_textureBuffer )
+		if ( m_texConfigBuffer
+			&& unit.getId() == 0u )
 		{
-			m_textureBuffer->addTextureConfiguration( unit );
+			m_texConfigBuffer->addTextureConfiguration( unit );
+
 			return true;
 		}
 
@@ -181,10 +196,35 @@ namespace castor
 
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::unregisterUnit( TextureUnit & unit )
 	{
-		if ( m_textureBuffer
+		if ( m_texConfigBuffer
 			&& unit.getId() )
 		{
-			m_textureBuffer->removeTextureConfiguration( unit );
+			m_texConfigBuffer->removeTextureConfiguration( unit );
+		}
+	}
+
+	bool ResourceCacheT< Material, String, MaterialCacheTraits >::registerTexture( AnimatedTexture & texture )
+	{
+		if ( m_texAnimBuffer )
+		{
+			if ( texture.getTexture().getId() == 0u )
+			{
+				registerUnit( texture.getTexture() );
+			}
+
+			m_texAnimBuffer->addTextureAnimation( texture );
+			return true;
+		}
+
+		m_pendingTextures.push_back( &texture );
+		return false;
+	}
+
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::unregisterTexture( AnimatedTexture & texture )
+	{
+		if ( m_texAnimBuffer )
+		{
+			m_texAnimBuffer->removeTextureAnimation( texture );
 		}
 	}
 }

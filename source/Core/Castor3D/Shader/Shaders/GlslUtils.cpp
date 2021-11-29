@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
+#include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
@@ -1004,6 +1005,7 @@ namespace castor3d::shader
 
 	void Utils::compute2DMapsContributions( FilteredTextureFlags const & flags
 		, TextureConfigurations const & textureConfigs
+		, TextureAnimations const & textureAnims
 		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 		, sdw::Vec3 const & texCoords
 		, sdw::Vec3 & colour
@@ -1019,20 +1021,23 @@ namespace castor3d::shader
 				CU_Require( textureIt.second.id > 0u );
 				auto config = m_writer.declLocale( "c3d_config" + name
 					, textureConfigs.getTextureConfiguration( sdw::UInt( textureIt.second.id ) ) );
+				auto anim = m_writer.declLocale( "c3d_anim" + name
+					, textureAnims.getTextureAnimation( sdw::UInt( textureIt.second.id ) ) );
 				auto texCoord = m_writer.declLocale( "c3d_texCoord" + name
 					, texCoords.xy() );
-				config.convertUV( m_writer, texCoord );
+				config.convertUV( texCoord );
+				anim.animUV( config, texCoord );
 				auto sampled = m_writer.declLocale< sdw::Vec4 >( "c3d_sampled" + name
 					, maps[i].sample( texCoord ) );
 
 				if ( checkFlag( textureIt.second.flags, TextureFlag::eColour ) )
 				{
-					colour = config.getDiffuse( m_writer, sampled, colour );
+					colour = config.getDiffuse( sampled, colour );
 				}
 
 				if ( checkFlag( textureIt.second.flags, TextureFlag::eOpacity ) )
 				{
-					opacity = config.getOpacity( m_writer, sampled, opacity );
+					opacity = config.getOpacity( sampled, opacity );
 				}
 			}
 		}
@@ -1040,6 +1045,7 @@ namespace castor3d::shader
 
 	void Utils::computeOpacityMapContribution( FilteredTextureFlags const & flags
 		, TextureConfigurations const & textureConfigs
+		, TextureAnimations const & textureAnims
 		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 		, sdw::Vec3 const & texCoords
 		, sdw::Float & opacity )
@@ -1052,18 +1058,22 @@ namespace castor3d::shader
 			CU_Require( it->second.id > 0u );
 			auto config = m_writer.declLocale( "c3d_opacityMapConfig"
 				, textureConfigs.getTextureConfiguration(  sdw::UInt( it->second.id ) ) );
+			auto anim = m_writer.declLocale( "c3d_opacityMapAnim"
+				, textureAnims.getTextureAnimation(  sdw::UInt( it->second.id ) ) );
 			auto texCoord = m_writer.declLocale( "c3d_texCoordOpacity"
 				, texCoords.xy() );
-			config.convertUV( m_writer, texCoord );
+			config.convertUV( texCoord );
+			anim.animUV( config, texCoord );
 			auto sampledOpacity = m_writer.declLocale< sdw::Vec4 >( "c3d_sampledOpacity"
 				, maps[i].sample( texCoord ) );
-			opacity = config.getOpacity( m_writer, sampledOpacity, opacity );
+			opacity = config.getOpacity( sampledOpacity, opacity );
 		}
 	}
 
 	void Utils::computeGeometryMapsContributions( FilteredTextureFlags const & flags
 		, PassFlags const & passFlags
 		, TextureConfigurations const & textureConfigs
+		, TextureAnimations const & textureAnims
 		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 		, sdw::Vec3 & texCoords
 		, sdw::Float & opacity
@@ -1082,10 +1092,13 @@ namespace castor3d::shader
 				CU_Require( textureIt.second.id > 0u );
 				auto config = m_writer.declLocale( "c3d_configGeom" + name
 					, textureConfigs.getTextureConfiguration( m_writer.cast<  sdw::UInt >( textureIt.second.id ) ) );
+				auto anim = m_writer.declLocale( "c3d_animGeom" + name
+					, textureAnims.getTextureAnimation( sdw::UInt( textureIt.second.id ) ) );
 				doComputeGeometryMapContribution( textureIt.second.flags
 					, passFlags
 					, name
 					, config
+					, anim
 					, maps[i]
 					, texCoords
 					, opacity
@@ -1102,6 +1115,7 @@ namespace castor3d::shader
 		, PassFlags const & passFlags
 		, std::string const & name
 		, shader::TextureConfigData const & config
+		, shader::TextureAnimData const & anim
 		, sdw::SampledImage2DRgba32 const & map
 		, sdw::Vec3 const & texCoords
 		, sdw::Vec3 & emissive
@@ -1113,23 +1127,24 @@ namespace castor3d::shader
 	{
 		auto texCoord = m_writer.declLocale( "c3d_texCoord" + name
 			, texCoords.xy() );
-		config.convertUV( m_writer, texCoord );
+		config.convertUV( texCoord );
+		anim.animUV( config, texCoord );
 		auto result = m_writer.declLocale( "c3d_result" + name
 			, map.sample( texCoord ) );
 
 		if ( checkFlag( textureFlags, TextureFlag::eEmissive ) )
 		{
-			emissive = config.getEmissive( m_writer, result, emissive );
+			emissive = config.getEmissive( result, emissive );
 		}
 
 		if ( checkFlag( textureFlags, TextureFlag::eOcclusion ) )
 		{
-			occlusion = config.getOcclusion( m_writer, result, occlusion );
+			occlusion = config.getOcclusion( result, occlusion );
 		}
 
 		if ( checkFlag( textureFlags, TextureFlag::eTransmittance ) )
 		{
-			transmittance = config.getTransmittance( m_writer, result, transmittance );
+			transmittance = config.getTransmittance( result, transmittance );
 		}
 
 		return result;
@@ -1139,6 +1154,7 @@ namespace castor3d::shader
 		, PassFlags const & passFlags
 		, std::string const & name
 		, shader::TextureConfigData const & config
+		, shader::TextureAnimData const & anim
 		, sdw::SampledImage2DRgba32 const & map
 		, sdw::Vec3 const & texCoords
 		, sdw::Vec3 & emissive
@@ -1147,23 +1163,24 @@ namespace castor3d::shader
 	{
 		auto texCoord = m_writer.declLocale( "c3d_texCoord" + name
 			, texCoords.xy() );
-		config.convertUV( m_writer, texCoord );
+		config.convertUV( texCoord );
+		anim.animUV( config, texCoord );
 		auto result = m_writer.declLocale< sdw::Vec4 >( "c3d_result" + name
 			, map.sample( texCoord ) );
 
 		if ( checkFlag( textureFlags, TextureFlag::eOpacity ) )
 		{
-			opacity = config.getOpacity( m_writer, result, opacity );
+			opacity = config.getOpacity( result, opacity );
 		}
 
 		if ( checkFlag( textureFlags, TextureFlag::eEmissive ) )
 		{
-			emissive = config.getEmissive( m_writer, result, emissive );
+			emissive = config.getEmissive( result, emissive );
 		}
 
 		if ( checkFlag( textureFlags, TextureFlag::eOcclusion ) )
 		{
-			occlusion = config.getOcclusion( m_writer, result, occlusion );
+			occlusion = config.getOcclusion( result, occlusion );
 		}
 
 		return result;
@@ -1379,6 +1396,7 @@ namespace castor3d::shader
 		, PassFlags const & passFlags
 		, std::string const & name
 		, shader::TextureConfigData const & config
+		, shader::TextureAnimData const & anim
 		, sdw::SampledImage2DRgba32 const & map
 		, sdw::Vec3 & texCoords
 		, sdw::Float & opacity
@@ -1390,7 +1408,8 @@ namespace castor3d::shader
 	{
 		auto texCoord = m_writer.declLocale( "c3d_texCoord" + name
 			, texCoords.xy() );
-		config.convertUV( m_writer, texCoord );
+		config.convertUV( texCoord );
+		anim.animUV( config, texCoord );
 
 		if ( checkFlag( textureFlags, TextureFlag::eHeight )
 			&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
@@ -1423,12 +1442,12 @@ namespace castor3d::shader
 		{
 			auto tbn = m_writer.declLocale( "c3d_tbn"
 				, shader::Utils::getTBN( normal, tangent, bitangent ) );
-			normal = config.getNormal( m_writer, sampled, tbn );
+			normal = config.getNormal( sampled, tbn );
 		}
 
 		if ( checkFlag( textureFlags, TextureFlag::eOpacity ) )
 		{
-			opacity = config.getOpacity( m_writer, sampled, opacity );
+			opacity = config.getOpacity( sampled, opacity );
 		}
 	}
 

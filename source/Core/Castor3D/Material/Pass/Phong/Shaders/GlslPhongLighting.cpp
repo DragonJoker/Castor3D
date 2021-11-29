@@ -8,6 +8,7 @@
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
+#include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
@@ -31,17 +32,17 @@ namespace castor3d::shader
 		{
 			if ( checkFlag( flags, TextureFlag::eDiffuse ) )
 			{
-				phongLightMat.albedo = config.getDiffuse( writer, sampled, phongLightMat.albedo );
+				phongLightMat.albedo = config.getDiffuse( sampled, phongLightMat.albedo );
 			}
 
 			if ( checkFlag( flags, TextureFlag::eSpecular ) )
 			{
-				phongLightMat.specular = config.getSpecular( writer, sampled, phongLightMat.specular );
+				phongLightMat.specular = config.getSpecular( sampled, phongLightMat.specular );
 			}
 
 			if ( checkFlag( flags, TextureFlag::eShininess ) )
 			{
-				phongLightMat.shininess = config.getShininess( writer, sampled, phongLightMat.shininess );
+				phongLightMat.shininess = config.getShininess( sampled, phongLightMat.shininess );
 			}
 
 			if ( checkFlag( flags, TextureFlag::eEmissive ) )
@@ -204,6 +205,7 @@ namespace castor3d::shader
 	void PhongLightingModel::computeMapContributions( PassFlags const & passFlags
 		, FilteredTextureFlags const & textures
 		, TextureConfigurations const & textureConfigs
+		, TextureAnimations const & textureAnims
 		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 		, sdw::Vec3 & texCoords
 		, sdw::Vec3 & normal
@@ -222,6 +224,7 @@ namespace castor3d::shader
 		m_utils.computeGeometryMapsContributions( textures
 			, passFlags
 			, textureConfigs
+			, textureAnims
 			, maps
 			, texCoords
 			, opacity
@@ -239,11 +242,14 @@ namespace castor3d::shader
 				auto name = castor::string::stringCast< char >( castor::string::toString( i ) );
 				auto config = m_writer.declLocale( "config" + name
 					, textureConfigs.getTextureConfiguration( m_writer.cast< sdw::UInt >( textureIt.second.id ) ) );
+				auto anim = m_writer.declLocale( "anim" + name
+					, textureAnims.getTextureAnimation( m_writer.cast< sdw::UInt >( textureIt.second.id ) ) );
 				auto sampled = m_writer.declLocale( "sampled" + name
 					, m_utils.computeCommonMapContribution( textureIt.second.flags
 						, passFlags
 						, name
 						, config
+						, anim
 						, maps[i]
 						, texCoords
 						, emissive
@@ -324,6 +330,7 @@ namespace castor3d::shader
 	void PhongLightingModel::computeMapDiffuseContributions( PassFlags const & passFlags
 		, FilteredTextureFlags const & textures
 		, TextureConfigurations const & textureConfigs
+		, TextureAnimations const & textureAnims
 		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 		, sdw::Vec3 const & texCoords
 		, sdw::Vec3 & emissive
@@ -340,11 +347,14 @@ namespace castor3d::shader
 			auto name = castor::string::stringCast< char >( castor::string::toString( i ) );
 			auto config = m_writer.declLocale( "config" + name
 				, textureConfigs.getTextureConfiguration( m_writer.cast< sdw::UInt >( textureIt.second.id ) ) );
+			auto anim = m_writer.declLocale( "anim" + name
+				, textureAnims.getTextureAnimation( m_writer.cast< sdw::UInt >( textureIt.second.id ) ) );
 			auto sampled = m_writer.declLocale( "sampled" + name
 				, m_utils.computeCommonMapVoxelContribution( textureIt.second.flags
 					, passFlags
 					, name
 					, config
+					, anim
 					, maps[i]
 					, texCoords
 					, emissive

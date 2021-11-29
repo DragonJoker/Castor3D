@@ -8,6 +8,7 @@
 #include <Castor3D/Shader/Shaders/GlslOutputComponents.hpp>
 #include <Castor3D/Shader/Shaders/GlslShadow.hpp>
 #include <Castor3D/Shader/Shaders/GlslSurface.hpp>
+#include <Castor3D/Shader/Shaders/GlslTextureAnimation.hpp>
 #include <Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp>
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 #include <Castor3D/Shader/Ubos/SceneUbo.hpp>
@@ -33,17 +34,17 @@ namespace toon::shader
 			{
 				if ( checkFlag( flags, castor3d::TextureFlag::eDiffuse ) )
 				{
-					phongLightMat.albedo = config.getDiffuse( writer, sampled, phongLightMat.albedo );
+					phongLightMat.albedo = config.getDiffuse( sampled, phongLightMat.albedo );
 				}
 
 				if ( checkFlag( flags, castor3d::TextureFlag::eSpecular ) )
 				{
-					phongLightMat.specular = config.getSpecular( writer, sampled, phongLightMat.specular );
+					phongLightMat.specular = config.getSpecular( sampled, phongLightMat.specular );
 				}
 
 				if ( checkFlag( flags, castor3d::TextureFlag::eShininess ) )
 				{
-					phongLightMat.shininess = config.getShininess( writer, sampled, phongLightMat.shininess );
+					phongLightMat.shininess = config.getShininess( sampled, phongLightMat.shininess );
 				}
 
 				if ( checkFlag( flags, castor3d::TextureFlag::eEmissive ) )
@@ -207,6 +208,7 @@ namespace toon::shader
 	void ToonPhongLightingModel::computeMapContributions( castor3d::PassFlags const & passFlags
 		, castor3d::FilteredTextureFlags const & textures
 		, c3d::TextureConfigurations const & textureConfigs
+		, c3d::TextureAnimations const & textureAnims
 		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 		, sdw::Vec3 & texCoords
 		, sdw::Vec3 & normal
@@ -225,6 +227,7 @@ namespace toon::shader
 		m_utils.computeGeometryMapsContributions( textures
 			, passFlags
 			, textureConfigs
+			, textureAnims
 			, maps
 			, texCoords
 			, opacity
@@ -242,11 +245,14 @@ namespace toon::shader
 				auto name = castor::string::stringCast< char >( castor::string::toString( i ) );
 				auto config = m_writer.declLocale( "config" + name
 					, textureConfigs.getTextureConfiguration( m_writer.cast< sdw::UInt >( textureIt.second.id ) ) );
+				auto anim = m_writer.declLocale( "anim" + name
+					, textureAnims.getTextureAnimation( m_writer.cast< sdw::UInt >( textureIt.second.id ) ) );
 				auto sampled = m_writer.declLocale( "sampled" + name
 					, m_utils.computeCommonMapContribution( textureIt.second.flags
 						, passFlags
 						, name
 						, config
+						, anim
 						, maps[i]
 						, texCoords
 						, emissive
@@ -327,6 +333,7 @@ namespace toon::shader
 	void ToonPhongLightingModel::computeMapDiffuseContributions( castor3d::PassFlags const & passFlags
 		, castor3d::FilteredTextureFlags const & textures
 		, c3d::TextureConfigurations const & textureConfigs
+		, c3d::TextureAnimations const & textureAnims
 		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 		, sdw::Vec3 const & texCoords
 		, sdw::Vec3 & emissive
@@ -343,11 +350,14 @@ namespace toon::shader
 			auto name = castor::string::stringCast< char >( castor::string::toString( i ) );
 			auto config = m_writer.declLocale( "config" + name
 				, textureConfigs.getTextureConfiguration( m_writer.cast< sdw::UInt >( textureIt.second.id ) ) );
+			auto anim = m_writer.declLocale( "anim" + name
+				, textureAnims.getTextureAnimation( m_writer.cast< sdw::UInt >( textureIt.second.id ) ) );
 			auto sampled = m_writer.declLocale( "sampled" + name
 				, m_utils.computeCommonMapVoxelContribution( textureIt.second.flags
 					, passFlags
 					, name
 					, config
+					, anim
 					, maps[i]
 					, texCoords
 					, emissive
@@ -1297,13 +1307,13 @@ namespace toon::shader
 			{
 				if ( checkFlag( flags, castor3d::TextureFlag::eAlbedo ) )
 				{
-					pbrLightMat.albedo = config.getAlbedo( writer, sampled, pbrLightMat.albedo );
+					pbrLightMat.albedo = config.getAlbedo( sampled, pbrLightMat.albedo );
 					mods.hasAlbedo = true;
 				}
 
 				if ( checkFlag( flags, castor3d::TextureFlag::eSpecular ) )
 				{
-					pbrLightMat.specular = config.getSpecular( writer, sampled, pbrLightMat.specular );
+					pbrLightMat.specular = config.getSpecular( sampled, pbrLightMat.specular );
 					mods.hasSpecular = true;
 				}
 
@@ -1311,23 +1321,19 @@ namespace toon::shader
 				{
 					auto gloss = writer.declLocale( "gloss" + configName
 						, c3d::LightMaterial::computeRoughness( pbrLightMat.roughness ) );
-					gloss = config.getGlossiness( writer
-						, sampled
-						, gloss );
+					gloss = config.getGlossiness( sampled, gloss );
 					pbrLightMat.roughness = c3d::LightMaterial::computeRoughness( gloss );
 				}
 
 				if ( checkFlag( flags, castor3d::TextureFlag::eMetalness ) )
 				{
-					pbrLightMat.metalness = config.getMetalness( writer, sampled, pbrLightMat.metalness );
+					pbrLightMat.metalness = config.getMetalness( sampled, pbrLightMat.metalness );
 					mods.hasMetalness = true;
 				}
 
 				if ( checkFlag( flags, castor3d::TextureFlag::eRoughness ) )
 				{
-					pbrLightMat.roughness = config.getRoughness( writer
-						, sampled
-						, pbrLightMat.roughness );
+					pbrLightMat.roughness = config.getRoughness( sampled, pbrLightMat.roughness );
 				}
 
 				if ( checkFlag( flags, castor3d::TextureFlag::eEmissive ) )
@@ -1482,6 +1488,7 @@ namespace toon::shader
 	void ToonPbrLightingModel::computeMapContributions( castor3d::PassFlags const & passFlags
 		, castor3d::FilteredTextureFlags const & textures
 		, c3d::TextureConfigurations const & textureConfigs
+		, c3d::TextureAnimations const & textureAnims
 		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 		, sdw::Vec3 & texCoords
 		, sdw::Vec3 & normal
@@ -1500,6 +1507,7 @@ namespace toon::shader
 		m_utils.computeGeometryMapsContributions( textures
 			, passFlags
 			, textureConfigs
+			, textureAnims
 			, maps
 			, texCoords
 			, opacity
@@ -1516,11 +1524,14 @@ namespace toon::shader
 				auto name = castor::string::stringCast< char >( castor::string::toString( textureIt.first, std::locale{ "C" } ) );
 				auto config = m_writer.declLocale( "config" + name
 					, textureConfigs.getTextureConfiguration( m_writer.cast< sdw::UInt >( textureIt.second.id ) ) );
+				auto anim = m_writer.declLocale( "anim" + name
+					, textureAnims.getTextureAnimation( m_writer.cast< sdw::UInt >( textureIt.second.id ) ) );
 				auto sampled = m_writer.declLocale( "sampled" + name
 					, m_utils.computeCommonMapContribution( textureIt.second.flags
 						, passFlags
 						, name
 						, config
+						, anim
 						, maps[textureIt.first]
 						, texCoords
 						, emissive
@@ -1601,6 +1612,7 @@ namespace toon::shader
 	void ToonPbrLightingModel::computeMapDiffuseContributions( castor3d::PassFlags const & passFlags
 		, castor3d::FilteredTextureFlags const & textures
 		, c3d::TextureConfigurations const & textureConfigs
+		, c3d::TextureAnimations const & textureAnims
 		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 		, sdw::Vec3 const & texCoords
 		, sdw::Vec3 & emissive
@@ -1616,11 +1628,14 @@ namespace toon::shader
 			auto name = castor::string::stringCast< char >( castor::string::toString( textureIt.first, std::locale{ "C" } ) );
 			auto config = m_writer.declLocale( "config" + name
 				, textureConfigs.getTextureConfiguration( m_writer.cast< sdw::UInt >( textureIt.second.id ) ) );
+			auto anim = m_writer.declLocale( "anim" + name
+				, textureAnims.getTextureAnimation( m_writer.cast< sdw::UInt >( textureIt.second.id ) ) );
 			auto sampled = m_writer.declLocale( "sampled" + name
 				, m_utils.computeCommonMapVoxelContribution( textureIt.second.flags
 					, passFlags
 					, name
 					, config
+					, anim
 					, maps[textureIt.first]
 					, texCoords
 					, emissive

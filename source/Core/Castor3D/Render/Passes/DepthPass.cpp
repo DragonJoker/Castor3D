@@ -1,6 +1,9 @@
 #include "Castor3D/Render/Passes/DepthPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/TextureView.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
@@ -8,12 +11,10 @@
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
-#include "Castor3D/Material/Texture/TextureView.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
@@ -113,11 +114,15 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eMaterials )
 			, RenderPipeline::eBuffers );
 		shader::TextureConfigurations textureConfigs{ writer };
+		shader::TextureAnimations textureAnims{ writer };
 
 		if ( hasTextures )
 		{
 			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( NodeUboIdx::eTextures )
+				, uint32_t( NodeUboIdx::eTexConfigs )
+				, RenderPipeline::eBuffers );
+			textureAnims.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+				, uint32_t( NodeUboIdx::eTexAnims )
 				, RenderPipeline::eBuffers );
 		}
 
@@ -165,6 +170,7 @@ namespace castor3d
 					utils.computeGeometryMapsContributions( textureFlags
 						, flags.passFlags
 						, textureConfigs
+						, textureAnims
 						, c3d_maps
 						, texCoord
 						, opacity

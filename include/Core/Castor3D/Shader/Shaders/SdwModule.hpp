@@ -78,6 +78,9 @@ namespace castor3d::shader
 	// Texture Configuration Buffer.
 	static uint32_t constexpr MaxTextureConfigurationCount = 4000u;
 	static int constexpr MaxTextureConfigurationComponentsCount = 9;
+	// Texture Animation Buffer.
+	static uint32_t constexpr MaxTextureAnimationCount = MaxTextureConfigurationCount;
+	static int constexpr MaxTextureAnimationComponentsCount = 3;
 
 	struct DirectionalLight;
 	struct Light;
@@ -89,6 +92,7 @@ namespace castor3d::shader
 	struct OutputComponents;
 	struct PointLight;
 	struct SpotLight;
+	struct TextureAnimData;
 	struct TextureConfigData;
 	struct TiledDirectionalLight;
 	struct VoxelData;
@@ -107,6 +111,7 @@ namespace castor3d::shader
 	class LightingModel;
 	class ReflectionModel;
 	class Shadow;
+	class TextureAnimations;
 	class TextureConfigurations;
 	class Utils;
 
